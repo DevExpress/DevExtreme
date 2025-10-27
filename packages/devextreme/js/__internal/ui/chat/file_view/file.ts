@@ -1,3 +1,4 @@
+import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { ClickEvent } from '@js/ui/button';
@@ -7,25 +8,31 @@ import type {
   AttachmentDownloadEvent,
 } from '@js/ui/chat';
 import { getImageContainer } from '@ts/core/utils/m_icon';
+import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
+import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { WidgetProperties } from '@ts/core/widget/widget';
-import Widget from '@ts/core/widget/widget';
 import type { ButtonProps as ButtonProperties } from '@ts/ui/button/button';
-import { getFileIconName } from '@ts/ui/file_uploader/file_uploader.utils';
+import { getFileIconName, getFileSize } from '@ts/ui/file_uploader/file_uploader.utils';
 
-export type Properties = WidgetProperties & {
+export type Properties = DOMComponentProperties<File> & {
+  activeStateEnabled?: boolean;
+
+  focusStateEnabled?: boolean;
+
+  hoverStateEnabled?: boolean;
+
   data: Attachment;
 
   onDownload?: (e: AttachmentDownloadEvent) => void;
 };
 
-const CHAT_FILE_CLASS = 'dx-chat-file';
+export const CHAT_FILE_CLASS = 'dx-chat-file';
 const CHAT_FILE_ICON_CONTAINER_CLASS = 'dx-chat-file-icon-container';
 const CHAT_FILE_NAME_CLASS = 'dx-chat-file-name';
 const CHAT_FILE_SIZE_CLASS = 'dx-chat-file-size';
 const CHAT_FILE_DOWNLOAD_BUTTON_CLASS = 'dx-chat-file-download-button';
 
-class File extends Widget<Properties> {
+class File extends DOMComponent<File, Properties> {
   private _downloadButton?: Button | null;
 
   private _downloadAction?: (e: Partial<AttachmentDownloadEvent>) => void;
@@ -33,6 +40,9 @@ class File extends Widget<Properties> {
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
+      activeStateEnabled: true,
+      focusStateEnabled: true,
+      hoverStateEnabled: true,
       data: {
         name: '',
         size: 0,
@@ -55,7 +65,10 @@ class File extends Widget<Properties> {
   }
 
   _initMarkup(): void {
-    this.$element().addClass(CHAT_FILE_CLASS);
+    this.$element()
+      .addClass(CHAT_FILE_CLASS)
+      .attr('role', 'listitem');
+
     super._initMarkup();
     this._renderSections();
   }
@@ -96,7 +109,7 @@ class File extends Widget<Properties> {
     const { data } = this.option();
     const { size } = data;
 
-    const text = `${size} B`;
+    const text = getFileSize(size);
 
     const $size = $('<div>')
       .addClass(CHAT_FILE_SIZE_CLASS)
@@ -119,9 +132,22 @@ class File extends Widget<Properties> {
   }
 
   private _getButtonConfig(): ButtonProperties {
-    const { data } = this.option();
+    const {
+      data,
+      activeStateEnabled,
+      focusStateEnabled,
+      hoverStateEnabled,
+    } = this.option();
 
-    const configuration = {
+    // @ts-expect-error useInkRipple should be optional
+    const configuration: ButtonProperties = {
+      activeStateEnabled,
+      focusStateEnabled,
+      hoverStateEnabled,
+      elementAttr: {
+        // @ts-expect-error format params should be extended
+        'aria-label': messageLocalization.format('dxChat-downloadButtonLabel', data?.name ?? ''),
+      },
       icon: 'download',
       stylingMode: 'text' as const,
       onClick: (e: ClickEvent): void => {
@@ -134,13 +160,19 @@ class File extends Widget<Properties> {
       },
     };
 
-    return configuration as ButtonProperties;
+    return configuration;
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
-    const { name } = args;
+    const { name, value } = args;
 
     switch (name) {
+      case 'activeStateEnabled':
+      case 'focusStateEnabled':
+      case 'hoverStateEnabled':
+        this._downloadButton?.option(name, value);
+        break;
+
       case 'data':
         this._invalidate();
         break;
@@ -154,10 +186,15 @@ class File extends Widget<Properties> {
     }
   }
 
-  _dispose(): void {
+  _clean(): void {
+    this._cleanDownloadButton();
+    this.$element().empty();
+    super._clean();
+  }
+
+  _cleanDownloadButton(): void {
     this._downloadButton?.dispose();
     this._downloadButton = null;
-    super._dispose();
   }
 }
 

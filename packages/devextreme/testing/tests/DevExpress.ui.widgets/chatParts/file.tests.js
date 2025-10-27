@@ -86,20 +86,103 @@ QUnit.module('File', moduleConfig, () => {
             assert.strictEqual($nameElement.attr('title'), fileName, 'file name is in title attribute');
         });
 
-        QUnit.test('should display file size correctly', function(assert) {
-            const fileSize = 5120;
+        QUnit.test('should display file size in bytes for small files (< 1 KB)', function(assert) {
+            const fileSize = 512;
 
             this.reinit({
                 data: {
-                    name: 'image.png',
+                    name: 'small.txt',
                     size: fileSize,
                 },
             });
 
             const $sizeElement = this.$element.find(`.${CHAT_FILE_SIZE_CLASS}`);
-            const expectedText = `${fileSize} B`;
+            const expectedText = `${fileSize} bytes`;
 
-            assert.strictEqual($sizeElement.text(), expectedText, 'file size is displayed');
+            assert.strictEqual($sizeElement.text(), expectedText, 'file size is displayed in bytes');
+            assert.strictEqual($sizeElement.attr('title'), expectedText, 'file size is in title attribute');
+        });
+
+        QUnit.test('should display file size in KB for files >= 1 KB and < 1 MB', function(assert) {
+            const fileSize = 1024 * 5.5; // 5.5 KB
+
+            this.reinit({
+                data: {
+                    name: 'medium.txt',
+                    size: fileSize,
+                },
+            });
+
+            const $sizeElement = this.$element.find(`.${CHAT_FILE_SIZE_CLASS}`);
+            const expectedText = '6 KB';
+
+            assert.strictEqual($sizeElement.text(), expectedText, 'file size is displayed in KB with rounding');
+            assert.strictEqual($sizeElement.attr('title'), expectedText, 'file size is in title attribute');
+        });
+
+        QUnit.test('should display file size in MB for files >= 1 MB and < 1 GB', function(assert) {
+            const fileSize = 1024 * 1024 * 2.7; // 2.7 MB
+
+            this.reinit({
+                data: {
+                    name: 'large.zip',
+                    size: fileSize,
+                },
+            });
+
+            const $sizeElement = this.$element.find(`.${CHAT_FILE_SIZE_CLASS}`);
+            const expectedText = '3 MB';
+
+            assert.strictEqual($sizeElement.text(), expectedText, 'file size is displayed in MB with rounding');
+            assert.strictEqual($sizeElement.attr('title'), expectedText, 'file size is in title attribute');
+        });
+
+        QUnit.test('should display file size in GB for files >= 1 GB', function(assert) {
+            const fileSize = 1024 * 1024 * 1024 * 1.3; // 1.3 GB
+
+            this.reinit({
+                data: {
+                    name: 'huge.iso',
+                    size: fileSize,
+                },
+            });
+
+            const $sizeElement = this.$element.find(`.${CHAT_FILE_SIZE_CLASS}`);
+            const expectedText = '1 GB';
+
+            assert.strictEqual($sizeElement.text(), expectedText, 'file size is displayed in GB with rounding');
+            assert.strictEqual($sizeElement.attr('title'), expectedText, 'file size is in title attribute');
+        });
+
+        QUnit.test('should display 0 B for zero size', function(assert) {
+            this.reinit({
+                data: {
+                    name: 'empty.txt',
+                    size: 0,
+                },
+            });
+
+            const $sizeElement = this.$element.find(`.${CHAT_FILE_SIZE_CLASS}`);
+            const expectedText = '0 bytes';
+
+            assert.strictEqual($sizeElement.text(), expectedText, 'zero size is displayed as 0 bytes');
+            assert.strictEqual($sizeElement.attr('title'), expectedText, 'zero size is in title attribute');
+        });
+
+        QUnit.test('should display exactly 1 KB for 1024 bytes', function(assert) {
+            const fileSize = 1024;
+
+            this.reinit({
+                data: {
+                    name: 'exact-kb.txt',
+                    size: fileSize,
+                },
+            });
+
+            const $sizeElement = this.$element.find(`.${CHAT_FILE_SIZE_CLASS}`);
+            const expectedText = '1 KB';
+
+            assert.strictEqual($sizeElement.text(), expectedText, 'exact 1024 bytes is displayed as 1 KB');
             assert.strictEqual($sizeElement.attr('title'), expectedText, 'file size is in title attribute');
         });
 
@@ -115,7 +198,7 @@ QUnit.module('File', moduleConfig, () => {
             const $sizeElement = this.$element.find(`.${CHAT_FILE_SIZE_CLASS}`);
 
             assert.strictEqual($nameElement.text(), newData.name, 'new file name is displayed');
-            assert.strictEqual($sizeElement.text(), `${newData.size} B`, 'new file size is displayed');
+            assert.strictEqual($sizeElement.text(), '10 KB', 'new file size is displayed with correct formatting');
         });
     });
 
@@ -193,6 +276,57 @@ QUnit.module('File', moduleConfig, () => {
         });
     });
 
+    QUnit.module('Proxy state options', () => {
+        [true, false].forEach(value => {
+            QUnit.test(`passed state options should be equal to download button state options when value is ${value}`, function(assert) {
+                const options = {
+                    activeStateEnabled: value,
+                    focusStateEnabled: value,
+                    hoverStateEnabled: value,
+                };
+
+                this.reinit({
+                    data: {
+                        name: 'test.txt',
+                        size: 1024,
+                    },
+                    ...options,
+                });
+
+                Object.entries(options).forEach(([key, value]) => {
+                    assert.strictEqual(this.downloadButton.option(key), value, `button ${key} value is correct`);
+                });
+            });
+
+            QUnit.test(`passed state options should be updated when state options are changed at runtime with value ${value}`, function(assert) {
+                const options = {
+                    activeStateEnabled: value,
+                    focusStateEnabled: value,
+                    hoverStateEnabled: value,
+                };
+
+                this.instance.option(options);
+
+                Object.entries(options).forEach(([key, value]) => {
+                    assert.strictEqual(this.downloadButton.option(key), value, `button ${key} value is correct`);
+                });
+            });
+        });
+
+        QUnit.test('should have correct default state options', function(assert) {
+            this.reinit({
+                data: {
+                    name: 'test.txt',
+                    size: 1024,
+                },
+            });
+
+            [ 'activeStateEnabled', 'focusStateEnabled', 'hoverStateEnabled' ].forEach((option) => {
+                assert.strictEqual(this.instance.option(option), true, `${option} is true by default`);
+            });
+        });
+    });
+
     QUnit.module('Dispose', () => {
         QUnit.test('should properly dispose download button', function(assert) {
             const buttonDisposeSpy = sinon.spy(this.downloadButton, 'dispose');
@@ -200,6 +334,85 @@ QUnit.module('File', moduleConfig, () => {
             this.instance.dispose();
 
             assert.strictEqual(buttonDisposeSpy.callCount, 1, 'button dispose was called');
+        });
+    });
+
+    QUnit.module('Accessibility', () => {
+        QUnit.test('file element should have role="listitem"', function(assert) {
+            assert.strictEqual(this.$element.attr('role'), 'listitem', 'file element should have correct role');
+        });
+
+        QUnit.test('download button should have correct aria-label with file name', function(assert) {
+            const testFileName = 'document.pdf';
+
+            this.reinit({
+                data: {
+                    name: testFileName,
+                    size: 2048,
+                },
+            });
+
+            assert.strictEqual(
+                this.$downloadButton.attr('aria-label'),
+                `Download file ${testFileName}`,
+                'download button should have aria-label with file name',
+            );
+        });
+
+        QUnit.test('download button aria-label should be updated when data is changed', function(assert) {
+            assert.strictEqual(
+                this.$downloadButton.attr('aria-label'),
+                'Download file test-file.txt',
+                'download button should have correct aria-label',
+            );
+
+            const secondFileName = 'file2.pdf';
+
+            this.instance.option('data', {
+                name: secondFileName,
+                size: 2048,
+            });
+
+            const $newDownloadButton = this.$element.find(`.${BUTTON_CLASS}`).first();
+
+            assert.strictEqual(
+                $newDownloadButton.attr('aria-label'),
+                `Download file ${secondFileName}`,
+                'download button aria-label should be updated with new file name',
+            );
+        });
+
+        QUnit.test('download button should have aria-label when file name is empty', function(assert) {
+            this.reinit({
+                data: {
+                    name: '',
+                    size: 0,
+                },
+            });
+
+            assert.strictEqual(
+                this.$downloadButton.attr('aria-label'),
+                'Download file ',
+                'download button should have aria-label even with empty file name',
+            );
+        });
+
+        QUnit.test('role="listitem" should persist after data option change', function(assert) {
+            this.reinit({
+                data: {
+                    name: 'initial.txt',
+                    size: 512,
+                },
+            });
+
+            assert.strictEqual(this.$element.attr('role'), 'listitem', 'role should be "listitem" initially');
+
+            this.instance.option('data', {
+                name: 'updated.pdf',
+                size: 1024,
+            });
+
+            assert.strictEqual(this.$element.attr('role'), 'listitem', 'role should remain "listitem" after data change');
         });
     });
 });

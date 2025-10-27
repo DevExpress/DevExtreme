@@ -7,6 +7,7 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { getWidth } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
 import type { ToolbarItem } from '@js/ui/popup';
+import type dxPopup from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import { current, isFluent } from '@js/ui/themes';
 
@@ -33,14 +34,21 @@ export class AppointmentPopup {
 
   form: AppointmentForm;
 
-  popup: any;
+  private _popup?: dxPopup;
 
   state: any;
 
-  constructor(scheduler, form) {
+  get popup(): dxPopup {
+    return this._popup as dxPopup;
+  }
+
+  get visible(): boolean {
+    return Boolean(this._popup?.option('visible'));
+  }
+
+  constructor(scheduler: any, form: AppointmentForm) {
     this.scheduler = scheduler;
     this.form = form;
-    this.popup = null;
 
     this.state = {
       action: null,
@@ -52,35 +60,31 @@ export class AppointmentPopup {
     };
   }
 
-  get visible() {
-    return this.popup ? this.popup.option('visible') : false;
-  }
-
   show(appointment, config) {
     this.state.appointment.data = appointment;
     this.state.action = config.action;
+    this.state.allowSaving = config.allowSaving;
     this.state.excludeInfo = config.excludeInfo;
 
-    if (!this.popup) {
+    if (!this._popup) {
       const popupConfig = this._createPopupConfig();
-      this.popup = this._createPopup(popupConfig);
+      this._popup = this._createPopup(popupConfig);
     }
 
-    const toolbarItems = this._getPopupToolbarItems(config.isToolbarVisible);
-    this.popup.option('toolbarItems', toolbarItems);
-
-    this.popup.show();
+    this._popup.show();
   }
 
   hide() {
-    this.popup.hide();
+    this._popup?.hide();
   }
 
   dispose() {
-    this.popup?.$element().remove();
+    this.form.dispose();
+    this._popup?.dispose();
+    this._popup = undefined;
   }
 
-  _createPopup(options) {
+  _createPopup(options): dxPopup {
     const popupElement = $('<div>')
       .addClass(APPOINTMENT_POPUP_CLASS)
       .appendTo(this.scheduler.getElement());
@@ -93,50 +97,24 @@ export class AppointmentPopup {
       height: 'auto',
       maxHeight: '90%',
       showCloseButton: false,
-      showTitle: true,
-      title: messageLocalization.format('dxScheduler-editPopupTitle'),
+      showTitle: false,
       preventScrollEvents: false,
       enableBodyScroll: false,
       _ignorePreventScrollEventsDeprecation: true,
-      onHiding: (): void => { this.scheduler.focus(); },
+      onHiding: (): void => {
+        this.scheduler.focus();
+      },
       contentTemplate: (): dxElementWrapper => {
-        this.form.create();
+        this.form.create({
+          updateToolbarForMainGroup: (): void => this.updateToolbarForMainGroup(),
+          updateToolbarForRecurrenceGroup: (): void => this.updateToolbarForRecurrenceGroup(),
+        });
+
         return this.form.dxForm.$element();
       },
       onShowing: (e): void => this._onShowing(e),
       wrapperAttr: { class: APPOINTMENT_POPUP_CLASS },
     };
-  }
-
-  _getPopupToolbarItems(allowUpdating: boolean): ToolbarItem[] {
-    const result: ToolbarItem[] = [];
-
-    if (allowUpdating) {
-      result.push(
-        {
-          toolbar: 'top',
-          location: 'after',
-          options: {
-            onClick: (e) => this._doneButtonClickHandler(e),
-            stylingMode: 'contained',
-            type: 'default',
-            text: messageLocalization.format('dxScheduler-editPopupSaveButtonText'),
-          },
-          shortcut: 'done',
-        } as ToolbarItem,
-      );
-    }
-
-    result.push({
-      toolbar: 'top',
-      location: 'after',
-      shortcut: 'cancel',
-      options: {
-        stylingMode: 'outlined',
-      },
-    } as ToolbarItem);
-
-    return result;
   }
 
   _onShowing(e) {
@@ -159,6 +137,7 @@ export class AppointmentPopup {
       if (canceled) {
         e.cancel = true;
       } else {
+        this.updateToolbarForMainGroup();
         this.updatePopupFullScreenMode();
       }
     });
@@ -184,6 +163,8 @@ export class AppointmentPopup {
   }
 
   _updateForm(): void {
+    this.form.showMainGroup(false);
+
     const rawAppointment = this.state.appointment.data;
     const appointmentAdapter = this._createAppointmentAdapter(rawAppointment)
       .clone()
@@ -191,8 +172,8 @@ export class AppointmentPopup {
 
     const formData = this._createFormData(appointmentAdapter);
 
-    this.form.readOnly = this._isReadOnly(appointmentAdapter);
     this.form.formData = formData;
+    this.form.readOnly = this._isReadOnly(appointmentAdapter);
   }
 
   _createFormData(appointmentAdapter: AppointmentAdapter): Record<string, any> {
@@ -202,23 +183,24 @@ export class AppointmentPopup {
       resources,
     );
 
-    const { allDayExpr } = this.scheduler.getDataAccessors().expr;
+    const { allDayExpr, recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
 
     return {
       ...appointmentAdapter.source,
       ...groupValues,
       [allDayExpr]: Boolean(appointmentAdapter.allDay),
+      [recurrenceRuleExpr]: appointmentAdapter.recurrenceRule,
     };
   }
 
   triggerResize(): void {
-    if (this.popup) {
+    if (this.popup?.$element()) {
       triggerResizeEvent(this.popup.$element());
     }
   }
 
   updatePopupFullScreenMode(): void {
-    if (this.form.dxForm && this.visible) {
+    if (this.visible) {
       const isPopupFullScreenNeeded = () => {
         const window = getWindow();
         const width = window && getWidth(window);
@@ -281,7 +263,7 @@ export class AppointmentPopup {
     return deferred.promise();
   }
 
-  _doneButtonClickHandler(e) {
+  _saveButtonClickHandler(e) {
     e.cancel = true;
     this.saveEditDataAsync();
   }
@@ -321,7 +303,7 @@ export class AppointmentPopup {
   }
 
   _showLoadPanel() {
-    const container = this.popup.$overlayContent();
+    const container = (this.popup as any).$overlayContent();
 
     showLoading({
       container,
@@ -370,5 +352,94 @@ export class AppointmentPopup {
     return shiftDifference
       ? new Date(clonedDate.getTime() + shiftDifference * dateUtils.dateToMilliseconds('hour'))
       : clonedDate;
+  }
+
+  updateToolbarForRecurrenceGroup(): void {
+    const toolbarItems: ToolbarItem[] = [
+      {
+        toolbar: 'top',
+        location: 'before',
+        widget: 'dxButton',
+        options: {
+          icon: 'back',
+          stylingMode: 'text',
+          onClick: (): void => {
+            this.form.showMainGroup();
+          },
+        },
+      },
+      {
+        toolbar: 'top',
+        location: 'before',
+        text: messageLocalization.format('dxScheduler-editorLabelRecurrence'),
+        cssClass: 'dx-toolbar-label',
+      },
+      {
+        toolbar: 'top',
+        location: 'after',
+        widget: 'dxButton',
+        options: {
+          text: messageLocalization.format('dxScheduler-editPopupSaveButtonText'),
+          stylingMode: 'contained',
+          type: 'default',
+          onClick: (e): void => {
+            this.form.showMainGroup();
+            e.cancel = true;
+            this.saveEditDataAsync();
+          },
+        },
+      },
+      {
+        toolbar: 'top',
+        location: 'after',
+        widget: 'dxButton',
+        options: {
+          text: messageLocalization.format('Cancel'),
+          stylingMode: 'outlined',
+          onClick: (): void => {
+            this.hide();
+          },
+        },
+      },
+    ];
+
+    this.popup.option('toolbarItems', toolbarItems);
+  }
+
+  updateToolbarForMainGroup(): void {
+    const toolbarItems: ToolbarItem[] = [{
+      toolbar: 'top',
+      location: 'before',
+      text: messageLocalization.format('dxScheduler-editPopupTitle'),
+      cssClass: 'dx-toolbar-label',
+    }];
+
+    const canSave = !this.form.readOnly;
+    if (canSave) {
+      toolbarItems.push(
+        {
+          toolbar: 'top',
+          location: 'after',
+          options: {
+            onClick: (e) => this._saveButtonClickHandler(e),
+            stylingMode: 'contained',
+            type: 'default',
+            text: messageLocalization.format('dxScheduler-editPopupSaveButtonText'),
+          },
+          shortcut: 'done',
+        } as ToolbarItem,
+      );
+    }
+
+    toolbarItems.push({
+      toolbar: 'top',
+      location: 'after',
+      shortcut: 'cancel',
+      options: {
+        stylingMode: 'outlined',
+      },
+    } as ToolbarItem);
+
+    this.popup.option('toolbarItems', toolbarItems);
   }
 }

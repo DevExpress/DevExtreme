@@ -27,6 +27,7 @@
 import DxPivotGrid, {
   DxFieldChooser,
   DxFieldPanel,
+  type DxPivotGridTypes,
 } from 'devextreme-vue/pivot-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import { sales } from './data.ts';
@@ -71,29 +72,27 @@ const dataSource = new PivotGridDataSource({
   store: sales,
 });
 
-function onContextMenuPreparing(e) {
-  if (e.field && e.field.dataField === 'amount') {
-    summaryDisplayModes.forEach((mode) => {
-      e.items.push({
-        text: mode.text,
-        selected: e.field.summaryDisplayMode === mode.value,
-        onItemClick: () => {
-          let format;
-          const caption = mode.value === 'none' ? 'Total Sales' : 'Relative Sales';
-          if (mode.value === 'none'
-                  || mode.value === 'absoluteVariation') {
-            format = 'currency';
-          }
-          dataSource.field(e.field.index, {
-            summaryDisplayMode: mode.value,
-            format,
-            caption,
-          });
+function onContextMenuPreparing(e: DxPivotGridTypes.ContextMenuPreparingEvent) {
+  if (e.items && e.field?.dataField === 'amount') {
+    summaryDisplayModes.forEach((mode) => e.items?.push({
+      text: mode.text,
+      selected: e.field?.summaryDisplayMode === mode.value,
+      onItemClick: () => {
+        let format: string | undefined;
+        const caption = mode.value === 'none' ? 'Total Sales' : 'Relative Sales';
+        if (mode.value === 'none'
+            || mode.value === 'absoluteVariation') {
+          format = 'currency';
+        }
+        dataSource.field((e.field as Record<string, any>).index, {
+          summaryDisplayMode: mode.value,
+          format,
+          caption,
+        });
 
-          dataSource.load();
-        },
-      });
-    });
+        dataSource.load();
+      },
+    }));
   }
 }
 </script>

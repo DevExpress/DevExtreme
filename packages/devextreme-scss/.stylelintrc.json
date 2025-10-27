@@ -29,7 +29,7 @@
         "shorthand-property-no-redundant-values": null,
         "string-quotes": null,
         "value-no-vendor-prefix": true,
-        "value-keyword-case": ["lower", {"camelCaseSvgKeywords": true}],
+        "value-keyword-case": null,
         "selector-not-notation": null,
         "keyframe-selector-notation": null,
         "media-feature-range-notation": null,
