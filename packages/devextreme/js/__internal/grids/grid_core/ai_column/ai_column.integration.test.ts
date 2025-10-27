@@ -1011,7 +1011,7 @@ describe('API Methods', () => {
       });
 
       instance.sendAIColumnRequest('myColumn');
-      expect(columnSendRequestStarted).toHaveBeenCalledTimes(1);
+      expect(columnSendRequestStarted).toHaveBeenCalledTimes(2);
       expect(columnSendRequestResolved).toHaveBeenCalledTimes(0);
       expect(abortSpy).toHaveBeenCalledTimes(0);
       // There is enough time to resolve a promise
@@ -1153,11 +1153,9 @@ describe('API Methods', () => {
 
       instance.columnOption('myColumn', 'ai.prompt', 'Test prompt');
 
-      // TODO: There should be only one call to sendAIColumnRequest
-      // Now there are two calls: one from optionChangedHandler, and other from handleDataChanged
-      expect(columnSendRequestResolved).toHaveBeenCalledTimes(2);
+      expect(columnSendRequestResolved).toHaveBeenCalledTimes(1);
       await Promise.resolve();
-      expect(abortSpy).toHaveBeenCalledTimes(2);
+      expect(abortSpy).toHaveBeenCalledTimes(1);
     });
 
     it('should not send a request if there are no data rows', async () => {
