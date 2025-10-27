@@ -304,22 +304,6 @@ const iconSet = {
   micfilled: '\f204',
   stopoutline: '\f205',
   stopfilled: '\f206',
-  optionsoutline: '\f207',
-  optionsfilled: '\f208',
-  conferenceroomoutline: '\f209',
-  conferenceroomfilled: '\f210',
-  chatsparkleoutline: '\f211',
-  chatsparklefilled: '\f212',
-  addcircleoutline: '\f213',
-  addcirclefilled: '\f214',
-  zoomoutoutline: '\f215',
-  zoomoutfilled: '\f216',
-  zoominoutlined: '\f217',
-  zoominfilled: '\f218',
-  calendardatestartoutline: '\f219',
-  calendardatestartfilled: '\f220',
-  calendardateendoutline: '\f221',
-  calendardateendfilled: '\f222',
 };
 
 fixture.disablePageReloads`Icons`
