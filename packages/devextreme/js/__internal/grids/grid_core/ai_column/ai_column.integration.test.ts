@@ -2160,4 +2160,150 @@ describe('Popup', () => {
     const popupInstance = component.getAIPromptEditor().getPopupInstance();
     expect(popupInstance.option('visible')).toBe(false);
   });
+
+  it('should pass popup options to the AI column prompt editor popup (initial rendering)', async () => {
+    const { component } = await createDataGrid({
+      dataSource: [
+        { id: 1, name: 'Name 1', value: 10 },
+      ],
+      columns: [
+        { dataField: 'id', caption: 'ID' },
+        { dataField: 'name', caption: 'Name' },
+        { dataField: 'value', caption: 'Value' },
+        {
+          type: 'ai',
+          caption: 'AI Column',
+          name: 'myColumn',
+          ai: {
+            popup: {
+              visible: true,
+              title: 'Custom Title',
+              height: 400,
+              animation: {
+                show: {
+                  type: 'fade',
+                  duration: 300,
+                },
+                hide: {
+                  type: 'fade',
+                  duration: 300,
+                },
+              },
+              toolbarItems: [
+                {
+                  widget: 'dxButton',
+                  options: {
+                    text: 'Custom Button',
+                  },
+                  location: 'after',
+                },
+              ],
+            },
+          },
+        },
+      ],
+    });
+
+    const popupInstance = component.getAIPromptEditor().getPopupInstance();
+    expect(popupInstance.option('visible')).toBe(true);
+    expect(popupInstance.option('title')).toBe('Custom Title');
+    expect(popupInstance.option('width')).toBe(360); // default width
+    expect(popupInstance.option('height')).toBe(400);
+    expect(popupInstance.option('animation')).toEqual({
+      show: {
+        type: 'fade',
+        duration: 300,
+      },
+      hide: {
+        type: 'fade',
+        duration: 300,
+      },
+    });
+    const toolbarItems = popupInstance.option('toolbarItems');
+    expect(toolbarItems).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          widget: 'dxButton',
+          options: expect.objectContaining({
+            text: 'Custom Button',
+          }),
+          location: 'after',
+        }),
+      ]),
+    );
+  });
+
+  it('should pass popup options to the AI column prompt editor popup (initial rendering)', async () => {
+    const { component } = await createDataGrid({
+      dataSource: [
+        { id: 1, name: 'Name 1', value: 10 },
+      ],
+      columns: [
+        { dataField: 'id', caption: 'ID' },
+        { dataField: 'name', caption: 'Name' },
+        { dataField: 'value', caption: 'Value' },
+        {
+          type: 'ai',
+          caption: 'AI Column',
+          name: 'myColumn',
+        },
+      ],
+    });
+
+    component.apiColumnOption('myColumn', 'ai.popup', {
+      visible: true,
+      title: 'Custom Title',
+      height: 400,
+      animation: {
+        show: {
+          type: 'fade',
+          duration: 300,
+        },
+        hide: {
+          type: 'fade',
+          duration: 300,
+        },
+      },
+      toolbarItems: [
+        {
+          widget: 'dxButton',
+          options: {
+            text: 'Custom Button',
+          },
+          location: 'after',
+        },
+      ],
+    });
+
+    jest.runAllTimers();
+    await Promise.resolve();
+
+    const popupInstance = component.getAIPromptEditor().getPopupInstance();
+    expect(popupInstance.option('visible')).toBe(true);
+    expect(popupInstance.option('title')).toBe('Custom Title');
+    expect(popupInstance.option('width')).toBe(360); // default width
+    expect(popupInstance.option('height')).toBe(400);
+    expect(popupInstance.option('animation')).toEqual({
+      show: {
+        type: 'fade',
+        duration: 300,
+      },
+      hide: {
+        type: 'fade',
+        duration: 300,
+      },
+    });
+    const toolbarItems = popupInstance.option('toolbarItems');
+    expect(toolbarItems).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          widget: 'dxButton',
+          options: expect.objectContaining({
+            text: 'Custom Button',
+          }),
+          location: 'after',
+        }),
+      ]),
+    );
+  });
 });
