@@ -325,7 +325,7 @@ test.clientScripts([
 
   await appointmentPopup.openRecurrenceForm(t, 'Weekly');
   await appointmentPopup.setRecurrenceInterval(t, 5);
-  await appointmentPopup.selectRecurrenceWeekDays(t, [1, 4]);
+  await appointmentPopup.selectRecurrenceWeekDays(t, [1, 5]);
 
   await takeScreenshot(
     `scheduler__recurrence-form__weekly__interval-5.png (theme=${theme})`,
