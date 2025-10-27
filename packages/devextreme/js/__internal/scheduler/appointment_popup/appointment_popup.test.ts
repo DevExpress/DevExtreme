@@ -486,6 +486,43 @@ describe('Appointment Popup Form', () => {
         expect(buttons7Days.length).toBe(7);
       });
 
+      it('Check that firstDayOfWeek is applied to week day buttons', async () => {
+        const appointment = {
+          text: 'Test Appointment',
+          startDate: new Date(2017, 4, 1, 9, 30),
+          endDate: new Date(2017, 4, 1, 11),
+        };
+
+        const { POM: POM1, scheduler: scheduler1 } = await createScheduler({
+          ...getDefaultConfig(),
+          firstDayOfWeek: 1,
+        });
+
+        scheduler1.showAppointmentPopup(appointment);
+        POM1.popup.selectRepeatValue('weekly');
+
+        const dayButtonsMonday = $(POM1.popup.recurrenceWeekDayButtons).find('.dx-button');
+        expect(dayButtonsMonday.length).toBe(7);
+        expect(dayButtonsMonday.eq(0).text()).toBe('M');
+        expect(dayButtonsMonday.eq(6).text()).toBe('S');
+
+        scheduler1.hideAppointmentPopup();
+
+        const { POM: POM2, scheduler: scheduler2 } = await createScheduler({
+          ...getDefaultConfig(),
+          firstDayOfWeek: 0,
+        });
+
+        scheduler2.showAppointmentPopup(appointment);
+        POM2.popup.selectRepeatValue('weekly');
+
+        const dayButtonsSunday = $(POM2.popup.recurrenceWeekDayButtons).find('.dx-button');
+        expect(dayButtonsSunday.length).toBe(7);
+        expect(dayButtonsSunday.eq(0).text()).toBe('S');
+        expect(dayButtonsSunday.eq(1).text()).toBe('M');
+        expect(dayButtonsSunday.eq(6).text()).toBe('S');
+      });
+
       it('Should show month day input when frequency is monthly', async () => {
         const appointment = {
           text: 'Test Appointment',
