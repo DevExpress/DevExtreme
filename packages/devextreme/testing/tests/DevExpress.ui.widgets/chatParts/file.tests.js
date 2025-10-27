@@ -165,7 +165,7 @@ QUnit.module('File', moduleConfig, () => {
             const $sizeElement = this.$element.find(`.${CHAT_FILE_SIZE_CLASS}`);
             const expectedText = '0 bytes';
 
-            assert.strictEqual($sizeElement.text(), expectedText, 'zero size is displayed as 0 B');
+            assert.strictEqual($sizeElement.text(), expectedText, 'zero size is displayed as 0 bytes');
             assert.strictEqual($sizeElement.attr('title'), expectedText, 'zero size is in title attribute');
         });
 
