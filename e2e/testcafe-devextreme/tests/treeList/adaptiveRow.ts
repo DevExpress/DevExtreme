@@ -10,8 +10,6 @@ safeSizeTest('Should be shown and hidden when the window is resized', async (t) 
   const treeList = new TreeList('#container');
   await treeList.isReady();
 
-  await t.resizeWindow(400, 400);
-
   const adaptiveButton = treeList.getAdaptiveButton();
   await t.expect(adaptiveButton.exists).ok();
   await t.click(adaptiveButton);
@@ -22,7 +20,7 @@ safeSizeTest('Should be shown and hidden when the window is resized', async (t) 
 
   await t.expect(treeList.isAdaptiveColumnHidden()).ok();
   await t.expect(treeList.getAdaptiveRow(0).element.exists).notOk();
-}).before(async () => createWidget('dxTreeList', {
+}, [400, 400]).before(async () => createWidget('dxTreeList', {
   dataSource: [{
     ID: 1,
     Head_ID: -1,

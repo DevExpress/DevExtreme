@@ -14,7 +14,7 @@ export default class TreeList extends DataGrid {
     return this.element.find(`.${CLASS.treeList}`);
   }
 
-  getAdaptiveButton(nth: number = 0): Selector {
-    return this.element.find(`.${CLASS.adaptiveColumnButton}`).nth(nth);
+  getAdaptiveButtonSelector(): string {
+    return `.${CLASS.adaptiveColumnButton}`;
   }
 }

@@ -10,8 +10,6 @@ safeSizeTest('Should be shown and hidden when the window is resized', async (t) 
   const dataGrid = new DataGrid('#container');
   await dataGrid.isReady();
 
-  await t.resizeWindow(400, 400);
-
   const adaptiveButton = dataGrid.getAdaptiveButton();
   await t.expect(adaptiveButton.exists).ok();
   await t.click(adaptiveButton);
@@ -22,7 +20,7 @@ safeSizeTest('Should be shown and hidden when the window is resized', async (t) 
 
   await t.expect(dataGrid.isAdaptiveColumnHidden()).ok();
   await t.expect(dataGrid.getAdaptiveRow(0).element.exists).notOk();
-}).before(async () => createWidget('dxDataGrid', {
+}, [400, 400]).before(async () => createWidget('dxDataGrid', {
   dataSource: [{
     ID: 1,
     Head_ID: -1,

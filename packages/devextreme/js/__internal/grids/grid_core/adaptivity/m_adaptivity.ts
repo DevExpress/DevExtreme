@@ -41,8 +41,10 @@ const COLUMN_VIEWS = [COLUMN_HEADERS_VIEW, ROWS_VIEW, FOOTER_VIEW];
 const ADAPTIVE_NAMESPACE = 'dxDataGridAdaptivity';
 const HIDDEN_COLUMNS_WIDTH = 'adaptiveHidden';
 const ADAPTIVE_ROW_TYPE = 'detailAdaptive';
+
 const FORM_ITEM_CONTENT_CLASS = 'dx-field-item-content';
 const FORM_ITEM_MODIFIED = 'dx-item-modified';
+
 const HIDDEN_COLUMN_CLASS = 'hidden-column';
 const ADAPTIVE_COLUMN_BUTTON_CLASS = 'adaptive-more';
 const ADAPTIVE_COLUMN_NAME_CLASS = 'dx-command-adaptive';
@@ -505,23 +507,25 @@ export class AdaptiveColumnsController extends modules.ViewController {
   }
 
   public _toggleGroupAdaptiveRowVisibility(isBestFit: boolean) {
-    const hasAdaptiveColumns = this.hasHiddenColumns() || this.getHidingColumnsQueue().length > 0;
+    const hasHiddenColumns = this.hasHiddenColumns() || this.getHidingColumnsQueue().length > 0;
 
-    if (!hasAdaptiveColumns) {
+    if (!hasHiddenColumns) {
       return;
     }
 
     const rowsView = this.getView(ROWS_VIEW);
-    if (rowsView.element()) {
-      const items = this._dataController.items();
+    const items = this._dataController.items();
 
-      items.forEach((item, index) => {
-        if (item.rowType === ADAPTIVE_ROW_TYPE) {
-          const $row = $(rowsView.getRowElement(index));
-          $row.css('display', isBestFit ? 'none' : '');
-        }
-      });
+    if (!items || items.length === 0) {
+      return;
     }
+
+    items.forEach((item, index) => {
+      if (item.rowType === ADAPTIVE_ROW_TYPE) {
+        const $row = $(rowsView.getRowElement(index));
+        $row.css('display', isBestFit ? 'none' : '');
+      }
+    });
   }
 
   private _isCellValid($cell) {

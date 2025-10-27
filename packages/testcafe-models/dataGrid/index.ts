@@ -409,8 +409,12 @@ export default class DataGrid extends GridCore {
     return this.element.find(`.${this.addWidgetPrefix(CLASS.columnChooserButton)}`);
   }
 
+   getAdaptiveButtonSelector(): string {
+    return `.${CLASS.adaptiveColumnButton}`;
+  }
+
   getAdaptiveButton(nth: number = 0): Selector {
-    return this.element.find(`.${CLASS.adaptiveColumnButton}`).nth(nth);
+    return this.element.find(this.getAdaptiveButtonSelector()).nth(nth);
   }
 
   isAdaptiveColumnHidden(): Promise<boolean> {
