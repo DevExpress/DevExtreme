@@ -149,13 +149,13 @@ export class ColumnsController extends modules.Controller {
       case !column?.type:
         return this.option('commonColumnSettings');
       case column?.type === AI_COLUMN_NAME:
-        return this.getAiColumnSettings();
+        return this.getAIColumnSettings();
       default:
         return {};
     }
   }
 
-  private getAiColumnSettings(): Partial<Column> {
+  private getAIColumnSettings(): Partial<Column> {
     return {
       allowHiding: true,
       ai: {
@@ -465,16 +465,6 @@ export class ColumnsController extends modules.Controller {
 
   public getColumnByName(columnName: string): Column | undefined {
     return this.getColumns().find((column) => column.name === columnName);
-  }
-
-  public getColumnHeaderCellElement(columnName: string): HTMLElement | null {
-    const column = this.getColumnByName(columnName);
-    if (!column) {
-      return null;
-    }
-    const visibleIndex = this.getVisibleIndex(column.index);
-    const headerCellSelector = getColumnHeaderCellSelector(visibleIndex);
-    return this.component.element().querySelector(headerCellSelector) as HTMLElement;
   }
 
   public isBandColumnsUsed() {

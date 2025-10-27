@@ -88,6 +88,9 @@
         "dxFileUploader-invalidFileExtension": "Nepovolený typ souboru",
         "dxFileUploader-invalidMaxFileSize": "Soubor je příliš velký",
         "dxFileUploader-invalidMinFileSize": "Soubor je příliš malý",
+        "dxFileUploader-fileListLabel": "File list",
+        "dxFileUploader-removeFileButtonLabel": "Remove file {0}",
+        "dxFileUploader-uploadFileButtonLabel": "Upload file {0}",
 
         "dxRangeSlider-ariaFrom": "Od",
         "dxRangeSlider-ariaTill": "Do",

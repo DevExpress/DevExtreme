@@ -1,10 +1,9 @@
 import type { Column } from '@js/ui/data_grid';
-import { isDefined } from '@ts/core/utils/m_type';
 
 import type { Item, UserData } from '../data_controller/m_data_controller';
 import { AI_COLUMN_NAME, CLASSES } from './const';
 
-export const getAiCommandColumnOptions = (): unknown => ({
+export const getAICommandColumnOptions = (): unknown => ({
   type: AI_COLUMN_NAME,
   command: AI_COLUMN_NAME,
   cssClass: CLASSES.aiColumn,
@@ -32,9 +31,3 @@ export const reduceDataCachedKeys = (
 };
 
 export const isAIColumnAutoMode = (column: Column): boolean => column.type === 'ai' && (!column.ai?.mode || column.ai.mode === 'auto');
-
-export const isPopupOptions = (optionName: string, value: unknown): boolean => optionName.startsWith('ai.popup')
-  || (optionName === 'ai' && isDefined((value as Record<string, unknown>)?.popupOptions));
-
-export const isEditorOptions = (optionName: string, value: unknown): boolean => optionName.startsWith('ai.editorOptions')
-  || (optionName === 'ai' && isDefined((value as Record<string, unknown>)?.editorOptions));

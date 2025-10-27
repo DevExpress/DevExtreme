@@ -88,6 +88,9 @@
         "dxFileUploader-invalidFileExtension": "El tipus de fitxer no està permès",
         "dxFileUploader-invalidMaxFileSize": "El fitxer és massa gran",
         "dxFileUploader-invalidMinFileSize": "El fitxer és massa petit",
+        "dxFileUploader-fileListLabel": "File list",
+        "dxFileUploader-removeFileButtonLabel": "Remove file {0}",
+        "dxFileUploader-uploadFileButtonLabel": "Upload file {0}",
 
         "dxRangeSlider-ariaFrom": "Des de",
         "dxRangeSlider-ariaTill": "Fins a",

@@ -88,6 +88,9 @@
         "dxFileUploader-invalidFileExtension": "Tipul fișierului nu este permis",
         "dxFileUploader-invalidMaxFileSize": "Fișierul este prea mare",
         "dxFileUploader-invalidMinFileSize": "Fișierul este prea mic",
+        "dxFileUploader-fileListLabel": "File list",
+        "dxFileUploader-removeFileButtonLabel": "Remove file {0}",
+        "dxFileUploader-uploadFileButtonLabel": "Upload file {0}",
 
         "dxRangeSlider-ariaFrom": "Din",
         "dxRangeSlider-ariaTill": "Până",

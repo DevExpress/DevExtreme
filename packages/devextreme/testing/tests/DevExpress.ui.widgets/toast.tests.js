@@ -1,10 +1,9 @@
-import { getWidth, getHeight, getOuterHeight, getOuterWidth } from 'core/utils/size';
+import { getWidth, getHeight, getOuterHeight } from 'core/utils/size';
 import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'common/core/animation/fx';
 import { value as setViewPort } from 'core/utils/view_port';
 import Toast from 'ui/toast';
-import { shouldSkipOnDevices } from '../../helpers/device.js';
 
 import 'generic_light.css!';
 
@@ -14,8 +13,6 @@ const TOAST_WRAPPER_CLASS = TOAST_CLASS_PREFIX + 'wrapper';
 const TOAST_CONTENT_CLASS = TOAST_CLASS_PREFIX + 'content';
 const TOAST_MESSAGE_CLASS = TOAST_CLASS_PREFIX + 'message';
 const TOAST_ICON_CLASS = TOAST_CLASS_PREFIX + 'icon';
-
-const DEFAULT_MARGIN = 20;
 
 const moduleConfig = {
     beforeEach: function() {
@@ -86,29 +83,6 @@ QUnit.module('general', moduleConfig, () => {
 
         const $content = this.instance.$content();
         assert.roughEqual($content.offset().top + getOuterHeight($content), getHeight($(window)), 1.01);
-    });
-
-    QUnit.test('position on mobile devices', function(assert) {
-        if(shouldSkipOnDevices({ deviceTypes: ['desktop', 'tablet'], assert })) {
-            return;
-        }
-
-        const done = assert.async();
-        fx.off = false;
-
-        this.instance = this.$element.dxToast({
-            onShown: function(e) {
-                const $content = e.component.$content();
-
-                assert.roughEqual($content.offset().top + getOuterHeight($content), window.visualViewport.height - DEFAULT_MARGIN, 1.01);
-                assert.roughEqual(getOuterWidth($content), window.visualViewport.width - (DEFAULT_MARGIN * 2), 1.01);
-
-                done();
-            }
-        }).dxToast('instance');
-
-        this.instance.show();
-        this.clock.tick(5000);
     });
 
     QUnit.test('displayTime', function(assert) {

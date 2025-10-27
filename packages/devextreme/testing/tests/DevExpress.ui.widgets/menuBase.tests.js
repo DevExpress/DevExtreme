@@ -4,7 +4,6 @@ import config from 'core/config';
 import MenuBase from 'ui/context_menu/ui.menu_base';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 import 'generic_light.css!';
 
@@ -631,10 +630,6 @@ QUnit.module('ShowSubmenuMode', {
     });
 
     QUnit.test('showSubmenuMode - by default', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menuBase = createMenu({ items: [{ text: 'item1', items: [{ text: 'item1-1' }] }] });
         const $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
@@ -647,10 +642,6 @@ QUnit.module('ShowSubmenuMode', {
     });
 
     QUnit.test('showSubmenuMode - onHover - set as object and delay set as number', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menuBase = createMenu({ items: [{ text: 'item1', items: [{ text: 'item1-1' }] }], showSubmenuMode: { type: 'onHover', delay: 50 } });
         const $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
@@ -663,10 +654,6 @@ QUnit.module('ShowSubmenuMode', {
     });
 
     QUnit.test('showSubmenuMode - onHover - function has item element as parameter', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menuBase = createMenu({ items: [{ text: 'item1', items: [{ text: 'item1-1' }] }], showSubmenuMode: { type: 'onHover', delay: 50 } });
         const $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
@@ -679,10 +666,6 @@ QUnit.module('ShowSubmenuMode', {
     });
 
     QUnit.test('showSubmenuMode - onHover - set as object and delay set as object too', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menuBase = createMenu({ items: [{ text: 'item1', items: [{ text: 'item1-1' }] }], showSubmenuMode: { type: 'onHover', delay: { show: 100, hide: 500 } } });
         const $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
@@ -695,10 +678,6 @@ QUnit.module('ShowSubmenuMode', {
     });
 
     QUnit.test('showSubmenuMode - onHover - set as string without delay', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menuBase = createMenu({ items: [{ text: 'item1', items: [{ text: 'item1-1' }] }], showSubmenuMode: 'onHover' });
         const $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
@@ -711,10 +690,6 @@ QUnit.module('ShowSubmenuMode', {
     });
 
     QUnit.test('previous submenu should not appear if other submenu shown timeout is started', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menuBase = createMenu({
             items: [
                 { text: 'item1', items: [{ text: 'item1-1' }] },

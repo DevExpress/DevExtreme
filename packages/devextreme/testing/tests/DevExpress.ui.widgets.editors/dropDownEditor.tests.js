@@ -14,7 +14,6 @@ import caretWorkaround from './textEditorParts/caretWorkaround.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import dxButton from 'ui/button';
 import domAdapter from '__internal/core/m_dom_adapter';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
 import {
     DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON,
     DROP_DOWN_EDITOR_AFTER_FIELD_ADDON
@@ -391,10 +390,6 @@ QUnit.module('dxDropDownEditor', testEnvironment, () => {
 
 QUnit.module('focus policy', () => {
     QUnit.testInActiveWindow('editor should save focus on button clicking', function(assert) {
-        if(shouldSkipOnMobile(assert, 'blur preventing is unnecessary on mobile devices')) {
-            return;
-        }
-
         const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
             applyValueMode: 'useButtons',
             focusStateEnabled: true
@@ -427,10 +422,6 @@ QUnit.module('focus policy', () => {
     });
 
     QUnit.testInActiveWindow('editor should save focus on clearbutton clicking, fieldTemplate is used', function(assert) {
-        if(shouldSkipOnMobile(assert, 'blur preventing is unnecessary on mobile devices')) {
-            return;
-        }
-
         const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
             items: [{ 'Name': 'one', 'ID': 1 }, { 'Name': 'two', 'ID': 2 }, { 'Name': 'three', 'ID': 3 }],
             displayExpr: 'Name',
@@ -769,10 +760,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('Focus policy with field template', function(assert) {
-        if(shouldSkipOnMobile(assert, 'blur preventing is unnecessary on mobile devices')) {
-            return;
-        }
-
         this.dropDownEditor.option('fieldTemplate', function(data, container) {
             $(container).append($('<div>').dxTextBox({ value: data }));
         });
