@@ -321,13 +321,15 @@ export class PopupModel {
       throw new Error('Week day buttons not found');
     }
 
-    daysIndex.forEach((dayIndex) => {
-      const buttons = Array.from(buttonsContainer.querySelectorAll('button'));
-      const button = buttons[dayIndex];
-      if (!button) {
-        throw new Error(`Day button for index ${dayIndex} not found`);
+    const buttons = Array.from(buttonsContainer.querySelectorAll('button'));
+
+    buttons.forEach((button, index) => {
+      const isActive = button.classList.contains('dx-button-mode-contained');
+      const shouldBeActive = daysIndex.includes(index);
+
+      if (isActive !== shouldBeActive) {
+        button.click();
       }
-      button.click();
     });
   };
 

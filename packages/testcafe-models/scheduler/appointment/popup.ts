@@ -99,10 +99,17 @@ export default class AppointmentPopup {
   }
 
   async selectRecurrenceWeekDays(t: TestController, daysIndex: number[]): Promise<void> {
-    daysIndex.forEach(async (dayIndex) => {
-      const dayButton = this.recurrence.weekDayButtons.nth(dayIndex);
-      await t.click(dayButton);
-    });
+    const buttonsCount = await this.recurrence.weekDayButtons.count;
+
+    for (let index = 0; index < buttonsCount; index++) {
+      const button = this.recurrence.weekDayButtons.nth(index);
+      const isActive = await button.hasClass('dx-button-mode-contained');
+      const shouldBeActive = daysIndex.includes(index);
+
+      if (isActive !== shouldBeActive) {
+        await t.click(button);
+      }
+    }
   }
 
   async setRecurrenceMonthDay(t: TestController, day: number): Promise<void> {
