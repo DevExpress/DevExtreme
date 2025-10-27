@@ -1011,7 +1011,7 @@ describe('API Methods', () => {
       });
 
       instance.sendAIColumnRequest('myColumn');
-      expect(columnSendRequestStarted).toHaveBeenCalledTimes(2);
+      expect(columnSendRequestStarted).toHaveBeenCalledTimes(1);
       expect(columnSendRequestResolved).toHaveBeenCalledTimes(0);
       expect(abortSpy).toHaveBeenCalledTimes(0);
       // There is enough time to resolve a promise
