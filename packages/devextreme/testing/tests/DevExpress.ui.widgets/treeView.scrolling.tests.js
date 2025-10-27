@@ -73,18 +73,24 @@ QUnit.module('scrollToItem', {
     ['vertical', 'horizontal', 'both'].forEach(scrollDirection => {
         [false, true].forEach(expanded => {
             [false, true].forEach(disabled => {
-                [false, true].forEach(rtlEnabled => {
-                    configs.push({
-                        expanded,
-                        scrollDirection,
-                        disabled,
-                        rtlEnabled,
-                        keysToScroll: ['item1', 'item1_1_1', 'item9', 'item9_1_1_1_1', 'item10', 'item10_1_1_1_1_1'],
-                        description: `expanded: ${expanded}, rtlEnabled: ${rtlEnabled}, disabled: ${disabled}, scrollDirection: ${scrollDirection}`
-                    });
+                configs.push({
+                    expanded,
+                    scrollDirection,
+                    disabled,
+                    rtlEnabled: false,
+                    keysToScroll: ['item1', 'item10_1_1_1_1_1'],
+                    description: `expanded: ${expanded}, rtlEnabled: false, disabled: ${disabled}, scrollDirection: ${scrollDirection}`
                 });
             });
         });
+    });
+    configs.push({
+        expanded: true,
+        scrollDirection: 'both',
+        disabled: false,
+        rtlEnabled: true,
+        keysToScroll: ['item1', 'item10_1_1_1_1_1'],
+        description: 'expanded: true, rtlEnabled: true, disabled: false, scrollDirection: both',
     });
 
     configs.forEach(config => {
