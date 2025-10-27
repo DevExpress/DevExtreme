@@ -13,24 +13,48 @@ fixture.disablePageReloads`DropDownBox - Single Selection`
 
 const treeProductsData = [
   { ID: 1, name: 'Stores', expanded: true },
-  { ID: '1_1', categoryId: 1, name: 'Super Mart of the West', expanded: true },
+  {
+    ID: '1_1', categoryId: 1, name: 'Super Mart of the West', expanded: true,
+  },
   { ID: '1_1_1', categoryId: '1_1', name: 'Video Players' },
-  { ID: '1_1_1_1', categoryId: '1_1_1', name: 'HD Video Player', price: 220 },
-  { ID: '1_1_1_2', categoryId: '1_1_1', name: 'SuperHD Video Player', price: 270 },
+  {
+    ID: '1_1_1_1', categoryId: '1_1_1', name: 'HD Video Player', price: 220,
+  },
+  {
+    ID: '1_1_1_2', categoryId: '1_1_1', name: 'SuperHD Video Player', price: 270,
+  },
   { ID: '1_1_2', categoryId: '1_1', name: 'Televisions' },
-  { ID: '1_1_2_1', categoryId: '1_1_2', name: 'SuperLCD 42', price: 1200 },
-  { ID: '1_1_2_2', categoryId: '1_1_2', name: 'SuperLED 42', price: 1450 },
-  { ID: '1_2', categoryId: 1, name: 'Braeburn', expanded: true },
+  {
+    ID: '1_1_2_1', categoryId: '1_1_2', name: 'SuperLCD 42', price: 1200,
+  },
+  {
+    ID: '1_1_2_2', categoryId: '1_1_2', name: 'SuperLED 42', price: 1450,
+  },
+  {
+    ID: '1_2', categoryId: 1, name: 'Braeburn', expanded: true,
+  },
   { ID: '1_2_1', categoryId: '1_2', name: 'Video Players' },
-  { ID: '1_2_1_1', categoryId: '1_2_1', name: 'HD Video Player', price: 240 },
+  {
+    ID: '1_2_1_1', categoryId: '1_2_1', name: 'HD Video Player', price: 240,
+  },
 ];
 
 const customersData = [
-  { ID: 1, CompanyName: 'Premier Buy', City: 'Richfield', Phone: '(612) 291-1000' },
-  { ID: 2, CompanyName: 'ElectrixMax', City: 'San Diego', Phone: '(619) 754-2000' },
-  { ID: 3, CompanyName: 'Video Emporium', City: 'Sacramento', Phone: '(916) 741-3000' },
-  { ID: 4, CompanyName: 'Screen Shop', City: 'Beaver Ruin', Phone: '(978) 879-4000' },
-  { ID: 5, CompanyName: 'Braeburn', City: 'Los Angeles', Phone: '(310) 555-5000' },
+  {
+    ID: 1, CompanyName: 'Premier Buy', City: 'Richfield', Phone: '(612) 291-1000',
+  },
+  {
+    ID: 2, CompanyName: 'ElectrixMax', City: 'San Diego', Phone: '(619) 754-2000',
+  },
+  {
+    ID: 3, CompanyName: 'Video Emporium', City: 'Sacramento', Phone: '(916) 741-3000',
+  },
+  {
+    ID: 4, CompanyName: 'Screen Shop', City: 'Beaver Ruin', Phone: '(978) 879-4000',
+  },
+  {
+    ID: 5, CompanyName: 'Braeburn', City: 'Los Angeles', Phone: '(310) 555-5000',
+  },
 ];
 
 const getTreeBoxValue = ClientFunction(() => ($('#treeBox') as any).dxDropDownBox('instance').option('value'));
