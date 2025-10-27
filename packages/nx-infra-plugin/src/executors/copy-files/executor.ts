@@ -8,10 +8,7 @@ import { copyFile, exists } from '../../utils/file-operations';
 const ERROR_FILES_MUST_BE_ARRAY = 'Files option must be an array';
 const ERROR_FAILED_TO_COPY = 'Failed to copy files';
 
-const runExecutor: PromiseExecutor<CopyFilesExecutorSchema> = async (
-  options,
-  context
-) => {
+const runExecutor: PromiseExecutor<CopyFilesExecutorSchema> = async (options, context) => {
   const projectRoot = resolveProjectPath(context);
 
   if (!options.files || !Array.isArray(options.files)) {
@@ -24,7 +21,7 @@ const runExecutor: PromiseExecutor<CopyFilesExecutorSchema> = async (
       const sourcePath = path.resolve(projectRoot, from);
       const destPath = path.resolve(projectRoot, to);
 
-      if (!await exists(sourcePath)) {
+      if (!(await exists(sourcePath))) {
         logger.error(`Source file not found: ${sourcePath}`);
         return { success: false };
       }

@@ -3,11 +3,7 @@ import * as path from 'path';
 import { execSync } from 'child_process';
 import executor from './executor';
 import { PackNpmExecutorSchema } from './schema';
-import {
-  createTempDir,
-  cleanupTempDir,
-  createMockContext,
-} from '../../utils/test-utils';
+import { createTempDir, cleanupTempDir, createMockContext } from '../../utils/test-utils';
 import { writeFileText, writeJson } from '../../utils';
 
 const PACKAGE_NAME = 'test-package';
@@ -40,47 +36,35 @@ describe('PackNpmExecutor E2E', () => {
 
     await writeFileText(
       path.join(tempDir, 'pnpm-workspace.yaml'),
-      `packages:\n  - '${PACKAGES_DIR}/*'\n`
+      `packages:\n  - '${PACKAGES_DIR}/*'\n`,
     );
 
-    await writeJson(
-      path.join(tempDir, 'package.json'),
-      {
-        name: 'test-workspace',
-        version: '1.0.0',
-        private: true,
-      }
-    );
+    await writeJson(path.join(tempDir, 'package.json'), {
+      name: 'test-workspace',
+      version: '1.0.0',
+      private: true,
+    });
 
     const projectDir = path.join(tempDir, PACKAGES_DIR, PROJECT_NAME);
     const npmDir = path.join(projectDir, NPM_DIR_NAME);
 
     fs.mkdirSync(npmDir, { recursive: true });
 
-    await writeJson(
-      path.join(projectDir, 'package.json'),
-      {
-        name: PACKAGE_NAME,
-        version: PACKAGE_VERSION,
-        description: 'Test package for pnpm pack',
-        main: './npm/index.js',
-      }
-    );
+    await writeJson(path.join(projectDir, 'package.json'), {
+      name: PACKAGE_NAME,
+      version: PACKAGE_VERSION,
+      description: 'Test package for pnpm pack',
+      main: './npm/index.js',
+    });
 
-    await writeJson(
-      path.join(npmDir, 'package.json'),
-      {
-        name: PACKAGE_NAME,
-        version: PACKAGE_VERSION,
-        description: 'Test package for pnpm pack',
-        main: './index.js',
-      }
-    );
+    await writeJson(path.join(npmDir, 'package.json'), {
+      name: PACKAGE_NAME,
+      version: PACKAGE_VERSION,
+      description: 'Test package for pnpm pack',
+      main: './index.js',
+    });
 
-    await writeFileText(
-      path.join(npmDir, 'index.js'),
-      'module.exports = { test: true };'
-    );
+    await writeFileText(path.join(npmDir, 'index.js'), 'module.exports = { test: true };');
 
     context = createMockContext({
       root: tempDir,

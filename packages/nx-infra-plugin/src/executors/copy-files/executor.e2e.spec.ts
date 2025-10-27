@@ -2,11 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import executor from './executor';
 import { CopyFilesExecutorSchema } from './schema';
-import {
-  createTempDir,
-  cleanupTempDir,
-  createMockContext,
-} from '../../utils/test-utils';
+import { createTempDir, cleanupTempDir, createMockContext } from '../../utils/test-utils';
 import { writeFileText, writeJson, readFileText } from '../../utils';
 
 describe('CopyFilesExecutor E2E', () => {
@@ -22,10 +18,10 @@ describe('CopyFilesExecutor E2E', () => {
     fs.mkdirSync(projectDir, { recursive: true });
     await writeFileText(path.join(projectDir, 'README.md'), '# Test Package\n\nThis is a test.');
     await writeFileText(path.join(projectDir, 'LICENSE'), 'MIT License\n\nCopyright...');
-    await writeJson(
-      path.join(projectDir, 'package.json'),
-      { name: 'test-package', version: '1.0.0' }
-    );
+    await writeJson(path.join(projectDir, 'package.json'), {
+      name: 'test-package',
+      version: '1.0.0',
+    });
 
     fs.mkdirSync(path.join(projectDir, 'docs'), { recursive: true });
     await writeFileText(path.join(projectDir, 'docs', 'guide.md'), '# Guide\n\nHow to use...');
@@ -62,9 +58,7 @@ describe('CopyFilesExecutor E2E', () => {
       const originalContent = await readFileText(path.join(projectDir, 'README.md'));
 
       const options: CopyFilesExecutorSchema = {
-        files: [
-          { from: './README.md', to: './dist/README.md' },
-        ],
+        files: [{ from: './README.md', to: './dist/README.md' }],
       };
 
       await executor(options, context);
@@ -76,9 +70,7 @@ describe('CopyFilesExecutor E2E', () => {
 
     it('should create destination directories if they do not exist', async () => {
       const options: CopyFilesExecutorSchema = {
-        files: [
-          { from: './README.md', to: './output/nested/deep/README.md' },
-        ],
+        files: [{ from: './README.md', to: './output/nested/deep/README.md' }],
       };
 
       const result = await executor(options, context);
@@ -101,9 +93,7 @@ describe('CopyFilesExecutor E2E', () => {
       await writeFileText(path.join(distDir, 'README.md'), 'Old content');
 
       const options: CopyFilesExecutorSchema = {
-        files: [
-          { from: './README.md', to: './dist/README.md' },
-        ],
+        files: [{ from: './README.md', to: './dist/README.md' }],
       };
 
       const result = await executor(options, context);

@@ -24,7 +24,7 @@ export async function readJson<T = unknown>(filePath: string): Promise<T> {
 export async function writeJson(
   filePath: string,
   data: unknown,
-  spaces: number = 2
+  spaces: number = 2,
 ): Promise<void> {
   const content = JSON.stringify(data, null, spaces);
   await fs.writeFile(filePath, content, ENCODING_UTF8);
@@ -33,7 +33,7 @@ export async function writeJson(
 export async function processFiles(
   pattern: string,
   processor: (filePath: string) => Promise<void>,
-  options: { ignore?: string[] } = {}
+  options: { ignore?: string[] } = {},
 ): Promise<number> {
   const files = await glob(pattern, {
     absolute: true,
@@ -63,10 +63,7 @@ export async function readFileText(filePath: string): Promise<string> {
   return fs.readFile(filePath, ENCODING_UTF8);
 }
 
-export async function writeFileText(
-  filePath: string,
-  content: string
-): Promise<void> {
+export async function writeFileText(filePath: string, content: string): Promise<void> {
   await ensureDir(path.dirname(filePath));
   await fs.writeFile(filePath, content, ENCODING_UTF8);
 }

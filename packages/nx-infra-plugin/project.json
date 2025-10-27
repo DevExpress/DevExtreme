@@ -34,7 +34,10 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint"
+      "executor": "nx:run-script",
+      "options": {
+        "script": "lint"
+      }
     },
     "test": {
       "executor": "@nx/jest:jest",

@@ -2,11 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import executor from './executor';
 import { NpmPackageExecutorSchema } from './schema';
-import {
-  createTempDir,
-  cleanupTempDir,
-  createMockContext,
-} from '../../utils/test-utils';
+import { createTempDir, cleanupTempDir, createMockContext } from '../../utils/test-utils';
 import { writeJson, readFileText } from '../../utils';
 
 describe('PreparePackageJsonExecutor E2E', () => {
@@ -21,36 +17,33 @@ describe('PreparePackageJsonExecutor E2E', () => {
 
     fs.mkdirSync(projectDir, { recursive: true });
 
-    await writeJson(
-      path.join(projectDir, 'package.json'),
-      {
-        name: '@devexpress/test-package',
-        version: '1.0.0',
-        description: 'Test package for prepare-package-json',
-        main: './index.js',
-        module: './esm/index.js',
-        types: './index.d.ts',
-        scripts: {
-          build: 'tsc',
-          test: 'jest',
-        },
-        publishConfig: {
-          access: 'public',
-          directory: 'npm',
-          registry: 'https://registry.npmjs.org/',
-        },
-        dependencies: {
-          react: '^18.0.0',
-        },
-        devDependencies: {
-          typescript: '^4.9.0',
-          jest: '^29.0.0',
-        },
-        keywords: ['test', 'package'],
-        license: 'MIT',
-        author: 'Test Author',
-      }
-    );
+    await writeJson(path.join(projectDir, 'package.json'), {
+      name: '@devexpress/test-package',
+      version: '1.0.0',
+      description: 'Test package for prepare-package-json',
+      main: './index.js',
+      module: './esm/index.js',
+      types: './index.d.ts',
+      scripts: {
+        build: 'tsc',
+        test: 'jest',
+      },
+      publishConfig: {
+        access: 'public',
+        directory: 'npm',
+        registry: 'https://registry.npmjs.org/',
+      },
+      dependencies: {
+        react: '^18.0.0',
+      },
+      devDependencies: {
+        typescript: '^4.9.0',
+        jest: '^29.0.0',
+      },
+      keywords: ['test', 'package'],
+      license: 'MIT',
+      author: 'Test Author',
+    });
   });
 
   afterEach(() => {

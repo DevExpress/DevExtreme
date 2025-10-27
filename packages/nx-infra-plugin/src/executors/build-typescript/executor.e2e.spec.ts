@@ -2,11 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import executor from './executor';
 import { BuildTypescriptExecutorSchema } from './schema';
-import {
-  createTempDir,
-  cleanupTempDir,
-  createMockContext,
-} from '../../utils/test-utils';
+import { createTempDir, cleanupTempDir, createMockContext } from '../../utils/test-utils';
 import { writeFileText, writeJson, readFileText } from '../../utils';
 
 describe('BuildTypescriptExecutor E2E', () => {
@@ -24,59 +20,53 @@ describe('BuildTypescriptExecutor E2E', () => {
 
     await writeFileText(
       path.join(srcDir, 'index.ts'),
-      `export function hello(name: string): string {\n  return \`Hello, \${name}!\`;\n}\n`
+      `export function hello(name: string): string {\n  return \`Hello, \${name}!\`;\n}\n`,
     );
 
     await writeFileText(
       path.join(srcDir, 'utils.ts'),
-      `export const add = (a: number, b: number): number => a + b;\n`
+      `export const add = (a: number, b: number): number => a + b;\n`,
     );
 
     fs.mkdirSync(path.join(srcDir, '__tests__'), { recursive: true });
     await writeFileText(
       path.join(srcDir, '__tests__', 'index.spec.ts'),
-      `import { hello } from '../index';\ntest('hello', () => {});\n`
+      `import { hello } from '../index';\ntest('hello', () => {});\n`,
     );
 
-    await writeJson(
-      path.join(projectDir, 'tsconfig.esm.json'),
-      {
-        compilerOptions: {
-          target: 'ES2020',
-          module: 'ESNext',
-          declaration: true,
-          declarationMap: true,
-          sourceMap: true,
-          outDir: './npm/esm',
-          rootDir: './src',
-          strict: true,
-          esModuleInterop: true,
-          skipLibCheck: true,
-        },
-        include: ['src/**/*'],
-        exclude: ['**/*.spec.ts', '**/__tests__/**'],
-      }
-    );
+    await writeJson(path.join(projectDir, 'tsconfig.esm.json'), {
+      compilerOptions: {
+        target: 'ES2020',
+        module: 'ESNext',
+        declaration: true,
+        declarationMap: true,
+        sourceMap: true,
+        outDir: './npm/esm',
+        rootDir: './src',
+        strict: true,
+        esModuleInterop: true,
+        skipLibCheck: true,
+      },
+      include: ['src/**/*'],
+      exclude: ['**/*.spec.ts', '**/__tests__/**'],
+    });
 
-    await writeJson(
-      path.join(projectDir, 'tsconfig.json'),
-      {
-        compilerOptions: {
-          target: 'ES2020',
-          module: 'CommonJS',
-          declaration: true,
-          declarationMap: true,
-          sourceMap: true,
-          outDir: './npm/cjs',
-          rootDir: './src',
-          strict: true,
-          esModuleInterop: true,
-          skipLibCheck: true,
-        },
-        include: ['src/**/*'],
-        exclude: ['**/*.spec.ts', '**/__tests__/**'],
-      }
-    );
+    await writeJson(path.join(projectDir, 'tsconfig.json'), {
+      compilerOptions: {
+        target: 'ES2020',
+        module: 'CommonJS',
+        declaration: true,
+        declarationMap: true,
+        sourceMap: true,
+        outDir: './npm/cjs',
+        rootDir: './src',
+        strict: true,
+        esModuleInterop: true,
+        skipLibCheck: true,
+      },
+      include: ['src/**/*'],
+      exclude: ['**/*.spec.ts', '**/__tests__/**'],
+    });
   });
 
   afterEach(() => {

@@ -2,11 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import executor from './executor';
 import { PrepareSubmodulesExecutorSchema } from './schema';
-import {
-  createTempDir,
-  cleanupTempDir,
-  createMockContext,
-} from '../../utils/test-utils';
+import { createTempDir, cleanupTempDir, createMockContext } from '../../utils/test-utils';
 import { writeFileText, readFileText } from '../../utils';
 
 describe('PrepareSubmodulesExecutor E2E', () => {
@@ -29,14 +25,20 @@ describe('PrepareSubmodulesExecutor E2E', () => {
 
     await writeFileText(
       path.join(npmDir, 'esm', 'index.js'),
-      `export { Button } from "./button";\nexport { Grid } from "./data/grid";\nexport { Chart } from "./viz/chart";`
+      `export { Button } from "./button";\nexport { Grid } from "./data/grid";\nexport { Chart } from "./viz/chart";`,
     );
 
     await writeFileText(path.join(npmDir, 'esm', 'button.js'), 'export const Button = () => {};');
     fs.mkdirSync(path.join(npmDir, 'esm', 'data'), { recursive: true });
-    await writeFileText(path.join(npmDir, 'esm', 'data', 'grid.js'), 'export const Grid = () => {};');
+    await writeFileText(
+      path.join(npmDir, 'esm', 'data', 'grid.js'),
+      'export const Grid = () => {};',
+    );
     fs.mkdirSync(path.join(npmDir, 'esm', 'viz'), { recursive: true });
-    await writeFileText(path.join(npmDir, 'esm', 'viz', 'chart.js'), 'export const Chart = () => {};');
+    await writeFileText(
+      path.join(npmDir, 'esm', 'viz', 'chart.js'),
+      'export const Chart = () => {};',
+    );
 
     await writeFileText(path.join(npmDir, 'cjs', 'index.js'), 'module.exports = {};');
     await writeFileText(path.join(npmDir, 'cjs', 'button.js'), 'module.exports = {};');
@@ -101,7 +103,7 @@ describe('PrepareSubmodulesExecutor E2E', () => {
       const esmIndex = await readFileText(path.join(npmDir, 'esm', 'index.js'));
       await writeFileText(
         path.join(npmDir, 'esm', 'index.js'),
-        esmIndex + '\nexport { Custom } from "./custom";'
+        esmIndex + '\nexport { Custom } from "./custom";',
       );
 
       const options: PrepareSubmodulesExecutorSchema = {
@@ -123,21 +125,27 @@ describe('PrepareSubmodulesExecutor E2E', () => {
       const npmDir = path.join(tempDir, 'packages', 'test-package', 'npm');
 
       fs.mkdirSync(path.join(npmDir, 'esm', 'common'), { recursive: true });
-      await writeFileText(path.join(npmDir, 'esm', 'common', 'index.js'), 'export * from "./core";');
+      await writeFileText(
+        path.join(npmDir, 'esm', 'common', 'index.js'),
+        'export * from "./core";',
+      );
       fs.mkdirSync(path.join(npmDir, 'esm', 'common', 'core'), { recursive: true });
-      await writeFileText(path.join(npmDir, 'esm', 'common', 'core', 'index.js'), 'export class Component {}');
+      await writeFileText(
+        path.join(npmDir, 'esm', 'common', 'core', 'index.js'),
+        'export class Component {}',
+      );
 
       fs.mkdirSync(path.join(npmDir, 'cjs', 'common'), { recursive: true });
       await writeFileText(path.join(npmDir, 'cjs', 'common', 'index.js'), 'module.exports = {};');
       fs.mkdirSync(path.join(npmDir, 'cjs', 'common', 'core'), { recursive: true });
-      await writeFileText(path.join(npmDir, 'cjs', 'common', 'core', 'index.js'), 'module.exports = {};');
+      await writeFileText(
+        path.join(npmDir, 'cjs', 'common', 'core', 'index.js'),
+        'module.exports = {};',
+      );
 
       const options: PrepareSubmodulesExecutorSchema = {
         distDirectory: './npm',
-        submoduleFolders: [
-          ['common'],
-          ['common/core'],
-        ],
+        submoduleFolders: [['common'], ['common/core']],
       };
 
       const result = await executor(options, context);
@@ -158,9 +166,7 @@ describe('PrepareSubmodulesExecutor E2E', () => {
       await executor(options, context);
 
       const npmDir = path.join(tempDir, 'packages', 'test-package', 'npm');
-      const buttonPkg = JSON.parse(
-        await readFileText(path.join(npmDir, 'button', 'package.json'))
-      );
+      const buttonPkg = JSON.parse(await readFileText(path.join(npmDir, 'button', 'package.json')));
 
       expect(buttonPkg.main).toBe('../cjs/button.js');
       expect(buttonPkg.module).toBe('../esm/button.js');
@@ -204,16 +210,12 @@ describe('PrepareSubmodulesExecutor E2E', () => {
       expect(result1.success).toBe(true);
 
       const npmDir = path.join(tempDir, 'packages', 'test-package', 'npm');
-      const firstPkg = JSON.parse(
-        await readFileText(path.join(npmDir, 'button', 'package.json'))
-      );
+      const firstPkg = JSON.parse(await readFileText(path.join(npmDir, 'button', 'package.json')));
 
       const result2 = await executor(options, context);
       expect(result2.success).toBe(true);
 
-      const secondPkg = JSON.parse(
-        await readFileText(path.join(npmDir, 'button', 'package.json'))
-      );
+      const secondPkg = JSON.parse(await readFileText(path.join(npmDir, 'button', 'package.json')));
 
       expect(secondPkg).toEqual(firstPkg);
     });

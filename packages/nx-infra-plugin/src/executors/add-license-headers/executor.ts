@@ -19,29 +19,31 @@ const EMPTY_LINE = '';
 
 const GITHUB_URL = 'https://github.com/DevExpress/devextreme-react';
 
-const COPYRIGHT_START = ' * Copyright (c) 2012 - <%= year %> Developer Express Inc. ALL RIGHTS RESERVED';
+const COPYRIGHT_START =
+  ' * Copyright (c) 2012 - <%= year %> Developer Express Inc. ALL RIGHTS RESERVED';
 
 const BANNER_PKG_NAME = COMMENT_PREFIX + ' ' + '<%= pkg.name %>';
 const BANNER_VERSION = COMMENT_PREFIX + ' ' + 'Version: <%= pkg.version %>';
 const BANNER_BUILD_DATE = COMMENT_PREFIX + ' ' + 'Build date: <%= date %>';
-const BANNER_LICENSE_LINE1 = COMMENT_PREFIX + ' ' + 'This software may be modified and distributed under the terms';
-const BANNER_LICENSE_LINE2 = COMMENT_PREFIX + ' ' + 'of the MIT license. See the LICENSE file in the root of the project for details.';
+const BANNER_LICENSE_LINE1 =
+  COMMENT_PREFIX + ' ' + 'This software may be modified and distributed under the terms';
+const BANNER_LICENSE_LINE2 =
+  COMMENT_PREFIX
+  + ' '
+  + 'of the MIT license. See the LICENSE file in the root of the project for details.';
 const BANNER_GITHUB = COMMENT_PREFIX + ' ' + GITHUB_URL;
 
 const TEMPLATE_REGEX = /<%=\s*(\w+(?:\.\w+)*)\s*%>/g;
 
-const runExecutor: PromiseExecutor<AddLicenseHeadersExecutorSchema> = async (
-  options,
-  context
-) => {
+const runExecutor: PromiseExecutor<AddLicenseHeadersExecutorSchema> = async (options, context) => {
   const absoluteProjectRoot = resolveProjectPath(context);
   const targetDirectory = path.join(
     absoluteProjectRoot,
-    options.targetDirectory || DEFAULT_TARGET_DIR
+    options.targetDirectory || DEFAULT_TARGET_DIR,
   );
   const packageJsonPath = path.join(
     absoluteProjectRoot,
-    options.packageJsonPath || DEFAULT_PACKAGE_JSON
+    options.packageJsonPath || DEFAULT_PACKAGE_JSON,
   );
 
   let pkg;
@@ -92,7 +94,7 @@ const runExecutor: PromiseExecutor<AddLicenseHeadersExecutorSchema> = async (
         }
 
         await writeFileText(file, banner + NEWLINE + content);
-      })
+      }),
     );
 
     logger.info('License headers added successfully');

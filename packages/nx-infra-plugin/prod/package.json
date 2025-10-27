@@ -18,7 +18,9 @@
   "devDependencies": {
     "@types/node": "^18.0.0",
     "typescript": "4.9.5",
-    "prettier": "catalog:tools"
+    "prettier": "catalog:tools",
+    "@types/jest": "29.5.12",
+    "ts-jest": "29.1.3"
   },
   "scripts": {
     "format:check": "prettier --check .",

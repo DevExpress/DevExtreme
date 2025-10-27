@@ -15,19 +15,13 @@ const JSON_INDENT = 2;
 
 const ERROR_PREPARE_PACKAGE_JSON = 'Failed to prepare package.json';
 
-const runExecutor: PromiseExecutor<NpmPackageExecutorSchema> = async (
-  options,
-  context
-) => {
+const runExecutor: PromiseExecutor<NpmPackageExecutorSchema> = async (options, context) => {
   const absoluteProjectRoot = resolveProjectPath(context);
   const sourcePackageJson = path.join(
     absoluteProjectRoot,
-    options.sourcePackageJson || DEFAULT_SOURCE_PACKAGE_JSON
+    options.sourcePackageJson || DEFAULT_SOURCE_PACKAGE_JSON,
   );
-  const distDirectory = path.join(
-    absoluteProjectRoot,
-    options.distDirectory || DEFAULT_DIST_DIR
-  );
+  const distDirectory = path.join(absoluteProjectRoot, options.distDirectory || DEFAULT_DIST_DIR);
 
   try {
     await ensureDir(distDirectory);

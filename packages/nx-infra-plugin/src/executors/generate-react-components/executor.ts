@@ -30,7 +30,8 @@ const CLEAN_MODE = 'shallow';
 const MSG_CLEANING = '🧹 Cleaning generated components';
 const MSG_CLEANED = '✓ Successfully cleaned components directory';
 const MSG_LOADING_METADATA = '📋 Loading metadata';
-const MSG_GENERATORS_CONFIG_NOT_FOUND = '⚠️  generators-config.js not found, proceeding without unifiedConfig';
+const MSG_GENERATORS_CONFIG_NOT_FOUND =
+  '⚠️  generators-config.js not found, proceeding without unifiedConfig';
 const MSG_LOADED_REACT_CONFIG = '✓ Loaded React configuration from generators-config.js';
 const MSG_GENERATING = '⚙️  Generating React components';
 const MSG_GENERATION_COMPLETED = '✓ Component generation completed';
@@ -38,7 +39,8 @@ const MSG_GENERATION_SUCCESS = '✨ React component generation successful!';
 const MSG_STARTING = '🔧 Starting React component generation';
 const MSG_GENERATION_FAILED = '❌ Component generation failed';
 
-const ERROR_METADATA_NOT_FOUND = 'Could not find devextreme-metadata/integration-data.json. Please ensure devextreme-metadata is installed or provide a metadataPath option.';
+const ERROR_METADATA_NOT_FOUND =
+  'Could not find devextreme-metadata/integration-data.json. Please ensure devextreme-metadata is installed or provide a metadataPath option.';
 const ERROR_CLEAN_FAILED = 'Failed to clean components directory';
 
 const PARENT_DIR_PREFIX = '../';
@@ -56,7 +58,7 @@ const EXPORT_PATTERN = /export \{/g;
 async function cleanComponentsDirectory(
   absoluteComponentsDir: string,
   preservePaths: string[],
-  context: ExecutorContext
+  context: ExecutorContext,
 ): Promise<void> {
   logger.info(MSG_CLEANING);
 
@@ -66,7 +68,7 @@ async function cleanComponentsDirectory(
 
   const cleanOptions: CleanExecutorSchema = {
     targetDirectory: DOT_SLASH_PREFIX + relativeComponentsDir,
-    excludePatterns: preservePaths.map(currentPath => {
+    excludePatterns: preservePaths.map((currentPath) => {
       if (path.isAbsolute(currentPath)) {
         const relative = path.relative(absoluteProjectRoot, currentPath);
         return DOT_SLASH_PREFIX + relative;
@@ -88,14 +90,10 @@ async function cleanComponentsDirectory(
 function resolveMetadataPath(
   options: GenerateReactComponentsExecutorSchema,
   absoluteProjectRoot: string,
-  workspaceRoot: string
+  workspaceRoot: string,
 ): string {
   if (options.metadataPath) {
-    return resolveCustomMetadataPath(
-      options.metadataPath,
-      absoluteProjectRoot,
-      workspaceRoot
-    );
+    return resolveCustomMetadataPath(options.metadataPath, absoluteProjectRoot, workspaceRoot);
   }
 
   return resolveDefaultMetadataPath();
@@ -104,7 +102,7 @@ function resolveMetadataPath(
 function resolveCustomMetadataPath(
   metadataPath: string,
   absoluteProjectRoot: string,
-  workspaceRoot: string
+  workspaceRoot: string,
 ): string {
   const relativeToProject = path.resolve(absoluteProjectRoot, metadataPath);
   if (fs.existsSync(relativeToProject)) {
@@ -171,7 +169,11 @@ function loadGenerationFunction(): any {
     const internalTools = require(INTERNAL_TOOLS_PACKAGE);
     return internalTools[GENERATION_FUNCTION];
   } catch (error) {
-    throw new Error(`Could not load devextreme-internal-tools. Please ensure devextreme-internal-tools is installed as a dependency. Error: ${getErrorMessage(error)}`);
+    throw new Error(
+      `Could not load devextreme-internal-tools. Please ensure devextreme-internal-tools is installed as a dependency. Error: ${getErrorMessage(
+        error,
+      )}`,
+    );
   }
 }
 
@@ -179,7 +181,7 @@ function buildGenerationConfig(
   options: GenerateReactComponentsExecutorSchema,
   componentsDir: string,
   indexFileName: string,
-  reactConfig: any
+  reactConfig: any,
 ): any {
   return {
     metaData: undefined,
@@ -210,7 +212,7 @@ async function executeGeneration(
   config: any,
   metaData: any,
   componentsDir: string,
-  indexFileName: string
+  indexFileName: string,
 ): Promise<void> {
   logger.info(MSG_GENERATING);
 
@@ -226,18 +228,19 @@ async function executeGeneration(
   }
 
   if (fs.existsSync(componentsDir)) {
-    const dirCount = fs.readdirSync(componentsDir, { withFileTypes: true })
-      .filter(entry => entry.isDirectory() && entry.name !== CORE_DIR)
-      .length;
+    const dirCount = fs
+      .readdirSync(componentsDir, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory() && entry.name !== CORE_DIR).length;
     logger.info(`   Component Directories: ${dirCount}`);
   }
 
   logger.info(MSG_GENERATION_SUCCESS);
 }
 
-const runExecutor: PromiseExecutor<
-  GenerateReactComponentsExecutorSchema
-> = async (options, context) => {
+const runExecutor: PromiseExecutor<GenerateReactComponentsExecutorSchema> = async (
+  options,
+  context,
+) => {
   const absoluteProjectRoot = resolveProjectPath(context);
   const workspaceRoot = context.root;
 
@@ -248,11 +251,11 @@ const runExecutor: PromiseExecutor<
   try {
     const componentsDir = path.resolve(
       absoluteProjectRoot,
-      options.componentsDir || DEFAULT_COMPONENTS_DIR
+      options.componentsDir || DEFAULT_COMPONENTS_DIR,
     );
     const indexFileName = path.resolve(
       absoluteProjectRoot,
-      options.indexFileName || DEFAULT_INDEX_FILE_NAME
+      options.indexFileName || DEFAULT_INDEX_FILE_NAME,
     );
 
     const coreDir = path.join(componentsDir, CORE_DIR);
@@ -267,7 +270,13 @@ const runExecutor: PromiseExecutor<
     const generateReactComponents = loadGenerationFunction();
 
     const config = buildGenerationConfig(options, componentsDir, indexFileName, reactConfig);
-    await executeGeneration(generateReactComponents, config, metaData, componentsDir, indexFileName);
+    await executeGeneration(
+      generateReactComponents,
+      config,
+      metaData,
+      componentsDir,
+      indexFileName,
+    );
 
     return { success: true };
   } catch (error) {

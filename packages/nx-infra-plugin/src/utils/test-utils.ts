@@ -13,7 +13,6 @@ export function cleanupTempDir(dirPath: string): void {
   }
 }
 
-
 export interface MockContextOptions {
   root?: string;
   projectName?: string;

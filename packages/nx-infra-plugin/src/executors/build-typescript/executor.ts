@@ -23,9 +23,9 @@ const ERROR_COMPILATION_FAILED = 'Compilation failed';
 const NEWLINE_CHAR = '\n';
 
 async function loadTsConfig(
-  tsconfigPath: string
+  tsconfigPath: string,
 ): Promise<{ content: TsConfig; compilerOptions: CompilerOptions }> {
-  if (!await exists(tsconfigPath)) {
+  if (!(await exists(tsconfigPath))) {
     throw new Error(`TypeScript config file not found: ${tsconfigPath}`);
   }
 
@@ -37,48 +37,31 @@ async function loadTsConfig(
   };
 }
 
-function formatDiagnostics(
-  diagnostics: ts.Diagnostic[]
-): string[] {
+function formatDiagnostics(diagnostics: ts.Diagnostic[]): string[] {
   return diagnostics.map((diagnostic) => {
     if (diagnostic.file) {
-      const { line, character } =
-        diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start!);
-      const message = ts.flattenDiagnosticMessageText(
-        diagnostic.messageText,
-        NEWLINE_CHAR
-      );
+      const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start!);
+      const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, NEWLINE_CHAR);
       return `${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`;
     }
     return ts.flattenDiagnosticMessageText(diagnostic.messageText, NEWLINE_CHAR);
   });
 }
 
-function compile(
-  sourceFiles: string[],
-  compilerOptions: ts.CompilerOptions
-): ts.Program {
+function compile(sourceFiles: string[], compilerOptions: ts.CompilerOptions): ts.Program {
   return ts.createProgram(sourceFiles, compilerOptions);
 }
 
-const runExecutor: PromiseExecutor<BuildTypescriptExecutorSchema> = async (
-  options,
-  context
-) => {
+const runExecutor: PromiseExecutor<BuildTypescriptExecutorSchema> = async (options, context) => {
   const absoluteProjectRoot = resolveProjectPath(context);
   const module = options.module || DEFAULT_MODULE_TYPE;
 
-  const defaultTsconfigPath = module === MODULE_TYPE_CJS ? DEFAULT_TSCONFIG_CJS : DEFAULT_TSCONFIG_ESM;
-  const tsconfigPath = path.join(
-    absoluteProjectRoot,
-    options.tsconfig || defaultTsconfigPath
-  );
+  const defaultTsconfigPath =
+    module === MODULE_TYPE_CJS ? DEFAULT_TSCONFIG_CJS : DEFAULT_TSCONFIG_ESM;
+  const tsconfigPath = path.join(absoluteProjectRoot, options.tsconfig || defaultTsconfigPath);
 
   const defaultOutDir = module === MODULE_TYPE_CJS ? DEFAULT_OUT_DIR_CJS : DEFAULT_OUT_DIR_ESM;
-  const outDir = path.join(
-    absoluteProjectRoot,
-    options.outDir || defaultOutDir
-  );
+  const outDir = path.join(absoluteProjectRoot, options.outDir || defaultOutDir);
 
   try {
     const { content: tsconfigContent, compilerOptions } = await loadTsConfig(tsconfigPath);
@@ -106,7 +89,7 @@ const runExecutor: PromiseExecutor<BuildTypescriptExecutorSchema> = async (
     const parsedConfig = ts.parseJsonConfigFileContent(
       tsconfigContent,
       ts.sys,
-      path.dirname(tsconfigPath)
+      path.dirname(tsconfigPath),
     );
 
     const finalCompilerOptions: ts.CompilerOptions = {
@@ -120,11 +103,9 @@ const runExecutor: PromiseExecutor<BuildTypescriptExecutorSchema> = async (
 
     if (result.emitSkipped) {
       logger.error(ERROR_COMPILATION_FAILED);
-      const diagnostics = ts
-        .getPreEmitDiagnostics(program)
-        .concat(result.diagnostics);
+      const diagnostics = ts.getPreEmitDiagnostics(program).concat(result.diagnostics);
 
-      formatDiagnostics(diagnostics).forEach(msg => logger.error(msg));
+      formatDiagnostics(diagnostics).forEach((msg) => logger.error(msg));
       return { success: false };
     }
 

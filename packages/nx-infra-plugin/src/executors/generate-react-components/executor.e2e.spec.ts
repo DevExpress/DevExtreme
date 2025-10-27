@@ -2,11 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import executor from './executor';
 import { GenerateReactComponentsExecutorSchema } from './schema';
-import {
-  createTempDir,
-  cleanupTempDir,
-  createMockContext,
-} from '../../utils/test-utils';
+import { createTempDir, cleanupTempDir, createMockContext } from '../../utils/test-utils';
 import { writeFileText, writeJson } from '../../utils';
 
 describe('GenerateReactComponentsExecutor E2E', () => {
@@ -27,43 +23,40 @@ describe('GenerateReactComponentsExecutor E2E', () => {
     fs.mkdirSync(path.join(srcDir, 'core'), { recursive: true });
     await writeFileText(
       path.join(srcDir, 'core', 'component.tsx'),
-      `export class Component<P = any> {\n  constructor(public props: P) {}\n}\n`
+      `export class Component<P = any> {\n  constructor(public props: P) {}\n}\n`,
     );
     await writeFileText(
       path.join(srcDir, 'core', 'extension-component.tsx'),
-      `export class ExtensionComponent {}\n`
+      `export class ExtensionComponent {}\n`,
     );
     await writeFileText(
       path.join(srcDir, 'core', 'nested-option.ts'),
-      `export class NestedOption {}\n`
+      `export class NestedOption {}\n`,
     );
 
     const metadataDir = path.join(tempDir, 'packages', 'metadata', 'dist');
     fs.mkdirSync(metadataDir, { recursive: true });
-    await writeJson(
-      path.join(metadataDir, 'integration-data.json'),
-      {
-        Widgets: {
-          dxButton: {
-            name: 'Button',
-            module: 'ui/button',
-            properties: [
-              { name: 'text', type: 'String' },
-              { name: 'type', type: 'String' },
-              { name: 'onClick', type: 'Function' },
-            ],
-          },
-          dxTextBox: {
-            name: 'TextBox',
-            module: 'ui/text_box',
-            properties: [
-              { name: 'value', type: 'String' },
-              { name: 'placeholder', type: 'String' },
-            ],
-          },
+    await writeJson(path.join(metadataDir, 'integration-data.json'), {
+      Widgets: {
+        dxButton: {
+          name: 'Button',
+          module: 'ui/button',
+          properties: [
+            { name: 'text', type: 'String' },
+            { name: 'type', type: 'String' },
+            { name: 'onClick', type: 'Function' },
+          ],
         },
-      }
-    );
+        dxTextBox: {
+          name: 'TextBox',
+          module: 'ui/text_box',
+          properties: [
+            { name: 'value', type: 'String' },
+            { name: 'placeholder', type: 'String' },
+          ],
+        },
+      },
+    });
   });
 
   afterEach(() => {
@@ -78,22 +71,26 @@ describe('GenerateReactComponentsExecutor E2E', () => {
 
         await writeFileText(
           path.join(outDir, 'button.tsx'),
-          `export const Button = () => <div>Button</div>;`
+          `export const Button = () => <div>Button</div>;`,
         );
         await writeFileText(
           path.join(outDir, 'text-box.tsx'),
-          `export const TextBox = () => <div>TextBox</div>;`
+          `export const TextBox = () => <div>TextBox</div>;`,
         );
 
         await writeFileText(
           indexFile,
-          `export { Button } from "./button";\nexport { TextBox } from "./text-box";\n`
+          `export { Button } from "./button";\nexport { TextBox } from "./text-box";\n`,
         );
       });
 
-      jest.mock('devextreme-internal-tools', () => ({
-        generateReactComponents: mockGenerator,
-      }), { virtual: true });
+      jest.mock(
+        'devextreme-internal-tools',
+        () => ({
+          generateReactComponents: mockGenerator,
+        }),
+        { virtual: true },
+      );
 
       const options: GenerateReactComponentsExecutorSchema = {
         metadataPath: '../metadata/dist/integration-data.json',
@@ -176,10 +173,7 @@ describe('GenerateReactComponentsExecutor E2E', () => {
     it('should resolve metadata path relative to project', async () => {
       const projectDir = path.join(tempDir, 'packages', 'react-wrappers');
 
-      await writeJson(
-        path.join(projectDir, 'metadata.json'),
-        { Widgets: {} }
-      );
+      await writeJson(path.join(projectDir, 'metadata.json'), { Widgets: {} });
 
       const options: GenerateReactComponentsExecutorSchema = {
         metadataPath: './metadata.json',
@@ -257,7 +251,13 @@ describe('GenerateReactComponentsExecutor E2E', () => {
 
   describe('Error scenarios', () => {
     it('should handle corrupted metadata gracefully', async () => {
-      const metadataPath = path.join(tempDir, 'packages', 'metadata', 'dist', 'integration-data.json');
+      const metadataPath = path.join(
+        tempDir,
+        'packages',
+        'metadata',
+        'dist',
+        'integration-data.json',
+      );
 
       await writeFileText(metadataPath, 'not valid json {{{');
 

@@ -2,11 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import executor from './executor';
 import { CleanExecutorSchema } from './schema';
-import {
-  createTempDir,
-  cleanupTempDir,
-  createMockContext,
-} from '../../utils/test-utils';
+import { createTempDir, cleanupTempDir, createMockContext } from '../../utils/test-utils';
 import { writeFileText } from '../../utils';
 
 describe('CleanExecutor E2E', () => {
@@ -45,7 +41,10 @@ describe('CleanExecutor E2E', () => {
       await writeFileText(path.join(npmDir, 'cjs', 'index.js'), 'module.exports = {};');
 
       fs.mkdirSync(path.join(npmDir, 'components', 'button'), { recursive: true });
-      await writeFileText(path.join(npmDir, 'components', 'button', 'index.js'), 'export const Button = {};');
+      await writeFileText(
+        path.join(npmDir, 'components', 'button', 'index.js'),
+        'export const Button = {};',
+      );
     });
 
     it('should delete the entire directory', async () => {
@@ -249,7 +248,10 @@ describe('CleanExecutor E2E', () => {
       const srcDir = path.join(tempDir, 'packages', 'test-lib', 'src');
 
       fs.mkdirSync(path.join(srcDir, 'core', 'internal'), { recursive: true });
-      await writeFileText(path.join(srcDir, 'core', 'internal', 'impl.tsx'), 'export const impl = {};');
+      await writeFileText(
+        path.join(srcDir, 'core', 'internal', 'impl.tsx'),
+        'export const impl = {};',
+      );
 
       const options: CleanExecutorSchema = {
         targetDirectory: './src',

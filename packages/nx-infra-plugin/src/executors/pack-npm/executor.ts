@@ -10,10 +10,7 @@ const DEFAULT_DIST_DIR = './npm';
 const MSG_PACK_SUCCESS = 'pnpm pack completed successfully';
 const MSG_PACK_FAILED = 'Failed to run pnpm pack';
 
-const runExecutor: PromiseExecutor<PackNpmExecutorSchema> = async (
-  options,
-  context
-) => {
+const runExecutor: PromiseExecutor<PackNpmExecutorSchema> = async (options, context) => {
   const absoluteProjectRoot = resolveProjectPath(context);
   const distDirectory = options.workingDirectory || DEFAULT_DIST_DIR;
   const workspaceRoot = context.root;

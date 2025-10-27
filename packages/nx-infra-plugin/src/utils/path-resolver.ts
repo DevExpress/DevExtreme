@@ -22,17 +22,11 @@ export function resolveProjectPath(context: ExecutorContext): string {
   return path.resolve(context.root, project.root);
 }
 
-export function resolveFromProject(
-  context: ExecutorContext,
-  relativePath: string
-): string {
+export function resolveFromProject(context: ExecutorContext, relativePath: string): string {
   const projectRoot = resolveProjectPath(context);
   return path.join(projectRoot, relativePath);
 }
 
-export function resolveFromWorkspace(
-  context: ExecutorContext,
-  relativePath: string
-): string {
+export function resolveFromWorkspace(context: ExecutorContext, relativePath: string): string {
   return path.join(context.root, relativePath);
 }

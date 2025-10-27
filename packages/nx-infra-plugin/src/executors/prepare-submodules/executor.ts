@@ -39,15 +39,9 @@ const DEFAULT_SUBMODULE_FOLDERS: PackParam[] = [
   ['common/export'],
 ];
 
-const runExecutor: PromiseExecutor<PrepareSubmodulesExecutorSchema> = async (
-  options,
-  context
-) => {
+const runExecutor: PromiseExecutor<PrepareSubmodulesExecutorSchema> = async (options, context) => {
   const absoluteProjectRoot = resolveProjectPath(context);
-  const distDirectory = path.join(
-    absoluteProjectRoot,
-    options.distDirectory || DEFAULT_DIST_DIR
-  );
+  const distDirectory = path.join(absoluteProjectRoot, options.distDirectory || DEFAULT_DIST_DIR);
 
   try {
     logger.info(MSG_PREPARING);
@@ -62,15 +56,13 @@ const runExecutor: PromiseExecutor<PrepareSubmodulesExecutorSchema> = async (
     }
 
     const modulesPaths = modulesImportsFromIndex.matchAll(REGEX_IMPORTS);
-    const packParamsForModules: PackParam[] = Array.from(modulesPaths).map(
-      ([, modulePath]) => {
-        const match = modulePath.match(REGEX_PARSE_MODULE) || [];
-        const moduleFilePath = match[2] as string | undefined;
-        const moduleFileName = match[3] as string | undefined;
+    const packParamsForModules: PackParam[] = Array.from(modulesPaths).map(([, modulePath]) => {
+      const match = modulePath.match(REGEX_PARSE_MODULE) || [];
+      const moduleFilePath = match[2] as string | undefined;
+      const moduleFileName = match[3] as string | undefined;
 
-        return ['', moduleFileName ? [moduleFileName] : undefined, moduleFilePath];
-      }
-    );
+      return ['', moduleFileName ? [moduleFileName] : undefined, moduleFilePath];
+    });
 
     const allModuleParams: PackParam[] = [...packParamsForModules, ...packParamsForFolders];
 
@@ -78,8 +70,8 @@ const runExecutor: PromiseExecutor<PrepareSubmodulesExecutorSchema> = async (
 
     await Promise.all(
       allModuleParams.map(([folder, moduleFileNames, moduleFilePath]) =>
-        makeModule(distDirectory, folder, moduleFileNames, moduleFilePath)
-      )
+        makeModule(distDirectory, folder, moduleFileNames, moduleFilePath),
+      ),
     );
 
     logger.info(MSG_SUCCESS);
@@ -94,7 +86,7 @@ async function makeModule(
   distFolder: string,
   folder: string,
   moduleFileNames?: string[],
-  moduleFilePath?: string
+  moduleFilePath?: string,
 ): Promise<void> {
   const distModuleFolder = path.join(distFolder, folder);
   const distEsmFolder = path.join(distFolder, ESM_DIR, folder);
@@ -112,13 +104,8 @@ async function makeModule(
         const moduleDir = path.join(distModuleFolder, moduleFileName);
         await ensureDir(moduleDir);
 
-        await generatePackageJsonFile(
-          distFolder,
-          folder,
-          moduleFileName,
-          moduleFilePath || folder
-        );
-      })
+        await generatePackageJsonFile(distFolder, folder, moduleFileName, moduleFilePath || folder);
+      }),
     );
   } catch (error) {
     throw new Error(`Exception while makeModule(${folder}): ${getErrorMessage(error)}`);
@@ -129,17 +116,12 @@ async function generatePackageJsonFile(
   distFolder: string,
   folder: string,
   moduleFileName?: string,
-  filePath?: string
+  filePath?: string,
 ): Promise<void> {
   const moduleName = moduleFileName || '';
   const absoluteModulePath = path.join(distFolder, folder, moduleName);
-  const moduleFilePathResolved =
-    (filePath ? filePath + PATH_SLASH : '') + (moduleName || 'index');
-  const esmFilePath = path.join(
-    distFolder,
-    ESM_DIR,
-    moduleFilePathResolved + JS_EXTENSION
-  );
+  const moduleFilePathResolved = (filePath ? filePath + PATH_SLASH : '') + (moduleName || 'index');
+  const esmFilePath = path.join(distFolder, ESM_DIR, moduleFilePathResolved + JS_EXTENSION);
   const relativePath = path.relative(absoluteModulePath, esmFilePath);
 
   const relativeBase = RELATIVE_DIR_PREFIX.repeat(relativePath.split('..').length - 1);
@@ -162,13 +144,13 @@ async function findJsModuleFileNamesInFolder(dir: string): Promise<string[]> {
 
   const entries = await fs.readdir(dir, { withFileTypes: true });
 
-  return entries
-    .filter(isJsModule)
-    .map((entry) => path.parse(entry.name).name);
+  return entries.filter(isJsModule).map((entry) => path.parse(entry.name).name);
 }
 
 function isJsModule(entry: Dirent): boolean {
-  return !entry.isDirectory() && entry.name.endsWith(JS_EXTENSION) && entry.name !== INDEX_FILE_NAME;
+  return (
+    !entry.isDirectory() && entry.name.endsWith(JS_EXTENSION) && entry.name !== INDEX_FILE_NAME
+  );
 }
 
 export default runExecutor;

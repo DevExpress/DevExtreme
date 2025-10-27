@@ -2,11 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import executor from './executor';
 import { AddLicenseHeadersExecutorSchema } from './schema';
-import {
-  createTempDir,
-  cleanupTempDir,
-  createMockContext,
-} from '../../utils/test-utils';
+import { createTempDir, cleanupTempDir, createMockContext } from '../../utils/test-utils';
 import { writeFileText, writeJson, readFileText } from '../../utils';
 
 describe('AddLicenseHeadersExecutor E2E', () => {
@@ -29,23 +25,20 @@ describe('AddLicenseHeadersExecutor E2E', () => {
 
     await writeFileText(
       path.join(npmDir, 'index.js'),
-      `export function hello() {\n  return 'Hello';\n}\n`
+      `export function hello() {\n  return 'Hello';\n}\n`,
     );
 
-    await writeFileText(
-      path.join(npmDir, 'utils.js'),
-      `export const add = (a, b) => a + b;\n`
-    );
+    await writeFileText(path.join(npmDir, 'utils.js'), `export const add = (a, b) => a + b;\n`);
 
     fs.mkdirSync(path.join(npmDir, 'components'), { recursive: true });
     await writeFileText(
       path.join(npmDir, 'components', 'button.js'),
-      `export const Button = () => {};\n`
+      `export const Button = () => {};\n`,
     );
 
     await writeFileText(
       path.join(npmDir, 'types.ts'),
-      `export interface Config { name: string; }\n`
+      `export interface Config { name: string; }\n`,
     );
   });
 
@@ -90,9 +83,7 @@ describe('AddLicenseHeadersExecutor E2E', () => {
       expect(result.success).toBe(true);
 
       const npmDir = path.join(tempDir, 'packages', 'test-lib', 'npm');
-      const buttonContent = await readFileText(
-        path.join(npmDir, 'components', 'button.js')
-      );
+      const buttonContent = await readFileText(path.join(npmDir, 'components', 'button.js'));
 
       expect(buttonContent).toMatch(/^\/\*!/);
       expect(buttonContent).toContain('test-package');
@@ -148,7 +139,7 @@ describe('AddLicenseHeadersExecutor E2E', () => {
 
       await writeFileText(
         path.join(npmDir, 'with-header.js'),
-        `/*!\n * Existing header\n */\nexport const foo = 'bar';\n`
+        `/*!\n * Existing header\n */\nexport const foo = 'bar';\n`,
       );
 
       const options: AddLicenseHeadersExecutorSchema = {
@@ -241,10 +232,7 @@ describe('AddLicenseHeadersExecutor E2E', () => {
     it('should fail gracefully with invalid package.json', async () => {
       const projectDir = path.join(tempDir, 'packages', 'test-lib');
 
-      await writeFileText(
-        path.join(projectDir, 'package.json'),
-        'not valid json {{{}'
-      );
+      await writeFileText(path.join(projectDir, 'package.json'), 'not valid json {{{}');
 
       const options: AddLicenseHeadersExecutorSchema = {
         targetDirectory: './npm',
@@ -278,10 +266,7 @@ describe('AddLicenseHeadersExecutor E2E', () => {
       const customDir = path.join(projectDir, 'dist');
       fs.mkdirSync(customDir, { recursive: true });
 
-      await writeFileText(
-        path.join(customDir, 'custom.js'),
-        `export const custom = true;\n`
-      );
+      await writeFileText(path.join(customDir, 'custom.js'), `export const custom = true;\n`);
 
       const options: AddLicenseHeadersExecutorSchema = {
         targetDirectory: './dist',
@@ -300,13 +285,10 @@ describe('AddLicenseHeadersExecutor E2E', () => {
     it('should work with custom package.json path', async () => {
       const projectDir = path.join(tempDir, 'packages', 'test-lib');
 
-      await writeJson(
-        path.join(projectDir, 'custom-package.json'),
-        {
-          name: 'custom-package-name',
-          version: '2.0.0',
-        }
-      );
+      await writeJson(path.join(projectDir, 'custom-package.json'), {
+        name: 'custom-package-name',
+        version: '2.0.0',
+      });
 
       const options: AddLicenseHeadersExecutorSchema = {
         targetDirectory: './npm',
@@ -325,10 +307,10 @@ describe('AddLicenseHeadersExecutor E2E', () => {
     });
   });
 
-    it('should preserve formatting and whitespace', async () => {
-      const npmDir = path.join(tempDir, 'packages', 'test-lib', 'npm');
+  it('should preserve formatting and whitespace', async () => {
+    const npmDir = path.join(tempDir, 'packages', 'test-lib', 'npm');
 
-      const originalContent = `export function complex() {
+    const originalContent = `export function complex() {
   if (true) {
     return 'formatted';
   }

@@ -16,27 +16,22 @@ const DEFAULT_CLEAN_MODE = CLEAN_MODE_SIMPLE;
 
 const GLOB_ALL_FILES = '**/*';
 
-function resolveExcludePaths(
-  patterns: string[],
-  absoluteProjectRoot: string
-): string[] {
-  return patterns.map(pattern =>
-    path.isAbsolute(pattern) ? pattern : path.join(absoluteProjectRoot, pattern)
+function resolveExcludePaths(patterns: string[], absoluteProjectRoot: string): string[] {
+  return patterns.map((pattern) =>
+    path.isAbsolute(pattern) ? pattern : path.join(absoluteProjectRoot, pattern),
   );
 }
 
 function shouldPreservePath(
   filePath: string,
   excludePaths: string[],
-  exactMatch: boolean
+  exactMatch: boolean,
 ): boolean {
   const normalized = path.normalize(filePath);
 
-  return excludePaths.some(excludePath => {
+  return excludePaths.some((excludePath) => {
     const normalizedExclude = path.normalize(excludePath);
-    return exactMatch
-      ? normalized === normalizedExclude
-      : normalized.startsWith(normalizedExclude);
+    return exactMatch ? normalized === normalizedExclude : normalized.startsWith(normalizedExclude);
   });
 }
 
@@ -46,10 +41,7 @@ function cleanSimple(targetDirectory: string): void {
   }
 }
 
-function cleanShallow(
-  targetDirectory: string,
-  absoluteExcludePaths: string[]
-): void {
+function cleanShallow(targetDirectory: string, absoluteExcludePaths: string[]): void {
   if (!fs.existsSync(targetDirectory)) {
     return;
   }
@@ -67,16 +59,16 @@ function cleanShallow(
 
 async function cleanRecursive(
   targetDirectory: string,
-  absoluteExcludePaths: string[]
+  absoluteExcludePaths: string[],
 ): Promise<void> {
   const filesToDelete = await glob(GLOB_ALL_FILES, {
     cwd: targetDirectory,
     dot: true,
-    absolute: true
+    absolute: true,
   });
 
-  const filteredFiles = filesToDelete.filter(file =>
-    !shouldPreservePath(file, absoluteExcludePaths, false)
+  const filteredFiles = filesToDelete.filter(
+    (file) => !shouldPreservePath(file, absoluteExcludePaths, false),
   );
 
   for (const file of filteredFiles) {
@@ -84,14 +76,11 @@ async function cleanRecursive(
   }
 }
 
-const runExecutor: PromiseExecutor<CleanExecutorSchema> = async (
-  options,
-  context
-) => {
+const runExecutor: PromiseExecutor<CleanExecutorSchema> = async (options, context) => {
   const absoluteProjectRoot = resolveProjectPath(context);
   const targetDirectory = path.join(
     absoluteProjectRoot,
-    options.targetDirectory || DEFAULT_TARGET_DIR
+    options.targetDirectory || DEFAULT_TARGET_DIR,
   );
   const mode = options.mode || DEFAULT_CLEAN_MODE;
   const excludePatterns = options.excludePatterns || [];
@@ -103,10 +92,7 @@ const runExecutor: PromiseExecutor<CleanExecutorSchema> = async (
   }
 
   try {
-    const absoluteExcludePaths = resolveExcludePaths(
-      excludePatterns,
-      absoluteProjectRoot
-    );
+    const absoluteExcludePaths = resolveExcludePaths(excludePatterns, absoluteProjectRoot);
 
     switch (mode) {
       case CLEAN_MODE_SIMPLE:
