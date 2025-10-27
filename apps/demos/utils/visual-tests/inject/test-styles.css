@@ -4,6 +4,8 @@ body {
 
 .dx-scrollable-scroll { visibility: hidden !important; }
 
-.dx-theme-material .dx-chart * {
-  font-family: sans-serif !important;
+.dx-theme-material * {
+  -webkit-font-smoothing: antialiased;
+  /* stylelint-disable-next-line value-keyword-case */
+  text-rendering: optimizeLegibility;
 }

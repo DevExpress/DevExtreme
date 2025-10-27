@@ -366,6 +366,8 @@ export function runManualTestCore(
   
   const getTestStyles = (demoName) => {
     switch (demoName) {
+      case 'EditorAppearanceVariants':
+        return `.dx-toast-wrapper { display: none !important; }`;
       case 'VirtualScrolling':
       case 'StatePersistence':
       case 'EditStateManagement':

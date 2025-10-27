@@ -81,8 +81,6 @@ runManualTest('Stepper', 'Overview', (test) => {
         .eql(true);
     });
 
-    // await t.wait(500);
-
     await testScreenshot(t, takeScreenshot, 'Stepper overview selectOnFocus=false.png');
 
     await t
