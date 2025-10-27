@@ -855,7 +855,7 @@ export class AppointmentForm {
         location: 'after',
         name: 'settings',
         options: {
-          icon: 'optionsoutline',
+          icon: 'preferences',
           stylingMode: 'text',
           onClick: (): void => {
             this.showRecurrenceGroup();
