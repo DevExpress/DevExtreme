@@ -182,29 +182,16 @@ Object.values(FRAMEWORKS).forEach((approach) => {
               ...{ looksSameComparisonOptions: { antialiasingTolerance: 10 } },
             }));
           } else {
-            const fastComparisonOptions = {
-              ...comparisonOptions,
-              looksSameComparisonOptions: {
-                ...comparisonOptions?.looksSameComparisonOptions,
-                tolerance: 10,
-                antialiasingTolerance: 10,
-              },
-              // eslint-disable-next-line spellcheck/spell-checker
-              textDiffTreshold: 0.1,
-            };
-
-            comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, fastComparisonOptions);
+            comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`);
           }
 
-          if (comparisonResult) {
-            const consoleMessages = await t.getBrowserConsoleMessages();
+          const consoleMessages = await t.getBrowserConsoleMessages();
 
-            const errors = [...consoleMessages.error, ...consoleMessages.warn]
-              .filter((e) => !knownWarnings.some((kw) => e.startsWith(kw)));
+          const errors = [...consoleMessages.error, ...consoleMessages.warn]
+            .filter((e) => !knownWarnings.some((kw) => e.startsWith(kw)));
 
-            await t.expect(errors).eql([]);
-            await t.expect(comparisonResult).ok('INVALID_SCREENSHOT');
-          }
+          await t.expect(errors).eql([]);
+          await t.expect(comparisonResult).ok('INVALID_SCREENSHOT');
         }
       });
   });

@@ -232,7 +232,7 @@ async function main() {
               }
               window.getSelection()?.removeAllRanges();
             }).with({ boundTestRun: t })();
-            await t.hover('html');
+            // await t.hover('html');
           },
         },
       },
