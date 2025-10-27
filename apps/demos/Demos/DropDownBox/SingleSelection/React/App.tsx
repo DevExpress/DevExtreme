@@ -34,7 +34,8 @@ function App() {
 
   const treeViewItemSelectionChanged = useCallback(
     (e: { component: { getSelectedNodeKeys: () => any } }) => {
-      setTreeBoxValue(e.component.getSelectedNodeKeys());
+      const selectedKeys = e.component.getSelectedNodeKeys();
+      setTreeBoxValue(selectedKeys.length > 0 ? selectedKeys[0] : null);
     },
     [],
   );

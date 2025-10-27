@@ -106,15 +106,18 @@ function makeAsyncDataSource(jsonFile) {
 }
 
 function syncTreeViewSelection() {
-  treeView?.unselectAll();
+  if (!treeView) return;
 
   if (treeBoxValue.value) {
     treeView?.selectItem(treeBoxValue.value);
+  } else {
+    treeView?.unselectAll();
   }
 }
 
 function treeViewItemSelectionChanged(e) {
-  treeBoxValue.value = e.component.getSelectedNodeKeys();
+  const selectedKeys = e.component.getSelectedNodeKeys();
+  treeBoxValue.value = selectedKeys.length > 0 ? selectedKeys[0] : null;
 }
 
 function gridBoxDisplayExpr(item) {

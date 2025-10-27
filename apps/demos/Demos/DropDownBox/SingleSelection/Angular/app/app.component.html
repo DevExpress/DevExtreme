@@ -24,6 +24,7 @@
             displayExpr="name"
             [selectByClick]="true"
             (onContentReady)="$event.component.selectItem(treeBoxValue)"
+            (onItemClick)="treeView_itemClick()"
             (onItemSelectionChanged)="treeView_itemSelectionChanged($event)"
           >
           </dx-tree-view>
@@ -52,7 +53,8 @@
             [columns]="gridColumns"
             [hoverStateEnabled]="true"
             showBorders="true"
-            [(selectedRowKeys)]="gridBoxValue"
+            [selectedRowKeys]="gridBoxValue"
+            (onSelectionChanged)="dataGrid_selectionChanged($event)"
             height="100%"
           >
             <dxo-selection mode="single"></dxo-selection>
