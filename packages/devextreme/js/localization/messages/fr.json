@@ -88,6 +88,9 @@
         "dxFileUploader-invalidFileExtension": "Type de fichier non autorisé",
         "dxFileUploader-invalidMaxFileSize": "Fichier trop volumineux",
         "dxFileUploader-invalidMinFileSize": "Fichier trop petit",
+        "dxFileUploader-fileListLabel": "File list",
+        "dxFileUploader-removeFileButtonLabel": "Remove file {0}",
+        "dxFileUploader-uploadFileButtonLabel": "Upload file {0}",
 
         "dxRangeSlider-ariaFrom": "De {0}",
         "dxRangeSlider-ariaTill": "à {0}",

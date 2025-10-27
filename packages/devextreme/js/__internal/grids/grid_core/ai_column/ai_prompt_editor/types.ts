@@ -4,7 +4,7 @@ import type { Properties as TextAreaProperties } from '@js/ui/text_area';
 
 import type { CreateComponent } from '../../m_types';
 
-export interface AiPromptEditorOptions {
+export interface AIPromptEditorOptions {
   container: dxElementWrapper;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   createComponent: CreateComponent<any>;
@@ -17,4 +17,4 @@ export interface AiPromptEditorOptions {
   editorOptions?: TextAreaProperties;
 }
 
-export type AiPromptEditorAction = 'apply' | 'regenerate' | 'stop';
+export type AIPromptEditorAction = 'apply' | 'regenerate' | 'stop';
