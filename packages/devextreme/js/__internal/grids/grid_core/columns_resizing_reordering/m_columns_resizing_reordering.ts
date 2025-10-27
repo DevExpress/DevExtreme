@@ -1386,10 +1386,18 @@ export class DraggingHeaderViewController extends modules.ViewController {
    * @extended: column_fixing
    */
   public _generatePointsByColumns(options, needToCheckPrevPoint = false) {
+    const cells = this._columnHeadersView.getColumnElements();
     this.isCustomGroupColumnPosition = this.checkIsCustomGroupColumnPosition(options);
+
     const points = gridCoreUtils.getPointsByColumns(
       options.columnElements,
-      (point) => this._pointCreated(point, options.columns, options.targetDraggingPanel.getName(), options.sourceColumn),
+      (point) => this._pointCreated({
+        point,
+        columns: options.columns,
+        location: options.targetDraggingPanel.getName(),
+        sourceColumn: options.sourceColumn,
+        cells,
+      }),
       options.isVerticalOrientation,
       options.startColumnIndex,
       needToCheckPrevPoint,
@@ -1422,9 +1430,19 @@ export class DraggingHeaderViewController extends modules.ViewController {
    * @param columns All columns in the given location
    * @param location Location where we move column (headers, group, column chooser etc)
    * @param sourceColumn Column that is dragging
+   * @param cells collection of draggable cells wrapped into jQuery object
    * @returns whether to filter current point (true - remove point, false - keep it)
    */
-  protected _pointCreated(point, columns, location, sourceColumn): boolean {
+
+  protected _pointCreated({
+    point, columns, location, sourceColumn,
+  }: {
+    point: ColumnPoint;
+    columns;
+    location?;
+    sourceColumn?;
+    cells?: dxElementWrapper;
+  }): boolean {
     const targetColumn = columns[point.columnIndex];
     const prevColumn = columns[point.columnIndex - 1];
 

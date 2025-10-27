@@ -3525,7 +3525,7 @@ QUnit.module('Headers reordering', {
         // assert
         const $cells = controller._columnHeadersView._tableElement.find('td');
         const points = gridCore.getPointsByColumns($cells, function(point) {
-            return controller._pointCreated(point, testColumns, 'headers', testColumns[1]);
+            return controller._pointCreated({ point, columns: testColumns, location: 'headers', sourceColumn: testColumns[1] });
         });
         assert.deepEqual(points, [
             { x: -9930, y: -10000, columnIndex: 1, index: 1 },
@@ -3549,7 +3549,7 @@ QUnit.module('Headers reordering', {
 
         // assert
         const points = gridCore.getPointsByColumns($cells, function(point) {
-            return controller._pointCreated(point, testColumns);
+            return controller._pointCreated({ point, columns: testColumns });
         });
         assert.deepEqual(points, [
             { x: -10000, y: -10000, columnIndex: 0, index: 0 },
@@ -3573,7 +3573,7 @@ QUnit.module('Headers reordering', {
 
         // assert
         assert.ok(!gridCore.getPointsByColumns($cells, function(point) {
-            return controller._pointCreated(point, testColumns, 'headers', testColumns[0]);
+            return controller._pointCreated({ point, columns: testColumns, location: 'headers', sourceColumn: testColumns[0] });
         }).length, 'points by columns');
     });
 

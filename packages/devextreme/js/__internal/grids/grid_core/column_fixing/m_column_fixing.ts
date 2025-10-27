@@ -1076,8 +1076,12 @@ const draggingHeader = (Base: ModuleType<DraggingHeaderViewController>) => class
     return super._generatePointsByColumns(options, needToCheckPrevPoint);
   }
 
-  protected _pointCreated(point, columns, location, sourceColumn) {
-    const result = super._pointCreated.apply(this, arguments as any);
+  protected _pointCreated({
+    point, columns, location, sourceColumn, cells,
+  }) {
+    const result = super._pointCreated({
+      point, columns, location, sourceColumn, cells,
+    });
     const targetColumn = columns[point.columnIndex];
     // @ts-expect-error
     const $transparentColumn = this._columnHeadersView.getTransparentColumnElement();

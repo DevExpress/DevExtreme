@@ -1022,8 +1022,12 @@ const columnsResizer = (
 const draggingHeader = (
   Base: ModuleType<DraggingHeaderViewController>,
 ) => class AdaptivityDraggingHeaderExtender extends Base {
-  protected _pointCreated(point, columns, location, sourceColumn) {
-    const result = super._pointCreated(point, columns, location, sourceColumn);
+  protected _pointCreated({
+    point, columns, location, sourceColumn, cells,
+  }) {
+    const result = super._pointCreated({
+      point, columns, location, sourceColumn, cells,
+    });
     const column = columns[point.columnIndex - 1] || {};
     const hasAdaptiveHiddenWidth = column.visibleWidth === HIDDEN_COLUMNS_WIDTH;
 
