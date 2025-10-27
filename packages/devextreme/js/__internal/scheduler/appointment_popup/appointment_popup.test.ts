@@ -421,6 +421,25 @@ describe('Appointment Popup Form', () => {
       expect(recurrenceGroup.hasClass('dx-scheduler-form-recurrence-hidden')).toBe(false);
     });
 
+    it('Check that after opening recurrence appointment current form is main form', async () => {
+      const appointment = {
+        text: 'Recurrent Appointment',
+        startDate: new Date(2017, 4, 1, 9, 30),
+        endDate: new Date(2017, 4, 1, 11),
+        recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=10',
+      };
+
+      const { POM, scheduler } = await createScheduler(getDefaultConfig());
+
+      scheduler.showAppointmentPopup(appointment);
+
+      POM.popup.getEditSeriesButton().click();
+
+      const recurrenceGroup = $(POM.popup.recurrenceGroup);
+
+      expect(recurrenceGroup.hasClass('dx-scheduler-form-recurrence-hidden')).toBe(true);
+    });
+
     it('Should discard recurrence changes when clicking \'cancel\' button in recurrence form', async () => {
       const data = [
         {
@@ -643,19 +662,54 @@ describe('Appointment Popup Form', () => {
 
         POM.popup.getBackButton().click();
 
-        scheduler.hideAppointmentPopup(true);
+        POM.popup.getSaveButton().click();
 
-        POM.openPopupByDblClick('Meeting');
+        expect(scheduler.option('dataSource')?.[0]).toEqual({
+          allDay: false,
+          text: 'Meeting',
+          startDate: new Date(2017, 4, 22, 9, 30),
+          endDate: new Date(2017, 4, 22, 11, 30),
+          recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO',
+        });
+      });
+
+      it('Check that appointment is saved after editing data in recurrence form', async () => {
+        const data = [
+          {
+            text: 'Team Meeting',
+            startDate: new Date(2017, 4, 15, 10, 0),
+            endDate: new Date(2017, 4, 15, 11, 0),
+            recurrenceRule: 'FREQ=DAILY',
+          },
+        ];
+
+        const { POM, scheduler } = await createScheduler({
+          dataSource: data,
+          currentDate: new Date(2017, 4, 15),
+          firstDayOfWeek: 1,
+        });
+
+        POM.openPopupByDblClick('Team Meeting');
 
         POM.popup.getEditSeriesButton().click();
 
-        // @ts-expect-error
-        const freqEditorAfter = $(POM.popup.frequencyEditor).dxSelectBox('instance');
-        expect(freqEditorAfter.option('value')).toBe('weekly');
+        POM.popup.selectRepeatValue('weekly');
 
-        // @ts-expect-error
-        const repeatEditorAfter = $(POM.popup.repeatEditor).dxSelectBox('instance');
-        expect(repeatEditorAfter.option('value')).toBe('weekly');
+        POM.popup.openRecurrenceSettings();
+
+        POM.popup.selectRecurrenceWeekDays([0, 4]);
+
+        POM.popup.getBackButton().click();
+
+        POM.popup.getSaveButton().click();
+
+        const savedAppointment = scheduler.option('dataSource')?.[0];
+        expect(savedAppointment).toMatchObject({
+          text: 'Team Meeting',
+          startDate: new Date(2017, 4, 15, 10, 0),
+          endDate: new Date(2017, 4, 15, 11, 0),
+          recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,FR',
+        });
       });
     });
   });
