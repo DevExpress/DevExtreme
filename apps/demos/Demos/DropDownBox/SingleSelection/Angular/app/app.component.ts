@@ -7,6 +7,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { lastValueFrom } from 'rxjs';
 import { CustomStore } from 'devextreme-angular/common/data';
 import { DxDataGridModule } from 'devextreme-angular';
+import { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { DxTreeViewModule, DxTreeViewComponent, DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
 import { DxDropDownBoxModule, DxDropDownBoxTypes } from 'devextreme-angular/ui/drop-down-box';
 
@@ -69,21 +70,33 @@ export class AppComponent {
   }
 
   treeView_itemSelectionChanged(e: DxTreeViewTypes.ItemSelectionChangedEvent) {
-    this.treeBoxValue = e.component.getSelectedNodeKeys();
+    const selectedKeys = e.component.getSelectedNodeKeys();
+    this.treeBoxValue = selectedKeys.length > 0 ? selectedKeys[0] : null;
+  }
+
+  treeView_itemClick() {
+    this.isTreeBoxOpened = false;
+    this.ref.detectChanges();
+  }
+
+  dataGrid_selectionChanged(e: DxDataGridTypes.SelectionChangedEvent) {
+    this.gridBoxValue = e.selectedRowKeys;
+    this.isGridBoxOpened = false;
+    this.ref.detectChanges();
   }
 
   gridBox_displayExpr = ({ CompanyName, Phone }) => CompanyName && `${CompanyName} <${Phone}>`;
 
   onTreeBoxOptionChanged(e: DxDropDownBoxTypes.OptionChangedEvent) {
-    if (e.name === 'value') {
-      this.isTreeBoxOpened = false;
+    if (e.name === 'opened') {
+      this.isTreeBoxOpened = e.value;
       this.ref.detectChanges();
     }
   }
 
   onGridBoxOptionChanged(e: DxDropDownBoxTypes.OptionChangedEvent) {
-    if (e.name === 'value') {
-      this.isGridBoxOpened = false;
+    if (e.name === 'opened') {
+      this.isGridBoxOpened = e.value;
       this.ref.detectChanges();
     }
   }
