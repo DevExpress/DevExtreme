@@ -188,7 +188,6 @@ Object.values(FRAMEWORKS).forEach((approach) => {
                 ...comparisonOptions?.looksSameComparisonOptions,
                 tolerance: 10,
                 antialiasingTolerance: 10,
-
               },
               // eslint-disable-next-line spellcheck/spell-checker
               textDiffTreshold: 0.1,

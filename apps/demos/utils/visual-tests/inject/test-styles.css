@@ -4,3 +4,6 @@ body {
 
 .dx-scrollable-scroll { visibility: hidden !important; }
 
+.dx-theme-material * {
+  font-family: sans-serif !important;
+}

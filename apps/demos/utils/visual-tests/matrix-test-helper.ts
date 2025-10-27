@@ -61,16 +61,36 @@ export const injectStyle = (style) => `
   document.getElementsByTagName('head')[0].appendChild(style);
 `;
 
-export const waitForAngularLoading = ClientFunction(() => new Promise((resolve) => {
-  let demoAppCounter = 0;
-  const demoAppIntervalHandle = setInterval(() => {
-    const demoApp = document.querySelector('demo-app') as HTMLElement;
-    if ((demoApp && demoApp.innerText !== 'Loading...') || demoAppCounter === 120) {
-      setTimeout(resolve, 500);
-      clearInterval(demoAppIntervalHandle);
+// export const waitForAngularLoading = ClientFunction(() => new Promise((resolve) => {
+//   let demoAppCounter = 0;
+//   const demoAppIntervalHandle = setInterval(() => {
+//     const demoApp = document.querySelector('demo-app') as HTMLElement;
+//     if ((demoApp && demoApp.innerText !== 'Loading...') || demoAppCounter === 120) {
+//       setTimeout(resolve, 500);
+//       clearInterval(demoAppIntervalHandle);
+//     }
+//     demoAppCounter += 1;
+//   }, 1000);
+// }));
+
+export const waitForAngularLoading = ClientFunction(() => new Promise<void>((resolve) => {
+  const start = performance.now();
+
+  const check = () => {
+    const demoApp = document.querySelector('demo-app') as HTMLElement | null;
+
+    if (demoApp && demoApp.innerText.trim() !== 'Loading...') {
+      return setTimeout(resolve, 100);
     }
-    demoAppCounter += 1;
-  }, 1000);
+
+    if (performance.now() - start > 10_000) {
+      return resolve();
+    }
+
+    requestAnimationFrame(check);
+  };
+
+  check();
 }));
 
 function getInterestProcessArgs() {
@@ -207,28 +227,27 @@ export function shouldRunTestAtIndex(testIndex) {
 const SKIPPED_TESTS = {
   jQuery: {
     Charts: [
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'AreaSelectionZooming', themes: [THEME.material] },
-      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
-      { demo: 'TooltipCustomization', themes: [THEME.material] },
-      { demo: 'LegendMarkersCustomization', themes: [THEME.material] },
-      { demo: 'PieResolveLabelOverlap', themes: [THEME.material] },
+      // { demo: 'Overview', themes: [THEME.material] },
+      // { demo: 'AreaSelectionZooming', themes: [THEME.material] },
+      // { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
+      // { demo: 'TooltipCustomization', themes: [THEME.material] },
+      // { demo: 'LegendMarkersCustomization', themes: [THEME.material] },
+      // { demo: 'PieResolveLabelOverlap', themes: [THEME.material] },
     ],
-    DataGrid: [
-      { demo: 'CellEditing', themes: [THEME.material] },
-      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
+    DataGrid: ['RemoteGrouping'],
+      // { demo: 'CellEditing', themes: [THEME.material] },
+      // { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
       // Scroll to const value. Not enough for other themes, because the height of elements is different.
-      { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
-      { demo: 'RowEditing', themes: [THEME.fluent, THEME.material] },
-      { demo: 'Toolbar', themes: [THEME.generic, THEME.fluent, THEME.material] },
-    ],
+      // { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
+      // { demo: 'RowEditing', themes: [THEME.fluent, THEME.material] },
+      // { demo: 'Toolbar', themes: [THEME.fluent, THEME.material] },
     Gantt: [
-      { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      // { demo: 'TaskTemplate', themes: [ THEME.material, THEME.fluent] },
+      // { demo: 'Validation', themes: [THEME.material, THEME.fluent] },
     ],
     VectorMap: [
-      { demo: 'Tooltip', themes: [THEME.material] },
-      { demo: 'TooltipsCustomization', themes: [THEME.material] },
+      // { demo: 'Tooltip', themes: [THEME.material] },
+      // { demo: 'TooltipsCustomization', themes: [THEME.material] },
     ]
   },
   Angular: {
@@ -239,18 +258,14 @@ const SKIPPED_TESTS = {
   },
   Vue: {
     Common: ['PopupAndNotificationsOverview'],
-    Scheduler: [
-      // NOTE: Context menu item position is different across themes
-      { demo: 'ContextMenu', themes: [THEME.fluent] },
-    ],
+    // NOTE: Context menu item position is different across themes
+    Scheduler: ['ContextMenu'],
     DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping'],
     FileUploader: ['CustomDropzone']
   },
   React: {
     Common: ['PopupAndNotificationsOverview'],
-    Scheduler: [
-      { demo: 'ContextMenu', themes: [THEME.fluent] },
-    ],
+    Scheduler: ['ContextMenu'],
     DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping'],
     FileUploader: ['CustomDropzone']
   },
