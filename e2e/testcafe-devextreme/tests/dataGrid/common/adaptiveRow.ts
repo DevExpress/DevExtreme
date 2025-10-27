@@ -1,28 +1,28 @@
-import TreeList from 'devextreme-testcafe-models/treeList';
-import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
-import { safeSizeTest } from '../../helpers/safeSizeTest';
+import DataGrid from 'devextreme-testcafe-models/dataGrid';
+import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
-fixture.disablePageReloads`Adaptive Row`
-  .page(url(__dirname, '../container.html'));
+fixture.disablePageReloads`Column chooser`
+  .page(url(__dirname, '../../container.html'));
 
 safeSizeTest('Should be shown and hidden when the window is resized', async (t) => {
-  const treeList = new TreeList('#container');
-  await treeList.isReady();
+  const dataGrid = new DataGrid('#container');
+  await dataGrid.isReady();
 
   await t.resizeWindow(400, 400);
 
-  const adaptiveButton = treeList.getAdaptiveButton();
+  const adaptiveButton = dataGrid.getAdaptiveButton();
   await t.expect(adaptiveButton.exists).ok();
   await t.click(adaptiveButton);
 
-  await t.expect(treeList.getAdaptiveRow(0).element.exists).ok();
+  await t.expect(dataGrid.getAdaptiveRow(0).element.exists).ok();
 
   await t.resizeWindow(1200, 400);
 
-  await t.expect(treeList.isAdaptiveColumnHidden()).ok();
-  await t.expect(treeList.getAdaptiveRow(0).element.exists).notOk();
-}).before(async () => createWidget('dxTreeList', {
+  await t.expect(dataGrid.isAdaptiveColumnHidden()).ok();
+  await t.expect(dataGrid.getAdaptiveRow(0).element.exists).notOk();
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [{
     ID: 1,
     Head_ID: -1,
@@ -38,8 +38,6 @@ safeSizeTest('Should be shown and hidden when the window is resized', async (t) 
     Hire_Date: '1995-01-15',
   }],
   keyExpr: 'ID',
-  parentIdExpr: 'Head_ID',
-  rootValue: -1,
   allowColumnResizing: true,
   rowDragging: {
     allowDropInsideItem: true,

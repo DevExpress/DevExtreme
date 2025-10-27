@@ -41,11 +41,8 @@ const COLUMN_VIEWS = [COLUMN_HEADERS_VIEW, ROWS_VIEW, FOOTER_VIEW];
 const ADAPTIVE_NAMESPACE = 'dxDataGridAdaptivity';
 const HIDDEN_COLUMNS_WIDTH = 'adaptiveHidden';
 const ADAPTIVE_ROW_TYPE = 'detailAdaptive';
-
 const FORM_ITEM_CONTENT_CLASS = 'dx-field-item-content';
 const FORM_ITEM_MODIFIED = 'dx-item-modified';
-const ADAPTIVE_ROW_SELECTOR = 'tr.dx-adaptive-detail-row';
-
 const HIDDEN_COLUMN_CLASS = 'hidden-column';
 const ADAPTIVE_COLUMN_BUTTON_CLASS = 'adaptive-more';
 const ADAPTIVE_COLUMN_NAME_CLASS = 'dx-command-adaptive';
@@ -510,14 +507,20 @@ export class AdaptiveColumnsController extends modules.ViewController {
   public _toggleGroupAdaptiveRowVisibility(isBestFit: boolean) {
     const hasAdaptiveColumns = this.hasHiddenColumns() || this.getHidingColumnsQueue().length > 0;
 
-    if (hasAdaptiveColumns) {
-      const rowsView = this.getView(ROWS_VIEW);
-      if (rowsView && rowsView.isVisible() && rowsView.element()) {
-        const $rowsFixedTable = rowsView.element();
-        each($rowsFixedTable.find(ADAPTIVE_ROW_SELECTOR), (_, item) => {
-          $(item).css('display', isBestFit ? 'none' : '');
-        });
-      }
+    if (!hasAdaptiveColumns) {
+      return;
+    }
+
+    const rowsView = this.getView(ROWS_VIEW);
+    if (rowsView.element()) {
+      const items = this._dataController.items();
+
+      items.forEach((item, index) => {
+        if (item.rowType === ADAPTIVE_ROW_TYPE) {
+          const $row = $(rowsView.getRowElement(index));
+          $row.css('display', isBestFit ? 'none' : '');
+        }
+      });
     }
   }
 

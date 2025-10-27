@@ -4,7 +4,6 @@ import DataGrid from '../dataGrid';
 const CLASS = {
   treeList: 'dx-treelist-container',
   adaptiveColumnButton: 'dx-treelist-adaptive-more',
-  adaptiveCommandCellHidden: 'dx-command-adaptive-hidden',
 }
 
 export default class TreeList extends DataGrid {
@@ -15,11 +14,7 @@ export default class TreeList extends DataGrid {
     return this.element.find(`.${CLASS.treeList}`);
   }
 
-  getAdaptiveButton(): Selector {
-    return this.element.find(`.${CLASS.adaptiveColumnButton}`);
-  }
-
-  isAdaptiveButtonHidden(): Promise<boolean> {
-    return this.getAdaptiveButton().parent(`.${CLASS.adaptiveCommandCellHidden}`).exists;
+  getAdaptiveButton(nth: number = 0): Selector {
+    return this.element.find(`.${CLASS.adaptiveColumnButton}`).nth(nth);
   }
 }
