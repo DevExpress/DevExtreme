@@ -1,4 +1,5 @@
 import messageLocalization from '@js/common/core/localization/message';
+import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { ClickEvent } from '@js/ui/button';
@@ -197,5 +198,7 @@ class File extends DOMComponent<File, Properties> {
     this._downloadButton = null;
   }
 }
+
+registerComponent('dxFile', File);
 
 export default File;
