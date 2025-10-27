@@ -667,7 +667,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
         : null,
     };
 
-    // @ts-expect-error attr type should be extdened
+    // @ts-expect-error attr type should be extended
     this._$filesContainer?.attr(aria);
   }
 
@@ -815,7 +815,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
         hoverStateEnabled,
         stylingMode: _buttonStylingMode,
         elementAttr: {
-          // @ts-expect-error foramat params should be extended
+          // @ts-expect-error format params should be extended
           'aria-label': messageLocalization.format('dxFileUploader-removeFileButtonLabel', file?.value?.name ?? ''),
         },
       },
@@ -844,7 +844,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
         hoverStateEnabled,
         stylingMode: _buttonStylingMode,
         elementAttr: {
-          // @ts-expect-error foramat params should be extended
+          // @ts-expect-error format params should be extended
           'aria-label': messageLocalization.format('dxFileUploader-uploadFileButtonLabel', file?.value?.name ?? ''),
         },
       },

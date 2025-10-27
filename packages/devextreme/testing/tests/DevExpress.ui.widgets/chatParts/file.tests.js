@@ -253,4 +253,83 @@ QUnit.module('File', moduleConfig, () => {
             assert.strictEqual(buttonDisposeSpy.callCount, 1, 'button dispose was called');
         });
     });
+
+    QUnit.module('Accessibility', () => {
+        QUnit.test('file element should have role="listitem"', function(assert) {
+            assert.strictEqual(this.$element.attr('role'), 'listitem', 'file element should have correct role');
+        });
+
+        QUnit.test('download button should have correct aria-label with file name', function(assert) {
+            const testFileName = 'document.pdf';
+
+            this.reinit({
+                data: {
+                    name: testFileName,
+                    size: 2048,
+                },
+            });
+
+            assert.strictEqual(
+                this.$downloadButton.attr('aria-label'),
+                `Download file ${testFileName}`,
+                'download button should have aria-label with file name',
+            );
+        });
+
+        QUnit.test('download button aria-label should be updated when data is changed', function(assert) {
+            assert.strictEqual(
+                this.$downloadButton.attr('aria-label'),
+                'Download file test-file.txt',
+                'download button should have correct aria-label',
+            );
+
+            const secondFileName = 'file2.pdf';
+
+            this.instance.option('data', {
+                name: secondFileName,
+                size: 2048,
+            });
+
+            const $newDownloadButton = this.$element.find(`.${BUTTON_CLASS}`).first();
+
+            assert.strictEqual(
+                $newDownloadButton.attr('aria-label'),
+                `Download file ${secondFileName}`,
+                'download button aria-label should be updated with new file name',
+            );
+        });
+
+        QUnit.test('download button should have aria-label when file name is empty', function(assert) {
+            this.reinit({
+                data: {
+                    name: '',
+                    size: 0,
+                },
+            });
+
+            assert.strictEqual(
+                this.$downloadButton.attr('aria-label'),
+                'Download file ',
+                'download button should have aria-label even with empty file name',
+            );
+        });
+
+        QUnit.test('role="listitem" should persist after data option change', function(assert) {
+            this.reinit({
+                data: {
+                    name: 'initial.txt',
+                    size: 512,
+                },
+            });
+
+            assert.strictEqual(this.$element.attr('role'), 'listitem', 'role should be "listitem" initially');
+
+            this.instance.option('data', {
+                name: 'updated.pdf',
+                size: 1024,
+            });
+
+            assert.strictEqual(this.$element.attr('role'), 'listitem', 'role should remain "listitem" after data change');
+        });
+    });
 });
