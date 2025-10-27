@@ -29,11 +29,6 @@ export const ACTION_TO_APPOINTMENT = {
   EXCLUDE_FROM_SERIES: 2,
 };
 
-/*
-TODO:
-- add test that check that firstDayOfWeek is correct after opening popup and then scheduler option change
-- add test that recurrence form does not show when popup is open for recurrence appointment
-*/
 export class AppointmentPopup {
   scheduler: any;
 
@@ -419,8 +414,7 @@ export class AppointmentPopup {
       cssClass: 'dx-toolbar-label',
     }];
 
-    // Show save button only if saving is allowed and form is not read-only
-    const canSave = this.state.allowSaving && !this.form.readOnly;
+    const canSave = !this.form.readOnly;
     if (canSave) {
       toolbarItems.push(
         {

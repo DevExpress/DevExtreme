@@ -143,7 +143,7 @@ export class RecurrenceForm {
         showSpinButtons: true,
         useLargeSpinButtons: false,
         onContentReady: (e): void => {
-          e.component.option('value', this.recurrenceRule.byMonthDay as any);
+          e.component.option('value', this.recurrenceRule.byMonthDay ?? undefined);
         },
         onValueChanged: (e): void => {
           this.recurrenceRule.byMonthDay = e.value;
@@ -161,15 +161,6 @@ export class RecurrenceForm {
   }
 
   setReadOnly(value: boolean): void {
-    if (!this._dxForm) {
-      return;
-    }
-
-    Object.values(EDITOR_NAMES).forEach((editorName) => {
-      const editor = this._dxForm?.getEditor(editorName);
-      editor?.option('readOnly', value);
-    });
-
     Object.values(this._weekDayButtons).forEach((button) => {
       button?.option('disabled', value);
     });
@@ -288,7 +279,7 @@ export class RecurrenceForm {
             showSpinButtons: true,
             useLargeSpinButtons: false,
             onContentReady: (e): void => {
-              e.component.option('value', this.recurrenceRule.interval as any);
+              e.component.option('value', this.recurrenceRule.interval);
             },
             onValueChanged: (e): void => {
               this.recurrenceRule.interval = e.value;
@@ -515,7 +506,7 @@ export class RecurrenceForm {
             showSpinButtons: true,
             useLargeSpinButtons: false,
             onContentReady: (e): void => {
-              e.component.option('value', this.recurrenceRule.count as any);
+              e.component.option('value', this.recurrenceRule.count ?? undefined);
             },
             onValueChanged: (e): void => {
               this.recurrenceRule.count = e.value;

@@ -53,7 +53,6 @@ const CLASSES = {
   recurrenceSettingsButton: 'dx-scheduler-form-recurrence-settings-button',
   mainHidden: 'dx-scheduler-form-main-hidden',
   recurrenceGroup: 'dx-scheduler-form-recurrence-group',
-  mainGroupClass: 'dx-scheduler-form-main-group',
   recurrenceHidden: 'dx-scheduler-form-recurrence-hidden',
 };
 
@@ -111,22 +110,17 @@ export class AppointmentForm {
 
   private _popup!: any;
 
-  private _readOnly = false;
-
   get dxForm(): dxForm {
     return this._dxForm as dxForm;
   }
 
   get readOnly(): boolean {
-    return this._readOnly;
+    return this.dxForm.option('readOnly') as boolean;
   }
 
   set readOnly(value: boolean) {
-    this._readOnly = value;
-    if (this._dxForm) {
-      this._dxForm.option('readOnly', value);
-      this._recurrenceForm?.setReadOnly(value);
-    }
+    this.dxForm.option('readOnly', value);
+    this._recurrenceForm.setReadOnly(value);
   }
 
   get formData(): Record<string, any> {
@@ -679,7 +673,7 @@ export class AppointmentForm {
 
   showRecurrenceGroup(): void {
     const $formElement = $(this.dxForm.element());
-    const mainGroup = $formElement.find(`.${CLASSES.mainGroupClass}`);
+    const mainGroup = $formElement.find(`.${CLASSES.mainGroup}`);
     const recurrenceGroup = $formElement.find(`.${CLASSES.recurrenceGroup}`);
 
     mainGroup.addClass(CLASSES.mainHidden);
@@ -698,7 +692,7 @@ export class AppointmentForm {
 
   showMainGroup(saveRecurrenceValue = true): void {
     const $formElement = $(this.dxForm.element());
-    const mainGroup = $formElement.find(`.${CLASSES.mainGroupClass}`);
+    const mainGroup = $formElement.find(`.${CLASSES.mainGroup}`);
     const recurrenceGroup = $formElement.find(`.${CLASSES.recurrenceGroup}`);
 
     mainGroup.removeClass(CLASSES.mainHidden);
