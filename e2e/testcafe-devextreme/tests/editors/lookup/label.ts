@@ -3,30 +3,29 @@ import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import {
-  appendElementTo,
+  appendElementTo, insertStylesheetRulesToPage,
 } from '../../../helpers/domUtils';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 const labelMods = ['floating', 'static', 'outside'];
-const stylingModes = ['outlined', 'underlined', 'filled'];
+const stylingModes = ['filled', 'outlined', 'underlined'];
 
 fixture.disablePageReloads`Lookup_Label`
   .page(url(__dirname, '../../container.html'));
 
-stylingModes.forEach((stylingMode) => {
-  labelMods.forEach((labelMode) => {
-    safeSizeTest(`Label for Lookup labelMode=${labelMode} stylingMode=${stylingMode}`, async (t) => {
+labelMods.forEach((labelMode) => {
+  stylingModes.forEach((stylingMode) => {
+    test(`Label for Lookup labelMode=${labelMode} stylingMode=${stylingMode}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t.click('#lookup2');
 
-      await testScreenshot(t, takeScreenshot, `Lookup label with labelMode=${labelMode}-styleMode=${stylingMode}.png`);
+      await testScreenshot(t, takeScreenshot, `Lookup label with labelMode=${labelMode}-styleMode=${stylingMode}.png`, { element: '#container' });
 
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }, [300, 800]).before(async (t) => {
-      await t.click('html', { offsetX: 0, offsetY: 0 });
+    }).before(async () => {
+      await insertStylesheetRulesToPage('#container { width: 300px; height: 800px; }');
 
       const componentOption = {
         label: 'label text',

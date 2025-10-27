@@ -90,7 +90,7 @@ const windowSize: [number, number] = [1500, 1500];
       const appointmentPopup = await openAppointmentPopup(t, appointment, isRecurringAppointment);
 
       await takeScreenshot(
-        `scheduler__appointment__main-form.png (recurring=${isRecurringAppointment},allDay=${isAllDay},theme=${theme})`,
+        `scheduler__appointment__main-form (recurring=${isRecurringAppointment},allDay=${isAllDay},theme=${theme})`,
         appointmentPopup.contentElement,
       );
 
@@ -115,7 +115,7 @@ const windowSize: [number, number] = [1500, 1500];
       const appointmentPopup = await openAppointmentPopup(t, appointment, isRecurringAppointment);
 
       await takeScreenshot(
-        `scheduler__appointment__main-form__with-resources-and-timezones.png (recurring=${isRecurringAppointment},allDay=${isAllDay},theme=${theme})`,
+        `scheduler__appointment__main-form__with-resources-and-timezones (recurring=${isRecurringAppointment},allDay=${isAllDay},theme=${theme})`,
         appointmentPopup.contentElement,
       );
 

@@ -95,6 +95,8 @@ test('Should change usual columns to band columns without error in React (T12136
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(GRID_CONTAINER);
 
+  await t.expect(dataGrid.isReady()).ok();
+
   await takeScreenshot('band-columns_before-runtime-update.png', dataGrid.element);
 
   await changeDataGridColumnsReactWay();

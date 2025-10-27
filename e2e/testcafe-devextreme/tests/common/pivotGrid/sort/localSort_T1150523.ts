@@ -48,7 +48,7 @@ const apiRequestMock = RequestMock()
     { 'access-control-allow-origin': '*' },
   );
 
-test('Should sort without DataSource reload if scrolling mode isn\'t virtual', async (t) => {
+test.meta({ unstable: true })('Should sort without DataSource reload if scrolling mode isn\'t virtual', async (t) => {
   const pivotGrid = new PivotGrid('#container');
   await t.addRequestHooks(requestLogger);
   const initialRequestCount = await requestLogger.count(() => true);
@@ -89,7 +89,7 @@ test('Should sort without DataSource reload if scrolling mode isn\'t virtual', a
   await t.removeRequestHooks(apiRequestMock);
 });
 
-test.meta({ unstable: true })('Should sort with DataSource reload if scrolling mode is virtual', async (t) => {
+test('Should sort with DataSource reload if scrolling mode is virtual', async (t) => {
   const pivotGrid = new PivotGrid('#container');
   await t.addRequestHooks(requestLogger);
   const initialRequestCount = await requestLogger.count(() => true);

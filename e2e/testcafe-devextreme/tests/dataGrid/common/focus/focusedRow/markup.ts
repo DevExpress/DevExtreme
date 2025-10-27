@@ -104,10 +104,8 @@ test('Invalid cells in a focused row should have the correct background color (T
 // visual: fluent.blue.light
 test('Link should not have background color in generic.light (T1282624)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const dataGrid = new DataGrid('#container');
-
   // assert
-  await takeScreenshot('focused-row-link-background (generic.light).png', dataGrid.element);
+  await takeScreenshot('focused-row-link-background (generic.light).png');
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -128,6 +126,4 @@ test('Link should not have background color in generic.light (T1282624)', async 
     focusedRowKey: 1,
     keyExpr: 'id',
   });
-}).after(async () => {
-  await removeStylesheetRulesFromPage();
 });
