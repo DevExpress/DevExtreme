@@ -39,6 +39,9 @@ export const DEFAULT_SCHEDULER_OPTIONS: Properties = {
     allowResizing: true,
     allowUpdating: true,
     allowTimeZoneEditing: false,
+    form: {
+      iconsShowMode: 'main',
+    },
   },
   showAllDayPanel: true,
   showCurrentTimeIndicator: true,
