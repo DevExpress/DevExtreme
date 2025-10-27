@@ -10,6 +10,8 @@ import { AI_COLUMN_NAME } from './const';
 import type { AIColumnController } from './m_ai_column_controller';
 import {
   getAICommandColumnOptions, isAIColumnAutoMode, isEditorOptions, isPopupOptions,
+  isPromptOption,
+  isRefreshOption,
 } from './utils';
 
 export class AIColumnView extends View {
@@ -96,8 +98,13 @@ export class AIColumnView extends View {
     }
 
     const columnOptionName = this.columnsController.getColumnOptionNameByFullName(args.fullName);
+    const isPromptOptionName = isPromptOption(columnOptionName, args.value);
 
-    if (columnOptionName === 'ai.prompt' && isAIColumnAutoMode(column)) {
+    if (isPromptOptionName) {
+      this.promptEditorInstance?.updatePrompt(args.value);
+    }
+
+    if (isPromptOptionName && isAIColumnAutoMode(column)) {
       this.aiColumnController.sendAIColumnRequest(column.name);
     }
 
@@ -107,16 +114,8 @@ export class AIColumnView extends View {
       this.updatePromptEditorInstance(column);
     }
 
-    const refreshOptionNames = [
-      'ai.showHeaderMenu',
-      'ai.prompt',
-      'ai.noDataText',
-      'ai.emptyText',
-    ];
-
-    if (refreshOptionNames.includes(columnOptionName)) {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      this.component.refresh();
+    if (isRefreshOption(columnOptionName, args.value)) {
+      // this.component.refresh();
     }
   }
 

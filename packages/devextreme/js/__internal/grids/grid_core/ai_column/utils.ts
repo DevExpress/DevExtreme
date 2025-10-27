@@ -38,3 +38,24 @@ export const isPopupOptions = (optionName: string, value: unknown): boolean => o
 
 export const isEditorOptions = (optionName: string, value: unknown): boolean => optionName.startsWith('ai.editorOptions')
   || (optionName === 'ai' && isDefined((value as Record<string, unknown>)?.editorOptions));
+
+export const isPromptOption = (optionName: string, value: unknown): boolean => optionName === 'ai.prompt'
+  || (optionName === 'ai' && isDefined((value as Record<string, unknown>)?.prompt));
+
+export const isRefreshOption = (optionName: string, value: unknown): boolean => {
+  const refreshOptionNames = [
+    'showHeaderMenu',
+    'noDataText',
+    'emptyText',
+  ];
+  const matchesName = refreshOptionNames.map((n) => `ai.${n}`).includes(optionName);
+  if (matchesName) {
+    return true;
+  }
+  if (optionName !== 'ai') {
+    return false;
+  }
+
+  const valueKeys = Object.keys(value as Record<string, unknown>);
+  return valueKeys.some((key) => refreshOptionNames.includes(key));
+};
