@@ -11,7 +11,7 @@ import { daysFromByDayRule } from '../recurrence/days_from_by_day_rule';
 import type { Rule } from '../recurrence/types';
 
 // eslint-disable-next-line arrow-body-style
-export const createFormIconTemplate = (iconName: string): (() => void) => {
+export const createFormIconTemplate = (iconName: string): (() => dxElementWrapper) => {
   return (): dxElementWrapper => $('<i>').addClass('dx-icon').addClass(`dx-icon-${iconName}`);
 };
 
