@@ -523,6 +523,35 @@ describe('Appointment Popup Form', () => {
         expect(dayButtonsSunday.eq(6).text()).toBe('S');
       });
 
+      it('Check that firstDayOfWeek is applied to recurrence form startDate', async () => {
+        const appointment = {
+          text: 'Test Appointment',
+          startDate: new Date(2017, 4, 1, 9, 30),
+          endDate: new Date(2017, 4, 1, 11),
+        };
+
+        const { POM, scheduler } = await createScheduler({
+          ...getDefaultConfig(),
+          firstDayOfWeek: 1,
+        });
+
+        scheduler.showAppointmentPopup(appointment);
+        POM.popup.selectRepeatValue('weekly');
+
+        const recurrenceStartDateEditor = POM.popup.form.getEditor('recurrenceStartDateEditor');
+        expect(recurrenceStartDateEditor).toBeDefined();
+        expect(recurrenceStartDateEditor?.option('calendarOptions.firstDayOfWeek')).toBe(1);
+
+        scheduler.option('firstDayOfWeek', 0);
+
+        scheduler.showAppointmentPopup(appointment);
+        POM.popup.selectRepeatValue('weekly');
+
+        const recurrenceStartDateEditorAfter = POM.popup.form.getEditor('recurrenceStartDateEditor');
+        expect(recurrenceStartDateEditorAfter).toBeDefined();
+        expect(recurrenceStartDateEditorAfter?.option('calendarOptions.firstDayOfWeek')).toBe(0);
+      });
+
       it('Should show month day input when frequency is monthly', async () => {
         const appointment = {
           text: 'Test Appointment',
