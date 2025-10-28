@@ -1,7 +1,7 @@
 import TreeList from 'devextreme-testcafe-models/treeList';
-import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
-import { safeSizeTest } from '../../helpers/safeSizeTest';
+import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Adaptive Row`
   .page(url(__dirname, '../container.html'));
