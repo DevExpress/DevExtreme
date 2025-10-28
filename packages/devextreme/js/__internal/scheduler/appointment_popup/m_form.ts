@@ -29,6 +29,7 @@ import { createFormIconTemplate, getStartDateCommonConfig, RecurrenceRule } from
 const CLASSES = {
   form: 'dx-scheduler-form',
   icon: 'dx-icon',
+  hidden: 'dx-hidden',
 
   groupWithIcon: 'dx-scheduler-form-group-with-icon',
   formIcon: 'dx-scheduler-form-icon',
@@ -716,11 +717,17 @@ export class AppointmentForm {
     } as GroupItem;
   }
 
-  private setStylingModeToEditors(item: FormItem, iconsShowMode: boolean): void {
-    const isIconItem = item.cssClass?.includes(CLASSES.icon);
+  private setStylingModeToEditors(item: FormItem, showIcon: boolean): void {
+    const itemClasses = (item.cssClass ?? '').split(' ');
+    const isIconItem = itemClasses.includes(CLASSES.formIcon);
 
     if (isIconItem) {
-      item.cssClass += iconsShowMode ? '' : ' dx-hidden';
+      const isHidden = itemClasses.includes(CLASSES.hidden);
+
+      if (!showIcon && !isHidden) {
+        item.cssClass += ` ${CLASSES.hidden}`;
+      }
+
       return;
     }
 
@@ -738,7 +745,7 @@ export class AppointmentForm {
     if (item.itemType === 'group') {
       const groupItem = item as GroupItem;
       groupItem.items?.forEach((child) => {
-        this.setStylingModeToEditors(child, iconsShowMode);
+        this.setStylingModeToEditors(child, showIcon);
       });
     }
   }
