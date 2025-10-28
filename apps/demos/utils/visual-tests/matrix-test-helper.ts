@@ -232,7 +232,7 @@ const SKIPPED_TESTS = {
       // { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
       // { demo: 'TooltipCustomization', themes: [THEME.material] },
       // { demo: 'LegendMarkersCustomization', themes: [THEME.material] },
-      // { demo: 'PieResolveLabelOverlap', themes: [THEME.material] },
+      { demo: 'PieResolveLabelOverlap', themes: [THEME.material] },
     ],
     DataGrid: ['RemoteGrouping'],
       // { demo: 'CellEditing', themes: [THEME.material] },
@@ -246,8 +246,7 @@ const SKIPPED_TESTS = {
       // { demo: 'Validation', themes: [THEME.material, THEME.fluent] },
     ],
     VectorMap: [
-      // { demo: 'Tooltip', themes: [THEME.material] },
-      // { demo: 'TooltipsCustomization', themes: [THEME.material] },
+      { demo: 'Tooltip', themes: [THEME.material] },
     ]
   },
   Angular: {
@@ -360,9 +359,6 @@ export function runManualTestCore(
     changeTheme(__dirname, `../../Demos/${widget}/${demo}/${FRAMEWORKS[framework]}/index.html`, process.env.THEME);
     testURL = `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widget}/${demo}/${FRAMEWORKS[framework]}/`;
   }
-
-  const specialDemos = ['VirtualScrolling', 'StatePersistence', 'EditStateManagement', 'BatchUpdateRequest'];
-  const needsSpecialStyles = specialDemos.includes(demo);
   
   const getTestStyles = (demoName) => {
     switch (demoName) {
@@ -384,7 +380,7 @@ export function runManualTestCore(
     { module: 'mockdate' },
     join(__dirname, './inject/test-utils.js'),
     { content: injectStyle(globalReadFrom(__dirname, './inject/test-styles.css', (x) => x)) },
-    ...(needsSpecialStyles ? [{ content: injectStyle(testStyles) }] : []),
+    ...(testStyles !== '' ? [{ content: injectStyle(testStyles) }] : []),
     ...clientScriptSource,
   ];
 
