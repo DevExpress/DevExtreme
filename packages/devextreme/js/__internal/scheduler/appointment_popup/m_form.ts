@@ -18,16 +18,21 @@ import { current, isFluent } from '@js/ui/themes';
 import { dateSerialization } from '@ts/core/utils/m_date_serialization';
 
 import timeZoneUtils from '../m_utils_time_zone';
+import type { SafeAppointment } from '../types';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
 import { DEFAULT_ICONS_SHOW_MODE } from '../utils/options/constants';
+import { getAppointmentGroupIndex, getRawAppointmentGroupValues, getSafeGroupValues } from '../utils/resource_manager/appointment_groups_utils';
+import type { ResourceManager } from '../utils/resource_manager/resource_manager';
 import { RecurrenceForm } from './m_recurrence_form';
 import { createFormIconTemplate, getStartDateCommonConfig, RecurrenceRule } from './utils';
 
 const CLASSES = {
   form: 'dx-scheduler-form',
+  icon: 'dx-icon',
+  hidden: 'dx-hidden',
 
   groupWithIcon: 'dx-scheduler-form-group-with-icon',
-  icon: 'dx-scheduler-form-icon',
+  formIcon: 'dx-scheduler-form-icon',
   defaultResourceIcon: 'dx-scheduler-default-resources-icon',
 
   mainGroup: 'dx-scheduler-form-main-group',
@@ -107,6 +112,8 @@ const MAIN_GROUP_NAME = 'mainGroup';
 export class AppointmentForm {
   private readonly scheduler: any;
 
+  private readonly resourceManager!: ResourceManager;
+
   private _dxForm?: dxForm;
 
   private _recurrenceForm!: RecurrenceForm;
@@ -157,6 +164,7 @@ export class AppointmentForm {
 
   constructor(scheduler: any) {
     this.scheduler = scheduler;
+    this.resourceManager = scheduler.getResourceManager();
   }
 
   dispose(): void {
@@ -218,9 +226,16 @@ export class AppointmentForm {
           startDateExpr, endDateExpr, recurrenceRuleExpr, allDayExpr,
         } = this.scheduler.getDataAccessors().expr;
 
-        const isAllDayChanged = e.dataField === allDayExpr;
-        const isDateRangeChanged = [startDateExpr, endDateExpr].includes(e.dataField);
-        const isRecurrenceRuleChanged = e.dataField === recurrenceRuleExpr;
+        const { dataField } = e;
+
+        if (!dataField) {
+          return;
+        }
+
+        const isAllDayChanged = dataField === allDayExpr;
+        const isDateRangeChanged = [startDateExpr, endDateExpr].includes(dataField);
+        const isRecurrenceRuleChanged = dataField === recurrenceRuleExpr;
+        const isResourceChanged = Object.keys(this.scheduler.getResourceById()).includes(dataField);
 
         if (isAllDayChanged) {
           this.updateDateTimeEditorsVisibility();
@@ -232,6 +247,10 @@ export class AppointmentForm {
 
         if (isRecurrenceRuleChanged) {
           this.updateRepeatEditor();
+        }
+
+        if (isResourceChanged) {
+          this.updateSubjectIconColor();
         }
       },
       onInitialized: (e): void => {
@@ -270,7 +289,7 @@ export class AppointmentForm {
       items: [
         {
           colSpan: 1,
-          cssClass: CLASSES.icon,
+          cssClass: CLASSES.formIcon,
           template: createFormIconTemplate('isnotblank'),
         },
         {
@@ -298,7 +317,7 @@ export class AppointmentForm {
       items: [
         {
           colSpan: 1,
-          cssClass: CLASSES.icon,
+          cssClass: CLASSES.formIcon,
           template: createFormIconTemplate('clock'),
         },
         {
@@ -554,7 +573,7 @@ export class AppointmentForm {
       items: [
         {
           colSpan: 1,
-          cssClass: CLASSES.icon,
+          cssClass: CLASSES.formIcon,
           template: createFormIconTemplate('repeat'),
         },
         {
@@ -598,7 +617,7 @@ export class AppointmentForm {
       items: [
         {
           colSpan: 1,
-          cssClass: CLASSES.icon,
+          cssClass: CLASSES.formIcon,
           template: createFormIconTemplate('description'),
         },
         {
@@ -654,7 +673,7 @@ export class AppointmentForm {
         items: [
           {
             colSpan: 1,
-            cssClass: `${CLASSES.icon} ${CLASSES.defaultResourceIcon}`,
+            cssClass: `${CLASSES.formIcon} ${CLASSES.defaultResourceIcon}`,
             template: createFormIconTemplate('addcircleoutline'),
           },
           {
@@ -679,7 +698,7 @@ export class AppointmentForm {
         items: [
           {
             colSpan: 1,
-            cssClass: CLASSES.icon,
+            cssClass: CLASSES.formIcon,
             template: createFormIconTemplate(icon),
           },
           item,
@@ -698,11 +717,17 @@ export class AppointmentForm {
     } as GroupItem;
   }
 
-  private setStylingModeToEditors(item: FormItem, iconsShowMode: boolean): void {
-    const isIconItem = item.cssClass?.includes(CLASSES.icon);
+  private setStylingModeToEditors(item: FormItem, showIcon: boolean): void {
+    const itemClasses = (item.cssClass ?? '').split(' ');
+    const isIconItem = itemClasses.includes(CLASSES.formIcon);
 
     if (isIconItem) {
-      item.cssClass += iconsShowMode ? '' : ' dx-hidden';
+      const isHidden = itemClasses.includes(CLASSES.hidden);
+
+      if (!showIcon && !isHidden) {
+        item.cssClass += ` ${CLASSES.hidden}`;
+      }
+
       return;
     }
 
@@ -720,7 +745,7 @@ export class AppointmentForm {
     if (item.itemType === 'group') {
       const groupItem = item as GroupItem;
       groupItem.items?.forEach((child) => {
-        this.setStylingModeToEditors(child, iconsShowMode);
+        this.setStylingModeToEditors(child, showIcon);
       });
     }
   }
@@ -764,6 +789,25 @@ export class AppointmentForm {
       );
       this.dxForm.getEditor(EDITOR_NAMES.startDate)?.option('value', recurrenceRule.startDate);
     }
+  }
+
+  private async updateSubjectIconColor(): Promise<void> {
+    const groupValues = getRawAppointmentGroupValues(
+      this.formData as SafeAppointment,
+      this.resourceManager.resources,
+    );
+    const groupIndex = getAppointmentGroupIndex(
+      getSafeGroupValues(groupValues),
+      this.resourceManager.groupsLeafs,
+    )[0];
+    const color = await this.resourceManager.getAppointmentColor({
+      itemData: this.formData as SafeAppointment,
+      groupIndex,
+    });
+
+    const $icon = this.dxForm.$element().find(`.${CLASSES.subjectGroup} .${CLASSES.formIcon} .${CLASSES.icon}`);
+
+    $icon.css('color', color ?? '');
   }
 
   private updateDateEditorsValues(): void {
