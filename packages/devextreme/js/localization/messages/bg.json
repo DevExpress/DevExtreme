@@ -275,10 +275,10 @@
 
         "dxScheduler-appointmentListAriaLabel": "Appointment list",
 
-        "dxScheduler-newAppointmentPopupTitle": "New Appointment",
+        "dxScheduler-newPopupTitle": "New Appointment",
         "dxScheduler-editPopupTitle": "Edit Appointment",
         "dxScheduler-editPopupSaveButtonText": "Save",
-        
+
         "dxScheduler-editorLabelTitle": "Заглавие",
         "dxScheduler-editorLabelStartDate": "Начална дата",
         "dxScheduler-editorLabelEndDate": "Краен срок",
