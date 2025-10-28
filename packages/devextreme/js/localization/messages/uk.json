@@ -274,10 +274,10 @@
         "dxScheduler-appointmentAriaLabel-recurring": "Повторювана подія",
 
         "dxScheduler-appointmentListAriaLabel": "Список подій",
-        "dxScheduler-newAppointmentPopupTitle": "New Appointment",
+        "dxScheduler-newPopupTitle": "New Appointment",
         "dxScheduler-editPopupTitle": "Edit Appointment",
         "dxScheduler-editPopupSaveButtonText": "Save",
-        
+
         "dxScheduler-editorLabelTitle": "Тема",
         "dxScheduler-editorLabelStartDate": "Дата початку",
         "dxScheduler-editorLabelEndDate": "Дата завершення",

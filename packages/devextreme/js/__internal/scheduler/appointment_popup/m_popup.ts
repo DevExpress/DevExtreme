@@ -408,7 +408,7 @@ export class AppointmentPopup {
 
   updateToolbarForMainGroup(): void {
     const isCreating = this.state.action === ACTION_TO_APPOINTMENT.CREATE;
-    const formTitleKey = isCreating ? 'dxScheduler-newAppointmentPopupTitle' : 'dxScheduler-editPopupTitle';
+    const formTitleKey = isCreating ? 'dxScheduler-newPopupTitle' : 'dxScheduler-editPopupTitle';
 
     const toolbarItems: ToolbarItem[] = [{
       toolbar: 'top',

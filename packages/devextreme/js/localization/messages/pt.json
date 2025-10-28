@@ -274,10 +274,10 @@
         "dxScheduler-appointmentAriaLabel-recurring": "Compromisso recorrente",
 
         "dxScheduler-appointmentListAriaLabel": "Lista de compromissos",
-        "dxScheduler-newAppointmentPopupTitle": "New Appointment",
+        "dxScheduler-newPopupTitle": "New Appointment",
         "dxScheduler-editPopupTitle": "Edit Appointment",
         "dxScheduler-editPopupSaveButtonText": "Save",
-        
+
         "dxScheduler-editorLabelTitle": "Assunto",
         "dxScheduler-editorLabelStartDate": "Data de Início",
         "dxScheduler-editorLabelEndDate": "Data Final",
