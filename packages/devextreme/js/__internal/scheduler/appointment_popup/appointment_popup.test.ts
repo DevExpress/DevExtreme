@@ -781,7 +781,7 @@ describe('Appointment Popup Form', () => {
   });
 
   describe('Icons', () => {
-    describe.only('Subject icon', () => {
+    describe('Subject icon', () => {
       it('has default color when appointment has no resources', async () => {
         const { scheduler, POM } = await createScheduler(getDefaultConfig());
 
