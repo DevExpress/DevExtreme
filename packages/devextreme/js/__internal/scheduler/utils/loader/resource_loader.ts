@@ -26,6 +26,8 @@ export class ResourceLoader extends Loader<RawResourceData, ResourceData> {
 
   public resourceName?: string;
 
+  public icon?: string;
+
   constructor(config: ResourceConfig) {
     super(config, { pageSize: 0 });
     const accessor = getAppointmentResourceAccessor(config);
@@ -37,6 +39,7 @@ export class ResourceLoader extends Loader<RawResourceData, ResourceData> {
     this.useColorAsDefault = Boolean(config.useColorAsDefault);
     this.resourceIndex = String(getResourceIndex(config));
     this.resourceName = config.label;
+    this.icon = config.icon;
     this.onInit();
   }
 
