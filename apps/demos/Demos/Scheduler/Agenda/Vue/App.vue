@@ -14,11 +14,13 @@
       :allow-multiple="true"
       field-expr="assigneeId"
       label="Assignee"
+      icon="user"
     />
     <DxResource
       :data-source="priorities"
       field-expr="priorityId"
       label="Priority"
+      icon="tag"
     />
   </DxScheduler>
 </template>
