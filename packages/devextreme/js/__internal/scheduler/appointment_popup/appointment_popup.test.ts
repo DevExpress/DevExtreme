@@ -780,6 +780,58 @@ describe('Appointment Popup Form', () => {
     });
   });
 
+  describe('Icons', () => {
+    describe.only('Subject icon', () => {
+      it('has default color when appointment has no resources', async () => {
+        const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+        scheduler.showAppointmentPopup(commonAppointment);
+
+        const $icon = $(POM.popup.subjectIcon);
+        expect($icon.css('color')).toBe('');
+      });
+
+      it('has default color when showAppointmentPopup is called without data', async () => {
+        const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+        scheduler.showAppointmentPopup();
+
+        const $icon = $(POM.popup.subjectIcon);
+        expect($icon.css('color')).toBe('');
+      });
+
+      it('has resource color when appointment has resource', async () => {
+        const resourceColor1 = 'rgb(255, 0, 0)';
+        const resourceColor2 = 'rgb(0, 0, 255)';
+        const { scheduler, POM } = await createScheduler({
+          ...getDefaultConfig(),
+          resources: [{
+            fieldExpr: 'roomId',
+            dataSource: [
+              { id: 1, text: 'Room 1', color: resourceColor1 },
+              { id: 2, text: 'Room 2', color: resourceColor2 },
+            ],
+          }],
+        });
+
+        scheduler.showAppointmentPopup({
+          ...commonAppointment,
+          roomId: 1,
+        });
+
+        await new Promise(process.nextTick);
+
+        const $icon = $(POM.popup.subjectIcon);
+        expect($icon.css('color')).toBe(resourceColor1);
+
+        POM.popup.form.getEditor('roomId')?.option('value', 2);
+        await new Promise(process.nextTick);
+
+        expect($icon.css('color')).toBe(resourceColor2);
+      });
+    });
+  });
+
   describe('Callbacks', () => {
     describe('OnAppointmentFormOpening', () => {
       it('should pass e.popup argument', async () => {

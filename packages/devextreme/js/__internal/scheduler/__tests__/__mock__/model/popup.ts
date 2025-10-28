@@ -19,6 +19,10 @@ export class PopupModel {
     return $(this.element.querySelector('.dx-form')).dxForm('instance') as dxForm;
   }
 
+  get subjectIcon(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-subject-group .dx-scheduler-form-icon .dx-icon');
+  }
+
   get startDate(): Element | null {
     return this.element.querySelector('.dx-scheduler-form-start-date-editor .dx-datebox.dx-widget');
   }
