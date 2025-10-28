@@ -269,11 +269,6 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
     .dx-#{$widget-name}-table .dx-header-row  > td {
       padding-top: $material-grid-base-header-cell-vertical-padding;
       padding-bottom: $material-grid-base-header-cell-vertical-padding;
-
-      &.dx-command-ai {
-        padding-top: 0;
-        padding-bottom: 0;
-      }
     }
 
     .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row {
@@ -371,11 +366,6 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
         }
       }
     }
-  }
-
-  .dx-command-ai-header__text {
-    padding-top: $material-grid-base-header-cell-vertical-padding;
-    padding-bottom: $material-grid-base-header-cell-vertical-padding;
   }
 
   .dx-#{$widget-name}-edit-popup {
@@ -685,7 +675,9 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
             color: $datagrid-base-color;
           }
 
-          &:hover {
+          &:not([class*="dx-command"], .dx-editor-cell, .dx-#{$widget-name}-group-space):hover {
+            background-color: $datagrid-hover-bg;
+
             .dx-#{$widget-name}-text-content {
               color: $datagrid-base-color;
             }
@@ -693,10 +685,6 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
             .dx-sort {
               color: $datagrid-columnchooser-hover-icon-color;
             }
-          }
-
-          &:hover:not(.dx-command-select):not(.dx-command-expand):not(.dx-editor-cell):not(.dx-command-edit):not(.dx-#{$widget-name}-group-space) {
-            background-color: $datagrid-hover-bg;
           }
         }
       }
@@ -1339,5 +1327,33 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
   .dx-#{$widget-name}-sticky-columns .dx-#{$widget-name}-draggable-column {
     opacity: 1;
     color: $datagrid-draggable-column-text-color;
+  }
+
+  .dx-command-ai-header-content {
+    max-width: calc(100% - ($material-button-height - $material-grid-base-cell-horizontal-padding + $material-grid-base-command-ai-header-button-offset));
+  }
+
+  .dx-command-ai {
+    .dx-#{$widget-name}-text-content {
+      padding-left: $material-grid-base-command-ai-text-content-padding;
+    }
+
+    .dx-icon-chatsparkleoutline {
+      @include dx-icon-sizing($material-grid-base-command-ai-chatsparkleoutline-icon-size);
+    }
+
+    .dx-command-ai-header-button .dx-button {
+      @include dx-button-onlyicon-sizing();
+    }
+  }
+
+  .dx-command-ai-header-button {
+    left: auto;
+    right: $material-grid-base-command-ai-header-button-offset;
+  }
+
+  td[style*="text-align: right"] .dx-command-ai-header-button {
+    left: $material-grid-base-command-ai-header-button-offset;
+    right: auto;
   }
 }

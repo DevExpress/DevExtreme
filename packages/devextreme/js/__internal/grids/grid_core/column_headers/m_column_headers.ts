@@ -16,8 +16,8 @@ import { CLASSES as REORDERING_CLASSES } from '../columns_resizing_reordering/co
 import type { HeadersKeyboardNavigationController } from '../keyboard_navigation/m_headers_keyboard_navigation';
 import { registerKeyboardAction } from '../m_accessibility';
 import { ColumnsView } from '../views/m_columns_view';
+import { CLASSES } from './const';
 
-const CELL_CONTENT_CLASS = 'text-content';
 const HEADERS_CLASS = 'headers';
 const NOWRAP_CLASS = 'nowrap';
 const ROW_CLASS_SELECTOR = '.dx-row';
@@ -37,7 +37,7 @@ const MULTI_ROW_HEADER_CLASS = 'dx-header-multi-row';
 const LINK = 'dx-link';
 
 const createCellContent = function (that, $cell, options) {
-  const $cellContent = $('<div>').addClass(that.addWidgetPrefix(CELL_CONTENT_CLASS));
+  const $cellContent = $('<div>').addClass(that.addWidgetPrefix(CLASSES.cellContent));
 
   that.setAria('role', 'presentation', $cellContent);
 
@@ -61,7 +61,7 @@ function addCssClassesToCellContent(that, $cell, column, $cellContent?) {
   const $sortIndicator = $visibleIndicatorElements.filter(sortIndicatorClassName);
   const $sortIndexIndicator = $visibleIndicatorElements.children().filter(sortIndexIndicatorClassName);
 
-  $cellContent = $cellContent || $cell.children(`.${that.addWidgetPrefix(CELL_CONTENT_CLASS)}`);
+  $cellContent = $cellContent || $cell.children(`.${that.addWidgetPrefix(CLASSES.cellContent)}`);
 
   $cellContent
     .toggleClass(TEXT_CONTENT_ALIGNMENT_CLASS_PREFIX + columnAlignment, indicatorCount > 0)
@@ -111,23 +111,20 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     return this.option('useLegacyKeyboardNavigation');
   }
 
-  private _getDefaultTemplate(column) {
-    const that = this;
+  protected getHeaderDefaultTemplate($container, options) {
+    const { column } = options;
+    const { caption } = column;
+    const needCellContent = !column.command || (caption && column.command !== 'expand');
 
-    return function ($container, options) {
-      const { caption } = column;
-      const needCellContent = !column.command || (caption && column.command !== 'expand');
+    if (column.command === 'empty') {
+      this._renderEmptyMessage($container, options);
+    } else if (needCellContent) {
+      const $content = createCellContent(this, $container, options);
 
-      if (column.command === 'empty') {
-        that._renderEmptyMessage($container, options);
-      } else if (needCellContent) {
-        const $content = createCellContent(that, $container, options);
-
-        $content.text(caption);
-      } else if (column.command) {
-        $container.html('&nbsp;');
-      }
-    };
+      $content.text(caption);
+    } else if (column.command) {
+      $container.html('&nbsp;');
+    }
   }
 
   private _renderEmptyMessage($container, options) {
@@ -179,7 +176,10 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
   }
 
   private _getHeaderTemplate(column) {
-    return column.headerCellTemplate || { allowRenderToDetachedContainer: true, render: this._getDefaultTemplate(column) };
+    return column.headerCellTemplate || {
+      allowRenderToDetachedContainer: true,
+      render: this.getHeaderDefaultTemplate.bind(this),
+    };
   }
 
   protected _processTemplate(template, options) {
@@ -411,7 +411,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
         .clone()
         .addClass(VISIBILITY_HIDDEN_CLASS)
         .css('float', '')
-        .insertBefore($cell.children(`.${this.addWidgetPrefix(CELL_CONTENT_CLASS)}`));
+        .insertBefore($cell.children(`.${this.addWidgetPrefix(CLASSES.cellContent)}`));
     }
   }
 

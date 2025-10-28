@@ -9,6 +9,7 @@ export const getAICommandColumnDefaultOptions = (): unknown => ({
   command: AI_COLUMN_NAME,
   cssClass: CLASSES.aiColumn,
   fixed: false,
+  minWidth: 120,
 });
 
 export const getDataFromRowItems = (items: Item[]): UserData[] => items

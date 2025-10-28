@@ -1,4 +1,4 @@
-import type { DxElement } from '@js/core/element';
+/* eslint-disable max-classes-per-file */
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getImageContainer } from '@js/core/utils/icon';
@@ -6,12 +6,15 @@ import type { Properties as DropDownProperties } from '@js/ui/drop_down_button';
 import DropDownButton from '@js/ui/drop_down_button';
 import domAdapter from '@ts/core/m_dom_adapter';
 
+import { CLASSES as HEADERS_CLASSES } from '../column_headers/const';
+import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { Column, ColumnsController } from '../columns_controller/m_columns_controller';
 import { getColumnHeaderCellSelector } from '../columns_controller/m_columns_controller_utils';
 import { View } from '../m_modules';
+import type { ModuleType } from '../m_types';
 import { AIPromptEditor } from './ai_prompt_editor/ai_prompt_editor';
 import type { AIPromptEditorOptions } from './ai_prompt_editor/types';
-import { AI_COLUMN_NAME } from './const';
+import { AI_CHAT_SPARKLE_OUTLINE, AI_COLUMN_NAME, CLASSES } from './const';
 import type { AIColumnController } from './m_ai_column_controller';
 import {
   getAICommandColumnDefaultOptions, isAIColumnAutoMode, isEditorOptions, isPopupOptions,
@@ -169,3 +172,55 @@ export class AIColumnView extends View {
     return this.promptEditorInstance;
   }
 }
+
+export const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) => class AIColumnHeadersViewExtender extends Base {
+  private getDropDownButtonConfig(): DropDownProperties {
+    return {
+      showArrowIcon: false,
+      icon: 'overflow',
+      stylingMode: 'text',
+    };
+  }
+
+  private renderHeaderDropDownButton($container: dxElementWrapper): void {
+    const $dropDownButton = $('<div>')
+      .addClass(CLASSES.aiColumnHeaderButton)
+      .appendTo($container);
+
+    this._createComponent($dropDownButton, DropDownButton, this.getDropDownButtonConfig());
+  }
+
+  private isAIColumn(options): boolean {
+    return options.rowType === 'header' && options.column.type === AI_COLUMN_NAME;
+  }
+
+  protected getHeaderDefaultTemplate($container: dxElementWrapper, options): void {
+    super.getHeaderDefaultTemplate($container, options);
+
+    if (this.isAIColumn(options)) {
+      const $iconElement = getImageContainer(AI_CHAT_SPARKLE_OUTLINE) as dxElementWrapper;
+      const $aiHeaderContainer = $('<div>').addClass(CLASSES.aiColumnHeaderContent);
+      const $cellContent = $container.find(`.${this.addWidgetPrefix(HEADERS_CLASSES.cellContent)}`);
+
+      $aiHeaderContainer
+        .append($iconElement)
+        .append($cellContent)
+        .appendTo($container);
+    }
+  }
+
+  protected _processTemplate(template, options) {
+    const renderingTemplate = super._processTemplate(template, options);
+
+    if (renderingTemplate && this.isAIColumn(options)) {
+      return {
+        render: (options) => {
+          renderingTemplate.render(options);
+          this.renderHeaderDropDownButton($(options.container));
+        },
+      };
+    }
+
+    return renderingTemplate;
+  }
+};

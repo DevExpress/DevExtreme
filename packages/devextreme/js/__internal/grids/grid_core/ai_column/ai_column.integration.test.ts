@@ -237,9 +237,9 @@ describe('Options', () => {
       expect(headerCellTemplate).toHaveBeenCalledTimes(1);
       expect(headerCell.querySelectorAll('.template-class').length).toBe(1);
       expect(headerCell.textContent).toBe('Template');
-      expect(headerCell.querySelector(`.${CLASSES.aiColumnHeader}`)).toBeNull();
-      expect(headerCell.querySelector(`.${CLASSES.aiColumnHeaderIcon}`)).toBeNull();
-      expect(headerCell.querySelector(`.${CLASSES.aiColumnHeaderButton}`)).toBeNull();
+      expect(headerCell.querySelector(`.${CLASSES.aiColumnHeaderContent}`)).toBeNull();
+      expect(headerCell.querySelector(`.${CLASSES.aiChatSparkleOutlineIcon}`)).toBeNull();
+      expect(headerCell.querySelector(`.${CLASSES.aiColumnHeaderButton}`)).not.toBeNull();
     });
   });
 
@@ -262,10 +262,10 @@ describe('Options', () => {
       });
 
       const headerCell = component.getHeaderCell(3);
-      const aiColumnHeaderText = headerCell.querySelector(`.${CLASSES.aiColumnHeaderText}`);
+      const aiColumnHeaderText = headerCell.querySelector('.dx-datagrid-text-content');
 
-      expect(headerCell.querySelector(`.${CLASSES.aiColumnHeader}`)).not.toBeNull();
-      expect(headerCell.querySelector(`.${CLASSES.aiColumnHeaderIcon}`)).not.toBeNull();
+      expect(headerCell.querySelector(`.${CLASSES.aiColumnHeaderContent}`)).not.toBeNull();
+      expect(headerCell.querySelector(`.${CLASSES.aiChatSparkleOutlineIcon}`)).not.toBeNull();
       expect(aiColumnHeaderText).not.toBeNull();
       expect(aiColumnHeaderText?.textContent).toBe('AI Column');
       expect(headerCell.querySelector(`.${CLASSES.aiColumnHeaderButton}`)).not.toBeNull();
@@ -303,9 +303,9 @@ describe('Options', () => {
       expect(headerCellTemplate).toHaveBeenCalledTimes(1);
       expect(headerCellUpdated.querySelector('.my-template-class')).not.toBeNull();
       expect(headerCellUpdated.textContent).toBe('Test');
-      expect(headerCellUpdated.querySelector(`.${CLASSES.aiColumnHeader}`)).toBeNull();
-      expect(headerCellUpdated.querySelector(`.${CLASSES.aiColumnHeaderIcon}`)).toBeNull();
-      expect(headerCellUpdated.querySelector(`.${CLASSES.aiColumnHeaderButton}`)).toBeNull();
+      expect(headerCellUpdated.querySelector(`.${CLASSES.aiColumnHeaderContent}`)).toBeNull();
+      expect(headerCellUpdated.querySelector(`.${CLASSES.aiChatSparkleOutlineIcon}`)).toBeNull();
+      expect(headerCellUpdated.querySelector(`.${CLASSES.aiColumnHeaderButton}`)).not.toBeNull();
     });
   });
 
