@@ -1426,7 +1426,7 @@ export class DraggingHeaderViewController extends modules.ViewController {
   }
 
   /**
-   * @extended adaptivity, column_fixing
+   * @extended: adaptivity, column_fixing
    * @description Function used to filter column points, it's called for each point
    * @param point Point that we are checking
    * @param columns All columns in the given location
