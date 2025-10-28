@@ -29,6 +29,7 @@ $(() => {
         allowMultiple: false,
         dataSource: priorityData,
         label: 'Priority',
+        icon: 'tag',
       },
     ],
     height: 730,
