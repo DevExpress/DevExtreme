@@ -118,7 +118,7 @@ export type CancelButtonClickEvent = NativeEventInfo<InteractionEvent> & {
   readonly file?: File;
 };
 
-interface Properties extends PublicProperties {
+export interface Properties extends PublicProperties {
   _buttonStylingMode?: ButtonStyle;
 
   _uploadButtonType?: ButtonType;

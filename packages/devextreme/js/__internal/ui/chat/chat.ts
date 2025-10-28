@@ -522,7 +522,7 @@ class Chat extends Widget<Properties> {
   }
 
   _messageEnteredHandler(e: MessageBoxMessageEnteredEvent): void {
-    const { text, event } = e;
+    const { text, event, attachments } = e;
     const { user } = this.option();
 
     const message: Message = {
@@ -530,6 +530,10 @@ class Chat extends Widget<Properties> {
       author: user,
       text,
     };
+
+    if (attachments) {
+      message.attachments = attachments;
+    }
 
     // @ts-expect-error
     const dataSource = this.getDataSource();
@@ -567,14 +571,16 @@ class Chat extends Widget<Properties> {
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
-    const { name, value } = args;
+    const { name, fullName, value } = args;
 
     switch (name) {
       case 'activeStateEnabled':
       case 'focusStateEnabled':
       case 'hoverStateEnabled':
-      case 'fileUploaderOptions':
         this._messageBox.option(name, value);
+        break;
+      case 'fileUploaderOptions':
+        this._messageBox.option(fullName, value);
         break;
       case 'user': {
         const author = value as Properties[typeof name];
