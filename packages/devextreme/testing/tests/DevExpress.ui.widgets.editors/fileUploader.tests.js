@@ -4722,7 +4722,7 @@ QUnit.module('Accessibility', moduleConfig, () => {
 
 QUnit.module('File limit', moduleConfig, () => {
     QUnit.test('onFileLimitReached should be fired when selecting files exceeds the limit', function(assert) {
-        assert.expect(5);
+        assert.expect(3);
 
         let fileLimitReachedCount = 0;
 
