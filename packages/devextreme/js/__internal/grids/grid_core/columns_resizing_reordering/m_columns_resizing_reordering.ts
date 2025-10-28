@@ -527,9 +527,13 @@ export class DraggingHeaderView extends modules.View {
 
   public dragHeader(options) {
     const { columnElement } = options;
+    const dragOptions = {
+      ...options,
+      draggingPanelBoundingRects: getDraggingPanelBoundingRects(options.draggingPanels),
+    };
 
     this._isDragging = true;
-    this._dragOptions = options;
+    this._dragOptions = dragOptions;
     this._dropOptions = {
       sourceIndex: options.index,
       sourceColumnIndex: this._getVisibleIndexObject(options.rowIndex, options.columnIndex),
@@ -1513,7 +1517,6 @@ export class DraggingHeaderViewController extends modules.ViewController {
                 columnElement: $columnElement,
                 sourceLocation: nameDraggingPanel,
                 draggingPanels,
-                draggingPanelBoundingRects: getDraggingPanelBoundingRects(draggingPanels),
                 rowIndex: that._columnsController.getRowIndex(column.index, true),
               });
             }));

@@ -4657,11 +4657,11 @@ QUnit.module('Headers reordering', {
         const controller = this.createDraggingHeaderViewController();
 
         controller._rowsView = {};
-        controller._columnHeadersView = { toggleDraggableColumnClass: noop };
         controller._rowsView.toggleDraggableColumnClass = function(columnIndex, value) {
             columnIndexOpacity = columnIndex;
             toggleClass = value;
         };
+        controller._columnHeadersView = { toggleDraggableColumnClass: noop, getColumnElements: noop };
         controller._columnHeadersView.element = function() {
             return $('<div/>');
         };
@@ -5440,7 +5440,7 @@ QUnit.module('Group panel reordering', {
         let opacityValue;
 
         this.controller._rowsView = {};
-        this.controller._columnHeadersView = { toggleDraggableColumnClass: noop };
+        this.controller._columnHeadersView = { toggleDraggableColumnClass: noop, getColumnElements: noop };
         this.controller._rowsView.toggleDraggableColumnClass = function(columnIndex, value) {
             columnIndexOpacity = columnIndex;
             opacityValue = value;
@@ -5509,8 +5509,8 @@ QUnit.module('Group panel reordering', {
         const testElement = $('#container');
 
         that.controller._rowsView = {};
-        that.controller._columnHeadersView = {};
         that.controller._rowsView.toggleDraggableColumnClass = function() {};
+        that.controller._columnHeadersView = { getColumnElements: noop };
         that.controller._columnHeadersView.element = function() {
             return that.draggingPanels[0].element().append($('<div />').addClass('dx-header-row'));
         };
@@ -5576,8 +5576,8 @@ QUnit.module('Group panel reordering', {
         const testElement = $('#container');
 
         that.controller._rowsView = {};
-        that.controller._columnHeadersView = {};
         that.controller._rowsView.toggleDraggableColumnClass = function() {};
+        that.controller._columnHeadersView = { getColumnElements: noop };
         that.controller._columnHeadersView.element = function() {
             return that.draggingPanels[0].element().append($('<div />').addClass('dx-header-row'));
         };
@@ -5625,8 +5625,8 @@ QUnit.module('Group panel reordering', {
         const testElement = $('#container');
 
         that.controller._rowsView = {};
-        that.controller._columnHeadersView = { toggleDraggableColumnClass: noop };
         that.controller._rowsView.toggleDraggableColumnClass = function() {};
+        that.controller._columnHeadersView = { toggleDraggableColumnClass: noop, getColumnElements: noop };
         that.controller._columnHeadersView.element = function() {
             return that.draggingPanels[0].element().append($('<div />').addClass('dx-header-row'));
         };
@@ -5689,7 +5689,7 @@ QUnit.module('Group panel reordering', {
         const testElement = $('#container');
 
         that.controller._rowsView = {};
-        that.controller._columnHeadersView = { toggleDraggableColumnClass: noop };
+        that.controller._columnHeadersView = { toggleDraggableColumnClass: noop, getColumnElements: noop };
         that.controller._rowsView.toggleDraggableColumnClass = function() {};
         that.controller._columnHeadersView.element = function() {
             return that.draggingPanels[0].element().append($('<div />').addClass('dx-header-row'));
@@ -5738,8 +5738,8 @@ QUnit.module('Group panel reordering', {
         const testElement = $('#container');
 
         that.controller._rowsView = {};
-        that.controller._columnHeadersView = {};
         that.controller._rowsView.toggleDraggableColumnClass = function() {};
+        that.controller._columnHeadersView = { getColumnElements: noop };
         that.controller._columnHeadersView.element = function() {
             return that.draggingPanels[0].element().append($('<div />').addClass('dx-header-row'));
         };
