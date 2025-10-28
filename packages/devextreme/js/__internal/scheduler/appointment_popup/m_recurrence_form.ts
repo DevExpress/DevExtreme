@@ -17,7 +17,7 @@ import { createFormIconTemplate, getStartDateCommonConfig, RecurrenceRule } from
 
 const CLASSES = {
   groupWithIcon: 'dx-scheduler-form-group-with-icon',
-  icon: 'dx-scheduler-form-icon',
+  formIcon: 'dx-scheduler-form-icon',
 
   recurrenceGroup: 'dx-scheduler-form-recurrence-group',
   recurrenceHidden: 'dx-scheduler-form-recurrence-hidden',
@@ -199,7 +199,7 @@ export class RecurrenceForm {
       items: [
         {
           colSpan: 1,
-          cssClass: CLASSES.icon,
+          cssClass: CLASSES.formIcon,
           template: createFormIconTemplate('clock'),
         },
         extend(
@@ -235,7 +235,7 @@ export class RecurrenceForm {
       items: [
         {
           colSpan: 1,
-          cssClass: CLASSES.icon,
+          cssClass: CLASSES.formIcon,
           template: createFormIconTemplate('repeat'),
         },
         {
@@ -413,7 +413,7 @@ export class RecurrenceForm {
       items: [
         {
           colSpan: 1,
-          cssClass: CLASSES.icon,
+          cssClass: CLASSES.formIcon,
           template: createFormIconTemplate('description'),
         },
         {
