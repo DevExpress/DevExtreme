@@ -673,7 +673,7 @@ export class AppointmentForm {
         items: [
           {
             colSpan: 1,
-            cssClass: `${CLASSES.icon} ${CLASSES.defaultResourceIcon}`,
+            cssClass: `${CLASSES.formIcon} ${CLASSES.defaultResourceIcon}`,
             template: createFormIconTemplate('addcircleoutline'),
           },
           {
@@ -698,7 +698,7 @@ export class AppointmentForm {
         items: [
           {
             colSpan: 1,
-            cssClass: CLASSES.icon,
+            cssClass: CLASSES.formIcon,
             template: createFormIconTemplate(icon),
           },
           item,
