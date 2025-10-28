@@ -10,6 +10,9 @@ fixture.disablePageReloads`Column resizing`
 test('column separator should starts from the parent', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
+
   async function makeColumnSeparatorScreenshot(index: number) {
     await dataGrid.resizeHeader(index, 0, false);
     await t.expect(await takeScreenshot(`column-separator-${index}.png`)).ok();
