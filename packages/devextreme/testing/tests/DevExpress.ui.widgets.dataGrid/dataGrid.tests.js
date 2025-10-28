@@ -1,11 +1,9 @@
 import DataGrid from 'ui/data_grid';
 import $ from 'jquery';
 import 'ui/drop_down_box';
-import Class from 'core/class';
 import { logger } from 'core/utils/console';
 import typeUtils from 'core/utils/type';
 import { deferUpdate } from 'core/utils/common';
-import devices from '__internal/core/m_devices';
 import { version } from 'core/version';
 import errors from 'core/errors';
 import gridCore from '__internal/grids/data_grid/m_core';
@@ -22,6 +20,8 @@ import { checkDxFontIcon, DX_ICON_XLSX_FILE_CONTENT_CODE, DX_ICON_EXPORT_SELECTE
 import { createDataGrid, baseModuleConfig, findShadowHostOrDocument } from '../../helpers/dataGridHelper.js';
 import { getOuterWidth } from 'core/utils/size';
 import { generateItems } from '../../helpers/dataGridMocks.js';
+
+import 'generic_light.css!';
 
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 const CELL_UPDATED_CLASS = 'dx-datagrid-cell-updated-animation';
