@@ -5,8 +5,6 @@ import '__internal/scheduler/m_scheduler';
 
 import { getEmptyResourceManager, applyWorkspaceGroups } from '../../helpers/scheduler/mockResourceManager.js';
 
-import 'generic_light.css!';
-
 QUnit.testStart(() => {
     const markup =
         '<div id="scheduler-work-space">\

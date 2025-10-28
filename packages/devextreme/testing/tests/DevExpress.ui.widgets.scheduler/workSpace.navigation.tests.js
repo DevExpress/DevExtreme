@@ -1,7 +1,6 @@
 import config from 'core/config';
 import { noop } from 'core/utils/common';
 import { isRenderer } from 'core/utils/type';
-import 'generic_light.css!';
 import $ from 'jquery';
 
 import '__internal/scheduler/workspaces/m_work_space_day';
