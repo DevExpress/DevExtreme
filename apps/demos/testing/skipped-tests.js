@@ -3,32 +3,6 @@
 export const skippedTests = {
   jQuery: {
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
-    // Charts: [
-    //   { demo: 'AreaSelectionZooming', themes: [THEME.material] },
-    //   { demo: 'Bubble', themes: [THEME.material] },
-    //   { demo: 'CenterLabelCustomization', themes: [THEME.material] },
-    //   { demo: 'ClientSideDataProcessing', themes: [THEME.material] },
-    //   { demo: 'CustomBarWidth', themes: [THEME.material] },
-    //   { demo: 'CustomizePointsAndLabels', themes: [THEME.material] },
-    //   { demo: 'DiscreteAxisZoomingAndScrolling', themes: [THEME.material] },
-    //   { demo: 'Doughnut', themes: [THEME.material] },
-    //   { demo: 'DynamicSeries', themes: [THEME.material] },
-    //   { demo: 'EqualSizePies', themes: [THEME.material] },
-    //   { demo: 'ErrorBars', themes: [THEME.material] },
-    //   { demo: 'ExportAndPrintingAPI', themes: [THEME.material] },
-    //   { demo: 'ExportCustomMarkup', themes: [THEME.material] },
-    //   { demo: 'InvertedChart', themes: [THEME.material] },
-    //   { demo: 'Line', themes: [THEME.material] },
-    //   { demo: 'MultipleAxes', themes: [THEME.material] },
-    //   { demo: 'PieAnnotations', themes: [THEME.material] },
-    //   { demo: 'PointSelectionAPI', themes: [THEME.material] },
-    //   { demo: 'SankeyChart', themes: [THEME.material] },
-    // ],
-    //  DataGrid: [
-    //     { demo: 'ColumnChooser', themes: [THEME.material] },
-    //     { demo: 'FixedAndStickyColumns', themes: [THEME.material] },
-    //     { demo: 'RealTimeUpdates', themes: [THEME.material] },
-    //  ],
   },
   Angular: {
     Common: ['PopupAndNotificationsOverview'],
