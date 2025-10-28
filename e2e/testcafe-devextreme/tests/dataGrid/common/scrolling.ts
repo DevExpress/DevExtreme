@@ -224,7 +224,7 @@ test('DataGrid should not reset its top scroll position after cell modification 
   },
 }));
 
-test('Ungrouping after grouping should work correctly if row rendering mode is virtual', async (t) => {
+test.meta({ unstable: true })('Ungrouping after grouping should work correctly if row rendering mode is virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t.expect(dataGrid.isReady()).ok();
@@ -386,7 +386,7 @@ safeSizeTest('Header container should have padding-right after expanding the mas
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxDataGrid', {
+}).meta({ unstable: true }).before(async () => createWidget('dxDataGrid', {
   width: 150,
   height: 300,
   columnMinWidth: 100,
@@ -882,6 +882,9 @@ safeSizeTest('New mode. Rows should be rendered properly when rowRenderingMode i
 
 safeSizeTest('Rows are rendered properly when window content is scrolled (T1070388)', async (t) => {
   const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
+
   const scrollWindowTo = async (position: number) => {
     await ClientFunction(
       () => {

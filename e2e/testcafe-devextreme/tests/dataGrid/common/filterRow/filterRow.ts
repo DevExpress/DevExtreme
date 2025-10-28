@@ -239,7 +239,7 @@ test('DataGrid - The `between` filter dropdown sticks to the viewport edge durin
 
   await dataGrid.scrollBy(t, { x: 999 });
   await t
-    .expect(await takeScreenshot('filter-row-filter-range-hide-on-scroll.png', dataGrid.element))
+    .expect(await takeScreenshot('filter-row-filter-range-hide-on-scroll.png'))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

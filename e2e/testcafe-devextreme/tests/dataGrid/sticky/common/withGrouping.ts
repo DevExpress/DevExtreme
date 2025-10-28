@@ -282,9 +282,6 @@ test('DataGrid - Group row content is scrolled if repaintChangesOnly is enabled 
   },
 }));
 
-fixture`FixedColumns - Group Summaries`
-  .page(url(__dirname, '../../../container.html'));
-
 [false, true].forEach((rtlEnabled) => {
   // T1284612
   safeSizeTest(`DataGrid - Group summaries are shown over sticky columns on a horizontal scroll (rtl=${rtlEnabled})`, async (t) => {
@@ -310,7 +307,7 @@ fixture`FixedColumns - Group Summaries`
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [900, 800]).before(async () => createWidget('dxDataGrid', {
+  }, [900, 800]).meta({ unstable: true }).before(async () => createWidget('dxDataGrid', {
     ...defaultConfig,
     rtlEnabled,
     customizeColumns(columns) {

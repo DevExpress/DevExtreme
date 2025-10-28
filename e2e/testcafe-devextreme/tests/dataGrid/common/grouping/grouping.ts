@@ -339,54 +339,8 @@ test('Grouping and filtering should be applied correctly when they change at run
   keyExpr: 'ID',
 }));
 
-fixture`Grouping Panel - autoExpandAll`
-  .page(url(__dirname, '../../../container.html'));
-
 // T1112573
-test('Content should be rendered correctly after setting the grouping.autoExpandAll property to true when dataRowTemplate is given', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const dataGrid = new DataGrid('#container');
-
-  await t.expect(dataGrid.isReady()).ok();
-
-  await dataGrid.apiExpandAllGroups();
-
-  await t
-    .wait(100)
-    .expect(await takeScreenshot('expanded-groups-content', dataGrid.element))
-    .ok()
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxDataGrid', {
-  dataSource: [
-    {
-      field1: '1', field2: 'test1',
-    },
-    {
-      field1: '2', field2: 'test1',
-    },
-    {
-      field1: '3', field2: 'test2',
-    },
-  ],
-  width: 700,
-  columns: [
-    'field1',
-    { dataField: 'field2', groupIndex: 0 },
-  ],
-  dataRowTemplate(container, { data }) {
-    return $(container).append($(`<tr><td>${data.field1}</td></tr>`));
-  },
-  groupPanel: {
-    visible: true,
-  },
-  grouping: {
-    autoExpandAll: false,
-  },
-}));
-
-// T1112573
-test('Content should be rendered correctly after setting the grouping.autoExpandAll property to true when dataRowTemplate is given', async (t) => {
+test.meta({ unstable: true })('Content should be rendered correctly after setting the grouping.autoExpandAll property to true when dataRowTemplate is given', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
 

@@ -4170,38 +4170,6 @@ test('DataGrid - Cell focus in edit mode does not work correctly if a cell has a
   },
 }));
 
-test('DataGrid - Cell focus works incorrectly if the command column has a disabled native button element (T1179207)', async (t) => {
-  await t
-    .pressKey('tab tab tab tab tab tab tab')
-
-    .expect(Selector(':focus').tagName)
-    .eql('td')
-    .expect(Selector(':focus').getAttribute('aria-colindex'))
-    .eql('1');
-}).before(async () => createWidget('dxDataGrid', {
-  dataSource: getData(2, 2),
-  showBorders: true,
-  editing: {
-    mode: 'cell',
-    allowUpdating: true,
-    allowDeleting: true,
-  },
-  columns: ['field_0', 'field_1', {
-    type: 'buttons',
-    buttons: [{
-      template() {
-        return $('<button>').text('Edit');
-      },
-    }, {
-      template() {
-        return $('<button>').attr({
-          disabled: true,
-        }).text('Delete');
-      },
-    }],
-  }],
-}));
-
 // T1178858
 test('Keyboard navigation behavior should be changed after changing the keyboardNavigation.enabled option', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -5994,8 +5962,40 @@ test('The batch edit mode - Shift + Tab navigation through interactive elements 
   });
 });
 
-fixture.disablePageReloads`Keyboard Navigation - Focus`
+fixture`Keyboard Navigation - Focus`
   .page(url(__dirname, '../../../container.html'));
+
+test('DataGrid - Cell focus works incorrectly if the command column has a disabled native button element (T1179207)', async (t) => {
+  await t
+    .pressKey('tab tab tab tab tab tab tab')
+
+    .expect(Selector(':focus').tagName)
+    .eql('td')
+    .expect(Selector(':focus').getAttribute('aria-colindex'))
+    .eql('1');
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(2, 2),
+  showBorders: true,
+  editing: {
+    mode: 'cell',
+    allowUpdating: true,
+    allowDeleting: true,
+  },
+  columns: ['field_0', 'field_1', {
+    type: 'buttons',
+    buttons: [{
+      template() {
+        return $('<button>').text('Edit');
+      },
+    }, {
+      template() {
+        return $('<button>').attr({
+          disabled: true,
+        }).text('Delete');
+      },
+    }],
+  }],
+}));
 
 test('All rows should be focused on arrow-up/down when virtual scrolling enabled with group summary (T1014612)', async (t) => {
   const dataGrid = new DataGrid('#container');

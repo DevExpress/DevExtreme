@@ -2,7 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
-import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../../helpers/domUtils';
+import { insertStylesheetRulesToPage } from '../../../../../helpers/domUtils';
 
 fixture.disablePageReloads`Focused row - markup`
   .page(url(__dirname, '../../../../container.html'));
