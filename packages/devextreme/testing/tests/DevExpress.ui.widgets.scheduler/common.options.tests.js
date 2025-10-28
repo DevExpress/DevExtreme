@@ -583,7 +583,10 @@ QUnit.module('Options', () => {
             allowResizing: true,
             allowDragging: true,
             allowTimeZoneEditing: false,
-            legacyForm: false
+            legacyForm: false,
+            form: {
+                iconsShowMode: 'main'
+            }
         };
 
         if(devices.real().platform !== 'generic') {

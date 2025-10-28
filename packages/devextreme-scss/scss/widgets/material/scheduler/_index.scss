@@ -576,6 +576,10 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
       }
     }
 
+    .dx-scheduler-form-icon-sized-gap {
+      width: $material-scheduler-appointment-popup-icon-size;
+    }
+
     .dx-scheduler-form-subject-group .dx-scheduler-form-icon {
       color: $scheduler-form-subject-icon-color;
     }

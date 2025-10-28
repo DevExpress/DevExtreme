@@ -1,14 +1,36 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
+import AppointmentPopup from 'devextreme-testcafe-models/scheduler/appointment/popup';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
+import { changeTheme } from '../../../../helpers/changeTheme';
 
 fixture`Appointment Form: Recurrence Form`
   .page(url(__dirname, '../../../container.html'));
 
 const SCHEDULER_SELECTOR = '#container';
 const theme = 'generic.light';
+
+const openAppointmentPopup = async (
+  t: TestController,
+  appointment: any,
+  isRecurringAppointment: boolean,
+): Promise<AppointmentPopup> => {
+  await ClientFunction((appointmentData) => {
+    const instance = ($('#container') as any).dxScheduler('instance');
+    instance.showAppointmentPopup(appointmentData);
+  })(appointment);
+
+  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+
+  if (isRecurringAppointment) {
+    await t.click(Scheduler.getEditRecurrenceDialog().series);
+  }
+
+  return scheduler.appointmentPopup;
+};
 
 test.clientScripts([
   { module: 'mockdate' },
@@ -650,4 +672,45 @@ test.clientScripts([
   await ClientFunction(() => {
     (window as any).MockDate.reset();
   })();
+});
+
+safeSizeTest('recurrence form with icons', async (t) => {
+  const appointment = {
+    text: 'Appointment',
+    startDate: new Date('2021-04-26T16:30:00.000Z'),
+    endDate: new Date('2021-04-26T18:30:00.000Z'),
+    assigneeId: [1, 2],
+    roomId: 1,
+    priorityId: 1,
+    recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=1',
+  };
+
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const appointmentPopup = await openAppointmentPopup(t, appointment, true);
+  await appointmentPopup.openRecurrenceSettings(t);
+
+  await takeScreenshot(
+    `scheduler__appointment__recurrence-form__with-icons (theme=${theme}).png`,
+    appointmentPopup.contentElement,
+  );
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [1500, 1500]).before(async () => {
+  await changeTheme(theme);
+  return createWidget('dxScheduler', {
+    dataSource: [],
+    views: ['week'],
+    currentView: 'week',
+    currentDate: new Date(2021, 2, 25),
+    editing: {
+      form: {
+        iconsShowMode: 'both',
+      },
+    },
+  });
+}).after(async () => {
+  await changeTheme('generic.light');
 });
