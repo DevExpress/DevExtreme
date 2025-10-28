@@ -32,13 +32,15 @@ const products = ref(service.getProducts());
 const limitSubmenuHeight = ref(false);
 
 function itemClick(e: DxMenuTypes.ItemClickEvent<ProductType>) {
-  if (!e.itemData.items) {
-    notify(`The "${e.itemData.text}" item was clicked`, 'success', 1500);
+  if (!e.itemData?.items) {
+    notify(`The "${e.itemData?.text}" item was clicked`, 'success', 1500);
   }
 }
 
-function onSubmenuShowing({ submenuContainer }: DxMenuTypes.SubmenuShowingEvent<ProductType>) {
-  submenuContainer.style.maxHeight = limitSubmenuHeight.value ? `${SUBMENU_HEIGHT}px` : '';
+function onSubmenuShowing(e: DxMenuTypes.SubmenuShowingEvent<ProductType>) {
+  if (e.submenuContainer) {
+    e.submenuContainer.style.maxHeight = limitSubmenuHeight.value ? `${SUBMENU_HEIGHT}px` : '';
+  }
 }
 </script>
 <style>
