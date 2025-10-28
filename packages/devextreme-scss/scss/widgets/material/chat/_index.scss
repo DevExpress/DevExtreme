@@ -30,7 +30,9 @@
   $chat-file-file-size-max-width,
 );
 @include chat-fileview(
-  $chat-file-view-items-gap
+  $chat-file-view-items-gap,
+  $chat-file-view-margin-top,
+  $chat-file-container-width,
 );
 @include chat-alertlist(
   $chat-alertlist-color,

@@ -2,10 +2,13 @@ import $ from 'jquery';
 import messageLocalization from 'common/core/localization/message';
 
 import MessageBubble, {
-    MESSAGE_DATA_KEY
+    MESSAGE_DATA_KEY,
+    CHAT_MESSAGEBUBBLE_ATTACHMENTS_CLASS,
+    CHAT_MESSAGEBUBBLE_CONTENT_CLASS,
 } from '__internal/ui/chat/messagebubble';
-
-const CHAT_MESSAGEBUBBLE_CONTENT_CLASS = 'dx-chat-messagebubble-content';
+import { BUTTON_CLASS } from '__internal/ui/button/button';
+import { CHAT_FILE_VIEW_CLASS } from '__internal/ui/chat/file_view/file_view';
+import { CHAT_FILE_CLASS, CHAT_FILE_NAME_CLASS, CHAT_FILE_SIZE_CLASS } from '__internal/ui/chat/file_view/file';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -13,6 +16,8 @@ const moduleConfig = {
             this.instance = new MessageBubble($('#component'), options);
             this.$element = $(this.instance.$element());
             this.$content = this.$element.find(`.${CHAT_MESSAGEBUBBLE_CONTENT_CLASS}`);
+            this.$attachments = this.$element.find(`.${CHAT_MESSAGEBUBBLE_ATTACHMENTS_CLASS}`);
+            this.getDownloadButton = () => this.$element.find(`.${BUTTON_CLASS}`);
         };
 
         this.reinit = (options) => {
@@ -158,6 +163,73 @@ QUnit.module('MessageBubble', moduleConfig, () => {
 
             assert.strictEqual($bubbleContentChild.prop('tagName'), 'H1', 'content tag is correct');
             assert.strictEqual($bubbleContentChild.text(), 'template text: text', 'content text is correct');
+        });
+
+        QUnit.test('should render FileView when attachments passed', function(assert) {
+            this.reinit({ attachments: [{ name: 'text.txt', size: 1024 }] });
+
+            const $fileView = this.$attachments.find(`.${CHAT_FILE_VIEW_CLASS}`);
+            const $file = $fileView.find(`.${CHAT_FILE_CLASS}`);
+            const $fileName = $file.find(`.${CHAT_FILE_NAME_CLASS}`);
+            const $fileSize = $file.find(`.${CHAT_FILE_SIZE_CLASS}`);
+
+            assert.ok($fileView.length, 'FileView is rendered inside attachments container');
+            assert.strictEqual($fileName.text(), 'text.txt', 'name rendered correctly');
+            assert.strictEqual($fileSize.text(), '1 KB', 'size rendered correctly');
+        });
+
+        QUnit.test('should not render FileView when no attachments passed', function(assert) {
+            this.reinit({ attachments: [] });
+
+            assert.strictEqual(this.$attachments.children().length, 0, 'attachments container is empty');
+        });
+
+        QUnit.test('should not render FileView when isDeleted is true', function(assert) {
+            this.reinit({
+                isDeleted: true,
+                attachments: [{ name: 'text.txt', size: 1024 }],
+            });
+
+            assert.strictEqual(this.$attachments.children().length, 0, 'no attachments rendered for deleted message');
+        });
+
+        QUnit.test('should render attachments in runtime', function(assert) {
+            const attachments = [{ name: 'text.txt', size: 1024 }];
+            let $fileView = this.$attachments.find(`.${CHAT_FILE_VIEW_CLASS}`);
+
+            assert.strictEqual($fileView.length, 0, 'FileView is empty initially');
+
+            this.instance.option({ attachments });
+
+            $fileView = this.$attachments.find(`.${CHAT_FILE_VIEW_CLASS}`);
+
+            assert.strictEqual($fileView.length, 1, 'FileView is rendered inside attachments container');
+        });
+
+        QUnit.test('should pass onAttachmentDownload to FileView', function(assert) {
+            const onAttachmentDownload = sinon.spy();
+
+            this.reinit({
+                attachments: [{ name: 'text.txt', size: 1024 }],
+                onAttachmentDownload,
+            });
+
+            this.getDownloadButton().trigger('dxclick');
+
+            assert.strictEqual(onAttachmentDownload.callCount, 1);
+        });
+
+        QUnit.test('should set onAttachmentDownload to FileView in runtime', function(assert) {
+            const onAttachmentDownload = sinon.spy();
+
+            this.reinit({
+                attachments: [{ name: 'text.txt', size: 1024 }],
+            });
+
+            this.instance.option({ onAttachmentDownload });
+            this.getDownloadButton().trigger('dxclick');
+
+            assert.strictEqual(onAttachmentDownload.callCount, 1);
         });
     });
 });

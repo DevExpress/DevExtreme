@@ -6,7 +6,8 @@ import MessageBubble, {
     CHAT_MESSAGEBUBBLE_CONTENT_CLASS,
     CHAT_MESSAGEBUBBLE_DELETED_CLASS,
     CHAT_MESSAGEBUBBLE_HAS_IMAGE_CLASS,
-    CHAT_MESSAGEBUBBLE_IMAGE_CLASS
+    CHAT_MESSAGEBUBBLE_IMAGE_CLASS,
+    CHAT_MESSAGEBUBBLE_ATTACHMENTS_CLASS
 } from '__internal/ui/chat/messagebubble';
 
 const moduleConfig = {
@@ -37,6 +38,13 @@ QUnit.module('MessageBubble', moduleConfig, () => {
 
             assert.strictEqual($content.length, 1, 'content element exist');
             assert.strictEqual($content.parent().is(this.$element), true, 'content element is direct child of root element');
+        });
+
+        QUnit.test('root element should have a child attachments element with correct class', function(assert) {
+            const $content = this.$element.find(`.${CHAT_MESSAGEBUBBLE_ATTACHMENTS_CLASS}`);
+
+            assert.strictEqual($content.length, 1, 'attachments element exist');
+            assert.strictEqual($content.parent().is(this.$element), true, 'attachments element is direct child of root element');
         });
 
         QUnit.test('root element should switch classes when deletion and undo happens', function(assert) {

@@ -1,15 +1,19 @@
 import messageLocalization from '@js/common/core/localization/message';
 import { getPublicElement } from '@js/core/element';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type { Message } from '@js/ui/chat';
+import type { Attachment, AttachmentDownloadEvent, Message } from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import { ICON_CLASS } from '@ts/core/utils/m_icon';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
+import FileView from './file_view/file_view';
+
 export const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 export const CHAT_MESSAGEBUBBLE_DELETED_CLASS = 'dx-chat-messagebubble-deleted';
 export const CHAT_MESSAGEBUBBLE_CONTENT_CLASS = 'dx-chat-messagebubble-content';
+export const CHAT_MESSAGEBUBBLE_ATTACHMENTS_CLASS = 'dx-chat-messagebubble-attachments';
 export const CHAT_MESSAGEBUBBLE_ICON_PROHIBITION_CLASS = `${ICON_CLASS}-cursorprohibition`;
 export const CHAT_MESSAGEBUBBLE_HAS_IMAGE_CLASS = 'dx-has-image';
 export const CHAT_MESSAGEBUBBLE_IMAGE_CLASS = 'dx-chat-messagebubble-image';
@@ -23,10 +27,16 @@ export interface Properties extends WidgetOptions<MessageBubble> {
   isEdited?: boolean;
   src?: string;
   alt?: string;
+  attachments?: Attachment[];
+  onAttachmentDownload?: (e: AttachmentDownloadEvent) => void;
   template?: ((message: Message, container: Element) => void) | null;
 }
 
 class MessageBubble extends Widget<Properties> {
+  _$content!: dxElementWrapper;
+
+  _$attachmentsContainer!: dxElementWrapper;
+
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
@@ -42,13 +52,25 @@ class MessageBubble extends Widget<Properties> {
 
     $element.addClass(CHAT_MESSAGEBUBBLE_CLASS);
 
-    $('<div>')
-      .addClass(CHAT_MESSAGEBUBBLE_CONTENT_CLASS)
-      .appendTo($element);
-
     super._initMarkup();
 
+    this._renderContentContainer();
+    this._renderAttachmentsContainer();
+
     this._updateContent();
+    this._renderAttachments();
+  }
+
+  _renderContentContainer(): void {
+    this._$content = $('<div>')
+      .addClass(CHAT_MESSAGEBUBBLE_CONTENT_CLASS)
+      .appendTo(this.$element());
+  }
+
+  _renderAttachmentsContainer(): void {
+    this._$attachmentsContainer = $('<div>')
+      .addClass(CHAT_MESSAGEBUBBLE_ATTACHMENTS_CLASS)
+      .appendTo(this.$element());
   }
 
   _updateContent(): void {
@@ -62,14 +84,14 @@ class MessageBubble extends Widget<Properties> {
     } = this.option();
 
     this.$element().removeClass(CHAT_MESSAGEBUBBLE_DELETED_CLASS);
+    this.$element().removeClass(CHAT_MESSAGEBUBBLE_HAS_IMAGE_CLASS);
 
-    const $bubbleContainer = $(this.element()).find(`.${CHAT_MESSAGEBUBBLE_CONTENT_CLASS}`);
-    $bubbleContainer.empty();
+    this._$content.empty();
 
     if (template) {
       template({
         type, text, src, alt,
-      }, getPublicElement($bubbleContainer));
+      }, getPublicElement(this._$content));
 
       return;
     }
@@ -84,7 +106,7 @@ class MessageBubble extends Widget<Properties> {
       const deletedMessage = $('<div>')
         .text(messageLocalization.format('dxChat-deletedMessageText'));
 
-      $bubbleContainer
+      this._$content
         .append(icon)
         .append(deletedMessage);
 
@@ -98,11 +120,37 @@ class MessageBubble extends Widget<Properties> {
           .attr('src', src ?? '')
           .attr('alt', alt ?? messageLocalization.format('dxChat-defaultImageAlt'))
           .addClass(CHAT_MESSAGEBUBBLE_IMAGE_CLASS)
-          .appendTo($bubbleContainer);
+          .appendTo(this._$content);
         break;
       case 'text':
       default:
-        $bubbleContainer.text(text ?? '');
+        this._$content.text(text ?? '');
+    }
+  }
+
+  _renderAttachments(): void {
+    const {
+      isDeleted,
+      attachments,
+      activeStateEnabled,
+      focusStateEnabled,
+      hoverStateEnabled,
+      onAttachmentDownload,
+    } = this.option();
+
+    this._$attachmentsContainer.empty();
+
+    if (attachments?.length && !isDeleted) {
+      const $fileView = $('<div>');
+      this._createComponent($fileView, FileView, {
+        files: attachments,
+        onDownload: onAttachmentDownload,
+        activeStateEnabled,
+        focusStateEnabled,
+        hoverStateEnabled,
+      });
+
+      this._$attachmentsContainer.append($fileView);
     }
   }
 
@@ -123,12 +171,17 @@ class MessageBubble extends Widget<Properties> {
       case 'isDeleted':
         this._updateMessageData(name, value);
         this._updateContent();
+        this._renderAttachments();
         break;
       case 'template':
         this._updateContent();
         break;
       case 'isEdited':
         this._updateMessageData(name, value);
+        break;
+      case 'onAttachmentDownload':
+      case 'attachments':
+        this._renderAttachments();
         break;
       default:
         super._optionChanged(args);

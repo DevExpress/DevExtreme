@@ -8,6 +8,7 @@ import { isDefined } from '@js/core/utils/type';
 import DataHelperMixin from '@js/data_helper';
 import type dxChat from '@js/ui/chat';
 import type {
+  AttachmentDownloadEvent,
   Message,
   MessageDeletedEvent,
   MessageDeletingEvent,
@@ -73,6 +74,8 @@ class Chat extends Widget<Properties> {
 
   _messageUpdatedAction?: (e: Partial<MessageUpdatedEvent>) => void;
 
+  _attachmentDownloadAction?: (e: Partial<AttachmentDownloadEvent>) => void;
+
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
@@ -125,6 +128,7 @@ class Chat extends Widget<Properties> {
     this._createMessageUpdatedAction();
     this._createTypingStartAction();
     this._createTypingEndAction();
+    this._createAttachmentDownloadAction();
   }
 
   _dataSourceLoadErrorHandler(): void {
@@ -223,6 +227,9 @@ class Chat extends Widget<Properties> {
       },
       onEscapeKeyPressed: () => {
         this.focus();
+      },
+      onAttachmentDownload: (e) => {
+        this._attachmentDownloadHandler(e);
       },
     };
 
@@ -521,6 +528,13 @@ class Chat extends Widget<Properties> {
     );
   }
 
+  _createAttachmentDownloadAction(): void {
+    this._attachmentDownloadAction = this._createActionByOption(
+      'onAttachmentDownload',
+      { excludeValidators: ['disabled'] },
+    );
+  }
+
   _messageEnteredHandler(e: MessageBoxMessageEnteredEvent): void {
     const { text, event } = e;
     const { user } = this.option();
@@ -558,6 +572,10 @@ class Chat extends Widget<Properties> {
     const { user } = this.option();
 
     this._typingEndAction?.({ user });
+  }
+
+  _attachmentDownloadHandler(e: AttachmentDownloadEvent): void {
+    this._attachmentDownloadAction?.(e);
   }
 
   _focusTarget(): dxElementWrapper {
@@ -621,6 +639,9 @@ class Chat extends Widget<Properties> {
         break;
       case 'onTypingEnd':
         this._createTypingEndAction();
+        break;
+      case 'onAttachmentDownload':
+        this._createAttachmentDownloadAction();
         break;
       case 'showDayHeaders':
       case 'showAvatar':
