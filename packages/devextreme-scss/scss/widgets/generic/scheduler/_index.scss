@@ -294,6 +294,18 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
       height: $generic-scheduler-appointment-popup-all-day-item-height;
     }
 
+    .dx-scheduler-form-recurrence-end-editors {
+      .dx-texteditor.dx-editor-filled,
+      .dx-texteditor.dx-editor-outlined {
+        .dx-lookup-field,
+        .dx-placeholder::before,
+        .dx-texteditor-input {
+          padding-left: 8px;
+          padding-right: 8px;
+        }
+      }
+    }
+
     .dx-field-item:not(.dx-first-col) {
       padding-inline-start: $generic-scheduler-appointment-popup-item-padding-horizontal;
     }
