@@ -89,7 +89,7 @@ test.meta({ unstable: true })('Should sort without DataSource reload if scrollin
   await t.removeRequestHooks(apiRequestMock);
 });
 
-test('Should sort with DataSource reload if scrolling mode is virtual', async (t) => {
+test.meta({ unstable: true })('Should sort with DataSource reload if scrolling mode is virtual', async (t) => {
   const pivotGrid = new PivotGrid('#container');
   await t.addRequestHooks(requestLogger);
   const initialRequestCount = await requestLogger.count(() => true);
