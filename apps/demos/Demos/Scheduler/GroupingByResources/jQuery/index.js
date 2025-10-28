@@ -27,6 +27,7 @@ $(() => {
         allowMultiple: false,
         dataSource: priorityData,
         label: 'Priority',
+        icon: 'tag',
       },
     ],
     showCurrentTimeIndicator: false,
