@@ -648,6 +648,10 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
       height: $fluent-scheduler-appointment-popup-all-day-item-height - $fluent-form-layout-manager-vertical-padding;
     }
 
+    .dx-scheduler-days-of-week-buttons {
+      height: $fluent-toolbar-height;
+    }
+
     .dx-field-item:not(.dx-first-col) {
       padding-inline-start: $fluent-scheduler-appointment-popup-item-padding-horizontal;
     }

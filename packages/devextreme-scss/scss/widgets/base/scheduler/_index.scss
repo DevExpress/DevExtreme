@@ -644,6 +644,7 @@ $scheduler-appointment-form-label-padding: 20px;
       /* Recurrence Day Buttons */
       .dx-scheduler-days-of-week-buttons {
         display: flex;
+        align-items: center;
         gap: 8px;
 
         .dx-button {

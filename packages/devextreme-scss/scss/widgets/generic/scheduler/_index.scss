@@ -285,6 +285,10 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
       margin-top: $generic-scheduler-appointment-popup-description-icon-margin-top;
     }
 
+    .dx-scheduler-days-of-week-buttons {
+      height: $generic-toolbar-height;
+    }
+
     .dx-scheduler-form-recurrence-end-group .dx-field-item-label {
       height: $generic-scheduler-appointment-popup-all-day-item-height;
     }
