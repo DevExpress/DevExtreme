@@ -90,7 +90,7 @@ test('The header filter should fit inside the viewport if the grid is scrolled h
   const filterIconElement = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).getFilterIcon();
 
   // act
-  await dataGrid.scrollBy({ x: 100 });
+  await dataGrid.scrollBy(t, { x: 100 });
   await t.click(filterIconElement);
 
   // assert
