@@ -7,5 +7,5 @@ testUtils.importAnd(() => 'devextreme/ui/date_range_box', () => DevExpress.ui.dx
       startDate: new Date('2022/08/25 16:35:10'),
       endDate: new Date('2022/08/26 16:35:10'),
     });
-  }))
+  })),
 );

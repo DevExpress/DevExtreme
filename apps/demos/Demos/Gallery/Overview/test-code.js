@@ -6,5 +6,5 @@ testUtils.importAnd(() => 'devextreme/ui/gallery', () => DevExpress.ui.dxGallery
     i.goToItem(0, false);
     // eslint-disable-next-line no-underscore-dangle
     i._optionChanged = function () { };
-  })
+  }),
 );

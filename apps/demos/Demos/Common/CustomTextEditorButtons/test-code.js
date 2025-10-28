@@ -4,5 +4,5 @@ testUtils.importAnd(() => 'devextreme/ui/date_box', () => DevExpress.ui.dxDateBo
     dxDateBox
       .getInstance(document.querySelector('.dx-datebox'))
       .option('value', new Date('2019/04/22'));
-  })
+  }),
 );

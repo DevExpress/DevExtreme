@@ -4,5 +4,5 @@ testUtils.importAnd(() => 'devextreme/ui/calendar', () => DevExpress.ui.dxCalend
     const instance = dxCalendar.getInstance(document.querySelector('.dx-calendar'));
     instance.option('value', [new Date('2023/08/19'), new Date('2023/08/20')]);
   })
-  .then(() => testUtils.postpone(1000))
+  .then(() => testUtils.postpone(1000)),
 );
