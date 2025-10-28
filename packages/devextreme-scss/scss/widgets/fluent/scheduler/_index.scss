@@ -4,6 +4,7 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+@use "../form/sizes" as *;
 @use '../../base/scheduler/layout/header' as *;
 @use "../../base/mixins" as *;
 @use "../../base/icons" as *;
@@ -39,7 +40,10 @@
   $agenda-appointment-hover-bg: $agenda-appointment-hover-bg,
   $agenda-appointment-active-bg: $agenda-appointment-active-bg,
   $agenda-appointment-text-color: $agenda-appointment-text-color,
-  $agenda-appointment-title-font-size: $agenda-appointment-title-font-size
+  $agenda-appointment-title-font-size: $agenda-appointment-title-font-size,
+
+  $scheduler-days-of-week-button-size: $fluent-scheduler-days-of-week-button-size,
+  $scheduler-recurrence-end-item-height: $fluent-scheduler-recurrence-end-item-height
 );
 @use "../button/colors" as *;
 @use "../button/mixins" as *;
@@ -625,8 +629,19 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
     }
 
     .dx-scheduler-form-description-group .dx-scheduler-form-icon,
-    .dx-scheduler-form-resources-group .dx-scheduler-default-resources-icon {
+    .dx-scheduler-form-resources-group .dx-scheduler-default-resources-icon,
+    .dx-scheduler-form-recurrence-settings-group .dx-scheduler-form-icon {
       margin-top: $fluent-scheduler-appointment-popup-description-icon-margin-top;
+    }
+
+    .dx-scheduler-form-recurrence-end-group .dx-texteditor-input {
+      padding-left: 8px;
+      padding-right: 8px;
+      padding-inline-end: 8px !important; // stylelint-disable-line declaration-no-important
+    }
+
+    .dx-scheduler-form-recurrence-end-group .dx-field-item-label {
+      height: $fluent-scheduler-appointment-popup-all-day-item-height - $fluent-form-layout-manager-vertical-padding;
     }
 
     .dx-field-item:not(.dx-first-col) {

@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Controller } from '../m_modules';
 
-export class AiColumnCacheController extends Controller {
+export class AIColumnCacheController extends Controller {
   public clearCache(columnName: string): void {
 
   }
 
   public getCachedResponse(columnName: string, keys: PropertyKey[]):
-    Record<PropertyKey, string> | null {
-    return null;
+  Record<PropertyKey, string> {
+    return {};
   }
 
   public getCachedString(columnName: string, key: PropertyKey): string | null {

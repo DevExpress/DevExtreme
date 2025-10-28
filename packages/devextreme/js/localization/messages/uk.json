@@ -88,6 +88,9 @@
         "dxFileUploader-invalidFileExtension": "Недопустимий тип файлу",
         "dxFileUploader-invalidMaxFileSize": "Файл завеликий",
         "dxFileUploader-invalidMinFileSize": "Файл замалий",
+        "dxFileUploader-fileListLabel": "File list",
+        "dxFileUploader-removeFileButtonLabel": "Remove file {0}",
+        "dxFileUploader-uploadFileButtonLabel": "Upload file {0}",
 
         "dxRangeSlider-ariaFrom": "Від",
         "dxRangeSlider-ariaTill": "До",
@@ -410,6 +413,8 @@
         "dxChat-editingDeleteConfirmText": "Ви впевнені, що хочете видалити це повідомлення?",
         "dxChat-deletedMessageText": "Це повідомлення було видалено",
         "dxChat-defaultImageAlt": "Зображення, надіслане в чаті",
+        "dxChat-fileViewLabel": "File list",
+        "dxChat-downloadButtonLabel": "Download file {0}",
 
         "dxColorView-ariaRed": "Червоний",
         "dxColorView-ariaGreen": "Зелений",

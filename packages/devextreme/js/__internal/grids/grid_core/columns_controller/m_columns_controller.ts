@@ -148,13 +148,13 @@ export class ColumnsController extends modules.Controller {
       case !column?.type:
         return this.option('commonColumnSettings');
       case column?.type === AI_COLUMN_NAME:
-        return this.getAiColumnSettings();
+        return this.getAIColumnSettings();
       default:
         return {};
     }
   }
 
-  private getAiColumnSettings(): Partial<Column> {
+  private getAIColumnSettings(): Partial<Column> {
     return {
       allowHiding: true,
       ai: {
@@ -462,6 +462,10 @@ export class ColumnsController extends modules.Controller {
     return this._columns;
   }
 
+  public getColumnByName(columnName: string): Column | undefined {
+    return this.getColumns().find((column) => column.name === columnName);
+  }
+
   public isBandColumnsUsed() {
     return this.getColumns().some((column) => column.isBand);
   }
@@ -469,9 +473,8 @@ export class ColumnsController extends modules.Controller {
   public getGroupColumns() {
     const result: any = [];
 
-    each(this._columns, function () {
-      const column = this;
-      if (isDefined(column.groupIndex)) {
+    (this._columns as Column[]).forEach((column) => {
+      if (isDefined(column.groupIndex) && !column.type) {
         result[column.groupIndex] = column;
       }
     });

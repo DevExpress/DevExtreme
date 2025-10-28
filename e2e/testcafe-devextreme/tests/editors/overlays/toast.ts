@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction, Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
-import { getFullThemeName, getThemeName, testScreenshot } from '../../../helpers/themeUtils';
+import { getThemeName, testScreenshot } from '../../../helpers/themeUtils';
 import { insertStylesheetRulesToPage, setClassAttribute } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`Toast`
@@ -39,11 +39,7 @@ const hideAllToasts = ClientFunction(() => {
 test('Toasts', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'Toasts.png', { element: STACK_CONTAINER_SELECTOR, shouldTestInCompact: true });
-  await testScreenshot(t, takeScreenshot, 'Toasts.png', {
-    element: STACK_CONTAINER_SELECTOR,
-    theme: `${getFullThemeName().replace('light', 'dark')}`,
-  });
+  await testScreenshot(t, takeScreenshot, 'Toasts.png', { element: STACK_CONTAINER_SELECTOR });
 
   await t
     .expect(compareResults.isValid())

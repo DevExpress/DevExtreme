@@ -22,7 +22,6 @@ import { setScrollView } from '__internal/ui/list/list.base';
 import ScrollView from 'ui/scroll_view';
 import eventsEngine from 'common/core/events/core/events_engine';
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
-import { shouldSkipOnMobile } from '../../../helpers/device.js';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEMS_CLASS = 'dx-list-items';
@@ -2098,10 +2097,6 @@ QUnit.module('events', moduleSetup, () => {
     });
 
     QUnit.test('item onClick handler should be fired on "enter" key press', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const $element = this.element.dxList({
             items: [{
                 text: 'item 1',
@@ -4084,9 +4079,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('\'enter\'/\'space\' keys pressing on selectAll checkbox', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
         assert.expect(3);
 
         const $element = $('#list').dxList({
@@ -4118,9 +4110,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('focusing on selectAll checkbox after \'down\'/\'up\' pressing', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
         assert.expect(6);
 
         const $element = $('#list').dxList({
@@ -4960,10 +4949,6 @@ QUnit.module('Accessibility', () => {
         const itemDeleteMode = buttonClass === STATIC_DELETE_BUTTON_CLASS ? 'static' : 'toggle';
 
         QUnit.test(`List item ${itemDeleteMode} button should have a correct role, aria-label, tabindex`, function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             $('#list').dxList({
                 itemDeleteMode,
                 dataSource: ['text 1', 'text 2'],
@@ -4981,10 +4966,6 @@ QUnit.module('Accessibility', () => {
     });
 
     QUnit.test('List item switchable button should have a correct role, aria-label, tabindex', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const $list = $('#list').dxList({
             dataSource: ['text 1', 'text 2'],
             itemDeleteMode: 'slideButton',

@@ -6,7 +6,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "{projectRoot}",
-        "command": "pnpm exec ts-node ./discover-declarations.ts"
+        "command": "pnpm exec ts-node -T ./discover-declarations.ts"
       },
       "cache": false,
       "inputs": [
@@ -26,7 +26,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "{projectRoot}",
-        "command": "pnpm exec ts-node ./make-angular-metadata.ts"
+        "command": "pnpm exec ts-node -T ./make-angular-metadata.ts"
       },
       "cache": false,
       "inputs": [
@@ -42,7 +42,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "{projectRoot}",
-        "command": "pnpm exec ts-node ./make-aspnet-metadata.ts"
+        "command": "pnpm exec ts-node -T ./make-aspnet-metadata.ts"
       },
       "cache": false,
       "inputs": [
@@ -58,7 +58,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "{projectRoot}",
-        "command": "pnpm exec ts-node ./make-integration-metadata.ts"
+        "command": "pnpm exec ts-node -T ./make-integration-metadata.ts"
       },
       "cache": false,
       "inputs": [

@@ -1,3 +1,4 @@
+import { type DxScheduler } from 'devextreme-vue';
 import { dinnerTime, holidays } from './data.ts';
 
 export default class Utils {
@@ -27,10 +28,10 @@ export default class Utils {
     return hours === dinnerTime.from && minutes === 0;
   }
 
-  static isValidAppointment(component, appointmentData) {
+  static isValidAppointment(component: DxScheduler['instance'], appointmentData: Record<string, any>) {
     const startDate = new Date(appointmentData.startDate);
     const endDate = new Date(appointmentData.endDate);
-    const cellDuration = component.option('cellDuration');
+    const cellDuration = component?.option('cellDuration') || 0;
     return Utils.isValidAppointmentInterval(startDate, endDate, cellDuration);
   }
 

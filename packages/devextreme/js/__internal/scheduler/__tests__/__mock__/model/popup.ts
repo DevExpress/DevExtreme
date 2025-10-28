@@ -43,6 +43,74 @@ export class PopupModel {
     return this.element.querySelector('.dx-scheduler-form-end-date-timezone-editor .dx-selectbox.dx-widget');
   }
 
+  get repeatEditor(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-repeat-editor .dx-selectbox.dx-widget');
+  }
+
+  get frequencyEditor(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-recurrence-frequency-editor .dx-selectbox.dx-widget');
+  }
+
+  get intervalEditor(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-recurrence-interval-editor .dx-textbox.dx-widget');
+  }
+
+  get byMonthEditor(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-recurrence-by-month-editor .dx-selectbox.dx-widget');
+  }
+
+  get dayOfMonthEditor(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-day-of-month-editor .dx-numberbox.dx-widget');
+  }
+
+  get countEditor(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-recurrence-count-editor .dx-numberbox.dx-widget');
+  }
+
+  get repeatEndEditors(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-recurrence-end-editors .dx-radiogroup.dx-widget');
+  }
+
+  get recurrenceGroup(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-recurrence-group');
+  }
+
+  get recurrenceSettingsButton(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-recurrence-settings-button');
+  }
+
+  get recurrenceRepeatEveryInput(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-recurrence-settings-group [type="text"]');
+  }
+
+  get recurrenceWeekDayButtons(): Element | null {
+    return this.element.querySelector('.dx-scheduler-days-of-week-buttons');
+  }
+
+  get recurrenceMonthDayInput(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-day-of-month-group [type="text"]');
+  }
+
+  get recurrenceYearlyInputs(): NodeListOf<Element> {
+    return this.element.querySelectorAll('.dx-scheduler-form-recurrence-repeat-on-yearly-group [type="text"]');
+  }
+
+  get recurrenceEndRadioGroup(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-recurrence-end-editors');
+  }
+
+  get recurrenceEndInputGroup(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-recurrence-end-inputs');
+  }
+
+  get recurrenceMonthlyGroup(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-day-of-month-group');
+  }
+
+  get recurrenceYearlyGroup(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-day-of-year-group');
+  }
+
   getLabelIdByText = (labelText: string): string => {
     const labels = Array.from(this.element.querySelectorAll('label'));
 
@@ -148,6 +216,14 @@ export class PopupModel {
     return saveButton;
   };
 
+  getBackButton = (): HTMLButtonElement => {
+    const backButton = this.element.querySelector('.dx-toolbar-button  .dx-button[aria-label="Back"]') as HTMLButtonElement;
+    if (!backButton) {
+      throw new Error('Back button not found');
+    }
+    return backButton;
+  };
+
   getCancelButton = (): HTMLButtonElement => {
     const cancelButton = this.element.querySelector('.dx-button.dx-popup-cancel') as HTMLButtonElement;
     if (!cancelButton) {
@@ -178,5 +254,167 @@ export class PopupModel {
       throw new Error('Edit series button not found');
     }
     return editSeriesButton;
+  };
+
+  openRecurrenceSettings = (): void => {
+    if (!this.repeatEditor) {
+      throw new Error('Repeat editor not found');
+    }
+
+    // @ts-expect-error
+    const repeatEditorInstance = $(this.repeatEditor).dxSelectBox('instance');
+    const buttons = repeatEditorInstance.option('buttons');
+    const settingsButton = buttons?.find((btn: { name: string }) => btn.name === 'settings');
+
+    if (settingsButton?.options?.onClick) {
+      settingsButton.options.onClick();
+    } else {
+      throw new Error('Settings button not found or onClick is not defined');
+    }
+  };
+
+  openRecurrenceForm = (freq = 'Daily'): void => {
+    if (!this.repeatEditor) {
+      throw new Error('Repeat editor not found');
+    }
+
+    // @ts-expect-error
+    const repeatEditorInstance = $(this.repeatEditor).dxSelectBox('instance');
+    repeatEditorInstance.option('value', freq.toLowerCase());
+
+    // Trigger the settings to open
+    this.openRecurrenceSettings();
+  };
+
+  selectRepeatValue = (value: string): void => {
+    // @ts-expect-error
+    const repeatEditor = $(this.repeatEditor).dxSelectBox('instance');
+    const previousValue = repeatEditor.option('value');
+
+    const originalOnValueChanged = repeatEditor.option('onValueChanged');
+
+    repeatEditor.option('value', value);
+
+    if (originalOnValueChanged) {
+      originalOnValueChanged({
+        value,
+        previousValue,
+        event: new Event('change'),
+      });
+    }
+  };
+
+  setRecurrenceInterval = (interval: number): void => {
+    const input = this.recurrenceRepeatEveryInput as HTMLInputElement;
+    if (!input) {
+      throw new Error('Recurrence interval input not found');
+    }
+
+    input.value = interval.toString();
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+  };
+
+  selectRecurrenceWeekDays = (daysIndex: number[]): void => {
+    const buttonsContainer = this.recurrenceWeekDayButtons;
+    if (!buttonsContainer) {
+      throw new Error('Week day buttons not found');
+    }
+
+    const buttons = Array.from(buttonsContainer.querySelectorAll('.dx-button'));
+
+    buttons.forEach((button, index) => {
+      const isActive = button.classList.contains('dx-button-mode-contained');
+      const shouldBeActive = daysIndex.includes(index);
+
+      if (isActive !== shouldBeActive) {
+        (button as HTMLElement).click();
+      }
+    });
+  };
+
+  setRecurrenceMonthDay = (day: number): void => {
+    const input = this.recurrenceMonthDayInput as HTMLInputElement;
+    if (!input) {
+      throw new Error('Month day input not found');
+    }
+
+    input.value = day.toString();
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+  };
+
+  setRecurrenceYearlyDate = (month: number, day: number): void => {
+    const inputs = this.recurrenceYearlyInputs;
+    if (inputs.length < 2) {
+      throw new Error('Yearly date inputs not found');
+    }
+
+    const monthInput = inputs[0] as HTMLInputElement;
+    const dayInput = inputs[1] as HTMLInputElement;
+
+    monthInput.value = month.toString();
+    monthInput.dispatchEvent(new Event('input', { bubbles: true }));
+    monthInput.dispatchEvent(new Event('change', { bubbles: true }));
+
+    dayInput.value = day.toString();
+    dayInput.dispatchEvent(new Event('input', { bubbles: true }));
+    dayInput.dispatchEvent(new Event('change', { bubbles: true }));
+  };
+
+  setRecurrenceEnd = (type: 'never' | 'count' | 'until', value?: number | string): void => {
+    const radioGroup = this.recurrenceEndRadioGroup;
+    const inputGroup = this.recurrenceEndInputGroup;
+
+    if (!radioGroup) {
+      throw new Error('Recurrence end radio group not found');
+    }
+
+    const radioButtons = radioGroup.querySelectorAll('.dx-radiobutton');
+
+    switch (type) {
+      case 'never': {
+        const neverRadio = radioButtons[0] as HTMLElement;
+        if (neverRadio) {
+          neverRadio.click();
+        }
+        break;
+      }
+      case 'until': {
+        const untilRadio = radioButtons[1] as HTMLElement;
+        if (untilRadio) {
+          untilRadio.click();
+        }
+
+        if (value !== undefined && inputGroup) {
+          const untilInput = inputGroup.querySelector('[type="text"]') as HTMLInputElement;
+          if (untilInput) {
+            untilInput.value = value.toString();
+            untilInput.dispatchEvent(new Event('input', { bubbles: true }));
+            untilInput.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        }
+        break;
+      }
+      case 'count': {
+        const countRadio = radioButtons[2] as HTMLElement;
+        if (countRadio) {
+          countRadio.click();
+        }
+
+        if (value !== undefined && inputGroup) {
+          const inputs = inputGroup.querySelectorAll('[type="text"]');
+          const countInput = inputs[1] as HTMLInputElement;
+          if (countInput) {
+            countInput.value = value.toString();
+            countInput.dispatchEvent(new Event('input', { bubbles: true }));
+            countInput.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        }
+        break;
+      }
+      default:
+        break;
+    }
   };
 }

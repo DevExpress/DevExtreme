@@ -36,7 +36,6 @@ import {
 import { CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS } from '__internal/ui/chat/confirmationpopup';
 import { POPUP_CLASS } from '__internal/ui/popup/m_popup';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
-import { shouldSkipOnMobile } from '../../../helpers/device.js';
 import MessageBubble from '__internal/ui/chat/messagebubble';
 import ChatTextArea from '__internal/ui/chat/message_box/chat_text_area';
 
@@ -423,10 +422,6 @@ QUnit.module('Chat', () => {
             });
 
             QUnit.testInActiveWindow('Contextmenu should be hidden and input focused after esc is pressed', function(assert) {
-                if(shouldSkipOnMobile(assert)) {
-                    return;
-                }
-
                 const items = [
                     { id: '1', text: 'a', author: userFirst },
                     { id: '2', text: 'b', author: userSecond },
@@ -452,10 +447,6 @@ QUnit.module('Chat', () => {
             });
 
             QUnit.testInActiveWindow('Input not focused after context menu is hidden by outside click', function(assert) {
-                if(shouldSkipOnMobile(assert)) {
-                    return;
-                }
-
                 const items = [
                     { id: '1', text: 'a', author: userFirst },
                     { id: '2', text: 'b', author: userSecond },
@@ -481,10 +472,6 @@ QUnit.module('Chat', () => {
             });
 
             QUnit.testInActiveWindow('Input should be blurred after context menu is shown', function(assert) {
-                if(shouldSkipOnMobile(assert)) {
-                    return;
-                }
-
                 const items = [
                     { id: '1', text: 'a', author: userFirst },
                     { id: '2', text: 'b', author: userSecond },
@@ -598,10 +585,6 @@ QUnit.module('Chat', () => {
             });
 
             QUnit.testInActiveWindow('Context menu should not be shown for deleted messages', function(assert) {
-                if(shouldSkipOnMobile(assert)) {
-                    return;
-                }
-
                 const items = [
                     { id: '1', text: 'a', author: userFirst },
                     { id: '2', text: 'b', author: userSecond, isDeleted: true },
@@ -950,10 +933,6 @@ QUnit.module('Chat', () => {
         });
 
         QUnit.testInActiveWindow('input should be focused after message delete popup is closed', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             const items = [
                 { text: 'a', author: userFirst },
                 { text: 'b', author: userSecond },
@@ -1056,10 +1035,6 @@ QUnit.module('Chat', () => {
         });
 
         QUnit.testInActiveWindow('editing preview should be shown after the Edit button is clicked if cancel promise rejected', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             const done = assert.async();
 
             const items = [
@@ -1202,10 +1177,6 @@ QUnit.module('Chat', () => {
         });
 
         QUnit.testInActiveWindow('message box should have editing message text and focus after the Edit button is clicked and not cancelled', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             const items = [
                 { text: 'a', author: userFirst },
                 { text: 'b', author: userSecond },
@@ -1231,10 +1202,6 @@ QUnit.module('Chat', () => {
         });
 
         QUnit.testInActiveWindow('message box should have editing message text and focus after the Edit was triggered from keyboard', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             const items = [
                 { text: 'a', author: userFirst },
                 { text: 'b', author: userSecond },
