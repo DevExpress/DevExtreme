@@ -4,11 +4,13 @@ import { DataSource } from '@js/common/data';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
+import { isBoolean } from '@js/core/utils/type';
 import type { Properties as DateBoxProperties } from '@js/ui/date_box';
 import type {
   GroupItem, Item as FormItem, Properties as FormProperties, SimpleItem,
 } from '@js/ui/form';
 import dxForm from '@js/ui/form';
+import type { Properties as SchedulerProperties } from '@js/ui/scheduler';
 import type { Properties as SelectBoxProperties } from '@js/ui/select_box';
 import type { Properties as SwitchProperties } from '@js/ui/switch';
 import type { Properties as TextAreaProperties } from '@js/ui/text_area';
@@ -17,6 +19,7 @@ import { dateSerialization } from '@ts/core/utils/m_date_serialization';
 
 import timeZoneUtils from '../m_utils_time_zone';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
+import { DEFAULT_ICONS_SHOW_MODE } from '../utils/options/constants';
 import { RecurrenceForm } from './m_recurrence_form';
 import { createFormIconTemplate, getStartDateCommonConfig, RecurrenceRule } from './utils';
 
@@ -174,10 +177,24 @@ export class AppointmentForm {
 
     const items = [mainGroup, recurrenceGroup];
 
-    this.setStylingModeToEditors(mainGroup);
-    this.setStylingModeToEditors(recurrenceGroup);
+    const iconsShowMode = this.getIconsShowMode();
+    const showMainGroupIcons = ['main', 'both'].includes(iconsShowMode);
+    const showRecurrenceGroupIcons = ['recurrence', 'both'].includes(iconsShowMode);
+
+    this.setStylingModeToEditors(mainGroup, showMainGroupIcons);
+    this.setStylingModeToEditors(recurrenceGroup, showRecurrenceGroupIcons);
 
     this.createForm(items);
+  }
+
+  private getIconsShowMode(): 'main' | 'recurrence' | 'both' | 'none' {
+    const editingConfig = this.scheduler.getEditingConfig() as SchedulerProperties['editing'];
+
+    if (isBoolean(editingConfig)) {
+      return DEFAULT_ICONS_SHOW_MODE;
+    }
+
+    return editingConfig?.form?.iconsShowMode ?? DEFAULT_ICONS_SHOW_MODE;
   }
 
   private createForm(items: FormProperties['items']): dxForm {
@@ -600,57 +617,95 @@ export class AppointmentForm {
     } as GroupItem;
   }
 
-  private createResourcesGroup(): GroupItem | undefined {
+  private createResourcesGroup(): GroupItem {
     const resourcesLoaders: ResourceLoader[] = Object.values(this.scheduler.getResourceById());
 
-    const resourcesItems = resourcesLoaders.map((resourceLoader) => {
+    let resourcesItems: FormItem[] = resourcesLoaders.map((resourceLoader) => {
       const { dataSource, dataAccessor } = resourceLoader;
       const dataField = resourceLoader.resourceIndex;
       const label = resourceLoader.resourceName ?? dataField;
       const editorType = resourceLoader.allowMultiple ? 'dxTagBox' : 'dxSelectBox';
 
       return {
+        itemType: 'simple',
+        dataField,
+        label: { text: label },
+        colSpan: 1,
+        editorType,
+        editorOptions: {
+          dataSource,
+          displayExpr: dataAccessor.textExpr,
+          valueExpr: dataAccessor.idExpr,
+        },
+      } as SimpleItem;
+    });
+
+    const noCustomResourceIcons = resourcesLoaders.every((resource) => !resource.icon);
+
+    if (noCustomResourceIcons) {
+      return {
         itemType: 'group',
+        visible: resourcesItems.length > 0,
+        colCount: 2,
+        colCountByScreen: {
+          xs: 2,
+        },
+        cssClass: `${CLASSES.resourcesGroup} ${CLASSES.groupWithIcon}`,
         items: [
           {
-            itemType: 'simple',
-            dataField,
-            label: { text: label },
-            editorType,
-            editorOptions: {
-              dataSource,
-              displayExpr: dataAccessor.textExpr,
-              valueExpr: dataAccessor.idExpr,
-            },
+            colSpan: 1,
+            cssClass: `${CLASSES.icon} ${CLASSES.defaultResourceIcon}`,
+            template: createFormIconTemplate('addcircleoutline'),
           },
+          {
+            itemType: 'group',
+            colSpan: 1,
+            items: resourcesItems,
+          },
+        ],
+      } as GroupItem;
+    }
+
+    resourcesItems = resourcesItems.map((item, index) => {
+      const icon = resourcesLoaders[index].icon ?? '';
+
+      return {
+        itemType: 'group',
+        colCount: 2,
+        colCountByScreen: {
+          xs: 2,
+        },
+        cssClass: CLASSES.groupWithIcon,
+        items: [
+          {
+            colSpan: 1,
+            cssClass: CLASSES.icon,
+            template: createFormIconTemplate(icon),
+          },
+          item,
         ],
       } as GroupItem;
     });
 
     return {
       itemType: 'group',
-      visible: resourcesItems.length > 0,
-      colCount: 2,
+      colCount: 1,
       colCountByScreen: {
-        xs: 2,
+        xs: 1,
       },
-      cssClass: `${CLASSES.resourcesGroup} ${CLASSES.groupWithIcon}`,
-      items: [
-        {
-          colSpan: 1,
-          cssClass: `${CLASSES.icon} ${CLASSES.defaultResourceIcon}`,
-          template: createFormIconTemplate('addcircleoutline'),
-        },
-        {
-          itemType: 'group',
-          colSpan: 1,
-          items: resourcesItems,
-        },
-      ],
+      cssClass: CLASSES.resourcesGroup,
+      items: resourcesItems,
     } as GroupItem;
   }
 
-  private setStylingModeToEditors(item: FormItem): void {
+  private setStylingModeToEditors(item: FormItem, iconsShowMode: boolean): void {
+    const isIconItem = item.cssClass?.includes(CLASSES.icon);
+
+    if (isIconItem) {
+      item.cssClass += iconsShowMode ? '' : ' dx-hidden';
+      return;
+    }
+
     if (item.itemType === 'simple') {
       const simpleItem = item as SimpleItem;
       const stylingMode = isFluent(current()) ? 'filled' : undefined;
@@ -664,9 +719,8 @@ export class AppointmentForm {
 
     if (item.itemType === 'group') {
       const groupItem = item as GroupItem;
-
       groupItem.items?.forEach((child) => {
-        this.setStylingModeToEditors(child);
+        this.setStylingModeToEditors(child, iconsShowMode);
       });
     }
   }

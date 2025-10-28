@@ -11,6 +11,8 @@ import type { SchedulerInternalOptions, SchedulerOptionsRule } from './types';
 const DEFAULT_APPOINTMENT_TEMPLATE_NAME = 'item';
 const DEFAULT_APPOINTMENT_COLLECTOR_TEMPLATE_NAME = 'appointmentCollector';
 
+export const DEFAULT_ICONS_SHOW_MODE = 'main';
+
 export const DEFAULT_SCHEDULER_OPTIONS: Properties = {
   views: ['day', 'week'],
   currentView: 'day', // TODO: should we calculate currentView if views array contains only one item, for example 'month'?
@@ -39,6 +41,9 @@ export const DEFAULT_SCHEDULER_OPTIONS: Properties = {
     allowResizing: true,
     allowUpdating: true,
     allowTimeZoneEditing: false,
+    form: {
+      iconsShowMode: DEFAULT_ICONS_SHOW_MODE,
+    },
   },
   showAllDayPanel: true,
   showCurrentTimeIndicator: true,

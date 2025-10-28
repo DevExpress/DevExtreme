@@ -19,6 +19,14 @@ export class PopupModel {
     return $(this.element.querySelector('.dx-form')).dxForm('instance') as dxForm;
   }
 
+  get mainGroup(): HTMLElement | null {
+    return this.element.querySelector('.dx-scheduler-form-main-group');
+  }
+
+  get recurrenceGroup(): HTMLElement | null {
+    return this.element.querySelector('.dx-scheduler-form-recurrence-group');
+  }
+
   get startDate(): Element | null {
     return this.element.querySelector('.dx-scheduler-form-start-date-editor .dx-datebox.dx-widget');
   }
@@ -69,10 +77,6 @@ export class PopupModel {
 
   get repeatEndEditors(): Element | null {
     return this.element.querySelector('.dx-scheduler-form-recurrence-end-editors .dx-radiogroup.dx-widget');
-  }
-
-  get recurrenceGroup(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-recurrence-group');
   }
 
   get recurrenceSettingsButton(): Element | null {
