@@ -12,15 +12,18 @@ $(() => {
         fieldExpr: 'roomId',
         dataSource: rooms,
         label: 'Room',
+        icon: 'conferenceroomoutline',
       }, {
         fieldExpr: 'priorityId',
         dataSource: priorities,
         label: 'Priority',
+        icon: 'tag',
       }, {
         fieldExpr: 'assigneeId',
         allowMultiple: true,
         dataSource: assignees,
         label: 'Assignee',
+        icon: 'user',
       }],
     height: 600,
   }).dxScheduler('instance');
