@@ -1464,11 +1464,11 @@ export class DraggingHeaderViewController extends modules.ViewController {
   }
 
   /**
-   * @extended: adaptivity, column_fixing
-   * Function that is used to filter column points, it's called for each point
+   * @extended adaptivity, column_fixing
+   * @description Function used to filter column points, it's called for each point
    * @param point Point that we are checking
    * @param columns All columns in the given location
-   * @param location Location where we move column (headers, group, column chooser etc)
+   * @param location Location where we move column (headers, group, column chooser, etc.)
    * @param sourceColumn Column that is dragging
    * @param cells collection of draggable cells wrapped into jQuery object
    * @returns whether to filter current point (true - remove point, false - keep it)
@@ -1478,9 +1478,9 @@ export class DraggingHeaderViewController extends modules.ViewController {
     point, columns, location, sourceColumn,
   }: {
     point: ColumnPoint;
-    columns;
-    location?;
-    sourceColumn?;
+    columns: any[];
+    location?: string;
+    sourceColumn?: any;
     cells?: dxElementWrapper;
   }): boolean {
     const targetColumn = columns[point.columnIndex];
