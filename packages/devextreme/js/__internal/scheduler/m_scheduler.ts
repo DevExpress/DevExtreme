@@ -1059,6 +1059,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       createComponent: (element, component, options) => this._createComponent(element, component, options),
 
       getEditingConfig: () => this._editing,
+      getResourceManager: () => this.resourceManager,
 
       getFirstDayOfWeek: () => this.option('firstDayOfWeek'),
       getStartDayHour: () => this.option('startDayHour'),

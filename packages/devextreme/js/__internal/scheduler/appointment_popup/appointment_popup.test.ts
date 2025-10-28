@@ -786,41 +786,93 @@ describe('Appointment Popup Form', () => {
   });
 
   describe('Icons', () => {
-    it.each<{
-      iconsShowMode: 'both' | 'main' | 'none' | 'recurrence';
-      visibleMain: boolean;
-      visibleRecurrence: boolean;
-    }>([
-      { iconsShowMode: 'both', visibleMain: true, visibleRecurrence: true },
-      { iconsShowMode: 'main', visibleMain: true, visibleRecurrence: false },
-      { iconsShowMode: 'recurrence', visibleMain: false, visibleRecurrence: true },
-      { iconsShowMode: 'none', visibleMain: false, visibleRecurrence: false },
-    ])('should shown icons correctly when iconsShowMode is \'$iconsShowMode\'', async ({ iconsShowMode, visibleMain, visibleRecurrence }) => {
-      const { scheduler, POM } = await createScheduler({
-        ...getDefaultConfig(),
-        editing: { form: { iconsShowMode } },
+    describe('Subject icon', () => {
+      it('has default color when appointment has no resources', async () => {
+        const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+        scheduler.showAppointmentPopup(commonAppointment);
+
+        const $icon = $(POM.popup.subjectIcon);
+        expect($icon.css('color')).toBe('');
       });
 
-      scheduler.showAppointmentPopup(commonAppointment);
+      it('has default color when showAppointmentPopup is called without data', async () => {
+        const { scheduler, POM } = await createScheduler(getDefaultConfig());
 
-      const mainFormIcons = POM.popup.mainGroup?.querySelectorAll(`.${CLASSES.icon}`) ?? [];
-      const recurrenceFormIcons = POM.popup.recurrenceGroup?.querySelectorAll(`.${CLASSES.icon}`) ?? [];
+        scheduler.showAppointmentPopup();
 
-      expect(mainFormIcons.length).toBe(4);
-      expect(recurrenceFormIcons.length).toBe(3);
-
-      const mainIconsCorrect = Array.from(mainFormIcons).every((icon) => {
-        const isVisible = !icon.classList.contains(CLASSES.hidden);
-        return isVisible === visibleMain;
+        const $icon = $(POM.popup.subjectIcon);
+        expect($icon.css('color')).toBe('');
       });
 
-      const recurrenceIconsCorrect = Array.from(recurrenceFormIcons).every((icon) => {
-        const isVisible = !icon.classList.contains(CLASSES.hidden);
-        return isVisible === visibleRecurrence;
-      });
+      it('has resource color when appointment has resource', async () => {
+        const resourceColor1 = 'rgb(255, 0, 0)';
+        const resourceColor2 = 'rgb(0, 0, 255)';
+        const { scheduler, POM } = await createScheduler({
+          ...getDefaultConfig(),
+          resources: [{
+            fieldExpr: 'roomId',
+            dataSource: [
+              { id: 1, text: 'Room 1', color: resourceColor1 },
+              { id: 2, text: 'Room 2', color: resourceColor2 },
+            ],
+          }],
+        });
 
-      expect(mainIconsCorrect).toBe(true);
-      expect(recurrenceIconsCorrect).toBe(true);
+        scheduler.showAppointmentPopup({
+          ...commonAppointment,
+          roomId: 1,
+        });
+
+        await new Promise(process.nextTick);
+
+        const $icon = $(POM.popup.subjectIcon);
+        expect($icon.css('color')).toBe(resourceColor1);
+
+        POM.popup.form.getEditor('roomId')?.option('value', 2);
+        await new Promise(process.nextTick);
+
+        expect($icon.css('color')).toBe(resourceColor2);
+      });
+    });
+
+    describe('Resource icons', () => {
+      it.each<{
+        iconsShowMode: 'both' | 'main' | 'none' | 'recurrence';
+        visibleMain: boolean;
+        visibleRecurrence: boolean;
+      }>([
+        { iconsShowMode: 'both', visibleMain: true, visibleRecurrence: true },
+        { iconsShowMode: 'main', visibleMain: true, visibleRecurrence: false },
+        { iconsShowMode: 'recurrence', visibleMain: false, visibleRecurrence: true },
+        { iconsShowMode: 'none', visibleMain: false, visibleRecurrence: false },
+      ])('should shown icons correctly when iconsShowMode is \'$iconsShowMode\'', async ({ iconsShowMode, visibleMain, visibleRecurrence }) => {
+        const { scheduler, POM } = await createScheduler({
+          ...getDefaultConfig(),
+          editing: { form: { iconsShowMode } },
+        });
+
+        scheduler.showAppointmentPopup(commonAppointment);
+
+        const mainFormIcons = POM.popup.mainGroup?.querySelectorAll(`.${CLASSES.icon}`) ?? [];
+        const recurrenceFormIcons = POM.popup.recurrenceGroup?.querySelectorAll(`.${CLASSES.icon}`) ?? [];
+
+        expect(mainFormIcons.length).toBe(4);
+        expect(recurrenceFormIcons.length).toBe(3);
+
+        const mainIconsCorrect = Array.from(mainFormIcons).every((icon) => {
+          const isVisible = !icon.classList.contains(CLASSES.hidden);
+          return isVisible === visibleMain;
+        });
+
+        const recurrenceIconsCorrect = Array.from(recurrenceFormIcons).every((icon) => {
+          const isVisible = !icon.classList.contains(CLASSES.hidden);
+          return isVisible === visibleRecurrence;
+        });
+
+        expect(mainIconsCorrect).toBe(true);
+        expect(recurrenceIconsCorrect).toBe(true);
+      });
     });
   });
 
