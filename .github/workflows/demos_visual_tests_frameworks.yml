@@ -30,7 +30,7 @@ jobs:
         run: echo "should-run=${{ env.RUN_TESTS }}" >> $GITHUB_OUTPUT
 
   build-devextreme:
-    runs-on: ubuntu-22.04
+    runs-on: devextreme-shr2
     name: Build DevExtreme
     needs: check-should-run
     if: needs.check-should-run.outputs.should-run == 'true'
@@ -93,7 +93,7 @@ jobs:
           retention-days: 1
 
   build-demos:
-    runs-on: ubuntu-22.04
+    runs-on: devextreme-shr2
     name: Build Demos
     timeout-minutes: 20
     needs: [check-should-run, build-devextreme]
@@ -154,7 +154,7 @@ jobs:
     - name: Demos - Run tsc
       if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'force all tests')
       working-directory: apps/demos
-      run: tsc --noEmit
+      run: pnpm exec tsc --noEmit
 
     - name: Copy build artifacts
       uses: actions/upload-artifact@v4
@@ -165,7 +165,7 @@ jobs:
         retention-days: 1
 
   get-changes:
-    runs-on: ubuntu-22.04
+    runs-on: devextreme-shr2
     needs: check-should-run
     if: github.event_name == 'pull_request' && needs.check-should-run.outputs.should-run == 'true'
     name: Get changed demos
@@ -263,7 +263,7 @@ jobs:
     needs: [check-should-run, build-devextreme]
     if: needs.check-should-run.outputs.should-run == 'true'
 
-    runs-on: ubuntu-22.04
+    runs-on: devextreme-shr2
     timeout-minutes: 60
 
     steps:
@@ -349,7 +349,7 @@ jobs:
 
   check_generated_demos:
     name: ${{ matrix.name }}
-    runs-on: ubuntu-22.04
+    runs-on: devextreme-shr2
     timeout-minutes: 10
     needs: [check-should-run, build-devextreme]
     if: needs.check-should-run.outputs.should-run == 'true'
@@ -444,7 +444,7 @@ jobs:
         CONSTEL: [react(1/4), react(2/4), react(3/4), react(4/4), vue(1/4), vue(2/4), vue(3/4), vue(4/4), angular(1/4), angular(2/4), angular(3/4), angular(4/4)]
         THEME: ['fluent.blue.light']
 
-    runs-on: ubuntu-22.04
+    runs-on: devextreme-shr2
     name: testcafe-${{ matrix.CONSTEL }}-${{ matrix.THEME }}
     timeout-minutes: 60
 

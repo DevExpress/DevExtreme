@@ -179,14 +179,12 @@ Object.values(FRAMEWORKS).forEach((approach) => {
 
           let comparisonResult;
           if (isGitHubDemos) {
-            comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`);
-            //  undefined,
-            //  comparisonOptions && {
-            //   ...comparisonOptions,
-            //   looksSameComparisonOptions: { antialiasingTolerance: 10 },
-            // });
+            comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions && {
+              ...comparisonOptions,
+              looksSameComparisonOptions: { antialiasingTolerance: 10 },
+            });
           } else {
-            comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`);
+            comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
           }
 
           const consoleMessages = await t.getBrowserConsoleMessages();

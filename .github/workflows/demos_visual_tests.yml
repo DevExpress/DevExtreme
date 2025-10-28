@@ -30,7 +30,7 @@ jobs:
         run: echo "should-run=${{ env.RUN_TESTS }}" >> $GITHUB_OUTPUT
 
   build:
-    runs-on: ubuntu-22.04
+    runs-on: devextreme-shr2
     name: Build devextreme
     needs: check-should-run
     if: needs.check-should-run.outputs.should-run == 'true'
@@ -94,7 +94,7 @@ jobs:
     env:
       ACCESSIBILITY_TESTCAFE_REPORT_PATH: "accessibility_testcafe_report"
 
-    runs-on: ubuntu-22.04
+    runs-on: devextreme-shr2
     name: ${{ matrix.CONSTEL }}-${{ matrix.STRATEGY }}-${{ matrix.THEME }}
     timeout-minutes: 30
 

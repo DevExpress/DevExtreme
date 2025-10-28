@@ -489,9 +489,7 @@ test('DateRangeBox & StartDateBox should be focused and stay opened after click 
   showClearButton: true,
   value: ['2021/09/17', '2021/10/24'],
   openOnFieldClick: true,
-}, '#container', {
-  disableFxAnimation: false,
-}));
+}, '#container'));
 
 test('DateRangeBox & StartDateBox should be focused after click on clear button', async (t) => {
   const dateRangeBox = new DateRangeBox('#container');
