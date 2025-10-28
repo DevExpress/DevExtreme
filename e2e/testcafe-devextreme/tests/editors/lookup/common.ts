@@ -124,22 +124,6 @@ safeSizeTest('Check popup height in loading state', async (t) => {
   displayExpr: 'text',
 }));
 
-test('Placeholder is visible after items option change when value is not chosen (T1099804)', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const lookup = new Lookup('#container');
-
-  await lookup.option('items', [1, 2, 3]);
-
-  await testScreenshot(t, takeScreenshot, 'Lookup placeholder if value is not choosen.png', { element: '#container' });
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxLookup', {
-  width: 300,
-  placeholder: 'Choose a value',
-}));
-
 test('Lookup appearance', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

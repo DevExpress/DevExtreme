@@ -238,6 +238,10 @@ test('DataGrid - FilterRow cell loses focus when focusedRowEnabled is true and e
       focusedRowEnabled: true,
       focusedRowKey: 1,
     });
+  }).after(async () => {
+    await ClientFunction(() => {
+      delete (window as any).myStore;
+    })();
   });
 });
 

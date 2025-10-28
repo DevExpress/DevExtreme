@@ -11,6 +11,8 @@ const DATA_GRID_SELECTOR = '#container';
 test('Editing should start by pressing enter after scrolling content with scrolling.mode=virtual', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
+  await t.expect(dataGrid.isReady()).ok();
+
   await dataGrid.scrollBy(t, { y: 10000 });
 
   await t.click(dataGrid.getDataCell(49, 1).element);

@@ -14,9 +14,8 @@ fixture.disablePageReloads`Master detail`
 test('Checkbox align right in masterdetail (T1045321) generic.light', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  // assert
   await t
-    .expect(await takeScreenshot('T1045321-generic.light.png', '#container'))
+    .expect(await takeScreenshot('T1045321-generic.light.png'))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
