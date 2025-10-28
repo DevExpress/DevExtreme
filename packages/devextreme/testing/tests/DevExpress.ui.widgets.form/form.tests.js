@@ -2623,6 +2623,126 @@ QUnit.test('Use \'itemOption\' with groups and one group has empty caption (T359
     assert.equal($testContainer.find('.' + FORM_GROUP_CAPTION_CLASS).last().text(), 'custom', 'new caption rendered');
 });
 
+QUnit.test('Use \'itemOption\' with path when items have same name or caption (T1311534)', function(assert) {
+    const targetField = {
+        itemType: 'simple',
+        name: 'Target',
+        editorType: 'dxTextBox',
+    };
+
+    const targetGroup = {
+        itemType: 'group',
+        caption: 'Target',
+        items: [
+            { itemType: 'simple', name: 'Field1', editorType: 'dxTextBox', },
+            { itemType: 'simple', name: 'Field2', editorType: 'dxTextBox', },
+            { itemType: 'simple', name: 'Field3', editorType: 'dxTextBox', },
+        ],
+    };
+
+    const targetFieldInGroup = {
+        ...targetField,
+        caption: 'Target in Group'
+    };
+
+    const form = $('#form').dxForm({
+        formData: {},
+        items: [
+            {
+                itemType: 'group',
+                name: 'ContainerGroup',
+                items: [
+                    { itemType: 'simple', name: 'Field4', editorType: 'dxTextBox', },
+                    targetGroup,
+                ]
+            },
+            {
+                itemType: 'group',
+                name: 'FieldGroup',
+                items: [
+                    targetFieldInGroup,
+                    { itemType: 'simple', name: 'Field5', editorType: 'dxTextBox', },
+                ],
+            },
+            targetField,
+        ]
+    }).dxForm('instance');
+
+    assert.deepEqual(form.itemOption('Target'), targetField, 'Simple item retrieved by name');
+    assert.deepEqual(form.itemOption('ContainerGroup.Target'), targetGroup, 'Group item in group retrieved by path');
+    assert.deepEqual(form.itemOption('FieldGroup.Target'), targetFieldInGroup, 'Simple item in group retrieved by path');
+});
+
+QUnit.test('Use \'itemOption\' with path when items have same name in named and unnamed groups (T1311534)', function(assert) {
+    const targetField = {
+        itemType: 'simple',
+        name: 'Target',
+        editorType: 'dxTextBox',
+    };
+
+    const targetFieldInGroup = {
+        ...targetField,
+        caption: 'Target in Group'
+    };
+
+    const form = $('#form').dxForm({
+        formData: {},
+        items: [
+            {
+                itemType: 'group',
+                name: 'FieldGroup',
+                items: [
+                    targetFieldInGroup,
+                    { itemType: 'simple', name: 'Field5', editorType: 'dxTextBox', },
+                ],
+            },
+            {
+                itemType: 'group',
+                items: [
+                    { itemType: 'simple', name: 'Field4', editorType: 'dxTextBox', },
+                    targetField,
+                ]
+            },
+        ]
+    }).dxForm('instance');
+
+    assert.deepEqual(form.itemOption('Target'), targetField, 'Simple item in unnamed group retrieved by name');
+    assert.deepEqual(form.itemOption('FieldGroup.Target'), targetFieldInGroup, 'Simple item in group retrieved by path');
+});
+
+QUnit.test('Use \'itemOption\' with path in nested groups (T1311534)', function(assert) {
+    const targetField = {
+        itemType: 'simple',
+        name: 'Target',
+        editorType: 'dxTextBox',
+    };
+
+    const targetFieldInGroup = {
+        ...targetField,
+        caption: 'Target in Group'
+    };
+
+    const form = $('#form').dxForm({
+        formData: {},
+        items: [{
+            itemType: 'group',
+            items: [
+                {
+                    itemType: 'group',
+                    name: 'FieldGroup',
+                    items: [
+                        targetFieldInGroup,
+                        { itemType: 'simple', name: 'Field5', editorType: 'dxTextBox', },
+                    ],
+                },
+                { itemType: 'simple', name: 'Field4', editorType: 'dxTextBox', },
+            ]
+        }]
+    }).dxForm('instance');
+
+    assert.deepEqual(form.itemOption('FieldGroup.Target'), targetFieldInGroup, 'Simple item in group retrieved by path');
+});
+
 QUnit.test('Use \'itemOption\' with tabs', function(assert) {
     const $testContainer = $('#form').dxForm({
         formData: { EmployeeID: 1, LastName: 'John', FirstName: 'Dow', BirthData: '01/01/1970', HireDate: '12/11/1995', Country: 'USA', City: 'Phoenix', Region: 'Arizona', Title: 'Ms' },
