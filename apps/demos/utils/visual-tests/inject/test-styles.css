@@ -5,7 +5,9 @@ body {
 .dx-scrollable-scroll { visibility: hidden !important; }
 
 .dx-theme-material * {
-  -webkit-font-smoothing: antialiased;
-  /* stylelint-disable-next-line value-keyword-case */
-  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased !important;
+  
+  /* text-rendering: optimizeLegibility !important; */
+  text-rendering: geometricprecision !important;
 }
+

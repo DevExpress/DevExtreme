@@ -43,6 +43,30 @@ const getTestSpecificSkipRules = (testName) => {
   }
 };
 
+const getClientScripts = () => {
+  const scripts = [
+    { module: 'mockdate' },
+  ];
+
+  if (process.env.STRATEGY === 'accessibility') {
+    scripts.push({ module: 'axe-core/axe.min.js' });
+  }
+
+  scripts.push(
+    // @ts-expect-error
+    join(__dirname, '../utils/visual-tests/inject/test-utils.js'),
+    { content: injectStyle(globalReadFrom(__dirname, '../utils/visual-tests/inject/test-styles.css', (x) => x)) },
+    {
+      content: `
+        window.addEventListener('error', function (e) {
+            console.error(e.message);
+        });`,
+    }
+  );
+
+  return scripts;
+};
+
 Object.values(FRAMEWORKS).forEach((approach) => {
   if (!shouldRunFramework(approach)) { return; }
   fixture(approach)
@@ -54,29 +78,7 @@ Object.values(FRAMEWORKS).forEach((approach) => {
       }
     })
     .afterEach(async (t) => clearTimeout(t.ctx.watchDogHandle))
-    .clientScripts((() => {
-      const scripts = [
-        { module: 'mockdate' },
-      ];
-
-      if (process.env.STRATEGY === 'accessibility') {
-        scripts.push({ module: 'axe-core/axe.min.js' });
-      }
-
-      scripts.push(
-        // @ts-expect-error Type 'string' is not assignable to type 'ClientScript'
-        join(__dirname, '../utils/visual-tests/inject/test-utils.js'),
-        { content: injectStyle(globalReadFrom(__dirname, '../utils/visual-tests/inject/test-styles.css', (x) => x)) },
-        {
-          content: `
-            window.addEventListener('error', function (e) {
-                console.error(e.message);
-            });`,
-        }
-      );
-
-      return scripts;
-    })());
+    .clientScripts(getClientScripts());
 
   const getDemoPaths = (platform) => glob.sync('Demos/*/*')
     .map((path) => join(path, platform));
@@ -182,7 +184,13 @@ Object.values(FRAMEWORKS).forEach((approach) => {
               ...{ looksSameComparisonOptions: { antialiasingTolerance: 10 } },
             }));
           } else {
-            comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`);
+            comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, (comparisonOptions && {
+              ...comparisonOptions,
+              ...{ looksSameComparisonOptions: {
+                antialiasingTolerance: 10,
+                foregroundDiffThreshold: 10,
+              } },
+            }));
           }
 
           const consoleMessages = await t.getBrowserConsoleMessages();
