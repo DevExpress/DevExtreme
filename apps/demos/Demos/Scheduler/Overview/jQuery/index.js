@@ -17,6 +17,7 @@ $(() => {
         allowMultiple: false,
         dataSource: employees,
         label: 'Employee',
+        icon: 'group',
       },
     ],
     dataCellTemplate(cellData, index, container) {
