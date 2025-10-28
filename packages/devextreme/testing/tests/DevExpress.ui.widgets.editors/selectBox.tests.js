@@ -15,6 +15,8 @@ import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelp
 import { normalizeKeyName } from 'common/core/events/utils/index';
 import messageLocalization from 'common/core/localization/message';
 
+import { shouldSkipOnMobile } from '../../helpers/device.js';
+
 import 'generic_light.css!';
 import 'ui/validator';
 
@@ -932,6 +934,10 @@ QUnit.module('functionality', moduleSetup, () => {
     });
 
     QUnit.test('the selected item should be focused after popup is opened', function(assert) {
+        if(shouldSkipOnMobile(assert)) {
+            return;
+        }
+
         const items = [1, 2, 3];
         const item = items[1];
         const selectBox = $('#selectBox').dxSelectBox({
@@ -6086,6 +6092,10 @@ QUnit.module('focus policy', {
     });
 
     QUnit.test('selectbox should not focus disabled item after the search', function(assert) {
+        if(shouldSkipOnMobile(assert)) {
+            return;
+        }
+
         this.instance.option({
             searchEnabled: true,
             opened: true,
