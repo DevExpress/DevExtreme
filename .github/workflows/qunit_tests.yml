@@ -10,12 +10,24 @@ on:
       - 'apps/**/*.md'
   push:
     branches: [25_2]
+  workflow_dispatch:
 
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
   NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
+  RUN_ALL_TESTS: true
 
 jobs:
+  check-should-run-all:
+    name: Check if all tests should run
+    runs-on: devextreme-shr2
+    outputs:
+      should-run: ${{ steps.check.outputs.should-run }}
+    steps:
+      - name: Check RUN_ALL_TESTS flag
+        id: check
+        run: echo "should-run=${{ env.RUN_ALL_TESTS }}" >> $GITHUB_OUTPUT
+
   build:
     runs-on: devextreme-shr2
     name: Build
@@ -122,7 +134,8 @@ jobs:
         useCsp: ${{ matrix.CSP }}
 
   qunit-tests-shadow-dom:
-    needs: build
+    needs: [check-should-run-all, build]
+    if: needs.check-should-run-all.outputs.should-run == 'true'
     runs-on: devextreme-shr2
     name: ${{ matrix.constel }}-shadow-dom
     timeout-minutes: 25

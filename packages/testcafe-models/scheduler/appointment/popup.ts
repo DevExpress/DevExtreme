@@ -24,6 +24,17 @@ export const SELECTORS = {
   endTimeZoneEditor: `.dx-scheduler-form-end-date-timezone-editor .dx-selectbox.dx-widget`,
   repeatEditor: `.dx-scheduler-form-repeat-editor .dx-selectbox.dx-widget`,
   descriptionEditor: `.dx-scheduler-form-description-editor .dx-textarea.dx-widget`,
+  recurrenceGroup: '.dx-scheduler-form-recurrence-group',
+  repeatEditorButton: '.dx-scheduler-form-repeat-editor .dx-button-has-icon',
+  recurrenceSettingsButton: '.dx-scheduler-form-recurrence-settings-button',
+  repeatEveryInput: '.dx-scheduler-form-recurrence-settings-group [type="text"]',
+  weekDayButtons: '.dx-scheduler-days-of-week-buttons .dx-button',
+  monthDayInput: '.dx-scheduler-form-day-of-month-group [type="text"]',
+  yearlyMonthInput: '.dx-scheduler-form-recurrence-by-month-editor .dx-selectbox.dx-widget',
+  recurrenceEndRadioGroup: '.dx-scheduler-form-recurrence-end-editors',
+  recurrenceEndInputGroup: '.dx-scheduler-form-recurrence-end-group',
+  dayOfMonthInput: '.dx-scheduler-form-day-of-month-editor input[type="text"]',
+  listOption: '.dx-list-item',
 };
 
 export default class AppointmentPopup {
@@ -52,5 +63,103 @@ export default class AppointmentPopup {
 
   descriptionEditor: TextArea = new TextArea(this.contentElement.find(SELECTORS.descriptionEditor));
 
+  // Recurrence form elements
+  recurrence = {
+    group: Selector(SELECTORS.recurrenceGroup),
+    settingsButton: Selector(SELECTORS.recurrenceSettingsButton),
+    repeatEditorButton: Selector(SELECTORS.repeatEditorButton),
+    repeatEveryInput: Selector(SELECTORS.repeatEveryInput),
+    weekDayButtons: Selector(SELECTORS.weekDayButtons),
+    monthDayInput: Selector(SELECTORS.monthDayInput),
+    yearlyMonthInput: Selector(SELECTORS.yearlyMonthInput),
+    endRadioGroup: Selector(SELECTORS.recurrenceEndRadioGroup),
+    endInputGroup: Selector(SELECTORS.recurrenceEndInputGroup),
+  };
+
   constructor(private readonly scheduler: Selector) { }
+
+  async openRecurrenceForm(t: TestController, freq = 'Daily'): Promise<void> {
+    await t.click(this.repeatEditor.element);
+
+    const option = Selector(SELECTORS.listOption).withText(freq);
+    await t.click(option);
+
+    await t.wait(500);
+  }
+
+  async openRecurrenceSettings(t: TestController): Promise<void> {
+    await t.click(this.recurrence.settingsButton);
+    await t.wait(500);
+  }
+
+  async setRecurrenceInterval(t: TestController, interval: number): Promise<void> {
+    await t
+      .selectText(this.recurrence.repeatEveryInput)
+      .typeText(this.recurrence.repeatEveryInput, interval.toString(), { replace: true });
+  }
+
+  async selectRecurrenceWeekDays(t: TestController, daysIndex: number[]): Promise<void> {
+    const buttonsCount = await this.recurrence.weekDayButtons.count;
+
+    for (let index = 0; index < buttonsCount; index++) {
+      const button = this.recurrence.weekDayButtons.nth(index);
+      const isActive = await button.hasClass('dx-button-mode-contained');
+      const shouldBeActive = daysIndex.includes(index);
+
+      if (isActive !== shouldBeActive) {
+        await t.click(button);
+      }
+    }
+  }
+
+  async setRecurrenceMonthDay(t: TestController, day: number): Promise<void> {
+    await t
+      .selectText(this.recurrence.monthDayInput)
+      .typeText(this.recurrence.monthDayInput, day.toString(), { replace: true });
+  }
+
+  async setRecurrenceYearlyMonth(t: TestController, month: string): Promise<void> {
+    await t.click(this.recurrence.yearlyMonthInput);
+
+    const option = Selector(SELECTORS.listOption).withText(month);
+    await t.click(option);
+  }
+
+  async setRecurrenceYearlyDate(t: TestController, month: string, day: number): Promise<void> {
+   await this.setRecurrenceYearlyMonth(t, month);
+    await t
+      .selectText(SELECTORS.dayOfMonthInput)
+      .typeText(SELECTORS.dayOfMonthInput, day.toString(), { replace: true });
+  }
+
+  async setRecurrenceEnd(
+    t: TestController,
+    type: 'never' | 'count' | 'until',
+    value?: number | string,
+  ): Promise<void> {
+    if (type === 'never') {
+      const neverRadio = this.recurrence.endRadioGroup.find('.dx-radiobutton').nth(0);
+      await t.click(neverRadio);
+    } else if (type === 'until') {
+      const untilRadio = this.recurrence.endRadioGroup.find('.dx-radiobutton').nth(1);
+      await t.click(untilRadio);
+
+      if (value !== undefined) {
+        const untilEditor = this.recurrence.endInputGroup.find('[type="text"]').nth(0);
+        await t
+          .selectText(untilEditor)
+          .typeText(untilEditor, value.toString(), { replace: true });
+      }
+    } else if (type === 'count') {
+      const countRadio = this.recurrence.endRadioGroup.find('.dx-radiobutton').nth(2);
+      await t.click(countRadio);
+
+      if (value !== undefined) {
+        const countEditor = this.recurrence.endInputGroup.find('[type="text"]').nth(1);
+        await t
+          .selectText(countEditor)
+          .typeText(countEditor, value.toString(), { replace: true });
+      }
+    }
+  }
 }

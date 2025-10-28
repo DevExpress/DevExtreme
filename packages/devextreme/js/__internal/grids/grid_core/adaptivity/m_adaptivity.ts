@@ -506,6 +506,28 @@ export class AdaptiveColumnsController extends modules.ViewController {
     }
   }
 
+  public _toggleGroupAdaptiveRowVisibility(isBestFit: boolean) {
+    const hasHiddenColumns = this.hasHiddenColumns() || this.getHidingColumnsQueue().length > 0;
+
+    if (!hasHiddenColumns) {
+      return;
+    }
+
+    const rowsView = this.getView(ROWS_VIEW);
+    const items = this._dataController.items();
+
+    if (!items || items.length === 0) {
+      return;
+    }
+
+    items.forEach((item, index) => {
+      if (item.rowType === ADAPTIVE_ROW_TYPE) {
+        const $row = $(rowsView.getRowElement(index));
+        $row.css('display', isBestFit ? 'none' : '');
+      }
+    });
+  }
+
   private _isCellValid($cell) {
     return $cell && $cell.length && !$cell.hasClass(MASTER_DETAIL_CELL_CLASS) && !$cell.hasClass(GROUP_CELL_CLASS);
   }
@@ -1301,6 +1323,7 @@ const resizing = (Base: ModuleType<ResizingController>) => class AdaptivityResiz
   }
 
   protected _toggleBestFitMode(isBestFit) {
+    this._adaptiveColumnsController._toggleGroupAdaptiveRowVisibility(isBestFit);
     isBestFit && this._adaptiveColumnsController._showHiddenColumns();
     super._toggleBestFitMode(isBestFit);
   }
