@@ -4,7 +4,7 @@ import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { resourceApiMock } from '../../apiMocks/resourceApiMock';
 
-fixture.disablePageReloads`Scheduler API - request counting`
+fixture`Scheduler API - request counting`
   .page(url(__dirname, '../../../container.html'));
 
 const requestLogger = RequestLogger(/\/api\/data/);
