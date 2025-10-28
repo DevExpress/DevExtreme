@@ -21,6 +21,8 @@ import timeZoneUtils from '../m_utils_time_zone';
 import type { SafeAppointment } from '../types';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
 import { DEFAULT_ICONS_SHOW_MODE } from '../utils/options/constants';
+import { getAppointmentGroupIndex, getRawAppointmentGroupValues, getSafeGroupValues } from '../utils/resource_manager/appointment_groups_utils';
+import type { ResourceManager } from '../utils/resource_manager/resource_manager';
 import { RecurrenceForm } from './m_recurrence_form';
 import { createFormIconTemplate, getStartDateCommonConfig, RecurrenceRule } from './utils';
 

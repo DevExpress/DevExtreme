@@ -835,8 +835,8 @@ describe('Appointment Popup Form', () => {
         expect($icon.css('color')).toBe(resourceColor2);
       });
     });
-    
-    describe('resource icons', () => {
+
+    describe('Resource icons', () => {
       it.each<{
         iconsShowMode: 'both' | 'main' | 'none' | 'recurrence';
         visibleMain: boolean;
