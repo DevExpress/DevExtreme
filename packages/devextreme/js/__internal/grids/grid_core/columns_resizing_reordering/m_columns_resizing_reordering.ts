@@ -1436,7 +1436,7 @@ export class DraggingHeaderViewController extends modules.ViewController {
    * @param columns All columns in the given location
    * @param location Location where we move column (headers, group, column chooser, etc.)
    * @param sourceColumn Column that is dragging
-   * @param cells collection of draggable cells wrapped into jQuery object
+   * @param cells JQuery-wrapped collection of header cell elements
    * @returns whether to filter current point (true - remove point, false - keep it)
    */
 
