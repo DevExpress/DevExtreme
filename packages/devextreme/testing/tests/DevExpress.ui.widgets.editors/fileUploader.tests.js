@@ -4872,7 +4872,7 @@ QUnit.module('File limit', moduleConfig, () => {
         const instance = $element.dxFileUploader('instance');
 
         assert.strictEqual(fileLimitReachedCount, 1, 'onFileLimitReached was called on init');
-        assert.strictEqual(instance.option('value').length, 0, 'value was reset to empty array');
+        assert.strictEqual(instance.option('value').length, 3, 'value won\'t reset to empty array');
     });
 
     QUnit.test('onFileLimitReached should be fired when value is changed programmatically and exceeds _maxFileCount', function(assert) {
@@ -4894,7 +4894,7 @@ QUnit.module('File limit', moduleConfig, () => {
 
         instance.option('value', [fakeFile, fakeFile1, fakeFile2]);
         assert.strictEqual(fileLimitReachedCount, 1, 'onFileLimitReached was called when setting 3 files');
-        assert.strictEqual(instance.option('value').length, 2, 'value was not changed, still 2 files');
+        assert.strictEqual(instance.option('value').length, 3, 'value is changed');
     });
 });
 
