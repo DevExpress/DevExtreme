@@ -4,10 +4,14 @@ import type { GridBase } from '@js/common/grids';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 
+import { AIPromptEditorModel } from './ai_prompt_editor';
+
 const SELECTORS = {
   headerRowClass: 'dx-header-row',
   dataRowClass: 'dx-data-row',
   groupRowClass: 'dx-group-row',
+  aiDialog: 'dx-aidialog',
+  aiPromptEditor: 'dx-ai-prompt-editor',
 };
 
 export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
@@ -43,6 +47,18 @@ export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
 
   public getHeaderByText(text: string): dxElementWrapper {
     return $(Array.from(this.getHeaderCells()).find((el) => $(el).text().includes(text)));
+  }
+
+  public getAIDialog(): HTMLElement {
+    return document.body.querySelector(`.${SELECTORS.aiDialog}`) as HTMLElement;
+  }
+
+  private getPromptEditorContainer(): HTMLElement {
+    return this.root.querySelector(`.${SELECTORS.aiPromptEditor}`) as HTMLElement;
+  }
+
+  public getAIPromptEditor(): AIPromptEditorModel {
+    return new AIPromptEditorModel(this.getPromptEditorContainer());
   }
 
   public abstract getInstance(): TInstance;

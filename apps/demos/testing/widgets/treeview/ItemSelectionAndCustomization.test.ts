@@ -16,8 +16,8 @@ runManualTest('TreeView', 'ItemSelectionAndCustomization', (test) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
-      .click($(`.${OPTION_CLASS} .${SELECTBOX_CLASS}`).nth(0))
-      .wait(200);
+      .click($(`.${OPTION_CLASS} .${SELECTBOX_CLASS}`).nth(0));
+    //  .wait(200);
 
     await testScreenshot(t, takeScreenshot, 'treeview_selection_field_is_open.png');
 

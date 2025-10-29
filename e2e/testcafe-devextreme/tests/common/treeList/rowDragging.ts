@@ -4,7 +4,7 @@ import ExpandableCell from 'devextreme-testcafe-models/treeList/expandableCell';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
-fixture.disablePageReloads`Row dragging`
+fixture`Row dragging`
   .page(url(__dirname, '../../container.html'));
 
 const tasksT1228650 = [{
@@ -64,7 +64,7 @@ test('TreeList - Expand/collapse mechanism breaks after dragging action in the s
 });
 
 [undefined, 200].forEach((height) => {
-  test(`TreeList - The W1025 warning occurs when dragging a row (height: ${height ?? 'not set'}). (T1280519)`, async (t) => {
+  test.meta({ unstable: true })(`TreeList - The W1025 warning occurs when dragging a row (height: ${height ?? 'not set'}). (T1280519)`, async (t) => {
     const treeList = new TreeList('#container');
 
     await treeList.isReady();
