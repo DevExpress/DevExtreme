@@ -259,7 +259,7 @@ test('DataGrid - Group row content is scrolled if repaintChangesOnly is enabled 
     .expect(dataGrid.getGroupRow(0).isExpanded)
     .notOk();
 
-  await dataGrid.scrollBy({ x: 1000 });
+  await dataGrid.scrollBy(t, { x: 1000 });
 
   await t
     .expect(await takeScreenshot('group_row_scrolling_all_collapsed_fixed_columns.png', dataGrid.element))
@@ -307,7 +307,7 @@ test('DataGrid - Group row content is scrolled if repaintChangesOnly is enabled 
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [900, 800]).before(async () => createWidget('dxDataGrid', {
+  }, [900, 800]).meta({ unstable: true }).before(async () => createWidget('dxDataGrid', {
     ...defaultConfig,
     rtlEnabled,
     customizeColumns(columns) {

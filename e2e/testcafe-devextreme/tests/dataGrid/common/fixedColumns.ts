@@ -220,6 +220,8 @@ safeSizeTest('Fixed to the right columns should appear when any column has undef
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await t.expect(dataGrid.isReady()).ok();
+
   // act
   await takeScreenshot('T1177143-right-fixed-column-with-no-width-columns-1.png', dataGrid.element);
 

@@ -4720,3 +4720,181 @@ QUnit.module('Accessibility', moduleConfig, () => {
     });
 });
 
+QUnit.module('File limit', moduleConfig, () => {
+    QUnit.test('onFileLimitReached should be fired when selecting files exceeds the limit', function(assert) {
+        assert.expect(3);
+
+        let fileLimitReachedCount = 0;
+
+        const $element = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            _maxFileCount: 2,
+            onFileLimitReached: (e) => {
+                fileLimitReachedCount++;
+
+                const { component, element } = e;
+
+                assert.strictEqual(component, $element.dxFileUploader('instance'), 'component field is correct');
+                assert.strictEqual($(element).is($element), true, 'element field is correct');
+            },
+        });
+
+        simulateFileChoose($element, [fakeFile, fakeFile1, fakeFile2]);
+
+        assert.strictEqual(fileLimitReachedCount, 1, 'onFileLimitReached callback was called once');
+    });
+
+    QUnit.test('files should not be added when limit is reached', function(assert) {
+        const $element = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            _maxFileCount: 2,
+            uploadMode: 'useButtons',
+        });
+        const instance = $element.dxFileUploader('instance');
+
+        simulateFileChoose($element, [fakeFile, fakeFile1]);
+        assert.strictEqual(instance.option('value').length, 2, 'two files were added');
+
+        simulateFileChoose($element, [fakeFile2]);
+        assert.strictEqual(instance.option('value').length, 2, 'files count is still 2, third file was not added');
+    });
+
+    QUnit.test('onFileLimitReached should be fired when drag and drop files exceeds the limit', function(assert) {
+        let fileLimitReachedCount = 0;
+
+        const $element = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            _maxFileCount: 2,
+            uploadMode: 'useButtons',
+            onFileLimitReached: () => {
+                fileLimitReachedCount++;
+            },
+        });
+
+        const instance = $element.dxFileUploader('instance');
+        const $inputWrapper = $element.find(`.${FILEUPLOADER_INPUT_WRAPPER_CLASS}`);
+
+        simulateFileChoose($element, [fakeFile]);
+        assert.strictEqual(instance.option('value').length, 1, 'one file was added');
+
+        const files = [fakeFile1, fakeFile2];
+
+        triggerDragEvent($inputWrapper, 'dragenter');
+        triggerDragEvent($inputWrapper, 'drop', { files, types: ['Files'] });
+
+        assert.strictEqual(fileLimitReachedCount, 1, 'onFileLimitReached was fired');
+        assert.strictEqual(instance.option('value').length, 1, 'files count is still 1');
+    });
+
+    QUnit.test('files should be added when count is less than limit', function(assert) {
+        const $element = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            _maxFileCount: 3,
+            uploadMode: 'useButtons',
+        });
+        const instance = $element.dxFileUploader('instance');
+
+        simulateFileChoose($element, [fakeFile, fakeFile1]);
+        assert.strictEqual(instance.option('value').length, 2, 'two files were added');
+
+        simulateFileChoose($element, [fakeFile2]);
+        assert.strictEqual(instance.option('value').length, 3, 'third file was added');
+    });
+
+    QUnit.test('_maxFileCount: undefined should not limit files', function(assert) {
+        let fileLimitReachedCount = 0;
+
+        const $element = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            _maxFileCount: undefined,
+            uploadMode: 'useButtons',
+            onFileLimitReached: () => {
+                fileLimitReachedCount++;
+            },
+        });
+        const instance = $element.dxFileUploader('instance');
+
+        simulateFileChoose($element, [fakeFile, fakeFile1, fakeFile2]);
+
+        assert.strictEqual(fileLimitReachedCount, 0, 'onFileLimitReached was not called');
+        assert.strictEqual(instance.option('value').length, 3, 'all three files were added');
+    });
+
+    QUnit.test('onFileLimitReached should not be fired when _maxFileCount is not set', function(assert) {
+        let fileLimitReachedCount = 0;
+
+        const $element = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            uploadMode: 'useButtons',
+            onFileLimitReached: () => {
+                fileLimitReachedCount++;
+            },
+        });
+        const instance = $element.dxFileUploader('instance');
+
+        simulateFileChoose($element, [fakeFile, fakeFile1, fakeFile2]);
+
+        assert.strictEqual(fileLimitReachedCount, 0, 'onFileLimitReached was not called');
+        assert.strictEqual(instance.option('value').length, 3, 'all files were added');
+    });
+
+    QUnit.test('file limit should work in instantly upload mode', function(assert) {
+        let fileLimitReachedCount = 0;
+
+        const $element = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            uploadMode: 'instantly',
+            _maxFileCount: 2,
+            onFileLimitReached: () => {
+                fileLimitReachedCount++;
+            },
+        });
+        const instance = $element.dxFileUploader('instance');
+
+        simulateFileChoose($element, [fakeFile, fakeFile1, fakeFile2]);
+
+        assert.strictEqual(fileLimitReachedCount, 1, 'onFileLimitReached was called');
+        assert.strictEqual(instance.option('value').length, 0, 'no files were added');
+    });
+
+    QUnit.test('onFileLimitReached should be fired on initial render when value exceeds _maxFileCount', function(assert) {
+        let fileLimitReachedCount = 0;
+
+        const $element = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            uploadMode: 'useButtons',
+            _maxFileCount: 2,
+            value: [fakeFile, fakeFile1, fakeFile2],
+            onFileLimitReached: () => {
+                fileLimitReachedCount++;
+            },
+        });
+        const instance = $element.dxFileUploader('instance');
+
+        assert.strictEqual(fileLimitReachedCount, 1, 'onFileLimitReached was called on init');
+        assert.strictEqual(instance.option('value').length, 3, 'value won\'t reset to empty array');
+    });
+
+    QUnit.test('onFileLimitReached should be fired when value is changed programmatically and exceeds _maxFileCount', function(assert) {
+        let fileLimitReachedCount = 0;
+
+        const $element = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            uploadMode: 'useButtons',
+            _maxFileCount: 2,
+            onFileLimitReached: () => {
+                fileLimitReachedCount++;
+            },
+        });
+        const instance = $element.dxFileUploader('instance');
+
+        instance.option('value', [fakeFile, fakeFile1]);
+        assert.strictEqual(fileLimitReachedCount, 0, 'onFileLimitReached was not called for 2 files');
+        assert.strictEqual(instance.option('value').length, 2, 'two files were set');
+
+        instance.option('value', [fakeFile, fakeFile1, fakeFile2]);
+        assert.strictEqual(fileLimitReachedCount, 1, 'onFileLimitReached was called when setting 3 files');
+        assert.strictEqual(instance.option('value').length, 3, 'value is changed');
+    });
+});
+
