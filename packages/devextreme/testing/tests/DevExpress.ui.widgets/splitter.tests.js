@@ -9,7 +9,7 @@ import { createEvent } from 'common/core/events/utils/index';
 import { name as DOUBLE_CLICK_EVENT } from 'common/core/events/double_click';
 import { name as CLICK_EVENT } from 'common/core/events/click';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
 const SPLITTER_ITEM_HIDDEN_CONTENT_CLASS = 'dx-splitter-item-hidden-content';

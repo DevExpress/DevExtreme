@@ -10,8 +10,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'generic_light.css!';
-
 const DATERANGEBOX_CLASS = 'dx-daterangebox';
 const TEXTEDITOR_WITH_LABEL_CLASS = 'dx-texteditor-with-label';
 const TEXTEDITOR_WITH_FLOATING_LABEL_CLASS = 'dx-texteditor-with-floating-label';

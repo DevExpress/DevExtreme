@@ -1,6 +1,5 @@
 import $ from 'jquery';
 
-import 'generic_light.css!';
 import 'ui/text_area';
 
 QUnit.testStart(function() {

@@ -4,8 +4,6 @@ import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translat
 import animationFrame from 'common/core/animation/frame';
 import pointerMock from '../../../helpers/pointerMock.js';
 
-import 'generic_light.css!';
-
 import {
     SCROLLABLE_CONTAINER_CLASS,
     SCROLLABLE_WRAPPER_CLASS,

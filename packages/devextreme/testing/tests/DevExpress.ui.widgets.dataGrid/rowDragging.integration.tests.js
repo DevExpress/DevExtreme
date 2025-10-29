@@ -5,6 +5,8 @@ import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.j
 import { CustomStore } from 'common/data/custom_store';
 import { generateItems } from '../../helpers/dataGridMocks.js';
 
+import 'fluent_blue_light.css!';
+
 QUnit.testStart(function() {
     const gridMarkup = `
         <div id='container'>
