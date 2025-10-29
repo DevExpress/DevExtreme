@@ -1,6 +1,6 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { createWidget } from '../../../../../helpers/createWidget';
-import url from '../../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
 
 // TODO: Enable multi-theming testcafe run in the future.
 fixture.disablePageReloads`Grouping Panel - Borders with enabled alternate rows`
@@ -125,102 +125,101 @@ const createDataGrid = async ({
 };
 
 const verifyGridStyles = async (t, dataGrid, matrixOptions) => {
-
   if (matrixOptions.showBorders) {
     const gridContainer = dataGrid.getContainer();
     const containerClasses = await gridContainer.getAttribute('class');
     await t.expect(containerClasses).contains('dx-datagrid-borders');
 
     const headersContainer = dataGrid.getHeadersContainer();
-    
+
     const borderTop = await headersContainer.getStyleProperty('border-top-width');
     const borderLeft = await headersContainer.getStyleProperty('border-left-width');
     const borderRight = await headersContainer.getStyleProperty('border-right-width');
-    
-    await t.expect(parseInt(borderTop)).gt(0);
-    await t.expect(parseInt(borderLeft)).gt(0);
-    await t.expect(parseInt(borderRight)).gt(0);
-    
+
+    await t.expect(parseInt(borderTop, 10)).gt(0);
+    await t.expect(parseInt(borderLeft, 10)).gt(0);
+    await t.expect(parseInt(borderRight, 10)).gt(0);
+
     const borderTopColor = await headersContainer.getStyleProperty('border-top-color');
     const borderLeftColor = await headersContainer.getStyleProperty('border-left-color');
     const borderRightColor = await headersContainer.getStyleProperty('border-right-color');
-    
+
     await t.expect(FORBIDDEN_COLORS).notContains(borderTopColor.toLowerCase());
     await t.expect(FORBIDDEN_COLORS).notContains(borderLeftColor.toLowerCase());
     await t.expect(FORBIDDEN_COLORS).notContains(borderRightColor.toLowerCase());
 
     const rowsView = dataGrid.getRowsView();
-    
+
     const rowsViewBorderTop = await rowsView.getStyleProperty('border-top-width');
     const rowsViewBorderLeft = await rowsView.getStyleProperty('border-left-width');
     const rowsViewBorderRight = await rowsView.getStyleProperty('border-right-width');
     const rowsViewBorderBottom = await rowsView.getStyleProperty('border-bottom-width');
-    
-    await t.expect(parseInt(rowsViewBorderTop)).gt(0);
-    await t.expect(parseInt(rowsViewBorderLeft)).gt(0);
-    await t.expect(parseInt(rowsViewBorderRight)).gt(0);
-    await t.expect(parseInt(rowsViewBorderBottom)).gt(0);
-    
+
+    await t.expect(parseInt(rowsViewBorderTop, 10)).gt(0);
+    await t.expect(parseInt(rowsViewBorderLeft, 10)).gt(0);
+    await t.expect(parseInt(rowsViewBorderRight, 10)).gt(0);
+    await t.expect(parseInt(rowsViewBorderBottom, 10)).gt(0);
+
     const rowsViewBorderTopColor = await rowsView.getStyleProperty('border-top-color');
     const rowsViewBorderLeftColor = await rowsView.getStyleProperty('border-left-color');
     const rowsViewBorderRightColor = await rowsView.getStyleProperty('border-right-color');
     const rowsViewBorderBottomColor = await rowsView.getStyleProperty('border-bottom-color');
-    
+
     await t.expect(FORBIDDEN_COLORS).notContains(rowsViewBorderTopColor.toLowerCase());
     await t.expect(FORBIDDEN_COLORS).notContains(rowsViewBorderLeftColor.toLowerCase());
     await t.expect(FORBIDDEN_COLORS).notContains(rowsViewBorderRightColor.toLowerCase());
     await t.expect(FORBIDDEN_COLORS).notContains(rowsViewBorderBottomColor.toLowerCase());
   }
-  
+
   if (matrixOptions.rowAlternationEnabled) {
     const rows = dataGrid.getRows();
-    for (let i = 1; i < rows.length; i++) {
+    for (let i = 1; i < rows.length; i += 1) {
       const currentRow = rows[i];
       const previousRow = rows[i - 1];
-      
+
       const currentClasses = await currentRow.element.getAttribute('class');
       const previousClasses = await previousRow.element.getAttribute('class');
-      
+
       if (currentClasses === previousClasses) {
         const currentBg = await currentRow.element.getStyleProperty('background-color');
         const previousBg = await previousRow.element.getStyleProperty('background-color');
-        
+
         await t.expect(currentBg).notEql(previousBg);
       }
     }
   }
-  
+
   if (matrixOptions.showRowLines && !matrixOptions.showBorders) {
-    const dataRows = dataGrid.dataRows;
+    const { dataRows } = dataGrid;
     const dataRowsCount = await dataRows.count;
-    
-    for (let i = 0; i < dataRowsCount; i++) {
+
+    for (let i = 0; i < dataRowsCount; i += 1) {
       const dataRow = dataRows.nth(i);
-      
+
       const borderTop = await dataRow.getStyleProperty('border-top-width');
       const borderTopStyle = await dataRow.getStyleProperty('border-top-style');
-      
-      await t.expect(parseInt(borderTop)).gt(0);
+
+      await t.expect(parseInt(borderTop, 10)).gt(0);
       await t.expect(borderTopStyle).notEql('none');
-      
+
       const borderBottom = await dataRow.getStyleProperty('border-bottom-width');
       const borderBottomStyle = await dataRow.getStyleProperty('border-bottom-style');
-      
-      await t.expect(parseInt(borderBottom)).gt(0);
+
+      await t.expect(parseInt(borderBottom, 10)).gt(0);
       await t.expect(borderBottomStyle).notEql('none');
     }
   }
-  
+
   if (matrixOptions.showColumnLines) {
     const cells = dataGrid.getCells();
     const cellsCount = await cells.count;
-    
-    for (let i = 0; i < cellsCount; i++) {
+
+    for (let i = 0; i < cellsCount; i += 1) {
       const cell = cells.nth(i);
-      
+
       const borderRightWidth = await cell.getStyleProperty('border-right-width');
       const borderRightColor = await cell.getStyleProperty('border-right-color');
-      
+
       await t.expect(borderRightWidth).eql('1px');
       await t.expect(FORBIDDEN_COLORS).notContains(borderRightColor.toLowerCase());
     }
@@ -228,12 +227,12 @@ const verifyGridStyles = async (t, dataGrid, matrixOptions) => {
 };
 
 const functionalTest = (matrixOptions) => {
-  test.only(`Should have correct applied styles with ${getTestParams(matrixOptions)}`, async (t) => {
+  test(`Should have correct applied styles with ${getTestParams(matrixOptions)}`, async (t) => {
     const dataGrid = new DataGrid(GRID_SELECTOR);
     await dataGrid.isReady();
-    
+
     await verifyGridStyles(t, dataGrid, matrixOptions);
-    
+
     const rowIdx = matrixOptions.hasMasterDetail ? 8 : 5;
     const colIdx = matrixOptions.hasMasterDetail ? 5 : 4;
     const deleteBtn = matrixOptions.hasFixedColumn
@@ -241,7 +240,7 @@ const functionalTest = (matrixOptions) => {
       : dataGrid.getDataRow(rowIdx).getCommandCell(colIdx).element;
 
     await t.click(deleteBtn);
-    
+
     await verifyGridStyles(t, dataGrid, matrixOptions);
   }).before(async () => {
     await createDataGrid(matrixOptions);

@@ -28,6 +28,7 @@ export const CLASS = {
   headers: 'headers',
   headerPanel: 'header-panel',
   searchBox: 'dx-searchbox',
+  row: 'dx-row',
   dataRow: 'dx-data-row',
   groupRow: 'dx-group-row',
   groupPanel: 'group-panel',
@@ -144,6 +145,10 @@ export default class DataGrid extends GridCore {
     return this.element.find(`.${CLASS.dataGrid}`);
   }
 
+  getHeadersContainer(): Selector {
+    return this.element.find(`.${this.addWidgetPrefix(CLASS.headers)}`);
+  }
+
   getHeaders(): Headers {
     return new Headers(this.element.find(`.${this.addWidgetPrefix(CLASS.headers)}`), this.getName());
   }
@@ -155,6 +160,15 @@ export default class DataGrid extends GridCore {
   getScrollContainer(): Selector {
     return this.getRowsView().find(`.${CLASS.scrollableContainer}`);
   }
+
+  getRows(): Selector {
+    return this.element.find(`.${CLASS.row}`);
+  }
+
+  getCells(): Selector {
+    return this.getRowsView().find('td:not([class])');
+  }
+
 
   getDataRow(index: number): DataRow {
     return new DataRow(this.element.find(`.${CLASS.dataRow}[aria-rowindex='${index + 1}']`), this.getName());
