@@ -5,9 +5,21 @@ import config from 'core/config';
 
 import ChatTextArea from '__internal/ui/chat/message_box/chat_text_area';
 import Button from 'ui/button';
+import FileUploader from 'ui/file_uploader';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const FILE_UPLOADER = 'dx-fileuploader';
+const FILE_UPLOADER_ATTACH_BUTTON = 'dx-textarea-attach-button';
+const FILEUPLOADER_CANCEL_BUTTON_CLASS = 'dx-fileuploader-cancel-button';
+
+const fakeFile = {
+    name: 'fakefile.png',
+    size: 100023,
+    type: 'image/png',
+    lastModifiedDate: Date.now()
+};
+
 
 const moduleConfig = {
     beforeEach: function() {
@@ -19,6 +31,9 @@ const moduleConfig = {
             const $buttons = this.$element.find(`.${BUTTON_CLASS}`);
             this.$sendButton = $($buttons[$buttons.length - 1]);
             this.sendButton = Button.getInstance(this.$sendButton);
+            this.$attachButton = this.$element.find(`.${FILE_UPLOADER_ATTACH_BUTTON}`);
+            this.$fileUploader = this.$element.find(`.${FILE_UPLOADER}`);
+            this.fileUploader = FileUploader.getInstance(this.$fileUploader);
         };
 
         this.reinit = (options) => {
@@ -54,8 +69,8 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
                 stylingMode: 'outlined',
                 placeholder: 'Type a message',
                 autoResizeEnabled: true,
-                maxHeight: '8em',
-                valueChangeEvent: 'input'
+                valueChangeEvent: 'input',
+                fileUploaderOptions: undefined,
             };
 
             Object.entries(expectedOptions).forEach(([key, value]) => {
@@ -87,63 +102,6 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
             this.$sendButton.trigger('dxclick');
 
             assert.strictEqual(this.$input.val(), emptyValue);
-        });
-
-        QUnit.test('send button should be enabled after entering any character', function(assert) {
-            keyboardMock(this.$input)
-                .focus()
-                .type('i');
-
-            const { disabled } = this.sendButton.option();
-
-            assert.strictEqual(disabled, false);
-        });
-
-        QUnit.test('send button should be disabled after entering any character and clicking the button', function(assert) {
-            keyboardMock(this.$input)
-                .focus()
-                .type('i');
-
-            this.$sendButton.trigger('dxclick');
-
-            const { disabled } = this.sendButton.option();
-
-            assert.strictEqual(disabled, true);
-        });
-
-        QUnit.test('send button should be disabled after entering only spaces', function(assert) {
-            const emptyValue = '    ';
-
-            keyboardMock(this.$input)
-                .focus()
-                .type(emptyValue);
-
-            const { disabled } = this.sendButton.option();
-
-            assert.strictEqual(disabled, true);
-        });
-
-        QUnit.test('send button should be disabled after entering only line breaks', function(assert) {
-            const lineBreakValue = '\n';
-
-            keyboardMock(this.$input)
-                .focus()
-                .type(lineBreakValue);
-
-            const { disabled } = this.sendButton.option();
-
-            assert.strictEqual(disabled, true);
-        });
-
-        QUnit.test('send button should be disabled after entering character and removing it', function(assert) {
-            keyboardMock(this.$input)
-                .focus()
-                .type('i')
-                .press('backspace');
-
-            const { disabled } = this.sendButton.option();
-
-            assert.strictEqual(disabled, true);
         });
     });
 
@@ -351,6 +309,247 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
                     assert.deepEqual(value, this.sendButton.option(key), `button ${key} value is correct`);
                 });
             });
+        });
+    });
+
+    QUnit.module('FileUploader', () => {
+        QUnit.test('should not be rendered if fileUploaderOptions are undefined', function(assert) {
+            this.reinit({
+                fileUploaderOptions: undefined,
+            });
+
+            assert.strictEqual(this.$fileUploader.length, 0, 'file uploader is not added');
+        });
+
+        QUnit.test('should be rendered if fileUploaderOptions are specified', function(assert) {
+            this.reinit({
+                fileUploaderOptions: {},
+            });
+
+            assert.strictEqual(this.$fileUploader.length, 1, 'file uploader is not rendered');
+            assert.strictEqual(this.fileUploader instanceof FileUploader, true, 'file uploader has correct instance');
+        });
+
+        QUnit.test('should not be rendered after fileUploaderOptions runtime updated', function(assert) {
+            assert.strictEqual(this.$fileUploader.length, 0, 'file uploader is not added');
+
+            this.instance.option('fileUploaderOptions', {});
+
+            const $fileUploader = this.$element.find(`.${FILE_UPLOADER}`);
+
+            assert.strictEqual($fileUploader.length, 1, 'file uploader is added');
+        });
+
+        [
+            { name: 'uploadMode', value: 'instantly' },
+            { name: '_hideCancelButtonOnUpload', value: false },
+            { name: '_showFileIcon', value: true },
+            { name: '_cancelButtonPosition', value: 'end' },
+            { name: 'multiple', value: true },
+        ].forEach(({ name, value }) => {
+            QUnit.test(`${name} should equal ${value} by default`, function(assert) {
+                this.reinit({
+                    fileUploaderOptions: {},
+                });
+
+                assert.strictEqual(this.fileUploader.option(name), value);
+            });
+        });
+
+        QUnit.test('It should be possible to redefine fileUploaderOptions.multiple option', function(assert) {
+            this.reinit({
+                fileUploaderOptions: {
+                    multiple: false,
+                },
+            });
+
+            assert.strictEqual(this.fileUploader.option('multiple'), false, 'multiple option is redefined');
+        });
+
+        QUnit.test('It should not be possible to redefine fileUploaderOptions.uploadMode option', function(assert) {
+            this.reinit({
+                fileUploaderOptions: {
+                    uploadMode: 'useButtons',
+                },
+            });
+
+            assert.strictEqual(this.fileUploader.option('uploadMode'), 'instantly', 'uploadMode option is not redefined');
+        });
+
+        QUnit.test('visible option should equal false when value is empty', function(assert) {
+            this.reinit({
+                fileUploaderOptions: {
+                    value: [],
+                }
+            });
+
+            assert.strictEqual(this.fileUploader.option('visible'), false, 'fileUploader is not visible');
+        });
+
+        QUnit.test('visible option should equal true when value is not empty', function(assert) {
+            this.reinit({
+                fileUploaderOptions: {
+                    value: [fakeFile],
+                }
+            });
+
+            assert.strictEqual(this.fileUploader.option('visible'), true, 'fileUploader is visible');
+        });
+
+        QUnit.test('visible option should change after runtime file adding', function(assert) {
+            this.reinit({
+                fileUploaderOptions: {
+                    value: [fakeFile],
+                }
+            });
+
+            assert.strictEqual(this.fileUploader.option('visible'), true, 'fileUploader is visible');
+
+            this.fileUploader.option('value', []);
+
+            assert.strictEqual(this.fileUploader.option('visible'), false, 'fileUploader is hidden');
+        });
+
+        QUnit.test('dialogTrigger option should equal attach button element', function(assert) {
+            this.reinit({
+                fileUploaderOptions: {}
+            });
+
+            const $dialogTrigger = $(this.fileUploader.option('dialogTrigger'));
+
+            assert.strictEqual($dialogTrigger.is(this.$attachButton), true);
+        });
+
+        QUnit.test('onValueChanged specified by user should be called in addition to inner one', function(assert) {
+            assert.expect(1);
+
+            this.reinit({
+                fileUploaderOptions: {
+                    onValueChanged: () => {
+                        assert.ok(true, 'onValueChanged was called');
+                    },
+                }
+            });
+
+            this.fileUploader.option('value', [fakeFile]);
+        });
+    });
+
+    QUnit.module('SendButton state', {
+        beforeEach: function() {
+            this.clock = sinon.useFakeTimers();
+        },
+        afterEach: function() {
+            this.clock.restore();
+        }
+    }, () => {
+        QUnit.test('send button should be enabled after entering any character', function(assert) {
+            keyboardMock(this.$input)
+                .focus()
+                .type('i');
+
+            const { disabled } = this.sendButton.option();
+
+            assert.strictEqual(disabled, false);
+        });
+
+        QUnit.test('send button should be disabled after entering any character and clicking the button', function(assert) {
+            keyboardMock(this.$input)
+                .focus()
+                .type('i');
+
+            this.$sendButton.trigger('dxclick');
+
+            const { disabled } = this.sendButton.option();
+
+            assert.strictEqual(disabled, true);
+        });
+
+        QUnit.test('send button should be disabled after entering only spaces', function(assert) {
+            const emptyValue = '    ';
+
+            keyboardMock(this.$input)
+                .focus()
+                .type(emptyValue);
+
+            const { disabled } = this.sendButton.option();
+
+            assert.strictEqual(disabled, true);
+        });
+
+        QUnit.test('send button should be disabled after entering only line breaks', function(assert) {
+            const lineBreakValue = '\n';
+
+            keyboardMock(this.$input)
+                .focus()
+                .type(lineBreakValue);
+
+            const { disabled } = this.sendButton.option();
+
+            assert.strictEqual(disabled, true);
+        });
+
+        QUnit.test('send button should be disabled after entering character and removing it', function(assert) {
+            keyboardMock(this.$input)
+                .focus()
+                .type('i')
+                .press('backspace');
+
+            const { disabled } = this.sendButton.option();
+
+            assert.strictEqual(disabled, true);
+        });
+
+        QUnit.test('send button should be enabled after adding and uploading files', function(assert) {
+            this.reinit({
+                fileUploaderOptions: {
+                    uploadFile: () => {},
+                },
+            });
+
+            this.fileUploader.option('value', [fakeFile]);
+            this.fileUploader.upload();
+
+            this.clock.tick();
+
+            const { disabled } = this.sendButton.option();
+
+            assert.strictEqual(disabled, false);
+        });
+
+        QUnit.test('send button should be disabled after adding and before uploading', function(assert) {
+            this.reinit({
+                fileUploaderOptions: {
+                    uploadFile: () => {},
+                },
+            });
+
+            this.fileUploader.option('value', [fakeFile]);
+
+            const { disabled } = this.sendButton.option();
+
+            assert.strictEqual(disabled, true);
+        });
+
+        QUnit.test('send button should be disabled after adding, uploading and removing', function(assert) {
+            this.reinit({
+                fileUploaderOptions: {
+                    uploadFile: () => {},
+                },
+            });
+
+            this.fileUploader.option('value', [fakeFile]);
+            this.fileUploader.upload();
+
+            this.clock.tick();
+
+            const $cancelButton = this.$element.find(`.${FILEUPLOADER_CANCEL_BUTTON_CLASS}`);
+
+            $cancelButton.trigger('dxclick');
+
+            const { disabled } = this.sendButton.option();
+
+            assert.strictEqual(disabled, true);
         });
     });
 });
