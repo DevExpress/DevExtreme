@@ -15,7 +15,7 @@ import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelp
 import { normalizeKeyName } from 'common/core/events/utils/index';
 import messageLocalization from 'common/core/localization/message';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import 'ui/validator';
 
 const EMPTY_MESSAGE_CLASS = 'dx-empty-message';

@@ -1,4 +1,3 @@
-import 'generic_light.css!';
 import { createWrapper, initTestMarkup, CLASSES, isDesktopEnvironment } from '../../helpers/scheduler/helpers.js';
 
 const { test, module, testStart } = QUnit;

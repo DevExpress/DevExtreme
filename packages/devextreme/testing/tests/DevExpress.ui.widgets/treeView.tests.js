@@ -188,8 +188,6 @@ window.makeSlowDataSource = function(data) {
     };
 };
 
-import 'generic_light.css!';
-
 import './treeViewParts/accessibility.js';
 import './treeViewParts/animation.js';
 import './treeViewParts/events.js';

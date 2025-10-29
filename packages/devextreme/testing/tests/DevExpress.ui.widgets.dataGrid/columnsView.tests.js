@@ -2,7 +2,7 @@ import $ from 'jquery';
 import dataUtils from 'core/element_data';
 import { addShadowDomStyles } from 'core/utils/shadow_dom.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import 'ui/data_grid';
 
 import browser from 'core/utils/browser';

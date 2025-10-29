@@ -16,7 +16,7 @@ import dateLocalization from 'common/core/localization/date';
 import { normalizeKeyName } from 'common/core/events/utils/index';
 import localization from 'localization';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 // calendar
 const CALENDAR_BODY_CLASS = 'dx-calendar-body';

@@ -4,8 +4,6 @@ import animationFrame from 'common/core/animation/frame';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import pointerMock from '../../../helpers/pointerMock.js';
 
-import 'generic_light.css!';
-
 import {
     SCROLLABLE_CONTAINER_CLASS,
     SCROLLABLE_CONTENT_CLASS,
