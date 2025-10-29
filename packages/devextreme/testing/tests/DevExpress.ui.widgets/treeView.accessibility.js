@@ -1,11 +1,17 @@
 import $ from 'jquery';
 import TreeView from 'ui/tree_view';
-import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
+import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 import eventsEngine from 'common/core/events/core/events_engine';
 
 const { module, test } = QUnit;
 
 const CHECK_BOX_CLASS = 'dx-checkbox';
+
+testStart(function() {
+    const markup = '<div id="treeView"></div>';
+
+    $('#qunit-fixture').html(markup);
+});
 
 let helper;
 [true, false].forEach((searchEnabled) => {

@@ -188,7 +188,6 @@ window.makeSlowDataSource = function(data) {
     };
 };
 
-import './treeViewParts/accessibility.js';
 import './treeViewParts/animation.js';
 import './treeViewParts/events.js';
 import './treeViewParts/expresions.js';
