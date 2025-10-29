@@ -1355,9 +1355,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
 
   .dx-command-ai-header-content {
     max-width: calc(100% - ($fluent-button-height - $fluent-grid-base-cell-horizontal-padding + $fluent-grid-base-command-ai-header-button-offset));
-  }
 
-  .dx-command-ai {
     .dx-#{$widget-name}-text-content {
       padding-left: $fluent-grid-base-command-ai-text-content-padding;
     }

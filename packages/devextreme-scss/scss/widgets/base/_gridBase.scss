@@ -1257,15 +1257,10 @@
     vertical-align: top;
   }
 
-  .dx-command-ai {
-    .dx-icon-chatsparkleoutline, .dx-command-ai-header-button {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-
-    .dx-icon-chatsparkleoutline {
-      left: 0;
-    }
+  .dx-command-ai-header-content .dx-icon-chatsparkleoutline, .dx-command-ai-header-button {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
   }
 }

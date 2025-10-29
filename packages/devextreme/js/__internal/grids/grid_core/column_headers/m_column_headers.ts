@@ -12,6 +12,7 @@ import { ColumnContextMenuMixin } from '@ts/grids/grid_core/context_menu/m_colum
 import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m_header_filter';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 
+import type { Column } from '../columns_controller/m_columns_controller';
 import { CLASSES as REORDERING_CLASSES } from '../columns_resizing_reordering/const';
 import type { HeadersKeyboardNavigationController } from '../keyboard_navigation/m_headers_keyboard_navigation';
 import { registerKeyboardAction } from '../m_accessibility';
@@ -36,41 +37,6 @@ const HEADER_FILTER_INDICATOR_CLASS = 'dx-header-filter-indicator';
 const MULTI_ROW_HEADER_CLASS = 'dx-header-multi-row';
 const LINK = 'dx-link';
 
-const createCellContent = function (that, $cell, options) {
-  const $cellContent = $('<div>').addClass(that.addWidgetPrefix(CLASSES.cellContent));
-
-  that.setAria('role', 'presentation', $cellContent);
-
-  addCssClassesToCellContent(that, $cell, options.column, $cellContent);
-  const showColumnLines = that.option('showColumnLines');
-  // TODO getController
-  const contentAlignment = that.getController('columns').getHeaderContentAlignment(options.column.alignment);
-
-  return $cellContent[showColumnLines || contentAlignment === 'right' ? 'appendTo' : 'prependTo']($cell);
-};
-
-function addCssClassesToCellContent(that, $cell, column, $cellContent?) {
-  const $indicatorElements = that._getIndicatorElements($cell, true);
-  const $visibleIndicatorElements = that._getIndicatorElements($cell);
-  const indicatorCount = $indicatorElements?.length;
-  const columnAlignment = that._getColumnAlignment(column.alignment);
-
-  const sortIndicatorClassName = `.${that._getIndicatorClassName('sort')}`;
-  const sortIndexIndicatorClassName = `.${that._getIndicatorClassName('sortIndex')}`;
-
-  const $sortIndicator = $visibleIndicatorElements.filter(sortIndicatorClassName);
-  const $sortIndexIndicator = $visibleIndicatorElements.children().filter(sortIndexIndicatorClassName);
-
-  $cellContent = $cellContent || $cell.children(`.${that.addWidgetPrefix(CLASSES.cellContent)}`);
-
-  $cellContent
-    .toggleClass(TEXT_CONTENT_ALIGNMENT_CLASS_PREFIX + columnAlignment, indicatorCount > 0)
-    .toggleClass(TEXT_CONTENT_ALIGNMENT_CLASS_PREFIX + (columnAlignment === 'left' ? 'right' : 'left'), indicatorCount > 0 && column.alignment === 'center')
-    .toggleClass(SORT_INDICATOR_CLASS, !!$sortIndicator.length)
-    .toggleClass(SORT_INDEX_INDICATOR_CLASS, !!$sortIndexIndicator.length)
-    .toggleClass(HEADER_FILTER_INDICATOR_CLASS, !!$visibleIndicatorElements.filter(`.${that._getIndicatorClassName('headerFilter')}`).length);
-}
-
 export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
   private _isGroupingChanged: any;
 
@@ -83,6 +49,56 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
   protected _headersKeyboardNavigation!: HeadersKeyboardNavigationController;
 
   protected _headerFilterController!: HeaderFilterController;
+
+  private addCssClassesToCellContent(
+    $cell: dxElementWrapper,
+    column: Column,
+    $cellContent?: dxElementWrapper,
+  ): void {
+    const $indicatorElements = this._getIndicatorElements($cell, true);
+    const $visibleIndicatorElements = this._getIndicatorElements($cell);
+    const indicatorCount = $indicatorElements?.length;
+    const columnAlignment = this._getColumnAlignment(column.alignment ?? '');
+
+    const sortIndicatorClassName = `.${this._getIndicatorClassName('sort')}`;
+    const sortIndexIndicatorClassName = `.${this._getIndicatorClassName('sortIndex')}`;
+
+    const $sortIndicator = $visibleIndicatorElements.filter(sortIndicatorClassName);
+    const $sortIndexIndicator = $visibleIndicatorElements
+      .children()
+      .filter(sortIndexIndicatorClassName);
+    const $content = $cellContent
+      ?? $cell.children(`.${this.addWidgetPrefix(CLASSES.cellContent)}`);
+
+    $content
+      .toggleClass(TEXT_CONTENT_ALIGNMENT_CLASS_PREFIX + columnAlignment, indicatorCount > 0)
+      .toggleClass(TEXT_CONTENT_ALIGNMENT_CLASS_PREFIX + (columnAlignment === 'left' ? 'right' : 'left'), indicatorCount > 0 && column.alignment === 'center')
+      .toggleClass(SORT_INDICATOR_CLASS, !!$sortIndicator.length)
+      .toggleClass(SORT_INDEX_INDICATOR_CLASS, !!$sortIndexIndicator.length)
+      .toggleClass(HEADER_FILTER_INDICATOR_CLASS, !!$visibleIndicatorElements.filter(`.${this._getIndicatorClassName('headerFilter')}`).length);
+  }
+
+  protected createCellContent(
+    $cell: dxElementWrapper,
+    column: Column,
+  ): dxElementWrapper {
+    const $cellContent = $('<div>').addClass(this.addWidgetPrefix(CLASSES.cellContent));
+
+    this.setAria('role', 'presentation', $cellContent);
+
+    this.addCssClassesToCellContent($cell, column, $cellContent);
+    const showColumnLines = this.option('showColumnLines');
+    // TODO getController
+    const contentAlignment = this.getController('columns').getHeaderContentAlignment(column.alignment);
+
+    if (showColumnLines || contentAlignment === 'right') {
+      $cellContent.appendTo($cell);
+    } else {
+      $cellContent.prependTo($cell);
+    }
+
+    return $cellContent;
+  }
 
   public init(): void {
     super.init();
@@ -119,7 +135,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     if (column.command === 'empty') {
       this._renderEmptyMessage($container, options);
     } else if (needCellContent) {
-      const $content = createCellContent(this, $container, options);
+      const $content = this.createCellContent($container, column);
 
       $content.text(caption);
     } else if (column.command) {
@@ -135,7 +151,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
       return;
     }
 
-    const $cellContent = createCellContent(this, $container, options);
+    const $cellContent = this.createCellContent($container, options.column);
     const needSplit = textEmpty.includes('{0}');
 
     if (needSplit) {
@@ -191,7 +207,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     if (options.rowType === 'header' && renderingTemplate && column.headerCellTemplate && !column.command) {
       resultTemplate = {
         render(options) {
-          const $content = createCellContent(that, options.container, options.model);
+          const $content = that.createCellContent(options.container, options.model);
           renderingTemplate.render(extend({}, options, { container: $content }));
         },
       };
@@ -433,7 +449,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
       this._alignCaptionByCenter($cell);
     }
 
-    addCssClassesToCellContent(this, $cell, column);
+    this.addCssClassesToCellContent($cell, column);
 
     return $indicatorElement;
   }

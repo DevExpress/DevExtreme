@@ -1,7 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { getImageContainer } from '@js/core/utils/icon';
 import type { Properties as DropDownProperties } from '@js/ui/drop_down_button';
 import DropDownButton from '@js/ui/drop_down_button';
 import domAdapter from '@ts/core/m_dom_adapter';
@@ -14,7 +13,8 @@ import { View } from '../m_modules';
 import type { ModuleType } from '../m_types';
 import { AIPromptEditor } from './ai_prompt_editor/ai_prompt_editor';
 import type { AIPromptEditorOptions } from './ai_prompt_editor/types';
-import { AI_CHAT_SPARKLE_OUTLINE, AI_COLUMN_NAME, CLASSES } from './const';
+import { AI_COLUMN_NAME, CLASSES } from './const';
+import { createAIHeaderContainer, createChatSparkleOutlineIcon } from './dom';
 import type { AIColumnController } from './m_ai_column_controller';
 import {
   getAICommandColumnDefaultOptions, isAIColumnAutoMode, isEditorOptions, isPopupOptions,
@@ -198,19 +198,25 @@ export const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) =
     return column?.ai?.showHeaderMenu !== false;
   }
 
+  private renderAIHeader($container: dxElementWrapper, column: Column): void {
+    const $iconElement = createChatSparkleOutlineIcon();
+    const $aiHeaderContainer = createAIHeaderContainer();
+    const $cellContent = this.createCellContent($container, column);
+
+    $cellContent.text(column.caption ?? '');
+    $aiHeaderContainer
+      .append($iconElement)
+      .append($cellContent)
+      .appendTo($container);
+  }
+
   protected getHeaderDefaultTemplate($container: dxElementWrapper, options): void {
-    super.getHeaderDefaultTemplate($container, options);
-
     if (this.isAIColumn(options)) {
-      const $iconElement = getImageContainer(AI_CHAT_SPARKLE_OUTLINE) as dxElementWrapper;
-      const $aiHeaderContainer = $('<div>').addClass(CLASSES.aiColumnHeaderContent);
-      const $cellContent = $container.find(`.${this.addWidgetPrefix(HEADERS_CLASSES.cellContent)}`);
-
-      $aiHeaderContainer
-        .append($iconElement)
-        .append($cellContent)
-        .appendTo($container);
+      this.renderAIHeader($container, options.column);
+      return;
     }
+
+    super.getHeaderDefaultTemplate($container, options);
   }
 
   protected _processTemplate(template, options) {
@@ -228,5 +234,14 @@ export const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) =
     }
 
     return renderingTemplate;
+  }
+
+  public renderDragCellContent($dragContainer: dxElementWrapper, column: Column): void {
+    if (column.type === AI_COLUMN_NAME) {
+      this.renderAIHeader($dragContainer, column);
+      return;
+    }
+
+    super.renderDragCellContent($dragContainer, column);
   }
 };

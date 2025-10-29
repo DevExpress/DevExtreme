@@ -1140,25 +1140,13 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
 
   .dx-command-ai-header-content {
     max-width: calc(100% - ($generic-grid-base-command-ai-header-button-size - $generic-grid-base-cell-padding));
-  }
 
-  .dx-command-ai {
     .dx-#{$widget-name}-text-content {
       padding-left: $generic-grid-base-command-ai-text-content-padding;
     }
 
     .dx-icon-chatsparkleoutline {
       @include dx-icon-sizing($generic-grid-base-command-ai-chatsparkleoutline-icon-size);
-    }
-
-    .dx-command-ai-header-button .dx-button {
-      @include dx-button-sizing(
-        $generic-grid-base-command-ai-header-button-padding,
-        $generic-grid-base-command-ai-header-button-padding,
-        $generic-grid-base-command-ai-header-button-padding,
-        $generic-base-icon-size,
-        0
-      );
     }
   }
 
@@ -1170,5 +1158,15 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
   td[style*="text-align: right"] .dx-command-ai-header-button {
     left: 0;
     right: auto;
+  }
+
+  .dx-command-ai .dx-command-ai-header-button .dx-button {
+    @include dx-button-sizing(
+      $generic-grid-base-command-ai-header-button-padding,
+      $generic-grid-base-command-ai-header-button-padding,
+      $generic-grid-base-command-ai-header-button-padding,
+      $generic-base-icon-size,
+      0
+    );
   }
 }

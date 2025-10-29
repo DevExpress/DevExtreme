@@ -1331,19 +1331,13 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
 
   .dx-command-ai-header-content {
     max-width: calc(100% - ($material-button-height - $material-grid-base-cell-horizontal-padding + $material-grid-base-command-ai-header-button-offset));
-  }
 
-  .dx-command-ai {
     .dx-#{$widget-name}-text-content {
       padding-left: $material-grid-base-command-ai-text-content-padding;
     }
 
     .dx-icon-chatsparkleoutline {
       @include dx-icon-sizing($material-grid-base-command-ai-chatsparkleoutline-icon-size);
-    }
-
-    .dx-command-ai-header-button .dx-button {
-      @include dx-button-onlyicon-sizing();
     }
   }
 
@@ -1355,5 +1349,9 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
   td[style*="text-align: right"] .dx-command-ai-header-button {
     left: $material-grid-base-command-ai-header-button-offset;
     right: auto;
+  }
+
+  .dx-command-ai .dx-command-ai-header-button .dx-button {
+    @include dx-button-onlyicon-sizing();
   }
 }
