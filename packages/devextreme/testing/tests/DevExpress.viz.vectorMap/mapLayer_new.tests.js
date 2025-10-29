@@ -11,7 +11,7 @@ import legendModule from 'viz/vector_map/legend';
 import tooltipModule from 'viz/core/tooltip';
 import tooltipViewerModule from 'viz/vector_map/tooltip_viewer';
 import { DataSource } from 'common/data/data_source/data_source';
-import exportMenuModule from 'viz/core/export';
+import exportMenuModule from '__internal/viz/core/exportModule';
 import rendererModule from 'viz/core/renderers/renderer_default';
 
 import '__internal/viz/vector_map/vector_map';

@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import legendModule from 'viz/components/legend';
 import titleModule from 'viz/core/title';
-import exportModule from 'viz/core/export';
+import exportModule from '__internal/viz/core/exportModule';
 import dxFunnel from '__internal/viz/funnel/funnel';
 import { createFunnel, environment as commonEnvironment, stubAlgorithm } from './commonParts/common.js';
 import { labelEnvironment } from './commonParts/label.js';
