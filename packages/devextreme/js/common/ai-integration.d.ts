@@ -224,6 +224,7 @@ export type SmartPasteCommandResult = Array<{
  */
 export type GenerateGridColumnCommandResult = {
   data: Record<PropertyKey, string>;
+  additionalInfo?: Record<PropertyKey, unknown>;
 };
 
 /**
@@ -231,6 +232,7 @@ export type GenerateGridColumnCommandResult = {
  */
 export type GenerateGridColumnCommandResponse = string | {
   data: string | Record<PropertyKey, string>;
+  additionalInfo?: Record<PropertyKey, unknown>;
 };
 
 /**
