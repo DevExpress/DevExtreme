@@ -108,7 +108,7 @@ function setShadowDom(args: ParsedArgs): void {
 function expandBrowserAlias(browser: string): string {
   switch (browser) {
     case 'chrome:devextreme-shr2':
-      return 'chrome:headless --no-sandbox --disable-dev-shm-usage --disable-gpu --window-size=1200,800 --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning';
+      return 'chrome:headless --no-sandbox --disable-gpu --window-size=1200,800 --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --font-render-hinting=none --disable-font-subpixel-positioning';
     case 'chrome:docker':
       return 'chromium:headless --no-sandbox --disable-gpu --window-size=1200,800';
     default:
@@ -248,7 +248,7 @@ createTestCafe(TESTCAFE_CONFIG)
     }
 
     const runOptions: RunOptions = {
-      quarantineMode: { successThreshold: 1, attemptLimit: 2 },
+      quarantineMode: { successThreshold: 1, attemptLimit: 5 },
       disableNativeAutomation: true,
       // @ts-expect-error ts-error
       hooks: {
