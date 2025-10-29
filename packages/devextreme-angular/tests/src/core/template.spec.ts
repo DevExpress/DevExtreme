@@ -36,6 +36,7 @@ DxTestWidget.defaultOptions({
 });
 
 @Component({
+  standalone: false,
   selector: 'dx-test-widget',
   template: '',
   providers: [DxTemplateHost, WatcherHelper],
@@ -76,6 +77,7 @@ export class DxTestWidgetComponent extends DxComponent {
 }
 
 @Component({
+  standalone: false,
   selector: 'dx-test',
   template: '',
   providers: [DxTemplateHost, WatcherHelper],
@@ -116,6 +118,7 @@ export class DxTestComponent extends DxComponent implements AfterViewInit {
 }
 
 @Component({
+  standalone: false,
   selector: 'test-container-component',
   template: '',
   providers: [DxTemplateHost],
@@ -143,6 +146,7 @@ export class TestContainerComponent {
 }
 
 @Component({
+  standalone: false,
   selector: 'dx-imitation',
   template: `
         <div *dxTemplate="let d of 'ImportedTemlate'">

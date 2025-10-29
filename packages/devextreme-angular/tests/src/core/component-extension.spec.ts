@@ -30,6 +30,7 @@ DxTestExtension.defaultOptions({
 });
 
 @Component({
+  standalone: false,
   selector: 'dx-test-extension',
   template: '',
   providers: [DxTemplateHost, WatcherHelper],
@@ -52,6 +53,7 @@ export class DxTestExtensionComponent extends DxComponentExtension {
 }
 
 @Component({
+  standalone: false,
   selector: 'test-container-component',
   template: '',
 })

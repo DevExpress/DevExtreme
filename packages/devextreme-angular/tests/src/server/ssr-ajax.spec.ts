@@ -15,8 +15,7 @@ import { DxServerModule } from 'devextreme-angular/server';
 import { Deferred } from 'devextreme/core/utils/deferred';
 import ajax from 'devextreme/core/utils/ajax';
 
-import { ServerModule, ServerTransferStateModule } from '@angular/platform-server';
-import { BrowserModule } from '@angular/platform-browser';
+import { ServerModule } from '@angular/platform-server';
 
 import {
   TestBed,
@@ -32,6 +31,7 @@ const mockSendRequest = {
 };
 
 @Component({
+  standalone: false,
   selector: 'test-container-component',
   template: '',
 })
@@ -49,11 +49,10 @@ describe('Universal', () => {
       {
         declarations: [TestContainerComponent],
         imports: [
-          DxServerModule,
-          ServerModule,
-          DxServerTransferStateModule,
-          ServerTransferStateModule,
-          BrowserModule.withServerTransition({ appId: 'appid' })],
+         DxServerModule,
+         ServerModule,
+         DxServerTransferStateModule,
+        ],
       },
     );
   });

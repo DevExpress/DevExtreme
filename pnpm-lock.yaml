@@ -1826,8 +1826,8 @@ importers:
         specifier: 4.0.2
         version: 4.0.2(typescript@5.5.4)
       jasmine:
-        specifier: 5.4.0
-        version: 5.4.0
+        specifier: 5.12.0
+        version: 5.12.0
       karma:
         specifier: 6.4.4
         version: 6.4.4
@@ -13784,14 +13784,14 @@ packages:
   jasmine-core@4.6.1:
     resolution: {integrity: sha512-VYz/BjjmC3klLJlLwA4Kw8ytk0zDSmbbDLNs794VnWmkcCB7I9aAL/D48VNQtmITyPvea2C3jdUMfc3kAoy0PQ==}
 
-  jasmine-core@5.4.0:
-    resolution: {integrity: sha512-T4fio3W++llLd7LGSGsioriDHgWyhoL6YTu4k37uwJLF7DzOzspz7mNxRoM3cQdLWtL/ebazQpIf/yZGJx/gzg==}
+  jasmine-core@5.12.0:
+    resolution: {integrity: sha512-QqO4pX33GEML5JoGQU6BM5NHKPgEsg+TXp3jCIDek9MbfEp2JUYEFBo9EF1+hegWy/bCHS1m5nP0BOp18G6rVA==}
 
   jasmine-core@5.6.0:
     resolution: {integrity: sha512-niVlkeYVRwKFpmfWg6suo6H9CrNnydfBLEqefM5UjibYS+UoTjZdmvPJSiuyrRLGnFj1eYRhFd/ch+5hSlsFVA==}
 
-  jasmine@5.4.0:
-    resolution: {integrity: sha512-E2u4ylX5tgGYvbynImU6EUBKKrSVB1L72FEPjGh4M55ov1VsxR26RA2JU91L9YSPFgcjo4mCLyKn/QXvEYGBkA==}
+  jasmine@5.12.0:
+    resolution: {integrity: sha512-KmKeTNuH8rgAuPRL5AUsXWSdJVlDu+pgqi2dLXoZUSH/g3kR+7Ho8B7hEhwDu0fu1PLuiXZtfaxmQ/mB5wqihw==}
     hasBin: true
 
   jest-changed-files@29.7.0:
@@ -37086,14 +37086,14 @@ snapshots:
 
   jasmine-core@4.6.1: {}
 
-  jasmine-core@5.4.0: {}
+  jasmine-core@5.12.0: {}
 
   jasmine-core@5.6.0: {}
 
-  jasmine@5.4.0:
+  jasmine@5.12.0:
     dependencies:
       glob: 10.4.5
-      jasmine-core: 5.4.0
+      jasmine-core: 5.12.0
 
   jest-changed-files@29.7.0:
     dependencies:
