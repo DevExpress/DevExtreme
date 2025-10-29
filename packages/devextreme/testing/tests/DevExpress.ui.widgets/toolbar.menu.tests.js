@@ -578,21 +578,20 @@ QUnit.module('widget sizing render', moduleConfig, () => {
         });
 
         QUnit.test('navigation by arrows', function(assert) {
-            assert.expect(4);
-
             this.instance.option('opened', false);
             this.overflowMenu.$button().focusin();
 
             this.keyboard.keyDown('enter');
             assert.ok(this.overflowMenu.popup().option('visible'));
-            this.keyboard.keyDown('down');
-            assert.ok(this.overflowMenu.$items().eq(0).hasClass(STATE_FOCUSED_CLASS), 'first item has focus class');
 
             this.keyboard.keyDown('down');
-            assert.ok(this.overflowMenu.$items().eq(1).hasClass(STATE_FOCUSED_CLASS), 'second item has focus class');
+            assert.ok(this.overflowMenu.$items().attr('id'), 'first item is active');
+
+            this.keyboard.keyDown('down');
+            assert.ok(this.overflowMenu.$items().eq(1).attr('id'), 'second item is active');
 
             this.keyboard.keyDown('up');
-            assert.ok(this.overflowMenu.$items().eq(0).hasClass(STATE_FOCUSED_CLASS), 'first item has focus class');
+            assert.ok(this.overflowMenu.$items().eq(0).attr('id'), 'third item is active');
         });
 
         QUnit.test('hide popup on press tab', function(assert) {

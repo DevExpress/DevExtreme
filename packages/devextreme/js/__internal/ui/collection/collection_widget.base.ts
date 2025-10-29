@@ -33,7 +33,11 @@ import DataHelperMixin from '@js/data_helper';
 import type {
   Cancelable, DxEvent, EventInfo, ItemInfo,
 } from '@js/events';
-import type { CollectionWidgetItem as CollectionWidgetItemProperties, CollectionWidgetOptions, ItemLike } from '@js/ui/collection/ui.collection_widget.base';
+import type {
+  CollectionWidgetItem as CollectionWidgetItemProperties,
+  CollectionWidgetOptions,
+  ItemLike,
+} from '@js/ui/collection/ui.collection_widget.base';
 import { focusable } from '@js/ui/widget/selectors';
 import { getPublicElement } from '@ts/core/m_element';
 import type { ActionConfig } from '@ts/core/widget/component';
@@ -531,7 +535,12 @@ class CollectionWidget<
     if ($target.length) {
       this._refreshActiveDescendant();
       this._refreshItemId($target, needCleanItemId);
-      this._toggleFocusClass(isFocused, $target);
+
+      const { focusStateEnabled } = this.option();
+
+      if (focusStateEnabled) {
+        this._toggleFocusClass(isFocused, $target);
+      }
     }
 
     this._updateParentActiveDescendant();

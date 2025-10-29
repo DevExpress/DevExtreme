@@ -9,19 +9,31 @@ on:
     paths-ignore:
       - 'apps/**/*.md'
   push:
-    branches:
-      - "[0-9][0-9]_[0-9]"
+    branches: [24_2]
   workflow_dispatch:
 
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
   NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
   BUILD_TEST_INTERNAL_PACKAGE: true
+  RUN_TESTS: true
 
 jobs:
+  check-should-run:
+    name: Check if tests should run
+    runs-on: devextreme-shr2
+    outputs:
+      should-run: ${{ steps.check.outputs.should-run }}
+    steps:
+      - name: Check RUN_TESTS flag
+        id: check
+        run: echo "should-run=${{ env.RUN_TESTS }}" >> $GITHUB_OUTPUT
+
   build-devextreme:
     runs-on: ubuntu-22.04
     name: Build DevExtreme
+    needs: check-should-run
+    if: needs.check-should-run.outputs.should-run == 'true'
     timeout-minutes: 40
 
     steps:
@@ -85,7 +97,8 @@ jobs:
     runs-on: ubuntu-22.04
     name: Build Demos
     timeout-minutes: 20
-    needs: build-devextreme
+    needs: [check-should-run, build-devextreme]
+    if: needs.check-should-run.outputs.should-run == 'true'
 
     steps:
 
@@ -154,6 +167,8 @@ jobs:
   get-changes:
     runs-on: ubuntu-22.04
     name: Get changed demos
+    needs: check-should-run
+    if: needs.check-should-run.outputs.should-run == 'true'
     timeout-minutes: 5
 
     steps:
@@ -177,7 +192,8 @@ jobs:
 
   check-ts:
     name: Check TS
-    needs: build-devextreme
+    needs: [check-should-run, build-devextreme]
+    if: needs.check-should-run.outputs.should-run == 'true'
     runs-on: devextreme-shr2
     timeout-minutes: 20
 
@@ -235,9 +251,8 @@ jobs:
 
   lint:
     name: ${{ matrix.name }}
-    needs:
-      - build-devextreme
-      - get-changes
+    needs: [check-should-run, build-devextreme, get-changes]
+    if: needs.check-should-run.outputs.should-run == 'true'
 
     runs-on: ubuntu-22.04
     timeout-minutes: 60
@@ -325,7 +340,8 @@ jobs:
     name: ${{ matrix.name }}
     runs-on: ubuntu-22.04
     timeout-minutes: 10
-    needs: build-demos
+    needs: [check-should-run, build-demos]
+    if: needs.check-should-run.outputs.should-run == 'true'
 
     strategy:
       fail-fast: false
@@ -404,7 +420,8 @@ jobs:
         fi
 
   testcafe:
-    needs: build-demos
+    needs: [check-should-run, build-demos]
+    if: needs.check-should-run.outputs.should-run == 'true'
     strategy:
       fail-fast: false
       matrix:
