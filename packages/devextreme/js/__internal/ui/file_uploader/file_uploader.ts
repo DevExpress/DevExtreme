@@ -405,7 +405,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     }
   }
 
-  _isFileLimitReached(files: File[]): boolean {
+  _isFileLimitReached(files: File[] = []): boolean {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     const { _maxFileCount, value } = this.option();
 
@@ -526,7 +526,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
   _createFiles(): void {
     const { value: files } = this.option();
 
-    if (this._isFileLimitReached(files as unknown as File[])) {
+    if (this._isFileLimitReached()) {
       this._fileLimitReachedAction?.();
     }
 
