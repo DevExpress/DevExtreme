@@ -79,14 +79,6 @@ export class DxiResourceComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get icon(): string {
-        return this._getOption('icon');
-    }
-    set icon(value: string) {
-        this._setOption('icon', value);
-    }
-
-    @Input()
     get label(): string {
         return this._getOption('label');
     }
