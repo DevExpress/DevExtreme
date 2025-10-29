@@ -65,7 +65,7 @@ QUnit.module('Initialization', () => {
                     options['rootValue'] = config.rootValue;
                     const wrapper = new TreeViewTestWrapper(options);
 
-                    assert.strictEqual(wrapper.instance === undefined, false, 'wrapper.instance is defined');
+                    assert.notStrictEqual(wrapper.instance, undefined, 'wrapper.instance is defined');
                     const $rootNode = wrapper.getElement().find('[aria-level="1"]');
                     if(config.expectedItemId !== undefined) {
                         assert.strictEqual($rootNode.attr('data-item-id'), config.expectedItemId, `$rootNode is ${config.expectedItemId}`);
