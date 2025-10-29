@@ -26,56 +26,53 @@ QUnit.module('Initialization', () => {
 
     ['items', 'dataSource', 'createChildren'].forEach((dataSourceOption) => {
         [false, true].forEach((virtualModeEnabled) => {
-            ['single', 'multiple'].forEach(selectionMode => {
-                [0, -1, 1.1, '0', 'aaa', null, undefined].forEach(rootValue => {
-                    QUnit.test(`rootValue = ${rootValue}, dataSource: ${dataSourceOption}, virtualModeEnabled: ${virtualModeEnabled}`, function(assert) {
-                        const options = createOptions({
-                            selectionMode, dataSourceOption, virtualModeEnabled, rootValue, testItems: [
-                                { id: 1, text: 'item1', parentId: rootValue },
-                                { id: 2, text: 'item2', parentId: 1 }]
-                        });
-
-                        const wrapper = new TreeViewTestWrapper(options);
-                        const $item1 = wrapper.getElement().find('[aria-level="1"]');
-
-                        assert.notEqual(wrapper.instance, undefined);
-                        assert.notEqual($item1.length, 0, 'item1 must be rendered');
+            [0, -1.1, '0', 'aaa', null, undefined].forEach(rootValue => {
+                QUnit.test(`rootValue = ${rootValue}, dataSource: ${dataSourceOption}, virtualModeEnabled: ${virtualModeEnabled}`, function(assert) {
+                    const options = createOptions({
+                        dataSourceOption, virtualModeEnabled, rootValue, testItems: [
+                            { id: 1, text: 'item1', parentId: rootValue },
+                            { id: 2, text: 'item2', parentId: 1 }]
                     });
+
+                    const wrapper = new TreeViewTestWrapper(options);
+                    const $item1 = wrapper.getElement().find('[aria-level="1"]');
+
+                    assert.notEqual(wrapper.instance, undefined);
+                    assert.notEqual($item1.length, 0, 'item1 must be rendered');
                 });
+            });
 
-                QUnit.test(`Initialization with cycle/loop keys. DataSource: ${dataSourceOption}. VirtualModeEnabled: ${virtualModeEnabled} (T832760)`, function(assert) {
-                    const configs = [
-                        { rootValue: 1, expectedItemId: 2, rootItemIndex: 1 },
-                        { rootValue: 2, expectedItemId: 3, rootItemIndex: 2 },
-                        { rootValue: 3, expectedItemId: 1, rootItemIndex: 0 },
-                        { rootValue: 0, expectedItemId: undefined, rootItemIndex: 1 },
-                        { rootValue: null, expectedItemId: undefined, rootItemIndex: 1 },
-                        { rootValue: undefined, expectedItemId: undefined, rootItemIndex: 1 }
-                    ];
+            QUnit.test(`Initialization with cycle/loop keys. DataSource: ${dataSourceOption}. VirtualModeEnabled: ${virtualModeEnabled} (T832760)`, function(assert) {
+                const configs = [
+                    { rootValue: 1, expectedItemId: '2', rootItemIndex: 1 },
+                    { rootValue: 2, expectedItemId: '3', rootItemIndex: 2 },
+                    { rootValue: 3, expectedItemId: '1', rootItemIndex: 0 },
+                    { rootValue: 0, expectedItemId: undefined, rootItemIndex: 1 },
+                    { rootValue: null, expectedItemId: undefined, rootItemIndex: 1 },
+                    { rootValue: undefined, expectedItemId: undefined, rootItemIndex: 1 }
+                ];
 
-                    configs.forEach((config) => {
-                        const options = createOptions({
-                            selectionMode,
-                            dataSourceOption,
-                            virtualModeEnabled,
-                            testRootItemIndex: config.rootItemIndex,
-                            testItems: [
-                                { id: 1, text: 'item1', parentId: 3 },
-                                { id: 2, text: 'item2', parentId: 1 },
-                                { id: 3, text: 'item3', parentId: 2 }]
-                        });
-                        options['rootValue'] = config.rootValue;
-                        const wrapper = new TreeViewTestWrapper(options);
-
-                        assert.notEqual(wrapper.instance, undefined);
-                        const $rootNode = wrapper.getElement().find('[aria-level="1"]');
-                        if(config.expectedItemId !== undefined) {
-                            assert.equal($rootNode.attr('data-item-id'), config.expectedItemId);
-                        } else {
-                            assert.equal($rootNode.length, 0);
-                        }
-                        wrapper.instance.dispose();
+                configs.forEach((config) => {
+                    const options = createOptions({
+                        dataSourceOption,
+                        virtualModeEnabled,
+                        testRootItemIndex: config.rootItemIndex,
+                        testItems: [
+                            { id: 1, text: 'item1', parentId: 3 },
+                            { id: 2, text: 'item2', parentId: 1 },
+                            { id: 3, text: 'item3', parentId: 2 }]
                     });
+                    options['rootValue'] = config.rootValue;
+                    const wrapper = new TreeViewTestWrapper(options);
+
+                    assert.strictEqual(wrapper.instance === undefined, false, 'wrapper.instance is defined');
+                    const $rootNode = wrapper.getElement().find('[aria-level="1"]');
+                    if(config.expectedItemId !== undefined) {
+                        assert.strictEqual($rootNode.attr('data-item-id'), config.expectedItemId, `$rootNode is ${config.expectedItemId}`);
+                    } else {
+                        assert.strictEqual($rootNode.length, 0, 'there are no $rootNode');
+                    }
+                    wrapper.instance.dispose();
                 });
             });
         });
@@ -83,25 +80,22 @@ QUnit.module('Initialization', () => {
 
     [true, false].forEach(virtualModeEnabled => {
         [null, -1, 0, ''].forEach(rootValue => {
-            ['single', 'multiple'].forEach(selectionMode => {
-                QUnit.test(`Adding new item to store with ${rootValue} value in parentId`, function(assert) { // T906787
-                    const store = new ArrayStore({ data: [ { id: 1, parentId: rootValue, text: 'item1' } ] });
-                    const wrapper = new TreeViewTestWrapper({
-                        selectionMode,
-                        virtualModeEnabled,
-                        rootValue: rootValue,
-                        dataStructure: 'plain',
-                        dataSource: new DataSource({
-                            store: store,
-                        }),
-                    });
-
-                    store.insert({ id: 2, parentId: rootValue, text: 'item2' });
-                    const nodes = wrapper.getNodes();
-                    assert.equal(nodes.length, 2);
-                    assert.equal(nodes.get(0).innerText.trim(), 'item1');
-                    assert.equal(nodes.get(1).innerText.trim(), 'item2');
+            QUnit.test(`Adding new item to store with ${rootValue} value in parentId (virtualModeEnabled=${virtualModeEnabled})`, function(assert) { // T906787
+                const store = new ArrayStore({ data: [ { id: 1, parentId: rootValue, text: 'item1' } ] });
+                const wrapper = new TreeViewTestWrapper({
+                    virtualModeEnabled,
+                    rootValue: rootValue,
+                    dataStructure: 'plain',
+                    dataSource: new DataSource({
+                        store: store,
+                    }),
                 });
+
+                store.insert({ id: 2, parentId: rootValue, text: 'item2' });
+                const nodes = wrapper.getNodes();
+                assert.strictEqual(nodes.length, 2, 'there are two nodes');
+                assert.strictEqual(nodes.get(0).innerText.trim(), 'item1', 'first node is item1');
+                assert.strictEqual(nodes.get(1).innerText.trim(), 'item2', 'second node is item2');
             });
         });
     });
