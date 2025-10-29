@@ -25,7 +25,6 @@ $filterbuilder-menu-icon-color: null !default;
 @use "./common";
 
 .dx-filterbuilder {
-  position: relative;
   background-color: $filterbuilder-bg;
 
   @mixin button-color($color, $hover-color, $focus-color) {
