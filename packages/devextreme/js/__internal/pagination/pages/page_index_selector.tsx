@@ -56,7 +56,7 @@ const PageIndexSelectorDefaultProps: PageIndexSelectorPropsType = {
   itemCount: PaginationDefaultProps.itemCount,
 };
 
-interface NavigationButtonProps extends Pick<LightButtonProps, 'className' | 'tabIndex' > { navigate: LightButtonProps['onClick'] }
+interface NavigationButtonProps extends Pick<LightButtonProps, 'className' | 'tabIndex' | 'disabled'> { navigate: LightButtonProps['onClick'] }
 
 interface NavigationButtonPropsCache {
   prevButtonProps: NavigationButtonProps | undefined;
@@ -105,6 +105,7 @@ export class PageIndexSelector extends BaseInfernoComponent<PageIndexSelectorPro
       className,
       tabIndex: canNavigate ? 0 : -1,
       navigate: () => this.navigateToPage(rtlAwareDirection),
+      disabled: !canNavigate,
     };
   }
 
