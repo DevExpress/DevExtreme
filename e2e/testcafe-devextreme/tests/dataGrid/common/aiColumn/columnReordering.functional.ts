@@ -18,7 +18,7 @@ test('Column reordering should work when allowColumnReordering is true', async (
   await t.expect(await headerRow.getHeaderTexts()).eql(['AI Column', 'ID', 'Name', 'Value']);
 
   // act
-  await t.drag(headerRow.getHeaderCell(0).element, 100, 0);
+  await t.drag(headerRow.getHeaderCell(0).element, 150, 0);
 
   // assert
   await t.expect(await headerRow.getHeaderTexts()).eql(['ID', 'AI Column', 'Name', 'Value']);
@@ -53,7 +53,7 @@ test('Column reordering should not work when allowColumnReordering is false', as
   await t.expect(await headerRow.getHeaderTexts()).eql(['AI Column', 'ID', 'Name', 'Value']);
 
   // act
-  await t.drag(headerRow.getHeaderCell(0).element, 100, 0);
+  await t.drag(headerRow.getHeaderCell(0).element, 150, 0);
 
   // assert
   await t.expect(await headerRow.getHeaderTexts()).eql(['AI Column', 'ID', 'Name', 'Value']);
@@ -88,7 +88,7 @@ test('Column reordering should not work when it has allowReordering set to false
   await t.expect(await headerRow.getHeaderTexts()).eql(['AI Column', 'ID', 'Name', 'Value']);
 
   // act
-  await t.drag(headerRow.getHeaderCell(0).element, 100, 0);
+  await t.drag(headerRow.getHeaderCell(0).element, 150, 0);
 
   // assert
   await t.expect(await headerRow.getHeaderTexts()).eql(['AI Column', 'ID', 'Name', 'Value']);
