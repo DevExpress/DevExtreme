@@ -4857,21 +4857,44 @@ QUnit.module('File limit', moduleConfig, () => {
         assert.strictEqual(instance.option('value').length, 0, 'no files were added');
     });
 
-    QUnit.test('changing _maxFileCount option should not trigger re-render', function(assert) {
+    QUnit.test('onFileLimitReached should be fired on initial render when value exceeds _maxFileCount', function(assert) {
+        let fileLimitReachedCount = 0;
+
         const $element = $('#fileuploader').dxFileUploader({
             multiple: true,
+            uploadMode: 'useButtons',
             _maxFileCount: 2,
+            value: [fakeFile, fakeFile1, fakeFile2],
+            onFileLimitReached: () => {
+                fileLimitReachedCount++;
+            },
         });
         const instance = $element.dxFileUploader('instance');
 
-        simulateFileChoose($element, [fakeFile]);
-        const $fileContainer = $element.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`);
-        assert.strictEqual($fileContainer.length, 1, 'one file is rendered');
+        assert.strictEqual(fileLimitReachedCount, 1, 'onFileLimitReached was called on init');
+        assert.strictEqual(instance.option('value').length, 0, 'value was reset to empty array');
+    });
 
-        instance.option('_maxFileCount', 3);
+    QUnit.test('onFileLimitReached should be fired when value is changed programmatically and exceeds _maxFileCount', function(assert) {
+        let fileLimitReachedCount = 0;
 
-        const $fileContainerAfter = $element.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`);
-        assert.strictEqual($fileContainerAfter.length, 1, 'files were not re-rendered');
+        const $element = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            uploadMode: 'useButtons',
+            _maxFileCount: 2,
+            onFileLimitReached: () => {
+                fileLimitReachedCount++;
+            },
+        });
+        const instance = $element.dxFileUploader('instance');
+
+        instance.option('value', [fakeFile, fakeFile1]);
+        assert.strictEqual(fileLimitReachedCount, 0, 'onFileLimitReached was not called for 2 files');
+        assert.strictEqual(instance.option('value').length, 2, 'two files were set');
+
+        instance.option('value', [fakeFile, fakeFile1, fakeFile2]);
+        assert.strictEqual(fileLimitReachedCount, 1, 'onFileLimitReached was called when setting 3 files');
+        assert.strictEqual(instance.option('value').length, 2, 'value was not changed, still 2 files');
     });
 });
 

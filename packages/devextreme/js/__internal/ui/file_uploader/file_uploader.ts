@@ -304,6 +304,8 @@ class FileUploader extends Editor<FileUploaderProperties> {
     this._initFileInput();
     this._initLabel();
     this._setUploadStrategy();
+
+    this._createFileLimitReachedAction();
     this._createFiles();
 
     this._createBeforeSendAction();
@@ -316,7 +318,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
     this._createDropZoneEnterAction();
     this._createDropZoneLeaveAction();
     this._createCancelButtonClickAction();
-    this._createFileLimitReachedAction();
   }
 
   _setUploadStrategy(): void {
