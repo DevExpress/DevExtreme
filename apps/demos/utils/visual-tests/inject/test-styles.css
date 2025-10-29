@@ -11,3 +11,7 @@ body {
   text-rendering: geometricprecision !important;
 }
 
+.dx-theme-material svg * {
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+

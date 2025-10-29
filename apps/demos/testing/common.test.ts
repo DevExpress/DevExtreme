@@ -146,6 +146,7 @@ Object.values(FRAMEWORKS).forEach((approach) => {
         if (visualTestStyles) {
           await execCode(visualTestStyles);
         }
+
         if (approach === 'Angular') {
           await waitForAngularLoading();
         }

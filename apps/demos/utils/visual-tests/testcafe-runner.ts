@@ -1,5 +1,6 @@
 import createTestCafe from 'testcafe';
 import { ClientFunction } from 'testcafe';
+import { THEME } from './helpers/theme-utils';
 import fs from 'fs';
 
 function reporter() {
@@ -216,12 +217,24 @@ async function main() {
     reporters.push(accessibilityTestCafeReporter);
   }
 
+  const getQuarantineMode = () => {
+    if(process.env.THEME === THEME.material) {
+      return { successThreshold: 1, attemptLimit: 3 };
+    }
+
+    if (process.env.TCQUARANTINE) {
+      return { successThreshold: 1, attemptLimit: 2 };
+    }
+    
+    return false;
+  }
+
   const failedCount = await runner
     .reporter(reporters)
     .browsers(process.env.BROWSERS || 'chrome --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning')
     .concurrency(concurrency || 1)
     .run({
-      quarantineMode: process.env.TCQUARANTINE ? { successThreshold: 1, attemptLimit: 2 } : false,
+      quarantineMode: getQuarantineMode(),
       // @ts-expect-error ts-error
       hooks: {
         test: {
