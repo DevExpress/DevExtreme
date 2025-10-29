@@ -24,6 +24,11 @@ export class GenerateGridColumnCommand extends BaseCommand<
     response: GenerateGridColumnCommandResponse,
   ): GenerateGridColumnCommandResult {
     if (typeof response === 'string') {
+      if (response === '') {
+        return {
+          data: {},
+        };
+      }
       return {
         data: JSON.parse(response),
       };

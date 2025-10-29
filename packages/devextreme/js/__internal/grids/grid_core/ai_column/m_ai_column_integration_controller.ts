@@ -131,7 +131,7 @@ export class AIColumnIntegrationController extends Controller {
           this.executeAction('onAIColumnResponseReceived', args);
           this.showResult(
             columnName,
-            finalResponse as Record<PropertyKey, unknown>,
+            finalResponse.data,
             cachedResponse,
           );
           this.processCommandCompletion(columnName);
