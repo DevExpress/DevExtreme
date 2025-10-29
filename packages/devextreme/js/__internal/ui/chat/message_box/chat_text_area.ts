@@ -73,6 +73,7 @@ class ChatTextArea extends TextArea<Properties> {
       stylingMode: 'outlined',
       placeholder: messageLocalization.format('dxChat-textareaPlaceholder'),
       autoResizeEnabled: true,
+      maxHeight: '8em',
       valueChangeEvent: 'input',
       fileUploaderOptions: undefined,
     };
