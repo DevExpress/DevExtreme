@@ -5,7 +5,6 @@ import type { Properties as DropDownProperties } from '@js/ui/drop_down_button';
 import DropDownButton from '@js/ui/drop_down_button';
 import domAdapter from '@ts/core/m_dom_adapter';
 
-import { CLASSES as HEADERS_CLASSES } from '../column_headers/const';
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { Column, ColumnsController } from '../columns_controller/m_columns_controller';
 import { getColumnHeaderCellSelector } from '../columns_controller/m_columns_controller_utils';
@@ -17,7 +16,12 @@ import { AI_COLUMN_NAME, CLASSES } from './const';
 import { createAIHeaderContainer, createChatSparkleOutlineIcon } from './dom';
 import type { AIColumnController } from './m_ai_column_controller';
 import {
-  getAICommandColumnDefaultOptions, isAIColumnAutoMode, isEditorOptions, isPopupOptions,
+  getAICommandColumnDefaultOptions,
+  isAIColumn,
+  isAIColumnAutoMode,
+  isEditorOptions,
+  isHeaderDropDownButtonVisible,
+  isPopupOptions,
   isPromptOption,
   isRefreshOption,
 } from './utils';
@@ -190,14 +194,6 @@ export const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) =
     this._createComponent($dropDownButton, DropDownButton, this.getDropDownButtonConfig());
   }
 
-  private isAIColumn(options): boolean {
-    return options.rowType === 'header' && options.column.type === AI_COLUMN_NAME;
-  }
-
-  private isHeaderDropDownButtonVisible(column: Column): boolean {
-    return column?.ai?.showHeaderMenu !== false;
-  }
-
   private renderAIHeader($container: dxElementWrapper, column: Column): void {
     const $iconElement = createChatSparkleOutlineIcon();
     const $aiHeaderContainer = createAIHeaderContainer();
@@ -211,7 +207,7 @@ export const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) =
   }
 
   protected getHeaderDefaultTemplate($container: dxElementWrapper, options): void {
-    if (this.isAIColumn(options)) {
+    if (isAIColumn(options)) {
       this.renderAIHeader($container, options.column);
       return;
     }
@@ -221,8 +217,8 @@ export const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) =
 
   protected _processTemplate(template, options) {
     const renderingTemplate = super._processTemplate(template, options);
-    const needToRenderHeaderDropDownButton = this.isAIColumn(options)
-      && this.isHeaderDropDownButtonVisible(options.column);
+    const needToRenderHeaderDropDownButton = isAIColumn(options)
+      && isHeaderDropDownButtonVisible(options.column);
 
     if (renderingTemplate && needToRenderHeaderDropDownButton) {
       return {

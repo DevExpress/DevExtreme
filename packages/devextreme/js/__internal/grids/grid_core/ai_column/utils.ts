@@ -60,3 +60,11 @@ export const isRefreshOption = (optionName: string, value: unknown): boolean => 
   const valueKeys = Object.keys(value as Record<string, unknown>);
   return valueKeys.some((key) => refreshOptionNames.includes(key));
 };
+
+export const isAIColumn = (
+  { rowType, column }: { rowType: string; column: Column },
+): boolean => rowType === 'header' && column.type === AI_COLUMN_NAME;
+
+export const isHeaderDropDownButtonVisible = (
+  column: Column,
+): boolean => column?.ai?.showHeaderMenu !== false;
