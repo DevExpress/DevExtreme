@@ -335,7 +335,9 @@ export class RecurrenceForm {
           this._weekDayButtons[item.key] = this.scheduler.createComponent(buttonContainer, Button, {
             text: item.text,
             onContentReady: (e): void => {
-              e.element.removeClass('dx-button-has-text');
+              if (e.element) {
+                e.element.removeClass('dx-button-has-text');
+              }
             },
             onClick: (): void => {
               const isSelected = this.recurrenceRule.byDay.includes(item.key);
