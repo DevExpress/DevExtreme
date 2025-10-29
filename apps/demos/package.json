@@ -85,7 +85,7 @@
         "vuex": "4.0.0-beta.4",
         "whatwg-fetch": "2.0.4",
         "yargs": "17.7.2",
-        "zone.js": "0.14.10"
+        "zone.js": "0.15.1"
     },
     "devDependencies": {
         "@angular/platform-server": "19.2.15",
