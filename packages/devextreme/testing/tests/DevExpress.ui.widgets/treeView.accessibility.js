@@ -7,7 +7,7 @@ const { module, test } = QUnit;
 
 const CHECK_BOX_CLASS = 'dx-checkbox';
 
-testStart(function() {
+QUnit.testStart(function() {
     const markup = '<div id="treeView"></div>';
 
     $('#qunit-fixture').html(markup);
