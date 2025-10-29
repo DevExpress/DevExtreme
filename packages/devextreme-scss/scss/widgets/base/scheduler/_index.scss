@@ -649,6 +649,10 @@ $scheduler-appointment-form-label-padding: 20px;
 
         .dx-button {
           border-radius: 50%;
+          width: $scheduler-days-of-week-button-size;
+          height: $scheduler-days-of-week-button-size;
+          min-width: $scheduler-days-of-week-button-size;
+          min-height: $scheduler-days-of-week-button-size;
 
           .dx-button-content {
             padding: 0;
