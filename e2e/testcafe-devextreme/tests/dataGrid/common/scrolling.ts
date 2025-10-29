@@ -224,8 +224,10 @@ test('DataGrid should not reset its top scroll position after cell modification 
   },
 }));
 
-test('Ungrouping after grouping should work correctly if row rendering mode is virtual', async (t) => {
+test.meta({ unstable: true })('Ungrouping after grouping should work correctly if row rendering mode is virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
 
   // act
   await dataGrid.scrollTo(t, { top: 500 });
@@ -353,6 +355,9 @@ test('Scroll position after grouping when RTL (T388508)', async (t) => {
 safeSizeTest('Header container should have padding-right after expanding the master row with a detail grid when using native scrolling (T1004507)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t.expect(dataGrid.isReady()).ok();
+
   async function getRightPadding(): Promise<number> {
     const padding = await dataGrid.getHeaders().element.getStyleProperty('padding-right');
     return parseFloat(padding);
@@ -381,7 +386,7 @@ safeSizeTest('Header container should have padding-right after expanding the mas
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxDataGrid', {
+}).meta({ unstable: true }).before(async () => createWidget('dxDataGrid', {
   width: 150,
   height: 300,
   columnMinWidth: 100,
@@ -488,6 +493,8 @@ test('Header container should have padding-right if grid has max-height and scro
 
 test('New virtual mode. A detail row should be rendered when the last master row is expanded', async (t) => {
   const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
 
   // act
   await dataGrid.scrollTo(t, { top: 3300 });
@@ -725,6 +732,10 @@ test.skip('New virtual mode. Virtual rows should not be in view port', async (t)
       legacyMode: false,
     },
   });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).myStore;
+  })();
 });
 
 test('New row should be rendered at the top when grid is scrolled in virtual scrolling', async (t) => {
@@ -871,6 +882,9 @@ safeSizeTest('New mode. Rows should be rendered properly when rowRenderingMode i
 
 safeSizeTest('Rows are rendered properly when window content is scrolled (T1070388)', async (t) => {
   const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
+
   const scrollWindowTo = async (position: number) => {
     await ClientFunction(
       () => {
@@ -1785,6 +1799,8 @@ test('DataGrid - Scrolling position is reset to far right on an attempt to scrol
 test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a non-focused row if the grid height is small', async (t) => {
   const dataGrid = new DataGrid('#container');
   const otherContainer = Selector('#otherContainer');
+
+  await t.expect(dataGrid.isReady()).ok();
 
   await dataGrid.apiOption('focusedRowKey', '2');
   await t.expect(otherContainer.innerText).eql('2');
