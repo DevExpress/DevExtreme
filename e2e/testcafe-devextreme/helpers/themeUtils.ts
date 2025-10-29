@@ -5,7 +5,7 @@ const defaultThemeName = 'generic.light';
 
 export const getThemePostfix = (theme?: string): string => {
   const themeName = (theme ?? process.env.theme) ?? defaultThemeName;
-  return ` (${themeName.replace(/\./g, '-')})`;
+  return ` (${themeName})`;
 };
 
 export const isMaterial = (): boolean => process.env.theme === 'material.blue.light';
@@ -64,7 +64,7 @@ export async function testScreenshot(
     await compactCallBack?.();
 
     await t
-      .expect(await takeScreenshot(getScreenshotName(screenshotName, `${themeName}-compact`), element))
+      .expect(await takeScreenshot(getScreenshotName(screenshotName, `${themeName}.compact`), element))
       .ok();
   }
 
