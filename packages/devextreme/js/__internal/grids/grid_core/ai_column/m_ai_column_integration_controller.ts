@@ -126,7 +126,6 @@ export class AIColumnIntegrationController extends Controller {
             column,
             error: null,
             data: finalResponse.data,
-            additionalInfo: finalResponse.additionalInfo,
           };
 
           this.executeAction('onAIColumnResponseReceived', args);
@@ -145,7 +144,6 @@ export class AIColumnIntegrationController extends Controller {
           column,
           error: message,
           data: null,
-          additionalInfo: undefined,
         });
         this.showError(message);
         this.processCommandCompletion(columnName);

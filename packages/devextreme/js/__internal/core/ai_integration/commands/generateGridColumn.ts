@@ -26,7 +26,6 @@ export class GenerateGridColumnCommand extends BaseCommand<
     if (typeof response === 'string') {
       return {
         data: JSON.parse(response),
-        additionalInfo: undefined,
       };
     }
 
@@ -36,7 +35,6 @@ export class GenerateGridColumnCommand extends BaseCommand<
 
     return {
       data,
-      additionalInfo: response.additionalInfo,
     };
   }
 
