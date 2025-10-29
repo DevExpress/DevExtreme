@@ -1,19 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
 import Scrollable from 'devextreme-testcafe-models/scrollView/internal/scrollable';
-import { isMaterialBased, testScreenshot } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { appendElementTo } from '../../../helpers/domUtils';
 
-const testFixture = () => {
-  if (isMaterialBased()) {
-    return fixture.disablePageReloads.skip;
-  }
-  return fixture.disablePageReloads;
-};
-
-testFixture()`Scrollable_visibility_integration`
+fixture.disablePageReloads`Scrollable_visibility_integration`
   .page(url(__dirname, '../../container.html'));
 type ScrollableDirection = 'both' | 'horizontal' | 'vertical';
 
