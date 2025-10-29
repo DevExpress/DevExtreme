@@ -15,12 +15,12 @@ runManualTest('Lookup', 'Basics', (test) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
-      .click($(`.${LOOKUP_CLASS}`).nth(0))
-      .wait(200);
+      .click($(`.${LOOKUP_CLASS}`).nth(0));
+    //  .wait(200);
 
     await t
-      .click($(`.${LOOKUP_CLASS}`).nth(1))
-      .wait(200);
+      .click($(`.${LOOKUP_CLASS}`).nth(1));
+    // .wait(200);
 
     await testScreenshot(t, takeScreenshot, 'lookup_templates_custom_appearance.png');
 

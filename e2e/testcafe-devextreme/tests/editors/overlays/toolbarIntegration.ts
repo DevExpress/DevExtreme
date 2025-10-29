@@ -195,7 +195,7 @@ safeSizeTest('Popup toolbars with wide elements and overflow menu if hidden on i
   ...baseConfiguration,
   toolbarItems,
   visible: false,
-}, undefined, { disableFxAnimation: false }));
+}));
 
 safeSizeTest('Popup toolbars with wide elements and overflow menu if hidden on init with no toolbar items', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -223,7 +223,7 @@ safeSizeTest('Popup toolbars with wide elements and overflow menu if hidden on i
   ...baseConfiguration,
   toolbarItems: [],
   visible: false,
-}, undefined, { disableFxAnimation: false }));
+}));
 
 safeSizeTest('Popup toolbars with wide elements and overflow menu if shown on init with toolbar items', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -248,4 +248,4 @@ safeSizeTest('Popup toolbars with wide elements and overflow menu if shown on in
   ...baseConfiguration,
   toolbarItems,
   visible: true,
-}, undefined, { disableFxAnimation: false }));
+}));

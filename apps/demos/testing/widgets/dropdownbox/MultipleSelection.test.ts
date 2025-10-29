@@ -14,18 +14,18 @@ runManualTest('DropDownBox', 'MultipleSelection', (test) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
-      .click($(`.${DROP_DOWN_BOX_CLASS}`).nth(0))
-      .wait(200);
+      .click($(`.${DROP_DOWN_BOX_CLASS}`).nth(0));
+    // .wait(200);
 
     await testScreenshot(t, takeScreenshot, 'dropdownbox_multiple_selection_treebox.png');
 
     await t
-      .click($(`.${DROP_DOWN_BOX_CLASS}`).nth(0))
-      .wait(200);
+      .click($(`.${DROP_DOWN_BOX_CLASS}`).nth(0));
+    // .wait(200);
 
     await t
-      .click($(`.${DROP_DOWN_BOX_CLASS}`).nth(1))
-      .wait(200);
+      .click($(`.${DROP_DOWN_BOX_CLASS}`).nth(1));
+    // .wait(200);
 
     await testScreenshot(t, takeScreenshot, 'dropdownbox_multiple_selection_gridbox.png');
 

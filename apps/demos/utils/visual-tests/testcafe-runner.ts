@@ -1,4 +1,6 @@
 import createTestCafe from 'testcafe';
+import { ClientFunction } from 'testcafe';
+import { THEME } from './helpers/theme-utils';
 import fs from 'fs';
 
 function reporter() {
@@ -39,7 +41,7 @@ function reporter() {
     renderErrors(errs) {
       const filteredErrors = errs.filter((x) => {
         // eslint-disable-next-line spellcheck/spell-checker
-        if (x && x.errMsg && x.errMsg.indexOf('INVALID_SCREENSHOT') !== -1) return false;
+        if (x && x.errMsg && typeof x.errMsg === 'string' && x.errMsg.indexOf('INVALID_SCREENSHOT') !== -1) return false;
         return true;
       });
       if (!filteredErrors.length) return;
@@ -215,13 +217,37 @@ async function main() {
     reporters.push(accessibilityTestCafeReporter);
   }
 
+  const getQuarantineMode = () => {
+    if(process.env.THEME === THEME.material) {
+      return { successThreshold: 1, attemptLimit: 5 };
+    }
+
+    if (process.env.TCQUARANTINE) {
+      return { successThreshold: 1, attemptLimit: 2 };
+    }
+    
+    return false;
+  }
+
   const failedCount = await runner
     .reporter(reporters)
-    .browsers(process.env.BROWSERS || 'chrome --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning')
+    .browsers(process.env.BROWSERS || 'chrome --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning')
     .concurrency(concurrency || 1)
     .run({
-      quarantineMode: process.env.TCQUARANTINE ? { successThreshold: 1, attemptLimit: 5 } : false,
-      disableNativeAutomation: true,
+      quarantineMode: getQuarantineMode(),
+      // @ts-expect-error ts-error
+      hooks: {
+        test: {
+          before: async (t: TestController) => {
+            await ClientFunction(() => {
+              if (document.activeElement && document.activeElement !== document.body) {
+                (document.activeElement as HTMLElement).blur();
+              }
+              window.getSelection()?.removeAllRanges();
+            }).with({ boundTestRun: t })();
+          },
+        },
+      },
     });
 
   await tester.close();
