@@ -7,13 +7,11 @@ import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import { ICON_CLASS } from '@ts/core/utils/m_icon';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
-
-import FileView from './file_view/file_view';
+import FileView from '@ts/ui/chat/file_view/file_view';
 
 export const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 export const CHAT_MESSAGEBUBBLE_DELETED_CLASS = 'dx-chat-messagebubble-deleted';
 export const CHAT_MESSAGEBUBBLE_CONTENT_CLASS = 'dx-chat-messagebubble-content';
-export const CHAT_MESSAGEBUBBLE_ATTACHMENTS_CLASS = 'dx-chat-messagebubble-attachments';
 export const CHAT_MESSAGEBUBBLE_ICON_PROHIBITION_CLASS = `${ICON_CLASS}-cursorprohibition`;
 export const CHAT_MESSAGEBUBBLE_HAS_IMAGE_CLASS = 'dx-has-image';
 export const CHAT_MESSAGEBUBBLE_IMAGE_CLASS = 'dx-chat-messagebubble-image';
@@ -35,7 +33,7 @@ export interface Properties extends WidgetOptions<MessageBubble> {
 class MessageBubble extends Widget<Properties> {
   _$content!: dxElementWrapper;
 
-  _$attachmentsContainer!: dxElementWrapper;
+  _$attachments?: dxElementWrapper;
 
   _getDefaultOptions(): Properties {
     return {
@@ -68,9 +66,14 @@ class MessageBubble extends Widget<Properties> {
   }
 
   _renderAttachmentsContainer(): void {
-    this._$attachmentsContainer = $('<div>')
-      .addClass(CHAT_MESSAGEBUBBLE_ATTACHMENTS_CLASS)
-      .appendTo(this.$element());
+    const { attachments, isDeleted } = this.option();
+
+    this._$attachments?.remove();
+    this._$attachments = undefined;
+
+    if (attachments?.length && !isDeleted) {
+      this._$attachments = $('<div>').appendTo(this.$element());
+    }
   }
 
   _updateContent(): void {
@@ -83,8 +86,9 @@ class MessageBubble extends Widget<Properties> {
       isDeleted = false,
     } = this.option();
 
-    this.$element().removeClass(CHAT_MESSAGEBUBBLE_DELETED_CLASS);
-    this.$element().removeClass(CHAT_MESSAGEBUBBLE_HAS_IMAGE_CLASS);
+    this.$element()
+      .removeClass(CHAT_MESSAGEBUBBLE_DELETED_CLASS)
+      .removeClass(CHAT_MESSAGEBUBBLE_HAS_IMAGE_CLASS);
 
     this._$content.empty();
 
@@ -130,7 +134,6 @@ class MessageBubble extends Widget<Properties> {
 
   _renderAttachments(): void {
     const {
-      isDeleted,
       attachments,
       activeStateEnabled,
       focusStateEnabled,
@@ -138,19 +141,20 @@ class MessageBubble extends Widget<Properties> {
       onAttachmentDownload,
     } = this.option();
 
-    this._$attachmentsContainer.empty();
+    if (!this._$attachments) {
+      return;
+    }
 
-    if (attachments?.length && !isDeleted) {
-      const $fileView = $('<div>');
-      this._createComponent($fileView, FileView, {
-        files: attachments,
-        onDownload: onAttachmentDownload,
+    this._$attachments.empty();
+
+    if (attachments?.length) {
+      this._createComponent(this._$attachments, FileView, {
         activeStateEnabled,
         focusStateEnabled,
         hoverStateEnabled,
+        files: attachments,
+        onDownload: onAttachmentDownload,
       });
-
-      this._$attachmentsContainer.append($fileView);
     }
   }
 
@@ -171,6 +175,12 @@ class MessageBubble extends Widget<Properties> {
       case 'isDeleted':
         this._updateMessageData(name, value);
         this._updateContent();
+        this._renderAttachmentsContainer();
+        this._renderAttachments();
+        break;
+      case 'type':
+        this._updateContent();
+        this._renderAttachmentsContainer();
         this._renderAttachments();
         break;
       case 'template':
@@ -181,6 +191,7 @@ class MessageBubble extends Widget<Properties> {
         break;
       case 'onAttachmentDownload':
       case 'attachments':
+        this._renderAttachmentsContainer();
         this._renderAttachments();
         break;
       default:

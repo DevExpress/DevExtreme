@@ -2253,7 +2253,7 @@ QUnit.module('Chat', () => {
             beforeEach: function() {
                 moduleConfig.beforeEach.apply(this, arguments);
 
-                this.getDownloadButton = () => this.$element.find(`.${CHAT_FILE_CLASS}`).find(`.${BUTTON_CLASS}`);
+                this.getDownloadButton = () => this.$element.find(`.${CHAT_FILE_CLASS} .${BUTTON_CLASS}`);
                 this.dataSourceWithAttachments = [
                     {
                         attachments: [

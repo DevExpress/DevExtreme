@@ -125,14 +125,16 @@ class MessageGroup extends Widget<Properties> {
   _getMessageBubbleOptions(message: Message): MessageBubbleProperties {
     const { messageTemplate, onAttachmentDownload } = this.option();
 
+    const { isDeleted, type, attachments } = message;
+
     const options: MessageBubbleProperties = {
-      isDeleted: message.isDeleted,
-      type: message.type,
-      attachments: message.attachments,
+      isDeleted,
+      type,
+      attachments,
       onAttachmentDownload,
     };
 
-    if (message.type === 'image') {
+    if (type === 'image') {
       options.alt = (message as ImageMessage).alt;
       options.src = (message as ImageMessage).src;
     } else {

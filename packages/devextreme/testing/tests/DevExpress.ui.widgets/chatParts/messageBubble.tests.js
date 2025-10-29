@@ -3,8 +3,8 @@ import messageLocalization from 'common/core/localization/message';
 
 import MessageBubble, {
     MESSAGE_DATA_KEY,
-    CHAT_MESSAGEBUBBLE_ATTACHMENTS_CLASS,
     CHAT_MESSAGEBUBBLE_CONTENT_CLASS,
+    CHAT_MESSAGEBUBBLE_HAS_IMAGE_CLASS
 } from '__internal/ui/chat/messagebubble';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
 import { CHAT_FILE_VIEW_CLASS } from '__internal/ui/chat/file_view/file_view';
@@ -16,7 +16,7 @@ const moduleConfig = {
             this.instance = new MessageBubble($('#component'), options);
             this.$element = $(this.instance.$element());
             this.$content = this.$element.find(`.${CHAT_MESSAGEBUBBLE_CONTENT_CLASS}`);
-            this.$attachments = this.$element.find(`.${CHAT_MESSAGEBUBBLE_ATTACHMENTS_CLASS}`);
+            this.$getAttachments = () => this.$element.find(`.${CHAT_FILE_VIEW_CLASS}`);
             this.getDownloadButton = () => this.$element.find(`.${BUTTON_CLASS}`);
         };
 
@@ -165,10 +165,28 @@ QUnit.module('MessageBubble', moduleConfig, () => {
             assert.strictEqual($bubbleContentChild.text(), 'template text: text', 'content text is correct');
         });
 
+        QUnit.test('should remove image class when message type changes from image to text', function(assert) {
+            const imageSrc = 'test.png';
+
+            this.reinit({ type: 'image', src: imageSrc });
+
+            assert.ok(
+                this.$element.hasClass(CHAT_MESSAGEBUBBLE_HAS_IMAGE_CLASS),
+                'initially has image class'
+            );
+
+            this.instance.option({ type: 'text' });
+
+            assert.notOk(
+                this.$element.hasClass(CHAT_MESSAGEBUBBLE_HAS_IMAGE_CLASS),
+                'image class is removed after changing type to text'
+            );
+        });
+
         QUnit.test('should render FileView when attachments passed', function(assert) {
             this.reinit({ attachments: [{ name: 'text.txt', size: 1024 }] });
 
-            const $fileView = this.$attachments.find(`.${CHAT_FILE_VIEW_CLASS}`);
+            const $fileView = this.$getAttachments();
             const $file = $fileView.find(`.${CHAT_FILE_CLASS}`);
             const $fileName = $file.find(`.${CHAT_FILE_NAME_CLASS}`);
             const $fileSize = $file.find(`.${CHAT_FILE_SIZE_CLASS}`);
@@ -178,10 +196,16 @@ QUnit.module('MessageBubble', moduleConfig, () => {
             assert.strictEqual($fileSize.text(), '1 KB', 'size rendered correctly');
         });
 
+        QUnit.test('should not render attachments container when no attachments passed', function(assert) {
+            this.reinit({ attachments: [] });
+
+            assert.strictEqual(this.$getAttachments().length, 0, 'attachments container is empty');
+        });
+
         QUnit.test('should not render FileView when no attachments passed', function(assert) {
             this.reinit({ attachments: [] });
 
-            assert.strictEqual(this.$attachments.children().length, 0, 'attachments container is empty');
+            assert.strictEqual(this.$getAttachments().children().length, 0, 'attachments container is empty');
         });
 
         QUnit.test('should not render FileView when isDeleted is true', function(assert) {
@@ -190,18 +214,18 @@ QUnit.module('MessageBubble', moduleConfig, () => {
                 attachments: [{ name: 'text.txt', size: 1024 }],
             });
 
-            assert.strictEqual(this.$attachments.children().length, 0, 'no attachments rendered for deleted message');
+            assert.strictEqual(this.$getAttachments().children().length, 0, 'no attachments rendered for deleted message');
         });
 
         QUnit.test('should render attachments in runtime', function(assert) {
             const attachments = [{ name: 'text.txt', size: 1024 }];
-            let $fileView = this.$attachments.find(`.${CHAT_FILE_VIEW_CLASS}`);
+            let $fileView = this.$getAttachments();
 
             assert.strictEqual($fileView.length, 0, 'FileView is empty initially');
 
             this.instance.option({ attachments });
 
-            $fileView = this.$attachments.find(`.${CHAT_FILE_VIEW_CLASS}`);
+            $fileView = this.$getAttachments();
 
             assert.strictEqual($fileView.length, 1, 'FileView is rendered inside attachments container');
         });
