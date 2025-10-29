@@ -4,6 +4,8 @@ export const skippedTests = {
   jQuery: {
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
     DataGrid: [
+      'ExcelJSExportMultipleGrids',
+      'PDFExportMultipleGrids',
       { demo: 'RealTimeUpdates', themes: [THEME.material] },
       { demo: 'MultiRowHeadersBands', themes: [THEME.material] },
       { demo: 'ColumnReordering', themes: [THEME.material] },
@@ -126,14 +128,14 @@ export const skippedTests = {
   },
   Angular: {
     Common: ['PopupAndNotificationsOverview'],
-    DataGrid: ['SignalRService', 'MultipleRecordSelectionModes', 'RemoteCRUDOperations'],
+    DataGrid: ['SignalRService', 'MultipleRecordSelectionModes', 'RemoteCRUDOperations', 'ExcelJSExportMultipleGrids', 'PDFExportMultipleGrids'],
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
     Gantt: ['TaskTemplate', 'Validation'],
     TreeView: ['LoadDataOnDemand'],
     Stepper: ['StepTemplate'],
   },
   React: {
-    DataGrid: ['Toolbar', 'SignalRService', 'MultipleRecordSelectionModes'],
+    DataGrid: ['Toolbar', 'SignalRService', 'MultipleRecordSelectionModes', 'ExcelJSExportMultipleGrids', 'PDFExportMultipleGrids'],
     // NOTE: 'GroupByDate' demo has problems with rendering
     Scheduler: ['GroupByDate'],
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
@@ -142,8 +144,9 @@ export const skippedTests = {
   Vue: {
     Common: ['PopupAndNotificationsOverview'],
     Charts: ['PointsAggregation'],
-    DataGrid: ['SignalRService', 'MultipleRecordSelectionModes'],
+    DataGrid: ['SignalRService', 'MultipleRecordSelectionModes', 'ExcelJSExportMultipleGrids', 'PDFExportMultipleGrids'],
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
     Gantt: ['Validation'],
+    Scheduler: ['Toolbar'],
   },
 };

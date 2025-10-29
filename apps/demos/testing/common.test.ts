@@ -54,7 +54,7 @@ const getClientScripts = () => {
   }
 
   scripts.push(
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     join(__dirname, '../utils/visual-tests/inject/test-utils.js'),
     { content: injectStyle(globalReadFrom(__dirname, '../utils/visual-tests/inject/test-styles.css', (x) => x)) },
     {
@@ -62,7 +62,7 @@ const getClientScripts = () => {
         window.addEventListener('error', function (e) {
             console.error(e.message);
         });`,
-    }
+    },
   );
 
   return scripts;
