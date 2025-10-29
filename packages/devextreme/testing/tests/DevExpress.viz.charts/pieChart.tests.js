@@ -16,7 +16,7 @@ import {
     getLegendStub,
     getTrackerStub
 } from './chartParts/commons.js';
-import exportModule from 'viz/core/export';
+import exportModule from '__internal/viz/core/exportModule';
 import seriesModule from 'viz/series/base_series';
 import { BaseChart } from '__internal/viz/chart_components/m_base_chart';
 import * as labelModule from 'viz/series/points/label';
