@@ -25,7 +25,7 @@
       :data-source="priorityData"
       field-expr="priority"
       label="Priority"
-      icon="tag"
+      icon="tags"
     />
   </DxScheduler>
 </template>

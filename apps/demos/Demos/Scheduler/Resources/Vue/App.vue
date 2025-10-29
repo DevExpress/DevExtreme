@@ -22,7 +22,7 @@
         :use-color-as-default="currentResource === 'Priority'"
         field-expr="priorityId"
         label="Priority"
-        icon="tag"
+        icon="tags"
       />
       <DxResource
         :data-source="assignees"

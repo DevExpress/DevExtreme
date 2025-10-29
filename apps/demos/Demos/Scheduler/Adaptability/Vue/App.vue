@@ -16,7 +16,7 @@
         :data-source="priorities"
         field-expr="priorityId"
         label="Priority"
-        icon="tag"
+        icon="tags"
       />
     </DxScheduler>
     <DxSpeedDialAction

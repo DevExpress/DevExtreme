@@ -34,7 +34,7 @@ const App = () => (
       allowMultiple={false}
       dataSource={priorityData}
       label="Priority"
-      icon="tag"
+      icon="tags"
     />
   </Scheduler>
 );

@@ -45,7 +45,7 @@ const App = () => (
       fieldExpr="priorityId"
       label="Priority"
       allowMultiple={false}
-      icon="tag"
+      icon="tags"
     />
     <Resource
       dataSource={typeData}

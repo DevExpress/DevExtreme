@@ -42,7 +42,7 @@ const App = () => {
           fieldExpr="priorityId"
           label="Priority"
           useColorAsDefault={currentResource === 'Priority'}
-          icon="tag"
+          icon="tags"
         />
         <Resource
           dataSource={assignees}

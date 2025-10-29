@@ -12,7 +12,7 @@ $(() => {
       fieldExpr: 'priorityId',
       dataSource: priorities,
       label: 'Priority',
-      icon: 'tag',
+      icon: 'tags',
     }],
   }).dxScheduler('instance');
 

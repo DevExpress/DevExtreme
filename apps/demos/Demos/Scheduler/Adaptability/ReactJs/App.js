@@ -29,7 +29,7 @@ const App = () => {
           dataSource={priorities}
           fieldExpr="priorityId"
           label="Priority"
-          icon="tag"
+          icon="tags"
         />
       </Scheduler>
       <SpeedDialAction
