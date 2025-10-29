@@ -612,6 +612,7 @@ class MessageList extends Widget<Properties> {
 
   _clean(): void {
     this._lastMessageDate = null;
+    resizeObserverSingleton.unobserve(this.$element().get(0));
 
     super._clean();
   }

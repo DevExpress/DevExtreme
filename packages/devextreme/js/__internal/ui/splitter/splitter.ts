@@ -1124,6 +1124,11 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
   getLayout(): number[] {
     return this._layout ?? [];
   }
+
+  _clean(): void {
+    resizeObserverSingleton.unobserve(this.$element().get(0));
+    super._clean();
+  }
 }
 
 registerComponent('dxSplitter', Splitter);
