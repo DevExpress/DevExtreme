@@ -274,10 +274,10 @@
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
 
         "dxScheduler-appointmentListAriaLabel": "Appointment list",
-
+        "dxScheduler-newPopupTitle": "New Appointment",
         "dxScheduler-editPopupTitle": "Edit Appointment",
         "dxScheduler-editPopupSaveButtonText": "Save",
-        
+
         "dxScheduler-editorLabelTitle": "Chủ đề",
         "dxScheduler-editorLabelStartDate": "Ngày bắt đầu",
         "dxScheduler-editorLabelEndDate": "Ngày kết thúc",

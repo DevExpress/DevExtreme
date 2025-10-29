@@ -78,7 +78,7 @@ testUtils.importAnd(() => 'devextreme/ui/gantt', () => DevExpress.ui.dxGantt, (d
   });
 
   return testUtils
-    .postponeUntilFound('.dx-gantt', 100, 10000)
+    .postponeUntilFound('.dx-gantt', 100, 5000)
     .then(() => {
       const instance = dxGantt.getInstance(document.querySelector('.dx-gantt'));
       if (instance) {
@@ -88,6 +88,5 @@ testUtils.importAnd(() => 'devextreme/ui/gantt', () => DevExpress.ui.dxGantt, (d
         });
         instance.refresh();
       }
-    })
-    .then(() => testUtils.postpone(2000));
+    });
 });

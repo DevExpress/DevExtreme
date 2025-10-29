@@ -522,7 +522,17 @@ export class DataController extends DataHelperMixin(modules.Controller) {
         }
       }
 
-      if (!that._needApplyFilter && !gridCoreUtils.checkChanges(optionNames, ['width', 'visibleWidth', 'filterValue', 'bufferedFilterValue', 'selectedFilterOperation', 'filterValues', 'filterType'])) {
+      const excludedOptionNames = [
+        'ai',
+        'width',
+        'visibleWidth',
+        'filterValue',
+        'bufferedFilterValue',
+        'selectedFilterOperation',
+        'filterValues',
+        'filterType',
+      ];
+      if (!that._needApplyFilter && !gridCoreUtils.checkChanges(optionNames, excludedOptionNames)) {
         // TODO remove resubscribing
         that._columnsController.columnsChanged.add(updateItemsHandler);
       }
