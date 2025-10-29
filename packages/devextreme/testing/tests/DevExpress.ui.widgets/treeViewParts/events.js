@@ -6,7 +6,7 @@ import fx from 'common/core/animation/fx';
 import contextMenuEvent from 'common/core/events/contextmenu';
 import dblclickEvent from 'common/core/events/dblclick';
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
-import { DATA, internals } from './testData.js';
+import { dataID, DATA, internals } from './testData.js';
 import { initTree, makeSlowDataSource, stripFunctions } from './testUtils.js';
 
 const createInstance = (options) => new TreeViewTestWrapper(options);
@@ -1024,7 +1024,7 @@ QUnit.test('Should not throw error if event does not have the \'originalEvent\' 
         const onItemRenderedHandler = sinon.spy();
 
         const $treeView = initTree({
-            dataSource: window.dataID,
+            dataSource: dataID,
             onItemRendered: onItemRenderedHandler
         });
 

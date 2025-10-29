@@ -115,11 +115,9 @@ jobs:
           - CONSTEL: misc
             CSP: 'false'
             useJQuery: 'true'
-          - CONSTEL: ui.widgets(1/3)
+          - CONSTEL: ui.widgets(1/2)
             CSP: 'false'
-          - CONSTEL: ui.widgets(2/3)
-            CSP: 'false'
-          - CONSTEL: ui.widgets(3/3)
+          - CONSTEL: ui.widgets(2/2)
             CSP: 'false'
 
     steps:
