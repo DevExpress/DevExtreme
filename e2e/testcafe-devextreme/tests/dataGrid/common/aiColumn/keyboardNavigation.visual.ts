@@ -3,32 +3,41 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 
-fixture.disablePageReloads`Ai Column.ColumnReordering.Visual`
+fixture.disablePageReloads`Ai Column.KeyboardNavigation.Visual`
   .page(url(__dirname, '../../../container.html'));
 
 const DATA_GRID_SELECTOR = '#container';
 
-test('The draggable AI column should display correctly', async (t) => {
+test('Check keyboard navigation for AI column', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const headerRow = dataGrid.getHeaders().getHeaderRow(0);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t.expect(dataGrid.isReady()).ok();
 
-  await dataGrid.moveHeader(0, 100, 5, true);
+  // act
+  await t.click(headerRow.getHeaderCell(0).element);
+  await t.pressKey('tab');
 
   // assert
-  await t.expect(dataGrid.getDraggableHeader().visible).ok();
-
-  await takeScreenshot('datagrid__ai-column__dragging.png', dataGrid.element);
+  await t.expect(headerRow.getHeaderCell(1).isFocused).ok();
 
   // act
-  await dataGrid.dropHeader(0);
+  await t.pressKey('tab');
+
+  // assert
+  await t.expect(headerRow.getHeaderCell(1).getAIDropDownButton().isFocused).ok();
+
+  await takeScreenshot('datagrid__ai-column__focused-dropdown-button.png', dataGrid.element);
+
+  // act
+  await t.pressKey('tab');
 
   // assert
   await t
-    .expect(dataGrid.getDraggableHeader().visible)
-    .notOk()
+    .expect(headerRow.getHeaderCell(2).isFocused)
+    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -38,14 +47,14 @@ test('The draggable AI column should display correctly', async (t) => {
     { id: 3, name: 'Name 3', value: 30 },
   ],
   allowColumnReordering: true,
-  columnWidth: 125,
+  columnWidth: 200,
   columns: [
+    { dataField: 'id', caption: 'ID' },
     {
       type: 'ai',
       caption: 'AI Column',
       name: 'myAiColumn',
     },
-    { dataField: 'id', caption: 'ID' },
     { dataField: 'name', caption: 'Name' },
     { dataField: 'value', caption: 'Value' },
   ],

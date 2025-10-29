@@ -1,6 +1,7 @@
 import { ClientFunction, Selector } from 'testcafe';
 import FocusableElement from '../../internal/focusable';
 import Widget from '../../internal/widget';
+import DropDownButton from '../../dropDownButton';
 
 type StickyPosition = 'left' | 'right' | 'sticky';
 
@@ -12,6 +13,7 @@ const CLASS = {
   sticky: 'dx-datagrid-sticky-column',
   stickyLeft: 'dx-datagrid-sticky-column-left',
   stickyRight: 'dx-datagrid-sticky-column-right',
+  aiHeaderButton: 'dx-command-ai-header-button',
 };
 
 const getStickyClassNames = (position: StickyPosition | undefined): string[] => {
@@ -62,5 +64,9 @@ export default class HeaderCell {
 
   getEditor(): FocusableElement {
     return new FocusableElement(this.element.find('.dx-texteditor-input, .dx-checkbox'));
+  }
+
+  getAIDropDownButton(): DropDownButton {
+    return new DropDownButton(this.element.find(`.${CLASS.aiHeaderButton}`));
   }
 }
