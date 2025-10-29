@@ -110,14 +110,18 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
     onRendered();
   }, [onRendered]);
 
-
   const guardNode = createHiddenNode(container?.nodeName, (node: HTMLElement) => {
     guardElement.current = node;
     elements.current = [];
 
     let currentNode = node?.previousSibling as HTMLElement;
 
-    while (currentNode && !currentNode.className?.includes(GUARD_NODE_CLASS_NAME)) {
+    while (
+      currentNode && (
+        typeof currentNode.className !== 'string'
+        || !currentNode.className.includes(GUARD_NODE_CLASS_NAME)
+      )
+    ) {
       elements.current.push(currentNode);
       currentNode = currentNode?.previousSibling as HTMLElement;
     }
