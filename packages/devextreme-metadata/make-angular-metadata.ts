@@ -59,7 +59,6 @@ Ng.makeMetadata({
     removeMembers(/\/grids:LoadPanel.indicatorOptions/),
     removeMembers(/\/scheduler:Toolbar/),
     removeMembers(/\/scheduler:dxSchedulerOptions\.editing\.form/),
-    removeMembers(/\/scheduler:dxSchedulerOptions\.resources\.icon/),
     removeMembers(/\/stepper:/),
     removeMembers(/\/speech_to_text:/),
   ],
