@@ -70,7 +70,7 @@ export function warnIfLegacyNestedComponent(nestedOption: BaseNestedOption, host
       `You are using the legacy ${legacySelector} configuration component. `
       + `We recommend upgrading to the new ${replacement} configuration component.`,
     );
-    //TODO: link to docs article, when available
+    // TODO: link to docs article, when available
   }
 }
 
