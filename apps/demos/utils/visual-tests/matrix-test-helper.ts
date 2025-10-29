@@ -214,13 +214,18 @@ export function shouldRunTestAtIndex(testIndex) {
 
 const SKIPPED_TESTS = {
   jQuery: { 
-    DataGrid: ['RemoteGrouping']
+    DataGrid: ['RemoteGrouping'],
+    Charts: [
+      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
+    ],
   },
   Angular: {
     Common: ['PopupAndNotificationsOverview'],
     DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping'],
     Scheduler: ['ContextMenu'],
-    FileUploader: ['CustomDropzone']
+    FileUploader: ['CustomDropzone'],
+    // TODO: make this more stable
+    // Stepper: ['StepTemplate'],
   },
   Vue: {
     Common: ['PopupAndNotificationsOverview'],

@@ -101,7 +101,7 @@ Object.values(FRAMEWORKS).forEach((approach) => {
 
     let comparisonOptions;
     if (process.env.DISABLE_DEMO_TEST_SETTINGS !== 'all') {
-      if (process.env.STRATEGY === 'accessibility' && accessibilityUnsupportedComponents.indexOf(widgetName) > -1) {
+      if (process.env.STRATEGY === 'accessibility' && accessibilityUnsupportedComponents.includes(widgetName)) {
         return;
       }
 
