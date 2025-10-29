@@ -1325,6 +1325,65 @@ describe('API Methods', () => {
       expect(columnSendRequestResolved).toHaveBeenCalledTimes(0);
       expect(abortSpy).toHaveBeenCalledTimes(0);
     });
+
+    it('should call a toast with error text if the request is rejected', async () => {
+      const aiIntegrationResultWithError = (): RequestResult => ({
+        promise: new Promise<string>((_resolve, reject) => {
+          columnSendRequestStarted();
+          // Timeouts are mocked and do not delay tests execution
+          setTimeout(() => {
+            reject(new Error('Test error'));
+          }, 10000);
+        }),
+        abort: (): void => {
+          abortSpy();
+        },
+      });
+      const columnAIIntegrationWithError = new AIIntegration({
+        sendRequest(): RequestResult {
+          return aiIntegrationResultWithError();
+        },
+      });
+      const { instance, component } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+          { id: 2, name: 'Name 2', value: 20 },
+        ],
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration: columnAIIntegrationWithError,
+              mode: 'manual',
+              prompt: 'Test prompt',
+            },
+          },
+        ],
+      });
+
+      expect(component.getToast().getInstance()).toBeUndefined();
+      instance.sendAIColumnRequest('myColumn');
+      expect(columnSendRequestStarted).toHaveBeenCalledTimes(1);
+      expect(abortSpy).toHaveBeenCalledTimes(0);
+      // There is enough time to resolve a promise
+      jest.advanceTimersByTime(10000);
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(abortSpy).toHaveBeenCalledTimes(1);
+      const toastInstance = component.getToast().getInstance();
+      expect(toastInstance).toBeDefined();
+      expect(toastInstance.option('message')).toEqual('Test error');
+      expect(toastInstance.option('type')).toEqual('error');
+      expect(toastInstance.option('position.at')).toEqual('bottom');
+      expect(toastInstance.option('position.my')).toEqual('bottom');
+    });
   });
 
   describe('refreshAIColumn', () => {
@@ -1775,7 +1834,7 @@ describe('API Handlers', () => {
       expect(columnSendRequestStarted).toHaveBeenCalledTimes(1);
       expect(columnSendRequestResolved).toHaveBeenCalledTimes(1);
       expect(sendRequestPromptSpy).toHaveBeenCalledWith(expect.objectContaining({
-        user: expect.stringContaining('Data: {"2":{"id":2,"name":"Name 2","value":20}}'),
+        user: expect.stringContaining('Dataset: {"2":{"id":2,"name":"Name 2","value":20}}'),
       }));
 
       await Promise.resolve();
@@ -1894,7 +1953,6 @@ describe('API Handlers', () => {
             }),
           }),
           data: 1,
-          additionalInfo: undefined,
           error: null,
         }),
       );
@@ -2006,7 +2064,6 @@ describe('API Handlers', () => {
             }),
           }),
           data: null,
-          additionalInfo: undefined,
           error: 'Test error',
         }),
       );
