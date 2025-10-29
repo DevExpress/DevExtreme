@@ -39,7 +39,7 @@ $(() => {
       allowMultiple: false,
       dataSource: priorityData,
       label: 'Priority',
-      icon: 'tag',
+      icon: 'tags',
     }, {
       fieldExpr: 'typeId',
       allowMultiple: false,

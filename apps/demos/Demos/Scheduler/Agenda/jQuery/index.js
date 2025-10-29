@@ -21,7 +21,7 @@ $(() => {
         fieldExpr: 'priorityId',
         dataSource: priorities,
         label: 'Priority',
-        icon: 'tag',
+        icon: 'tags',
       }],
     height: 600,
   });

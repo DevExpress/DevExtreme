@@ -22,7 +22,7 @@ $(() => {
       allowMultiple: false,
       dataSource: priorityData,
       label: 'Priority',
-      icon: 'tag',
+      icon: 'tags',
     }],
     height: 580,
   });

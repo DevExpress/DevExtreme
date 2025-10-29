@@ -17,7 +17,7 @@ $(() => {
         fieldExpr: 'priorityId',
         dataSource: priorities,
         label: 'Priority',
-        icon: 'tag',
+        icon: 'tags',
       }, {
         fieldExpr: 'assigneeId',
         allowMultiple: true,
