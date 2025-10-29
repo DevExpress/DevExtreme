@@ -23,7 +23,7 @@ type ScrollableDirection = 'both' | 'horizontal' | 'vertical';
           const expectedScrollOffsetValue = { left: 10, top: 20 };
           await t.expect(await scrollable.scrollOffset()).eql(expectedScrollOffsetValue);
 
-          await testScreenshot(t, takeScreenshot, `Scroll position before hide, useNative=${useNative},rtl=${rtlEnabled},useSimScrollbar=${useSimulatedScrollbar}.png`, {element: Selector('#scrollable')});
+          await testScreenshot(t, takeScreenshot, `Scroll position before hide, useNative=${useNative},rtl=${rtlEnabled},useSimScrollbar=${useSimulatedScrollbar}.png`, { element: Selector('#scrollable') });
 
           await t
             .expect(compareResults.isValid())
@@ -36,7 +36,7 @@ type ScrollableDirection = 'both' | 'horizontal' | 'vertical';
           await scrollable.triggerShownEvent();
 
           await t.expect(await scrollable.scrollOffset()).eql(expectedScrollOffsetValue);
-          await testScreenshot(t, takeScreenshot, `Scroll position after show, useNative=${useNative},rtl=${rtlEnabled},useSimScrollbar=${useSimulatedScrollbar}.png`, {element: Selector('#scrollable')});
+          await testScreenshot(t, takeScreenshot, `Scroll position after show, useNative=${useNative},rtl=${rtlEnabled},useSimScrollbar=${useSimulatedScrollbar}.png`, { element: Selector('#scrollable') });
 
           await t
             .expect(compareResults.isValid())
