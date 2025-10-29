@@ -15,15 +15,15 @@
         "devextreme-vue": "workspace:*"
     },
     "dependencies": {
-        "@angular-devkit/build-angular": "17.3.11",
-        "@angular/cli": "17.3.11",
-        "@angular/common": "17.3.12",
-        "@angular/compiler": "17.3.12",
-        "@angular/compiler-cli": "17.3.12",
-        "@angular/core": "17.3.12",
-        "@angular/forms": "17.3.12",
-        "@angular/platform-browser": "17.3.12",
-        "@angular/platform-browser-dynamic": "17.3.12",
+        "@angular-devkit/build-angular": "19.2.19",
+        "@angular/cli": "19.2.19",
+        "@angular/common": "19.2.15",
+        "@angular/compiler": "19.2.15",
+        "@angular/compiler-cli": "19.2.15",
+        "@angular/core": "19.2.15",
+        "@angular/forms": "19.2.15",
+        "@angular/platform-browser": "19.2.15",
+        "@angular/platform-browser-dynamic": "19.2.15",
         "@aspnet/signalr": "1.0.27",
         "@preact/signals-core": "^1.8.0",
         "@rollup/plugin-commonjs": "19.0.2",
@@ -88,7 +88,7 @@
         "zone.js": "0.14.10"
     },
     "devDependencies": {
-        "@angular/platform-server": "17.3.12",
+        "@angular/platform-server": "19.2.15",
         "@babel/core": "7.23.9",
         "@babel/eslint-parser": "catalog:",
         "@babel/preset-env": "7.23.9",

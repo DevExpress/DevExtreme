@@ -87,6 +87,20 @@ export default [
     },
     external: ["rxjs", "rxjs/operators", "zone.js"],
   },
+  {
+    input: NG_BASE_DIR + "@angular/core/fesm2022/primitives/di.mjs",
+    output: {
+      file: OUTPUT_DIR + `@angular/core.primitives.di.umd.js`,
+      format: "umd",
+      name: "ng.core.primitives.di",
+      globals: {
+        "@angular/core": "ng.core",
+        rxjs: "rxjs",
+        "rxjs/operators": "rxjs.operators",
+      },
+    },
+    external: ["rxjs", "rxjs/operators", "zone.js"],
+  },
 
   // forms
   {
