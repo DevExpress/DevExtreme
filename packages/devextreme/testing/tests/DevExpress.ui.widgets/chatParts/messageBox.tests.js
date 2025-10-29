@@ -38,7 +38,7 @@ const moduleConfig = {
             this.sendButton = Button.getInstance(this.$sendButton);
 
             this.$fileUploader = this.$element.find(`.${FILE_UPLOADER}`);
-            this.fileUploader = FileUploader.getInstance(this.$fileUploader);
+            this.getFileUploader = () => FileUploader.getInstance(this.$element.find(`.${FILE_UPLOADER}`));
 
             this.getEditingPreview = () => this.$element.find(`.${CHAT_EDITING_PREVIEW_CLASS}`);
             this.getEditingPreviewInstance = () => EditingPreview.getInstance(this.getEditingPreview());
@@ -230,8 +230,9 @@ QUnit.module('MessageBox', moduleConfig, () => {
                     uploadFile: () => {},
                 }
             });
-            this.fileUploader.option('value', [ { name: 'file.png', size: 123 }]);
-            this.fileUploader.upload();
+            const fileUploader = this.getFileUploader();
+            fileUploader.option('value', [ { name: 'file.png', size: 123 }]);
+            fileUploader.upload();
 
             clock.tick();
 

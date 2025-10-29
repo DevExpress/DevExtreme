@@ -33,7 +33,7 @@ const moduleConfig = {
             this.sendButton = Button.getInstance(this.$sendButton);
             this.$attachButton = this.$element.find(`.${FILE_UPLOADER_ATTACH_BUTTON}`);
             this.$fileUploader = this.$element.find(`.${FILE_UPLOADER}`);
-            this.fileUploader = FileUploader.getInstance(this.$fileUploader);
+            this.getFileUploader = () => FileUploader.getInstance(this.$element.find(`.${FILE_UPLOADER}`));
         };
 
         this.reinit = (options) => {
@@ -327,7 +327,7 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
             });
 
             assert.strictEqual(this.$fileUploader.length, 1, 'file uploader is not rendered');
-            assert.strictEqual(this.fileUploader instanceof FileUploader, true, 'file uploader has correct instance');
+            assert.strictEqual(this.getFileUploader() instanceof FileUploader, true, 'file uploader has correct instance');
         });
 
         QUnit.test('should not be rendered after fileUploaderOptions runtime updated', function(assert) {
@@ -352,7 +352,7 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
                     fileUploaderOptions: {},
                 });
 
-                assert.strictEqual(this.fileUploader.option(name), value);
+                assert.strictEqual(this.getFileUploader().option(name), value);
             });
         });
 
@@ -363,7 +363,7 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
                 },
             });
 
-            assert.strictEqual(this.fileUploader.option('multiple'), false, 'multiple option is redefined');
+            assert.strictEqual(this.getFileUploader().option('multiple'), false, 'multiple option is redefined');
         });
 
         QUnit.test('It should not be possible to redefine fileUploaderOptions.uploadMode option', function(assert) {
@@ -373,7 +373,7 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
                 },
             });
 
-            assert.strictEqual(this.fileUploader.option('uploadMode'), 'instantly', 'uploadMode option is not redefined');
+            assert.strictEqual(this.getFileUploader().option('uploadMode'), 'instantly', 'uploadMode option is not redefined');
         });
 
         QUnit.test('visible option should equal false when value is empty', function(assert) {
@@ -383,7 +383,7 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
                 }
             });
 
-            assert.strictEqual(this.fileUploader.option('visible'), false, 'fileUploader is not visible');
+            assert.strictEqual(this.getFileUploader().option('visible'), false, 'fileUploader is not visible');
         });
 
         QUnit.test('visible option should equal true when value is not empty', function(assert) {
@@ -393,7 +393,7 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
                 }
             });
 
-            assert.strictEqual(this.fileUploader.option('visible'), true, 'fileUploader is visible');
+            assert.strictEqual(this.getFileUploader().option('visible'), true, 'fileUploader is visible');
         });
 
         QUnit.test('visible option should change after runtime file adding', function(assert) {
@@ -402,12 +402,13 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
                     value: [fakeFile],
                 }
             });
+            const fileUploader = this.getFileUploader();
 
-            assert.strictEqual(this.fileUploader.option('visible'), true, 'fileUploader is visible');
+            assert.strictEqual(fileUploader.option('visible'), true, 'fileUploader is visible');
 
-            this.fileUploader.option('value', []);
+            fileUploader.option('value', []);
 
-            assert.strictEqual(this.fileUploader.option('visible'), false, 'fileUploader is hidden');
+            assert.strictEqual(fileUploader.option('visible'), false, 'fileUploader is hidden');
         });
 
         QUnit.test('dialogTrigger option should equal attach button element', function(assert) {
@@ -415,7 +416,7 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
                 fileUploaderOptions: {}
             });
 
-            const $dialogTrigger = $(this.fileUploader.option('dialogTrigger'));
+            const $dialogTrigger = $(this.getFileUploader().option('dialogTrigger'));
 
             assert.strictEqual($dialogTrigger.is(this.$attachButton), true);
         });
@@ -431,7 +432,7 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
                 }
             });
 
-            this.fileUploader.option('value', [fakeFile]);
+            this.getFileUploader().option('value', [fakeFile]);
         });
     });
 
@@ -506,9 +507,9 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
                     uploadFile: () => {},
                 },
             });
-
-            this.fileUploader.option('value', [fakeFile]);
-            this.fileUploader.upload();
+            const fileUploader = this.getFileUploader();
+            fileUploader.option('value', [fakeFile]);
+            fileUploader.upload();
 
             this.clock.tick();
 
@@ -524,7 +525,7 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
                 },
             });
 
-            this.fileUploader.option('value', [fakeFile]);
+            this.getFileUploader().option('value', [fakeFile]);
 
             const { disabled } = this.sendButton.option();
 
@@ -537,9 +538,9 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
                     uploadFile: () => {},
                 },
             });
-
-            this.fileUploader.option('value', [fakeFile]);
-            this.fileUploader.upload();
+            const fileUploader = this.getFileUploader();
+            fileUploader.option('value', [fakeFile]);
+            fileUploader.upload();
 
             this.clock.tick();
 
