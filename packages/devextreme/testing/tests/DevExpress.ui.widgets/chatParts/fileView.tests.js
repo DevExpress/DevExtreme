@@ -153,4 +153,40 @@ QUnit.module('FileView', moduleConfig, () => {
 
         assert.strictEqual(this.$element.children().length, 0, 'DOM cleared');
     });
+
+    QUnit.module('Accessibility', () => {
+        QUnit.test('file view should have aria attributes when initialized with files', function(assert) {
+            this.reinit({
+                files: [
+                    { name: 'test1.txt', size: 1024 },
+                    { name: 'test2.pdf', size: 2048 },
+                ],
+            });
+
+            assert.strictEqual(this.$element.attr('role'), 'list', 'role should be set correctly');
+            assert.strictEqual(this.$element.attr('aria-label'), 'File list', 'aria-label should be set correctly');
+        });
+
+        QUnit.test('file view should have role="list" and aria-label when files are changed in runtime', function(assert) {
+            this.reinit({
+                files: [],
+            });
+
+            this.instance.option('files', [{ name: 'test.txt', size: 1024 }]);
+
+            assert.strictEqual(this.$element.attr('role'), 'list', 'role should be updated correctly');
+            assert.strictEqual(this.$element.attr('aria-label'), 'File list', 'aria-label should be updated correctly');
+        });
+
+        QUnit.test('file view should remove aria attributes when all files are removed', function(assert) {
+            this.reinit({
+                files: [{ name: 'test.txt', size: 1024 }],
+            });
+
+            this.instance.option('files', []);
+
+            assert.strictEqual(this.$element.attr('role'), undefined, 'role should be updated correctly');
+            assert.strictEqual(this.$element.attr('aria-label'), undefined, 'aria-label should be updated correctly');
+        });
+    });
 });

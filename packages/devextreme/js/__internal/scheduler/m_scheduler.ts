@@ -264,6 +264,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       case 'firstDayOfWeek':
         this._updateOption('workSpace', name, value);
         this._updateOption('header', name, value);
+        this._cleanPopup();
         break;
       case 'currentDate': {
         const dateValue = this.getViewOption(name);
@@ -917,7 +918,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     this._editing.allowDragging = this._editing.allowDragging && this._editing.allowUpdating;
     this._editing.allowResizing = this._editing.allowResizing && this._editing.allowUpdating;
-    const isReadOnly = Object.values(this._editing).every((value) => !value);
+
+    const isReadOnly = Object.values({
+      ...this._editing,
+      form: undefined,
+    }).every((value) => !value);
 
     (this.$element() as any).toggleClass(WIDGET_READONLY_CLASS, isReadOnly);
   }
@@ -1054,6 +1059,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       createComponent: (element, component, options) => this._createComponent(element, component, options),
 
       getEditingConfig: () => this._editing,
+      getResourceManager: () => this.resourceManager,
 
       getFirstDayOfWeek: () => this.option('firstDayOfWeek'),
       getStartDayHour: () => this.option('startDayHour'),
@@ -1543,7 +1549,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     if (isPopupEditing) {
       this._appointmentPopup.show(singleRawAppointment, {
-        isToolbarVisible: true,
+        isToolbarVisible: true, // TODO: remove when legacyForm is deleted
         action: ACTION_TO_APPOINTMENT.EXCLUDE_FROM_SERIES,
         excludeInfo: {
           sourceAppointment: rawAppointment,
@@ -1914,7 +1920,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     if (isCreateAppointment) {
       delete this._editAppointmentData; // TODO
       this._editing.allowAdding && this._appointmentPopup.show(rawAppointment, {
-        isToolbarVisible: true,
+        isToolbarVisible: true, // TODO: remove when legacyForm is deleted
         action: ACTION_TO_APPOINTMENT.CREATE,
       });
     } else {
@@ -1924,7 +1930,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this._editAppointmentData = rawAppointment; // TODO
 
         this._appointmentPopup.show(rawAppointment, {
-          isToolbarVisible: this._editing.allowUpdating,
+          isToolbarVisible: this._editing.allowUpdating, // TODO: remove when legacyForm is deleted
           action: ACTION_TO_APPOINTMENT.UPDATE,
         });
       }, false, true);

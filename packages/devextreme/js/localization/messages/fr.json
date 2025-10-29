@@ -413,6 +413,8 @@
         "dxChat-editingDeleteConfirmText": "Êtes-vous sûr de vouloir supprimer ce message ?",
         "dxChat-deletedMessageText": "Le message a été supprimé",
         "dxChat-defaultImageAlt": "Image partagée dans le chat",
+        "dxChat-fileViewLabel": "File list",
+        "dxChat-downloadButtonLabel": "Download file {0}",
 
         "dxColorView-ariaRed": "Rouge",
         "dxColorView-ariaGreen": "Vert",

@@ -1,3 +1,4 @@
+import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { ClickEvent } from '@js/ui/button';
@@ -11,7 +12,7 @@ import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { ButtonProps as ButtonProperties } from '@ts/ui/button/button';
-import { getFileIconName } from '@ts/ui/file_uploader/file_uploader.utils';
+import { getFileIconName, getFileSize } from '@ts/ui/file_uploader/file_uploader.utils';
 
 export type Properties = DOMComponentProperties<File> & {
   activeStateEnabled?: boolean;
@@ -64,7 +65,10 @@ class File extends DOMComponent<File, Properties> {
   }
 
   _initMarkup(): void {
-    this.$element().addClass(CHAT_FILE_CLASS);
+    this.$element()
+      .addClass(CHAT_FILE_CLASS)
+      .attr('role', 'listitem');
+
     super._initMarkup();
     this._renderSections();
   }
@@ -105,7 +109,7 @@ class File extends DOMComponent<File, Properties> {
     const { data } = this.option();
     const { size } = data;
 
-    const text = `${size} B`;
+    const text = getFileSize(size);
 
     const $size = $('<div>')
       .addClass(CHAT_FILE_SIZE_CLASS)
@@ -135,10 +139,15 @@ class File extends DOMComponent<File, Properties> {
       hoverStateEnabled,
     } = this.option();
 
-    const configuration = {
+    // @ts-expect-error useInkRipple should be optional
+    const configuration: ButtonProperties = {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
+      elementAttr: {
+        // @ts-expect-error format params should be extended
+        'aria-label': messageLocalization.format('dxChat-downloadButtonLabel', data?.name ?? ''),
+      },
       icon: 'download',
       stylingMode: 'text' as const,
       onClick: (e: ClickEvent): void => {
@@ -151,7 +160,7 @@ class File extends DOMComponent<File, Properties> {
       },
     };
 
-    return configuration as ButtonProperties;
+    return configuration;
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
