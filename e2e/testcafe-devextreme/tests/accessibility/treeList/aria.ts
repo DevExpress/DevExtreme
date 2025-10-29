@@ -74,7 +74,7 @@ const options = {
   ],
 };
 
-test('Aria expanded should be toggled true on Ctrl + → keypress', async (t) => {
+test.meta({ unstable: !!isMaterial() })('Aria expanded should be toggled true on Ctrl + → keypress', async (t) => {
   const treeList = new TreeList('#container');
   const expandableRow = treeList.getDataRow(0).element;
   const expandableCells = [

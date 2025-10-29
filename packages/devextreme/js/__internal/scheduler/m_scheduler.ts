@@ -918,7 +918,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     this._editing.allowDragging = this._editing.allowDragging && this._editing.allowUpdating;
     this._editing.allowResizing = this._editing.allowResizing && this._editing.allowUpdating;
-    const isReadOnly = Object.values(this._editing).every((value) => !value);
+
+    const isReadOnly = Object.values({
+      ...this._editing,
+      form: undefined,
+    }).every((value) => !value);
 
     (this.$element() as any).toggleClass(WIDGET_READONLY_CLASS, isReadOnly);
   }
@@ -1055,6 +1059,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       createComponent: (element, component, options) => this._createComponent(element, component, options),
 
       getEditingConfig: () => this._editing,
+      getResourceManager: () => this.resourceManager,
 
       getFirstDayOfWeek: () => this.option('firstDayOfWeek'),
       getStartDayHour: () => this.option('startDayHour'),

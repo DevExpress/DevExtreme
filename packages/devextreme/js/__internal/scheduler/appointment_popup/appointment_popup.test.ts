@@ -9,6 +9,11 @@ import fx from '../../../common/core/animation/fx';
 import { createScheduler } from '../__tests__/__mock__/create_scheduler';
 import { setupSchedulerTestEnvironment } from '../__tests__/__mock__/m_mock_scheduler';
 
+const CLASSES = {
+  icon: 'dx-scheduler-form-icon',
+  hidden: 'dx-hidden',
+};
+
 const getDefaultData = () => [
   {
     text: 'recurrent-app',
@@ -116,7 +121,6 @@ describe('Appointment Popup Form', () => {
       {
         toolbar: 'top',
         location: 'before',
-        text: 'Edit Appointment',
         cssClass: 'dx-toolbar-label',
       },
       {
@@ -141,7 +145,6 @@ describe('Appointment Popup Form', () => {
       {
         toolbar: 'top',
         location: 'before',
-        text: 'Edit Appointment',
         cssClass: 'dx-toolbar-label',
       },
       {
@@ -151,6 +154,38 @@ describe('Appointment Popup Form', () => {
         options: { stylingMode: 'outlined' },
       },
     ];
+
+    describe('Popup Title', () => {
+      it('should display "New Appointment" when creating new appointment', async () => {
+        const { scheduler, POM } = await createScheduler({
+          ...getDefaultConfig(),
+          editing: { allowAdding: true },
+        });
+
+        scheduler.showAppointmentPopup();
+
+        const toolbarItems = POM.popup.component.option('toolbarItems');
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const titleItem = toolbarItems?.find((item: any) => item.cssClass === 'dx-toolbar-label');
+
+        expect(titleItem?.text).toBe('New Appointment');
+      });
+
+      it('should display "Edit Appointment" when editing existing appointment', async () => {
+        const { scheduler, POM } = await createScheduler({
+          ...getDefaultConfig(),
+          editing: { allowUpdating: true },
+        });
+
+        scheduler.showAppointmentPopup(commonAppointment);
+
+        const toolbarItems = POM.popup.component.option('toolbarItems');
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const titleItem = toolbarItems?.find((item: any) => item.cssClass === 'dx-toolbar-label');
+
+        expect(titleItem?.text).toBe('Edit Appointment');
+      });
+    });
 
     it.each([
       { allowUpdating: false, disabled: false },
@@ -776,6 +811,97 @@ describe('Appointment Popup Form', () => {
           endDate: new Date(2017, 4, 15, 11, 0),
           recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,FR',
         });
+      });
+    });
+  });
+
+  describe('Icons', () => {
+    describe('Subject icon', () => {
+      it('has default color when appointment has no resources', async () => {
+        const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+        scheduler.showAppointmentPopup(commonAppointment);
+
+        const $icon = $(POM.popup.subjectIcon);
+        expect($icon.css('color')).toBe('');
+      });
+
+      it('has default color when showAppointmentPopup is called without data', async () => {
+        const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+        scheduler.showAppointmentPopup();
+
+        const $icon = $(POM.popup.subjectIcon);
+        expect($icon.css('color')).toBe('');
+      });
+
+      it('has resource color when appointment has resource', async () => {
+        const resourceColor1 = 'rgb(255, 0, 0)';
+        const resourceColor2 = 'rgb(0, 0, 255)';
+        const { scheduler, POM } = await createScheduler({
+          ...getDefaultConfig(),
+          resources: [{
+            fieldExpr: 'roomId',
+            dataSource: [
+              { id: 1, text: 'Room 1', color: resourceColor1 },
+              { id: 2, text: 'Room 2', color: resourceColor2 },
+            ],
+          }],
+        });
+
+        scheduler.showAppointmentPopup({
+          ...commonAppointment,
+          roomId: 1,
+        });
+
+        await new Promise(process.nextTick);
+
+        const $icon = $(POM.popup.subjectIcon);
+        expect($icon.css('color')).toBe(resourceColor1);
+
+        POM.popup.form.getEditor('roomId')?.option('value', 2);
+        await new Promise(process.nextTick);
+
+        expect($icon.css('color')).toBe(resourceColor2);
+      });
+    });
+
+    describe('Resource icons', () => {
+      it.each<{
+        iconsShowMode: 'both' | 'main' | 'none' | 'recurrence';
+        visibleMain: boolean;
+        visibleRecurrence: boolean;
+      }>([
+        { iconsShowMode: 'both', visibleMain: true, visibleRecurrence: true },
+        { iconsShowMode: 'main', visibleMain: true, visibleRecurrence: false },
+        { iconsShowMode: 'recurrence', visibleMain: false, visibleRecurrence: true },
+        { iconsShowMode: 'none', visibleMain: false, visibleRecurrence: false },
+      ])('should shown icons correctly when iconsShowMode is \'$iconsShowMode\'', async ({ iconsShowMode, visibleMain, visibleRecurrence }) => {
+        const { scheduler, POM } = await createScheduler({
+          ...getDefaultConfig(),
+          editing: { form: { iconsShowMode } },
+        });
+
+        scheduler.showAppointmentPopup(commonAppointment);
+
+        const mainFormIcons = POM.popup.mainGroup?.querySelectorAll(`.${CLASSES.icon}`) ?? [];
+        const recurrenceFormIcons = POM.popup.recurrenceGroup?.querySelectorAll(`.${CLASSES.icon}`) ?? [];
+
+        expect(mainFormIcons.length).toBe(4);
+        expect(recurrenceFormIcons.length).toBe(3);
+
+        const mainIconsCorrect = Array.from(mainFormIcons).every((icon) => {
+          const isVisible = !icon.classList.contains(CLASSES.hidden);
+          return isVisible === visibleMain;
+        });
+
+        const recurrenceIconsCorrect = Array.from(recurrenceFormIcons).every((icon) => {
+          const isVisible = !icon.classList.contains(CLASSES.hidden);
+          return isVisible === visibleRecurrence;
+        });
+
+        expect(mainIconsCorrect).toBe(true);
+        expect(recurrenceIconsCorrect).toBe(true);
       });
     });
   });

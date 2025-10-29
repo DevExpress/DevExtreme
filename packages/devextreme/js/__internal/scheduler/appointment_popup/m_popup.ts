@@ -361,7 +361,7 @@ export class AppointmentPopup {
         location: 'before',
         widget: 'dxButton',
         options: {
-          icon: 'back',
+          icon: 'arrowleft',
           stylingMode: 'text',
           onClick: (): void => {
             this.form.showMainGroup();
@@ -407,10 +407,13 @@ export class AppointmentPopup {
   }
 
   updateToolbarForMainGroup(): void {
+    const isCreating = this.state.action === ACTION_TO_APPOINTMENT.CREATE;
+    const formTitleKey = isCreating ? 'dxScheduler-newPopupTitle' : 'dxScheduler-editPopupTitle';
+
     const toolbarItems: ToolbarItem[] = [{
       toolbar: 'top',
       location: 'before',
-      text: messageLocalization.format('dxScheduler-editPopupTitle'),
+      text: messageLocalization.format(formTitleKey),
       cssClass: 'dx-toolbar-label',
     }];
 

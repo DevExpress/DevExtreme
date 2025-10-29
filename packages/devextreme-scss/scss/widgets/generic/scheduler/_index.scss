@@ -272,8 +272,12 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
       }
     }
 
+    .dx-scheduler-form-icon-sized-gap {
+      width: $generic-scheduler-appointment-popup-icon-size;
+    }
+
     .dx-scheduler-form-subject-group .dx-scheduler-form-icon {
-      color: $scheduler-form-subject-icon-color;
+      color: $scheduler-appointment-base-color;
     }
 
     .dx-scheduler-form-description-group .dx-scheduler-form-icon,

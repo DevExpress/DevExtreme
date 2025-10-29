@@ -118,6 +118,8 @@ export type CancelButtonClickEvent = NativeEventInfo<InteractionEvent> & {
   readonly file?: File;
 };
 
+export type FileLimitReachedEvent = NativeEventInfo<FileUploader>;
+
 interface Properties extends PublicProperties {
   _buttonStylingMode?: ButtonStyle;
 
@@ -129,6 +131,8 @@ interface Properties extends PublicProperties {
 
   _cancelButtonPosition?: 'start' | 'end';
 
+  _maxFileCount?: number;
+
   extendSelection?: boolean;
 
   allowCanceling?: boolean;
@@ -139,7 +143,9 @@ interface Properties extends PublicProperties {
 
   useDragOver?: boolean;
 
-  onCancelButtonClick?: ((e: CancelButtonClickEvent) => void);
+  onCancelButtonClick?: (e: CancelButtonClickEvent) => void;
+
+  onFileLimitReached?: (e: FileLimitReachedEvent) => void;
 }
 
 export interface FileUploaderProperties extends Properties,
