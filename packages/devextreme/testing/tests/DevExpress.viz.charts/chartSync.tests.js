@@ -8,7 +8,7 @@ import { noop } from 'core/utils/common';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import vizUtils from 'viz/core/utils_default';
 import titleModule from 'viz/core/title';
-import exportModule from 'viz/core/export';
+import exportModule from '__internal/viz/core/exportModule';
 import tooltipModule from 'viz/core/tooltip';
 import rendererModule from 'viz/core/renderers/renderer_default';
 import { Deferred } from 'core/utils/deferred';
