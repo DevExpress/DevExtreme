@@ -17,7 +17,7 @@ export const dependencies: FlatStylesDependencies = {
   dropdownbutton: ['validation', 'button', 'buttongroup', 'popup', 'loadindicator', 'loadpanel', 'scrollview', 'list'],
   calendar: ['validation', 'button'],
   cardview: ['box', 'button', 'calendar', 'checkbox', 'contextmenu', 'datebox', 'filterbuilder', 'form', 'list', 'loadindicator', 'loadpanel', 'multiview', 'numberbox', 'popup', 'responsivebox', 'scrollview', 'selectbox', 'sortable', 'tabpanel', 'tabs', 'textbox', 'toast', 'toolbar', 'treeview', 'validation'],
-  chat: ['button', 'loadindicator', 'loadpanel', 'popup', 'scrollview', 'textbox', 'toolbar', 'validation'],
+  chat: ['button', 'loadindicator', 'loadpanel', 'popup', 'progressbar', 'scrollview', 'textbox', 'toolbar', 'validation'],
   checkbox: ['validation'],
   numberbox: ['validation', 'button', 'loadindicator'],
   colorbox: ['validation', 'button', 'loadindicator', 'numberbox', 'textbox', 'popup'],
