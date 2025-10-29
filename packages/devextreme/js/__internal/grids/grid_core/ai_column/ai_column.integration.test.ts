@@ -243,7 +243,7 @@ describe('Options', () => {
     });
   });
 
-  describe('default headerCellTemplate', () => {
+  describe('when headerCellTemplate isn\'t set', () => {
     it('should render icon, text and button by default', async () => {
       const { component } = await createDataGrid({
         dataSource: [
@@ -262,16 +262,19 @@ describe('Options', () => {
       });
 
       const headerCell = component.getHeaderCell(3);
-      const aiColumnHeaderText = headerCell.querySelector('.dx-datagrid-text-content');
+      const aiColumnHeaderContent = headerCell.querySelector(`.${CLASSES.aiColumnHeaderContent}`);
+      const aiColumnHeaderText = aiColumnHeaderContent?.querySelector('.dx-datagrid-text-content');
 
-      expect(headerCell.querySelector(`.${CLASSES.aiColumnHeaderContent}`)).not.toBeNull();
-      expect(headerCell.querySelector(`.${CLASSES.aiChatSparkleOutlineIcon}`)).not.toBeNull();
+      expect(aiColumnHeaderContent).not.toBeNull();
+      expect(aiColumnHeaderContent?.querySelector(`.${CLASSES.aiChatSparkleOutlineIcon}`)).not.toBeNull();
       expect(aiColumnHeaderText).not.toBeNull();
       expect(aiColumnHeaderText?.textContent).toBe('AI Column');
       expect(headerCell.querySelector(`.${CLASSES.aiColumnHeaderButton}`)).not.toBeNull();
     });
+  });
 
-    it('should replace default header template after dynamic headerCellTemplate update', async () => {
+  describe('when headerCellTemplate is dynamically updated', () => {
+    it('should replace default header template', async () => {
       const headerCellTemplate = jest.fn((container: HTMLElement) => {
         const span = document.createElement('span');
 
@@ -367,6 +370,39 @@ describe('Options', () => {
 
       expect(visibleColumns.map(({ caption }) => caption))
         .toEqual(['ID', 'AI Column', 'Name', 'Value']);
+    });
+  });
+
+  describe('when column.ai.showHeaderMenu is set to false', () => {
+    it('should not render header button', async () => {
+      const { component } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              showHeaderMenu: false,
+            },
+          },
+        ],
+      });
+
+      const headerCell = component.getHeaderCell(3);
+      const aiColumnHeaderContent = headerCell.querySelector(`.${CLASSES.aiColumnHeaderContent}`);
+      const aiColumnHeaderText = aiColumnHeaderContent?.querySelector('.dx-datagrid-text-content');
+
+      expect(aiColumnHeaderContent).not.toBeNull();
+      expect(aiColumnHeaderContent?.querySelector(`.${CLASSES.aiChatSparkleOutlineIcon}`)).not.toBeNull();
+      expect(aiColumnHeaderText).not.toBeNull();
+      expect(aiColumnHeaderText?.textContent).toBe('AI Column');
+      expect(headerCell.querySelector(`.${CLASSES.aiColumnHeaderButton}`)).toBeNull();
     });
   });
 });
