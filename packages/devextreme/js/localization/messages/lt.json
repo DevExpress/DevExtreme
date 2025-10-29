@@ -274,10 +274,10 @@
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
 
         "dxScheduler-appointmentListAriaLabel": "Appointment list",
-
+        "dxScheduler-newPopupTitle": "New Appointment",
         "dxScheduler-editPopupTitle": "Edit Appointment",
         "dxScheduler-editPopupSaveButtonText": "Save",
-        
+
         "dxScheduler-editorLabelTitle": "Tema",
         "dxScheduler-editorLabelStartDate": "Pradžios data",
         "dxScheduler-editorLabelEndDate": "Pabaigos data",

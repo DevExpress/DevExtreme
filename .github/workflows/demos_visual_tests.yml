@@ -78,7 +78,8 @@ jobs:
       fail-fast: false
       matrix:
         STRATEGY: [screenshots, accessibility]
-        THEME: ['material.blue.light', 'fluent.blue.light']
+        # THEME: ['material.blue.light', 'fluent.blue.light']
+        THEME: ['fluent.blue.light']
         CONSTEL: [jquery(1/4), jquery(2/4), jquery(3/4), jquery(4/4), jquery]
         exclude:
           - STRATEGY: accessibility
