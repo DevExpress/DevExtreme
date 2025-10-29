@@ -88,6 +88,9 @@
         "dxFileUploader-invalidFileExtension": "El tipus de fitxer no està permès",
         "dxFileUploader-invalidMaxFileSize": "El fitxer és massa gran",
         "dxFileUploader-invalidMinFileSize": "El fitxer és massa petit",
+        "dxFileUploader-fileListLabel": "File list",
+        "dxFileUploader-removeFileButtonLabel": "Remove file {0}",
+        "dxFileUploader-uploadFileButtonLabel": "Upload file {0}",
 
         "dxRangeSlider-ariaFrom": "Des de",
         "dxRangeSlider-ariaTill": "Fins a",
@@ -271,10 +274,10 @@
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
 
         "dxScheduler-appointmentListAriaLabel": "Appointment list",
-
+        "dxScheduler-newPopupTitle": "New Appointment",
         "dxScheduler-editPopupTitle": "Edit Appointment",
         "dxScheduler-editPopupSaveButtonText": "Save",
-        
+
         "dxScheduler-editorLabelTitle": "Assignatura",
         "dxScheduler-editorLabelStartDate": "Data d'inici",
         "dxScheduler-editorLabelEndDate": "Data de finalització",
@@ -410,6 +413,8 @@
         "dxChat-editingDeleteConfirmText": "Are you sure you want to delete this message?",
         "dxChat-deletedMessageText": "This message was deleted",
         "dxChat-defaultImageAlt": "Image shared in chat",
+        "dxChat-fileViewLabel": "File list",
+        "dxChat-downloadButtonLabel": "Download file {0}",
 
         "dxColorView-ariaRed": "Vermell",
         "dxColorView-ariaGreen": "Verd",

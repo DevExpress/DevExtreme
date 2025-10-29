@@ -12,10 +12,10 @@ import {
   CLASSES, DEFAULT_POPUP_OPTIONS,
   REGENERATE_DATA_BUTTON_INDEX, STOP_BUTTON_INDEX,
 } from './const';
-import type { AiPromptEditorAction, AiPromptEditorOptions } from './types';
+import type { AIPromptEditorAction, AIPromptEditorOptions } from './types';
 import { getPrompt, isPromptChanged } from './utils';
 
-export class AiPromptEditor {
+export class AIPromptEditor {
   private readonly popupInstance: Popup;
 
   private editorInstance!: TextArea;
@@ -25,7 +25,7 @@ export class AiPromptEditor {
   private prompt: string;
 
   constructor(
-    private options: AiPromptEditorOptions,
+    private options: AIPromptEditorOptions,
   ) {
     const { container, createComponent } = options;
 
@@ -45,14 +45,15 @@ export class AiPromptEditor {
   private getTextAreaConfig(): TextAreaProperties {
     return {
       value: this.prompt,
-      height: 140,
+      height: 110,
+      stylingMode: 'outlined',
       onValueChanged: (e): void => {
         this.updateButtonOption(APPLY_BUTTON_INDEX, 'disabled', !e.value); // Update the disable state of the Apply button
         this.updateButtonOption(REGENERATE_DATA_BUTTON_INDEX, 'disabled', true); // Update the disable state of the Regenerate Data button
       },
       placeholder: messageLocalization.format('dxDataGrid-aiPromptEditorPlaceholder'),
       valueChangeEvent: 'input change keyup',
-      ...this.options.editorOptions,
+      ...this.options.editorOptions as TextAreaProperties,
     };
   }
 
@@ -63,6 +64,7 @@ export class AiPromptEditor {
       shadingColor: 'transparent',
       dragEnabled: true,
       hideOnOutsideClick: true,
+      showCloseButton: true,
       title: messageLocalization.format('dxDataGrid-aiPromptEditorTitle'),
       wrapperAttr: { class: `${CLASSES.aiPromptEditor} ${CLASSES.aiDialog}` },
       contentTemplate: ($container): void => {
@@ -110,7 +112,7 @@ export class AiPromptEditor {
           options: this.getStopButtonConfig(),
         },
       ],
-      ...this.options.popupOptions,
+      ...this.options.popupOptions as PopupProperties,
     };
   }
 
@@ -211,7 +213,7 @@ export class AiPromptEditor {
    * @param action - The current action being performed
    */
   public updateStateOnAction(
-    action: AiPromptEditorAction,
+    action: AIPromptEditorAction,
   ): void {
     // eslint-disable-next-line default-case
     switch (action) {
@@ -229,7 +231,7 @@ export class AiPromptEditor {
     }
   }
 
-  public updateOptions(options: AiPromptEditorOptions): void {
+  public updateOptions(options: AIPromptEditorOptions): void {
     this.options = options;
     this.updatePrompt(getPrompt(options.prompt));
     this.popupInstance.option(this.getPopupConfig());

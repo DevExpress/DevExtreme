@@ -6,41 +6,41 @@ function postpone(duration) {
   return new Promise((resolve) => setTimeout(resolve, duration || 5000));
 }
 
-function postponeUntilInternal(condition, interval, timeout, inverseCondition) {
-  let i = 0;
-  const theInterval = interval || 100;
-  const theTimeout = timeout || 10000;
+function postponeUntilInternal(condition, interval = 100, timeout = 10000) {
   return new Promise((resolve) => {
-    const id = setInterval(() => {
+    const start = performance.now();
+
+    const check = () => {
       const result = condition();
-      if (i * theInterval >= theTimeout || (inverseCondition ? !result : result)) {
-        clearInterval(id);
-        resolve();
+      const elapsed = performance.now() - start;
+
+      if (elapsed >= timeout || result) {
+        return resolve();
       }
-      i += 1;
-    }, theInterval);
+
+      setTimeout(() => requestAnimationFrame(check), interval);
+    };
+
+    check();
   });
 }
 
 function postponeUntil(condition, interval, timeout) {
-  return postponeUntilInternal(condition, interval, timeout, false);
+  return postponeUntilInternal(condition, interval, timeout);
 }
 
 function ifAny(array) {
   return array.length && array;
 }
 
-function postponeUntilFoundInternal(selector, interval, timeout, inverseCondition) {
+function postponeUntilFoundInternal(selector, interval, timeout) {
   const condition = Array.isArray(selector)
     ? (() => ifAny(selector.flatMap(findElements)))
     : (() => ifAny(findElements(selector)));
-  return postponeUntilInternal(condition, interval, timeout, inverseCondition);
+  return postponeUntilInternal(condition, interval, timeout);
 }
 function postponeUntilFound(selector, interval, timeout) {
-  return postponeUntilFoundInternal(selector, interval, timeout, false);
-}
-function postponeUntilNotFound(selector, interval, timeout) {
-  return postponeUntilFoundInternal(selector, interval, timeout, true);
+  return postponeUntilFoundInternal(selector, interval, timeout);
 }
 
 function getValues(getter) {
@@ -77,7 +77,6 @@ const testUtils = {
   postpone,
   postponeUntil,
   postponeUntilFound,
-  postponeUntilNotFound,
   importAnd,
   findElements,
   mockOptionMethod,

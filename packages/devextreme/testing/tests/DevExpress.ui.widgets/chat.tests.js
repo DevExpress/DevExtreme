@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(() => {
     const markup = '<div id="component"></div>';
@@ -19,3 +19,4 @@ import './chatParts/typingIndicator.tests.js';
 import './chatParts/editingPreview.tests.js';
 import './chatParts/chatTextArea.tests.js';
 import './chatParts/chat.tests.js';
+import './chatParts/fileView.tests.js';

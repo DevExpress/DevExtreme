@@ -57,6 +57,8 @@ $material-scheduler-appointment-popup-all-day-item-height: null !default;
 $material-scheduler-appointment-popup-all-day-item-padding-left: null !default;
 $material-scheduler-appointment-popup-all-day-item-font-size: null !default;
 $material-scheduler-appointment-popup-all-day-item-margin-bottom: null !default;
+$material-scheduler-days-of-week-button-size: null !default;
+$material-scheduler-recurrence-end-item-height: null !default;
 
 $scheduler-timeline-cell-height: 50px !default;
 
@@ -102,6 +104,8 @@ $scheduler-timeline-cell-height: 50px !default;
   $material-scheduler-appointment-popup-all-day-item-padding-left: 16px !default;
   $material-scheduler-appointment-popup-all-day-item-font-size: 16px !default;
   $material-scheduler-appointment-popup-all-day-item-margin-bottom: 3px !default;
+  $material-scheduler-days-of-week-button-size: 32px !default;
+  $material-scheduler-recurrence-end-item-height: 32px !default;
 
   $agenda-appointment-title-font-size: 14px;
 }
@@ -147,6 +151,8 @@ $scheduler-timeline-cell-height: 50px !default;
   $material-scheduler-appointment-popup-all-day-item-padding-left: 12px !default;
   $material-scheduler-appointment-popup-all-day-item-font-size: 14px !default;
   $material-scheduler-appointment-popup-all-day-item-margin-bottom: 1px !default;
+  $material-scheduler-days-of-week-button-size: 24px !default;
+  $material-scheduler-recurrence-end-item-height: 32px !default;
 
   $agenda-appointment-title-font-size: 13px;
 }

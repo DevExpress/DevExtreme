@@ -7,10 +7,10 @@ import $ from '@js/core/renderer';
 import Popup from '@js/ui/popup';
 import ProgressBar from '@js/ui/progress_bar';
 import TextArea from '@js/ui/text_area';
-import { AiPromptEditorModel } from '@ts/grids/grid_core/__tests__/__mock__/model/ai_prompt_editor';
+import { AIPromptEditorModel } from '@ts/grids/grid_core/__tests__/__mock__/model/ai_prompt_editor';
 
-import { AiPromptEditor } from './ai_prompt_editor';
-import type { AiPromptEditorOptions } from './types';
+import { AIPromptEditor } from './ai_prompt_editor';
+import type { AIPromptEditorOptions } from './types';
 
 const createComponentMock = jest.fn((
   el: dxElementWrapper,
@@ -18,15 +18,15 @@ const createComponentMock = jest.fn((
   options: any,
 ): any => new Widget(el, options));
 
-const createAiPromptEditor = (
-  options: Partial<AiPromptEditorOptions> = {},
+const createAIPromptEditor = (
+  options: Partial<AIPromptEditorOptions> = {},
 ): {
   container: dxElementWrapper;
-  instance: AiPromptEditor;
-  POM: AiPromptEditorModel;
+  instance: AIPromptEditor;
+  POM: AIPromptEditorModel;
 } => {
   const container = $(document.createElement('div')).appendTo(document.body);
-  const instance = new AiPromptEditor({
+  const instance = new AIPromptEditor({
     ...options,
     container,
     createComponent: createComponentMock,
@@ -35,7 +35,7 @@ const createAiPromptEditor = (
   return {
     container,
     instance,
-    POM: new AiPromptEditorModel(container[0]),
+    POM: new AIPromptEditorModel(container[0]),
   };
 };
 
@@ -49,7 +49,7 @@ const afterTest = (): void => {
   fx.off = false;
 };
 
-describe('AiPromptEditor', () => {
+describe('AIPromptEditor', () => {
   beforeEach(beforeTest);
   afterEach(afterTest);
 
@@ -59,7 +59,7 @@ describe('AiPromptEditor', () => {
       const onStop = (): void => {};
       const onRefresh = (): void => {};
 
-      const { container } = createAiPromptEditor({
+      const { container } = createAIPromptEditor({
         onSubmit,
         onStop,
         onRefresh,
@@ -74,6 +74,7 @@ describe('AiPromptEditor', () => {
           height: 'auto',
           title: 'AI Prompt Editor',
           hideOnOutsideClick: true,
+          showCloseButton: true,
           shading: false,
           shadingColor: 'transparent',
           dragEnabled: true,
@@ -135,16 +136,17 @@ describe('AiPromptEditor', () => {
 
   describe('when creating an instance', () => {
     it('should create TextArea using createComponent', () => {
-      const { POM } = createAiPromptEditor({ popupOptions: { visible: true } });
+      const { POM } = createAIPromptEditor({ popupOptions: { visible: true } });
 
       expect(createComponentMock.mock.calls[1]).toEqual([
         $(POM.getTextArea().getElement()),
         TextArea,
         {
-          height: 140,
+          height: 110,
           onValueChanged: expect.any(Function),
           value: '',
           valueChangeEvent: 'input change keyup',
+          stylingMode: 'outlined',
           placeholder: 'Prompt AI to generate column values...',
         },
       ]);
@@ -153,7 +155,7 @@ describe('AiPromptEditor', () => {
 
   describe('when creating an instance', () => {
     it('should create ProgressBar using createComponent', () => {
-      const { POM } = createAiPromptEditor({ popupOptions: { visible: true } });
+      const { POM } = createAIPromptEditor({ popupOptions: { visible: true } });
 
       expect(createComponentMock.mock.calls[2]).toEqual([
         $(POM.getProgressBar().getElement()),
@@ -172,7 +174,7 @@ describe('AiPromptEditor', () => {
     it('should call onRefresh', () => {
       const onRefreshMock = jest.fn();
 
-      const { POM } = createAiPromptEditor({
+      const { POM } = createAIPromptEditor({
         prompt: 'test',
         popupOptions: { visible: true },
         onRefresh: onRefreshMock,
@@ -188,7 +190,7 @@ describe('AiPromptEditor', () => {
     it('should call onSubmit', () => {
       const onSubmitMock = jest.fn();
 
-      const { POM } = createAiPromptEditor({
+      const { POM } = createAIPromptEditor({
         popupOptions: { visible: true },
         onSubmit: onSubmitMock,
       });
@@ -205,7 +207,7 @@ describe('AiPromptEditor', () => {
       const onStopMock = jest.fn();
       const onSubmitMock = jest.fn();
 
-      const { POM } = createAiPromptEditor({
+      const { POM } = createAIPromptEditor({
         popupOptions: { visible: true },
         onStop: onStopMock,
         onSubmit: onSubmitMock,
@@ -230,7 +232,7 @@ describe('Regenerate Data button', () => {
 
   describe('when no initial value is provided', () => {
     it('should be disabled', () => {
-      const { POM } = createAiPromptEditor({
+      const { POM } = createAIPromptEditor({
         popupOptions: { visible: true },
       });
 
@@ -240,7 +242,7 @@ describe('Regenerate Data button', () => {
 
   describe('when initial value is empty string', () => {
     it('should be disabled', () => {
-      const { POM } = createAiPromptEditor({
+      const { POM } = createAIPromptEditor({
         prompt: '',
         popupOptions: { visible: true },
       });
@@ -251,7 +253,7 @@ describe('Regenerate Data button', () => {
 
   describe('when initial value is provided', () => {
     it('should be enabled', () => {
-      const { POM } = createAiPromptEditor({
+      const { POM } = createAIPromptEditor({
         prompt: 'initial text',
         popupOptions: { visible: true },
       });
@@ -267,7 +269,7 @@ describe('Apply button', () => {
 
   describe('when no initial value is provided', () => {
     it('should be disabled', () => {
-      const { POM } = createAiPromptEditor({
+      const { POM } = createAIPromptEditor({
         popupOptions: { visible: true },
       });
 
@@ -277,7 +279,7 @@ describe('Apply button', () => {
 
   describe('when initial value is provided', () => {
     it('should be disabled', () => {
-      const { POM } = createAiPromptEditor({
+      const { POM } = createAIPromptEditor({
         prompt: 'initial text',
         popupOptions: { visible: true },
       });
@@ -288,7 +290,7 @@ describe('Apply button', () => {
 
   describe('when text area value changes from empty', () => {
     it('should be enabled', () => {
-      const { POM } = createAiPromptEditor({
+      const { POM } = createAIPromptEditor({
         popupOptions: { visible: true },
       });
 
@@ -302,7 +304,7 @@ describe('Apply button', () => {
 
   describe('when text area value changes from non-empty', () => {
     it('should be enabled', () => {
-      const { POM } = createAiPromptEditor({
+      const { POM } = createAIPromptEditor({
         prompt: 'initial text',
         popupOptions: { visible: true },
       });
@@ -317,7 +319,7 @@ describe('Apply button', () => {
 
   describe('when text area value is changed back to initial value', () => {
     it('should be enabled', () => {
-      const { POM } = createAiPromptEditor({
+      const { POM } = createAIPromptEditor({
         prompt: 'initial text',
         popupOptions: { visible: true },
       });
@@ -336,7 +338,7 @@ describe('Apply button', () => {
 
   describe('when text area value is reset from non-empty', () => {
     it('should be disabled', () => {
-      const { POM } = createAiPromptEditor({
+      const { POM } = createAIPromptEditor({
         popupOptions: { visible: true },
       });
 
@@ -359,7 +361,7 @@ describe('Stop button', () => {
 
   describe('when editor is created', () => {
     it('should be hidden by default', () => {
-      const { POM } = createAiPromptEditor({
+      const { POM } = createAIPromptEditor({
         popupOptions: { visible: true },
       });
 
@@ -374,7 +376,7 @@ describe('TextArea', () => {
 
   describe('when editor is created', () => {
     it('should be enabled by default', () => {
-      const { POM } = createAiPromptEditor({
+      const { POM } = createAIPromptEditor({
         popupOptions: { visible: true },
       });
 
@@ -389,7 +391,7 @@ describe('Public Methods', () => {
 
   describe('when toggleApplyButtonVisibility is called', () => {
     it('should show Apply and hide Stop when isApplyButtonVisible is true', () => {
-      const { instance, POM } = createAiPromptEditor({
+      const { instance, POM } = createAIPromptEditor({
         popupOptions: { visible: true },
       });
 
@@ -400,7 +402,7 @@ describe('Public Methods', () => {
     });
 
     it('should hide Apply and show Stop when isApplyButtonVisible is false', () => {
-      const { instance, POM } = createAiPromptEditor({
+      const { instance, POM } = createAIPromptEditor({
         popupOptions: { visible: true },
       });
 
@@ -411,7 +413,7 @@ describe('Public Methods', () => {
     });
 
     it('should toggle visibility correctly', () => {
-      const { instance, POM } = createAiPromptEditor({
+      const { instance, POM } = createAIPromptEditor({
         popupOptions: { visible: true },
       });
 
@@ -433,7 +435,7 @@ describe('Public Methods', () => {
 
   describe('when updatePrompt is called', () => {
     it('should update internal value and enable Regenerate Data button', () => {
-      const { instance, POM } = createAiPromptEditor({
+      const { instance, POM } = createAIPromptEditor({
         popupOptions: { visible: true },
       });
 
@@ -443,7 +445,7 @@ describe('Public Methods', () => {
     });
 
     it('should update internal value and disable Regenerate Data button', () => {
-      const { instance, POM } = createAiPromptEditor({
+      const { instance, POM } = createAIPromptEditor({
         prompt: 'initial text',
         popupOptions: { visible: true },
       });
@@ -456,7 +458,7 @@ describe('Public Methods', () => {
 
   describe('when show is called', () => {
     it('should be visible', async () => {
-      const { instance, POM } = createAiPromptEditor();
+      const { instance, POM } = createAIPromptEditor();
 
       await instance.show();
 
@@ -466,7 +468,7 @@ describe('Public Methods', () => {
 
   describe('when hide is called', () => {
     it('should be hidden', async () => {
-      const { instance, POM } = createAiPromptEditor({
+      const { instance, POM } = createAIPromptEditor({
         popupOptions: { visible: true },
       });
 
@@ -480,7 +482,7 @@ describe('Public Methods', () => {
 
   describe('when updateOptions is called', () => {
     it('should update the prompt editor options', async () => {
-      const { container, instance, POM } = createAiPromptEditor({
+      const { container, instance, POM } = createAIPromptEditor({
         prompt: 'updated prompt',
         popupOptions: { visible: true },
       });
@@ -508,7 +510,7 @@ describe('Public Methods', () => {
 
   describe('when setLoading is called', () => {
     it('should show progress bar when isLoading is true', () => {
-      const { instance, POM } = createAiPromptEditor({
+      const { instance, POM } = createAIPromptEditor({
         popupOptions: { visible: true },
       });
 
@@ -520,7 +522,7 @@ describe('Public Methods', () => {
     });
 
     it('should hide progress bar when isLoading is false', () => {
-      const { instance, POM } = createAiPromptEditor({
+      const { instance, POM } = createAIPromptEditor({
         popupOptions: { visible: true },
       });
 
@@ -535,7 +537,7 @@ describe('Public Methods', () => {
   describe('when updateStateOnAction is called', () => {
     describe('with apply action', () => {
       it('should set loading, disable controls and hide apply button', () => {
-        const { instance, POM } = createAiPromptEditor({
+        const { instance, POM } = createAIPromptEditor({
           prompt: 'initial text',
           popupOptions: { visible: true },
         });
@@ -566,7 +568,7 @@ describe('Public Methods', () => {
 
     describe('with regenerate action', () => {
       it('should set loading and disable controls', () => {
-        const { instance, POM } = createAiPromptEditor({
+        const { instance, POM } = createAIPromptEditor({
           prompt: 'initial text',
           popupOptions: { visible: true },
         });
@@ -596,7 +598,7 @@ describe('Public Methods', () => {
 
     describe('with stop action after apply', () => {
       it('should clear loading, enable controls and show apply button', () => {
-        const { instance, POM } = createAiPromptEditor({
+        const { instance, POM } = createAIPromptEditor({
           prompt: 'initial text',
           popupOptions: { visible: true },
         });
@@ -631,7 +633,7 @@ describe('Public Methods', () => {
 
     describe('with stop action after regenerate data', () => {
       it('should clear loading, enable controls and enable regenerate data button', () => {
-        const { instance, POM } = createAiPromptEditor({
+        const { instance, POM } = createAIPromptEditor({
           prompt: 'initial text',
           popupOptions: { visible: true },
         });

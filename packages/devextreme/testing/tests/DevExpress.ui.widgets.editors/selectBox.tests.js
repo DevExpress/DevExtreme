@@ -14,9 +14,8 @@ import config from 'core/config';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 import { normalizeKeyName } from 'common/core/events/utils/index';
 import messageLocalization from 'common/core/localization/message';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import 'ui/validator';
 
 const EMPTY_MESSAGE_CLASS = 'dx-empty-message';
@@ -405,10 +404,6 @@ QUnit.module('functionality', moduleSetup, () => {
     });
 
     QUnit.testInActiveWindow('input focused after click on drop button', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const $selectBox = $('#selectBox').dxSelectBox({});
         const $dropDownButton = $selectBox.find(`.${DX_DROP_DOWN_BUTTON}`);
 
@@ -494,10 +489,6 @@ QUnit.module('functionality', moduleSetup, () => {
     });
 
     QUnit.test('list item obtained focus only after press on control key', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const $selectBox = $('#selectBox').dxSelectBox({
             items: [1, 2, 3],
             searchEnabled: true,
@@ -925,10 +916,6 @@ QUnit.module('functionality', moduleSetup, () => {
     });
 
     QUnit.test('the selected item should be focused after popup is opened', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const items = [1, 2, 3];
         const item = items[1];
         const selectBox = $('#selectBox').dxSelectBox({
@@ -3731,10 +3718,6 @@ QUnit.module('search', moduleSetup, () => {
     });
 
     QUnit.test('Input value should not be changed after dropdown click when "startswith" search mode is enabled', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const $selectBox = $('#selectBox').dxSelectBox({
             items: ['1', '2', '3'],
             searchMode: 'startswith',
@@ -4105,10 +4088,6 @@ QUnit.module('search substitution', {
     });
 
     QUnit.test('the list item value should be displayed in input while navigating without substitution', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const items = ['aaa', 'bbb'];
 
         this.reinit({
@@ -4128,9 +4107,6 @@ QUnit.module('search substitution', {
     });
 
     QUnit.test('the list item value should not be displayed in input after click on item', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
         const dataSource = [
             { id: 1, text: 'test1' },
             { id: 2, text: 'test2' },
@@ -4165,10 +4141,6 @@ QUnit.module('search substitution', {
     });
 
     QUnit.testInActiveWindow('the first list item should be focused while searching', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const items = ['aaa', 'abb', 'aab'];
 
         this.reinit({
@@ -4551,10 +4523,6 @@ QUnit.module('regressions', moduleSetup, () => {
     });
 
     QUnit.test('press "enter" key sets option value (T100679)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const value = {
             value: 'test'
         };
@@ -4580,10 +4548,6 @@ QUnit.module('regressions', moduleSetup, () => {
     });
 
     QUnit.test('press "space" key sets option value', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const value = {
             value: 'test'
         };
@@ -4609,10 +4573,6 @@ QUnit.module('regressions', moduleSetup, () => {
     });
 
     QUnit.test('press "space" key shouldn\'t sets option value if SelectBox accept custom value', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const value = {
             value: 'test'
         };
@@ -4639,10 +4599,6 @@ QUnit.module('regressions', moduleSetup, () => {
     });
 
     QUnit.test('press "space" key shouldn\'t sets option value if search is enabled', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const value = {
             value: 'test'
         };
@@ -5379,10 +5335,6 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
     });
 
     QUnit.testInActiveWindow('value should be reset to the previous one on the "tab" press if popup is closed', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const items = ['aaa', 'aab'];
         const $selectBox = $('#selectBox').dxSelectBox({
             items: items,
@@ -5406,9 +5358,6 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
     });
 
     QUnit.testInActiveWindow('input value should be reset to the previous one on the "esc" press', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
         const items = ['aaa', 'aab'];
         const $selectBox = $('#selectBox').dxSelectBox({
             items: items,
@@ -5427,10 +5376,6 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
     });
 
     QUnit.testInActiveWindow('value should be reset on the "tab" press after input value was cleared', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const item = 'a';
         const $selectBox = $('#selectBox').dxSelectBox({
             items: [item],
@@ -5453,10 +5398,6 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
     });
 
     QUnit.testInActiveWindow('value should be restored after the focusout when selection was not changed', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const items = ['first', 'second'];
         const $selectBox = $('#selectBox').dxSelectBox({
             items: items,
@@ -5475,10 +5416,6 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
     });
 
     QUnit.test('value should be restored after the drop down button pressed when selection was not changed', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const items = ['first', 'second'];
         const $selectBox = $('#selectBox').dxSelectBox({
             items: items,
@@ -5594,10 +5531,6 @@ QUnit.module('keyboard navigation "TAB" button', moduleSetup, () => {
     });
 
     QUnit.test('After highlighting item and pressing "tab" it should be chosen', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const $element = $('#selectBox').dxSelectBox({
             dataSource: ['United States of America', 'Uruguay', 'Uzbekistan', 'Vanuatu'],
             searchEnabled: true,
@@ -5677,10 +5610,6 @@ QUnit.module('keyboard navigation "TAB" button', moduleSetup, () => {
     });
 
     QUnit.testInActiveWindow('the "tab" key press should focus the "apply" button if the input is focused', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const items = [1, 2, 3];
         const $element = $('#selectBox').dxSelectBox({
             dataSource: items,
@@ -6066,10 +5995,6 @@ QUnit.module('focus policy', {
     });
 
     QUnit.test('selectbox should not focus disabled item after the search', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         this.instance.option({
             searchEnabled: true,
             opened: true,

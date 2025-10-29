@@ -88,6 +88,9 @@
         "dxFileUploader-invalidFileExtension": "Type de fichier non autorisé",
         "dxFileUploader-invalidMaxFileSize": "Fichier trop volumineux",
         "dxFileUploader-invalidMinFileSize": "Fichier trop petit",
+        "dxFileUploader-fileListLabel": "File list",
+        "dxFileUploader-removeFileButtonLabel": "Remove file {0}",
+        "dxFileUploader-uploadFileButtonLabel": "Upload file {0}",
 
         "dxRangeSlider-ariaFrom": "De {0}",
         "dxRangeSlider-ariaTill": "à {0}",
@@ -271,10 +274,10 @@
         "dxScheduler-appointmentAriaLabel-recurring": "Rendez-vous récurrent",
 
         "dxScheduler-appointmentListAriaLabel": "Liste des rendez-vous ",
-
+        "dxScheduler-newPopupTitle": "New Appointment",
         "dxScheduler-editPopupTitle": "Edit Appointment",
         "dxScheduler-editPopupSaveButtonText": "Save",
-        
+
         "dxScheduler-editorLabelTitle": "Titre",
         "dxScheduler-editorLabelStartDate": "Date de début",
         "dxScheduler-editorLabelEndDate": "Date de fin",
@@ -410,6 +413,8 @@
         "dxChat-editingDeleteConfirmText": "Êtes-vous sûr de vouloir supprimer ce message ?",
         "dxChat-deletedMessageText": "Le message a été supprimé",
         "dxChat-defaultImageAlt": "Image partagée dans le chat",
+        "dxChat-fileViewLabel": "File list",
+        "dxChat-downloadButtonLabel": "Download file {0}",
 
         "dxColorView-ariaRed": "Rouge",
         "dxColorView-ariaGreen": "Vert",

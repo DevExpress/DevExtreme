@@ -88,6 +88,9 @@
         "dxFileUploader-invalidFileExtension": "Bylos tipas yra negalimas",
         "dxFileUploader-invalidMaxFileSize": "Byla yra per didelė",
         "dxFileUploader-invalidMinFileSize": "Byla yra per maža",
+        "dxFileUploader-fileListLabel": "File list",
+        "dxFileUploader-removeFileButtonLabel": "Remove file {0}",
+        "dxFileUploader-uploadFileButtonLabel": "Upload file {0}",
 
         "dxRangeSlider-ariaFrom": "Nuo",
         "dxRangeSlider-ariaTill": "Iki",
@@ -271,10 +274,10 @@
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
 
         "dxScheduler-appointmentListAriaLabel": "Appointment list",
-
+        "dxScheduler-newPopupTitle": "New Appointment",
         "dxScheduler-editPopupTitle": "Edit Appointment",
         "dxScheduler-editPopupSaveButtonText": "Save",
-        
+
         "dxScheduler-editorLabelTitle": "Tema",
         "dxScheduler-editorLabelStartDate": "Pradžios data",
         "dxScheduler-editorLabelEndDate": "Pabaigos data",
@@ -410,6 +413,8 @@
         "dxChat-editingDeleteConfirmText": "Are you sure you want to delete this message?",
         "dxChat-deletedMessageText": "This message was deleted",
         "dxChat-defaultImageAlt": "Image shared in chat",
+        "dxChat-fileViewLabel": "File list",
+        "dxChat-downloadButtonLabel": "Download file {0}",
 
         "dxColorView-ariaRed": "Raudona",
         "dxColorView-ariaGreen": "Žalia",

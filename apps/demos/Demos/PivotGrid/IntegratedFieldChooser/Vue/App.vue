@@ -40,7 +40,7 @@ import {
   DxSelectBox,
 } from 'devextreme-vue/select-box';
 
-const dataSource = {
+const dataSource: Record<string, any> = {
   fields: [
     { dataField: '[Product].[Category]', area: 'row' },
     {

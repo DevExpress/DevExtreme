@@ -9,6 +9,8 @@ import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
 
+import 'fluent_blue_light.css!';
+
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
 
 fx.off = true;

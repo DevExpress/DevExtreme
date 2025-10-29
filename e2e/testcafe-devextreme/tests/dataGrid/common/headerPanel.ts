@@ -177,10 +177,9 @@ test('Toolbar should not reset its widget values when changing the disabled prop
 
 test('Invisible toolbar doesn\'t have additional paddings (T1261773)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const dataGrid = new DataGrid('#container');
 
   await t
-    .expect(await takeScreenshot('invisible-toolbar-buttons-generic.light.png', dataGrid.element))
+    .expect(await takeScreenshot('invisible-toolbar-buttons-generic.light.png'))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

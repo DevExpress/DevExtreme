@@ -15,9 +15,8 @@ import dataUtils from 'core/element_data';
 import dateLocalization from 'common/core/localization/date';
 import { normalizeKeyName } from 'common/core/events/utils/index';
 import localization from 'localization';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 // calendar
 const CALENDAR_BODY_CLASS = 'dx-calendar-body';
@@ -2275,10 +2274,6 @@ QUnit.module('Options', {
                 }
             ].forEach(({ value, scenario }) => {
                 QUnit.test(`Cells should not have ${CALENDAR_CELL_IN_RANGE_CLASS} class on hover ${scenario}`, function(assert) {
-                    if(shouldSkipOnMobile(assert)) {
-                        return;
-                    }
-
                     this.reinit({
                         value,
                         selectionMode: 'range'
@@ -2292,10 +2287,6 @@ QUnit.module('Options', {
             });
 
             QUnit.test(`Cells should have ${CALENDAR_CELL_RANGE_HOVER_CLASS} class on hover when only startDate is defined`, function(assert) {
-                if(shouldSkipOnMobile(assert)) {
-                    return;
-                }
-
                 this.reinit({
                     value: ['2023/01/13', null],
                     selectionMode: 'range'
@@ -2325,10 +2316,6 @@ QUnit.module('Options', {
             });
 
             QUnit.test('Hovered range should be cleared after mouseleave on viewsWrapper element', function(assert) {
-                if(shouldSkipOnMobile(assert)) {
-                    return;
-                }
-
                 this.reinit({
                     value: ['2023/01/13', null],
                     selectionMode: 'range'

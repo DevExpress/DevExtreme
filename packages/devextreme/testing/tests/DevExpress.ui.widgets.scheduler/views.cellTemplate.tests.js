@@ -8,6 +8,8 @@ import { dateToMilliseconds } from 'core/utils/date';
 import { createWrapper, createWrapperFakeClock, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 
+import 'generic_light.css!';
+
 const {
     module,
     testStart,

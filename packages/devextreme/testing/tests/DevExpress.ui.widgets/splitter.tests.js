@@ -8,8 +8,9 @@ import config from 'core/config';
 import { createEvent } from 'common/core/events/utils/index';
 import { name as DOUBLE_CLICK_EVENT } from 'common/core/events/double_click';
 import { name as CLICK_EVENT } from 'common/core/events/click';
+import resizeObserverSingleton from 'core/resize_observer';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
 const SPLITTER_ITEM_HIDDEN_CONTENT_CLASS = 'dx-splitter-item-hidden-content';
@@ -1343,6 +1344,22 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         $collapsePrevButton.trigger('dxclick');
 
         this.assertLayout(['0', '66.6677', '33.3339']);
+    });
+
+    QUnit.test('Should unobserve element on detach (T1311706)', function(assert) {
+        sinon.stub(resizeObserverSingleton, 'unobserve');
+
+        const $splitter = $('<div id="splitterDetached">');
+
+        $splitter.dxSplitter({
+            dataSource: [{ size: '30%' }, { size: '70%' }]
+        });
+
+        $splitter.remove();
+
+        assert.strictEqual(resizeObserverSingleton.unobserve.callCount, 2);
+
+        resizeObserverSingleton.unobserve.restore();
     });
 });
 

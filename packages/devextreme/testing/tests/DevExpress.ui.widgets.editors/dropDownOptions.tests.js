@@ -3,7 +3,7 @@ import fx from 'common/core/animation/fx';
 import { dropDownEditorsList } from '../../helpers/widgetsList.js';
 import { defaultDropDownOptions } from '../../helpers/dropDownOptions.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const dropDownEditorsNames = Object.keys(dropDownEditorsList);
 const dropDownOptionsKeys = Object.keys(defaultDropDownOptions);

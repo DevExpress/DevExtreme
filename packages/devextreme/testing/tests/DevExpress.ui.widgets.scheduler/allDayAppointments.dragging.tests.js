@@ -9,9 +9,8 @@ import {
     createWrapper,
     initTestMarkup
 } from '../../helpers/scheduler/helpers.js';
-import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import '__internal/scheduler/m_scheduler';
 
 const { module, test, testStart } = QUnit;

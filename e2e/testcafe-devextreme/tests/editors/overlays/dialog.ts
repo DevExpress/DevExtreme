@@ -1,6 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 
@@ -14,7 +13,7 @@ fixture.disablePageReloads`Dialog`
   'confirm',
   'custom',
 ].forEach((dialogType) => {
-  safeSizeTest(`Dialog appearance (${dialogType})`, async (t) => {
+  test(`Dialog appearance (${dialogType})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await testScreenshot(t, takeScreenshot, `Dialog appearance (${dialogType}).png`);
@@ -28,7 +27,7 @@ fixture.disablePageReloads`Dialog`
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [400, 400]).before(async () => {
+  }).before(async () => {
     const dialogArgs = dialogType === 'custom'
       ? { title: 'custom', messageHtml: 'message', buttons: [{ text: 'Custom button' }] }
       : dialogType;

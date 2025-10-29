@@ -3,7 +3,7 @@ import fx from 'common/core/animation/fx';
 
 import 'ui/progress_bar';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(function() {
     const markup =

@@ -5,8 +5,6 @@ import 'ui/text_area';
 import 'ui/tag_box';
 import 'ui/slider';
 
-import 'generic_light.css!';
-
 QUnit.testStart(function() {
     const markup = '<div id="form"></div>';
     $('#qunit-fixture').html(markup);

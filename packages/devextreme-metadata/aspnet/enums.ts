@@ -1,6 +1,6 @@
 export const enums = {
   AnimationEasing: {
-    items: [
+    Items: [
       'ease',
       'ease-in',
       'ease-in-out',
@@ -12,10 +12,10 @@ export const enums = {
     ],
   },
   EdmType: {
-    items: ['Guid', 'Int32', 'Int64', 'String', 'Boolean', 'Single', 'Decimal'],
+    Items: ['Guid', 'Int32', 'Int64', 'String', 'Boolean', 'Single', 'Decimal'],
   },
   FilterOperations: {
-    items: [
+    Items: [
       '=',
       '<>',
       '<',
@@ -30,7 +30,7 @@ export const enums = {
     ],
   },
   GaugeIndicatorType: {
-    items: [
+    Items: [
       'circle',
       'rangeBar',
       'rectangle',
@@ -41,13 +41,13 @@ export const enums = {
       'triangleNeedle',
       'twoColorNeedle',
     ],
-    options: ['GaugeIndicator.type'],
+    Options: ['GaugeIndicator.type'],
   },
   GeoMapProvider: {
-    items: ['bing', 'google', 'googleStatic', 'azure'],
+    Items: ['bing', 'google', 'googleStatic', 'azure'],
   },
   SchedulerViewType: {
-    items: [
+    Items: [
       'agenda',
       'day',
       'month',
@@ -58,53 +58,53 @@ export const enums = {
       'week',
       'workWeek',
     ],
-    options: ['dxScheduler.views'],
+    Options: ['dxScheduler.views'],
   },
   ShowScrollbarMode: {
-    items: ['always', 'never', 'onHover', 'onScroll'],
-    options: ['dxScrollView.showScrollbar'],
+    Items: ['always', 'never', 'onHover', 'onScroll'],
+    Options: ['dxScrollView.showScrollbar'],
   },
   TextEditorButtonWidget: {
-    items: ['dxButton'],
+    Items: ['dxButton'],
   },
   DiagramDataLayoutOrientation: {
-    items: ['vertical', 'horizontal'],
+    Items: ['vertical', 'horizontal'],
   },
   GanttSortingMode: {
-    items: ['multiple', 'none', 'single'],
+    Items: ['multiple', 'none', 'single'],
   },
   GridSortingMode: {
-    items: ['multiple', 'none', 'single'],
+    Items: ['multiple', 'none', 'single'],
   },
   PieChartLegendHoverMode: {
-    items: ['none', 'allArgumentPoints'],
+    Items: ['none', 'allArgumentPoints'],
   },
   PolarChartOverlappingBehavior: {
-    items: ['none', 'hide'],
+    Items: ['none', 'hide'],
   },
   SelectionMode: {
-    items: ['multiple', 'none', 'single'],
+    Items: ['multiple', 'none', 'single'],
   },
   PolarChartResolveLabelOverlapping: {
-    items: ['hide', 'none'],
+    Items: ['hide', 'none'],
   },
   ButtonGroupSelectionMode: {
-    items: ['multiple', 'single', 'none'],
+    Items: ['multiple', 'single', 'none'],
   },
   ChartElementSelectionMode: {
-    items: ['multiple', 'single'],
+    Items: ['multiple', 'single'],
   },
   FileManagerSelectionMode: {
-    items: ['multiple', 'single'],
+    Items: ['multiple', 'single'],
   },
   ListSelectionMode: {
-    items: ['all', 'multiple', 'none', 'single'],
+    Items: ['all', 'multiple', 'none', 'single'],
   },
   MenuSelectionMode: {
-    items: ['none', 'single'],
+    Items: ['none', 'single'],
   },
   NavSelectionMode: {
-    items: ['multiple', 'single'],
+    Items: ['multiple', 'single'],
   },
 };
 

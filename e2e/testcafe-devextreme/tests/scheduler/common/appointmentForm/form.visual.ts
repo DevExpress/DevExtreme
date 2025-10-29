@@ -31,7 +31,7 @@ const openAppointmentPopup = async (
   return scheduler.appointmentPopup;
 };
 
-const getResources = () => ([
+const getResources = (withIcons = false) => ([
   {
     fieldExpr: 'assigneeId',
     allowMultiple: true,
@@ -40,6 +40,7 @@ const getResources = () => ([
       { text: 'Samantha Bright', id: 1, color: '#727bd2' },
       { text: 'John Heart', id: 2, color: '#32c9ed' },
     ],
+    icon: withIcons ? 'user' : undefined,
   },
   {
     fieldExpr: 'roomId',
@@ -47,6 +48,7 @@ const getResources = () => ([
     dataSource: [
       { text: 'Room 1', id: 1, color: '#00af2c' },
     ],
+    icon: withIcons ? 'conferenceroomfilled' : undefined,
   },
   {
     fieldExpr: 'priorityId',
@@ -54,10 +56,9 @@ const getResources = () => ([
     dataSource: [
       { text: 'High', id: 1, color: '#cc5c53' },
     ],
+    icon: withIcons ? 'tags' : undefined,
   },
 ]);
-
-const windowSize: [number, number] = [1500, 1500];
 
 [
   'generic.light',
@@ -90,7 +91,7 @@ const windowSize: [number, number] = [1500, 1500];
       const appointmentPopup = await openAppointmentPopup(t, appointment, isRecurringAppointment);
 
       await takeScreenshot(
-        `scheduler__appointment__main-form.png (recurring=${isRecurringAppointment},allDay=${isAllDay},theme=${theme})`,
+        `scheduler__appointment__main-form (recurring=${isRecurringAppointment},allDay=${isAllDay},theme=${theme})`,
         appointmentPopup.contentElement,
       );
 
@@ -115,14 +116,14 @@ const windowSize: [number, number] = [1500, 1500];
       const appointmentPopup = await openAppointmentPopup(t, appointment, isRecurringAppointment);
 
       await takeScreenshot(
-        `scheduler__appointment__main-form__with-resources-and-timezones.png (recurring=${isRecurringAppointment},allDay=${isAllDay},theme=${theme})`,
+        `scheduler__appointment__main-form__with-resources-and-timezones (recurring=${isRecurringAppointment},allDay=${isAllDay},theme=${theme})`,
         appointmentPopup.contentElement,
       );
 
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }, windowSize).before(async () => {
+    }, [1500, 1500]).before(async () => {
       await changeTheme(theme);
       await createWidget('dxScheduler', {
         dataSource: [appointment],
@@ -139,3 +140,33 @@ const windowSize: [number, number] = [1500, 1500];
     });
   });
 });
+
+safeSizeTest('main form with resources that have icons', async (t) => {
+  const appointment = {
+    text: 'Appointment',
+    startDate: new Date('2021-04-26T16:30:00.000Z'),
+    endDate: new Date('2021-04-26T18:30:00.000Z'),
+    assigneeId: [1, 2],
+    roomId: 1,
+    priorityId: 1,
+  };
+
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const appointmentPopup = await openAppointmentPopup(t, appointment, false);
+
+  await takeScreenshot(
+    'scheduler__appointment__main-form__with-resources-with-icons.png',
+    appointmentPopup.contentElement,
+  );
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [1500, 1500]).before(() => createWidget('dxScheduler', {
+  dataSource: [],
+  views: ['week'],
+  currentView: 'week',
+  currentDate: new Date(2021, 2, 25),
+  resources: getResources(true),
+}));

@@ -88,6 +88,9 @@
         "dxFileUploader-invalidFileExtension": "Tipul fișierului nu este permis",
         "dxFileUploader-invalidMaxFileSize": "Fișierul este prea mare",
         "dxFileUploader-invalidMinFileSize": "Fișierul este prea mic",
+        "dxFileUploader-fileListLabel": "File list",
+        "dxFileUploader-removeFileButtonLabel": "Remove file {0}",
+        "dxFileUploader-uploadFileButtonLabel": "Upload file {0}",
 
         "dxRangeSlider-ariaFrom": "Din",
         "dxRangeSlider-ariaTill": "Până",
@@ -271,10 +274,10 @@
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
 
         "dxScheduler-appointmentListAriaLabel": "Appointment list",
-
+        "dxScheduler-newPopupTitle": "New Appointment",
         "dxScheduler-editPopupTitle": "Edit Appointment",
         "dxScheduler-editPopupSaveButtonText": "Save",
-        
+
         "dxScheduler-editorLabelTitle": "Subiect",
         "dxScheduler-editorLabelStartDate": "Data de început",
         "dxScheduler-editorLabelEndDate": "Data de încheiere",
@@ -410,6 +413,8 @@
         "dxChat-editingDeleteConfirmText": "Are you sure you want to delete this message?",
         "dxChat-deletedMessageText": "This message was deleted",
         "dxChat-defaultImageAlt": "Image shared in chat",
+        "dxChat-fileViewLabel": "File list",
+        "dxChat-downloadButtonLabel": "Download file {0}",
 
         "dxColorView-ariaRed": "Roșu",
         "dxColorView-ariaGreen": "Verde",

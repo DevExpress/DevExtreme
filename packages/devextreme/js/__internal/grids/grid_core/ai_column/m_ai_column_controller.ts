@@ -1,20 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import type { GenerateGridColumnCommandResult, RequestCallbacks } from '@js/common/ai-integration';
 import type { Callback } from '@js/core/utils/callbacks';
 
-import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { Column, ColumnsController } from '../columns_controller/m_columns_controller';
 import type { DataController } from '../data_controller/m_data_controller';
 import { Controller } from '../m_modules';
-import { AiColumnCacheController } from './m_ai_column_cache_controller';
-import { AiColumnIntegrationController } from './m_ai_column_integration_controller';
+import { AIColumnIntegrationController } from './m_ai_column_integration_controller';
+import { isAIColumnAutoMode } from './utils';
 
-export class AiColumnController extends Controller {
+export class AIColumnController extends Controller {
   private dataController!: DataController;
 
   private columnsController!: ColumnsController;
 
-  private aiColumnCacheController!: AiColumnCacheController;
-
-  private aiColumnIntegrationController!: AiColumnIntegrationController;
+  private aiColumnIntegrationController!: AIColumnIntegrationController;
 
   private dataChangedHandler!: (e) => any;
 
@@ -30,39 +29,33 @@ export class AiColumnController extends Controller {
     this.columnsController = this.getController('columns');
     this.dataController = this.getController('data');
 
-    this.aiColumnCacheController = new AiColumnCacheController(this.component);
-    this.aiColumnIntegrationController = new AiColumnIntegrationController(this.component);
+    this.aiColumnIntegrationController = new AIColumnIntegrationController(this.component);
     this.aiColumnIntegrationController.init();
-    this.aiColumnCacheController.init();
 
     this.dataChangedHandler = this.handleDataChanged.bind(this);
     this.dataController.changed.add(this.dataChangedHandler);
-
-    this.createAction('onAIColumnRequestCreating');
-    this.createAction('onAIColumnResponseReceived');
   }
 
-  private createAIColumnRequest() {
-    const options = {};
-    this.executeAction('onAIColumnRequestCreating', options);
+  private showResults(
+    columnName: string,
+    result: string,
+    cachedData: Record<PropertyKey, string>,
+  ): void {
+    // Update the results in the UI or internal state
   }
 
-  private receiveAIColumnResponse() {
-    const options = {};
-    this.executeAction('onAIColumnResponseReceived', options);
+  public getAIColumns(): Column[] {
+    return this.columnsController.getColumns().filter((col) => col.type === 'ai') as Column[];
   }
 
   private handleDataChanged(e) {
-    const aiColumns = this.columnsController.getColumns()
-      .filter((col) => col.type === 'ai' && (!col.ai?.mode || col.ai.mode === 'auto'));
+    const aiColumns = this.getAIColumns();
 
     for (const col of aiColumns) {
-      this.refreshAIColumn(col.name);
+      if (isAIColumnAutoMode(col)) {
+        this.refreshAIColumn(col.name as string);
+      }
     }
-  }
-
-  private showResult(columnName: string, data: Record<PropertyKey, string>): void {
-    // TODO
   }
 
   // API methods
@@ -77,21 +70,14 @@ export class AiColumnController extends Controller {
     ];
   }
 
-  public abortAIColumnRequest(): void {
-    this.aiColumnIntegrationController.abortRequest();
+  public abortAIColumnRequest(columnName: string): void {
+    this.aiColumnIntegrationController.abortRequest(columnName);
   }
 
   public sendAIColumnRequest(
     columnName: string,
   ): void {
-    this.aiColumnIntegrationController.sendRequest(columnName, {
-      onComplete: (data) => {
-        this.aiRequestCompleted.fire(data);
-      },
-      onError: (error: Error) => {
-        this.aiRequestRejected.fire(error);
-      },
-    });
+    this.aiColumnIntegrationController.sendRequest(columnName, true, this.getRequestCallbacks());
   }
 
   public refreshAIColumn(
@@ -100,8 +86,19 @@ export class AiColumnController extends Controller {
     this.sendAIColumnRequest(columnName);
   }
 
-  public clearAIColumn(columnName: string): void {
+  private getRequestCallbacks(): RequestCallbacks<GenerateGridColumnCommandResult> {
+    return {
+      onComplete: (data): void => {
+        this.aiRequestCompleted.fire(data);
+      },
+      onError: (error: Error): void => {
+        this.aiRequestRejected.fire(error);
+      },
+    };
+  }
 
+  public clearAIColumn(columnName: string): void {
+    this.aiColumnIntegrationController.abortRequest(columnName);
   }
 
   public getAIColumnText(columnName: string, key: any): void {
