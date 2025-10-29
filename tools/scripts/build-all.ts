@@ -78,7 +78,7 @@ sh.cp([path.join(BOOTSTRAP_DIR, 'css', 'bootstrap.css'), path.join(BOOTSTRAP_DIR
 
 sh.exec('pnpm run all:pack-and-copy');
 
-sh.exec('pnpx nx pack devextreme-react', { silent: false });
+sh.exec('pnpx nx pack devextreme-react', { silent: true });
 sh.exec('pnpx nx pack devextreme-vue', { silent: true });
 sh.exec(`pnpx nx pack devextreme-angular${devMode ? '' : ' --with-descriptions'}`, { silent: true });
 
