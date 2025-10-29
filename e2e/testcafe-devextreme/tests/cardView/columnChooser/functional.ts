@@ -2,7 +2,7 @@ import CardView from 'devextreme-testcafe-models/cardView';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 
-fixture.disablePageReloads`CardView - ColumnChooser.Functional`
+fixture`CardView - ColumnChooser.Functional`
   .page(url(__dirname, '../../container.html'));
 
 function testsFactory(testModel: {
