@@ -1,10 +1,17 @@
-/* global DATA, initTree */
-
-import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
+import TreeViewTestWrapper from '../../helpers/TreeViewTestHelper.js';
+import { DATA } from './treeViewParts/testData.js';
+import { initTree } from './treeViewParts/testUtils.js';
 import $ from 'jquery';
 const createInstance = (options) => new TreeViewTestWrapper(options);
+import 'ui/tree_view';
 
 const TREEVIEW_NODE_CONTAINER_CLASS = 'dx-treeview-node-container';
+
+QUnit.testStart(function() {
+    const markup = '<div id="treeView"></div>';
+
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('searching');
 

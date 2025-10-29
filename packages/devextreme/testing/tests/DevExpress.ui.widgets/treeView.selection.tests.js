@@ -1,11 +1,18 @@
 import $ from 'jquery';
-import keyboardMock from '../../../helpers/keyboardMock.js';
+import keyboardMock from '../../helpers/keyboardMock.js';
 import eventsEngine from 'common/core/events/core/events_engine';
-import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
+import TreeViewTestWrapper from '../../helpers/TreeViewTestHelper.js';
+import 'ui/tree_view';
 
 const { module, test } = QUnit;
 
 const createInstance = (options) => new TreeViewTestWrapper(options);
+
+QUnit.testStart(function() {
+    const markup = '<div id="treeView"></div>';
+
+    $('#qunit-fixture').html(markup);
+});
 
 module('selection common', () => {
     test('selection should work without checkboxes on init', function() {

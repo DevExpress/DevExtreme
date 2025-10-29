@@ -1,10 +1,10 @@
-/* global DATA, internals, initTree */
-
 import $ from 'jquery';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 import keyboardMock from '../../../helpers/keyboardMock.js';
+import { DATA, internals } from './testData.js';
+import { initTree } from './testUtils.js';
 
 const NODE_CLASS = 'dx-treeview-node';
 const ITEM_CLASS = 'dx-treeview-item';

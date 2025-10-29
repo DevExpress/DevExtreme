@@ -1,8 +1,9 @@
-/* global initTree */
 import ArrayStore from 'common/data/array_store';
 import { DataSource } from 'common/data/data_source/data_source';
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
+import { initTree } from './testUtils.js';
 import $ from 'jquery';
+
 QUnit.module('Initialization', () => {
     QUnit.test('Init tree view', function(assert) {
         const $treeView = initTree();
