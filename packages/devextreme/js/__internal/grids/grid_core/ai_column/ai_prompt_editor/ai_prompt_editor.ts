@@ -53,8 +53,8 @@ export class AIPromptEditor {
       },
       placeholder: messageLocalization.format('dxDataGrid-aiPromptEditorPlaceholder'),
       valueChangeEvent: 'input change keyup',
-      ...this.options.editorOptions,
-    } as TextAreaProperties;
+      ...this.options.editorOptions as TextAreaProperties,
+    };
   }
 
   private getPopupConfig(): PopupProperties {
@@ -112,8 +112,8 @@ export class AIPromptEditor {
           options: this.getStopButtonConfig(),
         },
       ],
-      ...this.options.popupOptions,
-    } as PopupProperties;
+      ...this.options.popupOptions as PopupProperties,
+    };
   }
 
   private getApplyButtonConfig(): ButtonProperties {
