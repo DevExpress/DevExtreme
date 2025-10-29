@@ -272,7 +272,7 @@
   .dx-#{$widget-name}-nowrap {
     white-space: nowrap;
 
-    .dx-header-row > td > .dx-#{$widget-name}-text-content {
+    .dx-header-row > td .dx-#{$widget-name}-text-content {
       white-space: nowrap;
     }
   }
@@ -644,7 +644,7 @@
       white-space: nowrap;
       overflow: hidden;
 
-      & > .dx-#{$widget-name}-text-content {
+      .dx-#{$widget-name}-text-content {
         display: inline-block;
         white-space: normal;
         vertical-align: top;
