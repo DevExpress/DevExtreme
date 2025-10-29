@@ -274,10 +274,10 @@
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
 
         "dxScheduler-appointmentListAriaLabel": "Appointment list",
-
+        "dxScheduler-newPopupTitle": "New Appointment",
         "dxScheduler-editPopupTitle": "Edit Appointment",
         "dxScheduler-editPopupSaveButtonText": "Save",
-        
+
         "dxScheduler-editorLabelTitle": "Θέμα",
         "dxScheduler-editorLabelStartDate": "Ημερομηνία έναρξης",
         "dxScheduler-editorLabelEndDate": "Ημερομηνία λήξης",
