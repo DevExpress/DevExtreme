@@ -837,6 +837,7 @@ class MessageList extends Widget<Properties> {
       case 'emptyViewTemplate':
       case 'dayHeaderFormat':
       case 'messageTimestampFormat':
+      case 'onAttachmentDownload':
         this._invalidate();
         break;
       case 'items':
