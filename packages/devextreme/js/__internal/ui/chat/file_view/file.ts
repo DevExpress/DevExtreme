@@ -21,6 +21,8 @@ export type Properties = DOMComponentProperties<File> & {
 
   hoverStateEnabled?: boolean;
 
+  showDownloadButton?: boolean;
+
   data: Attachment;
 
   onDownload?: (e: AttachmentDownloadEvent) => void;
@@ -48,6 +50,7 @@ class File extends DOMComponent<File, Properties> {
         size: 0,
       },
       onDownload: undefined,
+      showDownloadButton: undefined,
     };
   }
 
@@ -120,6 +123,12 @@ class File extends DOMComponent<File, Properties> {
   }
 
   private _renderButton(): void {
+    const { showDownloadButton } = this.option();
+
+    if (!showDownloadButton) {
+      return;
+    }
+
     const $button = $('<div>').addClass(CHAT_FILE_DOWNLOAD_BUTTON_CLASS);
 
     this._downloadButton = this._createComponent<Button, ButtonProperties>(
@@ -179,6 +188,10 @@ class File extends DOMComponent<File, Properties> {
 
       case 'onDownload':
         this._createDownloadAction();
+        break;
+      case 'showDownloadButton':
+        this._cleanDownloadButton();
+        this._renderButton();
         break;
 
       default:

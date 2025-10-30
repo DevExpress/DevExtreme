@@ -195,11 +195,13 @@ class Chat extends Widget<Properties> {
       dayHeaderFormat,
       messageTimestampFormat,
       typingUsers = [],
+      onAttachmentDownload,
     } = this.option();
 
     // @ts-expect-error
     const isLoading = this._dataController.isLoading();
     const currentUserId = user?.id;
+    const showAttachmentDownloadButton = Boolean(onAttachmentDownload);
 
     const options: MessageListProperties = {
       items,
@@ -217,6 +219,7 @@ class Chat extends Widget<Properties> {
       messageTimestampFormat,
       typingUsers,
       isLoading,
+      showAttachmentDownloadButton,
       onMessageEditingStart: (e) => {
         this._messageEditingStartHandler(e);
 
@@ -638,6 +641,7 @@ class Chat extends Widget<Properties> {
         break;
       case 'onAttachmentDownload':
         this._createAttachmentDownloadAction();
+        this._messageList.option({ showAttachmentDownloadButton: Boolean(value) });
         break;
       case 'showDayHeaders':
       case 'showAvatar':

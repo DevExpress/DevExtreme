@@ -40,6 +40,7 @@ export interface Properties extends WidgetOptions<MessageGroup> {
   showAvatar: boolean;
   showUserName: boolean;
   showMessageTimestamp: boolean;
+  showAttachmentDownloadButton?: boolean;
   messageTimestampFormat?: Format;
   messageTemplate?: MessageTemplate;
   onAttachmentDownload?: (e: AttachmentDownloadEvent) => void;
@@ -123,7 +124,7 @@ class MessageGroup extends Widget<Properties> {
   }
 
   _getMessageBubbleOptions(message: Message): MessageBubbleProperties {
-    const { messageTemplate, onAttachmentDownload } = this.option();
+    const { showAttachmentDownloadButton, messageTemplate, onAttachmentDownload } = this.option();
 
     const { isDeleted, type, attachments } = message;
 
@@ -131,6 +132,7 @@ class MessageGroup extends Widget<Properties> {
       isDeleted,
       type,
       attachments,
+      showAttachmentDownloadButton,
       onAttachmentDownload,
     };
 
@@ -313,6 +315,7 @@ class MessageGroup extends Widget<Properties> {
       case 'showMessageTimestamp':
       case 'messageTemplate':
       case 'messageTimestampFormat':
+      case 'showAttachmentDownloadButton':
         this._invalidate();
         break;
       default:

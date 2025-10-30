@@ -16,6 +16,8 @@ export interface FileViewProperties extends DOMComponentProperties<FileView> {
 
   files?: Attachment[];
 
+  showDownloadButton?: boolean;
+
   onDownload?: (e: AttachmentDownloadEvent) => void;
 }
 
@@ -79,13 +81,16 @@ class FileView extends DOMComponent<FileView, FileViewProperties> {
   }
 
   _getFileConfig(data: Attachment): FileProperties {
-    const { activeStateEnabled, focusStateEnabled, hoverStateEnabled } = this.option();
+    const {
+      activeStateEnabled, focusStateEnabled, hoverStateEnabled, showDownloadButton,
+    } = this.option();
 
     const configuration: FileProperties = {
       data,
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
+      showDownloadButton,
       onDownload: (event) => {
         this._downloadAction?.(event);
       },
@@ -128,6 +133,7 @@ class FileView extends DOMComponent<FileView, FileViewProperties> {
       case 'activeStateEnabled':
       case 'focusStateEnabled':
       case 'hoverStateEnabled':
+      case 'showDownloadButton':
         this._renderItems();
         break;
 

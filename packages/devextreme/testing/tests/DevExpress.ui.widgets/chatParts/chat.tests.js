@@ -2292,6 +2292,12 @@ QUnit.module('Chat', () => {
 
                 assert.strictEqual(onAttachmentDownload.callCount, 1);
             });
+
+            QUnit.test('should hide download button if not passed', function(assert) {
+                this.instance.option({ onAttachmentDownload: undefined, dataSource: this.dataSourceWithAttachments });
+
+                assert.strictEqual(this.getDownloadButton().length, 0, 'button is hidden');
+            });
         });
     });
 

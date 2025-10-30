@@ -236,6 +236,7 @@ QUnit.module('MessageBubble', moduleConfig, () => {
             this.reinit({
                 attachments: [{ name: 'text.txt', size: 1024 }],
                 onAttachmentDownload,
+                showAttachmentDownloadButton: true,
             });
 
             this.getDownloadButton().trigger('dxclick');
@@ -248,6 +249,7 @@ QUnit.module('MessageBubble', moduleConfig, () => {
 
             this.reinit({
                 attachments: [{ name: 'text.txt', size: 1024 }],
+                showAttachmentDownloadButton: true,
             });
 
             this.instance.option({ onAttachmentDownload });

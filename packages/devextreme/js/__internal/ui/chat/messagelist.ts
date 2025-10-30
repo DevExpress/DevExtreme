@@ -104,6 +104,7 @@ export interface Properties extends WidgetOptions<MessageList> {
   showAvatar: boolean;
   showUserName: boolean;
   showMessageTimestamp: boolean;
+  showAttachmentDownloadButton?: boolean;
   onAttachmentDownload?: (e: AttachmentDownloadEvent) => void;
   onMessageEditingStart?: (e: MessageEditingEvent) => () => void;
   onMessageDeleting?: (e: MessageDeletingEvent) => void;
@@ -277,6 +278,7 @@ class MessageList extends Widget<Properties> {
       showUserName,
       showMessageTimestamp,
       messageTimestampFormat,
+      showAttachmentDownloadButton,
       messageTemplate,
       onAttachmentDownload,
     } = this.option();
@@ -290,6 +292,7 @@ class MessageList extends Widget<Properties> {
       showUserName,
       showMessageTimestamp,
       messageTimestampFormat,
+      showAttachmentDownloadButton,
       messageTemplate,
       onAttachmentDownload,
     });
@@ -837,6 +840,7 @@ class MessageList extends Widget<Properties> {
       case 'emptyViewTemplate':
       case 'dayHeaderFormat':
       case 'messageTimestampFormat':
+      case 'showAttachmentDownloadButton':
         this._invalidate();
         break;
       case 'items':

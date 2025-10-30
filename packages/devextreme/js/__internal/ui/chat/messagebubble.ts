@@ -26,6 +26,7 @@ export interface Properties extends WidgetOptions<MessageBubble> {
   src?: string;
   alt?: string;
   attachments?: Attachment[];
+  showAttachmentDownloadButton?: boolean;
   onAttachmentDownload?: (e: AttachmentDownloadEvent) => void;
   template?: ((message: Message, container: Element) => void) | null;
 }
@@ -34,6 +35,8 @@ class MessageBubble extends Widget<Properties> {
   _$content!: dxElementWrapper;
 
   _$attachments?: dxElementWrapper;
+
+  _fileView?: FileView;
 
   _getDefaultOptions(): Properties {
     return {
@@ -138,6 +141,7 @@ class MessageBubble extends Widget<Properties> {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
+      showAttachmentDownloadButton,
       onAttachmentDownload,
     } = this.option();
 
@@ -148,11 +152,12 @@ class MessageBubble extends Widget<Properties> {
     this._$attachments.empty();
 
     if (attachments?.length) {
-      this._createComponent(this._$attachments, FileView, {
+      this._fileView = this._createComponent(this._$attachments, FileView, {
         activeStateEnabled,
         focusStateEnabled,
         hoverStateEnabled,
         files: attachments,
+        showDownloadButton: showAttachmentDownloadButton,
         onDownload: onAttachmentDownload,
       });
     }
@@ -193,6 +198,9 @@ class MessageBubble extends Widget<Properties> {
       case 'attachments':
         this._renderAttachmentsElement();
         this._renderAttachments();
+        break;
+      case 'showAttachmentDownloadButton':
+        this._fileView?.option({ showDownloadButton: value });
         break;
       default:
         super._optionChanged(args);

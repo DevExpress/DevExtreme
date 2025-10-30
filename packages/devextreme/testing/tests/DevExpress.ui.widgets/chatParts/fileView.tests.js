@@ -62,6 +62,7 @@ QUnit.module('FileView', moduleConfig, () => {
                     assert.ok(e.event, 'original event is provided');
                     assert.strictEqual(typeof e.event, 'object', 'event is an object');
                 },
+                showDownloadButton: true,
             });
 
             this.$downloadButton.trigger('dxclick');
@@ -69,6 +70,8 @@ QUnit.module('FileView', moduleConfig, () => {
 
         QUnit.test('should pass correct event arguments to onDownload via on()', function(assert) {
             assert.expect(4);
+
+            this.reinit({ showDownloadButton: true });
 
             const onDownload = (e) => {
                 assert.ok(e.component instanceof FileView, 'component is correct');
@@ -84,6 +87,8 @@ QUnit.module('FileView', moduleConfig, () => {
 
         QUnit.test('should set onDownload via option()', function(assert) {
             assert.expect(4);
+
+            this.reinit({ showDownloadButton: true });
 
             const onDownload = (e) => {
                 assert.ok(e.component instanceof FileView, 'component is correct');
