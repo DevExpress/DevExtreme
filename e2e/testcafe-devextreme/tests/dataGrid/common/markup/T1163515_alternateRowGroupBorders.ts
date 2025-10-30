@@ -3,8 +3,8 @@ import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
 // TODO: Enable multi-theming testcafe run in the future.
-fixture.disablePageReloads`Grouping Panel - Borders with enabled alternate rows`
-  .page(url(__dirname, '../../../../container.html'));
+fixture.disablePageReloads`Grouping Panel - check borders and backgrounds with various options`
+  .page(url(__dirname, '../../../container.html'));
 
 const GRID_SELECTOR = '#container';
 
@@ -174,22 +174,22 @@ const verifyGridStyles = async (t, dataGrid, matrixOptions) => {
   if (matrixOptions.rowAlternationEnabled) {
     const rows = dataGrid.getRows();
     for (let i = 1; i < rows.length; i += 1) {
-      const currentRow = rows[i];
-      const previousRow = rows[i - 1];
+      const currentRow = rows.nth(i);
+      const previousRow = rows.nth(i - 1);
 
-      const currentClasses = await currentRow.element.getAttribute('class');
-      const previousClasses = await previousRow.element.getAttribute('class');
+      const currentClasses = await currentRow.getAttribute('class');
+      const previousClasses = await previousRow.getAttribute('class');
 
       if (currentClasses === previousClasses) {
-        const currentBg = await currentRow.element.getStyleProperty('background-color');
-        const previousBg = await previousRow.element.getStyleProperty('background-color');
+        const currentBg = await currentRow.getStyleProperty('background-color');
+        const previousBg = await previousRow.getStyleProperty('background-color');
 
         await t.expect(currentBg).notEql(previousBg);
       }
     }
   }
 
-  if (matrixOptions.showRowLines && !matrixOptions.showBorders) {
+  if (matrixOptions.showRowLines) {
     const { dataRows } = dataGrid;
     const dataRowsCount = await dataRows.count;
 
@@ -202,11 +202,13 @@ const verifyGridStyles = async (t, dataGrid, matrixOptions) => {
       await t.expect(parseInt(borderTop, 10)).gt(0);
       await t.expect(borderTopStyle).notEql('none');
 
-      const borderBottom = await dataRow.getStyleProperty('border-bottom-width');
-      const borderBottomStyle = await dataRow.getStyleProperty('border-bottom-style');
+      if (!matrixOptions.showBorders) {
+        const borderBottom = await dataRow.getStyleProperty('border-bottom-width');
+        const borderBottomStyle = await dataRow.getStyleProperty('border-bottom-style');
 
-      await t.expect(parseInt(borderBottom, 10)).gt(0);
-      await t.expect(borderBottomStyle).notEql('none');
+        await t.expect(parseInt(borderBottom, 10)).gt(0);
+        await t.expect(borderBottomStyle).notEql('none');
+      }
     }
   }
 
