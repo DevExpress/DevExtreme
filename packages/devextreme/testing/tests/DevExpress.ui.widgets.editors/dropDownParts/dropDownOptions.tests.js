@@ -133,7 +133,7 @@ const optionComparer = {
     visible: skipTesting
 };
 
-export const widgetTestModule = (widgetName => {
+export const widgetTestModule = widgetName => {
     QUnit.module(widgetName, {
         beforeEach: function() {
             fx.off = true;
@@ -408,4 +408,4 @@ export const widgetTestModule = (widgetName => {
             });
         });
     });
-});
+};
