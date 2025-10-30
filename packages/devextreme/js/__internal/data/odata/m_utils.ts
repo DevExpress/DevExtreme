@@ -60,7 +60,7 @@ const formatISO8601 = (date: Date, skipZeroTime?: boolean, skipTimezone?: boolea
     }
 
     if (!skipTimezone) {
-      bag.push('Z'); // -01:00 || Z
+      bag.push('Z');
     }
   }
 
@@ -443,6 +443,10 @@ const serializeValueV2 = (value) => {
     return value.valueOf();
   }
 
+  if (typeof value === 'string' && ISO8601_DATE_REGEX.test(value)) {
+    return formatISO8601(new Date(value), false, false);
+  }
+
   if (typeof value === 'string') {
     return serializeString(value);
   }
@@ -487,12 +491,10 @@ export const keyConverters = {
   Decimal: (value) => (value instanceof EdmLiteral ? value : new EdmLiteral(`${value}m`)),
 
   DateTime: (value) => {
-    // If value is already a Date object, return it
     if (value instanceof Date) {
       return value;
     }
 
-    // If string, try to convert to Date
     if (typeof value === 'string') {
       const date = new Date(value);
       if (isNaN(date.getTime())) {
@@ -501,7 +503,6 @@ export const keyConverters = {
       return date;
     }
 
-    // If number (timestamp), convert to Date
     if (typeof value === 'number') {
       return new Date(value);
     }
