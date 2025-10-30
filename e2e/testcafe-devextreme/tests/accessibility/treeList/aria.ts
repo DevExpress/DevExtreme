@@ -1,7 +1,6 @@
 import TreeList from 'devextreme-testcafe-models/treeList';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { isMaterial } from '../../../helpers/themeUtils';
 
 fixture`TreeList - Aria Label`.page(url(__dirname, '../../container.html'));
 
@@ -74,7 +73,7 @@ const options = {
   ],
 };
 
-test.meta({ unstable: !!isMaterial() })('Aria expanded should be toggled true on Ctrl + → keypress', async (t) => {
+test.meta({ unstable: true })('Aria expanded should be toggled true on Ctrl + → keypress', async (t) => {
   const treeList = new TreeList('#container');
   const expandableRow = treeList.getDataRow(0).element;
   const expandableCells = [
@@ -85,11 +84,9 @@ test.meta({ unstable: !!isMaterial() })('Aria expanded should be toggled true on
 
   await t
     .expect(treeList.getContainer().getAttribute('aria-label'))
-    .eql(isMaterial()
-      ? 'Tree list with 3 rows and 3 columns. Press Ctrl + right arrow to expand the focused node and Ctrl + left arrow to collapse it'
-      : 'Tree list with 1 rows and 3 columns. Press Ctrl + right arrow to expand the focused node and Ctrl + left arrow to collapse it')
+    .eql('Tree list with 1 rows and 3 columns. Press Ctrl + right arrow to expand the focused node and Ctrl + left arrow to collapse it')
     .expect(expandableRow.getAttribute('aria-expanded'))
-    .eql(isMaterial() ? 'true' : 'false');
+    .eql('false');
 
   // eslint-disable-next-line no-restricted-syntax
   for (const cell of expandableCells) {

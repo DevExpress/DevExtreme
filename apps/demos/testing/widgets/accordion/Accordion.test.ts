@@ -16,38 +16,31 @@ runManualTest('Accordion', 'Overview', (test) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
-      .click($(`.${ITEM_TITLE_CLASS}`).nth(1))
-      .wait(200);
+      .click($(`.${ITEM_TITLE_CLASS}`).nth(1));
 
     await testScreenshot(t, takeScreenshot, 'accordion_overview_expanded_electronics.png');
 
     await t
-      .click($(`.${ITEM_TITLE_CLASS}`).nth(1))
-      .wait(200);
+      .click($(`.${ITEM_TITLE_CLASS}`).nth(1));
 
     await testScreenshot(t, takeScreenshot, 'accordion_overview_collapsed_electronics_disabled_collapsible.png');
 
     await t
-      .click($(`.${CHECKBOX_CLASS}`).nth(0))
-      .wait(200);
+      .click($(`.${CHECKBOX_CLASS}`).nth(0));
 
     await t
-      .click($(`.${CHECKBOX_CLASS}`).nth(1))
-      .wait(200);
+      .click($(`.${CHECKBOX_CLASS}`).nth(1));
 
     await t
-      .click($(`.${ITEM_TITLE_CLASS}`).nth(1))
-      .wait(200);
+      .click($(`.${ITEM_TITLE_CLASS}`).nth(1));
 
     await testScreenshot(t, takeScreenshot, 'accordion_overview_collapsed_electronics_enabled_multiple_and_collapsible.png');
 
     await t
-      .click($(`.${ITEM_TITLE_CLASS}`).nth(2))
-      .wait(200);
+      .click($(`.${ITEM_TITLE_CLASS}`).nth(2));
 
     await t
-      .click($(`.${ITEM_TITLE_CLASS}`).nth(3))
-      .wait(200);
+      .click($(`.${ITEM_TITLE_CLASS}`).nth(3));
 
     await testScreenshot(t, takeScreenshot, 'accordion_overview_expanded_ksmusic_and_tomsclub.png');
 
