@@ -688,6 +688,10 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
   public getKeyboardNavigationController() {
     return this._headersKeyboardNavigation;
   }
+
+  public renderDragCellContent($dragContainer: dxElementWrapper, column: Column): void {
+    $dragContainer.text(column.caption ?? '');
+  }
 }
 
 export const columnHeadersModule = {
