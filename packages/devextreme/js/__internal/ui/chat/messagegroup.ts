@@ -313,6 +313,7 @@ class MessageGroup extends Widget<Properties> {
       case 'showMessageTimestamp':
       case 'messageTemplate':
       case 'messageTimestampFormat':
+      case 'onAttachmentDownload':
         this._invalidate();
         break;
       default:

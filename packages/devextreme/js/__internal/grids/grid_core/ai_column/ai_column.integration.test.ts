@@ -10,6 +10,8 @@ import errors from '@js/ui/widget/ui.errors';
 import { AIIntegration } from '@ts/core/ai_integration/core/ai_integration';
 import { DataGridModel } from '@ts/grids/data_grid/__tests__/__mock__/model/data_grid';
 
+import { CLASSES } from './const';
+
 const SELECTORS = {
   gridContainer: '#gridContainer',
 };
@@ -235,6 +237,78 @@ describe('Options', () => {
       expect(headerCellTemplate).toHaveBeenCalledTimes(1);
       expect(headerCell.querySelectorAll('.template-class').length).toBe(1);
       expect(headerCell.textContent).toBe('Template');
+      expect(headerCell.querySelector(`.${CLASSES.aiColumnHeaderContent}`)).toBeNull();
+      expect(headerCell.querySelector(`.${CLASSES.aiChatSparkleOutlineIcon}`)).toBeNull();
+      expect(headerCell.querySelector(`.${CLASSES.aiColumnHeaderButton}`)).not.toBeNull();
+    });
+  });
+
+  describe('when headerCellTemplate isn\'t set', () => {
+    it('should render icon, text and button by default', async () => {
+      const { component } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+          },
+        ],
+      });
+
+      const headerCell = component.getHeaderCell(3);
+      const aiColumnHeaderContent = headerCell.querySelector(`.${CLASSES.aiColumnHeaderContent}`);
+      const aiColumnHeaderText = aiColumnHeaderContent?.querySelector('.dx-datagrid-text-content');
+
+      expect(aiColumnHeaderContent).not.toBeNull();
+      expect(aiColumnHeaderContent?.querySelector(`.${CLASSES.aiChatSparkleOutlineIcon}`)).not.toBeNull();
+      expect(aiColumnHeaderText).not.toBeNull();
+      expect(aiColumnHeaderText?.textContent).toBe('AI Column');
+      expect(headerCell.querySelector(`.${CLASSES.aiColumnHeaderButton}`)).not.toBeNull();
+    });
+  });
+
+  describe('when headerCellTemplate is dynamically updated', () => {
+    it('should replace default header template', async () => {
+      const headerCellTemplate = jest.fn((container: HTMLElement) => {
+        const span = document.createElement('span');
+
+        span.className = 'my-template-class';
+        span.textContent = 'Test';
+        container.append(span);
+      });
+
+      const { component } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+          },
+        ],
+      });
+
+      component.apiColumnOption('myColumn', 'headerCellTemplate', headerCellTemplate);
+
+      const headerCellUpdated = component.getHeaderCell(3);
+
+      expect(headerCellTemplate).toHaveBeenCalledTimes(1);
+      expect(headerCellUpdated.querySelector('.my-template-class')).not.toBeNull();
+      expect(headerCellUpdated.textContent).toBe('Test');
+      expect(headerCellUpdated.querySelector(`.${CLASSES.aiColumnHeaderContent}`)).toBeNull();
+      expect(headerCellUpdated.querySelector(`.${CLASSES.aiChatSparkleOutlineIcon}`)).toBeNull();
+      expect(headerCellUpdated.querySelector(`.${CLASSES.aiColumnHeaderButton}`)).not.toBeNull();
     });
   });
 
@@ -296,6 +370,39 @@ describe('Options', () => {
 
       expect(visibleColumns.map(({ caption }) => caption))
         .toEqual(['ID', 'AI Column', 'Name', 'Value']);
+    });
+  });
+
+  describe('when column.ai.showHeaderMenu is set to false', () => {
+    it('should not render header button', async () => {
+      const { component } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              showHeaderMenu: false,
+            },
+          },
+        ],
+      });
+
+      const headerCell = component.getHeaderCell(3);
+      const aiColumnHeaderContent = headerCell.querySelector(`.${CLASSES.aiColumnHeaderContent}`);
+      const aiColumnHeaderText = aiColumnHeaderContent?.querySelector('.dx-datagrid-text-content');
+
+      expect(aiColumnHeaderContent).not.toBeNull();
+      expect(aiColumnHeaderContent?.querySelector(`.${CLASSES.aiChatSparkleOutlineIcon}`)).not.toBeNull();
+      expect(aiColumnHeaderText).not.toBeNull();
+      expect(aiColumnHeaderText?.textContent).toBe('AI Column');
+      expect(headerCell.querySelector(`.${CLASSES.aiColumnHeaderButton}`)).toBeNull();
     });
   });
 });
