@@ -1,6 +1,5 @@
 /* eslint-disable max-classes-per-file */
 import messageLocalization from '@js/common/core/localization/message';
-import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { deferUpdate } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
@@ -14,7 +13,7 @@ import TreeView from '@js/ui/tree_view';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
-import type { Column, ColumnsController } from '../columns_controller/m_columns_controller';
+import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { HeaderPanel } from '../header_panel/m_header_panel';
 import modules from '../m_modules';
 import type { ModuleType } from '../m_types';
@@ -513,10 +512,6 @@ export class ColumnChooserView extends ColumnsView {
     const hiddenColumns = this.getColumns().filter((column) => !column.visible);
 
     return isEnabled && hiddenColumns.length;
-  }
-
-  public renderDragCellContent($dragContainer: dxElementWrapper, column: Column): void {
-    $dragContainer.text(column.caption ?? '');
   }
 }
 

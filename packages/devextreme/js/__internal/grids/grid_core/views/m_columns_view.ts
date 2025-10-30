@@ -1478,5 +1478,6 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   public renderDragCellContent($dragContainer: dxElementWrapper, column: Column): void {
+    $dragContainer.text(column.caption ?? '');
   }
 }

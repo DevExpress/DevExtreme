@@ -17,8 +17,8 @@ import { createAIHeaderContainer, createChatSparkleOutlineIcon } from './dom';
 import type { AIColumnController } from './m_ai_column_controller';
 import {
   getAICommandColumnDefaultOptions,
+  isAIColumn,
   isAIColumnAutoMode,
-  isAIColumnHeader,
   isEditorOptions,
   isHeaderDropDownButtonVisible,
   isPopupOptions,
@@ -207,7 +207,7 @@ export const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) =
   }
 
   protected getHeaderDefaultTemplate($container: dxElementWrapper, options): void {
-    if (isAIColumnHeader(options.column, options.rowType)) {
+    if (isAIColumn(options)) {
       this.renderAIHeader($container, options.column);
       return;
     }
@@ -217,7 +217,7 @@ export const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) =
 
   protected _processTemplate(template, options) {
     const renderingTemplate = super._processTemplate(template, options);
-    const needToRenderHeaderDropDownButton = isAIColumnHeader(options.column, options.rowType)
+    const needToRenderHeaderDropDownButton = isAIColumn(options)
       && isHeaderDropDownButtonVisible(options.column);
 
     if (renderingTemplate && needToRenderHeaderDropDownButton) {
@@ -235,6 +235,7 @@ export const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) =
   public renderDragCellContent($dragContainer: dxElementWrapper, column: Column): void {
     if (column.type === AI_COLUMN_NAME) {
       this.renderAIHeader($dragContainer, column);
+      return;
     }
 
     super.renderDragCellContent($dragContainer, column);

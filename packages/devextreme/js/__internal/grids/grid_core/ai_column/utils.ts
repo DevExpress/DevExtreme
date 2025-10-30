@@ -61,9 +61,8 @@ export const isRefreshOption = (optionName: string, value: unknown): boolean => 
   return valueKeys.some((key) => refreshOptionNames.includes(key));
 };
 
-export const isAIColumnHeader = (
-  column: Column,
-  rowType: string,
+export const isAIColumn = (
+  { rowType, column }: { rowType: string; column: Column },
 ): boolean => rowType === 'header' && column.type === AI_COLUMN_NAME;
 
 export const isHeaderDropDownButtonVisible = (
