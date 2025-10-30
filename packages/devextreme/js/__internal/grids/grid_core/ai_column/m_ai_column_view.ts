@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Properties as DropDownProperties } from '@js/ui/drop_down_button';
@@ -178,11 +179,24 @@ export class AIColumnView extends View {
 }
 
 export const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) => class AIColumnHeadersViewExtender extends Base {
-  private getDropDownButtonConfig(): DropDownProperties {
+  private getDropDownButtonConfig($container: dxElementWrapper): DropDownProperties {
     return {
       showArrowIcon: false,
       icon: 'overflow',
       stylingMode: 'text',
+      items: [
+        { text: messageLocalization.format('dxDataGrid-aiDropDownButtonAutofillItem') },
+        { text: messageLocalization.format('dxDataGrid-aiDropDownButtonRegenerateItem') },
+        { text: messageLocalization.format('dxDataGrid-aiDropDownButtonDeleteItem') },
+      ],
+      dropDownOptions: {
+        width: 160,
+        position: {
+          of: $container[0],
+          at: 'right bottom',
+          my: 'right top',
+        },
+      },
     };
   }
 
@@ -191,7 +205,7 @@ export const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) =
       .addClass(CLASSES.aiColumnHeaderButton)
       .appendTo($container);
 
-    this._createComponent($dropDownButton, DropDownButton, this.getDropDownButtonConfig());
+    this._createComponent($dropDownButton, DropDownButton, this.getDropDownButtonConfig($container));
   }
 
   private renderAIHeader($container: dxElementWrapper, column: Column): void {
