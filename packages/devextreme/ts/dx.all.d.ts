@@ -41516,15 +41516,15 @@ declare module DevExpress.viz {
      */
     export type PointInfo = BasePointInfo<piePointObject> & {
       /**
-       * [descr:PointInfo.percent]
+       * [descr:dxPieChartPointInfo.percent]
        */
       percent?: number;
       /**
-       * [descr:PointInfo.percentText]
+       * [descr:dxPieChartPointInfo.percentText]
        */
       percentText?: string;
       /**
-       * [descr:PointInfo.points]
+       * [descr:dxPieChartPointInfo.points]
        */
       points?: PointInfo;
     };
