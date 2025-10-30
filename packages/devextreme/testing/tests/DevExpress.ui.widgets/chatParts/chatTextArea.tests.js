@@ -312,7 +312,14 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
         });
     });
 
-    QUnit.module('FileUploader', () => {
+    QUnit.module('FileUploader', {
+        beforeEach: function() {
+            this.clock = sinon.useFakeTimers();
+        },
+        afterEach: function() {
+            this.clock.restore();
+        }
+    }, () => {
         QUnit.test('should not be rendered if fileUploaderOptions are undefined', function(assert) {
             this.reinit({
                 fileUploaderOptions: undefined,
@@ -420,19 +427,40 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
 
             assert.strictEqual($dialogTrigger.is(this.$attachButton), true);
         });
+        ['onValueChanged', 'onUploadStarted', 'onUploaded'].forEach((eventName) => {
+            QUnit.test(`${eventName} specified by user should be called in addition to inner one`, function(assert) {
+                assert.expect(1);
 
-        QUnit.test('onValueChanged specified by user should be called in addition to inner one', function(assert) {
-            assert.expect(1);
+                this.reinit({
+                    fileUploaderOptions: {
+                        [eventName]: () => {
+                            assert.ok(true, `${eventName} was called`);
+                        },
+                        uploadFile: () => {},
+                    }
+                });
 
+                const fileUploader = this.getFileUploader();
+
+                fileUploader.option('value', [fakeFile]);
+                fileUploader.upload();
+            });
+        });
+
+        QUnit.test('value should be reset after send button click', function(assert) {
             this.reinit({
                 fileUploaderOptions: {
-                    onValueChanged: () => {
-                        assert.ok(true, 'onValueChanged was called');
-                    },
-                }
+                    uploadFile: () => {},
+                },
             });
+            const fileUploader = this.getFileUploader();
+            fileUploader.option('value', [fakeFile]);
+            fileUploader.upload();
 
-            this.getFileUploader().option('value', [fakeFile]);
+            this.clock.tick();
+            this.$sendButton.trigger('dxclick');
+
+            assert.deepEqual(fileUploader.option('value'), []);
         });
     });
 

@@ -34,7 +34,7 @@ type EnterKeyEvent = NativeEventInfo<ChatTextArea, KeyboardEvent>;
 
 export type SendEvent = ClickEvent | EnterKeyEvent;
 
-type FileToUpload = Attachment & {
+type FileToSend = Attachment & {
   readyToSend: boolean;
 };
 
@@ -49,9 +49,11 @@ class ChatTextArea extends TextArea<Properties> {
 
   _toolbar?: Toolbar | null;
 
-  _fileUploader?: FileUploader;
+  _$fileUploader?: dxElementWrapper | null;
 
-  _filesToSend?: Map<File, FileToUpload>;
+  _fileUploader?: FileUploader | null;
+
+  _filesToSend?: Map<File, FileToSend>;
 
   _sendButton?: Button;
 
@@ -136,13 +138,10 @@ class ChatTextArea extends TextArea<Properties> {
   _initMarkup(): void {
     super._initMarkup();
     this._renderToolbar();
-    this._renderFileUploader();
+    this._initFileUploader();
   }
 
   _renderToolbar(): void {
-    this._toolbar?.dispose();
-    this._$toolbar?.remove();
-
     const toolbarItems = this._getToolbarItems();
 
     const toolbarOptions = {
@@ -229,28 +228,27 @@ class ChatTextArea extends TextArea<Properties> {
     return configuration;
   }
 
-  _renderFileUploader(): void {
-    let $fileUploader = this._fileUploader?.$element();
-    this._fileUploader?.dispose();
-    $fileUploader?.remove();
-
+  _initFileUploader(): void {
     const { fileUploaderOptions } = this.option();
 
     if (!fileUploaderOptions) {
       return;
     }
 
-    $fileUploader = $('<div>')
+    this._renderFileUploader();
+    this._filesToSend = new Map<File, FileToSend>();
+  }
+
+  _renderFileUploader(): void {
+    this._$fileUploader = $('<div>')
       .addClass(TEXT_AREA_ATTACHMENTS)
       .insertBefore(this._$textEditorContainer);
 
     this._fileUploader = this._createComponent(
-      $fileUploader,
+      this._$fileUploader,
       FileUploader,
       this._getFileUploaderOptions(),
     );
-
-    this._filesToSend = new Map<File, FileToUpload>();
   }
 
   _shouldHideFileUploader(value: File[] = []): boolean {
@@ -261,76 +259,89 @@ class ChatTextArea extends TextArea<Properties> {
     const { fileUploaderOptions = {} } = this.option();
     const multiple = fileUploaderOptions.multiple ?? true;
     const visible = this._shouldHideFileUploader(fileUploaderOptions.value);
-    const onValueChanged = (e: ValueChangedEvent): void => {
-      const { value, component } = e;
-
-      component.option('visible', this._shouldHideFileUploader(value));
-
-      fileUploaderOptions.onValueChanged?.(e);
-    };
-    const onUploadStarted = (e: UploadStartedEvent): void => {
-      const { file } = e;
-
-      this._filesToSend?.set(file, {
-        readyToSend: false,
-        name: file.name,
-        size: file.size,
-      });
-      const shouldButtonBeDisabled = !this._isMessageCanBeSent();
-      this._toggleButtonDisableState(shouldButtonBeDisabled);
-
-      fileUploaderOptions.onUploadStarted?.(e);
-    };
-    const onUploaded = (e: UploadedEvent): void => {
-      const { file } = e;
-      const fileInfo = this._filesToSend?.get(file);
-
-      if (fileInfo) {
-        fileInfo.readyToSend = true;
-      }
-
-      const shouldButtonBeDisabled = !this._isMessageCanBeSent();
-      this._toggleButtonDisableState(shouldButtonBeDisabled);
-
-      fileUploaderOptions.onUploaded?.(e);
-    };
-    const onCancelButtonClick = (e: CancelButtonClickEvent): void => {
-      const { file } = e;
-
-      if (file) {
-        this._filesToSend?.delete(file);
-      }
-
-      const shouldButtonBeDisabled = !this._isMessageCanBeSent();
-      this._toggleButtonDisableState(shouldButtonBeDisabled);
-    };
 
     return {
       ...fileUploaderOptions,
+      multiple,
+      visible,
       uploadMode: 'instantly',
-      dialogTrigger: $(`.${TEXT_AREA_ATTACH_BUTTON}`).get(0),
+      dialogTrigger: this.$element().find(`.${TEXT_AREA_ATTACH_BUTTON}`).get(0),
       _hideCancelButtonOnUpload: false,
       _showFileIcon: true,
       _cancelButtonPosition: 'end',
-      multiple,
-      visible,
-      onValueChanged,
-      onUploadStarted,
-      onUploaded,
-      onCancelButtonClick,
+      onValueChanged: (e) => this._fileUploaderOnValueChanged(e),
+      onUploadStarted: (e) => this._fileUploaderOnUploadStarted(e),
+      onUploaded: (e) => this._fileUploaderOnUploaded(e),
+      onCancelButtonClick: (e) => this._fileUploaderOnCancelButtonClick(e),
     };
   }
 
-  _toggleButtonDisableState(state: boolean): void {
-    this._sendButton?.option('disabled', state);
+  _fileUploaderOnValueChanged(e: ValueChangedEvent): void {
+    const { value, component } = e;
+    const { fileUploaderOptions = {} } = this.option();
+
+    component.option('visible', this._shouldHideFileUploader(value));
+    this._updateInputHeight();
+    fileUploaderOptions.onValueChanged?.(e);
+  }
+
+  _fileUploaderOnUploadStarted(e: UploadStartedEvent): void {
+    const { file } = e;
+    const { fileUploaderOptions = {} } = this.option();
+
+    this._filesToSend?.set(file, {
+      readyToSend: false,
+      name: file.name,
+      size: file.size,
+    });
+    this._toggleButtonDisableState();
+
+    fileUploaderOptions.onUploadStarted?.(e);
+  }
+
+  _fileUploaderOnUploaded(e: UploadedEvent): void {
+    const { file } = e;
+    const { fileUploaderOptions = {} } = this.option();
+    const fileInfo = this._filesToSend?.get(file);
+
+    if (this._filesToSend && fileInfo) {
+      this._filesToSend.set(file, {
+        ...fileInfo,
+        readyToSend: true,
+      });
+    }
+
+    this._toggleButtonDisableState();
+
+    fileUploaderOptions.onUploaded?.(e);
+  }
+
+  _fileUploaderOnCancelButtonClick = (e: CancelButtonClickEvent): void => {
+    const { file } = e;
+
+    if (file) {
+      this._filesToSend?.delete(file);
+    }
+
+    this._toggleButtonDisableState();
+  };
+
+  _toggleButtonDisableState(state?: boolean): void {
+    const shouldDisable = state ?? !this._isMessageCanBeSent();
+    this._sendButton?.option('disabled', shouldDisable);
   }
 
   _renderButtonContainers(): void {}
 
   _getHeightDifference($input: dxElementWrapper): number {
     const superResult = super._getHeightDifference($input);
+    const fileUploaderHeight = getOuterHeight(this._$fileUploader);
     const toolbarHeight = getOuterHeight(this._$toolbar);
-    const sum: number = superResult + toolbarHeight;
+
+    const gap = parseFloat(this.$element().css('gap') ?? '0');
+    const totalGap = (fileUploaderHeight ? gap : 0) + (toolbarHeight ? gap : 0);
+
+    const sum: number = superResult + fileUploaderHeight + toolbarHeight + totalGap;
 
     return sum;
   }
@@ -338,13 +349,13 @@ class ChatTextArea extends TextArea<Properties> {
   _keyPressHandler(e: InputEvent): void {
     super._keyPressHandler(e);
 
-    const shouldButtonBeDisabled = !this._isMessageCanBeSent();
-    this._toggleButtonDisableState(shouldButtonBeDisabled);
+    this._toggleButtonDisableState();
   }
 
   _processSendButtonActivation(e: SendEvent): void {
     this._sendAction?.(e);
     this.reset();
+    this._fileUploader?.reset();
     this._toggleButtonDisableState(true);
   }
 
@@ -363,8 +374,7 @@ class ChatTextArea extends TextArea<Properties> {
         break;
 
       case 'text': {
-        const shouldButtonBeDisabled = !this._isMessageCanBeSent();
-        this._toggleButtonDisableState(shouldButtonBeDisabled);
+        this._toggleButtonDisableState();
         break;
       }
 
@@ -384,8 +394,10 @@ class ChatTextArea extends TextArea<Properties> {
     const { fullName, value, previousValue } = args;
 
     if (fullName === 'fileUploaderOptions' && (!value || !previousValue)) {
+      this._cleanToolbar();
       this._renderToolbar();
-      this._renderFileUploader();
+      this._cleanFileUploader();
+      this._initFileUploader();
 
       return;
     }
@@ -400,30 +412,44 @@ class ChatTextArea extends TextArea<Properties> {
     return Boolean(text?.trim());
   }
 
+  _getFilesArray(): FileToSend[] {
+    return this._filesToSend ? Array.from(this._filesToSend.values()) : [];
+  }
+
   _areFilesReadyToSend(): boolean {
     if (!this._filesToSend?.size) {
       return false;
     }
 
-    return Array.from(this._filesToSend.values())
-      .every((file) => file.readyToSend);
+    return this._getFilesArray().every((file) => file.readyToSend);
   }
 
   _isMessageCanBeSent(): boolean {
     const hasText = this._isValuableTextEntered();
     const hasReadyFiles = this._areFilesReadyToSend();
-    const hasUnreadyFiles = this._filesToSend && Array.from(this._filesToSend.values())
+    const hasUnreadyFiles = this._filesToSend && this._getFilesArray()
       .some((file) => !file.readyToSend);
 
     return !hasUnreadyFiles && (hasText || hasReadyFiles);
   }
 
-  _dispose(): void {
+  _cleanFileUploader(): void {
+    this._fileUploader?.dispose();
+    this._$fileUploader?.remove();
+    this._fileUploader = null;
+    this._$fileUploader = null;
+  }
+
+  _cleanToolbar(): void {
     this._toolbar?.dispose();
     this._$toolbar?.remove();
-    this._fileUploader?.dispose();
     this._toolbar = null;
     this._$toolbar = null;
+  }
+
+  _dispose(): void {
+    this._cleanFileUploader();
+    this._cleanToolbar();
     super._dispose();
   }
 }
