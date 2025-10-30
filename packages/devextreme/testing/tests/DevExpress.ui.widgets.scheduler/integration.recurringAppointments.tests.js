@@ -15,6 +15,7 @@ import {
 } from '../../helpers/scheduler/helpers.js';
 import { waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 import dateUtils from 'core/utils/date';
+import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
 
 import 'generic_light.css!';
 import '__internal/scheduler/m_scheduler';

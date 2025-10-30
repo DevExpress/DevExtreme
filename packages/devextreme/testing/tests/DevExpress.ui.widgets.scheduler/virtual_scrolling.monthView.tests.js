@@ -1,6 +1,7 @@
 import 'generic_light.css!';
 import $ from 'jquery';
 
+import dateUtils from 'core/utils/date';
 import {
     createWrapper,
     initTestMarkup,
