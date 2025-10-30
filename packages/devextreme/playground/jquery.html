@@ -52,14 +52,10 @@
         <div id="button"></div>
         <script>
             $(() => {
-                const dxChat = $("#button").dxChat({
-                    height: 700,
-                    fileUploaderOptions: {},
-                }).dxChat('instance');
-
-                dxChat._messageBox._textArea.option({
-                    value: 'wefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwe',
-                })
+                $("#button").dxButton({
+                    text: 'Click me!',
+                    onClick: () => { alert("clicked"); }
+                });
             });
         </script>
     </div>
