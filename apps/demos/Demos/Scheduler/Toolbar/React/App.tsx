@@ -88,6 +88,7 @@ const App = () => {
         allowMultiple={true}
         fieldExpr="assigneeId"
         label="Assignee"
+        icon="user"
       />
       <Toolbar>
         <Item name="today" />
