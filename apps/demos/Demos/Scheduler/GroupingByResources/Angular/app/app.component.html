@@ -26,10 +26,11 @@
     [intervalCount]="2"
   >
   </dxi-view>
-  <dxi-resource
+  <dxi-scheduler-resource
     [dataSource]="prioritiesData"
     fieldExpr="priorityId"
     label="Priority"
     [allowMultiple]="false"
-  ></dxi-resource>
+    icon="tags"
+  ></dxi-scheduler-resource>
 </dx-scheduler>

@@ -3687,7 +3687,9 @@ QUnit.module('Headers reordering', {
             }),
             sourceColumn: {
                 caption: 'TestDrag'
-            }
+            },
+            sourceLocation: 'headers',
+            draggingPanels: this.draggingPanels,
         });
         const $dragHeader = $('.dx-datagrid-drag-header');
 
@@ -3720,7 +3722,9 @@ QUnit.module('Headers reordering', {
             }),
             sourceColumn: {
                 caption: 'TestDrag'
-            }
+            },
+            sourceLocation: 'headers',
+            draggingPanels: this.draggingPanels,
         });
 
         const $dragHeader = $('.dx-datagrid-drag-header');
@@ -4788,7 +4792,8 @@ QUnit.module('Headers reordering', {
             sourceLocation: 'headers',
             sourceColumn: {
                 caption: 'TestDrag'
-            }
+            },
+            draggingPanels: this.draggingPanels,
         });
         draggingHeader.moveHeader({
             event: {
@@ -4826,7 +4831,9 @@ QUnit.module('Headers reordering', {
             sourceColumn: {
                 command: 'edit',
                 type: 'buttons'
-            }
+            },
+            sourceLocation: 'headers',
+            draggingPanels: this.draggingPanels,
         });
         const $dragHeader = $('.dx-datagrid-drag-header');
 

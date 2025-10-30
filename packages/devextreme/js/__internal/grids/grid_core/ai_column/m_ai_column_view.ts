@@ -1,14 +1,30 @@
+/* eslint-disable max-classes-per-file */
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { Properties as DropDownProperties } from '@js/ui/drop_down_button';
+import DropDownButton from '@js/ui/drop_down_button';
 import domAdapter from '@ts/core/m_dom_adapter';
 
+import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { Column, ColumnsController } from '../columns_controller/m_columns_controller';
+import { getColumnHeaderCellSelector } from '../columns_controller/m_columns_controller_utils';
 import { View } from '../m_modules';
+import type { ModuleType } from '../m_types';
 import { AIPromptEditor } from './ai_prompt_editor/ai_prompt_editor';
 import type { AIPromptEditorOptions } from './ai_prompt_editor/types';
-import { AI_COLUMN_NAME } from './const';
+import { AI_COLUMN_NAME, CLASSES } from './const';
+import { createAIHeaderContainer, createChatSparkleOutlineIcon } from './dom';
 import type { AIColumnController } from './m_ai_column_controller';
-import { getAICommandColumnOptions, isAIColumnAutoMode } from './utils';
+import {
+  getAICommandColumnDefaultOptions,
+  isAIColumnAutoMode,
+  isAIColumnHeader,
+  isEditorOptions,
+  isHeaderDropDownButtonVisible,
+  isPopupOptions,
+  isPromptOption,
+  isRefreshOption,
+} from './utils';
 
 export class AIColumnView extends View {
   private columnsController!: ColumnsController;
@@ -18,11 +34,10 @@ export class AIColumnView extends View {
   private promptEditorInstance!: AIPromptEditor;
 
   private addAICommandColumn(): void {
-    this.columnsController.addCommandColumn(getAICommandColumnOptions());
+    this.columnsController.addCommandColumn(getAICommandColumnDefaultOptions());
   }
 
   private getAIPromptEditorConfig(
-    $cellElement: dxElementWrapper,
     column: Column,
   ): AIPromptEditorOptions {
     const alignment = column.alignment === 'right' ? 'left' : 'right';
@@ -58,12 +73,26 @@ export class AIColumnView extends View {
         position: {
           my: `${alignment} top`,
           at: `${alignment} bottom`,
-          of: `.dx-header-row td[aria-colindex="${visibleIndex + 1}"]`,
+          of: getColumnHeaderCellSelector(visibleIndex),
           collision: 'fit',
           boundary: this.component.element(),
         },
+        ...column.ai?.popup,
+      },
+      editorOptions: {
+        ...column.ai?.editorOptions,
       },
     };
+  }
+
+  private updatePromptEditorInstance(column: Column): void {
+    const config = this.getAIPromptEditorConfig(column);
+
+    if (!this.promptEditorInstance) {
+      this.promptEditorInstance = new AIPromptEditor(config);
+    } else {
+      this.promptEditorInstance.updateOptions(config);
+    }
   }
 
   // TODO: support changing all columns and the entire column
@@ -81,9 +110,32 @@ export class AIColumnView extends View {
     }
 
     const columnOptionName = this.columnsController.getColumnOptionNameByFullName(args.fullName);
+    const isPromptOptionName = isPromptOption(columnOptionName, args.value);
 
-    if (columnOptionName === 'ai.prompt' && isAIColumnAutoMode(column)) {
-      this.aiColumnController.sendAIColumnRequest(column.name as string);
+    if (isPromptOptionName) {
+      this.promptEditorInstance?.updatePrompt(args.value);
+    }
+
+    if (isPromptOptionName && isAIColumnAutoMode(column)) {
+      this.aiColumnController.sendAIColumnRequest(column.name);
+    }
+
+    const needUpdatePopup = isPopupOptions(columnOptionName, args.value);
+    const needUpdateEditor = isEditorOptions(columnOptionName, args.value);
+    if (needUpdatePopup || needUpdateEditor) {
+      this.updatePromptEditorInstance(column);
+    }
+
+    if (isRefreshOption(columnOptionName, args.value)) {
+      // TODO: this.component.refresh();
+    }
+  }
+
+  private ensureAIPromptEditorVisibility() {
+    const aiColumns = this.aiColumnController.getAIColumns();
+    const aiColumnsWithVisiblePopup = aiColumns.filter((column) => column.ai?.popup?.visible);
+    if (aiColumnsWithVisiblePopup.length > 0) {
+      this.updatePromptEditorInstance(aiColumnsWithVisiblePopup[0]);
     }
   }
 
@@ -99,6 +151,10 @@ export class AIColumnView extends View {
     this.aiColumnController.aiRequestRejected.add(() => {
       this.promptEditorInstance?.updateStateOnAction('stop');
     });
+
+    this.renderCompleted.add(() => {
+      this.ensureAIPromptEditorVisibility();
+    });
   }
 
   public showPromptEditor(cellElement: HTMLElement, column: Column): Promise<boolean> {
@@ -108,14 +164,7 @@ export class AIColumnView extends View {
       return Promise.resolve(false);
     }
 
-    const config = this.getAIPromptEditorConfig($cellElement, column);
-
-    if (!this.promptEditorInstance) {
-      this.promptEditorInstance = new AIPromptEditor(config);
-    } else {
-      this.promptEditorInstance.updateOptions(config);
-    }
-
+    this.updatePromptEditorInstance(column);
     return this.promptEditorInstance.show();
   }
 
@@ -127,3 +176,68 @@ export class AIColumnView extends View {
     return this.promptEditorInstance;
   }
 }
+
+export const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) => class AIColumnHeadersViewExtender extends Base {
+  private getDropDownButtonConfig(): DropDownProperties {
+    return {
+      showArrowIcon: false,
+      icon: 'overflow',
+      stylingMode: 'text',
+    };
+  }
+
+  private renderHeaderDropDownButton($container: dxElementWrapper): void {
+    const $dropDownButton = $('<div>')
+      .addClass(CLASSES.aiColumnHeaderButton)
+      .appendTo($container);
+
+    this._createComponent($dropDownButton, DropDownButton, this.getDropDownButtonConfig());
+  }
+
+  private renderAIHeader($container: dxElementWrapper, column: Column): void {
+    const $iconElement = createChatSparkleOutlineIcon();
+    const $aiHeaderContainer = createAIHeaderContainer();
+    const $cellContent = this.createCellContent($container, column);
+
+    $cellContent.text(column.caption ?? '');
+    $aiHeaderContainer
+      .append($iconElement)
+      .append($cellContent)
+      .appendTo($container);
+  }
+
+  protected getHeaderDefaultTemplate($container: dxElementWrapper, options): void {
+    if (isAIColumnHeader(options.column, options.rowType)) {
+      this.renderAIHeader($container, options.column);
+      return;
+    }
+
+    super.getHeaderDefaultTemplate($container, options);
+  }
+
+  protected _processTemplate(template, options) {
+    const renderingTemplate = super._processTemplate(template, options);
+    const needToRenderHeaderDropDownButton = isAIColumnHeader(options.column, options.rowType)
+      && isHeaderDropDownButtonVisible(options.column);
+
+    if (renderingTemplate && needToRenderHeaderDropDownButton) {
+      return {
+        render: (options) => {
+          renderingTemplate.render(options);
+          this.renderHeaderDropDownButton($(options.container));
+        },
+      };
+    }
+
+    return renderingTemplate;
+  }
+
+  public renderDragCellContent($dragContainer: dxElementWrapper, column: Column): void {
+    if (column.type === AI_COLUMN_NAME) {
+      this.renderAIHeader($dragContainer, column);
+      return;
+    }
+
+    super.renderDragCellContent($dragContainer, column);
+  }
+};

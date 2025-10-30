@@ -9,6 +9,8 @@ import { getHeight, getWidth } from 'core/utils/size';
 import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
 
+import 'generic_light.css!';
+
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
 
 function checkScrollWorks(dataGrid, scrollBy = 10, isHorizontal = false) {

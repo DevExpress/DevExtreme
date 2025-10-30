@@ -33,6 +33,7 @@ import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
 import type { PagerView } from '../pager/m_pager';
 import { CLASSES } from './const';
+import type { DraggingPanel } from './types';
 
 const COLUMNS_SEPARATOR_CLASS = 'columns-separator';
 const COLUMNS_SEPARATOR_TRANSPARENT = 'columns-separator-transparent';
@@ -407,6 +408,39 @@ export class DraggingHeaderView extends modules.View {
   private _testPointsByColumns: any;
   /// #ENDDEBUG
 
+  private getSourceDraggingPanel(): DraggingPanel {
+    const {
+      sourceLocation,
+      draggingPanels,
+    }: {
+      sourceLocation: string;
+      draggingPanels: DraggingPanel[];
+    } = this._dragOptions;
+
+    return draggingPanels
+      .find(
+        (draggingPanel: DraggingPanel) => draggingPanel.getName() === sourceLocation,
+      ) as DraggingPanel;
+  }
+
+  private updateDragElement(): void {
+    const { columnElement, sourceColumn } = this._dragOptions;
+    const sourceDraggingPanel = this.getSourceDraggingPanel();
+    const dragElement = this.element();
+
+    dragElement
+      .empty()
+      .css({
+        textAlign: columnElement?.css('textAlign'),
+        height: columnElement && getHeight(columnElement),
+        width: columnElement && getWidth(columnElement),
+        whiteSpace: columnElement?.css('whiteSpace'),
+      })
+      .addClass(this.addWidgetPrefix(HEADERS_DRAG_ACTION_CLASS));
+
+    sourceDraggingPanel.renderDragCellContent(dragElement, sourceColumn);
+  }
+
   public init() {
     super.init();
 
@@ -490,39 +524,30 @@ export class DraggingHeaderView extends modules.View {
   }
 
   public dragHeader(options) {
-    const that = this;
     const { columnElement } = options;
 
-    that._isDragging = true;
-    that._dragOptions = options;
-    that._dropOptions = {
+    this._isDragging = true;
+    this._dragOptions = options;
+    this._dropOptions = {
       sourceIndex: options.index,
-      sourceColumnIndex: that._getVisibleIndexObject(options.rowIndex, options.columnIndex),
-      sourceColumnElement: options.columnElement,
+      sourceColumnIndex: this._getVisibleIndexObject(options.rowIndex, options.columnIndex),
+      sourceColumnElement: columnElement,
       sourceLocation: options.sourceLocation,
     };
 
     const document = domAdapter.getDocument();
     // eslint-disable-next-line spellcheck/spell-checker
-    that._onSelectStart = document.onselectstart;
+    this._onSelectStart = document.onselectstart;
 
     // eslint-disable-next-line spellcheck/spell-checker
     document.onselectstart = function () {
       return false;
     };
 
-    that._controller.drag(that._dropOptions);
+    this._controller.drag(this._dropOptions);
+    this.updateDragElement();
 
-    that.element().css({
-      textAlign: columnElement?.css('textAlign'),
-      height: columnElement && getHeight(columnElement),
-      width: columnElement && getWidth(columnElement),
-      whiteSpace: columnElement?.css('whiteSpace'),
-    })
-      .addClass(that.addWidgetPrefix(HEADERS_DRAG_ACTION_CLASS))
-      .text(options.sourceColumn.caption);
-
-    that.element().appendTo(swatchContainer.getSwatchContainer(columnElement));
+    this.element().appendTo(swatchContainer.getSwatchContainer(columnElement));
   }
 
   public moveHeader(args) {

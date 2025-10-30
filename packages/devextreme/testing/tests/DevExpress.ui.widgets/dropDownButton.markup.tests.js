@@ -4,12 +4,12 @@ import DropDownButton from 'ui/drop_down_button';
 import windowUtils from 'core/utils/window';
 import eventsEngine from 'common/core/events/core/events_engine';
 
-import 'generic_light.css!';
-
 const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
 const DROP_DOWN_BUTTON_ACTION_CLASS = 'dx-dropdownbutton-action';
 const DROP_DOWN_BUTTON_TOGGLE_CLASS = 'dx-dropdownbutton-toggle';
 const DROP_DOWN_BUTTON_HAS_ARROW_CLASS = 'dx-dropdownbutton-has-arrow';
+
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(() => {
     const markup =

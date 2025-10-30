@@ -8,7 +8,7 @@ import { normalizeKeyName } from 'common/core/events/utils/index';
 import { rerender } from 'inferno';
 
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import 'ui/validator';
 
 QUnit.testStart(function() {

@@ -21,7 +21,7 @@ import mapLayerModule from 'viz/vector_map/map_layer';
 import tooltipViewerModule from 'viz/vector_map/tooltip_viewer';
 import rendererModule from 'viz/core/renderers/renderer_default';
 import titleModule from 'viz/core/title';
-import exportModule from 'viz/core/export';
+import exportModule from '__internal/viz/core/exportModule';
 import tooltipModule from 'viz/core/tooltip';
 import { implementationsMap } from 'core/utils/size';
 

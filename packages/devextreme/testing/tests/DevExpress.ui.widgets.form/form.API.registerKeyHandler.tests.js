@@ -2,8 +2,6 @@ import $ from 'jquery';
 
 import 'ui/form';
 
-import 'generic_light.css!';
-
 QUnit.testStart(function() {
     const markup = '<div id="form"></div>';
     $('#qunit-fixture').html(markup);

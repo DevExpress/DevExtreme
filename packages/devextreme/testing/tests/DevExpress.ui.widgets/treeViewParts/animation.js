@@ -1,8 +1,7 @@
-/* global internals */
-
 import $ from 'jquery';
 import fx from 'common/core/animation/fx';
 import keyboardMock from '../../../helpers/keyboardMock.js';
+import { internals } from './testData.js';
 
 QUnit.module('Animation', {
     beforeEach: function() {

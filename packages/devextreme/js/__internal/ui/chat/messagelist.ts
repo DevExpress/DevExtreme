@@ -13,7 +13,9 @@ import { isElementInDom } from '@js/core/utils/dom';
 import { getHeight } from '@js/core/utils/size';
 import { isDate, isDefined } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
-import type { Message, TextMessage, User } from '@js/ui/chat';
+import type {
+  AttachmentDownloadEvent, Message, TextMessage, User,
+} from '@js/ui/chat';
 import type { Item as ContextMenuItem } from '@js/ui/context_menu';
 import type dxContextMenu from '@js/ui/context_menu';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
@@ -102,6 +104,7 @@ export interface Properties extends WidgetOptions<MessageList> {
   showAvatar: boolean;
   showUserName: boolean;
   showMessageTimestamp: boolean;
+  onAttachmentDownload?: (e: AttachmentDownloadEvent) => void;
   onMessageEditingStart?: (e: MessageEditingEvent) => () => void;
   onMessageDeleting?: (e: MessageDeletingEvent) => void;
   onEscapeKeyPressed?: (e: KeyboardEvent) => void;
@@ -273,8 +276,9 @@ class MessageList extends Widget<Properties> {
       showAvatar,
       showUserName,
       showMessageTimestamp,
-      messageTemplate,
       messageTimestampFormat,
+      messageTemplate,
+      onAttachmentDownload,
     } = this.option();
 
     const $messageGroup = $('<div>').appendTo(this._$content);
@@ -285,8 +289,9 @@ class MessageList extends Widget<Properties> {
       showAvatar,
       showUserName,
       showMessageTimestamp,
-      messageTemplate,
       messageTimestampFormat,
+      messageTemplate,
+      onAttachmentDownload,
     });
   }
 
@@ -794,6 +799,7 @@ class MessageList extends Widget<Properties> {
 
   _clean(): void {
     this._lastMessageDate = null;
+    resizeObserverSingleton.unobserve(this.$element().get(0));
 
     super._clean();
   }
@@ -831,6 +837,7 @@ class MessageList extends Widget<Properties> {
       case 'emptyViewTemplate':
       case 'dayHeaderFormat':
       case 'messageTimestampFormat':
+      case 'onAttachmentDownload':
         this._invalidate();
         break;
       case 'items':

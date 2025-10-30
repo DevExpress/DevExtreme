@@ -32,7 +32,7 @@ export const templates: PromptTemplates = {
     user: 'Text: {{text}}. Fields: {{fields}}.',
   },
   generateGridColumn: {
-    system: 'You are a helpful assistant that generates column data based on the provided text and existing data context. Generate appropriate column values that match the request and are consistent with the existing data structure.',
-    user: 'Text: {{text}}. Data: {{data}}.',
+    system: 'You are a helpful AI assistant that generates values for a new column in a dataset, based on a given user instruction and existing row data. Input: A user prompt that describes what should be generated. A dataset in the format: { "rowKey1": {column1: value1, column2: value2, ...}, "rowKey2": {...}, ... }. Task: Generate a single value for each row that satisfies the user\'s prompt, using the provided row data as context. Instructions: Output your result strictly in this format: { "rowKey1": "generatedValue1", "rowKey2": "generatedValue2", ... }. The output must be a valid JSON string, directly parsable by JSON.parse. Do not include any explanation, markdown, or formatting — only the raw JSON object. If a value cannot be generated for a specific row, assign an empty string ("") for that row. Example Output: { "rowKey1": "valueA", "rowKey2": "" }. You must follow this output format exactly. Any deviation will result in a parsing error.',
+    user: 'User prompt text: {{text}}. Dataset: {{data}}.',
   },
 };

@@ -23,6 +23,9 @@ $material-command-edit-icon-size: null !default;
 $material-filter-row-between-editor-padding: null !default;
 $material-command-column-additional-right-margin: null !default;
 $material-grid-base-treeview-select-all-item-offset: null !default;
+$material-grid-base-command-ai-chatsparkleoutline-icon-size: null !default;
+$material-grid-base-command-ai-text-content-padding: null !default;
+$material-grid-base-command-ai-header-button-offset: null !default;
 
 $material-grid-base-header-line-height: 16px !default;
 $material-grid-base-header-icon-size: 15px !default;
@@ -57,6 +60,9 @@ $material-command-edit-text-margin: 2px !default;
   $material-command-column-additional-right-margin: 0 !default;
 
   $material-grid-base-treeview-select-all-item-offset: 43px !default;
+  $material-grid-base-command-ai-chatsparkleoutline-icon-size: 24px !default;
+  $material-grid-base-command-ai-text-content-padding: $material-grid-base-command-ai-chatsparkleoutline-icon-size + 8px !default;
+  $material-grid-base-command-ai-header-button-offset: 8px !default;
 }
 
 @else if $size == "compact" {
@@ -86,6 +92,9 @@ $material-command-edit-text-margin: 2px !default;
   $material-command-column-additional-right-margin: 2px !default;
 
   $material-grid-base-treeview-select-all-item-offset: 35px !default;
+  $material-grid-base-command-ai-chatsparkleoutline-icon-size: 18px !default;
+  $material-grid-base-command-ai-text-content-padding: $material-grid-base-command-ai-chatsparkleoutline-icon-size + 6px !default;
+  $material-grid-base-command-ai-header-button-offset: 6px !default;
 }
 
 $material-grid-base-header-panel-padding: 0 $material-grid-base-cell-horizontal-padding !default;
