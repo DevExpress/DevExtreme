@@ -10,8 +10,6 @@ import errors from '@js/ui/widget/ui.errors';
 import { AIIntegration } from '@ts/core/ai_integration/core/ai_integration';
 import { DataGridModel } from '@ts/grids/data_grid/__tests__/__mock__/model/data_grid';
 
-import { CLASSES } from './const';
-
 const SELECTORS = {
   gridContainer: '#gridContainer',
 };
@@ -235,11 +233,11 @@ describe('Options', () => {
       const headerCell = component.getHeaderCell(3);
 
       expect(headerCellTemplate).toHaveBeenCalledTimes(1);
-      expect(headerCell.querySelectorAll('.template-class').length).toBe(1);
-      expect(headerCell.textContent).toBe('Template');
-      expect(headerCell.querySelector(`.${CLASSES.aiColumnHeaderContent}`)).toBeNull();
-      expect(headerCell.querySelector(`.${CLASSES.aiChatSparkleOutlineIcon}`)).toBeNull();
-      expect(headerCell.querySelector(`.${CLASSES.aiColumnHeaderButton}`)).not.toBeNull();
+      expect(headerCell.element.querySelectorAll('.template-class').length).toBe(1);
+      expect(headerCell.element.textContent).toBe('Template');
+      expect(headerCell.getHeaderContent()).toBeNull();
+      expect(headerCell.getIcon()).toBeNull();
+      expect(headerCell.getDropDownButton()).not.toBeNull();
     });
   });
 
@@ -262,14 +260,10 @@ describe('Options', () => {
       });
 
       const headerCell = component.getHeaderCell(3);
-      const aiColumnHeaderContent = headerCell.querySelector(`.${CLASSES.aiColumnHeaderContent}`);
-      const aiColumnHeaderText = aiColumnHeaderContent?.querySelector('.dx-datagrid-text-content');
 
-      expect(aiColumnHeaderContent).not.toBeNull();
-      expect(aiColumnHeaderContent?.querySelector(`.${CLASSES.aiChatSparkleOutlineIcon}`)).not.toBeNull();
-      expect(aiColumnHeaderText).not.toBeNull();
-      expect(aiColumnHeaderText?.textContent).toBe('AI Column');
-      expect(headerCell.querySelector(`.${CLASSES.aiColumnHeaderButton}`)).not.toBeNull();
+      expect(headerCell.getIcon()).not.toBeNull();
+      expect(headerCell.getText()).toBe('AI Column');
+      expect(headerCell.getDropDownButton()).not.toBeNull();
     });
   });
 
@@ -304,11 +298,11 @@ describe('Options', () => {
       const headerCellUpdated = component.getHeaderCell(3);
 
       expect(headerCellTemplate).toHaveBeenCalledTimes(1);
-      expect(headerCellUpdated.querySelector('.my-template-class')).not.toBeNull();
-      expect(headerCellUpdated.textContent).toBe('Test');
-      expect(headerCellUpdated.querySelector(`.${CLASSES.aiColumnHeaderContent}`)).toBeNull();
-      expect(headerCellUpdated.querySelector(`.${CLASSES.aiChatSparkleOutlineIcon}`)).toBeNull();
-      expect(headerCellUpdated.querySelector(`.${CLASSES.aiColumnHeaderButton}`)).not.toBeNull();
+      expect(headerCellUpdated.element.querySelector('.my-template-class')).not.toBeNull();
+      expect(headerCellUpdated.element.textContent).toBe('Test');
+      expect(headerCellUpdated.getHeaderContent()).toBeNull();
+      expect(headerCellUpdated.getIcon()).toBeNull();
+      expect(headerCellUpdated.getDropDownButton()).not.toBeNull();
     });
   });
 
@@ -395,14 +389,11 @@ describe('Options', () => {
       });
 
       const headerCell = component.getHeaderCell(3);
-      const aiColumnHeaderContent = headerCell.querySelector(`.${CLASSES.aiColumnHeaderContent}`);
-      const aiColumnHeaderText = aiColumnHeaderContent?.querySelector('.dx-datagrid-text-content');
 
-      expect(aiColumnHeaderContent).not.toBeNull();
-      expect(aiColumnHeaderContent?.querySelector(`.${CLASSES.aiChatSparkleOutlineIcon}`)).not.toBeNull();
-      expect(aiColumnHeaderText).not.toBeNull();
-      expect(aiColumnHeaderText?.textContent).toBe('AI Column');
-      expect(headerCell.querySelector(`.${CLASSES.aiColumnHeaderButton}`)).toBeNull();
+      expect(headerCell.getHeaderContent()).not.toBeNull();
+      expect(headerCell.getIcon()).not.toBeNull();
+      expect(headerCell.getText()).toBe('AI Column');
+      expect(headerCell.getDropDownButton()).toBeNull();
     });
   });
 });
@@ -490,8 +481,8 @@ describe('columnOption', () => {
     const headerCell = component.getHeaderCell(3);
 
     expect(headerCellTemplate).toHaveBeenCalledTimes(1);
-    expect(headerCell.querySelectorAll('.template-class').length).toBe(1);
-    expect(headerCell.textContent).toBe('Template');
+    expect(headerCell.element.querySelectorAll('.template-class').length).toBe(1);
+    expect(headerCell.element.textContent).toBe('Template');
   });
 
   it('should apply cellTemplate to AI column', async () => {

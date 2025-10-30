@@ -6,6 +6,7 @@ import $ from '@js/core/renderer';
 import { ToastModel } from '@ts/ui/__tests__/__mock__/model/toast';
 
 import { AIPromptEditorModel } from './ai_prompt_editor';
+import { HeaderCellModel } from './header_cell';
 
 const SELECTORS = {
   headerRowClass: 'dx-header-row',
@@ -23,8 +24,8 @@ export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
     return this.root.querySelectorAll(`.${SELECTORS.headerRowClass} > td`);
   }
 
-  public getHeaderCell(columnIndex: number): HTMLElement {
-    return this.getHeaderCells()[columnIndex];
+  public getHeaderCell(columnIndex: number): HeaderCellModel {
+    return new HeaderCellModel(this.getHeaderCells()[columnIndex]);
   }
 
   public getCellElement(rowIndex: number, columnIndex: number): HTMLElement {
