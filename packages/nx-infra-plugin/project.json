@@ -6,31 +6,10 @@
   "tags": [],
   "targets": {
     "build": {
-      "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
+      "executor": "nx:run-script",
+      "outputs": ["{projectRoot}/dist"],
       "options": {
-        "outputPath": "{projectRoot}/dist",
-        "main": "{projectRoot}/src/index.ts",
-        "tsConfig": "{projectRoot}/tsconfig.lib.json",
-        "generateExportsField": true,
-        "assets": [
-          "{projectRoot}/*.md",
-          {
-            "input": "{projectRoot}/src",
-            "glob": "**/!(*.ts)",
-            "output": "./src"
-          },
-          {
-            "input": "{projectRoot}/src",
-            "glob": "**/*.d.ts",
-            "output": "./src"
-          },
-          {
-            "input": "{projectRoot}",
-            "glob": "executors.json",
-            "output": "."
-          }
-        ]
+        "script": "build"
       }
     },
     "lint": {
