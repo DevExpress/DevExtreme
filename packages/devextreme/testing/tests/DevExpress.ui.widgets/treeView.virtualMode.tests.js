@@ -1,5 +1,3 @@
-/* global data2, dataID, internals, makeSlowDataSource */
-
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import fx from 'common/core/animation/fx';
@@ -9,13 +7,21 @@ import { CustomStore } from 'common/data/custom_store';
 import dblclickEvent from 'common/core/events/dblclick';
 import TreeView from 'ui/tree_view';
 import eventsEngine from 'common/core/events/core/events_engine';
-import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
+import TreeViewTestWrapper from '../../helpers/TreeViewTestHelper.js';
 import LoadIndicator from 'ui/load_indicator';
+import { internals, data2, dataID } from './treeViewParts/testData.js';
+import { makeSlowDataSource } from './treeViewParts/testUtils.js';
 
 const { module, test, assert } = QUnit;
 const createInstance = (options) => new TreeViewTestWrapper(options);
 
 import 'generic_light.css!';
+
+QUnit.testStart(function() {
+    const markup = '<div id="treeView"></div>';
+
+    $('#qunit-fixture').html(markup);
+});
 
 const NODE_LOAD_INDICATOR_CLASS = 'dx-treeview-node-loadindicator';
 const TREEVIEW_ITEM_CLASS = 'dx-treeview-item';
