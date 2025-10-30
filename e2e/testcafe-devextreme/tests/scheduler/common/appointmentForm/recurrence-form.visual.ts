@@ -4,8 +4,6 @@ import { ClientFunction } from 'testcafe';
 import AppointmentPopup from 'devextreme-testcafe-models/scheduler/appointment/popup';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
-import { changeTheme } from '../../../../helpers/changeTheme';
 
 fixture`Appointment Form: Recurrence Form`
   .page(url(__dirname, '../../../container.html'));
