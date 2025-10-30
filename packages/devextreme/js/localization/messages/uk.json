@@ -274,10 +274,10 @@
         "dxScheduler-appointmentAriaLabel-recurring": "Повторювана подія",
 
         "dxScheduler-appointmentListAriaLabel": "Список подій",
-
+        "dxScheduler-newPopupTitle": "New Appointment",
         "dxScheduler-editPopupTitle": "Edit Appointment",
         "dxScheduler-editPopupSaveButtonText": "Save",
-        
+
         "dxScheduler-editorLabelTitle": "Тема",
         "dxScheduler-editorLabelStartDate": "Дата початку",
         "dxScheduler-editorLabelEndDate": "Дата завершення",
@@ -413,6 +413,8 @@
         "dxChat-editingDeleteConfirmText": "Ви впевнені, що хочете видалити це повідомлення?",
         "dxChat-deletedMessageText": "Це повідомлення було видалено",
         "dxChat-defaultImageAlt": "Зображення, надіслане в чаті",
+        "dxChat-fileViewLabel": "File list",
+        "dxChat-downloadButtonLabel": "Download file {0}",
 
         "dxColorView-ariaRed": "Червоний",
         "dxColorView-ariaGreen": "Зелений",

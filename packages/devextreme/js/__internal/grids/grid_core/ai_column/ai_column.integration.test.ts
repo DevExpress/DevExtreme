@@ -1153,11 +1153,9 @@ describe('API Methods', () => {
 
       instance.columnOption('myColumn', 'ai.prompt', 'Test prompt');
 
-      // TODO: There should be only one call to sendAIColumnRequest
-      // Now there are two calls: one from optionChangedHandler, and other from handleDataChanged
-      expect(columnSendRequestResolved).toHaveBeenCalledTimes(2);
+      expect(columnSendRequestResolved).toHaveBeenCalledTimes(1);
       await Promise.resolve();
-      expect(abortSpy).toHaveBeenCalledTimes(2);
+      expect(abortSpy).toHaveBeenCalledTimes(1);
     });
 
     it('should not send a request if there are no data rows', async () => {
@@ -2093,5 +2091,519 @@ describe('API Handlers', () => {
         }),
       );
     });
+  });
+});
+
+describe('Popup', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it('should be visible when the ai.popup.visible is true (dynamic update)', async () => {
+    const { component } = await createDataGrid({
+      dataSource: [
+        { id: 1, name: 'Name 1', value: 10 },
+      ],
+      columns: [
+        { dataField: 'id', caption: 'ID' },
+        { dataField: 'name', caption: 'Name' },
+        { dataField: 'value', caption: 'Value' },
+        {
+          type: 'ai',
+          caption: 'AI Column',
+          name: 'myColumn',
+        },
+      ],
+    });
+
+    expect(component.getAIDialog()).toBeNull();
+
+    component.apiColumnOption('myColumn', 'ai.popup.visible', true);
+
+    jest.runAllTimers();
+    await Promise.resolve();
+    expect(component.getAIDialog()).not.toBeNull();
+
+    const popupInstance = component.getAIPromptEditor().getPopupInstance();
+    expect(popupInstance.option('visible')).toBe(true);
+  });
+
+  it('should be invisible when the ai.popup.visible is false (dynamic update)', async () => {
+    const { component } = await createDataGrid({
+      dataSource: [
+        { id: 1, name: 'Name 1', value: 10 },
+      ],
+      columns: [
+        { dataField: 'id', caption: 'ID' },
+        { dataField: 'name', caption: 'Name' },
+        { dataField: 'value', caption: 'Value' },
+        {
+          type: 'ai',
+          caption: 'AI Column',
+          name: 'myColumn',
+          ai: {
+            popup: {
+              visible: true,
+            },
+          },
+        },
+      ],
+    });
+
+    expect(component.getAIDialog()).not.toBeNull();
+
+    component.apiColumnOption('myColumn', 'ai.popup.visible', false);
+
+    jest.runAllTimers();
+    await Promise.resolve();
+    expect(component.getAIDialog()).toBeNull();
+
+    const popupInstance = component.getAIPromptEditor().getPopupInstance();
+    expect(popupInstance.option('visible')).toBe(false);
+  });
+
+  it('should pass popup options to the AI column prompt editor popup (initial rendering)', async () => {
+    const { component } = await createDataGrid({
+      dataSource: [
+        { id: 1, name: 'Name 1', value: 10 },
+      ],
+      columns: [
+        { dataField: 'id', caption: 'ID' },
+        { dataField: 'name', caption: 'Name' },
+        { dataField: 'value', caption: 'Value' },
+        {
+          type: 'ai',
+          caption: 'AI Column',
+          name: 'myColumn',
+          ai: {
+            popup: {
+              visible: true,
+              title: 'Custom Title',
+              height: 400,
+              animation: {
+                show: {
+                  type: 'fade',
+                  duration: 300,
+                },
+                hide: {
+                  type: 'fade',
+                  duration: 300,
+                },
+              },
+              toolbarItems: [
+                {
+                  widget: 'dxButton',
+                  options: {
+                    text: 'Custom Button',
+                  },
+                  location: 'after',
+                },
+              ],
+              accessKey: 'h',
+              hideOnOutsideClick: true,
+              dragEnabled: true,
+              enableBodyScroll: false,
+              hint: 'Custom Hint',
+              maxHeight: 2000,
+              minHeight: 100,
+              maxWidth: 800,
+              minWidth: 200,
+              onDisposing: jest.fn().mockReturnValue('onDisposing'),
+              onHidden: jest.fn().mockReturnValue('onHidden'),
+              onShowing: jest.fn().mockReturnValue('onShowing'),
+              onShown: jest.fn().mockReturnValue('onShown'),
+              onContentReady: jest.fn().mockReturnValue('onContentReady'),
+              onResize: jest.fn().mockReturnValue('onResize'),
+              onResizeEnd: jest.fn().mockReturnValue('onResizeEnd'),
+              onResizeStart: jest.fn().mockReturnValue('onResizeStart'),
+              onHiding: jest.fn().mockReturnValue('onHiding'),
+              onTitleRendered: jest.fn().mockReturnValue('onTitleRendered'),
+              onInitialized: jest.fn().mockReturnValue('onInitialized'),
+              resizeEnabled: true,
+              restorePosition: true,
+              rtlEnabled: true,
+              shading: false,
+              showTitle: true,
+            },
+          },
+        },
+      ],
+    });
+
+    const popupInstance = component.getAIPromptEditor().getPopupInstance();
+    expect(popupInstance.option('visible')).toBe(true);
+    expect(popupInstance.option('title')).toBe('Custom Title');
+    expect(popupInstance.option('width')).toBe(360); // default width
+    expect(popupInstance.option('height')).toBe(400);
+    expect(popupInstance.option('animation')).toEqual({
+      show: {
+        type: 'fade',
+        duration: 300,
+      },
+      hide: {
+        type: 'fade',
+        duration: 300,
+      },
+    });
+    const toolbarItems = popupInstance.option('toolbarItems');
+    expect(toolbarItems).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          widget: 'dxButton',
+          options: expect.objectContaining({
+            text: 'Custom Button',
+          }),
+          location: 'after',
+        }),
+      ]),
+    );
+    expect(popupInstance.option('accessKey')).toBe('h');
+    expect(popupInstance.option('hideOnOutsideClick')).toBe(true);
+    expect(popupInstance.option('dragEnabled')).toBe(true);
+    expect(popupInstance.option('enableBodyScroll')).toBe(false);
+    expect(popupInstance.option('hint')).toBe('Custom Hint');
+    expect(popupInstance.option('maxHeight')).toBe(2000);
+    expect(popupInstance.option('minHeight')).toBe(100);
+    expect(popupInstance.option('maxWidth')).toBe(800);
+    expect(popupInstance.option('minWidth')).toBe(200);
+    expect(popupInstance.option('onDisposing')?.({} as any)).toEqual('onDisposing');
+    expect(popupInstance.option('onHidden')?.({} as any)).toEqual('onHidden');
+    expect(popupInstance.option('onShowing')?.({} as any)).toEqual('onShowing');
+    expect(popupInstance.option('onShown')?.({} as any)).toEqual('onShown');
+    expect(popupInstance.option('onContentReady')?.({} as any)).toEqual('onContentReady');
+    expect(popupInstance.option('onResize')?.({} as any)).toEqual('onResize');
+    expect(popupInstance.option('onResizeEnd')?.({} as any)).toEqual('onResizeEnd');
+    expect(popupInstance.option('onResizeStart')?.({} as any)).toEqual('onResizeStart');
+    expect(popupInstance.option('onHiding')?.({} as any)).toEqual('onHiding');
+    expect(popupInstance.option('onTitleRendered')?.({} as any)).toEqual('onTitleRendered');
+    expect(popupInstance.option('onInitialized')?.({} as any)).toEqual('onInitialized');
+    expect(popupInstance.option('resizeEnabled')).toBe(true);
+    expect(popupInstance.option('restorePosition')).toBe(true);
+    expect(popupInstance.option('rtlEnabled')).toBe(true);
+    expect(popupInstance.option('shading')).toBe(false);
+    expect(popupInstance.option('showTitle')).toBe(true);
+  });
+
+  it('should pass popup options to the AI column prompt editor popup (dynamic update)', async () => {
+    const { component } = await createDataGrid({
+      dataSource: [
+        { id: 1, name: 'Name 1', value: 10 },
+      ],
+      columns: [
+        { dataField: 'id', caption: 'ID' },
+        { dataField: 'name', caption: 'Name' },
+        { dataField: 'value', caption: 'Value' },
+        {
+          type: 'ai',
+          caption: 'AI Column',
+          name: 'myColumn',
+        },
+      ],
+    });
+
+    component.apiColumnOption('myColumn', 'ai.popup', {
+      visible: true,
+      title: 'Custom Title',
+      height: 400,
+      animation: {
+        show: {
+          type: 'fade',
+          duration: 300,
+        },
+        hide: {
+          type: 'fade',
+          duration: 300,
+        },
+      },
+      toolbarItems: [
+        {
+          widget: 'dxButton',
+          options: {
+            text: 'Custom Button',
+          },
+          location: 'after',
+        },
+      ],
+      accessKey: 'h',
+      hideOnOutsideClick: true,
+      dragEnabled: true,
+      enableBodyScroll: false,
+      hint: 'Custom Hint',
+      maxHeight: 2000,
+      minHeight: 100,
+      maxWidth: 800,
+      minWidth: 200,
+      onDisposing: jest.fn().mockReturnValue('onDisposing'),
+      onHidden: jest.fn().mockReturnValue('onHidden'),
+      onShowing: jest.fn().mockReturnValue('onShowing'),
+      onShown: jest.fn().mockReturnValue('onShown'),
+      onContentReady: jest.fn().mockReturnValue('onContentReady'),
+      onResize: jest.fn().mockReturnValue('onResize'),
+      onResizeEnd: jest.fn().mockReturnValue('onResizeEnd'),
+      onResizeStart: jest.fn().mockReturnValue('onResizeStart'),
+      onHiding: jest.fn().mockReturnValue('onHiding'),
+      onTitleRendered: jest.fn().mockReturnValue('onTitleRendered'),
+      onInitialized: jest.fn().mockReturnValue('onInitialized'),
+      resizeEnabled: true,
+      restorePosition: true,
+      rtlEnabled: true,
+      shading: false,
+      showTitle: true,
+    });
+
+    jest.runAllTimers();
+    await Promise.resolve();
+
+    const popupInstance = component.getAIPromptEditor().getPopupInstance();
+    expect(popupInstance.option('visible')).toBe(true);
+    expect(popupInstance.option('title')).toBe('Custom Title');
+    expect(popupInstance.option('width')).toBe(360); // default width
+    expect(popupInstance.option('height')).toBe(400);
+    expect(popupInstance.option('animation')).toEqual({
+      show: {
+        type: 'fade',
+        duration: 300,
+      },
+      hide: {
+        type: 'fade',
+        duration: 300,
+      },
+    });
+    const toolbarItems = popupInstance.option('toolbarItems');
+    expect(toolbarItems).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          widget: 'dxButton',
+          options: expect.objectContaining({
+            text: 'Custom Button',
+          }),
+          location: 'after',
+        }),
+      ]),
+    );
+    expect(popupInstance.option('accessKey')).toBe('h');
+    expect(popupInstance.option('hideOnOutsideClick')).toBe(true);
+    expect(popupInstance.option('dragEnabled')).toBe(true);
+    expect(popupInstance.option('enableBodyScroll')).toBe(false);
+    expect(popupInstance.option('hint')).toBe('Custom Hint');
+    expect(popupInstance.option('maxHeight')).toBe(2000);
+    expect(popupInstance.option('minHeight')).toBe(100);
+    expect(popupInstance.option('maxWidth')).toBe(800);
+    expect(popupInstance.option('minWidth')).toBe(200);
+    expect(popupInstance.option('onDisposing')?.({} as any)).toEqual('onDisposing');
+    expect(popupInstance.option('onHidden')?.({} as any)).toEqual('onHidden');
+    expect(popupInstance.option('onShowing')?.({} as any)).toEqual('onShowing');
+    expect(popupInstance.option('onShown')?.({} as any)).toEqual('onShown');
+    expect(popupInstance.option('onContentReady')?.({} as any)).toEqual('onContentReady');
+    expect(popupInstance.option('onResize')?.({} as any)).toEqual('onResize');
+    expect(popupInstance.option('onResizeEnd')?.({} as any)).toEqual('onResizeEnd');
+    expect(popupInstance.option('onResizeStart')?.({} as any)).toEqual('onResizeStart');
+    expect(popupInstance.option('onHiding')?.({} as any)).toEqual('onHiding');
+    expect(popupInstance.option('onTitleRendered')?.({} as any)).toEqual('onTitleRendered');
+    expect(popupInstance.option('onInitialized')?.({} as any)).toEqual('onInitialized');
+    expect(popupInstance.option('resizeEnabled')).toBe(true);
+    expect(popupInstance.option('restorePosition')).toBe(true);
+    expect(popupInstance.option('rtlEnabled')).toBe(true);
+    expect(popupInstance.option('shading')).toBe(false);
+    expect(popupInstance.option('showTitle')).toBe(true);
+  });
+});
+
+describe('Editor', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it('should pass editor options to the AI column prompt editor (initial rendering)', async () => {
+    const { component } = await createDataGrid({
+      dataSource: [
+        { id: 1, name: 'Name 1', value: 10 },
+      ],
+      columns: [
+        { dataField: 'id', caption: 'ID' },
+        { dataField: 'name', caption: 'Name' },
+        { dataField: 'value', caption: 'Value' },
+        {
+          type: 'ai',
+          caption: 'AI Column',
+          name: 'myColumn',
+          ai: {
+            popup: {
+              visible: true,
+            },
+            prompt: 'Test prompt',
+            editorOptions: {
+              height: 200,
+              placeholder: 'Custom placeholder',
+              accessKey: 'h',
+              activeStateEnabled: true,
+              hint: 'Custom Hint',
+              label: 'Custom Label',
+              labelMode: 'floating',
+              maxLength: 500,
+              readOnly: false,
+              spellcheck: true,
+              onChange: jest.fn().mockReturnValue('onChange'),
+              onCopy: jest.fn().mockReturnValue('onCopy'),
+              onCut: jest.fn().mockReturnValue('onCut'),
+              onEnterKey: jest.fn().mockReturnValue('onEnterKey'),
+              onFocusIn: jest.fn().mockReturnValue('onFocusIn'),
+              onFocusOut: jest.fn().mockReturnValue('onFocusOut'),
+              onInput: jest.fn().mockReturnValue('onInput'),
+              onKeyDown: jest.fn().mockReturnValue('onKeyDown'),
+              onKeyUp: jest.fn().mockReturnValue('onKeyUp'),
+              onPaste: jest.fn().mockReturnValue('onPaste'),
+              onDisposing: jest.fn().mockReturnValue('onDisposing'),
+              onInitialized: jest.fn().mockReturnValue('onInitialized'),
+              rtlEnabled: true,
+              stylingMode: 'underlined',
+              tabIndex: 1,
+              width: '100px',
+            },
+          },
+        },
+      ],
+    });
+
+    const textEditorInstance = component.getAIPromptEditor().getTextArea().getInstance();
+    expect(textEditorInstance.option('height')).toBe(200);
+    expect(textEditorInstance.option('placeholder')).toBe('Custom placeholder');
+    expect(textEditorInstance.option('value')).toBe('Test prompt');
+    expect(textEditorInstance.option('accessKey')).toBe('h');
+    expect(textEditorInstance.option('activeStateEnabled')).toBe(true);
+    expect(textEditorInstance.option('hint')).toBe('Custom Hint');
+    expect(textEditorInstance.option('label')).toBe('Custom Label');
+    expect(textEditorInstance.option('labelMode')).toBe('floating');
+    expect(textEditorInstance.option('maxLength')).toBe(500);
+    expect(textEditorInstance.option('readOnly')).toBe(false);
+    expect(textEditorInstance.option('spellcheck')).toBe(true);
+    expect((textEditorInstance.option('onChange') as any)()).toEqual('onChange');
+    expect((textEditorInstance.option('onCopy') as any)()).toEqual('onCopy');
+    expect((textEditorInstance.option('onCut') as any)()).toEqual('onCut');
+    expect((textEditorInstance.option('onEnterKey') as any)()).toEqual('onEnterKey');
+    expect((textEditorInstance.option('onFocusIn') as any)()).toEqual('onFocusIn');
+    expect((textEditorInstance.option('onFocusOut') as any)()).toEqual('onFocusOut');
+    expect((textEditorInstance.option('onInput') as any)()).toEqual('onInput');
+    expect((textEditorInstance.option('onKeyDown') as any)()).toEqual('onKeyDown');
+    expect((textEditorInstance.option('onKeyUp') as any)()).toEqual('onKeyUp');
+    expect((textEditorInstance.option('onPaste') as any)()).toEqual('onPaste');
+    expect((textEditorInstance.option('onDisposing') as any)()).toEqual('onDisposing');
+    expect((textEditorInstance.option('onInitialized') as any)()).toEqual('onInitialized');
+    expect(textEditorInstance.option('rtlEnabled')).toBe(true);
+    expect(textEditorInstance.option('stylingMode')).toBe('underlined');
+    expect(textEditorInstance.option('tabIndex')).toBe(1);
+    expect(textEditorInstance.option('width')).toBe('100px');
+  });
+
+  it('should pass editor options to the AI column prompt editor (dynamic update)', async () => {
+    const { component } = await createDataGrid({
+      dataSource: [
+        { id: 1, name: 'Name 1', value: 10 },
+      ],
+      columns: [
+        { dataField: 'id', caption: 'ID' },
+        { dataField: 'name', caption: 'Name' },
+        { dataField: 'value', caption: 'Value' },
+        {
+          type: 'ai',
+          caption: 'AI Column',
+          name: 'myColumn',
+          ai: {
+            popup: {
+              visible: true,
+            },
+          },
+        },
+      ],
+    });
+
+    component.apiColumnOption('myColumn', 'ai.editorOptions', {
+      height: 200,
+      placeholder: 'Custom placeholder',
+      accessKey: 'h',
+      activeStateEnabled: true,
+      hint: 'Custom Hint',
+      label: 'Custom Label',
+      labelMode: 'floating',
+      maxLength: 500,
+      readOnly: false,
+      spellcheck: true,
+      onChange: jest.fn().mockReturnValue('onChange'),
+      onCopy: jest.fn().mockReturnValue('onCopy'),
+      onCut: jest.fn().mockReturnValue('onCut'),
+      onEnterKey: jest.fn().mockReturnValue('onEnterKey'),
+      onFocusIn: jest.fn().mockReturnValue('onFocusIn'),
+      onFocusOut: jest.fn().mockReturnValue('onFocusOut'),
+      onInput: jest.fn().mockReturnValue('onInput'),
+      onKeyDown: jest.fn().mockReturnValue('onKeyDown'),
+      onKeyUp: jest.fn().mockReturnValue('onKeyUp'),
+      onPaste: jest.fn().mockReturnValue('onPaste'),
+      onDisposing: jest.fn().mockReturnValue('onDisposing'),
+      onInitialized: jest.fn().mockReturnValue('onInitialized'),
+      rtlEnabled: true,
+      stylingMode: 'underlined',
+      tabIndex: 1,
+      width: '100px',
+    });
+    component.apiColumnOption('myColumn', 'ai.prompt', 'My test prompt');
+
+    const textEditorInstance = component.getAIPromptEditor().getTextArea().getInstance();
+    expect(textEditorInstance.option('height')).toBe(200);
+    expect(textEditorInstance.option('placeholder')).toBe('Custom placeholder');
+    expect(textEditorInstance.option('value')).toBe('My test prompt');
+    expect(textEditorInstance.option('accessKey')).toBe('h');
+    expect(textEditorInstance.option('activeStateEnabled')).toBe(true);
+    expect(textEditorInstance.option('hint')).toBe('Custom Hint');
+    expect(textEditorInstance.option('label')).toBe('Custom Label');
+    expect(textEditorInstance.option('labelMode')).toBe('floating');
+    expect(textEditorInstance.option('maxLength')).toBe(500);
+    expect(textEditorInstance.option('readOnly')).toBe(false);
+    expect(textEditorInstance.option('spellcheck')).toBe(true);
+    expect((textEditorInstance.option('onChange') as any)()).toEqual('onChange');
+    expect((textEditorInstance.option('onCopy') as any)()).toEqual('onCopy');
+    expect((textEditorInstance.option('onCut') as any)()).toEqual('onCut');
+    expect((textEditorInstance.option('onEnterKey') as any)()).toEqual('onEnterKey');
+    expect((textEditorInstance.option('onFocusIn') as any)()).toEqual('onFocusIn');
+    expect((textEditorInstance.option('onFocusOut') as any)()).toEqual('onFocusOut');
+    expect((textEditorInstance.option('onInput') as any)()).toEqual('onInput');
+    expect((textEditorInstance.option('onKeyDown') as any)()).toEqual('onKeyDown');
+    expect((textEditorInstance.option('onKeyUp') as any)()).toEqual('onKeyUp');
+    expect((textEditorInstance.option('onPaste') as any)()).toEqual('onPaste');
+    expect((textEditorInstance.option('onDisposing') as any)()).toEqual('onDisposing');
+    expect((textEditorInstance.option('onInitialized') as any)()).toEqual('onInitialized');
+    expect(textEditorInstance.option('rtlEnabled')).toBe(true);
+    expect(textEditorInstance.option('stylingMode')).toBe('underlined');
+    expect(textEditorInstance.option('tabIndex')).toBe(1);
+    expect(textEditorInstance.option('width')).toBe('100px');
+  });
+
+  it('should pass ai.prompt to the editor value', async () => {
+    const { component } = await createDataGrid({
+      dataSource: [
+        { id: 1, name: 'Name 1', value: 10 },
+      ],
+      columns: [
+        { dataField: 'id', caption: 'ID' },
+        { dataField: 'name', caption: 'Name' },
+        { dataField: 'value', caption: 'Value' },
+        {
+          type: 'ai',
+          caption: 'AI Column',
+          name: 'myColumn',
+          ai: {
+            popup: {
+              visible: true,
+            },
+            prompt: 'Initial prompt',
+          },
+        },
+      ],
+    });
+
+    let textEditorInstance = component.getAIPromptEditor().getTextArea().getInstance();
+    expect(textEditorInstance.option('value')).toBe('Initial prompt');
+
+    component.apiColumnOption('myColumn', 'ai.prompt', 'Updated prompt');
+
+    textEditorInstance = component.getAIPromptEditor().getTextArea().getInstance();
+    expect(textEditorInstance.option('value')).toBe('Updated prompt');
   });
 });

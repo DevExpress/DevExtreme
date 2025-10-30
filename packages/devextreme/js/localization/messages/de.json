@@ -274,10 +274,10 @@
         "dxScheduler-appointmentAriaLabel-recurring": "Wiederkehrender Termin",
 
         "dxScheduler-appointmentListAriaLabel": "Terminliste",
-
+        "dxScheduler-newPopupTitle": "New Appointment",
         "dxScheduler-editPopupTitle": "Edit Appointment",
         "dxScheduler-editPopupSaveButtonText": "Save",
-        
+
         "dxScheduler-editorLabelTitle": "Betreff",
         "dxScheduler-editorLabelStartDate": "Anfangszeit",
         "dxScheduler-editorLabelEndDate": "Endzeit",
@@ -413,6 +413,8 @@
         "dxChat-editingDeleteConfirmText": "Sind Sie sicher, dass Sie diese Nachricht löschen möchten?",
         "dxChat-deletedMessageText": "Diese Nachricht wurde gelöscht",
         "dxChat-defaultImageAlt": "Im Chat geteiltes Bild",
+        "dxChat-fileViewLabel": "File list",
+        "dxChat-downloadButtonLabel": "Download file {0}",
 
         "dxColorView-ariaRed": "Rot",
         "dxColorView-ariaGreen": "Grün",

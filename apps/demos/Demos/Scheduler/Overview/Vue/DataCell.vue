@@ -14,18 +14,18 @@ withDefaults(defineProps<{
   cellData: () => {},
 });
 
-function markWeekEnd(cellData) {
-  function isWeekEnd(date) {
+function markWeekEnd(cellData: Record<string, any>) {
+  function isWeekEnd(date: Date) {
     const day = date.getDay();
     return day === 0 || day === 6;
   }
-  const classObject = {};
+  const classObject: Record<string, boolean> = {};
   classObject[`employee-${cellData.groups.employeeID}`] = true;
   classObject[`employee-weekend-${cellData.groups.employeeID}`] = isWeekEnd(cellData.startDate);
   return classObject;
 }
-function markTraining(cellData) {
-  const classObject = {
+function markTraining(cellData: Record<string, any>) {
+  const classObject: Record<string, boolean> = {
     'day-cell': true,
   };
 
@@ -34,7 +34,7 @@ function markTraining(cellData) {
   ] = true;
   return classObject;
 }
-function getCurrentTraining(date, employeeID) {
+function getCurrentTraining(date: number, employeeID: number) {
   const result = (date + employeeID) % 3;
   const currentTraining = `training-background-${result}`;
 

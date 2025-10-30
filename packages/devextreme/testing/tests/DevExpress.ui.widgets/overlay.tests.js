@@ -2,7 +2,7 @@ import { getWidth, getHeight, getOuterWidth } from 'core/utils/size';
 import fx from 'common/core/animation/fx';
 import positionUtils from 'common/core/animation/position';
 import { locate } from 'common/core/animation/translator';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import config from 'core/config';
 import devices from '__internal/core/m_devices';
 import { Template } from 'core/templates/template';

@@ -9,19 +9,33 @@ on:
     paths-ignore:
       - 'apps/**/*.md'
   push:
-    branches:
-      - "[0-9][0-9]_[0-9]"
+    branches: [25_2]
   workflow_dispatch:
 
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
   NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
   BUILD_TEST_INTERNAL_PACKAGE: true
+  RUN_TESTS: true
 
 jobs:
+  check-should-run:
+    name: Check if tests should run
+    runs-on: devextreme-shr2
+    outputs:
+      should-run: ${{ steps.check.outputs.should-run }}
+    steps:
+      - name: Check RUN_TESTS flag
+        id: check
+        run: echo "should-run=${{ env.RUN_TESTS }}" >> $GITHUB_OUTPUT
+
   build-devextreme:
-    runs-on: ubuntu-22.04
+    runs-on: devextreme-shr2
     name: Build DevExtreme
+    needs: check-should-run
+    if: needs.check-should-run.outputs.should-run == 'true'
+    env:
+      NODE_OPTIONS: "--max-old-space-size=8192"
     timeout-minutes: 40
 
     steps:
@@ -81,10 +95,11 @@ jobs:
           retention-days: 1
 
   build-demos:
-    runs-on: ubuntu-22.04
+    runs-on: devextreme-shr2
     name: Build Demos
     timeout-minutes: 20
-    needs: build-devextreme
+    needs: [check-should-run, build-devextreme]
+    if: needs.check-should-run.outputs.should-run == 'true'
 
     steps:
 
@@ -136,12 +151,14 @@ jobs:
     - name: Prepare bundles
       if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'force all tests')
       working-directory: apps/demos
+      env:
+        NODE_OPTIONS: "--max-old-space-size=8192"
       run: pnpx nx prepare-bundles
 
     - name: Demos - Run tsc
       if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'force all tests')
       working-directory: apps/demos
-      run: tsc --noEmit
+      run: pnpm exec tsc --noEmit
 
     - name: Copy build artifacts
       uses: actions/upload-artifact@v4
@@ -152,8 +169,9 @@ jobs:
         retention-days: 1
 
   get-changes:
-    runs-on: ubuntu-22.04
-    if: github.event_name == 'pull_request'
+    runs-on: devextreme-shr2
+    needs: check-should-run
+    if: github.event_name == 'pull_request' && needs.check-should-run.outputs.should-run == 'true'
     name: Get changed demos
     timeout-minutes: 5
 
@@ -188,7 +206,8 @@ jobs:
 
   check-ts:
     name: Check TS
-    needs: build-devextreme
+    needs: [check-should-run, build-devextreme]
+    if: needs.check-should-run.outputs.should-run == 'true'
     runs-on: devextreme-shr2
     timeout-minutes: 20
 
@@ -245,10 +264,10 @@ jobs:
 
   lint:
     name: Lint code base
-    needs:
-      - build-devextreme
+    needs: [check-should-run, build-devextreme]
+    if: needs.check-should-run.outputs.should-run == 'true'
 
-    runs-on: ubuntu-22.04
+    runs-on: devextreme-shr2
     timeout-minutes: 60
 
     steps:
@@ -334,10 +353,10 @@ jobs:
 
   check_generated_demos:
     name: ${{ matrix.name }}
-    runs-on: ubuntu-22.04
+    runs-on: devextreme-shr2
     timeout-minutes: 10
-    needs:
-      - build-devextreme
+    needs: [check-should-run, build-devextreme]
+    if: needs.check-should-run.outputs.should-run == 'true'
 
     strategy:
       fail-fast: false
@@ -421,7 +440,7 @@ jobs:
         fi
 
   testcafe:
-    needs: build-demos
+    needs: [check-should-run, build-demos]
     if: contains(github.event.pull_request.labels.*.name, 'force all tests')
     strategy:
       fail-fast: false
@@ -429,7 +448,7 @@ jobs:
         CONSTEL: [react(1/4), react(2/4), react(3/4), react(4/4), vue(1/4), vue(2/4), vue(3/4), vue(4/4), angular(1/4), angular(2/4), angular(3/4), angular(4/4)]
         THEME: ['fluent.blue.light']
 
-    runs-on: ubuntu-22.04
+    runs-on: devextreme-shr2
     name: testcafe-${{ matrix.CONSTEL }}-${{ matrix.THEME }}
     timeout-minutes: 60
 
@@ -440,7 +459,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '133.0.6943.53'
+        chrome-version: '141.0.7390.122'
         runner-type: 'github-hosted'
 
     - name: Use Node.js
@@ -508,7 +527,7 @@ jobs:
       working-directory: apps/demos
       env:
         CHANGEDFILEINFOSPATH: changed-files.json
-        BROWSERS: chrome:headless --window-size=1200,800 --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
+        BROWSERS: chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
         # DEBUG: hammerhead:*,testcafe:*
         CONCURRENCY: 4
         TCQUARANTINE: true

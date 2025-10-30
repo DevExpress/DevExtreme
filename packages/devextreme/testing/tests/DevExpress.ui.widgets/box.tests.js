@@ -3,7 +3,7 @@ import $ from 'jquery';
 import 'ui/box';
 import 'ui/scroll_view/ui.scrollable';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const { testStart, module, test } = QUnit;
 

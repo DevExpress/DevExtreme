@@ -4,9 +4,6 @@ import dataUtils from 'core/element_data';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
 import 'ui/date_range_box';
-
-import 'generic_light.css!';
-
 QUnit.testStart(() => {
     const markup =
         '<div id="dateRangeBox"></div>';

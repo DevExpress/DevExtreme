@@ -1,1 +1,1 @@
-testUtils.postponeUntilFound('.dx-scheduler-appointment-title', 200, 5000);
+testUtils.postponeUntilFound('.dx-scheduler-appointment-title', 100, 5000);

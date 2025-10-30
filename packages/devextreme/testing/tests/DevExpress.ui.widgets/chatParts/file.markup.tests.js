@@ -89,18 +89,16 @@ QUnit.module('File', moduleConfig, () => {
         });
 
         QUnit.test('size element should display correct text', function(assert) {
-            const fileSize = 5120;
-
             this.reinit({
                 data: {
                     name: 'image.png',
-                    size: fileSize,
+                    size: 5120,
                 },
             });
 
             const $size = this.$element.find(`.${CHAT_FILE_SIZE_CLASS}`);
 
-            assert.strictEqual($size.text(), `${fileSize} B`, 'size text is correct');
+            assert.strictEqual($size.text(), '5 KB', 'size text is correct');
         });
 
         QUnit.test('name element should have title attribute', function(assert) {
@@ -119,18 +117,16 @@ QUnit.module('File', moduleConfig, () => {
         });
 
         QUnit.test('size element should have title attribute', function(assert) {
-            const fileSize = 9999;
-
             this.reinit({
                 data: {
                     name: 'file.txt',
-                    size: fileSize,
+                    size: 9999,
                 },
             });
 
             const $size = this.$element.find(`.${CHAT_FILE_SIZE_CLASS}`);
 
-            assert.strictEqual($size.attr('title'), `${fileSize} B`, 'title attribute is set');
+            assert.strictEqual($size.attr('title'), '10 KB', 'title attribute is set');
         });
     });
 
@@ -147,7 +143,7 @@ QUnit.module('File', moduleConfig, () => {
             const $size = this.$element.find(`.${CHAT_FILE_SIZE_CLASS}`);
 
             assert.strictEqual($name.text(), newData.name, 'name is updated');
-            assert.strictEqual($size.text(), `${newData.size} B`, 'size is updated');
+            assert.strictEqual($size.text(), '10 KB', 'size is updated');
         });
     });
 });

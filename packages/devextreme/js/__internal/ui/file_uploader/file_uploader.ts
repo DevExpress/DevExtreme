@@ -34,7 +34,10 @@ import type {
   LoadedFileData,
   MouseLikeEvent,
 } from '@ts/ui/file_uploader/file_uploader.types';
-import { getFileIconName } from '@ts/ui/file_uploader/file_uploader.utils';
+import {
+  getFileIconName,
+  getFileSize,
+} from '@ts/ui/file_uploader/file_uploader.utils';
 
 const window = getWindow();
 
@@ -141,6 +144,8 @@ class FileUploader extends Editor<FileUploaderProperties> {
 
   _cancelButtonClickAction?: (event?: Partial<CancelButtonClickEvent>) => void;
 
+  _fileLimitReachedAction?: () => void;
+
   static __internals: {
     changeFileInputRenderer: (renderer: () => dxElementWrapper) => void;
     resetFileInputTag: () => void;
@@ -208,6 +213,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
         onDropZoneEnter: null,
         onDropZoneLeave: null,
         onCancelButtonClick: null,
+        onFileLimitReached: undefined,
         allowedFileExtensions: [],
         maxFileSize: 0,
         minFileSize: 0,
@@ -230,6 +236,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
         _hideCancelButtonOnUpload: true,
         _showFileIcon: false,
         _cancelButtonPosition: 'start',
+        _maxFileCount: undefined,
       },
     };
   }
@@ -296,9 +303,11 @@ class FileUploader extends Editor<FileUploaderProperties> {
 
     this._initFileInput();
     this._initLabel();
-
     this._setUploadStrategy();
+
+    this._createFileLimitReachedAction();
     this._createFiles();
+
     this._createBeforeSendAction();
     this._createUploadStartedAction();
     this._createUploadedAction();
@@ -333,11 +342,14 @@ class FileUploader extends Editor<FileUploaderProperties> {
     if (!this._$fileInput) {
       this._$fileInput = renderFileUploaderInput();
 
-      eventsEngine.on(this._$fileInput, 'change', this._inputChangeHandler.bind(this));
+      eventsEngine.on(this._$fileInput, 'change', () => { this._inputChangeHandler(); });
       eventsEngine.on(this._$fileInput, 'click', (e: Event): boolean | undefined => {
         e.stopPropagation();
+
         this._resetInputValue();
+
         const { useNativeInputClick } = this.option();
+
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         return useNativeInputClick || this._isCustomClickEvent;
       });
@@ -371,18 +383,40 @@ class FileUploader extends Editor<FileUploaderProperties> {
     const fileName = this._$fileInput.val().replace(/^.*\\/, '');
     // @ts-expect-error dxElementWrapper should be extdened
     const files = this._$fileInput.prop('files');
+
     const { uploadMode } = this.option();
+
     if (files && !files.length && uploadMode !== 'useForm') {
+      return;
+    }
+
+    if (this._isFileLimitReached(files as unknown as File[])) {
+      this._fileLimitReachedAction?.();
       return;
     }
 
     // @ts-expect-error dxElementWrapper should be extdened
     const value = files ? this._getFiles(files) : [{ name: fileName }];
+
     this._changeValue(value as File[]);
 
     if (uploadMode === 'instantly') {
       this._uploadFiles();
     }
+  }
+
+  _isFileLimitReached(files: File[] = []): boolean {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { _maxFileCount, value } = this.option();
+
+    if (_maxFileCount === undefined) {
+      return false;
+    }
+
+    const totalCount = files.length + (value?.length ?? 0);
+    const isFileLimitReached = totalCount > _maxFileCount;
+
+    return isFileLimitReached;
   }
 
   _shouldFileListBeExtended(): boolean {
@@ -395,6 +429,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     const { value: currentValue } = this.option();
 
     const files = this._shouldFileListBeExtended() ? currentValue?.slice() : [];
+
     this.option({ value: files?.concat(value) });
   }
 
@@ -490,6 +525,10 @@ class FileUploader extends Editor<FileUploaderProperties> {
 
   _createFiles(): void {
     const { value: files } = this.option();
+
+    if (this._isFileLimitReached()) {
+      this._fileLimitReachedAction?.();
+    }
 
     if (this._files && (files?.length === 0 || !this._shouldFileListBeExtended())) {
       this._preventFilesUploading(this._files);
@@ -602,6 +641,10 @@ class FileUploader extends Editor<FileUploaderProperties> {
     this._cancelButtonClickAction = this._createActionByOption('onCancelButtonClick', { excludeValidators: ['readOnly'] });
   }
 
+  _createFileLimitReachedAction(): void {
+    this._fileLimitReachedAction = this._createActionByOption('onFileLimitReached', { excludeValidators: ['readOnly'] });
+  }
+
   _createFile(value: File): FileUploaderItem {
     return {
       value,
@@ -667,7 +710,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
         : null,
     };
 
-    // @ts-expect-error attr type should be extdened
+    // @ts-expect-error attr type should be extended
     this._$filesContainer?.attr(aria);
   }
 
@@ -705,7 +748,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     if (isDefined(value.size)) {
       $('<div>')
         .addClass(FILEUPLOADER_FILE_SIZE_CLASS)
-        .text(this._getFileSize(value.size))
+        .text(getFileSize(value.size))
         .appendTo($fileInfo);
     }
 
@@ -815,7 +858,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
         hoverStateEnabled,
         stylingMode: _buttonStylingMode,
         elementAttr: {
-          // @ts-expect-error foramat params should be extended
+          // @ts-expect-error format params should be extended
           'aria-label': messageLocalization.format('dxFileUploader-removeFileButtonLabel', file?.value?.name ?? ''),
         },
       },
@@ -844,7 +887,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
         hoverStateEnabled,
         stylingMode: _buttonStylingMode,
         elementAttr: {
-          // @ts-expect-error foramat params should be extended
+          // @ts-expect-error format params should be extended
           'aria-label': messageLocalization.format('dxFileUploader-uploadFileButtonLabel', file?.value?.name ?? ''),
         },
       },
@@ -913,26 +956,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
 
   _hasInvalidFile(files: FileUploaderItem[]): boolean {
     return files.some((file) => !file.isValid());
-  }
-
-  _getFileSize(size: number): string {
-    const labels = [
-      messageLocalization.format('dxFileUploader-bytes'),
-      messageLocalization.format('dxFileUploader-kb'),
-      messageLocalization.format('dxFileUploader-Mb'),
-      messageLocalization.format('dxFileUploader-Gb'),
-    ];
-
-    const count = labels.length - 1;
-    let value = size;
-    let i = 0;
-
-    while (i < count && value >= 1024) {
-      value /= 1024;
-      i += 1;
-    }
-
-    return `${Math.round(value)} ${labels[i]}`;
   }
 
   _renderSelectButton(): void {
@@ -1247,13 +1270,19 @@ class FileUploader extends Editor<FileUploaderProperties> {
     const fileList = e.originalEvent.dataTransfer.files;
     const files = this._getFiles(fileList);
 
-    const { multiple } = this.option();
+    const { multiple, uploadMode } = this.option();
+
     if ((!multiple && files.length > 1) || files.length === 0) {
       return;
     }
 
+    if (this._isFileLimitReached(files as unknown as File[])) {
+      this._fileLimitReachedAction?.();
+      return;
+    }
+
     this._changeValue(files);
-    const { uploadMode } = this.option();
+
     if (uploadMode === 'instantly') {
       this._uploadFiles();
     }
@@ -1635,6 +1664,8 @@ class FileUploader extends Editor<FileUploaderProperties> {
       case '_showFileIcon':
         this._invalidate();
         break;
+      case '_maxFileCount':
+        break;
       case 'labelText':
         this._updateInputLabelText();
         break;
@@ -1694,6 +1725,9 @@ class FileUploader extends Editor<FileUploaderProperties> {
         break;
       case 'onCancelButtonClick':
         this._createCancelButtonClickAction();
+        break;
+      case 'onFileLimitReached':
+        this._createFileLimitReachedAction();
         break;
       case 'useNativeInputClick':
         this._renderInput();

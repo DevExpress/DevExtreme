@@ -5,8 +5,6 @@ import MenuBase from 'ui/context_menu/ui.menu_base';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 
-import 'generic_light.css!';
-
 QUnit.testStart(function() {
     const markup =
         `<style nonce="qunit-test">

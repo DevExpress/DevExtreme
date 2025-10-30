@@ -2,7 +2,7 @@
 import type { GenerateGridColumnCommandResult, RequestCallbacks } from '@js/common/ai-integration';
 import type { Callback } from '@js/core/utils/callbacks';
 
-import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { Column, ColumnsController } from '../columns_controller/m_columns_controller';
 import type { DataController } from '../data_controller/m_data_controller';
 import { Controller } from '../m_modules';
 import { AIColumnIntegrationController } from './m_ai_column_integration_controller';
@@ -44,12 +44,17 @@ export class AIColumnController extends Controller {
     // Update the results in the UI or internal state
   }
 
+  public getAIColumns(): Column[] {
+    return this.columnsController.getColumns().filter((col) => col.type === 'ai') as Column[];
+  }
+
   private handleDataChanged(e) {
-    const aiColumns = this.columnsController.getColumns()
-      .filter((col) => col.type === 'ai' && isAIColumnAutoMode(col));
+    const aiColumns = this.getAIColumns();
 
     for (const col of aiColumns) {
-      this.refreshAIColumn(col.name);
+      if (isAIColumnAutoMode(col)) {
+        this.refreshAIColumn(col.name as string);
+      }
     }
   }
 

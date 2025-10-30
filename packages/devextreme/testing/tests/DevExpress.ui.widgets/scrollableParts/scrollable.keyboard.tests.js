@@ -5,8 +5,6 @@ import keyboardMock from '../../../helpers/keyboardMock.js';
 import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
 import { setWindow, getWindow } from 'core/utils/window';
 
-import 'generic_light.css!';
-
 import {
     SCROLLABLE_CONTAINER_CLASS,
     SCROLLABLE_SCROLL_CLASS,

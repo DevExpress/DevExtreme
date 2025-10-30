@@ -5,7 +5,7 @@ import Button from 'ui/button';
 import devices from '__internal/core/m_devices';
 import themes from 'ui/themes';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 import {
     SPEECH_TO_TEXT_CLASS,
