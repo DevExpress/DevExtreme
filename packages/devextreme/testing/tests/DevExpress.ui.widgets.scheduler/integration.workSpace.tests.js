@@ -17,6 +17,7 @@ import dragEvents from 'common/core/events/drag';
 import { CustomStore } from 'common/data/custom_store';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
+import translator from 'common/core/animation/translator';
 import { getOuterHeight, getInnerHeight, getOuterWidth } from 'core/utils/size';
 
 import 'generic_light.css!';
