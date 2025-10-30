@@ -1,6 +1,6 @@
-/* global internals, initTree, $ */
-
 import commonUtils from 'core/utils/common';
+import { internals } from './testData.js';
+import { initTree } from './testUtils.js';
 
 QUnit.module('Usage without keys');
 

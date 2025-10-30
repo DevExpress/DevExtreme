@@ -1,9 +1,9 @@
-/* global DATA, data2, internals, initTree, makeSlowDataSource */
-
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import fx from 'common/core/animation/fx';
 import keyboardMock from '../../../helpers/keyboardMock.js';
+import { DATA, data2, internals } from './testData.js';
+import { initTree, makeSlowDataSource } from './testUtils.js';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 
