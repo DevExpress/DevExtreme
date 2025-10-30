@@ -352,6 +352,7 @@ class ChatTextArea extends TextArea<Properties> {
     this._sendAction?.(e);
     this.reset();
     this._fileUploader?.reset();
+    this._filesToSend?.clear();
     this._toggleButtonDisableState(true);
   }
 
