@@ -2028,7 +2028,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       rawAppointment,
       this._dataAccessors,
     );
-    appointment.text = appointment.text || messageLocalization.format('dxScheduler-noSubject');
+    appointment.text = appointment.text || '';
 
     const serializedAppointment = appointment.serialize().source;
 
