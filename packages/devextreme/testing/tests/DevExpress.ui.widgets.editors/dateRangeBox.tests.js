@@ -1,9 +1,8 @@
 import $ from 'jquery';
 import config from 'core/config';
-import devices from '__internal/core/m_devices';
 import DateRangeBox from 'ui/date_range_box';
 import DateBox from 'ui/date_box';
-import { isRenderer } from 'core/utils/type';
+import { isDefined, isRenderer } from 'core/utils/type';
 import { isObject } from 'core/utils/type.js';
 import fx from 'common/core/animation/fx';
 import hoverEvents from 'common/core/events/hover';
@@ -207,9 +206,12 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 width: undefined,
             };
 
-            Object.entries(expectedOptions).forEach(([key, value]) => {
-                assert.deepEqual(this.instance.option(key), value, `${key} default value is correct`);
+            const options = {};
+            Object.keys(expectedOptions).forEach((key) => {
+                options[key] = this.instance.option(key);
             });
+
+            assert.deepEqual(options, expectedOptions, 'default value is correct');
         });
 
         const expectedDateBoxOptions = {
@@ -277,15 +279,22 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             };
             const startDateBox = getStartDateBoxInstance(this.instance);
 
-            Object.entries(expectedOptions).forEach(([key, value]) => {
+            const options = {};
+            Object.keys(expectedOptions).forEach((key) => {
                 if(key === 'dropDownOptions') {
                     Object.entries(startDateBox.option(key)).forEach(([dropDownOptionKey, dropDownOptionValue]) => {
                         assert.deepEqual(dropDownOptionValue, startDateBox.option(`${key}.${dropDownOptionKey}`), `${key}.${dropDownOptionKey} default value is correct`);
                     });
+                    options[key] = {};
+                    Object.keys(expectedOptions[key]).forEach((dropDownOptionKey) => {
+                        options[key][dropDownOptionKey] = startDateBox.option(`${key}.${dropDownOptionKey}`);
+                    });
                 } else {
-                    assert.deepEqual(value, startDateBox.option(key), `${key} default value is correct`);
+                    options[key] = startDateBox.option(key);
                 }
             });
+
+            assert.deepEqual(options, expectedOptions, 'default value is correct');
         });
 
         QUnit.test('EndDateBox has expected defaults', function(assert) {
@@ -301,9 +310,12 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             };
             const endDateBox = getEndDateBoxInstance(this.instance);
 
-            Object.entries(expectedOptions).forEach(([key, value]) => {
-                assert.deepEqual(value, endDateBox.option(key), `${key} default value is correct`);
+            const options = {};
+            Object.keys(expectedOptions).forEach((key) => {
+                options[key] = endDateBox.option(key);
             });
+
+            assert.deepEqual(options, expectedOptions, 'default value is correct');
         });
     });
 
@@ -347,9 +359,17 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             };
             const startDateBox = getStartDateBoxInstance(this.instance);
 
-            Object.entries(initialDateRangeBoxOptions).forEach(([key]) => {
-                assert.deepEqual(startDateBox.option(key), expectedOptions[key], `${key} value is correct`);
+            const options = {};
+            Object.keys(initialDateRangeBoxOptions).forEach((key) => {
+                options[key] = startDateBox.option(key);
+                expectedOptions[key] = isDefined(expectedOptions[key]) ? expectedOptions[key] : undefined;
             });
+
+            Object.keys(expectedOptions).forEach((key) => {
+                options[key] = startDateBox.option(key);
+            });
+
+            assert.deepEqual(options, expectedOptions, 'value is correct');
         });
 
         QUnit.test('EndDateBox has expected settings', function(assert) {
@@ -360,7 +380,6 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 buttons: undefined,
                 deferRendering: true,
                 disabled: true,
-                earButton: false,
                 focusStateEnabled: false,
                 hoverStateEnabled: false,
                 inputAttr: { id: 'endDateInput' },
@@ -373,9 +392,16 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             };
             const endDateBox = getEndDateBoxInstance(this.instance);
 
-            Object.entries(initialDateRangeBoxOptions).forEach(([key]) => {
-                assert.deepEqual(endDateBox.option(key), expectedOptions[key], `${key} value is correct`);
+            const options = {};
+            Object.keys(initialDateRangeBoxOptions).forEach((key) => {
+                options[key] = endDateBox.option(key);
+                expectedOptions[key] = isDefined(expectedOptions[key]) ? expectedOptions[key] : undefined;
             });
+            Object.keys(expectedOptions).forEach((key) => {
+                options[key] = endDateBox.option(key);
+            });
+
+            assert.deepEqual(options, expectedOptions, 'value is correct');
         });
     });
 });
@@ -1867,43 +1893,19 @@ QUnit.module('Popup integration', moduleConfig, () => {
         });
     });
 
-    QUnit.module('IOS', () => {
-        QUnit.test('Popup should not be closed after focus is moved to the end dateBox, especially on IOS', function(assert) {
-            this.instance.open();
+    QUnit.test('Popup should not be closed after focus is moved to the end dateBox', function(assert) {
+        this.instance.open();
 
-            const startDateBox = getStartDateBoxInstance(this.instance);
-            const $startDateBoxInput = $(startDateBox.field());
-            $startDateBoxInput.trigger('focusin');
+        const startDateBox = getStartDateBoxInstance(this.instance);
+        const $startDateBoxInput = $(startDateBox.field());
+        $startDateBoxInput.trigger('focusin');
 
-            const endDateBox = getEndDateBoxInstance(this.instance);
-            const $endDateBoxInput = $(endDateBox.field());
+        const endDateBox = getEndDateBoxInstance(this.instance);
+        const $endDateBoxInput = $(endDateBox.field());
 
-            $startDateBoxInput.trigger($.Event('focusout', { relatedTarget: $endDateBoxInput }));
+        $startDateBoxInput.trigger($.Event('focusout', { relatedTarget: $endDateBoxInput }));
 
-            assert.strictEqual(this.instance.option('opened'), true, 'popup is not closed');
-        });
-
-        QUnit.test('Popup should be closed after focus is moved to other editor using IOs special nextButton', function(assert) {
-            const isIOs = devices.current().platform === 'ios';
-            if(!isIOs) {
-                assert.ok(true, 'test is actual only for ios');
-                return;
-            }
-
-            this.instance.open();
-
-            const startDateBox = getStartDateBoxInstance(this.instance);
-            const $startDateBoxInput = $(startDateBox.field());
-            $startDateBoxInput.trigger('focusin');
-
-            const otherDateRangeBox = $('#dateRangeBox2').dxDateRangeBox({}).dxDateRangeBox('instance');
-            const otherStartDateBox = getStartDateBoxInstance(otherDateRangeBox);
-            const $otherStartDateBoxInput = $(otherStartDateBox.field());
-
-            $startDateBoxInput.trigger($.Event('focusout', { relatedTarget: $otherStartDateBoxInput }));
-
-            assert.strictEqual(this.instance.option('opened'), false, 'popup is closed');
-        });
+        assert.strictEqual(this.instance.option('opened'), true, 'popup is not closed');
     });
 
     QUnit.module('popup can be opened by click on input after option change when popup was already rendered', () => {
@@ -4176,93 +4178,91 @@ QUnit.module('isDirty', moduleConfig, () => {
     });
 });
 
-if(devices.real().deviceType === 'desktop') {
-    QUnit.module('Keyboard navigation', moduleConfig, () => {
-        const toolbarItems = [{
-            widget: 'dxButton',
-            toolbar: 'top',
-            location: 'before',
-            options: {
-                text: 'Button',
-            },
+QUnit.module('Keyboard navigation', moduleConfig, () => {
+    const toolbarItems = [{
+        widget: 'dxButton',
+        toolbar: 'top',
+        location: 'before',
+        options: {
+            text: 'Button',
         },
-        {
-            widget: 'dxTextBox',
-            toolbar: 'bottom',
-            location: 'before',
-            options: {
-                text: 'Text box',
-            },
-        }];
+    },
+    {
+        widget: 'dxTextBox',
+        toolbar: 'bottom',
+        location: 'before',
+        options: {
+            text: 'Text box',
+        },
+    }];
 
-        QUnit.test('pressing tab should set focus on previous month button in calendar', function(assert) {
-            this.reinit({
-                opened: true,
-                applyValueMode: 'useButtons',
-            });
-
-            this.$endDateInput
-                .focus()
-                .trigger($.Event('keydown', {
-                    key: 'Tab',
-                }));
-
-            const $prevButton = this.getPopupContent().parent().find(`.${CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS}`);
-            assert.ok($prevButton.hasClass(STATE_FOCUSED_CLASS));
+    QUnit.test('pressing tab should set focus on previous month button in calendar', function(assert) {
+        this.reinit({
+            opened: true,
+            applyValueMode: 'useButtons',
         });
 
-        QUnit.test('pressing tab + shift should set focus on cancel button in popup', function(assert) {
-            this.reinit({
-                opened: true,
-                applyValueMode: 'useButtons',
-            });
-            this.$startDateInput
-                .focus()
-                .trigger($.Event('keydown', {
-                    key: 'Tab',
-                    shiftKey: true
-                }));
+        this.$endDateInput
+            .focus()
+            .trigger($.Event('keydown', {
+                key: 'Tab',
+            }));
 
-            const $cancelButton = this.getPopupContent().parent().find(CANCEL_BUTTON_SELECTOR);
-            assert.ok($cancelButton.hasClass(STATE_FOCUSED_CLASS));
-        });
-
-        QUnit.test('pressing tab should set focus on first item in popup with custom items', function(assert) {
-            this.reinit({
-                opened: true,
-                applyValueMode: 'useButtons',
-                dropDownOptions: {
-                    toolbarItems,
-                },
-            });
-            this.$endDateInput
-                .focus()
-                .trigger($.Event('keydown', {
-                    key: 'Tab',
-                }));
-
-            const $firstItem = this.getPopupContent().parent().find(BUTTON_SELECTOR);
-            assert.ok($firstItem.hasClass(STATE_FOCUSED_CLASS));
-        });
-
-        QUnit.test('pressing tab + shift should set focus on last item in popup with custom items', function(assert) {
-            this.reinit({
-                opened: true,
-                applyValueMode: 'useButtons',
-                dropDownOptions: {
-                    toolbarItems,
-                },
-            });
-            this.$startDateInput
-                .focus()
-                .trigger($.Event('keydown', {
-                    key: 'Tab',
-                    shiftKey: true
-                }));
-
-            const $lastItem = this.getPopupContent().parent().find(TEXTBOX_SELECTOR);
-            assert.ok($lastItem.hasClass(STATE_FOCUSED_CLASS));
-        });
+        const $prevButton = this.getPopupContent().parent().find(`.${CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS}`);
+        assert.ok($prevButton.hasClass(STATE_FOCUSED_CLASS));
     });
-}
+
+    QUnit.test('pressing tab + shift should set focus on cancel button in popup', function(assert) {
+        this.reinit({
+            opened: true,
+            applyValueMode: 'useButtons',
+        });
+        this.$startDateInput
+            .focus()
+            .trigger($.Event('keydown', {
+                key: 'Tab',
+                shiftKey: true
+            }));
+
+        const $cancelButton = this.getPopupContent().parent().find(CANCEL_BUTTON_SELECTOR);
+        assert.ok($cancelButton.hasClass(STATE_FOCUSED_CLASS));
+    });
+
+    QUnit.test('pressing tab should set focus on first item in popup with custom items', function(assert) {
+        this.reinit({
+            opened: true,
+            applyValueMode: 'useButtons',
+            dropDownOptions: {
+                toolbarItems,
+            },
+        });
+        this.$endDateInput
+            .focus()
+            .trigger($.Event('keydown', {
+                key: 'Tab',
+            }));
+
+        const $firstItem = this.getPopupContent().parent().find(BUTTON_SELECTOR);
+        assert.ok($firstItem.hasClass(STATE_FOCUSED_CLASS));
+    });
+
+    QUnit.test('pressing tab + shift should set focus on last item in popup with custom items', function(assert) {
+        this.reinit({
+            opened: true,
+            applyValueMode: 'useButtons',
+            dropDownOptions: {
+                toolbarItems,
+            },
+        });
+        this.$startDateInput
+            .focus()
+            .trigger($.Event('keydown', {
+                key: 'Tab',
+                shiftKey: true
+            }));
+
+        const $lastItem = this.getPopupContent().parent().find(TEXTBOX_SELECTOR);
+        assert.ok($lastItem.hasClass(STATE_FOCUSED_CLASS));
+    });
+});
 
