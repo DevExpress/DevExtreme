@@ -1,6 +1,4 @@
-import 'generic_light.css!';
 import $ from 'jquery';
-import { logger } from '__internal/core/utils/m_console';
 import 'ui/form';
 import 'ui/date_range_box';
 import 'ui/switch';

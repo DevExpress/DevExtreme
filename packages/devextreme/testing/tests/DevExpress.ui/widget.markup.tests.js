@@ -2,8 +2,6 @@ import $ from 'jquery';
 import Widget from 'ui/widget/ui.widget';
 import registerComponent from 'core/component_registrator';
 
-import 'generic_light.css!';
-
 (function() {
 
     const WIDGET_CLASS = 'dx-widget';

@@ -12,7 +12,7 @@ import {
 } from '__internal/ui/color_box/m_color_box';
 
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import 'ui/color_box';
 
 QUnit.testStart(function() {

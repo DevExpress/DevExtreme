@@ -6,8 +6,6 @@ import { DATA, data2 } from './treeViewParts/testData.js';
 import localization from 'localization';
 import 'ui/tree_view';
 
-import 'generic_light.css!';
-
 const SELECT_ALL_CHECKBOX_CLASS = 'dx-treeview-select-all-item';
 const CHECKBOX_CLASS = 'dx-checkbox';
 const TOGGLE_ITEM_VISIBILITY_CLASS = 'dx-treeview-toggle-item-visibility';

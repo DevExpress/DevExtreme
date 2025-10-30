@@ -1,7 +1,7 @@
 import { getHeight, getWidth, getOuterWidth } from 'core/utils/size';
 import fx from 'common/core/animation/fx';
 import translator from 'common/core/animation/translator';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import config from 'core/config';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import typeUtils from 'core/utils/type';

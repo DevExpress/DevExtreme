@@ -4,7 +4,6 @@ import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
 
 import '__internal/scheduler/m_scheduler';
-import 'generic_light.css!';
 
 const FIXTURE_SELECTOR = '#qunit-fixture';
 

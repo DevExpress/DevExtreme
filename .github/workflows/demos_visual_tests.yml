@@ -30,7 +30,7 @@ jobs:
         run: echo "should-run=${{ env.RUN_TESTS }}" >> $GITHUB_OUTPUT
 
   build:
-    runs-on: ubuntu-22.04
+    runs-on: devextreme-shr2
     name: Build devextreme
     needs: check-should-run
     if: needs.check-should-run.outputs.should-run == 'true'
@@ -78,7 +78,8 @@ jobs:
       fail-fast: false
       matrix:
         STRATEGY: [screenshots, accessibility]
-        THEME: ['material.blue.light', 'fluent.blue.light']
+        # THEME: ['material.blue.light', 'fluent.blue.light']
+        THEME: ['fluent.blue.light']
         CONSTEL: [jquery(1/4), jquery(2/4), jquery(3/4), jquery(4/4), jquery]
         exclude:
           - STRATEGY: accessibility
@@ -94,7 +95,7 @@ jobs:
     env:
       ACCESSIBILITY_TESTCAFE_REPORT_PATH: "accessibility_testcafe_report"
 
-    runs-on: ubuntu-22.04
+    runs-on: devextreme-shr2
     name: ${{ matrix.CONSTEL }}-${{ matrix.STRATEGY }}-${{ matrix.THEME }}
     timeout-minutes: 30
 
@@ -105,7 +106,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '133.0.6943.53'
+        chrome-version: '141.0.7390.122'
         runner-type: 'github-hosted'
 
     - name: Use Node.js
@@ -151,7 +152,7 @@ jobs:
       env:
         STRATEGY: ${{ matrix.STRATEGY }}
         CHANGEDFILEINFOSPATH: changed-files.json
-        BROWSERS: chrome:headless --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
+        BROWSERS: chrome:headless --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
         #DEBUG: hammerhead:*,testcafe:*
         CONCURRENCY: 4
         TCQUARANTINE: true

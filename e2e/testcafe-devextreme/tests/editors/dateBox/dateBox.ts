@@ -8,7 +8,6 @@ import { isMaterialBased, testScreenshot } from '../../../helpers/themeUtils';
 fixture.disablePageReloads`DateBox`
   .page(url(__dirname, '../../container.html'));
 
-const TIME_TO_WAIT = 1500;
 const ITEM_HEIGHT = 40;
 
 if (!isMaterialBased()) {
@@ -18,19 +17,16 @@ if (!isMaterialBased()) {
       const { dropDownEditorButton } = dateBox;
 
       await t
-        .click(dropDownEditorButton)
-        .wait(TIME_TO_WAIT);
+        .click(dropDownEditorButton);
 
       await t
-        .click(DateBox.getDoneButton())
-        .wait(TIME_TO_WAIT);
+        .click(DateBox.getDoneButton());
 
       await t
         .typeText(dateBox.input, `${month}${day}${year}`);
 
       await t
-        .click(dropDownEditorButton)
-        .wait(TIME_TO_WAIT);
+        .click(dropDownEditorButton);
 
       const views = {
         month: month - 1,

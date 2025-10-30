@@ -1,8 +1,6 @@
 import $ from 'jquery';
 import TreeView from 'ui/tree_view';
 
-import 'generic_light.css!';
-
 const { testStart } = QUnit;
 
 testStart(function() {

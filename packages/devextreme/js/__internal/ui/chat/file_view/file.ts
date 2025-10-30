@@ -28,8 +28,8 @@ export type Properties = DOMComponentProperties<File> & {
 
 export const CHAT_FILE_CLASS = 'dx-chat-file';
 const CHAT_FILE_ICON_CONTAINER_CLASS = 'dx-chat-file-icon-container';
-const CHAT_FILE_NAME_CLASS = 'dx-chat-file-name';
-const CHAT_FILE_SIZE_CLASS = 'dx-chat-file-size';
+export const CHAT_FILE_NAME_CLASS = 'dx-chat-file-name';
+export const CHAT_FILE_SIZE_CLASS = 'dx-chat-file-size';
 const CHAT_FILE_DOWNLOAD_BUTTON_CLASS = 'dx-chat-file-download-button';
 
 class File extends DOMComponent<File, Properties> {

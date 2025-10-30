@@ -7,10 +7,9 @@ testUtils.importAnd(() => ['devextreme/viz/chart', 'devextreme/data/data_source'
   const dataSource = new DataSource(dataSourceItems);
 
   return testUtils
-    .postponeUntilFound('#chart', 100, 10000)
+    .postponeUntilFound('#chart', 100, 5000)
     .then(() => {
       const instance = dxChart.getInstance(document.querySelector('#chart'));
       instance.option('dataSource', dataSource);
-    })
-    .then(() => testUtils.postpone(2000));
+    });
 });

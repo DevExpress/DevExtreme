@@ -7,7 +7,7 @@ const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
 require('ui/list');
 require('integration/knockout');
 
-require('generic_light.css!');
+require('fluent_blue_light.css!');
 
 const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 

@@ -11,6 +11,7 @@
         :data-source="resourcesData"
         field-expr="roomId"
         label="Room"
+        icon="conferenceroomoutline"
       />
       <DxView
         type="month"

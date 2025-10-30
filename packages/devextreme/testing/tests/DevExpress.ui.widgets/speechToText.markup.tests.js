@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import 'ui/speech_to_text';
-import 'generic_light.css!';
 
 import { BUTTON_CLASS } from '__internal/ui/button/button';
 import {

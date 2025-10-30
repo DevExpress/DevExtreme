@@ -24,7 +24,7 @@ import browser from 'core/utils/browser';
 
 import { TextEditorLabel } from '__internal/ui/text_box/m_text_editor.label';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(() => {
     const markup =
