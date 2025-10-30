@@ -1,6 +1,7 @@
 import type { TextEditorButton } from '@js/common';
 import messageLocalization from '@js/common/core/localization/message';
 import { DataSource } from '@js/common/data';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
@@ -10,12 +11,13 @@ import type {
   GroupItem, Item as FormItem, Properties as FormProperties, SimpleItem,
 } from '@js/ui/form';
 import dxForm from '@js/ui/form';
-import type { Properties as SchedulerProperties } from '@js/ui/scheduler';
+import type { AppointmentFormIconsShowMode, Properties as SchedulerProperties } from '@js/ui/scheduler';
 import type { Properties as SelectBoxProperties } from '@js/ui/select_box';
 import type { Properties as SwitchProperties } from '@js/ui/switch';
 import type { Properties as TextAreaProperties } from '@js/ui/text_area';
 import { current, isFluent } from '@js/ui/themes';
 import { dateSerialization } from '@ts/core/utils/m_date_serialization';
+import type Popup from '@ts/ui/popup/m_popup';
 
 import timeZoneUtils from '../m_utils_time_zone';
 import type { SafeAppointment } from '../types';
@@ -120,6 +122,10 @@ export class AppointmentForm {
 
   private _popup!: any;
 
+  private _$mainGroup?: dxElementWrapper;
+
+  private _$recurrenceGroup?: dxElementWrapper;
+
   get dxForm(): dxForm {
     return this._dxForm as dxForm;
   }
@@ -139,6 +145,10 @@ export class AppointmentForm {
 
   set formData(formData: Record<string, any>) {
     this.dxForm.option('formData', formData);
+  }
+
+  get visibleGroupName(): 'main' | 'recurrence' {
+    return this._$mainGroup?.is(':visible') ? 'main' : 'recurrence';
   }
 
   get startDate(): Date | null {
@@ -195,7 +205,7 @@ export class AppointmentForm {
     this.createForm(items);
   }
 
-  private getIconsShowMode(): 'main' | 'recurrence' | 'both' | 'none' {
+  private getIconsShowMode(): AppointmentFormIconsShowMode {
     const editingConfig = this.scheduler.getEditingConfig() as SchedulerProperties['editing'];
 
     if (isBoolean(editingConfig)) {
@@ -257,6 +267,11 @@ export class AppointmentForm {
         this._dxForm = e.component;
         this._recurrenceForm.dxForm = this.dxForm;
       },
+      onContentReady: (e): void => {
+        const $formElement = e.component.$element();
+        this._$mainGroup = $formElement.find(`.${CLASSES.mainGroup}`);
+        this._$recurrenceGroup = $formElement.find(`.${CLASSES.recurrenceGroup}`);
+      },
     } as FormProperties) as dxForm;
   }
 
@@ -266,6 +281,7 @@ export class AppointmentForm {
       itemType: 'group',
       colSpan: 1,
       cssClass: CLASSES.mainGroup,
+      visible: true,
       items: [
         this.createSubjectGroup(),
         this.createDateRangeGroup(),
@@ -751,12 +767,19 @@ export class AppointmentForm {
   }
 
   showRecurrenceGroup(): void {
-    const $formElement = $(this.dxForm.element());
-    const mainGroup = $formElement.find(`.${CLASSES.mainGroup}`);
-    const recurrenceGroup = $formElement.find(`.${CLASSES.recurrenceGroup}`);
+    // TODO: make dxPopup a member of AppointmentForm class
+    const $popup = $('.dx-popup.dx-widget.dx-scheduler-appointment-popup');
+    const dxPopup = ($popup as any).dxPopup('instance') as Popup;
 
-    mainGroup.addClass(CLASSES.mainHidden);
-    recurrenceGroup.removeClass(CLASSES.recurrenceHidden);
+    // @ts-expect-error
+    dxPopup?.option('height', dxPopup.$overlayContent().height());
+
+    // TODO: move these styles to according CLASSES in scss file
+    this._$mainGroup?.css('position', 'absolute');
+    this._$recurrenceGroup?.css('position', 'relative');
+
+    this._$mainGroup?.addClass(CLASSES.mainHidden);
+    this._$recurrenceGroup?.removeClass(CLASSES.recurrenceHidden);
 
     const repeatEditorValue = this.dxForm.getEditor(EDITOR_NAMES.repeat)?.option('value');
 
@@ -770,12 +793,18 @@ export class AppointmentForm {
   }
 
   showMainGroup(saveRecurrenceValue = true): void {
-    const $formElement = $(this.dxForm.element());
-    const mainGroup = $formElement.find(`.${CLASSES.mainGroup}`);
-    const recurrenceGroup = $formElement.find(`.${CLASSES.recurrenceGroup}`);
+    // TODO: make dxPopup a member of AppointmentForm class
+    const $popup = $('.dx-popup.dx-widget.dx-scheduler-appointment-popup');
+    const dxPopup = ($popup as any).dxPopup('instance');
 
-    mainGroup.removeClass(CLASSES.mainHidden);
-    recurrenceGroup.addClass(CLASSES.recurrenceHidden);
+    dxPopup?.option('height', undefined);
+
+    // TODO: move these styles to according CLASSES in scss file
+    this._$mainGroup?.css('position', 'relative');
+    this._$recurrenceGroup?.css('position', 'absolute');
+
+    this._$mainGroup?.removeClass(CLASSES.mainHidden);
+    this._$recurrenceGroup?.addClass(CLASSES.recurrenceHidden);
 
     this._popup.updateToolbarForMainGroup();
 
