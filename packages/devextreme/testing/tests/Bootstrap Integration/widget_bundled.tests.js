@@ -3,8 +3,6 @@ import GoogleStaticProvider from '__internal/ui/map/provider.google_static';
 import fx from 'common/core/animation/fx';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
-import 'generic_light.css!';
-
 import 'bundles/modules/parts/widgets-web';
 
 GoogleStaticProvider.remapConstant('/mapURL?');

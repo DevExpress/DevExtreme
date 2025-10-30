@@ -1,13 +1,10 @@
 const $ = require('jquery');
 const devices = require('core/devices');
-const tooltip = require('__internal/ui/tooltip/m_tooltip');
 const fx = require('common/core/animation/fx');
 const keyboardMock = require('../../helpers/keyboardMock.js');
 const { createWrapper } = require('../../helpers/scheduler/helpers.js');
 const { waitAsync } = require('../../helpers/scheduler/waitForAsync.js');
-const dataUtils = require('core/element_data');
 
-require('generic_light.css!');
 require('__internal/scheduler/m_scheduler');
 require('ui/drop_down_button');
 

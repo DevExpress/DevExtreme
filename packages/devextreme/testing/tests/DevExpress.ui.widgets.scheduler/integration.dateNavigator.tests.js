@@ -2,7 +2,7 @@ import $ from 'jquery';
 import fx from 'common/core/animation/fx';
 import '__internal/scheduler/m_scheduler';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
 
 QUnit.testStart(function() {

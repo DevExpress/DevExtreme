@@ -14,7 +14,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 
 import 'ui/gallery';
 import 'ui/button';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(() => {
     const markup =

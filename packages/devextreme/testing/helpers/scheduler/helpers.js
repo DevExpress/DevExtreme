@@ -5,7 +5,6 @@ import pointerMock from '../../helpers/pointerMock.js';
 import dataUtils from 'core/element_data';
 import Color from 'color';
 
-import 'generic_light.css!';
 import '__internal/scheduler/m_scheduler';
 import 'ui/drop_down_button';
 

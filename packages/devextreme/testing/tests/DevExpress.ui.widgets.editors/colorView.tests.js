@@ -6,7 +6,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import fx from 'common/core/animation/fx';
 import { normalizeKeyName } from 'common/core/events/utils/index';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import '__internal/ui/color_box/m_color_view';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
