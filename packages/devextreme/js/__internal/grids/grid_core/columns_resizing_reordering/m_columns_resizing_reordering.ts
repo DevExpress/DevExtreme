@@ -27,7 +27,7 @@ import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import type { ColumnChooserView } from '../column_chooser/m_column_chooser';
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
-import type { Column, ColumnsController } from '../columns_controller/m_columns_controller';
+import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { HeaderPanel } from '../header_panel/m_header_panel';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
