@@ -26,7 +26,7 @@ import type { TextAreaProperties } from '@ts/ui/m_text_area';
 import TextArea from '@ts/ui/m_text_area';
 
 const CHAT_TEXT_AREA_ATTACHMENTS = 'dx-chat-textarea-attachments';
-const CHAT_TEXT_AREA_ATTACH_BUTTON = 'dx-chat-textarea-attach-button';
+export const CHAT_TEXT_AREA_ATTACH_BUTTON = 'dx-chat-textarea-attach-button';
 
 export const CHAT_TEXTAREA_CLASS = 'dx-chat-textarea';
 export const CHAT_TEXT_AREA_TOOLBAR = 'dx-chat-textarea-toolbar';
@@ -148,7 +148,7 @@ class ChatTextArea extends TextArea<Properties> {
   }
 
   _initMarkup(): void {
-    this.$element().addClass(CHAT_TEXTAREA_CLASS); // ADD TEST
+    this.$element().addClass(CHAT_TEXTAREA_CLASS);
     super._initMarkup();
     this._renderToolbar();
     this._initFileUploader();
@@ -214,13 +214,13 @@ class ChatTextArea extends TextArea<Properties> {
     ];
 
     if (fileUploaderOptions) {
-      items.push(this._getFileUploaderButtonConfig());
+      items.push(this._getAttachButtonConfig());
     }
 
     return items;
   }
 
-  _getFileUploaderButtonConfig(): ToolbarItem {
+  _getAttachButtonConfig(): ToolbarItem {
     const {
       activeStateEnabled,
       focusStateEnabled,
@@ -236,8 +236,8 @@ class ChatTextArea extends TextArea<Properties> {
         hoverStateEnabled,
         elementAttr: { class: CHAT_TEXT_AREA_ATTACH_BUTTON },
         icon: 'attach',
-        onClick: () => {
-          this._showInformer(ERRORS.fileLimit);
+        onClick: (): void => {
+          this._cleanInformer();
           this._updateInputHeight();
         },
       },
@@ -308,6 +308,7 @@ class ChatTextArea extends TextArea<Properties> {
 
   _getFileUploaderOptions(): FileUploaderProperties {
     const { fileUploaderOptions = {} } = this.option();
+
     const multiple = fileUploaderOptions.multiple ?? true;
     const visible = this._shouldHideFileUploader(fileUploaderOptions.value);
 
@@ -320,10 +321,12 @@ class ChatTextArea extends TextArea<Properties> {
       _hideCancelButtonOnUpload: false,
       _showFileIcon: true,
       _cancelButtonPosition: 'end',
+      _maxFileCount: MAX_ATTACHMENTS_COUNT,
       onValueChanged: (e) => this._fileUploaderOnValueChanged(e),
       onUploadStarted: (e) => this._fileUploaderOnUploadStarted(e),
       onUploaded: (e) => this._fileUploaderOnUploaded(e),
       onCancelButtonClick: (e) => this._fileUploaderOnCancelButtonClick(e),
+      onFileLimitReached: () => this._fileUploaderFileLimitReached(),
     };
   }
 
@@ -377,6 +380,11 @@ class ChatTextArea extends TextArea<Properties> {
     this._toggleButtonDisableState();
   };
 
+  _fileUploaderFileLimitReached(): void {
+    this._showInformer(ERRORS.fileLimit);
+    this._updateInputHeight();
+  }
+
   _toggleButtonDisableState(state?: boolean): void {
     const shouldDisable = state ?? !this._isMessageCanBeSent();
     this._sendButton?.option('disabled', shouldDisable);
@@ -399,7 +407,10 @@ class ChatTextArea extends TextArea<Properties> {
       fileUploaderHeight,
     ].filter(Boolean).length;
 
-    const totalExtraHeight = toolbarHeight + informerHeight + visibleSections * gap;
+    const totalExtraHeight = toolbarHeight
+      + informerHeight
+      + fileUploaderHeight
+      + visibleSections * gap;
 
     const difference: number = baseDifference + totalExtraHeight;
 
