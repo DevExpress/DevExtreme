@@ -25,12 +25,14 @@ const App = () => (
       dataSource={resourcesData}
       label="Owner"
       useColorAsDefault={true}
+      icon="user"
     />
     <Resource
       fieldExpr="priority"
       allowMultiple={false}
       dataSource={priorityData}
       label="Priority"
+      icon="tags"
     />
   </Scheduler>
 );
