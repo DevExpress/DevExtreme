@@ -96,7 +96,7 @@ async function makeModule(
     await ensureDir(distModuleFolder);
 
     if (folder && fsSync.existsSync(path.join(distEsmFolder, 'index.js'))) {
-      await generatePackageJsonFile(distFolder, folder);
+      await generatePackageJsonFile(distFolder, folder, undefined, folder);
     }
 
     await Promise.all(

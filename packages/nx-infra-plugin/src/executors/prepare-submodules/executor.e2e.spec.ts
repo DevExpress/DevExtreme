@@ -172,6 +172,41 @@ describe('PrepareSubmodulesExecutor E2E', () => {
       expect(buttonPkg.module).toBe('../esm/button.js');
       expect(buttonPkg.typings).toBe('../cjs/button.d.ts');
     });
+
+    it('should generate correct paths for nested folder modules with index.js', async () => {
+      const npmDir = path.join(tempDir, 'packages', 'test-package', 'npm');
+
+      fs.mkdirSync(path.join(npmDir, 'esm', 'common', 'core'), { recursive: true });
+      await writeFileText(
+        path.join(npmDir, 'esm', 'common', 'core', 'index.js'),
+        'export class Component {}',
+      );
+      fs.mkdirSync(path.join(npmDir, 'cjs', 'common', 'core'), { recursive: true });
+      await writeFileText(
+        path.join(npmDir, 'cjs', 'common', 'core', 'index.js'),
+        'module.exports = {};',
+      );
+
+      const options: PrepareSubmodulesExecutorSchema = {
+        distDirectory: './npm',
+        submoduleFolders: [['common/core']],
+      };
+
+      const result = await executor(options, context);
+      expect(result.success).toBe(true);
+
+      const commonCorePkg = JSON.parse(
+        await readFileText(path.join(npmDir, 'common', 'core', 'package.json')),
+      );
+
+      expect(commonCorePkg.main).toBe('../../cjs/common/core/index.js');
+      expect(commonCorePkg.module).toBe('../../esm/common/core/index.js');
+      expect(commonCorePkg.typings).toBe('../../cjs/common/core/index.d.ts');
+
+      expect(commonCorePkg.main).not.toBe('../../cjs/index.js');
+      expect(commonCorePkg.module).not.toBe('../../esm/index.js');
+      expect(commonCorePkg.typings).not.toBe('../../cjs/index.d.ts');
+    });
   });
 
   describe('Error handling', () => {
