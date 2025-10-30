@@ -665,6 +665,12 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
          */
         iconsShowMode?: AppointmentFormIconsShowMode;
       } | undefined;
+      /**
+       * @docid
+       * @default undefined
+       * @public
+       */
+      popup?: Properties;
     };
     /**
      * @docid

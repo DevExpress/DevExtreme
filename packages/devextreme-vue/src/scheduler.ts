@@ -667,6 +667,7 @@ const DxEditingConfig = {
     "update:allowTimeZoneEditing": null,
     "update:allowUpdating": null,
     "update:form": null,
+    "update:popup": null,
   },
   props: {
     allowAdding: Boolean,
@@ -675,7 +676,8 @@ const DxEditingConfig = {
     allowResizing: Boolean,
     allowTimeZoneEditing: Boolean,
     allowUpdating: Boolean,
-    form: Object as PropType<Record<string, any>>
+    form: Object as PropType<Record<string, any>>,
+    popup: {}
   }
 };
 

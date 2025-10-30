@@ -93,14 +93,15 @@ export class AppointmentPopup {
   }
 
   _createPopupConfig() {
-    return {
+    const editingConfig = this.scheduler.getEditingConfig();
+    const userPopupOptions = editingConfig?.popup ?? {};
+
+    const defaultPopupConfig = {
       height: 'auto',
       maxHeight: '90%',
       showCloseButton: false,
       showTitle: false,
-      preventScrollEvents: false,
       enableBodyScroll: false,
-      _ignorePreventScrollEventsDeprecation: true,
       onHiding: (): void => {
         this.scheduler.focus();
       },
@@ -114,6 +115,11 @@ export class AppointmentPopup {
       },
       onShowing: (e): void => this._onShowing(e),
       wrapperAttr: { class: APPOINTMENT_POPUP_CLASS },
+    };
+
+    return {
+      ...defaultPopupConfig,
+      ...userPopupOptions,
     };
   }
 
