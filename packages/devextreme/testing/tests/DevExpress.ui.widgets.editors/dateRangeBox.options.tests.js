@@ -525,7 +525,7 @@ QUnit.module('Option synchronization', moduleConfig, () => {
         QUnit.test('DateRangeBox startDateText and endDateText options should return text option of dateboxes correctly after change value in runtime', function(assert) {
             this.reinit({});
 
-            this.instance.option('value', ['2021/09/17', '2021/09/24']),
+            this.instance.option('value', ['2021/09/17', '2021/09/24']);
 
             assert.deepEqual(new Date(this.instance.option('startDateText')), new Date('2021/09/17'));
             assert.deepEqual(new Date(this.instance.option('endDateText')), new Date('2021/09/24'));
