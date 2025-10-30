@@ -335,8 +335,8 @@ class ChatTextArea extends TextArea<Properties> {
 
   _getHeightDifference($input: dxElementWrapper): number {
     const superResult = super._getHeightDifference($input);
-    const fileUploaderHeight = getOuterHeight(this._$fileUploader);
     const toolbarHeight = getOuterHeight(this._$toolbar);
+    const fileUploaderHeight = getOuterHeight(this._$fileUploader);
     const sum: number = superResult + toolbarHeight + fileUploaderHeight;
 
     return sum;
