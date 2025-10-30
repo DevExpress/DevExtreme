@@ -11,7 +11,7 @@ import Informer from 'ui/informer';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const FILE_UPLOADER = 'dx-fileuploader';
-const FILE_UPLOADER_ATTACH_BUTTON = 'dx-textarea-attach-button';
+const FILE_UPLOADER_ATTACH_BUTTON = 'dx-chat-textarea-attach-button';
 const FILEUPLOADER_CANCEL_BUTTON_CLASS = 'dx-fileuploader-cancel-button';
 
 const fakeFile = {
@@ -72,8 +72,9 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
                 stylingMode: 'outlined',
                 placeholder: 'Type a message',
                 autoResizeEnabled: true,
-                valueChangeEvent: 'input',
                 fileUploaderOptions: undefined,
+                maxHeight: '16em',
+                valueChangeEvent: 'input',
             };
 
             Object.entries(expectedOptions).forEach(([key, value]) => {
@@ -591,8 +592,6 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
 
             this.getInformer = () => this.instance._informer;
             this.showInformer = (text) => this.instance._showInformer(text);
-
-            this.$attachButton = this.$element.find(`.${BUTTON_CLASS}`).get(0);
         },
         afterEach: function() {
             this.clock.restore();
@@ -603,7 +602,7 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
                 const $informer = this.$element.find(`.${INFORMER_CLASS}`);
 
                 assert.strictEqual($informer.length, 0, 'informer is not rendered');
-                assert.strictEqual(this.getInformer(), null, 'informer instance is null');
+                assert.strictEqual(this.getInformer(), undefined, 'informer instance is undefined');
             });
 
             QUnit.test('informer should be rendered when _showInformer is called', function(assert) {
@@ -714,7 +713,9 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
             QUnit.test('clicking file uploader button should show informer with file limit error', function(assert) {
                 this.reinit({ fileUploaderOptions: {} });
 
-                this.$attachButton.trigger('dxclick');
+                const $attachButton = this.$element.find(`.${BUTTON_CLASS}`).eq(0);
+
+                $attachButton.trigger('dxclick');
 
                 const $informer = this.$element.find(`.${INFORMER_CLASS}`);
                 const $informerText = this.$element.find(`.${INFORMER_TEXT_CLASS}`);

@@ -1,12 +1,14 @@
 import $ from 'jquery';
 import ChatTextArea, {
-    TEXT_AREA_TOOLBAR,
+    CHAT_TEXTAREA_CLASS,
+    CHAT_TEXT_AREA_TOOLBAR,
 } from '__internal/ui/chat/message_box/chat_text_area';
 
 const BUTTON_CLASS = 'dx-button';
 const TOOLBAR_CLASS = 'dx-toolbar';
 const TOOLBAR_BEFORE_CONTAINER_CLASS = 'dx-toolbar-before';
 const TOOLBAR_AFTER_CONTAINER_CLASS = 'dx-toolbar-after';
+const TEXTAREA_CLASS = 'dx-textarea';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -26,17 +28,23 @@ const moduleConfig = {
 
 QUnit.module('ChatTextArea', moduleConfig, () => {
     QUnit.module('Classes', () => {
+        QUnit.test(`textarea field should have ${CHAT_TEXTAREA_CLASS} class`, function(assert) {
+            const $textArea = this.$element.find(`.${TEXTAREA_CLASS}`);
+
+            assert.strictEqual($textArea.hasClass(CHAT_TEXTAREA_CLASS), true);
+        });
+
         QUnit.test('toolbar should be rendered', function(assert) {
-            const $toolbar = this.$element.find(`.${TEXT_AREA_TOOLBAR}`);
+            const $toolbar = this.$element.find(`.${TOOLBAR_CLASS}`);
 
             assert.strictEqual($toolbar.length, 1, 'toolbar element exists');
-            assert.strictEqual($toolbar.hasClass(TOOLBAR_CLASS), true, 'toolbar has correct class');
+            assert.strictEqual($toolbar.hasClass(CHAT_TEXT_AREA_TOOLBAR), true, 'toolbar has correct class');
         });
     });
 
     QUnit.module('Toolbar buttons', () => {
         QUnit.test('send button should be rendered by default', function(assert) {
-            const $toolbar = this.$element.find(`.${TEXT_AREA_TOOLBAR}`);
+            const $toolbar = this.$element.find(`.${CHAT_TEXT_AREA_TOOLBAR}`);
             const $afterContainer = $toolbar.find(`.${TOOLBAR_AFTER_CONTAINER_CLASS}`);
             const $sendButton = $afterContainer.find(`.${BUTTON_CLASS}`);
 
@@ -44,7 +52,7 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
         });
 
         QUnit.test('file uploader button should not be rendered by default', function(assert) {
-            const $toolbar = this.$element.find(`.${TEXT_AREA_TOOLBAR}`);
+            const $toolbar = this.$element.find(`.${CHAT_TEXT_AREA_TOOLBAR}`);
             const $beforeContainer = $toolbar.find(`.${TOOLBAR_BEFORE_CONTAINER_CLASS}`);
             const $buttons = $beforeContainer.find(`.${BUTTON_CLASS}`);
 
@@ -56,7 +64,7 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
                 fileUploaderOptions: {}
             });
 
-            const $toolbar = this.$element.find(`.${TEXT_AREA_TOOLBAR}`);
+            const $toolbar = this.$element.find(`.${CHAT_TEXT_AREA_TOOLBAR}`);
             const $beforeContainer = $toolbar.find(`.${TOOLBAR_BEFORE_CONTAINER_CLASS}`);
             const $fileButton = $beforeContainer.find(`.${BUTTON_CLASS}`);
 
@@ -68,7 +76,7 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
                 fileUploaderOptions: {}
             });
 
-            const $toolbar = this.$element.find(`.${TEXT_AREA_TOOLBAR}`);
+            const $toolbar = this.$element.find(`.${CHAT_TEXT_AREA_TOOLBAR}`);
             const $beforeContainer = $toolbar.find(`.${TOOLBAR_BEFORE_CONTAINER_CLASS}`);
             const $afterContainer = $toolbar.find(`.${TOOLBAR_AFTER_CONTAINER_CLASS}`);
 
@@ -79,7 +87,7 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
 
     QUnit.module('Accessibility', () => {
         QUnit.test('send button should have correct aria-label', function(assert) {
-            const $toolbar = this.$element.find(`.${TEXT_AREA_TOOLBAR}`);
+            const $toolbar = this.$element.find(`.${CHAT_TEXT_AREA_TOOLBAR}`);
             const $sendButton = $toolbar.find(`.${TOOLBAR_AFTER_CONTAINER_CLASS} .${BUTTON_CLASS}`);
 
             assert.strictEqual($sendButton.attr('aria-label'), 'Send', 'send button has correct aria-label');
@@ -88,14 +96,14 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
 
     QUnit.module('DOM structure', () => {
         QUnit.test('component should have correct DOM hierarchy', function(assert) {
-            const $toolbar = this.$element.find(`.${TEXT_AREA_TOOLBAR}`);
+            const $toolbar = this.$element.find(`.${CHAT_TEXT_AREA_TOOLBAR}`);
 
             assert.ok($toolbar.length > 0, 'toolbar is present');
             assert.ok($toolbar.parent().is(this.$element), 'toolbar is direct child of root element');
         });
 
         QUnit.test('toolbar should be appended after textarea elements', function(assert) {
-            const $toolbar = this.$element.find(`.${TEXT_AREA_TOOLBAR}`);
+            const $toolbar = this.$element.find(`.${CHAT_TEXT_AREA_TOOLBAR}`);
             const $children = this.$element.children();
             const toolbarIndex = $children.index($toolbar);
 

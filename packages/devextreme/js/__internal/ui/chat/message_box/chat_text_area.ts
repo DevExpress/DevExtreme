@@ -25,9 +25,11 @@ import Informer from '@ts/ui/informer/informer';
 import type { TextAreaProperties } from '@ts/ui/m_text_area';
 import TextArea from '@ts/ui/m_text_area';
 
-export const TEXT_AREA_TOOLBAR = 'dx-textarea-toolbar';
-const TEXT_AREA_ATTACHMENTS = 'dx-textarea-attachments';
-const TEXT_AREA_ATTACH_BUTTON = 'dx-textarea-attach-button';
+const CHAT_TEXT_AREA_ATTACHMENTS = 'dx-chat-textarea-attachments';
+const CHAT_TEXT_AREA_ATTACH_BUTTON = 'dx-chat-textarea-attach-button';
+
+export const CHAT_TEXTAREA_CLASS = 'dx-chat-textarea';
+export const CHAT_TEXT_AREA_TOOLBAR = 'dx-chat-textarea-toolbar';
 
 const MAX_ATTACHMENTS_COUNT = 10;
 const INFORMER_DELAY = 10000;
@@ -146,6 +148,7 @@ class ChatTextArea extends TextArea<Properties> {
   }
 
   _initMarkup(): void {
+    this.$element().addClass(CHAT_TEXTAREA_CLASS); // ADD TEST
     super._initMarkup();
     this._renderToolbar();
     this._initFileUploader();
@@ -193,7 +196,7 @@ class ChatTextArea extends TextArea<Properties> {
     };
 
     this._$toolbar = $('<div>')
-      .addClass(TEXT_AREA_TOOLBAR)
+      .addClass(CHAT_TEXT_AREA_TOOLBAR)
       .appendTo(this.$element());
 
     this._toolbar = this._createComponent(
@@ -231,7 +234,7 @@ class ChatTextArea extends TextArea<Properties> {
         activeStateEnabled,
         focusStateEnabled,
         hoverStateEnabled,
-        elementAttr: { class: TEXT_AREA_ATTACH_BUTTON },
+        elementAttr: { class: CHAT_TEXT_AREA_ATTACH_BUTTON },
         icon: 'attach',
         onClick: () => {
           this._showInformer(ERRORS.fileLimit);
@@ -289,7 +292,7 @@ class ChatTextArea extends TextArea<Properties> {
 
   _renderFileUploader(): void {
     this._$fileUploader = $('<div>')
-      .addClass(TEXT_AREA_ATTACHMENTS)
+      .addClass(CHAT_TEXT_AREA_ATTACHMENTS)
       .insertBefore(this._$textEditorContainer);
 
     this._fileUploader = this._createComponent(
@@ -313,7 +316,7 @@ class ChatTextArea extends TextArea<Properties> {
       multiple,
       visible,
       uploadMode: 'instantly',
-      dialogTrigger: this.$element().find(`.${TEXT_AREA_ATTACH_BUTTON}`).get(0),
+      dialogTrigger: this.$element().find(`.${CHAT_TEXT_AREA_ATTACH_BUTTON}`).get(0),
       _hideCancelButtonOnUpload: false,
       _showFileIcon: true,
       _cancelButtonPosition: 'end',
