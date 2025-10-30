@@ -17,8 +17,8 @@ import { createAIHeaderContainer, createChatSparkleOutlineIcon } from './dom';
 import type { AIColumnController } from './m_ai_column_controller';
 import {
   getAICommandColumnDefaultOptions,
-  isAIColumn,
   isAIColumnAutoMode,
+  isAIColumnHeader,
   isEditorOptions,
   isHeaderDropDownButtonVisible,
   isPopupOptions,
@@ -207,7 +207,7 @@ export const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) =
   }
 
   protected getHeaderDefaultTemplate($container: dxElementWrapper, options): void {
-    if (isAIColumn(options)) {
+    if (isAIColumnHeader(options.column, options.rowType)) {
       this.renderAIHeader($container, options.column);
       return;
     }
@@ -217,7 +217,7 @@ export const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) =
 
   protected _processTemplate(template, options) {
     const renderingTemplate = super._processTemplate(template, options);
-    const needToRenderHeaderDropDownButton = isAIColumn(options)
+    const needToRenderHeaderDropDownButton = isAIColumnHeader(options.column, options.rowType)
       && isHeaderDropDownButtonVisible(options.column);
 
     if (renderingTemplate && needToRenderHeaderDropDownButton) {
