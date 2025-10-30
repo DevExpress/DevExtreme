@@ -142,9 +142,6 @@ class ChatTextArea extends TextArea<Properties> {
   }
 
   _renderToolbar(): void {
-    this._toolbar?.dispose();
-    this._$toolbar?.remove();
-
     const toolbarItems = this._getToolbarItems();
 
     const toolbarOptions = {
@@ -338,8 +335,8 @@ class ChatTextArea extends TextArea<Properties> {
 
   _getHeightDifference($input: dxElementWrapper): number {
     const superResult = super._getHeightDifference($input);
-    const toolbarHeight = getOuterHeight(this._$toolbar);
     const fileUploaderHeight = getOuterHeight(this._$fileUploader);
+    const toolbarHeight = getOuterHeight(this._$toolbar);
     const sum: number = superResult + toolbarHeight + fileUploaderHeight;
 
     return sum;
@@ -443,7 +440,6 @@ class ChatTextArea extends TextArea<Properties> {
   _cleanToolbar(): void {
     this._toolbar?.dispose();
     this._$toolbar?.remove();
-    this._fileUploader?.dispose();
     this._toolbar = null;
     this._$toolbar = null;
   }
