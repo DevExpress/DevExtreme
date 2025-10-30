@@ -96,7 +96,6 @@ module('render', {
         this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
-        executeAsyncMock.teardown();
         this.clock.restore();
     }
 }, () => {
@@ -538,6 +537,7 @@ module('render', {
         });
 
         assert.equal(this.element.find('.' + EMPTY_MESSAGE_CLASS).length, 0);
+        executeAsyncMock.teardown();
     });
 
     test('No data text message - value', function(assert) {
