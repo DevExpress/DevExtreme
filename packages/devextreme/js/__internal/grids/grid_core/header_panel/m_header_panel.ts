@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import messageLocalization from '@js/common/core/localization/message';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getPathParts } from '@js/core/utils/data';
 import { isDefined } from '@js/core/utils/type';
@@ -9,6 +10,7 @@ import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m_header_filter';
 import { normalizeToolbarItems } from '@ts/grids/new/grid_core/toolbar/utils';
 
+import type { Column } from '../columns_controller/m_columns_controller';
 import type { ModuleType } from '../m_types';
 import { ColumnsView } from '../views/m_columns_view';
 import type { ResizingController } from '../views/m_grid_view';
@@ -215,6 +217,10 @@ export class HeaderPanel extends ColumnsView {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public getContextMenuItems(options) {
     return undefined;
+  }
+
+  public renderDragCellContent($dragContainer: dxElementWrapper, column: Column): void {
+    $dragContainer.text(column.caption ?? '');
   }
 }
 
