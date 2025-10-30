@@ -29,7 +29,8 @@
   $chat-file-file-size-max-width,
 );
 @include chat-fileview(
-  $chat-file-view-items-gap
+  $chat-file-view-items-gap,
+  $chat-file-container-width,
 );
 @include chat-alertlist(
   $chat-alertlist-color,
@@ -56,6 +57,7 @@
   $chat-bubble-container-gap,
   $chat-bubble-delete-gap,
   $chat-bubble-delete-icon-size,
+  $chat-bubble-gap,
 );
 @include chat-messagegroup(
   $chat-messagegroup-gap,

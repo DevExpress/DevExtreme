@@ -20,7 +20,6 @@ export interface FileViewProperties extends DOMComponentProperties<FileView> {
 }
 
 export const CHAT_FILE_VIEW_CLASS = 'dx-chat-file-view';
-export const CHAT_FILE_VIEW_ITEM_CLASS = 'dx-chat-file-view-item';
 
 class FileView extends DOMComponent<FileView, FileViewProperties> {
   private _fileInstances: File[] = [];
