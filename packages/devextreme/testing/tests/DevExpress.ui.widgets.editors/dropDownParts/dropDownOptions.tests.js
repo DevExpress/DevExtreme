@@ -1,6 +1,7 @@
 import $ from 'jquery';
 
 import fx from 'common/core/animation/fx';
+import { dropDownEditorsList } from '../../../helpers/widgetsList.js';
 import { defaultDropDownOptions } from '../../../helpers/dropDownOptions.js';
 
 import 'fluent_blue_light.css!';
