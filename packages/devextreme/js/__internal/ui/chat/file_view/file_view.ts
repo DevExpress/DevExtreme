@@ -16,8 +16,6 @@ export interface FileViewProperties extends DOMComponentProperties<FileView> {
 
   files?: Attachment[];
 
-  showDownloadButton?: boolean;
-
   onDownload?: (e: AttachmentDownloadEvent) => void;
 }
 
@@ -25,8 +23,6 @@ export const CHAT_FILE_VIEW_CLASS = 'dx-chat-file-view';
 
 class FileView extends DOMComponent<FileView, FileViewProperties> {
   private _fileInstances: File[] = [];
-
-  private _downloadAction?: (e: Partial<AttachmentDownloadEvent>) => void;
 
   _getDefaultOptions(): FileViewProperties {
     return {
@@ -36,19 +32,6 @@ class FileView extends DOMComponent<FileView, FileViewProperties> {
       focusStateEnabled: true,
       hoverStateEnabled: true,
     };
-  }
-
-  _init(): void {
-    super._init();
-
-    this._createDownloadAction();
-  }
-
-  _createDownloadAction(): void {
-    this._downloadAction = this._createActionByOption(
-      'onDownload',
-      { excludeValidators: ['disabled'] },
-    );
   }
 
   _initMarkup(): void {
@@ -82,7 +65,7 @@ class FileView extends DOMComponent<FileView, FileViewProperties> {
 
   _getFileConfig(data: Attachment): FileProperties {
     const {
-      activeStateEnabled, focusStateEnabled, hoverStateEnabled, showDownloadButton,
+      activeStateEnabled, focusStateEnabled, hoverStateEnabled, onDownload,
     } = this.option();
 
     const configuration: FileProperties = {
@@ -90,10 +73,7 @@ class FileView extends DOMComponent<FileView, FileViewProperties> {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
-      showDownloadButton,
-      onDownload: (event) => {
-        this._downloadAction?.(event);
-      },
+      onDownload,
     };
 
     return configuration;
@@ -133,17 +113,13 @@ class FileView extends DOMComponent<FileView, FileViewProperties> {
       case 'activeStateEnabled':
       case 'focusStateEnabled':
       case 'hoverStateEnabled':
-      case 'showDownloadButton':
+      case 'onDownload':
         this._renderItems();
         break;
 
       case 'files':
         this._renderItems();
         this._toggleAria();
-        break;
-
-      case 'onDownload':
-        this._createDownloadAction();
         break;
 
       default:

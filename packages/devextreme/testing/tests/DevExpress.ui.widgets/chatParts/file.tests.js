@@ -17,7 +17,6 @@ const moduleConfig = {
                     name: 'test-file.txt',
                     size: 1024,
                 },
-                showDownloadButton: true,
                 onDownload: () => {},
                 ...options,
             };
@@ -60,7 +59,7 @@ QUnit.module('File', moduleConfig, () => {
         });
 
         QUnit.test('should have correct default options', function(assert) {
-            this.reinit({ data: {}, onDownload: undefined, showDownloadButton: undefined });
+            this.reinit({ data: {}, onDownload: undefined });
 
             const expectedData = {
                 name: '',
@@ -71,7 +70,6 @@ QUnit.module('File', moduleConfig, () => {
 
             assert.deepEqual(actualData, expectedData, 'default data is correct');
             assert.strictEqual(this.instance.option('onDownload'), undefined, 'onDownload is undefined by default');
-            assert.strictEqual(this.instance.option('showDownloadButton'), undefined, 'showDownloadButton is undefined by default');
         });
     });
 

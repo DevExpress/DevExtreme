@@ -21,8 +21,6 @@ export type Properties = DOMComponentProperties<File> & {
 
   hoverStateEnabled?: boolean;
 
-  showDownloadButton?: boolean;
-
   data: Attachment;
 
   onDownload?: (e: AttachmentDownloadEvent) => void;
@@ -50,7 +48,6 @@ class File extends DOMComponent<File, Properties> {
         size: 0,
       },
       onDownload: undefined,
-      showDownloadButton: undefined,
     };
   }
 
@@ -123,9 +120,9 @@ class File extends DOMComponent<File, Properties> {
   }
 
   private _renderButton(): void {
-    const { showDownloadButton } = this.option();
+    const { onDownload } = this.option();
 
-    if (!showDownloadButton) {
+    if (!onDownload) {
       return;
     }
 
@@ -160,16 +157,38 @@ class File extends DOMComponent<File, Properties> {
       icon: 'download',
       stylingMode: 'text' as const,
       onClick: (e: ClickEvent): void => {
-        const event = {
-          event: e.event,
-          attachment: data,
-        };
-
-        this._downloadAction?.(event);
+        this._downloadHandler(e);
       },
     };
 
     return configuration;
+  }
+
+  _downloadHandler(e: ClickEvent): void {
+    const { data } = this.option();
+
+    const event = {
+      event: e.event,
+      attachment: data,
+    };
+
+    this._downloadAction?.(event);
+  }
+
+  _handleOnDownloadOptionChange(): void {
+    const { onDownload } = this.option();
+
+    if (!onDownload) {
+      this._cleanDownloadButton();
+
+      return;
+    }
+
+    if (this._downloadButton) {
+      this._downloadButton?.option({ onClick: (e) => this._downloadHandler(e) });
+    } else {
+      this._renderButton();
+    }
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
@@ -188,10 +207,7 @@ class File extends DOMComponent<File, Properties> {
 
       case 'onDownload':
         this._createDownloadAction();
-        break;
-      case 'showDownloadButton':
-        this._cleanDownloadButton();
-        this._renderButton();
+        this._handleOnDownloadOptionChange();
         break;
 
       default:

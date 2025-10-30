@@ -108,6 +108,7 @@ class Chat extends Widget<Properties> {
       onMessageEntered: undefined,
       onTypingEnd: undefined,
       onTypingStart: undefined,
+      onAttachmentDownload: undefined,
     };
   }
 
@@ -195,13 +196,12 @@ class Chat extends Widget<Properties> {
       dayHeaderFormat,
       messageTimestampFormat,
       typingUsers = [],
-      onAttachmentDownload,
     } = this.option();
 
     // @ts-expect-error
     const isLoading = this._dataController.isLoading();
     const currentUserId = user?.id;
-    const showAttachmentDownloadButton = Boolean(onAttachmentDownload);
+    const onAttachmentDownload = this._getAttachmentDownloadHandler();
 
     const options: MessageListProperties = {
       items,
@@ -219,7 +219,6 @@ class Chat extends Widget<Properties> {
       messageTimestampFormat,
       typingUsers,
       isLoading,
-      showAttachmentDownloadButton,
       onMessageEditingStart: (e) => {
         this._messageEditingStartHandler(e);
 
@@ -231,12 +230,21 @@ class Chat extends Widget<Properties> {
       onEscapeKeyPressed: () => {
         this.focus();
       },
-      onAttachmentDownload: (e) => {
-        this._attachmentDownloadAction?.(e);
-      },
+      onAttachmentDownload,
     };
 
     return options;
+  }
+
+  _getAttachmentDownloadHandler(): ((e: AttachmentDownloadEvent) => void) | undefined {
+    const { onAttachmentDownload } = this.option();
+
+    if (!onAttachmentDownload) {
+      return;
+    }
+
+    // eslint-disable-next-line consistent-return
+    return (e: AttachmentDownloadEvent): void => { this._attachmentDownloadAction?.(e); };
   }
 
   protected _allowEditAction(message: Message): boolean {
@@ -641,7 +649,7 @@ class Chat extends Widget<Properties> {
         break;
       case 'onAttachmentDownload':
         this._createAttachmentDownloadAction();
-        this._messageList.option({ showAttachmentDownloadButton: Boolean(value) });
+        this._messageList.option({ onAttachmentDownload: this._getAttachmentDownloadHandler() });
         break;
       case 'showDayHeaders':
       case 'showAvatar':

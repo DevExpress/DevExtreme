@@ -65,7 +65,7 @@ QUnit.module('File', moduleConfig, () => {
         });
 
         QUnit.test('download button should be rendered', function(assert) {
-            this.reinit({ showDownloadButton: true });
+            this.reinit({ onDownload: () => {} });
             const $button = this.$element.find(`.${CHAT_FILE_DOWNLOAD_BUTTON_CLASS}`);
 
             assert.strictEqual($button.length, 1, 'download button exists');
@@ -148,19 +148,19 @@ QUnit.module('File', moduleConfig, () => {
         });
     });
 
-    QUnit.module('showDownloadButton option', () => {
-        QUnit.test('download button should not be rendered if showDownloadButton is false/undefined', function(assert) {
+    QUnit.module('onDownload option', () => {
+        QUnit.test('download button should not be rendered if onDownload is undefined', function(assert) {
             const $button = this.$element.find(`.${CHAT_FILE_DOWNLOAD_BUTTON_CLASS}`);
 
             assert.strictEqual($button.length, 0, 'download button is not rendered');
         });
 
-        QUnit.test('should re-render button on showDownloadButton runtime changes', function(assert) {
+        QUnit.test('should re-render button on onDownload runtime changes', function(assert) {
             let $button = this.$element.find(`.${CHAT_FILE_DOWNLOAD_BUTTON_CLASS}`);
 
             assert.strictEqual($button.length, 0, 'download button is not rendered initially');
 
-            this.instance.option('showDownloadButton', true);
+            this.instance.option('onDownload', () => {});
 
             $button = this.$element.find(`.${CHAT_FILE_DOWNLOAD_BUTTON_CLASS}`);
 
