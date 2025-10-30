@@ -15,8 +15,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-executeAsyncMock.setup();
-
 const BOOTSTRAP_CSS_URL = window.ROOT_URL + 'packages/devextreme-themebuilder/node_modules/bootstrap/dist/css/bootstrap.css';
 
 const applyBootstrap = (function() {
