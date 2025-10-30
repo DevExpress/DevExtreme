@@ -25,8 +25,8 @@
   "scripts": {
     "format:check": "prettier --check .",
     "format": "prettier --write .",
-    "build": "nx build nx-infra-plugin",
-    "test": "nx test nx-infra-plugin",
+    "build": "pnpm --workspace-root nx build devextreme-nx-infra-plugin",
+    "test": "pnpm --workspace-root nx test devextreme-nx-infra-plugin",
     "lint": "pnpm run format:check"
   },
   "main": "./src/index.js"
