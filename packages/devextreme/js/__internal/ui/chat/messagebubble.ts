@@ -53,7 +53,7 @@ class MessageBubble extends Widget<Properties> {
     super._initMarkup();
 
     this._renderContentContainer();
-    this._renderAttachmentsContainer();
+    this._renderAttachmentsElement();
 
     this._updateContent();
     this._renderAttachments();
@@ -65,7 +65,7 @@ class MessageBubble extends Widget<Properties> {
       .appendTo(this.$element());
   }
 
-  _renderAttachmentsContainer(): void {
+  _renderAttachmentsElement(): void {
     const { attachments, isDeleted } = this.option();
 
     this._$attachments?.remove();
@@ -175,12 +175,12 @@ class MessageBubble extends Widget<Properties> {
       case 'isDeleted':
         this._updateMessageData(name, value);
         this._updateContent();
-        this._renderAttachmentsContainer();
+        this._renderAttachmentsElement();
         this._renderAttachments();
         break;
       case 'type':
         this._updateContent();
-        this._renderAttachmentsContainer();
+        this._renderAttachmentsElement();
         this._renderAttachments();
         break;
       case 'template':
@@ -191,7 +191,7 @@ class MessageBubble extends Widget<Properties> {
         break;
       case 'onAttachmentDownload':
       case 'attachments':
-        this._renderAttachmentsContainer();
+        this._renderAttachmentsElement();
         this._renderAttachments();
         break;
       default:

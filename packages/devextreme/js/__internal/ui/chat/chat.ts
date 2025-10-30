@@ -229,7 +229,7 @@ class Chat extends Widget<Properties> {
         this.focus();
       },
       onAttachmentDownload: (e) => {
-        this._attachmentDownloadHandler(e);
+        this._attachmentDownloadAction?.(e);
       },
     };
 
@@ -572,10 +572,6 @@ class Chat extends Widget<Properties> {
     const { user } = this.option();
 
     this._typingEndAction?.({ user });
-  }
-
-  _attachmentDownloadHandler(e: AttachmentDownloadEvent): void {
-    this._attachmentDownloadAction?.(e);
   }
 
   _focusTarget(): dxElementWrapper {
