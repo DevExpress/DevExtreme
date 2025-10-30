@@ -16,7 +16,6 @@ export const fields: (DxFilterBuilderTypes.Field & DxDataGridTypes.Column)[] = [
     caption: 'ID',
     dataField: 'Product_ID',
     dataType: 'number',
-    width: 50,
   }, {
     dataField: 'Product_Name',
     dataType: 'string',

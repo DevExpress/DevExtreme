@@ -11,7 +11,6 @@ const filter = [
 const fields = [
   {
     caption: 'ID',
-    width: 50,
     dataField: 'Product_ID',
     dataType: 'number',
   }, {

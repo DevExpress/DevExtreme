@@ -24,7 +24,6 @@ const filter: Condition = [
 const fields: Record<string, string | number>[] = [
   {
     caption: 'ID',
-    width: 50,
     dataField: 'Product_ID',
     dataType: 'number',
   }, {
