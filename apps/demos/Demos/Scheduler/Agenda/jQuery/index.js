@@ -16,10 +16,12 @@ $(() => {
         dataSource: assignees,
         label: 'Assignee',
         useColorAsDefault: true,
+        icon: 'user',
       }, {
         fieldExpr: 'priorityId',
         dataSource: priorities,
         label: 'Priority',
+        icon: 'tags',
       }],
     height: 600,
   });
