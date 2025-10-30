@@ -13,9 +13,9 @@
   "types": "./cjs/index.d.ts",
   "scripts": {
     "clean": "nx clean devextreme-react",
-    "regenerate": "nx regenerate devextreme-react",
+    "regenerate": "pnpm --workspace-root nx regenerate devextreme-react",
     "lint": "eslint src/core",
-    "pack": "nx pack devextreme-react",
+    "pack": "pnpm --workspace-root nx pack devextreme-react",
     "test": "jest"
   },
   "keywords": [
