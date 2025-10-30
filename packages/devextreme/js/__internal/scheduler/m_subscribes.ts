@@ -1,3 +1,4 @@
+import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
@@ -133,14 +134,14 @@ const subscribes = {
     const formatType = format ?? getFormatType(startDate, endDate, adapter.allDay, this.currentView.type !== 'month');
 
     return {
-      text: adapter.text,
+      text: adapter.text || messageLocalization.format('dxScheduler-noSubject'),
       formatDate: formatDates(startDate, endDate, formatType),
     };
   },
 
   _createAppointmentTitle(data) {
     if (isPlainObject(data)) {
-      return data.text;
+      return data.text || messageLocalization.format('dxScheduler-noSubject');
     }
 
     return String(data);
