@@ -60,7 +60,7 @@ export class AppComponent {
   }
 }
 
-@Pipe({ name: 'stringifyEmployees' })
+@Pipe({ name: 'stringifyEmployees', standalone: true })
 export class StringifyEmployeesPipe implements PipeTransform {
   transform(employees: Employee[]) {
     return employees.map((employee) => `${employee.FirstName} ${employee.LastName}`).join(', ');
@@ -73,8 +73,9 @@ export class StringifyEmployeesPipe implements PipeTransform {
     DxDataGridModule,
     DxButtonModule,
     DxSelectBoxModule,
+    StringifyEmployeesPipe,
   ],
-  declarations: [AppComponent, StringifyEmployeesPipe],
+  declarations: [AppComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

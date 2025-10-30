@@ -37,7 +37,7 @@ export class AppComponent {
   }
 }
 
-@Pipe({ name: 'gridCellData' })
+@Pipe({ name: 'gridCellData', standalone: true })
 export class GridCellDataPipe implements PipeTransform {
   transform({ data, column }) {
     return data[column.caption.toLowerCase()];
@@ -49,8 +49,9 @@ export class GridCellDataPipe implements PipeTransform {
     BrowserModule,
     DxDataGridModule,
     DxSparklineModule,
+    GridCellDataPipe,
   ],
-  declarations: [AppComponent, GridCellDataPipe],
+  declarations: [AppComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

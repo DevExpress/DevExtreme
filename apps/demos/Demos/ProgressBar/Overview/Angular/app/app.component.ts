@@ -5,7 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxButtonModule, DxProgressBarModule } from 'devextreme-angular';
 
-@Pipe({ name: 'time' })
+@Pipe({ name: 'time', standalone: true })
 export class TimePipe implements PipeTransform {
   transform(value: number): string {
     return `00:00:${(`0${value}`).slice(-2)}`;
@@ -73,8 +73,9 @@ export class AppComponent {
     BrowserModule,
     DxButtonModule,
     DxProgressBarModule,
+    TimePipe,
   ],
-  declarations: [AppComponent, TimePipe],
+  declarations: [AppComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

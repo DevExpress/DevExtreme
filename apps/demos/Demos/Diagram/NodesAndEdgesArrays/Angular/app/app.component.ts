@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { HttpClientModule } from '@angular/common/http';
+import {provideHttpClient, withFetch} from '@angular/common/http';
 
 import { DxDiagramModule } from 'devextreme-angular';
 import { ArrayStore } from 'devextreme-angular/common/data';
@@ -46,9 +46,9 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    HttpClientModule,
     DxDiagramModule,
   ],
+  providers: [provideHttpClient(withFetch())],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
 })

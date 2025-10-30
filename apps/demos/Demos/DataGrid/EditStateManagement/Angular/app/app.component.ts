@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import { DxLoadPanelModule } from 'devextreme-angular';
 import { Observable, Subscription } from 'rxjs';
 import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
@@ -89,8 +89,8 @@ export class AppComponent implements OnInit, OnDestroy {
     BrowserModule,
     DxDataGridModule,
     DxLoadPanelModule,
-    HttpClientModule,
   ],
+  providers: [provideHttpClient(withFetch())],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
 })

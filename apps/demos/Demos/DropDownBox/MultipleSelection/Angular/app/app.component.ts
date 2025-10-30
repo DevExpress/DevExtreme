@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { CustomStore } from 'devextreme-angular/common/data';
 import { DxDropDownBoxModule, DxDataGridModule } from 'devextreme-angular';
@@ -80,9 +80,9 @@ export class AppComponent {
     BrowserModule,
     DxTreeViewModule,
     DxDropDownBoxModule,
-    HttpClientModule,
     DxDataGridModule,
   ],
+  providers: [provideHttpClient(withFetch())],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
 })

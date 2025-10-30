@@ -1,7 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { DxTreeViewComponent, DxTreeViewModule } from 'devextreme-angular';
 
@@ -38,8 +38,8 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxTreeViewModule,
-    HttpClientModule,
   ],
+  providers: [provideHttpClient(withFetch())],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
 })

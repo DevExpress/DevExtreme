@@ -1,7 +1,7 @@
 import {
   NgModule, Component, enableProdMode,
 } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import {provideHttpClient, withFetch} from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import notify from 'devextreme/ui/notify';
@@ -121,9 +121,9 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    HttpClientModule,
     DxDiagramModule,
   ],
+  providers: [provideHttpClient(withFetch())],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
 })

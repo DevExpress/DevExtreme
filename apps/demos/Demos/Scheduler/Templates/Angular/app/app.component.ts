@@ -9,7 +9,7 @@ import {
   Service, MovieData, TheatreData, Data,
 } from './app.service';
 
-@Pipe({ name: 'apply' })
+@Pipe({ name: 'apply', standalone: true })
 export class ApplyPipe<TArgs, TReturn> implements PipeTransform {
   transform(func: ((...args: TArgs[]) => TReturn), ...args: TArgs[]): TReturn { return func(...args); }
 }
@@ -118,8 +118,9 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxSchedulerModule,
+    ApplyPipe,
   ],
-  declarations: [AppComponent, ApplyPipe],
+  declarations: [AppComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

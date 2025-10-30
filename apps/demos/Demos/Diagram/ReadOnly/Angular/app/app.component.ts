@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 
 import { DxDiagramModule, DxDiagramComponent } from 'devextreme-angular';
 
@@ -37,10 +37,10 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    HttpClientModule,
     DxDiagramModule,
   ],
   declarations: [AppComponent],
+  providers: [provideHttpClient(withFetch())],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

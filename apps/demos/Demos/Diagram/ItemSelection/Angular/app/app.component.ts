@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import { ArrayStore } from 'devextreme-angular/common/data';
 import { DxDiagramModule, DxDiagramTypes } from 'devextreme-angular/ui/diagram';
 import { Service } from './app.service';
@@ -55,7 +55,7 @@ export class AppComponent {
   }
 }
 
-@Pipe({ name: 'stringifyItems' })
+@Pipe({ name: 'stringifyItems', standalone: true })
 export class StringifyItemsPipe implements PipeTransform {
   transform(items: DxDiagramTypes.Item[], textExpression: string): string {
     return items
@@ -67,10 +67,11 @@ export class StringifyItemsPipe implements PipeTransform {
 @NgModule({
   imports: [
     BrowserModule,
-    HttpClientModule,
     DxDiagramModule,
+    StringifyItemsPipe,
   ],
-  declarations: [AppComponent, StringifyItemsPipe],
+  providers: [provideHttpClient(withFetch())],
+  declarations: [AppComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

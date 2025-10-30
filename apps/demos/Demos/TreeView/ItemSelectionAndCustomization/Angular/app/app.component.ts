@@ -8,7 +8,7 @@ import { DxTreeViewModule, DxTreeViewComponent, DxTreeViewTypes } from 'devextre
 import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import { Service, Employee } from './app.service';
 
-@Pipe({ name: 'title' })
+@Pipe({ name: 'title', standalone: true })
 export class TitlePipe implements PipeTransform {
   transform(item: Record<string, unknown>): string {
     return item.text + (item.price ? ` ($${item.price})` : '');
@@ -100,8 +100,9 @@ export class AppComponent {
     DxListModule,
     DxCheckBoxModule,
     DxSelectBoxModule,
+    TitlePipe,
   ],
-  declarations: [AppComponent, TitlePipe],
+  declarations: [AppComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
