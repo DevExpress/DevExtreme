@@ -284,6 +284,8 @@
         "dxScheduler-editorLabelDescription": "Descrição",
         "dxScheduler-editorLabelRecurrence": "Repetir",
 
+        "dxScheduler-noSubject": "(No subject)",
+
         "dxScheduler-navigationToday": "Today",
         "dxScheduler-navigationPrevious": "Página anterior",
         "dxScheduler-navigationNext": "Próxima página",

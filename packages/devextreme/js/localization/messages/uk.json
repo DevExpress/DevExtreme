@@ -284,6 +284,8 @@
         "dxScheduler-editorLabelDescription": "Опис",
         "dxScheduler-editorLabelRecurrence": "Повторення",
 
+        "dxScheduler-noSubject": "(No subject)",
+
         "dxScheduler-navigationToday": "Сьогодні",
         "dxScheduler-navigationPrevious": "Попередня сторінка",
         "dxScheduler-navigationNext": "Наступна сторінка",
