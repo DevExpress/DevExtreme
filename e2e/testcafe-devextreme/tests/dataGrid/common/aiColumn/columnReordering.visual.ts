@@ -38,7 +38,7 @@ test('The draggable AI column should display correctly', async (t) => {
     { id: 3, name: 'Name 3', value: 30 },
   ],
   allowColumnReordering: true,
-  columnWidth: 125,
+  columnWidth: 200,
   columns: [
     {
       type: 'ai',
