@@ -1386,6 +1386,89 @@ describe('Appointment Popup Form', () => {
     expect(data[0].Subject).toBe('qwerty');
     expect(data[0].text).toBeUndefined();
   });
+
+  describe('Popup options', () => {
+    it('should pass custom popup options from editing.popup to appointment popup', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          popup: {
+            showTitle: true,
+            title: 'Custom Appointment Form',
+            maxHeight: '80%',
+            dragEnabled: true,
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      expect(POM.popup.component.option('showTitle')).toBe(true);
+      expect(POM.popup.component.option('title')).toBe('Custom Appointment Form');
+      expect(POM.popup.component.option('maxHeight')).toBe('80%');
+      expect(POM.popup.component.option('dragEnabled')).toBe(true);
+    });
+
+    it('should use default popup options when editing.popup is not specified', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      expect(POM.popup.component.option('showTitle')).toBe(false);
+      expect(POM.popup.component.option('height')).toBe('auto');
+      expect(POM.popup.component.option('maxHeight')).toBe('90%');
+    });
+
+    it('should merge custom popup options with default options', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          popup: {
+            showTitle: true,
+            title: 'My Form',
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      expect(POM.popup.component.option('showTitle')).toBe(true);
+      expect(POM.popup.component.option('title')).toBe('My Form');
+
+      expect(POM.popup.component.option('showCloseButton')).toBe(false);
+      expect(POM.popup.component.option('enableBodyScroll')).toBe(false);
+      expect(POM.popup.component.option('preventScrollEvents')).toBe(false);
+    });
+
+    it('should allow overriding default popup options', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          popup: {
+            showCloseButton: true,
+            enableBodyScroll: true,
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      expect(POM.popup.component.option('showCloseButton')).toBe(true);
+      expect(POM.popup.component.option('enableBodyScroll')).toBe(true);
+    });
+  });
 });
 
 describe('Appointment Popup Content', () => {
