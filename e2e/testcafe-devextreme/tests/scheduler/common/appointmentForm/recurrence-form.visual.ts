@@ -4,8 +4,6 @@ import { ClientFunction } from 'testcafe';
 import AppointmentPopup from 'devextreme-testcafe-models/scheduler/appointment/popup';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
-import { changeTheme } from '../../../../helpers/changeTheme';
 
 fixture`Appointment Form: Recurrence Form`
   .page(url(__dirname, '../../../container.html'));
@@ -56,7 +54,7 @@ test.clientScripts([
   await appointmentPopup.setRecurrenceEnd(t, 'never');
 
   await takeScreenshot(
-    `scheduler__recurrence-form__daily__repeat-end-never.png (theme=${theme})`,
+    `scheduler__recurrence-form__daily__repeat-end-never(theme=${theme})`,
     appointmentPopup.recurrence.group,
   );
 
@@ -104,7 +102,7 @@ test.clientScripts([
   await appointmentPopup.setRecurrenceEnd(t, 'until', '12/31/2024');
 
   await takeScreenshot(
-    `scheduler__recurrence-form__daily__repeat-end-until.png (theme=${theme})`,
+    `scheduler__recurrence-form__daily__repeat-end-until(theme=${theme})`,
     appointmentPopup.recurrence.group,
   );
 
@@ -152,7 +150,7 @@ test.clientScripts([
   await appointmentPopup.setRecurrenceEnd(t, 'count', 10);
 
   await takeScreenshot(
-    `scheduler__recurrence-form__daily__repeat-end-count.png (theme=${theme})`,
+    `scheduler__recurrence-form__daily__repeat-end-count(theme=${theme})`,
     appointmentPopup.recurrence.group,
   );
 
@@ -201,7 +199,7 @@ test.clientScripts([
   await appointmentPopup.setRecurrenceEnd(t, 'count', 15);
 
   await takeScreenshot(
-    `scheduler__recurrence-form__weekly__mon-wed-fri.png (theme=${theme})`,
+    `scheduler__recurrence-form__weekly__mon-wed-fri(theme=${theme})`,
     appointmentPopup.recurrence.group,
   );
 
@@ -251,7 +249,7 @@ test.clientScripts([
   await appointmentPopup.setRecurrenceEnd(t, 'count', 15);
 
   await takeScreenshot(
-    `scheduler__recurrence-form__weekly__weekend.png (theme=${theme})`,
+    `scheduler__recurrence-form__weekly__weekend(theme=${theme})`,
     appointmentPopup.recurrence.group,
   );
 
@@ -301,7 +299,7 @@ test.clientScripts([
   await appointmentPopup.selectRecurrenceWeekDays(t, [1, 5]);
 
   await takeScreenshot(
-    `scheduler__recurrence-form__weekly__interval-2.png (theme=${theme})`,
+    `scheduler__recurrence-form__weekly__interval-2(theme=${theme})`,
     appointmentPopup.recurrence.group,
   );
 
@@ -350,7 +348,7 @@ test.clientScripts([
   await appointmentPopup.selectRecurrenceWeekDays(t, [1, 5]);
 
   await takeScreenshot(
-    `scheduler__recurrence-form__weekly__interval-5.png (theme=${theme})`,
+    `scheduler__recurrence-form__weekly__interval-5(theme=${theme})`,
     appointmentPopup.recurrence.group,
   );
 
@@ -399,7 +397,7 @@ test.clientScripts([
   await appointmentPopup.setRecurrenceEnd(t, 'count', 12);
 
   await takeScreenshot(
-    `scheduler__recurrence-form__monthly__day-1.png (theme=${theme})`,
+    `scheduler__recurrence-form__monthly__day-1(theme=${theme})`,
     appointmentPopup.recurrence.group,
   );
 
@@ -448,7 +446,7 @@ test.clientScripts([
   await appointmentPopup.setRecurrenceEnd(t, 'count', 12);
 
   await takeScreenshot(
-    `scheduler__recurrence-form__monthly__day-15.png (theme=${theme})`,
+    `scheduler__recurrence-form__monthly__day-15(theme=${theme})`,
     appointmentPopup.recurrence.group,
   );
 
@@ -497,7 +495,7 @@ test.clientScripts([
   await appointmentPopup.setRecurrenceEnd(t, 'until', '01/01/2030');
 
   await takeScreenshot(
-    `scheduler__recurrence-form__yearly__jan-1.png (theme=${theme})`,
+    `scheduler__recurrence-form__yearly__jan-1(theme=${theme})`,
     appointmentPopup.recurrence.group,
   );
 
@@ -547,7 +545,7 @@ test.clientScripts([
   await appointmentPopup.setRecurrenceEnd(t, 'until', '01/01/2030');
 
   await takeScreenshot(
-    `scheduler__recurrence-form__yearly__dec-31.png (theme=${theme})`,
+    `scheduler__recurrence-form__yearly__dec-31(theme=${theme})`,
     appointmentPopup.recurrence.group,
   );
 
@@ -596,7 +594,7 @@ test.clientScripts([
   await appointmentPopup.setRecurrenceEnd(t, 'count', 20);
 
   await takeScreenshot(
-    `scheduler__recurrence-form__hourly.png (theme=${theme})`,
+    `scheduler__recurrence-form__hourly(theme=${theme})`,
     appointmentPopup.recurrence.group,
   );
 
@@ -645,7 +643,7 @@ test.clientScripts([
   await appointmentPopup.openRecurrenceSettings(t);
 
   await takeScreenshot(
-    `scheduler__recurrence-form__editing-existing.png (theme=${theme})`,
+    `scheduler__recurrence-form__editing-existing(theme=${theme})`,
     appointmentPopup.recurrence.group,
   );
 
@@ -674,7 +672,14 @@ test.clientScripts([
   })();
 });
 
-safeSizeTest('recurrence form with icons', async (t) => {
+test.clientScripts([
+  { module: 'mockdate' },
+  { content: 'window.MockDate = MockDate;' },
+])(`recurrence form with icons (${theme})`, async (t) => {
+  await ClientFunction(() => {
+    (window as any).MockDate.set('2025/10/29');
+  })();
+
   const appointment = {
     text: 'Appointment',
     startDate: new Date('2021-04-26T16:30:00.000Z'),
@@ -698,19 +703,18 @@ safeSizeTest('recurrence form with icons', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [1500, 1500]).before(async () => {
-  await changeTheme(theme);
-  return createWidget('dxScheduler', {
-    dataSource: [],
-    views: ['week'],
-    currentView: 'week',
-    currentDate: new Date(2021, 2, 25),
-    editing: {
-      form: {
-        iconsShowMode: 'both',
-      },
+}).before(async () => createWidget('dxScheduler', {
+  dataSource: [],
+  views: ['week'],
+  currentView: 'week',
+  currentDate: new Date(2021, 2, 25),
+  editing: {
+    form: {
+      iconsShowMode: 'both',
     },
-  });
-}).after(async () => {
-  await changeTheme('generic.light');
+  },
+})).after(async () => {
+  await ClientFunction(() => {
+    (window as any).MockDate.reset();
+  })();
 });

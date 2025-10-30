@@ -8,9 +8,6 @@ import {
     TABS_ITEM_TEXT_SPAN_CLASS,
     TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS
 } from '__internal/ui/tabs/tabs';
-
-import 'generic_light.css!';
-
 QUnit.testStart(() => {
     const markup =
         '<div id="tabs"></div>\

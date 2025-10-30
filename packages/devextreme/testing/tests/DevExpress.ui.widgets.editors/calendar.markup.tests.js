@@ -5,7 +5,6 @@ import { isDefined, isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import windowUtils from 'core/utils/window';
 
-import 'generic_light.css!';
 import 'ui/calendar';
 
 const CALENDAR_CLASS = 'dx-calendar';

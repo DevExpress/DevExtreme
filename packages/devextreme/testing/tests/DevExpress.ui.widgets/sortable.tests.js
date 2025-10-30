@@ -7,9 +7,8 @@ import animationFrame from 'common/core/animation/frame';
 import browser from 'core/utils/browser';
 import translator from 'common/core/animation/translator';
 import viewPort from 'core/utils/view_port';
-import devices from '__internal/core/m_devices';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(function() {
     const markup =

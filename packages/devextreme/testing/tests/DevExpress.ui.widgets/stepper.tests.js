@@ -16,8 +16,6 @@ import {
     FOCUSED_STATE_CLASS,
 } from '__internal/core/widget/widget';
 
-import 'generic_light.css!';
-
 QUnit.testStart(() => {
     const markup = '<div id="stepper"></div>';
 

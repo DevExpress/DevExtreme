@@ -6,8 +6,6 @@ import { renderLabel } from '__internal/ui/form/components/label';
 import { TABPANEL_CONTAINER_CLASS } from '__internal/ui/tab_panel/tab_panel';
 import { TABS_ITEM_CLASS } from '__internal/ui/tabs/tabs';
 
-import 'generic_light.css!';
-
 const FORM_LAYOUT_MANAGER_CLASS = 'dx-layout-manager';
 const FIELD_ITEM_LABEL_CONTENT_CLASS = 'dx-field-item-label-content';
 

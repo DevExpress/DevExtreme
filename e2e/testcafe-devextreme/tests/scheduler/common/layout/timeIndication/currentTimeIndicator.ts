@@ -74,7 +74,7 @@ test('Current time indicator should be placed correctly when there are many grou
         '2023-12-03T17:30:00',
         '2023-12-03T23:59:59',
       ].forEach((indicatorTime) => {
-        // NOTE: Due the technical reasons we cannot test these cases by testcafe here.
+      // NOTE: Due the technical reasons we cannot test these cases by testcafe here.
         if (grouping === 'horizontal' && TIMELINE_VIEWS.includes(view)) {
           return;
         }

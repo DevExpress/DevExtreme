@@ -12,6 +12,8 @@ runManualTest('DataGrid', 'Filtering', (test) => {
   test('Filtering', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+    await t.wait(500);
+
     await t
       .hover(
         $('.dx-datagrid-filter-row')

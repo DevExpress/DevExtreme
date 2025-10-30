@@ -7,8 +7,6 @@ import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
 import 'ui/box';
 import 'ui/responsive_box';
 
-import 'generic_light.css!';
-
 QUnit.testStart(() => {
     const markup =
         '<div id="responsiveBox"></div>\

@@ -2,8 +2,6 @@ import $ from 'jquery';
 
 import 'ui/form';
 
-import 'generic_light.css!';
-
 const INVALID_CLASS = 'dx-invalid';
 
 QUnit.testStart(function() {

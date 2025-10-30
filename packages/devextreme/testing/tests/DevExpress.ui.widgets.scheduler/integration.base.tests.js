@@ -10,7 +10,7 @@ QUnit.testStart(function() {
             </div>');
 });
 
-require('generic_light.css!');
+require('fluent_blue_light.css!');
 
 const noop = require('core/utils/common').noop;
 const errors = require('ui/widget/ui.errors');

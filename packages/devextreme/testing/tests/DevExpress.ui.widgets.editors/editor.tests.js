@@ -9,7 +9,7 @@ import { wrapRenovatedWidget } from '../../helpers/wrapRenovatedWidget.js';
 import Validator from 'ui/validator';
 import { getOuterWidth } from 'core/utils/size';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const wrapRenovatedEditor = (editor) => {
     const wrapperEditor = wrapRenovatedWidget(editor);
