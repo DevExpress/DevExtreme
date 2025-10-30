@@ -101,6 +101,7 @@ export class AppointmentPopup {
       maxHeight: '90%',
       showCloseButton: false,
       showTitle: false,
+      preventScrollEvents: false,
       enableBodyScroll: false,
       onHiding: (): void => {
         this.scheduler.focus();
