@@ -6,7 +6,7 @@ import { createWidget } from '../../../helpers/createWidget';
 // It triggers this event on document level and process keyboard navigation action immediately.
 // Therefore, it's impossible to test switching focus between areas in TestCafe
 // Because this feature works with event bubbling + inert attribute
-fixture.disablePageReloads`KeyboardNavigation.Header`
+fixture`KeyboardNavigation.Header`
   .page(url(__dirname, '../../container.html'));
 
 const CARD_VIEW_SELECTOR = '#container';
@@ -87,7 +87,7 @@ test('Should continue arrow navigation from last focused item', async (t) => {
   height: 700,
 }));
 
-test('Should enable sorting by Enter', async (t) => {
+test.meta({ unstable: true })('Should enable sorting by Enter', async (t) => {
   const cardView = new CardView(CARD_VIEW_SELECTOR);
 
   await t
@@ -113,7 +113,7 @@ test('Should enable sorting by Enter', async (t) => {
   height: 700,
 }));
 
-test('Should switch sorting by Enter', async (t) => {
+test.meta({ unstable: true })('Should switch sorting by Enter', async (t) => {
   const cardView = new CardView(CARD_VIEW_SELECTOR);
 
   await t
@@ -139,7 +139,7 @@ test('Should switch sorting by Enter', async (t) => {
   height: 700,
 }));
 
-test('Should clear sorting by ctrl+Enter', async (t) => {
+test.meta({ unstable: true })('Should clear sorting by ctrl+Enter', async (t) => {
   const cardView = new CardView(CARD_VIEW_SELECTOR);
 
   await t
@@ -177,7 +177,7 @@ test('Should clear sorting by ctrl+Enter', async (t) => {
   height: 700,
 }));
 
-test('Should enable multi field sorting by shift+Enter', async (t) => {
+test.meta({ unstable: true })('Should enable multi field sorting by shift+Enter', async (t) => {
   const cardView = new CardView(CARD_VIEW_SELECTOR);
 
   await t

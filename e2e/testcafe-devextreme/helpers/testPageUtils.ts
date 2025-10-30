@@ -1,13 +1,10 @@
 /* eslint-disable spellcheck/spell-checker */
-import { ClientFunction } from 'testcafe';
 import {
   removeStylesheetRulesFromPage,
 } from './domUtils';
 
-export async function clearTestPage(testController: TestController): Promise<void> {
-  const shadowDom = process.env.shadowDom === 'true';
-
-  const clearTestPageFn = ClientFunction(() => {
+export async function clearTestPage(t: TestController): Promise<void> {
+  await t.eval(() => {
     const widgetSelector = '.dx-widget';
     const $elements = $(widgetSelector)
       .filter((_, element) => $(element).parents(widgetSelector).length === 0);
@@ -40,14 +37,9 @@ export async function clearTestPage(testController: TestController): Promise<voi
     `;
 
     body?.prepend(temp.firstElementChild!);
-  }, {
-    dependencies: {
-      shadowDom,
-    },
   });
 
-  await clearTestPageFn.with({ boundTestRun: testController })();
-  await removeStylesheetRulesFromPage.with({ boundTestRun: testController })();
+  await removeStylesheetRulesFromPage.with({ boundTestRun: t })();
 }
 
 export async function loadAxeCore(t: TestController): Promise<void> {
@@ -59,6 +51,7 @@ export async function loadAxeCore(t: TestController): Promise<void> {
     }
 
     const script = document.createElement('script');
+    script.id = 'axe-core-script';
     script.src = '../../../node_modules/axe-core/axe.min.js';
     // @ts-expect-error ts-error
     script.onload = resolve;
@@ -66,3 +59,36 @@ export async function loadAxeCore(t: TestController): Promise<void> {
     document.head.appendChild(script);
   }));
 }
+
+export async function loadGantt(t: TestController): Promise<void> {
+  await t.eval(() => new Promise<void>((resolve, reject) => {
+    if (document.getElementById('dx-gantt-script')) {
+      resolve();
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.id = 'dx-gantt-script';
+    script.src = '../../../packages/devextreme/artifacts/js/dx-gantt.min.js';
+    // @ts-expect-error ts-error
+    script.onload = resolve;
+    script.onerror = reject;
+    document.head.appendChild(script);
+  }));
+}
+
+export const addShadowRootTree = async (t: TestController): Promise<void> => {
+  await t.eval(() => {
+    const root = document.querySelector('#parentContainer') as HTMLElement;
+    const { childNodes } = root;
+
+    if (!root.shadowRoot) {
+      root.attachShadow({ mode: 'open' });
+    }
+
+    const shadowContainer = document.createElement('div');
+    shadowContainer.append(...Array.from(childNodes));
+
+    root.shadowRoot!.appendChild(shadowContainer);
+  });
+};

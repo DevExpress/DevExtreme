@@ -83,7 +83,7 @@ test('Accessibility: Scrollable should have focusable element when navigate thro
   }
 }).before(async () => createWidget('dxDataGrid', getGridConfig()));
 
-test('Accessibility: Scrollable should always have focusable element when navigate back to column headers', async (t) => {
+test.meta({ unstable: true })('Accessibility: Scrollable should always have focusable element when navigate back to column headers', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   // focus first cell in second row

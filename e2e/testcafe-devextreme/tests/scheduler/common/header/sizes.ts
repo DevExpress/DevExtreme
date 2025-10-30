@@ -1,11 +1,11 @@
-import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { compareScreenshot, createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { changeTheme } from '../../../../helpers/changeTheme';
 import { Themes } from '../../../../helpers/themes';
 
-fixture.disablePageReloads`Scheduler header sizes`
+fixture`Scheduler header sizes`
   .page(url(__dirname, '../../../container.html'));
 
 const buttons = Array.from({ length: 4 }).map((_, index) => ({
@@ -16,10 +16,16 @@ const buttons = Array.from({ length: 4 }).map((_, index) => ({
 }));
 
 test('items inside toolbar menu should stretch', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const scheduler = new Scheduler('#container');
 
   await t.click(scheduler.toolbar.menuButton);
-  await t.expect(await compareScreenshot(t, 'scheduler-toolbar-menu.png', scheduler.element)).ok();
+
+  await takeScreenshot('scheduler-toolbar-menu.png');
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
 }).before(async () => {
   await changeTheme('fluent.blue.light');
   return createWidget('dxScheduler', {

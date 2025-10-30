@@ -7,7 +7,7 @@ const clearLocalStorage = ClientFunction(() => {
   (window as any).localStorage.removeItem('mystate');
 });
 
-fixture.disablePageReloads`Focused row`
+fixture`Focused row`
   .page(url(__dirname, '../../container.html'));
 
 const getItems = (): Record<string, unknown>[] => {

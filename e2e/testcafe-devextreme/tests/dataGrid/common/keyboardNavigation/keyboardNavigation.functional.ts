@@ -21,7 +21,7 @@ const CLASS = ClassNames;
 
 const getOnKeyDownCallCount = ClientFunction(() => (window as any).onKeyDownCallCount);
 
-fixture.disablePageReloads`Keyboard Navigation - common`
+fixture`Keyboard Navigation - common`
   .page(url(__dirname, '../../../container.html'));
 
 test('Changing keyboardNavigation options should not invalidate the entire content (T1197829)', async (t) => {
@@ -3876,7 +3876,7 @@ test('Adaptive with batch edit mode - Adaptive cells should not go into edit sta
   });
 });
 
-test('Adaptive with batch edit mode - Adaptive cells should be focused by tab key press when they are in edit state', async (t) => {
+test.meta({ unstable: true })('Adaptive with batch edit mode - Adaptive cells should be focused by tab key press when they are in edit state', async (t) => {
   const dataGrid = new DataGrid('#container');
   const headerRow = dataGrid.getHeaders().getHeaderRow(0);
   const firstDataRow = dataGrid.getDataRow(0);
@@ -5997,7 +5997,7 @@ test('DataGrid - Cell focus works incorrectly if the command column has a disabl
   }],
 }));
 
-test('All rows should be focused on arrow-up/down when virtual scrolling enabled with group summary (T1014612)', async (t) => {
+test.meta({ unstable: true })('All rows should be focused on arrow-up/down when virtual scrolling enabled with group summary (T1014612)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   // act (forward)

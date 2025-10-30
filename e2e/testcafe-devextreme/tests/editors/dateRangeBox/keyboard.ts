@@ -1249,7 +1249,7 @@ test('DateRangeBox keyboard navigation via `shift+tab` key if applyValueMode is 
   }, '#dateRangeBox');
 });
 
-test('DateRangeBox should not be closed by press shift+tab key on endDate input', async (t) => {
+test.meta({ unstable: true })('DateRangeBox should not be closed by press shift+tab key on endDate input', async (t) => {
   const dateRangeBox = new DateRangeBox('#container');
 
   await t

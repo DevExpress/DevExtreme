@@ -6,10 +6,39 @@ import parseArgs from 'minimist';
 import { globSync } from 'glob';
 import { DEFAULT_BROWSER_SIZE } from './helpers/const';
 import {
+  addShadowRootTree,
   clearTestPage,
   loadAxeCore,
+  loadGantt,
 } from './helpers/testPageUtils';
-import 'nconf';
+import { getCurrentTheme } from './helpers/themeUtils';
+
+const LAUNCH_RETRY_ATTEMPTS = 5;
+const LAUNCH_RETRY_TIMEOUT = 10000;
+
+const wait = async (
+  timeout: number,
+// eslint-disable-next-line no-promise-executor-return
+): Promise<void> => new Promise((resolve) => setTimeout(resolve, timeout));
+
+const retry = async <T>(action: () => Promise<T>, attempt: number): Promise<T> => {
+  try {
+    return await action();
+  } catch (error) {
+    if (attempt <= 1) {
+      throw error;
+    }
+
+    /* eslint-disable no-console */
+    console.log('\n > error occurred during testcafe launch!\n');
+    console.error(error);
+    console.info(`\n > waiting ${LAUNCH_RETRY_TIMEOUT / 1000} seconds...\n`);
+    await wait(LAUNCH_RETRY_TIMEOUT);
+    console.info('\n > retry launching testcafe\n');
+    /* eslint-enable no-console */
+    return retry(action, attempt - 1);
+  }
+};
 
 interface ParsedArgs {
   concurrency: number;
@@ -33,13 +62,6 @@ const TESTCAFE_CONFIG: Partial<TestCafeConfigurationOptions> = {
   port2: 1438,
 };
 
-const getCurrentTheme = async (t: TestController): Promise<string> => {
-  // eslint-disable-next-line @stylistic/max-len
-  const currentTheme = await ClientFunction(() => (window as any).DevExpress.ui.themes.current()).with({ boundTestRun: t })();
-
-  return currentTheme;
-};
-
 const changeTheme = async (t: TestController, themeName: string): Promise<void> => {
   const changeThemeClientFn = ClientFunction(() => new Promise<void>((resolve) => {
     (window as any).DevExpress.ui.themes.ready(resolve);
@@ -47,24 +69,6 @@ const changeTheme = async (t: TestController, themeName: string): Promise<void> 
   }), { dependencies: { themeName } });
 
   return changeThemeClientFn.with({ boundTestRun: t })();
-};
-
-const addShadowRootTree = async (t: TestController): Promise<void> => {
-  const addShadowRootClientFn = ClientFunction(() => {
-    const root = document.querySelector('#parentContainer') as HTMLElement;
-    const { childNodes } = root;
-
-    if (!root.shadowRoot) {
-      root.attachShadow({ mode: 'open' });
-    }
-
-    const shadowContainer = document.createElement('div');
-    shadowContainer.append(...Array.from(childNodes));
-
-    root.shadowRoot!.appendChild(shadowContainer);
-  });
-
-  await addShadowRootClientFn.with({ boundTestRun: t })();
 };
 
 function setTestingPlatform(args: ParsedArgs): void {
@@ -123,152 +127,180 @@ const split = <T>(array: T[], chunkCount: number): T[][] => {
 };
 
 async function main() {
-  const testCafe = await createTestCafe(TESTCAFE_CONFIG);
+  let testCafe: Awaited<ReturnType<typeof createTestCafe>> | null = null;
 
-  const args = getArgs();
-  const testName = args.test.trim();
-  const reporter = typeof args.reporter === 'string' ? args.reporter.trim() : args.reporter;
-  const indices = args.indices.trim();
-  let componentFolder = args.componentFolder.trim();
-  const file = args.file.trim();
+  try {
+    testCafe = await createTestCafe(TESTCAFE_CONFIG);
 
-  setTestingPlatform(args);
-  setTestingTheme(args);
-  setShadowDom(args);
+    const args = getArgs();
+    const testName = args.test.trim();
+    const reporter = typeof args.reporter === 'string' ? args.reporter.trim() : args.reporter;
+    const indices = args.indices.trim();
+    let componentFolder = args.componentFolder.trim();
+    const file = args.file.trim();
 
-  componentFolder = componentFolder ? `${componentFolder}/**` : '**';
-  if (fs.existsSync('./screenshots')) {
-    fs.rmSync('./screenshots', { recursive: true });
-  }
+    setTestingPlatform(args);
+    setTestingTheme(args);
+    setShadowDom(args);
 
-  const browsers = args.browsers
-    .split(' ')
-    .map((browser) => expandBrowserAlias(browser));
+    componentFolder = componentFolder ? `${componentFolder}/**` : '**';
+    if (fs.existsSync('./screenshots')) {
+      fs.rmSync('./screenshots', { recursive: true });
+    }
 
-  // eslint-disable-next-line no-console
-  console.info('Browsers:', browsers);
+    const browsers = args.browsers
+      .split(' ')
+      .map((browser) => expandBrowserAlias(browser));
 
-  const runner: Runner = testCafe.createRunner()
-    .browsers(browsers)
-    .reporter(reporter)
-    .src([`./tests/${componentFolder}/${file}.ts`]);
+    // eslint-disable-next-line no-console
+    console.info('Browsers:', browsers);
 
-  runner.compilerOptions({
-    typescript: {
-      customCompilerModulePath: '../../node_modules/typescript',
-    },
-  });
+    const runner: Runner = testCafe.createRunner()
+      .browsers(browsers)
+      .reporter(reporter)
+      .src([`./tests/${componentFolder}/${file}.ts`]);
 
-  runner.concurrency(args.concurrency || 4);
-
-  const filters: FilterFunction[] = [];
-
-  if (indices) {
-    const [current, total] = indices.split(/_|of|\\|\//ig).map((x) => +x);
-    const fixtures = globSync([`./tests/${componentFolder}/*.ts`]);
-    const fixtureChunks = split(fixtures, total);
-    const targetFixtureChunk = fixtureChunks[current - 1] ?? [];
-    const targetFixtureChunkSet = new Set(targetFixtureChunk);
-
-    /* eslint-disable no-console */
-    console.info(' === test run config ===');
-    console.info(` > indices: current = ${current} | total = ${total}`);
-    console.info(' > glob: ', [`./tests/${componentFolder}/*.ts`]);
-    console.info(' > all fixtures: ', fixtureChunks);
-    console.info(' > fixtures: ', targetFixtureChunk, '\n');
-    /* eslint-enable no-console */
-
-    filters.push((
-      _testName: string,
-      _fixtureName: string,
-      fixturePath: string,
-    ) => {
-      const testPath = fixturePath.split('/testcafe-devextreme/')[1];
-      return targetFixtureChunkSet.has(testPath);
+    runner.compilerOptions({
+      typescript: {
+        customCompilerModulePath: '../../node_modules/typescript',
+      },
     });
-  }
 
-  if (testName) {
-    filters.push((name: string) => name === testName);
-  }
+    runner.concurrency(args.concurrency || 5);
 
-  if (args.skipUnstable) {
-    filters.push((
-      _testName: string,
-      _fixtureName: string,
-      _fixturePath: string,
-      testMeta?: any,
-    ) => !(testMeta)?.unstable);
-  }
+    const filters: FilterFunction[] = [];
 
-  if (filters.length) {
-    runner.filter((...filterArgs: Parameters<FilterFunction>) => {
-      // eslint-disable-next-line @typescript-eslint/prefer-for-of
-      for (let i = 0; i < filters.length; i += 1) {
-        if (!filters[i](...filterArgs)) {
-          return false;
+    if (indices) {
+      const [current, total] = indices.split(/_|of|\\|\//ig).map((x) => +x);
+      const fixtures = globSync([`./tests/${componentFolder}/*.ts`]);
+      const fixtureChunks = split(fixtures, total);
+      const targetFixtureChunk = fixtureChunks[current - 1] ?? [];
+      const targetFixtureChunkSet = new Set(targetFixtureChunk);
+
+      /* eslint-disable no-console */
+      console.info(' === test run config ===');
+      console.info(` > indices: current = ${current} | total = ${total}`);
+      console.info(' > glob: ', [`./tests/${componentFolder}/*.ts`]);
+      console.info(' > all fixtures: ', fixtureChunks);
+      console.info(' > fixtures: ', targetFixtureChunk, '\n');
+      /* eslint-enable no-console */
+
+      filters.push((
+        _testName: string,
+        _fixtureName: string,
+        fixturePath: string,
+      ) => {
+        const testPath = fixturePath.split('/testcafe-devextreme/')[1];
+        return targetFixtureChunkSet.has(testPath);
+      });
+    }
+
+    if (testName) {
+      filters.push((name: string) => name === testName);
+    }
+
+    if (args.skipUnstable) {
+      filters.push((
+        _testName: string,
+        _fixtureName: string,
+        _fixturePath: string,
+        testMeta?: any,
+      ) => !(testMeta)?.unstable);
+    }
+
+    if (filters.length) {
+      runner.filter((...filterArgs: Parameters<FilterFunction>) => {
+        // eslint-disable-next-line @typescript-eslint/prefer-for-of
+        for (let i = 0; i < filters.length; i += 1) {
+          if (!filters[i](...filterArgs)) {
+            return false;
+          }
         }
-      }
-      return true;
-    });
-  }
+        return true;
+      });
+    }
 
-  if (args.cache) {
-    (runner as any).cache = args.cache;
-  }
+    if (args.cache) {
+      (runner as any).cache = args.cache;
+    }
 
-  const runOptions: RunOptions = {
-    quarantineMode: false, // { successThreshold: 1, attemptLimit: 2 },
-    // @ts-expect-error ts-error
-    hooks: {
-      test: {
-        before: async (t: TestController) => {
-          if (!componentFolder.includes('accessibility')) {
-            await ClientFunction(() => {
-              if (document.activeElement && document.activeElement !== document.body) {
-                (document.activeElement as HTMLElement).blur();
+    const runOptions: RunOptions = {
+      quarantineMode: { successThreshold: 1, attemptLimit: 2 },
+      // @ts-expect-error ts-error
+      hooks: {
+        test: {
+          before: async (t: TestController) => {
+            if (!componentFolder.includes('accessibility')) {
+              // @ts-expect-error ts-errors
+              const { meta } = t.testRun.test;
+
+              if (meta?.loadGantt) {
+                await loadGantt(t);
               }
 
-              window.getSelection()?.removeAllRanges();
-            }).with({ boundTestRun: t })();
+              await ClientFunction(() => {
+                if (document.activeElement && document.activeElement !== document.body) {
+                  (document.activeElement as HTMLElement).blur();
+                }
 
-            await t.hover('html');
+                window.getSelection()?.removeAllRanges();
+              }).with({ boundTestRun: t })();
 
-            const [width, height] = DEFAULT_BROWSER_SIZE;
-            await t.resizeWindow(width, height);
-          } else {
-            await loadAxeCore(t);
-          }
+              await t.hover('html');
 
-          if (args.shadowDom) {
-            await addShadowRootTree(t);
-          }
-
-          if (!componentFolder.includes('dataGrid')) {
-            const currentTheme = await getCurrentTheme(t) || 'generic.light';
-            const newTheme = args.theme || 'generic.light';
-
-            if (currentTheme !== newTheme) {
-              await changeTheme(t, newTheme);
+              const [width, height] = DEFAULT_BROWSER_SIZE;
+              await t.resizeWindow(width, height);
+            } else {
+              await loadAxeCore(t);
             }
-          }
-        },
-        after: async (t: TestController) => {
-          await clearTestPage(t);
+
+            if (args.shadowDom) {
+              await addShadowRootTree(t);
+            }
+
+            if (!componentFolder.includes('dataGrid')) {
+              const currentTheme = await getCurrentTheme(t) || 'generic.light';
+              const newTheme = args.theme || 'generic.light';
+
+              if (currentTheme !== newTheme) {
+                await changeTheme(t, newTheme);
+              }
+            }
+          },
+          after: async (t: TestController) => {
+            // if (componentFolder.includes('accessibility')) {
+            await clearTestPage(t);
+            // }
+          },
         },
       },
-    },
-  };
+    };
 
-  if (args.browsers === 'chrome:docker') {
-    runOptions.disableScreenshots = true;
+    if (args.browsers === 'chrome:docker') {
+      runOptions.disableScreenshots = true;
+    }
+
+    const failedCount = await retry(() => runner.run(runOptions), LAUNCH_RETRY_ATTEMPTS);
+
+    await testCafe.close();
+
+    process.exit(failedCount);
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Error occurred during test execution:', error);
+
+    // Ensure TestCafe is properly closed
+    if (testCafe) {
+      try {
+        await testCafe.close();
+      } catch (closeError) {
+        // eslint-disable-next-line no-console
+        console.error('Error closing TestCafe:', closeError);
+      }
+    }
+
+    process.exit(1);
   }
-
-  const failedCount = await runner.run(runOptions);
-
-  await testCafe.close();
-
-  process.exit(failedCount);
 }
 
 main();

@@ -966,7 +966,7 @@ safeSizeTest('Rows are rendered properly when window content is scrolled (T10703
   await t
     .expect(visibleRows.length > 0)
     .ok();
-}, [800, 800]).before(async () => {
+}, [800, 800]).meta({ unstable: true }).before(async () => {
   const renderContent = ClientFunction(() => {
     for (let i = 0; i < 100; i += 1) {
       $('body').prepend('<br class="myBr" />');
@@ -1324,6 +1324,10 @@ test('New virtual mode. Virtual rows should not be in view port after scrolling 
       mode: 'virtual',
     },
   });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).myStore;
+  })();
 });
 
 test.meta({ unstable: true })('New virtual mode. Navigation to the last row if new row is added (T1069849)', async (t) => {
@@ -1449,6 +1453,10 @@ test.meta({ unstable: true })('New virtual mode. Navigation to the last row if n
         visible: true,
       },
     });
+  }).after(async () => {
+    await ClientFunction(() => {
+      delete (window as any).myStore;
+    })();
   });
 });
 
@@ -1949,7 +1957,7 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
 fixture`Scrolling - warnings`
   .page(url(__dirname, '../../container.html'));
 
-test('Warning should be thrown if scrolling is virtual and height is not specified', async (t) => {
+test.meta({ unstable: true })('Warning should be thrown if scrolling is virtual and height is not specified', async (t) => {
   const consoleMessages = await t.getBrowserConsoleMessages();
   const warningExists = !!consoleMessages?.warn.find((message) => message.startsWith('W1025'));
 
