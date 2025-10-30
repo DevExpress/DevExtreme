@@ -288,6 +288,13 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
 
     .dx-scheduler-days-of-week-buttons {
       height: $generic-toolbar-height;
+
+      .dx-button {
+        width: $generic-scheduler-days-of-week-button-size;
+        height: $generic-scheduler-days-of-week-button-size;
+        min-width: $generic-scheduler-days-of-week-button-size;
+        min-height: $generic-scheduler-days-of-week-button-size;
+      }
     }
 
     .dx-scheduler-form-recurrence-end-group .dx-field-item-label {
