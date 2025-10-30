@@ -9334,6 +9334,7 @@ QUnit.module('Customization of the command columns', {
         setupModule.apply(this, [['adaptivity']]);
     },
     afterEach: function() {
+        teardownModule.apply(this);
         this.dispose && this.dispose();
     }
 }, function() {
