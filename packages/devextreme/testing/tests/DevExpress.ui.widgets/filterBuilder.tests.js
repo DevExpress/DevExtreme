@@ -1,7 +1,5 @@
 import $ from 'jquery';
 
-import 'generic_light.css!';
-
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="container"></div><div id="container1"></div>');
 });

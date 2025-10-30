@@ -6,7 +6,7 @@ import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
 import '__internal/scheduler/m_scheduler';
 import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(() => initTestMarkup());
 

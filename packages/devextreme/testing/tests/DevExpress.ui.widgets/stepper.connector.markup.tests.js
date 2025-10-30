@@ -8,9 +8,6 @@ import Connector, {
     STEPPER_CONNECTOR_VALUE_CLASS,
 } from '__internal/ui/stepper/connector';
 
-import 'generic_light.css!';
-
-
 QUnit.testStart(() => {
     const markup = '<div id="connector"></div>';
 

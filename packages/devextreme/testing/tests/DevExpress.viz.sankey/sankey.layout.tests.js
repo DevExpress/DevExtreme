@@ -5,7 +5,7 @@ import {
 } from '../../helpers/vizMocks.js';
 import { createSankey, environment } from './commonParts/common.js';
 import titleModule from 'viz/core/title';
-import exportModule from 'viz/core/export';
+import exportModule from '__internal/viz/core/exportModule';
 import dxSankey from '__internal/viz/sankey/sankey';
 
 const TitleOrig = titleModule.Title;

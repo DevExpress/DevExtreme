@@ -7,7 +7,7 @@ QUnit.testStart(function() {
             </div>');
 });
 
-require('generic_light.css!');
+require('fluent_blue_light.css!');
 require('ui/drop_down_button');
 
 const noop = require('core/utils/common').noop;
