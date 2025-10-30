@@ -207,7 +207,7 @@ export const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) =
   }
 
   protected getHeaderDefaultTemplate($container: dxElementWrapper, options): void {
-    if (isAIColumnHeader(options.column, options.rowType)) {
+    if (isAIColumnHeader(options.column)) {
       this.renderAIHeader($container, options.column);
       return;
     }
