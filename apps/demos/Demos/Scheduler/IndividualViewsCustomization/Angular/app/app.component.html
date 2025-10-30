@@ -24,22 +24,22 @@
   ></dxi-view>
   <dxi-view type="month"></dxi-view>
 
-  <dxi-resource
+  <dxi-scheduler-resource
     fieldExpr="priorityId"
     [allowMultiple]="false"
     [dataSource]="priorityData"
     label="Priority"
     icon="tags"
   >
-  </dxi-resource>
+  </dxi-scheduler-resource>
 
-  <dxi-resource
+  <dxi-scheduler-resource
     fieldExpr="typeId"
     [allowMultiple]="false"
     [dataSource]="typeData"
     label="Type"
   >
-  </dxi-resource>
+  </dxi-scheduler-resource>
 
   <div *dxTemplate="let data of 'dateCellTemplate'">
     <div class="name">{{
