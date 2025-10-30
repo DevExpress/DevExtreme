@@ -15,7 +15,7 @@ function formatWarningMessage(template: string, args?: TemplateArgs): string {
     );
   }
 
-  return (Object.entries(args) as Array<[string, TemplatePrimitive]>).reduce<string>(
+  return Object.entries(args).reduce<string>(
     (message, [key, value]) => replacePlaceholder(message, `{${key}}`, String(value)),
     template,
   );
