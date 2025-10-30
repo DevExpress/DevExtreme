@@ -12,4 +12,4 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-dropDownEditorsNames.slice(Math.floor(dropDownEditorsNames.length * 0.75)).forEach(widgetTestModule);
+dropDownEditorsNames.slice(6, 8).forEach(widgetTestModule);
