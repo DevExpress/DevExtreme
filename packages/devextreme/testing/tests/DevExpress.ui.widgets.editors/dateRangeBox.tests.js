@@ -206,12 +206,12 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 width: undefined,
             };
 
-            const options = {};
+            const actualOptions = {};
             Object.keys(expectedOptions).forEach((key) => {
-                options[key] = this.instance.option(key);
+                actualOptions[key] = this.instance.option(key);
             });
 
-            assert.deepEqual(options, expectedOptions, 'default value is correct');
+            assert.deepEqual(actualOptions, expectedOptions, 'default value is correct');
         });
 
         const expectedDateBoxOptions = {
@@ -279,22 +279,22 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             };
             const startDateBox = getStartDateBoxInstance(this.instance);
 
-            const options = {};
+            const actualOptions = {};
             Object.keys(expectedOptions).forEach((key) => {
                 if(key === 'dropDownOptions') {
                     Object.entries(startDateBox.option(key)).forEach(([dropDownOptionKey, dropDownOptionValue]) => {
                         assert.deepEqual(dropDownOptionValue, startDateBox.option(`${key}.${dropDownOptionKey}`), `${key}.${dropDownOptionKey} default value is correct`);
                     });
-                    options[key] = {};
+                    actualOptions[key] = {};
                     Object.keys(expectedOptions[key]).forEach((dropDownOptionKey) => {
-                        options[key][dropDownOptionKey] = startDateBox.option(`${key}.${dropDownOptionKey}`);
+                        actualOptions[key][dropDownOptionKey] = startDateBox.option(`${key}.${dropDownOptionKey}`);
                     });
                 } else {
-                    options[key] = startDateBox.option(key);
+                    actualOptions[key] = startDateBox.option(key);
                 }
             });
 
-            assert.deepEqual(options, expectedOptions, 'default value is correct');
+            assert.deepEqual(actualOptions, expectedOptions, 'default value is correct');
         });
 
         QUnit.test('EndDateBox has expected defaults', function(assert) {
@@ -310,12 +310,12 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             };
             const endDateBox = getEndDateBoxInstance(this.instance);
 
-            const options = {};
+            const actualOptions = {};
             Object.keys(expectedOptions).forEach((key) => {
-                options[key] = endDateBox.option(key);
+                actualOptions[key] = endDateBox.option(key);
             });
 
-            assert.deepEqual(options, expectedOptions, 'default value is correct');
+            assert.deepEqual(actualOptions, expectedOptions, 'default value is correct');
         });
     });
 
@@ -359,17 +359,17 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             };
             const startDateBox = getStartDateBoxInstance(this.instance);
 
-            const options = {};
+            const actualOptions = {};
             Object.keys(initialDateRangeBoxOptions).forEach((key) => {
-                options[key] = startDateBox.option(key);
+                actualOptions[key] = startDateBox.option(key);
                 expectedOptions[key] = isDefined(expectedOptions[key]) ? expectedOptions[key] : undefined;
             });
 
             Object.keys(expectedOptions).forEach((key) => {
-                options[key] = startDateBox.option(key);
+                actualOptions[key] = startDateBox.option(key);
             });
 
-            assert.deepEqual(options, expectedOptions, 'value is correct');
+            assert.deepEqual(actualOptions, expectedOptions, 'value is correct');
         });
 
         QUnit.test('EndDateBox has expected settings', function(assert) {
@@ -392,16 +392,16 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             };
             const endDateBox = getEndDateBoxInstance(this.instance);
 
-            const options = {};
+            const actualOptions = {};
             Object.keys(initialDateRangeBoxOptions).forEach((key) => {
-                options[key] = endDateBox.option(key);
+                actualOptions[key] = endDateBox.option(key);
                 expectedOptions[key] = isDefined(expectedOptions[key]) ? expectedOptions[key] : undefined;
             });
             Object.keys(expectedOptions).forEach((key) => {
-                options[key] = endDateBox.option(key);
+                actualOptions[key] = endDateBox.option(key);
             });
 
-            assert.deepEqual(options, expectedOptions, 'value is correct');
+            assert.deepEqual(actualOptions, expectedOptions, 'value is correct');
         });
     });
 });
