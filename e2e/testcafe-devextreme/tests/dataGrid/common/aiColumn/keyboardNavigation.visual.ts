@@ -21,13 +21,13 @@ test('Check keyboard navigation for AI column', async (t) => {
   await t.pressKey('tab');
 
   // assert
-  await t.expect(headerRow.getHeaderCell(1).isFocused).ok();
+  await t.expect(headerRow.getCommandCell(1).isFocused).ok();
 
   // act
   await t.pressKey('tab');
 
   // assert
-  await t.expect(headerRow.getHeaderCell(1).getAIDropDownButton().isFocused).ok();
+  await t.expect(headerRow.getCommandCell(1).getAIDropDownButton().isFocused).ok();
 
   await takeScreenshot('datagrid__ai-column__focused-dropdown-button.png', dataGrid.element);
 
