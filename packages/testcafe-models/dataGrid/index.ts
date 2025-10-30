@@ -171,7 +171,6 @@ export default class DataGrid extends GridCore {
     return this.getRowsView().find('td:not([class])');
   }
 
-
   getDataRow(index: number): DataRow {
     return new DataRow(this.element.find(`.${CLASS.dataRow}[aria-rowindex='${index + 1}']`), this.getName());
   }
