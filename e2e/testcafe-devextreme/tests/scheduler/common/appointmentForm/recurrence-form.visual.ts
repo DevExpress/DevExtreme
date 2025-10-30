@@ -705,19 +705,18 @@ test.clientScripts([
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
-  await changeTheme(theme);
-  return createWidget('dxScheduler', {
-    dataSource: [],
-    views: ['week'],
-    currentView: 'week',
-    currentDate: new Date(2021, 2, 25),
-    editing: {
-      form: {
-        iconsShowMode: 'both',
-      },
+}).before(async () => createWidget('dxScheduler', {
+  dataSource: [],
+  views: ['week'],
+  currentView: 'week',
+  currentDate: new Date(2021, 2, 25),
+  editing: {
+    form: {
+      iconsShowMode: 'both',
     },
-  });
-}).after(async () => {
-  await changeTheme('generic.light');
+  },
+})).after(async () => {
+  await ClientFunction(() => {
+    (window as any).MockDate.reset();
+  })();
 });
