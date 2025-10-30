@@ -1168,5 +1168,9 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
       $generic-base-icon-size,
       0
     );
+
+    &.dx-state-focused {
+      outline-offset: -2px;
+    }
   }
 }
