@@ -1,5 +1,7 @@
 import type { BaseNestedOption, INestedOptionContainer } from './nested-option';
 import { DEPRECATED_CONFIG_COMPONENTS } from './deprecated-config-map';
+import WARNING_CODES from './warning-codes';
+import { logWarning } from './warning-helper';
 
 const warnedUsages = new Set<string>();
 
@@ -65,13 +67,10 @@ export function warnIfLegacyNestedComponent(nestedOption: BaseNestedOption, host
 
   warnedUsages.add(cacheKey);
 
-  if (typeof console !== 'undefined' && typeof console.warn === 'function') {
-    console.warn(
-      `You are using the legacy ${legacySelector} configuration component. `
-      + `We recommend upgrading to the new ${replacement} configuration component.`,
-    );
-    // TODO: link to docs article, when available
-  }
+  logWarning(
+    WARNING_CODES.LEGACY_CONFIG_COMPONENT_USED,
+    { legacySelector, replacement },
+  );
 }
 
 function toKebabCase(value: string): string {
