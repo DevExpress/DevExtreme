@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import { dropDownEditorsList } from '../../helpers/widgetsList.js';
 
-import { widgetTestModule } from './dropDownParts/dropDownOptions.tests.js';
+import { widgetTestModule, WIDGET_AMOUNT_PER_FILE } from './dropDownParts/dropDownOptions.tests.js';
 
 const dropDownEditorsNames = Object.keys(dropDownEditorsList);
 
@@ -12,4 +12,4 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-dropDownEditorsNames.slice(6, 8).forEach(widgetTestModule);
+dropDownEditorsNames.slice(WIDGET_AMOUNT_PER_FILE * 3, WIDGET_AMOUNT_PER_FILE * 4).forEach(widgetTestModule);

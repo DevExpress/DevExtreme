@@ -409,3 +409,5 @@ export const widgetTestModule = widgetName => {
         });
     });
 };
+
+export const WIDGET_AMOUNT_PER_FILE = 2;
