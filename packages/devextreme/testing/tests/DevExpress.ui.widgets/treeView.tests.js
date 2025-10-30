@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import 'ui/tree_view';
 
 QUnit.testStart(function() {
