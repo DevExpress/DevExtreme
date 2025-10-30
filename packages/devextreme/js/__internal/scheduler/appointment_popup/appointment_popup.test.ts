@@ -1386,6 +1386,28 @@ describe('Appointment Popup Form', () => {
     expect(data[0].Subject).toBe('qwerty');
     expect(data[0].text).toBeUndefined();
   });
+
+  it('should display "(No subject)" for appointments without title', async () => {
+    setupSchedulerTestEnvironment({ height: 200 });
+    const appointmentWithoutTitle = {
+      startDate: new Date(2017, 4, 9, 9, 30),
+      endDate: new Date(2017, 4, 9, 11),
+      text: '',
+    };
+
+    const { scheduler, POM } = await createScheduler({
+      ...getDefaultConfig(),
+      dataSource: [appointmentWithoutTitle],
+    });
+
+    const appointment = POM.getAppointment();
+    expect(appointment.getText()).toBe('(No subject)');
+
+    scheduler.showAppointmentPopup(appointmentWithoutTitle);
+
+    const titleInput = POM.popup.getInputByLabel('Subject');
+    expect(titleInput.value).toBe('');
+  });
 });
 
 describe('Appointment Popup Content', () => {
