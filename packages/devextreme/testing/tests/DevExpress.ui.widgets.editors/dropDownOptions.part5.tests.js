@@ -13,3 +13,7 @@ QUnit.testStart(function() {
 });
 
 dropDownEditorsNames.slice(WIDGET_AMOUNT_PER_FILE * 4).forEach(widgetTestModule);
+
+QUnit.test('editors splitted by WIDGET_AMOUNT_PER_FILE=2', function(assert) {
+    assert.strictEqual(dropDownEditorsNames.length <= WIDGET_AMOUNT_PER_FILE * 5, true, 'amount of tested editors is correct, if not -- move extras to separate file');
+});
