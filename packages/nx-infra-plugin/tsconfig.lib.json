@@ -2,7 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "outDir": "./prod",
+    "outDir": "./dist",
     "declaration": true,
     "types": ["node"],
     "skipLibCheck": true

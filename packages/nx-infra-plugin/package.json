@@ -3,11 +3,11 @@
   "version": "0.0.1",
   "type": "commonjs",
   "private": true,
-  "executors": "./prod/executors.json",
+  "executors": "./dist/executors.json",
   "exports": {
     ".": {
-      "require": "./prod/src/index.js",
-      "types": "./prod/src/index.d.ts"
+      "require": "./dist/src/index.js",
+      "types": "./dist/src/index.d.ts"
     },
     "./package.json": "./package.json"
   },
@@ -23,6 +23,7 @@
     "ts-jest": "29.1.3"
   },
   "scripts": {
+    "postinstall": "pnpm run build",
     "format:check": "prettier --check .",
     "format": "prettier --write .",
     "build": "pnpm --workspace-root nx build devextreme-nx-infra-plugin",

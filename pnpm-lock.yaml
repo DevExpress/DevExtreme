@@ -1935,6 +1935,9 @@ importers:
       devextreme-metadata:
         specifier: workspace:*
         version: link:../devextreme-metadata
+      devextreme-nx-infra-plugin:
+        specifier: workspace:*
+        version: link:../nx-infra-plugin
       eslint:
         specifier: 'catalog:'
         version: 9.18.0(jiti@1.21.6)
