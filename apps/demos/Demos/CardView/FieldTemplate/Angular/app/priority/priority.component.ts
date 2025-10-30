@@ -8,6 +8,7 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
+  standalone: false,
   selector: 'priority',
   templateUrl: `.${modulePrefix}/priority/priority.component.html`,
   styleUrls: [`.${modulePrefix}/priority/priority.component.css`],

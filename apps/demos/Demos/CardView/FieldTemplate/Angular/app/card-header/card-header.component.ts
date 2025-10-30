@@ -7,6 +7,7 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
+  standalone: false,
   selector: 'card-header',
   templateUrl: `.${modulePrefix}/card-header/card-header.component.html`,
   styleUrls: [`.${modulePrefix}/card-header/card-header.component.css`],

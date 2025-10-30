@@ -23,6 +23,7 @@ if (window && window.config?.packageConfigPaths) {
 
 @Component({
   selector: 'demo-app',
+  standalone: false,
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
 })

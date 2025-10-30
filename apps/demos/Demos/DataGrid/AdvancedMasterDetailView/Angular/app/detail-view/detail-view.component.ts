@@ -11,6 +11,7 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
+  standalone: false,
   selector: 'detail-view',
   templateUrl: `.${modulePrefix && (`${modulePrefix}/detail-view`)}/detail-view.component.html`,
   styleUrls: [`.${modulePrefix && (`${modulePrefix}/detail-view`)}/detail-view.component.css`],

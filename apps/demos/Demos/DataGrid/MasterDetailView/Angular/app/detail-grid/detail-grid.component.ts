@@ -9,6 +9,7 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
+  standalone: false,
   selector: 'detail-grid',
   templateUrl: `.${modulePrefix && (`${modulePrefix}/detail-grid`)}/detail-grid.component.html`,
   providers: [Service],
