@@ -30,60 +30,65 @@ export const filter = [
   ],
 ];
 
-const fieldsMap: Record<keyof Product, Field> = {
-  Product_ID: {
+export const fields: Field[] = [
+  {
     caption: 'ID',
     dataField: 'Product_ID',
     dataType: 'number',
-  },
-  Product_Name: {
+  }, {
     dataField: 'Product_Name',
     dataType: 'string',
-  },
-  Product_Cost: {
+  }, {
     caption: 'Cost',
     dataField: 'Product_Cost',
     dataType: 'number',
     format: 'currency',
-  },
-  Product_Sale_Price: {
+  }, {
     dataField: 'Product_Sale_Price',
     caption: 'Sale Price',
     dataType: 'number',
     format: 'currency',
-  },
-  Product_Retail_Price: {
+  }, {
     dataField: 'Product_Retail_Price',
     caption: 'Retail Price',
     dataType: 'number',
     format: 'currency',
-  },
-  Product_Current_Inventory: {
+  }, {
     dataField: 'Product_Current_Inventory',
     dataType: 'number',
     caption: 'Inventory',
   },
-};
-
-export const fields: Field[] = [
-  fieldsMap.Product_ID,
-  fieldsMap.Product_Name,
-  fieldsMap.Product_Cost,
-  fieldsMap.Product_Sale_Price,
-  fieldsMap.Product_Retail_Price,
-  fieldsMap.Product_Current_Inventory,
 ];
 
 export const columns: Column[] = [
   {
-    ...fieldsMap.Product_ID,
+    caption: 'ID',
+    dataField: 'Product_ID',
+    dataType: 'number',
     width: 50,
+  }, {
+    dataField: 'Product_Name',
+    dataType: 'string',
+  }, {
+    caption: 'Cost',
+    dataField: 'Product_Cost',
+    dataType: 'number',
+    format: 'currency',
+  }, {
+    dataField: 'Product_Sale_Price',
+    caption: 'Sale Price',
+    dataType: 'number',
+    format: 'currency',
+  }, {
+    dataField: 'Product_Retail_Price',
+    caption: 'Retail Price',
+    dataType: 'number',
+    format: 'currency',
+  }, {
+    dataField: 'Product_Current_Inventory',
+    dataType: 'number',
+    caption: 'Inventory',
   },
-  fieldsMap.Product_Name,
-  fieldsMap.Product_Cost,
-  fieldsMap.Product_Sale_Price,
-  fieldsMap.Product_Retail_Price,
-  fieldsMap.Product_Current_Inventory,
 ];
 
 export const products: Product[] = [

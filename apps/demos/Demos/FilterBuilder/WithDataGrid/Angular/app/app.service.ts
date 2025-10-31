@@ -22,58 +22,66 @@ const filter: Condition = [
     ['Product_Cost', '<', 200],
   ],
 ];
-const fieldsMap: Record<keyof Product, Record<string, string>> = {
-  Product_ID: {
+
+const fields: Record<string, string>[] = [
+  {
     caption: 'ID',
     dataField: 'Product_ID',
     dataType: 'number',
-  },
-  Product_Name: {
+  }, {
     dataField: 'Product_Name',
     dataType: 'string',
-  },
-  Product_Cost: {
+  }, {
     caption: 'Cost',
     dataField: 'Product_Cost',
     dataType: 'number',
     format: 'currency',
-  },
-  Product_Sale_Price: {
+  }, {
     dataField: 'Product_Sale_Price',
     caption: 'Sale Price',
     dataType: 'number',
     format: 'currency',
-  },
-  Product_Retail_Price: {
+  }, {
     dataField: 'Product_Retail_Price',
     caption: 'Retail Price',
     dataType: 'number',
     format: 'currency',
-  },
-  Product_Current_Inventory: {
+  }, {
     dataField: 'Product_Current_Inventory',
     dataType: 'number',
     caption: 'Inventory',
   },
-};
-const fields: Record<string, string>[] = [
-  fieldsMap.Product_ID,
-  fieldsMap.Product_Name,
-  fieldsMap.Product_Cost,
-  fieldsMap.Product_Sale_Price,
-  fieldsMap.Product_Retail_Price,
-  fieldsMap.Product_Current_Inventory,
 ];
+
 const columns: Record<string, string | number>[] = [
   {
-    ...fieldsMap.Product_ID,
+    caption: 'ID',
+    dataField: 'Product_ID',
+    dataType: 'number',
     width: 50,
+  }, {
+    dataField: 'Product_Name',
+    dataType: 'string',
+  }, {
+    caption: 'Cost',
+    dataField: 'Product_Cost',
+    dataType: 'number',
+    format: 'currency',
+  }, {
+    dataField: 'Product_Sale_Price',
+    caption: 'Sale Price',
+    dataType: 'number',
+    format: 'currency',
+  }, {
+    dataField: 'Product_Retail_Price',
+    caption: 'Retail Price',
+    dataType: 'number',
+    format: 'currency',
+  }, {
+    dataField: 'Product_Current_Inventory',
+    dataType: 'number',
+    caption: 'Inventory',
   },
-  fieldsMap.Product_Name,
-  fieldsMap.Product_Cost,
-  fieldsMap.Product_Sale_Price,
-  fieldsMap.Product_Retail_Price,
-  fieldsMap.Product_Current_Inventory,
 ];
 
 const products: Product[] = [
