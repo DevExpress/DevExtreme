@@ -602,10 +602,11 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
     super._generatePointsByColumns(hasStickyColumns);
   }
 
-  protected _pointCreated(point, cellsLength, columns) {
+  protected _pointCreated(point, columns, cells?: dxElementWrapper) {
     // @ts-expect-error
     const hasStickyColumns = this._columnHeadersView?.hasStickyColumns();
-    const result = super._pointCreated(point, cellsLength, columns);
+    const result = super._pointCreated(point, columns, cells);
+    const cellsLength = cells?.length ?? columns.length;
     const needToCheckPoint = hasStickyColumns && cellsLength > 0;
 
     if (needToCheckPoint && !result) {
@@ -619,6 +620,7 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
           point,
           column,
           nextColumn,
+          cells,
         },
         this.addWidgetPrefix.bind(this),
       );
@@ -665,18 +667,21 @@ const draggingHeader = (Base: ModuleType<DraggingHeaderViewController>) => class
     return super._generatePointsByColumns(options, hasStickyColumns);
   }
 
-  protected _pointCreated(point, columns, location, sourceColumn) {
+  protected _pointCreated({
+    point, columns, location, sourceColumn, cells,
+  }) {
     // @ts-expect-error
     const hasStickyColumns = this._columnHeadersView.hasStickyColumns();
-    const $cells = this._columnHeadersView.getColumnElements();
-    const needToCheckPoint = hasStickyColumns && location === 'headers' && $cells?.length
+    const needToCheckPoint = hasStickyColumns && location === 'headers' && cells?.length
         && (!sourceColumn.fixed || sourceColumn.fixedPosition === StickyPosition.Sticky);
-    const result = super._pointCreated(point, columns, location, sourceColumn);
+    const result = super._pointCreated({
+      point, columns, location, sourceColumn,
+    });
 
     if (needToCheckPoint && !result) {
       return GridCoreStickyColumnsDom.noNeedToCreateReorderingPoint(
         point,
-        $cells,
+        cells,
         $(this._columnHeadersView.getContent()),
         this.addWidgetPrefix.bind(this),
       );
