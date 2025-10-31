@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 export type Condition = Condition[] | string | number;
 export type Fields = typeof fields;
+export type Columns = typeof columns;
 
 export interface Product {
   Product_ID: number;
@@ -21,34 +22,58 @@ const filter: Condition = [
     ['Product_Cost', '<', 200],
   ],
 ];
-const fields: Record<string, string | number>[] = [
-  {
+const fieldsMap: Record<keyof Product, Record<string, string>> = {
+  Product_ID: {
     caption: 'ID',
     dataField: 'Product_ID',
     dataType: 'number',
-  }, {
+  },
+  Product_Name: {
     dataField: 'Product_Name',
     dataType: 'string',
-  }, {
+  },
+  Product_Cost: {
     caption: 'Cost',
     dataField: 'Product_Cost',
     dataType: 'number',
     format: 'currency',
-  }, {
+  },
+  Product_Sale_Price: {
     dataField: 'Product_Sale_Price',
     caption: 'Sale Price',
     dataType: 'number',
     format: 'currency',
-  }, {
+  },
+  Product_Retail_Price: {
     dataField: 'Product_Retail_Price',
     caption: 'Retail Price',
     dataType: 'number',
     format: 'currency',
-  }, {
+  },
+  Product_Current_Inventory: {
     dataField: 'Product_Current_Inventory',
     dataType: 'number',
     caption: 'Inventory',
   },
+};
+const fields: Record<string, string>[] = [
+  fieldsMap.Product_ID,
+  fieldsMap.Product_Name,
+  fieldsMap.Product_Cost,
+  fieldsMap.Product_Sale_Price,
+  fieldsMap.Product_Retail_Price,
+  fieldsMap.Product_Current_Inventory,
+];
+const columns: Record<string, string | number>[] = [
+  {
+    ...fieldsMap.Product_ID,
+    width: 50,
+  },
+  fieldsMap.Product_Name,
+  fieldsMap.Product_Cost,
+  fieldsMap.Product_Sale_Price,
+  fieldsMap.Product_Retail_Price,
+  fieldsMap.Product_Current_Inventory,
 ];
 
 const products: Product[] = [
@@ -208,6 +233,10 @@ const products: Product[] = [
 
 @Injectable()
 export class Service {
+  getColumns(): Columns {
+    return columns;
+  }
+
   getFields(): Fields {
     return fields;
   }
