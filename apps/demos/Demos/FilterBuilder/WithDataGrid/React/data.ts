@@ -1,5 +1,25 @@
 import { DataType } from 'devextreme/common';
 
+interface Product {
+  Product_ID: number;
+  Product_Name: string;
+  Product_Cost: string;
+  Product_Sale_Price: string;
+  Product_Retail_Price: string;
+  Product_Current_Inventory: number;
+}
+
+interface Field {
+  caption?: string,
+  dataField: string,
+  dataType: DataType,
+  format?: string,
+}
+
+interface Column extends Field {
+  width?: number,
+}
+
 export const filter = [
   ['Product_Current_Inventory', '<>', 0],
   'or',
@@ -10,50 +30,61 @@ export const filter = [
   ],
 ];
 
-export const fields: {
-  caption?: string,
-  width?: number,
-  dataField: string,
-  dataType: DataType,
-  format?: string,
-}[] = [
-  {
+const fieldsMap: Record<keyof Product, Field> = {
+  Product_ID: {
     caption: 'ID',
     dataField: 'Product_ID',
     dataType: 'number',
-  }, {
+  },
+  Product_Name: {
     dataField: 'Product_Name',
     dataType: 'string',
-  }, {
+  },
+  Product_Cost: {
     caption: 'Cost',
     dataField: 'Product_Cost',
     dataType: 'number',
     format: 'currency',
-  }, {
+  },
+  Product_Sale_Price: {
     dataField: 'Product_Sale_Price',
     caption: 'Sale Price',
     dataType: 'number',
     format: 'currency',
-  }, {
+  },
+  Product_Retail_Price: {
     dataField: 'Product_Retail_Price',
     caption: 'Retail Price',
     dataType: 'number',
     format: 'currency',
-  }, {
+  },
+  Product_Current_Inventory: {
     dataField: 'Product_Current_Inventory',
     dataType: 'number',
     caption: 'Inventory',
   },
+};
+
+export const fields: Field[] = [
+  fieldsMap.Product_ID,
+  fieldsMap.Product_Name,
+  fieldsMap.Product_Cost,
+  fieldsMap.Product_Sale_Price,
+  fieldsMap.Product_Retail_Price,
+  fieldsMap.Product_Current_Inventory,
 ];
 
-interface Product {
-  Product_ID: number;
-  Product_Name: string;
-  Product_Cost: string;
-  Product_Sale_Price: string;
-  Product_Retail_Price: string;
-  Product_Current_Inventory: number;
-}
+export const columns: Column[] = [
+  {
+    ...fieldsMap.Product_ID,
+    width: 50,
+  },
+  fieldsMap.Product_Name,
+  fieldsMap.Product_Cost,
+  fieldsMap.Product_Sale_Price,
+  fieldsMap.Product_Retail_Price,
+  fieldsMap.Product_Current_Inventory,
+];
 
 export const products: Product[] = [
   {
