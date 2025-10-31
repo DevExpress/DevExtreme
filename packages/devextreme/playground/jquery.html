@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>DevExtreme jQuery Example</title>
 
@@ -41,7 +42,58 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
+
+    <!-- <style>
+        .dx-chat {
+            /* min-height: 8.49em !important; 3.57em + 4.92em */
+            min-width: 308px !important;
+            /* overflow-y: auto; */
+        }
+
+        .dx-chat-messagelist {
+            min-height: 3.57em !important;
+            /* 50px */
+        }
+
+        .dx-chat-messagebox {
+            /* min-height: 4.92em !important; */
+            flex-shrink: 0;
+        }
+
+        .dx-texteditor-container {
+            /* min-height: 2.429em !important; */
+            /* 250px */
+            max-height: 17.85em !important;
+        }
+
+        .dx-fileuploader-container {
+            display: block !important;
+            table-layout: unset !important;
+        }
+
+        .dx-fileuploader-content {
+            display: block !important;
+        }
+
+        .dx-fileuploader-files-container {
+            padding: 0 !important;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, 17.14em);
+            gap: 8px;
+        }
+
+        .dx-fileuploader-file-container {
+            margin-bottom: 0 !important;
+        }
+    </style> -->
+
+    <!-- <style>
+        .dx-chat-textarea {
+            max-height: 16em;
+        }
+    </style> -->
 </head>
+
 <body class="dx-surface">
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
@@ -49,15 +101,200 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+
+        <div id="chat"></div>
+
         <script>
             $(() => {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: () => { alert("clicked"); }
+                const customStore = new DevExpress.data.CustomStore({
+                    key: "id",
+                    load: async () => messages,
+                    insert: async (message) => {
+                        messages.push(message);
+                        return message;
+                    }
                 });
+
+                const dataSource = new DevExpress.data.DataSource({
+                    store: customStore,
+                    paginate: false
+                });
+
+                const chat = $("#chat")
+                    .dxChat({
+                        // height: '95vh',
+                        height: 600,
+                        dataSource,
+                        editing: {
+                            allowUpdating: true,
+                        },
+                        reloadOnChange: false,
+                        user: currentUser,
+                        onMessageEntered(e) {
+                            const { message } = e;
+
+                            dataSource.store().push([
+                                {
+                                    type: "insert",
+                                    data: {
+                                        id: new DevExpress.data.Guid(),
+                                        ...message
+                                    }
+                                }
+                            ]);
+                        },
+                        onMessageUpdated(e) {
+                            const { message, text } = e;
+
+                            dataSource.store().push([
+                                {
+                                    type: "update",
+                                    key: message.id,
+                                    data: { text, isEdited: true }
+                                }
+                            ]);
+                        },
+                        fileUploaderOptions: {
+                            uploadFile: () => { },
+                        },
+                    })
+                    .dxChat("instance");
+
+                // chat._messageBox._textArea._fileUploader.option({
+                //     value: [
+                //         {
+                //             name: 'Name 1',
+                //             size: '314',
+                //         },
+                //         {
+                //             name: 'Name 1',
+                //             size: '314',
+                //         },
+                //         {
+                //             name: 'Name 1',
+                //             size: '314',
+                //         },
+                //         {
+                //             name: 'Name 1',
+                //             size: '314',
+                //         },
+                //         {
+                //             name: 'Name 1',
+                //             size: '314',
+                //         },
+                //         {
+                //             name: 'Name 1',
+                //             size: '314',
+                //         },
+                //         {
+                //             name: 'Name 1',
+                //             size: '314',
+                //         },
+                //         {
+                //             name: 'Name 1',
+                //             size: '314',
+                //         },
+                //         {
+                //             name: 'Name 1',
+                //             size: '314',
+                //         },
+                //         {
+                //             name: 'Name 1',
+                //             size: '314',
+                //         },
+                //     ],
+                // });
+                // chat._messageBox._textArea._renderInformer('One file attached and the message is a little longer');
+                // chat._messageBox._textArea.option({
+                //     value: 'fui-Primitive r1fo7sec ___14nm3au f12t0xb8 faignsn f1lerl7m fv42tz9 fivn2v3 fg8ubt8 f1popacity: 1 !important; visibility: visible !important; clip-path: none !important; filter: none !important; width: 100% !important; height: auto !important; line-height: normal !important; display: flex !important; z-index: 1500 !important; position: relative !important; transform: translate(0px, 0px) !important; background-color: rgb(255, 114, 0) !important; border: none !important; margin: auto !important; box-sizing: border-box !important; text-align: center !important; align-items: center !important; flex-direction: row !important; top: 0px !important; left: 0px !important; padding: 0.5rem !important;opacity: 1 !important; visibility: visible !important; clip-path: none !important; filter: none !important; width: 100% !important; height: auto !important; line-height: normal !important; display: flex !important; z-index: 1500 !important; position: relative !important; transform: translate(0px, 0px) !important; background-color: rgb(255, 114, 0) !important; border: none !important; margin: auto !important; box-sizing: border-box !important; text-align: center !important; align-items: center !important; flex-direction: row !important; top: 0px !important; left: 0px !important; padding: 0.5rem !important;opacity: 1 !important; visibility: visible !important; clip-path: none !important; filter: none !important; width: 100% !important; height: auto !important; line-height: normal !important; display: flex !important; z-index: 1500 !important; position: relative !important; transform: translate(0px, 0px) !important; background-color: rgb(255, 114, 0) !important; border: none !important; margin: auto !important; box-sizing: border-box !important; text-align: center !important; align-items: center !important; flex-direction: row !important; top: 0px !important; left: 0px !important; padding: 0.5rem !important;opacity: 1 !important; visibility: visible !important; clip-path: none !important; filter: none !important; width: 100% !important; height: auto !important; line-height: normal !important; display: flex !important; z-index: 1500 !important; position: relative !important; transform: translate(0px, 0px) !important; background-color: rgb(255, 114, 0) !important; border: none !important; margin: auto !important; box-sizing: border-box !important; text-align: center !important; align-items: center !important; flex-direction: row !important; top: 0px !important; left: 0px !important; padding: 0.5rem !important;opacity: 1 !important; visibility: visible !important; clip-path: none !important; filter: none !important; width: 100% !important; height: auto !important; line-height: normal !important; display: flex !important; z-index: 1500 !important; position: relative !important; transform: translate(0px, 0px) !important; background-color: rgb(255, 114, 0) !important; border: none !important; margin: auto !important; box-sizing: border-box !important; text-align: center !important; align-items: center !important; flex-direction: row !important; top: 0px !important; left: 0px !important; padding: 0.5rem !important;6s0a fug15yh f12n92bj f3y0ns1 f1b6mj93 f1h0licf fz7g6wx f1hm9qpj f7xsdqo fz2kz91 f1snnsa7 f14cnzb4 f1vzdjr3 f3bqqim f1d0nfvs fac4klo frp1kbq f12s2122 f19l72ij fcsrh55 f1o6l1dn fyo61pj f1spqul0 faegybh fkq5uzf f1x4fozf frnyhdv f10yrmu1 f1w45tcp f1dqeblh f18c6rdl f1e7lo8u f1vs2jsm f1p119jl f1nu0r7q fg0t3io ff98at f2yyzyc f1sjbqdg fyzb71r fxi2ush f1hz9qas f1vmprsu f1wogq95 f1oojlmx fpbf6y8 fy6vjqu fuo4419 fbzygsp fnuenae f7jsfu7 f1e76dpb f1lwmlrd fgtcxse f1d705n1 f1jrvuk2 f11h0gum f1tandro fpeluho fxjdbx7 fum67ou f1j64hbx f1807z01 f1q6iyvy f1wk7p4c f920ium f23pzvi fab17n6 f1romy96 f4f01mv fzxrkxx fyobyzx f5ar0yy f1k5b9d9 fc1bztw fr7rh9q fx4kq8r fali74x f1jhujhe ff8sxr fp87lad f8rhl2h f3czx58 fjehjmdfui-Primitive r1fo7sec ___14nm3au f12t0xb8 faignsn f1lerl7m fv42tz9 fivn2v3 fg8ubt8 f1p6s0a fug15yh f12n92bj f3y0ns1 f1b6mj93 f1h0licf fz7g6wx f1hm9qpj f7xsdqo fz2kz91 f1snnsa7 f14cnzb4 f1vzdjr3 f3bqqim f1d0nfvs fac4klo frp1kbq f12s2122 f19l72ij fcsrh55 f1o6l1dn fyo61pj f1spqul0 faegybh fkq5uzf f1x4fozf frnyhdv f10yrmu1 f1w45tcp f1dqeblh f18c6rdl f1e7lo8u f1vs2jsm f1p119jl f1nu0r7q fg0t3io ff98at f2yyzyc f1sjbqdg fyzb71r fxi2ush f1hz9qas f1vmprsu f1wogq95 f1oojlmx fpbf6y8 fy6vjqu fuo4419 fbzygsp fnuenae f7jsfu7 f1e76dpb f1lwmlrd fgtcxse f1d705n1 f1jrvuk2 f11h0gum f1tandro fpeluho fxjdbx7 fum67ou f1j64hbx f1807z01 f1q6iyvy f1wk7p4c f920ium f23pzvi fab17n6 f1romy96 f4f01mv fzxrkxx fyobyzx f5ar0yy f1k5b9d9 fc1bztw fr7rh9q fx4kq8r fali74x f1jhujhe ff8sxr fp87lad f8rhl2h f3czx58 fjehjmdfui-Primitive r1fo7sec ___14nm3au f12t0xb8 faignsn f1lerl7m fv42tz9 fivn2v3 fg8ubt8 f1p6s0a fug15yh f12n92bj f3y0ns1 f1b6mj93 f1h0licf fz7g6wx f1hm9qpj f7xsdqo fz2kz91 f1snnsa7 f14cnzb4 f1vzdjr3 f3bqqim f1d0nfvs fac4klo frp1kbq f12s2122 f19l72ij fcsrh55 f1o6l1dn fyo61pj f1spqul0 faegybh fkq5uzf f1x4fozf frnyhdv f10yrmu1 f1w45tcp f1dqeblh f18c6rdl f1e7lo8u f1vs2jsm f1p119jl f1nu0r7q fg0t3io ff98at f2yyzyc f1sjbqdg fyzb71r fxi2ush f1hz9qas f1vmprsu f1wogq95 f1oojlmx fpbf6y8 fy6vjqu fuo4419 fbzygsp fnuenae f7jsfu7 f1e76dpb f1lwmlrd fgtcxse f1d705n1 f1jrvuk2 f11h0gum f1tandro fpeluho fxjdbx7 fum67ou f1j64hbx f1807z01 f1q6iyvy f1wk7p4c f920ium f23pzvi fab17n6 f1romy96 f4f01mv fzxrkxx fyobyzx f5ar0yy f1k5b9d9 fc1bztw fr7rh9q fx4kq8r fali74x f1jhujhe ff8sxr fp87lad f8rhl2h f3czx58 fjehjmdfui-Primitive r1fo7sec ___14nm3au f12t0xb8 faignsn f1lerl7m fv42tz9 fivn2v3 fg8ubt8 f1p6s0a fug15yh f12n92bj f3y0ns1 f1b6mj93 f1h0licf fz7g6wx f1hm9qpj f7xsdqo fz2kz91 f1snnsa7 f14cnzb4 f1vzdjr3 f3bqqim f1d0nfvs fac4klo frp1kbq f12s2122 f19l72ij fcsrh55 f1o6l1dn fyo61pj f1spqul0 faegybh fkq5uzf f1x4fozf frnyhdv f10yrmu1 f1w45tcp f1dqeblh f18c6rdl f1e7lo8u f1vs2jsm f1p119jl f1nu0r7q fg0t3io ff98at f2yyzyc f1sjbqdg fyzb71r fxi2ush f1hz9qas f1vmprsu f1wogq95 f1oojlmx fpbf6y8 fy6vjqu fuo4419 fbzygsp fnuenae f7jsfu7 f1e76dpb f1lwmlrd fgtcxse f1d705n1 f1jrvuk2 f11h0gum f1tandro fpeluho fxjdbx7 fum67ou f1j64hbx f1807z01 f1q6iyvy f1wk7p4c f920ium f23pzvi fab17n6 f1romy96 f4f01mv fzxrkxx fyobyzx f5ar0yy f1k5b9d9 fc1bztw fr7rh9q fx4kq8r fali74x f1jhujhe ff8sxr fp87lad f8rhl2h f3czx58 fjehjmdfui-Primitive r1fo7sec ___14nm3au f12t0xb8 faignsn f1lerl7m fv42tz9 fivn2v3 fg8ubt8 f1p6s0a fug15yh f12n92bj f3y0ns1 f1b6mj93 f1h0licf fz7g6wx f1hm9qpj f7xsdqo fz2kz91 f1snnsa7 f14cnzb4 f1vzdjr3 f3bqqim f1d0nfvs fac4klo frp1kbq f12s2122 f19l72ij fcsrh55 f1o6l1dn fyo61pj f1spqul0 faegybh fkq5uzf f1x4fozf frnyhdv f10yrmu1 f1w45tcp f1dqeblh f18c6rdl f1e7lo8u f1vs2jsm f1p119jl f1nu0r7q fg0t3io ff98at f2yyzyc f1sjbqdg fyzb71r fxi2ush f1hz9qas f1vmprsu f1wogq95 f1oojlmx fpbf6y8 fy6vjqu fuo4419 fbzygsp fnuenae f7jsfu7 f1e76dpb f1lwmlrd fgtcxse f1d705n1 f1jrvuk2 f11h0gum f1tandro fpeluho fxjdbx7 fum67ou f1j64hbx f1807z01 f1q6iyvy f1wk7p4c f920ium f23pzvi fab17n6 f1romy96 f4f01mv fzxrkxx fyobyzx f5ar0yy f1k5b9d9 fc1bztw fr7rh9q fx4kq8r fali74x f1jhujhe ff8sxr fp87lad f8rhl2h f3czx58 fjehjmdfui-Primitive r1fo7sec ___14nm3au f12t0xb8 faignsn f1lerl7m fv42tz9 fivn2v3 fg8ubt8 f1p6s0a fug15yh f12n92bj f3y0ns1 f1b6mj93 f1h0licf fz7g6wx f1hm9qpj f7xsdqo fz2kz91 f1snnsa7 f14cnzb4 f1vzdjr3 f3bqqim f1d0nfvs fac4klo frp1kbq f12s2122 f19l72ij fcsrh55 f1o6l1dn fyo61pj f1spqul0 faegybh fkq5uzf f1x4fozf frnyhdv f10yrmu1 f1w45tcp f1dqeblh f18c6rdl f1e7lo8u f1vs2jsm f1p119jl f1nu0r7q fg0t3io ff98at f2yyzyc f1sjbqdg fyzb71r fxi2ush f1hz9qas f1vmprsu f1wogq95 f1oojlmx fpbf6y8 fy6vjqu fuo4419 fbzygsp fnuenae f7jsfu7 f1e76dpb f1lwmlrd fgtcxse f1d705n1 f1jrvuk2 f11h0gum f1tandro fpeluho fxjdbx7 fum67ou f1j64hbx f1807z01 f1q6iyvy f1wk7p4c f920ium f23pzvi fab17n6 f1romy96 f4f01mv fzxrkxx fyobyzx f5ar0yy f1k5b9d9 fc1bztw fr7rh9q fx4kq8r fali74x f1jhujhe ff8sxr fp87lad f8rhl2h f3czx58 fjehjmdfui-Primitive r1fo7sec ___14nm3au f12t0xb8 faignsn f1lerl7m fv42tz9 fivn2v3 fg8ubt8 f1popacity: 1 !important; visibility: visible !important; clip-path: none !important; filter: none !important; width: 100% !important; height: auto !important; line-height: normal !important; display: flex !important; z-index: 1500 !important; position: relative !important; transform: translate(0px, 0px) !important; background-color: rgb(255, 114, 0) !important; border: none !important; margin: auto !important; box-sizing: border-box !important; text-align: center !important; align-items: center !important; flex-direction: row !important; top: 0px !important; left: 0px !important; padding: 0.5rem !important;opacity: 1 !important; visibility: visible !important; clip-path: none !important; filter: none !important; width: 100% !important; height: auto !important; line-height: normal !important; display: flex !important; z-index: 1500 !important; position: relative !important; transform: translate(0px, 0px) !important; background-color: rgb(255, 114, 0) !important; border: none !important; margin: auto !important; box-sizing: border-box !important; text-align: center !important; align-items: center !important; flex-direction: row !important; top: 0px !important; left: 0px !important; padding: 0.5rem !important;opacity: 1 !important; visibility: visible !important; clip-path: none !important; filter: none !important; width: 100% !important; height: auto !important; line-height: normal !important; display: flex !important; z-index: 1500 !important; position: relative !important; transform: translate(0px, 0px) !important; background-color: rgb(255, 114, 0) !important; border: none !important; margin: auto !important; box-sizing: border-box !important; text-align: center !important; align-items: center !important; flex-direction: row !important; top: 0px !important; left: 0px !important; padding: 0.5rem !important;opacity: 1 !important; visibility: visible !important; clip-path: none !important; filter: none !important; width: 100% !important; height: auto !important; line-height: normal !important; display: flex !important; z-index: 1500 !important; position: relative !important; transform: translate(0px, 0px) !important; background-color: rgb(255, 114, 0) !important; border: none !important; margin: auto !important; box-sizing: border-box !important; text-align: center !important; align-items: center !important; flex-direction: row !important; top: 0px !important; left: 0px !important; padding: 0.5rem !important;opacity: 1 !important; visibility: visible !important; clip-path: none !important; filter: none !important; width: 100% !important; height: auto !important; line-height: normal !important; display: flex !important; z-index: 1500 !important; position: relative !important; transform: translate(0px, 0px) !important; background-color: rgb(255, 114, 0) !important; border: none !important; margin: auto !important; box-sizing: border-box !important; text-align: center !important; align-items: center !important; flex-direction: row !important; top: 0px !important; left: 0px !important; padding: 0.5rem !important;6s0a fug15yh f12n92bj f3y0ns1 f1b6mj93 f1h0licf fz7g6wx f1hm9qpj f7xsdqo fz2kz91 f1snnsa7 f14cnzb4 f1vzdjr3 f3bqqim f1d0nfvs fac4klo frp1kbq f12s2122 f19l72ij fcsrh55 f1o6l1dn fyo61pj f1spqul0 faegybh fkq5uzf f1x4fozf frnyhdv f10yrmu1 f1w45tcp f1dqeblh f18c6rdl f1e7lo8u f1vs2jsm f1p119jl f1nu0r7q fg0t3io ff98at f2yyzyc f1sjbqdg fyzb71r fxi2ush f1hz9qas f1vmprsu f1wogq95 f1oojlmx fpbf6y8 fy6vjqu fuo4419 fbzygsp fnuenae f7jsfu7 f1e76dpb f1lwmlrd fgtcxse f1d705n1 f1jrvuk2 f11h0gum f1tandro fpeluho fxjdbx7 fum67ou f1j64hbx f1807z01 f1q6iyvy f1wk7p4c f920ium f23pzvi fab17n6 f1romy96 f4f01mv fzxrkxx fyobyzx f5ar0yy f1k5b9d9 fc1bztw fr7rh9q fx4kq8r fali74x f1jhujhe ff8sxr fp87lad f8rhl2h f3czx58 fjehjmdfui-Primitive r1fo7sec ___14nm3au f12t0xb8 faignsn f1lerl7m fv42tz9 fivn2v3 fg8ubt8 f1p6s0a fug15yh f12n92bj f3y0ns1 f1b6mj93 f1h0licf fz7g6wx f1hm9qpj f7xsdqo fz2kz91 f1snnsa7 f14cnzb4 f1vzdjr3 f3bqqim f1d0nfvs fac4klo frp1kbq f12s2122 f19l72ij fcsrh55 f1o6l1dn fyo61pj f1spqul0 faegybh fkq5uzf f1x4fozf frnyhdv f10yrmu1 f1w45tcp f1dqeblh f18c6rdl f1e7lo8u f1vs2jsm f1p119jl f1nu0r7q fg0t3io ff98at f2yyzyc f1sjbqdg fyzb71r fxi2ush f1hz9qas f1vmprsu f1wogq95 f1oojlmx fpbf6y8 fy6vjqu fuo4419 fbzygsp fnuenae f7jsfu7 f1e76dpb f1lwmlrd fgtcxse f1d705n1 f1jrvuk2 f11h0gum f1tandro fpeluho fxjdbx7 fum67ou f1j64hbx f1807z01 f1q6iyvy f1wk7p4c f920ium f23pzvi fab17n6 f1romy96 f4f01mv fzxrkxx fyobyzx f5ar0yy f1k5b9d9 fc1bztw fr7rh9q fx4kq8r fali74x f1jhujhe ff8sxr fp87lad f8rhl2h f3czx58 fjehjmdfui-Primitive r1fo7sec ___14nm3au f12t0xb8 faignsn f1lerl7m fv42tz9 fivn2v3 fg8ubt8 f1p6s0a fug15yh f12n92bj f3y0ns1 f1b6mj93 f1h0licf fz7g6wx f1hm9qpj f7xsdqo fz2kz91 f1snnsa7 f14cnzb4 f1vzdjr3 f3bqqim f1d0nfvs fac4klo frp1kbq f12s2122 f19l72ij fcsrh55 f1o6l1dn fyo61pj f1spqul0 faegybh fkq5uzf f1x4fozf frnyhdv f10yrmu1 f1w45tcp f1dqeblh f18c6rdl f1e7lo8u f1vs2jsm f1p119jl f1nu0r7q fg0t3io ff98at f2yyzyc f1sjbqdg fyzb71r fxi2ush f1hz9qas f1vmprsu f1wogq95 f1oojlmx fpbf6y8 fy6vjqu fuo4419 fbzygsp fnuenae f7jsfu7 f1e76dpb f1lwmlrd fgtcxse f1d705n1 f1jrvuk2 f11h0gum f1tandro fpeluho fxjdbx7 fum67ou f1j64hbx f1807z01 f1q6iyvy f1wk7p4c f920ium f23pzvi fab17n6 f1romy96 f4f01mv fzxrkxx fyobyzx f5ar0yy f1k5b9d9 fc1bztw fr7rh9q fx4kq8r fali74x f1jhujhe ff8sxr fp87lad f8rhl2h f3czx58 fjehjmdfui-Primitive r1fo7sec ___14nm3au f12t0xb8 faignsn f1lerl7m fv42tz9 fivn2v3 fg8ubt8 f1p6s0a fug15yh f12n92bj f3y0ns1 f1b6mj93 f1h0licf fz7g6wx f1hm9qpj f7xsdqo fz2kz91 f1snnsa7 f14cnzb4 f1vzdjr3 f3bqqim f1d0nfvs fac4klo frp1kbq f12s2122 f19l72ij fcsrh55 f1o6l1dn fyo61pj f1spqul0 faegybh fkq5uzf f1x4fozf frnyhdv f10yrmu1 f1w45tcp f1dqeblh f18c6rdl f1e7lo8u f1vs2jsm f1p119jl f1nu0r7q fg0t3io ff98at f2yyzyc f1sjbqdg fyzb71r fxi2ush f1hz9qas f1vmprsu f1wogq95 f1oojlmx fpbf6y8 fy6vjqu fuo4419 fbzygsp fnuenae f7jsfu7 f1e76dpb f1lwmlrd fgtcxse f1d705n1 f1jrvuk2 f11h0gum f1tandro fpeluho fxjdbx7 fum67ou f1j64hbx f1807z01 f1q6iyvy f1wk7p4c f920ium f23pzvi fab17n6 f1romy96 f4f01mv fzxrkxx fyobyzx f5ar0yy f1k5b9d9 fc1bztw fr7rh9q fx4kq8r fali74x f1jhujhe ff8sxr fp87lad f8rhl2h f3czx58 fjehjmdfui-Primitive r1fo7sec ___14nm3au f12t0xb8 faignsn f1lerl7m fv42tz9 fivn2v3 fg8ubt8 f1p6s0a fug15yh f12n92bj f3y0ns1 f1b6mj93 f1h0licf fz7g6wx f1hm9qpj f7xsdqo fz2kz91 f1snnsa7 f14cnzb4 f1vzdjr3 f3bqqim f1d0nfvs fac4klo frp1kbq f12s2122 f19l72ij fcsrh55 f1o6l1dn fyo61pj f1spqul0 faegybh fkq5uzf f1x4fozf frnyhdv f10yrmu1 f1w45tcp f1dqeblh f18c6rdl f1e7lo8u f1vs2jsm f1p119jl f1nu0r7q fg0t3io ff98at f2yyzyc f1sjbqdg fyzb71r fxi2ush f1hz9qas f1vmprsu f1wogq95 f1oojlmx fpbf6y8 fy6vjqu fuo4419 fbzygsp fnuenae f7jsfu7 f1e76dpb f1lwmlrd fgtcxse f1d705n1 f1jrvuk2 f11h0gum f1tandro fpeluho fxjdbx7 fum67ou f1j64hbx f1807z01 f1q6iyvy f1wk7p4c f920ium f23pzvi fab17n6 f1romy96 f4f01mv fzxrkxx fyobyzx f5ar0yy f1k5b9d9 fc1bztw fr7rh9q fx4kq8r fali74x f1jhujhe ff8sxr fp87lad f8rhl2h f3czx58 fjehjmdfui-Primitive r1fo7sec ___14nm3au f12t0xb8 faignsn f1lerl7m fv42tz9 fivn2v3 fg8ubt8 f1p6s0a fug15yh f12n92bj f3y0ns1 f1b6mj93 f1h0licf fz7g6wx f1hm9qpj f7xsdqo fz2kz91 f1snnsa7 f14cnzb4 f1vzdjr3 f3bqqim f1d0nfvs fac4klo frp1kbq f12s2122 f19l72ij fcsrh55 f1o6l1dn fyo61pj f1spqul0 faegybh fkq5uzf f1x4fozf frnyhdv f10yrmu1 f1w45tcp f1dqeblh f18c6rdl f1e7lo8u f1vs2jsm f1p119jl f1nu0r7q fg0t3io ff98at f2yyzyc f1sjbqdg fyzb71r fxi2ush f1hz9qas f1vmprsu f1wogq95 f1oojlmx fpbf6y8 fy6vjqu fuo4419 fbzygsp fnuenae f7jsfu7 f1e76dpb f1lwmlrd fgtcxse f1d705n1 f1jrvuk2 f11h0gum f1tandro fpeluho fxjdbx7 fum67ou f1j64hbx f1807z01 f1q6iyvy f1wk7p4c f920ium f23pzvi fab17n6 f1romy96 f4f01mv fzxrkxx fyobyzx f5ar0yy f1k5b9d9 fc1bztw fr7rh9q fx4kq8r fali74x f1jhujhe ff8sxr fp87lad f8rhl2h f3czx58 fjehjmd',
+                // });
             });
+
+            const getTimestamp = function (date, offsetMinutes = 0) {
+                return date.getTime() + offsetMinutes * 60000;
+            };
+
+            const date = new Date();
+            date.setHours(0, 0, 0, 0);
+
+            const currentUser = {
+                id: "c94c0e76-fb49-4b9b-8f07-9f93ed93b4f3",
+                name: "John Doe"
+            };
+
+            const supportAgent = {
+                id: "d16d1a4c-5c67-4e20-b70e-2991c22747c3",
+                name: "Support Agent",
+                avatarUrl:
+                    "https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/images/petersmith.png"
+            };
+
+            const messages = [
+                {
+                    id: new DevExpress.data.Guid(),
+                    timestamp: getTimestamp(date, -9),
+                    author: supportAgent,
+                    text: "One file attached and the message is a little longer",
+                    attachments: [
+                        {
+                            name: "test.txt",
+                            size: 1024
+                        }
+                    ]
+                },
+                {
+                    id: new DevExpress.data.Guid(),
+                    timestamp: getTimestamp(date, -7),
+                    author: currentUser,
+                    text: "Short message",
+                    attachments: [
+                        {
+                            name: "song.mp3",
+                            size: 1024
+                        },
+                        {
+                            name: "table.xls",
+                            size: 1024
+                        }
+                    ]
+                },
+                {
+                    id: new DevExpress.data.Guid(),
+                    timestamp: getTimestamp(date, -7),
+                    author: currentUser,
+                    text: "Very long text: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel tempus orci, sit amet tempor tortor. Etiam ut aliquam nisi. Aenean sagittis posuere lacus, nec aliquet neque molestie ut.",
+                    attachments: [
+                        {
+                            name: "song.mp3",
+                            size: 1024
+                        },
+                        {
+                            name: "table.xls",
+                            size: 1024
+                        },
+                        {
+                            name: "video.mov",
+                            size: 10241024102
+                        },
+                        {
+                            name: "archive.zip",
+                            size: 102400
+                        },
+                        {
+                            name: "pdf.pdf",
+                            size: 10241024
+                        },
+                    ]
+                },
+                {
+                    id: new DevExpress.data.Guid(),
+                    timestamp: getTimestamp(date, -7),
+                    author: currentUser,
+                    isDeleted: true
+                },
+            ];
         </script>
     </div>
 </body>
+
 </html>
