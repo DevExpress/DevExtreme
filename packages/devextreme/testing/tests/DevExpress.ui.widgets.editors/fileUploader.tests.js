@@ -6,9 +6,8 @@ import { Deferred } from 'core/utils/deferred';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { createBlobFile } from '../../helpers/fileHelper.js';
 import { getFileChunkCount } from '../../helpers/fileManagerHelpers.js';
-import { shouldSkipOnDesktop, shouldSkipOnMobile } from '../../helpers/device.js';
 import '../../helpers/xmlHttpRequestMock.js';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const { test } = QUnit;
 
@@ -36,6 +35,7 @@ const FILEUPLOADER_FILE_CONTAINER_CLASS = 'dx-fileuploader-file-container';
 const FILEUPLOADER_FILE_CLASS = 'dx-fileuploader-file';
 const FILEUPLOADER_FILE_NAME_CLASS = 'dx-fileuploader-file-name';
 const FILEUPLOADER_FILE_SIZE_CLASS = 'dx-fileuploader-file-size';
+const FILEUPLOADER_FILE_ICON_CLASS = 'dx-fileuploader-file-icon';
 
 const FILEUPLOADER_CANCEL_BUTTON_CLASS = 'dx-fileuploader-cancel-button';
 const FILEUPLOADER_UPLOAD_BUTTON_CLASS = 'dx-fileuploader-upload-button';
@@ -2584,6 +2584,110 @@ QUnit.module('file uploading', moduleConfig, () => {
         assert.equal($fileUploader.find('.' + FILEUPLOADER_CANCEL_BUTTON_CLASS + ':visible').length, 3, 'uploaded files\' cancel button are hidden');
     });
 
+    QUnit.test('cancel button should not be hidden for uploaded file if _hideCancelButtonOnUpload is disabled on init', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            _hideCancelButtonOnUpload: false,
+        });
+
+        simulateFileChoose($fileUploader, [fakeFile]);
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT + FILEUPLOADER_AFTER_LOAD_DELAY);
+        assert.strictEqual($fileUploader.find(`.${FILEUPLOADER_CANCEL_BUTTON_CLASS}:visible`).length, 1, 'cancel button is not hidden after upload');
+    });
+
+    QUnit.test('cancel button should be hidden for uploaded file after _hideCancelButtonOnUpload enable at runtime', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            _hideCancelButtonOnUpload: false,
+        });
+        const fileUploader = $fileUploader.dxFileUploader('instance');
+
+        fileUploader.option('_hideCancelButtonOnUpload', true);
+
+        simulateFileChoose($fileUploader, [fakeFile]);
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT + FILEUPLOADER_AFTER_LOAD_DELAY);
+        assert.strictEqual($fileUploader.find(`.${FILEUPLOADER_CANCEL_BUTTON_CLASS}:visible`).length, 0, 'cancel button is hidden after upload');
+    });
+
+    QUnit.test('should show file icon if _showFileIcon is enabled', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            _showFileIcon: true,
+        });
+        const fileUploader = $fileUploader.dxFileUploader('instance');
+
+        simulateFileChoose($fileUploader, [{ name: 'fakefile' }]);
+
+        const $fileIcon = $fileUploader.find(`.${FILEUPLOADER_FILE_ICON_CLASS}`);
+
+        assert.strictEqual($fileIcon.length, 1, 'file icon is shown');
+        assert.ok($fileIcon.hasClass('dx-icon'), 'icon has dx-icon class');
+        assert.ok($fileIcon.hasClass('dx-icon-file'), 'icon has dx-icon-file class');
+
+        fileUploader.option('_showFileIcon', false);
+
+        assert.strictEqual($fileIcon.length, 1, 'file icon is hidden');
+    });
+
+    [
+        {
+            extension: 'png',
+            icon: 'image'
+        },
+        {
+            extension: 'mp3',
+            icon: 'music'
+        },
+        {
+            extension: 'mp4',
+            icon: 'video'
+        },
+        {
+            extension: 'pdf',
+            icon: 'pdffile'
+        },
+        {
+            extension: 'doc',
+            icon: 'textdocument'
+        },
+        {
+            extension: 'xls',
+            icon: 'exportxlsx'
+        },
+        {
+            extension: 'zip',
+            icon: 'folder'
+        },
+    ].forEach(({ extension, icon }) => {
+        QUnit.test(`should show file icon with dx-icon-${icon} class when file has ${extension} extension`, function(assert) {
+            const $fileUploader = $('#fileuploader').dxFileUploader({
+                uploadMode: 'instantly',
+                _showFileIcon: true,
+            });
+
+            simulateFileChoose($fileUploader, [{ name: `fakefile.${extension}` }]);
+
+            const $fileIcon = $fileUploader.find(`.${FILEUPLOADER_FILE_ICON_CLASS}`);
+
+            assert.ok($fileIcon.hasClass(`dx-icon-${icon}`), `icon has dx-icon-${icon} class`);
+        });
+    });
+
+    QUnit.test('cancel button should be placed to the end if _cancelButtonPosition is set to "end"', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            _cancelButtonPosition: 'end',
+        });
+
+        simulateFileChoose($fileUploader, [{ name: 'fakefile' }]);
+
+        const $cancelButtonContainer = $fileUploader.find(`.${FILEUPLOADER_CANCEL_BUTTON_CLASS}`).parent();
+        const $fileContainer = $fileUploader.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`);
+        const $lastChild = $fileContainer.children().last();
+
+        assert.strictEqual($cancelButtonContainer.is($lastChild), true, 'cancel button is placed to the end of file container');
+    });
+
     QUnit.test('files count should be correct after value reset', function(assert) {
         const $fileUploader = $('#fileuploader').dxFileUploader({
             extendSelection: true,
@@ -3543,6 +3647,29 @@ QUnit.module('uploading events', moduleConfig, () => {
         assert.strictEqual(progressSpy.args[0][0].bytesTotal, 100023, 'the bytesTotal argument value is correct');
     });
 
+    QUnit.test('onCancelButtonClick should be called with correct arguments on cancel button click', function(assert) {
+        assert.expect(3);
+
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            _hideCancelButtonOnUpload: false,
+        });
+        const fileUploader = $fileUploader.dxFileUploader('instance');
+        const onCancelButtonClick = ({ component, element, file }) => {
+            assert.strictEqual($(element).is($fileUploader), true, 'element is passed');
+            assert.strictEqual(component, fileUploader, 'component is passed');
+            assert.strictEqual(file, fakeFile, 'file is passed');
+        };
+
+        fileUploader.option('onCancelButtonClick', onCancelButtonClick);
+
+        simulateFileChoose($fileUploader, fakeFile);
+        this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
+
+        const $cancelButton = $fileUploader.find(`.${FILEUPLOADER_CANCEL_BUTTON_CLASS}`);
+
+        $cancelButton.trigger('dxclick');
+    });
 });
 
 QUnit.module('keyboard navigation', moduleConfig, () => {
@@ -3568,10 +3695,6 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
     });
 
     QUnit.test('T328503 - \'enter\' press on select button should lead to input click', function(assert) {
-        if(shouldSkipOnMobile(assert, 'keyboard is not supported for non-desktop devices')) {
-            return;
-        }
-
         const $fileUploader = $('#fileuploader').dxFileUploader({
             uploadMode: 'instantly',
             focusStateEnabled: true,
@@ -3965,10 +4088,6 @@ QUnit.module('Drag and drop', moduleConfig, () => {
     });
 
     QUnit.test('Default label text must be shown if upload mode is useForm and native drop is supported (T936087)', function(assert) {
-        if(shouldSkipOnMobile(assert, 'default label text is hidden for mobile devices')) {
-            return;
-        }
-
         const defaultLabelText = 'or Drop a file here';
         const $fileUploader = $('#fileuploader').dxFileUploader({
             uploadMode: 'useForm',
@@ -4334,10 +4453,6 @@ QUnit.module('integration of dx button components via dialogTrigger', moduleConf
     ['dxButton', 'dxButtonGroup', 'dxDropDownButton'].forEach(component => {
         ['enter', 'space'].forEach(keyName => {
             QUnit.test(`dialog should be shown after press ${keyName} key on ${component} (T1178836, T1256752)`, function(assert) {
-                if(shouldSkipOnMobile(assert, 'keyboard is not supported for non-desktop devices')) {
-                    return;
-                }
-
                 const $dialogTrigger = $('<div>')[component]().appendTo('#qunit-fixture');
 
                 $('#fileuploader').dxFileUploader({ dialogTrigger: $dialogTrigger });
@@ -4378,15 +4493,408 @@ QUnit.module('integration of dx button components via dialogTrigger', moduleConf
     });
 });
 
-QUnit.module('labelText', moduleConfig, () => {
-    QUnit.test('Dropzone default label text should be hidden on mobile devices', function(assert) {
-        if(shouldSkipOnDesktop(assert, 'should only apply on mobile devices')) {
-            return;
-        }
+QUnit.module('Accessibility', moduleConfig, () => {
+    QUnit.test('files container should have role="list" and aria-label when files are present', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+        });
 
-        const $fileUploader = $('#fileuploader').dxFileUploader();
-        const $inputLabel = $fileUploader.find(`.${FILEUPLOADER_INPUT_LABEL_CLASS}`);
+        const $filesContainer = $fileUploader.find(`.${FILEUPLOADER_FILES_CONTAINER_CLASS}`);
 
-        assert.strictEqual($inputLabel.text(), '', 'default label is hidden on mobile');
+        assert.strictEqual($filesContainer.attr('role'), undefined, 'role should not be set initially');
+        assert.strictEqual($filesContainer.attr('aria-label'), undefined, 'aria-label should not be set initially');
+
+        simulateFileChoose($fileUploader, [fakeFile]);
+
+        assert.strictEqual($filesContainer.attr('role'), 'list', 'role should be "list"');
+        assert.strictEqual($filesContainer.attr('aria-label'), 'File list', 'aria-label should be "File list"');
+    });
+
+    QUnit.test('files container should remove aria attributes when all files are removed', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            value: [fakeFile],
+        });
+
+        const $filesContainer = $fileUploader.find(`.${FILEUPLOADER_FILES_CONTAINER_CLASS}`);
+
+        assert.strictEqual($filesContainer.attr('role'), 'list', 'role should be "list" with files');
+        assert.strictEqual($filesContainer.attr('aria-label'), 'File list', 'aria-label should be "File list" with files');
+
+        const instance = $fileUploader.dxFileUploader('instance');
+        instance.option('value', []);
+
+        assert.strictEqual($filesContainer.attr('role'), undefined, 'role should be undefined after removing files');
+        assert.strictEqual($filesContainer.attr('aria-label'), undefined, 'aria-label should be undefined after removing files');
+    });
+
+    QUnit.test('files container should not have aria attributes when showFileList is false', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            value: [fakeFile],
+            showFileList: false,
+        });
+
+        const $filesContainer = $fileUploader.find(`.${FILEUPLOADER_FILES_CONTAINER_CLASS}`);
+
+        assert.strictEqual($filesContainer.attr('role'), undefined, 'role should not be set when showFileList is false');
+        assert.strictEqual($filesContainer.attr('aria-label'), undefined, 'aria-label should not be set when showFileList is false');
+    });
+
+    QUnit.test('file container should have role="listitem"', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            value: [fakeFile],
+        });
+
+        const $fileContainer = $fileUploader.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`).first();
+
+        assert.strictEqual($fileContainer.attr('role'), 'listitem', 'file container should have role="listitem"');
+    });
+
+    QUnit.test('multiple file containers should each have role="listitem"', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            multiple: true,
+            value: [fakeFile, fakeFile1, fakeFile2],
+        });
+
+        const $fileContainers = $fileUploader.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`);
+
+        assert.strictEqual($fileContainers.length, 3, 'should have 3 file containers');
+        assert.strictEqual($fileContainers.eq(0).attr('role'), 'listitem', 'first file container should have role="listitem"');
+        assert.strictEqual($fileContainers.eq(1).attr('role'), 'listitem', 'second file container should have role="listitem"');
+        assert.strictEqual($fileContainers.eq(2).attr('role'), 'listitem', 'third file container should have role="listitem"');
+    });
+
+    QUnit.test('cancel button should have correct aria-label with file name', function(assert) {
+        const testFileName = 'testfile.png';
+        const testFile = {
+            name: testFileName,
+            size: 1024,
+            type: 'image/png',
+            lastModifiedDate: Date.now(),
+        };
+
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            value: [testFile],
+        });
+
+        const $cancelButton = $fileUploader.find(`.${FILEUPLOADER_CANCEL_BUTTON_CLASS}`).first();
+
+        assert.strictEqual(
+            $cancelButton.attr('aria-label'),
+            `Remove file ${testFileName}`,
+            'cancel button should have aria-label with file name',
+        );
+    });
+
+    QUnit.test('cancel button aria-label should be updated when file is changed', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            value: [fakeFile],
+        });
+
+        let $cancelButton = $fileUploader.find(`.${FILEUPLOADER_CANCEL_BUTTON_CLASS}`).first();
+
+        assert.strictEqual(
+            $cancelButton.attr('aria-label'),
+            `Remove file ${fakeFile.name}`,
+            'cancel button should have aria-label with first file name',
+        );
+
+        const instance = $fileUploader.dxFileUploader('instance');
+
+        instance.option('value', [fakeFile1]);
+
+        $cancelButton = $fileUploader.find(`.${FILEUPLOADER_CANCEL_BUTTON_CLASS}`).first();
+
+        assert.strictEqual(
+            $cancelButton.attr('aria-label'),
+            `Remove file ${fakeFile1.name}`,
+            'cancel button aria-label should be updated with new file name'
+        );
+    });
+
+    QUnit.test('upload button should have correct aria-label with file name', function(assert) {
+        const testFileName = 'document.pdf';
+        const testFile = {
+            name: testFileName,
+            size: 2048,
+            type: 'application/pdf',
+            lastModifiedDate: Date.now(),
+        };
+
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            value: [testFile],
+        });
+
+        const $uploadButton = $fileUploader.find(`.${FILEUPLOADER_FILES_CONTAINER_CLASS} .${FILEUPLOADER_UPLOAD_BUTTON_CLASS}`);
+
+        assert.strictEqual(
+            $uploadButton.attr('aria-label'),
+            `Upload file ${testFileName}`,
+            'upload button should have aria-label with file name',
+        );
+    });
+
+    QUnit.test('upload button should not be rendered in instantly mode', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            value: [fakeFile],
+        });
+
+        const $uploadButton = $fileUploader.find(`.${FILEUPLOADER_FILES_CONTAINER_CLASS} .${FILEUPLOADER_UPLOAD_BUTTON_CLASS}`);
+
+        assert.strictEqual($uploadButton.length, 0, 'upload button should not be rendered in instantly mode');
+    });
+
+    QUnit.test('cancel button should have aria-label for each file in multiple mode', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            multiple: true,
+            value: [fakeFile, fakeFile1, fakeFile2],
+        });
+
+        const $cancelButtons = $fileUploader.find(`.${FILEUPLOADER_CANCEL_BUTTON_CLASS}`);
+
+        assert.strictEqual($cancelButtons.length, 3, 'should have 3 cancel buttons');
+
+        assert.strictEqual(
+            $cancelButtons.eq(0).attr('aria-label'),
+            `Remove file ${fakeFile.name}`,
+            'first cancel button should have correct aria-label',
+        );
+
+        assert.strictEqual(
+            $cancelButtons.eq(1).attr('aria-label'),
+            `Remove file ${fakeFile1.name}`,
+            'second cancel button should have correct aria-label',
+        );
+
+        assert.strictEqual(
+            $cancelButtons.eq(2).attr('aria-label'),
+            `Remove file ${fakeFile2.name}`,
+            'third cancel button should have correct aria-label',
+        );
+    });
+
+    QUnit.test('upload button should have aria-label for each file in multiple mode', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            multiple: true,
+            value: [fakeFile, fakeFile1, fakeFile2],
+        });
+
+        const $uploadButtons = $fileUploader.find(`.${FILEUPLOADER_FILES_CONTAINER_CLASS} .${FILEUPLOADER_UPLOAD_BUTTON_CLASS}`);
+
+        assert.strictEqual($uploadButtons.length, 3, 'should have 3 upload buttons');
+        assert.strictEqual(
+            $uploadButtons.eq(0).attr('aria-label'),
+            `Upload file ${fakeFile.name}`,
+            'first upload button should have correct aria-label',
+        );
+        assert.strictEqual(
+            $uploadButtons.eq(1).attr('aria-label'),
+            `Upload file ${fakeFile1.name}`,
+            'second upload button should have correct aria-label',
+        );
+        assert.strictEqual(
+            $uploadButtons.eq(2).attr('aria-label'),
+            `Upload file ${fakeFile2.name}`,
+            'third upload button should have correct aria-label',
+        );
+    });
+
+    QUnit.test('cancel button should not have aria-label in useForm mode', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useForm',
+            value: [fakeFile],
+        });
+
+        const $cancelButton = $fileUploader.find(`.${FILEUPLOADER_CANCEL_BUTTON_CLASS}`);
+
+        assert.strictEqual($cancelButton.length, 0, 'cancel button should not be rendered in useForm mode');
     });
 });
+
+QUnit.module('File limit', moduleConfig, () => {
+    QUnit.test('onFileLimitReached should be fired when selecting files exceeds the limit', function(assert) {
+        assert.expect(3);
+
+        let fileLimitReachedCount = 0;
+
+        const $element = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            _maxFileCount: 2,
+            onFileLimitReached: (e) => {
+                fileLimitReachedCount++;
+
+                const { component, element } = e;
+
+                assert.strictEqual(component, $element.dxFileUploader('instance'), 'component field is correct');
+                assert.strictEqual($(element).is($element), true, 'element field is correct');
+            },
+        });
+
+        simulateFileChoose($element, [fakeFile, fakeFile1, fakeFile2]);
+
+        assert.strictEqual(fileLimitReachedCount, 1, 'onFileLimitReached callback was called once');
+    });
+
+    QUnit.test('files should not be added when limit is reached', function(assert) {
+        const $element = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            _maxFileCount: 2,
+            uploadMode: 'useButtons',
+        });
+        const instance = $element.dxFileUploader('instance');
+
+        simulateFileChoose($element, [fakeFile, fakeFile1]);
+        assert.strictEqual(instance.option('value').length, 2, 'two files were added');
+
+        simulateFileChoose($element, [fakeFile2]);
+        assert.strictEqual(instance.option('value').length, 2, 'files count is still 2, third file was not added');
+    });
+
+    QUnit.test('onFileLimitReached should be fired when drag and drop files exceeds the limit', function(assert) {
+        let fileLimitReachedCount = 0;
+
+        const $element = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            _maxFileCount: 2,
+            uploadMode: 'useButtons',
+            onFileLimitReached: () => {
+                fileLimitReachedCount++;
+            },
+        });
+
+        const instance = $element.dxFileUploader('instance');
+        const $inputWrapper = $element.find(`.${FILEUPLOADER_INPUT_WRAPPER_CLASS}`);
+
+        simulateFileChoose($element, [fakeFile]);
+        assert.strictEqual(instance.option('value').length, 1, 'one file was added');
+
+        const files = [fakeFile1, fakeFile2];
+
+        triggerDragEvent($inputWrapper, 'dragenter');
+        triggerDragEvent($inputWrapper, 'drop', { files, types: ['Files'] });
+
+        assert.strictEqual(fileLimitReachedCount, 1, 'onFileLimitReached was fired');
+        assert.strictEqual(instance.option('value').length, 1, 'files count is still 1');
+    });
+
+    QUnit.test('files should be added when count is less than limit', function(assert) {
+        const $element = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            _maxFileCount: 3,
+            uploadMode: 'useButtons',
+        });
+        const instance = $element.dxFileUploader('instance');
+
+        simulateFileChoose($element, [fakeFile, fakeFile1]);
+        assert.strictEqual(instance.option('value').length, 2, 'two files were added');
+
+        simulateFileChoose($element, [fakeFile2]);
+        assert.strictEqual(instance.option('value').length, 3, 'third file was added');
+    });
+
+    QUnit.test('_maxFileCount: undefined should not limit files', function(assert) {
+        let fileLimitReachedCount = 0;
+
+        const $element = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            _maxFileCount: undefined,
+            uploadMode: 'useButtons',
+            onFileLimitReached: () => {
+                fileLimitReachedCount++;
+            },
+        });
+        const instance = $element.dxFileUploader('instance');
+
+        simulateFileChoose($element, [fakeFile, fakeFile1, fakeFile2]);
+
+        assert.strictEqual(fileLimitReachedCount, 0, 'onFileLimitReached was not called');
+        assert.strictEqual(instance.option('value').length, 3, 'all three files were added');
+    });
+
+    QUnit.test('onFileLimitReached should not be fired when _maxFileCount is not set', function(assert) {
+        let fileLimitReachedCount = 0;
+
+        const $element = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            uploadMode: 'useButtons',
+            onFileLimitReached: () => {
+                fileLimitReachedCount++;
+            },
+        });
+        const instance = $element.dxFileUploader('instance');
+
+        simulateFileChoose($element, [fakeFile, fakeFile1, fakeFile2]);
+
+        assert.strictEqual(fileLimitReachedCount, 0, 'onFileLimitReached was not called');
+        assert.strictEqual(instance.option('value').length, 3, 'all files were added');
+    });
+
+    QUnit.test('file limit should work in instantly upload mode', function(assert) {
+        let fileLimitReachedCount = 0;
+
+        const $element = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            uploadMode: 'instantly',
+            _maxFileCount: 2,
+            onFileLimitReached: () => {
+                fileLimitReachedCount++;
+            },
+        });
+        const instance = $element.dxFileUploader('instance');
+
+        simulateFileChoose($element, [fakeFile, fakeFile1, fakeFile2]);
+
+        assert.strictEqual(fileLimitReachedCount, 1, 'onFileLimitReached was called');
+        assert.strictEqual(instance.option('value').length, 0, 'no files were added');
+    });
+
+    QUnit.test('onFileLimitReached should be fired on initial render when value exceeds _maxFileCount', function(assert) {
+        let fileLimitReachedCount = 0;
+
+        const $element = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            uploadMode: 'useButtons',
+            _maxFileCount: 2,
+            value: [fakeFile, fakeFile1, fakeFile2],
+            onFileLimitReached: () => {
+                fileLimitReachedCount++;
+            },
+        });
+        const instance = $element.dxFileUploader('instance');
+
+        assert.strictEqual(fileLimitReachedCount, 1, 'onFileLimitReached was called on init');
+        assert.strictEqual(instance.option('value').length, 3, 'value won\'t reset to empty array');
+    });
+
+    QUnit.test('onFileLimitReached should be fired when value is changed programmatically and exceeds _maxFileCount', function(assert) {
+        let fileLimitReachedCount = 0;
+
+        const $element = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            uploadMode: 'useButtons',
+            _maxFileCount: 2,
+            onFileLimitReached: () => {
+                fileLimitReachedCount++;
+            },
+        });
+        const instance = $element.dxFileUploader('instance');
+
+        instance.option('value', [fakeFile, fakeFile1]);
+        assert.strictEqual(fileLimitReachedCount, 0, 'onFileLimitReached was not called for 2 files');
+        assert.strictEqual(instance.option('value').length, 2, 'two files were set');
+
+        instance.option('value', [fakeFile, fakeFile1, fakeFile2]);
+        assert.strictEqual(fileLimitReachedCount, 1, 'onFileLimitReached was called when setting 3 files');
+        assert.strictEqual(instance.option('value').length, 3, 'value is changed');
+    });
+});
+

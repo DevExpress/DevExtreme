@@ -573,7 +573,7 @@ safeSizeTest('The draggable element should be displayed correctly after horizont
 safeSizeTest('Dragging with scrolling should be prevented by e.cancel (T1179555)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
-  await dataGrid.scrollBy({ top: 10000 });
+  await dataGrid.scrollBy(t, { top: 10000 });
   await t.expect(dataGrid.isReady()).ok();
 
   await MouseUpEvents.disable(MouseAction.dragToOffset);

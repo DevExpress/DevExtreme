@@ -88,6 +88,9 @@
         "dxFileUploader-invalidFileExtension": "このファイルの種類を使用できません",
         "dxFileUploader-invalidMaxFileSize": "ファイルが大きすぎます",
         "dxFileUploader-invalidMinFileSize": "ファイルが小さすぎます",
+        "dxFileUploader-fileListLabel": "File list",
+        "dxFileUploader-removeFileButtonLabel": "Remove file {0}",
+        "dxFileUploader-uploadFileButtonLabel": "Upload file {0}",
 
         "dxRangeSlider-ariaFrom": "から",
         "dxRangeSlider-ariaTill": "まで",
@@ -271,10 +274,10 @@
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
 
         "dxScheduler-appointmentListAriaLabel": "Appointment list",
-
+        "dxScheduler-newPopupTitle": "New Appointment",
         "dxScheduler-editPopupTitle": "Edit Appointment",
         "dxScheduler-editPopupSaveButtonText": "Save",
-        
+
         "dxScheduler-editorLabelTitle": "件名",
         "dxScheduler-editorLabelStartDate": "開始時刻",
         "dxScheduler-editorLabelEndDate": "終了時刻",
@@ -410,6 +413,8 @@
         "dxChat-editingDeleteConfirmText": "Are you sure you want to delete this message?",
         "dxChat-deletedMessageText": "This message was deleted",
         "dxChat-defaultImageAlt": "Image shared in chat",
+        "dxChat-fileViewLabel": "File list",
+        "dxChat-downloadButtonLabel": "Download file {0}",
 
         "dxColorView-ariaRed": "赤",
         "dxColorView-ariaGreen": "緑",

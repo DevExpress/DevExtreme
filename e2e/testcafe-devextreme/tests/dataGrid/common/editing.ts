@@ -7,7 +7,6 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
 import { getData } from '../helpers/generateDataSourceData';
-import { Themes } from '../../../helpers/themes';
 
 fixture.disablePageReloads`Editing`
   .page(url(__dirname, '../../container.html'));
@@ -2115,130 +2114,6 @@ test('The "Cannot read property "brokenRules" of undefined" error occurs T978286
   }));
 });
 
-test('Cells should be focused correctly on click when cell editing mode is used with enabled showEditorAlways (T1037019)', async (t) => {
-  const dataGrid = new DataGrid('#container');
-
-  // act
-  await t
-    .click(dataGrid.getDataCell(0, 0).getEditor().element);
-
-  // assert
-  await t
-    .expect(dataGrid.getDataCell(0, 0).isFocused)
-    .ok()
-    .expect(dataGrid.getDataCell(0, 0).getEditor().element.focused)
-    .ok();
-
-  // act
-  await t
-    .typeText(dataGrid.getDataCell(0, 0).getEditor().element, '1')
-    .click(dataGrid.getDataCell(1, 0).getEditor().element);
-
-  // assert
-  await t
-    .expect(dataGrid.apiGetCellValue(0, 0))
-    .eql('Name 11')
-    .expect(dataGrid.getDataCell(1, 0).isFocused)
-    .ok()
-    .expect(dataGrid.getDataCell(1, 0).getEditor().element.focused)
-    .ok();
-
-  // act
-  await t
-    .typeText(dataGrid.getDataCell(1, 0).getEditor().element, '2')
-    .click(dataGrid.getDataCell(2, 0).getEditor().element);
-
-  // assert
-  await t
-    .expect(dataGrid.apiGetCellValue(1, 0))
-    .eql('Name 22')
-    .expect(dataGrid.getDataCell(2, 0).isFocused)
-    .ok()
-    .expect(dataGrid.getDataCell(2, 0).getEditor().element.focused)
-    .ok();
-
-  // act
-  await t
-    .typeText(dataGrid.getDataCell(2, 0).getEditor().element, '3')
-    .click(dataGrid.getDataCell(1, 0).getEditor().element);
-
-  // assert
-  await t
-    .expect(dataGrid.apiGetCellValue(2, 0))
-    .eql('Name 33')
-    .expect(dataGrid.getDataCell(1, 0).isFocused)
-    .ok()
-    .expect(dataGrid.getDataCell(1, 0).getEditor().element.focused)
-    .ok();
-
-  // act
-  await t
-    .typeText(dataGrid.getDataCell(1, 0).getEditor().element, '2')
-    .click(dataGrid.getDataCell(0, 0).getEditor().element);
-
-  // assert
-  await t
-    .expect(dataGrid.apiGetCellValue(1, 0))
-    .eql('Name 222')
-    .expect(dataGrid.getDataCell(0, 0).isFocused)
-    .ok()
-    .expect(dataGrid.getDataCell(0, 0).getEditor().element.focused)
-    .ok();
-}).before(async () => {
-  const initStore = ClientFunction(() => {
-    (window as any).myStore = new (window as any).DevExpress.data.ArrayStore({
-      key: 'ID',
-      data: [
-        { ID: 1, Name: 'Name 1' },
-        { ID: 2, Name: 'Name 2' },
-        { ID: 3, Name: 'Name 3' },
-      ],
-    });
-  });
-
-  await initStore();
-
-  return createWidget('dxDataGrid', {
-    dataSource: {
-      key: 'ID',
-      load(loadOptions) {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            (window as any).myStore.load(loadOptions).done((data) => {
-              resolve(data);
-            });
-          }, 100);
-        });
-      },
-      update(key, values) {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            (window as any).myStore.update(key, values).done(() => {
-              resolve(key);
-            });
-          }, 100);
-        });
-      },
-      totalCount(loadOptions) {
-        return (window as any).myStore.totalCount(loadOptions);
-      },
-    } as any, // todo check
-    keyExpr: 'ID',
-    editing: {
-      mode: 'cell',
-      allowUpdating: true,
-    },
-    columns: [{
-      dataField: 'Name',
-      showEditorAlways: true,
-    }],
-  });
-}).after(async () => {
-  await ClientFunction(() => {
-    delete (window as any).myStore;
-  })();
-});
-
 // T1130497
 ([
   ['first', 0, 'standard', 0],
@@ -2431,28 +2306,12 @@ test('Popup EditForm screenshot when editRowKey is initially specified', async (
     })();
   });
 });
-
-[
-  {
-    theme: 'material.blue.light',
-    useIcons: true,
-  },
-  {
-    theme: 'generic.light',
-    useIcons: true,
-  },
-  {
-    theme: 'material.blue.light',
-    useIcons: false,
-  },
-  {
-    theme: 'generic.light',
-    useIcons: false,
-  },
-].forEach(({ theme, useIcons }) => {
+// visual: generic.light
+// visual: material.blue.light
+[true, false].forEach((useIcons) => {
   // T1179114
   // TODO Chrome133: skipped during chrome update
-  test.skip(`The disabled state should be correct for a custom button when given as a SVG image (${theme})`, async (t) => {
+  test.skip('The disabled state should be correct for a custom button when given as a SVG image', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid('#container');
     const commandCell = dataGrid.getDataRow(0).getCommandCell(2);
@@ -2464,52 +2323,46 @@ test('Popup EditForm screenshot when editRowKey is initially specified', async (
       .eql(20)
       .expect(secondCustomIcon.clientWidth)
       .eql(20)
-      .expect(await takeScreenshot(`T1179114-grid-edit-custom-button-in-${theme.split('.')[0]}-theme-when-useicons-is-${useIcons}.png`, dataGrid.element))
+      .expect(await takeScreenshot(`T1179114-grid-edit-custom-button-in-generic-theme-when-useicons-is-${useIcons}.png`, dataGrid.element))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => {
-    await changeTheme(theme);
-
-    return createWidget('dxDataGrid', {
-      width: 600,
-      dataSource: [{
-        Id: 0,
-        name: 'test',
-      }],
-      keyExpr: 'Id',
-      editing: {
-        mode: 'row',
-        allowUpdating: true,
-        allowDeleting: true,
-        useIcons,
-      },
-      columns: ['Id', 'name', {
-        type: 'buttons',
-        width: 200,
-        buttons: [
-          {
-            name: 'delete',
-            disabled: false,
-          },
-          {
-            name: 'delete',
-            disabled: true,
-          },
-          {
-            icon: encodedIcon,
-            disabled: false,
-          },
-          {
-            icon: encodedIcon,
-            disabled: true,
-          },
-        ],
-      }],
-    });
-  }).after(async () => {
-    await changeTheme('generic.light');
-  });
+  }).before(async () => createWidget('dxDataGrid', {
+    width: 600,
+    dataSource: [{
+      Id: 0,
+      name: 'test',
+    }],
+    keyExpr: 'Id',
+    editing: {
+      mode: 'row',
+      allowUpdating: true,
+      allowDeleting: true,
+      useIcons,
+    },
+    columns: ['Id', 'name', {
+      type: 'buttons',
+      width: 200,
+      buttons: [
+        {
+          name: 'delete',
+          disabled: false,
+        },
+        {
+          name: 'delete',
+          disabled: true,
+        },
+        {
+          icon: encodedIcon,
+          disabled: false,
+        },
+        {
+          icon: encodedIcon,
+          disabled: true,
+        },
+      ],
+    }],
+  }));
 });
 
 test('Component sends unexpected filtering request after inserting a new row if focusedRowEnabled is true and key set in data source (T1181477)', async (t) => {
@@ -2772,45 +2625,39 @@ test('DataGrid - A new row is added above the existing row if the data source is
   ],
 }));
 
-[
-  Themes.genericLight,
-  Themes.fluentBlue,
-  Themes.materialBlue,
-].forEach((theme) => {
-  test('DataGrid - ColorBox in DataGrid causes input value to appear behind color preview (T1280023)', async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const dataGrid = new DataGrid('#container');
+// visual: generic.light
+// visual: fluent.blue.light
+// visual: material.blue.light
+test('DataGrid - ColorBox in DataGrid causes input value to appear behind color preview (T1280023)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
 
-    await t.click(dataGrid.getDataCell(0, 0).element);
+  await t.click(dataGrid.getDataCell(0, 0).element);
 
-    await t
-      .expect(await takeScreenshot(`grid-form-editing-with-color-box_(${theme})`, dataGrid.element))
-      .ok()
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  })
-    .before(async () => {
-      await changeTheme(theme);
-
-      await createWidget('dxDataGrid', {
-        dataSource: [
-          { Color: 'red' },
-        ],
-        showBorders: true,
-        editing: {
-          allowUpdating: true,
-          mode: 'cell',
-        },
-        onEditorPreparing(e) {
-          if (e.dataField === 'Color') {
-            e.editorName = 'dxColorBox';
-            e.editorOptions.readOnly = false;
-          }
-        },
-      });
-    })
-    .after(async () => changeTheme(Themes.genericLight));
-});
+  await t
+    .expect(await takeScreenshot('grid-form-editing-with-color-box_(generic.light)', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+})
+  .before(async () => {
+    await createWidget('dxDataGrid', {
+      dataSource: [
+        { Color: 'red' },
+      ],
+      showBorders: true,
+      editing: {
+        allowUpdating: true,
+        mode: 'cell',
+      },
+      onEditorPreparing(e) {
+        if (e.dataField === 'Color') {
+          e.editorName = 'dxColorBox';
+          e.editorOptions.readOnly = false;
+        }
+      },
+    });
+  });
 
 // T1291087
 test('The editCellTemplate template should not be called after clicking on a cell in another row and column', async (t) => {
@@ -2959,5 +2806,132 @@ test('The onEditorPreparing event should be called once after clicking on a cell
 }).after(async () => {
   await ClientFunction(() => {
     delete (window as any).onEditorPreparingCallArgs;
+  })();
+});
+
+fixture`Editing - ShowEditorAlways`
+  .page(url(__dirname, '../../container.html'));
+
+test('Cells should be focused correctly on click when cell editing mode is used with enabled showEditorAlways (T1037019)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(0, 0).getEditor().element);
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 0).isFocused)
+    .ok()
+    .expect(dataGrid.getDataCell(0, 0).getEditor().element.focused)
+    .ok();
+
+  // act
+  await t
+    .typeText(dataGrid.getDataCell(0, 0).getEditor().element, '1')
+    .click(dataGrid.getDataCell(1, 0).getEditor().element);
+
+  // assert
+  await t
+    .expect(dataGrid.apiGetCellValue(0, 0))
+    .eql('Name 11')
+    .expect(dataGrid.getDataCell(1, 0).isFocused)
+    .ok()
+    .expect(dataGrid.getDataCell(1, 0).getEditor().element.focused)
+    .ok();
+
+  // act
+  await t
+    .typeText(dataGrid.getDataCell(1, 0).getEditor().element, '2')
+    .click(dataGrid.getDataCell(2, 0).getEditor().element);
+
+  // assert
+  await t
+    .expect(dataGrid.apiGetCellValue(1, 0))
+    .eql('Name 22')
+    .expect(dataGrid.getDataCell(2, 0).isFocused)
+    .ok()
+    .expect(dataGrid.getDataCell(2, 0).getEditor().element.focused)
+    .ok();
+
+  // act
+  await t
+    .typeText(dataGrid.getDataCell(2, 0).getEditor().element, '3')
+    .click(dataGrid.getDataCell(1, 0).getEditor().element);
+
+  // assert
+  await t
+    .expect(dataGrid.apiGetCellValue(2, 0))
+    .eql('Name 33')
+    .expect(dataGrid.getDataCell(1, 0).isFocused)
+    .ok()
+    .expect(dataGrid.getDataCell(1, 0).getEditor().element.focused)
+    .ok();
+
+  // act
+  await t
+    .typeText(dataGrid.getDataCell(1, 0).getEditor().element, '2')
+    .click(dataGrid.getDataCell(0, 0).getEditor().element);
+
+  // assert
+  await t
+    .expect(dataGrid.apiGetCellValue(1, 0))
+    .eql('Name 222')
+    .expect(dataGrid.getDataCell(0, 0).isFocused)
+    .ok()
+    .expect(dataGrid.getDataCell(0, 0).getEditor().element.focused)
+    .ok();
+}).before(async () => {
+  const initStore = ClientFunction(() => {
+    (window as any).myStore = new (window as any).DevExpress.data.ArrayStore({
+      key: 'ID',
+      data: [
+        { ID: 1, Name: 'Name 1' },
+        { ID: 2, Name: 'Name 2' },
+        { ID: 3, Name: 'Name 3' },
+      ],
+    });
+  });
+
+  await initStore();
+
+  return createWidget('dxDataGrid', {
+    dataSource: {
+      key: 'ID',
+      load(loadOptions) {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            (window as any).myStore.load(loadOptions).done((data) => {
+              resolve(data);
+            });
+          }, 100);
+        });
+      },
+      update(key, values) {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            (window as any).myStore.update(key, values).done(() => {
+              resolve(key);
+            });
+          }, 100);
+        });
+      },
+      totalCount(loadOptions) {
+        return (window as any).myStore.totalCount(loadOptions);
+      },
+    } as any, // todo check
+    keyExpr: 'ID',
+    editing: {
+      mode: 'cell',
+      allowUpdating: true,
+    },
+    columns: [{
+      dataField: 'Name',
+      showEditorAlways: true,
+    }],
+  });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).myStore;
   })();
 });

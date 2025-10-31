@@ -30,7 +30,7 @@ import {
     resetMockFactory,
     restoreMockFactory,
 } from '../../../helpers/chartMocks.js';
-import exportModule from 'viz/core/export';
+import exportModule from '__internal/viz/core/exportModule';
 import { _test_prepareSegmentRectPoints } from 'viz/utils';
 
 const ThemeManager = stubClass(chartThemeManagerModule.ThemeManager);

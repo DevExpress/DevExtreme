@@ -19,6 +19,7 @@
         :data-source="resourcesData"
         field-expr="roomId"
         label="Room"
+        icon="conferenceroomoutline"
       />
     </DxScheduler>
     <DxContextMenu
@@ -49,11 +50,11 @@ const appointmentClassName = '.dx-scheduler-appointment';
 const cellClassName = '.dx-scheduler-date-table-cell';
 const currentDate = ref(new Date(2020, 10, 25));
 const dataSource = data;
-const groups = ref<string[]>(undefined);
+const groups = ref<string[]>();
 const crossScrollingEnabled = ref(false);
 const disabled = ref(true);
 const contextMenuItems = ref<ContextMenuItem[]>([]);
-const target = ref(appointmentClassName);
+const target = ref<string>(appointmentClassName);
 const schedulerRef = ref<DxScheduler>();
 
 function onAppointmentContextMenu(
@@ -66,7 +67,7 @@ function onAppointmentContextMenu(
       { itemData }: DxContextMenuTypes.ItemClickEvent<ContextMenuItem>,
     ) => scheduler?.updateAppointment(appointmentData, {
       ...appointmentData,
-      ...{ roomId: [itemData.id] },
+      ...{ roomId: [itemData?.id] },
     }),
   }));
   target.value = appointmentClassName;
@@ -84,7 +85,7 @@ function onAppointmentContextMenu(
       text: 'Repeat Weekly',
       beginGroup: true,
       onItemClick: () => scheduler.updateAppointment(appointmentData, {
-        startDate: targetedAppointmentData.startDate,
+        startDate: targetedAppointmentData?.startDate,
         recurrenceRule: 'FREQ=WEEKLY',
       }),
     },
@@ -120,7 +121,7 @@ function onCellContextMenu({ cellData }: DxSchedulerTypes.CellContextMenuEvent) 
       onItemClick: () => {
         if (groups.value) {
           crossScrollingEnabled.value = false;
-          groups.value = null;
+          groups.value = undefined;
         } else {
           crossScrollingEnabled.value = true;
           groups.value = ['roomId'];
@@ -136,7 +137,7 @@ function onCellContextMenu({ cellData }: DxSchedulerTypes.CellContextMenuEvent) 
   ];
 }
 function onContextMenuItemClick(e: DxContextMenuTypes.ItemClickEvent<ContextMenuItem>) {
-  e.itemData.onItemClick(e);
+  e.itemData?.onItemClick?.(e);
 }
 </script>
 

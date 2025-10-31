@@ -16,7 +16,7 @@ const CLASSES = {
   aiPromptEditorProgressBar: 'dx-ai-prompt-editor__progressbar',
 };
 
-export class AiPromptEditorModel {
+export class AIPromptEditorModel {
   constructor(protected readonly root: HTMLElement) {}
 
   public isVisible(): boolean {

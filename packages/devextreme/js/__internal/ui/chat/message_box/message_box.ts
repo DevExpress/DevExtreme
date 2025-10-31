@@ -1,6 +1,7 @@
 import type { NativeEventInfo } from '@js/common/core/events';
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import type { InteractionEvent } from '@js/events';
+import type { Attachment } from '@js/ui/chat';
 import type { Properties as FileUploaderProperties } from '@js/ui/file_uploader';
 import type { InputEvent } from '@js/ui/text_area';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
@@ -22,7 +23,10 @@ const ESCAPE_KEY = 'escape';
 
 export type MessageEnteredEvent =
   NativeEventInfo<MessageBox, InteractionEvent> &
-  { text?: string };
+  {
+    text?: string;
+    attachments?: Attachment[];
+  };
 
 export type TypingStartEvent = NativeEventInfo<MessageBox, UIEvent & { target: HTMLInputElement }>;
 
@@ -237,11 +241,21 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       return;
     }
 
-    this._messageEnteredAction?.({ text, event: e.event });
+    const messageEnteredArgs: Partial<MessageEnteredEvent> = {
+      text,
+      event: e.event,
+    };
+    const attachments = this._textArea.getAttachments();
+
+    if (attachments) {
+      messageEnteredArgs.attachments = attachments;
+    }
+
+    this._messageEnteredAction?.(messageEnteredArgs);
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
-    const { name, value } = args;
+    const { name, fullName, value } = args;
 
     switch (name) {
       case 'activeStateEnabled':
@@ -252,7 +266,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
         break;
 
       case 'fileUploaderOptions':
-        this._textArea.option(name, value);
+        this._textArea.option(fullName, value);
         break;
 
       case 'onMessageEntered':

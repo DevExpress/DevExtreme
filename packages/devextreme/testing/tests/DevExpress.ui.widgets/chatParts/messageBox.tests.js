@@ -9,6 +9,7 @@ import MessageBox, {
 } from '__internal/ui/chat/message_box/message_box';
 import ChatTextArea from '__internal/ui/chat/message_box/chat_text_area';
 import Button from 'ui/button';
+import FileUploader from 'ui/file_uploader';
 import EditingPreview, {
     CHAT_EDITING_PREVIEW_CLASS,
     CHAT_EDITING_PREVIEW_CANCEL_BUTTON_CLASS,
@@ -17,9 +18,9 @@ import {
     FOCUSED_STATE_CLASS,
 } from '__internal/core/widget/widget';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
-import { shouldSkipOnDesktop, shouldSkipOnMobile } from '../../../helpers/device.js';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const FILE_UPLOADER = 'dx-fileuploader';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -34,8 +35,10 @@ const moduleConfig = {
 
             const $buttons = this.$element.find(`.${BUTTON_CLASS}`);
             this.$sendButton = $($buttons[$buttons.length - 1]);
-
             this.sendButton = Button.getInstance(this.$sendButton);
+
+            this.$fileUploader = this.$element.find(`.${FILE_UPLOADER}`);
+            this.getFileUploader = () => FileUploader.getInstance(this.$element.find(`.${FILE_UPLOADER}`));
 
             this.getEditingPreview = () => this.$element.find(`.${CHAT_EDITING_PREVIEW_CLASS}`);
             this.getEditingPreviewInstance = () => EditingPreview.getInstance(this.getEditingPreview());
@@ -65,7 +68,6 @@ QUnit.module('MessageBox', moduleConfig, () => {
                 stylingMode: 'outlined',
                 placeholder: 'Type a message',
                 autoResizeEnabled: true,
-                maxHeight: '8em',
                 valueChangeEvent: 'input'
             };
 
@@ -93,10 +95,6 @@ QUnit.module('MessageBox', moduleConfig, () => {
         });
 
         QUnit.test('should be fired on enter key if the textarea input contains a value', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             const onMessageEnteredStub = sinon.stub();
 
             this.reinit({ onMessageEntered: onMessageEnteredStub });
@@ -194,10 +192,6 @@ QUnit.module('MessageBox', moduleConfig, () => {
         });
 
         QUnit.test('should be fired with correct arguments when enter is pressed', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             assert.expect(6);
 
             const text = '  new text message ';
@@ -222,22 +216,29 @@ QUnit.module('MessageBox', moduleConfig, () => {
                 .keyUp('enter');
         });
 
-        QUnit.test('should not send message on enter key on mobile devices (T1293840)', function(assert) {
-            if(shouldSkipOnDesktop(assert)) {
-                return;
-            }
+        QUnit.test('should be fired with attachments in args when the send button is clicked if the textarea is empty and file is attached', function(assert) {
+            assert.expect(3);
 
-            const onMessageEnteredStub = sinon.stub();
+            const clock = sinon.useFakeTimers();
+            this.reinit({
+                onMessageEntered: ({ attachments }) => {
+                    assert.notStrictEqual(attachments, undefined, 'attachments argument is passed');
+                    assert.strictEqual(attachments[0].name, 'file.png', 'attachments name is correct');
+                    assert.strictEqual(attachments[0].size, 123, 'attachments size is correct');
+                },
+                fileUploaderOptions: {
+                    uploadFile: () => {},
+                }
+            });
+            const fileUploader = this.getFileUploader();
+            fileUploader.option('value', [ { name: 'file.png', size: 123 }]);
+            fileUploader.upload();
 
-            this.reinit({ onMessageEntered: onMessageEnteredStub });
+            clock.tick();
 
-            keyboardMock(this.$input)
-                .focus()
-                .type('new text message')
-                .keyDown('enter')
-                .keyUp('enter');
+            this.$sendButton.trigger('dxclick');
 
-            assert.strictEqual(onMessageEnteredStub.callCount, 0);
+            clock.restore();
         });
     });
 

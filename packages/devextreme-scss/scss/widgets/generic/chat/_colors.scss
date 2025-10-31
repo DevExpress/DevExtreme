@@ -122,6 +122,10 @@ $chat-typingindicator-circle-bg-color-center: null !default;
 */
 $chat-typingindicator-circle-bg-color: null !default;
 
+$chat-file-container-background-color: $base-bg !default;
+$chat-file-container-box-shadow: null !default;
+$chat-file-secondary-color: $base-icon-color !default;
+
 @if $color == "light" {
   $chat-avatar-color: $base-text-color !default;
   $chat-bubble-color-primary: $base-text-color !default;
@@ -140,6 +144,8 @@ $chat-typingindicator-circle-bg-color: null !default;
 
   $chat-typingindicator-circle-bg-color: darken($base-bg, 31.57) !default;
   $chat-typingindicator-circle-bg-color-center: darken($base-bg, 46.57) !default;
+
+  $chat-file-container-box-shadow: 0 0 2px 0 color.change($base-shadow-color, $alpha: 0.12), 0 1px 2px 0 color.change($base-shadow-color, $alpha: 0.14) !default;
 }
 
 @if $color == "dark" {
@@ -160,6 +166,8 @@ $chat-typingindicator-circle-bg-color: null !default;
 
   $chat-typingindicator-circle-bg-color: lighten($base-bg, 32.55) !default;
   $chat-typingindicator-circle-bg-color-center: lighten($base-bg, 41.07) !default;
+
+  $chat-file-container-box-shadow: 0 0 2px 0 color.change($base-shadow-color, $alpha: 0.28), 0 1px 2px 0 color.change($base-shadow-color, $alpha: 0.32) !default;
 }
 
 @if $color == "carmine" {
@@ -180,6 +188,8 @@ $chat-typingindicator-circle-bg-color: null !default;
 
   $chat-typingindicator-circle-bg-color: darken($base-bg, 31.57) !default;
   $chat-typingindicator-circle-bg-color-center: darken($base-bg, 46.57) !default;
+
+  $chat-file-container-box-shadow: 0 0 2px 0 color.change($base-shadow-color, $alpha: 0.12), 0 1px 2px 0 color.change($base-shadow-color, $alpha: 0.14) !default;
 }
 
 @if $color == "contrast" {
@@ -200,6 +210,8 @@ $chat-typingindicator-circle-bg-color: null !default;
 
   $chat-typingindicator-circle-bg-color: $base-inverted-bg !default;
   $chat-typingindicator-circle-bg-color-center: $base-inverted-bg !default;
+
+  $chat-file-container-box-shadow: 0 0 2px 0 color.change($base-shadow-color, $alpha: 0.28), 0 1px 2px 0 color.change($base-shadow-color, $alpha: 0.32) !default;
 }
 
 @if $color == "darkmoon" {
@@ -220,6 +232,8 @@ $chat-typingindicator-circle-bg-color: null !default;
 
   $chat-typingindicator-circle-bg-color: lighten($base-bg, 32.55) !default;
   $chat-typingindicator-circle-bg-color-center: lighten($base-bg, 41.07) !default;
+
+  $chat-file-container-box-shadow: 0 0 2px 0 color.change($base-shadow-color, $alpha: 0.28), 0 1px 2px 0 color.change($base-shadow-color, $alpha: 0.32) !default;
 }
 
 @if $color == "darkviolet" {
@@ -240,6 +254,8 @@ $chat-typingindicator-circle-bg-color: null !default;
 
   $chat-typingindicator-circle-bg-color: lighten($base-bg, 32.55) !default;
   $chat-typingindicator-circle-bg-color-center: lighten($base-bg, 41.07) !default;
+
+  $chat-file-container-box-shadow: 0 0 2px 0 color.change($base-shadow-color, $alpha: 0.28), 0 1px 2px 0 color.change($base-shadow-color, $alpha: 0.32) !default;
 }
 
 @if $color == "greenmist" {
@@ -260,6 +276,8 @@ $chat-typingindicator-circle-bg-color: null !default;
 
   $chat-typingindicator-circle-bg-color: darken($base-bg, 31.57) !default;
   $chat-typingindicator-circle-bg-color-center: darken($base-bg, 46.57) !default;
+
+  $chat-file-container-box-shadow: 0 0 2px 0 color.change($base-shadow-color, $alpha: 0.12), 0 1px 2px 0 color.change($base-shadow-color, $alpha: 0.14) !default;
 }
 
 @if $color == "softblue" {
@@ -280,6 +298,8 @@ $chat-typingindicator-circle-bg-color: null !default;
 
   $chat-typingindicator-circle-bg-color: darken($base-bg, 31.57) !default;
   $chat-typingindicator-circle-bg-color-center: darken($base-bg, 46.57) !default;
+
+  $chat-file-container-box-shadow: 0 0 2px 0 color.change($base-shadow-color, $alpha: 0.12), 0 1px 2px 0 color.change($base-shadow-color, $alpha: 0.14) !default;
 }
 
 /**

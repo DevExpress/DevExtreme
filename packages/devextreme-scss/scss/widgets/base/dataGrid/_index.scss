@@ -457,3 +457,7 @@ $datagrid-text-stub-background-image-path: null !default;
     outline-offset: -2px;
   }
 }
+
+.dx-command-ai-header-button .dx-button.dx-state-focused {
+  outline: 2px solid $datagrid-focused-border-color;
+}

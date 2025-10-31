@@ -12,7 +12,7 @@ import 'ui/tab_panel';
 import 'ui/text_box';
 import 'ui/tree_view';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 import dxDrawer from 'ui/drawer';
 import fx from 'common/core/animation/fx';
@@ -60,6 +60,14 @@ openedStateModes.forEach(openedStateMode => {
         });
     });
 });
+
+const baseConfigs = [];
+openedStateModes.forEach(openedStateMode => {
+    ['left', 'top', 'right', 'bottom'].forEach(position => {
+        baseConfigs.push({ openedStateMode, position });
+    });
+});
+
 
 QUnit.module('zIndex conflicts', moduleConfig, () => {
     openedStateModes.forEach(openedStateMode => {
@@ -195,55 +203,46 @@ QUnit.module('zIndex conflicts', moduleConfig, () => {
     });
 });
 
-configs.forEach(config => {
-    QUnit.module(`Scenarios (${config.openedStateMode}, ${config.position}, ${config.revealMode}, shading: ${config.shading}, minSize: ${config.minSize})`, moduleConfig, () => {
+baseConfigs.forEach(baseConfig => {
+    QUnit.module(`Scenarios (${baseConfig.openedStateMode}, ${baseConfig.position})`, moduleConfig, () => {
+        function getFullDrawerOptions(targetOptions) {
+            return extend({ rtlEnabled: false, animationEnabled: false }, baseConfig, targetOptions);
+        }
 
-        function configIs(openedStateMode, position, revealMode) {
-            const isPosition = Array.isArray(position) ? (position.indexOf(config.position) >= 0) : (config.position === position || !position);
-            const isRevealMode = Array.isArray(revealMode) ? (revealMode.indexOf(config.revealMode) >= 0) : (config.revealMode === revealMode || !revealMode);
-            return config.openedStateMode === openedStateMode && isPosition && isRevealMode;
+        function configIs(openedStateMode, position) {
+            const isOpenedStateMode = Array.isArray(openedStateMode) ? (openedStateMode.indexOf(baseConfig.openedStateMode) >= 0) : (!openedStateMode || baseConfig.openedStateMode === openedStateMode);
+            const isPosition = Array.isArray(position) ? (position.indexOf(baseConfig.position) >= 0) : (!position || baseConfig.position === position);
+            return isOpenedStateMode && isPosition;
         }
 
         function testOrSkip(name, skip, callback) {
             if(skip()) {
-                // eslint-disable-next-line qunit/no-commented-tests
+
                 // QUnit.skip(name + ' - NOT SUPPORTED', function() {});
             } else {
                 QUnit.test(name, callback);
             }
         }
 
-        function testOverlap(name, skip, callback) {
-            if(config.openedStateMode === 'overlap') {
-                if(skip()) {
-                    // eslint-disable-next-line qunit/no-commented-tests
-                    // QUnit.skip(name + ' - NOT SUPPORTED', function() {});
-                } else {
-                    QUnit.test(name, callback);
-                }
-            }
-        }
+        [undefined, 25].forEach(minSize => {
+            QUnit.test('opened: false', function(assert) {
+                const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
 
-        function getFullDrawerOptions(targetOptions) {
-            return extend({ rtlEnabled: false, animationEnabled: false }, config, targetOptions);
-        }
-
-        QUnit.test('opened: false', function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
-
-            const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
-                opened: false,
-                template: drawerTesters[config.position].template,
-                __debugWhenPanelContentRendered: (e) => {
-                    if(!(configIs('overlap', ['right', 'top', 'bottom', ], ['expand', 'slide']) && config.minSize)) {
-                        drawerTesters[config.position].checkWhenPanelContentRendered(assert, e.drawer, drawerElement, $('#template').get(0), config.minSize);
+                const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
+                    opened: false,
+                    minSize,
+                    template: drawerTesters[baseConfig.position].template,
+                    __debugWhenPanelContentRendered: (e) => {
+                        if(!(configIs('overlap', ['right', 'top', 'bottom', ]) && minSize)) {
+                            drawerTesters[baseConfig.position].checkWhenPanelContentRendered(assert, e.drawer, drawerElement, $('#template').get(0), minSize);
+                        }
                     }
-                }
-            }));
+                }));
 
-            this.clock.tick(100);
+                this.clock.tick(100);
 
-            drawerTesters[config.position].checkHidden(assert, drawer, drawerElement);
+                drawerTesters[baseConfig.position].checkHidden(assert, drawer, drawerElement);
+            });
         });
 
         QUnit.test('opened: false -> minSize: 0', function(assert) {
@@ -251,14 +250,14 @@ configs.forEach(config => {
 
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: false,
-                template: drawerTesters[config.position].template,
+                template: drawerTesters[baseConfig.position].template,
             }));
 
             this.clock.tick(100);
             drawer.option('minSize', 0);
             this.clock.tick(100);
 
-            drawerTesters[config.position].checkHidden(assert, drawer, drawerElement);
+            drawerTesters[baseConfig.position].checkHidden(assert, drawer, drawerElement);
         });
 
         QUnit.test('opened: false -> minSize: null', function(assert) {
@@ -266,14 +265,14 @@ configs.forEach(config => {
 
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: false,
-                template: drawerTesters[config.position].template,
+                template: drawerTesters[baseConfig.position].template,
             }));
 
             this.clock.tick(100);
             drawer.option('minSize', null);
             this.clock.tick(100);
 
-            drawerTesters[config.position].checkHidden(assert, drawer, drawerElement);
+            drawerTesters[baseConfig.position].checkHidden(assert, drawer, drawerElement);
         });
 
         QUnit.test('opened: false -> minSize: 30', function(assert) {
@@ -281,79 +280,125 @@ configs.forEach(config => {
 
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: false,
-                template: drawerTesters[config.position].template,
+                template: drawerTesters[baseConfig.position].template,
             }));
 
             this.clock.tick(100);
             drawer.option('minSize', 30);
             this.clock.tick(100);
 
-            drawerTesters[config.position].checkHidden(assert, drawer, drawerElement);
+            drawerTesters[baseConfig.position].checkHidden(assert, drawer, drawerElement);
         });
 
-        QUnit.test('opened: false -> opened: true', function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
-            const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
-                opened: false,
-                template: drawerTesters[config.position].template()
-            }));
+        ['slide', 'expand'].forEach(revealMode => {
+            [undefined, 25].forEach(minSize => {
+                QUnit.test(`(revealMode: ${revealMode}, minSize: ${minSize}) opened: false -> opened: true`, function(assert) {
+                    const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+                    const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
+                        opened: false,
+                        revealMode,
+                        minSize,
+                        template: drawerTesters[baseConfig.position].template()
+                    }));
 
-            this.clock.tick(100);
-            drawer.option('opened', true);
-            this.clock.tick(100);
+                    this.clock.tick(100);
+                    drawer.option('opened', true);
+                    this.clock.tick(100);
 
-            drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
+                    drawerTesters[baseConfig.position].checkOpened(assert, drawer, drawerElement);
+                });
+            });
+
+            testOrSkip(`(revealMode: ${revealMode}) opened: false, visible: false -> visible: true -> opened: true`, () => configIs('overlap'), function(assert) {
+                const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+                const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
+                    opened: false,
+                    revealMode,
+                    visible: false,
+                    template: drawerTesters[baseConfig.position].template
+                }));
+
+                this.clock.tick(100);
+                drawer.option('visible', true);
+                this.clock.tick(100);
+                drawer.option('opened', true);
+                this.clock.tick(100);
+
+                drawerTesters[baseConfig.position].checkOpened(assert, drawer, drawerElement);
+            });
+
+
+            QUnit.test(`(revealMode: ${revealMode}) opened: true -> repaint`, function(assert) {
+                const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+                const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
+                    opened: true,
+                    template: drawerTesters[baseConfig.position].template,
+                }));
+
+                this.clock.tick(100);
+                drawer.repaint();
+                this.clock.tick(100);
+
+                drawerTesters[baseConfig.position].checkOpened(assert, drawer, drawerElement);
+            });
+
+            QUnit.test(`(revealMode: ${revealMode}) opened: false -> resize -> opened: true, update position config after resize`, function(assert) {
+                const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+                const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
+                    opened: false,
+                    template: drawerTesters[baseConfig.position].template
+                }));
+
+                const originalRenderPositionFunc = drawer._renderPosition;
+
+                try {
+                    sinon.spy(drawer, '_renderPosition');
+                    resizeCallbacks.fire();
+                } finally {
+                    drawer._renderPosition = originalRenderPositionFunc;
+                }
+
+                resizeCallbacks.fire();
+                this.clock.tick(100);
+                drawer.option('opened', true);
+                this.clock.tick(100);
+
+                drawerTesters[baseConfig.position].checkOpened(assert, drawer, drawerElement);
+            });
         });
 
-        testOrSkip('opened: false, visible: false -> visible: true', () => config.minSize, function(assert) {
+        QUnit.test('opened: false, visible: false -> visible: true', function(assert) {
             const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: false,
                 visible: false,
-                template: drawerTesters[config.position].template
+                template: drawerTesters[baseConfig.position].template
             }));
 
             this.clock.tick(100);
             drawer.option('visible', true);
             this.clock.tick(100);
 
-            drawerTesters[config.position].checkHidden(assert, drawer, drawerElement);
-        });
-
-        testOrSkip('opened: false, visible: false -> visible: true -> opened: true', () => configIs('overlap'), function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
-            const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
-                opened: false,
-                visible: false,
-                template: drawerTesters[config.position].template
-            }));
-
-            this.clock.tick(100);
-            drawer.option('visible', true);
-            this.clock.tick(100);
-            drawer.option('opened', true);
-            this.clock.tick(100);
-
-            drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
+            drawerTesters[baseConfig.position].checkHidden(assert, drawer, drawerElement);
         });
 
         QUnit.test('opened: true', function(assert) {
             const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: true,
-                template: drawerTesters[config.position].template,
+                template: drawerTesters[baseConfig.position].template,
             }));
 
             this.clock.tick(100);
 
-            drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
+            drawerTesters[baseConfig.position].checkOpened(assert, drawer, drawerElement);
         });
 
         QUnit.test('opened: true -> visible: false', function(assert) {
             const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: true,
-                template: drawerTesters[config.position].template
+                template: drawerTesters[baseConfig.position].template
             }));
 
             this.clock.tick(100);
@@ -370,7 +415,7 @@ configs.forEach(config => {
                 const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                     opened: true,
                     closeOnOutsideClick: closeOnOutsideClick,
-                    template: drawerTesters[config.position].template
+                    template: drawerTesters[baseConfig.position].template
                 }));
 
                 this.clock.tick(100);
@@ -378,9 +423,9 @@ configs.forEach(config => {
                 this.clock.tick(100);
 
                 if(closeOnOutsideClick) {
-                    drawerTesters[config.position].checkHidden(assert, drawer, drawerElement);
+                    drawerTesters[baseConfig.position].checkHidden(assert, drawer, drawerElement);
                 } else {
-                    drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
+                    drawerTesters[baseConfig.position].checkOpened(assert, drawer, drawerElement);
                 }
             });
         });
@@ -389,7 +434,7 @@ configs.forEach(config => {
             const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: true,
-                template: drawerTesters[config.position].template
+                template: drawerTesters[baseConfig.position].template
             }));
 
             this.clock.tick(100);
@@ -398,60 +443,24 @@ configs.forEach(config => {
             drawer.option('visible', true);
             this.clock.tick(100);
 
-            drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
+            drawerTesters[baseConfig.position].checkOpened(assert, drawer, drawerElement);
         });
 
-        QUnit.test(`opened: true, shading: ${config.shading} -> shading: ${!config.shading}`, function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
-            const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
-                opened: true,
-                shading: config.shading,
-                template: drawerTesters[config.position].template
-            }));
+        [true, false].forEach(shading => {
+            QUnit.test(`opened: true, shading: ${shading} -> shading: ${!shading}`, function(assert) {
+                const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
+                const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
+                    opened: true,
+                    shading,
+                    template: drawerTesters[baseConfig.position].template
+                }));
 
-            this.clock.tick(100);
-            drawer.option('shading', !config.shading);
-            this.clock.tick(100);
+                this.clock.tick(100);
+                drawer.option('shading', !shading);
+                this.clock.tick(100);
 
-            drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
-        });
-
-        QUnit.test('opened: true -> repaint', function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
-            const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
-                opened: true,
-                template: drawerTesters[config.position].template,
-            }));
-
-            this.clock.tick(100);
-            drawer.repaint();
-            this.clock.tick(100);
-
-            drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
-        });
-
-        QUnit.test('opened: false -> resize -> opened: true, update position config after resize', function(assert) {
-            const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
-            const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
-                opened: false,
-                template: drawerTesters[config.position].template
-            }));
-
-            const originalRenderPositionFunc = drawer._renderPosition;
-
-            try {
-                sinon.spy(drawer, '_renderPosition');
-                resizeCallbacks.fire();
-            } finally {
-                drawer._renderPosition = originalRenderPositionFunc;
-            }
-
-            resizeCallbacks.fire();
-            this.clock.tick(100);
-            drawer.option('opened', true);
-            this.clock.tick(100);
-
-            drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
+                drawerTesters[baseConfig.position].checkOpened(assert, drawer, drawerElement);
+            });
         });
 
         QUnit.test('opened: true (template + onRendered)', function(assert) {
@@ -467,7 +476,7 @@ configs.forEach(config => {
                     templates: {
                         template1: {
                             render(data) {
-                                $(data.container).append(drawerTesters[config.position].template);
+                                $(data.container).append(drawerTesters[baseConfig.position].template);
                                 data.onRendered();
                             }
                         }
@@ -477,17 +486,17 @@ configs.forEach(config => {
 
             this.clock.tick(100);
 
-            drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
+            drawerTesters[baseConfig.position].checkOpened(assert, drawer, drawerElement);
         });
 
-        testOverlap('opened: true (T813710: template + rendered + _viewPortChangeHandler)', () => configIs(undefined, 'right'), function(assert) {
+        testOrSkip('opened: true (T813710: template + rendered + _viewPortChangeHandler)', () => configIs(['shrink', 'push']) || configIs(undefined, 'right'), function(assert) {
             const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: true,
                 visible: true,
                 template: 'template1',
                 templatesRenderAsynchronously: true,
-                templateSize: drawerTesters[config.position].templateSize,
+                templateSize: drawerTesters[baseConfig.position].templateSize,
                 integrationOptions: {
                     templates: {
                         template1: {
@@ -495,7 +504,7 @@ configs.forEach(config => {
                                 Promise.resolve().then(() => {
                                     drawer.getOverlay()._viewPortChangeHandler();
                                 });
-                                $(data.container).append($(drawerTesters[config.position].template()));
+                                $(data.container).append($(drawerTesters[baseConfig.position].template()));
                                 data.onRendered();
                             }
                         }
@@ -505,7 +514,7 @@ configs.forEach(config => {
 
             this.clock.tick(100);
 
-            drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
+            drawerTesters[baseConfig.position].checkOpened(assert, drawer, drawerElement);
         });
 
         testOrSkip('opened: true, visible: false -> visible: true', () => configIs('overlap'), function(assert) {
@@ -513,14 +522,14 @@ configs.forEach(config => {
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: true,
                 visible: false,
-                template: drawerTesters[config.position].template
+                template: drawerTesters[baseConfig.position].template
             }));
 
             this.clock.tick(100);
             drawer.option('visible', true);
             this.clock.tick(100);
 
-            drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
+            drawerTesters[baseConfig.position].checkOpened(assert, drawer, drawerElement);
         });
 
         testOrSkip('opened: true, visible: false -> repaint -> visible: true', () => configIs('overlap'), function(assert) {
@@ -528,7 +537,7 @@ configs.forEach(config => {
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: true,
                 visible: false,
-                template: drawerTesters[config.position].template
+                template: drawerTesters[baseConfig.position].template
             }));
 
             this.clock.tick(100);
@@ -538,7 +547,7 @@ configs.forEach(config => {
             drawer.option('visible', true);
             this.clock.tick(100);
 
-            drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
+            drawerTesters[baseConfig.position].checkOpened(assert, drawer, drawerElement);
         });
     });
 });

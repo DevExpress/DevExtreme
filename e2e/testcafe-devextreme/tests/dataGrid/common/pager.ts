@@ -4,7 +4,6 @@ import TextBox from 'devextreme-testcafe-models/textBox';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { changeTheme } from '../../../helpers/changeTheme';
 
 async function createDataGridWithPager(): Promise<any> {
   const dataSource = Array.from({ length: 100 }, (_, room) => ({ name: 'Alex', phone: '555555', room }));
@@ -132,41 +131,38 @@ safeSizeTest('Resize without navigation buttons', async (t) => {
     .ok(compareResults.errorMessages());
 }).before(async () => createDataGridWithPager());
 
-['generic.light', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'].forEach((theme) => {
-  safeSizeTest(`Compact pager in the ${theme} theme (T1057735)`, async (t) => {
-    const dataGrid = new DataGrid('#container');
-    const pagerElement = dataGrid.getPager().element;
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+// visual: generic.light
+// visual: generic.light.compact
+// visual: material.blue.light
+// visual: material.blue.light.compact
+safeSizeTest('Compact pager in the generic.light theme (T1057735)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const pagerElement = dataGrid.getPager().element;
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t
-      .expect(await takeScreenshot(`compact-pager-in-the-${theme.replace(/\./g, '-')}-theme.png`, pagerElement))
-      .ok()
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }, [700, 600])
-    .meta({ unstable: theme === 'material.blue.light' })
-    .before(async () => {
-      await changeTheme(theme);
-      await createWidget('dxDataGrid', {
-        dataSource: [{ id: 1, name: 'test' }],
-        keyExpr: 'id',
-        paging: {
-          pageSize: 10,
-        },
-        pager: {
-          visible: true,
-          allowedPageSizes: [5, 10, 'all'],
-          showPageSizeSelector: true,
-          showInfo: true,
-          showNavigationButtons: true,
-          displayMode: 'compact',
-        },
-      });
-    })
-    .after(async () => {
-      await changeTheme('generic.light');
+  await t
+    .expect(await takeScreenshot('compact-pager-in-the-generic-light-theme.png', pagerElement))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [700, 600])
+  .before(async () => {
+    await createWidget('dxDataGrid', {
+      dataSource: [{ id: 1, name: 'test' }],
+      keyExpr: 'id',
+      paging: {
+        pageSize: 10,
+      },
+      pager: {
+        visible: true,
+        allowedPageSizes: [5, 10, 'all'],
+        showPageSizeSelector: true,
+        showInfo: true,
+        showNavigationButtons: true,
+        displayMode: 'compact',
+      },
     });
-});
+  });
 
 test('Changing pageSize to \'all\' with rowRenderingMode=\'virtual\' should work (T1090331)', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -178,7 +174,7 @@ test('Changing pageSize to \'all\' with rowRenderingMode=\'virtual\' should work
 
   await t.click(dataGrid.element()); // don't know why but test isn't reproduces without this click
 
-  await dataGrid.scrollBy({ y: 100 });
+  await dataGrid.scrollBy(t, { y: 100 });
 
   await t.click(pager.getPageSizeSelectBox().element);
   await t.click(pager.getPopupPageSizes().withText('All'));
@@ -214,7 +210,7 @@ test('Page index should not reset when scrolling while the grid is being refresh
     .eql(2);
 
   await dataGrid.apiRefresh();
-  await dataGrid.scrollBy({ y: 20 });
+  await dataGrid.scrollBy(t, { y: 20 });
 
   await t
     .expect(dataGrid.option('paging.pageIndex'))

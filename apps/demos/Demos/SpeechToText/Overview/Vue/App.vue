@@ -126,11 +126,11 @@ const type = ref<DxButtonTypes.ButtonType>('default');
 const hint = ref('Start voice recognition');
 const disabled = ref(false);
 const textAreaValue = ref('');
-const language = ref(languages[0]);
+const language = ref<string>(languages[0]);
 const interimResults = ref(true);
 const continuous = ref(false);
 const animation = ref(true);
-const speechRecognitionConfig = computed(() => ({
+const speechRecognitionConfig: Record<string, any> = computed(() => ({
   interimResults: interimResults.value,
   continuous: continuous.value,
   lang: langMap[language.value],
@@ -159,10 +159,10 @@ function onStartClick() {
 function onStopClick() {
   stopHandler();
 }
-function onResult({ event }) {
+function onResult({ event }: Record<string, any>) {
   const { results } = event;
   const resultText = Object.values(results)
-    .map((resultItem) => resultItem[0].transcript)
+    .map((resultItem: any) => resultItem[0].transcript)
     .join(' ');
   textAreaValue.value = resultText;
 

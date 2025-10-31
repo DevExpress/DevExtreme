@@ -7,8 +7,6 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { salesApiMock } from './apiMocks/salesApiMock';
-import { changeTheme } from '../../../helpers/changeTheme';
-import { Themes } from '../../../helpers/themes';
 
 async function getMaxRightOffset(dataGrid: DataGrid): Promise<number> {
   const scrollWidth = await dataGrid.getScrollWidth();
@@ -226,8 +224,10 @@ test('DataGrid should not reset its top scroll position after cell modification 
   },
 }));
 
-test('Ungrouping after grouping should work correctly if row rendering mode is virtual', async (t) => {
+test.meta({ unstable: true })('Ungrouping after grouping should work correctly if row rendering mode is virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
 
   // act
   await dataGrid.scrollTo(t, { top: 500 });
@@ -355,6 +355,9 @@ test('Scroll position after grouping when RTL (T388508)', async (t) => {
 safeSizeTest('Header container should have padding-right after expanding the master row with a detail grid when using native scrolling (T1004507)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t.expect(dataGrid.isReady()).ok();
+
   async function getRightPadding(): Promise<number> {
     const padding = await dataGrid.getHeaders().element.getStyleProperty('padding-right');
     return parseFloat(padding);
@@ -383,7 +386,7 @@ safeSizeTest('Header container should have padding-right after expanding the mas
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxDataGrid', {
+}).meta({ unstable: true }).before(async () => createWidget('dxDataGrid', {
   width: 150,
   height: 300,
   columnMinWidth: 100,
@@ -438,7 +441,7 @@ test('Header container should have padding-right if grid has max-height and scro
   // act
   const scrollBarWidth = await dataGrid.getScrollbarWidth(false);
 
-  await dataGrid.scrollBy({ y: 20 });
+  await dataGrid.scrollBy(t, { y: 20 });
 
   // assert
   await t
@@ -490,6 +493,8 @@ test('Header container should have padding-right if grid has max-height and scro
 
 test('New virtual mode. A detail row should be rendered when the last master row is expanded', async (t) => {
   const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
 
   // act
   await dataGrid.scrollTo(t, { top: 3300 });
@@ -727,6 +732,10 @@ test.skip('New virtual mode. Virtual rows should not be in view port', async (t)
       legacyMode: false,
     },
   });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).myStore;
+  })();
 });
 
 test('New row should be rendered at the top when grid is scrolled in virtual scrolling', async (t) => {
@@ -873,6 +882,9 @@ safeSizeTest('New mode. Rows should be rendered properly when rowRenderingMode i
 
 safeSizeTest('Rows are rendered properly when window content is scrolled (T1070388)', async (t) => {
   const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
+
   const scrollWindowTo = async (position: number) => {
     await ClientFunction(
       () => {
@@ -1178,7 +1190,7 @@ test.meta({ unstable: true })('Scroll to the bottom after expand several group',
   await dataGrid.apiExpandRow(['Contoso York Store']);
   await dataGrid.apiExpandRow(['Contoso York Store', 'Audio']);
   await scrollToBottom();
-  await dataGrid.scrollBy({ y: -1 });
+  await dataGrid.scrollBy(t, { y: -1 });
   await t.expect(dataGrid.isReady()).ok();
 
   // assert
@@ -1567,14 +1579,14 @@ safeSizeTest('Editing buttons should rerender correctly after scrolling if repai
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await dataGrid.scrollBy({ top: 1000 });
+  await dataGrid.scrollBy(t, { top: 1000 });
 
   await dataGrid.apiEditRow(3); // row with id=12
 
-  await dataGrid.scrollBy({ top: -1000 });
-  await dataGrid.scrollBy({ top: 1000 });
+  await dataGrid.scrollBy(t, { top: -1000 });
+  await dataGrid.scrollBy(t, { top: 1000 });
 
-  await dataGrid.scrollBy({ top: -1 });
+  await dataGrid.scrollBy(t, { top: -1 });
 
   await takeScreenshot('T1136896-virtual-scrolling_editing-buttons.png', '#container');
 
@@ -1610,12 +1622,12 @@ test('Restoring focus on re-rendering should be done without unexpected scrollin
 
   await t.expect(dataGrid.isReady()).ok();
 
-  await dataGrid.scrollBy({ left: 1000 });
+  await dataGrid.scrollBy(t, { left: 1000 });
 
   await t.click(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(19).element);
 
-  await dataGrid.scrollBy({ left: 0 });
-  await dataGrid.scrollBy({ top: 50 });
+  await dataGrid.scrollBy(t, { left: 0 });
+  await dataGrid.scrollBy(t, { top: 50 });
 
   await t.expect(dataGrid.getScrollLeft()).eql(0);
 }).before(async () => {
@@ -1733,8 +1745,8 @@ test('DataGrid - Focused cell moves to the end of the table after horizontal scr
 
   await t.expect(dataGrid.getDataCell(0, 0).isFocused).ok();
 
-  await dataGrid.scrollBy({ x: 1000 });
-  await dataGrid.scrollBy({ x: -1000 });
+  await dataGrid.scrollBy(t, { x: 1000 });
+  await dataGrid.scrollBy(t, { x: -1000 });
 
   await t.expect(dataGrid.getDataCell(0, 0).isFocused).ok();
 }).before(async () => createWidget('dxDataGrid', {
@@ -1763,8 +1775,8 @@ test('DataGrid - Scrolling position is reset to far right on an attempt to scrol
 
   await t.expect(dataGrid.getDataCell(0, 20).isFocused).ok();
 
-  await dataGrid.scrollBy({ x: -1000 });
-  await dataGrid.scrollBy({ x: 1000 });
+  await dataGrid.scrollBy(t, { x: -1000 });
+  await dataGrid.scrollBy(t, { x: 1000 });
 
   await t.expect(dataGrid.getDataCell(0, 20).isFocused).ok();
 }).before(async () => createWidget('dxDataGrid', {
@@ -1787,6 +1799,8 @@ test('DataGrid - Scrolling position is reset to far right on an attempt to scrol
 test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a non-focused row if the grid height is small', async (t) => {
   const dataGrid = new DataGrid('#container');
   const otherContainer = Selector('#otherContainer');
+
+  await t.expect(dataGrid.isReady()).ok();
 
   await dataGrid.apiOption('focusedRowKey', '2');
   await t.expect(otherContainer.innerText).eql('2');
@@ -1869,32 +1883,30 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
 });
 
 // T1270354
+// visual: generic.light
+// visual: material.blue.light
+// visual: fluent.blue.light
 [
-  { theme: Themes.genericLight, useNative: true },
-  { theme: Themes.genericLight, useNative: false },
-  { theme: Themes.materialBlue, useNative: true },
-  { theme: Themes.materialBlue, useNative: false },
-  { theme: Themes.fluentBlue, useNative: true },
-  { theme: Themes.fluentBlue, useNative: false },
-].forEach(({ theme, useNative }) => {
-  test(`Virtual ${useNative ? 'native' : 'simulated'} scrolling - Scrolling to the bottom should work correctly when there is a grouping and a summary (${theme} theme)`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  { useNative: true },
+  { useNative: false },
+].forEach(({ useNative }) => {
+  test(`Virtual ${useNative ? 'native' : 'simulated'} scrolling - Scrolling to the bottom should work correctly when there is a grouping and a summary`, async (t) => {
     const dataGrid = new DataGrid('#container');
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
       .expect(dataGrid.isReady())
       .ok();
 
-    await dataGrid.scrollBy({ y: 10000 });
+    await dataGrid.scrollBy(t, { y: 10000 });
 
     await t
-      .expect(await takeScreenshot(`T1270354-virtual-${useNative ? 'native' : 'simulated'}-scrolling-with-grouping-and-summary-${theme}.png`, '#container'))
+      .expect(await takeScreenshot(`T1270354-virtual-${useNative ? 'native' : 'simulated'}-scrolling-with-grouping-and-summary-generic.light.png`, '#container'))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   })
     .before(async () => {
-      await changeTheme(theme);
       await createWidget('dxDataGrid', {
         dataSource: [...new Array(50)]
           .fill(null)
@@ -1931,8 +1943,7 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
           ],
         },
       });
-    })
-    .after(async () => changeTheme(Themes.genericLight));
+    });
 });
 
 fixture`Scrolling - warnings`

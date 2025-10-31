@@ -7,7 +7,7 @@ import animationFrame from 'common/core/animation/frame';
 import translator from 'common/core/animation/translator';
 import fx from 'common/core/animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import 'ui/draggable';
 import 'ui/scroll_view';
 import 'ui/overlay';

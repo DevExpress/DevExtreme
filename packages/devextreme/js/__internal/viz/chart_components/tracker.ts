@@ -51,7 +51,7 @@ const POINT_CLICK = 'pointClick';
 const POINT_DATA = 'chart-data-point';
 const SERIES_DATA = 'chart-data-series';
 const ARG_DATA = 'chart-data-argument';
-const DELAY = 100;
+const DELAY = 10;
 const HOLD_TIMEOUT = 300;
 
 const NONE_MODE = 'none';

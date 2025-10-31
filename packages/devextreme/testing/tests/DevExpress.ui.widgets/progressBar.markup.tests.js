@@ -2,8 +2,6 @@ import $ from 'jquery';
 
 import 'ui/progress_bar';
 
-import 'generic_light.css!';
-
 QUnit.testStart(function() {
     const markup =
         '<div id="progressbar"></div>';

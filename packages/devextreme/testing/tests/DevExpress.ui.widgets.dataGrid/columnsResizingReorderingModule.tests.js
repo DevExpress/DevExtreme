@@ -32,7 +32,6 @@ import { HeaderPanel } from '__internal/grids/data_grid/module_not_extended/head
 import Action from '__internal/core/m_action';
 import { getHeight } from 'core/utils/size';
 import publicComponentUtils from 'core/utils/public_component';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 class TestDraggingHeader2 extends columnsResizingReordering.DraggingHeaderView {
     callDragCounter = 0;
@@ -2503,10 +2502,6 @@ QUnit.module('Columns resizing', {
     });
 
     QUnit.test('The free space row is not displayed when horizontal scrollbar is shown_B253714', function(assert) {
-        if(shouldSkipOnMobile(assert, 'height of scrollbar equals zero on mobile devices')) {
-            return;
-        }
-
         // arrange
         this.component._controllers.columns = new MockColumnsController([
             { caption: 'Column 1', visible: true, width: '150px' },
@@ -3692,7 +3687,9 @@ QUnit.module('Headers reordering', {
             }),
             sourceColumn: {
                 caption: 'TestDrag'
-            }
+            },
+            sourceLocation: 'headers',
+            draggingPanels: this.draggingPanels,
         });
         const $dragHeader = $('.dx-datagrid-drag-header');
 
@@ -3725,7 +3722,9 @@ QUnit.module('Headers reordering', {
             }),
             sourceColumn: {
                 caption: 'TestDrag'
-            }
+            },
+            sourceLocation: 'headers',
+            draggingPanels: this.draggingPanels,
         });
 
         const $dragHeader = $('.dx-datagrid-drag-header');
@@ -4793,7 +4792,8 @@ QUnit.module('Headers reordering', {
             sourceLocation: 'headers',
             sourceColumn: {
                 caption: 'TestDrag'
-            }
+            },
+            draggingPanels: this.draggingPanels,
         });
         draggingHeader.moveHeader({
             event: {
@@ -4831,7 +4831,9 @@ QUnit.module('Headers reordering', {
             sourceColumn: {
                 command: 'edit',
                 type: 'buttons'
-            }
+            },
+            sourceLocation: 'headers',
+            draggingPanels: this.draggingPanels,
         });
         const $dragHeader = $('.dx-datagrid-drag-header');
 

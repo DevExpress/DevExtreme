@@ -14,8 +14,6 @@ QUnit.testStart(function() {
     $('#widthRootStyle').css('width', '300px');
 });
 
-import 'generic_light.css!';
-
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const DATEBOX_CLASS = 'dx-datebox';
 const DATEBOX_LIST_CLASS = 'dx-datebox-list';

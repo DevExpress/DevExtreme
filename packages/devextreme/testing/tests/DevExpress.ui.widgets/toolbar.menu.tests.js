@@ -14,10 +14,9 @@ import config from 'core/config';
 import { DataSource } from 'common/data/data_source/data_source';
 import { isRenderer } from 'core/utils/type';
 import themes from 'ui/themes';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
 import errors from 'core/errors';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(function() {
     const markup =
@@ -620,10 +619,6 @@ QUnit.module('widget sizing render', moduleConfig, () => {
             }
         }, () => {
             QUnit.test('esc on popup overlay should close popup', function(assert) {
-                if(shouldSkipOnMobile(assert)) {
-                    return;
-                }
-
                 this.overflowMenu.$button().focusin();
                 this.keyboard.keyDown('enter');
 
@@ -637,10 +632,6 @@ QUnit.module('widget sizing render', moduleConfig, () => {
             });
 
             QUnit.test('esc on nested items should NOT close popup', function(assert) {
-                if(shouldSkipOnMobile(assert)) {
-                    return;
-                }
-
                 this.overflowMenu.$button().focusin();
                 this.keyboard.keyDown('enter');
 
@@ -675,10 +666,6 @@ QUnit.module('widget sizing render', moduleConfig, () => {
             }
         }, () => {
             QUnit.test('space on a not dxButton in nested list item should NOT close popup', function(assert) {
-                if(shouldSkipOnMobile(assert)) {
-                    return;
-                }
-
                 this.overflowMenu.$button().focusin();
                 this.keyboard.keyDown('enter');
 
@@ -692,10 +679,6 @@ QUnit.module('widget sizing render', moduleConfig, () => {
             });
 
             QUnit.test('enter on a not dxButton in nested list item should NOT close popup', function(assert) {
-                if(shouldSkipOnMobile(assert)) {
-                    return;
-                }
-
                 this.overflowMenu.$button().focusin();
                 this.keyboard.keyDown('enter');
 
@@ -709,9 +692,6 @@ QUnit.module('widget sizing render', moduleConfig, () => {
             });
 
             QUnit.test('space on a dxButton in nested list item should close popup', function(assert) {
-                if(shouldSkipOnMobile(assert)) {
-                    return;
-                }
                 this.overflowMenu.$button().focusin();
                 this.keyboard.keyDown('enter');
 
@@ -724,9 +704,6 @@ QUnit.module('widget sizing render', moduleConfig, () => {
             });
 
             QUnit.test('enter on a dxButton in nested list item should close popup', function(assert) {
-                if(shouldSkipOnMobile(assert)) {
-                    return;
-                }
                 this.overflowMenu.$button().focusin();
                 this.keyboard.keyDown('enter');
 

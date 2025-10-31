@@ -8,12 +8,11 @@ testUtils.importAnd(() => 'devextreme/viz/chart', () => DevExpress.viz.dxChart, 
   });
 
   return testUtils
-    .postponeUntilFound('#chart', 100, 10000)
+    .postponeUntilFound('#chart', 100, 5000)
     .then(() => {
       const instance = dxChart.getInstance(document.querySelector('#chart'));
       instance.option('dataSource', dataSource);
 
       testUtils.mockOptionMethod(instance);
-    })
-    .then(() => testUtils.postpone(2000));
+    });
 });

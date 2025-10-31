@@ -19,8 +19,8 @@ runManualTest('Chat', 'Customization', (test) => {
 
     await t
       .click(Selector(`.${SELECTBOX_CLASS}`).nth(0))
-      .click(Selector(`.${LIST_ITEM_CLASS}`).nth(2))
-      .wait(500);
+      .click(Selector(`.${LIST_ITEM_CLASS}`).nth(2));
+    // .wait(500);
 
     await testScreenshot(t, takeScreenshot, 'chat_customization_day_headers_format_is_changed.png');
 
@@ -47,8 +47,8 @@ runManualTest('Chat', 'Customization', (test) => {
 
     await t
       .click(Selector(`.${SELECTBOX_CLASS}`).nth(1))
-      .click(Selector(`.${LIST_ITEM_CLASS}`).nth(5))
-      .wait(500);
+      .click(Selector(`.${LIST_ITEM_CLASS}`).nth(5));
+    // .wait(500);
 
     await testScreenshot(t, takeScreenshot, 'chat_customization_message_timestamp_format_is_changed.png');
 

@@ -1,4 +1,4 @@
-import type { GenerateGridColumnCommandParams, GenerateGridColumnCommandResult } from '@js/common/ai-integration';
+import type { GenerateGridColumnCommandParams, GenerateGridColumnCommandResponse, GenerateGridColumnCommandResult } from '@js/common/ai-integration';
 import { BaseCommand } from '@ts/core/ai_integration/commands/base';
 import type { PromptData, PromptTemplateName } from '@ts/core/ai_integration/core/prompt_manager';
 
@@ -20,9 +20,27 @@ export class GenerateGridColumnCommand extends BaseCommand<
     };
   }
 
-  protected parseResult(response: string): GenerateGridColumnCommandResult {
-    const result: GenerateGridColumnCommandResult = JSON.parse(response);
-    return result;
+  protected parseResult(
+    response: GenerateGridColumnCommandResponse,
+  ): GenerateGridColumnCommandResult {
+    if (typeof response === 'string') {
+      if (response === '') {
+        return {
+          data: {},
+        };
+      }
+      return {
+        data: JSON.parse(response),
+      };
+    }
+
+    const data = typeof response.data === 'string'
+      ? JSON.parse(response.data)
+      : response.data;
+
+    return {
+      data,
+    };
   }
 
   private generateDataDescription(data: Record<PropertyKey, unknown>): string {

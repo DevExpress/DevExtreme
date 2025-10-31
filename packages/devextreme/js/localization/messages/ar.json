@@ -88,6 +88,9 @@
         "dxFileUploader-invalidFileExtension": "نوع الملف غير مسموح به",
         "dxFileUploader-invalidMaxFileSize": "الملف كبير جدا",
         "dxFileUploader-invalidMinFileSize": "الملف صغير جدًا",
+        "dxFileUploader-fileListLabel": "File list",
+        "dxFileUploader-removeFileButtonLabel": "Remove file {0}",
+        "dxFileUploader-uploadFileButtonLabel": "Upload file {0}",
 
         "dxRangeSlider-ariaFrom": "من عند",
         "dxRangeSlider-ariaTill": "حتى",
@@ -271,10 +274,10 @@
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
 
         "dxScheduler-appointmentListAriaLabel": "Appointment list",
-
+        "dxScheduler-newPopupTitle": "New Appointment",
         "dxScheduler-editPopupTitle": "Edit Appointment",
         "dxScheduler-editPopupSaveButtonText": "Save",
-        
+
         "dxScheduler-editorLabelTitle": "الموضوع",
         "dxScheduler-editorLabelStartDate": "تاريخ البدء",
         "dxScheduler-editorLabelEndDate": "تاريخ الانتهاء",
@@ -410,6 +413,8 @@
         "dxChat-editingDeleteConfirmText": "Are you sure you want to delete this message?",
         "dxChat-deletedMessageText": "This message was deleted",
         "dxChat-defaultImageAlt": "Image shared in chat",
+        "dxChat-fileViewLabel": "File list",
+        "dxChat-downloadButtonLabel": "Download file {0}",
 
         "dxColorView-ariaRed": "أحمر",
         "dxColorView-ariaGreen": "أخضر",

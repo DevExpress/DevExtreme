@@ -2,8 +2,6 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { Themes } from '../../../helpers/themes';
-import { changeTheme } from '../../../helpers/changeTheme';
 import { getData } from '../helpers/generateDataSourceData';
 
 fixture.disablePageReloads`Header Panel`
@@ -80,43 +78,35 @@ test('Drop-down window should be positioned correctly after resizing the toolbar
   },
 }));
 
-[
-  Themes.genericLight,
-  Themes.genericDark,
-  Themes.materialBlue,
-  Themes.materialBlueDark,
-  Themes.fluentBlue,
-  Themes.fluentBlueDark,
-].forEach((theme) => {
-  test(`Disabled toolbar buttons are not grayed out in Material themes (T1217416) in ${theme}`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const dataGrid = new DataGrid('#container');
+// visual: generic.light
+// visual: generic.dark
+// visual: material.blue.light
+// visual: material.blue.dark
+// visual: fluent.blue.light
+// visual: fluent.blue.dark
 
-    await t
-      .expect(await takeScreenshot(`disabled-toolbar-buttons-${theme}.png`, dataGrid.element))
-      .ok()
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => {
-    await changeTheme(theme);
+test('Disabled toolbar buttons are not grayed out in Material themes (T1217416)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
 
-    return createWidget('dxDataGrid', {
-      dataSource: getData(5, 3),
-      keyExpr: 'field_0',
-      showBorders: true,
-      toolbar: {
-        items: ['saveButton', 'revertButton', 'applyFilterButton'],
-      },
-      filterRow: { visible: true, applyFilter: 'onClick' },
-      editing: {
-        mode: 'batch',
-        allowUpdating: true,
-      },
-    });
-  }).after(async () => {
-    await changeTheme(Themes.genericLight);
-  });
-});
+  await t
+    .expect(await takeScreenshot('disabled-toolbar-buttons-generic.light.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(5, 3),
+  keyExpr: 'field_0',
+  showBorders: true,
+  toolbar: {
+    items: ['saveButton', 'revertButton', 'applyFilterButton'],
+  },
+  filterRow: { visible: true, applyFilter: 'onClick' },
+  editing: {
+    mode: 'batch',
+    allowUpdating: true,
+  },
+}));
 
 test('Toolbar should render on changing visibility if visibility is false initially', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -181,32 +171,23 @@ test('Toolbar should not reset its widget values when changing the disabled prop
   },
 }));
 
-[
-  Themes.genericLight,
-  Themes.materialBlue,
-  Themes.fluentBlue,
-].forEach((theme) => {
-  test(`Invisible toolbar doesn't have additional paddings (T1261773) in ${theme}`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const dataGrid = new DataGrid('#container');
+// visual: generic.light
+// visual: material.blue.light
+// visual: fluent.blue.light
 
-    await t
-      .expect(await takeScreenshot(`invisible-toolbar-buttons-${theme}.png`, dataGrid.element))
-      .ok()
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => {
-    await changeTheme(theme);
+test('Invisible toolbar doesn\'t have additional paddings (T1261773)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    return createWidget('dxDataGrid', {
-      dataSource: getData(5, 3),
-      keyExpr: 'field_0',
-      toolbar: {
-        items: ['columnChooserButton'],
-        visible: false,
-      },
-    });
-  }).after(async () => {
-    await changeTheme(Themes.genericLight);
-  });
-});
+  await t
+    .expect(await takeScreenshot('invisible-toolbar-buttons-generic.light.png'))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(5, 3),
+  keyExpr: 'field_0',
+  toolbar: {
+    items: ['columnChooserButton'],
+    visible: false,
+  },
+}));

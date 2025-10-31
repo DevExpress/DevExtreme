@@ -30,7 +30,6 @@ import {
     POPUP_CONTENT_SCROLLABLE_CLASS,
 } from '__internal/ui/popup/m_popup';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 import 'generic_light.css!';
 import 'ui/popup';
@@ -118,8 +117,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-executeAsyncMock.setup();
-
 const POPUP_CLASS = 'dx-popup';
 const POPUP_WRAPPER_CLASS = 'dx-popup-wrapper';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
@@ -144,7 +141,14 @@ const VIEWPORT_CLASS = 'dx-viewport';
 
 const viewport = function() { return $(`.${VIEWPORT_CLASS}`); };
 
-QUnit.module('basic', () => {
+QUnit.module('basic', {
+    beforeEach: function() {
+        executeAsyncMock.setup();
+    },
+    afterEach: function() {
+        executeAsyncMock.teardown();
+    }
+}, () => {
     QUnit.test('markup init', function(assert) {
         const $element = $('#popup').dxPopup();
         assert.ok($element.hasClass(POPUP_CLASS));
@@ -650,9 +654,11 @@ QUnit.module('basic', () => {
 QUnit.module('dimensions', {
     beforeEach: function() {
         fx.off = true;
+        executeAsyncMock.setup();
     },
     afterEach: function() {
         fx.off = false;
+        executeAsyncMock.teardown();
     }
 }, () => {
     QUnit.test('content must not overlap bottom buttons', function(assert) {
@@ -932,12 +938,15 @@ QUnit.module('options changed callbacks', {
         };
         this.init();
 
+        executeAsyncMock.setup();
+
         return new Promise((resolve) => themes.initialized(resolve));
     },
 
     afterEach: function() {
         fx.off = false;
         this.clock.restore();
+        executeAsyncMock.teardown();
     }
 }, () => {
     QUnit.test('width/height', function(assert) {
@@ -2085,6 +2094,11 @@ QUnit.module('drag', {
         };
 
         this.init();
+
+        executeAsyncMock.setup();
+    },
+    afterEach: function() {
+        executeAsyncMock.teardown();
     }
 }, () => {
     QUnit.test('class should be added if drag is enabled', function(assert) {
@@ -2357,6 +2371,11 @@ QUnit.module('resize', {
         };
 
         this.init();
+
+        executeAsyncMock.setup();
+    },
+    afterEach: function() {
+        executeAsyncMock.teardown();
     }
 }, () => {
     QUnit.test('popup should have resizable component on overlay content', function(assert) {
@@ -2566,6 +2585,10 @@ QUnit.module('keyboard navigation', {
             this.position = this.$overlayContent.position();
             this.keyboard = keyboardMock(this.$overlayContent);
         };
+        executeAsyncMock.setup();
+    },
+    afterEach: function() {
+        executeAsyncMock.teardown();
     }
 }, () => {
     QUnit.test('arrows handling', function(assert) {
@@ -2663,7 +2686,11 @@ QUnit.module('rendering', {
         this.element = $('#popup').dxPopup();
         this.instance = this.element.dxPopup('instance');
         devices.current('desktop');
+        executeAsyncMock.setup();
         return new Promise((resolve) => themes.initialized(resolve));
+    },
+    afterEach: function() {
+        executeAsyncMock.teardown();
     }
 }, () => {
     QUnit.test('anonymous content template rendering', function(assert) {
@@ -2796,7 +2823,14 @@ QUnit.module('rendering', {
     });
 });
 
-QUnit.module('templates', () => {
+QUnit.module('templates', {
+    beforeEach: function() {
+        executeAsyncMock.setup();
+    },
+    afterEach: function() {
+        executeAsyncMock.teardown();
+    }
+}, () => {
     QUnit.test('titleTemplate', function(assert) {
         assert.expect(6);
 
@@ -3027,6 +3061,10 @@ QUnit.module('renderGeometry', {
 
         this.init();
 
+        executeAsyncMock.setup();
+    },
+    afterEach: function() {
+        executeAsyncMock.teardown();
     }
 }, () => {
     QUnit.test('toolbar should update geometry after toolbarItems visibility option change', function(assert) {
@@ -3142,6 +3180,10 @@ QUnit.module('positioning', {
             this.init(options);
         };
         this.init();
+        executeAsyncMock.setup();
+    },
+    afterEach: function() {
+        executeAsyncMock.teardown();
     }
 }, () => {
     QUnit.module('after fullScreen option change', () => {
@@ -3271,10 +3313,6 @@ QUnit.module('positioning', {
         });
 
         QUnit.test('drag using kbn should raise visualPositionChanged event with correct parameters', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             const visualPositionChangedStub = sinon.stub();
             this.popup.on('visualPositionChanged', visualPositionChangedStub);
 
@@ -3530,9 +3568,11 @@ QUnit.module('animation', {
             },
             fullScreen: true,
         }).dxPopup('instance');
+        executeAsyncMock.setup();
     },
     afterEach: function() {
         this.animateStub.restore();
+        executeAsyncMock.teardown();
     }
 }, () => {
     QUnit.test('animation.show.to should have position.of=window if fullScreen=true even if popup position.of is set', function(assert) {

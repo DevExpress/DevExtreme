@@ -3,6 +3,8 @@ import devices from '__internal/core/m_devices';
 import { CustomStore } from 'common/data/custom_store';
 import { DataSource } from 'common/data/data_source/data_source';
 
+import 'generic_light.css!';
+
 import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibility_change';
 import $ from 'jquery';
 import dxSchedulerWorkSpaceDay from '__internal/scheduler/workspaces/m_work_space_day';
@@ -583,7 +585,10 @@ QUnit.module('Options', () => {
             allowResizing: true,
             allowDragging: true,
             allowTimeZoneEditing: false,
-            legacyForm: false
+            legacyForm: false,
+            form: {
+                iconsShowMode: 'main'
+            }
         };
 
         if(devices.real().platform !== 'generic') {

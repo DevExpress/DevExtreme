@@ -36,7 +36,8 @@ import {
 import { CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS } from '__internal/ui/chat/confirmationpopup';
 import { POPUP_CLASS } from '__internal/ui/popup/m_popup';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
-import { shouldSkipOnMobile } from '../../../helpers/device.js';
+import { CHAT_FILE_CLASS } from '__internal/ui/chat/file_view/file';
+
 import MessageBubble from '__internal/ui/chat/messagebubble';
 import ChatTextArea from '__internal/ui/chat/message_box/chat_text_area';
 
@@ -423,10 +424,6 @@ QUnit.module('Chat', () => {
             });
 
             QUnit.testInActiveWindow('Contextmenu should be hidden and input focused after esc is pressed', function(assert) {
-                if(shouldSkipOnMobile(assert)) {
-                    return;
-                }
-
                 const items = [
                     { id: '1', text: 'a', author: userFirst },
                     { id: '2', text: 'b', author: userSecond },
@@ -452,10 +449,6 @@ QUnit.module('Chat', () => {
             });
 
             QUnit.testInActiveWindow('Input not focused after context menu is hidden by outside click', function(assert) {
-                if(shouldSkipOnMobile(assert)) {
-                    return;
-                }
-
                 const items = [
                     { id: '1', text: 'a', author: userFirst },
                     { id: '2', text: 'b', author: userSecond },
@@ -481,10 +474,6 @@ QUnit.module('Chat', () => {
             });
 
             QUnit.testInActiveWindow('Input should be blurred after context menu is shown', function(assert) {
-                if(shouldSkipOnMobile(assert)) {
-                    return;
-                }
-
                 const items = [
                     { id: '1', text: 'a', author: userFirst },
                     { id: '2', text: 'b', author: userSecond },
@@ -598,10 +587,6 @@ QUnit.module('Chat', () => {
             });
 
             QUnit.testInActiveWindow('Context menu should not be shown for deleted messages', function(assert) {
-                if(shouldSkipOnMobile(assert)) {
-                    return;
-                }
-
                 const items = [
                     { id: '1', text: 'a', author: userFirst },
                     { id: '2', text: 'b', author: userSecond, isDeleted: true },
@@ -950,10 +935,6 @@ QUnit.module('Chat', () => {
         });
 
         QUnit.testInActiveWindow('input should be focused after message delete popup is closed', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             const items = [
                 { text: 'a', author: userFirst },
                 { text: 'b', author: userSecond },
@@ -1056,10 +1037,6 @@ QUnit.module('Chat', () => {
         });
 
         QUnit.testInActiveWindow('editing preview should be shown after the Edit button is clicked if cancel promise rejected', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             const done = assert.async();
 
             const items = [
@@ -1202,10 +1179,6 @@ QUnit.module('Chat', () => {
         });
 
         QUnit.testInActiveWindow('message box should have editing message text and focus after the Edit button is clicked and not cancelled', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             const items = [
                 { text: 'a', author: userFirst },
                 { text: 'b', author: userSecond },
@@ -1231,10 +1204,6 @@ QUnit.module('Chat', () => {
         });
 
         QUnit.testInActiveWindow('message box should have editing message text and focus after the Edit was triggered from keyboard', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             const items = [
                 { text: 'a', author: userFirst },
                 { text: 'b', author: userSecond },
@@ -2277,6 +2246,57 @@ QUnit.module('Chat', () => {
                 this.clock.tick(TYPING_END_DELAY);
 
                 assert.strictEqual(onTypingEnd.callCount, 1);
+            });
+        });
+
+        QUnit.module('onAttachmentDownload', {
+            beforeEach: function() {
+                moduleConfig.beforeEach.apply(this, arguments);
+
+                this.getDownloadButton = () => this.$element.find(`.${CHAT_FILE_CLASS} .${BUTTON_CLASS}`);
+                this.dataSourceWithAttachments = [
+                    {
+                        attachments: [
+                            {
+                                name: 'test.txt',
+                                size: 1024,
+                            },
+                        ],
+                    }
+                ];
+            },
+        }, () => {
+            QUnit.test('should be called with correct arguments', function(assert) {
+                assert.expect(4);
+
+                this.reinit({
+                    dataSource: this.dataSourceWithAttachments,
+                    onAttachmentDownload: ({ component, element, attachment }) => {
+                        assert.strictEqual(component, this.instance, 'component field is correct');
+                        assert.strictEqual(isRenderer(element), !!config().useJQuery, 'element is correct');
+                        assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
+                        assert.deepEqual(attachment, this.dataSourceWithAttachments[0].attachments[0], 'attachment field is correct');
+                    },
+                });
+
+
+                this.getDownloadButton().trigger('dxclick');
+            });
+
+            QUnit.test('should be possible to change at runtime', function(assert) {
+                const onAttachmentDownload = sinon.spy();
+
+                this.instance.option({ onAttachmentDownload, dataSource: this.dataSourceWithAttachments });
+
+                this.getDownloadButton().trigger('dxclick');
+
+                assert.strictEqual(onAttachmentDownload.callCount, 1);
+            });
+
+            QUnit.test('should hide download button if not passed', function(assert) {
+                this.instance.option({ onAttachmentDownload: undefined, dataSource: this.dataSourceWithAttachments });
+
+                assert.strictEqual(this.getDownloadButton().length, 0, 'button is hidden');
             });
         });
     });

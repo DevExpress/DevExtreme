@@ -55,7 +55,7 @@ jobs:
         run: pnpx nx build
 
   check-regenerate:
-    runs-on: ubuntu-latest
+    runs-on: devextreme-shr2
     timeout-minutes: 10
 
     steps:
@@ -66,11 +66,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-
-      - name: Set up .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 6.0.x
 
       - uses: pnpm/action-setup@v4
         with:
@@ -112,15 +107,11 @@ jobs:
   test:
     timeout-minutes: 20
     needs: build
+    runs-on: devextreme-shr2
     strategy:
       fail-fast: false
       matrix:
-        framework: [react, vue]
-        runner: [devextreme-shr2]
-        include:
-          - runner: ubuntu-22.04
-            framework: angular
-    runs-on: ${{ matrix.runner }}
+        framework: [angular, react, vue]
 
     steps:
       - name: Get sources

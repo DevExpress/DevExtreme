@@ -10,15 +10,29 @@ on:
       - 'apps/**/*.md'
   push:
     branches: [25_2]
+  workflow_dispatch:
 
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
   NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
   BUILD_TEST_INTERNAL_PACKAGE: true
+  RUN_TESTS: true
 
 jobs:
+  check-should-run:
+    name: Check if tests should run
+    runs-on: devextreme-shr2
+    outputs:
+      should-run: ${{ steps.check.outputs.should-run }}
+    steps:
+      - name: Check RUN_TESTS flag
+        id: check
+        run: echo "should-run=${{ env.RUN_TESTS }}" >> $GITHUB_OUTPUT
+
   build:
     name: build
+    needs: check-should-run
+    if: needs.check-should-run.outputs.should-run == 'true'
 
     runs-on: devextreme-shr2
     timeout-minutes: 15
@@ -71,18 +85,18 @@ jobs:
         retention-days: 1
 
   testcafe:
-    name: ${{ matrix.ARGS.name }}
-    needs: [build]
+    name: ${{ matrix.ARGS.name }}${{ !matrix.ARGS.theme && ' - fluent' || '' }}
+    if: needs.check-should-run.outputs.should-run == 'true'
+    needs: [check-should-run, build]
     strategy:
       fail-fast: false
       matrix:
         ARGS: [
-          { componentFolder: "accessibility", name: "accessibility - fluent (1/2)", theme: "fluent.blue.light", indices: "1/2" },
-          { componentFolder: "accessibility", name: "accessibility - fluent (2/2)", theme: "fluent.blue.light", indices: "2/2" },
+          { componentFolder: "accessibility", name: "accessibility (1/2)", indices: "1/2" },
+          { componentFolder: "accessibility", name: "accessibility (2/2)", indices: "2/2" },
           { componentFolder: "common", name: "common" },
-          { componentFolder: "common", name: "common - material", theme: 'material.blue.light' },
-          { componentFolder: "common", name: "common - fluent", theme: 'fluent.blue.light' },
-          { componentFolder: "treeList", name: "treeList", concurrency: 1 },
+
+          # Grids tests need to be reworked to work in fluent theme
           { componentFolder: "dataGrid/common", name: "dataGrid / common (1/5)", indices: "1/5" },
           { componentFolder: "dataGrid/common", name: "dataGrid / common (2/5)", indices: "2/5" },
           { componentFolder: "dataGrid/common", name: "dataGrid / common (3/5)", indices: "3/5" },
@@ -93,44 +107,22 @@ jobs:
           { componentFolder: "dataGrid/sticky/fixed", name: "dataGrid / sticky (2/3)", indices: "2/3" },
           { componentFolder: "dataGrid/sticky/fixed", name: "dataGrid / sticky (3/3)", indices: "3/3" },
           { componentFolder: "cardView", name: "cardView" },
-          { componentFolder: "cardView", name: "cardView - material", theme: 'material.blue.light' },
-          { componentFolder: "cardView", name: "cardView - fluent", theme: 'fluent.blue.light' },
-          { componentFolder: "pivotGrid", name: "pivotGrid", concurrency: 1 },
-          { componentFolder: "pivotGrid", name: "pivotGrid - material", theme: 'material.blue.light', concurrency: 1 },
-          { componentFolder: "pivotGrid", name: "pivotGrid - fluent", theme: 'fluent.blue.light', concurrency: 1 },
-          { componentFolder: "scheduler/common", name: "scheduler / common (1/6)", indices: "1/6" },
-          { componentFolder: "scheduler/common", name: "scheduler / common (2/6)", indices: "2/6" },
-          { componentFolder: "scheduler/common", name: "scheduler / common (3/6)", indices: "3/6" },
-          { componentFolder: "scheduler/common", name: "scheduler / common (4/6)", indices: "4/6" },
-          { componentFolder: "scheduler/common", name: "scheduler / common (5/6)", indices: "5/6" },
-          { componentFolder: "scheduler/common", name: "scheduler / common (6/6)", indices: "6/6" },
-          { componentFolder: "scheduler/viewOffset/common", name: "scheduler / offset" },
-          { componentFolder: "scheduler/viewOffset/markup", name: "scheduler / offset markups" },
-          { componentFolder: "scheduler/timezones", name: "scheduler / timezones (Europe/Berlin)", timezone: "Europe/Berlin" },
-          { componentFolder: "scheduler/timezones", name: "scheduler / timezones (America/Los_Angeles)", timezone: "America/Los_Angeles" },
-          { componentFolder: "editors", name: "editors (1/4)", indices: "1/4" },
-          { componentFolder: "editors", name: "editors (2/4)", indices: "2/4" },
-          { componentFolder: "editors", name: "editors (3/4)", indices: "3/4" },
-          { componentFolder: "editors", name: "editors (4/4)", indices: "4/4" },
-          { componentFolder: "editors", name: "editors - material (1/4)", indices: "1/4", theme: 'material.blue.light' },
-          { componentFolder: "editors", name: "editors - material (2/4)", indices: "2/4", theme: 'material.blue.light' },
-          { componentFolder: "editors", name: "editors - material (3/4)", indices: "3/4", theme: 'material.blue.light' },
-          { componentFolder: "editors", name: "editors - material (4/4)", indices: "4/4", theme: 'material.blue.light' },
-          { componentFolder: "editors", name: "editors - fluent (1/4)", indices: "1/4", theme: 'fluent.blue.light' },
-          { componentFolder: "editors", name: "editors - fluent (2/4)", indices: "2/4", theme: 'fluent.blue.light' },
-          { componentFolder: "editors", name: "editors - fluent (3/4)", indices: "3/4", theme: 'fluent.blue.light' },
-          { componentFolder: "editors", name: "editors - fluent (4/4)", indices: "4/4", theme: 'fluent.blue.light' },
+
+          # Scheduler tests need to be reworked to work in fluent theme
+          { componentFolder: "scheduler/common", name: "scheduler / common (1/6)", indices: "1/6", theme: 'generic.light' },
+          { componentFolder: "scheduler/common", name: "scheduler / common (2/6)", indices: "2/6", theme: 'generic.light' },
+          { componentFolder: "scheduler/common", name: "scheduler / common (3/6)", indices: "3/6", theme: 'generic.light' },
+          { componentFolder: "scheduler/common", name: "scheduler / common (4/6)", indices: "4/6", theme: 'generic.light' },
+          { componentFolder: "scheduler/common", name: "scheduler / common (5/6)", indices: "5/6", theme: 'generic.light' },
+          { componentFolder: "scheduler/common", name: "scheduler / common (6/6)", indices: "6/6", theme: 'generic.light' },
+          { componentFolder: "scheduler/viewOffset/common", name: "scheduler / offset", theme: 'generic.light' },
+          { componentFolder: "scheduler/viewOffset/markup", name: "scheduler / offset markups", theme: 'generic.light' },
+          { componentFolder: "scheduler/timezones", name: "scheduler / timezones (Europe/Berlin)", timezone: "Europe/Berlin", theme: 'generic.light' },
+          { componentFolder: "scheduler/timezones", name: "scheduler / timezones (America/Los_Angeles)", timezone: "America/Los_Angeles", theme: 'generic.light' },
+
+          { componentFolder: "editors", name: "editors (1/2)", indices: "1/2" },
+          { componentFolder: "editors", name: "editors (2/2)", indices: "2/2" },
           { componentFolder: "navigation", name: "navigation" },
-          { componentFolder: "navigation", name: "navigation - material", theme: 'material.blue.light' },
-          { componentFolder: "navigation", name: "navigation - fluent", theme: 'fluent.blue.light' },
-          { componentFolder: "filterBuilder", name: "filterBuilder" },
-          { componentFolder: "filterBuilder", name: "filterBuilder - material", theme: 'material.blue.light' },
-          { componentFolder: "filterBuilder", name: "filterBuilder - fluent", theme: 'fluent.blue.light' },
-          { componentFolder: "pagination", name: "pagination" },
-#         TODO Chrome133: skipped during chrome update
-#         { componentFolder: "pagination", name: "pagination - material", theme: 'material.blue.light' },
-          { componentFolder: "pagination", name: "pagination - fluent", theme: 'fluent.blue.light' },
-          { componentFolder: "gantt", name: "gantt" },
         ]
     runs-on: devextreme-shr2
     timeout-minutes: 45
@@ -157,7 +149,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '133.0.6943.53'
+        chrome-version: '141.0.7390.122'
 
     - name: Use Node.js
       uses: actions/setup-node@v4
@@ -189,7 +181,11 @@ jobs:
     - name: Run TestCafe tests
       working-directory: ./e2e/testcafe-devextreme
       run: |
-        [ "${{ matrix.ARGS.theme }}" != "" ] && THEME="--theme ${{ matrix.ARGS.theme }}"
+        if [ "${{ matrix.ARGS.theme }}" != "" ]; then
+          THEME="--theme ${{ matrix.ARGS.theme }}"
+        else
+          THEME="--theme fluent.blue.light"
+        fi
         [ "${{ matrix.ARGS.indices }}" != "" ] && INDICES="--indices ${{ matrix.ARGS.indices }}"
         [ "${{ matrix.ARGS.concurrency }}" != "" ] && CONCURRENCY="--concurrency ${{ matrix.ARGS.concurrency }}"
         [ "${{ matrix.ARGS.platform }}" != "" ] && PLATFORM="--platform ${{ matrix.ARGS.platform }}"
