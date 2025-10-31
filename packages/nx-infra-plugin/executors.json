@@ -1,9 +1,9 @@
 {
   "executors": {
-    "generate-react-components": {
-      "implementation": "./src/executors/generate-react-components/executor",
-      "schema": "./src/executors/generate-react-components/schema.json",
-      "description": "Generate React components from DevExtreme metadata"
+    "generate-components": {
+      "implementation": "./src/executors/generate-components/executor",
+      "schema": "./src/executors/generate-components/schema.json",
+      "description": "Generate framework components from DevExtreme metadata"
     },
     "clean": {
       "implementation": "./src/executors/clean/executor",

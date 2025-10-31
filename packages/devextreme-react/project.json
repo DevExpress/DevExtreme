@@ -13,7 +13,7 @@
       }
     },
     "regenerate": {
-      "executor": "devextreme-nx-infra-plugin:generate-react-components",
+      "executor": "devextreme-nx-infra-plugin:generate-components",
       "dependsOn": ["devextreme-metadata:generate","clean"],
       "options": {
         "metadataPath": "../devextreme-metadata/dist/integration-data.json",
@@ -21,7 +21,9 @@
         "indexFileName": "./src/index.ts",
         "baseComponent": "./core/component",
         "extensionComponent": "./core/extension-component",
-        "configComponent": "./core/nested-option"
+        "configComponent": "./core/nested-option",
+        "quotes": "double",
+        "explicitIndexInImports": true
       }
     },
     "build:esm": {
