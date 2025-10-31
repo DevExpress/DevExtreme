@@ -3,15 +3,13 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { getData } from '../../helpers/generateDataSourceData';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 
 const GRID_SELECTOR = '#container';
 
 fixture.disablePageReloads`Validation`
   .page(url(__dirname, '../../../container.html'));
 
-// TODO: make this test stable
-safeSizeTest('Validation popup screenshot', async (t) => {
+test('Validation popup screenshot', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -29,7 +27,7 @@ safeSizeTest('Validation popup screenshot', async (t) => {
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).meta({ unstable: true }).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(20, 2),
   height: 400,
   showBorders: true,
@@ -47,7 +45,7 @@ safeSizeTest('Validation popup screenshot', async (t) => {
   },
 }));
 
-safeSizeTest('Validation popup with open master detail', async (t) => {
+test('Validation popup with open master detail', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -91,7 +89,7 @@ safeSizeTest('Validation popup with open master detail', async (t) => {
   masterDetail: { enabled: true },
 }));
 
-safeSizeTest('Validation popup with open master detail and fixed columns', async (t) => {
+test('Validation popup with open master detail and fixed columns', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(GRID_SELECTOR);
 

@@ -6,7 +6,6 @@ import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
 import { MouseUpEvents, MouseAction } from '../../../helpers/mouseUpEvents';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 const CLASS = { ...DataGridClassNames, ...ClassNames };
 
@@ -55,11 +54,11 @@ const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
   return items;
 };
 
-fixture.disablePageReloads`Row dragging`
+fixture`Row dragging`
   .page(url(__dirname, '../../container.html'));
 
 // T903351
-safeSizeTest('The placeholder should appear when a cross-component dragging rows after scrolling the window', async (t) => {
+test('The placeholder should appear when a cross-component dragging rows after scrolling the window', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await scrollTo(0, 10000);
@@ -151,7 +150,7 @@ safeSizeTest('The placeholder should appear when a cross-component dragging rows
   $('body').css('display', '');
 })());
 
-safeSizeTest('The cross-component drag and drop rows should work when there are fixed columns', async (t) => {
+test('The cross-component drag and drop rows should work when there are fixed columns', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await dataGrid.moveRow(0, 500, 0, true);
@@ -260,7 +259,7 @@ safeSizeTest('The cross-component drag and drop rows should work when there are 
   $('body').css('display', '');
 })());
 
-safeSizeTest('The cross-component drag and drop rows should not block rows', async (t) => {
+test('The cross-component drag and drop rows should not block rows', async (t) => {
   const dataGrid = new DataGrid('#container');
   const otherDataGrid = new DataGrid('#otherContainer');
 
@@ -367,7 +366,7 @@ safeSizeTest('The cross-component drag and drop rows should not block rows', asy
   $('body').css('display', '');
 })());
 
-safeSizeTest('Virtual rendering during auto scrolling should not cause errors in onDragChange', async (t) => {
+test('Virtual rendering during auto scrolling should not cause errors in onDragChange', async (t) => {
   const dataGrid = new DataGrid('#container');
   await t.drag(dataGrid.getDataRow(0).getDragCommand(), 0, 100, { speed: 0.01 });
 
@@ -412,7 +411,7 @@ safeSizeTest('Virtual rendering during auto scrolling should not cause errors in
 });
 
 // T1078513
-safeSizeTest('Headers should not be hidden during auto scrolling when virtual scrollling is specified', async (t) => {
+test('Headers should not be hidden during auto scrolling when virtual scrollling is specified', async (t) => {
   const dataGrid = new DataGrid('#container');
   await t.drag(dataGrid.getDataRow(0).getDragCommand(), 0, 90, { speed: 0.01 });
 
@@ -468,7 +467,7 @@ safeSizeTest('Headers should not be hidden during auto scrolling when virtual sc
 });
 
 // T1078513
-safeSizeTest('Footer should not be hidden during auto scrolling when virtual scrollling is specified', async (t) => {
+test('Footer should not be hidden during auto scrolling when virtual scrollling is specified', async (t) => {
   const dataGrid = new DataGrid('#container');
   await t.drag(dataGrid.getDataRow(0).getDragCommand(), 0, 90, { speed: 0.01 });
 
@@ -530,7 +529,7 @@ safeSizeTest('Footer should not be hidden during auto scrolling when virtual scr
 });
 
 // T1082538
-safeSizeTest('The draggable element should be displayed correctly after horizontal scrolling when columnRenderingMode is virtual', async (t) => {
+test('The draggable element should be displayed correctly after horizontal scrolling when columnRenderingMode is virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await dataGrid.scrollTo(t, { x: 2500 });
@@ -570,7 +569,7 @@ safeSizeTest('The draggable element should be displayed correctly after horizont
   });
 });
 
-safeSizeTest('Dragging with scrolling should be prevented by e.cancel (T1179555)', async (t) => {
+test('Dragging with scrolling should be prevented by e.cancel (T1179555)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await dataGrid.scrollBy(t, { top: 10000 });
@@ -584,7 +583,7 @@ safeSizeTest('Dragging with scrolling should be prevented by e.cancel (T1179555)
   await t.expect(Selector('.dx-sortable-placeholder').visible).notOk();
 
   await MouseUpEvents.enable(MouseAction.dragToOffset);
-}).meta({ unstable: true }).before(async (t) => {
+}).before(async (t) => {
   await t.maximizeWindow();
   return createWidget('dxDataGrid', {
     dataSource: [...new Array(100)].map((_, i) => ({
@@ -610,11 +609,11 @@ safeSizeTest('Dragging with scrolling should be prevented by e.cancel (T1179555)
   });
 });
 
-// TODO Chrome133: skipped during chrome update
 // T1085143
-// safeSizeTest
-test.skip('The placeholder should have correct position after dragging the row to the end when there is free space in grid and dataRowTemplate is set', async (t) => {
+test('The placeholder should have correct position after dragging the row to the end when there is free space in grid and dataRowTemplate is set', async (t) => {
   const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
 
   await dataGrid.moveRow(0, 0, 50, true);
   await dataGrid.moveRow(0, 0, 550);
@@ -631,58 +630,70 @@ test.skip('The placeholder should have correct position after dragging the row t
 
   await t.expect(isPlaceholderVisible()).ok();
   await t.expect(placeholderOffset).eql(expectedPlaceholderOffset);
-}).before(async (t) => {
-  await t.maximizeWindow();
-  return createWidget('dxDataGrid', {
-    width: 400,
-    height: 600,
-    dataSource: [
-      {
-        id: 1, name: 'Name 1', age: 19,
-      },
-      {
-        id: 2, name: 'Name 2', age: 11,
-      },
-    ],
-    columns: ['name', 'age'],
-    dataRowTemplate(_, { data }) {
-      return $(`<tr><td>${data.name}</td><td>${data.age}</td></tr>`);
+}).before(async () => createWidget('dxDataGrid', {
+  width: 400,
+  height: 600,
+  dataSource: [
+    {
+      id: 1, name: 'Name 1', age: 19,
     },
-    rowDragging: {
-      allowReordering: true,
-      dragTemplate() {
-        return $('<div>test</div>');
-      },
-      showDragIcons: false,
+    {
+      id: 2, name: 'Name 2', age: 11,
     },
-  });
-});
+  ],
+  columns: ['name', 'age'],
+  dataRowTemplate(_, { data }) {
+    return $(`<tr><td>${data.name}</td><td>${data.age}</td></tr>`);
+  },
+  rowDragging: {
+    allowReordering: true,
+    dragTemplate() {
+      return $('<div>test</div>');
+    },
+    showDragIcons: false,
+  },
+}));
 
 // T1126013
-safeSizeTest('toIndex should not be corrected when source item gets removed from DOM', async (t) => {
+test('toIndex should not be corrected when source item gets removed from DOM', async (t) => {
   const fromIndex = 2;
   const toIndex = 4;
 
   const dataGrid = new DataGrid('#container');
   await dataGrid.scrollTo(t, { y: 3000 });
+
+  const sourceKey = await ClientFunction((grid, idx) => {
+    const instance: any = grid.getInstance();
+    const visibleRows = instance.getVisibleRows();
+    return visibleRows[idx]?.key;
+  }, { dependencies: {} })(dataGrid, fromIndex);
+
+  const initialIndices = await ClientFunction((grid) => {
+    const instance: any = grid.getInstance();
+    return instance.getVisibleRows().map((r: any) => r.key);
+  })(dataGrid);
+  const sourceInitialIndex = initialIndices.indexOf(sourceKey);
+
   await dataGrid.moveRow(fromIndex, 0, 50, true);
   await dataGrid.moveRow(fromIndex, 0, -20);
-  await t.wait(500);
   await dataGrid.moveRow(toIndex, 0, 5);
-  await t.wait(200);
 
   await ClientFunction((grid) => {
     const instance = grid.getInstance();
     $(instance.element()).trigger($.Event('dxpointerup'));
   })(dataGrid);
-  await t.wait(200);
 
-  const draggedRowIndex = await ClientFunction((grid) => grid.getInstance()
-    .getVisibleRows()
-    .findIndex(({ key }, index: number, rows) => key > rows[index + 1]?.key))(dataGrid);
-  await t.expect(draggedRowIndex)
-    .eql(toIndex - 1);
-}).meta({ unstable: true }).before(async (t) => {
+  const finalIndex = await ClientFunction((grid, key) => {
+    const instance: any = grid.getInstance();
+    const visibleRows = instance.getVisibleRows();
+    return visibleRows.findIndex((r: any) => r.key === key);
+  })(dataGrid, sourceKey);
+
+  const expectedFinalIndex = (toIndex - 1) - (sourceInitialIndex < toIndex ? 1 : 0);
+
+  await t.expect(finalIndex)
+    .eql(expectedFinalIndex, `Dragged row key ${sourceKey} expected at ${expectedFinalIndex} but ended up at index ${finalIndex}`);
+}).before(async (t) => {
   await t.maximizeWindow();
   const items = generateData(50, 1);
   return createWidget('dxDataGrid', {
@@ -714,7 +725,7 @@ safeSizeTest('toIndex should not be corrected when source item gets removed from
 });
 
 // T1139685
-safeSizeTest('Item should appear in a correct spot when dragging to a different page with scrolling.mode: "virtual"', async (t) => {
+test('Item should appear in a correct spot when dragging to a different page with scrolling.mode: "virtual"', async (t) => {
   const fromIndex = 2;
   const toIndex = 4;
 
@@ -738,7 +749,7 @@ safeSizeTest('Item should appear in a correct spot when dragging to a different 
 
   await t.expect(getDraggedRowIndexFunc)
     .eql(toIndex - 1);
-}).meta({ unstable: true }).before(async (t) => {
+}).before(async (t) => {
   await t.maximizeWindow();
   const items = generateData(20, 1);
   return createWidget('dxDataGrid', {
@@ -770,7 +781,7 @@ safeSizeTest('Item should appear in a correct spot when dragging to a different 
 });
 
 // T1179218
-safeSizeTest('Rows should appear correctly during dragging when virtual scrolling is enabled and rowDragging.dropFeedbackMode = "push"', async (t) => {
+test('Rows should appear correctly during dragging when virtual scrolling is enabled and rowDragging.dropFeedbackMode = "push"', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -789,7 +800,7 @@ safeSizeTest('Rows should appear correctly during dragging when virtual scrollin
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).meta({ unstable: true }).before(async (t) => {
+}).before(async (t) => {
   await t.maximizeWindow();
   return createWidget('dxDataGrid', {
     height: 440,

@@ -1,7 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { ClientFunction, Selector } from 'testcafe';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { createWidget } from '../../../../helpers/createWidget';
 import { getData } from '../../helpers/generateDataSourceData';
 import { defaultConfig } from '../helpers/data';
@@ -12,7 +11,7 @@ fixture.disablePageReloads`FixedColumns`
 
 const DATA_GRID_SELECTOR = '#container';
 
-safeSizeTest('The simulated scrollbar should display correctly when there are sticky columns', async (t) => {
+test.meta({ browserSize: [1000, 800] })('The simulated scrollbar should display correctly when there are sticky columns', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -33,7 +32,7 @@ safeSizeTest('The simulated scrollbar should display correctly when there are st
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [1000, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(5, 25),
   width: 984,
   columnAutoWidth: true,
@@ -57,7 +56,7 @@ safeSizeTest('The simulated scrollbar should display correctly when there are st
 // visual: material.blue.light
 // visual: fluent.blue.light
 // visual: generic.greenMist.light
-safeSizeTest('Header hover should display correctly when there are fixed columns (generic.light theme)', async (t) => {
+test.meta({ browserSize: [900, 800] })('Header hover should display correctly when there are fixed columns (generic.light theme)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const headerCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(13);
@@ -73,25 +72,24 @@ safeSizeTest('Header hover should display correctly when there are fixed columns
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [900, 800])
-  .before(async () => {
-    await createWidget('dxDataGrid', {
-      dataSource: getData(20, 15),
-      columnWidth: 100,
-      columnAutoWidth: true,
-      customizeColumns: (columns) => {
-        columns[5].fixed = true;
-        columns[5].fixedPosition = 'left';
-        columns[6].fixed = true;
-        columns[6].fixedPosition = 'left';
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: getData(20, 15),
+    columnWidth: 100,
+    columnAutoWidth: true,
+    customizeColumns: (columns) => {
+      columns[5].fixed = true;
+      columns[5].fixedPosition = 'left';
+      columns[6].fixed = true;
+      columns[6].fixedPosition = 'left';
 
-        columns[8].fixed = true;
-        columns[8].fixedPosition = 'right';
-        columns[9].fixed = true;
-        columns[9].fixedPosition = 'right';
-      },
-    });
-  })
+      columns[8].fixed = true;
+      columns[8].fixedPosition = 'right';
+      columns[9].fixed = true;
+      columns[9].fixedPosition = 'right';
+    },
+  });
+})
   .after(async (t) => {
     await t.hover(Selector('body'));
   });
@@ -144,7 +142,7 @@ test.meta({ unstable: true })('Row hover should display correctly when there are
 // visual: material.blue.light
 // visual: fluent.blue.light
 // visual: generic.greenMist.light
-safeSizeTest('Alternating rows should display correctly when there are fixed columns (generic.light theme)', async (t) => {
+test.meta({ browserSize: [900, 800] })('Alternating rows should display correctly when there are fixed columns (generic.light theme)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -155,32 +153,31 @@ safeSizeTest('Alternating rows should display correctly when there are fixed col
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [900, 800])
-  .before(async () => {
-    await createWidget('dxDataGrid', {
-      dataSource: getData(20, 15),
-      columnWidth: 100,
-      columnAutoWidth: true,
-      rowAlternationEnabled: true,
-      customizeColumns: (columns) => {
-        columns[5].fixed = true;
-        columns[5].fixedPosition = 'left';
-        columns[6].fixed = true;
-        columns[6].fixedPosition = 'left';
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: getData(20, 15),
+    columnWidth: 100,
+    columnAutoWidth: true,
+    rowAlternationEnabled: true,
+    customizeColumns: (columns) => {
+      columns[5].fixed = true;
+      columns[5].fixedPosition = 'left';
+      columns[6].fixed = true;
+      columns[6].fixedPosition = 'left';
 
-        columns[8].fixed = true;
-        columns[8].fixedPosition = 'right';
-        columns[9].fixed = true;
-        columns[9].fixedPosition = 'right';
-      },
-    });
+      columns[8].fixed = true;
+      columns[8].fixedPosition = 'right';
+      columns[9].fixed = true;
+      columns[9].fixedPosition = 'right';
+    },
   });
+});
 
 // visual: generic.light
 // visual: material.blue.light
 // visual: fluent.blue.light
 [0.9, 1.25, 1.5].forEach((zoom) => {
-  safeSizeTest(`Fixed columns should display correctly at ${zoom * 100}% zoom (generic.light theme)`, async (t) => {
+  test.meta({ browserSize: [900, 800] })(`Fixed columns should display correctly at ${zoom * 100}% zoom (generic.light theme)`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -191,7 +188,7 @@ safeSizeTest('Alternating rows should display correctly when there are fixed col
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [900, 800])
+  })
     .before(async () => {
       await ClientFunction((zoomValue: number) => {
         $('body').css('zoom', zoomValue);
@@ -220,7 +217,7 @@ safeSizeTest('Alternating rows should display correctly when there are fixed col
     });
 });
 
-safeSizeTest('The grid should display correctly when there is no data and there are fixed columns (T1269088)', async (t) => {
+test.meta({ browserSize: [1000, 800] })('The grid should display correctly when there is no data and there are fixed columns (T1269088)', async (t) => {
   // arrange, act
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -233,7 +230,7 @@ safeSizeTest('The grid should display correctly when there is no data and there 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [1000, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
   dataSource: [],
 }));

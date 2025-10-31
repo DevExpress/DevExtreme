@@ -265,7 +265,10 @@ createTestCafe(TESTCAFE_CONFIG)
 
               await t.hover('html');
 
-              const [width, height] = DEFAULT_BROWSER_SIZE;
+              // @ts-expect-error ts-errors
+              const { meta } = t.testRun.test;
+
+              const [width, height] = meta?.browserSize || DEFAULT_BROWSER_SIZE;
               await t.resizeWindow(width, height);
             } else {
               await loadAxeCore(t);
@@ -275,13 +278,11 @@ createTestCafe(TESTCAFE_CONFIG)
               await addShadowRootTree(t);
             }
 
-            if (!componentFolder.includes('dataGrid')) {
-              const currentTheme = await getCurrentTheme(t) || 'generic.light';
-              const newTheme = args.theme || 'generic.light';
+            const currentTheme = await getCurrentTheme(t) || 'generic.light';
+            const newTheme = args.theme || 'generic.light';
 
-              if (currentTheme !== newTheme) {
-                await changeTheme(t, newTheme);
-              }
+            if (currentTheme !== newTheme) {
+              await changeTheme(t, newTheme);
             }
           },
           after: async (t: TestController) => {

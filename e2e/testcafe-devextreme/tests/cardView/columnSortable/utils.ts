@@ -91,6 +91,8 @@ export const dragToHeaderPanel = async (
       { destinationOffsetX: -5, destinationOffsetY: -20, speed: 0.5 },
     );
   }
+
+  await t.wait(100);
 };
 
 export const dragToColumnChooser = async (

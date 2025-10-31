@@ -1,7 +1,6 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { createWidget } from '../../../../helpers/createWidget';
 import { getData } from '../../helpers/generateDataSourceData';
 import url from '../../../../helpers/getPageUrl';
@@ -16,7 +15,7 @@ fixture.disablePageReloads`Resize columns - nextColumn mode`
   .page(url(__dirname, '../../../container.html'));
 
 [false, true].forEach((rtlEnabled) => {
-  safeSizeTest(`Resize first fixed column width with left position (rtlEnabled = ${rtlEnabled})`, async (t) => {
+  test.meta({ browserSize: [900, 800] })(`Resize first fixed column width with left position (rtlEnabled = ${rtlEnabled})`, async (t) => {
     // arrange
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -39,7 +38,7 @@ fixture.disablePageReloads`Resize columns - nextColumn mode`
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [900, 800]).before(async () => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     dataSource: getData(5, 25),
     rtlEnabled,
     columnAutoWidth: true,
@@ -54,7 +53,7 @@ fixture.disablePageReloads`Resize columns - nextColumn mode`
     },
   }));
 
-  safeSizeTest(`Resize second fixed column width with right position (rtlEnabled = ${rtlEnabled})`, async (t) => {
+  test.meta({ browserSize: [900, 800] })(`Resize second fixed column width with right position (rtlEnabled = ${rtlEnabled})`, async (t) => {
     // arrange
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -77,7 +76,7 @@ fixture.disablePageReloads`Resize columns - nextColumn mode`
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [900, 800]).before(async () => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     dataSource: getData(5, 25),
     rtlEnabled,
     columnAutoWidth: true,
@@ -97,7 +96,7 @@ fixture.disablePageReloads`Resize columns - widget mode`
   .page(url(__dirname, '../../../container.html'));
 
 [false, true].forEach((rtlEnabled) => {
-  safeSizeTest(`Resize first fixed column width with left position (rtlEnabled = ${rtlEnabled})`, async (t) => {
+  test.meta({ browserSize: [900, 800] })(`Resize first fixed column width with left position (rtlEnabled = ${rtlEnabled})`, async (t) => {
     // arrange
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -120,7 +119,7 @@ fixture.disablePageReloads`Resize columns - widget mode`
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [900, 800]).before(async () => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     dataSource: getData(5, 25),
     rtlEnabled,
     columnAutoWidth: true,
@@ -135,7 +134,7 @@ fixture.disablePageReloads`Resize columns - widget mode`
     },
   }));
 
-  safeSizeTest(`Resize second fixed column width with right position (rtlEnabled = ${rtlEnabled})`, async (t) => {
+  test.meta({ browserSize: [900, 800] })(`Resize second fixed column width with right position (rtlEnabled = ${rtlEnabled})`, async (t) => {
     // arrange
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -158,7 +157,7 @@ fixture.disablePageReloads`Resize columns - widget mode`
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [900, 800]).before(async () => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     dataSource: getData(5, 25),
     rtlEnabled,
     columnAutoWidth: true,
@@ -173,7 +172,7 @@ fixture.disablePageReloads`Resize columns - widget mode`
     },
   }));
 
-  safeSizeTest(`Resize first fixed column width with right position (rtlEnabled = ${rtlEnabled})`, async (t) => {
+  test.meta({ browserSize: [900, 800] })(`Resize first fixed column width with right position (rtlEnabled = ${rtlEnabled})`, async (t) => {
     // arrange
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -196,7 +195,7 @@ fixture.disablePageReloads`Resize columns - widget mode`
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [900, 800]).before(async () => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     dataSource: getData(5, 25),
     rtlEnabled,
     columnAutoWidth: true,
@@ -211,7 +210,7 @@ fixture.disablePageReloads`Resize columns - widget mode`
     },
   }));
 
-  safeSizeTest(`The separator should have correct position when resizing fixed column on the right (rtlEnabled = ${rtlEnabled})`, async (t) => {
+  test.meta({ browserSize: [900, 800] })(`The separator should have correct position when resizing fixed column on the right (rtlEnabled = ${rtlEnabled})`, async (t) => {
     // arrange
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -228,7 +227,7 @@ fixture.disablePageReloads`Resize columns - widget mode`
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [900, 800]).before(async () => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     dataSource: getData(5, 25),
     rtlEnabled,
     columnAutoWidth: true,
@@ -243,7 +242,7 @@ fixture.disablePageReloads`Resize columns - widget mode`
     },
   }));
 
-  safeSizeTest(`The separator should have correct position when there is window scrollTop (rtlEnabled = ${rtlEnabled})`, async (t) => {
+  test.meta({ browserSize: [900, 800] })(`The separator should have correct position when there is window scrollTop (rtlEnabled = ${rtlEnabled})`, async (t) => {
     // arrange
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -261,27 +260,26 @@ fixture.disablePageReloads`Resize columns - widget mode`
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [900, 800])
-    .before(async () => {
-      await ClientFunction(() => {
-        $('#container').css('margin-top', '800px');
-      })();
+  }).before(async () => {
+    await ClientFunction(() => {
+      $('#container').css('margin-top', '800px');
+    })();
 
-      await createWidget('dxDataGrid', {
-        dataSource: getData(5, 25),
-        rtlEnabled,
-        columnAutoWidth: true,
-        allowColumnResizing: true,
-        columnWidth: 200,
-        columnResizingMode: 'widget',
-        customizeColumns: (columns) => {
-          columns[5].fixed = true;
-          columns[5].fixedPosition = 'right';
-          columns[6].fixed = true;
-          columns[6].fixedPosition = 'right';
-        },
-      });
-    })
+    await createWidget('dxDataGrid', {
+      dataSource: getData(5, 25),
+      rtlEnabled,
+      columnAutoWidth: true,
+      allowColumnResizing: true,
+      columnWidth: 200,
+      columnResizingMode: 'widget',
+      customizeColumns: (columns) => {
+        columns[5].fixed = true;
+        columns[5].fixedPosition = 'right';
+        columns[6].fixed = true;
+        columns[6].fixedPosition = 'right';
+      },
+    });
+  })
     .after(async () => {
       await ClientFunction(() => {
         $('#container').css('margin-top', '');

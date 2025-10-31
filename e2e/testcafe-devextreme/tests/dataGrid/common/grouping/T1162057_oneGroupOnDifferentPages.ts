@@ -73,26 +73,25 @@ const endsOnNextPageApiMock = RequestMock()
     { 'access-control-allow-origin': '*' },
   );
 
-// TODO: this test is unstable
-/* safeSizeTest */test.skip('Group panel restored from cache and ends at the next page', async (t) => {
+test.meta({ browserSize: [800, 800] })('Group panel restored from cache and ends at the next page', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
   await t.click(dataGrid.getGroupRow(0).getCell(0).element);
-  await takeScreenshot('group-panel_loaded_first-page.png', dataGrid.element);
+  await takeScreenshot('group-panel_loaded_first-page.png');
 
   await t.click(dataGrid.getPager().getNavPage('2').element);
-  await takeScreenshot('group-panel_loaded_second-page.png', dataGrid.element);
+  await takeScreenshot('group-panel_loaded_second-page.png');
 
   await t.click(dataGrid.getPager().getNavPage('1').element);
-  await takeScreenshot('group-panel_restored_first-page.png', dataGrid.element);
+  await takeScreenshot('group-panel_restored_first-page.png');
 
   await t.click(dataGrid.getPager().getNavPage('2').element);
-  await takeScreenshot('group-panel_restored_second-page.png', dataGrid.element);
+  await takeScreenshot('group-panel_restored_second-page.png');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}/* , [800, 800] */).before(async (t) => {
+}).before(async (t) => {
   await t.addRequestHooks(endsOnNextPageApiMock);
   await createWidget('dxDataGrid', () => ({
     dataSource: (window as any).DevExpress.data.AspNet.createStore({

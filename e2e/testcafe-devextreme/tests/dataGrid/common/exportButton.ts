@@ -2,7 +2,6 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Export button`
   .page(url(__dirname, '../../container.html'));
@@ -106,7 +105,7 @@ test('allowExportSelectedData: true, menu: true', async (t) => {
   width: 30,
 }));
 
-safeSizeTest('Export is disabled when no data columns is in grid header, menu: false', async (t) => {
+test.meta({ browserSize: [800, 800] })('Export is disabled when no data columns is in grid header, menu: false', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const dataGrid = new DataGrid('#container');
@@ -116,7 +115,7 @@ safeSizeTest('Export is disabled when no data columns is in grid header, menu: f
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ value: 1 }],
   groupPanel: {
     visible: true,
@@ -131,7 +130,7 @@ safeSizeTest('Export is disabled when no data columns is in grid header, menu: f
   },
 }));
 
-safeSizeTest('Export is disabled when no data columns is in grid header, menu: true', async (t) => {
+test.meta({ browserSize: [800, 800] })('Export is disabled when no data columns is in grid header, menu: true', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const dataGrid = new DataGrid('#container');
@@ -144,7 +143,7 @@ safeSizeTest('Export is disabled when no data columns is in grid header, menu: t
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).meta({ unstable: true }).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ value: 1 }],
   columns: [
     { dataField: 'value', visible: false },
