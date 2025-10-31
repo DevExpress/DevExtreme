@@ -2,7 +2,6 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import TreeList from 'devextreme-testcafe-models/treeList';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const TREE_LIST_SELECTOR = '#container';
@@ -13,7 +12,7 @@ fixture.disablePageReloads`Sticky columns - Drag and Drop`
 // visual: generic.light
 // visual: material.blue.light
 // visual: fluent.blue.light
-safeSizeTest('Header hover should display correctly when there are fixed columns', async (t) => {
+test.meta({ browserSize: [900, 800] })('Header hover should display correctly when there are fixed columns', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const treeList = new TreeList(TREE_LIST_SELECTOR);
   const headerCell = treeList.getHeaders().getHeaderRow(0).getHeaderCell(13);
@@ -29,7 +28,7 @@ safeSizeTest('Header hover should display correctly when there are fixed columns
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [900, 800])
+})
   .before(async () => {
     await createWidget('dxTreeList', {
       dataSource: new Array(20).fill(null).map((_, index) => {

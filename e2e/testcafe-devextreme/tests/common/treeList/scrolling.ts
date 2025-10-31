@@ -4,7 +4,6 @@ import TreeList from 'devextreme-testcafe-models/treeList';
 import CheckBox from 'devextreme-testcafe-models/checkBox';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { testScreenshot } from '../../../helpers/themeUtils';
 
 const scrollWindowTo = async (position: object) => {
@@ -106,7 +105,7 @@ test('The vertical scroll bar of the container\'s parent should not be displayed
 });
 
 // T1189118
-safeSizeTest('All items should be selected after select all and scroll down', async (t) => {
+test.meta({ browserSize: [800, 800] })('All items should be selected after select all and scroll down', async (t) => {
   // arrange
   const treeList = new TreeList('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -133,7 +132,7 @@ safeSizeTest('All items should be selected after select all and scroll down', as
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => createWidget('dxTreeList', {
+}).before(async () => createWidget('dxTreeList', {
   dataSource: generateData(100),
   height: 400,
   rootValue: -1,

@@ -1,6 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { getData } from '../../helpers/generateDataSourceData';
@@ -11,7 +10,7 @@ const DATA_GRID_SELECTOR = '#container';
 fixture.disablePageReloads`Sticky columns - Virtual Columns`
   .page(url(__dirname, '../../../container.html'));
 
-safeSizeTest('Fixed columns with sticky position should not work', async (t) => {
+test.meta({ browserSize: [800, 800] })('Fixed columns with sticky position should not work', async (t) => {
   // arrange, act
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -29,7 +28,7 @@ safeSizeTest('Fixed columns with sticky position should not work', async (t) => 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 100),
   columnWidth: 100,
   showColumnLines: true,
@@ -45,7 +44,7 @@ safeSizeTest('Fixed columns with sticky position should not work', async (t) => 
   },
 }));
 
-safeSizeTest('There should be no way to set a sticky fixed position for columns via the context menu', async (t) => {
+test('There should be no way to set a sticky fixed position for columns via the context menu', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -62,7 +61,7 @@ safeSizeTest('There should be no way to set a sticky fixed position for columns 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 100),
   columnWidth: 100,
   scrolling: {
@@ -77,7 +76,7 @@ safeSizeTest('There should be no way to set a sticky fixed position for columns 
   },
 }));
 
-safeSizeTest('should render group row in scroll right max position', async (t) => {
+test('should render group row in scroll right max position', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -117,7 +116,7 @@ safeSizeTest('should render group row in scroll right max position', async (t) =
   width: 330,
 }));
 
-safeSizeTest('should render nested group row in scroll right max position', async (t) => {
+test('should render nested group row in scroll right max position', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -162,7 +161,7 @@ safeSizeTest('should render nested group row in scroll right max position', asyn
   width: 330,
 }));
 
-safeSizeTest('expand group icon should be clickable in scroll right max position', async (t) => {
+test('expand group icon should be clickable in scroll right max position', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

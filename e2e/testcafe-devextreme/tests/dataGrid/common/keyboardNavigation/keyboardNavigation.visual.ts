@@ -582,7 +582,8 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
   // act
   await t
     .click(dataGrid.getDataCell(199, 34).element)
-    .pressKey('ctrl+home');
+    .pressKey('ctrl+home')
+    .wait(300);
 
   // assert
   await t

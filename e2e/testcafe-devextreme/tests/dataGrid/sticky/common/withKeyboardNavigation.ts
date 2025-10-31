@@ -1,6 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { defaultConfig } from '../helpers/data';
@@ -32,7 +31,7 @@ const DATA_GRID_SELECTOR = '#container';
 fixture.disablePageReloads`Fixed Columns - keyboard navigation`
   .page(url(__dirname, '../../../container.html'));
 
-safeSizeTest('Headers navigation by Tab key when there are fixed columns', async (t) => {
+test.meta({ browserSize: [900, 800] })('Headers navigation by Tab key when there are fixed columns', async (t) => {
   // arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -69,7 +68,7 @@ safeSizeTest('Headers navigation by Tab key when there are fixed columns', async
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [900, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
   width: 600,
   customizeColumns(columns) {
@@ -79,7 +78,7 @@ safeSizeTest('Headers navigation by Tab key when there are fixed columns', async
   },
 }));
 
-safeSizeTest('Headers navigation by Shift and Tab keys when there are fixed columns', async (t) => {
+test.meta({ browserSize: [900, 800] })('Headers navigation by Shift and Tab keys when there are fixed columns', async (t) => {
   // arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -116,7 +115,7 @@ safeSizeTest('Headers navigation by Shift and Tab keys when there are fixed colu
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [900, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
   width: 625,
   customizeColumns(columns) {
@@ -126,7 +125,7 @@ safeSizeTest('Headers navigation by Shift and Tab keys when there are fixed colu
   },
 }));
 
-safeSizeTest('Headers navigation by Tab key when there are fixed columns and adaptability is enabled', async (t) => {
+test.meta({ browserSize: [900, 800] })('Headers navigation by Tab key when there are fixed columns and adaptability is enabled', async (t) => {
   // arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -160,7 +159,7 @@ safeSizeTest('Headers navigation by Tab key when there are fixed columns and ada
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [900, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
   width: 650,
   columnWidth: 150,
@@ -172,7 +171,7 @@ safeSizeTest('Headers navigation by Tab key when there are fixed columns and ada
   },
 }));
 
-safeSizeTest('Headers navigation by Shift and Tab keys when there are fixed columns and adaptability is enabled', async (t) => {
+test.meta({ browserSize: [900, 800] })('Headers navigation by Shift and Tab keys when there are fixed columns and adaptability is enabled', async (t) => {
   // arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -208,7 +207,7 @@ safeSizeTest('Headers navigation by Shift and Tab keys when there are fixed colu
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [900, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
   width: 650,
   columnWidth: 150,
@@ -220,7 +219,7 @@ safeSizeTest('Headers navigation by Shift and Tab keys when there are fixed colu
   },
 }));
 
-safeSizeTest('Band headers navigation by Tab key when there are fixed columns', async (t) => {
+test.meta({ browserSize: [900, 800] })('Band headers navigation by Tab key when there are fixed columns', async (t) => {
   // arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -257,7 +256,7 @@ safeSizeTest('Band headers navigation by Tab key when there are fixed columns', 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [900, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
   width: 600,
   customizeColumns(columns) {
@@ -268,7 +267,7 @@ safeSizeTest('Band headers navigation by Tab key when there are fixed columns', 
   },
 }));
 
-safeSizeTest('Band headers navigation by Shift and Tab key when there are fixed columns', async (t) => {
+test.meta({ browserSize: [900, 800] })('Band headers navigation by Shift and Tab key when there are fixed columns', async (t) => {
   // arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -301,7 +300,7 @@ safeSizeTest('Band headers navigation by Shift and Tab key when there are fixed 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [900, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
   width: 550,
   columnWidth: 200,
@@ -313,7 +312,7 @@ safeSizeTest('Band headers navigation by Shift and Tab key when there are fixed 
   },
 }));
 
-safeSizeTest('Band headers navigation by Tab key when there are fixed and command columns', async (t) => {
+test.meta({ browserSize: [900, 800] })('Band headers navigation by Tab key when there are fixed and command columns', async (t) => {
   // arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -350,7 +349,7 @@ safeSizeTest('Band headers navigation by Tab key when there are fixed and comman
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [900, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
   width: 600,
   editing: {
@@ -364,7 +363,7 @@ safeSizeTest('Band headers navigation by Tab key when there are fixed and comman
   },
 }));
 
-safeSizeTest('Data cells navigation by Tab key when there are fixed columns', async (t) => {
+test.meta({ browserSize: [900, 800] })('Data cells navigation by Tab key when there are fixed columns', async (t) => {
   // arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -392,7 +391,7 @@ safeSizeTest('Data cells navigation by Tab key when there are fixed columns', as
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [900, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
   width: 600,
   customizeColumns(columns) {
@@ -402,7 +401,7 @@ safeSizeTest('Data cells navigation by Tab key when there are fixed columns', as
   },
 }));
 
-safeSizeTest('Data cells navigation by Shift and Tab keys when there are fixed columns', async (t) => {
+test.meta({ browserSize: [900, 800] })('Data cells navigation by Shift and Tab keys when there are fixed columns', async (t) => {
   // arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -430,7 +429,7 @@ safeSizeTest('Data cells navigation by Shift and Tab keys when there are fixed c
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [900, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
   width: 625,
   customizeColumns(columns) {

@@ -4,13 +4,12 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
 import { Themes } from '../../../helpers/themes';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Search Panel`
   .page(url(__dirname, '../../container.html'));
 
 // T1046688
-safeSizeTest('searchPanel has correct view inside masterDetail', async (t) => {
+test.meta({ browserSize: [800, 800] })('searchPanel has correct view inside masterDetail', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const dataGrid = new DataGrid('#container');
@@ -27,7 +26,7 @@ safeSizeTest('searchPanel has correct view inside masterDetail', async (t) => {
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => {
+}).before(async () => {
   await changeTheme(Themes.materialBlue);
 
   return createWidget('dxDataGrid', {
@@ -53,7 +52,7 @@ safeSizeTest('searchPanel has correct view inside masterDetail', async (t) => {
 }).after(async () => { await changeTheme(Themes.genericLight); });
 
 // T1272535
-safeSizeTest('Base sensitivity search should accept rows with accent letters in lookup columns', async (t) => {
+test.meta({ browserSize: [800, 800] })('Base sensitivity search should accept rows with accent letters in lookup columns', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t
@@ -63,7 +62,7 @@ safeSizeTest('Base sensitivity search should accept rows with accent letters in 
   await t.expect(dataGrid.dataRows.count).eql(2);
   await t.expect(dataGrid.dataRows.withText('another').exists).ok();
   await t.expect(dataGrid.dataRows.withText('ánother').exists).ok();
-}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: {
     store: [
       { id: 1, text: 'tešt', lookup: 1 },
