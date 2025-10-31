@@ -191,7 +191,6 @@ test('Changing pageSize to \'all\' with rowRenderingMode=\'virtual\' should work
 
   await t.click(dataGrid.element()); // don't know why but test isn't reproduces without this click
 
-  // @ts-expect-error ts-error
   await dataGrid.scrollBy(t, { y: 100 });
 
   await t.click(pager.getPageSizeSelectBox().element);
@@ -228,7 +227,6 @@ test('Page index should not reset when scrolling while the grid is being refresh
     .eql(2);
 
   await dataGrid.apiRefresh();
-  // @ts-expect-error ts-error
   await dataGrid.scrollBy(t, { y: 20 });
 
   await t

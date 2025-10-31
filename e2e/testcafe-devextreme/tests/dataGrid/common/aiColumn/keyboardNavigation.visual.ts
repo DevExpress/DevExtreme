@@ -28,7 +28,6 @@ test('Check keyboard navigation for AI column', async (t) => {
   await t.pressKey('tab');
 
   // assert
-  // @ts-expect-error ts-error
   await t.expect(headerRow.getHeaderCell(1).getAIDropDownButton().isFocused).ok();
 
   await testScreenshot(t, takeScreenshot, 'datagrid__ai-column__focused-dropdown-button.png', { element: dataGrid.element });

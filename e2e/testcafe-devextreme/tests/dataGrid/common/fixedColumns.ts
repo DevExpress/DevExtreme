@@ -576,7 +576,6 @@ test('Warning should work when columns changed in real time', async (t) => {
 test('Warning should be shown one time for every dataGrid instance', async (t) => {
   const otherGrid = new DataGrid('#otherContainer');
 
-  // @ts-expect-error ts-error
   await otherGrid.apiAddColumn({
     dataField: 'test',
     caption: 'test',

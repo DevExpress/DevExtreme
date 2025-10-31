@@ -443,7 +443,6 @@ test('Header container should have padding-right if grid has max-height and scro
   // act
   const scrollBarWidth = await dataGrid.getScrollbarWidth(false);
 
-  // @ts-expect-error ts-error
   await dataGrid.scrollBy(t, { y: 20 });
 
   // assert
@@ -1194,7 +1193,6 @@ test.meta({ unstable: true })('Scroll to the bottom after expand several group',
   await dataGrid.apiExpandRow(['Contoso York Store']);
   await dataGrid.apiExpandRow(['Contoso York Store', 'Audio']);
   await scrollToBottom();
-  // @ts-expect-error ts-error
   await dataGrid.scrollBy(t, { y: -1 });
   await t.expect(dataGrid.isReady()).ok();
 
@@ -1584,17 +1582,13 @@ safeSizeTest('Editing buttons should rerender correctly after scrolling if repai
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  // @ts-expect-error ts-error
   await dataGrid.scrollBy(t, { top: 1000 });
 
   await dataGrid.apiEditRow(3); // row with id=12
 
-  // @ts-expect-error ts-error
   await dataGrid.scrollBy(t, { top: -1000 });
-  // @ts-expect-error ts-error
   await dataGrid.scrollBy(t, { top: 1000 });
 
-  // @ts-expect-error ts-error
   await dataGrid.scrollBy(t, { top: -1 });
 
   await testScreenshot(t, takeScreenshot, 'T1136896-virtual-scrolling_editing-buttons.png', { element: '#container' });
@@ -1631,14 +1625,11 @@ test('Restoring focus on re-rendering should be done without unexpected scrollin
 
   await t.expect(dataGrid.isReady()).ok();
 
-  // @ts-expect-error ts-error
   await dataGrid.scrollBy(t, { left: 1000 });
 
   await t.click(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(19).element);
 
-  // @ts-expect-error ts-error
   await dataGrid.scrollBy(t, { left: 0 });
-  // @ts-expect-error ts-error
   await dataGrid.scrollBy(t, { top: 50 });
 
   await t.expect(dataGrid.getScrollLeft()).eql(0);
@@ -1757,9 +1748,7 @@ test('DataGrid - Focused cell moves to the end of the table after horizontal scr
 
   await t.expect(dataGrid.getDataCell(0, 0).isFocused).ok();
 
-  // @ts-expect-error ts-error
   await dataGrid.scrollBy(t, { x: 1000 });
-  // @ts-expect-error ts-error
   await dataGrid.scrollBy(t, { x: -1000 });
 
   await t.expect(dataGrid.getDataCell(0, 0).isFocused).ok();
@@ -1789,9 +1778,7 @@ test('DataGrid - Scrolling position is reset to far right on an attempt to scrol
 
   await t.expect(dataGrid.getDataCell(0, 20).isFocused).ok();
 
-  // @ts-expect-error ts-error
   await dataGrid.scrollBy(t, { x: -1000 });
-  // @ts-expect-error ts-error
   await dataGrid.scrollBy(t, { x: 1000 });
 
   await t.expect(dataGrid.getDataCell(0, 20).isFocused).ok();
@@ -1818,11 +1805,9 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
 
   await t.expect(dataGrid.isReady()).ok();
 
-  // @ts-expect-error ts-error
   await dataGrid.apiOption('focusedRowKey', '2');
   await t.expect(otherContainer.innerText).eql('2');
 
-  // @ts-expect-error ts-error
   await dataGrid.apiOption('focusedRowKey', '0');
   await t.expect(otherContainer.innerText).eql('0');
 }).before(async () => createWidget('dxDataGrid', {
@@ -1855,7 +1840,6 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
       const firstRow = dataGrid.getDataRow(0);
       const firstDataCell = firstRow.getDataCell(0);
       const adaptiveCell = firstRow.getCommandCell(adaptiveCellIdx);
-      // @ts-expect-error ts-error
       const scrollContainer = dataGrid.getScrollContainer();
 
       await t
@@ -1917,7 +1901,6 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
       .expect(dataGrid.isReady())
       .ok();
 
-    // @ts-expect-error ts-error
     await dataGrid.scrollBy(t, { y: 10000 });
 
     await testScreenshot(t, takeScreenshot, `T1270354-virtual-${useNative ? 'native' : 'simulated'}-scrolling-with-grouping-and-summary.png`, { element: '#container' });

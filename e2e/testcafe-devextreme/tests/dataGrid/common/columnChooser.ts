@@ -17,7 +17,6 @@ fixture.disablePageReloads`Column chooser`
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid('#container');
 
-    // @ts-expect-error ts-error
     await dataGrid.apiShowColumnChooser();
 
     await testScreenshot(t, takeScreenshot, `column-chooser-${mode}-mode.png`, { element: dataGrid.element });
@@ -195,19 +194,14 @@ test(
     await t.click(columnChooserBtn);
 
     const columnChooser = dataGrid.getColumnChooser();
-    // @ts-expect-error ts-error
     const lastItemCheckbox = columnChooser.getCheckbox(1);
 
-    // @ts-expect-error ts-error
     await t.expect(columnChooser.isCheckboxDisabled(0)).notOk();
-    // @ts-expect-error ts-error
     await t.expect(columnChooser.isCheckboxDisabled(1)).notOk();
 
     await t.click(lastItemCheckbox);
 
-    // @ts-expect-error ts-error
     await t.expect(columnChooser.isCheckboxDisabled(0)).ok();
-    // @ts-expect-error ts-error
     await t.expect(columnChooser.isCheckboxDisabled(1)).notOk();
   },
 ).before(async () => createWidget('dxDataGrid', {
@@ -242,9 +236,7 @@ test('ColumnChooser should receive and render custom texts', async (t) => {
   const columnChooserBtn = dataGrid.getColumnChooserButton();
   await t.click(columnChooserBtn);
   const columnChooser = dataGrid.getColumnChooser();
-  // @ts-expect-error ts-error
   const title = columnChooser.getTitle();
-  // @ts-expect-error ts-error
   const emptyMessage = columnChooser.getEmptyMessage();
   const titleText = await title.innerText;
   const emptyMessageText = await emptyMessage.innerText;

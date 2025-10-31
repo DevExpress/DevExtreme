@@ -330,7 +330,6 @@ test('Grouping should work with virtual columns', async (t) => {
 
   await t.dragToElement(
     dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(499).element,
-    // @ts-expect-error ts-error
     dataGrid.getGroupPanel().element,
   );
 

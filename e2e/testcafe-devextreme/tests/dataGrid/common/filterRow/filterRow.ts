@@ -226,7 +226,6 @@ test('DataGrid - The `between` filter dropdown sticks to the viewport edge durin
     .click(filterEditor.menuButton)
     .click(filterEditor.menu.getItemByText('Between'));
 
-  // @ts-expect-error ts-error
   await dataGrid.scrollBy(t, { x: 999 });
   await testScreenshot(t, takeScreenshot, 'filter-row-filter-range-hide-on-scroll.png');
   await t

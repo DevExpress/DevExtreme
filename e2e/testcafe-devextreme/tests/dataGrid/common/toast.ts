@@ -12,15 +12,12 @@ test('Toast should be visible after calling and should be not visible after defa
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   await dataGrid.isReady();
-  // @ts-expect-error ts-error
   await dataGrid.apiShowErrorToast();
-  // @ts-expect-error ts-error
   await t.expect(dataGrid.getToast().exists).ok();
   await testScreenshot(t, takeScreenshot, 'ai-column__toast__at-the-right-position.png', { element: dataGrid.element });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-  // @ts-expect-error ts-error
   await t.expect(dataGrid.getToast().exists).notOk();
 }).before(async () => {
   createWidget('dxDataGrid', {});

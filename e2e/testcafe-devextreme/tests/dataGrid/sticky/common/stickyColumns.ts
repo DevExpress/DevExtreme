@@ -67,7 +67,6 @@ safeSizeTest('Header hover should display correctly when there are fixed columns
 
   await t.hover(headerCell.element);
 
-  // @ts-expect-error ts-error
   await t.expect(headerCell.isHovered()).ok();
 
   await testScreenshot(t, takeScreenshot, 'datagrid_header_hover_with_fixed_columns.png', { element: dataGrid.element });

@@ -258,7 +258,6 @@ test('DataGrid - Group row content is scrolled if repaintChangesOnly is enabled 
     .expect(dataGrid.getGroupRow(0).isExpanded)
     .notOk();
 
-  // @ts-expect-error ts-error
   await dataGrid.scrollBy(t, { x: 1000 });
 
   await testScreenshot(t, takeScreenshot, 'group_row_scrolling_all_collapsed_fixed_columns.png', { element: dataGrid.element });
@@ -293,7 +292,6 @@ test('DataGrid - Group row content is scrolled if repaintChangesOnly is enabled 
     await dataGrid.scrollTo(t, { x: rtlEnabled ? 100 : 250 });
     await testScreenshot(t, takeScreenshot, `grouping-scroll-total_summary_intersection-rtl=${rtlEnabled}.png`, { element: dataGrid.element });
 
-    // @ts-expect-error ts-error
     await dataGrid.apiOption('summary.totalItems', [{
       column: 'SaleAmount',
       summaryType: 'max',
