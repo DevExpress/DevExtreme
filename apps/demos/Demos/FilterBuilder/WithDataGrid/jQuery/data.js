@@ -57,7 +57,7 @@ const columns = [
     caption: 'Sale Price',
     dataType: 'number',
     format: 'currency',
-  },{
+  }, {
     dataField: 'Product_Retail_Price',
     caption: 'Retail Price',
     dataType: 'number',
