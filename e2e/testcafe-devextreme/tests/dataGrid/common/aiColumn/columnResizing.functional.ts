@@ -20,13 +20,13 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).element.textContent)
       .eql('AI Column')
       .expect(dataCell.element.clientWidth)
-      .eql(100);
+      .eql(120);
 
     // act
     await dataGrid.resizeHeader(1, 50);
 
     // assert
-    await t.expect(dataCell.element.clientWidth).eql(150);
+    await t.expect(dataCell.element.clientWidth).eql(170);
   }).before(async () => createWidget('dxDataGrid', {
     dataSource: [
       { id: 1, name: 'Name 1', value: 10 },
@@ -59,13 +59,13 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).element.textContent)
       .eql('AI Column')
       .expect(dataCell.element.clientWidth)
-      .eql(100);
+      .eql(120);
 
     // act
     await dataGrid.resizeHeader(1, 50);
 
     // assert
-    await t.expect(dataCell.element.clientWidth).eql(150);
+    await t.expect(dataCell.element.clientWidth).eql(170);
   }).before(async () => createWidget('dxDataGrid', {
     dataSource: [
       { id: 1, name: 'Name 1', value: 10 },
@@ -104,13 +104,13 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).element.textContent)
       .eql('AI Column')
       .expect(dataCell.element.clientWidth)
-      .eql(100);
+      .eql(120);
 
     // act
     await dataGrid.resizeHeader(1, 50);
 
     // assert
-    await t.expect(dataCell.element.clientWidth).eql(100);
+    await t.expect(dataCell.element.clientWidth).eql(120);
   }).before(async () => createWidget('dxDataGrid', {
     dataSource: [
       { id: 1, name: 'Name 1', value: 10 },

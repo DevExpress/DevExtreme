@@ -675,7 +675,9 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
             color: $datagrid-base-color;
           }
 
-          &:hover {
+          &:not([class*="dx-command"], .dx-editor-cell, .dx-#{$widget-name}-group-space):hover {
+            background-color: $datagrid-hover-bg;
+
             .dx-#{$widget-name}-text-content {
               color: $datagrid-base-color;
             }
@@ -683,10 +685,6 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
             .dx-sort {
               color: $datagrid-columnchooser-hover-icon-color;
             }
-          }
-
-          &:hover:not(.dx-command-select):not(.dx-command-expand):not(.dx-editor-cell):not(.dx-command-edit):not(.dx-#{$widget-name}-group-space) {
-            background-color: $datagrid-hover-bg;
           }
         }
       }
@@ -1329,5 +1327,31 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
   .dx-#{$widget-name}-sticky-columns .dx-#{$widget-name}-draggable-column {
     opacity: 1;
     color: $datagrid-draggable-column-text-color;
+  }
+
+  .dx-command-ai-header-content {
+    max-width: calc(100% - ($material-button-height - $material-grid-base-cell-horizontal-padding + $material-grid-base-command-ai-header-button-offset));
+
+    .dx-#{$widget-name}-text-content {
+      padding-left: $material-grid-base-command-ai-text-content-padding;
+    }
+
+    .dx-icon-chatsparkleoutline {
+      @include dx-icon-sizing($material-grid-base-command-ai-chatsparkleoutline-icon-size);
+    }
+  }
+
+  .dx-command-ai-header-button {
+    left: auto;
+    right: $material-grid-base-command-ai-header-button-offset;
+  }
+
+  td[style*="text-align: right"] .dx-command-ai-header-button {
+    left: $material-grid-base-command-ai-header-button-offset;
+    right: auto;
+  }
+
+  .dx-command-ai .dx-command-ai-header-button .dx-button {
+    @include dx-button-onlyicon-sizing();
   }
 }

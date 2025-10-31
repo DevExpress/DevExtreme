@@ -272,7 +272,7 @@
   .dx-#{$widget-name}-nowrap {
     white-space: nowrap;
 
-    .dx-header-row > td > .dx-#{$widget-name}-text-content {
+    .dx-header-row > td .dx-#{$widget-name}-text-content {
       white-space: nowrap;
     }
   }
@@ -644,7 +644,7 @@
       white-space: nowrap;
       overflow: hidden;
 
-      & > .dx-#{$widget-name}-text-content {
+      .dx-#{$widget-name}-text-content {
         display: inline-block;
         white-space: normal;
         vertical-align: top;
@@ -1246,5 +1246,21 @@
     right: 0;
     bottom: 0;
     line-height: 0;
+  }
+
+  .dx-command-ai, .dx-command-ai-header-content {
+    position: relative;
+  }
+
+  .dx-command-ai-header-content {
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  .dx-command-ai-header-content .dx-icon-chatsparkleoutline, .dx-command-ai-header-button {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
   }
 }

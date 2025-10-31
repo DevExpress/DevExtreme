@@ -120,7 +120,7 @@ export type CancelButtonClickEvent = NativeEventInfo<InteractionEvent> & {
 
 export type FileLimitReachedEvent = NativeEventInfo<FileUploader>;
 
-interface Properties extends PublicProperties {
+export interface Properties extends PublicProperties {
   _buttonStylingMode?: ButtonStyle;
 
   _uploadButtonType?: ButtonType;
