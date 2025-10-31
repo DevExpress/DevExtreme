@@ -11,24 +11,24 @@ const ATTR = {
 };
 
 export class DropDownButtonModel {
-  constructor(protected readonly root: HTMLElement) {}
+  constructor(protected readonly root: HTMLElement | null) {}
 
-  public getElement(): HTMLElement {
+  public getElement(): HTMLElement | null {
     return this.root;
   }
 
-  public getButtonElement(): HTMLElement {
-    return this.root.querySelector(`.${CLASSES.button}`) as HTMLElement;
+  public getButtonElement(): HTMLElement | null {
+    return this.root?.querySelector(`.${CLASSES.button}`) ?? null;
   }
 
-  public getPopupContent(): HTMLElement {
-    const popupId = this.root.getAttribute(ATTR.popupId);
+  public getPopupContent(): HTMLElement | null {
+    const popupId = this.root?.getAttribute(ATTR.popupId);
 
-    return document.body.querySelector(`#${popupId}`) as HTMLElement;
+    return document.body.querySelector(`#${popupId}`);
   }
 
   public getList(): ListModel {
-    return new ListModel(this.getPopupContent().querySelector(`.${CLASSES.list}`) as HTMLElement);
+    return new ListModel(this.getPopupContent()?.querySelector(`.${CLASSES.list}`) ?? null);
   }
 
   public isOpened(): boolean {

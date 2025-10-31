@@ -6,17 +6,17 @@ const CLASSES = {
 };
 
 export class ListModel {
-  constructor(protected readonly root: HTMLElement) {}
+  constructor(protected readonly root: HTMLElement | null) {}
 
-  public getElement(): HTMLElement {
+  public getElement(): HTMLElement | null {
     return this.root;
   }
 
-  public getItems(): NodeListOf<HTMLElement> {
-    return this.root.querySelectorAll(`.${CLASSES.item}`);
+  public getItems(): NodeListOf<HTMLElement> | null {
+    return this.root?.querySelectorAll(`.${CLASSES.item}`) ?? null;
   }
 
   public getItem(index = 0): ListItemModel {
-    return new ListItemModel(this.getItems()[index]);
+    return new ListItemModel(this.getItems()?.[index] ?? null);
   }
 }

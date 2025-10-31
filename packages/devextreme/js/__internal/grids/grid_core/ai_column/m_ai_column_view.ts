@@ -2,7 +2,7 @@
 import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type { Item, Properties as DropDownProperties } from '@js/ui/drop_down_button';
+import type { Item, ItemClickEvent, Properties as DropDownProperties } from '@js/ui/drop_down_button';
 import DropDownButton from '@js/ui/drop_down_button';
 import domAdapter from '@ts/core/m_dom_adapter';
 
@@ -220,7 +220,7 @@ export const columnHeadersViewExtender = (
       icon: 'overflow',
       stylingMode: 'text',
       items: this.getDropDownButtonItems(column),
-      onItemClick: (e): void => {
+      onItemClick: (e: ItemClickEvent): void => {
         const { key: actionName } = e.itemData;
 
         // eslint-disable-next-line default-case

@@ -233,8 +233,8 @@ describe('Options', () => {
       const headerCell = component.getHeaderCell(3);
 
       expect(headerCellTemplate).toHaveBeenCalledTimes(1);
-      expect(headerCell.getElement().querySelectorAll('.template-class').length).toBe(1);
-      expect(headerCell.getElement().textContent).toBe('Template');
+      expect(headerCell.getElement()?.querySelectorAll('.template-class').length).toBe(1);
+      expect(headerCell.getElement()?.textContent).toBe('Template');
       expect(headerCell.getHeaderContent()).toBeNull();
       expect(headerCell.getIcon()).toBeNull();
       expect(headerCell.getDropDownButton()).not.toBeNull();
@@ -298,8 +298,8 @@ describe('Options', () => {
       const headerCellUpdated = component.getHeaderCell(3);
 
       expect(headerCellTemplate).toHaveBeenCalledTimes(1);
-      expect(headerCellUpdated.getElement().querySelector('.my-template-class')).not.toBeNull();
-      expect(headerCellUpdated.getElement().textContent).toBe('Test');
+      expect(headerCellUpdated.getElement()?.querySelector('.my-template-class')).not.toBeNull();
+      expect(headerCellUpdated.getElement()?.textContent).toBe('Test');
       expect(headerCellUpdated.getHeaderContent()).toBeNull();
       expect(headerCellUpdated.getIcon()).toBeNull();
       expect(headerCellUpdated.getDropDownButton()).not.toBeNull();
@@ -481,8 +481,8 @@ describe('columnOption', () => {
     const headerCell = component.getHeaderCell(3);
 
     expect(headerCellTemplate).toHaveBeenCalledTimes(1);
-    expect(headerCell.getElement().querySelectorAll('.template-class').length).toBe(1);
-    expect(headerCell.getElement().textContent).toBe('Template');
+    expect(headerCell.getElement()?.querySelectorAll('.template-class').length).toBe(1);
+    expect(headerCell.getElement()?.textContent).toBe('Template');
   });
 
   it('should apply cellTemplate to AI column', async () => {
@@ -2706,7 +2706,7 @@ describe('DropDownButton', () => {
       });
       const dropDownButton = component.getHeaderCell(3).getDropDownButton();
 
-      dropDownButton?.getButtonElement().click();
+      dropDownButton?.getButtonElement()?.click();
 
       expect(dropDownButton.isOpened()).toBe(true);
       expect(dropDownButton.getList().getItem(0).isDisabled).toBe(false);
@@ -2737,7 +2737,7 @@ describe('DropDownButton', () => {
       });
       const dropDownButton = component.getHeaderCell(3).getDropDownButton();
 
-      dropDownButton?.getButtonElement().click();
+      dropDownButton?.getButtonElement()?.click();
 
       expect(dropDownButton.isOpened()).toBe(true);
       expect(dropDownButton.getList().getItem(0).isDisabled).toBe(false);
@@ -2765,7 +2765,7 @@ describe('DropDownButton', () => {
       });
       let dropDownButton = component.getHeaderCell(3).getDropDownButton();
 
-      dropDownButton?.getButtonElement().click();
+      dropDownButton?.getButtonElement()?.click();
 
       expect(dropDownButton.isOpened()).toBe(true);
       expect(dropDownButton.getList().getItem(0).isDisabled).toBe(false);
@@ -2775,7 +2775,7 @@ describe('DropDownButton', () => {
       instance.columnOption('myColumn', 'ai.prompt', 'Updated prompt');
 
       dropDownButton = component.getHeaderCell(3).getDropDownButton();
-      dropDownButton?.getButtonElement().click();
+      dropDownButton?.getButtonElement()?.click();
 
       expect(dropDownButton.isOpened()).toBe(true);
       expect(dropDownButton.getList().getItem(0).isDisabled).toBe(false);
@@ -2803,11 +2803,11 @@ describe('DropDownButton', () => {
       });
       const dropDownButton = component.getHeaderCell(3).getDropDownButton();
 
-      dropDownButton?.getButtonElement().click();
+      dropDownButton?.getButtonElement()?.click();
 
-      expect(dropDownButton.isOpened()).toBe(true);
+      expect(dropDownButton?.isOpened()).toBe(true);
 
-      dropDownButton.getList().getItem(0).getElement().click();
+      dropDownButton?.getList()?.getItem(0)?.getElement()?.click();
 
       expect(component.getAIPromptEditor().isVisible()).toBe(true);
     });
@@ -2838,7 +2838,7 @@ describe('DropDownButton', () => {
                     promise: new Promise<string>((resolve) => {
                       resolve('123');
                     }),
-                    abort: (): void => { },
+                    abort: (): void => {},
                   };
                 },
               }),
@@ -2848,12 +2848,12 @@ describe('DropDownButton', () => {
       });
       const dropDownButton = component.getHeaderCell(3).getDropDownButton();
 
-      dropDownButton?.getButtonElement().click();
+      dropDownButton?.getButtonElement()?.click();
 
       expect(dropDownButton.isOpened()).toBe(true);
 
       sendRequestSpy.mockClear();
-      dropDownButton.getList().getItem(1).getElement().click();
+      dropDownButton.getList()?.getItem(1)?.getElement()?.click();
 
       expect(sendRequestSpy).toHaveBeenCalledTimes(1);
     });
@@ -2881,11 +2881,11 @@ describe('DropDownButton', () => {
       });
       const dropDownButton = component.getHeaderCell(3).getDropDownButton();
 
-      dropDownButton?.getButtonElement().click();
+      dropDownButton?.getButtonElement()?.click();
 
       expect(dropDownButton.isOpened()).toBe(true);
 
-      dropDownButton.getList().getItem(2).getElement().click();
+      dropDownButton.getList()?.getItem(2)?.getElement()?.click();
 
       expect(instance.columnOption('myColumn', 'ai.prompt')).toBe('');
     });
