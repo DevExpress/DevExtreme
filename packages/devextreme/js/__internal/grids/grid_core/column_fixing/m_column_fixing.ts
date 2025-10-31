@@ -1125,7 +1125,7 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
           point.index += correctIndex;
         }
 
-        return that._pointCreated(point, { length: columns.length } as dxElementWrapper, columns);
+        return that._pointCreated(point, columns);
       });
     }
   }

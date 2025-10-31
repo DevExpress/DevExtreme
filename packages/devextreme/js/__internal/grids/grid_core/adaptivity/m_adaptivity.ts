@@ -996,8 +996,8 @@ const exportExtender = (
 const columnsResizer = (
   Base: ModuleType<ColumnsResizerViewController>,
 ) => class AdaptivityColumnsResizerExtender extends Base {
-  protected _pointCreated(point, cells: dxElementWrapper | undefined, columns) {
-    const result = super._pointCreated(point, cells, columns);
+  protected _pointCreated(point, columns, cells?: dxElementWrapper) {
+    const result = super._pointCreated(point, columns, cells);
     const currentColumn = columns[point.columnIndex] || {};
     const nextColumnIndex = this._getNextColumnIndex(point.columnIndex);
     const nextColumn = columns[nextColumnIndex] || {};
