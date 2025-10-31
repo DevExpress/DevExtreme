@@ -4,6 +4,7 @@ import TextBox from 'devextreme-testcafe-models/textBox';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 async function createDataGridWithPager(): Promise<any> {
   const dataSource = Array.from({ length: 100 }, (_, room) => ({ name: 'Alex', phone: '555555', room }));
@@ -87,21 +88,30 @@ safeSizeTest('Resize', async (t) => {
   const pagerElement = dataGrid.getPager().element;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   await t
-    .resizeWindow(700, 600)
-    .expect(await takeScreenshot('pager-resize-large.png', pagerElement))
+    .resizeWindow(700, 600);
+
+  await testScreenshot(t, takeScreenshot, 'pager-resize-large.png', { element: pagerElement });
+  await t
+    .expect(compareResults.isValid())
     .ok()
-    .resizeWindow(600, 600)
-    .expect(await takeScreenshot('pager-resize-large-noinfo.png', pagerElement))
+    .resizeWindow(600, 600);
+  await testScreenshot(t, takeScreenshot, 'pager-resize-large-noinfo.png', { element: pagerElement });
+  await t
+    .expect(compareResults.isValid())
     .ok()
-    .resizeWindow(350, 600)
-    .expect(await takeScreenshot('pager-resize-small.png', pagerElement))
+    .resizeWindow(350, 600);
+  await testScreenshot(t, takeScreenshot, 'pager-resize-small.png', { element: pagerElement });
+  await t
+    .expect(compareResults.isValid())
     .ok()
-    .resizeWindow(600, 600)
-    .expect(await takeScreenshot('pager-resize-large-noinfo-enlarge.png', pagerElement))
+    .resizeWindow(600, 600);
+  await testScreenshot(t, takeScreenshot, 'pager-resize-large-noinfo-enlarge.png', { element: pagerElement });
+  await t
+    .expect(compareResults.isValid())
     .ok()
-    .resizeWindow(700, 600)
-    .expect(await takeScreenshot('pager-resize-large-enlarge.png', pagerElement))
-    .ok()
+    .resizeWindow(700, 600);
+  await testScreenshot(t, takeScreenshot, 'pager-resize-large-enlarge.png', { element: pagerElement });
+  await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createDataGridWithPager());
@@ -112,21 +122,29 @@ safeSizeTest('Resize without navigation buttons', async (t) => {
   const pagerElement = dataGrid.getPager().element;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   await t
-    .resizeWindow(700, 600)
-    .expect(await takeScreenshot('pager-resize-nobutton-large.png', pagerElement))
+    .resizeWindow(700, 600);
+  await testScreenshot(t, takeScreenshot, 'pager-resize-nobutton-large.png', { element: pagerElement });
+  await t
+    .expect(compareResults.isValid())
     .ok()
-    .resizeWindow(540, 600)
-    .expect(await takeScreenshot('pager-resize-nobutton-large-noinfo.png', pagerElement))
+    .resizeWindow(540, 600);
+  await testScreenshot(t, takeScreenshot, 'pager-resize-nobutton-large-noinfo.png', { element: pagerElement });
+  await t
+    .expect(compareResults.isValid())
     .ok()
-    .resizeWindow(350, 600)
-    .expect(await takeScreenshot('pager-resize-nobutton-small.png', pagerElement))
+    .resizeWindow(350, 600);
+  await testScreenshot(t, takeScreenshot, 'pager-resize-nobutton-small.png', { element: pagerElement });
+  await t
+    .expect(compareResults.isValid())
     .ok()
-    .resizeWindow(540, 600)
-    .expect(await takeScreenshot('pager-resize-nobutton-large-noinfo-enlarge.png', pagerElement))
+    .resizeWindow(540, 600);
+  await testScreenshot(t, takeScreenshot, 'pager-resize-nobutton-large-noinfo-enlarge.png', { element: pagerElement });
+  await t
+    .expect(compareResults.isValid())
     .ok()
-    .resizeWindow(700, 600)
-    .expect(await takeScreenshot('pager-resize-nobutton-large-enlarge.png', pagerElement))
-    .ok()
+    .resizeWindow(700, 600);
+  await testScreenshot(t, takeScreenshot, 'pager-resize-nobutton-large-enlarge.png', { element: pagerElement });
+  await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createDataGridWithPager());
@@ -140,9 +158,8 @@ safeSizeTest('Compact pager in the generic.light theme (T1057735)', async (t) =>
   const pagerElement = dataGrid.getPager().element;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await testScreenshot(t, takeScreenshot, 'compact-pager.png', { element: pagerElement });
   await t
-    .expect(await takeScreenshot('compact-pager-in-the-generic-light-theme.png', pagerElement))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }, [700, 600])
@@ -174,6 +191,7 @@ test('Changing pageSize to \'all\' with rowRenderingMode=\'virtual\' should work
 
   await t.click(dataGrid.element()); // don't know why but test isn't reproduces without this click
 
+  // @ts-expect-error ts-error
   await dataGrid.scrollBy(t, { y: 100 });
 
   await t.click(pager.getPageSizeSelectBox().element);
@@ -210,6 +228,7 @@ test('Page index should not reset when scrolling while the grid is being refresh
     .eql(2);
 
   await dataGrid.apiRefresh();
+  // @ts-expect-error ts-error
   await dataGrid.scrollBy(t, { y: 20 });
 
   await t

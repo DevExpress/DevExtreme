@@ -7,6 +7,7 @@ import { MouseUpEvents, MouseAction } from '../../../helpers/mouseUpEvents';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 const CLASS = { ...DataGridClassNames, ...ClassNames };
 
@@ -573,6 +574,7 @@ safeSizeTest('The draggable element should be displayed correctly after horizont
 safeSizeTest('Dragging with scrolling should be prevented by e.cancel (T1179555)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
+  // @ts-expect-error ts-error
   await dataGrid.scrollBy(t, { top: 10000 });
   await t.expect(dataGrid.isReady()).ok();
 
@@ -784,9 +786,8 @@ safeSizeTest('Rows should appear correctly during dragging when virtual scrollin
   // drag the row up
   await dataGrid.moveRow(0, 30, 75);
 
+  await testScreenshot(t, takeScreenshot, 'T1179218-virtual-scrolling-dragging-row.png', { element: dataGrid.element });
   await t
-    .expect(await takeScreenshot('T1179218-virtual-scrolling-dragging-row.png', dataGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).meta({ unstable: true }).before(async (t) => {

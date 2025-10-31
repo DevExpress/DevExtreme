@@ -3,6 +3,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../../helpers/getPageUrl';
 import { changeTheme } from '../../../../helpers/changeTheme';
 import { createWidget } from '../../../../helpers/createWidget';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Icon Sizes`
   .page(url(__dirname, '../../../container.html'));
@@ -13,13 +14,11 @@ test('Correct icon sizes in the Fluent compact theme (T1207612)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(GRID_CONTAINER);
 
+  await testScreenshot(t, takeScreenshot, 'icon-sizes.png', { element: dataGrid.element, theme: 'fluent.blue.light.compact' });
   await t
-    .expect(await takeScreenshot('icon-sizes-fluent-compact.png', dataGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await changeTheme('fluent.blue.light.compact');
   await createWidget('dxDataGrid', {
     dataSource: [...new Array(3)].map((_, index) => ({ id: index, text: `item ${index}`, group: `group ${index % 2}` })),
     keyExpr: 'id',
@@ -56,6 +55,4 @@ test('Correct icon sizes in the Fluent compact theme (T1207612)', async (t) => {
       showNavigationButtons: true,
     },
   });
-}).after(async () => {
-  await changeTheme('generic.light');
 });

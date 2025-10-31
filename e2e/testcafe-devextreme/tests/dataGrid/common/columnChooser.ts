@@ -3,6 +3,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { getData } from '../helpers/generateDataSourceData';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Column chooser`
   .page(url(__dirname, '../../container.html'));
@@ -16,11 +17,11 @@ fixture.disablePageReloads`Column chooser`
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid('#container');
 
+    // @ts-expect-error ts-error
     await dataGrid.apiShowColumnChooser();
 
+    await testScreenshot(t, takeScreenshot, `column-chooser-${mode}-mode.png`, { element: dataGrid.element });
     await t
-      .expect(await takeScreenshot(`column-chooser-${mode}-mode (generic.light).png`, dataGrid.element))
-      .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => createWidget('dxDataGrid', {
@@ -55,9 +56,8 @@ test('Column chooser checkboxes should be aligned correctly with plain structure
 
   const columnChooser = dataGrid.getColumnChooser();
 
+  await testScreenshot(t, takeScreenshot, 'column-chooser-checkbox-alignment-plain-structure.png', { element: columnChooser.content });
   await t
-    .expect(await takeScreenshot('column-chooser-checkbox-alignment-plain-structure.png', columnChooser.content))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -86,9 +86,8 @@ test('Column chooser checkboxes should be aligned correctly with tree structure'
 
   const columnChooser = dataGrid.getColumnChooser();
 
+  await testScreenshot(t, takeScreenshot, 'column-chooser-checkbox-alignment-tree-structure.png', { element: columnChooser.content });
   await t
-    .expect(await takeScreenshot('column-chooser-checkbox-alignment-tree-structure.png', columnChooser.content))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -148,19 +147,19 @@ test('Check the behavior of pressing the Esc button when dragging a column from 
   await t
     .click(dataGrid.getColumnChooserButton());
 
-  await takeScreenshot('T1219785-column-chooser-1.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1219785-column-chooser-1.png', { element: dataGrid.element });
 
   await dataGrid.getColumnChooser().focusList();
   await dataGrid.moveColumnChooserColumn(0, -25, -25, true);
   await dataGrid.moveColumnChooserColumn(0, -50, -50);
 
-  await takeScreenshot('T1219785-column-chooser-2.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1219785-column-chooser-2.png', { element: dataGrid.element });
 
   // act
   await t.pressKey('esc');
   await dataGrid.moveColumnChooserColumn(0, -75, -75);
 
-  await takeScreenshot('T1219785-column-chooser-3.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1219785-column-chooser-3.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -196,14 +195,19 @@ test(
     await t.click(columnChooserBtn);
 
     const columnChooser = dataGrid.getColumnChooser();
+    // @ts-expect-error ts-error
     const lastItemCheckbox = columnChooser.getCheckbox(1);
 
+    // @ts-expect-error ts-error
     await t.expect(columnChooser.isCheckboxDisabled(0)).notOk();
+    // @ts-expect-error ts-error
     await t.expect(columnChooser.isCheckboxDisabled(1)).notOk();
 
     await t.click(lastItemCheckbox);
 
+    // @ts-expect-error ts-error
     await t.expect(columnChooser.isCheckboxDisabled(0)).ok();
+    // @ts-expect-error ts-error
     await t.expect(columnChooser.isCheckboxDisabled(1)).notOk();
   },
 ).before(async () => createWidget('dxDataGrid', {
@@ -238,7 +242,9 @@ test('ColumnChooser should receive and render custom texts', async (t) => {
   const columnChooserBtn = dataGrid.getColumnChooserButton();
   await t.click(columnChooserBtn);
   const columnChooser = dataGrid.getColumnChooser();
+  // @ts-expect-error ts-error
   const title = columnChooser.getTitle();
+  // @ts-expect-error ts-error
   const emptyMessage = columnChooser.getEmptyMessage();
   const titleText = await title.innerText;
   const emptyMessageText = await emptyMessage.innerText;

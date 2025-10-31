@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Summary`
   .page(url(__dirname, '../../container.html'));
@@ -14,8 +15,8 @@ test('Group footer summary should be focusable', async (t) => {
   await t
     .pressKey('tab');
 
+  await testScreenshot(t, takeScreenshot, 'group-summary-focused.png', { element: dataGrid.element });
   await t
-    .expect(await takeScreenshot('group-summary-focused.png', dataGrid.element)).ok()
     .expect(compareResults.isValid()).ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [
@@ -50,8 +51,8 @@ test('Total summary should be focusable', async (t) => {
   await t
     .pressKey('tab');
 
+  await testScreenshot(t, takeScreenshot, 'total-summary-focused.png', { element: dataGrid.element });
   await t
-    .expect(await takeScreenshot('total-summary-focused.png', dataGrid.element)).ok()
     .expect(compareResults.isValid()).ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [
@@ -80,8 +81,8 @@ test('Focused total summary should have right appearance with sticky columns', a
   await t
     .pressKey('tab');
 
+  await testScreenshot(t, takeScreenshot, 'total-summary-focused-with-sticky.png', { element: dataGrid.element });
   await t
-    .expect(await takeScreenshot('total-summary-focused-with-sticky.png', dataGrid.element)).ok()
     .expect(compareResults.isValid()).ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [
@@ -160,9 +161,10 @@ test('The group summary should be displayed next to the grouped value when the g
   // assert
   await t
     .expect(dataGrid.isReady())
-    .ok()
-    .expect(await takeScreenshot('group-summary-when-grouped-column-has-showWhenGrouped.png', dataGrid.element))
-    .ok()
+    .ok();
+
+  await testScreenshot(t, takeScreenshot, 'group-summary-when-grouped-column-has-showWhenGrouped.png', { element: dataGrid.element });
+  await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {

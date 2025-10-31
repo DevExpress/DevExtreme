@@ -2,6 +2,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Ai Column.ColumnReordering.Visual`
   .page(url(__dirname, '../../../container.html'));
@@ -18,15 +19,18 @@ test('The draggable AI column should display correctly', async (t) => {
   await dataGrid.moveHeader(0, 100, 5, true);
 
   // assert
+  // @ts-expect-error ts-error
   await t.expect(dataGrid.getDraggableHeader().visible).ok();
 
-  await takeScreenshot('datagrid__ai-column__dragging.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'datagrid__ai-column__dragging.png', { element: dataGrid.element });
 
   // act
+  // @ts-expect-error ts-error
   await dataGrid.dropHeader(0);
 
   // assert
   await t
+    // @ts-expect-error ts-error
     .expect(dataGrid.getDraggableHeader().visible)
     .notOk()
     .expect(compareResults.isValid())

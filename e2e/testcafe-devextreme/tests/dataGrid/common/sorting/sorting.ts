@@ -2,8 +2,8 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { changeTheme } from '../../../../helpers/changeTheme';
 import { Themes } from '../../../../helpers/themes';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Sorting`
   .page(url(__dirname, '../../../container.html'));
@@ -59,16 +59,13 @@ test.skip('Multiple sorting alphabetical icons should be correct in Fluent Theme
 
   await t
     .rightClick(dataGrid.getHeaders().element);
-  await takeScreenshot(
-    'datagrid-alphabetical-icons-should-be-correct.png',
-    dataGrid.element,
-  );
+
+  await testScreenshot(t, takeScreenshot, 'datagrid-alphabetical-icons-should-be-correct.png', { element: dataGrid.element, theme: Themes.fluentBlue });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(
   async () => {
-    await changeTheme(Themes.fluentBlue);
     await createWidget('dxDataGrid', {
       dataSource: [
         {
@@ -88,7 +85,7 @@ test.skip('Multiple sorting alphabetical icons should be correct in Fluent Theme
       ],
     });
   },
-).after(async () => { await changeTheme(Themes.genericLight); });
+);
 
 test('Sorting and filtering should be applied correctly when they change at runtime (T1237863)', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -104,7 +101,7 @@ test('Sorting and filtering should be applied correctly when they change at runt
 
   await t.expect(dataGrid.isReady()).ok();
 
-  await takeScreenshot('T1237863_datagrid-sorting_and_filtering.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1237863_datagrid-sorting_and_filtering.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())

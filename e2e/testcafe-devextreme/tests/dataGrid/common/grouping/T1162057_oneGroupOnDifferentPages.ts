@@ -3,6 +3,7 @@ import { RequestMock } from 'testcafe';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Grouping Panel - One group on different pages`
   .page(url(__dirname, '../../../container.html'));
@@ -79,16 +80,16 @@ const endsOnNextPageApiMock = RequestMock()
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
   await t.click(dataGrid.getGroupRow(0).getCell(0).element);
-  await takeScreenshot('group-panel_loaded_first-page.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'group-panel_loaded_first-page.png', { element: dataGrid.element });
 
   await t.click(dataGrid.getPager().getNavPage('2').element);
-  await takeScreenshot('group-panel_loaded_second-page.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'group-panel_loaded_second-page.png', { element: dataGrid.element });
 
   await t.click(dataGrid.getPager().getNavPage('1').element);
-  await takeScreenshot('group-panel_restored_first-page.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'group-panel_restored_first-page.png', { element: dataGrid.element });
 
   await t.click(dataGrid.getPager().getNavPage('2').element);
-  await takeScreenshot('group-panel_restored_second-page.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'group-panel_restored_second-page.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

@@ -5,6 +5,7 @@ import { createWidget } from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
 import { Themes } from '../../../helpers/themes';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Search Panel`
   .page(url(__dirname, '../../container.html'));
@@ -22,9 +23,8 @@ safeSizeTest('searchPanel has correct view inside masterDetail', async (t) => {
   const masterGrid = masterRow.getDataGrid();
 
   // assert
+  await testScreenshot(t, takeScreenshot, 'T1046688.searchPanel.png', { element: masterGrid.element });
   await t
-    .expect(await takeScreenshot('T1046688.searchPanel.png', masterGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }, [800, 800]).before(async () => {

@@ -3,6 +3,7 @@ import { ClientFunction } from 'testcafe';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../../helpers/createWidget';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Focused row`
   .page(url(__dirname, '../../../../container.html'));
@@ -926,9 +927,10 @@ test('It is possible to focus row that was added via push method if previously r
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid('#container');
 
+    // @ts-expect-error ts-error
     await dataGrid.apiOption('focusedRowKey', 1);
 
-    await takeScreenshot(`focused-row_under_group=${groupValue}.png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `focused-row_under_group=${groupValue}.png`, { element: dataGrid.element });
 
     await t
       .expect(compareResults.isValid())
@@ -958,9 +960,10 @@ test('Group should expand when focusedRowKey is set and data items have \'items\
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
 
+  // @ts-expect-error ts-error
   await dataGrid.apiOption('focusedRowKey', 1);
 
-  await takeScreenshot('focused-row_under_group_when_data-items_have_items-property.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'focused-row_under_group_when_data-items_have_items-property.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())
