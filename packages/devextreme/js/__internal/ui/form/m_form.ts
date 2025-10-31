@@ -1160,21 +1160,11 @@ class Form extends Widget<FormProperties> {
     fieldName: string;
     fieldPath: string[];
   } {
-    const fieldSeparator = '.';
-    let fieldName = field;
-    let separatorIndex = fieldName.indexOf(fieldSeparator);
-    const resultPath = [];
-
-    while (separatorIndex !== -1) {
-      // @ts-expect-error ts-error
-      resultPath.push(fieldName.substr(0, separatorIndex));
-      fieldName = fieldName.substr(separatorIndex + 1);
-      separatorIndex = fieldName.indexOf(fieldSeparator);
-    }
+    const [fieldName, ...fieldPath] = field.split('.').reverse();
 
     return {
       fieldName,
-      fieldPath: resultPath.reverse(),
+      fieldPath,
     };
   }
 
@@ -1198,7 +1188,7 @@ class Form extends Widget<FormProperties> {
           pathNode = path.pop();
         }
 
-        if (!path.length) {
+        if (!path.length && nameWithoutSpaces === pathNode) {
           result = that._getItemByField(fieldName, item[subItemsField]);
 
           if (result) {
@@ -1206,9 +1196,14 @@ class Form extends Widget<FormProperties> {
           }
         }
 
-        if (!isGroupWithName || isGroupWithName && nameWithoutSpaces === pathNode) {
-          if (path.length) {
-            result = that._searchItemInEverySubItem(path, fieldName, item[subItemsField]);
+        const isGroupPathNodeOrUnnamed = !isGroupWithName
+          || (isGroupWithName && nameWithoutSpaces === pathNode);
+
+        if (isGroupPathNodeOrUnnamed && path.length) {
+          result = that._searchItemInEverySubItem(path, fieldName, item[subItemsField]);
+
+          if (!result) {
+            break;
           }
         }
       } else {
