@@ -4,7 +4,6 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Master detail`
   .page(url(__dirname, '../../container.html'));
@@ -115,7 +114,7 @@ test('pageSizeSelector has correct layout inside masterDetail', async (t) => {
   }));
 
 // T1159578
-safeSizeTest('The master detail row should display correctly when renderAsync, virtual scrolling and column fixing features are enabled', async (t) => {
+test.meta({ browserSize: [800, 800] })('The master detail row should display correctly when renderAsync, virtual scrolling and column fixing features are enabled', async (t) => {
   // arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -133,7 +132,7 @@ safeSizeTest('The master detail row should display correctly when renderAsync, v
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800])
+})
   .before(() => createWidget('dxDataGrid', {
     dataSource: [...new Array(40)].map((_, index) => ({ id: index, text: `item ${index}` })),
     keyExpr: 'id',
@@ -150,7 +149,7 @@ safeSizeTest('The master detail row should display correctly when renderAsync, v
 
 [true, false].forEach((useNative) => {
   // T1167889
-  safeSizeTest(`The master detail row should display correctly after scrolling when renderAsync, column fixing are enabled and virtual scrolling with useNative=${useNative}`, async (t) => {
+  test.meta({ browserSize: [800, 800] })(`The master detail row should display correctly after scrolling when renderAsync, column fixing are enabled and virtual scrolling with useNative=${useNative}`, async (t) => {
     // arrange
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid('#container');
@@ -192,80 +191,73 @@ safeSizeTest('The master detail row should display correctly when renderAsync, v
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [800, 800])
-    .before(async (t) => {
-      await createWidget('dxDataGrid', {
-        dataSource: [...new Array(200)].map((_, index) => ({ id: index, text: `item ${index}` })),
-        keyExpr: 'id',
-        showBorders: true,
-        height: 800,
-        renderAsync: true,
-        templatesRenderAsynchronously: true,
-        columnFixing: {
-          enabled: true,
-          // @ts-expect-error private option
-          legacyMode: true,
-        },
-        masterDetail: {
-          enabled: true,
-          template: '#test',
-        },
-        scrolling: {
-          mode: 'virtual',
-          useNative,
-        },
-        onContentReady(e) {
+  }).before(async (t) => {
+    await createWidget('dxDataGrid', {
+      dataSource: [...new Array(200)].map((_, index) => ({ id: index, text: `item ${index}` })),
+      keyExpr: 'id',
+      showBorders: true,
+      height: 800,
+      renderAsync: true,
+      templatesRenderAsynchronously: true,
+      columnFixing: {
+        enabled: true,
+        // @ts-expect-error private option
+        legacyMode: true,
+      },
+      masterDetail: {
+        enabled: true,
+        template: '#test',
+      },
+      scrolling: {
+        mode: 'virtual',
+        showScrollbar: 'never',
+        useNative,
+      },
+      onContentReady(e) {
+        // @ts-expect-error flag for test
+        // eslint-disable-next-line no-underscore-dangle
+        if (!e.component.__initExpand) {
           // @ts-expect-error flag for test
           // eslint-disable-next-line no-underscore-dangle
-          if (!e.component.__initExpand) {
-            // @ts-expect-error flag for test
-            // eslint-disable-next-line no-underscore-dangle
-            e.component.__initExpand = true;
-            e.component.beginUpdate();
-            e.component.expandRow(3);
-            e.component.expandRow(5);
-            e.component.expandRow(7);
-            e.component.expandRow(9);
-            e.component.expandRow(11);
-            e.component.expandRow(13);
-            e.component.expandRow(15);
-            e.component.endUpdate();
-          }
-        },
-      });
+          e.component.__initExpand = true;
+          e.component.beginUpdate();
+          e.component.expandRow(3);
+          e.component.expandRow(5);
+          e.component.expandRow(7);
+          e.component.expandRow(9);
+          e.component.expandRow(11);
+          e.component.expandRow(13);
+          e.component.expandRow(15);
+          e.component.endUpdate();
+        }
+      },
+    });
 
-      await t.wait(100);
+    await t.wait(100);
 
-      // simulating async rendering in React
-      await ClientFunction(() => {
-        const dataGrid = ($('#container') as any).dxDataGrid('instance');
+    // simulating async rendering in React
+    await ClientFunction(() => {
+      const dataGrid = ($('#container') as any).dxDataGrid('instance');
 
-        // eslint-disable-next-line no-underscore-dangle
-        dataGrid.getView('rowsView')._templatesCache = {};
+      // eslint-disable-next-line no-underscore-dangle
+      dataGrid.getView('rowsView')._templatesCache = {};
 
-        // eslint-disable-next-line no-underscore-dangle
-        dataGrid._getTemplate = () => ({
-          render(options) {
-            setTimeout(() => {
-              if ($(options.container).closest(document as any).length) {
-                $(options.container).append($('<div/>').html(`
+      // eslint-disable-next-line no-underscore-dangle
+      dataGrid._getTemplate = () => ({
+        render(options) {
+          setTimeout(() => {
+            if ($(options.container).closest(document as any).length) {
+              $(options.container).append($('<div/>').html(`
                     <p>${options.model.data.id}</p>
                     <p>${options.model.data.text}</p>
                 `));
-                options.deferred?.resolve();
-              }
-            }, 30);
-          },
-        });
+              options.deferred?.resolve();
+            }
+          }, 30);
+        },
+      });
 
-        dataGrid.repaint();
-      })();
-    })
-    .after(async () => {
-      await ClientFunction(() => {
-        const dataGrid = ($('#container') as any).dxDataGrid('instance');
-
-        dataGrid?.dispose();
-      })();
-    });
+      dataGrid.repaint();
+    })();
+  });
 });

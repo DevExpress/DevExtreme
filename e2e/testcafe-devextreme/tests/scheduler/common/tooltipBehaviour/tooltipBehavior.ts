@@ -2,7 +2,6 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import dataSource from './init/widget.data';
 import { createScheduler, scroll } from './init/widget.setup';
 import url from '../../../../helpers/getPageUrl';
@@ -10,14 +9,14 @@ import url from '../../../../helpers/getPageUrl';
 fixture.disablePageReloads`Appointment tooltip behavior during scrolling in the Scheduler (T755449)`
   .page(url(__dirname, '../../../container.html'));
 
-safeSizeTest('The tooltip of collector should not scroll page and immediately hide', async (t) => {
+test.meta({ browserSize: [600, 450] })('The tooltip of collector should not scroll page and immediately hide', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t
     .click(scheduler.collectors.find('7').element)
     .expect(scheduler.appointmentTooltip.isVisible())
     .ok();
-}, [600, 450]).before(async () => createScheduler({
+}).before(async () => createScheduler({
   views: [{
     type: 'week',
     name: 'week',
@@ -57,7 +56,7 @@ safeSizeTest('The tooltip of collector should not scroll page and immediately hi
   }],
 }));
 
-safeSizeTest('The tooltip should not hide after automatic scrolling during an appointment click', async (t) => {
+test.meta({ browserSize: [600, 400] })('The tooltip should not hide after automatic scrolling during an appointment click', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointment('Brochure Design Review');
 
@@ -65,13 +64,13 @@ safeSizeTest('The tooltip should not hide after automatic scrolling during an ap
     .click(appointment.element)
     .expect(scheduler.appointmentTooltip.isVisible())
     .ok();
-}, [600, 400]).before(async () => createScheduler({
+}).before(async () => createScheduler({
   views: ['week'],
   currentView: 'week',
   dataSource,
 }));
 
-safeSizeTest('The tooltip should hide after manually scrolling in the browser', async (t) => {
+test.meta({ browserSize: [600, 400] })('The tooltip should hide after manually scrolling in the browser', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointment('Brochure Design Review');
 
@@ -83,7 +82,7 @@ safeSizeTest('The tooltip should hide after manually scrolling in the browser', 
   await t
     .wait(500)
     .expect(scheduler.appointmentTooltip.isVisible()).notOk();
-}, [600, 400]).before(async () => createScheduler({
+}).before(async () => createScheduler({
   views: ['week'],
   currentView: 'week',
   dataSource,
@@ -93,7 +92,7 @@ safeSizeTest('The tooltip should hide after manually scrolling in the browser', 
   false,
   true,
 ].forEach((adaptivityEnabled) => {
-  safeSizeTest('The tooltip screenshot', async (t) => {
+  test.meta({ browserSize: [600, 400] })('The tooltip screenshot', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const scheduler = new Scheduler('#container');
     const appointment = scheduler.getAppointment('Brochure Design Review');
@@ -112,7 +111,7 @@ safeSizeTest('The tooltip should hide after manually scrolling in the browser', 
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [600, 400]).meta({ unstable: true }).before(async () => createScheduler({
+  }).before(async () => createScheduler({
     views: ['week'],
     currentView: 'week',
     dataSource,
@@ -120,7 +119,7 @@ safeSizeTest('The tooltip should hide after manually scrolling in the browser', 
   }));
 });
 
-safeSizeTest('Tooltip on mobile devices should have enough hight if there are async templates (React)', async (t) => {
+test.meta({ browserSize: [600, 1000] })('Tooltip on mobile devices should have enough hight if there are async templates (React)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const scheduler = new Scheduler('#container');
 
@@ -145,7 +144,7 @@ safeSizeTest('Tooltip on mobile devices should have enough hight if there are as
   await takeScreenshot('tooltip-rendering-with-react.png');
 
   await t.expect(compareResults.isValid()).ok(compareResults.errorMessages());
-}, [600, 1000]).before(async () => {
+}).before(async () => {
   const prepareRenderDeferreds = ClientFunction(() => {
     (window as any).deferreds = [];
   });

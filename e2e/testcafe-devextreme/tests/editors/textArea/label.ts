@@ -1,6 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import TextArea from 'devextreme-testcafe-models/textArea';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
@@ -33,7 +32,7 @@ test('Label scroll input dxTextArea', async (t) => {
 
 stylingModes.forEach((stylingMode) => {
   labelModes.forEach((labelMode) => {
-    safeSizeTest(`Label for dxTextArea labelMode=${labelMode} stylingMode=${stylingMode}`, async (t) => {
+    test.meta({ browserSize: [300, 400] })(`Label for dxTextArea labelMode=${labelMode} stylingMode=${stylingMode}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t.click('#textArea2');
@@ -43,7 +42,7 @@ stylingModes.forEach((stylingMode) => {
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }, [300, 400]).before(async () => {
+    }).before(async () => {
       await appendElementTo('#container', 'div', 'textArea1', { });
       await appendElementTo('#container', 'div', 'textArea2', { });
 

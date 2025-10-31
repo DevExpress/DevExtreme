@@ -2883,8 +2883,8 @@ test('Cells should be focused correctly on click when cell editing mode is used 
     .ok()
     .expect(dataGrid.getDataCell(0, 0).getEditor().element.focused)
     .ok();
-}).before(async () => {
-  const initStore = ClientFunction(() => {
+}).before(async (t) => {
+  await ClientFunction(() => {
     (window as any).myStore = new (window as any).DevExpress.data.ArrayStore({
       key: 'ID',
       data: [
@@ -2893,9 +2893,7 @@ test('Cells should be focused correctly on click when cell editing mode is used 
         { ID: 3, Name: 'Name 3' },
       ],
     });
-  });
-
-  await initStore();
+  }).with({ boundTestRun: t })();
 
   return createWidget('dxDataGrid', {
     dataSource: {

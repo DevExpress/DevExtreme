@@ -6,7 +6,6 @@ import { Selector } from 'testcafe';
 import { isMaterial, testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`Popup_toolbar`
@@ -23,7 +22,7 @@ const ANIMATION_DELAY = 500;
 ].forEach(({ name, Class }) => {
   ['bottom', 'top'].forEach((toolbar) => {
     [true, false].forEach((rtlEnabled) => {
-      safeSizeTest(`Extended toolbar should be used in ${name},rtlEnabled=${rtlEnabled},toolbar=${toolbar}`, async (t) => {
+      test.meta({ browserSize: [600, 400] })(`Extended toolbar should be used in ${name},rtlEnabled=${rtlEnabled},toolbar=${toolbar}`, async (t) => {
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
         const instance = new Class(COMPONENT_SELECTOR);
 
@@ -42,7 +41,7 @@ const ANIMATION_DELAY = 500;
         await t
           .expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
-      }, [600, 400]).before(async () => {
+      }).before(async () => {
         if (isMaterial()) {
           await insertStylesheetRulesToPage('.dx-overlay-content, .dx-overlay-content input { font-family: sans-serif !important; }');
         }
@@ -169,7 +168,7 @@ const baseConfiguration = {
     .height(300),
 };
 
-safeSizeTest('Popup toolbars with wide elements and overflow menu if hidden on init with toolbar items', async (t) => {
+test.meta({ browserSize: [600, 600] })('Popup toolbars with wide elements and overflow menu if hidden on init with toolbar items', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const instance = new Popup(COMPONENT_SELECTOR);
   await instance.option({ visible: true });
@@ -191,13 +190,13 @@ safeSizeTest('Popup toolbars with wide elements and overflow menu if hidden on i
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [600, 600]).before(async () => createWidget('dxPopup', {
+}).before(async () => createWidget('dxPopup', {
   ...baseConfiguration,
   toolbarItems,
   visible: false,
 }));
 
-safeSizeTest('Popup toolbars with wide elements and overflow menu if hidden on init with no toolbar items', async (t) => {
+test.meta({ browserSize: [600, 600] })('Popup toolbars with wide elements and overflow menu if hidden on init with no toolbar items', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const instance = new Popup(COMPONENT_SELECTOR);
   await instance.option({ visible: true, toolbarItems });
@@ -219,13 +218,13 @@ safeSizeTest('Popup toolbars with wide elements and overflow menu if hidden on i
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [600, 600]).before(async () => createWidget('dxPopup', {
+}).before(async () => createWidget('dxPopup', {
   ...baseConfiguration,
   toolbarItems: [],
   visible: false,
 }));
 
-safeSizeTest('Popup toolbars with wide elements and overflow menu if shown on init with toolbar items', async (t) => {
+test.meta({ browserSize: [600, 600] })('Popup toolbars with wide elements and overflow menu if shown on init with toolbar items', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const instance = new Popup(COMPONENT_SELECTOR);
 
@@ -244,7 +243,7 @@ safeSizeTest('Popup toolbars with wide elements and overflow menu if shown on in
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [600, 600]).before(async () => createWidget('dxPopup', {
+}).before(async () => createWidget('dxPopup', {
   ...baseConfiguration,
   toolbarItems,
   visible: true,

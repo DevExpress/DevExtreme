@@ -1,6 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { getData } from '../../helpers/generateDataSourceData';
@@ -10,7 +9,7 @@ const DATA_GRID_SELECTOR = '#container';
 fixture.disablePageReloads`Sticky columns - Virtual Scrolling`
   .page(url(__dirname, '../../../container.html'));
 
-safeSizeTest('Fixed columns should display correctly when scrolling vertically quickly', async (t) => {
+test.meta({ browserSize: [1000, 800] })('Fixed columns should display correctly when scrolling vertically quickly', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -36,7 +35,7 @@ safeSizeTest('Fixed columns should display correctly when scrolling vertically q
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(400, 15),
   height: 700,
   columnWidth: 100,
@@ -56,7 +55,7 @@ safeSizeTest('Fixed columns should display correctly when scrolling vertically q
   },
 }));
 
-safeSizeTest('Fixed columns should display correctly when horizontal scrolling', async (t) => {
+test.meta({ browserSize: [800, 800] })('Fixed columns should display correctly when horizontal scrolling', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -72,7 +71,7 @@ safeSizeTest('Fixed columns should display correctly when horizontal scrolling',
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(400, 15),
   height: 700,
   columnWidth: 100,
