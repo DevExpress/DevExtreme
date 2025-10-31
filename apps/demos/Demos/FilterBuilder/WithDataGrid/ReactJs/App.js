@@ -2,7 +2,9 @@ import React, { useCallback, useState } from 'react';
 import FilterBuilder from 'devextreme-react/filter-builder';
 import Button from 'devextreme-react/button';
 import DataGrid from 'devextreme-react/data-grid';
-import { filter, fields, columns, products } from './data.js';
+import {
+  filter, fields, columns, products,
+} from './data.js';
 
 const App = () => {
   const [value, setValue] = useState(filter);

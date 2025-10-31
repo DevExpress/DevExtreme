@@ -22,7 +22,7 @@ export const fields = [
     caption: 'Sale Price',
     dataType: 'number',
     format: 'currency',
-  },{
+  }, {
     dataField: 'Product_Retail_Price',
     caption: 'Retail Price',
     dataType: 'number',
@@ -53,7 +53,7 @@ export const columns = [
     caption: 'Sale Price',
     dataType: 'number',
     format: 'currency',
-  },{
+  }, {
     dataField: 'Product_Retail_Price',
     caption: 'Retail Price',
     dataType: 'number',

@@ -9,33 +9,33 @@ const filter = [
 ];
 
 const fields = [
-    {
-      caption: 'ID',
-      dataField: 'Product_ID',
-      dataType: 'number',
-    }, {
-      dataField: 'Product_Name',
-      dataType: 'string',
-    }, {
-      caption: 'Cost',
-      dataField: 'Product_Cost',
-      dataType: 'number',
-      format: 'currency',
-    }, {
-      dataField: 'Product_Sale_Price',
-      caption: 'Sale Price',
-      dataType: 'number',
-      format: 'currency',
-    },{
-      dataField: 'Product_Retail_Price',
-      caption: 'Retail Price',
-      dataType: 'number',
-      format: 'currency',
-    }, {
-      dataField: 'Product_Current_Inventory',
-      dataType: 'number',
-      caption: 'Inventory',
-    },
+  {
+    caption: 'ID',
+    dataField: 'Product_ID',
+    dataType: 'number',
+  }, {
+    dataField: 'Product_Name',
+    dataType: 'string',
+  }, {
+    caption: 'Cost',
+    dataField: 'Product_Cost',
+    dataType: 'number',
+    format: 'currency',
+  }, {
+    dataField: 'Product_Sale_Price',
+    caption: 'Sale Price',
+    dataType: 'number',
+    format: 'currency',
+  }, {
+    dataField: 'Product_Retail_Price',
+    caption: 'Retail Price',
+    dataType: 'number',
+    format: 'currency',
+  }, {
+    dataField: 'Product_Current_Inventory',
+    dataType: 'number',
+    caption: 'Inventory',
+  },
 ];
 
 const columns = [
