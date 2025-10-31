@@ -114,7 +114,7 @@
         "dxDataGrid-aiPromptEditorStopButton": "Stop",
         "dxDataGrid-aiDropDownButtonAutofillItem": "Autofill with AI",
         "dxDataGrid-aiDropDownButtonRegenerateItem": "Regenerate",
-        "dxDataGrid-aiDropDownButtonDeleteItem": "Delete Data",
+        "dxDataGrid-aiDropDownButtonClearItem": "Clear Data",
         "dxDataGrid-emptyHeaderWithColumnChooserText": "Brug {0} til at vise kolonner",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "Træk en kolonne fra gruppepanelet hertil",
         "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Brug {0}, eller træk en kolonne fra gruppepanelet",

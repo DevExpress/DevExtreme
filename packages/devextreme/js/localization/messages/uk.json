@@ -114,7 +114,7 @@
         "dxDataGrid-aiPromptEditorStopButton": "Stop",
         "dxDataGrid-aiDropDownButtonAutofillItem": "Autofill with AI",
         "dxDataGrid-aiDropDownButtonRegenerateItem": "Regenerate",
-        "dxDataGrid-aiDropDownButtonDeleteItem": "Delete Data",
+        "dxDataGrid-aiDropDownButtonClearItem": "Clear Data",
         "dxDataGrid-emptyHeaderWithColumnChooserText": "Використовуйте {0}, щоб відобразити стовпці",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "Перетягніть сюди стовпець з панелі групування",
         "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Використовуйте {0} або перетягніть стовпець з панелі групування",

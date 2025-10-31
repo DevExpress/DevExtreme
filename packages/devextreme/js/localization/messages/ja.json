@@ -114,7 +114,7 @@
         "dxDataGrid-aiPromptEditorStopButton": "Stop",
         "dxDataGrid-aiDropDownButtonAutofillItem": "Autofill with AI",
         "dxDataGrid-aiDropDownButtonRegenerateItem": "Regenerate",
-        "dxDataGrid-aiDropDownButtonDeleteItem": "Delete Data",
+        "dxDataGrid-aiDropDownButtonClearItem": "Clear Data",
         "dxDataGrid-emptyHeaderWithColumnChooserText": "{0} を使用して列を表示してください",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "グループパネルからここに列をドラッグしてください",
         "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "{0} を使用するか、グループ パネルから列をドラッグしてください",

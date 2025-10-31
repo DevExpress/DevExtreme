@@ -2,7 +2,7 @@
 import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type { Properties as DropDownProperties } from '@js/ui/drop_down_button';
+import type { Item, Properties as DropDownProperties } from '@js/ui/drop_down_button';
 import DropDownButton from '@js/ui/drop_down_button';
 import domAdapter from '@ts/core/m_dom_adapter';
 
@@ -13,7 +13,7 @@ import { View } from '../m_modules';
 import type { ModuleType } from '../m_types';
 import { AIPromptEditor } from './ai_prompt_editor/ai_prompt_editor';
 import type { AIPromptEditorOptions } from './ai_prompt_editor/types';
-import { AI_COLUMN_NAME, CLASSES } from './const';
+import { AI_COLUMN_NAME, CLASSES, ICON_NAMES } from './const';
 import { createAIHeaderContainer, createChatSparkleOutlineIcon } from './dom';
 import type { AIColumnController } from './m_ai_column_controller';
 import {
@@ -152,7 +152,9 @@ export class AIColumnView extends View {
     this.aiColumnController.aiRequestRejected.add(() => {
       this.promptEditorInstance?.updateStateOnAction('stop');
     });
-
+    this.aiColumnController.promptEditorRequested.add(({ column, cellElement }) => {
+      this.showPromptEditor(cellElement, column);
+    });
     this.renderCompleted.add(() => {
       this.ensureAIPromptEditorVisibility();
     });
@@ -178,17 +180,65 @@ export class AIColumnView extends View {
   }
 }
 
-export const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) => class AIColumnHeadersViewExtender extends Base {
-  private getDropDownButtonConfig($container: dxElementWrapper): DropDownProperties {
+export const columnHeadersViewExtender = (
+  Base: ModuleType<ColumnHeadersView>,
+) => class AIColumnHeadersViewExtender extends Base {
+  private aiColumnController!: AIColumnController;
+
+  private getDropDownButtonItems(column: Column): Item[] {
+    return [
+      {
+        key: 'autoFill',
+        icon: ICON_NAMES.autoFill,
+        text: messageLocalization.format('dxDataGrid-aiDropDownButtonAutofillItem'),
+      },
+      {
+        key: 'regenerate',
+        icon: ICON_NAMES.regenerate,
+        text: messageLocalization.format('dxDataGrid-aiDropDownButtonRegenerateItem'),
+        disabled: !column.ai?.prompt,
+      },
+      {
+        key: 'clear',
+        icon: ICON_NAMES.clear,
+        text: messageLocalization.format('dxDataGrid-aiDropDownButtonClearItem'),
+        disabled: !column.ai?.prompt,
+      },
+    ];
+  }
+
+  private getDropDownButtonInstance($container: dxElementWrapper): DropDownButton {
+    return DropDownButton.getInstance($container.find(`.${CLASSES.aiColumnHeaderButton}`)[0]) as DropDownButton;
+  }
+
+  private getDropDownButtonConfig(
+    column: Column,
+    $container: dxElementWrapper,
+  ): DropDownProperties {
     return {
       showArrowIcon: false,
       icon: 'overflow',
       stylingMode: 'text',
-      items: [
-        { text: messageLocalization.format('dxDataGrid-aiDropDownButtonAutofillItem') },
-        { text: messageLocalization.format('dxDataGrid-aiDropDownButtonRegenerateItem') },
-        { text: messageLocalization.format('dxDataGrid-aiDropDownButtonDeleteItem') },
-      ],
+      items: this.getDropDownButtonItems(column),
+      onItemClick: (e): void => {
+        const { key: actionName } = e.itemData;
+
+        // eslint-disable-next-line default-case
+        switch (actionName) {
+          case 'autoFill':
+            this.aiColumnController.requestPromptEditor(
+              column,
+              $container[0],
+            );
+            break;
+          case 'regenerate':
+            this.aiColumnController.refreshAIColumn(column.name as string);
+            break;
+          case 'clear':
+            this.aiColumnController.clearAIColumn(column.name as string);
+            break;
+        }
+      },
       dropDownOptions: {
         width: 160,
         position: {
@@ -196,16 +246,26 @@ export const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) =
           at: 'right bottom',
           my: 'right top',
         },
+        onShowing: (): void => {
+          const dropDownButtonInstance = this.getDropDownButtonInstance($container);
+          const actualColumn = this._columnsController.columnOption(column.name);
+
+          dropDownButtonInstance.option('items', this.getDropDownButtonItems(actualColumn));
+        },
       },
     };
   }
 
-  private renderHeaderDropDownButton($container: dxElementWrapper): void {
+  private renderHeaderDropDownButton(column: Column, $container: dxElementWrapper): void {
     const $dropDownButton = $('<div>')
       .addClass(CLASSES.aiColumnHeaderButton)
       .appendTo($container);
 
-    this._createComponent($dropDownButton, DropDownButton, this.getDropDownButtonConfig($container));
+    this._createComponent(
+      $dropDownButton,
+      DropDownButton,
+      this.getDropDownButtonConfig(column, $container),
+    );
   }
 
   private renderAIHeader($container: dxElementWrapper, column: Column): void {
@@ -236,14 +296,19 @@ export const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) =
 
     if (renderingTemplate && needToRenderHeaderDropDownButton) {
       return {
-        render: (options) => {
-          renderingTemplate.render(options);
-          this.renderHeaderDropDownButton($(options.container));
+        render: (args) => {
+          renderingTemplate.render(args);
+          this.renderHeaderDropDownButton(args.model.column, $(args.container));
         },
       };
     }
 
     return renderingTemplate;
+  }
+
+  public init(): void {
+    super.init();
+    this.aiColumnController = this.getController('aiColumn');
   }
 
   public renderDragCellContent($dragContainer: dxElementWrapper, column: Column): void {
