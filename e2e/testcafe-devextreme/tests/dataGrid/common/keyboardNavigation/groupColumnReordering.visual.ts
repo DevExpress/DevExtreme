@@ -1153,7 +1153,6 @@ safeSizeTest('Group second column via context menu', async (t) => {
     .click(contextMenu.getItemByText('Group by This Column'));
 
   await testScreenshot(t, takeScreenshot, 'group_second_column_via_context_menu_2.png');
-  await takeScreenshot('group_second_column_via_context_menu_2');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
