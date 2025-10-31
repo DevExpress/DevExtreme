@@ -1,11 +1,11 @@
 import $ from 'jquery';
+
 import fx from 'common/core/animation/fx';
-import { dropDownEditorsList } from '../../helpers/widgetsList.js';
-import { defaultDropDownOptions } from '../../helpers/dropDownOptions.js';
+import { dropDownEditorsList } from '../../../helpers/widgetsList.js';
+import { defaultDropDownOptions } from '../../../helpers/dropDownOptions.js';
 
 import 'fluent_blue_light.css!';
 
-const dropDownEditorsNames = Object.keys(dropDownEditorsList);
 const dropDownOptionsKeys = Object.keys(defaultDropDownOptions);
 
 const optionTestValues = {
@@ -80,13 +80,6 @@ const skipTesting = (assert) => {
     assert.ok(true, 'tests for this option are implemented separately');
 };
 
-QUnit.testStart(function() {
-    const markup = '<div id="editor"></div>\
-    <div id="container"></div>';
-
-    $('#qunit-fixture').html(markup);
-});
-
 const optionComparer = {
     position: function(assert, editor) {
         const expectedPosition = {
@@ -140,7 +133,7 @@ const optionComparer = {
     visible: skipTesting
 };
 
-dropDownEditorsNames.forEach(widgetName => {
+export const widgetTestModule = widgetName => {
     QUnit.module(widgetName, {
         beforeEach: function() {
             fx.off = true;
@@ -415,4 +408,6 @@ dropDownEditorsNames.forEach(widgetName => {
             });
         });
     });
-});
+};
+
+export const WIDGET_AMOUNT_PER_FILE = 2;
