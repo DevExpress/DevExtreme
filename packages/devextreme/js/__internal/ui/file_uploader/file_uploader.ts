@@ -41,7 +41,7 @@ import {
 
 const window = getWindow();
 
-const FILEUPLOADER_CLASS = 'dx-fileuploader';
+export const FILEUPLOADER_CLASS = 'dx-fileuploader';
 const FILEUPLOADER_EMPTY_CLASS = 'dx-fileuploader-empty';
 const FILEUPLOADER_SHOW_FILE_LIST_CLASS = 'dx-fileuploader-show-file-list';
 const FILEUPLOADER_DRAGOVER_CLASS = 'dx-fileuploader-dragover';
@@ -65,7 +65,7 @@ const FILEUPLOADER_FILE_ICON_CLASS = 'dx-fileuploader-file-icon';
 
 const FILEUPLOADER_BUTTON_CLASS = 'dx-fileuploader-button';
 const FILEUPLOADER_BUTTON_CONTAINER_CLASS = 'dx-fileuploader-button-container';
-const FILEUPLOADER_CANCEL_BUTTON_CLASS = 'dx-fileuploader-cancel-button';
+export const FILEUPLOADER_CANCEL_BUTTON_CLASS = 'dx-fileuploader-cancel-button';
 const FILEUPLOADER_UPLOAD_BUTTON_CLASS = 'dx-fileuploader-upload-button';
 
 const FILEUPLOADER_INVALID_CLASS = 'dx-fileuploader-invalid';

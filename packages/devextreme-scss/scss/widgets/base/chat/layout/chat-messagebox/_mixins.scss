@@ -16,7 +16,7 @@
     gap: $gap;
   }
 
-  .dx-chat-messagebox-textarea.dx-textarea {
+  .dx-chat-textarea.dx-textarea {
     gap: $gap;
     padding: $textarea-padding;
 
@@ -31,7 +31,7 @@
     }
   }
 
-  .dx-textarea-toolbar.dx-toolbar {
+  .dx-chat-textarea-toolbar.dx-toolbar {
     .dx-toolbar-items-container {
       min-height: $toolbar-min-height;
     }
