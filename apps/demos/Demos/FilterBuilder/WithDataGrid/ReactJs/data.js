@@ -3,40 +3,63 @@ export const filter = [
   'or',
   [['Product_Name', 'contains', 'HD'], 'and', ['Product_Cost', '<', 200]],
 ];
-export const fields = [
-  {
+
+const fieldsMap = {
+  Product_ID: {
     caption: 'ID',
     dataField: 'Product_ID',
     dataType: 'number',
   },
-  {
+  Product_Name: {
     dataField: 'Product_Name',
     dataType: 'string',
   },
-  {
+  Product_Cost: {
     caption: 'Cost',
     dataField: 'Product_Cost',
     dataType: 'number',
     format: 'currency',
   },
-  {
+  Product_Sale_Price: {
     dataField: 'Product_Sale_Price',
     caption: 'Sale Price',
     dataType: 'number',
     format: 'currency',
   },
-  {
+  Product_Retail_Price: {
     dataField: 'Product_Retail_Price',
     caption: 'Retail Price',
     dataType: 'number',
     format: 'currency',
   },
-  {
+  Product_Current_Inventory: {
     dataField: 'Product_Current_Inventory',
     dataType: 'number',
     caption: 'Inventory',
   },
+}
+
+export const fields = [
+  fieldsMap.Product_ID,
+  fieldsMap.Product_Name,
+  fieldsMap.Product_Cost,
+  fieldsMap.Product_Sale_Price,
+  fieldsMap.Product_Retail_Price,
+  fieldsMap.Product_Current_Inventory,
 ];
+
+export const columns = [
+  {
+    ...fieldsMap.Product_ID,
+    width: 50,
+  },
+  fieldsMap.Product_Name,
+  fieldsMap.Product_Cost,
+  fieldsMap.Product_Sale_Price,
+  fieldsMap.Product_Retail_Price,
+  fieldsMap.Product_Current_Inventory,
+];
+
 export const products = [
   {
     Product_ID: 1,

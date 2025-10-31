@@ -20,7 +20,7 @@ export const filter = [
   ],
 ];
 
-export const fieldsMap: Record<keyof Product, (DxFilterBuilderTypes.Field & DxDataGridTypes.Column)> = {
+const fieldsMap: Record<keyof Product, (DxFilterBuilderTypes.Field & DxDataGridTypes.Column)> = {
   Product_ID: {
     caption: 'ID',
     dataField: 'Product_ID',
