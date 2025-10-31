@@ -443,7 +443,7 @@ const serializeValueV2 = (value, fieldType?: string) => {
     return value.valueOf();
   }
 
-  if (typeof value === 'string' && fieldType !== 'string' && ISO8601_DATE_REGEX.test(value)) {
+  if (typeof value === 'string' && fieldType !== 'String' && ISO8601_DATE_REGEX.test(value)) {
     return formatISO8601(new Date(value), false, false);
   }
 
