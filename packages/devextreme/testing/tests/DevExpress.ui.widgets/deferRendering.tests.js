@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import TransitionExecutorModule from 'common/core/animation/transition_executor/transition_executor';
+import TransitionExecutorModule from '__internal/common/core/animation/transition_executor/transitionExecutorModule';
 import dataUtils from 'core/element_data';
 
 import 'ui/defer_rendering';
