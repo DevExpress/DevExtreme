@@ -1,1 +1,1 @@
-export * from '../common/core/animation/easing';
+export * from '../__internal/common/core/animation/easing';

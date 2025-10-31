@@ -1,42 +1,59 @@
-import { hasWindow, getWindow } from '../../../core/utils/window';
-const window = hasWindow() ? getWindow() : {};
-import callOnce from '../../../core/utils/call_once';
+import callOnce from '@js/core/utils/call_once';
+import { getWindow, hasWindow } from '@js/core/utils/window';
+
+type ExtendedWindow = Window & {
+  webkitRequestAnimationFrame?: typeof window.requestAnimationFrame;
+  mozRequestAnimationFrame?: typeof window.requestAnimationFrame;
+  oRequestAnimationFrame?: typeof window.requestAnimationFrame;
+  msRequestAnimationFrame?: typeof window.requestAnimationFrame;
+
+  webkitCancelAnimationFrame?: typeof window.cancelAnimationFrame;
+  mozCancelAnimationFrame?: typeof window.cancelAnimationFrame;
+  oCancelAnimationFrame?: typeof window.cancelAnimationFrame;
+  msCancelAnimationFrame?: typeof window.cancelAnimationFrame;
+};
+
+const window: ExtendedWindow = (hasWindow() ? getWindow() : {}) as ExtendedWindow;
 
 const FRAME_ANIMATION_STEP_TIME = 1000 / 60;
 
-let request = function(callback) {
-    return setTimeout(callback, FRAME_ANIMATION_STEP_TIME);
+let request = function (callback: FrameRequestCallback): number {
+  /* eslint-disable no-restricted-globals */
+  return setTimeout(callback, FRAME_ANIMATION_STEP_TIME);
 };
 
-let cancel = function(requestID) {
-    clearTimeout(requestID);
+let cancel = function (requestID: number): void {
+  clearTimeout(requestID);
 };
 
-const setAnimationFrameMethods = callOnce(function() {
-    const nativeRequest = window.requestAnimationFrame ||
-            window.webkitRequestAnimationFrame ||
-            window.mozRequestAnimationFrame ||
-            window.oRequestAnimationFrame ||
-            window.msRequestAnimationFrame;
+const setAnimationFrameMethods = callOnce(() => {
+  const nativeRequest = window.requestAnimationFrame
+            || window.webkitRequestAnimationFrame
+            || window.mozRequestAnimationFrame
+            || window.oRequestAnimationFrame
+            || window.msRequestAnimationFrame;
 
-    const nativeCancel = window.cancelAnimationFrame ||
-            window.webkitCancelAnimationFrame ||
-            window.mozCancelAnimationFrame ||
-            window.oCancelAnimationFrame ||
-            window.msCancelAnimationFrame;
+  const nativeCancel = window.cancelAnimationFrame
+            || window.webkitCancelAnimationFrame
+            || window.mozCancelAnimationFrame
+            || window.oCancelAnimationFrame
+            || window.msCancelAnimationFrame;
 
-    if(nativeRequest && nativeCancel) {
-        request = nativeRequest;
-        cancel = nativeCancel;
-    }
+  if (nativeRequest && nativeCancel) {
+    request = nativeRequest;
+    cancel = nativeCancel;
+  }
 });
 
-export function requestAnimationFrame() {
-    setAnimationFrameMethods();
-    return request.apply(window, arguments);
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export function requestAnimationFrame(...args): number {
+  setAnimationFrameMethods();
+
+  // @ts-ignore
+  return request.apply(window, args);
 }
 
-export function cancelAnimationFrame() {
-    setAnimationFrameMethods();
-    cancel.apply(window, arguments);
+export function cancelAnimationFrame(requestID: number): void {
+  setAnimationFrameMethods();
+  cancel.apply(window, [requestID]);
 }

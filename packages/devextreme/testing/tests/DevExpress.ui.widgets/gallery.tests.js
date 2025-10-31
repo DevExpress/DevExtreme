@@ -4,7 +4,7 @@ import { DataSource } from 'common/data/data_source/data_source';
 import visibilityChange from 'common/core/events/visibility_change';
 import ArrayStore from 'common/data/array_store';
 import fx from 'common/core/animation/fx';
-import animationFrame from 'common/core/animation/frame';
+import animationFrame from '__internal/common/core/animation/frameModule';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
@@ -2176,11 +2176,9 @@ QUnit.module('api', {
     QUnit.test('animationDuration', function(assert) {
         fx.off = false;
 
-        const oldRAF = animationFrame.requestAnimationFrame;
-
-        animationFrame.requestAnimationFrame = callback => {
+        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
             return window.setTimeout(callback, 10);
-        };
+        });
 
         try {
             const $element = $('#gallerySimple').dxGallery({ items: [0, 1, 2] });
@@ -2213,7 +2211,7 @@ QUnit.module('api', {
             this.clock.tick(5000);
             assert.equal($container.position().left, -800, 'animation is completed');
         } finally {
-            animationFrame.requestAnimationFrame = oldRAF;
+            this.requestAnimationFrameStub.restore();
         }
     });
 });
