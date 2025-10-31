@@ -11,6 +11,7 @@ import { addNamespace, eventData as getEventData, isTouchEvent } from '@js/commo
 import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { Callback } from '@js/core/utils/callbacks';
 import Callbacks from '@js/core/utils/callbacks';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
@@ -701,6 +702,12 @@ export class ColumnsResizerViewController extends modules.ViewController {
 
   private _draggingHeaderView!: DraggingHeaderView;
 
+  public resizeStarted!: Callback;
+
+  protected callbackNames(): string[] {
+    return ['resizeStarted'];
+  }
+
   public init() {
     this._subscribesToCallbacks = [];
 
@@ -938,6 +945,8 @@ export class ColumnsResizerViewController extends modules.ViewController {
       if (scrollable && that._isRtlParentStyle()) {
         that._scrollRight = getWidth(scrollable.$content()) - getWidth(scrollable.container()) - scrollable.scrollLeft();
       }
+
+      this.resizeStarted.fire();
 
       e.preventDefault();
       e.stopPropagation();

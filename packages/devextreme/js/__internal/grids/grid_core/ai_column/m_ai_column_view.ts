@@ -9,6 +9,7 @@ import domAdapter from '@ts/core/m_dom_adapter';
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { Column, ColumnsController } from '../columns_controller/m_columns_controller';
 import { getColumnHeaderCellSelector } from '../columns_controller/m_columns_controller_utils';
+import type { ColumnsResizerViewController } from '../columns_resizing_reordering/m_columns_resizing_reordering';
 import { View } from '../m_modules';
 import type { ModuleType } from '../m_types';
 import { AIPromptEditor } from './ai_prompt_editor/ai_prompt_editor';
@@ -185,6 +186,10 @@ export const columnHeadersViewExtender = (
 ) => class AIColumnHeadersViewExtender extends Base {
   private aiColumnController!: AIColumnController;
 
+  private columnsResizer!: ColumnsResizerViewController;
+
+  private dropDownButtonInstance!: DropDownButton | null;
+
   private getDropDownButtonItems(column: Column): Item[] {
     return [
       {
@@ -246,11 +251,17 @@ export const columnHeadersViewExtender = (
           at: 'right bottom',
           my: 'right top',
         },
-        onShowing: (): void => {
-          const dropDownButtonInstance = this.getDropDownButtonInstance($container);
+        onShown: (): void => {
           const actualColumn = this._columnsController.columnOption(column.name);
 
-          dropDownButtonInstance.option('items', this.getDropDownButtonItems(actualColumn));
+          this.dropDownButtonInstance = this.getDropDownButtonInstance($container);
+          this.dropDownButtonInstance.option('items', this.getDropDownButtonItems(actualColumn));
+        },
+        onHidden: (): void => {
+          this.dropDownButtonInstance = null;
+        },
+        onDisposing: (): void => {
+          this.dropDownButtonInstance = null;
         },
       },
     };
@@ -309,6 +320,11 @@ export const columnHeadersViewExtender = (
   public init(): void {
     super.init();
     this.aiColumnController = this.getController('aiColumn');
+    this.columnsResizer = this.getController('columnsResizer');
+
+    this.columnsResizer.resizeStarted.add(() => {
+      this.dropDownButtonInstance?.close();
+    });
   }
 
   public renderDragCellContent($dragContainer: dxElementWrapper, column: Column): void {
@@ -318,5 +334,10 @@ export const columnHeadersViewExtender = (
     }
 
     super.renderDragCellContent($dragContainer, column);
+  }
+
+  public dispose(): void {
+    super.dispose();
+    this.dropDownButtonInstance = null;
   }
 };

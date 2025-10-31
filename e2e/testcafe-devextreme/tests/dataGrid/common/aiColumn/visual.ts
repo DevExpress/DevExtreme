@@ -87,7 +87,7 @@ test('Default render', async (t) => {
       await t.click(aiDropDownButton.element);
 
       // assert
-      await t.expect(aiDropDownButton.isOpened()).ok();
+      await t.expect(await aiDropDownButton.isOpened()).ok();
 
       await takeScreenshot(`datagrid__ai-column_dropdown-button-menu(alignment=${alignment}_rtlEnabled=${rtlEnabled}).png`, dataGrid.element);
 
