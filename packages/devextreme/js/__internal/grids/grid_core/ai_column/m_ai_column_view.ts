@@ -59,6 +59,8 @@ export const columnHeadersViewExtender = (
     column: Column,
     $container: dxElementWrapper,
   ): DropDownProperties {
+    const alignment = column.alignment === 'right' ? 'left' : 'right';
+
     return {
       showArrowIcon: false,
       icon: 'overflow',
@@ -84,8 +86,8 @@ export const columnHeadersViewExtender = (
         width: 160,
         position: {
           of: $container[0],
-          at: 'right bottom',
-          my: 'right top',
+          at: `${alignment} bottom`,
+          my: `${alignment} top`,
         },
         onShown: (): void => {
           this.activeDropDownButtonInstance = this.getDropDownButtonInstance($container);
