@@ -15,7 +15,6 @@ import AlertList from '__internal/ui/chat/alertlist';
 import MessageBox, {
     TYPING_END_DELAY,
     CHAT_MESSAGEBOX_CLASS,
-    CHAT_MESSAGEBOX_TEXTAREA_CLASS,
 } from '__internal/ui/chat/message_box/message_box';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import pointerMock from '../../../helpers/pointerMock.js';
@@ -39,7 +38,7 @@ import { BUTTON_CLASS } from '__internal/ui/button/button';
 import { CHAT_FILE_CLASS } from '__internal/ui/chat/file_view/file';
 
 import MessageBubble from '__internal/ui/chat/messagebubble';
-import ChatTextArea from '__internal/ui/chat/message_box/chat_text_area';
+import ChatTextArea, { CHAT_TEXTAREA_CLASS } from '__internal/ui/chat/message_box/chat_text_area';
 
 const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
@@ -97,7 +96,7 @@ const moduleConfig = {
 
             this.instance = new Chat($('#component'), options);
             this.$element = $(this.instance.$element());
-            this.$textArea = this.$element.find(`.${CHAT_MESSAGEBOX_TEXTAREA_CLASS}`);
+            this.$textArea = this.$element.find(`.${CHAT_TEXTAREA_CLASS}`);
             this.textArea = ChatTextArea.getInstance(this.$textArea);
             this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             const $buttons = this.$element.find(`.${BUTTON_CLASS}`);
