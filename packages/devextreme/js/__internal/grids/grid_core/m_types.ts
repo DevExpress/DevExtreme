@@ -225,7 +225,7 @@ export interface Views {
   filterBuilderView: import('./filter/m_filter_builder').FilterBuilderView;
   filterPanelView: import('./filter/m_filter_panel').FilterPanelView;
   toastView: import('./toast/m_toast_view').ToastView;
-  aiColumnView: import('./ai_column/m_ai_column_view').AIColumnView;
+  aiPromptEditorView: import('./ai_column/m_ai_prompt_editor_view').AIPromptEditorView;
 }
 
 export interface EditingControllerRequired {
