@@ -9,7 +9,6 @@ import type { AIPromptEditorOptions } from './ai_prompt_editor/types';
 import { AI_COLUMN_NAME } from './const';
 import type { AIColumnController } from './m_ai_column_controller';
 import {
-  getAICommandColumnDefaultOptions,
   isAIColumnAutoMode,
   isEditorOptions,
   isPopupOptions,
@@ -23,10 +22,6 @@ export class AIPromptEditorView extends View {
   private aiColumnController!: AIColumnController;
 
   private promptEditorInstance!: AIPromptEditor;
-
-  private addAICommandColumn(): void {
-    this.columnsController.addCommandColumn(getAICommandColumnDefaultOptions());
-  }
 
   private getAIPromptEditorConfig(
     column: Column,
@@ -134,7 +129,6 @@ export class AIPromptEditorView extends View {
     this.columnsController = this.getController('columns');
     this.aiColumnController = this.getController('aiColumn');
 
-    this.addAICommandColumn();
     this.aiColumnController.aiRequestCompleted.add(() => {
       this.promptEditorInstance?.updatePrompt(this.promptEditorInstance.getEditorValue());
       this.promptEditorInstance?.updateStateOnAction('stop');

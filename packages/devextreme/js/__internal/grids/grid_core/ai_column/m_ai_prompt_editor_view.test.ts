@@ -16,7 +16,6 @@ import { AIPromptEditorModel } from '@ts/grids/grid_core/__tests__/__mock__/mode
 
 import type { Column } from '../columns_controller/m_columns_controller';
 import { AIPromptEditor } from './ai_prompt_editor/ai_prompt_editor';
-import { AI_COLUMN_NAME } from './const';
 import { AIPromptEditorView } from './m_ai_prompt_editor_view';
 
 jest.mock('./ai_prompt_editor/ai_prompt_editor', (): any => {
@@ -109,19 +108,11 @@ describe('AIPromptEditorView', () => {
   afterEach(afterTest);
 
   describe('initialization', () => {
-    it('should initialize controllers and add AI command column', () => {
+    it('should initialize controllers', () => {
       const { aiPromptEditorView } = createAIPromptEditorView();
 
       expect(aiPromptEditorView.getController).toHaveBeenCalledWith('columns');
       expect(aiPromptEditorView.getController).toHaveBeenCalledWith('aiColumn');
-      expect(mockColumnsController.addCommandColumn).toHaveBeenCalledTimes(1);
-      expect(mockColumnsController.addCommandColumn).toHaveBeenCalledWith({
-        type: AI_COLUMN_NAME,
-        command: AI_COLUMN_NAME,
-        cssClass: 'dx-command-ai',
-        fixed: false,
-        minWidth: 120,
-      });
     });
   });
 
