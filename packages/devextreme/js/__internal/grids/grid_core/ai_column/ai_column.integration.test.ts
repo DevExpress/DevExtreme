@@ -2746,7 +2746,7 @@ describe('DropDownButton', () => {
     });
   });
 
-  describe('when prompt was updated at runtime', () => {
+  describe('when prompt is updated via apiColumnOption', () => {
     it('\'Regenerate\' and \'Clear Data\' should be enabled', async () => {
       const { component, instance } = await createDataGrid({
         dataSource: [
@@ -2773,6 +2773,51 @@ describe('DropDownButton', () => {
       expect(dropDownButton.getList().getItem(2).isDisabled).toBe(true);
 
       instance.columnOption('myColumn', 'ai.prompt', 'Updated prompt');
+
+      dropDownButton = component.getHeaderCell(3).getDropDownButton();
+      dropDownButton?.getButtonElement()?.click();
+
+      expect(dropDownButton.isOpened()).toBe(true);
+      expect(dropDownButton.getList().getItem(0).isDisabled).toBe(false);
+      expect(dropDownButton.getList().getItem(1).isDisabled).toBe(false);
+      expect(dropDownButton.getList().getItem(2).isDisabled).toBe(false);
+    });
+  });
+
+  describe('when prompt is updated via AIPromptEditor', () => {
+    it('\'Regenerate\' and \'Clear Data\' should be enabled', async () => {
+      const { component } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+          },
+        ],
+      });
+      let dropDownButton = component.getHeaderCell(3).getDropDownButton();
+
+      dropDownButton?.getButtonElement()?.click();
+
+      expect(dropDownButton.isOpened()).toBe(true);
+      expect(dropDownButton.getList().getItem(0).isDisabled).toBe(false);
+      expect(dropDownButton.getList().getItem(1).isDisabled).toBe(true);
+      expect(dropDownButton.getList().getItem(2).isDisabled).toBe(true);
+
+      dropDownButton.getList()?.getItem(0)?.getElement()?.click(); // show AIPromptEditor
+
+      const aiPromptEditor = component.getAIPromptEditor();
+
+      expect(aiPromptEditor.isVisible()).toBe(true);
+
+      aiPromptEditor.getTextArea().setValue('Updated prompt');
+      aiPromptEditor.getApplyButton().getElement().click();
 
       dropDownButton = component.getHeaderCell(3).getDropDownButton();
       dropDownButton?.getButtonElement()?.click();
