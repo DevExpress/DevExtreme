@@ -136,15 +136,12 @@ export class AIPromptEditorView extends View {
     this.aiColumnController.aiRequestRejected.add(() => {
       this.promptEditorInstance?.updateStateOnAction('stop');
     });
-    this.aiColumnController.promptEditorRequested.add(({ column, cellElement }) => {
-      this.showPromptEditor(cellElement, column);
-    });
     this.renderCompleted.add(() => {
       this.ensureAIPromptEditorVisibility();
     });
   }
 
-  public showPromptEditor(cellElement: HTMLElement, column: Column): Promise<boolean> {
+  public show(cellElement: HTMLElement, column: Column): Promise<boolean> {
     const $cellElement = $(cellElement);
 
     if (!$cellElement?.length || column?.type !== AI_COLUMN_NAME) {
@@ -155,7 +152,7 @@ export class AIPromptEditorView extends View {
     return this.promptEditorInstance.show();
   }
 
-  public hidePromptEditor(): Promise<boolean> {
+  public hide(): Promise<boolean> {
     return this.promptEditorInstance?.hide();
   }
 

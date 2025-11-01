@@ -11,6 +11,7 @@ import type { ModuleType } from '../m_types';
 import { AI_COLUMN_NAME, CLASSES, ICON_NAMES } from './const';
 import { createAIHeaderContainer, createChatSparkleOutlineIcon } from './dom';
 import type { AIColumnController } from './m_ai_column_controller';
+import type { AIPromptEditorViewController } from './m_ai_prompt_editor_view_controller';
 import {
   isAIColumnHeader,
   isHeaderDropDownButtonVisible,
@@ -20,6 +21,8 @@ export const columnHeadersViewExtender = (
   Base: ModuleType<ColumnHeadersView>,
 ) => class AIColumnHeadersViewExtender extends Base {
   private aiColumnController!: AIColumnController;
+
+  private aiPromptEditorController!: AIPromptEditorViewController;
 
   private columnsResizer!: ColumnsResizerViewController;
 
@@ -66,10 +69,7 @@ export const columnHeadersViewExtender = (
         // eslint-disable-next-line default-case
         switch (actionName) {
           case 'autoFill':
-            this.aiColumnController.requestPromptEditor(
-              column,
-              $container[0],
-            );
+            this.aiPromptEditorController.show($container[0], column);
             break;
           case 'regenerate':
             this.aiColumnController.refreshAIColumn(column.name as string);
@@ -152,6 +152,7 @@ export const columnHeadersViewExtender = (
   public init(): void {
     super.init();
     this.aiColumnController = this.getController('aiColumn');
+    this.aiPromptEditorController = this.getController('aiPromptEditor');
     this.columnsResizer = this.getController('columnsResizer');
 
     this.columnsResizer.resizeStarted.add(() => {

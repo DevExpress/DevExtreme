@@ -117,7 +117,7 @@ describe('AIPromptEditorView', () => {
   });
 
   describe('Methods', () => {
-    describe('showPromptEditor', () => {
+    describe('show', () => {
       it('should create new AIPromptEditor instance', async () => {
         const {
           $container,
@@ -126,7 +126,7 @@ describe('AIPromptEditorView', () => {
           aiPromptEditorPOM,
         } = createAIPromptEditorView();
 
-        await aiPromptEditorView.showPromptEditor(
+        await aiPromptEditorView.show(
           cellElement,
           mockColumn,
         );
@@ -163,7 +163,7 @@ describe('AIPromptEditorView', () => {
           aiPromptEditorPOM,
         } = createAIPromptEditorView();
 
-        await aiPromptEditorView.showPromptEditor(cellElement, mockColumn);
+        await aiPromptEditorView.show(cellElement, mockColumn);
 
         expect(AIPromptEditor).toHaveBeenCalledTimes(1);
         expect(AIPromptEditor).toHaveBeenCalledWith(
@@ -183,7 +183,7 @@ describe('AIPromptEditorView', () => {
         } as Column;
         mockColumnsController.getVisibleIndex.mockReturnValue(1);
 
-        await aiPromptEditorView.showPromptEditor(
+        await aiPromptEditorView.show(
           cellElement,
           newColumn,
         );
@@ -212,7 +212,7 @@ describe('AIPromptEditorView', () => {
           alignment: 'left',
         } as Column;
 
-        await aiPromptEditorView.showPromptEditor(cellElement, leftAlignedColumn);
+        await aiPromptEditorView.show(cellElement, leftAlignedColumn);
 
         expect(AIPromptEditor).toHaveBeenCalledWith(
           expect.objectContaining({
@@ -236,7 +236,7 @@ describe('AIPromptEditorView', () => {
           alignment: 'right',
         } as Column;
 
-        await aiPromptEditorView.showPromptEditor(cellElement, rightAlignedColumn);
+        await aiPromptEditorView.show(cellElement, rightAlignedColumn);
 
         expect(AIPromptEditor).toHaveBeenCalledWith(
           expect.objectContaining({
@@ -256,7 +256,7 @@ describe('AIPromptEditorView', () => {
             aiPromptEditorView,
           } = createAIPromptEditorView();
 
-          const result = await aiPromptEditorView.showPromptEditor(null as any, mockColumn);
+          const result = await aiPromptEditorView.show(null as any, mockColumn);
 
           expect(AIPromptEditor).not.toHaveBeenCalled();
           expect(result).toBe(false);
@@ -268,7 +268,7 @@ describe('AIPromptEditorView', () => {
             aiPromptEditorView,
           } = createAIPromptEditorView();
 
-          const result = await aiPromptEditorView.showPromptEditor(
+          const result = await aiPromptEditorView.show(
             cellElement,
             null as any,
           );
@@ -283,7 +283,7 @@ describe('AIPromptEditorView', () => {
             aiPromptEditorView,
           } = createAIPromptEditorView();
 
-          const result = await aiPromptEditorView.showPromptEditor(
+          const result = await aiPromptEditorView.show(
             cellElement,
             { ...mockColumn, type: '' },
           );
@@ -294,16 +294,16 @@ describe('AIPromptEditorView', () => {
       });
     });
 
-    describe('hidePromptEditor', () => {
+    describe('hide', () => {
       it('should call hide method', async () => {
         const {
           cellElement,
           aiPromptEditorView,
           aiPromptEditorPOM,
         } = createAIPromptEditorView();
-        await aiPromptEditorView.showPromptEditor(cellElement, mockColumn);
+        await aiPromptEditorView.show(cellElement, mockColumn);
 
-        const result = await aiPromptEditorView.hidePromptEditor();
+        const result = await aiPromptEditorView.hide();
 
         expect(aiPromptEditorView.getPromptEditorInstance().hide).toHaveBeenCalledTimes(1);
         expect(aiPromptEditorPOM.isVisible()).toBe(false);
@@ -322,7 +322,7 @@ describe('AIPromptEditorView', () => {
         } = createAIPromptEditorView();
         const columnWithIndex = { ...mockColumn, index: 2 };
 
-        await aiPromptEditorView.showPromptEditor(cellElement, columnWithIndex);
+        await aiPromptEditorView.show(cellElement, columnWithIndex);
 
         aiPromptEditorPOM.getTextArea().setValue('test prompt');
         aiPromptEditorPOM.getApplyButton().getElement().click();
@@ -352,7 +352,7 @@ describe('AIPromptEditorView', () => {
             });
           });
 
-        await aiPromptEditorView.showPromptEditor(cellElement, mockColumn);
+        await aiPromptEditorView.show(cellElement, mockColumn);
 
         const promptEditorInstance = aiPromptEditorView.getPromptEditorInstance();
 
@@ -377,7 +377,7 @@ describe('AIPromptEditorView', () => {
         } = createAIPromptEditorView();
         const columnWithPrompt = { ...mockColumn, name: 'testColumn', ai: { prompt: 'test prompt' } };
 
-        await aiPromptEditorView.showPromptEditor(cellElement, columnWithPrompt);
+        await aiPromptEditorView.show(cellElement, columnWithPrompt);
 
         const promptEditorInstance = aiPromptEditorView.getPromptEditorInstance();
 
@@ -402,7 +402,7 @@ describe('AIPromptEditorView', () => {
             });
           });
 
-        await aiPromptEditorView.showPromptEditor(cellElement, columnWithPrompt);
+        await aiPromptEditorView.show(cellElement, columnWithPrompt);
 
         const promptEditorInstance = aiPromptEditorView.getPromptEditorInstance();
 
@@ -430,7 +430,7 @@ describe('AIPromptEditorView', () => {
             });
           });
 
-        await aiPromptEditorView.showPromptEditor(cellElement, columnWithPrompt);
+        await aiPromptEditorView.show(cellElement, columnWithPrompt);
 
         const promptEditorInstance = aiPromptEditorView.getPromptEditorInstance();
 
@@ -451,11 +451,11 @@ describe('AIPromptEditorView', () => {
           aiPromptEditorView,
         } = createAIPromptEditorView();
 
-        await aiPromptEditorView.showPromptEditor(cellElement, mockColumn);
+        await aiPromptEditorView.show(cellElement, mockColumn);
 
         const promptEditorInstance = aiPromptEditorView.getPromptEditorInstance();
 
-        await aiPromptEditorView.hidePromptEditor();
+        await aiPromptEditorView.hide();
 
         expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledWith('stop');
         expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledTimes(1);
@@ -501,7 +501,7 @@ describe('AIPromptEditorView', () => {
           });
         });
 
-      await aiPromptEditorView.showPromptEditor(cellElement, mockColumn);
+      await aiPromptEditorView.show(cellElement, mockColumn);
 
       const promptEditorInstance = aiPromptEditorView.getPromptEditorInstance();
 
@@ -530,7 +530,7 @@ describe('AIPromptEditorView', () => {
           mockAIColumnController.aiRequestCompleted.fire();
         });
 
-      await aiPromptEditorView.showPromptEditor(cellElement, mockColumn);
+      await aiPromptEditorView.show(cellElement, mockColumn);
 
       const promptEditorInstance = aiPromptEditorView.getPromptEditorInstance();
 
@@ -559,7 +559,7 @@ describe('AIPromptEditorView', () => {
           mockAIColumnController.aiRequestRejected.fire();
         });
 
-      await aiPromptEditorView.showPromptEditor(cellElement, mockColumn);
+      await aiPromptEditorView.show(cellElement, mockColumn);
 
       aiPromptEditorView.optionChanged({
         name: 'columns',

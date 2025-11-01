@@ -21,14 +21,12 @@ export class AIColumnController extends Controller {
 
   public aiRequestRejected!: Callback;
 
-  public promptEditorRequested!: Callback;
-
   private addAICommandColumn(): void {
     this.columnsController.addCommandColumn(getAICommandColumnDefaultOptions());
   }
 
   protected callbackNames(): string[] {
-    return ['aiRequestCompleted', 'aiRequestRejected', 'promptEditorRequested'];
+    return ['aiRequestCompleted', 'aiRequestRejected'];
   }
 
   public init(): void {
@@ -116,9 +114,5 @@ export class AIColumnController extends Controller {
 
   public dispose(): void {
     this.dataController.changed.remove(this.dataChangedHandler);
-  }
-
-  public requestPromptEditor(column: Column, cellElement: HTMLElement): void {
-    this.promptEditorRequested.fire({ column, cellElement });
   }
 }
