@@ -165,7 +165,7 @@ class DxLicense extends SafeHTMLElement {
   }
 
   private _updateSubscriptionsText(subscriptions: string | null): void {
-    if (subscriptions && this._subscriptionsSpan) {
+    if (subscriptions && subscriptions !== 'null' && this._subscriptionsSpan) {
       this.setAttribute(attributeNames.subscriptions, subscriptions);
       this._subscriptionsSpan.innerText = ` Included in Subscriptions: ${subscriptions}`;
     }
