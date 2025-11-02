@@ -31,7 +31,7 @@ export default class CommandCell extends FocusableElement {
   constructor(dataRow: Selector, index: number, widgetName: string) {
     const childrenSelector = `td[aria-colindex='${index + 1}']`;
     super(dataRow.child(childrenSelector).filter(commandSelector));
-    this.isFocused = this.element.focused;
+    this.isFocused = this.element.hasClass(CLASS.focused);
     this.isHidden = this.element.hasClass(Widget.addClassPrefix(widgetName, CLASS.hiddenColumn));
   }
 
