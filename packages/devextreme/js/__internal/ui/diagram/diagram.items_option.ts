@@ -80,12 +80,13 @@ class ItemsOption extends ItemsOptionBase {
     const store = this._getStore();
     store
       .insert(this._prepareData(data))
-      .done((resultData, resultKey): void => {
+      // eslint-disable-next-line @typescript-eslint/no-shadow
+      .done((data, key): void => {
         store.push([{
-          type: 'insert', resultKey, resultData, internalChange: true,
+          type: 'insert', key, data, internalChange: true,
         }]);
         if (callback) {
-          callback(resultData);
+          callback(data);
         }
         this._resetCache();
       })
@@ -102,12 +103,13 @@ class ItemsOption extends ItemsOptionBase {
     const storeKey = this._getStoreKey(store, key, data);
     store
       .update(storeKey, this._prepareData(data))
-      .done((resultData, resultKey) => {
+      // eslint-disable-next-line @typescript-eslint/no-shadow
+      .done((data, key) => {
         store.push([{
-          type: 'update', resultKey, resultData, internalChange: true,
+          type: 'update', key, data, internalChange: true,
         }]);
         if (callback) {
-          callback(resultKey, resultData);
+          callback(key, data);
         }
       })
       .fail((error) => {
@@ -123,10 +125,11 @@ class ItemsOption extends ItemsOptionBase {
     const storeKey = this._getStoreKey(store, key, data);
     store
       .remove(storeKey)
-      .done((resultKey): void => {
-        store.push([{ type: 'remove', resultKey, internalChange: true }]);
+      // eslint-disable-next-line @typescript-eslint/no-shadow
+      .done((key): void => {
+        store.push([{ type: 'remove', key, internalChange: true }]);
         if (callback) {
-          callback(resultKey);
+          callback(key);
         }
         this._resetCache();
       })
@@ -182,8 +185,9 @@ class ItemsOption extends ItemsOptionBase {
       }
     } else {
       const keySet = cache.keySet
-        || cache.keys.reduce((accumulator, cacheKey, index) => {
-          accumulator[cacheKey] = index;
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        || cache.keys.reduce((accumulator, key, index) => {
+          accumulator[key] = index;
           // eslint-disable-next-line @typescript-eslint/no-unsafe-return
           return accumulator;
         }, {});
