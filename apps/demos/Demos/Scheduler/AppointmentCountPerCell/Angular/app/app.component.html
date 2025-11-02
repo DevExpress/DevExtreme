@@ -15,9 +15,10 @@
   </dxi-view>
   <dxi-view name="Numeric Mode" type="month" [maxAppointmentsPerCell]="2">
   </dxi-view>
-  <dxi-resource
+  <dxi-scheduler-resource
     fieldExpr="roomId"
     label="room"
     [dataSource]="resourcesData"
-  ></dxi-resource>
+    icon="conferenceroomoutline"
+  ></dxi-scheduler-resource>
 </dx-scheduler>

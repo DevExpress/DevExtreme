@@ -10,6 +10,8 @@ import errors from '@js/ui/widget/ui.errors';
 import { AIIntegration } from '@ts/core/ai_integration/core/ai_integration';
 import { DataGridModel } from '@ts/grids/data_grid/__tests__/__mock__/model/data_grid';
 
+import { CLASSES } from './const';
+
 const SELECTORS = {
   gridContainer: '#gridContainer',
 };
@@ -235,6 +237,78 @@ describe('Options', () => {
       expect(headerCellTemplate).toHaveBeenCalledTimes(1);
       expect(headerCell.querySelectorAll('.template-class').length).toBe(1);
       expect(headerCell.textContent).toBe('Template');
+      expect(headerCell.querySelector(`.${CLASSES.aiColumnHeaderContent}`)).toBeNull();
+      expect(headerCell.querySelector(`.${CLASSES.aiChatSparkleOutlineIcon}`)).toBeNull();
+      expect(headerCell.querySelector(`.${CLASSES.aiColumnHeaderButton}`)).not.toBeNull();
+    });
+  });
+
+  describe('when headerCellTemplate isn\'t set', () => {
+    it('should render icon, text and button by default', async () => {
+      const { component } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+          },
+        ],
+      });
+
+      const headerCell = component.getHeaderCell(3);
+      const aiColumnHeaderContent = headerCell.querySelector(`.${CLASSES.aiColumnHeaderContent}`);
+      const aiColumnHeaderText = aiColumnHeaderContent?.querySelector('.dx-datagrid-text-content');
+
+      expect(aiColumnHeaderContent).not.toBeNull();
+      expect(aiColumnHeaderContent?.querySelector(`.${CLASSES.aiChatSparkleOutlineIcon}`)).not.toBeNull();
+      expect(aiColumnHeaderText).not.toBeNull();
+      expect(aiColumnHeaderText?.textContent).toBe('AI Column');
+      expect(headerCell.querySelector(`.${CLASSES.aiColumnHeaderButton}`)).not.toBeNull();
+    });
+  });
+
+  describe('when headerCellTemplate is dynamically updated', () => {
+    it('should replace default header template', async () => {
+      const headerCellTemplate = jest.fn((container: HTMLElement) => {
+        const span = document.createElement('span');
+
+        span.className = 'my-template-class';
+        span.textContent = 'Test';
+        container.append(span);
+      });
+
+      const { component } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+          },
+        ],
+      });
+
+      component.apiColumnOption('myColumn', 'headerCellTemplate', headerCellTemplate);
+
+      const headerCellUpdated = component.getHeaderCell(3);
+
+      expect(headerCellTemplate).toHaveBeenCalledTimes(1);
+      expect(headerCellUpdated.querySelector('.my-template-class')).not.toBeNull();
+      expect(headerCellUpdated.textContent).toBe('Test');
+      expect(headerCellUpdated.querySelector(`.${CLASSES.aiColumnHeaderContent}`)).toBeNull();
+      expect(headerCellUpdated.querySelector(`.${CLASSES.aiChatSparkleOutlineIcon}`)).toBeNull();
+      expect(headerCellUpdated.querySelector(`.${CLASSES.aiColumnHeaderButton}`)).not.toBeNull();
     });
   });
 
@@ -296,6 +370,39 @@ describe('Options', () => {
 
       expect(visibleColumns.map(({ caption }) => caption))
         .toEqual(['ID', 'AI Column', 'Name', 'Value']);
+    });
+  });
+
+  describe('when column.ai.showHeaderMenu is set to false', () => {
+    it('should not render header button', async () => {
+      const { component } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              showHeaderMenu: false,
+            },
+          },
+        ],
+      });
+
+      const headerCell = component.getHeaderCell(3);
+      const aiColumnHeaderContent = headerCell.querySelector(`.${CLASSES.aiColumnHeaderContent}`);
+      const aiColumnHeaderText = aiColumnHeaderContent?.querySelector('.dx-datagrid-text-content');
+
+      expect(aiColumnHeaderContent).not.toBeNull();
+      expect(aiColumnHeaderContent?.querySelector(`.${CLASSES.aiChatSparkleOutlineIcon}`)).not.toBeNull();
+      expect(aiColumnHeaderText).not.toBeNull();
+      expect(aiColumnHeaderText?.textContent).toBe('AI Column');
+      expect(headerCell.querySelector(`.${CLASSES.aiColumnHeaderButton}`)).toBeNull();
     });
   });
 });
@@ -1325,6 +1432,65 @@ describe('API Methods', () => {
       expect(columnSendRequestResolved).toHaveBeenCalledTimes(0);
       expect(abortSpy).toHaveBeenCalledTimes(0);
     });
+
+    it('should call a toast with error text if the request is rejected', async () => {
+      const aiIntegrationResultWithError = (): RequestResult => ({
+        promise: new Promise<string>((_resolve, reject) => {
+          columnSendRequestStarted();
+          // Timeouts are mocked and do not delay tests execution
+          setTimeout(() => {
+            reject(new Error('Test error'));
+          }, 10000);
+        }),
+        abort: (): void => {
+          abortSpy();
+        },
+      });
+      const columnAIIntegrationWithError = new AIIntegration({
+        sendRequest(): RequestResult {
+          return aiIntegrationResultWithError();
+        },
+      });
+      const { instance, component } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+          { id: 2, name: 'Name 2', value: 20 },
+        ],
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration: columnAIIntegrationWithError,
+              mode: 'manual',
+              prompt: 'Test prompt',
+            },
+          },
+        ],
+      });
+
+      expect(component.getToast().getInstance()).toBeUndefined();
+      instance.sendAIColumnRequest('myColumn');
+      expect(columnSendRequestStarted).toHaveBeenCalledTimes(1);
+      expect(abortSpy).toHaveBeenCalledTimes(0);
+      // There is enough time to resolve a promise
+      jest.advanceTimersByTime(10000);
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(abortSpy).toHaveBeenCalledTimes(1);
+      const toastInstance = component.getToast().getInstance();
+      expect(toastInstance).toBeDefined();
+      expect(toastInstance.option('message')).toEqual('Test error');
+      expect(toastInstance.option('type')).toEqual('error');
+      expect(toastInstance.option('position.at')).toEqual('bottom');
+      expect(toastInstance.option('position.my')).toEqual('bottom');
+    });
   });
 
   describe('refreshAIColumn', () => {
@@ -1775,7 +1941,7 @@ describe('API Handlers', () => {
       expect(columnSendRequestStarted).toHaveBeenCalledTimes(1);
       expect(columnSendRequestResolved).toHaveBeenCalledTimes(1);
       expect(sendRequestPromptSpy).toHaveBeenCalledWith(expect.objectContaining({
-        user: expect.stringContaining('Data: {"2":{"id":2,"name":"Name 2","value":20}}'),
+        user: expect.stringContaining('Dataset: {"2":{"id":2,"name":"Name 2","value":20}}'),
       }));
 
       await Promise.resolve();
@@ -1894,7 +2060,6 @@ describe('API Handlers', () => {
             }),
           }),
           data: 1,
-          additionalInfo: undefined,
           error: null,
         }),
       );
@@ -1938,86 +2103,6 @@ describe('API Handlers', () => {
       jest.advanceTimersByTime(10000);
       await Promise.resolve();
       expect(onAIColumnResponseReceived).toHaveBeenCalledTimes(0);
-    });
-
-    it('should pass additional data to the handler', async () => {
-      const aiIntegrationCustomResult = (): RequestResult => ({
-        promise: new Promise<GenerateGridColumnCommandResponse>((resolve) => {
-          columnSendRequestStarted();
-          // Timeouts are mocked and do not delay tests execution
-          setTimeout(() => {
-            columnSendRequestResolved();
-            resolve(
-              {
-                data: '1',
-                additionalInfo: {
-                  customData: 'My custom data',
-                  value: 1,
-                },
-              },
-            );
-          }, 10000);
-        }),
-        abort: (): void => {
-          abortSpy();
-        },
-      });
-      const columnCustomAIIntegration = new AIIntegration({
-        sendRequest(): RequestResult {
-          return aiIntegrationCustomResult();
-        },
-      });
-      const onAIColumnResponseReceived = jest.fn();
-      const { instance } = await createDataGrid({
-        dataSource: [
-          { id: 1, name: 'Name 1', value: 10 },
-          { id: 2, name: 'Name 2', value: 20 },
-        ],
-        keyExpr: 'id',
-        columns: [
-          { dataField: 'id', caption: 'ID' },
-          { dataField: 'name', caption: 'Name' },
-          { dataField: 'value', caption: 'Value' },
-          {
-            type: 'ai',
-            caption: 'AI Column',
-            name: 'myColumn',
-            ai: {
-              aiIntegration: columnCustomAIIntegration,
-              mode: 'manual',
-              prompt: 'Test prompt',
-            },
-          },
-        ],
-        onAIColumnResponseReceived,
-      });
-
-      instance.sendAIColumnRequest('myColumn');
-      expect(columnSendRequestStarted).toHaveBeenCalledTimes(1);
-      expect(onAIColumnResponseReceived).toHaveBeenCalledTimes(0);
-      expect(abortSpy).toHaveBeenCalledTimes(0);
-      // There is enough time to resolve a promise
-      jest.advanceTimersByTime(10000);
-      await Promise.resolve();
-      expect(columnSendRequestResolved).toHaveBeenCalledTimes(1);
-      expect(onAIColumnResponseReceived).toHaveBeenCalledTimes(1);
-      expect(onAIColumnResponseReceived).toHaveBeenCalledWith(
-        expect.objectContaining({
-          component: expect.objectContaining({ NAME: 'dxDataGrid' }),
-          element: expect.objectContaining({ id: GRID_CONTAINER_ID }),
-          column: expect.objectContaining({
-            name: 'myColumn',
-            ai: expect.objectContaining({
-              mode: 'manual',
-              prompt: 'Test prompt',
-            }),
-          }),
-          data: 1,
-          additionalInfo: { customData: 'My custom data', value: 1 },
-          error: null,
-        }),
-      );
-      expect(abortSpy).toHaveBeenCalledTimes(1);
     });
 
     it('should call onAIColumnResponseReceived handler with error object if the request is rejected', async () => {
@@ -2086,7 +2171,6 @@ describe('API Handlers', () => {
             }),
           }),
           data: null,
-          additionalInfo: undefined,
           error: 'Test error',
         }),
       );
