@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { DiagramContextMenu } from 'ui/diagram/ui.diagram.context_menu.js';
+import diagramContextMenuModule from '__internal/ui/diagram/ui.diagram.context_menu';
 import { DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON } from '__internal/ui/drop_down_editor/m_drop_down_editor';
 
 export const Consts = {
@@ -96,7 +96,7 @@ export function getContextMenuElement($diagramElement) {
     return $diagramElement.find(Consts.CONTEXT_MENU_SELECTOR);
 }
 export function getContextMenuInstance($diagramElement) {
-    return DiagramContextMenu.getInstance(getContextMenuElement($diagramElement));
+    return diagramContextMenuModule.DiagramContextMenu.getInstance(getContextMenuElement($diagramElement));
 }
 export function findContextMenuItem($diagramElement, label) {
     return $('body').find('.dx-diagram-contextmenu, .dx-diagram-touchbar')

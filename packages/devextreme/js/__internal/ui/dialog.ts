@@ -30,7 +30,7 @@ interface BaseDialog {
   hide: (value: boolean) => void;
 }
 
-interface DialogParams extends CustomDialogOptions, PopupProperties {
+export interface DialogParams extends CustomDialogOptions, PopupProperties {
   popupOptions?: PopupProperties;
 }
 
