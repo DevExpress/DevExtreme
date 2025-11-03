@@ -94,7 +94,8 @@ class ChatTextArea extends TextArea<Properties> {
       placeholder: messageLocalization.format('dxChat-textareaPlaceholder'),
       autoResizeEnabled: true,
       valueChangeEvent: 'input',
-      maxHeight: '16em',
+      // maxHeight: '16em',
+      maxHeight: '53.86em',
       fileUploaderOptions: undefined,
     };
   }
@@ -450,6 +451,7 @@ class ChatTextArea extends TextArea<Properties> {
         break;
 
       case 'text': {
+        this._cleanInformer();
         this._toggleButtonDisableState();
         break;
       }
