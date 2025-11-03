@@ -6,7 +6,7 @@ import { createWidget } from '../../../../helpers/createWidget';
 import { getData } from '../../helpers/generateDataSourceData';
 import { defaultConfig } from '../helpers/data';
 import url from '../../../../helpers/getPageUrl';
-import { getFullThemeName, testScreenshot } from '../../../../helpers/themeUtils';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`FixedColumns`
   .page(url(__dirname, '../../../container.html'));
@@ -145,7 +145,7 @@ test.meta({ unstable: true })('Row hover should display correctly when there are
 // visual: material.blue.light
 // visual: fluent.blue.light
 // visual: generic.greenMist.light
-safeSizeTest(`Alternating rows should display correctly when there are fixed columns (generic.light theme) ${getFullThemeName()}`, async (t) => {
+safeSizeTest('Alternating rows should display correctly when there are fixed columns (generic.light theme)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -181,7 +181,7 @@ safeSizeTest(`Alternating rows should display correctly when there are fixed col
 // visual: material.blue.light
 // visual: fluent.blue.light
 [0.9, 1.25, 1.5].forEach((zoom) => {
-  safeSizeTest(`Fixed columns should display correctly at ${zoom * 100}% zoom (generic.light theme) ${getFullThemeName()}`, async (t) => {
+  safeSizeTest(`Fixed columns should display correctly at ${zoom * 100}% zoom (generic.light theme)`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
