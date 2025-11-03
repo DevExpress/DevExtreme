@@ -275,17 +275,12 @@ createTestCafe(TESTCAFE_CONFIG)
               await addShadowRootTree(t);
             }
 
-            // if (!componentFolder.includes('dataGrid')) {
             const currentTheme = await getCurrentTheme(t) || 'fluent.blue.light';
             const newTheme = args.theme || 'fluent.blue.light';
 
             if (currentTheme !== newTheme) {
-              console.log(`\n > changeTheme to ${newTheme}, currentTheme: ${currentTheme}!\n`);
               await changeTheme(t, newTheme);
-            } else {
-              console.log(`currentTheme: ${currentTheme}, args.theme: ${args.theme}`);
             }
-            // }
           },
           after: async (t: TestController) => {
             await clearTestPage(t);
