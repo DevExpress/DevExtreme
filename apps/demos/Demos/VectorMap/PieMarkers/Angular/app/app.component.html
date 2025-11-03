@@ -3,7 +3,10 @@
     [enabled]="true"
     [customizeTooltip]="customizeTooltip"
   ></dxo-vector-map-tooltip>
-  <dxi-vector-map-layer [dataSource]="worldMap" [hoverEnabled]="false"></dxi-vector-map-layer>
+  <dxi-vector-map-layer
+    [dataSource]="worldMap"
+    [hoverEnabled]="false"
+  ></dxi-vector-map-layer>
   <dxi-vector-map-layer
     [dataSource]="markers"
     name="pies"
@@ -11,6 +14,9 @@
     dataField="values"
   ></dxi-vector-map-layer>
   <dxi-vector-map-legend [customizeText]="customizeText">
-    <dxo-vector-map-source layer="pies" grouping="color"></dxo-vector-map-source>
+    <dxo-vector-map-source
+      layer="pies"
+      grouping="color"
+    ></dxo-vector-map-source>
   </dxi-vector-map-legend>
 </dx-vector-map>

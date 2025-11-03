@@ -6,7 +6,10 @@
   (onCenterChanged)="centerChanged($event)"
 >
   <dxi-vector-map-layer [dataSource]="worldMap"></dxi-vector-map-layer>
-  <dxo-vector-map-control-bar [panVisible]="pan.value" [zoomVisible]="zoom.value">
+  <dxo-vector-map-control-bar
+    [panVisible]="pan.value"
+    [zoomVisible]="zoom.value"
+  >
   </dxo-vector-map-control-bar>
 </dx-vector-map>
 <div class="options">

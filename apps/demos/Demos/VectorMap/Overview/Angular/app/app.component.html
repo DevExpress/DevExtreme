@@ -1,8 +1,13 @@
 <dx-vector-map id="vector-map" [bounds]="[-180, 85, 180, -60]">
-  <dxo-vector-map-tooltip [enabled]="true" contentTemplate="tooltipContent"></dxo-vector-map-tooltip>
+  <dxo-vector-map-tooltip
+    [enabled]="true"
+    contentTemplate="tooltipContent"
+  ></dxo-vector-map-tooltip>
   <dxo-vector-map-export [enabled]="true"></dxo-vector-map-export>
   <dxo-vector-map-title text="Nominal GDP">
-    <dxo-vector-map-subtitle text="(in millions of US dollars)"></dxo-vector-map-subtitle>
+    <dxo-vector-map-subtitle
+      text="(in millions of US dollars)"
+    ></dxo-vector-map-subtitle>
   </dxo-vector-map-title>
   <dxi-vector-map-layer
     [customize]="customizeLayers"
@@ -13,10 +18,16 @@
     colorGroupingField="total"
     name="areas"
   >
-    <dxo-vector-map-label [enabled]="true" dataField="name"></dxo-vector-map-label>
+    <dxo-vector-map-label
+      [enabled]="true"
+      dataField="name"
+    ></dxo-vector-map-label>
   </dxi-vector-map-layer>
   <dxi-vector-map-legend [customizeText]="customizeText">
-    <dxo-vector-map-source layer="areas" grouping="color"></dxo-vector-map-source>
+    <dxo-vector-map-source
+      layer="areas"
+      grouping="color"
+    ></dxo-vector-map-source>
   </dxi-vector-map-legend>
   <div *dxTemplate="let info of 'tooltipContent'" class="state-tooltip">
     <div>
@@ -33,8 +44,14 @@
       <div *ngIf="getPieData(info.attribute('name')) as data; else noData">
         <dx-pie-chart id="gdp-sectors" [dataSource]="data" [animation]="false">
           <dxi-pie-chart-series argumentField="name" valueField="value">
-            <dxo-pie-chart-label [visible]="true" [customizeText]="customizePieLabel">
-              <dxo-pie-chart-connector [visible]="true" [width]="1"></dxo-pie-chart-connector>
+            <dxo-pie-chart-label
+              [visible]="true"
+              [customizeText]="customizePieLabel"
+            >
+              <dxo-pie-chart-connector
+                [visible]="true"
+                [width]="1"
+              ></dxo-pie-chart-connector>
             </dxo-pie-chart-label>
           </dxi-pie-chart-series>
           <dxo-pie-chart-legend [visible]="false"></dxo-pie-chart-legend>

@@ -3,7 +3,10 @@
     [enabled]="true"
     [customizeTooltip]="customizeTooltip"
   ></dxo-vector-map-tooltip>
-  <dxi-vector-map-layer [dataSource]="worldMap" [hoverEnabled]="false"></dxi-vector-map-layer>
+  <dxi-vector-map-layer
+    [dataSource]="worldMap"
+    [hoverEnabled]="false"
+  ></dxi-vector-map-layer>
   <dxi-vector-map-layer
     [dataSource]="markers"
     [minSize]="20"
@@ -19,6 +22,9 @@
     [customizeText]="customizeText"
     [customizeItems]="customizeItems"
   >
-    <dxo-vector-map-source layer="bubbles" grouping="size"></dxo-vector-map-source>
+    <dxo-vector-map-source
+      layer="bubbles"
+      grouping="size"
+    ></dxo-vector-map-source>
   </dxi-vector-map-legend>
 </dx-vector-map>

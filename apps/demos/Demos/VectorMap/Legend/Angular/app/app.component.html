@@ -11,7 +11,10 @@
     colorGroupingField="population"
     [customize]="customizeLayers"
   >
-    <dxo-vector-map-label [enabled]="true" dataField="name"></dxo-vector-map-label>
+    <dxo-vector-map-label
+      [enabled]="true"
+      dataField="name"
+    ></dxo-vector-map-label>
   </dxi-vector-map-layer>
   <dxi-vector-map-layer
     [dataSource]="markers"
@@ -30,7 +33,10 @@
     [customizeItems]="customizeItems"
     [customizeText]="customizeText"
   >
-    <dxo-vector-map-source layer="areas" grouping="color"></dxo-vector-map-source>
+    <dxo-vector-map-source
+      layer="areas"
+      grouping="color"
+    ></dxo-vector-map-source>
   </dxi-vector-map-legend>
   <dxi-vector-map-legend
     title="City Population"
@@ -40,6 +46,9 @@
     [customizeItems]="customizeItems"
     [customizeText]="customizeMarkers"
   >
-    <dxo-vector-map-source layer="markers" grouping="size"></dxo-vector-map-source>
+    <dxo-vector-map-source
+      layer="markers"
+      grouping="size"
+    ></dxo-vector-map-source>
   </dxi-vector-map-legend>
 </dx-vector-map>
