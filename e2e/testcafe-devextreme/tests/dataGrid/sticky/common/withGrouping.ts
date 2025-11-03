@@ -22,10 +22,10 @@ fixture.disablePageReloads`FixedColumns - Grouping`
     await takeScreenshot(`grouping-scroll-begin-rtl=${rtlEnabled}.png`, dataGrid.element);
 
     await dataGrid.scrollTo(t, { x: rtlEnabled ? 500 : 100 });
-    await takeScreenshot(`grouping-scroll-center=${rtlEnabled}.png.png`, dataGrid.element);
+    await takeScreenshot(`grouping-scroll-center=${rtlEnabled}.png`, dataGrid.element);
 
     await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
-    await takeScreenshot(`grouping-scroll-end=${rtlEnabled}.png.png`, dataGrid.element);
+    await takeScreenshot(`grouping-scroll-end=${rtlEnabled}.png`, dataGrid.element);
 
     await t
       .expect(compareResults.isValid())
