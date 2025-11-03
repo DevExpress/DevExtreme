@@ -36,6 +36,10 @@
 
   .dx-fileuploader-files-container {
     display: grid;
+
+    .dx-fileuploader-file-container {
+      margin-bottom: 0;
+    }
   }
 }
 
