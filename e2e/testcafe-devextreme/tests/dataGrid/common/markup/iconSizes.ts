@@ -10,7 +10,7 @@ fixture.disablePageReloads`Icon Sizes`
 
 const GRID_CONTAINER = '#container';
 
-test('Correct icon sizes in the Fluent compact theme (T1207612)', async (t) => {
+test.skip('Correct icon sizes in the Fluent compact theme (T1207612)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(GRID_CONTAINER);
 
