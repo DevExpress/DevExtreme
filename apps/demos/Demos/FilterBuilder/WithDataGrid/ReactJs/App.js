@@ -4,7 +4,7 @@ import Button from 'devextreme-react/button';
 import DataGrid from 'devextreme-react/data-grid';
 import {
   filter, fields, columns, products,
-} from './data.ts';
+} from './data.js';
 
 const App = () => {
   const [value, setValue] = useState(filter);
