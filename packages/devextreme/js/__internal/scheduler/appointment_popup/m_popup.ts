@@ -102,8 +102,8 @@ export class AppointmentPopup {
       showCloseButton: false,
       showTitle: false,
       preventScrollEvents: false,
-      _ignorePreventScrollEventsDeprecation: true,
       enableBodyScroll: false,
+      _ignorePreventScrollEventsDeprecation: true,
       onHiding: (): void => {
         this.scheduler.focus();
       },
