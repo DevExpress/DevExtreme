@@ -1,18 +1,19 @@
 import { Controller } from '../m_modules';
 
 export class AIColumnCacheController extends Controller {
-  private readonly cache: Map<string, Map<PropertyKey, string>> = new Map();
+  private readonly cache: Record<string, Record<PropertyKey, string>> = {};
 
   public clearCache(columnName: string): void {
-    this.cache.delete(columnName);
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+    delete this.cache[columnName];
   }
 
   public getCachedResponse(columnName: string, keys: PropertyKey[]):
   Record<PropertyKey, string> {
-    const columnCache = this.cache.get(columnName);
+    const columnCache = this.cache[columnName];
     if (!columnCache) return {};
     return keys.reduce<Record<PropertyKey, string>>((acc, key) => {
-      const value = columnCache.get(key);
+      const value = columnCache[key];
       if (value !== undefined) {
         acc[key] = value;
       }
@@ -24,25 +25,21 @@ export class AIColumnCacheController extends Controller {
     columnName: string,
     data: Record<PropertyKey, string>,
   ): void {
-    let columnCache = this.cache.get(columnName);
+    let columnCache = this.cache[columnName];
     if (!columnCache) {
-      columnCache = new Map<PropertyKey, string>();
-      this.cache.set(columnName, columnCache);
+      columnCache = {};
+      this.cache[columnName] = columnCache;
     }
     Object.entries(data).forEach(([key, value]) => {
-      columnCache.set(key, value);
+      columnCache[key] = value;
     });
   }
 
   public getCachedString(columnName: string, key: PropertyKey): string | undefined {
-    return this.cache.get(columnName)?.get(key);
+    return this.cache[columnName]?.[key];
   }
 
   public isEmptyCache(columnName: string): boolean {
-    return this.cache.get(columnName)?.size === 0;
-  }
-
-  public dispose(): void {
-    this.cache.clear();
+    return Object.keys(this.cache[columnName] || {}).length === 0;
   }
 }

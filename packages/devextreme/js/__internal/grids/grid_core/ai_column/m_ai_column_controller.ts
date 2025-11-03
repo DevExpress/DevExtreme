@@ -99,10 +99,11 @@ export class AIColumnController extends Controller {
 
   public clearAIColumn(columnName: string): void {
     this.aiColumnIntegrationController.abortRequest(columnName);
+    this.aiColumnIntegrationController.clearAIColumn(columnName);
   }
 
-  public getAIColumnText(columnName: string, key: unknown): void {
-    this.aiColumnIntegrationController.getAIColumnText(columnName, key as PropertyKey);
+  public getAIColumnText(columnName: string, key: unknown): string | undefined {
+    return this.aiColumnIntegrationController.getAIColumnText(columnName, key as PropertyKey);
   }
 
   public dispose(): void {

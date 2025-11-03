@@ -164,8 +164,8 @@ export class AIColumnIntegrationController extends Controller {
     this.errorHandlingController?.showToastError(message);
   }
 
-  public getAIColumnText(columnName: string, key: PropertyKey): void {
-    this.aiColumnCacheController.getCachedString(columnName, key);
+  public getAIColumnText(columnName: string, key: PropertyKey): string | undefined {
+    return this.aiColumnCacheController.getCachedString(columnName, key);
   }
 
   public clearAIColumn(columnName: string): void {

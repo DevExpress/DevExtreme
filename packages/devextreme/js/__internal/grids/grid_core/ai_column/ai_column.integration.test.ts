@@ -1772,8 +1772,59 @@ describe('API Methods', () => {
       expect(abortSpy).toHaveBeenCalledTimes(1);
     });
 
-    // TODO: Implement after cache is done
-    // it('should clear column cache', async () => { });
+    it('should clear column cache', async () => {
+      const aiIntegrationResult = (prompt: RequestParams): RequestResult => ({
+        promise: new Promise<string>((resolve) => {
+          const result = {};
+          Object.entries(prompt.data?.data).forEach(([key, value]) => {
+            result[key] = `Response ${(value as any).name}`;
+          });
+
+          resolve(JSON.stringify(result));
+        }),
+        abort: (): void => {
+          abortSpy();
+        },
+      });
+
+      const columnAIIntegration = new AIIntegration({
+        sendRequest(prompt): RequestResult {
+          return aiIntegrationResult(prompt);
+        },
+      });
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+          { id: 2, name: 'Name 2', value: 20 },
+        ],
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration: columnAIIntegration,
+              mode: 'manual',
+              prompt: 'Test prompt',
+            },
+          },
+        ],
+      });
+
+      instance.sendAIColumnRequest('myColumn');
+      await Promise.resolve();
+      expect(instance.getAIColumnText('myColumn', 1)).toBe('Response Name 1');
+      expect(instance.getAIColumnText('myColumn', 2)).toBe('Response Name 2');
+
+      instance.clearAIColumn('myColumn');
+
+      expect(instance.getAIColumnText('myColumn', 1)).toBeUndefined();
+      expect(instance.getAIColumnText('myColumn', 2)).toBeUndefined();
+    });
   });
 
   // TODO: implement after column cache is done
