@@ -21,8 +21,14 @@
         >
         </dxi-form-validation-rule>
       </dxi-form-item>
-      <dxi-form-item dataField="Password" [editorOptions]="passwordEditorOptions">
-        <dxi-form-validation-rule type="required" message="Password is required">
+      <dxi-form-item
+        dataField="Password"
+        [editorOptions]="passwordEditorOptions"
+      >
+        <dxi-form-validation-rule
+          type="required"
+          message="Password is required"
+        >
         </dxi-form-validation-rule>
       </dxi-form-item>
       <dxi-form-item
@@ -176,7 +182,10 @@
           [buttonOptions]="resetButtonOptions"
         >
         </dxi-form-item>
-        <dxi-form-item itemType="button" [buttonOptions]="registerButtonOptions">
+        <dxi-form-item
+          itemType="button"
+          [buttonOptions]="registerButtonOptions"
+        >
         </dxi-form-item>
       </dxi-form-item>
     </dxi-form-item>

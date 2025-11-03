@@ -20,12 +20,17 @@
         caption="Category"
         width="95"
       ></dxi-file-manager-column>
-      <dxi-file-manager-column dataField="dateModified"></dxi-file-manager-column>
+      <dxi-file-manager-column
+        dataField="dateModified"
+      ></dxi-file-manager-column>
       <dxi-file-manager-column dataField="size"></dxi-file-manager-column>
     </dxo-file-manager-details>
   </dxo-file-manager-item-view>
   <dxo-file-manager-toolbar>
-    <dxi-file-manager-item name="showNavPane" [visible]="true"></dxi-file-manager-item>
+    <dxi-file-manager-item
+      name="showNavPane"
+      [visible]="true"
+    ></dxi-file-manager-item>
     <dxi-file-manager-item name="separator"></dxi-file-manager-item>
     <dxi-file-manager-item name="create"></dxi-file-manager-item>
     <dxi-file-manager-item
@@ -34,20 +39,35 @@
       [options]="newFileMenuOptions"
     ></dxi-file-manager-item>
     <dxi-file-manager-item name="refresh"></dxi-file-manager-item>
-    <dxi-file-manager-item name="separator" location="after"></dxi-file-manager-item>
+    <dxi-file-manager-item
+      name="separator"
+      location="after"
+    ></dxi-file-manager-item>
     <dxi-file-manager-item name="switchView"></dxi-file-manager-item>
 
-    <dxi-file-manager-file-selection-item name="rename"></dxi-file-manager-file-selection-item>
-    <dxi-file-manager-file-selection-item name="separator"></dxi-file-manager-file-selection-item>
-    <dxi-file-manager-file-selection-item name="delete"></dxi-file-manager-file-selection-item>
-    <dxi-file-manager-file-selection-item name="separator"></dxi-file-manager-file-selection-item>
+    <dxi-file-manager-file-selection-item
+      name="rename"
+    ></dxi-file-manager-file-selection-item>
+    <dxi-file-manager-file-selection-item
+      name="separator"
+    ></dxi-file-manager-file-selection-item>
+    <dxi-file-manager-file-selection-item
+      name="delete"
+    ></dxi-file-manager-file-selection-item>
+    <dxi-file-manager-file-selection-item
+      name="separator"
+    ></dxi-file-manager-file-selection-item>
     <dxi-file-manager-file-selection-item
       widget="dxMenu"
       location="before"
       [options]="changeCategoryMenuOptions"
     ></dxi-file-manager-file-selection-item>
-    <dxi-file-manager-file-selection-item name="refresh"></dxi-file-manager-file-selection-item>
-    <dxi-file-manager-file-selection-item name="clearSelection"></dxi-file-manager-file-selection-item>
+    <dxi-file-manager-file-selection-item
+      name="refresh"
+    ></dxi-file-manager-file-selection-item>
+    <dxi-file-manager-file-selection-item
+      name="clearSelection"
+    ></dxi-file-manager-file-selection-item>
   </dxo-file-manager-toolbar>
   <dxo-file-manager-context-menu>
     <dxi-file-manager-item name="create"></dxi-file-manager-item>
@@ -56,7 +76,10 @@
       <dxi-file-manager-item text="RTF Document"></dxi-file-manager-item>
       <dxi-file-manager-item text="Spreadsheet"></dxi-file-manager-item>
     </dxi-file-manager-item>
-    <dxi-file-manager-item name="rename" [beginGroup]="true"></dxi-file-manager-item>
+    <dxi-file-manager-item
+      name="rename"
+      [beginGroup]="true"
+    ></dxi-file-manager-item>
     <dxi-file-manager-item name="delete"></dxi-file-manager-item>
     <dxi-file-manager-item text="Category" icon="tags" [beginGroup]="true">
       <dxi-file-manager-item text="Work"></dxi-file-manager-item>
