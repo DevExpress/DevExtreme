@@ -789,7 +789,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     const $fileSize = this._$filesContainer?.find(`.${FILEUPLOADER_FILE_SIZE_CLASS}`).eq(0);
     const $icon = this._$filesContainer?.find(`.${FILEUPLOADER_FILE_ICON_CLASS}`).eq(0);
     const iconWidth = _showFileIcon ? getWidth($icon) : 0;
-    debugger;
+
     const prevFileSize = $fileSize?.text();
     $fileSize?.text('1000 Mb');
     const fileSizeWidth = getWidth($fileSize);
