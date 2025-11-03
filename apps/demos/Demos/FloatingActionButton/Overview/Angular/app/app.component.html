@@ -11,10 +11,16 @@
     <dxo-data-grid-texts confirmDeleteMessage=""></dxo-data-grid-texts>
   </dxo-data-grid-editing>
 
-  <dxi-data-grid-column dataField="Prefix" caption="Title"></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="Prefix"
+    caption="Title"
+  ></dxi-data-grid-column>
   <dxi-data-grid-column dataField="FirstName"></dxi-data-grid-column>
   <dxi-data-grid-column dataField="LastName"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Position" [width]="130"></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="Position"
+    [width]="130"
+  ></dxi-data-grid-column>
   <dxi-data-grid-column dataField="StateID" [width]="125" caption="State">
     <dxo-data-grid-lookup
       [dataSource]="states"
@@ -22,7 +28,11 @@
       valueExpr="ID"
     ></dxo-data-grid-lookup>
   </dxi-data-grid-column>
-  <dxi-data-grid-column dataField="BirthDate" [width]="125" dataType="date"></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="BirthDate"
+    [width]="125"
+    dataType="date"
+  ></dxi-data-grid-column>
 </dx-data-grid>
 
 <dx-speed-dial-action
