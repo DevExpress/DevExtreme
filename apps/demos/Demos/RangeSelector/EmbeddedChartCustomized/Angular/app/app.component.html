@@ -4,20 +4,20 @@
   title="Select a Range in the CPU Usage History"
   [dataSource]="dataSource"
 >
-  <dxo-margin [top]="50" [left]="15" [right]="15"></dxo-margin>
-  <dxo-background color="#808080"></dxo-background>
-  <dxo-scale [minorTickInterval]="0.5" [tickInterval]="1">
-    <dxo-label [customizeText]="customizeText"></dxo-label>
-  </dxo-scale>
-  <dxo-slider-marker [visible]="false"></dxo-slider-marker>
-  <dxo-chart [topIndent]="0.05" [bottomIndent]="0.05">
-    <dxi-series
+  <dxo-range-selector-margin [top]="50" [left]="15" [right]="15"></dxo-range-selector-margin>
+  <dxo-range-selector-background color="#808080"></dxo-range-selector-background>
+  <dxo-range-selector-scale [minorTickInterval]="0.5" [tickInterval]="1">
+    <dxo-range-selector-label [customizeText]="customizeText"></dxo-range-selector-label>
+  </dxo-range-selector-scale>
+  <dxo-range-selector-slider-marker [visible]="false"></dxo-range-selector-slider-marker>
+  <dxo-range-selector-chart [topIndent]="0.05" [bottomIndent]="0.05">
+    <dxi-range-selector-series
       color="#ffa500"
       [width]="3"
       type="line"
       argumentField="x"
       valueField="y"
     >
-    </dxi-series>
-  </dxo-chart>
+    </dxi-range-selector-series>
+  </dxo-range-selector-chart>
 </dx-range-selector>

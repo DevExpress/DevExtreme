@@ -4,20 +4,20 @@
     title="Calculate the Working Days Count in a Date Period"
     (onValueChanged)="onValueChanged($event)"
   >
-    <dxo-margin [top]="50"></dxo-margin>
-    <dxo-scale
+    <dxo-range-selector-margin [top]="50"></dxo-range-selector-margin>
+    <dxo-range-selector-scale
       [startValue]="startValue"
       [endValue]="endValue"
       minorTickInterval="day"
       tickInterval="month"
     >
-      <dxo-minor-tick [visible]="false"></dxo-minor-tick>
-      <dxo-marker [visible]="false"></dxo-marker>
-      <dxo-label [customizeText]="customizeLabel"></dxo-label>
-    </dxo-scale>
-    <dxo-slider-marker [customizeText]="customizeSliderMarker">
-    </dxo-slider-marker>
-    <dxo-behavior #beh valueChangeMode="onHandleMove"> </dxo-behavior>
+      <dxo-range-selector-minor-tick [visible]="false"></dxo-range-selector-minor-tick>
+      <dxo-range-selector-marker [visible]="false"></dxo-range-selector-marker>
+      <dxo-range-selector-label [customizeText]="customizeLabel"></dxo-range-selector-label>
+    </dxo-range-selector-scale>
+    <dxo-range-selector-slider-marker [customizeText]="customizeSliderMarker">
+    </dxo-range-selector-slider-marker>
+    <dxo-range-selector-behavior #beh valueChangeMode="onHandleMove"> </dxo-range-selector-behavior>
   </dx-range-selector>
   <h2>Working days count: {{ workingDaysCount.toFixed() }}</h2>
   <div class="options">
