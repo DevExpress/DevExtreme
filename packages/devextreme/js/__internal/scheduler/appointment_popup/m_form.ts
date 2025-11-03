@@ -236,6 +236,8 @@ export class AppointmentForm {
 
   private createForm(items: FormProperties['items']): dxForm {
     const element = $('<div>');
+    const editingConfig = this.scheduler.getEditingConfig();
+    const userFormOptions = editingConfig?.form ?? {};
 
     return this.scheduler.createComponent(element, dxForm, {
       items,

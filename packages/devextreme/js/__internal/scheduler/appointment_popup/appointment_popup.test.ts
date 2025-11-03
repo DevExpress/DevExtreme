@@ -1339,6 +1339,28 @@ describe('Appointment Popup Form', () => {
     });
   });
 
+  describe('Form custimization', () => {
+    it('should propagate editing.form options to the form instance', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          form: {
+            height: 500,
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const { form } = POM.popup;
+      const formHeight = form.option('height') as number;
+
+      expect(formHeight).toBe(500);
+    });
+  });
+
   it('should update form data after another appointment was open', async () => {
     const { scheduler, POM } = await createScheduler(getDefaultConfig());
 

@@ -30,7 +30,7 @@ import {
 
 import dxDraggable from './draggable';
 
-import dxForm, { Item as FormItem } from './form';
+import dxForm, { Properties as FormProperties } from './form';
 import dxPopup, { Properties as PopupProperties } from './popup';
 
 import dxSortable from './sortable';
@@ -633,17 +633,10 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       allowUpdating?: boolean;
       /**
        * @docid
-       * @default undefined
        * @public
+       * @type dxFormOptions
        */
-      form?: {
-        /**
-         * @docid
-         * @type Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>
-         * @default []
-         * @public
-         */
-        items?: Array<FormItem>;
+      form?: FormProperties & {
         /**
          * @docid
          * @type_function_param1 formData:object
