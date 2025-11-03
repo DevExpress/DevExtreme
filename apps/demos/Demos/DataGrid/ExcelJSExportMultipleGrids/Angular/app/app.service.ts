@@ -1,0 +1,98 @@
+import { Injectable } from '@angular/core';
+
+export class Product {
+  Product_ID: number;
+
+  Product_Name: string;
+
+  Product_Sale_Price: number;
+
+  Product_Retail_Price: number;
+
+  Product_Consumer_Rating: number;
+
+  Product_Category: string;
+}
+
+const products: Product[] = [
+  {
+    Product_ID: 1,
+    Product_Name: "HD Video Player",
+    Product_Sale_Price: 220.00,
+    Product_Retail_Price: 330.00,
+    Product_Consumer_Rating: 4,
+    Product_Category: "Video Players",
+  },
+  {
+    Product_ID: 2,
+    Product_Name: "SuperHD Video Player",
+    Product_Sale_Price: 275.00,
+    Product_Retail_Price: 400.00,
+    Product_Consumer_Rating: 4,
+    Product_Category: "Video Players",
+  },
+  {
+    Product_ID: 3,
+    Product_Name: "SuperPlasma 50",
+    Product_Sale_Price: 1800.00,
+    Product_Retail_Price: 2400.00,
+    Product_Consumer_Rating: 4.5,
+    Product_Category: "Televisions",
+  },
+  {
+    Product_ID: 4,
+    Product_Name: "SuperLED 50",
+    Product_Sale_Price: 1100.00,
+    Product_Retail_Price: 1600.00,
+    Product_Consumer_Rating: 5,
+    Product_Category: "Televisions",
+  },
+  {
+    Product_ID: 5,
+    Product_Name: "SuperLED 42",
+    Product_Sale_Price: 1050.00,
+    Product_Retail_Price: 1450.00,
+    Product_Consumer_Rating: 5,
+    Product_Category: "Televisions",
+  },
+  {
+    Product_ID: 6,
+    Product_Name: "SuperLCD 55",
+    Product_Sale_Price: 1045.00,
+    Product_Retail_Price: 1350.00,
+    Product_Consumer_Rating: 4.5,
+    Product_Category: "Televisions",
+  },
+  {
+    Product_ID: 7,
+    Product_Name: "SuperLCD 42",
+    Product_Sale_Price: 999.00,
+    Product_Retail_Price: 1200.00,
+    Product_Consumer_Rating: 4,
+    Product_Category: "Televisions",
+  },
+  {
+    Product_ID: 8,
+    Product_Name: "SuperPlasma 65",
+    Product_Sale_Price: 2900.00,
+    Product_Retail_Price: 3500.00,
+    Product_Consumer_Rating: 3,
+    Product_Category: "Televisions",
+  },
+  {
+    Product_ID: 9,
+    Product_Name: "SuperLCD 70",
+    Product_Sale_Price: 3200.00,
+    Product_Retail_Price: 4000.00,
+    Product_Consumer_Rating: 4,
+    Product_Category: "Televisions",
+  },
+];
+
+
+@Injectable()
+export class Service {
+  getProducts() {
+    return products;
+  }
+}

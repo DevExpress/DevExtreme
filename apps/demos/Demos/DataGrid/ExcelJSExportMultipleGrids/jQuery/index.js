@@ -20,13 +20,9 @@ $(() => {
           ],
           showBorders: true,
           rowAlternationEnabled: true,
+          keyExpr: 'Product_ID',
           dataSource: {
-            store: {
-              type: 'odata',
-              version: 2,
-              url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
-              key: 'Product_ID',
-            },
+            store: products,
             select: ['Product_ID', 'Product_Name', 'Product_Sale_Price', 'Product_Retail_Price'],
             filter: ['Product_ID', '<', 10],
           },
@@ -45,13 +41,9 @@ $(() => {
           ],
           showBorders: true,
           rowAlternationEnabled: true,
+          keyExpr: 'Product_ID',
           dataSource: {
-            store: {
-              type: 'odata',
-              version: 2,
-              url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
-              key: 'Product_ID',
-            },
+            store: products,
             select: ['Product_ID', 'Product_Name', 'Product_Consumer_Rating', 'Product_Category'],
             filter: ['Product_ID', '<', 10],
           },
