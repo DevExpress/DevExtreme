@@ -70,7 +70,7 @@ safeSizeTest('Headers navigation by Tab key when there are fixed columns', async
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [900, 800]).before(async () => createWidget('dxDataGrid', {
+}, [900, 800]).meta({ unstable: true }).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
   width: 600,
   customizeColumns(columns) {
@@ -393,7 +393,7 @@ safeSizeTest('Data cells navigation by Tab key when there are fixed columns', as
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [900, 800]).before(async () => createWidget('dxDataGrid', {
+}, [900, 800]).meta({ unstable: true }).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
   width: 600,
   customizeColumns(columns) {

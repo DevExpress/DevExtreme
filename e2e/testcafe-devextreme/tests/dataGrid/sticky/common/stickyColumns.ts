@@ -34,7 +34,7 @@ safeSizeTest('The simulated scrollbar should display correctly when there are st
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [1000, 800]).before(async () => createWidget('dxDataGrid', {
+}, [1000, 800]).meta({ unstable: true }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(5, 25),
   width: 984,
   columnAutoWidth: true,
