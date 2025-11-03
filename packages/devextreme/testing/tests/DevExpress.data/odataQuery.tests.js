@@ -930,6 +930,81 @@ QUnit.test('Values are converted according to \'fieldTypes\' property', function
         .always(done);
 });
 
+QUnit.test('ISO date string serialized as date when fieldTypes indicate DateTimeOffset (v4)', function(assert) {
+    assert.expect(1);
+
+    const done = assert.async();
+    ajaxMock.setup({
+        url: 'odata.org',
+        callback: function(bag) { this.responseText = { value: [bag] }; }
+    });
+
+    const iso = '1945-05-09T14:25:01.001Z';
+    const expectedRe = /^date eq \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
+
+    QUERY('odata.org', { version: 4, fieldTypes: { date: 'DateTimeOffset' } })
+        .filter(['date', '=', iso])
+        .enumerate()
+        .fail(function() { assert.ok(false, MUST_NOT_REACH_MESSAGE); })
+        .done(function(r) { assert.ok(expectedRe.test(r[0].data['$filter'])); })
+        .always(done);
+});
+
+QUnit.test('ISO date string serialized as date when fieldTypes indicate DateTime (v2)', function(assert) {
+    assert.expect(1);
+
+    const done = assert.async();
+    ajaxMock.setup({
+        url: 'odata.org',
+        callback: function(bag) { this.responseText = { value: [bag] }; }
+    });
+
+    const iso = '1945-05-09T14:25:01.001Z';
+    const expectedRe = /^date eq datetime'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}'$/;
+
+    QUERY('odata.org', {
+        version: 2,
+        fieldTypes: { date: 'DateTime' }
+    })
+        .filter(['date', '=', iso])
+        .enumerate()
+        .fail(function() { assert.ok(false, MUST_NOT_REACH_MESSAGE); })
+        .done(function(r) { assert.ok(expectedRe.test(r[0].data['$filter'])); })
+        .always(done);
+});
+
+QUnit.test('ISO date string remains string when fieldTypes indicate String (v2/v4)', function(assert) {
+    assert.expect(2);
+
+    const done = assert.async();
+
+    const p1 = QUERY('odata.org', {
+        version: 4,
+        fieldTypes: { date: 'String' }
+    })
+        .filter(['date', '=', '1945-05-09T14:25:01.001Z'])
+        .enumerate()
+        .done(function(r) {
+            assert.equal(r[0].data['$filter'], 'date eq \'1945-05-09T14:25:01.001Z\'');
+        });
+
+    const p2 = QUERY('odata.org', {
+        version: 2,
+        fieldTypes: { date: 'String' }
+    })
+        .filter(['date', '=', '1945-05-09T14:25:01.001Z'])
+        .enumerate()
+        .done(function(r) {
+            assert.equal(r[0].data['$filter'], 'date eq \'1945-05-09T14:25:01.001Z\'');
+        });
+
+    $.when.apply($, [p1, p2])
+        .fail(function() {
+            assert.ok(false, MUST_NOT_REACH_MESSAGE);
+        })
+        .always(done);
+});
+
 QUnit.module('Server side capabilities', moduleConfig);
 QUnit.test('can be done on server: any number of sort and filter before slice, first select, first slice', function(assert) {
     assert.expect(2 * 5);
