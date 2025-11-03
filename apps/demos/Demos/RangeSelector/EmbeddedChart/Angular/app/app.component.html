@@ -6,11 +6,18 @@
 >
   <dxo-range-selector-margin [top]="50"></dxo-range-selector-margin>
   <dxo-range-selector-scale minorTickInterval="day">
-    <dxo-range-selector-tick-interval [days]="7"> </dxo-range-selector-tick-interval>
+    <dxo-range-selector-tick-interval [days]="7">
+    </dxo-range-selector-tick-interval>
   </dxo-range-selector-scale>
   <dxo-range-selector-chart>
-    <dxi-range-selector-series argumentField="t" valueField="costs"></dxi-range-selector-series>
-    <dxi-range-selector-series argumentField="t" valueField="income"></dxi-range-selector-series>
+    <dxi-range-selector-series
+      argumentField="t"
+      valueField="costs"
+    ></dxi-range-selector-series>
+    <dxi-range-selector-series
+      argumentField="t"
+      valueField="income"
+    ></dxi-range-selector-series>
     <dxo-range-selector-value-axis [min]="0"></dxo-range-selector-value-axis>
   </dxo-range-selector-chart>
 </dx-range-selector>

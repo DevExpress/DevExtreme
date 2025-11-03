@@ -57,7 +57,10 @@
     <div class="option">
       <span>Animation duration</span>
       <dx-slider [min]="0" [max]="1000" [(value)]="accordion.animationDuration">
-        <dxo-slider-tooltip [enabled]="true" position="bottom"></dxo-slider-tooltip>
+        <dxo-slider-tooltip
+          [enabled]="true"
+          position="bottom"
+        ></dxo-slider-tooltip>
         <dxo-slider-label [visible]="true"></dxo-slider-label>
       </dx-slider>
     </div>

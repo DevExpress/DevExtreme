@@ -25,11 +25,20 @@
     <dxo-range-selector-chart>
       <dxi-range-selector-series></dxi-range-selector-series>
     </dxo-range-selector-chart>
-    <dxo-range-selector-scale type="logarithmic" [minorTickCount]="10" [minRange]="1">
+    <dxo-range-selector-scale
+      type="logarithmic"
+      [minorTickCount]="10"
+      [minRange]="1"
+    >
       <dxo-range-selector-label format="exponential"></dxo-range-selector-label>
     </dxo-range-selector-scale>
-    <dxo-range-selector-slider-marker format="exponential"></dxo-range-selector-slider-marker>
-    <dxo-range-selector-behavior valueChangeMode="onHandleMove" [snapToTicks]="false">
+    <dxo-range-selector-slider-marker
+      format="exponential"
+    ></dxo-range-selector-slider-marker>
+    <dxo-range-selector-behavior
+      valueChangeMode="onHandleMove"
+      [snapToTicks]="false"
+    >
     </dxo-range-selector-behavior>
   </dx-range-selector>
 </div>
