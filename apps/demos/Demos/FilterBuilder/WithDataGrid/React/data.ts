@@ -1,5 +1,25 @@
 import { DataType } from 'devextreme/common';
 
+interface Product {
+  Product_ID: number;
+  Product_Name: string;
+  Product_Cost: string;
+  Product_Sale_Price: string;
+  Product_Retail_Price: string;
+  Product_Current_Inventory: number;
+}
+
+interface Field {
+  caption?: string,
+  dataField: string,
+  dataType: DataType,
+  format?: string,
+}
+
+interface Column extends Field {
+  width?: number,
+}
+
 export const filter = [
   ['Product_Current_Inventory', '<>', 0],
   'or',
@@ -10,16 +30,9 @@ export const filter = [
   ],
 ];
 
-export const fields: {
-  caption?: string,
-  width?: number,
-  dataField: string,
-  dataType: DataType,
-  format?: string,
-}[] = [
+export const fields: Field[] = [
   {
     caption: 'ID',
-    width: 50,
     dataField: 'Product_ID',
     dataType: 'number',
   }, {
@@ -47,14 +60,36 @@ export const fields: {
   },
 ];
 
-interface Product {
-  Product_ID: number;
-  Product_Name: string;
-  Product_Cost: string;
-  Product_Sale_Price: string;
-  Product_Retail_Price: string;
-  Product_Current_Inventory: number;
-}
+export const columns: Column[] = [
+  {
+    caption: 'ID',
+    dataField: 'Product_ID',
+    dataType: 'number',
+    width: 50,
+  }, {
+    dataField: 'Product_Name',
+    dataType: 'string',
+  }, {
+    caption: 'Cost',
+    dataField: 'Product_Cost',
+    dataType: 'number',
+    format: 'currency',
+  }, {
+    dataField: 'Product_Sale_Price',
+    caption: 'Sale Price',
+    dataType: 'number',
+    format: 'currency',
+  }, {
+    dataField: 'Product_Retail_Price',
+    caption: 'Retail Price',
+    dataType: 'number',
+    format: 'currency',
+  }, {
+    dataField: 'Product_Current_Inventory',
+    dataType: 'number',
+    caption: 'Inventory',
+  },
+];
 
 export const products: Product[] = [
   {
