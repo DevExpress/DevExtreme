@@ -21,6 +21,7 @@ import {
 } from '@js/core/utils/size';
 import { isDefined, isObject, isString } from '@js/core/utils/type';
 import swatchContainer from '@ts/core/utils/swatch_container';
+import { getDraggingPanelBoundingRects } from '@ts/grids/grid_core/columns_resizing_reordering/utils';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 import type { ColumnPoint, ModuleType } from '@ts/grids/grid_core/m_types';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
@@ -33,6 +34,7 @@ import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
 import type { PagerView } from '../pager/m_pager';
 import { CLASSES } from './const';
+import type { DraggingPanel } from './types';
 
 const COLUMNS_SEPARATOR_CLASS = 'columns-separator';
 const COLUMNS_SEPARATOR_TRANSPARENT = 'columns-separator-transparent';
@@ -407,6 +409,39 @@ export class DraggingHeaderView extends modules.View {
   private _testPointsByColumns: any;
   /// #ENDDEBUG
 
+  private getSourceDraggingPanel(): DraggingPanel {
+    const {
+      sourceLocation,
+      draggingPanels,
+    }: {
+      sourceLocation: string;
+      draggingPanels: DraggingPanel[];
+    } = this._dragOptions;
+
+    return draggingPanels
+      .find(
+        (draggingPanel: DraggingPanel) => draggingPanel.getName() === sourceLocation,
+      ) as DraggingPanel;
+  }
+
+  private updateDragElement(): void {
+    const { columnElement, sourceColumn } = this._dragOptions;
+    const sourceDraggingPanel = this.getSourceDraggingPanel();
+    const dragElement = this.element();
+
+    dragElement
+      .empty()
+      .css({
+        textAlign: columnElement?.css('textAlign'),
+        height: columnElement && getHeight(columnElement),
+        width: columnElement && getWidth(columnElement),
+        whiteSpace: columnElement?.css('whiteSpace'),
+      })
+      .addClass(this.addWidgetPrefix(HEADERS_DRAG_ACTION_CLASS));
+
+    sourceDraggingPanel.renderDragCellContent(dragElement, sourceColumn);
+  }
+
   public init() {
     super.init();
 
@@ -433,14 +468,15 @@ export class DraggingHeaderView extends modules.View {
     const that = this;
     let result;
 
-    each(that._dragOptions.draggingPanels, (index, draggingPanel) => {
-      if (draggingPanel) {
-        const boundingRect = draggingPanel.getBoundingRect();
-        if (boundingRect && (boundingRect.bottom === undefined || pos.y < boundingRect.bottom) && (boundingRect.top === undefined || pos.y > boundingRect.top)
-                    && (boundingRect.left === undefined || pos.x > boundingRect.left) && (boundingRect.right === undefined || pos.x < boundingRect.right)) {
-          result = draggingPanel;
-          return false;
-        }
+    each(that._dragOptions.draggingPanelBoundingRects, (_, { draggingPanel, boundingRect }) => {
+      if (boundingRect
+        && (boundingRect.bottom === undefined || pos.y < boundingRect.bottom)
+        && (boundingRect.top === undefined || pos.y > boundingRect.top)
+        && (boundingRect.left === undefined || pos.x > boundingRect.left)
+        && (boundingRect.right === undefined || pos.x < boundingRect.right)
+      ) {
+        result = draggingPanel;
+        return false;
       }
 
       return undefined;
@@ -490,39 +526,34 @@ export class DraggingHeaderView extends modules.View {
   }
 
   public dragHeader(options) {
-    const that = this;
     const { columnElement } = options;
+    const dragOptions = {
+      ...options,
+      draggingPanelBoundingRects: getDraggingPanelBoundingRects(options.draggingPanels),
+    };
 
-    that._isDragging = true;
-    that._dragOptions = options;
-    that._dropOptions = {
+    this._isDragging = true;
+    this._dragOptions = dragOptions;
+    this._dropOptions = {
       sourceIndex: options.index,
-      sourceColumnIndex: that._getVisibleIndexObject(options.rowIndex, options.columnIndex),
-      sourceColumnElement: options.columnElement,
+      sourceColumnIndex: this._getVisibleIndexObject(options.rowIndex, options.columnIndex),
+      sourceColumnElement: columnElement,
       sourceLocation: options.sourceLocation,
     };
 
     const document = domAdapter.getDocument();
     // eslint-disable-next-line spellcheck/spell-checker
-    that._onSelectStart = document.onselectstart;
+    this._onSelectStart = document.onselectstart;
 
     // eslint-disable-next-line spellcheck/spell-checker
     document.onselectstart = function () {
       return false;
     };
 
-    that._controller.drag(that._dropOptions);
+    this._controller.drag(this._dropOptions);
+    this.updateDragElement();
 
-    that.element().css({
-      textAlign: columnElement?.css('textAlign'),
-      height: columnElement && getHeight(columnElement),
-      width: columnElement && getWidth(columnElement),
-      whiteSpace: columnElement?.css('whiteSpace'),
-    })
-      .addClass(that.addWidgetPrefix(HEADERS_DRAG_ACTION_CLASS))
-      .text(options.sourceColumn.caption);
-
-    that.element().appendTo(swatchContainer.getSwatchContainer(columnElement));
+    this.element().appendTo(swatchContainer.getSwatchContainer(columnElement));
   }
 
   public moveHeader(args) {
@@ -723,11 +754,12 @@ export class ColumnsResizerViewController extends modules.ViewController {
   /**
    * @extended: adaptivity
    */
-  protected _pointCreated(point, cellsLength, columns) {
+  protected _pointCreated(point, columns, cells?: dxElementWrapper) {
     const isNextColumnMode = isNextColumnResizingMode(this);
     const rtlEnabled = this.option('rtlEnabled');
     const isRtlParentStyle = this._isRtlParentStyle();
     const firstPointColumnIndex = !isNextColumnMode && rtlEnabled && !isRtlParentStyle ? 0 : 1;
+    const cellsLength = cells?.length ?? columns.length;
 
     if (point.index >= firstPointColumnIndex && point.index < cellsLength + (!isNextColumnMode && (!rtlEnabled || isRtlParentStyle) ? 1 : 0)) {
       this._correctColumnIndexForPoint(point, firstPointColumnIndex, columns);
@@ -964,7 +996,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
     if (cells && cells.length > 0) {
       that._pointsByColumns = gridCoreUtils.getPointsByColumns(
         cells,
-        (point) => that._pointCreated(correctColumnY(point), cells.length, columns),
+        (point) => that._pointCreated(correctColumnY(point), columns, cells),
         false,
         0,
         needToCheckPrevPoint,
@@ -1360,10 +1392,18 @@ export class DraggingHeaderViewController extends modules.ViewController {
    * @extended: column_fixing
    */
   public _generatePointsByColumns(options, needToCheckPrevPoint = false) {
+    const cells = this._columnHeadersView.getColumnElements();
     this.isCustomGroupColumnPosition = this.checkIsCustomGroupColumnPosition(options);
+
     const points = gridCoreUtils.getPointsByColumns(
       options.columnElements,
-      (point) => this._pointCreated(point, options.columns, options.targetDraggingPanel.getName(), options.sourceColumn),
+      (point) => this._pointCreated({
+        point,
+        columns: options.columns,
+        location: options.targetDraggingPanel.getName(),
+        sourceColumn: options.sourceColumn,
+        cells,
+      }),
       options.isVerticalOrientation,
       options.startColumnIndex,
       needToCheckPrevPoint,
@@ -1391,14 +1431,24 @@ export class DraggingHeaderViewController extends modules.ViewController {
 
   /**
    * @extended: adaptivity, column_fixing
-   * Function that is used to filter column points, it's called for each point
+   * @description Function used to filter column points, it's called for each point
    * @param point Point that we are checking
    * @param columns All columns in the given location
-   * @param location Location where we move column (headers, group, column chooser etc)
+   * @param location Location where we move column (headers, group, column chooser, etc.)
    * @param sourceColumn Column that is dragging
+   * @param cells JQuery-wrapped collection of header cell elements
    * @returns whether to filter current point (true - remove point, false - keep it)
    */
-  protected _pointCreated(point, columns, location, sourceColumn): boolean {
+
+  protected _pointCreated({
+    point, columns, location, sourceColumn,
+  }: {
+    point: ColumnPoint;
+    columns: any[];
+    location?: string;
+    sourceColumn?: any;
+    cells?: dxElementWrapper;
+  }): boolean {
     const targetColumn = columns[point.columnIndex];
     const prevColumn = columns[point.columnIndex - 1];
 

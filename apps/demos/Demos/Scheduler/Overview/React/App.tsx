@@ -31,6 +31,7 @@ const App = () => (
       fieldExpr="employeeID"
       dataSource={employees}
       allowMultiple={false}
+      icon="group"
     />
   </Scheduler>
 );

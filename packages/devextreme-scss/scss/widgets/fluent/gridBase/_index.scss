@@ -704,14 +704,12 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
             color: $header-filter-color-empty;
           }
 
-          &:hover {
+          &:not([class*="dx-command"], .dx-editor-cell, .dx-#{$widget-name}-group-space):hover {
+            background-color: $datagrid-hover-bg;
+
             .dx-#{$widget-name}-text-content {
               color: $datagrid-base-color;
             }
-          }
-
-          &:hover:not(.dx-command-select):not(.dx-command-expand):not(.dx-editor-cell):not(.dx-command-edit):not(.dx-#{$widget-name}-group-space) {
-            background-color: $datagrid-hover-bg;
           }
         }
       }
@@ -1353,5 +1351,27 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
   .dx-#{$widget-name}-sticky-columns .dx-#{$widget-name}-draggable-column {
     opacity: 1;
     color: $datagrid-draggable-column-text-color;
+  }
+
+  .dx-command-ai-header-content {
+    max-width: calc(100% - ($fluent-button-height - $fluent-grid-base-cell-horizontal-padding + $fluent-grid-base-command-ai-header-button-offset));
+
+    .dx-#{$widget-name}-text-content {
+      padding-left: $fluent-grid-base-command-ai-text-content-padding;
+    }
+
+    .dx-icon-chatsparkleoutline {
+      @include dx-icon-sizing($fluent-grid-base-command-ai-chatsparkleoutline-icon-size);
+    }
+  }
+
+  .dx-command-ai-header-button {
+    left: auto;
+    right: $fluent-grid-base-command-ai-header-button-offset;
+  }
+
+  td[style*="text-align: right"] .dx-command-ai-header-button {
+    left: $fluent-grid-base-command-ai-header-button-offset;
+    right: auto;
   }
 }

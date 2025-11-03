@@ -49,8 +49,10 @@
 
 @mixin chat-fileview(
   $chat-file-view-items-gap,
+  $chat-file-container-width,
 ) {
   .dx-chat-file-view {
     gap: $chat-file-view-items-gap;
+    grid-template-columns: repeat(auto-fit, $chat-file-container-width);
   }
 }
