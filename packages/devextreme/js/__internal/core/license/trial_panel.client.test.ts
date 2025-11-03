@@ -58,7 +58,7 @@ describe('trial panel client', () => {
 
     // When null is passed, it gets converted to string "null" as HTML attribute
     const subscriptionsAttr = triggerElement?.getAttribute('subscriptions');
-    expect(subscriptionsAttr).toBe('null');
+    expect(subscriptionsAttr).toBe('');
 
     // Ensure the panel element doesn't show "Included in Subscriptions: null"
     // This is the key test - our fix should prevent displaying "null"
