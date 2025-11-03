@@ -33,6 +33,14 @@
   .dx-fileuploader-wrapper {
     padding: 0;
   }
+
+  .dx-fileuploader-files-container {
+    display: grid;
+
+    .dx-fileuploader-file-container {
+      margin-bottom: 0;
+    }
+  }
 }
 
 .dx-chat-textarea-toolbar.dx-toolbar {

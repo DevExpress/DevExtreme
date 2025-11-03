@@ -4,7 +4,10 @@
   $gap,
   $textarea-border-radius,
   $textarea-padding,
-  $toolbar-min-height
+  $toolbar-min-height,
+  $chat-file-container-width,
+  $messagebox-file-container-padding,
+  $messagebox-file-container-padding-top,
 ) {
   .dx-chat-messagebox {
     padding: $messagebox-padding;
@@ -28,6 +31,13 @@
         border-bottom-left-radius: $textarea-border-radius;
         border-bottom-right-radius: $textarea-border-radius;
       }
+    }
+
+    .dx-fileuploader-files-container {
+      padding: $messagebox-file-container-padding;
+      padding-top: $messagebox-file-container-padding-top;
+      gap: $gap;
+      grid-template-columns: repeat(auto-fit, $chat-file-container-width);
     }
   }
 
