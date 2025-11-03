@@ -38,7 +38,6 @@
       padding-top: $messagebox-file-container-padding-top;
       gap: $gap;
       grid-template-columns: repeat(auto-fit, $chat-file-container-width);
-      min-width: $chat-file-container-width;
     }
   }
 
