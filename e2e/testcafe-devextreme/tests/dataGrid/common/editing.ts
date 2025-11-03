@@ -7,6 +7,7 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { getData } from '../helpers/generateDataSourceData';
 import { testScreenshot } from '../../../helpers/themeUtils';
+import { Themes } from '../../../helpers/themes';
 
 fixture.disablePageReloads`Editing`
   .page(url(__dirname, '../../container.html'));
@@ -1755,7 +1756,7 @@ test('Checkbox has ink ripple in material theme inside editing popup (T977287)',
     .click(overlay.getPopupCheckbox());
 
   // assert
-  await testScreenshot(t, takeScreenshot, 'grid-popup-editing-checkbox.png', { element: overlay.content, theme: 'material.blue.light' });
+  await testScreenshot(t, takeScreenshot, 'grid-popup-editing-checkbox.png', { element: overlay.content, theme: Themes.materialBlue });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -1801,7 +1802,7 @@ test('DataGrid inside editing popup should have synchronized columns (T1059401)'
     .ok();
 
   // assert
-  await testScreenshot(t, takeScreenshot, 'grid-popup-editing-grid.png', { element: overlay.content, theme: 'material.blue.light' });
+  await testScreenshot(t, takeScreenshot, 'grid-popup-editing-grid.png', { element: overlay.content, theme: Themes.materialBlue });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -1862,7 +1863,7 @@ test('DataGrid adaptive text should have correct paddings (T1062084)', async (t)
   await t
     .pressKey('enter');
 
-  await testScreenshot(t, takeScreenshot, 'grid-adaptive-item-text.png', { element: dataGrid.element, theme: 'material.blue.light' });
+  await testScreenshot(t, takeScreenshot, 'grid-adaptive-item-text.png', { element: dataGrid.element, theme: Themes.materialBlue });
   // assert
   await t
     .expect(compareResults.isValid())
@@ -1906,7 +1907,7 @@ test('DataGrid checkboxes should have correct outline in adaptive row', async (t
     .click(dataGrid.getDataRow(0).getCommandCell(4).getAdaptiveButton())
     .click(dataGrid.getFormItemElement(2));
 
-  await testScreenshot(t, takeScreenshot, 'grid-adaptive-checkbox.png', { element: dataGrid.element, theme: 'material.blue.light' });
+  await testScreenshot(t, takeScreenshot, 'grid-adaptive-checkbox.png', { element: dataGrid.element, theme: Themes.materialBlue });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

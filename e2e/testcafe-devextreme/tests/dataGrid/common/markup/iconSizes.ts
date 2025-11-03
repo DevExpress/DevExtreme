@@ -3,6 +3,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { testScreenshot } from '../../../../helpers/themeUtils';
+import { Themes } from '../../../../helpers/themes';
 
 fixture.disablePageReloads`Icon Sizes`
   .page(url(__dirname, '../../../container.html'));
@@ -13,7 +14,7 @@ test('Correct icon sizes in the Fluent compact theme (T1207612)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(GRID_CONTAINER);
 
-  await testScreenshot(t, takeScreenshot, 'icon-sizes.png', { element: dataGrid.element, theme: 'fluent.blue.light.compact' });
+  await testScreenshot(t, takeScreenshot, 'icon-sizes.png', { element: dataGrid.element, theme: Themes.fluentBlueCompact });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
