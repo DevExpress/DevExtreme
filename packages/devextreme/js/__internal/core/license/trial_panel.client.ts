@@ -165,7 +165,7 @@ class DxLicense extends SafeHTMLElement {
   }
 
   private _updateSubscriptionsText(subscriptions: string | null): void {
-    if (subscriptions && subscriptions !== 'null' && this._subscriptionsSpan) {
+    if (subscriptions && this._subscriptionsSpan) {
       this.setAttribute(attributeNames.subscriptions, subscriptions);
       this._subscriptionsSpan.innerText = ` Included in Subscriptions: ${subscriptions}`;
     }
@@ -338,7 +338,7 @@ export function renderTrialPanel(
   buyNowUrl: string,
   licensingDocUrl: string,
   version: string,
-  subscriptions = '',
+  subscriptions: string | undefined | null,
   customStyles?: CustomTrialPanelStyles,
 ): void {
   registerCustomComponents(customStyles);
@@ -348,7 +348,7 @@ export function renderTrialPanel(
   trialPanelTrigger.setAttribute(attributeNames.buyNow, buyNowUrl);
   trialPanelTrigger.setAttribute(attributeNames.licensingDoc, licensingDocUrl);
   trialPanelTrigger.setAttribute(attributeNames.version, version);
-  trialPanelTrigger.setAttribute(attributeNames.subscriptions, subscriptions);
+  trialPanelTrigger.setAttribute(attributeNames.subscriptions, subscriptions ?? '');
 
   document.body.appendChild(trialPanelTrigger);
 }

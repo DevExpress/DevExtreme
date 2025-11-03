@@ -12,30 +12,6 @@ describe('trial panel client', () => {
     document.body.innerHTML = '';
   });
 
-  it('should not display subscription text when subscriptions parameter is string "null"', () => {
-    renderTrialPanel(
-      'https://example.com/buy',
-      'https://example.com/docs',
-      '25.2.0',
-      'null', // String "null" instead of actual null
-    );
-
-    const triggerElement = document.querySelector('dx-license-trigger');
-    expect(triggerElement).not.toBeNull();
-
-    // Check that the subscriptions attribute is set to "null"
-    const subscriptionsAttr = triggerElement?.getAttribute('subscriptions');
-    expect(subscriptionsAttr).toBe('null');
-
-    // The key test: ensure the panel element doesn't show this text
-    // This would fail if we remove the check for subscriptions !== 'null'
-    const panelElement = document.querySelector('dx-license');
-    if (panelElement) {
-      const text = panelElement.textContent ?? '';
-      expect(text).not.toContain('Included in Subscriptions: null');
-    }
-  });
-
   it('should not display subscription text when subscriptions parameter is empty string', () => {
     renderTrialPanel(
       'https://example.com/buy',
