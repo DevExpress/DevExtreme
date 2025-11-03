@@ -34,7 +34,8 @@
     }
 
     .dx-fileuploader-files-container {
-      padding: 2px 3px 3px 3px;
+      padding: $messagebox-file-container-padding;
+      padding-top: $messagebox-file-container-padding-top;
       gap: $gap;
       grid-template-columns: repeat(auto-fit, $chat-file-container-width);
       min-width: $chat-file-container-width;

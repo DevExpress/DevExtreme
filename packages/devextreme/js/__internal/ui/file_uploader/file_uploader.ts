@@ -10,7 +10,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import Callbacks from '@js/core/utils/callbacks';
 import { extend } from '@js/core/utils/extend';
-import { getOffset, getWidth } from '@js/core/utils/size';
+import { getOffset, getOuterWidth, getWidth } from '@js/core/utils/size';
 import { isDefined, isFunction, isNumeric } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
@@ -788,7 +788,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     const buttonsWidth = getWidth($buttonContainer) * (cancelButtonsCount + uploadButtonsCount);
     const $fileSize = this._$filesContainer?.find(`.${FILEUPLOADER_FILE_SIZE_CLASS}`).eq(0);
     const $icon = this._$filesContainer?.find(`.${FILEUPLOADER_FILE_ICON_CLASS}`).eq(0);
-    const iconWidth = _showFileIcon ? getWidth($icon) : 0;
+    const iconWidth = _showFileIcon ? getOuterWidth($icon) : 0;
 
     const prevFileSize = $fileSize?.text();
     $fileSize?.text('1000 Mb');
