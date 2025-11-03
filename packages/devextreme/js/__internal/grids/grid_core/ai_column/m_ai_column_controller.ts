@@ -101,8 +101,8 @@ export class AIColumnController extends Controller {
     this.aiColumnIntegrationController.abortRequest(columnName);
   }
 
-  public getAIColumnText(columnName: string, key: any): void {
-
+  public getAIColumnText(columnName: string, key: unknown): void {
+    this.aiColumnIntegrationController.getAIColumnText(columnName, key as PropertyKey);
   }
 
   public dispose(): void {

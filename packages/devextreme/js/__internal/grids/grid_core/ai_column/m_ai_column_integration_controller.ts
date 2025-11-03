@@ -129,6 +129,7 @@ export class AIColumnIntegrationController extends Controller {
           };
 
           this.executeAction('onAIColumnResponseReceived', args);
+          this.aiColumnCacheController.setCachedResponse(columnName, finalResponse.data);
           this.showResult(
             columnName,
             finalResponse.data,
@@ -161,6 +162,14 @@ export class AIColumnIntegrationController extends Controller {
 
   public showError(message: string): void {
     this.errorHandlingController?.showToastError(message);
+  }
+
+  public getAIColumnText(columnName: string, key: PropertyKey): void {
+    this.aiColumnCacheController.getCachedString(columnName, key);
+  }
+
+  public clearAIColumn(columnName: string): void {
+    this.aiColumnCacheController.clearCache(columnName);
   }
 
   private getAIIntegration(columnName: string): AIIntegration | null {
