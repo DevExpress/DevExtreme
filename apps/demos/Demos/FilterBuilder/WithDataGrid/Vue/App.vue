@@ -26,9 +26,7 @@ import { ref } from 'vue';
 import DxFilterBuilder from 'devextreme-vue/filter-builder';
 import DxButton from 'devextreme-vue/button';
 import DxDataGrid from 'devextreme-vue/data-grid';
-import {
-  filter, fields, columns, products,
-} from './data.ts';
+import { filter, fields, columns, products } from './data.ts';
 
 const filterValue = ref(filter);
 const gridFilterValue = ref(filter);
