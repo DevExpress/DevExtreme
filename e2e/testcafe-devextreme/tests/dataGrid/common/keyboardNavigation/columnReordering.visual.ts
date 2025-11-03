@@ -1269,7 +1269,7 @@ test('reorder column to right when adaptability is enabled and there are hidden 
     .pressKey('ctrl+right');
 
   await takeScreenshot(
-    'reorder_column_to_right_when_there_are_hidden_columns',
+    'reorder_column_to_right_when_there_are_hidden_columns.png',
     dataGrid.element,
   );
 
