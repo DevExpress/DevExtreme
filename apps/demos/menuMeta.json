@@ -586,6 +586,12 @@
                   "/Models/SampleData/DataGridEmployees.cs"
                 ],
                 "DemoType": "Web"
+              },
+              {
+                "Title": "AI Column",
+                "Name": "AIColumn",
+                "Widget": "DataGrid",
+                "DemoType": "Web"
               }
             ]
           },
@@ -1331,6 +1337,12 @@
                   "/Models/TreeList/Employee.cs",
                   "/Models/SampleData/TreeListEmployees.cs"
                 ],
+                "DemoType": "Web"
+              },
+              {
+                "Title": "AI Column",
+                "Name": "AIColumn",
+                "Widget": "TreeList",
                 "DemoType": "Web"
               }
             ]
