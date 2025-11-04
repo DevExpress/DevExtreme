@@ -20,6 +20,7 @@ import type { SelectionController } from '@ts/grids/grid_core/selection/m_select
 import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m_state_storing_core';
 import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
 
+import { AI_COLUMN_NAME } from '../ai_column/const';
 import modules from '../m_modules';
 import type {
   Controllers, Module,
@@ -63,7 +64,7 @@ const changePaging = function (that, optionName, value) {
   return 0;
 };
 
-interface HandleDataChangedArguments {
+export interface HandleDataChangedArguments {
   changeType?: 'refresh' | 'update' | 'loadError';
   isDelayed?: boolean;
   isLiveUpdate?: boolean;
@@ -803,7 +804,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     for (let i = 0; i < columns.length; i++) {
       const column = columns[i];
       value = isModified ? undefined : null;
-      if (!column.command) {
+      if (!column.command || column.type === AI_COLUMN_NAME) {
         if (column.calculateCellValue) {
           value = column.calculateCellValue(data);
         } else if (column.dataField) {

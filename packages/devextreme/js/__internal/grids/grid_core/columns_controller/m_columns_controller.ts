@@ -92,6 +92,7 @@ export interface Column extends ColumnBase {
   visibleWidth?: string | number;
   hidingPriority?: number;
   ai?: ColumnAIOptions;
+  command?: string;
 }
 
 export class ColumnsController extends modules.Controller {
@@ -1742,10 +1743,13 @@ export class ColumnsController extends modules.Controller {
       extend(true, calculatedColumnOptions, {
         allowSorting: false,
         allowGrouping: false,
-        calculateCellValue() {
-          return null;
-        },
       });
+
+      if (columnOptions?.type !== AI_COLUMN_NAME) {
+        calculatedColumnOptions.calculateCellValue = function () {
+          return null;
+        };
+      }
     }
 
     if (bandColumn) {
