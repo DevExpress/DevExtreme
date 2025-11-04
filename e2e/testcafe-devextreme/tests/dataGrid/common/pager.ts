@@ -66,7 +66,7 @@ test('Full size pager', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok();
-}).skip.before(async () => createDataGridWithPager());
+}).before(async () => createDataGridWithPager());
 
 test.meta({ browserSize: [350, 600] })('Compact pager', async (t) => {
   const dataGrid = new DataGrid('#container');
