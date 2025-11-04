@@ -1528,7 +1528,7 @@ describe('Appointment Popup Form', () => {
       expect(POM.popup.component.option('visible')).toBe(true);
       expect(onHiding).not.toHaveBeenCalled();
 
-      POM.popup.getCancelButton().click();
+      scheduler.hideAppointmentPopup();
 
       expect(POM.popup.component.option('visible')).toBe(false);
       expect(onHiding).toHaveBeenCalled();
