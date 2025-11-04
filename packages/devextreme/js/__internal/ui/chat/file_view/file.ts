@@ -5,7 +5,7 @@ import type { ClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type {
   Attachment,
-  AttachmentDownloadEvent,
+  AttachmentDownloadClickEvent,
 } from '@js/ui/chat';
 import { getImageContainer } from '@ts/core/utils/m_icon';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
@@ -23,7 +23,7 @@ export type Properties = DOMComponentProperties<File> & {
 
   data: Attachment;
 
-  onDownload?: (e: AttachmentDownloadEvent) => void;
+  onDownload?: (e: AttachmentDownloadClickEvent) => void;
 };
 
 export const CHAT_FILE_CLASS = 'dx-chat-file';
@@ -35,7 +35,7 @@ const CHAT_FILE_DOWNLOAD_BUTTON_CLASS = 'dx-chat-file-download-button';
 class File extends DOMComponent<File, Properties> {
   private _downloadButton?: Button | null;
 
-  private _downloadAction?: (e: Partial<AttachmentDownloadEvent>) => void;
+  private _downloadAction?: (e: Partial<AttachmentDownloadClickEvent>) => void;
 
   _getDefaultOptions(): Properties {
     return {
