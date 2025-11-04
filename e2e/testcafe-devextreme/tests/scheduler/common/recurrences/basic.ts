@@ -1,25 +1,31 @@
-import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import dataSource from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture`Rendering of the recurrence appointments in  Scheduler `
   .page(url(__dirname, '../../../container.html'));
 
 test('Drag-n-drop recurrence appointment between dateTable and allDay panel', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Simple recurrence appointment');
 
-  await t.expect(await compareScreenshot(t, 'basic-recurrence-appointment-init.png')).ok();
+  await testScreenshot(t, takeScreenshot, 'basic-recurrence-appointment-init.png');
 
   await t
     .dragToElement(draggableAppointment.element, scheduler.getAllDayTableCell(0), { speed: 0.5 })
     .wait(300)
-    .expect(scheduler.getAppointmentCount()).eql(7);
+    .expect(scheduler.getAppointmentCount()).eql(7)
+      .wait(500);
 
-  await t.wait(500);
-  await t.expect(await compareScreenshot(t, 'basic-recurrence-appointment-after-drag.png')).ok();
+  await testScreenshot(t, takeScreenshot, 'basic-recurrence-appointment-after-drag.png');
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
 }).before(async () => createScheduler({
   dataSource,
   startDayHour: 1,
