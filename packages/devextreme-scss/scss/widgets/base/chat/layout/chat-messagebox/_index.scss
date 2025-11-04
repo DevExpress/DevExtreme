@@ -22,6 +22,12 @@
         padding: 0;
       }
     }
+
+    > .dx-texteditor-container {
+      .dx-texteditor-input {
+        max-height: 7.1em;
+      }
+    }
   }
 }
 
