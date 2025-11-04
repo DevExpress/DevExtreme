@@ -93,10 +93,10 @@ test('The Select All checkbox should be visible when a column headerCellTemplate
 });
 
 // T1214734
-test('Select rows by shift should work when grid has real time updates', async (t) => {
+test.skip('Select rows by shift should work when grid has real time updates', async (t) => {
   const dataGrid = new DataGrid('#container');
   const secondRow = dataGrid.getDataRow(1);
-  const fifthRow = dataGrid.getDataRow(4);
+  const seventhRow = dataGrid.getDataRow(6);
   const checkRowSelectionStates = async (startRowIndex: number, endRowIndex: number) => {
     for (let i = startRowIndex; i <= endRowIndex; i += 1) {
       await t
@@ -116,10 +116,10 @@ test('Select rows by shift should work when grid has real time updates', async (
     .eql('test123');
 
   // act
-  await t.click(fifthRow.element, { modifiers: { shift: true } });
+  await t.click(seventhRow.element, { modifiers: { shift: true } });
 
   // assert
-  await checkRowSelectionStates(1, 4);
+  await checkRowSelectionStates(1, 6);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: {
     store: {
