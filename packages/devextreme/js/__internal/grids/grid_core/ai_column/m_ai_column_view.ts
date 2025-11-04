@@ -34,7 +34,7 @@ export const columnHeadersViewExtender = (
       {
         key: 'autoFill',
         icon: ICON_NAMES.autoFill,
-        text: messageLocalization.format('dxDataGrid-aiDropDownButtonAutofillItem'),
+        text: messageLocalization.format('dxDataGrid-aiDropDownAutofill'),
       },
       {
         key: 'regenerate',
@@ -45,7 +45,7 @@ export const columnHeadersViewExtender = (
       {
         key: 'clear',
         icon: ICON_NAMES.clear,
-        text: messageLocalization.format('dxDataGrid-aiDropDownButtonClearItem'),
+        text: messageLocalization.format('dxDataGrid-aiDropDownClear'),
         disabled: !column.ai?.prompt,
       },
     ];
