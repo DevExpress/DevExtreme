@@ -204,7 +204,7 @@ const main = (): void => {
   } catch (error) {
     console.error('⚠ Failed to build plugin:', (error as Error).message);
     console.error('  The plugin will be built on first use by NX');
-    process.exit(0);
+    process.exit(1);
   }
 };
 

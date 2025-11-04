@@ -14,7 +14,7 @@
     },
     "regenerate": {
       "executor": "devextreme-nx-infra-plugin:generate-components",
-      "dependsOn": ["devextreme-metadata:generate","clean"],
+      "dependsOn": ["devextreme-metadata:generate", "clean"],
       "options": {
         "metadataPath": "../devextreme-metadata/dist/integration-data.json",
         "componentsDir": "./src",
@@ -137,7 +137,6 @@
       "{projectRoot}/devextreme-metadata/**/*",
       "{projectRoot}/src/**/*",
       "!{projectRoot}/src/**/__tests__/*",
-      "{projectRoot}/build.config.js",
       "{projectRoot}/tsconfig*",
       "{workspaceRoot}/tsconfig.json"
     ],
