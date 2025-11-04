@@ -1827,8 +1827,144 @@ describe('API Methods', () => {
     });
   });
 
-  // TODO: implement after column cache is done
-  // describe('getAIColumnValue', () => { });
+  describe('getAIColumnValue', () => {
+    it('should return undefined if there is no value for the row', async () => {
+      const columnAIIntegration = new AIIntegration({
+        sendRequest(): RequestResult {
+          return {
+            promise: new Promise<string>(() => { }),
+            abort: (): void => { },
+          };
+        },
+      });
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+          { id: 2, name: 'Name 2', value: 20 },
+        ],
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration: columnAIIntegration,
+              mode: 'manual',
+              prompt: 'Test prompt',
+            },
+          },
+        ],
+      });
+      expect(instance.getAIColumnText('myColumn', 1)).toBeUndefined();
+      expect(instance.getAIColumnText('myColumn', 2)).toBeUndefined();
+      instance.sendAIColumnRequest('myColumn');
+      await Promise.resolve();
+      expect(instance.getAIColumnText('myColumn', 1)).toBeUndefined();
+      expect(instance.getAIColumnText('myColumn', 2)).toBeUndefined();
+    });
+
+    it('should support string keys', async () => {
+      const aiIntegrationResult = (): RequestResult => ({
+        promise: new Promise<string>((resolve) => {
+          const result = {
+            a1: 'Response Name A1',
+            b2: 'Response Name B2',
+          };
+          resolve(JSON.stringify(result));
+        }),
+        abort: (): void => {
+          abortSpy();
+        },
+      });
+
+      const columnAIIntegration = new AIIntegration({
+        sendRequest(): RequestResult {
+          return aiIntegrationResult();
+        },
+      });
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 'a1', name: 'Name A1', value: 10 },
+          { id: 'b2', name: 'Name B2', value: 20 },
+        ],
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration: columnAIIntegration,
+              mode: 'manual',
+              prompt: 'Test prompt',
+            },
+          },
+        ],
+      });
+
+      instance.sendAIColumnRequest('myColumn');
+      await Promise.resolve();
+      expect(instance.getAIColumnText('myColumn', 'a1')).toBe('Response Name A1');
+      expect(instance.getAIColumnText('myColumn', 'b2')).toBe('Response Name B2');
+    });
+
+    it('should support number keys', async () => {
+      const aiIntegrationResult = (): RequestResult => ({
+        promise: new Promise<string>((resolve) => {
+          const result = {
+            1: 'Response Name 1',
+            2: 'Response Name 2',
+          };
+          resolve(JSON.stringify(result));
+        }),
+        abort: (): void => {
+          abortSpy();
+        },
+      });
+
+      const columnAIIntegration = new AIIntegration({
+        sendRequest(): RequestResult {
+          return aiIntegrationResult();
+        },
+      });
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+          { id: 2, name: 'Name 2', value: 20 },
+        ],
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration: columnAIIntegration,
+              mode: 'manual',
+              prompt: 'Test prompt',
+            },
+          },
+        ],
+      });
+
+      instance.sendAIColumnRequest('myColumn');
+      await Promise.resolve();
+      expect(instance.getAIColumnText('myColumn', 1)).toBe('Response Name 1');
+      expect(instance.getAIColumnText('myColumn', 2)).toBe('Response Name 2');
+      expect(instance.getAIColumnText('myColumn', '1')).toBe('Response Name 1');
+      expect(instance.getAIColumnText('myColumn', '2')).toBe('Response Name 2');
+    });
+  });
 });
 
 describe('API Handlers', () => {
