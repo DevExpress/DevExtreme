@@ -4,6 +4,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { changeTheme } from '../../../../helpers/changeTheme';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Scheduler header: material theme`
   .page(url(__dirname, '../../../container.html'))
@@ -41,7 +42,6 @@ test('viewSwitcher dropdown button popup should have a specified class', async (
 
   await t
     .click(dropDownButton.element)
-
     .expect(Selector(viewSwitcherDropDownButtonContent).count)
     .eql(1);
 }).before(async () => {
@@ -59,27 +59,23 @@ test('The toolbar should not display if the config is empty', async (t) => {
 
   const scheduler = new Scheduler('#container');
 
-  await t
-    .expect(await takeScreenshot('scheduler-with-empty-toolbar-config.png'))
-    .ok();
+  await testScreenshot(t, takeScreenshot, 'scheduler-with-empty-toolbar-config.png', {
+    theme: 'material.blue.light',
+  });
 
   await scheduler.option('toolbar', { items: ['viewSwitcher'] });
 
-  await t
-    .expect(await takeScreenshot('scheduler-with-non-empty-toolbar-config.png'))
-    .ok();
+  await testScreenshot(t, takeScreenshot, 'scheduler-with-non-empty-toolbar-config.png', {
+    theme: 'material.blue.light',
+  });
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
-  await changeTheme('material.blue.light');
-
-  return createWidget('dxScheduler', {
-    currentDate: new Date(2020, 2, 2),
-    currentView: 'day',
-    views: ['day', 'week'],
-    height: 580,
-    toolbar: { items: [] },
-  });
-});
+}).before(async () => createWidget('dxScheduler', {
+  currentDate: new Date(2020, 2, 2),
+  currentView: 'day',
+  views: ['day', 'week'],
+  height: 580,
+  toolbar: { items: [] },
+}));
