@@ -4,6 +4,7 @@ import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { defaultConfig } from '../helpers/data';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const DATA_GRID_SELECTOR = '#container';
 
@@ -19,13 +20,13 @@ safeSizeTest('Sticky columns with master-detail', async (t) => {
 
   await dataGrid.apiExpandRow(1);
 
-  await takeScreenshot('masterdetail-scroll-begin.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'masterdetail-scroll-begin.png', { element: dataGrid.element });
 
   await dataGrid.scrollTo(t, { x: 100 });
-  await takeScreenshot('masterdetail-scroll-center.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'masterdetail-scroll-center.png', { element: dataGrid.element });
 
   await dataGrid.scrollTo(t, { x: 10000 });
-  await takeScreenshot('masterdetail-scroll-end.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'masterdetail-scroll-end.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())
@@ -50,11 +51,11 @@ safeSizeTest('Master detail resizing', async (t) => {
 
   await dataGrid.apiExpandRow(1);
 
-  await takeScreenshot('masterdetail-before-resize.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'masterdetail-before-resize.png', { element: dataGrid.element });
 
   await dataGrid.option('width', 500);
 
-  await takeScreenshot('masterdetail-after-resize.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'masterdetail-after-resize.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())

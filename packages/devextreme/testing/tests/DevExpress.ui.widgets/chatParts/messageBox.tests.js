@@ -5,9 +5,10 @@ import config from 'core/config';
 
 import MessageBox, {
     TYPING_END_DELAY,
-    CHAT_MESSAGEBOX_TEXTAREA_CLASS,
 } from '__internal/ui/chat/message_box/message_box';
-import ChatTextArea from '__internal/ui/chat/message_box/chat_text_area';
+import ChatTextArea, {
+    CHAT_TEXTAREA_CLASS,
+} from '__internal/ui/chat/message_box/chat_text_area';
 import Button from 'ui/button';
 import FileUploader from 'ui/file_uploader';
 import EditingPreview, {
@@ -28,7 +29,7 @@ const moduleConfig = {
             this.instance = new MessageBox($('#component'), options);
             this.$element = $(this.instance.$element());
 
-            this.$textArea = this.$element.find(`.${CHAT_MESSAGEBOX_TEXTAREA_CLASS}`);
+            this.$textArea = this.$element.find(`.${CHAT_TEXTAREA_CLASS}`);
             this.textArea = ChatTextArea.getInstance(this.$textArea);
 
             this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);

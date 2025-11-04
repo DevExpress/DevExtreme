@@ -2,16 +2,9 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import PivotGrid from 'devextreme-testcafe-models/pivotGrid';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { isMaterialBased, testScreenshot } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
-const testFixture = (): FixtureFn => {
-  if (isMaterialBased()) {
-    return fixture.disablePageReloads.skip;
-  }
-  return fixture.disablePageReloads;
-};
-
-testFixture().disablePageReloads`PivotGrid_scrolling`
+fixture.disablePageReloads`PivotGrid_scrolling`
   .page(url(__dirname, '../../container.html'));
 
 const createData = (count, innerCount) => {

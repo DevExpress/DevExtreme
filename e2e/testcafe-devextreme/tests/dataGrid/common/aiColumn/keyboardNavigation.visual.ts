@@ -2,6 +2,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Ai Column.KeyboardNavigation.Visual`
   .page(url(__dirname, '../../../container.html'));
@@ -21,15 +22,15 @@ test('Check keyboard navigation for AI column', async (t) => {
   await t.pressKey('tab');
 
   // assert
-  await t.expect(headerRow.getHeaderCell(1).isFocused).ok();
+  await t.expect(headerRow.getCommandCell(1).element.focused).ok();
 
   // act
   await t.pressKey('tab');
 
   // assert
-  await t.expect(headerRow.getHeaderCell(1).getAIDropDownButton().isFocused).ok();
+  await t.expect(headerRow.getCommandCell(1).getAIDropDownButton().isFocused).ok();
 
-  await takeScreenshot('datagrid__ai-column__focused-dropdown-button.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'datagrid__ai-column__focused-dropdown-button.png', { element: dataGrid.element });
 
   // act
   await t.pressKey('tab');
