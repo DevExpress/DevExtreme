@@ -4,6 +4,7 @@ import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { getData } from '../../helpers/generateDataSourceData';
 import { safeSizeTest } from '../../../../helpers/safeSizeTest';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const GRID_SELECTOR = '#container';
 
@@ -18,11 +19,13 @@ safeSizeTest('Validation popup screenshot', async (t) => {
   await t
     .maximizeWindow()
     .click(dataGrid.getDataCell(0, 0).element)
-    .pressKey('ctrl+a backspace enter')
-    // act
-    .expect(await takeScreenshot('validation-popup.png', dataGrid.element))
-    .ok()
-    // assert
+    .pressKey('ctrl+a backspace enter');
+
+  // act
+  await testScreenshot(t, takeScreenshot, 'validation-popup.png', { element: dataGrid.element });
+
+  // assert
+  await t
     .expect(dataGrid.getRevertTooltip().exists)
     .ok()
     .expect(dataGrid.getInvalidMessageTooltip().exists)
@@ -58,9 +61,9 @@ safeSizeTest('Validation popup with open master detail', async (t) => {
     .pressKey('ctrl+a backspace enter');
 
   // act
-  await takeScreenshot('validation-popup_master-detail.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'validation-popup_master-detail.png', { element: dataGrid.element });
   await dataGrid.scrollTo(t, { y: 150 });
-  await takeScreenshot('validation-popup_master-detail_after-scroll.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'validation-popup_master-detail_after-scroll.png', { element: dataGrid.element });
 
   // assert
   await t.expect(dataGrid.getRevertTooltip().exists)
@@ -102,9 +105,9 @@ safeSizeTest('Validation popup with open master detail and fixed columns', async
     .pressKey('ctrl+a backspace enter');
 
   // act
-  await takeScreenshot('validation-popup_master-detail_fixed-column.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'validation-popup_master-detail_fixed-column.png', { element: dataGrid.element });
   await dataGrid.scrollTo(t, { y: 150 });
-  await takeScreenshot('validation-popup_master-detail_fixed-column_after-scroll.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'validation-popup_master-detail_fixed-column_after-scroll.png', { element: dataGrid.element });
 
   // assert
   await t.expect(dataGrid.getRevertTooltip().exists)

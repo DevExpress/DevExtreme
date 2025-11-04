@@ -1,19 +1,21 @@
 <dx-vector-map id="vector-map" [bounds]="[-118, 52, -80, 20]">
-  <dxo-loading-indicator [show]="true"></dxo-loading-indicator>
-  <dxi-layer
+  <dxo-vector-map-loading-indicator
+    [show]="true"
+  ></dxo-vector-map-loading-indicator>
+  <dxi-vector-map-layer
     [dataSource]="usaMap"
     borderColor="#ffffff"
     [hoverEnabled]="false"
-  ></dxi-layer>
-  <dxi-layer
+  ></dxi-vector-map-layer>
+  <dxi-vector-map-layer
     [dataSource]="weather"
     dataField="url"
     elementType="image"
     type="marker"
     [size]="51"
   >
-    <dxo-label dataField="text">
-      <dxo-font [size]="14"></dxo-font>
-    </dxo-label>
-  </dxi-layer>
+    <dxo-vector-map-label dataField="text">
+      <dxo-vector-map-font [size]="14"></dxo-vector-map-font>
+    </dxo-vector-map-label>
+  </dxi-vector-map-layer>
 </dx-vector-map>
