@@ -4,6 +4,7 @@ import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { createWidget } from '../../../../helpers/createWidget';
 import { getData } from '../../helpers/generateDataSourceData';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const DATA_GRID_SELECTOR = '#container';
 
@@ -20,7 +21,7 @@ safeSizeTest('Move left fixed column to the right', async (t) => {
   // act
   await t.drag(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).element, 400, 0);
 
-  await takeScreenshot('move_left_fixed_column_to_right.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'move_left_fixed_column_to_right.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -54,7 +55,7 @@ safeSizeTest('Move right fixed column to the left', async (t) => {
   // TODO: issue will be fixed in the card 7Mct6tJU
   await dataGrid.scrollTo(t, { x: 0 });
 
-  await takeScreenshot('move_right_fixed_column_to_left.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'move_right_fixed_column_to_left.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -85,7 +86,7 @@ safeSizeTest('Move fixed column with fixedPosition = \'sticky\' to the right', a
   // act
   await t.drag(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(5).element, 200, 0);
 
-  await takeScreenshot('move_fixed_column_with_sticky_position_to_right.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'move_fixed_column_with_sticky_position_to_right.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -122,7 +123,7 @@ safeSizeTest('Move left fixed band column to the right', async (t) => {
   // act
   await t.drag(dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(0).element, 500, 0);
 
-  await takeScreenshot('move_left_fixed_band_column_to_right.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'move_left_fixed_band_column_to_right.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -161,7 +162,7 @@ safeSizeTest('Move right fixed band column to the left', async (t) => {
   // TODO: issue will be fixed in the card 7Mct6tJU
   await dataGrid.scrollTo(t, { x: 0 });
 
-  await takeScreenshot('move_right_fixed_band_column_to_left.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'move_right_fixed_band_column_to_left.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -197,7 +198,7 @@ safeSizeTest('Move fixed band column with fixedPosition=\'sticky\' to the right'
   // act
   await t.drag(dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(0).element, 400, 0);
 
-  await takeScreenshot('move_fixed_band_column_with_sticky_position_to_right.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'move_fixed_band_column_with_sticky_position_to_right.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -231,7 +232,7 @@ safeSizeTest('Check the draggable source column while moving the fixed column on
   // act
   await dataGrid.moveHeader(24, -200, 5, true);
 
-  await takeScreenshot('draggable_source_column_with_fixed_columns_(generic.light).png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'draggable_source_column_with_fixed_columns.png', { element: dataGrid.element });
 
   // assert
   await t

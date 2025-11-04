@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`No Data`
   .page(url(__dirname, '../../../container.html'));
@@ -14,9 +15,8 @@ test('The noDataText element should be centered (T1178289)', async (t) => {
 
   await dataGrid.option('dataSource', []);
 
+  await testScreenshot(t, takeScreenshot, 'grid-no-data-text-position.png', { element: dataGrid.element });
   await t
-    .expect(await takeScreenshot('grid-no-data-text-position.png', dataGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {

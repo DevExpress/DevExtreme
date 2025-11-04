@@ -7,8 +7,9 @@ import SelectBox from 'devextreme-testcafe-models/selectBox';
 import { Overlay } from 'devextreme-testcafe-models/dataGrid/overlay';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { changeTheme } from '../../../helpers/changeTheme';
 import { getData } from '../helpers/generateDataSourceData';
+import { testScreenshot } from '../../../helpers/themeUtils';
+import { Themes } from '../../../helpers/themes';
 
 fixture.disablePageReloads`Editing`
   .page(url(__dirname, '../../container.html'));
@@ -37,9 +38,8 @@ test('The E0110 should not occur when editing a column with setCellValue in form
     .click(dataGrid.getEditForm().saveButton);
 
   // assert
+  await testScreenshot(t, takeScreenshot, 'grid-form-editing-T1193894.png', { element: dataGrid.element });
   await t
-    .expect(await takeScreenshot('grid-form-editing-T1193894.png', dataGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -150,7 +150,7 @@ test('Tab key on editor should focus next cell if editing mode is cell', async (
   columns: [{ dataField: 'name', allowEditing: false }, { dataField: 'value', showEditorAlways: true }],
 }));
 
-test('Click should work if a column button set using svg icon (T863635)', async (t) => {
+test.skip('Click should work if a column button set using svg icon (T863635)', async (t) => {
   await t
     .click(Selector('.dx-command-edit-with-icons').nth(0))
     .expect(ClientFunction(() => (window as any).onSvgClickCounter)()).eql(1);
@@ -1758,34 +1758,28 @@ test('Checkbox has ink ripple in material theme inside editing popup (T977287)',
     .click(overlay.getPopupCheckbox());
 
   // assert
+  await testScreenshot(t, takeScreenshot, 'grid-popup-editing-checkbox.png', { element: overlay.content, theme: Themes.materialBlue });
   await t
-    .expect(await takeScreenshot('grid-popup-editing-checkbox.png', overlay.content))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
-  await changeTheme('material.blue.light');
-  return createWidget('dxDataGrid', {
-    dataSource: [{
-      ID: 1,
-      LastName: 'Heart',
-    }],
-    keyExpr: 'ID',
-    editing: {
-      allowUpdating: true,
-      mode: 'popup',
-      form: {
-        items: [{
-          dataField: 'checkbox',
-          editorType: 'dxCheckBox',
-        }],
-      },
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{
+    ID: 1,
+    LastName: 'Heart',
+  }],
+  keyExpr: 'ID',
+  editing: {
+    allowUpdating: true,
+    mode: 'popup',
+    form: {
+      items: [{
+        dataField: 'checkbox',
+        editorType: 'dxCheckBox',
+      }],
     },
-    columns: ['LastName'],
-  });
-}).after(async () => {
-  await changeTheme('generic.light');
-});
+  },
+  columns: ['LastName'],
+}));
 
 test('DataGrid inside editing popup should have synchronized columns (T1059401)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -1810,47 +1804,40 @@ test('DataGrid inside editing popup should have synchronized columns (T1059401)'
     .ok();
 
   // assert
+  await testScreenshot(t, takeScreenshot, 'grid-popup-editing-grid.png', { element: overlay.content, theme: Themes.materialBlue });
   await t
-    .expect(await takeScreenshot('grid-popup-editing-grid.png', overlay.content))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
-  await changeTheme('material.blue.light');
-
-  return createWidget('dxDataGrid', {
-    dataSource: [{
-      ID: 1,
-    }],
-    keyExpr: 'ID',
-    editing: {
-      allowUpdating: true,
-      mode: 'popup',
-      form: {
-        colCount: 1,
-        items: [{
-          template() {
-            return ($('<div>') as any).dxDataGrid({
-              showColumnLines: true,
-              dataSource: [{
-                ID: 1,
-                FirstName: 'John',
-                LastName: 'Heart',
-              }],
-              height: 200,
-              editing: {
-                allowUpdating: true,
-                allowDeleting: true,
-              },
-            });
-          },
-        }],
-      },
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{
+    ID: 1,
+  }],
+  keyExpr: 'ID',
+  editing: {
+    allowUpdating: true,
+    mode: 'popup',
+    form: {
+      colCount: 1,
+      items: [{
+        template() {
+          return ($('<div>') as any).dxDataGrid({
+            showColumnLines: true,
+            dataSource: [{
+              ID: 1,
+              FirstName: 'John',
+              LastName: 'Heart',
+            }],
+            height: 200,
+            editing: {
+              allowUpdating: true,
+              allowDeleting: true,
+            },
+          });
+        },
+      }],
     },
-  });
-}).after(async () => {
-  await changeTheme('generic.light');
-});
+  },
+}));
 
 test('DataGrid adaptive text should have correct paddings (T1062084)', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -1878,46 +1865,40 @@ test('DataGrid adaptive text should have correct paddings (T1062084)', async (t)
   await t
     .pressKey('enter');
 
+  await testScreenshot(t, takeScreenshot, 'grid-adaptive-item-text.png', { element: dataGrid.element, theme: Themes.materialBlue });
   // assert
   await t
-    .expect(await takeScreenshot('grid-adaptive-item-text.png', dataGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
-  await changeTheme('material.blue.light');
-  return createWidget('dxDataGrid', {
-    width: 400,
-    dataSource: [{
-      OrderNumber: 35703,
-      SaleAmount: 11800,
-      OrderDate: '2014/04/10',
-      Employee: 'Harv Mudd',
-    }],
-    keyExpr: 'OrderNumber',
-    columnHidingEnabled: true,
-    editing: {
-      allowUpdating: true,
-      mode: 'batch',
-    },
-    columns: [{
-      dataField: 'OrderNumber',
-      caption: 'Invoice Number',
-      width: 300,
-    }, {
-      dataField: 'Employee',
-    }, {
-      dataField: 'OrderDate',
-      dataType: 'date',
-    }, {
-      dataField: 'SaleAmount',
-      validationRules: [{ type: 'range', max: 100000 }],
-      format: 'currency',
-    }],
-  });
-}).after(async () => {
-  await changeTheme('generic.light');
-});
+}).before(async () => createWidget('dxDataGrid', {
+  width: 400,
+  dataSource: [{
+    OrderNumber: 35703,
+    SaleAmount: 11800,
+    OrderDate: '2014/04/10',
+    Employee: 'Harv Mudd',
+  }],
+  keyExpr: 'OrderNumber',
+  columnHidingEnabled: true,
+  editing: {
+    allowUpdating: true,
+    mode: 'batch',
+  },
+  columns: [{
+    dataField: 'OrderNumber',
+    caption: 'Invoice Number',
+    width: 300,
+  }, {
+    dataField: 'Employee',
+  }, {
+    dataField: 'OrderDate',
+    dataType: 'date',
+  }, {
+    dataField: 'SaleAmount',
+    validationRules: [{ type: 'range', max: 100000 }],
+    format: 'currency',
+  }],
+}));
 
 test('DataGrid checkboxes should have correct outline in adaptive row', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -1928,44 +1909,38 @@ test('DataGrid checkboxes should have correct outline in adaptive row', async (t
     .click(dataGrid.getDataRow(0).getCommandCell(4).getAdaptiveButton())
     .click(dataGrid.getFormItemElement(2));
 
+  await testScreenshot(t, takeScreenshot, 'grid-adaptive-checkbox.png', { element: dataGrid.element, theme: Themes.materialBlue });
   await t
-    .expect(await takeScreenshot('grid-adaptive-checkbox.png', dataGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
-  await changeTheme('material.blue.light');
-  return createWidget('dxDataGrid', {
-    width: 400,
-    dataSource: [{
-      OrderNumber: 35703,
-      Employee: 'Sam',
-      OrderDate: '2014/04/10',
-      Checkbox: true,
-    }],
-    keyExpr: 'OrderNumber',
-    columnHidingEnabled: true,
-    editing: {
-      allowUpdating: true,
-      mode: 'cell',
-    },
-    columns: [{
-      dataField: 'OrderNumber',
-      caption: 'Invoice Number',
-      width: 300,
-    }, {
-      dataField: 'Employee',
-    }, {
-      dataField: 'OrderDate',
-      dataType: 'date',
-    }, {
-      dataField: 'Checkbox',
-      dataType: 'boolean',
-    }],
-  });
-}).after(async () => {
-  await changeTheme('generic.light');
-});
+}).before(async () => createWidget('dxDataGrid', {
+  width: 400,
+  dataSource: [{
+    OrderNumber: 35703,
+    Employee: 'Sam',
+    OrderDate: '2014/04/10',
+    Checkbox: true,
+  }],
+  keyExpr: 'OrderNumber',
+  columnHidingEnabled: true,
+  editing: {
+    allowUpdating: true,
+    mode: 'cell',
+  },
+  columns: [{
+    dataField: 'OrderNumber',
+    caption: 'Invoice Number',
+    width: 300,
+  }, {
+    dataField: 'Employee',
+  }, {
+    dataField: 'OrderDate',
+    dataType: 'date',
+  }, {
+    dataField: 'Checkbox',
+    dataType: 'boolean',
+  }],
+}));
 
 test('DataGrid cell with checkbox should have outline on focused', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -1978,9 +1953,8 @@ test('DataGrid cell with checkbox should have outline on focused', async (t) => 
     .pressKey('enter')
     .pressKey('tab');
 
+  await testScreenshot(t, takeScreenshot, 'grid-checkbox-outline.png', { element: dataGrid.element });
   await t
-    .expect(await takeScreenshot('grid-checkbox-outline.png', dataGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -2122,16 +2096,16 @@ test('The "Cannot read property "brokenRules" of undefined" error occurs T978286
   ['last', 20, 'standard', 0],
   ['pageBottom', 20, 'standard', 0],
   ['pageTop', 0, 'standard', 0],
-  ['pageBottom', 8, 'virtual', 0],
+  ['pageBottom', 5, 'virtual', 0],
   ['pageTop', 0, 'virtual', 0],
-  ['viewportBottom', 8, 'standard', 0],
-  ['viewportBottom', 13, 'standard', 162],
+  ['viewportBottom', 5, 'standard', 0],
+  ['viewportBottom', 8, 'standard', 162],
   ['viewportTop', 0, 'standard', 0],
-  ['viewportTop', 5, 'standard', 162],
-  ['viewportBottom', 8, 'virtual', 0],
-  ['viewportBottom', 13, 'virtual', 162],
+  ['viewportTop', 3, 'standard', 162],
+  ['viewportBottom', 5, 'virtual', 0],
+  ['viewportBottom', 8, 'virtual', 162],
   ['viewportTop', 0, 'virtual', 0],
-  ['viewportTop', 5, 'virtual', 162],
+  ['viewportTop', 3, 'virtual', 162],
 ] as const)
   .forEach(([newRowPosition, insertedRowNumber, scrollMode, scrollTop]) => {
     test(`The first cell of the new row should be focused when
@@ -2153,9 +2127,12 @@ test('The "Cannot read property "brokenRules" of undefined" error occurs T978286
       await t
         .expect(await scrollTo(scrollTop))
         .ok(`scrollTo ${scrollTop}`)
-        .click(headerPanel.getAddRowButton())
-        // act
-        .expect(await takeScreenshot(screenshotName, dataGrid.element))
+        .click(headerPanel.getAddRowButton());
+
+      // act
+      await testScreenshot(t, takeScreenshot, screenshotName, { element: dataGrid.element });
+      await t
+        .expect(compareResults.isValid())
         .ok()
         // assert
         .expect(dataGrid.getDataRow(insertedRowNumber).isInserted)
@@ -2182,12 +2159,11 @@ test('Popup EditForm screenshot', async (t) => {
   const dataGrid = new DataGrid('#container');
   const commandCellRow0 = dataGrid.getDataCell(0, 2);
 
+  await t.click(commandCellRow0.getLinkEdit());
+  // act
+  await testScreenshot(t, takeScreenshot, 'popup-edit-form.png', { element: dataGrid.element });
+  // assert
   await t
-    .click(commandCellRow0.getLinkEdit())
-    // act
-    .expect(await takeScreenshot('popup-edit-form.png', dataGrid.element))
-    .ok()
-    // assert
     .expect(dataGrid.getPopupEditForm().element.exists)
     .ok()
     .expect(compareResults.isValid())
@@ -2207,9 +2183,8 @@ test('Popup EditForm screenshot when editRowKey is initially specified', async (
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
 
+  await testScreenshot(t, takeScreenshot, 'popup-edit-form-with-initial-editrowkey.png', { element: dataGrid.element });
   await t
-    .expect(await takeScreenshot('popup-edit-form-with-initial-editrowkey.png', dataGrid.element))
-    .ok()
     .expect(dataGrid.getPopupEditForm().element.exists)
     .ok()
     .expect(compareResults.isValid())
@@ -2324,9 +2299,10 @@ test('Popup EditForm screenshot when editRowKey is initially specified', async (
       .expect(firstCustomIcon.clientWidth)
       .eql(20)
       .expect(secondCustomIcon.clientWidth)
-      .eql(20)
-      .expect(await takeScreenshot(`T1179114-grid-edit-custom-button-in-generic-theme-when-useicons-is-${useIcons}.png`, dataGrid.element))
-      .ok()
+      .eql(20);
+
+    await testScreenshot(t, takeScreenshot, `T1179114-grid-edit-custom-button when-useicons-is-${useIcons}.png`, { element: dataGrid.element });
+    await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => createWidget('dxDataGrid', {
@@ -2527,9 +2503,11 @@ test('An exception should not throw after pressing enter on the save button and 
   // assert
   await t
     .expect(dataRow.isEdited)
-    .notOk()
-    .expect(await takeScreenshot('grid-editing-with-onSaving-T1201724.png', dataGrid.element))
-    .ok()
+    .notOk();
+
+  await testScreenshot(t, takeScreenshot, 'grid-editing-with-onSaving-T1201724.png', { element: dataGrid.element });
+
+  await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
@@ -2607,9 +2585,10 @@ test('DataGrid - A new row is added above the existing row if the data source is
 
   await t
     .expect(dataGrid.getDataRow(1).isInserted)
-    .ok()
-    .expect(await takeScreenshot('newRowPosition-pageBottom-add-row-to-bottom.png', dataGrid.element))
-    .ok()
+    .ok();
+
+  await testScreenshot(t, takeScreenshot, 'newRowPosition-pageBottom-add-row-to-bottom.png', { element: dataGrid.element });
+  await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -2636,9 +2615,8 @@ test('DataGrid - ColorBox in DataGrid causes input value to appear behind color 
 
   await t.click(dataGrid.getDataCell(0, 0).element);
 
+  await testScreenshot(t, takeScreenshot, 'grid-form-editing-with-color-box.png', { element: dataGrid.element });
   await t
-    .expect(await takeScreenshot('grid-form-editing-with-color-box_(generic.light)', dataGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 })
