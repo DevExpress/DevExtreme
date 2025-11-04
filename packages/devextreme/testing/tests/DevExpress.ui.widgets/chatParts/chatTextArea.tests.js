@@ -84,7 +84,7 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
                 placeholder: 'Type a message',
                 autoResizeEnabled: true,
                 fileUploaderOptions: undefined,
-                maxHeight: '16em',
+                maxHeight: '53.86em',
                 valueChangeEvent: 'input',
             };
 
@@ -768,6 +768,64 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
                 $cancelButton.trigger('dxclick');
 
                 assert.strictEqual(this.sendButton.option('disabled'), true, 'send button is disabled after file removal');
+            });
+        });
+
+        QUnit.module('Integration with text option', () => {
+            QUnit.test('informer should be hidden when text option is changed', function(assert) {
+                this.showInformer('Test error message');
+
+                assert.strictEqual(this.$element.find(`.${INFORMER_CLASS}`).length, 1, 'informer is visible initially');
+
+                this.instance.option('text', 'new text');
+
+                assert.strictEqual(this.$element.find(`.${INFORMER_CLASS}`).length, 0, 'informer is hidden after text change');
+                assert.strictEqual(this.getInformer(), null, 'informer instance is null');
+            });
+
+            QUnit.test('informer should be hidden when text is typed in textarea', function(assert) {
+                this.showInformer('Test error message');
+
+                assert.strictEqual(this.$element.find(`.${INFORMER_CLASS}`).length, 1, 'informer is visible initially');
+
+                this.typeText('new text');
+
+                assert.strictEqual(this.$element.find(`.${INFORMER_CLASS}`).length, 0, 'informer is hidden after typing');
+                assert.strictEqual(this.getInformer(), null, 'informer instance is null');
+            });
+
+            QUnit.test('element height should be recalculated when informer is hidden by text change', function(assert) {
+                const initialHeight = this.$element.outerHeight();
+
+                this.showInformer('Test error message');
+
+                this.instance.option('text', 'new text');
+
+                const heightAfterTextChange = this.$element.outerHeight();
+
+                assert.strictEqual(heightAfterTextChange, initialHeight, 'element height returned to initial value after informer is hidden');
+            });
+
+            QUnit.test('informer timeout should be cleared when text option is changed', function(assert) {
+                this.showInformer('Test error message');
+
+                const timeoutId = this.instance._informerTimeoutId;
+
+                assert.notStrictEqual(timeoutId, undefined, 'timeout is set');
+
+                this.instance.option('text', 'new text');
+
+                assert.strictEqual(this.instance._informerTimeoutId, undefined, 'timeout is cleared');
+            });
+
+            QUnit.test('informer should be hidden when text is cleared', function(assert) {
+                this.showInformer('Test error message');
+
+                assert.strictEqual(this.$element.find(`.${INFORMER_CLASS}`).length, 1, 'informer is visible initially');
+
+                this.instance.option('text', '');
+
+                assert.strictEqual(this.$element.find(`.${INFORMER_CLASS}`).length, 0, 'informer is hidden after text is cleared');
             });
         });
     });
