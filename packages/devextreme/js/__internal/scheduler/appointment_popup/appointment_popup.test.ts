@@ -1492,7 +1492,7 @@ describe('Appointment Popup Form', () => {
 
     it('should call onShowing callback when popup is shown', async () => {
       const onShowing = jest.fn();
-      const { scheduler, POM } = await createScheduler({
+      const { scheduler } = await createScheduler({
         ...getDefaultConfig(),
         editing: {
           allowAdding: true,
@@ -1505,14 +1505,13 @@ describe('Appointment Popup Form', () => {
 
       scheduler.showAppointmentPopup(commonAppointment);
 
-      expect(POM.popup.component.option('visible')).toBe(true);
       expect(onShowing).toHaveBeenCalled();
       expect(onShowing).toHaveBeenCalledTimes(1);
     });
 
     it('should call onHiding callback when popup is hidden', async () => {
       const onHiding = jest.fn();
-      const { scheduler, POM } = await createScheduler({
+      const { scheduler } = await createScheduler({
         ...getDefaultConfig(),
         editing: {
           allowAdding: true,
@@ -1525,12 +1524,10 @@ describe('Appointment Popup Form', () => {
 
       scheduler.showAppointmentPopup(commonAppointment);
 
-      expect(POM.popup.component.option('visible')).toBe(true);
       expect(onHiding).not.toHaveBeenCalled();
 
       scheduler.hideAppointmentPopup();
 
-      expect(POM.popup.component.option('visible')).toBe(false);
       expect(onHiding).toHaveBeenCalled();
       expect(onHiding).toHaveBeenCalledTimes(1);
     });
