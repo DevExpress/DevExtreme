@@ -80,7 +80,7 @@ export const dragToHeaderPanel = async (
     await t.dragToElement(
       columnElement,
       insertBeforeColumn,
-      { destinationOffsetX: +5, destinationOffsetY: -20, speed: 0.5 },
+      { destinationOffsetX: +5, destinationOffsetY: -20, speed: 0.2 },
     );
   } else {
     const insertAfterColumn = headers.getHeaderItemNth(columnsNum - 1).element;
@@ -88,11 +88,11 @@ export const dragToHeaderPanel = async (
     await t.dragToElement(
       columnElement,
       insertAfterColumn,
-      { destinationOffsetX: -5, destinationOffsetY: -20, speed: 0.5 },
+      { destinationOffsetX: -5, destinationOffsetY: -20, speed: 0.2 },
     );
   }
 
-  await t.wait(100);
+  await t.wait(300);
 };
 
 export const dragToColumnChooser = async (

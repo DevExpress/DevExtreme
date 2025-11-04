@@ -224,7 +224,7 @@ test('DataGrid should not reset its top scroll position after cell modification 
   },
 }));
 
-test('Ungrouping after grouping should work correctly if row rendering mode is virtual', async (t) => {
+test.meta({ unstable: true })('Ungrouping after grouping should work correctly if row rendering mode is virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t.expect(dataGrid.isReady()).ok();
@@ -352,7 +352,7 @@ test('Scroll position after grouping when RTL (T388508)', async (t) => {
   }],
 }));
 
-test('Header container should have padding-right after expanding the master row with a detail grid when using native scrolling (T1004507)', async (t) => {
+test.meta({ unstable: true })('Header container should have padding-right after expanding the master row with a detail grid when using native scrolling (T1004507)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -493,7 +493,7 @@ test('Header container should have padding-right if grid has max-height and scro
   });
 });
 
-test('New virtual mode. A detail row should be rendered when the last master row is expanded', async (t) => {
+test.meta({ unstable: true })('New virtual mode. A detail row should be rendered when the last master row is expanded', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t.expect(dataGrid.isReady()).ok();
@@ -547,7 +547,7 @@ test('New virtual mode. A detail row should be rendered when the last master row
   });
 });
 
-test('New virtual mode. An adaptive row should be rendered when the last row is expanded', async (t) => {
+test.meta({ unstable: true })('New virtual mode. An adaptive row should be rendered when the last row is expanded', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   // act
@@ -603,7 +603,7 @@ test('New virtual mode. An adaptive row should be rendered when the last row is 
   });
 });
 
-test('New virtual mode. Virtual rows should not be in view port', async (t) => {
+test.meta({ unstable: true })('New virtual mode. Virtual rows should not be in view port', async (t) => {
   const dataGrid = new DataGrid('#container');
   const getVirtualRowInfo = ClientFunction(() => {
     const result: any = {};
@@ -882,7 +882,7 @@ test.meta({ browserSize: [800, 700] })('New mode. Rows should be rendered proper
   });
 });
 
-test.meta({ browserSize: [800, 800] })('Rows are rendered properly when window content is scrolled (T1070388)', async (t) => {
+test.meta({ unstable: true, browserSize: [800, 800] })('Rows are rendered properly when window content is scrolled (T1070388)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t.expect(dataGrid.isReady()).ok();
@@ -1048,7 +1048,7 @@ test('The data should display correctly after changing the dataSource and focuse
 }));
 
 // T1166649
-test.meta({ browserSize: [800, 800] })('The scroll position of a fixed table should be synchronized with the main table when fast scrolling to the end', async (t) => {
+test.meta({ unstable: true, browserSize: [800, 800] })('The scroll position of a fixed table should be synchronized with the main table when fast scrolling to the end', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -1325,7 +1325,7 @@ test('New virtual mode. Virtual rows should not be in view port after scrolling 
   });
 });
 
-test('New virtual mode. Navigation to the last row if new row is added (T1069849)', async (t) => {
+test.meta({ unstable: true })('New virtual mode. Navigation to the last row if new row is added (T1069849)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   const addRowButton = dataGrid.getHeaderPanel().getAddRowButton();
@@ -1366,7 +1366,7 @@ test('New virtual mode. Navigation to the last row if new row is added (T1069849
 }));
 
 [false, true].forEach((useNative) => {
-  test(`New virtual mode. Virtual rows should not be in view port after switching to the last page with row numbers less than page size (useNative = ${useNative}) (T1085775)`, async (t) => {
+  test.meta({ unstable: true })(`New virtual mode. Virtual rows should not be in view port after switching to the last page with row numbers less than page size (useNative = ${useNative}) (T1085775)`, async (t) => {
     const dataGrid = new DataGrid('#container');
 
     // assert

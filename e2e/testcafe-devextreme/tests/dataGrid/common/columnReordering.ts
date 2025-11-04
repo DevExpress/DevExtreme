@@ -224,10 +224,13 @@ test('HeaderRow should be highlighted when dragging column with allowColumnReord
 test('Column without allowReordering should have same position after dragging to groupPanel and back', async (t) => {
   const dataGrid = new DataGrid('#container');
 
-  await t.drag(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(2).element, -30, -30);
+  await t.expect(dataGrid.isReady()).ok();
+
+  await t.drag(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(2).element, -100, -50);
+
   await t.expect(dataGrid.getGroupPanel().getHeadersCount()).eql(1);
 
-  await t.drag(dataGrid.getGroupPanel().getHeader(0).element, 0, 30);
+  await t.drag(dataGrid.getGroupPanel().getHeader(0).element, 0, 50);
 
   const headers = await Promise.all([0, 1, 2, 3].map(
     (i) => dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(i).element.textContent,

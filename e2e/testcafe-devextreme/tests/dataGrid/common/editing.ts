@@ -149,8 +149,13 @@ test('Tab key on editor should focus next cell if editing mode is cell', async (
 }));
 
 test('Click should work if a column button set using svg icon (T863635)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
+
   await t
-    .click(Selector('.dx-command-edit-with-icons').nth(0))
+    .click(Selector('#svg-icon').parent())
+    .wait(300)
     .expect(ClientFunction(() => (window as any).onSvgClickCounter)()).eql(1);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ value: 1 }],
@@ -642,6 +647,8 @@ test('Cell mode(setCellValue) with async validation - The value of an invalid de
 
 test('Cell mode(setCellValue) with async validation - The value of an invalid dependent cell should be updated in a modified row(T872751)', async (t) => {
   const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
 
   await dataGrid.apiEditCell(0, 0);
 
@@ -2207,6 +2214,7 @@ test('Popup EditForm screenshot when editRowKey is initially specified', async (
     await t
       // act
       .click(dataGrid.getHeaderPanel().getSaveButton())
+      .wait(500)
 
       // assert
       .expect(dataGrid.dataRows.count)

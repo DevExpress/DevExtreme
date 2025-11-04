@@ -129,7 +129,6 @@ export const skippedTests = {
     DataGrid: ['SignalRService', 'MultipleRecordSelectionModes', 'RemoteCRUDOperations'],
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
     Gantt: ['TaskTemplate', 'Validation'],
-    Stepper: ['StepTemplate'],
   },
   React: {
     DataGrid: ['Toolbar', 'SignalRService', 'MultipleRecordSelectionModes'],

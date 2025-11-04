@@ -121,9 +121,11 @@ test('should show delete recurrence dialog if mode is "dialog"', async (t) => {
     .expect(appointmentTooltip.deleteButton.visible)
     .ok()
     .click(appointmentTooltip.deleteButton)
+    .wait(100)
     .expect(scheduler.getAppointmentCount())
     .eql(3)
     .click(deleteRecurrenceDialog.appointment)
+    .wait(100)
     .expect(scheduler.getAppointmentCount())
     .eql(2);
 }).before(async () => createWidget(
@@ -138,7 +140,7 @@ test('should show delete recurrence dialog if mode is "dialog"', async (t) => {
     currentView: 'day',
     currentDate: new Date(2022, 3, 12),
     startDayHour: 8,
-    endDayHour: 12.5,
+    endDayHour: 13,
     onAppointmentDeleting: (e) => {
       e.component.deleteRecurrence(
         e.appointmentData,

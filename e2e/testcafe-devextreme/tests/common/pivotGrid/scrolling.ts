@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import PivotGrid from 'devextreme-testcafe-models/pivotGrid';
 import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
-import { isMaterialBased, testScreenshot } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 // eslint-disable-next-line import/extensions
@@ -12,14 +12,7 @@ import { dataOptions } from './virtualDataOptions.js';
 import { sales } from './data.js';
 import { generateOptionMatrix } from '../../../helpers/generateOptionMatrix';
 
-const testFixture = () => {
-  if (isMaterialBased()) {
-    return fixture.disablePageReloads.skip;
-  }
-  return fixture.disablePageReloads;
-};
-
-testFixture()`PivotGrid_scrolling`
+fixture.disablePageReloads`PivotGrid_scrolling`
   .page(url(__dirname, '../../container.html'));
 
 [

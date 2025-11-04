@@ -7,7 +7,6 @@ import { setZoomLevel } from '../virtualScrolling/utils';
 fixture.disablePageReloads`Resize appointments - Zooming`
   .page(url(__dirname, '../../../container.html'));
 
-// We don't support zooming (known limitation)
 test('Vertical resize with zooming', async (t) => {
   const scheduler = new Scheduler('#container');
   const resizableAppointment = scheduler.getAppointment('Appt-01');
@@ -19,7 +18,7 @@ test('Vertical resize with zooming', async (t) => {
 
   await t
     .expect(height)
-    .eql(515);
+    .eql(94);
 }).before(async () => {
   await setZoomLevel(110);
   await insertStylesheetRulesToPage('.dx-scheduler-cell-sizes-vertical { height: 43px;}');

@@ -121,7 +121,9 @@ test.meta({ browserSize: [800, 800] })('The master detail row should display cor
   // assert
   await testScreenshot(t, takeScreenshot, 'T1159578-master-detail-with-renderAsync-1.png', { element: dataGrid.element });
 
-  // act
+  await dataGrid.scrollTo(t, { y: 400 });
+  await t.wait(300);
+
   await t.click(dataGrid.getDataRow(16).getCommandCell(0).element);
 
   // assert
@@ -130,7 +132,7 @@ test.meta({ browserSize: [800, 800] })('The master detail row should display cor
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [...new Array(40)].map((_, index) => ({ id: index, text: `item ${index}` })),
   keyExpr: 'id',
   showBorders: true,

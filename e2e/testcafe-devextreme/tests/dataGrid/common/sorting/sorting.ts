@@ -51,15 +51,14 @@ test('Filter expression should be valid when sortingMethod, remoteOperations, an
   };
 }));
 
-// Different position of menu each time
 test('Multiple sorting alphabetical icons should be correct in Fluent Theme (T1243658)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .rightClick(dataGrid.getHeaders().element);
+    .rightClick(dataGrid.getHeaders().element, { offsetX: 10, offsetY: 10 });
 
-  await testScreenshot(t, takeScreenshot, 'datagrid-alphabetical-icons-should-be-correct.png', { element: dataGrid.element, theme: Themes.fluentBlue });
+  await testScreenshot(t, takeScreenshot, 'datagrid-alphabetical-icons-should-be-correct.png', { theme: Themes.fluentBlue });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
