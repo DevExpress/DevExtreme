@@ -2166,10 +2166,120 @@ describe('API Handlers', () => {
       expect(abortSpy).toHaveBeenCalledTimes(1);
     });
 
-    // TODO: Implement after cache is done
-    // if('should take into account useCache property', async () => {
+    it('should have useCache property set to true by default', async () => {
+      const aiIntegration = new AIIntegration({
+        sendRequest(prompt): RequestResult {
+          sendRequestDataSpy();
 
-    // });
+          return {
+            promise: new Promise<string>((resolve) => {
+              const result = {};
+              Object.entries(prompt.data?.data).forEach(([key, value]) => {
+                result[key] = `Response ${(value as any).name}`;
+              });
+              resolve(JSON.stringify(result));
+            }),
+            abort: (): void => {},
+          };
+        },
+      });
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+          { id: 2, name: 'Name 2', value: 20 },
+        ],
+        paging: {
+          pageSize: 1,
+        },
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration,
+              prompt: 'Test prompt',
+            },
+          },
+        ],
+      });
+
+      await Promise.resolve();
+      expect(sendRequestDataSpy).toHaveBeenCalledTimes(1);
+
+      instance.option('paging.pageIndex', 1);
+      jest.runAllTimers();
+      await Promise.resolve();
+      expect(sendRequestDataSpy).toHaveBeenCalledTimes(2);
+
+      instance.option('paging.pageIndex', 0);
+      jest.runAllTimers();
+      await Promise.resolve();
+      expect(sendRequestDataSpy).toHaveBeenCalledTimes(2);
+    });
+
+    it('should not use cache when useCache property set to false', async () => {
+      const aiIntegration = new AIIntegration({
+        sendRequest(prompt): RequestResult {
+          sendRequestDataSpy();
+
+          return {
+            promise: new Promise<string>((resolve) => {
+              const result = {};
+              Object.entries(prompt.data?.data).forEach(([key, value]) => {
+                result[key] = `Response ${(value as any).name}`;
+              });
+              resolve(JSON.stringify(result));
+            }),
+            abort: (): void => {},
+          };
+        },
+      });
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+          { id: 2, name: 'Name 2', value: 20 },
+        ],
+        paging: {
+          pageSize: 1,
+        },
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration,
+              prompt: 'Test prompt',
+            },
+          },
+        ],
+        onAIColumnRequestCreating: (e) => {
+          e.useCache = false;
+        },
+      });
+
+      await Promise.resolve();
+      expect(sendRequestDataSpy).toHaveBeenCalledTimes(1);
+
+      instance.option('paging.pageIndex', 1);
+      jest.runAllTimers();
+      await Promise.resolve();
+      expect(sendRequestDataSpy).toHaveBeenCalledTimes(2);
+
+      instance.option('paging.pageIndex', 0);
+      jest.runAllTimers();
+      await Promise.resolve();
+      expect(sendRequestDataSpy).toHaveBeenCalledTimes(3);
+    });
   });
 
   describe('onAIColumnResponseReceived', () => {
@@ -3354,6 +3464,7 @@ describe('Cache', () => {
       expect(sendRequestSpy).toHaveBeenCalledTimes(2);
 
       instance.option('paging.pageIndex', 0);
+      jest.runAllTimers();
       await Promise.resolve();
       expect(sendRequestSpy).toHaveBeenCalledTimes(2);
     });

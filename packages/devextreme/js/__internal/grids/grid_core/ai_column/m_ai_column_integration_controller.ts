@@ -74,7 +74,7 @@ export class AIColumnIntegrationController extends Controller {
 
     const keyField = this.dataController.key();
     const keys = data.map((item) => item[keyField] as PropertyKey);
-    const cachedResponse: Record<PropertyKey, string> = useCache
+    const cachedResponse: Record<PropertyKey, string> = args.useCache
       ? this.aiColumnCacheController.getCachedResponse(columnName, keys)
       : {};
     const reducedData = reduceDataCachedKeys(data, cachedResponse, keyField);
