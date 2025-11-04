@@ -82,7 +82,7 @@ describe('Options', () => {
         ],
       });
 
-      expect($(component.getCellElement(0, 3)).css('text-align')).toBe('left');
+      expect($(component.getDataCell(0, 3).getElement()).css('text-align')).toBe('left');
     });
   });
 
@@ -105,7 +105,7 @@ describe('Options', () => {
         ],
       });
 
-      expect($(component.getCellElement(0, 3)).css('text-align')).toBe('right');
+      expect($(component.getDataCell(0, 3).getElement()).css('text-align')).toBe('right');
     });
   });
 
@@ -128,7 +128,7 @@ describe('Options', () => {
         ],
       });
 
-      expect($(component.getCellElement(0, 3)).css('text-align')).toBe('center');
+      expect($(component.getDataCell(0, 3).getElement()).css('text-align')).toBe('center');
     });
   });
 
@@ -151,7 +151,7 @@ describe('Options', () => {
         ],
       });
 
-      expect($(component.getCellElement(0, 3)).hasClass('custom-class')).toBe(true);
+      expect($(component.getDataCell(0, 3).getElement()).hasClass('custom-class')).toBe(true);
     });
   });
 
@@ -334,11 +334,11 @@ describe('Options', () => {
         ],
       });
 
-      const dataCell = component.getCellElement(0, 3);
+      const dataCell = component.getDataCell(0, 3).getElement();
 
       expect(cellTemplate).toHaveBeenCalledTimes(1);
-      expect(dataCell.querySelectorAll('.template-class').length).toBe(1);
-      expect(dataCell.textContent).toBe('Template');
+      expect(dataCell?.querySelectorAll('.template-class').length).toBe(1);
+      expect(dataCell?.textContent).toBe('Template');
     });
   });
 
@@ -443,11 +443,11 @@ describe('columnOption', () => {
       ],
     });
 
-    expect($(component.getCellElement(0, 3)).hasClass('custom-class')).toBe(false);
+    expect($(component.getDataCell(0, 3).getElement()).hasClass('custom-class')).toBe(false);
 
     component.apiColumnOption('myColumn', 'cssClass', 'custom-class');
 
-    expect($(component.getCellElement(0, 3)).hasClass('custom-class')).toBe(true);
+    expect($(component.getDataCell(0, 3).getElement()).hasClass('custom-class')).toBe(true);
   });
 
   it('should apply headerCellTemplate to AI column', async () => {
@@ -513,11 +513,11 @@ describe('columnOption', () => {
 
     component.apiColumnOption('myColumn', 'cellTemplate', cellTemplate);
 
-    const dataCell = component.getCellElement(0, 3);
+    const dataCell = component.getDataCell(0, 3).getElement();
 
     expect(cellTemplate).toHaveBeenCalledTimes(1);
-    expect(dataCell.querySelectorAll('.template-class').length).toBe(1);
-    expect(dataCell.textContent).toBe('Template');
+    expect(dataCell?.querySelectorAll('.template-class').length).toBe(1);
+    expect(dataCell?.textContent).toBe('Template');
   });
 
   it('should apply alignment', async () => {
@@ -537,11 +537,11 @@ describe('columnOption', () => {
       ],
     });
 
-    expect($(component.getCellElement(0, 3)).css('text-align')).toBe('left');
+    expect($(component.getDataCell(0, 3).getElement()).css('text-align')).toBe('left');
 
     component.apiColumnOption('myColumn', 'alignment', 'right');
 
-    expect($(component.getCellElement(0, 3)).css('text-align')).toBe('right');
+    expect($(component.getDataCell(0, 3).getElement()).css('text-align')).toBe('right');
   });
 
   it('should apply visibleIndex to AI column', async () => {

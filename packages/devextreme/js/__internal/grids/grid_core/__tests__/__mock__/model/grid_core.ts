@@ -7,6 +7,7 @@ import { ToastModel } from '@ts/ui/__tests__/__mock__/model/toast';
 
 import { AIPromptEditorModel } from './ai_prompt_editor';
 import { AIHeaderCellModel } from './cell/ai_header_cell';
+import { DataCellModel } from './cell/data_cell';
 import { HeaderCellModel } from './cell/header_cell';
 
 const SELECTORS = {
@@ -38,8 +39,16 @@ export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
     );
   }
 
-  public getCellElement(rowIndex: number, columnIndex: number): HTMLElement {
-    return this.root.querySelectorAll(`.${SELECTORS.dataRowClass}`)[rowIndex]?.querySelectorAll('td')[columnIndex] as HTMLElement;
+  public getDataRows(): NodeListOf<HTMLElement> {
+    return this.root.querySelectorAll(`.${SELECTORS.dataRowClass}`);
+  }
+
+  public getDataCells(rowIndex: number): NodeListOf<HTMLElement> {
+    return this.root.querySelectorAll(`.${SELECTORS.dataRowClass}:nth-child(${rowIndex + 1}) > td`);
+  }
+
+  public getDataCell(rowIndex: number, columnIndex: number): DataCellModel {
+    return new DataCellModel(this.getDataCells(rowIndex)[columnIndex]);
   }
 
   public getGroupRows(): NodeListOf<HTMLElement> {
