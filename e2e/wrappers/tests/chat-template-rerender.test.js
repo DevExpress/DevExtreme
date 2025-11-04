@@ -6,7 +6,7 @@ if(process.env.FRAMEWORK === 'react') {
       'Chat should be able to re-render its messages',
       async (t) => {
           const textarea = Selector('.dx-chat-messagebox textarea');
-          const sendButton = Selector('.dx-icon-sendfilled');
+          const sendButton = Selector('.dx-chat-messagebox .dx-chat-textarea-toolbar .dx-button');
           const assistantBubble = Selector('.chat-messagebubble-text').nth(1);
           const regenerateButton = Selector('.dx-icon-refresh').nth(1);
       
