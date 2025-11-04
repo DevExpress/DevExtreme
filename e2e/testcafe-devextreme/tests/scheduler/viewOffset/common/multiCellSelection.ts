@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Offset: Multi cell selection`
   .page(url(__dirname, '../../../container.html'));
@@ -45,9 +46,11 @@ rtl: ${rtlEnabled},
         const secondCellSelector = scheduler.getDateTableCell(toRow, toCell);
 
         await t.dragToElement(firstCellSelector, secondCellSelector);
-        await takeScreenshot(
+        await testScreenshot(
+          t,
+          takeScreenshot,
           `offset_multi-cell-select_${view}_offset-${offset}_${direction}${rtlEnabled ? '_rtl' : ''}.png`,
-          scheduler.workSpace,
+          { element: scheduler.workSpace },
         );
 
         await t.expect(compareResults.isValid())
@@ -76,9 +79,11 @@ rtl: ${rtlEnabled},
       const secondCellSelector = scheduler.getAllDayTableCell(3);
 
       await t.dragToElement(firstCellSelector, secondCellSelector);
-      await takeScreenshot(
+      await testScreenshot(
+        t,
+        takeScreenshot,
         `offset_multi-cell-select_week-all-day_offset-${offset}${rtlEnabled ? '_rtl' : ''}.png`,
-        scheduler.workSpace,
+        { element: scheduler.workSpace },
       );
 
       await t.expect(compareResults.isValid())
