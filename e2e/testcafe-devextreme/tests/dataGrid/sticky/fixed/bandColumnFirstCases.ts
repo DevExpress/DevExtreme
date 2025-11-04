@@ -4,6 +4,7 @@ import { createWidget } from '../../../../helpers/createWidget';
 import { getData } from '../../helpers/generateDataSourceData';
 import url from '../../../../helpers/getPageUrl';
 import { borderConfigs } from '../helpers/testMatrixConfig';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const DATA_GRID_SELECTOR = '#container';
 
@@ -19,12 +20,12 @@ borderConfigs.forEach(({ showColumnLines, showBorders }) => {
 
       await t.expect(dataGrid.isReady()).ok();
 
-      await takeScreenshot(`band-columns-1-(case-1)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `band-columns-1-(case-1)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`band-columns-2-(case-1)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `band-columns-2-(case-1)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       await t
         .expect(compareResults.isValid())
@@ -80,12 +81,12 @@ borderConfigs.forEach(({ showColumnLines, showBorders }) => {
 
       await t.expect(dataGrid.isReady()).ok();
 
-      await takeScreenshot(`band-columns-1-(case-2)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `band-columns-1-(case-2)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`band-columns-2-(case-2)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `band-columns-2-(case-2)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       await t
         .expect(compareResults.isValid())
@@ -141,12 +142,12 @@ borderConfigs.forEach(({ showColumnLines, showBorders }) => {
 
       await t.expect(dataGrid.isReady()).ok();
 
-      await takeScreenshot(`band-columns-1-(case-3)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `band-columns-1-(case-3)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`band-columns-2-(case-3)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `band-columns-2-(case-3)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       await t
         .expect(compareResults.isValid())
@@ -202,12 +203,12 @@ borderConfigs.forEach(({ showColumnLines, showBorders }) => {
 
       await t.expect(dataGrid.isReady()).ok();
 
-      await takeScreenshot(`band-columns-1-(case-4)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `band-columns-1-(case-4)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`band-columns-2-(case-4)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `band-columns-2-(case-4)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       await t
         .expect(compareResults.isValid())
@@ -261,12 +262,12 @@ borderConfigs.forEach(({ showColumnLines, showBorders }) => {
 
       await t.expect(dataGrid.isReady()).ok();
 
-      await takeScreenshot(`band-columns-1-(case-5)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `band-columns-1-(case-5)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`band-columns-2-(case-5)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `band-columns-2-(case-5)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       await t
         .expect(compareResults.isValid())
@@ -320,12 +321,12 @@ borderConfigs.forEach(({ showColumnLines, showBorders }) => {
 
       await t.expect(dataGrid.isReady()).ok();
 
-      await takeScreenshot(`band-columns-1-(case-6)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `band-columns-1-(case-6)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`band-columns-2-(case-6)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `band-columns-2-(case-6)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       await t
         .expect(compareResults.isValid())
@@ -382,12 +383,12 @@ borderConfigs.forEach(({ showColumnLines, showBorders }) => {
 
       await t.expect(dataGrid.isReady()).ok();
 
-      await takeScreenshot(`band-columns-1-(case-7)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `band-columns-1-(case-7)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`band-columns-2-(case-7)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `band-columns-2-(case-7)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       await t
         .expect(compareResults.isValid())

@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
 
 // TODO: Enable multi-theming testcafe run in the future.
 fixture.disablePageReloads`Grouping Panel - Borders with enabled alternate rows`
@@ -151,9 +152,9 @@ const markupTest = (matrixOptions) => {
 
     const screenshotParams = getScreenshotParams(matrixOptions);
     const additionalScreenshotName = screenshotParams.length ? `_${screenshotParams}` : '';
-    await takeScreenshot(`borders${additionalScreenshotName}.png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `borders${additionalScreenshotName}.png`, { element: dataGrid.element });
     await t.click(deleteBtn);
-    await takeScreenshot(`borders-repaint${additionalScreenshotName}.png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `borders-repaint${additionalScreenshotName}.png`, { element: dataGrid.element });
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());

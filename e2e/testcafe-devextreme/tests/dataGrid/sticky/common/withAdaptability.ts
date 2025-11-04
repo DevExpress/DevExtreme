@@ -3,6 +3,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { defaultConfig } from '../helpers/data';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const DATA_GRID_SELECTOR = '#container';
 
@@ -19,11 +20,11 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
 
     await dataGrid.apiExpandAdaptiveDetailRow(1);
 
-    await takeScreenshot(`adaptability_sticky_columns_with_adaptive_detail_row_1_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `adaptability_sticky_columns_with_adaptive_detail_row_1_(rtlEnabled_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     await dataGrid.scrollTo(t, { x: scrollLeft });
 
-    await takeScreenshot(`adaptability_sticky_columns_with_adaptive_detail_row_2_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `adaptability_sticky_columns_with_adaptive_detail_row_2_(rtlEnabled_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     await t
       .expect(compareResults.isValid())
@@ -50,11 +51,11 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
 
     await t.expect(dataGrid.isReady()).ok();
 
-    await takeScreenshot(`adaptability_sticky_columns_with_sticky_positions_1_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `adaptability_sticky_columns_with_sticky_positions_1_(rtlEnabled_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     await dataGrid.scrollTo(t, { x: 10000 });
 
-    await takeScreenshot(`adaptability_sticky_columns_with_sticky_positions_2_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `adaptability_sticky_columns_with_sticky_positions_2_(rtlEnabled_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     await t
       .expect(compareResults.isValid())
@@ -90,7 +91,7 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
 
     await t.expect(dataGrid.isReady()).ok();
 
-    await takeScreenshot(`adaptability_fixed_columns_with_small_grid_width_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `adaptability_fixed_columns_with_small_grid_width_(rtlEnabled_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     await t
       .expect(compareResults.isValid())
@@ -120,11 +121,11 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
 
     await t.expect(dataGrid.isReady()).ok();
 
-    await takeScreenshot(`hidden_column_between_sticky_column_and_left_fixed_column_1_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `hidden_column_between_sticky_column_and_left_fixed_column_1_(rtlEnabled_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     await dataGrid.scrollTo(t, { x: scrollLeft });
 
-    await takeScreenshot(`hidden_column_between_sticky_column_and_left_fixed_column_2_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `hidden_column_between_sticky_column_and_left_fixed_column_2_(rtlEnabled_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     await t
       .expect(compareResults.isValid())
@@ -148,11 +149,11 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
 
     await t.expect(dataGrid.isReady()).ok();
 
-    await takeScreenshot(`banded_hidden_column_between_sticky_column_and_left_fixed_column_1_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `banded_hidden_column_between_sticky_column_and_left_fixed_column_1_(rtlEnabled_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     await dataGrid.scrollTo(t, { x: scrollLeft });
 
-    await takeScreenshot(`banded_hidden_column_between_sticky_column_and_left_fixed_column_2_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `banded_hidden_column_between_sticky_column_and_left_fixed_column_2_(rtlEnabled_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     await t
       .expect(compareResults.isValid())
@@ -179,11 +180,11 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
 
     await t.expect(dataGrid.isReady()).ok();
 
-    await takeScreenshot(`hidden_column_between_sticky_column_and_right_fixed_column_1_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `hidden_column_between_sticky_column_and_right_fixed_column_1_(rtlEnabled_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     await dataGrid.scrollTo(t, { x: scrollLeft });
 
-    await takeScreenshot(`hidden_column_between_sticky_column_and_right_fixed_column_2_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `hidden_column_between_sticky_column_and_right_fixed_column_2_(rtlEnabled_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     await t
       .expect(compareResults.isValid())
@@ -207,11 +208,11 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
 
     await t.expect(dataGrid.isReady()).ok();
 
-    await takeScreenshot(`banded_hidden_column_between_sticky_column_and_right_fixed_column_1_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `banded_hidden_column_between_sticky_column_and_right_fixed_column_1_(rtlEnabled_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     await dataGrid.scrollTo(t, { x: scrollLeft });
 
-    await takeScreenshot(`banded_hidden_column_between_sticky_column_and_right_fixed_column_2_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `banded_hidden_column_between_sticky_column_and_right_fixed_column_2_(rtlEnabled_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     await t
       .expect(compareResults.isValid())
@@ -238,11 +239,11 @@ test.meta({ browserSize: [900, 800] })('Sticky columns with sticky positions whe
 
   await t.expect(dataGrid.isReady()).ok();
 
-  await takeScreenshot('adaptability_sticky_columns_with_sticky_positions_and_hiding_priority_1.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'adaptability_sticky_columns_with_sticky_positions_and_hiding_priority_1.png', { element: dataGrid.element });
 
   await dataGrid.scrollTo(t, { x: 10000 });
 
-  await takeScreenshot('adaptability_sticky_columns_with_sticky_positions_and_hiding_priority_2.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'adaptability_sticky_columns_with_sticky_positions_and_hiding_priority_2.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())

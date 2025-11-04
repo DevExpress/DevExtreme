@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const DATA_GRID_SELECTOR = '#container';
 
@@ -17,7 +18,7 @@ fixture.disablePageReloads`Band sticky columns`
     await t.expect(dataGrid.isReady()).ok();
 
     await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
-    await takeScreenshot(`T1279722_band_sticky_columns-headers_with_filter_row_and_grouped_column_(rtl=${rtlEnabled}).png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `T1279722_band_sticky_columns-headers_with_filter_row_and_grouped_column_(rtl=${rtlEnabled}).png`, { element: dataGrid.element });
 
     await t
       .expect(compareResults.isValid())

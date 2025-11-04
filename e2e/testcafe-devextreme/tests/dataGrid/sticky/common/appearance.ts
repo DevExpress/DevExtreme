@@ -3,6 +3,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { getData } from '../../helpers/generateDataSourceData';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const DATA_GRID_SELECTOR = '#container';
 
@@ -26,14 +27,14 @@ fixture.disablePageReloads`FixedColumns - appearance`
 
       await t.expect(dataGrid.isReady()).ok();
 
-      await takeScreenshot(`datagrid_default_state_with_${showRowLinesState}_(generic.light).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `datagrid_default_state_with_${showRowLinesState}.png`, { element: dataGrid.element });
 
       await t
         .click(dataGrid.getDataRow(2).getCommandCell(41).getButton(0))
         .click(dataGrid.getDataRow(3).getCommandCell(0).element)
         .click(dataGrid.getDataRow(4).getDataCell(4).element);
 
-      await takeScreenshot(`datagrid_selected_focused_edit_state_with_${showRowLinesState}_(generic.light).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `datagrid_selected_focused_edit_state_with_${showRowLinesState}.png`, { element: dataGrid.element });
 
       await t
         .expect(compareResults.isValid())

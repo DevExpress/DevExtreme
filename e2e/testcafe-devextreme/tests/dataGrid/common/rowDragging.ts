@@ -6,6 +6,7 @@ import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
 import { MouseUpEvents, MouseAction } from '../../../helpers/mouseUpEvents';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 const CLASS = { ...DataGridClassNames, ...ClassNames };
 
@@ -795,9 +796,8 @@ test('Rows should appear correctly during dragging when virtual scrolling is ena
   // drag the row up
   await dataGrid.moveRow(0, 30, 75);
 
+  await testScreenshot(t, takeScreenshot, 'T1179218-virtual-scrolling-dragging-row.png', { element: dataGrid.element });
   await t
-    .expect(await takeScreenshot('T1179218-virtual-scrolling-dragging-row.png', dataGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async (t) => {

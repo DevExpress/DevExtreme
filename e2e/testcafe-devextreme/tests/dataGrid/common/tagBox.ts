@@ -3,6 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Tagbox Columns`.page(
   url(__dirname, '../../container.html'),
@@ -15,14 +16,9 @@ test('Datagrid tagbox column should not look broken', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   await t
-    .click(dataGrid.getDataCell(0, 1).element)
-    .expect(
-      await takeScreenshot(
-        'T1228720-grid-tagbox-on-edit_(generic.light).png',
-        dataGrid.element,
-      ),
-    )
-    .ok()
+    .click(dataGrid.getDataCell(0, 1).element);
+  await testScreenshot(t, takeScreenshot, 'T1228720-grid-tagbox-on-edit.png', { element: dataGrid.element });
+  await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 })

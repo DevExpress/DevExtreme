@@ -4,6 +4,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { makeRowsViewTemplatesAsync } from '../helpers/asyncTemplates';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 const DATA_GRID_SELECTOR = '#container';
 
@@ -150,7 +151,7 @@ test('Hovering over a row should work correctly when there is a fixed column and
   await t.hover(firstDataRow.element);
 
   // assert
-  await takeScreenshot('T1148937-grid-hover-row-1.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1148937-grid-hover-row-1.png', { element: dataGrid.element });
 
   await t
     .expect(firstDataRow.isHovered)
@@ -162,7 +163,7 @@ test('Hovering over a row should work correctly when there is a fixed column and
   await t.hover(secondFixedDataRow.element);
 
   // assert
-  await takeScreenshot('T1148937-grid-hover-row-2.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1148937-grid-hover-row-2.png', { element: dataGrid.element });
 
   await t
     .expect(secondDataRow.isHovered)
@@ -222,11 +223,11 @@ test.meta({ browserSize: [800, 800] })('Fixed to the right columns should appear
   await t.expect(dataGrid.isReady()).ok();
 
   // act
-  await takeScreenshot('T1177143-right-fixed-column-with-no-width-columns-1.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1177143-right-fixed-column-with-no-width-columns-1.png', { element: dataGrid.element });
 
   await dataGrid.scrollTo(t, { x: 5000 });
 
-  await takeScreenshot('T1177143-right-fixed-column-with-no-width-columns-2.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1177143-right-fixed-column-with-no-width-columns-2.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())
@@ -278,7 +279,7 @@ test('Hovering over a row should work correctly after scrolling when there is a 
   await t.hover(dataRow.element);
 
   // assert
-  await takeScreenshot('T1180834-grid-hover-row-after-scrolling-1.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1180834-grid-hover-row-after-scrolling-1.png', { element: dataGrid.element });
 
   await t
     .expect(dataRow.isHovered)
@@ -294,7 +295,7 @@ test('Hovering over a row should work correctly after scrolling when there is a 
   // assert
   fixedDataRow = dataGrid.getDataRow(10);
 
-  await takeScreenshot('T1180834-grid-hover-row-after-scrolling-2.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1180834-grid-hover-row-after-scrolling-2.png', { element: dataGrid.element });
 
   await t
     .expect(dataRow.isHovered)
@@ -349,9 +350,9 @@ test.meta({ browserSize: [800, 800] })('The grid layout should be correct after 
     .ok();
 
   // act
-  await takeScreenshot('T1193153-layout-with-fixed-and-band-columns-1.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1193153-layout-with-fixed-and-band-columns-1.png', { element: dataGrid.element });
   await t.resizeWindow(400, 400);
-  await takeScreenshot('T1193153-layout-with-fixed-and-band-columns-2.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1193153-layout-with-fixed-and-band-columns-2.png', { element: dataGrid.element });
 
   // assert
   await t
