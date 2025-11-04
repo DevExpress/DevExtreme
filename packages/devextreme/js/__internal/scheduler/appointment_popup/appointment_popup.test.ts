@@ -1468,6 +1468,72 @@ describe('Appointment Popup Form', () => {
       expect(POM.popup.component.option('showCloseButton')).toBe(true);
       expect(POM.popup.component.option('enableBodyScroll')).toBe(true);
     });
+
+    it('should apply wrapperAttr configuration to popup', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          popup: {
+            wrapperAttr: {
+              id: 'test',
+            },
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const wrapperAttr = POM.popup.component.option('wrapperAttr');
+      expect(wrapperAttr.id).toBe('test');
+      expect(wrapperAttr.class).toBeDefined();
+    });
+
+    it('should call onShowing callback when popup is shown', async () => {
+      const onShowing = jest.fn();
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          popup: {
+            onShowing,
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      expect(POM.popup.component.option('visible')).toBe(true);
+      expect(onShowing).toHaveBeenCalled();
+      expect(onShowing).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call onHiding callback when popup is hidden', async () => {
+      const onHiding = jest.fn();
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          popup: {
+            onHiding,
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      expect(POM.popup.component.option('visible')).toBe(true);
+      expect(onHiding).not.toHaveBeenCalled();
+
+      POM.popup.getCancelButton().click();
+
+      expect(POM.popup.component.option('visible')).toBe(false);
+      expect(onHiding).toHaveBeenCalled();
+      expect(onHiding).toHaveBeenCalledTimes(1);
+    });
   });
 });
 
