@@ -1743,13 +1743,10 @@ export class ColumnsController extends modules.Controller {
       extend(true, calculatedColumnOptions, {
         allowSorting: false,
         allowGrouping: false,
-      });
-
-      if (columnOptions?.type !== AI_COLUMN_NAME) {
-        calculatedColumnOptions.calculateCellValue = function () {
+        calculateCellValue() {
           return null;
-        };
-      }
+        },
+      });
     }
 
     if (bandColumn) {
