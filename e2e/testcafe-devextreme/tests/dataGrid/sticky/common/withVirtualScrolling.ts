@@ -10,7 +10,7 @@ const DATA_GRID_SELECTOR = '#container';
 fixture.disablePageReloads`Sticky columns - Virtual Scrolling`
   .page(url(__dirname, '../../../container.html'));
 
-test.meta({ browserSize: [1000, 800] })('Fixed columns should display correctly when scrolling vertically quickly', async (t) => {
+test.meta({ browserSize: [800, 800] })('Fixed columns should display correctly when scrolling vertically quickly', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
