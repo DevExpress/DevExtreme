@@ -1,11 +1,10 @@
 import { Controller } from '../m_modules';
 
 export class AIColumnCacheController extends Controller {
-  private readonly cache: Record<string, Record<PropertyKey, string>> = {};
+  private readonly cache: Record<string, Record<PropertyKey, string> | undefined> = {};
 
   public clearCache(columnName: string): void {
-    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-    delete this.cache[columnName];
+    this.cache[columnName] = undefined;
   }
 
   public getCachedResponse(columnName: string, keys: PropertyKey[]):
@@ -40,6 +39,6 @@ export class AIColumnCacheController extends Controller {
   }
 
   public isEmptyCache(columnName: string): boolean {
-    return Object.keys(this.cache[columnName] || {}).length === 0;
+    return Object.keys(this.cache[columnName] ?? {}).length === 0;
   }
 }
