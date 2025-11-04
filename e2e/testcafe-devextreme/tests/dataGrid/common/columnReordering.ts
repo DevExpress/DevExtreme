@@ -73,7 +73,7 @@ test('The column reordering should work correctly when there is a fixed column w
 }));
 
 // T1038094
-test.meta({ unstable: true })('The separator should display correctly when dragging column', async (t) => {
+test('The separator should display correctly when dragging column', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await dataGrid.moveHeader(0, 200, 5, true);

@@ -51,9 +51,8 @@ test('Filter expression should be valid when sortingMethod, remoteOperations, an
   };
 }));
 
-// TODO Chrome133: skipped during chrome update
 // Different position of menu each time
-test.skip('Multiple sorting alphabetical icons should be correct in Fluent Theme (T1243658)', async (t) => {
+test('Multiple sorting alphabetical icons should be correct in Fluent Theme (T1243658)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

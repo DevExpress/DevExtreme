@@ -601,8 +601,7 @@ test('Async Validation(Cell) - Data is not saved when a dependant cell value bec
   }, 'lastName'],
 })));
 
-// TODO Chrome133: skipped during chrome update
-test.skip('Cell mode(setCellValue) with async validation - The value of an invalid dependent cell should be updated in a new row(T872751)', async (t) => {
+test('Cell mode(setCellValue) with async validation - The value of an invalid dependent cell should be updated in a new row(T872751)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await dataGrid.apiAddRow();
@@ -641,8 +640,7 @@ test.skip('Cell mode(setCellValue) with async validation - The value of an inval
   }, 'lastName'],
 })));
 
-// TODO Chrome133: skipped during chrome update
-test.skip('Cell mode(setCellValue) with async validation - The value of an invalid dependent cell should be updated in a modified row(T872751)', async (t) => {
+test('Cell mode(setCellValue) with async validation - The value of an invalid dependent cell should be updated in a modified row(T872751)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await dataGrid.apiEditCell(0, 0);
@@ -681,8 +679,7 @@ test.skip('Cell mode(setCellValue) with async validation - The value of an inval
   }, 'lastName'],
 })));
 
-// TODO Chrome133: skipped during chrome update
-test.skip('Cell mode(calculateCellValue) with async validation - The value of an invalid dependent cell should be updated in a new row(T872751)', async (t) => {
+test('Cell mode(calculateCellValue) with async validation - The value of an invalid dependent cell should be updated in a new row(T872751)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await dataGrid.apiAddRow();
@@ -718,8 +715,7 @@ test.skip('Cell mode(calculateCellValue) with async validation - The value of an
   }, 'lastName'],
 })));
 
-// TODO Chrome133: skipped during chrome update
-test.skip('Cell mode(calculateCellValue) with async validation - The value of an invalid dependent cell should be updated in a modified row(T872751)', async (t) => {
+test('Cell mode(calculateCellValue) with async validation - The value of an invalid dependent cell should be updated in a modified row(T872751)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t.expect(dataGrid.isReady()).ok();
@@ -2204,9 +2200,8 @@ test('Popup EditForm screenshot when editRowKey is initially specified', async (
   true,
   false,
 ].forEach((remoteOperations) => {
-  // TODO Chrome133: skipped during chrome update
   // Why asserts different with different remote operations?
-  test.skip(`Empty rows should not appear after rows are updated in batch editing mode when paging and validation are enabled and remoteOperations=${remoteOperations}`, async (t) => {
+  test(`Empty rows should not appear after rows are updated in batch editing mode when paging and validation are enabled and remoteOperations=${remoteOperations}`, async (t) => {
     const dataGrid = new DataGrid('#container');
 
     await t
@@ -2285,8 +2280,7 @@ test('Popup EditForm screenshot when editRowKey is initially specified', async (
 // visual: material.blue.light
 [true, false].forEach((useIcons) => {
   // T1179114
-  // TODO Chrome133: skipped during chrome update
-  test.skip('The disabled state should be correct for a custom button when given as a SVG image', async (t) => {
+  test('The disabled state should be correct for a custom button when given as a SVG image', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid('#container');
     const commandCell = dataGrid.getDataRow(0).getCommandCell(2);

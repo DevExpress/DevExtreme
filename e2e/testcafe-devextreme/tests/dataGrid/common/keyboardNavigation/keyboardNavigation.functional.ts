@@ -5258,7 +5258,7 @@ test('Focus events should be called when pressing the Ctrl + End key when virtua
   })();
 });
 
-test.meta({ unstable: true })('Focus events should be called when pressing the Ctrl + End key when virtual scrolling and columns are enabled', async (t) => {
+test('Focus events should be called when pressing the Ctrl + End key when virtual scrolling and columns are enabled', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
 
@@ -5328,7 +5328,7 @@ test.meta({ unstable: true })('Focus events should be called when pressing the C
   })();
 });
 
-test.meta({ unstable: true })('Focus events should be called when pressing the Ctrl + End key when rowRenderingMode is \'virtual\'', async (t) => {
+test('Focus events should be called when pressing the Ctrl + End key when rowRenderingMode is \'virtual\'', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
 
@@ -5397,7 +5397,7 @@ test.meta({ unstable: true })('Focus events should be called when pressing the C
   })();
 });
 
-test.meta({ unstable: true })('Focus events should be called when pressing the Ctrl + End key when infinite scrolling is enabled', async (t) => {
+test('Focus events should be called when pressing the Ctrl + End key when infinite scrolling is enabled', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
 
@@ -5623,7 +5623,7 @@ test('Focus events should be called when pressing the Ctrl + End key when virtua
   })();
 });
 
-test.meta({ unstable: true })('Focus events should be called when pressing the Ctrl + End key when virtual columns, virtual scrolling and focusedRowEnabled are enabled', async (t) => {
+test('Focus events should be called when pressing the Ctrl + End key when virtual columns, virtual scrolling and focusedRowEnabled are enabled', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
 
