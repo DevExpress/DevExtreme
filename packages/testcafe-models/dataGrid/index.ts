@@ -164,11 +164,11 @@ export default class DataGrid extends GridCore {
   }
 
   getRows(): Selector {
-    return this.element.find(`.${CLASS.row}`);
+    return this.getRowsView().find(`.${CLASS.row}`);
   }
 
   getCells(): Selector {
-    return this.getRowsView().find('td:not([class])');
+    return this.getRowsView().find('td');
   }
 
   getDataRow(index: number): DataRow {

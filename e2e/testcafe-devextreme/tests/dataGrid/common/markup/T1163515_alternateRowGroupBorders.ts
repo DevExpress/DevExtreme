@@ -6,7 +6,11 @@ import url from '../../../../helpers/getPageUrl';
 fixture.disablePageReloads`Grouping Panel - check borders and backgrounds with various options`
   .page(url(__dirname, '../../../container.html'));
 
-const GRID_SELECTOR = '#container';
+const SELECTORS = {
+  gridContainer: 'container',
+  masterDetailClass: 'dx-master-detail-row',
+  groupRowClass: 'dx-group-row',
+};
 
 const FORBIDDEN_COLORS = ['transparent', 'white', 'black', 'rgb(0, 0, 0)', 'rgb(255, 255, 255)'];
 
@@ -172,20 +176,37 @@ const verifyGridStyles = async (t, dataGrid, matrixOptions) => {
   }
 
   if (matrixOptions.rowAlternationEnabled) {
-    const rows = dataGrid.getRows();
-    for (let i = 1; i < rows.length; i += 1) {
-      const currentRow = rows.nth(i);
-      const previousRow = rows.nth(i - 1);
+    const filteredRows = dataGrid.getRows().find(`tr:not(.${SELECTORS.masterDetailClass})`);
+    const filteredRowsLength = await filteredRows.count;
+
+    let i = 1;
+    while (i < filteredRowsLength) {
+      const currentRow = filteredRows.nth(i);
+      const previousRow = filteredRows.nth(i - 1);
 
       const currentClasses = await currentRow.getAttribute('class');
       const previousClasses = await previousRow.getAttribute('class');
 
-      if (currentClasses === previousClasses) {
+      if (currentClasses?.includes(SELECTORS.groupRowClass)) {
+        i += 2;
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+
+      if (previousClasses?.includes(SELECTORS.groupRowClass)) {
+        i += 1;
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+
+      if (currentClasses !== previousClasses) {
         const currentBg = await currentRow.getStyleProperty('background-color');
         const previousBg = await previousRow.getStyleProperty('background-color');
 
         await t.expect(currentBg).notEql(previousBg);
       }
+
+      i += 1;
     }
   }
 
@@ -213,7 +234,7 @@ const verifyGridStyles = async (t, dataGrid, matrixOptions) => {
   }
 
   if (matrixOptions.showColumnLines) {
-    const cells = dataGrid.getCells();
+    const cells = dataGrid.getCells().find('td:not([class])');
     const cellsCount = await cells.count;
 
     for (let i = 0; i < cellsCount; i += 1) {
@@ -230,7 +251,7 @@ const verifyGridStyles = async (t, dataGrid, matrixOptions) => {
 
 const functionalTest = (matrixOptions) => {
   test(`Should have correct applied styles with ${getTestParams(matrixOptions)}`, async (t) => {
-    const dataGrid = new DataGrid(GRID_SELECTOR);
+    const dataGrid = new DataGrid(`#${SELECTORS.gridContainer}`);
     await dataGrid.isReady();
 
     await verifyGridStyles(t, dataGrid, matrixOptions);
@@ -249,8 +270,6 @@ const functionalTest = (matrixOptions) => {
   });
 };
 
-// visual: generic.light
-// visual: material.blue.light
 [true, false].forEach((hasFixedColumn) => {
   [true, false].forEach((hasMasterDetail) => {
     [true, false].forEach((rowAlternationEnabled) => {
