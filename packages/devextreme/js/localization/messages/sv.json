@@ -14,8 +14,11 @@
         "OK": "OK",
         "Today": "Idag",
         "Yesterday": "Igår",
+
         "dxCollectionWidget-noDataText": "Inga data att visa",
+
         "dxDropDownEditor-selectLabel": "Välj",
+
         "validation-required": "Obligatoriskt",
         "validation-required-formatted": "{0} är obligatoriskt",
         "validation-numeric": "Värdet måste vara ett nummer",
@@ -35,7 +38,9 @@
         "validation-email": "Ogiltig e-postadress",
         "validation-email-formatted": "{0} är ogiltigt",
         "validation-mask": "Värdet är ogiltigt",
+
         "dxLookup-searchPlaceholder": "Minsta antal tecken: {0}",
+
         "dxList-pullingDownText": "Dra neråt för att uppdatera...",
         "dxList-pulledDownText": "Släpp för att uppdatera...",
         "dxList-refreshingText": "Uppdaterar...",
@@ -51,20 +56,24 @@
         "dxList-selectAll-notChecked": "Inte markerad",
         "dxList-ariaRoleDescription": "Lista",
         "dxList-listAriaLabel-itemContent": "Listobjektets innehåll",
+
         "dxScrollView-pullingDownText": "Dra neråt för att uppdatera...",
         "dxScrollView-pulledDownText": "Släpp för att uppdatera...",
         "dxScrollView-refreshingText": "Uppdaterar...",
         "dxScrollView-reachBottomText": "Laddar...",
+
         "dxDateBox-simulatedDataPickerTitleTime": "Välj tid",
         "dxDateBox-simulatedDataPickerTitleDate": "Välj datum",
         "dxDateBox-simulatedDataPickerTitleDateTime": "Välj datum och tid",
         "dxDateBox-validation-datetime": "Värdet måste vara ett datum eller en tid",
+
         "dxDateRangeBox-invalidStartDateMessage": "Startvärdet måste vara ett datum",
         "dxDateRangeBox-invalidEndDateMessage": "Slutvärdet måste vara ett datum",
         "dxDateRangeBox-startDateOutOfRangeMessage": "Startdatum är utanför tillåtet intervall",
         "dxDateRangeBox-endDateOutOfRangeMessage": "Slutdatum är utanför tillåtet intervall",
         "dxDateRangeBox-startDateLabel": "Startdatum",
         "dxDateRangeBox-endDateLabel": "Slutdatum",
+
         "dxFileUploader-selectFile": "Välj fil",
         "dxFileUploader-dropFile": "eller släpp filen här",
         "dxFileUploader-bytes": "byte",
@@ -82,17 +91,22 @@
         "dxFileUploader-fileListLabel": "Fillista",
         "dxFileUploader-removeFileButtonLabel": "Ta bort fil {0}",
         "dxFileUploader-uploadFileButtonLabel": "Ladda upp fil {0}",
+
         "dxRangeSlider-ariaFrom": "Från",
         "dxRangeSlider-ariaTill": "Till",
         "dxSwitch-switchedOnText": "PÅ",
         "dxSwitch-switchedOffText": "AV",
+
         "dxForm-optionalMark": "valfri",
         "dxForm-requiredMessage": "{0} är obligatoriskt",
         "dxForm-smartPasteButtonText": "Smart klistra in",
         "dxForm-resetButtonText": "Återställ",
         "dxForm-submitButtonText": "Skicka",
+
         "dxNumberBox-invalidValueMessage": "Värdet måste vara ett nummer",
         "dxNumberBox-noDataText": "Inga data",
+
+
         "dxDataGrid-aiPromptEditorTitle": "AI Prompt Editor",
         "dxDataGrid-aiPromptEditorPlaceholder": "Be AI generera kolumnens värden",
         "dxDataGrid-aiPromptEditorApplyButton": "Tillämpa",
@@ -202,11 +216,13 @@
         "dxDataGrid-masterDetail": "Cell med detaljer",
         "dxDataGrid-moveColumnToTheRight": "Flytta till höger",
         "dxDataGrid-moveColumnToTheLeft": "Flytta till vänster",
+
         "dxTreeList-ariaTreeList": "Trädlista med {0} rader och {1} kolumner",
         "dxTreeList-ariaExpandableInstruction": "Tryck Ctrl + högerpil för att expandera den fokuserade noden och Ctrl + vänsterpil för att kollapsa den",
         "dxTreeList-ariaSearchInGrid": "Sök i trädlistan",
         "dxTreeList-ariaToolbar": "Trädlistans verktygsfält",
         "dxTreeList-editingAddRowToNode": "Lägg till",
+
         "dxPager-infoText": "Sida {0} av {1} ({2} uppgifter)",
         "dxPager-pagesCountText": "av",
         "dxPager-pageSize": "Objekt per sida: {0}",
@@ -217,6 +233,7 @@
         "dxPager-ariaLabel": "Sidnavigering",
         "dxPager-ariaPageSize": "Sidstorlek",
         "dxPager-ariaPageNumber": "Sidnummer",
+
         "dxPagination-infoText": "Sida {0} av {1} ({2} uppgifter)",
         "dxPagination-pagesCountText": "av",
         "dxPagination-pageSize": "Objekt per sida: {0}",
@@ -227,6 +244,7 @@
         "dxPagination-ariaLabel": "Sidnavigering",
         "dxPagination-ariaPageSize": "Sidstorlek",
         "dxPagination-ariaPageNumber": "Sidnummer",
+
         "dxPivotGrid-grandTotal": "Totalsumma",
         "dxPivotGrid-total": "{0} Summa",
         "dxPivotGrid-fieldChooserTitle": "Fältväljare",
@@ -246,25 +264,32 @@
         "dxPivotGrid-dataFieldArea": "Släpp datafält här",
         "dxPivotGrid-rowFieldArea": "Släpp radfält här",
         "dxPivotGrid-filterFieldArea": "Släpp filterfält här",
+
         "dxScheduler-dateRange": "från {0} till {1}",
         "dxScheduler-ariaLabel": "Schemaläggare. {0}-vy: {1} med {2} bokningar",
         "dxScheduler-ariaLabel-currentIndicator-present": "Aktuell tidsindikator visas i vyn",
         "dxScheduler-ariaLabel-currentIndicator-not-present": "Aktuell tidsindikator visas inte på skärmen",
+
         "dxScheduler-appointmentAriaLabel-group": "Grupp: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Återkommande bokning",
+
         "dxScheduler-appointmentListAriaLabel": "Bokningslista",
         "dxScheduler-newPopupTitle": "Ny bokning",
         "dxScheduler-editPopupTitle": "Redigera bokning",
         "dxScheduler-editPopupSaveButtonText": "Spara",
+
         "dxScheduler-editorLabelTitle": "Ämne",
         "dxScheduler-editorLabelStartDate": "Startdatum",
         "dxScheduler-editorLabelEndDate": "Slutdatum",
         "dxScheduler-editorLabelDescription": "Beskrivning",
         "dxScheduler-editorLabelRecurrence": "Upprepa",
+
         "dxScheduler-navigationToday": "Idag",
         "dxScheduler-navigationPrevious": "Föregående sida",
         "dxScheduler-navigationNext": "Nästa sida",
+
         "dxScheduler-openAppointment": "Öppna bokning",
+
         "dxScheduler-recurrenceNever": "Aldrig",
         "dxScheduler-recurrenceMinutely": "Varje minut",
         "dxScheduler-recurrenceHourly": "Varje timme",
@@ -272,42 +297,55 @@
         "dxScheduler-recurrenceWeekly": "Varje vecka",
         "dxScheduler-recurrenceMonthly": "Varje månad",
         "dxScheduler-recurrenceYearly": "Varje år",
+
         "dxScheduler-recurrenceRepeatEvery": "Varje",
         "dxScheduler-recurrenceRepeatOn": "Upprepa på",
         "dxScheduler-recurrenceEnd": "Upprepningen slutar",
         "dxScheduler-recurrenceAfter": "Efter",
         "dxScheduler-recurrenceOn": "På",
+
         "dxScheduler-recurrenceUntilDateLabel": "Datum då upprepningen slutar",
         "dxScheduler-recurrenceOccurrenceLabel": "Antal förekomster",
+
         "dxScheduler-recurrenceRepeatMinutely": "minuter",
         "dxScheduler-recurrenceRepeatHourly": "timmar",
         "dxScheduler-recurrenceRepeatDaily": "dagar",
         "dxScheduler-recurrenceRepeatWeekly": "veckor",
         "dxScheduler-recurrenceRepeatMonthly": "månader",
         "dxScheduler-recurrenceRepeatYearly": "år",
+
         "dxScheduler-switcherDay": "Dag",
         "dxScheduler-switcherWeek": "Vecka",
         "dxScheduler-switcherWorkWeek": "Arbetsvecka",
         "dxScheduler-switcherMonth": "Månad",
+
         "dxScheduler-switcherAgenda": "Agenda",
+
         "dxScheduler-switcherTimelineDay": "Tidslinje dag",
         "dxScheduler-switcherTimelineWeek": "Tidslinje vecka",
         "dxScheduler-switcherTimelineWorkWeek": "Tidslinje arbetsvecka",
         "dxScheduler-switcherTimelineMonth": "Tidslinje månad",
+
         "dxScheduler-recurrenceRepeatOnDate": "på datumet",
         "dxScheduler-recurrenceRepeatCount": "upprepning(ar)",
         "dxScheduler-allDay": "Hela dagen",
+
         "dxScheduler-ariaEditForm": "Redigeringsformulär",
+
         "dxScheduler-confirmRecurrenceEditTitle": "Redigera återkommande bokning",
         "dxScheduler-confirmRecurrenceDeleteTitle": "Radera återkommande bokning",
+
         "dxScheduler-confirmRecurrenceEditMessage": "Vill du redigera bara denna avtalade tid eller hela serien?",
         "dxScheduler-confirmRecurrenceDeleteMessage": "Vill du radera bara denna avtalade tid eller hela serien?",
+
         "dxScheduler-confirmRecurrenceEditSeries": "Redigera serien",
         "dxScheduler-confirmRecurrenceDeleteSeries": "Radera serien",
         "dxScheduler-confirmRecurrenceEditOccurrence": "Redigera avtalad tid",
         "dxScheduler-confirmRecurrenceDeleteOccurrence": "Radera avtalad tid",
+
         "dxScheduler-noTimezoneTitle": "Ingen tidszon",
         "dxScheduler-moreAppointments": "{0} mer",
+
         "dxCalendar-currentDay": "Idag",
         "dxCalendar-currentMonth": "Aktuell månad",
         "dxCalendar-currentYear": "Aktuellt år",
@@ -332,6 +370,7 @@
         "dxCalendar-selectedMultipleDateRange": "från {0} till {1}",
         "dxCalendar-selectedDateRangeCount": "Det finns {0} valda datumintervall",
         "dxCalendar-readOnlyLabel": "Skrivskyddad kalender",
+
         "dxCardView-ariaSearchInGrid": "Sök i kortvyn",
         "dxCardView-ariaHeaderItemLabel": "Fältnamn {0}",
         "dxCardView-ariaHeaderItemSortingAscendingLabel": "Sorterad i stigande ordning",
@@ -351,7 +390,9 @@
         "dxCardView-headerItemDropZoneText": "Släpp rubrikobjektet här",
         "dxCardView-emptyHeaderPanelText": "Använd {0} för att visa kolumner",
         "dxCardView-emptyHeaderPanelColumnChooserText": "kolumnväljaren",
+
         "dxAvatar-defaultImageAlt": "Avatar",
+
         "dxChat-elementAriaLabel": "Chatt",
         "dxChat-textareaPlaceholder": "Skriv ett meddelande",
         "dxChat-sendButtonAriaLabel": "Skicka",
@@ -375,19 +416,23 @@
         "dxChat-fileViewLabel": "Fillista",
         "dxChat-downloadButtonLabel": "Ladda ner fil {0}",
         "dxChat-fileLimitReachedWarning": "Du valde för många filer. Välj högst {0} filer och försök igen.",
+
         "dxColorView-ariaRed": "Röd",
         "dxColorView-ariaGreen": "Grön",
         "dxColorView-ariaBlue": "Blå",
         "dxColorView-ariaAlpha": "Transparens",
         "dxColorView-ariaHex": "Färgkod",
+
         "dxTagBox-selected": "{0} valda",
         "dxTagBox-allSelected": "Alla valda ({0})",
         "dxTagBox-moreSelected": "{0} mer",
         "dxTagBox-tagRoleDescription": "Tagg. Tryck på raderingsknappen för att ta bort den här taggen",
         "dxTagBox-ariaRoleDescription": "Taggruta",
+
         "vizExport-printingButtonText": "Skriv ut",
         "vizExport-titleMenuText": "Export/Utskrift",
         "vizExport-exportButtonText": "{0}-fil",
+
         "dxFilterBuilder-and": "Och",
         "dxFilterBuilder-or": "Eller",
         "dxFilterBuilder-notAnd": "Inte och",
@@ -419,6 +464,7 @@
         "dxFilterBuilder-filterAriaItemField": "Fält",
         "dxFilterBuilder-filterAriaItemOperation": "Åtgärd",
         "dxFilterBuilder-filterAriaItemValue": "Värde",
+
         "dxHtmlEditor-dialogColorCaption": "Ändra textfärg",
         "dxHtmlEditor-dialogBackgroundCaption": "Ändra bakgrundsfärg",
         "dxHtmlEditor-dialogLinkCaption": "Lägg till länk",
@@ -528,6 +574,7 @@
         "dxHtmlEditor-aiToolbarItemAriaLabel": "AI-assistent verktygsfältspost",
         "dxHtmlEditor-aiResultTextAreaAriaLabel": "AI-assistent resultat",
         "dxHtmlEditor-aiAskPlaceholder": "Be AI ändra text",
+
         "dxFileManager-newDirectoryName": "Namnlös katalog",
         "dxFileManager-rootDirectoryName": "Filer",
         "dxFileManager-errorNoAccess": "Åtkomst nekad. Åtgärden kunde inte slutföras.",
@@ -540,6 +587,7 @@
         "dxFileManager-errorInvalidSymbols": "Namnet innehåller ogiltiga tecken.",
         "dxFileManager-errorDefault": "Ospecificerat fel.",
         "dxFileManager-errorDirectoryOpenFailed": "Katalogen kunde inte öppnas",
+
         "dxFileManager-commandCreate": "Ny katalog",
         "dxFileManager-commandRename": "Byt namn",
         "dxFileManager-commandMove": "Flytta till",
@@ -552,6 +600,7 @@
         "dxFileManager-commandDetails": "Detaljvy",
         "dxFileManager-commandClearSelection": "Rensa markering",
         "dxFileManager-commandShowNavPane": "Växla navigeringspanel",
+
         "dxFileManager-dialogDirectoryChooserMoveTitle": "Flytta till",
         "dxFileManager-dialogDirectoryChooserMoveButtonText": "Flytta",
         "dxFileManager-dialogDirectoryChooserCopyTitle": "Kopiera till",
@@ -565,14 +614,17 @@
         "dxFileManager-dialogDeleteItemSingleItemConfirmation": "Är du säker på att du vill radera {0}?",
         "dxFileManager-dialogDeleteItemMultipleItemsConfirmation": "Är du säker på att du vill radera {0} objekt?",
         "dxFileManager-dialogButtonCancel": "Avbryt",
+
         "dxFileManager-editingCreateSingleItemProcessingMessage": "Skapar en katalog i {0}",
         "dxFileManager-editingCreateSingleItemSuccessMessage": "Katalog skapad i {0}",
         "dxFileManager-editingCreateSingleItemErrorMessage": "Katalogen skapades inte",
         "dxFileManager-editingCreateCommonErrorMessage": "Katalogen skapades inte",
+
         "dxFileManager-editingRenameSingleItemProcessingMessage": "Byter namn på ett objekt i {0}",
         "dxFileManager-editingRenameSingleItemSuccessMessage": "Bytte namn på ett objekt i {0}",
         "dxFileManager-editingRenameSingleItemErrorMessage": "Objektet byttes inte namn",
         "dxFileManager-editingRenameCommonErrorMessage": "Objektet byttes inte namn",
+
         "dxFileManager-editingDeleteSingleItemProcessingMessage": "Raderar ett objekt från {0}",
         "dxFileManager-editingDeleteMultipleItemsProcessingMessage": "Raderar {0} objekt från {1}",
         "dxFileManager-editingDeleteSingleItemSuccessMessage": "Raderade ett objekt från {0}",
@@ -580,6 +632,7 @@
         "dxFileManager-editingDeleteSingleItemErrorMessage": "Objektet raderades inte",
         "dxFileManager-editingDeleteMultipleItemsErrorMessage": "{0} objekt raderades inte",
         "dxFileManager-editingDeleteCommonErrorMessage": "Vissa objekt raderades inte",
+
         "dxFileManager-editingMoveSingleItemProcessingMessage": "Flyttar ett objekt till {0}",
         "dxFileManager-editingMoveMultipleItemsProcessingMessage": "Flyttar {0} objekt till {1}",
         "dxFileManager-editingMoveSingleItemSuccessMessage": "Flyttade ett objekt till {0}",
@@ -587,6 +640,7 @@
         "dxFileManager-editingMoveSingleItemErrorMessage": "Objektet flyttades inte",
         "dxFileManager-editingMoveMultipleItemsErrorMessage": "{0} objekt flyttades inte",
         "dxFileManager-editingMoveCommonErrorMessage": "Vissa objekt flyttades inte",
+
         "dxFileManager-editingCopySingleItemProcessingMessage": "Kopierar ett objekt till {0}",
         "dxFileManager-editingCopyMultipleItemsProcessingMessage": "Kopierar {0} objekt till {1}",
         "dxFileManager-editingCopySingleItemSuccessMessage": "Kopierade ett objekt till {0}",
@@ -594,6 +648,7 @@
         "dxFileManager-editingCopySingleItemErrorMessage": "Objektet kopierades inte",
         "dxFileManager-editingCopyMultipleItemsErrorMessage": "{0} objekt kopierades inte",
         "dxFileManager-editingCopyCommonErrorMessage": "Vissa objekt kopierades inte",
+
         "dxFileManager-editingUploadSingleItemProcessingMessage": "Laddar upp ett objekt till {0}",
         "dxFileManager-editingUploadMultipleItemsProcessingMessage": "Laddar upp {0} objekt till {1}",
         "dxFileManager-editingUploadSingleItemSuccessMessage": "Laddade upp ett objekt till {0}",
@@ -601,21 +656,27 @@
         "dxFileManager-editingUploadSingleItemErrorMessage": "Objektet laddades inte upp",
         "dxFileManager-editingUploadMultipleItemsErrorMessage": "{0} objekt laddades inte upp",
         "dxFileManager-editingUploadCanceledMessage": "Avbruten",
+
         "dxFileManager-editingDownloadSingleItemErrorMessage": "Objektet laddades inte ner",
         "dxFileManager-editingDownloadMultipleItemsErrorMessage": "{0} objekt laddades inte ner",
+
         "dxFileManager-listDetailsColumnCaptionName": "Namn",
         "dxFileManager-listDetailsColumnCaptionDateModified": "Ändringsdatum",
         "dxFileManager-listDetailsColumnCaptionFileSize": "Filstorlek",
+
         "dxFileManager-listThumbnailsTooltipTextSize": "Storlek",
         "dxFileManager-listThumbnailsTooltipTextDateModified": "Ändringsdatum",
+
         "dxFileManager-notificationProgressPanelTitle": "Förlopp",
         "dxFileManager-notificationProgressPanelEmptyListText": "Inga operationer",
         "dxFileManager-notificationProgressPanelOperationCanceled": "Avbruten",
+
         "dxDiagram-categoryGeneral": "Allmänt",
         "dxDiagram-categoryFlowchart": "Flödesschema",
         "dxDiagram-categoryOrgChart": "Organisationsschema",
         "dxDiagram-categoryContainers": "Behållare",
         "dxDiagram-categoryCustom": "Anpassad",
+
         "dxDiagram-commandExportToSvg": "Exportera till SVG",
         "dxDiagram-commandExportToPng": "Exportera till PNG",
         "dxDiagram-commandExportToJpg": "Exportera till JPEG",
@@ -677,15 +738,18 @@
         "dxDiagram-commandLayoutRightToLeft": "Höger till vänster",
         "dxDiagram-commandLayoutTopToBottom": "Uppifrån och ned",
         "dxDiagram-commandLayoutBottomToTop": "Nedifrån och upp",
+
         "dxDiagram-unitIn": "tum",
         "dxDiagram-unitCm": "cm",
         "dxDiagram-unitPx": "px",
+
         "dxDiagram-dialogButtonOK": "OK",
         "dxDiagram-dialogButtonCancel": "Avbryt",
         "dxDiagram-dialogInsertShapeImageTitle": "Infoga bild",
         "dxDiagram-dialogEditShapeImageTitle": "Byt bild",
         "dxDiagram-dialogEditShapeImageSelectButton": "Välj bild",
         "dxDiagram-dialogEditShapeImageLabelText": "eller släpp en fil här",
+
         "dxDiagram-uiExport": "Exportera",
         "dxDiagram-uiProperties": "Egenskaper",
         "dxDiagram-uiSettings": "Inställningar",
@@ -700,6 +764,7 @@
         "dxDiagram-uiObject": "Objekt",
         "dxDiagram-uiConnector": "Anslutning",
         "dxDiagram-uiPage": "Sida",
+
         "dxDiagram-shapeText": "Text",
         "dxDiagram-shapeRectangle": "Rektangel",
         "dxDiagram-shapeEllipse": "Ellips",
@@ -745,6 +810,7 @@
         "dxDiagram-shapeCardWithImageOnLeft": "Kort med bild till vänster",
         "dxDiagram-shapeCardWithImageOnTop": "Kort med bild ovanför",
         "dxDiagram-shapeCardWithImageOnRight": "Kort med bild till höger",
+
         "dxGantt-dialogTitle": "Titel",
         "dxGantt-dialogStartTitle": "Start",
         "dxGantt-dialogEndTitle": "Slut",
@@ -788,14 +854,19 @@
         "dxGantt-showDependencies": "Visa beroenden",
         "dxGantt-dialogStartDateValidation": "Startdatum måste vara efter {0}",
         "dxGantt-dialogEndDateValidation": "Slutdatum måste vara efter {0}",
+
         "dxGallery-itemName": "Gallerielement",
-        "dxMultiView-elementAriaRoleDescriptideon": "Fler vyer",
+
+        "dxMultiView-elementAriaRoleDescription": "MultiView",
         "dxMultiView-elementAriaLabel": "Använd piltangenterna eller svep för att växla mellan vyer",
         "dxMultiView-itemAriaRoleDescription": "Vy",
         "dxMultiView-itemAriaLabel": "{0} av {1}",
+
         "dxSplitter-resizeHandleAriaLabel": "Delningslist",
         "dxSplitter-resizeHandleAriaRoleDescription": "Avgränsare",
+
         "dxStepper-optionalMark": "(Valfritt)",
+
         "dxSpeechToText-ariaLabelStart": "Tryck för att starta rösttranskribering",
         "dxSpeechToText-ariaLabelStop": "Tryck för att stoppa rösttranskribering"
     }
