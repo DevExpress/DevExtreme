@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 export type Condition = Condition[] | string | number;
 export type Fields = typeof fields;
+export type Columns = typeof columns;
 
 export interface Product {
   Product_ID: number;
@@ -21,12 +22,43 @@ const filter: Condition = [
     ['Product_Cost', '<', 200],
   ],
 ];
-const fields: Record<string, string | number>[] = [
+
+const fields: Record<string, string>[] = [
   {
     caption: 'ID',
-    width: 50,
     dataField: 'Product_ID',
     dataType: 'number',
+  }, {
+    dataField: 'Product_Name',
+    dataType: 'string',
+  }, {
+    caption: 'Cost',
+    dataField: 'Product_Cost',
+    dataType: 'number',
+    format: 'currency',
+  }, {
+    dataField: 'Product_Sale_Price',
+    caption: 'Sale Price',
+    dataType: 'number',
+    format: 'currency',
+  }, {
+    dataField: 'Product_Retail_Price',
+    caption: 'Retail Price',
+    dataType: 'number',
+    format: 'currency',
+  }, {
+    dataField: 'Product_Current_Inventory',
+    dataType: 'number',
+    caption: 'Inventory',
+  },
+];
+
+const columns: Record<string, string | number>[] = [
+  {
+    caption: 'ID',
+    dataField: 'Product_ID',
+    dataType: 'number',
+    width: 50,
   }, {
     dataField: 'Product_Name',
     dataType: 'string',
@@ -209,6 +241,10 @@ const products: Product[] = [
 
 @Injectable()
 export class Service {
+  getColumns(): Columns {
+    return columns;
+  }
+
   getFields(): Fields {
     return fields;
   }
