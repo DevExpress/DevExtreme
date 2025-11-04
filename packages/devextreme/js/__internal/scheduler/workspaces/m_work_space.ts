@@ -511,13 +511,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
     const isMultiSelectionAllowed = this.option('allowMultipleCellSelection');
     const currentCellData = this._getFullCellData($cell);
-    const focusedCell = this.cellsSelectionState.getFocusedCell();
-
-    if (!focusedCell) {
-      return;
-    }
-
-    const focusedCellData = focusedCell.cellData;
+    const focusedCellData = this.cellsSelectionState.getFocusedCell().cellData;
 
     const nextFocusedCellData = this.cellsSelectionController.moveToCell({
       isMultiSelection,
@@ -3339,7 +3333,7 @@ const createDragBehaviorConfig = (
   };
 
   const onDragMove = () => {
-    if (isDefaultDraggingMode || !state.dragElement) {
+    if (isDefaultDraggingMode) {
       return;
     }
 
@@ -3381,7 +3375,6 @@ const createDragBehaviorConfig = (
     }
 
     state.dragElement?.remove();
-    state.dragElement = undefined;
     removeDroppableCellClass();
   };
 
@@ -3390,8 +3383,6 @@ const createDragBehaviorConfig = (
       enableDefaultDragging();
     }
 
-    state.dragElement?.remove();
-    state.dragElement = undefined;
     removeDroppableCellClass();
     e.itemElement?.removeClass?.(APPOINTMENT_DRAG_SOURCE_CLASS);
   };
