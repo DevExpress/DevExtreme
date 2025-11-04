@@ -16,8 +16,7 @@ import { AIPromptEditorModel } from '@ts/grids/grid_core/__tests__/__mock__/mode
 
 import type { Column } from '../columns_controller/m_columns_controller';
 import { AIPromptEditor } from './ai_prompt_editor/ai_prompt_editor';
-import { AI_COLUMN_NAME } from './const';
-import { AIColumnView } from './m_ai_column_view';
+import { AIPromptEditorView } from './m_ai_prompt_editor_view';
 
 jest.mock('./ai_prompt_editor/ai_prompt_editor', (): any => {
   const original = jest.requireActual<any>('./ai_prompt_editor/ai_prompt_editor');
@@ -30,7 +29,7 @@ jest.mock('./ai_prompt_editor/ai_prompt_editor', (): any => {
     }),
   };
 });
-jest.spyOn(AIColumnView.prototype, 'getController');
+jest.spyOn(AIPromptEditorView.prototype, 'getController');
 
 const mockColumnsController = {
   addCommandColumn: jest.fn(),
@@ -46,6 +45,7 @@ const mockAIColumnController = {
   getAIColumns: jest.fn().mockReturnValue([]),
   aiRequestCompleted: Callbacks(),
   aiRequestRejected: Callbacks(),
+  promptEditorRequested: Callbacks(),
 };
 const mockColumn = {
   type: 'ai',
@@ -60,10 +60,10 @@ const createComponentMock = jest.fn((
   options: any,
 ): any => new Widget(el, options));
 
-const createAIColumnView = (): {
+const createAIPromptEditorView = (): {
   $container: dxElementWrapper;
   cellElement: HTMLElement;
-  aiColumnView: AIColumnView;
+  aiPromptEditorView: AIPromptEditorView;
   aiPromptEditorPOM: AIPromptEditorModel;
 } => {
   const $container = $('<div>').appendTo(document.body);
@@ -76,16 +76,16 @@ const createAIColumnView = (): {
       aiColumn: mockAIColumnController,
     },
   };
-  const aiColumnView = new AIColumnView(mockComponent);
+  const aiPromptEditorView = new AIPromptEditorView(mockComponent);
 
-  aiColumnView.init();
-  aiColumnView.render($container);
+  aiPromptEditorView.init();
+  aiPromptEditorView.render($container);
 
   return {
     $container,
     cellElement: $cellElement[0],
-    aiColumnView,
-    aiPromptEditorPOM: new AIPromptEditorModel(aiColumnView.element().get(0)),
+    aiPromptEditorView,
+    aiPromptEditorPOM: new AIPromptEditorModel(aiPromptEditorView.element().get(0)),
   };
 };
 
@@ -103,38 +103,30 @@ const afterTest = (): void => {
   mockAIColumnController.aiRequestRejected.empty();
 };
 
-describe('AIColumnView', () => {
+describe('AIPromptEditorView', () => {
   beforeEach(beforeTest);
   afterEach(afterTest);
 
   describe('initialization', () => {
-    it('should initialize controllers and add AI command column', () => {
-      const { aiColumnView } = createAIColumnView();
+    it('should initialize controllers', () => {
+      const { aiPromptEditorView } = createAIPromptEditorView();
 
-      expect(aiColumnView.getController).toHaveBeenCalledWith('columns');
-      expect(aiColumnView.getController).toHaveBeenCalledWith('aiColumn');
-      expect(mockColumnsController.addCommandColumn).toHaveBeenCalledTimes(1);
-      expect(mockColumnsController.addCommandColumn).toHaveBeenCalledWith({
-        type: AI_COLUMN_NAME,
-        command: AI_COLUMN_NAME,
-        cssClass: 'dx-command-ai',
-        fixed: false,
-        minWidth: 120,
-      });
+      expect(aiPromptEditorView.getController).toHaveBeenCalledWith('columns');
+      expect(aiPromptEditorView.getController).toHaveBeenCalledWith('aiColumn');
     });
   });
 
   describe('Methods', () => {
-    describe('showPromptEditor', () => {
+    describe('show', () => {
       it('should create new AIPromptEditor instance', async () => {
         const {
           $container,
           cellElement,
-          aiColumnView,
+          aiPromptEditorView,
           aiPromptEditorPOM,
-        } = createAIColumnView();
+        } = createAIPromptEditorView();
 
-        await aiColumnView.showPromptEditor(
+        await aiPromptEditorView.show(
           cellElement,
           mockColumn,
         );
@@ -142,7 +134,7 @@ describe('AIColumnView', () => {
         expect(AIPromptEditor).toHaveBeenCalledTimes(1);
         expect(AIPromptEditor).toHaveBeenCalledWith({
           prompt: '',
-          container: aiColumnView.element(),
+          container: aiPromptEditorView.element(),
           createComponent: expect.any(Function),
           onStop: expect.any(Function),
           onSubmit: expect.any(Function),
@@ -160,18 +152,18 @@ describe('AIColumnView', () => {
           },
           editorOptions: { },
         });
-        expect(aiColumnView.getPromptEditorInstance().show).toHaveBeenCalledTimes(1);
+        expect(aiPromptEditorView.getPromptEditorInstance().show).toHaveBeenCalledTimes(1);
         expect(aiPromptEditorPOM.isVisible()).toBe(true);
       });
 
       it('should update existing AIPromptEditor instance', async () => {
         const {
           cellElement,
-          aiColumnView,
+          aiPromptEditorView,
           aiPromptEditorPOM,
-        } = createAIColumnView();
+        } = createAIPromptEditorView();
 
-        await aiColumnView.showPromptEditor(cellElement, mockColumn);
+        await aiPromptEditorView.show(cellElement, mockColumn);
 
         expect(AIPromptEditor).toHaveBeenCalledTimes(1);
         expect(AIPromptEditor).toHaveBeenCalledWith(
@@ -183,7 +175,7 @@ describe('AIColumnView', () => {
             }),
           }),
         );
-        expect(aiColumnView.getPromptEditorInstance().updateOptions).toHaveBeenCalledTimes(0);
+        expect(aiPromptEditorView.getPromptEditorInstance().updateOptions).toHaveBeenCalledTimes(0);
 
         const newColumn = {
           ...mockColumn,
@@ -191,14 +183,14 @@ describe('AIColumnView', () => {
         } as Column;
         mockColumnsController.getVisibleIndex.mockReturnValue(1);
 
-        await aiColumnView.showPromptEditor(
+        await aiPromptEditorView.show(
           cellElement,
           newColumn,
         );
 
         expect(AIPromptEditor).toHaveBeenCalledTimes(1); // Only one instance created
-        expect(aiColumnView.getPromptEditorInstance().updateOptions).toHaveBeenCalledTimes(1);
-        expect(aiColumnView.getPromptEditorInstance().updateOptions).toHaveBeenCalledWith(
+        expect(aiPromptEditorView.getPromptEditorInstance().updateOptions).toHaveBeenCalledTimes(1);
+        expect(aiPromptEditorView.getPromptEditorInstance().updateOptions).toHaveBeenCalledWith(
           expect.objectContaining({
             popupOptions: expect.objectContaining({
               position: expect.objectContaining({
@@ -213,14 +205,14 @@ describe('AIColumnView', () => {
       it('should configure popup position correctly for left alignment', async () => {
         const {
           cellElement,
-          aiColumnView,
-        } = createAIColumnView();
+          aiPromptEditorView,
+        } = createAIPromptEditorView();
         const leftAlignedColumn = {
           ...mockColumn,
           alignment: 'left',
         } as Column;
 
-        await aiColumnView.showPromptEditor(cellElement, leftAlignedColumn);
+        await aiPromptEditorView.show(cellElement, leftAlignedColumn);
 
         expect(AIPromptEditor).toHaveBeenCalledWith(
           expect.objectContaining({
@@ -237,14 +229,14 @@ describe('AIColumnView', () => {
       it('should configure popup position correctly for right alignment', async () => {
         const {
           cellElement,
-          aiColumnView,
-        } = createAIColumnView();
+          aiPromptEditorView,
+        } = createAIPromptEditorView();
         const rightAlignedColumn = {
           ...mockColumn,
           alignment: 'right',
         } as Column;
 
-        await aiColumnView.showPromptEditor(cellElement, rightAlignedColumn);
+        await aiPromptEditorView.show(cellElement, rightAlignedColumn);
 
         expect(AIPromptEditor).toHaveBeenCalledWith(
           expect.objectContaining({
@@ -261,10 +253,10 @@ describe('AIColumnView', () => {
       describe('when called with invalid parameters', () => {
         it('should return false if cell element is null', async () => {
           const {
-            aiColumnView,
-          } = createAIColumnView();
+            aiPromptEditorView,
+          } = createAIPromptEditorView();
 
-          const result = await aiColumnView.showPromptEditor(null as any, mockColumn);
+          const result = await aiPromptEditorView.show(null as any, mockColumn);
 
           expect(AIPromptEditor).not.toHaveBeenCalled();
           expect(result).toBe(false);
@@ -273,10 +265,10 @@ describe('AIColumnView', () => {
         it('should return false if column is null', async () => {
           const {
             cellElement,
-            aiColumnView,
-          } = createAIColumnView();
+            aiPromptEditorView,
+          } = createAIPromptEditorView();
 
-          const result = await aiColumnView.showPromptEditor(
+          const result = await aiPromptEditorView.show(
             cellElement,
             null as any,
           );
@@ -288,10 +280,10 @@ describe('AIColumnView', () => {
         it('should return false if column type is not ai', async () => {
           const {
             cellElement,
-            aiColumnView,
-          } = createAIColumnView();
+            aiPromptEditorView,
+          } = createAIPromptEditorView();
 
-          const result = await aiColumnView.showPromptEditor(
+          const result = await aiPromptEditorView.show(
             cellElement,
             { ...mockColumn, type: '' },
           );
@@ -302,18 +294,18 @@ describe('AIColumnView', () => {
       });
     });
 
-    describe('hidePromptEditor', () => {
+    describe('hide', () => {
       it('should call hide method', async () => {
         const {
           cellElement,
-          aiColumnView,
+          aiPromptEditorView,
           aiPromptEditorPOM,
-        } = createAIColumnView();
-        await aiColumnView.showPromptEditor(cellElement, mockColumn);
+        } = createAIPromptEditorView();
+        await aiPromptEditorView.show(cellElement, mockColumn);
 
-        const result = await aiColumnView.hidePromptEditor();
+        const result = await aiPromptEditorView.hide();
 
-        expect(aiColumnView.getPromptEditorInstance().hide).toHaveBeenCalledTimes(1);
+        expect(aiPromptEditorView.getPromptEditorInstance().hide).toHaveBeenCalledTimes(1);
         expect(aiPromptEditorPOM.isVisible()).toBe(false);
         expect(result).toBe(false);
       });
@@ -325,17 +317,17 @@ describe('AIColumnView', () => {
       it('should update column option and prompt editor state', async () => {
         const {
           cellElement,
-          aiColumnView,
+          aiPromptEditorView,
           aiPromptEditorPOM,
-        } = createAIColumnView();
+        } = createAIPromptEditorView();
         const columnWithIndex = { ...mockColumn, index: 2 };
 
-        await aiColumnView.showPromptEditor(cellElement, columnWithIndex);
+        await aiPromptEditorView.show(cellElement, columnWithIndex);
 
         aiPromptEditorPOM.getTextArea().setValue('test prompt');
         aiPromptEditorPOM.getApplyButton().getElement().click();
 
-        expect(aiColumnView.getPromptEditorInstance().updateStateOnAction).toHaveBeenCalledWith('apply');
+        expect(aiPromptEditorView.getPromptEditorInstance().updateStateOnAction).toHaveBeenCalledWith('apply');
         expect(mockColumnsController.columnOption).toHaveBeenCalledWith(
           2,
           'ai.prompt',
@@ -349,9 +341,9 @@ describe('AIColumnView', () => {
       it('should abort AI request and update prompt editor state', async () => {
         const {
           cellElement,
-          aiColumnView,
+          aiPromptEditorView,
           aiPromptEditorPOM,
-        } = createAIColumnView();
+        } = createAIPromptEditorView();
 
         mockAIColumnController.sendAIColumnRequest
           .mockImplementation(() => {
@@ -360,9 +352,9 @@ describe('AIColumnView', () => {
             });
           });
 
-        await aiColumnView.showPromptEditor(cellElement, mockColumn);
+        await aiPromptEditorView.show(cellElement, mockColumn);
 
-        const promptEditorInstance = aiColumnView.getPromptEditorInstance();
+        const promptEditorInstance = aiPromptEditorView.getPromptEditorInstance();
 
         aiPromptEditorPOM.getTextArea().setValue('test prompt');
         aiPromptEditorPOM.getApplyButton().getElement().click();
@@ -380,14 +372,14 @@ describe('AIColumnView', () => {
       it('should refresh AI column and update prompt editor state', async () => {
         const {
           cellElement,
-          aiColumnView,
+          aiPromptEditorView,
           aiPromptEditorPOM,
-        } = createAIColumnView();
+        } = createAIPromptEditorView();
         const columnWithPrompt = { ...mockColumn, name: 'testColumn', ai: { prompt: 'test prompt' } };
 
-        await aiColumnView.showPromptEditor(cellElement, columnWithPrompt);
+        await aiPromptEditorView.show(cellElement, columnWithPrompt);
 
-        const promptEditorInstance = aiColumnView.getPromptEditorInstance();
+        const promptEditorInstance = aiPromptEditorView.getPromptEditorInstance();
 
         aiPromptEditorPOM.getRefreshButton().getElement().click();
 
@@ -398,9 +390,9 @@ describe('AIColumnView', () => {
       it('should update prompt editor state on completion', async () => {
         const {
           cellElement,
-          aiColumnView,
+          aiPromptEditorView,
           aiPromptEditorPOM,
-        } = createAIColumnView();
+        } = createAIPromptEditorView();
         const columnWithPrompt = { ...mockColumn, name: 'testColumn', ai: { prompt: 'test prompt' } };
 
         mockAIColumnController.refreshAIColumn
@@ -410,9 +402,9 @@ describe('AIColumnView', () => {
             });
           });
 
-        await aiColumnView.showPromptEditor(cellElement, columnWithPrompt);
+        await aiPromptEditorView.show(cellElement, columnWithPrompt);
 
-        const promptEditorInstance = aiColumnView.getPromptEditorInstance();
+        const promptEditorInstance = aiPromptEditorView.getPromptEditorInstance();
 
         aiPromptEditorPOM.getRefreshButton().getElement().click();
         (promptEditorInstance.updateStateOnAction as jest.Mock).mockClear();
@@ -426,9 +418,9 @@ describe('AIColumnView', () => {
       it('should update prompt editor state on error', async () => {
         const {
           cellElement,
-          aiColumnView,
+          aiPromptEditorView,
           aiPromptEditorPOM,
-        } = createAIColumnView();
+        } = createAIPromptEditorView();
         const columnWithPrompt = { ...mockColumn, name: 'testColumn', ai: { prompt: 'test prompt' } };
 
         mockAIColumnController.refreshAIColumn
@@ -438,9 +430,9 @@ describe('AIColumnView', () => {
             });
           });
 
-        await aiColumnView.showPromptEditor(cellElement, columnWithPrompt);
+        await aiPromptEditorView.show(cellElement, columnWithPrompt);
 
-        const promptEditorInstance = aiColumnView.getPromptEditorInstance();
+        const promptEditorInstance = aiPromptEditorView.getPromptEditorInstance();
 
         aiPromptEditorPOM.getRefreshButton().getElement().click();
         (promptEditorInstance.updateStateOnAction as jest.Mock).mockClear();
@@ -456,14 +448,14 @@ describe('AIColumnView', () => {
       it('should update prompt editor state and abort AI request', async () => {
         const {
           cellElement,
-          aiColumnView,
-        } = createAIColumnView();
+          aiPromptEditorView,
+        } = createAIPromptEditorView();
 
-        await aiColumnView.showPromptEditor(cellElement, mockColumn);
+        await aiPromptEditorView.show(cellElement, mockColumn);
 
-        const promptEditorInstance = aiColumnView.getPromptEditorInstance();
+        const promptEditorInstance = aiPromptEditorView.getPromptEditorInstance();
 
-        await aiColumnView.hidePromptEditor();
+        await aiPromptEditorView.hide();
 
         expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledWith('stop');
         expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledTimes(1);
@@ -474,19 +466,19 @@ describe('AIColumnView', () => {
 
   describe('optionChanged', () => {
     it('should return early if name is not columns', () => {
-      const { aiColumnView } = createAIColumnView();
+      const { aiPromptEditorView } = createAIPromptEditorView();
 
-      aiColumnView.optionChanged({ name: 'dataSource' });
+      aiPromptEditorView.optionChanged({ name: 'dataSource' });
 
       expect(mockColumnsController.getColumnByPath).not.toHaveBeenCalled();
     });
 
     it('should return early if column type is not ai', () => {
-      const { aiColumnView } = createAIColumnView();
+      const { aiPromptEditorView } = createAIPromptEditorView();
       const column = { type: 'data' };
       mockColumnsController.getColumnByPath.mockReturnValue(column);
 
-      aiColumnView.optionChanged({
+      aiPromptEditorView.optionChanged({
         name: 'columns',
         fullName: 'columns[0].caption',
       });
@@ -497,8 +489,8 @@ describe('AIColumnView', () => {
     it('should handle ai.prompt option change', async () => {
       const {
         cellElement,
-        aiColumnView,
-      } = createAIColumnView();
+        aiPromptEditorView,
+      } = createAIPromptEditorView();
 
       mockColumnsController.getColumnByPath.mockReturnValue(mockColumn);
       mockColumnsController.getColumnOptionNameByFullName.mockReturnValue('ai.prompt');
@@ -509,13 +501,13 @@ describe('AIColumnView', () => {
           });
         });
 
-      await aiColumnView.showPromptEditor(cellElement, mockColumn);
+      await aiPromptEditorView.show(cellElement, mockColumn);
 
-      const promptEditorInstance = aiColumnView.getPromptEditorInstance();
+      const promptEditorInstance = aiPromptEditorView.getPromptEditorInstance();
 
       (promptEditorInstance.getEditorValue as jest.Mock).mockReturnValue('new prompt value');
 
-      aiColumnView.optionChanged({
+      aiPromptEditorView.optionChanged({
         name: 'columns',
         fullName: 'columns[0].ai.prompt',
         value: 'new prompt value',
@@ -528,8 +520,8 @@ describe('AIColumnView', () => {
     it('should update prompt editor state on completion', async () => {
       const {
         cellElement,
-        aiColumnView,
-      } = createAIColumnView();
+        aiPromptEditorView,
+      } = createAIPromptEditorView();
 
       mockColumnsController.getColumnByPath.mockReturnValue(mockColumn);
       mockColumnsController.getColumnOptionNameByFullName.mockReturnValue('ai.prompt');
@@ -538,13 +530,13 @@ describe('AIColumnView', () => {
           mockAIColumnController.aiRequestCompleted.fire();
         });
 
-      await aiColumnView.showPromptEditor(cellElement, mockColumn);
+      await aiPromptEditorView.show(cellElement, mockColumn);
 
-      const promptEditorInstance = aiColumnView.getPromptEditorInstance();
+      const promptEditorInstance = aiPromptEditorView.getPromptEditorInstance();
 
       (promptEditorInstance.getEditorValue as jest.Mock).mockReturnValue('new prompt value');
 
-      aiColumnView.optionChanged({
+      aiPromptEditorView.optionChanged({
         name: 'columns',
         fullName: 'columns[0].ai.prompt',
         value: 'new prompt value',
@@ -557,8 +549,8 @@ describe('AIColumnView', () => {
     it('should update prompt editor state on error', async () => {
       const {
         cellElement,
-        aiColumnView,
-      } = createAIColumnView();
+        aiPromptEditorView,
+      } = createAIPromptEditorView();
 
       mockColumnsController.getColumnByPath.mockReturnValue(mockColumn);
       mockColumnsController.getColumnOptionNameByFullName.mockReturnValue('ai.prompt');
@@ -567,15 +559,15 @@ describe('AIColumnView', () => {
           mockAIColumnController.aiRequestRejected.fire();
         });
 
-      await aiColumnView.showPromptEditor(cellElement, mockColumn);
+      await aiPromptEditorView.show(cellElement, mockColumn);
 
-      aiColumnView.optionChanged({
+      aiPromptEditorView.optionChanged({
         name: 'columns',
         fullName: 'columns[0].ai.prompt',
         value: 'new prompt value',
       });
 
-      const promptEditorInstance = aiColumnView.getPromptEditorInstance();
+      const promptEditorInstance = aiPromptEditorView.getPromptEditorInstance();
 
       expect(promptEditorInstance.updatePrompt).toHaveBeenCalledWith('new prompt value');
       expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledTimes(1);
@@ -584,13 +576,13 @@ describe('AIColumnView', () => {
 
     describe('when prompt editor is not initialized', () => {
       it('should handle optionChanged', () => {
-        const { aiColumnView } = createAIColumnView();
+        const { aiPromptEditorView } = createAIPromptEditorView();
 
         mockColumnsController.getColumnByPath.mockReturnValue(mockColumn);
         mockColumnsController.getColumnOptionNameByFullName.mockReturnValue('ai.prompt');
 
         expect(() => {
-          aiColumnView.optionChanged({
+          aiPromptEditorView.optionChanged({
             name: 'columns',
             fullName: 'columns[0].ai.prompt',
             value: 'new prompt value',
