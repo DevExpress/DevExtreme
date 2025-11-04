@@ -1,5 +1,4 @@
 $(() => {
-
   const dataSource = [];
 
   vehicles.forEach(item => {
@@ -67,7 +66,7 @@ $(() => {
     },
   });
 
-   const createTrademarkTemplate = (vehicle) => {
+  const createTrademarkTemplate = (vehicle) => {
     const {
       ID,
       Name,
@@ -87,7 +86,7 @@ $(() => {
     const imgWrapper = $('<div>').addClass('trademark__img-wrapper');
     const img = $('<img>').addClass('trademark__img');
     img.attr({
-      src: `../../../../images/vehicles/image_${ID}.png`,
+      src: `images/vehicles/image_${ID}.png`,
       alt: `${TrademarkName} ${Name}`,
     });
 
@@ -136,7 +135,7 @@ $(() => {
 
   $('#gridContainer').dxTreeList({
     dataSource,
-    keyExpr: "TLID",
+    keyExpr: 'TLID',
     parentIdExpr: 'ParentID',
     expandedRowKeys: [1, 3],
     columns: [
@@ -147,7 +146,7 @@ $(() => {
           const vehicle = options.data;
           const imageWrapper = createTrademarkTemplate(vehicle);
           container.append(imageWrapper);
-        }
+        },
       },
       {
         dataField: 'Price',
@@ -163,20 +162,20 @@ $(() => {
           const category = options.data;
           const categoryWrapper = createCategoryTemplate(category);
           container.append(categoryWrapper);
-        }
+        },
       },
       {
         dataField: 'Modification',
-        width: 180
+        width: 180,
       },
       {
         dataField: 'Horsepower',
-        width: 140
+        width: 140,
       },
       {
         dataField: 'BodyStyleName',
         caption: 'Body Style',
-        width: 180
+        width: 180,
       },
       {
         name: 'AI column',
@@ -192,11 +191,11 @@ $(() => {
         },
         width: 200,
         fixed: true,
-        fixedPosition: "right",
+        fixedPosition: 'right',
         cellTemplate: ($container) => {
-          $container.addClass("ai__cell");
+          $container.addClass('ai__cell');
         },
-      }
+      },
     ],
   });
 });
