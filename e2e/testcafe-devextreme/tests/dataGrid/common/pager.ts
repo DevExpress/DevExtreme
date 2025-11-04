@@ -98,26 +98,17 @@ safeSizeTest('Resize', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   await t
     .resizeWindow(700, 600);
-
   await testScreenshot(t, takeScreenshot, 'pager-resize-large.png', { element: pagerElement });
   await t
-    .expect(compareResults.isValid())
-    .ok()
     .resizeWindow(600, 600);
   await testScreenshot(t, takeScreenshot, 'pager-resize-large-noinfo.png', { element: pagerElement });
   await t
-    .expect(compareResults.isValid())
-    .ok()
     .resizeWindow(350, 600);
   await testScreenshot(t, takeScreenshot, 'pager-resize-small.png', { element: pagerElement });
   await t
-    .expect(compareResults.isValid())
-    .ok()
     .resizeWindow(600, 600);
   await testScreenshot(t, takeScreenshot, 'pager-resize-large-noinfo-enlarge.png', { element: pagerElement });
   await t
-    .expect(compareResults.isValid())
-    .ok()
     .resizeWindow(700, 600);
   await testScreenshot(t, takeScreenshot, 'pager-resize-large-enlarge.png', { element: pagerElement });
   await t
@@ -134,23 +125,15 @@ safeSizeTest('Resize without navigation buttons', async (t) => {
     .resizeWindow(700, 600);
   await testScreenshot(t, takeScreenshot, 'pager-resize-nobutton-large.png', { element: pagerElement });
   await t
-    .expect(compareResults.isValid())
-    .ok()
     .resizeWindow(540, 600);
   await testScreenshot(t, takeScreenshot, 'pager-resize-nobutton-large-noinfo.png', { element: pagerElement });
   await t
-    .expect(compareResults.isValid())
-    .ok()
     .resizeWindow(350, 600);
   await testScreenshot(t, takeScreenshot, 'pager-resize-nobutton-small.png', { element: pagerElement });
   await t
-    .expect(compareResults.isValid())
-    .ok()
     .resizeWindow(540, 600);
   await testScreenshot(t, takeScreenshot, 'pager-resize-nobutton-large-noinfo-enlarge.png', { element: pagerElement });
   await t
-    .expect(compareResults.isValid())
-    .ok()
     .resizeWindow(700, 600);
   await testScreenshot(t, takeScreenshot, 'pager-resize-nobutton-large-enlarge.png', { element: pagerElement });
   await t
