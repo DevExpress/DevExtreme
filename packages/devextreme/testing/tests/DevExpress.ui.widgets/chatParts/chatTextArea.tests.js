@@ -544,7 +544,7 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
                 const $informer = this.$element.find(`.${INFORMER_CLASS}`);
 
                 assert.strictEqual($informer.length, 0, 'informer is not rendered');
-                assert.strictEqual(this.getInformer(), undefined, 'informer instance is undefined');
+                assert.strictEqual(this.getInformer(), null, 'informer instance is not defined');
             });
 
             QUnit.test('informer should be rendered when _showInformer is called', function(assert) {
@@ -819,6 +819,7 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
             });
 
             QUnit.test('informer should be hidden when text is cleared', function(assert) {
+                this.typeText('new text');
                 this.showInformer('Test error message');
 
                 assert.strictEqual(this.$element.find(`.${INFORMER_CLASS}`).length, 1, 'informer is visible initially');
