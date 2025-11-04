@@ -108,7 +108,7 @@ function makeAsyncDataSource(jsonFile: string) {
 function syncTreeViewSelection() {
   if (!treeView) return;
 
-  if (treeBoxValue.value) {
+  if (treeBoxValue.value != null) {
     treeView?.selectItem(treeBoxValue.value);
   } else {
     treeView?.unselectAll();
