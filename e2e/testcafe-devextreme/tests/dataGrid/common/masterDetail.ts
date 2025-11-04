@@ -131,18 +131,18 @@ test.meta({ browserSize: [800, 800] })('The master detail row should display cor
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(() => createWidget('dxDataGrid', {
-    dataSource: [...new Array(40)].map((_, index) => ({ id: index, text: `item ${index}` })),
-    keyExpr: 'id',
-    showBorders: true,
-    height: 700,
-    renderAsync: true,
-    masterDetail: {
-      enabled: true,
-    },
-    scrolling: {
-      mode: 'virtual',
-    },
-  }));
+  dataSource: [...new Array(40)].map((_, index) => ({ id: index, text: `item ${index}` })),
+  keyExpr: 'id',
+  showBorders: true,
+  height: 700,
+  renderAsync: true,
+  masterDetail: {
+    enabled: true,
+  },
+  scrolling: {
+    mode: 'virtual',
+  },
+}));
 
 [true, false].forEach((useNative) => {
   // T1167889
