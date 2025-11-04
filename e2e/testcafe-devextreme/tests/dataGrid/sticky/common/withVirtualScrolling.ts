@@ -4,6 +4,7 @@ import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { getData } from '../../helpers/generateDataSourceData';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const DATA_GRID_SELECTOR = '#container';
 
@@ -25,12 +26,12 @@ safeSizeTest('Fixed columns should display correctly when scrolling vertically q
   await dataGrid.scrollTo(t, { y: 1500 });
   await t.wait(100);
 
-  await takeScreenshot('fixed_columns_with_virtual_scrolling_1.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'fixed_columns_with_virtual_scrolling_1.png', { element: dataGrid.element });
 
   // waiting for size update
   await t.wait(3000);
 
-  await takeScreenshot('fixed_columns_with_virtual_scrolling_2.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'fixed_columns_with_virtual_scrolling_2.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -66,7 +67,7 @@ safeSizeTest('Fixed columns should display correctly when horizontal scrolling',
   // act
   await dataGrid.scrollTo(t, { x: 10000 });
 
-  await takeScreenshot('fixed_columns_with_horizontal_scrolling.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'fixed_columns_with_horizontal_scrolling.png', { element: dataGrid.element });
 
   // assert
   await t

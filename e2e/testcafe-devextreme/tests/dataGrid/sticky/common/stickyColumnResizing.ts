@@ -5,6 +5,7 @@ import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { createWidget } from '../../../../helpers/createWidget';
 import { getData } from '../../helpers/generateDataSourceData';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const scrollTo = ClientFunction((x = 0, y = 0) => {
   window.scrollTo(x, y);
@@ -28,12 +29,12 @@ fixture.disablePageReloads`Resize columns - nextColumn mode`
     // act
     await dataGrid.resizeHeader(columnIndex, 100);
 
-    await takeScreenshot(`resize_first_fixed_column_with_left_position_1_(nextColumn_mode_and_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `resize_first_fixed_column_with_left_position_1_(nextColumn_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     // act
     await dataGrid.scrollTo(t, { x: scrollLeft });
 
-    await takeScreenshot(`resize_first_fixed_column_with_left_position_2_(nextColumn_mode_and_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `resize_first_fixed_column_with_left_position_2_(nextColumn_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     // assert
     await t
@@ -66,12 +67,12 @@ fixture.disablePageReloads`Resize columns - nextColumn mode`
     // act
     await dataGrid.resizeHeader(columnIndex, -100);
 
-    await takeScreenshot(`resize_second_fixed_column_with_right_position_1_(nextColumn_mode_and_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `resize_second_fixed_column_with_right_position_1_(nextColumn_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     // act
     await dataGrid.scrollTo(t, { x: scrollLeft });
 
-    await takeScreenshot(`resize_second_fixed_column_with_right_position_2_(nextColumn_mode_and_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `resize_second_fixed_column_with_right_position_2_(nextColumn_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     // assert
     await t
@@ -109,12 +110,12 @@ fixture.disablePageReloads`Resize columns - widget mode`
     // act
     await dataGrid.resizeHeader(columnIndex, 100);
 
-    await takeScreenshot(`resize_first_fixed_column_with_left_position_1_(widget_mode_and_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `resize_first_fixed_column_with_left_position_1_(widget_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     // act
     await dataGrid.scrollTo(t, { x: scrollLeft });
 
-    await takeScreenshot(`resize_first_fixed_column_with_left_position_2_(widget_mode_and_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `resize_first_fixed_column_with_left_position_2_(widget_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     // assert
     await t
@@ -147,12 +148,12 @@ fixture.disablePageReloads`Resize columns - widget mode`
     // act
     await dataGrid.resizeHeader(columnIndex, -100);
 
-    await takeScreenshot(`resize_second_fixed_column_with_right_position_1_(widget_mode_and_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `resize_second_fixed_column_with_right_position_1_(widget_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     // act
     await dataGrid.scrollTo(t, { x: scrollLeft });
 
-    await takeScreenshot(`resize_second_fixed_column_with_right_position_2_(widget_mode_and_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `resize_second_fixed_column_with_right_position_2_(widget_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     // assert
     await t
@@ -185,12 +186,12 @@ fixture.disablePageReloads`Resize columns - widget mode`
     // act
     await dataGrid.resizeHeader(columnIndex, -100);
 
-    await takeScreenshot(`resize_first_fixed_column_with_right_position_1_(widget_mode_and_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `resize_first_fixed_column_with_right_position_1_(widget_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     // act
     await dataGrid.scrollTo(t, { x: scrollLeft });
 
-    await takeScreenshot(`resize_first_fixed_column_with_right_position_2_(widget_mode_and_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `resize_first_fixed_column_with_right_position_2_(widget_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     // assert
     await t
@@ -222,7 +223,7 @@ fixture.disablePageReloads`Resize columns - widget mode`
     // act
     await dataGrid.resizeHeader(columnIndex, -100, false);
 
-    await takeScreenshot(`separator_position_with_fixed_column_on_right_(widget_mode_and_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `separator_position_with_fixed_column_on_right_(widget_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     // assert
     await t
@@ -255,7 +256,7 @@ fixture.disablePageReloads`Resize columns - widget mode`
     await scrollTo(0, 1000);
     await dataGrid.resizeHeader(columnIndex, -100, false);
 
-    await takeScreenshot(`separator_position_with_window_scroll_top_(widget_mode_and_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `separator_position_with_window_scroll_top_(widget_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     // assert
     await t
