@@ -56,12 +56,12 @@
             min-height: 3.57em !important;
         }
 
-        .dx-chat-messagebox {
+        /* .dx-chat-messagebox { */
             /* DEBUG */
             /* max-height: 39.29em !important; */
             /* END DEBUG */
-            flex-shrink: 0;
-        }
+            /* flex-shrink: 0; */
+        /* } */
 
         /* .dx-chat-textarea {
             max-height: unset !important;
@@ -75,29 +75,30 @@
         /* END DEBUG */
 
         .dx-texteditor-input {
-            min-height: 4.29em !important;
-            max-height: 17.85em !important;
+            /* min-height: 4.29em !important; */
+            /* max-height: 17.85em !important; */
+            max-height: 7.1em !important;
         }
 
-        .dx-fileuploader-container {
+        /* .dx-fileuploader-container {
             display: block !important;
             table-layout: unset !important;
-        }
+        } */
 
-        .dx-fileuploader-content {
+        /* .dx-fileuploader-content {
             display: block !important;
-        }
+        } */
 
-        .dx-fileuploader-files-container {
+        /* .dx-fileuploader-files-container {
             padding: 2px 3px 3px !important;
             display: grid;
             grid-template-columns: repeat(auto-fit, 17.14em);
             gap: 8px;
-        }
+        } */
 
-        .dx-fileuploader-file-container {
+        /* .dx-fileuploader-file-container {
             margin-bottom: 0 !important;
-        }
+        } */
     </style>
 </head>
 
@@ -130,7 +131,7 @@
                 const chat = $("#chat")
                     .dxChat({
                         // height: '95vh',
-                        height: 200,
+                        height: 600,
                         dataSource,
                         editing: {
                             allowUpdating: true,
@@ -138,6 +139,20 @@
                         reloadOnChange: false,
                         user: currentUser,
                         showAvatar: false,
+                        alerts: [
+                            {
+                                message: 'One file attached and the message is a little longer',
+                            },
+                            {
+                                message: 'One file attached and the message is a little longer',
+                            },
+                            {
+                                message: 'One file attached and the message is a little longer',
+                            },
+                            {
+                                message: 'One file attached and the message is a little longer',
+                            },
+                        ],
                         onMessageEntered(e) {
                             const { message } = e;
 
