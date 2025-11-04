@@ -37,7 +37,7 @@ const TESTCAFE_CONFIG: Partial<TestCafeConfigurationOptions> = {
 
 const getCurrentTheme = async (t: TestController): Promise<string> => {
   // eslint-disable-next-line @stylistic/max-len
-  const currentTheme = await ClientFunction(() => (window as any).DevExpress.ui.themes.current()).with({ boundTestRun: t })();
+  const currentTheme = await ClientFunction(() => (window as any)?.DevExpress?.ui?.themes?.current()).with({ boundTestRun: t })();
 
   return currentTheme;
 };
@@ -276,13 +276,11 @@ createTestCafe(TESTCAFE_CONFIG)
             }
 
             console.log('file', file, 'componentFolder', componentFolder, 'testName', testName);
-            if (!file.includes('xss')) {
-              const currentTheme = await getCurrentTheme(t) || 'fluent.blue.light';
-              const newTheme = args.theme || 'fluent.blue.light';
+            const currentTheme = await getCurrentTheme(t) || 'fluent.blue.light';
+            const newTheme = args.theme || 'fluent.blue.light';
 
-              if (currentTheme !== newTheme) {
-                await changeTheme(t, newTheme);
-              }
+            if (currentTheme !== newTheme) {
+              await changeTheme(t, newTheme);
             }
           },
           after: async (t: TestController) => {
