@@ -63,6 +63,27 @@ export const resources = [
   }
 ];
 
+export const resourcesWithIcons = [
+  {
+    fieldExpr: 'roomId',
+    dataSource: rooms,
+    label: 'Room',
+    icon: 'conferenceroomoutline'
+  }, {
+    fieldExpr: 'priorityId',
+    dataSource: priorities,
+    label: 'Priority',
+    icon: 'tags',
+    useColorAsDefault: true,
+  }, {
+    fieldExpr: 'assigneeId',
+    allowMultiple: true,
+    dataSource: assignees,
+    label: 'Assignee',
+    icon: 'user'
+  }
+];
+
 export const data = [
   {
     text: 'Watercolor Landscape',

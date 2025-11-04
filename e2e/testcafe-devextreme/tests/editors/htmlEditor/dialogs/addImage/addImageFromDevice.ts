@@ -10,7 +10,7 @@ const TEST_IMAGE_PATH_2 = './images/test-image-2.png';
 fixture`HtmlEditor - upload image from device`
   .page(url(__dirname, '../../../../container.html'));
 
-test('Image from device should be inserted', async (t) => {
+test.meta({ loadQuill: true })('Image from device should be inserted', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const htmlEditor = new HtmlEditor('#container');
 
@@ -69,7 +69,7 @@ test('Image from device should be inserted', async (t) => {
   });
 });
 
-test('Image should be validated and inserted from device', async (t) => {
+test.meta({ loadQuill: true })('Image should be validated and inserted from device', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const htmlEditor = new HtmlEditor('#container');
 

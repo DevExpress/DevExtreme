@@ -15,12 +15,14 @@
         :use-color-as-default="currentResource === 'Room'"
         field-expr="roomId"
         label="Room"
+        icon="conferenceroomoutline"
       />
       <DxResource
         :data-source="priorities"
         :use-color-as-default="currentResource === 'Priority'"
         field-expr="priorityId"
         label="Priority"
+        icon="tags"
       />
       <DxResource
         :data-source="assignees"
@@ -28,6 +30,7 @@
         field-expr="assigneeId"
         label="Assignee"
         :allow-multiple="true"
+        icon="user"
       />
     </DxScheduler>
     <div class="options">

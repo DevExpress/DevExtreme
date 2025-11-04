@@ -4,8 +4,6 @@ import { ClientFunction } from 'testcafe';
 import AppointmentPopup from 'devextreme-testcafe-models/scheduler/appointment/popup';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
-import { changeTheme } from '../../../../helpers/changeTheme';
 
 fixture`Appointment Form: Recurrence Form`
   .page(url(__dirname, '../../../container.html'));
@@ -674,7 +672,14 @@ test.clientScripts([
   })();
 });
 
-safeSizeTest('recurrence form with icons', async (t) => {
+test.clientScripts([
+  { module: 'mockdate' },
+  { content: 'window.MockDate = MockDate;' },
+])(`recurrence form with icons (${theme})`, async (t) => {
+  await ClientFunction(() => {
+    (window as any).MockDate.set('2025/10/29');
+  })();
+
   const appointment = {
     text: 'Appointment',
     startDate: new Date('2021-04-26T16:30:00.000Z'),
@@ -698,19 +703,18 @@ safeSizeTest('recurrence form with icons', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [1500, 1500]).before(async () => {
-  await changeTheme(theme);
-  return createWidget('dxScheduler', {
-    dataSource: [],
-    views: ['week'],
-    currentView: 'week',
-    currentDate: new Date(2021, 2, 25),
-    editing: {
-      form: {
-        iconsShowMode: 'both',
-      },
+}).before(async () => createWidget('dxScheduler', {
+  dataSource: [],
+  views: ['week'],
+  currentView: 'week',
+  currentDate: new Date(2021, 2, 25),
+  editing: {
+    form: {
+      iconsShowMode: 'both',
     },
-  });
-}).after(async () => {
-  await changeTheme('generic.light');
+  },
+})).after(async () => {
+  await ClientFunction(() => {
+    (window as any).MockDate.reset();
+  })();
 });

@@ -12,7 +12,7 @@ fixture`HtmlEditor - common`
 
 const ADD_IMAGE_POPUP_CONTENT_SELECTOR = '.dx-htmleditor-add-image-popup .dx-overlay-content';
 
-test('TabPanel in HtmlEditor must have correct borders', async (t) => {
+test.meta({ loadQuill: true })('TabPanel in HtmlEditor must have correct borders', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const htmlEditor = new HtmlEditor('#container');
 
@@ -36,7 +36,7 @@ test('TabPanel in HtmlEditor must have correct borders', async (t) => {
   });
 });
 
-test('Add button should be enabled after switch to url form', async (t) => {
+test.meta({ loadQuill: true })('Add button should be enabled after switch to url form', async (t) => {
   const htmlEditor = new HtmlEditor('#container');
 
   await t
@@ -66,7 +66,7 @@ test('Add button should be enabled after switch to url form', async (t) => {
   });
 });
 
-test('Add button should be disable after switch to image upload form', async (t) => {
+test.meta({ loadQuill: true })('Add button should be disable after switch to image upload form', async (t) => {
   const htmlEditor = new HtmlEditor('#container');
 
   await t
@@ -105,7 +105,7 @@ test('Add button should be disable after switch to image upload form', async (t)
   });
 });
 
-test('AddImage form shouldn\'t lead to side effects in other forms', async (t) => {
+test.meta({ loadQuill: true })('AddImage form shouldn\'t lead to side effects in other forms', async (t) => {
   const htmlEditor = new HtmlEditor('#container');
 
   await t

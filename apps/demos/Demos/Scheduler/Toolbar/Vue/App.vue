@@ -15,6 +15,7 @@
       field-expr="assigneeId"
       label="Assignee"
       :allow-multiple="true"
+      icon="user"
     />
     <DxToolbar>
       <DxItem name="today"/>

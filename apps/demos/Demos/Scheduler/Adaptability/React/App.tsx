@@ -33,6 +33,7 @@ const App = () => {
           dataSource={priorities}
           fieldExpr="priorityId"
           label="Priority"
+          icon="tags"
         />
       </Scheduler>
       <SpeedDialAction

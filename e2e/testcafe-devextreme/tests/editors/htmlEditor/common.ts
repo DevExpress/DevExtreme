@@ -17,7 +17,7 @@ fixture.disablePageReloads`HtmlEditor`
   const clickTarget = toolbar ? '#otherContainer .dx-bold-format' : '#container';
   const baseScreenName = toolbar ? 'htmleditor-with-toolbar' : 'htmleditor-without-toolbar';
 
-  test(`T1025549 - ${baseScreenName}`, async (t) => {
+  test.meta({ loadQuill: true })(`T1025549 - ${baseScreenName}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await testScreenshot(t, takeScreenshot, `${baseScreenName}.png`, { element: selector });
@@ -53,7 +53,7 @@ fixture.disablePageReloads`HtmlEditor`
   });
 });
 
-test('AI toolbar item', async (t) => {
+test.meta({ loadQuill: true })('AI toolbar item', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const htmlEditor = new HtmlEditor('#container');
 

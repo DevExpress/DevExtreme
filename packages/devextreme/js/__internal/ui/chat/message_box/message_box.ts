@@ -1,6 +1,7 @@
 import type { NativeEventInfo } from '@js/common/core/events';
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import type { InteractionEvent } from '@js/events';
+import type { Attachment } from '@js/ui/chat';
 import type { Properties as FileUploaderProperties } from '@js/ui/file_uploader';
 import type { InputEvent } from '@js/ui/text_area';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
@@ -15,14 +16,16 @@ import EditingPreview from '@ts/ui/chat/message_box/editing_preview';
 
 export const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
 export const CHAT_MESSAGEBOX_TEXTAREA_CONTAINER_CLASS = 'dx-chat-messagebox-textarea-container';
-export const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
 
 export const TYPING_END_DELAY = 2000;
 const ESCAPE_KEY = 'escape';
 
 export type MessageEnteredEvent =
   NativeEventInfo<MessageBox, InteractionEvent> &
-  { text?: string };
+  {
+    text?: string;
+    attachments?: Attachment[];
+  };
 
 export type TypingStartEvent = NativeEventInfo<MessageBox, UIEvent & { target: HTMLInputElement }>;
 
@@ -133,7 +136,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   }
 
   _renderTextArea($parent: dxElementWrapper): void {
-    const $textArea = $('<div>').addClass(CHAT_MESSAGEBOX_TEXTAREA_CLASS);
+    const $textArea = $('<div>');
     const textAreaOptions = this._getTextAreaOptions();
 
     $parent.append($textArea);
@@ -237,11 +240,21 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       return;
     }
 
-    this._messageEnteredAction?.({ text, event: e.event });
+    const messageEnteredArgs: Partial<MessageEnteredEvent> = {
+      text,
+      event: e.event,
+    };
+    const attachments = this._textArea.getAttachments();
+
+    if (attachments) {
+      messageEnteredArgs.attachments = attachments;
+    }
+
+    this._messageEnteredAction?.(messageEnteredArgs);
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
-    const { name, value } = args;
+    const { name, fullName, value } = args;
 
     switch (name) {
       case 'activeStateEnabled':
@@ -252,7 +265,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
         break;
 
       case 'fileUploaderOptions':
-        this._textArea.option(name, value);
+        this._textArea.option(fullName, value);
         break;
 
       case 'onMessageEntered':

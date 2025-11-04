@@ -42,6 +42,7 @@ const configuration: Configuration = {
   a11yCheckConfig,
   options,
   created,
+  meta: { loadQuill: true },
 };
 
 testAccessibility(configuration);
@@ -77,6 +78,7 @@ const aiConfiguration: Configuration = {
   a11yCheckConfig,
   options: aiOptions,
   created: aiCreated,
+  meta: { loadQuill: true },
 };
 
 testAccessibility(aiConfiguration);

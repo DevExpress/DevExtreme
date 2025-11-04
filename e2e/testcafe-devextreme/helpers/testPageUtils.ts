@@ -1,10 +1,11 @@
 /* eslint-disable spellcheck/spell-checker */
+import { ClientFunction } from 'testcafe';
 import {
   removeStylesheetRulesFromPage,
 } from './domUtils';
 
 export async function clearTestPage(t: TestController): Promise<void> {
-  await t.eval(() => {
+  await ClientFunction(() => {
     const widgetSelector = '.dx-widget';
     const $elements = $(widgetSelector)
       .filter((_, element) => $(element).parents(widgetSelector).length === 0);
@@ -37,13 +38,13 @@ export async function clearTestPage(t: TestController): Promise<void> {
     `;
 
     body?.prepend(temp.firstElementChild!);
-  });
+  }).with({ boundTestRun: t })();
 
   await removeStylesheetRulesFromPage.with({ boundTestRun: t })();
 }
 
 export async function loadAxeCore(t: TestController): Promise<void> {
-  await t.eval(() => new Promise<void>((resolve, reject) => {
+  await ClientFunction(() => new Promise<void>((resolve, reject) => {
     // @ts-expect-error ts-error
     if (window.axe) {
       resolve();
@@ -57,11 +58,11 @@ export async function loadAxeCore(t: TestController): Promise<void> {
     script.onload = resolve;
     script.onerror = reject;
     document.head.appendChild(script);
-  }));
+  })).with({ boundTestRun: t })();
 }
 
 export async function loadGantt(t: TestController): Promise<void> {
-  await t.eval(() => new Promise<void>((resolve, reject) => {
+  await ClientFunction(() => new Promise<void>((resolve, reject) => {
     if (document.getElementById('dx-gantt-script')) {
       resolve();
       return;
@@ -73,12 +74,56 @@ export async function loadGantt(t: TestController): Promise<void> {
     // @ts-expect-error ts-error
     script.onload = resolve;
     script.onerror = reject;
-    document.head.appendChild(script);
-  }));
+    document.head.prepend(script);
+  })).with({ boundTestRun: t })();
+}
+
+export async function loadQuill(t: TestController): Promise<void> {
+  await ClientFunction(() => new Promise<void>((resolve, reject) => {
+    // @ts-expect-error ts-error
+    if (window.Quill) {
+      resolve();
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.id = 'dx-quill-script';
+    script.src = '../../../packages/devextreme/artifacts/js/dx-quill.min.js';
+    // @ts-expect-error ts-error
+    script.onload = resolve;
+    script.onerror = reject;
+    document.head.prepend(script);
+  })).with({ boundTestRun: t })();
+}
+
+export async function loadDevExtreme(t: TestController): Promise<void> {
+  await ClientFunction(() => new Promise<void>((resolve, reject) => {
+    if (document.getElementById('dx-all-script')) {
+      resolve();
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.id = 'dx-all-script';
+    script.src = '../../../packages/devextreme/artifacts/js/dx.all.js';
+    // @ts-expect-error ts-error
+    script.onload = resolve;
+    script.onerror = reject;
+    document.head.prepend(script);
+  })).with({ boundTestRun: t })();
+}
+
+export async function removeScript(t: TestController, scriptId: string): Promise<void> {
+  await ClientFunction((id: string) => {
+    const script = document.getElementById(id);
+    if (script) {
+      script.remove();
+    }
+  }).with({ boundTestRun: t })(scriptId);
 }
 
 export const addShadowRootTree = async (t: TestController): Promise<void> => {
-  await t.eval(() => {
+  await ClientFunction(() => {
     const root = document.querySelector('#parentContainer') as HTMLElement;
     const { childNodes } = root;
 
@@ -90,5 +135,5 @@ export const addShadowRootTree = async (t: TestController): Promise<void> => {
     shadowContainer.append(...Array.from(childNodes));
 
     root.shadowRoot!.appendChild(shadowContainer);
-  });
+  }).with({ boundTestRun: t })();
 };

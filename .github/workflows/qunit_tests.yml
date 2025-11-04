@@ -110,15 +110,19 @@ jobs:
         include:
           - CONSTEL: ui.scheduler(1/2)
             TIMEZONE: US/Pacific
+            useJQuery: 'false'
           - CONSTEL: ui.scheduler(2/2)
             TIMEZONE: US/Pacific
+            useJQuery: 'false'
           - CONSTEL: misc
             CSP: 'false'
             useJQuery: 'true'
           - CONSTEL: ui.widgets(1/2)
             CSP: 'false'
+            useJQuery: 'false'
           - CONSTEL: ui.widgets(2/2)
             CSP: 'false'
+            useJQuery: 'false'
 
     steps:
     - name: Get sources

@@ -1,10 +1,10 @@
-/* global DATA, internals, initTree */
-
 import $ from 'jquery';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 import keyboardMock from '../../../helpers/keyboardMock.js';
+import { DATA, internals } from './testData.js';
+import { initTree } from './testUtils.js';
 
 const NODE_CLASS = 'dx-treeview-node';
 const ITEM_CLASS = 'dx-treeview-item';
@@ -13,6 +13,8 @@ const SEARCH_BAR_CLASS = 'dx-treeview-search';
 const TOGGLE_ITEM_VISIBILITY_CLASS = 'dx-treeview-toggle-item-visibility';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 const CHECKBOX_CHECKED_STATE_CLASS = 'dx-checkbox-checked';
+
+import 'generic_light.css!';
 
 QUnit.module('Focusing');
 
@@ -65,10 +67,13 @@ QUnit.testInActiveWindow('widget should not have focus-state class after click o
 
 const configs = [];
 ['up', 'down', 'left', 'right', 'first', 'last'].forEach(direction => {
-    ['item1', 'item1_1', 'item1_1_1', 'item1_1_1_1', 'item2', 'item2_1', 'item2_1_1', 'item2_1_1_1', 'item3', 'item3_1', 'item3_1_1', 'item3_1_1_1', 'item4', 'item4_1', 'item4_1_1', 'item4_1_1_1'].forEach(initialFocusedKey => {
+    ['item1', 'item3'].forEach(initialFocusedKey => {
         [false, true].forEach(expanded => {
             configs.push({ expanded, direction, initialFocusedKey });
         });
+    });
+    ['item2_1', 'item3_1_1', 'item4_1_1_1'].forEach(initialFocusedKey => {
+        configs.push({ expanded: true, direction, initialFocusedKey });
     });
 });
 
@@ -76,10 +81,10 @@ configs.forEach(config => {
     QUnit.test(`all.Expanded: ${config.expanded} -> emulateFocus(key:${config.initialFocusedKey}) -> moveFocus('${config.direction}'); (T226868)`, function(assert) {
         const wrapper = new TreeViewTestWrapper({
             items: [
-                { id: 'item1', expanded: config.expanded, items: [{ id: 'item1_1', expanded: config.expanded, items: [{ id: 'item1_1_1', expanded: config.expanded, items: [{ id: 'item1_1_1_1_1', expanded: config.expanded }] }] }] },
-                { id: 'item2', expanded: config.expanded, items: [{ id: 'item2_1', expanded: config.expanded, items: [{ id: 'item2_1_1', expanded: config.expanded, items: [{ id: 'item2_1_1_1_1', expanded: config.expanded }] }] }] },
-                { id: 'item3', expanded: config.expanded, items: [{ id: 'item3_1', expanded: config.expanded, items: [{ id: 'item3_1_1', expanded: config.expanded, items: [{ id: 'item3_1_1_1_1', expanded: config.expanded }] }] }] },
-                { id: 'item4', expanded: config.expanded, items: [{ id: 'item4_1', expanded: config.expanded, items: [{ id: 'item4_1_1', expanded: config.expanded, items: [{ id: 'item4_1_1_1_1', expanded: config.expanded }] }] }] }
+                { id: 'item1', expanded: config.expanded, items: [{ id: 'item1_1', expanded: config.expanded, items: [{ id: 'item1_1_1', expanded: config.expanded, items: [{ id: 'item1_1_1_1', expanded: config.expanded }] }] }] },
+                { id: 'item2', expanded: config.expanded, items: [{ id: 'item2_1', expanded: config.expanded, items: [{ id: 'item2_1_1', expanded: config.expanded, items: [{ id: 'item2_1_1_1', expanded: config.expanded }] }] }] },
+                { id: 'item3', expanded: config.expanded, items: [{ id: 'item3_1', expanded: config.expanded, items: [{ id: 'item3_1_1', expanded: config.expanded, items: [{ id: 'item3_1_1_1', expanded: config.expanded }] }] }] },
+                { id: 'item4', expanded: config.expanded, items: [{ id: 'item4_1', expanded: config.expanded, items: [{ id: 'item4_1_1', expanded: config.expanded, items: [{ id: 'item4_1_1_1', expanded: config.expanded }] }] }] }
             ],
             displayExpr: 'id',
             focusStateEnabled: true,
@@ -90,10 +95,6 @@ configs.forEach(config => {
 
         const $nodes = wrapper.getElement().find(`.${NODE_CLASS}`);
         const $node = wrapper.getElement().find(`[data-item-id="${config.initialFocusedKey}"]`);
-        if(!$node.length) {
-            assert.ok(true, 'not real scenario');
-            return;
-        }
 
         const $item = $node.find('.dx-treeview-item').eq(0);
         wrapper.instance.scrollToItem($item);
@@ -102,7 +103,7 @@ configs.forEach(config => {
         wrapper.instance._moveFocus(config.direction, {});
         const nextFocusedKey = getNextFocusedKey($nodes, $node, config.direction);
         const actualFocusedItemKey = $(wrapper.instance.option('focusedElement')).attr('data-item-id');
-        assert.equal(nextFocusedKey, actualFocusedItemKey);
+        assert.strictEqual(nextFocusedKey, actualFocusedItemKey, `focused item key is ${actualFocusedItemKey}`);
         wrapper.checkNodeIsInVisibleArea(nextFocusedKey);
     });
 

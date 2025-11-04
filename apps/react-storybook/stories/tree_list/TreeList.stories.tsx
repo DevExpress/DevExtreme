@@ -17,6 +17,7 @@ type EditingMode = typeof editingModes[number];
 
 interface HumanReadableProps {
   showSelectCheckboxes: boolean;
+  aiColumnEnabled: boolean;
   showRowLines: boolean;
   rtlEnabled: boolean;
   editingMode: EditingMode;
@@ -70,6 +71,7 @@ const mergeProps = (
 ): Record<PropertyKey, any> => {
   const result = { ...defaultProps };
   const {
+    aiColumnEnabled,
     showSelectCheckboxes,
     firstColumnContentType,
     showRowLines,
@@ -77,6 +79,7 @@ const mergeProps = (
     firstColumnFixed,
     editingMode,
   } = humanReadableProps;
+  const hasAIColumn = result.columns.some((col) => col?.type === 'ai');
 
   result.selection = { mode: showSelectCheckboxes ? 'multiple' : 'none' };
 
@@ -85,6 +88,19 @@ const mergeProps = (
     cellTemplate: firstColumnContentType === 'multi-line' ? MULTI_LINE_CELL_TEMPLATE : undefined,
     fixed: firstColumnFixed !== 'none',
     fixedPosition: firstColumnFixed === 'left' ? 'left' : 'right',
+  }
+
+  if (aiColumnEnabled) {
+    if (!hasAIColumn) {
+      result.columns.unshift({
+        type: 'ai',
+        caption: 'Smart Column',
+        name: 'myAIColumn',
+        width: 200,
+      });
+    }
+  } else if (hasAIColumn) {
+    result.columns = result.columns.filter((col) => col?.type !== 'ai');
   }
 
   result.showRowLines = showRowLines;
@@ -143,7 +159,8 @@ type Story = StoryObj<typeof TreeList>;
 
 export const Overview: Story = {
   args: {
-    showSelectCheckboxes: false,
+    aiColumnEnabled: true,
+    showSelectCheckboxes: true,
     showRowLines: false,
     rtlEnabled: false,
     editingMode: 'none',

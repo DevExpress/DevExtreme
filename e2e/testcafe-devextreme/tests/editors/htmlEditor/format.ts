@@ -5,7 +5,7 @@ import { createWidget } from '../../../helpers/createWidget';
 fixture.disablePageReloads`HtmlEditor - formats`
   .page(url(__dirname, '../../container.html'));
 
-test('HtmlEditor should keep actual format after "enter" key pressed (T922236)', async (t) => {
+test.meta({ loadQuill: true })('HtmlEditor should keep actual format after "enter" key pressed (T922236)', async (t) => {
   const selectBox = new SelectBox('.dx-font-format');
 
   await t

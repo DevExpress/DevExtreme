@@ -9,7 +9,10 @@ import {
   addShadowRootTree,
   clearTestPage,
   loadAxeCore,
+  loadDevExtreme,
   loadGantt,
+  loadQuill,
+  removeScript,
 } from './helpers/testPageUtils';
 import { getCurrentTheme } from './helpers/themeUtils';
 
@@ -235,7 +238,15 @@ async function main() {
               const { meta } = t.testRun.test;
 
               if (meta?.loadGantt) {
+                await removeScript(t, 'dx-all-script');
                 await loadGantt(t);
+                await loadDevExtreme(t);
+              }
+
+              if (meta?.loadQuill) {
+                await removeScript(t, 'dx-all-script');
+                await loadQuill(t);
+                await loadDevExtreme(t);
               }
 
               await ClientFunction(() => {

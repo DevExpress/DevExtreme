@@ -15,7 +15,6 @@ import AlertList from '__internal/ui/chat/alertlist';
 import MessageBox, {
     TYPING_END_DELAY,
     CHAT_MESSAGEBOX_CLASS,
-    CHAT_MESSAGEBOX_TEXTAREA_CLASS,
 } from '__internal/ui/chat/message_box/message_box';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import pointerMock from '../../../helpers/pointerMock.js';
@@ -36,8 +35,10 @@ import {
 import { CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS } from '__internal/ui/chat/confirmationpopup';
 import { POPUP_CLASS } from '__internal/ui/popup/m_popup';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
+import { CHAT_FILE_CLASS } from '__internal/ui/chat/file_view/file';
+
 import MessageBubble from '__internal/ui/chat/messagebubble';
-import ChatTextArea from '__internal/ui/chat/message_box/chat_text_area';
+import ChatTextArea, { CHAT_TEXTAREA_CLASS } from '__internal/ui/chat/message_box/chat_text_area';
 
 const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
@@ -95,7 +96,7 @@ const moduleConfig = {
 
             this.instance = new Chat($('#component'), options);
             this.$element = $(this.instance.$element());
-            this.$textArea = this.$element.find(`.${CHAT_MESSAGEBOX_TEXTAREA_CLASS}`);
+            this.$textArea = this.$element.find(`.${CHAT_TEXTAREA_CLASS}`);
             this.textArea = ChatTextArea.getInstance(this.$textArea);
             this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             const $buttons = this.$element.find(`.${BUTTON_CLASS}`);
@@ -2244,6 +2245,57 @@ QUnit.module('Chat', () => {
                 this.clock.tick(TYPING_END_DELAY);
 
                 assert.strictEqual(onTypingEnd.callCount, 1);
+            });
+        });
+
+        QUnit.module('onAttachmentDownload', {
+            beforeEach: function() {
+                moduleConfig.beforeEach.apply(this, arguments);
+
+                this.getDownloadButton = () => this.$element.find(`.${CHAT_FILE_CLASS} .${BUTTON_CLASS}`);
+                this.dataSourceWithAttachments = [
+                    {
+                        attachments: [
+                            {
+                                name: 'test.txt',
+                                size: 1024,
+                            },
+                        ],
+                    }
+                ];
+            },
+        }, () => {
+            QUnit.test('should be called with correct arguments', function(assert) {
+                assert.expect(4);
+
+                this.reinit({
+                    dataSource: this.dataSourceWithAttachments,
+                    onAttachmentDownload: ({ component, element, attachment }) => {
+                        assert.strictEqual(component, this.instance, 'component field is correct');
+                        assert.strictEqual(isRenderer(element), !!config().useJQuery, 'element is correct');
+                        assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
+                        assert.deepEqual(attachment, this.dataSourceWithAttachments[0].attachments[0], 'attachment field is correct');
+                    },
+                });
+
+
+                this.getDownloadButton().trigger('dxclick');
+            });
+
+            QUnit.test('should be possible to change at runtime', function(assert) {
+                const onAttachmentDownload = sinon.spy();
+
+                this.instance.option({ onAttachmentDownload, dataSource: this.dataSourceWithAttachments });
+
+                this.getDownloadButton().trigger('dxclick');
+
+                assert.strictEqual(onAttachmentDownload.callCount, 1);
+            });
+
+            QUnit.test('should hide download button if not passed', function(assert) {
+                this.instance.option({ onAttachmentDownload: undefined, dataSource: this.dataSourceWithAttachments });
+
+                assert.strictEqual(this.getDownloadButton().length, 0, 'button is hidden');
             });
         });
     });

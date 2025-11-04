@@ -10,7 +10,7 @@ fixture.disablePageReloads`HtmlEditor - add image url`
 
 const ADD_IMAGE_POPUP_CONTENT_SELECTOR = '.dx-htmleditor-add-image-popup .dx-overlay-content';
 
-test('Image uploader from url appearance', async (t) => {
+test.meta({ loadQuill: true })('Image uploader from url appearance', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const htmlEditor = new HtmlEditor('#container');
 
@@ -33,7 +33,7 @@ test('Image uploader from url appearance', async (t) => {
   toolbar: { items: ['image'] },
 }));
 
-test('Image url should be validate before wil be inserted by add button click', async (t) => {
+test.meta({ loadQuill: true })('Image url should be validate before wil be inserted by add button click', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const htmlEditor = new HtmlEditor('#container');
 
@@ -66,7 +66,7 @@ test('Image url should be validate before wil be inserted by add button click', 
   });
 });
 
-test('Image url should be validate before wil be inserted by add enter press', async (t) => {
+test.meta({ loadQuill: true })('Image url should be validate before wil be inserted by add enter press', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const htmlEditor = new HtmlEditor('#container');
 
@@ -99,7 +99,7 @@ test('Image url should be validate before wil be inserted by add enter press', a
   });
 });
 
-test('Image url should be updated', async (t) => {
+test.meta({ loadQuill: true })('Image url should be updated', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const htmlEditor = new HtmlEditor('#container');
 
