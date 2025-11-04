@@ -2,8 +2,8 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { changeTheme } from '../../../helpers/changeTheme';
 import { Themes } from '../../../helpers/themes';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Search Panel`
   .page(url(__dirname, '../../container.html'));
@@ -21,35 +21,30 @@ test.meta({ browserSize: [800, 800] })('searchPanel has correct view inside mast
   const masterGrid = masterRow.getDataGrid();
 
   // assert
+  await testScreenshot(t, takeScreenshot, 'T1046688.searchPanel.png', { element: masterGrid.element, theme: Themes.materialBlue });
   await t
-    .expect(await takeScreenshot('T1046688.searchPanel.png', masterGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
-  await changeTheme(Themes.materialBlue);
-
-  return createWidget('dxDataGrid', {
-    dataSource: [{ column1: 'first' }],
-    columns: ['column1'],
-    masterDetail: {
-      enabled: true,
-      template(container) {
-        ($('<div>') as any)
-          .dxDataGrid({
-            searchPanel: {
-              visible: true,
-              width: 240,
-              placeholder: 'Search...',
-            },
-            columns: ['detail1'],
-            dataSource: [],
-          })
-          .appendTo(container);
-      },
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{ column1: 'first' }],
+  columns: ['column1'],
+  masterDetail: {
+    enabled: true,
+    template(container) {
+      ($('<div>') as any)
+        .dxDataGrid({
+          searchPanel: {
+            visible: true,
+            width: 240,
+            placeholder: 'Search...',
+          },
+          columns: ['detail1'],
+          dataSource: [],
+        })
+        .appendTo(container);
     },
-  });
-}).after(async () => { await changeTheme(Themes.genericLight); });
+  },
+}));
 
 // T1272535
 test.meta({ browserSize: [800, 800] })('Base sensitivity search should accept rows with accent letters in lookup columns', async (t) => {

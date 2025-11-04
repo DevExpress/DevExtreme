@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Export button`
   .page(url(__dirname, '../../container.html'));
@@ -10,9 +11,8 @@ test('allowExportSelectedData: false, menu: false', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await testScreenshot(t, takeScreenshot, 'grid-export-one-button.png', { element: dataGrid.getHeaderPanel().element });
   await t
-    .expect(await takeScreenshot('grid-export-one-button.png', dataGrid.getHeaderPanel().element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -26,9 +26,8 @@ test('allowExportSelectedData: false, menu: false, PDF', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await testScreenshot(t, takeScreenshot, 'grid-export-one-button-pdf.png', { element: dataGrid.getHeaderPanel().element });
   await t
-    .expect(await takeScreenshot('grid-export-one-button-pdf.png', dataGrid.getHeaderPanel().element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -46,9 +45,8 @@ test('allowExportSelectedData: true, menu: false', async (t) => {
 
   await t.click(headerPanel.getExportButton().element);
 
+  await testScreenshot(t, takeScreenshot, 'grid-export-dropdown-button.png', { element: dataGrid.element });
   await t
-    .expect(await takeScreenshot('grid-export-dropdown-button.png', dataGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -69,9 +67,8 @@ test('allowExportSelectedData: false, menu: true', async (t) => {
 
   await t.click(headerPanel.getDropDownMenuButton());
 
+  await testScreenshot(t, takeScreenshot, 'grid-export-one-button-in-menu.png', { element: 'html' });
   await t
-    .expect(await takeScreenshot('grid-export-one-button-in-menu.png', 'html'))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -90,9 +87,8 @@ test('allowExportSelectedData: true, menu: true', async (t) => {
 
   await t.click(headerPanel.getDropDownMenuButton());
 
+  await testScreenshot(t, takeScreenshot, 'grid-export-dropdown-button-in-menu.png', { element: 'html' });
   await t
-    .expect(await takeScreenshot('grid-export-dropdown-button-in-menu.png', 'html'))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -110,9 +106,8 @@ test.meta({ browserSize: [800, 800] })('Export is disabled when no data columns 
 
   const dataGrid = new DataGrid('#container');
 
+  await testScreenshot(t, takeScreenshot, 'disabled-export_when-no-columns-visible.png', { element: dataGrid.element });
   await t
-    .expect(await takeScreenshot('disabled-export_when-no-columns-visible.png', dataGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -138,9 +133,8 @@ test.meta({ browserSize: [800, 800] })('Export is disabled when no data columns 
 
   await t.click(headerPanel.getDropDownMenuButton());
 
+  await testScreenshot(t, takeScreenshot, 'disabled-export-in-menu_when-no-columns-visible.png', { element: 'html' });
   await t
-    .expect(await takeScreenshot('disabled-export-in-menu_when-no-columns-visible.png', 'html'))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {

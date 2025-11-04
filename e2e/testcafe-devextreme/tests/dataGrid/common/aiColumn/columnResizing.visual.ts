@@ -2,6 +2,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Ai Column.ColumnResizing.Visual`
   .page(url(__dirname, '../../../container.html'));
@@ -15,12 +16,12 @@ test('Resize AI Column when wordWrapEnabled is true', async (t) => {
 
   await t.expect(dataGrid.isReady()).ok();
 
-  await takeScreenshot('datagrid__ai-column__column-resizing(wordWrapEnabled=true)-1.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'datagrid__ai-column__column-resizing(wordWrapEnabled=true)-1.png', { element: dataGrid.element });
 
   // act
   await dataGrid.resizeHeader(1, -150);
 
-  await takeScreenshot('datagrid__ai-column__column-resizing(wordWrapEnabled=true)-2.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'datagrid__ai-column__column-resizing(wordWrapEnabled=true)-2.png', { element: dataGrid.element });
 
   // assert
   await t

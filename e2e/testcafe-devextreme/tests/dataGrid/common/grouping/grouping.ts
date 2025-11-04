@@ -3,6 +3,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { makeColumnHeadersViewTemplatesAsync } from '../../helpers/asyncTemplates';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Grouping Panel`
   .page(url(__dirname, '../../../container.html'));
@@ -14,9 +15,8 @@ test('Grouping Panel label should not overflow in a narrow grid (T1103925)', asy
 
   const dataGrid = new DataGrid('#container');
 
+  await testScreenshot(t, takeScreenshot, 'groupingPanel.png', { element: dataGrid.getToolbar().element });
   await t
-    .expect(await takeScreenshot('groupingPanel', dataGrid.getToolbar().element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -46,13 +46,13 @@ test('Headers should be rendered correctly after changing the grouping.autoExpan
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
 
-  await takeScreenshot('T1155453-expanded-groups', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1155453-expanded-groups.png', { element: dataGrid.element });
 
   // act
   await dataGrid.apiCollapseAllGroups();
   await t.wait(100);
 
-  await takeScreenshot('T1155453-collapsed-groups', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1155453-collapsed-groups.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -96,13 +96,13 @@ test('Headers should be rendered correctly after changing the grouping.autoExpan
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
 
-  await takeScreenshot('T1155453-expanded-groups-with-fixed-content', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1155453-expanded-groups-with-fixed-content.png', { element: dataGrid.element });
 
   // act
   await dataGrid.apiCollapseAllGroups();
   await t.wait(200);
 
-  await takeScreenshot('T1155453-collapsed-groups-with-fixed-content', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1155453-collapsed-groups-with-fixed-content.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -149,7 +149,7 @@ test.meta({ browserSize: [800, 800] })('Empty header message should appear when 
 
   const dataGrid = new DataGrid('#container');
 
-  await takeScreenshot('empty-header-message-with-selection-enabled', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'empty-header-message-with-selection-enabled.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -186,9 +186,8 @@ test('Group panel message should be vertically aligned (T1186613)', async (t) =>
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
 
+  await testScreenshot(t, takeScreenshot, 'group-panel-message-align.png', { element: dataGrid.getToolbar().element });
   await t
-    .expect(await takeScreenshot('group-panel-message-align.png', dataGrid.getToolbar().element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -229,10 +228,10 @@ test('The collapse icon should update if repaintChangesOnly option is enabled (T
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
 
+  await t.click(dataGrid.getPager().getNavPage('2').element);
+
+  await testScreenshot(t, takeScreenshot, 'continued_group-collapse_icon-T1201981.png', { element: dataGrid.element });
   await t
-    .click(dataGrid.getPager().getNavPage('2').element)
-    .expect(await takeScreenshot('continued_group-collapse_icon-T1201981.png', dataGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -312,7 +311,7 @@ test('Grouping and filtering should be applied correctly when they change at run
 
   await t.expect(dataGrid.isReady()).ok();
 
-  await takeScreenshot('T1237863_datagrid-grouping_and_filtering.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1237863_datagrid-grouping_and_filtering.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())
@@ -348,9 +347,11 @@ test.meta({ unstable: true })('Content should be rendered correctly after settin
   await dataGrid.apiExpandAllGroups();
 
   await t
-    .wait(100)
-    .expect(await takeScreenshot('expanded-groups-content', dataGrid.element))
-    .ok()
+    .wait(100);
+
+  await testScreenshot(t, takeScreenshot, 'expanded-groups-content.png', { element: dataGrid.element });
+
+  await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {

@@ -3,6 +3,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { defaultConfig } from '../helpers/data';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const DATA_GRID_SELECTOR = '#container';
 
@@ -18,11 +19,11 @@ test.meta({ browserSize: [800, 800] })('The selected row should be displayed cor
 
   await t.expect(dataGrid.isReady()).ok();
 
-  await takeScreenshot('row_selection_with_sticky_columns_1_(generic.light).png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'row_selection_with_sticky_columns_1.png', { element: dataGrid.element });
 
   await dataGrid.scrollTo(t, { x: 10000 });
 
-  await takeScreenshot('row_selection_with_sticky_columns_2_(generic.light).png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'row_selection_with_sticky_columns_2.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())

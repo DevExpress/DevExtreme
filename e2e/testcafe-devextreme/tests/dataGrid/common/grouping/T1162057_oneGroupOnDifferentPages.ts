@@ -3,6 +3,7 @@ import { RequestMock } from 'testcafe';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Grouping Panel - One group on different pages`
   .page(url(__dirname, '../../../container.html'));
@@ -78,16 +79,16 @@ test.meta({ browserSize: [800, 800] })('Group panel restored from cache and ends
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
   await t.click(dataGrid.getGroupRow(0).getCell(0).element);
-  await takeScreenshot('group-panel_loaded_first-page.png');
+  await testScreenshot(t, takeScreenshot, 'group-panel_loaded_first-page.png');
 
   await t.click(dataGrid.getPager().getNavPage('2').element);
-  await takeScreenshot('group-panel_loaded_second-page.png');
+  await testScreenshot(t, takeScreenshot, 'group-panel_loaded_second-page.png');
 
   await t.click(dataGrid.getPager().getNavPage('1').element);
-  await takeScreenshot('group-panel_restored_first-page.png');
+  await testScreenshot(t, takeScreenshot, 'group-panel_restored_first-page.png');
 
   await t.click(dataGrid.getPager().getNavPage('2').element);
-  await takeScreenshot('group-panel_restored_second-page.png');
+  await testScreenshot(t, takeScreenshot, 'group-panel_restored_second-page.png');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -186,11 +187,11 @@ test('Group panel restored from cache and ends at the page end', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
   await t.click(dataGrid.getGroupRow(0).getCell(0).element);
-  await takeScreenshot('group-panel_loaded_page-end.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'group-panel_loaded_page-end.png', { element: dataGrid.element });
 
   await t.click(dataGrid.getPager().getNavPage('2').element)
     .click(dataGrid.getPager().getNavPage('1').element);
-  await takeScreenshot('group-panel_restored_page-end.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'group-panel_restored_page-end.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
