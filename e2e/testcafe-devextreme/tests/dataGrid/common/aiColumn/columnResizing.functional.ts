@@ -2,7 +2,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 
-fixture.disablePageReloads`Ai Column.ColumnResizing`
+fixture.disablePageReloads`Ai Column.ColumnResizing.Functional`
   .page(url(__dirname, '../../../container.html'));
 
 const DATA_GRID_SELECTOR = '#container';
@@ -40,6 +40,7 @@ const DATA_GRID_SELECTOR = '#container';
       {
         type: 'ai',
         caption: 'AI Column',
+        name: 'myAIColumn',
       },
       { dataField: 'id', caption: 'ID' },
       { dataField: 'name', caption: 'Name' },
@@ -80,6 +81,7 @@ const DATA_GRID_SELECTOR = '#container';
         type: 'ai',
         caption: 'AI Column',
         allowResizing: true,
+        name: 'myAIColumn',
       },
       {
         dataField: 'id',
@@ -124,6 +126,7 @@ const DATA_GRID_SELECTOR = '#container';
       {
         type: 'ai',
         caption: 'AI Column',
+        name: 'myAIColumn',
         allowResizing: false,
       },
       { dataField: 'id', caption: 'ID' },
@@ -165,6 +168,7 @@ const DATA_GRID_SELECTOR = '#container';
         type: 'ai',
         caption: 'AI Column',
         minWidth: 75,
+        name: 'myAIColumn',
       },
       { dataField: 'id', caption: 'ID' },
       { dataField: 'name', caption: 'Name' },
@@ -172,3 +176,45 @@ const DATA_GRID_SELECTOR = '#container';
     ],
   }));
 });
+
+test('DropDownButton should be hidden during resizing', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const aiDropDownButton = dataGrid
+    .getHeaders()
+    .getHeaderRow(0)
+    .getCommandCell(0)
+    .getAIDropDownButton();
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  // act
+  await t.click(aiDropDownButton.element);
+
+  // assert
+  await t.expect(await aiDropDownButton.isOpened()).ok();
+
+  // act
+  await dataGrid.resizeHeader(1, 50);
+
+  // assert
+  await t.expect(await aiDropDownButton.isOpened()).notOk();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { id: 1, name: 'Name 1', value: 10 },
+    { id: 2, name: 'Name 2', value: 20 },
+    { id: 3, name: 'Name 3', value: 30 },
+  ],
+  allowColumnResizing: true,
+  columnWidth: 150,
+  columns: [
+    {
+      type: 'ai',
+      caption: 'AI Column',
+      name: 'myAIColumn',
+    },
+    { dataField: 'id', caption: 'ID' },
+    { dataField: 'name', caption: 'Name' },
+    { dataField: 'value', caption: 'Value' },
+  ],
+}));

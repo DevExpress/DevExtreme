@@ -112,6 +112,8 @@
         "dxDataGrid-aiPromptEditorApplyButton": "Apply",
         "dxDataGrid-aiPromptEditorRegenerateButton": "Regenerate Data",
         "dxDataGrid-aiPromptEditorStopButton": "Stop",
+        "dxDataGrid-aiDropDownAutofill": "Autofill with AI",
+        "dxDataGrid-aiDropDownClear": "Clear Data",
         "dxDataGrid-emptyHeaderWithColumnChooserText": "Use {0} para exibir colunas",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "Arraste uma coluna do painel do grupo aqui",
         "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Use {0} ou arraste uma coluna do painel do grupo",

@@ -3,6 +3,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { getData } from '../helpers/generateDataSourceData';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Header Panel`
   .page(url(__dirname, '../../container.html'));
@@ -45,9 +46,10 @@ test('Drop-down window should be positioned correctly after resizing the toolbar
   // assert
   await t
     .expect(visibleRows.length)
-    .eql(3)
-    .expect(await takeScreenshot('grid-toolbar-dropdown-menu.png', 'body'))
-    .ok()
+    .eql(3);
+
+  await testScreenshot(t, takeScreenshot, 'grid-toolbar-dropdown-menu.png', { element: 'body' });
+  await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -89,9 +91,8 @@ test('Disabled toolbar buttons are not grayed out in Material themes (T1217416)'
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
 
+  await testScreenshot(t, takeScreenshot, 'disabled-toolbar-buttons.png', { element: dataGrid.element });
   await t
-    .expect(await takeScreenshot('disabled-toolbar-buttons-generic.light.png', dataGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -178,9 +179,8 @@ test('Toolbar should not reset its widget values when changing the disabled prop
 test('Invisible toolbar doesn\'t have additional paddings (T1261773)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await testScreenshot(t, takeScreenshot, 'invisible-toolbar-buttons.png');
   await t
-    .expect(await takeScreenshot('invisible-toolbar-buttons-generic.light.png'))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {

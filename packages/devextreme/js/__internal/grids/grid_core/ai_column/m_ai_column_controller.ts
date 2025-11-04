@@ -6,7 +6,7 @@ import type { Column, ColumnsController } from '../columns_controller/m_columns_
 import type { DataController } from '../data_controller/m_data_controller';
 import { Controller } from '../m_modules';
 import { AIColumnIntegrationController } from './m_ai_column_integration_controller';
-import { isAIColumnAutoMode } from './utils';
+import { getAICommandColumnDefaultOptions, isAIColumnAutoMode } from './utils';
 
 export class AIColumnController extends Controller {
   private dataController!: DataController;
@@ -21,6 +21,10 @@ export class AIColumnController extends Controller {
 
   public aiRequestRejected!: Callback;
 
+  private addAICommandColumn(): void {
+    this.columnsController.addCommandColumn(getAICommandColumnDefaultOptions());
+  }
+
   protected callbackNames(): string[] {
     return ['aiRequestCompleted', 'aiRequestRejected'];
   }
@@ -28,6 +32,8 @@ export class AIColumnController extends Controller {
   public init(): void {
     this.columnsController = this.getController('columns');
     this.dataController = this.getController('data');
+
+    this.addAICommandColumn();
 
     this.aiColumnIntegrationController = new AIColumnIntegrationController(this.component);
     this.aiColumnIntegrationController.init();
@@ -100,6 +106,7 @@ export class AIColumnController extends Controller {
   public clearAIColumn(columnName: string): void {
     this.aiColumnIntegrationController.abortRequest(columnName);
     this.aiColumnIntegrationController.clearAIColumn(columnName);
+    this.columnsController.columnOption(columnName, 'ai.prompt', '');
   }
 
   public getAIColumnText(columnName: string, key: unknown): string | undefined {

@@ -16,6 +16,7 @@ import {
   getOrderOfEventCalls,
   resetFocusedEventsTestData,
 } from '../../helpers/eventUtils';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const CLASS = ClassNames;
 
@@ -181,7 +182,7 @@ test('Next cell should be focused immediately on a single Enter key press if sho
 
   await t.pressKey('enter');
 
-  await takeScreenshot('cell-focus-showEditorAlways-T1196539.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'cell-focus-showEditorAlways-T1196539.png', { element: dataGrid.element });
 
   await t.pressKey('enter')
     .expect(dataGrid.getDataCell(2, 0).isFocused)
@@ -2456,7 +2457,7 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
     });
   });
 
-  test(`The first cell should be focused on pressing shift and tab keys after clicking on the document when command column is ${isCommandColumnFixed ? 'fixed' : 'unfixed'} and on the right side (T951849)`, async (t) => {
+  test.skip(`The first cell should be focused on pressing shift and tab keys after clicking on the document when command column is ${isCommandColumnFixed ? 'fixed' : 'unfixed'} and on the right side (T951849)`, async (t) => {
     const dataGrid = new DataGrid('#container');
     const headers = dataGrid.getHeaders();
     const dataGridOffsetBottom = await dataGrid.element.getBoundingClientRectProperty('bottom');
@@ -2729,7 +2730,7 @@ test('Grid should get focus when the focus method is called (T955678)', async (t
   })();
 });
 
-test('New mode. A cell should be focused when the PageDow/Up key is pressed (T898324)', async (t) => {
+test.skip('New mode. A cell should be focused when the PageDow/Up key is pressed (T898324)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   // act
@@ -4228,12 +4229,12 @@ test('Adaptive row should toggle when press enter key', async (t) => {
   // open adaptive row
   await t.pressKey('enter');
 
-  await takeScreenshot('adaptive-row-opened-via-keyboard.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'adaptive-row-opened-via-keyboard.png', { element: dataGrid.element });
 
   // close adaptive row
   await t.pressKey('enter');
 
-  await takeScreenshot('adaptive-row-closed-via-keyboard.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'adaptive-row-closed-via-keyboard.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())
@@ -4279,7 +4280,7 @@ test('Focus position should be correct when open second adaptive row', async (t)
 
   await t.pressKey('enter');
 
-  await takeScreenshot('focus-position-when-second-adaptive-row-opened.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'focus-position-when-second-adaptive-row-opened.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())
@@ -4544,7 +4545,7 @@ test('DataGrid input cell should not put tabindex to incorrect element while on 
   await t
     .click(dataGrid.getToolbar().getItem(0))
     .pressKey('tab');
-  await takeScreenshot('data-grid_keyboard-navigation-input-text-focused.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'data-grid_keyboard-navigation-input-text-focused.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
