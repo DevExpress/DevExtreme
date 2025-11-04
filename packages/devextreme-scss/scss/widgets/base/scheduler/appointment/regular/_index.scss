@@ -164,6 +164,7 @@ $reduced-icon-offset: null !default;
 
   &.dx-scheduler-appointment-drag-source {
     opacity: 0.7;
+    pointer-events: none;
   }
 }
 
