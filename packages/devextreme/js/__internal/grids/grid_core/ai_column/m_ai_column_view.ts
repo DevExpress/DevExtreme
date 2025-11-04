@@ -39,7 +39,7 @@ export const columnHeadersViewExtender = (
       {
         key: 'regenerate',
         icon: ICON_NAMES.regenerate,
-        text: messageLocalization.format('dxDataGrid-aiDropDownButtonRegenerateItem'),
+        text: messageLocalization.format('dxDataGrid-aiPromptEditorRegenerateButton'),
         disabled: !column.ai?.prompt,
       },
       {
@@ -83,7 +83,7 @@ export const columnHeadersViewExtender = (
         }
       },
       dropDownOptions: {
-        width: 160,
+        width: 180,
         position: {
           of: $container[0],
           at: `${alignment} bottom`,
