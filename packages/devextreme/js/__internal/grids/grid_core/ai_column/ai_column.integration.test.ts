@@ -2041,7 +2041,7 @@ describe('API Handlers', () => {
             { id: 1, name: 'Name 1', value: 10 },
             { id: 2, name: 'Name 2', value: 20 },
           ]),
-          useCache: true,
+          useCache: false,
           cancel: false,
           additionalInfo: {},
         }),
