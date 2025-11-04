@@ -21,12 +21,23 @@ import type { SupportedKeys } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import FileUploader from '@ts/ui/file_uploader/file_uploader';
 import type { CancelButtonClickEvent, Properties as FileUploaderProperties } from '@ts/ui/file_uploader/file_uploader.types';
+import Informer from '@ts/ui/informer/informer';
 import type { TextAreaProperties } from '@ts/ui/m_text_area';
 import TextArea from '@ts/ui/m_text_area';
 
-export const TEXT_AREA_TOOLBAR = 'dx-textarea-toolbar';
-const TEXT_AREA_ATTACHMENTS = 'dx-textarea-attachments';
-const TEXT_AREA_ATTACH_BUTTON = 'dx-textarea-attach-button';
+const CHAT_TEXT_AREA_ATTACHMENTS = 'dx-chat-textarea-attachments';
+export const CHAT_TEXT_AREA_ATTACH_BUTTON = 'dx-chat-textarea-attach-button';
+
+export const CHAT_TEXTAREA_CLASS = 'dx-chat-textarea';
+export const CHAT_TEXT_AREA_TOOLBAR = 'dx-chat-textarea-toolbar';
+
+const MAX_ATTACHMENTS_COUNT = 10;
+const INFORMER_DELAY = 10000;
+
+const ERRORS = {
+  // @ts-expect-error format params should be extended
+  fileLimit: messageLocalization.format('dxChat-fileLimitReachedWarning', MAX_ATTACHMENTS_COUNT),
+};
 
 const isMobile = (): boolean => devices.current().deviceType !== 'desktop';
 
@@ -45,6 +56,11 @@ export type Properties = TextAreaProperties & {
 };
 
 class ChatTextArea extends TextArea<Properties> {
+  // eslint-disable-next-line no-restricted-globals
+  _informerTimeoutId?: ReturnType<typeof setTimeout> | undefined;
+
+  _informer?: Informer | null;
+
   _$toolbar?: dxElementWrapper | null;
 
   _toolbar?: Toolbar | null;
@@ -57,7 +73,7 @@ class ChatTextArea extends TextArea<Properties> {
 
   _sendButton?: Button;
 
-  _sendAction?: (e: SendEvent) => void;
+  _sendAction?: (e: Partial<SendEvent>) => void;
 
   getAttachments(): Attachment[] | undefined {
     if (!this._filesToSend?.size) {
@@ -75,8 +91,8 @@ class ChatTextArea extends TextArea<Properties> {
       stylingMode: 'outlined',
       placeholder: messageLocalization.format('dxChat-textareaPlaceholder'),
       autoResizeEnabled: true,
-      maxHeight: '8em',
       valueChangeEvent: 'input',
+      maxHeight: '16em',
       fileUploaderOptions: undefined,
     };
   }
@@ -114,11 +130,7 @@ class ChatTextArea extends TextArea<Properties> {
     }
 
     if (this._shouldSendMessageOnEnter(e)) {
-      this._processSendButtonActivation({
-        component: this,
-        element: this.element(),
-        event: e,
-      });
+      this._processSendButtonActivation({ event: e });
     }
   }
 
@@ -136,9 +148,44 @@ class ChatTextArea extends TextArea<Properties> {
   }
 
   _initMarkup(): void {
+    this.$element().addClass(CHAT_TEXTAREA_CLASS);
     super._initMarkup();
     this._renderToolbar();
     this._initFileUploader();
+  }
+
+  _showInformer(text: string): void {
+    if (this._informer) {
+      this._informer.option({ text });
+    } else {
+      this._renderInformer(text);
+    }
+
+    this._updateInformerTimeout();
+  }
+
+  _renderInformer(text: string): void {
+    const $informer = $('<div>').prependTo(this.$element());
+
+    this._informer = this._createComponent(
+      $informer,
+      Informer,
+      {
+        text,
+        contentAlignment: 'start',
+        icon: 'errorcircle',
+      },
+    );
+  }
+
+  _updateInformerTimeout(): void {
+    clearTimeout(this._informerTimeoutId);
+
+    // eslint-disable-next-line no-restricted-globals
+    this._informerTimeoutId = setTimeout(() => {
+      this._cleanInformer();
+      this._updateInputHeight();
+    }, INFORMER_DELAY);
   }
 
   _renderToolbar(): void {
@@ -149,7 +196,7 @@ class ChatTextArea extends TextArea<Properties> {
     };
 
     this._$toolbar = $('<div>')
-      .addClass(TEXT_AREA_TOOLBAR)
+      .addClass(CHAT_TEXT_AREA_TOOLBAR)
       .appendTo(this.$element());
 
     this._toolbar = this._createComponent(
@@ -167,13 +214,13 @@ class ChatTextArea extends TextArea<Properties> {
     ];
 
     if (fileUploaderOptions) {
-      items.push(this._getFileUploaderButtonConfig());
+      items.push(this._getAttachButtonConfig());
     }
 
     return items;
   }
 
-  _getFileUploaderButtonConfig(): ToolbarItem {
+  _getAttachButtonConfig(): ToolbarItem {
     const {
       activeStateEnabled,
       focusStateEnabled,
@@ -187,8 +234,12 @@ class ChatTextArea extends TextArea<Properties> {
         activeStateEnabled,
         focusStateEnabled,
         hoverStateEnabled,
-        elementAttr: { class: TEXT_AREA_ATTACH_BUTTON },
+        elementAttr: { class: CHAT_TEXT_AREA_ATTACH_BUTTON },
         icon: 'attach',
+        onClick: (): void => {
+          this._cleanInformer();
+          this._updateInputHeight();
+        },
       },
     } as ToolbarItem;
 
@@ -241,7 +292,7 @@ class ChatTextArea extends TextArea<Properties> {
 
   _renderFileUploader(): void {
     this._$fileUploader = $('<div>')
-      .addClass(TEXT_AREA_ATTACHMENTS)
+      .addClass(CHAT_TEXT_AREA_ATTACHMENTS)
       .insertBefore(this._$textEditorContainer);
 
     this._fileUploader = this._createComponent(
@@ -257,6 +308,7 @@ class ChatTextArea extends TextArea<Properties> {
 
   _getFileUploaderOptions(): FileUploaderProperties {
     const { fileUploaderOptions = {} } = this.option();
+
     const multiple = fileUploaderOptions.multiple ?? true;
     const visible = this._shouldHideFileUploader(fileUploaderOptions.value);
 
@@ -265,14 +317,16 @@ class ChatTextArea extends TextArea<Properties> {
       multiple,
       visible,
       uploadMode: 'instantly',
-      dialogTrigger: this.$element().find(`.${TEXT_AREA_ATTACH_BUTTON}`).get(0),
+      dialogTrigger: this.$element().find(`.${CHAT_TEXT_AREA_ATTACH_BUTTON}`).get(0),
       _hideCancelButtonOnUpload: false,
       _showFileIcon: true,
       _cancelButtonPosition: 'end',
+      _maxFileCount: MAX_ATTACHMENTS_COUNT,
       onValueChanged: (e) => this._fileUploaderOnValueChanged(e),
       onUploadStarted: (e) => this._fileUploaderOnUploadStarted(e),
       onUploaded: (e) => this._fileUploaderOnUploaded(e),
       onCancelButtonClick: (e) => this._fileUploaderOnCancelButtonClick(e),
+      onFileLimitReached: () => this._fileUploaderFileLimitReached(),
     };
   }
 
@@ -326,6 +380,11 @@ class ChatTextArea extends TextArea<Properties> {
     this._toggleButtonDisableState();
   };
 
+  _fileUploaderFileLimitReached(): void {
+    this._showInformer(ERRORS.fileLimit);
+    this._updateInputHeight();
+  }
+
   _toggleButtonDisableState(state?: boolean): void {
     const shouldDisable = state ?? !this._isMessageCanBeSent();
     this._sendButton?.option('disabled', shouldDisable);
@@ -334,12 +393,28 @@ class ChatTextArea extends TextArea<Properties> {
   _renderButtonContainers(): void {}
 
   _getHeightDifference($input: dxElementWrapper): number {
-    const superResult = super._getHeightDifference($input);
-    const toolbarHeight = getOuterHeight(this._$toolbar);
-    const fileUploaderHeight = getOuterHeight(this._$fileUploader);
-    const sum: number = superResult + toolbarHeight + fileUploaderHeight;
+    const baseDifference = super._getHeightDifference($input);
 
-    return sum;
+    const gap = parseFloat(this.$element().css('gap') ?? '0');
+
+    const informerHeight = this._informer ? getOuterHeight(this._informer.$element()) : 0;
+    const fileUploaderHeight = getOuterHeight(this._$fileUploader);
+    const toolbarHeight = getOuterHeight(this._$toolbar);
+
+    const visibleSections = [
+      toolbarHeight,
+      informerHeight,
+      fileUploaderHeight,
+    ].filter(Boolean).length;
+
+    const totalExtraHeight = toolbarHeight
+      + informerHeight
+      + fileUploaderHeight
+      + visibleSections * gap;
+
+    const difference: number = baseDifference + totalExtraHeight;
+
+    return difference;
   }
 
   _keyPressHandler(e: InputEvent): void {
@@ -348,7 +423,7 @@ class ChatTextArea extends TextArea<Properties> {
     this._toggleButtonDisableState();
   }
 
-  _processSendButtonActivation(e: SendEvent): void {
+  _processSendButtonActivation(e: Partial<SendEvent>): void {
     this._sendAction?.(e);
     this.reset();
     this._fileUploader?.reset();
@@ -437,6 +512,23 @@ class ChatTextArea extends TextArea<Properties> {
     this._$fileUploader = null;
   }
 
+  _cleanInformer(): void {
+    this._clearInformerTimeout();
+    this._removeInformer();
+  }
+
+  _removeInformer(): void {
+    this._informer?.dispose();
+    this._informer?.$element().remove();
+    this._informer = null;
+  }
+
+  _clearInformerTimeout(): void {
+    clearTimeout(this._informerTimeoutId);
+
+    this._informerTimeoutId = undefined;
+  }
+
   _cleanToolbar(): void {
     this._toolbar?.dispose();
     this._$toolbar?.remove();
@@ -447,6 +539,7 @@ class ChatTextArea extends TextArea<Properties> {
   _dispose(): void {
     this._cleanFileUploader();
     this._cleanToolbar();
+    this._cleanInformer();
     super._dispose();
   }
 }

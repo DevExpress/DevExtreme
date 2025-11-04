@@ -16,7 +16,6 @@ import EditingPreview from '@ts/ui/chat/message_box/editing_preview';
 
 export const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
 export const CHAT_MESSAGEBOX_TEXTAREA_CONTAINER_CLASS = 'dx-chat-messagebox-textarea-container';
-export const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
 
 export const TYPING_END_DELAY = 2000;
 const ESCAPE_KEY = 'escape';
@@ -137,7 +136,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   }
 
   _renderTextArea($parent: dxElementWrapper): void {
-    const $textArea = $('<div>').addClass(CHAT_MESSAGEBOX_TEXTAREA_CLASS);
+    const $textArea = $('<div>');
     const textAreaOptions = this._getTextAreaOptions();
 
     $parent.append($textArea);
