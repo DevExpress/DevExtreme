@@ -3123,3 +3123,120 @@ describe('DropDownButton', () => {
     });
   });
 });
+
+describe('Cache', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  describe('when request data', () => {
+    it('should not use cached data with sendAIColumnRequest', async () => {
+      const sendRequestSpy = jest.fn();
+      const aiIntegration = new AIIntegration({
+        sendRequest(prompt): RequestResult {
+          sendRequestSpy();
+
+          return {
+            promise: new Promise<string>((resolve) => {
+              const result = {};
+              Object.entries(prompt.data?.data).forEach(([key, value]) => {
+                result[key] = `Response ${(value as any).name}`;
+              });
+
+              resolve(JSON.stringify(result));
+            }),
+            abort: (): void => {},
+          };
+        },
+      });
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+          { id: 2, name: 'Name 2', value: 20 },
+        ],
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration,
+              mode: 'manual',
+              prompt: 'Test prompt',
+            },
+          },
+        ],
+      });
+
+      instance.sendAIColumnRequest('myColumn');
+      await Promise.resolve();
+      expect(sendRequestSpy).toHaveBeenCalledTimes(1);
+
+      instance.sendAIColumnRequest('myColumn');
+      await Promise.resolve();
+      expect(sendRequestSpy).toHaveBeenCalledTimes(2);
+
+      instance.sendAIColumnRequest('myColumn');
+      await Promise.resolve();
+      expect(sendRequestSpy).toHaveBeenCalledTimes(3);
+    });
+
+    it('should not use cached data with refreshAIColumn', async () => {
+      const sendRequestSpy = jest.fn();
+      const aiIntegration = new AIIntegration({
+        sendRequest(prompt): RequestResult {
+          sendRequestSpy();
+
+          return {
+            promise: new Promise<string>((resolve) => {
+              const result = {};
+              Object.entries(prompt.data?.data).forEach(([key, value]) => {
+                result[key] = `Response ${(value as any).name}`;
+              });
+
+              resolve(JSON.stringify(result));
+            }),
+            abort: (): void => {},
+          };
+        },
+      });
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+          { id: 2, name: 'Name 2', value: 20 },
+        ],
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration,
+              mode: 'manual',
+              prompt: 'Test prompt',
+            },
+          },
+        ],
+      });
+
+      instance.refreshAIColumn('myColumn');
+      await Promise.resolve();
+      expect(sendRequestSpy).toHaveBeenCalledTimes(1);
+
+      instance.refreshAIColumn('myColumn');
+      await Promise.resolve();
+      expect(sendRequestSpy).toHaveBeenCalledTimes(2);
+
+      instance.refreshAIColumn('myColumn');
+      await Promise.resolve();
+      expect(sendRequestSpy).toHaveBeenCalledTimes(3);
+    });
+  });
+});

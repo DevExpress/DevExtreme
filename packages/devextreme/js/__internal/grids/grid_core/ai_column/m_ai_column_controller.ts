@@ -80,16 +80,24 @@ export class AIColumnController extends Controller {
     this.aiColumnIntegrationController.abortRequest(columnName);
   }
 
+  private sendRequest(
+    columnName: string,
+    useCache: boolean,
+  ): void {
+    const callbacks = this.getRequestCallbacks();
+    this.aiColumnIntegrationController.sendRequest(columnName, useCache, callbacks);
+  }
+
   public sendAIColumnRequest(
     columnName: string,
   ): void {
-    this.aiColumnIntegrationController.sendRequest(columnName, true, this.getRequestCallbacks());
+    this.sendRequest(columnName, false);
   }
 
   public refreshAIColumn(
     columnName: string,
   ): void {
-    this.sendAIColumnRequest(columnName);
+    this.sendRequest(columnName, false);
   }
 
   private getRequestCallbacks(): RequestCallbacks<GenerateGridColumnCommandResult> {
