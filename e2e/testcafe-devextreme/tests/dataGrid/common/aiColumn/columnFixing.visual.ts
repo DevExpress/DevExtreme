@@ -2,6 +2,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Ai Column - Sticky columns.Visual`
   .page(url(__dirname, '../../../container.html'));
@@ -20,7 +21,7 @@ test('Check context menu items', async (t) => {
     .rightClick(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).element)
     .click(dataGrid.getContextMenu().getItemByText('Set Fixed Position'));
 
-  await takeScreenshot('datagrid__ai-column-and-sticky-columns__context-menu.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'datagrid__ai-column-and-sticky-columns__context-menu.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -59,7 +60,7 @@ test('Check context menu items when allowFixing is false', async (t) => {
   // act
   await t.rightClick(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).element);
 
-  await takeScreenshot('datagrid__ai-column-and-sticky-columns__context-menu-when-allowFixing-false.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'datagrid__ai-column-and-sticky-columns__context-menu-when-allowFixing-false.png', { element: dataGrid.element });
 
   // assert
   await t

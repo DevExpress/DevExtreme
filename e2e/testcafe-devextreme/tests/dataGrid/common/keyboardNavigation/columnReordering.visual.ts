@@ -4,6 +4,7 @@ import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { getData } from '../../helpers/generateDataSourceData';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture
   .disablePageReloads`Keyboard Navigation - Column Reordering`
@@ -23,10 +24,7 @@ const DATA_GRID_SELECTOR = '#container';
       .click(firstHeaderCell.element)
       .pressKey(shortcut);
 
-    await takeScreenshot(
-      `reorder_column_to_${rtlEnabled ? 'left' : 'right'}_when_rtlEnabled_=_${rtlEnabled}`,
-      dataGrid.element,
-    );
+    await testScreenshot(t, takeScreenshot, `reorder_column_to_${rtlEnabled ? 'left' : 'right'}_when_rtlEnabled_=_${rtlEnabled}.png`, { element: dataGrid.element });
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
@@ -53,10 +51,7 @@ const DATA_GRID_SELECTOR = '#container';
       .click(lastHeaderCell.element)
       .pressKey(shortcut);
 
-    await takeScreenshot(
-      `reorder_column_to_${rtlEnabled ? 'right' : 'left'}_when_rtlEnabled_=_${rtlEnabled}`,
-      dataGrid.element,
-    );
+    await testScreenshot(t, takeScreenshot, `reorder_column_to_${rtlEnabled ? 'right' : 'left'}_when_rtlEnabled_=_${rtlEnabled}.png`, { element: dataGrid.element });
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
@@ -83,12 +78,12 @@ const DATA_GRID_SELECTOR = '#container';
 
     await t.rightClick(firstHeaderCell.element);
 
-    await takeScreenshot(`reorder_column_to_right_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_1`);
+    await testScreenshot(t, takeScreenshot, `reorder_column_to_right_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_1.png`);
 
     await t
       .click(contextMenu.getItemByText(contextMenuItemText));
 
-    await takeScreenshot(`reorder_column_to_right_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_2`);
+    await testScreenshot(t, takeScreenshot, `reorder_column_to_right_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_2.png`);
 
     await t
       .expect(compareResults.isValid())
@@ -116,12 +111,12 @@ const DATA_GRID_SELECTOR = '#container';
 
     await t.rightClick(lastHeaderCell.element);
 
-    await takeScreenshot(`reorder_column_to_left_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_1`);
+    await testScreenshot(t, takeScreenshot, `reorder_column_to_left_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_1.png`);
 
     await t
       .click(contextMenu.getItemByText(contextMenuItemText));
 
-    await takeScreenshot(`reorder_column_to_left_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_2`);
+    await testScreenshot(t, takeScreenshot, `reorder_column_to_left_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_2.png`);
 
     await t
       .expect(compareResults.isValid())
@@ -149,10 +144,7 @@ test('The column should not be reordered when allowColumnReordering is false', a
     .click(firstHeaderCell.element)
     .pressKey('ctrl+right');
 
-  await takeScreenshot(
-    'reorder_column_when_allowColumnReordering_is_false',
-    dataGrid.element,
-  );
+  await testScreenshot(t, takeScreenshot, 'reorder_column_when_allowColumnReordering_is_false.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -177,10 +169,7 @@ test('The column should not be reordered when it has allowReordering set to fals
     .click(firstHeaderCell.element)
     .pressKey('ctrl+right');
 
-  await takeScreenshot(
-    'reorder_column_with_allowReordering_is_false',
-    dataGrid.element,
-  );
+  await testScreenshot(t, takeScreenshot, 'reorder_column_with_allowReordering_is_false.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -214,10 +203,7 @@ test('The column should not be reordered when allowColumnReordering is false and
     .click(firstHeaderCell.element)
     .pressKey('ctrl+right');
 
-  await takeScreenshot(
-    'reorder_column_when_allowColumnReordering_is_false_and_group_panel_is_visible',
-    dataGrid.element,
-  );
+  await testScreenshot(t, takeScreenshot, 'reorder_column_when_allowColumnReordering_is_false_and_group_panel_is_visible.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -244,7 +230,7 @@ safeSizeTest('The context menu should not have items for column reordering when 
 
   await t.rightClick(firstHeaderCell.element);
 
-  await takeScreenshot('reorder_column_via_context_menu_when_allowColumnReordering_is_false');
+  await testScreenshot(t, takeScreenshot, 'reorder_column_via_context_menu_when_allowColumnReordering_is_false.png');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -270,10 +256,7 @@ test('The cell focus should be correct after column reordering when previously t
     .pressKey('shift+tab')
     .pressKey('ctrl+left');
 
-  await takeScreenshot(
-    'cell_focus_after_column_reordering_when_data_cell_was_focused.png',
-    dataGrid.element,
-  );
+  await testScreenshot(t, takeScreenshot, 'cell_focus_after_column_reordering_when_data_cell_was_focused.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())
@@ -301,10 +284,7 @@ test('reorder fixed left column to right', async (t) => {
     .pressKey('ctrl+right')
     .pressKey('ctrl+right');
 
-  await takeScreenshot(
-    'reorder_fixed_left_column_to_right',
-    dataGrid.element,
-  );
+  await testScreenshot(t, takeScreenshot, 'reorder_fixed_left_column_to_right.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -339,10 +319,7 @@ test('reorder fixed left column to left', async (t) => {
     .pressKey('ctrl+left')
     .pressKey('ctrl+left');
 
-  await takeScreenshot(
-    'reorder_fixed_left_column_to_left',
-    dataGrid.element,
-  );
+  await testScreenshot(t, takeScreenshot, 'reorder_fixed_left_column_to_left.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -377,10 +354,7 @@ test('reorder fixed right column to right', async (t) => {
     .pressKey('ctrl+right')
     .pressKey('ctrl+right');
 
-  await takeScreenshot(
-    'reorder_fixed_right_column_to_right',
-    dataGrid.element,
-  );
+  await testScreenshot(t, takeScreenshot, 'reorder_fixed_right_column_to_right.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -417,10 +391,7 @@ test('reorder fixed right column to left', async (t) => {
     .pressKey('ctrl+left')
     .pressKey('ctrl+left');
 
-  await takeScreenshot(
-    'reorder_fixed_right_column_to_left',
-    dataGrid.element,
-  );
+  await testScreenshot(t, takeScreenshot, 'reorder_fixed_right_column_to_left.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -457,10 +428,7 @@ test('reorder sticky column to left when there are fixed columns', async (t) => 
     .pressKey('ctrl+left')
     .pressKey('ctrl+left');
 
-  await takeScreenshot(
-    'reorder_sticky_column_to_left',
-    dataGrid.element,
-  );
+  await testScreenshot(t, takeScreenshot, 'reorder_sticky_column_to_left.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -502,10 +470,7 @@ test('reorder sticky column to right when there are fixed columns', async (t) =>
     .pressKey('ctrl+right')
     .pressKey('ctrl+right');
 
-  await takeScreenshot(
-    'reorder_sticky_column_to_right',
-    dataGrid.element,
-  );
+  await testScreenshot(t, takeScreenshot, 'reorder_sticky_column_to_right.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -547,10 +512,7 @@ test('reorder fixed right column to right when there is a command column on the 
     .pressKey('ctrl+right')
     .pressKey('ctrl+right');
 
-  await takeScreenshot(
-    'reorder_fixed_right_column_to_right_when_there_is_command_column_on_right',
-    dataGrid.element,
-  );
+  await testScreenshot(t, takeScreenshot, 'reorder_fixed_right_column_to_right_when_there_is_command_column_on_right.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -592,10 +554,7 @@ test('reorder fixed right column to right when there is a custom command column 
     .pressKey('ctrl+right')
     .pressKey('ctrl+right');
 
-  await takeScreenshot(
-    'reorder_fixed_right_column_to_right_when_there_is_custom_command_column_on_right',
-    dataGrid.element,
-  );
+  await testScreenshot(t, takeScreenshot, 'reorder_fixed_right_column_to_right_when_there_is_custom_command_column_on_right.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -657,12 +616,12 @@ safeSizeTest('reorder fixed left column to right via context menu', async (t) =>
 
   await t.rightClick(firstFixedLeftHeader.element);
 
-  await takeScreenshot('reorder_fixed_left_column_to_right_via_context_menu_1');
+  await testScreenshot(t, takeScreenshot, 'reorder_fixed_left_column_to_right_via_context_menu_1.png');
 
   await t
     .click(contextMenu.getItemByText('Move to the right'));
 
-  await takeScreenshot('reorder_fixed_left_column_to_right_via_context_menu_2');
+  await testScreenshot(t, takeScreenshot, 'reorder_fixed_left_column_to_right_via_context_menu_2.png');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -695,12 +654,12 @@ safeSizeTest('reorder fixed left column to left via context menu', async (t) => 
 
   await t.rightClick(secondFixedLeftHeader.element);
 
-  await takeScreenshot('reorder_fixed_left_column_to_left_via_context_menu_1');
+  await testScreenshot(t, takeScreenshot, 'reorder_fixed_left_column_to_left_via_context_menu_1.png');
 
   await t
     .click(contextMenu.getItemByText('Move to the left'));
 
-  await takeScreenshot('reorder_fixed_left_column_to_left_via_context_menu_2');
+  await testScreenshot(t, takeScreenshot, 'reorder_fixed_left_column_to_left_via_context_menu_2.png');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -733,12 +692,12 @@ safeSizeTest('reorder fixed right column to right via context menu', async (t) =
 
   await t.rightClick(firstFixedRightHeader.element);
 
-  await takeScreenshot('reorder_fixed_right_column_to_right_via_context_menu_1');
+  await testScreenshot(t, takeScreenshot, 'reorder_fixed_right_column_to_right_via_context_menu_1.png');
 
   await t
     .click(contextMenu.getItemByText('Move to the right'));
 
-  await takeScreenshot('reorder_fixed_right_column_to_right_via_context_menu_2');
+  await testScreenshot(t, takeScreenshot, 'reorder_fixed_right_column_to_right_via_context_menu_2.png');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -773,12 +732,12 @@ safeSizeTest('reorder fixed right column to left via context menu', async (t) =>
 
   await t.rightClick(secondFixedRightHeader.element);
 
-  await takeScreenshot('reorder_fixed_right_column_to_left_via_context_menu_1');
+  await testScreenshot(t, takeScreenshot, 'reorder_fixed_right_column_to_left_via_context_menu_1.png');
 
   await t
     .click(contextMenu.getItemByText('Move to the left'));
 
-  await takeScreenshot('reorder_fixed_right_column_to_left_via_context_menu_2');
+  await testScreenshot(t, takeScreenshot, 'reorder_fixed_right_column_to_left_via_context_menu_2.png');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -816,10 +775,7 @@ test('reorder band column to right', async (t) => {
     .pressKey('ctrl+right')
     .pressKey('ctrl+right');
 
-  await takeScreenshot(
-    'reorder_band_column_to_right',
-    dataGrid.element,
-  );
+  await testScreenshot(t, takeScreenshot, 'reorder_band_column_to_right.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -854,10 +810,7 @@ test('reorder band column to left', async (t) => {
     .pressKey('ctrl+left')
     .pressKey('ctrl+left');
 
-  await takeScreenshot(
-    'reorder_band_column_to_left',
-    dataGrid.element,
-  );
+  await testScreenshot(t, takeScreenshot, 'reorder_band_column_to_left.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -892,10 +845,7 @@ test('reorder nested column to left', async (t) => {
     .pressKey('ctrl+left')
     .pressKey('ctrl+left');
 
-  await takeScreenshot(
-    'reorder_nested_column_to_left',
-    dataGrid.element,
-  );
+  await testScreenshot(t, takeScreenshot, 'reorder_nested_column_to_left.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -930,10 +880,7 @@ test('reorder nested column to right', async (t) => {
     .pressKey('ctrl+right')
     .pressKey('ctrl+right');
 
-  await takeScreenshot(
-    'reorder_nested_column_to_right',
-    dataGrid.element,
-  );
+  await testScreenshot(t, takeScreenshot, 'reorder_nested_column_to_right.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -968,10 +915,7 @@ test('reorder fixed nested column to right', async (t) => {
     .pressKey('ctrl+right')
     .pressKey('ctrl+right');
 
-  await takeScreenshot(
-    'reorder_fixed_nested_column_to_right',
-    dataGrid.element,
-  );
+  await testScreenshot(t, takeScreenshot, 'reorder_fixed_nested_column_to_right.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -1007,10 +951,7 @@ test('reorder fixed nested column to left', async (t) => {
     .pressKey('ctrl+left')
     .pressKey('ctrl+left');
 
-  await takeScreenshot(
-    'reorder_fixed_nested_column_to_left',
-    dataGrid.element,
-  );
+  await testScreenshot(t, takeScreenshot, 'reorder_fixed_nested_column_to_left.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -1045,12 +986,12 @@ safeSizeTest('reorder nested column to left via context menu', async (t) => {
 
   await t.rightClick(nestedSecondHeader.element);
 
-  await takeScreenshot('reorder_nested_column_to_left_via_context_menu_1');
+  await testScreenshot(t, takeScreenshot, 'reorder_nested_column_to_left_via_context_menu_1.png');
 
   await t
     .click(contextMenu.getItemByText('Move to the left'));
 
-  await takeScreenshot('reorder_nested_column_to_left_via_context_menu_2');
+  await testScreenshot(t, takeScreenshot, 'reorder_nested_column_to_left_via_context_menu_2.png');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -1083,12 +1024,12 @@ safeSizeTest('reorder nested column to right via context menu', async (t) => {
 
   await t.rightClick(nestedFirstHeader.element);
 
-  await takeScreenshot('reorder_nested_column_to_right_via_context_menu_1');
+  await testScreenshot(t, takeScreenshot, 'reorder_nested_column_to_right_via_context_menu_1.png');
 
   await t
     .click(contextMenu.getItemByText('Move to the right'));
 
-  await takeScreenshot('reorder_nested_column_to_right_via_context_menu_2');
+  await testScreenshot(t, takeScreenshot, 'reorder_nested_column_to_right_via_context_menu_2.png');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -1124,10 +1065,7 @@ test('reorder column to left when there is a command column', async (t) => {
     .pressKey('ctrl+left')
     .pressKey('ctrl+left');
 
-  await takeScreenshot(
-    'reorder_column_to_left_when_there_is_command_column',
-    dataGrid.element,
-  );
+  await testScreenshot(t, takeScreenshot, 'reorder_column_to_left_when_there_is_command_column.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -1166,10 +1104,7 @@ test('reorder column to right when there is a command column', async (t) => {
     .pressKey('ctrl+right')
     .pressKey('ctrl+right');
 
-  await takeScreenshot(
-    'reorder_column_to_right_when_there_is_command_column',
-    dataGrid.element,
-  );
+  await testScreenshot(t, takeScreenshot, 'reorder_column_to_right_when_there_is_command_column.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -1207,10 +1142,7 @@ test('reorder a custom command column to right', async (t) => {
     .click(commandHeader.element)
     .pressKey('ctrl+right');
 
-  await takeScreenshot(
-    'reorder_custom_command_column_to_right',
-    dataGrid.element,
-  );
+  await testScreenshot(t, takeScreenshot, 'reorder_custom_command_column_to_right.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -1250,10 +1182,7 @@ test('reorder a custom command column to left', async (t) => {
     .click(commandHeader.element)
     .pressKey('ctrl+left');
 
-  await takeScreenshot(
-    'reorder_custom_command_column_to_left',
-    dataGrid.element,
-  );
+  await testScreenshot(t, takeScreenshot, 'reorder_custom_command_column_to_left.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -1292,12 +1221,12 @@ safeSizeTest('reorder a custom command column to right via context menu', async 
 
   await t.rightClick(commandHeader.element);
 
-  await takeScreenshot('reorder_custom_command_column_to_right_via_context_menu_1');
+  await testScreenshot(t, takeScreenshot, 'reorder_custom_command_column_to_right_via_context_menu_1.png');
 
   await t
     .click(contextMenu.getItemByText('Move to the right'));
 
-  await takeScreenshot('reorder_custom_command_column_to_right_via_context_menu_2');
+  await testScreenshot(t, takeScreenshot, 'reorder_custom_command_column_to_right_via_context_menu_2.png');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -1339,10 +1268,7 @@ test('reorder column to right when adaptability is enabled and there are hidden 
     .pressKey('ctrl+right')
     .pressKey('ctrl+right');
 
-  await takeScreenshot(
-    'reorder_column_to_right_when_there_are_hidden_columns',
-    dataGrid.element,
-  );
+  await testScreenshot(t, takeScreenshot, 'reorder_column_to_right_when_there_are_hidden_columns.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -1379,10 +1305,7 @@ test('reorder column to left when adaptability is enabled and there are hidden c
     .pressKey('ctrl+left')
     .pressKey('ctrl+left');
 
-  await takeScreenshot(
-    'reorder_column_to_left_when_there_are_hidden_columns',
-    dataGrid.element,
-  );
+  await testScreenshot(t, takeScreenshot, 'reorder_column_to_left_when_there_are_hidden_columns.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -1428,10 +1351,7 @@ test('reorder column to left when adaptability is enabled and there are hidden c
       .expect(firstHeader.element.textContent)
       .contains('Field');
 
-    await takeScreenshot(
-      `reorder_column_when_there_are_async_templates_and_renderAsync_=_${renderAsync}`,
-      dataGrid.element,
-    );
+    await testScreenshot(t, takeScreenshot, `reorder_column_when_there_are_async_templates_and_renderAsync_=_${renderAsync}.png`, { element: dataGrid.element });
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
@@ -1487,10 +1407,7 @@ test('reorder column to left when adaptability is enabled and there are hidden c
       .pressKey('ctrl+right')
       .pressKey('ctrl+right');
 
-    await takeScreenshot(
-      `${useNative ? 'native' : 'simulated'}_scrolling_-_auto_scroll_to_right_when_column_reordering`,
-      dataGrid.element,
-    );
+    await testScreenshot(t, takeScreenshot, `${useNative ? 'native' : 'simulated'}_scrolling_-_auto_scroll_to_right_when_column_reordering.png`, { element: dataGrid.element });
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
@@ -1535,10 +1452,7 @@ test('reorder column to left when adaptability is enabled and there are hidden c
       .pressKey('ctrl+left')
       .pressKey('ctrl+left');
 
-    await takeScreenshot(
-      `${useNative ? 'native' : 'simulated'}_scrolling_-_auto_scroll_to_left_when_column_reordering`,
-      dataGrid.element,
-    );
+    await testScreenshot(t, takeScreenshot, `${useNative ? 'native' : 'simulated'}_scrolling_-_auto_scroll_to_left_when_column_reordering.png`, { element: dataGrid.element });
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
@@ -1576,10 +1490,7 @@ test('reorder column to left when adaptability is enabled and there are hidden c
       await t.pressKey('ctrl+right');
     }
 
-    await takeScreenshot(
-      `${useNative ? 'native' : 'simulated'}_scrolling_-_auto_scroll_to_right_when_virtual_columns_are_enabled`,
-      dataGrid.element,
-    );
+    await testScreenshot(t, takeScreenshot, `${useNative ? 'native' : 'simulated'}_scrolling_-_auto_scroll_to_right_when_virtual_columns_are_enabled.png`, { element: dataGrid.element });
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
@@ -1614,10 +1525,7 @@ test('reorder column to left when adaptability is enabled and there are hidden c
       await t.pressKey('ctrl+left');
     }
 
-    await takeScreenshot(
-      `${useNative ? 'native' : 'simulated'}_scrolling_-_auto_scroll_to_left_when_virtual_columns_are_enabled`,
-      dataGrid.element,
-    );
+    await testScreenshot(t, takeScreenshot, `${useNative ? 'native' : 'simulated'}_scrolling_-_auto_scroll_to_left_when_virtual_columns_are_enabled.png`, { element: dataGrid.element });
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
