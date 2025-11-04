@@ -1,7 +1,5 @@
-import {
-  NgModule, Component, enableProdMode,
-} from '@angular/core';
-import {provideHttpClient, withFetch} from '@angular/common/http';
+import { NgModule, Component, enableProdMode } from '@angular/core';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import notify from 'devextreme/ui/notify';

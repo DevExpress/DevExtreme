@@ -121,7 +121,6 @@ const getValidationResult = (index: number) => {
   if (index >= validationGroups.length) {
     return true;
   }
- console.log('----validationGroups------>', [validationGroups ,index, validationGroups[index]])
   return validationEngine.validateGroup(validationGroups[index]).isValid;
 };
 

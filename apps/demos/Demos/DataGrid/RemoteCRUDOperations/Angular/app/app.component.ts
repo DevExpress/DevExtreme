@@ -1,7 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import {HttpClient, HttpParams, provideHttpClient, withFetch} from '@angular/common/http';
+import { HttpClient, HttpParams, provideHttpClient, withFetch } from '@angular/common/http';
 import { lastValueFrom, Observable } from 'rxjs';
 import { DxDataGridModule, DxSelectBoxModule, DxButtonModule } from 'devextreme-angular';
 import { CustomStore } from 'devextreme-angular/common/data';
