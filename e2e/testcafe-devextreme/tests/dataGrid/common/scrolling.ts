@@ -1366,7 +1366,7 @@ test('New virtual mode. Navigation to the last row if new row is added (T1069849
 }));
 
 [false, true].forEach((useNative) => {
-  test.skip(`New virtual mode. Virtual rows should not be in view port after switching to the last page with row numbers less than page size (useNative = ${useNative}) (T1085775)`, async (t) => {
+  test(`New virtual mode. Virtual rows should not be in view port after switching to the last page with row numbers less than page size (useNative = ${useNative}) (T1085775)`, async (t) => {
     const dataGrid = new DataGrid('#container');
 
     // assert

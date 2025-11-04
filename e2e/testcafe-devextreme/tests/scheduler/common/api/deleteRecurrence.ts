@@ -108,7 +108,7 @@ test('should exclude from recurrence if mode is "occurrence"', async (t) => {
   },
 ));
 
-test.skip('should show delete recurrence dialog if mode is "dialog"', async (t) => {
+test('should show delete recurrence dialog if mode is "dialog"', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointment('test-appt');
   const { appointmentTooltip } = scheduler;

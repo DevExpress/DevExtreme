@@ -148,7 +148,7 @@ test('Tab key on editor should focus next cell if editing mode is cell', async (
   columns: [{ dataField: 'name', allowEditing: false }, { dataField: 'value', showEditorAlways: true }],
 }));
 
-test.skip('Click should work if a column button set using svg icon (T863635)', async (t) => {
+test('Click should work if a column button set using svg icon (T863635)', async (t) => {
   await t
     .click(Selector('.dx-command-edit-with-icons').nth(0))
     .expect(ClientFunction(() => (window as any).onSvgClickCounter)()).eql(1);
