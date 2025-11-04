@@ -65,7 +65,7 @@ test.meta({ browserSize: [900, 800] })('Header hover should display correctly wh
 // visual: generic.light
 // visual: material.blue.light
 // visual: fluent.blue.light
-test.meta({ unstable: true })('Row hover should display correctly when there are fixed columns', async (t) => {
+test('Row hover should display correctly when there are fixed columns', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const treeList = new TreeList(TREE_LIST_SELECTOR);
   const dataRow = treeList.getDataRow(1);

@@ -304,7 +304,7 @@ test('DataGrid - Group row content is scrolled if repaintChangesOnly is enabled 
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).meta({ unstable: true }).before(async () => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     ...defaultConfig,
     rtlEnabled,
     customizeColumns(columns) {

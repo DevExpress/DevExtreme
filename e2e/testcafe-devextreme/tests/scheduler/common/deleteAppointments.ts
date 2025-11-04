@@ -63,7 +63,7 @@ test.skip('Recurrence appointments should be deleted by click on \'delete\' butt
     .eql(0);
 }).before(async () => createScheduler(createRecurrenceData()));
 
-test.meta({ unstable: true })('Recurrence appointments should be deleted by press \'delete\' key', async (t) => {
+test('Recurrence appointments should be deleted by press \'delete\' key', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t

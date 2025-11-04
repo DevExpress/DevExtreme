@@ -99,7 +99,7 @@ test.meta({ browserSize: [900, 800] })('Header hover should display correctly wh
 // visual: material.blue.light
 // visual: fluent.blue.light
 // visual: generic.greenMist.light
-test.meta({ unstable: true })('Row hover should display correctly when there are fixed columns (generic.light theme)', async (t) => {
+test('Row hover should display correctly when there are fixed columns (generic.light theme)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const dataRow = dataGrid.getDataRow(1);
