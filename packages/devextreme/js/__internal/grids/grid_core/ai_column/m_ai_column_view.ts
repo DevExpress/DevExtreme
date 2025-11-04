@@ -154,6 +154,18 @@ export const columnHeadersViewExtender = (
     return renderingTemplate;
   }
 
+  private aiColumnOptionChanged(column: Column, optionName: string, value: unknown): void {
+    const isPromptOptionName = isPromptOption(optionName, value);
+
+    if (isPromptOptionName) {
+      const visibleIndex = this._columnsController.getVisibleIndex(column.index);
+      const $headerElement = this.getHeaderElement(visibleIndex);
+      const dropDownButtonInstance = this.getDropDownButtonInstance($headerElement);
+
+      dropDownButtonInstance?.option('items', this.getDropDownButtonItems(column));
+    }
+  }
+
   public init(): void {
     super.init();
     this.aiColumnController = this.getController('aiColumn');
@@ -170,18 +182,7 @@ export const columnHeadersViewExtender = (
       this.activeDropDownButtonInstance?.close();
     });
 
-    this.aiColumnOptionChangedHandler = (column: Column, optionName: string, value: unknown): void => {
-      const isPromptOptionName = isPromptOption(optionName, value);
-
-      if (isPromptOptionName) {
-        const visibleIndex = this._columnsController.getVisibleIndex(column.index);
-        const $headerElement = this.getHeaderElement(visibleIndex);
-        const dropDownButtonInstance = this.getDropDownButtonInstance($headerElement);
-
-        dropDownButtonInstance?.option('items', this.getDropDownButtonItems(column));
-      }
-    };
-
+    this.aiColumnOptionChangedHandler = this.aiColumnOptionChanged.bind(this);
     this._columnsController.aiColumnOptionChanged.add(this.aiColumnOptionChangedHandler);
   }
 
@@ -198,6 +199,8 @@ export const columnHeadersViewExtender = (
     super.dispose();
     this.activeDropDownButtonInstance = null;
 
-    this._columnsController.aiColumnOptionChanged.remove(this.aiColumnOptionChangedHandler);
+    if (this.aiColumnOptionChangedHandler) {
+      this._columnsController.aiColumnOptionChanged.remove(this.aiColumnOptionChangedHandler);
+    }
   }
 };
