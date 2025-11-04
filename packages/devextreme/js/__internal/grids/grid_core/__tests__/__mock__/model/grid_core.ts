@@ -55,18 +55,6 @@ export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
     return this.root.querySelectorAll(`.${SELECTORS.groupRowClass}`);
   }
 
-  public apiColumnOption(id: string, name?: string, value?: any): any {
-    switch (arguments.length) {
-      case 1:
-        return this.getInstance().columnOption(id);
-      case 2:
-        return this.getInstance().columnOption(id, name);
-      default:
-        this.getInstance().columnOption(id, name as string, value);
-        return undefined;
-    }
-  }
-
   public getHeaderByText(text: string): dxElementWrapper {
     return $(Array.from(this.getHeaderCells()).find((el) => $(el).text().includes(text)));
   }
@@ -95,6 +83,22 @@ export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
     const componentName = this.NAME;
 
     return `dx-${componentName.slice(2).toLowerCase()}${classNames ? `-${classNames}` : ''}`;
+  }
+
+  public apiColumnOption(id: string, name?: string, value?: any): any {
+    switch (arguments.length) {
+      case 1:
+        return this.getInstance().columnOption(id);
+      case 2:
+        return this.getInstance().columnOption(id, name);
+      default:
+        this.getInstance().columnOption(id, name as string, value);
+        return undefined;
+    }
+  }
+
+  public async apiRefresh(): Promise<void> {
+    await this.getInstance().refresh();
   }
 
   public abstract getInstance(): TInstance;

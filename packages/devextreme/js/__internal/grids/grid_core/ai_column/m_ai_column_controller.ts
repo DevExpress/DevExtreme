@@ -34,9 +34,9 @@ export class AIColumnController extends Controller {
       ...getAICommandColumnDefaultOptions(),
       calculateCellValue(data) {
         const key = dataController.keyOf(data);
-        const response = aiColumnIntegrationController.getColumnResponseData(this.name);
+        const cellValue = aiColumnIntegrationController.getAIColumnText(this.name, key);
 
-        return response?.[key] ?? null;
+        return cellValue ?? null;
       },
     });
   }
@@ -44,6 +44,12 @@ export class AIColumnController extends Controller {
   private subscribeToDataSourceChanged(): void {
     this.dataSourceChangedHandler = this.handleDataSourceChanged.bind(this);
     this.dataController.dataSource()?.changed.add(this.dataSourceChangedHandler);
+  }
+
+  private updateAICells(): void {
+    this.dataController.updateItems({
+      repaintChangesOnly: this.option('repaintChangesOnly'),
+    });
   }
 
   protected callbackNames(): string[] {
@@ -130,7 +136,7 @@ export class AIColumnController extends Controller {
     return {
       onComplete: (data): void => {
         this.aiRequestCompleted.fire(data);
-        this.dataController.updateItems();
+        this.updateAICells();
       },
       onError: (error: Error): void => {
         this.aiRequestRejected.fire(error);
@@ -142,7 +148,7 @@ export class AIColumnController extends Controller {
     this.aiColumnIntegrationController.abortRequest(columnName);
     this.aiColumnIntegrationController.clearAIColumn(columnName);
     this.columnsController.columnOption(columnName, 'ai.prompt', '');
-    this.dataController.updateItems();
+    this.updateAICells();
   }
 
   public getAIColumnText(columnName: string, key: unknown): string | undefined {

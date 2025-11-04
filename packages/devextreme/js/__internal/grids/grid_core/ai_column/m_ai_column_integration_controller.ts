@@ -15,7 +15,7 @@ import { getDataFromRowItems, reduceDataCachedKeys } from './utils';
 export class AIColumnIntegrationController extends Controller {
   private aborts: Record<string, (() => void) | undefined> = { };
 
-  private responseData: Record<string, Record<PropertyKey, unknown>> = {};
+  private readonly responseData: Record<string, Record<PropertyKey, string>> = {};
 
   private columnsController!: ColumnsController;
 
@@ -107,13 +107,6 @@ export class AIColumnIntegrationController extends Controller {
     this.abortRequest(columnName);
   }
 
-  private saveResult(
-    columnName: string,
-    response: Record<PropertyKey, unknown>,
-  ): void {
-    this.responseData[columnName] = response;
-  }
-
   private getAICommandCallbacks(
     columnName: string,
     cachedResponse: Record<PropertyKey, string>,
@@ -131,10 +124,6 @@ export class AIColumnIntegrationController extends Controller {
 
           this.executeAction('onAIColumnResponseReceived', args);
           this.aiColumnCacheController.setCachedResponse(columnName, finalResponse.data);
-          this.saveResult(
-            columnName,
-            finalResponse.data,
-          );
           this.processCommandCompletion(columnName);
           callBacks?.onComplete?.(finalResponse);
         }
@@ -197,13 +186,5 @@ export class AIColumnIntegrationController extends Controller {
   public dispose(): void {
     super.dispose();
     Object.keys(this.aborts).forEach((columnName) => this.abortRequest(columnName));
-  }
-
-  public getColumnResponseData(columnName: string): Record<PropertyKey, unknown> | null {
-    return this.responseData[columnName] ?? null;
-  }
-
-  public resetColumnResponseData(): void {
-    this.responseData = {};
   }
 }

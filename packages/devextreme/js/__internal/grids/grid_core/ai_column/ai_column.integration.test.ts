@@ -4,11 +4,16 @@ import {
 import type { GenerateGridColumnCommandResponse, RequestParams } from '@js/common/ai-integration';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { LoadOptions } from '@js/data';
+import DataSource from '@js/data/data_source';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import DataGrid from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
 import { AIIntegration } from '@ts/core/ai_integration/core/ai_integration';
+import ArrayStore from '@ts/data/m_array_store';
 import { DataGridModel } from '@ts/grids/data_grid/__tests__/__mock__/model/data_grid';
+
+import { CLASSES } from './const';
 
 const SELECTORS = {
   gridContainer: '#gridContainer',
@@ -1818,7 +1823,7 @@ describe('API Methods', () => {
     });
   });
 
-  describe('getAIColumnValue', () => {
+  describe('getAIColumnText', () => {
     it('should return undefined if there is no value for the row', async () => {
       const columnAIIntegration = new AIIntegration({
         sendRequest(): RequestResult {
@@ -3623,6 +3628,417 @@ describe('Cache', () => {
       await Promise.resolve();
       expect(sendRequestSpy).toHaveBeenCalledTimes(2);
       expect(instance.getAIColumnText('myColumn', 1)).toBeUndefined();
+    });
+  });
+});
+
+describe('AI data', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  const UNICODE_NBSP = '\u00A0';
+
+  const items = [
+    { id: 1, name: 'Name 1', value: 10 },
+    { id: 2, name: 'Name 2', value: 20 },
+  ];
+
+  const store = new ArrayStore(items);
+  const loadMock = jest.fn((
+    loadOptions: LoadOptions,
+  ): Promise<any[]> => new Promise((resolve, reject) => {
+    setTimeout(() => {
+      store.load(loadOptions).done(resolve).fail(reject);
+    }, 300);
+  }));
+  const totalCountMock = jest.fn((): Promise<number> => new Promise((resolve, reject) => {
+    store.totalCount().done(resolve).fail(reject);
+  }));
+
+  const remoteDataSource = new DataSource({
+    key: 'id',
+    load: loadMock,
+    totalCount: totalCountMock,
+  });
+  const compareCellNodes = (
+    prevCells: (HTMLElement | null)[],
+    currentCells: (HTMLElement | null)[],
+  ): void => {
+    prevCells.forEach((cell: HTMLElement | null, index: number) => {
+      const currentCell = currentCells[index];
+
+      if (cell === null || currentCell === null) {
+        throw new Error('Cell is null');
+      }
+
+      if (cell.classList.contains(CLASSES.aiColumn)) {
+        expect(cell).not.toBe(currentCell);
+      } else {
+        expect(cell).toBe(currentCell);
+      }
+    });
+  };
+
+  describe('when prompt is set', () => {
+    it('should be rendered', async () => {
+      const { component } = await createDataGrid({
+        dataSource: items,
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              prompt: 'Initial prompt',
+              aiIntegration: new AIIntegration({
+                sendRequest(): RequestResult {
+                  return {
+                    promise: new Promise<string>((resolve) => {
+                      resolve('{"1":"AI Response 1","2":"AI Response 2"}');
+                    }),
+                    abort: (): void => {},
+                  };
+                },
+              }),
+            },
+          },
+        ],
+      });
+
+      expect(component.getDataCell(0, 3).getText()).toBe('AI Response 1');
+      expect(component.getDataCell(1, 3).getText()).toBe('AI Response 2');
+    });
+  });
+
+  describe('when prompt is set via column option', () => {
+    it('should be rendered', async () => {
+      const { component } = await createDataGrid({
+        dataSource: items,
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration: new AIIntegration({
+                sendRequest(): RequestResult {
+                  return {
+                    promise: new Promise<string>((resolve) => {
+                      resolve('{"1":"AI Response 1","2":"AI Response 2"}');
+                    }),
+                    abort: (): void => {},
+                  };
+                },
+              }),
+            },
+          },
+        ],
+      });
+
+      expect(component.getDataCell(0, 3).getText()).toBe(UNICODE_NBSP);
+      expect(component.getDataCell(1, 3).getText()).toBe(UNICODE_NBSP);
+
+      component.apiColumnOption('myColumn', 'ai.prompt', 'Initial prompt');
+      await Promise.resolve();
+
+      expect(component.getDataCell(0, 3).getText()).toBe('AI Response 1');
+      expect(component.getDataCell(1, 3).getText()).toBe('AI Response 2');
+    });
+  });
+
+  describe('when prompt is set via AI prompt editor', () => {
+    it('should be rendered', async () => {
+      const { component } = await createDataGrid({
+        dataSource: items,
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              popup: {
+                visible: true,
+              },
+              aiIntegration: new AIIntegration({
+                sendRequest(): RequestResult {
+                  return {
+                    promise: new Promise<string>((resolve) => {
+                      resolve('{"1":"AI Response 1","2":"AI Response 2"}');
+                    }),
+                    abort: (): void => {},
+                  };
+                },
+              }),
+            },
+          },
+        ],
+      });
+
+      expect(component.getDataCell(0, 3).getText()).toBe(UNICODE_NBSP);
+      expect(component.getDataCell(1, 3).getText()).toBe(UNICODE_NBSP);
+
+      component.getAIPromptEditor().getTextArea().setValue('Initial prompt');
+      component.getAIPromptEditor().getApplyButton().getElement().click();
+
+      await Promise.resolve();
+
+      expect(component.getDataCell(0, 3).getText()).toBe('AI Response 1');
+      expect(component.getDataCell(1, 3).getText()).toBe('AI Response 2');
+    });
+  });
+
+  describe('when prompt is set when there are multiple AI columns', () => {
+    it('should be rendered in the correct column', async () => {
+      const { component } = await createDataGrid({
+        dataSource: items,
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column 1',
+            name: 'myColumn1',
+            ai: {
+              aiIntegration: new AIIntegration({
+                sendRequest(): RequestResult {
+                  return {
+                    promise: new Promise<string>((resolve) => {
+                      resolve('{"1":"AI Column 1 - AI Response 1","2":"AI Column 1 - AI Response 2"}');
+                    }),
+                    abort: (): void => {},
+                  };
+                },
+              }),
+            },
+          },
+          {
+            type: 'ai',
+            caption: 'AI Column 2',
+            name: 'myColumn2',
+            ai: {
+              prompt: 'Initial prompt',
+              aiIntegration: new AIIntegration({
+                sendRequest(): RequestResult {
+                  return {
+                    promise: new Promise<string>((resolve) => {
+                      resolve('{"1":"AI Column 2 - AI Response 1","2":"AI Column 2 - AI Response 2"}');
+                    }),
+                    abort: (): void => {},
+                  };
+                },
+              }),
+            },
+          },
+        ],
+      });
+
+      // check data cells of the first AI column
+      expect(component.getDataCell(0, 3).getText()).toBe(UNICODE_NBSP);
+      expect(component.getDataCell(1, 3).getText()).toBe(UNICODE_NBSP);
+
+      // check data cells of the second AI column
+      expect(component.getDataCell(0, 4).getText()).toBe('AI Column 2 - AI Response 1');
+      expect(component.getDataCell(1, 4).getText()).toBe('AI Column 2 - AI Response 2');
+    });
+  });
+
+  describe('when click the "Clear Data" button', () => {
+    it('should be reset', async () => {
+      const { component } = await createDataGrid({
+        dataSource: items,
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              prompt: 'Initial prompt',
+              aiIntegration: new AIIntegration({
+                sendRequest(): RequestResult {
+                  return {
+                    promise: new Promise<string>((resolve) => {
+                      resolve('{"1":"AI Response 1","2":"AI Response 2"}');
+                    }),
+                    abort: (): void => {},
+                  };
+                },
+              }),
+            },
+          },
+        ],
+      });
+
+      const dropDownButton = component.getAIHeaderCell(3).getDropDownButton();
+
+      expect(component.getDataCell(0, 3).getText()).toBe('AI Response 1');
+      expect(component.getDataCell(1, 3).getText()).toBe('AI Response 2');
+
+      dropDownButton.getButtonElement()?.click();
+
+      expect(dropDownButton.isOpened()).toBe(true);
+
+      // click the 'Clear Data' button
+      dropDownButton.getList().getItem(2).getElement()?.click();
+
+      expect(component.getDataCell(0, 3).getText()).toBe(UNICODE_NBSP);
+      expect(component.getDataCell(1, 3).getText()).toBe(UNICODE_NBSP);
+    });
+  });
+
+  describe('when refresh is called', () => {
+    it('should be re-rendered', async () => {
+      const { component } = await createDataGrid({
+        dataSource: items,
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              prompt: 'Initial prompt',
+              aiIntegration: new AIIntegration({
+                sendRequest(): RequestResult {
+                  return {
+                    promise: new Promise<string>((resolve) => {
+                      resolve('{"1":"AI Response 1","2":"AI Response 2"}');
+                    }),
+                    abort: (): void => {},
+                  };
+                },
+              }),
+            },
+          },
+        ],
+      });
+
+      jest.useRealTimers();
+
+      const aiCells = [
+        component.getDataCell(0, 3).getElement(),
+        component.getDataCell(1, 3).getElement(),
+      ];
+
+      await component.apiRefresh();
+
+      compareCellNodes(
+        aiCells,
+        [
+          component.getDataCell(0, 3).getElement(),
+          component.getDataCell(1, 3).getElement(),
+        ],
+      );
+    });
+  });
+
+  describe('when remoteOperations is enabled and refresh is called', () => {
+    it('should be re-rendered', async () => {
+      const { component } = await createDataGrid({
+        dataSource: remoteDataSource,
+        remoteOperations: true,
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              prompt: 'Initial prompt',
+              aiIntegration: new AIIntegration({
+                sendRequest(): RequestResult {
+                  return {
+                    promise: new Promise<string>((resolve) => {
+                      resolve('{"1":"AI Response 1","2":"AI Response 2"}');
+                    }),
+                    abort: (): void => {},
+                  };
+                },
+              }),
+            },
+          },
+        ],
+      });
+
+      jest.useRealTimers();
+
+      const aiCells = [
+        component.getDataCell(0, 3).getElement(),
+        component.getDataCell(1, 3).getElement(),
+      ];
+
+      expect(loadMock).toHaveBeenCalledTimes(1);
+
+      await component.apiRefresh();
+
+      expect(loadMock).toHaveBeenCalledTimes(2);
+      compareCellNodes(
+        aiCells,
+        [
+          component.getDataCell(0, 3).getElement(),
+          component.getDataCell(1, 3).getElement(),
+        ],
+      );
+    });
+  });
+
+  describe('when repaintChangesOnly is enabled', () => {
+    it('should render only AI cells', async () => {
+      const { component } = await createDataGrid({
+        dataSource: items,
+        keyExpr: 'id',
+        repaintChangesOnly: true,
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration: new AIIntegration({
+                sendRequest(): RequestResult {
+                  return {
+                    promise: new Promise<string>((resolve) => {
+                      resolve('{"1":"AI Response 1","2":"AI Response 2"}');
+                    }),
+                    abort: (): void => {},
+                  };
+                },
+              }),
+            },
+          },
+        ],
+      });
+      const cells = [...component.getDataCells(0), ...component.getDataCells(1)];
+
+      component.apiColumnOption('myColumn', 'ai.prompt', 'Initial prompt');
+      await Promise.resolve();
+
+      compareCellNodes(cells, [...component.getDataCells(0), ...component.getDataCells(1)]);
     });
   });
 });
