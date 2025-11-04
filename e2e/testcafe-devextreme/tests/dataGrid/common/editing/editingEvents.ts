@@ -5,6 +5,7 @@ import { Overlay } from 'devextreme-testcafe-models/dataGrid/overlay';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Editing events`
   .page(url(__dirname, '../../../container.html'));
@@ -196,9 +197,8 @@ test('DataGrid - Canceled rows are hidden when multiple rows are added in batch 
   await t
     .click(cancelBtn)
     .click(saveBtnPopup);
+  await testScreenshot(t, takeScreenshot, 'T1250405-canceled-rows-hidden.png', { element: dataGrid.element });
   await t
-    .expect(await takeScreenshot('T1250405-canceled-rows-hidden.png', dataGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {

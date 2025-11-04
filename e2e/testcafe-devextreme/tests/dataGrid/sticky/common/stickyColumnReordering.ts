@@ -3,6 +3,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../../helpers/createWidget';
 import { getData } from '../../helpers/generateDataSourceData';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const DATA_GRID_SELECTOR = '#container';
 
@@ -19,7 +20,7 @@ test.meta({ browserSize: [1000, 800] })('Move left fixed column to the right', a
   // act
   await t.drag(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).element, 400, 0);
 
-  await takeScreenshot('move_left_fixed_column_to_right.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'move_left_fixed_column_to_right.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -53,7 +54,7 @@ test.meta({ browserSize: [1000, 800] })('Move right fixed column to the left', a
   // TODO: issue will be fixed in the card 7Mct6tJU
   await dataGrid.scrollTo(t, { x: 0 });
 
-  await takeScreenshot('move_right_fixed_column_to_left.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'move_right_fixed_column_to_left.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -84,7 +85,7 @@ test.meta({ browserSize: [1000, 800] })('Move fixed column with fixedPosition = 
   // act
   await t.drag(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(5).element, 200, 0);
 
-  await takeScreenshot('move_fixed_column_with_sticky_position_to_right.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'move_fixed_column_with_sticky_position_to_right.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -121,7 +122,7 @@ test.meta({ browserSize: [1000, 800] })('Move left fixed band column to the righ
   // act
   await t.drag(dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(0).element, 500, 0);
 
-  await takeScreenshot('move_left_fixed_band_column_to_right.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'move_left_fixed_band_column_to_right.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -160,7 +161,7 @@ test.meta({ browserSize: [1000, 800] })('Move right fixed band column to the lef
   // TODO: issue will be fixed in the card 7Mct6tJU
   await dataGrid.scrollTo(t, { x: 0 });
 
-  await takeScreenshot('move_right_fixed_band_column_to_left.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'move_right_fixed_band_column_to_left.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -196,7 +197,7 @@ test.meta({ browserSize: [1000, 800] })('Move fixed band column with fixedPositi
   // act
   await t.drag(dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(0).element, 400, 0);
 
-  await takeScreenshot('move_fixed_band_column_with_sticky_position_to_right.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'move_fixed_band_column_with_sticky_position_to_right.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -230,7 +231,7 @@ test.meta({ browserSize: [1000, 800] })('Check the draggable source column while
   // act
   await dataGrid.moveHeader(24, -200, 5, true);
 
-  await takeScreenshot('draggable_source_column_with_fixed_columns_(generic.light).png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'draggable_source_column_with_fixed_columns.png', { element: dataGrid.element });
 
   // assert
   await t

@@ -155,13 +155,13 @@ export type MessageUpdatedEvent = EventInfo<dxChat> & {
 };
 
 /**
- * @docid _ui_chat_AttachmentDownloadEvent
+ * @docid _ui_chat_AttachmentDownloadClickEvent
  * @public
  * @type object
  * @inherits EventInfo
  */
-export type AttachmentDownloadEvent = EventInfo<dxChat> & {
-  /** @docid _ui_chat_AttachmentDownloadEvent.attachment */
+export type AttachmentDownloadClickEvent = EventInfo<dxChat> & {
+  /** @docid _ui_chat_AttachmentDownloadClickEvent.attachment */
   readonly attachment?: Attachment;
 };
 
@@ -227,6 +227,8 @@ export type Attachment = {
      * @public
      */
     size: number;
+
+    [key: string]: any;
 };
 
 /**
@@ -476,11 +478,11 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     /**
      * @docid
      * @default undefined
-     * @type_function_param1 e:{ui/chat:AttachmentDownloadEvent}
+     * @type_function_param1 e:{ui/chat:AttachmentDownloadClickEvent}
      * @action
      * @public
      */
-    onAttachmentDownload?: ((e: AttachmentDownloadEvent) => void) | undefined;
+    onAttachmentDownloadClick?: ((e: AttachmentDownloadClickEvent) => void) | undefined;
     /**
      * @docid
      * @default undefined
@@ -591,7 +593,7 @@ type FilterOutHidden<T> = Omit<T, 'onContentReady' | 'onFocusIn' | 'onFocusOut' 
 
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onMessageEntered'
   | 'onTypingStart' | 'onTypingEnd' | 'onMessageDeleting' | 'onMessageDeleted'
-  | 'onMessageEditingStart' | 'onMessageEditCanceled' | 'onMessageUpdating' | 'onMessageUpdated' | 'onAttachmentDownload'>;
+  | 'onMessageEditingStart' | 'onMessageEditCanceled' | 'onMessageUpdating' | 'onMessageUpdated' | 'onAttachmentDownloadClick'>;
 
 /**
 * @hidden

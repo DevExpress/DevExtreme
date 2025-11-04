@@ -1,7 +1,8 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../../helpers/getPageUrl';
-import { changeTheme } from '../../../../helpers/changeTheme';
 import { createWidget } from '../../../../helpers/createWidget';
+import { testScreenshot } from '../../../../helpers/themeUtils';
+import { Themes } from '../../../../helpers/themes';
 
 fixture.disablePageReloads`Icon Sizes`
   .page(url(__dirname, '../../../container.html'));
@@ -9,13 +10,11 @@ fixture.disablePageReloads`Icon Sizes`
 test('Correct icon sizes in the Fluent compact theme (T1207612)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await testScreenshot(t, takeScreenshot, 'icon-sizes.png', { theme: Themes.fluentBlueCompact });
   await t
-    .expect(await takeScreenshot('icon-sizes-fluent-compact.png'))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await changeTheme('fluent.blue.light.compact');
   await createWidget('dxDataGrid', {
     dataSource: [...new Array(3)].map((_, index) => ({ id: index, text: `item ${index}`, group: `group ${index % 2}` })),
     keyExpr: 'id',
@@ -52,6 +51,4 @@ test('Correct icon sizes in the Fluent compact theme (T1207612)', async (t) => {
       showNavigationButtons: true,
     },
   });
-}).after(async () => {
-  await changeTheme('generic.light');
 });

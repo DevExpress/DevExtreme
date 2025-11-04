@@ -4,6 +4,7 @@ import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { defaultConfig } from '../helpers/data';
 import { MouseAction, MouseUpEvents } from '../../../../helpers/mouseUpEvents';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const DATA_GRID_SELECTOR = '#container';
 
@@ -18,13 +19,13 @@ fixture.disablePageReloads`FixedColumns - Grouping`
 
     await t.expect(dataGrid.isReady()).ok();
 
-    await takeScreenshot(`grouping-scroll-begin-rtl=${rtlEnabled}.png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `grouping-scroll-begin-rtl=${rtlEnabled}.png`, { element: dataGrid.element });
 
     await dataGrid.scrollTo(t, { x: rtlEnabled ? 500 : 100 });
-    await takeScreenshot(`grouping-scroll-center=${rtlEnabled}.png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `grouping-scroll-center=${rtlEnabled}.png`, { element: dataGrid.element });
 
     await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
-    await takeScreenshot(`grouping-scroll-end=${rtlEnabled}.png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `grouping-scroll-end=${rtlEnabled}.png`, { element: dataGrid.element });
 
     await t
       .expect(compareResults.isValid())
@@ -88,13 +89,13 @@ test.meta({ browserSize: [900, 800] })('Sticky columns with grouping & summary (
 
   await t.expect(dataGrid.isReady()).ok();
 
-  await takeScreenshot('grouping-multiple-scroll-begin.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'grouping-multiple-scroll-begin.png', { element: dataGrid.element });
 
   await dataGrid.scrollTo(t, { x: 100 });
-  await takeScreenshot('grouping-multiple-scroll-center.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'grouping-multiple-scroll-center.png', { element: dataGrid.element });
 
   await dataGrid.scrollTo(t, { x: 10000 });
-  await takeScreenshot('grouping-multiple-scroll-end.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'grouping-multiple-scroll-end.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())
@@ -158,7 +159,7 @@ test.meta({ browserSize: [900, 800] })('Sticky columns with grouping - overflow 
 
   await t.expect(dataGrid.isReady()).ok();
 
-  await takeScreenshot('grouping-overflow-cell.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'grouping-overflow-cell.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())
@@ -186,9 +187,8 @@ test.meta({ browserSize: [900, 800] })('The header row should be highlighted cor
 
   await t.drag(dataGrid.getGroupPanel().getHeader(0).element, 200, 35);
 
+  await testScreenshot(t, takeScreenshot, 'header_row_highlight_with_fixed_columns.png', { element: dataGrid.element });
   await t
-    .expect(await takeScreenshot('header_row_highlight_with_fixed_columns_(generic.light).png', dataGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
@@ -214,9 +214,8 @@ test.meta({ browserSize: [900, 800] })('The group separator should be visible wh
 
   await t.drag(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1).element, 100, -50);
 
+  await testScreenshot(t, takeScreenshot, 'dragging_fixed_column_to_group_panel.png', { element: dataGrid.element });
   await t
-    .expect(await takeScreenshot('dragging_fixed_column_to_group_panel.png', dataGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
@@ -260,9 +259,8 @@ test('DataGrid - Group row content is scrolled if repaintChangesOnly is enabled 
 
   await dataGrid.scrollBy(t, { x: 1000 });
 
+  await testScreenshot(t, takeScreenshot, 'group_row_scrolling_all_collapsed_fixed_columns.png', { element: dataGrid.element });
   await t
-    .expect(await takeScreenshot('group_row_scrolling_all_collapsed_fixed_columns.png', dataGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -291,7 +289,7 @@ test('DataGrid - Group row content is scrolled if repaintChangesOnly is enabled 
     await t.expect(dataGrid.isReady()).ok();
 
     await dataGrid.scrollTo(t, { x: rtlEnabled ? 100 : 250 });
-    await takeScreenshot(`grouping-scroll-total_summary_intersection-rtl=${rtlEnabled}.png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `grouping-scroll-total_summary_intersection-rtl=${rtlEnabled}.png`, { element: dataGrid.element });
 
     await dataGrid.apiOption('summary.totalItems', [{
       column: 'SaleAmount',
@@ -301,7 +299,7 @@ test('DataGrid - Group row content is scrolled if repaintChangesOnly is enabled 
     await dataGrid.scrollTo(t, { x: 0 });
     await dataGrid.scrollTo(t, { x: rtlEnabled ? 100 : 250 });
 
-    await takeScreenshot(`grouping-scroll-total_summary-rtl=${rtlEnabled}.png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `grouping-scroll-total_summary-rtl=${rtlEnabled}.png`, { element: dataGrid.element });
 
     await t
       .expect(compareResults.isValid())

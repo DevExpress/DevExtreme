@@ -63,7 +63,7 @@ export const isRefreshOption = (optionName: string, value: unknown): boolean => 
 
 export const isAIColumnHeader = (
   column: Column,
-  rowType: string,
+  rowType = 'header',
 ): boolean => rowType === 'header' && column.type === AI_COLUMN_NAME;
 
 export const isHeaderDropDownButtonVisible = (

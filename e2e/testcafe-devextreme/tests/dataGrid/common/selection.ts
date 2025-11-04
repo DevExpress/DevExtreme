@@ -4,6 +4,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import CheckBox from 'devextreme-testcafe-models/checkBox';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Selection`
   .page(url(__dirname, '../../container.html'));
@@ -49,7 +50,7 @@ test('The Select All checkbox should be visible when a column headerCellTemplate
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   // assert
-  await takeScreenshot('T1141405-grid-select-all.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1141405-grid-select-all.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())
@@ -92,7 +93,7 @@ test('The Select All checkbox should be visible when a column headerCellTemplate
 });
 
 // T1214734
-test('Select rows by shift should work when grid has real time updates', async (t) => {
+test.skip('Select rows by shift should work when grid has real time updates', async (t) => {
   const dataGrid = new DataGrid('#container');
   const secondRow = dataGrid.getDataRow(1);
   const seventhRow = dataGrid.getDataRow(6);

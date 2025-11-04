@@ -2,7 +2,7 @@ import { isString } from 'devextreme/core/utils/type';
 import { ClientFunction } from 'testcafe';
 import { changeTheme } from './changeTheme';
 
-const defaultThemeName = 'generic.light';
+const defaultThemeName = 'fluent.blue.light';
 
 export const getThemePostfix = (theme?: string): string => {
   const themeName = (theme ?? process.env.theme) ?? defaultThemeName;

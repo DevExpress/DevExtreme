@@ -2248,7 +2248,7 @@ QUnit.module('Chat', () => {
             });
         });
 
-        QUnit.module('onAttachmentDownload', {
+        QUnit.module('onAttachmentDownloadClick', {
             beforeEach: function() {
                 moduleConfig.beforeEach.apply(this, arguments);
 
@@ -2270,7 +2270,7 @@ QUnit.module('Chat', () => {
 
                 this.reinit({
                     dataSource: this.dataSourceWithAttachments,
-                    onAttachmentDownload: ({ component, element, attachment }) => {
+                    onAttachmentDownloadClick: ({ component, element, attachment }) => {
                         assert.strictEqual(component, this.instance, 'component field is correct');
                         assert.strictEqual(isRenderer(element), !!config().useJQuery, 'element is correct');
                         assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
@@ -2283,17 +2283,17 @@ QUnit.module('Chat', () => {
             });
 
             QUnit.test('should be possible to change at runtime', function(assert) {
-                const onAttachmentDownload = sinon.spy();
+                const onAttachmentDownloadClick = sinon.spy();
 
-                this.instance.option({ onAttachmentDownload, dataSource: this.dataSourceWithAttachments });
+                this.instance.option({ onAttachmentDownloadClick, dataSource: this.dataSourceWithAttachments });
 
                 this.getDownloadButton().trigger('dxclick');
 
-                assert.strictEqual(onAttachmentDownload.callCount, 1);
+                assert.strictEqual(onAttachmentDownloadClick.callCount, 1);
             });
 
             QUnit.test('should hide download button if not passed', function(assert) {
-                this.instance.option({ onAttachmentDownload: undefined, dataSource: this.dataSourceWithAttachments });
+                this.instance.option({ onAttachmentDownloadClick: undefined, dataSource: this.dataSourceWithAttachments });
 
                 assert.strictEqual(this.getDownloadButton().length, 0, 'button is hidden');
             });

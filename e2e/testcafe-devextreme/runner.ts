@@ -79,7 +79,7 @@ function setTestingPlatform(args: ParsedArgs): void {
 }
 
 function setTestingTheme(args: ParsedArgs): void {
-  process.env.theme = args.theme || 'generic.light';
+  process.env.theme = args.theme || 'fluent.blue.light';
 }
 
 function setShadowDom(args: ParsedArgs): void {
@@ -272,8 +272,8 @@ async function main() {
               await addShadowRootTree(t);
             }
 
-            const currentTheme = await getCurrentTheme(t) || 'generic.light';
-            const newTheme = args.theme || 'generic.light';
+            const currentTheme = await getCurrentTheme(t) || 'fluent.blue.light';
+            const newTheme = args.theme || 'fluent.blue.light';
 
             if (currentTheme !== newTheme) {
               await changeTheme(t, newTheme);

@@ -3,6 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Master detail`
   .page(url(__dirname, '../../container.html'));
@@ -12,9 +13,8 @@ fixture.disablePageReloads`Master detail`
 test('Checkbox align right in masterdetail (T1045321) generic.light', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await testScreenshot(t, takeScreenshot, 'T1045321.png');
   await t
-    .expect(await takeScreenshot('T1045321-generic.light.png'))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -85,9 +85,8 @@ test('pageSizeSelector has correct layout inside masterDetail', async (t) => {
   const masterGrid = masterRow.getDataGrid();
 
   // assert
+  await testScreenshot(t, takeScreenshot, 'T1113525.page-size-select.png', { element: masterGrid.element });
   await t
-    .expect(await takeScreenshot('T1113525.page-size-select.png', masterGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 })
@@ -120,19 +119,18 @@ test.meta({ browserSize: [800, 800] })('The master detail row should display cor
   const dataGrid = new DataGrid('#container');
 
   // assert
-  await takeScreenshot('T1159578-master-detail-with-renderAsync-1.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1159578-master-detail-with-renderAsync-1.png', { element: dataGrid.element });
 
   // act
   await t.click(dataGrid.getDataRow(16).getCommandCell(0).element);
 
   // assert
-  await takeScreenshot('T1159578-master-detail-with-renderAsync-2.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1159578-master-detail-with-renderAsync-2.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-})
-  .before(() => createWidget('dxDataGrid', {
+}).before(() => createWidget('dxDataGrid', {
     dataSource: [...new Array(40)].map((_, index) => ({ id: index, text: `item ${index}` })),
     keyExpr: 'id',
     showBorders: true,
@@ -171,21 +169,21 @@ test.meta({ browserSize: [800, 800] })('The master detail row should display cor
     await t.wait(100);
 
     // assert
-    await takeScreenshot(`T1167889-master-detail-with-scrolling.useNative=${useNative}-1.png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `T1167889-master-detail-with-scrolling.useNative=${useNative}-1.png`, { element: dataGrid.element });
 
     // act
     await dataGrid.scrollTo(t, { y: 1000 });
     await t.wait(100);
 
     // assert
-    await takeScreenshot(`T1167889-master-detail-with-scrolling.useNative=${useNative}-2.png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `T1167889-master-detail-with-scrolling.useNative=${useNative}-2.png`, { element: dataGrid.element });
 
     // act
     await scrollUp();
     await t.wait(100);
 
     // assert
-    await takeScreenshot(`T1167889-master-detail-with-scrolling.useNative=${useNative}-3.png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `T1167889-master-detail-with-scrolling.useNative=${useNative}-3.png`, { element: dataGrid.element });
 
     await t
       .expect(compareResults.isValid())

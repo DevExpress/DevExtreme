@@ -14,7 +14,7 @@ import { getHeight } from '@js/core/utils/size';
 import { isDate, isDefined } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 import type {
-  AttachmentDownloadEvent, Message, TextMessage, User,
+  AttachmentDownloadClickEvent, Message, TextMessage, User,
 } from '@js/ui/chat';
 import type { Item as ContextMenuItem } from '@js/ui/context_menu';
 import type dxContextMenu from '@js/ui/context_menu';
@@ -104,7 +104,7 @@ export interface Properties extends WidgetOptions<MessageList> {
   showAvatar: boolean;
   showUserName: boolean;
   showMessageTimestamp: boolean;
-  onAttachmentDownload?: (e: AttachmentDownloadEvent) => void;
+  onAttachmentDownloadClick?: (e: AttachmentDownloadClickEvent) => void;
   onMessageEditingStart?: (e: MessageEditingEvent) => () => void;
   onMessageDeleting?: (e: MessageDeletingEvent) => void;
   onEscapeKeyPressed?: (e: KeyboardEvent) => void;
@@ -278,7 +278,7 @@ class MessageList extends Widget<Properties> {
       showMessageTimestamp,
       messageTimestampFormat,
       messageTemplate,
-      onAttachmentDownload,
+      onAttachmentDownloadClick,
     } = this.option();
 
     const $messageGroup = $('<div>').appendTo(this._$content);
@@ -291,7 +291,7 @@ class MessageList extends Widget<Properties> {
       showMessageTimestamp,
       messageTimestampFormat,
       messageTemplate,
-      onAttachmentDownload,
+      onAttachmentDownloadClick,
     });
   }
 
@@ -837,7 +837,7 @@ class MessageList extends Widget<Properties> {
       case 'emptyViewTemplate':
       case 'dayHeaderFormat':
       case 'messageTimestampFormat':
-      case 'onAttachmentDownload':
+      case 'onAttachmentDownloadClick':
         this._invalidate();
         break;
       case 'items':
