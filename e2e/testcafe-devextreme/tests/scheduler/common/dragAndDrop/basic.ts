@@ -3,6 +3,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { dataSource } from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Drag-and-drop appointments in the Scheduler basic views`
   .page(url(__dirname, '../../../container.html'));
@@ -125,7 +126,6 @@ test('Drag recurrent appointment occurrence from collector (T832887)', async (t)
 
 test('Drag-n-drop the appointment to the left column to the cell that has the same time', async (t) => {
   const scheduler = new Scheduler('#container');
-  const screenshotZone = scheduler.workSpace;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const draggableAppointment = scheduler.getAppointment('Test appointment');
 
@@ -136,7 +136,7 @@ test('Drag-n-drop the appointment to the left column to the cell that has the sa
       { speed: 0.5 },
     );
 
-  await takeScreenshot('drag-n-drop-appointment-to-left-column.png', screenshotZone);
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-appointment-to-left-column.png', { element: scheduler.workSpace });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
