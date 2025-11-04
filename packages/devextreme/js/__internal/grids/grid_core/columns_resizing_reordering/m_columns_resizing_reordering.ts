@@ -702,6 +702,10 @@ export class ColumnsResizerViewController extends modules.ViewController {
 
   private _draggingHeaderView!: DraggingHeaderView;
 
+  /**
+   * Fired when column resizing begins.
+   * Used to notify other components (e.g., to close open dropdowns).
+   */
   public resizeStarted!: Callback;
 
   protected callbackNames(): string[] {

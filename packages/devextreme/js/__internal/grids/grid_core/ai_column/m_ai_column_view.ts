@@ -159,6 +159,12 @@ export const columnHeadersViewExtender = (
     this.columnsResizer = this.getController('columnsResizer');
 
     this.columnsResizer.resizeStarted.add(() => {
+      /**
+       * We need to manually close the DropDownMenu button
+       * because the stopPropagation method is called
+       * when the cell resize is initiated.
+       * Calling this method is necessary to fix bug T252661.
+       */
       this.activeDropDownButtonInstance?.close();
     });
   }
