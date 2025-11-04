@@ -29,6 +29,8 @@ export const columnHeadersViewExtender = (
 
   private activeDropDownButtonInstance!: DropDownButton | null;
 
+  private aiColumnOptionChangedHandler!: (column: Column, optionName: string, value: unknown) => void;
+
   private getDropDownButtonItems(column: Column): Item[] {
     return [
       {
@@ -167,31 +169,20 @@ export const columnHeadersViewExtender = (
        */
       this.activeDropDownButtonInstance?.close();
     });
-  }
 
-  public optionChanged(args): void {
-    super.optionChanged(args);
+    this.aiColumnOptionChangedHandler = (column: Column, optionName: string, value: unknown): void => {
+      const isPromptOptionName = isPromptOption(optionName, value);
 
-    if (args.name !== 'columns') {
-      return;
-    }
+      if (isPromptOptionName) {
+        const visibleIndex = this._columnsController.getVisibleIndex(column.index);
+        const $headerElement = this.getHeaderElement(visibleIndex);
+        const dropDownButtonInstance = this.getDropDownButtonInstance($headerElement);
 
-    const column = this._columnsController.getColumnByPath(args.fullName);
+        dropDownButtonInstance?.option('items', this.getDropDownButtonItems(column));
+      }
+    };
 
-    if (column?.type !== AI_COLUMN_NAME) {
-      return;
-    }
-
-    const columnOptionName = this._columnsController.getColumnOptionNameByFullName(args.fullName);
-    const isPromptOptionName = isPromptOption(columnOptionName, args.value);
-
-    if (isPromptOptionName) {
-      const visibleIndex = this._columnsController.getVisibleIndex(column.index);
-      const $headerElement = this.getHeaderElement(visibleIndex);
-      const dropDownButtonInstance = this.getDropDownButtonInstance($headerElement);
-
-      dropDownButtonInstance?.option('items', this.getDropDownButtonItems(column));
-    }
+    this._columnsController.aiColumnOptionChanged.add(this.aiColumnOptionChangedHandler);
   }
 
   public renderDragCellContent($dragContainer: dxElementWrapper, column: Column): void {
@@ -206,5 +197,7 @@ export const columnHeadersViewExtender = (
   public dispose(): void {
     super.dispose();
     this.activeDropDownButtonInstance = null;
+
+    this._columnsController.aiColumnOptionChanged.remove(this.aiColumnOptionChangedHandler);
   }
 };

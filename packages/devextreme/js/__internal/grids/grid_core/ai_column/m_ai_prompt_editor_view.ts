@@ -23,6 +23,9 @@ export class AIPromptEditorView extends View {
 
   private promptEditorInstance!: AIPromptEditor;
 
+  private aiColumnOptionChangedHandler!:
+  (column: Column, optionName: string, value: unknown) => void;
+
   private getAIPromptEditorConfig(
     column: Column,
   ): AIPromptEditorOptions {
@@ -81,42 +84,6 @@ export class AIPromptEditorView extends View {
     }
   }
 
-  // TODO: support changing all columns and the entire column
-  public optionChanged(args): void {
-    super.optionChanged(args);
-
-    if (args.name !== 'columns') {
-      return;
-    }
-
-    const column = this.columnsController.getColumnByPath(args.fullName);
-
-    if (column?.type !== AI_COLUMN_NAME) {
-      return;
-    }
-
-    const columnOptionName = this.columnsController.getColumnOptionNameByFullName(args.fullName);
-    const isPromptOptionName = isPromptOption(columnOptionName, args.value);
-
-    if (isPromptOptionName) {
-      this.promptEditorInstance?.updatePrompt(args.value);
-    }
-
-    if (isPromptOptionName && isAIColumnAutoMode(column)) {
-      this.aiColumnController.sendAIColumnRequest(column.name);
-    }
-
-    const needUpdatePopup = isPopupOptions(columnOptionName, args.value);
-    const needUpdateEditor = isEditorOptions(columnOptionName, args.value);
-    if (needUpdatePopup || needUpdateEditor) {
-      this.updatePromptEditorInstance(column);
-    }
-
-    if (isRefreshOption(columnOptionName, args.value)) {
-      // TODO: this.component.refresh();
-    }
-  }
-
   private ensureAIPromptEditorVisibility() {
     const aiColumns = this.aiColumnController.getAIColumns();
     const aiColumnsWithVisiblePopup = aiColumns.filter((column) => column.ai?.popup?.visible);
@@ -139,6 +106,9 @@ export class AIPromptEditorView extends View {
     this.renderCompleted.add(() => {
       this.ensureAIPromptEditorVisibility();
     });
+
+    this.aiColumnOptionChangedHandler = this.aiColumnOptionChanged.bind(this);
+    this.columnsController.aiColumnOptionChanged.add(this.aiColumnOptionChangedHandler);
   }
 
   public show(cellElement: HTMLElement, column: Column): Promise<boolean> {
@@ -158,5 +128,36 @@ export class AIPromptEditorView extends View {
 
   public getPromptEditorInstance(): AIPromptEditor {
     return this.promptEditorInstance;
+  }
+
+  // TODO: support changing all columns and the entire column
+  private aiColumnOptionChanged(column: Column, optionName: string, value: unknown): void {
+    const isPromptOptionName = isPromptOption(optionName, value);
+
+    if (isPromptOptionName) {
+      this.promptEditorInstance?.updatePrompt(value as string);
+    }
+
+    if (isPromptOptionName && isAIColumnAutoMode(column)) {
+      this.aiColumnController.sendAIColumnRequest(column.name as string);
+    }
+
+    const needUpdatePopup = isPopupOptions(optionName, value);
+    const needUpdateEditor = isEditorOptions(optionName, value);
+    if (needUpdatePopup || needUpdateEditor) {
+      this.updatePromptEditorInstance(column);
+    }
+
+    if (isRefreshOption(optionName, value)) {
+      // TODO: this.component.refresh();
+    }
+  }
+
+  public dispose(): void {
+    super.dispose();
+
+    if (this.aiColumnOptionChangedHandler) {
+      this.columnsController.aiColumnOptionChanged.remove(this.aiColumnOptionChangedHandler);
+    }
   }
 }
