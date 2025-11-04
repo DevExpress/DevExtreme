@@ -101,7 +101,6 @@ $fluent-fileuploader-file-container-boxshadow: 0 1px 3px 0 color.change($base-sh
   }
 
   .dx-fileuploader-file-container {
-    display: flex;
     padding: $fluent-fileuploader-file-container-padding;
     margin-bottom: 4px;
     border-radius: $fluent-fileuploader-files-container-rounding;
@@ -148,15 +147,18 @@ $fluent-fileuploader-file-container-boxshadow: 0 1px 3px 0 color.change($base-sh
   line-height: 13px;
 }
 
-.dx-fileuploader-file-name {
+.dx-fileuploader-file-info {
   padding-bottom: math.div($fluent-fileuploader-vertical-padding, 2);
+}
+
+.dx-fileuploader-file-name {
   color: $fileuploader-filename-color;
   font-weight: 500;
 }
 
 .dx-fileuploader-file-size {
   float: right;
-  margin: $fluent-fileuploader-file-size-margin;
+  padding: $fluent-fileuploader-file-size-margin;
   color: $base-label-color;
 }
 

@@ -100,6 +100,8 @@
 }
 
 .dx-fileuploader-file-container {
+  display: flex;
+  align-items: center;
   width: 100%;
   padding: 4px 0 4px;
 
@@ -189,7 +191,7 @@
 }
 
 .dx-fileuploader-file-size {
-  margin-left: 4px;
+  padding-left: 4px;
   float: left;
   vertical-align: super;
   font-size: 10px;
@@ -221,7 +223,7 @@
     }
 
     .dx-fileuploader-file-size {
-      margin-right: 4px;
+      padding-right: 4px;
     }
   }
 }
