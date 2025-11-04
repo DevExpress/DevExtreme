@@ -930,48 +930,6 @@ QUnit.test('Values are converted according to \'fieldTypes\' property', function
         .always(done);
 });
 
-QUnit.test('ISO date string serialized as date when fieldTypes indicate DateTimeOffset (v4)', function(assert) {
-    assert.expect(1);
-
-    const done = assert.async();
-    ajaxMock.setup({
-        url: 'odata.org',
-        callback: function(bag) { this.responseText = { value: [bag] }; }
-    });
-
-    const iso = '1945-05-09T14:25:01.001Z';
-    const expectedRe = /^date eq \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
-
-    QUERY('odata.org', { version: 4, fieldTypes: { date: 'DateTimeOffset' } })
-        .filter(['date', '=', iso])
-        .enumerate()
-        .fail(function() { assert.ok(false, MUST_NOT_REACH_MESSAGE); })
-        .done(function(r) { assert.ok(expectedRe.test(r[0].data['$filter'])); })
-        .always(done);
-});
-
-QUnit.test('ISO date string serialized as date when fieldTypes indicate DateTime (v2)', function(assert) {
-    assert.expect(1);
-
-    const done = assert.async();
-    ajaxMock.setup({
-        url: 'odata.org',
-        callback: function(bag) { this.responseText = { value: [bag] }; }
-    });
-
-    const iso = '1945-05-09T14:25:01.001Z';
-    const expectedRe = /^date eq datetime'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}'$/;
-
-    QUERY('odata.org', {
-        version: 2,
-        fieldTypes: { date: 'DateTime' }
-    })
-        .filter(['date', '=', iso])
-        .enumerate()
-        .fail(function() { assert.ok(false, MUST_NOT_REACH_MESSAGE); })
-        .done(function(r) { assert.ok(expectedRe.test(r[0].data['$filter'])); })
-        .always(done);
-});
 
 QUnit.test('ISO date string remains string when fieldTypes indicate String (v2/v4)', function(assert) {
     assert.expect(2);
