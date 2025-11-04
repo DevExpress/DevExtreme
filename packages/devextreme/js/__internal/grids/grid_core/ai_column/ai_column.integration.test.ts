@@ -230,7 +230,7 @@ describe('Options', () => {
         ],
       });
 
-      const headerCell = component.getHeaderCell(3);
+      const headerCell = component.getAIHeaderCell(3);
 
       expect(headerCellTemplate).toHaveBeenCalledTimes(1);
       expect(headerCell.getElement()?.querySelectorAll('.template-class').length).toBe(1);
@@ -259,7 +259,7 @@ describe('Options', () => {
         ],
       });
 
-      const headerCell = component.getHeaderCell(3);
+      const headerCell = component.getAIHeaderCell(3);
 
       expect(headerCell.getIcon()).not.toBeNull();
       expect(headerCell.getText()).toBe('AI Column');
@@ -295,7 +295,7 @@ describe('Options', () => {
 
       component.apiColumnOption('myColumn', 'headerCellTemplate', headerCellTemplate);
 
-      const headerCellUpdated = component.getHeaderCell(3);
+      const headerCellUpdated = component.getAIHeaderCell(3);
 
       expect(headerCellTemplate).toHaveBeenCalledTimes(1);
       expect(headerCellUpdated.getElement()?.querySelector('.my-template-class')).not.toBeNull();
@@ -388,7 +388,7 @@ describe('Options', () => {
         ],
       });
 
-      const headerCell = component.getHeaderCell(3);
+      const headerCell = component.getAIHeaderCell(3);
 
       expect(headerCell.getHeaderContent()).not.toBeNull();
       expect(headerCell.getIcon()).not.toBeNull();
@@ -478,7 +478,7 @@ describe('columnOption', () => {
 
     component.apiColumnOption('myColumn', 'headerCellTemplate', headerCellTemplate);
 
-    const headerCell = component.getHeaderCell(3);
+    const headerCell = component.getAIHeaderCell(3);
 
     expect(headerCellTemplate).toHaveBeenCalledTimes(1);
     expect(headerCell.getElement()?.querySelectorAll('.template-class').length).toBe(1);
@@ -2704,7 +2704,7 @@ describe('DropDownButton', () => {
           },
         ],
       });
-      const dropDownButton = component.getHeaderCell(3).getDropDownButton();
+      const dropDownButton = component.getAIHeaderCell(3).getDropDownButton();
 
       dropDownButton?.getButtonElement()?.click();
 
@@ -2735,7 +2735,7 @@ describe('DropDownButton', () => {
           },
         ],
       });
-      const dropDownButton = component.getHeaderCell(3).getDropDownButton();
+      const dropDownButton = component.getAIHeaderCell(3).getDropDownButton();
 
       dropDownButton?.getButtonElement()?.click();
 
@@ -2763,7 +2763,7 @@ describe('DropDownButton', () => {
           },
         ],
       });
-      let dropDownButton = component.getHeaderCell(3).getDropDownButton();
+      let dropDownButton = component.getAIHeaderCell(3).getDropDownButton();
 
       dropDownButton?.getButtonElement()?.click();
 
@@ -2774,7 +2774,7 @@ describe('DropDownButton', () => {
 
       instance.columnOption('myColumn', 'ai.prompt', 'Updated prompt');
 
-      dropDownButton = component.getHeaderCell(3).getDropDownButton();
+      dropDownButton = component.getAIHeaderCell(3).getDropDownButton();
       dropDownButton?.getButtonElement()?.click();
 
       expect(dropDownButton.isOpened()).toBe(true);
@@ -2801,7 +2801,7 @@ describe('DropDownButton', () => {
           },
         ],
       });
-      let dropDownButton = component.getHeaderCell(3).getDropDownButton();
+      let dropDownButton = component.getAIHeaderCell(3).getDropDownButton();
 
       dropDownButton?.getButtonElement()?.click();
 
@@ -2819,7 +2819,7 @@ describe('DropDownButton', () => {
       aiPromptEditor.getTextArea().setValue('Updated prompt');
       aiPromptEditor.getApplyButton().getElement().click();
 
-      dropDownButton = component.getHeaderCell(3).getDropDownButton();
+      dropDownButton = component.getAIHeaderCell(3).getDropDownButton();
       dropDownButton?.getButtonElement()?.click();
 
       expect(dropDownButton.isOpened()).toBe(true);
@@ -2846,7 +2846,7 @@ describe('DropDownButton', () => {
           },
         ],
       });
-      const dropDownButton = component.getHeaderCell(3).getDropDownButton();
+      const dropDownButton = component.getAIHeaderCell(3).getDropDownButton();
 
       dropDownButton?.getButtonElement()?.click();
 
@@ -2891,7 +2891,7 @@ describe('DropDownButton', () => {
           },
         ],
       });
-      const dropDownButton = component.getHeaderCell(3).getDropDownButton();
+      const dropDownButton = component.getAIHeaderCell(3).getDropDownButton();
 
       dropDownButton?.getButtonElement()?.click();
 
@@ -2924,7 +2924,7 @@ describe('DropDownButton', () => {
           },
         ],
       });
-      const dropDownButton = component.getHeaderCell(3).getDropDownButton();
+      const dropDownButton = component.getAIHeaderCell(3).getDropDownButton();
 
       dropDownButton?.getButtonElement()?.click();
 

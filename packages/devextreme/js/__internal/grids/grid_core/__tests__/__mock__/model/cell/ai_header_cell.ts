@@ -1,22 +1,14 @@
 import { DropDownButtonModel } from '@ts/ui/drop_down_editor/__tests__/__mock__/model/drop_down_button';
 
+import { HeaderCellModel } from './header_cell';
+
 const SELECTORS = {
   aiColumnHeaderContent: 'dx-command-ai-header-content',
   aiColumnHeaderButton: 'dx-command-ai-header-button',
   aiChatSparkleOutlineIcon: 'dx-icon-chatsparkleoutline',
 };
 
-export class HeaderCellModel {
-  constructor(public readonly root: HTMLElement | null) {}
-
-  public getElement(): HTMLElement | null {
-    return this.root;
-  }
-
-  public getText(): string {
-    return this.getHeaderContent()?.textContent ?? '';
-  }
-
+export class AIHeaderCellModel extends HeaderCellModel {
   public getHeaderContent(): HTMLElement | null {
     return this.root?.querySelector(`.${SELECTORS.aiColumnHeaderContent}`) ?? null;
   }
