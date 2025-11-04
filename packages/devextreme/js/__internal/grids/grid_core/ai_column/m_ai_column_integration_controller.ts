@@ -73,10 +73,12 @@ export class AIColumnIntegrationController extends Controller {
     }
 
     const keyField = this.dataController.key();
-    const keys = data.map((item) => item[keyField] as PropertyKey);
-    const cachedResponse: Record<PropertyKey, string> = args.useCache
-      ? this.aiColumnCacheController.getCachedResponse(columnName, keys)
-      : {};
+    let cachedResponse: Record<PropertyKey, string> = {};
+    if (args.useCache) {
+      const keys = data.map((item) => item[keyField] as PropertyKey);
+      cachedResponse = this.aiColumnCacheController.getCachedResponse(columnName, keys);
+    }
+
     const reducedData = reduceDataCachedKeys(data, cachedResponse, keyField);
     const areAllDataCached = Object.keys(reducedData).length === 0;
     if (areAllDataCached) {
