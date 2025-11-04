@@ -4,16 +4,16 @@
   palette="soft"
   title="Percent of Total Energy Production"
 >
-  <dxi-series valueField="oil" name="Oil Production"></dxi-series>
-  <dxi-series valueField="gas" name="Gas Production"></dxi-series>
-  <dxi-series valueField="coal" name="Coal Production"></dxi-series>
-  <dxo-common-series-settings
+  <dxi-chart-series valueField="oil" name="Oil Production"></dxi-chart-series>
+  <dxi-chart-series valueField="gas" name="Gas Production"></dxi-chart-series>
+  <dxi-chart-series valueField="coal" name="Coal Production"></dxi-chart-series>
+  <dxo-chart-common-series-settings
     argumentField="state"
     type="bar"
     [ignoreEmptyPoints]="true"
   >
-  </dxo-common-series-settings>
-  <dxo-legend verticalAlignment="bottom" horizontalAlignment="center">
-  </dxo-legend>
-  <dxo-export [enabled]="true"></dxo-export>
+  </dxo-chart-common-series-settings>
+  <dxo-chart-legend verticalAlignment="bottom" horizontalAlignment="center">
+  </dxo-chart-legend>
+  <dxo-chart-export [enabled]="true"></dxo-chart-export>
 </dx-chart>

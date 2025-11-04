@@ -45,22 +45,22 @@
     </svg>
   </div>
   <dx-chart id="chart" [dataSource]="oilProductionData" palette="Violet">
-    <dxi-series valueField="year1990" name="1990"></dxi-series>
-    <dxi-series valueField="year2000" name="2000"></dxi-series>
-    <dxi-series valueField="year2010" name="2010"></dxi-series>
-    <dxi-series valueField="year2016" name="2016"></dxi-series>
-    <dxi-series valueField="year2017" name="2017"></dxi-series>
-    <dxo-common-series-settings
+    <dxi-chart-series valueField="year1990" name="1990"></dxi-chart-series>
+    <dxi-chart-series valueField="year2000" name="2000"></dxi-chart-series>
+    <dxi-chart-series valueField="year2010" name="2010"></dxi-chart-series>
+    <dxi-chart-series valueField="year2016" name="2016"></dxi-chart-series>
+    <dxi-chart-series valueField="year2017" name="2017"></dxi-chart-series>
+    <dxo-chart-common-series-settings
       argumentField="state"
       type="bar"
       [barPadding]="0.3"
     >
-    </dxo-common-series-settings>
-    <dxo-legend verticalAlignment="bottom" horizontalAlignment="center">
-    </dxo-legend>
-    <dxo-title text="Oil Production">
-      <dxo-subtitle text="(in millions tonnes)"></dxo-subtitle>
-    </dxo-title>
+    </dxo-chart-common-series-settings>
+    <dxo-chart-legend verticalAlignment="bottom" horizontalAlignment="center">
+    </dxo-chart-legend>
+    <dxo-chart-title text="Oil Production">
+      <dxo-chart-subtitle text="(in millions tonnes)"></dxo-chart-subtitle>
+    </dxo-chart-title>
   </dx-chart>
 </div>
 
