@@ -1460,7 +1460,7 @@ test.meta({ unstable: true })('New virtual mode. Navigation to the last row if n
 // T1152498
 // TODO: fix unstable tests
 // ['infinite', 'virtual'].forEach((scrollingMode) => {
-// eslint-disable-next-line @stylistic/max-len
+//   // eslint-disable-next-line @stylistic/max-len
 //   test.meta({ browserSize: [900, 600] })(`${scrollingMode} scrolling - the markup should be correct for continuous scrolling when there is a fixed column with cellTemplate (React)`, async (t) => {
 //   // arrange
 //     const dataGrid = new DataGrid('#container');
