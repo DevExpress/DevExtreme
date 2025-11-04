@@ -90,7 +90,7 @@ test('Default render', async (t) => {
       // assert
       await t.expect(await aiDropDownButton.isOpened()).ok();
 
-      await takeScreenshot(`datagrid__ai-column_dropdown-button-menu(alignment=${alignment}_rtlEnabled=${rtlEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `datagrid__ai-column_dropdown-button-menu(alignment=${alignment}_rtlEnabled=${rtlEnabled}).png`, { element: dataGrid.element });
 
       await t
         .expect(compareResults.isValid())
