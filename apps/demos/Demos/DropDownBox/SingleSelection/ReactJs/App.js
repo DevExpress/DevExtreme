@@ -27,7 +27,8 @@ function App() {
   const [isGridBoxOpened, setIsGridBoxOpened] = useState(false);
   const [isTreeBoxOpened, setIsTreeBoxOpened] = useState(false);
   const treeViewItemSelectionChanged = useCallback((e) => {
-    setTreeBoxValue(e.component.getSelectedNodeKeys());
+    const selectedKeys = e.component.getSelectedNodeKeys();
+    setTreeBoxValue(selectedKeys.length > 0 ? selectedKeys[0] : null);
   }, []);
   const dataGridOnSelectionChanged = useCallback((e) => {
     setGridBoxValue(e.selectedRowKeys);
