@@ -17,6 +17,7 @@ const GUID_REGEX = /^(\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-
 
 const VERBOSE_DATE_REGEX = /^\/Date\((-?\d+)((\+|-)?(\d+)?)\)\/$/;
 const ISO8601_DATE_REGEX = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[-+]{1}\d{2}(:?)(\d{2})?)?$/;
+const ISO8601_DATE_DATETIME_REGEX = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])(T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[-+]{1}\d{2}(:?)(\d{2})?)?)?$/;
 
 // Request processing
 const JSON_VERBOSE_MIME_TYPE = 'application/json;odata=verbose';
@@ -443,8 +444,8 @@ const serializeValueV2 = (value, fieldType?: string) => {
     return value.valueOf();
   }
 
-  if (typeof value === 'string' && fieldType !== 'String' && ISO8601_DATE_REGEX.test(value)) {
-    return formatISO8601(new Date(value), false, false);
+  if (typeof value === 'string' && !fieldType && ISO8601_DATE_DATETIME_REGEX.test(value)) {
+    return serializeValueV2(new EdmLiteral(value));
   }
 
   if (typeof value === 'string') {
@@ -489,28 +490,6 @@ export const keyConverters = {
   Single: (value) => (value instanceof EdmLiteral ? value : new EdmLiteral(`${value}f`)),
 
   Decimal: (value) => (value instanceof EdmLiteral ? value : new EdmLiteral(`${value}m`)),
-
-  DateTime: (value) => {
-    if (value instanceof Date) {
-      return value;
-    }
-
-    if (typeof value === 'string') {
-      const date = new Date(value);
-      if (isNaN(date.getTime())) {
-        throw new Error(`Invalid DateTime value: ${value}`);
-      }
-      return date;
-    }
-
-    if (typeof value === 'number') {
-      return new Date(value);
-    }
-
-    throw new Error(`Cannot convert ${typeof value} to DateTime`);
-  },
-
-  DateTimeOffset: (value) => keyConverters.DateTime(value),
 };
 
 export const convertPrimitiveValue = (type, value) => {

@@ -1247,9 +1247,7 @@ export type ODataStoreOptions<
      * @default {}
      * @public
      */
-    fieldTypes?: {
-      [fieldName: string]: 'String' | 'Int32' | 'Int64' | 'Guid' | 'Boolean' | 'Single' | 'Decimal' | 'DateTime' | 'DateTimeOffset';
-    };
+    fieldTypes?: any;
     /**
      * @docid
      * @public
@@ -1264,10 +1262,10 @@ export type ODataStoreOptions<
     /**
      * @docid
      * @type string|object
-     * @acceptValues "String"|"Int32"|"Int64"|"Guid"|"Boolean"|"Single"|"Decimal"|"DateTime"|"DateTimeOffset"
+     * @acceptValues "String"|"Int32"|"Int64"|"Guid"|"Boolean"|"Single"|"Decimal"
      * @public
      */
-    keyType?: 'String' | 'Int32' | 'Int64' | 'Guid' | 'Boolean' | 'Single' | 'Decimal' | 'DateTime' | 'DateTimeOffset' | any;
+    keyType?: 'String' | 'Int32' | 'Int64' | 'Guid' | 'Boolean' | 'Single' | 'Decimal' | any;
     /**
      * @docid
      * @public
