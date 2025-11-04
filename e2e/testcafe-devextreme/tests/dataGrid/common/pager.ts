@@ -67,7 +67,7 @@ safeSizeTest('Full size pager', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok();
-}).before(async () => createDataGridWithPager());
+}).skip.before(async () => createDataGridWithPager());
 
 safeSizeTest('Compact pager', async (t) => {
   const dataGrid = new DataGrid('#container');

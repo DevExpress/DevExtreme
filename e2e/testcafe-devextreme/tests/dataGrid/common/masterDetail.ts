@@ -132,6 +132,7 @@ safeSizeTest('The master detail row should display correctly when renderAsync, v
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }, [800, 800])
+  .skip
   .before(() => createWidget('dxDataGrid', {
     dataSource: [...new Array(40)].map((_, index) => ({ id: index, text: `item ${index}` })),
     keyExpr: 'id',

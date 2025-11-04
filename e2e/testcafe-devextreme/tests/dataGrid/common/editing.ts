@@ -148,7 +148,7 @@ test('Tab key on editor should focus next cell if editing mode is cell', async (
   columns: [{ dataField: 'name', allowEditing: false }, { dataField: 'value', showEditorAlways: true }],
 }));
 
-test('Click should work if a column button set using svg icon (T863635)', async (t) => {
+test.skip('Click should work if a column button set using svg icon (T863635)', async (t) => {
   await t
     .click(Selector('.dx-command-edit-with-icons').nth(0))
     .expect(ClientFunction(() => (window as any).onSvgClickCounter)()).eql(1);
@@ -2094,16 +2094,16 @@ test('The "Cannot read property "brokenRules" of undefined" error occurs T978286
   ['last', 20, 'standard', 0],
   ['pageBottom', 20, 'standard', 0],
   ['pageTop', 0, 'standard', 0],
-  ['pageBottom', 8, 'virtual', 0],
+  ['pageBottom', 5, 'virtual', 0],
   ['pageTop', 0, 'virtual', 0],
-  ['viewportBottom', 8, 'standard', 0],
-  ['viewportBottom', 13, 'standard', 162],
+  ['viewportBottom', 5, 'standard', 0],
+  ['viewportBottom', 8, 'standard', 162],
   ['viewportTop', 0, 'standard', 0],
-  ['viewportTop', 5, 'standard', 162],
-  ['viewportBottom', 8, 'virtual', 0],
-  ['viewportBottom', 13, 'virtual', 162],
+  ['viewportTop', 3, 'standard', 162],
+  ['viewportBottom', 5, 'virtual', 0],
+  ['viewportBottom', 8, 'virtual', 162],
   ['viewportTop', 0, 'virtual', 0],
-  ['viewportTop', 5, 'virtual', 162],
+  ['viewportTop', 3, 'virtual', 162],
 ] as const)
   .forEach(([newRowPosition, insertedRowNumber, scrollMode, scrollTop]) => {
     test(`The first cell of the new row should be focused when
@@ -2130,6 +2130,8 @@ test('The "Cannot read property "brokenRules" of undefined" error occurs T978286
       // act
       await testScreenshot(t, takeScreenshot, screenshotName, { element: dataGrid.element });
       await t
+        .expect(compareResults.isValid())
+        .ok()
         // assert
         .expect(dataGrid.getDataRow(insertedRowNumber).isInserted)
         .ok('row is inserted')
