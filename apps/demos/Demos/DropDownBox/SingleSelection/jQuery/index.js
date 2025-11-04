@@ -44,7 +44,8 @@ $(() => {
         selectNodesRecursive: false,
         onItemSelectionChanged(args) {
           const selectedKeys = args.component.getSelectedNodeKeys();
-          e.component.option('value', selectedKeys);
+          const singleValue = selectedKeys.length > 0 ? selectedKeys[0] : null;
+          e.component.option('value', singleValue);
         },
       });
 
