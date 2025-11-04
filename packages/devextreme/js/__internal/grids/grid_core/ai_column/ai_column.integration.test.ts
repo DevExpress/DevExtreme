@@ -3302,7 +3302,7 @@ describe('Cache', () => {
       expect(instance.getAIColumnText('myColumn', 2)).toEqual('Response Name 2');
     });
 
-    it('should use cache with pagination', async () => {
+    it('should use cache with pagination in auto mode', async () => {
       const sendRequestSpy = jest.fn();
       const aiIntegration = new AIIntegration({
         sendRequest(prompt): RequestResult {
@@ -3314,7 +3314,6 @@ describe('Cache', () => {
               Object.entries(prompt.data?.data).forEach(([key, value]) => {
                 result[key] = `Response ${(value as any).name}`;
               });
-
               resolve(JSON.stringify(result));
             }),
             abort: (): void => {},
@@ -3340,28 +3339,21 @@ describe('Cache', () => {
             name: 'myColumn',
             ai: {
               aiIntegration,
-              mode: 'manual',
               prompt: 'Test prompt',
             },
           },
         ],
       });
 
-      instance.sendAIColumnRequest('myColumn');
       await Promise.resolve();
       expect(sendRequestSpy).toHaveBeenCalledTimes(1);
 
       instance.option('paging.pageIndex', 1);
-      await Promise.resolve();
-
-      instance.sendAIColumnRequest('myColumn');
+      jest.runAllTimers();
       await Promise.resolve();
       expect(sendRequestSpy).toHaveBeenCalledTimes(2);
 
       instance.option('paging.pageIndex', 0);
-      await Promise.resolve();
-
-      instance.sendAIColumnRequest('myColumn');
       await Promise.resolve();
       expect(sendRequestSpy).toHaveBeenCalledTimes(2);
     });
