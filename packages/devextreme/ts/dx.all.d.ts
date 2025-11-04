@@ -26505,7 +26505,7 @@ declare module DevExpress.ui {
           /**
            * [descr:dxSchedulerOptions.editing.popup]
            */
-          popup?: DevExpress.ui.dxScheduler.Properties;
+          popup?: DevExpress.ui.dxPopup.Properties;
         };
     /**
      * [descr:dxSchedulerOptions.endDateExpr]
