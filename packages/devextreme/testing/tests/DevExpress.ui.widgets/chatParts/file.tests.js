@@ -17,6 +17,7 @@ const moduleConfig = {
                     name: 'test-file.txt',
                     size: 1024,
                 },
+                onDownload: () => {},
                 ...options,
             };
 
@@ -24,8 +25,11 @@ const moduleConfig = {
             this.$element = $(this.instance.$element());
 
             const $buttons = this.$element.find(`.${BUTTON_CLASS}`);
-            this.$downloadButton = $($buttons[0]);
-            this.downloadButton = Button.getInstance(this.$downloadButton);
+
+            if($buttons.length) {
+                this.$downloadButton = $($buttons[0]);
+                this.downloadButton = Button.getInstance(this.$downloadButton);
+            }
         };
 
         this.reinit = (options) => {
@@ -55,7 +59,7 @@ QUnit.module('File', moduleConfig, () => {
         });
 
         QUnit.test('should have correct default options', function(assert) {
-            this.reinit({ data: {} });
+            this.reinit({ data: {}, onDownload: undefined });
 
             const expectedData = {
                 name: '',

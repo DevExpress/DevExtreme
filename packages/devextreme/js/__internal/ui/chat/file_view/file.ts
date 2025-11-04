@@ -28,8 +28,8 @@ export type Properties = DOMComponentProperties<File> & {
 
 export const CHAT_FILE_CLASS = 'dx-chat-file';
 const CHAT_FILE_ICON_CONTAINER_CLASS = 'dx-chat-file-icon-container';
-const CHAT_FILE_NAME_CLASS = 'dx-chat-file-name';
-const CHAT_FILE_SIZE_CLASS = 'dx-chat-file-size';
+export const CHAT_FILE_NAME_CLASS = 'dx-chat-file-name';
+export const CHAT_FILE_SIZE_CLASS = 'dx-chat-file-size';
 const CHAT_FILE_DOWNLOAD_BUTTON_CLASS = 'dx-chat-file-download-button';
 
 class File extends DOMComponent<File, Properties> {
@@ -120,6 +120,12 @@ class File extends DOMComponent<File, Properties> {
   }
 
   private _renderButton(): void {
+    const { onDownload } = this.option();
+
+    if (!onDownload) {
+      return;
+    }
+
     const $button = $('<div>').addClass(CHAT_FILE_DOWNLOAD_BUTTON_CLASS);
 
     this._downloadButton = this._createComponent<Button, ButtonProperties>(
@@ -151,16 +157,38 @@ class File extends DOMComponent<File, Properties> {
       icon: 'download',
       stylingMode: 'text' as const,
       onClick: (e: ClickEvent): void => {
-        const event = {
-          event: e.event,
-          attachment: data,
-        };
-
-        this._downloadAction?.(event);
+        this._downloadHandler(e);
       },
     };
 
     return configuration;
+  }
+
+  _downloadHandler(e: ClickEvent): void {
+    const { data } = this.option();
+
+    const event = {
+      event: e.event,
+      attachment: data,
+    };
+
+    this._downloadAction?.(event);
+  }
+
+  _handleOnDownloadOptionChange(): void {
+    const { onDownload } = this.option();
+
+    if (!onDownload) {
+      this._cleanDownloadButton();
+
+      return;
+    }
+
+    if (this._downloadButton) {
+      this._downloadButton?.option({ onClick: (e) => this._downloadHandler(e) });
+    } else {
+      this._renderButton();
+    }
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
@@ -179,6 +207,7 @@ class File extends DOMComponent<File, Properties> {
 
       case 'onDownload':
         this._createDownloadAction();
+        this._handleOnDownloadOptionChange();
         break;
 
       default:
