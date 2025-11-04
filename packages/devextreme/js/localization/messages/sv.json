@@ -789,7 +789,7 @@
         "dxGantt-dialogStartDateValidation": "Startdatum måste vara efter {0}",
         "dxGantt-dialogEndDateValidation": "Slutdatum måste vara efter {0}",
         "dxGallery-itemName": "Gallerielement",
-        "dxMultiView-elementAriaRoleDescriptideon": "Fler vyer",
+        "dxMultiView-elementAriaRoleDescription": "Fler vyer",
         "dxMultiView-elementAriaLabel": "Använd piltangenterna eller svep för att växla mellan vyer",
         "dxMultiView-itemAriaRoleDescription": "Vy",
         "dxMultiView-itemAriaLabel": "{0} av {1}",
