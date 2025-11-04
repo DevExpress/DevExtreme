@@ -275,7 +275,7 @@ createTestCafe(TESTCAFE_CONFIG)
               await addShadowRootTree(t);
             }
 
-            console.log('file', file, 'componentFolder', componentFolder);
+            console.log('file', file, 'componentFolder', componentFolder, 'testName', testName);
             if (!file.includes('xss')) {
               const currentTheme = await getCurrentTheme(t) || 'fluent.blue.light';
               const newTheme = args.theme || 'fluent.blue.light';
