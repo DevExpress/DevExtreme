@@ -2,7 +2,8 @@ import TreeList from 'devextreme-testcafe-models/treeList';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
-fixture`TreeList - Aria Label`.page(url(__dirname, '../../container.html'));
+fixture`TreeList - Aria Label`
+  .page(url(__dirname, '../../container.html'));
 
 const tasks = [
   {
@@ -73,7 +74,7 @@ const options = {
   ],
 };
 
-test.meta({ unstable: true })('Aria expanded should be toggled true on Ctrl + → keypress', async (t) => {
+test('Aria expanded should be toggled true on Ctrl + → keypress', async (t) => {
   const treeList = new TreeList('#container');
   const expandableRow = treeList.getDataRow(0).element;
   const expandableCells = [
@@ -103,7 +104,10 @@ test.meta({ unstable: true })('Aria expanded should be toggled true on Ctrl + �
   for (const cell of expandableCells) {
     await t.expect(cell.getAttribute('aria-expanded')).eql('true');
   }
-}).before(async () => createWidget('dxTreeList', options));
+}).before(async () => createWidget('dxTreeList', {
+  ...options,
+  expandedRowKeys: [0],
+}));
 
 test('Aria expanded should be toggled false on Ctrl + ← keypress', async (t) => {
   const treeList = new TreeList('#container');
@@ -135,7 +139,7 @@ test('Aria expanded should be toggled false on Ctrl + ← keypress', async (t) =
   for (const cell of expandableCells) {
     await t.expect(cell.getAttribute('aria-expanded')).eql('false');
   }
-}).before(async () => {
-  options.expandedRowKeys = [1];
-  await createWidget('dxTreeList', options);
-});
+}).before(async () => createWidget('dxTreeList', {
+  ...options,
+  expandedRowKeys: [1],
+}));
