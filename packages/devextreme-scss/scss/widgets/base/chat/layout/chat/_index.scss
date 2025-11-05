@@ -3,8 +3,9 @@
   flex-direction: column;
   width: 100%;
   height: 100%;
-  min-width: 20em;
-  min-height: 20em;
+  min-width: 22.45em;
+  min-height: 38em;
+  overflow-y: auto;
 
   &.dx-state-disabled {
     opacity: 0.5;

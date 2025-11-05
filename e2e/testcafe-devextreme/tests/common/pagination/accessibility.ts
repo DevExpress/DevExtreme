@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Pagination from 'devextreme-testcafe-models/pagination';
 import url from '../../../helpers/getPageUrl';
-import { isMaterial, testScreenshot } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import { createWidget } from '../../../helpers/createWidget';
 
 fixture.disablePageReloads`Pagination`
@@ -19,12 +19,6 @@ fixture.disablePageReloads`Pagination`
             + `spss_${showPageSizeSelector.toString()}`, async (t) => {
             const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
             const pagination = new Pagination('#container');
-
-            // TODO Chrome133: skipped during chrome update
-            // Skipped all material theme
-            if (isMaterial()) {
-              return;
-            }
 
             await testScreenshot(
               t,
