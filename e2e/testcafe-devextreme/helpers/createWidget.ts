@@ -5,6 +5,8 @@ export interface CreateWidgetOptions {
   disableFxAnimation: boolean;
 }
 
+declare const $;
+
 const DEFAULT_SELECTOR = '#container';
 const DEFAULT_OPTIONS: CreateWidgetOptions = {
   disableFxAnimation: true,
@@ -21,11 +23,11 @@ const createWidgetCore = <TWidgetName extends WidgetName>(
 ) => {
   if (isShadowDom) {
     return new (window as any).DevExpress.ui[widgetName](
-      ($(selector) as any).get(0),
+      ($(selector)).get(0),
       widgetOptions,
     );
   }
-  return ($(`${selector}`) as any)[widgetName](widgetOptions)[widgetName]('instance');
+  return ($(`${selector}`))[widgetName](widgetOptions)[widgetName]('instance');
 };
 
 export const createWidget = async<TWidgetName extends WidgetName>(

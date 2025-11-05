@@ -6,6 +6,8 @@ const CLASS = {
   scrollableScroll: 'dx-scrollable-scroll',
 };
 
+declare const $;
+
 export default class Scrollbar {
   element: Selector;
 
