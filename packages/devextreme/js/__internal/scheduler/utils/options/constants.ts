@@ -44,7 +44,7 @@ export const DEFAULT_SCHEDULER_OPTIONS: Properties = {
     form: {
       iconsShowMode: DEFAULT_ICONS_SHOW_MODE,
     },
-    popup: {},
+    popup: undefined,
   },
   showAllDayPanel: true,
   showCurrentTimeIndicator: true,
@@ -106,7 +106,7 @@ export const DEFAULT_SCHEDULER_INTERNAL_OPTIONS: SchedulerInternalOptions = {
     legacyForm: false,
     // @ts-expect-error copy from default so that you can rewrite it
     ...DEFAULT_SCHEDULER_OPTIONS.editing,
-    popup: {},
+    popup: undefined,
   },
   _draggingMode: 'outlook',
   _appointmentTooltipOffset: { x: 0, y: 0 },
