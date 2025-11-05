@@ -330,6 +330,8 @@ class Chat extends Widget<Properties> {
       messageEditingStartArgs.cancel,
       () => {
         this._messageBox.option('text', e.message.text);
+        this._messageBox.resetFileUploader();
+        this._messageBox.toggleAttachButtonVisibleState(false);
         this._messageToEdit = e.message;
       },
     );
@@ -340,6 +342,8 @@ class Chat extends Widget<Properties> {
       this._messageEditCanceledAction?.({ message: this._messageToEdit });
       this._messageToEdit = undefined;
     }
+
+    this._messageBox.toggleAttachButtonVisibleState(true);
   }
 
   _showDeleteConfirmationPopup(e: Pick<MessageDeletingEvent, 'message'>): void {
@@ -406,6 +410,7 @@ class Chat extends Widget<Properties> {
       eventArgs.cancel,
       () => {
         this._messageBox.option('text', '');
+        this._messageBox.toggleAttachButtonVisibleState(true);
         this._messageUpdatedAction?.(eventArgs);
         this._messageToEdit = undefined;
       },
