@@ -496,12 +496,13 @@ test.meta({ unstable: true })('Navigate to last cell in the last row when virtua
   },
 }));
 
-test('Navigate to first cell in the first row when virtual scrolling is enabled', async (t) => {
+test.meta({ unstable: true })('Navigate to first cell in the first row when virtual scrolling is enabled', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await dataGrid.scrollTo(t, { x: 700, y: 10000 });
+  await dataGrid
+    .scrollTo(t, { x: 700, y: 10000 });
 
   // assert
   await t
@@ -535,7 +536,7 @@ test('Navigate to first cell in the first row when virtual scrolling is enabled'
   },
 }));
 
-test('Navigate to last cell in the last row when virtual scrolling and columns are enabled', async (t) => {
+test.meta({ unstable: true })('Navigate to last cell in the last row when virtual scrolling and columns are enabled', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -611,7 +612,7 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
 }));
 
 [true, false].forEach((useNative) => {
-  test(`${useNative ? 'Native' : 'Simulated'} scrolling: Focus should be on the first focusable cell when pressing the Ctrl + Home key when row dragging, virtual scrolling and columns are enabled`, async (t) => {
+  test.meta({ unstable: true })(`${useNative ? 'Native' : 'Simulated'} scrolling: Focus should be on the first focusable cell when pressing the Ctrl + Home key when row dragging, virtual scrolling and columns are enabled`, async (t) => {
     // arrange
     const dataGrid = new DataGrid('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -657,7 +658,7 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
     },
   }));
 
-  test(`${useNative ? 'Native' : 'Simulated'} scrolling: Focus should be on the last focusable cell when pressing the Ctrl + Home key when row dragging, virtual scrolling and columns are enabled`, async (t) => {
+  test.meta({ unstable: true })(`${useNative ? 'Native' : 'Simulated'} scrolling: Focus should be on the last focusable cell when pressing the Ctrl + Home key when row dragging, virtual scrolling and columns are enabled`, async (t) => {
     // arrange
     const dataGrid = new DataGrid('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

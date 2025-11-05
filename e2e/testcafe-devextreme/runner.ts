@@ -259,9 +259,6 @@ async function main() {
 
               await t.hover('html');
 
-              // @ts-expect-error ts-errors
-              const { meta } = t.testRun.test;
-
               const [width, height] = meta?.browserSize || DEFAULT_BROWSER_SIZE;
               await t.resizeWindow(width, height);
             } else {

@@ -101,7 +101,6 @@ $fluent-fileuploader-file-container-boxshadow: 0 1px 3px 0 color.change($base-sh
   }
 
   .dx-fileuploader-file-container {
-    display: flex;
     padding: $fluent-fileuploader-file-container-padding;
     margin-bottom: 4px;
     border-radius: $fluent-fileuploader-files-container-rounding;
@@ -156,7 +155,7 @@ $fluent-fileuploader-file-container-boxshadow: 0 1px 3px 0 color.change($base-sh
 
 .dx-fileuploader-file-size {
   float: right;
-  margin: $fluent-fileuploader-file-size-margin;
+  padding: $fluent-fileuploader-file-size-margin;
   color: $base-label-color;
 }
 
