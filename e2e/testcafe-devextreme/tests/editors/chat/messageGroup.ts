@@ -13,6 +13,7 @@ import { appendElementTo, setStyleAttribute } from '../../../helpers/domUtils';
 import asyncForEach from '../../../helpers/asyncForEach';
 
 const AVATAR_SELECTOR = '.dx-avatar';
+const CHAT_WRAPPER_STYLES = 'display: flex; flex-wrap: wrap; gap: 2px; width: 1270px; padding: 20px; transform: scale(0.9);';
 
 fixture.disablePageReloads`ChatMessageGroup`
   .page(url(__dirname, '../../container.html'));
@@ -136,7 +137,7 @@ test('Messagegroup scenarios in disabled state', async (t) => {
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await appendElementTo('#container', 'div', 'chat-wrapper');
-  await setStyleAttribute(Selector('#chat-wrapper'), 'display: flex; flex-wrap: wrap; gap: 2px; width: 1270px; padding: 20px; transform: scale(0.9);');
+  await setStyleAttribute(Selector('#chat-wrapper'), CHAT_WRAPPER_STYLES);
 });
 
 test('Messagegroup scenarios in RTL mode', async (t) => {
@@ -170,7 +171,7 @@ test('Messagegroup scenarios in RTL mode', async (t) => {
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await appendElementTo('#container', 'div', 'chat-wrapper');
-  await setStyleAttribute(Selector('#chat-wrapper'), 'display: flex; flex-wrap: wrap; gap: 2px; width: 1270px; padding: 20px; transform: scale(0.9);');
+  await setStyleAttribute(Selector('#chat-wrapper'), CHAT_WRAPPER_STYLES);
 });
 
 test('MessageGroup with edited messages', async (t) => {
