@@ -34,7 +34,7 @@ function getHostMapping(host: INestedOptionContainer | undefined): DeprecatedCon
     visited.add(current);
 
     const ctorName = current.constructor?.name;
-    if (ctorName && Object.prototype.hasOwnProperty.call(DEPRECATED_CONFIG_COMPONENTS, ctorName)) {
+    if (ctorName && Object.hasOwn(DEPRECATED_CONFIG_COMPONENTS, ctorName)) {
       return DEPRECATED_CONFIG_COMPONENTS[ctorName] as DeprecatedConfigEntry;
     }
 
