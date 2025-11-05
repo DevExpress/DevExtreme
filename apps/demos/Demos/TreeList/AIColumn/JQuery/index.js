@@ -78,7 +78,7 @@ $(() => {
       return $('<div>').text(Manufacturer);
     }
 
-    if(!ID || !TrademarkName || !Name) {
+    if (!ID || !TrademarkName || !Name) {
       return $('<div>').text('');
     }
 
