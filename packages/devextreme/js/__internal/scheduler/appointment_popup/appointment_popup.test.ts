@@ -1492,6 +1492,7 @@ describe('Appointment Popup Form', () => {
 
     it('should call onShowing callback when popup is shown', async () => {
       const onShowing = jest.fn();
+      const onAppointmentFormOpening = jest.fn();
       const { scheduler } = await createScheduler({
         ...getDefaultConfig(),
         editing: {
@@ -1501,12 +1502,15 @@ describe('Appointment Popup Form', () => {
             onShowing,
           },
         },
+        onAppointmentFormOpening,
       });
 
       scheduler.showAppointmentPopup(commonAppointment);
 
       expect(onShowing).toHaveBeenCalled();
       expect(onShowing).toHaveBeenCalledTimes(1);
+      expect(onAppointmentFormOpening).toHaveBeenCalled();
+      expect(onAppointmentFormOpening).toHaveBeenCalledTimes(1);
     });
 
     it('should call onHiding callback when popup is hidden', async () => {
@@ -1522,14 +1526,21 @@ describe('Appointment Popup Form', () => {
         },
       });
 
+      const focusSpy = jest.spyOn(scheduler, 'focus');
+
       scheduler.showAppointmentPopup(commonAppointment);
 
       expect(onHiding).not.toHaveBeenCalled();
+      expect(focusSpy).not.toHaveBeenCalled();
 
       scheduler.hideAppointmentPopup();
 
       expect(onHiding).toHaveBeenCalled();
       expect(onHiding).toHaveBeenCalledTimes(1);
+      expect(focusSpy).toHaveBeenCalled();
+      expect(focusSpy).toHaveBeenCalledTimes(1);
+
+      focusSpy.mockRestore();
     });
   });
 });
