@@ -14,7 +14,7 @@ $(() => {
   });
 
   $('#dataGrid').dxDataGrid({
-    columns: fields,
+    columns,
     showBorders: true,
     dataSource: products,
     filterValue: filter,

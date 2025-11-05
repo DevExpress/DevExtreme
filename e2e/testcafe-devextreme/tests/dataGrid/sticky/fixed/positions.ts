@@ -1,10 +1,10 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { createWidget } from '../../../../helpers/createWidget';
 import { getData } from '../../helpers/generateDataSourceData';
 import url from '../../../../helpers/getPageUrl';
 import { borderConfigs } from '../helpers/testMatrixConfig';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`FixedColumns`
   .page(url(__dirname, '../../../container.html'));
@@ -13,24 +13,24 @@ const DATA_GRID_SELECTOR = '#container';
 
 borderConfigs.forEach(({ showColumnLines, showBorders }) => {
   [true, false].forEach((rtlEnabled) => {
-    safeSizeTest(`Sticky columns with left position (showColumnLines = ${showColumnLines}, showBorders = ${showBorders}, rtlEnabled = ${rtlEnabled})`, async (t) => {
+    test.meta({ browserSize: [900, 800] })(`Sticky columns with left position (showColumnLines = ${showColumnLines}, showBorders = ${showBorders}, rtlEnabled = ${rtlEnabled})`, async (t) => {
       // arrange
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t.expect(dataGrid.isReady()).ok();
 
-      await takeScreenshot(`left-position-1(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `left-position-1(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`left-position-2(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `left-position-2(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }, [900, 800]).before(async () => createWidget('dxDataGrid', {
+    }).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
       width: 884,
       showColumnLines,
@@ -45,24 +45,24 @@ borderConfigs.forEach(({ showColumnLines, showBorders }) => {
       },
     }));
 
-    safeSizeTest(`Sticky columns with right position (showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
+    test.meta({ browserSize: [900, 800] })(`Sticky columns with right position (showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
       // arrange
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t.expect(dataGrid.isReady()).ok();
 
-      await takeScreenshot(`right-position-1(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `right-position-1(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`right-position-2(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `right-position-2(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }, [900, 800]).before(async () => createWidget('dxDataGrid', {
+    }).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
       width: 884,
       showColumnLines,
@@ -77,24 +77,24 @@ borderConfigs.forEach(({ showColumnLines, showBorders }) => {
       },
     }));
 
-    safeSizeTest(`Sticky columns with left and right positions (showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
+    test.meta({ browserSize: [900, 800] })(`Sticky columns with left and right positions (showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
       // arrange
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t.expect(dataGrid.isReady()).ok();
 
-      await takeScreenshot(`left-right-positions-1(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `left-right-positions-1(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`left-right-positions-2(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `left-right-positions-2(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }, [900, 800]).before(async () => createWidget('dxDataGrid', {
+    }).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
       width: 884,
       showColumnLines,
@@ -113,24 +113,24 @@ borderConfigs.forEach(({ showColumnLines, showBorders }) => {
       },
     }));
 
-    safeSizeTest(`Sticky columns with left, right and sticky positions (showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
+    test.meta({ browserSize: [1000, 800] })(`Sticky columns with left, right and sticky positions (showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
       // arrange
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t.expect(dataGrid.isReady()).ok();
 
-      await takeScreenshot(`left-right-sticky-positions-1(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `left-right-sticky-positions-1(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`left-right-sticky-positions-2(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `left-right-sticky-positions-2(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
+    }).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
       width: 984,
       showColumnLines,
@@ -157,24 +157,24 @@ borderConfigs.forEach(({ showColumnLines, showBorders }) => {
       },
     }));
 
-    safeSizeTest(`Sticky columns with sticky position (showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
+    test.meta({ browserSize: [1000, 800] })(`Sticky columns with sticky position (showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
       // arrange
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t.expect(dataGrid.isReady()).ok();
 
-      await takeScreenshot(`sticky-position-1-(case-1)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `sticky-position-1-(case-1)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`sticky-position-2-(case-1)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `sticky-position-2-(case-1)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
+    }).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
       width: 984,
       showColumnLines,
@@ -193,24 +193,24 @@ borderConfigs.forEach(({ showColumnLines, showBorders }) => {
       },
     }));
 
-    safeSizeTest(`Sticky columns with sticky position when first and last cells are sticky (showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
+    test.meta({ browserSize: [1000, 800] })(`Sticky columns with sticky position when first and last cells are sticky (showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
       // arrange
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t.expect(dataGrid.isReady()).ok();
 
-      await takeScreenshot(`sticky-position-1-(case-2)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `sticky-position-1-(case-2)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`sticky-position-2-(case-2)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `sticky-position-2-(case-2)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
+    }).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
       width: 984,
       showColumnLines,
@@ -235,24 +235,24 @@ borderConfigs.forEach(({ showColumnLines, showBorders }) => {
       },
     }));
 
-    safeSizeTest(`Sticky columns with sticky position when first and last cells are fixed on left and right respectively (showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
+    test.meta({ browserSize: [1000, 800] })(`Sticky columns with sticky position when first and last cells are fixed on left and right respectively (showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
       // arrange
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t.expect(dataGrid.isReady()).ok();
 
-      await takeScreenshot(`sticky-position-1-(case-3)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `sticky-position-1-(case-3)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`sticky-position-2-(case-3)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
+      await testScreenshot(t, takeScreenshot, `sticky-position-2-(case-3)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
+    }).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
       width: 984,
       showColumnLines,

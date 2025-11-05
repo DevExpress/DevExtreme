@@ -10,7 +10,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import Callbacks from '@js/core/utils/callbacks';
 import { extend } from '@js/core/utils/extend';
-import { getOffset, getWidth } from '@js/core/utils/size';
+import { getOffset, getOuterWidth, getWidth } from '@js/core/utils/size';
 import { isDefined, isFunction, isNumeric } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
@@ -72,6 +72,8 @@ const FILEUPLOADER_INVALID_CLASS = 'dx-fileuploader-invalid';
 
 const FILEUPLOADER_AFTER_LOAD_DELAY = 400;
 const DRAG_EVENT_DELTA = 1;
+const GAP = 10;
+const ETALON_TEXT = '1023 bytes';
 
 const DIALOG_TRIGGER_EVENT_NAMESPACE = 'dxFileUploaderDialogTrigger';
 
@@ -776,7 +778,9 @@ class FileUploader extends Editor<FileUploaderProperties> {
   }
 
   _updateFileNameMaxWidth(): void {
-    const { allowCanceling, uploadMode } = this.option();
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { allowCanceling, uploadMode, _showFileIcon } = this.option();
+
     const cancelButtonsCount = allowCanceling && uploadMode !== 'useForm' ? 1 : 0;
     const uploadButtonsCount = uploadMode === 'useButtons' ? 1 : 0;
     const filesContainerWidth = getWidth(
@@ -785,13 +789,17 @@ class FileUploader extends Editor<FileUploaderProperties> {
     const $buttonContainer = this._$filesContainer?.find(`.${FILEUPLOADER_BUTTON_CONTAINER_CLASS}`).eq(0);
     const buttonsWidth = getWidth($buttonContainer) * (cancelButtonsCount + uploadButtonsCount);
     const $fileSize = this._$filesContainer?.find(`.${FILEUPLOADER_FILE_SIZE_CLASS}`).eq(0);
+    const $icon = this._$filesContainer?.find(`.${FILEUPLOADER_FILE_ICON_CLASS}`).eq(0);
+    const iconWidth = _showFileIcon ? getOuterWidth($icon) : 0;
 
     const prevFileSize = $fileSize?.text();
-    $fileSize?.text('1000 Mb');
+    $fileSize?.text(ETALON_TEXT);
     const fileSizeWidth = getWidth($fileSize);
     $fileSize?.text(prevFileSize ?? '');
 
-    this._$filesContainer?.find(`.${FILEUPLOADER_FILE_NAME_CLASS}`).css('maxWidth', filesContainerWidth - buttonsWidth - fileSizeWidth);
+    const maxWidth = filesContainerWidth - buttonsWidth - fileSizeWidth - iconWidth - GAP;
+
+    this._$filesContainer?.find(`.${FILEUPLOADER_FILE_NAME_CLASS}`).css('maxWidth', maxWidth);
   }
 
   _renderFileButtons(file: FileUploaderItem, $container: dxElementWrapper): void {
@@ -1744,6 +1752,10 @@ class FileUploader extends Editor<FileUploaderProperties> {
       case 'hint':
         this._initFileInput();
         super._optionChanged(args);
+        break;
+      case 'visible':
+        super._optionChanged(args);
+        this._updateFileNameMaxWidth();
         break;
       default:
         super._optionChanged(args);

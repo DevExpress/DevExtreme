@@ -17,19 +17,22 @@ import { DX_REMOVE_EVENT } from './component-base';
 import { DXRemoveCustomArgs, TemplateWrapperProps } from './types';
 import { RemovalLockerContext } from './contexts';
 
+const GUARD_NODE_CLASS_NAME = '__dx_react_guard_node__';
+
 const createHiddenNode = (
   containerNodeName: string,
   ref: React.LegacyRef<any>,
   defaultElement: string,
+  className = '',
 ) => {
   const style = { display: 'none' };
   switch (containerNodeName) {
     case 'TABLE':
-      return <tbody style={style} ref={ref} />;
+      return <tbody style={style} ref={ref} className={className} />;
     case 'TBODY':
-      return <tr style={style} ref={ref} />;
+      return <tr style={style} ref={ref} className={className} />;
     default:
-      return React.createElement(defaultElement, { style, ref });
+      return React.createElement(defaultElement, { style, ref, className });
   }
 };
 
@@ -50,7 +53,7 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
   }), []);
 
   const elements = useRef<HTMLElement[]>([]);
-  const hiddenNodeElement = useRef<HTMLElement>();
+  const guardElement = useRef<HTMLElement>();
   const removalListenerElement = useRef<HTMLElement>();
 
   const onTemplateRemoved = useCallback((_, args: DXRemoveCustomArgs | undefined) => {
@@ -95,7 +98,7 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
 
       [
         ...elements.current,
-        hiddenNodeElement.current,
+        guardElement.current,
         removalListenerElement.current,
       ].forEach((el) => safeAppend(el));
 
@@ -109,36 +112,36 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
     onRendered();
   }, [onRendered]);
 
-  const containerContent = Array.from(container.childNodes);
-
-  const hiddenNode = createHiddenNode(container?.nodeName, (node: HTMLElement) => {
-    hiddenNodeElement.current = node;
+  const guardNode = createHiddenNode(container?.nodeName, (node: HTMLElement) => {
+    guardElement.current = node;
     elements.current = [];
 
     let currentNode = node?.previousSibling as HTMLElement;
 
-    while (currentNode) {
-      if (!containerContent.includes(currentNode)) {
-        elements.current.push(currentNode);
-      }
-
+    while (
+      currentNode && (
+        typeof currentNode.className !== 'string'
+        || !currentNode.className.includes(GUARD_NODE_CLASS_NAME)
+      )
+    ) {
+      elements.current.push(currentNode);
       currentNode = currentNode?.previousSibling as HTMLElement;
     }
-  }, 'div');
+  }, 'div', GUARD_NODE_CLASS_NAME);
 
   const removalListener = removalListenerRequired
     ? createHiddenNode(container?.nodeName, (node: HTMLElement) => { removalListenerElement.current = node; }, 'span')
     : undefined;
 
   return createPortal(
-    <>
-      <RemovalLockerContext.Provider value={removalLocker}>
-        {templateFactory({ data, index, onRendered })}
-        {hiddenNode}
-        {removalListener}
-      </RemovalLockerContext.Provider>
-    </>,
-    container,
+      <>
+        <RemovalLockerContext.Provider value={removalLocker}>
+          {templateFactory({ data, index, onRendered })}
+          {guardNode}
+          {removalListener}
+        </RemovalLockerContext.Provider>
+      </>,
+      container,
   );
 };
 

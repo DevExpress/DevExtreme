@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`DataGrid deleted row height consistency T1286265`
   .page(url(__dirname, '../../../container.html'));
@@ -42,7 +43,7 @@ test('When DataGrid has fixed column row height should not change when marked as
     .eql(initialRowHeight, 'Row height should not change when marked as deleted');
 
   // Take a screenshot for visual verification
-  await takeScreenshot('datagrid-deleted-row-height-row-lines-and-fixed-column (generic.light).png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'datagrid-deleted-row-height-row-lines-and-fixed-column.png', { element: dataGrid.element });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -101,7 +102,7 @@ test('When DataGrid doesn\'t have fixed column row height should not change when
     .eql(initialRowHeight, 'Row height should not change when marked as deleted');
 
   // Take a screenshot for visual verification
-  await takeScreenshot('datagrid-deleted-row-height-row-lines-and-no-fixed-column (generic.light).png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'datagrid-deleted-row-height-row-lines-and-no-fixed-column.png', { element: dataGrid.element });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -160,7 +161,7 @@ test('When not showing row lines and not fixed any column row height should not 
     .eql(initialRowHeight, 'Row height should not change when marked as deleted');
 
   // Take a screenshot for visual verification
-  await takeScreenshot('datagrid-deleted-row-height-no-row-lines-and-no-fixed-column (generic.light).png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'datagrid-deleted-row-height-no-row-lines-and-no-fixed-column.png', { element: dataGrid.element });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -219,7 +220,7 @@ test('When not showing row lines and DataGrid has any column row height should n
     .eql(initialRowHeight, 'Row height should not change when marked as deleted');
 
   // Take a screenshot for visual verification
-  await takeScreenshot('datagrid-deleted-row-height-no-row-lines-and-fixed-column (generic.light).png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'datagrid-deleted-row-height-no-row-lines-and-fixed-column.png', { element: dataGrid.element });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

@@ -6,7 +6,6 @@ import url from '../../../../../helpers/getPageUrl';
 import { testScreenshot } from '../../../../../helpers/themeUtils';
 import { insertStylesheetRulesToPage } from '../../../../../helpers/domUtils';
 import { getLongText } from '../../../chat/data';
-import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 
 const MENU_ITEM_CLASS = 'dx-menu-item';
 const SUBMENU_CLASS = 'dx-submenu';
@@ -285,7 +284,7 @@ test('error state', async (t) => {
     },
   },
 ].forEach(({ state, configuration }) => {
-  safeSizeTest(`${state} state on small screen`, async (t) => {
+  test.meta({ browserSize: [400, 700] })(`${state} state on small screen`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await openAIDialog(t, 0);
@@ -294,7 +293,7 @@ test('error state', async (t) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [400, 700]).before(async () => {
+  }).before(async () => {
     await insertStylesheetRulesToPage(`
       .${LOADINDICATOR_SEGMENT_CLASS},
       .${LOADINDICATOR_CONTENT_CLASS},

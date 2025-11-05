@@ -2,7 +2,7 @@ import messageLocalization from '@js/common/core/localization/message';
 import { getPublicElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type { Attachment, AttachmentDownloadEvent, Message } from '@js/ui/chat';
+import type { Attachment, AttachmentDownloadClickEvent, Message } from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import { ICON_CLASS } from '@ts/core/utils/m_icon';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -26,7 +26,7 @@ export interface Properties extends WidgetOptions<MessageBubble> {
   src?: string;
   alt?: string;
   attachments?: Attachment[];
-  onAttachmentDownload?: (e: AttachmentDownloadEvent) => void;
+  onAttachmentDownloadClick?: (e: AttachmentDownloadClickEvent) => void;
   template?: ((message: Message, container: Element) => void) | null;
 }
 
@@ -138,7 +138,7 @@ class MessageBubble extends Widget<Properties> {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
-      onAttachmentDownload,
+      onAttachmentDownloadClick,
     } = this.option();
 
     if (!this._$attachments) {
@@ -153,7 +153,7 @@ class MessageBubble extends Widget<Properties> {
         focusStateEnabled,
         hoverStateEnabled,
         files: attachments,
-        onDownload: onAttachmentDownload,
+        onDownload: onAttachmentDownloadClick,
       });
     }
   }
@@ -189,7 +189,7 @@ class MessageBubble extends Widget<Properties> {
       case 'isEdited':
         this._updateMessageData(name, value);
         break;
-      case 'onAttachmentDownload':
+      case 'onAttachmentDownloadClick':
       case 'attachments':
         this._renderAttachmentsElement();
         this._renderAttachments();

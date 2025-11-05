@@ -21,6 +21,10 @@
       .dx-placeholder::before {
         padding: 0;
       }
+
+      .dx-texteditor-input {
+        max-height: 7.1em;
+      }
     }
   }
 }
@@ -32,6 +36,14 @@
 
   .dx-fileuploader-wrapper {
     padding: 0;
+  }
+
+  .dx-fileuploader-files-container {
+    display: grid;
+
+    .dx-fileuploader-file-container {
+      margin-bottom: 0;
+    }
   }
 }
 

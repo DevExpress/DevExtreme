@@ -6,7 +6,7 @@ import $ from '@js/core/renderer';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { isDate, isDefined } from '@js/core/utils/type';
 import type {
-  AttachmentDownloadEvent, ImageMessage, Message, TextMessage,
+  AttachmentDownloadClickEvent, ImageMessage, Message, TextMessage,
 } from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -42,7 +42,7 @@ export interface Properties extends WidgetOptions<MessageGroup> {
   showMessageTimestamp: boolean;
   messageTimestampFormat?: Format;
   messageTemplate?: MessageTemplate;
-  onAttachmentDownload?: (e: AttachmentDownloadEvent) => void;
+  onAttachmentDownloadClick?: (e: AttachmentDownloadClickEvent) => void;
 }
 
 class MessageGroup extends Widget<Properties> {
@@ -123,7 +123,7 @@ class MessageGroup extends Widget<Properties> {
   }
 
   _getMessageBubbleOptions(message: Message): MessageBubbleProperties {
-    const { messageTemplate, onAttachmentDownload } = this.option();
+    const { messageTemplate, onAttachmentDownloadClick } = this.option();
 
     const { isDeleted, type, attachments } = message;
 
@@ -131,7 +131,7 @@ class MessageGroup extends Widget<Properties> {
       isDeleted,
       type,
       attachments,
-      onAttachmentDownload,
+      onAttachmentDownloadClick,
     };
 
     if (type === 'image') {
@@ -313,7 +313,7 @@ class MessageGroup extends Widget<Properties> {
       case 'showMessageTimestamp':
       case 'messageTemplate':
       case 'messageTimestampFormat':
-      case 'onAttachmentDownload':
+      case 'onAttachmentDownloadClick':
         this._invalidate();
         break;
       default:
