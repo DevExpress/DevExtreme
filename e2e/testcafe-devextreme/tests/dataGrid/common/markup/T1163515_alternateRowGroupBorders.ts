@@ -234,7 +234,7 @@ const verifyGridStyles = async (t, dataGrid, matrixOptions) => {
   }
 
   if (matrixOptions.showColumnLines) {
-    const cells = dataGrid.getCells().find('td:not([class])');
+    const cells = dataGrid.getCells().filter('td:not([class])');
     const cellsCount = await cells.count;
 
     for (let i = 0; i < cellsCount; i += 1) {
