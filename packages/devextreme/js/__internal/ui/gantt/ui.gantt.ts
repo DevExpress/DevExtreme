@@ -9,24 +9,24 @@ import { getHeight } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import type { Properties } from '@js/ui/gantt';
-import { GanttActionsManager } from '@js/ui/gantt/ui.gantt.actions';
-import { GanttContextMenuBar, GanttToolbar } from '@js/ui/gantt/ui.gantt.bars';
-import { GanttCustomFieldsManager } from '@js/ui/gantt/ui.gantt.custom_fields';
-import DataOption from '@js/ui/gantt/ui.gantt.data.option';
-import { GanttDataChangesProcessingHelper } from '@js/ui/gantt/ui.gantt.data_changes_processing_helper';
-import { GanttDialog } from '@js/ui/gantt/ui.gantt.dialogs';
-import { GanttExportHelper } from '@js/ui/gantt/ui.gantt.export_helper';
-import { GanttHelper } from '@js/ui/gantt/ui.gantt.helper';
-import { GanttMappingHelper } from '@js/ui/gantt/ui.gantt.mapping_helper';
-import { ModelChangesListener } from '@js/ui/gantt/ui.gantt.model_changes_listener';
-import { GanttSizeHelper } from '@js/ui/gantt/ui.gantt.size_helper';
-import { GanttTemplatesManager } from '@js/ui/gantt/ui.gantt.templates';
-import { GanttTreeList } from '@js/ui/gantt/ui.gantt.treelist';
-import { GanttView } from '@js/ui/gantt/ui.gantt.view';
 import SplitterControl from '@js/ui/splitter_control';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import type TreeList from '@ts/grids/tree_list/m_widget_base';
+import { GanttActionsManager } from '@ts/ui/gantt/ui.gantt.actions';
+import { GanttContextMenuBar, GanttToolbar } from '@ts/ui/gantt/ui.gantt.bars';
+import { GanttCustomFieldsManager } from '@ts/ui/gantt/ui.gantt.custom_fields';
+import DataOption from '@ts/ui/gantt/ui.gantt.data.option';
+import { GanttDataChangesProcessingHelper } from '@ts/ui/gantt/ui.gantt.data_changes_processing_helper';
+import { GanttDialog } from '@ts/ui/gantt/ui.gantt.dialogs';
+import { GanttExportHelper } from '@ts/ui/gantt/ui.gantt.export_helper';
+import { GanttHelper } from '@ts/ui/gantt/ui.gantt.helper';
+import { GanttMappingHelper } from '@ts/ui/gantt/ui.gantt.mapping_helper';
+import { ModelChangesListener } from '@ts/ui/gantt/ui.gantt.model_changes_listener';
+import { GanttSizeHelper } from '@ts/ui/gantt/ui.gantt.size_helper';
+import { GanttTemplatesManager } from '@ts/ui/gantt/ui.gantt.templates';
+import { GanttTreeList } from '@ts/ui/gantt/ui.gantt.treelist';
+import { GanttView } from '@ts/ui/gantt/ui.gantt.view';
 import LoadPanel from '@ts/ui/load_panel';
 
 const window = getWindow();
@@ -133,6 +133,8 @@ class Gantt extends Widget<Properties> {
 
   _lockRowExpandEvent?: boolean;
 
+  _hasHeight?: boolean;
+
   _init(): void {
     super._init();
 
@@ -231,6 +233,7 @@ class Gantt extends Widget<Properties> {
 
   _renderTreeList(): void {
     this._ganttTreeList = new GanttTreeList(this);
+    // @ts-expect-error ts-error
     this._treeList = this._ganttTreeList.getTreeList();
     this._ganttTreeList.onAfterTreeListCreate();
   }
@@ -298,6 +301,7 @@ class Gantt extends Widget<Properties> {
     this._ganttView = this._createComponent(this._$ganttView, GanttView, {
       width: '100%',
       height: this._ganttTreeList?.getOffsetHeight(),
+      // @ts-expect-error ts-error
       rowHeight: this._ganttTreeList?.getRowHeight(),
       headerHeight: this._ganttTreeList?.getHeaderHeight(),
       tasks: this._tasks,
@@ -809,8 +813,7 @@ class Gantt extends Widget<Properties> {
 
   // eslint-disable-next-line @stylistic/max-len
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type,@typescript-eslint/no-unused-vars
-  _getGanttViewOption(optionName: string, value) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  _getGanttViewOption(optionName: string, value?) {
     return this._ganttView?.option(optionName);
   }
 
