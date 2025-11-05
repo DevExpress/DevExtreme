@@ -13,7 +13,7 @@ const dataSource = [{
   endDate: new Date(2023, 0, 2, 11, 0),
 }];
 
-test('Should not throw error when trying to drag appointment while it is already being dragged (with 5s delay)', async (t) => {
+test('Should not throw error when trying to drag appointment while it is already being dragged', async (t) => {
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
   const appointment = scheduler.getAppointment('Test Appointment');
 
