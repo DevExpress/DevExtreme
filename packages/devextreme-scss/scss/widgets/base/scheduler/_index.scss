@@ -641,6 +641,15 @@ $scheduler-appointment-form-label-padding: 20px;
         }
       }
 
+      &.dx-scheduler-form-readonly {
+        .dx-scheduler-form-repeat-editor .dx-scheduler-form-recurrence-settings-button {
+          margin-right: 0;
+          &::after {
+            content: none;
+          }
+        }
+      }
+
       /* Recurrence Day Buttons */
       .dx-scheduler-days-of-week-buttons {
         display: flex;

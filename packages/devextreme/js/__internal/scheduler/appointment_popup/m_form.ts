@@ -131,6 +131,8 @@ export class AppointmentForm {
   set readOnly(value: boolean) {
     this.dxForm.option('readOnly', value);
     this._recurrenceForm.setReadOnly(value);
+    this.updateReadOnlyCssClass();
+    this.updateRepeatEditor();
   }
 
   get formData(): Record<string, any> {
@@ -256,6 +258,7 @@ export class AppointmentForm {
       onInitialized: (e): void => {
         this._dxForm = e.component;
         this._recurrenceForm.dxForm = this.dxForm;
+        this.updateReadOnlyCssClass();
       },
     } as FormProperties) as dxForm;
   }
@@ -840,6 +843,8 @@ export class AppointmentForm {
     }
 
     repeatEditor.option('buttons', this.getRepeatEditorButtons());
+
+    this.enableRecurrenceSettingsButton();
   }
 
   private getRepeatEditorButtons(): TextEditorButton[] {
@@ -870,6 +875,22 @@ export class AppointmentForm {
     });
 
     return buttons;
+  }
+
+  private enableRecurrenceSettingsButton(): void {
+    const $settingsButton = $(this.dxForm.element())
+      .find(`.${CLASSES.recurrenceSettingsButton}`)
+      .closest('.dx-button');
+
+    if ($settingsButton && $settingsButton.length) {
+      const buttonInstance = ($settingsButton as any).dxButton?.('instance');
+      buttonInstance?.option?.('disabled', false);
+    }
+  }
+
+  private updateReadOnlyCssClass(): void {
+    const $formElement = $(this.dxForm.element());
+    $formElement.toggleClass('dx-scheduler-form-readonly', this.readOnly);
   }
 
   private updateDateTimeEditorsVisibility(): void {
