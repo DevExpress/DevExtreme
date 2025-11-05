@@ -32,26 +32,26 @@ import type {
   ShapeType,
   Units,
 } from '@js/ui/diagram';
-import DiagramCommandsManager from '@js/ui/diagram/diagram.commands_manager';
-import EdgesOption from '@js/ui/diagram/diagram.edges_option';
-import { getDiagram } from '@js/ui/diagram/diagram.importer';
-import NodesOption from '@js/ui/diagram/diagram.nodes_option';
-import DiagramOptionsUpdateBar from '@js/ui/diagram/diagram.options_update';
-import DiagramToolboxManager from '@js/ui/diagram/diagram.toolbox_manager';
-import diagramContextMenuModule from '@js/ui/diagram/ui.diagram.context_menu';
-import DiagramContextToolbox from '@js/ui/diagram/ui.diagram.context_toolbox';
-import DiagramDialogManager from '@js/ui/diagram/ui.diagram.dialog_manager';
-import DiagramDialog from '@js/ui/diagram/ui.diagram.dialogs';
-import DiagramHistoryToolbar from '@js/ui/diagram/ui.diagram.history_toolbar';
-import DiagramMainToolbar from '@js/ui/diagram/ui.diagram.main_toolbar';
-import DiagramPropertiesPanel from '@js/ui/diagram/ui.diagram.properties_panel';
-import DiagramPropertiesToolbar from '@js/ui/diagram/ui.diagram.properties_toolbar';
-import DiagramScrollView from '@js/ui/diagram/ui.diagram.scroll_view';
-import DiagramToolbar from '@js/ui/diagram/ui.diagram.toolbar';
-import DiagramToolbox from '@js/ui/diagram/ui.diagram.toolbox';
-import DiagramViewToolbar from '@js/ui/diagram/ui.diagram.view_toolbar';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
+import DiagramCommandsManager from '@ts/ui/diagram/diagram.commands_manager';
+import EdgesOption from '@ts/ui/diagram/diagram.edges_option';
+import { getDiagram } from '@ts/ui/diagram/diagram.importer';
+import NodesOption from '@ts/ui/diagram/diagram.nodes_option';
+import DiagramOptionsUpdateBar from '@ts/ui/diagram/diagram.options_update';
+import DiagramToolboxManager from '@ts/ui/diagram/diagram.toolbox_manager';
+import diagramContextMenuModule from '@ts/ui/diagram/ui.diagram.context_menu';
+import DiagramContextToolbox from '@ts/ui/diagram/ui.diagram.context_toolbox';
+import DiagramDialogManager from '@ts/ui/diagram/ui.diagram.dialog_manager';
+import DiagramDialog from '@ts/ui/diagram/ui.diagram.dialogs';
+import DiagramHistoryToolbar from '@ts/ui/diagram/ui.diagram.history_toolbar';
+import DiagramMainToolbar from '@ts/ui/diagram/ui.diagram.main_toolbar';
+import DiagramPropertiesPanel from '@ts/ui/diagram/ui.diagram.properties_panel';
+import DiagramPropertiesToolbar from '@ts/ui/diagram/ui.diagram.properties_toolbar';
+import DiagramScrollView from '@ts/ui/diagram/ui.diagram.scroll_view';
+import DiagramToolbar from '@ts/ui/diagram/ui.diagram.toolbar';
+import DiagramToolbox from '@ts/ui/diagram/ui.diagram.toolbox';
+import DiagramViewToolbar from '@ts/ui/diagram/ui.diagram.view_toolbar';
 import LoadIndicator from '@ts/ui/load_indicator';
 import Overlay from '@ts/ui/overlay/overlay';
 import * as zIndexPool from '@ts/ui/overlay/z_index';
@@ -276,11 +276,12 @@ class Diagram extends Widget<Properties> {
     this._renderDialog($contentWrapper);
 
     if (!isServerSide) {
+      const { useNativeScrolling } = this.option();
       const $scrollViewWrapper = $('<div>')
         .addClass(DIAGRAM_SCROLL_VIEW_CLASS)
         .appendTo(this._$content);
       this._createComponent($scrollViewWrapper, DiagramScrollView, {
-        useNativeScrolling: this.option('useNativeScrolling'),
+        useNativeScrolling,
         onCreateDiagram: (e): void => {
           this._diagramInstance.createDocument(
             e.$parent[0],
@@ -400,7 +401,7 @@ class Diagram extends Widget<Properties> {
       // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
       onSubMenuVisibilityChanging: ({
         component,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       }) => this._diagramInstance.updateBarItemsState(component.bar),
       onPointerUp: this._onPanelPointerUp.bind(this),
       export: this.option('export'),
@@ -590,7 +591,7 @@ class Diagram extends Widget<Properties> {
       },
       onPointerUp: this._onPanelPointerUp.bind(this),
     });
-    this._toolbox._popup.option(
+    this._toolbox._popup?.option(
       'propagateOutsideClick',
       !this.option('fullScreen'),
     );
@@ -598,6 +599,7 @@ class Diagram extends Widget<Properties> {
       const toolboxBounds = this._getToolboxBounds($parent, isServerSide);
       this._toolbox?.option('height', toolboxBounds.height);
       const prevIsMobileView = this._toolbox?.option('isMobileView');
+      // @ts-expect-error ts-error
       if (prevIsMobileView !== this.isMobileScreenSize()) {
         this._toolbox?.option({
           isMobileView: this.isMobileScreenSize(),
@@ -795,6 +797,7 @@ class Diagram extends Widget<Properties> {
     );
     this._propertiesPanelResizeCallback = (): void => {
       const prevIsMobileView = this._propertiesPanel?.option('isMobileView');
+      // @ts-expect-error ts-error
       if (prevIsMobileView !== this.isMobileScreenSize()) {
         this._propertiesPanel?.option({
           isMobileView: this.isMobileScreenSize(),
@@ -809,7 +812,7 @@ class Diagram extends Widget<Properties> {
   }
 
   _updatePropertiesPanelGroupBars(component): void {
-    component.getActiveToolbars().forEach((toolbar): void => {
+    component.getActiveToolbars()?.forEach((toolbar): void => {
       this._diagramInstance.updateBarItemsState(toolbar.bar);
     });
   }
@@ -825,11 +828,14 @@ class Diagram extends Widget<Properties> {
       diagramContextMenuModule.DiagramContextMenuWrapper,
       {
         commands: this.option('contextMenu.commands'),
+        // @ts-expect-error ts-error
         onContentReady: ({ component }): void => this._registerBar(component),
         // eslint-disable-next-line @stylistic/max-len,@typescript-eslint/no-unsafe-return
         onVisibilityChanging: ({ component }) => this._diagramInstance.updateBarItemsState(component.bar),
+        // @ts-expect-error ts-error
         onItemClick: (itemData): boolean => this._onBeforeCommandExecuted(itemData.command),
         export: this.option('export'),
+        // @ts-expect-error ts-error
         excludeCommands: this._getExcludeCommands(),
         onInternalCommand: this._onInternalCommand.bind(this),
         onCustomCommand: this._onCustomCommand.bind(this),
@@ -841,14 +847,16 @@ class Diagram extends Widget<Properties> {
     const isServerSide = !hasWindow();
 
     const { contextToolbox = {} } = this.option();
-    const { category, displayMode, shapes } = contextToolbox;
+    const {
+      category, displayMode, shapes, width,
+    } = contextToolbox;
 
     const $contextToolbox = $('<div>').appendTo($parent);
     this._contextToolbox = this._createComponent(
       $contextToolbox,
       DiagramContextToolbox,
       {
-        toolboxWidth: this.option('contextToolbox.width'),
+        toolboxWidth: width,
         onShown: (e): void => {
           if (isServerSide) return;
 
@@ -1548,6 +1556,7 @@ class Diagram extends Widget<Properties> {
 
   _getToolboxGroups(): NonNullable<Properties['toolbox']>['groups'] {
     const { toolbox } = this.option();
+    // @ts-expect-error ts-error
     return DiagramToolboxManager.getGroups(toolbox?.groups) as NonNullable<Properties['toolbox']>['groups'];
   }
 
@@ -1664,7 +1673,7 @@ class Diagram extends Widget<Properties> {
     this._processDiagramResize();
     if (this._toolbox) {
       this._toolbox.repaint();
-      this._toolbox._popup.option('propagateOutsideClick', !fullScreen);
+      this._toolbox._popup?.option('propagateOutsideClick', !fullScreen);
     }
     if (this._propertiesPanel) {
       this._propertiesPanel.repaint();

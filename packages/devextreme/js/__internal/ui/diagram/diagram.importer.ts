@@ -1,9 +1,10 @@
-import Errors from '../widget/ui.errors';
+import errors from '@js/ui/widget/ui.errors';
 import DiagramDefault, * as Diagram from 'devexpress-diagram';
 
-export function getDiagram() {
-    if(!DiagramDefault) {
-        throw Errors.Error('E1041', 'devexpress-diagram');
-    }
-    return Diagram;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function getDiagram(): any {
+  if (!DiagramDefault) {
+    throw errors.Error('E1041', 'devexpress-diagram');
+  }
+  return Diagram;
 }
