@@ -21,11 +21,11 @@ const createWidgetCore = <TWidgetName extends WidgetName>(
 ) => {
   if (isShadowDom) {
     return new (window as any).DevExpress.ui[widgetName](
-      ($(selector)).get(0),
+      ($(selector) as any).get(0),
       widgetOptions,
     );
   }
-  return ($(`${selector}`))[widgetName](widgetOptions)[widgetName]('instance');
+  return ($(`${selector}`) as any)[widgetName](widgetOptions)[widgetName]('instance');
 };
 
 export const createWidget = async<TWidgetName extends WidgetName>(
