@@ -415,7 +415,7 @@ export const serializePropName = (propName) => (propName instanceof EdmLiteral
   ? propName.valueOf()
   : propName.replace(/\./g, '/'));
 
-const serializeValueV4 = (value) => {
+const serializeValueV4 = (value, fieldType) => {
   if (value instanceof Date) {
     return formatISO8601(value, false, false);
   }
@@ -423,12 +423,12 @@ const serializeValueV4 = (value) => {
     return value.valueOf();
   }
   if (Array.isArray(value)) {
-    return `[${value.map((item) => serializeValueV4(item)).join(',')}]`;
+    return `[${value.map((item) => serializeValueV4(item, fieldType)).join(',')}]`;
   }
-  return serializeValueV2(value);
+  return serializeValueV2(value, fieldType);
 };
 
-const serializeValueV2 = (value) => {
+const serializeValueV2 = (value, fieldType) => {
   if (value instanceof Date) {
     return serializeDate(value);
   }
@@ -438,19 +438,22 @@ const serializeValueV2 = (value) => {
   if (value instanceof EdmLiteral) {
     return value.valueOf();
   }
+  if (fieldType && ['Date', 'DateTimeOffset'].includes(fieldType)) {
+    return value;
+  }
   if (typeof value === 'string') {
     return serializeString(value);
   }
   return String(value);
 };
 
-export const serializeValue = (value, protocolVersion) => {
+export const serializeValue = (value, protocolVersion, fieldType) => {
   switch (protocolVersion) {
     case 2:
     case 3:
       return serializeValueV2(value);
     case 4:
-      return serializeValueV4(value);
+      return serializeValueV4(value, fieldType);
     default: throw errors.Error('E4002');
   }
 };

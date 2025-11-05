@@ -1130,8 +1130,16 @@ export type ODataContextOptions = {
     /**
      * @docid
      * @public
+     * @default false
+     * @deprecated Use processDatesAsUtc instead
      */
     deserializeDates?: boolean;
+    /**
+     * @docid
+     * @public
+     * @default false
+     */
+    processDatesAsUtc?: boolean;
     /**
      * @docid
      * @public
@@ -1232,8 +1240,16 @@ export type ODataStoreOptions<
     /**
      * @docid
      * @public
+     * @default false
+     * @deprecated Use processDatesAsUtc instead
      */
     deserializeDates?: boolean;
+    /**
+     * @docid
+     * @public
+     * @default false
+     */
+    processDatesAsUtc?: boolean;
     /**
      * @docid
      * @type_function_param1 e:Error
@@ -1247,7 +1263,9 @@ export type ODataStoreOptions<
      * @default {}
      * @public
      */
-    fieldTypes?: any;
+    fieldTypes?: {
+      [fieldName: string]: 'String' | 'Int32' | 'Int64' | 'Guid' | 'Boolean' | 'Single' | 'Decimal' | 'Date' | 'DateTimeOffset';
+    };
     /**
      * @docid
      * @public

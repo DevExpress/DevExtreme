@@ -3703,8 +3703,13 @@ declare module DevExpress.common.data {
     }) => void;
     /**
      * [descr:ODataContextOptions.deserializeDates]
+     * @deprecated [depNote:ODataContextOptions.deserializeDates]
      */
     deserializeDates?: boolean;
+    /**
+     * [descr:ODataContextOptions.processDatesAsUtc]
+     */
+    processDatesAsUtc?: boolean;
     /**
      * [descr:ODataContextOptions.entities]
      */
@@ -3786,8 +3791,13 @@ declare module DevExpress.common.data {
     }) => void;
     /**
      * [descr:ODataStoreOptions.deserializeDates]
+     * @deprecated [depNote:ODataStoreOptions.deserializeDates]
      */
     deserializeDates?: boolean;
+    /**
+     * [descr:ODataStoreOptions.processDatesAsUtc]
+     */
+    processDatesAsUtc?: boolean;
     /**
      * [descr:ODataStoreOptions.errorHandler]
      */
@@ -3799,7 +3809,18 @@ declare module DevExpress.common.data {
     /**
      * [descr:ODataStoreOptions.fieldTypes]
      */
-    fieldTypes?: any;
+    fieldTypes?: {
+      [fieldName: string]:
+        | 'String'
+        | 'Int32'
+        | 'Int64'
+        | 'Guid'
+        | 'Boolean'
+        | 'Single'
+        | 'Decimal'
+        | 'Date'
+        | 'DateTimeOffset';
+    };
     /**
      * [descr:ODataStoreOptions.filterToLower]
      */

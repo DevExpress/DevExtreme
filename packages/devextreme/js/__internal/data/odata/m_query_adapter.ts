@@ -106,7 +106,7 @@ const compileCriteria = (() => {
 
     return formatter(
       serializePropName(fieldName),
-      serializeValue(value, protocolVersion),
+      serializeValue(value, protocolVersion, fieldTypes?.[fieldName]),
     );
   };
 
