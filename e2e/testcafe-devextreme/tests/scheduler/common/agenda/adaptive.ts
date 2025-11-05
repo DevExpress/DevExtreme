@@ -61,7 +61,7 @@ Promise<void> => {
     groups: ['priorityId'],
     text: 'groups',
   }].forEach((testCase) => {
-      test.meta({ browserSize: ADAPTIVE_SIZE })(testCase.text, async (t) => {
+    test.meta({ browserSize: ADAPTIVE_SIZE })(testCase.text, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await testScreenshot(t, takeScreenshot, `agenda-${testCase.text}-adaptive-rtl=${rtlEnabled}.png`);

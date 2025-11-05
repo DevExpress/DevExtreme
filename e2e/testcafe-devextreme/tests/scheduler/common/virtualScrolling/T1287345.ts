@@ -11,7 +11,7 @@ import { testScreenshot } from '../../../../helpers/themeUtils';
 fixture.disablePageReloads`Scheduler: Virtual scrolling`
   .page(url(__dirname, '../../../container.html'));
 
-safeSizeTest('Cell width set in css should be correct for virtual scrolling after scroll down (T1287345)', async (t) => {
+test.meta({ browserSize: [600, 800] })('Cell width set in css should be correct for virtual scrolling after scroll down (T1287345)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const scheduler = new Scheduler('#container');
