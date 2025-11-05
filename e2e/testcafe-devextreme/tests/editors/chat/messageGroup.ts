@@ -169,6 +169,8 @@ test('Messagegroup scenarios in RTL mode', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
+}).before(async () => {
+  await setStyleAttribute(Selector('#container'), 'width: 1270px');
 });
 
 test('MessageGroup with edited messages', async (t) => {
