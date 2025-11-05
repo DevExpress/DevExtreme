@@ -1,6 +1,7 @@
 import type { TextEditorButton } from '@js/common';
 import messageLocalization from '@js/common/core/localization/message';
 import { DataSource } from '@js/common/data';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
@@ -10,12 +11,13 @@ import type {
   GroupItem, Item as FormItem, Properties as FormProperties, SimpleItem,
 } from '@js/ui/form';
 import dxForm from '@js/ui/form';
-import type { Properties as SchedulerProperties } from '@js/ui/scheduler';
+import type { AppointmentFormIconsShowMode, Properties as SchedulerProperties } from '@js/ui/scheduler';
 import type { Properties as SelectBoxProperties } from '@js/ui/select_box';
 import type { Properties as SwitchProperties } from '@js/ui/switch';
 import type { Properties as TextAreaProperties } from '@js/ui/text_area';
 import { current, isFluent } from '@js/ui/themes';
 import { dateSerialization } from '@ts/core/utils/m_date_serialization';
+import type Popup from '@ts/ui/popup/m_popup';
 
 import timeZoneUtils from '../m_utils_time_zone';
 import type { SafeAppointment } from '../types';
@@ -59,9 +61,9 @@ const CLASSES = {
   descriptionEditor: 'dx-scheduler-form-description-editor',
 
   recurrenceSettingsButton: 'dx-scheduler-form-recurrence-settings-button',
-  mainHidden: 'dx-scheduler-form-main-hidden',
+  mainHidden: 'dx-scheduler-form-main-group-hidden',
   recurrenceGroup: 'dx-scheduler-form-recurrence-group',
-  recurrenceHidden: 'dx-scheduler-form-recurrence-hidden',
+  recurrenceHidden: 'dx-scheduler-form-recurrence-group-hidden',
 };
 
 const EDITOR_NAMES = {
@@ -120,8 +122,16 @@ export class AppointmentForm {
 
   private _popup!: any;
 
+  private _$mainGroup?: dxElementWrapper;
+
+  private _$recurrenceGroup?: dxElementWrapper;
+
   get dxForm(): dxForm {
     return this._dxForm as dxForm;
+  }
+
+  private get dxPopup(): Popup {
+    return this._popup.dxPopup as Popup;
   }
 
   get readOnly(): boolean {
@@ -195,7 +205,7 @@ export class AppointmentForm {
     this.createForm(items);
   }
 
-  private getIconsShowMode(): 'main' | 'recurrence' | 'both' | 'none' {
+  private getIconsShowMode(): AppointmentFormIconsShowMode {
     const editingConfig = this.scheduler.getEditingConfig() as SchedulerProperties['editing'];
 
     if (isBoolean(editingConfig)) {
@@ -256,6 +266,11 @@ export class AppointmentForm {
       onInitialized: (e): void => {
         this._dxForm = e.component;
         this._recurrenceForm.dxForm = this.dxForm;
+      },
+      onContentReady: (e): void => {
+        const $formElement = e.component.$element();
+        this._$mainGroup = $formElement.find(`.${CLASSES.mainGroup}`);
+        this._$recurrenceGroup = $formElement.find(`.${CLASSES.recurrenceGroup}`);
       },
     } as FormProperties) as dxForm;
   }
@@ -751,12 +766,11 @@ export class AppointmentForm {
   }
 
   showRecurrenceGroup(): void {
-    const $formElement = $(this.dxForm.element());
-    const mainGroup = $formElement.find(`.${CLASSES.mainGroup}`);
-    const recurrenceGroup = $formElement.find(`.${CLASSES.recurrenceGroup}`);
+    const overlayHeight = this.dxPopup.$overlayContent().get(0).clientHeight;
+    this.dxPopup.option('height', overlayHeight);
 
-    mainGroup.addClass(CLASSES.mainHidden);
-    recurrenceGroup.removeClass(CLASSES.recurrenceHidden);
+    this._$mainGroup?.addClass(CLASSES.mainHidden);
+    this._$recurrenceGroup?.removeClass(CLASSES.recurrenceHidden);
 
     const repeatEditorValue = this.dxForm.getEditor(EDITOR_NAMES.repeat)?.option('value');
 
@@ -770,12 +784,10 @@ export class AppointmentForm {
   }
 
   showMainGroup(saveRecurrenceValue = true): void {
-    const $formElement = $(this.dxForm.element());
-    const mainGroup = $formElement.find(`.${CLASSES.mainGroup}`);
-    const recurrenceGroup = $formElement.find(`.${CLASSES.recurrenceGroup}`);
+    this.dxPopup.option('height', undefined);
 
-    mainGroup.removeClass(CLASSES.mainHidden);
-    recurrenceGroup.addClass(CLASSES.recurrenceHidden);
+    this._$mainGroup?.removeClass(CLASSES.mainHidden);
+    this._$recurrenceGroup?.addClass(CLASSES.recurrenceHidden);
 
     this._popup.updateToolbarForMainGroup();
 
