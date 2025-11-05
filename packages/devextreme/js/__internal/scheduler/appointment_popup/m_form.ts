@@ -61,9 +61,9 @@ const CLASSES = {
   descriptionEditor: 'dx-scheduler-form-description-editor',
 
   recurrenceSettingsButton: 'dx-scheduler-form-recurrence-settings-button',
-  mainHidden: 'dx-scheduler-form-main-hidden',
+  mainHidden: 'dx-scheduler-form-main-group-hidden',
   recurrenceGroup: 'dx-scheduler-form-recurrence-group',
-  recurrenceHidden: 'dx-scheduler-form-recurrence-hidden',
+  recurrenceHidden: 'dx-scheduler-form-recurrence-group-hidden',
 };
 
 const EDITOR_NAMES = {
@@ -128,6 +128,10 @@ export class AppointmentForm {
 
   get dxForm(): dxForm {
     return this._dxForm as dxForm;
+  }
+
+  private get dxPopup(): Popup {
+    return this._popup.dxPopup as Popup;
   }
 
   get readOnly(): boolean {
@@ -767,16 +771,9 @@ export class AppointmentForm {
   }
 
   showRecurrenceGroup(): void {
-    // TODO: make dxPopup a member of AppointmentForm class
-    const $popup = $('.dx-popup.dx-widget.dx-scheduler-appointment-popup');
-    const dxPopup = ($popup as any).dxPopup('instance') as Popup;
-
     // @ts-expect-error
-    dxPopup?.option('height', dxPopup.$overlayContent().height());
-
-    // TODO: move these styles to according CLASSES in scss file
-    this._$mainGroup?.css('position', 'absolute');
-    this._$recurrenceGroup?.css('position', 'relative');
+    const overlayHeight = this.dxPopup.$overlayContent().height();
+    this.dxPopup.option('height', overlayHeight);
 
     this._$mainGroup?.addClass(CLASSES.mainHidden);
     this._$recurrenceGroup?.removeClass(CLASSES.recurrenceHidden);
@@ -793,15 +790,7 @@ export class AppointmentForm {
   }
 
   showMainGroup(saveRecurrenceValue = true): void {
-    // TODO: make dxPopup a member of AppointmentForm class
-    const $popup = $('.dx-popup.dx-widget.dx-scheduler-appointment-popup');
-    const dxPopup = ($popup as any).dxPopup('instance');
-
-    dxPopup?.option('height', undefined);
-
-    // TODO: move these styles to according CLASSES in scss file
-    this._$mainGroup?.css('position', 'relative');
-    this._$recurrenceGroup?.css('position', 'absolute');
+    this.dxPopup.option('height', undefined);
 
     this._$mainGroup?.removeClass(CLASSES.mainHidden);
     this._$recurrenceGroup?.addClass(CLASSES.recurrenceHidden);
