@@ -3,7 +3,6 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Item, ItemClickEvent, Properties as DropDownProperties } from '@js/ui/drop_down_button';
 import DropDownButton from '@js/ui/drop_down_button';
-import { findLastVisibleExpandedItemIndex } from '@ts/ui/splitter/utils/layout';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { Column } from '../columns_controller/m_columns_controller';
