@@ -72,10 +72,14 @@ test('The toolbar should not display if the config is empty', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxScheduler', {
-  currentDate: new Date(2020, 2, 2),
-  currentView: 'day',
-  views: ['day', 'week'],
-  height: 580,
-  toolbar: { items: [] },
-}));
+}).before(async () => {
+  await changeTheme('material.blue.light');
+
+  return createWidget('dxScheduler', {
+    currentDate: new Date(2020, 2, 2),
+    currentView: 'day',
+    views: ['day', 'week'],
+    height: 580,
+    toolbar: { items: [] },
+  });
+});
