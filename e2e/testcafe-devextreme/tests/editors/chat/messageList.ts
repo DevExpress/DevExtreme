@@ -133,7 +133,7 @@ test('Messagelist should scrolled to the latest messages after being rendered in
 
   return createWidget('dxTabPanel', {
     width: 400,
-    height: 570,
+    height: 600,
     deferRendering: true,
     templatesRenderAsynchronously: true,
     dataSource: [{
