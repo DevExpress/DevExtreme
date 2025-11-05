@@ -1,6 +1,6 @@
 import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
-import type { Attachment, AttachmentDownloadEvent } from '@js/ui/chat';
+import type { Attachment, AttachmentDownloadClickEvent } from '@js/ui/chat';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -16,16 +16,13 @@ export interface FileViewProperties extends DOMComponentProperties<FileView> {
 
   files?: Attachment[];
 
-  onDownload?: (e: AttachmentDownloadEvent) => void;
+  onDownload?: (e: AttachmentDownloadClickEvent) => void;
 }
 
 export const CHAT_FILE_VIEW_CLASS = 'dx-chat-file-view';
-export const CHAT_FILE_VIEW_ITEM_CLASS = 'dx-chat-file-view-item';
 
 class FileView extends DOMComponent<FileView, FileViewProperties> {
   private _fileInstances: File[] = [];
-
-  private _downloadAction?: (e: Partial<AttachmentDownloadEvent>) => void;
 
   _getDefaultOptions(): FileViewProperties {
     return {
@@ -35,19 +32,6 @@ class FileView extends DOMComponent<FileView, FileViewProperties> {
       focusStateEnabled: true,
       hoverStateEnabled: true,
     };
-  }
-
-  _init(): void {
-    super._init();
-
-    this._createDownloadAction();
-  }
-
-  _createDownloadAction(): void {
-    this._downloadAction = this._createActionByOption(
-      'onDownload',
-      { excludeValidators: ['disabled'] },
-    );
   }
 
   _initMarkup(): void {
@@ -80,16 +64,16 @@ class FileView extends DOMComponent<FileView, FileViewProperties> {
   }
 
   _getFileConfig(data: Attachment): FileProperties {
-    const { activeStateEnabled, focusStateEnabled, hoverStateEnabled } = this.option();
+    const {
+      activeStateEnabled, focusStateEnabled, hoverStateEnabled, onDownload,
+    } = this.option();
 
     const configuration: FileProperties = {
       data,
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
-      onDownload: (event) => {
-        this._downloadAction?.(event);
-      },
+      onDownload,
     };
 
     return configuration;
@@ -129,16 +113,13 @@ class FileView extends DOMComponent<FileView, FileViewProperties> {
       case 'activeStateEnabled':
       case 'focusStateEnabled':
       case 'hoverStateEnabled':
+      case 'onDownload':
         this._renderItems();
         break;
 
       case 'files':
         this._renderItems();
         this._toggleAria();
-        break;
-
-      case 'onDownload':
-        this._createDownloadAction();
         break;
 
       default:

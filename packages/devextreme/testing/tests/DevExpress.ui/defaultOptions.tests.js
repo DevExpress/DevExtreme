@@ -1410,7 +1410,6 @@ testComponentDefaults(ChatTextArea,
         placeholder: 'Type a message',
         autoResizeEnabled: true,
         valueChangeEvent: 'input',
-        maxHeight: '8em',
         fileUploaderOptions: undefined,
         onSend: undefined,
     }

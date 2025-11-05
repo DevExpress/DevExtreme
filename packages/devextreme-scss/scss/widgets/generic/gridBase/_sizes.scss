@@ -23,6 +23,10 @@ $generic-command-edit-text-margin: null !default;
 $generic-grid-base-nodata-font-size: null !default;
 $generic-grid-base-checkbox-padding-bottom: null !default;
 $generic-grid-base-treeview-select-all-item-offset: null !default;
+$generic-grid-base-command-ai-chatsparkleoutline-icon-size: null !default;
+$generic-grid-base-command-ai-text-content-padding: null !default;
+$generic-grid-base-command-ai-header-button-padding: null !default;
+$generic-grid-base-command-ai-header-button-size: null !default;
 
 $datagrid-text-link-disabled-opacity: $base-disabled-opacity;
 $datagrid-icon-link-disabled-opacity: 0.6;
@@ -48,6 +52,10 @@ $datagrid-icon-link-disabled-opacity: 0.6;
   $generic-grid-base-nodata-font-size: 17px !default;
   $generic-grid-base-checkbox-padding-bottom: 2px;
   $generic-grid-base-treeview-select-all-item-offset: 34px;
+  $generic-grid-base-command-ai-chatsparkleoutline-icon-size: 18px !default;
+  $generic-grid-base-command-ai-text-content-padding: $generic-grid-base-command-ai-chatsparkleoutline-icon-size + 8px !default;
+  $generic-grid-base-command-ai-header-button-padding: 6px !default;
+  $generic-grid-base-command-ai-header-button-size: 32px !default;
 }
 
 @else if $size == "compact" {
@@ -71,6 +79,10 @@ $datagrid-icon-link-disabled-opacity: 0.6;
   $generic-grid-base-nodata-font-size: 14px !default;
   $generic-grid-base-checkbox-padding-bottom: 0;
   $generic-grid-base-treeview-select-all-item-offset: 28px;
+  $generic-grid-base-command-ai-chatsparkleoutline-icon-size: 14px !default;
+  $generic-grid-base-command-ai-text-content-padding: $generic-grid-base-command-ai-chatsparkleoutline-icon-size + 6px !default;
+  $generic-grid-base-command-ai-header-button-padding: 5px !default;
+  $generic-grid-base-command-ai-header-button-size: 26px !default;
 }
 
 $generic-grid-base-column-chooser-paddings: 0 $generic-grid-base-column-chooser-padding $generic-grid-base-column-chooser-padding $generic-grid-base-column-chooser-padding !default;

@@ -18,12 +18,14 @@
       :use-color-as-default="true"
       field-expr="ownerId"
       label="Owner"
+      icon="user"
     />
     <DxResource
       :allow-multiple="false"
       :data-source="priorityData"
       field-expr="priority"
       label="Priority"
+      icon="tags"
     />
   </DxScheduler>
 </template>

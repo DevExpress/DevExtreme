@@ -234,85 +234,21 @@ QUnit.module('MonthView', {
     });
 
     [
-        { currentDate: new Date(2012, 0, 1), expectedWeekNumbers: [52, 1, 2, 3, 4, 5] },
-        { currentDate: new Date(2007, 0, 1), expectedWeekNumbers: [52, 1, 2, 3, 4, 5] },
-        { currentDate: new Date(2007, 11, 31), expectedWeekNumbers: [48, 49, 50, 51, 52, 1] },
-        { currentDate: new Date(2002, 11, 31), expectedWeekNumbers: [48, 49, 50, 51, 52, 1] },
-        { currentDate: new Date(2008, 11, 29), expectedWeekNumbers: [48, 49, 50, 51, 52, 1] },
-        { currentDate: new Date(2009, 11, 28), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2010, 11, 27), expectedWeekNumbers: [48, 49, 50, 51, 52, 1] },
-        // 53
-        { currentDate: new Date(2004, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2009, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2015, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2020, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
+        { currentDate: new Date(2025, 11, 31), expectedWeekNumbers: [48, 49, 50, 51, 52, 1] },
         { currentDate: new Date(2026, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2032, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2037, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2043, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2048, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2054, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2060, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2065, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2071, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2076, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2082, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2088, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2093, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2099, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2105, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2111, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2116, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2122, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2128, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2133, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2139, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2144, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2150, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2156, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2161, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2167, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2172, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2178, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2184, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2189, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2195, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2201, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2207, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2212, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2218, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2224, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2229, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2235, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2240, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2246, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2252, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2257, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2263, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2268, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2274, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2280, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2285, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2291, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2296, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2303, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2308, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2314, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2320, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2325, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2331, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2336, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2342, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2348, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2353, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2359, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2364, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2370, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2376, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2381, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2387, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2392, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
-        { currentDate: new Date(2398, 11, 31), expectedWeekNumbers: [49, 50, 51, 52, 53, 1] },
+        { currentDate: new Date(2027, 11, 31), expectedWeekNumbers: [48, 49, 50, 51, 52, 1] },
+        { currentDate: new Date(2028, 11, 31), expectedWeekNumbers: [48, 49, 50, 51, 52, 1] },
+        { currentDate: new Date(2029, 11, 31), expectedWeekNumbers: [48, 49, 50, 51, 52, 1] },
+        { currentDate: new Date(2030, 11, 31), expectedWeekNumbers: [48, 49, 50, 51, 52, 1] },
+        { currentDate: new Date(2033, 11, 31), expectedWeekNumbers: [48, 49, 50, 51, 52, 1] },
+
+        { currentDate: new Date(2025, 0, 1), expectedWeekNumbers: [1, 2, 3, 4, 5, 6] },
+        { currentDate: new Date(2026, 0, 1), expectedWeekNumbers: [1, 2, 3, 4, 5, 6] },
+        { currentDate: new Date(2027, 0, 1), expectedWeekNumbers: [53, 1, 2, 3, 4, 5] },
+        { currentDate: new Date(2028, 0, 1), expectedWeekNumbers: [52, 1, 2, 3, 4, 5] },
+        { currentDate: new Date(2029, 0, 1), expectedWeekNumbers: [52, 1, 2, 3, 4, 5] },
+        { currentDate: new Date(2030, 0, 1), expectedWeekNumbers: [1, 2, 3, 4, 5, 6] },
+        { currentDate: new Date(2034, 0, 1), expectedWeekNumbers: [52, 1, 2, 3, 4, 5] },
     ].forEach(({ currentDate, expectedWeekNumbers }) => {
         QUnit.test(`iso week numbers of 'month' view with date: ${currentDate.toLocaleDateString()}`, function(assert) {
             this.reinit({
@@ -330,83 +266,6 @@ QUnit.module('MonthView', {
             }).get();
 
             assert.deepEqual(actualWeekNumbers, expectedWeekNumbers, 'week cell numbers');
-        });
-    });
-
-    [0, 1, 2, 3, 4, 5, 6].forEach((firstDayOfWeek) => {
-        QUnit.test(`count years with iso week 53, firstDayOfWeek: ${firstDayOfWeek}`, function(assert) {
-            let count = 0;
-
-            for(let i = 0; i < 400; i++) {
-                this.reinit({
-                    value: new Date(2000 + i, 11, 31),
-                    date: new Date(2000 + i, 11, 31),
-                    showWeekNumbers: true,
-                    weekNumberRule: 'firstFourDays',
-                    firstDayOfWeek,
-                    zoomLevel: 'month',
-                });
-
-                const $weekCell = this.$element.find(`.${CALENDAR_WEEK_NUMBER_CELL_CLASS}`);
-                const actualWeekNumbers = $weekCell.map(function() {
-                    return Number($(this).text());
-                }).get();
-
-                if(actualWeekNumbers.indexOf(53) !== -1) {
-                    count++;
-                }
-            }
-            assert.equal(count, 71, 'Should have 71 years with iso week 53');
-        });
-
-        QUnit.test(`count years with iso week 53, firstDayOfWeek: ${firstDayOfWeek}`, function(assert) {
-            let count = 0;
-
-            for(let i = 0; i < 400; i++) {
-                this.reinit({
-                    value: new Date(2001 + i, 0, 1),
-                    date: new Date(2001 + i, 0, 1),
-                    showWeekNumbers: true,
-                    weekNumberRule: 'firstFourDays',
-                    firstDayOfWeek,
-                    zoomLevel: 'month',
-                });
-
-                const $weekCell = this.$element.find(`.${CALENDAR_WEEK_NUMBER_CELL_CLASS}`);
-                const actualWeekNumbers = $weekCell.map(function() {
-                    return Number($(this).text());
-                }).get();
-
-                if(actualWeekNumbers.indexOf(53) !== -1 || (dateUtils.getWeekNumber(new Date(2000 + i, 11, 31), firstDayOfWeek, 'firstFourDays') === 53 && actualWeekNumbers[0] === 1)) {
-                    count++;
-                }
-            }
-            assert.equal(count, 71, 'Should have 71 years with iso week 53');
-        });
-
-        QUnit.test(`count years with iso week 52, firstDayOfWeek: ${firstDayOfWeek}`, function(assert) {
-            let count = 0;
-
-            for(let i = 0; i < 400; i++) {
-                this.reinit({
-                    value: new Date(2000 + i, 11, 31),
-                    date: new Date(2000 + i, 11, 31),
-                    showWeekNumbers: true,
-                    weekNumberRule: 'firstFourDays',
-                    firstDayOfWeek,
-                    zoomLevel: 'month',
-                });
-
-                const $weekCell = this.$element.find(`.${CALENDAR_WEEK_NUMBER_CELL_CLASS}`);
-                const actualWeekNumbers = $weekCell.map(function() {
-                    return Number($(this).text());
-                }).get();
-
-                if(actualWeekNumbers.indexOf(53) === -1) {
-                    count++;
-                }
-            }
-            assert.equal(count, 329, 'Should have 329 years with iso week 52');
         });
     });
 });

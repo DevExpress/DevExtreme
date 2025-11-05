@@ -4,6 +4,7 @@ import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { getData } from '../../helpers/generateDataSourceData';
 import { safeSizeTest } from '../../../../helpers/safeSizeTest';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Column Fixing`.page(
   url(__dirname, '../../../container.html'),
@@ -20,11 +21,9 @@ safeSizeTest('Fixed columns: Check context menu items', async (t) => {
 
   await t
     .rightClick(dataGrid.getHeaders().getHeaderRow(0).element)
-    .click(dataGrid.getContextMenu().getItemByText('Set Fixed Position'))
-    .expect(
-      await takeScreenshot('sticky_columns_context_menu_(generic.light).png'),
-    )
-    .ok()
+    .click(dataGrid.getContextMenu().getItemByText('Set Fixed Position'));
+  await testScreenshot(t, takeScreenshot, 'sticky_columns_context_menu.png');
+  await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 })

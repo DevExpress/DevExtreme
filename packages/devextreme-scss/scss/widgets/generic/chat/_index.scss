@@ -32,7 +32,8 @@
   $chat-file-file-size-max-width,
 );
 @include chat-fileview(
-  $chat-file-view-items-gap
+  $chat-file-view-items-gap,
+  $chat-file-container-width,
 );
 @include chat-alertlist(
   $chat-alertlist-color,
@@ -48,6 +49,9 @@
   $chat-messagebox-textarea-border-radius,
   $chat-messagebox-textarea-padding,
   $chat-messagebox-toolbar-min-height,
+  $chat-file-container-width,
+  $chat-messagebox-file-container-padding,
+  $chat-messagebox-file-container-padding-top,
 );
 @include chat-messagebubble(
   $chat-bubble-padding,
@@ -59,6 +63,7 @@
   $chat-bubble-container-gap,
   $chat-bubble-delete-gap,
   $chat-bubble-delete-icon-size,
+  $chat-bubble-gap,
 );
 @include chat-messagegroup(
   $chat-messagegroup-gap,

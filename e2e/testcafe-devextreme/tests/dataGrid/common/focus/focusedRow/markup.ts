@@ -3,6 +3,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 import { insertStylesheetRulesToPage } from '../../../../../helpers/domUtils';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Focused row - markup`
   .page(url(__dirname, '../../../../container.html'));
@@ -25,7 +26,7 @@ test('markup - generic.light', async (t) => {
 
   await t.click(thirdCell.element);
 
-  await takeScreenshot('focused-row_markup (generic.light).png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'focused-row_markup.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -71,7 +72,7 @@ test('Invalid cells in a focused row should have the correct background color (T
   await dataGrid.apiAddRow();
   await dataGrid.apiSaveEditData();
   // assert
-  await takeScreenshot('focused-row-invalid-cells (generic.light).png');
+  await testScreenshot(t, takeScreenshot, 'focused-row-invalid-cells.png');
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
@@ -105,7 +106,7 @@ test('Invalid cells in a focused row should have the correct background color (T
 test('Link should not have background color in generic.light (T1282624)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   // assert
-  await takeScreenshot('focused-row-link-background (generic.light).png');
+  await testScreenshot(t, takeScreenshot, 'focused-row-link-background.png');
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

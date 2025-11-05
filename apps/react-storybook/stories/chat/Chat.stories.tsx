@@ -790,3 +790,127 @@ export const Editing: Story = {
         );
     }
 };
+
+export const FileAttachments: Story = {
+  args: {
+    user: firstAuthor,
+    ...commonArgs,
+  },
+  argTypes: {
+    user: {
+      control: 'select',
+      options: [firstAuthor.name, secondAuthor.name],
+      mapping: {
+        [firstAuthor.name]: firstAuthor,
+        [secondAuthor.name]: secondAuthor,
+      },
+      defaultValue: firstAuthor.name,
+    },
+  },
+  render: ({
+    width,
+    height,
+    disabled,
+    rtlEnabled,
+    user,
+    visible,
+    activeStateEnabled,
+    hoverStateEnabled,
+    focusStateEnabled,
+  }) => {
+    const [messages, setMessages] = useState<ChatTypes.Message[]>([
+      {
+        id: 1,
+        author: firstAuthor,
+        text: 'Files attached in a very long message: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel tempus orci, sit amet tempor tortor. Etiam ut aliquam nisi.',
+        attachments: [
+          { name: 'report.pdf', size: 1024 * 512 },
+          { name: 'presentation.pptx', size: 1024 * 1024 },
+          { name: 'photo.jpg', size: 1024 * 300 },
+          { name: 'song.mp3', size: 1024 * 300 },
+        ],
+      },
+      {
+        id: 2,
+        author: secondAuthor,
+        text: 'Files, short message',
+        attachments: [
+          { name: 'report.pdf', size: 1024 * 512 },
+          { name: 'song.mp3', size: 1024 * 1024 },
+        ],
+      },
+    ]);
+
+    const [toastConfig, setToastConfig] = useState({
+      visible: false,
+      message: '',
+    });
+
+    const onAttachmentDownloadClick = useCallback((e: ChatTypes.AttachmentDownloadClickEvent) => {
+      const { attachment } = e;
+
+      setToastConfig({
+        visible: true,
+        message: `Downloading ${attachment?.name}...`,
+      });
+
+      setTimeout(() => {
+        setToastConfig({
+          visible: true,
+          message: `${attachment?.name} downloaded successfully`,
+        });
+      }, 1000);
+    }, []);
+
+    const onMessageEntered = useCallback(
+      ({ message }) => {
+        setMessages((prev) => [...prev, message]);
+      },
+      []
+    );
+
+    const onToastHiding = useCallback(() => {
+      setToastConfig({ visible: false, message: '' });
+    }, []);
+
+    const fileUploaderOptions = useMemo(() => ({
+        uploadFile: (file: File) => {
+          setToastConfig({
+            visible: true,
+            message: `Uploading ${file.name}...`,
+          });
+          setTimeout(() => {
+            setToastConfig({
+              visible: true,
+              message: `${file.name} uploaded successfully`,
+            });
+          }, 1000);
+        }
+    }), []);
+
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Chat
+          width={width}
+          height={height}
+          items={messages}
+          disabled={disabled}
+          rtlEnabled={rtlEnabled}
+          user={user}
+          visible={visible}
+          activeStateEnabled={activeStateEnabled}
+          focusStateEnabled={focusStateEnabled}
+          hoverStateEnabled={hoverStateEnabled}
+          onAttachmentDownloadClick={onAttachmentDownloadClick}
+          onMessageEntered={onMessageEntered}
+          fileUploaderOptions={fileUploaderOptions}
+        />
+        <Toast
+          {...toastConfig}
+          onHiding={onToastHiding}
+          displayTime={1000}
+        />
+      </div>
+    );
+  },
+};

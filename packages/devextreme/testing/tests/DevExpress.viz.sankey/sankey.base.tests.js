@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import { testData, createSankey, layoutBuilder, spiesLayoutBuilder, environment, find } from './commonParts/common.js';
 import rendererModule from 'viz/core/renderers/renderer';
-import paletteModule from 'viz/palette';
+import paletteModule from '__internal/viz/paletteModule';
 import themeModule from 'viz/themes';
 
 themeModule.registerTheme({
