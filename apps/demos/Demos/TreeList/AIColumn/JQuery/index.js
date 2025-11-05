@@ -1,8 +1,10 @@
+/* eslint-disable no-undef */
+
 $(() => {
   const dataSource = [];
 
-  vehicles.forEach(item => {
-    if (!dataSource.some(t => t.ID === item.TrademarkID)) {
+  vehicles.forEach((item) => {
+    if (!dataSource.some((t) => t.ID === item.TrademarkID)) {
       dataSource.push({
         TLID: item.TrademarkID,
         Manufacturer: item.TrademarkName,
@@ -78,7 +80,7 @@ $(() => {
       return $('<div>').text(Manufacturer);
     }
 
-    if(!ID || !TrademarkName || !Name) {
+    if (!ID || !TrademarkName || !Name) {
       return $('<div>').text('');
     }
 
@@ -120,7 +122,7 @@ $(() => {
     const nameText = $('<div>').addClass('trademark__text trademark__text--subtitle').text(Name);
 
     textWrapper.append(trademarkText, nameText);
-    trademarkWrapper.append(textWrapper); 
+    trademarkWrapper.append(textWrapper);
 
     return trademarkWrapper;
   };
@@ -131,7 +133,7 @@ $(() => {
     }
 
     return $('<div>').addClass('category__wrapper').text(CategoryName);
-  }
+  };
 
   $('#gridContainer').dxTreeList({
     dataSource,

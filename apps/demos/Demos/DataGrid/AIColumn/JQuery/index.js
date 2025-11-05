@@ -1,5 +1,6 @@
-$(() => {
+/* eslint-disable no-undef */
 
+$(() => {
   const aiService = new AzureOpenAI({
     dangerouslyAllowBrowser: true,
     deployment,
@@ -89,14 +90,12 @@ $(() => {
     const nameText = $('<div>').addClass('trademark__text trademark__text--subtitle').text(Name);
 
     textWrapper.append(trademarkText, nameText);
-    trademarkWrapper.append(textWrapper); 
+    trademarkWrapper.append(textWrapper);
 
     return trademarkWrapper;
   };
 
-  const createCategoryTemplate = ({ CategoryName }) => {
-    return $('<div>').addClass('category__wrapper').text(CategoryName);
-  }
+  const createCategoryTemplate = ({ CategoryName }) => $('<div>').addClass('category__wrapper').text(CategoryName);
 
   $('#gridContainer').dxDataGrid({
     dataSource: vehicles,
