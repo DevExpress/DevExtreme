@@ -30,7 +30,7 @@ export class AIColumnCacheController extends Controller {
       this.cache[columnName] = columnCache;
     }
     Object.entries(data).forEach(([key, value]) => {
-      if (value !== '') {
+      if (columnCache && value !== '') {
         columnCache[key] = value;
       }
     });
