@@ -31,7 +31,7 @@ import {
 import dxDraggable from './draggable';
 
 import dxForm, { Item as FormItem } from './form';
-import dxPopup, { Properties as dxSchedulerPopupOptions } from './popup';
+import dxPopup, { Properties as SchedulerPopupOptions } from './popup';
 
 import dxSortable from './sortable';
 import { dxToolbarItem } from './toolbar';
@@ -670,7 +670,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @default {}
        * @public
        */
-      popup?: dxSchedulerPopupOptions;
+      popup?: SchedulerPopupOptions;
     };
     /**
      * @docid
