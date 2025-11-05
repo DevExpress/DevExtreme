@@ -230,30 +230,30 @@ QUnit.module('MessageBubble', moduleConfig, () => {
             assert.strictEqual($fileView.length, 1, 'FileView is rendered inside attachments container');
         });
 
-        QUnit.test('should pass onAttachmentDownload to FileView', function(assert) {
-            const onAttachmentDownload = sinon.spy();
+        QUnit.test('should pass onAttachmentDownloadClick to FileView', function(assert) {
+            const onAttachmentDownloadClick = sinon.spy();
 
             this.reinit({
                 attachments: [{ name: 'text.txt', size: 1024 }],
-                onAttachmentDownload,
+                onAttachmentDownloadClick,
             });
 
             this.getDownloadButton().trigger('dxclick');
 
-            assert.strictEqual(onAttachmentDownload.callCount, 1);
+            assert.strictEqual(onAttachmentDownloadClick.callCount, 1);
         });
 
-        QUnit.test('should set onAttachmentDownload to FileView in runtime', function(assert) {
-            const onAttachmentDownload = sinon.spy();
+        QUnit.test('should set onAttachmentDownloadClick to FileView in runtime', function(assert) {
+            const onAttachmentDownloadClick = sinon.spy();
 
             this.reinit({
                 attachments: [{ name: 'text.txt', size: 1024 }],
             });
 
-            this.instance.option({ onAttachmentDownload });
+            this.instance.option({ onAttachmentDownloadClick });
             this.getDownloadButton().trigger('dxclick');
 
-            assert.strictEqual(onAttachmentDownload.callCount, 1);
+            assert.strictEqual(onAttachmentDownloadClick.callCount, 1);
         });
     });
 });

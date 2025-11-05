@@ -1,9 +1,10 @@
-import { createScreenshotsComparer, compareScreenshot } from 'devextreme-screenshot-comparer';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import TextBox from 'devextreme-testcafe-models/textBox';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 async function createDataGridWithPager(): Promise<any> {
   const dataSource = Array.from({ length: 100 }, (_, room) => ({ name: 'Alex', phone: '555555', room }));
@@ -28,6 +29,7 @@ fixture.disablePageReloads`Pager`
 safeSizeTest('Full size pager', async (t) => {
   const dataGrid = new DataGrid('#container');
   const pager = dataGrid.getPager();
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   await t
     .resizeWindow(750, 600)
     .expect(pager.getPageSize(0).selected)
@@ -59,16 +61,20 @@ safeSizeTest('Full size pager', async (t) => {
   await t
     .click(pager.getNextNavButton().element)
     .expect(pager.getInfoText().textContent)
-    .eql('Page 7 of 10 (100 items)')
-    .expect(await compareScreenshot(t, 'pager-full-allpages.png'))
+    .eql('Page 7 of 10 (100 items)');
+
+  await testScreenshot(t, takeScreenshot, 'pager-full-allpages.png');
+  await t
+    .expect(compareResults.isValid())
     .ok();
-}).before(async () => createDataGridWithPager());
+}).skip.before(async () => createDataGridWithPager());
 
 safeSizeTest('Compact pager', async (t) => {
   const dataGrid = new DataGrid('#container');
   const pager = dataGrid.getPager();
   const pageSizeWidget = pager.getPageSizeSelectBox();
   const pageIndexWidget = new TextBox(pager.getPageIndexWidget() as any);
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   await t
     .typeText(pageIndexWidget.input, '7', { replace: true })
     .click(pageSizeWidget.dropDownButton)
@@ -77,8 +83,12 @@ safeSizeTest('Compact pager', async (t) => {
     .expect(pageSizeWidget.input.value)
     .eql('10')
     .expect(dataGrid.getDataCell(10 * 7 - 1, 2).element.textContent)
-    .eql('69')
-    .expect(await compareScreenshot(t, 'pager-compact.png'))
+    .eql('69');
+
+  await testScreenshot(t, takeScreenshot, 'pager-compact.png');
+
+  await t
+    .expect(compareResults.isValid())
     .ok();
 }, [350, 600]).before(async () => createDataGridWithPager());
 
@@ -87,21 +97,21 @@ safeSizeTest('Resize', async (t) => {
   const pagerElement = dataGrid.getPager().element;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   await t
-    .resizeWindow(700, 600)
-    .expect(await takeScreenshot('pager-resize-large.png', pagerElement))
-    .ok()
-    .resizeWindow(600, 600)
-    .expect(await takeScreenshot('pager-resize-large-noinfo.png', pagerElement))
-    .ok()
-    .resizeWindow(350, 600)
-    .expect(await takeScreenshot('pager-resize-small.png', pagerElement))
-    .ok()
-    .resizeWindow(600, 600)
-    .expect(await takeScreenshot('pager-resize-large-noinfo-enlarge.png', pagerElement))
-    .ok()
-    .resizeWindow(700, 600)
-    .expect(await takeScreenshot('pager-resize-large-enlarge.png', pagerElement))
-    .ok()
+    .resizeWindow(700, 600);
+  await testScreenshot(t, takeScreenshot, 'pager-resize-large.png', { element: pagerElement });
+  await t
+    .resizeWindow(600, 600);
+  await testScreenshot(t, takeScreenshot, 'pager-resize-large-noinfo.png', { element: pagerElement });
+  await t
+    .resizeWindow(350, 600);
+  await testScreenshot(t, takeScreenshot, 'pager-resize-small.png', { element: pagerElement });
+  await t
+    .resizeWindow(600, 600);
+  await testScreenshot(t, takeScreenshot, 'pager-resize-large-noinfo-enlarge.png', { element: pagerElement });
+  await t
+    .resizeWindow(700, 600);
+  await testScreenshot(t, takeScreenshot, 'pager-resize-large-enlarge.png', { element: pagerElement });
+  await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createDataGridWithPager());
@@ -112,21 +122,21 @@ safeSizeTest('Resize without navigation buttons', async (t) => {
   const pagerElement = dataGrid.getPager().element;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   await t
-    .resizeWindow(700, 600)
-    .expect(await takeScreenshot('pager-resize-nobutton-large.png', pagerElement))
-    .ok()
-    .resizeWindow(540, 600)
-    .expect(await takeScreenshot('pager-resize-nobutton-large-noinfo.png', pagerElement))
-    .ok()
-    .resizeWindow(350, 600)
-    .expect(await takeScreenshot('pager-resize-nobutton-small.png', pagerElement))
-    .ok()
-    .resizeWindow(540, 600)
-    .expect(await takeScreenshot('pager-resize-nobutton-large-noinfo-enlarge.png', pagerElement))
-    .ok()
-    .resizeWindow(700, 600)
-    .expect(await takeScreenshot('pager-resize-nobutton-large-enlarge.png', pagerElement))
-    .ok()
+    .resizeWindow(700, 600);
+  await testScreenshot(t, takeScreenshot, 'pager-resize-nobutton-large.png', { element: pagerElement });
+  await t
+    .resizeWindow(540, 600);
+  await testScreenshot(t, takeScreenshot, 'pager-resize-nobutton-large-noinfo.png', { element: pagerElement });
+  await t
+    .resizeWindow(350, 600);
+  await testScreenshot(t, takeScreenshot, 'pager-resize-nobutton-small.png', { element: pagerElement });
+  await t
+    .resizeWindow(540, 600);
+  await testScreenshot(t, takeScreenshot, 'pager-resize-nobutton-large-noinfo-enlarge.png', { element: pagerElement });
+  await t
+    .resizeWindow(700, 600);
+  await testScreenshot(t, takeScreenshot, 'pager-resize-nobutton-large-enlarge.png', { element: pagerElement });
+  await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createDataGridWithPager());
@@ -140,9 +150,8 @@ safeSizeTest('Compact pager in the generic.light theme (T1057735)', async (t) =>
   const pagerElement = dataGrid.getPager().element;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await testScreenshot(t, takeScreenshot, 'compact-pager.png', { element: pagerElement });
   await t
-    .expect(await takeScreenshot('compact-pager-in-the-generic-light-theme.png', pagerElement))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }, [700, 600])

@@ -4,6 +4,7 @@ import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { defaultConfig } from '../helpers/data';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const DATA_GRID_SELECTOR = '#container';
 
@@ -19,7 +20,7 @@ safeSizeTest('The multi row header columns should have vertical borders when a c
 
   await t.expect(dataGrid.isReady()).ok();
 
-  await takeScreenshot('multi_row_header_columns_(generic.light).png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'multi_row_header_columns.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())

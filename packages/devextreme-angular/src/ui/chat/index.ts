@@ -24,7 +24,7 @@ import {
 
 import DataSource from 'devextreme/data/data_source';
 import dxChat from 'devextreme/ui/chat';
-import { Alert, Message, AttachmentDownloadEvent, DisposingEvent, InitializedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, OptionChangedEvent, TypingEndEvent, TypingStartEvent, User } from 'devextreme/ui/chat';
+import { Alert, Message, AttachmentDownloadClickEvent, DisposingEvent, InitializedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, OptionChangedEvent, TypingEndEvent, TypingStartEvent, User } from 'devextreme/ui/chat';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 import { Format } from 'devextreme/common/core/localization';
@@ -465,7 +465,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     
     
      */
-    @Output() onAttachmentDownload: EventEmitter<AttachmentDownloadEvent>;
+    @Output() onAttachmentDownloadClick: EventEmitter<AttachmentDownloadClickEvent>;
 
     /**
     
@@ -765,7 +765,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
         this._createEventEmitters([
-            { subscribe: 'attachmentDownload', emit: 'onAttachmentDownload' },
+            { subscribe: 'attachmentDownloadClick', emit: 'onAttachmentDownloadClick' },
             { subscribe: 'disposing', emit: 'onDisposing' },
             { subscribe: 'initialized', emit: 'onInitialized' },
             { subscribe: 'messageDeleted', emit: 'onMessageDeleted' },

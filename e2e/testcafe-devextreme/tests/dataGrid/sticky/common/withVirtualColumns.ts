@@ -5,6 +5,7 @@ import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { getData } from '../../helpers/generateDataSourceData';
 import { groupingDataSource, groupingDataSourceFields } from '../helpers/data';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const DATA_GRID_SELECTOR = '#container';
 
@@ -18,12 +19,12 @@ safeSizeTest('Fixed columns with sticky position should not work', async (t) => 
 
   await t.expect(dataGrid.isReady()).ok();
 
-  await takeScreenshot('virtual_columns_with_sticky_columns_1.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'virtual_columns_with_sticky_columns_1.png', { element: dataGrid.element });
 
   // act
   await dataGrid.scrollTo(t, { x: 150 });
 
-  await takeScreenshot('virtual_columns_with_sticky_columns_2.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'virtual_columns_with_sticky_columns_2.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -58,7 +59,7 @@ safeSizeTest('There should be no way to set a sticky fixed position for columns 
     .click(dataGrid.getContextMenu().getItemByText('Set Fixed Position'));
 
   // assert
-  await takeScreenshot('context_menu_and_virtual_columns_with_fixed_columns.png');
+  await testScreenshot(t, takeScreenshot, 'context_menu_and_virtual_columns_with_fixed_columns.png');
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -87,7 +88,7 @@ safeSizeTest('should render group row in scroll right max position', async (t) =
   await dataGrid.scrollTo(t, { x: 9999999 });
 
   await t.expect(dataGrid.isReady()).ok();
-  await takeScreenshot('virtual_columns_with_grouping_scroll_right.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'virtual_columns_with_grouping_scroll_right.png', { element: dataGrid.element });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -127,7 +128,7 @@ safeSizeTest('should render nested group row in scroll right max position', asyn
   await dataGrid.scrollTo(t, { x: 9999999 });
 
   await t.expect(dataGrid.isReady()).ok();
-  await takeScreenshot('virtual_columns_with_nested_grouping_scroll_right.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'virtual_columns_with_nested_grouping_scroll_right.png', { element: dataGrid.element });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -174,7 +175,7 @@ safeSizeTest('expand group icon should be clickable in scroll right max position
   await t.click(expandCell.element);
 
   await t.expect(dataGrid.isReady()).ok();
-  await takeScreenshot('virtual_columns_with_grouping_expand_scroll_right.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'virtual_columns_with_grouping_expand_scroll_right.png', { element: dataGrid.element });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

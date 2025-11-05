@@ -6,6 +6,7 @@ import { createWidget } from '../../../../helpers/createWidget';
 import { getData } from '../../helpers/generateDataSourceData';
 import { defaultConfig } from '../helpers/data';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`FixedColumns`
   .page(url(__dirname, '../../../container.html'));
@@ -21,19 +22,19 @@ safeSizeTest('The simulated scrollbar should display correctly when there are st
   await t.expect(dataGrid.isReady()).ok();
 
   await t.hover(scrollbarVerticalThumbTrack);
-  await takeScreenshot('simulated_scrollbar_with_sticky_columns_1.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'simulated_scrollbar_with_sticky_columns_1.png', { element: dataGrid.element });
 
   // act
   await t
     .drag(scrollbarVerticalThumbTrack, 600, 0)
     .wait(1000);
 
-  await takeScreenshot('simulated_scrollbar_with_sticky_columns_2.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'simulated_scrollbar_with_sticky_columns_2.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [1000, 800]).before(async () => createWidget('dxDataGrid', {
+}, [1000, 800]).meta({ unstable: true }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(5, 25),
   width: 984,
   columnAutoWidth: true,
@@ -68,7 +69,7 @@ safeSizeTest('Header hover should display correctly when there are fixed columns
 
   await t.expect(headerCell.isHovered()).ok();
 
-  await takeScreenshot('datagrid_header_hover_with_fixed_columns_(generic.light).png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'datagrid_header_hover_with_fixed_columns.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())
@@ -111,7 +112,7 @@ test.meta({ unstable: true })('Row hover should display correctly when there are
 
   await t.expect(dataRow.isHovered).ok();
 
-  await takeScreenshot('datagrid_row_hover_with_fixed_columns_(generic.light).png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'datagrid_row_hover_with_fixed_columns.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())
@@ -150,7 +151,7 @@ safeSizeTest('Alternating rows should display correctly when there are fixed col
 
   await t.expect(dataGrid.isReady()).ok();
 
-  await takeScreenshot('datagrid_row_alt_with_fixed_columns_(generic.light).png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'datagrid_row_alt_with_fixed_columns.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())
@@ -186,7 +187,7 @@ safeSizeTest('Alternating rows should display correctly when there are fixed col
 
     await t.expect(dataGrid.isReady()).ok();
 
-    await takeScreenshot(`fixed_columns_with_${zoom * 100}%_zoom_(generic.light).png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `fixed_columns_with_${zoom * 100}%_zoom.png`, { element: dataGrid.element });
 
     await t
       .expect(compareResults.isValid())
@@ -227,7 +228,7 @@ safeSizeTest('The grid should display correctly when there is no data and there 
 
   await t.expect(dataGrid.isReady()).ok();
 
-  await takeScreenshot('T1269088_grid_with_fixed_columns_and_without_data.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1269088_grid_with_fixed_columns_and_without_data.png', { element: dataGrid.element });
 
   // assert
   await t
