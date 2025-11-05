@@ -18,6 +18,11 @@ const COMPONENTS = [
     path: 'text-box-dynamic-styles',
     name: 'TextBoxDynamicStyles',
     component: () => import('@examples/text-box-dynamic-styles/react19/index.jsx')
+  },
+  {
+    path: 'chat-template-rerender',
+    name: 'ChatTemplateRerender',
+    component: () => import('@examples/chat-template-rerender/react19/index.jsx')
   }
 ];
 
