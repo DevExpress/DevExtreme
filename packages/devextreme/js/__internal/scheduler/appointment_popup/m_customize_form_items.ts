@@ -3,13 +3,11 @@ import type {
   FormItemComponent,
   GroupItem,
   Item as FormItem,
-  TabbedItem,
 } from '@js/ui/form';
 
 type ConfigItem = string | FormItem;
 
-const isGroupItem = (item: FormItem): item is GroupItem => 'items' in item && !('tabs' in item);
-const isTabbedItem = (item: FormItem): item is TabbedItem => 'tabs' in item;
+const isGroupItem = (item: FormItem): item is GroupItem => 'items' in item;
 
 const createFormItemFromConfig = (configItem: ConfigItem): FormItem => (
   typeof configItem === 'string'
@@ -19,13 +17,8 @@ const createFormItemFromConfig = (configItem: ConfigItem): FormItem => (
       name: configItem,
       dataField: configItem,
     }
-    : { ...configItem }
+    : configItem
 );
-
-const getChildren = (item: FormItem): FormItem[] => [
-  ...isGroupItem(item) ? item.items ?? [] : [],
-  ...isTabbedItem(item) ? item.tabs?.flatMap((tab) => tab.items ?? []) ?? [] : [],
-];
 
 const buildFormItemsMap = (
   items: FormItem[],
@@ -35,7 +28,7 @@ const buildFormItemsMap = (
     if (item.name) {
       accumulator.set(item.name, { ...item });
     }
-    return buildFormItemsMap(getChildren(item), accumulator);
+    return buildFormItemsMap(isGroupItem(item) ? item.items ?? [] : [], accumulator);
   },
   map,
 );
@@ -51,29 +44,14 @@ const removeItemFromGroups = (
   });
 };
 
-const getItemName = (configure: ConfigItem): string | undefined => (
-  typeof configure === 'string' ? configure : configure.name
+const getItemName = (customItem: ConfigItem): string | undefined => (
+  typeof customItem === 'string' ? customItem : customItem.name
 );
 
-const shouldMergeWithExisting = (configure: ConfigItem): configure is FormItem => typeof configure === 'object';
+const shouldMergeWithExisting = (customItems: ConfigItem): customItems is FormItem => typeof customItems === 'object';
 
-const hasChildItems = (configure: ConfigItem): configure is GroupItem => typeof configure === 'object'
-&& isGroupItem(configure) && Boolean(configure.items);
-
-const baseResolveItem = (map: Map<string, FormItem>) => (configure: ConfigItem): FormItem => {
-  const itemName = getItemName(configure);
-  const existingItem = itemName ? map.get(itemName) : undefined;
-
-  if (!existingItem || !itemName) {
-    return createFormItemFromConfig(configure);
-  }
-
-  removeItemFromGroups(itemName, map);
-
-  return shouldMergeWithExisting(configure)
-    ? extend(true, {}, existingItem, configure) as FormItem
-    : existingItem;
-};
+const hasChildItems = (customItems: ConfigItem): customItems is GroupItem => typeof customItems === 'object'
+&& isGroupItem(customItems) && Boolean(customItems.items);
 
 const customizeFormItems = (
   items: FormItem[],
@@ -83,14 +61,29 @@ const customizeFormItems = (
     return items;
   }
 
-  const map = buildFormItemsMap(items);
-  const resolveItem = baseResolveItem(map);
+  const defaultItemsMap = buildFormItemsMap(items);
 
-  const customize = (config: ConfigItem[]): FormItem[] => config.map((configure): FormItem => {
-    const formItem = resolveItem(configure);
+  const resolveItem = (customItems: ConfigItem): FormItem => {
+    const itemName = getItemName(customItems);
+    const defaultItem = itemName ? defaultItemsMap.get(itemName) : undefined;
 
-    if (isGroupItem(formItem) && hasChildItems(configure) && configure.items) {
-      return { ...formItem, items: customize(configure.items) };
+    if (defaultItem && itemName) {
+      removeItemFromGroups(itemName, defaultItemsMap);
+
+      return shouldMergeWithExisting(customItems)
+        ? extend(true, {}, defaultItem, customItems) as FormItem
+        : defaultItem;
+    }
+
+    return createFormItemFromConfig(customItems);
+  };
+
+  const customize = (userItems: ConfigItem[]):
+  FormItem[] => userItems.map((customItems): FormItem => {
+    const formItem = resolveItem(customItems);
+
+    if (isGroupItem(formItem) && hasChildItems(customItems) && customItems.items) {
+      return { ...formItem, items: customize(customItems.items) };
     }
 
     return formItem;

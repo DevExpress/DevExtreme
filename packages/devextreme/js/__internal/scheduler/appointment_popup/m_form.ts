@@ -105,12 +105,25 @@ const DATE_GROUP_NAME = 'dateGroup';
 const START_DATE_GROUP_NAME = 'startDateGroup';
 const END_DATE_GROUP_NAME = 'endDateGroup';
 const RESOURCES_GROUP_NAME = 'resourcesGroup';
+const SUBJECT_GROUP_NAME = 'subjectGroup';
+const REPEAT_GROUP_NAME = 'repeatGroup';
+const DESCRIPTION_GROUP_NAME = 'descriptionGroup';
 
 const START_DATE_EDITOR_NAME = 'startDate';
 const START_TIME_EDITOR_NAME = 'startTime';
 const END_DATE_EDITOR_NAME = 'endDate';
 const END_TIME_EDITOR_NAME = 'endTime';
 const REPEAT_EDITOR_NAME = 'repeat';
+const ALL_DAY_EDITOR_NAME = 'allDay';
+const SUBJECT_EDITOR_NAME = 'subject';
+const DESCRIPTION_EDITOR_NAME = 'description';
+const START_DATE_TIMEZONE_EDITOR_NAME = 'startDateTimeZone';
+const END_DATE_TIMEZONE_EDITOR_NAME = 'endDateTimeZone';
+
+const SUBJECT_ICON_NAME = 'subjectIcon';
+const DATE_ICON_NAME = 'dateIcon';
+const REPEAT_ICON_NAME = 'repeatIcon';
+const DESCRIPTION_ICON_NAME = 'descriptionIcon';
 
 export class AppointmentForm {
   private readonly scheduler: any;
@@ -286,7 +299,7 @@ export class AppointmentForm {
     const { textExpr } = this.scheduler.getDataAccessors().expr;
 
     return {
-      name: 'subjectGroup',
+      name: SUBJECT_GROUP_NAME,
       itemType: 'group',
       cssClass: `${CLASSES.subjectGroup} ${CLASSES.groupWithIcon}`,
       colCount: 2,
@@ -295,13 +308,13 @@ export class AppointmentForm {
       },
       items: [
         {
-          name: 'subjectIcon',
+          name: SUBJECT_ICON_NAME,
           colSpan: 1,
           cssClass: CLASSES.formIcon,
           template: createFormIconTemplate('isnotblank'),
         },
         {
-          name: 'subject',
+          name: SUBJECT_EDITOR_NAME,
           colSpan: 1,
           itemType: 'simple',
           cssClass: CLASSES.textEditor,
@@ -326,7 +339,7 @@ export class AppointmentForm {
       },
       items: [
         {
-          name: 'dateIcon',
+          name: DATE_ICON_NAME,
           colSpan: 1,
           cssClass: CLASSES.formIcon,
           template: createFormIconTemplate('clock'),
@@ -348,7 +361,7 @@ export class AppointmentForm {
     const { allDayExpr, startDateExpr, endDateExpr } = this.scheduler.getDataAccessors().expr;
 
     return {
-      name: 'allDay',
+      name: ALL_DAY_EDITOR_NAME,
       itemType: 'simple',
       dataField: allDayExpr,
       cssClass: CLASSES.allDaySwitch,
@@ -407,7 +420,7 @@ export class AppointmentForm {
         cssClass: CLASSES.startTimeEditor,
       },
       {
-        name: 'startDateTimeZone',
+        name: START_DATE_TIMEZONE_EDITOR_NAME,
         dataField: startDateTimeZoneExpr,
         cssClass: CLASSES.startDateTimeZoneEditor,
         editorOptions: {
@@ -442,7 +455,7 @@ export class AppointmentForm {
         cssClass: CLASSES.endTimeEditor,
       },
       {
-        name: 'endDateTimeZone',
+        name: END_DATE_TIMEZONE_EDITOR_NAME,
         dataField: endDateTimeZoneExpr,
         cssClass: CLASSES.endDateTimeZoneEditor,
       },
@@ -580,7 +593,7 @@ export class AppointmentForm {
 
   private createRepeatGroup(): GroupItem {
     return {
-      name: 'repeatGroup',
+      name: REPEAT_GROUP_NAME,
       itemType: 'group',
       colCount: 2,
       colCountByScreen: {
@@ -589,7 +602,7 @@ export class AppointmentForm {
       cssClass: `${CLASSES.repeatGroup} ${CLASSES.groupWithIcon}`,
       items: [
         {
-          name: 'repeatIcon',
+          name: REPEAT_ICON_NAME,
           colSpan: 1,
           cssClass: CLASSES.formIcon,
           template: createFormIconTemplate('repeat'),
@@ -626,7 +639,7 @@ export class AppointmentForm {
 
   private createDescriptionGroup(): GroupItem {
     return {
-      name: 'descriptionGroup',
+      name: DESCRIPTION_GROUP_NAME,
       itemType: 'group',
       colCount: 2,
       colCountByScreen: {
@@ -635,13 +648,13 @@ export class AppointmentForm {
       cssClass: `${CLASSES.descriptionGroup} ${CLASSES.groupWithIcon}`,
       items: [
         {
-          name: 'descriptionIcon',
+          name: DESCRIPTION_ICON_NAME,
           colSpan: 1,
           cssClass: CLASSES.formIcon,
           template: createFormIconTemplate('description'),
         },
         {
-          name: 'description',
+          name: DESCRIPTION_EDITOR_NAME,
           colSpan: 1,
           itemType: 'simple',
           cssClass: CLASSES.descriptionEditor,
