@@ -304,10 +304,11 @@ class DxLicenseTrigger extends SafeHTMLElement {
       const license = document.createElement(componentNames.panel);
 
       Object.values(attributeNames).forEach((attrName) => {
-        license.setAttribute(
-          attrName,
-          this.getAttribute(attrName) as string,
-        );
+        const attrValue = this.getAttribute(attrName);
+
+        if (attrValue) {
+          license.setAttribute(attrName, attrValue);
+        }
       });
 
       license.setAttribute(DATA_PERMANENT_ATTRIBUTE, '');
