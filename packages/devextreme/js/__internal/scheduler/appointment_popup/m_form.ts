@@ -151,10 +151,6 @@ export class AppointmentForm {
     this.dxForm.option('formData', formData);
   }
 
-  get visibleGroupName(): 'main' | 'recurrence' {
-    return this._$mainGroup?.is(':visible') ? 'main' : 'recurrence';
-  }
-
   get startDate(): Date | null {
     const { startDateExpr } = this.scheduler.getDataAccessors().expr;
     const value = this.formData[startDateExpr];
@@ -285,7 +281,6 @@ export class AppointmentForm {
       itemType: 'group',
       colSpan: 1,
       cssClass: CLASSES.mainGroup,
-      visible: true,
       items: [
         this.createSubjectGroup(),
         this.createDateRangeGroup(),
