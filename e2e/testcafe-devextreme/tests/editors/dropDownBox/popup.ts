@@ -1,7 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { testScreenshot } from '../../../helpers/themeUtils';
 
 const BUTTON_CLASS = 'dx-dropdowneditor-button';
@@ -9,7 +8,7 @@ const BUTTON_CLASS = 'dx-dropdowneditor-button';
 fixture.disablePageReloads`Drop Down Box's Popup`
   .page(url(__dirname, '../../container.html'));
 
-safeSizeTest('Popup should have correct height when DropDownBox is opened first time (T1130045)', async (t) => {
+test.meta({ browserSize: [900, 600] })('Popup should have correct height when DropDownBox is opened first time (T1130045)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
@@ -20,7 +19,7 @@ safeSizeTest('Popup should have correct height when DropDownBox is opened first 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [900, 600]).before(async () => createWidget('dxDropDownBox', {
+}).before(async () => createWidget('dxDropDownBox', {
   dropDownOptions: {
     templatesRenderAsynchronously: true,
   },

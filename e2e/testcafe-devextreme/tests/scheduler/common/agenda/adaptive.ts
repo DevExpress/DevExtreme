@@ -1,7 +1,6 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { ADAPTIVE_SIZE } from '../const';
 
 fixture.disablePageReloads`Agenda:adaptive`
@@ -61,9 +60,8 @@ Promise<void> => {
     groups: ['priorityId'],
     text: 'groups',
   }].forEach((testCase) => {
-    safeSizeTest(testCase.text, async (t) => {
+    test.meta({ browserSize: ADAPTIVE_SIZE })(testCase.text, async (t) => {
       await t.expect(await compareScreenshot(t, `agenda-${testCase.text}-adaptive-rtl=${rtlEnabled}.png`)).ok();
-    }, ADAPTIVE_SIZE)
-      .before(async () => createScheduler(testCase.groups, rtlEnabled));
+    }).before(async () => createScheduler(testCase.groups, rtlEnabled));
   });
 });

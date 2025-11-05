@@ -67,6 +67,7 @@
   border-radius: 4px;
 }
 
-::ng-deep #iconOnly :is(.dx-step-selected, .dx-step-completed) .dx-icon {
-  color: var(--dx-color-primary);
+::ng-deep #iconOnly .dx-step-selected .dx-icon,
+::ng-deep #iconOnly .dx-step-completed .dx-icon {
+    color: var(--dx-color-primary);
 }

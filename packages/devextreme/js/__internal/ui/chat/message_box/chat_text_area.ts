@@ -71,6 +71,8 @@ class ChatTextArea extends TextArea<Properties> {
 
   _filesToSend?: Map<File, FileToSend>;
 
+  _attachButton?: Button;
+
   _sendButton?: Button;
 
   _sendAction?: (e: Partial<SendEvent>) => void;
@@ -92,7 +94,7 @@ class ChatTextArea extends TextArea<Properties> {
       placeholder: messageLocalization.format('dxChat-textareaPlaceholder'),
       autoResizeEnabled: true,
       valueChangeEvent: 'input',
-      maxHeight: '16em',
+      maxHeight: '53.86em',
       fileUploaderOptions: undefined,
     };
   }
@@ -183,8 +185,7 @@ class ChatTextArea extends TextArea<Properties> {
 
     // eslint-disable-next-line no-restricted-globals
     this._informerTimeoutId = setTimeout(() => {
-      this._cleanInformer();
-      this._updateInputHeight();
+      this._processInformerCleaning();
     }, INFORMER_DELAY);
   }
 
@@ -236,10 +237,10 @@ class ChatTextArea extends TextArea<Properties> {
         hoverStateEnabled,
         elementAttr: { class: CHAT_TEXT_AREA_ATTACH_BUTTON },
         icon: 'attach',
-        onClick: (): void => {
-          this._cleanInformer();
-          this._updateInputHeight();
+        onInitialized: (e: InitializedEvent): void => {
+          this._attachButton = e.component;
         },
+        onClick: (): void => this._processInformerCleaning(),
       },
     } as ToolbarItem;
 
@@ -426,8 +427,7 @@ class ChatTextArea extends TextArea<Properties> {
   _processSendButtonActivation(e: Partial<SendEvent>): void {
     this._sendAction?.(e);
     this.reset();
-    this._fileUploader?.reset();
-    this._filesToSend?.clear();
+    this.resetFileUploader();
     this._toggleButtonDisableState(true);
   }
 
@@ -445,10 +445,10 @@ class ChatTextArea extends TextArea<Properties> {
         this._sendButton?.option(name, value);
         break;
 
-      case 'text': {
+      case 'text':
+        this._processInformerCleaning();
         this._toggleButtonDisableState();
         break;
-      }
 
       case 'onSend':
         this._createSendAction();
@@ -457,6 +457,7 @@ class ChatTextArea extends TextArea<Properties> {
       case 'fileUploaderOptions':
         this._handleFileUploaderOptionsChange(args);
         break;
+
       default:
         super._optionChanged(args);
     }
@@ -512,6 +513,11 @@ class ChatTextArea extends TextArea<Properties> {
     this._$fileUploader = null;
   }
 
+  _processInformerCleaning(): void {
+    this._cleanInformer();
+    this._updateInputHeight();
+  }
+
   _cleanInformer(): void {
     this._clearInformerTimeout();
     this._removeInformer();
@@ -541,6 +547,15 @@ class ChatTextArea extends TextArea<Properties> {
     this._cleanToolbar();
     this._cleanInformer();
     super._dispose();
+  }
+
+  resetFileUploader(): void {
+    this._fileUploader?.reset();
+    this._filesToSend?.clear();
+  }
+
+  toggleAttachButtonVisibleState(state: boolean): void {
+    this._attachButton?.option('visible', state);
   }
 }
 

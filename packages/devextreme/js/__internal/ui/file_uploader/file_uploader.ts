@@ -72,6 +72,8 @@ const FILEUPLOADER_INVALID_CLASS = 'dx-fileuploader-invalid';
 
 const FILEUPLOADER_AFTER_LOAD_DELAY = 400;
 const DRAG_EVENT_DELTA = 1;
+const GAP = 10;
+const ETALON_TEXT = '1023 bytes';
 
 const DIALOG_TRIGGER_EVENT_NAMESPACE = 'dxFileUploaderDialogTrigger';
 
@@ -791,11 +793,13 @@ class FileUploader extends Editor<FileUploaderProperties> {
     const iconWidth = _showFileIcon ? getOuterWidth($icon) : 0;
 
     const prevFileSize = $fileSize?.text();
-    $fileSize?.text('1000 Mb');
+    $fileSize?.text(ETALON_TEXT);
     const fileSizeWidth = getWidth($fileSize);
     $fileSize?.text(prevFileSize ?? '');
 
-    this._$filesContainer?.find(`.${FILEUPLOADER_FILE_NAME_CLASS}`).css('maxWidth', filesContainerWidth - buttonsWidth - fileSizeWidth - iconWidth);
+    const maxWidth = filesContainerWidth - buttonsWidth - fileSizeWidth - iconWidth - GAP;
+
+    this._$filesContainer?.find(`.${FILEUPLOADER_FILE_NAME_CLASS}`).css('maxWidth', maxWidth);
   }
 
   _renderFileButtons(file: FileUploaderItem, $container: dxElementWrapper): void {

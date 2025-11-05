@@ -1,6 +1,5 @@
 import { Selector, ClientFunction } from 'testcafe';
 import Popup from 'devextreme-testcafe-models/popup';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import url from '../../../helpers/getPageUrl';
 import asyncForEach from '../../../helpers/asyncForEach';
 import { createWidget } from '../../../helpers/createWidget';
@@ -14,6 +13,7 @@ test('Popup should be centered regarding the container even if content dimension
 
   await popup.show();
   await setStyleAttribute(Selector('#content'), 'width: 300px; height: 300px;');
+  await t.wait(100);
 
   const wrapper = popup.getWrapper();
   const content = popup.getContent();
@@ -53,6 +53,7 @@ test('Popup should be centered regarding the container even if popup dimension o
 
   await popup.show();
   await setStyleAttribute(Selector('#content'), 'width: 300px; height: 300px;');
+  await t.wait(100);
 
   const wrapper = popup.getWrapper();
   const content = popup.getContent();
@@ -92,6 +93,7 @@ test('Popup should be centered regarding the container even if content dimension
 
   await popup.show();
   await setStyleAttribute(Selector('#content'), 'width: 300px; height: 300px;');
+  await t.wait(100);
 
   const wrapper = popup.getWrapper();
   const content = popup.getContent();
@@ -127,7 +129,7 @@ test('Popup should be centered regarding the container even if content dimension
   animation: null,
 }, undefined, { disableFxAnimation: false }));
 
-safeSizeTest('popup should be repositioned after window resize', async (t) => {
+test.meta({ browserSize: [200, 200] })('popup should be repositioned after window resize', async (t) => {
   const popup = new Popup('#container');
 
   const wrapper = popup.getWrapper();
@@ -157,7 +159,7 @@ safeSizeTest('popup should be repositioned after window resize', async (t) => {
   await t
     .expect(wrapperHorizontalCenter)
     .within(contentHorizontalCenter - 0.5, contentHorizontalCenter + 0.5);
-}, [200, 200]).before(async () => createWidget('dxPopup', {
+}).before(async () => createWidget('dxPopup', {
   animation: null,
   visible: true,
   width: 100,
