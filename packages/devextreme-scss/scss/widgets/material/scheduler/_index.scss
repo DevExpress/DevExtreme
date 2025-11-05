@@ -597,6 +597,10 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
     .dx-scheduler-form-recurrence-end-group .dx-field-item-label {
       padding-left: 0;
 
+      .dx-field-item-label-text {
+        color: $base-text-color;
+      }
+
       @if $size == "compact" {
         height: $material-scheduler-appointment-popup-icon-container-height;
       }
@@ -611,6 +615,33 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
           padding-left: 8px;
           padding-right: 8px;
         }
+      }
+
+      // RadioGroup and Inputs columns - use material inline widget height
+      .dx-item.dx-radiobutton {
+        height: $material-base-inline-widget-height !important; // stylelint-disable-line declaration-no-important
+      }
+
+      .dx-box-item {
+        height: $material-base-inline-widget-height;
+
+        .dx-box-item-content {
+          height: $material-base-inline-widget-height;
+        }
+      }
+
+      .dx-field-item,
+      .dx-empty-item {
+        height: $material-base-inline-widget-height;
+
+        .dx-field-item-content {
+          height: $material-base-inline-widget-height;
+        }
+      }
+
+      .dx-texteditor,
+      .dx-numberbox {
+        height: $material-base-inline-widget-height;
       }
     }
 
@@ -915,4 +946,10 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 
 .dx-scheduler-header-panel-empty-cell {
   margin-top: 0;
+}
+
+@media (max-width: 450px) {
+  .dx-scheduler-appointment-popup .dx-form .dx-scheduler-days-of-week-buttons {
+    gap: 6px;
+  }
 }

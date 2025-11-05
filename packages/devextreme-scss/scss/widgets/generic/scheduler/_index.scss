@@ -311,6 +311,33 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
           padding-right: 8px;
         }
       }
+
+      // RadioGroup and Inputs columns - use generic inline widget height
+      .dx-item.dx-radiobutton {
+        height: $generic-base-inline-widget-height !important; // stylelint-disable-line declaration-no-important
+      }
+
+      .dx-box-item {
+        height: $generic-base-inline-widget-height;
+
+        .dx-box-item-content {
+          height: $generic-base-inline-widget-height;
+        }
+      }
+
+      .dx-field-item,
+      .dx-empty-item {
+        height: $generic-base-inline-widget-height;
+
+        .dx-field-item-content {
+          height: $generic-base-inline-widget-height;
+        }
+      }
+
+      .dx-texteditor,
+      .dx-numberbox {
+        height: $generic-base-inline-widget-height;
+      }
     }
 
     .dx-field-item:not(.dx-first-col) {
@@ -567,5 +594,11 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
 .dx-scheduler .dx-scheduler-overlay-panel {
   .dx-overlay-content {
     background: $base-bg;
+  }
+}
+
+@media (max-width: 450px) {
+  .dx-scheduler-appointment-popup .dx-form .dx-scheduler-days-of-week-buttons {
+    gap: 6px;
   }
 }

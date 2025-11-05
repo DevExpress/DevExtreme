@@ -976,3 +976,9 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
   margin-top: 0;
 }
 
+@media (max-width: 450px) {
+  .dx-scheduler-appointment-popup .dx-form .dx-scheduler-days-of-week-buttons {
+    gap: 6px;
+  }
+}
+
