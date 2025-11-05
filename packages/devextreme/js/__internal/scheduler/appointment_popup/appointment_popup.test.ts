@@ -12,6 +12,9 @@ import { setupSchedulerTestEnvironment } from '../__tests__/__mock__/m_mock_sche
 const CLASSES = {
   icon: 'dx-scheduler-form-icon',
   hidden: 'dx-hidden',
+
+  mainGroupHidden: 'dx-scheduler-form-main-group-hidden',
+  recurrenceGroupHidden: 'dx-scheduler-form-recurrence-group-hidden',
 };
 
 const getDefaultData = () => [
@@ -436,24 +439,32 @@ describe('Appointment Popup Form', () => {
   });
 
   describe('Recurrence', () => {
-    it('Recurrence editor container should be visible after changing its visibility value', async () => {
-      const appointment = {
-        text: 'Test Appointment',
-        startDate: new Date(2017, 4, 1, 9, 30),
-        endDate: new Date(2017, 4, 1, 11),
-      };
+    it('changes visibility of groups when opening recurrence form', async () => {
+      const { scheduler, POM } = await createScheduler(getDefaultConfig());
 
-      const { POM, scheduler } = await createScheduler(getDefaultConfig());
+      scheduler.showAppointmentPopup();
 
-      scheduler.showAppointmentPopup(appointment);
-
+      const mainGroup = $(POM.popup.mainGroup);
       const recurrenceGroup = $(POM.popup.recurrenceGroup);
 
-      expect(recurrenceGroup.hasClass('dx-scheduler-form-recurrence-hidden')).toBe(true);
+      expect(mainGroup.hasClass(CLASSES.mainGroupHidden)).toBe(false);
+      expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(true);
 
       POM.popup.selectRepeatValue('weekly');
+      await new Promise(process.nextTick);
 
-      expect(recurrenceGroup.hasClass('dx-scheduler-form-recurrence-hidden')).toBe(false);
+      const popupHeight = POM.popup.component.option('height');
+      expect(popupHeight).toBeDefined();
+      expect(typeof popupHeight).toBe('number');
+
+      expect(mainGroup.hasClass(CLASSES.mainGroupHidden)).toBe(true);
+      expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(false);
+
+      POM.popup.getBackButton().click();
+
+      expect(POM.popup.component.option('height')).toBeUndefined();
+      expect(mainGroup.hasClass(CLASSES.mainGroupHidden)).toBe(false);
+      expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(true);
     });
 
     it('Check that after opening recurrence appointment current form is main form', async () => {
@@ -472,7 +483,7 @@ describe('Appointment Popup Form', () => {
 
       const recurrenceGroup = $(POM.popup.recurrenceGroup);
 
-      expect(recurrenceGroup.hasClass('dx-scheduler-form-recurrence-hidden')).toBe(true);
+      expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(true);
     });
 
     it('Should discard recurrence changes when clicking \'cancel\' button in recurrence form', async () => {
