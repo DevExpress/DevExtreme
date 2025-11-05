@@ -11317,7 +11317,7 @@ declare module DevExpress.ui {
      */
     fileUploaderOptions?: Omit<
       DevExpress.ui.dxFileUploader.Properties,
-      'dialogTrigger' | 'showFileList' | 'uploadMode'
+      'dialogTrigger' | 'showFileList' | 'uploadMode' | 'value'
     >;
     /**
      * [descr:dxChatOptions.focusStateEnabled]
