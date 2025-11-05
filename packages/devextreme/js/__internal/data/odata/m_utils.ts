@@ -27,21 +27,22 @@ const makeArray = (value) => (type(value) === 'string' ? value.split() : value);
 const hasDot = (x) => /\./.test(x);
 
 // consider to use String.prototype.padEnd() or String.prototype.padStart()
-const pad = (text: unknown, length: number, right?: boolean): string => {
-  let textString = String(text);
-
-  textString = right ? textString.padEnd(length, '0') : textString.padStart(length, '0');
-
-  return textString;
+const pad = (text, length, right) => {
+  text = String(text);
+  while (text.length < length) {
+    text = right ? `${text}0` : `0${text}`;
+  }
+  return text;
 };
 
-const formatISO8601 = (date: Date, skipZeroTime?: boolean, skipTimezone?: boolean): string => {
+const formatISO8601 = (date, skipZeroTime, skipTimezone) => {
   const bag: string[] = [];
 
   const isZeroTime = () => date.getHours() + date.getMinutes() + date.getSeconds() + date.getMilliseconds() < 1;
-  const padLeft2 = (text: unknown) => pad(text, 2);
+  // @ts-expect-error
+  const padLeft2 = (text) => pad(text, 2);
 
-  bag.push(date.getFullYear().toString());
+  bag.push(date.getFullYear());
   bag.push('-');
   bag.push(padLeft2(date.getMonth() + 1));
   bag.push('-');
@@ -57,6 +58,7 @@ const formatISO8601 = (date: Date, skipZeroTime?: boolean, skipTimezone?: boolea
 
     if (date.getMilliseconds()) {
       bag.push('.');
+      // @ts-expect-error
       bag.push(pad(date.getMilliseconds(), 3));
     }
 
@@ -64,22 +66,19 @@ const formatISO8601 = (date: Date, skipZeroTime?: boolean, skipTimezone?: boolea
       bag.push('Z');
     }
   }
-
   return bag.join('');
 };
 
-const parseISO8601 = (isoString: string) => {
+const parseISO8601 = (isoString) => {
   const result = new Date(new Date(0).getTimezoneOffset() * 60 * 1000);
-  const [dateChunk, timeChunk] = isoString.replace('Z', '').split('T');
-  const date = /(\d{4})-(\d{2})-(\d{2})/.exec(dateChunk);
-  const time = /(\d{2}):(\d{2}):(\d{2})\.?(\d{0,7})?/.exec(timeChunk);
-
-  if (!date) {
-    return null;
-  }
-
+  const chunks = isoString.replace('Z', '').split('T');
+  const date = /(\d{4})-(\d{2})-(\d{2})/.exec(chunks[0]);
+  const time = /(\d{2}):(\d{2}):(\d{2})\.?(\d{0,7})?/.exec(chunks[1]);
+  // @ts-expect-error
   result.setFullYear(Number(date[1]));
+  // @ts-expect-error
   result.setMonth(Number(date[2]) - 1);
+  // @ts-expect-error
   result.setDate(Number(date[3]));
 
   if (Array.isArray(time) && time.length) {
@@ -126,7 +125,7 @@ const toAbsoluteUrl = (basePath, relativePath) => {
 
 const param = (params) => {
   const result = [];
-  // eslint-disable-next-line no-restricted-syntax, guard-for-in
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, no-restricted-syntax, guard-for-in
   for (const name in params) {
     // @ts-expect-error
     result.push(`${name}=${params[name]}`);
@@ -140,7 +139,7 @@ const ajaxOptionsForRequest = (protocolVersion, request, options = {}) => {
     if (!(this[key] instanceof Date)) {
       return value;
     }
-
+    // @ts-expect-error
     value = formatISO8601(this[key]);
     switch (protocolVersion) {
       case 2:
@@ -379,7 +378,7 @@ export const EdmLiteral = Class.inherit({
   },
 });
 
-const transformTypes = (obj, options = {}): void => {
+const transformTypes = (obj, options = {}) => {
   each(obj, (key, value) => {
     if (value !== null && typeof value === 'object') {
       if ('results' in value) {
@@ -401,9 +400,8 @@ const transformTypes = (obj, options = {}): void => {
           // @ts-expect-error
           const date = new Date(Number(RegExp.$1) + RegExp.$2 * 60 * 1000);
           obj[key] = new Date(date.valueOf() + date.getTimezoneOffset() * 60 * 1000);
-        // OData v4 format
         } else if (ISO8601_DATE_REGEX.test(value)) {
-          obj[key] = new Date(parseISO8601(obj[key])!.valueOf());
+          obj[key] = new Date(parseISO8601(obj[key]).valueOf());
         }
       }
     }
