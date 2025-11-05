@@ -477,7 +477,7 @@ $scheduler-appointment-form-label-padding: 20px;
         transform: translateX(0);
 
         &.dx-scheduler-form-main-hidden {
-          transform: translateX(-100%);
+          transform: translateX(-110%);
         }
       }
 
@@ -487,7 +487,7 @@ $scheduler-appointment-form-label-padding: 20px;
         left: 0;
         width: 100%;
         transition: transform 0.3s ease-in-out;
-        transform: translateX(100%);
+        transform: translateX(110%);
 
         &:not(.dx-scheduler-form-recurrence-hidden) {
           transform: translateX(0);
