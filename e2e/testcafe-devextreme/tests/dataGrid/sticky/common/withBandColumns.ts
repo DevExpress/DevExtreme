@@ -1,6 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { testScreenshot } from '../../../../helpers/themeUtils';
@@ -12,7 +11,7 @@ fixture.disablePageReloads`Band sticky columns`
 
 [false, true].forEach((rtlEnabled) => {
   // T1279722
-  safeSizeTest(`Headers and filter row should display correctly after scrolling to the max right position when there is a grouped column (rtl=${rtlEnabled})`, async (t) => {
+  test.meta({ browserSize: [900, 800] })(`Headers and filter row should display correctly after scrolling to the max right position when there is a grouped column (rtl=${rtlEnabled})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -24,7 +23,7 @@ fixture.disablePageReloads`Band sticky columns`
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [900, 800]).before(async () => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     dataSource: [
       {
         field0: 1, field1: 1, field2: 1, field3: 1, field4: 1, field5: 1, field6: 1, field7: 1,

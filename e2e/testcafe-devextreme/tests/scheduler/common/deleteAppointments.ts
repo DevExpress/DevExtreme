@@ -37,8 +37,7 @@ const createSimpleData = (): Record<string, unknown>[] => [{
   EndDate: new Date(2017, 4, 22, 13, 0, 0, 0),
 }];
 
-// TODO Chrome133: skipped during chrome update
-test.skip('Recurrence appointments should be deleted by click on \'delete\' button', async (t) => {
+test('Recurrence appointments should be deleted by click on \'delete\' button', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t
@@ -49,6 +48,7 @@ test.skip('Recurrence appointments should be deleted by click on \'delete\' butt
     .ok()
     .click(scheduler.appointmentTooltip.deleteButton)
     .click(Scheduler.getDeleteRecurrenceDialog().appointment)
+    .wait(100)
 
     .expect(scheduler.getAppointmentCount())
     .eql(5);
@@ -63,25 +63,22 @@ test.skip('Recurrence appointments should be deleted by click on \'delete\' butt
     .eql(0);
 }).before(async () => createScheduler(createRecurrenceData()));
 
-test.meta({ unstable: true })('Recurrence appointments should be deleted by press \'delete\' key', async (t) => {
+test('Recurrence appointments should be deleted by press \'delete\' key', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t
     .expect(scheduler.getAppointmentCount()).eql(6)
     .click(scheduler.getAppointment('Text', 3).element)
-
     .pressKey('delete')
     .click(Scheduler.getDeleteRecurrenceDialog().appointment)
-
+    .wait(100)
     .expect(scheduler.getAppointmentCount())
     .eql(5);
 
   await t
     .click(scheduler.getAppointment('Text', 3).element)
-
     .pressKey('delete')
     .click(Scheduler.getDeleteRecurrenceDialog().series)
-
     .expect(scheduler.getAppointmentCount())
     .eql(0);
 }).before(async () => createScheduler(createRecurrenceData()));

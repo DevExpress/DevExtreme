@@ -2,7 +2,6 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import { ADAPTIVE_SIZE } from '../../const';
 import { changeTheme } from '../../../../../helpers/changeTheme';
 import {
@@ -32,7 +31,7 @@ const createScheduler = async (
 
   [false, true].forEach((rtlEnabled) => {
     [false, true].forEach((crossScrollingEnabled) => {
-      safeSizeTest(`Adaptive views layout test in ${themePrefix} theme, crossScrollingEnabled=${crossScrollingEnabled}${rtlEnabled ? 'in RTL' : ''}`, async (t) => {
+      test.meta({ browserSize: ADAPTIVE_SIZE })(`Adaptive views layout test in ${themePrefix} theme, crossScrollingEnabled=${crossScrollingEnabled}${rtlEnabled ? 'in RTL' : ''}`, async (t) => {
         const scheduler = new Scheduler('#container');
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -47,7 +46,7 @@ const createScheduler = async (
 
         await t.expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
-      }, ADAPTIVE_SIZE).before(async () => {
+      }).before(async () => {
         await changeTheme(theme);
 
         await createScheduler({
@@ -60,7 +59,7 @@ const createScheduler = async (
         await changeTheme('generic.light');
       });
 
-      safeSizeTest(`Adaptive views layout test in ${themePrefix} theme, crossScrollingEnabled=${crossScrollingEnabled} when horizontal grouping${rtlEnabled ? ' and RTL are' : ' is'} used`, async (t) => {
+      test.meta({ browserSize: ADAPTIVE_SIZE })(`Adaptive views layout test in ${themePrefix} theme, crossScrollingEnabled=${crossScrollingEnabled} when horizontal grouping${rtlEnabled ? ' and RTL are' : ' is'} used`, async (t) => {
         const scheduler = new Scheduler('#container');
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -75,7 +74,7 @@ const createScheduler = async (
 
         await t.expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
-      }, ADAPTIVE_SIZE).before(async () => {
+      }).before(async () => {
         await changeTheme(theme);
 
         await createScheduler({
@@ -90,7 +89,7 @@ const createScheduler = async (
         await changeTheme('generic.light');
       });
 
-      safeSizeTest(`Adaptive views layout test in ${themePrefix} theme, crossScrollingEnabled=${crossScrollingEnabled} when vertical grouping${rtlEnabled ? ' and RTL are' : ' is'} used`, async (t) => {
+      test.meta({ browserSize: ADAPTIVE_SIZE })(`Adaptive views layout test in ${themePrefix} theme, crossScrollingEnabled=${crossScrollingEnabled} when vertical grouping${rtlEnabled ? ' and RTL are' : ' is'} used`, async (t) => {
         const scheduler = new Scheduler('#container');
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -105,7 +104,7 @@ const createScheduler = async (
 
         await t.expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
-      }, ADAPTIVE_SIZE).before(async () => {
+      }).before(async () => {
         await changeTheme(theme);
 
         await createScheduler({
