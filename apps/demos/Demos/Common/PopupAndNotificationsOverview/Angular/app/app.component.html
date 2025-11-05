@@ -26,8 +26,13 @@
         contentTemplate="popoverContent"
         [width]="260"
       >
-        <dxo-position at="bottom" my="top" offset="0 2" collision="fit flip">
-        </dxo-position>
+        <dxo-popover-position
+          at="bottom"
+          my="top"
+          offset="0 2"
+          collision="fit flip"
+        >
+        </dxo-popover-position>
         <div *dxTemplate="let data of 'popoverContent'">
           <div class="agent-details">
             <img alt="{{ house.Agent.Name }}" src="{{ house.Agent.Picture }}" />
