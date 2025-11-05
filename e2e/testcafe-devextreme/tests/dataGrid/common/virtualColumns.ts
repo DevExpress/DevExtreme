@@ -5,7 +5,6 @@ import DataGrid, { CLASS } from 'devextreme-testcafe-models/dataGrid';
 import type { Column } from 'devextreme/ui/data_grid';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { testScreenshot } from '../../../helpers/themeUtils';
 
 const showDataGrid = ClientFunction(() => {
@@ -36,7 +35,7 @@ const generateColumns = (columnCount: number): Column[] => [...new Array(columnC
     dataField: `field${index + 1}`,
   }));
 
-test.meta({ unstable: true })('DataGrid should not scroll back to the focused cell after horizontal scrolling to the right when columnRenderingMode is virtual', async (t) => {
+test('DataGrid should not scroll back to the focused cell after horizontal scrolling to the right when columnRenderingMode is virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t
@@ -102,7 +101,7 @@ test('DataGrid should not scroll back to the focused cell after horizontal scrol
 }));
 
 // T1090735
-safeSizeTest('The updateDimensions method should render the grid if a container was hidden and columnRenderingMode is virtual', async (t) => {
+test('The updateDimensions method should render the grid if a container was hidden and columnRenderingMode is virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

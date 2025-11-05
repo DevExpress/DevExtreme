@@ -4,7 +4,6 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { getData } from '../../helpers/generateDataSourceData';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Column Fixing`.page(
@@ -14,7 +13,7 @@ fixture.disablePageReloads`Column Fixing`.page(
 // visual: generic.light
 // visual: material.blue
 // visual: fluent.blue
-safeSizeTest('Fixed columns: Check context menu items', async (t) => {
+test('Fixed columns: Check context menu items', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -27,13 +26,12 @@ safeSizeTest('Fixed columns: Check context menu items', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-})
-  .before(async () => {
-    await createWidget('dxDataGrid', {
-      dataSource: getData(5, 5),
-      width: '100%',
-      columnFixing: {
-        enabled: true,
-      },
-    });
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: getData(5, 5),
+    width: '100%',
+    columnFixing: {
+      enabled: true,
+    },
   });
+});

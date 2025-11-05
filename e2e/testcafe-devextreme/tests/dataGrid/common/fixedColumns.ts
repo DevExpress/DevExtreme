@@ -1,7 +1,6 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { makeRowsViewTemplatesAsync } from '../helpers/asyncTemplates';
@@ -217,7 +216,7 @@ test('Hovering over a row should work correctly when there is a fixed column and
 });
 
 // T1177143
-safeSizeTest('Fixed to the right columns should appear when any column has undefined or 0 width', async (t) => {
+test.meta({ browserSize: [800, 800] })('Fixed to the right columns should appear when any column has undefined or 0 width', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -233,7 +232,7 @@ safeSizeTest('Fixed to the right columns should appear when any column has undef
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   columnAutoWidth: false,
   dataSource: [{
     Column1: 'a',
@@ -340,7 +339,7 @@ test('Hovering over a row should work correctly after scrolling when there is a 
 });
 
 // T1193153
-safeSizeTest('The grid layout should be correct after resizing the window when there are fixed and band columns', async (t) => {
+test.meta({ browserSize: [800, 800] })('The grid layout should be correct after resizing the window when there are fixed and band columns', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -359,7 +358,7 @@ safeSizeTest('The grid layout should be correct after resizing the window when t
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   columnAutoWidth: true,
   dataSource: [{}],
   columnFixing: {

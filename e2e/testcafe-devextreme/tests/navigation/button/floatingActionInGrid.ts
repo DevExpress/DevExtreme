@@ -5,7 +5,6 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { appendElementTo } from '../../../helpers/domUtils';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { testScreenshot } from '../../../helpers/themeUtils';
 
 const scrollWindowTo = async (position: object) => {
@@ -39,7 +38,7 @@ fixture`FloatingAction with Grid`
   .page(url(__dirname, '../../container.html'));
 
 [undefined, '#grid'].forEach((positionOf) => {
-  safeSizeTest(`FAB with grid, position.of is ${positionOf}`, async (t) => {
+  test(`FAB with grid, position.of is ${positionOf}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     const dataGrid = new DataGrid('#grid');

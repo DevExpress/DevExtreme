@@ -2,7 +2,6 @@ import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { OpenedStateMode } from 'devextreme/ui/drawer';
 import { Position } from 'devextreme/common';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import url from '../../../helpers/getPageUrl';
 import { createDrawer } from './drawer.helpers';
 import { isFluent, testScreenshot } from '../../../helpers/themeUtils';
@@ -20,7 +19,7 @@ testFixture()`Drawer`
 
 ['overlap', 'shrink', 'push'].forEach((openedStateMode: OpenedStateMode) => {
   const testName = `Drawer, openedStateMode=${openedStateMode}, shading=true`;
-  safeSizeTest(testName, async (t) => {
+  test.meta({ browserSize: [600, 600] })(testName, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await testScreenshot(t, takeScreenshot, `${testName}.png`);
@@ -28,7 +27,7 @@ testFixture()`Drawer`
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [600, 600]).before(async () => {
+  }).before(async () => {
     await createDrawer({
       options: { openedStateMode },
     });
@@ -37,7 +36,7 @@ testFixture()`Drawer`
 
 ['top', 'bottom', 'left', 'right'].forEach((position: Position) => {
   const testName = `Drawer, position=${position}, shading=true`;
-  safeSizeTest(testName, async (t) => {
+  test.meta({ browserSize: [600, 600] })(testName, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await testScreenshot(t, takeScreenshot, `${testName}.png`);
@@ -45,14 +44,14 @@ testFixture()`Drawer`
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [600, 600]).before(async () => {
+  }).before(async () => {
     await createDrawer({
       options: { position },
     });
   });
 });
 
-safeSizeTest('Drawer hidden', async (t) => {
+test.meta({ browserSize: [600, 600] })('Drawer hidden', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t.click(Selector('#container #hideDrawerBtn'));
@@ -62,7 +61,7 @@ safeSizeTest('Drawer hidden', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [600, 600]).before(async () => {
+}).before(async () => {
   await createDrawer({
     createOuterContent: ($container) => {
       ($('<div id="hideDrawerBtn">').appendTo($container) as any).dxButton({
@@ -109,7 +108,7 @@ safeSizeTest('Drawer hidden', async (t) => {
   testCase, createDrawerContent, createOuterContent, selector,
 }) => {
   const testName = `Drawer z-index, ${testCase}, shading=true`;
-  safeSizeTest(testName, async (t) => {
+  test.meta({ browserSize: [600, 600] })(testName, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t.click(`#container #content ${selector}`);
@@ -124,7 +123,7 @@ safeSizeTest('Drawer hidden', async (t) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [600, 600]).before(async () => {
+  }).before(async () => {
     await createDrawer({
       createDrawerContent,
       createOuterContent,

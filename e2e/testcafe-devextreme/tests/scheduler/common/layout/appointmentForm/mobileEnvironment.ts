@@ -1,13 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Layout:AppointmentForm:MobileEnvironment`
   .page(url(__dirname, '../../../../container.html'));
 
-safeSizeTest('Appointment form should be display valid layout', async (t) => {
+test.meta({ browserSize: [350, 600] })('Appointment form should be display valid layout', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -18,7 +17,7 @@ safeSizeTest('Appointment form should be display valid layout', async (t) => {
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [350, 600]).before(async () => {
+}).before(async () => {
   await createWidget('dxScheduler', {
     dataSource: [{
       text: 'Text',

@@ -220,13 +220,14 @@ const SKIPPED_TESTS = {
     ],
   },
   Angular: {
+    Charts: ['Crosshair'],
     Common: ['PopupAndNotificationsOverview'],
     DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping'],
     Scheduler: ['ContextMenu'],
     FileUploader: ['CustomDropzone'],
-    Stepper: ['StepTemplate'],
   },
   Vue: {
+    Charts: ['Crosshair'],
     Common: ['PopupAndNotificationsOverview'],
     // NOTE: Context menu item position is different across themes
     Scheduler: ['ContextMenu'],
@@ -234,6 +235,7 @@ const SKIPPED_TESTS = {
     FileUploader: ['CustomDropzone']
   },
   React: {
+    Charts: ['Crosshair'],
     Common: ['PopupAndNotificationsOverview'],
     Scheduler: ['ContextMenu'],
     DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping'],

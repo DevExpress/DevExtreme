@@ -122,7 +122,7 @@ function getArgs(): ParsedArgs {
       concurrency: 0,
       browsers: 'chrome',
       test: '',
-      reporter: [process.env.CI === 'true' ? 'list' : 'minimal'],
+      reporter: process.env.CI === 'true' ? 'list' : 'spec',
       componentFolder: '',
       file: '*',
       cache: true,
@@ -265,7 +265,10 @@ createTestCafe(TESTCAFE_CONFIG)
 
               await t.hover('html');
 
-              const [width, height] = DEFAULT_BROWSER_SIZE;
+              // @ts-expect-error ts-errors
+              const { meta } = t.testRun.test;
+
+              const [width, height] = meta?.browserSize || DEFAULT_BROWSER_SIZE;
               await t.resizeWindow(width, height);
             } else {
               await loadAxeCore(t);

@@ -3,7 +3,6 @@ import Toolbar from 'devextreme-testcafe-models/toolbar/toolbar';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { setAttribute } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`Toolbar_OverflowMenu_Popup`
@@ -19,7 +18,7 @@ const generateItems = (count) => {
   return items;
 };
 
-safeSizeTest('Popup automatically update its height on window resize', async (t) => {
+test.meta({ browserSize: [400, 400] })('Popup automatically update its height on window resize', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const toolbar = new Toolbar('#container');
@@ -36,11 +35,11 @@ safeSizeTest('Popup automatically update its height on window resize', async (t)
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [400, 400]).before(async () => createWidget('dxToolbar', {
+}).before(async () => createWidget('dxToolbar', {
   items: generateItems(40),
 }));
 
-safeSizeTest('Popup should be position correctly with the window border collision', async (t) => {
+test.meta({ browserSize: [400, 400] })('Popup should be position correctly with the window border collision', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const toolbar = new Toolbar('#container');
@@ -53,13 +52,13 @@ safeSizeTest('Popup should be position correctly with the window border collisio
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [400, 400]).before(async () => createWidget('dxToolbar', {
+}).before(async () => createWidget('dxToolbar', {
   items: generateItems(40),
   width: 50,
 }));
 
 [true, false].forEach((rtlEnabled) => {
-  safeSizeTest(`Popup under container should be limited in height,rtlEnabled=${rtlEnabled}`, async (t) => {
+  test.meta({ browserSize: [400, 400] })(`Popup under container should be limited in height,rtlEnabled=${rtlEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     const toolbar = new Toolbar('#container');
@@ -72,12 +71,12 @@ safeSizeTest('Popup should be position correctly with the window border collisio
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [400, 400]).before(async () => createWidget('dxToolbar', {
+  }).before(async () => createWidget('dxToolbar', {
     items: generateItems(40),
     rtlEnabled,
   }));
 
-  safeSizeTest(`Popup above container should be limited in height,rtlEnabled=${rtlEnabled}`, async (t) => {
+  test.meta({ browserSize: [400, 400] })(`Popup above container should be limited in height,rtlEnabled=${rtlEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     const toolbar = new Toolbar('#container');
@@ -90,7 +89,7 @@ safeSizeTest('Popup should be position correctly with the window border collisio
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [400, 400]).before(async () => {
+  }).before(async () => {
     await setAttribute('#container', 'style', 'margin-top: 200px');
 
     return createWidget('dxToolbar', {
