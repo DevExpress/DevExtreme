@@ -408,6 +408,83 @@ describe('Options', () => {
       expect(headerCell.getDropDownButton().getElement()).toBeNull();
     });
   });
+
+  describe('when the noDataText is set', () => {
+    it('should render this text', async () => {
+      const { component } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+          { id: 2, name: 'Name 2', value: 20 },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            cssClass: 'custom-class',
+            ai: {
+              prompt: 'Initial Prompt',
+              noDataText: 'Test - No Data',
+              aiIntegration: new AIIntegration({
+                sendRequest(): RequestResult {
+                  return {
+                    promise: new Promise<string>((resolve) => {
+                      resolve('');
+                    }),
+                    abort: (): void => {},
+                  };
+                },
+              }),
+            },
+          },
+        ],
+      });
+
+      expect(component.getDataCell(0, 3).getText()).toBe('Test - No Data');
+      expect(component.getDataCell(1, 3).getText()).toBe('Test - No Data');
+    });
+  });
+
+  describe('when the emptyText is set', () => {
+    it('should render this text', async () => {
+      const { component } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+          { id: 2, name: 'Name 2', value: 20 },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            cssClass: 'custom-class',
+            ai: {
+              emptyText: 'Test - Empty Data',
+              aiIntegration: new AIIntegration({
+                sendRequest(): RequestResult {
+                  return {
+                    promise: new Promise<string>((resolve) => {
+                      resolve('');
+                    }),
+                    abort: (): void => {},
+                  };
+                },
+              }),
+            },
+          },
+        ],
+      });
+
+      expect(component.getDataCell(0, 3).getText()).toBe('Test - Empty Data');
+      expect(component.getDataCell(1, 3).getText()).toBe('Test - Empty Data');
+    });
+  });
 });
 
 describe('columnOption', () => {

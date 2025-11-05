@@ -3,7 +3,7 @@ import type { GenerateGridColumnCommandResult, RequestCallbacks } from '@js/comm
 import type { Callback } from '@js/core/utils/callbacks';
 
 import type { Column, ColumnsController } from '../columns_controller/m_columns_controller';
-import type { DataController, HandleDataChangedArguments } from '../data_controller/m_data_controller';
+import type { DataController, HandleDataChangedArguments, UserData } from '../data_controller/m_data_controller';
 import { Controller } from '../m_modules';
 import { AIColumnIntegrationController } from './m_ai_column_integration_controller';
 import { getAICommandColumnDefaultOptions, isAIColumnAutoMode, isPromptOption } from './utils';
@@ -27,16 +27,29 @@ export class AIColumnController extends Controller {
 
   public aiRequestRejected!: Callback;
 
+  private getDefaultCellValue(column: Column): string | null {
+    const prompt = column.ai?.prompt;
+
+    if (!prompt) {
+      return column.ai?.emptyText ?? null;
+    }
+
+    return column.ai?.noDataText ?? null;
+  }
+
   private addAICommandColumn(): void {
+    const that = this;
     const { dataController, aiColumnIntegrationController } = this;
 
     this.columnsController.addCommandColumn({
       ...getAICommandColumnDefaultOptions(),
-      calculateCellValue(data) {
+      calculateCellValue(data: UserData) {
         const key = dataController.keyOf(data);
         const cellValue = aiColumnIntegrationController.getAIColumnText(this.name, key);
+        const defaultValue = that.getDefaultCellValue(this);
 
-        return cellValue ?? null;
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+        return cellValue || defaultValue;
       },
     });
   }
