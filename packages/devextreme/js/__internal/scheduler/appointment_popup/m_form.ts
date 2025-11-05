@@ -237,9 +237,8 @@ export class AppointmentForm {
   private createForm(items: FormProperties['items']): dxForm {
     const element = $('<div>');
     const editingConfig = this.scheduler.getEditingConfig();
-    const userFormOptions = editingConfig?.form ?? {};
-
-    return this.scheduler.createComponent(element, dxForm, {
+    const customFormOptions = editingConfig?.form ?? {};
+    const defaultOptions: FormProperties = {
       items,
       formData: {},
       showColonAfterLabel: false,
@@ -293,7 +292,10 @@ export class AppointmentForm {
         this._$mainGroup = $formElement.find(`.${CLASSES.mainGroup}`);
         this._$recurrenceGroup = $formElement.find(`.${CLASSES.recurrenceGroup}`);
       },
-    } as FormProperties) as dxForm;
+    } as FormProperties;
+    const formOptions = extend(true, defaultOptions, customFormOptions);
+
+    return this.scheduler.createComponent(element, dxForm, formOptions) as dxForm;
   }
 
   private createMainFormGroup(): GroupItem {

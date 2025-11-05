@@ -1339,7 +1339,7 @@ describe('Appointment Popup Form', () => {
     });
   });
 
-  describe('Form custimization', () => {
+  describe('Form customization', () => {
     it('should propagate editing.form options to the form instance', async () => {
       const { scheduler, POM } = await createScheduler({
         ...getDefaultConfig(),
