@@ -8,7 +8,7 @@ import  UploadInfo from "devextreme/file_management/upload_info";
 import {
  Alert,
  Message,
- AttachmentDownloadEvent,
+ AttachmentDownloadClickEvent,
  DisposingEvent,
  InitializedEvent,
  MessageDeletedEvent,
@@ -76,7 +76,7 @@ type AccessibleOptions = Pick<Properties,
   "items" |
   "messageTemplate" |
   "messageTimestampFormat" |
-  "onAttachmentDownload" |
+  "onAttachmentDownloadClick" |
   "onDisposing" |
   "onInitialized" |
   "onMessageDeleted" |
@@ -124,7 +124,7 @@ const componentConfig = {
     items: Array as PropType<Array<Message>>,
     messageTemplate: {},
     messageTimestampFormat: [Object, String, Function] as PropType<Format | CommonFormat | (((value: number | Date) => string)) | Record<string, any> | string>,
-    onAttachmentDownload: Function as PropType<((e: AttachmentDownloadEvent) => void)>,
+    onAttachmentDownloadClick: Function as PropType<((e: AttachmentDownloadClickEvent) => void)>,
     onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
     onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
     onMessageDeleted: Function as PropType<((e: MessageDeletedEvent) => void)>,
@@ -168,7 +168,7 @@ const componentConfig = {
     "update:items": null,
     "update:messageTemplate": null,
     "update:messageTimestampFormat": null,
-    "update:onAttachmentDownload": null,
+    "update:onAttachmentDownloadClick": null,
     "update:onDisposing": null,
     "update:onInitialized": null,
     "update:onMessageDeleted": null,
