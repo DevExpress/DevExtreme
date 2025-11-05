@@ -17,17 +17,14 @@ runManualTest('DropDownButton', 'Overview', (test) => {
 
     await t
       .click($(`.${DROP_DOWN_BUTTON_CLASS}`).nth(0));
-    //  .wait(200);
 
     await testScreenshot(t, takeScreenshot, 'dropdown_button_overview_custom_static_text.png');
 
     await t
       .click($(`.${DROP_DOWN_BUTTON_CLASS}`).nth(0));
-    //   .wait(200);
 
     await t
       .click($(`.${DROP_DOWN_BUTTON_TOGGLE_CLASS}`));
-    //  .wait(200);
 
     await testScreenshot(t, takeScreenshot, 'dropdown_button_overview_custom_button_action.png');
 

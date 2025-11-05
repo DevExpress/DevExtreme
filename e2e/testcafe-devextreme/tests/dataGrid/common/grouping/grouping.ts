@@ -1,6 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { makeColumnHeadersViewTemplatesAsync } from '../../helpers/asyncTemplates';
@@ -145,7 +144,7 @@ test('Headers should be rendered correctly after changing the grouping.autoExpan
   await makeColumnHeadersViewTemplatesAsync(DATA_GRID_SELECTOR);
 });
 
-safeSizeTest('Empty header message should appear when all columns grouped and selection is enabled', async (t) => {
+test.meta({ browserSize: [800, 800] })('Empty header message should appear when all columns grouped and selection is enabled', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const dataGrid = new DataGrid('#container');
@@ -156,7 +155,7 @@ safeSizeTest('Empty header message should appear when all columns grouped and se
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => {
+}).before(async () => {
   await createWidget('dxDataGrid', {
     dataSource: [
       {
@@ -339,7 +338,7 @@ test('Grouping and filtering should be applied correctly when they change at run
 }));
 
 // T1112573
-test.meta({ unstable: true })('Content should be rendered correctly after setting the grouping.autoExpandAll property to true when dataRowTemplate is given', async (t) => {
+test('Content should be rendered correctly after setting the grouping.autoExpandAll property to true when dataRowTemplate is given', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
 

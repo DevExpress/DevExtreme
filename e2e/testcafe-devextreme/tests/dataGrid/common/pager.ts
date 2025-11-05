@@ -1,7 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import TextBox from 'devextreme-testcafe-models/textBox';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
@@ -26,7 +25,7 @@ async function createDataGridWithPager(): Promise<any> {
 fixture.disablePageReloads`Pager`
   .page(url(__dirname, '../../container.html'));
 
-safeSizeTest('Full size pager', async (t) => {
+test('Full size pager', async (t) => {
   const dataGrid = new DataGrid('#container');
   const pager = dataGrid.getPager();
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -69,7 +68,7 @@ safeSizeTest('Full size pager', async (t) => {
     .ok();
 }).skip.before(async () => createDataGridWithPager());
 
-safeSizeTest('Compact pager', async (t) => {
+test.meta({ browserSize: [350, 600] })('Compact pager', async (t) => {
   const dataGrid = new DataGrid('#container');
   const pager = dataGrid.getPager();
   const pageSizeWidget = pager.getPageSizeSelectBox();
@@ -90,9 +89,9 @@ safeSizeTest('Compact pager', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok();
-}, [350, 600]).before(async () => createDataGridWithPager());
+}).before(async () => createDataGridWithPager());
 
-safeSizeTest('Resize', async (t) => {
+test('Resize', async (t) => {
   const dataGrid = new DataGrid('#container');
   const pagerElement = dataGrid.getPager().element;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -116,7 +115,7 @@ safeSizeTest('Resize', async (t) => {
     .ok(compareResults.errorMessages());
 }).before(async () => createDataGridWithPager());
 
-safeSizeTest('Resize without navigation buttons', async (t) => {
+test('Resize without navigation buttons', async (t) => {
   const dataGrid = new DataGrid('#container');
   await dataGrid.option('pager.showNavigationButtons', false);
   const pagerElement = dataGrid.getPager().element;
@@ -145,7 +144,7 @@ safeSizeTest('Resize without navigation buttons', async (t) => {
 // visual: generic.light.compact
 // visual: material.blue.light
 // visual: material.blue.light.compact
-safeSizeTest('Compact pager in the generic.light theme (T1057735)', async (t) => {
+test.meta({ browserSize: [700, 600] })('Compact pager in the generic.light theme (T1057735)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const pagerElement = dataGrid.getPager().element;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -154,24 +153,23 @@ safeSizeTest('Compact pager in the generic.light theme (T1057735)', async (t) =>
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [700, 600])
-  .before(async () => {
-    await createWidget('dxDataGrid', {
-      dataSource: [{ id: 1, name: 'test' }],
-      keyExpr: 'id',
-      paging: {
-        pageSize: 10,
-      },
-      pager: {
-        visible: true,
-        allowedPageSizes: [5, 10, 'all'],
-        showPageSizeSelector: true,
-        showInfo: true,
-        showNavigationButtons: true,
-        displayMode: 'compact',
-      },
-    });
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [{ id: 1, name: 'test' }],
+    keyExpr: 'id',
+    paging: {
+      pageSize: 10,
+    },
+    pager: {
+      visible: true,
+      allowedPageSizes: [5, 10, 'all'],
+      showPageSizeSelector: true,
+      showInfo: true,
+      showNavigationButtons: true,
+      displayMode: 'compact',
+    },
   });
+});
 
 test('Changing pageSize to \'all\' with rowRenderingMode=\'virtual\' should work (T1090331)', async (t) => {
   const dataGrid = new DataGrid('#container');
