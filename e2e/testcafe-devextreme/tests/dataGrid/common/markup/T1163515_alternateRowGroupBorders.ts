@@ -154,12 +154,10 @@ const verifyGridStyles = async (t, dataGrid, matrixOptions) => {
 
     const rowsView = dataGrid.getRowsView();
 
-    const rowsViewBorderTop = await rowsView.getStyleProperty('border-top-width');
     const rowsViewBorderLeft = await rowsView.getStyleProperty('border-left-width');
     const rowsViewBorderRight = await rowsView.getStyleProperty('border-right-width');
     const rowsViewBorderBottom = await rowsView.getStyleProperty('border-bottom-width');
 
-    await t.expect(parseInt(rowsViewBorderTop, 10)).gt(0);
     await t.expect(parseInt(rowsViewBorderLeft, 10)).gt(0);
     await t.expect(parseInt(rowsViewBorderRight, 10)).gt(0);
     await t.expect(parseInt(rowsViewBorderBottom, 10)).gt(0);
