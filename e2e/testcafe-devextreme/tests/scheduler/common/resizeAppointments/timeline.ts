@@ -2,7 +2,6 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import dataSource from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import url from '../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Resize appointments in the Scheduler basic views`
   .page(url(__dirname, '../../../container.html'));
@@ -73,7 +72,7 @@ test('Resize in the "timelineMonth" view', async (t) => {
   dataSource,
 }));
 
-safeSizeTest('Resize appointment on timelineWeek view with custom startDayHour & endDayHour (T804779)', async (t) => {
+test.meta({ browserSize: [1400, 800] })('Resize appointment on timelineWeek view with custom startDayHour & endDayHour (T804779)', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointment('Appointment');
 
@@ -82,7 +81,7 @@ safeSizeTest('Resize appointment on timelineWeek view with custom startDayHour &
     .expect(appointment.size.width).eql('200px')
     .expect(appointment.date.time)
     .eql('2:00 PM - 3:00 PM');
-}, [1400, 800]).before(async () => createScheduler({
+}).before(async () => createScheduler({
   views: [{
     type: 'timelineWeek', startDayHour: 10, endDayHour: 16, cellDuration: 60,
   }],

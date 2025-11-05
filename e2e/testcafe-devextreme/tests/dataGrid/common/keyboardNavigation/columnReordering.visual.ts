@@ -2,7 +2,6 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { getData } from '../../helpers/generateDataSourceData';
 import { testScreenshot } from '../../../../helpers/themeUtils';
 
@@ -68,7 +67,7 @@ const DATA_GRID_SELECTOR = '#container';
     });
   });
 
-  safeSizeTest(`reorder column to right via context menu when rtlEnabled = ${rtlEnabled}`, async (t) => {
+  test(`reorder column to right via context menu when rtlEnabled = ${rtlEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
     const contextMenu = dataGrid.getContextMenu();
@@ -101,7 +100,7 @@ const DATA_GRID_SELECTOR = '#container';
     });
   });
 
-  safeSizeTest(`reorder column to left via context menu when rtlEnabled = ${rtlEnabled}`, async (t) => {
+  test(`reorder column to left via context menu when rtlEnabled = ${rtlEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
     const contextMenu = dataGrid.getContextMenu();
@@ -223,7 +222,7 @@ test('The column should not be reordered when allowColumnReordering is false and
   });
 });
 
-safeSizeTest('The context menu should not have items for column reordering when allowColumnReordering is false', async (t) => {
+test('The context menu should not have items for column reordering when allowColumnReordering is false', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const firstHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
@@ -608,7 +607,7 @@ test('reorder fixed right column to right when there is a custom command column 
   });
 });
 
-safeSizeTest('reorder fixed left column to right via context menu', async (t) => {
+test('reorder fixed left column to right via context menu', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const contextMenu = dataGrid.getContextMenu();
@@ -646,7 +645,7 @@ safeSizeTest('reorder fixed left column to right via context menu', async (t) =>
   });
 });
 
-safeSizeTest('reorder fixed left column to left via context menu', async (t) => {
+test('reorder fixed left column to left via context menu', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const contextMenu = dataGrid.getContextMenu();
@@ -684,7 +683,7 @@ safeSizeTest('reorder fixed left column to left via context menu', async (t) => 
   });
 });
 
-safeSizeTest('reorder fixed right column to right via context menu', async (t) => {
+test('reorder fixed right column to right via context menu', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const contextMenu = dataGrid.getContextMenu();
@@ -724,7 +723,7 @@ safeSizeTest('reorder fixed right column to right via context menu', async (t) =
   });
 });
 
-safeSizeTest('reorder fixed right column to left via context menu', async (t) => {
+test('reorder fixed right column to left via context menu', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const contextMenu = dataGrid.getContextMenu();
@@ -978,7 +977,7 @@ test('reorder fixed nested column to left', async (t) => {
   });
 });
 
-safeSizeTest('reorder nested column to left via context menu', async (t) => {
+test('reorder nested column to left via context menu', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const contextMenu = dataGrid.getContextMenu();
@@ -1016,7 +1015,7 @@ safeSizeTest('reorder nested column to left via context menu', async (t) => {
   });
 });
 
-safeSizeTest('reorder nested column to right via context menu', async (t) => {
+test('reorder nested column to right via context menu', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const contextMenu = dataGrid.getContextMenu();
@@ -1213,7 +1212,7 @@ test('reorder a custom command column to left', async (t) => {
   });
 });
 
-safeSizeTest('reorder a custom command column to right via context menu', async (t) => {
+test('reorder a custom command column to right via context menu', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const contextMenu = dataGrid.getContextMenu();
@@ -1345,7 +1344,8 @@ test('reorder column to left when adaptability is enabled and there are hidden c
 
     await t
       .click(firstHeader.element)
-      .pressKey('ctrl+right');
+      .pressKey('ctrl+right')
+      .wait(1000);
 
     await t
       .expect(firstHeader.element.textContent)

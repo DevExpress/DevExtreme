@@ -1,5 +1,6 @@
 import $ from 'jquery';
 
+import Button from 'ui/button';
 import Chat from 'ui/chat';
 import MessageList, {
     CHAT_MESSAGELIST_CONTEXT_MENU_CLASS
@@ -7,6 +8,9 @@ import MessageList, {
 import ContextMenu, {
     DX_MENU_ITEM_CLASS,
 } from '__internal/ui/context_menu/context_menu';
+import FileUploader, {
+    FILEUPLOADER_CLASS,
+} from '__internal/ui/file_uploader/file_uploader';
 import {
     FOCUSED_STATE_CLASS,
     WIDGET_CLASS,
@@ -38,7 +42,10 @@ import { BUTTON_CLASS } from '__internal/ui/button/button';
 import { CHAT_FILE_CLASS } from '__internal/ui/chat/file_view/file';
 
 import MessageBubble from '__internal/ui/chat/messagebubble';
-import ChatTextArea, { CHAT_TEXTAREA_CLASS } from '__internal/ui/chat/message_box/chat_text_area';
+import ChatTextArea, {
+    CHAT_TEXTAREA_CLASS,
+    CHAT_TEXT_AREA_ATTACH_BUTTON,
+} from '__internal/ui/chat/message_box/chat_text_area';
 
 const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
@@ -123,6 +130,8 @@ const moduleConfig = {
         this.getEditingPreview = () => this.$element.find(`.${CHAT_EDITING_PREVIEW_CLASS}`);
         this.getCancelEditingButton = () => this.$element.find(`.${CHAT_EDITING_PREVIEW_CANCEL_BUTTON_CLASS}`);
         this.getMessageListEmptyView = () => this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`);
+        this.getFileUploader = () => FileUploader.getInstance(this.$element.find(`.${FILEUPLOADER_CLASS}`));
+        this.getAttachButton = () => Button.getInstance(this.$element.find(`.${CHAT_TEXT_AREA_ATTACH_BUTTON}`));
 
         init();
     },
@@ -1227,6 +1236,95 @@ QUnit.module('Chat', () => {
             assert.strictEqual(this.textArea.option('value'), 'b', 'input contains editing message text');
             assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
         });
+
+        QUnit.testInActiveWindow('attach button should be hidden after editing is started', function(assert) {
+            this.reinit({
+                items: [{ text: 'f', author: userSecond }],
+                focusStateEnabled: true,
+                user: userSecond,
+                editing: {
+                    allowUpdating: true
+                },
+                fileUploaderOptions: {},
+            });
+            const attachButton = this.getAttachButton();
+            assert.strictEqual(attachButton.option('visible'), true, 'attach button is visible');
+
+            const $bubbles = this.getBubbles();
+            $bubbles.eq(0).trigger('dxcontextmenu');
+
+            const $editButton = this.getContextMenuItems().eq(0);
+            $editButton.trigger('dxclick');
+
+            assert.strictEqual(attachButton.option('visible'), false, 'attach button is hidden');
+        });
+
+        QUnit.testInActiveWindow('attach button should be visible after editing is done', function(assert) {
+            this.reinit({
+                items: [{ text: 'f', author: userSecond }],
+                focusStateEnabled: true,
+                user: userSecond,
+                editing: {
+                    allowUpdating: true
+                },
+                fileUploaderOptions: {},
+            });
+            const $bubbles = this.getBubbles();
+            $bubbles.eq(0).trigger('dxcontextmenu');
+
+            const $editButton = this.getContextMenuItems().eq(0);
+            $editButton.trigger('dxclick');
+            this.$sendButton.trigger('dxclick');
+
+            const attachButton = this.getAttachButton();
+
+            assert.strictEqual(attachButton.option('visible'), true, 'attach button is visible');
+        });
+
+        QUnit.testInActiveWindow('attach button should be visible after editing is canceled', function(assert) {
+            this.reinit({
+                items: [{ text: 'f', author: userSecond }],
+                focusStateEnabled: true,
+                user: userSecond,
+                editing: {
+                    allowUpdating: true
+                },
+                fileUploaderOptions: {},
+            });
+            const $bubbles = this.getBubbles();
+            $bubbles.eq(0).trigger('dxcontextmenu');
+
+            const $editButton = this.getContextMenuItems().eq(0);
+            $editButton.trigger('dxclick');
+            this.getCancelEditingButton().trigger('dxclick');
+
+            const attachButton = this.getAttachButton();
+
+            assert.strictEqual(attachButton.option('visible'), true, 'attach button is visible');
+        });
+
+        QUnit.testInActiveWindow('fileUploader should reset value after message editing is started', function(assert) {
+            this.reinit({
+                items: [{ text: 'f', author: userSecond }],
+                focusStateEnabled: true,
+                user: userSecond,
+                editing: {
+                    allowUpdating: true
+                },
+                fileUploaderOptions: {},
+            });
+
+            const fileUploader = this.getFileUploader();
+            fileUploader.option('value', [{ name: 'fakefile.png', size: 123 }]);
+
+            const $bubbles = this.getBubbles();
+            $bubbles.eq(0).trigger('dxcontextmenu');
+
+            const $editButton = this.getContextMenuItems().eq(0);
+            $editButton.trigger('dxclick');
+
+            assert.deepEqual(fileUploader.option('value'), []);
+        });
     });
 
     QUnit.module('Events', () => {
@@ -2248,7 +2346,7 @@ QUnit.module('Chat', () => {
             });
         });
 
-        QUnit.module('onAttachmentDownload', {
+        QUnit.module('onAttachmentDownloadClick', {
             beforeEach: function() {
                 moduleConfig.beforeEach.apply(this, arguments);
 
@@ -2270,7 +2368,7 @@ QUnit.module('Chat', () => {
 
                 this.reinit({
                     dataSource: this.dataSourceWithAttachments,
-                    onAttachmentDownload: ({ component, element, attachment }) => {
+                    onAttachmentDownloadClick: ({ component, element, attachment }) => {
                         assert.strictEqual(component, this.instance, 'component field is correct');
                         assert.strictEqual(isRenderer(element), !!config().useJQuery, 'element is correct');
                         assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
@@ -2283,17 +2381,17 @@ QUnit.module('Chat', () => {
             });
 
             QUnit.test('should be possible to change at runtime', function(assert) {
-                const onAttachmentDownload = sinon.spy();
+                const onAttachmentDownloadClick = sinon.spy();
 
-                this.instance.option({ onAttachmentDownload, dataSource: this.dataSourceWithAttachments });
+                this.instance.option({ onAttachmentDownloadClick, dataSource: this.dataSourceWithAttachments });
 
                 this.getDownloadButton().trigger('dxclick');
 
-                assert.strictEqual(onAttachmentDownload.callCount, 1);
+                assert.strictEqual(onAttachmentDownloadClick.callCount, 1);
             });
 
             QUnit.test('should hide download button if not passed', function(assert) {
-                this.instance.option({ onAttachmentDownload: undefined, dataSource: this.dataSourceWithAttachments });
+                this.instance.option({ onAttachmentDownloadClick: undefined, dataSource: this.dataSourceWithAttachments });
 
                 assert.strictEqual(this.getDownloadButton().length, 0, 'button is hidden');
             });
