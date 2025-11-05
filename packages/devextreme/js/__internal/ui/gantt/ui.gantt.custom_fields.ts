@@ -1,91 +1,151 @@
-import { compileGetter } from '../../core/utils/data';
-import { GanttDataCache } from './ui.gantt.cache';
-import { GanttHelper } from './ui.gantt.helper';
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import { compileGetter } from '@js/core/utils/data';
+import type Gantt from '@ts/ui/gantt/ui.gantt';
+import { GanttDataCache } from '@ts/ui/gantt/ui.gantt.cache';
+import { GanttHelper } from '@ts/ui/gantt/ui.gantt.helper';
+import type { GanttMappingHelper } from '@ts/ui/gantt/ui.gantt.mapping_helper';
 
 const GANTT_TASKS = 'tasks';
 
 export class GanttCustomFieldsManager {
-    constructor(gantt) {
-        this._gantt = gantt;
-        this._mappingHelper = gantt._mappingHelper;
-        this.cache = new GanttDataCache();
-    }
+  _gantt: Gantt;
 
-    _getTaskCustomFields() {
-        const columns = this._gantt.option('columns');
-        const columnFields = columns && columns.map(c => c.dataField);
-        const mappedFields = this._mappingHelper.getTaskMappedFieldNames();
-        return columnFields ? columnFields.filter(f => mappedFields.indexOf(f) < 0) : [];
-    }
-    _getCustomFieldsData(data) {
-        return this._getTaskCustomFields()
-            .reduce((previous, field) => {
-                if(data && data[field] !== undefined) {
-                    previous[field] = data[field];
-                }
-                return previous;
-            }, {});
-    }
-    addCustomFieldsData(key, data) {
-        if(data) {
-            const modelData = this._gantt._tasksOption && this._gantt._tasksOption._getItems();
-            const keyGetter = compileGetter(this._gantt.option(`${GANTT_TASKS}.keyExpr`));
-            const modelItem = modelData && modelData.filter((obj) => keyGetter(obj) === key)[0];
-            const customFields = this._getTaskCustomFields();
-            if(modelItem) {
-                for(let i = 0; i < customFields.length; i++) {
-                    const field = customFields[i];
-                    if(Object.prototype.hasOwnProperty.call(modelItem, field)) {
-                        data[field] = modelItem[field];
-                    }
-                }
-            }
+  _mappingHelper: GanttMappingHelper;
+
+  cache: GanttDataCache;
+
+  constructor(gantt: Gantt) {
+    this._gantt = gantt;
+    // @ts-expect-error ts-error
+    this._mappingHelper = gantt._mappingHelper;
+    this.cache = new GanttDataCache();
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  _getTaskCustomFields() {
+    const { columns } = this._gantt.option();
+    // @ts-expect-error ts-error
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    const columnFields = columns?.map((c) => c.dataField);
+    const mappedFields = this._mappingHelper.getTaskMappedFieldNames();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return columnFields
+      // @ts-expect-error ts-error
+      ? columnFields.filter((f) => !mappedFields.includes(f))
+      : [];
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  _getCustomFieldsData(data) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return this._getTaskCustomFields().reduce((previous, field) => {
+      if (data && data[field] !== undefined) {
+        previous[field] = data[field];
+      }
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return previous;
+    }, {});
+  }
+
+  addCustomFieldsData(key, data): void {
+    if (data) {
+      // @ts-expect-error ts-error
+      const modelData = this._gantt._tasksOption?._getItems();
+      const keyGetter = compileGetter(
+        // @ts-expect-error ts-error
+        this._gantt.option(`${GANTT_TASKS}.keyExpr`),
+      );
+      // @ts-expect-error ts-error
+      const modelItem = modelData?.filter((obj) => keyGetter(obj) === key)[0];
+      const customFields = this._getTaskCustomFields();
+      if (modelItem) {
+        // eslint-disable-next-line @typescript-eslint/prefer-for-of
+        for (let i = 0; i < customFields.length; i += 1) {
+          const field = customFields[i];
+          // eslint-disable-next-line max-depth
+          if (Object.prototype.hasOwnProperty.call(modelItem, field)) {
+            data[field] = modelItem[field];
+          }
         }
+      }
     }
+  }
 
-    appendCustomFields(data) {
-        const modelData = this._gantt._tasksOption && this._gantt._tasksOption._getItems();
-        const keyGetter = this._gantt._getTaskKeyGetter();
-        const invertedData = GanttHelper.getInvertedData(modelData, keyGetter);
-        return data.reduce((previous, item) => {
-            const key = keyGetter(item);
-            const modelItem = invertedData[key];
-            if(!modelItem) {
-                previous.push(item);
-            } else {
-                const updatedItem = {};
-                for(const field in modelItem) {
-                    updatedItem[field] = Object.prototype.hasOwnProperty.call(item, field) ? item[field] : modelItem[field];
-                }
-                previous.push(updatedItem);
-            }
-            return previous;
-        }, []);
-    }
-
-    addCustomFieldsDataFromCache(key, data) {
-        this.cache.pullDataFromCache(key, data);
-    }
-    saveCustomFieldsDataToCache(key, data, forceUpdateOnKeyExpire = false, isCustomFieldsUpdateOnly = false) {
-        const customFieldsData = this._getCustomFieldsData(data);
-        if(Object.keys(customFieldsData).length > 0) {
-            const updateCallback = (key, data) => {
-                const dataOption = this._gantt[`_${GANTT_TASKS}Option`];
-                if(dataOption && data) {
-                    dataOption.update(key, data, (data, key) => {
-                        const updatedCustomFields = {};
-                        this.addCustomFieldsData(key, updatedCustomFields);
-                        dataOption._reloadDataSource().done(data => {
-                            this._gantt._ganttTreeList.updateDataSource(data ?? dataOption._dataSource, false, isCustomFieldsUpdateOnly);
-                        });
-                        const selectedRowKey = this._gantt.option('selectedRowKey');
-                        this._gantt._ganttView._selectTask(selectedRowKey);
-                        this._gantt._actionsManager.raiseUpdatedAction(GANTT_TASKS, updatedCustomFields, key);
-                    });
-                }
-            };
-            this.cache.saveData(key, customFieldsData, forceUpdateOnKeyExpire ? updateCallback : null);
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  appendCustomFields(data) {
+    // @ts-expect-error ts-error
+    const modelData = this._gantt._tasksOption?._getItems();
+    const keyGetter = this._gantt._getTaskKeyGetter();
+    const invertedData = GanttHelper.getInvertedData(modelData, keyGetter);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return data.reduce((previous, item) => {
+      // @ts-expect-error ts-error
+      const key = keyGetter(item);
+      const modelItem = invertedData[key];
+      if (!modelItem) {
+        previous.push(item);
+      } else {
+        const updatedItem = {};
+        // eslint-disable-next-line guard-for-in,no-restricted-syntax
+        for (const field in modelItem) {
+          updatedItem[field] = Object.prototype.hasOwnProperty.call(item, field)
+            ? item[field]
+            : modelItem[field];
         }
+        previous.push(updatedItem);
+      }
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return previous;
+    }, []);
+  }
+
+  addCustomFieldsDataFromCache(key, data): void {
+    this.cache.pullDataFromCache(key, data);
+  }
+
+  saveCustomFieldsDataToCache(
+    key,
+    data,
+    forceUpdateOnKeyExpire = false,
+    isCustomFieldsUpdateOnly = false,
+  ): void {
+    const customFieldsData = this._getCustomFieldsData(data);
+    if (Object.keys(customFieldsData).length > 0) {
+      // eslint-disable-next-line @typescript-eslint/no-shadow
+      const updateCallback = (key, data): void => {
+        const dataOption = this._gantt[`_${GANTT_TASKS}Option`];
+        if (dataOption && data) {
+          // eslint-disable-next-line @typescript-eslint/no-shadow
+          dataOption.update(key, data, (data, key): void => {
+            const updatedCustomFields = {};
+            this.addCustomFieldsData(key, updatedCustomFields);
+            // eslint-disable-next-line @typescript-eslint/no-shadow
+            dataOption._reloadDataSource().done((data): void => {
+              this._gantt._ganttTreeList?.updateDataSource(
+                data ?? dataOption._dataSource,
+                false,
+                isCustomFieldsUpdateOnly,
+              );
+            });
+            const selectedRowKey = this._gantt.option('selectedRowKey');
+            this._gantt._ganttView?._selectTask(selectedRowKey);
+            this._gantt._actionsManager?.raiseUpdatedAction(
+              GANTT_TASKS,
+              updatedCustomFields,
+              key,
+            );
+          });
+        }
+      };
+      this.cache.saveData(
+        key,
+        customFieldsData,
+        forceUpdateOnKeyExpire ? updateCallback : null,
+      );
     }
-    resetCustomFieldsDataCache(key) { this.cache.resetCache(key); }
+  }
+
+  resetCustomFieldsDataCache(key): void {
+    this.cache.resetCache(key);
+  }
 }

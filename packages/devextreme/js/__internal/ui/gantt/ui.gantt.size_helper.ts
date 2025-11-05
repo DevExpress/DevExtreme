@@ -1,83 +1,118 @@
-import { getWidth, getHeight, setHeight, setWidth } from '../../core/utils/size';
-import { hasWindow } from '../../core/utils/window';
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import {
+  getHeight,
+  getWidth,
+  setHeight,
+  setWidth,
+} from '@js/core/utils/size';
+import { hasWindow } from '@js/core/utils/window';
+import type Gantt from '@ts/ui/gantt/ui.gantt';
+
+type Dimension = 'width' | 'height';
 
 export class GanttSizeHelper {
-    constructor(gantt) {
-        this._gantt = gantt;
-    }
+  _gantt: Gantt;
 
-    _setTreeListDimension(dimension, value) {
-        const setter = dimension === 'width' ? setWidth : setHeight;
-        const getter = dimension === 'width' ? getWidth : getHeight;
-        setter(this._gantt._$treeListWrapper, value);
-        this._gantt._ganttTreeList?.setOption(dimension, getter(this._gantt._$treeListWrapper));
-    }
-    _setGanttViewDimension(dimension, value) {
-        const setter = dimension === 'width' ? setWidth : setHeight;
-        const getter = dimension === 'width' ? getWidth : getHeight;
-        setter(this._gantt._$ganttView, value);
-        this._gantt._setGanttViewOption(dimension, getter(this._gantt._$ganttView));
-    }
-    _getPanelsWidthByOption() {
-        const ganttWidth = getWidth(this._gantt._$element);
-        const leftPanelWidth = this._gantt.option('taskListWidth');
-        let rightPanelWidth;
-        if(!isNaN(leftPanelWidth)) {
-            rightPanelWidth = ganttWidth - parseInt(leftPanelWidth);
-        } else if(leftPanelWidth.indexOf?.('px') > 0) {
-            rightPanelWidth = (ganttWidth - parseInt(leftPanelWidth.replace('px', ''))) + 'px';
-        } else if(leftPanelWidth.indexOf?.('%') > 0) {
-            rightPanelWidth = (100 - parseInt(leftPanelWidth.replace('%', ''))) + '%';
-        }
-        return { leftPanelWidth: leftPanelWidth, rightPanelWidth: rightPanelWidth };
-    }
+  constructor(gantt: Gantt) {
+    this._gantt = gantt;
+  }
 
-    onAdjustControl() {
-        const elementHeight = getHeight(this._gantt._$element);
-        this.updateGanttWidth();
-        this.setGanttHeight(elementHeight);
+  _setTreeListDimension(dimension: Dimension, value): void {
+    const setter = dimension === 'width' ? setWidth : setHeight;
+    const getter = dimension === 'width' ? getWidth : getHeight;
+    setter(this._gantt._$treeListWrapper, value);
+    this._gantt._ganttTreeList?.setOption(
+      dimension,
+      getter(this._gantt._$treeListWrapper),
+    );
+  }
+
+  _setGanttViewDimension(dimension: Dimension, value): void {
+    const setter = dimension === 'width' ? setWidth : setHeight;
+    const getter = dimension === 'width' ? getWidth : getHeight;
+    setter(this._gantt._$ganttView, value);
+    this._gantt._setGanttViewOption(dimension, getter(this._gantt._$ganttView));
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  _getPanelsWidthByOption() {
+    const ganttWidth = getWidth(this._gantt.$element());
+    const leftPanelWidth = this._gantt.option('taskListWidth');
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let rightPanelWidth;
+    // @ts-expect-error ts-error
+    if (!isNaN(leftPanelWidth)) {
+      // @ts-expect-error ts-error
+      rightPanelWidth = ganttWidth - parseInt(leftPanelWidth, 10);
+      // @ts-expect-error ts-error
+    } else if (leftPanelWidth.indexOf?.('px') > 0) {
+      // @ts-expect-error ts-error
+      rightPanelWidth = `${ganttWidth - parseInt(leftPanelWidth.replace('px', ''), 10)}px`;
+      // @ts-expect-error ts-error
+    } else if (leftPanelWidth.indexOf?.('%') > 0) {
+      // @ts-expect-error ts-error
+      rightPanelWidth = `${100 - parseInt(leftPanelWidth.replace('%', ''), 10)}%`;
     }
-    onApplyPanelSize(e) {
-        this.setInnerElementsWidth(e);
-        this.updateGanttRowHeights();
+    return { leftPanelWidth, rightPanelWidth };
+  }
+
+  onAdjustControl(): void {
+    const elementHeight = getHeight(this._gantt.$element());
+    this.updateGanttWidth();
+    this.setGanttHeight(elementHeight);
+  }
+
+  onApplyPanelSize(e): void {
+    this.setInnerElementsWidth(e);
+    this.updateGanttRowHeights();
+  }
+
+  updateGanttRowHeights(): void {
+    const rowHeight = this._gantt._ganttTreeList?.getRowHeight();
+    if (this._gantt._getGanttViewOption('rowHeight') !== rowHeight) {
+      this._gantt._setGanttViewOption('rowHeight', rowHeight);
+      this._gantt._ganttView?._ganttViewCore.updateRowHeights(rowHeight);
     }
-    updateGanttRowHeights() {
-        const rowHeight = this._gantt._ganttTreeList.getRowHeight();
-        if(this._gantt._getGanttViewOption('rowHeight') !== rowHeight) {
-            this._gantt._setGanttViewOption('rowHeight', rowHeight);
-            this._gantt._ganttView?._ganttViewCore.updateRowHeights(rowHeight);
-        }
+  }
+
+  adjustHeight(): void {
+    if (!this._gantt._hasHeight) {
+      this._gantt._setGanttViewOption('height', 0);
+      this._gantt._setGanttViewOption(
+        'height',
+        this._gantt._ganttTreeList?.getOffsetHeight(),
+      );
     }
-    adjustHeight() {
-        if(!this._gantt._hasHeight) {
-            this._gantt._setGanttViewOption('height', 0);
-            this._gantt._setGanttViewOption('height', this._gantt._ganttTreeList.getOffsetHeight());
-        }
+  }
+
+  setInnerElementsWidth(widths?): void {
+    if (!hasWindow()) {
+      return;
     }
-    setInnerElementsWidth(widths) {
-        if(!hasWindow()) {
-            return;
-        }
-        const takeWithFromOption = !widths;
-        if(takeWithFromOption) {
-            widths = this._getPanelsWidthByOption();
-            this._setTreeListDimension('width', 0);
-            this._setGanttViewDimension('width', 0);
-        }
-        this._setTreeListDimension('width', widths.leftPanelWidth);
-        this._setGanttViewDimension('width', widths.rightPanelWidth);
-        if(takeWithFromOption) {
-            this._gantt._splitter._setSplitterPositionLeft();
-        }
+    const takeWithFromOption = !widths;
+    if (takeWithFromOption) {
+      // eslint-disable-next-line no-param-reassign
+      widths = this._getPanelsWidthByOption();
+      this._setTreeListDimension('width', 0);
+      this._setGanttViewDimension('width', 0);
     }
-    updateGanttWidth() {
-        this._gantt._splitter._dimensionChanged();
+    this._setTreeListDimension('width', widths.leftPanelWidth);
+    this._setGanttViewDimension('width', widths.rightPanelWidth);
+    if (takeWithFromOption) {
+      this._gantt._splitter?._setSplitterPositionLeft();
     }
-    setGanttHeight(height) {
-        const toolbarHeightOffset = this._gantt._$toolbarWrapper.get(0).offsetHeight;
-        const mainWrapperHeight = height - toolbarHeightOffset;
-        this._setTreeListDimension('height', mainWrapperHeight);
-        this._setGanttViewDimension('height', mainWrapperHeight);
-        this._gantt._ganttView?._ganttViewCore.resetAndUpdate();
-    }
+  }
+
+  updateGanttWidth(): void {
+    this._gantt._splitter?._dimensionChanged();
+  }
+
+  setGanttHeight(height): void {
+    // @ts-expect-error ts-error
+    const toolbarHeightOffset = this._gantt._$toolbarWrapper.get(0).offsetHeight;
+    const mainWrapperHeight = height - toolbarHeightOffset;
+    this._setTreeListDimension('height', mainWrapperHeight);
+    this._setGanttViewDimension('height', mainWrapperHeight);
+    this._gantt._ganttView?._ganttViewCore.resetAndUpdate();
+  }
 }
