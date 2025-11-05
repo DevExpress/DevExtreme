@@ -846,7 +846,7 @@ export const FileAttachments: Story = {
       message: '',
     });
 
-    const onAttachmentDownload = useCallback((e: ChatTypes.AttachmentDownloadEvent) => {
+    const onAttachmentDownloadClick = useCallback((e: ChatTypes.AttachmentDownloadClickEvent) => {
       const { attachment } = e;
 
       setToastConfig({
@@ -901,7 +901,7 @@ export const FileAttachments: Story = {
           activeStateEnabled={activeStateEnabled}
           focusStateEnabled={focusStateEnabled}
           hoverStateEnabled={hoverStateEnabled}
-          onAttachmentDownload={onAttachmentDownload}
+          onAttachmentDownloadClick={onAttachmentDownloadClick}
           onMessageEntered={onMessageEntered}
           fileUploaderOptions={fileUploaderOptions}
         />
