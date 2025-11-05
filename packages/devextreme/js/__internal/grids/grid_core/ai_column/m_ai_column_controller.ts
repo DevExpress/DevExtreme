@@ -110,13 +110,24 @@ export class AIColumnController extends Controller {
 
   public abortAIColumnRequest(columnName: string): void {
     this.aiColumnIntegrationController.abortRequest(columnName);
+
+    if (!this.aiColumnIntegrationController.hasAbortRequests()) {
+      this.dataController.endCustomLoading();
+    }
   }
 
-  private sendRequest(
+  public sendRequest(
     columnName: string,
     useCache: boolean,
+    needToShowLoadPanel = true,
   ): void {
     const callbacks = this.getRequestCallbacks();
+    const column = this.columnsController.columnOption(columnName);
+
+    if (needToShowLoadPanel && !!column?.ai?.prompt) {
+      this.dataController.beginCustomLoading();
+    }
+
     this.aiColumnIntegrationController.sendRequest(columnName, useCache, callbacks);
   }
 
@@ -135,10 +146,12 @@ export class AIColumnController extends Controller {
   private getRequestCallbacks(): RequestCallbacks<GenerateGridColumnCommandResult> {
     return {
       onComplete: (data): void => {
+        this.dataController.endCustomLoading();
         this.aiRequestCompleted.fire(data);
         this.updateAICells();
       },
       onError: (error: Error): void => {
+        this.dataController.endCustomLoading();
         this.aiRequestRejected.fire(error);
       },
     };

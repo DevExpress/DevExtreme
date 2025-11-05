@@ -144,6 +144,10 @@ export class AIColumnIntegrationController extends Controller {
     return callbacks;
   }
 
+  public hasAbortRequests(): boolean {
+    return Object.values(this.aborts).some((abort) => !!abort);
+  }
+
   public abortRequest(columnName: string): void {
     this.aborts[columnName]?.();
     this.aborts[columnName] = undefined;

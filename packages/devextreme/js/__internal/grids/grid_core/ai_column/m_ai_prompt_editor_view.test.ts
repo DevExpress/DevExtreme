@@ -41,8 +41,7 @@ const mockColumnsController = {
 };
 const mockAIColumnController = {
   abortAIColumnRequest: jest.fn(),
-  refreshAIColumn: jest.fn(),
-  sendAIColumnRequest: jest.fn(),
+  sendRequest: jest.fn(),
   getAIColumns: jest.fn().mockReturnValue([]),
   aiRequestCompleted: Callbacks(),
   aiRequestRejected: Callbacks(),
@@ -347,7 +346,7 @@ describe('AIPromptEditorView', () => {
           aiPromptEditorPOM,
         } = createAIPromptEditorView();
 
-        mockAIColumnController.sendAIColumnRequest
+        mockAIColumnController.sendRequest
           .mockImplementation(() => {
             setTimeout(() => {
               mockAIColumnController.aiRequestCompleted.fire();
@@ -386,7 +385,7 @@ describe('AIPromptEditorView', () => {
         aiPromptEditorPOM.getRefreshButton().getElement().click();
 
         expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledWith('regenerate');
-        expect(mockAIColumnController.refreshAIColumn).toHaveBeenCalledWith('testColumn');
+        expect(mockAIColumnController.sendRequest).toHaveBeenCalledWith('testColumn', false, false);
       });
 
       it('should update prompt editor state on completion', async () => {
@@ -397,7 +396,7 @@ describe('AIPromptEditorView', () => {
         } = createAIPromptEditorView();
         const columnWithPrompt = { ...mockColumn, name: 'testColumn', ai: { prompt: 'test prompt' } };
 
-        mockAIColumnController.refreshAIColumn
+        mockAIColumnController.sendRequest
           .mockImplementation(() => {
             setTimeout(() => {
               mockAIColumnController.aiRequestCompleted.fire();
@@ -425,7 +424,7 @@ describe('AIPromptEditorView', () => {
         } = createAIPromptEditorView();
         const columnWithPrompt = { ...mockColumn, name: 'testColumn', ai: { prompt: 'test prompt' } };
 
-        mockAIColumnController.refreshAIColumn
+        mockAIColumnController.sendRequest
           .mockImplementation(() => {
             setTimeout(() => {
               mockAIColumnController.aiRequestRejected.fire();
@@ -473,7 +472,7 @@ describe('AIPromptEditorView', () => {
         aiPromptEditorView,
       } = createAIPromptEditorView();
 
-      mockAIColumnController.sendAIColumnRequest
+      mockAIColumnController.sendRequest
         .mockImplementation(() => {
           setTimeout(() => {
             mockAIColumnController.aiRequestCompleted.fire();
@@ -489,7 +488,7 @@ describe('AIPromptEditorView', () => {
       mockColumnsController.aiColumnOptionChanged.fire(mockColumn, 'ai.prompt', 'new prompt value');
 
       expect(promptEditorInstance.updatePrompt).toHaveBeenCalledWith('new prompt value');
-      expect(mockAIColumnController.sendAIColumnRequest).toHaveBeenCalledWith('aiColumn');
+      expect(mockAIColumnController.sendRequest).toHaveBeenCalledWith('aiColumn', false, false);
     });
 
     it('should update prompt editor state on completion', async () => {
@@ -498,7 +497,7 @@ describe('AIPromptEditorView', () => {
         aiPromptEditorView,
       } = createAIPromptEditorView();
 
-      mockAIColumnController.sendAIColumnRequest
+      mockAIColumnController.sendRequest
         .mockImplementation(() => {
           mockAIColumnController.aiRequestCompleted.fire();
         });
@@ -521,7 +520,7 @@ describe('AIPromptEditorView', () => {
         aiPromptEditorView,
       } = createAIPromptEditorView();
 
-      mockAIColumnController.sendAIColumnRequest
+      mockAIColumnController.sendRequest
         .mockImplementation(() => {
           mockAIColumnController.aiRequestRejected.fire();
         });
@@ -545,7 +544,7 @@ describe('AIPromptEditorView', () => {
           mockColumnsController.aiColumnOptionChanged.fire(mockColumn, 'ai.prompt', 'new prompt value');
         }).not.toThrow();
 
-        expect(mockAIColumnController.sendAIColumnRequest).toHaveBeenCalledWith('aiColumn');
+        expect(mockAIColumnController.sendRequest).toHaveBeenCalledWith('aiColumn', false, true);
       });
     });
   });

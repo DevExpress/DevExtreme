@@ -3,6 +3,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Item, ItemClickEvent, Properties as DropDownProperties } from '@js/ui/drop_down_button';
 import DropDownButton from '@js/ui/drop_down_button';
+import { findLastVisibleExpandedItemIndex } from '@ts/ui/splitter/utils/layout';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { Column } from '../columns_controller/m_columns_controller';
@@ -77,7 +78,7 @@ export const columnHeadersViewExtender = (
             this.aiPromptEditorController.show($container[0], column);
             break;
           case 'regenerate':
-            this.aiColumnController.refreshAIColumn(column.name as string);
+            this.aiColumnController.sendRequest(column.name as string, false);
             break;
           case 'clear':
             this.aiColumnController.clearAIColumn(column.name as string);

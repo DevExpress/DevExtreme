@@ -1632,13 +1632,13 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return changePaging(this, 'pageSize', value);
   }
 
-  private beginCustomLoading(messageText) {
+  public beginCustomLoading(messageText?: string) {
     this._isCustomLoading = true;
-    this._loadingText = messageText || '';
+    this._loadingText = messageText ?? '';
     this._fireLoadingChanged();
   }
 
-  private endCustomLoading() {
+  public endCustomLoading() {
     this._isCustomLoading = false;
     this._loadingText = undefined;
     this._fireLoadingChanged();

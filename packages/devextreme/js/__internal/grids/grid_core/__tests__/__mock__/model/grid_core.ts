@@ -3,6 +3,7 @@
 import type { GridBase } from '@js/common/grids';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import { LoadPanelModel } from '@ts/ui/__tests__/__mock__/model/load_panel';
 import { ToastModel } from '@ts/ui/__tests__/__mock__/model/toast';
 
 import { AIPromptEditorModel } from './ai_prompt_editor';
@@ -17,12 +18,17 @@ const SELECTORS = {
   aiDialog: 'dx-aidialog',
   aiPromptEditor: 'dx-ai-prompt-editor',
   toast: 'dx-toast',
+  loadPanel: 'dx-loadpanel',
 };
 
 export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
   protected abstract NAME: string;
 
   constructor(protected readonly root: HTMLElement) {}
+
+  private getPromptEditorContainer(): HTMLElement {
+    return this.root.querySelector(`.${SELECTORS.aiPromptEditor}`) as HTMLElement;
+  }
 
   public getHeaderCells(): NodeListOf<HTMLElement> {
     return this.root.querySelectorAll(`.${SELECTORS.headerRowClass} > td`);
@@ -63,10 +69,6 @@ export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
     return document.body.querySelector(`.${SELECTORS.aiDialog}`) as HTMLElement;
   }
 
-  private getPromptEditorContainer(): HTMLElement {
-    return this.root.querySelector(`.${SELECTORS.aiPromptEditor}`) as HTMLElement;
-  }
-
   public getAIPromptEditor(): AIPromptEditorModel {
     return new AIPromptEditorModel(this.getPromptEditorContainer());
   }
@@ -99,6 +101,14 @@ export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
 
   public async apiRefresh(): Promise<void> {
     await this.getInstance().refresh();
+  }
+
+  public apiAbortAIColumnRequest(columnName: string): void {
+    this.getInstance().abortAIColumnRequest(columnName);
+  }
+
+  public getLoadPanel(): LoadPanelModel {
+    return new LoadPanelModel(document.body.querySelector(`.${SELECTORS.loadPanel}`));
   }
 
   public abstract getInstance(): TInstance;
