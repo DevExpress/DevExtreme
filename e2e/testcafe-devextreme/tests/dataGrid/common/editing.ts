@@ -150,9 +150,14 @@ test('Tab key on editor should focus next cell if editing mode is cell', async (
   columns: [{ dataField: 'name', allowEditing: false }, { dataField: 'value', showEditorAlways: true }],
 }));
 
-test.skip('Click should work if a column button set using svg icon (T863635)', async (t) => {
+test('Click should work if a column button set using svg icon (T863635)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
+
   await t
-    .click(Selector('.dx-command-edit-with-icons').nth(0))
+    .click(Selector('#svg-icon').parent())
+    .wait(300)
     .expect(ClientFunction(() => (window as any).onSvgClickCounter)()).eql(1);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ value: 1 }],
@@ -603,8 +608,7 @@ test('Async Validation(Cell) - Data is not saved when a dependant cell value bec
   }, 'lastName'],
 })));
 
-// TODO Chrome133: skipped during chrome update
-test.skip('Cell mode(setCellValue) with async validation - The value of an invalid dependent cell should be updated in a new row(T872751)', async (t) => {
+test('Cell mode(setCellValue) with async validation - The value of an invalid dependent cell should be updated in a new row(T872751)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await dataGrid.apiAddRow();
@@ -643,9 +647,10 @@ test.skip('Cell mode(setCellValue) with async validation - The value of an inval
   }, 'lastName'],
 })));
 
-// TODO Chrome133: skipped during chrome update
-test.skip('Cell mode(setCellValue) with async validation - The value of an invalid dependent cell should be updated in a modified row(T872751)', async (t) => {
+test('Cell mode(setCellValue) with async validation - The value of an invalid dependent cell should be updated in a modified row(T872751)', async (t) => {
   const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
 
   await dataGrid.apiEditCell(0, 0);
 
@@ -683,8 +688,7 @@ test.skip('Cell mode(setCellValue) with async validation - The value of an inval
   }, 'lastName'],
 })));
 
-// TODO Chrome133: skipped during chrome update
-test.skip('Cell mode(calculateCellValue) with async validation - The value of an invalid dependent cell should be updated in a new row(T872751)', async (t) => {
+test('Cell mode(calculateCellValue) with async validation - The value of an invalid dependent cell should be updated in a new row(T872751)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await dataGrid.apiAddRow();
@@ -720,8 +724,7 @@ test.skip('Cell mode(calculateCellValue) with async validation - The value of an
   }, 'lastName'],
 })));
 
-// TODO Chrome133: skipped during chrome update
-test.skip('Cell mode(calculateCellValue) with async validation - The value of an invalid dependent cell should be updated in a modified row(T872751)', async (t) => {
+test('Cell mode(calculateCellValue) with async validation - The value of an invalid dependent cell should be updated in a modified row(T872751)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t.expect(dataGrid.isReady()).ok();
@@ -2206,14 +2209,14 @@ test('Popup EditForm screenshot when editRowKey is initially specified', async (
   true,
   false,
 ].forEach((remoteOperations) => {
-  // TODO Chrome133: skipped during chrome update
   // Why asserts different with different remote operations?
-  test.skip(`Empty rows should not appear after rows are updated in batch editing mode when paging and validation are enabled and remoteOperations=${remoteOperations}`, async (t) => {
+  test(`Empty rows should not appear after rows are updated in batch editing mode when paging and validation are enabled and remoteOperations=${remoteOperations}`, async (t) => {
     const dataGrid = new DataGrid('#container');
 
     await t
       // act
       .click(dataGrid.getHeaderPanel().getSaveButton())
+      .wait(500)
 
       // assert
       .expect(dataGrid.dataRows.count)
@@ -2287,8 +2290,7 @@ test('Popup EditForm screenshot when editRowKey is initially specified', async (
 // visual: material.blue.light
 [true, false].forEach((useIcons) => {
   // T1179114
-  // TODO Chrome133: skipped during chrome update
-  test.skip('The disabled state should be correct for a custom button when given as a SVG image', async (t) => {
+  test('The disabled state should be correct for a custom button when given as a SVG image', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid('#container');
     const commandCell = dataGrid.getDataRow(0).getCommandCell(2);
@@ -2792,7 +2794,7 @@ test('The onEditorPreparing event should be called once after clicking on a cell
 fixture`Editing - ShowEditorAlways`
   .page(url(__dirname, '../../container.html'));
 
-test('Cells should be focused correctly on click when cell editing mode is used with enabled showEditorAlways (T1037019)', async (t) => {
+test.meta({ unstable: true })('Cells should be focused correctly on click when cell editing mode is used with enabled showEditorAlways (T1037019)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   // act

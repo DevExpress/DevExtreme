@@ -19,7 +19,7 @@ fixture.disablePageReloads`Validation`
     await t.pressKey('tab');
 
     await t.expect(true).ok('no errors');
-  }).before(() => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     dataSource: [{
       id: 1,
       col2: 30,

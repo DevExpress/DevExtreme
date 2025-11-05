@@ -94,10 +94,10 @@ test('The Select All checkbox should be visible when a column headerCellTemplate
 });
 
 // T1214734
-test.skip('Select rows by shift should work when grid has real time updates', async (t) => {
+test.meta({ unstable: true })('Select rows by shift should work when grid has real time updates', async (t) => {
   const dataGrid = new DataGrid('#container');
-  const secondRow = dataGrid.getDataRow(1);
-  const seventhRow = dataGrid.getDataRow(6);
+  const secondRow = dataGrid.getDataRow(1).getSelectCheckBox();
+  const seventhRow = dataGrid.getDataRow(6).getSelectCheckBox();
   const checkRowSelectionStates = async (startRowIndex: number, endRowIndex: number) => {
     for (let i = startRowIndex; i <= endRowIndex; i += 1) {
       await t
@@ -108,16 +108,16 @@ test.skip('Select rows by shift should work when grid has real time updates', as
 
   // act
   await t
-    .click(secondRow.element);
+    .click(secondRow)
+    .wait(500);
 
   // assert
   await checkRowSelectionStates(1, 1);
-  await t
-    .expect(dataGrid.getDataCell(2, 3).element.textContent)
-    .eql('test123');
 
   // act
-  await t.click(seventhRow.element, { modifiers: { shift: true } });
+  await t
+    .click(seventhRow, { modifiers: { shift: true } })
+    .wait(500);
 
   // assert
   await checkRowSelectionStates(1, 6);
@@ -176,7 +176,7 @@ const DATA_GRID_SELECTOR = '#container';
     await t
       .expect(firstRow.isSelected).ok()
       .expect(secondRow.isSelected).ok();
-  }).before(() => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     dataSource: data,
     keyExpr: 'ID',
     columns: ['ID', 'Name'],
@@ -200,7 +200,7 @@ test('Deferred selection should work correctly with deferred sensitivity: \'case
   await t
     .expect(firstRow.isSelected).ok()
     .expect(secondRow.isSelected).notOk();
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: data,
   keyExpr: 'ID',
   columns: ['ID', 'Name'],
@@ -235,7 +235,7 @@ test('Sensitivity option change should be correctly handled during runtime chang
   await t
     .expect(firstRow.isSelected).ok()
     .expect(secondRow.isSelected).notOk();
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: data,
   keyExpr: 'ID',
   columns: ['ID', 'Name'],

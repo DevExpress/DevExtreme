@@ -245,7 +245,7 @@ test('No error should occur if dataSource is not defined and pageIndex is promis
   await t
     .expect(dataGrid.isReady())
     .ok();
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   onContentReady(e) {
     e.component.pageIndex(1).then(() => {}, () => {});
   },

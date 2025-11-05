@@ -71,7 +71,7 @@ test('sync from headerFilter: filter by one value', async (t) => {
     .eql(['id', '=', 0]);
 
   await expectFilterElementsState(t, ['id']);
-}).before(() => createWidget('dxCardView', baseConfig));
+}).before(async () => createWidget('dxCardView', baseConfig));
 
 test('sync from headerFilter: filter by exclude one value', async (t) => {
   const cardView = new CardView('#container');
@@ -83,7 +83,7 @@ test('sync from headerFilter: filter by exclude one value', async (t) => {
     .eql(['id', '<>', 0]);
 
   await expectFilterElementsState(t, ['id']);
-}).before(() => createWidget('dxCardView', baseConfig));
+}).before(async () => createWidget('dxCardView', baseConfig));
 
 test('sync from headerFilter: filter by two values', async (t) => {
   const cardView = new CardView('#container');
@@ -94,7 +94,7 @@ test('sync from headerFilter: filter by two values', async (t) => {
     .eql(['id', 'anyof', [0, 1]]);
 
   await expectFilterElementsState(t, ['id']);
-}).before(() => createWidget('dxCardView', baseConfig));
+}).before(async () => createWidget('dxCardView', baseConfig));
 
 test('sync from headerFilter: filter by exclude two values', async (t) => {
   const cardView = new CardView('#container');
@@ -106,7 +106,7 @@ test('sync from headerFilter: filter by exclude two values', async (t) => {
     .eql(['id', 'noneof', [0, 1]]);
 
   await expectFilterElementsState(t, ['id']);
-}).before(() => createWidget('dxCardView', baseConfig));
+}).before(async () => createWidget('dxCardView', baseConfig));
 
 test('sync from headerFilter: filter by empty', async (t) => {
   const cardView = new CardView('#container');
@@ -117,7 +117,7 @@ test('sync from headerFilter: filter by empty', async (t) => {
     .eql(['gender', '=', null]);
 
   await expectFilterElementsState(t, ['gender']);
-}).before(() => createWidget('dxCardView', baseConfig));
+}).before(async () => createWidget('dxCardView', baseConfig));
 
 test('sync from headerFilter: filter by non-empty', async (t) => {
   const cardView = new CardView('#container');
@@ -129,7 +129,7 @@ test('sync from headerFilter: filter by non-empty', async (t) => {
     .eql(['gender', '<>', null]);
 
   await expectFilterElementsState(t, ['gender']);
-}).before(() => createWidget('dxCardView', baseConfig));
+}).before(async () => createWidget('dxCardView', baseConfig));
 
 test('sync from headerFilter: filter by all values', async (t) => {
   const cardView = new CardView('#container');
@@ -138,7 +138,7 @@ test('sync from headerFilter: filter by all values', async (t) => {
   await cardView.apiColumnOption('id', 'filterValues', undefined);
 
   await t.expect(cardView.apiOption('filterValue')).eql(null);
-}).before(() => createWidget('dxCardView', baseConfig));
+}).before(async () => createWidget('dxCardView', baseConfig));
 
 test('sync from headerFilter: filter by two columns', async (t) => {
   const cardView = new CardView('#container');
@@ -158,7 +158,7 @@ test('sync from headerFilter: filter by two columns', async (t) => {
   );
 
   await expectFilterElementsState(t, ['id', 'gender']);
-}).before(() => createWidget('dxCardView', baseConfig));
+}).before(async () => createWidget('dxCardView', baseConfig));
 
 test('sync from headerFilter: filter by groupInterval', async (t) => {
   const cardView = new CardView('#container');
@@ -169,7 +169,7 @@ test('sync from headerFilter: filter by groupInterval', async (t) => {
   await t.expect(cardView.apiOption('filterValue')).eql(
     ['id', 'anyof', [0]],
   );
-}).before(() => createWidget('dxCardView', {
+}).before(async () => createWidget('dxCardView', {
   ...baseConfig,
   columns: [{
     dataField: 'id',
@@ -192,7 +192,7 @@ test('sync from headerFilter: filter by a column, then remove filter', async (t)
   await t.expect(cardView.apiOption('filterValue')).eql(null);
 
   await t.expect(cardView.getFilterPanel().getClearFilterButton().element.exists).notOk();
-}).before(() => createWidget('dxCardView', baseConfig));
+}).before(async () => createWidget('dxCardView', baseConfig));
 
 /*
  sync from filterPanel
@@ -207,7 +207,7 @@ test('sync from filterPanel: equals filter', async (t) => {
   await t.expect(cardView.apiColumnOption('id', 'filterValues')).eql([0]);
 
   await expectFilterElementsState(t, ['id']);
-}).before(() => createWidget('dxCardView', baseConfig));
+}).before(async () => createWidget('dxCardView', baseConfig));
 
 test('sync from filterPanel: does not equal filter', async (t) => {
   const cardView = new CardView('#container');
@@ -218,7 +218,7 @@ test('sync from filterPanel: does not equal filter', async (t) => {
   await t.expect(cardView.apiColumnOption('id', 'filterValues')).eql([0]);
 
   await expectFilterElementsState(t, ['id']);
-}).before(() => createWidget('dxCardView', baseConfig));
+}).before(async () => createWidget('dxCardView', baseConfig));
 
 test('sync from filterPanel: anyof filter', async (t) => {
   const cardView = new CardView('#container');
@@ -229,7 +229,7 @@ test('sync from filterPanel: anyof filter', async (t) => {
   await t.expect(cardView.apiColumnOption('id', 'filterValues')).eql([0, 1]);
 
   await expectFilterElementsState(t, ['id']);
-}).before(() => createWidget('dxCardView', baseConfig));
+}).before(async () => createWidget('dxCardView', baseConfig));
 
 test('sync from filterPanel: noneof filter', async (t) => {
   const cardView = new CardView('#container');
@@ -240,7 +240,7 @@ test('sync from filterPanel: noneof filter', async (t) => {
   await t.expect(cardView.apiColumnOption('id', 'filterValues')).eql([0, 1]);
 
   await expectFilterElementsState(t, ['id']);
-}).before(() => createWidget('dxCardView', baseConfig));
+}).before(async () => createWidget('dxCardView', baseConfig));
 
 test('sync from filterPanel: is blank filter', async (t) => {
   const cardView = new CardView('#container');
@@ -251,7 +251,7 @@ test('sync from filterPanel: is blank filter', async (t) => {
   await t.expect(cardView.apiColumnOption('gender', 'filterValues')).eql([null]);
 
   await expectFilterElementsState(t, ['gender']);
-}).before(() => createWidget('dxCardView', baseConfig));
+}).before(async () => createWidget('dxCardView', baseConfig));
 
 test('sync from filterPanel: is not blank filter', async (t) => {
   const cardView = new CardView('#container');
@@ -262,7 +262,7 @@ test('sync from filterPanel: is not blank filter', async (t) => {
   await t.expect(cardView.apiColumnOption('gender', 'filterValues')).eql([null]);
 
   await expectFilterElementsState(t, ['gender']);
-}).before(() => createWidget('dxCardView', baseConfig));
+}).before(async () => createWidget('dxCardView', baseConfig));
 
 [
   {
@@ -301,7 +301,7 @@ test('sync from filterPanel: is not blank filter', async (t) => {
     await t.expect(cardView.apiColumnOption(column, 'filterValues')).eql(undefined);
 
     await expectFilterElementsState(t, [column]);
-  }).before(() => createWidget('dxCardView', baseConfig));
+  }).before(async () => createWidget('dxCardView', baseConfig));
 });
 
 test('sync from filterPanel: filter by two columns', async (t) => {
@@ -320,7 +320,7 @@ test('sync from filterPanel: filter by two columns', async (t) => {
   await t.expect(cardView.apiColumnOption('gender', 'filterValues')).eql(['male']);
 
   await expectFilterElementsState(t, ['id', 'gender']);
-}).before(() => createWidget('dxCardView', baseConfig));
+}).before(async () => createWidget('dxCardView', baseConfig));
 
 test('sync from filterPanel: filter by groupInterval', async (t) => {
   const cardView = new CardView('#container');
@@ -329,7 +329,7 @@ test('sync from filterPanel: filter by groupInterval', async (t) => {
 
   await t.expect(cardView.apiColumnOption('id', 'filterType')).eql('include');
   await t.expect(cardView.apiColumnOption('id', 'filterValues')).eql([0]);
-}).before(() => createWidget('dxCardView', {
+}).before(async () => createWidget('dxCardView', {
   ...baseConfig,
   columns: [{
     dataField: 'id',
@@ -360,4 +360,4 @@ test('sync first from filterPanel, then from headerFilter', async (t) => {
   ]);
 
   await expectFilterElementsState(t, ['id', 'gender']);
-}).before(() => createWidget('dxCardView', baseConfig));
+}).before(async () => createWidget('dxCardView', baseConfig));

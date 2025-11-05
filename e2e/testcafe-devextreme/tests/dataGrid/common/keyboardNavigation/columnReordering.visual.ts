@@ -1344,7 +1344,8 @@ test('reorder column to left when adaptability is enabled and there are hidden c
 
     await t
       .click(firstHeader.element)
-      .pressKey('ctrl+right');
+      .pressKey('ctrl+right')
+      .wait(1000);
 
     await t
       .expect(firstHeader.element.textContent)

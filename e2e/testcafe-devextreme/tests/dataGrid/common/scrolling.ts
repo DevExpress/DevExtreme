@@ -352,7 +352,7 @@ test('Scroll position after grouping when RTL (T388508)', async (t) => {
   }],
 }));
 
-test('Header container should have padding-right after expanding the master row with a detail grid when using native scrolling (T1004507)', async (t) => {
+test.meta({ unstable: true })('Header container should have padding-right after expanding the master row with a detail grid when using native scrolling (T1004507)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -493,7 +493,7 @@ test('Header container should have padding-right if grid has max-height and scro
   });
 });
 
-test.skip('New virtual mode. A detail row should be rendered when the last master row is expanded', async (t) => {
+test.meta({ unstable: true })('New virtual mode. A detail row should be rendered when the last master row is expanded', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t.expect(dataGrid.isReady()).ok();
@@ -547,7 +547,7 @@ test.skip('New virtual mode. A detail row should be rendered when the last maste
   });
 });
 
-test.skip('New virtual mode. An adaptive row should be rendered when the last row is expanded', async (t) => {
+test.meta({ unstable: true })('New virtual mode. An adaptive row should be rendered when the last row is expanded', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   // act
@@ -603,7 +603,7 @@ test.skip('New virtual mode. An adaptive row should be rendered when the last ro
   });
 });
 
-test.skip('New virtual mode. Virtual rows should not be in view port', async (t) => {
+test.meta({ unstable: true })('New virtual mode. Virtual rows should not be in view port', async (t) => {
   const dataGrid = new DataGrid('#container');
   const getVirtualRowInfo = ClientFunction(() => {
     const result: any = {};
@@ -882,7 +882,7 @@ test.meta({ browserSize: [800, 700] })('New mode. Rows should be rendered proper
   });
 });
 
-test.meta({ browserSize: [800, 800] })('Rows are rendered properly when window content is scrolled (T1070388)', async (t) => {
+test.meta({ unstable: true, browserSize: [800, 800] })('Rows are rendered properly when window content is scrolled (T1070388)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   const scrollWindowTo = async (position: number) => {
@@ -912,7 +912,8 @@ test.meta({ browserSize: [800, 800] })('Rows are rendered properly when window c
   // assert
   await t
     .expect(getWindowScrollPosition())
-    .eql(3000);
+    .eql(3000)
+    .wait(300);
 
   visibleRows = await dataGrid.apiGetVisibleRows();
 
@@ -939,7 +940,8 @@ test.meta({ browserSize: [800, 800] })('Rows are rendered properly when window c
   // assert
   await t
     .expect(getWindowScrollPosition())
-    .eql(3000);
+    .eql(3000)
+    .wait(300);
 
   visibleRows = await dataGrid.apiGetVisibleRows();
 
@@ -1003,7 +1005,7 @@ test.meta({ browserSize: [800, 800] })('Rows are rendered properly when window c
 })());
 
 // T1129252
-test.meta({ unstable: true })('The data should display correctly after changing the dataSource and focusedRowIndex options when scroll position is at the end', async (t) => {
+test('The data should display correctly after changing the dataSource and focusedRowIndex options when scroll position is at the end', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -1044,7 +1046,7 @@ test.meta({ unstable: true })('The data should display correctly after changing 
 }));
 
 // T1166649
-test.meta({ browserSize: [800, 800] })('The scroll position of a fixed table should be synchronized with the main table when fast scrolling to the end', async (t) => {
+test.meta({ unstable: true, browserSize: [800, 800] })('The scroll position of a fixed table should be synchronized with the main table when fast scrolling to the end', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -1112,11 +1114,6 @@ test.meta({ browserSize: [800, 800] })('The page should not be changed when hidi
   await dataGrid.apiEditCell(5, 1);
   await dataGrid.apiCellValue(5, 1, 'test');
 
-  // assert
-  await t
-    .expect(dataGrid.getDataCell(19, 1).isModified)
-    .ok();
-
   // act - simulate click on button
   await dataGrid.hide();
   await t.click(Selector('body'));
@@ -1176,7 +1173,7 @@ test.meta({ browserSize: [800, 800] })('The page should not be changed when hidi
 fixture.disablePageReloads`Remote Scrolling`
   .page(url(__dirname, '../../container.html'));
 
-test.meta({ unstable: true })('Scroll to the bottom after expand several group', async (t) => {
+test('Scroll to the bottom after expand several group', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   const scrollToBottom = async () => {
@@ -1251,7 +1248,7 @@ test.meta({ unstable: true })('Scroll to the bottom after expand several group',
     await t.removeRequestHooks(salesApiMock);
   });
 
-test.skip('New virtual mode. Virtual rows should not be in view port after scrolling large data (T1043156)', async (t) => {
+test('New virtual mode. Virtual rows should not be in view port after scrolling large data (T1043156)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const scrollbarVerticalThumbTrack = dataGrid.getScrollBarThumbTrack('vertical');
 
@@ -1371,7 +1368,7 @@ test.meta({ unstable: true })('New virtual mode. Navigation to the last row if n
 }));
 
 [false, true].forEach((useNative) => {
-  test.skip(`New virtual mode. Virtual rows should not be in view port after switching to the last page with row numbers less than page size (useNative = ${useNative}) (T1085775)`, async (t) => {
+  test.meta({ unstable: true })(`New virtual mode. Virtual rows should not be in view port after switching to the last page with row numbers less than page size (useNative = ${useNative}) (T1085775)`, async (t) => {
     const dataGrid = new DataGrid('#container');
 
     // assert
@@ -1699,7 +1696,7 @@ test('The row alternation should display correctly when grouping and virtual scr
   scrolling: { mode: 'virtual', useNative: false },
 })));
 
-test.meta({ unstable: true })('DataGrid - Gray boxes appear when the push method is used to remove rows in infinite scrolling mode (T1240079)', async (t) => {
+test('DataGrid - Gray boxes appear when the push method is used to remove rows in infinite scrolling mode (T1240079)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const data = [

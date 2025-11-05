@@ -35,7 +35,7 @@ const generateColumns = (columnCount: number): Column[] => [...new Array(columnC
     dataField: `field${index + 1}`,
   }));
 
-test.meta({ unstable: true })('DataGrid should not scroll back to the focused cell after horizontal scrolling to the right when columnRenderingMode is virtual', async (t) => {
+test('DataGrid should not scroll back to the focused cell after horizontal scrolling to the right when columnRenderingMode is virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t

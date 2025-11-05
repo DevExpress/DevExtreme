@@ -185,7 +185,11 @@ test.meta({ browserSize: [900, 800] })('The header row should be highlighted cor
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
 
+  await t.expect(dataGrid.isReady()).ok();
+  await t.wait(300);
+
   await t.drag(dataGrid.getGroupPanel().getHeader(0).element, 200, 35);
+  await t.wait(200);
 
   await testScreenshot(t, takeScreenshot, 'header_row_highlight_with_fixed_columns.png', { element: dataGrid.element });
   await t
@@ -212,7 +216,11 @@ test.meta({ browserSize: [900, 800] })('The group separator should be visible wh
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
 
+  await t.expect(dataGrid.isReady()).ok();
+  await t.wait(300);
+
   await t.drag(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1).element, 100, -50);
+  await t.wait(200);
 
   await testScreenshot(t, takeScreenshot, 'dragging_fixed_column_to_group_panel.png', { element: dataGrid.element });
   await t
@@ -289,6 +297,7 @@ test('DataGrid - Group row content is scrolled if repaintChangesOnly is enabled 
     await t.expect(dataGrid.isReady()).ok();
 
     await dataGrid.scrollTo(t, { x: rtlEnabled ? 100 : 250 });
+    await t.wait(300);
     await testScreenshot(t, takeScreenshot, `grouping-scroll-total_summary_intersection-rtl=${rtlEnabled}.png`, { element: dataGrid.element });
 
     await dataGrid.apiOption('summary.totalItems', [{
@@ -296,15 +305,18 @@ test('DataGrid - Group row content is scrolled if repaintChangesOnly is enabled 
       summaryType: 'max',
       valueFormat: 'currency',
     }]);
+    await t.wait(300);
     await dataGrid.scrollTo(t, { x: 0 });
+    await t.wait(200);
     await dataGrid.scrollTo(t, { x: rtlEnabled ? 100 : 250 });
+    await t.wait(300);
 
     await testScreenshot(t, takeScreenshot, `grouping-scroll-total_summary-rtl=${rtlEnabled}.png`, { element: dataGrid.element });
 
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).meta({ unstable: true }).before(async () => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     ...defaultConfig,
     rtlEnabled,
     customizeColumns(columns) {
