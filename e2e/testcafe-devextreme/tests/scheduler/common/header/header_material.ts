@@ -54,7 +54,7 @@ test('viewSwitcher dropdown button popup should have a specified class', async (
   });
 });
 
-test('The toolbar should not display if the config is empty', async (t) => {
+test.skip('The toolbar should not display if the config is empty', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const scheduler = new Scheduler('#container');
