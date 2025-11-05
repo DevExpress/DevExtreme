@@ -859,7 +859,7 @@ export class AppointmentForm {
             this.showRecurrenceGroup();
           },
           elementAttr: {
-            class: CLASSES.recurrenceSettingsButton,
+            class: `${CLASSES.recurrenceSettingsButton} dx-shape-standard`,
           },
         },
       });
