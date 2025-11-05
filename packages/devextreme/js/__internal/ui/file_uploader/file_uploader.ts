@@ -1722,6 +1722,9 @@ class FileUploader extends Editor<FileUploaderProperties> {
       case 'onFilesUploaded':
         this._createFilesUploadedAction();
         break;
+      case 'onFileValidationError':
+        this._createFileValidationErrorAction();
+        break;
       case 'onProgress':
         this._createProgressAction();
         break;
