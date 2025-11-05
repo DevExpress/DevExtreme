@@ -587,6 +587,10 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
   font-size: $generic-scheduler-workspace-info-text-size;
 }
 
+.dx-scheduler-appointment-popup .dx-form .dx-scheduler-form-recurrence-end-group .dx-field-item-label {
+  margin-bottom: $generic-scheduler-appointment-popup-item-padding-top;
+}
+
 .dx-scheduler-appointment-tooltip-wrapper .dx-overlay-content .dx-popup-content .dx-list-item {
   border-top-width: 1px;
 }

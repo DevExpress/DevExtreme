@@ -645,8 +645,13 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
       padding-inline-end: 8px !important; // stylelint-disable-line declaration-no-important
     }
 
+    .dx-scheduler-form-recurrence-end-editors {
+      margin-top: $fluent-form-layout-manager-vertical-padding;
+    }
+
     .dx-scheduler-form-recurrence-end-group .dx-field-item-label {
       height: $fluent-scheduler-appointment-popup-all-day-item-height - $fluent-form-layout-manager-vertical-padding;
+      margin-bottom: $fluent-form-layout-manager-vertical-padding;
     }
 
     .dx-scheduler-days-of-week-buttons {

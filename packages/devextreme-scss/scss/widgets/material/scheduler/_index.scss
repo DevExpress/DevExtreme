@@ -661,6 +661,14 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
       padding-bottom: 6px;
     }
 
+    .dx-scheduler-form-recurrence-end-editors {
+      margin-top: 6px;
+    }
+
+    .dx-scheduler-form-recurrence-end-group .dx-field-item-label {
+      margin-bottom: 6px;
+    }
+
     .dx-scheduler-form-all-day-switch.dx-field-item.dx-label-h-align {
       height: $material-scheduler-appointment-popup-all-day-item-height;
       padding-inline-start: $material-scheduler-appointment-popup-all-day-item-padding-left;
