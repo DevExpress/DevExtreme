@@ -3231,6 +3231,54 @@ describe('DropDownButton', () => {
 
       expect(instance.columnOption('myColumn', 'ai.prompt')).toBe('');
     });
+
+    it('should clear cached data', async () => {
+      const aiIntegration = new AIIntegration({
+        sendRequest(prompt): RequestResult {
+          return {
+            promise: new Promise<string>((resolve) => {
+              const result = {};
+              Object.entries(prompt.data?.data).forEach(([key, value]) => {
+                result[key] = `Response ${(value as any).name}`;
+              });
+              resolve(JSON.stringify(result));
+            }),
+            abort: (): void => {},
+          };
+        },
+      });
+      const { component, instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              prompt: 'Initial prompt',
+              aiIntegration,
+            },
+          },
+        ],
+      });
+
+      jest.runAllTimers();
+      await Promise.resolve();
+      expect(instance.getAIColumnText('myColumn', 1)).toBe('Response Name 1');
+
+      const dropDownButton = component.getAIHeaderCell(3).getDropDownButton();
+      dropDownButton?.getButtonElement()?.click();
+      expect(dropDownButton.isOpened()).toBe(true);
+
+      dropDownButton.getList()?.getItem(2)?.getElement()?.click();
+      expect(instance.getAIColumnText('myColumn', 1)).toBeUndefined();
+    });
   });
 });
 
