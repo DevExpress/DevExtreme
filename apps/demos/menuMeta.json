@@ -591,7 +591,9 @@
                 "Title": "AI Column",
                 "Name": "AIColumn",
                 "Widget": "DataGrid",
-                "DemoType": "Web"
+                "DemoType": "Web",
+                "Badge": "New",
+                "Equivalents": "Smart Column, AI generated column, AI field, AI Autofill column, Smart Field"
               }
             ]
           },
@@ -1343,7 +1345,9 @@
                 "Title": "AI Column",
                 "Name": "AIColumn",
                 "Widget": "TreeList",
-                "DemoType": "Web"
+                "DemoType": "Web",
+                "Badge": "New",
+                "Equivalents": "Smart Column, AI generated column, AI field, AI Autofill column, Smart Field"
               }
             ]
           },

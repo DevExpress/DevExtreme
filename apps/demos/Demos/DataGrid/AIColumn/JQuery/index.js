@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 $(() => {
   const aiService = new AzureOpenAI({
     dangerouslyAllowBrowser: true,
@@ -51,26 +49,57 @@ $(() => {
       ID,
       Name,
       TrademarkName,
+      LicenseName,
+      Author,
+      Source,
+      Edits,
     } = vehicle;
     const trademarkWrapper = $('<div>').addClass('trademark__wrapper');
     const imgWrapper = $('<div>').addClass('trademark__img-wrapper');
     const img = $('<img>').addClass('trademark__img');
     img.attr({
-      src: `images/vehicles/image_${ID}.png`,
+      src: `../../../../images/vehicles/image_${ID}.png`,
       alt: `${TrademarkName} ${Name}`,
     });
 
     const popoverId = `popover-${ID}`;
     const popoverWrapper = $('<div>');
-    popoverWrapper.html(`
-      <div class="license-info__title">License Information</div>
-      <div class="license-info__content">
-        <p><strong>Image:</strong> ${TrademarkName} ${Name}</p>
-        <p><strong>License:</strong> Stock Photo License</p>
-        <p><strong>Attribution:</strong> © DevExpress Demos</p>
-        <p><strong>Usage:</strong> For demonstration purposes only</p>
-      </div>
-    `);
+    
+    const licenseTitle = $('<div>')
+      .addClass('license-info__title')
+      .text('License Information');
+    
+    const licenseContent = $('<div>')
+      .addClass('license-info__content');
+    
+    const imageParagraph = $('<p>')
+      .append($('<strong>').text('Image: '))
+      .append(`${TrademarkName} ${Name}`);
+    
+    const licenseParagraph = $('<p>')
+      .append($('<strong>').text('Image licensed under: '))
+      .append(LicenseName);
+    
+    const authorParagraph = $('<p>')
+      .append($('<strong>').text('Author: '))
+      .append(Author);
+    
+    const sourceLink = `https://${Source}`;
+    const sourceParagraph = $('<p>')
+      .append($('<strong>').text('Source link: '))
+      .append(
+        $('<a>', {
+          href: sourceLink,
+          target: '_blank',
+        }).text(sourceLink)
+      );
+    
+    const editsParagraph = $('<p>')
+      .append($('<strong>').text('Edits: '))
+      .append(Edits);
+    
+    licenseContent.append(imageParagraph, licenseParagraph, authorParagraph, sourceParagraph, editsParagraph);
+    popoverWrapper.append(licenseTitle, licenseContent);
 
     img.attr('data-popover-target', popoverId);
 
@@ -99,6 +128,16 @@ $(() => {
 
   $('#gridContainer').dxDataGrid({
     dataSource: vehicles,
+    paging: {
+        pageSize: 10,
+    },
+    aiIntegration,
+    grouping: {
+      contextMenuEnabled: false
+    },
+    groupPanel: {
+      visible: false
+    },
     columns: [
       {
         caption: 'Trademark',
@@ -113,9 +152,6 @@ $(() => {
         dataField: 'Price',
         format: 'currency',
         width: 100,
-        headerFilter: {
-          groupInterval: 20000,
-        },
       },
       {
         caption: 'Category',
@@ -124,6 +160,7 @@ $(() => {
           const categoryWrapper = createCategoryTemplate(category);
           container.append(categoryWrapper);
         },
+        minWidth: 180,
       },
       {
         dataField: 'Modification',
@@ -143,8 +180,7 @@ $(() => {
         caption: 'Origin Country',
         type: 'ai',
         ai: {
-          aiIntegration,
-          prompt: 'show the country of origin for the following vehicles',
+          prompt: 'Identify the country where this vehicle model is originally manufactured or developed, based on its brand, model, and specifications. Respond with the country name and the country flag icon.',
           mode: 'auto',
           showHeaderMenu: true,
           noDataText: 'No data',
