@@ -13,7 +13,7 @@ export class AIColumnCacheController extends Controller {
     if (!columnCache) return {};
     return keys.reduce<Record<PropertyKey, string>>((acc, key) => {
       const value = columnCache[key];
-      if (value !== undefined) {
+      if (value !== undefined && value !== '') {
         acc[key] = value;
       }
       return acc;
@@ -30,7 +30,9 @@ export class AIColumnCacheController extends Controller {
       this.cache[columnName] = columnCache;
     }
     Object.entries(data).forEach(([key, value]) => {
-      columnCache[key] = value;
+      if (value !== '') {
+        columnCache[key] = value;
+      }
     });
   }
 

@@ -3235,12 +3235,17 @@ describe('DropDownButton', () => {
 });
 
 describe('Cache', () => {
-  beforeEach(beforeTest);
+  const sendRequestSpy = jest.fn();
+
+  beforeEach(() => {
+    beforeTest();
+    sendRequestSpy.mockClear();
+  });
+
   afterEach(afterTest);
 
   describe('when use public methods', () => {
     it('should not use cached data with sendAIColumnRequest', async () => {
-      const sendRequestSpy = jest.fn();
       const aiIntegration = new AIIntegration({
         sendRequest(prompt): RequestResult {
           sendRequestSpy();
@@ -3295,7 +3300,6 @@ describe('Cache', () => {
     });
 
     it('should not use cached data with refreshAIColumn', async () => {
-      const sendRequestSpy = jest.fn();
       const aiIntegration = new AIIntegration({
         sendRequest(prompt): RequestResult {
           sendRequestSpy();
@@ -3352,7 +3356,6 @@ describe('Cache', () => {
 
   describe('when update column options', () => {
     it('should clear cached data on ai.prompt change', async () => {
-      const sendRequestSpy = jest.fn();
       const aiIntegration = new AIIntegration({
         sendRequest(prompt): RequestResult {
           sendRequestSpy();
@@ -3413,10 +3416,9 @@ describe('Cache', () => {
     });
 
     it('should use cache with pagination in auto mode', async () => {
-      const sendRequestSpy = jest.fn();
       const aiIntegration = new AIIntegration({
         sendRequest(prompt): RequestResult {
-          sendRequestSpy();
+          sendRequestSpy(prompt.data?.data);
 
           return {
             promise: new Promise<string>((resolve) => {
@@ -3457,16 +3459,122 @@ describe('Cache', () => {
 
       await Promise.resolve();
       expect(sendRequestSpy).toHaveBeenCalledTimes(1);
+      expect(sendRequestSpy).toHaveBeenCalledWith({ 1: { id: 1, name: 'Name 1', value: 10 } });
 
       instance.option('paging.pageIndex', 1);
       jest.runAllTimers();
       await Promise.resolve();
       expect(sendRequestSpy).toHaveBeenCalledTimes(2);
+      expect(sendRequestSpy).toHaveBeenCalledWith({ 2: { id: 2, name: 'Name 2', value: 20 } });
 
       instance.option('paging.pageIndex', 0);
       jest.runAllTimers();
       await Promise.resolve();
       expect(sendRequestSpy).toHaveBeenCalledTimes(2);
+    });
+
+    it('should use cache with filtering in auto mode', async () => {
+      const aiIntegration = new AIIntegration({
+        sendRequest(prompt): RequestResult {
+          sendRequestSpy(prompt.data?.data);
+          return {
+            promise: new Promise<string>((resolve) => {
+              const result = {};
+              Object.entries(prompt.data?.data).forEach(([key, value]) => {
+                result[key] = `Response ${(value as any).name}`;
+              });
+              resolve(JSON.stringify(result));
+            }),
+            abort: (): void => {},
+          };
+        },
+      });
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+          { id: 2, name: 'Name 2', value: 20 },
+        ],
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration,
+              prompt: 'Test prompt',
+            },
+          },
+        ],
+        filterValue: ['id', '=', 1],
+      });
+
+      await Promise.resolve();
+      expect(sendRequestSpy).toHaveBeenCalledTimes(1);
+      expect(sendRequestSpy).toHaveBeenCalledWith({ 1: { id: 1, name: 'Name 1', value: 10 } });
+
+      instance.option('filterValue', undefined);
+      jest.runAllTimers();
+      await Promise.resolve();
+      expect(sendRequestSpy).toHaveBeenCalledTimes(2);
+      expect(sendRequestSpy).toHaveBeenCalledWith({ 2: { id: 2, name: 'Name 2', value: 20 } });
+    });
+  });
+
+  describe('common behavior', () => {
+    it('should not cache empty responses', async () => {
+      const aiIntegrationResult = (prompt): RequestResult => ({
+        promise: new Promise<string>((resolve) => {
+          const result = {};
+          Object.entries(prompt.data?.data).forEach(([key]) => {
+            result[key] = '';
+          });
+
+          resolve(JSON.stringify(result));
+        }),
+        abort: (): void => {},
+      });
+      const columnAIIntegration = new AIIntegration({
+        sendRequest(prompt): RequestResult {
+          sendRequestSpy();
+          return aiIntegrationResult(prompt);
+        },
+      });
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration: columnAIIntegration,
+              mode: 'manual',
+              prompt: 'Test prompt',
+            },
+          },
+        ],
+      });
+
+      expect(instance.getAIColumnText('myColumn', 1)).toBeUndefined();
+      instance.sendAIColumnRequest('myColumn');
+      await Promise.resolve();
+      expect(sendRequestSpy).toHaveBeenCalledTimes(1);
+      expect(instance.getAIColumnText('myColumn', 1)).toBeUndefined();
+
+      instance.sendAIColumnRequest('myColumn');
+      await Promise.resolve();
+      expect(sendRequestSpy).toHaveBeenCalledTimes(2);
+      expect(instance.getAIColumnText('myColumn', 1)).toBeUndefined();
     });
   });
 });
