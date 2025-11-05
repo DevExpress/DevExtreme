@@ -15,8 +15,6 @@ import { getDataFromRowItems, reduceDataCachedKeys } from './utils';
 export class AIColumnIntegrationController extends Controller {
   private aborts: Record<string, (() => void) | undefined> = { };
 
-  private readonly responseData: Record<string, Record<PropertyKey, string>> = {};
-
   private columnsController!: ColumnsController;
 
   private dataController!: DataController;
