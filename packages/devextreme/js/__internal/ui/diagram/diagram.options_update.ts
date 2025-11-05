@@ -1,105 +1,128 @@
-import DiagramBar from './diagram.bar';
-import { getDiagram } from './diagram.importer';
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import DiagramBar from '@ts/ui/diagram/diagram.bar';
+import { getDiagram } from '@ts/ui/diagram/diagram.importer';
 
 class DiagramOptionsUpdateBar extends DiagramBar {
-    constructor(owner) {
-        super(owner);
+  private _updateLock!: number;
 
-        const { DiagramCommand } = getDiagram();
-        this.commandOptions = {};
-        this.commandOptions[DiagramCommand.Fullscreen] = 'fullScreen';
-        this.commandOptions[DiagramCommand.ZoomLevel] = function(value) {
-            if(typeof this._getOption('zoomLevel') === 'object') {
-                this._setOption('zoomLevel.value', value);
-            } else {
-                this._setOption('zoomLevel', value);
-            }
-        };
-        this.commandOptions[DiagramCommand.SwitchAutoZoom] = function(value) {
-            const { AutoZoomMode } = getDiagram();
-            switch(value) {
-                case AutoZoomMode.FitContent:
-                    this._setOption('autoZoomMode', 'fitContent');
-                    break;
-                case AutoZoomMode.FitToWidth:
-                    this._setOption('autoZoomMode', 'fitWidth');
-                    break;
-                case AutoZoomMode.Disabled:
-                    this._setOption('autoZoomMode', 'disabled');
-                    break;
-            }
-        };
-        this.commandOptions[DiagramCommand.ToggleSimpleView] = 'simpleView';
-        this.commandOptions[DiagramCommand.ShowGrid] = 'showGrid';
-        this.commandOptions[DiagramCommand.SnapToGrid] = 'snapToGrid';
-        this.commandOptions[DiagramCommand.GridSize] = function(value) {
-            if(typeof this._getOption('gridSize') === 'object') {
-                this._setOption('gridSize.value', value);
-            } else {
-                this._setOption('gridSize', value);
-            }
-        };
-        this.commandOptions[DiagramCommand.ViewUnits] = 'viewUnits';
-        this.commandOptions[DiagramCommand.PageSize] = function(value) {
-            const pageSize = this._getOption('pageSize');
-            if(pageSize === undefined || pageSize.width !== value.width || pageSize.height !== value.height) {
-                this._setOption('pageSize', value);
-            }
-        };
-        this.commandOptions[DiagramCommand.PageLandscape] = function(value) {
-            this._setOption('pageOrientation', value ? 'landscape' : 'portrait');
-        };
-        this.commandOptions[DiagramCommand.ViewUnits] = function(value) {
-            const { DiagramUnit } = getDiagram();
-            switch(value) {
-                case DiagramUnit.In:
-                    this._setOption('viewUnits', 'in');
-                    break;
-                case DiagramUnit.Cm:
-                    this._setOption('viewUnits', 'cm');
-                    break;
-                case DiagramUnit.Px:
-                    this._setOption('viewUnits', 'px');
-                    break;
-            }
-        };
-        this.commandOptions[DiagramCommand.PageColor] = 'pageColor';
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  commandOptions?: Record<any, any>;
 
-        this._updateLock = 0;
-    }
-    getCommandKeys() {
-        return Object.keys(this.commandOptions).map(function(key) { return parseInt(key); });
-    }
-    setItemValue(key, value) {
-        if(this.isUpdateLocked()) return;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  constructor(owner: any) {
+    super(owner);
 
-        this.beginUpdate();
-        try {
-            if(typeof this.commandOptions[key] === 'function') {
-                this.commandOptions[key].call(this, value);
-            } else {
-                this._setOption(this.commandOptions[key], value);
-            }
-        } finally {
-            this.endUpdate();
-        }
-    }
-    beginUpdate() {
-        this._updateLock++;
-    }
-    endUpdate() {
-        this._updateLock--;
-    }
-    isUpdateLocked() {
-        return this._updateLock > 0;
-    }
+    const { DiagramCommand } = getDiagram();
+    this.commandOptions = {};
+    this.commandOptions[DiagramCommand.Fullscreen] = 'fullScreen';
+    this.commandOptions[DiagramCommand.ZoomLevel] = (value): void => {
+      if (typeof this._getOption('zoomLevel') === 'object') {
+        this._setOption('zoomLevel.value', value);
+      } else {
+        this._setOption('zoomLevel', value);
+      }
+    };
+    this.commandOptions[DiagramCommand.SwitchAutoZoom] = (value): void => {
+      const { AutoZoomMode } = getDiagram();
+      switch (value) {
+        case AutoZoomMode.FitContent:
+          this._setOption('autoZoomMode', 'fitContent');
+          break;
+        case AutoZoomMode.FitToWidth:
+          this._setOption('autoZoomMode', 'fitWidth');
+          break;
+        case AutoZoomMode.Disabled:
+          this._setOption('autoZoomMode', 'disabled');
+          break;
+        default:
+          break;
+      }
+    };
+    this.commandOptions[DiagramCommand.ToggleSimpleView] = 'simpleView';
+    this.commandOptions[DiagramCommand.ShowGrid] = 'showGrid';
+    this.commandOptions[DiagramCommand.SnapToGrid] = 'snapToGrid';
+    this.commandOptions[DiagramCommand.GridSize] = (value): void => {
+      if (typeof this._getOption('gridSize') === 'object') {
+        this._setOption('gridSize.value', value);
+      } else {
+        this._setOption('gridSize', value);
+      }
+    };
+    this.commandOptions[DiagramCommand.ViewUnits] = 'viewUnits';
+    this.commandOptions[DiagramCommand.PageSize] = (value): void => {
+      const pageSize = this._getOption('pageSize');
+      if (
+        pageSize === undefined
+        || pageSize.width !== value.width
+        || pageSize.height !== value.height
+      ) {
+        this._setOption('pageSize', value);
+      }
+    };
+    this.commandOptions[DiagramCommand.PageLandscape] = (value): void => {
+      this._setOption('pageOrientation', value ? 'landscape' : 'portrait');
+    };
+    this.commandOptions[DiagramCommand.ViewUnits] = (value): void => {
+      const { DiagramUnit } = getDiagram();
+      switch (value) {
+        case DiagramUnit.In:
+          this._setOption('viewUnits', 'in');
+          break;
+        case DiagramUnit.Cm:
+          this._setOption('viewUnits', 'cm');
+          break;
+        case DiagramUnit.Px:
+          this._setOption('viewUnits', 'px');
+          break;
+        default:
+          break;
+      }
+    };
+    this.commandOptions[DiagramCommand.PageColor] = 'pageColor';
 
-    _getOption(name) {
-        return this._owner.option(name);
+    this._updateLock = 0;
+  }
+
+  getCommandKeys(): number[] {
+    // @ts-expect-error ts-error
+    return Object.keys(this.commandOptions).map((key): number => parseInt(key, 10));
+  }
+
+  setItemValue(key, value): void {
+    if (this.isUpdateLocked()) return;
+
+    this.beginUpdate();
+    try {
+      if (typeof this.commandOptions?.[key] === 'function') {
+        this.commandOptions?.[key].call(this, value);
+      } else {
+        this._setOption(this.commandOptions?.[key], value);
+      }
+    } finally {
+      this.endUpdate();
     }
-    _setOption(name, value) {
-        this._owner.option(name, value);
-    }
+  }
+
+  beginUpdate(): void {
+    this._updateLock += 1;
+  }
+
+  endUpdate(): void {
+    this._updateLock -= 1;
+  }
+
+  isUpdateLocked(): boolean {
+    return this._updateLock > 0;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _getOption(name): any {
+    return this._owner.option(name);
+  }
+
+  _setOption(name, value): void {
+    this._owner.option(name, value);
+  }
 }
 
 export default DiagramOptionsUpdateBar;
