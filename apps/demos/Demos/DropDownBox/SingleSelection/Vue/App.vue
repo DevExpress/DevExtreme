@@ -79,7 +79,7 @@ import {
 import { CustomStore } from 'devextreme-vue/common/data';
 import 'whatwg-fetch';
 
-const treeBoxValue = ref(['1_1']);
+const treeBoxValue = ref('1_1');
 const isGridBoxOpened = ref(false);
 const isTreeBoxOpened = ref(false);
 const gridBoxValue = ref([3]);
