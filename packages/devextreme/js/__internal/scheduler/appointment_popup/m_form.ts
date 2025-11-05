@@ -771,8 +771,7 @@ export class AppointmentForm {
   }
 
   showRecurrenceGroup(): void {
-    // @ts-expect-error
-    const overlayHeight = this.dxPopup.$overlayContent().height();
+    const overlayHeight = this.dxPopup.$overlayContent().get(0).clientHeight;
     this.dxPopup.option('height', overlayHeight);
 
     this._$mainGroup?.addClass(CLASSES.mainHidden);
