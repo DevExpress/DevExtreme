@@ -1,6 +1,6 @@
 import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
-import type { Attachment, AttachmentDownloadEvent } from '@js/ui/chat';
+import type { Attachment, AttachmentDownloadClickEvent } from '@js/ui/chat';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -16,7 +16,7 @@ export interface FileViewProperties extends DOMComponentProperties<FileView> {
 
   files?: Attachment[];
 
-  onDownload?: (e: AttachmentDownloadEvent) => void;
+  onDownload?: (e: AttachmentDownloadClickEvent) => void;
 }
 
 export const CHAT_FILE_VIEW_CLASS = 'dx-chat-file-view';

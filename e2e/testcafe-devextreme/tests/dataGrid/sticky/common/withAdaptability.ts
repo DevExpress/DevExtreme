@@ -1,6 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { defaultConfig } from '../helpers/data';
@@ -12,7 +11,7 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
   .page(url(__dirname, '../../../container.html'));
 
 [false, true].forEach((rtlEnabled) => {
-  safeSizeTest(`Sticky columns with adaptive detail row (rtlEnabled = ${rtlEnabled})`, async (t) => {
+  test.meta({ browserSize: [900, 800] })(`Sticky columns with adaptive detail row (rtlEnabled = ${rtlEnabled})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
     const scrollLeft = rtlEnabled ? -10000 : 10000;
@@ -30,7 +29,7 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [900, 800]).before(async () => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     ...defaultConfig,
     width: 800,
     rtlEnabled,
@@ -46,7 +45,7 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
     columnHidingEnabled: true,
   }));
 
-  safeSizeTest(`Sticky columns with sticky positions (rtlEnabled = ${rtlEnabled})`, async (t) => {
+  test.meta({ browserSize: [900, 800] })(`Sticky columns with sticky positions (rtlEnabled = ${rtlEnabled})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -61,7 +60,7 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [900, 800]).before(async () => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     ...defaultConfig,
     width: 800,
     rtlEnabled,
@@ -86,7 +85,7 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
     columnHidingEnabled: true,
   }));
 
-  safeSizeTest(`Fixed columns should be displayed correctly when the grid has a small width  (rtlEnabled = ${rtlEnabled})`, async (t) => {
+  test.meta({ browserSize: [900, 800] })(`Fixed columns should be displayed correctly when the grid has a small width  (rtlEnabled = ${rtlEnabled})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -97,7 +96,7 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [900, 800]).before(async () => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     ...defaultConfig,
     width: 350,
     rtlEnabled,
@@ -115,7 +114,7 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
     columnHidingEnabled: true,
   }));
 
-  safeSizeTest(`Sticky column pinned to the left should be displayed correctly when hidden column between sticky column and fixed column (rtlEnabled = ${rtlEnabled})`, async (t) => {
+  test.meta({ browserSize: [900, 800] })(`Sticky column pinned to the left should be displayed correctly when hidden column between sticky column and fixed column (rtlEnabled = ${rtlEnabled})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
     const scrollLeft = rtlEnabled ? -10000 : 10000;
@@ -131,7 +130,7 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [900, 800]).before(async () => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     ...defaultConfig,
     width: 800,
     rtlEnabled,
@@ -143,7 +142,7 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
     },
   }));
 
-  safeSizeTest(`Sticky column pinned to the left should be displayed correctly when banded hidden column between sticky column and fixed column (rtlEnabled = ${rtlEnabled})`, async (t) => {
+  test.meta({ browserSize: [900, 800] })(`Sticky column pinned to the left should be displayed correctly when banded hidden column between sticky column and fixed column (rtlEnabled = ${rtlEnabled})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
     const scrollLeft = rtlEnabled ? -10000 : 10000;
@@ -159,7 +158,7 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [900, 800]).before(async () => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     ...defaultConfig,
     width: 800,
     rtlEnabled,
@@ -174,7 +173,7 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
     },
   }));
 
-  safeSizeTest(`Sticky column pinned to the right should be displayed correctly when hidden column between sticky column and fixed column (rtlEnabled = ${rtlEnabled})`, async (t) => {
+  test.meta({ browserSize: [900, 800] })(`Sticky column pinned to the right should be displayed correctly when hidden column between sticky column and fixed column (rtlEnabled = ${rtlEnabled})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
     const scrollLeft = rtlEnabled ? -10000 : 10000;
@@ -190,7 +189,7 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [900, 800]).before(async () => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     ...defaultConfig,
     width: 800,
     rtlEnabled,
@@ -202,7 +201,7 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
     },
   }));
 
-  safeSizeTest(`Sticky column pinned to the right should be displayed correctly when banded hidden column between sticky column and fixed column (rtlEnabled = ${rtlEnabled})`, async (t) => {
+  test.meta({ browserSize: [900, 800] })(`Sticky column pinned to the right should be displayed correctly when banded hidden column between sticky column and fixed column (rtlEnabled = ${rtlEnabled})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
     const scrollLeft = rtlEnabled ? -10000 : 10000;
@@ -218,7 +217,7 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [900, 800]).before(async () => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     ...defaultConfig,
     width: 800,
     rtlEnabled,
@@ -234,7 +233,7 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
   }));
 });
 
-safeSizeTest('Sticky columns with sticky positions when columnHidingEnabled = false and columns have hidingPriority', async (t) => {
+test.meta({ browserSize: [900, 800] })('Sticky columns with sticky positions when columnHidingEnabled = false and columns have hidingPriority', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -249,7 +248,7 @@ safeSizeTest('Sticky columns with sticky positions when columnHidingEnabled = fa
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [900, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
   width: 800,
   customizeColumns(columns) {

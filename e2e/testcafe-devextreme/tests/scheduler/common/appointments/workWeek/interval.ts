@@ -2,12 +2,11 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../../helpers/createWidget';
-import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Appointments with adaptive`
   .page(url(__dirname, '../../../../container.html'));
 
-safeSizeTest('Should correctly render scheduler in workWeek view with interval, skipping weekends (T1243027)', async (t) => {
+test('Should correctly render scheduler in workWeek view with interval, skipping weekends (T1243027)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const scheduler = new Scheduler('#container');
 
