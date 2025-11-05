@@ -71,6 +71,8 @@ class ChatTextArea extends TextArea<Properties> {
 
   _filesToSend?: Map<File, FileToSend>;
 
+  _attachButton?: Button;
+
   _sendButton?: Button;
 
   _sendAction?: (e: Partial<SendEvent>) => void;
@@ -239,6 +241,9 @@ class ChatTextArea extends TextArea<Properties> {
         onClick: (): void => {
           this._cleanInformer();
           this._updateInputHeight();
+        },
+        onInitialized: (e: InitializedEvent): void => {
+          this._attachButton = e.component;
         },
       },
     } as ToolbarItem;
@@ -426,8 +431,7 @@ class ChatTextArea extends TextArea<Properties> {
   _processSendButtonActivation(e: Partial<SendEvent>): void {
     this._sendAction?.(e);
     this.reset();
-    this._fileUploader?.reset();
-    this._filesToSend?.clear();
+    this.resetFileUploader();
     this._toggleButtonDisableState(true);
   }
 
@@ -541,6 +545,15 @@ class ChatTextArea extends TextArea<Properties> {
     this._cleanToolbar();
     this._cleanInformer();
     super._dispose();
+  }
+
+  resetFileUploader(): void {
+    this._fileUploader?.reset();
+    this._filesToSend?.clear();
+  }
+
+  toggleAttachButtonVisibleState(state: boolean): void {
+    this._attachButton?.option('visible', state);
   }
 }
 

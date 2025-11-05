@@ -316,7 +316,7 @@ test('Grouping and filtering should be applied correctly when they change at run
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [
     {
       ID: 1,
@@ -338,7 +338,7 @@ test('Grouping and filtering should be applied correctly when they change at run
 }));
 
 // T1112573
-test.meta({ unstable: true })('Content should be rendered correctly after setting the grouping.autoExpandAll property to true when dataRowTemplate is given', async (t) => {
+test('Content should be rendered correctly after setting the grouping.autoExpandAll property to true when dataRowTemplate is given', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
 

@@ -24,9 +24,7 @@ test.meta({ browserSize: [1000, 800] })('The simulated scrollbar should display 
   await testScreenshot(t, takeScreenshot, 'simulated_scrollbar_with_sticky_columns_1.png', { element: dataGrid.element });
 
   // act
-  await t
-    .drag(scrollbarVerticalThumbTrack, 600, 0)
-    .wait(1000);
+  await dataGrid.scrollTo(t, { x: 1500 });
 
   await testScreenshot(t, takeScreenshot, 'simulated_scrollbar_with_sticky_columns_2.png', { element: dataGrid.element });
 
@@ -99,7 +97,7 @@ test.meta({ browserSize: [900, 800] })('Header hover should display correctly wh
 // visual: material.blue.light
 // visual: fluent.blue.light
 // visual: generic.greenMist.light
-test.meta({ unstable: true })('Row hover should display correctly when there are fixed columns (generic.light theme)', async (t) => {
+test.meta({ browserSize: [900, 800] })('Row hover should display correctly when there are fixed columns (generic.light theme)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const dataRow = dataGrid.getDataRow(1);
@@ -115,26 +113,25 @@ test.meta({ unstable: true })('Row hover should display correctly when there are
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-})
-  .before(async () => {
-    await createWidget('dxDataGrid', {
-      dataSource: getData(20, 15),
-      columnWidth: 100,
-      columnAutoWidth: true,
-      hoverStateEnabled: true,
-      customizeColumns: (columns) => {
-        columns[5].fixed = true;
-        columns[5].fixedPosition = 'left';
-        columns[6].fixed = true;
-        columns[6].fixedPosition = 'left';
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: getData(20, 15),
+    columnWidth: 100,
+    columnAutoWidth: true,
+    hoverStateEnabled: true,
+    customizeColumns: (columns) => {
+      columns[5].fixed = true;
+      columns[5].fixedPosition = 'left';
+      columns[6].fixed = true;
+      columns[6].fixedPosition = 'left';
 
-        columns[8].fixed = true;
-        columns[8].fixedPosition = 'right';
-        columns[9].fixed = true;
-        columns[9].fixedPosition = 'right';
-      },
-    });
-  })
+      columns[8].fixed = true;
+      columns[8].fixedPosition = 'right';
+      columns[9].fixed = true;
+      columns[9].fixedPosition = 'right';
+    },
+  });
+})
   .after(async (t) => {
     await t.hover(Selector('body'));
   });

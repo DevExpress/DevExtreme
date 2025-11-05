@@ -162,7 +162,7 @@ test.meta({ browserSize: [1500, 1500] })('main form with resources that have ico
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(() => createWidget('dxScheduler', {
+}).before(async () => createWidget('dxScheduler', {
   dataSource: [],
   views: ['week'],
   currentView: 'week',

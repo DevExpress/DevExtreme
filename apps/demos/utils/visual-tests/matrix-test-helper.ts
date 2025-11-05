@@ -225,8 +225,6 @@ const SKIPPED_TESTS = {
     DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping'],
     Scheduler: ['ContextMenu'],
     FileUploader: ['CustomDropzone'],
-    // TODO: make this more stable
-    Stepper: ['StepTemplate'],
   },
   Vue: {
     Charts: ['Crosshair'],

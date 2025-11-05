@@ -103,7 +103,7 @@ function getArgs(): ParsedArgs {
       concurrency: 0,
       browsers: 'chrome',
       test: '',
-      reporter: [process.env.CI === 'true' ? 'list' : 'minimal'],
+      reporter: process.env.CI === 'true' ? 'list' : 'spec',
       componentFolder: '',
       file: '*',
       cache: true,

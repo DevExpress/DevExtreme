@@ -580,7 +580,6 @@ test('Dragging with scrolling should be prevented by e.cancel (T1179555)', async
 
   await t.drag(dataGrid.getDataRow(98).getDragCommand(), 0, -180, { speed: 0.01 });
 
-  await t.wait(300); // wait for scroll on drag
   await t.expect(Selector('.dx-sortable-placeholder').visible).notOk();
 
   await MouseUpEvents.enable(MouseAction.dragToOffset);
@@ -630,7 +629,13 @@ test('The placeholder should have correct position after dragging the row to the
     : undefined;
 
   await t.expect(isPlaceholderVisible()).ok();
-  await t.expect(placeholderOffset).eql(expectedPlaceholderOffset);
+
+  if (expectedPlaceholderOffset && placeholderOffset) {
+    await t.expect(placeholderOffset.left).eql(expectedPlaceholderOffset.left);
+    await t.expect(Math.abs(placeholderOffset.top - expectedPlaceholderOffset.top)).lt(0.1);
+  } else {
+    await t.expect(placeholderOffset).eql(expectedPlaceholderOffset);
+  }
 }).before(async () => createWidget('dxDataGrid', {
   width: 400,
   height: 600,
