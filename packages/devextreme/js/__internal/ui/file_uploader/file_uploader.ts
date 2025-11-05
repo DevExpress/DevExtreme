@@ -140,6 +140,8 @@ class FileUploader extends Editor<FileUploaderProperties> {
 
   _filesUploadedAction?: (event?: Record<string, unknown>) => void;
 
+  _fileValidationErrorAction?: (event?: Record<string, unknown>) => void;
+
   _uploadedAction?: (event?: Record<string, unknown>) => void;
 
   _beforeSendAction?: (event?: Record<string, unknown>) => void;
@@ -209,6 +211,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
         onUploadStarted: null,
         onUploaded: null,
         onFilesUploaded: null,
+        onFileValidationError: null,
         onProgress: null,
         onUploadError: null,
         onUploadAborted: null,
@@ -314,6 +317,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     this._createUploadStartedAction();
     this._createUploadedAction();
     this._createFilesUploadedAction();
+    this._createFileValidationErrorAction();
     this._createProgressAction();
     this._createUploadErrorAction();
     this._createUploadAbortedAction();
@@ -619,6 +623,10 @@ class FileUploader extends Editor<FileUploaderProperties> {
     this._filesUploadedAction = this._createActionByOption('onFilesUploaded', { excludeValidators: ['readOnly'] });
   }
 
+  _createFileValidationErrorAction(): void {
+    this._fileValidationErrorAction = this._createActionByOption('onFileValidationError', { excludeValidators: ['readOnly'] });
+  }
+
   _createProgressAction(): void {
     this._progressAction = this._createActionByOption('onProgress', { excludeValidators: ['readOnly'] });
   }
@@ -769,6 +777,8 @@ class FileUploader extends Editor<FileUploaderProperties> {
       if (!file.isValidMinSize) {
         file.$statusMessage.append(this._createValidationElement('invalidMinFileSizeMessage'));
       }
+
+      this._fileValidationErrorAction?.({ file: file.value });
       $fileContainer.addClass(FILEUPLOADER_INVALID_CLASS);
     }
   }
@@ -1715,6 +1725,9 @@ class FileUploader extends Editor<FileUploaderProperties> {
         break;
       case 'onFilesUploaded':
         this._createFilesUploadedAction();
+        break;
+      case 'onFileValidationError':
+        this._createFileValidationErrorAction();
         break;
       case 'onProgress':
         this._createProgressAction();
