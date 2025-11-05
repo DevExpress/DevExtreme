@@ -5,8 +5,6 @@ export interface CreateWidgetOptions {
   disableFxAnimation: boolean;
 }
 
-declare const $;
-
 const DEFAULT_SELECTOR = '#container';
 const DEFAULT_OPTIONS: CreateWidgetOptions = {
   disableFxAnimation: true,
