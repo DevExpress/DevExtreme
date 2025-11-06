@@ -313,14 +313,18 @@ QUnit.module('Connector integration', moduleConfig, () => {
 
     QUnit.test('connector should update its size on items mutation (T1312793)', function(assert) {
         const items = [{}, {}];
-        this.reinit({ items });
+
+        this.reinit({ items, width: 100 });
 
         const sizeBefore = this.getConnector().option('size');
-        items.push({});
+
+        assert.roughEqual(sizeBefore, 50, 0.01, 'initial connector size is correct');
+
+        items.push({}, {});
         this.instance.option('items', items);
         const sizeAfter = this.getConnector().option('size');
 
-        assert.strictEqual(sizeAfter > sizeBefore, true, 'connector size is updated after items mutation');
+        assert.roughEqual(sizeAfter, 75, 0.01, 'connector size is correct after items mutation');
     });
 });
 

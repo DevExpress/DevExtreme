@@ -454,8 +454,8 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
         this._invalidate();
         break;
       case 'items':
-        this._connector.option(this._getConnectorOptions());
         super._optionChanged(args);
+        this._connector.option(this._getConnectorOptions());
         break;
       default:
         super._optionChanged(args);
