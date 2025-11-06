@@ -190,7 +190,7 @@ test.meta({ browserSize: [1500, 1500] })('main form with resources that have ico
       priorityId: 1,
     };
 
-    safeSizeTest(`appointment form readonly state (${theme})`, async (t) => {
+    test.meta({ browserSize: [1500, 1500] })(`appointment form readonly state (${theme})`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       const appointmentPopup = await openAppointmentPopup(t, appointment, isRecurringAppointment);
@@ -203,7 +203,7 @@ test.meta({ browserSize: [1500, 1500] })('main form with resources that have ico
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }, [1500, 1500]).before(async () => {
+    }).before(async () => {
       await changeTheme(theme);
       await createWidget('dxScheduler', {
         dataSource: [],

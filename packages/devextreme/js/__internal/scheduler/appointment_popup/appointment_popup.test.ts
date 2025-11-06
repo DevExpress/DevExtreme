@@ -456,11 +456,11 @@ describe('Appointment Popup Form', () => {
       scheduler.showAppointmentPopup(appointment);
 
       const recurrenceGroup = $(POM.popup.recurrenceGroup);
-      expect(recurrenceGroup.hasClass('dx-scheduler-form-recurrence-hidden')).toBe(true);
+      expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(true);
 
       POM.popup.openRecurrenceSettings();
 
-      expect(recurrenceGroup.hasClass('dx-scheduler-form-recurrence-hidden')).toBe(false);
+      expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(false);
     });
 
     it('changes visibility of groups when opening recurrence form', async () => {
