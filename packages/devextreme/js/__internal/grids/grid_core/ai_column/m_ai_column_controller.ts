@@ -169,7 +169,7 @@ export class AIColumnController extends Controller {
   }
 
   public clearAIColumn(columnName: string): void {
-    this.aiColumnIntegrationController.abortRequest(columnName);
+    this.abortAIColumnRequest(columnName);
     this.aiColumnIntegrationController.clearAIColumn(columnName);
     this.columnsController.columnOption(columnName, 'ai.prompt', '');
     this.updateAICells();

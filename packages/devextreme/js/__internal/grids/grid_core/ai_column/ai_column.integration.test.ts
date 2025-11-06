@@ -4473,4 +4473,47 @@ describe('Load panel', () => {
       expect(aiPromptEditor.getProgressBar().isVisible()).toBe(false);
     });
   });
+
+  describe('when AI column is cleared during request', () => {
+    it('should be hidden', async () => {
+      const { component, instance } = await createDataGrid({
+        dataSource: items,
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration: new AIIntegration({
+                sendRequest(): RequestResult {
+                  return {
+                    promise: new Promise<string>((resolve) => {
+                      setTimeout(() => {
+                        resolve('{"1":"AI Response 1","2":"AI Response 2"}');
+                      }, 300);
+                    }),
+                    abort: (): void => {},
+                  };
+                },
+              }),
+            },
+          },
+        ],
+      });
+
+      component.apiColumnOption('myColumn', 'ai.prompt', 'Updated prompt');
+
+      expect(component.getLoadPanel().isVisible()).toBe(true);
+
+      instance.clearAIColumn('myColumn');
+
+      jest.runAllTimers(); // wait hidden load panel
+
+      expect(component.getLoadPanel().isVisible()).toBe(false);
+    });
+  });
 });
