@@ -50,7 +50,7 @@ const messages = [
     id: new DevExpress.data.Guid(),
     timestamp: getTimestamp(date, -7),
     author: supportAgent,
-    text: 'Thanks for the screenshots!  I can help you with that. Please refer to the attached file for instructions to restore access.',
+    text: 'Thanks for the screenshots! I can help you with that. Please refer to the attached file for instructions to restore access.',
     attachments: [instructions],
   },
 ];

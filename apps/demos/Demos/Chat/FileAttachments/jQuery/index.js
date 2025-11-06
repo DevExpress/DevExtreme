@@ -48,7 +48,10 @@ $(() => {
     },
     onAttachmentDownloadClick(e) {
       const { attachment } = e;
-      if (!attachment?.url) return;
+
+      if (!attachment?.url) {
+        return;
+      }
 
       const link = document.createElement('a');
       link.href = attachment.url;

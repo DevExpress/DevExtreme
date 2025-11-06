@@ -1,7 +1,5 @@
 .demo-container {
   min-width: 720px;
-  display: flex;
-  gap: 20px;
 }
 
 .chat-container {
@@ -9,15 +7,6 @@
   flex-grow: 1;
   align-items: center;
   justify-content: center;
-}
-
-.options {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  min-width: 280px;
-  background-color: rgba(191, 191, 191, 0.15);
-  gap: 16px;
 }
 
 .dx-chat {
