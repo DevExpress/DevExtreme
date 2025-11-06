@@ -16,6 +16,22 @@ const supportAgent = {
   avatarUrl: '../../../../images/petersmith.png',
 };
 
+const createEmptyAttachment = (name, type) => {
+  const blob = new Blob([''], { type });
+  const url = URL.createObjectURL(blob);
+
+  return {
+    name,
+    url,
+    size: 0,
+  };
+};
+
+const screenshot1 = createEmptyAttachment('Screenshot1.jpg', 'image/jpeg');
+const screenshot2 = createEmptyAttachment('Screenshot2.jpg', 'image/jpeg');
+const screenshot3 = createEmptyAttachment('Screenshot3.jpg', 'image/jpeg');
+const instructions = createEmptyAttachment('Instructions.pdf', 'application/pdf');
+
 const messages = [
   {
     id: new DevExpress.data.Guid(),
@@ -28,32 +44,14 @@ const messages = [
     timestamp: getTimestamp(date, -7),
     author: currentUser,
     text: "Hi, I'm having trouble accessing my account.\nIt says my password is incorrect. I’ve attached some screenshots for you to check.",
-    attachments: [
-      {
-        name: 'Screenshot1.jpg',
-        size: 0,
-      },
-      {
-        name: 'Screenshot2.jpg',
-        size: 0,
-      },
-      {
-        name: 'Screenshot3.jpg',
-        size: 0,
-      },
-    ],
+    attachments: [screenshot1, screenshot2, screenshot3],
   },
   {
     id: new DevExpress.data.Guid(),
     timestamp: getTimestamp(date, -7),
     author: supportAgent,
     text: 'Thanks for the screenshots!  I can help you with that. Please refer to the attached file for instructions to restore access.',
-    attachments: [
-      {
-        name: 'Instructions.pdf',
-        size: 0,
-      },
-    ],
+    attachments: [instructions],
   },
 ];
 
