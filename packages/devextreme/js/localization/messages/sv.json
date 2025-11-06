@@ -88,9 +88,6 @@
         "dxFileUploader-invalidFileExtension": "Filtypen är inte tillåten",
         "dxFileUploader-invalidMaxFileSize": "Filen är för stor",
         "dxFileUploader-invalidMinFileSize": "Filen är för liten",
-        "dxFileUploader-fileListLabel": "Fillista",
-        "dxFileUploader-removeFileButtonLabel": "Ta bort fil {0}",
-        "dxFileUploader-uploadFileButtonLabel": "Ladda upp fil {0}",
 
         "dxRangeSlider-ariaFrom": "Från",
         "dxRangeSlider-ariaTill": "Till",
@@ -99,21 +96,10 @@
 
         "dxForm-optionalMark": "valfri",
         "dxForm-requiredMessage": "{0} är obligatoriskt",
-        "dxForm-smartPasteButtonText": "Smart klistra in",
-        "dxForm-resetButtonText": "Återställ",
-        "dxForm-submitButtonText": "Skicka",
 
         "dxNumberBox-invalidValueMessage": "Värdet måste vara ett nummer",
         "dxNumberBox-noDataText": "Inga data",
 
-
-        "dxDataGrid-aiPromptEditorTitle": "AI Prompt Editor",
-        "dxDataGrid-aiPromptEditorPlaceholder": "Be AI generera kolumnens värden",
-        "dxDataGrid-aiPromptEditorApplyButton": "Tillämpa",
-        "dxDataGrid-aiPromptEditorRegenerateButton": "Generera om data",
-        "dxDataGrid-aiPromptEditorStopButton": "Stoppa",
-        "dxDataGrid-aiDropDownAutofill": "Autofill with AI",
-        "dxDataGrid-aiDropDownClear": "Clear Data",
         "dxDataGrid-emptyHeaderWithColumnChooserText": "Använd {0} för att visa kolumner",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "Dra en kolumn från grupperingspanelen hit",
         "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Använd {0} eller dra en kolumn från grupperingspanelen",
@@ -276,9 +262,7 @@
         "dxScheduler-appointmentAriaLabel-recurring": "Återkommande bokning",
 
         "dxScheduler-appointmentListAriaLabel": "Bokningslista",
-        "dxScheduler-newPopupTitle": "Ny bokning",
-        "dxScheduler-editPopupTitle": "Redigera bokning",
-        "dxScheduler-editPopupSaveButtonText": "Spara",
+
 
         "dxScheduler-editorLabelTitle": "Ämne",
         "dxScheduler-editorLabelStartDate": "Startdatum",
@@ -415,9 +399,6 @@
         "dxChat-editingDeleteConfirmText": "Är du säker på att du vill radera det här meddelandet?",
         "dxChat-deletedMessageText": "Det här meddelandet har raderats",
         "dxChat-defaultImageAlt": "Bild delad i chatten",
-        "dxChat-fileViewLabel": "Fillista",
-        "dxChat-downloadButtonLabel": "Ladda ner fil {0}",
-        "dxChat-fileLimitReachedWarning": "Du valde för många filer. Välj högst {0} filer och försök igen.",
 
         "dxColorView-ariaRed": "Röd",
         "dxColorView-ariaGreen": "Grön",
@@ -867,9 +848,6 @@
         "dxSplitter-resizeHandleAriaLabel": "Delningslist",
         "dxSplitter-resizeHandleAriaRoleDescription": "Avgränsare",
 
-        "dxStepper-optionalMark": "(Valfritt)",
-
-        "dxSpeechToText-ariaLabelStart": "Tryck för att starta rösttranskribering",
-        "dxSpeechToText-ariaLabelStop": "Tryck för att stoppa rösttranskribering"
+        "dxStepper-optionalMark": "(Valfritt)"
     }
 }
