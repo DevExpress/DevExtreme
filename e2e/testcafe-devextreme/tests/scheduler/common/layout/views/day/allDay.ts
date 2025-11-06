@@ -3,6 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../../../helpers/createWidget';
 import url from '../../../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Layout:Views:Day:AllDay`
   .page(url(__dirname, '../../../../../container.html'));
@@ -25,10 +26,9 @@ const enableNativeScroll = ClientFunction(() => {
 
         const pngName = `day-orientation=${groupOrientation}-allDay=${showAllDayPanel}-interval=${intervalCount}.png`;
 
-        await t
-          .expect(await takeScreenshot(pngName, scheduler.element))
-          .ok()
+        await testScreenshot(t, takeScreenshot, pngName, { element: scheduler.element });
 
+        await t
           .expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
       }).before(async () => createWidget('dxScheduler', {

@@ -3,6 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Layout:Templates:appointmentTooltipTemplate`
   .page(url(__dirname, '../../../../container.html'));
@@ -13,10 +14,14 @@ test('appointmentTooltipTemplate layout should be rendered right', async (t) => 
 
   await t.click(scheduler.getAppointmentByIndex().element);
 
-  await t
-    .expect(await takeScreenshot('appointment-tooltip-template.png', scheduler.element))
-    .ok()
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'appointment-tooltip-template.png',
+    { element: scheduler.element },
+  );
 
+  await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {

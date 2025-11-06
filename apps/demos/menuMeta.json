@@ -4128,6 +4128,27 @@
             ]
           },
           {
+            "Name": "File Attachments",
+            "Equivalents": "Files Sending, Messages with files, Files Attached, Message Attachments, Document Attachments",
+            "Demos": [
+              {
+                "Title": "File Attachments",
+                "Name": "FileAttachments",
+                "Widget": "Chat",
+                "DemoType": "Web",
+                "DocUrl": "",
+                "MvcDescription": "",
+                "NetCoreDescription": "",
+                "MvcAdditionalFiles": [
+                  "/Models/SampleData/ChatData.cs",
+                  "/Models/Chat/User.cs",
+                  "/Models/Chat/Message.cs",
+                  "/ViewModels/ChatViewModel.cs"
+                ]
+              }
+            ]
+          },
+          {
             "Name": "Customization",
             "Equivalents": "Settings, Options",
             "Demos": [

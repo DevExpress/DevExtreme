@@ -3,7 +3,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 import { generateOptionMatrix } from '../../../../../helpers/generateOptionMatrix';
-import { changeTheme } from '../../../../../helpers/changeTheme';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Appointments collector`
   .page(url(__dirname, '../../../../container.html'));
@@ -13,11 +13,14 @@ test('Appointment collector has correct offset when adaptivityEnabled=true (T102
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t
-    .expect(await takeScreenshot('appointment-collector-adaptability-timelineMonth.png', scheduler.workSpace))
-    .ok()
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'appointment-collector-adaptability-timelineMonth.png',
+    { element: scheduler.workSpace },
+  );
 
-    .expect(compareResults.isValid())
+  await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxScheduler', {
   adaptivityEnabled: true,
@@ -61,64 +64,46 @@ const getSchedulerBaseOptions = (view: string) => {
 
 generateOptionMatrix({
   view: ['week', 'month', 'timelineWeek'],
-  variants: [
-    { theme: 'generic.light', adaptivityEnabled: false },
-    { theme: 'material.blue.light', adaptivityEnabled: false },
-    { theme: 'fluent.blue.light', adaptivityEnabled: false },
-    { theme: 'generic.light.compact', adaptivityEnabled: false },
-    { theme: 'material.blue.light.compact', adaptivityEnabled: false },
-    { theme: 'fluent.blue.light.compact', adaptivityEnabled: false },
-    { theme: 'generic.light', adaptivityEnabled: true },
-    { theme: 'material.blue.light', adaptivityEnabled: true },
-    { theme: 'fluent.blue.light', adaptivityEnabled: true },
-  ],
-}).forEach(({ view, variants: { theme, adaptivityEnabled } }) => {
-  test(`Appointment collector has correct offset when view=${view} adaptivityEnabled=${adaptivityEnabled} theme=${theme}`, async (t) => {
+  adaptivityEnabled: [true, false],
+}).forEach(({ view, adaptivityEnabled }) => {
+  test(`Appointment collector has correct offset when view=${view} adaptivityEnabled=${adaptivityEnabled}`, async (t) => {
     const scheduler = new Scheduler('#container');
 
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t
-      .expect(await takeScreenshot(`appointment-collector-${view}-adapt(${adaptivityEnabled})-${theme}.png`, scheduler.workSpace))
-      .ok()
+    await testScreenshot(
+      t,
+      takeScreenshot,
+      `appointment-collector-${view}-adapt(${adaptivityEnabled}).png`,
+      { element: scheduler.workSpace },
+    );
 
-      .expect(compareResults.isValid())
+    await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => {
-    await changeTheme(theme);
-
-    return createWidget('dxScheduler', {
-      adaptivityEnabled,
-      ...getSchedulerBaseOptions(view),
-    });
-  }).after(async () => {
-    await changeTheme('generic.light');
-  });
+  }).before(async () => createWidget('dxScheduler', {
+    adaptivityEnabled,
+    ...getSchedulerBaseOptions(view),
+  }));
 });
 
-['generic.light', 'material.blue.light', 'fluent.blue.light'].forEach((theme) => {
-  test(`Appointment collector has correct offset when month view with double interval theme=${theme}`, async (t) => {
-    const scheduler = new Scheduler('#container');
+test('Appointment collector has correct offset when month view with double interval', async (t) => {
+  const scheduler = new Scheduler('#container');
 
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t
-      .expect(await takeScreenshot(`appointment-collector-month-double-interval-${theme}.png`, scheduler.workSpace))
-      .ok()
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'appointment-collector-month-double-interval.png',
+    { element: scheduler.workSpace },
+  );
 
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => {
-    await changeTheme(theme);
-
-    return createWidget('dxScheduler', {
-      ...getSchedulerBaseOptions('month'),
-      views: [{ type: 'month', intervalCount: 2 }],
-    });
-  }).after(async () => {
-    await changeTheme('generic.light');
-  });
-});
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxScheduler', {
+  ...getSchedulerBaseOptions('month'),
+  views: [{ type: 'month', intervalCount: 2 }],
+}));
 
 generateOptionMatrix({
   view: ['week', 'month', 'timelineWeek'],
@@ -131,11 +116,14 @@ generateOptionMatrix({
 
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t
-      .expect(await takeScreenshot(`appointment-collector-${view}-rtl(${rtlEnabled}).png`, scheduler.workSpace))
-      .ok()
+    await testScreenshot(
+      t,
+      takeScreenshot,
+      `appointment-collector-${view}-rtl(${rtlEnabled}).png`,
+      { element: scheduler.workSpace },
+    );
 
-      .expect(compareResults.isValid())
+    await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => createWidget('dxScheduler', {
     ...getSchedulerBaseOptions(view),

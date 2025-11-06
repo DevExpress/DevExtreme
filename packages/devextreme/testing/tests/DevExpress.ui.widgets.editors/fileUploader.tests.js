@@ -3670,6 +3670,51 @@ QUnit.module('uploading events', moduleConfig, () => {
 
         $cancelButton.trigger('dxclick');
     });
+
+    QUnit.test('onFileValidationError event should rise if file has not allowed extension', function(assert) {
+        assert.expect(2);
+
+        const $element = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            allowedFileExtensions: ['.pdf'],
+            onFileValidationError: ({ file }) => {
+                assert.ok(true, 'onFileValidationError is called');
+                assert.strictEqual(file, fakeFile, 'file is passed');
+            },
+        });
+
+        simulateFileChoose($element, fakeFile);
+    });
+
+    QUnit.test('onFileValidationError event should rise if file has size bigger than maxFileSize', function(assert) {
+        assert.expect(2);
+
+        const $element = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            maxFileSize: 1000,
+            onFileValidationError: ({ file }) => {
+                assert.ok(true, 'onFileValidationError is called');
+                assert.strictEqual(file, fakeFile2, 'file is passed');
+            },
+        });
+
+        simulateFileChoose($element, fakeFile2);
+    });
+
+    QUnit.test('onFileValidationError event should rise if file has size less than minFileSize', function(assert) {
+        assert.expect(2);
+
+        const $element = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            minFileSize: 5000,
+            onFileValidationError: ({ file }) => {
+                assert.ok(true, 'onFileValidationError is called');
+                assert.strictEqual(file, fakeFile2, 'file is passed');
+            },
+        });
+
+        simulateFileChoose($element, fakeFile2);
+    });
 });
 
 QUnit.module('keyboard navigation', moduleConfig, () => {

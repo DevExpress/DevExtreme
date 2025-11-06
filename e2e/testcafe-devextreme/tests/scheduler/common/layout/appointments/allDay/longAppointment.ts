@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../../../helpers/createWidget';
 import url from '../../../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Layout:Appointments:AllDay`
   .page(url(__dirname, '../../../../../container.html'));
@@ -10,21 +11,21 @@ test('Long all day appointment should be render, if him ended on next view day i
   const { workSpace, toolbar } = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t
-    .click(toolbar.navigator.prevButton)
-    .expect(await takeScreenshot('27-march-day-view.png', workSpace)).ok();
+  await t.click(toolbar.navigator.prevButton);
 
-  await t
-    .click(toolbar.navigator.nextButton)
-    .expect(await takeScreenshot('28-march-day-view.png', workSpace)).ok();
+  await testScreenshot(t, takeScreenshot, '27-march-day-view.png', { element: workSpace });
 
-  await t
-    .click(toolbar.navigator.nextButton)
-    .expect(await takeScreenshot('29-march-day-view.png', workSpace)).ok();
+  await t.click(toolbar.navigator.nextButton);
 
-  await t
-    .click(toolbar.navigator.nextButton)
-    .expect(await takeScreenshot('30-march-day-view.png', workSpace)).ok();
+  await testScreenshot(t, takeScreenshot, '28-march-day-view.png', { element: workSpace });
+
+  await t.click(toolbar.navigator.nextButton);
+
+  await testScreenshot(t, takeScreenshot, '29-march-day-view.png', { element: workSpace });
+
+  await t.click(toolbar.navigator.nextButton);
+
+  await testScreenshot(t, takeScreenshot, '30-march-day-view.png', { element: workSpace });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -48,17 +49,17 @@ test('Long all day appointment should be render, if him ended on next view day i
   const { workSpace, toolbar } = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t
-    .click(toolbar.navigator.prevButton)
-    .expect(await takeScreenshot('21-27-march-week-view.png', workSpace)).ok();
+  await t.click(toolbar.navigator.prevButton);
 
-  await t
-    .click(toolbar.navigator.nextButton)
-    .expect(await takeScreenshot('28-march-3-apr-week-view.png', workSpace)).ok();
+  await testScreenshot(t, takeScreenshot, '21-27-march-week-view.png', { element: workSpace });
 
-  await t
-    .click(toolbar.navigator.nextButton)
-    .expect(await takeScreenshot('4-10-apr-week-view.png', workSpace)).ok();
+  await t.click(toolbar.navigator.nextButton);
+
+  await testScreenshot(t, takeScreenshot, '28-march-3-apr-week-view.png', { element: workSpace });
+
+  await t.click(toolbar.navigator.nextButton);
+
+  await testScreenshot(t, takeScreenshot, '4-10-apr-week-view.png', { element: workSpace });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
