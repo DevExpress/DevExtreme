@@ -6,11 +6,11 @@ import { BASE64_IMAGE_1, BASE64_IMAGE_2 } from './images/base64';
 import { isMaterial, testScreenshot } from '../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`HtmlEditor - add image url`
-  .page(url(__dirname, '../../../../container.html'));
+  .page(url(__dirname, '../../../../container-extended.html'));
 
 const ADD_IMAGE_POPUP_CONTENT_SELECTOR = '.dx-htmleditor-add-image-popup .dx-overlay-content';
 
-test.meta({ loadQuill: true })('Image uploader from url appearance', async (t) => {
+test('Image uploader from url appearance', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const htmlEditor = new HtmlEditor('#container');
 
@@ -33,7 +33,7 @@ test.meta({ loadQuill: true })('Image uploader from url appearance', async (t) =
   toolbar: { items: ['image'] },
 }));
 
-test.meta({ loadQuill: true })('Image url should be validate before wil be inserted by add button click', async (t) => {
+test('Image url should be validate before wil be inserted by add button click', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const htmlEditor = new HtmlEditor('#container');
 
@@ -66,7 +66,7 @@ test.meta({ loadQuill: true })('Image url should be validate before wil be inser
   });
 });
 
-test.meta({ loadQuill: true })('Image url should be validate before wil be inserted by add enter press', async (t) => {
+test('Image url should be validate before wil be inserted by add enter press', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const htmlEditor = new HtmlEditor('#container');
 
@@ -99,7 +99,7 @@ test.meta({ loadQuill: true })('Image url should be validate before wil be inser
   });
 });
 
-test.meta({ loadQuill: true })('Image url should be updated', async (t) => {
+test('Image url should be updated', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const htmlEditor = new HtmlEditor('#container');
 

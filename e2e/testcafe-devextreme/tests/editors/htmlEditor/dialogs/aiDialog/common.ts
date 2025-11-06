@@ -17,7 +17,7 @@ const LOADINDICATOR_SEGMENT_INNER_CLASS = 'dx-loadindicator-segment-inner';
 const longResult = getLongText(false, 10);
 
 fixture.disablePageReloads`HtmlEditor: AIDialog`
-  .page(url(__dirname, '../../../../container.html'));
+  .page(url(__dirname, '../../../../container-extended.html'));
 
 export async function openAIDialog(
   t: TestController,
@@ -42,7 +42,7 @@ export async function openAIDialog(
   { name: 'with-no-options', command: 0, option: undefined },
   { name: 'with-options', command: 4, option: 0 },
 ].forEach(({ name, command, option }) => {
-  test.meta({ loadQuill: true })(`initial state ${name}`, async (t) => {
+  test(`initial state ${name}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await openAIDialog(t, command, option);
@@ -63,7 +63,7 @@ export async function openAIDialog(
   });
 });
 
-test.meta({ loadQuill: true })('resize window when initial state', async (t) => {
+test('resize window when initial state', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const htmlEditor = await openAIDialog(t, 0);
 
@@ -88,7 +88,7 @@ test.meta({ loadQuill: true })('resize window when initial state', async (t) => 
   });
 });
 
-test.meta({ loadQuill: true })('generating state', async (t) => {
+test('generating state', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await openAIDialog(t, 4, 0);
@@ -134,7 +134,7 @@ test.meta({ loadQuill: true })('generating state', async (t) => {
     result: longResult,
   },
 ].forEach(({ name, result }) => {
-  test.meta({ loadQuill: true })(`resultReady state with ${name}`, async (t) => {
+  test(`resultReady state with ${name}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     const htmlEditor = await openAIDialog(t, 4, 0);
@@ -163,7 +163,7 @@ test.meta({ loadQuill: true })('generating state', async (t) => {
   });
 });
 
-test.meta({ loadQuill: true })('asking state', async (t) => {
+test('asking state', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await openAIDialog(t, 7);
@@ -183,7 +183,7 @@ test.meta({ loadQuill: true })('asking state', async (t) => {
   });
 });
 
-test.meta({ loadQuill: true })('askAI result ready state', async (t) => {
+test('askAI result ready state', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const htmlEditor = await openAIDialog(t, 7);
@@ -213,7 +213,7 @@ test.meta({ loadQuill: true })('askAI result ready state', async (t) => {
   });
 });
 
-test.meta({ loadQuill: true })('result ready after canceletion', async (t) => {
+test('result ready after canceletion', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const htmlEditor = await openAIDialog(t, 0);
@@ -240,7 +240,7 @@ test.meta({ loadQuill: true })('result ready after canceletion', async (t) => {
   });
 });
 
-test.meta({ loadQuill: true })('error state', async (t) => {
+test('error state', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await openAIDialog(t, 0);

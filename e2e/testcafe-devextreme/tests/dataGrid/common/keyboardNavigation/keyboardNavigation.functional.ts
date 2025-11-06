@@ -3879,7 +3879,7 @@ test('Adaptive with batch edit mode - Adaptive cells should not go into edit sta
   });
 });
 
-test.meta({ unstable: true })('Adaptive with batch edit mode - Adaptive cells should be focused by tab key press when they are in edit state', async (t) => {
+test('Adaptive with batch edit mode - Adaptive cells should be focused by tab key press when they are in edit state', async (t) => {
   const dataGrid = new DataGrid('#container');
   const headerRow = dataGrid.getHeaders().getHeaderRow(0);
   const firstDataRow = dataGrid.getDataRow(0);
@@ -6006,7 +6006,7 @@ test('DataGrid - Cell focus works incorrectly if the command column has a disabl
   }],
 }));
 
-test.meta({ unstable: true })('All rows should be focused on arrow-up/down when virtual scrolling enabled with group summary (T1014612)', async (t) => {
+test('All rows should be focused on arrow-up/down when virtual scrolling enabled with group summary (T1014612)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   // act (forward)

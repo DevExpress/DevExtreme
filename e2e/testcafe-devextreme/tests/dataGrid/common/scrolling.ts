@@ -352,7 +352,7 @@ test('Scroll position after grouping when RTL (T388508)', async (t) => {
   }],
 }));
 
-test('Header container should have padding-right after expanding the master row with a detail grid when using native scrolling (T1004507)', async (t) => {
+test.meta({ unstable: true })('Header container should have padding-right after expanding the master row with a detail grid when using native scrolling (T1004507)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -882,7 +882,7 @@ test.meta({ browserSize: [800, 700] })('New mode. Rows should be rendered proper
   });
 });
 
-test.meta({ browserSize: [800, 800] })('Rows are rendered properly when window content is scrolled (T1070388)', async (t) => {
+test.meta({ unstable: true, browserSize: [800, 800] })('Rows are rendered properly when window content is scrolled (T1070388)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t.expect(dataGrid.isReady()).ok();
@@ -1048,7 +1048,7 @@ test('The data should display correctly after changing the dataSource and focuse
 }));
 
 // T1166649
-test.meta({ browserSize: [800, 800] })('The scroll position of a fixed table should be synchronized with the main table when fast scrolling to the end', async (t) => {
+test.meta({ unstable: true, browserSize: [800, 800] })('The scroll position of a fixed table should be synchronized with the main table when fast scrolling to the end', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -1955,7 +1955,7 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
 fixture`Scrolling - warnings`
   .page(url(__dirname, '../../container.html'));
 
-test.meta({ unstable: true })('Warning should be thrown if scrolling is virtual and height is not specified', async (t) => {
+test('Warning should be thrown if scrolling is virtual and height is not specified', async (t) => {
   const consoleMessages = await t.getBrowserConsoleMessages();
   const warningExists = !!consoleMessages?.warn.find((message) => message.startsWith('W1025'));
 

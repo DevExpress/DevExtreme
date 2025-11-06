@@ -11,7 +11,6 @@ export interface Configuration<TComponentOptions = unknown> {
   a11yCheckConfig?: A11yCheckOptions;
   selector?: ElementContext;
   created?: (t: TestController, optionConfiguration?: TComponentOptions) => Promise<void>;
-  meta?: Record<string, unknown>;
 }
 
 export const defaultSelector = '#container';
@@ -40,15 +39,12 @@ export const testAccessibility = <TComponentOptions = unknown>(
     selector = defaultSelector,
     a11yCheckConfig = defaultA11yCheckConfig,
     created = defaultCreated,
-    meta: testMeta,
   } = configuration;
 
   const optionConfigurations = getOptionConfigurations(options);
 
   optionConfigurations.forEach((optionConfiguration, index) => {
-    const testFn = testMeta ? test.meta(testMeta) : test;
-
-    testFn(`${component}: test with axe #${index}`, async (t) => {
+    test(`${component}: test with axe #${index}`, async (t) => {
       await a11yCheck(t, a11yCheckConfig, selector, optionConfiguration);
     }).before(async (t) => {
       await createWidget(

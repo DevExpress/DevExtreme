@@ -87,7 +87,7 @@ test('Should continue arrow navigation from last focused item', async (t) => {
   height: 700,
 }));
 
-test.meta({ unstable: true })('Should enable sorting by Enter', async (t) => {
+test('Should enable sorting by Enter', async (t) => {
   const cardView = new CardView(CARD_VIEW_SELECTOR);
 
   await t
@@ -113,7 +113,7 @@ test.meta({ unstable: true })('Should enable sorting by Enter', async (t) => {
   height: 700,
 }));
 
-test.meta({ unstable: true })('Should switch sorting by Enter', async (t) => {
+test('Should switch sorting by Enter', async (t) => {
   const cardView = new CardView(CARD_VIEW_SELECTOR);
 
   await t
@@ -139,7 +139,7 @@ test.meta({ unstable: true })('Should switch sorting by Enter', async (t) => {
   height: 700,
 }));
 
-test.meta({ unstable: true })('Should clear sorting by ctrl+Enter', async (t) => {
+test('Should clear sorting by ctrl+Enter', async (t) => {
   const cardView = new CardView(CARD_VIEW_SELECTOR);
 
   await t
@@ -177,7 +177,7 @@ test.meta({ unstable: true })('Should clear sorting by ctrl+Enter', async (t) =>
   height: 700,
 }));
 
-test.meta({ unstable: true })('Should enable multi field sorting by shift+Enter', async (t) => {
+test('Should enable multi field sorting by shift+Enter', async (t) => {
   const cardView = new CardView(CARD_VIEW_SELECTOR);
 
   await t

@@ -10,14 +10,14 @@ const MENU_ITEM_CLASS = 'dx-menu-item';
 const SUBMENU_CLASS = 'dx-submenu';
 
 fixture.disablePageReloads`HtmlEditor`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../container-extended.html'));
 
 [false, true].forEach((toolbar) => {
   const selector = toolbar ? '#otherContainer' : '#container';
   const clickTarget = toolbar ? '#otherContainer .dx-bold-format' : '#container';
   const baseScreenName = toolbar ? 'htmleditor-with-toolbar' : 'htmleditor-without-toolbar';
 
-  test.meta({ loadQuill: true })(`T1025549 - ${baseScreenName}`, async (t) => {
+  test(`T1025549 - ${baseScreenName}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await testScreenshot(t, takeScreenshot, `${baseScreenName}.png`, { element: selector });
@@ -53,7 +53,7 @@ fixture.disablePageReloads`HtmlEditor`
   });
 });
 
-test.meta({ loadQuill: true })('AI toolbar item', async (t) => {
+test('AI toolbar item', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const htmlEditor = new HtmlEditor('#container');
 

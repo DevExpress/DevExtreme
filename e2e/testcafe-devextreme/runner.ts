@@ -9,10 +9,7 @@ import {
   addShadowRootTree,
   clearTestPage,
   loadAxeCore,
-  loadDevExtreme,
-  loadGantt,
-  loadQuill,
-  removeScript,
+  loadShadowDomExtension,
 } from './helpers/testPageUtils';
 import { getCurrentTheme } from './helpers/themeUtils';
 
@@ -233,21 +230,14 @@ async function main() {
       hooks: {
         test: {
           before: async (t: TestController) => {
+            if (args.shadowDom) {
+              await loadShadowDomExtension(t);
+              await addShadowRootTree(t);
+            }
+
             if (!componentFolder.includes('accessibility')) {
               // @ts-expect-error ts-errors
               const { meta } = t.testRun.test;
-
-              if (meta?.loadGantt) {
-                await removeScript(t, 'dx-all-script');
-                await loadGantt(t);
-                await loadDevExtreme(t);
-              }
-
-              if (meta?.loadQuill) {
-                await removeScript(t, 'dx-all-script');
-                await loadQuill(t);
-                await loadDevExtreme(t);
-              }
 
               await ClientFunction(() => {
                 if (document.activeElement && document.activeElement !== document.body) {
@@ -265,10 +255,6 @@ async function main() {
               await loadAxeCore(t);
             }
 
-            if (args.shadowDom) {
-              await addShadowRootTree(t);
-            }
-
             const currentTheme = await getCurrentTheme(t) || 'fluent.blue.light';
             const newTheme = args.theme || 'fluent.blue.light';
 
@@ -277,9 +263,7 @@ async function main() {
             }
           },
           after: async (t: TestController) => {
-            // if (componentFolder.includes('accessibility')) {
             await clearTestPage(t);
-            // }
           },
         },
       },

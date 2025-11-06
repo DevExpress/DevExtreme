@@ -9,7 +9,7 @@ const MENU_ITEM_CLASS = 'dx-menu-item';
 const SUBMENU_CLASS = 'dx-submenu';
 
 fixture.disablePageReloads`Accessibility`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../container-extended.html'));
 
 const markup = '<p>He<em>llo</em></p>';
 
@@ -42,7 +42,6 @@ const configuration: Configuration = {
   a11yCheckConfig,
   options,
   created,
-  meta: { loadQuill: true },
 };
 
 testAccessibility(configuration);
@@ -78,7 +77,6 @@ const aiConfiguration: Configuration = {
   a11yCheckConfig,
   options: aiOptions,
   created: aiCreated,
-  meta: { loadQuill: true },
 };
 
 testAccessibility(aiConfiguration);

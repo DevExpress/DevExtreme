@@ -61,65 +61,21 @@ export async function loadAxeCore(t: TestController): Promise<void> {
   })).with({ boundTestRun: t })();
 }
 
-export async function loadGantt(t: TestController): Promise<void> {
+export async function loadShadowDomExtension(t: TestController): Promise<void> {
   await ClientFunction(() => new Promise<void>((resolve, reject) => {
-    if (document.getElementById('dx-gantt-script')) {
+    if (document.getElementById('shadow-dom-extension-script')) {
       resolve();
       return;
     }
 
     const script = document.createElement('script');
-    script.id = 'dx-gantt-script';
-    script.src = '../../../packages/devextreme/artifacts/js/dx-gantt.min.js';
+    script.id = 'shadow-dom-extension-script';
+    script.src = '../../helpers/shadowDom/shadowDomExtension.js';
     // @ts-expect-error ts-error
     script.onload = resolve;
     script.onerror = reject;
-    document.head.prepend(script);
+    document.head.appendChild(script);
   })).with({ boundTestRun: t })();
-}
-
-export async function loadQuill(t: TestController): Promise<void> {
-  await ClientFunction(() => new Promise<void>((resolve, reject) => {
-    // @ts-expect-error ts-error
-    if (window.Quill) {
-      resolve();
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.id = 'dx-quill-script';
-    script.src = '../../../packages/devextreme/artifacts/js/dx-quill.min.js';
-    // @ts-expect-error ts-error
-    script.onload = resolve;
-    script.onerror = reject;
-    document.head.prepend(script);
-  })).with({ boundTestRun: t })();
-}
-
-export async function loadDevExtreme(t: TestController): Promise<void> {
-  await ClientFunction(() => new Promise<void>((resolve, reject) => {
-    if (document.getElementById('dx-all-script')) {
-      resolve();
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.id = 'dx-all-script';
-    script.src = '../../../packages/devextreme/artifacts/js/dx.all.js';
-    // @ts-expect-error ts-error
-    script.onload = resolve;
-    script.onerror = reject;
-    document.head.prepend(script);
-  })).with({ boundTestRun: t })();
-}
-
-export async function removeScript(t: TestController, scriptId: string): Promise<void> {
-  await ClientFunction((id: string) => {
-    const script = document.getElementById(id);
-    if (script) {
-      script.remove();
-    }
-  }).with({ boundTestRun: t })(scriptId);
 }
 
 export const addShadowRootTree = async (t: TestController): Promise<void> => {
