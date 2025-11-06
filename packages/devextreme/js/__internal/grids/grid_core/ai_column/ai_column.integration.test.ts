@@ -21,7 +21,7 @@ const SELECTORS = {
 
 const GRID_CONTAINER_ID = 'gridContainer';
 
-const UNICODE_NBSP = '\u00A0';
+const EMPTY_CELL_TEXT = '\u00A0';
 
 const items = [
   { id: 1, name: 'Name 1', value: 10 },
@@ -1836,8 +1836,8 @@ describe('API Methods', () => {
       // click the 'Clear Data' button
       dropDownButton.getList().getItem(2).getElement()?.click();
 
-      expect(component.getDataCell(0, 3).getText()).toBe(UNICODE_NBSP);
-      expect(component.getDataCell(1, 3).getText()).toBe(UNICODE_NBSP);
+      expect(component.getDataCell(0, 3).getText()).toBe(EMPTY_CELL_TEXT);
+      expect(component.getDataCell(1, 3).getText()).toBe(EMPTY_CELL_TEXT);
     });
 
     it('should abort the previous request of the same column', async () => {
@@ -3864,8 +3864,8 @@ describe('AI data', () => {
         ],
       });
 
-      expect(component.getDataCell(0, 3).getText()).toBe(UNICODE_NBSP);
-      expect(component.getDataCell(1, 3).getText()).toBe(UNICODE_NBSP);
+      expect(component.getDataCell(0, 3).getText()).toBe(EMPTY_CELL_TEXT);
+      expect(component.getDataCell(1, 3).getText()).toBe(EMPTY_CELL_TEXT);
 
       component.apiColumnOption('myColumn', 'ai.prompt', 'Initial prompt');
       await Promise.resolve();
@@ -3907,8 +3907,8 @@ describe('AI data', () => {
         ],
       });
 
-      expect(component.getDataCell(0, 3).getText()).toBe(UNICODE_NBSP);
-      expect(component.getDataCell(1, 3).getText()).toBe(UNICODE_NBSP);
+      expect(component.getDataCell(0, 3).getText()).toBe(EMPTY_CELL_TEXT);
+      expect(component.getDataCell(1, 3).getText()).toBe(EMPTY_CELL_TEXT);
 
       component.getAIPromptEditor().getTextArea().setValue('Initial prompt');
       component.getAIPromptEditor().getApplyButton().getElement().click();
@@ -3968,8 +3968,8 @@ describe('AI data', () => {
       });
 
       // check data cells of the first AI column
-      expect(component.getDataCell(0, 3).getText()).toBe(UNICODE_NBSP);
-      expect(component.getDataCell(1, 3).getText()).toBe(UNICODE_NBSP);
+      expect(component.getDataCell(0, 3).getText()).toBe(EMPTY_CELL_TEXT);
+      expect(component.getDataCell(1, 3).getText()).toBe(EMPTY_CELL_TEXT);
 
       // check data cells of the second AI column
       expect(component.getDataCell(0, 4).getText()).toBe('AI Column 2 - AI Response 1');
