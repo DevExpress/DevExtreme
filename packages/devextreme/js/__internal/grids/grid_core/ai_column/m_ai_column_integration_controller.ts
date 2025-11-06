@@ -142,7 +142,7 @@ export class AIColumnIntegrationController extends Controller {
     return callbacks;
   }
 
-  public hasAbortRequests(): boolean {
+  public isAnyRequestAwaitingCompletion(): boolean {
     return Object.values(this.aborts).some((abort) => !!abort);
   }
 

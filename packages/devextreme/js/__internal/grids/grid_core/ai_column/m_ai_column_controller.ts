@@ -124,7 +124,7 @@ export class AIColumnController extends Controller {
   public abortAIColumnRequest(columnName: string): void {
     this.aiColumnIntegrationController.abortRequest(columnName);
 
-    if (!this.aiColumnIntegrationController.hasAbortRequests()) {
+    if (!this.aiColumnIntegrationController.isAnyRequestAwaitingCompletion()) {
       this.dataController.endCustomLoading();
     }
   }
