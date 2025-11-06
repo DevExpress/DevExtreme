@@ -1131,11 +1131,11 @@ export type ODataContextOptions = {
      * @docid
      * @public
      * @default false
-     * @deprecated processDatesAsUtc
+     * @deprecated ODataContextOptions.processDatesAsUtc
      */
     deserializeDates?: boolean;
     /**
-     * @docid
+     * @docid ODataContextOptions.processDatesAsUtc
      * @public
      * @default false
      */
@@ -1241,11 +1241,11 @@ export type ODataStoreOptions<
      * @docid
      * @public
      * @default false
-     * @deprecated processDatesAsUtc
+     * @deprecated ODataStoreOptions.processDatesAsUtc
      */
     deserializeDates?: boolean;
     /**
-     * @docid
+     * @docid ODataStoreOptions.processDatesAsUtc
      * @public
      * @default false
      */
