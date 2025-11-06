@@ -416,6 +416,7 @@ describe('Options', () => {
           { id: 1, name: 'Name 1', value: 10 },
           { id: 2, name: 'Name 2', value: 20 },
         ],
+        keyExpr: 'id',
         columns: [
           { dataField: 'id', caption: 'ID' },
           { dataField: 'name', caption: 'Name' },
@@ -451,6 +452,7 @@ describe('Options', () => {
   describe('when the emptyText is set', () => {
     it('should render this text', async () => {
       const { component } = await createDataGrid({
+        keyExpr: 'id',
         dataSource: [
           { id: 1, name: 'Name 1', value: 10 },
           { id: 2, name: 'Name 2', value: 20 },
