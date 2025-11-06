@@ -163,8 +163,6 @@ export class AppointmentPopup {
   }
 
   _updateForm(): void {
-    this.form.showMainGroup(false);
-
     const rawAppointment = this.state.appointment.data;
     const appointmentAdapter = this._createAppointmentAdapter(rawAppointment)
       .clone()
@@ -174,6 +172,8 @@ export class AppointmentPopup {
 
     this.form.formData = formData;
     this.form.readOnly = this._isReadOnly(appointmentAdapter);
+
+    this.form.showMainGroup(false);
   }
 
   _createFormData(appointmentAdapter: AppointmentAdapter): Record<string, any> {

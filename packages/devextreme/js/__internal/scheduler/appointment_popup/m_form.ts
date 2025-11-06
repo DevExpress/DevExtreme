@@ -785,10 +785,7 @@ export class AppointmentForm {
       return;
     }
 
-    const isSimpleItem = item.itemType === 'simple' || 'editorType' in item || 'editorOptions' in item;
-    const isGroupItem = 'items' in item;
-
-    if (isSimpleItem) {
+    if (item.itemType === 'simple') {
       const simpleItem = item as SimpleItem;
       const stylingMode = isFluent(current()) ? 'filled' : undefined;
 
@@ -799,8 +796,9 @@ export class AppointmentForm {
       return;
     }
 
-    if (isGroupItem) {
-      item.items?.forEach((child) => {
+    if (item.itemType === 'group') {
+      const groupItem = item as GroupItem;
+      groupItem.items?.forEach((child) => {
         this.setStylingModeToEditors(child, showIcon);
       });
     }

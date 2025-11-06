@@ -32,7 +32,6 @@ $(() => {
     },
     onAppointmentFormOpening(e) {
       form = e.form;
-      window.x = form;
 
       form.on('fieldDataChanged', (e) => {
         if (e.dataField === 'startDate') {
@@ -48,6 +47,7 @@ $(() => {
           {
             template: () => {
               $movieInfoContainer = $('<div class="movie-info-container">');
+              updateMovieInfoContainer(movie);
               return $movieInfoContainer;
             },
           },
@@ -69,8 +69,7 @@ $(() => {
                   onValueChanged(e) {
                     const movie = getMovieById(e.value);
 
-                    const $movieInfo = movieInfoTemplate(movie);
-                    $movieInfoContainer.empty().append($movieInfo);
+                    updateMovieInfoContainer(movie);
 
                     if (!form) {
                       return;
@@ -157,6 +156,11 @@ $(() => {
         </div>
       </div>
     `);
+  }
+
+  function updateMovieInfoContainer(movie) {
+    const $movieInfo = movieInfoTemplate(movie);
+    $movieInfoContainer.empty().append($movieInfo);
   }
 
   function getEditorStylingMode() {
