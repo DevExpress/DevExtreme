@@ -736,7 +736,7 @@ test.clientScripts([
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  const appointmentPopup = await openAppointmentPopup(t, appointment, true);
+  const appointmentPopup = await openAppointmentPopup(t, appointment, false);
   await appointmentPopup.openRecurrenceSettings(t);
 
   await takeScreenshot(

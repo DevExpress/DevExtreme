@@ -172,8 +172,11 @@ test.meta({ browserSize: [1500, 1500] })('main form with resources that have ico
 
 [
   'generic.light',
+  'generic.light.compact',
   'material.blue.light',
+  'material.blue.light.compact',
   'fluent.blue.light',
+  'fluent.blue.light.compact',
 ].forEach((theme) => {
   [
     { isRecurringAppointment: false, isAllDay: false },
@@ -193,7 +196,7 @@ test.meta({ browserSize: [1500, 1500] })('main form with resources that have ico
     test.meta({ browserSize: [1500, 1500] })(`appointment form readonly state (${theme})`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      const appointmentPopup = await openAppointmentPopup(t, appointment, isRecurringAppointment);
+      const appointmentPopup = await openAppointmentPopup(t, appointment, false);
 
       await takeScreenshot(
         `scheduler__appointment__readonly-form (recurring=${isRecurringAppointment},theme=${theme})`,
