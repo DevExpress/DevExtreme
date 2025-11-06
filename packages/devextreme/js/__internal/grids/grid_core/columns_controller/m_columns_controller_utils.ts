@@ -15,6 +15,7 @@ import variableWrapper from '@js/core/utils/variable_wrapper';
 import errors from '@js/ui/widget/ui.errors';
 
 import { HIDDEN_COLUMNS_WIDTH } from '../adaptivity/const';
+import { AI_COLUMN_NAME } from '../ai_column/const';
 import gridCoreUtils from '../m_utils';
 import { StickyPosition } from '../sticky_columns/const';
 import { getColumnFixedPosition } from '../sticky_columns/utils';
@@ -737,6 +738,10 @@ export const columnOptionCore = function (that: ColumnsController, column, optio
       value,
       prevValue,
     });
+
+    if (column.type === AI_COLUMN_NAME) {
+      that.aiColumnOptionChanged.fire(column, optionName, value);
+    }
   }
 };
 

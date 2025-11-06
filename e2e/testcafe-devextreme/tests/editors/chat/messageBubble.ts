@@ -1,6 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Chat from 'devextreme-testcafe-models/chat';
-import { createUser, generateImageMessage, generateMessages } from './data';
+import {
+  createUser,
+  generateImageMessage,
+  generateMessages,
+  generateFileMessage,
+} from './data';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
@@ -39,21 +44,31 @@ test('Chat: messagebubble', async (t) => {
   }, '#chat');
 });
 
-test('Chat: messagebubble - image rendering with size variations', async (t) => {
+test('Chat: messagebubble with images and files', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const chat = new Chat('#chat');
 
   const user = createUser(1, 'ImageUser');
 
-  let imageMessages = generateImageMessage(user, '../../../apps/demos/images/products/1.png');
+  const imageMessages = [
+    generateImageMessage(user, '../../../apps/demos/images/products/1.png'),
+    generateImageMessage(user, '../../../apps/demos/images/products/1-small.png'),
+  ];
 
-  await chat.option({ items: [imageMessages] });
-  await testScreenshot(t, takeScreenshot, 'Bubbles with image.png', { element: '#chat' });
+  await chat.option({ items: imageMessages });
+  await testScreenshot(t, takeScreenshot, 'Bubbles with images.png', { element: '#chat' });
 
-  imageMessages = generateImageMessage(user, '../../../apps/demos/images/products/1-small.png');
+  const fileMessages = [
+    generateFileMessage(user),
+    generateFileMessage(user, true),
+  ];
 
-  await chat.option({ items: [imageMessages] });
-  await testScreenshot(t, takeScreenshot, 'Bubbles with small image.png', { element: '#chat' });
+  await chat.option({
+    width: 700,
+    height: 720,
+    items: fileMessages,
+  });
+  await testScreenshot(t, takeScreenshot, 'Bubbles with files.png', { element: '#chat' });
 
   await t.expect(compareResults.isValid()).ok(compareResults.errorMessages());
 }).before(async () => {

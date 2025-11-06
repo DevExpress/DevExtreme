@@ -1021,17 +1021,17 @@ export interface pieChartSeriesObject extends baseSeriesObject {
  */
 export type PointInfo = BasePointInfo<piePointObject> & {
   /**
-   * @docid
+   * @docid dxPieChartPointInfo.percent
    * @public
    */
   percent?: number;
   /**
-   * @docid
+   * @docid dxPieChartPointInfo.percentText
    * @public
    */
   percentText?: string;
   /**
-   * @docid
+   * @docid dxPieChartPointInfo.points
    * @public
    */
   points?: PointInfo;

@@ -57,7 +57,7 @@ test('TreeList - Expand/collapse buttons are too close to column borders if the 
 // visual: generic.light
 // visual: material.blue.light
 // visual: fluent.blue.light
-test.meta({ unstable: true })('TreeList screenshot when the first cell has a template', async (t) => {
+test('TreeList screenshot when the first cell has a template', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const treeList = new TreeList('#container');
 
