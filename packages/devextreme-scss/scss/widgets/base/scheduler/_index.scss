@@ -469,28 +469,33 @@ $scheduler-appointment-form-label-padding: 20px;
     }
 
     .dx-form {
+      min-height: 100%;
       position: relative;
       overflow: hidden;
 
       .dx-scheduler-form-main-group {
+        width: 100%;
         transition: transform 0.3s ease-in-out;
         transform: translateX(0);
+        position: relative;
 
-        &.dx-scheduler-form-main-hidden {
+        &.dx-scheduler-form-main-group-hidden {
           transform: translateX(-100%);
+          position: absolute;
+          top: 0;
         }
       }
 
       .dx-scheduler-form-recurrence-group {
-        position: absolute;
-        top: 0;
-        left: 0;
         width: 100%;
         transition: transform 0.3s ease-in-out;
-        transform: translateX(100%);
+        transform: translateX(0);
+        position: relative;
 
-        &:not(.dx-scheduler-form-recurrence-hidden) {
-          transform: translateX(0);
+        &.dx-scheduler-form-recurrence-group-hidden {
+          transform: translateX(100%);
+          position: absolute;
+          top: 0;
         }
       }
 

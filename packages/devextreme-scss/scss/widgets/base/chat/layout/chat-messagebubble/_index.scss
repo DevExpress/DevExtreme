@@ -9,6 +9,8 @@ $chat-messagebubble-max-height-image: 400px !default;
 }
 
 .dx-chat-messagebubble {
+  display: flex;
+  flex-direction: column;
   width: auto;
   word-break: break-word;
   white-space: break-spaces;

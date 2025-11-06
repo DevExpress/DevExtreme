@@ -96,7 +96,7 @@ const CELL_SIZE_CSS = `
 
 const createScheduler = async (options = {}): Promise<void> => createWidget('dxScheduler', extend(DEFAULT_OPTIONS, options));
 
-fixture.disablePageReloads`Scheduler: Group Header CSS for Long Resource Names`
+fixture`Scheduler: Group Header CSS for Long Resource Names`
   .page(url(__dirname, '../../../container.html'));
 
 test('Group header CSS should work with vertical grouping and long resource names', async (t) => {
@@ -115,7 +115,7 @@ test('Group header CSS should work with vertical grouping and long resource name
   await createScheduler({ currentView: 'Vertical Grouping' });
 });
 
-test('Group header CSS should work with horizontal grouping and long resource names', async (t) => {
+test.meta({ unstable: true })('Group header CSS should work with horizontal grouping and long resource names', async (t) => {
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

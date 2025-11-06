@@ -6,7 +6,7 @@ import type { Column, ColumnsController } from '../columns_controller/m_columns_
 import type { DataController } from '../data_controller/m_data_controller';
 import { Controller } from '../m_modules';
 import { AIColumnIntegrationController } from './m_ai_column_integration_controller';
-import { isAIColumnAutoMode } from './utils';
+import { getAICommandColumnDefaultOptions, isAIColumnAutoMode, isPromptOption } from './utils';
 
 export class AIColumnController extends Controller {
   private dataController!: DataController;
@@ -17,9 +17,19 @@ export class AIColumnController extends Controller {
 
   private dataChangedHandler!: (e) => any;
 
+  private aiColumnOptionChangedHandler!: (
+    column: Column,
+    optionName: string,
+    value: unknown,
+  ) => void;
+
   public aiRequestCompleted!: Callback;
 
   public aiRequestRejected!: Callback;
+
+  private addAICommandColumn(): void {
+    this.columnsController.addCommandColumn(getAICommandColumnDefaultOptions());
+  }
 
   protected callbackNames(): string[] {
     return ['aiRequestCompleted', 'aiRequestRejected'];
@@ -29,11 +39,16 @@ export class AIColumnController extends Controller {
     this.columnsController = this.getController('columns');
     this.dataController = this.getController('data');
 
+    this.addAICommandColumn();
+
     this.aiColumnIntegrationController = new AIColumnIntegrationController(this.component);
     this.aiColumnIntegrationController.init();
 
     this.dataChangedHandler = this.handleDataChanged.bind(this);
     this.dataController.changed.add(this.dataChangedHandler);
+
+    this.aiColumnOptionChangedHandler = this.aiColumnOptionChanged.bind(this);
+    this.columnsController.aiColumnOptionChanged.add(this.aiColumnOptionChangedHandler);
   }
 
   private showResults(
@@ -53,7 +68,7 @@ export class AIColumnController extends Controller {
 
     for (const col of aiColumns) {
       if (isAIColumnAutoMode(col)) {
-        this.refreshAIColumn(col.name as string);
+        this.sendRequest(col.name as string, true);
       }
     }
   }
@@ -74,16 +89,24 @@ export class AIColumnController extends Controller {
     this.aiColumnIntegrationController.abortRequest(columnName);
   }
 
+  private sendRequest(
+    columnName: string,
+    useCache: boolean,
+  ): void {
+    const callbacks = this.getRequestCallbacks();
+    this.aiColumnIntegrationController.sendRequest(columnName, useCache, callbacks);
+  }
+
   public sendAIColumnRequest(
     columnName: string,
   ): void {
-    this.aiColumnIntegrationController.sendRequest(columnName, true, this.getRequestCallbacks());
+    this.sendRequest(columnName, false);
   }
 
   public refreshAIColumn(
     columnName: string,
   ): void {
-    this.sendAIColumnRequest(columnName);
+    this.sendRequest(columnName, false);
   }
 
   private getRequestCallbacks(): RequestCallbacks<GenerateGridColumnCommandResult> {
@@ -99,13 +122,33 @@ export class AIColumnController extends Controller {
 
   public clearAIColumn(columnName: string): void {
     this.aiColumnIntegrationController.abortRequest(columnName);
+    this.aiColumnIntegrationController.clearAIColumn(columnName);
+    this.columnsController.columnOption(columnName, 'ai.prompt', '');
   }
 
-  public getAIColumnText(columnName: string, key: any): void {
+  public getAIColumnText(columnName: string, key: unknown): string | undefined {
+    return this.aiColumnIntegrationController.getAIColumnText(columnName, key as PropertyKey);
+  }
 
+  public aiColumnOptionChanged(
+    column: Column,
+    optionName: string,
+    value: unknown,
+  ): void {
+    const isPromptOptionName = isPromptOption(optionName, value);
+
+    if (isPromptOptionName && column.name) {
+      this.aiColumnIntegrationController.clearAIColumn(column.name);
+    }
   }
 
   public dispose(): void {
-    this.dataController.changed.remove(this.dataChangedHandler);
+    super.dispose();
+    if (this.aiColumnOptionChangedHandler) {
+      this.columnsController.aiColumnOptionChanged.remove(this.aiColumnOptionChangedHandler);
+    }
+    if (this.dataChangedHandler) {
+      this.dataController.changed.remove(this.dataChangedHandler);
+    }
   }
 }

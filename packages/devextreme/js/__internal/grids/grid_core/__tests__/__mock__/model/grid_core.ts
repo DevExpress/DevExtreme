@@ -3,8 +3,11 @@
 import type { GridBase } from '@js/common/grids';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import { ToastModel } from '@ts/ui/__tests__/__mock__/model/toast';
 
 import { AIPromptEditorModel } from './ai_prompt_editor';
+import { AIHeaderCellModel } from './cell/ai_header_cell';
+import { HeaderCellModel } from './cell/header_cell';
 
 const SELECTORS = {
   headerRowClass: 'dx-header-row',
@@ -12,17 +15,27 @@ const SELECTORS = {
   groupRowClass: 'dx-group-row',
   aiDialog: 'dx-aidialog',
   aiPromptEditor: 'dx-ai-prompt-editor',
+  toast: 'dx-toast',
 };
 
 export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
+  protected abstract NAME: string;
+
   constructor(protected readonly root: HTMLElement) {}
 
   public getHeaderCells(): NodeListOf<HTMLElement> {
     return this.root.querySelectorAll(`.${SELECTORS.headerRowClass} > td`);
   }
 
-  public getHeaderCell(columnIndex: number): HTMLElement {
-    return this.getHeaderCells()[columnIndex];
+  public getHeaderCell(columnIndex: number): HeaderCellModel {
+    return new HeaderCellModel(this.getHeaderCells()[columnIndex], this.addWidgetPrefix.bind(this));
+  }
+
+  public getAIHeaderCell(columnIndex: number): AIHeaderCellModel {
+    return new AIHeaderCellModel(
+      this.getHeaderCells()[columnIndex],
+      this.addWidgetPrefix.bind(this),
+    );
   }
 
   public getCellElement(rowIndex: number, columnIndex: number): HTMLElement {
@@ -59,6 +72,20 @@ export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
 
   public getAIPromptEditor(): AIPromptEditorModel {
     return new AIPromptEditorModel(this.getPromptEditorContainer());
+  }
+
+  private getToastContainer(): HTMLElement {
+    return document.body.querySelector(`.${SELECTORS.toast}`) as HTMLElement;
+  }
+
+  public getToast(): ToastModel {
+    return new ToastModel(this.getToastContainer());
+  }
+
+  public addWidgetPrefix(classNames: string): string {
+    const componentName = this.NAME;
+
+    return `dx-${componentName.slice(2).toLowerCase()}${classNames ? `-${classNames}` : ''}`;
   }
 
   public abstract getInstance(): TInstance;

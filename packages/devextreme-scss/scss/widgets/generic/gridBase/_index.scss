@@ -6,6 +6,7 @@
 @use "../sizes" as *;
 @use "../../base/icons" as *;
 @use "../../base/checkBox/mixins" as *;
+@use "../../base/button/mixins" as *;
 @use "../dropDownEditor" as *;
 @use "../textEditor" as *;
 @use "../common/mixins" as *;
@@ -1134,6 +1135,42 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
       &.dx-scrollable-scrollbars-alwaysvisible.dx-scrollable-both .dx-scrollable-wrapper .dx-scrollable-container .dx-scrollable-content {
         padding-left: 0;
       }
+    }
+  }
+
+  .dx-command-ai-header-content {
+    max-width: calc(100% - ($generic-grid-base-command-ai-header-button-size - $generic-grid-base-cell-padding));
+
+    .dx-#{$widget-name}-text-content {
+      padding-left: $generic-grid-base-command-ai-text-content-padding;
+    }
+
+    .dx-icon-chatsparkleoutline {
+      @include dx-icon-sizing($generic-grid-base-command-ai-chatsparkleoutline-icon-size);
+    }
+  }
+
+  .dx-command-ai-header-button {
+    left: auto;
+    right: 0;
+  }
+
+  td[style*="text-align: right"] .dx-command-ai-header-button {
+    left: 0;
+    right: auto;
+  }
+
+  .dx-command-ai .dx-command-ai-header-button .dx-button {
+    @include dx-button-sizing(
+      $generic-grid-base-command-ai-header-button-padding,
+      $generic-grid-base-command-ai-header-button-padding,
+      $generic-grid-base-command-ai-header-button-padding,
+      $generic-base-icon-size,
+      0
+    );
+
+    &.dx-state-focused {
+      outline-offset: -2px;
     }
   }
 }

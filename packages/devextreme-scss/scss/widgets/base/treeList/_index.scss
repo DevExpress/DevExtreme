@@ -410,3 +410,7 @@ $treelist-row-error-color: $datagrid-row-error-color;
     background-color: color.change($treelist-base-color, $alpha: 0.08);
   }
 }
+
+.dx-command-ai-header-button .dx-button.dx-state-focused {
+  outline: 2px solid $treelist-focused-border-color;
+}

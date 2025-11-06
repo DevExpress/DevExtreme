@@ -8,6 +8,7 @@ import { isDefined } from '@js/core/utils/type';
 import DataHelperMixin from '@js/data_helper';
 import type dxChat from '@js/ui/chat';
 import type {
+  AttachmentDownloadClickEvent,
   Message,
   MessageDeletedEvent,
   MessageDeletingEvent,
@@ -73,6 +74,8 @@ class Chat extends Widget<Properties> {
 
   _messageUpdatedAction?: (e: Partial<MessageUpdatedEvent>) => void;
 
+  _attachmentDownloadAction?: (e: Partial<AttachmentDownloadClickEvent>) => void;
+
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
@@ -105,6 +108,7 @@ class Chat extends Widget<Properties> {
       onMessageEntered: undefined,
       onTypingEnd: undefined,
       onTypingStart: undefined,
+      onAttachmentDownloadClick: undefined,
     };
   }
 
@@ -125,6 +129,7 @@ class Chat extends Widget<Properties> {
     this._createMessageUpdatedAction();
     this._createTypingStartAction();
     this._createTypingEndAction();
+    this._createAttachmentDownloadAction();
   }
 
   _dataSourceLoadErrorHandler(): void {
@@ -196,6 +201,7 @@ class Chat extends Widget<Properties> {
     // @ts-expect-error
     const isLoading = this._dataController.isLoading();
     const currentUserId = user?.id;
+    const onAttachmentDownloadClick = this._getAttachmentDownloadHandler();
 
     const options: MessageListProperties = {
       items,
@@ -224,9 +230,21 @@ class Chat extends Widget<Properties> {
       onEscapeKeyPressed: () => {
         this.focus();
       },
+      onAttachmentDownloadClick,
     };
 
     return options;
+  }
+
+  _getAttachmentDownloadHandler(): ((e: AttachmentDownloadClickEvent) => void) | undefined {
+    const { onAttachmentDownloadClick } = this.option();
+
+    if (!onAttachmentDownloadClick) {
+      return;
+    }
+
+    // eslint-disable-next-line consistent-return
+    return (e: AttachmentDownloadClickEvent): void => { this._attachmentDownloadAction?.(e); };
   }
 
   protected _allowEditAction(message: Message): boolean {
@@ -312,6 +330,8 @@ class Chat extends Widget<Properties> {
       messageEditingStartArgs.cancel,
       () => {
         this._messageBox.option('text', e.message.text);
+        this._messageBox.resetFileUploader();
+        this._messageBox.toggleAttachButtonVisibleState(false);
         this._messageToEdit = e.message;
       },
     );
@@ -322,6 +342,8 @@ class Chat extends Widget<Properties> {
       this._messageEditCanceledAction?.({ message: this._messageToEdit });
       this._messageToEdit = undefined;
     }
+
+    this._messageBox.toggleAttachButtonVisibleState(true);
   }
 
   _showDeleteConfirmationPopup(e: Pick<MessageDeletingEvent, 'message'>): void {
@@ -388,6 +410,7 @@ class Chat extends Widget<Properties> {
       eventArgs.cancel,
       () => {
         this._messageBox.option('text', '');
+        this._messageBox.toggleAttachButtonVisibleState(true);
         this._messageUpdatedAction?.(eventArgs);
         this._messageToEdit = undefined;
       },
@@ -521,8 +544,15 @@ class Chat extends Widget<Properties> {
     );
   }
 
+  _createAttachmentDownloadAction(): void {
+    this._attachmentDownloadAction = this._createActionByOption(
+      'onAttachmentDownloadClick',
+      { excludeValidators: ['disabled'] },
+    );
+  }
+
   _messageEnteredHandler(e: MessageBoxMessageEnteredEvent): void {
-    const { text, event } = e;
+    const { text, event, attachments } = e;
     const { user } = this.option();
 
     const message: Message = {
@@ -530,6 +560,10 @@ class Chat extends Widget<Properties> {
       author: user,
       text,
     };
+
+    if (attachments) {
+      message.attachments = attachments;
+    }
 
     // @ts-expect-error
     const dataSource = this.getDataSource();
@@ -567,14 +601,16 @@ class Chat extends Widget<Properties> {
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
-    const { name, value } = args;
+    const { name, fullName, value } = args;
 
     switch (name) {
       case 'activeStateEnabled':
       case 'focusStateEnabled':
       case 'hoverStateEnabled':
-      case 'fileUploaderOptions':
         this._messageBox.option(name, value);
+        break;
+      case 'fileUploaderOptions':
+        this._messageBox.option(fullName, value);
         break;
       case 'user': {
         const author = value as Properties[typeof name];
@@ -621,6 +657,12 @@ class Chat extends Widget<Properties> {
         break;
       case 'onTypingEnd':
         this._createTypingEndAction();
+        break;
+      case 'onAttachmentDownloadClick':
+        this._createAttachmentDownloadAction();
+        this._messageList.option({
+          onAttachmentDownloadClick: this._getAttachmentDownloadHandler(),
+        });
         break;
       case 'showDayHeaders':
       case 'showAvatar':

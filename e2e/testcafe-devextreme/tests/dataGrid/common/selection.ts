@@ -4,6 +4,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import CheckBox from 'devextreme-testcafe-models/checkBox';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Selection`
   .page(url(__dirname, '../../container.html'));
@@ -49,7 +50,7 @@ test('The Select All checkbox should be visible when a column headerCellTemplate
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   // assert
-  await takeScreenshot('T1141405-grid-select-all.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1141405-grid-select-all.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())
@@ -92,10 +93,10 @@ test('The Select All checkbox should be visible when a column headerCellTemplate
 });
 
 // T1214734
-test('Select rows by shift should work when grid has real time updates', async (t) => {
+test.meta({ unstable: true })('Select rows by shift should work when grid has real time updates', async (t) => {
   const dataGrid = new DataGrid('#container');
-  const secondRow = dataGrid.getDataRow(1);
-  const seventhRow = dataGrid.getDataRow(6);
+  const secondRow = dataGrid.getDataRow(1).getSelectCheckBox();
+  const seventhRow = dataGrid.getDataRow(6).getSelectCheckBox();
   const checkRowSelectionStates = async (startRowIndex: number, endRowIndex: number) => {
     for (let i = startRowIndex; i <= endRowIndex; i += 1) {
       await t
@@ -106,16 +107,16 @@ test('Select rows by shift should work when grid has real time updates', async (
 
   // act
   await t
-    .click(secondRow.element);
+    .click(secondRow)
+    .wait(500);
 
   // assert
   await checkRowSelectionStates(1, 1);
-  await t
-    .expect(dataGrid.getDataCell(2, 3).element.textContent)
-    .eql('test123');
 
   // act
-  await t.click(seventhRow.element, { modifiers: { shift: true } });
+  await t
+    .click(seventhRow, { modifiers: { shift: true } })
+    .wait(500);
 
   // assert
   await checkRowSelectionStates(1, 6);

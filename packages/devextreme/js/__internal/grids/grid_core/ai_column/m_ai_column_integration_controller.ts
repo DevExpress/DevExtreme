@@ -72,11 +72,13 @@ export class AIColumnIntegrationController extends Controller {
       return;
     }
 
-    const keys = Object.keys(data);
-    const cachedResponse: Record<PropertyKey, string> = useCache
-      ? this.aiColumnCacheController.getCachedResponse(columnName, keys)
-      : {};
     const keyField = this.dataController.key();
+    let cachedResponse: Record<PropertyKey, string> = {};
+    if (args.useCache) {
+      const keys = data.map((item) => item[keyField] as PropertyKey);
+      cachedResponse = this.aiColumnCacheController.getCachedResponse(columnName, keys);
+    }
+
     const reducedData = reduceDataCachedKeys(data, cachedResponse, keyField);
     const areAllDataCached = Object.keys(reducedData).length === 0;
     if (areAllDataCached) {
@@ -126,13 +128,13 @@ export class AIColumnIntegrationController extends Controller {
             column,
             error: null,
             data: finalResponse.data,
-            additionalInfo: finalResponse.additionalInfo,
           };
 
           this.executeAction('onAIColumnResponseReceived', args);
+          this.aiColumnCacheController.setCachedResponse(columnName, finalResponse.data);
           this.showResult(
             columnName,
-            finalResponse as Record<PropertyKey, unknown>,
+            finalResponse.data,
             cachedResponse,
           );
           this.processCommandCompletion(columnName);
@@ -145,7 +147,6 @@ export class AIColumnIntegrationController extends Controller {
           column,
           error: message,
           data: null,
-          additionalInfo: undefined,
         });
         this.showError(message);
         this.processCommandCompletion(columnName);
@@ -163,6 +164,14 @@ export class AIColumnIntegrationController extends Controller {
 
   public showError(message: string): void {
     this.errorHandlingController?.showToastError(message);
+  }
+
+  public getAIColumnText(columnName: string, key: PropertyKey): string | undefined {
+    return this.aiColumnCacheController.getCachedString(columnName, key);
+  }
+
+  public clearAIColumn(columnName: string): void {
+    this.aiColumnCacheController.clearCache(columnName);
   }
 
   private getAIIntegration(columnName: string): AIIntegration | null {

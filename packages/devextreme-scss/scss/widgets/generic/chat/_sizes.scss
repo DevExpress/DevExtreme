@@ -18,6 +18,8 @@ $chat-messagebox-textarea-border-radius: $texteditor-input-border-radius !defaul
 $chat-messagebox-textarea-padding: null !default;
 $chat-messagebox-toolbar-min-height: null !default;
 $chat-messagebox-gap: 8px !default;
+$chat-messagebox-file-container-padding: 3px !default;
+$chat-messagebox-file-container-padding-top: 2px !default;
 $chat-messagelist-padding: null !default;
 $chat-messagegroup-gap: 4px !default;
 $chat-messagegroup-padding: null !default;
@@ -73,6 +75,7 @@ $chat-file-secondary-font-size: 10px !default;
 $chat-file-base-section-gap: 4px !default;
 $chat-file-file-size-max-width: 4em !default;
 $chat-file-view-items-gap: 8px !default;
+$chat-bubble-gap: 8px !default;
 
 @if $size == "default" {
   $chat-bubble-padding: 8px 12px !default;

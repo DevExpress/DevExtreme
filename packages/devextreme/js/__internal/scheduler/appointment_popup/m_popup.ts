@@ -106,6 +106,7 @@ export class AppointmentPopup {
       },
       contentTemplate: (): dxElementWrapper => {
         this.form.create({
+          dxPopup: this.popup,
           updateToolbarForMainGroup: (): void => this.updateToolbarForMainGroup(),
           updateToolbarForRecurrenceGroup: (): void => this.updateToolbarForRecurrenceGroup(),
         });
