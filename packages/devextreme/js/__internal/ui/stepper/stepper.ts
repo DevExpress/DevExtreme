@@ -272,7 +272,6 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
 
   _renderConnector(): void {
     if (this._connector) {
-      this._connector.option(this._getConnectorOptions());
       return;
     }
 
@@ -453,6 +452,10 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
         break;
       case 'hintExpr':
         this._invalidate();
+        break;
+      case 'items':
+        this._connector.option(this._getConnectorOptions());
+        super._optionChanged(args);
         break;
       default:
         super._optionChanged(args);

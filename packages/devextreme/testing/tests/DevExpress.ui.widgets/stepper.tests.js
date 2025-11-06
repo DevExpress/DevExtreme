@@ -311,18 +311,16 @@ QUnit.module('Connector integration', moduleConfig, () => {
         });
     });
 
-    QUnit.test('connector should update its size if stepper repaint was called (T1312793)', function(assert) {
+    QUnit.test('connector should update its size on items mutation (T1312793)', function(assert) {
         const items = [{}, {}];
         this.reinit({ items });
 
         const sizeBefore = this.getConnector().option('size');
-
         items.push({});
-        this.instance.repaint();
-
+        this.instance.option('items', items);
         const sizeAfter = this.getConnector().option('size');
 
-        assert.strictEqual(sizeAfter > sizeBefore, true, 'connector size is updated after repaint');
+        assert.strictEqual(sizeAfter > sizeBefore, true, 'connector size is updated after items mutation');
     });
 });
 
