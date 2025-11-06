@@ -97,7 +97,7 @@ QUnit.module('Navigation', moduleConfig, () => {
                 items: [{}, {}, {}, {}],
                 selectedIndex: 1,
                 linear,
-                onSelectionChanged: function(e) {
+                onSelectionChanged: function() {
                     count += 1;
                 },
             });
@@ -309,6 +309,20 @@ QUnit.module('Connector integration', moduleConfig, () => {
 
             assert.deepEqual(this.getConnector().$element().children().length, 1, 'content is not duplicated');
         });
+    });
+
+    QUnit.test('connector should update its size if stepper repaint was called (T1312793)', function(assert) {
+        const items = [{}, {}];
+        this.reinit({ items });
+
+        const sizeBefore = this.getConnector().option('size');
+
+        items.push({});
+        this.instance.repaint();
+
+        const sizeAfter = this.getConnector().option('size');
+
+        assert.strictEqual(sizeAfter > sizeBefore, true, 'connector size is updated after repaint');
     });
 });
 
