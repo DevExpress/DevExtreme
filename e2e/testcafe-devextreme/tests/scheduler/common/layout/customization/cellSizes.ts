@@ -3,6 +3,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { insertStylesheetRulesToPage } from '../../../../../helpers/domUtils';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Scheduler: Layout Customization: Cell Sizes`
   .page(url(__dirname, '../../../../container.html'));
@@ -75,9 +76,13 @@ test('Cell sizes customization should work', async (t) => {
   // eslint-disable-next-line no-restricted-syntax
   for (const { type } of views) {
     await scheduler.option('currentView', type);
-    await t.expect(
-      await takeScreenshot(`custom-cell-sizes-in-${type}.png`, scheduler.workSpace),
-    ).ok();
+
+    await testScreenshot(
+      t,
+      takeScreenshot,
+      `custom-cell-sizes-in-${type}.png`,
+      { element: scheduler.workSpace },
+    );
   }
 
   await t.expect(compareResults.isValid())
@@ -93,9 +98,12 @@ test('Cell sizes customization should work when all-day panel is enabled', async
   const scheduler = new Scheduler(SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t.expect(
-    await takeScreenshot('custom-cell-sizes-with-all-day-panel-in-week.png', scheduler.workSpace),
-  ).ok();
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'custom-cell-sizes-with-all-day-panel-in-week.png',
+    { element: scheduler.workSpace },
+  );
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

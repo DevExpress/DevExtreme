@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Outlook dragging base tests`
   .page(url(__dirname, '../../../../container.html'));
@@ -12,15 +13,14 @@ test('Basic drag-n-drop movements in groups', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
 
+  await t.drag(draggableAppointment.element, 330, 70);
+
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-to-orange-group.png', { element: scheduler.workSpace });
+
+  await t.drag(draggableAppointment.element, -330, 70);
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-blue-group.png', { element: scheduler.workSpace });
+
   await t
-    .drag(draggableAppointment.element, 330, 70)
-    .expect(await takeScreenshot('drag-n-drop-to-orange-group.png', scheduler.workSpace))
-    .ok()
-
-    .drag(draggableAppointment.element, -330, 70)
-    .expect(await takeScreenshot('drag-n-drop-blue-group.png', scheduler.workSpace))
-    .ok()
-
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxScheduler', {
@@ -61,17 +61,22 @@ test('Basic drag-n-drop movements from tooltip in week view', async (t) => {
   await t
     .click(scheduler.collectors.find('2').element)
     .expect(scheduler.appointmentTooltip.isVisible()).ok()
-    .drag(scheduler.appointmentTooltip.getListItem('Appointment 3').element, 200, 50)
-    .expect(await takeScreenshot('drag-n-drop-\'Appointment 3\'-from-tooltip-in-week.png', scheduler.workSpace))
-    .ok();
+    .drag(scheduler.appointmentTooltip.getListItem('Appointment 3').element, 200, 50);
+
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-\'Appointment 3\'-from-tooltip-in-week.png', {
+    element: scheduler.workSpace,
+  });
 
   await t
     .click(scheduler.collectors.find('1').element)
     .expect(scheduler.appointmentTooltip.isVisible()).ok()
-    .drag(scheduler.appointmentTooltip.getListItem('Appointment 2').element, 350, 150)
-    .expect(await takeScreenshot('drag-n-drop-\'Appointment 2\'-from-tooltip-in-week.png', scheduler.workSpace))
-    .ok()
+    .drag(scheduler.appointmentTooltip.getListItem('Appointment 2').element, 350, 150);
 
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-\'Appointment 2\'-from-tooltip-in-week.png', {
+    element: scheduler.workSpace,
+  });
+
+  await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxScheduler', {
@@ -108,17 +113,22 @@ test('Basic drag-n-drop movements from tooltip in month view', async (t) => {
   await t
     .click(scheduler.collectors.find('2').element)
     .expect(scheduler.appointmentTooltip.isVisible()).ok()
-    .drag(scheduler.appointmentTooltip.getListItem('Appointment 3').element, -180, -30)
-    .expect(await takeScreenshot('drag-n-drop-\'Appointment 3\'-from-tooltip-in-month.png', scheduler.workSpace))
-    .ok();
+    .drag(scheduler.appointmentTooltip.getListItem('Appointment 3').element, -180, -30);
+
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-\'Appointment 3\'-from-tooltip-in-month.png', {
+    element: scheduler.workSpace,
+  });
 
   await t
     .click(scheduler.collectors.find('1', 1).element)
     .expect(scheduler.appointmentTooltip.isVisible()).ok()
-    .drag(scheduler.appointmentTooltip.getListItem('Appointment 2').element, 320, 150)
-    .expect(await takeScreenshot('drag-n-drop-\'Appointment 2\'-from-tooltip-in-month.png', scheduler.workSpace))
-    .ok()
+    .drag(scheduler.appointmentTooltip.getListItem('Appointment 2').element, 320, 150);
 
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-\'Appointment 2\'-from-tooltip-in-month.png', {
+    element: scheduler.workSpace,
+  });
+
+  await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxScheduler', {
@@ -168,15 +178,15 @@ test('Basic drag-n-drop movements from tooltip in month view', async (t) => {
 
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+    await t.drag(draggableAppointment.element, 250, 0);
+
+    await testScreenshot(t, takeScreenshot, `drag-n-drop-${currentView}-to-right.png`, { element: scheduler.workSpace });
+
+    await t.drag(draggableAppointment.element, -250, 0);
+
+    await testScreenshot(t, takeScreenshot, `drag-n-drop-${currentView}-to-left.png`, { element: scheduler.workSpace });
+
     await t
-      .drag(draggableAppointment.element, 250, 0)
-      .expect(await takeScreenshot(`drag-n-drop-${currentView}-to-right.png`, scheduler.workSpace))
-      .ok()
-
-      .drag(draggableAppointment.element, -250, 0)
-      .expect(await takeScreenshot(`drag-n-drop-${currentView}-to-left.png`, scheduler.workSpace))
-      .ok()
-
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => createWidget('dxScheduler', {
@@ -196,23 +206,23 @@ test('Basic drag-n-drop movements', async (t) => {
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await t.drag(draggableAppointment.element, 100, 0, { speed: 0.5 });
+
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-to-right.png', { element: scheduler.workSpace });
+
+  await t.drag(draggableAppointment.element, -100, 0, { speed: 0.5 });
+
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-to-left.png', { element: scheduler.workSpace });
+
+  await t.drag(draggableAppointment.element, 0, 100, { speed: 0.5 });
+
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-to-bottom.png', { element: scheduler.workSpace });
+
+  await t.drag(draggableAppointment.element, 0, -100, { speed: 0.5 });
+
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-to-top.png', { element: scheduler.workSpace });
+
   await t
-    .drag(draggableAppointment.element, 100, 0, { speed: 0.5 })
-    .expect(await takeScreenshot('drag-n-drop-to-right.png', scheduler.workSpace))
-    .ok()
-
-    .drag(draggableAppointment.element, -100, 0, { speed: 0.5 })
-    .expect(await takeScreenshot('drag-n-drop-to-left.png', scheduler.workSpace))
-    .ok()
-
-    .drag(draggableAppointment.element, 0, 100, { speed: 0.5 })
-    .expect(await takeScreenshot('drag-n-drop-to-bottom.png', scheduler.workSpace))
-    .ok()
-
-    .drag(draggableAppointment.element, 0, -100, { speed: 0.5 })
-    .expect(await takeScreenshot('drag-n-drop-to-top.png', scheduler.workSpace))
-    .ok()
-
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxScheduler', {
@@ -235,23 +245,19 @@ test('Basic drag-n-drop movements with mouse offset', async (t) => {
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await t.drag(draggableAppointment.element, 100, 0, { offsetX: 10, offsetY: 200, speed: 0.5 });
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-mouse-offset-to-right.png', { element: scheduler.workSpace });
+
+  await t.drag(draggableAppointment.element, -100, 0, { offsetX: 10, offsetY: 200, speed: 0.5 });
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-mouse-offset-to-left.png', { element: scheduler.workSpace });
+
+  await t.drag(draggableAppointment.element, 0, 100, { offsetX: 10, offsetY: 200, speed: 0.5 });
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-mouse-offset-to-bottom.png', { element: scheduler.workSpace });
+
+  await t.drag(draggableAppointment.element, 0, -100, { offsetX: 10, offsetY: 200, speed: 0.5 });
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-mouse-offset-to-top.png', { element: scheduler.workSpace });
+
   await t
-    .drag(draggableAppointment.element, 100, 0, { offsetX: 10, offsetY: 200, speed: 0.5 })
-    .expect(await takeScreenshot('drag-n-drop-mouse-offset-to-right.png', scheduler.workSpace))
-    .ok()
-
-    .drag(draggableAppointment.element, -100, 0, { offsetX: 10, offsetY: 200, speed: 0.5 })
-    .expect(await takeScreenshot('drag-n-drop-mouse-offset-to-left.png', scheduler.workSpace))
-    .ok()
-
-    .drag(draggableAppointment.element, 0, 100, { offsetX: 10, offsetY: 200, speed: 0.5 })
-    .expect(await takeScreenshot('drag-n-drop-mouse-offset-to-bottom.png', scheduler.workSpace))
-    .ok()
-
-    .drag(draggableAppointment.element, 0, -100, { offsetX: 10, offsetY: 200, speed: 0.5 })
-    .expect(await takeScreenshot('drag-n-drop-mouse-offset-to-top.png', scheduler.workSpace))
-    .ok()
-
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxScheduler', {
@@ -274,23 +280,19 @@ test('Basic drag-n-drop all day appointment movements', async (t) => {
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await t.drag(draggableAppointment.element, 200, 0, { speed: 0.1 });
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-all-day-to-right.png', { element: scheduler.workSpace });
+
+  await t.drag(draggableAppointment.element, -200, 0, { speed: 0.1 });
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-all-day-to-left.png', { element: scheduler.workSpace });
+
+  await t.drag(draggableAppointment.element, 260, 270, { speed: 0.1 });
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-all-day-to-bottom.png', { element: scheduler.workSpace });
+
+  await t.drag(draggableAppointment.element, 0, -260, { speed: 0.1 });
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-all-day-to-top.png', { element: scheduler.workSpace });
+
   await t
-    .drag(draggableAppointment.element, 200, 0, { speed: 0.1 })
-    .expect(await takeScreenshot('drag-n-drop-all-day-to-right.png', scheduler.workSpace))
-    .ok()
-
-    .drag(draggableAppointment.element, -200, 0, { speed: 0.1 })
-    .expect(await takeScreenshot('drag-n-drop-all-day-to-left.png', scheduler.workSpace))
-    .ok()
-
-    .drag(draggableAppointment.element, 260, 270, { speed: 0.1 })
-    .expect(await takeScreenshot('drag-n-drop-all-day-to-bottom.png', scheduler.workSpace))
-    .ok()
-
-    .drag(draggableAppointment.element, 0, -260, { speed: 0.1 })
-    .expect(await takeScreenshot('drag-n-drop-all-day-to-top.png', scheduler.workSpace))
-    .ok()
-
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxScheduler', {
@@ -313,19 +315,16 @@ test('Basic drag-n-drop movements within the cell', async (t) => {
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await t.drag(draggableAppointment.element, 55, 0);
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-within-cell-to-right.png', { element: scheduler.workSpace });
+
+  await t.drag(draggableAppointment.element, -50, 0);
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-within-cell-to-left.png', { element: scheduler.workSpace });
+
+  await t.drag(draggableAppointment.element, 0, 30);
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-within-cell-to-bottom.png', { element: scheduler.workSpace });
+
   await t
-    .drag(draggableAppointment.element, 55, 0)
-    .expect(await takeScreenshot('drag-n-drop-within-cell-to-right.png', scheduler.workSpace))
-    .ok()
-
-    .drag(draggableAppointment.element, -50, 0)
-    .expect(await takeScreenshot('drag-n-drop-within-cell-to-left.png', scheduler.workSpace))
-    .ok()
-
-    .drag(draggableAppointment.element, 0, 30)
-    .expect(await takeScreenshot('drag-n-drop-within-cell-to-bottom.png', scheduler.workSpace))
-    .ok()
-
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxScheduler', {
@@ -348,23 +347,19 @@ test('Basic drag-n-drop small appointments', async (t) => {
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await t.drag(draggableAppointment.element, 250, 0);
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-small-appoint-to-right.png', { element: scheduler.workSpace });
+
+  await t.drag(draggableAppointment.element, -250, 0);
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-small-appoint-to-left.png', { element: scheduler.workSpace });
+
+  await t.drag(draggableAppointment.element, 0, 170);
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-small-appoint-to-bottom.png', { element: scheduler.workSpace });
+
+  await t.drag(draggableAppointment.element, 0, -170);
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-small-appoint-to-top.png', { element: scheduler.workSpace });
+
   await t
-    .drag(draggableAppointment.element, 250, 0)
-    .expect(await takeScreenshot('drag-n-drop-small-appoint-to-right.png', scheduler.workSpace))
-    .ok()
-
-    .drag(draggableAppointment.element, -250, 0)
-    .expect(await takeScreenshot('drag-n-drop-small-appoint-to-left.png', scheduler.workSpace))
-    .ok()
-
-    .drag(draggableAppointment.element, 0, 170)
-    .expect(await takeScreenshot('drag-n-drop-small-appoint-to-bottom.png', scheduler.workSpace))
-    .ok()
-
-    .drag(draggableAppointment.element, 0, -170)
-    .expect(await takeScreenshot('drag-n-drop-small-appoint-to-top.png', scheduler.workSpace))
-    .ok()
-
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxScheduler', {
@@ -387,23 +382,19 @@ test('Basic drag-n-drop long appointments', async (t) => {
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await t.drag(draggableAppointment.element, 150, 0);
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-long-appoint-to-right.png', { element: scheduler.workSpace });
+
+  await t.drag(draggableAppointment.element, -30, 0);
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-long-appoint-to-left.png', { element: scheduler.workSpace });
+
+  await t.drag(draggableAppointment.element, 0, 70);
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-long-appoint-to-bottom.png', { element: scheduler.workSpace });
+
+  await t.drag(draggableAppointment.element, 0, -70);
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-long-appoint-to-top.png', { element: scheduler.workSpace });
+
   await t
-    .drag(draggableAppointment.element, 150, 0)
-    .expect(await takeScreenshot('drag-n-drop-long-appoint-to-right.png', scheduler.workSpace))
-    .ok()
-
-    .drag(draggableAppointment.element, -30, 0)
-    .expect(await takeScreenshot('drag-n-drop-long-appoint-to-left.png', scheduler.workSpace))
-    .ok()
-
-    .drag(draggableAppointment.element, 0, 70)
-    .expect(await takeScreenshot('drag-n-drop-long-appoint-to-bottom.png', scheduler.workSpace))
-    .ok()
-
-    .drag(draggableAppointment.element, 0, -70)
-    .expect(await takeScreenshot('drag-n-drop-long-appoint-to-top.png', scheduler.workSpace))
-    .ok()
-
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxScheduler', {
@@ -426,21 +417,15 @@ test('Narrow appointment dragging on minimal distance should be expected(1171520
 
   await t.drag(scheduler.getAppointment('Test').element, -10, 0, { offsetX: 10 });
 
-  await t
-    .expect(await takeScreenshot('drag-short-app-min-dist-to-left.png', scheduler.workSpace))
-    .ok();
+  await testScreenshot(t, takeScreenshot, 'drag-short-app-min-dist-to-left.png', { element: scheduler.workSpace });
 
   await t.drag(scheduler.getAppointment('Test').element, 195, 0, { offsetX: 10 });
 
-  await t
-    .expect(await takeScreenshot('drag-short-app-to-right.png', scheduler.workSpace))
-    .ok();
+  await testScreenshot(t, takeScreenshot, 'drag-short-app-to-right.png', { element: scheduler.workSpace });
 
   await t.drag(scheduler.getAppointment('Test').element, 200, 0, { offsetX: 10 });
 
-  await t
-    .expect(await takeScreenshot('drag-short-app-to-right-on-next-cell.png', scheduler.workSpace))
-    .ok();
+  await testScreenshot(t, takeScreenshot, 'drag-short-app-to-right-on-next-cell.png', { element: scheduler.workSpace });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

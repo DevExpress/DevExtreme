@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Date navigator`
   .page(url(__dirname, '../../../container.html'));
@@ -41,9 +42,7 @@ test('Current date in Calendar should be respond on prev and next buttons of Nav
   await t
     .click(toolbar.navigator.caption);
 
-  await t
-    .expect(await takeScreenshot('initial-calendar-state.png'))
-    .ok();
+  await testScreenshot(t, takeScreenshot, 'initial-calendar-state.png');
 
   await t
     .click(toolbar.navigator.nextButton)
@@ -52,9 +51,7 @@ test('Current date in Calendar should be respond on prev and next buttons of Nav
   await t
     .click(toolbar.navigator.caption);
 
-  await t
-    .expect(await takeScreenshot('calendar-state-after-next-button-click.png'))
-    .ok();
+  await testScreenshot(t, takeScreenshot, 'calendar-state-after-next-button-click.png');
 
   await t
     .click(toolbar.navigator.prevButton)
@@ -66,9 +63,7 @@ test('Current date in Calendar should be respond on prev and next buttons of Nav
   await t
     .click(toolbar.navigator.caption);
 
-  await t
-    .expect(await takeScreenshot('calendar-state-after-prev-button-click.png'))
-    .ok();
+  await testScreenshot(t, takeScreenshot, 'calendar-state-after-prev-button-click.png');
 
   await t
     .expect(compareResults.isValid())
@@ -94,9 +89,7 @@ test('Current date in Navigator should be respond on Current date of Calendar', 
     .click(navigator.calendar.getNavigatorNextButton().element)
     .click(navigator.calendar.getView().getCellByIndex(20));
 
-  await t
-    .expect(await takeScreenshot('navigator-state-after-calendar-next-button-click.png'))
-    .ok();
+  await testScreenshot(t, takeScreenshot, 'navigator-state-after-calendar-next-button-click.png');
 
   await t
     .click(toolbar.navigator.caption)
@@ -104,9 +97,7 @@ test('Current date in Navigator should be respond on Current date of Calendar', 
     .click(navigator.calendar.getNavigatorPrevButton().element)
     .click(toolbar.navigator.calendar.getView().getCellByIndex(15));
 
-  await t
-    .expect(await takeScreenshot('navigator-state-after-calendar-prev-button-click.png'))
-    .ok();
+  await testScreenshot(t, takeScreenshot, 'navigator-state-after-calendar-prev-button-click.png');
 
   await t
     .expect(compareResults.isValid())
@@ -129,7 +120,12 @@ test('Current date in navigator should be updated if scheduler currentDate is ch
   await t
     .click(scheduler.toolbar.navigator.caption);
 
-  await takeScreenshot('navigator-state-after-change-currentDate-option.png', scheduler.toolbar.navigator.calendar.element);
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'navigator-state-after-change-currentDate-option.png',
+    { element: scheduler.toolbar.navigator.calendar.element },
+  );
 
   await t
     .expect(compareResults.isValid())
@@ -150,9 +146,12 @@ test('Calendar should be have right appearance', async (t) => {
   await t
     .click(toolbar.navigator.caption);
 
-  await t
-    .expect(await takeScreenshot('right-calendar-appearance.png', toolbar.navigator.calendar.element))
-    .ok();
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'right-calendar-appearance.png',
+    { element: toolbar.navigator.calendar.element },
+  );
 
   await t
     .expect(compareResults.isValid())

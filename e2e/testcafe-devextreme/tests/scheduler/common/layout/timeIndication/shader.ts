@@ -3,6 +3,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { insertStylesheetRulesToPage } from '../../../../../helpers/domUtils';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Scheduler: Current Time Indication: Shader`
   .page(url(__dirname, '../../../../container.html'));
@@ -56,9 +57,12 @@ const createScheduler = async (
     for (const view of views) {
       await scheduler.option('currentView', view);
 
-      await t.expect(
-        await takeScreenshot(`shader-in-${view}-crossScrolling=${crossScrollingEnabled}.png`, scheduler.workSpace),
-      ).ok();
+      await testScreenshot(
+        t,
+        takeScreenshot,
+        `shader-in-${view}-crossScrolling=${crossScrollingEnabled}.png`,
+        { element: scheduler.workSpace },
+      );
     }
 
     await t.expect(compareResults.isValid())
@@ -80,9 +84,12 @@ const createScheduler = async (
     for (const view of views) {
       await scheduler.option('currentView', view);
 
-      await t.expect(
-        await takeScreenshot(`shader-in-${view}-crossScrolling=${crossScrollingEnabled}-horizontal-grouping.png`, scheduler.workSpace),
-      ).ok();
+      await testScreenshot(
+        t,
+        takeScreenshot,
+        `shader-in-${view}-crossScrolling=${crossScrollingEnabled}-horizontal-grouping.png`,
+        { element: scheduler.workSpace },
+      );
     }
 
     await t.expect(compareResults.isValid())
@@ -120,9 +127,12 @@ const createScheduler = async (
     for (const view of views) {
       await scheduler.option('currentView', view);
 
-      await t.expect(
-        await takeScreenshot(`shader-in-${view}-crossScrolling=${crossScrollingEnabled}-vertical-grouping.png`, scheduler.workSpace),
-      ).ok();
+      await testScreenshot(
+        t,
+        takeScreenshot,
+        `shader-in-${view}-crossScrolling=${crossScrollingEnabled}-vertical-grouping.png`,
+        { element: scheduler.workSpace },
+      );
     }
 
     await t.expect(compareResults.isValid())
