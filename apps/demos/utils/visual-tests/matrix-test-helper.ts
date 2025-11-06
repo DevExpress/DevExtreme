@@ -162,7 +162,7 @@ function getExplicitTestsInternal() {
       result.masks.push(patternGroupFromValues(
         groups.product,
         groups.demo,
-        groups.framework,
+        undefined,
       ));
     } else {
       // eslint-disable-next-line no-console
