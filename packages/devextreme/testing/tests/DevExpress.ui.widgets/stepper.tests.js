@@ -321,6 +321,7 @@ QUnit.module('Connector integration', moduleConfig, () => {
         assert.roughEqual(sizeBefore, 50, 0.01, 'initial connector size is correct');
 
         items.push({}, {});
+
         this.instance.option('items', items);
         const sizeAfter = this.getConnector().option('size');
 
