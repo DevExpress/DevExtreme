@@ -213,7 +213,6 @@ $(() => {
         ai: {
           prompt: 'Identify the country where this vehicle model is originally manufactured or developed, based on its brand, model, and specifications. Respond with the country name and the country flag icon.',
           mode: 'auto',
-          showHeaderMenu: true,
         },
         width: 200,
         fixed: true,
