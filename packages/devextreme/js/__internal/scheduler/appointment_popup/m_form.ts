@@ -142,6 +142,8 @@ export class AppointmentForm {
 
   private _$recurrenceGroup?: dxElementWrapper;
 
+  private _initialPopupHeight?: string | number;
+
   get dxForm(): dxForm {
     return this._dxForm as dxForm;
   }
@@ -203,6 +205,7 @@ export class AppointmentForm {
 
   create(popup: any): void {
     this._popup = popup;
+    this._initialPopupHeight = this.dxPopup.option('height') as string | number;
 
     const mainGroup = this.createMainFormGroup();
 
@@ -823,7 +826,7 @@ export class AppointmentForm {
   }
 
   showMainGroup(saveRecurrenceValue = true): void {
-    this.dxPopup.option('height', undefined);
+    this.dxPopup.option('height', this._initialPopupHeight);
 
     this._$mainGroup?.removeClass(CLASSES.mainHidden);
     this._$recurrenceGroup?.addClass(CLASSES.recurrenceHidden);
