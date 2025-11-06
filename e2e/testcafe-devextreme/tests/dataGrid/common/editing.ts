@@ -2796,8 +2796,7 @@ test('Cells should be focused correctly on click when cell editing mode is used 
 
   // act
   await t
-    .click(dataGrid.getDataCell(0, 0).getEditor().element)
-    .wait(50);
+    .click(dataGrid.getDataCell(0, 0).getEditor().element);
 
   // assert
   await t
@@ -2810,8 +2809,7 @@ test('Cells should be focused correctly on click when cell editing mode is used 
   await t
     .typeText(dataGrid.getDataCell(0, 0).getEditor().element, '1')
     .wait(50)
-    .click(dataGrid.getDataCell(1, 0).getEditor().element)
-    .wait(50);
+    .click(dataGrid.getDataCell(1, 0).getEditor().element);
 
   // assert
   await t
@@ -2826,8 +2824,7 @@ test('Cells should be focused correctly on click when cell editing mode is used 
   await t
     .typeText(dataGrid.getDataCell(1, 0).getEditor().element, '2')
     .wait(50)
-    .click(dataGrid.getDataCell(2, 0).getEditor().element)
-    .wait(50);
+    .click(dataGrid.getDataCell(2, 0).getEditor().element);
 
   // assert
   await t
@@ -2842,8 +2839,7 @@ test('Cells should be focused correctly on click when cell editing mode is used 
   await t
     .typeText(dataGrid.getDataCell(2, 0).getEditor().element, '3')
     .wait(50)
-    .click(dataGrid.getDataCell(1, 0).getEditor().element)
-    .wait(50);
+    .click(dataGrid.getDataCell(1, 0).getEditor().element);
 
   // assert
   await t
@@ -2858,8 +2854,7 @@ test('Cells should be focused correctly on click when cell editing mode is used 
   await t
     .typeText(dataGrid.getDataCell(1, 0).getEditor().element, '2')
     .wait(50)
-    .click(dataGrid.getDataCell(0, 0).getEditor().element)
-    .wait(50);
+    .click(dataGrid.getDataCell(0, 0).getEditor().element);
 
   // assert
   await t

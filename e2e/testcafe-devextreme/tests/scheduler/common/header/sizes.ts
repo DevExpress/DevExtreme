@@ -4,7 +4,7 @@ import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { testScreenshot } from '../../../../helpers/themeUtils';
 
-fixture`Scheduler header sizes`
+fixture.disablePageReloads`Scheduler header sizes`
   .page(url(__dirname, '../../../container.html'));
 
 const buttons = Array.from({ length: 4 }).map((_, index) => ({

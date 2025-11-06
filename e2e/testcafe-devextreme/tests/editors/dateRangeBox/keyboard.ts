@@ -428,8 +428,7 @@ test('DateRangeBox should not be closed by press tab key on startDate input', as
   const dateRangeBox = new DateRangeBox('#container');
 
   await t
-    .click(dateRangeBox.getStartDateBox().input)
-    .wait(50);
+    .click(dateRangeBox.getStartDateBox().input);
 
   await t
     .expect(dateRangeBox.option('opened'))
@@ -438,8 +437,7 @@ test('DateRangeBox should not be closed by press tab key on startDate input', as
     .ok();
 
   await t
-    .pressKey('tab')
-    .wait(50);
+    .pressKey('tab');
 
   await t
     .expect(dateRangeBox.option('opened'))
@@ -448,8 +446,7 @@ test('DateRangeBox should not be closed by press tab key on startDate input', as
     .ok();
 
   await t
-    .pressKey('tab')
-    .wait(50);
+    .pressKey('tab');
 
   await t
     .expect(dateRangeBox.option('opened'))
@@ -1255,8 +1252,7 @@ test('DateRangeBox should not be closed by press shift+tab key on endDate input'
   const dateRangeBox = new DateRangeBox('#container');
 
   await t
-    .click(dateRangeBox.getEndDateBox().input)
-    .wait(50);
+    .click(dateRangeBox.getEndDateBox().input);
 
   await t
     .expect(dateRangeBox.option('opened'))
@@ -1265,8 +1261,7 @@ test('DateRangeBox should not be closed by press shift+tab key on endDate input'
     .ok();
 
   await t
-    .pressKey('shift+tab')
-    .wait(50);
+    .pressKey('shift+tab');
 
   await t
     .expect(dateRangeBox.option('opened'))
@@ -1275,8 +1270,7 @@ test('DateRangeBox should not be closed by press shift+tab key on endDate input'
     .ok();
 
   await t
-    .pressKey('shift+tab')
-    .wait(50);
+    .pressKey('shift+tab');
 
   await t
     .expect(dateRangeBox.option('opened'))

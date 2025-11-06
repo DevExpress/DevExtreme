@@ -8,7 +8,7 @@ import { addFocusableElementBefore } from '../../../helpers/domUtils';
 // It triggers this event on document level and process keyboard navigation action immediately.
 // Therefore, it's impossible to test switching focus between areas in TestCafe
 // Because this feature works with event bubbling + inert attribute
-fixture`KeyboardNavigation.Header`
+fixture.disablePageReloads`KeyboardNavigation.Header`
   .page(url(__dirname, '../../container.html'));
 
 const CARD_VIEW_SELECTOR = '#container';

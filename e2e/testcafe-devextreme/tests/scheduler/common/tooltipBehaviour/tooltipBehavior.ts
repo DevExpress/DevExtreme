@@ -8,7 +8,7 @@ import url from '../../../../helpers/getPageUrl';
 import { DEFAULT_BROWSER_SIZE } from '../../../../helpers/const';
 import { testScreenshot } from '../../../../helpers/themeUtils';
 
-fixture`Appointment tooltip behavior during scrolling in the Scheduler (T755449)`
+fixture.disablePageReloads`Appointment tooltip behavior during scrolling in the Scheduler (T755449)`
   .page(url(__dirname, '../../../container.html'));
 
 test.meta({ browserSize: [600, 450] })('The tooltip of collector should not scroll page and immediately hide', async (t) => {

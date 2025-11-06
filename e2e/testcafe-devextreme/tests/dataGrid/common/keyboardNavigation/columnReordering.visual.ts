@@ -1355,7 +1355,6 @@ test('reorder column to left when adaptability is enabled and there are hidden c
       .expect(firstHeader.element.textContent)
       .contains('Field');
 
-    await t.debug();
     await testScreenshot(t, takeScreenshot, `reorder_column_when_there_are_async_templates_and_renderAsync_=_${renderAsync}.png`, { element: dataGrid.element });
 
     await t.expect(compareResults.isValid())

@@ -7,7 +7,7 @@ import { createWidget } from '../../../helpers/createWidget';
 import { tasksApiMock } from './apiMocks/tasksApiMock';
 import { testScreenshot } from '../../../helpers/themeUtils';
 
-fixture`Selection`
+fixture.disablePageReloads`Selection`
   .page(url(__dirname, '../../container.html'));
 
 // T1109666

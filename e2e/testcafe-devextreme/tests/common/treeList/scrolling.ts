@@ -19,7 +19,7 @@ const scrollWindowTo = async (position: object) => {
   )();
 };
 
-fixture`Virtual Scrolling`
+fixture.disablePageReloads`Virtual Scrolling`
   .page(url(__dirname, '../../container.html'));
 
 function generateData(rowCount): Record<string, unknown>[] {

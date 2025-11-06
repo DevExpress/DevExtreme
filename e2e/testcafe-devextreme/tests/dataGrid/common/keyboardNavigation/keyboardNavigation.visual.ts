@@ -404,7 +404,7 @@ test('Focus the first cell in the firs row when pressing the Ctrl+Home key', asy
   showBorders: true,
 }));
 
-test.meta({ unstable: true })('Navigate to last cell in the last row when pressing the Ctrl+End key', async (t) => {
+test('Navigate to last cell in the last row when pressing the Ctrl+End key', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

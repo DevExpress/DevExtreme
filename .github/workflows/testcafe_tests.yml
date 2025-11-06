@@ -62,13 +62,12 @@ jobs:
         path: |
           ${{ env.STORE_PATH }}
           .nx/cache
-          node_modules/.cache
         key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install --frozen-lockfile --prefer-offline
+      run: pnpm install --frozen-lockfile
 
     - name: Build
       shell: bash
@@ -167,18 +166,17 @@ jobs:
         path: |
           ${{ env.STORE_PATH }}
           .nx/cache
-          node_modules/.cache
         key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install --frozen-lockfile --prefer-offline
+      run: pnpm install --frozen-lockfile
 
     - name: Run TestCafe tests
       working-directory: ./e2e/testcafe-devextreme
       env:
-        NODE_OPTIONS: --max-old-space-size=8192 --max-semi-space-size=1024
+        NODE_OPTIONS: --max-old-space-size=8192
       run: |
         if [ "${{ matrix.ARGS.theme }}" != "" ]; then
           THEME="--theme ${{ matrix.ARGS.theme }}"

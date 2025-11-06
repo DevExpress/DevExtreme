@@ -161,6 +161,7 @@ async function main() {
     console.info('Browsers:', browsers);
 
     const failedTests: Set<string> = new Set();
+    let isRetryRun = false;
 
     const createRunner = (filterByFailedTests = false) => {
       const runner: Runner = testCafe!.createRunner()
@@ -282,7 +283,7 @@ async function main() {
           after: async (t: TestController) => {
             await clearTestPage(t);
 
-            if (args.retryFailed) {
+            if (args.retryFailed && !isRetryRun) {
               // @ts-expect-error ts-errors
               const { test, errs } = t.testRun;
               if (errs && errs.length > 0) {
@@ -325,11 +326,13 @@ async function main() {
         const testsToRetry = new Set(failedTests);
         failedTests.clear();
 
+        isRetryRun = true;
         const retryRunner = createRunner(true);
         failedCount = await retry(
           () => retryRunner.run(runOptions),
           LAUNCH_RETRY_ATTEMPTS,
         );
+        isRetryRun = false;
 
         attemptsLeft -= 1;
 
@@ -340,7 +343,7 @@ async function main() {
         console.info('='.repeat(60));
         console.info(`Tests retried: ${testsToRetry.size}`);
         console.info(`Still failing: ${failedCount}`);
-        console.info(`Passed on this attempt: ${testsToRetry.size - failedCount}`);
+        console.info(`Passed on this attempt: ${Math.max(0, testsToRetry.size - failedCount)}`);
         console.info('='.repeat(60));
         console.info('\n');
         /* eslint-enable no-console */
