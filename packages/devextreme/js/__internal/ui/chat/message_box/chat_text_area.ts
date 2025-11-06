@@ -4,7 +4,6 @@ import devices from '@js/core/devices';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { getOuterHeight } from '@js/core/utils/size';
 import type { DxEvent, NativeEventInfo } from '@js/events';
 import type {
   ClickEvent,
@@ -404,29 +403,20 @@ class ChatTextArea extends TextArea<Properties> {
 
   _renderButtonContainers(): void {}
 
-  _getHeightDifference($input: dxElementWrapper): number {
-    const baseDifference = super._getHeightDifference($input);
+  _getAdjustedMaxHeight(maxHeight: number): number {
+    return maxHeight;
+  }
 
-    const gap = parseFloat(this.$element().css('gap') ?? '0');
+  _getMaxHeight(): number | undefined {
+    const cssValue = this._input().css('maxHeight');
 
-    const informerHeight = this._informer ? getOuterHeight(this._informer.$element()) : 0;
-    const fileUploaderHeight = getOuterHeight(this._$fileUploader);
-    const toolbarHeight = getOuterHeight(this._$toolbar);
+    if (!cssValue || cssValue === 'none') {
+      return undefined;
+    }
 
-    const visibleSections = [
-      toolbarHeight,
-      informerHeight,
-      fileUploaderHeight,
-    ].filter(Boolean).length;
+    const maxHeight = parseFloat(cssValue);
 
-    const totalExtraHeight = toolbarHeight
-      + informerHeight
-      + fileUploaderHeight
-      + visibleSections * gap;
-
-    const difference: number = baseDifference + totalExtraHeight;
-
-    return difference;
+    return maxHeight;
   }
 
   _keyPressHandler(e: InputEvent): void {
