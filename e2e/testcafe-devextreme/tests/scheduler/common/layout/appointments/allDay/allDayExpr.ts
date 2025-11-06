@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../../../helpers/createWidget';
 import url from '../../../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Layout:Appointments:allDayExpr`
   .page(url(__dirname, '../../../../../container.html'));
@@ -24,14 +25,22 @@ fixture.disablePageReloads`Layout:Appointments:allDayExpr`
     const { toolbar, workSpace } = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t
-      .expect(await takeScreenshot(`week-all-day-expr-${config.allDayExpr}.png`, workSpace)).ok();
+    await testScreenshot(
+      t,
+      takeScreenshot,
+      `week-all-day-expr-${config.allDayExpr}.png`,
+      { element: workSpace },
+    );
 
     await t
       .click(toolbar.viewSwitcher.getButton('Timeline Week').element);
 
-    await t
-      .expect(await takeScreenshot(`timelineWeek-all-day-expr-${config.allDayExpr}.png`, workSpace)).ok();
+    await testScreenshot(
+      t,
+      takeScreenshot,
+      `timelineWeek-all-day-expr-${config.allDayExpr}.png`,
+      { element: workSpace },
+    );
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
