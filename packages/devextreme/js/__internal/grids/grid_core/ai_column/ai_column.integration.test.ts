@@ -433,7 +433,7 @@ describe('Options', () => {
                 sendRequest(): RequestResult {
                   return {
                     promise: new Promise<string>((resolve) => {
-                      resolve('');
+                      resolve('{"1":"","2":""}');
                     }),
                     abort: (): void => {},
                   };
@@ -472,7 +472,7 @@ describe('Options', () => {
                 sendRequest(): RequestResult {
                   return {
                     promise: new Promise<string>((resolve) => {
-                      resolve('');
+                      resolve('{"1":"","2":""}');
                     }),
                     abort: (): void => {},
                   };
