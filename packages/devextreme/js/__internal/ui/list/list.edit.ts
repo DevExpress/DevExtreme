@@ -81,7 +81,7 @@ class ListEdit extends ListBase {
             parent.downArrow(e);
           }
         } else {
-          e.preventDefault();
+          e.preventDefault(); // to prevent extra scrolling
         }
       }
     };
