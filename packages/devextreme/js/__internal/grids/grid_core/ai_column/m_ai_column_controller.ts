@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { GenerateGridColumnCommandResult, RequestCallbacks } from '@js/common/ai-integration';
 import type { Callback } from '@js/core/utils/callbacks';
 
@@ -79,14 +78,6 @@ export class AIColumnController extends Controller {
 
     this.subscribeToDataSourceChanged();
     this.addAICommandColumn();
-  }
-
-  private showResults(
-    columnName: string,
-    result: string,
-    cachedData: Record<PropertyKey, string>,
-  ): void {
-    // Update the results in the UI or internal state
   }
 
   public getAIColumns(): Column[] {
