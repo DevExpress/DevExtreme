@@ -3,23 +3,25 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { testScreenshot } from '../../../../helpers/themeUtils';
+import { isMaterial, isMaterialBased, testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Scheduler header: material theme`
   .page(url(__dirname, '../../../container.html'));
 
 // visual: material.blue.light
-test('dateNavigator buttons should have "text" styling mode with material theme', async (t) => {
+test('dateNavigator buttons should have "text" styling mode', async (t) => {
   const { toolbar } = new Scheduler('#container');
 
+  const expectedClass = isMaterialBased() ? 'dx-button-mode-text' : 'dx-button-mode-contained';
+
   await t
-    .expect(toolbar.navigator.prevButton.hasClass('dx-button-mode-text'))
+    .expect(toolbar.navigator.prevButton.hasClass(expectedClass))
     .ok()
 
-    .expect(toolbar.navigator.caption.hasClass('dx-button-mode-text'))
+    .expect(toolbar.navigator.caption.hasClass(expectedClass))
     .ok()
 
-    .expect(toolbar.navigator.nextButton.hasClass('dx-button-mode-text'))
+    .expect(toolbar.navigator.nextButton.hasClass(expectedClass))
     .ok();
 }).before(async () => createWidget('dxScheduler', {
   currentView: 'day',
@@ -36,7 +38,7 @@ test('viewSwitcher dropdown button popup should have a specified class', async (
   await t
     .click(dropDownButton.element)
     .expect(Selector(viewSwitcherDropDownButtonContent).count)
-    .eql(1);
+    .eql(isMaterial() ? 1 : 0);
 }).before(async () => createWidget('dxScheduler', {
   currentView: 'day',
   views: ['day', 'week'],

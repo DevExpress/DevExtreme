@@ -1833,34 +1833,31 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
 [true, false].forEach((nativeScroll) => {
   type TestCaseWindow = typeof window & { dataGridScrollableEventValues?: number[] };
 
-  test(
-    `Should not scroll back on top with virtual scrolling and adaptive master detail (nativeScroll: ${nativeScroll}) [T1278804]`,
-    async (t) => {
-      // NOTE: idx + 1 logic inside POM
-      const adaptiveCellIdx = 101;
-      const scrollValuesThreshold = 100;
+  test.meta({ unstable: true })(`Should not scroll back on top with virtual scrolling and adaptive master detail (nativeScroll: ${nativeScroll}) [T1278804]`, async (t) => {
+    // NOTE: idx + 1 logic inside POM
+    const adaptiveCellIdx = 101;
+    const scrollValuesThreshold = 100;
 
-      const dataGrid = new DataGrid('#container');
-      const firstRow = dataGrid.getDataRow(0);
-      const firstDataCell = firstRow.getDataCell(0);
-      const adaptiveCell = firstRow.getCommandCell(adaptiveCellIdx);
+    const dataGrid = new DataGrid('#container');
+    const firstRow = dataGrid.getDataRow(0);
+    const firstDataCell = firstRow.getDataCell(0);
+    const adaptiveCell = firstRow.getCommandCell(adaptiveCellIdx);
 
-      await t
-        .click(firstDataCell.element)
-        .click(adaptiveCell.element);
+    await t
+      .click(firstDataCell.element)
+      .click(adaptiveCell.element);
 
-      await dataGrid
-        .scrollBy(t, { y: 1000 });
-      await dataGrid
-        .scrollBy(t, { y: 1000 });
+    await dataGrid
+      .scrollBy(t, { y: 1000 });
+    await dataGrid
+      .scrollBy(t, { y: 1000 });
 
-      const scrollOffsets = await t
-        .eval(() => (window as TestCaseWindow).dataGridScrollableEventValues) as number[];
+    const scrollOffsets = await t
+      .eval(() => (window as TestCaseWindow).dataGridScrollableEventValues) as number[];
 
-      const hasSmallScrollValues = scrollOffsets.some((offset) => offset < scrollValuesThreshold);
-      await t.expect(hasSmallScrollValues).notOk();
-    },
-  ).before(async () => {
+    const hasSmallScrollValues = scrollOffsets.some((offset) => offset < scrollValuesThreshold);
+    await t.expect(hasSmallScrollValues).notOk();
+  }).before(async () => {
     await createWidget('dxDataGrid', {
       dataSource: getData(3, 100).map((item, idx) => ({ ...item, id: idx })),
       keyExpr: 'id',

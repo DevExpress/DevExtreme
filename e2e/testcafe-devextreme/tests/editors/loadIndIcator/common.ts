@@ -16,14 +16,6 @@ fixture.disablePageReloads`LoadIndicator`
 ['circle', 'sparkle'].forEach((animationType) => {
   test(`LoadIndicator: start stage of the ${animationType} animation`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const loadIndicator = new LoadIndicator('#container');
-
-    await testScreenshot(t, takeScreenshot, `LoadIndicator with ${animationType} animation.png`, {
-      element: '#container',
-      themeChanged: async () => {
-        await loadIndicator.repaint();
-      },
-    });
 
     await testScreenshot(t, takeScreenshot, `LoadIndicator with ${animationType} animation.png`, {
       element: '#container',

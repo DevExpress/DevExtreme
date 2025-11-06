@@ -21,7 +21,7 @@ test.meta({ browserSize: [300, 200] })('Validation Message position should be co
     .click(Selector(`.${TEXTEDITOR_INPUT_CLASS}`))
     .pressKey('backspace')
     .pressKey('enter')
-    .pressKey('tab');
+    .click('focusable-start');
 
   await setAttribute('#container', 'hidden', 'true');
   await removeAttribute('#container', 'hidden');

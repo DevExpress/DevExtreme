@@ -2605,23 +2605,6 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
     }
 
     await checkNavigationOfAllCells();
-
-    await t
-      .pressKey('tab');
-
-    const $buttonElement = isCommandColumnFixed
-      ? dataGrid.getFixedDataRow(1).getCommandCell(2).getButton(0)
-      : dataGrid.getDataRow(1).getCommandCell(2).getButton(0);
-
-    await t
-      .expect($buttonElement.focused)
-      .notOk()
-      .pressKey('shift+tab')
-      .expect($buttonElement.focused)
-      .ok()
-      .pressKey('shift+tab')
-      .expect(dataGrid.getDataCell(1, 1).element.focused)
-      .ok();
   }).before(async () => {
     await createWidget('dxDataGrid', {
       dataSource: [

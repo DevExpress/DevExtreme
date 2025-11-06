@@ -98,11 +98,9 @@ jobs:
           { componentFolder: "common", name: "common" },
 
           # Grids tests need to be reworked to work in fluent theme
-          { componentFolder: "dataGrid/common", name: "dataGrid / common (1/3)", indices: "1/3" },
-          { componentFolder: "dataGrid/common", name: "dataGrid / common (2/3)", indices: "2/3" },
-          { componentFolder: "dataGrid/common", name: "dataGrid / common (3/3)", indices: "3/3" },
-          { componentFolder: "dataGrid/sticky", name: "dataGrid / sticky (1/2)", indices: "1/2" },
-          { componentFolder: "dataGrid/sticky", name: "dataGrid / sticky (2/2)", indices: "2/2" },
+          { componentFolder: "dataGrid", name: "dataGrid (1/3)", indices: "1/3" },
+          { componentFolder: "dataGrid", name: "dataGrid (2/3)", indices: "2/3" },
+          { componentFolder: "dataGrid", name: "dataGrid (3/3)", indices: "3/3" },
           { componentFolder: "cardView", name: "cardView" },
 
           # Scheduler tests need to be reworked to work in fluent theme

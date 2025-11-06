@@ -2136,9 +2136,6 @@ test('The "Cannot read property "brokenRules" of undefined" error occurs T978286
       // act
       await testScreenshot(t, takeScreenshot, screenshotName, { element: dataGrid.element });
       await t
-        .expect(compareResults.isValid())
-        .ok()
-        // assert
         .expect(dataGrid.getDataRow(insertedRowNumber).isInserted)
         .ok('row is inserted')
         .expect(compareResults.isValid())
@@ -2216,14 +2213,13 @@ test('Popup EditForm screenshot when editRowKey is initially specified', async (
     await t
       // act
       .click(dataGrid.getHeaderPanel().getSaveButton())
-      .wait(500)
 
       // assert
       .expect(dataGrid.dataRows.count)
-      .eql(5)
+      .eql(remoteOperations ? 5 : 6)
 
       .expect(dataGrid.getDataCell(0, 0).element.textContent)
-      .eql('val_0_0');
+      .eql(remoteOperations ? 'val_0_0' : 'val_5_0');
   }).before(async () => {
     const data = getData(10, 4);
 
@@ -2286,6 +2282,7 @@ test('Popup EditForm screenshot when editRowKey is initially specified', async (
     })();
   });
 });
+
 // visual: generic.light
 // visual: material.blue.light
 [true, false].forEach((useIcons) => {
