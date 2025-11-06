@@ -26483,11 +26483,7 @@ declare module DevExpress.ui {
            * [descr:dxSchedulerOptions.editing.form]
            */
           form?:
-            | {
-                /**
-                 * [descr:dxSchedulerOptions.editing.form.items]
-                 */
-                items?: Array<DevExpress.ui.dxForm.Item>;
+            | (DevExpress.ui.dxForm.Properties & {
                 /**
                  * [descr:dxSchedulerOptions.editing.form.onSaved]
                  */
@@ -26500,7 +26496,7 @@ declare module DevExpress.ui {
                  * [descr:dxSchedulerOptions.editing.form.iconsShowMode]
                  */
                 iconsShowMode?: DevExpress.ui.dxScheduler.AppointmentFormIconsShowMode;
-              }
+              })
             | undefined;
           /**
            * [descr:dxSchedulerOptions.editing.popup]

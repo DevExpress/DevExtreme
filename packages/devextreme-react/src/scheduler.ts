@@ -10,11 +10,12 @@ import NestedOption from "./core/nested-option";
 
 import type { ViewType, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, AppointmentFormIconsShowMode, SchedulerPredefinedToolbarItem, DateNavigatorItemProperties, SchedulerPredefinedDateNavigatorItem, dxSchedulerToolbarItem, AllDayPanelMode, AppointmentCollectorTemplateData, AppointmentTemplateData, AppointmentTooltipTemplateData, CellAppointmentsLimit, dxSchedulerScrolling } from "devextreme/ui/scheduler";
 import type { ContentReadyEvent as ButtonContentReadyEvent, DisposingEvent as ButtonDisposingEvent, InitializedEvent as ButtonInitializedEvent, dxButtonOptions, ClickEvent, OptionChangedEvent } from "devextreme/ui/button";
+import type { ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, FormItemType, FormPredefinedButtonItem, OptionChangedEvent as FormOptionChangedEvent, dxFormOptions, dxFormSimpleItem, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, SmartPastedEvent, SmartPastingEvent, FormItemComponent } from "devextreme/ui/form";
 import type { ContentReadyEvent as ButtonGroupContentReadyEvent, DisposingEvent as ButtonGroupDisposingEvent, InitializedEvent as ButtonGroupInitializedEvent, OptionChangedEvent as ButtonGroupOptionChangedEvent, dxButtonGroupItem, ItemClickEvent, SelectionChangedEvent } from "devextreme/ui/button_group";
 import type { ContentReadyEvent as TabPanelContentReadyEvent, DisposingEvent as TabPanelDisposingEvent, InitializedEvent as TabPanelInitializedEvent, OptionChangedEvent as TabPanelOptionChangedEvent, dxTabPanelOptions, ItemClickEvent as TabPanelItemClickEvent, SelectionChangedEvent as TabPanelSelectionChangedEvent, dxTabPanelItem, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, SelectionChangingEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from "devextreme/ui/tab_panel";
 import type { event } from "devextreme/events/events.types";
-import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, ButtonStyle, template, ButtonType, ComparisonOperator, ToolbarItemLocation, ToolbarItemComponent, SingleMultipleOrNone, ScrollMode, TabsIconPosition, TabsStyle, Position, FirstDayOfWeek, Orientation } from "devextreme/common";
-import type { FormItemType, FormPredefinedButtonItem, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem, FormItemComponent, LabelLocation } from "devextreme/ui/form";
+import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, ButtonStyle, template, ButtonType, ComparisonOperator, Mode, ToolbarItemLocation, ToolbarItemComponent, SingleMultipleOrNone, ScrollMode, TabsIconPosition, TabsStyle, Position, FirstDayOfWeek, Orientation } from "devextreme/common";
+import type { AIIntegration } from "devextreme/common/ai-integration";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { DataSourceOptions } from "devextreme/data/data_source";
@@ -89,7 +90,7 @@ const Scheduler = memo(
         }
       ), []);
 
-      const subscribableOptions = useMemo(() => (["currentDate","currentView"]), []);
+      const subscribableOptions = useMemo(() => (["currentDate","currentView","editing.form.formData"]), []);
       const independentEvents = useMemo(() => (["onAppointmentAdded","onAppointmentAdding","onAppointmentClick","onAppointmentContextMenu","onAppointmentDblClick","onAppointmentDeleted","onAppointmentDeleting","onAppointmentFormOpening","onAppointmentRendered","onAppointmentTooltipShowing","onAppointmentUpdated","onAppointmentUpdating","onCellClick","onCellContextMenu","onContentReady","onDisposing","onInitialized"]), []);
 
       const defaults = useMemo(() => ({
@@ -315,6 +316,7 @@ const ButtonOptions = Object.assign<typeof _componentButtonOptions, NestedCompon
 });
 
 // owners:
+// Form
 // GroupItem
 // Tab
 type IColCountByScreenProps = React.PropsWithChildren<{
@@ -397,9 +399,8 @@ type IEditingProps = React.PropsWithChildren<{
   allowResizing?: boolean;
   allowTimeZoneEditing?: boolean;
   allowUpdating?: boolean;
-  form?: Record<string, any> | undefined | {
+  form?: dxFormOptions | {
     iconsShowMode?: AppointmentFormIconsShowMode;
-    items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>;
     onCanceled?: ((formData: any) => void);
     onSaved?: ((formData: any) => void);
   };
@@ -475,18 +476,68 @@ const EmptyItem = Object.assign<typeof _componentEmptyItem, NestedComponentMeta>
 // owners:
 // Editing
 type IFormProps = React.PropsWithChildren<{
-  iconsShowMode?: AppointmentFormIconsShowMode;
+  accessKey?: string | undefined;
+  activeStateEnabled?: boolean;
+  aiIntegration?: AIIntegration | undefined;
+  alignItemLabels?: boolean;
+  alignItemLabelsInAllGroups?: boolean;
+  colCount?: Mode | number;
+  colCountByScreen?: Record<string, any> | {
+    lg?: number | undefined;
+    md?: number | undefined;
+    sm?: number | undefined;
+    xs?: number | undefined;
+  };
+  customizeItem?: ((item: dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem) => void);
+  disabled?: boolean;
+  elementAttr?: Record<string, any>;
+  focusStateEnabled?: boolean;
+  formData?: any;
+  height?: number | string | undefined;
+  hint?: string | undefined;
+  hoverStateEnabled?: boolean;
+  isDirty?: boolean;
   items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>;
-  onCanceled?: ((formData: any) => void);
-  onSaved?: ((formData: any) => void);
+  labelLocation?: LabelLocation;
+  labelMode?: FormLabelMode;
+  minColWidth?: number;
+  onContentReady?: ((e: FormContentReadyEvent) => void);
+  onDisposing?: ((e: FormDisposingEvent) => void);
+  onEditorEnterKey?: ((e: EditorEnterKeyEvent) => void);
+  onFieldDataChanged?: ((e: FieldDataChangedEvent) => void);
+  onInitialized?: ((e: FormInitializedEvent) => void);
+  onOptionChanged?: ((e: FormOptionChangedEvent) => void);
+  onSmartPasted?: ((e: SmartPastedEvent) => void);
+  onSmartPasting?: ((e: SmartPastingEvent) => void);
+  optionalMark?: string;
+  readOnly?: boolean;
+  requiredMark?: string;
+  requiredMessage?: string;
+  rtlEnabled?: boolean;
+  screenByWidth?: (() => void);
+  scrollingEnabled?: boolean;
+  showColonAfterLabel?: boolean;
+  showOptionalMark?: boolean;
+  showRequiredMark?: boolean;
+  showValidationSummary?: boolean;
+  tabIndex?: number;
+  validationGroup?: string | undefined;
+  visible?: boolean;
+  width?: number | string | undefined;
+  defaultFormData?: any;
+  onFormDataChange?: (value: any) => void;
 }>
 const _componentForm = (props: IFormProps) => {
   return React.createElement(NestedOption<IFormProps>, {
     ...props,
     elementDescriptor: {
       OptionName: "form",
+      DefaultsProps: {
+        defaultFormData: "formData"
+      },
       ExpectedChildren: {
         ButtonItem: { optionName: "items", isCollectionItem: true },
+        colCountByScreen: { optionName: "colCountByScreen", isCollectionItem: false },
         EmptyItem: { optionName: "items", isCollectionItem: true },
         GroupItem: { optionName: "items", isCollectionItem: true },
         item: { optionName: "items", isCollectionItem: true },

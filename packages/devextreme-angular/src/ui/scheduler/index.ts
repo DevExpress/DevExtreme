@@ -30,7 +30,7 @@ import { AllDayPanelMode, ViewType, dxSchedulerAppointment, AppointmentFormIcons
 import { event } from 'devextreme/events/events.types';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
-import { dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
+import { dxFormOptions } from 'devextreme/ui/form';
 import { FirstDayOfWeek, Orientation } from 'devextreme/common';
 
 import DxScheduler from 'devextreme/ui/scheduler';
@@ -393,10 +393,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get editing(): boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: undefined | { iconsShowMode?: AppointmentFormIconsShowMode, items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, onCanceled?: ((formData: any) => void), onSaved?: ((formData: any) => void) }, popup?: Record<string, any> } {
+    get editing(): boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: dxFormOptions | { iconsShowMode?: AppointmentFormIconsShowMode, onCanceled?: ((formData: any) => void), onSaved?: ((formData: any) => void) }, popup?: Record<string, any> } {
         return this._getOption('editing');
     }
-    set editing(value: boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: undefined | { iconsShowMode?: AppointmentFormIconsShowMode, items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, onCanceled?: ((formData: any) => void), onSaved?: ((formData: any) => void) }, popup?: Record<string, any> }) {
+    set editing(value: boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: dxFormOptions | { iconsShowMode?: AppointmentFormIconsShowMode, onCanceled?: ((formData: any) => void), onSaved?: ((formData: any) => void) }, popup?: Record<string, any> }) {
         this._setOption('editing', value);
     }
 
@@ -1202,7 +1202,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() editingChange: EventEmitter<boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: undefined | { iconsShowMode?: AppointmentFormIconsShowMode, items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, onCanceled?: ((formData: any) => void), onSaved?: ((formData: any) => void) }, popup?: Record<string, any> }>;
+    @Output() editingChange: EventEmitter<boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: dxFormOptions | { iconsShowMode?: AppointmentFormIconsShowMode, onCanceled?: ((formData: any) => void), onSaved?: ((formData: any) => void) }, popup?: Record<string, any> }>;
 
     /**
     

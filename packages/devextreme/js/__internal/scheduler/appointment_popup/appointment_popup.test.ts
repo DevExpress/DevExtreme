@@ -1797,6 +1797,37 @@ describe('Customize form items', () => {
 
       expect(formItems?.length ?? 0).toBe(1);
     });
+
+    it('should call custom onContentReady and onInitialized and preserving default', async () => {
+      const onContentReady = jest.fn();
+      const onInitialized = jest.fn();
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        ...{
+          editing: {
+            form: {
+              onContentReady,
+              onInitialized,
+            },
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup();
+      const recurrenceGroup = $(POM.popup.recurrenceGroup);
+
+      POM.popup.selectRepeatValue('weekly');
+
+      await new Promise(process.nextTick);
+
+      const mainGroup = $(POM.popup.mainGroup);
+
+      expect(mainGroup.hasClass(CLASSES.mainGroupHidden)).toBe(true);
+      expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(false);
+
+      expect(onContentReady).toHaveBeenCalled();
+      expect(onInitialized).toHaveBeenCalled();
+    });
   });
 
   describe('Form customization with editing.items', () => {

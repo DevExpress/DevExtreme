@@ -14,8 +14,8 @@ import {
 
 
 
+import { dxFormOptions } from 'devextreme/ui/form';
 import { AppointmentFormIconsShowMode } from 'devextreme/ui/scheduler';
-import { dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
 
 import {
     DxIntegrationModule,
@@ -82,10 +82,10 @@ export class DxoSchedulerEditingComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get form(): undefined | { iconsShowMode?: AppointmentFormIconsShowMode, items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, onCanceled?: ((formData: any) => void), onSaved?: ((formData: any) => void) } {
+    get form(): dxFormOptions | { iconsShowMode?: AppointmentFormIconsShowMode, onCanceled?: ((formData: any) => void), onSaved?: ((formData: any) => void) } {
         return this._getOption('form');
     }
-    set form(value: undefined | { iconsShowMode?: AppointmentFormIconsShowMode, items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, onCanceled?: ((formData: any) => void), onSaved?: ((formData: any) => void) }) {
+    set form(value: dxFormOptions | { iconsShowMode?: AppointmentFormIconsShowMode, onCanceled?: ((formData: any) => void), onSaved?: ((formData: any) => void) }) {
         this._setOption('form', value);
     }
 
