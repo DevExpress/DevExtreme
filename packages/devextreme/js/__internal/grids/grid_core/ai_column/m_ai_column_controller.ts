@@ -27,10 +27,8 @@ export class AIColumnController extends Controller {
 
   public aiRequestRejected!: Callback;
 
-  private getDefaultCellValue(column: Column): string | null {
-    const prompt = column.ai?.prompt;
-
-    if (!prompt) {
+  private getDefaultCellValue(column: Column, cellValue: string | undefined): string | null {
+    if (cellValue === undefined) {
       return column.ai?.emptyText ?? null;
     }
 
@@ -46,7 +44,7 @@ export class AIColumnController extends Controller {
       calculateCellValue(data: UserData) {
         const key = dataController.keyOf(data);
         const cellValue = aiColumnIntegrationController.getAIColumnText(this.name, key);
-        const defaultValue = that.getDefaultCellValue(this);
+        const defaultValue = that.getDefaultCellValue(this, cellValue);
 
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         return cellValue || defaultValue;
