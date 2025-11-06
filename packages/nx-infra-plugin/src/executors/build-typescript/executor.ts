@@ -4,7 +4,7 @@ import * as path from 'path';
 import { glob } from 'glob';
 import { BuildTypescriptExecutorSchema } from './schema';
 import { TsConfig, CompilerOptions } from '../../utils/types';
-import { resolveProjectPath } from '../../utils/path-resolver';
+import { resolveProjectPath, normalizeGlobPathForWindows } from '../../utils/path-resolver';
 import { logError } from '../../utils/error-handler';
 import { readFileText, exists, ensureDir } from '../../utils/file-operations';
 
@@ -69,9 +69,9 @@ const runExecutor: PromiseExecutor<BuildTypescriptExecutorSchema> = async (optio
     await ensureDir(outDir);
 
     const srcPattern = options.srcPattern || DEFAULT_SRC_PATTERN;
-    const globPattern = path.join(absoluteProjectRoot, srcPattern);
+    const globPattern = normalizeGlobPathForWindows(path.join(absoluteProjectRoot, srcPattern));
     const excludePattern = options.excludePattern
-      ? path.join(absoluteProjectRoot, options.excludePattern)
+      ? normalizeGlobPathForWindows(path.join(absoluteProjectRoot, options.excludePattern))
       : undefined;
 
     const sourceFiles = await glob(globPattern, {
@@ -80,11 +80,11 @@ const runExecutor: PromiseExecutor<BuildTypescriptExecutorSchema> = async (optio
       ignore: excludePattern ? [excludePattern] : [],
     });
 
-    logger.info(`Building ${module.toUpperCase()} for ${sourceFiles.length} source files...`);
-
     if (sourceFiles.length === 0) {
-      logger.warn(`No source files matched pattern: ${srcPattern}`);
+      throw new Error(`No source files matched pattern: ${srcPattern}`);
     }
+
+    logger.info(`Building ${module.toUpperCase()} for ${sourceFiles.length} source files...`);
 
     const parsedConfig = ts.parseJsonConfigFileContent(
       tsconfigContent,

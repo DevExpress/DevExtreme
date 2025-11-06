@@ -30,3 +30,7 @@ export function resolveFromProject(context: ExecutorContext, relativePath: strin
 export function resolveFromWorkspace(context: ExecutorContext, relativePath: string): string {
   return path.join(context.root, relativePath);
 }
+
+export function normalizeGlobPathForWindows(filePath: string): string {
+  return filePath.replace(/\\/g, '/');
+}

@@ -2,7 +2,7 @@ import { PromiseExecutor, logger } from '@nx/devkit';
 import * as path from 'path';
 import { glob } from 'glob';
 import { AddLicenseHeadersExecutorSchema } from './schema';
-import { resolveProjectPath } from '../../utils/path-resolver';
+import { resolveProjectPath, normalizeGlobPathForWindows } from '../../utils/path-resolver';
 import { logError } from '../../utils/error-handler';
 import { readJson, readFileText, writeFileText } from '../../utils/file-operations';
 
@@ -80,7 +80,7 @@ const runExecutor: PromiseExecutor<AddLicenseHeadersExecutorSchema> = async (opt
   const banner = renderTemplate(bannerTemplate, data);
 
   try {
-    const pattern = path.join(targetDirectory, GLOB_PATTERN);
+    const pattern = normalizeGlobPathForWindows(path.join(targetDirectory, GLOB_PATTERN));
     const files = await glob(pattern);
 
     logger.info(`Adding license headers to ${files.length} files...`);
