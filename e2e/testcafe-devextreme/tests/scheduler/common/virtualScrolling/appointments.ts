@@ -3,6 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { getStyleAttribute, setStyleAttribute } from '../../../../helpers/domUtils';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 import { scrollToDate } from '../../helpers/utils';
 
 fixture.disablePageReloads`Scheduler: Virtual Scrolling`
@@ -47,7 +48,9 @@ test('The appointment should render correctly when scrolling vertically (T126342
 
   await scrollToDate(new Date('2024-11-12T09:00:00+0100'));
 
-  await takeScreenshot('T1263428-virtual-scrolling-render-appointment.png', scheduler.element);
+  await testScreenshot(t, takeScreenshot, 'T1263428-virtual-scrolling-render-appointment.png', {
+    element: scheduler.element,
+  });
 
   await t
     .expect(compareResults.isValid())

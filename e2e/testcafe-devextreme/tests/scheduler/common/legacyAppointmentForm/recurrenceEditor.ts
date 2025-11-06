@@ -3,6 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import LegacyAppointmentPopup from 'devextreme-testcafe-models/scheduler/appointment/legacyPopup';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Appointment Form: recurrence editor`
   .page(url(__dirname, '../../../container.html'));
@@ -32,7 +33,7 @@ test('Should not reset the recurrence editor value after the repeat toggling', a
   await t.click(popup.recurrenceElement);
   await t.click(popup.recurrenceElement);
 
-  await takeScreenshot('recurrence-editor_after-hide.png', popup.content);
+  await testScreenshot(t, takeScreenshot, 'recurrence-editor_after-hide.png', { element: popup.content });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -61,7 +62,7 @@ test('Should reset the recurrence editor value after the popup reopening', async
   await t.doubleClick(cell);
   await t.click(popup.recurrenceElement);
 
-  await takeScreenshot('recurrence-editor_after-popup-reopen.png', popup.content);
+  await testScreenshot(t, takeScreenshot, 'recurrence-editor_after-popup-reopen.png', { element: popup.content });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

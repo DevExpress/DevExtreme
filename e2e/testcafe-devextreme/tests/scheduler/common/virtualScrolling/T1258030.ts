@@ -3,6 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { scrollTo } from '../../helpers/utils';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Scheduler: Virtual scrolling`
   .page(url(__dirname, '../../../container.html'));
@@ -13,7 +14,7 @@ test('it should render recurrence appointment with correct width in month timeli
   const scheduler = new Scheduler('#container');
 
   await scrollTo(3000, 0);
-  await t.expect(await takeScreenshot('virtual_scroll_timeline_3000.png', scheduler.workSpace)).ok();
+  await testScreenshot(t, takeScreenshot, 'virtual_scroll_timeline_3000.png', { element: scheduler.workSpace });
 
   await t
     .expect(compareResults.isValid())
