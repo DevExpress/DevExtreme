@@ -164,6 +164,7 @@ describe('Options', () => {
       });
 
       expect($(component.getDataCell(0, 3).getElement()).hasClass('custom-class')).toBe(true);
+      expect($(component.getDataCell(0, 3).getElement()).hasClass(CLASSES.aiColumn)).toBe(true);
     });
   });
 
