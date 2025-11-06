@@ -66,15 +66,41 @@ $(() => {
     },
   });
 
+  const popoverContentTemplate = function (vehicle) {
+    const {
+      Source,
+      LicenseName,
+      Author,
+      Edits,
+    } = vehicle;
+    const sourceLink = `https://${Source}`;
+    return $('<div>').append(
+      $('<p>')
+        .append($('<b>').text('Image licensed under: '))
+        .append($('<span>').text(LicenseName)),
+      $('<p>')
+        .append($('<b>').text('Author: '))
+        .append($('<span>').text(Author)),
+      $('<p>')
+        .append($('<b>').text('Source link: '))
+        .append(
+          $('<a>', {
+            href: sourceLink,
+            target: '_blank',
+          })
+            .text(sourceLink),
+        ),
+      $('<p>')
+        .append($('<b>').text('Edits: '))
+        .append($('<span>').text(Edits)),
+    );
+  };
+
   const createTrademarkTemplate = (vehicle) => {
     const {
       ID,
       Name,
       TrademarkName,
-      LicenseName,
-      Author,
-      Source,
-      Edits,
       Manufacturer,
     } = vehicle;
 
@@ -95,52 +121,19 @@ $(() => {
     });
 
     const popoverId = `popover-${ID}`;
-    const popoverWrapper = $('<div>');
-
-    const licenseTitle = $('<div>')
-      .addClass('license-info__title')
-      .text('License Information');
-
-    const licenseContent = $('<div>')
-      .addClass('license-info__content');
-
-    const imageParagraph = $('<p>')
-      .append($('<strong>').text('Image: '))
-      .append(`${TrademarkName} ${Name}`);
-
-    const licenseParagraph = $('<p>')
-      .append($('<strong>').text('Image licensed under: '))
-      .append(LicenseName);
-
-    const authorParagraph = $('<p>')
-      .append($('<strong>').text('Author: '))
-      .append(Author);
-
-    const sourceLink = `https://${Source}`;
-    const sourceParagraph = $('<p>')
-      .append($('<strong>').text('Source link: '))
-      .append(
-        $('<a>', {
-          href: sourceLink,
-          target: '_blank',
-        }).text(sourceLink),
-      );
-
-    const editsParagraph = $('<p>')
-      .append($('<strong>').text('Edits: '))
-      .append(Edits);
-
-    licenseContent.append(imageParagraph, licenseParagraph, authorParagraph, sourceParagraph, editsParagraph);
-    popoverWrapper.append(licenseTitle, licenseContent);
-
     img.attr('data-popover-target', popoverId);
 
     const popover = $('<div>').attr('id', popoverId).dxPopover({
       target: `[data-popover-target="${popoverId}"]`,
       showEvent: 'mouseenter',
-      hideEvent: 'mouseleave',
+      hideEvent: {
+        name: 'mouseleave',
+        delay: 1000,
+      },
       position: 'top',
-      contentTemplate: () => popoverWrapper,
+      showTitle: true,
+      title: 'License Information',
+      contentTemplate: () => popoverContentTemplate(vehicle),
     });
 
     imgWrapper.append(img, popover);

@@ -51,24 +51,3 @@ div.dx-datagrid .ai__cell {
   border-radius: 24px;
   background-color: var(--dx-color-separator);
 }
-
-.license-info__title {
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: #333;
-    border-bottom: 1px solid #E0E0E0;
-    padding-bottom: 6px;
-}
-
-.license-info__content p {
-    margin: 4px 0;
-    font-size: 12px;
-    line-height: 1.4;
-    color: #666;
-}
-
-.license-info__content strong {
-    color: #333;
-    font-weight: 500;
-}
