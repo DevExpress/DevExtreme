@@ -9,6 +9,7 @@ import FileUploader, { FILEUPLOADER_CLASS, FILEUPLOADER_CANCEL_BUTTON_CLASS } fr
 import { BUTTON_CLASS } from '__internal/ui/button/button';
 import Informer, { INFORMER_CLASS, INFORMER_TEXT_CLASS } from '__internal/ui/informer/informer';
 import { TEXTEDITOR_INPUT_CLASS } from '__internal/ui/text_box/m_text_editor.base';
+import { TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE } from '__internal/ui/m_text_area';
 
 const fakeFile = {
     name: 'fakefile.png',
@@ -866,6 +867,50 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
 
                 assert.strictEqual(this.$element.find(`.${INFORMER_CLASS}`).length, 0, 'informer is hidden after text is cleared');
             });
+        });
+    });
+
+    QUnit.module('MaxHeight and scroll behavior', () => {
+        QUnit.test('input should have auto-resize class by default', function(assert) {
+            const hasAutoResizeClass = this.$input.hasClass(TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE);
+
+            assert.ok(hasAutoResizeClass, 'input has auto-resize class');
+        });
+
+        QUnit.test('textarea should expand when text is added', function(assert) {
+            const initialHeight = this.$input.height();
+
+            this.typeText('Line 1\nLine 2\nLine 3');
+
+            const heightAfterTyping = this.$input.height();
+
+            assert.ok(heightAfterTyping > initialHeight, 'textarea height increased after adding multiline text');
+        });
+
+        QUnit.test('textarea should not exceed default maxHeight', function(assert) {
+            const longText = Array(100).fill('Line of text that should cause scrolling').join('\n');
+            this.typeText(longText);
+
+            const inputHeight = this.$input.height();
+            const maxHeightValue = parseFloat(this.$input.css('maxHeight'));
+
+            assert.roughEqual(inputHeight, maxHeightValue, 0.01, 'input height respects default maxHeight');
+            assert.notStrictEqual(maxHeightValue, undefined, 'default maxHeight is applied');
+        });
+
+        QUnit.test('textarea height should be restored after clearing text', function(assert) {
+            const initialHeight = this.$input.height();
+
+            this.typeText('Line 1\nLine 2\nLine 3\nLine 4\nLine 5');
+
+            const heightWithText = this.$input.height();
+            assert.ok(heightWithText > initialHeight, 'height increased with text');
+
+            this.instance.option('value', '');
+
+            const heightAfterClear = this.$input.height();
+
+            assert.roughEqual(heightAfterClear, initialHeight, 0.01, 'height is restored after clearing text');
         });
     });
 });
