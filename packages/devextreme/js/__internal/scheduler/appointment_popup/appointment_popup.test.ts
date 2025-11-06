@@ -3,6 +3,7 @@ import {
 } from '@jest/globals';
 import $ from '@js/core/renderer';
 import type dxDateBox from '@js/ui/date_box';
+import type { GroupItem, Item as FormItem } from '@js/ui/form';
 import { toMilliseconds } from '@ts/utils/toMilliseconds';
 
 import fx from '../../../common/core/animation/fx';
@@ -1455,4 +1456,339 @@ describe('Timezone Editors', () => {
   it.todo('timeZone editors should have correct options');
   it.todo('timeZone editor should have correct display value for timezones with different offsets');
   it.todo('dataSource of timezoneEditor should be filtered');
+});
+
+describe('Customize form items', () => {
+  beforeEach(() => {
+    fx.off = true;
+    setupSchedulerTestEnvironment();
+  });
+
+  afterEach(() => {
+    fx.off = false;
+    document.body.innerHTML = '';
+    jest.useRealTimers();
+  });
+
+  describe('Basic form customization', () => {
+    it('should use default form when editing.items is not set', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const { form } = POM.popup;
+      const formItems = form.option('items') as FormItem[];
+
+      expect(formItems).toBeDefined();
+      expect(formItems?.length).toBeGreaterThan(0);
+    });
+
+    it('should show empty form when editing.items is empty array', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          form: {
+            items: [],
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const { form } = POM.popup;
+      const formItems = form.option('items') as FormItem[];
+
+      expect(formItems?.length ?? 0).toBe(0);
+    });
+
+    it('should show mainGroup when specified in string array', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          form: {
+            items: ['mainGroup'],
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const { form } = POM.popup;
+      const formItems = form.option('items') as FormItem[];
+
+      expect(formItems?.length).toBe(1);
+      expect(formItems?.[0]?.name).toBe('mainGroup');
+    });
+
+    it('should hide group when visible is false', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          form: {
+            items: [{ name: 'mainGroup', visible: false }],
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const { form } = POM.popup;
+      const formItems = form.option('items') as FormItem[];
+
+      expect(formItems?.length).toBe(1);
+      expect(formItems?.[0]?.visible).toBe(false);
+    });
+
+    it('should show group when visible is true', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          form: {
+            items: [{ name: 'mainGroup', visible: true }],
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const { form } = POM.popup;
+      const formItems = form.option('items') as FormItem[];
+
+      expect(formItems?.length).toBe(1);
+      expect(formItems?.[0]?.visible).toBe(true);
+    });
+
+    it('should filter children when items array is specified', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          form: {
+            items: [{
+              name: 'mainGroup',
+              visible: true,
+              items: ['subjectGroup'],
+            }],
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const { form } = POM.popup;
+      const formItems = form.option('items') as FormItem[];
+      const mainGroup = formItems?.[0] as GroupItem;
+
+      expect(formItems?.length).toBe(1);
+      expect(mainGroup?.items?.length).toBe(1);
+      expect(mainGroup?.items?.[0]?.name).toBe('subjectGroup');
+    });
+
+    it('should handle non-existent groups gracefully', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          form: {
+            items: ['nonExistentGroup'],
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const { form } = POM.popup;
+      const formItems = form.option('items') as FormItem[];
+
+      expect(formItems?.length ?? 0).toBe(1);
+    });
+  });
+
+  describe('Form customization with editing.items', () => {
+    it('should handle empty items array', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          form: {
+            items: [],
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const { form } = POM.popup;
+      const formItems = form.option('items') as FormItem[];
+      expect(formItems?.length).toBe(0);
+    });
+
+    it('should handle string array configuration', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          form: {
+            items: ['mainGroup'],
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const { form } = POM.popup;
+      const formItems = form.option('items') as FormItem[];
+      expect(formItems?.length).toBe(1);
+      expect((formItems?.[0] as GroupItem)?.name).toBe('mainGroup');
+    });
+
+    it('should handle object configuration with visible false', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          form: {
+            items: [{ name: 'mainGroup', visible: false }],
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const { form } = POM.popup;
+      const formItems = form.option('items') as FormItem[];
+      expect(formItems?.length).toBe(1);
+      expect(formItems?.[0]?.visible).toBe(false);
+    });
+
+    it('should handle object configuration with custom items', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          form: {
+            items: [{
+              name: 'mainGroup',
+              items: ['subjectGroup', 'dateGroup'],
+            }],
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const { form } = POM.popup;
+      const formItems = form.option('items') as FormItem[];
+      const mainGroup = formItems?.[0] as GroupItem;
+      expect(mainGroup?.items?.length).toBe(2);
+      expect((mainGroup?.items?.[0] as GroupItem)?.name).toBe('subjectGroup');
+      expect((mainGroup?.items?.[1] as GroupItem)?.name).toBe('dateGroup');
+    });
+
+    it('should handle non-existent group names', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          form: {
+            items: ['nonExistentGroup'],
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const { form } = POM.popup;
+      const formItems = form.option('items') as FormItem[];
+      expect(formItems?.length).toBe(1);
+    });
+
+    it('should handle undefined items', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          form: {
+            items: undefined,
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const { form } = POM.popup;
+      const formItems = form.option('items') as FormItem[];
+      expect(formItems?.length).toBeGreaterThan(0);
+    });
+
+    it('should handle mixed configurations', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          form: {
+            items: [
+              'mainGroup',
+              { name: 'mainGroup', visible: false },
+            ],
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const { form } = POM.popup;
+      const formItems = form.option('items') as FormItem[];
+      expect(formItems?.length).toBe(2);
+      expect((formItems?.[0] as any)?.name).toBe('mainGroup');
+      expect((formItems?.[1] as any)?.name).toBe('mainGroup');
+      expect(formItems?.[1]?.visible).toBe(false);
+    });
+
+    it('should handle empty items array in object config', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          form: {
+            items: [{
+              name: 'mainGroup',
+              items: [],
+            }],
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const { form } = POM.popup;
+      const formItems = form.option('items') as FormItem[];
+      const mainGroup = formItems?.[0] as any;
+      expect(mainGroup?.items?.length).toBe(0);
+    });
+  });
 });
