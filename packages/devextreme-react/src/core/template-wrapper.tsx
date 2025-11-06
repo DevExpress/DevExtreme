@@ -66,10 +66,7 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
       removalListenerElement.current,
     ].forEach((el) => el && events.off(el, DX_REMOVE_EVENT, onTemplateRemoved));
 
-    // In case of multiple root elements, letting the widget remove them all sync
-    Promise.resolve().then(() => {
-      onRemoved(componentKey);
-    });
+    onRemoved(componentKey);
   }, [onRemoved]);
 
   useLayoutEffect(() => {

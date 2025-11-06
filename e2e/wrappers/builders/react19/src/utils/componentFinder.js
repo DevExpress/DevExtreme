@@ -23,6 +23,11 @@ const COMPONENTS = [
     path: 'chat-template-rerender',
     name: 'ChatTemplateRerender',
     component: () => import('@examples/chat-template-rerender/react19/index.jsx')
+  },
+  {
+    path: 'gantt-template-state-update',
+    name: 'GanttTemplateStateUpdate',
+    component: () => import('@examples/gantt-template-state-update/react19/index.jsx')
   }
 ];
 
