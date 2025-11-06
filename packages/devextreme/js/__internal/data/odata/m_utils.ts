@@ -210,7 +210,7 @@ const ajaxOptionsForRequest = (protocolVersion, request, options = {}) => {
 
 export const sendRequest = (protocolVersion, request, options) => {
   const {
-    deserializeDates, fieldTypes, countOnly, isPaged,
+    processDatesAsUtc, fieldTypes, countOnly, isPaged,
   } = options;
   // @ts-expect-error
   const d = new Deferred();
@@ -218,7 +218,7 @@ export const sendRequest = (protocolVersion, request, options) => {
 
   ajax.sendRequest(ajaxOptions).always((obj, textStatus) => {
     const transformOptions = {
-      deserializeDates,
+      processDatesAsUtc,
       fieldTypes,
     };
     const tuple = interpretJsonFormat(obj, textStatus, transformOptions, ajaxOptions);
@@ -387,14 +387,14 @@ const transformTypes = (obj, options = {}) => {
       transformTypes(obj[key], options);
     } else if (typeof value === 'string') {
       // @ts-expect-error
-      const { fieldTypes, deserializeDates } = options;
+      const { fieldTypes, processDatesAsUtc } = options;
       const canBeGuid = !fieldTypes || fieldTypes[key] !== 'String';
 
       if (canBeGuid && GUID_REGEX.test(value)) {
         obj[key] = new Guid(value);
       }
 
-      if (deserializeDates !== false) {
+      if (processDatesAsUtc !== false) {
         if (VERBOSE_DATE_REGEX.exec(value)) {
           // @ts-expect-error
           const date = new Date(Number(RegExp.$1) + RegExp.$2 * 60 * 1000);
