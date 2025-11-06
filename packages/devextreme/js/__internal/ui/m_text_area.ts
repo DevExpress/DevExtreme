@@ -17,7 +17,7 @@ import TextBox from '@ts/ui/text_box/m_text_box';
 import { allowScroll, prepareScrollData } from '@ts/ui/text_box/m_utils.scroll';
 
 export const TEXTAREA_CLASS = 'dx-textarea';
-const TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE = 'dx-texteditor-input-auto-resize';
+export const TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE = 'dx-texteditor-input-auto-resize';
 
 export interface TextAreaProperties extends Omit<Properties,
 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' |
@@ -191,7 +191,8 @@ class TextArea<
     this._renderDimensions();
 
     const minHeight = this._getBoundaryHeight('minHeight');
-    const maxHeight = this._getBoundaryHeight('maxHeight');
+    const maxHeight = this._getMaxHeight();
+
     let inputHeight = $input[0].scrollHeight;
 
     if (minHeight !== undefined) {
@@ -199,10 +200,11 @@ class TextArea<
     }
 
     if (maxHeight !== undefined) {
-      const adjustedMaxHeight = maxHeight - heightDifference;
-      const needScroll = inputHeight > adjustedMaxHeight;
+      const adjustedMaxHeight = this._getAdjustedMaxHeight(maxHeight, heightDifference);
+      const needScroll = this._isScrollNeeded(inputHeight, adjustedMaxHeight);
 
       inputHeight = Math.min(inputHeight, adjustedMaxHeight);
+
       this._updateInputAutoResizeAppearance($input, !needScroll);
     }
 
@@ -211,6 +213,27 @@ class TextArea<
     if (autoHeightResizing) {
       this.$element().css('height', 'auto');
     }
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  _getAdjustedMaxHeight(maxHeight: number, heightDifference: number): number {
+    const adjustedMaxHeight = maxHeight - heightDifference;
+
+    return adjustedMaxHeight;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  _isScrollNeeded(
+    inputHeight: number,
+    adjustedMaxHeight: number,
+  ): boolean {
+    const needScroll = inputHeight > adjustedMaxHeight;
+
+    return needScroll;
+  }
+
+  _getMaxHeight(): number | undefined {
+    return this._getBoundaryHeight('maxHeight');
   }
 
   _getBoundaryHeight(optionName: string): number | undefined {
