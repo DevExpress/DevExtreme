@@ -2,7 +2,6 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { Themes } from '../../../../helpers/themes';
 import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Sorting`
@@ -51,39 +50,38 @@ test('Filter expression should be valid when sortingMethod, remoteOperations, an
   };
 }));
 
-test('Multiple sorting alphabetical icons should be correct in Fluent Theme (T1243658)', async (t) => {
+// unskip test when Fluent theme will be default
+test.meta({ unstable: true })('Multiple sorting alphabetical icons should be correct in Fluent Theme (T1243658)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
     .rightClick(dataGrid.getHeaders().element, { offsetX: 10, offsetY: 10 });
 
-  await testScreenshot(t, takeScreenshot, 'datagrid-alphabetical-icons-should-be-correct.png', { theme: Themes.fluentBlue });
+  await testScreenshot(t, takeScreenshot, 'datagrid-alphabetical-icons-should-be-correct.png');
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(
-  async () => {
-    await createWidget('dxDataGrid', {
-      dataSource: [
-        {
-          ID: 1,
-          FirstName: 'John',
-        },
-      ],
-      keyExpr: 'ID',
-      sorting: {
-        mode: 'multiple',
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [
+      {
+        ID: 1,
+        FirstName: 'John',
       },
-      columns: [
-        {
-          dataField: 'FirstName',
-          sortOrder: 'asc',
-        },
-      ],
-    });
-  },
-);
+    ],
+    keyExpr: 'ID',
+    sorting: {
+      mode: 'multiple',
+    },
+    columns: [
+      {
+        dataField: 'FirstName',
+        sortOrder: 'asc',
+      },
+    ],
+  });
+});
 
 test('Sorting and filtering should be applied correctly when they change at runtime (T1237863)', async (t) => {
   const dataGrid = new DataGrid('#container');

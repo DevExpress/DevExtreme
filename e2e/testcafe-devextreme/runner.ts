@@ -54,6 +54,7 @@ interface ParsedArgs {
   theme: string;
   shadowDom: boolean;
   skipUnstable: boolean;
+  disableScreenshots: boolean;
 }
 
 const TESTCAFE_CONFIG: Partial<TestCafeConfigurationOptions> = {
@@ -110,6 +111,7 @@ function getArgs(): ParsedArgs {
       theme: '',
       shadowDom: false,
       skipUnstable: true,
+      disableScreenshots: false,
     },
   }) as ParsedArgs;
 }
@@ -166,7 +168,7 @@ async function main() {
       },
     });
 
-    runner.concurrency(args.concurrency || 5);
+    runner.concurrency(args.concurrency || 4);
 
     const filters: FilterFunction[] = [];
 
@@ -269,7 +271,7 @@ async function main() {
       },
     };
 
-    if (args.browsers === 'chrome:docker') {
+    if (args.browsers === 'chrome:docker' || args.disableScreenshots) {
       runOptions.disableScreenshots = true;
     }
 

@@ -21,6 +21,9 @@ export async function clearTestPage(t: TestController): Promise<void> {
       $widgetElement.empty();
     });
 
+    const element = document.getElementById('focusable-start');
+    element?.remove();
+
     const body = document.querySelector('body');
     if (body) {
       body.innerHTML = '';

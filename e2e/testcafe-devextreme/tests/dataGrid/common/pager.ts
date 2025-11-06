@@ -30,7 +30,7 @@ test('Full size pager', async (t) => {
   const pager = dataGrid.getPager();
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   await t
-    .resizeWindow(750, 600)
+    .resizeWindow(900, 600)
     .expect(pager.getPageSize(0).selected)
     .ok('page size 5 selected')
     .expect(pager.getNavPage('6').selected)

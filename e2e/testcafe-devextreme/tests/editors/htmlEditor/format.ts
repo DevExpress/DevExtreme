@@ -2,7 +2,7 @@ import SelectBox from 'devextreme-testcafe-models/selectBox';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 
-fixture.disablePageReloads`HtmlEditor - formats`
+fixture`HtmlEditor - formats`
   .page(url(__dirname, '../../container-extended.html'));
 
 test('HtmlEditor should keep actual format after "enter" key pressed (T922236)', async (t) => {

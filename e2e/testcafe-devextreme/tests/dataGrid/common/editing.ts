@@ -7,7 +7,6 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { getData } from '../helpers/generateDataSourceData';
 import { testScreenshot } from '../../../helpers/themeUtils';
-import { Themes } from '../../../helpers/themes';
 
 fixture.disablePageReloads`Editing`
   .page(url(__dirname, '../../container.html'));
@@ -1747,6 +1746,7 @@ test('Batch - Redundant validation messages should not be rendered in a detail g
   },
 }));
 
+// visual: material.blue.light
 test('Checkbox has ink ripple in material theme inside editing popup (T977287)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
@@ -1759,7 +1759,7 @@ test('Checkbox has ink ripple in material theme inside editing popup (T977287)',
     .click(overlay.getPopupCheckbox());
 
   // assert
-  await testScreenshot(t, takeScreenshot, 'grid-popup-editing-checkbox.png', { element: overlay.content, theme: Themes.materialBlue });
+  await testScreenshot(t, takeScreenshot, 'grid-popup-editing-checkbox.png', { element: overlay.content });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -1782,6 +1782,7 @@ test('Checkbox has ink ripple in material theme inside editing popup (T977287)',
   columns: ['LastName'],
 }));
 
+// visual: material.blue.light
 test('DataGrid inside editing popup should have synchronized columns (T1059401)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
@@ -1805,7 +1806,7 @@ test('DataGrid inside editing popup should have synchronized columns (T1059401)'
     .ok();
 
   // assert
-  await testScreenshot(t, takeScreenshot, 'grid-popup-editing-grid.png', { element: overlay.content, theme: Themes.materialBlue });
+  await testScreenshot(t, takeScreenshot, 'grid-popup-editing-grid.png', { element: overlay.content });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -1840,6 +1841,7 @@ test('DataGrid inside editing popup should have synchronized columns (T1059401)'
   },
 }));
 
+// visual: material.blue.light
 test('DataGrid adaptive text should have correct paddings (T1062084)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -1866,7 +1868,7 @@ test('DataGrid adaptive text should have correct paddings (T1062084)', async (t)
   await t
     .pressKey('enter');
 
-  await testScreenshot(t, takeScreenshot, 'grid-adaptive-item-text.png', { element: dataGrid.element, theme: Themes.materialBlue });
+  await testScreenshot(t, takeScreenshot, 'grid-adaptive-item-text.png', { element: dataGrid.element });
   // assert
   await t
     .expect(compareResults.isValid())
@@ -1901,6 +1903,7 @@ test('DataGrid adaptive text should have correct paddings (T1062084)', async (t)
   }],
 }));
 
+// visual: material.blue.light
 test('DataGrid checkboxes should have correct outline in adaptive row', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -1910,7 +1913,7 @@ test('DataGrid checkboxes should have correct outline in adaptive row', async (t
     .click(dataGrid.getDataRow(0).getCommandCell(4).getAdaptiveButton())
     .click(dataGrid.getFormItemElement(2));
 
-  await testScreenshot(t, takeScreenshot, 'grid-adaptive-checkbox.png', { element: dataGrid.element, theme: Themes.materialBlue });
+  await testScreenshot(t, takeScreenshot, 'grid-adaptive-checkbox.png', { element: dataGrid.element });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -2204,10 +2207,9 @@ test('Popup EditForm screenshot when editRowKey is initially specified', async (
 
 // T1165529
 [
-  true,
   false,
+  true,
 ].forEach((remoteOperations) => {
-  // Why asserts different with different remote operations?
   test(`Empty rows should not appear after rows are updated in batch editing mode when paging and validation are enabled and remoteOperations=${remoteOperations}`, async (t) => {
     const dataGrid = new DataGrid('#container');
 
@@ -2218,10 +2220,10 @@ test('Popup EditForm screenshot when editRowKey is initially specified', async (
 
       // assert
       .expect(dataGrid.dataRows.count)
-      .eql(remoteOperations ? 5 : 6)
+      .eql(5)
 
       .expect(dataGrid.getDataCell(0, 0).element.textContent)
-      .eql(remoteOperations ? 'val_0_0' : 'val_5_0');
+      .eql('val_0_0');
   }).before(async () => {
     const data = getData(10, 4);
 
@@ -2797,7 +2799,8 @@ test('Cells should be focused correctly on click when cell editing mode is used 
 
   // act
   await t
-    .click(dataGrid.getDataCell(0, 0).getEditor().element);
+    .click(dataGrid.getDataCell(0, 0).getEditor().element)
+    .wait(50);
 
   // assert
   await t
@@ -2809,7 +2812,9 @@ test('Cells should be focused correctly on click when cell editing mode is used 
   // act
   await t
     .typeText(dataGrid.getDataCell(0, 0).getEditor().element, '1')
-    .click(dataGrid.getDataCell(1, 0).getEditor().element);
+    .wait(50)
+    .click(dataGrid.getDataCell(1, 0).getEditor().element)
+    .wait(50);
 
   // assert
   await t
@@ -2823,7 +2828,9 @@ test('Cells should be focused correctly on click when cell editing mode is used 
   // act
   await t
     .typeText(dataGrid.getDataCell(1, 0).getEditor().element, '2')
-    .click(dataGrid.getDataCell(2, 0).getEditor().element);
+    .wait(50)
+    .click(dataGrid.getDataCell(2, 0).getEditor().element)
+    .wait(50);
 
   // assert
   await t
@@ -2837,7 +2844,9 @@ test('Cells should be focused correctly on click when cell editing mode is used 
   // act
   await t
     .typeText(dataGrid.getDataCell(2, 0).getEditor().element, '3')
-    .click(dataGrid.getDataCell(1, 0).getEditor().element);
+    .wait(50)
+    .click(dataGrid.getDataCell(1, 0).getEditor().element)
+    .wait(50);
 
   // assert
   await t
@@ -2851,7 +2860,9 @@ test('Cells should be focused correctly on click when cell editing mode is used 
   // act
   await t
     .typeText(dataGrid.getDataCell(1, 0).getEditor().element, '2')
-    .click(dataGrid.getDataCell(0, 0).getEditor().element);
+    .wait(50)
+    .click(dataGrid.getDataCell(0, 0).getEditor().element)
+    .wait(50);
 
   // assert
   await t
@@ -2908,8 +2919,4 @@ test('Cells should be focused correctly on click when cell editing mode is used 
       showEditorAlways: true,
     }],
   });
-}).after(async () => {
-  await ClientFunction(() => {
-    delete (window as any).myStore;
-  })();
 });

@@ -11317,7 +11317,7 @@ declare module DevExpress.ui {
      */
     fileUploaderOptions?: Omit<
       DevExpress.ui.dxFileUploader.Properties,
-      'dialogTrigger' | 'showFileList' | 'uploadMode'
+      'dialogTrigger' | 'showFileList' | 'uploadMode' | 'value'
     >;
     /**
      * [descr:dxChatOptions.focusStateEnabled]
@@ -41518,15 +41518,15 @@ declare module DevExpress.viz {
      */
     export type PointInfo = BasePointInfo<piePointObject> & {
       /**
-       * [descr:PointInfo.percent]
+       * [descr:dxPieChartPointInfo.percent]
        */
       percent?: number;
       /**
-       * [descr:PointInfo.percentText]
+       * [descr:dxPieChartPointInfo.percentText]
        */
       percentText?: string;
       /**
-       * [descr:PointInfo.points]
+       * [descr:dxPieChartPointInfo.points]
        */
       points?: PointInfo;
     };

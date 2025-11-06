@@ -1336,6 +1336,10 @@ test('reorder column to left when adaptability is enabled and there are hidden c
   test(`reorder column when there are async templates and renderAsync = ${renderAsync}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+    await t.expect(dataGrid.isReady()).ok();
+    await t.wait(500); // wait for async templates to be rendered
+
     const firstHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
 
     await t
@@ -1351,6 +1355,7 @@ test('reorder column to left when adaptability is enabled and there are hidden c
       .expect(firstHeader.element.textContent)
       .contains('Field');
 
+    await t.debug();
     await testScreenshot(t, takeScreenshot, `reorder_column_when_there_are_async_templates_and_renderAsync_=_${renderAsync}.png`, { element: dataGrid.element });
 
     await t.expect(compareResults.isValid())

@@ -11,7 +11,7 @@ export const getThemePostfix = (theme?: string): string => {
 
 export const getCurrentTheme = async (t: TestController): Promise<string> => {
   // eslint-disable-next-line @stylistic/max-len
-  const currentTheme = await ClientFunction(() => (window as any).DevExpress.ui.themes.current()).with({ boundTestRun: t })();
+  const currentTheme = await ClientFunction(() => (window as any).DevExpress?.ui.themes.current()).with({ boundTestRun: t })();
 
   return currentTheme;
 };

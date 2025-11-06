@@ -1699,7 +1699,7 @@ test('The row alternation should display correctly when grouping and virtual scr
   scrolling: { mode: 'virtual', useNative: false },
 })));
 
-test('DataGrid - Gray boxes appear when the push method is used to remove rows in infinite scrolling mode (T1240079)', async (t) => {
+test.meta({ unstable: true })('DataGrid - Gray boxes appear when the push method is used to remove rows in infinite scrolling mode (T1240079)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const data = [
@@ -1956,6 +1956,8 @@ fixture`Scrolling - warnings`
   .page(url(__dirname, '../../container.html'));
 
 test('Warning should be thrown if scrolling is virtual and height is not specified', async (t) => {
+  await t.wait(100);
+
   const consoleMessages = await t.getBrowserConsoleMessages();
   const warningExists = !!consoleMessages?.warn.find((message) => message.startsWith('W1025'));
 

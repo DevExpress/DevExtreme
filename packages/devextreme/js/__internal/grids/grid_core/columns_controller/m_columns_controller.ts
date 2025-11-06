@@ -133,6 +133,8 @@ export class ColumnsController extends modules.Controller {
 
   public columnsChanged: any;
 
+  public aiColumnOptionChanged: any;
+
   public _columnChanges: any;
 
   protected _dataController!: DataController;
@@ -235,7 +237,7 @@ export class ColumnsController extends modules.Controller {
   }
 
   protected callbackNames() {
-    return ['columnsChanged'];
+    return ['columnsChanged', 'aiColumnOptionChanged'];
   }
 
   public getColumnByPath(path, columns?) {
@@ -1458,8 +1460,8 @@ export class ColumnsController extends modules.Controller {
         }
         columnOptionCore(that, column, option, value, notFireEvent);
       } else if (isObject(option)) {
-        each(option, (optionName, value) => {
-          columnOptionCore(that, column, optionName, value, notFireEvent);
+        each(option, (optionName, optionValue) => {
+          columnOptionCore(that, column, optionName, optionValue, notFireEvent);
         });
       }
 

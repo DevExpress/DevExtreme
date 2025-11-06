@@ -526,6 +526,44 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
 
             assert.strictEqual(this.sendButton.option('disabled'), true);
         });
+
+        QUnit.test('send button should be disabled after adding files and some of them fail validation', function(assert) {
+            this.reinit({
+                fileUploaderOptions: {
+                    uploadFile: () => {},
+                    allowedFileExtensions: ['.png'],
+                },
+            });
+            const fileUploader = this.getFileUploader();
+            fileUploader.option('value', [fakeFile, { name: 'img.jpg', size: 1 }]);
+            fileUploader.upload();
+
+            this.clock.tick();
+
+            assert.strictEqual(this.sendButton.option('disabled'), true, 'send button is disabled after adding file that fail validation');
+        });
+
+        QUnit.test('send button should not be disabled after removing file that fail validation', function(assert) {
+            this.reinit({
+                fileUploaderOptions: {
+                    uploadFile: () => {},
+                    allowedFileExtensions: ['.jpg'],
+                },
+            });
+            const fileUploader = this.getFileUploader();
+            fileUploader.option('value', [fakeFile]);
+            fileUploader.upload();
+
+            this.clock.tick();
+
+            assert.strictEqual(this.sendButton.option('disabled'), true, 'send button is disabled');
+
+            const $cancelButton = this.$element.find(`.${FILEUPLOADER_CANCEL_BUTTON_CLASS}`);
+
+            $cancelButton.trigger('dxclick');
+
+            assert.strictEqual(this.sendButton.option('disabled'), true, 'send button is not disabled');
+        });
     });
 
     QUnit.module('Informer integration', {

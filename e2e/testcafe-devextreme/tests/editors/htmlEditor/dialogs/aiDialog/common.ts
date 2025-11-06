@@ -16,7 +16,7 @@ const LOADINDICATOR_SEGMENT_INNER_CLASS = 'dx-loadindicator-segment-inner';
 
 const longResult = getLongText(false, 10);
 
-fixture.disablePageReloads`HtmlEditor: AIDialog`
+fixture`HtmlEditor: AIDialog`
   .page(url(__dirname, '../../../../container-extended.html'));
 
 export async function openAIDialog(
