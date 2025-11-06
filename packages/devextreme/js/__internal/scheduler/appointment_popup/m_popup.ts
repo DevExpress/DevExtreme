@@ -138,7 +138,6 @@ export class AppointmentPopup {
       if (canceled) {
         e.cancel = true;
       } else {
-        this.updateToolbarForMainGroup();
         this.updatePopupFullScreenMode();
       }
     });

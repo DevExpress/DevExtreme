@@ -1,4 +1,7 @@
 $(() => {
+  let form;
+  let $movieInfoContainer;
+
   $('#scheduler').dxScheduler({
     timeZone: 'America/Los_Angeles',
     dataSource: data,
@@ -12,10 +15,8 @@ $(() => {
     height: 600,
     groups: ['theatreId'],
     crossScrollingEnabled: true,
+    maxAppointmentsPerCell: 1,
     cellDuration: 20,
-    editing: {
-      allowAdding: false,
-    },
     resources: [{
       fieldExpr: 'movieId',
       dataSource: moviesData,
@@ -24,85 +25,88 @@ $(() => {
       fieldExpr: 'theatreId',
       dataSource: theatreData,
     }],
-    appointmentTooltipTemplate(model) {
-      return getTooltipTemplate(getMovieById(model.targetedAppointmentData.movieId));
+    appointmentTemplate,
+    appointmentTooltipTemplate: (model) => {
+      const movie = getMovieById(model.targetedAppointmentData.movieId);
+      return movieInfoTemplate(movie);
     },
-    appointmentTemplate(model) {
-      const movieInfo = getMovieById(model.targetedAppointmentData.movieId) || {};
+    onAppointmentFormOpening(e) {
+      form = e.form;
+      window.x = form;
 
-      return $(`${"<div class='showtime-preview'>"
-                        + '<div>'}${movieInfo.text}</div>`
-                        + `<div>Ticket Price: <strong>$${model.targetedAppointmentData.price}</strong>`
-                        + '</div>'
-                        + `<div>${DevExpress.localization.formatDate(model.targetedAppointmentData.displayStartDate, 'shortTime')
-                        } - ${DevExpress.localization.formatDate(model.targetedAppointmentData.displayEndDate, 'shortTime')
-                        }</div>`
-                    + '</div>');
+      form.on('fieldDataChanged', (e) => {
+        if (e.dataField === 'startDate') {
+          const movie = getMovieById(form.option('formData').movieId);
+          updateEndDate(form, movie);
+        }
+      });
     },
-    onAppointmentFormOpening(data) {
-      const { form } = data;
-      let movieInfo = getMovieById(data.appointmentData.movieId) || {};
-      let { startDate } = data.appointmentData;
-
-      form.option('items', [{
-        label: {
-          text: 'Movie',
-        },
-        editorType: 'dxSelectBox',
-        dataField: 'movieId',
-        editorOptions: {
-          items: moviesData,
-          displayExpr: 'text',
-          valueExpr: 'id',
-          onValueChanged(args) {
-            movieInfo = getMovieById(args.value);
-
-            form.updateData('director', movieInfo.director);
-            form.updateData('endDate', new Date(startDate.getTime() + 60 * 1000 * movieInfo.duration));
+    editing: {
+      allowAdding: false,
+      form: {
+        items: [
+          {
+            template: () => {
+              $movieInfoContainer = $('<div class="movie-info-container">');
+              return $movieInfoContainer;
+            },
           },
-        },
-      }, {
-        label: {
-          text: 'Director',
-        },
-        name: 'director',
-        editorType: 'dxTextBox',
-        editorOptions: {
-          value: movieInfo.director,
-          readOnly: true,
-        },
-      }, {
-        dataField: 'startDate',
-        editorType: 'dxDateBox',
-        editorOptions: {
-          width: '100%',
-          type: 'datetime',
-          onValueChanged(args) {
-            startDate = args.value;
+          {
+            itemType: 'group',
+            colCount: 2,
+            colCountByScreen: { xs: 2 },
+            items: [
+              {
+                label: { text: 'Movie' },
+                colSpan: 1,
+                editorType: 'dxSelectBox',
+                dataField: 'movieId',
+                editorOptions: {
+                  items: moviesData,
+                  displayExpr: 'text',
+                  valueExpr: 'id',
+                  stylingMode: getEditorStylingMode(),
+                  onValueChanged(e) {
+                    const movie = getMovieById(e.value);
 
-            form.updateData('endDate', new Date(startDate.getTime() + 60 * 1000 * movieInfo.duration));
+                    const $movieInfo = movieInfoTemplate(movie);
+                    $movieInfoContainer.empty().append($movieInfo);
+
+                    if (!form) {
+                      return;
+                    }
+
+                    form.updateData('director', movie.director);
+                    updateEndDate(form, movie);
+                  },
+                  onContentReady: (e) => {
+                    e.component.option('stylingMode', getEditorStylingMode());
+                  },
+                },
+              },
+              {
+                label: { text: 'Price' },
+                colSpan: 1,
+                editorType: 'dxSelectBox',
+                dataField: 'price',
+                editorOptions: {
+                  items: [5, 10, 15, 20],
+                  displayExpr: (value) => `$${value}`,
+                  stylingMode: getEditorStylingMode(),
+                  onContentReady: (e) => {
+                    e.component.option('stylingMode', getEditorStylingMode());
+                  },
+                },
+              },
+            ],
           },
-        },
-      }, {
-        name: 'endDate',
-        dataField: 'endDate',
-        editorType: 'dxDateBox',
-        editorOptions: {
-          width: '100%',
-          type: 'datetime',
-          readOnly: true,
-        },
-      }, {
-        dataField: 'price',
-        editorType: 'dxRadioGroup',
-        editorOptions: {
-          dataSource: [5, 10, 15, 20],
-          itemTemplate(itemData) {
-            return `$${itemData}`;
+          'startDateGroup',
+          {
+            name: 'endDateGroup',
+            disabled: true,
           },
-        },
+        ],
       },
-      ]);
     },
   }).dxScheduler('instance');
 
@@ -112,20 +116,50 @@ $(() => {
       .toArray()[0];
   }
 
-  function getTooltipTemplate(movieData) {
-    return $(`${"<div class='movie-tooltip'>"
-                    + "<img src='"}${movieData.image}' />`
-                    + '<div class=\'movie-info\'>'
-                        + `<div class='movie-title'>${
-                          movieData.text} (${movieData.year})`
-                        + '</div>'
-                        + '<div>'
-                            + `Director: ${movieData.director
-                            }</div>`
-                        + '<div>'
-                            + `Duration: ${movieData.duration} minutes`
-                        + '</div>'
-                    + '</div>'
-                + '</div>');
+  function updateEndDate(form, movie) {
+    const { startDate } = form.option('formData');
+    const newEndDate = new Date(startDate.getTime() + 60 * 1000 * movie.duration);
+
+    form.updateData('endDate', newEndDate);
+  }
+
+  function appointmentTemplate(model) {
+    const { movieId, displayStartDate, displayEndDate, price } = model.targetedAppointmentData;
+    const movie = getMovieById(movieId) || {};
+
+    return $(`
+      <div class='movie-preview'>
+        <div class='movie-preview-image'>
+          <img src='${movie.image}' />
+        </div>
+        <div class='movie-details'>
+          <div class='title'>${movie.text}</div>
+          <div>Ticket Price: <b>$${price}</b></div>
+          <div>
+            ${DevExpress.localization.formatDate(displayStartDate, 'shortTime')}
+            - ${DevExpress.localization.formatDate(displayEndDate, 'shortTime')}
+          </div>
+        </div>
+      </div>
+    `);
+  }
+
+  function movieInfoTemplate(movie) {
+    return $(`
+      <div class='movie-info'>
+        <div class='movie-preview-image'>
+          <img src='${movie.image}' />
+        </div>
+        <div class='movie-details'>
+          <div class='title'>${movie.text} (${movie.year})</div>
+          <div>Director: ${movie.director}</div>
+          <div>Duration: ${movie.duration} minutes</div>
+        </div>
+      </div>
+    `);
+  }
+
+  function getEditorStylingMode() {
+    return $('.dx-theme-fluent, .dx-theme-material').length > 0 ? 'filled' : 'outlined';
   }
 });

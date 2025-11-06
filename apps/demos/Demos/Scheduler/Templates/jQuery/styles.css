@@ -1,38 +1,56 @@
 .dx-tooltip-wrapper .dx-overlay-content .dx-popup-content {
-  padding: 14px;
+  padding: 12px;
 }
 
-.showtime-preview > div:first-child {
+.dx-scheduler-appointment-popup .dx-overlay-content {
+  max-width: 440px !important;
+}
+
+.movie-preview-image {
+  height: 80px;
+  width: 80px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.movie-preview-image img {
+  width: 100%;
+  position: relative;
+  top: -25%;
+}
+
+.movie-preview {
+  display: flex;
+  gap: 8px;
+}
+
+.movie-preview > .movie-details {
   font-size: 12px;
-  white-space: normal;
+  color: #242424;
 }
 
-.showtime-preview > div:not(:first-child) {
-  font-size: 11px;
-  white-space: normal;
+.movie-preview > .movie-details > .title {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 4px;
 }
 
-.movie-tooltip .movie-info {
-  display: inline-block;
-  margin-left: 10px;
-  vertical-align: top;
+.movie-info-container {
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.movie-info {
+  display: flex;
+  gap: 12px;
+}
+
+.movie-info .movie-details {
   text-align: left;
 }
 
-.movie-tooltip img {
-  height: 80px;
-  margin-bottom: 10px;
-}
-
-.movie-tooltip .movie-title {
-  font-size: 1.5em;
-  line-height: 40px;
-}
-
-.long-title h3 {
-  font-family: 'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana;
-  font-weight: 200;
-  font-size: 28px;
-  text-align: center;
-  margin-bottom: 20px;
+.movie-info .movie-details > .title {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 8px;
 }

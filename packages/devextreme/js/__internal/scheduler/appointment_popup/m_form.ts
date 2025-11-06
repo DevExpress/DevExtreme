@@ -111,16 +111,16 @@ const SUBJECT_GROUP_NAME = 'subjectGroup';
 const REPEAT_GROUP_NAME = 'repeatGroup';
 const DESCRIPTION_GROUP_NAME = 'descriptionGroup';
 
-const START_DATE_EDITOR_NAME = 'startDate';
-const START_TIME_EDITOR_NAME = 'startTime';
-const END_DATE_EDITOR_NAME = 'endDate';
-const END_TIME_EDITOR_NAME = 'endTime';
-const REPEAT_EDITOR_NAME = 'repeat';
-const ALL_DAY_EDITOR_NAME = 'allDay';
-const SUBJECT_EDITOR_NAME = 'subject';
-const DESCRIPTION_EDITOR_NAME = 'description';
-const START_DATE_TIMEZONE_EDITOR_NAME = 'startDateTimeZone';
-const END_DATE_TIMEZONE_EDITOR_NAME = 'endDateTimeZone';
+const START_DATE_EDITOR_NAME = 'startDateEditor';
+const START_TIME_EDITOR_NAME = 'startTimeEditor';
+const END_DATE_EDITOR_NAME = 'endDateEditor';
+const END_TIME_EDITOR_NAME = 'endTimeEditor';
+const REPEAT_EDITOR_NAME = 'repeatEditor';
+const ALL_DAY_EDITOR_NAME = 'allDayEditor';
+const SUBJECT_EDITOR_NAME = 'subjectEditor';
+const DESCRIPTION_EDITOR_NAME = 'descriptionEditor';
+const START_DATE_TIMEZONE_EDITOR_NAME = 'startDateTimeZoneEditor';
+const END_DATE_TIMEZONE_EDITOR_NAME = 'endDateTimeZoneEditor';
 
 const SUBJECT_ICON_NAME = 'subjectIcon';
 const DATE_ICON_NAME = 'dateIcon';
@@ -785,7 +785,10 @@ export class AppointmentForm {
       return;
     }
 
-    if (item.itemType === 'simple') {
+    const isSimpleItem = item.itemType === 'simple' || 'editorType' in item || 'editorOptions' in item;
+    const isGroupItem = 'items' in item;
+
+    if (isSimpleItem) {
       const simpleItem = item as SimpleItem;
       const stylingMode = isFluent(current()) ? 'filled' : undefined;
 
@@ -796,9 +799,8 @@ export class AppointmentForm {
       return;
     }
 
-    if (item.itemType === 'group') {
-      const groupItem = item as GroupItem;
-      groupItem.items?.forEach((child) => {
+    if (isGroupItem) {
+      item.items?.forEach((child) => {
         this.setStylingModeToEditors(child, showIcon);
       });
     }
