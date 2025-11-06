@@ -2,7 +2,7 @@ import $ from 'jquery';
 const { test } = QUnit;
 import 'ui/diagram';
 
-import DiagramCommandsManager from 'ui/diagram/diagram.commands_manager.js';
+import DiagramCommandsManager from '__internal/ui/diagram/diagram.commands_manager';
 
 const customCommands = [
     'copy',
