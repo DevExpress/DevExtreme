@@ -72,7 +72,7 @@ jobs:
       shell: bash
       env:
         NODE_OPTIONS: --max-old-space-size=8192
-      run: pnpx nx build devextreme --uglify
+      run: pnpx nx build devextreme
 
     - name: Zip artifacts
       working-directory: ./packages/devextreme

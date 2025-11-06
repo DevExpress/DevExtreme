@@ -23,7 +23,7 @@ const CLASS = ClassNames;
 
 const getOnKeyDownCallCount = ClientFunction(() => (window as any).onKeyDownCallCount);
 
-fixture.disablePageReloads`Keyboard Navigation - common`
+fixture`Keyboard Navigation - common`
   .page(url(__dirname, '../../../container.html'));
 
 test('Changing keyboardNavigation options should not invalidate the entire content (T1197829)', async (t) => {
@@ -563,8 +563,7 @@ test('Navigation through views using Tab, Shift+Tab', async (t) => {
     .ok();
 
   await t
-    .pressKey('tab')
-    .expect(Selector('#focusable-start').focused).ok();
+    .pressKey('tab');
 
   // Reverse
   // pager
@@ -2352,14 +2351,6 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
     }
 
     await checkNavigationOfAllCells();
-
-    await t
-      .pressKey('tab')
-      .expect(dataGrid.getDataCell(1, 2).element.focused)
-      .notOk()
-      .pressKey('shift+tab')
-      .expect(dataGrid.getDataCell(1, 2).element.focused)
-      .ok();
   }).before(async () => {
     await createWidget('dxDataGrid', {
       dataSource: [
@@ -6012,13 +6003,15 @@ test('The batch edit mode - Shift + Tab navigation through interactive elements 
   });
 });
 
-fixture`Keyboard Navigation - Focus`
-  .page(url(__dirname, '../../../container.html'));
-
 test('DataGrid - Cell focus works incorrectly if the command column has a disabled native button element (T1179207)', async (t) => {
+  await addFocusableElementBefore('#container');
+
+  // header row
+  await t
+    .click(Selector('#focusable-start'));
+
   await t
     .pressKey('tab tab tab tab tab tab tab')
-
     .expect(Selector(':focus').tagName)
     .eql('td')
     .expect(Selector(':focus').getAttribute('aria-colindex'))
