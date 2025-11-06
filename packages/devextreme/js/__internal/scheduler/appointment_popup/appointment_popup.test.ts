@@ -463,7 +463,7 @@ describe('Appointment Popup Form', () => {
 
       POM.popup.getBackButton().click();
 
-      expect(POM.popup.component.option('height')).toBeUndefined();
+      expect(POM.popup.component.option('height')).toBe('auto');
       expect(mainGroup.hasClass(CLASSES.mainGroupHidden)).toBe(false);
       expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(true);
     });
