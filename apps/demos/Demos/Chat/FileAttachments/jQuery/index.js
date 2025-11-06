@@ -46,24 +46,6 @@ $(() => {
         },
       }]);
     },
-    onMessageDeleted(e) {
-      const { message } = e;
-
-      dataSource.store().push([{
-        type: 'update',
-        key: message.id,
-        data: { isDeleted: true },
-      }]);
-    },
-    onMessageUpdated(e) {
-      const { message, text } = e;
-
-      dataSource.store().push([{
-        type: 'update',
-        key: message.id,
-        data: { text, isEdited: true },
-      }]);
-    },
     onAttachmentDownloadClick(e) {
       const { attachment } = e;
       if (!attachment?.url) return;
