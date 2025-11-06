@@ -201,7 +201,7 @@ class TextArea<
 
     if (maxHeight !== undefined) {
       const adjustedMaxHeight = this._getAdjustedMaxHeight(maxHeight, heightDifference);
-      const needScroll = this._isScrollNeeded(inputHeight, adjustedMaxHeight);
+      const needScroll = inputHeight > adjustedMaxHeight;
 
       inputHeight = Math.min(inputHeight, adjustedMaxHeight);
 
@@ -220,16 +220,6 @@ class TextArea<
     const adjustedMaxHeight = maxHeight - heightDifference;
 
     return adjustedMaxHeight;
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  _isScrollNeeded(
-    inputHeight: number,
-    adjustedMaxHeight: number,
-  ): boolean {
-    const needScroll = inputHeight > adjustedMaxHeight;
-
-    return needScroll;
   }
 
   _getMaxHeight(): number | undefined {
