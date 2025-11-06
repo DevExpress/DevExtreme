@@ -80,6 +80,8 @@ class ListEdit extends ListBase {
           } else {
             parent.downArrow(e);
           }
+        } else {
+          e.preventDefault();
         }
       }
     };
