@@ -5,7 +5,6 @@ import { ClientFunction } from 'testcafe';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { changeTheme } from '../../../../helpers/changeTheme';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Appointment Form: Main Form`
   .page(url(__dirname, '../../../container.html'));
@@ -85,7 +84,7 @@ const getResources = (withIcons = false) => ([
       priorityId: 1,
     };
 
-    safeSizeTest(`appointment main form (${theme})`, async (t) => {
+    test.meta({ browserSize: [1500, 1500] })(`appointment main form (${theme})`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       const appointmentPopup = await openAppointmentPopup(t, appointment, isRecurringAppointment);
@@ -110,7 +109,7 @@ const getResources = (withIcons = false) => ([
       await changeTheme('generic.light');
     });
 
-    safeSizeTest(`appointment main form with resources and timezones (${theme})`, async (t) => {
+    test.meta({ browserSize: [1500, 1500] })(`appointment main form with resources and timezones (${theme})`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       const appointmentPopup = await openAppointmentPopup(t, appointment, isRecurringAppointment);
@@ -123,7 +122,7 @@ const getResources = (withIcons = false) => ([
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }, [1500, 1500]).before(async () => {
+    }).before(async () => {
       await changeTheme(theme);
       await createWidget('dxScheduler', {
         dataSource: [appointment],
@@ -141,7 +140,7 @@ const getResources = (withIcons = false) => ([
   });
 });
 
-safeSizeTest('main form with resources that have icons', async (t) => {
+test.meta({ browserSize: [1500, 1500] })('main form with resources that have icons', async (t) => {
   const appointment = {
     text: 'Appointment',
     startDate: new Date('2021-04-26T16:30:00.000Z'),
@@ -163,7 +162,7 @@ safeSizeTest('main form with resources that have icons', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [1500, 1500]).before(() => createWidget('dxScheduler', {
+}).before(() => createWidget('dxScheduler', {
   dataSource: [],
   views: ['week'],
   currentView: 'week',

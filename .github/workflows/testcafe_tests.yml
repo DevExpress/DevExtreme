@@ -102,10 +102,8 @@ jobs:
           { componentFolder: "dataGrid/common", name: "dataGrid / common (3/5)", indices: "3/5" },
           { componentFolder: "dataGrid/common", name: "dataGrid / common (4/5)", indices: "4/5" },
           { componentFolder: "dataGrid/common", name: "dataGrid / common (5/5)", indices: "5/5" },
-          { componentFolder: "dataGrid/sticky/common", name: "dataGrid / sticky common" },
-          { componentFolder: "dataGrid/sticky/fixed", name: "dataGrid / sticky (1/3)", indices: "1/3" },
-          { componentFolder: "dataGrid/sticky/fixed", name: "dataGrid / sticky (2/3)", indices: "2/3" },
-          { componentFolder: "dataGrid/sticky/fixed", name: "dataGrid / sticky (3/3)", indices: "3/3" },
+          { componentFolder: "dataGrid/sticky", name: "dataGrid / sticky (1/2)", indices: "1/2" },
+          { componentFolder: "dataGrid/sticky", name: "dataGrid / sticky (2/2)", indices: "2/2" },
           { componentFolder: "cardView", name: "cardView" },
 
           # Scheduler tests need to be reworked to work in fluent theme
@@ -120,8 +118,7 @@ jobs:
           { componentFolder: "scheduler/timezones", name: "scheduler / timezones (Europe/Berlin)", timezone: "Europe/Berlin", theme: 'generic.light' },
           { componentFolder: "scheduler/timezones", name: "scheduler / timezones (America/Los_Angeles)", timezone: "America/Los_Angeles", theme: 'generic.light' },
 
-          { componentFolder: "editors", name: "editors (1/2)", indices: "1/2" },
-          { componentFolder: "editors", name: "editors (2/2)", indices: "2/2" },
+          { componentFolder: "editors", name: "editors" },
           { componentFolder: "navigation", name: "navigation" },
         ]
     runs-on: devextreme-shr2

@@ -20,7 +20,7 @@ const CLASSES = {
   formIcon: 'dx-scheduler-form-icon',
 
   recurrenceGroup: 'dx-scheduler-form-recurrence-group',
-  recurrenceHidden: 'dx-scheduler-form-recurrence-hidden',
+  recurrenceHidden: 'dx-scheduler-form-recurrence-group-hidden',
 
   frequencyEditor: 'dx-scheduler-form-recurrence-frequency-editor',
   byMonthEditor: 'dx-scheduler-form-recurrence-by-month-editor',

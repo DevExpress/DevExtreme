@@ -25,13 +25,12 @@ const createData = (count, innerCount) => {
   return result;
 };
 
-test.meta({ unstable: true })('Row fields overlap data fields if dataFieldArea is set to "row" and virtual scrolling is enabled (T1210807)', async (t) => {
+test('Row fields overlap data fields if dataFieldArea is set to "row" and virtual scrolling is enabled (T1210807)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const pivotGrid = new PivotGrid('#container');
   const firstHeaderRow = pivotGrid.getRowsArea(2).getCell(0);
   await t
     .click(firstHeaderRow);
-  await pivotGrid.scrollBy({ top: 30000 });
   await pivotGrid.scrollBy({ top: 30000 });
 
   await testScreenshot(t, takeScreenshot, 'rows_do_not_overlap_data_fields_if_virtual_scrolling_enabled_T1210807.png', { element: pivotGrid.element });
