@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../../../helpers/createWidget';
 import url from '../../../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../../../helpers/themeUtils';
 import { changeTheme } from '../../../../../../helpers/changeTheme';
 
 fixture.disablePageReloads`Scheduler: Material theme without all-day panel`
@@ -11,10 +12,12 @@ test('Week view without all-day panel should be rendered correctly', async (t) =
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t
-    .expect(await takeScreenshot('week-without-all-day-panel.png', scheduler.workSpace))
-    .ok()
+  await testScreenshot(t, takeScreenshot, 'week-without-all-day-panel.png', {
+    element: scheduler.workSpace,
+    theme: 'material.blue.light',
+  });
 
+  await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {

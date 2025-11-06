@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import url from '../../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`DataSource`
   .page(url(__dirname, '../../../../container.html'));
@@ -13,12 +14,16 @@ test('Appointment key should be deleted when removing an appointment from series
 
   await t
     .doubleClick(scheduler.getAppointmentByIndex(1).element)
-    .click(scheduler.appointmentPopup.saveButton.element)
+    .click(scheduler.appointmentPopup.saveButton.element);
 
-    .expect(await takeScreenshot('exclude-appointment-from-series-via-form-editing.png', scheduler.workSpace))
-    .ok()
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'exclude-appointment-from-series-via-form-editing.png',
+    { element: scheduler.workSpace },
+  );
 
-    .expect(compareResults.isValid())
+  await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
   const initScheduler = ClientFunction(() => {
