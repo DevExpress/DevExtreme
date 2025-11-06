@@ -408,7 +408,13 @@ class ChatTextArea extends TextArea<Properties> {
   }
 
   _getMaxHeight(): number | undefined {
-    const maxHeight = parseFloat(this._input().css('maxHeight') ?? '0');
+    const cssValue = this._input().css('maxHeight');
+
+    if (!cssValue || cssValue === 'none') {
+      return undefined;
+    }
+
+    const maxHeight = parseFloat(cssValue);
 
     return maxHeight;
   }
