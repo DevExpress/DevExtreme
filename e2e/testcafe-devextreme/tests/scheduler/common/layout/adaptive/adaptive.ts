@@ -3,7 +3,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 import { ADAPTIVE_SIZE } from '../../const';
-import { changeTheme } from '../../../../../helpers/changeTheme';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
 import {
   createDataSetForScreenShotTests,
   resourceDataSource,
@@ -26,97 +26,90 @@ const createScheduler = async (
   });
 };
 
-['generic.light', 'material.blue.light', 'fluent.blue.light'].forEach((theme) => {
-  const themePrefix = theme.split('.')[0];
+[false, true].forEach((rtlEnabled) => {
+  [false, true].forEach((crossScrollingEnabled) => {
+    test.meta({ browserSize: ADAPTIVE_SIZE })(`Adaptive views layout test, crossScrollingEnabled=${crossScrollingEnabled}${rtlEnabled ? 'in RTL' : ''}`, async (t) => {
+      const scheduler = new Scheduler('#container');
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  [false, true].forEach((rtlEnabled) => {
-    [false, true].forEach((crossScrollingEnabled) => {
-      test.meta({ browserSize: ADAPTIVE_SIZE })(`Adaptive views layout test in ${themePrefix} theme, crossScrollingEnabled=${crossScrollingEnabled}${rtlEnabled ? 'in RTL' : ''}`, async (t) => {
-        const scheduler = new Scheduler('#container');
-        const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+      // eslint-disable-next-line no-restricted-syntax
+      for (const view of views) {
+        await scheduler.option('currentView', view);
 
-        // eslint-disable-next-line no-restricted-syntax
-        for (const view of views) {
-          await scheduler.option('currentView', view);
+        await testScreenshot(
+          t,
+          takeScreenshot,
+          `view=${view}-crossScrolling=${crossScrollingEnabled}${rtlEnabled ? '-rtl' : ''}.png`,
+          { element: scheduler.workSpace },
+        );
+      }
 
-          await t.expect(
-            await takeScreenshot(`${themePrefix}-view=${view}-crossScrolling=${crossScrollingEnabled}${rtlEnabled ? '-rtl' : ''}.png`, scheduler.workSpace),
-          ).ok();
-        }
-
-        await t.expect(compareResults.isValid())
-          .ok(compareResults.errorMessages());
-      }).before(async () => {
-        await changeTheme(theme);
-
-        await createScheduler({
-          views,
-          currentView: 'day',
-          crossScrollingEnabled,
-          rtlEnabled,
-        });
-      }).after(async () => {
-        await changeTheme('generic.light');
+      await t.expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async () => {
+      await createScheduler({
+        views,
+        currentView: 'day',
+        crossScrollingEnabled,
+        rtlEnabled,
       });
+    });
 
-      test.meta({ browserSize: ADAPTIVE_SIZE })(`Adaptive views layout test in ${themePrefix} theme, crossScrollingEnabled=${crossScrollingEnabled} when horizontal grouping${rtlEnabled ? ' and RTL are' : ' is'} used`, async (t) => {
-        const scheduler = new Scheduler('#container');
-        const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    test.meta({ browserSize: ADAPTIVE_SIZE })(`Adaptive views layout test crossScrollingEnabled=${crossScrollingEnabled} when horizontal grouping${rtlEnabled ? ' and RTL are' : ' is'} used`, async (t) => {
+      const scheduler = new Scheduler('#container');
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-        // eslint-disable-next-line no-restricted-syntax
-        for (const view of views) {
-          await scheduler.option('currentView', view);
+      // eslint-disable-next-line no-restricted-syntax
+      for (const view of views) {
+        await scheduler.option('currentView', view);
 
-          await t.expect(
-            await takeScreenshot(`${themePrefix}-view=${view}-crossScrolling=${crossScrollingEnabled}-horizontal${rtlEnabled ? '-rtl' : ''}.png`, scheduler.workSpace),
-          ).ok();
-        }
+        await testScreenshot(
+          t,
+          takeScreenshot,
+          `view=${view}-crossScrolling=${crossScrollingEnabled}-horizontal${rtlEnabled ? '-rtl' : ''}.png`,
+          { element: scheduler.workSpace },
+        );
+      }
 
-        await t.expect(compareResults.isValid())
-          .ok(compareResults.errorMessages());
-      }).before(async () => {
-        await changeTheme(theme);
-
-        await createScheduler({
-          views: horizontalViews,
-          currentView: 'day',
-          crossScrollingEnabled,
-          rtlEnabled,
-          groups: ['priorityId'],
-          resources: resourceDataSource,
-        });
-      }).after(async () => {
-        await changeTheme('generic.light');
+      await t.expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async () => {
+      await createScheduler({
+        views: horizontalViews,
+        currentView: 'day',
+        crossScrollingEnabled,
+        rtlEnabled,
+        groups: ['priorityId'],
+        resources: resourceDataSource,
       });
+    });
 
-      test.meta({ browserSize: ADAPTIVE_SIZE })(`Adaptive views layout test in ${themePrefix} theme, crossScrollingEnabled=${crossScrollingEnabled} when vertical grouping${rtlEnabled ? ' and RTL are' : ' is'} used`, async (t) => {
-        const scheduler = new Scheduler('#container');
-        const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    test.meta({ browserSize: ADAPTIVE_SIZE })(`Adaptive views layout test, crossScrollingEnabled=${crossScrollingEnabled} when vertical grouping${rtlEnabled ? ' and RTL are' : ' is'} used`, async (t) => {
+      const scheduler = new Scheduler('#container');
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-        // eslint-disable-next-line no-restricted-syntax
-        for (const view of views) {
-          await scheduler.option('currentView', view);
+      // eslint-disable-next-line no-restricted-syntax
+      for (const view of views) {
+        await scheduler.option('currentView', view);
 
-          await t.expect(
-            await takeScreenshot(`${themePrefix}-view=${view}-crossScrolling=${crossScrollingEnabled}-vertical${rtlEnabled ? '-rtl' : ''}.png`, scheduler.workSpace),
-          ).ok();
-        }
+        await testScreenshot(
+          t,
+          takeScreenshot,
+          `view=${view}-crossScrolling=${crossScrollingEnabled}-vertical${rtlEnabled ? '-rtl' : ''}.png`,
+          { element: scheduler.workSpace },
+        );
+      }
 
-        await t.expect(compareResults.isValid())
-          .ok(compareResults.errorMessages());
-      }).before(async () => {
-        await changeTheme(theme);
-
-        await createScheduler({
-          views: verticalViews,
-          currentView: 'day',
-          crossScrollingEnabled,
-          rtlEnabled,
-          groups: ['priorityId'],
-          resources: resourceDataSource,
-        });
-      }).after(async () => {
-        await changeTheme('generic.light');
+      await t.expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async () => {
+      await createScheduler({
+        views: verticalViews,
+        currentView: 'day',
+        crossScrollingEnabled,
+        rtlEnabled,
+        groups: ['priorityId'],
+        resources: resourceDataSource,
       });
     });
   });

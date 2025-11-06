@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Layout:Appointments:two-schedulers`
   .page(url(__dirname, '../../../../container.html'));
@@ -10,14 +11,12 @@ test('Appointment\'s dragging should be work properly, if on page placed two dxS
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t
-    .expect(await takeScreenshot('before-dragging(T1020820).png'))
-    .ok();
+  await testScreenshot(t, takeScreenshot, 'before-dragging(T1020820).png');
 
   await t
-    .drag(scheduler.getAppointment('Install New Database').element, -100, -100, { speed: 0.5 })
-    .expect(await takeScreenshot('after-dragging(T1020820).png'))
-    .ok();
+    .drag(scheduler.getAppointment('Install New Database').element, -100, -100, { speed: 0.5 });
+
+  await testScreenshot(t, takeScreenshot, 'after-dragging(T1020820).png');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
