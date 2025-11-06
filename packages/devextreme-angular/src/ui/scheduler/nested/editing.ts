@@ -90,10 +90,10 @@ export class DxoSchedulerEditingComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get popup(): any {
+    get popup(): Record<string, any> {
         return this._getOption('popup');
     }
-    set popup(value: any) {
+    set popup(value: Record<string, any>) {
         this._setOption('popup', value);
     }
 

@@ -403,7 +403,7 @@ type IEditingProps = React.PropsWithChildren<{
     onCanceled?: ((formData: any) => void);
     onSaved?: ((formData: any) => void);
   };
-  popup?: any;
+  popup?: Record<string, any>;
 }>
 const _componentEditing = (props: IEditingProps) => {
   return React.createElement(NestedOption<IEditingProps>, {
