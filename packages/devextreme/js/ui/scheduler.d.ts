@@ -668,7 +668,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       /**
        * @docid
        * @public
-       * @type PopupProperties
+       * @type dxPopupOptions
        */
       popup?: PopupProperties;
     };
