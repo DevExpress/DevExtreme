@@ -64,26 +64,26 @@ $(() => {
 
     const popoverId = `popover-${ID}`;
     const popoverWrapper = $('<div>');
-    
+
     const licenseTitle = $('<div>')
       .addClass('license-info__title')
       .text('License Information');
-    
+
     const licenseContent = $('<div>')
       .addClass('license-info__content');
-    
+
     const imageParagraph = $('<p>')
       .append($('<strong>').text('Image: '))
       .append(`${TrademarkName} ${Name}`);
-    
+
     const licenseParagraph = $('<p>')
       .append($('<strong>').text('Image licensed under: '))
       .append(LicenseName);
-    
+
     const authorParagraph = $('<p>')
       .append($('<strong>').text('Author: '))
       .append(Author);
-    
+
     const sourceLink = `https://${Source}`;
     const sourceParagraph = $('<p>')
       .append($('<strong>').text('Source link: '))
@@ -91,13 +91,13 @@ $(() => {
         $('<a>', {
           href: sourceLink,
           target: '_blank',
-        }).text(sourceLink)
+        }).text(sourceLink),
       );
-    
+
     const editsParagraph = $('<p>')
       .append($('<strong>').text('Edits: '))
       .append(Edits);
-    
+
     licenseContent.append(imageParagraph, licenseParagraph, authorParagraph, sourceParagraph, editsParagraph);
     popoverWrapper.append(licenseTitle, licenseContent);
 
@@ -129,14 +129,14 @@ $(() => {
   $('#gridContainer').dxDataGrid({
     dataSource: vehicles,
     paging: {
-        pageSize: 10,
+      pageSize: 10,
     },
     aiIntegration,
     grouping: {
-      contextMenuEnabled: false
+      contextMenuEnabled: false,
     },
     groupPanel: {
-      visible: false
+      visible: false,
     },
     columns: [
       {
@@ -177,7 +177,7 @@ $(() => {
       },
       {
         name: 'AI column',
-        caption: 'Origin Country',
+        caption: 'AI Column',
         type: 'ai',
         ai: {
           prompt: 'Identify the country where this vehicle model is originally manufactured or developed, based on its brand, model, and specifications. Respond with the country name and the country flag icon.',
