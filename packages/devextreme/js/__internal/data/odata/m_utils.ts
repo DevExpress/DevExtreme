@@ -447,11 +447,11 @@ const serializeValueV2 = (value, fieldType) => {
   return String(value);
 };
 
-export const serializeValue = (value, protocolVersion, fieldType) => {
+export const serializeValue = (value, protocolVersion, fieldType?) => {
   switch (protocolVersion) {
     case 2:
     case 3:
-      return serializeValueV2(value);
+      return serializeValueV2(value, fieldType);
     case 4:
       return serializeValueV4(value, fieldType);
     default: throw errors.Error('E4002');
