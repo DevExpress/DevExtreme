@@ -5,6 +5,8 @@ body {
 .dx-scrollable-scroll { visibility: hidden !important; }
 
 .dx-theme-material * {
+  /* stylelint-disable-next-line font-family-name-quotes */
+  font-family: 'RobotoFallback', sans-serif !important;
   -webkit-font-smoothing: antialiased !important;
   
   /* text-rendering: optimizeLegibility !important; */
