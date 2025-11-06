@@ -1,12 +1,5 @@
-:root {
-  --generic-light-ai-bg: #DDDDDD;
-  --generic-dark-ai-bg: #343434;
-  --material-light-ai-bg: #E0E0E0;
-  --material-dark-ai-bg: #3E3E47;
-  --fluent-light-ai-bg: #E0E0E0;
-  --fluent-dark-ai-bg: #1F1F1F;
-  --category-wrapper-light-bg: #E0E0E0;
-  --category-wrapper-dark-bg: #525252;
+div.dx-datagrid .ai__cell {
+  background-color: var(--dx-color-main-bg);
 }
 
 .trademark__wrapper {
@@ -77,36 +70,6 @@
 .license-info__content strong {
     color: #333;
     font-weight: 500;
-}
-
-.dx-theme-generic.dx-color-scheme-light .ai__cell,
-.dx-theme-generic.dx-color-scheme-light .dx-command-ai {
-  background-color: var(--generic-light-ai-bg);
-}
-
-.dx-theme-generic.dx-color-scheme-dark .ai__cell,
-.dx-theme-generic.dx-color-scheme-dark .dx-command-ai {
-  background-color: var(--generic-dark-ai-bg);
-}
-
-.dx-theme-material.dx-color-scheme-light .ai__cell,
-.dx-theme-material.dx-color-scheme-light .dx-command-ai {
-  background-color: var(--material-light-ai-bg);
-}
-
-.dx-theme-material.dx-color-scheme-dark .ai__cell,
-.dx-theme-material.dx-color-scheme-dark .dx-command-ai {
-  background-color: var(--material-dark-ai-bg);
-}
-
-.dx-theme-fluent.dx-color-scheme-light .ai__cell,
-.dx-theme-fluent.dx-color-scheme-light .dx-command-ai {
-  background-color: var(--fluent-light-ai-bg);
-}
-
-.dx-theme-fluent.dx-color-scheme-dark .ai__cell,
-.dx-theme-fluent.dx-color-scheme-dark .dx-command-ai {
-  background-color: var(--fluent-dark-ai-bg);
 }
 
 .dx-color-scheme-light .category__wrapper {

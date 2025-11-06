@@ -225,9 +225,7 @@ $(() => {
         width: 200,
         fixed: true,
         fixedPosition: 'right',
-        cellTemplate: ($container) => {
-          $container.addClass('ai__cell');
-        },
+        cssClass: 'ai__cell',
       },
     ],
   });
