@@ -49,6 +49,7 @@ div.dx-datagrid .ai__cell {
   display: inline-block;
   padding: 2px 8px;
   border-radius: 24px;
+  background-color: var(--dx-color-separator);
 }
 
 .license-info__title {
@@ -70,12 +71,4 @@ div.dx-datagrid .ai__cell {
 .license-info__content strong {
     color: #333;
     font-weight: 500;
-}
-
-.dx-color-scheme-light .category__wrapper {
-  background-color: var(--category-wrapper-light-bg);
-}
-
-.dx-color-scheme-dark .category__wrapper {
-  background-color: var(--category-wrapper-dark-bg);
 }
