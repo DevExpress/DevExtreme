@@ -1,26 +1,4 @@
 $(() => {
-  const dataSource = [];
-
-  vehicles.forEach((item) => {
-    if (!dataSource.some((t) => t.ID === item.TrademarkID)) {
-      dataSource.push({
-        TLID: item.TrademarkID,
-        Manufacturer: item.TrademarkName,
-        Name: '',
-        Price: '',
-        CategoryName: '',
-        BodyStyleName: '',
-        ParentID: 0,
-      });
-    }
-
-    dataSource.push({
-      ...item,
-      TLID: item.ID + 10000,
-      ParentID: item.TrademarkID,
-    });
-  });
-
   const aiService = new AzureOpenAI({
     dangerouslyAllowBrowser: true,
     deployment,
@@ -116,7 +94,7 @@ $(() => {
     const imgWrapper = $('<div>').addClass('trademark__img-wrapper');
     const img = $('<img>').addClass('trademark__img');
     img.attr({
-      src: `../../../../images/vehicles/image_${ID}.png`,
+      src: `../../../../images/vehicles/image_${(ID % 100)}.png`,
       alt: `${TrademarkName} ${Name}`,
     });
 
@@ -157,12 +135,19 @@ $(() => {
     return $('<div>').addClass('category__wrapper').text(CategoryName);
   };
 
-  $('#gridContainer').dxTreeList({
-    dataSource,
-    keyExpr: 'TLID',
-    parentIdExpr: 'ParentID',
-    expandedRowKeys: [1, 3],
+  $('#treeList').dxTreeList({
+    dataSource: vehicles,
+    keyExpr: 'ID',
+    parentIdExpr: 'CategoryID',
+    expandedRowKeys: [1],
     aiIntegration,
+    scrolling: {
+      mode: 'standard',
+    },
+    paging: {
+      enabled: true,
+      pageSize: 10,
+    },
     grouping: {
       contextMenuEnabled: false,
     },

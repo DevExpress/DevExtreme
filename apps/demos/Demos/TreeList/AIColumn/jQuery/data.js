@@ -4,8 +4,26 @@ const endpoint = 'https://public-api.devexpress.com/demo-openai';
 const apiKey = 'DEMO';
 
 const vehicles = [
+  // Category records
   {
     ID: 1,
+    Manufacturer: 'Passenger Car',
+  },
+  {
+    ID: 2,
+    Manufacturer: 'Crossover & SUV',
+  },
+  {
+    ID: 3,
+    Manufacturer: 'Truck',
+  },
+  {
+    ID: 4,
+    Manufacturer: 'Minivan',
+  },
+  // Vehicle records
+  {
+    ID: 101,
     TrademarkName: 'Toyota',
     TrademarkID: 1,
     Name: 'Venza',
@@ -32,7 +50,7 @@ const vehicles = [
     Source: 'devexpress.com/carimage44',
   },
   {
-    ID: 2,
+    ID: 102,
     TrademarkName: 'Ford',
     TrademarkID: 2,
     Name: 'Edge',
@@ -59,7 +77,7 @@ const vehicles = [
     Source: 'devexpress.com/carimage45',
   },
   {
-    ID: 3,
+    ID: 103,
     TrademarkName: 'Nissan',
     TrademarkID: 3,
     Name: 'Murano',
@@ -86,7 +104,7 @@ const vehicles = [
     Source: 'devexpress.com/carimage46',
   },
   {
-    ID: 4,
+    ID: 104,
     TrademarkName: 'Honda',
     TrademarkID: 4,
     Name: 'Crosstour',
