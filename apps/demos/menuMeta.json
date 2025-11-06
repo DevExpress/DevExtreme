@@ -4113,7 +4113,7 @@
           },
           {
             "Name": "File Attachments",
-            "Equivalents":  "Files Sending, Messages with files, Files Attached, Message Attachments, Document Attachments",
+            "Equivalents": "Files Sending, Messages with files, Files Attached, Message Attachments, Document Attachments",
             "Demos": [
               {
                 "Title": "File Attachments",

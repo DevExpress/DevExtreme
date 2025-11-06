@@ -23,7 +23,7 @@ const createEmptyAttachment = (name, type) => {
   return {
     name,
     url,
-    size: 0,
+    size: 1024 * 10,
   };
 };
 
@@ -53,10 +53,4 @@ const messages = [
     text: 'Thanks for the screenshots!  I can help you with that. Please refer to the attached file for instructions to restore access.',
     attachments: [instructions],
   },
-];
-
-const editingOptions = [
-  { text: 'Enabled', key: 'enabled' },
-  { text: 'Disabled', key: 'disabled' },
-  { text: 'Only the last message (custom)', key: 'custom' },
 ];
