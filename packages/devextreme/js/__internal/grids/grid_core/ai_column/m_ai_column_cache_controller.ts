@@ -24,12 +24,9 @@ export class AIColumnCacheController extends Controller {
     columnName: string,
     data: Record<PropertyKey, string>,
   ): void {
-    let columnCache = this.cache[columnName];
+    const columnCache = this.cache[columnName] ?? {};
 
-    if (!columnCache) {
-      columnCache = {};
-      this.cache[columnName] = columnCache;
-    }
+    this.cache[columnName] = columnCache;
 
     Object.entries(data).forEach(([key, value]) => {
       columnCache[key] = value;
