@@ -718,3 +718,45 @@ test.clientScripts([
     (window as any).MockDate.reset();
   })();
 });
+
+test.clientScripts([
+  { module: 'mockdate' },
+  { content: 'window.MockDate = MockDate;' },
+])(`recurrence settings opened in readonly mode (${theme})`, async (t) => {
+  await ClientFunction(() => {
+    (window as any).MockDate.set('2025/10/29');
+  })();
+
+  const appointment = {
+    text: 'Readonly Recurrent Appointment',
+    startDate: new Date('2024-01-01T10:00:00'),
+    endDate: new Date('2024-01-01T11:00:00'),
+    recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=10',
+  };
+
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const appointmentPopup = await openAppointmentPopup(t, appointment, true);
+  await appointmentPopup.openRecurrenceSettings(t);
+
+  await takeScreenshot(
+    `scheduler__recurrence-form__readonly-mode(theme=${theme})`,
+    appointmentPopup.recurrence.group,
+  );
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxScheduler', {
+  dataSource: [],
+  views: ['week'],
+  currentView: 'week',
+  currentDate: new Date(2024, 0, 1),
+  editing: {
+    allowUpdating: false,
+  },
+})).after(async () => {
+  await ClientFunction(() => {
+    (window as any).MockDate.reset();
+  })();
+});

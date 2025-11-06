@@ -436,6 +436,29 @@ describe('Appointment Popup Form', () => {
   });
 
   describe('Recurrence', () => {
+    it('should allow opening recurrence settings when allowUpdating is false', async () => {
+      const appointment = {
+        text: 'Recurrent Appointment',
+        startDate: new Date(2017, 4, 1, 9, 30),
+        endDate: new Date(2017, 4, 1, 11),
+        recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=10',
+      };
+
+      const { POM, scheduler } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: { allowUpdating: false },
+      });
+
+      scheduler.showAppointmentPopup(appointment);
+
+      const recurrenceGroup = $(POM.popup.recurrenceGroup);
+      expect(recurrenceGroup.hasClass('dx-scheduler-form-recurrence-hidden')).toBe(true);
+
+      POM.popup.openRecurrenceSettings();
+
+      expect(recurrenceGroup.hasClass('dx-scheduler-form-recurrence-hidden')).toBe(false);
+    });
+
     it('Recurrence editor container should be visible after changing its visibility value', async () => {
       const appointment = {
         text: 'Test Appointment',

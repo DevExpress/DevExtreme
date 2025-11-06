@@ -170,3 +170,55 @@ safeSizeTest('main form with resources that have icons', async (t) => {
   currentDate: new Date(2021, 2, 25),
   resources: getResources(true),
 }));
+
+[
+  'generic.light',
+  'material.blue.light',
+  'fluent.blue.light',
+].forEach((theme) => {
+  [
+    { isRecurringAppointment: false, isAllDay: false },
+    { isRecurringAppointment: true, isAllDay: false },
+  ].forEach(({ isRecurringAppointment, isAllDay }) => {
+    const appointment = {
+      text: 'Readonly Appointment',
+      startDate: new Date('2021-04-26T16:30:00.000Z'),
+      endDate: new Date('2021-04-26T18:30:00.000Z'),
+      allDay: isAllDay,
+      recurrenceRule: isRecurringAppointment ? 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=10' : undefined,
+      assigneeId: [1, 2],
+      roomId: 1,
+      priorityId: 1,
+    };
+
+    safeSizeTest(`appointment form readonly state (${theme})`, async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+      const appointmentPopup = await openAppointmentPopup(t, appointment, isRecurringAppointment);
+
+      await takeScreenshot(
+        `scheduler__appointment__readonly-form (recurring=${isRecurringAppointment},theme=${theme})`,
+        appointmentPopup.contentElement,
+      );
+
+      await t
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }, [1500, 1500]).before(async () => {
+      await changeTheme(theme);
+      await createWidget('dxScheduler', {
+        dataSource: [],
+        views: ['week'],
+        currentView: 'week',
+        currentDate: new Date(2021, 2, 25),
+        resources: getResources(),
+        editing: {
+          allowUpdating: false,
+          allowTimeZoneEditing: true,
+        },
+      });
+    }).after(async () => {
+      await changeTheme('generic.light');
+    });
+  });
+});
