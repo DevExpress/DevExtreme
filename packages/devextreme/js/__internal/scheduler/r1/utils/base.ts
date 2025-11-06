@@ -4,7 +4,7 @@ import { isDefined, isObject } from '@js/core/utils/type';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
 import {
-  HORIZONTAL_GROUP_ORIENTATION, TIMELINE_VIEWS, VERTICAL_GROUP_ORIENTATION, VIEWS,
+  HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION,
 } from '../../constants';
 import { VERTICAL_GROUP_COUNT_CLASSES } from '../../m_classes';
 import timeZoneUtils from '../../m_utils_time_zone';
@@ -23,7 +23,7 @@ import type {
 } from '../../types';
 import type { ResourceLoader } from '../../utils/loader/resource_loader';
 import type { ResourceId } from '../../utils/loader/types';
-import type { GroupLeaf } from '../../utils/resource_manager/types';
+import { VIEWS } from '../../utils/options/constants_view';
 
 const toMs = dateUtils.dateToMilliseconds;
 const DAY_HOURS = 24;
@@ -36,9 +36,9 @@ const getDurationInHours = (
   endDate: Date,
 ): number => Math.floor((endDate.getTime() - startDate.getTime()) / toMs('hour'));
 
-export const getDatesWithoutTime = (min: Date, max: Date): [Date, Date] => {
-  const newMin = dateUtils.trimTime(min) as Date;
-  const newMax = dateUtils.trimTime(max) as Date;
+export const getDatesWithoutTime = (min: Date | number, max: Date | number): [Date, Date] => {
+  const newMin = dateUtils.trimTime(new Date(min)) as Date;
+  const newMax = dateUtils.trimTime(new Date(max)) as Date;
 
   newMax.setDate(newMax.getDate() + 1);
 
@@ -150,7 +150,7 @@ export const getValidCellDateForLocalTimeFormat = (
     viewOffset: number;
   },
 ): Date => {
-  const originDate = dateUtilsTs.addOffsets(date, [-viewOffset]);
+  const originDate = dateUtilsTs.addOffsets(date, -viewOffset);
   const localTimeZoneChangedInOriginDate = timeZoneUtils.isTimezoneChangeInDate(originDate);
 
   if (!localTimeZoneChangedInOriginDate) {
@@ -169,7 +169,9 @@ export const getValidCellDateForLocalTimeFormat = (
   const startViewDateOffset = getStartViewDateTimeOffset(startViewDate, startDayHour);
   return dateUtilsTs.addOffsets(
     startViewDateWithoutDST,
-    [viewOffset, cellIndexShift, -startViewDateOffset],
+    viewOffset,
+    cellIndexShift,
+    -startViewDateOffset,
   );
 };
 
@@ -194,21 +196,25 @@ export const getHeaderCellText = (
 };
 
 export const isVerticalGroupingApplied = (
-  groups: unknown[],
+  groupCount: number,
   groupOrientation?: GroupOrientation,
-): boolean => groupOrientation === VERTICAL_GROUP_ORIENTATION
-  && !!groups.length;
+): boolean => groupOrientation === VERTICAL_GROUP_ORIENTATION && groupCount > 0;
 
-// TODO(9): Get rid of it as soon as you can. More parameters then needed
 export const getHorizontalGroupCount = (
-  groupLeafs: GroupLeaf[],
+  groupCount: number,
   groupOrientation: GroupOrientation,
 ): number => {
-  const isVerticalGrouping = isVerticalGroupingApplied(groupLeafs, groupOrientation);
+  const isVerticalGrouping = isVerticalGroupingApplied(groupCount, groupOrientation);
 
-  return isVerticalGrouping ? 1 : groupLeafs.length;
+  return isVerticalGrouping ? 1 : groupCount;
 };
 
+const TIMELINE_VIEWS = [
+  VIEWS.TIMELINE_DAY,
+  VIEWS.TIMELINE_WEEK,
+  VIEWS.TIMELINE_WORK_WEEK,
+  VIEWS.TIMELINE_MONTH,
+];
 export const isTimelineView = (
   viewType?: ViewType,
 ): boolean => Boolean(viewType && TIMELINE_VIEWS.includes(viewType));
@@ -266,10 +272,10 @@ export const getViewStartByOptions = (
 };
 
 export const calculateIsGroupedAllDayPanel = (
-  groups: unknown[],
+  groupCount: number,
   groupOrientation: GroupOrientation,
   isAllDayPanelVisible: boolean,
-): boolean => isVerticalGroupingApplied(groups, groupOrientation) && isAllDayPanelVisible;
+): boolean => isVerticalGroupingApplied(groupCount, groupOrientation) && isAllDayPanelVisible;
 
 export const calculateViewStartDate = (
   startDateOption: Date | undefined,
@@ -324,7 +330,7 @@ export const getKeyByGroup = (
   groupIndex: number | undefined,
   isVerticalGrouping: boolean,
 ): string => {
-  if (isVerticalGrouping && !!groupIndex) {
+  if (isVerticalGrouping && groupIndex !== undefined) {
     return groupIndex.toString();
   }
 
@@ -346,16 +352,16 @@ export const getCalculatedFirstDayOfWeek = (
   : dateLocalization.firstDayOfWeekIndex());
 
 export const isHorizontalGroupingApplied = (
-  groups: unknown[],
+  groupCount: number,
   groupOrientation?: GroupOrientation,
-): boolean => groupOrientation === HORIZONTAL_GROUP_ORIENTATION && !!groups.length;
+): boolean => groupOrientation === HORIZONTAL_GROUP_ORIENTATION && groupCount > 0;
 
 export const isGroupingByDate = (
-  groups: unknown[],
+  groupCount: number,
   groupOrientation: GroupOrientation | undefined,
   groupByDate: boolean,
 ): boolean => {
-  const isHorizontalGrouping = isHorizontalGroupingApplied(groups, groupOrientation);
+  const isHorizontalGrouping = isHorizontalGroupingApplied(groupCount, groupOrientation);
 
   return groupByDate && isHorizontalGrouping;
 };
@@ -391,22 +397,34 @@ export const getSkippedHoursInRange = (
   const endDateHours = endDate.getHours() + (endDate.getTime() % HOUR_IN_MS) / HOUR_IN_MS;
 
   if (viewDataProvider.isSkippedDate(startDate)) {
-    if (isAllDay) {
-      result += DAY_HOURS;
-    } else if (startDateHours < startDayHour) {
-      result += dayHours;
-    } else if (startDateHours < endDayHour) {
-      result += endDayHour - startDateHours;
+    switch (true) {
+      case isAllDay:
+        result += DAY_HOURS;
+        break;
+      case startDateHours < startDayHour:
+        result += dayHours;
+        break;
+      case startDateHours < endDayHour:
+        result += endDayHour - startDateHours;
+        break;
+      default:
+        break;
     }
   }
 
   if (viewDataProvider.isSkippedDate(endDate)) {
-    if (isAllDay) {
-      result += DAY_HOURS;
-    } else if (endDateHours > endDayHour) {
-      result += dayHours;
-    } else if (endDateHours > startDayHour) {
-      result += endDateHours - startDayHour;
+    switch (true) {
+      case isAllDay:
+        result += DAY_HOURS;
+        break;
+      case endDateHours > endDayHour:
+        result += dayHours;
+        break;
+      case endDateHours > startDayHour:
+        result += endDateHours - startDayHour;
+        break;
+      default:
+        break;
     }
   }
 

@@ -18,7 +18,7 @@ import {
     HostListener,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
 } from '@angular/core';
 
 
@@ -39,10 +39,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
-
-
 
 
 
@@ -72,6 +70,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxCalendarComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+
     instance: DxCalendar = null;
 
     /**
@@ -409,6 +408,16 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     }
     set tabIndex(value: number) {
         this._setOption('tabIndex', value);
+    }
+
+
+    
+    @Input()
+    get todayButtonText(): string {
+        return this._getOption('todayButtonText');
+    }
+    set todayButtonText(value: string) {
+        this._setOption('todayButtonText', value);
     }
 
 
@@ -760,6 +769,13 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() todayButtonTextChange: EventEmitter<string>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() validationErrorChange: EventEmitter<any>;
 
     /**
@@ -838,10 +854,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-
-
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -882,6 +894,7 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
             { emit: 'showTodayButtonChange' },
             { emit: 'showWeekNumbersChange' },
             { emit: 'tabIndexChange' },
+            { emit: 'todayButtonTextChange' },
             { emit: 'validationErrorChange' },
             { emit: 'validationErrorsChange' },
             { emit: 'validationMessageModeChange' },

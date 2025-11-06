@@ -148,7 +148,6 @@ class Lookup extends DropDownList<LookupProperties> {
         fullScreen: false,
       },
       dropDownCentered: false,
-
       _scrollToSelectedItemEnabled: false,
       useHiddenSubmitElement: true,
     };
@@ -322,9 +321,11 @@ class Lookup extends DropDownList<LookupProperties> {
   }
 
   _renderField() {
-    const fieldTemplate = this._getTemplateByOption('fieldTemplate');
+    const { fieldTemplate: fieldTemplateOption } = this.option();
 
-    if (fieldTemplate && this.option('fieldTemplate')) {
+    const fieldTemplate = this._getTemplate(fieldTemplateOption);
+
+    if (fieldTemplate && fieldTemplateOption) {
       this._renderFieldTemplate(fieldTemplate);
       return;
     }
@@ -413,8 +414,7 @@ class Lookup extends DropDownList<LookupProperties> {
   }
 
   _scrollToSelectedItem(): void {
-    const selectedIndex = this._list?.option('selectedIndex');
-    const listItems = this._list?.option('items');
+    const { selectedIndex, items: listItems } = this._list?.option() ?? {};
     // @ts-expect-error ts-error
     const itemsCount = listItems.length;
 
@@ -522,6 +522,7 @@ class Lookup extends DropDownList<LookupProperties> {
     const groups = this._list._getItemsContainer().children();
     const items: Element[] = [];
 
+    // @ts-expect-error ts-error
     groups.each((_, group) => {
       items.push($(group).find(`.${GROUP_LIST_HEADER_CLASS}`)[0]);
 
@@ -532,7 +533,6 @@ class Lookup extends DropDownList<LookupProperties> {
       });
     });
 
-    // @ts-expect-error
     return $(items);
   }
 
@@ -572,14 +572,13 @@ class Lookup extends DropDownList<LookupProperties> {
   }
 
   _getPopupHeight() {
-    // @ts-expect-error ts-error
     if (this._list?.itemElements().length) {
       return this._calculateListHeight(this.option('grouped'))
         + (this._$searchWrapper ? getOuterHeight(this._$searchWrapper) : 0)
         // @ts-expect-error ts-error
-        + (this._popup._$bottom ? getOuterHeight(this._popup._$bottom) : 0)
+        + (this._popup.bottomToolbar() ? getOuterHeight(this._popup.bottomToolbar()) : 0)
         // @ts-expect-error ts-error
-        + (this._popup._$title ? getOuterHeight(this._popup._$title) : 0);
+        + (this._popup.topToolbar() ? getOuterHeight(this._popup.topToolbar()) : 0);
     }
     return 'auto';
   }
@@ -873,9 +872,7 @@ class Lookup extends DropDownList<LookupProperties> {
   }
 
   _filterDataSource(...args): void {
-    // @ts-expect-error ts-error
     if (this._list && !this._list._dataSource && this._isMinSearchLengthExceeded()) {
-      // @ts-expect-error ts-error
       this._list?._scrollView.startLoading();
     }
     // @ts-expect-error ts-error
@@ -884,7 +881,6 @@ class Lookup extends DropDownList<LookupProperties> {
 
   _dataSourceFiltered(...args) {
     super._dataSourceFiltered(...args);
-    // @ts-expect-error ts-error
     this._list?._scrollView.finishLoading();
   }
 
@@ -908,7 +904,6 @@ class Lookup extends DropDownList<LookupProperties> {
   }
 
   _selectListItemHandler(e) {
-    // @ts-expect-error ts-error
     const { focusedElement } = this._list!.option();
 
     const $itemElement = $(focusedElement);
@@ -1149,19 +1144,17 @@ class Lookup extends DropDownList<LookupProperties> {
         switch (fullName) {
           case 'dropDownOptions.width':
           case 'dropDownOptions.height': {
-            this._popupOptionChanged({
+            const args = {
               name,
               fullName,
               value: value === 'auto' ? this.initialOption('dropDownOptions')[getFieldName(fullName)] : value,
-            });
-            const { dropDownOptions } = this.option();
-            // @ts-expect-error ts-error
-            this._options.cache('dropDownOptions', dropDownOptions);
+            };
+            this._popupOptionChanged(args);
+            this._innerWidgetOptionChanged(this._popup, args);
             break;
           }
           default:
-            // @ts-expect-error ts-error
-            super._optionChanged(...arguments);
+            super._optionChanged(args);
         }
         break;
       case 'dropDownCentered':

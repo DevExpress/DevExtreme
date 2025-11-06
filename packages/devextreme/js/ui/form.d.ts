@@ -1,3 +1,4 @@
+import { AIIntegration, SmartPasteResultFieldType } from '../common/ai-integration';
 import {
     UserDefinedElement,
     DxElement,
@@ -24,10 +25,11 @@ import {
 } from '../common';
 
 import {
-    EventInfo,
-    InitializedEventInfo,
-    ChangedOptionInfo,
-} from '../common/core/events';
+  AsyncCancelable,
+  EventInfo,
+  InitializedEventInfo,
+  ChangedOptionInfo,
+} from '../events';
 
 import dxButton, {
     dxButtonOptions,
@@ -61,6 +63,23 @@ export type FormItemType = 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
 export type LabelLocation = 'left' | 'right' | 'top';
 /** @public */
 export type FormLabelMode = 'static' | 'floating' | 'hidden' | 'outside';
+/** @public */
+export type FormPredefinedButtonItem = 'reset' | 'submit' | 'smartPaste';
+
+/** @public */
+export type AIResult = Record<string, SmartPasteResultFieldType>;
+
+/**
+ * @docid
+ * @hidden
+ */
+export type SmartPasteInfo = {
+  /**
+   * @docid
+   * @type object
+   */
+  readonly aiResult: AIResult;
+};
 
 /**
  * @docid _ui_form_ContentReadyEvent
@@ -121,6 +140,22 @@ export type InitializedEvent = InitializedEventInfo<dxForm>;
  */
 export type OptionChangedEvent = EventInfo<dxForm> & ChangedOptionInfo;
 
+/**
+ * @docid _ui_form_SmartPastingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,AsyncCancelable,SmartPasteInfo
+ */
+export type SmartPastingEvent = EventInfo<dxForm> & AsyncCancelable & SmartPasteInfo;
+
+/**
+ * @docid _ui_form_SmartPastedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,SmartPasteInfo
+ */
+export type SmartPastedEvent = EventInfo<dxForm> & SmartPasteInfo;
+
 /** @public */
 export type GroupItemTemplateData = {
     readonly component: dxForm;
@@ -152,6 +187,12 @@ export type SimpleItemLabelTemplateData = SimpleItemTemplateData & { text: strin
  * @docid
  */
 export interface dxFormOptions extends WidgetOptions<dxForm> {
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
+    aiIntegration?: AIIntegration | undefined;
     /**
      * @docid
      * @default true
@@ -217,7 +258,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @default "outside"
      * @public
      */
-     labelMode?: FormLabelMode;
+    labelMode?: FormLabelMode;
     /**
      * @docid
      * @default 200
@@ -240,6 +281,22 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @public
      */
     onFieldDataChanged?: ((e: FieldDataChangedEvent) => void);
+    /**
+     * @docid
+     * @default null
+     * @type_function_param1 e:{ui/form:SmartPastingEvent}
+     * @action
+     * @public
+     */
+    onSmartPasting?: ((e: SmartPastingEvent) => void);
+    /**
+     * @docid
+     * @default null
+     * @type_function_param1 e:{ui/form:SmartPastedEvent}
+     * @action
+     * @public
+     */
+    onSmartPasted?: ((e: SmartPastedEvent) => void);
     /**
      * @docid
      * @default "optional"
@@ -360,18 +417,18 @@ export default class dxForm extends Widget<dxFormOptions> {
     clear(): void;
     /**
      * @docid
-     * @publicName resetValues()
-     * @public
-     * @deprecated dxForm.clear
-     */
-    resetValues(): void;
-    /**
-     * @docid
      * @publicName reset(editorsData)
      * @param1 editorsData:object
      * @public
      */
     reset(editorsData?: Record<string, any>): void;
+    /**
+     * @docid
+     * @publicName smartPaste(text)
+     * @param1 text:string|undefined
+     * @public
+     */
+    smartPaste(text?: string): void;
     /**
      * @docid
      * @publicName updateData(data)
@@ -454,7 +511,7 @@ export interface dxFormButtonItem {
      * @default undefined
      * @public
      */
-    name?: string | undefined;
+    name?: FormPredefinedButtonItem | string | undefined;
     /**
      * @docid
      * @default "top"
@@ -631,6 +688,24 @@ export type SimpleItem = dxFormSimpleItem;
  * @namespace DevExpress.ui
  */
 export interface dxFormSimpleItem {
+    /**
+     * @docid
+     * @public
+     */
+    aiOptions?: {
+      /**
+       * @docid
+       * @default undefined
+       * @public
+       */
+      instruction?: string | undefined;
+      /**
+       * @docid
+       * @default false
+       * @public
+       */
+      disabled?: boolean;
+    };
     /**
      * @docid
      * @default undefined
@@ -881,7 +956,8 @@ export type Options = dxFormOptions;
 
 // type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-// type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onEditorEnterKey' | 'onFieldDataChanged'>;
+// type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onEditorEnterKey'
+// | 'onFieldDataChanged' | 'onSmartPasting' | 'onSmartPasted'>;
 
 /**
 * @hidden

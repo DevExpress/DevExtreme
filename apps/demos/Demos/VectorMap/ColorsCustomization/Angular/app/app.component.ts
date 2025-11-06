@@ -42,6 +42,7 @@ export class AppComponent {
         color: country.color,
       };
     }
+    return null;
   };
 
   customizeLayers = (elements: { attribute: Function, applySettings: Function }[]) => {

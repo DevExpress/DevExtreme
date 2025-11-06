@@ -43,10 +43,12 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 
+import { DxoCardViewAiOptionsModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewAnimationModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewAsyncRuleModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewAtModule } from 'devextreme-angular/ui/card-view/nested';
@@ -91,6 +93,7 @@ import { DxoCardViewGroupOperationDescriptionsModule } from 'devextreme-angular/
 import { DxoCardViewHeaderFilterModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewHeaderPanelModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewHideModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewIndicatorOptionsModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewItemModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewLabelModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewLoadPanelModule } from 'devextreme-angular/ui/card-view/nested';
@@ -122,9 +125,15 @@ import { DxoCardViewToModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewToolbarModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewToolbarItemModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewValidationRuleModule } from 'devextreme-angular/ui/card-view/nested';
-
-
-import { DxiCardViewColumnComponent } from 'devextreme-angular/ui/card-view/nested';
+import { 
+           PROPERTY_TOKEN_validationRules,
+           PROPERTY_TOKEN_items,
+           PROPERTY_TOKEN_changes,
+           PROPERTY_TOKEN_columns,
+           PROPERTY_TOKEN_customOperations,
+           PROPERTY_TOKEN_fields,
+           PROPERTY_TOKEN_tabs,
+     } from 'devextreme-angular/core/tokens';
 
 
 
@@ -142,6 +151,42 @@ import { DxiCardViewColumnComponent } from 'devextreme-angular/ui/card-view/nest
     ]
 })
 export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_validationRules)
+    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_changes)
+    set _changesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('changes', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_columns)
+    set _columnsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('columns', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_customOperations)
+    set _customOperationsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('customOperations', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_fields)
+    set _fieldsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('fields', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_tabs)
+    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('tabs', value);
+    }
+
     instance: DxCardView<TCardData, TKey> = null;
 
     
@@ -1185,18 +1230,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
 
 
-    @ContentChildren(DxiCardViewColumnComponent)
-    get columnsChildren(): QueryList<DxiCardViewColumnComponent> {
-        return this._getOption('columns');
-    }
-    set columnsChildren(value) {
-        this._setChildren('columns', value, 'DxiCardViewColumnComponent');
-    }
-
-
-
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -1339,6 +1372,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 @NgModule({
   imports: [
     DxCardViewComponent,
+    DxoCardViewAiOptionsModule,
     DxoCardViewAnimationModule,
     DxiCardViewAsyncRuleModule,
     DxoCardViewAtModule,
@@ -1383,6 +1417,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoCardViewHeaderFilterModule,
     DxoCardViewHeaderPanelModule,
     DxoCardViewHideModule,
+    DxoCardViewIndicatorOptionsModule,
     DxiCardViewItemModule,
     DxoCardViewLabelModule,
     DxoCardViewLoadPanelModule,
@@ -1419,6 +1454,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
   ],
   exports: [
     DxCardViewComponent,
+    DxoCardViewAiOptionsModule,
     DxoCardViewAnimationModule,
     DxiCardViewAsyncRuleModule,
     DxoCardViewAtModule,
@@ -1463,6 +1499,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoCardViewHeaderFilterModule,
     DxoCardViewHeaderPanelModule,
     DxoCardViewHideModule,
+    DxoCardViewIndicatorOptionsModule,
     DxiCardViewItemModule,
     DxoCardViewLabelModule,
     DxoCardViewLoadPanelModule,

@@ -14,15 +14,15 @@ if (window && window.config?.packageConfigPaths) {
   templateUrl: `.${modulePrefix}/dates-form/dates-form.component.html`,
 })
 export class DatesFormComponent {
-  @ViewChild('formComponent', { static: false }) form!: DxFormComponent
+  @ViewChild('formComponent', { static: false }) form!: DxFormComponent;
 
   @Input() formData: BookingFormData;
 
   @Input() validationGroup: string;
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['formData']) {
-      const value = changes['formData'].currentValue;
+    if (changes.formData) {
+      const value = changes.formData.currentValue;
 
       this.form?.instance?.reset(value);
     }
@@ -32,9 +32,9 @@ export class DatesFormComponent {
     startDatePlaceholder: 'Check-in',
     endDatePlaceholder: 'Check-out',
     elementAttr: { id: 'datesPicker' },
-  }
+  };
 
-  labelOptions: DxFormTypes.SimpleItem["label"] = {
+  labelOptions: DxFormTypes.SimpleItem['label'] = {
     visible: false,
   };
 }

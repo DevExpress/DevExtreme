@@ -1,6 +1,7 @@
-export type DateType = Date | string;
+export type DateType = Date | string | number;
 
 export interface TimeZoneCalculatorOptions {
+  timeZone?: string;
   getClientOffset: (date: Date) => number;
   tryGetCommonOffset: (date: Date, timeZone?: string) => number | undefined;
   tryGetAppointmentOffset: (

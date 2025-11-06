@@ -28,7 +28,6 @@ import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
-import { shouldSkipOnMobile, shouldSkipOnDevices } from '../../helpers/device.js';
 import { TextEditorLabel } from '__internal/ui/text_box/m_text_editor.label';
 
 import 'generic_light.css!';
@@ -96,10 +95,6 @@ const FOCUSED_CLASS = 'dx-state-focused';
 const CANCEL_BUTTON_SELECTOR = '.dx-popup-cancel.dx-button';
 
 const WINDOW_RATIO = 0.8;
-
-const toSelector = function(val) {
-    return '.' + val;
-};
 
 const openPopupWithList = function(lookup) {
     $(lookup._$field).trigger('dxclick');
@@ -1616,27 +1611,6 @@ QUnit.module('options', {
         assert.equal(autoValue, initialValue, 'initial value equal auto value');
     });
 
-    QUnit.test('popup height should have correct size on mobile devices', function(assert) {
-        if(shouldSkipOnDevices({ deviceTypes: ['desktop', 'tablet'], assert })) {
-            return;
-        }
-        const initialVisualViewport = window.visualViewport;
-
-        try {
-            window.visualViewport = { height: 510, width: 405 };
-            const $lookup = $('#lookup');
-            const instance = $lookup.dxLookup({}).dxLookup('instance');
-
-            instance.open();
-            const popup = $lookup.find(`.${POPUP_CLASS}`).dxPopup('instance');
-
-            assert.equal(popup.option('height')(), 510 * WINDOW_RATIO);
-            assert.equal(popup.option('width')(), 405 * WINDOW_RATIO);
-        } finally {
-            window.visualViewport = initialVisualViewport;
-        }
-    });
-
     QUnit.test('searchPlaceholder', function(assert) {
         const instance = $('#lookup').dxLookup({
             dataSource: [1, 2, 3],
@@ -1682,10 +1656,6 @@ QUnit.module('options', {
     });
 
     QUnit.test('cleanSearchOnOpening', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = $('#lookup').dxLookup({
             items: [1, 11, 111],
             deferRendering: false,
@@ -2077,7 +2047,7 @@ QUnit.module('options', {
     });
 
     QUnit.test('clear button option runtime change', function(assert) {
-        const getClearButton = (instance) => $(instance.content()).parent().find(toSelector(CLEAR_BUTTON_CLASS)).get(0);
+        const getClearButton = (instance) => $(instance.content()).parent().find(`.${CLEAR_BUTTON_CLASS}`).get(0);
 
         const lookup = $('#lookup')
             .dxLookup({
@@ -2168,7 +2138,7 @@ QUnit.module('popup options', {
         }).dxLookup('instance');
 
         openPopupWithList(instance);
-        const $wrapper = $(toSelector(OVERLAY_WRAPPER_CLASS));
+        const $wrapper = $(`.${OVERLAY_WRAPPER_CLASS}`);
 
         assert.ok($wrapper.hasClass(OVERLAY_SHADER_CLASS));
 
@@ -2184,7 +2154,7 @@ QUnit.module('popup options', {
 
         openPopupWithList(instance);
 
-        const $overlay = $(toSelector(OVERLAY_CONTENT_CLASS)).eq(0);
+        const $overlay = $(`.${OVERLAY_CONTENT_CLASS}`).eq(0);
 
         $(document).trigger('dxpointerdown');
         assert.equal($overlay.is(':visible'), false, 'overlay is hidden');
@@ -2200,7 +2170,7 @@ QUnit.module('popup options', {
 
         openPopupWithList(instance);
 
-        const $overlay = $(toSelector(OVERLAY_CONTENT_CLASS)).eq(0);
+        const $overlay = $(`.${OVERLAY_CONTENT_CLASS}`).eq(0);
 
         $($overlay).trigger('dxpointerdown');
         assert.equal($overlay.is(':visible'), true, 'overlay is not hidden');
@@ -2248,7 +2218,7 @@ QUnit.module('popup options', {
 
         openPopupWithList($lookup.dxLookup('instance'));
 
-        const $title = $(toSelector(POPUP_TITLE_CLASS));
+        const $title = $(`.${POPUP_TITLE_CLASS}`);
 
         assert.equal($title.text().trim(), 'testTitle', 'title text is correct');
     });
@@ -2267,9 +2237,9 @@ QUnit.module('popup options', {
 
         openPopupWithList(instance);
 
-        const $title = $(toSelector(POPUP_TITLE_CLASS));
+        const $title = $(`.${POPUP_TITLE_CLASS}`);
 
-        assert.ok($title.find(toSelector('test-title-renderer')).length, 'option \'titleTemplate\' was set successfully');
+        assert.ok($title.find('.test-title-renderer').length, 'option \'titleTemplate\' was set successfully');
     });
 
     QUnit.test('custom titleTemplate and onTitleRendered option is set correctly by options', function(assert) {
@@ -2291,9 +2261,9 @@ QUnit.module('popup options', {
         });
 
         openPopupWithList(instance);
-        const $title = $(toSelector(POPUP_TITLE_CLASS));
+        const $title = $(`.${POPUP_TITLE_CLASS}`);
 
-        assert.ok($title.find(toSelector('changed-test-title-renderer')).length, 'option \'titleTemplate\' successfully passed to the popup widget');
+        assert.ok($title.find('.changed-test-title-renderer').length, 'option \'titleTemplate\' successfully passed to the popup widget');
     });
 
     QUnit.test('popup does not close when filtering datasource has item equal selected item', function(assert) {
@@ -2305,7 +2275,7 @@ QUnit.module('popup options', {
 
         $lookup.dxLookup('option', 'opened', true);
 
-        const $popupContent = $(toSelector(POPUP_CONTENT_CLASS));
+        const $popupContent = $(`.${POPUP_CONTENT_CLASS}`);
         keyboardMock($popupContent.find('.' + TEXTEDITOR_INPUT_CLASS)).type('y');
 
         assert.ok($lookup.dxLookup('option', 'opened'), 'lookup stays opened');
@@ -2352,10 +2322,6 @@ QUnit.module('popup options', {
     });
 
     QUnit.test('popup height should be stretch when data items are loaded asynchronously', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         $('#lookup').dxLookup({
             dataSource: new CustomStore({
                 load: function(loadOptions) {
@@ -2389,10 +2355,6 @@ QUnit.module('popup options', {
     });
 
     QUnit.test('popover height should be recalculated after async datasource load(T655040)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         if(browser.mozilla && parseFloat(browser.version) < 71) {
             assert.ok(true, 'test is not applicable to mozilla browser version < 71');
             return;
@@ -2535,6 +2497,18 @@ QUnit.module('popup options', {
         assert.roughEqual(getOuterHeight($overlayContent), getOuterHeight($container) / 2, 0.1, 'popup height is correct');
     });
 
+    QUnit.test('_cached_dropDownOptions cache should be updated correctly after partial dropDownOptions update', function(assert) {
+        const lookup = $('#lookup').dxLookup({ }).dxLookup('instance');
+        const dropDownOptionsAfterInit = { ... lookup.option('dropDownOptions') };
+
+        lookup.open();
+        lookup.option('dropDownOptions.width', 123);
+
+        const { _cached_dropDownOptions } = lookup.option();
+
+        assert.deepEqual(_cached_dropDownOptions, { ...dropDownOptionsAfterInit, width: 123 }, 'updated part of dropDownOptions is cached in _cached_dropDownOptions');
+    });
+
     [
         {
             component: PopupFull,
@@ -2606,7 +2580,8 @@ QUnit.module('list options', {
 
         openPopupWithList(instance);
 
-        const $list = $(toSelector(LIST_CLASS)); const list = $list.dxList('instance');
+        const $list = $(`.${LIST_CLASS}`);
+        const list = $list.dxList('instance');
 
         assert.equal(list.option('pageLoadMode'), 'scrollBottom', 'pageLoadMode was bounced');
         instance.option('pageLoadMode', 'nextButton');
@@ -2649,11 +2624,12 @@ QUnit.module('list options', {
 
         openPopupWithList(instance);
 
-        const $list = $(toSelector(LIST_CLASS)); const list = $list.dxList('instance');
+        const $list = $(`.${LIST_CLASS}`);
+        const list = $list.dxList('instance');
 
         assert.equal(list.option('grouped'), true, 'grouped was bounced');
 
-        let $title = $(toSelector(LIST_GROUP_HEADER_CLASS));
+        let $title = $(`.${LIST_GROUP_HEADER_CLASS}`);
         assert.equal($title.length, 2, 'there are 2 group titles');
         $title = $title.eq(0);
         assert.equal($title.text().trim(), 'testGroupTemplate', 'title text is correct');
@@ -2663,7 +2639,7 @@ QUnit.module('list options', {
             return 'test';
         });
 
-        $title = $(toSelector(LIST_GROUP_HEADER_CLASS)).eq(0);
+        $title = $(`.${LIST_GROUP_HEADER_CLASS}`).eq(0);
         assert.equal($title.text().trim(), 'test', 'title text is correct');
     });
 });
@@ -2784,10 +2760,6 @@ QUnit.module('focus policy', {
     }
 }, () => {
     QUnit.testInActiveWindow('T338144 - focused element should not be reset after popup is reopened if the \'searchEnabled\' is false', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = $('#widget').dxLookup({
             items: [1, 2, 3],
             opened: true,
@@ -2914,10 +2886,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('lookup-list should be focused after \'down\' key pressing', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const $element = $('#widget').dxLookup({
             opened: true,
             items: [1, 2, 3],
@@ -2933,10 +2901,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('lookup-list keyboard navigation should work after focusing on list', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const $element = $('#widget').dxLookup({
             opened: true,
             items: [1, 2, 3],
@@ -2957,10 +2921,6 @@ QUnit.module('keyboard navigation', {
 
     [true, false].forEach(value => {
         QUnit.test(`focus from last Popover element should ${value ? 'not' : ''} move to Lookup field while keeping Popup open when usePopover: true and _scrollToSelectedItemEnabled: ${value}`, function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             const $element = $('#widget').dxLookup({
                 _scrollToSelectedItemEnabled: value,
                 items: [1, 2, 3],
@@ -2981,10 +2941,6 @@ QUnit.module('keyboard navigation', {
 
     [true, false].forEach(value => {
         QUnit.test(`focus from last Popover element should not move to Lookup field while keeping Popup open when usePopover: false and dropDownCentered: ${value}`, function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             const $element = $('#widget').dxLookup({
                 dropDownCentered: value,
                 items: [1, 2, 3],
@@ -3006,10 +2962,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('focus from first Popover element should move back to Lookup field while keeping Popup open when usePopover: true and shift+Tab is pressed', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const $element = $('#widget').dxLookup({
             opened: true,
             items: [1, 2, 3],
@@ -3027,10 +2979,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('lookup value should not be changed after pressing tab', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const $element = $('#widget').dxLookup({
             opened: true,
             items: [1, 2, 3],
@@ -3048,10 +2996,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('lookup item should be selected after \'enter\' key pressing', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const $element = $('#widget').dxLookup({
             opened: true,
             items: [1, 2, 3],
@@ -3069,10 +3013,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('lookup item should be selected after \'space\' key pressing', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const $element = $('#widget').dxLookup({
             opened: true,
             items: [1, 2, 3],
@@ -3090,10 +3030,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('keyboard for lookup-list should work correctly after \'searchEnabled\' option changed', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const $element = $('#widget').dxLookup({
             opened: true,
             items: [1, 2, 3],
@@ -3161,10 +3097,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('escape key press close overlay without search enabled', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = $('#lookup').dxLookup({
             items: [0, 1, 2],
             opened: true,
@@ -3250,10 +3182,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('Pressing escape when focus \'cancel\' button must hide the popup', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const escapeKeyDown = $.Event('keydown', { key: 'Escape' });
         const $element = $('#widget').dxLookup({
             opened: true,
@@ -3292,7 +3220,7 @@ QUnit.module('dataSource integration', {
             searchMode: 'contains'
         });
 
-        const $input = $(toSelector(POPUP_CONTENT_CLASS) + ' ' + toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $(`.${POPUP_CONTENT_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
         $($input.val('o')).trigger('input');
         this.clock.tick(10);
         assert.equal($('.dx-list-item').length, 2, 'filters execute on input event');

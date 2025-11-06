@@ -29,7 +29,7 @@ export class AppComponent {
   constructor(http: HttpClient) {
     http.get('../../../../data/diagram-hardware.json').subscribe({
       next: (data) => { this.diagram.instance.import(JSON.stringify(data)); },
-      error: (err) => { throw 'Data Loading Error'; },
+      error: () => { throw 'Data Loading Error'; },
     });
   }
 }

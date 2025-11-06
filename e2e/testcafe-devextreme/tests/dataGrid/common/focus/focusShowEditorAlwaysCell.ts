@@ -3,8 +3,9 @@ import List from 'devextreme-testcafe-models/list';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
-fixture`Focus - cell with showEditorAlways`
+fixture.disablePageReloads`Focus - cell with showEditorAlways`
   .page(url(__dirname, '../../../container.html'));
 
 const SELECTOR = '#container';
@@ -90,7 +91,7 @@ test('Should switch focus after the lookup value change [T1194403]', async (t) =
   await t.click(item.element);
   await t.click(editorTextCell.element);
 
-  await takeScreenshot('focus-edit-cell_after-lookup-change.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'focus-edit-cell_after-lookup-change.png', { element: dataGrid.element });
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createDataGrid());
@@ -106,7 +107,7 @@ test('Should switch focus after the textBox value change [T1194403]', async (t) 
   await t.typeText(textEditorCellOne.element, 'TEST_TEXT', { replace: true });
   await t.click(textEditorCellTwo.element);
 
-  await takeScreenshot('focus-edit-cell_after-text-editor-change.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'focus-edit-cell_after-text-editor-change.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

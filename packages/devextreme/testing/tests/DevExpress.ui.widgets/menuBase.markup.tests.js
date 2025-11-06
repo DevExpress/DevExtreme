@@ -1,8 +1,6 @@
 import $ from 'jquery';
 import MenuBase from 'ui/context_menu/ui.menu_base';
 
-import 'generic_light.css!';
-
 QUnit.testStart(function() {
     const markup =
         '<div id="menu"></div>';

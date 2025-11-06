@@ -8,6 +8,9 @@ QUnit.testStart(() => {
             .dx-list-item {
                 height: 40px;
             }
+            .dx-list-group-header{
+                height: 40px;
+            }
             .dx-icon-remove {
                 width: 20px;
             }

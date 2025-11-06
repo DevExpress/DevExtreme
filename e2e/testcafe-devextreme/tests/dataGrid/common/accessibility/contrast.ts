@@ -4,102 +4,81 @@ import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTex
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { getData } from '../../helpers/generateDataSourceData';
-import { Themes } from '../../../../helpers/themes';
-import { changeTheme } from '../../../../helpers/changeTheme';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`DataGrid - contrast`
   .page(url(__dirname, '../../../container.html'));
 
 // T1257970
-[
-  Themes.genericLight,
-  Themes.fluentBlue,
-  Themes.materialBlue,
-].forEach((theme) => {
-  test('DataGrid - Contrast between icons in the Filter Row menu and their background doesn\'t comply with WCAG accessibility standards', async (t) => {
-    const dataGrid = new DataGrid('#container');
-    const filterEditor = dataGrid.getFilterEditor(0, FilterTextBox);
-    const searchButton = filterEditor.menuButton;
-    const filterMenu = filterEditor.menu;
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+// visual: generic.light
+// visual: fluent.blue.light
+// visual: material.blue.light
+test('DataGrid - Contrast between icons in the Filter Row menu and their background doesn\'t comply with WCAG accessibility standards', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const filterEditor = dataGrid.getFilterEditor(0, FilterTextBox);
+  const searchButton = filterEditor.menuButton;
+  const filterMenu = filterEditor.menu;
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t
-      .expect(dataGrid.isReady())
-      .ok();
-    await t
-      .click(searchButton)
-      .expect(filterMenu.element.exists)
-      .ok();
-    await t
-      .expect(await takeScreenshot(`T1257970-datagrid-menu-icon-contrast-${theme}.png`, dataGrid.element))
-      .ok()
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(
-    async () => {
-      await changeTheme(theme);
-      await createWidget('dxDataGrid', {
-        dataSource: getData(5, 5),
-        filterRow: {
-          visible: true,
-        },
-      });
-    },
-  ).after(
-    async () => {
-      if (theme === Themes.genericLight) {
-        return;
-      }
-      await changeTheme(Themes.genericLight);
-    },
-  );
-});
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+  await t
+    .click(searchButton)
+    .expect(filterMenu.element.exists)
+    .ok();
+
+  await testScreenshot(t, takeScreenshot, 'T1257970-datagrid-menu-icon-contrast.png', { element: dataGrid.element });
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(
+  async () => {
+    await createWidget('dxDataGrid', {
+      dataSource: getData(5, 5),
+      filterRow: {
+        visible: true,
+      },
+    });
+  },
+);
 
 // T1286345
-[
-  Themes.genericLight,
-  Themes.fluentBlue,
-  Themes.materialBlue,
-].forEach((theme) => {
-  test('DataGrid - Filter icon should remain visible when it\'s focused', async (t) => {
-    const dataGrid = new DataGrid('#container');
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+// visual: generic.light
+// visual: fluent.blue.light
+// visual: material.blue.light
+test('DataGrid - Filter icon should remain visible when it\'s focused', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t
-      .expect(dataGrid.isReady())
-      .ok();
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
 
-    const searchIconContainer = dataGrid
-      .getHeaders()
-      .getFilterRow()
-      .getFilterCell(1)
-      .getSearchIcon()
-      .element;
+  const searchIconContainer = dataGrid
+    .getHeaders()
+    .getFilterRow()
+    .getFilterCell(1)
+    .getSearchIcon()
+    .element;
 
-    await t
-      .click(dataGrid.getFilterCell(0))
-      .pressKey('tab')
-      .expect(searchIconContainer.focused)
-      .ok();
+  await t
+    .click(dataGrid.getFilterCell(0))
+    .pressKey('tab')
+    .expect(searchIconContainer.focused)
+    .ok();
 
-    await t
-      .expect(await takeScreenshot(`T1286345-datagrid-menu-icon-when-focused-${theme}.png`, dataGrid.element))
-      .ok()
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(
-    async () => {
-      await changeTheme(theme);
-      await createWidget('dxDataGrid', {
-        dataSource: getData(2, 2),
-        filterRow: {
-          visible: true,
-        },
-      });
-    },
-  ).after(
-    async () => {
-      await changeTheme(Themes.genericLight);
-    },
-  );
-});
+  await testScreenshot(t, takeScreenshot, 'T1286345-datagrid-menu-icon-when-focused.png', { element: dataGrid.element });
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(
+  async () => {
+    await createWidget('dxDataGrid', {
+      dataSource: getData(2, 2),
+      filterRow: {
+        visible: true,
+      },
+    });
+  },
+);

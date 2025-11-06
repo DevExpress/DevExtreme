@@ -8,6 +8,7 @@ import  DOMComponent from "devextreme/core/dom_component";
 import  dxPopup from "devextreme/ui/popup";
 import {
  DropDownPredefinedButton,
+ FieldAddons,
 } from "devextreme/ui/drop_down_editor/ui.drop_down_editor";
 import {
  TextEditorButton,
@@ -109,6 +110,7 @@ type AccessibleOptions = Pick<Properties,
   "dropDownButtonTemplate" |
   "dropDownOptions" |
   "elementAttr" |
+  "fieldAddons" |
   "fieldTemplate" |
   "focusStateEnabled" |
   "grouped" |
@@ -198,6 +200,7 @@ const componentConfig = {
     dropDownButtonTemplate: {},
     dropDownOptions: Object as PropType<dxPopupOptions<any> | Record<string, any>>,
     elementAttr: Object as PropType<Record<string, any>>,
+    fieldAddons: Object as PropType<FieldAddons | Record<string, any>>,
     fieldTemplate: {},
     focusStateEnabled: Boolean,
     grouped: Boolean,
@@ -283,6 +286,7 @@ const componentConfig = {
     "update:dropDownButtonTemplate": null,
     "update:dropDownOptions": null,
     "update:elementAttr": null,
+    "update:fieldAddons": null,
     "update:fieldTemplate": null,
     "update:focusStateEnabled": null,
     "update:grouped": null,
@@ -364,6 +368,7 @@ const componentConfig = {
     (this as any).$_expectedChildren = {
       button: { isCollectionItem: true, optionName: "buttons" },
       dropDownOptions: { isCollectionItem: false, optionName: "dropDownOptions" },
+      fieldAddons: { isCollectionItem: false, optionName: "fieldAddons" },
       item: { isCollectionItem: true, optionName: "items" }
     };
   }
@@ -485,7 +490,6 @@ const DxDropDownOptionsConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:animation": null,
-    "update:bindingOptions": null,
     "update:container": null,
     "update:contentTemplate": null,
     "update:deferRendering": null,
@@ -536,7 +540,6 @@ const DxDropDownOptionsConfig = {
   props: {
     accessKey: String,
     animation: Object as PropType<Record<string, any>>,
-    bindingOptions: Object as PropType<Record<string, any>>,
     container: {},
     contentTemplate: {},
     deferRendering: Boolean,
@@ -596,6 +599,25 @@ const DxDropDownOptions = defineComponent(DxDropDownOptionsConfig);
   position: { isCollectionItem: false, optionName: "position" },
   toolbarItem: { isCollectionItem: true, optionName: "toolbarItems" }
 };
+
+const DxFieldAddonsConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:afterTemplate": null,
+    "update:beforeTemplate": null,
+  },
+  props: {
+    afterTemplate: {},
+    beforeTemplate: {}
+  }
+};
+
+prepareConfigurationComponentConfig(DxFieldAddonsConfig);
+
+const DxFieldAddons = defineComponent(DxFieldAddonsConfig);
+
+(DxFieldAddons as any).$_optionName = "fieldAddons";
 
 const DxFromConfig = {
   emits: {
@@ -734,7 +756,6 @@ const DxOptionsConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:activeStateEnabled": null,
-    "update:bindingOptions": null,
     "update:disabled": null,
     "update:elementAttr": null,
     "update:focusStateEnabled": null,
@@ -761,7 +782,6 @@ const DxOptionsConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
-    bindingOptions: Object as PropType<Record<string, any>>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
@@ -947,6 +967,7 @@ export {
   DxButton,
   DxCollision,
   DxDropDownOptions,
+  DxFieldAddons,
   DxFrom,
   DxHide,
   DxItem,

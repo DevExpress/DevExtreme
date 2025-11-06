@@ -13,9 +13,9 @@ import type { CardClickEvent, CardDblClickEvent, CardInsertedEvent, CardInsertin
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
 import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, ButtonStyle, template, ButtonType, ToolbarItemLocation, ToolbarItemComponent, SearchMode, SingleMultipleOrNone, SelectAllMode, DataType, Format as CommonFormat, SortOrder, ComparisonOperator, DragHighlight, Mode, Direction, PositionAlignment, DisplayMode, ScrollbarMode, TabsIconPosition, TabsStyle, Position as CommonPosition } from "devextreme/common";
 import type { dxButtonOptions, ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from "devextreme/ui/button";
-import type { FormItemType, ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, OptionChangedEvent as FormOptionChangedEvent, dxFormSimpleItem, dxFormOptions, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, FormItemComponent } from "devextreme/ui/form";
+import type { FormItemType, FormPredefinedButtonItem, ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, OptionChangedEvent as FormOptionChangedEvent, dxFormSimpleItem, dxFormOptions, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, SmartPastedEvent, SmartPastingEvent, FormItemComponent } from "devextreme/ui/form";
 import type { ContentReadyEvent as FilterBuilderContentReadyEvent, DisposingEvent as FilterBuilderDisposingEvent, InitializedEvent as FilterBuilderInitializedEvent, OptionChangedEvent as FilterBuilderOptionChangedEvent, dxFilterBuilderField, FieldInfo, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation, EditorPreparedEvent, EditorPreparingEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
-import type { ContentReadyEvent as LoadPanelContentReadyEvent, DisposingEvent as LoadPanelDisposingEvent, InitializedEvent as LoadPanelInitializedEvent, OptionChangedEvent as LoadPanelOptionChangedEvent, HiddenEvent, HidingEvent, ShowingEvent, ShownEvent } from "devextreme/ui/load_panel";
+import type { ContentReadyEvent as LoadPanelContentReadyEvent, DisposingEvent as LoadPanelDisposingEvent, InitializedEvent as LoadPanelInitializedEvent, OptionChangedEvent as LoadPanelOptionChangedEvent, LoadPanelIndicatorProperties, HiddenEvent, HidingEvent, ShowingEvent, ShownEvent } from "devextreme/ui/load_panel";
 import type { ContentReadyEvent as TabPanelContentReadyEvent, DisposingEvent as TabPanelDisposingEvent, InitializedEvent as TabPanelInitializedEvent, OptionChangedEvent as TabPanelOptionChangedEvent, dxTabPanelOptions, dxTabPanelItem, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, SelectionChangedEvent, SelectionChangingEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from "devextreme/ui/tab_panel";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
@@ -23,6 +23,8 @@ import type { HeaderFilterSearchConfig, HeaderFilterTexts, SelectionColumnDispla
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
+import type { AIIntegration } from "devextreme/common/ai-integration";
+import type { LoadingAnimationType } from "devextreme/ui/load_indicator";
 import type { event } from "devextreme/events/events.types";
 
 import type dxForm from "devextreme/ui/form";
@@ -90,7 +92,7 @@ const CardView = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["filterValue","selectedCardKeys","filterBuilder.value","filterPanel.filterEnabled","editing.form.formData","loadPanel.position","loadPanel.visible","paging.pageIndex","paging.pageSize","searchPanel.text"]), []);
       const independentEvents = useMemo(() => (["onCardClick","onCardDblClick","onCardInserted","onCardInserting","onCardPrepared","onCardRemoved","onCardRemoving","onCardSaved","onCardSaving","onCardUpdated","onCardUpdating","onContentReady","onContextMenuPreparing","onDataErrorOccurred","onDisposing","onEditCanceled","onEditCanceling","onEditingStart","onFieldCaptionClick","onFieldCaptionDblClick","onFieldCaptionPrepared","onFieldValueClick","onFieldValueDblClick","onFieldValuePrepared","onInitialized","onInitNewCard"]), []);
@@ -162,6 +164,26 @@ const CardView = memo(
   ),
 ) as <TCardData = any, TKey = any>(props: React.PropsWithChildren<ICardViewOptions<TCardData, TKey>> & { ref?: Ref<CardViewRef<TCardData, TKey>> }) => ReactElement | null;
 
+
+// owners:
+// FormItem
+// SimpleItem
+type IAiOptionsProps = React.PropsWithChildren<{
+  disabled?: boolean;
+  instruction?: string | undefined;
+}>
+const _componentAiOptions = (props: IAiOptionsProps) => {
+  return React.createElement(NestedOption<IAiOptionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "aiOptions",
+    },
+  });
+};
+
+const AiOptions = Object.assign<typeof _componentAiOptions, NestedComponentMeta>(_componentAiOptions, {
+  componentType: "option",
+});
 
 // owners:
 // LoadPanel
@@ -260,7 +282,7 @@ type IButtonItemProps = React.PropsWithChildren<{
   cssClass?: string | undefined;
   horizontalAlignment?: HorizontalAlignment;
   itemType?: FormItemType;
-  name?: string | undefined;
+  name?: FormPredefinedButtonItem | string | undefined;
   verticalAlignment?: VerticalAlignment;
   visible?: boolean;
   visibleIndex?: number | undefined;
@@ -290,7 +312,6 @@ const ButtonItem = Object.assign<typeof _componentButtonItem, NestedComponentMet
 type IButtonOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
-  bindingOptions?: Record<string, any>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
@@ -1118,7 +1139,6 @@ type IFilterBuilderProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
   allowHierarchicalFields?: boolean;
-  bindingOptions?: Record<string, any>;
   customOperations?: Array<dxFilterBuilderCustomOperation>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
@@ -1272,9 +1292,9 @@ const FilterPanelTexts = Object.assign<typeof _componentFilterPanelTexts, Nested
 type IFormProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
+  aiIntegration?: AIIntegration | undefined;
   alignItemLabels?: boolean;
   alignItemLabelsInAllGroups?: boolean;
-  bindingOptions?: Record<string, any>;
   colCount?: Mode | number;
   colCountByScreen?: Record<string, any> | {
     lg?: number | undefined;
@@ -1301,6 +1321,8 @@ type IFormProps = React.PropsWithChildren<{
   onFieldDataChanged?: ((e: FieldDataChangedEvent) => void);
   onInitialized?: ((e: FormInitializedEvent) => void);
   onOptionChanged?: ((e: FormOptionChangedEvent) => void);
+  onSmartPasted?: ((e: SmartPastedEvent) => void);
+  onSmartPasting?: ((e: SmartPastingEvent) => void);
   optionalMark?: string;
   readOnly?: boolean;
   requiredMark?: string;
@@ -1371,6 +1393,10 @@ const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_comp
 // owners:
 // Column
 type IFormItemProps = React.PropsWithChildren<{
+  aiOptions?: Record<string, any> | {
+    disabled?: boolean;
+    instruction?: string | undefined;
+  };
   colSpan?: number | undefined;
   cssClass?: string | undefined;
   dataField?: string | undefined;
@@ -1401,6 +1427,7 @@ const _componentFormItem = (props: IFormItemProps) => {
     elementDescriptor: {
       OptionName: "formItem",
       ExpectedChildren: {
+        aiOptions: { optionName: "aiOptions", isCollectionItem: false },
         AsyncRule: { optionName: "validationRules", isCollectionItem: true },
         CompareRule: { optionName: "validationRules", isCollectionItem: true },
         CustomRule: { optionName: "validationRules", isCollectionItem: true },
@@ -1636,6 +1663,27 @@ const Hide = Object.assign<typeof _componentHide, NestedComponentMeta>(_componen
 });
 
 // owners:
+// LoadPanel
+type IIndicatorOptionsProps = React.PropsWithChildren<{
+  animationType?: LoadingAnimationType;
+  height?: number | string | undefined;
+  src?: string;
+  width?: number | string | undefined;
+}>
+const _componentIndicatorOptions = (props: IIndicatorOptionsProps) => {
+  return React.createElement(NestedOption<IIndicatorOptionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "indicatorOptions",
+    },
+  });
+};
+
+const IndicatorOptions = Object.assign<typeof _componentIndicatorOptions, NestedComponentMeta>(_componentIndicatorOptions, {
+  componentType: "option",
+});
+
+// owners:
 // CardHeader
 // TabPanelOptions
 // Form
@@ -1647,7 +1695,7 @@ type IItemProps = React.PropsWithChildren<{
   locateInMenu?: LocateInMenuMode;
   location?: ToolbarItemLocation;
   menuItemTemplate?: (() => string | any) | template;
-  name?: CardHeaderPredefinedItem | string | undefined | PredefinedToolbarItem;
+  name?: CardHeaderPredefinedItem | string | undefined | FormPredefinedButtonItem | PredefinedToolbarItem;
   options?: any;
   showText?: ShowTextMode;
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
@@ -1658,6 +1706,10 @@ type IItemProps = React.PropsWithChildren<{
   icon?: string;
   tabTemplate?: (() => string | any) | template;
   title?: string;
+  aiOptions?: Record<string, any> | {
+    disabled?: boolean;
+    instruction?: string | undefined;
+  };
   colSpan?: number | undefined;
   dataField?: string | undefined;
   editorOptions?: any | undefined;
@@ -1723,6 +1775,7 @@ const _componentItem = (props: IItemProps) => {
       OptionName: "items",
       IsCollectionItem: true,
       ExpectedChildren: {
+        aiOptions: { optionName: "aiOptions", isCollectionItem: false },
         AsyncRule: { optionName: "validationRules", isCollectionItem: true },
         buttonOptions: { optionName: "buttonOptions", isCollectionItem: false },
         colCountByScreen: { optionName: "colCountByScreen", isCollectionItem: false },
@@ -1802,7 +1855,6 @@ type ILoadPanelProps = React.PropsWithChildren<{
     hide?: AnimationConfig;
     show?: AnimationConfig;
   };
-  bindingOptions?: Record<string, any>;
   container?: any | string | undefined;
   deferRendering?: boolean;
   delay?: number;
@@ -1812,6 +1864,7 @@ type ILoadPanelProps = React.PropsWithChildren<{
   hideOnParentScroll?: boolean;
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
+  indicatorOptions?: LoadPanelIndicatorProperties;
   indicatorSrc?: string;
   maxHeight?: number | string;
   maxWidth?: number | string;
@@ -1851,6 +1904,7 @@ const _componentLoadPanel = (props: ILoadPanelProps) => {
       },
       ExpectedChildren: {
         animation: { optionName: "animation", isCollectionItem: false },
+        indicatorOptions: { optionName: "indicatorOptions", isCollectionItem: false },
         position: { optionName: "position", isCollectionItem: false }
       },
     },
@@ -1955,7 +2009,7 @@ type IPagerProps = React.PropsWithChildren<{
   label?: string;
   showInfo?: boolean;
   showNavigationButtons?: boolean;
-  showPageSizeSelector?: boolean;
+  showPageSizeSelector?: boolean | Mode;
   visible?: boolean | Mode;
 }>
 const _componentPager = (props: IPagerProps) => {
@@ -2283,6 +2337,10 @@ const Show = Object.assign<typeof _componentShow, NestedComponentMeta>(_componen
 // owners:
 // Form
 type ISimpleItemProps = React.PropsWithChildren<{
+  aiOptions?: Record<string, any> | {
+    disabled?: boolean;
+    instruction?: string | undefined;
+  };
   colSpan?: number | undefined;
   cssClass?: string | undefined;
   dataField?: string | undefined;
@@ -2314,6 +2372,7 @@ const _componentSimpleItem = (props: ISimpleItemProps) => {
       OptionName: "items",
       IsCollectionItem: true,
       ExpectedChildren: {
+        aiOptions: { optionName: "aiOptions", isCollectionItem: false },
         AsyncRule: { optionName: "validationRules", isCollectionItem: true },
         CompareRule: { optionName: "validationRules", isCollectionItem: true },
         CustomRule: { optionName: "validationRules", isCollectionItem: true },
@@ -2497,7 +2556,6 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
   animationEnabled?: boolean;
-  bindingOptions?: Record<string, any>;
   dataSource?: Array<any | dxTabPanelItem | string> | DataSource | DataSourceOptions | null | Store | string;
   deferRendering?: boolean;
   disabled?: boolean;
@@ -2511,6 +2569,7 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   items?: Array<any | dxTabPanelItem | string>;
   itemTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
   itemTitleTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
+  keyExpr?: (() => void) | string;
   loop?: boolean;
   noDataText?: string;
   onContentReady?: ((e: TabPanelContentReadyEvent) => void);
@@ -2786,6 +2845,8 @@ export {
   CardView,
   ICardViewOptions,
   CardViewRef,
+  AiOptions,
+  IAiOptionsProps,
   Animation,
   IAnimationProps,
   AsyncRule,
@@ -2874,6 +2935,8 @@ export {
   IHeaderPanelProps,
   Hide,
   IHideProps,
+  IndicatorOptions,
+  IIndicatorOptionsProps,
   Item,
   IItemProps,
   Label,

@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`month should render long appointments with parts and hide smaller ones into spread collectors 1`] = `
+[
+  "5 more",
+  "5 more",
+  "5 more",
+  "5 more",
+  "2 more",
+  "2 more",
+  "2 more",
+  "2 more",
+  "2 more",
+]
+`;

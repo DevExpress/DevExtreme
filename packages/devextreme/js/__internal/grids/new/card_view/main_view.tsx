@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { computed } from '@preact/signals-core';
+import { computed } from '@ts/core/state_manager/index';
 import { ColumnChooserView } from '@ts/grids/new/grid_core/column_chooser/index';
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { FilterPanelView } from '@ts/grids/new/grid_core/filtering/filter_panel/view';
@@ -10,6 +10,7 @@ import { ToolbarView } from '@ts/grids/new/grid_core/toolbar/view';
 import type { ComponentType, RefObject } from 'inferno';
 
 import { A11yStatusContainer, AccessibilityController } from '../grid_core/accessibility/index';
+import { CommonPropsContext } from '../grid_core/core/common_props_context';
 import type { Config } from '../grid_core/core/config_context';
 import { ConfigContext } from '../grid_core/core/config_context';
 import { EditPopupView } from '../grid_core/editing/popup/view';
@@ -34,7 +35,9 @@ interface MainViewProps {
   EditPopup: ComponentType;
   ContextMenu: ComponentType;
   config: Config;
-  rootElementRef: RefObject<HTMLDivElement>;
+  commonProps: {
+    rootElementRef: RefObject<HTMLDivElement>;
+  };
   accessibilityDescription: string;
   accessibilityStatus: string;
   onKeyDown: (event: KeyboardEvent) => void;
@@ -51,15 +54,16 @@ function MainViewComponent({
   ContextMenu,
   EditPopup,
   config,
-  rootElementRef,
+  commonProps,
   accessibilityDescription,
   accessibilityStatus,
   onKeyDown,
 }: MainViewProps): JSX.Element {
   return (<>
     <ConfigContext.Provider value={config}>
+      <CommonPropsContext.Provider value={commonProps}>
         <RootElementUpdater
-          rootElementRef={rootElementRef}
+          rootElementRef={commonProps.rootElementRef}
           className={CLASSES.cardView}
         >
           <div
@@ -91,6 +95,7 @@ function MainViewComponent({
             <ContextMenu/>
           </div>
         </RootElementUpdater>
+      </CommonPropsContext.Provider>
     </ConfigContext.Provider>
   </>);
 }
@@ -103,6 +108,10 @@ export class MainView extends View<MainViewProps> {
     disabled: this.options.oneWay('disabled').value,
     templatesRenderAsynchronously: this.options.oneWay('templatesRenderAsynchronously').value,
   }));
+
+  private readonly commonProps = {
+    rootElementRef: { current: this.root! },
+  };
 
   public static dependencies = [
     ContentView,
@@ -139,6 +148,8 @@ export class MainView extends View<MainViewProps> {
   // eslint-disable-next-line @stylistic/max-len
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type
   protected override getProps() {
+    this.commonProps.rootElementRef.current = this.root!;
+
     return computed(() => ({
       Toolbar: this.toolbar.asInferno(),
       Content: this.content.asInferno(),
@@ -150,7 +161,7 @@ export class MainView extends View<MainViewProps> {
       EditPopup: this.editPopup.asInferno(),
       ContextMenu: this.contextMenu.asInferno(),
       config: this.config.value,
-      rootElementRef: { current: this.root! },
+      commonProps: this.commonProps,
       onKeyDown: (event: KeyboardEvent): void => {
         this.keyboardNavigation.onKeyDown(event);
       },

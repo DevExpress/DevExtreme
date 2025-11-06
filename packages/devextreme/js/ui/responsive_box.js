@@ -1,4 +1,4 @@
-import ResponsiveBox from '../__internal/ui/m_responsive_box';
+import ResponsiveBox from '../__internal/ui/responsive_box';
 
 export default ResponsiveBox;
 

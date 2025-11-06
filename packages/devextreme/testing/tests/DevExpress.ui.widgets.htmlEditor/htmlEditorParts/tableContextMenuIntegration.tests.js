@@ -275,7 +275,7 @@ module('Table context menu integration', {
 
             const $textItems = $contextMenu.find(`.${ITEM_HAS_TEXT_CLASS}`);
 
-            $textItems.eq(2).trigger('dxclick');
+            $textItems.eq(3).trigger('dxclick');
             this.clock.tick(500);
 
             const $form = $('.dx-form:not(.dx-formdialog-form)');

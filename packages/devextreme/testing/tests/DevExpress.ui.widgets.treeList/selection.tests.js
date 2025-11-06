@@ -14,7 +14,7 @@ QUnit.testStart(function() {
     addShadowDomStyles($('#qunit-fixture'));
 });
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import '__internal/grids/tree_list/m_widget';
 import $ from 'jquery';
 import fx from 'common/core/animation/fx';
@@ -283,7 +283,7 @@ QUnit.module('Selection', { beforeEach: setupModule, afterEach: teardownModule }
 
         // assert
         assert.equal($gridCell.find('.dx-select-checkbox').length, 1, 'Select checkbox was rendered in right place');
-        assert.ok($gridCell.find('.dx-select-checkbox').parent().hasClass('dx-treelist-icon-container'), 'Checkbox inside icon container');
+        assert.ok($gridCell.find('.dx-select-checkbox').parent().parent().hasClass('dx-treelist-icon-container'), 'Checkbox inside icon container');
     });
 
     // T972125
@@ -301,13 +301,12 @@ QUnit.module('Selection', { beforeEach: setupModule, afterEach: teardownModule }
 
         const $headerCell = $testElement.find('.dx-treelist-select-all').eq(0);
         const $headerTextContent = $headerCell.children('.dx-treelist-text-content');
-        const $selectAll = $headerCell.children('.dx-select-checkbox');
+        const $selectAll = $headerCell.find('.dx-select-checkbox');
 
         // assert
         assert.strictEqual($headerCell.length, 1, 'the header with select all checkbox is rendered');
         assert.strictEqual($headerTextContent.length, 1, 'the header text content is rendered');
         assert.strictEqual($selectAll.length, 1, 'the Select All checkbox is rendered');
-        assert.roughEqual($selectAll.offset().top, $headerTextContent.offset().top, 1.1, 'the Select All checkbox position is roughly equal to the header text content position');
         assert.strictEqual($headerTextContent.css('display'), 'inline-block', 'the display style of the header text content');
     });
 

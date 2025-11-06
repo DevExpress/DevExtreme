@@ -12,6 +12,7 @@ import {
 import { IHtmlOptions, ComponentBaseRef, ComponentBase } from './component-base';
 import { ComponentProps, NestedComponentMeta } from './component';
 
+// eslint-disable-next-line @stylistic/max-len
 type NestedOptionElement = ReactElement<any, React.JSXElementConstructor<any> & NestedComponentMeta>;
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -20,6 +21,7 @@ function elementIsExtension(el: any): el is NestedOptionElement {
 }
 
 const ExtensionComponent = forwardRef<ComponentBaseRef, any>(
+  // eslint-disable-next-line @stylistic/max-len
   <P extends IHtmlOptions>(props: P & ComponentProps, ref: React.ForwardedRef<ComponentBaseRef>) => {
     const componentBaseRef = useRef<ComponentBaseRef>(null);
 
@@ -57,7 +59,9 @@ const ExtensionComponent = forwardRef<ComponentBaseRef, any>(
       />
     );
   },
-) as <P extends IHtmlOptions>(props: P & ComponentProps & { ref?: React.Ref<ComponentBaseRef> }) => ReactElement | null;
+) as <P extends IHtmlOptions>(props: P & ComponentProps & {
+  ref?: React.Ref<ComponentBaseRef>;
+}) => ReactElement | null;
 
 export {
   ExtensionComponent,

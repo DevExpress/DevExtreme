@@ -7,7 +7,7 @@ const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
 require('ui/list');
 require('integration/knockout');
 
-require('generic_light.css!');
+require('fluent_blue_light.css!');
 
 const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 
@@ -35,10 +35,6 @@ QUnit.testStart(function() {
 const LIST_CLASS = 'dx-list';
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
-
-const toSelector = function(cssClass) {
-    return '.' + cssClass;
-};
 
 const moduleSetup = {
     beforeEach: function() {
@@ -70,7 +66,7 @@ QUnit.test('default with ko approach', function(assert) {
 
     assert.ok($element.hasClass(LIST_CLASS));
 
-    const items = $element.find(toSelector(LIST_ITEM_CLASS));
+    const items = $element.find(`.${LIST_ITEM_CLASS}`);
     assert.equal(items.length, 2);
     assert.ok(items.eq(0).hasClass(LIST_ITEM_CLASS));
     assert.ok(items.eq(1).hasClass(LIST_ITEM_CLASS));
@@ -121,11 +117,11 @@ QUnit.test('observableArray.push must refresh', function(assert) {
     this.element.attr('data-bind', 'dxList: { dataSource: data }');
     ko.applyBindings(vm, this.element[0]);
 
-    assert.equal(this.element.find(toSelector(LIST_ITEM_CLASS)).length, 1);
+    assert.equal(this.element.find(`.${LIST_ITEM_CLASS}`).length, 1);
     assert.equal(this.element.dxList('instance').option('items').length, 1);
 
     vm.data.push(2);
-    assert.equal(this.element.find(toSelector(LIST_ITEM_CLASS)).length, 2);
+    assert.equal(this.element.find(`.${LIST_ITEM_CLASS}`).length, 2);
     assert.equal(this.element.dxList('instance').option('items').length, 2);
 });
 
@@ -211,7 +207,7 @@ QUnit.test('grouped list should respond on outside selectedItems changes', funct
         unselectActionFired += args.removedItems.length;
     });
 
-    const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+    const $items = $list.find(`.${LIST_ITEM_CLASS}`);
 
     vm.selectedItems([
         {

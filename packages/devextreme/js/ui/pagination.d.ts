@@ -1,6 +1,7 @@
 import Widget, { WidgetOptions } from './widget/ui.widget';
 import {
     DisplayMode,
+    Mode,
 } from '../common';
 
 export {
@@ -40,9 +41,9 @@ export type PagerBase = {
     /**
      * @docid
      * @public
-     * @default false
+     * @default "auto"
      */
-    showPageSizeSelector?: boolean;
+    showPageSizeSelector?: boolean | Mode;
     /**
      * @docid
      * @public

@@ -52,7 +52,7 @@ const App = () => {
     }
 
     const currentDate = scheduler.option('currentDate');
-    const cellDuration = scheduler.option('cellDuration') as number;
+    const cellDuration = scheduler.option('cellDuration');
     const cellDurationMs = cellDuration * MS_IN_HOUR;
     const currentTime = new Date(currentDate as Date).getTime();
     const roundTime = Math.round(currentTime / cellDurationMs) * cellDurationMs;
@@ -88,6 +88,7 @@ const App = () => {
         allowMultiple={true}
         fieldExpr="assigneeId"
         label="Assignee"
+        icon="user"
       />
       <Toolbar>
         <Item name="today" />

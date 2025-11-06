@@ -42,7 +42,6 @@ const App = () => {
   const ratingGridRef = useRef(null);
 
   const exportGrids = useCallback(() => {
-    // eslint-disable-next-line new-cap
     const doc = new jsPDF();
 
     exportDataGrid({

@@ -48,15 +48,15 @@ export class DateTableMonthCell extends BaseInfernoComponent<DateTableCellBasePr
       startDate,
       text,
       className,
-      firstDayOfMonth,
+      isFirstDayMonthHighlighting,
       otherMonth,
       today,
     } = this.props;
     const classes = combineClasses({
-      'dx-scheduler-date-table-other-month': !!otherMonth,
-      'dx-scheduler-date-table-current-date': !!today,
-      'dx-scheduler-date-table-first-of-month': !!firstDayOfMonth,
-      [className ?? '']: !!className,
+      'dx-scheduler-date-table-other-month': Boolean(otherMonth),
+      'dx-scheduler-date-table-current-date': Boolean(today),
+      'dx-scheduler-date-table-first-of-month': Boolean(isFirstDayMonthHighlighting),
+      [className ?? '']: Boolean(className),
     });
     const contentTemplateProps = this.getContentTemplateProps();
 

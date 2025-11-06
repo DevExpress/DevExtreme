@@ -1,20 +1,20 @@
+import type { ScrollDirection as Direction } from '@js/common';
 import { ensureDefined } from '@js/core/utils/common';
 import {
   isDefined,
   isPlainObject,
 } from '@js/core/utils/type';
-
 import type {
-  ScrollableDirection,
   ScrollOffset,
-} from '../types';
+} from '@ts/ui/scroll_view/types';
+
 import {
   ScrollDirection,
 } from './scroll_direction';
 
 export function convertToLocation(
   location: number | Partial<{ x: number; y: number; top: number; left: number }>,
-  direction: ScrollableDirection,
+  direction: Direction,
 ): Partial<ScrollOffset> {
   if (isPlainObject(location)) {
     const left = ensureDefined(location.left, location.x);

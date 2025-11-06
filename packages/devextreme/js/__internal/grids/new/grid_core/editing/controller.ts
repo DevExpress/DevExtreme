@@ -2,7 +2,7 @@
 /* eslint-disable spellcheck/spell-checker */
 import { applyChanges } from '@js/common/data';
 import { isDefined } from '@js/core/utils/type';
-import { computed, type Signal } from '@preact/signals-core';
+import { computed, type Signal } from '@ts/core/state_manager/index';
 import { generateNewRowTempKey } from '@ts/grids/grid_core/editing/m_editing_utils';
 import { OptionsValidationController } from '@ts/grids/new/grid_core/options_validation/index';
 
@@ -78,14 +78,16 @@ export class EditingController {
 
     const oldData = insertChange?.data ?? oldItem.data;
 
-    const newData = applyChanges(
-      [oldData],
-      changes,
-      {
-        keyExpr: this.dataController.dataSource.peek().key(),
-        immutable: true,
-      },
-    )[0];
+    const newData = insertChange
+      ? { ...oldData, ...changes }
+      : applyChanges(
+        [oldData],
+        changes,
+        {
+          keyExpr: this.dataController.dataSource.peek().key(),
+          immutable: true,
+        },
+      )[0];
 
     const newItem = this.itemsController.createCardInfo(
       newData,
@@ -167,7 +169,7 @@ export class EditingController {
     ];
 
     this.changes.value = [
-      ...this.changes.peek(), { type: 'insert', key: newItemKey, data: {} },
+      ...this.changes.peek(), { type: 'insert', key: newItemKey, data: eventArgs.data },
     ];
     this.editCardKey.value = newItemKey;
   }

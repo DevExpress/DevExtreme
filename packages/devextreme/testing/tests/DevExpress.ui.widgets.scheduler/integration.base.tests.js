@@ -10,7 +10,7 @@ QUnit.testStart(function() {
             </div>');
 });
 
-require('generic_light.css!');
+require('fluent_blue_light.css!');
 
 const noop = require('core/utils/common').noop;
 const errors = require('ui/widget/ui.errors');
@@ -45,8 +45,22 @@ QUnit.test('Header should be initialized with correct views and currentView opti
         currentView: 'week'
     });
     const header = this.instance.$element().find('.dx-scheduler-header').dxSchedulerHeader('instance');
-    assert.deepEqual(header.option('views'), ['day', 'week'], 'Scheduler header has a correct views option');
-    assert.equal(header.option('currentView'), 'week', 'Scheduler header has a correct current view');
+    const expectedViews = [
+        {
+            'groupOrientation': 'horizontal',
+            'intervalCount': 1,
+            'type': 'day',
+            'skippedDays': [],
+        },
+        {
+            'groupOrientation': 'horizontal',
+            'intervalCount': 1,
+            'type': 'week',
+            'skippedDays': [],
+        }
+    ];
+    assert.deepEqual(header.option('views'), expectedViews, 'Scheduler header has a correct views option');
+    assert.deepEqual(header.option('currentView'), expectedViews[1], 'Scheduler header has a correct current view');
 });
 
 QUnit.test('Height of \'dx-scheduler-group-row\' should be equal with height of \'dx-scheduler-date-table-row\'', async function(assert) {
@@ -158,11 +172,11 @@ QUnit.test('Scheduler should handle events from units', async function(assert) {
 
         this.instance.subscribe('testFunction', spy);
 
-        const observer = unit.option('observer');
+        const notifyScheduler = unit.option('notifyScheduler');
 
-        assert.equal(observer, this.instance, 'observer is instance of scheduler');
+        assert.equal(notifyScheduler.scheduler, this.instance, 'notifyScheduler is instance of scheduler');
 
-        unit.notifyObserver('testFunction', { a: 1 });
+        unit.invoke('testFunction', { a: 1 });
 
         assert.ok(spy.calledOnce, 'testFunction called once');
         assert.deepEqual(spy.getCall(0).args[0], { a: 1 }, 'testFunction has right args');
@@ -244,7 +258,7 @@ QUnit.test('Scheduler should not throw an error when the details form is opened 
 });
 
 QUnit.test('The \'scrollingEnabled\' option of an appointment form should be \'true\'', async function(assert) {
-    await this.createInstance();
+    await this.createInstance({ editing: { legacyForm: true } });
     this.instance.showAppointmentPopup({ startDate: new Date() });
 
     assert.strictEqual(this.instance.getAppointmentDetailsForm().option('scrollingEnabled'), true, 'the scrollingEnabled option is OK');

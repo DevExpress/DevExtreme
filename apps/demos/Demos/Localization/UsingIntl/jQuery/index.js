@@ -56,8 +56,8 @@ $(() => {
         format: 'currency',
         showClearButton: true,
         inputAttr: {
-          'aria-label': 'Filter cell'
-        }
+          'aria-label': 'Filter cell',
+        },
       },
     }, {
       dataField: 'PaymentDate',

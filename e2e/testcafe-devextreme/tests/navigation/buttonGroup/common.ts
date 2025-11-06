@@ -1,85 +1,46 @@
-import { ClientFunction, Selector } from 'testcafe';
+import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Item, ButtonType } from 'devextreme/ui/button_group.d';
-import { setStyleAttribute, appendElementTo, setAttribute } from '../../../helpers/domUtils';
-import { testScreenshot, isMaterialBased } from '../../../helpers/themeUtils';
+import {
+  setStyleAttribute,
+  appendElementTo,
+  setAttribute,
+} from '../../../helpers/domUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 
-interface ButtonGroupItem extends Item {
-  id: string;
-}
+const typedItems: Item[] = ['danger', 'default', 'normal', 'success'].map((type: ButtonType) => ({ type, text: type }));
+const iconItems: Item[] = [
+  { icon: 'find', text: 'find' },
+  { icon: 'find' },
+];
+const items: Item[] = [
+  ...typedItems,
+  ...iconItems,
+];
 
-fixture.disablePageReloads`ButtonGroup_Styles`
+fixture.disablePageReloads`ButtonGroup`
   .page(url(__dirname, '../../container.html'));
 
-['text', 'outlined', 'contained'].forEach((stylingMode) => {
-  test(`ButtonGroup-styling,stylingMode=${stylingMode}`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+test('ButtonGroup styling', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await appendElementTo('#container', 'div', `mode${stylingMode}`, {});
-    await ClientFunction(() => {
-      $(`#mode${stylingMode}`).text(stylingMode);
-    }, { dependencies: { stylingMode } })();
+  await testScreenshot(t, takeScreenshot, 'ButtonGroup styling.png', { element: '#container' });
 
-    // eslint-disable-next-line no-restricted-syntax
-    for (const state of [
-      'dx-state-default',
-      'dx-state-focused',
-      'dx-state-hover',
-      'dx-state-active',
-      'dx-state-selected',
-      'dx-item-selected',
-    ]) {
-      await appendElementTo('#container', 'div', `mode${stylingMode}${state}`, {});
-      await ClientFunction(() => {
-        $(`#mode${stylingMode}${state}`).text(state);
-      }, { dependencies: { stylingMode, state } })();
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await setStyleAttribute(Selector('#container'), 'width: fit-content; padding: 8px; display: flex; gap: 16px; flex-direction: column;');
+  await setAttribute('#container', 'class', 'dx-theme-generic-typography');
 
-      await appendElementTo('#container', 'div', `buttongroup${stylingMode}${state}`, {});
+  const stylingModes = ['text', 'outlined', 'contained'];
 
-      const items: ButtonGroupItem[] = ['danger', 'default', 'normal', 'success'].map((type) => ({
-        id: type,
-        type: type as ButtonType,
-        text: type,
-      }));
-
-      items.push({
-        id: 'find',
-        icon: 'find',
-        text: 'find',
-      });
-
-      items.push({
-        id: 'findIconOnly',
-        icon: 'find',
-      });
-
-      items.map((item) => {
-        item.elementAttr = { class: state };
-        return item;
-      });
-
-      await createWidget('dxButtonGroup', {
-        items,
-        stylingMode,
-        keyExpr: 'id',
-        selectionMode: 'none',
-      }, `#buttongroup${stylingMode}${state}`);
-    }
-
-    await testScreenshot(t, takeScreenshot, `ButtonGroup render states mode=${stylingMode}.png`, { element: '#container' });
-
-    if (!isMaterialBased()) {
-      await testScreenshot(t, takeScreenshot, `ButtonGroup render states mode=${stylingMode}.png`, { element: '#container', theme: 'generic.dark' });
-      await testScreenshot(t, takeScreenshot, `ButtonGroup render states mode=${stylingMode}.png`, { element: '#container', theme: 'generic.contrast' });
-    }
-
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => {
-    await setStyleAttribute(Selector('#container'), 'width: 600px; height: 400px;');
-    await setAttribute('#container', 'class', 'dx-theme-generic-typography');
-  });
+  await Promise.all(stylingModes.map((mode) => appendElementTo('#container', 'div', `buttongroup-${mode}`, {})));
+  await Promise.all(stylingModes.map((stylingMode) => createWidget('dxButtonGroup', {
+    items,
+    stylingMode,
+    selectionMode: 'none',
+  }, `#buttongroup-${stylingMode}`)));
 });

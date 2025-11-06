@@ -92,6 +92,8 @@ export class Service {
         return this.update(change);
       case 'remove':
         return this.remove(change);
+      default:
+        return null;
     }
   }
 }

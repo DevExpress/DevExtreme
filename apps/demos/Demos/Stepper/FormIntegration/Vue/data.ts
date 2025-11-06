@@ -1,4 +1,4 @@
-import { type DxStepperTypes } from 'devextreme-vue/stepper'
+import { type DxStepperTypes } from 'devextreme-vue/stepper';
 import type { BookingFormData } from './types';
 
 export const initialSteps: DxStepperTypes.Item[] = [

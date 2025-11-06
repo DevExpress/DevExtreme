@@ -33,7 +33,7 @@ const cities = ['Los Angeles', 'Denver', 'Bentonville', 'Atlanta', 'Reno', 'Beav
 
 const products: Product[] = [];
 
-for (let i = 1; i <= 100; i++) {
+for (let i = 1; i <= 100; i += 1) {
   products.push({
     ProductID: i,
     ProductName: `Product ${i}`,

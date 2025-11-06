@@ -332,6 +332,16 @@ QUnit.module('12 hours format', () => {
         assert.equal($element.find('.' + TIMEVIEW_FORMAT12_CLASS).length, 0, 'input was removed');
     });
 
+    QUnit.test('format selectBox should set timeView root as a dropDown container (T1300566)', function(assert) {
+        const $element = $('#timeView').dxTimeView({
+            use24HourFormat: false,
+        });
+        const formatSelectBox = $element.find(`.${TIMEVIEW_FORMAT12_CLASS}`).dxSelectBox('instance');
+        const $container = formatSelectBox.option('dropDownOptions.container');
+
+        assert.strictEqual($container.is($element), true);
+    });
+
     QUnit.test('timeView should use localized message for the 24hour format selectBox', function(assert) {
         const getPeriodNames = sinon.stub(dateLocalization, 'getPeriodNames').returns(['A', 'P']);
 

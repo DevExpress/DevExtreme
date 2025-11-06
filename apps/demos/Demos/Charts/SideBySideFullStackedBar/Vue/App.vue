@@ -57,12 +57,15 @@ import {
   DxLegend,
   DxExport,
   DxTooltip,
+  type DxChartTypes,
 } from 'devextreme-vue/chart';
 import service from './data.ts';
 
 const dataSource = service.getMaleAgeData();
 
-const customizeTooltip = ({ percentText, valueText }) => ({ text: `${percentText} - ${valueText}` });
+const customizeTooltip = (
+  { percentText, valueText }: DxChartTypes.StackedPointInfo,
+) => ({ text: `${percentText} - ${valueText}` });
 </script>
 <style>
 #chart {

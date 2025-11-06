@@ -36,13 +36,13 @@ import {
 import { roomsData, buildingData } from './data.ts';
 
 const projection = {
-  to: ([l, lt]) => [l / 100, lt / 100],
-  from: ([x, y]) => [x * 100, y * 100],
+  to: ([l, lt]: [number, number]) => [l / 100, lt / 100],
+  from: ([x, y]: [number, number]) => [x * 100, y * 100],
 };
 
-const customizeTooltip = (info) => (info.layer.name === 'rooms'
+const customizeTooltip = (info: any) => (info.layer.name === 'rooms'
   ? { text: `Square: ${info.attribute('square')} ft&#178` }
-  : null);
+  : {});
 </script>
 <style>
 #vector-map {

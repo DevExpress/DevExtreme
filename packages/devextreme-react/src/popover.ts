@@ -60,7 +60,7 @@ const Popover = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["height","position","visible","width"]), []);
       const independentEvents = useMemo(() => (["onContentReady","onDisposing","onHidden","onHiding","onInitialized","onShowing","onShown","onTitleRendered"]), []);

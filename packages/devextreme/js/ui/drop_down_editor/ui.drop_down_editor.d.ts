@@ -27,6 +27,8 @@ import {
     EventInfo,
 } from '../../common/core/events';
 
+import { EditorOptionsWithValue } from '../editor/editor';
+
 /** @public */
 export type DropDownPredefinedButton = 'clear' | 'dropDown';
 
@@ -34,6 +36,25 @@ export interface DropDownButtonTemplateDataModel {
     readonly text?: string;
     readonly icon?: string;
 }
+
+/**
+ * @namespace DevExpress.ui
+ * @docid
+ */
+export type FieldAddons = {
+    /**
+     * @docid
+     * @type_function_param1 data:object
+     * @type_function_return string|Element|jQuery
+     */
+    beforeTemplate?: template | ((data: any, element: DxElement) => string | UserDefinedElement);
+    /**
+     * @docid
+     * @type_function_param1 data:object
+     * @type_function_return string|Element|jQuery
+     */
+    afterTemplate?: template | ((data: any, element: DxElement) => string | UserDefinedElement);
+};
 
 /**
  * @namespace DevExpress.ui
@@ -89,6 +110,12 @@ export interface dxDropDownEditorOptions<TComponent> extends Omit<dxTextBoxOptio
     /**
      * @docid
      * @default null
+     * @public
+     */
+    fieldAddons?: FieldAddons;
+    /**
+     * @docid
+     * @default null
      * @action
      * @public
      */
@@ -140,7 +167,9 @@ export interface dxDropDownEditorOptions<TComponent> extends Omit<dxTextBoxOptio
  * @namespace DevExpress.ui
  * @options dxDropDownEditorOptions
  */
-export default class dxDropDownEditor<TProperties> extends dxTextBox<TProperties> {
+export default class dxDropDownEditor<
+    TProperties extends EditorOptionsWithValue = Properties,
+> extends dxTextBox<TProperties> {
     /**
      * @docid
      * @publicName close()
@@ -165,6 +194,13 @@ export default class dxDropDownEditor<TProperties> extends dxTextBox<TProperties
      * @public
      */
     open(): void;
+    /**
+     * @docid
+     * @publicName reset(value)
+     * @public
+     * @param1 value:any
+     */
+    reset(value?: TProperties['value']): void;
 }
 
 interface DropDownEditorInstance extends dxDropDownEditor<Properties> { }

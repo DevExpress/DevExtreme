@@ -1,7 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxButtonModule, DxLoadIndicatorModule, DxTemplateModule } from 'devextreme-angular';
+import { DxButtonModule, DxLoadIndicatorModule } from 'devextreme-angular';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -23,7 +23,7 @@ export class AppComponent {
 
   buttonText = 'Send';
 
-  onClick(data) {
+  onClick() {
     this.buttonText = 'Sending';
     this.loadIndicatorVisible = true;
 
@@ -39,7 +39,6 @@ export class AppComponent {
     BrowserModule,
     DxButtonModule,
     DxLoadIndicatorModule,
-    DxTemplateModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

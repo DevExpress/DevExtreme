@@ -3,10 +3,10 @@ import fx from 'common/core/animation/fx';
 import renderer from 'core/renderer';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
-import Submenu from '__internal/ui/menu/m_submenu';
+import Submenu from '__internal/ui/menu/submenu';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import domAdapter from '__internal/core/m_dom_adapter';
-import Menu from '__internal/ui/menu/m_menu';
+import Menu from '__internal/ui/menu/menu';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import fixtures from '../../helpers/positionFixtures.js';
 import { CustomStore } from 'common/data/custom_store';
@@ -14,11 +14,14 @@ import ArrayStore from 'common/data/array_store';
 import eventsEngine from 'common/core/events/core/events_engine';
 import { DataSource } from 'common/data/data_source/data_source';
 import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 import 'generic_light.css!';
 import { implementationsMap, getHeight, getWidth, getOuterHeight } from 'core/utils/size';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
+import {
+    EXPANDER_ICON_STUB_CLASS as TREE_VIEW_EXPANDER_ICON_STUB_CLASS,
+    ITEM_CLASS as TREE_VIEW_ITEM_CLASS,
+} from '__internal/ui/tree_view/tree_view.base';
 
 QUnit.testStart(function() {
     const markup =
@@ -158,10 +161,6 @@ QUnit.module('Render content delimiters', {
     });
 
     QUnit.test('container border should not be hidden when non-top level submenu hides', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menu = createMenuInWindow({
             showSubmenuMode: 'onHover',
             items: [{
@@ -257,7 +256,7 @@ QUnit.module('Menu rendering', {
         assert.equal(root.length, 1, 'just root level');
     });
 
-    QUnit.test('Don\'t create submenu on rendering', function(assert) {
+    QUnit.test('Do not create submenu on rendering', function(assert) {
         const menu = createMenu({ items: [{ text: 'item1', items: [{}] }] });
         const $rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
@@ -419,10 +418,6 @@ QUnit.module('Rendering Scrollable', {
     });
 
     QUnit.test('Scrollable should be initialized on a 2nd level submenu', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menu = createMenu({
             items: [{
                 text: 'item 1',
@@ -477,10 +472,6 @@ QUnit.module('Rendering Scrollable', {
     });
 
     QUnit.test('Height of the submenu should not exceed content height', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menu = createMenuInWindow({
             items: [{
                 text: 'item 1',
@@ -499,10 +490,6 @@ QUnit.module('Rendering Scrollable', {
     });
 
     QUnit.test('Nested submenu should be positioned to a clicked item', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menu = createMenuInWindow({
             items: [{
                 text: 'item 1',
@@ -558,10 +545,6 @@ QUnit.module('Rendering Scrollable', {
     });
 
     QUnit.test('Flipping 2nd level submenu', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menu = createMenuInWindow({
             items: [{
                 text: 'item 1',
@@ -593,10 +576,6 @@ QUnit.module('Rendering Scrollable', {
     });
 
     QUnit.test('Selected item should be always visible during keyboard navigation (root submenu)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menu = createMenuInWindow({
             items: [{
                 text: 'Item 1',
@@ -630,10 +609,6 @@ QUnit.module('Rendering Scrollable', {
     });
 
     QUnit.test('Selected item should be always visible during keyboard navigation (nested submenu)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menu = createMenuInWindow({
             items: [{
                 text: 'Item 1',
@@ -671,10 +646,6 @@ QUnit.module('Rendering Scrollable', {
     });
 
     QUnit.test('Scroll position should be set to 0 after reopen (root submenu)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menu = createMenuInWindow({
             items: [{
                 text: 'Item 1',
@@ -713,10 +684,6 @@ QUnit.module('Rendering Scrollable', {
     });
 
     QUnit.test('Scroll position should be set to 0 after reopen (nested submenu, KBN)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menu = createMenuInWindow({
             items: [
                 {
@@ -763,10 +730,6 @@ QUnit.module('Rendering Scrollable', {
     });
 
     QUnit.test('Scroll position should be set to 0 after reopen (nested submenu, pointer)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menu = createMenuInWindow({
             items: [
                 {
@@ -822,10 +785,6 @@ QUnit.module('Rendering Scrollable', {
     });
 
     QUnit.test('Option focusedElement should be null after reopen root submenu', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const submenuItemText = '1st submenu item';
         const menu = createMenuInWindow({
             items: [{
@@ -1119,10 +1078,6 @@ QUnit.module('Menu - selection', {
     }
 }, () => {
     QUnit.test('Menu should not crash when items changed (T310030)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const items = [{ text: 'root', selected: false, items: [{ text: 'submenu' }] }];
         const changedItems = [{ text: 'root1', selected: true, items: [{ text: 'submenu1' }] }];
         const menu = createMenu({
@@ -1608,7 +1563,7 @@ QUnit.module('Menu tests', {
         assert.strictEqual(submenu.option('visible'), true, 'submenu still opened');
     });
 
-    QUnit.test('Don\'t hide submenu when cancel is true', function(assert) {
+    QUnit.test('Do not hide submenu when cancel is true', function(assert) {
         let i = 0;
 
         const options = {
@@ -1856,10 +1811,6 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Menu was not shown on some browsers with not synchronized mouse event arguments (T191149)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const options = { showFirstSubmenuMode: 'onHover', items: [{ text: 'item1', items: [{ text: 'item1-1' }] }] };
         const menu = createMenu(options);
         const rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
@@ -1878,10 +1829,6 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Show submenu onHover', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menu = createMenuForHoverStay({ showFirstSubmenuMode: 'onHover', items: [{ text: 'itemB', items: [{ text: 'itemB-A' }] }] });
         const rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
         const $itemContainer = menu.instance.itemsContainer();
@@ -1896,10 +1843,6 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Show submenu onHover with custom timeout set as an object', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menu = createMenuForHoverStay({ showFirstSubmenuMode: { name: 'onHover', delay: { show: 300, hide: 700 } }, items: [{ text: 'itemB', items: [{ text: 'itemB-A' }] }] });
         const rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
         const $itemContainer = menu.instance.itemsContainer();
@@ -1914,10 +1857,6 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Show submenu onHover with custom timeout set as a number', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menu = createMenuForHoverStay({ showFirstSubmenuMode: { name: 'onHover', delay: 500 }, items: [{ text: 'itemB', items: [{ text: 'itemB-A' }] }] });
         const rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
         const $itemContainer = menu.instance.itemsContainer();
@@ -1963,10 +1902,6 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Show submenu and sub-submenu on hover', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const items = [
             {
                 text: 'itemA',
@@ -2001,10 +1936,6 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Do not show submenu on hover if item is disabled', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const items = [
             {
                 text: 'itemB',
@@ -2026,10 +1957,6 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Show submenu on hover and sub-submenu onClick', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const items = [
             {
                 text: 'itemA',
@@ -2085,10 +2012,6 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('hover should not open menu when mouse button is pressed', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menu = createMenu({
             items: [{ text: 'Item 1', items: [{ text: 'item 11' }] }],
             showFirstSubmenuMode: 'onHover'
@@ -2106,10 +2029,6 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('hover on opened menu should not close it (T317062)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menu = createMenu({
             items: [{ text: 'Item 1', items: [{ text: 'item 11' }] }],
             showFirstSubmenuMode: 'onHover'
@@ -2130,10 +2049,6 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Menu should show when show delay is 0', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menu = createMenu({
             items: [{ text: 'Item 1', items: [{ text: 'item 11' }] }],
             showFirstSubmenuMode: { name: 'onHover', delay: 0 }
@@ -2149,10 +2064,6 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Menu should not be shown if hover was ended before show delay time exceeded', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menu = createMenu({
             items: [{ text: 'Item 1', items: [{ text: 'Item 11' }] }],
             showFirstSubmenuMode: { name: 'onHover', delay: 500 }
@@ -2171,10 +2082,6 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Submenu should not be shown if hover was ended before show delay time exceeded', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menu = createMenu({
             items: [{ text: 'Item 1', items: [{ text: 'Item 11', items: [{ text: 'Item 111' }] }] }],
             showSubmenuMode: { name: 'onHover', delay: 500 }
@@ -2197,10 +2104,6 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Submenu shoyld not be hidden if other submenu was opened before hide delay time exceeded', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menu = createMenu({
             items: [
                 { text: 'Item 1', items: [{ text: 'Item 11' }] },
@@ -2228,10 +2131,6 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Submenu should not be closed after showFirstSubmenuMode option is changed', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menu = createMenu({
             items: [{ text: 'Item 1', items: [{ text: 'Item 11', items: [{ text: 'Item 111' }] }] }],
             showFirstSubmenuMode: { name: 'onHover', delay: { show: 500, hide: 400 } }
@@ -2248,10 +2147,6 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Menu should hide after mouseleave when pointer goes through siblings menus (T325923)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menu = createMenu({
             items: [{ text: 'Item 1', items: [{ text: 'item 11' }] }, { text: 'Item 2' }],
             showFirstSubmenuMode: { name: 'onHover', delay: 0 },
@@ -2274,10 +2169,6 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Link should be programmatically clicked if item.url is set and item is clicked, showSubmenuMode is `onHover` (T1209825)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const clickSpy = sinon.spy();
 
         const menu = createMenu({
@@ -2321,10 +2212,6 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Menu should hide after mouseleave when hideOnMouseLeave = true', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menu = createMenu({
             items: [{ text: 'Item 1', items: [{ text: 'item 11' }] }, { text: 'Item 2' }],
             showFirstSubmenuMode: { name: 'onHover', delay: 0 },
@@ -2352,10 +2239,6 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Menu should not hide after mouseleave to children of a target', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menu = createMenu({
             items: [{ text: 'Item 1', items: [{ text: 'item 11' }] }, { text: 'Item 2' }],
             showFirstSubmenuMode: { name: 'onHover', delay: 0 },
@@ -2371,7 +2254,7 @@ QUnit.module('Menu tests', {
         assert.ok(submenu.option('visible'), 'submenu shown');
     });
 
-    QUnit.test('Menu should show after it\'s submenu has been selected', function(assert) {
+    QUnit.test('Menu should show after its submenu has been selected', function(assert) {
         const menu = createMenu({
             items: [{ text: 'Item 1', items: [{ text: 'item 11' }] }, { text: 'Item 2' }],
             showFirstSubmenuMode: { name: 'onClick', delay: 0 }
@@ -2391,10 +2274,6 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Menu should not hide when root item clicked', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menu = createMenu({
             items: [{ text: 'Item 1', items: [{ text: 'item 11' }] }],
             showFirstSubmenuMode: { name: 'onHover', delay: 0 }
@@ -2419,10 +2298,6 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Menu should not hide when root item clicked right after mouseleave, hideSubmenuOnMouseLeave: true', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menu = createMenu({
             items: [{ text: 'Item_1', items: [{ text: 'item_1_1' }] }, { text: 'Item_2', items: [{ text: 'item_2_1' }] }],
             hideSubmenuOnMouseLeave: true
@@ -2441,10 +2316,6 @@ QUnit.module('Menu tests', {
     });
     // T431949
     QUnit.test('Menu should stop show submenu timeout when another level submenu was hovered', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menu = createMenu({
             items: [{ text: 'Item 1', items: [{ text: 'item 11' }] }, { text: 'Item 2', items: [{ text: 'item 11' }] }],
             showFirstSubmenuMode: { name: 'onHover', delay: 50 }
@@ -2470,7 +2341,7 @@ QUnit.module('Menu tests', {
         assert.ok(submenu.isOverlayVisible(), 'submenu is still visible');
     });
 
-    QUnit.test('click should not be blocked on menu\'s item', function(assert) {
+    QUnit.test('click should not be blocked on menu item', function(assert) {
         const menu = createMenu({
             items: [{ text: 'Item 1' }]
         });
@@ -2488,10 +2359,6 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Hover root menu item -> move mouse pointer to the first submenu item (disabled)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const $menu = $('#menu').dxMenu({
             items: [{
                 text: 'Item 1',
@@ -2641,7 +2508,7 @@ QUnit.module('keyboard navigation', {
         assert.equal(this.instance.option('selectedItem').text, 'item3', 'correct item is selected');
     });
 
-    QUnit.test('don\'t select an item when space pressed and selectionMode is none', function(assert) {
+    QUnit.test('do not select an item when space pressed and selectionMode is none', function(assert) {
         this.instance.option('selectionMode', 'none');
 
         this.keyboard
@@ -2698,10 +2565,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('keyboard navigation should work after a click', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         this.instance.option('showFirstSubmenuMode', 'onHover');
 
         $(this.instance.itemsContainer())
@@ -2891,7 +2754,7 @@ QUnit.module('keyboard navigation', {
         [{ icon: 'imageCssClass', items: [{ name: 'item_1_1' }] }],
         [{ text: 'item1', icon: 'imageCssClass', items: [{ name: 'item_1_1' }] }],
     ].forEach(items => {
-        checkStyleHelper.testInChromeOnDesktopActiveWindow('root item text should be visible after focusing when it\'s opened (T1227670)', function(assert) {
+        checkStyleHelper.testInChromeOnDesktopActiveWindow('root item text should be visible after focusing when it is opened (T1227670)', function(assert) {
             this.instance.option('items', items);
 
             const $rootMenuItem = $(this.instance.itemElements().eq(0));
@@ -3339,6 +3202,32 @@ QUnit.module('adaptivity: render', {
             offset.restore();
         }
     });
+
+    QUnit.test('tree view stub elements should have display=none if adaptivityEnabled is set to true (T1302958)', function(assert) {
+        new Menu(this.$element, {
+            items: this.items,
+            adaptivityEnabled: true
+        });
+
+        const $treeViewItems = $(`.${TREE_VIEW_ITEM_CLASS}`);
+        const $stubElements = $(`.${TREE_VIEW_EXPANDER_ICON_STUB_CLASS}`);
+
+        $treeViewItems.each((index, element) => {
+            assert.strictEqual(
+                window.getComputedStyle(element).gap,
+                '0px',
+                `gap property of tree view item #${index} is 0px`
+            );
+        });
+
+        $stubElements.each((index, element) => {
+            assert.strictEqual(
+                window.getComputedStyle(element).width,
+                '0px',
+                `width property of stub element #${index} is 0px`
+            );
+        });
+    });
 });
 
 QUnit.module('adaptivity: transfer options', {
@@ -3576,7 +3465,7 @@ QUnit.module('adaptivity: transfer options', {
         assert.strictEqual(treeview.option('animationEnabled'), false, 'animation has been changed to disabled');
     });
 
-    QUnit.test('Data of tree view doesn\'t load twice when uses the custom store', function(assert) {
+    QUnit.test('Data of tree view does not load twice when uses the custom store', function(assert) {
         const that = this;
         let dataLoadCounter = 0;
         const clock = sinon.useFakeTimers();
@@ -3707,11 +3596,28 @@ QUnit.module('adaptivity: behavior', {
         assert.ok(clickSpy.calledOnce);
     });
 
-    QUnit.test('link should be clicked programmatically with enter key if item.url is set', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
+    QUnit.test('onItemClick should be raised once if item.url is set', function(assert) {
+        const onItemClickSpy = sinon.spy();
 
+        new Menu(this.$element, {
+            items: this.items,
+            onItemClick: onItemClickSpy,
+            adaptivityEnabled: true
+        });
+
+        const parentTreeviewItem = $(`.${DX_TREEVIEW_ITEM_CLASS}`).eq(1);
+
+        parentTreeviewItem.trigger('dxclick');
+        onItemClickSpy.resetHistory();
+
+        const treeviewItem = $(`.${DX_TREEVIEW_ITEM_CLASS}`).eq(2);
+
+        treeviewItem.trigger('dxclick');
+
+        assert.strictEqual(onItemClickSpy.calledOnce, true, 'onItemClick was called once');
+    });
+
+    QUnit.test('link should be clicked programmatically with enter key if item.url is set', function(assert) {
         const clickSpy = sinon.spy();
 
         new Menu(this.$element, {
@@ -3828,7 +3734,7 @@ QUnit.module('adaptivity: behavior', {
         assert.ok($treeview.is(':visible'), 'treeview is visible');
     });
 
-    QUnit.test('Menu should toggle it\'s view between adaptive and non adaptive if container size changed', function(assert) {
+    QUnit.test('Menu should toggle its view between adaptive and non adaptive if container size changed', function(assert) {
         new Menu(this.$element, {
             items: this.items,
             adaptivityEnabled: true
@@ -3841,7 +3747,7 @@ QUnit.module('adaptivity: behavior', {
         assert.ok(this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).is(':hidden'), 'hamburger button is hidden');
     });
 
-    QUnit.test('Menu should toggle it\'s view between adaptive and non adaptive if width is not enough', function(assert) {
+    QUnit.test('Menu should toggle its view between adaptive and non adaptive if width is not enough', function(assert) {
         new Menu(this.$element, {
             items: this.items,
             width: 500,
@@ -3851,7 +3757,7 @@ QUnit.module('adaptivity: behavior', {
         assert.ok(this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).is(':hidden'), 'hamburger button is hidden');
     });
 
-    QUnit.test('Menu should toggle it\'s view between adaptive and non adaptive if widget size changed', function(assert) {
+    QUnit.test('Menu should toggle its view between adaptive and non adaptive if widget size changed', function(assert) {
         const menu = new Menu(this.$element, {
             items: this.items,
             adaptivityEnabled: true
@@ -3862,7 +3768,7 @@ QUnit.module('adaptivity: behavior', {
         assert.ok(this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).is(':hidden'), 'hamburger button is hidden');
     });
 
-    QUnit.test('Menu should toggle it\'s view between adaptive and non adaptive on visibilityChanged event', function(assert) {
+    QUnit.test('Menu should toggle its view between adaptive and non adaptive on visibilityChanged event', function(assert) {
         $('#qunit-fixture').width(500);
 
         const menu = new Menu(this.$element, {
@@ -4002,11 +3908,11 @@ QUnit.module('adaptivity: behavior', {
 
         $($item2).trigger('dxclick');
         assert.ok(getOuterHeight($overlayContent) > height, 'overlay should be enlarged');
-        assert.equal(overlayPositioned.callCount, 2, 'overlay\'s position should be recalculated');
+        assert.equal(overlayPositioned.callCount, 2, 'overlay position should be recalculated');
 
         $($item2).trigger('dxclick');
         assert.equal(getOuterHeight($overlayContent), height, 'overlay should be shrinked');
-        assert.equal(overlayPositioned.callCount, 3, 'overlay\'s position should be recalculated');
+        assert.equal(overlayPositioned.callCount, 3, 'overlay position should be recalculated');
     });
 
     QUnit.test('Adaptive width limit should contain only root items', function(assert) {
@@ -4029,10 +3935,6 @@ QUnit.module('adaptivity: behavior', {
     });
 
     QUnit.test('TreeView should be focused after click on hamburger button (T1207839)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         new Menu(this.$element, {
             items: this.items,
             adaptivityEnabled: true
@@ -4059,10 +3961,6 @@ QUnit.module('Aria accessibility', {
     }
 }, () => {
     QUnit.test('Nested submenu has the "menu" role', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menu = createMenu({
             items: [{
                 text: 'item 1',
@@ -4093,10 +3991,6 @@ QUnit.module('Aria accessibility', {
     });
 
     QUnit.test('Nested submenu items has not "dxPrivateComponent" text in alt', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menu = createMenu({
             items: [{
                 text: 'item 1',
@@ -4174,7 +4068,7 @@ function createMenuForHoverStay(options) {
 }
 
 function transferActionTest(eventName, expectedArgs, triggerFunc) {
-    QUnit.test(eventName + ' action should be transferred to the treeview when \'on\' binding is used', function(assert) {
+    QUnit.test(eventName + ' action should be transferred to the treeview when on binding is used', function(assert) {
         const handler = sinon.spy();
 
         const menu = new Menu(this.$element, {
@@ -4185,7 +4079,7 @@ function transferActionTest(eventName, expectedArgs, triggerFunc) {
 
         menu.on(eventName, handler);
         triggerFunc(treeView);
-        assert.equal(handler.callCount, 1, 'handler for \'on\' was called once');
+        assert.equal(handler.callCount, 1, 'handler for on was called once');
         $.each(expectedArgs, function(_, argument) {
             assert.ok(handler.getCall(0).args[0], argument + ' is exist in parameters');
         });
@@ -4193,7 +4087,7 @@ function transferActionTest(eventName, expectedArgs, triggerFunc) {
         handler.resetHistory();
         menu.off(eventName);
         triggerFunc(treeView);
-        assert.equal(handler.callCount, 0, 'handler for \'on\' was not executed after unsubscribe');
+        assert.equal(handler.callCount, 0, 'handler for on was not executed after unsubscribe');
     });
 
     QUnit.test(eventName + ' action should be transferred to the treeview when option is used', function(assert) {

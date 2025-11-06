@@ -49,7 +49,6 @@ import { CustomStore } from 'devextreme-vue/common/data';
 
 const props = defineProps<{
   value: number,
-  // eslint-disable-next-line no-unused-vars
   onValueChanged(value: number): void,
   dataSource: CustomStore,
 }>();

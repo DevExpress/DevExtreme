@@ -34,7 +34,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoApiKeyModule } from 'devextreme-angular/ui/nested';
@@ -53,13 +54,12 @@ import { DxoMapProviderConfigModule } from 'devextreme-angular/ui/map/nested';
 import { DxiMapRouteModule } from 'devextreme-angular/ui/map/nested';
 import { DxoMapTooltipModule } from 'devextreme-angular/ui/map/nested';
 import { DxiMapLocationModule } from 'devextreme-angular/ui/map/nested';
-
-import { DxiCenterComponent } from 'devextreme-angular/ui/nested';
-import { DxiMarkerComponent } from 'devextreme-angular/ui/nested';
-import { DxiRouteComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiMapMarkerComponent } from 'devextreme-angular/ui/map/nested';
-import { DxiMapRouteComponent } from 'devextreme-angular/ui/map/nested';
+import { 
+           PROPERTY_TOKEN_markers,
+           PROPERTY_TOKEN_routes,
+           PROPERTY_TOKEN_locations,
+           PROPERTY_TOKEN_center,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -80,6 +80,27 @@ import { DxiMapRouteComponent } from 'devextreme-angular/ui/map/nested';
     ]
 })
 export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_markers)
+    set _markersContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('markers', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_routes)
+    set _routesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('routes', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_locations)
+    set _locationsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('locations', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_center)
+    set _centerContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('center', value);
+    }
+
     instance: DxMap = null;
 
     /**
@@ -612,50 +633,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     
      */
     @Output() zoomChange: EventEmitter<number>;
-
-
-
-
-    @ContentChildren(DxiMapMarkerComponent)
-    get markersChildren(): QueryList<DxiMapMarkerComponent> {
-        return this._getOption('markers');
-    }
-    set markersChildren(value) {
-        this._setChildren('markers', value, 'DxiMapMarkerComponent');
-    }
-
-    @ContentChildren(DxiMapRouteComponent)
-    get routesChildren(): QueryList<DxiMapRouteComponent> {
-        return this._getOption('routes');
-    }
-    set routesChildren(value) {
-        this._setChildren('routes', value, 'DxiMapRouteComponent');
-    }
-
-
-    @ContentChildren(DxiCenterComponent)
-    get centerLegacyChildren(): QueryList<DxiCenterComponent> {
-        return this._getOption('center');
-    }
-    set centerLegacyChildren(value) {
-        this._setChildren('center', value, 'DxiCenterComponent');
-    }
-
-    @ContentChildren(DxiMarkerComponent)
-    get markersLegacyChildren(): QueryList<DxiMarkerComponent> {
-        return this._getOption('markers');
-    }
-    set markersLegacyChildren(value) {
-        this._setChildren('markers', value, 'DxiMarkerComponent');
-    }
-
-    @ContentChildren(DxiRouteComponent)
-    get routesLegacyChildren(): QueryList<DxiRouteComponent> {
-        return this._getOption('routes');
-    }
-    set routesLegacyChildren(value) {
-        this._setChildren('routes', value, 'DxiRouteComponent');
-    }
 
 
 

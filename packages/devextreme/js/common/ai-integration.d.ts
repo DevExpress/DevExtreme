@@ -19,6 +19,21 @@ export type Prompt = {
 /**
  * @docid
  * @namespace DevExpress.aiIntegration
+ * @type object
+ * @public
+ */
+export type RequestParamsData = Record<PropertyKey, any>;
+/**
+ * @docid
+ * @namespace DevExpress.aiIntegration
+ * @type object
+ * @public
+ */
+export type AIResponse = string | Record<PropertyKey, any>;
+
+/**
+ * @docid
+ * @namespace DevExpress.aiIntegration
  * @public
  */
 export type RequestParams = {
@@ -27,6 +42,11 @@ export type RequestParams = {
    * @public
    */
   prompt: Prompt;
+  /**
+   * @docid
+   * @public
+   */
+  data?: RequestParamsData;
 };
 
 /**
@@ -39,7 +59,7 @@ export type Response = {
    * @docid
    * @public
    */
-  promise: Promise<string>;
+  promise: Promise<AIResponse>;
   /**
    * @docid
    * @public
@@ -109,6 +129,46 @@ export type TranslateCommandParams = {
 /**
  * @namespace DevExpress.aiIntegration
  */
+export type SmartPasteFieldType =
+  | 'color'
+  | 'boolean'
+  | 'string'
+  | 'stringArray'
+  | 'number'
+  | 'numberRange'
+  | 'date'
+  | 'dateRange';
+
+/**
+ * @namespace DevExpress.aiIntegration
+ */
+export type FieldInfo = {
+  name: string;
+  format: string;
+  type?: SmartPasteFieldType;
+  instruction?: string;
+};
+
+/**
+ * @namespace DevExpress.aiIntegration
+ */
+export type SmartPasteCommandParams = {
+  text: string;
+  fields: FieldInfo[];
+};
+
+/**
+ * @namespace DevExpress.aiIntegration
+ */
+export type GenerateGridColumnCommandParams = {
+  text: string;
+  data: Record<PropertyKey, unknown>;
+  additionalInfo?: Record<PropertyKey, unknown>;
+};
+
+/**
+ * @namespace DevExpress.aiIntegration
+ */
 export type ChangeStyleCommandResult = string;
 
 /**
@@ -145,6 +205,35 @@ export type SummarizeCommandResult = string;
  * @namespace DevExpress.aiIntegration
  */
 export type TranslateCommandResult = string;
+
+/**
+ * @namespace DevExpress.aiIntegration
+ */
+export type SmartPasteResultFieldType = string | string[] | number | number[] | Date | Date[] | boolean;
+
+/**
+ * @namespace DevExpress.aiIntegration
+ */
+export type SmartPasteCommandResult = Array<{
+  name: string;
+  value: SmartPasteResultFieldType;
+}>;
+
+/**
+ * @namespace DevExpress.aiIntegration
+ */
+export type GenerateGridColumnCommandResult = {
+  data: Record<PropertyKey, string>;
+  additionalInfo?: Record<PropertyKey, unknown>;
+};
+
+/**
+ * @namespace DevExpress.aiIntegration
+ */
+export type GenerateGridColumnCommandResponse = string | {
+  data: string | Record<PropertyKey, string>;
+  additionalInfo?: Record<PropertyKey, unknown>;
+};
 
 /**
  * @namespace DevExpress.aiIntegration
@@ -211,4 +300,12 @@ export class AIIntegration {
    * @publicName translate(params, callbacks)
    */
   translate(params: TranslateCommandParams, callbacks: RequestCallbacks<TranslateCommandResult>): () => void;
+  /**
+   * @publicName smartPaste(params, callbacks)
+   */
+  smartPaste(params: SmartPasteCommandParams, callbacks: RequestCallbacks<SmartPasteCommandResult>): () => void;
+  /**
+   * @publicName generateGridColumn(params, callbacks)
+   */
+  generateGridColumn(params: GenerateGridColumnCommandParams, callbacks: RequestCallbacks<GenerateGridColumnCommandResult>): () => void;
 }

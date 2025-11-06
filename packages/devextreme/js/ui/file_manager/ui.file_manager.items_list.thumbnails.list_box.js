@@ -12,7 +12,7 @@ import { BindableTemplate } from '../../core/templates/bindable_template';
 
 import ScrollView from '../scroll_view';
 import CollectionWidget from '../collection/ui.collection_widget.edit';
-import Selection from '../../__internal/ui/selection/m_selection';
+import Selection from '../../__internal/ui/selection/selection';
 
 const FILE_MANAGER_THUMBNAILS_VIEW_PORT_CLASS = 'dx-filemanager-thumbnails-view-port';
 const FILE_MANAGER_THUMBNAILS_ITEM_LIST_CONTAINER_CLASS = 'dx-filemanager-thumbnails-container';
@@ -336,6 +336,8 @@ class FileManagerThumbnailListBox extends CollectionWidget {
     }
 
     _focusOutHandler() {}
+
+    _focusInHandler() {}
 
     _getItems() {
         return this.option('items') || [];

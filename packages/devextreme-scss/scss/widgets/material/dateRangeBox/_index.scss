@@ -15,7 +15,7 @@
 $material-editor-custom-button-margin: 5px;
 
 .dx-daterangebox {
-  @include dx-dropdowneditor-button-icon-styling(eventall);
+  @include dx-dropdowneditor-button-icon-styling(daterangepicker);
 
   .dx-editor-outlined {
     &::before {

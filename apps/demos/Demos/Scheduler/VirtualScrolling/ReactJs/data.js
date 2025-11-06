@@ -222,9 +222,9 @@ function filterAppointmentsByTime(appointments, startDayHour, endDayHour) {
     const { startDate } = appointments[i];
     const { endDate } = appointments[i];
     if (
-      startDate.getDay() === endDate.getDay()
-      && startDate.getHours() >= startDayHour - 1
-      && endDate.getHours() <= endDayHour - 1
+      startDate.getDay() === endDate.getDay() &&
+      startDate.getHours() >= startDayHour - 1 &&
+      endDate.getHours() <= endDayHour - 1
     ) {
       result.push(appointments[i]);
     }

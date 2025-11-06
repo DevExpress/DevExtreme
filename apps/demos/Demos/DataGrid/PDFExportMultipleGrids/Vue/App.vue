@@ -118,7 +118,6 @@ const ratingDataSource: DataSourceOptions = {
 const exportGrids = () => {
   const priceGrid = priceGridRef.value?.instance!;
   const ratingGrid = ratingGridRef.value?.instance!;
-  // eslint-disable-next-line new-cap
   const doc = new jsPDF();
 
   exportDataGrid({
@@ -149,8 +148,9 @@ const setAlternatingRowsBackground = (
   dataGrid: DxDataGrid['instance'], gridCell: DataGridCell, pdfCell: Cell,
 ) => {
   if (gridCell.rowType === 'data') {
-    const rowIndex = dataGrid.getRowIndexByKey(gridCell.data.Product_ID);
-    if (rowIndex % 2 === 0) {
+    const rowIndex = dataGrid?.getRowIndexByKey(gridCell.data.Product_ID);
+
+    if (rowIndex && rowIndex % 2 === 0) {
       pdfCell.backgroundColor = '#D3D3D3';
     }
   }

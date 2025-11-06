@@ -56,7 +56,7 @@ const onSaving = (e: DxDataGridTypes.SavingEvent) => {
 };
 
 function normalizeChanges(changes: DxDataGridTypes.DataChange[]): DxDataGridTypes.DataChange[] {
-  return changes.map(c => {
+  return changes.map((c) => {
     switch (c.type) {
       case 'insert':
         return {
@@ -74,6 +74,8 @@ function normalizeChanges(changes: DxDataGridTypes.DataChange[]): DxDataGridType
           type: c.type,
           key: c.key,
         };
+      default:
+        return c;
     }
   }) as DxDataGridTypes.DataChange[];
 }
@@ -82,9 +84,9 @@ async function processBatchRequest(
   url: string, changes: DxDataGridTypes.DataChange[], component: DxDataGrid['instance'],
 ) {
   await sendBatchRequest(url, changes);
-  await component.refresh(true);
+  await component?.refresh(true);
 
-  component.cancelEditData();
+  component?.cancelEditData();
 }
 
 async function sendBatchRequest(url: string, changes: DxDataGridTypes.DataChange[]) {

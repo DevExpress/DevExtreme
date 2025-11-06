@@ -2,7 +2,7 @@ import { Component, NgModule, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
-  DxCheckBoxModule, DxDateBoxModule, DxSelectBoxModule, DxTemplateModule,
+  DxCheckBoxModule, DxDateBoxModule, DxSelectBoxModule,
 } from 'devextreme-angular';
 import { DxCalendarModule, DxCalendarTypes } from 'devextreme-angular/ui/calendar';
 
@@ -55,6 +55,10 @@ export class AppComponent {
     return day === 0 || day === 6;
   }
 
+  isHoliday(date: Date) {
+    return this.holidays.some((item) => date.getDate() === item[0] && date.getMonth() === item[1]);
+  }
+
   useCellTemplate({ value }) {
     this.cellTemplate = value ? 'custom' : 'cell';
   }
@@ -68,12 +72,7 @@ export class AppComponent {
       } else {
         if (this.isWeekend(date)) { cssClass = 'weekend'; }
 
-        this.holidays.forEach((item) => {
-          if (date.getDate() === item[0] && date.getMonth() === item[1]) {
-            cssClass = 'holiday';
-            return false;
-          }
-        });
+        if (this.isHoliday(date)) { cssClass = 'holiday'; }
       }
     }
 
@@ -88,7 +87,6 @@ export class AppComponent {
     DxCheckBoxModule,
     DxDateBoxModule,
     DxSelectBoxModule,
-    DxTemplateModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

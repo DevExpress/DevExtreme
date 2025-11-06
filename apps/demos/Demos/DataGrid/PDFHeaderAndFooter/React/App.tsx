@@ -12,7 +12,6 @@ const gdpFormat = {
 const exportFormats = ['pdf'];
 
 const onExporting = (e: DataGridTypes.ExportingEvent) => {
-  // eslint-disable-next-line new-cap
   const doc = new jsPDF();
   const lastPoint = { x: 0, y: 0 };
 
@@ -51,61 +50,61 @@ const onExporting = (e: DataGridTypes.ExportingEvent) => {
 };
 
 const App = () => (
-<>
-  <div id="long-title">
+  <React.Fragment>
+    <div id="long-title">
       <h3>Country Area, Population, and GDP Structure</h3>
-  </div>
-  <DataGrid
-    dataSource={countries}
-    keyExpr="ID"
-    showBorders={true}
-    onExporting={onExporting}
+    </div>
+    <DataGrid
+      dataSource={countries}
+      keyExpr="ID"
+      showBorders={true}
+      onExporting={onExporting}
     >
-    <Export enabled={true} formats={exportFormats} />
-    <Column dataField="Country" />
-    <Column dataField="Area" />
-    <Column caption="Population">
-      <Column
-        dataField="Population_Total"
-        caption="Total"
-        format="fixedPoint"
-        />
-      <Column
-        dataField="Population_Urban"
-        caption="Urban"
-        format="percent"
-        />
-    </Column>
-    <Column caption="Nominal GDP">
-      <Column
-        dataField="GDP_Total"
-        caption="Total, mln $"
-        format="fixedPoint"
-        sortOrder="desc"
-        />
-      <Column caption="By Sector">
+      <Export enabled={true} formats={exportFormats} />
+      <Column dataField="Country" />
+      <Column dataField="Area" />
+      <Column caption="Population">
         <Column
-          dataField="GDP_Agriculture"
-          caption="Agriculture"
-          format={gdpFormat}
-          width={95}
-          />
+          dataField="Population_Total"
+          caption="Total"
+          format="fixedPoint"
+        />
         <Column
-          dataField="GDP_Industry"
-          caption="Industry"
-          format={gdpFormat}
-          width={80}
-          />
-        <Column
-          dataField="GDP_Services"
-          caption="Services"
-          format={gdpFormat}
-          width={85}
-          />
+          dataField="Population_Urban"
+          caption="Urban"
+          format="percent"
+        />
       </Column>
-    </Column>
-  </DataGrid>
-</>
+      <Column caption="Nominal GDP">
+        <Column
+          dataField="GDP_Total"
+          caption="Total, mln $"
+          format="fixedPoint"
+          sortOrder="desc"
+        />
+        <Column caption="By Sector">
+          <Column
+            dataField="GDP_Agriculture"
+            caption="Agriculture"
+            format={gdpFormat}
+            width={95}
+          />
+          <Column
+            dataField="GDP_Industry"
+            caption="Industry"
+            format={gdpFormat}
+            width={80}
+          />
+          <Column
+            dataField="GDP_Services"
+            caption="Services"
+            format={gdpFormat}
+            width={85}
+          />
+        </Column>
+      </Column>
+    </DataGrid>
+  </React.Fragment>
 );
 
 export default App;

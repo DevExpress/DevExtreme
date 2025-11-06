@@ -1,7 +1,6 @@
 import { NgModule, Component, ViewChild, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxTemplateModule } from 'devextreme-angular';
 import { DxButtonModule, type DxButtonTypes } from 'devextreme-angular/ui/button';
 import { DxSchedulerModule, DxSchedulerComponent } from 'devextreme-angular/ui/scheduler';
 import { DxSelectBoxModule, type DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
@@ -61,7 +60,7 @@ export class AppComponent {
     }
 
     const currentDate = this.scheduler.instance.option('currentDate');
-    const cellDuration = this.scheduler.instance.option('cellDuration') as number;
+    const cellDuration = this.scheduler.instance.option('cellDuration');
     const cellDurationMs = cellDuration * MS_IN_HOUR;
     const currentTime = new Date(currentDate as Date).getTime();
     const roundTime = Math.round(currentTime / cellDurationMs) * cellDurationMs;
@@ -84,7 +83,6 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    DxTemplateModule,
     DxButtonModule,
     DxSchedulerModule,
     DxSelectBoxModule,

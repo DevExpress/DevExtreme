@@ -10,10 +10,9 @@ import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 /* global orders */
 import '../../content/orders.js';
 
-import 'ui/pivot_grid/ui.pivot_grid.field_chooser';
+import '__internal/grids/pivot_grid/field_chooser/m_field_chooser';
 import 'ui/pivot_grid/ui.pivot_grid';
 
-import 'generic_light.css!';
 import 'viz/chart';
 
 $('<div id="pivotGridContainer">').appendTo('#qunit-fixture');

@@ -1,7 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxSchedulerModule, DxTemplateModule } from 'devextreme-angular';
+import { DxSchedulerModule } from 'devextreme-angular';
 import { DataSource } from 'devextreme-angular/common/data';
 import { Service, PriorityData, TypeData } from './app.service';
 
@@ -44,7 +44,6 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxSchedulerModule,
-    DxTemplateModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

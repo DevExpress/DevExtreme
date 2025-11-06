@@ -6,11 +6,12 @@ interface EmployeeProps {
 }
 
 const Employee = ({ employeeID }: EmployeeProps) => {
-    const employee = useMemo<Employee>(() => {
-        return employees.find(e => e.ID === employeeID);
-    }, [employeeID, employees]);
-    
-    return <button className='task__link-button'>{ employee.Name }</button>
-}
+  const employee = useMemo<Employee>(
+    () => employees.find((e) => e.ID === employeeID),
+    [employeeID]
+  );
+
+  return <button className='task__link-button'>{ employee.Name }</button>;
+};
 
 export default Employee;

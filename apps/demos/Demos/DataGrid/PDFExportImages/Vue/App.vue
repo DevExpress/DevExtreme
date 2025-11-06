@@ -50,7 +50,6 @@ import { jsPDF } from 'jspdf';
 import { employees } from './data.ts';
 
 const onExporting = ({ component }: DxDataGridTypes.ExportingEvent) => {
-  // eslint-disable-next-line new-cap
   const doc = new jsPDF();
 
   exportDataGrid({
@@ -65,13 +64,16 @@ const onExporting = ({ component }: DxDataGridTypes.ExportingEvent) => {
     topLeft: { x: 5, y: 5 },
     columnWidths: [30, 30, 30, 30, 30, 30],
     onRowExporting: (e) => {
-      const isHeader = e.rowCells[0].text === 'Picture';
-      if (!isHeader) {
-        e.rowHeight = 40;
+      if (e.rowCells) {
+        const isHeader = e.rowCells[0].text === 'Picture';
+
+        if (!isHeader) {
+          e.rowHeight = 40;
+        }
       }
     },
     customDrawCell: (e) => {
-      if (e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'Picture') {
+      if (e.rect && e.gridCell?.rowType === 'data' && e.gridCell?.column?.dataField === 'Picture') {
         doc.addImage(e.gridCell.value, 'PNG', e.rect.x, e.rect.y, e.rect.w, e.rect.h);
         e.cancel = true;
       }

@@ -3,8 +3,8 @@ import DataGrid, {
   DataGridTypes,
   Scrolling, Pager, Paging,
 } from 'devextreme-react/data-grid';
-import { PagerPageSize } from 'devextreme-react/common/grids'
-import { DisplayMode } from 'devextreme-react/common'
+import { PagerPageSize } from 'devextreme-react/common/grids';
+import { DisplayMode } from 'devextreme-react/common';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
 import { generateData, displayModeLabel } from './data.ts';

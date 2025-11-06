@@ -1,7 +1,6 @@
 <template>
   <DxDiagram
     id="diagram"
-    ref="diagram"
     @request-edit-operation="onRequestEditOperation"
     @request-layout-update="onRequestLayoutUpdate"
   >
@@ -56,7 +55,6 @@
   </DxDiagram>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
 import {
   DxDiagram,
   DxCustomShape,
@@ -76,17 +74,16 @@ const orgItemsDataSource = new ArrayStore({
   key: 'ID',
   data: service.getOrgItems(),
 });
-const diagram = ref();
 const shapes = ['team', 'employee'] as unknown as DxDiagramTypes.ShapeType[];
 
-const itemStyleExpr = ({ Type }) => ({
+const itemStyleExpr = ({ Type }: Record<string, string>) => ({
   fill: {
     root: '#ffcfc3',
     team: '#b7e3fe',
   }[Type] || '#bbefcb',
 }
 );
-function showToast(text) {
+function showToast(text: string) {
   notify({
     position: {
       at: 'top', my: 'top', of: '#diagram', offset: '0 4',
@@ -96,7 +93,7 @@ function showToast(text) {
     delayTime: 2000,
   });
 }
-function onRequestLayoutUpdate(e) {
+function onRequestLayoutUpdate(e: DxDiagramTypes.RequestLayoutUpdateEvent) {
   for (let i = 0; i < e.changes.length; i += 1) {
     if (e.changes[i].type === 'remove') {
       e.allowed = true;
@@ -106,7 +103,7 @@ function onRequestLayoutUpdate(e) {
     }
   }
 }
-function onRequestEditOperation(e) {
+function onRequestEditOperation(e: Record<string, any>) {
   let i;
 
   if (e.operation === 'addShape') {
@@ -126,7 +123,7 @@ function onRequestEditOperation(e) {
     if (e.args.shape.type === 'team') {
       const connectorIds = e.args.shape.attachedConnectorIds;
       for (i = 0; i < connectorIds.length; i += 1) {
-        if (diagram.value.instance.getItemById(connectorIds[i]).toId !== e.args.shape.id) {
+        if (e.component.instance().getItemById(connectorIds[i]).toId !== e.args.shape.id) {
           if (e.reason !== 'checkUIElementAvailability') {
             showToast('You cannot delete a \'Team\' shape that has a child shape.');
           }

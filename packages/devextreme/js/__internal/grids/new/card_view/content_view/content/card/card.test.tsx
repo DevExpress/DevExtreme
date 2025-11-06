@@ -107,14 +107,29 @@ describe('Card Header', () => {
   });
 });
 
-describe('Image', () => {
-  it('should render the image correctly', () => {
+describe('Cover', () => {
+  it('should be rendered', () => {
     const container = document.createElement('div');
     // @ts-expect-error
     render(<Card {...props} />, container);
 
     const image = container.querySelector('img');
     expect(image).not.toBeNull();
+  });
+
+  it('should be rendered if imageExpr is not defined but template is defined', () => {
+    const container = document.createElement('div');
+    const localProps = {
+      ...props,
+      cover: {
+        template: () => <img className='myTemplate'/>,
+      },
+    };
+
+    // @ts-expect-error
+    render(<Card {...localProps} />, container);
+
+    expect(container.querySelector('.myTemplate')).toBeTruthy();
   });
 });
 

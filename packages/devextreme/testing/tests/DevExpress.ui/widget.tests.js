@@ -25,7 +25,7 @@ const FEEDBACK_SHOW_TIMEOUT = 30;
 const FEEDBACK_HIDE_TIMEOUT = 400;
 const RTL_CLASS = 'dx-rtl';
 
-const DxWidget = Widget.inherit({});
+class DxWidget extends Widget {}
 registerComponent('dxWidget', DxWidget);
 
 QUnit.testStart(() => {
@@ -95,10 +95,14 @@ QUnit.module('render', {}, () => {
             visible ? shownFired++ : hidingFired++;
         };
 
-        const TestWidget = Widget.inherit({
-            NAME: 'TestWidget1',
-            _visibilityChanged: visibilityChanged
-        });
+        class TestWidget extends Widget {
+            ctor(element, options) {
+                this.NAME = 'TestWidget1';
+                this._visibilityChanged = visibilityChanged;
+
+                super.ctor(element, options);
+            }
+        }
 
         const $element = $('#widget');
         const component = new TestWidget($element, { visible: false });
@@ -431,13 +435,17 @@ QUnit.module('API', {
     }
 }, () => {
     QUnit.test('\'repaint\' method refreshes widget by default', function(assert) {
-        const NewWidget = Widget.inherit({
-            NAME: 'Widget',
+        class NewWidget extends Widget {
+            ctor(element, options) {
+                this.NAME = 'Widget';
+
+                super.ctor(element, options);
+            }
 
             _render() {
                 this.$element().append('<div></div>');
             }
-        });
+        }
 
         const element = $('#widget');
         const instance = new NewWidget(element);
@@ -726,7 +734,7 @@ QUnit.module('ui feedback', {
             .append(item1)
             .append(item2);
 
-        instance._activeStateUnit = '.widget-item-hover';
+        instance._activeStateUnit = () => '.widget-item-hover';
         instance.option('hoverStateEnabled', true);
 
         element.trigger({ target: item1.get(0), type: 'dxpointerenter', pointerType: 'mouse' });
@@ -778,15 +786,18 @@ QUnit.module('widget sizing render', {}, () => {
 });
 
 QUnit.module('templates support', {}, () => {
-    const TestContainer = Widget.inherit({
-        NAME: 'TestContainer',
+    class TestContainer extends Widget {
+        ctor(element, options) {
+            this.NAME = 'TestContainer';
+            super.ctor(element, options);
+        }
 
         _renderContentImpl() {
             if(this.option('integrationOptions.templates').template) {
                 this.option('integrationOptions.templates').template.render({ container: this.$element() });
             }
         }
-    });
+    }
 
     registerComponent('TestContainer', TestContainer);
 
@@ -1168,14 +1179,21 @@ QUnit.module('templates caching', {
                 };
             }
         };
-        this.TestContainer = Widget.inherit({
-            NAME: 'TestContainer',
+
+        class TestContainer extends Widget {
+            ctor(element, options) {
+                this.NAME = 'TestContainer';
+
+                super.ctor(element, options);
+            }
 
             _renderContentImpl() {
                 this._getTemplateByOption('template')
                     .render({ container: this.$element() });
             }
-        });
+        }
+
+        this.TestContainer = TestContainer;
 
         $('<script id=\'external-template\' type=\'text/html\'>template string</script>')
             .appendTo('#qunit-fixture');
@@ -1204,15 +1222,19 @@ QUnit.module('templates caching', {
 
 QUnit.module('platform specific templates', {
     beforeEach: function() {
-        const TestContainerWidget = Widget.inherit({
-            NAME: 'TestContainerWidget',
+        class TestContainerWidget extends Widget {
+            ctor(element, options) {
+                this.NAME = 'TestContainerWidget';
+                super.ctor(element, options);
+
+            }
 
             _renderContentImpl() {
                 if(this.option('integrationOptions.templates')['item']) {
                     this.option('integrationOptions.templates')['item'].render({ container: this.$element() });
                 }
             }
-        });
+        }
 
         registerComponent('TestContainerWidget', TestContainerWidget);
         this.currentDevice = devices.current();
@@ -1252,24 +1274,31 @@ QUnit.module('platform specific templates', {
 
 QUnit.module('template support regressions', {
     beforeEach: function() {
-        const TestContainer = Widget.inherit({
-            NAME: 'TestContainer',
+        class TestContainer extends Widget {
+            ctor(element, options) {
+                this.NAME = 'TestContainer';
+                super.ctor(element, options);
+
+            }
 
             _renderContentImpl() {
                 if(this.option('integrationOptions.templates').template) {
                     this.option('integrationOptions.templates').template.render({ container: this.$element() });
                 }
             }
-        });
+        }
 
-        const TestWidget = Widget.inherit({
-            NAME: 'TestWidget',
+        class TestWidget extends Widget {
+            ctor(element, options) {
+                this.NAME = 'TestWidget';
+                super.ctor(element, options);
+            }
 
             _render() {
-                this.callBase();
+                super._render();
                 this.$element().text('test');
             }
-        });
+        }
 
         registerComponent('TestContainer', TestContainer);
         registerComponent('TestWidget', TestWidget);
@@ -1347,10 +1376,15 @@ QUnit.module('keyboard navigation', {}, () => {
             }
         });
 
-        const TestWidget = Widget.inherit({
-            NAME: 'TestWidget',
-            _supportedKeys: supportedKeysHandler
-        });
+        class TestWidget extends Widget {
+            ctor(element, options) {
+                this.NAME = 'TestWidget';
+                this._supportedKeys = supportedKeysHandler;
+
+                super.ctor(element, options);
+
+            }
+        };
 
         const $element = $('#widget');
 
@@ -1482,14 +1516,14 @@ QUnit.module('isReady', {}, () => {
 
         let isReadyOnInit;
 
-        registerComponent('dxWidget', Widget.inherit({
-
+        class DxWidget extends Widget {
             _init() {
-                this.callBase();
+                super._init();
                 isReadyOnInit = this.isReady();
             }
+        }
 
-        }));
+        registerComponent('dxWidget', DxWidget);
 
         const $widget = $('#widget').dxWidget();
 
@@ -1512,24 +1546,28 @@ QUnit.module('isReady', {}, () => {
 QUnit.module('dataHelperMixin', {}, () => {
     QUnit.test('dataSource disposing should remove only widget handlers preserving existing handlers (T213769)', function(assert) {
         const $container = $('#widget');
-        const TestWidget = Widget.inherit({
-            NAME: 'TestWidget',
+        class TestWidget extends Widget {
+            ctor(element, options) {
+                this.NAME = 'TestWidget';
+                super.ctor(element, options);
+
+            }
 
             _getDefaultOptions() {
                 return $.extend(
-                    this.callBase(),
+                    super._getDefaultOptions(),
                     {
                         dataSource: null
                     }
                 );
-            },
-
-            _init() {
-                this.callBase();
-                this._refreshDataSource();
             }
 
-        }).include(DataHelperMixin);
+            _init() {
+                super._init();
+                this._refreshDataSource();
+            }
+        }
+        TestWidget.include(DataHelperMixin);
 
         const dataSource = new DataSource({ store: [] });
         const changeHandler = () => {
@@ -1606,25 +1644,28 @@ QUnit.module('aria accessibility', {}, () => {
 });
 
 QUnit.module('inner options cache', {}, () => {
-    const TestWidget = Widget.inherit({
-        NAME: 'TestWidget',
+    class TestWidget extends Widget {
+        ctor(element, options) {
+            this.NAME = 'TestWidget';
+            super.ctor(element, options);
+        }
 
         _init() {
-            this.callBase();
+            super._init();
             this._options.cache('innerComponentOptions', this.option('innerComponentOptions'));
-        },
+        }
 
         _renderInnerWidget() {
             return this._createComponent($('<div>'), Widget, extend({
                 defaultOption: 'Test'
             }, this._options.cache('innerComponentOptions')));
-        },
+        }
 
         _render() {
-            this.callBase();
+            super._render();
             this.innerComponent = this._renderInnerWidget();
             this._bindInnerWidgetOptions(this.innerComponent, 'innerComponentOptions');
-        },
+        }
 
         _optionChanged(args) {
             switch(args.name) {
@@ -1632,10 +1673,10 @@ QUnit.module('inner options cache', {}, () => {
                     this._innerWidgetOptionChanged(this.innerComponent, args);
                     break;
                 default:
-                    this.callBase(args);
+                    super._optionChanged(args);
             }
         }
-    });
+    }
 
     QUnit.test('a user can redefine inner component options', function(assert) {
         const $container = $('#widget');

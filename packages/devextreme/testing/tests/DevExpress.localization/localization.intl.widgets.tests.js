@@ -4,7 +4,7 @@ import { locale } from 'common/core/localization/core';
 
 import $ from 'jquery';
 import 'ui/date_box';
-import { ExportFormat } from 'exporter/exceljs/export_format';
+import { ExportFormat } from '__internal/exporter/exceljs/export_format';
 import dateLocalization from 'common/core/localization/date';
 import keyboardMock from '../../helpers/keyboardMock.js';
 

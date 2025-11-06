@@ -1,13 +1,12 @@
 import dateLocalization from '@js/common/core/localization/date';
-import messageLocalization from '@js/common/core/localization/message';
-import errors from '@js/core/errors';
 import dateUtils from '@js/core/utils/date';
-import { camelize } from '@js/core/utils/inflector';
 import { isFunction, isObject } from '@js/core/utils/type';
+import messageLocalization from '@js/localization/message';
 import type { DateNavigatorTextInfo, Properties } from '@js/ui/scheduler';
+import { camelize } from '@ts/core/utils/m_inflector';
+import type { IntervalOptions, Step } from '@ts/scheduler/header/types';
+import type { NormalizedView, RawViewType, ViewType } from '@ts/scheduler/utils/options/types';
 
-import { VIEWS } from '../constants';
-import type { RawViewType } from '../types';
 import type { Direction } from './constants';
 
 const DAY_FORMAT = 'd';
@@ -74,7 +73,7 @@ const getDateAfterWorkWeek = (workWeekStart: Date): Date => {
 
 const nextAgendaStart = (date: Date, agendaDuration: number): Date => addDateInterval(date, { days: agendaDuration }, 1);
 
-const getIntervalStartDate = (options) => {
+const getIntervalStartDate = (options: IntervalOptions) => {
   const { date, step, firstDayOfWeek } = options;
 
   // eslint-disable-next-line default-case
@@ -92,7 +91,7 @@ const getIntervalStartDate = (options) => {
   }
 };
 
-const getIntervalEndDate = (startDate: Date, options) => {
+const getIntervalEndDate = (startDate: Date, options: IntervalOptions) => {
   const { intervalCount, step, agendaDuration } = options;
 
   let periodStartDate;
@@ -102,7 +101,7 @@ const getIntervalEndDate = (startDate: Date, options) => {
   for (let i = 0; i < intervalCount; i++) {
     periodStartDate = nextPeriodStartDate;
 
-    periodEndDate = getPeriodEndDate(periodStartDate, step, agendaDuration);
+    periodEndDate = getPeriodEndDate(periodStartDate, step, agendaDuration!);
 
     nextPeriodStartDate = getNextPeriodStartDate(periodEndDate, step);
   }
@@ -110,7 +109,7 @@ const getIntervalEndDate = (startDate: Date, options) => {
   return periodEndDate;
 };
 
-export const getCaptionInterval = (options): {
+export const getCaptionInterval = (options: IntervalOptions): {
   startDate: Date;
   endDate: Date;
 } => {
@@ -120,7 +119,7 @@ export const getCaptionInterval = (options): {
   return { startDate, endDate };
 };
 
-const getPeriodEndDate = (currentPeriodStartDate: Date, step, agendaDuration: number): Date => {
+const getPeriodEndDate = (currentPeriodStartDate: Date, step: Step, agendaDuration: number): Date => {
   let date;
 
   // eslint-disable-next-line default-case
@@ -166,7 +165,7 @@ export const getNextIntervalDate = (options, direction: Direction): Date => {
   // eslint-disable-next-line default-case
   switch (step) {
     case 'day':
-      dayDuration = 1 * intervalCount;
+      dayDuration = Number(intervalCount);
       break;
     case 'week':
     case 'workWeek':
@@ -303,7 +302,7 @@ const getCaptionText = (startDate: Date, endDate: Date, isShort: boolean, step):
   return formatCaptionByMonths(startDate, endDate, isShort);
 };
 
-export const getCaption = (options, isShort: boolean, customizationFunction?: Properties['customizeDateNavigatorText']): DateNavigatorTextInfo => {
+export const getCaption = (options: IntervalOptions, isShort: boolean, customizationFunction?: Properties['customizeDateNavigatorText']): DateNavigatorTextInfo => {
   const { startDate, endDate } = getCaptionInterval(options);
 
   let text = getCaptionText(startDate, endDate, isShort, options.step);
@@ -315,7 +314,7 @@ export const getCaption = (options, isShort: boolean, customizationFunction?: Pr
   return { startDate, endDate, text };
 };
 
-const STEP_MAP = {
+const STEP_MAP: Record<ViewType, Step> = {
   day: 'day',
   week: 'week',
   workWeek: 'workWeek',
@@ -327,14 +326,6 @@ const STEP_MAP = {
   agenda: 'agenda',
 } as const;
 
-export const getViewType = (view: RawViewType): string | undefined => (isObject(view) ? view.type : view);
-
-export const getStep = (view: RawViewType): (typeof STEP_MAP)[keyof typeof STEP_MAP] | undefined => {
-  const type = getViewType(view);
-
-  return type ? STEP_MAP[type] : undefined;
-};
-
 export const getViewName = (view: RawViewType): string | undefined => {
   if (isObject(view)) {
     return view.name ?? view.type;
@@ -343,39 +334,17 @@ export const getViewName = (view: RawViewType): string | undefined => {
   return view;
 };
 
-export const getViewText = (view: RawViewType) => {
-  if (isObject(view) && view.name) {
-    return view.name;
-  }
+export const getViewText = (
+  view: NormalizedView,
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+): string => view.name || messageLocalization.format(`dxScheduler-switcher${camelize(view.type, true)}`);
 
-  const viewName = camelize(getViewType(view), true);
+export const formatViews = (
+  views: NormalizedView[],
+): NormalizedView[] => views.map((view) => ({
+  ...view,
+  name: getViewName(view),
+  text: getViewText(view),
+}));
 
-  return messageLocalization.format(`dxScheduler-switcher${viewName}`);
-};
-
-const isValidView = (view?: string): boolean => Boolean(view && Object.values(VIEWS).includes(view));
-
-export const validateViews = (views: Properties['views'] = []) => {
-  views.forEach((view) => {
-    const viewType = getViewType(view);
-
-    if (!isValidView(viewType)) {
-      errors.log('W0008', viewType);
-    }
-  });
-};
-
-export const formatViews = (views: Properties['views'] = []) => {
-  validateViews(views);
-
-  return views.map((view) => {
-    const text = getViewText(view);
-    const type = getViewType(view);
-    const name = getViewName(view);
-
-    return { text, name, view: { text, type, name } };
-  });
-};
-
-export const isOneView = (views, selectedView) => views.length === 1
-        && views[0].name === selectedView;
+export const getStep = (type: ViewType): Step => STEP_MAP[type];

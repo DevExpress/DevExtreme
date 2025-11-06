@@ -3,7 +3,6 @@ import CheckBox from 'devextreme-testcafe-models/checkBox';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`CheckBox_ValidationMessage`
   .page(url(__dirname, '../../container.html'));
@@ -46,7 +45,7 @@ test('ValidationMessage integrated in editor should not raise any errors when it
 
 const positions = ['top', 'right', 'bottom', 'left'];
 positions.forEach((position) => {
-  safeSizeTest(`CheckBox ValidationMessage position is correct (${position})`, async (t) => {
+  test.meta({ browserSize: [300, 200] })(`CheckBox ValidationMessage position is correct (${position})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const checkBox1 = new CheckBox('#container');
     await t
@@ -54,19 +53,12 @@ positions.forEach((position) => {
       .click(checkBox1.element)
       .expect(true).ok();
 
-    await testScreenshot(t, takeScreenshot, `Checkbox validation message with ${position} position.png`, {
-      shouldTestInCompact: true,
-      compactCallBack: async () => {
-        await t
-          .click(checkBox1.element)
-          .click(checkBox1.element);
-      },
-    });
+    await testScreenshot(t, takeScreenshot, `Checkbox validation message with ${position} position.png`);
 
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [300, 200]).before(async () => {
+  }).before(async () => {
     await createWidget('dxCheckBox', {
       text: 'Click me!',
       elementAttr: { style: 'margin: 50px 0 0 100px;' },

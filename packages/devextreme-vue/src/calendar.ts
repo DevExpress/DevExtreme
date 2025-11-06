@@ -50,6 +50,7 @@ type AccessibleOptions = Pick<Properties,
   "showTodayButton" |
   "showWeekNumbers" |
   "tabIndex" |
+  "todayButtonText" |
   "validationError" |
   "validationErrors" |
   "validationMessageMode" |
@@ -98,6 +99,7 @@ const componentConfig = {
     showTodayButton: Boolean,
     showWeekNumbers: Boolean,
     tabIndex: Number,
+    todayButtonText: String,
     validationError: {},
     validationErrors: Array as PropType<Array<any>>,
     validationMessageMode: String as PropType<ValidationMessageMode>,
@@ -142,6 +144,7 @@ const componentConfig = {
     "update:showTodayButton": null,
     "update:showWeekNumbers": null,
     "update:tabIndex": null,
+    "update:todayButtonText": null,
     "update:validationError": null,
     "update:validationErrors": null,
     "update:validationMessageMode": null,

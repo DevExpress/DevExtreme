@@ -3,7 +3,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import type { ItemLike } from '@js/ui/collection/ui.collection_widget.base';
-import type { ItemRenderInfo } from '@ts/ui/collection/collection_widget.base';
+import type { CollectionItemKey, ItemRenderInfo } from '@ts/ui/collection/collection_widget.base';
 import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
 import CollectionWidgetEdit from '@ts/ui/collection/collection_widget.edit';
 
@@ -13,8 +13,8 @@ class CollectionWidgetAsync<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends ItemLike = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TKey = any,
-> extends CollectionWidgetEdit<TProperties> {
+  TKey extends CollectionItemKey = any,
+> extends CollectionWidgetEdit<TProperties, TItem, TKey> {
   _asyncTemplateItemsMap!: Record<string, DeferredObj<unknown>>;
 
   _initMarkup(): void {

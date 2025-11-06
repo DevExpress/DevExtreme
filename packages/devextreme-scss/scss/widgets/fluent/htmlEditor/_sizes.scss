@@ -14,27 +14,30 @@ $fluent-html-editor-add-image-dialog-tabs-padding: null !default;
 $fluent-aidialog-selects-gap: null !default;
 $fluent-aidialog-content-gap: null !default;
 $fluent-aidialog-content-padding: null !default;
+$fluent-aidialog-border-radius: null !default;
 
 @if $size == "default" {
   $fluent-toolbar-size-editor-width: 120px !default;
   $fluent-html-editor-vertical-padding: 16px !default;
   $fluent-html-editor-horizontal-padding: 16px !default;
-  $fluent-html-editor-add-image-dialog-fileuploader-padding: 48px 0 24px;
+  $fluent-html-editor-add-image-dialog-fileuploader-padding: 48px 0 24px !default;
   $fluent-html-editor-add-image-dialog-tabs-padding: 14px !default;
-  $fluent-aidialog-selects-gap: 8px;
-  $fluent-aidialog-content-gap: 16px;
-  $fluent-aidialog-content-padding: 16px 24px;
+  $fluent-aidialog-selects-gap: 8px !default;
+  $fluent-aidialog-content-gap: 16px !default;
+  $fluent-aidialog-content-padding: 16px 24px !default;
+  $fluent-aidialog-border-radius: $base-border-radius * 2 !default;
 }
 
 @else if $size == "compact" {
   $fluent-toolbar-size-editor-width: 90px !default;
   $fluent-html-editor-vertical-padding: 12px !default;
   $fluent-html-editor-horizontal-padding: 12px !default;
-  $fluent-html-editor-add-image-dialog-fileuploader-padding: 40px 0 18px;
+  $fluent-html-editor-add-image-dialog-fileuploader-padding: 40px 0 18px !default;
   $fluent-html-editor-add-image-dialog-tabs-padding: 8px !default;
-  $fluent-aidialog-selects-gap: 4px;
-  $fluent-aidialog-content-gap: 12px;
-  $fluent-aidialog-content-padding: 12px 16px;
+  $fluent-aidialog-selects-gap: 4px !default;
+  $fluent-aidialog-content-gap: 12px !default;
+  $fluent-aidialog-content-padding: 12px 16px !default;
+  $fluent-aidialog-border-radius: $base-border-radius !default;
 }
 
 $fluent-htmleditor-toolbar-padding: $fluent-html-editor-horizontal-padding !default;

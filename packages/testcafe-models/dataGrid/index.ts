@@ -12,6 +12,7 @@ import ContextMenu from '../contextMenu';
 
 import type { WidgetName } from '../types';
 import { Overlay } from './overlay';
+import LoadPanel from '../loadPanel';
 // eslint-disable-next-line import/no-cycle
 import MasterRow from './masterRow';
 import AdaptiveDetailRow from './adaptiveDetailRow';
@@ -41,6 +42,8 @@ export const CLASS = {
   popupEdit: 'edit-popup',
   masterDetailRow: 'dx-master-detail-row',
   adaptiveDetailRow: 'dx-adaptive-detail-row',
+  adaptiveCommandCellHidden: 'dx-command-adaptive-hidden',
+  adaptiveColumnButton: 'dx-datagrid-adaptive-more',
   errorRow: 'dx-error-row',
 
   headerRow: 'dx-header-row',
@@ -67,6 +70,8 @@ export const CLASS = {
   summaryTotal: 'dx-datagrid-summary-item',
   scrollableContainer: 'dx-scrollable-container',
   columnsSeparator: 'dx-datagrid-columns-separator',
+  toast: 'dx-toast-wrapper',
+  dragHeader: 'drag-header',
 };
 
 const E2E_ATTRIBUTES = {
@@ -218,7 +223,7 @@ export default class DataGrid extends GridCore {
 
   getFilterEditor<T>(
     columnIndex: number,
-    EditorType: new(mainElement: Selector) => T,
+    EditorType: new (mainElement: Selector) => T,
   ): T {
     return new EditorType(this.getHeaders().getFilterRow().getFilterCell(columnIndex).getEditor());
   }
@@ -235,8 +240,8 @@ export default class DataGrid extends GridCore {
     return new Overlay(this.element.find(`.${CLASS.overlayWrapper}`));
   }
 
-  getLoadPanel(): Overlay {
-    return new Overlay(this.element.find(`.${CLASS.loadPanelWrapper}`));
+  getLoadPanel(): LoadPanel {
+    return new LoadPanel(this.element.find(`.${CLASS.loadPanelWrapper}`));
   }
 
   getConfirmDeletionButton(): Selector {
@@ -283,6 +288,10 @@ export default class DataGrid extends GridCore {
     return new ContextMenu(this.body.find(`.${CLASS.contextMenu}.${this.addWidgetPrefix()}`));
   }
 
+  getToast(): Selector {
+    return this.body.find(`.${CLASS.toast}`);
+  }
+
   async scrollTo(
     t: TestController,
     options: { x?: number; y?: number; top?: number },
@@ -315,7 +324,12 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-  scrollBy(options: { x?: number; y?: number; top?: number; left?: number }): Promise<void> {
+  async scrollBy(
+    t: TestController,
+    options: { x?: number; y?: number; top?: number; left?: number
+  }): Promise<void> {
+    await t.expect(this.hasScrollable()).ok();
+
     const { getInstance } = this;
 
     return ClientFunction(
@@ -398,6 +412,18 @@ export default class DataGrid extends GridCore {
 
   getColumnChooserButton(): Selector {
     return this.element.find(`.${this.addWidgetPrefix(CLASS.columnChooserButton)}`);
+  }
+
+   getAdaptiveButtonSelector(): string {
+    return `.${CLASS.adaptiveColumnButton}`;
+  }
+
+  getAdaptiveButton(nth: number = 0): Selector {
+    return this.element.find(this.getAdaptiveButtonSelector()).nth(nth);
+  }
+
+  isAdaptiveColumnHidden(): Promise<boolean> {
+    return this.element.find(`.${CLASS.adaptiveCommandCellHidden}`).exists;
   }
 
   apiAddRow(): Promise<void> {
@@ -592,7 +618,7 @@ export default class DataGrid extends GridCore {
     const { getInstance } = this;
     return ClientFunction(
       () => {
-        (getInstance() as DataGridInstance).refresh().catch(() => {});
+        (getInstance() as DataGridInstance).refresh().catch(() => { });
       },
       { dependencies: { getInstance } },
     )();
@@ -651,6 +677,29 @@ export default class DataGrid extends GridCore {
     )();
   }
 
+  apiAddColumn(config: any): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as DataGridInstance).addColumn(config),
+      { dependencies: { getInstance, config } },
+    )();
+  }
+
+
+  apiFocus(): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).focus(),
+      {
+        dependencies: {
+          getInstance,
+        },
+      },
+    )();
+  }
+
   moveRow(rowIndex: number, x: number, y: number, isStart = false): Promise<void> {
     const { getInstance } = this;
 
@@ -672,7 +721,7 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-  resizeHeader(columnIndex: number, offset: number, needToTriggerPointerUp = true): Promise<void>  {
+  resizeHeader(columnIndex: number, offset: number, needToTriggerPointerUp = true): Promise<void> {
     const { getInstance } = this;
 
     return ClientFunction(
@@ -720,6 +769,24 @@ export default class DataGrid extends GridCore {
       {
         dependencies: {
           getInstance, columnIndex, x, y, isStart, moveElement,
+        },
+      },
+    )();
+  }
+
+  async dropHeader(columnIndex: number): Promise<void> {
+    const header = this.getHeaders().getHeaderRow(0).getHeaderCell(columnIndex).element;
+
+    return ClientFunction(
+      () => {
+        const headerOffset = $(header()).offset();
+
+        triggerPointerUp($(document), headerOffset.left, headerOffset.top);
+      },
+      {
+        dependencies: {
+          header, 
+          triggerPointerUp,
         },
       },
     )();
@@ -852,10 +919,24 @@ export default class DataGrid extends GridCore {
   ): Promise<void> {
     const { getInstance } = this;
     return ClientFunction(
-        () => {
-          (getInstance() as DataGridInstance).option('selection.sensitivity', sensitivity);
-        },
-        { dependencies: { getInstance, sensitivity } },
+      () => {
+        (getInstance() as DataGridInstance).option('selection.sensitivity', sensitivity);
+      },
+      { dependencies: { getInstance, sensitivity } },
     )();
+  }
+
+  apiShowErrorToast(): Promise<void> {
+    const { getInstance } = this;
+    return ClientFunction(() => {
+        const gridInstance = getInstance() as any;
+        gridInstance.getController('errorHandling').showToastError('Error');
+      },
+      { dependencies: { getInstance } },
+    )();
+  }
+  
+  getDraggableHeader() {
+    return this.body.find(`.${this.addWidgetPrefix(CLASS.dragHeader)}`);
   }
 }

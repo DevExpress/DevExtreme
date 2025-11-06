@@ -39,16 +39,16 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiTabPanelItemModule } from 'devextreme-angular/ui/tab-panel/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiTabPanelItemComponent } from 'devextreme-angular/ui/tab-panel/nested';
+import { 
+           PROPERTY_TOKEN_items,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -69,6 +69,12 @@ import { DxiTabPanelItemComponent } from 'devextreme-angular/ui/tab-panel/nested
     ]
 })
 export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
     instance: DxTabPanel<TItem, TKey> = null;
 
     /**
@@ -276,6 +282,19 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
     }
     set itemTitleTemplate(value: any) {
         this._setOption('itemTitleTemplate', value);
+    }
+
+
+    /**
+     * [descr:dxTabPanelOptions.keyExpr]
+    
+     */
+    @Input()
+    get keyExpr(): Function | string {
+        return this._getOption('keyExpr');
+    }
+    set keyExpr(value: Function | string) {
+        this._setOption('keyExpr', value);
     }
 
 
@@ -694,6 +713,13 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() keyExprChange: EventEmitter<Function | string>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() loopChange: EventEmitter<boolean>;
 
     /**
@@ -797,26 +823,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
 
 
-    @ContentChildren(DxiTabPanelItemComponent)
-    get itemsChildren(): QueryList<DxiTabPanelItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiTabPanelItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
-
-
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -856,6 +862,7 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
             { emit: 'itemsChange' },
             { emit: 'itemTemplateChange' },
             { emit: 'itemTitleTemplateChange' },
+            { emit: 'keyExprChange' },
             { emit: 'loopChange' },
             { emit: 'noDataTextChange' },
             { emit: 'repaintChangesOnlyChange' },

@@ -5,7 +5,7 @@ const parseArguments = require('minimist');
 
 
 const root = path.join(__dirname, '..');
-const transpileRenovationPath = path.join(root, '/artifacts/transpiled-renovation');
+const transpilePath = path.join(root, '/artifacts/transpiled');
 
 const getFileList = (dirName) => {
     let files = [];
@@ -106,12 +106,12 @@ const transpileFile = async(sourcePath, targetPath) => {
     }
 };
 
-const transpileRenovationModules = async() => {
+const transpileModules = async() => {
     await Promise.all(
-        getFileList(transpileRenovationPath).map((filePath) => {
+        getFileList(transpilePath).map((filePath) => {
             return transpileFile(
                 filePath,
-                filePath.replace(path.normalize('/transpiled-renovation'), path.normalize('/transpiled-renovation-systemjs')),
+                filePath.replace(path.normalize('/transpiled'), path.normalize('/transpiled-systemjs')),
             );
         })
     );
@@ -133,6 +133,7 @@ const transpileCss = async() => {
     const cssList = [
         ['artifacts/css/dx.light.css', 'generic.light'],
         ['artifacts/css/dx.material.blue.light.css', 'material.blue.light'],
+        ['artifacts/css/dx.fluent.blue.light.css', 'fluent.blue.light'],
         ['artifacts/css/dx-gantt.css', 'gantt'],
     ];
 
@@ -259,8 +260,8 @@ const transpileTesting = async() => {
     const { transpile } = parseArguments(process.argv);
 
     switch(transpile) {
-        case 'modules-renovation':
-            return await transpileRenovationModules();
+        case 'modules':
+            return await transpileModules();
         case 'testing':
             return await transpileTesting();
         case 'css':

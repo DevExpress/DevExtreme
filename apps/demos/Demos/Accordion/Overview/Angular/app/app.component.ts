@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import {
-  DxAccordionModule, DxCheckBoxModule, DxSliderModule, DxTagBoxModule, DxTemplateModule,
+  DxAccordionModule, DxCheckBoxModule, DxSliderModule, DxTagBoxModule,
 } from 'devextreme-angular';
 
 import { Company, Service } from './app.service';
@@ -40,7 +40,6 @@ export class AppComponent {
     DxCheckBoxModule,
     DxSliderModule,
     DxTagBoxModule,
-    DxTemplateModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

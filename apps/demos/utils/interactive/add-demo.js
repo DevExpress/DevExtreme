@@ -4,12 +4,26 @@ const path = require('path');
 const { spawn } = require('child_process');
 const promptsQuestions = require('./prompts-questions');
 const fileSystemUtils = require('../shared/fs-utils');
-const menuMetaUtils = require('./menu-meta-utils');
+const menuMetaUtils = require('../shared/menu-meta-utils');
 const menuMetaData = require('../../menuMeta.json');
 
 const existingApproaches = ['jQuery', 'Angular', 'React', 'Vue'];
-
-// const descriptionFileName = 'description.md';
+const extraModules = [
+  'signalr',
+  'devextreme-aspnet-data-nojquery',
+  'globalize',
+  'devextreme-exceljs-fork&file-saver',
+  'jspdf',
+  'jspdf&jspdf-autotable',
+  'devextreme-intl',
+  'canvg',
+  'whatwg-fetch',
+  'vectormap',
+  'unified',
+  'openai',
+  'html-react-parser',
+  'vuex',
+];
 
 const menuMetaFilePath = './menuMeta.json';
 
@@ -17,12 +31,13 @@ const baseDemosDir = 'Demos';
 
 const openDemoInEditor = (demoPath) => spawn('code', [demoPath], { shell: true });
 
-const addDemo = async (category, group, meta) => {
-  const demo = await promptsQuestions.askDemo(meta, category, group);
+const addDemo = async (meta, pathParts) => {
+  const demo = await promptsQuestions.askDemo(meta, pathParts);
   let demoPath;
   let missingApproaches = [];
 
   if (demo.name === 'new') {
+    const equivalents = await promptsQuestions.askEquivalents();
     const widget = await promptsQuestions.askWidget(baseDemosDir);
     if (widget.name === 'new') {
       const pathToNewWidget = path.join(baseDemosDir, widget.newName);
@@ -35,17 +50,17 @@ const addDemo = async (category, group, meta) => {
     }
     menuMetaUtils.addDemo(
       meta,
-      category.name,
-      group.name,
+      pathParts,
       demo.newName,
       widget.newName ? widget.newName : widget.name,
+      equivalents.value,
     );
+    pathParts.push(demo.newName.replace(/ /g, ''));
     missingApproaches = existingApproaches;
   } else {
+    pathParts.push(demo.name);
     demoPath = fileSystemUtils.getDemoPathByMeta(
-      category.name,
-      group.name,
-      demo.name,
+      pathParts,
       baseDemosDir,
       meta,
     );
@@ -60,10 +75,17 @@ const addDemo = async (category, group, meta) => {
   if (newOrExisting.choice === 'existing') {
     menuMetaUtils.updateDemoProperties(
       meta,
-      category.name,
-      group.name,
-      demo.newName,
+      pathParts,
       newOrExisting,
+    );
+  }
+  if (newOrExisting.choice === 'new') {
+    const extraModulesAnswer = await promptsQuestions.askForExtraModules(extraModules);
+    const modules = menuMetaUtils.prepareModules(extraModulesAnswer.modules);
+    menuMetaUtils.addDemoModules(
+      meta,
+      pathParts,
+      modules,
     );
   }
   fileSystemUtils.copyDemos(
@@ -74,7 +96,6 @@ const addDemo = async (category, group, meta) => {
     baseDemosDir,
   );
   fileSystemUtils.saveMetaDataFile(menuMetaFilePath, meta);
-  console.log(demoPath);
   openDemoInEditor(demoPath);
 };
 
@@ -85,13 +106,23 @@ const mainRoutine = async (meta) => {
     fileSystemUtils.saveMetaDataFile(menuMetaFilePath, meta);
     console.log('-> New category has been added.');
   } else {
-    const group = await promptsQuestions.askGroup(meta, category);
-    if (group.name === 'new') {
-      menuMetaUtils.addGroup(meta, category.name, group.newName);
-      fileSystemUtils.saveMetaDataFile(menuMetaFilePath, meta);
-      console.log('-> New group has been added.');
-    } else {
-      await addDemo(category, group, meta);
+    const pathParts = [category.name];
+    let shouldAskForGroup = true;
+    let group;
+    while (shouldAskForGroup) {
+      group = await promptsQuestions.askGroup(meta, pathParts);
+      if (group.name === 'new') {
+        menuMetaUtils.addGroup(meta, pathParts, group.newName);
+        fileSystemUtils.saveMetaDataFile(menuMetaFilePath, meta);
+        console.log('-> New group has been added.');
+        shouldAskForGroup = false;
+      } else {
+        pathParts.push(group.name);
+        if (menuMetaUtils.hasDemos(meta, pathParts)) {
+          shouldAskForGroup = false;
+          await addDemo(meta, pathParts);
+        }
+      }
     }
   }
 };

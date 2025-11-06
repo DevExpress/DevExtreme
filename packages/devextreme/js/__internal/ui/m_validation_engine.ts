@@ -882,7 +882,7 @@ const ValidationEngine = {
     return {};
   },
 
-  validateGroup(group) {
+  validateGroup(group): ValidationResult {
     const groupConfig = ValidationEngine.getGroupConfig(group);
     if (!groupConfig) {
       throw errors.Error('E0110');

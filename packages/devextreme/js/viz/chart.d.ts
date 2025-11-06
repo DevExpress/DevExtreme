@@ -9,7 +9,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+} from '../events';
 
 import {
     Format,
@@ -29,6 +29,7 @@ import {
     BaseChartOptions,
     BaseChartTooltip,
     BaseChartAnnotationConfig,
+    BasePointInfo,
     PointInteractionInfo,
     TooltipInfo,
 } from './chart_components/base_chart';
@@ -237,7 +238,7 @@ export type OptionChangedEvent = EventInfo<dxChart> & ChangedOptionInfo;
  * @type object
  * @inherits Cancelable,NativeEventInfo,PointInteractionInfo
  */
-export type PointClickEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | PointerEvent> & PointInteractionInfo;
+export type PointClickEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | PointerEvent> & PointInteractionInfo<chartPointObject>;
 
 /**
  * @docid _viz_chart_PointHoverChangedEvent
@@ -245,7 +246,7 @@ export type PointClickEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent |
  * @type object
  * @inherits EventInfo,PointInteractionInfo
  */
-export type PointHoverChangedEvent = EventInfo<dxChart> & PointInteractionInfo;
+export type PointHoverChangedEvent = EventInfo<dxChart> & PointInteractionInfo<chartPointObject>;
 
 /**
  * @docid _viz_chart_PointSelectionChangedEvent
@@ -253,7 +254,7 @@ export type PointHoverChangedEvent = EventInfo<dxChart> & PointInteractionInfo;
  * @type object
  * @inherits EventInfo,PointInteractionInfo
  */
-export type PointSelectionChangedEvent = EventInfo<dxChart> & PointInteractionInfo;
+export type PointSelectionChangedEvent = EventInfo<dxChart> & PointInteractionInfo<chartPointObject>;
 
 /**
  * @docid _viz_chart_SeriesClickEvent
@@ -288,7 +289,7 @@ export type SeriesSelectionChangedEvent = EventInfo<dxChart> & SeriesInteraction
  * @type object
  * @inherits EventInfo,_viz_chart_components_base_chart_TooltipInfo
  */
-export type TooltipHiddenEvent = EventInfo<dxChart> & TooltipInfo;
+export type TooltipHiddenEvent = EventInfo<dxChart> & TooltipInfo<chartPointObject>;
 
 /**
  * @docid _viz_chart_TooltipShownEvent
@@ -296,7 +297,7 @@ export type TooltipHiddenEvent = EventInfo<dxChart> & TooltipInfo;
  * @type object
  * @inherits EventInfo,_viz_chart_components_base_chart_TooltipInfo
  */
-export type TooltipShownEvent = EventInfo<dxChart> & TooltipInfo;
+export type TooltipShownEvent = EventInfo<dxChart> & TooltipInfo<chartPointObject>;
 
 /**
  * @docid _viz_chart_ZoomEndEvent
@@ -396,6 +397,266 @@ export interface baseLabelObject {
      */
     show(holdVisible: boolean): void;
 }
+
+/**
+ * @docid
+ * @public
+ * @type object
+ */
+export type StackedPointInfo = CommonPointInfo & {
+  /**
+   * @docid
+   * @public
+   */
+  percent?: number;
+  /**
+   * @docid
+   * @public
+   */
+  percentText?: string;
+  /**
+   * @docid
+   * @public
+   */
+  points?: StackedPointInfo[];
+  /**
+   * @docid
+   * @public
+   */
+  total?: number;
+  /**
+   * @docid
+   * @public
+   */
+  totalText?: string;
+};
+
+/**
+ * @docid
+ * @public
+ * @type object
+ */
+export type BubblePointInfo = CommonPointInfo & {
+  /**
+   * @docid
+   * @public
+   */
+  points?: BubblePointInfo[];
+  /**
+   * @docid
+   * @public
+   */
+  size?: number;
+  /**
+   * @docid
+   * @public
+   */
+  sizeText?: string;
+};
+
+/**
+ * @docid
+ * @public
+ * @type object
+ */
+export type CandleStickPointInfo = {
+  /**
+   * @docid
+   * @public
+   */
+  argument?: string | number | Date;
+  /**
+   * @docid
+   * @public
+   */
+  closeValue?: number | string;
+  /**
+   * @docid
+   * @public
+   */
+  closeValueText?: string;
+  /**
+   * @docid
+   * @public
+   */
+  highValue?: number | string;
+  /**
+   * @docid
+   * @public
+   */
+  highValueText?: string;
+  /**
+   * @docid
+   * @public
+   */
+  lowValue?: number | string;
+  /**
+   * @docid
+   * @public
+   */
+  lowValueText?: string;
+  /**
+   * @docid
+   * @public
+   */
+  openValue?: number | string;
+  /**
+   * @docid
+   * @public
+   */
+  openValueText?: string;
+  /**
+   * @docid
+   * @public
+   */
+  originalArgument?: string | number | Date;
+  /**
+   * @docid
+   * @public
+   */
+  originalCloseValue?: number | string;
+  /**
+   * @docid
+   * @public
+   */
+  originalHighValue?: number | string;
+  /**
+   * @docid
+   * @public
+   */
+  originalLowValue?: number | string;
+  /**
+   * @docid
+   * @public
+   */
+  originalOpenValue?: number | string;
+  /**
+   * @docid
+   * @public
+   */
+  point?: chartPointObject;
+  /**
+   * @docid
+   * @public
+   */
+  points?: CandleStickPointInfo[];
+  /**
+   * @docid
+   * @public
+   */
+  reductionValue?: number | string;
+  /**
+   * @docid
+   * @public
+   */
+  seriesName?: any;
+  /**
+   * @docid
+   * @public
+   */
+  value?: number | string;
+  /**
+   * @docid
+   * @public
+   */
+  valueText?: string;
+};
+
+/**
+ * @docid
+ * @public
+ * @type object
+ */
+export type RangePointInfo = {
+  /**
+   * @docid
+   * @public
+   */
+  argument?: string | number | Date;
+  /**
+   * @docid
+   * @public
+   */
+  argumentText?: string;
+  /**
+   * @docid
+   * @public
+   */
+  valueText?: string;
+  /**
+   * @docid
+   * @public
+   */
+  rangeValue1?: string | number | Date;
+  /**
+   * @docid
+   * @public
+   */
+  rangeValue1Text?: string;
+  /**
+   * @docid
+   * @public
+   */
+  rangeValue2?: string | number | Date;
+  /**
+   * @docid
+   * @public
+   */
+  rangeValue2Text?: string;
+  /**
+   * @docid
+   * @public
+   */
+  seriesName?: any;
+  /**
+   * @docid
+   * @public
+   */
+  point?: chartPointObject;
+  /**
+   * @docid
+   * @public
+   */
+  points?: RangePointInfo[];
+  /**
+   * @docid
+   * @public
+   */
+  originalArgument?: string | number | Date;
+  /**
+   * @docid
+   * @public
+   */
+  originalMinValue?: string | number | Date;
+  /**
+   * @docid
+   * @public
+   */
+  originalValue?: string | number | Date;
+};
+
+/**
+ * @docid
+ * @public
+ */
+export type CommonPointInfo = BasePointInfo<chartPointObject>;
+
+/**
+ * @docid dxChartPointInfo
+ * @public
+ */
+export type PointInfo =
+  | CommonPointInfo
+  | StackedPointInfo
+  | BubblePointInfo
+  | CandleStickPointInfo
+  | RangePointInfo;
+
+/**
+ * @namespace DevExpress.viz
+ * @deprecated Use PointInfo instead
+ */
+export type dxChartPointInfo = PointInfo;
 
 /**
  * @docid
@@ -768,7 +1029,7 @@ export interface chartSeriesObject extends baseSeriesObject {
  * @namespace DevExpress.viz
  * @docid
  */
-export interface dxChartOptions extends BaseChartOptions<dxChart> {
+export interface dxChartOptions extends BaseChartOptions<dxChart, chartPointObject> {
     /**
      * @docid
      * @default true
@@ -2423,11 +2684,13 @@ export type Panes = CommonPaneSettings & {
      */
     name?: string | undefined;
 };
+
 /**
- * @bublic
+ * @public
  * @docid dxChartTooltip
+ * @type object
  */
-export type Tooltip = BaseChartTooltip & {
+export type Tooltip = Omit<BaseChartTooltip<PointInfo>, 'contentTemplate' | 'customizeTooltip'> & {
     /**
      * @docid dxChartOptions.tooltip.location
      * @default 'center'
@@ -2435,7 +2698,25 @@ export type Tooltip = BaseChartTooltip & {
      * @public
      */
     location?: ChartTooltipLocation;
+    /**
+     * @docid dxChartOptions.tooltip.contentTemplate
+     * @type_function_param1 pointInfo:dxChartPointInfo
+     * @type_function_return string|Element|jQuery
+     * @default undefined
+     * @public
+     */
+    contentTemplate?: template | ((pointInfo: PointInfo, element: DxElement) => string | UserDefinedElement) | undefined;
+    /**
+     * @docid dxChartOptions.tooltip.customizeTooltip
+     * @public
+     * @type_function_param1 pointInfo:dxChartPointInfo
+     * @type_function_return object
+     * @default undefined
+     * @notUsedInTheme
+     */
+    customizeTooltip?: ((pointInfo: PointInfo) => any) | undefined;
 };
+
 /**
  * @public
  * @docid dxChartValueAxis

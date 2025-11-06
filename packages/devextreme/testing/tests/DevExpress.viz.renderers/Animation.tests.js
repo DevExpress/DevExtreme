@@ -1,12 +1,14 @@
 /* global currentAssert */
 
-const $ = require('jquery');
-const animationFrame = require('common/core/animation/frame');
-const commonUtils = require('core/utils/common');
-const typeUtils = require('core/utils/type');
-const animationModule = require('viz/core/renderers/animation');
-const rendererModule = require('viz/core/renderers/renderer');
-const vizMocks = require('../../helpers/vizMocks.js');
+import $ from 'jquery';
+import animationFrame from 'common/core/animation/frame';
+import commonUtils from 'core/utils/common';
+import typeUtils from 'core/utils/type';
+import animationModule from 'viz/core/renderers/animation';
+import rendererModule from 'viz/core/renderers/renderer';
+import {
+    stubClass
+} from '../../helpers/vizMocks.js';
 
 (function() {
     QUnit.module('AnimationController', {
@@ -45,7 +47,6 @@ const vizMocks = require('../../helpers/vizMocks.js');
             this.srcRequestAnimationFrame && (animationFrame.requestAnimationFrame = this.srcRequestAnimationFrame);
             this.srcCancelAnimationFrame && (animationFrame.cancelAnimationFrame = this.srcCancelAnimationFrame);
             this.animationController.dispose();
-
         },
         mockRequestAnimationFrame: function(callback) {
             this.srcRequestAnimationFrame = animationFrame.requestAnimationFrame;
@@ -71,7 +72,7 @@ const vizMocks = require('../../helpers/vizMocks.js');
     QUnit.test('Creation. Two Controllers', function(assert) {
         const animationController = this.createAnimationController();
         animationController.addAnimation(new this.Animation());
-        // act
+
         const animationController1 = new this.AnimationController();
 
         assert.ok(animationController1);
@@ -96,10 +97,9 @@ const vizMocks = require('../../helpers/vizMocks.js');
             animationStartedCount++;
             doAssert();
         };
-        // Act
+
         animationController.addAnimation(animation);
 
-        // Assert
         function doAssert() {
             assert.equal(animationController._animationCount, 1);
             assert.deepEqual(animationController._animations, { '0': animation });
@@ -142,12 +142,11 @@ const vizMocks = require('../../helpers/vizMocks.js');
             animationStartedCount++;
             doAssert();
         };
-        // Act
+
         for(let i = 0; i < animations.length; i++) {
             animationController.addAnimation(animations[i]);
         }
 
-        // Assert
         function doAssert() {
             assert.equal(animationController._animationCount, 4);
             assert.deepEqual(animationController._animations, { '0': animations[0], '1': animations[1], '2': animations[2], '3': animations[3] });
@@ -167,9 +166,9 @@ const vizMocks = require('../../helpers/vizMocks.js');
 
         animationController.addAnimation(new this.Animation());
         this.mockCancelAnimationFrame(cancelRequestAnimationFrameSpy);
-        // act
+
         animationController.stop();
-        // assert
+
         assert.deepEqual(animationController._animations, {});
         assert.equal(animationController._animationCount, 0);
         assert.ok(!animation1.stopped);
@@ -186,9 +185,9 @@ const vizMocks = require('../../helpers/vizMocks.js');
 
         animationController.addAnimation(animation1);
         animationController.addAnimation(animation2);
-        // act
+
         animationController.lock();
-        // assert
+
         assert.deepEqual(animationController._animations, {});
         assert.equal(animationController._animationCount, 0);
         assert.deepEqual(animation1.stopArguments, [true]);
@@ -207,10 +206,9 @@ const vizMocks = require('../../helpers/vizMocks.js');
 
         animationController.addAnimation(animation1);
         animationController.addAnimation(animation2);
-        // act
+
         animationController.lock();
 
-        // assert
         assert.equal(animation1.stopArguments.length, 1, 'stop does called');
         assert.ok(!animation2.stopArguments, 'stop doesn\'t called');
         assert.ok(!animationController.stop.called);
@@ -231,10 +229,9 @@ const vizMocks = require('../../helpers/vizMocks.js');
 
         animationController.addAnimation(animation1);
         animationController.addAnimation(animation2);
-        // act
+
         animationController.lock();
 
-        // assert
         assert.equal(animation1.stopArguments.length, 1, 'stop does called');
         assert.equal(animation2.stopArguments.length, 1, 'stop does called');
         assert.equal(animationController.stop.callCount, 1);
@@ -372,9 +369,8 @@ const vizMocks = require('../../helpers/vizMocks.js');
         const oldAnimation = new this.Animation();
         element.animation = oldAnimation;
 
-        // Act
         animationController.animateElement(element, params, options);
-        // Assert
+
         assert.ok(oldAnimation.stopped, 'old animation must be stopped');
         assert.deepEqual(oldAnimation.stopArguments, [], 'old animation must be stopped with break parameter');
         const newAnimation = element.animation;
@@ -446,7 +442,6 @@ const vizMocks = require('../../helpers/vizMocks.js');
             done();
         }
     });
-
 })();
 
 (function() {
@@ -480,7 +475,6 @@ const vizMocks = require('../../helpers/vizMocks.js');
                         that.animateAttributeParameters.baseArguments = that.animateAttributeParameters.baseArguments || [];
                         that.animateAttributeParameters.baseArguments.push($.extend(true, {}, $.makeArray(arguments)));
                         currentParams.baseProgress = progress;
-
                     },
                     complete: function(element, currentParams) {
                         that.animateAttributeParameters.completeArguments = that.animateAttributeParameters.completeArguments || [];
@@ -495,13 +489,12 @@ const vizMocks = require('../../helpers/vizMocks.js');
                 }
             };
 
-            this.element = new (vizMocks.stubClass(rendererModule.SvgElement,
+            this.element = new (stubClass(rendererModule.SvgElement,
                 {
                     attr: function() { return this; },
                     css: function() { return this; },
                     append: function() { return this; }
                 }))();
-
         }
     };
     QUnit.module('Animation', environment);
@@ -522,15 +515,13 @@ const vizMocks = require('../../helpers/vizMocks.js');
         const animation = new this.Animation(this.element, this.params, this.options);
         const firstTick = animation.tick;
 
-        // Act
         const result = animation.tick(new Date().getTime());
         const secondTick = animation.tick;
-        // Assert
+
         assert.ok(new Date() - animation._startTime < 1000);
         assert.strictEqual(result, true);
         assert.notStrictEqual(firstTick, secondTick);
     });
-
 
     QUnit.test('Calculate animation progress', function(assert) {
         const animation = new this.Animation(this.element, this.params, $.extend(this.options, { duration: 10000 }));
@@ -566,11 +557,11 @@ const vizMocks = require('../../helpers/vizMocks.js');
 
     QUnit.test('Step', function(assert) {
         const animation = this.createAnimation(this.element, this.params, this.options);
-        // Act
+
         animation.tick();
         animation.tick();
         animation.tick();
-        // Assert
+
         const animateAction1 = this.animateAttributeParameters._Arguments[0];
         assertAnimationAction(assert, animateAction1, this.element, this.params['_'], 0.4, {}, '_', 1);
 
@@ -580,11 +571,11 @@ const vizMocks = require('../../helpers/vizMocks.js');
 
     QUnit.test('Step. same params', function(assert) {
         const animation = this.createAnimation(this.element, $.extend(true, this.params, { x: { from: 10, to: 12 } }), this.options);
-        // Act
+
         animation.tick();
         animation.tick();
         animation.tick();
-        // Assert
+
         const animateAction1 = this.animateAttributeParameters._Arguments[0];
         assertAnimationAction(assert, animateAction1, this.element, this.params['_'], 0.4, {}, '_', 1);
 
@@ -601,11 +592,11 @@ const vizMocks = require('../../helpers/vizMocks.js');
     QUnit.test('Stop. Break Animations', function(assert) {
         this.options.complete = sinon.stub();
         const animation = this.createAnimation(this.element, $.extend(true, this.params, { x: { from: 10, to: 12 } }), this.options);
-        // Act
+
         animation.tick();
         animation.tick();
         animation.stop();
-        // Assert
+
         const animateAction1 = this.animateAttributeParameters._Arguments[0];
         assertAnimationAction(assert, animateAction1, this.element, this.params['_'], 0.4, {}, '_', 1);
 
@@ -620,11 +611,11 @@ const vizMocks = require('../../helpers/vizMocks.js');
     QUnit.test('Stop. Break Animations with disable user complete', function(assert) {
         this.options.complete = sinon.stub();
         const animation = this.createAnimation(this.element, $.extend(true, this.params, { x: { from: 10, to: 12 } }), this.options);
-        // Act
+
         animation.tick();
         animation.tick();
         animation.stop(true);
-        // Assert
+
         const animateAction1 = this.animateAttributeParameters._Arguments[0];
         assertAnimationAction(assert, animateAction1, this.element, this.params['_'], 0.4, {}, '_', 1);
 
@@ -642,10 +633,10 @@ const vizMocks = require('../../helpers/vizMocks.js');
         let synchronizeTimeValue;
         animation._calcProgress = function(now) { synchronizeTimeValue = now; return 1; };
         animation.tick();
-        // Act
+
         const now = new Date().getTime();
         animation.tick(now);
-        // Assert
+
         assert.deepEqual(synchronizeTimeValue, now);
     });
 
@@ -653,9 +644,9 @@ const vizMocks = require('../../helpers/vizMocks.js');
         const animation = this.createAnimation(this.element, this.params, this.options);
         animation._calcProgress = function() { return 1; };
         animation.tick();
-        // Act
+
         const result = animation.tick();
-        // Assert
+
         assert.ok(!result);
         assert.equal(animation.tick, animationModule.noop);
         const completeAction = this.animateAttributeParameters.completeArguments[0];
@@ -672,10 +663,10 @@ const vizMocks = require('../../helpers/vizMocks.js');
                 }
             }));
         animation.tick();
-        // Act
+
         animation.tick();
         animation.tick();
-        // Assert
+
         assert.equal(steps.length, 2);
 
         assert.roughEqual(steps[0][0], 0.784, 0.01);
@@ -694,11 +685,11 @@ const vizMocks = require('../../helpers/vizMocks.js');
                 }
             }));
         animation.tick();
-        // Act
+
         animation.tick();
         animation.tick();
         animation.tick();
-        // Assert
+
         assert.equal(completeCallCount, 1);
     });
 
@@ -706,7 +697,6 @@ const vizMocks = require('../../helpers/vizMocks.js');
         assert.expect(2);
         const that = this;
         const animation = this.createAnimation(this.element, this.params, $.extend(this.options, {
-            // Assert
             complete: function() {
                 const completeAction = that.animateAttributeParameters.completeArguments[0];
                 assert.equal(completeAction[0], that.element);
@@ -714,7 +704,7 @@ const vizMocks = require('../../helpers/vizMocks.js');
             }
         }));
         animation.tick();
-        // Act
+
         animation.tick();
         animation.tick();
         animation.tick();
@@ -744,11 +734,11 @@ const vizMocks = require('../../helpers/vizMocks.js');
                 }
             }));
         animation.tick();
-        // Act
+
         animation.tick();
         animation.tick();
         animation.tick();
-        // Assert
+
         assert.equal(completeCallCount, 1);
     });
 
@@ -774,14 +764,13 @@ const vizMocks = require('../../helpers/vizMocks.js');
         animation.tick(new Date().getTime());
         this.clock.tick(10);
 
-        // Act
         animation.tick(new Date().getTime());
         this.clock.tick(10);
         animation.tick(new Date().getTime());
 
         this.clock.tick(0);
         animation.tick(new Date().getTime());
-        // Assert
+
         assert.strictEqual(step.callCount, 1);
         assert.strictEqual(step.getCall(0).args[0], 0);
     });
@@ -798,14 +787,14 @@ const vizMocks = require('../../helpers/vizMocks.js');
         animation.tick(new Date().getTime());
         this.clock.tick(20);
         animation.tick(new Date().getTime());
-        // Act
+
         this.clock.tick(40);
         animation.tick(new Date().getTime());
         this.clock.tick(40);
         animation.tick(new Date().getTime());
         this.clock.tick(20);
         animation.tick(new Date().getTime());
-        // Assert
+
         assert.strictEqual(step.callCount, 3);
         assert.strictEqual(step.getCall(0).args[0], 0.4);
         assert.strictEqual(step.getCall(1).args[0], 0.8);
@@ -816,7 +805,7 @@ const vizMocks = require('../../helpers/vizMocks.js');
 QUnit.module('SvgAnimationStep', {
     beforeEach: function() {
         this.animationStep = animationModule.animationSvgStep;
-        this.element = new (vizMocks.stubClass(rendererModule.SvgElement))();
+        this.element = new (stubClass(rendererModule.SvgElement))();
         this.element._transforms = {};
         this.currentParams = {};
     },
@@ -872,7 +861,6 @@ QUnit.test('Transformations step. translateX, translateY', function(assert) {
 QUnit.test('Transformations step. Rotate with xy', function(assert) {
     const step = this.animationStep;
 
-    // Act
     // elem, params, progress, easing, currentParams, attributeName
     step.transform(this.element, {
         from: {
@@ -895,7 +883,6 @@ QUnit.test('Transformations step. Rotate with xy', function(assert) {
 QUnit.test('Transformations step. Rotate without xy', function(assert) {
     const step = this.animationStep;
 
-    // Act
     // elem, params, progress, easing, currentParams, attributeName
     step.transform(this.element, {
         from: { rotate: 10 },
@@ -976,7 +963,6 @@ QUnit.test('Arc step', function(assert) {
         }
     }, 0.5, this.easing(assert), this.currentParams, 'arc');
 
-    // assert
     assert.deepEqual(this.currentParams, {});
 
     assert.strictEqual(this.element.stub('attr').callCount, 1);

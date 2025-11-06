@@ -32,7 +32,7 @@ const { data } = props;
 
 const dimensionOptions = new Set(['size', 'minSize', 'maxSize', 'collapsedSize']);
 
-const getStateText = function() {
+const getStateText = function () {
   if (data.resizable !== false && !data.collapsible) {
     return 'Resizable only';
   }

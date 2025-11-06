@@ -1,4 +1,3 @@
-/* eslint-disable func-style */
 import React, { useCallback, useMemo, useState } from 'react';
 import Scheduler from 'devextreme-react/scheduler';
 import notify from 'devextreme/ui/notify';
@@ -20,13 +19,15 @@ const ariaDescription = () => {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
-      }));
+      }),
+    );
   if (disabledDates?.length === 1) {
     return `${disabledDates} is a disabled date`;
   }
   if (disabledDates?.length > 1) {
     return `${disabledDates.join(', ')} are disabled dates`;
   }
+  return '';
 };
 const notifyDisableDate = () => {
   notify(
@@ -70,7 +71,9 @@ const onAppointmentUpdating = (e) => {
 };
 const setComponentAria = (element) => {
   const prevAria = element?.attr('aria-label') || '';
-  element?.attr('aria-label', `${prevAria} ${ariaDescription()}`);
+  const description = ariaDescription();
+  const nextAria = `${prevAria}${description ? ` ${description}` : ''}`;
+  element?.attr('aria-label', nextAria);
 };
 const App = () => {
   const [currentView, setCurrentView] = useState(views[0]);
@@ -86,7 +89,7 @@ const App = () => {
         currentView={currentView}
       />
     ),
-    [],
+    [currentView],
   );
   return (
     <Scheduler

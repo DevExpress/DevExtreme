@@ -16,7 +16,7 @@ class ColorIcon extends React.Component<ColorIconProps> {
     this.props.onClick(this.props.color);
   }
 
-  render(): JSX.Element {
+  render() {
     return (
       <i
         onClick={this.onClick}

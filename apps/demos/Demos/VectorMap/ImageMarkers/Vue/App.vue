@@ -25,13 +25,14 @@
   </DxVectorMap>
 </template>
 <script setup lang="ts">
+// @ts-ignore
 import * as mapsData from 'devextreme-dist/js/vectormap-data/usa.js';
 import {
   DxVectorMap,
   DxLabel,
   DxLayer,
   DxFont,
-  DxLoadingIndicator
+  DxLoadingIndicator,
 } from 'devextreme-vue/vector-map';
 import { weatherData } from './data.ts';
 

@@ -5,13 +5,14 @@ import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
 import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
 
 import { employees, showCheckboxesModeLabel, selectionModeLabel } from './data.ts';
+import type { Employee } from './types';
 
 const showCheckBoxesModes: TreeViewTypes.TreeViewCheckBoxMode[] = ['normal', 'selectAll', 'none'];
 const selectionModes: TreeViewTypes.SingleOrMultiple[] = ['multiple', 'single'];
 
-const renderTreeViewItem = (item: { fullName: any; position: any; }) => `${item.fullName} (${item.position})`;
+const renderTreeViewItem = (item: Employee) => `${item.fullName} (${item.position})`;
 
-const renderListItem = (item: { prefix: any; fullName: any; position: any; }) => `${item.prefix} ${item.fullName} (${item.position})`;
+const renderListItem = (item: Employee) => `${item.prefix} ${item.fullName} (${item.position})`;
 
 const App = () => {
   const treeViewRef = useRef(null);
@@ -25,16 +26,16 @@ const App = () => {
 
   const syncSelection = useCallback((treeView) => {
     const syncSelectedEmployees = treeView.getSelectedNodes()
-      .map((node) => node.itemData);
+      .map((node: TreeViewTypes.Node<Employee>) => node.itemData);
 
     setSelectedEmployees(syncSelectedEmployees);
   }, [setSelectedEmployees]);
 
-  const treeViewSelectionChanged = useCallback((e: TreeViewTypes.SelectionChangedEvent) => {
+  const treeViewSelectionChanged = useCallback((e: TreeViewTypes.SelectionChangedEvent<Employee>) => {
     syncSelection(e.component);
   }, [syncSelection]);
 
-  const treeViewContentReady = useCallback((e: TreeViewTypes.ContentReadyEvent) => {
+  const treeViewContentReady = useCallback((e: TreeViewTypes.ContentReadyEvent<Employee>) => {
     syncSelection(e.component);
   }, [syncSelection]);
 

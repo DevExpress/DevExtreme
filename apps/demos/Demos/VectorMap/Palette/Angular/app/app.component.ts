@@ -38,6 +38,7 @@ export class AppComponent {
         text: `${attribute('name')}: ${attribute('population')}% of world population`,
       };
     }
+    return null;
   }
 
   customizeLayers(elements: { attribute: Function }[]) {
@@ -47,7 +48,7 @@ export class AppComponent {
   }
 
   customizeText({ index, start, end }: Record<string, number>) {
-    let text = (index === 0) ? '< 0.5%' : `${start}% to ${end}%`;
+    const text = (index === 0) ? '< 0.5%' : `${start}% to ${end}%`;
 
     return (index === 5) ? '> 3%' : text;
   }

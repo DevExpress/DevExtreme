@@ -9,13 +9,9 @@ import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibi
 import 'generic_light.css!';
 import $ from 'jquery';
 import { getTimeZones } from 'time_zone_utils';
-import themes from 'ui/themes';
-import Scrollable from 'ui/scroll_view/ui.scrollable.js';
 
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
-
-const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
 
 QUnit.testStart(() => initTestMarkup());
 
@@ -767,7 +763,7 @@ QUnit.module('View with configuration', () => {
                 });
 
                 [true, false].forEach((renovateRender) => {
-                    QUnit.test(`Workspace vertical scroll should be equal to the dataTable height if grouping, view: '${viewName}', view.intervalCount=${intervalCount}, height: ${height}`, async function(assert) {
+                    QUnit.test(`Workspace vertical scroll should be equal to the dataTable height if grouping, view: '${viewName}', view.intervalCount=${intervalCount}, height: ${height}, renovateRender: ${renovateRender}`, async function(assert) {
                         const scheduler = await createWrapper({
                             height: height,
                             views: [{
@@ -798,12 +794,6 @@ QUnit.module('View with configuration', () => {
     });
 
     QUnit.test('Scrollable content should have correct height when native scrolling is used and a cell\'s height is greater than default', async function(assert) {
-        if(isRenovatedScrollable) {
-            // this scenario doesn't relevant for renovated widget
-            assert.ok(true, 'skip test');
-            return;
-        }
-
         const scheduler = await createWrapper({
             height: 1500,
             views: ['month'],
@@ -822,12 +812,6 @@ QUnit.module('View with configuration', () => {
     });
 
     QUnit.test('Scrollable content should have correct height when native scrolling is used and a cell\'s height is equal to default', async function(assert) {
-        if(isRenovatedScrollable) {
-            // this scenario doesn't relevant for renovated widget
-            assert.ok(true, 'skip test');
-            return;
-        }
-
         const scheduler = await createWrapper({
             height: 500,
             views: [{
@@ -849,48 +833,6 @@ QUnit.module('View with configuration', () => {
     });
 });
 
-QUnit.module('Options for Material-based themes in components', {
-    beforeEach: function() {
-        this.origIsMaterialBased = themes.isMaterialBased;
-        themes.isMaterialBased = function() { return true; };
-    },
-    afterEach: function() {
-        themes.isMaterialBased = this.origIsMaterialBased;
-    }
-}, () => {
-    QUnit.test('_collectorOffset option should be passed to SchedulerAppointments depending on the view', async function(assert) {
-        const scheduler = await createWrapper({
-            currentView: 'month',
-            showCurrentTimeIndicator: false
-        });
-
-        const appointments = scheduler.instance.getAppointmentsInstance();
-
-        assert.equal(appointments.option('_collectorOffset'), 20, 'SchedulerAppointments has correct _collectorOffset');
-
-        scheduler.instance.option('currentView', 'week');
-        await waitAsync(10);
-        assert.equal(appointments.option('_collectorOffset'), 0, 'SchedulerAppointments has correct _collectorOffset');
-    });
-
-    QUnit.test('Real _collectorOffset option should be passed to SchedulerAppointments depending on the adaptivityEnabled', async function(assert) {
-        const scheduler = await createWrapper({
-            currentView: 'month',
-            showCurrentTimeIndicator: false,
-            adaptivityEnabled: false
-        });
-
-        let appointments = scheduler.instance.getAppointmentsInstance();
-
-        assert.equal(appointments.option('_collectorOffset'), 20, 'SchedulerAppointments has correct _collectorOffset');
-
-        scheduler.instance.option('adaptivityEnabled', true);
-        appointments = scheduler.instance.getAppointmentsInstance();
-
-        assert.equal(appointments.option('_collectorOffset'), 0, 'SchedulerAppointments has correct _collectorOffset');
-    });
-});
-
 QUnit.module('Getting timezones', {}, () => {
     const findTimeZone = (timeZones, id) => {
         return timeZones.filter((timeZone) => timeZone.id === id)[0];
@@ -905,35 +847,6 @@ QUnit.module('Getting timezones', {}, () => {
         assert.ok(Object.prototype.hasOwnProperty.call(firstTimeZone, 'id'), 'returned timeZone has an id');
         assert.ok(Object.prototype.hasOwnProperty.call(firstTimeZone, 'offset'), 'returned timeZone has an offset');
         assert.ok(Object.prototype.hasOwnProperty.call(firstTimeZone, 'title'), 'returned timeZone has a title');
-    });
-
-    QUnit.test('getTimeZones should take into account custom timezones', async function(assert) {
-        try {
-            const timezone = 'America/Los_Angeles';
-            config({
-                timezones: [{
-                    id: timezone,
-                    untils: 'Infinity',
-                    offsets: '60000',
-                    offsetIndices: '0',
-                }]
-            });
-            const date = new Date(2020, 5, 1);
-            const timeZones = getTimeZones(date);
-            const targetTimezone = timeZones.filter(tz => tz.id === timezone)[0];
-
-            assert.ok(timeZones instanceof Array, 'method returns an array');
-            assert.ok(Object.prototype.hasOwnProperty.call(targetTimezone, 'id'), 'returned timeZone has an id');
-            assert.ok(Object.prototype.hasOwnProperty.call(targetTimezone, 'offset'), 'returned timeZone has an offset');
-            assert.ok(Object.prototype.hasOwnProperty.call(targetTimezone, 'title'), 'returned timeZone has a title');
-
-            assert.equal(targetTimezone.offset, -1000);
-
-            const nonConfigTimezone = timeZones.filter(tz => tz.id === 'Europe/Berlin')[0];
-            assert.equal(nonConfigTimezone.offset, 2);
-        } finally {
-            config({ timezones: null });
-        }
     });
 
     QUnit.test('getTimeZones method should work properly without date passing', async function(assert) {

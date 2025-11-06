@@ -3,19 +3,20 @@
     Right click within this region to display the DevExtreme Context Menu
   </div>
   <DxContextMenu
-      :data-source="items"
-      :width="200"
-      target=".target-area"
-      @item-click="itemClick"
+    :data-source="items"
+    :width="200"
+    target=".target-area"
+    @item-click="itemClick"
   />
 </template>
 <script setup lang="ts">
-import DxContextMenu, { type DxContextMenuTypes } from 'devextreme-vue/context-menu';
+import { DxContextMenu, type DxContextMenuTypes } from 'devextreme-vue/context-menu';
 import notify from 'devextreme/ui/notify';
 import { contextMenuItems as items } from './data.ts';
+import type { ContextMenuItem } from './types';
 
-function itemClick({ itemData }: DxContextMenuTypes.ItemClickEvent) {
-  if (!itemData.items) {
+function itemClick({ itemData }: DxContextMenuTypes.ItemClickEvent<ContextMenuItem>) {
+  if (itemData && !itemData.items) {
     notify(`The "${itemData.text}" item was clicked`, 'success', 1500);
   }
 }
@@ -45,7 +46,6 @@ body {
   justify-content: center;
   align-items: center;
   -webkit-touch-callout: none;
-  -webkit-user-select: none;
   user-select: none;
 }
 </style>

@@ -111,7 +111,7 @@ const componentConfig = {
     hideSubmenuOnMouseLeave: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
-    items: Array as PropType<Array<dxMenuItem>>,
+    items: Array as PropType<Array<any | dxMenuItem>>,
     itemsExpr: [Function, String] as PropType<((() => void)) | string>,
     itemTemplate: {},
     onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,

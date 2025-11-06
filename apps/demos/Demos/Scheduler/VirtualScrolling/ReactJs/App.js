@@ -38,6 +38,7 @@ const App = () => (
       fieldExpr="humanId"
       dataSource={resources}
       label="Employee"
+      icon="group"
     />
     <Scrolling mode="virtual" />
   </Scheduler>

@@ -1,5 +1,5 @@
 import {
-  NgModule, ChangeDetectionStrategy, Component, ViewChild, enableProdMode, Input,
+  NgModule, ChangeDetectionStrategy, Component, enableProdMode,
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';

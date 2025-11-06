@@ -6,7 +6,7 @@
 */
 import { compileGetter } from '@js/core/utils/data';
 import { isDefined } from '@js/core/utils/type';
-import { computed, effect, signal } from '@preact/signals-core';
+import { computed, effect, signal } from '@ts/core/state_manager/index';
 import type { OptionsController } from '@ts/grids/new/card_view/options_controller';
 import type { CardInfo } from '@ts/grids/new/grid_core/columns_controller/types';
 import {

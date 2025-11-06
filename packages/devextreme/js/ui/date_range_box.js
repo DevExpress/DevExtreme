@@ -4,6 +4,10 @@ export default DateRangeBox;
 // STYLE dateRangeBox
 
 /**
+ * @name dxDateRangeBoxOptions.fieldAddons
+ * @hidden
+ */
+/**
  * @name dxDateRangeBoxOptions.inputAttr
  * @hidden
  */

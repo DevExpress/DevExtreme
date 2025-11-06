@@ -7,7 +7,7 @@ import {
 import {
     FLEX_LAYOUT_CLASS,
     FIELD_ITEM_LABEL_ALIGN_CLASS,
-} from '__internal/ui/form/components/m_field_item';
+} from '__internal/ui/form/components/field_item';
 
 import 'ui/form';
 import 'ui/switch';
@@ -16,7 +16,7 @@ import 'ui/text_area';
 import 'ui/radio_group';
 import 'ui/date_range_box';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(function() {
     const markup =

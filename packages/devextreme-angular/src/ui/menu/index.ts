@@ -40,7 +40,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
@@ -74,10 +75,9 @@ import { DxoMenuShowModule } from 'devextreme-angular/ui/menu/nested';
 import { DxoMenuShowFirstSubmenuModeModule } from 'devextreme-angular/ui/menu/nested';
 import { DxoMenuShowSubmenuModeModule } from 'devextreme-angular/ui/menu/nested';
 import { DxoMenuToModule } from 'devextreme-angular/ui/menu/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiMenuItemComponent } from 'devextreme-angular/ui/menu/nested';
+import { 
+           PROPERTY_TOKEN_items,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -97,8 +97,14 @@ import { DxiMenuItemComponent } from 'devextreme-angular/ui/menu/nested';
         IterableDifferHelper
     ]
 })
-export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxMenu<TKey> = null;
+export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
+    instance: DxMenu<TItem, TKey> = null;
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -300,10 +306,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get items(): Array<dxMenuItem> {
+    get items(): Array<any | dxMenuItem> {
         return this._getOption('items');
     }
-    set items(value: Array<dxMenuItem>) {
+    set items(value: Array<any | dxMenuItem>) {
         this._setOption('items', value);
     }
 
@@ -695,7 +701,7 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<dxMenuItem>>;
+    @Output() itemsChange: EventEmitter<Array<any | dxMenuItem>>;
 
     /**
     
@@ -794,26 +800,6 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
-
-    @ContentChildren(DxiMenuItemComponent)
-    get itemsChildren(): QueryList<DxiMenuItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiMenuItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
 
 
 

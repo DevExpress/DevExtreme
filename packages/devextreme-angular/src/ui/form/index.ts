@@ -22,8 +22,9 @@ import {
 } from '@angular/core';
 
 
+import { AIIntegration } from 'devextreme/common/ai-integration';
 import { Mode } from 'devextreme/common';
-import { dxFormSimpleItem, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, FieldDataChangedEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/form';
+import { dxFormSimpleItem, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, FieldDataChangedEvent, InitializedEvent, OptionChangedEvent, SmartPastedEvent, SmartPastingEvent } from 'devextreme/ui/form';
 
 import DxForm from 'devextreme/ui/form';
 
@@ -35,7 +36,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoColCountByScreenModule } from 'devextreme-angular/ui/nested';
@@ -46,6 +48,7 @@ import { DxoTabPanelOptionsModule } from 'devextreme-angular/ui/nested';
 import { DxiTabModule } from 'devextreme-angular/ui/nested';
 import { DxoButtonOptionsModule } from 'devextreme-angular/ui/nested';
 
+import { DxoFormAiOptionsModule } from 'devextreme-angular/ui/form/nested';
 import { DxiFormAsyncRuleModule } from 'devextreme-angular/ui/form/nested';
 import { DxiFormButtonItemModule } from 'devextreme-angular/ui/form/nested';
 import { DxoFormButtonOptionsModule } from 'devextreme-angular/ui/form/nested';
@@ -68,15 +71,11 @@ import { DxiFormTabbedItemModule } from 'devextreme-angular/ui/form/nested';
 import { DxoFormTabPanelOptionsModule } from 'devextreme-angular/ui/form/nested';
 import { DxiFormTabPanelOptionsItemModule } from 'devextreme-angular/ui/form/nested';
 import { DxiFormValidationRuleModule } from 'devextreme-angular/ui/form/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiFormButtonItemComponent } from 'devextreme-angular/ui/form/nested';
-import { DxiFormEmptyItemComponent } from 'devextreme-angular/ui/form/nested';
-import { DxiFormGroupItemComponent } from 'devextreme-angular/ui/form/nested';
-import { DxiFormItemComponent } from 'devextreme-angular/ui/form/nested';
-import { DxiFormSimpleItemComponent } from 'devextreme-angular/ui/form/nested';
-import { DxiFormTabbedItemComponent } from 'devextreme-angular/ui/form/nested';
+import { 
+           PROPERTY_TOKEN_validationRules,
+           PROPERTY_TOKEN_items,
+           PROPERTY_TOKEN_tabs,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -97,6 +96,22 @@ import { DxiFormTabbedItemComponent } from 'devextreme-angular/ui/form/nested';
     ]
 })
 export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_validationRules)
+    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_tabs)
+    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('tabs', value);
+    }
+
     instance: DxForm = null;
 
     /**
@@ -122,6 +137,16 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     }
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
+    }
+
+
+    
+    @Input()
+    get aiIntegration(): AIIntegration | undefined {
+        return this._getOption('aiIntegration');
+    }
+    set aiIntegration(value: AIIntegration | undefined) {
+        this._setOption('aiIntegration', value);
     }
 
 
@@ -590,6 +615,22 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
     
+     * [descr:undefined]
+    
+    
+     */
+    @Output() onSmartPasted: EventEmitter<SmartPastedEvent>;
+
+    /**
+    
+     * [descr:undefined]
+    
+    
+     */
+    @Output() onSmartPasting: EventEmitter<SmartPastingEvent>;
+
+    /**
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
@@ -601,6 +642,13 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() aiIntegrationChange: EventEmitter<AIIntegration | undefined>;
 
     /**
     
@@ -829,66 +877,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
 
 
-    @ContentChildren(DxiFormButtonItemComponent)
-    get buttonItemsChildren(): QueryList<DxiFormButtonItemComponent> {
-        return this._getOption('items');
-    }
-    set buttonItemsChildren(value) {
-        this._setChildren('items', value, 'DxiFormButtonItemComponent');
-    }
-
-    @ContentChildren(DxiFormEmptyItemComponent)
-    get emptyItemsChildren(): QueryList<DxiFormEmptyItemComponent> {
-        return this._getOption('items');
-    }
-    set emptyItemsChildren(value) {
-        this._setChildren('items', value, 'DxiFormEmptyItemComponent');
-    }
-
-    @ContentChildren(DxiFormGroupItemComponent)
-    get groupItemsChildren(): QueryList<DxiFormGroupItemComponent> {
-        return this._getOption('items');
-    }
-    set groupItemsChildren(value) {
-        this._setChildren('items', value, 'DxiFormGroupItemComponent');
-    }
-
-    @ContentChildren(DxiFormItemComponent)
-    get itemsChildren(): QueryList<DxiFormItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiFormItemComponent');
-    }
-
-    @ContentChildren(DxiFormSimpleItemComponent)
-    get simpleItemsChildren(): QueryList<DxiFormSimpleItemComponent> {
-        return this._getOption('items');
-    }
-    set simpleItemsChildren(value) {
-        this._setChildren('items', value, 'DxiFormSimpleItemComponent');
-    }
-
-    @ContentChildren(DxiFormTabbedItemComponent)
-    get tabbedItemsChildren(): QueryList<DxiFormTabbedItemComponent> {
-        return this._getOption('items');
-    }
-    set tabbedItemsChildren(value) {
-        this._setChildren('items', value, 'DxiFormTabbedItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
-
-
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -905,8 +893,11 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
             { subscribe: 'fieldDataChanged', emit: 'onFieldDataChanged' },
             { subscribe: 'initialized', emit: 'onInitialized' },
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { subscribe: 'smartPasted', emit: 'onSmartPasted' },
+            { subscribe: 'smartPasting', emit: 'onSmartPasting' },
             { emit: 'accessKeyChange' },
             { emit: 'activeStateEnabledChange' },
+            { emit: 'aiIntegrationChange' },
             { emit: 'alignItemLabelsChange' },
             { emit: 'alignItemLabelsInAllGroupsChange' },
             { emit: 'colCountChange' },
@@ -993,6 +984,7 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     DxoTabPanelOptionsModule,
     DxiTabModule,
     DxoButtonOptionsModule,
+    DxoFormAiOptionsModule,
     DxiFormAsyncRuleModule,
     DxiFormButtonItemModule,
     DxoFormButtonOptionsModule,
@@ -1027,6 +1019,7 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     DxoTabPanelOptionsModule,
     DxiTabModule,
     DxoButtonOptionsModule,
+    DxoFormAiOptionsModule,
     DxiFormAsyncRuleModule,
     DxiFormButtonItemModule,
     DxoFormButtonOptionsModule,

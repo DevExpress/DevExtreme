@@ -46,6 +46,7 @@ export class AppComponent {
     } if (value < this.lowAverage) {
       return { color: this.lowAverageColor };
     }
+    return null;
   };
 
   customizeLabel: DxChartTypes.Properties['customizeLabel'] = ({ value }) => {
@@ -54,6 +55,7 @@ export class AppComponent {
     } if (value < this.lowAverage) {
       return getLabelsSettings(this.lowAverageColor);
     }
+    return null;
   };
 
   customizeText = customizeText;

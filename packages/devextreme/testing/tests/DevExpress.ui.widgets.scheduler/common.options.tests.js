@@ -3,6 +3,8 @@ import devices from '__internal/core/m_devices';
 import { CustomStore } from 'common/data/custom_store';
 import { DataSource } from 'common/data/data_source/data_source';
 
+import 'generic_light.css!';
+
 import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibility_change';
 import $ from 'jquery';
 import dxSchedulerWorkSpaceDay from '__internal/scheduler/workspaces/m_work_space_day';
@@ -48,7 +50,8 @@ QUnit.module('Options', () => {
                 'allDayExpr': '_allDay',
                 'recurrenceRuleExpr': '_recurrenceRule',
                 'recurrenceExceptionExpr': '_recurrenceException',
-                'disabledExpr': '_disabled'
+                'disabledExpr': '_disabled',
+                'visibleExpr': '_visible',
             });
 
             const data = {
@@ -61,7 +64,8 @@ QUnit.module('Options', () => {
                 allDay: true,
                 recurrenceRule: 'abc',
                 recurrenceException: 'def',
-                disabled: false
+                disabled: false,
+                visible: false,
             };
             const appointment = {
                 _startDate: data.startDate,
@@ -73,49 +77,20 @@ QUnit.module('Options', () => {
                 _allDay: data.allDay,
                 _recurrenceRule: data.recurrenceRule,
                 _recurrenceException: data.recurrenceException,
-                _disabled: data.disabled
+                _disabled: data.disabled,
+                _visible: data.visible
             };
 
             const dataAccessors = scheduler.instance._dataAccessors;
 
-            $.each(dataAccessors.getter, function(name, getter) {
-                assert.deepEqual(dataAccessors.getter[name](appointment), data[name], 'getter for ' + name + ' is OK');
+            $.each(dataAccessors.getter, function(name) {
+                assert.deepEqual(dataAccessors.get(name, appointment), data[name], 'getter for ' + name + ' is OK');
             });
 
-            $.each(dataAccessors.setter, function(name, getter) {
-                dataAccessors.setter[name](appointment, 'xyz');
+            $.each(dataAccessors.setter, function(name) {
+                dataAccessors.set(name, appointment, 'xyz');
                 assert.equal(appointment['_' + name], 'xyz', 'setter for ' + name + ' is OK');
             });
-        } finally {
-            repaintStub.restore();
-        }
-    });
-
-    QUnit.test('Data expressions should be recompiled on optionChanged and passed to appointmentDataProvider', async function(assert) {
-        const { instance } = await createWrapper();
-        const repaintStub = sinon.stub(instance, 'repaint');
-
-        try {
-            const { appointmentDataProvider } = instance;
-
-            instance.option({
-                'startDateExpr': '_startDate',
-                'endDateExpr': '_endDate',
-                'startDateTimeZoneExpr': '_startDateTimeZone',
-                'endDateTimeZoneExpr': '_endDateTimeZone',
-                'textExpr': '_text',
-                'descriptionExpr': '_description',
-                'allDayExpr': '_allDay',
-                'recurrenceRuleExpr': '_recurrenceRule',
-                'recurrenceExceptionExpr': '_recurrenceException'
-            });
-
-            const dataAccessors = instance._dataAccessors;
-
-            assert.deepEqual(dataAccessors.getter, appointmentDataProvider.dataAccessors.getter, 'dataAccessors getters were passed to appointmentDataProvider');
-            assert.deepEqual(dataAccessors.setter, appointmentDataProvider.dataAccessors.setter, 'dataAccessors setters were passed to appointmentDataProvider');
-            assert.deepEqual(dataAccessors.expr, appointmentDataProvider.dataAccessors.expr, 'dataExpressions were passed to appointmentDataProvider');
-            assert.deepEqual(dataAccessors.resources, appointmentDataProvider.dataAccessors.resources, 'resources were passed to appointmentDataProvider');
         } finally {
             repaintStub.restore();
         }
@@ -453,7 +428,7 @@ QUnit.module('Options', () => {
         const header = scheduler.instance.getHeader();
 
         assert.equal(workSpaceWeek.option('intervalCount'), 3, 'workspace has correct count');
-        assert.equal(header.option('intervalCount'), 3, 'header has correct count');
+        assert.equal(header.option('currentView').intervalCount, 3, 'header has correct count');
     });
 
     QUnit.test('view.intervalCount is passed to workspace & header, currentView is set by view.name', async function(assert) {
@@ -474,7 +449,7 @@ QUnit.module('Options', () => {
         const header = scheduler.instance.getHeader();
 
         assert.equal(workSpaceWeek.option('intervalCount'), 3, 'workspace has correct count');
-        assert.equal(header.option('intervalCount'), 3, 'header has correct count');
+        assert.equal(header.option('currentView').intervalCount, 3, 'header has correct count');
     });
 
     QUnit.test('view.intervalCount is passed to workspace & header, currentView is set by view.type', async function(assert) {
@@ -498,7 +473,7 @@ QUnit.module('Options', () => {
         const header = scheduler.instance.getHeader();
 
         assert.equal(workSpaceWeek.option('intervalCount'), 3, 'workspace has correct count');
-        assert.equal(header.option('intervalCount'), 3, 'header has correct count');
+        assert.equal(header.option('currentView').intervalCount, 3, 'header has correct count');
     });
 
     QUnit.test('view.startDate is passed to workspace & header', async function(assert) {
@@ -519,7 +494,7 @@ QUnit.module('Options', () => {
         const header = scheduler.instance.getHeader();
 
         assert.deepEqual(workSpaceWeek.option('startDate'), date, 'workspace has correct startDate');
-        assert.deepEqual(header.option('startDate'), date, 'header has correct startDate');
+        assert.deepEqual(header.option('currentView').startDate, date, 'header has correct startDate');
     });
 
     QUnit.test('view.groupByDate is passed to workspace', async function(assert) {
@@ -610,6 +585,10 @@ QUnit.module('Options', () => {
             allowResizing: true,
             allowDragging: true,
             allowTimeZoneEditing: false,
+            legacyForm: false,
+            form: {
+                iconsShowMode: 'main'
+            }
         };
 
         if(devices.real().platform !== 'generic') {

@@ -7,14 +7,15 @@ import Chart, {
   Series,
   Tooltip,
   Margin,
+  type ChartTypes,
 } from 'devextreme-react/chart';
 import { dataSource } from './data.ts';
 
-function customizeTooltip(e: { valueText: number; }) {
-  return { text: Math.abs(e.valueText) };
+function customizeTooltip(e: ChartTypes.CommonPointInfo) {
+  return { text: Math.abs(Number(e.valueText)) };
 }
 
-function customizeLabel(e: {value: Date | number | string}) {
+function customizeLabel(e: { value: Date | number | string }) {
   return `${Math.abs(e.value as number)}%`;
 }
 

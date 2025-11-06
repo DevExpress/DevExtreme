@@ -5,7 +5,6 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
   DxSelectBoxModule,
   DxLoadIndicatorModule,
-  DxTemplateModule,
 } from 'devextreme-angular';
 
 import { Product, Service } from './app.service';
@@ -39,7 +38,7 @@ export class AppComponent {
     loadMode: 'raw',
     load: () => {
       this.isLoaded = false;
-      const promise = new Promise((resolve, reject) => {
+      const promise = new Promise((resolve) => {
         setTimeout(() => {
           resolve(this.simpleProducts);
           this.isLoaded = true;
@@ -62,7 +61,6 @@ export class AppComponent {
     BrowserModule,
     DxSelectBoxModule,
     DxLoadIndicatorModule,
-    DxTemplateModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

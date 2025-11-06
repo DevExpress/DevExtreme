@@ -1,4 +1,5 @@
 import DataGrid from 'ui/data_grid';
+import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 
 import $ from 'jquery';
 
@@ -10,10 +11,13 @@ DataGrid.defaultOptions({
 
 export const baseModuleConfig = {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
         this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         this.clock.restore();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 };
 

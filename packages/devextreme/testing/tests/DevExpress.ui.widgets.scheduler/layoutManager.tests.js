@@ -5,11 +5,6 @@ import '__internal/scheduler/m_scheduler';
 import $ from 'jquery';
 import translator from 'common/core/animation/translator';
 
-import AppointmentLayoutManager from '__internal/scheduler/m_appointments_layout_manager';
-import BaseAppointmentsStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_base';
-import VerticalAppointmentStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_vertical';
-import HorizontalAppointmentsStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_horizontal';
-import HorizontalMonthLineAppointmentsStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_horizontal_month_line';
 import dataUtils from 'core/element_data';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -39,70 +34,6 @@ const moduleOptions = {
     afterEach: function() {
     }
 };
-
-QUnit.module('LayoutManager', moduleOptions);
-
-QUnit.test('LayoutManager should be initialized', async function(assert) {
-    await this.createInstance();
-    assert.ok(this.instance.getLayoutManager() instanceof AppointmentLayoutManager, 'AppointmentLayoutManager was initialized');
-});
-
-QUnit.test('RenderingStrategy should be initialized', async function(assert) {
-    await this.createInstance();
-    assert.ok(this.instance.getLayoutManager().getRenderingStrategyInstance() instanceof BaseAppointmentsStrategy, 'AppointmentLayoutManager was initialized');
-});
-
-QUnit.test('Scheduler should have a right rendering strategy for timeline views', async function(assert) {
-    await this.createInstance({
-        views: ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'],
-        currentView: 'timelineDay',
-        currentDate: new Date(2021, 7, 30),
-        dataSource: [{
-            startDate: new Date(2021, 7, 8, 9),
-            endDate: new Date(2021, 7, 8, 10),
-            text: 'Test'
-        }]
-    });
-
-    assert.ok(this.instance.getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, 'timelineDay strategy is OK');
-
-    this.instance.option('currentView', 'timelineWeek');
-    await waitAsync(0);
-    assert.ok(this.instance.getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, 'timelineWeek strategy is OK');
-
-    this.instance.option('currentView', 'timelineWorkWeek');
-    await waitAsync(0);
-    assert.ok(this.instance.getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, 'timelineWorkWeek strategy is OK');
-
-    this.instance.option('currentView', 'timelineMonth');
-    await waitAsync(0);
-    assert.ok(this.instance.getRenderingStrategyInstance() instanceof HorizontalMonthLineAppointmentsStrategy, 'timelineMonth strategy is OK');
-});
-
-QUnit.test('Scheduler should have a right rendering strategy for views with config', async function(assert) {
-    await this.createInstance({
-        views: [ {
-            name: 'MonthView',
-            type: 'month'
-        }, {
-            name: 'WeekView',
-            type: 'week'
-        }],
-        currentView: 'WeekView',
-        currentDate: new Date(2021, 7, 30),
-        dataSource: [{
-            startDate: new Date(2021, 7, 8, 9),
-            endDate: new Date(2021, 7, 8, 10),
-            text: 'Test'
-        }]
-    });
-
-    assert.ok(this.instance.getRenderingStrategyInstance() instanceof VerticalAppointmentStrategy, 'Strategy is OK');
-
-    this.instance.option('currentView', 'MonthView');
-    await waitAsync(0);
-    assert.ok(this.instance.getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, 'Strategy is OK');
-});
 
 QUnit.module('Appointments', moduleOptions);
 
@@ -328,11 +259,11 @@ QUnit.test('Four rival appointments should have correct positions', async functi
     assert.roughEqual(this.scheduler.appointments.getAppointmentWidth(1), this.scheduler.workSpace.getCellWidth(), 1.1, 'appointment has a right size');
 
     assert.equal(this.scheduler.appointments.getAppointmentPosition(2).left, 0, 'appointment is rendered in right place');
-    assert.roughEqual(this.scheduler.appointments.getAppointmentPosition(2).top, 68, 1.5, 'appointment is rendered in right place');
+    assert.roughEqual(this.scheduler.appointments.getAppointmentPosition(2).top, 54, 1.5, 'appointment is rendered in right place');
     assert.roughEqual(this.scheduler.appointments.getAppointmentWidth(2), this.scheduler.workSpace.getCellWidth(), 1.1, 'appointment has a right size');
 
     assert.equal(this.scheduler.appointments.getAppointmentPosition(3).left, 0, 'appointment is rendered in right place');
-    assert.roughEqual(this.scheduler.appointments.getAppointmentPosition(3).top, 54, 1.5, 'appointment is rendered in right place');
+    assert.roughEqual(this.scheduler.appointments.getAppointmentPosition(3).top, 68, 1.5, 'appointment is rendered in right place');
     assert.roughEqual(this.scheduler.appointments.getAppointmentWidth(3), this.scheduler.workSpace.getCellWidth(), 1.1, 'appointment has a right size');
 
 });
@@ -359,11 +290,11 @@ QUnit.test('Rival duplicated appointments should have correct positions', async 
 
     assert.equal(firstAppointmentPosition.left, 0, 'appointment is rendered in right place');
     assert.roughEqual(firstAppointmentPosition.top, 26, 1.5, 'appointment is rendered in right place');
-    assert.roughEqual(getOuterWidth($appointment.eq(0)), getOuterWidth($tableCell), 1.1, 'appointment has a right size');
+    assert.roughEqual(getOuterWidth($appointment.eq(0)), getOuterWidth($tableCell) * 2, 1.5, 'appointment has a right size');
 
     assert.equal(secondAppointmentPosition.left, 0, 'appointment is rendered in right place');
     assert.roughEqual(secondAppointmentPosition.top, 50, 1.5, 'appointment is rendered in right place');
-    assert.roughEqual(getOuterWidth($appointment.eq(1)), getOuterWidth($tableCell) * 2, 1.5, 'appointment has a right size');
+    assert.roughEqual(getOuterWidth($appointment.eq(1)), getOuterWidth($tableCell), 1.1, 'appointment has a right size');
 });
 
 QUnit.test('Appointments should be rendered without errors (T816873)', async function(assert) {
@@ -1255,18 +1186,21 @@ QUnit.test('Three rival appointments with two columns should have correct positi
     const cellWidth = $tableCell.get(0).getBoundingClientRect().width;
     const offset = APPOINTMENT_DEFAULT_LEFT_OFFSET;
     const firstAppointmentPosition = translator.locate($appointment.eq(0));
-    const secondAppointmentPosition = translator.locate($appointment.eq(1));
-    const thirdAppointmentPosition = translator.locate($appointment.eq(2));
+    const secondAppointmentPosition = translator.locate($appointment.eq(2));
+    const thirdAppointmentPosition = translator.locate($appointment.eq(1));
 
     assert.equal($appointment.length, 3, 'All appointments are rendered');
+    assert.equal($appointment.eq(0).find('.dx-scheduler-appointment-title').text(), 'Appointment 1');
     assert.equal(firstAppointmentPosition.top, 0, 'appointment is rendered in right place');
     assert.roughEqual(firstAppointmentPosition.left, cellWidth, 1, 'appointment is rendered in right place');
     assert.roughEqual(getOuterWidth($appointment.eq(0)), (cellWidth - offset) / 2, 1, 'appointment has a right size');
 
+    assert.equal($appointment.eq(2).find('.dx-scheduler-appointment-title').text(), 'Appointment 2');
     assert.equal(secondAppointmentPosition.top, 2 * cellHeight, 'appointment is rendered in right place');
     assert.roughEqual(secondAppointmentPosition.left, cellWidth + $appointment.eq(0).outerWidth(), 1, 'appointment is rendered in right place');
-    assert.roughEqual(getOuterWidth($appointment.eq(1)), (cellWidth - offset) / 2, 1, 'appointment has a right size');
+    assert.roughEqual(getOuterWidth($appointment.eq(2)), (cellWidth - offset) / 2, 1, 'appointment has a right size');
 
+    assert.equal($appointment.eq(1).find('.dx-scheduler-appointment-title').text(), 'Appointment 3');
     assert.equal(thirdAppointmentPosition.top, 0, 'appointment is rendered in right place');
     assert.roughEqual(thirdAppointmentPosition.left, cellWidth + $appointment.eq(0).outerWidth(), 1, 'appointment is rendered in right place');
     assert.roughEqual(getOuterWidth($appointment.eq(1)), (cellWidth - offset) / 2, 1, 'appointment has a right size');
@@ -1291,18 +1225,17 @@ QUnit.test('Four rival appointments with three columns should have correct posit
 
     const cellHeight = this.scheduler.workSpace.getCellHeight();
     const cellWidth = this.scheduler.workSpace.getCellWidth();
-    const unlimitedModeOffset = 5;
-    const expectedAppWidth = (cellWidth - unlimitedModeOffset) / 3;
+    const expectedAppWidth = cellWidth / 3;
 
     assert.equal(this.scheduler.appointments.getAppointmentCount(), 4, 'All appointments are rendered');
 
     assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(0), { top: 0, left: cellWidth }, 'appointment is rendered in right place');
     assert.roughEqual(this.scheduler.appointments.getAppointmentWidth(0), expectedAppWidth, 1, 'appointment has a right size');
 
-    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(1), { top: 2 * cellHeight, left: cellWidth + 2 * expectedAppWidth }, 'appointment is rendered in right place');
+    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(1), { top: 0, left: cellWidth + expectedAppWidth }, 'appointment is rendered in right place');
     assert.roughEqual(this.scheduler.appointments.getAppointmentWidth(1), expectedAppWidth, 1, 'appointment has a right size');
 
-    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(2), { top: 0, left: cellWidth + expectedAppWidth }, 'appointment is rendered in right place');
+    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(2), { top: 2 * cellHeight, left: cellWidth + 2 * expectedAppWidth }, 'appointment is rendered in right place');
     assert.roughEqual(this.scheduler.appointments.getAppointmentWidth(2), expectedAppWidth, 1, 'appointment has a right size');
 
     assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(3), { top: 4 * cellHeight, left: cellWidth + expectedAppWidth }, 'appointment is rendered in right place');
@@ -1497,15 +1430,20 @@ QUnit.testInActiveWindow('Apps should be focused in right order on month view wi
 
     const $appointments = $(this.instance.$element().find('.dx-scheduler-appointment'));
     const apptInstance = this.instance.getAppointmentsInstance();
+    const getFocusedAppointmentText = () => $(apptInstance.option('focusedElement')).text();
 
     $($appointments.eq(0)).trigger('focusin');
+    assert.deepEqual(getFocusedAppointmentText(), 'Appointment 28:00 AM - 10:00 AM', 'app 2 in focus');
 
     const keyboard = keyboardMock($appointments.eq(0));
     keyboard.keyDown('tab');
-    assert.deepEqual($appointments.get(1), $(apptInstance.option('focusedElement')).get(0), 'app 1 in focus');
+    assert.deepEqual(getFocusedAppointmentText(), 'Appointment 38:00 AM - 10:00 AM', 'app 3 in focus');
 
     keyboard.keyDown('tab');
-    assert.deepEqual($appointments.get(2), $(apptInstance.option('focusedElement')).get(0), 'app 0 in focus');
+    assert.deepEqual(getFocusedAppointmentText(), '1 more', 'collector in focus');
+
+    keyboard.keyDown('tab');
+    assert.deepEqual(getFocusedAppointmentText(), 'Appointment 48:00 AM - 10:00 AM', 'app 4 in focus');
 });
 
 QUnit.testInActiveWindow('Apps should be focused in back order while press shift+tab', async function(assert) {
@@ -1666,8 +1604,10 @@ QUnit.test('Full-size appointment should have correct height, "auto" mode', asyn
 });
 
 QUnit.test('Full-size appointment should not have empty class in "auto" mode', async function(assert) {
-    const items = [ { text: 'Task 1', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0) },
-        { text: 'Task 2', startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0) } ];
+    const items = [
+        { text: 'Task 1', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0) },
+        { text: 'Task 2', startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0) },
+    ];
 
     await this.createInstance(
         {
@@ -1682,22 +1622,14 @@ QUnit.test('Full-size appointment should not have empty class in "auto" mode', a
         }
     );
 
-    const getHeightStub = sinon.stub(this.instance.getRenderingStrategyInstance(), '_getAppointmentDefaultHeight').callsFake(function() {
-        return 18;
-    });
+    this.instance.option('dataSource', items);
+    await waitAsync(0);
 
-    try {
-        this.instance.option('dataSource', items);
-        await waitAsync(0);
+    const $firstAppointment = $(this.instance.$element().find('.dx-scheduler-appointment')).eq(0);
+    const $secondAppointment = $(this.instance.$element().find('.dx-scheduler-appointment')).eq(1);
 
-        const $firstAppointment = $(this.instance.$element().find('.dx-scheduler-appointment')).eq(0);
-        const $secondAppointment = $(this.instance.$element().find('.dx-scheduler-appointment')).eq(1);
-
-        assert.ok(!$firstAppointment.hasClass('dx-scheduler-appointment-empty'), 'appointment has not the class');
-        assert.ok(!$secondAppointment.eq(1).hasClass('dx-scheduler-appointment-empty'), 'appointment has not the class');
-    } finally {
-        getHeightStub.restore();
-    }
+    assert.ok(!$firstAppointment.hasClass('dx-scheduler-appointment-empty'), 'appointment has not the class');
+    assert.ok(!$secondAppointment.eq(1).hasClass('dx-scheduler-appointment-empty'), 'appointment has not the class');
 });
 
 QUnit.test('Full-size appointment should not have empty class in \'auto\' mode, week view', async function(assert) {
@@ -1951,8 +1883,8 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
         const appointmentWidth = getOuterWidth($appointment.eq(i));
         const appointmentHeight = getOuterHeight($appointment.eq(i));
 
-        assert.roughEqual(appointmentWidth, tableCellWidth, 1.5, 'appointment is full-size');
-        assert.roughEqual(appointmentHeight, (tableCellHeight - 10) / 5, 1.5, 'appointment is full-size');
+        assert.roughEqual(appointmentWidth, tableCellWidth, 1.5, 'appointment width is full-size');
+        assert.roughEqual(appointmentHeight, tableCellHeight / 5, 1.5, 'appointment height is full-size');
     }
 });
 
@@ -2013,7 +1945,7 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
     }
 
     this.scheduler.appointments.compact.click();
-    assert.equal(this.scheduler.appointments.compact.getButtonCount(), 2, 'ddAppointment is rendered');
+    assert.equal(this.scheduler.appointments.compact.getButtonCount(), 3, 'ddAppointment is rendered');
     assert.equal(this.scheduler.tooltip.getItemCount(), 2, 'DropDown menu has correct items');
     assert.equal(this.scheduler.appointments.compact.getButtonText(), '2 more', 'DropDown menu has correct text');
 });
@@ -2042,14 +1974,14 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
     const $appointment = $(this.instance.$element().find('.dx-scheduler-appointment'));
     const tableCellHeight = getOuterHeight(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0));
 
-    for(let i = 0; i < 5; i++) {
+    for(let i = 0; i < 4; i++) {
         const appointmentHeight = getOuterHeight($appointment.eq(i));
 
         assert.roughEqual(appointmentHeight, (tableCellHeight - 26) / 3, 1.5, 'appointment is full-size');
     }
 
     this.scheduler.appointments.compact.click();
-    assert.equal(this.scheduler.appointments.compact.getButtonCount(), 4, 'ddAppointment is rendered');
+    assert.equal(this.scheduler.appointments.compact.getButtonCount(), 6, 'ddAppointment is rendered');
     assert.equal(this.scheduler.tooltip.getItemCount(), 1, 'DropDown menu has correct items');
     assert.equal(this.scheduler.appointments.compact.getButtonText(), '1 more', 'DropDown menu has correct text');
 });
@@ -2085,7 +2017,7 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
     }
 
     this.scheduler.appointments.compact.click();
-    assert.equal(this.scheduler.appointments.compact.getButtonCount(), 8, 'ddAppointment is rendered');
+    assert.equal(this.scheduler.appointments.compact.getButtonCount(), 6, 'ddAppointment is rendered');
     assert.equal(this.scheduler.tooltip.getItemCount(), 3, 'DropDown menu has correct items');
     assert.equal(this.scheduler.appointments.compact.getButtonText(), '3 more', 'DropDown menu has correct text');
 });
@@ -2149,15 +2081,15 @@ QUnit.test('Full-size appointment should have minWidth, narrow width', async fun
             views: [{
                 type: 'week'
             }],
-            width: 160,
+            width: 100,
             dataSource: items
         }
     );
 
     const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
 
-    assert.roughEqual($appointments.eq(0).get(0).getBoundingClientRect().width, 5, 1.1, 'Appointment has min width');
-    assert.roughEqual($appointments.eq(1).get(0).getBoundingClientRect().width, 5, 1.1, 'Appointment has min width');
+    assert.roughEqual($appointments.eq(0).get(0).getBoundingClientRect().width, 4, 1.1, 'Appointment has min width');
+    assert.roughEqual($appointments.eq(1).get(0).getBoundingClientRect().width, 4, 1.1, 'Appointment has min width');
 });
 
 QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, \'auto\' mode, narrow width', async function(assert) {
@@ -2285,7 +2217,7 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell and wi
     tableCellWidth = getOuterWidth(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0));
     appointmentWidth = getOuterWidth($appointment.eq(0));
 
-    assert.roughEqual(appointmentWidth, tableCellWidth - 26, 1.5, 'One appointment is full-size');
+    assert.roughEqual(appointmentWidth, tableCellWidth - APPOINTMENT_DEFAULT_LEFT_OFFSET, 1.5, 'One appointment is full-size');
 
     this.scheduler.appointments.compact.click();
     assert.ok(this.scheduler.tooltip.isVisible(), 'ddAppointment is rendered');
@@ -2351,28 +2283,4 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
     const $dropDownMenu = $(this.instance.$element()).find('.dx-scheduler-appointment-collector');
 
     assert.equal($dropDownMenu.length, 0, 'ddAppointment isn\'t rendered');
-});
-
-QUnit.test('_isAppointmentEmpty should work correctly in different strategies', async function(assert) {
-    await this.createInstance({
-        views: ['timelineDay', 'week'],
-        currentView: 'timelineDay'
-    });
-
-    const renderingStrategy = this.instance.getRenderingStrategyInstance();
-
-    assert.ok(renderingStrategy._isAppointmentEmpty(34, 41), 'Appointment is empty');
-    assert.notOk(renderingStrategy._isAppointmentEmpty(36, 41), 'Appointment isn\'t empty');
-
-    this.instance.option('currentView', 'week');
-    await waitAsync(0);
-
-    assert.ok(renderingStrategy._isAppointmentEmpty(34, 39), 'Appointment is empty');
-    assert.notOk(renderingStrategy._isAppointmentEmpty(36, 41), 'Appointment isn\'t empty');
-
-    this.instance.option('currentView', 'month');
-    await waitAsync(0);
-
-    assert.ok(renderingStrategy._isAppointmentEmpty(19, 50), 'Appointment is empty');
-    assert.notOk(renderingStrategy._isAppointmentEmpty(36, 41), 'Appointment isn\'t empty');
 });

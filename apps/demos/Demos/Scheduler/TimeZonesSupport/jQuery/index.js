@@ -1,10 +1,7 @@
 $(() => {
   const currentDate = new Date(2021, 3, 27);
 
-  const getTimeZones = function (date) {
-    const timeZones = DevExpress.utils.getTimeZones(date);
-    return timeZones.filter((timeZone) => locations.indexOf(timeZone.id) !== -1);
-  };
+  const getTimeZones = (date) => DevExpress.utils.getTimeZones(date, locations);
 
   const timeZones = getTimeZones(currentDate);
 

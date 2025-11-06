@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <DxChart
@@ -54,15 +53,19 @@ import DxButton from 'devextreme-vue/button';
 import { mountains } from './data.ts';
 
 const chart = ref();
-const customizeTooltipText = ({ argumentText, point, valueText }) => ({
+
+const customizeTooltipText = ({ argumentText, point, valueText }: any) => ({
   text: `<span class='title'>${argumentText
   }</span><br />&nbsp;<br />System: ${point.data.system
   }<br />Height: ${valueText} m`,
 });
-const customizeLabelText = ({ value }) => `${value} m`;
+
+const customizeLabelText = ({ value }: any) => `${value} m`;
+
 function printChart() {
   chart.value.instance.print();
 }
+
 function exportChart() {
   chart.value.instance.exportTo('Example', 'png');
 }
@@ -87,4 +90,3 @@ function exportChart() {
   font-weight: 500;
 }
 </style>
-

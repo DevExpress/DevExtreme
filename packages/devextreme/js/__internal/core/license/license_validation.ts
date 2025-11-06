@@ -33,6 +33,9 @@ const KEY_SPLITTER = '.';
 const BUY_NOW_LINK = 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeJQuery.aspx';
 const LICENSING_DOC_LINK = 'https://go.devexpress.com/Licensing_Documentation_DevExtremeJQuery.aspx';
 
+const NBSP = '\u00A0';
+const SUBSCRIPTION_NAMES = `Universal, DXperience, ASP.NET${NBSP}and${NBSP}Blazor, DevExtreme${NBSP}Complete`;
+
 const GENERAL_ERROR: Token = { kind: TokenKind.corrupted, error: 'general' };
 const VERIFICATION_ERROR: Token = { kind: TokenKind.corrupted, error: 'verification' };
 const DECODING_ERROR: Token = { kind: TokenKind.corrupted, error: 'decoding' };
@@ -116,6 +119,10 @@ function isPreview(patch: number): boolean {
   return isNaN(patch) || patch < RTM_MIN_PATCH_VERSION;
 }
 
+function isDevExpressLicenseKey(licenseKey: string): boolean {
+  return licenseKey.startsWith('LCX') || licenseKey.startsWith('LCP');
+}
+
 function getLicenseCheckParams({
   licenseKey,
   version,
@@ -132,6 +139,10 @@ function getLicenseCheckParams({
 
     if (!licenseKey) {
       return { preview, error: 'W0019' };
+    }
+
+    if (isDevExpressLicenseKey(licenseKey)) {
+      return { preview, error: 'W0024' };
     }
 
     const license = parseLicenseKey(licenseKey);
@@ -180,7 +191,7 @@ export function validateLicense(licenseKey: string, versionStr: string = fullVer
   if (error && !internal) {
     const buyNowLink = config().buyNowLink ?? BUY_NOW_LINK;
     const licensingDocLink = config().licensingDocLink ?? LICENSING_DOC_LINK;
-    showTrialPanel(buyNowLink, licensingDocLink, fullVersion);
+    showTrialPanel(buyNowLink, licensingDocLink, fullVersion, SUBSCRIPTION_NAMES);
   }
 
   const preview = isPreview(version.patch);

@@ -17,15 +17,13 @@ import { FIELD_ITEM_CLASS,
 import {
     FIELD_ITEM_HELP_TEXT_CLASS,
     TOGGLE_CONTROLS_PADDING_CLASS
-} from '__internal/ui/form/components/m_field_item';
+} from '__internal/ui/form/components/field_item';
 
 import ValidationEngine from 'ui/validation_engine';
 
 import 'ui/text_area';
 import 'ui/radio_group';
 import 'ui/switch';
-
-import 'generic_light.css!';
 
 const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
 const FORM_GROUP_CUSTOM_CAPTION_CLASS = 'dx-form-group-custom-caption';

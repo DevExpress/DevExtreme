@@ -25,7 +25,7 @@ export class AppComponent {
 
   states: State[];
 
-  events: Array<string> = [];
+  events: string[] = [];
 
   constructor(service: Service) {
     this.dataSource = service.getEmployees();

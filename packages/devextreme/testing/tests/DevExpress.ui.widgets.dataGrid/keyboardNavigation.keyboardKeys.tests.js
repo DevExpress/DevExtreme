@@ -3220,7 +3220,7 @@ QUnit.module('Keyboard keys', {
         };
 
         // act
-        this.triggerKeyDown('tab', false, false, this.keyboardNavigationController._getFocusedCell());
+        this.triggerKeyDown('tab', false, false, $(this.keyboardNavigationController._getFocusedCell()).find('.dx-texteditor-input').get(0));
         this.clock.tick(10);
 
         // assert
@@ -3230,7 +3230,7 @@ QUnit.module('Keyboard keys', {
         // act
         isFocusedInput = false;
 
-        this.triggerKeyDown('tab', false, false, this.keyboardNavigationController._getFocusedCell());
+        this.triggerKeyDown('tab', false, false, $(this.keyboardNavigationController._getFocusedCell()).find('.dx-texteditor-input').get(0));
         this.clock.tick(10);
 
         // assert

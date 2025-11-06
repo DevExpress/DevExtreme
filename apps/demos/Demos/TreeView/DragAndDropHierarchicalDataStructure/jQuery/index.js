@@ -119,7 +119,7 @@ function moveNode(fromNode, toNode, fromItems, toItems, isDropInsideItem) {
 }
 
 function getNodeContainingArray(node, rootArray) {
-  return node === null || node.parent === null
+  return !node?.parent
     ? rootArray
     : node.parent.itemData.items;
 }

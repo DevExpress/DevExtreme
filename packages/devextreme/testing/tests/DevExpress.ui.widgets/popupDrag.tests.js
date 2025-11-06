@@ -1,7 +1,7 @@
 
 import $ from 'jquery';
 import PopupDrag from '__internal/ui/popup/m_popup_drag';
-import { PopupPositionController } from '__internal/ui/popup/m_popup_position_controller';
+import { PopupPositionController } from '__internal/ui/popup/popup_position_controller';
 
 const KEYBOARD_DRAG_STEP = 5;
 
@@ -59,13 +59,17 @@ QUnit.module('overlay_drag', {
                     handle: this.handle,
                     draggableElement: this.draggableElement,
                     positionController: new PopupPositionController({
-                        container: $('#qunit-fixture'),
-                        $root: $('#qunit-fixture'),
-                        $content: this.draggableElement,
-                        restorePosition: {},
-                        onVisualPositionChanged: () => {},
-                        onPositioned: () => {},
-                        outsideDragFactor: 0,
+                        properties: {
+                            container: $('#qunit-fixture'),
+                            restorePosition: {},
+                            onVisualPositionChanged: () => {},
+                            onPositioned: () => {},
+                            outsideDragFactor: 0,
+                        },
+                        elements: {
+                            $root: $('#qunit-fixture'),
+                            $content: this.draggableElement,
+                        },
                     })
                 });
                 this.initialPosition = this.draggableElement.getBoundingClientRect();

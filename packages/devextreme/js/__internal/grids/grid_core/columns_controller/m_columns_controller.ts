@@ -3,7 +3,7 @@ import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
 import { DataSource } from '@js/common/data/data_source/data_source';
 import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
-import type { ColumnBase } from '@js/common/grids';
+import type { ColumnAIOptions, ColumnBase } from '@js/common/grids';
 import config from '@js/core/config';
 import $ from '@js/core/renderer';
 import Callbacks from '@js/core/utils/callbacks';
@@ -25,6 +25,7 @@ import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m_state_storing_core';
 
+import { AI_COLUMN_NAME } from '../ai_column/const';
 import modules from '../m_modules';
 import type { Module } from '../m_types';
 import gridCoreUtils from '../m_utils';
@@ -65,6 +66,7 @@ import {
   getSerializationFormat,
   getValueDataType,
   isColumnFixed,
+  isColumnNameRequired,
   isFirstOrLastColumn,
   isSortOrderValid,
   mergeColumns,
@@ -85,8 +87,11 @@ import {
 export interface Column extends ColumnBase {
   parseValue: (text: string) => unknown;
   index?: number;
+  groupIndex?: number;
   type?: string;
   visibleWidth?: string | number;
+  hidingPriority?: number;
+  ai?: ColumnAIOptions;
 }
 
 export class ColumnsController extends modules.Controller {
@@ -128,6 +133,8 @@ export class ColumnsController extends modules.Controller {
 
   public columnsChanged: any;
 
+  public aiColumnOptionChanged: any;
+
   public _columnChanges: any;
 
   protected _dataController!: DataController;
@@ -135,6 +142,29 @@ export class ColumnsController extends modules.Controller {
   protected _focusController!: FocusController;
 
   protected _stateStoringController!: StateStoringController;
+
+  public _isWarnedAboutUnsupportedProperties?: boolean;
+
+  private getCommonColumnSettings(column): Partial<Column> {
+    switch (true) {
+      case !column?.type:
+        return this.option('commonColumnSettings');
+      case column?.type === AI_COLUMN_NAME:
+        return this.getAIColumnSettings();
+      default:
+        return {};
+    }
+  }
+
+  private getAIColumnSettings(): Partial<Column> {
+    return {
+      allowHiding: true,
+      ai: {
+        mode: 'auto',
+        showHeaderMenu: true,
+      },
+    };
+  }
 
   public init(isApplyingUserState?): void {
     this._dataController = this.getController('data');
@@ -207,7 +237,7 @@ export class ColumnsController extends modules.Controller {
   }
 
   protected callbackNames() {
-    return ['columnsChanged'];
+    return ['columnsChanged', 'aiColumnOptionChanged'];
   }
 
   public getColumnByPath(path, columns?) {
@@ -293,7 +323,7 @@ export class ColumnsController extends modules.Controller {
   private _columnOptionChanged(args) {
     let columnOptionValue = {};
     const column = this.getColumnByPath(args.fullName);
-    const columnOptionName = args.fullName.replace(COLUMN_OPTION_REGEXP, '');
+    const columnOptionName = this.getColumnOptionNameByFullName(args.fullName);
 
     if (column) {
       if (columnOptionName) {
@@ -386,7 +416,7 @@ export class ColumnsController extends modules.Controller {
   }
 
   public getCommonSettings(column?) {
-    const commonColumnSettings = (!column || !column.type) && this.option('commonColumnSettings') || {};
+    const commonColumnSettings = this.getCommonColumnSettings(column);
     const groupingOptions: any = this.option('grouping') ?? {};
     const groupPanelOptions: any = this.option('groupPanel') ?? {};
 
@@ -434,6 +464,10 @@ export class ColumnsController extends modules.Controller {
     return this._columns;
   }
 
+  public getColumnByName(columnName: string): Column | undefined {
+    return this.getColumns().find((column) => column.name === columnName);
+  }
+
   public isBandColumnsUsed() {
     return this.getColumns().some((column) => column.isBand);
   }
@@ -441,9 +475,8 @@ export class ColumnsController extends modules.Controller {
   public getGroupColumns() {
     const result: any = [];
 
-    each(this._columns, function () {
-      const column = this;
-      if (isDefined(column.groupIndex)) {
+    (this._columns as Column[]).forEach((column) => {
+      if (isDefined(column.groupIndex) && !column.type) {
         result[column.groupIndex] = column;
       }
     });
@@ -613,17 +646,26 @@ export class ColumnsController extends modules.Controller {
       expandColumn = this.columnOption('command:expand');
     }
 
-    expandColumns = map(expandColumns, (column) => extend({}, column, {
-      visibleWidth: null,
-      minWidth: null,
-      cellTemplate: !isDefined(column.groupIndex) ? column.cellTemplate : null,
-      headerCellTemplate: null,
-      fixed: !isDefined(column.groupIndex) || !isFixedFirstGroupColumn ? isColumnFixing : true,
-      fixedPosition: rtlEnabled ? 'right' : 'left',
-    }, expandColumn, {
-      index: column.index,
-      type: column.type || GROUP_COMMAND_COLUMN_NAME,
-    }));
+    expandColumns = map(expandColumns, (column) => extend(
+      {},
+      {
+        ...column,
+        ownerBand: undefined,
+      },
+      {
+        visibleWidth: null,
+        minWidth: null,
+        cellTemplate: !isDefined(column.groupIndex) ? column.cellTemplate : null,
+        headerCellTemplate: null,
+        fixed: !isDefined(column.groupIndex) || !isFixedFirstGroupColumn ? isColumnFixing : true,
+        fixedPosition: rtlEnabled ? 'right' : 'left',
+      },
+      expandColumn,
+      {
+        index: column.index,
+        type: column.type || GROUP_COMMAND_COLUMN_NAME,
+      },
+    ));
 
     return expandColumns;
   }
@@ -1291,10 +1333,10 @@ export class ColumnsController extends modules.Controller {
             if (selector === column.dataField
               || selector === column.name
               || selector === column.displayField
-              || selector === column.selector
-              || selector === column.calculateCellValue
-              || selector === column.calculateGroupValue
-              || selector === column.calculateDisplayValue
+              || gridCoreUtils.isEqualSelectors(selector, column.selector)
+              || gridCoreUtils.isSelectorEqualWithCallback(selector, column.calculateCellValue)
+              || gridCoreUtils.isSelectorEqualWithCallback(selector, column.calculateGroupValue)
+              || gridCoreUtils.isSelectorEqualWithCallback(selector, column.calculateDisplayValue)
             ) {
               if (fromDataSource) {
                 column.sortOrder = 'sortOrder' in column ? column.sortOrder : sortParameters[i].desc ? 'desc' : 'asc';
@@ -1418,8 +1460,8 @@ export class ColumnsController extends modules.Controller {
         }
         columnOptionCore(that, column, option, value, notFireEvent);
       } else if (isObject(option)) {
-        each(option, (optionName, value) => {
-          columnOptionCore(that, column, optionName, value, notFireEvent);
+        each(option, (optionName, optionValue) => {
+          columnOptionCore(that, column, optionName, optionValue, notFireEvent);
         });
       }
 
@@ -1540,7 +1582,9 @@ export class ColumnsController extends modules.Controller {
   }
 
   public setName(column) {
-    column.name = column.name || column.dataField || column.type;
+    if (!isColumnNameRequired(column)) {
+      column.name = column.name || column.dataField || column.type;
+    }
   }
 
   public setUserState(state) {
@@ -1581,18 +1625,23 @@ export class ColumnsController extends modules.Controller {
 
   public _checkColumns() {
     const usedNames = {};
-    let hasEditableColumnWithoutName = false;
     const duplicatedNames: any = [];
+    let hasEditableColumnWithoutName = false;
+    let hasColumnsWithoutRequiredNames = false;
+
     this._columns.forEach((column) => {
       const { name } = column;
       const isBand = column.columns?.length;
       const isEditable = column.allowEditing && (column.dataField || column.setCellValue) && !isBand;
+
       if (name) {
         if (usedNames[name]) {
           duplicatedNames.push(`"${name}"`);
         }
 
         usedNames[name] = true;
+      } else if (isColumnNameRequired(column)) {
+        hasColumnsWithoutRequiredNames = true;
       } else if (isEditable) {
         hasEditableColumnWithoutName = true;
       }
@@ -1600,6 +1649,10 @@ export class ColumnsController extends modules.Controller {
 
     if (duplicatedNames.length) {
       errors.log('E1059', duplicatedNames.join(', '));
+    }
+
+    if (hasColumnsWithoutRequiredNames) {
+      errors.log('E1066');
     }
 
     if (hasEditableColumnWithoutName) {
@@ -1903,6 +1956,10 @@ export class ColumnsController extends modules.Controller {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public isNeedToRenderVirtualColumns(scrollPosition: number): boolean {
     return false;
+  }
+
+  public getColumnOptionNameByFullName(fullName: string): string {
+    return fullName.replace(COLUMN_OPTION_REGEXP, '');
   }
 }
 

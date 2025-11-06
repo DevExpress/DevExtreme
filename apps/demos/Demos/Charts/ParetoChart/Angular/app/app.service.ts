@@ -30,7 +30,7 @@ export class Service {
     const data = complaintsData.sort((a, b) => b.count - a.count);
     const totalCount = data.reduce((prevValue, item) => prevValue + item.count, 0);
     let cumulativeCount = 0;
-    return data.map((item, index) => {
+    return data.map((item) => {
       cumulativeCount += item.count;
       return {
         complaint: item.complaint,

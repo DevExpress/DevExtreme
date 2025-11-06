@@ -3,6 +3,7 @@ import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import LoadIndicator, { Properties } from "devextreme/ui/load_indicator";
 import {
+ LoadingAnimationType,
  ContentReadyEvent,
  DisposingEvent,
  InitializedEvent,
@@ -10,6 +11,7 @@ import {
 } from "devextreme/ui/load_indicator";
 
 type AccessibleOptions = Pick<Properties,
+  "animationType" |
   "elementAttr" |
   "height" |
   "hint" |
@@ -29,6 +31,7 @@ interface DxLoadIndicator extends AccessibleOptions {
 
 const componentConfig = {
   props: {
+    animationType: String as PropType<LoadingAnimationType>,
     elementAttr: Object as PropType<Record<string, any>>,
     height: [Number, String],
     hint: String,
@@ -44,6 +47,7 @@ const componentConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:animationType": null,
     "update:elementAttr": null,
     "update:height": null,
     "update:hint": null,

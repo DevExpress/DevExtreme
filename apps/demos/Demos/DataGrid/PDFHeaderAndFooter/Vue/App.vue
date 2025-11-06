@@ -70,7 +70,6 @@ const gdpFormat = {
 };
 
 const onExporting = (e: DxDataGridTypes.ExportingEvent) => {
-  // eslint-disable-next-line new-cap
   const doc = new jsPDF();
   const lastPoint = { x: 0, y: 0 };
 
@@ -79,12 +78,14 @@ const onExporting = (e: DxDataGridTypes.ExportingEvent) => {
     component: e.component,
     topLeft: { x: 1, y: 15 },
     columnWidths: [30, 20, 30, 15, 22, 22, 20, 20],
-    customDrawCell({ rect }) {
-      if (lastPoint.x < rect.x + rect.w) {
-        lastPoint.x = rect.x + rect.w;
-      }
-      if (lastPoint.y < rect.y + rect.h) {
-        lastPoint.y = rect.y + rect.h;
+    customDrawCell({ rect }: { rect?: { x: number; y: number; h: number; w: number } }) {
+      if (rect) {
+        if (lastPoint.x < rect.x + rect.w) {
+          lastPoint.x = rect.x + rect.w;
+        }
+        if (lastPoint.y < rect.y + rect.h) {
+          lastPoint.y = rect.y + rect.h;
+        }
       }
     },
   }).then(() => {

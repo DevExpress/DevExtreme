@@ -8,6 +8,8 @@ QUnit.testStart(function() {
 });
 
 import 'ui/tree_view';
+import { EXPANDER_ICON_STUB_CLASS } from '__internal/ui/tree_view/tree_view.base';
+import localization from 'localization';
 
 const WIDGET_CLASS = 'dx-treeview';
 const NODE_CONTAINER_CLASS = 'dx-treeview-node-container';
@@ -72,6 +74,30 @@ QUnit.module('aria accessibility', {
 
         assert.equal($node1.attr('aria-label'), 'Item 1', 'label for 1st item is correct');
         assert.equal($node2.attr('aria-label'), 'Item 11', 'label for 2nd ite is correct');
+    });
+
+    QUnit.test('aria-label for selectAll checkbox should be localized (T1299342)', function(assert) {
+        assert.expect(1);
+
+        const defaultLocale = localization.locale();
+        const localizedSelectAllText = 'Alles auswählen';
+
+        try {
+            localization.loadMessages({
+                'de': { 'dxList-selectAll': localizedSelectAllText }
+            });
+            localization.locale('de');
+
+            this.instance.option({ showCheckBoxesMode: 'selectAll' });
+
+            const $selectAllItem = this.$element.find(`.${SELECT_ALL_ITEM_CLASS}`);
+
+            assert.strictEqual($selectAllItem.attr('aria-label'), localizedSelectAllText, 'selectAll checkbox aria-label is localized');
+        } finally {
+            localization.locale(defaultLocale);
+        }
+
+
     });
 
     QUnit.test('aria role for item levels', function(assert) {
@@ -467,7 +493,7 @@ QUnit.module('markup', {
         assert.equal($firstItem.text(), 'Item 1');
     });
 
-    QUnit.test('scroll direction by default is \'vertical\'', function(assert) {
+    QUnit.test('scroll direction by default is vertical', function(assert) {
         const treeView = initTree({
             items: this.treeItems,
         }).dxTreeView('instance');
@@ -562,7 +588,7 @@ QUnit.module('markup', {
         });
     });
 
-    QUnit.test('Render \'selectAll\' item', function(assert) {
+    QUnit.test('Render selectAll item', function(assert) {
         const $treeView = initTree({
             showCheckBoxesMode: 'selectAll',
             dataSource: this.treeItems
@@ -572,7 +598,7 @@ QUnit.module('markup', {
         assert.equal($selectAll.length, 1);
     });
 
-    QUnit.test('On initialization \'selectAll\' item should be selected if all items are selected', function(assert) {
+    QUnit.test('On initialization selectAll item should be selected if all items are selected', function(assert) {
         const data = [{ id: 1, text: 'item 1', selected: true }, { id: 2, text: 'item 2', selected: true }];
         const $treeView = initTree({
             showCheckBoxesMode: 'selectAll',
@@ -583,7 +609,7 @@ QUnit.module('markup', {
         assert.ok($selectAll.hasClass('dx-checkbox-checked'));
     });
 
-    QUnit.test('On initialization \'selectAll\' item should be unselected if all items are unselected', function(assert) {
+    QUnit.test('On initialization selectAll item should be unselected if all items are unselected', function(assert) {
         const data = [{ id: 1, text: 'item 1' }, { id: 2, text: 'item 2' }];
         const $treeView = initTree({
             showCheckBoxesMode: 'selectAll',
@@ -595,7 +621,7 @@ QUnit.module('markup', {
         assert.notOk($selectAll.hasClass('dx-checkbox-checked'));
     });
 
-    QUnit.test('On initialization \'selectAll\' item should have intermediate state if at least one item is selected', function(assert) {
+    QUnit.test('On initialization selectAll item should have intermediate state if at least one item is selected', function(assert) {
         const data = [{ id: 1, text: 'item 1', selected: true }, { id: 2, text: 'item 2' }];
         const $treeView = initTree({
             showCheckBoxesMode: 'selectAll',
@@ -606,7 +632,7 @@ QUnit.module('markup', {
         assert.ok($selectAll.hasClass('dx-checkbox-indeterminate'));
     });
 
-    QUnit.test('On initialization \'selectAll\' item should have intermediate state if at least one item is selected (ierarchical)', function(assert) {
+    QUnit.test('On initialization selectAll item should have intermediate state if at least one item is selected (ierarchical)', function(assert) {
         const data = [{
             id: '1',
             expanded: true,
@@ -634,6 +660,16 @@ QUnit.module('markup', {
         const $icon = $treeView.find(`.${ITEM_CLASS} .${ICON_CLASS}`);
 
         assert.strictEqual($icon.attr('alt'), 'dxTreeView item icon');
+    });
+
+    QUnit.test('TreeView should show stub elements next to items', function(assert) {
+        const $treeView = initTree({
+            items: [{ text: 'Item text', icon: 'some_icon.jpg' }]
+        });
+
+        const $stubElements = $treeView.find(`.${EXPANDER_ICON_STUB_CLASS}`);
+
+        assert.strictEqual($stubElements.length > 0, true, 'stub elements are rendered');
     });
 });
 

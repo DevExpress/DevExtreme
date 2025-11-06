@@ -7,7 +7,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 
 import { DxChartModule, DxSelectBoxModule } from 'devextreme-angular';
-import { DataSource, CustomStore, query } from 'devextreme-angular/common/data';
+import { DataSource, CustomStore } from 'devextreme-angular/common/data';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -39,7 +39,7 @@ export class AppComponent implements AfterViewInit {
     this.monthWeather = new DataSource({
       store: new CustomStore({
         load: () => lastValueFrom(this.http.get('../../../../data/monthWeather.json'))
-          .catch((error) => { throw 'Data Loading Error'; }),
+          .catch(() => { throw 'Data Loading Error'; }),
         loadMode: 'raw',
       }),
       filter: ['t', '>', '2'],

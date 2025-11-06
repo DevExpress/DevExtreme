@@ -1,4 +1,3 @@
-
 export const housesSource = [{
   ID: '1',
   Favorite: false,

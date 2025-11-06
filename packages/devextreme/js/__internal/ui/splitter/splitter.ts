@@ -16,6 +16,7 @@ import {
 } from '@js/core/utils/size';
 import { isDefined, isObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
+import type { DxEvent, InteractionEvent } from '@js/events';
 import type {
   Item,
   ItemCollapsedEvent,
@@ -26,12 +27,17 @@ import type {
   ResizeStartEvent,
 } from '@js/ui/splitter';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { ItemRenderInfo, PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
+import type { SupportedKeyHandler } from '@ts/core/widget/widget';
+import type {
+  CollectionItemKey,
+  ItemRenderInfo,
+  PostprocessRenderItemInfo,
+} from '@ts/ui/collection/collection_widget.base';
+import type { CollectionWidgetLiveUpdateProperties } from '@ts/ui/collection/collection_widget.live_update';
 import CollectionWidgetLiveUpdate from '@ts/ui/collection/collection_widget.live_update';
 
-import type { CollectionWidgetEditProperties } from '../collection/collection_widget.edit';
 import type ResizeHandle from './resize_handle';
-import type { ResizeHandleOptions } from './resize_handle';
+import type { ResizeHandleProperties } from './resize_handle';
 import { RESIZE_HANDLE_CLASS } from './resize_handle';
 import SplitterItem from './splitter_item';
 import { getComponentInstance } from './utils/component';
@@ -59,7 +65,6 @@ import {
   type EventMap,
   type FlexProperty,
   type HandlerMap,
-  type InteractionEvent,
   type PaneRestrictions,
   type RenderQueueItem,
 } from './utils/types';
@@ -95,12 +100,11 @@ export interface Properties<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends ItemLike<TKey> = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TKey = any,
-> extends PublicProperties<TItem, TKey>,
-  Omit<
-  CollectionWidgetEditProperties<Splitter, TItem, TKey>,
-  keyof PublicProperties<TItem, TKey> & keyof CollectionWidgetEditProperties<Splitter, TItem, TKey>
-  > {
+  TKey extends CollectionItemKey = any,
+> extends PublicProperties<TItem, TKey>, Omit<
+  CollectionWidgetLiveUpdateProperties<Splitter, TItem, TKey>,
+  keyof PublicProperties<TItem, TKey>
+> {
   _renderQueue?: RenderQueueItem[];
 }
 
@@ -118,7 +122,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
 
   private _panesCacheSizeVisible: (PaneCache | undefined)[] = [];
 
-  private _savedCollapsingEvent?: InteractionEvent;
+  private _savedCollapsingEvent?: DxEvent<InteractionEvent>;
 
   private _shouldRecalculateLayout?: boolean;
 
@@ -182,7 +186,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
   }
 
   _pushItemToRenderQueue(
-    itemContent: dxElementWrapper,
+    itemContent: dxElementWrapper | Element,
     splitterConfig: Properties,
   ): void {
     this._renderQueue.push({ itemContent, splitterConfig });
@@ -425,7 +429,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     return this[actionName];
   }
 
-  _getResizeHandleConfig(paneId: string): ResizeHandleOptions {
+  _getResizeHandleConfig(paneId: string): ResizeHandleProperties {
     const {
       orientation,
       rtlEnabled,
@@ -617,15 +621,13 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
   _createItemByTemplate(
     itemTemplate: { source: () => unknown },
     args: ItemRenderInfo<Item>,
-  ): unknown {
+  ): dxElementWrapper {
     const { itemData } = args;
 
     if (itemData.splitter) {
       this._onItemTemplateRendered(itemTemplate, args)();
-      return itemTemplate.source
-        ? itemTemplate.source()
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        : ($ as any)();
+      // @ts-expect-error
+      return itemTemplate.source ? itemTemplate.source() : $();
     }
 
     return super._createItemByTemplate(itemTemplate, args);
@@ -663,7 +665,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
       case 'maxSize':
       case 'minSize':
       case 'collapsedSize':
-        this._layout = this._getDefaultLayoutBasedOnSize();
+        this._layout = this._getDefaultLayoutBasedOnSize(property === 'size' ? item : undefined);
 
         this._applyStylesFromLayout(this.getLayout());
         this._updateItemSizes();
@@ -840,7 +842,9 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     );
 
     this._itemRestrictions.forEach((pane) => {
-      pane.maxSize = undefined;
+      if (item.collapsed) {
+        pane.maxSize = undefined;
+      }
       pane.resizable = undefined;
     });
 
@@ -951,20 +955,21 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
   _fireCollapsedStateChanged(
     isExpanded: boolean,
     $item: dxElementWrapper,
-    e?: unknown,
+    e?: DxEvent<InteractionEvent>,
   ): void {
     const eventName = isExpanded ? ITEM_EXPANDED_EVENT : ITEM_COLLAPSED_EVENT;
+    const actionArgs = { event: e };
 
-    this._itemEventHandler($item, eventName, { event: e });
+    this._itemEventHandler($item, eventName, actionArgs);
   }
 
-  _getDefaultLayoutBasedOnSize(): number[] {
-    this._updateItemsRestrictions();
+  _getDefaultLayoutBasedOnSize(item?: Item): number[] {
+    this._updateItemsRestrictions(item);
 
     return getDefaultLayout(this._itemRestrictions);
   }
 
-  _updateItemsRestrictions(): void {
+  _updateItemsRestrictions(currentItem?: Item): void {
     const { orientation, items = [] } = this.option();
 
     const handlesSizeSum = this._getResizeHandlesSize();
@@ -974,7 +979,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
 
     items.forEach((item) => {
       this._itemRestrictions.push({
-        resizable: item.resizable !== false,
+        resizable: item === currentItem ? false : item.resizable !== false,
         visible: item.visible !== false,
         collapsed: item.collapsed === true,
         collapsedSize: convertSizeToRatio(item.collapsedSize, elementSize, handlesSizeSum),
@@ -1110,7 +1115,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     }
   }
 
-  registerKeyHandler(key: string, handler: () => void): void {
+  registerKeyHandler(key: string, handler: SupportedKeyHandler): void {
     $(this.element()).find(`.${RESIZE_HANDLE_CLASS}`).each((index, element) => {
       getComponentInstance($(element)).registerKeyHandler(key, handler);
 
@@ -1120,6 +1125,11 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
 
   getLayout(): number[] {
     return this._layout ?? [];
+  }
+
+  _clean(): void {
+    resizeObserverSingleton.unobserve(this.$element().get(0));
+    super._clean();
   }
 }
 

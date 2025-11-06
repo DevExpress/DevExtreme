@@ -4,7 +4,7 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
-} from '../common/core/events';
+} from '../events';
 
 import dxDropDownList, {
     dxDropDownListOptions,
@@ -210,8 +210,7 @@ export interface dxAutocompleteOptions extends dxDropDownListOptions<dxAutocompl
      * @default null
      * @public
      */
-    value?: string;
-
+    value?: string | null;
     /**
      * @docid
      * @type dxPopupOptions
@@ -230,8 +229,9 @@ export default class dxAutocomplete extends dxDropDownList<dxAutocompleteOptions
      * @docid
      * @publicName reset(value)
      * @public
+     * @param1 value:string | null
      */
-    reset(value?: string | null): void;
+    reset(value?: Properties['value']): void;
 }
 
 /** @public */

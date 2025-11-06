@@ -5,7 +5,7 @@ import messageLocalization from 'common/core/localization/message';
 import uiErrors from 'ui/widget/ui.errors';
 import fx from 'common/core/animation/fx';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import 'ui/load_panel';
 
 QUnit.testStart(function() {
@@ -270,26 +270,6 @@ QUnit.module('init', {
         assert.equal($content.find(MESSAGE_SELECTOR).text(), 'Test Loading Message');
     });
 
-    QUnit.test('load panel created with templatesRenderAsynchronously option should be shown with delay', function(assert) {
-        const clock = sinon.useFakeTimers();
-        try {
-            const onShowingSpy = sinon.spy();
-
-            const instance = $('#loadPanel').dxLoadPanel({
-                templatesRenderAsynchronously: true,
-                visible: true,
-                onShowing: onShowingSpy
-            }).dxLoadPanel('instance');
-
-            assert.strictEqual(instance.option('templatesRenderAsynchronously'), true, 'templatesRenderAsynchronously option can be reassigned (T896267)');
-            assert.strictEqual(onShowingSpy.called, false);
-            clock.tick(10);
-            assert.strictEqual(onShowingSpy.called, true);
-        } finally {
-            clock.restore();
-        }
-    });
-
     QUnit.test('shows on init if loading option is true', function(assert) {
         $('#loadPanel').dxLoadPanel({ message: 'Test Loading Message', visible: true });
         assert.ok($('#loadPanel').is(':visible'));
@@ -477,7 +457,7 @@ QUnit.module('options changed callbacks', {
         assert.ok(!instance.$content().hasClass(LOADPANEL_PANE_HIDDEN_CLASS));
     });
 
-    QUnit.test('LoadPanel with custom indicator', function(assert) {
+    QUnit.test('LoadPanel with custom indicator (deprecated from 25.2)', function(assert) {
         const url = '../../testing/content/customLoadIndicator.png';
         const instance = this.element
             .dxLoadPanel({
@@ -494,32 +474,54 @@ QUnit.module('options changed callbacks', {
         assert.equal(instance.option('indicatorSrc'), loadIndicatorInstance.option('indicatorSrc'), 'custom indicator option changed successfully');
     });
 
-    QUnit.test('indicatorSrc option change', function(assert) {
+    QUnit.test('LoadPanel with custom indicator', function(assert) {
         const url = '../../testing/content/customLoadIndicator.png';
+        const customSize = 120;
+        const indicatorOptions = {
+            src: url,
+            animationType: 'sparkle',
+            height: customSize,
+            width: customSize,
+        };
+        const updatedOptions = {
+            src: '',
+            animationType: 'circle',
+            height: undefined,
+            width: undefined,
+        };
+        const optionNames = {
+            src: 'indicatorSrc',
+            animationType: 'animationType',
+            height: 'height',
+            width: 'width'
+        };
         const instance = this.element
             .dxLoadPanel({
-                showIndicator: true
+                showIndicator: true,
+                indicatorOptions,
             })
             .dxLoadPanel('instance');
         instance.show();
 
-        instance.option('indicatorSrc', url);
-
         const loadIndicatorInstance = this.instance.$content().find('.dx-loadindicator').dxLoadIndicator().dxLoadIndicator('instance');
 
-        assert.strictEqual(loadIndicatorInstance.option('indicatorSrc'), url, 'custom indicator option installed successfully');
-        instance.option('indicatorSrc', '');
-        assert.equal(instance.option('indicatorSrc'), loadIndicatorInstance.option('indicatorSrc'), 'custom indicator option changed successfully');
+        Object.entries(indicatorOptions).forEach(([optionName, value]) => {
+            assert.strictEqual(loadIndicatorInstance.option(optionNames[optionName]), value, `custom ${optionName} option installed successfully`);
+        });
+        Object.entries(updatedOptions).forEach(([optionName, value]) => {
+            instance.option(`indicatorOptions.${optionName}`, value);
+            assert.strictEqual(loadIndicatorInstance.option(optionNames[optionName]), value, `custom ${optionName} option changed successfully`);
+        });
     });
 
-    QUnit.test('indicatorSrc option change when showIndicator is false', function(assert) {
+    QUnit.test('indicatorOptions.src option change when showIndicator is false', function(assert) {
         const url = '../../testing/content/customLoadIndicator.png';
         const instance = this.element
             .dxLoadPanel({})
             .dxLoadPanel('instance');
 
         instance.show();
-        instance.option('indicatorSrc', url);
+        instance.option('indicatorOptions.src', url);
         instance.option('showIndicator', true);
 
         const loadIndicatorInstance = this.instance.$content().find('.dx-loadindicator').dxLoadIndicator().dxLoadIndicator('instance');

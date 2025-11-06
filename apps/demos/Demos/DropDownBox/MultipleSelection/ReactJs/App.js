@@ -23,6 +23,34 @@ function App() {
   const [treeBoxValue, setTreeBoxValue] = useState(['1_1']);
   const [gridBoxValue, setGridBoxValue] = useState([3]);
   const treeViewRef = useRef();
+  const syncTreeViewSelection = useCallback(
+    (e) => {
+      const treeView = (e.component.selectItem && e.component) || treeViewRef.current?.instance();
+      if (treeView) {
+        if (e.value === null) {
+          treeView.unselectAll();
+        } else {
+          const values = e.value || treeBoxValue;
+          values?.forEach((value) => {
+            treeView.selectItem(value);
+          });
+        }
+      }
+      if (e.value !== undefined) {
+        setTreeBoxValue(e.value);
+      }
+    },
+    [treeBoxValue],
+  );
+  const syncDataGridSelection = useCallback((e) => {
+    setGridBoxValue(e.value || []);
+  }, []);
+  const treeViewItemSelectionChanged = useCallback((e) => {
+    setTreeBoxValue(e.component.getSelectedNodeKeys());
+  }, []);
+  const dataGridOnSelectionChanged = useCallback((e) => {
+    setGridBoxValue((e.selectedRowKeys.length && e.selectedRowKeys) || []);
+  }, []);
   const treeViewRender = useCallback(
     () => (
       <TreeView
@@ -40,7 +68,7 @@ function App() {
         onItemSelectionChanged={treeViewItemSelectionChanged}
       />
     ),
-    [treeDataSource],
+    [syncTreeViewSelection, treeViewItemSelectionChanged],
   );
   const dataGridRender = useCallback(
     () => (
@@ -61,38 +89,8 @@ function App() {
         <FilterRow visible={true} />
       </DataGrid>
     ),
-    [gridDataSource, gridBoxValue],
+    [gridBoxValue, dataGridOnSelectionChanged],
   );
-  const syncTreeViewSelection = useCallback(
-    (e) => {
-      const treeView = (e.component.selectItem && e.component)
-        || (treeViewRef.current && treeViewRef.current.instance());
-      if (treeView) {
-        if (e.value === null) {
-          treeView.unselectAll();
-        } else {
-          const values = e.value || treeBoxValue;
-          values
-            && values.forEach((value) => {
-              treeView.selectItem(value);
-            });
-        }
-      }
-      if (e.value !== undefined) {
-        setTreeBoxValue(e.value);
-      }
-    },
-    [treeBoxValue],
-  );
-  const syncDataGridSelection = useCallback((e) => {
-    setGridBoxValue(e.value || []);
-  }, []);
-  const treeViewItemSelectionChanged = useCallback((e) => {
-    setTreeBoxValue(e.component.getSelectedNodeKeys());
-  }, []);
-  const dataGridOnSelectionChanged = useCallback((e) => {
-    setGridBoxValue((e.selectedRowKeys.length && e.selectedRowKeys) || []);
-  }, []);
   return (
     <div className="dx-fieldset">
       <div className="dx-field">

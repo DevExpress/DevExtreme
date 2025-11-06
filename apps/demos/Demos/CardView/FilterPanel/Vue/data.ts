@@ -7,7 +7,7 @@ export interface Order {
   OrderDate: string;
   DeliveryDate: string;
   Terms: string;
-};
+}
 
 export const orders: Order[] = [{
   ID: 1,

@@ -9,16 +9,16 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+} from '../events';
 
 import {
     Format,
 } from '../localization';
 
 import {
-    basePointObject,
-    baseSeriesObject,
-    chartAxisObject,
+  basePointObject,
+  baseSeriesObject,
+  chartAxisObject,
 } from './chart';
 
 import {
@@ -28,6 +28,7 @@ import {
     BaseChartOptions,
     BaseChartTooltip,
     BaseChartAnnotationConfig,
+    BasePointInfo,
     PointInteractionInfo,
     TooltipInfo,
 } from './chart_components/base_chart';
@@ -199,7 +200,7 @@ export type OptionChangedEvent = EventInfo<dxPolarChart> & ChangedOptionInfo;
  * @type object
  * @inherits Cancelable,NativeEventInfo,PointInteractionInfo
  */
-export type PointClickEvent = Cancelable & NativeEventInfo<dxPolarChart, MouseEvent | PointerEvent> & PointInteractionInfo;
+export type PointClickEvent = Cancelable & NativeEventInfo<dxPolarChart, MouseEvent | PointerEvent> & PointInteractionInfo<polarPointObject>;
 
 /**
  * @docid _viz_polar_chart_PointHoverChangedEvent
@@ -207,7 +208,7 @@ export type PointClickEvent = Cancelable & NativeEventInfo<dxPolarChart, MouseEv
  * @type object
  * @inherits EventInfo,PointInteractionInfo
  */
-export type PointHoverChangedEvent = EventInfo<dxPolarChart> & PointInteractionInfo;
+export type PointHoverChangedEvent = EventInfo<dxPolarChart> & PointInteractionInfo<polarPointObject>;
 
 /**
  * @docid _viz_polar_chart_PointSelectionChangedEvent
@@ -215,7 +216,7 @@ export type PointHoverChangedEvent = EventInfo<dxPolarChart> & PointInteractionI
  * @type object
  * @inherits EventInfo,PointInteractionInfo
  */
-export type PointSelectionChangedEvent = EventInfo<dxPolarChart> & PointInteractionInfo;
+export type PointSelectionChangedEvent = EventInfo<dxPolarChart> & PointInteractionInfo<polarPointObject>;
 
 /**
  * @docid _viz_polar_chart_SeriesClickEvent
@@ -250,7 +251,7 @@ export type SeriesSelectionChangedEvent = EventInfo<dxPolarChart> & SeriesIntera
  * @type object
  * @inherits EventInfo,_viz_chart_components_base_chart_TooltipInfo
  */
-export type TooltipHiddenEvent = EventInfo<dxPolarChart> & TooltipInfo;
+export type TooltipHiddenEvent = EventInfo<dxPolarChart> & TooltipInfo<polarPointObject>;
 
 /**
  * @docid _viz_polar_chart_TooltipShownEvent
@@ -258,7 +259,7 @@ export type TooltipHiddenEvent = EventInfo<dxPolarChart> & TooltipInfo;
  * @type object
  * @inherits EventInfo,_viz_chart_components_base_chart_TooltipInfo
  */
-export type TooltipShownEvent = EventInfo<dxPolarChart> & TooltipInfo;
+export type TooltipShownEvent = EventInfo<dxPolarChart> & TooltipInfo<polarPointObject>;
 
 /**
  * @docid _viz_polar_chart_ZoomEndEvent
@@ -333,7 +334,7 @@ export interface PolarChartSeries extends dxPolarChartSeriesTypesCommonPolarChar
  * @namespace DevExpress.viz
  * @docid
  */
-export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
+export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart, polarPointObject> {
     /**
      * @docid
      * @type object
@@ -1211,17 +1212,48 @@ export type Legend = BaseChartLegend & {
      */
     hoverMode?: LegendHoverMode;
 };
+
+/**
+ * @docid dxPolarChartPointInfo
+ * @public
+ */
+export type PointInfo = BasePointInfo<polarPointObject>;
+
+/**
+ * @namespace DevExpress.viz
+ * @deprecated Use PointInfo instead
+ */
+export type dxPolarChartPointInfo = PointInfo;
+
 /**
  * @public
  * @docid dxPolarChartTooltip
+ * @type object
  */
-export type Tooltip = BaseChartTooltip & {
+export type Tooltip = Omit<BaseChartTooltip<PointInfo>, 'contentTemplate' | 'customizeTooltip'> & {
     /**
      * @docid dxPolarChartOptions.tooltip.shared
      * @default false
      * @public
      */
     shared?: boolean;
+    /**
+     * @docid dxPolarChartOptions.tooltip.contentTemplate
+     * @type_function_param1 pointInfo:dxPolarChartPointInfo
+     * @type_function_return string|Element|jQuery
+     * @default undefined
+     * @public
+     */
+    contentTemplate?: template | ((pointInfo: PointInfo, element: DxElement) => string | UserDefinedElement) | undefined;
+    /**
+     * @docid dxPolarChartOptions.tooltip.customizeTooltip
+     * @public
+     * @type_function_param1 pointInfo:dxPolarChartPointInfo
+     * @type_function_return object
+     * @default undefined
+     * @notUsedInTheme
+     */
+    customizeTooltip?: ((pointInfo: PointInfo) => any) | undefined;
 };
 /**
  * @public

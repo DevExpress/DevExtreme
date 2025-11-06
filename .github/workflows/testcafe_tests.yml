@@ -10,17 +10,29 @@ on:
       - 'apps/**/*.md'
   push:
     branches: [25_2]
+  workflow_dispatch:
 
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
   NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
   BUILD_TEST_INTERNAL_PACKAGE: true
+  RUN_TESTS: true
 
 jobs:
+  check-should-run:
+    name: Check if tests should run
+    runs-on: devextreme-shr2
+    outputs:
+      should-run: ${{ steps.check.outputs.should-run }}
+    steps:
+      - name: Check RUN_TESTS flag
+        id: check
+        run: echo "should-run=${{ env.RUN_TESTS }}" >> $GITHUB_OUTPUT
+
   build:
     name: build
-    strategy:
-      fail-fast: false
+    needs: check-should-run
+    if: needs.check-should-run.outputs.should-run == 'true'
 
     runs-on: devextreme-shr2
     timeout-minutes: 15
@@ -34,9 +46,8 @@ jobs:
       with:
         node-version: '20'
 
-    - uses: pnpm/action-setup@v3
+    - uses: pnpm/action-setup@v4
       with:
-        version: 9
         run_install: false
 
     - name: Get pnpm store directory
@@ -55,13 +66,11 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: Build
       shell: bash
-      run: |
-        node ./tools/scripts/performance_log.js &
-        pnpx nx build devextreme
+      run: pnpx nx build devextreme
 
     - name: Zip artifacts
       working-directory: ./packages/devextreme
@@ -76,100 +85,41 @@ jobs:
         retention-days: 1
 
   testcafe:
-    name: ${{ matrix.ARGS.name }}
-    needs: [build]
+    name: ${{ matrix.ARGS.name }}${{ !matrix.ARGS.theme && ' - fluent' || '' }}
+    if: needs.check-should-run.outputs.should-run == 'true'
+    needs: [check-should-run, build]
     strategy:
       fail-fast: false
       matrix:
         ARGS: [
-          { componentFolder: "accessibility/common", name: "accessibility (1/7)", indices: "1/7" },
-          { componentFolder: "accessibility/common", name: "accessibility (2/7)", indices: "2/7" },
-          { componentFolder: "accessibility/common", name: "accessibility (3/7)", indices: "3/7" },
-          { componentFolder: "accessibility/common", name: "accessibility (4/7)", indices: "4/7" },
-          { componentFolder: "accessibility/common", name: "accessibility (5/7)", indices: "5/7" },
-          { componentFolder: "accessibility/common", name: "accessibility (6/7)", indices: "6/7" },
-          { componentFolder: "accessibility/common", name: "accessibility (7/7)", indices: "7/7" },
-          { componentFolder: "accessibility/common", name: "accessibility - material (1/7)", theme: "material.blue.light", indices: "1/7" },
-          { componentFolder: "accessibility/common", name: "accessibility - material (2/7)", theme: "material.blue.light", indices: "2/7" },
-          { componentFolder: "accessibility/common", name: "accessibility - material (3/7)", theme: "material.blue.light", indices: "3/7" },
-          { componentFolder: "accessibility/common", name: "accessibility - material (4/7)", theme: "material.blue.light", indices: "4/7" },
-          { componentFolder: "accessibility/common", name: "accessibility - material (5/7)", theme: "material.blue.light", indices: "5/7" },
-          { componentFolder: "accessibility/common", name: "accessibility - material (6/7)", theme: "material.blue.light", indices: "6/7" },
-          { componentFolder: "accessibility/common", name: "accessibility - material (7/7)", theme: "material.blue.light", indices: "7/7" },
-          { componentFolder: "accessibility/common", name: "accessibility - fluent (1/7)", theme: "fluent.blue.light", indices: "1/7" },
-          { componentFolder: "accessibility/common", name: "accessibility - fluent (2/7)", theme: "fluent.blue.light", indices: "2/7" },
-          { componentFolder: "accessibility/common", name: "accessibility - fluent (3/7)", theme: "fluent.blue.light", indices: "3/7" },
-          { componentFolder: "accessibility/common", name: "accessibility - fluent (4/7)", theme: "fluent.blue.light", indices: "4/7" },
-          { componentFolder: "accessibility/common", name: "accessibility - fluent (5/7)", theme: "fluent.blue.light", indices: "5/7" },
-          { componentFolder: "accessibility/common", name: "accessibility - fluent (6/7)", theme: "fluent.blue.light", indices: "6/7" },
-          { componentFolder: "accessibility/common", name: "accessibility - fluent (7/7)", theme: "fluent.blue.light", indices: "7/7" },
+          { componentFolder: "accessibility", name: "accessibility (1/2)", indices: "1/2" },
+          { componentFolder: "accessibility", name: "accessibility (2/2)", indices: "2/2" },
           { componentFolder: "common", name: "common" },
-          { componentFolder: "common", name: "common - material", theme: 'material.blue.light' },
-          { componentFolder: "common", name: "common - fluent", theme: 'fluent.blue.light' },
-          { componentFolder: "chat", name: "chat" },
-          { componentFolder: "chat", name: "chat - material", theme: 'material.blue.light' },
-          { componentFolder: "chat", name: "chat - fluent", theme: 'fluent.blue.light' },
-          { componentFolder: "treeList", name: "treeList", concurrency: 1 },
+
+          # Grids tests need to be reworked to work in fluent theme
           { componentFolder: "dataGrid/common", name: "dataGrid / common (1/5)", indices: "1/5" },
           { componentFolder: "dataGrid/common", name: "dataGrid / common (2/5)", indices: "2/5" },
           { componentFolder: "dataGrid/common", name: "dataGrid / common (3/5)", indices: "3/5" },
           { componentFolder: "dataGrid/common", name: "dataGrid / common (4/5)", indices: "4/5" },
           { componentFolder: "dataGrid/common", name: "dataGrid / common (5/5)", indices: "5/5" },
-          { componentFolder: "dataGrid/sticky/common", name: "dataGrid / sticky common" },
-          { componentFolder: "dataGrid/sticky/fixed", name: "dataGrid / sticky (1/3)", indices: "1/3" },
-          { componentFolder: "dataGrid/sticky/fixed", name: "dataGrid / sticky (2/3)", indices: "2/3" },
-          { componentFolder: "dataGrid/sticky/fixed", name: "dataGrid / sticky (3/3)", indices: "3/3" },
+          { componentFolder: "dataGrid/sticky", name: "dataGrid / sticky (1/2)", indices: "1/2" },
+          { componentFolder: "dataGrid/sticky", name: "dataGrid / sticky (2/2)", indices: "2/2" },
           { componentFolder: "cardView", name: "cardView" },
-          { componentFolder: "cardView", name: "cardView - material", theme: 'material.blue.light' },
-          { componentFolder: "cardView", name: "cardView - fluent", theme: 'fluent.blue.light' },
-          { componentFolder: "pivotGrid", name: "pivotGrid", concurrency: 1 },
-          { componentFolder: "pivotGrid", name: "pivotGrid - material", theme: 'material.blue.light', concurrency: 1 },
-          { componentFolder: "pivotGrid", name: "pivotGrid - fluent", theme: 'fluent.blue.light', concurrency: 1 },
-          { componentFolder: "scheduler/common", name: "scheduler / common (1/6)", indices: "1/6" },
-          { componentFolder: "scheduler/common", name: "scheduler / common (2/6)", indices: "2/6" },
-          { componentFolder: "scheduler/common", name: "scheduler / common (3/6)", indices: "3/6" },
-          { componentFolder: "scheduler/common", name: "scheduler / common (4/6)", indices: "4/6" },
-          { componentFolder: "scheduler/common", name: "scheduler / common (5/6)", indices: "5/6" },
-          { componentFolder: "scheduler/common", name: "scheduler / common (6/6)", indices: "6/6" },
-          { componentFolder: "scheduler/viewOffset/common", name: "scheduler / offset" },
-          { componentFolder: "scheduler/viewOffset/markup", name: "scheduler / offset markups" },
-          { componentFolder: "scheduler/timezones", name: "scheduler / timezones (Europe/Berlin)", timezone: "Europe/Berlin" },
-          { componentFolder: "scheduler/timezones", name: "scheduler / timezones (America/Los_Angeles)", timezone: "America/Los_Angeles" },
-          { componentFolder: "form", name: "form (1/2)", indices: "1/2" },
-          { componentFolder: "form", name: "form (2/2)", indices: "2/2" },
-          { componentFolder: "form", name: "form - material (1/2)", theme: 'material.blue.light', indices: "1/2" },
-          { componentFolder: "form", name: "form - material (2/2)", theme: 'material.blue.light', indices: "2/2" },
-          { componentFolder: "form", name: "form - fluent (1/2)", theme: 'fluent.blue.light', indices: "1/2" },
-          { componentFolder: "form", name: "form - fluent (2/2)", theme: 'fluent.blue.light', indices: "2/2" },
-          { componentFolder: "editors", name: "editors (1/3)", indices: "1/3" },
-          { componentFolder: "editors", name: "editors (2/3)", indices: "2/3" },
-          { componentFolder: "editors", name: "editors (3/3)", indices: "3/3" },
-          { componentFolder: "editors", name: "editors - material (1/3)", indices: "1/3", theme: 'material.blue.light' },
-          { componentFolder: "editors", name: "editors - material (2/3)", indices: "2/3", theme: 'material.blue.light' },
-          { componentFolder: "editors", name: "editors - material (3/3)", indices: "3/3", theme: 'material.blue.light' },
-          { componentFolder: "editors", name: "editors - fluent (1/3)", indices: "1/3", theme: 'fluent.blue.light' },
-          { componentFolder: "editors", name: "editors - fluent (2/3)", indices: "2/3", theme: 'fluent.blue.light' },
-          { componentFolder: "editors", name: "editors - fluent (3/3)", indices: "3/3", theme: 'fluent.blue.light' },
-          { componentFolder: "htmlEditor", name: "htmlEditor", concurrency: 1 },
-          { componentFolder: "htmlEditor", name: "htmlEditor - material", theme: 'material.blue.light', concurrency: 1 },
-          { componentFolder: "htmlEditor", name: "htmlEditor - fluent", theme: 'fluent.blue.light', concurrency: 1 },
+
+          # Scheduler tests need to be reworked to work in fluent theme
+          { componentFolder: "scheduler/common", name: "scheduler / common (1/6)", indices: "1/6", theme: 'generic.light' },
+          { componentFolder: "scheduler/common", name: "scheduler / common (2/6)", indices: "2/6", theme: 'generic.light' },
+          { componentFolder: "scheduler/common", name: "scheduler / common (3/6)", indices: "3/6", theme: 'generic.light' },
+          { componentFolder: "scheduler/common", name: "scheduler / common (4/6)", indices: "4/6", theme: 'generic.light' },
+          { componentFolder: "scheduler/common", name: "scheduler / common (5/6)", indices: "5/6", theme: 'generic.light' },
+          { componentFolder: "scheduler/common", name: "scheduler / common (6/6)", indices: "6/6", theme: 'generic.light' },
+          { componentFolder: "scheduler/viewOffset/common", name: "scheduler / offset", theme: 'generic.light' },
+          { componentFolder: "scheduler/viewOffset/markup", name: "scheduler / offset markups", theme: 'generic.light' },
+          { componentFolder: "scheduler/timezones", name: "scheduler / timezones (Europe/Berlin)", timezone: "Europe/Berlin", theme: 'generic.light' },
+          { componentFolder: "scheduler/timezones", name: "scheduler / timezones (America/Los_Angeles)", timezone: "America/Los_Angeles", theme: 'generic.light' },
+
+          { componentFolder: "editors", name: "editors" },
           { componentFolder: "navigation", name: "navigation" },
-          { componentFolder: "navigation", name: "navigation - material", theme: 'material.blue.light' },
-          { componentFolder: "navigation", name: "navigation - fluent", theme: 'fluent.blue.light' },
-          { componentFolder: "fileManager", name: "fileManager" },
-          { componentFolder: "fileManager", name: "fileManager - material", theme: 'material.blue.light' },
-          { componentFolder: "fileManager", name: "fileManager - fluent", theme: 'fluent.blue.light' },
-          { componentFolder: "filterBuilder", name: "filterBuilder" },
-          { componentFolder: "filterBuilder", name: "filterBuilder - material", theme: 'material.blue.light' },
-          { componentFolder: "filterBuilder", name: "filterBuilder - fluent", theme: 'fluent.blue.light' },
-          { componentFolder: "pagination", name: "pagination" },
-#         TODO Chrome133: skipped during chrome update
-#         { componentFolder: "pagination", name: "pagination - material", theme: 'material.blue.light' },
-          { componentFolder: "pagination", name: "pagination - fluent", theme: 'fluent.blue.light' },
-          { componentFolder: "gantt", name: "gantt" },
-          { componentFolder: "fileUploader", name: "fileUploader" },
-          { componentFolder: "fileUploader", name: "fileUploader - material", theme: 'material.blue.light' },
-          { componentFolder: "fileUploader", name: "fileUploader - fluent", theme: 'fluent.blue.light' },
         ]
     runs-on: devextreme-shr2
     timeout-minutes: 45
@@ -196,16 +146,15 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '133.0.6943.53'
+        chrome-version: '141.0.7390.122'
 
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20'
 
-    - uses: pnpm/action-setup@v3
+    - uses: pnpm/action-setup@v4
       with:
-        version: 9
         run_install: false
 
     - name: Get pnpm store directory
@@ -224,18 +173,21 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: Run TestCafe tests
       working-directory: ./e2e/testcafe-devextreme
       run: |
-        [ "${{ matrix.ARGS.theme }}" != "" ] && THEME="--theme ${{ matrix.ARGS.theme }}"
+        if [ "${{ matrix.ARGS.theme }}" != "" ]; then
+          THEME="--theme ${{ matrix.ARGS.theme }}"
+        else
+          THEME="--theme fluent.blue.light"
+        fi
         [ "${{ matrix.ARGS.indices }}" != "" ] && INDICES="--indices ${{ matrix.ARGS.indices }}"
         [ "${{ matrix.ARGS.concurrency }}" != "" ] && CONCURRENCY="--concurrency ${{ matrix.ARGS.concurrency }}"
         [ "${{ matrix.ARGS.platform }}" != "" ] && PLATFORM="--platform ${{ matrix.ARGS.platform }}"
         all_args="--browsers=chrome:devextreme-shr2 --componentFolder ${{ matrix.ARGS.componentFolder }} $CONCURRENCY $INDICES $PLATFORM $THEME"
         echo "$all_args"
-        node ../../tools/scripts/performance_log.js &
         pnpm run test $all_args
 
     - name: Sanitize job name

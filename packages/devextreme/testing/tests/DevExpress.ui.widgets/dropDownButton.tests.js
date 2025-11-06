@@ -95,6 +95,26 @@ QUnit.module('button group integration', {}, () => {
         assert.strictEqual(buttonGroup.option('accessKey'), accessKey, 'accessKey is passed to buttonGroup');
     });
 
+    QUnit.test('It should be possible to update 2nd lvl nested option in buttonGroupOptions', function(assert) {
+        const dropDownButton = $('#dropDownButton').dxDropDownButton({}).dxDropDownButton('instance');
+
+        dropDownButton.option('buttonGroupOptions.elementAttr.class', 'someClass');
+
+        const buttonGroup = getButtonGroup(dropDownButton);
+        const { elementAttr } = buttonGroup.option();
+
+        assert.deepEqual(elementAttr, { class: 'someClass', role: 'group' });
+    });
+
+    QUnit.test('buttonGroupOptions should be cached in _cached_buttonGroupOptions after buttonGroupOptions runtime change', function(assert) {
+        const dropDownButton = $('#dropDownButton').dxDropDownButton({}).dxDropDownButton('instance');
+
+        dropDownButton.option('buttonGroupOptions', { stylingMode: 'text' });
+        const { _cached_buttonGroupOptions } = dropDownButton.option();
+
+        assert.deepEqual(_cached_buttonGroupOptions, { stylingMode: 'text' });
+    });
+
     ['normal', 'default', 'danger', 'success'].forEach((type) => {
         QUnit.test(`type '${type}' should be passed to action button of buttonGroup if splitbutton is false`, function(assert) {
             const dropDownButton = $('#dropDownButton').dxDropDownButton({
@@ -683,6 +703,29 @@ QUnit.module('popup integration', {
         const popupContentElementRect = getPopup(instance).$overlayContent().get(0).getBoundingClientRect();
 
         assert.strictEqual(popupContentElementRect.left, dropDownButtonElementRect.left, 'popup position is correct, rtlEnabled = false');
+    });
+
+    QUnit.test('It should be possible to update 2nd lvl nested option in dropDownOptions', function(assert) {
+        const dropDownButton = $('#dropDownButton').dxDropDownButton({
+            opened: true,
+            dropDownOptions: { wrapperAttr: { class: 'customClass' } },
+        }).dxDropDownButton('instance');
+
+        dropDownButton.option('dropDownOptions.wrapperAttr.class', 'newClass');
+
+        const popup = getPopup(dropDownButton);
+        const { wrapperAttr } = popup.option();
+
+        assert.deepEqual(wrapperAttr, { class: 'newClass' });
+    });
+
+    QUnit.test('dropDownOptions should be cached in _cached_dropDownOptions after dropDownOptions runtime change', function(assert) {
+        const dropDownButton = $('#dropDownButton').dxDropDownButton({}).dxDropDownButton('instance');
+
+        dropDownButton.option('dropDownOptions', { width: 123 });
+        const { _cached_dropDownOptions } = dropDownButton.option();
+
+        assert.deepEqual(_cached_dropDownOptions, { width: 123 });
     });
 
     QUnit.test('popup width should change if content is truncated', function(assert) {

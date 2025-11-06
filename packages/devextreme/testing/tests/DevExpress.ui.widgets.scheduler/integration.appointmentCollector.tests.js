@@ -22,8 +22,8 @@ testStart(() => {
 
 const ADAPTIVE_COLLECTOR_DEFAULT_SIZE = 28;
 const ADAPTIVE_COLLECTOR_BOTTOM_OFFSET = 40;
-const ADAPTIVE_COLLECTOR_RIGHT_OFFSET = 5;
-const COMPACT_THEME_ADAPTIVE_COLLECTOR_RIGHT_OFFSET = 1;
+const ADAPTIVE_COLLECTOR_RIGHT_OFFSET = 2;
+const COMPACT_THEME_ADAPTIVE_COLLECTOR_RIGHT_OFFSET = 2;
 
 const baseConfig = {
     beforeEach: function() {
@@ -62,6 +62,9 @@ module('Integration: collector', baseConfig, () => {
             onAppointmentFormOpening: e => {
                 const startDate = e.form.getEditor('startDate').option('value');
                 assert.equal(startDate.getDate(), 16, 'Recurrence appointment date should be display equal targetedAppointmentData date in form');
+            },
+            editing: {
+                legacyForm: true
             }
         });
 
@@ -92,7 +95,10 @@ module('Integration: Appointments Collector Base Tests', baseConfig, () => {
 
     const renderAppointmentsCollectorContainer = ({ widgetMock, items, options, color }) => {
         const helper = new CompactAppointmentsHelper(widgetMock);
-        items = items || { data: [{ text: 'a', startDate: new Date(2015, 1, 1) }], colors: [], settings: [] };
+        items = items || [{
+            appointment: [{ text: 'a', startDate: new Date(2015, 1, 1) }],
+            color: Promise.resolve(undefined),
+        }];
 
         return helper.render({
             ...options,
@@ -118,14 +124,13 @@ module('Integration: Appointments Collector Base Tests', baseConfig, () => {
 
         const $collector = renderAppointmentsCollectorContainer({
             widgetMock,
-            items: {
-                data: [
-                    { text: 'a', startDate: new Date(2015, 1, 1) },
-                    { text: 'b', startDate: new Date(2015, 1, 1) }
-                ],
-                colors: ['#fff000', '#000fff'],
-                settings: []
-            },
+            items: [{
+                appointment: [{ text: 'a', startDate: new Date(2015, 1, 1) }],
+                color: Promise.resolve('#fff000'),
+            }, {
+                appointment: [{ text: 'b', startDate: new Date(2015, 1, 1) }],
+                color: Promise.resolve('#000fff'),
+            }],
             color
         });
 
@@ -172,7 +177,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             currentDate: currentDate,
             currentView: 'month',
             views: ['month'],
-            dropDownAppointmentTemplate(itemData) {
+            appointmentTooltipTemplate({ appointmentData: itemData }) {
                 assert.ok(dataSource.indexOf(itemData) > -1, 'appointment data contains in the data source');
             }
         });
@@ -200,30 +205,8 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, 'Top coordinate is OK');
     });
 
-    test('Appointment collector should have correct size in material-based themes', async function(assert) {
-        const origIsMaterialBased = themes.isMaterialBased;
-
-        try {
-            themes.isMaterialBased = () => true;
-
-            const scheduler = await createInstance({
-                currentDate: new Date(2019, 2, 4),
-                views: ['month'],
-                width: 840,
-                height: 500,
-                currentView: 'month',
-                firstDayOfWeek: 1
-            });
-
-            assert.roughEqual(scheduler.appointments.compact.getButtonWidth(), 63, 1, 'Collector width is ok');
-            assert.roughEqual(scheduler.appointments.compact.getButtonHeight(), 20, 1, 'Collector height is ok');
-        } finally {
-            themes.isMaterialBased = origIsMaterialBased;
-        }
-    });
-
     test('DropDown appointment button should have correct coordinates on weekView, not in allDay panel', async function(assert) {
-        const WEEK_VIEW_BUTTON_OFFSET = 5;
+        const WEEK_VIEW_BUTTON_OFFSET = 2;
 
         const scheduler = await createInstance({
             currentDate: new Date(2019, 2, 4),
@@ -361,26 +344,6 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         assert.equal(scheduler.tooltip.getItemCount(), 13, 'There are 13 drop down appts');
     });
 
-    test('Appointment collector should have correct coordinates: rtl mode', async function(assert) {
-        const scheduler = await createInstance({
-            currentDate: new Date(2019, 2, 4),
-            views: ['month'],
-            width: 840,
-            height: 500,
-            currentView: 'month',
-            firstDayOfWeek: 1,
-            rtlEnabled: true
-        });
-        const $collector = scheduler.appointments.compact.getButton(0);
-
-        const collectorCoordinates = translator.locate($collector);
-        const expectedCoordinates = scheduler.workSpace.getCell(7).position();
-        const rtlOffset = scheduler.workSpace.getCell(7).outerWidth() - 36;
-
-        assert.roughEqual(collectorCoordinates.left, expectedCoordinates.left + rtlOffset, 1.001, 'Left coordinate is OK');
-        assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, 'Top coordinate is OK');
-    });
-
     test('Collapsed appointment should raise the onAppointmentClick event', async function(assert) {
         let tooltipItemElement = null;
         let instance;
@@ -487,7 +450,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             textExpr: 'Text',
             height: 490,
             maxAppointmentsPerCell: 'auto',
-            dropDownAppointmentTemplate(data) {
+            appointmentTooltipTemplate({ appointmentData: data }) {
                 return `<div class='custom-title'>${data.Text}</div>`;
             }
         });
@@ -563,10 +526,10 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             textExpr: 'Text',
             height: 500,
             maxAppointmentsPerCell: 'auto',
-            dropDownAppointmentTemplate: 'dropDownAppointmentTemplate',
+            appointmentTooltipTemplate: 'appointmentTooltipTemplate',
             integrationOptions: {
                 templates: {
-                    'dropDownAppointmentTemplate': {
+                    'appointmentTooltipTemplate': {
                         render(args) {
                             const $element = $('<span>')
                                 .addClass('dx-template-wrapper')
@@ -680,7 +643,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         view: 'month',
         expectedNumberOfCollectors: 9,
         expectedText: '5 more',
-        collectorIndex: 3,
+        collectorIndex: 0,
         description: 'Scheduler should render correct number of collectors and pass correct number of appointments to them in month view (T965267)',
     }, {
         dataSource: [{
@@ -815,7 +778,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
         const buttonCoordinates = translator.locate($collector);
         const expectedCoordinates = scheduler.workSpace.getCell(8).position();
 
-        assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left + (scheduler.workSpace.getCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE) / 2, 1.001, 'Left coordinate is OK');
+        assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left + (scheduler.workSpace.getCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE - 2 * ADAPTIVE_COLLECTOR_RIGHT_OFFSET) / 2, 1.001, 'Left coordinate is OK');
         assert.roughEqual(buttonCoordinates.top, expectedCoordinates.top + scheduler.workSpace.getCellHeight() - ADAPTIVE_COLLECTOR_BOTTOM_OFFSET, 1.001, 'Top coordinate is OK');
     });
 
@@ -853,7 +816,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
         const buttonCoordinates = translator.locate($collector);
         const expectedCoordinates = scheduler.workSpace.getAllDayCell(1).position();
 
-        assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left + (scheduler.workSpace.getAllDayCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE) / 2, 1.001, 'Left coordinate is OK');
+        assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left + (scheduler.workSpace.getAllDayCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE - 2 * ADAPTIVE_COLLECTOR_RIGHT_OFFSET) / 2, 1.001, 'Left coordinate is OK');
         assert.roughEqual(buttonCoordinates.top, (scheduler.workSpace.getAllDayCellHeight() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE) / 2, 1.001, 'Top coordinate is OK');
     });
 
@@ -904,7 +867,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
 
         const $appointment = scheduler.appointments.getAppointment(0);
 
-        assert.roughEqual($appointment.outerWidth(), 50, 1.001, 'Width is OK');
+        assert.roughEqual($appointment.outerWidth(), 55.4, 1.001, 'Width is OK');
         assert.roughEqual($appointment.outerHeight(), 50, 1.001, 'Height is OK');
 
         scheduler.instance.option('width', 1000);
@@ -912,10 +875,10 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
         const $firstAppointment = scheduler.appointments.getAppointment(0);
         const $secondAppointment = scheduler.appointments.getAppointment(1);
 
-        assert.roughEqual($firstAppointment.outerWidth(), 46.5, 1.001, 'Width is OK');
+        assert.roughEqual($firstAppointment.outerWidth(), 49.1, 1.001, 'Width is OK');
         assert.roughEqual($firstAppointment.outerHeight(), 50, 1.001, 'Height is OK');
 
-        assert.roughEqual($secondAppointment.outerWidth(), 46.5, 1.001, 'Width is OK');
+        assert.roughEqual($secondAppointment.outerWidth(), 49.1, 1.001, 'Width is OK');
         assert.roughEqual($secondAppointment.outerHeight(), 50, 1.001, 'Height is OK');
     });
 

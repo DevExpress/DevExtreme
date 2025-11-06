@@ -22,7 +22,7 @@ export class Employee {
   Email: string;
 }
 
-const employee : Employee = {
+const employee: Employee = {
   ID: 1,
   FirstName: 'John',
   LastName: 'Heart',
@@ -35,7 +35,7 @@ const employee : Employee = {
   Email: 'jheart@dx-email.com',
 };
 
-const positions : string[] = [
+const positions: string[] = [
   'HR Manager',
   'IT Manager',
   'CEO',
@@ -47,11 +47,11 @@ const positions : string[] = [
 
 @Injectable()
 export class Service {
-  getEmployee() : Employee {
+  getEmployee(): Employee {
     return employee;
   }
 
-  getPositions() : string[] {
+  getPositions(): string[] {
     return positions;
   }
 }

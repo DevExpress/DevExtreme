@@ -7,8 +7,8 @@ import { hasWindow } from '@js/core/utils/window';
 import { DateTableMonthComponent } from '@ts/scheduler/r1/components/index';
 import { formatWeekday, monthUtils } from '@ts/scheduler/r1/utils/index';
 
-import { VIEWS } from '../constants';
 import { utils } from '../m_utils';
+import { VIEWS } from '../utils/options/constants_view';
 import SchedulerWorkSpace from './m_work_space_indicator';
 
 const MONTH_CLASS = 'dx-scheduler-work-space-month';
@@ -128,8 +128,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     return this._getViewStartByOptions();
   }
 
-  scrollToTime() { return noop(); }
-
   renderRAllDayPanel() {}
 
   renderRTimeTable() {}
@@ -171,7 +169,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   _setMonthClassesToCell($cell, data) {
     $cell
       .toggleClass(DATE_TABLE_CURRENT_DATE_CLASS, data.isCurrentDate)
-      .toggleClass(DATE_TABLE_FIRST_OF_MONTH_CLASS, data.firstDayOfMonth)
+      .toggleClass(DATE_TABLE_FIRST_OF_MONTH_CLASS, data.isFirstDayMonthHighlighting)
       .toggleClass(DATE_TABLE_OTHER_MONTH_DATE_CLASS, data.otherMonth);
   }
 

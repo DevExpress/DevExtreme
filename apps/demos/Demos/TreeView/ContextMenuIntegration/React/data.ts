@@ -1,3 +1,5 @@
+import type { Product } from './types';
+
 const menuItems = [
   { id: 'expand', text: 'Expand category' },
   { id: 'collapse', text: 'Collapse category' },
@@ -5,7 +7,7 @@ const menuItems = [
   { id: 'copy', text: 'Copy product info' },
 ];
 
-const products = [{
+const products: Product[] = [{
   id: '1',
   text: 'Stores',
   expanded: true,

@@ -8,7 +8,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+} from '../events';
 
 import {
     ComponentDisabledDate,
@@ -22,6 +22,7 @@ import dxDropDownEditor, {
 
 import {
     ValueChangedInfo,
+    EditorOptionsWithValue,
 } from './editor/editor';
 
 import {
@@ -294,7 +295,10 @@ export interface dxDateBoxOptions extends DateBoxBaseOptions<dxDateBox> {
  * @docid
  * @namespace DevExpress.ui
  */
-export interface DateBoxBaseOptions<TComponent> extends dxDropDownEditorOptions<TComponent> {
+export interface DateBoxBaseOptions<TComponent> extends Omit<
+    dxDropDownEditorOptions<TComponent>,
+    'fieldAddons'
+> {
     /**
      * @docid
      * @default "OK"
@@ -366,7 +370,9 @@ export interface DateBoxBaseOptions<TComponent> extends dxDropDownEditorOptions<
  * @hidden
  * @options DateBoxBaseOptions
  */
-export class DateBoxBase<TProperties = Properties> extends dxDropDownEditor<TProperties> {
+export class DateBoxBase<
+    TProperties extends EditorOptionsWithValue = Properties,
+> extends dxDropDownEditor<TProperties> {
     /**
      * @docid
      * @publicName close()
@@ -393,9 +399,9 @@ export default class dxDateBox extends DateBoxBase<Properties> {
      * @docid
      * @publicName reset(value)
      * @public
-     * @param1 value:Date|number|string|null
+     * @param1 value:Date | number | string | null
      */
-    reset(value?: DateLike): void;
+    reset(value?: Properties['value']): void;
 }
 
 /**

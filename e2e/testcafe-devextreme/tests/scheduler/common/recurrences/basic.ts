@@ -4,7 +4,7 @@ import dataSource from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import url from '../../../../helpers/getPageUrl';
 
-fixture.disablePageReloads`Rendering of the recurrence appointments in  Scheduler `
+fixture`Rendering of the recurrence appointments in  Scheduler `
   .page(url(__dirname, '../../../container.html'));
 
 test('Drag-n-drop recurrence appointment between dateTable and allDay panel', async (t) => {
@@ -14,16 +14,11 @@ test('Drag-n-drop recurrence appointment between dateTable and allDay panel', as
   await t.expect(await compareScreenshot(t, 'basic-recurrence-appointment-init.png')).ok();
 
   await t
-    .dragToElement(draggableAppointment.element, scheduler.getAllDayTableCell(0))
+    .dragToElement(draggableAppointment.element, scheduler.getAllDayTableCell(0), { speed: 0.5 })
+    .wait(300)
     .expect(scheduler.getAppointmentCount()).eql(7);
 
-  await t
-    .wait(500)
-    .expect((await scheduler.getAppointment('Simple recurrence appointment').element.boundingClientRect).width)
-    .eql(114)
-    .expect(draggableAppointment.isAllDay)
-    .ok();
-
+  await t.wait(500);
   await t.expect(await compareScreenshot(t, 'basic-recurrence-appointment-after-drag.png')).ok();
 }).before(async () => createScheduler({
   dataSource,

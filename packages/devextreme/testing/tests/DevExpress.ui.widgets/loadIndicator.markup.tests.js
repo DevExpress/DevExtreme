@@ -10,7 +10,7 @@ import {
     LOADINDICATOR_IMAGE_CLASS,
     LOADINDICATOR_WRAPPER_CLASS,
     ANIMATION_TYPE_CLASSES,
-} from '__internal/ui/m_load_indicator';
+} from '__internal/ui/load_indicator';
 
 import 'ui/load_indicator';
 import 'generic_light.css!';
@@ -108,7 +108,7 @@ QUnit.module('animation type', () => {
     });
 
     QUnit.test('content should not have any animation class if animation type is undefined', function(assert) {
-        const $element = $('#loadIndicator').dxLoadIndicator({ _animationType: undefined });
+        const $element = $('#loadIndicator').dxLoadIndicator({ animationType: undefined });
 
         const $indicatorContent = $element.find(`.${LOADINDICATOR_CONTENT_CLASS}`);
         const classCount = $indicatorContent[0].classList.length || 0;
@@ -118,7 +118,7 @@ QUnit.module('animation type', () => {
 
     QUnit.test('content should have circle animation class in runtime', function(assert) {
         const instance = $('#loadIndicator')
-            .dxLoadIndicator({ _animationType: undefined })
+            .dxLoadIndicator({ animationType: undefined })
             .dxLoadIndicator('instance');
 
         const getContent = () => instance.$element().find(`.${LOADINDICATOR_CONTENT_CLASS}`);
@@ -126,13 +126,13 @@ QUnit.module('animation type', () => {
 
         assert.strictEqual(classCount, 1, 'animation classes has not been added');
 
-        instance.option({ _animationType: 'circle' });
+        instance.option({ animationType: 'circle' });
 
         assert.strictEqual(getContent().hasClass(ANIMATION_TYPE_CLASSES['circle']), true, 'animation class has been added');
     });
 
     QUnit.test('content should have sparkle animation class if animation type is sparkle', function(assert) {
-        const $element = $('#loadIndicator').dxLoadIndicator({ _animationType: 'sparkle' });
+        const $element = $('#loadIndicator').dxLoadIndicator({ animationType: 'sparkle' });
         const $indicatorContent = $element.find(`.${LOADINDICATOR_CONTENT_CLASS}`);
 
         assert.strictEqual($indicatorContent.hasClass(ANIMATION_TYPE_CLASSES['sparkle']), true, 'animation class has been changed');
@@ -141,7 +141,7 @@ QUnit.module('animation type', () => {
     QUnit.test('content should have sparkle animation class in runtime', function(assert) {
         const instance = $('#loadIndicator').dxLoadIndicator().dxLoadIndicator('instance');
 
-        instance.option({ _animationType: 'sparkle' });
+        instance.option({ animationType: 'sparkle' });
 
         const $content = instance.$element().find(`.${LOADINDICATOR_CONTENT_CLASS}`);
 
@@ -149,7 +149,7 @@ QUnit.module('animation type', () => {
     });
 
     QUnit.test('content should have 3 segments if animation type is sparkle', function(assert) {
-        const $element = $('#loadIndicator').dxLoadIndicator({ _animationType: 'sparkle', visible: true });
+        const $element = $('#loadIndicator').dxLoadIndicator({ animationType: 'sparkle', visible: true });
         const $segments = $element.find(`.${LOADINDICATOR_SEGMENT_CLASS}`);
 
         assert.strictEqual($segments.length, 3, '3 segments are rendered');

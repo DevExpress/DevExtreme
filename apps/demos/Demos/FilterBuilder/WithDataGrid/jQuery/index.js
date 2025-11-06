@@ -14,28 +14,9 @@ $(() => {
   });
 
   $('#dataGrid').dxDataGrid({
-    columns: fields,
+    columns,
     showBorders: true,
-    dataSource: {
-      store: {
-        type: 'odata',
-        version: 2,
-        fieldTypes: {
-          Product_Cost: 'Decimal',
-          Product_Sale_Price: 'Decimal',
-          Product_Retail_Price: 'Decimal',
-        },
-        url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
-      },
-      select: [
-        'Product_ID',
-        'Product_Name',
-        'Product_Cost',
-        'Product_Sale_Price',
-        'Product_Retail_Price',
-        'Product_Current_Inventory',
-      ],
-    },
+    dataSource: products,
     filterValue: filter,
     height: 300,
   });

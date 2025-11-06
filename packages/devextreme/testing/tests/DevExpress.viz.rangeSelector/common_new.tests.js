@@ -1,12 +1,14 @@
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
-import rendererModule from 'viz/core/renderers/renderer';
+import {
+    Renderer,
+    stubClass,
+} from '../../helpers/vizMocks.js';
+import rendererModule from 'viz/core/renderers/renderer_default';
 import axisModule from 'viz/axes/base_axis';
 import translator2DModule from 'viz/translators/translator2d';
-import errors from 'core/errors.js';
-import 'viz/range_selector/range_selector';
+import '__internal/viz/range_selector/range_selector';
 
-const StubAxis = vizMocks.stubClass(axisModule.Axis);
+const StubAxis = stubClass(axisModule.Axis);
 
 QUnit.testStart(function() {
     const markup =
@@ -24,7 +26,7 @@ QUnit.module('RangeSelector', {
     beforeEach: function() {
         const that = this;
         this.$container = $('#test-container');
-        const renderer = this.renderer = new vizMocks.Renderer();
+        const renderer = this.renderer = new Renderer();
         rendererModule.Renderer = function() { return renderer; };
         this.axis = new StubAxis();
         this.axis.stub('getVisibleArea').returns([]);
@@ -41,7 +43,7 @@ QUnit.module('RangeSelector', {
 });
 
 // T347971
-QUnit.test('Empty scale is drawn with compact height when \'dataSource\' is defined and \'chart\' is not', function(assert) {
+QUnit.test('Empty scale is drawn with compact height when dataSource is defined and chart is not', function(assert) {
     this.$container.dxRangeSelector({
         dataSource: []
     });
@@ -52,7 +54,7 @@ QUnit.test('Empty scale is drawn with compact height when \'dataSource\' is defi
 });
 
 // T347971
-QUnit.test('Empty scale is drawn with full height when \'dataSource\' is not defined and \'chart\' is', function(assert) {
+QUnit.test('Empty scale is drawn with full height when dataSource is not defined and chart is', function(assert) {
     this.$container.dxRangeSelector({
         chart: {
             series: {}
@@ -65,7 +67,7 @@ QUnit.test('Empty scale is drawn with full height when \'dataSource\' is not def
 });
 
 // T347971
-QUnit.test('There is no unexpected incident when \'chart.series\' array is empty', function(assert) {
+QUnit.test('There is no unexpected incident when chart.series array is empty', function(assert) {
     const spy = sinon.spy();
     this.$container.dxRangeSelector({
         dataSource: [],
@@ -79,7 +81,7 @@ QUnit.test('There is no unexpected incident when \'chart.series\' array is empty
 });
 
 // T347293
-QUnit.test('There is no error when \'dataSource\' is an empty array and scale is discrete datetime', function(assert) {
+QUnit.test('There is no error when dataSource is an empty array and scale is discrete datetime', function(assert) {
     const translator = this.axis.getTranslator();
     translator.updateBusinessRange({});
 

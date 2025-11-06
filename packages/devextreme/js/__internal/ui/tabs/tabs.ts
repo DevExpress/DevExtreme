@@ -14,18 +14,23 @@ import { each } from '@js/core/utils/iterator';
 import { getHeight, getOuterWidth, getWidth } from '@js/core/utils/size';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import type { DxEvent, ItemInfo } from '@js/events';
+import type { DxEvent } from '@js/events';
+import type { Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
-// eslint-disable-next-line import/no-named-default
-import { default as CollectionWidget } from '@js/ui/collection/ui.collection_widget.live_update';
+import CollectionWidgetLiveUpdate from '@js/ui/collection/ui.collection_widget.live_update';
 import type {
   Item,
-  Orientation, Properties, TabsIconPosition, TabsStyle,
+  Orientation,
+  Properties,
+  TabsIconPosition,
+  TabsStyle,
 } from '@js/ui/tabs';
 import { current as currentTheme, isFluent, isMaterial } from '@js/ui/themes';
-import { render } from '@js/ui/widget/utils.ink_ripple';
+import { render } from '@ts/core/utils/m_ink_ripple';
 import type { OptionChanged } from '@ts/core/widget/types';
-import Scrollable from '@ts/ui/scroll_view/m_scrollable';
+import type { CollectionItemInfo, InkRippleEvent } from '@ts/ui/collection/collection_widget.base';
+import type { CollectionWidgetLiveUpdateProperties } from '@ts/ui/collection/collection_widget.live_update';
+import Scrollable from '@ts/ui/scroll_view/scrollable';
 import {
   isReachedBottom, isReachedLeft, isReachedRight, isReachedTop,
 } from '@ts/ui/scroll_view/utils/get_boundary_props';
@@ -123,25 +128,18 @@ const STYLING_MODE: Record<TabsStyle, TabsStyle> = {
   secondary: 'secondary',
 };
 
-export interface TabsProperties extends Properties {
-  selectionRequired?: boolean;
-
-  selectOnFocus?: boolean;
-
-  loopItemFocus?: boolean;
-
+export interface TabsProperties extends Properties, Omit<
+  CollectionWidgetLiveUpdateProperties<TabsProperties>,
+  keyof Properties
+> {
   useInkRipple?: boolean;
 
   badgeExpr?: (data) => string | undefined;
 
-  _itemAttributes?: Record<string, unknown>;
-
   _indicatorPosition?: Position | null;
-
-  focusedElement?: dxElementWrapper;
 }
 
-class Tabs extends CollectionWidget<TabsProperties> {
+class Tabs extends CollectionWidgetLiveUpdate<TabsProperties> {
   static ItemClass = TabsItem;
 
   _scrollable?: Scrollable | null;
@@ -154,6 +152,14 @@ class Tabs extends CollectionWidget<TabsProperties> {
   _rightButton?: Button | null;
 
   _$wrapper!: dxElementWrapper;
+
+  protected _activeStateUnit(): string {
+    return `.${TABS_ITEM_CLASS}`;
+  }
+
+  protected _feedbackHideTimeout(): number {
+    return FEEDBACK_HIDE_TIMEOUT;
+  }
 
   _getDefaultOptions(): TabsProperties {
     return {
@@ -233,7 +239,6 @@ class Tabs extends CollectionWidget<TabsProperties> {
 
     super._init();
 
-    this._activeStateUnit = `.${TABS_ITEM_CLASS}`;
     this.setAria('role', 'tablist');
     this.$element().addClass(TABS_CLASS);
     this._toggleScrollingEnabledClass(scrollingEnabled);
@@ -243,8 +248,6 @@ class Tabs extends CollectionWidget<TabsProperties> {
     this._toggleStylingModeClass(stylingMode);
     this._renderWrapper();
     this._renderMultiple();
-
-    this._feedbackHideTimeout = FEEDBACK_HIDE_TIMEOUT;
   }
 
   _prepareDefaultItemTemplate(data: Item, $container: dxElementWrapper): void {
@@ -433,13 +436,9 @@ class Tabs extends CollectionWidget<TabsProperties> {
   _toggleActiveState(
     $element: dxElementWrapper,
     value: boolean,
-    e: Record<string, unknown>,
+    event: InkRippleEvent,
   ): void {
-    super._toggleActiveState(
-      $element,
-      value,
-      e,
-    );
+    super._toggleActiveState($element, value, event);
 
     if (!this._inkRipple) {
       return;
@@ -447,7 +446,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
 
     const config = {
       element: $element,
-      event: e,
+      event,
     };
 
     if (value) {
@@ -492,13 +491,13 @@ class Tabs extends CollectionWidget<TabsProperties> {
 
   _renderScrollable(): void {
     const $itemContainer = this.$element().wrapInner($('<div>').addClass(TABS_SCROLLABLE_CLASS)).children();
-
+    const { scrollByContent } = this.option();
     this._scrollable = this._createComponent($itemContainer, Scrollable, {
       direction: this._getScrollableDirection(),
       showScrollbar: 'never',
       useKeyboard: false,
       useNative: false,
-      scrollByContent: this.option('scrollByContent'),
+      scrollByContent,
       onScroll: () => {
         this._updateNavButtonsState();
       },
@@ -507,10 +506,18 @@ class Tabs extends CollectionWidget<TabsProperties> {
     this.$element().append(this._scrollable.$element());
   }
 
-  _scrollToItem(item: dxElementWrapper | undefined): void {
+  _scrollToItem(item: Element | undefined | null): void {
     if (!this._scrollable) return;
     const $item = this._editStrategy.getItemElement(item);
     this._scrollable.scrollToElement($item);
+  }
+
+  _itemPointerHandler(e: DxEvent): void {
+    this._handleItemFocus(e);
+  }
+
+  _itemPointerUpHandler(e: DxEvent): void {
+    super._itemPointerHandler(e);
   }
 
   _renderNavButtons(): void {
@@ -588,9 +595,10 @@ class Tabs extends CollectionWidget<TabsProperties> {
     const pointerUpEventName = addNamespace(pointerEvents.up, 'dxNavButton');
     const pointerOutEventName = addNamespace(pointerEvents.out, 'dxNavButton');
 
-    const navButton = this._createComponent($('<div>').addClass(TABS_NAV_BUTTON_CLASS), Button, {
+    const navButton = this._createComponent<Button, ButtonProperties>($('<div>').addClass(TABS_NAV_BUTTON_CLASS), Button, {
       focusStateEnabled: false,
       icon,
+      // @ts-expect-error
       integrationOptions: {},
       elementAttr: {
         role: null,
@@ -645,7 +653,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
   }
 
   _enterKeyHandler(
-    e: KeyboardEvent,
+    e: DxEvent<KeyboardEvent>,
   ): void {
     const { focusedElement } = this.option();
 
@@ -768,7 +776,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
       .toggleClass(FOCUSED_DISABLED_PREV_TAB_CLASS, isPrevDisabled);
   }
 
-  _toggleFocusedDisabledClasses(value: dxElementWrapper | undefined): void {
+  _toggleFocusedDisabledClasses(value: dxElementWrapper): void {
     const { selectedIndex: currentIndex } = this.option();
 
     this._itemElements()
@@ -778,7 +786,6 @@ class Tabs extends CollectionWidget<TabsProperties> {
     const prevItemIndex = currentIndex - 1;
     // @ts-expect-error ts-error
     const nextItemIndex = currentIndex + 1;
-
     const nextFocusedIndex = $(value).index();
 
     const isNextDisabled = this._itemElements().eq(nextItemIndex).hasClass(STATE_DISABLED_CLASS);
@@ -832,11 +839,9 @@ class Tabs extends CollectionWidget<TabsProperties> {
         this._invalidate();
         break;
       case 'focusedElement': {
-        type PropertyType = TabsProperties[typeof name];
-
-        this._toggleFocusedDisabledClasses(value as PropertyType);
+        this._toggleFocusedDisabledClasses($(value));
         super._optionChanged(args);
-        this._scrollToItem(value as PropertyType);
+        this._scrollToItem(value);
         break;
       }
       case 'rtlEnabled': {
@@ -890,7 +895,10 @@ class Tabs extends CollectionWidget<TabsProperties> {
     this._planPostRenderActions();
   }
 
-  _afterItemElementDeleted($item: dxElementWrapper, deletedActionArgs: ItemInfo<Item>): void {
+  _afterItemElementDeleted(
+    $item: dxElementWrapper,
+    deletedActionArgs: CollectionItemInfo<Item, number>,
+  ): void {
     super._afterItemElementDeleted($item, deletedActionArgs);
     this._renderScrolling();
   }

@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
-import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../helpers/domUtils';
+import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
 import url from '../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Offset: Markup recurrent appointments`
@@ -83,6 +83,7 @@ const getViewWithCorrectCellDuration = (
   }
 };
 
+// TODO(10): Fix view model. Appointment with offset can crops and doesn't render
 [
   { views: [{ type: 'day', cellDuration: 60, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS },
   { views: [{ type: 'week', cellDuration: 60, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS },
@@ -150,9 +151,6 @@ first day: ${views[0].firstDayOfWeek}
             startDayHour,
             endDayHour,
           });
-        })
-        .after(async () => {
-          await removeStylesheetRulesFromPage();
         });
     });
   });
@@ -325,9 +323,6 @@ end: ${endDayHour}
         startDayHour,
         endDayHour,
       });
-    })
-      .after(async () => {
-        await removeStylesheetRulesFromPage();
-      });
+    });
   });
 });

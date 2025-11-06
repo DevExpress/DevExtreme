@@ -1,7 +1,7 @@
 import type { DataSource, LoadResult } from '@js/common/data';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
-import type { ReadonlySignal } from '@preact/signals-core';
+import type { ReadonlySignal } from '@ts/core/state_manager/index';
 
 import { deferredCache } from '../deferred_cache';
 import type { InternalLoadOptions, OperationOptions } from '../types';

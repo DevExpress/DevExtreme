@@ -11,7 +11,7 @@ const App = () => {
   const [pageIndex, setPageIndex] = useState(1);
 
   return (
-    <>
+    <React.Fragment>
       <EmployeeGallery
         employees={employees}
         pageSize={pageSize}
@@ -27,7 +27,7 @@ const App = () => {
         onPageIndexChange={setPageIndex}
         onPageSizeChange={setPageSize}
       />
-    </>
+    </React.Fragment>
   );
 };
 

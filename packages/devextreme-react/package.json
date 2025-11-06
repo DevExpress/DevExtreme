@@ -7,13 +7,14 @@
     "type": "git",
     "url": "https://github.com/DevExpress/devextreme-react.git"
   },
+  "sideEffects": false,
   "main": "./cjs/index.js",
   "module": "./esm/index.js",
   "types": "./cjs/index.d.ts",
   "scripts": {
     "clean": "gulp clean",
     "regenerate": "pnpm run clean && gulp generate",
-    "lint": "eslint --ignore-pattern __tests__ src/core",
+    "lint": "eslint src/core",
     "pack": "gulp npm.pack",
     "test": "jest"
   },
@@ -70,8 +71,6 @@
     "@types/react-dom": "~18.0.0",
     "del": "3.0.0",
     "devextreme-metadata": "workspace:*",
-    "eslint-config-airbnb-base": "15.0.0",
-    "eslint-config-devextreme": "1.1.5",
     "gulp": "4.0.2",
     "gulp-header": "2.0.9",
     "gulp-shell": "0.8.0",
@@ -81,11 +80,13 @@
     "react-dom": "18.0.0",
     "ts-jest": "29.1.3",
     "typescript": "4.9.5",
-    "eslint": "catalog:eslint8",
-    "eslint-config-airbnb-typescript": "catalog:eslint8",
-    "eslint-plugin-import": "catalog:eslint8",
-    "@typescript-eslint/eslint-plugin": "catalog:eslint8",
-    "@typescript-eslint/parser": "catalog:eslint8"
+    "eslint": "catalog:",
+    "eslint-config-airbnb-base": "15.0.0",
+    "eslint-config-airbnb-typescript": "catalog:",
+    "eslint-plugin-import": "catalog:",
+    "@typescript-eslint/eslint-plugin": "catalog:",
+    "@typescript-eslint/parser": "catalog:",
+    "eslint-config-devextreme": "1.1.6"
   },
   "publishConfig": {
     "directory": "npm",

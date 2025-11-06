@@ -20,6 +20,7 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-tree-list-string-length-rule',
@@ -27,7 +28,13 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_validationRules,
+           useExisting: DxiTreeListStringLengthRuleComponent,
+        }
+    ]
 })
 export class DxiTreeListStringLengthRuleComponent extends CollectionNestedOption {
     @Input()
@@ -89,6 +96,8 @@ export class DxiTreeListStringLengthRuleComponent extends CollectionNestedOption
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        this.type = 'stringLength';
+    
     }
 
 

@@ -1,12 +1,10 @@
 import { getWidth } from 'core/utils/size';
 import $ from 'jquery';
 import 'ui/form';
-import '__internal/ui/form/m_form.layout_manager';
-import { renderLabel } from '__internal/ui/form/components/m_label';
+import '__internal/ui/form/form.layout_manager';
+import { renderLabel } from '__internal/ui/form/components/label';
 import { TABPANEL_CONTAINER_CLASS } from '__internal/ui/tab_panel/tab_panel';
 import { TABS_ITEM_CLASS } from '__internal/ui/tabs/tabs';
-
-import 'generic_light.css!';
 
 const FORM_LAYOUT_MANAGER_CLASS = 'dx-layout-manager';
 const FIELD_ITEM_LABEL_CONTENT_CLASS = 'dx-field-item-label-content';
@@ -2057,19 +2055,19 @@ module('Align labels', () => {
             }]
         });
 
-        testWrapper.setItemOption('title1.group1.description', 'visible', false);
+        testWrapper.setItemOption('title1.group2.description', 'visible', false);
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 0, etalonLabelText: 'Home Address' });
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 1, etalonLabelText: 'Last Name' });
 
-        testWrapper.setItemOption('title1.group1.homeAddress', 'visible', false);
+        testWrapper.setItemOption('title1.group2.homeAddress', 'visible', false);
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 0, etalonLabelText: 'Name' });
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 1, etalonLabelText: 'Last Name' });
 
-        testWrapper.setItemOption('title1.group1.description', 'visible', true);
+        testWrapper.setItemOption('title1.group2.description', 'visible', true);
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 0, etalonLabelText: 'Description' });
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 1, etalonLabelText: 'Last Name' });
 
-        testWrapper.setItemOption('title1.group1.homeAddress', 'visible', true);
+        testWrapper.setItemOption('title1.group2.homeAddress', 'visible', true);
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 0, etalonLabelText: 'Description' });
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 1, etalonLabelText: 'Home Address' });
     });

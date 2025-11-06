@@ -12,15 +12,18 @@ $(() => {
         fieldExpr: 'roomId',
         dataSource: rooms,
         label: 'Room',
+        icon: 'conferenceroomoutline',
       }, {
         fieldExpr: 'priorityId',
         dataSource: priorities,
         label: 'Priority',
+        icon: 'tags',
       }, {
         fieldExpr: 'assigneeId',
         allowMultiple: true,
         dataSource: assignees,
         label: 'Assignee',
+        icon: 'user',
       }],
     height: 600,
   }).dxScheduler('instance');
@@ -32,11 +35,10 @@ $(() => {
     onValueChanged(e) {
       const resources = scheduler.option('resources');
 
-      for (let i = 0; i < resources.length; i += 1) {
-        resources[i].useColorAsDefault = resources[i].label === e.value;
-      }
-
-      scheduler.repaint();
+      scheduler.option('resources', resources.map((resource) => ({
+        ...resource,
+        useColorAsDefault: resource.label === e.value,
+      })));
     },
   });
 });

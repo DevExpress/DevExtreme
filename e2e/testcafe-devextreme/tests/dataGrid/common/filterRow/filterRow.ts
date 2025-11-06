@@ -3,9 +3,9 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTextBox';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
-import { changeTheme } from '../../../../helpers/changeTheme';
 import { getNumberData, getData } from '../../helpers/generateDataSourceData';
 import { Themes } from '../../../../helpers/themes';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`FilterRow`
   .page(url(__dirname, '../../../container.html'));
@@ -57,29 +57,22 @@ test('Filter row\'s height should be adjusted by content (T1072609)', async (t) 
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await testScreenshot(t, takeScreenshot, 'T1072609.png', { element: dataGrid.element, theme: Themes.materialBlue });
   await t
-    .expect(await takeScreenshot('T1072609-material.blue.light', dataGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
-  await changeTheme('material.blue.light');
-
-  return createWidget('dxDataGrid', {
-    columns: [{
-      dataField: 'Date',
-      dataType: 'date',
-      width: 140,
-      selectedFilterOperation: 'between',
-      filterValue: [new Date(2022, 2, 28), new Date(2022, 2, 29)],
-    }],
-    filterRow: { visible: true },
-    wordWrapEnabled: true,
-    showBorders: true,
-  });
-}).after(async () => {
-  await changeTheme('generic.light');
-});
+}).before(async () => createWidget('dxDataGrid', {
+  columns: [{
+    dataField: 'Date',
+    dataType: 'date',
+    width: 140,
+    selectedFilterOperation: 'between',
+    filterValue: [new Date(2022, 2, 28), new Date(2022, 2, 29)],
+  }],
+  filterRow: { visible: true },
+  wordWrapEnabled: true,
+  showBorders: true,
+}));
 
 test('FilterRow range overlay screenshot', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -89,9 +82,11 @@ test('FilterRow range overlay screenshot', async (t) => {
   await t
     .click(filterEditor.menuButton);
   await t
-    .click(filterEditor.menu.getItemByText('Between'))
-    // act
-    .expect(await takeScreenshot('filter-row-overlay.png', dataGrid.element))
+    .click(filterEditor.menu.getItemByText('Between'));
+  // act
+  await testScreenshot(t, takeScreenshot, 'filter-row-overlay.png', { element: dataGrid.element });
+  await t
+    .expect(compareResults.isValid())
     .ok()
     // assert
     .expect(dataGrid.getFilterRangeOverlay().exists)
@@ -170,29 +165,23 @@ test('Focus overlay should be visible in filter row when focusedRowEnabled is en
     .click(filterEditor.input)
     // assert
     .expect(filterEditor.input.focused)
-    .ok()
-    .expect(await takeScreenshot(`filter-row-focus-overlay (${Themes.fluentBlue}).png`, dataGrid.element))
-    .ok()
+    .ok();
+  await testScreenshot(t, takeScreenshot, 'filter-row-focus-overlay.png', { element: dataGrid.element, theme: Themes.fluentBlue });
+  await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
-  await changeTheme(Themes.fluentBlue);
-
-  return createWidget('dxDataGrid', {
-    dataSource: [
-      { ID: 1, Field: 'Item 1' },
-      { ID: 2, Field: 'Item 2' },
-      { ID: 3, Field: 'Item 3' },
-    ],
-    keyExpr: 'ID',
-    focusedRowEnabled: true,
-    filterRow: { visible: true },
-    showBorders: true,
-    columns: ['ID', 'Field'],
-  });
-}).after(async () => {
-  await changeTheme('generic.light');
-});
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { ID: 1, Field: 'Item 1' },
+    { ID: 2, Field: 'Item 2' },
+    { ID: 3, Field: 'Item 3' },
+  ],
+  keyExpr: 'ID',
+  focusedRowEnabled: true,
+  filterRow: { visible: true },
+  showBorders: true,
+  columns: ['ID', 'Field'],
+}));
 
 test('DataGrid - NVDA reads filter menu items as "Search box 1 of 8" (T1290386)', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -237,10 +226,9 @@ test('DataGrid - The `between` filter dropdown sticks to the viewport edge durin
     .click(filterEditor.menuButton)
     .click(filterEditor.menu.getItemByText('Between'));
 
-  await dataGrid.scrollBy({ x: 999 });
+  await dataGrid.scrollBy(t, { x: 999 });
+  await testScreenshot(t, takeScreenshot, 'filter-row-filter-range-hide-on-scroll.png');
   await t
-    .expect(await takeScreenshot('filter-row-filter-range-hide-on-scroll.png', dataGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -259,3 +247,37 @@ test('DataGrid - The `between` filter dropdown sticks to the viewport edge durin
   columnWidth: 400,
   width: 500,
 }));
+
+// T1290381
+test('DataGrid - filter row\'s search-box\'s aria-label should be customizable via localization', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const filterEditor = dataGrid.getFilterEditor(0, FilterTextBox);
+
+  await dataGrid.isReady();
+
+  const ariaLabel = await filterEditor.menuButton.getAttribute('aria-label');
+
+  await t
+    .expect(ariaLabel)
+    .eql('custom text');
+}).before(async (t) => {
+  await t.eval(() => {
+    (window as any).DevExpress.localization.loadMessages({
+      en: {
+        'dxDataGrid-ariaSearchBox': 'custom text',
+      },
+    });
+  });
+
+  return createWidget('dxDataGrid', {
+    columns: [{
+      dataField: 'test',
+      dataType: 'string',
+    }],
+    filterRow: {
+      visible: true,
+    },
+  });
+}).after(async (t) => {
+  await t.eval(() => location.reload());
+});

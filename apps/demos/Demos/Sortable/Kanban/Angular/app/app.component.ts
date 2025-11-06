@@ -27,7 +27,7 @@ export class AppComponent {
 
   statuses = ['Not Started', 'Need Assistance', 'In Progress', 'Deferred', 'Completed'];
 
-  employees: Record<'ID', Employee> | {} = {};
+  employees: Record<'ID', Employee> = {};
 
   constructor(service: Service) {
     const tasks = service.getTasks();

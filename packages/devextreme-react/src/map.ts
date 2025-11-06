@@ -51,7 +51,7 @@ const Map = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["center","markers","routes","zoom"]), []);
       const independentEvents = useMemo(() => (["onClick","onDisposing","onInitialized","onMarkerAdded","onMarkerRemoved","onReady","onRouteAdded","onRouteRemoved"]), []);

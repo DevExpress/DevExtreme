@@ -1,8 +1,8 @@
 import React, { useCallback, useRef, useState } from 'react';
-import Scheduler, { Resource } from 'devextreme-react/scheduler';
-import ContextMenu from 'devextreme-react/context-menu';
-import { data, resourcesData } from './data.js';
+import { Scheduler, Resource } from 'devextreme-react/scheduler';
+import { ContextMenu } from 'devextreme-react/context-menu';
 import AppointmentMenuTemplate from './AppointmentTemplate.js';
+import { data, resourcesData } from './data.js';
 
 const views = ['day', 'month'];
 const appointmentClassName = '.dx-scheduler-appointment';
@@ -123,6 +123,7 @@ const App = () => {
           dataSource={resourcesData}
           fieldExpr="roomId"
           label="Room"
+          icon="conferenceroomoutline"
         />
       </Scheduler>
       <ContextMenu

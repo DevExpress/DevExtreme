@@ -1,2 +1,13 @@
-If&nbsp;your data contains an&nbsp;error or&nbsp;measurement uncertainty, you can indicate a&nbsp;confidential interval on&nbsp;the Chart using error bars. To&nbsp;configure them, use the fields of&nbsp;the series&rsquo; **valueErrorBar** object. In&nbsp;this example, error bars indicate a&nbsp;range of&nbsp;average temperatures (on&nbsp;the upper pane) and humidity (on&nbsp;the lower pane) for a&nbsp;specific month.
+DevExtreme Chart supports value error bars. These bars indicate data measurement tolerances and [confidence intervals](https://en.wikipedia.org/wiki/Confidence_interval). Use the **series**.[valueErrorBar](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/valueErrorBar/) object to configure error bar settings and appearance.
+
 <!--split-->
+
+To display error bars, specify one of the following pairs of **valueErrorBar** properties:
+
+- [lowValueField](Documentation/ApiReference/UI_Components/dxChart/Configuration/series/valueErrorBar/#lowValueField) and [highValueField](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/valueErrorBar/#highValueField)    
+Bind fields that contain error values for each series point.
+
+- [value](Documentation/ApiReference/UI_Components/dxChart/Configuration/series/valueErrorBar/#value) and [type](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/valueErrorBar/#type)    
+Calculate error bar values based on series data points.
+
+This demo implements predefined error bars specified in the Chart data source.

@@ -270,6 +270,11 @@ export type FirstDayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
  */
 export type Format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime';
 
+export type VersionAssertion = {
+  packageName: string;
+  version: string;
+};
+
 /**
  * @docid
  * @section commonObjectStructures
@@ -278,6 +283,7 @@ export type Format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential'
  * @type object
  */
 export type GlobalConfig = {
+  versionAssertions?: VersionAssertion[];
   /**
    * @docid
    * @default "."
@@ -298,6 +304,12 @@ export type GlobalConfig = {
    * @public
    */
   defaultUseCurrencyAccountingStyle?: boolean;
+  /**
+   * @docid
+   * @default true
+   * @public
+   */
+  copyStylesToShadowDom?: boolean;
   /**
    * @docid
    * @default undefined
@@ -361,10 +373,6 @@ export type GlobalConfig = {
    * @deprecated Attention! This field is not documented and should only be specified in a limited number of use cases. For more information, please submit a ticket to our Support Center.
    */
   pointerEventStrategy?: 'mouse-and-touch' | 'mouse' | 'touch';
-  /**
-   * @deprecated Attention! This field is not documented and should only be specified in a limited number of use cases. For more information, please submit a ticket to our Support Center.
-   */
-  timezones?: unknown[];
   /**
    * @docid
    * @default false

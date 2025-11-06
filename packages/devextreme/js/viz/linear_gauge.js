@@ -1,2 +1,2 @@
-import LinearGauge from './gauges/linear_gauge';
+import LinearGauge from '../__internal/viz/gauges/linear_gauge';
 export default LinearGauge;

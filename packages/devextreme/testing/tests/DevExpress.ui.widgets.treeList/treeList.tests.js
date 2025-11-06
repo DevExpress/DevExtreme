@@ -24,7 +24,6 @@ import TreeList from '__internal/grids/tree_list/m_widget';
 import pointerMock from '../../helpers/pointerMock.js';
 import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
 import { createEvent } from 'common/core/events/utils/index';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 fx.off = true;
 
@@ -264,10 +263,6 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
 
 
     QUnit.testInActiveWindow('Ctrl + left/right keys should collapse/expand row', function(assert) {
-        if(shouldSkipOnMobile(assert, 'keyboard navigation is disabled for non-desktop devices')) {
-            return;
-        }
-
         const treeList = createTreeList({
             columns: ['name', 'age'],
             dataSource: [
@@ -300,10 +295,6 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
 
     // T917248
     QUnit.testInActiveWindow('Row should be selected via space key press on check box', function(assert) {
-        if(shouldSkipOnMobile(assert, 'keyboard navigation is disabled for non-desktop devices')) {
-            return;
-        }
-
         const treeList = createTreeList({
             columns: ['name', 'age'],
             dataSource: [
@@ -1174,8 +1165,10 @@ QUnit.module('Option Changed', defaultModuleConfig, () => {
         assert.strictEqual($rowElements.eq(2).children().first().text(), '4', 'third node - first cell text');
 
         const $expandIcon = $rowElements.eq(2).children().first().find('.dx-treelist-collapsed');
+        const $checkbox = $expandIcon.next().children().eq(0);
+
         assert.strictEqual($expandIcon.length, 1, 'third node has an expand icon');
-        assert.ok($expandIcon.next().hasClass('dx-select-checkbox'), 'third node has a select checkbox');
+        assert.ok($checkbox.hasClass('dx-select-checkbox'), 'third node has a select checkbox');
     });
 
     // T861052

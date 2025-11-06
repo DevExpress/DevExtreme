@@ -1,5 +1,3 @@
-<!-- eslint-disable vue/max-len -->
-
 <template>
   <div class="custom_markup_container">
     <svg
@@ -8,12 +6,12 @@
       height="420px"
     >
       <path
-          d="M 0 0 L 820 0 L 820 420 L 0 420 L 0 0"
-          stroke="#999999"
-          stroke-width="1"
-          stroke-linecap="butt"
-          fill="white"
-          stroke-linejoin="miter"
+        d="M 0 0 L 820 0 L 820 420 L 0 420 L 0 0"
+        stroke="#999999"
+        stroke-width="1"
+        stroke-linecap="butt"
+        fill="white"
+        stroke-linejoin="miter"
       />
       <path
         d="M 13 407 L 128 407 L 232 39 L 13 39"
@@ -26,7 +24,11 @@
       />
       <text
         transform="translate(30,89)"
-        style="fill: #fff; font-family: 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif; font-size: 36px; font-weight: bold;"
+        :style="{ fill: '#fff',
+                  fontFamily: fontFamily,
+                  fontSize: '36px',
+                  fontWeight: 'bold',
+        }"
       >
         <tspan
           x="0"
@@ -43,7 +45,11 @@
       </text>
       <text
         transform="translate(32,199)"
-        style="opacity: 0.8; fill: #fff; font-family: 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif; font-size: 14px;"
+        :style="{ opacity: '0.8',
+                  fill: '#fff',
+                  fontFamily: fontFamily,
+                  fontSize: '14px'
+        }"
       >
         <tspan
           x="0"
@@ -59,8 +65,9 @@
 </template>
 <script setup lang="ts">
 
+const fontFamily = "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif";
 defineExpose({
-  getMarkup() {
+  getMarkup(): string {
     // @ts-ignore
     return this.$el.innerHTML;
   },

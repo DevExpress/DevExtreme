@@ -240,7 +240,6 @@ namespace Runner.Controllers
             m.NoJQuery = q.ContainsKey("nojquery");
             m.ShadowDom = q.ContainsKey("shadowDom");
             m.WorkerInWindow = q.ContainsKey("workerinwindow");
-            m.NoRenovation = q.ContainsKey("norenovation") || false;
             m.NoCsp = q.ContainsKey("nocsp") || false;
         }
 

@@ -1,14 +1,14 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { makeRowsViewTemplatesAsync } from '../helpers/asyncTemplates';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 const DATA_GRID_SELECTOR = '#container';
 
-fixture`FixedColumns`
+fixture.disablePageReloads`FixedColumns`
   .page(url(__dirname, '../../container.html'));
 
 // T1156153
@@ -151,7 +151,7 @@ test('Hovering over a row should work correctly when there is a fixed column and
   await t.hover(firstDataRow.element);
 
   // assert
-  await takeScreenshot('T1148937-grid-hover-row-1.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1148937-grid-hover-row-1.png', { element: dataGrid.element });
 
   await t
     .expect(firstDataRow.isHovered)
@@ -163,7 +163,7 @@ test('Hovering over a row should work correctly when there is a fixed column and
   await t.hover(secondFixedDataRow.element);
 
   // assert
-  await takeScreenshot('T1148937-grid-hover-row-2.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1148937-grid-hover-row-2.png', { element: dataGrid.element });
 
   await t
     .expect(secondDataRow.isHovered)
@@ -216,21 +216,23 @@ test('Hovering over a row should work correctly when there is a fixed column and
 });
 
 // T1177143
-safeSizeTest('Fixed to the right columns should appear when any column has undefined or 0 width', async (t) => {
+test.meta({ browserSize: [800, 800] })('Fixed to the right columns should appear when any column has undefined or 0 width', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await t.expect(dataGrid.isReady()).ok();
+
   // act
-  await takeScreenshot('T1177143-right-fixed-column-with-no-width-columns-1.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1177143-right-fixed-column-with-no-width-columns-1.png', { element: dataGrid.element });
 
   await dataGrid.scrollTo(t, { x: 5000 });
 
-  await takeScreenshot('T1177143-right-fixed-column-with-no-width-columns-2.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1177143-right-fixed-column-with-no-width-columns-2.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   columnAutoWidth: false,
   dataSource: [{
     Column1: 'a',
@@ -277,7 +279,7 @@ test('Hovering over a row should work correctly after scrolling when there is a 
   await t.hover(dataRow.element);
 
   // assert
-  await takeScreenshot('T1180834-grid-hover-row-after-scrolling-1.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1180834-grid-hover-row-after-scrolling-1.png', { element: dataGrid.element });
 
   await t
     .expect(dataRow.isHovered)
@@ -293,7 +295,7 @@ test('Hovering over a row should work correctly after scrolling when there is a 
   // assert
   fixedDataRow = dataGrid.getDataRow(10);
 
-  await takeScreenshot('T1180834-grid-hover-row-after-scrolling-2.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1180834-grid-hover-row-after-scrolling-2.png', { element: dataGrid.element });
 
   await t
     .expect(dataRow.isHovered)
@@ -328,6 +330,7 @@ test('Hovering over a row should work correctly after scrolling when there is a 
     },
     scrolling: {
       useNative: false,
+      showScrollbar: 'never',
       rowRenderingMode: 'virtual',
     },
     showBorders: true,
@@ -337,7 +340,7 @@ test('Hovering over a row should work correctly after scrolling when there is a 
 });
 
 // T1193153
-safeSizeTest('The grid layout should be correct after resizing the window when there are fixed and band columns', async (t) => {
+test.meta({ browserSize: [800, 800] })('The grid layout should be correct after resizing the window when there are fixed and band columns', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -348,15 +351,15 @@ safeSizeTest('The grid layout should be correct after resizing the window when t
     .ok();
 
   // act
-  await takeScreenshot('T1193153-layout-with-fixed-and-band-columns-1.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1193153-layout-with-fixed-and-band-columns-1.png', { element: dataGrid.element });
   await t.resizeWindow(400, 400);
-  await takeScreenshot('T1193153-layout-with-fixed-and-band-columns-2.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1193153-layout-with-fixed-and-band-columns-2.png', { element: dataGrid.element });
 
   // assert
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   columnAutoWidth: true,
   dataSource: [{}],
   columnFixing: {
@@ -436,3 +439,212 @@ test('DataGrid - Group summary is not updated when a column is fixed on the righ
     },
   ],
 }));
+
+const mockCountries = [
+  {
+    ID: 1,
+    Country: 'Brazil',
+    Area: 8515767,
+    Population_Urban: 0.85,
+    Population_Rural: 0.15,
+    Population_Total: 205809000,
+    GDP_Agriculture: 0.054,
+    GDP_Industry: 0.274,
+    GDP_Services: 0.672,
+    GDP_Total: 2353025,
+  },
+  {
+    ID: 2,
+    Country: 'China',
+    Area: 9388211,
+    Population_Urban: 0.54,
+    Population_Rural: 0.46,
+    Population_Total: 1375530000,
+    GDP_Agriculture: 0.091,
+    GDP_Industry: 0.426,
+    GDP_Services: 0.483,
+    GDP_Total: 10380380,
+  },
+  {
+    ID: 3,
+    Country: 'France',
+    Area: 675417,
+    Population_Urban: 0.79,
+    Population_Rural: 0.21,
+    Population_Total: 64529000,
+    GDP_Agriculture: 0.019,
+    GDP_Industry: 0.183,
+    GDP_Services: 0.798,
+    GDP_Total: 2846889,
+  },
+];
+
+test('Warning should be shown when trying to set fixed state for child columns', async (t) => {
+  const consoleMessages = await t.getBrowserConsoleMessages();
+  const warnings = consoleMessages?.warn.filter((message) => message.startsWith('W1028')) || [];
+  await t.expect(warnings.length).eql(1, 'There is warning W1028');
+}).before(async () => {
+  await createWidget(
+    'dxDataGrid',
+    {
+      dataSource: mockCountries,
+      keyExpr: 'ID',
+      columnAutoWidth: true,
+      allowColumnReordering: true,
+      width: 600,
+      showBorders: true,
+      columnChooser: { enabled: true },
+      columns: [
+        {
+          dataField: 'Country',
+          fixed: true,
+          fixedPosition: 'left',
+        },
+        {
+          dataField: 'Area',
+          fixed: true,
+          fixedPosition: 'left',
+        },
+        {
+          caption: 'Population',
+          columns: [
+            {
+              caption: 'Total',
+              dataField: 'Population_Total',
+              format: 'fixedPoint',
+              fixed: true,
+              fixedPosition: 'left',
+            },
+            {
+              caption: 'Urban',
+              dataField: 'Population_Urban',
+              format: 'percent',
+              fixed: true,
+              fixedPosition: 'left',
+            },
+          ],
+        },
+      ],
+    },
+    '#container',
+  );
+});
+
+test('Warning should work when columns changed in real time', async (t) => {
+  const grid = new DataGrid('#container');
+
+  let consoleMessages = await t.getBrowserConsoleMessages();
+  let warnings = consoleMessages?.warn.filter((message) => message.startsWith('W1028')) || [];
+
+  await t.expect(warnings.length).eql(0, 'There is not any warning W1028');
+
+  await grid.option('columns', [
+    {
+      dataField: 'test3',
+      caption: 'test3',
+    },
+    {
+      caption: 'test3 group',
+      columns: [
+        {
+          dataField: 'test4',
+          caption: 'test4',
+          fixed: true,
+        },
+        {
+          dataField: 'test5',
+          caption: 'test5',
+          fixed: true,
+        },
+      ],
+    },
+  ]);
+  consoleMessages = await t.getBrowserConsoleMessages();
+  warnings = consoleMessages?.warn.filter((message) => message.startsWith('W1028')) || [];
+  await t.expect(warnings.length).eql(1, 'There is warning W1028');
+}).before(async () => {
+  await createWidget(
+    'dxDataGrid',
+    {
+      dataSource: [],
+    },
+    '#container',
+  );
+});
+
+test('Warning should be shown one time for every dataGrid instance', async (t) => {
+  const otherGrid = new DataGrid('#otherContainer');
+
+  await otherGrid.apiAddColumn({
+    dataField: 'test',
+    caption: 'test',
+    columns: [
+      {
+        dataField: 'test1',
+        caption: 'test1',
+        fixed: true,
+      },
+      {
+        dataField: 'test2',
+        caption: 'test2',
+        fixed: true,
+      },
+    ],
+  });
+  const consoleMessages = await t.getBrowserConsoleMessages();
+  const warnings = consoleMessages?.warn.filter((message) => message.startsWith('W1028')) || [];
+  await t.expect(warnings.length).eql(2, 'There are two warnings W1028');
+}).before(async () => {
+  await createWidget(
+    'dxDataGrid',
+    {
+      dataSource: mockCountries,
+      keyExpr: 'ID',
+      columnAutoWidth: true,
+      allowColumnReordering: true,
+      width: 600,
+      showBorders: true,
+      columnChooser: { enabled: true },
+      columns: [
+        {
+          dataField: 'Country',
+          fixed: true,
+          fixedPosition: 'left',
+        },
+        {
+          dataField: 'Area',
+          fixed: true,
+          fixedPosition: 'left',
+        },
+        {
+          caption: 'Population',
+          columns: [
+            {
+              caption: 'Total',
+              dataField: 'Population_Total',
+              format: 'fixedPoint',
+              fixed: true,
+              fixedPosition: 'left',
+            },
+            {
+              caption: 'Urban',
+              dataField: 'Population_Urban',
+              format: 'percent',
+              fixed: true,
+              fixedPosition: 'left',
+            },
+          ],
+        },
+      ],
+    },
+    '#container',
+  );
+
+  await createWidget(
+    'dxDataGrid',
+    {
+      dataSource: [],
+    },
+    '#otherContainer',
+  );
+});

@@ -25,10 +25,6 @@ const MULTIVIEW_ITEM_CLASS = 'dx-multiview-item';
 const MULTIVIEW_ITEM_CONTENT_CLASS = 'dx-multiview-item-content';
 const MULTIVIEW_ITEM_HIDDEN_CLASS = 'dx-multiview-item-hidden';
 
-const toSelector = function(cssClass) {
-    return '.' + cssClass;
-};
-
 QUnit.module('markup', () => {
     QUnit.test('widget should be rendered', function(assert) {
         const $multiView = $('#multiView').dxMultiView();
@@ -38,15 +34,15 @@ QUnit.module('markup', () => {
 
     QUnit.test('wrapper should be rendered', function(assert) {
         const $multiView = $('#multiView').dxMultiView();
-        const $wrapper = $multiView.children(toSelector(MULTIVIEW_WRAPPER_CLASS));
+        const $wrapper = $multiView.children(`.${MULTIVIEW_WRAPPER_CLASS}`);
 
         assert.equal($wrapper.length, 1, 'wrapper was rendered');
     });
 
     QUnit.test('item container should be rendered', function(assert) {
         const $multiView = $('#multiView').dxMultiView();
-        const $wrapper = $multiView.children(toSelector(MULTIVIEW_WRAPPER_CLASS));
-        const $itemContainer = $wrapper.children(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+        const $wrapper = $multiView.children(`.${MULTIVIEW_WRAPPER_CLASS}`);
+        const $itemContainer = $wrapper.children(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
 
         assert.equal($itemContainer.length, 1, 'item container was rendered');
     });
@@ -56,12 +52,12 @@ QUnit.module('markup', () => {
             items: [1, 2],
             selectedIndex: 0
         });
-        const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
-        const $items = $itemContainer.children(toSelector(MULTIVIEW_ITEM_CLASS));
+        const $itemContainer = $multiView.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
+        const $items = $itemContainer.children(`.${MULTIVIEW_ITEM_CLASS}`);
 
         assert.equal($items.length, 2, 'items was rendered');
-        assert.equal($items.eq(0).find(toSelector(MULTIVIEW_ITEM_CONTENT_CLASS)).length, 1, 'rendered item has item content inside');
-        assert.equal($items.eq(1).find(toSelector(MULTIVIEW_ITEM_CONTENT_CLASS)).length, 0, 'second item has no item content because deferRendering is true');
+        assert.equal($items.eq(0).find(`.${MULTIVIEW_ITEM_CONTENT_CLASS}`).length, 1, 'rendered item has item content inside');
+        assert.equal($items.eq(1).find(`.${MULTIVIEW_ITEM_CONTENT_CLASS}`).length, 0, 'second item has no item content because deferRendering is true');
     });
 
     QUnit.test('item templates should be applied', function(assert) {
@@ -70,8 +66,8 @@ QUnit.module('markup', () => {
             selectedIndex: 1,
             deferRendering: false
         });
-        const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
-        const $items = $itemContainer.children(toSelector(MULTIVIEW_ITEM_CLASS));
+        const $itemContainer = $multiView.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
+        const $items = $itemContainer.children(`.${MULTIVIEW_ITEM_CLASS}`);
 
         assert.equal($items.eq(0).text(), 'Test1', 'element has correct content');
         assert.equal($items.eq(1).text(), 'Test2', 'element has correct content');
@@ -87,9 +83,9 @@ QUnit.module('markup', () => {
                 });
             }
         });
-        const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+        const $itemContainer = $multiView.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
 
-        const $items = $itemContainer.children(toSelector(MULTIVIEW_ITEM_CLASS));
+        const $items = $itemContainer.children(`.${MULTIVIEW_ITEM_CLASS}`);
         assert.ok(!$items.eq(3).hasClass(MULTIVIEW_ITEM_HIDDEN_CLASS), 'correct item selected');
     });
 
@@ -98,7 +94,7 @@ QUnit.module('markup', () => {
             items: [1, 2, 3],
             selectedIndex: 0
         });
-        const $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
+        const $items = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`);
 
         assert.ok(!$items.eq(0).hasClass(MULTIVIEW_ITEM_HIDDEN_CLASS));
         assert.ok($items.eq(1).hasClass(MULTIVIEW_ITEM_HIDDEN_CLASS));

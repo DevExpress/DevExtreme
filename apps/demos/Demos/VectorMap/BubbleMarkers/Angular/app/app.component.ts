@@ -41,6 +41,7 @@ export class AppComponent {
         text: attribute('tooltip'),
       };
     }
+    return null;
   }
 }
 

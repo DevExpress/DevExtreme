@@ -212,8 +212,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   _getIntervalBetween(currentDate, allDay) {
-    const startDayHour = this.option('startDayHour')!;
-    const endDayHour = this.option('endDayHour')!;
+    const startDayHour = this.option('startDayHour');
+    const endDayHour = this.option('endDayHour');
     const firstViewDate = this.getStartViewDate();
     const firstViewDateTime = firstViewDate.getTime();
     const hiddenInterval = (24 - endDayHour + startDayHour) * toMs('hour');
@@ -228,14 +228,23 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     let result = cellCount * (this.option('hoursInterval') as any) * toMs('hour');
 
     if (!allDay) {
-      if (currentDate.getHours() < startDayHour) {
-        tailDelta = tailDuration - hiddenInterval + gapBeforeAppt;
-      } else if (currentDate.getHours() >= startDayHour && currentDate.getHours() < endDayHour) {
-        tailDelta = tailDuration;
-      } else if (currentDate.getHours() >= startDayHour && currentDate.getHours() >= endDayHour) {
-        tailDelta = tailDuration - (gapBeforeAppt - endDayHour * toMs('hour'));
-      } else if (!fullDays) {
-        result = fullInterval;
+      const hour = currentDate.getHours();
+
+      switch (true) {
+        case hour < startDayHour:
+          tailDelta = tailDuration - hiddenInterval + gapBeforeAppt;
+          break;
+        case hour >= startDayHour && hour < endDayHour:
+          tailDelta = tailDuration;
+          break;
+        case hour >= endDayHour:
+          tailDelta = tailDuration - (gapBeforeAppt - endDayHour * toMs('hour'));
+          break;
+        case !fullDays:
+          result = fullInterval;
+          break;
+        default:
+          break;
       }
 
       result += tailDelta;
@@ -268,20 +277,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
   getWorkSpaceLeftOffset() {
     return 0;
-  }
-
-  scrollToTime(hours, minutes, date) {
-    const coordinates = this._getScrollCoordinates(hours, minutes, date);
-    const scrollable = this.getScrollable();
-    const offset = this.option('rtlEnabled') ? getBoundingRect(this.getScrollableContainer().get(0)).width : 0;
-
-    if (this.option('templatesRenderAsynchronously')) {
-      setTimeout(() => {
-        scrollable.scrollBy({ left: coordinates.left - scrollable.scrollLeft() - offset, top: 0 });
-      });
-    } else {
-      scrollable.scrollBy({ left: coordinates.left - scrollable.scrollLeft() - offset, top: 0 });
-    }
   }
 
   renderRAllDayPanel() {}

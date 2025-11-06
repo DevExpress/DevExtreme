@@ -11,7 +11,8 @@ import DataGrid, {
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridEmployeesValidation';
-const emailValidationUrl = 'https://js.devexpress.com/Demos/NetCore/RemoteValidation/CheckUniqueEmailAddress';
+const emailValidationUrl =
+  'https://js.devexpress.com/Demos/NetCore/RemoteValidation/CheckUniqueEmailAddress';
 const dataSource = createStore({
   key: 'ID',
   loadUrl: url,
@@ -22,7 +23,6 @@ const dataSource = createStore({
     ajaxOptions.xhrFields = { withCredentials: true };
   },
 });
-// eslint-disable-next-line space-before-function-paren
 const asyncValidation = async (params) => {
   const response = await fetch(emailValidationUrl, {
     method: 'POST',
@@ -62,7 +62,7 @@ const App = () => (
     <Column dataField="Phone">
       <RequiredRule />
       <PatternRule
-        message={'Your phone must have "(555) 555-5555" format!'}
+        message='Your phone must have "(555) 555-5555" format!'
         pattern={/^\(\d{3}\) \d{3}-\d{4}$/i}
       />
     </Column>

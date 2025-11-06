@@ -902,15 +902,18 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             currentView: 'month',
             views: ['month'],
             appointmentTooltipTemplate: model => {
-                assert.deepEqual(model.targetedAppointmentData, {
-                    allDay: true,
-                    endDate: new Date(2015, 4, 25, 11),
-                    recurrenceRule: 'FREQ=DAILY;COUNT=3',
-                    startDate: new Date(2015, 4, 25, 9),
-                    text: 'Task 2',
-                    displayEndDate: new Date(2015, 4, 25, 11),
-                    displayStartDate: new Date(2015, 4, 25, 9),
-                });
+                assert.deepEqual(
+                    model.targetedAppointmentData,
+                    {
+                        allDay: true,
+                        endDate: new Date(2015, 4, 25, 11),
+                        recurrenceRule: 'FREQ=DAILY;COUNT=3',
+                        startDate: new Date(2015, 4, 25, 9),
+                        text: 'Task 2',
+                        displayEndDate: new Date(2015, 4, 25, 11),
+                        displayStartDate: new Date(2015, 4, 25, 9),
+                    }
+                );
             }
         });
 
@@ -1167,7 +1170,12 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
             startDate: new Date(2017, 4, 22, 9, 30),
             endDate: new Date(2017, 4, 22, 11, 30)
         });
-        assert.equal(scheduler.appointments.compact.getButtonText(), '2 more', 'Count of compact buttons should be increase after add appointment');
+        scheduler.instance.addAppointment({
+            text: 'Temp appointment 3',
+            startDate: new Date(2017, 4, 22, 9, 30),
+            endDate: new Date(2017, 4, 22, 11, 30)
+        });
+        assert.equal(scheduler.appointments.compact.getButtonText(4), '3 more', 'Count of compact buttons should be increase after add appointment');
         assert.equal(scheduler.appointments.compact.getButtonCount(), 5, 'Count of compact buttons shouldn\'t change');
     });
 
@@ -1474,7 +1482,9 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
             onAppointmentClick: ({ targetedAppointmentData }) => {
                 const expectedAppointment = {
                     startDate: new Date(2020, 11, 3, 9),
+                    displayStartDate: new Date(2020, 11, 3, 9),
                     endDate: new Date(2020, 11, 3, 9, 30),
+                    displayEndDate: new Date(2020, 11, 3, 9, 30),
                     recurrenceRule: 'FREQ=DAILY',
                 };
                 assert.deepEqual(targetedAppointmentData, expectedAppointment, 'Correct targeted appointment');

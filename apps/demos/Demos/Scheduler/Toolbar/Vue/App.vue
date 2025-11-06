@@ -15,6 +15,7 @@
       field-expr="assigneeId"
       label="Assignee"
       :allow-multiple="true"
+      icon="user"
     />
     <DxToolbar>
       <DxItem name="today"/>
@@ -53,7 +54,8 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import { DxScheduler, DxResource,
+import {
+  DxScheduler, DxResource,
   DxToolbar, DxItem, type DxSchedulerTypes,
 } from 'devextreme-vue/scheduler';
 import { DxSelectBox, type DxSelectBoxTypes } from 'devextreme-vue/select-box';

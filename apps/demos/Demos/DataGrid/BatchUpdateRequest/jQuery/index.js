@@ -53,7 +53,7 @@ $(() => {
   });
 
   function normalizeChanges(changes) {
-    return changes.map(c => {
+    return changes.map((c) => {
       switch (c.type) {
         case 'insert':
           return {
@@ -71,6 +71,8 @@ $(() => {
             type: c.type,
             key: c.key,
           };
+        default:
+          return c;
       }
     });
   }

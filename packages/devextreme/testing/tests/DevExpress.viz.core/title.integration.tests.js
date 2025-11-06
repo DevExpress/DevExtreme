@@ -1,8 +1,7 @@
-require('viz/tree_map/tree_map');
-
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const titleModule = require('viz/core/title');
+import '__internal/viz/tree_map/tree_map';
+import $ from 'jquery';
+import { Title as MockTitle } from '../../helpers/vizMocks.js';
+import titleModule from 'viz/core/title';
 
 $('#qunit-fixture').append('<div id="test-container"></div>');
 
@@ -13,7 +12,7 @@ $('#test-container').css({
 
 QUnit.module('Title', {
     beforeEach: function() {
-        const title = this.title = new vizMocks.Title();
+        const title = this.title = new MockTitle();
         titleModule.DEBUG_set_title(sinon.spy(function() { return title; }));
         this.$container = $('#test-container');
     },

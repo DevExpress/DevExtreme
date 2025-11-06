@@ -81,16 +81,16 @@ const dataSource = new PivotGridDataSource({
   store: sales,
 });
 const dataGridRef = ref();
-const drillDownDataSource = ref<DataSource>(null);
+const drillDownDataSource = ref<DataSource>();
 const popupTitle = ref('');
 const popupVisible = ref(false);
 
-function onCellClick(e: DxPivotGridTypes.CellClickEvent) {
-  if (e.area === 'data') {
-    const pivotGridDataSource = e.component.getDataSource();
-    const rowPathLength = e.cell.rowPath.length;
-    const rowPathName = e.cell.rowPath[rowPathLength - 1];
-    drillDownDataSource.value = pivotGridDataSource.createDrillDownDataSource(e.cell);
+function onCellClick({ area, cell, component }: DxPivotGridTypes.CellClickEvent) {
+  if (area === 'data' && cell?.rowPath) {
+    const pivotGridDataSource = component.getDataSource();
+    const rowPathLength = cell.rowPath.length;
+    const rowPathName = cell.rowPath[rowPathLength - 1];
+    drillDownDataSource.value = pivotGridDataSource.createDrillDownDataSource(cell);
     popupTitle.value = `${
       rowPathName || 'Total'
     } Drill Down Data`;

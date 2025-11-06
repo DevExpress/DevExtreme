@@ -6,9 +6,9 @@
     :card-min-width="240"
     card-template="cardTemplate"
   >
-    <DxHeaderFilter :visible="true" />
-    <DxSearchPanel :visible="true" />
-    <DxPaging :pageSize="12" />
+    <DxHeaderFilter :visible="true"/>
+    <DxSearchPanel :visible="true"/>
+    <DxPaging :pageSize="12"/>
 
     <DxColumn
       data-field="TrademarkName"
@@ -22,7 +22,7 @@
       data-field="Price"
       format="currency"
     >
-      <DxHeaderFilter :groupInterval="20000" />
+      <DxHeaderFilter :groupInterval="20000"/>
     </DxColumn>
     <DxColumn
       data-field="CategoryName"
@@ -34,7 +34,8 @@
       caption="Body Style"
     />
     <DxColumn data-field="Horsepower"/>
-    <template #cardTemplate="{
+    <template
+      #cardTemplate="{
         data: {
           card: {
             data: vehicle,
@@ -50,17 +51,19 @@
             fields,
           }
         }
-      }">
-        <VehicleCard
-          :vehicle="vehicle"
-          :id="ID"
-          :model="`${TrademarkName} ${Name}`"
-          :price="fields?.find(f => f.column?.dataField === 'Price')?.text"
-          :category-name="CategoryName"
-          :modification="Modification"
-          :body-style-name="BodyStyleName"
-          :horsepower="Horsepower"
-          @show-info="showInfo" />
+      }"
+    >
+      <VehicleCard
+        :vehicle="vehicle"
+        :id="ID"
+        :model="`${TrademarkName} ${Name}`"
+        :price="getPriceText(fields)"
+        :category-name="CategoryName"
+        :modification="Modification"
+        :body-style-name="BodyStyleName"
+        :horsepower="Horsepower"
+        @show-info="showInfo"
+      />
     </template>
   </DxCardView>
   <DxPopup
@@ -72,10 +75,14 @@
     title="Image Info"
     :onHiding="hideInfo"
   >
-    <DxPosition at="center" my="center" collision="fit" />
-      <template #content>
-        <LicenseInfo :vehicle="currentVehicle" />
-      </template>
+    <DxPosition
+      at="center"
+      my="center"
+      collision="fit"
+    />
+    <template #content>
+      <LicenseInfo :vehicle="currentVehicle"/>
+    </template>
   </DxPopup>
 </template>
 <script setup lang="ts">
@@ -83,13 +90,20 @@ import { DxCardView, DxColumn, DxHeaderFilter, DxSearchPanel, DxPaging } from 'd
 import { DxPopup, DxPosition } from 'devextreme-vue/popup';
 import LicenseInfo from './LicenseInfo.vue';
 import VehicleCard from './VehicleCard.vue';
-import { vehicles } from './data.ts';
+import { vehicles, type Vehicle } from './data.ts';
 import { ref } from 'vue';
 
 const popupVisible = ref(false);
-const currentVehicle = ref(null);
+const currentVehicle = ref<Vehicle | undefined>();
 
-function showInfo(vehicle) {
+function getPriceText(
+  fields?: Array<{ column?: { dataField?: string }, text?: string }>,
+): string {
+  const priceField = fields?.find((field) => field?.column?.dataField === 'Price');
+  return priceField?.text || '';
+}
+
+function showInfo(vehicle: Vehicle) {
   currentVehicle.value = vehicle;
   popupVisible.value = true;
 }

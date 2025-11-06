@@ -6,9 +6,8 @@
         || Model.ScriptVirtualPath.Contains("Bundles")
         || Model.ScriptVirtualPath.Contains("DevExpress.jquery");
 
-    var renovationPart = Model.NoRenovation ? "" : "-renovation";
     var cspPart = Model.NoCsp ? "" : "-systemjs";
-    var npmModule = "transpiled" + renovationPart + cspPart;
+    var npmModule = "transpiled" + cspPart;
     var testingBasePath = Model.NoCsp ? "~/packages/devextreme/testing/" : "~/packages/devextreme/artifacts/transpiled-testing/";
 
     string GetJQueryUrl() {
@@ -134,12 +133,6 @@
             });
 
             QUnit.config.urlConfig.push({
-                id: "norenovation",
-                label: "No Renovation",
-                tooltip: "Use norenovation components with old tests",
-            });
-
-            QUnit.config.urlConfig.push({
                 id: "nocsp",
                 label: "No CSP",
                 tooltip: "Use noscp components without CSP checks",
@@ -169,6 +162,10 @@
 
     <script nonce="IpCks6">
         (function() {
+            window.process = window.process || {};
+            window.process.env = window.process.env || {};
+            window.process.env.NODE_ENV = 'test';
+
             jQuery.noConflict();
 
             var cacheBuster = '@Url.CacheBuster()';
@@ -190,6 +187,7 @@
                     'css': '@Url.Content("~/packages/devextreme/artifacts/js-systemjs/css.js")',
                     'generic_light.css': '@Url.Content("~/packages/devextreme/artifacts/css-systemjs/dx.light.css")',
                     'material_blue_light.css': '@Url.Content("~/packages/devextreme/artifacts/css-systemjs/dx.material.blue.light.css")',
+                    'fluent_blue_light.css': '@Url.Content("~/packages/devextreme/artifacts/css-systemjs/dx.fluent.blue.light.css")',
                     'gantt.css': '@Url.Content("~/packages/devextreme/artifacts/css-systemjs/dx-gantt.css")',
 
                     'devextreme-cldr-data': '@Url.Content("~/packages/devextreme/artifacts/js-systemjs/devextreme-cldr-data")',
@@ -224,7 +222,7 @@
                     'devextreme-quill': '@Url.Content("~/packages/devextreme/node_modules/devextreme-quill/dist/dx-quill.js")',
                     'devexpress-diagram': '@Url.Content("~/packages/devextreme/artifacts/js/dx-diagram.js")',
                     'devexpress-gantt': '@Url.Content("~/packages/devextreme/artifacts/js/dx-gantt.js")',
-                    'exceljs': '@Url.Content("~/packages/devextreme/node_modules/exceljs/dist/exceljs.js")',
+                    'devextreme-exceljs-fork': '@Url.Content("~/packages/devextreme/node_modules/devextreme-exceljs-fork/dist/dx-exceljs-fork.js")',
                     'fflate': '@Url.Content("~/packages/devextreme/node_modules/fflate/esm/browser.js")',
                     'jspdf': '@Url.Content("~/packages/devextreme/node_modules/jspdf/dist/jspdf.umd.js")',
                     'jspdf-autotable': '@Url.Content("~/packages/devextreme/node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.js")',
@@ -242,6 +240,7 @@
                     // Global CSS
                     'generic_light.css': '@Url.Content("~/packages/devextreme/artifacts/css/dx.light.css")',
                     'material_blue_light.css': '@Url.Content("~/packages/devextreme/artifacts/css/dx.material.blue.light.css")',
+                    'fluent_blue_light.css': '@Url.Content("~/packages/devextreme/artifacts/css/dx.fluent.blue.light.css")',
                     'gantt.css': '@Url.Content("~/packages/devextreme/artifacts/css/dx-gantt.css")',
 
                     // SystemJS plugins

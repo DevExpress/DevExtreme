@@ -24,7 +24,7 @@ if (window && window.config?.packageConfigPaths) {
 export class AppComponent {
   employees: Employee[];
 
-  editOnkeyPress = true;
+  editOnKeyPress = true;
 
   enterKeyActions: DxTreeListTypes.EnterKeyAction[];
 

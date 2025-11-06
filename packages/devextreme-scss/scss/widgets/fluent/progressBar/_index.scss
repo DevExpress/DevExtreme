@@ -73,9 +73,8 @@
 }
 
 .dx-progressbar-status {
-  margin-top: $progressbar-status-height;
+  padding-top: $progressbar-status-margin-top;
   color: $progressbar-label-color;
-  height: $progressbar-status-height;
 
   .dx-progressbar .dx-position-right & {
     padding-top: 0;

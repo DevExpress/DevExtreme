@@ -7,6 +7,7 @@ import { setupDataGridModules, MockDataController, MockColumnsController } from 
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
 
 import * as summaryModule from '__internal/grids/data_grid/summary/m_summary';
+import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 
 QUnit.testStart(function() {
     const markup =
@@ -47,6 +48,9 @@ QUnit.module('Summary footer', {
             ]
         }, 5);
 
+        that.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
+
         that.createFooterView = function(totalItem, rows, columns) {
             rows = rows || [{ values: [1, 2, 3, 4, 5] }];
             columns = columns || [
@@ -80,7 +84,10 @@ QUnit.module('Summary footer', {
 
             return mockDataGrid.footerView;
         };
-    }
+    },
+    afterEach: function() {
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
+    },
 }, () => {
 
     QUnit.test('Render when summary is defined', function(assert) {

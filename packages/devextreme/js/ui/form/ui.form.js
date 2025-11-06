@@ -1,4 +1,4 @@
-import Form from '../../__internal/ui/form/m_form';
+import Form from '../../__internal/ui/form/form';
 
 export default Form;
 

@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxSchedulerComponent, DxSchedulerModule, DxTemplateModule } from 'devextreme-angular';
+import { DxSchedulerComponent, DxSchedulerModule } from 'devextreme-angular';
 import { DataSource } from 'devextreme-angular/common/data';
 import notify from 'devextreme/ui/notify';
 import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
@@ -46,13 +46,13 @@ export class AppComponent {
 
   ariaDescription = () => {
     const disabledDates = this.holidays
-      .filter(date => !this.isWeekend(date))
-      .map(date => new Date(date).toLocaleDateString('en-US', {
-          weekday: 'long',
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-        })
+      .filter((date) => !this.isWeekend(date))
+      .map((date) => new Date(date).toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
       );
     if (disabledDates?.length === 1) {
       return `${disabledDates} is a disabled date`;
@@ -60,6 +60,7 @@ export class AppComponent {
     if (disabledDates?.length > 1) {
       return `${disabledDates.join(', ')} are disabled dates`;
     }
+    return '';
   };
 
   constructor(public dataService: DataService) {
@@ -175,7 +176,9 @@ export class AppComponent {
 
   setComponentAria(element): void {
     const prevAria = element?.attr('aria-label') || '';
-    element?.attr('aria-label', `${prevAria} ${this.ariaDescription()}`);
+    const description = this.ariaDescription();
+    const nextAria = `${prevAria}${description ? ` ${description}` : ''}`;
+    element?.attr('aria-label', nextAria);
   }
 }
 
@@ -183,7 +186,6 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxSchedulerModule,
-    DxTemplateModule,
   ],
   declarations: [AppComponent, ApplyPipe],
   bootstrap: [AppComponent],

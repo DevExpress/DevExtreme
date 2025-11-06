@@ -3,6 +3,7 @@ import $ from 'jquery';
 import 'ui/data_grid';
 
 import dataGridMocks from '../../helpers/dataGridMocks.js';
+import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 
 const MockColumnsController = dataGridMocks.MockColumnsController;
 const MockDataController = dataGridMocks.MockDataController;
@@ -23,6 +24,8 @@ QUnit.testStart(function() {
 
 QUnit.module('Context menu', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
         this.element = function() {
             return $('#container');
         };
@@ -69,6 +72,7 @@ QUnit.module('Context menu', {
     },
     afterEach: function() {
         this.dispose();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 
@@ -206,6 +210,8 @@ QUnit.module('Context menu', {
 
 QUnit.module('Context menu with rowsView', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
         const that = this;
 
         that.element = function() {
@@ -232,6 +238,7 @@ QUnit.module('Context menu with rowsView', {
     },
     afterEach: function() {
         this.dispose();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 

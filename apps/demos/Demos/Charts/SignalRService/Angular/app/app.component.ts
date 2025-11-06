@@ -66,6 +66,7 @@ export class AppComponent {
         close: prices[prices.length - 1],
       };
     }
+    return null;
   }
 
   customizePoint: DxChartTypes.Properties['customizePoint'] = ({ seriesName, argument }) => {
@@ -75,6 +76,7 @@ export class AppComponent {
         return { color: '#1db2f5' };
       }
     }
+    return null;
   };
 
   formatPrice = (points: { seriesName: string, [key: string]: string }[], field: string) => {

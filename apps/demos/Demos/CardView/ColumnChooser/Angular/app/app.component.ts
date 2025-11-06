@@ -1,7 +1,7 @@
-import { NgModule, Component, enableProdMode, ViewChild } from '@angular/core';
+import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxCardViewComponent, DxCardViewModule, DxSelectBoxModule, DxCheckBoxModule } from 'devextreme-angular';
+import { DxCardViewModule, DxSelectBoxModule, DxCheckBoxModule } from 'devextreme-angular';
 import { Employee, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -46,7 +46,7 @@ export class AppComponent {
   }
 
   calculateFullName({ First_Name, Last_Name }: Employee): string {
-    return `${First_Name} ${Last_Name}`
+    return `${First_Name} ${Last_Name}`;
   }
 }
 

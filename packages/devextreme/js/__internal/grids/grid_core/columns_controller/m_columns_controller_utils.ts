@@ -12,22 +12,50 @@ import {
   isDefined, isFunction, isNumeric, isObject, isString, type,
 } from '@js/core/utils/type';
 import variableWrapper from '@js/core/utils/variable_wrapper';
+import errors from '@js/ui/widget/ui.errors';
 
 import { HIDDEN_COLUMNS_WIDTH } from '../adaptivity/const';
+import { AI_COLUMN_NAME } from '../ai_column/const';
 import gridCoreUtils from '../m_utils';
 import { StickyPosition } from '../sticky_columns/const';
 import { getColumnFixedPosition } from '../sticky_columns/utils';
 import {
   COLUMN_CHOOSER_LOCATION,
   COLUMN_INDEX_OPTIONS,
+  COMMAND_COLUMNS_WITH_REQUIRED_NAMES,
   DEFAULT_COLUMN_OPTIONS,
   GROUP_COMMAND_COLUMN_NAME,
   GROUP_LOCATION,
   IGNORE_COLUMN_OPTION_NAMES,
+  UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS,
   USER_STATE_FIELD_NAMES,
   USER_STATE_FIELD_NAMES_15_1,
 } from './const';
-import type { ColumnsController } from './m_columns_controller';
+import type { Column, ColumnsController } from './m_columns_controller';
+
+const warnFixedInChildColumnsOnce = (controller: ColumnsController, childColumns: any[]): void => {
+  if (controller?._isWarnedAboutUnsupportedProperties) return;
+  if (!childColumns || !Array.isArray(childColumns) || childColumns?.length === 0) return;
+
+  let unsupportedProperty: string | null = null;
+
+  for (const column of childColumns) {
+    if (unsupportedProperty) break;
+    if (!column || typeof column !== 'object' || column === null) continue;
+
+    for (const property of UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS) {
+      if (property in column) {
+        unsupportedProperty = property;
+        break;
+      }
+    }
+  }
+
+  if (unsupportedProperty) {
+    controller && (controller._isWarnedAboutUnsupportedProperties = true);
+    errors.log('W1028', unsupportedProperty);
+  }
+};
 
 export const setFilterOperationsAsDefaultValues = function (column) {
   column.filterOperations = column.defaultFilterOperations;
@@ -47,7 +75,7 @@ export const createColumn = function (that: ColumnsController, columnOptions, us
 
     that.setName(columnOptions);
 
-    let result = { };
+    let result = {};
     if (columnOptions.command) {
       result = deepExtendArraySafe(commonColumnOptions, columnOptions);
     } else {
@@ -90,6 +118,7 @@ export const createColumnsFromOptions = function (that: ColumnsController, colum
         result.push(column);
 
         if (column.columns) {
+          warnFixedInChildColumnsOnce(that, column.columns);
           result = result.concat(createColumnsFromOptions(that, column.columns, column, result.length));
           delete column.columns;
           column.hasColumns = true;
@@ -311,7 +340,6 @@ export const createColumnsFromDataSource = function (that: ColumnsController, da
 
   for (let i = 0; i < firstItems.length; i++) {
     if (firstItems[i]) {
-      // eslint-disable-next-line no-restricted-syntax
       for (fieldName in firstItems[i]) {
         if (!isFunction(firstItems[i][fieldName]) || variableWrapper.isWrapped(firstItems[i][fieldName])) {
           processedFields[fieldName] = true;
@@ -320,7 +348,6 @@ export const createColumnsFromDataSource = function (that: ColumnsController, da
     }
   }
 
-  // eslint-disable-next-line no-restricted-syntax
   for (fieldName in processedFields) {
     if (fieldName.indexOf('__') !== 0) {
       const column = createColumn(that, fieldName);
@@ -657,9 +684,11 @@ export const columnOptionCore = function (that: ColumnsController, column, optio
   // @ts-expect-error
   const prevValue = optionGetter(column, { functionsAsIs: true });
   if (!equalByValue(prevValue, value, { maxDepth: 5 })) {
-    if (optionName === 'groupIndex' || optionName === 'calculateGroupValue') {
+    if (optionName === 'groupIndex') {
       changeType = 'grouping';
       updateSortOrderWhenGrouping(that, column, value, prevValue);
+    } else if (optionName === 'calculateGroupValue') {
+      changeType = 'grouping';
     } else if (optionName === 'sortIndex' || optionName === 'sortOrder' || optionName === 'calculateSortValue') {
       changeType = 'sorting';
     } else {
@@ -709,6 +738,10 @@ export const columnOptionCore = function (that: ColumnsController, column, optio
       value,
       prevValue,
     });
+
+    if (column.type === AI_COLUMN_NAME) {
+      that.aiColumnOptionChanged.fire(column, optionName, value);
+    }
   }
 };
 
@@ -945,7 +978,7 @@ const isFirstOrLastBandColumn = function (
   fixedPosition?: StickyPosition,
 ): boolean {
   return bandColumns.every((column, index) => onlyWithinBandColumn && index === 0
-        || isFirstOrLastColumnCore(that, column, index, onlyWithinBandColumn, isLast, fixedPosition));
+    || isFirstOrLastColumnCore(that, column, index, onlyWithinBandColumn, isLast, fixedPosition));
 };
 
 const isFirstOrLastColumnCore = function (
@@ -991,7 +1024,7 @@ export const isFirstOrLastColumn = function (
 ): boolean {
   const targetColumnIndex = targetColumn.index;
   const bandColumnsCache = that.getBandColumnsCache();
-  const parentBandColumns = getParentBandColumns(targetColumnIndex, bandColumnsCache.columnParentByIndex);
+  const parentBandColumns = !isDefined(targetColumn.type) && getParentBandColumns(targetColumnIndex, bandColumnsCache.columnParentByIndex);
 
   if (parentBandColumns?.length) {
     return isFirstOrLastBandColumn(that, parentBandColumns.concat([targetColumn]), onlyWithinBandColumn, isLast, fixedPosition);
@@ -999,3 +1032,9 @@ export const isFirstOrLastColumn = function (
 
   return onlyWithinBandColumn || isFirstOrLastColumnCore(that, targetColumn, rowIndex, onlyWithinBandColumn, isLast, fixedPosition);
 };
+
+export const isColumnNameRequired = function ({ type = '' }: Column): boolean {
+  return COMMAND_COLUMNS_WITH_REQUIRED_NAMES.includes(type);
+};
+
+export const getColumnHeaderCellSelector = (visibleIndex: number): string => `.dx-header-row td[aria-colindex="${visibleIndex + 1}"]`;

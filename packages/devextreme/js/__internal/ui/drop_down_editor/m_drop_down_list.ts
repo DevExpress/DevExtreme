@@ -1,6 +1,8 @@
+import type { SingleMultipleAllOrNone } from '@js/common';
 import eventsEngine from '@js/common/core/events/core/events_engine';
-import { addNamespace } from '@js/common/core/events/utils/index';
+import { addNamespace } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
+import type { GroupItem } from '@js/common/data';
 import dataQuery from '@js/common/data/query';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
@@ -11,7 +13,7 @@ import $ from '@js/core/renderer';
 import { ChildDefaultTemplate } from '@js/core/templates/child_default_template';
 import {
   ensureDefined,
-  // @ts-expect-error
+  // @ts-expect-error ts-error
   grep,
   noop,
 } from '@js/core/utils/common';
@@ -21,15 +23,17 @@ import { each } from '@js/core/utils/iterator';
 import { getOuterHeight } from '@js/core/utils/size';
 import { isDefined, isObject, isWindow } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
+import type { DataSourceLike, DataSourceOptions } from '@js/data/data_source';
 import type { dxDropDownListOptions } from '@js/ui/drop_down_editor/ui.drop_down_list';
 import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
-import type dxList from '@js/ui/list';
-import List from '@js/ui/list_light';
+import type { Item } from '@js/ui/list';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import errors from '@js/ui/widget/ui.errors';
 import type { OptionChanged } from '@ts/core/widget/types';
+import { getDataSourceOptions } from '@ts/data/data_converter/grouped';
 import DropDownEditor from '@ts/ui/drop_down_editor/m_drop_down_editor';
-import DataConverterMixin from '@ts/ui/shared/m_grouped_data_converter_mixin';
+import type { ListBaseProperties } from '@ts/ui/list/list.base';
+import List from '@ts/ui/list/list.edit.search';
 
 const window = getWindow();
 
@@ -47,13 +51,13 @@ interface DropDownListProperties extends Omit<dxDropDownListOptions<DropDownList
 'onOpened' | 'onClosed' |
 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' | 'onKeyDown' | 'onKeyUp' | 'onPaste'
 | 'onValueChanged' | 'validationMessagePosition' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'> {
-
+  encodeNoDataText?: boolean;
 }
 
 class DropDownList<
   TProperties extends DropDownListProperties = DropDownListProperties,
 > extends DropDownEditor<TProperties> {
-  _list?: dxList;
+  _list?: List;
 
   _$list?: dxElementWrapper;
 
@@ -86,8 +90,11 @@ class DropDownList<
       tab(e): void {
         if (this._allowSelectItemByTab()) {
           this._saveValueChangeEvent(e);
-          const $focusedItem = $(this._list.option('focusedElement'));
-          $focusedItem.length && this._setSelectedElement($focusedItem);
+          const { focusedElement } = this._list.option();
+          const $focusedItem = $(focusedElement);
+          if ($focusedItem.length) {
+            this._setSelectedElement($focusedItem);
+          }
         }
 
         parentSupportedKeys.tab(e);
@@ -203,6 +210,7 @@ class DropDownList<
   }
 
   _initContentReadyAction(): void {
+    // @ts-expect-error
     this._contentReadyAction = this._createActionByOption('onContentReady', {
       excludeValidators: ['disabled', 'readOnly'],
     });
@@ -233,7 +241,6 @@ class DropDownList<
   }
 
   _saveFocusOnWidget(): void {
-    // @ts-expect-error ts-error
     if (this._list?.initialOption('focusStateEnabled')) {
       this._focusInput();
     }
@@ -381,7 +388,8 @@ class DropDownList<
 
   _getPlainItems(items?) {
     let plainItems: any = [];
-    const grouped = this._getGroupedOption();
+
+    const { grouped } = this.option();
 
     items = items || this.option('items') || this._dataSource.items() || [];
 
@@ -398,12 +406,12 @@ class DropDownList<
 
   _updateActiveDescendant($target?): void {
     const opened = this.option('opened');
-    // @ts-expect-error ts-error
     const listFocusedItemId = this._list?.getFocusedItemId();
     const isElementOnDom = $(`#${listFocusedItemId}`).length > 0;
     const activedescendant = opened && isElementOnDom && listFocusedItemId;
 
     this.setAria({
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       activedescendant: activedescendant || null,
     }, $target);
   }
@@ -519,7 +527,11 @@ class DropDownList<
   _getKeyboardListeners(): any[] {
     const canListHaveFocus = this._canListHaveFocus();
 
-    return super._getKeyboardListeners().concat([!canListHaveFocus && this._list]);
+    if (!canListHaveFocus) {
+      return super._getKeyboardListeners().concat([this._list]);
+    }
+
+    return super._getKeyboardListeners();
   }
 
   _renderList(): void {
@@ -578,29 +590,41 @@ class DropDownList<
     return devices.real().deviceType === 'desktop';
   }
 
-  _listConfig() {
+  _listConfig(): ListBaseProperties {
+    const {
+      noDataText,
+      grouped,
+      wrapItemText,
+      itemTemplate,
+      groupTemplate,
+      hoverStateEnabled,
+      focusStateEnabled,
+      encodeNoDataText,
+      useItemTextAsTitle,
+    } = this.option();
+
     const options = {
-      selectionMode: 'single',
+      selectionMode: 'single' as SingleMultipleAllOrNone,
       _templates: this.option('_templates'),
       templateProvider: this.option('templateProvider'),
-      noDataText: this.option('noDataText'),
-      encodeNoDataText: this.option('encodeNoDataText'),
-      grouped: this.option('grouped'),
-      wrapItemText: this.option('wrapItemText'),
-      useItemTextAsTitle: this.option('useItemTextAsTitle'),
+      noDataText,
+      encodeNoDataText,
+      grouped,
+      wrapItemText,
+      useItemTextAsTitle,
       onContentReady: this._listContentReadyHandler.bind(this),
-      itemTemplate: this.option('itemTemplate'),
+      itemTemplate,
       indicateLoading: false,
       // @ts-expect-error ts-error
       keyExpr: this._getCollectionKeyExpr(),
       // @ts-expect-error ts-error
       displayExpr: this._displayGetterExpr(),
-      groupTemplate: this.option('groupTemplate'),
+      groupTemplate,
       onItemClick: this._listItemClickAction.bind(this),
       dataSource: this._getDataSource(),
       _dataController: this._dataController,
-      hoverStateEnabled: this._isDesktopDevice() ? this.option('hoverStateEnabled') : false,
-      focusStateEnabled: this._isDesktopDevice() ? this.option('focusStateEnabled') : false,
+      hoverStateEnabled: this._isDesktopDevice() ? hoverStateEnabled : false,
+      focusStateEnabled: this._isDesktopDevice() ? focusStateEnabled : false,
       _onItemsRendered: (): void => {
         // @ts-expect-error ts-error
         this._popup.repaint();
@@ -630,8 +654,18 @@ class DropDownList<
     };
   }
 
-  _getGroupedOption() {
-    return this.option('grouped');
+  _getSpecificDataSourceOption(): DataSourceLike<Item>
+    | DataSourceOptions<GroupItem<Item>>
+    | null
+    | undefined {
+    const { grouped } = this.option();
+    const dataSource = this.option('dataSource');
+
+    if (dataSource && grouped) {
+      return getDataSourceOptions(dataSource);
+    }
+
+    return dataSource;
   }
 
   _dataSourceFromUrlLoadMode(): string {
@@ -1026,7 +1060,7 @@ class DropDownList<
 }
 
 // @ts-expect-error ts-error
-DropDownList.include(DataExpressionMixin, DataConverterMixin);
+DropDownList.include(DataExpressionMixin);
 
 registerComponent('dxDropDownList', DropDownList);
 

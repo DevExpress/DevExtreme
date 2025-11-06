@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { computed, effect, type ReadonlySignal } from '@preact/signals-core';
+import { computed, effect, type ReadonlySignal } from '@ts/core/state_manager/index';
 import { HeaderFilterView as OldHeaderFilterPopup } from '@ts/grids/grid_core/header_filter/m_header_filter_core';
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { WidgetMock } from '@ts/grids/new/grid_core/widget_mock';

@@ -21,21 +21,21 @@
       <DxForm>
         <DxItem
           dataField="Task_Subject"
-        ></DxItem>
+        />
         <DxItem
           dataField="Task_Start_Date"
-        ></DxItem>
+        />
         <DxItem
           dataField="Task_Due_Date"
-        ></DxItem>
+        />
         <DxItem
           data-field="Task_Priority"
           editor-type="dxSelectBox"
           :editor-options="{ dataSource: ['Low', 'Normal', 'High', 'Urgent'] }"
-        ></DxItem>
+        />
         <DxItem
           dataField="Task_Status"
-        ></DxItem>
+        />
       </DxForm>
     </DxEditing>
     <DxColumn

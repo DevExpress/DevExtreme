@@ -49,7 +49,7 @@ define(function(require) {
         $('#qunit-fixture').html(markup);
     });
 
-    const selectors = require('ui/widget/selectors');
+    const selectors = require('__internal/core/utils/m_selectors');
 
     QUnit.test('focusable', function(assert) {
         const focusableContainer = $('.focusable');

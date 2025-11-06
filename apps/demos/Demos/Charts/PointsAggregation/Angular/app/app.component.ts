@@ -39,43 +39,50 @@ export class AppComponent {
   }
 
   customizeTooltip({
-    valueText,
     point: { aggregationInfo },
     seriesName,
-    value,
-    argument,
-    rangeValue1,
-    rangeValue2,
+    ...pointInfo
+  }: {
+    point: {
+      aggregationInfo?: {
+        intervalStart: Date;
+        intervalEnd: Date;
+      }
+    },
+    seriesName: 'Average temperature' | 'Temperature range' | 'Precipitation';
+    value?: number;
+    argument?: Date;
+    rangeValue1?: number;
+    rangeValue2?: number;
+    valueText?: string;
   }) {
     const start = aggregationInfo?.intervalStart;
     const end = aggregationInfo?.intervalEnd;
-
-    if (seriesName === 'Average temperature') {
-      return {
-        text: `${!aggregationInfo
+    const handlers = {
+      'Average temperature': ({ argument, value }: { argument: Date; value: number; }) => ({
+        text: `${(!aggregationInfo
           ? `Date: ${argument.toDateString()}`
-          : `Interval: ${start.toDateString()
-          } - ${end.toDateString()}`
+          : `Interval: ${start.toDateString()} - ${end.toDateString()}`)
         }<br/>Temperature: ${value.toFixed(2)} °C`,
-      };
-    } if (seriesName === 'Temperature range') {
-      return {
+      }),
+      'Temperature range': ({ rangeValue1, rangeValue2 }: { rangeValue1: number; rangeValue2: number; }) => ({
         text: `Interval: ${start.toDateString()
         } - ${end.toDateString()
         }<br/>Temperature range: ${rangeValue1
         } - ${rangeValue2} °C`,
-      };
-    } if (seriesName === 'Precipitation') {
-      return {
+      }),
+      Precipitation: ({ argument, valueText }: { argument: Date; valueText: string; }) => ({
         text: `Date: ${argument.toDateString()
         }<br/>Precipitation: ${valueText} mm`,
-      };
-    }
+      }),
+    };
+
+    return handlers[seriesName](pointInfo);
   }
 
   calculateRangeArea(aggregationInfo: Record<string, any>) {
     if (!aggregationInfo.data.length) {
-      return;
+      return null;
     }
     const temp = aggregationInfo.data.map((item) => item.temp);
     const maxTemp = Math.max.apply(null, temp);

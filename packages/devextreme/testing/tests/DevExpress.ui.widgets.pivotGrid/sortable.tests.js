@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { getWidth, getHeight } from 'core/utils/size';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import '__internal/grids/pivot_grid/sortable/m_sortable';
 import 'ui/scroll_view/ui.scrollable';
 

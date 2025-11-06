@@ -1,6 +1,6 @@
 import { getOuterWidth } from 'core/utils/size';
 import { noop } from 'core/utils/common';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import $ from 'jquery';
 
 import { supportedScrollingModes } from '../../helpers/scheduler/helpers.js';
@@ -735,7 +735,7 @@ module('Renovated Render', {
             allDay: undefined,
             startDate: new Date(2020, 5, 28, 0, 0),
             endDate: new Date(2020, 5, 28, 0, 0),
-            firstDayOfMonth: false,
+            isFirstDayMonthHighlighting: false,
             groupIndex: 0,
             index: 0,
             isFirstGroupCell: true,
@@ -749,7 +749,7 @@ module('Renovated Render', {
             allDay: undefined,
             startDate: new Date(2020, 6, 1, 0, 0),
             endDate: new Date(2020, 6, 1, 0, 0),
-            firstDayOfMonth: false,
+            isFirstDayMonthHighlighting: false,
             groupIndex: 0,
             index: 3,
             isFirstGroupCell: false,
@@ -763,7 +763,7 @@ module('Renovated Render', {
             allDay: undefined,
             startDate: new Date(2020, 7, 1, 0, 0),
             endDate: new Date(2020, 7, 1, 0, 0),
-            firstDayOfMonth: false,
+            isFirstDayMonthHighlighting: false,
             groupIndex: 0,
             index: 34,
             isFirstGroupCell: false,

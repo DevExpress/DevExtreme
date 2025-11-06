@@ -23,7 +23,7 @@ const App = () => (
     timeZone="America/Los_Angeles"
     dataSource={data}
     views={views}
-    defaultCurrentView={'Auto Mode'}
+    defaultCurrentView="Auto Mode"
     defaultCurrentDate={currentDate}
     height={730}
   >
@@ -31,6 +31,7 @@ const App = () => (
       dataSource={resourcesData}
       fieldExpr="roomId"
       label="Room"
+      icon="conferenceroomoutline"
     />
   </Scheduler>
 );

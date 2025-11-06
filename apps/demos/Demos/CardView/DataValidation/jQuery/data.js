@@ -20,7 +20,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Arthur has been a prominent figure in the AV industry for decades. His love for technology is unmatched.\r\n\r\nIn his free time, Arthur races cars and jumps out of airplanes (with a parachute).",
   "pictureName": "Arthur Miller.jpg",
-  "picture": "../../../../images/employees/new/Arthur Miller.jpg"
+  "picture": "../../../../images/employees/new/Arthur Miller.jpg",
 },
 {
   "id": 4,
@@ -44,7 +44,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Robert was recently voted the CMO of the year by CMO Magazine. He is a proud member of the DevAV Management Team.\r\n\r\nRobert is a championship BBQ chef, so when you get the chance ask him for his secret recipe.",
   "pictureName": "Robert Reagan.jpg",
-  "picture": "../../../../images/employees/new/Robert Reagan.jpg"
+  "picture": "../../../../images/employees/new/Robert Reagan.jpg",
 },
 {
   "id": 5,
@@ -68,7 +68,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Greta has been DevAV's HR Manager since 2003. She joined DevAV from Sonee Corp.\r\n\r\nGreta is currently training for the NYC marathon. Her best marathon time is 4 hours. Go Greta.",
   "pictureName": "Greta Sims.jpg",
-  "picture": "../../../../images/employees/new/Greta Sims.jpg"
+  "picture": "../../../../images/employees/new/Greta Sims.jpg",
 },
 {
   "id": 6,
@@ -92,7 +92,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Brett came to DevAv from Microsoft and has led our IT department since 2012.\r\n\r\nWhen he is not working hard for DevAV, he coaches Little League (he was a high school pitcher).",
   "pictureName": "Brett Wade.jpg",
-  "picture": "../../../../images/employees/new/Brett Wade.jpg"
+  "picture": "../../../../images/employees/new/Brett Wade.jpg",
 },
 {
   "id": 7,
@@ -116,7 +116,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Sandra is a CPA and has been our controller since 2008. She loves to interact with staff so if you've not met her, be certain to say hi.\r\n\r\nSandra has 2 daughters both of whom are accomplished gymnasts.",
   "pictureName": "Sandra Johnson.jpg",
-  "picture": "../../../../images/employees/new/Sandra Johnson.jpg"
+  "picture": "../../../../images/employees/new/Sandra Johnson.jpg",
 },
 {
   "id": 8,
@@ -140,7 +140,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "As Ed likes to say, he can sell ice to eskimos. He has been selling AV products his entire life. He was promoted to Sales Manager in 2011.\r\n\r\nEd's 2 boys are on the high school football team (Go Malibu High!)",
   "pictureName": "Ed Holmes.jpg",
-  "picture": "../../../../images/employees/new/Ed Holmes.jpg"
+  "picture": "../../../../images/employees/new/Ed Holmes.jpg",
 },
 {
   "id": 9,
@@ -164,7 +164,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Barb has been DevAV's support manager for nearly 3 years. You can usually find her behind her desk working hard to solve customer problems.\r\n\r\nIn her spare time, Barb loves to play chess and checkers.",
   "pictureName": "Barb Banks.jpg",
-  "picture": "../../../../images/employees/new/Barb Banks.jpg"
+  "picture": "../../../../images/employees/new/Barb Banks.jpg",
 },
 {
   "id": 10,
@@ -188,7 +188,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Kevin is our hard-working shipping manager and has been helping that department work like clockwork for 18 months.\r\n\r\nWhen not in the office, he is usually on the basketball court playing pick-up games.",
   "pictureName": "Kevin Carter.jpg",
-  "picture": "../../../../images/employees/new/Kevin Carter.jpg"
+  "picture": "../../../../images/employees/new/Kevin Carter.jpg",
 },
 {
   "id": 11,
@@ -212,7 +212,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Cindy joined us in 2008 and has been in the HR department for 2 years. \r\n\r\nShe was recently awarded employee of the month. Way to go Cindy!",
   "pictureName": "Cindy Stanwick.jpg",
-  "picture": "../../../../images/employees/new/Cindy Stanwick.jpg"
+  "picture": "../../../../images/employees/new/Cindy Stanwick.jpg",
 },
 {
   "id": 12,
@@ -236,7 +236,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Sammy is proud to be a member of the DevAV team. He joined the team in 2012 and has been in the sales department from the beginning.\r\n\r\nHe has just picked up golf so you can find him on the links every weekend.",
   "pictureName": "Sammy Hill.jpg",
-  "picture": "../../../../images/employees/new/Sammy Hill.jpg"
+  "picture": "../../../../images/employees/new/Sammy Hill.jpg",
 },
 {
   "id": 13,
@@ -260,7 +260,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Davey Jones - yes, he was named after the singer. Though he does not sing, he does do a great job in the shipping department.\r\n\r\nHe is a DJ in his spare time, so if you are having a party, make sure to inquire about his services.",
   "pictureName": "Davey Jones.jpg",
-  "picture": "../../../../images/employees/new/Davey Jones.jpg"
+  "picture": "../../../../images/employees/new/Davey Jones.jpg",
 },
 {
   "id": 14,
@@ -284,7 +284,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Victor Norris came to us directly from College where he was a sum cum laude.\r\n\r\nHe loves chemistry and is working on converting lead into gold. Good luck Victor.",
   "pictureName": "Victor Norris.jpg",
-  "picture": "../../../../images/employees/new/Victor Norris.jpg"
+  "picture": "../../../../images/employees/new/Victor Norris.jpg",
 },
 {
   "id": 15,
@@ -308,7 +308,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Mary works with DevAV on a part-time basis. The rest of her day is spent raising her newborn. \r\n\r\nMary was a champion swimmer in high school and qualified for the Olympics.",
   "pictureName": "Mary Stern.jpg",
-  "picture": "../../../../images/employees/new/Mary Stern.jpg"
+  "picture": "../../../../images/employees/new/Mary Stern.jpg",
 },
 {
   "id": 16,
@@ -332,7 +332,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Robin Cosworth is another new hire for DevAV's shipping department.\r\n\r\nRobin was voted most likely to succeed in high school. If you meet her, you'll know why…one of the smartest people around.",
   "pictureName": "Robin Cosworth.jpg",
-  "picture": "../../../../images/employees/new/Robin Cosworth.jpg"
+  "picture": "../../../../images/employees/new/Robin Cosworth.jpg",
 },
 {
   "id": 17,
@@ -356,7 +356,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Kelly loves people and that's why she joined DevAV's support department. One of the funniest people in the company, she does stand-up on the weekends at the Laugh Factory.",
   "pictureName": "Kelly Rodriguez.jpg",
-  "picture": "../../../../images/employees/new/Kelly Rodriguez.jpg"
+  "picture": "../../../../images/employees/new/Kelly Rodriguez.jpg",
 },
 {
   "id": 18,
@@ -380,7 +380,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "James joined DevAV in 2012 and has been helping our customers ever since.\r\n\r\nIn his free time, he loves to build websites and watch college basketball games.",
   "pictureName": "James Anderson.jpg",
-  "picture": "../../../../images/employees/new/James Anderson.jpg"
+  "picture": "../../../../images/employees/new/James Anderson.jpg",
 },
 {
   "id": 19,
@@ -404,7 +404,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Anthony is shy and did not want to share any personal information for his profile. \r\n\r\nHe is a proud member of our support team so do talk to him when you get the chance. Let's get him to open up.",
   "pictureName": "Antony Remmen.jpg",
-  "picture": "../../../../images/employees/new/Antony Remmen.jpg"
+  "picture": "../../../../images/employees/new/Antony Remmen.jpg",
 },
 {
   "id": 20,
@@ -428,7 +428,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Olivia loves to sell. She has been selling DevAV products since 2012. \r\n\r\nOlivia was homecoming queen in high school. She is expecting her first child in 6 months. Good Luck Olivia.",
   "pictureName": "Olivia Peyton.jpg",
-  "picture": "../../../../images/employees/new/Olivia Peyton.jpg"
+  "picture": "../../../../images/employees/new/Olivia Peyton.jpg",
 },
 {
   "id": 21,
@@ -452,7 +452,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "If you are like the rest of us at DevAV, then you've probably reached out for help from Taylor. He does a great job as a member of our IT department.",
   "pictureName": "Taylor Riley.jpg",
-  "picture": "../../../../images/employees/new/Taylor Riley.jpg"
+  "picture": "../../../../images/employees/new/Taylor Riley.jpg",
 },
 {
   "id": 22,
@@ -476,7 +476,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Amelia (like Taylor) is a member of our hard-working network admin team. She loves to help so don’t hesistate to ask her for assistance.\r\n\r\nIn her spare time, Amelia coaches young tennis players at the park.",
   "pictureName": "Amelia Harper.jpg",
-  "picture": "../../../../images/employees/new/new/Amelia Harper.jpg"
+  "picture": "../../../../images/employees/new/Amelia Harper.jpg",
 },
 {
   "id": 23,
@@ -500,7 +500,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Walter has been developing apps and websites for DevAV since 2011. His passion is software and if you ever walk by his desk, you'll know why.\r\n\r\nWally once worked 72 hours straight - writing code and fixing bugs.",
   "pictureName": "Wally Hobbs.jpg",
-  "picture": "../../../../images/employees/new/Wally Hobbs.jpg"
+  "picture": "../../../../images/employees/new/Wally Hobbs.jpg",
 },
 {
   "id": 24,
@@ -524,7 +524,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Brad works with Walter and together, they are a 1-2 punch unlike any other. \r\n\r\nHe once ran a marathon and then realized that running is not something he should ever do again.",
   "pictureName": "Brad Jameson.jpg",
-  "picture": "../../../../images/employees/new/Brad Jameson.jpg"
+  "picture": "../../../../images/employees/new/Brad Jameson.jpg",
 },
 {
   "id": 25,
@@ -548,7 +548,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Karen likes to remind everyone that she is not grumpy…she just has a lot of work to do.\r\n\r\nA part of DevAV's programmer team, she likes to surf during the weekends.",
   "pictureName": "Karen Goodson.jpg",
-  "picture": "../../../../images/employees/new/Karen Goodson.jpg"
+  "picture": "../../../../images/employees/new/Karen Goodson.jpg",
 },
 {
   "id": 26,
@@ -572,7 +572,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Marcus is our travel coordinator and spends most of his work day trying to save DevAV money on travel costs.\r\n\r\nHe recommends that everyone sign up for a frequent flier account and rack up those miles.",
   "pictureName": "Marcus Orbison.jpg",
-  "picture": "../../../../images/employees/new/Marcus Orbison.jpg"
+  "picture": "../../../../images/employees/new/Marcus Orbison.jpg",
 },
 {
   "id": 27,
@@ -596,7 +596,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Sandy is here to answer any of your benefits related questions. She works directly with DevAV's HR manager so let her know what you need.\r\n\r\nSandy's daughter recently won a spelling bee. Congrats to you and your daughter Sandy.",
   "pictureName": "Sandy Bright.jpg",
-  "picture": "../../../../images/employees/new/Sandy Bright.jpg"
+  "picture": "../../../../images/employees/new/Sandy Bright.jpg",
 },
 {
   "id": 28,
@@ -620,7 +620,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Morgan is our graphic designer and we are so lucky to have such a dedicated person on our team.\r\n\r\nMorgan designs wedding invitations on her spare time. Her portfolio is amazing.",
   "pictureName": "Morgan Kennedy.jpg",
-  "picture": "../../../../images/employees/new/Morgan Kennedy.jpg"
+  "picture": "../../../../images/employees/new/Morgan Kennedy.jpg",
 },
 {
   "id": 29,
@@ -644,7 +644,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Violet joined us after graduating from the Art Institute as a jr designer.\r\n\r\nViolet's favorte painter is Picasso. Ask her to tell you why she loves Picasso.",
   "pictureName": "Violet Bailey.jpg",
-  "picture": "../../../../images/employees/new/Violet Bailey.jpg"
+  "picture": "../../../../images/employees/new/Violet Bailey.jpg",
 },
 {
   "id": 30,
@@ -668,7 +668,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "As our ombudsman, Kent is on the front-lines solving customer problems and helping our partners address issues out in the field.\r\n\r\nHe is a classically trained musician and is a member of the Chamber Orchestra.",
   "pictureName": "Ken Samuelson.jpg",
-  "picture": "../../../../images/employees/new/Ken Samuelson.jpg"
+  "picture": "../../../../images/employees/new/Ken Samuelson.jpg",
 },
 {
   "id": 31,
@@ -692,7 +692,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Natalie travels the US and teaches our partners how to explain the benefits of our products to customers.\r\n\r\nShe is a proud wife and mom and volunteers her time at the elementary school.",
   "pictureName": "Nat Maguiree.jpg",
-  "picture": "../../../../images/employees/new/Nat Maguiree.jpg"
+  "picture": "../../../../images/employees/new/Nat Maguiree.jpg",
 },
 {
   "id": 32,
@@ -716,7 +716,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Without Bart, we'd have no products to sell. As Director of Engineering, he is responsible for so much of what we do.\r\n\r\nBart is a father of 2 little girls and hopes one day that they'll play professional ice hockey.",
   "pictureName": "Bart Arnaz.jpg",
-  "picture": "../../../../images/employees/new/Bart Arnaz.jpg"
+  "picture": "../../../../images/employees/new/Bart Arnaz.jpg",
 },
 {
   "id": 33,
@@ -740,7 +740,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Leah is DevAV's test coordinator and is focused on helping our company deliver rock-solid AV products.\r\n\r\nLeah set a record in high school for the fastest 100m sprint for 11th graders. Amazing!",
   "pictureName": "Leah Simpson.jpg",
-  "picture": "../../../../images/employees/new/Leah Simpson.jpg"
+  "picture": "../../../../images/employees/new/Leah Simpson.jpg",
 },
 {
   "id": 34,
@@ -764,7 +764,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Arnold works with Bart and is responsible for some of our best selling AV products.\r\n\r\nArnold's oldest son has hopes of joining DevAV when he grows up. We'd love to have him on-board someday!",
   "pictureName": "Arnie Schwartz.jpg",
-  "picture": "../../../../images/employees/new/Arnie Schwartz.jpg"
+  "picture": "../../../../images/employees/new/Arnie Schwartz.jpg",
 },
 {
   "id": 35,
@@ -788,7 +788,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Billy graduated from CalTech and so he is a smart cookie. If you ever talk to him, ask him about his GPA.\r\n\r\nBilly says his only hobby is reading engineering books. Come'on Billy have some fun!",
   "pictureName": "Billy Zimmer.jpg",
-  "picture": "../../../../images/employees/new/Billy Zimmer.jpg"
+  "picture": "../../../../images/employees/new/Billy Zimmer.jpg",
 },
 {
   "id": 36,
@@ -812,7 +812,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Samantha Piper has been selected Employee of the Year 7 times. The reasons are many, but perhaps most important, she works on some of the best products on the planet.",
   "pictureName": "Samantha Piper.jpg",
-  "picture": "../../../../images/employees/new/Samantha Piper.jpg"
+  "picture": "../../../../images/employees/new/Samantha Piper.jpg",
 },
 {
   "id": 37,
@@ -836,7 +836,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Maggie is an MIT graduate and has been with DevAV since 2009. \r\n\r\nIn her spare time, Maggie loves to experiment for home automation systems.",
   "pictureName": "Maggie Boxter.jpg",
-  "picture": "../../../../images/employees/new/Maggie Boxter.jpg"
+  "picture": "../../../../images/employees/new/Maggie Boxter.jpg",
 },
 {
   "id": 38,
@@ -860,7 +860,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Quality is everything and we are lucky to have Terry in our QA team. He is an extremely hard working individual and loves work almost as much as he loves eating.",
   "pictureName": "Terry Bradley.jpg",
-  "picture": "../../../../images/employees/new/Terry Bradley.jpg"
+  "picture": "../../../../images/employees/new/Terry Bradley.jpg",
 },
 {
   "id": 39,
@@ -884,7 +884,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Gabriel has been in retail sales for a very long time and can give you lots of ideas on how to save money when buying products at retail stores.\r\n\r\nGabe is a proud father and a dedicated husband.",
   "pictureName": "Gabe Jones.jpg",
-  "picture": "../../../../images/employees/new/Gabe Jones.jpg"
+  "picture": "../../../../images/employees/new/Gabe Jones.jpg",
 },
 {
   "id": 40,
@@ -908,7 +908,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Lucy Ball is not just a sales assistant…She IS the ultimate sales assistant.\r\n\r\nIn her spare time, Lucy loves to act and has hopes of having her own sitcom someday.",
   "pictureName": "Lucy Ball.jpg",
-  "picture": "../../../../images/employees/new/Lucy Ball.jpg"
+  "picture": "../../../../images/employees/new/Lucy Ball.jpg",
 },
 {
   "id": 41,
@@ -932,7 +932,7 @@ const employees = [{
   "status": "Commission",
   "notes": "What would we do without Jim. As the point-person for all retail sales, he has generated more money for DevAV than any other team-member.\r\n\r\nJim used to be a shot-putter in College and almost set the national record in his senior year.",
   "pictureName": "Jim Packard.jpg",
-  "picture": "../../../../images/employees/new/Jim Packard.jpg"
+  "picture": "../../../../images/employees/new/Jim Packard.jpg",
 },
 {
   "id": 42,
@@ -956,7 +956,7 @@ const employees = [{
   "status": "Commission",
   "notes": "Hannah loves selling products online and if you take a look at our website, you can see how much energy she devotes to our company.\r\n\r\nWe are lucky to have you on our team. Stop working so hard!",
   "pictureName": "Hannah Brookly.jpg",
-  "picture": "../../../../images/employees/new/Hannah Brookly.jpg"
+  "picture": "../../../../images/employees/new/Hannah Brookly.jpg",
 },
 {
   "id": 43,
@@ -980,7 +980,7 @@ const employees = [{
   "status": "Commission",
   "notes": "Harv went to college to become a dentist but decided to switch to sales when he went to buy his first car. \r\n\r\nHarv is an avid surfer and can be seen at the beach whenver the weather allows.",
   "pictureName": "Harv Mudd.jpg",
-  "picture": "../../../../images/employees/new/Harv Mudd.jpg"
+  "picture": "../../../../images/employees/new/Harv Mudd.jpg",
 },
 {
   "id": 44,
@@ -1004,7 +1004,7 @@ const employees = [{
   "status": "Commission",
   "notes": "Clark says he joined DevAV because we are the best in the industry. He is excited to see what the future holds for our company. \r\n\r\nClark once ran a mile in under 4 minutes (he says he can do it in 5 minutes now).",
   "pictureName": "Clark Morgan.jpg",
-  "picture": "../../../../images/employees/new/Clark Morgan.jpg"
+  "picture": "../../../../images/employees/new/Clark Morgan.jpg",
 },
 {
   "id": 45,
@@ -1028,7 +1028,7 @@ const employees = [{
   "status": "Commission",
   "notes": "Todd Hoffman loves to make money and has always held commission only positions.\r\n\r\nIf you ever see Todd, ask him to tell you his fishing trip story…It's very funny.",
   "pictureName": "Todd Hoffman.jpg",
-  "picture": "../../../../images/employees/new/Todd Hoffman.jpg"
+  "picture": "../../../../images/employees/new/Todd Hoffman.jpg",
 },
 {
   "id": 46,
@@ -1052,7 +1052,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Jack is on probation due to sloppy work. We hope to see him back at his desk shortly.\r\n\r\nPlease remember, sloppy work is not something we tolerate.",
   "pictureName": "Jackie Garmin.jpg",
-  "picture": "../../../../images/employees/new/Jackie Garmin.jpg"
+  "picture": "../../../../images/employees/new/Jackie Garmin.jpg",
 },
 {
   "id": 47,
@@ -1076,7 +1076,7 @@ const employees = [{
   "status": "Salaried",
   "notes": "Lincoln is on probation due to poor performance. We hope to see him back at his desk shortly.\r\n\r\nPlease remember, poor performance Is not something we tolerate.",
   "pictureName": "Lincoln Bartlett.jpg",
-  "picture": "../../../../images/employees/new/Lincoln Bartlett.jpg"
+  "picture": "../../../../images/employees/new/Lincoln Bartlett.jpg",
 },
 {
   "id": 48,
@@ -1100,7 +1100,7 @@ const employees = [{
   "status": "Terminated",
   "notes": null,
   "pictureName": "Brad Farkus.jpg",
-  "picture": "../../../../images/employees/new/Brad Farkus.jpg"
+  "picture": "../../../../images/employees/new/Brad Farkus.jpg",
 },
 {
   "id": 49,
@@ -1124,7 +1124,7 @@ const employees = [{
   "status": "Terminated",
   "notes": null,
   "pictureName": "Jenny Hobbs.jpg",
-  "picture": "../../../../images/employees/new/Jenny Hobbs.jpg"
+  "picture": "../../../../images/employees/new/Jenny Hobbs.jpg",
 },
 {
   "id": 50,
@@ -1148,7 +1148,7 @@ const employees = [{
   "status": "Terminated",
   "notes": null,
   "pictureName": "Dallas Lou.jpg",
-  "picture": "../../../../images/employees/new/Dallas Lou.jpg"
+  "picture": "../../../../images/employees/new/Dallas Lou.jpg",
 },
 {
   "id": 51,
@@ -1172,5 +1172,5 @@ const employees = [{
   "status": "Terminated",
   "notes": null,
   "pictureName": "Stu Pizaro.jpg",
-  "picture": "../../../../images/employees/new/Stu Pizaro.jpg"
+  "picture": "../../../../images/employees/new/Stu Pizaro.jpg",
 }];

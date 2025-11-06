@@ -1,9 +1,9 @@
 import $ from 'jquery';
 import errors from 'core/errors';
-import ExcelJS from 'exceljs';
+import ExcelJS from 'devextreme-exceljs-fork';
 import { ExcelJSDataGridTestHelper } from './ExcelJSTestHelper.js';
 import { exportDataGrid } from 'excel_exporter';
-import { Export } from 'exporter/exceljs/export';
+import { Export } from '__internal/exporter/exceljs/export';
 import ExcelJSLocalizationFormatTests from './exceljs.format.tests.js';
 import { ExcelJSOptionTests } from './exceljs.options.tests.js';
 import { LoadPanelTests } from '../commonParts/loadPanel.tests.js';
@@ -3314,6 +3314,59 @@ const moduleConfig = {
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1], topLeft.row);
                 helper.checkCellRange(cellRange, { row: 2, column: 1 }, topLeft);
+                done();
+            });
+        });
+
+        // T1300738
+        QUnit.test('Grouping - 1 level & 3 columns - col_3.showWhenGrouped: true, summary_col_3.alignByColumn: true', function(assert) {
+            const done = assert.async();
+            const ds = [
+                { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1' },
+            ];
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                columns: [
+                    { dataField: 'f1', caption: 'f1', width: 100 },
+                    { dataField: 'f2', caption: 'f2', width: 150 },
+                    { dataField: 'f3', caption: 'f3', width: 200, groupIndex: 0, showWhenGrouped: true }
+                ],
+                summary: {
+                    groupItems: [
+                        {
+                            column: 'f3',
+                            summaryType: 'count',
+                            displayFormat: '{0} F3 GROUP COUNT',
+                            alignByColumn: true,
+                        }
+                    ]
+                },
+                dataSource: ds,
+                showColumnHeaders: false,
+                loadingTimeout: null
+            }).dxDataGrid('instance');
+
+            const expectedCells = [
+                [
+                    { excelCell: { value: 'f3: f3_1 (1 F3 GROUP COUNT)', alignment: alignLeftTopNoWrap, font: { bold: true } }, gridCell: { rowType: 'group', groupIndex: 0, column: dataGrid.columnOption(2), value: 'f3_1', groupSummaryItems: [{ name: undefined, value: 1 }] } },
+                    { excelCell: { value: null }, gridCell: { value: undefined, rowType: 'group', groupIndex: 0, column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: null }, gridCell: { value: undefined, rowType: 'group', groupIndex: 0, column: dataGrid.columnOption(2) } },
+                ], [
+                    { excelCell: { value: 'f1_1', alignment: alignLeftTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: 'f2_1', alignment: alignLeftTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: 'f3_1', alignment: alignLeftTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
+                ]
+            ];
+
+            helper._extendExpectedCells(expectedCells, topLeft);
+
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
+                helper.checkRowAndColumnCount({ row: 2, column: 3 }, { row: 2, column: 3 }, topLeft);
+                helper.checkAutoFilter(autoFilterEnabled, null);
+                helper.checkCellStyle(expectedCells);
+                helper.checkValues(expectedCells);
+                helper.checkMergeCells(expectedCells, topLeft);
+                helper.checkOutlineLevel([0, 1], topLeft.row);
+                helper.checkCellRange(cellRange, { row: 2, column: 3 }, topLeft);
                 done();
             });
         });

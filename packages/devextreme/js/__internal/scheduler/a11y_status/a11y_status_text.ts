@@ -1,9 +1,8 @@
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
-import { isObject } from '@js/core/utils/type';
 import type { ViewType } from '@js/ui/scheduler';
 
-import type { RawViewType } from '../types';
+import type { NormalizedView } from '../utils/options/types';
 
 const KEYS = {
   dateRange: 'dxScheduler-dateRange',
@@ -46,16 +45,15 @@ const localizeName = (viewName?: string, viewType?: string): string => {
 };
 
 export const getA11yStatusText = (
-  view: RawViewType,
+  view: NormalizedView | undefined,
   startDate: Date,
   endDate: Date,
   appointmentCount: number,
   indicatorTime?: Date,
 ): string => {
-  const viewType = isObject(view) ? view.type : view;
-  const viewName = isObject(view) ? view.name : undefined;
+  const viewType = view?.type;
+  const viewName = view?.name;
   const viewTypeLabel = localizeName(viewName, viewType);
-
   const isMonth = viewType === 'month' || viewType === 'timelineMonth';
   const startDateText = isMonth ? localizeMonth(startDate) : localizeDate(startDate);
   const endDateText = isMonth ? localizeMonth(endDate) : localizeDate(endDate);

@@ -33,6 +33,7 @@
   align-items: center;
   gap: 8px;
   overflow: hidden;
+  user-select: none;
 
   .dx-resize-handle-collapse-prev-pane,
   .dx-resize-handle-collapse-next-pane {

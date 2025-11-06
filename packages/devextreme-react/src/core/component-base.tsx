@@ -99,6 +99,10 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
     const { parentType } = useContext(NestedOptionContext);
 
+    if (parentType === 'option') {
+      return React.createElement('div');
+    }
+
     const [widgetConfig, context] = useOptionScanning(
       {
         type: ElementType.Option,
@@ -133,6 +137,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       restoreParentLink,
     ]);
 
+    // eslint-disable-next-line @stylistic/max-len
     const updateCssClasses = useCallback((prevProps: (P & ComponentBaseProps) | undefined, newProps: P & ComponentBaseProps) => {
       const prevClassName = prevProps ? getClassName(prevProps) : undefined;
       const newClassName = getClassName(newProps);
@@ -210,6 +215,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
       const updateFunc = useDeferUpdateForTemplates.current ? deferUpdate : requestAnimationFrame;
 
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       updateFunc(() => {
         guardsUpdateScheduled.current = false;
 
@@ -226,6 +232,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     const createWidget = useCallback((el?: Element) => {
       beforeCreateWidget();
 
+      // eslint-disable-next-line no-param-reassign
       el = el || element.current;
 
       let options: any = {
@@ -255,6 +262,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
         );
       }
 
+      // eslint-disable-next-line @stylistic/max-len
       optionsManager.current.setInstance(instance.current, widgetConfig, subscribableOptions, independentEvents);
       instance.current.on('optionChanged', optionsManager.current.onOptionChanged);
 
@@ -283,10 +291,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     }, [shouldRestoreFocus.current, instance.current]);
 
     const onComponentUpdated = useCallback(() => {
-      if (parentType === 'option') {
-        return;
-      }
-
       if (!optionsManager.current?.isInstanceSet) {
         return;
       }
@@ -311,10 +315,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     ]);
 
     const onComponentMounted = useCallback(() => {
-      if (parentType === 'option') {
-        return;
-      }
-
       const { style } = props;
 
       if (childElementsDetached.current) {
@@ -444,18 +444,23 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
             <NestedOptionContext.Provider value={context}>
               {renderContent()}
             </NestedOptionContext.Provider>
-            <TemplateManager init={setTemplateManagerHooks} onTemplatesRendered={onTemplatesRendered}/>
-              { isPortalComponent
-                && <NestedOptionContext.Provider value={context}>
-                  { renderPortal() }
-                </NestedOptionContext.Provider>
-              }
+            <TemplateManager
+              init={setTemplateManagerHooks}
+              onTemplatesRendered={onTemplatesRendered}
+            />
+            {isPortalComponent
+              && <NestedOptionContext.Provider value={context}>
+                {renderPortal()}
+              </NestedOptionContext.Provider>
+            }
           </div>
         </TemplateRenderingContext.Provider>
       </RestoreTreeContext.Provider>
     );
   },
-) as <P extends IHtmlOptions>(props: P & ComponentBaseProps & { ref?: React.Ref<ComponentBaseRef> }) => ReactElement | null;
+) as <P extends IHtmlOptions>(props: P & ComponentBaseProps & {
+  ref?: React.Ref<ComponentBaseRef>;
+}) => ReactElement | null;
 
 export {
   IHtmlOptions,

@@ -14,16 +14,12 @@ import TableResizing from './modules/m_tableResizing';
 import Toolbar from './modules/m_toolbar';
 import Variables from './modules/m_variables';
 import BaseTheme from './themes/m_base';
+import type { QuillInstance, QuillOptions, QuillStatic } from './types/quill';
 
 class QuillRegistrator {
-  _customModules: any[] = [];
+  private readonly _customModules: string[] = [];
 
   constructor() {
-    // @ts-expect-error
-    if (QuillRegistrator.initialized) {
-      return;
-    }
-
     const quill = this.getQuill();
     const DirectionStyle = quill.import('attributors/style/direction');
 
@@ -53,21 +49,18 @@ class QuillRegistrator {
     );
 
     this._customModules = [];
-    // @ts-expect-error
-    QuillRegistrator._initialized = true;
   }
 
-  createEditor(container, config) {
-    const quill = this.getQuill();
+  createEditor(container: string | Element, config: QuillOptions): QuillInstance {
+    const QuillConstructor = this.getQuill();
 
-    // eslint-disable-next-line new-cap
-    return new quill(container, config);
+    return new QuillConstructor(container, config);
   }
 
-  registerModules(modulesConfig) {
+  registerModules(modulesConfig: Record<string, unknown>): void {
     const isModule = RegExp('modules/*');
     const quill = this.getQuill();
-    const isRegisteredModule = (modulePath) => !!quill.imports[modulePath];
+    const isRegisteredModule = (modulePath: string): boolean => Boolean(quill.imports[modulePath]);
 
     // eslint-disable-next-line no-restricted-syntax
     for (const modulePath in modulesConfig) {
@@ -79,11 +72,11 @@ class QuillRegistrator {
     quill.register(modulesConfig, true);
   }
 
-  getRegisteredModuleNames() {
+  getRegisteredModuleNames(): string[] {
     return this._customModules;
   }
 
-  getQuill() {
+  getQuill(): QuillStatic {
     return getQuill();
   }
 }

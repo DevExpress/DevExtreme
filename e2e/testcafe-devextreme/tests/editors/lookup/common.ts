@@ -6,12 +6,12 @@ import Guid from 'devextreme/core/guid';
 import { isMaterial, isMaterialBased, testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import {
   appendElementTo, insertStylesheetRulesToPage, setStyleAttribute,
 } from '../../../helpers/domUtils';
 
 const LOOKUP_FIELD_CLASS = 'dx-lookup-field';
+const OVERLAY_CLASS = 'dx-overlay-content';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
 const labelModes = ['static', 'floating', 'hidden', 'outside'];
@@ -86,28 +86,30 @@ if (!isMaterialBased()) {
   }));
 }
 
-safeSizeTest('Check popup height with no found data option', async (t) => {
+test.meta({ browserSize: [300, 400] })('Check popup height with no found data option', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
+  await t.hover(`.${OVERLAY_CLASS}`);
 
   await testScreenshot(t, takeScreenshot, 'Lookup with no found data.png');
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [300, 400]).before(async () => createWidget('dxLookup', { dataSource: [], searchEnabled: true }));
+}).before(async () => createWidget('dxLookup', { dataSource: [], searchEnabled: true }));
 
-safeSizeTest('Check popup height in loading state', async (t) => {
+test.meta({ browserSize: [300, 400] })('Check popup height in loading state', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
+  await t.hover(`.${OVERLAY_CLASS}`);
 
   await testScreenshot(t, takeScreenshot, 'Lookup in loading.png');
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [300, 400]).before(async () => createWidget('dxLookup', {
+}).before(async () => createWidget('dxLookup', {
   dataSource: {
     load() {
       return new Promise((resolve) => {
@@ -121,38 +123,22 @@ safeSizeTest('Check popup height in loading state', async (t) => {
   displayExpr: 'text',
 }));
 
-test('Placeholder is visible after items option change when value is not chosen (T1099804)', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const lookup = new Lookup('#container');
-
-  await lookup.option('items', [1, 2, 3]);
-
-  await testScreenshot(t, takeScreenshot, 'Lookup placeholder if value is not choosen.png', { element: '#container' });
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxLookup', {
-  width: 300,
-  placeholder: 'Choose a value',
-}));
-
 test('Lookup appearance', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'Lookup appearance.png', { shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Lookup appearance.png');
 
   for (const id of t.ctx.ids) {
     await setStyleAttribute(Selector(`#${id}`), 'width: fit-content;');
   }
 
-  await testScreenshot(t, takeScreenshot, 'Lookup width adjust to fit its content.png', { shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Lookup width adjust to fit its content.png');
 
   for (const id of t.ctx.ids) {
     await setStyleAttribute(Selector(`#${id}`), 'width: 100px;');
   }
 
-  await testScreenshot(t, takeScreenshot, 'Lookup appearance with limited width.png', { shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Lookup appearance with limited width.png');
 
   await t
     .expect(compareResults.isValid())

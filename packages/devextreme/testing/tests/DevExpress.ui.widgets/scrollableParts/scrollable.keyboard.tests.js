@@ -4,10 +4,6 @@ import pointerMock from '../../../helpers/pointerMock.js';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
 import { setWindow, getWindow } from 'core/utils/window';
-import Scrollable from 'ui/scroll_view/ui.scrollable';
-import { shouldSkipOnMobile } from '../../../helpers/device.js';
-
-import 'generic_light.css!';
 
 import {
     SCROLLABLE_CONTAINER_CLASS,
@@ -15,7 +11,6 @@ import {
 } from './scrollable.constants.js';
 
 const SCROLL_LINE_HEIGHT = 40;
-const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
 
 QUnit.module('keyboard support', {
     beforeEach: function() {
@@ -55,25 +50,15 @@ QUnit.module('keyboard support', {
 });
 
 const getKeyboardMock = ($scrollable) => {
-    let keyboard;
+    const $container = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
+    const keyboard = keyboardMock($container);
 
-    if(isRenovatedScrollable) {
-        keyboard = keyboardMock($scrollable);
-        $scrollable.focus();
-    } else {
-        const $container = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
-        keyboard = keyboardMock($container);
-        $container.focus();
-    }
+    $container.focus();
 
     return keyboard;
 };
 
 QUnit.test('support arrow keys', function(assert) {
-    if(shouldSkipOnMobile(assert, 'mobile device does not support tabindex on div element')) {
-        return;
-    }
-
     const $scrollable = $('#scrollable');
     $scrollable.width(100);
     $scrollable.children().width(200);
@@ -100,10 +85,6 @@ QUnit.test('support arrow keys', function(assert) {
 });
 
 QUnit.test('support pageup and pagedown', function(assert) {
-    if(shouldSkipOnMobile(assert, 'mobile device does not support tabindex on div element')) {
-        return;
-    }
-
     const $scrollable = $('#scrollable');
     const containerHeight = 100;
 
@@ -126,10 +107,6 @@ QUnit.test('support pageup and pagedown', function(assert) {
 });
 
 QUnit.test('support end and home', function(assert) {
-    if(shouldSkipOnMobile(assert, 'mobile device does not support tabindex on div element')) {
-        return;
-    }
-
     const $scrollable = $('#scrollable');
     const containerHeight = 100;
     const contentHeight = 1000;
@@ -151,10 +128,6 @@ QUnit.test('support end and home', function(assert) {
 });
 
 QUnit.test('supportKeyboard option', function(assert) {
-    if(shouldSkipOnMobile(assert, 'mobile device does not support tabindex on div element')) {
-        return;
-    }
-
     const $scrollable = $('#scrollable');
     $scrollable.width(100);
     $scrollable.children().width(200);
@@ -172,10 +145,6 @@ QUnit.test('supportKeyboard option', function(assert) {
 });
 
 QUnit.test('supportKeyboard option after render', function(assert) {
-    if(shouldSkipOnMobile(assert, 'mobile device does not support tabindex on div element')) {
-        return;
-    }
-
     const $scrollable = $('#scrollable');
     $scrollable.width(100);
     $scrollable.children().width(200);
@@ -199,10 +168,6 @@ QUnit.test('supportKeyboard option after render', function(assert) {
 });
 
 QUnit.test('arrow keys does not trigger when it not need', function(assert) {
-    if(shouldSkipOnMobile(assert, 'mobile device does not support tabindex on div element')) {
-        return;
-    }
-
     const $scrollable = $('#scrollable');
     $scrollable.height(100);
     $scrollable.wrapInner('<div>');
@@ -227,10 +192,6 @@ QUnit.test('arrow keys does not trigger when it not need', function(assert) {
 });
 
 QUnit.test('arrows work correctly after scroll by scrollbar', function(assert) {
-    if(shouldSkipOnMobile(assert, 'mobile device does not support tabindex on div element')) {
-        return;
-    }
-
     const $scrollable = $('#scrollable');
     $scrollable.height(100);
     $scrollable.children().height(200);

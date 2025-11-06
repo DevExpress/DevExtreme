@@ -1,7 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxSchedulerModule, DxSelectBoxModule, DxTemplateModule } from 'devextreme-angular';
+import { DxSchedulerModule, DxSelectBoxModule } from 'devextreme-angular';
 import { getTimeZones, dxSchedulerTimeZone } from 'devextreme/time_zone_utils';
 import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
 import { DataSource } from 'devextreme-angular/common/data';
@@ -44,7 +44,7 @@ export class AppComponent {
     this.currentTimeZone = this.timeZones[0].id;
   }
 
-  getDefaultTimeZones = (date: Date) => getTimeZones(date).filter((timeZone) => this.service.getLocations().indexOf(timeZone.id) !== -1);
+  getDefaultTimeZones = (date: Date) => getTimeZones(date, this.service.getLocations());
 
   onAppointmentFormOpening({ form }: DxSchedulerTypes.AppointmentFormOpeningEvent) {
     const startDateDataSource = form.getEditor('startDateTimeZone').option('dataSource') as DataSource;
@@ -68,7 +68,6 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxSchedulerModule,
-    DxTemplateModule,
     DxSelectBoxModule,
   ],
   declarations: [AppComponent],

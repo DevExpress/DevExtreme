@@ -60,7 +60,7 @@ const App = () => (
       dataField="Task_Subject"
       caption="Subject"
     >
-      <RequiredRule/>
+      <RequiredRule />
     </Column>
     <Column
       dataField="Task_Start_Date"

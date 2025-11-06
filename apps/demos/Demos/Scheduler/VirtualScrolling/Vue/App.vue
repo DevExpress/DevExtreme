@@ -27,6 +27,7 @@
       :data-source="resources"
       field-expr="humanId"
       label="Employee"
+      icon="group"
     />
     <DxScrolling
       mode="virtual"

@@ -2,7 +2,7 @@ import {
   describe, expect, it, jest,
 } from '@jest/globals';
 
-import { getResourceManagerMock } from '../__mock__/resourceManager.mock';
+import { getResourceManagerMock } from '../__mock__/resource_manager.mock';
 import SchedulerTimelineDay from '../workspaces/m_timeline_day';
 import SchedulerTimelineMonth from '../workspaces/m_timeline_month';
 import SchedulerTimelineWeek from '../workspaces/m_timeline_week';

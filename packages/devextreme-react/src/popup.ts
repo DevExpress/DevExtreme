@@ -44,7 +44,7 @@ const Popup = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["height","position","visible","width"]), []);
       const independentEvents = useMemo(() => (["onContentReady","onDisposing","onHidden","onHiding","onInitialized","onResize","onResizeEnd","onResizeStart","onShowing","onShown","onTitleRendered"]), []);

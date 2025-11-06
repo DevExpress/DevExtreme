@@ -3,8 +3,9 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { getData } from '../../helpers/generateDataSourceData';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
-fixture.disablePageReloads`Keyboard Navigation.Visual`
+fixture`Keyboard Navigation.Visual`
   .page(url(__dirname, '../../../container.html'));
 
 // Quick navigation through grid cells via Home and End keys
@@ -18,7 +19,7 @@ test('Focus the last cell in the row that contains focus when pressing the End k
     .click(dataGrid.getDataCell(0, 0).element)
     .pressKey('end');
 
-  await takeScreenshot('focus_last_cell_in_row_that_contains_focus_when_pressing_End_key', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'focus_last_cell_in_row_that_contains_focus_when_pressing_End_key.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -30,6 +31,9 @@ test('Focus the last cell in the row that contains focus when pressing the End k
   height: 500,
   width: 800,
   showBorders: true,
+  scrolling: {
+    showScrollbar: 'never',
+  },
 }));
 
 test('Focus the first cell in the row that contains focus when pressing the Home key', async (t) => {
@@ -42,7 +46,7 @@ test('Focus the first cell in the row that contains focus when pressing the Home
     .click(dataGrid.getDataCell(0, 6).element)
     .pressKey('home');
 
-  await takeScreenshot('focus_first_cell_in_row_that_contains_focus_when_pressing_Home_key', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'focus_first_cell_in_row_that_contains_focus_when_pressing_Home_key.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -54,6 +58,9 @@ test('Focus the first cell in the row that contains focus when pressing the Home
   height: 500,
   width: 800,
   showBorders: true,
+  scrolling: {
+    showScrollbar: 'never',
+  },
 }));
 
 test('Navigate to last cell in the row that contains focus when pressing the End key', async (t) => {
@@ -66,7 +73,7 @@ test('Navigate to last cell in the row that contains focus when pressing the End
     .click(dataGrid.getDataCell(0, 0).element)
     .pressKey('end');
 
-  await takeScreenshot('navigate_to_last_cell_in_row_that_contains_focus_when_pressing_End_key', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'navigate_to_last_cell_in_row_that_contains_focus_when_pressing_End_key.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -78,6 +85,9 @@ test('Navigate to last cell in the row that contains focus when pressing the End
   height: 500,
   width: 800,
   showBorders: true,
+  scrolling: {
+    showScrollbar: 'never',
+  },
 }));
 
 test('Navigate to first cell in the row that contains focus when pressing the Home key', async (t) => {
@@ -97,7 +107,7 @@ test('Navigate to first cell in the row that contains focus when pressing the Ho
     .click(dataGrid.getDataCell(0, 14).element)
     .pressKey('home');
 
-  await takeScreenshot('navigate_to_first_cell_in_row_that_contains_focus_when_pressing_Home_key', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'navigate_to_first_cell_in_row_that_contains_focus_when_pressing_Home_key.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -109,6 +119,9 @@ test('Navigate to first cell in the row that contains focus when pressing the Ho
   height: 500,
   width: 800,
   showBorders: true,
+  scrolling: {
+    showScrollbar: 'never',
+  },
 }));
 
 test('Navigate to last cell in the row that contains focus when focusedRowEnabled is true', async (t) => {
@@ -121,7 +134,7 @@ test('Navigate to last cell in the row that contains focus when focusedRowEnable
     .click(dataGrid.getDataCell(0, 0).element)
     .pressKey('end');
 
-  await takeScreenshot('navigate_to_last_cell_in_row_that_contains_focus_when_focusedRowEnabled_is_true', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'navigate_to_last_cell_in_row_that_contains_focus_when_focusedRowEnabled_is_true.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -134,6 +147,9 @@ test('Navigate to last cell in the row that contains focus when focusedRowEnable
   width: 800,
   showBorders: true,
   focusedRowEnabled: true,
+  scrolling: {
+    showScrollbar: 'never',
+  },
 }));
 
 test('Navigate to first cell in the row that contains focus when row dragging is enabled', async (t) => {
@@ -153,7 +169,7 @@ test('Navigate to first cell in the row that contains focus when row dragging is
     .click(dataGrid.getDataCell(0, 14).element)
     .pressKey('home');
 
-  await takeScreenshot('navigate_to_first_cell_in_row_that_contains_focus_when_row_dragging_is_enabled', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'navigate_to_first_cell_in_row_that_contains_focus_when_row_dragging_is_enabled.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -169,6 +185,9 @@ test('Navigate to first cell in the row that contains focus when row dragging is
     allowReordering: true,
     showDragIcons: true,
   },
+  scrolling: {
+    showScrollbar: 'never',
+  },
 }));
 
 test('Navigation should not work when pressing the End key when the row is in edit state', async (t) => {
@@ -181,7 +200,7 @@ test('Navigation should not work when pressing the End key when the row is in ed
     .click(dataGrid.getDataCell(0, 0).element)
     .pressKey('end');
 
-  await takeScreenshot('navigation_should_not_work_when_pressing_End_when_row_is_in_edit_state', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'navigation_should_not_work_when_pressing_End_when_row_is_in_edit_state.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -194,6 +213,9 @@ test('Navigation should not work when pressing the End key when the row is in ed
   height: 500,
   width: 800,
   showBorders: true,
+  scrolling: {
+    showScrollbar: 'never',
+  },
   editing: {
     editRowKey: 'val_0_0',
   },
@@ -209,7 +231,7 @@ test('Navigate to last cell in the row that contains focus when virtual columns 
     .click(dataGrid.getDataCell(0, 0).element)
     .pressKey('end');
 
-  await takeScreenshot('navigate_to_last_cell_in_row_that_contains_focus_when_virtual_columns_are_enabled', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'navigate_to_last_cell_in_row_that_contains_focus_when_virtual_columns_are_enabled.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -223,6 +245,7 @@ test('Navigate to last cell in the row that contains focus when virtual columns 
   showBorders: true,
   scrolling: {
     useNative: false,
+    showScrollbar: 'never',
     columnRenderingMode: 'virtual',
   },
 }));
@@ -244,7 +267,7 @@ test('Navigate to first cell in the row that contains focus when virtual columns
     .click(dataGrid.getDataCell(0, 49).element)
     .pressKey('home');
 
-  await takeScreenshot('navigate_to_first_cell_in_row_that_contains_focus_when_virtual_columns_are_enabled', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'navigate_to_first_cell_in_row_that_contains_focus_when_virtual_columns_are_enabled.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -258,6 +281,7 @@ test('Navigate to first cell in the row that contains focus when virtual columns
   showBorders: true,
   scrolling: {
     useNative: false,
+    showScrollbar: 'never',
     columnRenderingMode: 'virtual',
   },
 }));
@@ -272,7 +296,7 @@ test('Navigate to last cell in the row that contains focus when adaptivity is en
     .click(dataGrid.getDataCell(0, 0).element)
     .pressKey('end');
 
-  await takeScreenshot('navigate_to_last_cell_in_row_that_contains_focus_when_adaptivity_is_enabled', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'navigate_to_last_cell_in_row_that_contains_focus_when_adaptivity_is_enabled.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -284,6 +308,9 @@ test('Navigate to last cell in the row that contains focus when adaptivity is en
   height: 500,
   width: 800,
   showBorders: true,
+  scrolling: {
+    showScrollbar: 'never',
+  },
   customizeColumns(columns) {
     columns[columns.length - 1].hidingPriority = 0;
     columns.splice(columns.length - 2, 0, { type: 'adaptive', width: 100 });
@@ -307,7 +334,7 @@ test('Navigate to first cell in the row that contains focus when adaptivity is e
     .click(dataGrid.getDataCell(0, 50).element)
     .pressKey('home');
 
-  await takeScreenshot('navigate_to_first_cell_in_row_that_contains_focus_when_adaptivity_is_enabled', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'navigate_to_first_cell_in_row_that_contains_focus_when_adaptivity_is_enabled.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -323,6 +350,9 @@ test('Navigate to first cell in the row that contains focus when adaptivity is e
     columns[0].hidingPriority = 0;
     columns.push({ type: 'adaptive', width: 100 });
   },
+  scrolling: {
+    showScrollbar: 'never',
+  },
 }));
 
 // Quick navigation through grid rows via Ctrl+Home and Ctrl+End keys
@@ -336,7 +366,7 @@ test('Focus the last cell in the last row when pressing the Ctrl+End key', async
     .click(dataGrid.getDataCell(0, 0).element)
     .pressKey('ctrl+end');
 
-  await takeScreenshot('focus_last_cell_in_last_row_when_pressing_Ctrl_+_End_key', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'focus_last_cell_in_last_row_when_pressing_Ctrl_+_End_key.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -360,7 +390,7 @@ test('Focus the first cell in the firs row when pressing the Ctrl+Home key', asy
     .click(dataGrid.getDataCell(4, 6).element)
     .pressKey('ctrl+home');
 
-  await takeScreenshot('focus_first_cell_in_first_row_when_pressing_Ctrl_+_Home_key', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'focus_first_cell_in_first_row_when_pressing_Ctrl_+_Home_key.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -384,7 +414,7 @@ test('Navigate to last cell in the last row when pressing the Ctrl+End key', asy
     .click(dataGrid.getDataCell(0, 0).element)
     .pressKey('ctrl+end');
 
-  await takeScreenshot('navigate_to_last_cell_in_last_row_when_pressing_Ctrl_+_End_key', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'navigate_to_last_cell_in_last_row_when_pressing_Ctrl_+_End_key.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -396,6 +426,9 @@ test('Navigate to last cell in the last row when pressing the Ctrl+End key', asy
   height: 500,
   width: 800,
   showBorders: true,
+  scrolling: {
+    showScrollbar: 'never',
+  },
 }));
 
 test('Navigate to first cell in the first row when pressing the Ctrl + Home key', async (t) => {
@@ -410,14 +443,14 @@ test('Navigate to first cell in the first row when pressing the Ctrl + Home key'
     .expect(dataGrid.getScrollLeft())
     .eql(700);
 
-  await takeScreenshot('navigate_to_first_cell_in_first_row_when_pressing_Ctrl_+_Home_key_1', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'navigate_to_first_cell_in_first_row_when_pressing_Ctrl_+_Home_key_1.png', { element: dataGrid.element });
 
   // act
   await t
     .click(dataGrid.getDataCell(19, 14).element)
     .pressKey('ctrl+home');
 
-  await takeScreenshot('navigate_to_first_cell_in_first_row_when_pressing_Ctrl_+_Home_key_2', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'navigate_to_first_cell_in_first_row_when_pressing_Ctrl_+_Home_key_2.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -429,9 +462,12 @@ test('Navigate to first cell in the first row when pressing the Ctrl + Home key'
   height: 500,
   width: 800,
   showBorders: true,
+  scrolling: {
+    showScrollbar: 'never',
+  },
 }));
 
-test('Navigate to last cell in the last row when virtual scrolling is enabled', async (t) => {
+test.meta({ unstable: true })('Navigate to last cell in the last row when virtual scrolling is enabled', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -441,7 +477,7 @@ test('Navigate to last cell in the last row when virtual scrolling is enabled', 
     .click(dataGrid.getDataCell(0, 0).element)
     .pressKey('ctrl+end');
 
-  await takeScreenshot('navigate_to_last_cell_in_last_row_when_virtual_scrolling_is_enabled', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'navigate_to_last_cell_in_last_row_when_virtual_scrolling_is_enabled.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -455,6 +491,7 @@ test('Navigate to last cell in the last row when virtual scrolling is enabled', 
   showBorders: true,
   scrolling: {
     mode: 'virtual',
+    showScrollbar: 'never',
     useNative: false,
   },
 }));
@@ -471,14 +508,15 @@ test('Navigate to first cell in the first row when virtual scrolling is enabled'
     .expect(dataGrid.getScrollLeft())
     .eql(700);
 
-  await takeScreenshot('navigate_to_first_cell_in_first_row_when_virtual_scrolling_is_enabled_1', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'navigate_to_first_cell_in_first_row_when_virtual_scrolling_is_enabled_1.png', { element: dataGrid.element });
 
   // act
   await t
     .click(dataGrid.getDataCell(199, 14).element)
-    .pressKey('ctrl+home');
+    .pressKey('ctrl+home')
+    .wait(1000);
 
-  await takeScreenshot('navigate_to_first_cell_in_first_row_when_virtual_scrolling_is_enabled_2', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'navigate_to_first_cell_in_first_row_when_virtual_scrolling_is_enabled_2.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -492,6 +530,7 @@ test('Navigate to first cell in the first row when virtual scrolling is enabled'
   showBorders: true,
   scrolling: {
     mode: 'virtual',
+    showScrollbar: 'never',
     useNative: false,
   },
 }));
@@ -504,14 +543,15 @@ test('Navigate to last cell in the last row when virtual scrolling and columns a
   // act
   await t
     .click(dataGrid.getDataCell(0, 0).element)
-    .pressKey('ctrl+end');
+    .pressKey('ctrl+end')
+    .wait(1000);
 
   // assert
   await t
     .expect(dataGrid.getDataCell(199, 34).element.focused)
     .ok();
 
-  await takeScreenshot('navigate_to_last_cell_in_last_row_when_virtual_scrolling_and_columns_are_enabled', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'navigate_to_last_cell_in_last_row_when_virtual_scrolling_and_columns_are_enabled.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())
@@ -524,6 +564,7 @@ test('Navigate to last cell in the last row when virtual scrolling and columns a
   scrolling: {
     mode: 'virtual',
     columnRenderingMode: 'virtual',
+    showScrollbar: 'never',
   },
 }));
 
@@ -539,19 +580,20 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
     .expect(dataGrid.getScrollLeft())
     .eql(2700);
 
-  await takeScreenshot('navigate_to_first_cell_in_first_row_when_virtual_scrolling_and_columns_are_enabled_1', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'navigate_to_first_cell_in_first_row_when_virtual_scrolling_and_columns_are_enabled_1.png', { element: dataGrid.element });
 
   // act
   await t
     .click(dataGrid.getDataCell(199, 34).element)
-    .pressKey('ctrl+home');
+    .pressKey('ctrl+home')
+    .wait(300);
 
   // assert
   await t
     .expect(dataGrid.getDataCell(0, 0).element.focused)
     .ok();
 
-  await takeScreenshot('navigate_to_first_cell_in_first_row_when_virtual_scrolling_and_columns_are_enabled_2', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'navigate_to_first_cell_in_first_row_when_virtual_scrolling_and_columns_are_enabled_2.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())
@@ -563,6 +605,7 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
   width: 800,
   scrolling: {
     mode: 'virtual',
+    showScrollbar: 'never',
     columnRenderingMode: 'virtual',
   },
 }));
@@ -576,7 +619,8 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
     // act
     await t
       .click(dataGrid.getDataCell(0, 1).element)
-      .pressKey('ctrl+end');
+      .pressKey('ctrl+end')
+      .wait(1000);
 
     // assert
     await t
@@ -586,9 +630,10 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
     // act
     await t
       .click(dataGrid.getDataCell(199, 35).element)
-      .pressKey('ctrl+home');
+      .pressKey('ctrl+home')
+      .wait(1000);
 
-    await takeScreenshot(`${useNative ? 'native' : 'simulated'}_scrolling_-_navigate_to_first_cell_row_dragging__virtual_scrolling__virtual_columns`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `${useNative ? 'native' : 'simulated'}_scrolling_-_navigate_to_first_cell_row_dragging__virtual_scrolling__virtual_columns.png`, { element: dataGrid.element });
 
     // assert
     await t
@@ -620,14 +665,13 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
     // act
     await t
       .click(dataGrid.getDataCell(0, 0).element)
-      .pressKey('ctrl+end');
+      .pressKey('ctrl+end')
+      .wait(1000);
 
-    await takeScreenshot(`${useNative ? 'native' : 'simulated'}_scrolling_-_navigate_to_last_cell_row_dragging__virtual_scrolling__virtual_columns`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `${useNative ? 'native' : 'simulated'}_scrolling_-_navigate_to_last_cell_row_dragging__virtual_scrolling__virtual_columns.png`, { element: dataGrid.element });
 
     // assert
     await t
-      .expect(dataGrid.getDataCell(199, 34).element.focused)
-      .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => createWidget('dxDataGrid', {

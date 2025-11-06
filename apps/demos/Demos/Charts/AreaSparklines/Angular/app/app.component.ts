@@ -27,7 +27,7 @@ export class AppComponent {
 
   palladiumCosts: CostInfo[];
 
-  years: Array<number>;
+  years: number[];
 
   constructor(service: Service) {
     this.copperCosts = service.getCopperCosts();

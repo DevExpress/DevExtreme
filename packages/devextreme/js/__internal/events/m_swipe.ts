@@ -1,11 +1,24 @@
+import type { Cancelable } from '@js/common/core/events';
 import registerEmitter from '@js/common/core/events/core/emitter_registrator';
 import GestureEmitter from '@js/common/core/events/gesture/emitter.gesture';
-import { eventData } from '@js/common/core/events/utils/index';
+import { eventData } from '@js/common/core/events/utils';
 import { getHeight, getWidth } from '@js/core/utils/size';
 
 const SWIPE_START_EVENT = 'dxswipestart';
 const SWIPE_EVENT = 'dxswipe';
 const SWIPE_END_EVENT = 'dxswipeend';
+
+export type SwipeStartEvent = Event & Cancelable & {
+  maxLeftOffset: number;
+  maxRightOffset: number;
+};
+export type SwipeUpdateEvent = Event & {
+  offset: number;
+
+};
+export type SwipeEndEvent = Event & {
+  targetOffset: number;
+};
 
 const HorizontalStrategy = {
   defaultItemSizeFunc() {

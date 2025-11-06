@@ -23,7 +23,7 @@ export default function App() {
     setEmployeeInfo({});
     setLoadPanelVisible(true);
     setTimeout(hideLoadPanel, 3000);
-  }, [setEmployeeInfo, setLoadPanelVisible]);
+  }, [setEmployeeInfo, setLoadPanelVisible, hideLoadPanel]);
 
   const onShowIndicatorChange = useCallback((e: { value: any; }) => {
     setShowIndicator(e.value);

@@ -1,4 +1,3 @@
-
 export const dataSource = [{
   state: 'Saudi Arabia',
   year1990: 319.6,

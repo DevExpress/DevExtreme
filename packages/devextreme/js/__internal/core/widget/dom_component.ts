@@ -6,8 +6,7 @@ import { cleanDataRecursive } from '@js/core/element_data';
 import errors from '@js/core/errors';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-// @ts-expect-error
-import { grep, noop } from '@js/core/utils/common';
+import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { attachInstanceToElement, getInstanceByElement } from '@js/core/utils/public_component';
@@ -18,24 +17,30 @@ import { hasWindow } from '@js/core/utils/window';
 import license, { peekValidationPerformed } from '@ts/core/license/license_validation';
 import TemplateManagerModule from '@ts/core/m_template_manager';
 import { uiLayerInitialized } from '@ts/core/utils/m_common';
+import type { ComponentProperties, DefaultActionArgs, DefaultActionConfig } from '@ts/core/widget/component';
+import { Component } from '@ts/core/widget/component';
+import type { OptionChanged } from '@ts/core/widget/types';
 
-import { Component } from './component';
-import type { OptionChanged } from './types';
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export interface Properties<TComponent = any> extends DOMComponentOptions<TComponent> {
+export interface DOMComponentProperties<TComponent> extends DOMComponentOptions<TComponent>, Omit<
+  ComponentProperties<TComponent>,
+  keyof DOMComponentOptions<TComponent>
+> {
   _ignoreFunctionValueDeprecation?: boolean;
 
   integrationOptions?: Record<string, unknown>;
 
   nestedComponentOptions?: (context: TComponent) => void;
 
-  modelByElement?: ($element: dxElementWrapper) => unknown;
+  modelByElement?: ($element: dxElementWrapper) => TComponent;
+
+  templatesRenderAsynchronously?: boolean;
+
+  disabled?: boolean;
 }
 
 class DOMComponent<
   TComponent extends Component<TComponent, TProperties>,
-  TProperties extends Properties = Properties,
+  TProperties extends DOMComponentProperties<TComponent> = DOMComponentProperties<TComponent>,
 > extends Component<TComponent, TProperties> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static _classCustomRules: any[];
@@ -55,11 +60,9 @@ class DOMComponent<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _templateManager!: any;
 
-  // eslint-disable-next-line @stylistic/max-len
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
-  static getInstance(element) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return getInstanceByElement($(element), this);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static getInstance<T = any>(element: Element | dxElementWrapper): T {
+    return getInstanceByElement<T>($(element), this);
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -71,17 +74,11 @@ class DOMComponent<
   _getDefaultOptions(): TProperties {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend(super._getDefaultOptions(), {
-
       width: undefined,
-
       height: undefined,
-
       rtlEnabled: config().rtlEnabled,
-
       elementAttr: {},
-
       disabled: false,
-
       integrationOptions: {},
     }, this._useTemplates() ? TemplateManagerModule.TemplateManager.createDefaultOptions() : {});
   }
@@ -108,7 +105,6 @@ class DOMComponent<
   }
 
   _getSynchronizableOptionsForCreateComponent(): (keyof TProperties)[] {
-    // @ts-expect-error
     return ['rtlEnabled', 'disabled', 'templatesRenderAsynchronously'];
   }
 
@@ -299,11 +295,10 @@ class DOMComponent<
   _clean(): void {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _modelByElement(element: dxElementWrapper): unknown | undefined {
+  _modelByElement($element: dxElementWrapper): TComponent | undefined {
     const { modelByElement } = this.option();
-    const $element = this.$element();
 
-    return modelByElement ? modelByElement($element) : undefined;
+    return modelByElement ? modelByElement(this.$element()) : undefined;
   }
 
   _invalidate(): void {
@@ -320,9 +315,7 @@ class DOMComponent<
   }
 
   _dispose(): void {
-    // eslint-disable-next-line @stylistic/max-len
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain, @typescript-eslint/no-unused-expressions
-    this._templateManager && this._templateManager.dispose();
+    this._templateManager?.dispose();
     super._dispose();
     this._clean();
     this._detachWindowResizeCallback();
@@ -340,20 +333,18 @@ class DOMComponent<
     $element.toggleClass('dx-rtl', rtl);
   }
 
-  _createComponent<TTComponent>(
-    element: string | HTMLElement | dxElementWrapper,
+  _createComponent<TTComponent, IProperties = Record<string, unknown>>(
+    element: string | HTMLElement | dxElementWrapper | Element,
     component: string | (new (...args) => TTComponent),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    componentConfiguration?: TTComponent extends Component<any, infer TTProperties>
+    componentConfiguration: TTComponent extends Component<any, infer TTProperties>
       ? TTProperties
-      : Record<string, unknown>,
+      : IProperties,
   ): TTComponent {
     const configuration = componentConfiguration ?? {};
 
-    const synchronizableOptions = grep(
-      this._getSynchronizableOptionsForCreateComponent(),
-      (value) => !(value in configuration),
-    );
+    const synchronizableOptions = this._getSynchronizableOptionsForCreateComponent()
+      .filter((value) => !(value in configuration));
 
     const { integrationOptions } = this.option();
     let { nestedComponentOptions } = this.option();
@@ -362,13 +353,13 @@ class DOMComponent<
 
     const nestedComponentConfig = extend(
       { integrationOptions },
-      nestedComponentOptions(this),
+      nestedComponentOptions(this as unknown as TComponent),
     );
 
-    synchronizableOptions.forEach(
-      // eslint-disable-next-line no-return-assign
-      (optionName) => nestedComponentConfig[optionName] = this.option(optionName),
-    );
+    synchronizableOptions.forEach((optionName) => {
+      const { [optionName]: value } = this.option();
+      nestedComponentConfig[optionName] = value;
+    });
 
     this._extendConfig(configuration, nestedComponentConfig);
 
@@ -410,29 +401,44 @@ class DOMComponent<
     return instance;
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  _extendConfig(configuration, extendConfig): void {
-    each(extendConfig, (key, value) => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      !Object.prototype.hasOwnProperty.call(configuration, key) && (configuration[key] = value);
+  _extendConfig(
+    configuration: Record<string, unknown>,
+    extendConfig: Record<string, unknown>,
+  ): void {
+    each(extendConfig, (key: string, value: unknown) => {
+      configuration[key] ??= value;
     });
   }
 
-  _defaultActionConfig(): { context: TComponent; component: TComponent } {
+  _defaultActionConfig(): DefaultActionConfig<TComponent> {
     const $element = this.$element();
     const context = this._modelByElement($element);
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return extend(super._defaultActionConfig(), { context });
+    const defaultConfig = super._defaultActionConfig();
+
+    if (context) {
+      defaultConfig.context = context;
+    }
+
+    return defaultConfig;
   }
 
-  _defaultActionArgs(): { component: TComponent; element?: dxElementWrapper; model?: unknown } {
+  _defaultActionArgs(): DefaultActionArgs<TComponent> {
+    const args = super._defaultActionArgs();
+
     const $element = this.$element();
     const model = this._modelByElement($element);
     const element = this.element();
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return extend(super._defaultActionArgs(), { element, model });
+    if (element) {
+      args.element = element;
+    }
+
+    if (model) {
+      args.model = model;
+    }
+
+    return args;
   }
 
   _optionChanged(args: OptionChanged<TProperties> | Record<string, unknown>): void {
@@ -461,8 +467,7 @@ class DOMComponent<
   _removeAttributes(element: Element): void {
     const attrs = element.attributes;
 
-    // eslint-disable-next-line no-plusplus
-    for (let i = attrs.length - 1; i >= 0; i--) {
+    for (let i = attrs.length - 1; i >= 0; i -= 1) {
       const attr = attrs[i];
 
       if (attr) {
@@ -470,7 +475,7 @@ class DOMComponent<
 
         // eslint-disable-next-line @typescript-eslint/prefer-includes
         if (!name.indexOf('aria-') || name.indexOf('dx-') !== -1
-                    || name === 'role' || name === 'style' || name === 'tabindex') {
+            || name === 'role' || name === 'style' || name === 'tabindex') {
           element.removeAttribute(name);
         }
       }

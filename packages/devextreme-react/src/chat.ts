@@ -8,15 +8,18 @@ import dxChat, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { Message, DisposingEvent, InitializedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, TypingEndEvent, TypingStartEvent, User as ChatUser } from "devextreme/ui/chat";
-import type { Format } from "devextreme/common";
+import type { Message, AttachmentDownloadClickEvent, DisposingEvent, InitializedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, TypingEndEvent, TypingStartEvent, Attachment as ChatAttachment, User as ChatUser } from "devextreme/ui/chat";
+import type { DisposingEvent as FileUploaderDisposingEvent, InitializedEvent as FileUploaderInitializedEvent, BeforeSendEvent, ContentReadyEvent, DropZoneEnterEvent, DropZoneLeaveEvent, FilesUploadedEvent, OptionChangedEvent, ProgressEvent, UploadAbortedEvent, UploadedEvent, UploadErrorEvent, UploadStartedEvent, ValueChangedEvent, UploadHttpMethod, FileUploadMode } from "devextreme/ui/file_uploader";
+import type { Format, ValidationStatus } from "devextreme/common";
 
+import type UploadInfo from "devextreme/file_management/upload_info";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
 }
 
 type IChatOptionsNarrowedEvents = {
+  onAttachmentDownloadClick?: ((e: AttachmentDownloadClickEvent) => void) | undefined;
   onDisposing?: ((e: DisposingEvent) => void);
   onInitialized?: ((e: InitializedEvent) => void);
   onMessageDeleted?: ((e: MessageDeletedEvent) => void) | undefined;
@@ -31,6 +34,8 @@ type IChatOptionsNarrowedEvents = {
 }
 
 type IChatOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IChatOptionsNarrowedEvents> & IHtmlOptions & {
+  emptyViewRender?: (...params: any) => React.ReactNode;
+  emptyViewComponent?: React.ComponentType<any>;
   messageRender?: (...params: any) => React.ReactNode;
   messageComponent?: React.ComponentType<any>;
   defaultItems?: Array<Message>;
@@ -52,10 +57,10 @@ const Chat = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["items"]), []);
-      const independentEvents = useMemo(() => (["onDisposing","onInitialized","onMessageDeleted","onMessageDeleting","onMessageEditCanceled","onMessageEditingStart","onMessageEntered","onMessageUpdated","onMessageUpdating","onTypingEnd","onTypingStart"]), []);
+      const independentEvents = useMemo(() => (["onAttachmentDownloadClick","onDisposing","onInitialized","onMessageDeleted","onMessageDeleting","onMessageEditCanceled","onMessageEditingStart","onMessageEntered","onMessageUpdated","onMessageUpdating","onTypingEnd","onTypingStart"]), []);
 
       const defaults = useMemo(() => ({
         defaultItems: "items",
@@ -65,6 +70,7 @@ const Chat = memo(
         alert: { optionName: "alerts", isCollectionItem: true },
         dayHeaderFormat: { optionName: "dayHeaderFormat", isCollectionItem: false },
         editing: { optionName: "editing", isCollectionItem: false },
+        fileUploaderOptions: { optionName: "fileUploaderOptions", isCollectionItem: false },
         item: { optionName: "items", isCollectionItem: true },
         messageTimestampFormat: { optionName: "messageTimestampFormat", isCollectionItem: false },
         typingUser: { optionName: "typingUsers", isCollectionItem: true },
@@ -72,6 +78,11 @@ const Chat = memo(
       }), []);
 
       const templateProps = useMemo(() => ([
+        {
+          tmplOption: "emptyViewTemplate",
+          render: "emptyViewRender",
+          component: "emptyViewComponent"
+        },
         {
           tmplOption: "messageTemplate",
           render: "messageRender",
@@ -113,6 +124,26 @@ const _componentAlert = (props: IAlertProps) => {
 };
 
 const Alert = Object.assign<typeof _componentAlert, NestedComponentMeta>(_componentAlert, {
+  componentType: "option",
+});
+
+// owners:
+// Item
+type IAttachmentProps = React.PropsWithChildren<{
+  name?: string;
+  size?: number;
+}>
+const _componentAttachment = (props: IAttachmentProps) => {
+  return React.createElement(NestedOption<IAttachmentProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "attachments",
+      IsCollectionItem: true,
+    },
+  });
+};
+
+const Attachment = Object.assign<typeof _componentAttachment, NestedComponentMeta>(_componentAttachment, {
   componentType: "option",
 });
 
@@ -181,8 +212,95 @@ const Editing = Object.assign<typeof _componentEditing, NestedComponentMeta>(_co
 
 // owners:
 // Chat
+type IFileUploaderOptionsProps = React.PropsWithChildren<{
+  abortUpload?: ((file: any, uploadInfo?: UploadInfo) => any);
+  accept?: string;
+  accessKey?: string | undefined;
+  activeStateEnabled?: boolean;
+  allowCanceling?: boolean;
+  allowedFileExtensions?: Array<string>;
+  chunkSize?: number;
+  dialogTrigger?: any | string | undefined;
+  disabled?: boolean;
+  dropZone?: any | string | undefined;
+  elementAttr?: Record<string, any>;
+  focusStateEnabled?: boolean;
+  height?: number | string | undefined;
+  hint?: string | undefined;
+  hoverStateEnabled?: boolean;
+  inputAttr?: any;
+  invalidFileExtensionMessage?: string;
+  invalidMaxFileSizeMessage?: string;
+  invalidMinFileSizeMessage?: string;
+  isDirty?: boolean;
+  isValid?: boolean;
+  labelText?: string;
+  maxFileSize?: number;
+  minFileSize?: number;
+  multiple?: boolean;
+  name?: string;
+  onBeforeSend?: ((e: BeforeSendEvent) => void);
+  onContentReady?: ((e: ContentReadyEvent) => void);
+  onDisposing?: ((e: FileUploaderDisposingEvent) => void);
+  onDropZoneEnter?: ((e: DropZoneEnterEvent) => void);
+  onDropZoneLeave?: ((e: DropZoneLeaveEvent) => void);
+  onFilesUploaded?: ((e: FilesUploadedEvent) => void);
+  onInitialized?: ((e: FileUploaderInitializedEvent) => void);
+  onOptionChanged?: ((e: OptionChangedEvent) => void);
+  onProgress?: ((e: ProgressEvent) => void);
+  onUploadAborted?: ((e: UploadAbortedEvent) => void);
+  onUploaded?: ((e: UploadedEvent) => void);
+  onUploadError?: ((e: UploadErrorEvent) => void);
+  onUploadStarted?: ((e: UploadStartedEvent) => void);
+  onValueChanged?: ((e: ValueChangedEvent) => void);
+  progress?: number;
+  readOnly?: boolean;
+  readyToUploadMessage?: string;
+  rtlEnabled?: boolean;
+  selectButtonText?: string;
+  showFileList?: boolean;
+  tabIndex?: number;
+  uploadAbortedMessage?: string;
+  uploadButtonText?: string;
+  uploadChunk?: ((file: any, uploadInfo: UploadInfo) => any);
+  uploadCustomData?: any;
+  uploadedMessage?: string;
+  uploadFailedMessage?: string;
+  uploadFile?: ((file: any, progressCallback: (() => void)) => any);
+  uploadHeaders?: any;
+  uploadMethod?: UploadHttpMethod;
+  uploadMode?: FileUploadMode;
+  uploadUrl?: string;
+  validationError?: any;
+  validationErrors?: Array<any>;
+  validationStatus?: ValidationStatus;
+  value?: Array<any>;
+  visible?: boolean;
+  width?: number | string | undefined;
+  defaultValue?: Array<any>;
+  onValueChange?: (value: Array<any>) => void;
+}>
+const _componentFileUploaderOptions = (props: IFileUploaderOptionsProps) => {
+  return React.createElement(NestedOption<IFileUploaderOptionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "fileUploaderOptions",
+      DefaultsProps: {
+        defaultValue: "value"
+      },
+    },
+  });
+};
+
+const FileUploaderOptions = Object.assign<typeof _componentFileUploaderOptions, NestedComponentMeta>(_componentFileUploaderOptions, {
+  componentType: "option",
+});
+
+// owners:
+// Chat
 type IItemProps = React.PropsWithChildren<{
   alt?: string;
+  attachments?: Array<ChatAttachment>;
   author?: ChatUser;
   id?: number | string;
   isDeleted?: boolean;
@@ -199,6 +317,7 @@ const _componentItem = (props: IItemProps) => {
       OptionName: "items",
       IsCollectionItem: true,
       ExpectedChildren: {
+        attachment: { optionName: "attachments", isCollectionItem: true },
         author: { optionName: "author", isCollectionItem: false }
       },
     },
@@ -282,12 +401,16 @@ export {
   ChatRef,
   Alert,
   IAlertProps,
+  Attachment,
+  IAttachmentProps,
   Author,
   IAuthorProps,
   DayHeaderFormat,
   IDayHeaderFormatProps,
   Editing,
   IEditingProps,
+  FileUploaderOptions,
+  IFileUploaderOptionsProps,
   Item,
   IItemProps,
   MessageTimestampFormat,

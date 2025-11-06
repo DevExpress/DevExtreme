@@ -25,7 +25,7 @@ export class AppComponent {
 
   shifts: Shift[];
 
-  currentShift:Shift;
+  currentShift: Shift;
 
   currentDate: Date = new Date(2021, 2, 30);
 

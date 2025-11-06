@@ -1,12 +1,11 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
-  DxTemplateModule, DxButtonModule, DxPopupModule, DxPopoverModule,
+  DxButtonModule, DxPopupModule, DxPopoverModule,
 } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
-import { Service, House, Agent } from './app.service';
+import { Service, House } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -64,7 +63,6 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    DxTemplateModule,
     DxButtonModule,
     DxPopupModule,
     DxPopoverModule,

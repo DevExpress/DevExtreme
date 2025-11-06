@@ -1,6 +1,7 @@
 <template>
   <p>
-    Review room types that can accommodate your group size and make your selection. You can also choose a meal plan, whether it's breakfast only or full board.
+    Review room types that can accommodate your group size and make your selection.
+    You can also choose a meal plan, whether it's breakfast only or full board.
   </p>
   <DxForm
     :form-data="formData"
@@ -33,18 +34,18 @@ import { watch, ref } from 'vue';
 import type { BookingFormData } from './types.ts';
 import { roomTypes, mealPlans, getInitialFormData } from './data.ts';
 
-const formRef = ref(null);
+const formRef = ref<DxForm>();
 
 const props = withDefaults(defineProps<{
   formData: BookingFormData;
   validationGroup?: string;
 }>(), {
   formData: getInitialFormData,
-  validationGroup: () => undefined,
+  validationGroup: () => '',
 });
 
 watch(() => props.formData, (value) => {
-  formRef.value.instance.reset(value);
+  formRef.value?.instance?.reset(value);
 });
 
 const roomLabelOptions = {

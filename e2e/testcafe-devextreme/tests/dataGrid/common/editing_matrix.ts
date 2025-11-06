@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+/* eslint-disable @stylistic/max-len, @typescript-eslint/init-declarations */
 import { Selector } from 'testcafe';
 import { CellEditor } from 'devextreme-testcafe-models/dataGrid/data/cellEditor';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
@@ -148,7 +148,7 @@ const editCell = async (t: TestController, {
 
   if (useKeyboard) {
     await t
-    // .pressKey('tab')
+      // .pressKey('tab')
       .pressKey('ctrl+down')
       .pressKey('enter');
     if (mode === 'popup') { // TODO
@@ -222,7 +222,6 @@ const checkEditCell = async (t: TestController, { mode, dataField }, cell: DataC
     .eql(true);
 };
 
-// eslint-disable-next-line max-len
 const getEditorValue = async (dataField: string, editor: CellEditor): Promise<string | undefined> => {
   if (dataField === 'boolean') {
     return await editor.isChecked() ? 'true' : 'false';
@@ -407,7 +406,7 @@ editingModes.forEach((mode) => {
               repaintChangesOnly,
             };
 
-            test.meta({ unstable: true })(`Update cell value ${JSON.stringify({
+            test(`Update cell value ${JSON.stringify({
               mode, dataField, repaintChangesOnly, useKeyboard, useMask, isAdding,
             })}`, async (t) => {
               const rowIndex = 0;

@@ -8,7 +8,7 @@ const onDragChange = (e) => {
   const visibleRows = e.component.getVisibleRows();
   const sourceNode = e.component.getNodeByKey(e.itemData.ID);
   let targetNode = visibleRows[e.toIndex].node;
-  while (targetNode && targetNode.data) {
+  while (targetNode?.data) {
     if (targetNode.data.ID === sourceNode.data.ID) {
       e.cancel = true;
       break;

@@ -11,6 +11,10 @@ import {
     template,
 } from '../common';
 
+import {
+    Properties as FileUploaderOptions,
+} from './file_uploader';
+
 import Widget, { WidgetOptions } from './widget/ui.widget';
 import {
     EventInfo,
@@ -18,7 +22,9 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     AsyncCancelable,
-} from '../common/core/events';
+    InteractionEvent,
+} from '../events';
+
 import DataSource, { DataSourceLike } from '../data/data_source';
 
 /**
@@ -51,7 +57,7 @@ export type OptionChangedEvent = EventInfo<dxChat> & ChangedOptionInfo;
  * @type object
  * @inherits NativeEventInfo
  */
-export type MessageEnteredEvent = NativeEventInfo<dxChat, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
+export type MessageEnteredEvent = NativeEventInfo<dxChat, InteractionEvent> & {
     /** @docid _ui_chat_MessageEnteredEvent.message */
     readonly message: Message;
 };
@@ -149,6 +155,17 @@ export type MessageUpdatedEvent = EventInfo<dxChat> & {
 };
 
 /**
+ * @docid _ui_chat_AttachmentDownloadClickEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
+export type AttachmentDownloadClickEvent = EventInfo<dxChat> & {
+  /** @docid _ui_chat_AttachmentDownloadClickEvent.attachment */
+  readonly attachment?: Attachment;
+};
+
+/**
  * @docid
  * @namespace DevExpress.ui.dxChat
  * @public
@@ -192,6 +209,26 @@ export type Alert = {
      * @public
      */
     message?: string;
+};
+
+/**
+ * @docid
+ * @namespace DevExpress.ui.dxChat
+ * @public
+ */
+export type Attachment = {
+    /**
+     * @docid
+     * @public
+     */
+    name: string;
+    /**
+     * @docid
+     * @public
+     */
+    size: number;
+
+    [key: string]: any;
 };
 
 /**
@@ -242,6 +279,12 @@ export type TextMessage = MessageBase & {
     /**
      * @docid
      * @public
+     * @type Array<Attachment>
+     */
+    attachments?: Attachment[];
+    /**
+     * @docid
+     * @public
      */
     text?: string;
     /**
@@ -249,6 +292,8 @@ export type TextMessage = MessageBase & {
      * @public
      */
     isEdited?: boolean;
+
+    [key: string]: any;
 };
 
 /**
@@ -284,6 +329,15 @@ export type MessageTemplateData = {
     readonly message?: Message;
 };
 
+/** @public */
+export type EmptyViewTemplateData = {
+    readonly component: dxChat;
+    readonly texts: {
+        readonly message: string;
+        readonly prompt: string;
+    };
+};
+
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
@@ -297,6 +351,13 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @public
      */
     activeStateEnabled?: boolean;
+    /**
+     * @docid
+     * @default null
+     * @type dxFileUploaderOptions
+     * @public
+     */
+    fileUploaderOptions?: Omit<FileUploaderOptions, 'dialogTrigger' | 'showFileList' | 'uploadMode' | 'value'>;
     /**
      * @docid
      * @default true
@@ -339,6 +400,13 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
        */
       allowDeleting?: boolean | ((options: { component?: dxChat; message?: Message }) => boolean);
     };
+    /**
+     * @docid
+     * @default null
+     * @type_function_return string|Element|jQuery
+     * @public
+     */
+    emptyViewTemplate?: template | null | ((data: EmptyViewTemplateData, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @type string | Array<Message> | Store | DataSource | DataSourceOptions | null
@@ -410,6 +478,14 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     /**
      * @docid
      * @default undefined
+     * @type_function_param1 e:{ui/chat:AttachmentDownloadClickEvent}
+     * @action
+     * @public
+     */
+    onAttachmentDownloadClick?: ((e: AttachmentDownloadClickEvent) => void) | undefined;
+    /**
+     * @docid
+     * @default undefined
      * @type_function_param1 e:{ui/chat:MessageEnteredEvent}
      * @action
      * @public
@@ -422,7 +498,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @action
      * @public
      */
-    onTypingStart?: ((e: TypingEndEvent) => void) | undefined ;
+    onTypingStart?: ((e: TypingStartEvent) => void) | undefined ;
     /**
      * @docid
      * @default undefined
@@ -517,7 +593,7 @@ type FilterOutHidden<T> = Omit<T, 'onContentReady' | 'onFocusIn' | 'onFocusOut' 
 
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onMessageEntered'
   | 'onTypingStart' | 'onTypingEnd' | 'onMessageDeleting' | 'onMessageDeleted'
-  | 'onMessageEditingStart' | 'onMessageEditCanceled' | 'onMessageUpdating' | 'onMessageUpdated'>;
+  | 'onMessageEditingStart' | 'onMessageEditCanceled' | 'onMessageUpdating' | 'onMessageUpdated' | 'onAttachmentDownloadClick'>;
 
 /**
 * @hidden

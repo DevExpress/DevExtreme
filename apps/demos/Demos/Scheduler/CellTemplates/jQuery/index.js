@@ -91,15 +91,16 @@ const holidays = [
   new Date(2021, 3, 29),
   new Date(2021, 5, 6),
 ];
+
 const ariaDescription = () => {
   const disabledDates = holidays
-    .filter(date => !isWeekend(date))
-    .map(date => new Date(date).toLocaleDateString('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      })
+    .filter((date) => !isWeekend(date))
+    .map((date) => new Date(date).toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }),
     );
   if (disabledDates?.length === 1) {
     return `${disabledDates} is a disabled date`;
@@ -107,6 +108,7 @@ const ariaDescription = () => {
   if (disabledDates?.length > 1) {
     return `${disabledDates.join(', ')} are disabled dates`;
   }
+  return '';
 };
 
 function notifyDisableDate() {
@@ -180,5 +182,7 @@ function applyDisableDatesToDateEditors(form) {
 
 function setComponentAria(element) {
   const prevAria = element?.attr('aria-label') || '';
-  element?.attr('aria-label', `${prevAria} ${ariaDescription()}`);
+  const description = ariaDescription();
+  const nextAria = `${prevAria}${description ? ` ${description}` : ''}`;
+  element?.attr('aria-label', nextAria);
 }

@@ -21,6 +21,7 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_views } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-view',
@@ -28,7 +29,13 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_views,
+           useExisting: DxiViewComponent,
+        }
+    ]
 })
 export class DxiViewComponent extends CollectionNestedOption {
     @Input()
@@ -93,14 +100,6 @@ export class DxiViewComponent extends CollectionNestedOption {
     }
     set dateCellTemplate(value: any) {
         this._setOption('dateCellTemplate', value);
-    }
-
-    @Input()
-    get dropDownAppointmentTemplate(): any {
-        return this._getOption('dropDownAppointmentTemplate');
-    }
-    set dropDownAppointmentTemplate(value: any) {
-        this._setOption('dropDownAppointmentTemplate', value);
     }
 
     @Input()

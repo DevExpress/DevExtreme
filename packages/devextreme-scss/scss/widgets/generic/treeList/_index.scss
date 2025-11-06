@@ -28,58 +28,9 @@
 
 @include grid-base(treelist);
 
-$treelist-empty-space-width: 14px;
-$treelist-select-all-checkbox-margin-top: floor(math.div(round($generic-base-line-height * $generic-base-font-size) - $generic-grid-base-checkbox-icon-size, 2));
-$treelist-checkbox-offset-left: $treelist-empty-space-width + $generic-grid-base-cell-padding;
-$treelist-checkbox-offset-left-rtl: $treelist-checkbox-offset-left + $generic-grid-base-checkbox-icon-size;
-$treelist-editor-cell-padding-left: $treelist-checkbox-offset-left-rtl + $generic-grid-base-cell-padding;
-$treelist-icon-container-padding-right: $generic-grid-base-checkbox-icon-size + $generic-grid-base-cell-padding;
-
 .dx-treelist-rowsview {
-  .dx-treelist-empty-space {
-    position: relative;
-    display: inline-block;
-    width: $treelist-empty-space-width;
-
-    @include dx-icon(spinright);
-
-    &::before {
-      visibility: hidden;
-    }
-  }
-
   tr:not(.dx-row-focused) .dx-treelist-empty-space {
     color: $treelist-spin-icon-color;
-  }
-
-  .dx-treelist-expanded span {
-    @include dx-icon(spindown);
-    @include dx-icon-font-centered-sizing($generic-base-icon-size);
-
-    cursor: pointer;
-
-    &::before {
-      left: 0;
-      margin-left: -$treelist-expanded-icon-margin-left;
-      margin-top: -$treelist-icon-margin-top;
-    }
-  }
-
-  .dx-treelist-collapsed span {
-    @include dx-icon(spinright);
-    @include dx-icon-font-centered-sizing($generic-base-icon-size);
-
-    cursor: pointer;
-
-    &::before {
-      left: 0;
-      margin-left: -$treelist-collapsed-icon-margin-left;
-      margin-top: -$treelist-icon-margin-top;
-    }
-  }
-
-  .dx-treelist-expanded, .dx-treelist-collapsed {
-    margin-right: $treelist-expanded-collapsed-margin-right;
   }
 
   tr:not(.dx-row-focused).dx-selection {
@@ -106,81 +57,6 @@ $treelist-icon-container-padding-right: $generic-grid-base-checkbox-icon-size + 
 
   .dx-treelist-content .dx-treelist-table .dx-row .dx-editor-cell {
     padding-left: $generic-grid-base-cell-padding;
-  }
-}
-
-.dx-treelist-checkbox-size {
-  line-height: 0;
-}
-
-.dx-treelist-cell-expandable,
-.dx-treelist-select-all {
-  .dx-select-checkbox {
-    position: absolute;
-  }
-}
-
-.dx-treelist-icon-container.dx-editor-inline-block {
-  position: relative;
-  padding-right: $treelist-icon-container-padding-right;
-
-  .dx-checkbox {
-    top: 50%;
-    margin-top: math.div(-$generic-grid-base-checkbox-icon-size, 2);
-  }
-}
-
-.dx-treelist-select-all {
-  position: relative;
-
-  .dx-checkbox {
-    left: $treelist-checkbox-offset-left;
-    margin-top: $treelist-select-all-checkbox-margin-top;
-  }
-
-  .dx-treelist-checkbox-size::before {
-    content: '';
-    width: $treelist-select-all-interaction-area-size;
-    height: $treelist-select-all-interaction-area-size;
-    position: absolute;
-    left: $treelist-select-all-interaction-area-left;
-    top: $treelist-select-all-interaction-area-top;
-  }
-}
-
-.dx-treelist-headers .dx-header-row > .dx-treelist-select-all {
-  padding-left: $treelist-editor-cell-padding-left;
-}
-
-.dx-rtl {
-  .dx-treelist-rowsview {
-    .dx-treelist-expanded,
-    .dx-treelist-collapsed {
-      @include flip-horizontally();
-
-      margin-right: 0;
-      margin-left: $treelist-expanded-collapsed-margin-right;
-    }
-
-    .dx-treelist-table-fixed {
-      .dx-treelist-icon-container {
-        float: right;
-      }
-    }
-  }
-
-  .dx-treelist-select-all .dx-checkbox {
-    left: calc(100% - #{$treelist-checkbox-offset-left-rtl});
-  }
-
-  .dx-treelist-headers .dx-header-row > .dx-treelist-select-all {
-    padding-right: $treelist-editor-cell-padding-left;
-    padding-left: $generic-grid-base-cell-padding;
-  }
-
-  .dx-treelist-icon-container.dx-editor-inline-block {
-    padding-left: $treelist-icon-container-padding-right;
-    padding-right: 0;
   }
 }
 

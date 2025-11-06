@@ -1,15 +1,16 @@
 import ConverterController from '../m_converterController';
+import type { Delta, QuillInstance } from '../types/quill';
 
 class DeltaConverter {
-  quillInstance: any;
+  quillInstance: QuillInstance | null = null;
 
-  setQuillInstance(quillInstance) {
+  setQuillInstance(quillInstance: QuillInstance): void {
     this.quillInstance = quillInstance;
   }
 
-  toHtml() {
+  toHtml(): string | undefined {
     if (!this.quillInstance) {
-      return;
+      return undefined;
     }
 
     return this._isQuillEmpty()
@@ -17,14 +18,23 @@ class DeltaConverter {
       : this.quillInstance.getSemanticHTML(0, this.quillInstance.getLength() + 1);
   }
 
-  _isQuillEmpty() {
+  private _isQuillEmpty(): boolean {
+    if (!this.quillInstance) {
+      return true;
+    }
+
     const delta = this.quillInstance.getContents();
 
-    return delta.length() === 1 && this._isDeltaEmpty(delta);
+    return delta.length() === 1 && DeltaConverter._isDeltaEmpty(delta);
   }
 
-  _isDeltaEmpty(delta) {
-    return delta.reduce((__, { insert }) => insert.indexOf('\n') !== -1);
+  private static _isDeltaEmpty(delta: Delta): boolean {
+    return delta.reduce<boolean>((_, operation) => {
+      if (typeof operation.insert === 'string') {
+        return operation.insert.includes('\n');
+      }
+      return false;
+    }, false);
   }
 }
 

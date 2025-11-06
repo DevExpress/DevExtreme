@@ -46,6 +46,7 @@ export class AppComponent {
         text: `Square: ${attribute('square')} ft&#178`,
       };
     }
+    return null;
   }
 }
 

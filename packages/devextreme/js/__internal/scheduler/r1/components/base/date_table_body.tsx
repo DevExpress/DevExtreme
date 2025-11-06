@@ -78,7 +78,7 @@ export class DateTableBody extends BaseInfernoComponent<DateTableBodyProps> {
                           cells.map(({
                             key: cellKey,
                             endDate,
-                            firstDayOfMonth,
+                            isFirstDayMonthHighlighting,
                             groupIndex: cellGroupIndex,
                             groups,
                             index: cellIndex,
@@ -106,7 +106,7 @@ export class DateTableBody extends BaseInfernoComponent<DateTableBodyProps> {
                               text,
                               today,
                               otherMonth,
-                              firstDayOfMonth,
+                              isFirstDayMonthHighlighting,
                               isSelected,
                               isFocused,
                             } as CellTemplateProps} />)

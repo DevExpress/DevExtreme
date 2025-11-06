@@ -1,0 +1,9 @@
+{
+    "rules": {
+        "function-name-case": null,
+        "no-empty-source": null,
+        "at-rule-no-unknown": null,
+        "value-keyword-case": null
+    }
+}
+

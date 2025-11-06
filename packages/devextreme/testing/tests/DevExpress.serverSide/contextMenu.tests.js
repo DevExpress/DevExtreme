@@ -1,1 +1,1 @@
-require('../DevExpress.ui.widgets/contextMenu.markup.tests.js');
+import '../DevExpress.ui.widgets/contextMenu.markup.tests.js';

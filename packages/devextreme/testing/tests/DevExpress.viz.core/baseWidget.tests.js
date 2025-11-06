@@ -1,32 +1,29 @@
 /* global currentTest */
 
-const errorsModule = require('viz/core/errors_warnings');
+import errorsModule from 'viz/core/errors_warnings';
+import $ from 'jquery';
+import { version } from 'core/version';
+import resizeCallbacks from 'core/utils/resize_callbacks';
+import registerComponent from 'core/component_registrator';
+import { logger } from 'core/utils/console';
+import resizeObserverSingleton from 'core/resize_observer';
+import { isFunction } from 'core/utils/type';
+import BaseWidget from '__internal/viz/core/m_base_widget';
+import { DEBUG_createEventTrigger, DEBUG_createResizeHandler } from '__internal/viz/core/base_widget.utils';
+import { BaseThemeManager } from 'viz/core/base_theme_manager';
+import rendererModule from 'viz/core/renderers/renderer_default';
+import { stubClass, environmentMethodInvoker, LoadingIndicator, Renderer, Title } from '../../helpers/vizMocks.js';
+import { implementationsMap } from 'core/utils/size';
+
+import 'viz/core/export';
 
 errorsModule.ERROR_MESSAGES.W0001 = ''; // To prevent failure on reading "incidentOccurred" option in tests
 errorsModule.ERROR_MESSAGES.E100 = 'Templated text 1: {0}, Templated text 2: {1}';
 errorsModule.ERROR_MESSAGES.W100 = 'Warning: Templated text 1: {0}, Templated text 2: {1}';
 
-const $ = require('jquery');
-const { version } = require('core/version');
-const resizeCallbacks = require('core/utils/resize_callbacks');
-const registerComponent = require('core/component_registrator');
-const logger = require('core/utils/console').logger;
-const resizeObserverSingleton = require('core/resize_observer');
-const isFunction = require('core/utils/type').isFunction;
-// const errors = require('viz/core/errors_warnings');
-const BaseWidget = require('__internal/viz/core/m_base_widget').default;
-const DEBUG_createEventTrigger = require('viz/core/base_widget.utils').DEBUG_createEventTrigger;
-const DEBUG_createResizeHandler = require('viz/core/base_widget.utils').DEBUG_createResizeHandler;
-const BaseThemeManager = require('viz/core/base_theme_manager').BaseThemeManager;
-const rendererModule = require('viz/core/renderers/renderer');
 let dxBaseWidgetTester;
 let StubThemeManager;
 let StubTitle;
-const vizMocks = require('../../helpers/vizMocks.js');
-const { implementationsMap } = require('core/utils/size');
-
-// TODO: Move export tests to a separate file
-require('viz/core/export');
 
 QUnit.testStart(function() {
     const markup =
@@ -36,8 +33,8 @@ QUnit.testStart(function() {
 });
 
 QUnit.begin(function() {
-    StubThemeManager = vizMocks.stubClass(BaseThemeManager);
-    StubTitle = vizMocks.Title;
+    StubThemeManager = stubClass(BaseThemeManager);
+    StubTitle = Title;
     dxBaseWidgetTester = BaseWidget.inherit({
         NAME: 'dxBaseWidgetTester',
         _rootClassPrefix: '_rootClassPrefix',
@@ -45,15 +42,14 @@ QUnit.begin(function() {
         _eventsMap: $.extend({}, BaseWidget.prototype._eventsMap, {
             'onTestEvent': { name: 'testEvent' }
         }),
-        _getAnimationOptions: vizMocks.environmentMethodInvoker('onGetAnimationOptions'),
-        _initCore: vizMocks.environmentMethodInvoker('onInitCore'),
-        _disposeCore: vizMocks.environmentMethodInvoker('onDisposeCore'),
-        _getDefaultSize: vizMocks.environmentMethodInvoker('onGetDefaultSize'),
-        _applySize: vizMocks.environmentMethodInvoker('onApplySize'),
-        _clean: vizMocks.environmentMethodInvoker('onClean'),
-        _render: vizMocks.environmentMethodInvoker('onRender'),
-        _createThemeManager: vizMocks.environmentMethodInvoker('onCreateThemeManager'),
-        // _handleThemeOptionsCore: vizMocks.environmentMethodInvoker("onHandleThemeOptionsCore")
+        _getAnimationOptions: environmentMethodInvoker('onGetAnimationOptions'),
+        _initCore: environmentMethodInvoker('onInitCore'),
+        _disposeCore: environmentMethodInvoker('onDisposeCore'),
+        _getDefaultSize: environmentMethodInvoker('onGetDefaultSize'),
+        _applySize: environmentMethodInvoker('onApplySize'),
+        _clean: environmentMethodInvoker('onClean'),
+        _render: environmentMethodInvoker('onRender'),
+        _createThemeManager: environmentMethodInvoker('onCreateThemeManager'),
     });
 
     registerComponent('dxBaseWidgetTester', dxBaseWidgetTester);
@@ -61,17 +57,16 @@ QUnit.begin(function() {
     sinon.stub(rendererModule, 'Renderer').callsFake(function() {
         return currentTest().renderer;
     });
-
 });
 
 const environment = {
     beforeEach: function() {
         this.themeManager = new StubThemeManager();
         this.title = new StubTitle();
-        this.loadingIndicator = new vizMocks.LoadingIndicator();
+        this.loadingIndicator = new LoadingIndicator();
         this.clock = sinon.useFakeTimers();
         this.createContainer();
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
     },
     afterEach: function() {
         this.$container.remove();
@@ -148,7 +143,7 @@ QUnit.test('Theme manager destruction', function(assert) {
 
 QUnit.test('Theme manager callback', function(assert) {
     this.onGetAnimationOptions = function() { return 'animation-option'; };
-    // this.onHandleThemeOptionsCore = sinon.spy();
+
     this.createWidget({
         rtlEnabled: 'rtl-enabled-option',
         encodeHtml: 'encode-html-option'
@@ -163,10 +158,6 @@ QUnit.test('Theme manager callback', function(assert) {
         rtl: 'rtl-enabled-option',
         encodeHtml: 'encode-html-option'
     }], 'renderer animation options');
-
-    // assert.deepEqual(this.onHandleThemeOptionsCore.lastCall.args, [], "theme options handled");
-    // assert.ok(this.renderer.lock.firstCall.calledBefore(this.title.update.lastCall), "renderer is locked");
-    // assert.ok(this.renderer.unlock.lastCall.calledAfter(this.onHandleThemeOptionsCore.lastCall), "renderer is unlocked")
 });
 
 // T190525
@@ -328,7 +319,7 @@ QUnit.test('rtlEnabled', function(assert) {
 
 QUnit.test('encodeHtml', function(assert) {
     this.onGetAnimationOptions = function() { return 'animation-option'; };
-    // this.onHandleThemeOptionsCore = sinon.spy();
+
     this.createWidget({
         rtlEnabled: 'rtl-enabled-option',
         pathModified: 'path-modified-option'
@@ -341,7 +332,6 @@ QUnit.test('encodeHtml', function(assert) {
         rtl: 'rtl-enabled-option',
         encodeHtml: 'encode-html-option'
     }], 'renderer animation options');
-    // assert.deepEqual(this.onHandleThemeOptionsCore.lastCall.args, [], "theme options handled");
 });
 
 QUnit.skip('Option from the invalidating list', function(assert) {
@@ -755,7 +745,6 @@ QUnit.test('Call render after container is resized', function(assert) {
 
     const size = this.widget.getSize();
 
-    // assert
     assert.equal(size.width, 400);
     assert.equal(size.height, 300);
 });
@@ -774,10 +763,8 @@ QUnit.test('size option changed', function(assert) {
         }
     });
 
-    // Act
     const size = this.widget.getSize();
 
-    // assert
     assert.equal(size.width, 300);
     assert.equal(size.height, 300);
 });
@@ -798,10 +785,8 @@ QUnit.test('size option changed with initial size. negative width', function(ass
         }
     });
 
-    // Act
     const size = this.widget.getSize();
 
-    // assert
     assert.equal(size.width, 0);
     assert.equal(size.height, 0);
 });
@@ -822,10 +807,8 @@ QUnit.test('size option changed with initial size. negative height', function(as
         }
     });
 
-    // Act
     const size = this.widget.getSize();
 
-    // assert
     assert.equal(size.width, 0);
     assert.equal(size.height, 0);
 });
@@ -840,10 +823,9 @@ QUnit.test('size option changed with container size. negative height', function(
             height: -100
         }
     });
-    // Act
+
     const size = this.widget.getSize();
 
-    // assert
     assert.equal(size.width, 0);
     assert.equal(size.height, 0);
 });
@@ -1022,18 +1004,15 @@ QUnit.module('Visibility changing', $.extend({}, environment, {
 }));
 
 QUnit.test('Hide', function(assert) {
-    // act
     this.$container.trigger('dxhiding');
 
     assert.strictEqual(this.renderStub.callCount, 1);
 });
 
 QUnit.test('Show', function(assert) {
-    // arrange
     this.$container.trigger('dxhiding').hide();
     this.renderStub.reset();
 
-    // act
     this.$container.show().trigger('dxshown');
 
     assert.strictEqual(this.renderStub.callCount, 1);
@@ -1166,25 +1145,19 @@ QUnit.module('drawn', $.extend({}, environment, {
 }));
 
 QUnit.test('without set drawn handler', function(assert) {
-    // arrange
     this.createWidget();
 
-    // act
     this.triggerDrawn();
 
-    // assert
     assert.ok(true, 'no exceptions');
 });
 
 QUnit.test('with set drawn handler', function(assert) {
-    // arrange
     const onDrawnCallback = sinon.spy();
     this.createWidget({ onDrawn: onDrawnCallback });
 
-    // act
     this.triggerDrawn();
 
-    // assert
     assert.deepEqual(onDrawnCallback.lastCall.args, [{
         component: this.widget,
         element: this.widget.element()
@@ -1206,7 +1179,6 @@ QUnit.test('Callback for event attached with on() must calls only once with own 
     widget1._eventTrigger('drawn', {});
     widget2._eventTrigger('drawn', {});
 
-    // assert
     assert.equal(onDrawnOneCallback.callCount, 1);
     assert.deepEqual(onDrawnOneCallback.lastCall.args, [{
         component: widget1,
@@ -1230,25 +1202,21 @@ QUnit.module('isReady', $.extend({}, environment, {
 }));
 
 QUnit.test('isReady on drawn', function(assert) {
-    // arrange
     this.createWidget();
 
-    // act
     this.triggerDrawn();
-    // assert
+
     assert.ok(this.renderer.onEndAnimation.calledOnce);
     assert.ok(!this.widget.isReady());
 });
 
 QUnit.test('isReady after call ready callback', function(assert) {
-    // arrange
     this.createWidget();
     this.renderer.onEndAnimation = function(complete) {
         complete();
     };
-    // act
+
     this.triggerDrawn();
-    // assert
 
     assert.ok(this.widget.isReady());
 });
@@ -1292,7 +1260,6 @@ QUnit.test('Trigger event with complete', function(assert) {
 
     assert.ok(callback.calledOnce);
     assert.ok(complete.calledOnce);
-
 });
 
 QUnit.test('Only option', function(assert) {
@@ -1548,11 +1515,10 @@ QUnit.module('Misc API', $.extend({}, environment, {
 }));
 
 QUnit.test('get widget markup', function(assert) {
-    // arrange
     this.renderer.svg = function() {
         return 'some markup';
     };
-    // act
+
     assert.equal(this.widget.svg(), 'some markup', 'markup, returned from element');
 });
 
@@ -1644,5 +1610,4 @@ QUnit.test('Repeat disposing', function(assert) {
     } catch(e) {
         assert.ok(false, 'the error is thrown');
     }
-
 });

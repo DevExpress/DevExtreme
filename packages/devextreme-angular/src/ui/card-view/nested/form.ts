@@ -12,29 +12,26 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    forwardRef,
-    QueryList,
-    AfterContentInit
+    QueryList
 } from '@angular/core';
 
 
 
 
+import { AIIntegration } from 'devextreme/common/ai-integration';
 import { Mode } from 'devextreme/common';
-import { dxFormSimpleItem, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, FieldDataChangedEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/form';
+import { dxFormSimpleItem, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, FieldDataChangedEvent, InitializedEvent, OptionChangedEvent, SmartPastedEvent, SmartPastingEvent } from 'devextreme/ui/form';
 
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiCardViewButtonItemComponent } from './button-item-dxi';
-import { DxiCardViewEmptyItemComponent } from './empty-item-dxi';
-import { DxiCardViewGroupItemComponent } from './group-item-dxi';
-import { DxiCardViewItemComponent } from './item-dxi';
-import { DxiCardViewSimpleItemComponent } from './simple-item-dxi';
-import { DxiCardViewTabbedItemComponent } from './tabbed-item-dxi';
 
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-card-view-form',
@@ -44,7 +41,12 @@ import { DxiCardViewTabbedItemComponent } from './tabbed-item-dxi';
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoCardViewFormComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
+export class DxoCardViewFormComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -59,6 +61,14 @@ export class DxoCardViewFormComponent extends NestedOption implements OnDestroy,
     }
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
+    }
+
+    @Input()
+    get aiIntegration(): AIIntegration | undefined {
+        return this._getOption('aiIntegration');
+    }
+    set aiIntegration(value: AIIntegration | undefined) {
+        this._setOption('aiIntegration', value);
     }
 
     @Input()
@@ -246,6 +256,22 @@ export class DxoCardViewFormComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
+    get onSmartPasted(): ((e: SmartPastedEvent) => void) {
+        return this._getOption('onSmartPasted');
+    }
+    set onSmartPasted(value: ((e: SmartPastedEvent) => void)) {
+        this._setOption('onSmartPasted', value);
+    }
+
+    @Input()
+    get onSmartPasting(): ((e: SmartPastingEvent) => void) {
+        return this._getOption('onSmartPasting');
+    }
+    set onSmartPasting(value: ((e: SmartPastingEvent) => void)) {
+        this._setOption('onSmartPasting', value);
+    }
+
+    @Input()
     get optionalMark(): string {
         return this._getOption('optionalMark');
     }
@@ -377,41 +403,9 @@ export class DxoCardViewFormComponent extends NestedOption implements OnDestroy,
     }
 
 
-    @ContentChildren(forwardRef(() => DxiCardViewButtonItemComponent)) buttonItemsChildren!: QueryList<DxiCardViewButtonItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewEmptyItemComponent)) emptyItemsChildren!: QueryList<DxiCardViewEmptyItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewGroupItemComponent)) groupItemsChildren!: QueryList<DxiCardViewGroupItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewItemComponent)) itemsChildren!: QueryList<DxiCardViewItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewSimpleItemComponent)) simpleItemsChildren!: QueryList<DxiCardViewSimpleItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewTabbedItemComponent)) tabbedItemsChildren!: QueryList<DxiCardViewTabbedItemComponent>
-    
-    setItems() {
-        const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.buttonItemsChildren.toArray(),
-            ...this.emptyItemsChildren.toArray(),
-            ...this.groupItemsChildren.toArray(),
-            ...this.itemsChildren.toArray(),
-            ...this.simpleItemsChildren.toArray(),
-            ...this.tabbedItemsChildren.toArray(),
-        ]);
-        this.setChildren('items', q);
-    }
-
-
-
-
-
-
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'formDataChange' }
         ]);
@@ -430,16 +424,6 @@ export class DxoCardViewFormComponent extends NestedOption implements OnDestroy,
     }
 
 
-    ngAfterContentInit() {
-        this.setItems();
-        
-        this.buttonItemsChildren.changes.subscribe(() => { this.setItems() });
-        this.emptyItemsChildren.changes.subscribe(() => { this.setItems() });
-        this.groupItemsChildren.changes.subscribe(() => { this.setItems() });
-        this.itemsChildren.changes.subscribe(() => { this.setItems() });
-        this.simpleItemsChildren.changes.subscribe(() => { this.setItems() });
-        this.tabbedItemsChildren.changes.subscribe(() => { this.setItems() });
-    }
 }
 
 @NgModule({

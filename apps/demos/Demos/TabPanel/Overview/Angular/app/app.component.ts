@@ -2,7 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
-  DxTabPanelModule, DxCheckBoxModule, DxSelectBoxModule, DxTemplateModule,
+  DxTabPanelModule, DxCheckBoxModule, DxSelectBoxModule,
 } from 'devextreme-angular';
 import { DxTabPanelTypes } from 'devextreme-angular/ui/tab-panel';
 import { TabPanelItem, Service } from './app.service';
@@ -59,7 +59,6 @@ export class AppComponent {
     DxTabPanelModule,
     DxCheckBoxModule,
     DxSelectBoxModule,
-    DxTemplateModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

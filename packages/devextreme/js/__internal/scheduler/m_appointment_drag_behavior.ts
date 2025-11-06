@@ -5,6 +5,7 @@ import Draggable from '@js/ui/draggable';
 
 import { APPOINTMENT_SETTINGS_KEY, LIST_ITEM_DATA_KEY } from './constants';
 import { isSchedulerComponent } from './utils/is_scheduler_component';
+import type { AppointmentViewModelPlain } from './view_model/types';
 
 const APPOINTMENT_ITEM_CLASS = 'dx-scheduler-appointment';
 
@@ -85,9 +86,9 @@ export default class AppointmentDragBehavior {
     return itemDataFromTooltip || itemDataFromGrid;
   }
 
-  getItemSettings(appointment) {
+  getItemSettings(appointment): AppointmentViewModelPlain | undefined {
     const itemData: any = $(appointment).data(LIST_ITEM_DATA_KEY);
-    return itemData?.settings || [];
+    return itemData?.settings;
   }
 
   createDragStartHandler(options, appointmentDragging) {

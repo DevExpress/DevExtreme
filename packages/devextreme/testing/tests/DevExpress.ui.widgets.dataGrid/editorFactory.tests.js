@@ -47,7 +47,6 @@ import { MockColumnsController, MockDataController, setupDataGridModules } from 
 import config from 'core/config';
 import typeUtils from 'core/utils/type';
 import { noop } from 'core/utils/common';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
@@ -1512,10 +1511,6 @@ QUnit.module('Focus', {
 
     // T454719
     QUnit.testInActiveWindow('Focus on dxLookup editor', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const that = this;
         let $cell;
         const $testElement = $('#container');
@@ -1559,10 +1554,6 @@ QUnit.module('Focus', {
 
     // T531176
     QUnit.testInActiveWindow('Focus on dxTextArea editor', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const that = this;
         let $cell;
         const $testElement = $('#container');

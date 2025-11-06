@@ -93,7 +93,7 @@ export class AppComponent {
     const rowsCount = e.component.getVisibleRows().length;
     const pageCount = e.component.pageCount();
     const pageIndex = e.component.pageIndex();
-    const key = e.event && e.event.key;
+    const key = e.event?.key;
 
     if (key && e.prevRowIndex === e.newRowIndex) {
       if (e.newRowIndex === rowsCount - 1 && pageIndex < pageCount - 1) {
@@ -112,7 +112,7 @@ export class AppComponent {
     this.taskSubject = data.Task_Subject;
     this.taskDetailsHtml = this.sanitizer.bypassSecurityTrustHtml(data.Task_Description);
     this.taskStatus = data.Task_Status;
-    this.taskProgress = data.Task_Completion ? `${data.Task_Completion}` + '%' : '';
+    this.taskProgress = data.Task_Completion ? `${data.Task_Completion}%` : '';
   }
 }
 

@@ -9,19 +9,33 @@ on:
     paths-ignore:
       - 'apps/**/*.md'
   push:
-    branches:
-      - "[0-9][0-9]_[0-9]"
+    branches: [25_2]
   workflow_dispatch:
 
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
   NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
   BUILD_TEST_INTERNAL_PACKAGE: true
+  RUN_TESTS: true
 
 jobs:
+  check-should-run:
+    name: Check if tests should run
+    runs-on: devextreme-shr2
+    outputs:
+      should-run: ${{ steps.check.outputs.should-run }}
+    steps:
+      - name: Check RUN_TESTS flag
+        id: check
+        run: echo "should-run=${{ env.RUN_TESTS }}" >> $GITHUB_OUTPUT
+
   build-devextreme:
-    runs-on: ubuntu-22.04
+    runs-on: devextreme-shr2
     name: Build DevExtreme
+    needs: check-should-run
+    if: needs.check-should-run.outputs.should-run == 'true'
+    env:
+      NODE_OPTIONS: "--max-old-space-size=8192"
     timeout-minutes: 40
 
     steps:
@@ -33,9 +47,8 @@ jobs:
         with:
           node-version: '20'
 
-      - uses: pnpm/action-setup@v3
+      - uses: pnpm/action-setup@v4
         with:
-          version: 9
           run_install: false
 
       - name: Get pnpm store directory
@@ -54,7 +67,7 @@ jobs:
             ${{ runner.os }}-pnpm-store
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: DevExtreme - Build-all
         env:
@@ -82,10 +95,11 @@ jobs:
           retention-days: 1
 
   build-demos:
-    runs-on: ubuntu-22.04
+    runs-on: devextreme-shr2
     name: Build Demos
     timeout-minutes: 20
-    needs: build-devextreme
+    needs: [check-should-run, build-devextreme]
+    if: needs.check-should-run.outputs.should-run == 'true'
 
     steps:
 
@@ -102,9 +116,8 @@ jobs:
       with:
         name: devextreme-sources
 
-    - uses: pnpm/action-setup@v3
+    - uses: pnpm/action-setup@v4
       with:
-        version: 9
         run_install: false
 
     - name: Get pnpm store directory
@@ -123,7 +136,7 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: Install tgz
       working-directory: apps/demos
@@ -136,12 +149,16 @@ jobs:
 #      run: pnpm install
 
     - name: Prepare bundles
+      if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'force all tests')
       working-directory: apps/demos
+      env:
+        NODE_OPTIONS: "--max-old-space-size=8192"
       run: pnpx nx prepare-bundles
 
     - name: Demos - Run tsc
+      if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'force all tests')
       working-directory: apps/demos
-      run: tsc --noEmit
+      run: pnpm exec tsc --noEmit
 
     - name: Copy build artifacts
       uses: actions/upload-artifact@v4
@@ -152,7 +169,9 @@ jobs:
         retention-days: 1
 
   get-changes:
-    runs-on: ubuntu-22.04
+    runs-on: devextreme-shr2
+    needs: check-should-run
+    if: github.event_name == 'pull_request' && needs.check-should-run.outputs.should-run == 'true'
     name: Get changed demos
     timeout-minutes: 5
 
@@ -162,11 +181,21 @@ jobs:
 
       - name: Get changed files
         uses: DevExpress/github-actions/get-changed-files@v1
-        if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
         with:
           gh-token: ${{ secrets.GITHUB_TOKEN }}
           paths: 'apps/demos/Demos/**/*'
           output: apps/demos/changed-files.json
+
+      - name: Display changed files
+        run: |
+          if [ -f "apps/demos/changed-files.json" ]; then
+            echo "Found changed-files.json"
+            echo "Content of changed-files.json:"
+            cat apps/demos/changed-files.json
+            echo "Number of changed files: $(jq length apps/demos/changed-files.json)"
+          else
+            echo "changed-files.json not found"
+          fi
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -177,7 +206,8 @@ jobs:
 
   check-ts:
     name: Check TS
-    needs: build-devextreme
+    needs: [check-should-run, build-devextreme]
+    if: needs.check-should-run.outputs.should-run == 'true'
     runs-on: devextreme-shr2
     timeout-minutes: 20
 
@@ -195,9 +225,8 @@ jobs:
         with:
           node-version: '20'
 
-      - uses: pnpm/action-setup@v3
+      - uses: pnpm/action-setup@v4
         with:
-          version: 9
           run_install: false
 
       - name: Get pnpm store directory
@@ -216,7 +245,7 @@ jobs:
             ${{ runner.os }}-pnpm-store
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Install tgz
         run: pnpm add -w ./devextreme-installer.tgz ./devextreme-dist-installer.tgz ./devextreme-react-installer.tgz ./devextreme-vue-installer.tgz ./devextreme-angular-installer.tgz
@@ -234,36 +263,19 @@ jobs:
       #   run: pnpm run ts-check-react
 
   lint:
-    name: ${{ matrix.name }}
-    needs:
-      - build-devextreme
-      - get-changes
+    name: Lint code base
+    needs: [check-should-run, build-devextreme]
+    if: needs.check-should-run.outputs.should-run == 'true'
 
-    runs-on: ubuntu-22.04
+    runs-on: devextreme-shr2
     timeout-minutes: 60
-
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - name: Lint code base (excluding demos)
-            command: pnpx nx lint-non-demos
-          # NOTE: skipped due to enormous number of errors
-          # - name: Lint demos (1/4)
-          #   command: CONSTEL=1/4 npm run lint-demos
-          # - name: Lint demos (2/4)
-          #   command: CONSTEL=2/4 npm run lint-demos
-          # - name: Lint demos (3/4)
-          #   command: CONSTEL=3/4 npm run lint-demos
-          # - name: Lint demos (4/4)
-          #   command: CONSTEL=4/4 npm run lint-demos
 
     steps:
     - name: Get sources
       uses: actions/checkout@v4
 
     - name: Download artifacts
-      if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
+      if: github.event_name == 'pull_request'
       uses: actions/download-artifact@v4
       with:
         name: changed-demos
@@ -279,9 +291,8 @@ jobs:
       with:
         node-version: '20'
 
-    - uses: pnpm/action-setup@v3
+    - uses: pnpm/action-setup@v4
       with:
-        version: 9
         run_install: false
 
     - name: Get pnpm store directory
@@ -300,55 +311,73 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: Install tgz
       run: pnpm add -w ./devextreme-installer.tgz ./devextreme-dist-installer.tgz ./devextreme-react-installer.tgz ./devextreme-vue-installer.tgz ./devextreme-angular-installer.tgz
 
-    - uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 5.0.408
-
-    - name: Prepare dotnet
-      run: |
-        dotnet new globaljson --sdk-version 5.0.408
-        dotnet tool install -g dotnet-format --version 5.1.225507
-
-    - name: Run lint
+    - name: Run lint on all demos
+      if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'force all tests')
       working-directory: apps/demos
       env:
-        CHANGEDFILEINFOSPATH: changed-files.json
         DEBUG: 'eslint:cli-engine,stylelint:standalone'
-      run: ${{ matrix.command }}
+      run: pnpx nx lint
+
+    - name: Run lint on changed demos
+      if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
+      working-directory: apps/demos
+      env:
+        DEBUG: 'eslint:cli-engine,stylelint:standalone'
+      run: |
+        pnpx nx lint-non-demos
+
+        if [ -f "changed-files.json" ]; then
+          echo "Running lint-demos on changed files"
+          CHANGED_DEMOS=$(jq -r '.[].filename' changed-files.json \
+            | grep '^apps/demos/Demos/' \
+            | sed 's|^apps/demos/||' \
+            | while read f; do
+                [ -f "$f" ] && echo "$f"
+              done \
+            | tr '\n' ' ')
+          if [ ! -z "$CHANGED_DEMOS" ]; then
+            echo "Changed demo files: $CHANGED_DEMOS"
+            pnpx eslint $CHANGED_DEMOS
+          else
+            echo "No demo files changed, skipping lint-demos"
+          fi
+        else
+          echo "changed-files.json not found"
+          pnpm run lint-demos
+        fi
 
   check_generated_demos:
     name: ${{ matrix.name }}
-    runs-on: ubuntu-22.04
+    runs-on: devextreme-shr2
     timeout-minutes: 10
-    needs: build-demos
+    needs: [check-should-run, build-devextreme]
+    if: needs.check-should-run.outputs.should-run == 'true'
 
     strategy:
       fail-fast: false
       matrix:
         include:
-          - name: Check generated demos (1/5)
-            command: CONSTEL=1/5 pnpm run convert-to-js
-          - name: Check generated demos (2/5)
-            command: CONSTEL=2/5 pnpm run convert-to-js
-          - name: Check generated demos (3/5)
-            command: CONSTEL=3/5 pnpm run convert-to-js
-          - name: Check generated demos (4/5)
-            command: CONSTEL=4/5 pnpm run convert-to-js
-          - name: Check generated demos (5/5)
-            command: CONSTEL=5/5 pnpm run convert-to-js
+          - name: Check generated demos
+            command: pnpm run convert-to-js
 
     steps:
     - name: Get sources
       uses: actions/checkout@v4
 
-    - uses: pnpm/action-setup@v3
+    - name: Download artifacts
+      if: github.event_name == 'pull_request'
+      uses: actions/download-artifact@v4
       with:
-        version: 9
+        name: changed-demos
+        path: apps/demos
+
+    - uses: pnpm/action-setup@v4
+      with:
         run_install: false
 
     - name: Use Node.js
@@ -356,21 +385,6 @@ jobs:
       with:
         node-version: '20'
         cache: 'pnpm'
-
-#    - name: Get pnpm store directory
-#      shell: bash
-#      run: |
-#        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-#
-#    - uses: actions/cache@v4
-#      name: Setup pnpm cache
-#      with:
-#        path: |
-#          ${{ env.STORE_PATH }}
-#          .nx/cache
-#        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-#        restore-keys: |
-#          ${{ runner.os }}-pnpm-store
 
     - name: Download devextreme sources
       uses: actions/download-artifact@v4
@@ -389,9 +403,31 @@ jobs:
       run: pnpm run prepare-js
 
     - name: Check generated JS demos
+      if: github.event_name == 'pull_request'
       working-directory: apps/demos
       run: |
-        ${{ matrix.command }}
+        if [ -f "changed-files.json" ]; then
+          echo "Running convert-to-js on changed files only"
+          
+          CHANGED_DEMOS=$(jq -r '.[].filename' changed-files.json | grep '/React/' | grep '\.tsx$' | sed 's|^apps/demos/||' | sed 's|/[^/]*\.tsx$||' | sort | uniq)
+          
+          if [ -z "$CHANGED_DEMOS" ]; then
+            echo "No React demos found in changed files, skipping conversion"
+          else
+            echo "Changed React demos:"
+            echo "$CHANGED_DEMOS"
+            
+            echo "$CHANGED_DEMOS" | while read -r demo_dir; do
+              if [ ! -z "$demo_dir" ]; then
+                echo "Converting: $demo_dir"
+                pnpm run convert-to-js "$demo_dir"
+              fi
+            done
+          fi
+        else
+          echo "Running convert-to-js on all files"
+          ${{ matrix.command }}
+        fi
 
         git add ./Demos -N
 
@@ -404,14 +440,15 @@ jobs:
         fi
 
   testcafe:
-    needs: build-demos
+    needs: [check-should-run, build-demos]
+    if: contains(github.event.pull_request.labels.*.name, 'force all tests')
     strategy:
       fail-fast: false
       matrix:
         CONSTEL: [react(1/4), react(2/4), react(3/4), react(4/4), vue(1/4), vue(2/4), vue(3/4), vue(4/4), angular(1/4), angular(2/4), angular(3/4), angular(4/4)]
-        THEME: ['generic.light', 'material.blue.light', 'fluent.blue.light']
+        THEME: ['fluent.blue.light']
 
-    runs-on: ubuntu-22.04
+    runs-on: devextreme-shr2
     name: testcafe-${{ matrix.CONSTEL }}-${{ matrix.THEME }}
     timeout-minutes: 60
 
@@ -422,7 +459,8 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '133.0.6943.53'
+        chrome-version: '141.0.7390.122'
+        runner-type: 'github-hosted'
 
     - name: Use Node.js
       uses: actions/setup-node@v4
@@ -434,16 +472,8 @@ jobs:
       with:
         name: devextreme-sources
 
-    - name: Download artifacts
-      if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
-      uses: actions/download-artifact@v4
+    - uses: pnpm/action-setup@v4
       with:
-        name: changed-demos
-        path: apps/demos
-
-    - uses: pnpm/action-setup@v3
-      with:
-        version: 9
         run_install: false
 
     - name: Get pnpm store directory
@@ -462,14 +492,11 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: Install tgz
       working-directory: apps/demos
       run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
-
-#    - name: Build wrappers
-#      run: pnpm exec nx run-many -t pack -p devextreme-angular devextreme-react devetreme-vue
 
     - name: Prepare JS
       working-directory: apps/demos
@@ -500,7 +527,7 @@ jobs:
       working-directory: apps/demos
       env:
         CHANGEDFILEINFOSPATH: changed-files.json
-        BROWSERS: chrome:headless --window-size=1200,800 --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
+        BROWSERS: chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
         # DEBUG: hammerhead:*,testcafe:*
         CONCURRENCY: 4
         TCQUARANTINE: true
@@ -510,9 +537,7 @@ jobs:
         # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
         # DISABLE_DEMO_TEST_SETTINGS: comparison-options # Uncomment to ignore the `comparison-options` field
         CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
-      run: |
-        node ../../tools/scripts/performance_log.js &
-        pnpx nx test-testcafe
+      run: pnpx nx test-testcafe
 
     - name: Sanitize job name
       if: ${{ failure() }}

@@ -6,7 +6,6 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
   DxDataGridModule,
   DxDataGridComponent,
-  DxTemplateModule,
   DxButtonModule,
 } from 'devextreme-angular';
 import { DxButtonTypes } from 'devextreme-angular/ui/button';
@@ -93,7 +92,6 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxDataGridModule,
-    DxTemplateModule,
     DxSelectBoxModule,
     DxButtonModule,
   ],

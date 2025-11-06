@@ -1,13 +1,13 @@
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import TagBox from 'devextreme-testcafe-models/tagBox';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
-import { testScreenshot } from '../../../helpers/themeUtils';
+import { isMaterial, testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import {
   appendElementTo,
   setStyleAttribute,
+  insertStylesheetRulesToPage,
 } from '../../../helpers/domUtils';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
@@ -17,7 +17,7 @@ fixture.disablePageReloads`TagBox_Label`
   .page(url(__dirname, '../../container.html'));
 
 stylingModes.forEach((stylingMode) => {
-  safeSizeTest(`Label for dxTagBox stylingMode=${stylingMode}`, async (t) => {
+  test.meta({ browserSize: [300, 800] })(`Label for dxTagBox stylingMode=${stylingMode}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t.click('#tagBox2');
@@ -27,15 +27,17 @@ stylingModes.forEach((stylingMode) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [300, 800]).before(async (t) => {
-    await t.click('html', { offsetX: 0, offsetY: 0 });
-
+  }).before(async () => {
     const componentOptions = {
       label: 'label text',
       items: [...Array(10)].map((_, i) => `item${i}`),
       value: [...Array(5)].map((_, i) => `item${i}`),
       stylingMode,
     };
+
+    if (isMaterial()) {
+      await insertStylesheetRulesToPage('#container .dx-widget { font-family: sans-serif }');
+    }
 
     await appendElementTo('#container', 'div', 'tagBox1', { });
     await appendElementTo('#container', 'div', 'tagBox2', { });
@@ -52,7 +54,7 @@ stylingModes.forEach((stylingMode) => {
   });
 
   labelModes.forEach((labelMode) => {
-    safeSizeTest(`Label shouldn't be cutted for dxTagBox in stylingMode=${stylingMode}, labelMode=${labelMode} (T1104913)`, async (t) => {
+    test.meta({ browserSize: [300, 400] })(`Label shouldn't be cutted for dxTagBox in stylingMode=${stylingMode}, labelMode=${labelMode} (T1104913)`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       const tagBox = new TagBox('#container');
@@ -61,12 +63,6 @@ stylingModes.forEach((stylingMode) => {
 
       const screenshotName = `TagBox label with stylingMode=${stylingMode},labelMode=${labelMode}.png`;
 
-      await testScreenshot(t, takeScreenshot, screenshotName);
-
-      await t
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
-
       await t.click(tagBox.element);
       await t.click(tagBox.element);
 
@@ -75,7 +71,7 @@ stylingModes.forEach((stylingMode) => {
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }, [300, 400]).before(async () => {
+    }).before(async () => {
       await setStyleAttribute(Selector('#container'), 'top: 250px;');
 
       return createWidget('dxTagBox', {

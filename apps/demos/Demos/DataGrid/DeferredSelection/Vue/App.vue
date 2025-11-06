@@ -101,7 +101,9 @@ const taskCount = ref(0);
 const peopleCount = ref(0);
 const avgDuration = ref(0);
 
-const calculateStatistics = async() => {
+const calculateStatistics = async () => {
+  if (!dataGrid) return;
+
   const selectedItems = await dataGrid.getSelectedRowsData();
 
   const totalDuration = selectedItems.reduce((currentValue, item) => {

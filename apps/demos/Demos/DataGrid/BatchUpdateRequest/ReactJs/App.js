@@ -30,6 +30,8 @@ function normalizeChanges(changes) {
           type: c.type,
           key: c.key,
         };
+      default:
+        return c;
     }
   });
 }

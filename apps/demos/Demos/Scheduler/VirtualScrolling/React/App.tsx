@@ -18,7 +18,7 @@ const App = () => (
   <Scheduler
     dataSource={appointments}
     height={730}
-    defaultCurrentView={'Timeline'}
+    defaultCurrentView="Timeline"
     defaultCurrentDate={currentDate}
     startDayHour={startDayHour}
     endDayHour={endDayHour}
@@ -42,6 +42,7 @@ const App = () => (
       fieldExpr='humanId'
       dataSource={resources}
       label='Employee'
+      icon='group'
     />
     <Scrolling
       mode='virtual'

@@ -3,6 +3,7 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../../base/chat/mixins" as *;
+@use "../common/mixins" as *;
 
 // adduse
 
@@ -16,7 +17,22 @@
   $chat-avatar-color,
   $chat-avatar-background-color,
 );
-@include chat-header($chat-header-padding);
+@include chat-file(
+  $chat-file-container-width,
+  $chat-file-container-padding,
+  $chat-file-container-background-color,
+  $chat-file-container-border-radius,
+  $chat-file-container-box-shadow,
+  $chat-file-button-size,
+  $chat-file-secondary-font-size,
+  $chat-file-secondary-color,
+  $chat-file-base-section-gap,
+  $chat-file-file-size-max-width,
+);
+@include chat-fileview(
+  $chat-file-view-items-gap,
+  $chat-file-container-width,
+);
 @include chat-alertlist(
   $chat-alertlist-color,
   $chat-alerts-padding-block,
@@ -29,7 +45,11 @@
   $chat-messagebox-border-color,
   $chat-messagebox-gap,
   $chat-messagebox-textarea-border-radius,
-  $chat-messagebox-buton-gap,
+  $chat-messagebox-textarea-padding,
+  $chat-messagebox-toolbar-min-height,
+  $chat-file-container-width,
+  $chat-messagebox-file-container-padding,
+  $chat-messagebox-file-container-padding-top,
 );
 @include chat-messagebubble(
   $chat-bubble-padding,
@@ -41,6 +61,7 @@
   $chat-bubble-container-gap,
   $chat-bubble-delete-gap,
   $chat-bubble-delete-icon-size,
+  $chat-bubble-gap,
 );
 @include chat-messagegroup(
   $chat-messagegroup-gap,
@@ -112,3 +133,7 @@
   $chat-confirmation-popup-toolbar-padding-inline,
   $chat-confirmation-popup-toolbar-gap,
 );
+
+.dx-chat-file {
+  @include dx-base-typography();
+}

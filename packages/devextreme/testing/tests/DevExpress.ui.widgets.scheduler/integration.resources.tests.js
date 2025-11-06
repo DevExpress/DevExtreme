@@ -12,7 +12,9 @@ import translator from 'common/core/animation/translator';
 import '__internal/scheduler/m_scheduler';
 
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
-import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
+import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
+
+const getHexColor = ($appointment) => new Color($appointment.css('backgroundColor')).toHex();
 
 QUnit.testStart(() => initTestMarkup());
 
@@ -175,6 +177,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
 
                 onAppointmentFormOpeningRaised = true;
             },
+            editing: { legacyForm: true },
             resources: resources,
             dataSource: dataSource,
             currentDate: new Date(2015, 1, 9)
@@ -237,7 +240,8 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             dataSource: new DataSource({
                 store: [task1, task2]
             }),
-            currentDate: new Date(2015, 1, 9)
+            currentDate: new Date(2015, 1, 9),
+            editing: { legacyForm: true }
         });
 
         scheduler.instance.showAppointmentPopup(task1);
@@ -291,7 +295,8 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             dataSource: new DataSource({
                 store: [task]
             }),
-            currentDate: new Date(2015, 1, 9)
+            currentDate: new Date(2015, 1, 9),
+            editing: { legacyForm: true }
         });
 
         scheduler.instance.showAppointmentPopup(task);
@@ -341,7 +346,8 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         const scheduler = await createWrapper({
             resources: resources,
             dataSource: [appointment],
-            currentDate: new Date(2015, 4, 24)
+            currentDate: new Date(2015, 4, 24),
+            editing: { legacyForm: true }
         });
 
         scheduler.instance.showAppointmentPopup(appointment);
@@ -464,8 +470,9 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
 
         const $appointments = scheduler.instance.$element().find('.dx-scheduler-appointment');
 
-        assert.equal(new Color($appointments.eq(0).css('backgroundColor')).toHex(), '#ff0000', 'Color is OK');
-        assert.equal(new Color($appointments.eq(1).css('backgroundColor')).toHex(), '#0000ff', 'Color is OK');
+        await waitForAsync(() => getHexColor($appointments.eq(0)) === '#ff0000');
+        assert.equal(getHexColor($appointments.eq(0)), '#ff0000', 'Color is OK');
+        assert.equal(getHexColor($appointments.eq(1)), '#0000ff', 'Color is OK');
     });
 
     QUnit.test('Resources should not be reloaded when details popup is opening', async function(assert) {
@@ -498,7 +505,8 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
                     load: loadStub,
                     byKey: byKeyStub
                 })
-            }]
+            }],
+            editing: { legacyForm: true }
         });
 
         assert.equal(loadStub.callCount, 1, 'Resources are loaded only once');
@@ -560,7 +568,8 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         await waitAsync(0);
 
         const $appointments = scheduler.instance.$element().find('.dx-scheduler-appointment');
-        assert.equal(new Color($appointments.eq(0).css('backgroundColor')).toHex(), '#ff0000', 'Color is OK');
+        await waitForAsync(() => getHexColor($appointments.eq(0)) === '#ff0000');
+        assert.equal(getHexColor($appointments.eq(0)), '#ff0000', 'Color is OK');
     });
 });
 

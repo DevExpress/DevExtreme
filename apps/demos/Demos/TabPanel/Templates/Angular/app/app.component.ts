@@ -1,7 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxTabPanelModule, DxCheckBoxModule, DxTemplateModule } from 'devextreme-angular';
+import { DxTabPanelModule, DxCheckBoxModule } from 'devextreme-angular';
 import { Company, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -37,7 +37,6 @@ export class AppComponent {
     BrowserModule,
     DxTabPanelModule,
     DxCheckBoxModule,
-    DxTemplateModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

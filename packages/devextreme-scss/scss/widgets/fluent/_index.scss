@@ -55,11 +55,11 @@
 @use "./filterBuilder";
 @use "./drawer";
 @use "./htmlEditor";
+@use "./speechToText";
 @use "./speedDialAction";
 @use "./fileManager";
 @use "./diagram";
 @use "./gantt";
 @use "./sortable";
-@use "./deferRendering";
 @use "./map";
 @use "./cardView";

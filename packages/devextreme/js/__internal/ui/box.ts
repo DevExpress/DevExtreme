@@ -21,14 +21,14 @@ import CollectionWidgetItem from '@ts/ui/collection/item';
 
 type BoxOptionKey = keyof BoxProperties;
 
-interface BoxItemData extends Item {
+export interface BoxItemData extends Item {
   maxSize?: string | number;
   minSize?: string | number;
   node?: dxElementWrapper;
 }
 
 interface QueueItem {
-  $item: dxElementWrapper;
+  $item: dxElementWrapper | Element;
   config: BoxProperties<BoxItemData>;
 }
 
@@ -261,8 +261,8 @@ class Box extends CollectionWidget<BoxProperties> {
   }
 
   _pushItemToQueue(
-    $item: dxElementWrapper,
-    config: BoxProperties,
+    $item: dxElementWrapper | Element,
+    config: BoxProperties<BoxItemData>,
   ): void {
     this._queue.push({ $item, config });
   }
@@ -328,7 +328,7 @@ class Box extends CollectionWidget<BoxProperties> {
 
   _renderItemContent(
     args: ItemRenderInfo<BoxItemData>,
-  ): dxElementWrapper | DeferredObj<dxElementWrapper> {
+  ): dxElementWrapper | Element | DeferredObj<dxElementWrapper> {
     const $itemNode = args.itemData?.node;
     if ($itemNode) {
       return this._renderItemContentByNode(args, $itemNode);
@@ -351,10 +351,11 @@ class Box extends CollectionWidget<BoxProperties> {
   _createItemByTemplate(
     itemTemplate: { source: () => unknown },
     args: ItemRenderInfo<BoxItemData>,
-  ): unknown {
+  ): dxElementWrapper {
     const { itemData } = args;
 
     if (itemData.box) {
+      // @ts-expect-error
       return itemTemplate.source ? itemTemplate.source() : $();
     }
     return super._createItemByTemplate(itemTemplate, args);

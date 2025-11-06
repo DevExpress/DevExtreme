@@ -39,7 +39,6 @@ $(() => {
     },
     onCellPrepared(e) {
       const { cell } = e;
-      cell.area = e.area;
 
       if (isDataCell(cell) || isTotalCell(cell)) {
         const appearance = getConditionalAppearance(cell);
@@ -79,7 +78,7 @@ $(() => {
   });
 
   function isDataCell(cell) {
-    return (cell.area === 'data' && cell.rowType === 'D' && cell.columnType === 'D');
+    return cell.rowType === 'D' && cell.columnType === 'D';
   }
 
   function isTotalCell(cell) {

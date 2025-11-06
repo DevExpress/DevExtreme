@@ -12,7 +12,6 @@ import dxContextMenu, { Properties as ContextMenuProperties } from '../ui/contex
 import dxDataGrid, { Properties as DataGridProperties } from '../ui/data_grid';
 import dxDateBox, { Properties as DateBoxProperties } from '../ui/date_box';
 import dxDateRangeBox, { Properties as DateRangeBoxProperties } from '../ui/date_range_box';
-import dxDeferRendering, { Properties as DeferRenderingProperties } from '../ui/defer_rendering';
 import dxDiagram, { Properties as DiagramProperties } from '../ui/diagram';
 import dxDraggable, { Properties as DraggableProperties } from '../ui/draggable';
 import dxDrawer, { Properties as DrawerProperties } from '../ui/drawer';
@@ -51,6 +50,7 @@ import dxSlider, { Properties as SliderProperties } from '../ui/slider';
 import dxSplitter, { Properties as SplitterProperties } from '../ui/splitter';
 import dxStepper, { Properties as StepperProperties } from '../ui/stepper';
 import dxSortable, { Properties as SortableProperties } from '../ui/sortable';
+import dxSpeechToText, { Properties as SpeechToTextProperties } from '../ui/speech_to_text';
 import dxSpeedDialAction, { Properties as SpeedDialActionProperties } from '../ui/speed_dial_action';
 import dxSwitch, { Properties as SwitchProperties } from '../ui/switch';
 import dxTabs, { Properties as TabsProperties } from '../ui/tabs';
@@ -216,12 +216,6 @@ declare global {
         dxDateRangeBox(options: DateRangeBoxProperties): JQuery;
         dxDateRangeBox(options: string): any;
         dxDateRangeBox(options: string, ...params: any[]): any;
-
-        dxDeferRendering(): JQuery;
-        dxDeferRendering(options: 'instance'): dxDeferRendering;
-        dxDeferRendering(options: DeferRenderingProperties): JQuery;
-        dxDeferRendering(options: string): any;
-        dxDeferRendering(options: string, ...params: any[]): any;
 
         dxDiagram(): JQuery;
         dxDiagram(options: 'instance'): dxDiagram;
@@ -492,6 +486,12 @@ declare global {
         dxSparkline(options: SparklineProperties): JQuery;
         dxSparkline(options: string): any;
         dxSparkline(options: string, ...params: any[]): any;
+
+        dxSpeechToText(): JQuery;
+        dxSpeechToText(options: 'instance'): dxSpeechToText;
+        dxSpeechToText(options: SpeechToTextProperties): JQuery;
+        dxSpeechToText(options: string): any;
+        dxSpeechToText(options: string, ...params: any[]): any;
 
         dxSpeedDialAction(): JQuery;
         dxSpeedDialAction(options: 'instance'): dxSpeedDialAction;

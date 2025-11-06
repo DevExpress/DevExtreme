@@ -76,7 +76,7 @@ export const useApi = () => {
     }, ALERT_TIMEOUT);
   }, []);
   const fetchAIResponse = useCallback(
-    async(message) => {
+    async (message) => {
       const messages = [...getMessageHistory(), dataItemToMessage(message)];
       try {
         const aiResponse = await getAIResponse(messages, 200);
@@ -92,7 +92,7 @@ export const useApi = () => {
     },
     [alertLimitReached, insertMessage],
   );
-  const regenerateLastAIResponse = useCallback(async() => {
+  const regenerateLastAIResponse = useCallback(async () => {
     const messageHistory = getMessageHistory();
     updateLastMessageContent(REGENERATION_TEXT);
     try {

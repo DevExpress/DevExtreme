@@ -3,8 +3,9 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTextBox';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
-fixture`Header Filter T1163100 change filter icon`
+fixture.disablePageReloads`Header Filter T1163100 change filter icon`
   .page(url(__dirname, '../../../container.html'));
 
 const GRID_SELECTOR = '#container';
@@ -41,9 +42,11 @@ const generateTestData = (rowCount: number) => new Array(rowCount)
             .click(filterMenu.menu.getItemByText('Starts with'));
         }
 
-        await takeScreenshot(
+        await testScreenshot(
+          t,
+          takeScreenshot,
           `T1163100_change-icon_columns-${firstColumnsName}-${secondColumnsName}_scrolling-${scrollingName}.png`,
-          dataGrid.element,
+          { element: dataGrid.element },
         );
 
         await t.expect(compareResults.isValid())

@@ -14,7 +14,8 @@ $base-focus-color: null !default;
 @use "sass:color";
 @use "../mixins" as *;
 @use "../icons" as *;
-@use "./common";
+@use "./common" as *;
+@use "./expandable" as *;
 
 $treelist-border: $datagrid-border;
 $treelist-drag-header-border-color: $datagrid-drag-header-border-color;
@@ -408,4 +409,8 @@ $treelist-row-error-color: $datagrid-row-error-color;
   50% {
     background-color: color.change($treelist-base-color, $alpha: 0.08);
   }
+}
+
+.dx-command-ai-header-button .dx-button.dx-state-focused {
+  outline: 2px solid $treelist-focused-border-color;
 }

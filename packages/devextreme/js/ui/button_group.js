@@ -1,4 +1,4 @@
-import ButtonGroup from '../__internal/ui/m_button_group';
+import ButtonGroup from '../__internal/ui/button_group';
 
 export default ButtonGroup;
 

@@ -2,7 +2,7 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
-import { focused } from '@js/ui/widget/selectors';
+import { focused } from '@ts/core/utils/m_selectors';
 
 import mappedAddNamespace from './m_add_namespace';
 /* eslint-disable spellcheck/spell-checker */
@@ -66,7 +66,6 @@ const EVENT_SOURCES_REGEX = {
 };
 
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 export const eventSource = ({ type }) => {
@@ -74,7 +73,6 @@ export const eventSource = ({ type }) => {
   /* eslint-disable @typescript-eslint/no-invalid-void-type */
   // eslint-disable-next-line consistent-return
   each(EVENT_SOURCES_REGEX, function (key): boolean | void {
-    // eslint-disable-next-line @typescript-eslint/no-invalid-this
     if (this.test(type)) {
       result = key;
 

@@ -23,7 +23,7 @@ if (window && window.config?.packageConfigPaths) {
   preserveWhitespaces: true,
 })
 export class AppComponent {
-  employees: Array<Employee>;
+  employees: Employee[];
 
   allowDropInsideItem = true;
 
@@ -31,7 +31,7 @@ export class AppComponent {
 
   showDragIcons = true;
 
-  expandedRowKeys: Array<number> = [1];
+  expandedRowKeys: number[] = [1];
 
   constructor(service: Service) {
     this.employees = service.getEmployees();
@@ -42,7 +42,7 @@ export class AppComponent {
     const sourceNode = e.component.getNodeByKey(e.itemData.ID);
     let targetNode = visibleRows[e.toIndex].node;
 
-    while (targetNode && targetNode.data) {
+    while (targetNode?.data) {
       if (targetNode.data.ID === sourceNode.data.ID) {
         e.cancel = true;
         break;

@@ -49,20 +49,20 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxSortable from 'devextreme-vue/sortable';
+import DxSortable, { type DxSortableTypes } from 'devextreme-vue/sortable';
 import DxButton from 'devextreme-vue/button';
 import DxTabPanel from 'devextreme-vue/tab-panel';
 import EmployeeTemplate from './EmployeeTemplate.vue';
-import service from './data.ts';
+import service, { type Employee } from './data.ts';
 
 const allEmployees = service.getEmployees();
-const employees = ref(allEmployees.slice(0, 3));
+const employees = ref<Employee[]>(allEmployees.slice(0, 3));
 const selectedIndex = ref(0);
 
-function onTabDragStart(e) {
+function onTabDragStart(e: DxSortableTypes.DragStartEvent) {
   e.itemData = e.fromData[e.fromIndex];
 }
-function onTabDrop(e) {
+function onTabDrop(e: DxSortableTypes.ReorderEvent) {
   const newEmployees = [...employees.value];
 
   newEmployees.splice(e.fromIndex, 1);
@@ -77,10 +77,10 @@ function addButtonHandler() {
   selectedIndex.value = employees.value.length;
   employees.value = [...employees.value, newItem];
 }
-function closeButtonHandler(itemData) {
+function closeButtonHandler(itemData: Employee) {
   const index = employees.value.indexOf(itemData);
 
-  employees.value = employees.value.filter((e) => e !== itemData);
+  employees.value = employees.value.filter((e: Employee) => e !== itemData);
   if (index >= employees.value.length && index > 0) selectedIndex.value = index - 1;
 }
 function disableButton() {
@@ -110,7 +110,7 @@ function showCloseButton() {
 .employeeInfo .employeePhoto {
   height: 100px;
   float: left;
-  padding: 10px 20px 10px 20px;
+  padding: 10px 20px;
 }
 
 .employeeInfo .employeeNotes {

@@ -8,7 +8,7 @@ import dxForm, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, InitializedEvent, FormItemType, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem, FormItemComponent, LabelLocation } from "devextreme/ui/form";
+import type { ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, InitializedEvent, SmartPastedEvent, SmartPastingEvent, FormItemType, FormPredefinedButtonItem, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem, FormItemComponent, LabelLocation } from "devextreme/ui/form";
 import type { ContentReadyEvent as ButtonContentReadyEvent, DisposingEvent as ButtonDisposingEvent, InitializedEvent as ButtonInitializedEvent, dxButtonOptions, ClickEvent, OptionChangedEvent } from "devextreme/ui/button";
 import type { ContentReadyEvent as TabPanelContentReadyEvent, DisposingEvent as TabPanelDisposingEvent, InitializedEvent as TabPanelInitializedEvent, OptionChangedEvent as TabPanelOptionChangedEvent, dxTabPanelOptions, dxTabPanelItem, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, SelectionChangedEvent, SelectionChangingEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from "devextreme/ui/tab_panel";
 import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, ButtonStyle, template, ButtonType, ComparisonOperator, TabsIconPosition, TabsStyle, Position } from "devextreme/common";
@@ -29,6 +29,8 @@ type IFormOptionsNarrowedEvents = {
   onDisposing?: ((e: DisposingEvent) => void);
   onEditorEnterKey?: ((e: EditorEnterKeyEvent) => void);
   onInitialized?: ((e: InitializedEvent) => void);
+  onSmartPasted?: ((e: SmartPastedEvent) => void);
+  onSmartPasting?: ((e: SmartPastingEvent) => void);
 }
 
 type IFormOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IFormOptionsNarrowedEvents> & IHtmlOptions & {
@@ -51,10 +53,10 @@ const Form = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["formData"]), []);
-      const independentEvents = useMemo(() => (["onContentReady","onDisposing","onEditorEnterKey","onInitialized"]), []);
+      const independentEvents = useMemo(() => (["onContentReady","onDisposing","onEditorEnterKey","onInitialized","onSmartPasted","onSmartPasting"]), []);
 
       const defaults = useMemo(() => ({
         defaultFormData: "formData",
@@ -85,6 +87,25 @@ const Form = memo(
   ),
 ) as (props: React.PropsWithChildren<IFormOptions> & { ref?: Ref<FormRef> }) => ReactElement | null;
 
+
+// owners:
+// SimpleItem
+type IAiOptionsProps = React.PropsWithChildren<{
+  disabled?: boolean;
+  instruction?: string | undefined;
+}>
+const _componentAiOptions = (props: IAiOptionsProps) => {
+  return React.createElement(NestedOption<IAiOptionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "aiOptions",
+    },
+  });
+};
+
+const AiOptions = Object.assign<typeof _componentAiOptions, NestedComponentMeta>(_componentAiOptions, {
+  componentType: "option",
+});
 
 // owners:
 // SimpleItem
@@ -120,7 +141,7 @@ type IButtonItemProps = React.PropsWithChildren<{
   cssClass?: string | undefined;
   horizontalAlignment?: HorizontalAlignment;
   itemType?: FormItemType;
-  name?: string | undefined;
+  name?: FormPredefinedButtonItem | string | undefined;
   verticalAlignment?: VerticalAlignment;
   visible?: boolean;
   visibleIndex?: number | undefined;
@@ -150,7 +171,6 @@ const ButtonItem = Object.assign<typeof _componentButtonItem, NestedComponentMet
 type IButtonOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
-  bindingOptions?: Record<string, any>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
@@ -388,6 +408,10 @@ type IItemProps = React.PropsWithChildren<{
   text?: string;
   title?: string;
   visible?: boolean;
+  aiOptions?: Record<string, any> | {
+    disabled?: boolean;
+    instruction?: string | undefined;
+  };
   colSpan?: number | undefined;
   cssClass?: string | undefined;
   dataField?: string | undefined;
@@ -404,7 +428,7 @@ type IItemProps = React.PropsWithChildren<{
     text?: string | undefined;
     visible?: boolean;
   };
-  name?: string | undefined;
+  name?: string | undefined | FormPredefinedButtonItem;
   validationRules?: Array<CommonTypes.ValidationRule>;
   visibleIndex?: number | undefined;
   alignItemLabels?: boolean;
@@ -453,6 +477,7 @@ const _componentItem = (props: IItemProps) => {
       OptionName: "items",
       IsCollectionItem: true,
       ExpectedChildren: {
+        aiOptions: { optionName: "aiOptions", isCollectionItem: false },
         AsyncRule: { optionName: "validationRules", isCollectionItem: true },
         buttonOptions: { optionName: "buttonOptions", isCollectionItem: false },
         colCountByScreen: { optionName: "colCountByScreen", isCollectionItem: false },
@@ -623,6 +648,10 @@ const RequiredRule = Object.assign<typeof _componentRequiredRule, NestedComponen
 // owners:
 // Form
 type ISimpleItemProps = React.PropsWithChildren<{
+  aiOptions?: Record<string, any> | {
+    disabled?: boolean;
+    instruction?: string | undefined;
+  };
   colSpan?: number | undefined;
   cssClass?: string | undefined;
   dataField?: string | undefined;
@@ -654,6 +683,7 @@ const _componentSimpleItem = (props: ISimpleItemProps) => {
       OptionName: "items",
       IsCollectionItem: true,
       ExpectedChildren: {
+        aiOptions: { optionName: "aiOptions", isCollectionItem: false },
         AsyncRule: { optionName: "validationRules", isCollectionItem: true },
         CompareRule: { optionName: "validationRules", isCollectionItem: true },
         CustomRule: { optionName: "validationRules", isCollectionItem: true },
@@ -813,7 +843,6 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
   animationEnabled?: boolean;
-  bindingOptions?: Record<string, any>;
   dataSource?: Array<any | dxTabPanelItem | string> | DataSource | DataSourceOptions | null | Store | string;
   deferRendering?: boolean;
   disabled?: boolean;
@@ -827,6 +856,7 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   items?: Array<any | dxTabPanelItem | string>;
   itemTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
   itemTitleTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
+  keyExpr?: (() => void) | string;
   loop?: boolean;
   noDataText?: string;
   onContentReady?: ((e: TabPanelContentReadyEvent) => void);
@@ -974,6 +1004,8 @@ export {
   Form,
   IFormOptions,
   FormRef,
+  AiOptions,
+  IAiOptionsProps,
   AsyncRule,
   IAsyncRuleProps,
   ButtonItem,

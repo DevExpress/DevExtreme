@@ -10,7 +10,7 @@
     "devextreme-cldr-data": "1.0.3",
     "globalize": "1.7.0",
     "cldrjs": "0.5.5",
-    "jquery": "3.7.1",
+    "jquery": "catalog:",
     "minimist": "1.2.8",
     "parcel": "2.12.0",
     "rimraf": "3.0.2",
@@ -18,7 +18,16 @@
     "vite": "5.4.19",
     "webpack": "5.94.0",
     "webpack-cli": "4.10.0",
-    "devextreme": "workspace:*"
+    "devextreme": "workspace:*",
+    "eslint": "catalog:",
+    "@eslint/eslintrc": "catalog:",
+    "@stylistic/eslint-plugin": "catalog:",
+    "@typescript-eslint/parser": "catalog:",
+    "eslint-config-devextreme": "1.1.6",
+    "eslint-plugin-i18n": "catalog:",
+    "eslint-plugin-import": "catalog:",
+    "eslint-plugin-no-only-tests": "catalog:",
+    "eslint-plugin-spellcheck": "0.0.20"
   },
   "alias": {
     "globalize$": "./node_modules/globalize/dist/globalize.js",

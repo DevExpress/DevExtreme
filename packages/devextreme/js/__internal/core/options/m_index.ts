@@ -4,7 +4,6 @@ import {
 } from '@js/core/options/utils';
 import { equalByValue, noop } from '@js/core/utils/common';
 import { getPathParts } from '@js/core/utils/data';
-import { extend } from '@js/core/utils/extend';
 import { isFunction, isObject, type } from '@js/core/utils/type';
 
 export class Options {
@@ -23,8 +22,6 @@ export class Options {
   _deprecatedNames: any[];
 
   _optionManager: OptionManager;
-
-  _cachedOptions: Record<string, any>;
 
   _rules: any[];
 
@@ -47,7 +44,6 @@ export class Options {
       optionsByReference,
     );
     this._optionManager.onRelevantNamesPrepared((options, name, value, silent) => this._setRelevantNames(options, name, value, silent));
-    this._cachedOptions = {};
 
     this._rules = [];
   }
@@ -200,7 +196,7 @@ export class Options {
     return getNestedOptionValue(this._initial, name);
   }
 
-  option(options, value) {
+  option(options, value?) {
     const isGetter = arguments.length < 2 && type(options) !== 'object';
 
     if (isGetter) {
@@ -245,12 +241,13 @@ export class Options {
     return Object.prototype.hasOwnProperty.call(this._deprecated, name);
   }
 
-  cache(name, options?: Record<string, unknown>) {
+  cache(name: string, value?: unknown) {
     const isGetter = arguments.length < 2;
+    const optionName = `_cached_${name}`;
 
     if (isGetter) {
-      return this._cachedOptions[name];
+      return this.option(optionName);
     }
-    this._cachedOptions[name] = extend(this._cachedOptions[name], options);
+    this.option(optionName, value);
   }
 }

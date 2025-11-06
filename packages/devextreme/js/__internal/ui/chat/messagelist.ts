@@ -13,17 +13,21 @@ import { isElementInDom } from '@js/core/utils/dom';
 import { getHeight } from '@js/core/utils/size';
 import { isDate, isDefined } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
-import type { Message, TextMessage, User } from '@js/ui/chat';
+import type {
+  AttachmentDownloadClickEvent, Message, TextMessage, User,
+} from '@js/ui/chat';
 import type { Item as ContextMenuItem } from '@js/ui/context_menu';
+import type dxContextMenu from '@js/ui/context_menu';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
+import { getPublicElement } from '@ts/core/m_element';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
-import ContextMenu from '@ts/ui/context_menu/m_context_menu';
+import type { ClickableCollectionWidgetItem } from '@ts/ui/collection/item';
+import ContextMenu from '@ts/ui/context_menu/context_menu';
 import type {
   ScrollView as ScrollViewType,
-  ScrollViewServerSide as ScrollViewServerSideType,
-} from '@ts/ui/scroll_view/m_scroll_view';
-import ScrollView from '@ts/ui/scroll_view/m_scroll_view';
+} from '@ts/ui/scroll_view/scroll_view';
+import ScrollView from '@ts/ui/scroll_view/scroll_view';
 import { getScrollTopMax } from '@ts/ui/scroll_view/utils/get_scroll_top_max';
 
 import type { DataChange } from '../collection/collection_widget.base';
@@ -64,6 +68,10 @@ const ESCAPE_KEY = 'escape';
 export const MESSAGEGROUP_TIMEOUT = 5 * 1000 * 60;
 
 export type MessageTemplate = ((data: Message, messageBubbleContainer: Element) => void) | null;
+export type EmptyViewTemplate = ((
+  data: { message: string; prompt: string },
+  emptyViewContainer: Element) => void
+) | null;
 
 export type ItemClick = NativeEventInfo<ContextMenu, KeyboardEvent | MouseEvent | PointerEvent> & {
   readonly itemData?: ContextMenuItem;
@@ -88,6 +96,7 @@ export interface Properties extends WidgetOptions<MessageList> {
   currentUserId: number | string | undefined;
   showDayHeaders: boolean;
   messageTemplate?: MessageTemplate;
+  emptyViewTemplate?: EmptyViewTemplate;
   dayHeaderFormat?: Format;
   messageTimestampFormat?: Format;
   typingUsers: User[];
@@ -95,6 +104,7 @@ export interface Properties extends WidgetOptions<MessageList> {
   showAvatar: boolean;
   showUserName: boolean;
   showMessageTimestamp: boolean;
+  onAttachmentDownloadClick?: (e: AttachmentDownloadClickEvent) => void;
   onMessageEditingStart?: (e: MessageEditingEvent) => () => void;
   onMessageDeleting?: (e: MessageDeletingEvent) => void;
   onEscapeKeyPressed?: (e: KeyboardEvent) => void;
@@ -107,7 +117,7 @@ class MessageList extends Widget<Properties> {
 
   private _isBottomReached!: boolean;
 
-  private _scrollView!: ScrollViewType | ScrollViewServerSideType;
+  private _scrollView!: ScrollViewType;
 
   private _typingIndicator!: TypingIndicator;
 
@@ -131,6 +141,7 @@ class MessageList extends Widget<Properties> {
       showAvatar: true,
       showUserName: true,
       showMessageTimestamp: true,
+      emptyViewTemplate: null,
       messageTemplate: null,
     };
   }
@@ -198,22 +209,33 @@ class MessageList extends Widget<Properties> {
   }
 
   _renderEmptyViewContent(): void {
+    const messageText = messageLocalization.format('dxChat-emptyListMessage');
+    const promptText = messageLocalization.format('dxChat-emptyListPrompt');
+    const { emptyViewTemplate } = this.option();
+
     const $emptyView = $('<div>')
       .addClass(CHAT_MESSAGELIST_EMPTY_VIEW_CLASS)
       .attr('id', `dx-${new Guid()}`);
+
+    if (emptyViewTemplate) {
+      const data = {
+        message: messageText,
+        prompt: promptText,
+      };
+      emptyViewTemplate(data, getPublicElement($emptyView));
+      $emptyView.appendTo(this._$content);
+
+      return;
+    }
 
     $('<div>')
       .appendTo($emptyView)
       .addClass(CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS);
 
-    const messageText = messageLocalization.format('dxChat-emptyListMessage');
-
     $('<div>')
       .appendTo($emptyView)
       .addClass(CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS)
       .text(messageText);
-
-    const promptText = messageLocalization.format('dxChat-emptyListPrompt');
 
     $('<div>')
       .appendTo($emptyView)
@@ -254,8 +276,9 @@ class MessageList extends Widget<Properties> {
       showAvatar,
       showUserName,
       showMessageTimestamp,
-      messageTemplate,
       messageTimestampFormat,
+      messageTemplate,
+      onAttachmentDownloadClick,
     } = this.option();
 
     const $messageGroup = $('<div>').appendTo(this._$content);
@@ -266,8 +289,9 @@ class MessageList extends Widget<Properties> {
       showAvatar,
       showUserName,
       showMessageTimestamp,
-      messageTemplate,
       messageTimestampFormat,
+      messageTemplate,
+      onAttachmentDownloadClick,
     });
   }
 
@@ -283,13 +307,14 @@ class MessageList extends Widget<Properties> {
     const editText = messageLocalization.format('dxChat-editingEditMessage');
     const deleteText = messageLocalization.format('dxChat-editingDeleteMessage');
 
-    const buttons: ContextMenuItem[] = [];
+    const buttons: ClickableCollectionWidgetItem<ContextMenuItem>[] = [];
 
     if (allowUpdating(message) && message.type !== 'image') {
       buttons.push({
         icon: 'edit',
         text: editText,
         disabled: isEditActionDisabled(message),
+        // @ts-expect-error itemElement
         onClick: (e: ItemClick): void => {
           const onMessageEditStarted = onMessageEditingStart?.({
             event: e.event, message: message as TextMessage,
@@ -309,6 +334,7 @@ class MessageList extends Widget<Properties> {
       buttons.push({
         icon: 'trash',
         text: deleteText,
+        // @ts-expect-error itemElement
         onClick(e: ItemClick): void {
           onMessageDeleting?.({ event: e.event, message });
         },
@@ -332,6 +358,7 @@ class MessageList extends Widget<Properties> {
       hideOnParentScroll: false,
       overlayContainer: this._scrollView.container(),
       visualContainer: this._scrollView.container(),
+      // @ts-expect-error ts-error
       boundaryOffset: { h: 16 },
     });
 
@@ -346,7 +373,7 @@ class MessageList extends Widget<Properties> {
     $contextMenu.appendTo(this.$element());
   }
 
-  _onContextMenuShowing(e: Cancelable & EventInfo<ContextMenu>): void {
+  _onContextMenuShowing(e: Cancelable & EventInfo<dxContextMenu>): void {
     // @ts-expect-error ts-error
     const { jQEvent } = e;
 
@@ -383,7 +410,6 @@ class MessageList extends Widget<Properties> {
       useKeyboard: false,
       bounceEnabled: false,
       reachBottomText: '',
-      indicateLoading: false,
       onReachBottom: noop,
     });
   }
@@ -525,7 +551,7 @@ class MessageList extends Widget<Properties> {
     const $lastMessageGroup = this._$content.find(`.${CHAT_MESSAGEGROUP_CLASS}`).last();
 
     if ($lastMessageGroup.length) {
-      return MessageGroup.getInstance($lastMessageGroup) as MessageGroup;
+      return MessageGroup.getInstance($lastMessageGroup);
     }
 
     return undefined;
@@ -773,6 +799,7 @@ class MessageList extends Widget<Properties> {
 
   _clean(): void {
     this._lastMessageDate = null;
+    resizeObserverSingleton.unobserve(this.$element().get(0));
 
     super._clean();
   }
@@ -781,7 +808,7 @@ class MessageList extends Widget<Properties> {
     changes.forEach((change) => {
       switch (change.type) {
         case 'update':
-          this._updateMessageByKey(change.key, change.data as Message ?? {});
+          this._updateMessageByKey(change.key, change.data ?? {});
           break;
         case 'insert': {
           const { items } = this.option();
@@ -807,8 +834,10 @@ class MessageList extends Widget<Properties> {
       case 'showUserName':
       case 'showMessageTimestamp':
       case 'messageTemplate':
+      case 'emptyViewTemplate':
       case 'dayHeaderFormat':
       case 'messageTimestampFormat':
+      case 'onAttachmentDownloadClick':
         this._invalidate();
         break;
       case 'items':

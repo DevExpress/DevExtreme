@@ -1,7 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxPopoverModule, DxTemplateModule } from 'devextreme-angular';
+import { DxPopoverModule } from 'devextreme-angular';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -25,7 +25,6 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxPopoverModule,
-    DxTemplateModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

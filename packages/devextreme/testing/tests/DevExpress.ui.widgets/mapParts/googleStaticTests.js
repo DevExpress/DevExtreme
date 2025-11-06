@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import testing from './utils.js';
 import Map from 'ui/map';
-import GoogleStaticProvider from '__internal/ui/map/m_provider.google_static';
+import GoogleStaticProvider from '__internal/ui/map/provider.google_static';
 import Color from 'color';
 import ajaxMock from '../../../helpers/ajaxMock.js';
 
@@ -212,7 +212,7 @@ QUnit.test('apiKey', function(assert) {
     return new Promise(function(resolve) {
         const map = new Map($('#map'), {
             provider: 'googleStatic',
-            apiKey: 10153453,
+            apiKey: '10153453',
             onReady: function(e) {
                 assert.notEqual(mapUrl(map).indexOf('key=10153453'), -1, 'key set correctly');
 

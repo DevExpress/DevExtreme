@@ -306,7 +306,7 @@ module('Integration: Appointments in Timeline views', {
 
                 const $appointment = $(scheduler.instance.$element()).find(`.${APPOINTMENT_CLASS}`).eq(0);
                 const $cell = $(scheduler.instance.$element()).find(`.${DATE_TABLE_CELL_CLASS}`).eq(0);
-                const cellsInAppointment = 48;
+                const cellsInAppointment = 4 * (22 - 10); // 4 days for 12 cells by 1 hour
 
                 assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, 'Task has a right width');
             });
@@ -406,7 +406,6 @@ module('Integration: Appointments in Timeline views', {
                 assert.roughEqual($appointment.position().left, $cell.outerWidth() * cellsToAppointment, 1.001, 'Task has a right width');
             });
 
-            // Timezone-sensitive test, use US/Pacific for proper testing
             [{
                 handle: CLASSES.resizableHandle.left,
                 direction: -1,
@@ -474,7 +473,7 @@ module('Integration: Appointments in Timeline views', {
                         width: 1500
                     });
 
-                    scheduler.instance.scrollToTime(0, 0, new Date(testCase.scrollDate));
+                    scheduler.instance.scrollTo(new Date(testCase.scrollDate));
 
                     const { getAppointment, getDateText } = scheduler.appointments;
 
@@ -589,9 +588,9 @@ module('Integration: Appointments in Timeline views', {
                     });
 
                     assert.strictEqual(scheduler.appointments.getAppointmentCount(), 4, 'Appointments are rendered');
-                    assert.strictEqual($(scheduler.appointments.getAppointment(0)).position().left, $(scheduler.appointments.getAppointment(3)).position().left, 'Appointments have same left coordinate');
-                    assert.strictEqual($(scheduler.appointments.getAppointment(0)).innerWidth(), $(scheduler.appointments.getAppointment(3)).innerWidth(), 'Appointments with equal coords have same width');
-                    assert.strictEqual($(scheduler.appointments.getAppointment(1)).innerWidth(), $(scheduler.appointments.getAppointment(3)).innerWidth(), 'Appointments with defferent coords have same width');
+                    assert.strictEqual($(scheduler.appointments.getAppointment(2)).position().left, $(scheduler.appointments.getAppointment(3)).position().left, 'Appointments have same left coordinate');
+                    assert.strictEqual($(scheduler.appointments.getAppointment(2)).innerWidth(), $(scheduler.appointments.getAppointment(3)).innerWidth(), 'Appointments with equal coords have same width');
+                    assert.strictEqual($(scheduler.appointments.getAppointment(3)).innerWidth(), $(scheduler.appointments.getAppointment(3)).innerWidth(), 'Appointments with defferent coords have same width');
                 });
             });
         });

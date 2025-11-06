@@ -18,36 +18,36 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
 }
 
-type IMenuOptionsNarrowedEvents<TKey = any> = {
-  onContentReady?: ((e: ContentReadyEvent<TKey>) => void);
-  onDisposing?: ((e: DisposingEvent<TKey>) => void);
-  onInitialized?: ((e: InitializedEvent<TKey>) => void);
-  onItemClick?: ((e: ItemClickEvent<TKey>) => void);
-  onItemContextMenu?: ((e: ItemContextMenuEvent<TKey>) => void);
-  onItemRendered?: ((e: ItemRenderedEvent<TKey>) => void);
-  onSubmenuHidden?: ((e: SubmenuHiddenEvent<TKey>) => void);
-  onSubmenuHiding?: ((e: SubmenuHidingEvent<TKey>) => void);
-  onSubmenuShowing?: ((e: SubmenuShowingEvent<TKey>) => void);
-  onSubmenuShown?: ((e: SubmenuShownEvent<TKey>) => void);
+type IMenuOptionsNarrowedEvents<TItem = any, TKey = any> = {
+  onContentReady?: ((e: ContentReadyEvent<TItem, TKey>) => void);
+  onDisposing?: ((e: DisposingEvent<TItem, TKey>) => void);
+  onInitialized?: ((e: InitializedEvent<TItem, TKey>) => void);
+  onItemClick?: ((e: ItemClickEvent<TItem, TKey>) => void);
+  onItemContextMenu?: ((e: ItemContextMenuEvent<TItem, TKey>) => void);
+  onItemRendered?: ((e: ItemRenderedEvent<TItem, TKey>) => void);
+  onSubmenuHidden?: ((e: SubmenuHiddenEvent<TItem, TKey>) => void);
+  onSubmenuHiding?: ((e: SubmenuHidingEvent<TItem, TKey>) => void);
+  onSubmenuShowing?: ((e: SubmenuShowingEvent<TItem, TKey>) => void);
+  onSubmenuShown?: ((e: SubmenuShownEvent<TItem, TKey>) => void);
 }
 
-type IMenuOptions<TKey = any> = React.PropsWithChildren<ReplaceFieldTypes<Properties<TKey>, IMenuOptionsNarrowedEvents<TKey>> & IHtmlOptions & {
-  dataSource?: Properties<TKey>["dataSource"];
+type IMenuOptions<TItem = any, TKey = any> = React.PropsWithChildren<ReplaceFieldTypes<Properties<TItem, TKey>, IMenuOptionsNarrowedEvents<TItem, TKey>> & IHtmlOptions & {
+  dataSource?: Properties<TItem, TKey>["dataSource"];
   itemRender?: (...params: any) => React.ReactNode;
   itemComponent?: React.ComponentType<any>;
-  defaultItems?: Array<dxMenuItem>;
+  defaultItems?: Array<any | dxMenuItem>;
   defaultSelectedItem?: any;
-  onItemsChange?: (value: Array<dxMenuItem>) => void;
+  onItemsChange?: (value: Array<any | dxMenuItem>) => void;
   onSelectedItemChange?: (value: any) => void;
 }>
 
-interface MenuRef<TKey = any> {
-  instance: () => dxMenu<TKey>;
+interface MenuRef<TItem = any, TKey = any> {
+  instance: () => dxMenu<TItem, TKey>;
 }
 
 const Menu = memo(
   forwardRef(
-    <TKey = any>(props: React.PropsWithChildren<IMenuOptions<TKey>>, ref: ForwardedRef<MenuRef<TKey>>) => {
+    <TItem = any, TKey = any>(props: React.PropsWithChildren<IMenuOptions<TItem, TKey>>, ref: ForwardedRef<MenuRef<TItem, TKey>>) => {
       const baseRef = useRef<ComponentRef>(null);
 
       useImperativeHandle(ref, () => (
@@ -56,7 +56,7 @@ const Menu = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["items","selectedItem"]), []);
       const independentEvents = useMemo(() => (["onContentReady","onDisposing","onInitialized","onItemClick","onItemContextMenu","onItemRendered","onSubmenuHidden","onSubmenuHiding","onSubmenuShowing","onSubmenuShown"]), []);
@@ -82,7 +82,7 @@ const Menu = memo(
       ]), []);
 
       return (
-        React.createElement(BaseComponent<React.PropsWithChildren<IMenuOptions<TKey>>>, {
+        React.createElement(BaseComponent<React.PropsWithChildren<IMenuOptions<TItem, TKey>>>, {
           WidgetClass: dxMenu,
           ref: baseRef,
           subscribableOptions,
@@ -95,7 +95,7 @@ const Menu = memo(
       );
     },
   ),
-) as <TKey = any>(props: React.PropsWithChildren<IMenuOptions<TKey>> & { ref?: Ref<MenuRef<TKey>> }) => ReactElement | null;
+) as <TItem = any, TKey = any>(props: React.PropsWithChildren<IMenuOptions<TItem, TKey>> & { ref?: Ref<MenuRef<TItem, TKey>> }) => ReactElement | null;
 
 
 // owners:

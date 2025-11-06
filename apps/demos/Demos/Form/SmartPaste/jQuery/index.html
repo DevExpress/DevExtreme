@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <title>DevExtreme Demo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <script src="../../../../node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="module">
+      import { AzureOpenAI } from "https://esm.sh/openai@4.73.1";
+
+      window.AzureOpenAI = AzureOpenAI;
+    </script>
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.light.css" />
+    <script src="../../../../node_modules/devextreme-dist/js/dx.all.debug.js"></script>
+    <script src="../../../../node_modules/devextreme-dist/js/dx.ai-integration.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="index.js"></script>
+  </head>
+  <body class="dx-viewport">
+    <div class="demo-container">
+      <div class="instruction" id="textarea-label">Copy text from the editor below to the clipboard. Edit the text to see how your changes affect Smart Paste result.</div>
+      <div class="instruction">Paste text from the clipboard to populate the form. Press Ctrl+Shift+V (when the form is focused) or use the "Smart Paste" button under the form.</div>
+      <div class="textarea-container">
+        <div id="copy"></div>
+        <div id="textarea"></div>
+      </div>
+      <div id="form"></div>
+    </div>
+  </body>
+</html>

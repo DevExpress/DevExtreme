@@ -13,7 +13,7 @@ import {
     ChangedOptionInfo,
     EventInfo,
     InitializedEventInfo,
-} from '../common/core/events';
+} from '../events';
 
 import { TemplateManager } from './template_manager';
 import { FunctionTemplate } from './templates/function_template';
@@ -33,12 +33,6 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<
     InitializedEventInfo<TComponent>,
     OptionChangedEventInfo<TComponent>
 > {
-    /**
-     * @docid
-     * @default {}
-     * @public
-     */
-    bindingOptions?: { [key: string]: any };
     /**
      * @docid
      * @default {}

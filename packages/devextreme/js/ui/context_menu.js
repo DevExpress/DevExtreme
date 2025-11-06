@@ -1,4 +1,4 @@
-import ContextMenu from '../__internal/ui/context_menu/m_context_menu';
+import ContextMenu from '../__internal/ui/context_menu/context_menu';
 
 export default ContextMenu;
 
