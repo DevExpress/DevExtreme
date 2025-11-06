@@ -1,5 +1,4 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import LoadIndicator from 'devextreme-testcafe-models/loadindicator';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';

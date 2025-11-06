@@ -54,6 +54,7 @@ jobs:
       shell: bash
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+        pnpm config set network-concurrency 16
 
     - uses: actions/cache@v4
       name: Setup pnpm cache
@@ -61,12 +62,13 @@ jobs:
         path: |
           ${{ env.STORE_PATH }}
           .nx/cache
+          node_modules/.cache
         key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install --frozen-lockfile
+      run: pnpm install --frozen-lockfile --prefer-offline
 
     - name: Build
       shell: bash
@@ -157,6 +159,7 @@ jobs:
       shell: bash
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+        pnpm config set network-concurrency 16
 
     - uses: actions/cache@v4
       name: Setup pnpm cache
@@ -164,12 +167,13 @@ jobs:
         path: |
           ${{ env.STORE_PATH }}
           .nx/cache
+          node_modules/.cache
         key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install --frozen-lockfile
+      run: pnpm install --frozen-lockfile --prefer-offline
 
     - name: Run TestCafe tests
       working-directory: ./e2e/testcafe-devextreme

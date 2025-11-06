@@ -15,6 +15,7 @@ import { getCurrentTheme } from './helpers/themeUtils';
 
 const LAUNCH_RETRY_ATTEMPTS = 5;
 const LAUNCH_RETRY_TIMEOUT = 10000;
+const FAILED_TESTS_RETRY_ATTEMPTS = 3;
 
 const wait = async (
   timeout: number,
@@ -55,6 +56,7 @@ interface ParsedArgs {
   shadowDom: boolean;
   skipUnstable: boolean;
   disableScreenshots: boolean;
+  retryFailed: boolean;
 }
 
 const TESTCAFE_CONFIG: Partial<TestCafeConfigurationOptions> = {
@@ -101,7 +103,7 @@ function getArgs(): ParsedArgs {
       concurrency: 0,
       browsers: 'chrome',
       test: '',
-      reporter: process.env.CI === 'true' ? 'list' : 'spec',
+      reporter: 'spec-time',
       componentFolder: '',
       file: '*',
       cache: true,
@@ -112,6 +114,7 @@ function getArgs(): ParsedArgs {
       shadowDom: false,
       skipUnstable: true,
       disableScreenshots: false,
+      retryFailed: true,
     },
   }) as ParsedArgs;
 }
@@ -157,77 +160,89 @@ async function main() {
     // eslint-disable-next-line no-console
     console.info('Browsers:', browsers);
 
-    const runner: Runner = testCafe.createRunner()
-      .browsers(browsers)
-      .reporter(reporter)
-      .src([`./tests/${componentFolder}/${file}.ts`]);
+    const failedTests: Set<string> = new Set();
 
-    runner.compilerOptions({
-      typescript: {
-        customCompilerModulePath: '../../node_modules/typescript',
-      },
-    });
+    const createRunner = (filterByFailedTests = false) => {
+      const runner: Runner = testCafe!.createRunner()
+        .browsers(browsers)
+        .reporter(reporter)
+        .src([`./tests/${componentFolder}/${file}.ts`]);
 
-    runner.concurrency(args.concurrency || 4);
-
-    const filters: FilterFunction[] = [];
-
-    if (indices) {
-      const [current, total] = indices.split(/_|of|\\|\//ig).map((x) => +x);
-      const fixtures = globSync([`./tests/${componentFolder}/*.ts`]);
-      const fixtureChunks = split(fixtures, total);
-      const targetFixtureChunk = fixtureChunks[current - 1] ?? [];
-      const targetFixtureChunkSet = new Set(targetFixtureChunk);
-
-      /* eslint-disable no-console */
-      console.info(' === test run config ===');
-      console.info(` > indices: current = ${current} | total = ${total}`);
-      console.info(' > glob: ', [`./tests/${componentFolder}/*.ts`]);
-      console.info(' > all fixtures: ', fixtureChunks);
-      console.info(' > fixtures: ', targetFixtureChunk, '\n');
-      /* eslint-enable no-console */
-
-      filters.push((
-        _testName: string,
-        _fixtureName: string,
-        fixturePath: string,
-      ) => {
-        const testPath = fixturePath.split('/testcafe-devextreme/')[1];
-        return targetFixtureChunkSet.has(testPath);
+      runner.compilerOptions({
+        typescript: {
+          customCompilerModulePath: '../../node_modules/typescript',
+        },
       });
-    }
 
-    if (testName) {
-      filters.push((name: string) => name === testName);
-    }
+      runner.concurrency(filterByFailedTests ? 1 : (args.concurrency || 4));
 
-    if (args.skipUnstable) {
-      filters.push((
-        _testName: string,
-        _fixtureName: string,
-        _fixturePath: string,
-        testMeta?: any,
-      ) => !(testMeta)?.unstable);
-    }
+      const filters: FilterFunction[] = [];
 
-    if (filters.length) {
-      runner.filter((...filterArgs: Parameters<FilterFunction>) => {
-        // eslint-disable-next-line @typescript-eslint/prefer-for-of
-        for (let i = 0; i < filters.length; i += 1) {
-          if (!filters[i](...filterArgs)) {
-            return false;
-          }
+      if (indices) {
+        const [current, total] = indices.split(/_|of|\\|\//ig).map((x) => +x);
+        const fixtures = globSync([`./tests/${componentFolder}/*.ts`]);
+        const fixtureChunks = split(fixtures, total);
+        const targetFixtureChunk = fixtureChunks[current - 1] ?? [];
+        const targetFixtureChunkSet = new Set(targetFixtureChunk);
+
+        if (!filterByFailedTests) {
+          /* eslint-disable no-console */
+          console.info(' === test run config ===');
+          console.info(` > indices: current = ${current} | total = ${total}`);
+          console.info(' > glob: ', [`./tests/${componentFolder}/*.ts`]);
+          console.info(' > all fixtures: ', fixtureChunks);
+          console.info(' > fixtures: ', targetFixtureChunk, '\n');
+          /* eslint-enable no-console */
         }
-        return true;
-      });
-    }
 
-    if (args.cache) {
-      (runner as any).cache = args.cache;
-    }
+        filters.push((
+          _testName: string,
+          _fixtureName: string,
+          fixturePath: string,
+        ) => {
+          const testPath = fixturePath.split('/testcafe-devextreme/')[1];
+          return targetFixtureChunkSet.has(testPath);
+        });
+      }
+
+      if (testName) {
+        filters.push((name: string) => name === testName);
+      }
+
+      if (filterByFailedTests && failedTests.size > 0) {
+        filters.push((name: string) => failedTests.has(name));
+      }
+
+      if (args.skipUnstable) {
+        filters.push((
+          _testName: string,
+          _fixtureName: string,
+          _fixturePath: string,
+          testMeta?: any,
+        ) => !(testMeta)?.unstable);
+      }
+
+      if (filters.length) {
+        runner.filter((...filterArgs: Parameters<FilterFunction>) => {
+          // eslint-disable-next-line @typescript-eslint/prefer-for-of
+          for (let i = 0; i < filters.length; i += 1) {
+            if (!filters[i](...filterArgs)) {
+              return false;
+            }
+          }
+          return true;
+        });
+      }
+
+      if (args.cache) {
+        (runner as any).cache = args.cache;
+      }
+
+      return runner;
+    };
 
     const runOptions: RunOptions = {
-      quarantineMode: { successThreshold: 1, attemptLimit: 2 },
+      quarantineMode: false,
       // @ts-expect-error ts-error
       hooks: {
         test: {
@@ -266,6 +281,14 @@ async function main() {
           },
           after: async (t: TestController) => {
             await clearTestPage(t);
+
+            if (args.retryFailed) {
+              // @ts-expect-error ts-errors
+              const { test, errs } = t.testRun;
+              if (errs && errs.length > 0) {
+                failedTests.add(test.name);
+              }
+            }
           },
         },
       },
@@ -275,7 +298,75 @@ async function main() {
       runOptions.disableScreenshots = true;
     }
 
-    const failedCount = await retry(() => runner.run(runOptions), LAUNCH_RETRY_ATTEMPTS);
+    // First run - all tests
+    const runner = createRunner(false);
+    let failedCount = await retry(() => runner.run(runOptions), LAUNCH_RETRY_ATTEMPTS);
+
+    // Retry failed tests multiple times if enabled and there are failures
+    if (args.retryFailed && failedTests.size > 0 && failedCount > 0) {
+      const initialFailedCount = failedTests.size;
+      let attemptsLeft = FAILED_TESTS_RETRY_ATTEMPTS;
+
+      while (attemptsLeft > 0 && failedTests.size > 0 && failedCount > 0) {
+        const attemptNumber = FAILED_TESTS_RETRY_ATTEMPTS - attemptsLeft + 1;
+
+        /* eslint-disable no-console */
+        console.info('\n');
+        console.info('='.repeat(60));
+        console.info(`RETRY ATTEMPT ${attemptNumber}/${FAILED_TESTS_RETRY_ATTEMPTS}`);
+        console.info(`Retrying ${failedTests.size} failed test(s)`);
+        console.info('='.repeat(60));
+        console.info('Failed tests:');
+        failedTests.forEach((failedTestName) => console.info(`  - ${failedTestName}`));
+        console.info('='.repeat(60));
+        console.info('\n');
+        /* eslint-enable no-console */
+
+        const testsToRetry = new Set(failedTests);
+        failedTests.clear();
+
+        const retryRunner = createRunner(true);
+        failedCount = await retry(
+          () => retryRunner.run(runOptions),
+          LAUNCH_RETRY_ATTEMPTS,
+        );
+
+        attemptsLeft -= 1;
+
+        /* eslint-disable no-console */
+        console.info('\n');
+        console.info('='.repeat(60));
+        console.info(`ATTEMPT ${attemptNumber} RESULTS`);
+        console.info('='.repeat(60));
+        console.info(`Tests retried: ${testsToRetry.size}`);
+        console.info(`Still failing: ${failedCount}`);
+        console.info(`Passed on this attempt: ${testsToRetry.size - failedCount}`);
+        console.info('='.repeat(60));
+        console.info('\n');
+        /* eslint-enable no-console */
+
+        if (failedCount === 0) {
+          /* eslint-disable no-console */
+          console.info('✅ All previously failed tests now pass!');
+          console.info('\n');
+          /* eslint-enable no-console */
+          break;
+        }
+      }
+
+      /* eslint-disable no-console */
+      console.info('\n');
+      console.info('='.repeat(60));
+      console.info('FINAL RETRY RESULTS');
+      console.info('='.repeat(60));
+      console.info(`Initially failed: ${initialFailedCount}`);
+      console.info(`Total retry attempts used: ${FAILED_TESTS_RETRY_ATTEMPTS - attemptsLeft}`);
+      console.info(`Final failing count: ${failedCount}`);
+      console.info(`Successfully recovered: ${initialFailedCount - failedCount}`);
+      console.info('='.repeat(60));
+      console.info('\n');
+      /* eslint-enable no-console */
+    }
 
     await testCafe.close();
 

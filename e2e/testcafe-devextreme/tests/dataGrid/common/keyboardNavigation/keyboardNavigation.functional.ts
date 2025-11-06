@@ -23,7 +23,7 @@ const CLASS = ClassNames;
 
 const getOnKeyDownCallCount = ClientFunction(() => (window as any).onKeyDownCallCount);
 
-fixture`Keyboard Navigation - common`
+fixture.disablePageReloads`Keyboard Navigation - common`
   .page(url(__dirname, '../../../container.html'));
 
 test('Changing keyboardNavigation options should not invalidate the entire content (T1197829)', async (t) => {
