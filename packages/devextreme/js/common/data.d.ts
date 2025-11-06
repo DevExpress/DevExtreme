@@ -1131,7 +1131,7 @@ export type ODataContextOptions = {
      * @docid
      * @public
      * @default false
-     * @deprecated Use processDatesAsUtc instead
+     * @deprecated processDatesAsUtc
      */
     deserializeDates?: boolean;
     /**
@@ -1241,7 +1241,7 @@ export type ODataStoreOptions<
      * @docid
      * @public
      * @default false
-     * @deprecated Use processDatesAsUtc instead
+     * @deprecated processDatesAsUtc
      */
     deserializeDates?: boolean;
     /**
