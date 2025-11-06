@@ -827,6 +827,46 @@ describe('columnOption', () => {
     component.apiColumnOption('myColumn', 'type', 'ai');
     expect(component.apiColumnOption('myColumn').type).toBe('ai');
   });
+
+  describe('when prompt is reset', () => {
+    it('should clear AI column values', async () => {
+      const { component, instance } = await createDataGrid({
+        keyExpr: 'id',
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              prompt: 'Initial Prompt',
+              aiIntegration: new AIIntegration({
+                sendRequest(): RequestResult {
+                  return {
+                    promise: new Promise<string>((resolve) => {
+                      resolve('{"1":"AI Value"}');
+                    }),
+                    abort: (): void => {},
+                  };
+                },
+              }),
+            },
+          },
+        ],
+      });
+
+      expect(component.getDataCell(0, 3).getText()).toBe('AI Value');
+
+      instance.columnOption('myColumn', 'ai.prompt', '');
+
+      expect(component.getDataCell(0, 3).getText()).toBe(EMPTY_CELL_TEXT);
+    });
+  });
 });
 
 describe('aiIntegration', () => {

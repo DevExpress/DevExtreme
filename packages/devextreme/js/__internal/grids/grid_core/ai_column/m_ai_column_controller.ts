@@ -188,6 +188,10 @@ export class AIColumnController extends Controller {
 
     if (isPromptOptionName && column.name) {
       this.aiColumnIntegrationController.clearAIColumn(column.name);
+
+      if (!column.ai?.prompt) {
+        this.updateAICells();
+      }
     }
   }
 
