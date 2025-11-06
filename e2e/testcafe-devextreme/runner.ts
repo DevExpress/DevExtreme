@@ -3,7 +3,6 @@ import createTestCafe, { ClientFunction } from 'testcafe';
 import * as fs from 'fs';
 import * as process from 'process';
 import parseArgs from 'minimist';
-import { globSync } from 'glob';
 import { DEFAULT_BROWSER_SIZE } from './helpers/const';
 import {
   addShadowRootTree,
@@ -119,18 +118,6 @@ function getArgs(): ParsedArgs {
   }) as ParsedArgs;
 }
 
-const split = <T>(array: T[], chunkCount: number): T[][] => {
-  const fixturesInChunkCount = Math.ceil(array.length / chunkCount);
-  const arr = [...array];
-  const res: T[][] = [];
-
-  while (arr.length) {
-    res.push(arr.splice(0, fixturesInChunkCount));
-  }
-
-  return res;
-};
-
 async function main() {
   let testCafe: Awaited<ReturnType<typeof createTestCafe>> | null = null;
 
@@ -161,9 +148,8 @@ async function main() {
     console.info('Browsers:', browsers);
 
     const failedTests: Set<string> = new Set();
-    let isRetryRun = false;
 
-    const createRunner = (filterByFailedTests = false) => {
+    const createRunner = (filterByFailedTests = false, testsToFilter?: Set<string>) => {
       const runner: Runner = testCafe!.createRunner()
         .browsers(browsers)
         .reporter(reporter)
@@ -175,34 +161,26 @@ async function main() {
         },
       });
 
-      runner.concurrency(filterByFailedTests ? 1 : (args.concurrency || 4));
+      runner.concurrency(filterByFailedTests ? 1 : (args.concurrency || 5));
 
       const filters: FilterFunction[] = [];
 
-      if (indices) {
+      if (indices && !filterByFailedTests) {
         const [current, total] = indices.split(/_|of|\\|\//ig).map((x) => +x);
-        const fixtures = globSync([`./tests/${componentFolder}/*.ts`]);
-        const fixtureChunks = split(fixtures, total);
-        const targetFixtureChunk = fixtureChunks[current - 1] ?? [];
-        const targetFixtureChunkSet = new Set(targetFixtureChunk);
 
-        if (!filterByFailedTests) {
-          /* eslint-disable no-console */
-          console.info(' === test run config ===');
-          console.info(` > indices: current = ${current} | total = ${total}`);
-          console.info(' > glob: ', [`./tests/${componentFolder}/*.ts`]);
-          console.info(' > all fixtures: ', fixtureChunks);
-          console.info(' > fixtures: ', targetFixtureChunk, '\n');
-          /* eslint-enable no-console */
-        }
+        /* eslint-disable no-console */
+        console.info(' === test run config ===');
+        console.info(` > indices: current = ${current} | total = ${total}`);
+        console.info(' > strategy: round-robin by test (not by file)');
+        console.info(' > glob: ', [`./tests/${componentFolder}/*.ts`]);
+        console.info('\n');
+        /* eslint-enable no-console */
 
-        filters.push((
-          _testName: string,
-          _fixtureName: string,
-          fixturePath: string,
-        ) => {
-          const testPath = fixturePath.split('/testcafe-devextreme/')[1];
-          return targetFixtureChunkSet.has(testPath);
+        let globalTestIndex = 0;
+        filters.push(() => {
+          globalTestIndex += 1;
+          const testChunk = ((globalTestIndex - 1) % total) + 1;
+          return testChunk === current;
         });
       }
 
@@ -210,8 +188,8 @@ async function main() {
         filters.push((name: string) => name === testName);
       }
 
-      if (filterByFailedTests && failedTests.size > 0) {
-        filters.push((name: string) => failedTests.has(name));
+      if (filterByFailedTests && testsToFilter && testsToFilter.size > 0) {
+        filters.push((name: string) => testsToFilter.has(name));
       }
 
       if (args.skipUnstable) {
@@ -283,7 +261,7 @@ async function main() {
           after: async (t: TestController) => {
             await clearTestPage(t);
 
-            if (args.retryFailed && !isRetryRun) {
+            if (args.retryFailed) {
               // @ts-expect-error ts-errors
               const { test, errs } = t.testRun;
               if (errs && errs.length > 0) {
@@ -308,7 +286,7 @@ async function main() {
       const initialFailedCount = failedTests.size;
       let attemptsLeft = FAILED_TESTS_RETRY_ATTEMPTS;
 
-      while (attemptsLeft > 0 && failedTests.size > 0 && failedCount > 0) {
+      while (attemptsLeft > 0 && failedCount > 0) {
         const attemptNumber = FAILED_TESTS_RETRY_ATTEMPTS - attemptsLeft + 1;
 
         /* eslint-disable no-console */
@@ -321,18 +299,18 @@ async function main() {
         failedTests.forEach((failedTestName) => console.info(`  - ${failedTestName}`));
         console.info('='.repeat(60));
         console.info('\n');
+        console.info('\n');
         /* eslint-enable no-console */
 
         const testsToRetry = new Set(failedTests);
         failedTests.clear();
 
-        isRetryRun = true;
-        const retryRunner = createRunner(true);
+        const retryRunner = createRunner(true, testsToRetry);
+
         failedCount = await retry(
           () => retryRunner.run(runOptions),
           LAUNCH_RETRY_ATTEMPTS,
         );
-        isRetryRun = false;
 
         attemptsLeft -= 1;
 

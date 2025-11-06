@@ -54,7 +54,6 @@ jobs:
       shell: bash
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-        pnpm config set network-concurrency 16
 
     - uses: actions/cache@v4
       name: Setup pnpm cache
@@ -105,11 +104,12 @@ jobs:
           { componentFolder: "cardView", name: "cardView" },
 
           # Scheduler tests need to be reworked to work in fluent theme
-          { componentFolder: "scheduler/common", name: "scheduler / common (1/5)", indices: "1/5", theme: 'generic.light' },
-          { componentFolder: "scheduler/common", name: "scheduler / common (2/5)", indices: "2/5", theme: 'generic.light' },
-          { componentFolder: "scheduler/common", name: "scheduler / common (3/5)", indices: "3/5", theme: 'generic.light' },
-          { componentFolder: "scheduler/common", name: "scheduler / common (4/5)", indices: "4/5", theme: 'generic.light' },
-          { componentFolder: "scheduler/common", name: "scheduler / common (5/5)", indices: "5/5", theme: 'generic.light' },
+          { componentFolder: "scheduler/common", name: "scheduler / common (1/6)", indices: "1/6", theme: 'generic.light' },
+          { componentFolder: "scheduler/common", name: "scheduler / common (2/6)", indices: "2/6", theme: 'generic.light' },
+          { componentFolder: "scheduler/common", name: "scheduler / common (3/6)", indices: "3/6", theme: 'generic.light' },
+          { componentFolder: "scheduler/common", name: "scheduler / common (4/6)", indices: "4/6", theme: 'generic.light' },
+          { componentFolder: "scheduler/common", name: "scheduler / common (5/6)", indices: "5/6", theme: 'generic.light' },
+          { componentFolder: "scheduler/common", name: "scheduler / common (6/6)", indices: "6/6", theme: 'generic.light' },
           { componentFolder: "scheduler/viewOffset/common", name: "scheduler / offset", theme: 'generic.light' },
           { componentFolder: "scheduler/viewOffset/markup", name: "scheduler / offset markups", theme: 'generic.light' },
           { componentFolder: "scheduler/timezones", name: "scheduler / timezones (Europe/Berlin)", timezone: "Europe/Berlin", theme: 'generic.light' },
@@ -158,10 +158,9 @@ jobs:
       shell: bash
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-        pnpm config set network-concurrency 16
 
-    - uses: actions/cache@v4
-      name: Setup pnpm cache
+    - uses: actions/cache/restore@v4
+      name: Restore pnpm cache
       with:
         path: |
           ${{ env.STORE_PATH }}
