@@ -5,6 +5,7 @@ import {
   generateImageMessage,
   generateMessages,
   generateFileMessage,
+  generateFileMessageWithoutText,
 } from './data';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
@@ -61,7 +62,7 @@ test('Chat: messagebubble with images and files', async (t) => {
   const fileMessages = [
     generateFileMessage(user),
     generateFileMessage(user, true),
-    { text: '', attachments: [{ name: 'doc.pdf', size: 123 }] },
+    generateFileMessageWithoutText(user),
   ];
 
   await chat.option({

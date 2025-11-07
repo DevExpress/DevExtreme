@@ -107,3 +107,10 @@ export const generateFileMessage = (author: User, longText = false): Message => 
   author,
   attachments,
 });
+
+export const generateFileMessageWithoutText = (author: User): Message => ({
+  text: '',
+  timestamp,
+  author,
+  attachments: [attachments[0]],
+});
