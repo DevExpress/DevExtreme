@@ -4,6 +4,7 @@ import { appointmentCollectorData } from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Drag-and-drop behaviour for the appointment tooltip`
   .page(url(__dirname, '../../../container.html'));
@@ -55,9 +56,11 @@ test('Drag-n-drop to the cell on the left should work in week view (T1005115)', 
       appointmentTooltipItem.element,
       scheduler.getDateTableCell(2, 2),
       { speed: 0.5 },
-    )
-    .expect(await takeScreenshot('drag-n-drop-from-tooltip-to-left-cell-in-week.png', scheduler.workSpace))
-    .ok()
+    );
+
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-from-tooltip-to-left-cell-in-week.png', { element: scheduler.workSpace });
+
+  await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxScheduler', {
@@ -117,11 +120,11 @@ test('Drag-n-drop to the cell below should work in month view (T1005115)', async
       appointmentTooltipItem.element,
       scheduler.getDateTableCell(1, 3),
       { speed: 0.5 },
-    )
+    );
 
-    .expect(await takeScreenshot('drag-n-drop-from-tooltip-to-cell-below-in-month.png', scheduler.workSpace))
-    .ok()
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-from-tooltip-to-cell-below-in-month.png', { element: scheduler.workSpace });
 
+  await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxScheduler', {
