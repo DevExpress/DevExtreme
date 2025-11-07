@@ -145,7 +145,6 @@ test('Should block appointment dragging while onAppointmentUpdating Promise is p
   await t.wait(6000);
 
   const positionAfterPromiseResolved = await appointment.element.boundingClientRect;
-
   const cell1Position = await targetCell1.boundingClientRect;
 
   await t
