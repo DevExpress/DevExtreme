@@ -35,7 +35,7 @@ jobs:
     needs: check-should-run
     if: needs.check-should-run.outputs.should-run == 'true'
     env:
-      NODE_OPTIONS: "--max-old-space-size=8192"
+      NODE_OPTIONS: --max-old-space-size=8192
     timeout-minutes: 40
 
     steps:
@@ -154,7 +154,7 @@ jobs:
       if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'force all tests')
       working-directory: apps/demos
       env:
-        NODE_OPTIONS: "--max-old-space-size=8192"
+        NODE_OPTIONS: --max-old-space-size=8192
       run: pnpx nx prepare-bundles
 
     - name: Demos - Run tsc

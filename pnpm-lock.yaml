@@ -990,6 +990,9 @@ importers:
       testcafe:
         specifier: 3.7.2
         version: 3.7.2
+      testcafe-reporter-spec-time:
+        specifier: 4.0.0
+        version: 4.0.0
       ts-node:
         specifier: 10.9.2
         version: 10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.15))(@types/node@20.14.5)(typescript@5.9.2)
@@ -15848,6 +15851,7 @@ packages:
     engines: {node: '>=0.6.0', teleport: '>=0.2.0'}
     deprecated: |-
       You or someone you depend on is using Q, the JavaScript Promise library that gave JavaScript developers strong feelings about promises. They can almost certainly migrate to the native JavaScript promise now. Thank you literally everyone for joining me in this bet against the odds. Be excellent to each other.
+
       (For a CapTP with native promises, see @endo/eventual-send and @endo/captp)
 
   qjobs@1.2.0:
@@ -17757,6 +17761,9 @@ packages:
 
   testcafe-reporter-minimal@2.2.0:
     resolution: {integrity: sha512-iUSWI+Z+kVUAsGegMmEXKDiMPZHDxq+smo4utWwc3wI3Tk6jT8PbNvsROQAjwkMKDmnpo6To5vtyvzvK+zKGXA==}
+
+  testcafe-reporter-spec-time@4.0.0:
+    resolution: {integrity: sha512-uGXbvN4eZ/AcBy83Fjk1oqdZk/17npHXbHYJy4aZZFP/pw61ne/Ynpnm5vxn3sqV5oUL2G3doPHDyunnKsvUAg==}
 
   testcafe-reporter-spec@2.2.0:
     resolution: {integrity: sha512-4jUN75Y7eaHQfSjiCLBXt/TvJMW76kBaZGC74sq03FJNBLoo8ibkEFzfjDJzNDCRYo+P7FjCx3vxGrzgfQU26w==}
@@ -41732,6 +41739,8 @@ snapshots:
   testcafe-reporter-list@2.2.0: {}
 
   testcafe-reporter-minimal@2.2.0: {}
+
+  testcafe-reporter-spec-time@4.0.0: {}
 
   testcafe-reporter-spec@2.2.0: {}
 

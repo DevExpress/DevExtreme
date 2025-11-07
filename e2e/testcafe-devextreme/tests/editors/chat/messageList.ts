@@ -51,8 +51,7 @@ test('Messagelist appearance with scrollbar', async (t) => {
   const chat = new Chat('#container');
 
   await t
-    .hover(chat.messageList)
-    .wait(400);
+    .hover(chat.messageList);
 
   await testScreenshot(t, takeScreenshot, 'Messagelist with a lot of messages.png', { element: '#container' });
 
