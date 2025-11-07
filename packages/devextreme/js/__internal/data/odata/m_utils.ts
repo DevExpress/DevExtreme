@@ -210,7 +210,7 @@ const ajaxOptionsForRequest = (protocolVersion, request, options = {}) => {
 
 export const sendRequest = (protocolVersion, request, options) => {
   const {
-    processDatesAsUtc, fieldTypes, countOnly, isPaged,
+    processDatesAsUTC, fieldTypes, countOnly, isPaged,
   } = options;
   // @ts-expect-error
   const d = new Deferred();
@@ -218,7 +218,7 @@ export const sendRequest = (protocolVersion, request, options) => {
 
   ajax.sendRequest(ajaxOptions).always((obj, textStatus) => {
     const transformOptions = {
-      processDatesAsUtc,
+      processDatesAsUTC,
       fieldTypes,
     };
     const tuple = interpretJsonFormat(obj, textStatus, transformOptions, ajaxOptions);
@@ -387,14 +387,14 @@ const transformTypes = (obj, options = {}) => {
       transformTypes(obj[key], options);
     } else if (typeof value === 'string') {
       // @ts-expect-error
-      const { fieldTypes, processDatesAsUtc } = options;
+      const { fieldTypes, processDatesAsUTC } = options;
       const canBeGuid = !fieldTypes || fieldTypes[key] !== 'String';
 
       if (canBeGuid && GUID_REGEX.test(value)) {
         obj[key] = new Guid(value);
       }
 
-      if (processDatesAsUtc !== false) {
+      if (processDatesAsUTC !== false) {
         if (VERBOSE_DATE_REGEX.exec(value)) {
           // @ts-expect-error
           const date = new Date(Number(RegExp.$1) + RegExp.$2 * 60 * 1000);
@@ -483,6 +483,10 @@ export const keyConverters = {
   Single: (value) => (value instanceof EdmLiteral ? value : new EdmLiteral(`${value}f`)),
 
   Decimal: (value) => (value instanceof EdmLiteral ? value : new EdmLiteral(`${value}m`)),
+
+  DateTimeOffset: (value) => value,
+
+  Date: (value) => value,
 };
 
 export const convertPrimitiveValue = (type, value) => {

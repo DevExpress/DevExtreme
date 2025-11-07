@@ -18,7 +18,7 @@ export default class RequestDispatcher {
     // @ts-expect-error
     this._withCredentials = options.withCredentials;
     // @ts-expect-error
-    this._processDatesAsUtc = options.processDatesAsUtc ?? options.deserializeDates ?? false;
+    this._processDatesAsUTC = options.processDatesAsUTC ?? options.deserializeDates ?? false;
     // @ts-expect-error
     this._filterToLower = options.filterToLower;
   }
@@ -40,7 +40,7 @@ export default class RequestDispatcher {
         // @ts-expect-error
         withCredentials: this._withCredentials,
         // @ts-expect-error
-        processDatesAsUtc: this._processDatesAsUtc,
+        processDatesAsUTC: this._processDatesAsUTC,
       },
     );
   }

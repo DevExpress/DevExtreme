@@ -277,7 +277,7 @@ const createODataQueryAdapter = (queryOptions) => {
           jsonp: queryOptions.jsonp,
           withCredentials: queryOptions.withCredentials,
           countOnly: _countQuery,
-          processDatesAsUtc: queryOptions.processDatesAsUtc,
+          processDatesAsUTC: queryOptions.processDatesAsUTC,
           fieldTypes: queryOptions.fieldTypes,
           isPaged: isFinite(_take),
         },

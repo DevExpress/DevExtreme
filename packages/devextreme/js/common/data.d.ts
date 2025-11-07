@@ -1131,15 +1131,15 @@ export type ODataContextOptions = {
      * @docid
      * @public
      * @default false
-     * @deprecated ODataContextOptions.processDatesAsUtc
+     * @deprecated ODataContextOptions.processDatesAsUTC
      */
     deserializeDates?: boolean;
     /**
-     * @docid ODataContextOptions.processDatesAsUtc
+     * @docid ODataContextOptions.processDatesAsUTC
      * @public
      * @default false
      */
-    processDatesAsUtc?: boolean;
+    processDatesAsUTC?: boolean;
     /**
      * @docid
      * @public
@@ -1241,15 +1241,15 @@ export type ODataStoreOptions<
      * @docid
      * @public
      * @default false
-     * @deprecated ODataStoreOptions.processDatesAsUtc
+     * @deprecated ODataStoreOptions.processDatesAsUTC
      */
     deserializeDates?: boolean;
     /**
-     * @docid ODataStoreOptions.processDatesAsUtc
+     * @docid ODataStoreOptions.processDatesAsUTC
      * @public
      * @default false
      */
-    processDatesAsUtc?: boolean;
+    processDatesAsUTC?: boolean;
     /**
      * @docid
      * @type_function_param1 e:Error

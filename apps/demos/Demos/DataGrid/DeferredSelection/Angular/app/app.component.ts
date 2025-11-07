@@ -33,6 +33,7 @@ export class AppComponent implements AfterViewInit {
       version: 2,
       url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks',
       key: 'Task_ID',
+      processDatesAsUTC: true,
     },
     expand: 'ResponsibleEmployee',
     select: [

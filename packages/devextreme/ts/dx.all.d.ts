@@ -3795,9 +3795,9 @@ declare module DevExpress.common.data {
      */
     deserializeDates?: boolean;
     /**
-     * [descr:ODataContextOptions.processDatesAsUtc]
+     * [descr:ODataContextOptions.processDatesAsUTC]
      */
-    processDatesAsUtc?: boolean;
+    processDatesAsUTC?: boolean;
     /**
      * [descr:ODataContextOptions.entities]
      */
@@ -3883,9 +3883,9 @@ declare module DevExpress.common.data {
      */
     deserializeDates?: boolean;
     /**
-     * [descr:ODataStoreOptions.processDatesAsUtc]
+     * [descr:ODataStoreOptions.processDatesAsUTC]
      */
-    processDatesAsUtc?: boolean;
+    processDatesAsUTC?: boolean;
     /**
      * [descr:ODataStoreOptions.errorHandler]
      */
@@ -7559,9 +7559,11 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSource.on(events)]
      */
-    on(events: {
-      [key in DevExpress.data.PivotGridDataSource.EventName]?: Function;
-    }): this;
+    on(
+      events: {
+        [key in DevExpress.data.PivotGridDataSource.EventName]?: Function;
+      }
+    ): this;
     /**
      * [descr:PivotGridDataSource.reload()]
      */
