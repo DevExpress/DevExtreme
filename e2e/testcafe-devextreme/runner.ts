@@ -161,7 +161,7 @@ async function main() {
         },
       });
 
-      runner.concurrency(filterByFailedTests ? 1 : (args.concurrency || 5));
+      runner.concurrency(filterByFailedTests ? 1 : (args.concurrency || 4));
 
       const filters: FilterFunction[] = [];
 
@@ -298,7 +298,6 @@ async function main() {
         console.info('Failed tests:');
         failedTests.forEach((failedTestName) => console.info(`  - ${failedTestName}`));
         console.info('='.repeat(60));
-        console.info('\n');
         console.info('\n');
         /* eslint-enable no-console */
 

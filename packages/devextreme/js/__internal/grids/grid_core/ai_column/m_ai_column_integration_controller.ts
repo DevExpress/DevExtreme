@@ -81,8 +81,8 @@ export class AIColumnIntegrationController extends Controller {
 
     const reducedData = reduceDataCachedKeys(data, cachedResponse, keyField);
     const areAllDataCached = Object.keys(reducedData).length === 0;
+
     if (areAllDataCached) {
-      this.showResult(columnName, {}, cachedResponse);
       return;
     }
 
@@ -105,16 +105,6 @@ export class AIColumnIntegrationController extends Controller {
     this.abortRequest(columnName);
   }
 
-  /* eslint-disable @typescript-eslint/no-unused-vars */
-  private showResult(
-    columnName: string,
-    response: Record<PropertyKey, unknown>,
-    cachedData: Record<PropertyKey, string>,
-  ): void {
-    // TODO: Implement result display logic
-    const mergedData = { ...cachedData, ...response };
-  }
-
   private getAICommandCallbacks(
     columnName: string,
     cachedResponse: Record<PropertyKey, string>,
@@ -132,11 +122,6 @@ export class AIColumnIntegrationController extends Controller {
 
           this.executeAction('onAIColumnResponseReceived', args);
           this.aiColumnCacheController.setCachedResponse(columnName, finalResponse.data);
-          this.showResult(
-            columnName,
-            finalResponse.data,
-            cachedResponse,
-          );
           this.processCommandCompletion(columnName);
           callBacks?.onComplete?.(finalResponse);
         }
@@ -155,6 +140,10 @@ export class AIColumnIntegrationController extends Controller {
     };
 
     return callbacks;
+  }
+
+  public isAnyRequestAwaitingCompletion(): boolean {
+    return Object.values(this.aborts).some((abort) => !!abort);
   }
 
   public abortRequest(columnName: string): void {

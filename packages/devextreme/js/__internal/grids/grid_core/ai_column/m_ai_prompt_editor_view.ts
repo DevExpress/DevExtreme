@@ -51,7 +51,7 @@ export class AIPromptEditorView extends View {
       },
       onRefresh: (): void => {
         this.promptEditorInstance.updateStateOnAction('regenerate');
-        this.aiColumnController.refreshAIColumn(column.name as string);
+        this.aiColumnController.sendRequest(column.name as string, false, false);
       },
       popupOptions: {
         container: domAdapter.getBody(),
@@ -139,7 +139,11 @@ export class AIPromptEditorView extends View {
     }
 
     if (isPromptOptionName && isAIColumnAutoMode(column)) {
-      this.aiColumnController.sendAIColumnRequest(column.name as string);
+      this.aiColumnController.sendRequest(
+        column.name as string,
+        false,
+        !this.promptEditorInstance?.isVisible(),
+      );
     }
 
     const needUpdatePopup = isPopupOptions(optionName, value);
