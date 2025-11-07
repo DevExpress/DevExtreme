@@ -67,6 +67,7 @@ export const columnHeadersViewExtender = (
       showArrowIcon: false,
       icon: 'overflow',
       stylingMode: 'text',
+      useItemTextAsTitle: false,
       items: this.getDropDownButtonItems(column),
       onItemClick: (e: ItemClickEvent): void => {
         const { key: actionName } = e.itemData;

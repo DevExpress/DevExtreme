@@ -164,6 +164,7 @@ describe('Options', () => {
       });
 
       expect($(component.getDataCell(0, 3).getElement()).hasClass('custom-class')).toBe(true);
+      expect($(component.getDataCell(0, 3).getElement()).hasClass(CLASSES.aiColumn)).toBe(true);
     });
   });
 
@@ -825,6 +826,46 @@ describe('columnOption', () => {
 
     component.apiColumnOption('myColumn', 'type', 'ai');
     expect(component.apiColumnOption('myColumn').type).toBe('ai');
+  });
+
+  describe('when prompt is reset', () => {
+    it('should clear AI column values', async () => {
+      const { component, instance } = await createDataGrid({
+        keyExpr: 'id',
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              prompt: 'Initial Prompt',
+              aiIntegration: new AIIntegration({
+                sendRequest(): RequestResult {
+                  return {
+                    promise: new Promise<string>((resolve) => {
+                      resolve('{"1":"AI Value"}');
+                    }),
+                    abort: (): void => {},
+                  };
+                },
+              }),
+            },
+          },
+        ],
+      });
+
+      expect(component.getDataCell(0, 3).getText()).toBe('AI Value');
+
+      instance.columnOption('myColumn', 'ai.prompt', '');
+
+      expect(component.getDataCell(0, 3).getText()).toBe(EMPTY_CELL_TEXT);
+    });
   });
 });
 
@@ -4470,6 +4511,114 @@ describe('Load panel', () => {
 
       expect(component.getLoadPanel().isVisible()).toBe(false);
       expect(aiPromptEditor.getProgressBar().isVisible()).toBe(false);
+    });
+  });
+
+  describe('when AI column is cleared during request', () => {
+    it('should be hidden', async () => {
+      const { component, instance } = await createDataGrid({
+        dataSource: items,
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration: new AIIntegration({
+                sendRequest(): RequestResult {
+                  return {
+                    promise: new Promise<string>((resolve) => {
+                      setTimeout(() => {
+                        resolve('{"1":"AI Response 1","2":"AI Response 2"}');
+                      }, 300);
+                    }),
+                    abort: (): void => {},
+                  };
+                },
+              }),
+            },
+          },
+        ],
+      });
+
+      component.apiColumnOption('myColumn', 'ai.prompt', 'Updated prompt');
+
+      expect(component.getLoadPanel().isVisible()).toBe(true);
+
+      instance.clearAIColumn('myColumn');
+
+      jest.runAllTimers(); // wait hidden load panel
+
+      expect(component.getLoadPanel().isVisible()).toBe(false);
+    });
+  });
+
+  describe('when AI Column response is cached', () => {
+    it('should be hidden', async () => {
+      const aiIntegration = new AIIntegration({
+        sendRequest(prompt): RequestResult {
+          return {
+            promise: new Promise<string>((resolve) => {
+              const result = {};
+              Object.entries(prompt.data?.data).forEach(([key, value]) => {
+                result[key] = `Response ${(value as any).name}`;
+              });
+
+              resolve(JSON.stringify(result));
+            }),
+            abort: (): void => {},
+          };
+        },
+      });
+      const { component, instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+          { id: 2, name: 'Name 2', value: 20 },
+        ],
+        paging: {
+          pageSize: 1,
+        },
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration,
+              prompt: 'Test prompt',
+            },
+          },
+        ],
+      });
+
+      expect(instance.getAIColumnText('myColumn', 1)).toEqual('Response Name 1');
+
+      instance.option('paging.pageIndex', 1);
+      jest.runAllTimers();
+
+      expect(component.getLoadPanel().isVisible()).toBe(true);
+
+      await Promise.resolve();
+
+      expect(instance.getAIColumnText('myColumn', 2)).toEqual('Response Name 2');
+
+      instance.option('paging.pageIndex', 0);
+      jest.runAllTimers();
+
+      expect(component.getLoadPanel().isVisible()).toBe(false);
+
+      await Promise.resolve();
+
+      expect(instance.getAIColumnText('myColumn', 1)).toEqual('Response Name 1');
+      expect(component.getLoadPanel().isVisible()).toBe(false);
     });
   });
 });
