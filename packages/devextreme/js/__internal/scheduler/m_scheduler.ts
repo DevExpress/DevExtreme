@@ -205,7 +205,7 @@ class Scheduler extends Widget<any> {
 
   _asyncTemplatesTimers!: any[];
 
-  _updatingAppointments: Set<any> = new Set();
+  _updatingAppointments: Set<Appointment> = new Set();
 
   _dataSourceLoadedCallback: any;
 
@@ -2627,7 +2627,7 @@ class Scheduler extends Widget<any> {
     return this._workSpace.dragBehavior;
   }
 
-  _isAppointmentBeingUpdated(appointmentData: any): boolean {
+  _isAppointmentBeingUpdated(appointmentData: Appointment): boolean {
     return this._updatingAppointments.has(appointmentData);
   }
 

@@ -155,7 +155,7 @@ test('Should not throw error when trying to drag appointment that is being updat
       e.cancel = new Promise((resolve) => {
         setTimeout(() => {
           resolve(false);
-        }, 5000);
+        }, 1500);
       });
     },
   });
