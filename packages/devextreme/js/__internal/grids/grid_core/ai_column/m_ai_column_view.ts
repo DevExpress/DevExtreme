@@ -29,6 +29,8 @@ export const columnHeadersViewExtender = (
 
   private activeDropDownButtonInstance!: DropDownButton | null;
 
+  private aiColumnOptionChangedHandler!: (column: Column, optionName: string, value: unknown) => void;
+
   private getDropDownButtonItems(column: Column): Item[] {
     return [
       {
@@ -75,7 +77,7 @@ export const columnHeadersViewExtender = (
             this.aiPromptEditorController.show($container[0], column);
             break;
           case 'regenerate':
-            this.aiColumnController.refreshAIColumn(column.name as string);
+            this.aiColumnController.sendRequest(column.name as string, false);
             break;
           case 'clear':
             this.aiColumnController.clearAIColumn(column.name as string);
@@ -152,6 +154,18 @@ export const columnHeadersViewExtender = (
     return renderingTemplate;
   }
 
+  private aiColumnOptionChanged(column: Column, optionName: string, value: unknown): void {
+    const isPromptOptionName = isPromptOption(optionName, value);
+
+    if (isPromptOptionName) {
+      const visibleIndex = this._columnsController.getVisibleIndex(column.index);
+      const $headerElement = this.getHeaderElement(visibleIndex);
+      const dropDownButtonInstance = this.getDropDownButtonInstance($headerElement);
+
+      dropDownButtonInstance?.option('items', this.getDropDownButtonItems(column));
+    }
+  }
+
   public init(): void {
     super.init();
     this.aiColumnController = this.getController('aiColumn');
@@ -167,31 +181,9 @@ export const columnHeadersViewExtender = (
        */
       this.activeDropDownButtonInstance?.close();
     });
-  }
 
-  public optionChanged(args): void {
-    super.optionChanged(args);
-
-    if (args.name !== 'columns') {
-      return;
-    }
-
-    const column = this._columnsController.getColumnByPath(args.fullName);
-
-    if (column?.type !== AI_COLUMN_NAME) {
-      return;
-    }
-
-    const columnOptionName = this._columnsController.getColumnOptionNameByFullName(args.fullName);
-    const isPromptOptionName = isPromptOption(columnOptionName, args.value);
-
-    if (isPromptOptionName) {
-      const visibleIndex = this._columnsController.getVisibleIndex(column.index);
-      const $headerElement = this.getHeaderElement(visibleIndex);
-      const dropDownButtonInstance = this.getDropDownButtonInstance($headerElement);
-
-      dropDownButtonInstance?.option('items', this.getDropDownButtonItems(column));
-    }
+    this.aiColumnOptionChangedHandler = this.aiColumnOptionChanged.bind(this);
+    this._columnsController.aiColumnOptionChanged.add(this.aiColumnOptionChangedHandler);
   }
 
   public renderDragCellContent($dragContainer: dxElementWrapper, column: Column): void {
@@ -206,5 +198,9 @@ export const columnHeadersViewExtender = (
   public dispose(): void {
     super.dispose();
     this.activeDropDownButtonInstance = null;
+
+    if (this.aiColumnOptionChangedHandler) {
+      this._columnsController.aiColumnOptionChanged.remove(this.aiColumnOptionChangedHandler);
+    }
   }
 };

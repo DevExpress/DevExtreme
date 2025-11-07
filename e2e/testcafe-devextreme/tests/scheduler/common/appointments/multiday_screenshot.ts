@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Scheduler - Multiday appointments (screenshot)`
   .page(url(__dirname, '../../../container.html'));
@@ -12,18 +13,14 @@ fixture.disablePageReloads`Scheduler - Multiday appointments (screenshot)`
   'timelineMonth',
 ].forEach((currentView) => {
   test(`it should not cut multiday appointment in ${currentView} view`, async (t) => {
-    const {
-      takeScreenshot,
-      compareResults,
-    } = createScreenshotsComparer(t);
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const scheduler = new Scheduler('#container');
 
+    await testScreenshot(t, takeScreenshot, `multiday-appointment_${currentView}.png`, {
+      element: scheduler.element,
+    });
+
     await t
-      .expect(await takeScreenshot(
-        `multiday-appointment_${currentView}.png`,
-        scheduler.element,
-      ))
-      .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {

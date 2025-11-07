@@ -1,4 +1,4 @@
-import { GanttExportHelper } from 'ui/gantt/ui.gantt.export_helper';
+import { GanttExportHelper } from '__internal/ui/gantt/ui.gantt.export_helper';
 import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 
 const moduleConfig = {

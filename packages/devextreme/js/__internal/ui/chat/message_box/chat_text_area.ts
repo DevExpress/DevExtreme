@@ -4,7 +4,6 @@ import devices from '@js/core/devices';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { getOuterHeight } from '@js/core/utils/size';
 import type { DxEvent, NativeEventInfo } from '@js/events';
 import type {
   ClickEvent,
@@ -20,7 +19,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import FileUploader from '@ts/ui/file_uploader/file_uploader';
-import type { CancelButtonClickEvent, Properties as FileUploaderProperties } from '@ts/ui/file_uploader/file_uploader.types';
+import type { CancelButtonClickEvent, FileValidationErrorEvent, Properties as FileUploaderProperties } from '@ts/ui/file_uploader/file_uploader.types';
 import Informer from '@ts/ui/informer/informer';
 import type { TextAreaProperties } from '@ts/ui/m_text_area';
 import TextArea from '@ts/ui/m_text_area';
@@ -328,6 +327,7 @@ class ChatTextArea extends TextArea<Properties> {
       onUploaded: (e) => this._fileUploaderOnUploaded(e),
       onCancelButtonClick: (e) => this._fileUploaderOnCancelButtonClick(e),
       onFileLimitReached: () => this._fileUploaderFileLimitReached(),
+      onFileValidationError: (e) => this._fileUploaderFileValidationError(e),
     };
   }
 
@@ -340,17 +340,21 @@ class ChatTextArea extends TextArea<Properties> {
     fileUploaderOptions.onValueChanged?.(e);
   }
 
-  _fileUploaderOnUploadStarted(e: UploadStartedEvent): void {
-    const { file } = e;
-    const { fileUploaderOptions = {} } = this.option();
-
+  _addFileToMap(file: File): void {
     this._filesToSend?.set(file, {
       readyToSend: false,
       name: file.name,
       size: file.size,
     });
     this._toggleButtonDisableState();
+  }
 
+  _fileUploaderOnUploadStarted(e: UploadStartedEvent): void {
+    const { file } = e;
+
+    this._addFileToMap(file);
+
+    const { fileUploaderOptions = {} } = this.option();
     fileUploaderOptions.onUploadStarted?.(e);
   }
 
@@ -386,6 +390,12 @@ class ChatTextArea extends TextArea<Properties> {
     this._updateInputHeight();
   }
 
+  _fileUploaderFileValidationError(e: FileValidationErrorEvent): void {
+    const { file } = e;
+
+    this._addFileToMap(file);
+  }
+
   _toggleButtonDisableState(state?: boolean): void {
     const shouldDisable = state ?? !this._isMessageCanBeSent();
     this._sendButton?.option('disabled', shouldDisable);
@@ -393,29 +403,20 @@ class ChatTextArea extends TextArea<Properties> {
 
   _renderButtonContainers(): void {}
 
-  _getHeightDifference($input: dxElementWrapper): number {
-    const baseDifference = super._getHeightDifference($input);
+  _getAdjustedMaxHeight(maxHeight: number): number {
+    return maxHeight;
+  }
 
-    const gap = parseFloat(this.$element().css('gap') ?? '0');
+  _getMaxHeight(): number | undefined {
+    const cssValue = this._input().css('maxHeight');
 
-    const informerHeight = this._informer ? getOuterHeight(this._informer.$element()) : 0;
-    const fileUploaderHeight = getOuterHeight(this._$fileUploader);
-    const toolbarHeight = getOuterHeight(this._$toolbar);
+    if (!cssValue || cssValue === 'none') {
+      return undefined;
+    }
 
-    const visibleSections = [
-      toolbarHeight,
-      informerHeight,
-      fileUploaderHeight,
-    ].filter(Boolean).length;
+    const maxHeight = parseFloat(cssValue);
 
-    const totalExtraHeight = toolbarHeight
-      + informerHeight
-      + fileUploaderHeight
-      + visibleSections * gap;
-
-    const difference: number = baseDifference + totalExtraHeight;
-
-    return difference;
+    return maxHeight;
   }
 
   _keyPressHandler(e: InputEvent): void {

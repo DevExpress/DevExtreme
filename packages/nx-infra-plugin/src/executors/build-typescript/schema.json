@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "type": "object",
+  "title": "Build TypeScript Executor",
+  "description": "Compile TypeScript code to CommonJS or ESM modules",
+  "properties": {
+    "module": {
+      "type": "string",
+      "description": "Target module format. 'esm' generates ES modules with import/export statements, 'cjs' generates CommonJS with require/module.exports. This affects output file structure, TypeScript compiler module settings, and determines the default tsconfig and output directory.",
+      "enum": ["cjs", "esm"],
+      "default": "esm"
+    },
+    "srcPattern": {
+      "type": "string",
+      "description": "Glob pattern for source files to include in compilation. Supports standard glob syntax with wildcards. Default pattern includes all .ts and .tsx files in src directory recursively.",
+      "default": "./src/**/*.{ts,tsx}"
+    },
+    "excludePattern": {
+      "type": "string",
+      "description": "Glob pattern for files to exclude from compilation (e.g., test files, stories). Files matching this pattern will be ignored even if they match srcPattern. Commonly used to exclude __tests__, __mocks__, or *.spec.ts files."
+    },
+    "tsconfig": {
+      "type": "string",
+      "description": "Path to TypeScript configuration file relative to project root. If not specified, defaults to './tsconfig.json' for CJS builds or './tsconfig.esm.json' for ESM builds. The tsconfig should contain appropriate module and target settings for the desired output format."
+    },
+    "outDir": {
+      "type": "string",
+      "description": "Output directory path relative to project root where compiled JavaScript and declaration files will be written. If not specified, defaults to './npm/cjs' for CJS builds or './npm/esm' for ESM builds. Directory will be created if it doesn't exist."
+    }
+  },
+  "required": [],
+  "additionalProperties": false
+}

@@ -1,6 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
+import { testScreenshot } from '../../../../../../helpers/themeUtils';
 import {
   appendElementTo,
   setStyleAttribute,
@@ -18,22 +19,23 @@ test('Dragging should be work right in case dxScheduler placed in container with
   const draggableAppointment = scheduler.getAppointmentByIndex(0);
 
   await t
-    .drag(draggableAppointment.element, 0, 120)
-    .expect(await takeScreenshot('dxScheduler-placed-in-transform-container-drag-to-bottom.png'))
-    .ok()
+    .drag(draggableAppointment.element, 0, 120);
 
-    .drag(draggableAppointment.element, 0, -170)
-    .expect(await takeScreenshot('dxScheduler-placed-in-transform-container-drag-to-top.png'))
-    .ok()
+  await testScreenshot(t, takeScreenshot, 'dxScheduler-placed-in-transform-container-drag-to-bottom.png');
 
-    .drag(draggableAppointment.element, 100, 0)
-    .expect(await takeScreenshot('dxScheduler-placed-in-transform-container-drag-to-right.png'))
-    .ok()
+  await t.drag(draggableAppointment.element, 0, -170);
 
-    .drag(draggableAppointment.element, -230, 0)
-    .expect(await takeScreenshot('dxScheduler-placed-in-transform-container-drag-to-left.png'))
-    .ok()
+  await testScreenshot(t, takeScreenshot, 'dxScheduler-placed-in-transform-container-drag-to-top.png');
 
+  await t.drag(draggableAppointment.element, 100, 0);
+
+  await testScreenshot(t, takeScreenshot, 'dxScheduler-placed-in-transform-container-drag-to-right.png');
+
+  await t.drag(draggableAppointment.element, -230, 0);
+
+  await testScreenshot(t, takeScreenshot, 'dxScheduler-placed-in-transform-container-drag-to-left.png');
+
+  await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
