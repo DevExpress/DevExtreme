@@ -380,10 +380,10 @@
         "dxAvatar-defaultImageAlt": "Avatar",
 
         "dxChat-elementAriaLabel": "Chat",
-        "dxChat-cancelEditingButtonAriaLabel": "Abbrechen",
-        "dxChat-editingMessageCaption": "Nachricht bearbeiten",
         "dxChat-textareaPlaceholder": "Geben Sie eine Nachricht ein",
         "dxChat-sendButtonAriaLabel": "Senden",
+        "dxChat-cancelEditingButtonAriaLabel": "Abbrechen",
+        "dxChat-editingMessageCaption": "Nachricht bearbeiten",
         "dxChat-defaultUserName": "Unbekannter Benutzer",
         "dxChat-messageListAriaLabel": "Nachrichtenliste",
         "dxChat-alertListAriaLabel": "Fehlerliste",
