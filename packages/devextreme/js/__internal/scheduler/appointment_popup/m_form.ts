@@ -805,8 +805,12 @@ export class AppointmentForm {
   }
 
   showRecurrenceGroup(): void {
-    const overlayHeight = this.dxPopup.$overlayContent().get(0).clientHeight;
-    this.dxPopup.option('height', overlayHeight);
+    const currentHeight = this.dxPopup.option('height') as string | number | undefined;
+
+    if (currentHeight === 'auto' || currentHeight === undefined) {
+      const overlayHeight = this.dxPopup.$overlayContent().get(0).clientHeight;
+      this.dxPopup.option('height', overlayHeight);
+    }
 
     this._$mainGroup?.addClass(CLASSES.mainHidden);
     this._$recurrenceGroup?.removeClass(CLASSES.recurrenceHidden);
@@ -823,7 +827,13 @@ export class AppointmentForm {
   }
 
   showMainGroup(saveRecurrenceValue = true): void {
-    this.dxPopup.option('height', undefined);
+    const currentHeight = this.dxPopup.option('height') as string | number | undefined;
+    const editingConfig = this.scheduler.getEditingConfig();
+    const configuredHeight = editingConfig?.popup?.height ?? 'auto';
+
+    if (typeof currentHeight === 'number') {
+      this.dxPopup.option('height', configuredHeight);
+    }
 
     this._$mainGroup?.removeClass(CLASSES.mainHidden);
     this._$recurrenceGroup?.addClass(CLASSES.recurrenceHidden);

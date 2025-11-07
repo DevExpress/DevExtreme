@@ -588,7 +588,8 @@ QUnit.module('Options', () => {
             legacyForm: false,
             form: {
                 iconsShowMode: 'main'
-            }
+            },
+            popup: {}
         };
 
         if(devices.real().platform !== 'generic') {

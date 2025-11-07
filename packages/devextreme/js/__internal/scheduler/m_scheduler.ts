@@ -922,6 +922,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const isReadOnly = Object.values({
       ...this._editing,
       form: undefined,
+      popup: undefined,
     }).every((value) => !value);
 
     (this.$element() as any).toggleClass(WIDGET_READONLY_CLASS, isReadOnly);
