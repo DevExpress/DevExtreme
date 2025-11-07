@@ -9,6 +9,7 @@ import FileUploader, { FILEUPLOADER_CLASS, FILEUPLOADER_CANCEL_BUTTON_CLASS } fr
 import { BUTTON_CLASS } from '__internal/ui/button/button';
 import Informer, { INFORMER_CLASS, INFORMER_TEXT_CLASS } from '__internal/ui/informer/informer';
 import { TEXTEDITOR_INPUT_CLASS } from '__internal/ui/text_box/m_text_editor.base';
+import { TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE } from '__internal/ui/m_text_area';
 
 const fakeFile = {
     name: 'fakefile.png',
@@ -84,7 +85,7 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
                 placeholder: 'Type a message',
                 autoResizeEnabled: true,
                 fileUploaderOptions: undefined,
-                maxHeight: '16em',
+                maxHeight: '53.86em',
                 valueChangeEvent: 'input',
             };
 
@@ -526,6 +527,44 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
 
             assert.strictEqual(this.sendButton.option('disabled'), true);
         });
+
+        QUnit.test('send button should be disabled after adding files and some of them fail validation', function(assert) {
+            this.reinit({
+                fileUploaderOptions: {
+                    uploadFile: () => {},
+                    allowedFileExtensions: ['.png'],
+                },
+            });
+            const fileUploader = this.getFileUploader();
+            fileUploader.option('value', [fakeFile, { name: 'img.jpg', size: 1 }]);
+            fileUploader.upload();
+
+            this.clock.tick();
+
+            assert.strictEqual(this.sendButton.option('disabled'), true, 'send button is disabled after adding file that fail validation');
+        });
+
+        QUnit.test('send button should not be disabled after removing file that fail validation', function(assert) {
+            this.reinit({
+                fileUploaderOptions: {
+                    uploadFile: () => {},
+                    allowedFileExtensions: ['.jpg'],
+                },
+            });
+            const fileUploader = this.getFileUploader();
+            fileUploader.option('value', [fakeFile]);
+            fileUploader.upload();
+
+            this.clock.tick();
+
+            assert.strictEqual(this.sendButton.option('disabled'), true, 'send button is disabled');
+
+            const $cancelButton = this.$element.find(`.${FILEUPLOADER_CANCEL_BUTTON_CLASS}`);
+
+            $cancelButton.trigger('dxclick');
+
+            assert.strictEqual(this.sendButton.option('disabled'), true, 'send button is not disabled');
+        });
     });
 
     QUnit.module('Informer integration', {
@@ -544,7 +583,7 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
                 const $informer = this.$element.find(`.${INFORMER_CLASS}`);
 
                 assert.strictEqual($informer.length, 0, 'informer is not rendered');
-                assert.strictEqual(this.getInformer(), undefined, 'informer instance is undefined');
+                assert.strictEqual(this.getInformer(), null, 'informer instance is not defined');
             });
 
             QUnit.test('informer should be rendered when _showInformer is called', function(assert) {
@@ -769,6 +808,109 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
 
                 assert.strictEqual(this.sendButton.option('disabled'), true, 'send button is disabled after file removal');
             });
+        });
+
+        QUnit.module('Integration with text option', () => {
+            QUnit.test('informer should be hidden when text option is changed', function(assert) {
+                this.showInformer('Test error message');
+
+                assert.strictEqual(this.$element.find(`.${INFORMER_CLASS}`).length, 1, 'informer is visible initially');
+
+                this.instance.option('text', 'new text');
+
+                assert.strictEqual(this.$element.find(`.${INFORMER_CLASS}`).length, 0, 'informer is hidden after text change');
+                assert.strictEqual(this.getInformer(), null, 'informer instance is null');
+            });
+
+            QUnit.test('informer should be hidden when text is typed in textarea', function(assert) {
+                this.showInformer('Test error message');
+
+                assert.strictEqual(this.$element.find(`.${INFORMER_CLASS}`).length, 1, 'informer is visible initially');
+
+                this.typeText('new text');
+
+                assert.strictEqual(this.$element.find(`.${INFORMER_CLASS}`).length, 0, 'informer is hidden after typing');
+                assert.strictEqual(this.getInformer(), null, 'informer instance is null');
+            });
+
+            QUnit.test('element height should be recalculated when informer is hidden by text change', function(assert) {
+                const initialHeight = this.$element.outerHeight();
+
+                this.showInformer('Test error message');
+
+                this.instance.option('text', 'new text');
+
+                const heightAfterTextChange = this.$element.outerHeight();
+
+                assert.strictEqual(heightAfterTextChange, initialHeight, 'element height returned to initial value after informer is hidden');
+            });
+
+            QUnit.test('informer timeout should be cleared when text option is changed', function(assert) {
+                this.showInformer('Test error message');
+
+                const timeoutId = this.instance._informerTimeoutId;
+
+                assert.notStrictEqual(timeoutId, undefined, 'timeout is set');
+
+                this.instance.option('text', 'new text');
+
+                assert.strictEqual(this.instance._informerTimeoutId, undefined, 'timeout is cleared');
+            });
+
+            QUnit.test('informer should be hidden when text is cleared', function(assert) {
+                this.typeText('new text');
+                this.showInformer('Test error message');
+
+                assert.strictEqual(this.$element.find(`.${INFORMER_CLASS}`).length, 1, 'informer is visible initially');
+
+                this.instance.option('text', '');
+
+                assert.strictEqual(this.$element.find(`.${INFORMER_CLASS}`).length, 0, 'informer is hidden after text is cleared');
+            });
+        });
+    });
+
+    QUnit.module('MaxHeight and scroll behavior', () => {
+        QUnit.test('input should have auto-resize class by default', function(assert) {
+            const hasAutoResizeClass = this.$input.hasClass(TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE);
+
+            assert.ok(hasAutoResizeClass, 'input has auto-resize class');
+        });
+
+        QUnit.test('textarea should expand when text is added', function(assert) {
+            const initialHeight = this.$input.height();
+
+            this.typeText('Line 1\nLine 2\nLine 3');
+
+            const heightAfterTyping = this.$input.height();
+
+            assert.ok(heightAfterTyping > initialHeight, 'textarea height increased after adding multiline text');
+        });
+
+        QUnit.test('textarea should not exceed default maxHeight', function(assert) {
+            const longText = Array(100).fill('Line of text that should cause scrolling').join('\n');
+            this.typeText(longText);
+
+            const inputHeight = this.$input.height();
+            const maxHeightValue = parseFloat(this.$input.css('maxHeight'));
+
+            assert.roughEqual(inputHeight, maxHeightValue, 0.01, 'input height respects default maxHeight');
+            assert.notStrictEqual(maxHeightValue, undefined, 'default maxHeight is applied');
+        });
+
+        QUnit.test('textarea height should be restored after clearing text', function(assert) {
+            const initialHeight = this.$input.height();
+
+            this.typeText('Line 1\nLine 2\nLine 3\nLine 4\nLine 5');
+
+            const heightWithText = this.$input.height();
+            assert.ok(heightWithText > initialHeight, 'height increased with text');
+
+            this.instance.option('value', '');
+
+            const heightAfterClear = this.$input.height();
+
+            assert.roughEqual(heightAfterClear, initialHeight, 0.01, 'height is restored after clearing text');
         });
     });
 });

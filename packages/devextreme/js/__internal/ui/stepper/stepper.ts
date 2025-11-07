@@ -17,14 +17,14 @@ import type {
   ItemRenderInfo,
   PostprocessRenderItemInfo,
 } from '@ts/ui/collection/collection_widget.base';
+import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
+import type { ConnectorProperties } from '@ts/ui/stepper/connector';
 import Connector from '@ts/ui/stepper/connector';
 import StepperItem, {
   STEP_COMPLETED_CLASS,
   STEP_INVALID_ICON,
   STEP_VALID_ICON,
 } from '@ts/ui/stepper/stepper_item';
-
-import type { CollectionWidgetEditProperties } from '../collection/collection_widget.edit';
 
 export const STEPPER_CLASS = 'dx-stepper';
 export const STEP_LIST_CLASS = 'dx-step-list';
@@ -260,18 +260,26 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     super._initMarkup();
   }
 
+  _getConnectorOptions(): ConnectorProperties {
+    const { orientation } = this.option();
+
+    return {
+      orientation,
+      size: this._getConnectorSize(),
+      value: this._getConnectorValue(),
+    };
+  }
+
   _renderConnector(): void {
     if (this._connector) {
       return;
     }
 
-    const { orientation } = this.option();
-
-    this._connector = this._createComponent($('<div>'), Connector, {
-      orientation,
-      size: this._getConnectorSize(),
-      value: this._getConnectorValue(),
-    });
+    this._connector = this._createComponent(
+      $('<div>'),
+      Connector,
+      this._getConnectorOptions(),
+    );
 
     $(this.element())
       .prepend(this._connector.$element());
@@ -444,6 +452,10 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
         break;
       case 'hintExpr':
         this._invalidate();
+        break;
+      case 'items':
+        super._optionChanged(args);
+        this._connector.option(this._getConnectorOptions());
         break;
       default:
         super._optionChanged(args);

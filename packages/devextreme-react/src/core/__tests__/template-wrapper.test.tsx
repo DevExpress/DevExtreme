@@ -251,7 +251,7 @@ describe('Template Wrapper', () => {
     );
 
     expect(document.querySelector('.template-container')?.outerHTML)
-      .toBe('<div class="template-container"><div class="template-element">My template - 1</div><div style="display: none;"></div></div>');
+      .toBe('<div class="template-container"><div class="template-element">My template - 1</div><div style="display: none;" class="__dx_react_guard_node__"></div></div>');
   });
 
   it('chooses hidden node element type correctly', () => {
@@ -350,11 +350,11 @@ describe('Template Wrapper', () => {
     );
 
     expect(document.querySelector('.div-container')?.outerHTML)
-      .toBe('<div class="div-container"><div class="template-element">My template - 1</div><div style="display: none;"></div></div>');
+      .toBe('<div class="div-container"><div class="template-element">My template - 1</div><div style="display: none;" class="__dx_react_guard_node__"></div></div>');
     expect(document.querySelector('.table-container')?.outerHTML)
-      .toBe('<table class="table-container"><tbody class="tbody-template-element"><tr><td>My template - 1</td></tr></tbody><tbody style="display: none;"></tbody></table>');
+      .toBe('<table class="table-container"><tbody class="tbody-template-element"><tr><td>My template - 1</td></tr></tbody><tbody style="display: none;" class="__dx_react_guard_node__"></tbody></table>');
     expect(document.querySelector('.tbody-container')?.outerHTML)
-      .toBe('<tbody class="tbody-container"><tr class="tr-template-element"><td>My template - 1</td></tr><tr style="display: none;"></tr></tbody>');
+      .toBe('<tbody class="tbody-container"><tr class="tr-template-element"><td>My template - 1</td></tr><tr style="display: none;" class="__dx_react_guard_node__"></tr></tbody>');
   });
 
   it('adds removal listener for text templates', () => {
@@ -383,7 +383,7 @@ describe('Template Wrapper', () => {
     );
 
     expect(document.querySelector('.template-container')?.outerHTML)
-      .toBe('<div class="template-container">My template - 1<div style="display: none;"></div><span style="display: none;"></span></div>');
+      .toBe('<div class="template-container">My template - 1<div style="display: none;" class="__dx_react_guard_node__"></div><span style="display: none;" class=""></span></div>');
   });
 
   it('triggers onRemove when the element is removed', async () => {

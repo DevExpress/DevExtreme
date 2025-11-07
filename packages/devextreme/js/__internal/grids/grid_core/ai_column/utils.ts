@@ -4,7 +4,7 @@ import type { Column } from '../columns_controller/m_columns_controller';
 import type { Item, UserData } from '../data_controller/m_data_controller';
 import { AI_COLUMN_NAME, CLASSES } from './const';
 
-export const getAICommandColumnDefaultOptions = (): unknown => ({
+export const getAICommandColumnDefaultOptions = (): object => ({
   type: AI_COLUMN_NAME,
   command: AI_COLUMN_NAME,
   cssClass: CLASSES.aiColumn,
@@ -63,7 +63,7 @@ export const isRefreshOption = (optionName: string, value: unknown): boolean => 
 
 export const isAIColumnHeader = (
   column: Column,
-  rowType: string,
+  rowType = 'header',
 ): boolean => rowType === 'header' && column.type === AI_COLUMN_NAME;
 
 export const isHeaderDropDownButtonVisible = (

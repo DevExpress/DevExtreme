@@ -1,6 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Appointments in TimelineMonth`
   .page(url(__dirname, '../../../container.html'));
@@ -8,9 +9,9 @@ fixture.disablePageReloads`Appointments in TimelineMonth`
 test('Appointments should have correct order', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await testScreenshot(t, takeScreenshot, 'timelineMonth-appt-order.png');
+
   await t
-    .expect(await takeScreenshot('timelineMonth-appt-order.png'))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxScheduler', {

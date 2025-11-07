@@ -114,6 +114,10 @@ export interface FileUploaderChunkUploadResponse {
   error?: string;
 }
 
+export type FileValidationErrorEvent = NativeEventInfo<FileUploader> & {
+  readonly file: File;
+};
+
 export type CancelButtonClickEvent = NativeEventInfo<InteractionEvent> & {
   readonly file?: File;
 };
@@ -146,6 +150,8 @@ export interface Properties extends PublicProperties {
   onCancelButtonClick?: (e: CancelButtonClickEvent) => void;
 
   onFileLimitReached?: (e: FileLimitReachedEvent) => void;
+
+  onFileValidationError?: (e: FileValidationErrorEvent) => void;
 }
 
 export interface FileUploaderProperties extends Properties,

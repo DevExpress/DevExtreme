@@ -8,7 +8,7 @@ import { isDefined } from '@js/core/utils/type';
 import DataHelperMixin from '@js/data_helper';
 import type dxChat from '@js/ui/chat';
 import type {
-  AttachmentDownloadEvent,
+  AttachmentDownloadClickEvent,
   Message,
   MessageDeletedEvent,
   MessageDeletingEvent,
@@ -74,7 +74,7 @@ class Chat extends Widget<Properties> {
 
   _messageUpdatedAction?: (e: Partial<MessageUpdatedEvent>) => void;
 
-  _attachmentDownloadAction?: (e: Partial<AttachmentDownloadEvent>) => void;
+  _attachmentDownloadAction?: (e: Partial<AttachmentDownloadClickEvent>) => void;
 
   _getDefaultOptions(): Properties {
     return {
@@ -108,7 +108,7 @@ class Chat extends Widget<Properties> {
       onMessageEntered: undefined,
       onTypingEnd: undefined,
       onTypingStart: undefined,
-      onAttachmentDownload: undefined,
+      onAttachmentDownloadClick: undefined,
     };
   }
 
@@ -201,7 +201,7 @@ class Chat extends Widget<Properties> {
     // @ts-expect-error
     const isLoading = this._dataController.isLoading();
     const currentUserId = user?.id;
-    const onAttachmentDownload = this._getAttachmentDownloadHandler();
+    const onAttachmentDownloadClick = this._getAttachmentDownloadHandler();
 
     const options: MessageListProperties = {
       items,
@@ -230,21 +230,21 @@ class Chat extends Widget<Properties> {
       onEscapeKeyPressed: () => {
         this.focus();
       },
-      onAttachmentDownload,
+      onAttachmentDownloadClick,
     };
 
     return options;
   }
 
-  _getAttachmentDownloadHandler(): ((e: AttachmentDownloadEvent) => void) | undefined {
-    const { onAttachmentDownload } = this.option();
+  _getAttachmentDownloadHandler(): ((e: AttachmentDownloadClickEvent) => void) | undefined {
+    const { onAttachmentDownloadClick } = this.option();
 
-    if (!onAttachmentDownload) {
+    if (!onAttachmentDownloadClick) {
       return;
     }
 
     // eslint-disable-next-line consistent-return
-    return (e: AttachmentDownloadEvent): void => { this._attachmentDownloadAction?.(e); };
+    return (e: AttachmentDownloadClickEvent): void => { this._attachmentDownloadAction?.(e); };
   }
 
   protected _allowEditAction(message: Message): boolean {
@@ -330,6 +330,8 @@ class Chat extends Widget<Properties> {
       messageEditingStartArgs.cancel,
       () => {
         this._messageBox.option('text', e.message.text);
+        this._messageBox.resetFileUploader();
+        this._messageBox.toggleAttachButtonVisibleState(false);
         this._messageToEdit = e.message;
       },
     );
@@ -340,6 +342,8 @@ class Chat extends Widget<Properties> {
       this._messageEditCanceledAction?.({ message: this._messageToEdit });
       this._messageToEdit = undefined;
     }
+
+    this._messageBox.toggleAttachButtonVisibleState(true);
   }
 
   _showDeleteConfirmationPopup(e: Pick<MessageDeletingEvent, 'message'>): void {
@@ -406,6 +410,7 @@ class Chat extends Widget<Properties> {
       eventArgs.cancel,
       () => {
         this._messageBox.option('text', '');
+        this._messageBox.toggleAttachButtonVisibleState(true);
         this._messageUpdatedAction?.(eventArgs);
         this._messageToEdit = undefined;
       },
@@ -541,7 +546,7 @@ class Chat extends Widget<Properties> {
 
   _createAttachmentDownloadAction(): void {
     this._attachmentDownloadAction = this._createActionByOption(
-      'onAttachmentDownload',
+      'onAttachmentDownloadClick',
       { excludeValidators: ['disabled'] },
     );
   }
@@ -653,9 +658,11 @@ class Chat extends Widget<Properties> {
       case 'onTypingEnd':
         this._createTypingEndAction();
         break;
-      case 'onAttachmentDownload':
+      case 'onAttachmentDownloadClick':
         this._createAttachmentDownloadAction();
-        this._messageList.option({ onAttachmentDownload: this._getAttachmentDownloadHandler() });
+        this._messageList.option({
+          onAttachmentDownloadClick: this._getAttachmentDownloadHandler(),
+        });
         break;
       case 'showDayHeaders':
       case 'showAvatar':

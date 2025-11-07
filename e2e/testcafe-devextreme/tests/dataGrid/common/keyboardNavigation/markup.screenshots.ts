@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture
   .disablePageReloads`Keyboard Navigation - screenshots`
@@ -17,11 +18,11 @@ test('Focused cells should look correctly', async (t) => {
 
   await t.click(headerCellToFocus.element)
     .pressKey('tab');
-  await takeScreenshot('data-grid_keyboard-navigation-header-cell-focused.png');
+  await testScreenshot(t, takeScreenshot, 'data-grid_keyboard-navigation-header-cell-focused.png');
 
   await t.click(dataCellToFocus.element)
     .pressKey('tab');
-  await takeScreenshot('data-grid_keyboard-navigation-data-cell-focused.png');
+  await testScreenshot(t, takeScreenshot, 'data-grid_keyboard-navigation-data-cell-focused.png');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -57,10 +58,10 @@ test('Focused custom buttons should look correctly', async (t) => {
 
   await t.click(headerCellToFocus.element)
     .pressKey('tab');
-  await takeScreenshot('data-grid_keyboard-navigation-custom-buttons-cell-focused.png');
+  await testScreenshot(t, takeScreenshot, 'data-grid_keyboard-navigation-custom-buttons-cell-focused.png');
 
   await t.pressKey('tab');
-  await takeScreenshot('data-grid_keyboard-navigation-custom-button-focused.png');
+  await testScreenshot(t, takeScreenshot, 'data-grid_keyboard-navigation-custom-button-focused.png');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

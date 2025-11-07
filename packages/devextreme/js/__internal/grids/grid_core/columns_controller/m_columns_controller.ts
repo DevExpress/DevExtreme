@@ -92,6 +92,7 @@ export interface Column extends ColumnBase {
   visibleWidth?: string | number;
   hidingPriority?: number;
   ai?: ColumnAIOptions;
+  command?: string;
 }
 
 export class ColumnsController extends modules.Controller {
@@ -132,6 +133,8 @@ export class ColumnsController extends modules.Controller {
   private __sortingUpdated: any;
 
   public columnsChanged: any;
+
+  public aiColumnOptionChanged: any;
 
   public _columnChanges: any;
 
@@ -235,7 +238,7 @@ export class ColumnsController extends modules.Controller {
   }
 
   protected callbackNames() {
-    return ['columnsChanged'];
+    return ['columnsChanged', 'aiColumnOptionChanged'];
   }
 
   public getColumnByPath(path, columns?) {
@@ -1458,8 +1461,8 @@ export class ColumnsController extends modules.Controller {
         }
         columnOptionCore(that, column, option, value, notFireEvent);
       } else if (isObject(option)) {
-        each(option, (optionName, value) => {
-          columnOptionCore(that, column, optionName, value, notFireEvent);
+        each(option, (optionName, optionValue) => {
+          columnOptionCore(that, column, optionName, optionValue, notFireEvent);
         });
       }
 
