@@ -300,6 +300,7 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
 
     .dx-scheduler-form-recurrence-end-group .dx-field-item-label {
       height: $generic-scheduler-appointment-popup-all-day-item-height;
+      margin-bottom: $generic-scheduler-appointment-popup-item-padding-top;
     }
 
     .dx-scheduler-form-recurrence-end-editors {
@@ -586,10 +587,6 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
 
 .dx-scheduler-agenda-nodata {
   font-size: $generic-scheduler-workspace-info-text-size;
-}
-
-.dx-scheduler-appointment-popup .dx-form .dx-scheduler-form-recurrence-end-group .dx-field-item-label {
-  margin-bottom: $generic-scheduler-appointment-popup-item-padding-top;
 }
 
 .dx-scheduler-appointment-tooltip-wrapper .dx-overlay-content .dx-popup-content .dx-list-item {
