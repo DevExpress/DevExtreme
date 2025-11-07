@@ -1,15 +1,15 @@
 export class Product {
-  Product_ID!: number;
+  Product_ID: number;
 
-  Product_Name!: string;
+  Product_Name: string;
 
-  Product_Sale_Price!: number;
+  Product_Sale_Price: number;
 
-  Product_Retail_Price!: number;
+  Product_Retail_Price: number;
 
-  Product_Consumer_Rating!: number;
+  Product_Consumer_Rating: number;
 
-  Product_Category!: string;
+  Product_Category: string;
 }
 
 export const products: Product[] = [
