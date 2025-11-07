@@ -501,7 +501,8 @@ test('Navigate to first cell in the first row when virtual scrolling is enabled'
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await dataGrid.scrollTo(t, { x: 700, y: 10000 });
+  await dataGrid
+    .scrollTo(t, { x: 700, y: 10000 });
 
   // assert
   await t

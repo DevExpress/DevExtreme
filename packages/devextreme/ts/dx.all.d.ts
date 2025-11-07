@@ -26525,6 +26525,10 @@ declare module DevExpress.ui {
                 iconsShowMode?: DevExpress.ui.dxScheduler.AppointmentFormIconsShowMode;
               }
             | undefined;
+          /**
+           * [descr:dxSchedulerOptions.editing.popup]
+           */
+          popup?: DevExpress.ui.dxPopup.Properties;
         };
     /**
      * [descr:dxSchedulerOptions.endDateExpr]
