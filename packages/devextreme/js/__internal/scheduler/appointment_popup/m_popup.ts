@@ -6,7 +6,7 @@ import dateUtils from '@js/core/utils/date';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { getWidth } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
-import type { dxPopupOptions, ToolbarItem } from '@js/ui/popup';
+import type { ToolbarItem } from '@js/ui/popup';
 import type dxPopup from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import { current, isFluent } from '@js/ui/themes';
