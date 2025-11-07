@@ -3,24 +3,30 @@
   [value]="[startSelectedValue, endSelectedValue]"
   title="Select a Time Period"
 >
-  <dxo-margin [top]="50" [bottom]="0"></dxo-margin>
-  <dxo-background>
-    <dxo-image
+  <dxo-range-selector-margin
+    [top]="50"
+    [bottom]="0"
+  ></dxo-range-selector-margin>
+  <dxo-range-selector-background>
+    <dxo-range-selector-image
       url="../../../../images/RangeSelector/background.png"
       location="full"
     >
-    </dxo-image>
-  </dxo-background>
-  <dxo-indent [left]="65" [right]="65"> </dxo-indent>
-  <dxo-scale
+    </dxo-range-selector-image>
+  </dxo-range-selector-background>
+  <dxo-range-selector-indent [left]="65" [right]="65">
+  </dxo-range-selector-indent>
+  <dxo-range-selector-scale
     [startValue]="startValue"
     [endValue]="endValue"
     [placeholderHeight]="20"
   >
-    <dxo-label format="shorttime"> </dxo-label>
-    <dxo-minor-tick-interval [hours]="1"> </dxo-minor-tick-interval>
-    <dxo-tick-interval [hours]="2"> </dxo-tick-interval>
-  </dxo-scale>
-  <dxo-slider-marker format="shorttime" [placeholderHeight]="30">
-  </dxo-slider-marker>
+    <dxo-range-selector-label format="shorttime"> </dxo-range-selector-label>
+    <dxo-range-selector-minor-tick-interval [hours]="1">
+    </dxo-range-selector-minor-tick-interval>
+    <dxo-range-selector-tick-interval [hours]="2">
+    </dxo-range-selector-tick-interval>
+  </dxo-range-selector-scale>
+  <dxo-range-selector-slider-marker format="shorttime" [placeholderHeight]="30">
+  </dxo-range-selector-slider-marker>
 </dx-range-selector>
