@@ -15,7 +15,6 @@ $(() => {
     height: 600,
     groups: ['theatreId'],
     crossScrollingEnabled: true,
-    maxAppointmentsPerCell: 1,
     cellDuration: 20,
     resources: [{
       fieldExpr: 'movieId',
@@ -47,7 +46,7 @@ $(() => {
           {
             template: () => {
               $movieInfoContainer = $('<div class="movie-info-container">');
-              updateMovieInfoContainer(movie);
+              updateMovieInfoContainer({});
               return $movieInfoContainer;
             },
           },
