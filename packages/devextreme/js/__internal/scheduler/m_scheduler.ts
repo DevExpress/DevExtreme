@@ -1779,13 +1779,13 @@ class Scheduler extends SchedulerOptionsBaseWidget {
             .fail(() => performFailAction());
         } catch (err) {
           performFailAction(err);
-          deferred.resolve();
           this._updatingAppointments.delete(target);
+          deferred.resolve();
         }
       } else {
         performFailAction();
-        deferred.resolve();
         this._updatingAppointments.delete(target);
+        deferred.resolve();
       }
 
       return deferred.promise();
