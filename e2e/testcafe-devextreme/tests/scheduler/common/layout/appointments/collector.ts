@@ -62,6 +62,9 @@ const getSchedulerBaseOptions = (view: string) => {
   };
 };
 
+// visual: generic.light
+// visual: fluent.blue.light
+// visual: material.blue.light
 generateOptionMatrix({
   view: ['week', 'month', 'timelineWeek'],
   adaptivityEnabled: [true, false],
@@ -86,6 +89,9 @@ generateOptionMatrix({
   }));
 });
 
+// visual: generic.light
+// visual: fluent.blue.light
+// visual: material.blue.light
 test('Appointment collector has correct offset when month view with double interval', async (t) => {
   const scheduler = new Scheduler('#container');
 

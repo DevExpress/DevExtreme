@@ -3,7 +3,6 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../../../helpers/createWidget';
 import url from '../../../../../../helpers/getPageUrl';
 import { createDataSetForScreenShotTests, resourceDataSource } from '../../utils';
-import { changeTheme } from '../../../../../../helpers/changeTheme';
 import { testScreenshot } from '../../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Scheduler: Generic theme layout`
@@ -20,6 +19,9 @@ const createScheduler = async (view: string, resourcesValue?: unknown[]): Promis
   });
 };
 
+// visual: generic.light
+// visual: fluent.blue.light
+// visual: material.blue.light
 [undefined, resourceDataSource].forEach((resourcesValue) => {
   ['agenda', 'day', 'week', 'month', 'workWeek'].forEach((view) => {
     test(`Base views layout test with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
@@ -39,6 +41,9 @@ const createScheduler = async (view: string, resourcesValue?: unknown[]): Promis
   });
 });
 
+// visual: generic.light
+// visual: fluent.blue.light
+// visual: material.blue.light
 [undefined, resourceDataSource].forEach((resourcesValue) => {
   ['timelineDay', 'timelineWeek', 'timelineMonth', 'timelineWorkWeek'].forEach((view) => {
     test(`Timeline views layout test with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
@@ -63,6 +68,9 @@ const createScheduler = async (view: string, resourcesValue?: unknown[]): Promis
   });
 });
 
+// visual: generic.light
+// visual: fluent.blue.light
+// visual: material.blue.light
 test('Scheduler should have correct height in month view (T927862)', async (t) => {
   const scheduler = new Scheduler('#container');
 
@@ -73,14 +81,10 @@ test('Scheduler should have correct height in month view (T927862)', async (t) =
     .expect(dataTableBoundingClientRect.bottom)
     .eql(workspaceBoundingClientRect.bottom);
 }).before(async () => {
-  await changeTheme('material.blue.light');
-
   await createWidget('dxScheduler', {
     dataSource: [],
     views: ['month'],
     currentView: 'month',
     height: 800,
   });
-}).after(async () => {
-  await changeTheme('generic.light');
 });

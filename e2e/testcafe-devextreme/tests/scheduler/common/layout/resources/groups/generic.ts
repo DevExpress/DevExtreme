@@ -26,6 +26,9 @@ const createScheduler = async (view: string, groupOrientation: string): Promise<
   });
 };
 
+// visual: generic.light
+// visual: fluent.blue.light
+// visual: material.blue.light
 ['vertical', 'horizontal'].forEach((groupOrientation) => {
   ['agenda', 'day', 'week', 'workWeek', 'month'].forEach((view) => {
     test(`Base views layout test with groups(view='${view}', groupOrientation=${groupOrientation})`, async (t) => {
@@ -40,6 +43,9 @@ const createScheduler = async (view: string, groupOrientation: string): Promise<
   });
 });
 
+// visual: generic.light
+// visual: fluent.blue.light
+// visual: material.blue.light
 ['vertical', 'horizontal'].forEach((groupOrientation) => {
   ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'].forEach((view) => {
     test(`Timeline views layout test with groups(view='${view}', groupOrientation=${groupOrientation})`, async (t) => {

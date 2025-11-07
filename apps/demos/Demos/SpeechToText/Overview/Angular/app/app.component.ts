@@ -117,7 +117,7 @@ export class AppComponent {
   onResult({ event }) {
     const { results } = event;
     const resultText = Object.values(results)
-      .map((resultItem) => resultItem[0].transcript)
+      .map((resultItem) => resultItem[0].transcript.trim())
       .join(' ');
     this.textAreaValue = resultText;
   }

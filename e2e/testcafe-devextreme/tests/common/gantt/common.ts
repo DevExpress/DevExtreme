@@ -8,8 +8,8 @@ import { appendElementTo } from '../../../helpers/domUtils';
 
 const TOOLBAR_ITEM_BUTTON = '.dx-button';
 
-fixture.disablePageReloads`Gantt`
-  .page(url(__dirname, '../../container.html'));
+fixture`Gantt`
+  .page(url(__dirname, '../../container-extended.html'));
 
 const data = {
   tasks: [{
@@ -119,6 +119,7 @@ const data = {
 
 test('Gantt - show resources button should not have focus state (T1264485)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
   await t
     .click(Selector(TOOLBAR_ITEM_BUTTON));
   await testScreenshot(t, takeScreenshot, 'Gantt show resourced.png', { element: '#container' });
@@ -139,6 +140,7 @@ test('Gantt - show resources button should not have focus state (T1264485)', asy
 
 test('Gantt - show dependencies button should not have focus state (T1264485)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
   await t
     .click(Selector(TOOLBAR_ITEM_BUTTON));
   await testScreenshot(t, takeScreenshot, 'Gantt show dependencies.png', { element: '#container' });

@@ -883,7 +883,13 @@ export const mergeColumns = (that: ColumnsController, columns, commandColumns, n
           { fixed: isColumnFixing },
           commandColumns[commandColumnIndex],
           column,
-          { calculateCellValue: commandColumns[commandColumnIndex].calculateCellValue },
+          {
+            calculateCellValue: commandColumns[commandColumnIndex].calculateCellValue,
+            cssClass: [
+              commandColumns[commandColumnIndex].cssClass ?? '',
+              column.cssClass ?? '',
+            ].join(' ').trim(),
+          },
         );
         if (column.type !== GROUP_COMMAND_COLUMN_NAME) {
           defaultCommandColumns = defaultCommandColumns.filter(callbackFilter);
