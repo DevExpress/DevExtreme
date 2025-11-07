@@ -26,6 +26,9 @@ const createScheduler = async (
   });
 };
 
+// visual: generic.light
+// visual: fluent.blue.light
+// visual: material.blue.light
 [false, true].forEach((rtlEnabled) => {
   [false, true].forEach((crossScrollingEnabled) => {
     test.meta({ browserSize: ADAPTIVE_SIZE })(`Adaptive views layout test, crossScrollingEnabled=${crossScrollingEnabled}${rtlEnabled ? 'in RTL' : ''}`, async (t) => {
