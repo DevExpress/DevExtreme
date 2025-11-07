@@ -1,0 +1,11 @@
+{
+  "type": "object",
+  "properties": {
+    "workingDirectory": {
+      "type": "string",
+      "description": "Working directory for pnpm pack",
+      "default": "./"
+    }
+  },
+  "required": []
+}
