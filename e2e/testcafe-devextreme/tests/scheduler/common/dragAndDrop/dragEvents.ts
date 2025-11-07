@@ -127,3 +127,40 @@ TEST_CASES.forEach(({ view, expectedToItemData }) => {
     await clearCallbackTesting();
   });
 });
+
+test('Should not throw error when trying to drag appointment that is being updated with Promise delay (T1308596)', async (t) => {
+  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+  const appointment = scheduler.getAppointment('Test Appointment');
+
+  await t.drag(appointment.element, 300, 0, { speed: 0.8 });
+
+  await t.wait(200);
+
+  await t.drag(appointment.element, 600, 0, { speed: 0.8 });
+
+  await t.wait(2000);
+
+  const consoleMessages = await t.getBrowserConsoleMessages();
+  const hasErrors = consoleMessages?.error && consoleMessages.error.length > 0;
+
+  await t.expect(hasErrors).notOk();
+}).before(async () => {
+  await createWidget('dxScheduler', {
+    dataSource: [{
+      text: 'Test Appointment',
+      startDate: new Date(2023, 0, 2, 10, 0),
+      endDate: new Date(2023, 0, 2, 11, 0),
+    }],
+    views: ['week'],
+    currentView: 'week',
+    currentDate: new Date(2023, 0, 2),
+    height: 600,
+    onAppointmentUpdating: (e) => {
+      e.cancel = new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(false);
+        }, 5000);
+      });
+    },
+  });
+});
