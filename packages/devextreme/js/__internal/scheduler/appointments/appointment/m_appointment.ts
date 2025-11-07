@@ -18,10 +18,12 @@ import {
   APPOINTMENT_HAS_RESOURCE_COLOR_CLASS,
   DIRECTION_APPOINTMENT_CLASSES,
   EMPTY_APPOINTMENT_CLASS,
+  EXTRA_SHORT_APPOINTMENT_CLASS,
   RECURRENCE_APPOINTMENT_CLASS,
   REDUCED_APPOINTMENT_CLASS,
   REDUCED_APPOINTMENT_ICON,
   REDUCED_APPOINTMENT_PARTS_CLASSES,
+  SHORT_APPOINTMENT_CLASS,
 } from '../../m_classes';
 import type { SubscribeKey, SubscribeMethods } from '../../m_subscribes';
 import { validateRRule } from '../../recurrence/validate_rule';
@@ -156,6 +158,7 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
     this._renderAppointmentGeometry();
     this._renderAriaLabel();
     this._renderEmptyClass();
+    this._renderShortAppointmentClass();
     this._renderReducedAppointment();
     this._renderAllDayClass();
     this._renderDragSourceClass();
@@ -224,6 +227,25 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
 
     if (geometry.empty || this.option('isCompact')) {
       (this.$element() as any).addClass(EMPTY_APPOINTMENT_CLASS);
+    }
+  }
+
+  _renderShortAppointmentClass() {
+    const geometry: any = this.option('geometry');
+
+    if (!geometry || geometry.empty) {
+      return;
+    }
+
+    const { height } = geometry;
+
+    // Extra short appointments (10 minutes, ~12px in Fluent default)
+    if (height > 0 && height <= 13) {
+      (this.$element() as any).addClass(EXTRA_SHORT_APPOINTMENT_CLASS);
+    }
+    // Short appointments (15 minutes, ~19px in Fluent default)
+    else if (height > 13 && height <= 20) {
+      (this.$element() as any).addClass(SHORT_APPOINTMENT_CLASS);
     }
   }
 
