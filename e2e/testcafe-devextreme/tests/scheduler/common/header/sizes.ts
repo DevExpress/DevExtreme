@@ -3,7 +3,6 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { testScreenshot } from '../../../../helpers/themeUtils';
-import { changeTheme } from '../../../../helpers/changeTheme';
 
 fixture.disablePageReloads`Scheduler header sizes`
   .page(url(__dirname, '../../../container.html'));
@@ -15,37 +14,28 @@ const buttons = Array.from({ length: 4 }).map((_, index) => ({
   options: { text: `Button ${index}` },
 }));
 
-test.skip('items inside toolbar menu should stretch', async (t) => {
+test('items inside toolbar menu should stretch', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const scheduler = new Scheduler('#container');
 
   await t.click(scheduler.toolbar.menuButton);
 
-  await testScreenshot(t, takeScreenshot, 'scheduler-toolbar-menu.png', {
-    element: scheduler.element,
-    theme: 'fluent.blue.light',
-  });
+  await takeScreenshot('scheduler-toolbar-menu.png');
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
-  await changeTheme('fluent.blue.light');
-
-  return createWidget('dxScheduler', {
-    width: 320,
-    currentDate: new Date('2025-05-02T07:59:01.167Z'),
-    toolbar: {
-      items: ['today', 'dateNavigator', ...buttons, {
-        location: 'after',
-        locateInMenu: 'auto',
-        name: 'viewSwitcher',
-      }],
-    },
-  });
-}).after(async () => {
-  await changeTheme('generic.light');
-});
+}).before(async () => createWidget('dxScheduler', {
+  width: 320,
+  currentDate: new Date('2025-05-02T07:59:01.167Z'),
+  toolbar: {
+    items: ['today', 'dateNavigator', ...buttons, {
+      location: 'after',
+      locateInMenu: 'auto',
+      name: 'viewSwitcher',
+    }],
+  },
+}));
 
 test('Scheduler header should have correct sizes', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

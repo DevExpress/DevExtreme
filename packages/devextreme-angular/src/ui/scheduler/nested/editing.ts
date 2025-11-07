@@ -89,6 +89,14 @@ export class DxoSchedulerEditingComponent extends NestedOption implements OnDest
         this._setOption('form', value);
     }
 
+    @Input()
+    get popup(): Record<string, any> {
+        return this._getOption('popup');
+    }
+    set popup(value: Record<string, any>) {
+        this._setOption('popup', value);
+    }
+
 
     protected get _optionPath() {
         return 'editing';

@@ -77,7 +77,7 @@ export const columnHeadersViewExtender = (
             this.aiPromptEditorController.show($container[0], column);
             break;
           case 'regenerate':
-            this.aiColumnController.refreshAIColumn(column.name as string);
+            this.aiColumnController.sendRequest(column.name as string, false);
             break;
           case 'clear':
             this.aiColumnController.clearAIColumn(column.name as string);

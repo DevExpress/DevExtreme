@@ -1323,6 +1323,10 @@ test('New virtual mode. Virtual rows should not be in view port after scrolling 
       mode: 'virtual',
     },
   });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).myStore;
+  })();
 });
 
 test.meta({ unstable: true })('New virtual mode. Navigation to the last row if new row is added (T1069849)', async (t) => {
@@ -1448,6 +1452,10 @@ test.meta({ unstable: true })('New virtual mode. Navigation to the last row if n
         visible: true,
       },
     });
+  }).after(async () => {
+    await ClientFunction(() => {
+      delete (window as any).myStore;
+    })();
   });
 });
 
@@ -1691,7 +1699,7 @@ test('The row alternation should display correctly when grouping and virtual scr
   scrolling: { mode: 'virtual', useNative: false },
 })));
 
-test('DataGrid - Gray boxes appear when the push method is used to remove rows in infinite scrolling mode (T1240079)', async (t) => {
+test.meta({ unstable: true })('DataGrid - Gray boxes appear when the push method is used to remove rows in infinite scrolling mode (T1240079)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const data = [
@@ -1825,34 +1833,31 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
 [true, false].forEach((nativeScroll) => {
   type TestCaseWindow = typeof window & { dataGridScrollableEventValues?: number[] };
 
-  test(
-    `Should not scroll back on top with virtual scrolling and adaptive master detail (nativeScroll: ${nativeScroll}) [T1278804]`,
-    async (t) => {
-      // NOTE: idx + 1 logic inside POM
-      const adaptiveCellIdx = 101;
-      const scrollValuesThreshold = 100;
+  test.meta({ unstable: true })(`Should not scroll back on top with virtual scrolling and adaptive master detail (nativeScroll: ${nativeScroll}) [T1278804]`, async (t) => {
+    // NOTE: idx + 1 logic inside POM
+    const adaptiveCellIdx = 101;
+    const scrollValuesThreshold = 100;
 
-      const dataGrid = new DataGrid('#container');
-      const firstRow = dataGrid.getDataRow(0);
-      const firstDataCell = firstRow.getDataCell(0);
-      const adaptiveCell = firstRow.getCommandCell(adaptiveCellIdx);
-      const scrollContainer = dataGrid.getScrollContainer();
+    const dataGrid = new DataGrid('#container');
+    const firstRow = dataGrid.getDataRow(0);
+    const firstDataCell = firstRow.getDataCell(0);
+    const adaptiveCell = firstRow.getCommandCell(adaptiveCellIdx);
 
-      await t
-        .click(firstDataCell.element)
-        .click(adaptiveCell.element);
+    await t
+      .click(firstDataCell.element)
+      .click(adaptiveCell.element);
 
-      await t
-        .scroll(scrollContainer, 0, 1000)
-        .scroll(scrollContainer, 0, 1000);
+    await dataGrid
+      .scrollBy(t, { y: 1000 });
+    await dataGrid
+      .scrollBy(t, { y: 1000 });
 
-      const scrollOffsets = await t
-        .eval(() => (window as TestCaseWindow).dataGridScrollableEventValues) as number[];
+    const scrollOffsets = await t
+      .eval(() => (window as TestCaseWindow).dataGridScrollableEventValues) as number[];
 
-      const hasSmallScrollValues = scrollOffsets.some((offset) => offset < scrollValuesThreshold);
-      await t.expect(hasSmallScrollValues).notOk();
-    },
-  ).before(async () => {
+    const hasSmallScrollValues = scrollOffsets.some((offset) => offset < scrollValuesThreshold);
+    await t.expect(hasSmallScrollValues).notOk();
+  }).before(async () => {
     await createWidget('dxDataGrid', {
       dataSource: getData(3, 100).map((item, idx) => ({ ...item, id: idx })),
       keyExpr: 'id',
@@ -1948,6 +1953,8 @@ fixture`Scrolling - warnings`
   .page(url(__dirname, '../../container.html'));
 
 test('Warning should be thrown if scrolling is virtual and height is not specified', async (t) => {
+  await t.wait(100);
+
   const consoleMessages = await t.getBrowserConsoleMessages();
   const warningExists = !!consoleMessages?.warn.find((message) => message.startsWith('W1025'));
 

@@ -9,8 +9,8 @@ import { appendElementTo, setStyleAttribute } from '../../../helpers/domUtils';
 const MENU_ITEM_CLASS = 'dx-menu-item';
 const SUBMENU_CLASS = 'dx-submenu';
 
-fixture.disablePageReloads`HtmlEditor`
-  .page(url(__dirname, '../../container.html'));
+fixture`HtmlEditor`
+  .page(url(__dirname, '../../container-extended.html'));
 
 [false, true].forEach((toolbar) => {
   const selector = toolbar ? '#otherContainer' : '#container';
