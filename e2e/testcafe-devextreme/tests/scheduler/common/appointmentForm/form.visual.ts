@@ -59,6 +59,9 @@ const getResources = (withIcons = false) => ([
   },
 ]);
 
+// visual: generic.light
+// visual: fluent.blue.light
+// visual: material.blue.light
 [
   { isRecurringAppointment: false, isAllDay: true },
   { isRecurringAppointment: false, isAllDay: false },
