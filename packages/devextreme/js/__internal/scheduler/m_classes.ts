@@ -3,6 +3,8 @@ export const REDUCED_APPOINTMENT_CLASS = 'dx-scheduler-appointment-reduced';
 export const REDUCED_APPOINTMENT_ICON = 'dx-scheduler-appointment-reduced-icon';
 export const RECURRENCE_APPOINTMENT_CLASS = 'dx-scheduler-appointment-recurrence';
 export const EMPTY_APPOINTMENT_CLASS = 'dx-scheduler-appointment-empty';
+export const SHORT_APPOINTMENT_CLASS = 'dx-scheduler-appointment-short';
+export const EXTRA_SHORT_APPOINTMENT_CLASS = 'dx-scheduler-appointment-extra-short';
 export const ALL_DAY_APPOINTMENT_CLASS = 'dx-scheduler-all-day-appointment';
 export const REDUCED_APPOINTMENT_PARTS_CLASSES = {
   head: 'dx-scheduler-appointment-head',

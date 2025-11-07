@@ -786,3 +786,19 @@ $scheduler-appointment-form-label-padding: 20px;
     }
   }
 }
+
+.dx-scheduler-appointment-extra-short {
+  .dx-scheduler-appointment-title {
+    display: block;
+    font-size: 8px;
+    line-height: 12px;
+  }
+}
+
+.dx-scheduler-appointment-short {
+  .dx-scheduler-appointment-title {
+    display: block;
+    font-size: 12px;
+    line-height: 18px;
+  }
+}

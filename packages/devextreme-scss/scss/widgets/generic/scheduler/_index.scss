@@ -545,3 +545,10 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
     background: $base-bg;
   }
 }
+
+.dx-scheduler-appointment-extra-short,
+.dx-scheduler-appointment-short {
+  .dx-scheduler-appointment-content {
+    padding: 0 7px;
+  }
+}

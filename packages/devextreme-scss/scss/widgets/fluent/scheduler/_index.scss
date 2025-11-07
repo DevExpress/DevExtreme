@@ -967,3 +967,10 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
   margin-top: 0;
 }
 
+.dx-scheduler-appointment-extra-short,
+.dx-scheduler-appointment-short {
+  .dx-scheduler-appointment-content {
+    padding: 0 8px 0 12px;
+  }
+}
+
