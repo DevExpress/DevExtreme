@@ -134,11 +134,7 @@ test('Should not throw error when trying to drag appointment that is being updat
 
   await t.drag(appointment.element, 300, 0, { speed: 0.8 });
 
-  await t.wait(200);
-
   await t.drag(appointment.element, 600, 0, { speed: 0.8 });
-
-  await t.wait(2000);
 
   const consoleMessages = await t.getBrowserConsoleMessages();
   const hasErrors = consoleMessages?.error && consoleMessages.error.length > 0;
