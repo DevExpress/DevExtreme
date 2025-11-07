@@ -47,8 +47,10 @@
   $chat-messagebox-textarea-padding,
   $chat-messagebox-toolbar-min-height,
   $chat-file-container-width,
-  $chat-messagebox-file-container-padding,
-  $chat-messagebox-file-container-padding-top,
+  $chat-messagebox-files-container-padding,
+  $chat-messagebox-files-container-padding-top,
+  $chat-messagebox-file-background-color,
+  $chat-messagebox-file-cancel-button-margin,
 );
 @include chat-messagebubble(
   $chat-bubble-padding,

@@ -61,6 +61,7 @@ test('Chat: messagebubble with images and files', async (t) => {
   const fileMessages = [
     generateFileMessage(user),
     generateFileMessage(user, true),
+    { text: '', attachments: [{ name: 'doc.pdf', size: 123 }] },
   ];
 
   await chat.option({
