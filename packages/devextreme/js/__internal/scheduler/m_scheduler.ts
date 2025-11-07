@@ -2173,13 +2173,13 @@ class Scheduler extends Widget<any> {
             .fail(() => performFailAction());
         } catch (err) {
           performFailAction(err);
-          deferred.resolve();
           this._updatingAppointments.delete(target);
+          deferred.resolve();
         }
       } else {
         performFailAction();
-        deferred.resolve();
         this._updatingAppointments.delete(target);
+        deferred.resolve();
       }
 
       return deferred.promise();
