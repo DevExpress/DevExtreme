@@ -304,10 +304,11 @@ class DxLicenseTrigger extends SafeHTMLElement {
       const license = document.createElement(componentNames.panel);
 
       Object.values(attributeNames).forEach((attrName) => {
-        license.setAttribute(
-          attrName,
-          this.getAttribute(attrName) as string,
-        );
+        const attrValue = this.getAttribute(attrName);
+
+        if (attrValue) {
+          license.setAttribute(attrName, attrValue);
+        }
       });
 
       license.setAttribute(DATA_PERMANENT_ATTRIBUTE, '');
@@ -338,7 +339,7 @@ export function renderTrialPanel(
   buyNowUrl: string,
   licensingDocUrl: string,
   version: string,
-  subscriptions = '',
+  subscriptions: string | undefined | null,
   customStyles?: CustomTrialPanelStyles,
 ): void {
   registerCustomComponents(customStyles);
@@ -348,7 +349,7 @@ export function renderTrialPanel(
   trialPanelTrigger.setAttribute(attributeNames.buyNow, buyNowUrl);
   trialPanelTrigger.setAttribute(attributeNames.licensingDoc, licensingDocUrl);
   trialPanelTrigger.setAttribute(attributeNames.version, version);
-  trialPanelTrigger.setAttribute(attributeNames.subscriptions, subscriptions);
+  trialPanelTrigger.setAttribute(attributeNames.subscriptions, subscriptions ?? '');
 
   document.body.appendChild(trialPanelTrigger);
 }
