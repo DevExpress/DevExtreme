@@ -316,7 +316,7 @@ test('Grouping and filtering should be applied correctly when they change at run
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [
     {
       ID: 1,

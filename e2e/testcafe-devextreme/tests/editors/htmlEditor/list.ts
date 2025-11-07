@@ -24,8 +24,8 @@ const orderedListMarkup = `
   </ol>
 `;
 
-fixture.disablePageReloads`HtmlEditor - lists`
-  .page(url(__dirname, '../../container.html'));
+fixture`HtmlEditor - lists`
+  .page(url(__dirname, '../../container-extended.html'));
 
 test('ordered list numbering sequence should reset for each list item (T1220554)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

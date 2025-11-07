@@ -2,15 +2,15 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { testScreenshot } from '../../../../helpers/themeUtils';
-import { Themes } from '../../../../helpers/themes';
 
 fixture.disablePageReloads`Icon Sizes`
   .page(url(__dirname, '../../../container.html'));
 
-test('Correct icon sizes in the Fluent compact theme (T1207612)', async (t) => {
+// visual: fluent.blue.light.compact
+test('Correct icon sizes (T1207612)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'icon-sizes.png', { theme: Themes.fluentBlueCompact });
+  await testScreenshot(t, takeScreenshot, 'icon-sizes.png');
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
