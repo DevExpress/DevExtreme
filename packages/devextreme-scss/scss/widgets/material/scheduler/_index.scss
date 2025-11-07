@@ -586,7 +586,8 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
     }
 
     .dx-scheduler-form-description-group .dx-scheduler-form-icon,
-    .dx-scheduler-form-resources-group .dx-scheduler-default-resources-icon {
+    .dx-scheduler-form-resources-group .dx-scheduler-default-resources-icon,
+    .dx-scheduler-form-recurrence-settings-group .dx-scheduler-form-icon {
       margin-top: $material-scheduler-appointment-popup-description-icon-margin-top;
     }
 
