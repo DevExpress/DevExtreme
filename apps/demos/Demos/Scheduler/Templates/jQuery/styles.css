@@ -18,6 +18,7 @@
   width: 100%;
   position: relative;
   top: -25%;
+  pointer-events: none;
 }
 
 .movie-preview {
