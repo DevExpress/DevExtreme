@@ -128,18 +128,31 @@ TEST_CASES.forEach(({ view, expectedToItemData }) => {
   });
 });
 
-test('Should not throw error when trying to drag appointment that is being updated with Promise delay (T1308596)', async (t) => {
+test('Should block appointment dragging while onAppointmentUpdating Promise is pending (T1308596)', async (t) => {
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
   const appointment = scheduler.getAppointment('Test Appointment');
 
-  await t.drag(appointment.element, 300, 0, { speed: 0.8 });
+  const targetCell1 = scheduler.getDateTableCell(18, 2);
+  const targetCell2 = scheduler.getDateTableCell(18, 5);
 
-  await t.drag(appointment.element, 600, 0, { speed: 0.8 });
+  const initialPosition = await appointment.element.boundingClientRect;
 
-  const consoleMessages = await t.getBrowserConsoleMessages();
-  const hasErrors = consoleMessages?.error && consoleMessages.error.length > 0;
+  await t.dragToElement(appointment.element, targetCell1, { speed: 1 });
+  await t.dragToElement(appointment.element, targetCell2, { speed: 1 });
+  await t.dragToElement(appointment.element, targetCell2, { speed: 1 });
+  await t.dragToElement(appointment.element, targetCell2, { speed: 1 });
 
-  await t.expect(hasErrors).notOk();
+  await t.wait(6000);
+
+  const positionAfterPromiseResolved = await appointment.element.boundingClientRect;
+
+  const cell1Position = await targetCell1.boundingClientRect;
+
+  await t
+    .expect(positionAfterPromiseResolved.left)
+    .notEql(initialPosition.left)
+    .expect(positionAfterPromiseResolved.left)
+    .eql(cell1Position.left);
 }).before(async () => {
   await createWidget('dxScheduler', {
     dataSource: [{
@@ -155,7 +168,7 @@ test('Should not throw error when trying to drag appointment that is being updat
       e.cancel = new Promise((resolve) => {
         setTimeout(() => {
           resolve(false);
-        }, 1500);
+        }, 5000);
       });
     },
   });
