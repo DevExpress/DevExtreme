@@ -10,6 +10,7 @@ import type { DataController } from '../data_controller/m_data_controller';
 import type { ErrorHandlingController } from '../error_handling/m_error_handling';
 import { Controller } from '../m_modules';
 import { AIColumnCacheController } from './m_ai_column_cache_controller';
+import type { InternalRequestCallbacks } from './types';
 import { getDataFromRowItems, reduceDataCachedKeys } from './utils';
 
 export class AIColumnIntegrationController extends Controller {
@@ -35,11 +36,17 @@ export class AIColumnIntegrationController extends Controller {
     this.createAction('onAIColumnResponseReceived');
   }
 
-  public sendRequest(
-    columnName: string,
-    useCache: boolean,
-    callbacks?: RequestCallbacks<GenerateGridColumnCommandResult>,
-  ): void {
+  public sendRequestCore({
+    columnName,
+    useCache,
+    needToShowLoadPanel,
+    callbacks,
+  }: {
+    columnName: string;
+    useCache: boolean;
+    needToShowLoadPanel: boolean;
+    callbacks: InternalRequestCallbacks;
+  }): void {
     const aiIntegration = this.getAIIntegration(columnName);
     if (!aiIntegration) {
       return;
@@ -85,6 +92,8 @@ export class AIColumnIntegrationController extends Controller {
     if (areAllDataCached) {
       return;
     }
+
+    callbacks.onRequestSending(needToShowLoadPanel);
 
     const abort = aiIntegration.generateGridColumn(
       {

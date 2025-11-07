@@ -4556,4 +4556,69 @@ describe('Load panel', () => {
       expect(component.getLoadPanel().isVisible()).toBe(false);
     });
   });
+
+  describe('when AI Column response is cached', () => {
+    it('should be hidden', async () => {
+      const aiIntegration = new AIIntegration({
+        sendRequest(prompt): RequestResult {
+          return {
+            promise: new Promise<string>((resolve) => {
+              const result = {};
+              Object.entries(prompt.data?.data).forEach(([key, value]) => {
+                result[key] = `Response ${(value as any).name}`;
+              });
+
+              resolve(JSON.stringify(result));
+            }),
+            abort: (): void => {},
+          };
+        },
+      });
+      const { component, instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+          { id: 2, name: 'Name 2', value: 20 },
+        ],
+        paging: {
+          pageSize: 1,
+        },
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration,
+              prompt: 'Test prompt',
+            },
+          },
+        ],
+      });
+
+      expect(instance.getAIColumnText('myColumn', 1)).toEqual('Response Name 1');
+
+      instance.option('paging.pageIndex', 1);
+      jest.runAllTimers();
+
+      expect(component.getLoadPanel().isVisible()).toBe(true);
+
+      await Promise.resolve();
+
+      expect(instance.getAIColumnText('myColumn', 2)).toEqual('Response Name 2');
+
+      instance.option('paging.pageIndex', 0);
+      jest.runAllTimers();
+
+      expect(component.getLoadPanel().isVisible()).toBe(false);
+
+      await Promise.resolve();
+
+      expect(instance.getAIColumnText('myColumn', 1)).toEqual('Response Name 1');
+      expect(component.getLoadPanel().isVisible()).toBe(false);
+    });
+  });
 });
