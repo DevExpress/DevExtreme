@@ -1,20 +1,19 @@
 import Animator from '__internal/ui/scroll_view/animator';
-import animationFrame from 'common/core/animation/frame';
+import animationFrame from '__internal/common/core/animation/frameModule';
 
-const REQEST_ANIMATION_FRAME_TIMEOUT = 10;
+const REQUEST_ANIMATION_FRAME_TIMEOUT = 10;
 
 QUnit.module('Animator', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
-        this.originalRAF = animationFrame.requestAnimationFrame;
-        animationFrame.requestAnimationFrame = function(callback) {
-            return window.setTimeout(callback, REQEST_ANIMATION_FRAME_TIMEOUT);
-        };
+        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
+            return window.setTimeout(callback, REQUEST_ANIMATION_FRAME_TIMEOUT);
+        });
     },
 
     afterEach: function() {
         this.clock.restore();
-        animationFrame.requestAnimationFrame = this.originalRAF;
+        this.requestAnimationFrameStub.restore();
     }
 }, () => {
     QUnit.test('basic', function(assert) {
@@ -38,7 +37,7 @@ QUnit.module('Animator', {
         const animator = new TestAnimator();
 
         animator.start();
-        this.clock.tick(10 * REQEST_ANIMATION_FRAME_TIMEOUT);
+        this.clock.tick(10 * REQUEST_ANIMATION_FRAME_TIMEOUT);
     });
 
     QUnit.test('stop', function(assert) {
@@ -70,7 +69,7 @@ QUnit.module('Animator', {
         const animator = new TestAnimator();
 
         animator.start();
-        this.clock.tick(10 * REQEST_ANIMATION_FRAME_TIMEOUT);
+        this.clock.tick(10 * REQUEST_ANIMATION_FRAME_TIMEOUT);
     });
 
     QUnit.test('infinite execution without isFinished callback', function(assert) {
