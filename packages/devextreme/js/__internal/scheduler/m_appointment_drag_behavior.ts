@@ -95,6 +95,11 @@ export default class AppointmentDragBehavior {
       e.itemData = this.getItemData(e.itemElement);
       e.itemSettings = this.getItemSettings(e.itemElement);
 
+      if (this.scheduler._isAppointmentBeingUpdated(e.itemData)) {
+        e.cancel = true;
+        return;
+      }
+
       appointmentDragging.onDragStart?.(e);
 
       if (!e.cancel) {
@@ -105,6 +110,16 @@ export default class AppointmentDragBehavior {
 
   createDragMoveHandler(options, appointmentDragging) {
     return (e) => {
+      if (!this.appointmentInfo) {
+        e.cancel = true;
+        return;
+      }
+
+      if (this.scheduler._isAppointmentBeingUpdated(this.appointmentInfo.appointment)) {
+        e.cancel = true;
+        return;
+      }
+
       appointmentDragging.onDragMove?.(e);
 
       if (!e.cancel) {
@@ -115,6 +130,11 @@ export default class AppointmentDragBehavior {
 
   createDragEndHandler(options, appointmentDragging) {
     return (e) => {
+      if (!this.appointmentInfo) {
+        e.cancel = true;
+        return;
+      }
+
       const updatedData = this.appointments.invoke('getUpdatedData', e.itemData);
 
       this.appointmentInfo = null;

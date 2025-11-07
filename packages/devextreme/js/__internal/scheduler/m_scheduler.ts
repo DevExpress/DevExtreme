@@ -205,6 +205,8 @@ class Scheduler extends Widget<any> {
 
   _asyncTemplatesTimers!: any[];
 
+  _updatingAppointments: Set<any> = new Set();
+
   _dataSourceLoadedCallback: any;
 
   _subscribes: any;
@@ -2147,6 +2149,10 @@ class Scheduler extends Widget<any> {
       dragEvent.cancel = new Deferred();
     }
 
+    if (isPromise(updatingOptions.cancel) && dragEvent) {
+      this._updatingAppointments.add(target);
+    }
+
     return this._processActionResult(updatingOptions, function (canceled) {
       // @ts-expect-error
       let deferred = new Deferred();
@@ -2160,15 +2166,20 @@ class Scheduler extends Widget<any> {
             .done(() => {
               dragEvent && dragEvent.cancel.resolve(false);
             })
-            .always((storeAppointment) => this._onDataPromiseCompleted(StoreEventNames.UPDATED, storeAppointment))
+            .always((storeAppointment) => {
+              this._updatingAppointments.delete(target);
+              this._onDataPromiseCompleted(StoreEventNames.UPDATED, storeAppointment);
+            })
             .fail(() => performFailAction());
         } catch (err) {
           performFailAction(err);
           deferred.resolve();
+          this._updatingAppointments.delete(target);
         }
       } else {
         performFailAction();
         deferred.resolve();
+        this._updatingAppointments.delete(target);
       }
 
       return deferred.promise();
@@ -2614,6 +2625,10 @@ class Scheduler extends Widget<any> {
 
   _getDragBehavior() {
     return this._workSpace.dragBehavior;
+  }
+
+  _isAppointmentBeingUpdated(appointmentData: any): boolean {
+    return this._updatingAppointments.has(appointmentData);
   }
 
   getViewOffsetMs(): number {
