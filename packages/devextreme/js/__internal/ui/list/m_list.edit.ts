@@ -56,7 +56,13 @@ class ListEdit extends ListBase {
         const isInternalMoving = editProvider.handleKeyboardEvents(focusedItemIndex, moveUp);
 
         if (!isInternalMoving) {
-          moveUp ? parent.upArrow(e) : parent.downArrow(e);
+          if (moveUp) {
+            parent.upArrow(e);
+          } else {
+            parent.downArrow(e);
+          }
+        } else {
+          e.preventDefault(); // to prevent extra scrolling
         }
       }
     };
