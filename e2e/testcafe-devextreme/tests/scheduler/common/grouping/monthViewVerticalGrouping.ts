@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const SCHEDULER_SELECTOR = '#container';
 
@@ -12,11 +13,11 @@ test('Scrolling: usual. Shouldn\'t overlap the next group with long all-day appo
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await takeScreenshot('month-view_vertical-grouping_fist-app-part_T1122185.png', scheduler.workSpace);
+  await testScreenshot(t, takeScreenshot, 'month-view_vertical-grouping_fist-app-part_T1122185.png', { element: scheduler.workSpace });
   await t.click(await scheduler.toolbar.navigator.nextButton());
-  await takeScreenshot('month-view_vertical-grouping_middle-app-part_T1122185.png', scheduler.workSpace);
+  await testScreenshot(t, takeScreenshot, 'month-view_vertical-grouping_middle-app-part_T1122185.png', { element: scheduler.workSpace });
   await t.click(await scheduler.toolbar.navigator.nextButton());
-  await takeScreenshot('month-view_vertical-grouping_last-app-part_T1122185.png', scheduler.workSpace);
+  await testScreenshot(t, takeScreenshot, 'month-view_vertical-grouping_last-app-part_T1122185.png', { element: scheduler.workSpace });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

@@ -12,13 +12,11 @@ import {
 } from '../../helpers/vizMocks.js';
 import trackerModule from 'viz/vector_map/tracker';
 import { _TESTS_eventEmitterMethods } from '__internal/viz/vector_map/event_emitter';
-import animationFrame from 'common/core/animation/frame';
+import animationFrame from '__internal/common/core/animation/frameModule';
 
 const FOCUS_OFF_DELAY = 100;
 
 $('#qunit-fixture').append('<div id="test-root"></div>');
-
-animationFrame.requestAnimationFrame = animationFrame.cancelAnimationFrame = noop;
 
 const EVENTS = {
     'start': {
@@ -57,11 +55,15 @@ const environment = {
         $.each(this.stubbedCallbacks || [], $.proxy(function(_, name) {
             this[name] = sinon.stub();
         }, this));
+        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake(noop);
+        this.cancelAnimationFrameStub = sinon.stub(animationFrame, 'cancelAnimationFrame').callsFake(noop);
         this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         this.tracker.dispose();
         this.root.dispose();
+        this.requestAnimationFrameStub.restore();
+        this.cancelAnimationFrameStub.restore();
         this.clock.restore();
     },
     createTracker: function() {

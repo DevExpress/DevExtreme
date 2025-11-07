@@ -4,6 +4,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { Deferred, when } from '@js/core/utils/deferred';
+import { extend } from '@js/core/utils/extend';
 import { getWidth } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
 import type { ToolbarItem } from '@js/ui/popup';
@@ -93,7 +94,10 @@ export class AppointmentPopup {
   }
 
   _createPopupConfig() {
-    return {
+    const editingConfig = this.scheduler.getEditingConfig();
+    const customPopupOptions = editingConfig?.popup ?? {};
+
+    const defaultPopupConfig = {
       height: 'auto',
       maxHeight: '90%',
       showCloseButton: false,
@@ -101,8 +105,9 @@ export class AppointmentPopup {
       preventScrollEvents: false,
       enableBodyScroll: false,
       _ignorePreventScrollEventsDeprecation: true,
-      onHiding: (): void => {
+      onHiding: (e): void => {
         this.scheduler.focus();
+        customPopupOptions?.onHiding?.(e);
       },
       contentTemplate: (): dxElementWrapper => {
         this.form.create({
@@ -113,9 +118,17 @@ export class AppointmentPopup {
 
         return this.form.dxForm.$element();
       },
-      onShowing: (e): void => this._onShowing(e),
+      onShowing: (e): void => {
+        this._onShowing(e);
+        customPopupOptions?.onShowing?.(e);
+      },
       wrapperAttr: { class: APPOINTMENT_POPUP_CLASS },
     };
+
+    return extend(true, {}, defaultPopupConfig, customPopupOptions, {
+      onHiding: defaultPopupConfig.onHiding,
+      onShowing: defaultPopupConfig.onShowing,
+    });
   }
 
   _onShowing(e) {

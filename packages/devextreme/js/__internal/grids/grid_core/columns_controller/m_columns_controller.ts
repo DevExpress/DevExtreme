@@ -92,6 +92,7 @@ export interface Column extends ColumnBase {
   visibleWidth?: string | number;
   hidingPriority?: number;
   ai?: ColumnAIOptions;
+  command?: string;
 }
 
 export class ColumnsController extends modules.Controller {

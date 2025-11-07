@@ -67,6 +67,7 @@ export const columnHeadersViewExtender = (
       showArrowIcon: false,
       icon: 'overflow',
       stylingMode: 'text',
+      useItemTextAsTitle: false,
       items: this.getDropDownButtonItems(column),
       onItemClick: (e: ItemClickEvent): void => {
         const { key: actionName } = e.itemData;
@@ -77,7 +78,7 @@ export const columnHeadersViewExtender = (
             this.aiPromptEditorController.show($container[0], column);
             break;
           case 'regenerate':
-            this.aiColumnController.refreshAIColumn(column.name as string);
+            this.aiColumnController.sendRequest(column.name as string, false);
             break;
           case 'clear':
             this.aiColumnController.clearAIColumn(column.name as string);
