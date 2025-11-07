@@ -5,7 +5,7 @@ import { logWarning } from './warning-helper';
 
 const warnedUsages = new Set<string>();
 
-const LEGACY_CLASS_NAME_REGEXP = /^Dx([io])([A-Za-z0-9]+)Component$/;
+const NESTED_CLASS_NAME_REGEXP = /^(Dx[io][A-Z]\w+)Component$/;
 
 type DeprecatedConfigEntry = Record<string, string>;
 
@@ -15,15 +15,14 @@ function getLegacySelector(nestedOption: BaseNestedOption): string | undefined {
     return undefined;
   }
 
-  const match = LEGACY_CLASS_NAME_REGEXP.exec(className);
+  const match = NESTED_CLASS_NAME_REGEXP.exec(className);
   if (!match) {
     return undefined;
   }
 
-  const [, type, rest] = match;
-  const prefix = type === 'o' ? 'dxo-' : 'dxi-';
+  const [, legacyName] = match;
 
-  return `${prefix}${toKebabCase(rest)}`;
+  return toKebabCase(legacyName);
 }
 
 function getHostMapping(host: INestedOptionContainer | undefined): DeprecatedConfigEntry | undefined {
