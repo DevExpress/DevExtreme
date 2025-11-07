@@ -4,6 +4,7 @@
   "license": "MIT",
   "author": "Developer Express Inc.",
   "scripts": {
+    "postinstall": "npx ts-node tools/scripts/build-nx-plugin.ts || true",
     "devextreme:inject-descriptions-to-bundle": "dx-tools inject-descriptions --target-path ./packages/devextreme/ts/dx.all.d.ts --artifacts ./node_modules/devextreme-metadata/dist",
     "devextreme:inject-descriptions-to-modules": "dx-tools inject-descriptions --collapse-tags --sources ./packages/devextreme/js --artifacts ./node_modules/devextreme-metadata/dist",
     "devextreme:inject-descriptions": "npm run devextreme:inject-descriptions-to-bundle && npm run devextreme:inject-descriptions-to-modules",
