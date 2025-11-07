@@ -208,6 +208,7 @@ class EditDecoratorSelection extends EditDecorator {
 
   _selectAllHandler(event): DeferredObj<unknown> {
     event.stopPropagation();
+    event.preventDefault(); // to prevent scrolling on space key press
     this._list._saveSelectionChangeEvent(event);
 
     const { value } = this._selectAllCheckBox.option();
