@@ -6,7 +6,7 @@ require('ui/overlay/ui.overlay');
 require('ui/slider');
 require('integration/knockout');
 
-require('generic_light.css!');
+require('fluent_blue_light.css!');
 
 const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 
@@ -45,6 +45,6 @@ QUnit.test('slider within overlay does not properly display its current position
     const $handle = $container.find('.dx-slider .dx-slider-handle');
     const $sliderBar = $container.find('.dx-slider-bar');
     const handleCenter = $handle.position().left + $handle.outerWidth() / 2 + parseInt($handle.css('border-left-width'));
-    assert.equal($sliderBar.outerWidth(), 100);
-    assert.equal(handleCenter, 50);
+    assert.equal($sliderBar.outerWidth(), 94);
+    assert.equal(handleCenter, 48);
 });
