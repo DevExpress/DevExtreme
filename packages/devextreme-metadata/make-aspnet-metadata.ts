@@ -153,6 +153,7 @@ AspNet.makeMetadata({
       ['ui/form:dxFormOptions', 'common/grids:EditingBase.form'],
       ['ui/form:dxFormOptions', 'ui/card_view:Editing.form'],
       ['ui/popover:dxPopoverOptions', 'ui/lookup:dxLookupOptions.dropDownOptions'],
+      ['ui/popup:dxPopupOptions', 'common/grids:ColumnAIOptions.popup'],
       ['ui/popup:dxPopupOptions', 'common/grids:EditingBase.popup'],
       ['ui/popup:dxPopupOptions', 'common/grids:GridBaseOptions.filterBuilderPopup'],
       ['ui/popup:dxPopupOptions', 'ui/autocomplete:dxAutocompleteOptions.dropDownOptions'],
@@ -163,9 +164,14 @@ AspNet.makeMetadata({
       ['ui/popup:dxPopupOptions', 'ui/drop_down_box:dxDropDownBoxOptions.dropDownOptions'],
       ['ui/popup:dxPopupOptions', 'ui/drop_down_button:dxDropDownButtonOptions.dropDownOptions'],
       ['ui/popup:dxPopupOptions', 'ui/select_box:dxSelectBoxOptions.dropDownOptions'],
+      ['ui/popup:dxPopupOptions', 'ui/scheduler:dxSchedulerOptions.editing.popup'],
       ['ui/sortable:dxSortableOptions', 'ui/list:dxListOptions.itemDragging'],
       ['ui/splitter:dxSplitterOptions', 'ui/splitter:dxSplitterItem.splitter'],
       ['ui/tab_panel:dxTabPanelOptions', 'ui/form:dxFormTabbedItem.tabPanelOptions'],
+      [
+        'ui/text_box:dxTextBoxOptions',
+        'common/grids:ColumnAIOptions.editorOptions'
+      ],
       [
         'ui/text_box:dxTextBoxOptions',
         'ui/widget/ui.search_box_mixin:SearchBoxMixinOptions.searchEditorOptions',
