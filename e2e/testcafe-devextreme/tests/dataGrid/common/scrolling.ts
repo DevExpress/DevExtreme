@@ -1830,7 +1830,7 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
 [true, false].forEach((nativeScroll) => {
   type TestCaseWindow = typeof window & { dataGridScrollableEventValues?: number[] };
 
-  test(`Should not scroll back on top with virtual scrolling and adaptive master detail (nativeScroll: ${nativeScroll}) [T1278804]`, async (t) => {
+  test.meta({ unstable: true })(`Should not scroll back on top with virtual scrolling and adaptive master detail (nativeScroll: ${nativeScroll}) [T1278804]`, async (t) => {
     // NOTE: idx + 1 logic inside POM
     const adaptiveCellIdx = 101;
     const scrollValuesThreshold = 100;

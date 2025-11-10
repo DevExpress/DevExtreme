@@ -7,6 +7,9 @@ import { testScreenshot } from '../../../../../helpers/themeUtils';
 fixture.disablePageReloads`AppointmentForm screenshot tests`
   .page(url(__dirname, '../../../../container.html'));
 
+// visual: generic.light
+// visual: fluent.blue.light
+// visual: material.blue.light
 ['day', 'week', 'workWeek', 'month', 'timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth', 'agenda'].forEach((currentView) => {
   [true, false].forEach((rtlEnabled) => {
     test('Appointemt form tests', async (t) => {

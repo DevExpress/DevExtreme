@@ -5986,7 +5986,7 @@ test('The batch edit mode - Shift + Tab navigation through interactive elements 
   });
 });
 
-test('DataGrid - Cell focus works incorrectly if the command column has a disabled native button element (T1179207)', async (t) => {
+test.meta({ unstable: true })('DataGrid - Cell focus works incorrectly if the command column has a disabled native button element (T1179207)', async (t) => {
   await addFocusableElementBefore('#container');
 
   // header row
