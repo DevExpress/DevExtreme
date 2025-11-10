@@ -30,6 +30,7 @@ $generic-grid-base-command-ai-header-button-size: null !default;
 
 $datagrid-text-link-disabled-opacity: $base-disabled-opacity;
 $datagrid-icon-link-disabled-opacity: 0.6;
+$generic-grid-base-ai-prompt-editor-progressbar-height: 4px !default;
 
 @if $size == "default" {
   $generic-grid-base-cell-padding: 7px !default;
