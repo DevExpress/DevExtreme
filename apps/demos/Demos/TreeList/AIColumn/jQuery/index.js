@@ -79,6 +79,7 @@ $(() => {
     visible: false,
     dragEnabled: false,
     hideOnOutsideClick: true,
+    showCloseButton: true,
     title: 'Image Info',
     position: {
       at: 'center',
