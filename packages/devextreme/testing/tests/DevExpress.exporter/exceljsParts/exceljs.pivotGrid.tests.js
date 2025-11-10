@@ -7829,6 +7829,38 @@ QUnit.module('Scenarios', moduleConfig, () => {
                 done();
             });
         });
+
+        // T1325416 - Fields with visible:false should not be exported in field headers
+        QUnit.test('Data fields with visible:false should not be exported in data field headers', function(assert) {
+            const done = assert.async();
+            const ds = {
+                fields: [
+                    { area: 'row', dataField: 'row' },
+                    { area: 'data', dataField: 'Sales', summaryType: 'sum', caption: 'Sales', visible: true },
+                    { area: 'data', dataField: 'Sales2', summaryType: 'sum', caption: 'Sales2', visible: false },
+                    { area: 'data', dataField: 'Sales3', summaryType: 'sum', caption: 'Sales3', visible: false }
+                ],
+                store: []
+            };
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({ dataSource: ds }).dxPivotGrid('instance');
+
+            exportPivotGrid({
+                component: pivotGrid,
+                worksheet: this.worksheet,
+                topLeftCell: topLeft,
+                exportDataFieldHeaders: true
+            }).then(() => {
+                const dataFieldHeaderCell = this.worksheet.getRow(topLeft.row).getCell(topLeft.column);
+                const cellValue = dataFieldHeaderCell.value;
+
+                assert.strictEqual(cellValue, 'Sales', `Data field header should show 'Sales', got: '${cellValue}'`);
+
+                assert.ok(!cellValue.includes('Sales2'), 'Data field header should not contain Sales2');
+                assert.ok(!cellValue.includes('Sales3'), 'Data field header should not contain Sales3');
+                done();
+            });
+        });
+
     });
 });
 
@@ -8073,7 +8105,6 @@ ExcelJSLocalizationFormatTests.runPivotGridCurrencyTests([
     { value: 'SEK', expected: '$#,##0_);\\($#,##0\\)' } // NOT SUPPORTED in default
 ]);
 ExcelJSOptionTests.runTests(moduleConfig, exportPivotGrid.__internals._getFullOptions, () => $('#pivotGrid').dxPivotGrid({}).dxPivotGrid('instance'));
-
 
 [
     { enabled: true },
