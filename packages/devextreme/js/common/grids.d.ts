@@ -84,31 +84,6 @@ import { AIIntegration } from './ai-integration';
  * @namespace DevExpress.common.grids
  * @public
  */
-export type AIColumnResponseReceivedInfo = {
-  /**
-   * @docid
-   * @type GridBaseColumn
-   */
-  readonly column: ColumnBase;
-  /** @docid */
-  error?: string;
-  /**
-   * @docid
-   * @type Array<object>
-   */
-  data: any[];
-  /**
-   * @docid
-   * @type object
-   */
-  additionalInfo?: Record<string, any>;
-};
-
-/**
- * @docid
- * @namespace DevExpress.common.grids
- * @public
- */
 export type AIColumnRequestCreatingInfo<TRowData = any> = {
   /**
    * @docid
