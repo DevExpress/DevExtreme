@@ -14,6 +14,7 @@ import DataGrid, {
 import DiscountCell from "./DiscountCell";
 import ODataStore from "devextreme/data/odata/store";
 import { AIIntegration } from 'devextreme-react/common/ai-integration';
+import { AzureOpenAI } from 'openai';
 
 const columnOptions = {
     regularColumns: [
@@ -273,65 +274,82 @@ args: {
 }
 }
 
+const deployment = "gpt-4o-mini";
+const apiVersion = "2024-02-01";
+const endpoint = "https://public-api.devexpress.com/demo-openai";
+const apiKey = "DEMO";
+
+const aiService = new AzureOpenAI({
+  dangerouslyAllowBrowser: true,
+  deployment,
+  endpoint,
+  apiVersion,
+  apiKey
+});
+
+async function getAIResponse(messages, signal): Promise<string> {
+    const params = {
+        messages,
+        model: deployment,
+        max_tokens: 1000,
+        temperature: 0.7,
+    };
+
+    const response = await aiService.chat.completions.create(params, { signal });
+    const result = response.choices[0].message?.content;
+
+    return result ?? '';
+}
+
+const aiIntegration = new AIIntegration({
+    sendRequest({ prompt }) {
+        const controller = new AbortController();
+        const signal = controller.signal;
+
+        const aiPrompt = [
+        { role: 'system', content: prompt.system, },
+        { role: 'user', content: prompt.user, },
+        ];
+
+        const promise = getAIResponse(aiPrompt, signal);
+
+        const result = {
+        promise,
+        abort: () => {
+            controller.abort();
+        },
+        };
+
+        return result;
+    },
+});
+
+
 export const AiColumn: Story = {
     args: {
         dataSource: countries,
+        aiIntegration,
+        keyExpr: 'ID',
         columns: [
             {
                 caption: 'AI Column 1',
                 type: 'ai',
-                name: 'test',
+                name: 'test1',
                 ai: {
-                    aiIntegration: new AIIntegration({
-                        sendRequest() {
-                            return {
-                                promise: new Promise((resolve) => {
-                                    setTimeout(() => {
-                                        resolve('{"text":"Test response from AI Column 1"}');
-                                    }, 5000);
-                                }),
-                                abort: () => {
-                                },
-                            };
-                        },
-                    }),
+                    prompt: 'Country currency',
                 },
             },
-            'Country', 'Area', 'Population_Urban', 'Population_Rural',
             {
                 caption: 'AI Column 2',
                 type: 'ai',
-                name: 'test',
+                name: 'test2',
                 ai: {
-                    aiIntegration: new AIIntegration({
-                        sendRequest() {
-                            return {
-                                promise: new Promise((resolve) => {
-                                    setTimeout(() => {
-                                        resolve('{"text":"Test response from AI Column 2"}');
-                                    }, 5000);
-                                }),
-                                abort: () => {
-                                },
-                            };
-                        },
-                    }),
+                    prompt: 'Emoji flag of the country',
                 },
-            }
+            },
+            'Country', 'Area', 'Population_Urban', 'Population_Rural',
         ],
         allowColumnResizing: true,
         allowColumnReordering: true,
-        onContextMenuPreparing: (e) => {
-            if (e.target === 'header' && e.column?.type === 'ai') {
-                e.items = e.items || [];
-                e.items.push({
-                    text: 'Show AI Prompt Editor',
-                    onItemClick: () => {
-                        // @ts-expect-error
-                        e.component.getView('aiColumnView').showPromptEditor(e.event.target, e.column);
-                    },
-                });
-            }
-        }
-    }
+    },
 };

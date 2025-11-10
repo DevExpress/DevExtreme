@@ -1,6 +1,8 @@
+import { Selector } from 'testcafe';
 import CardView from 'devextreme-testcafe-models/cardView';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
+import { addFocusableElementBefore } from '../../../helpers/domUtils';
 
 // NOTE: TestCafe cannot trigger "pressKey" on some specific element
 // It triggers this event on document level and process keyboard navigation action immediately.
@@ -89,9 +91,17 @@ test('Should continue arrow navigation from last focused item', async (t) => {
 
 test('Should enable sorting by Enter', async (t) => {
   const cardView = new CardView(CARD_VIEW_SELECTOR);
+  const headerPanel = cardView.getHeaderPanel();
+
+  await addFocusableElementBefore(CARD_VIEW_SELECTOR);
 
   await t
-    .pressKey('tab tab tab enter');
+    .click(Selector('#focusable-start'))
+    .pressKey('tab')
+    .expect(headerPanel.getHeaderItem(0).element.focused)
+    .ok()
+    .pressKey('enter')
+    .wait(100);
 
   const texts = [
     await cardView.getCard(0).getFieldValueCell('Id').textContent,
@@ -115,9 +125,17 @@ test('Should enable sorting by Enter', async (t) => {
 
 test('Should switch sorting by Enter', async (t) => {
   const cardView = new CardView(CARD_VIEW_SELECTOR);
+  const headerPanel = cardView.getHeaderPanel();
+
+  await addFocusableElementBefore(CARD_VIEW_SELECTOR);
 
   await t
-    .pressKey('tab tab tab enter enter');
+    .click(Selector('#focusable-start'))
+    .pressKey('tab')
+    .expect(headerPanel.getHeaderItem(0).element.focused)
+    .ok()
+    .pressKey('enter enter')
+    .wait(100);
 
   const texts = [
     await cardView.getCard(0).getFieldValueCell('Id').textContent,
@@ -141,9 +159,17 @@ test('Should switch sorting by Enter', async (t) => {
 
 test('Should clear sorting by ctrl+Enter', async (t) => {
   const cardView = new CardView(CARD_VIEW_SELECTOR);
+  const headerPanel = cardView.getHeaderPanel();
+
+  await addFocusableElementBefore(CARD_VIEW_SELECTOR);
 
   await t
-    .pressKey('tab tab tab enter');
+    .click(Selector('#focusable-start'))
+    .pressKey('tab')
+    .expect(headerPanel.getHeaderItem(0).element.focused)
+    .ok()
+    .pressKey('enter')
+    .wait(100);
 
   const sortedTexts = [
     await cardView.getCard(0).getFieldValueCell('Id').textContent,
@@ -155,7 +181,8 @@ test('Should clear sorting by ctrl+Enter', async (t) => {
   await t.expect(sortedTexts).eql(['0', '1', '2', '3']);
 
   await t
-    .pressKey('ctrl+Enter');
+    .pressKey('ctrl+Enter')
+    .wait(100);
 
   const unsortedTexts = [
     await cardView.getCard(0).getFieldValueCell('Id').textContent,
@@ -179,9 +206,17 @@ test('Should clear sorting by ctrl+Enter', async (t) => {
 
 test('Should enable multi field sorting by shift+Enter', async (t) => {
   const cardView = new CardView(CARD_VIEW_SELECTOR);
+  const headerPanel = cardView.getHeaderPanel();
+
+  await addFocusableElementBefore(CARD_VIEW_SELECTOR);
 
   await t
-    .pressKey('tab tab tab right shift+enter left shift+enter');
+    .click(Selector('#focusable-start'))
+    .pressKey('tab')
+    .expect(headerPanel.getHeaderItem(0).element.focused)
+    .ok()
+    .pressKey('right shift+enter left shift+enter')
+    .wait(100);
 
   const aTexts = [
     await cardView.getCard(0).getFieldValueCell('A').textContent,
@@ -216,9 +251,16 @@ test('Should enable multi field sorting by shift+Enter', async (t) => {
 
 test('Should open header filter by alt+ArrowDown', async (t) => {
   const cardView = new CardView(CARD_VIEW_SELECTOR);
+  const headerPanel = cardView.getHeaderPanel();
+
+  await addFocusableElementBefore(CARD_VIEW_SELECTOR);
 
   await t
-    .pressKey('tab tab tab alt+down');
+    .click(Selector('#focusable-start'))
+    .pressKey('tab')
+    .expect(headerPanel.getHeaderItem(0).element.focused)
+    .ok()
+    .pressKey('alt+down');
 
   const popup = cardView.getHeaderFilterPopup();
 

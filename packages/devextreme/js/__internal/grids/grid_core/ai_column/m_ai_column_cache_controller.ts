@@ -24,15 +24,12 @@ export class AIColumnCacheController extends Controller {
     columnName: string,
     data: Record<PropertyKey, string>,
   ): void {
-    let columnCache = this.cache[columnName];
-    if (!columnCache) {
-      columnCache = {};
-      this.cache[columnName] = columnCache;
-    }
+    const columnCache = this.cache[columnName] ?? {};
+
+    this.cache[columnName] = columnCache;
+
     Object.entries(data).forEach(([key, value]) => {
-      if (columnCache && value !== '') {
-        columnCache[key] = value;
-      }
+      columnCache[key] = value;
     });
   }
 

@@ -4,39 +4,119 @@
   "sourceRoot": "packages/devextreme-react",
   "projectType": "library",
   "targets": {
-    "build": {
-      "executor": "nx:run-script",
-      "dependsOn": ["^build"],
+    "clean": {
+      "executor": "devextreme-nx-infra-plugin:clean",
       "options": {
-        "script": "pack"
-      },
-      "inputs": [
-        "default"
-      ],
-      "outputs": [
-        "{projectRoot}/npm"
-      ],
-      "cache": true
-    },
-    "pack": {
-      "executor": "nx:run-script",
-      "options": {
-        "script": "pack"
-      },
-      "inputs": [
-        "default"
-      ],
-      "outputs": [
-        "{projectRoot}/npm"
-      ],
-      "cache": true
+        "targetDirectory": "./src",
+        "excludePatterns": ["./src/core", "./src/common"],
+        "mode": "recursive"
+      }
     },
     "regenerate": {
-      "executor": "nx:run-script",
-      "dependsOn": ["devextreme-metadata:generate"],
+      "executor": "devextreme-nx-infra-plugin:generate-react-components",
+      "dependsOn": ["devextreme-metadata:generate","clean"],
       "options": {
-        "script": "regenerate"
+        "metadataPath": "../devextreme-metadata/dist/integration-data.json",
+        "componentsDir": "./src",
+        "indexFileName": "./src/index.ts",
+        "baseComponent": "./core/component",
+        "extensionComponent": "./core/extension-component",
+        "configComponent": "./core/nested-option"
       }
+    },
+    "build:esm": {
+      "executor": "devextreme-nx-infra-plugin:build-typescript",
+      "dependsOn": ["npm:clean"],
+      "options": {
+        "srcPattern": "./src/**/*.{ts,tsx}",
+        "excludePattern": "./src/**/__tests__/**/*",
+        "tsconfig": "./tsconfig.esm.json",
+        "outDir": "./npm/esm",
+        "module": "esm"
+      },
+      "outputs": ["{projectRoot}/npm/esm"],
+      "cache": true,
+      "inputs": ["default"]
+    },
+    "build:cjs": {
+      "executor": "devextreme-nx-infra-plugin:build-typescript",
+      "dependsOn": ["npm:clean"],
+      "options": {
+        "srcPattern": "./src/**/*.{ts,tsx}",
+        "excludePattern": "./src/**/__tests__/**/*",
+        "tsconfig": "./tsconfig.json",
+        "outDir": "./npm/cjs",
+        "module": "cjs"
+      },
+      "outputs": ["{projectRoot}/npm/cjs"],
+      "cache": true,
+      "inputs": ["default"]
+    },
+    "npm:clean": {
+      "executor": "devextreme-nx-infra-plugin:clean",
+      "options": {
+        "targetDirectory": "./npm",
+        "mode": "simple"
+      }
+    },
+    "prepare-package-json": {
+      "executor": "devextreme-nx-infra-plugin:prepare-package-json",
+      "dependsOn": ["npm:clean", "build:esm", "build:cjs"],
+      "options": {}
+    },
+    "license-headers": {
+      "executor": "devextreme-nx-infra-plugin:add-license-headers",
+      "dependsOn": ["prepare-package-json"],
+      "options": {
+        "targetDirectory": "./npm",
+        "packageJsonPath": "./package.json"
+      }
+    },
+    "npm:prepare-modules": {
+      "executor": "devextreme-nx-infra-plugin:prepare-submodules",
+      "dependsOn": ["npm:clean", "license-headers", "copy-files"],
+      "options": {
+        "distDirectory": "./npm"
+      }
+    },
+    "copy-files": {
+      "executor": "devextreme-nx-infra-plugin:copy-files",
+      "dependsOn": ["prepare-package-json"],
+      "options": {
+        "files": [
+          {
+            "from": "./LICENSE",
+            "to": "./npm/LICENSE"
+          },
+          {
+            "from": "./README.md",
+            "to": "./npm/README.md"
+          }
+        ]
+      }
+    },
+    "pack": {
+      "executor": "devextreme-nx-infra-plugin:pack-npm",
+      "dependsOn": ["npm:prepare-modules"],
+      "options": {
+        "workingDirectory": "./npm"
+      },
+      "outputs": ["{projectRoot}/npm/*.tgz"],
+      "cache": true,
+      "inputs": ["default"]
+    },
+    "build": {
+      "executor": "devextreme-nx-infra-plugin:pack-npm",
+      "dependsOn": ["npm:prepare-modules", "^build"],
+      "options": {
+        "workingDirectory": "./npm"
+      },
+      "outputs": [
+        "{projectRoot}/npm",
+        "{projectRoot}/*.tgz"
+      ],
+      "cache": true,
+      "inputs": ["default"]
     },
     "test": {
       "executor": "nx:run-script",
@@ -56,7 +136,6 @@
       "{projectRoot}/src/**/*",
       "!{projectRoot}/src/**/__tests__/*",
       "{projectRoot}/build.config.js",
-      "{projectRoot}/gulpfile.js",
       "{projectRoot}/tsconfig*",
       "{workspaceRoot}/tsconfig.json"
     ],
