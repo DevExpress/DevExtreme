@@ -110,6 +110,11 @@
     height: 28px;
     margin-right: 10px;
 
+    &.dx-fileuploader-cancel-button-position-end {
+      margin-left: 4px;
+      margin-right: 0;
+    }
+
     &.dx-state-invisible {
       margin-right: 0;
     }
