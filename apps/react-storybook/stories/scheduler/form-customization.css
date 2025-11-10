@@ -1,0 +1,10 @@
+.icon-button {
+  padding: 4px;
+  width: 18px;
+  height: 18px;
+  border: 0 !important;
+}
+
+.icon-button * {
+  padding: 0 !important;
+}
