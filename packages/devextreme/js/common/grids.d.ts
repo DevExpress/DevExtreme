@@ -81,8 +81,8 @@ import { AIIntegration } from './ai-integration';
 
 /**
  * @docid
+ * @hidden
  * @namespace DevExpress.common.grids
- * @public
  */
 export type AIColumnRequestCreatingInfo<TRowData = any> = {
   /**
