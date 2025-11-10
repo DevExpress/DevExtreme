@@ -1,13 +1,17 @@
-// eslint-disable-next-line no-restricted-imports
+/* eslint-disable import/first */
+
+import errors from '@ts/core/utils/m_error';
+import { compare as compareVersions } from '@ts/core/utils/m_version';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import jQuery from 'jquery';
-import { compare as compareVersions } from '../core/utils/version';
-import errors from '../core/utils/error';
+
 import useJQueryMethod from './jquery/use_jquery';
 
 const useJQuery = useJQueryMethod();
 
-if(useJQuery && compareVersions(jQuery.fn.jquery, [1, 10]) < 0) {
-    throw errors.Error('E0012');
+if (useJQuery && compareVersions(jQuery.fn.jquery, [1, 10]) < 0) {
+  // @ts-expect-error
+  throw errors.Error('E0012');
 }
 
 import './jquery/renderer';

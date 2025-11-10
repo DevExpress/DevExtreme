@@ -1,7 +1,7 @@
-// eslint-disable-next-line no-restricted-imports
+import { setEasing } from '@ts/common/core/animation/easing';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import jQuery from 'jquery';
-import { setEasing } from '../../__internal/common/core/animation/easing';
 
-if(jQuery) {
-    setEasing(jQuery.easing);
+if (jQuery) {
+  setEasing(jQuery.easing);
 }

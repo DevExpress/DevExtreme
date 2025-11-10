@@ -1,12 +1,19 @@
-// eslint-disable-next-line no-restricted-imports
+import config from '@js/core/config';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import jQuery from 'jquery';
-import config from '../../core/config';
-const useJQuery = config().useJQuery;
 
-if(jQuery && useJQuery !== false) {
-    config({ useJQuery: true });
+// @ts-expect-error
+const { useJQuery } = config();
+
+// @ts-expect-error
+if (jQuery && useJQuery !== false) {
+  // @ts-expect-error
+  config({ useJQuery: true });
 }
 
-export default function() {
-    return jQuery && config().useJQuery;
+// eslint-disable-next-line func-names
+export default function (): boolean {
+  // @ts-expect-error
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return jQuery && config().useJQuery;
 }
