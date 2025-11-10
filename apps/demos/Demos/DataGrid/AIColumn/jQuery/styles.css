@@ -11,10 +11,9 @@ div.dx-datagrid .ai__cell {
 .trademark__img-wrapper {
     width: 40px;
     height: 40px;
-    border: 1px solid #E0E0E0;
-    border-radius: 4px;
+    border: var(--dx-border-width) solid var(--dx-color-border);
+    border-radius: var(--dx-border-radius);
     cursor: pointer;
-    transition: border-color 0.2s ease;
 }
 
 .trademark__img-wrapper img {
@@ -22,7 +21,7 @@ div.dx-datagrid .ai__cell {
   height: 100%;
   object-fit: cover;
   object-position: center;
-  border-radius: 4px;
+  border-radius: var(--dx-border-radius);
 }
 
 .trademark__text-wrapper {
