@@ -5,7 +5,7 @@ import url from '../../../../../../helpers/getPageUrl';
 import { createDataSetForScreenShotTests, resourceDataSource } from '../../utils';
 import { testScreenshot } from '../../../../../../helpers/themeUtils';
 
-fixture.disablePageReloads`Scheduler: Generic theme layout`
+fixture.disablePageReloads`Scheduler: Resources layout`
   .page(url(__dirname, '../../../../../container.html'));
 
 const createScheduler = async (view: string, resourcesValue?: unknown[]): Promise<void> => {
