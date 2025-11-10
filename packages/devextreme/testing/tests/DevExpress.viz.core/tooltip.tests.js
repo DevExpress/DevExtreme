@@ -38,7 +38,7 @@ function getInitialOptions() {
         customizeTooltip: function() { return 1; },
         font: {
             size: 14,
-            family: '\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana',
+            family: '-apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, adwaita sans, cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
             weight: 400,
             color: '#939393',
             opacity: 0.7
@@ -434,7 +434,7 @@ QUnit.test('Update', function(assert) {
     assert.deepEqual(tooltip._textGroupHtml.css.firstCall.args[0], {
         color: 'rgba(147,147,147,0.7)',
         fill: 'rgba(147,147,147,0.7)',
-        fontFamily: '\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana',
+        fontFamily: '-apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, adwaita sans, cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
         fontSize: '14px',
         fontWeight: 400,
         opacity: null

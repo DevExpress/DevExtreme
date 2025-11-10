@@ -242,7 +242,7 @@ QUnit.test('initializeFont', function(assert) {
     assert.ok(theme.testLabel);
     assert.equal(theme.testLabel.font.color, 'white', 'color');
     assert.equal(theme.testLabel.font.size, 12, 'size');
-    assert.equal(theme.testLabel.font.family, '\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana, sans-serif', 'Font families');
+    assert.equal(theme.testLabel.font.family, '-apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, adwaita sans, cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif', 'Font families');
     assert.equal(theme.testLabel.font.cursor, 'default');
 });
 
@@ -360,11 +360,11 @@ QUnit.test('initializeFont via font fields', function(assert) {
 
     assert.deepEqual(this.themeManager.theme('testLabel1.font'), {
         size: 12, cursor: 'default', weight: 400, color: 'white',
-        family: '\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana, sans-serif'
+        family: '-apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, adwaita sans, cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif'
     }, 'font 1');
     assert.deepEqual(this.themeManager.theme('testObject2.testLabel2.font'), {
         size: 20, cursor: 'default', weight: 400, color: '#767676',
-        family: '\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana, sans-serif'
+        family: '-apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, adwaita sans, cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif'
     }, 'font 2');
 });
 

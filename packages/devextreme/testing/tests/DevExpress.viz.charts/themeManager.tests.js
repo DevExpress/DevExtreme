@@ -114,7 +114,7 @@ function createThemeManager(options, themeGroupName) {
             alignment: 'center',
             font: {
                 color: '#ffffff',
-                family: '\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana, sans-serif',
+                family: '-apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, adwaita sans, cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
                 weight: 400,
                 size: 12,
                 cursor: 'default'
@@ -206,7 +206,7 @@ function createThemeManager(options, themeGroupName) {
         assert.deepEqual(theme.label, {
             font: {
                 color: '#ffffff',
-                family: '\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana, sans-serif',
+                family: '-apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, adwaita sans, cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
                 weight: 400,
                 size: 12,
                 cursor: 'default'
@@ -341,7 +341,7 @@ function createThemeManager(options, themeGroupName) {
         assert.deepEqual(theme.label, {
             font: {
                 color: '#ffffff',
-                family: '\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana, sans-serif',
+                family: '-apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, adwaita sans, cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
                 weight: 400,
                 size: 12,
                 cursor: 'default'
@@ -1742,7 +1742,7 @@ function createThemeManager(options, themeGroupName) {
         assert.deepEqual(themeManager.getOptions('crosshair').label.font, {
             color: '#ffffff',
             cursor: 'default',
-            family: '\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana, sans-serif',
+            family: '-apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, adwaita sans, cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
             size: 12,
             weight: 400
         });

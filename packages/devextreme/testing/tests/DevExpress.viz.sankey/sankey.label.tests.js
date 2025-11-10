@@ -79,7 +79,7 @@ QUnit.test('Create labels with styles', function(assert) {
     assert.deepEqual(css, {
         fill: 'red',
         cursor: 'default',
-        'font-family': '\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana, sans-serif',
+        'font-family': '-apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, adwaita sans, cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
         'font-size': 26,
         'font-weight': 400
     });
