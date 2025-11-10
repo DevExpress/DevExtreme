@@ -13,17 +13,20 @@ import { hide, show } from '@ts/ui/tooltip/m_tooltip';
 
 import {
   ALL_DAY_APPOINTMENT_CLASS,
+  APPOINTMENT_10MIN_CLASS,
+  APPOINTMENT_15MIN_CLASS,
+  APPOINTMENT_20MIN_CLASS,
+  APPOINTMENT_25MIN_CLASS,
+  APPOINTMENT_30MIN_CLASS,
   APPOINTMENT_CONTENT_CLASSES,
   APPOINTMENT_DRAG_SOURCE_CLASS,
   APPOINTMENT_HAS_RESOURCE_COLOR_CLASS,
   DIRECTION_APPOINTMENT_CLASSES,
   EMPTY_APPOINTMENT_CLASS,
-  EXTRA_SHORT_APPOINTMENT_CLASS,
   RECURRENCE_APPOINTMENT_CLASS,
   REDUCED_APPOINTMENT_CLASS,
   REDUCED_APPOINTMENT_ICON,
   REDUCED_APPOINTMENT_PARTS_CLASSES,
-  SHORT_APPOINTMENT_CLASS,
 } from '../../m_classes';
 import type { SubscribeKey, SubscribeMethods } from '../../m_subscribes';
 import { validateRRule } from '../../recurrence/validate_rule';
@@ -237,15 +240,36 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
       return;
     }
 
-    const { height } = geometry;
+    // Get appointment duration in minutes
+    const startDate = this.dataAccessors.get('startDate', this.rawAppointment);
+    const endDate = this.dataAccessors.get('endDate', this.rawAppointment);
 
-    // Extra short appointments (10 minutes, ~12px in Fluent default)
-    if (height > 0 && height <= 13) {
-      (this.$element() as any).addClass(EXTRA_SHORT_APPOINTMENT_CLASS);
+    if (!startDate || !endDate) {
+      return;
     }
-    // Short appointments (15 minutes, ~19px in Fluent default)
-    else if (height > 13 && height <= 20) {
-      (this.$element() as any).addClass(SHORT_APPOINTMENT_CLASS);
+
+    const durationMs = new Date(endDate).getTime() - new Date(startDate).getTime();
+    const durationMinutes = Math.round(durationMs / (1000 * 60));
+
+    // Apply classes based on actual appointment duration
+    switch (true) {
+      case durationMinutes <= 10:
+        (this.$element() as any).addClass(APPOINTMENT_10MIN_CLASS);
+        break;
+      case durationMinutes <= 15:
+        (this.$element() as any).addClass(APPOINTMENT_15MIN_CLASS);
+        break;
+      case durationMinutes <= 20:
+        (this.$element() as any).addClass(APPOINTMENT_20MIN_CLASS);
+        break;
+      case durationMinutes <= 25:
+        (this.$element() as any).addClass(APPOINTMENT_25MIN_CLASS);
+        break;
+      case durationMinutes <= 35:
+        (this.$element() as any).addClass(APPOINTMENT_30MIN_CLASS);
+        break;
+      default:
+        break;
     }
   }
 

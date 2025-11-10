@@ -787,17 +787,35 @@ $scheduler-appointment-form-label-padding: 20px;
   }
 }
 
-.dx-scheduler-appointment-extra-short {
+.dx-scheduler-appointment-10min {
   .dx-scheduler-appointment-title {
-    display: block;
     font-size: 8px;
     line-height: 12px;
   }
 }
 
-.dx-scheduler-appointment-short {
+.dx-scheduler-appointment-15min {
   .dx-scheduler-appointment-title {
-    display: block;
+    font-size: 12px;
+    line-height: 18px;
+  }
+}
+
+.dx-scheduler-appointment-20min {
+  .dx-scheduler-appointment-title {
+    font-size: 12px;
+  }
+}
+
+.dx-scheduler-appointment-25min {
+  .dx-scheduler-appointment-title {
+    font-size: 12px;
+    line-height: 18px;
+  }
+}
+
+.dx-scheduler-appointment-30min {
+  .dx-scheduler-appointment-title {
     font-size: 12px;
     line-height: 18px;
   }
