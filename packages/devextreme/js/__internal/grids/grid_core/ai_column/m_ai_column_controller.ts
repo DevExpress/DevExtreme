@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import type { GenerateGridColumnCommandResult, RequestCallbacks } from '@js/common/ai-integration';
 import type { Callback } from '@js/core/utils/callbacks';
 
 import type { Column, ColumnsController } from '../columns_controller/m_columns_controller';
 import type { DataController, HandleDataChangedArguments, UserData } from '../data_controller/m_data_controller';
 import { Controller } from '../m_modules';
 import { AIColumnIntegrationController } from './m_ai_column_integration_controller';
+import type { InternalRequestCallbacks } from './types';
 import { getAICommandColumnDefaultOptions, isAIColumnAutoMode, isPromptOption } from './utils';
 
 export class AIColumnController extends Controller {
@@ -81,14 +80,6 @@ export class AIColumnController extends Controller {
     this.addAICommandColumn();
   }
 
-  private showResults(
-    columnName: string,
-    result: string,
-    cachedData: Record<PropertyKey, string>,
-  ): void {
-    // Update the results in the UI or internal state
-  }
-
   public getAIColumns(): Column[] {
     return this.columnsController.getColumns().filter((col) => col.type === 'ai') as Column[];
   }
@@ -133,13 +124,13 @@ export class AIColumnController extends Controller {
     needToShowLoadPanel = true,
   ): void {
     const callbacks = this.getRequestCallbacks();
-    const column = this.columnsController.columnOption(columnName);
 
-    if (needToShowLoadPanel && !!column?.ai?.prompt) {
-      this.dataController.beginCustomLoading();
-    }
-
-    this.aiColumnIntegrationController.sendRequest(columnName, useCache, callbacks);
+    this.aiColumnIntegrationController.sendRequestCore({
+      columnName,
+      useCache,
+      needToShowLoadPanel,
+      callbacks,
+    });
   }
 
   public sendAIColumnRequest(
@@ -154,8 +145,13 @@ export class AIColumnController extends Controller {
     this.sendRequest(columnName, false);
   }
 
-  private getRequestCallbacks(): RequestCallbacks<GenerateGridColumnCommandResult> {
+  private getRequestCallbacks(): InternalRequestCallbacks {
     return {
+      onRequestSending: (needToShowLoadPanel: boolean): void => {
+        if (needToShowLoadPanel) {
+          this.dataController.beginCustomLoading();
+        }
+      },
       onComplete: (data): void => {
         this.dataController.endCustomLoading();
         this.aiRequestCompleted.fire(data);
@@ -169,7 +165,7 @@ export class AIColumnController extends Controller {
   }
 
   public clearAIColumn(columnName: string): void {
-    this.aiColumnIntegrationController.abortRequest(columnName);
+    this.abortAIColumnRequest(columnName);
     this.aiColumnIntegrationController.clearAIColumn(columnName);
     this.columnsController.columnOption(columnName, 'ai.prompt', '');
     this.updateAICells();
@@ -188,6 +184,10 @@ export class AIColumnController extends Controller {
 
     if (isPromptOptionName && column.name) {
       this.aiColumnIntegrationController.clearAIColumn(column.name);
+
+      if (!column.ai?.prompt) {
+        this.updateAICells();
+      }
     }
   }
 
