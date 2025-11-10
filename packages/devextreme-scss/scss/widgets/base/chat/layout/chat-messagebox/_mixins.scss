@@ -9,7 +9,6 @@
   $messagebox-files-container-padding,
   $messagebox-files-container-padding-top,
   $messagebox-file-background-color,
-  $messagebox-file-cancel-button-margin,
 ) {
   .dx-chat-messagebox {
     padding: $messagebox-padding;
@@ -43,10 +42,6 @@
 
       .dx-fileuploader-file-container {
         background-color: $messagebox-file-background-color;
-
-        .dx-fileuploader-cancel-button {
-          margin: $messagebox-file-cancel-button-margin;
-        }
       }
     }
   }
