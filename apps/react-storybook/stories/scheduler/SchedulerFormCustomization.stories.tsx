@@ -212,7 +212,7 @@ export const CustomizeExistingItems: Story = {
             name: "subjectIcon",
             itemType: "button",
             buttonOptions: {
-              elementAttr: { id: 'customize-subjectIcon', class: "icon-button" },
+              elementAttr: { id: 'customize-subjectIcon', class: "scheduler-form-custom-icon-button" },
               icon: "floppy",
               stylingMode: "text",
               onClick: () => {

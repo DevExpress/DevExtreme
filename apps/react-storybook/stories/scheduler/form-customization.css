@@ -1,10 +1,11 @@
-.icon-button {
-  padding: 4px;
+#customize-subjectIcon,
+.scheduler-form-custom-icon-button {
   width: 18px;
   height: 18px;
   border: 0 !important;
 }
 
-.icon-button * {
+#customize-subjectIcon *,
+.scheduler-form-custom-icon-button * {
   padding: 0 !important;
 }
