@@ -552,3 +552,11 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
     padding: 0 7px;
   }
 }
+
+@if $size == "compact" {
+  .dx-scheduler-appointment-short {
+    .dx-scheduler-appointment-title {
+      line-height: 12px;
+    }
+  }
+}

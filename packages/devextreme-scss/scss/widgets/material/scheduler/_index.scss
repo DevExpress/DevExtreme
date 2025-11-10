@@ -906,3 +906,11 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
     padding: 0 7px;
   }
 }
+
+@if $size == "compact" {
+  .dx-scheduler-appointment-short {
+    .dx-scheduler-appointment-title {
+      line-height: 12px;
+    }
+  }
+}
