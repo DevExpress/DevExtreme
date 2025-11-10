@@ -43,7 +43,7 @@ $(() => {
     },
   });
 
-  const popoverContentTemplate = function (vehicle) {
+  const popupContentTemplate = function (vehicle) {
     const {
       Source,
       LicenseName,
@@ -73,6 +73,20 @@ $(() => {
     );
   };
 
+  const popup = $('#popup').dxPopup({
+    width: 360,
+    height: 260,
+    visible: false,
+    dragEnabled: false,
+    hideOnOutsideClick: true,
+    title: 'Image Info',
+    position: {
+      at: 'center',
+      my: 'center',
+      collision: 'fit',
+    },
+  }).dxPopup('instance');
+
   const createTrademarkTemplate = (vehicle) => {
     const {
       ID,
@@ -95,25 +109,23 @@ $(() => {
     img.attr({
       src: `../../../../images/vehicles/image_${ID}.png`,
       alt: `${TrademarkName} ${Name}`,
+      tabindex: 0,
     });
 
-    const popoverId = `popover-${ID}`;
-    img.attr('data-popover-target', popoverId);
+    const showPopup = () => {
+      popup.option('contentTemplate', () => popupContentTemplate(vehicle));
+      popup.show();
+    };
 
-    const popover = $('<div>').attr('id', popoverId).dxPopover({
-      target: `[data-popover-target="${popoverId}"]`,
-      showEvent: 'mouseenter',
-      hideEvent: {
-        name: 'mouseleave',
-        delay: 1000,
-      },
-      position: 'top',
-      showTitle: true,
-      title: 'License Information',
-      contentTemplate: () => popoverContentTemplate(vehicle),
+    img.on('click', showPopup);
+
+    img.on('keydown', (e) => {
+      if (e.key === 'Enter') {
+        showPopup();
+      }
     });
 
-    imgWrapper.append(img, popover);
+    imgWrapper.append(img);
     trademarkWrapper.append(imgWrapper);
 
     const textWrapper = $('<div>').addClass('trademark__text-wrapper');
