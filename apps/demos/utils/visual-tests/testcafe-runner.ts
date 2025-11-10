@@ -38,6 +38,55 @@ function reporter() {
         .newline();
     },
 
+    formatError(err) {
+      let result = '';
+      
+      if (err.errMsg) {
+        result += err.errMsg;
+      } else if (err.message) {
+        result += err.message;
+      }
+      
+      if (err.callsite) {
+        result += '\n\n' + this.formatCallsite(err.callsite);
+      }
+      
+      if (err.screenshotPath) {
+        result += `\n\nScreenshot: ${err.screenshotPath}`;
+      }
+      
+      return result || JSON.stringify(err, null, 2);
+    },
+
+    formatCallsite(callsite) {
+      if (!callsite) return '';
+      
+      let result = '';
+      
+      if (callsite.filename) {
+        result += `at ${callsite.filename}`;
+        
+        if (callsite.lineNum) {
+          result += `:${callsite.lineNum}`;
+          
+          if (callsite.columnNum) {
+            result += `:${callsite.columnNum}`;
+          }
+        }
+      }
+      
+      if (callsite.stackFrames && callsite.stackFrames.length) {
+        result += '\n\nStack:\n';
+        callsite.stackFrames.forEach((frame) => {
+          if (frame.source) {
+            result += `  ${frame.source}\n`;
+          }
+        });
+      }
+      
+      return result;
+    },
+
     renderErrors(errs) {
       const filteredErrors = errs.filter((x) => {
         // eslint-disable-next-line spellcheck/spell-checker
@@ -53,7 +102,7 @@ function reporter() {
         const prefix = this.chalk.red(`${index + 1}) `);
 
         this.newline()
-          .write(this.formatError(err, prefix))
+          .write(prefix + this.formatError(err))
           .newline()
           .newline();
       });
