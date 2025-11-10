@@ -1359,6 +1359,31 @@ describe('Appointment Popup Form', () => {
 
       expect(formHeight).toBe(500);
     });
+
+    it('should merge editing.form options with default form configuration', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          form: {
+            height: 500,
+            elementAttr: { id: 'custom-form' },
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const { form } = POM.popup;
+      const formHeight = form.option('height') as number;
+      const elementAttr = form.option('elementAttr') as { class?: string; id?: string };
+      const { class: className, id } = elementAttr;
+
+      expect(formHeight).toBe(500);
+      expect(className).toBe('dx-scheduler-form');
+      expect(id).toBe('custom-form');
+    });
   });
 
   it('should update form data after another appointment was open', async () => {

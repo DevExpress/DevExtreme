@@ -290,9 +290,7 @@ export class AppointmentForm {
         this._dxForm = e.component;
         this._recurrenceForm.dxForm = this.dxForm;
 
-        if (onInitialized) {
-          onInitialized.call(this, e);
-        }
+        onInitialized?.call(this, e);
       },
       onContentReady: (e): void => {
         const $formElement = e.component.$element();
