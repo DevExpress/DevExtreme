@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import url from '../../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../../helpers/createWidget';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Scheduler: max appointments per cell: Timeline`
   .page(url(__dirname, '../../../../container.html'));
@@ -11,9 +12,12 @@ fixture.disablePageReloads`Scheduler: max appointments per cell: Timeline`
     const { compareResults, takeScreenshot } = createScreenshotsComparer(t);
     const scheduler = new Scheduler('#container');
 
-    await t
-      .expect(await takeScreenshot(`timeline-appointment-maxAppointmentsPerCell=${maxAppointmentsPerCellValue}.png`, scheduler.workSpace))
-      .ok();
+    await testScreenshot(
+      t,
+      takeScreenshot,
+      `timeline-appointment-maxAppointmentsPerCell=${maxAppointmentsPerCellValue}.png`,
+      { element: scheduler.workSpace },
+    );
 
     await t
       .expect(compareResults.isValid())

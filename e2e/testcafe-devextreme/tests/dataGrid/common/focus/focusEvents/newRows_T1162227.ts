@@ -6,7 +6,7 @@ import { CallbackTestHelper, WindowCallbackExtended } from '../../../../../helpe
 // TODO: Something wrong with test cleanup with 'disablePageReloads'
 //       old events from previous test still alive on the next test case run
 //       So, we should disable it for these tests until this problem exists.
-fixture.disablePageReloads`Focused row - new rows T1162227`
+fixture`Focused row - new rows T1162227`
   .page(url(__dirname, '../../../../container.html'));
 
 type FocusCellChangingData =

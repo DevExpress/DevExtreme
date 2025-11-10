@@ -6,6 +6,7 @@ import render from 'devextreme/core/renderer';
 import { triggerHandler } from 'devextreme/events';
 import domAdapter from 'devextreme/core/dom_adapter';
 import { getElement } from './utils';
+import { warnIfLegacyNestedComponent } from './deprecated-config-warning';
 import { DX_TEMPLATE_WRAPPER_CLASS } from './template';
 
 const VISIBILITY_CHANGE_SELECTOR = 'dx-visibility-change-handler';
@@ -292,5 +293,6 @@ export class NestedOptionHost {
 
   setNestedOption(nestedOption: BaseNestedOption) {
     nestedOption.setHost(this._host, this._optionPath);
+    warnIfLegacyNestedComponent(nestedOption, this._host);
   }
 }

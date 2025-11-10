@@ -10,6 +10,7 @@ import type { DataController } from '../data_controller/m_data_controller';
 import type { ErrorHandlingController } from '../error_handling/m_error_handling';
 import { Controller } from '../m_modules';
 import { AIColumnCacheController } from './m_ai_column_cache_controller';
+import type { InternalRequestCallbacks } from './types';
 import { getDataFromRowItems, reduceDataCachedKeys } from './utils';
 
 export class AIColumnIntegrationController extends Controller {
@@ -35,11 +36,17 @@ export class AIColumnIntegrationController extends Controller {
     this.createAction('onAIColumnResponseReceived');
   }
 
-  public sendRequest(
-    columnName: string,
-    useCache: boolean,
-    callbacks?: RequestCallbacks<GenerateGridColumnCommandResult>,
-  ): void {
+  public sendRequestCore({
+    columnName,
+    useCache,
+    needToShowLoadPanel,
+    callbacks,
+  }: {
+    columnName: string;
+    useCache: boolean;
+    needToShowLoadPanel: boolean;
+    callbacks: InternalRequestCallbacks;
+  }): void {
     const aiIntegration = this.getAIIntegration(columnName);
     if (!aiIntegration) {
       return;
@@ -81,10 +88,12 @@ export class AIColumnIntegrationController extends Controller {
 
     const reducedData = reduceDataCachedKeys(data, cachedResponse, keyField);
     const areAllDataCached = Object.keys(reducedData).length === 0;
+
     if (areAllDataCached) {
-      this.showResult(columnName, {}, cachedResponse);
       return;
     }
+
+    callbacks.onRequestSending(needToShowLoadPanel);
 
     const abort = aiIntegration.generateGridColumn(
       {
@@ -105,16 +114,6 @@ export class AIColumnIntegrationController extends Controller {
     this.abortRequest(columnName);
   }
 
-  /* eslint-disable @typescript-eslint/no-unused-vars */
-  private showResult(
-    columnName: string,
-    response: Record<PropertyKey, unknown>,
-    cachedData: Record<PropertyKey, string>,
-  ): void {
-    // TODO: Implement result display logic
-    const mergedData = { ...cachedData, ...response };
-  }
-
   private getAICommandCallbacks(
     columnName: string,
     cachedResponse: Record<PropertyKey, string>,
@@ -132,11 +131,6 @@ export class AIColumnIntegrationController extends Controller {
 
           this.executeAction('onAIColumnResponseReceived', args);
           this.aiColumnCacheController.setCachedResponse(columnName, finalResponse.data);
-          this.showResult(
-            columnName,
-            finalResponse.data,
-            cachedResponse,
-          );
           this.processCommandCompletion(columnName);
           callBacks?.onComplete?.(finalResponse);
         }
@@ -155,6 +149,10 @@ export class AIColumnIntegrationController extends Controller {
     };
 
     return callbacks;
+  }
+
+  public isAnyRequestAwaitingCompletion(): boolean {
+    return Object.values(this.aborts).some((abort) => !!abort);
   }
 
   public abortRequest(columnName: string): void {

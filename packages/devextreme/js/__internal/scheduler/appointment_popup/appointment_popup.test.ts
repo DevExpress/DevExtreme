@@ -486,7 +486,7 @@ describe('Appointment Popup Form', () => {
 
       POM.popup.getBackButton().click();
 
-      expect(POM.popup.component.option('height')).toBeUndefined();
+      expect(POM.popup.component.option('height')).toBe('auto');
       expect(mainGroup.hasClass(CLASSES.mainGroupHidden)).toBe(false);
       expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(true);
     });
@@ -1420,6 +1420,163 @@ describe('Appointment Popup Form', () => {
 
     expect(data[0].Subject).toBe('qwerty');
     expect(data[0].text).toBeUndefined();
+  });
+
+  describe('Popup options', () => {
+    it('should pass custom popup options from editing.popup to appointment popup', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          popup: {
+            showTitle: true,
+            title: 'Custom Appointment Form',
+            maxHeight: '80%',
+            dragEnabled: true,
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      expect(POM.popup.component.option('showTitle')).toBe(true);
+      expect(POM.popup.component.option('title')).toBe('Custom Appointment Form');
+      expect(POM.popup.component.option('maxHeight')).toBe('80%');
+      expect(POM.popup.component.option('dragEnabled')).toBe(true);
+    });
+
+    it('should use default popup options when editing.popup is not specified', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      expect(POM.popup.component.option('showTitle')).toBe(false);
+      expect(POM.popup.component.option('height')).toBe('auto');
+      expect(POM.popup.component.option('maxHeight')).toBe('90%');
+    });
+
+    it('should merge custom popup options with default options', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          popup: {
+            showTitle: true,
+            title: 'My Form',
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      expect(POM.popup.component.option('showTitle')).toBe(true);
+      expect(POM.popup.component.option('title')).toBe('My Form');
+
+      expect(POM.popup.component.option('showCloseButton')).toBe(false);
+      expect(POM.popup.component.option('enableBodyScroll')).toBe(false);
+      expect(POM.popup.component.option('preventScrollEvents')).toBe(false);
+    });
+
+    it('should allow overriding default popup options', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          popup: {
+            showCloseButton: true,
+            enableBodyScroll: true,
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      expect(POM.popup.component.option('showCloseButton')).toBe(true);
+      expect(POM.popup.component.option('enableBodyScroll')).toBe(true);
+    });
+
+    it('should apply wrapperAttr configuration to popup', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          popup: {
+            wrapperAttr: {
+              id: 'test',
+            },
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const wrapperAttr = POM.popup.component.option('wrapperAttr');
+      expect(wrapperAttr.id).toBe('test');
+      expect(wrapperAttr.class).toBeDefined();
+    });
+
+    it('should call onShowing callback when popup is shown', async () => {
+      const onShowing = jest.fn();
+      const onAppointmentFormOpening = jest.fn();
+      const { scheduler } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          popup: {
+            onShowing,
+          },
+        },
+        onAppointmentFormOpening,
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      expect(onShowing).toHaveBeenCalled();
+      expect(onShowing).toHaveBeenCalledTimes(1);
+      expect(onAppointmentFormOpening).toHaveBeenCalled();
+      expect(onAppointmentFormOpening).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call onHiding callback when popup is hidden', async () => {
+      const onHiding = jest.fn();
+      const { scheduler } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          popup: {
+            onHiding,
+          },
+        },
+      });
+
+      const focusSpy = jest.spyOn(scheduler, 'focus');
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      expect(onHiding).not.toHaveBeenCalled();
+      expect(focusSpy).not.toHaveBeenCalled();
+
+      scheduler.hideAppointmentPopup();
+
+      expect(onHiding).toHaveBeenCalled();
+      expect(onHiding).toHaveBeenCalledTimes(1);
+      expect(focusSpy).toHaveBeenCalled();
+      expect(focusSpy).toHaveBeenCalledTimes(1);
+
+      focusSpy.mockRestore();
+    });
   });
 });
 

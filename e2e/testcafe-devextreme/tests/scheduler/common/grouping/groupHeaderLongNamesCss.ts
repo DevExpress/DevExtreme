@@ -4,6 +4,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const SCHEDULER_SELECTOR = '#container';
 
@@ -106,7 +107,7 @@ test('Group header CSS should work with vertical grouping and long resource name
   await t.expect(scheduler.element.find('.dx-scheduler-group-header').exists)
     .ok('Group headers should exist');
 
-  await takeScreenshot('group-header-css-vertical-grouping-long-names.png', scheduler.element);
+  await testScreenshot(t, takeScreenshot, 'group-header-css-vertical-grouping-long-names.png', { element: scheduler.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -122,7 +123,7 @@ test.meta({ unstable: true })('Group header CSS should work with horizontal grou
   await t.expect(scheduler.element.find('.dx-scheduler-group-header').exists)
     .ok('Group headers should exist');
 
-  await takeScreenshot('group-header-css-horizontal-grouping-long-names.png', scheduler.element);
+  await testScreenshot(t, takeScreenshot, 'group-header-css-horizontal-grouping-long-names.png', { element: scheduler.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -138,7 +139,7 @@ test('Group header CSS should work with group by date and long resource names', 
   await t.expect(scheduler.element.find('.dx-scheduler-group-header').exists)
     .ok('Group headers should exist');
 
-  await takeScreenshot('group-header-css-group-by-date-long-names.png', scheduler.element);
+  await testScreenshot(t, takeScreenshot, 'group-header-css-group-by-date-long-names.png', { element: scheduler.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -154,7 +155,7 @@ test('Group header CSS should work with agenda view and long resource names', as
   await t.expect(scheduler.element.find('.dx-scheduler-group-header').exists)
     .ok('Group headers should exist');
 
-  await takeScreenshot('group-header-css-agenda-view-long-names.png', scheduler.element);
+  await testScreenshot(t, takeScreenshot, 'group-header-css-agenda-view-long-names.png', { element: scheduler.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

@@ -127,3 +127,48 @@ TEST_CASES.forEach(({ view, expectedToItemData }) => {
     await clearCallbackTesting();
   });
 });
+
+test('Should block appointment dragging while onAppointmentUpdating Promise is pending (T1308596)', async (t) => {
+  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+  const appointment = scheduler.getAppointment('Test Appointment');
+
+  const targetCell1 = scheduler.getDateTableCell(18, 2);
+  const targetCell2 = scheduler.getDateTableCell(18, 5);
+
+  const initialPosition = await appointment.element.boundingClientRect;
+
+  await t.dragToElement(appointment.element, targetCell1, { speed: 1 });
+  await t.dragToElement(appointment.element, targetCell2, { speed: 1 });
+  await t.dragToElement(appointment.element, targetCell2, { speed: 1 });
+  await t.dragToElement(appointment.element, targetCell2, { speed: 1 });
+
+  await t.wait(6000);
+
+  const positionAfterPromiseResolved = await appointment.element.boundingClientRect;
+  const cell1Position = await targetCell1.boundingClientRect;
+
+  await t
+    .expect(positionAfterPromiseResolved.left)
+    .notEql(initialPosition.left)
+    .expect(positionAfterPromiseResolved.left)
+    .eql(cell1Position.left);
+}).before(async () => {
+  await createWidget('dxScheduler', {
+    dataSource: [{
+      text: 'Test Appointment',
+      startDate: new Date(2023, 0, 2, 10, 0),
+      endDate: new Date(2023, 0, 2, 11, 0),
+    }],
+    views: ['week'],
+    currentView: 'week',
+    currentDate: new Date(2023, 0, 2),
+    height: 600,
+    onAppointmentUpdating: (e) => {
+      e.cancel = new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(false);
+        }, 5000);
+      });
+    },
+  });
+});

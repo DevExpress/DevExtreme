@@ -1,7 +1,8 @@
-import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Agenda:layout`
   .page(url(__dirname, '../../../container.html'));
@@ -139,7 +140,17 @@ const createScheduler = async (
 [false, true].forEach((rtlEnabled) => {
   [undefined, resourcesData].forEach((resources) => {
     test(`Agenda test layout(rtl=${rtlEnabled}, resources=${!!resources}`, async (t) => {
-      await t.expect(await compareScreenshot(t, `agenda-layout-rtl=${rtlEnabled}-resources=${!!resources}.png`)).ok();
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+      await testScreenshot(
+        t,
+        takeScreenshot,
+        `agenda-layout-rtl=${rtlEnabled}-resources=${!!resources}.png`,
+      );
+
+      await t
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
     })
       .before(async () => createScheduler(rtlEnabled, resources, undefined));
   });
@@ -147,16 +158,27 @@ const createScheduler = async (
 
 [false, true].forEach((rtlEnabled) => {
   test(`Agenda test layout with groups(rtl=${rtlEnabled}`, async (t) => {
-    await t.expect(await compareScreenshot(t, `agenda-layout-groups-rtl=${rtlEnabled}.png`)).ok();
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await testScreenshot(t, takeScreenshot, `agenda-layout-groups-rtl=${rtlEnabled}.png`);
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
   }).before(async () => createScheduler(rtlEnabled, resourcesData, ['roomId']));
 });
 
 test('Agenda test appointment state', async (t) => {
   const scheduler = new Scheduler('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t.hover(scheduler.getAppointment('Final Budget Review', 0).element);
-  await t.expect(await compareScreenshot(t, 'agenda-layout-appointment-state-hover.png')).ok();
+  await testScreenshot(t, takeScreenshot, 'agenda-layout-appointment-state-hover.png');
 
   await t.click(scheduler.getAppointment('New Brochures', 0).element);
-  await t.expect(await compareScreenshot(t, 'agenda-layout-appointment-state-click.png')).ok();
+  await testScreenshot(t, takeScreenshot, 'agenda-layout-appointment-state-click.png');
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
 }).before(async () => createScheduler(false, resourcesData, undefined));

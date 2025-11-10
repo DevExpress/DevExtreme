@@ -17,7 +17,7 @@ test('ContextMenu width should be adjusted to the width of the item text (T11062
 
   await t.hover(Selector(`.${CONTEXT_MENU_CLASS}`));
 
-  await testScreenshot(t, takeScreenshot, 'PivotGrid contextmenu width.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'PivotGrid contextmenu width.png');
 
   await t
     .expect(compareResults.isValid())
