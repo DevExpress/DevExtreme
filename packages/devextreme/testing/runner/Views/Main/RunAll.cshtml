@@ -79,7 +79,6 @@
             noCsp = @Html.Raw(Json.Serialize(Model.NoCsp)),
             farmMode = @Html.Raw(Json.Serialize(Model.IsContinuousIntegration)),
             DX_HTTP_CACHE = Date.now(),
-            lastTestCaseDoneTime = 0,
             runWorkerInNewWindow = @Html.Raw(Json.Serialize(Model.WorkerInWindow)),
 
             WORKER_COUNT;
@@ -93,7 +92,7 @@
             if(window.ActiveXObject !== undefined)
                 return 1;
 
-            return 10;
+            return 2;
         };
 
         WORKER_COUNT = calcWorkerFrameCount();
@@ -277,6 +276,8 @@
             var i = indexFromWorkerName(worker),
                 testSuite = suitesInProgress[i];
 
+            notifyIsAlive();
+
             var testCase = {
                 __type: "case",
 
@@ -383,11 +384,9 @@
                 testCases,
                 testCase;
 
-            if(Date.now() - lastTestCaseDoneTime > 1000) {
-                lastTestCaseDoneTime = Date.now();
-                notifyDeviceTestManager("QUnit.testCaseDone");
-                notifyIsAlive();
-            }
+            // Always notify on test done (removed throttling to prevent stalling)
+            notifyDeviceTestManager("QUnit.testCaseDone");
+            notifyIsAlive();
 
             if(testSuite && StringEndsWith(qunitData.suiteUrl, escape(testSuite.name))) {
                 testCases = suitesInProgress[i].results;
@@ -471,6 +470,11 @@
         }
 
         createWorkers();
+        
+        setInterval(function() {
+            notifyIsAlive();
+        }, 30000); // Reduced from 60000ms to 30000ms (30 seconds) to prevent watchdog timeout
+        
         runFirstBatch();
     });
 </script>

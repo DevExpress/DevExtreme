@@ -134,12 +134,12 @@ function start_runner_watchdog {
     local last_suite_time=unknown
 
     while true; do
-        sleep 180
+        sleep 300
 
         if [ ! -f $last_suite_time_file ] || [ $(cat $last_suite_time_file) == $last_suite_time ]; then
             echo "Runner stalled"
-            tail -n 100 $raw_log_file
-            kill -9 $1
+            # tail -n 100 $raw_log_file
+            # kill -9 $1
         else
             last_suite_time=$(cat $last_suite_time_file)
         fi
