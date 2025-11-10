@@ -1,5 +1,8 @@
 import $ from 'jquery';
-import FileUploader from 'ui/file_uploader';
+import FileUploader, {
+    FILEUPLOADER_CANCEL_BUTTON_CLASS,
+    FILEUPLOADER_CANCEL_BUTTON_POSITION_END_CLASS,
+} from '__internal/ui/file_uploader/file_uploader';
 import 'ui/drop_down_button';
 import 'ui/button_group';
 import { Deferred } from 'core/utils/deferred';
@@ -37,7 +40,6 @@ const FILEUPLOADER_FILE_NAME_CLASS = 'dx-fileuploader-file-name';
 const FILEUPLOADER_FILE_SIZE_CLASS = 'dx-fileuploader-file-size';
 const FILEUPLOADER_FILE_ICON_CLASS = 'dx-fileuploader-file-icon';
 
-const FILEUPLOADER_CANCEL_BUTTON_CLASS = 'dx-fileuploader-cancel-button';
 const FILEUPLOADER_UPLOAD_BUTTON_CLASS = 'dx-fileuploader-upload-button';
 const FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS = 'dx-fileuploader-file-status-message';
 
@@ -2686,6 +2688,30 @@ QUnit.module('file uploading', moduleConfig, () => {
         const $lastChild = $fileContainer.children().last();
 
         assert.strictEqual($cancelButtonContainer.is($lastChild), true, 'cancel button is placed to the end of file container');
+    });
+
+    QUnit.test('cancel button should have position-end class when _cancelButtonPosition is "end"', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            _cancelButtonPosition: 'end',
+        });
+
+        simulateFileChoose($fileUploader, [{ name: 'fakefile' }]);
+        const $cancelButton = $fileUploader.find(`.${FILEUPLOADER_CANCEL_BUTTON_CLASS}`);
+
+        assert.strictEqual($cancelButton.hasClass(FILEUPLOADER_CANCEL_BUTTON_POSITION_END_CLASS), true, 'cancel button has position-end class');
+    });
+
+    QUnit.test('cancel button should not have position-end class when _cancelButtonPosition is "start"', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            _cancelButtonPosition: 'end',
+        });
+
+        simulateFileChoose($fileUploader, [{ name: 'fakefile' }]);
+        const $cancelButton = $fileUploader.find(`.${FILEUPLOADER_CANCEL_BUTTON_CLASS}`);
+
+        assert.strictEqual($cancelButton.hasClass(FILEUPLOADER_CANCEL_BUTTON_POSITION_END_CLASS), true, 'cancel button has position-end class');
     });
 
     QUnit.test('files count should be correct after value reset', function(assert) {
