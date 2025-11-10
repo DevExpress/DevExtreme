@@ -7850,18 +7850,13 @@ QUnit.module('Scenarios', moduleConfig, () => {
                 topLeftCell: topLeft,
                 exportDataFieldHeaders: true
             }).then(() => {
-                // Data field headers appear in the first row when exportDataFieldHeaders: true
-                // Check that only 'Sales' appears (not Sales2 or Sales3 which have visible: false)
                 const dataFieldHeaderCell = this.worksheet.getRow(topLeft.row).getCell(topLeft.column);
                 const cellValue = dataFieldHeaderCell.value;
 
-                // With caption set, the field name should be exactly 'Sales'
                 assert.strictEqual(cellValue, 'Sales', `Data field header should show 'Sales', got: '${cellValue}'`);
 
-                // Verify that Sales2 and Sales3 (with visible: false) are not in the header
-                assert.ok(!cellValue || !cellValue.includes('Sales2'), 'Data field header should not contain Sales2');
-                assert.ok(!cellValue || !cellValue.includes('Sales3'), 'Data field header should not contain Sales3');
-
+                assert.ok(!cellValue.includes('Sales2'), 'Data field header should not contain Sales2');
+                assert.ok(!cellValue.includes('Sales3'), 'Data field header should not contain Sales3');
                 done();
             });
         });
