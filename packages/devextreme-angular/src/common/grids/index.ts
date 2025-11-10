@@ -2,7 +2,6 @@ export {
     AdaptiveDetailRowPreparingInfo,
     AIColumnMode,
     AIColumnRequestCreatingInfo,
-    AIColumnResponseReceivedInfo,
     ApplyChangesMode,
     ApplyFilterMode,
     ColumnAIOptions,

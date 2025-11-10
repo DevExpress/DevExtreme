@@ -57,7 +57,6 @@ import {
  dxDataGridColumn,
  AdaptiveDetailRowPreparingEvent,
  AIColumnRequestCreatingEvent,
- AIColumnResponseReceivedEvent,
  CellClickEvent,
  CellDblClickEvent,
  CellHoverChangedEvent,
@@ -301,7 +300,6 @@ type AccessibleOptions = Pick<Properties,
   "noDataText" |
   "onAdaptiveDetailRowPreparing" |
   "onAIColumnRequestCreating" |
-  "onAIColumnResponseReceived" |
   "onCellClick" |
   "onCellDblClick" |
   "onCellHoverChanged" |
@@ -428,7 +426,6 @@ const componentConfig = {
     noDataText: String,
     onAdaptiveDetailRowPreparing: Function as PropType<((e: AdaptiveDetailRowPreparingEvent) => void)>,
     onAIColumnRequestCreating: Function as PropType<((e: AIColumnRequestCreatingEvent) => void)>,
-    onAIColumnResponseReceived: Function as PropType<((e: AIColumnResponseReceivedEvent) => void)>,
     onCellClick: Function as PropType<((e: CellClickEvent) => void)>,
     onCellDblClick: Function as PropType<((e: CellDblClickEvent) => void)>,
     onCellHoverChanged: Function as PropType<((e: CellHoverChangedEvent) => void)>,
@@ -551,7 +548,6 @@ const componentConfig = {
     "update:noDataText": null,
     "update:onAdaptiveDetailRowPreparing": null,
     "update:onAIColumnRequestCreating": null,
-    "update:onAIColumnResponseReceived": null,
     "update:onCellClick": null,
     "update:onCellDblClick": null,
     "update:onCellHoverChanged": null,
