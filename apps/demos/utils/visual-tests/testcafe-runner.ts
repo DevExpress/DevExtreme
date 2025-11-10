@@ -293,6 +293,15 @@ async function main() {
                 (document.activeElement as HTMLElement).blur();
               }
               window.getSelection()?.removeAllRanges();
+              
+              // Ensure fonts are loaded before taking screenshots
+              if (document.fonts) {
+                return document.fonts.ready.then(() => {
+                  // Small delay to ensure rendering is complete
+                  return new Promise(resolve => setTimeout(resolve, 100));
+                });
+              }
+              return Promise.resolve();
             }).with({ boundTestRun: t })();
           },
         },

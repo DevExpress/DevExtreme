@@ -81,6 +81,27 @@ export const waitForAngularLoading = ClientFunction(() => new Promise<void>((res
   check();
 }));
 
+export const waitForFontsLoading = ClientFunction(() => new Promise<void>((resolve) => {
+  if (!document.fonts) {
+    return setTimeout(resolve, 500);
+  }
+
+  const timeout = setTimeout(() => {
+    console.warn('Font loading timeout');
+    resolve();
+  }, 5000);
+
+  document.fonts.ready.then(() => {
+    clearTimeout(timeout);
+    // Additional delay to ensure fonts are fully applied
+    setTimeout(resolve, 200);
+  }).catch((error) => {
+    console.error('Font loading error:', error);
+    clearTimeout(timeout);
+    setTimeout(resolve, 200);
+  });
+}));
+
 function getInterestProcessArgs() {
   // eslint-disable-next-line spellcheck/spell-checker
   return process.argv.slice(2);
@@ -371,6 +392,14 @@ export function runManualTestCore(
 
     if (FRAMEWORKS[framework] === 'Angular') {
       await waitForAngularLoading();
+    }
+
+    // Wait for fonts to load (critical for Material theme)
+    await waitForFontsLoading();
+    
+    // Additional stabilization delay for Material theme
+    if (process.env.THEME === THEME.material) {
+      await t.wait(300);
     }
   });
 
