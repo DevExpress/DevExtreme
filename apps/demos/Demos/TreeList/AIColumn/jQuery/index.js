@@ -14,7 +14,6 @@ $(() => {
       max_tokens: 1000,
       temperature: 0.7,
     };
-
     const response = await aiService.chat.completions.create(params, { signal });
     const result = response.choices[0].message?.content;
 
@@ -94,7 +93,7 @@ $(() => {
     const imgWrapper = $('<div>').addClass('trademark__img-wrapper');
     const img = $('<img>').addClass('trademark__img');
     img.attr({
-      src: `../../../../images/vehicles/image_${(ID % 100)}.png`,
+      src: `../../../../images/vehicles/image_${ID}.png`,
       alt: `${TrademarkName} ${Name}`,
     });
 
