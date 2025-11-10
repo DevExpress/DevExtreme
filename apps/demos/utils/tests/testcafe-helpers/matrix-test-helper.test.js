@@ -40,7 +40,7 @@ describe('Matrix test helper tests', () => {
   test('Product-Demo-Framework change test', () => {
     updateChanges(productDemoFramework);
     expect(helper.runTestAtPage(testStub, 'http://127.0.0.1:8080/Demos/Accordion/Overview/Angular/').name).toBe('only');
-    expect(helper.runTestAtPage(testStub, 'http://127.0.0.1:8080/Demos/Accordion/Overview/Jquery/').name).toBe('skip');
+    expect(helper.runTestAtPage(testStub, 'http://127.0.0.1:8080/Demos/Accordion/Overview/Jquery/').name).toBe('only');
   });
 
   test('Product-Demo change test', () => {
