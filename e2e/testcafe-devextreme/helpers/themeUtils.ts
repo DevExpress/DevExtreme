@@ -1,11 +1,19 @@
 import { isString } from 'devextreme/core/utils/type';
+import { ClientFunction } from 'testcafe';
 import { changeTheme } from './changeTheme';
 
-const defaultThemeName = 'generic.light';
+const defaultThemeName = 'fluent.blue.light';
 
 export const getThemePostfix = (theme?: string): string => {
   const themeName = (theme ?? process.env.theme) ?? defaultThemeName;
   return ` (${themeName})`;
+};
+
+export const getCurrentTheme = async (t: TestController): Promise<string> => {
+  // eslint-disable-next-line @stylistic/max-len
+  const currentTheme = await ClientFunction(() => (window as any).DevExpress?.ui.themes.current()).with({ boundTestRun: t })();
+
+  return currentTheme;
 };
 
 export const isMaterial = (): boolean => process.env.theme === 'material.blue.light';

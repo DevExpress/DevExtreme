@@ -304,6 +304,14 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     });
   }
 
+  resetFileUploader(): void {
+    this._textArea.resetFileUploader();
+  }
+
+  toggleAttachButtonVisibleState(state: boolean): void {
+    this._textArea.toggleAttachButtonVisibleState(state);
+  }
+
   _updateEditingPreview(text: string | undefined): void {
     if (this._editingPreview) {
       this._editingPreview.option('text', text);

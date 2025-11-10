@@ -3,6 +3,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { insertStylesheetRulesToPage } from '../../../../../helpers/domUtils';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Scheduler - All day appointments`
   .page(url(__dirname, '../../../../container.html'));
@@ -26,14 +27,9 @@ const data = [{
 }];
 
 test('it should skip weekend days in workWeek', async (t) => {
-  const {
-    takeScreenshot,
-    compareResults,
-  } = createScreenshotsComparer(t);
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t
-    .expect(await takeScreenshot('workweek_all-day_appointments_skip_weekend.png'))
-    .ok();
+  await testScreenshot(t, takeScreenshot, 'workweek_all-day_appointments_skip_weekend.png');
 
   await t
     .expect(compareResults.isValid())
@@ -55,14 +51,9 @@ test('it should skip weekend days in workWeek', async (t) => {
 ));
 
 test('it should skip weekend days in timelineWorkWeek', async (t) => {
-  const {
-    takeScreenshot,
-    compareResults,
-  } = createScreenshotsComparer(t);
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t
-    .expect(await takeScreenshot('timeline-work-week_all-day_appointments_skip_weekend.png'))
-    .ok();
+  await testScreenshot(t, takeScreenshot, 'timeline-work-week_all-day_appointments_skip_weekend.png');
 
   await t
     .expect(compareResults.isValid())
@@ -90,15 +81,9 @@ test('it should skip weekend days in timelineWorkWeek', async (t) => {
 
 test('should work correctly for unsorted dataSource', async (t) => {
   const scheduler = new Scheduler('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  const {
-    takeScreenshot,
-    compareResults,
-  } = createScreenshotsComparer(t);
-
-  await t
-    .expect(await takeScreenshot('allDay-unsorted-datasource.png', scheduler.workSpace))
-    .ok();
+  await testScreenshot(t, takeScreenshot, 'allDay-unsorted-datasource.png', { element: scheduler.workSpace });
 
   await t
     .expect(compareResults.isValid())

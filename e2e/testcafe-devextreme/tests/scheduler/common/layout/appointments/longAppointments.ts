@@ -3,6 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Layout:Appointments:longAppointments(T1086079)`
   .page(url(__dirname, '../../../../container.html'));
@@ -20,7 +21,9 @@ test('Control should be render top part of recurrent long appointment in day vie
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t.expect(await takeScreenshot('long-appointment-day-view-T1086079.png', scheduler.workSpace)).ok();
+  await testScreenshot(t, takeScreenshot, 'long-appointment-day-view-T1086079.png', {
+    element: scheduler.workSpace,
+  });
 
   await t.click(scheduler.getAppointment(appointmentName, 0).element);
   await t.expect(scheduler.appointmentTooltip.getListItem(appointmentName).date.innerText).eql('March 29 5:30 PM - March 30 6:30 AM');
@@ -56,7 +59,9 @@ test('Control should be render top part of recurrent long appointment in week vi
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t.expect(await takeScreenshot('long-appointment-week-view-T1086079.png.png', scheduler.workSpace)).ok();
+  await testScreenshot(t, takeScreenshot, 'long-appointment-week-view-T1086079.png', {
+    element: scheduler.workSpace,
+  });
 
   await t.click(scheduler.getAppointment(appointmentName, 0).element);
   await t.expect(scheduler.appointmentTooltip.getListItem(appointmentName).date.innerText).eql('March 27 5:30 PM - March 28 6:30 AM');

@@ -1,59 +1,59 @@
 <div id="form-container">
   <dx-form id="form" [formData]="employee">
-    <dxi-item itemType="group" [colCount]="2" caption="Employee Details">
-      <dxi-item dataField="FirstName" [editorOptions]="nameEditorOptions">
-        <dxo-label template="name"></dxo-label>
-      </dxi-item>
-      <dxi-item
+    <dxi-form-item itemType="group" [colCount]="2" caption="Employee Details">
+      <dxi-form-item dataField="FirstName" [editorOptions]="nameEditorOptions">
+        <dxo-form-label template="name"></dxo-form-label>
+      </dxi-form-item>
+      <dxi-form-item
         dataField="Position"
         editorType="dxSelectBox"
         [editorOptions]="positionEditorOptions"
       >
-        <dxi-validation-rule
+        <dxi-form-validation-rule
           type="required"
           message="Position is required"
-        ></dxi-validation-rule>
-        <dxo-label template="position"></dxo-label>
-      </dxi-item>
-      <dxi-item dataField="LastName" [editorOptions]="nameEditorOptions">
-        <dxo-label template="name"></dxo-label>
-      </dxi-item>
-      <dxi-item
+        ></dxi-form-validation-rule>
+        <dxo-form-label template="position"></dxo-form-label>
+      </dxi-form-item>
+      <dxi-form-item dataField="LastName" [editorOptions]="nameEditorOptions">
+        <dxo-form-label template="name"></dxo-form-label>
+      </dxi-form-item>
+      <dxi-form-item
         dataField="HireDate"
         editorType="dxDateBox"
         [editorOptions]="hireDateEditorOptions"
       >
-        <dxi-validation-rule
+        <dxi-form-validation-rule
           type="required"
           message="Hire date is required"
-        ></dxi-validation-rule>
-        <dxo-label template="date"></dxo-label>
-      </dxi-item>
-      <dxi-item
+        ></dxi-form-validation-rule>
+        <dxo-form-label template="date"></dxo-form-label>
+      </dxi-form-item>
+      <dxi-form-item
         dataField="BirthDate"
         editorType="dxDateBox"
         [editorOptions]="birthDateEditorOptions"
       >
-        <dxo-label template="date"></dxo-label>
-      </dxi-item>
-      <dxi-item dataField="Address">
-        <dxo-label template="address"></dxo-label>
-      </dxi-item>
-      <dxi-item
+        <dxo-form-label template="date"></dxo-form-label>
+      </dxi-form-item>
+      <dxi-form-item dataField="Address">
+        <dxo-form-label template="address"></dxo-form-label>
+      </dxi-form-item>
+      <dxi-form-item
         dataField="Notes"
         editorType="dxTextArea"
         [editorOptions]="notesEditorOptions"
         [colSpan]="2"
       >
-        <dxo-label template="notes"></dxo-label>
-      </dxi-item>
-      <dxi-item dataField="Phone" [editorOptions]="phoneEditorOptions">
-        <dxo-label template="phone"></dxo-label>
-      </dxi-item>
-      <dxi-item dataField="Email">
-        <dxo-label template="email"></dxo-label>
-      </dxi-item>
-    </dxi-item>
+        <dxo-form-label template="notes"></dxo-form-label>
+      </dxi-form-item>
+      <dxi-form-item dataField="Phone" [editorOptions]="phoneEditorOptions">
+        <dxo-form-label template="phone"></dxo-form-label>
+      </dxi-form-item>
+      <dxi-form-item dataField="Email">
+        <dxo-form-label template="email"></dxo-form-label>
+      </dxi-form-item>
+    </dxi-form-item>
 
     <ng-container *ngFor="let label of labelTemplates">
       <div *dxTemplate="let data of label.name">
