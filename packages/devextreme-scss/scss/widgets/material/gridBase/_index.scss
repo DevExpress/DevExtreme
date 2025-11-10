@@ -1357,6 +1357,6 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
 
   .dx-ai-prompt-editor__progressbar .dx-progressbar-animating-container {
     height: $material-grid-base-ai-prompt-editor-progressbar-height;
-    border-radius: 0px;
+    border-radius: 0;
   }
 }

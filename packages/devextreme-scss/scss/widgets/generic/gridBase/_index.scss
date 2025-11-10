@@ -1177,6 +1177,6 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
   .dx-ai-prompt-editor__progressbar .dx-progressbar-animating-container {
     height: $generic-grid-base-ai-prompt-editor-progressbar-height;
     border: none;
-    border-radius: 0px;
+    border-radius: 0;
   }
 }
