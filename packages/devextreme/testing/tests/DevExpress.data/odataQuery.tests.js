@@ -916,16 +916,18 @@ QUnit.test('Values are converted according to \'fieldTypes\' property', function
         fieldTypes: {
             id1: 'Int64',
             name: 'String',
-            total: 'Decimal' // T566307
+            total: 'Decimal', // T566307
+            date: 'Date',
+            dateTime: 'DateTimeOffset'
         }
     })
-        .filter([['id1', '=', 123], 'and', ['id2', '=', 456], 'and', ['name', '=', 789], 'and', ['total', '=', null]])
+        .filter([['id1', '=', 123], 'and', ['id2', '=', 456], 'and', ['name', '=', 789], 'and', ['total', '=', null], 'and', ['date', '=', '2025-11-11'], 'and', ['dateTime', '=', '2025-11-11T11:11:11.000Z']])
         .enumerate()
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .done(function(r) {
-            assert.equal(r[0].data['$filter'], '(id1 eq 123L) and (id2 eq 456) and (name eq \'789\') and (total eq null)');
+            assert.equal(r[0].data['$filter'], '(id1 eq 123L) and (id2 eq 456) and (name eq \'789\') and (total eq null) and (date eq 2025-11-11) and (dateTime eq 2025-11-11T11:11:11.000Z)');
         })
         .always(done);
 });
