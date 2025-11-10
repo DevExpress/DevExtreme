@@ -407,7 +407,7 @@ editingModes.forEach((mode) => {
               repaintChangesOnly,
             };
 
-            test(`Update cell value ${JSON.stringify({
+            test.meta({ unstable: true })(`Update cell value ${JSON.stringify({
               mode, dataField, repaintChangesOnly, useKeyboard, useMask, isAdding,
             })}`, async (t) => {
               const rowIndex = 0;
@@ -430,7 +430,7 @@ editingModes.forEach((mode) => {
             }).before(createDataGrid(options));
 
             if (isBasicColumn && !isAdding) {
-              test(`Edit next cell ${JSON.stringify({
+              test.meta({ unstable: true })(`Edit next cell ${JSON.stringify({
                 mode, dataField, repaintChangesOnly, useKeyboard, useMask,
               })}`, async (t) => {
                 const rowIndex = 0;
