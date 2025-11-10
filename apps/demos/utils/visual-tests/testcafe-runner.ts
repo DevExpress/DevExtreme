@@ -218,9 +218,9 @@ async function main() {
   }
 
   const getQuarantineMode = () => {
-    // if(process.env.THEME === THEME.material) {
-    //   return { successThreshold: 1, attemptLimit: 5 };
-    // }
+    if(process.env.THEME === THEME.material) {
+      return false; // { successThreshold: 1, attemptLimit: 5 };
+    }
 
     if (process.env.TCQUARANTINE) {
       return { successThreshold: 1, attemptLimit: 2 };

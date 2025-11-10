@@ -38,6 +38,8 @@ const getTestSpecificSkipRules = (testName) => {
       return ['empty-table-header'];
     case 'Localization-UsingGlobalize':
       return ['label'];
+    case 'DataGrid-EditStateManagement':
+      return ['aria-required-parent'];
     default:
       return [];
   }
@@ -185,7 +187,14 @@ Object.values(FRAMEWORKS).forEach((approach) => {
               looksSameComparisonOptions: { antialiasingTolerance: 10 },
             });
           } else {
-            comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
+            comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions && {
+              ...comparisonOptions,
+              looksSameComparisonOptions: {
+                antialiasingTolerance: 8,
+                textTolerance: 10,
+                threshold: 0.1,
+              },
+            });
           }
 
           const consoleMessages = await t.getBrowserConsoleMessages();

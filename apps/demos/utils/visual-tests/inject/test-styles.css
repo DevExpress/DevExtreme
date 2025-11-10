@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700") screen and (max-width: 0);
+
 body {
   overflow: clip;
 }
@@ -5,10 +7,16 @@ body {
 .dx-scrollable-scroll { visibility: hidden !important; }
 
 .dx-theme-material * {
-  /* stylelint-disable-next-line font-family-name-quotes */
-  font-family: 'RobotoFallback', sans-serif !important;
   -webkit-font-smoothing: antialiased !important;
   
   /* text-rendering: optimizeLegibility !important; */
-  text-rendering: geometricprecision !important;
+  /* stylelint-disable-next-line value-keyword-case */
+  text-rendering: geometricPrecision !important;
+}
+
+.dx-theme-material,
+.dx-theme-material-typography,
+.dx-theme-material .dx-widget { 
+  /* stylelint-disable-next-line font-family-name-quotes */
+  font-family: 'RobotoFallback', sans-serif !important;
 }
