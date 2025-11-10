@@ -1,12 +1,7 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import DataGrid, {
   Column,
-  type DataGridTypes,
-  Grouping,
   GroupPanel,
-  Pager,
-  Paging,
-  SearchPanel,
 } from 'devextreme-react/data-grid';
 import Popup, { Position } from 'devextreme-react/popup';
 import { vehicles, aiIntegration } from './data.ts';
