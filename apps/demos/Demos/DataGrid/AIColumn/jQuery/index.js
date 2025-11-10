@@ -185,7 +185,7 @@ $(() => {
         caption: 'AI Column',
         type: 'ai',
         ai: {
-          prompt: 'Identify the country where this vehicle model is originally manufactured or developed, based on its brand, model, and specifications. Respond with the country name and the country flag icon.',
+          prompt: 'Identify the country where this vehicle model is originally manufactured or developed, based on its brand, model, and specifications.',
           mode: 'auto',
         },
         width: 200,
