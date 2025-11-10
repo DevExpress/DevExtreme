@@ -1,11 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
 import dxScheduler from "devextreme/ui/scheduler";
+import type { dxSchedulerOptions } from "devextreme/ui/scheduler";
 import { wrapDxWithReact } from "../utils";
 import { data, resources } from "./data";
 import "./form-customization.css";
 
-const Scheduler = wrapDxWithReact(dxScheduler);
+const Scheduler = wrapDxWithReact<dxSchedulerOptions>(dxScheduler);
 
 const meta: Meta<typeof Scheduler> = {
   title: "Components/Scheduler/Form Customization",
@@ -32,8 +33,16 @@ export const DefaultForm: Story = {
   args: {
     ...baseConfig,
     resources,
-  },
+  } as dxSchedulerOptions,
 };
+
+interface ShowOnlySpecificItemsArgs extends dxSchedulerOptions {
+  showSubjectGroup?: boolean;
+  showDateGroup?: boolean;
+  showDescriptionGroup?: boolean;
+  showResourcesGroup?: boolean;
+  showRecurrenceGroup?: boolean;
+}
 
 export const ShowOnlySpecificItems: Story = {
   args: {
@@ -44,7 +53,7 @@ export const ShowOnlySpecificItems: Story = {
     showResourcesGroup: true,
     ...baseConfig,
     resources,
-  },
+  } as ShowOnlySpecificItemsArgs,
   argTypes: {
     showSubjectGroup: {
       control: "boolean",
@@ -61,9 +70,9 @@ export const ShowOnlySpecificItems: Story = {
     showResourcesGroup: {
       control: "boolean",
     },
-  },
-  render: (args: any) => {
-    const items: string[] = [];
+  } as Record<string, unknown>,
+  render: (args: ShowOnlySpecificItemsArgs) => {
+    const items: unknown[] = [];
     if (args.showSubjectGroup) items.push("subjectGroup");
     if (args.showDateGroup) items.push("dateGroup");
     if (args.showDescriptionGroup) items.push("descriptionGroup");
@@ -72,14 +81,23 @@ export const ShowOnlySpecificItems: Story = {
 
     return (
       <Scheduler
-        {...args}
-        editing={{ form: { items } }}
+        {...(baseConfig as dxSchedulerOptions)}
+        resources={resources}
+        editing={{ form: { items } } as dxSchedulerOptions['editing']}
       />
     );
   },
 };
 
 const positions = [1, 2, 3, 4, 5];
+
+interface ReorderItemsArgs extends dxSchedulerOptions {
+  subjectGroupPosition: number;
+  dateGroupPosition: number;
+  descriptionGroupPosition: number;
+  resourcesGroupPosition: number;
+  recurrenceGroupPosition: number;
+}
 
 export const ReorderItems: Story = {
   args: {
@@ -90,7 +108,7 @@ export const ReorderItems: Story = {
     recurrenceGroupPosition: 5,
     ...baseConfig,
     resources,
-  },
+  } as ReorderItemsArgs,
   argTypes: {
     subjectGroupPosition: {
       control: { type: "select" },
@@ -112,8 +130,8 @@ export const ReorderItems: Story = {
       control: { type: "select" },
       options: positions,
     },
-  },
-  render: (args: any) => {
+  } as Record<string, unknown>,
+  render: (args: ReorderItemsArgs) => {
     const groups = [
       { name: "subjectGroup", position: args.subjectGroupPosition },
       { name: "dateGroup", position: args.dateGroupPosition },
@@ -123,12 +141,13 @@ export const ReorderItems: Story = {
     ];
 
     groups.sort((a, b) => a.position - b.position);
-    const items = groups.map(g => g.name);
+    const items: unknown[] = groups.map(g => g.name);
 
     return (
       <Scheduler
-        {...args}
-        editing={{ form: { items } }}
+        {...(baseConfig as dxSchedulerOptions)}
+        resources={resources}
+        editing={{ form: { items } } as dxSchedulerOptions['editing']}
       />
     );
   },
@@ -178,7 +197,7 @@ export const AddCustomItems: Story = {
         ],
       },
     ],
-  },
+  } as Record<string, unknown>,
 };
 
 export const CustomizeExistingItems: Story = {
@@ -249,5 +268,5 @@ export const CustomizeExistingItems: Story = {
         ]
       },
     ],
-  },
+  } as Record<string, unknown>,
 };
