@@ -1,4 +1,4 @@
-#gridContainer .ai__cell {
+#treeList .ai__cell {
   background-color: var(--dx-datagrid-row-alternation-bg);
 }
 
