@@ -11,7 +11,6 @@
   width: 80px;
   border-radius: 2px;
   overflow: hidden;
-  border: 1px solid var(--dx-color-border);
 }
 
 .movie-preview-image img {
@@ -49,6 +48,10 @@
 
 .dx-theme-material .movie-info {
   gap: 16px;
+}
+
+.movie-info .movie-preview-image {
+  border: 1px solid var(--dx-color-border);
 }
 
 .movie-info .movie-details {
