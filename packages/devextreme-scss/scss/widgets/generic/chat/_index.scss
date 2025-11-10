@@ -29,7 +29,8 @@
   $chat-file-secondary-font-size,
   $chat-file-secondary-color,
   $chat-file-base-section-gap,
-  $chat-file-file-size-max-width,
+  $chat-file-size-max-width,
+  $chat-file-icon-font-size,
 );
 @include chat-fileview(
   $chat-file-view-items-gap,

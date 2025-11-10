@@ -6,6 +6,7 @@ $material-fileuploader-file-container-padding: null !default;
 $material-fileuploader-file-container-text-margin: null !default;
 $material-fileuploader-file-container-button-margin: null !default;
 $material-fileuploader-file-container-button-size: null !default;
+$material-fileuploader-file-icon-font-size: null !default;
 
 $material-fileuploader-vertical-padding: 7px !default;
 
@@ -14,6 +15,7 @@ $material-fileuploader-vertical-padding: 7px !default;
   $material-fileuploader-file-container-text-margin: 15px !default;
   $material-fileuploader-file-container-button-margin: 5px !default;
   $material-fileuploader-file-container-button-size: 36px !default;
+  $material-fileuploader-file-icon-font-size: 18px !default;
 }
 
 @else if $size == "compact" {
@@ -21,4 +23,5 @@ $material-fileuploader-vertical-padding: 7px !default;
   $material-fileuploader-file-container-text-margin: 6px !default;
   $material-fileuploader-file-container-button-margin: 2px !default;
   $material-fileuploader-file-container-button-size: 28px !default;
+  $material-fileuploader-file-icon-font-size: 16px !default;
 }

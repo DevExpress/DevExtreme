@@ -147,6 +147,11 @@ $fluent-fileuploader-file-container-boxshadow: 0 1px 3px 0 color.change($base-sh
   line-height: 13px;
 }
 
+.dx-fileuploader-file-icon {
+  color: $fileuploader-file-icon-color;
+  font-size: $fluent-fileuploader-file-icon-font-size;
+}
+
 .dx-fileuploader-file-name {
   padding-bottom: math.div($fluent-fileuploader-vertical-padding, 2);
   color: $fileuploader-filename-color;

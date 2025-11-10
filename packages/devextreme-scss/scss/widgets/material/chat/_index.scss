@@ -27,7 +27,8 @@
   $chat-file-secondary-font-size,
   $chat-file-secondary-color,
   $chat-file-base-section-gap,
-  $chat-file-file-size-max-width,
+  $chat-file-size-max-width,
+  $chat-file-icon-font-size,
 );
 @include chat-fileview(
   $chat-file-view-items-gap,
@@ -137,6 +138,10 @@
 
 .dx-chat-file {
   @include dx-base-typography();
+
+  .dx-chat-file-name {
+    font-weight: $chat-file-name-font-weight;
+  }
 }
 
 .dx-chat-textarea.dx-textarea {

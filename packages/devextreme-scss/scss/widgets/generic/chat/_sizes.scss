@@ -75,7 +75,8 @@ $chat-file-container-border-radius: $base-border-radius !default;
 $chat-file-button-size: null !default;
 $chat-file-secondary-font-size: 10px !default;
 $chat-file-base-section-gap: 4px !default;
-$chat-file-file-size-max-width: 4em !default;
+$chat-file-size-max-width: 4em !default;
+$chat-file-icon-font-size: null !default;
 $chat-file-view-items-gap: 8px !default;
 $chat-bubble-gap: 8px !default;
 
@@ -114,6 +115,8 @@ $chat-bubble-gap: 8px !default;
 
   $chat-confirmation-popup-content-padding: 0 !default;
   $chat-confirmation-popup-toolbar-gap: 8px !default;
+
+  $chat-file-icon-font-size: 18px !default;
 }
 
 @else if $size == "compact" {
@@ -151,4 +154,6 @@ $chat-bubble-gap: 8px !default;
 
   $chat-confirmation-popup-content-padding: $generic-popup-content-padding !default;
   $chat-confirmation-popup-toolbar-gap: 4px !default;
+
+  $chat-file-icon-font-size: 14 !default;
 }
