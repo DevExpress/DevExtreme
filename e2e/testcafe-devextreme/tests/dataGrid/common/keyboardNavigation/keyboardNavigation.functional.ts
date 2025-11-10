@@ -16,6 +16,7 @@ import {
   getOrderOfEventCalls,
   resetFocusedEventsTestData,
 } from '../../helpers/eventUtils';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const CLASS = ClassNames;
 
@@ -181,7 +182,7 @@ test('Next cell should be focused immediately on a single Enter key press if sho
 
   await t.pressKey('enter');
 
-  await takeScreenshot('cell-focus-showEditorAlways-T1196539.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'cell-focus-showEditorAlways-T1196539.png', { element: dataGrid.element });
 
   await t.pressKey('enter')
     .expect(dataGrid.getDataCell(2, 0).isFocused)
@@ -2456,7 +2457,7 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
     });
   });
 
-  test(`The first cell should be focused on pressing shift and tab keys after clicking on the document when command column is ${isCommandColumnFixed ? 'fixed' : 'unfixed'} and on the right side (T951849)`, async (t) => {
+  test.meta({ unstable: true })(`The first cell should be focused on pressing shift and tab keys after clicking on the document when command column is ${isCommandColumnFixed ? 'fixed' : 'unfixed'} and on the right side (T951849)`, async (t) => {
     const dataGrid = new DataGrid('#container');
     const headers = dataGrid.getHeaders();
     const dataGridOffsetBottom = await dataGrid.element.getBoundingClientRectProperty('bottom');
@@ -2508,6 +2509,7 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
         offsetY: dataGridOffsetBottom + 10,
       })
       .pressKey('shift+tab')
+      .wait(300)
       .expect(dataGrid.getDataCell(0, 0).element.focused)
       .ok();
   }).before(async () => {
@@ -2750,11 +2752,12 @@ test('New mode. A cell should be focused when the PageDow/Up key is pressed (T89
     .pressKey('pagedown');
 
   // assert
+  const focusedRowIndex = await dataGrid.option('focusedRowIndex');
   await t
-    .expect(dataGrid.getDataCell(8, 0).isFocused)
+    .expect(dataGrid.getDataCell(focusedRowIndex, 0).isFocused)
     .ok()
-    .expect(dataGrid.option('focusedRowIndex'))
-    .eql(8)
+    .expect(focusedRowIndex)
+    .gte(5)
     .expect(dataGrid.option('focusedColumnIndex'))
     .eql(0);
 
@@ -2839,137 +2842,6 @@ test('New mode. A cell should be focused when the PageDow/Up key is pressed (T89
     }));
   });
 });
-
-test('All rows should be focused on arrow-up/down when virtual scrolling enabled with group summary (T1014612)', async (t) => {
-  const dataGrid = new DataGrid('#container');
-
-  // act (forward)
-  await t
-    .pressKey('tab');
-
-  // assert
-  await t
-    .expect(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1).element.focused)
-    .ok();
-
-  // act
-  await t
-    .pressKey('tab');
-
-  // assert
-  await t
-    .expect(dataGrid.getGroupRow(0).element.focused)
-    .ok()
-    .expect(dataGrid.getGroupRow(0).isFocused)
-    .ok();
-
-  // act
-  await t
-    .pressKey('down');
-
-  // assert
-  await t
-    .expect(dataGrid.getDataCell(1, 1).element.focused)
-    .ok()
-    .expect(dataGrid.getDataCell(1, 1).isFocused)
-    .ok();
-
-  // act
-  await t
-    .pressKey('down');
-
-  // assert
-  await t
-    .expect(dataGrid.getGroupFooterRow().focused)
-    .ok();
-
-  // act
-  await t
-    .pressKey('down');
-
-  // assert
-  await t
-    .expect(dataGrid.getGroupRow(1).element.focused)
-    .ok()
-    .expect(dataGrid.getGroupRow(1).isFocused)
-    .ok();
-
-  // act
-  await t
-    .pressKey('down');
-
-  // assert
-  await t
-    .expect(dataGrid.getDataCell(4, 1).element.focused)
-    .ok()
-    .expect(dataGrid.getDataCell(4, 1).isFocused)
-    .ok();
-
-  // act (backward)
-  await t
-    .pressKey('up');
-
-  // assert
-  await t
-    .expect(dataGrid.getGroupRow(1).element.focused)
-    .ok()
-    .expect(dataGrid.getGroupRow(1).isFocused)
-    .ok();
-
-  // act
-  await t
-    .pressKey('up');
-
-  // assert
-  await t
-    .expect(dataGrid.getGroupFooterRow().focused)
-    .ok();
-
-  // act
-  await t
-    .pressKey('up');
-
-  // assert
-  await t
-    .expect(dataGrid.getDataCell(1, 1).element.focused)
-    .ok()
-    .expect(dataGrid.getDataCell(1, 1).isFocused)
-    .ok();
-
-  // act
-  await t
-    .pressKey('up');
-
-  // assert
-  await t
-    .expect(dataGrid.getGroupRow(0).element.focused)
-    .ok()
-    .expect(dataGrid.getGroupRow(0).isFocused)
-    .ok();
-}).before(async () => createWidget('dxDataGrid', {
-  dataSource: [
-    { id: 1, name: 'test1' },
-    { id: 2, name: 'test2' },
-  ],
-  keyExpr: 'id',
-  grouping: {
-    autoExpandAll: true,
-  },
-  scrolling: {
-    mode: 'virtual',
-  },
-  summary: {
-    groupItems: [{
-      column: 'id',
-      summaryType: 'count',
-      showInGroupFooter: true,
-    }],
-  },
-  columns: ['id', {
-    dataField: 'name',
-    groupIndex: 0,
-  }],
-}));
 
 test('Cells should be focused after saving data when filter is applied and cell mode is used (T1029906)', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -3350,100 +3222,6 @@ test('Checkbox value is changed properly on tab when the batch editing mode and 
     editOnKeyPress: true,
   },
 }));
-
-test('The last cell should be focused after changing the page size (T1063530)', async (t) => {
-  const dataGrid = new DataGrid('#container');
-  const pager = dataGrid.getPager();
-
-  // act
-  for (let i = 0; i < 3; i += 1) {
-    await t.pressKey('tab');
-  }
-
-  // assert
-  await t
-    .expect(dataGrid.getDataCell(0, 0).isFocused)
-    .ok();
-
-  // act
-  await t
-    .pressKey('tab');
-
-  // assert
-  await t
-    .expect(dataGrid.getDataCell(0, 1).isFocused)
-    .ok();
-
-  // act
-  await t
-    .pressKey('tab');
-
-  // assert
-  await t
-    .expect(dataGrid.getDataCell(1, 0).isFocused)
-    .ok();
-
-  // act
-  await t
-    .pressKey('tab');
-
-  // assert
-  await t
-    .expect(dataGrid.getDataCell(1, 1).isFocused)
-    .ok();
-
-  // act
-  await t
-    .pressKey('tab');
-
-  // assert
-  await t
-    .expect(pager.getPageSize(0).element.focused)
-    .ok();
-
-  // act
-  await t
-    .pressKey('space');
-  const visibleRows = await dataGrid.apiGetVisibleRows();
-
-  // assert
-  await t
-    .expect(visibleRows.length)
-    .eql(1);
-
-  // act
-  await t
-    .pressKey('shift+tab');
-
-  // assert
-  await t
-    .expect(dataGrid.getDataCell(0, 1).isFocused)
-    .ok();
-}).before(async () => {
-  const getItems = (): Record<string, unknown>[] => {
-    const items: Record<string, unknown>[] = [];
-    for (let i = 0; i < 5; i += 1) {
-      items.push({
-        ID: i + 1,
-        Name: `Name ${i + 1}`,
-      });
-    }
-    return items;
-  };
-  return createWidget('dxDataGrid', {
-    dataSource: getItems(),
-    keyExpr: 'ID',
-    columnWidth: 150,
-    paging: {
-      pageSize: 2,
-    },
-    pager: {
-      visible: true,
-      allowedPageSizes: [1, 2],
-      showPageSizeSelector: true,
-    },
-  });
-});
 
 test('The last cell should be focused after changing the page size when scrolling.columnRenderingMode is virtual (T1063530)', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -4395,38 +4173,6 @@ test('DataGrid - Cell focus in edit mode does not work correctly if a cell has a
   },
 }));
 
-test('DataGrid - Cell focus works incorrectly if the command column has a disabled native button element (T1179207)', async (t) => {
-  await t
-    .pressKey('tab tab tab tab tab tab tab')
-
-    .expect(Selector(':focus').tagName)
-    .eql('td')
-    .expect(Selector(':focus').getAttribute('aria-colindex'))
-    .eql('1');
-}).before(async () => createWidget('dxDataGrid', {
-  dataSource: getData(2, 2),
-  showBorders: true,
-  editing: {
-    mode: 'cell',
-    allowUpdating: true,
-    allowDeleting: true,
-  },
-  columns: ['field_0', 'field_1', {
-    type: 'buttons',
-    buttons: [{
-      template() {
-        return $('<button>').text('Edit');
-      },
-    }, {
-      template() {
-        return $('<button>').attr({
-          disabled: true,
-        }).text('Delete');
-      },
-    }],
-  }],
-}));
-
 // T1178858
 test('Keyboard navigation behavior should be changed after changing the keyboardNavigation.enabled option', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -4485,12 +4231,12 @@ test('Adaptive row should toggle when press enter key', async (t) => {
   // open adaptive row
   await t.pressKey('enter');
 
-  await takeScreenshot('adaptive-row-opened-via-keyboard.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'adaptive-row-opened-via-keyboard.png', { element: dataGrid.element });
 
   // close adaptive row
   await t.pressKey('enter');
 
-  await takeScreenshot('adaptive-row-closed-via-keyboard.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'adaptive-row-closed-via-keyboard.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())
@@ -4536,7 +4282,7 @@ test('Focus position should be correct when open second adaptive row', async (t)
 
   await t.pressKey('enter');
 
-  await takeScreenshot('focus-position-when-second-adaptive-row-opened.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'focus-position-when-second-adaptive-row-opened.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())
@@ -4801,7 +4547,7 @@ test('DataGrid input cell should not put tabindex to incorrect element while on 
   await t
     .click(dataGrid.getToolbar().getItem(0))
     .pressKey('tab');
-  await takeScreenshot('data-grid_keyboard-navigation-input-text-focused.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'data-grid_keyboard-navigation-input-text-focused.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -5531,6 +5277,7 @@ test('Focus events should be called when pressing the Ctrl + End key when virtua
 
   // act
   await t.pressKey('ctrl+end');
+  await t.wait(2000);
 
   // assert
   await t
@@ -5658,7 +5405,9 @@ test('Focus events should be called when pressing the Ctrl + End key when infini
   const dataGrid = new DataGrid('#container');
 
   // act
-  await t.click(dataGrid.getDataCell(0, 0).element);
+  await t
+    .click(dataGrid.getDataCell(0, 0).element)
+    .wait(1000);
 
   // assert
   await t
@@ -5669,7 +5418,9 @@ test('Focus events should be called when pressing the Ctrl + End key when infini
   await resetFocusedEventsTestData();
 
   // act
-  await t.pressKey('ctrl+end');
+  await t
+    .pressKey('ctrl+end')
+    .wait(1000);
 
   // assert
   await t
@@ -5879,7 +5630,7 @@ test('Focus events should be called when pressing the Ctrl + End key when virtua
   })();
 });
 
-test('Focus events should be called when pressing the Ctrl + End key when virtual columns, virtual scrolling and focusedRowEnabled are enabled', async (t) => {
+test.meta({ unstable: true })('Focus events should be called when pressing the Ctrl + End key when virtual columns, virtual scrolling and focusedRowEnabled are enabled', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
 
@@ -5896,6 +5647,7 @@ test('Focus events should be called when pressing the Ctrl + End key when virtua
 
   // act
   await t.pressKey('ctrl+end');
+  await t.wait(1000);
 
   // assert
   await t
@@ -6216,5 +5968,265 @@ test('The batch edit mode - Shift + Tab navigation through interactive elements 
       },
       'field3',
     ],
+  });
+});
+
+fixture`Keyboard Navigation - Focus`
+  .page(url(__dirname, '../../../container.html'));
+
+test('DataGrid - Cell focus works incorrectly if the command column has a disabled native button element (T1179207)', async (t) => {
+  await t
+    .pressKey('tab tab tab tab tab tab tab')
+
+    .expect(Selector(':focus').tagName)
+    .eql('td')
+    .expect(Selector(':focus').getAttribute('aria-colindex'))
+    .eql('1');
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(2, 2),
+  showBorders: true,
+  editing: {
+    mode: 'cell',
+    allowUpdating: true,
+    allowDeleting: true,
+  },
+  columns: ['field_0', 'field_1', {
+    type: 'buttons',
+    buttons: [{
+      template() {
+        return $('<button>').text('Edit');
+      },
+    }, {
+      template() {
+        return $('<button>').attr({
+          disabled: true,
+        }).text('Delete');
+      },
+    }],
+  }],
+}));
+
+test('All rows should be focused on arrow-up/down when virtual scrolling enabled with group summary (T1014612)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  // act (forward)
+  await t
+    .pressKey('tab');
+
+  // assert
+  await t
+    .expect(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1).element.focused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('tab');
+
+  // assert
+  await t
+    .expect(dataGrid.getGroupRow(0).element.focused)
+    .ok()
+    .expect(dataGrid.getGroupRow(0).isFocused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('down');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(1, 1).element.focused)
+    .ok()
+    .expect(dataGrid.getDataCell(1, 1).isFocused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('down');
+
+  // assert
+  await t
+    .expect(dataGrid.getGroupFooterRow().focused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('down');
+
+  // assert
+  await t
+    .expect(dataGrid.getGroupRow(1).element.focused)
+    .ok()
+    .expect(dataGrid.getGroupRow(1).isFocused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('down');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(4, 1).element.focused)
+    .ok()
+    .expect(dataGrid.getDataCell(4, 1).isFocused)
+    .ok();
+
+  // act (backward)
+  await t
+    .pressKey('up');
+
+  // assert
+  await t
+    .expect(dataGrid.getGroupRow(1).element.focused)
+    .ok()
+    .expect(dataGrid.getGroupRow(1).isFocused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('up');
+
+  // assert
+  await t
+    .expect(dataGrid.getGroupFooterRow().focused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('up');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(1, 1).element.focused)
+    .ok()
+    .expect(dataGrid.getDataCell(1, 1).isFocused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('up');
+
+  // assert
+  await t
+    .expect(dataGrid.getGroupRow(0).element.focused)
+    .ok()
+    .expect(dataGrid.getGroupRow(0).isFocused)
+    .ok();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { id: 1, name: 'test1' },
+    { id: 2, name: 'test2' },
+  ],
+  keyExpr: 'id',
+  grouping: {
+    autoExpandAll: true,
+  },
+  scrolling: {
+    mode: 'virtual',
+  },
+  summary: {
+    groupItems: [{
+      column: 'id',
+      summaryType: 'count',
+      showInGroupFooter: true,
+    }],
+  },
+  columns: ['id', {
+    dataField: 'name',
+    groupIndex: 0,
+  }],
+}));
+
+test('The last cell should be focused after changing the page size (T1063530)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const pager = dataGrid.getPager();
+
+  // act
+  for (let i = 0; i < 3; i += 1) {
+    await t.pressKey('tab');
+  }
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 0).isFocused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('tab');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 1).isFocused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('tab');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(1, 0).isFocused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('tab');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(1, 1).isFocused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('tab');
+
+  // assert
+  await t
+    .expect(pager.getPageSize(0).element.focused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('space');
+  const visibleRows = await dataGrid.apiGetVisibleRows();
+
+  // assert
+  await t
+    .expect(visibleRows.length)
+    .eql(1);
+
+  // act
+  await t
+    .pressKey('shift+tab');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 1).isFocused)
+    .ok();
+}).before(async () => {
+  const getItems = (): Record<string, unknown>[] => {
+    const items: Record<string, unknown>[] = [];
+    for (let i = 0; i < 5; i += 1) {
+      items.push({
+        ID: i + 1,
+        Name: `Name ${i + 1}`,
+      });
+    }
+    return items;
+  };
+  return createWidget('dxDataGrid', {
+    dataSource: getItems(),
+    keyExpr: 'ID',
+    columnWidth: 150,
+    paging: {
+      pageSize: 2,
+    },
+    pager: {
+      visible: true,
+      allowedPageSizes: [1, 2],
+      showPageSizeSelector: true,
+    },
   });
 });

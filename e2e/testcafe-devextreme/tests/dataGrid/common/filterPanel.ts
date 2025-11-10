@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`filterPanel`
   .page(url(__dirname, '../../container.html'));
@@ -16,16 +17,25 @@ test('editor\'s popup inside filterBuilder is opening & closing right (T1182854)
     await dataGrid.getFilterPanel().openFilterBuilderPopup(t)
   ).getFilterBuilder();
 
-  await t.expect(await takeScreenshot('dataGrid-filterPanel-popup-focused.png')).ok();
+  await testScreenshot(t, takeScreenshot, 'dataGrid-filterPanel-popup-focused.png');
+  await t
+    .expect(compareResults.isValid())
+    .ok();
 
   await t.click(filterBuilder.getField().getValueText());
-  await t.expect(await takeScreenshot('dataGrid-filterPanel-popup.-with-editor-popup')).ok();
+  await testScreenshot(t, takeScreenshot, 'dataGrid-filterPanel-popup.-with-editor-popup.png');
+  await t
+    .expect(compareResults.isValid())
+    .ok();
 
   await t.click(filterBuilder.getField().getValueText());
-  await t.expect(await takeScreenshot('dataGrid-filterPanel-popup.png')).ok();
+  await testScreenshot(t, takeScreenshot, 'dataGrid-filterPanel-popup.png');
+  await t
+    .expect(compareResults.isValid())
+    .ok();
 
   await t.click(filterBuilder.getField().getValueText());
-  await t.expect(await takeScreenshot('dataGrid-filterPanel-popup.-with-editor-popup')).ok();
+  await testScreenshot(t, takeScreenshot, 'dataGrid-filterPanel-popup.-with-editor-popup.png');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

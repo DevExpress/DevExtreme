@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 const SCHEDULER_SELECTOR = '#container';
 const INITIAL_APPOINTMENT_TITLE = 'appointment';
@@ -20,11 +21,11 @@ test('Save appointment loading panel screenshot', async (t) => {
     .doubleClick(appointment.element)
     .click(appointmentPopup.subjectElement)
     .typeText(appointmentPopup.subjectElement, ADDITIONAL_TITLE_TEXT)
-    .click(appointmentPopup.doneButton)
-    // act
-    .expect(await takeScreenshot('save-appointment-loading-panel-screenshot.png', scheduler.element))
-    .ok()
-    // assert
+    .click(appointmentPopup.doneButton);
+
+  await testScreenshot(t, takeScreenshot, 'save-appointment-loading-panel-screenshot.png', { element: scheduler.element });
+
+  await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxScheduler', {
@@ -42,6 +43,6 @@ test('Save appointment loading panel screenshot', async (t) => {
   height: 600,
   onAppointmentUpdating: (e) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    e.cancel = new Promise((resolve, reject) => { });
+    e.cancel = new Promise((resolve, reject) => {});
   },
 }));

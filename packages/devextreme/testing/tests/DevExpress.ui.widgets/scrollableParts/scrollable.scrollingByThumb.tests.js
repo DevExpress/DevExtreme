@@ -1,10 +1,8 @@
 import $ from 'jquery';
 import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
-import animationFrame from 'common/core/animation/frame';
+import animationFrame from '__internal/common/core/animation/frameModule';
 import Scrollbar from '__internal/ui/scroll_view/scrollbar';
 import pointerMock from '../../../helpers/pointerMock.js';
-
-import 'generic_light.css!';
 
 import {
     SCROLLABLE_CONTAINER_CLASS,
@@ -36,14 +34,13 @@ const moduleConfig = {
         $('#qunit-fixture').html(markup);
 
         this.clock = sinon.useFakeTimers();
-        this._originalRequestAnimationFrame = animationFrame.requestAnimationFrame;
-        animationFrame.requestAnimationFrame = function(callback) {
+        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
             callback();
-        };
+        });
     },
     afterEach: function() {
         this.clock.restore();
-        animationFrame.requestAnimationFrame = this._originalRequestAnimationFrame;
+        this.requestAnimationFrameStub.restore();
     }
 };
 

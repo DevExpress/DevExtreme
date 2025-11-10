@@ -37,7 +37,7 @@ const TESTCAFE_CONFIG: Partial<TestCafeConfigurationOptions> = {
 
 const getCurrentTheme = async (t: TestController): Promise<string> => {
   // eslint-disable-next-line max-len
-  const currentTheme = await ClientFunction(() => (window as any).DevExpress.ui.themes.current()).with({ boundTestRun: t })();
+  const currentTheme = await ClientFunction(() => (window as any)?.DevExpress?.ui?.themes?.current()).with({ boundTestRun: t })();
 
   return currentTheme;
 };
@@ -98,7 +98,7 @@ function setTestingPlatform(args: ParsedArgs): void {
 }
 
 function setTestingTheme(args: ParsedArgs): void {
-  process.env.theme = args.theme || 'generic.light';
+  process.env.theme = args.theme || 'fluent.blue.light';
 }
 
 function setShadowDom(args: ParsedArgs): void {
@@ -108,7 +108,7 @@ function setShadowDom(args: ParsedArgs): void {
 function expandBrowserAlias(browser: string): string {
   switch (browser) {
     case 'chrome:devextreme-shr2':
-      return 'chrome:headless --no-sandbox --disable-gpu --window-size=1200,800 --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --font-render-hinting=none --disable-font-subpixel-positioning';
+      return 'chrome:headless --no-sandbox --disable-dev-shm-usage --disable-gpu --window-size=1200,800 --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning';
     case 'chrome:docker':
       return 'chromium:headless --no-sandbox --disable-gpu --window-size=1200,800';
     default:
@@ -122,7 +122,7 @@ function getArgs(): ParsedArgs {
       concurrency: 0,
       browsers: 'chrome',
       test: '',
-      reporter: [process.env.CI === 'true' ? 'list' : 'minimal'],
+      reporter: process.env.CI === 'true' ? 'list' : 'spec',
       componentFolder: '',
       file: '*',
       cache: true,
@@ -248,7 +248,7 @@ createTestCafe(TESTCAFE_CONFIG)
     }
 
     const runOptions: RunOptions = {
-      quarantineMode: { successThreshold: 1, attemptLimit: 5 },
+      quarantineMode: { successThreshold: 1, attemptLimit: 2 },
       disableNativeAutomation: true,
       // @ts-expect-error ts-error
       hooks: {
@@ -265,7 +265,10 @@ createTestCafe(TESTCAFE_CONFIG)
 
               await t.hover('html');
 
-              const [width, height] = DEFAULT_BROWSER_SIZE;
+              // @ts-expect-error ts-errors
+              const { meta } = t.testRun.test;
+
+              const [width, height] = meta?.browserSize || DEFAULT_BROWSER_SIZE;
               await t.resizeWindow(width, height);
             } else {
               await loadAxeCore(t);
@@ -275,13 +278,11 @@ createTestCafe(TESTCAFE_CONFIG)
               await addShadowRootTree(t);
             }
 
-            if (!componentFolder.includes('dataGrid')) {
-              const currentTheme = await getCurrentTheme(t) || 'generic.light';
-              const newTheme = args.theme || 'generic.light';
+            const currentTheme = await getCurrentTheme(t) || 'fluent.blue.light';
+            const newTheme = args.theme || 'fluent.blue.light';
 
-              if (currentTheme !== newTheme) {
-                await changeTheme(t, newTheme);
-              }
+            if (currentTheme !== newTheme) {
+              await changeTheme(t, newTheme);
             }
           },
           after: async (t: TestController) => {

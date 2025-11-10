@@ -1,6 +1,5 @@
 import fx from 'common/core/animation/fx';
 import config from 'core/config';
-import devices from '__internal/core/m_devices';
 import { deferUpdate } from 'core/utils/common';
 import support from '__internal/core/utils/m_support';
 import { isRenderer } from 'core/utils/type';
@@ -11,7 +10,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import translator from 'common/core/animation/translator';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
+import { current as currentTheme } from 'ui/themes';
 import {
     TABPANEL_TABS_ITEM_CLASS,
     TABPANEL_CONTAINER_CLASS,
@@ -1119,11 +1118,7 @@ QUnit.module('keyboard navigation', {
         assert.equal(tabsFocusedIndex, $(this.instance.option('focusedElement')).index(), 'multiView focused element is equal tabs focused element');
     });
 
-    QUnit.skip('looping should work on keyboard navigation after loop runtime change to true and swipe', function(assert) {
-        if(shouldSkipOnMobile(assert, 'there is no keyboard navigation on mobile devices')) {
-            return;
-        }
-
+    QUnit.test('looping should work on keyboard navigation after loop runtime change to true and swipe', function(assert) {
         this.instance.option({
             items: [1, 2, 3],
             loop: false,
@@ -1131,29 +1126,30 @@ QUnit.module('keyboard navigation', {
         });
         this.instance.option('loop', true);
         const pointer = pointerMock(this.$element);
-        const keyDownEvent = $.Event('keydown', { key: 'ArrowRight' });
 
         pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
-        this.$element.trigger(keyDownEvent).trigger(keyDownEvent);
+        assert.strictEqual(this.instance.option('selectedIndex'), 1, 'at second element after swipe');
 
+        this.$element.trigger($.Event('keydown', { key: 'ArrowRight' }));
+        assert.strictEqual(this.instance.option('selectedIndex'), 2, 'at third element after first keydown');
+
+        this.$element.trigger($.Event('keydown', { key: 'ArrowRight' }));
         assert.strictEqual(this.instance.option('selectedIndex'), 0, 'loop comes back to first element');
     });
 
-    if(devices.current().deviceType === 'desktop') {
-        const createWidget = ($element) => {
-            const widget = $element.dxTabPanel({
-                focusStateEnabled: true,
-                items: [{ text: 'text' }]
-            }).dxTabPanel('instance');
+    const createWidget = ($element) => {
+        const widget = $element.dxTabPanel({
+            focusStateEnabled: true,
+            items: [{ text: 'text' }]
+        }).dxTabPanel('instance');
 
-            $element.attr('tabIndex', 1);
+        $element.attr('tabIndex', 1);
 
-            return widget;
-        };
+        return widget;
+    };
 
-        registerKeyHandlerTestHelper.runTests({ createWidget: createWidget, checkInitialize: false });
-        registerKeyHandlerTestHelper.runTests({ createWidget: createWidget, keyPressTargetElement: (widget) => widget._tabs.$element().eq(0), checkInitialize: false, testNamePrefix: 'Tabs: ' });
-    }
+    registerKeyHandlerTestHelper.runTests({ createWidget: createWidget, checkInitialize: false });
+    registerKeyHandlerTestHelper.runTests({ createWidget: createWidget, keyPressTargetElement: (widget) => widget._tabs.$element().eq(0), checkInitialize: false, testNamePrefix: 'Tabs: ' });
 });
 
 QUnit.module('Disabled items', {

@@ -17,6 +17,8 @@ import dragEvents from 'common/core/events/drag';
 import pointerMock from '../../helpers/pointerMock.js';
 import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
+import 'fluent_blue_light.css!';
+
 const { module, test, testStart } = QUnit;
 
 testStart(() => initTestMarkup());

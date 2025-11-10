@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Layout:AppointmentForm:AllDay`
   .page(url(__dirname, '../../../../container.html'));
@@ -9,35 +10,31 @@ fixture.disablePageReloads`Layout:AppointmentForm:AllDay`
 test('Start and end dates should be reflect the current day(appointment is already available case)', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const { appointmentPopup } = scheduler;
 
   await t
     .click(scheduler.getAppointment('Text').element)
-    .click(scheduler.appointmentTooltip.getListItem('Text').element)
+    .click(scheduler.appointmentTooltip.getListItem('Text').element);
 
-    .expect(await takeScreenshot('appointment-form-before-click-all-day.png'))
-    .ok();
+  await testScreenshot(t, takeScreenshot, 'appointment-form-before-click-all-day.png');
 
-  await t
-    .click(scheduler.appointmentPopup.allDayElement)
-    .expect(await takeScreenshot('appointment-form-after-click-all-day.png'))
-    .ok();
+  await t.click(appointmentPopup.allDayElement);
 
-  await t
-    .click(scheduler.appointmentPopup.doneButton)
-    .expect(await takeScreenshot('all-day-appointment-on-tables.png'))
-    .ok();
+  await testScreenshot(t, takeScreenshot, 'appointment-form-after-click-all-day.png');
+
+  await t.click(appointmentPopup.doneButton);
+
+  await testScreenshot(t, takeScreenshot, 'all-day-appointment-on-tables.png');
 
   await t
     .click(scheduler.getAppointment('Text').element)
-    .click(scheduler.appointmentTooltip.getListItem('Text').element)
+    .click(scheduler.appointmentTooltip.getListItem('Text').element);
 
-    .expect(await takeScreenshot('appointment-form-after-render-on-table.png'))
-    .ok();
+  await testScreenshot(t, takeScreenshot, 'appointment-form-after-render-on-table.png');
 
-  await t
-    .click(scheduler.appointmentPopup.allDayElement)
-    .expect(await takeScreenshot('appointment-form-after-switch-off-all-day.png'))
-    .ok();
+  await t.click(appointmentPopup.allDayElement);
+
+  await testScreenshot(t, takeScreenshot, 'appointment-form-after-switch-off-all-day.png');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -59,33 +56,29 @@ test('Start and end dates should be reflect the current day(appointment is alrea
 test('Start and end dates should be reflect the current day(create new appointment case)', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const { appointmentPopup } = scheduler;
 
-  await t
-    .doubleClick(scheduler.getDateTableCell(2, 3))
-    .expect(await takeScreenshot('new-appointment-form-before-click-all-day.png'))
-    .ok();
+  await t.doubleClick(scheduler.getDateTableCell(2, 3));
 
-  await t
-    .click(scheduler.appointmentPopup.allDayElement)
-    .expect(await takeScreenshot('new-appointment-form-after-click-all-day.png'))
-    .ok();
+  await testScreenshot(t, takeScreenshot, 'new-appointment-form-before-click-all-day.png');
 
-  await t
-    .click(scheduler.appointmentPopup.doneButton)
-    .expect(await takeScreenshot('new-all-day-appointment-on-tables.png'))
-    .ok();
+  await t.click(appointmentPopup.allDayElement);
+
+  await testScreenshot(t, takeScreenshot, 'new-appointment-form-after-click-all-day.png');
+
+  await t.click(appointmentPopup.doneButton);
+
+  await testScreenshot(t, takeScreenshot, 'new-all-day-appointment-on-tables.png');
 
   await t
     .click(scheduler.getAppointment('').element)
-    .click(scheduler.appointmentTooltip.getListItem('').element)
+    .click(scheduler.appointmentTooltip.getListItem('').element);
 
-    .expect(await takeScreenshot('new-appointment-form-after-render-on-table.png'))
-    .ok();
+  await testScreenshot(t, takeScreenshot, 'new-appointment-form-after-render-on-table.png');
 
-  await t
-    .click(scheduler.appointmentPopup.allDayElement)
-    .expect(await takeScreenshot('new-appointment-form-after-switch-off-all-day.png'))
-    .ok();
+  await t.click(appointmentPopup.allDayElement);
+
+  await testScreenshot(t, takeScreenshot, 'new-appointment-form-after-switch-off-all-day.png');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -106,17 +99,27 @@ test('StartDate and endDate should have correct type after "allDay" and "repeat"
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await t.doubleClick(scheduler.getDateTableCell(0, 0));
+
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'form-before-change-allday-and-reccurence-options.png',
+    { element: appointmentPopup.content },
+  );
+
   await t
-    .doubleClick(scheduler.getDateTableCell(0, 0))
-    .expect(await takeScreenshot('form-before-change-allday-and-reccurence-options.png', appointmentPopup.content))
-    .ok()
-
     .click(appointmentPopup.allDayElement)
-    .click(appointmentPopup.recurrenceElement)
+    .click(appointmentPopup.recurrenceElement);
 
-    .expect(await takeScreenshot('form-after-change-allday-and-reccurence-options.png', appointmentPopup.content))
-    .ok()
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'form-after-change-allday-and-reccurence-options.png',
+    { element: appointmentPopup.content },
+  );
 
+  await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxScheduler', {

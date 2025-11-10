@@ -5,8 +5,6 @@ import 'ui/scroll_view/ui.scrollable';
 import 'ui/box';
 import 'ui/responsive_box';
 
-import 'generic_light.css!';
-
 const SCROLLABLE_ID = 'my_scrollable';
 const PLACEMENT_STANDALONE = 'standalone';
 const PLACEMENT_INSIDE_BOX = 'insideBox';

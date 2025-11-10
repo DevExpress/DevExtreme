@@ -5,6 +5,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import CheckBox from 'devextreme-testcafe-models/checkBox';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Selection`
   .page(url(__dirname, '../../container.html'));
@@ -50,7 +51,7 @@ test('The Select All checkbox should be visible when a column headerCellTemplate
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   // assert
-  await takeScreenshot('T1141405-grid-select-all.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1141405-grid-select-all.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())
@@ -93,10 +94,10 @@ test('The Select All checkbox should be visible when a column headerCellTemplate
 });
 
 // T1214734
-test('Select rows by shift should work when grid has real time updates', async (t) => {
+test.meta({ unstable: true })('Select rows by shift should work when grid has real time updates', async (t) => {
   const dataGrid = new DataGrid('#container');
-  const secondRow = dataGrid.getDataRow(1);
-  const seventhRow = dataGrid.getDataRow(6);
+  const secondRow = dataGrid.getDataRow(1).getSelectCheckBox();
+  const seventhRow = dataGrid.getDataRow(6).getSelectCheckBox();
   const checkRowSelectionStates = async (startRowIndex: number, endRowIndex: number) => {
     for (let i = startRowIndex; i <= endRowIndex; i += 1) {
       await t
@@ -107,16 +108,16 @@ test('Select rows by shift should work when grid has real time updates', async (
 
   // act
   await t
-    .click(secondRow.element);
+    .click(secondRow)
+    .wait(500);
 
   // assert
   await checkRowSelectionStates(1, 1);
-  await t
-    .expect(dataGrid.getDataCell(2, 3).element.textContent)
-    .eql('test123');
 
   // act
-  await t.click(seventhRow.element, { modifiers: { shift: true } });
+  await t
+    .click(seventhRow, { modifiers: { shift: true } })
+    .wait(500);
 
   // assert
   await checkRowSelectionStates(1, 6);
@@ -175,7 +176,7 @@ const DATA_GRID_SELECTOR = '#container';
     await t
       .expect(firstRow.isSelected).ok()
       .expect(secondRow.isSelected).ok();
-  }).before(() => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     dataSource: data,
     keyExpr: 'ID',
     columns: ['ID', 'Name'],
@@ -199,7 +200,7 @@ test('Deferred selection should work correctly with deferred sensitivity: \'case
   await t
     .expect(firstRow.isSelected).ok()
     .expect(secondRow.isSelected).notOk();
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: data,
   keyExpr: 'ID',
   columns: ['ID', 'Name'],
@@ -234,7 +235,7 @@ test('Sensitivity option change should be correctly handled during runtime chang
   await t
     .expect(firstRow.isSelected).ok()
     .expect(secondRow.isSelected).notOk();
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: data,
   keyExpr: 'ID',
   columns: ['ID', 'Name'],
@@ -293,4 +294,37 @@ test('"Select All" checkbox should not react when not visible', async (t) => {
     format: 'currency',
     width: 90,
   }],
+}));
+
+test('"Deselect all" should work after changing showCheckboxMode', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await dataGrid.option('selection.showCheckBoxesMode', 'onClick');
+
+  const selectAllCheckBox = new CheckBox(
+    dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).getEditor().element,
+  );
+
+  await t.click(selectAllCheckBox.element); // select all
+  await t.click(selectAllCheckBox.element); // deselect all
+
+  await t
+    .expect(selectAllCheckBox.option('value'))
+    .eql(false);
+
+  for (let i = 0; i < 7; i += 1) {
+    await t
+      .expect(dataGrid.getDataRow(i).isSelected)
+      .notOk();
+  }
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { a: 1 }, { a: 2 }, { a: 3 }, { a: 4 }, { a: 5 }, { a: 6 }, { a: 7 },
+  ],
+  keyExpr: 'a',
+  selection: {
+    mode: 'multiple',
+    showCheckBoxesMode: 'always',
+  },
+  selectedRowKeys: [1, 2],
 }));

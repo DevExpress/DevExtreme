@@ -4,6 +4,8 @@ import $ from 'jquery';
 import { TreeListWrapper } from '../../helpers/wrappers/dataGridWrappers.js';
 import { generateNestedData } from '../../helpers/treeListMocks.js';
 
+import 'generic_light.css!';
+
 const treeListWrapper = new TreeListWrapper('#treeList');
 
 

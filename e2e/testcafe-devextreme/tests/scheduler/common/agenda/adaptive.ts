@@ -1,7 +1,7 @@
-import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 import { ADAPTIVE_SIZE } from '../const';
 
 fixture.disablePageReloads`Agenda:adaptive`
@@ -61,9 +61,15 @@ Promise<void> => {
     groups: ['priorityId'],
     text: 'groups',
   }].forEach((testCase) => {
-    safeSizeTest(testCase.text, async (t) => {
-      await t.expect(await compareScreenshot(t, `agenda-${testCase.text}-adaptive-rtl=${rtlEnabled}.png`)).ok();
-    }, ADAPTIVE_SIZE)
+    test.meta({ browserSize: ADAPTIVE_SIZE })(testCase.text, async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+      await testScreenshot(t, takeScreenshot, `agenda-${testCase.text}-adaptive-rtl=${rtlEnabled}.png`);
+
+      await t
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    })
       .before(async () => createScheduler(testCase.groups, rtlEnabled));
   });
 });

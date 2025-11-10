@@ -13,6 +13,8 @@ fixture('Form.Validation')
 
 runManualTest('Form', 'Validation', (test) => {
   test('Validation', async (t) => {
+    await t.click('body', { offsetX: -5, offsetY: -5 });
+
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await testScreenshot(t, takeScreenshot, 'form_validation_summary.png');

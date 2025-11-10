@@ -7,6 +7,8 @@ import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.j
 import pointerMock from '../../helpers/pointerMock.js';
 import 'ui/radio_group';
 
+import 'fluent_blue_light.css!';
+
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
 
 QUnit.testStart(function() {

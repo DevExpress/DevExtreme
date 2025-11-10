@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { Renderer } from '../../helpers/vizMocks.js';
-import exportModule from 'viz/core/export';
+import exportModule from '__internal/viz/core/exportModule';
 import themeModule from 'viz/themes';
 import clientExporter from 'exporter';
 import localization from 'localization';

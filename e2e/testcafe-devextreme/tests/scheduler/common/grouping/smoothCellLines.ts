@@ -3,6 +3,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { changeTheme } from '../../../../helpers/changeTheme';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Scheduler: SmoothCellLines`
   .page(url(__dirname, '../../../container.html'));
@@ -18,9 +19,12 @@ test('The group panel and date table stay in sync during scrolling on material t
 
   await t.scroll(scheduler.workspaceScrollable, 0, 1100);
 
+  await testScreenshot(t, takeScreenshot, 'scrolling-vertical', {
+    element: scheduler.workSpace,
+    theme: 'material.blue.light',
+  });
+
   await t
-    .expect(await takeScreenshot('material-theme-scrolling-vertical', scheduler.workSpace))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {

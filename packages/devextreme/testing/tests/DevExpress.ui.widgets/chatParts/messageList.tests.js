@@ -23,6 +23,7 @@ import TypingIndicator from '__internal/ui/chat/typingindicator';
 import devices from '__internal/core/m_devices';
 import localization from 'localization';
 import dateLocalization from 'common/core/localization/date';
+import resizeObserverSingleton from 'core/resize_observer';
 
 const CHAT_MESSAGELIST_CONTENT_CLASS = 'dx-chat-messagelist-content';
 const CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS = 'dx-chat-messagelist-empty-message';
@@ -1931,6 +1932,19 @@ QUnit.module('MessageList', () => {
                 localization.locale(defaultLocale);
             }
         });
+    });
+
+    QUnit.test('Should unobserve element on detach (T1311706)', function(assert) {
+        sinon.stub(resizeObserverSingleton, 'unobserve');
+
+        const instance = new MessageList($('#component'));
+        const $element = $(instance.$element());
+
+        $element.remove();
+
+        assert.strictEqual(resizeObserverSingleton.unobserve.callCount, 2);
+
+        resizeObserverSingleton.unobserve.restore();
     });
 });
 

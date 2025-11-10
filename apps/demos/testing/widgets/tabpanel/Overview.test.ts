@@ -21,22 +21,19 @@ runManualTest('TabPanel', 'Overview', (test) => {
 
     await t
       .click($selectBox.nth(0))
-      .click($(`.${SELECTBOX_POPUP_WRAPPER_CLASS} .${LIST_ITEM_CLASS}`).nth(1))
-      .wait(200);
+      .click($(`.${SELECTBOX_POPUP_WRAPPER_CLASS} .${LIST_ITEM_CLASS}`).nth(1));
 
     await testScreenshot(t, takeScreenshot, 'tabpanel_tabsposition_top.png');
 
     await t
       .click($selectBox.nth(1))
-      .click($(`.${SELECTBOX_POPUP_WRAPPER_CLASS} .${LIST_ITEM_CLASS}`).nth(1))
-      .wait(200);
+      .click($(`.${SELECTBOX_POPUP_WRAPPER_CLASS} .${LIST_ITEM_CLASS}`).nth(1));
 
     await testScreenshot(t, takeScreenshot, 'tabpanel_stylingmode_primary.png');
 
     await t
       .click($selectBox.nth(2))
-      .click($(`.${SELECTBOX_POPUP_WRAPPER_CLASS} .${LIST_ITEM_CLASS}`).nth(1))
-      .wait(200);
+      .click($(`.${SELECTBOX_POPUP_WRAPPER_CLASS} .${LIST_ITEM_CLASS}`).nth(1));
 
     await testScreenshot(t, takeScreenshot, 'tabpanel_iconposition_start.png');
 

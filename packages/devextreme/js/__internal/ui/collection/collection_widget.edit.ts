@@ -74,7 +74,9 @@ class CollectionWidget<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TKey extends CollectionItemKey = any,
 > extends BaseCollectionWidget<TProperties, TItem, TKey> {
-  static _userOptions = {};
+  static _initUserOptions?: Record<string, unknown> = {};
+
+  _userOptions?: Record<string, unknown>;
 
   // @ts-expect-error TItem
   _selection!: Selection<TItem, TKey, false>;
@@ -92,7 +94,7 @@ class CollectionWidget<
   _keyGetter!: (item: TItem) => TKey;
 
   constructor(element: Element, options?: Record<string, unknown>) {
-    CollectionWidget._userOptions = options ?? {};
+    CollectionWidget._initUserOptions = options ?? {};
     // @ts-expect-error
     super(element, options);
   }
@@ -125,6 +127,9 @@ class CollectionWidget<
   }
 
   _init(): void {
+    this._userOptions = { ...CollectionWidget._initUserOptions };
+    CollectionWidget._initUserOptions = undefined;
+
     this._initEditStrategy();
 
     super._init();
@@ -429,7 +434,7 @@ class CollectionWidget<
       const { [name]: optionValue } = this.option();
       const length = isDefined(optionValue) && Array.isArray(optionValue) && optionValue.length;
 
-      return !!length || name in CollectionWidget._userOptions;
+      return !!length || name in (this._userOptions ?? {});
     };
 
     if (isOptionDefined('selectedItems')) {

@@ -3,8 +3,6 @@ import fx from 'common/core/animation/fx';
 import { animation, _translator } from '__internal/ui/multi_view/multi_view.animation';
 import 'ui/multi_view';
 
-import 'generic_light.css!';
-
 QUnit.module('Integration tests', {
     beforeEach: function(assert) {
         fx.off = true;

@@ -8,8 +8,9 @@ import config from 'core/config';
 import { createEvent } from 'common/core/events/utils/index';
 import { name as DOUBLE_CLICK_EVENT } from 'common/core/events/double_click';
 import { name as CLICK_EVENT } from 'common/core/events/click';
+import resizeObserverSingleton from 'core/resize_observer';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
 const SPLITTER_ITEM_HIDDEN_CONTENT_CLASS = 'dx-splitter-item-hidden-content';
@@ -1344,6 +1345,22 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
         this.assertLayout(['0', '66.6677', '33.3339']);
     });
+
+    QUnit.test('Should unobserve element on detach (T1311706)', function(assert) {
+        sinon.stub(resizeObserverSingleton, 'unobserve');
+
+        const $splitter = $('<div id="splitterDetached">');
+
+        $splitter.dxSplitter({
+            dataSource: [{ size: '30%' }, { size: '70%' }]
+        });
+
+        $splitter.remove();
+
+        assert.strictEqual(resizeObserverSingleton.unobserve.callCount, 2);
+
+        resizeObserverSingleton.unobserve.restore();
+    });
 });
 
 QUnit.module('Pane visibility', moduleConfig, () => {
@@ -1959,6 +1976,17 @@ QUnit.module('Resizing', moduleConfig, () => {
             this.checkItemSizes([159.133, 159.133, 159.133, 204.602]);
             this.assertLayout([23.3333, 23.3333, 23.3333, 30]);
         });
+    });
+
+
+    QUnit.test('size set should work for resizable pane (T1310428)', function(assert) {
+        this.reinit({
+            width: 208, height: 208,
+            items: [{ }, { size: 10, resizable: true }],
+        });
+
+        this.instance.option('items[1].size', 50);
+        assert.strictEqual(this.instance.option('items[1].size'), 50, 'new item size was set');
     });
 
     [

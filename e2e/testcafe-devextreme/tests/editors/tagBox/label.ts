@@ -1,7 +1,6 @@
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import TagBox from 'devextreme-testcafe-models/tagBox';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { isMaterial, testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
@@ -18,7 +17,7 @@ fixture.disablePageReloads`TagBox_Label`
   .page(url(__dirname, '../../container.html'));
 
 stylingModes.forEach((stylingMode) => {
-  safeSizeTest(`Label for dxTagBox stylingMode=${stylingMode}`, async (t) => {
+  test.meta({ browserSize: [300, 800] })(`Label for dxTagBox stylingMode=${stylingMode}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t.click('#tagBox2');
@@ -28,9 +27,7 @@ stylingModes.forEach((stylingMode) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [300, 800]).before(async (t) => {
-    await t.click('html', { offsetX: 0, offsetY: 0 });
-
+  }).before(async () => {
     const componentOptions = {
       label: 'label text',
       items: [...Array(10)].map((_, i) => `item${i}`),
@@ -57,7 +54,7 @@ stylingModes.forEach((stylingMode) => {
   });
 
   labelModes.forEach((labelMode) => {
-    safeSizeTest(`Label shouldn't be cutted for dxTagBox in stylingMode=${stylingMode}, labelMode=${labelMode} (T1104913)`, async (t) => {
+    test.meta({ browserSize: [300, 400] })(`Label shouldn't be cutted for dxTagBox in stylingMode=${stylingMode}, labelMode=${labelMode} (T1104913)`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       const tagBox = new TagBox('#container');
@@ -74,7 +71,7 @@ stylingModes.forEach((stylingMode) => {
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }, [300, 400]).before(async () => {
+    }).before(async () => {
       await setStyleAttribute(Selector('#container'), 'top: 250px;');
 
       return createWidget('dxTagBox', {

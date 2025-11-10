@@ -123,6 +123,7 @@ test('AllowSorting API', async (t) => {
 });
 
 [
+  // eslint-disable-next-line func-names
   function (rowData) {
     return rowData.id % 3;
   },
