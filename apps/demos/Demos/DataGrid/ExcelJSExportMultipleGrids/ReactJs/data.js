@@ -1,4 +1,3 @@
-export class Product {}
 export const products = [
   {
     Product_ID: 1,

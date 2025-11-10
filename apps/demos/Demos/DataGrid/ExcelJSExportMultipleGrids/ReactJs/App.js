@@ -2,18 +2,25 @@ import React, { useCallback, useRef } from 'react';
 import Button from 'devextreme-react/button';
 import TabPanel, { Item } from 'devextreme-react/tab-panel';
 import DataGrid, { Column } from 'devextreme-react/data-grid';
+import { ArrayStore } from 'devextreme-react/common/data';
 import { Workbook } from 'devextreme-exceljs-fork';
 import { saveAs } from 'file-saver-es';
 import { exportDataGrid } from 'devextreme-react/common/export/excel';
 import { products } from './data.js';
 
 const priceDataSource = {
-  store: products,
+  store: new ArrayStore({
+    data: products,
+    key: 'Product_ID',
+  }),
   select: ['Product_ID', 'Product_Name', 'Product_Sale_Price', 'Product_Retail_Price'],
   filter: ['Product_ID', '<', 10],
 };
 const ratingDataSource = {
-  store: products,
+  store: new ArrayStore({
+    data: products,
+    key: 'Product_ID',
+  }),
   select: ['Product_ID', 'Product_Name', 'Product_Consumer_Rating', 'Product_Category'],
   filter: ['Product_ID', '<', 10],
 };
