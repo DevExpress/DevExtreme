@@ -40,6 +40,9 @@ $fluent-command-edit-icon-size: null !default;
 $fluent-filter-panel-icon-size: null !default;
 
 $fluent-grid-base-filter-icon-size: $fluent-button-icon-size !default;
+$fluent-grid-base-command-ai-chatsparkleoutline-icon-size: null !default;
+$fluent-grid-base-command-ai-text-content-padding: null !default;
+$fluent-grid-base-command-ai-header-button-offset: null !default;
 
 @if $size == "default" {
   $fluent-grid-base-cell-height: 48px !default;
@@ -71,6 +74,9 @@ $fluent-grid-base-filter-icon-size: $fluent-button-icon-size !default;
   $fluent-grid-base-header-icon-size: 20px !default;
   $fluent-command-edit-icon-size: 20px !default;
   $fluent-filter-panel-icon-size: 20px !default;
+  $fluent-grid-base-command-ai-chatsparkleoutline-icon-size: 20px !default;
+  $fluent-grid-base-command-ai-text-content-padding: $fluent-grid-base-command-ai-chatsparkleoutline-icon-size + 8px !default;
+  $fluent-grid-base-command-ai-header-button-offset: 8px !default;
 }
 
 @else if $size == "compact" {
@@ -103,6 +109,9 @@ $fluent-grid-base-filter-icon-size: $fluent-button-icon-size !default;
   $fluent-grid-base-header-icon-size: 16px !default;
   $fluent-command-edit-icon-size: 16px !default;
   $fluent-filter-panel-icon-size: 16px !default;
+  $fluent-grid-base-command-ai-chatsparkleoutline-icon-size: 16px !default;
+  $fluent-grid-base-command-ai-text-content-padding: $fluent-grid-base-command-ai-chatsparkleoutline-icon-size + 6px !default;
+  $fluent-grid-base-command-ai-header-button-offset: 6px !default;
 }
 
 $fluent-grid-base-header-cell-font-size: $fluent-grid-base-cell-font-size !default;

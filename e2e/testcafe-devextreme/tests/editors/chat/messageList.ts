@@ -51,8 +51,7 @@ test('Messagelist appearance with scrollbar', async (t) => {
   const chat = new Chat('#container');
 
   await t
-    .hover(chat.messageList)
-    .wait(400);
+    .hover(chat.messageList);
 
   await testScreenshot(t, takeScreenshot, 'Messagelist with a lot of messages.png', { element: '#container' });
 
@@ -133,7 +132,7 @@ test('Messagelist should scrolled to the latest messages after being rendered in
 
   return createWidget('dxTabPanel', {
     width: 400,
-    height: 500,
+    height: 600,
     deferRendering: true,
     templatesRenderAsynchronously: true,
     dataSource: [{

@@ -5,9 +5,8 @@ import Scheduler, { CLASS } from 'devextreme-testcafe-models/scheduler';
 import { extend } from 'devextreme/core/utils/extend';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { changeTheme } from '../../../helpers/changeTheme';
-import { Themes } from '../../../helpers/themes';
 import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Scheduler: Workspace`
   .page(url(__dirname, '../../container.html'));
@@ -114,10 +113,9 @@ test('Hidden scheduler should not resize', async (t) => {
   await resize('#container');
   await hideShow('#container');
 
-  await t
-    .expect(await takeScreenshot('scheduler-after-hiding-and-resizing.png'))
-    .ok()
+  await testScreenshot(t, takeScreenshot, 'scheduler-after-hiding-and-resizing.png');
 
+  await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxScheduler', {
@@ -182,153 +180,126 @@ test('All day panel should be hidden when allDayPanelMode=hidden by initializing
   }],
 }));
 
-['generic.light', 'material.blue.light', 'fluent.blue.light'].forEach((theme) => {
-  test(`Month workspace should be scrollable to the last row (T1203250) in ${theme}`, async (t) => {
-    const scheduler = new Scheduler('#container');
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+// visual: generic.light
+// visual: fluent.blue.light
+// visual: material.blue.light
+test('Month workspace should be scrollable to the last row (T1203250)', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await scheduler.scrollTo(new Date(2019, 5, 8, 0, 0));
+  await scheduler.scrollTo(new Date(2019, 5, 8, 0, 0));
 
-    await t
-      .expect(await takeScreenshot(`scrollable-month-workspace-${theme}.png`, scheduler.workSpace))
-      .ok()
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => {
-    await changeTheme(theme);
-    await createWidget('dxScheduler', {
-      views: ['month'],
-      currentView: 'month',
-      currentDate: new Date(2019, 4, 1),
-      height: 250,
-    });
-  }).after(async () => {
-    await changeTheme('generic.light');
+  await testScreenshot(t, takeScreenshot, 'scrollable-month-workspace.png', { element: scheduler.workSpace });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxScheduler', {
+    views: ['month'],
+    currentView: 'month',
+    currentDate: new Date(2019, 4, 1),
+    height: 250,
+  });
+});
+
+// visual: generic.light
+// visual: generic.dark
+// visual: fluent.blue.light
+// visual: fluent.blue.dark
+// visual: fluent.saas.lighr
+// visual: fluent.saas.dark
+// visual: material.blue.light
+// visual: material.blue.dark
+test('Check cell hover state', async (t) => {
+  // arrange
+  const scheduler = new Scheduler('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const firstDateTableCell = scheduler.getDateTableCell(0, 0);
+
+  // act
+  await t
+    .hover(firstDateTableCell)
+    .expect(firstDateTableCell.hasClass(CLASS.hoverCell))
+    .ok();
+
+  // assert
+  await testScreenshot(t, takeScreenshot, 'scheduler-week-cell-hover-state.png', { element: scheduler.workSpace });
+
+  await t
+    .hover(scheduler.getDateTableCell(0, 1))
+    .expect(scheduler.getDateTableCell(0, 1).hasClass(CLASS.hoverCell))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxScheduler', {
+    views: ['week'],
+    currentView: 'week',
+    currentDate: new Date(2019, 4, 1),
+    height: 500,
+  });
+});
+
+test('Check cell active state', async (t) => {
+  // arrange
+  const scheduler = new Scheduler('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const firstDateTableCell = scheduler.getDateTableCell(0, 0);
+
+  // act
+  await t
+    .hover(firstDateTableCell)
+    .expect(firstDateTableCell.hasClass(CLASS.hoverCell))
+    .ok()
+    .dispatchEvent(firstDateTableCell, 'mousedown')
+    .expect(firstDateTableCell.hasClass(CLASS.activeCell))
+    .ok();
+
+  // assert
+  await testScreenshot(t, takeScreenshot, 'scheduler-week-cell-active-state.png', { element: scheduler.workSpace });
+
+  await t
+    .dispatchEvent(firstDateTableCell, 'mouseup')
+    .expect(firstDateTableCell.hasClass(CLASS.activeCell))
+    .notOk()
+    .hover(scheduler.getDateTableCell(0, 1))
+    .expect(scheduler.getDateTableCell(0, 1).hasClass(CLASS.hoverCell))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxScheduler', {
+    views: ['week'],
+    currentView: 'week',
+    currentDate: new Date(2019, 4, 1),
+    height: 500,
   });
 });
 
 [
-  Themes.genericLight,
-  Themes.materialBlue,
-  Themes.fluentBlue,
-  // eslint-disable-next-line spellcheck/spell-checker
-  Themes.fluentSaaS,
-  Themes.genericDark,
-  Themes.materialBlueDark,
-  Themes.fluentBlueDark,
-  // eslint-disable-next-line spellcheck/spell-checker
-  Themes.fluentSaaSDark,
-].forEach((theme) => {
-  test(`Check cell hover state in ${theme}`, async (t) => {
-    // arrange
+  'day',
+  'week',
+  'workWeek',
+  'month',
+].forEach((viewName) => {
+  test(`[T1225772]: should not have the horizontal scroll in horizontal views when the crossScrollingEnabled: true (view:${viewName})`, async (t) => {
     const scheduler = new Scheduler('#container');
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const firstDateTableCell = scheduler.getDateTableCell(0, 0);
 
-    // act
-    await t
-      .hover(firstDateTableCell)
-      .expect(firstDateTableCell.hasClass(CLASS.hoverCell))
-      .ok();
+    const scrollableContainer = scheduler.dateTableScrollableContainer;
+    const scrollWidth = await scrollableContainer.scrollWidth;
+    const clientWidth = await scrollableContainer.clientWidth;
+    const hasHorizontalScroll = scrollWidth > clientWidth;
 
-    // assert
-    await t
-      .expect(await takeScreenshot(`scheduler-week-cell-hover-state-${theme}.png`, scheduler.workSpace))
-      .ok();
-
-    await t
-      .hover(scheduler.getDateTableCell(0, 1))
-      .expect(scheduler.getDateTableCell(0, 1).hasClass(CLASS.hoverCell))
-      .ok()
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
+    await t.expect(hasHorizontalScroll).notOk('workspace has the horizontal scrollbar');
   }).before(async () => {
-    await changeTheme(theme);
     await createWidget('dxScheduler', {
-      views: ['week'],
-      currentView: 'week',
-      currentDate: new Date(2019, 4, 1),
-      height: 500,
+      dataSource: [],
+      currentView: viewName,
+      currentDate: '2024-01-01T00:00:00',
+      crossScrollingEnabled: true,
+      height: 300,
     });
-  }).after(async () => {
-    await changeTheme(Themes.genericLight);
-  });
-
-  test(`Check cell active state in ${theme}`, async (t) => {
-    // arrange
-    const scheduler = new Scheduler('#container');
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const firstDateTableCell = scheduler.getDateTableCell(0, 0);
-
-    // act
-    await t
-      .hover(firstDateTableCell)
-      .expect(firstDateTableCell.hasClass(CLASS.hoverCell))
-      .ok()
-      .dispatchEvent(firstDateTableCell, 'mousedown')
-      .expect(firstDateTableCell.hasClass(CLASS.activeCell))
-      .ok();
-
-    // assert
-    await t
-      .expect(await takeScreenshot(`scheduler-week-cell-active-state-${theme}.png`, scheduler.workSpace))
-      .ok();
-
-    await t
-      .dispatchEvent(firstDateTableCell, 'mouseup')
-      .expect(firstDateTableCell.hasClass(CLASS.activeCell))
-      .notOk()
-      .hover(scheduler.getDateTableCell(0, 1))
-      .expect(scheduler.getDateTableCell(0, 1).hasClass(CLASS.hoverCell))
-      .ok()
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => {
-    await changeTheme(theme);
-    await createWidget('dxScheduler', {
-      views: ['week'],
-      currentView: 'week',
-      currentDate: new Date(2019, 4, 1),
-      height: 500,
-    });
-  }).after(async () => {
-    await changeTheme(Themes.genericLight);
-  });
-});
-
-[
-  Themes.genericLight,
-  Themes.materialBlue,
-  Themes.fluentBlue,
-].forEach((theme) => {
-  [
-    'day',
-    'week',
-    'workWeek',
-    'month',
-  ].forEach((viewName) => {
-    test(`[T1225772]: should not have the horizontal scroll in horizontal views when the crossScrollingEnabled: true (theme:${theme}, view:${viewName})`, async (t) => {
-      const scheduler = new Scheduler('#container');
-
-      const scrollableContainer = scheduler.dateTableScrollableContainer;
-      const scrollWidth = await scrollableContainer.scrollWidth;
-      const clientWidth = await scrollableContainer.clientWidth;
-      const hasHorizontalScroll = scrollWidth > clientWidth;
-
-      await t.expect(hasHorizontalScroll).notOk('workspace has the horizontal scrollbar');
-    }).before(async () => {
-      await changeTheme(theme);
-      await createWidget('dxScheduler', {
-        dataSource: [],
-        currentView: viewName,
-        currentDate: '2024-01-01T00:00:00',
-        crossScrollingEnabled: true,
-        height: 300,
-      });
-    })
-      .after(async () => {
-        await changeTheme(Themes.genericLight);
-      });
   });
 });
 
@@ -367,7 +338,7 @@ test('Scheduler appointments should change color on update resources', async (t)
 
   await t.click(button.element);
 
-  await takeScreenshot('scheduler-appointments-should-update-color.png', scheduler.workSpace);
+  await testScreenshot(t, takeScreenshot, 'scheduler-appointments-should-update-color.png', { element: scheduler.workSpace });
   await t.expect(compareResults.isValid()).ok(compareResults.errorMessages());
 }).before(async () => {
   await createWidget('dxScheduler', {

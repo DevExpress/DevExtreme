@@ -21,7 +21,7 @@ fixture.disablePageReloads`DataGrid - Editing`
       .click(dataGrid.getToolbar().getItem(0));
 
     await a11yCheck(t);
-  }).before(() => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     dataSource: getData(3, 2),
     height: 400,
     showBorders: true,

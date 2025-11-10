@@ -408,7 +408,6 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     return cellElements;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public getColumnWidths(fixedTableElement?: any, rowIndex?: number) {
     const result = super.getColumnWidths(fixedTableElement, rowIndex);
     const fixedColumns = this.getFixedColumns();
@@ -1077,8 +1076,12 @@ const draggingHeader = (Base: ModuleType<DraggingHeaderViewController>) => class
     return super._generatePointsByColumns(options, needToCheckPrevPoint);
   }
 
-  protected _pointCreated(point, columns, location, sourceColumn) {
-    const result = super._pointCreated.apply(this, arguments as any);
+  protected _pointCreated({
+    point, columns, location, sourceColumn, cells,
+  }) {
+    const result = super._pointCreated({
+      point, columns, location, sourceColumn, cells,
+    });
     const targetColumn = columns[point.columnIndex];
     // @ts-expect-error
     const $transparentColumn = this._columnHeadersView.getTransparentColumnElement();
@@ -1122,7 +1125,7 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
           point.index += correctIndex;
         }
 
-        return that._pointCreated(point, columns.length, columns);
+        return that._pointCreated(point, columns);
       });
     }
   }
