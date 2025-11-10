@@ -2,13 +2,13 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { Themes } from '../../../helpers/themes';
 import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Search Panel`
   .page(url(__dirname, '../../container.html'));
 
 // T1046688
+// visual: material.blue.light
 test.meta({ browserSize: [800, 800] })('searchPanel has correct view inside masterDetail', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -21,7 +21,7 @@ test.meta({ browserSize: [800, 800] })('searchPanel has correct view inside mast
   const masterGrid = masterRow.getDataGrid();
 
   // assert
-  await testScreenshot(t, takeScreenshot, 'T1046688.searchPanel.png', { element: masterGrid.element, theme: Themes.materialBlue });
+  await testScreenshot(t, takeScreenshot, 'T1046688.searchPanel.png', { element: masterGrid.element });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

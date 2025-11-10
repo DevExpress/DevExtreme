@@ -4,12 +4,12 @@ import { ClientFunction } from 'testcafe';
 import AppointmentPopup from 'devextreme-testcafe-models/scheduler/appointment/popup';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture`Appointment Form: Recurrence Form`
   .page(url(__dirname, '../../../container.html'));
 
 const SCHEDULER_SELECTOR = '#container';
-const theme = 'generic.light';
 
 const openAppointmentPopup = async (
   t: TestController,
@@ -33,7 +33,7 @@ const openAppointmentPopup = async (
 test.clientScripts([
   { module: 'mockdate' },
   { content: 'window.MockDate = MockDate;' },
-])(`daily frequency with repeat end never (${theme})`, async (t) => {
+])('daily frequency with repeat end never', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const appointment = {
@@ -53,9 +53,11 @@ test.clientScripts([
   await appointmentPopup.openRecurrenceForm(t, 'Daily');
   await appointmentPopup.setRecurrenceEnd(t, 'never');
 
-  await takeScreenshot(
-    `scheduler__recurrence-form__daily__repeat-end-never(theme=${theme})`,
-    appointmentPopup.recurrence.group,
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'scheduler__recurrence-form__daily__repeat-end-never.png',
+    { element: appointmentPopup.recurrence.group },
   );
 
   await t
@@ -81,7 +83,7 @@ test.clientScripts([
 test.clientScripts([
   { module: 'mockdate' },
   { content: 'window.MockDate = MockDate;' },
-])(`daily frequency with repeat end until (${theme})`, async (t) => {
+])('daily frequency with repeat end until', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const appointment = {
@@ -101,9 +103,11 @@ test.clientScripts([
   await appointmentPopup.openRecurrenceForm(t, 'Daily');
   await appointmentPopup.setRecurrenceEnd(t, 'until', '12/31/2024');
 
-  await takeScreenshot(
-    `scheduler__recurrence-form__daily__repeat-end-until(theme=${theme})`,
-    appointmentPopup.recurrence.group,
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'scheduler__recurrence-form__daily__repeat-end-until.png',
+    { element: appointmentPopup.recurrence.group },
   );
 
   await t
@@ -129,7 +133,7 @@ test.clientScripts([
 test.clientScripts([
   { module: 'mockdate' },
   { content: 'window.MockDate = MockDate;' },
-])(`daily frequency with repeat end count (${theme})`, async (t) => {
+])('daily frequency with repeat end count', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const appointment = {
@@ -149,9 +153,11 @@ test.clientScripts([
   await appointmentPopup.openRecurrenceForm(t, 'Daily');
   await appointmentPopup.setRecurrenceEnd(t, 'count', 10);
 
-  await takeScreenshot(
-    `scheduler__recurrence-form__daily__repeat-end-count(theme=${theme})`,
-    appointmentPopup.recurrence.group,
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'scheduler__recurrence-form__daily__repeat-end-count.png',
+    { element: appointmentPopup.recurrence.group },
   );
 
   await t
@@ -177,7 +183,7 @@ test.clientScripts([
 test.clientScripts([
   { module: 'mockdate' },
   { content: 'window.MockDate = MockDate;' },
-])(`weekly frequency with days mon-wed-fri (${theme})`, async (t) => {
+])('weekly frequency with days mon-wed-fri', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const appointment = {
@@ -198,9 +204,11 @@ test.clientScripts([
   await appointmentPopup.selectRecurrenceWeekDays(t, [0, 2, 4]);
   await appointmentPopup.setRecurrenceEnd(t, 'count', 15);
 
-  await takeScreenshot(
-    `scheduler__recurrence-form__weekly__mon-wed-fri(theme=${theme})`,
-    appointmentPopup.recurrence.group,
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'scheduler__recurrence-form__weekly__mon-wed-fri.png',
+    { element: appointmentPopup.recurrence.group },
   );
 
   await t
@@ -227,7 +235,7 @@ test.clientScripts([
 test.clientScripts([
   { module: 'mockdate' },
   { content: 'window.MockDate = MockDate;' },
-])(`weekly frequency with days weekend (${theme})`, async (t) => {
+])('weekly frequency with days weekend', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const appointment = {
@@ -248,9 +256,11 @@ test.clientScripts([
   await appointmentPopup.selectRecurrenceWeekDays(t, [5, 6]);
   await appointmentPopup.setRecurrenceEnd(t, 'count', 15);
 
-  await takeScreenshot(
-    `scheduler__recurrence-form__weekly__weekend(theme=${theme})`,
-    appointmentPopup.recurrence.group,
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'scheduler__recurrence-form__weekly__weekend.png',
+    { element: appointmentPopup.recurrence.group },
   );
 
   await t
@@ -277,7 +287,7 @@ test.clientScripts([
 test.clientScripts([
   { module: 'mockdate' },
   { content: 'window.MockDate = MockDate;' },
-])(`weekly frequency with interval 2 (${theme})`, async (t) => {
+])('weekly frequency with interval 2', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const appointment = {
@@ -298,9 +308,11 @@ test.clientScripts([
   await appointmentPopup.setRecurrenceInterval(t, 2);
   await appointmentPopup.selectRecurrenceWeekDays(t, [1, 5]);
 
-  await takeScreenshot(
-    `scheduler__recurrence-form__weekly__interval-2(theme=${theme})`,
-    appointmentPopup.recurrence.group,
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'scheduler__recurrence-form__weekly__interval-2.png',
+    { element: appointmentPopup.recurrence.group },
   );
 
   await t
@@ -326,7 +338,7 @@ test.clientScripts([
 test.clientScripts([
   { module: 'mockdate' },
   { content: 'window.MockDate = MockDate;' },
-])(`weekly frequency with interval 5 (${theme})`, async (t) => {
+])('weekly frequency with interval 5', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const appointment = {
@@ -347,9 +359,11 @@ test.clientScripts([
   await appointmentPopup.setRecurrenceInterval(t, 5);
   await appointmentPopup.selectRecurrenceWeekDays(t, [1, 5]);
 
-  await takeScreenshot(
-    `scheduler__recurrence-form__weekly__interval-5(theme=${theme})`,
-    appointmentPopup.recurrence.group,
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'scheduler__recurrence-form__weekly__interval-5.png',
+    { element: appointmentPopup.recurrence.group },
   );
 
   await t
@@ -375,7 +389,7 @@ test.clientScripts([
 test.clientScripts([
   { module: 'mockdate' },
   { content: 'window.MockDate = MockDate;' },
-])(`monthly frequency with day 1 (${theme})`, async (t) => {
+])('monthly frequency with day 1', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const appointment = {
@@ -396,9 +410,11 @@ test.clientScripts([
   await appointmentPopup.setRecurrenceMonthDay(t, 1);
   await appointmentPopup.setRecurrenceEnd(t, 'count', 12);
 
-  await takeScreenshot(
-    `scheduler__recurrence-form__monthly__day-1(theme=${theme})`,
-    appointmentPopup.recurrence.group,
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'scheduler__recurrence-form__monthly__day-1.png',
+    { element: appointmentPopup.recurrence.group },
   );
 
   await t
@@ -424,7 +440,7 @@ test.clientScripts([
 test.clientScripts([
   { module: 'mockdate' },
   { content: 'window.MockDate = MockDate;' },
-])(`monthly frequency with day 15 (${theme})`, async (t) => {
+])('monthly frequency with day 15', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const appointment = {
@@ -445,9 +461,11 @@ test.clientScripts([
   await appointmentPopup.setRecurrenceMonthDay(t, 15);
   await appointmentPopup.setRecurrenceEnd(t, 'count', 12);
 
-  await takeScreenshot(
-    `scheduler__recurrence-form__monthly__day-15(theme=${theme})`,
-    appointmentPopup.recurrence.group,
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'scheduler__recurrence-form__monthly__day-15.png',
+    { element: appointmentPopup.recurrence.group },
   );
 
   await t
@@ -473,7 +491,7 @@ test.clientScripts([
 test.clientScripts([
   { module: 'mockdate' },
   { content: 'window.MockDate = MockDate;' },
-])(`yearly frequency with jan-1 (${theme})`, async (t) => {
+])('yearly frequency with jan-1', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const appointment = {
@@ -494,9 +512,11 @@ test.clientScripts([
   await appointmentPopup.setRecurrenceYearlyDate(t, 'January', 1);
   await appointmentPopup.setRecurrenceEnd(t, 'until', '01/01/2030');
 
-  await takeScreenshot(
-    `scheduler__recurrence-form__yearly__jan-1(theme=${theme})`,
-    appointmentPopup.recurrence.group,
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'scheduler__recurrence-form__yearly__jan-1.png',
+    { element: appointmentPopup.recurrence.group },
   );
 
   await t
@@ -523,7 +543,7 @@ test.clientScripts([
 test.clientScripts([
   { module: 'mockdate' },
   { content: 'window.MockDate = MockDate;' },
-])(`yearly frequency with dec-31 (${theme})`, async (t) => {
+])('yearly frequency with dec-31', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const appointment = {
@@ -544,9 +564,11 @@ test.clientScripts([
   await appointmentPopup.setRecurrenceYearlyDate(t, 'December', 31);
   await appointmentPopup.setRecurrenceEnd(t, 'until', '01/01/2030');
 
-  await takeScreenshot(
-    `scheduler__recurrence-form__yearly__dec-31(theme=${theme})`,
-    appointmentPopup.recurrence.group,
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'scheduler__recurrence-form__yearly__dec-31.png',
+    { element: appointmentPopup.recurrence.group },
   );
 
   await t
@@ -572,7 +594,7 @@ test.clientScripts([
 test.clientScripts([
   { module: 'mockdate' },
   { content: 'window.MockDate = MockDate;' },
-])(`hourly frequency (${theme})`, async (t) => {
+])('hourly frequency', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const appointment = {
@@ -593,9 +615,11 @@ test.clientScripts([
   await appointmentPopup.setRecurrenceInterval(t, 2);
   await appointmentPopup.setRecurrenceEnd(t, 'count', 20);
 
-  await takeScreenshot(
-    `scheduler__recurrence-form__hourly(theme=${theme})`,
-    appointmentPopup.recurrence.group,
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'scheduler__recurrence-form__hourly.png',
+    { element: appointmentPopup.recurrence.group },
   );
 
   await t
@@ -621,7 +645,7 @@ test.clientScripts([
 test.clientScripts([
   { module: 'mockdate' },
   { content: 'window.MockDate = MockDate;' },
-])(`editing existing recurrence rule (${theme})`, async (t) => {
+])('editing existing recurrence rule', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const appointment = {
@@ -642,9 +666,11 @@ test.clientScripts([
   await t.click(Scheduler.getEditRecurrenceDialog().series);
   await appointmentPopup.openRecurrenceSettings(t);
 
-  await takeScreenshot(
-    `scheduler__recurrence-form__editing-existing(theme=${theme})`,
-    appointmentPopup.recurrence.group,
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'scheduler__recurrence-form__editing-existing.png',
+    { element: appointmentPopup.recurrence.group },
   );
 
   await t
@@ -675,7 +701,7 @@ test.clientScripts([
 test.clientScripts([
   { module: 'mockdate' },
   { content: 'window.MockDate = MockDate;' },
-])(`recurrence form with icons (${theme})`, async (t) => {
+])('recurrence form with icons', async (t) => {
   await ClientFunction(() => {
     (window as any).MockDate.set('2025/10/29');
   })();
@@ -695,11 +721,12 @@ test.clientScripts([
   const appointmentPopup = await openAppointmentPopup(t, appointment, true);
   await appointmentPopup.openRecurrenceSettings(t);
 
-  await takeScreenshot(
-    `scheduler__appointment__recurrence-form__with-icons (theme=${theme}).png`,
-    appointmentPopup.contentElement,
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'scheduler__appointment__recurrence-form__with-icons.png',
+    { element: appointmentPopup.contentElement },
   );
-
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

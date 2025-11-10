@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Offset: Current time indicator`
   .page(url(__dirname, '../../../container.html'));
@@ -88,13 +89,8 @@ endDayHour: ${endDayHour}
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
-    await takeScreenshot(getScreenshotName(
-      view,
-      indicatorTime,
-      offset,
-      startDayHour,
-      endDayHour,
-    ), scheduler.workSpace);
+    const screenshotName = getScreenshotName(view, indicatorTime, offset, startDayHour, endDayHour);
+    await testScreenshot(t, takeScreenshot, screenshotName, { element: scheduler.workSpace });
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());

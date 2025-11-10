@@ -3,6 +3,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Scheduler header`
   .page(url(__dirname, '../../../container.html'));
@@ -145,9 +146,7 @@ test('Scheduler: maintain layout after horizontal scroll (T1306971)', async (t) 
 
   await t.wait(100);
 
-  await t.expect(
-    await takeScreenshot('T1306971__scheduler__horizontal-scrolling__before.png', scheduler.element),
-  ).ok();
+  await testScreenshot(t, takeScreenshot, 'T1306971__scheduler__horizontal-scrolling__before.png', { element: scheduler.element });
 
   const container = scheduler.dateTableScrollableContainer;
   const scrollWidth = await container.scrollWidth;
@@ -164,9 +163,7 @@ test('Scheduler: maintain layout after horizontal scroll (T1306971)', async (t) 
 
   await t.wait(500);
 
-  await t.expect(
-    await takeScreenshot('T1306971__scheduler__horizontal-scrolling__after.png', scheduler.element),
-  ).ok();
+  await testScreenshot(t, takeScreenshot, 'T1306971__scheduler__horizontal-scrolling__after.png', { element: scheduler.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

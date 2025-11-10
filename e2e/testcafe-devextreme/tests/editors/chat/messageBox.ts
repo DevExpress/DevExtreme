@@ -1,6 +1,8 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Chat from 'devextreme-testcafe-models/chat';
-import { getShortText, getLongText, createUser } from './data';
+import {
+  getShortText, getLongText, createUser, attachments,
+} from './data';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
@@ -81,13 +83,24 @@ test('Chat: messagebox with editing preview', async (t) => {
   }, '#chat');
 });
 
-test('Chat: messagebox with attach button', async (t) => {
+test('Chat: messagebox with attachments and informer', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const chat = new Chat('#chat');
 
+  await t.typeText(chat.getInput(), getLongText(false, 4));
+  await chat.option({
+    fileUploaderOptions: {
+      value: [
+        ...attachments,
+        ...attachments,
+        ...attachments,
+      ],
+    },
+  });
+
   await chat.focus();
-  await testScreenshot(t, takeScreenshot, 'Messagebox with attach button.png', { element: '#chat' });
+  await testScreenshot(t, takeScreenshot, 'Messagebox with attachments and informer.png', { element: '#chat' });
 
   await t
     .expect(compareResults.isValid())
@@ -96,8 +109,7 @@ test('Chat: messagebox with attach button', async (t) => {
   await appendElementTo('#container', 'div', 'chat');
 
   return createWidget('dxChat', {
-    width: 400,
+    width: 812,
     height: 600,
-    fileUploaderOptions: {},
   }, '#chat');
 });

@@ -97,7 +97,9 @@ test('Accessibility: Scrollable should always have focusable element when naviga
   await a11yCheck(t);
 
   // focus last not fixed header cell
-  await pressKey(t, 'shift+tab', 9);
+  // In headless mode with nativeAutomation, we need one more shift+tab
+  // because focus goes through scrollable-container
+  await pressKey(t, 'shift+tab', 10);
 
   const headerCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(COLUMNS_LENGTH - 3);
 

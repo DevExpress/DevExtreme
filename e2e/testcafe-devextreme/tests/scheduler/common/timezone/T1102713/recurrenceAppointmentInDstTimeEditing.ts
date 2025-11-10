@@ -4,6 +4,7 @@ import AppointmentDialog from 'devextreme-testcafe-models/scheduler/appointment/
 import Appointment from 'devextreme-testcafe-models/scheduler/appointment';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Editing recurrent appointment in DST time`
   .page(url(__dirname, '../../../../container.html'));
@@ -46,7 +47,7 @@ async function editingPopupTestFunction(t: TestController, screenshotName: strin
   const { appointmentPopup } = scheduler;
   await t.click(appointmentPopup.saveButton.element);
 
-  await takeScreenshot(`${SCREENSHOT_BASE_NAME}__${screenshotName}.png`, screenshotZone);
+  await testScreenshot(t, takeScreenshot, `${SCREENSHOT_BASE_NAME}__${screenshotName}.png`, { element: screenshotZone });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -69,7 +70,7 @@ async function dragAndDropTestFunction(
   const appointmentDialog = new AppointmentDialog();
   await t.click(appointmentDialog.series);
 
-  await takeScreenshot(`${SCREENSHOT_BASE_NAME}__${screenshotName}.png`, screenshotZone);
+  await testScreenshot(t, takeScreenshot, `${SCREENSHOT_BASE_NAME}__${screenshotName}.png`, { element: screenshotZone });
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }
@@ -95,12 +96,12 @@ async function resizeTestFunction(
   const appointmentDialog = new AppointmentDialog();
   await t.click(appointmentDialog.series);
 
-  await takeScreenshot(`${SCREENSHOT_BASE_NAME}__${screenshotName}.png`, screenshotZone);
+  await testScreenshot(t, takeScreenshot, `${SCREENSHOT_BASE_NAME}__${screenshotName}.png`, { element: screenshotZone });
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }
 
-async function configureScheduler(t: TestController, { start, end }: { start: Date; end: Date }) {
+async function configureScheduler({ start, end }: { start: Date; end: Date }) {
   await createWidget('dxScheduler', {
     dataSource: [{
       startDate: start,
@@ -121,14 +122,14 @@ async function configureScheduler(t: TestController, { start, end }: { start: Da
 // === EDITING POPUP ===
 test('Editing popup: should have correctly been edited from editing popup. DST - winter time', async (t) => {
   await editingPopupTestFunction(t, 'popup__winter-time');
-}).before(async (t) => {
-  await configureScheduler(t, APPOINTMENT_DATETIME.winter);
+}).before(async () => {
+  await configureScheduler(APPOINTMENT_DATETIME.winter);
 });
 
 test('Editing popup: should have correctly been edited from editing popup. DST - summer time', async (t) => {
   await editingPopupTestFunction(t, 'popup__summer-time');
-}).before(async (t) => {
-  await configureScheduler(t, APPOINTMENT_DATETIME.summer);
+}).before(async () => {
+  await configureScheduler(APPOINTMENT_DATETIME.summer);
 });
 
 // === DRAG_N_DROP ===
@@ -137,8 +138,8 @@ test('Drag-n-drop up: should have correctly been edited. DST - winter time', asy
     rowIdx: 1,
     cellIdx: 1,
   });
-}).before(async (t) => {
-  await configureScheduler(t, APPOINTMENT_DATETIME.winter);
+}).before(async () => {
+  await configureScheduler(APPOINTMENT_DATETIME.winter);
 });
 
 test('Drag-n-drop down: should have correctly been edited. DST - winter time', async (t) => {
@@ -146,8 +147,8 @@ test('Drag-n-drop down: should have correctly been edited. DST - winter time', a
     rowIdx: 4,
     cellIdx: 1,
   });
-}).before(async (t) => {
-  await configureScheduler(t, APPOINTMENT_DATETIME.winter);
+}).before(async () => {
+  await configureScheduler(APPOINTMENT_DATETIME.winter);
 });
 
 test('Drag-n-drop up: should have correctly been edited. DST - summer time', async (t) => {
@@ -155,8 +156,8 @@ test('Drag-n-drop up: should have correctly been edited. DST - summer time', asy
     rowIdx: 1,
     cellIdx: 1,
   });
-}).before(async (t) => {
-  await configureScheduler(t, APPOINTMENT_DATETIME.summer);
+}).before(async () => {
+  await configureScheduler(APPOINTMENT_DATETIME.summer);
 });
 
 test('Drag-n-drop down: should have correctly been edited. DST - summer time', async (t) => {
@@ -164,8 +165,8 @@ test('Drag-n-drop down: should have correctly been edited. DST - summer time', a
     rowIdx: 4,
     cellIdx: 1,
   });
-}).before(async (t) => {
-  await configureScheduler(t, APPOINTMENT_DATETIME.summer);
+}).before(async () => {
+  await configureScheduler(APPOINTMENT_DATETIME.summer);
 });
 
 // === RESIZE ===
@@ -174,8 +175,8 @@ test('Resize top: should have correctly been edited. DST - winter time', async (
     direction: 'top',
     value: 100,
   });
-}).before(async (t) => {
-  await configureScheduler(t, APPOINTMENT_DATETIME.winter);
+}).before(async () => {
+  await configureScheduler(APPOINTMENT_DATETIME.winter);
 });
 
 test('Resize bottom: should have correctly been edited. DST - winter time', async (t) => {
@@ -183,8 +184,8 @@ test('Resize bottom: should have correctly been edited. DST - winter time', asyn
     direction: 'bottom',
     value: 100,
   });
-}).before(async (t) => {
-  await configureScheduler(t, APPOINTMENT_DATETIME.winter);
+}).before(async () => {
+  await configureScheduler(APPOINTMENT_DATETIME.winter);
 });
 
 test('Resize top: should have correctly been edited. DST - summer time', async (t) => {
@@ -192,8 +193,8 @@ test('Resize top: should have correctly been edited. DST - summer time', async (
     direction: 'top',
     value: 100,
   });
-}).before(async (t) => {
-  await configureScheduler(t, APPOINTMENT_DATETIME.summer);
+}).before(async () => {
+  await configureScheduler(APPOINTMENT_DATETIME.summer);
 });
 
 test('Resize bottom: should have correctly been edited. DST - summer time', async (t) => {
@@ -201,6 +202,6 @@ test('Resize bottom: should have correctly been edited. DST - summer time', asyn
     direction: 'bottom',
     value: 100,
   });
-}).before(async (t) => {
-  await configureScheduler(t, APPOINTMENT_DATETIME.summer);
+}).before(async () => {
+  await configureScheduler(APPOINTMENT_DATETIME.summer);
 });

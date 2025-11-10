@@ -511,7 +511,13 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
     const isMultiSelectionAllowed = this.option('allowMultipleCellSelection');
     const currentCellData = this._getFullCellData($cell);
-    const focusedCellData = this.cellsSelectionState.getFocusedCell().cellData;
+    const focusedCell = this.cellsSelectionState.getFocusedCell();
+
+    if (!focusedCell) {
+      return;
+    }
+
+    const focusedCellData = focusedCell.cellData;
 
     const nextFocusedCellData = this.cellsSelectionController.moveToCell({
       isMultiSelection,

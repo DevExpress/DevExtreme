@@ -1,12 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import type { GenerateGridColumnCommandResult, RequestCallbacks } from '@js/common/ai-integration';
 import type { Callback } from '@js/core/utils/callbacks';
 
 import type { Column, ColumnsController } from '../columns_controller/m_columns_controller';
-import type { DataController } from '../data_controller/m_data_controller';
+import type { DataController, HandleDataChangedArguments, UserData } from '../data_controller/m_data_controller';
 import { Controller } from '../m_modules';
 import { AIColumnIntegrationController } from './m_ai_column_integration_controller';
-import { getAICommandColumnDefaultOptions, isAIColumnAutoMode } from './utils';
+import type { InternalRequestCallbacks } from './types';
+import { getAICommandColumnDefaultOptions, isAIColumnAutoMode, isPromptOption } from './utils';
 
 export class AIColumnController extends Controller {
   private dataController!: DataController;
@@ -15,14 +14,52 @@ export class AIColumnController extends Controller {
 
   private aiColumnIntegrationController!: AIColumnIntegrationController;
 
-  private dataChangedHandler!: (e) => any;
+  private dataSourceChangedHandler!: (e?: HandleDataChangedArguments) => void;
+
+  private aiColumnOptionChangedHandler!: (
+    column: Column,
+    optionName: string,
+    value: unknown,
+  ) => void;
 
   public aiRequestCompleted!: Callback;
 
   public aiRequestRejected!: Callback;
 
+  private getDefaultCellValue(column: Column, cellValue: string | undefined): string | null {
+    if (cellValue === undefined) {
+      return column.ai?.emptyText ?? null;
+    }
+
+    return column.ai?.noDataText ?? null;
+  }
+
   private addAICommandColumn(): void {
-    this.columnsController.addCommandColumn(getAICommandColumnDefaultOptions());
+    const that = this;
+    const { dataController, aiColumnIntegrationController } = this;
+
+    this.columnsController.addCommandColumn({
+      ...getAICommandColumnDefaultOptions(),
+      calculateCellValue(data: UserData) {
+        const key = dataController.keyOf(data);
+        const cellValue = aiColumnIntegrationController.getAIColumnText(this.name, key);
+        const defaultValue = that.getDefaultCellValue(this, cellValue);
+
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+        return cellValue || defaultValue;
+      },
+    });
+  }
+
+  private subscribeToDataSourceChanged(): void {
+    this.dataSourceChangedHandler = this.handleDataSourceChanged.bind(this);
+    this.dataController.dataSource()?.changed.add(this.dataSourceChangedHandler);
+  }
+
+  private updateAICells(): void {
+    this.dataController.updateItems({
+      repaintChangesOnly: this.option('repaintChangesOnly'),
+    });
   }
 
   protected callbackNames(): string[] {
@@ -33,33 +70,30 @@ export class AIColumnController extends Controller {
     this.columnsController = this.getController('columns');
     this.dataController = this.getController('data');
 
-    this.addAICommandColumn();
-
     this.aiColumnIntegrationController = new AIColumnIntegrationController(this.component);
     this.aiColumnIntegrationController.init();
 
-    this.dataChangedHandler = this.handleDataChanged.bind(this);
-    this.dataController.changed.add(this.dataChangedHandler);
-  }
+    this.aiColumnOptionChangedHandler = this.aiColumnOptionChanged.bind(this);
+    this.columnsController.aiColumnOptionChanged.add(this.aiColumnOptionChangedHandler);
 
-  private showResults(
-    columnName: string,
-    result: string,
-    cachedData: Record<PropertyKey, string>,
-  ): void {
-    // Update the results in the UI or internal state
+    this.subscribeToDataSourceChanged();
+    this.addAICommandColumn();
   }
 
   public getAIColumns(): Column[] {
     return this.columnsController.getColumns().filter((col) => col.type === 'ai') as Column[];
   }
 
-  private handleDataChanged(e) {
+  private handleDataSourceChanged(args?: HandleDataChangedArguments): void {
     const aiColumns = this.getAIColumns();
+
+    if (args?.changeType === 'loadError') {
+      return;
+    }
 
     for (const col of aiColumns) {
       if (isAIColumnAutoMode(col)) {
-        this.refreshAIColumn(col.name as string);
+        this.sendRequest(col.name as string, true);
       }
     }
   }
@@ -78,41 +112,87 @@ export class AIColumnController extends Controller {
 
   public abortAIColumnRequest(columnName: string): void {
     this.aiColumnIntegrationController.abortRequest(columnName);
+
+    if (!this.aiColumnIntegrationController.isAnyRequestAwaitingCompletion()) {
+      this.dataController.endCustomLoading();
+    }
+  }
+
+  public sendRequest(
+    columnName: string,
+    useCache: boolean,
+    needToShowLoadPanel = true,
+  ): void {
+    const callbacks = this.getRequestCallbacks();
+
+    this.aiColumnIntegrationController.sendRequestCore({
+      columnName,
+      useCache,
+      needToShowLoadPanel,
+      callbacks,
+    });
   }
 
   public sendAIColumnRequest(
     columnName: string,
   ): void {
-    this.aiColumnIntegrationController.sendRequest(columnName, true, this.getRequestCallbacks());
+    this.sendRequest(columnName, false);
   }
 
   public refreshAIColumn(
     columnName: string,
   ): void {
-    this.sendAIColumnRequest(columnName);
+    this.sendRequest(columnName, false);
   }
 
-  private getRequestCallbacks(): RequestCallbacks<GenerateGridColumnCommandResult> {
+  private getRequestCallbacks(): InternalRequestCallbacks {
     return {
+      onRequestSending: (needToShowLoadPanel: boolean): void => {
+        if (needToShowLoadPanel) {
+          this.dataController.beginCustomLoading();
+        }
+      },
       onComplete: (data): void => {
+        this.dataController.endCustomLoading();
         this.aiRequestCompleted.fire(data);
+        this.updateAICells();
       },
       onError: (error: Error): void => {
+        this.dataController.endCustomLoading();
         this.aiRequestRejected.fire(error);
       },
     };
   }
 
   public clearAIColumn(columnName: string): void {
-    this.aiColumnIntegrationController.abortRequest(columnName);
+    this.abortAIColumnRequest(columnName);
+    this.aiColumnIntegrationController.clearAIColumn(columnName);
     this.columnsController.columnOption(columnName, 'ai.prompt', '');
+    this.updateAICells();
   }
 
-  public getAIColumnText(columnName: string, key: any): void {
+  public getAIColumnText(columnName: string, key: unknown): string | undefined {
+    return this.aiColumnIntegrationController.getAIColumnText(columnName, key as PropertyKey);
+  }
 
+  public aiColumnOptionChanged(
+    column: Column,
+    optionName: string,
+    value: unknown,
+  ): void {
+    const isPromptOptionName = isPromptOption(optionName, value);
+
+    if (isPromptOptionName && column.name) {
+      this.aiColumnIntegrationController.clearAIColumn(column.name);
+
+      if (!column.ai?.prompt) {
+        this.updateAICells();
+      }
+    }
   }
 
   public dispose(): void {
-    this.dataController.changed.remove(this.dataChangedHandler);
+    super.dispose();
+    this.dataController.dataSource()?.changed.remove(this.dataSourceChangedHandler);
   }
 }

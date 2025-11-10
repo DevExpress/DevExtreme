@@ -1,5 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 import createScheduler from './init/widget.setup';
 import url from '../../../../helpers/getPageUrl';
 
@@ -12,12 +13,11 @@ test('Should drag appoinment to the previous day`s cell (T1025952)', async (t) =
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await t.dragToElement(appointment.element, scheduler.getDateTableCell(1, 1));
+
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-previous-day-cell.png', { element: scheduler.workSpace });
+
   await t
-    .dragToElement(appointment.element, scheduler.getDateTableCell(1, 1))
-
-    .expect(await takeScreenshot('drag-n-drop-previous-day-cell.png', scheduler.workSpace))
-    .ok()
-
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createScheduler({

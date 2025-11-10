@@ -4,6 +4,7 @@
   "license": "MIT",
   "author": "Developer Express Inc.",
   "scripts": {
+    "postinstall": "npx ts-node tools/scripts/build-nx-plugin.ts || true",
     "devextreme:inject-descriptions-to-bundle": "dx-tools inject-descriptions --target-path ./packages/devextreme/ts/dx.all.d.ts --artifacts ./node_modules/devextreme-metadata/dist",
     "devextreme:inject-descriptions-to-modules": "dx-tools inject-descriptions --collapse-tags --sources ./packages/devextreme/js --artifacts ./node_modules/devextreme-metadata/dist",
     "devextreme:inject-descriptions": "npm run devextreme:inject-descriptions-to-bundle && npm run devextreme:inject-descriptions-to-modules",
@@ -20,7 +21,8 @@
     "all:build": "ts-node tools/scripts/build-all.ts",
     "all:build-dev": "pnpm run all:build --dev",
     "all:pack-and-copy": "nx run-many -t pack-and-copy",
-    "webserver": "http-server --port 8080 -c-1"
+    "demos:prepare": "nx run devextreme-demos:prepare-js",
+    "demos:start": "http-server ./apps/demos --port 8080 -c-1"
   },
   "nx": {},
   "private": true,

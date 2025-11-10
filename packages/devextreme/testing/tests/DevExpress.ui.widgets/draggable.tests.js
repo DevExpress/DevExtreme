@@ -3,7 +3,7 @@ import { noop } from 'core/utils/common';
 import pointerMock from '../../helpers/pointerMock.js';
 import viewPort from 'core/utils/view_port';
 import GestureEmitter from 'common/core/events/gesture/emitter.gesture.js';
-import animationFrame from 'common/core/animation/frame';
+import animationFrame from '__internal/common/core/animation/frameModule';
 import translator from 'common/core/animation/translator';
 import fx from 'common/core/animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
@@ -1664,10 +1664,9 @@ QUnit.module('autoScroll', $.extend({}, moduleConfig, {
         this.clock = sinon.useFakeTimers();
         setupDraggable(this, $('#scrollableItem'));
 
-        this.originalRAF = animationFrame.requestAnimationFrame;
-        animationFrame.requestAnimationFrame = function(callback) {
+        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
             return window.setTimeout(callback, 10);
-        };
+        });
 
         $('#area').hide();
         $('#items').hide();
@@ -1679,10 +1678,9 @@ QUnit.module('autoScroll', $.extend({}, moduleConfig, {
         $('#scrollable').scrollLeft(0);
     },
     afterEach: function() {
+        this.requestAnimationFrameStub.restore();
         this.clock.restore();
         this.clock.reset();
-
-        animationFrame.requestAnimationFrame = this.originalRAF;
 
         $('#scrollable').hide();
 

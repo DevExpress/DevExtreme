@@ -116,3 +116,23 @@ export const addCaptionTo = ClientFunction((
 
   element?.insertAdjacentText(where, caption);
 });
+
+export const addFocusableElementBefore = ClientFunction((
+  targetSelector: string,
+  elementId = 'focusable-start',
+) => {
+  const existing = document.getElementById(elementId);
+  existing?.remove();
+
+  const target = document.querySelector(targetSelector);
+  const button = document.createElement('button');
+  button.id = elementId;
+  button.textContent = 'Start';
+  button.style.position = 'fixed';
+  button.style.top = '0';
+  button.style.left = '0';
+  button.style.zIndex = '-1';
+  button.style.opacity = '0';
+  target?.parentElement?.insertBefore(button, target);
+  return button.id;
+});

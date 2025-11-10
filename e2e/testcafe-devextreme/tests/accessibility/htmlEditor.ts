@@ -8,8 +8,8 @@ import { Options } from '../../helpers/generateOptionMatrix';
 const MENU_ITEM_CLASS = 'dx-menu-item';
 const SUBMENU_CLASS = 'dx-submenu';
 
-fixture.disablePageReloads`Accessibility`
-  .page(url(__dirname, '../container.html'));
+fixture`Accessibility`
+  .page(url(__dirname, '../container-extended.html'));
 
 const markup = '<p>He<em>llo</em></p>';
 
