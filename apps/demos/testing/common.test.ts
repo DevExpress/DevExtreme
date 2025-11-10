@@ -187,14 +187,7 @@ Object.values(FRAMEWORKS).forEach((approach) => {
               looksSameComparisonOptions: { antialiasingTolerance: 10 },
             });
           } else {
-            comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions && {
-              ...comparisonOptions,
-              looksSameComparisonOptions: {
-                antialiasingTolerance: 8,
-                textTolerance: 10,
-                threshold: 0.1,
-              },
-            });
+            comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
           }
 
           const consoleMessages = await t.getBrowserConsoleMessages();
