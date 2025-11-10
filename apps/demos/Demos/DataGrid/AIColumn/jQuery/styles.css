@@ -1,4 +1,4 @@
-div.dx-datagrid .ai__cell {
+#gridContainer .ai__cell {
   background-color: var(--dx-color-main-bg);
 }
 
