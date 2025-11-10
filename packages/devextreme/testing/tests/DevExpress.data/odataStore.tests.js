@@ -1807,7 +1807,7 @@ QUnit.test('Dates, default behaviour (processDatesAsUtc = false) and fieldType o
         .always(done);
 });
 
-QUnit.test('Dates, default behaviour (processDatesAsUtc = false), ODataContext', function(assert) {
+QUnit.test('Dates, processDatesAsUtc = true, ODataContext', function(assert) {
     assert.expect(4);
 
     const done = assert.async();
@@ -1833,24 +1833,24 @@ QUnit.test('Dates, default behaviour (processDatesAsUtc = false), ODataContext',
         processDatesAsUtc: true,
         entities: {
             'X': { name: 'name' },
-            'Y': { name: 'name', processDatesAsUtc: true }
+            'Y': { name: 'name' }
         }
     });
 
     const promises = [
         ctx.get('function')
             .done(function(r) {
-                assert.strictEqual(typeof r.dateProperty, 'string');
+                assert.ok(isDate(r[0].dateProperty));
             }),
 
         ctx.invoke('action')
             .done(function(r) {
-                assert.strictEqual(typeof r.dateProperty, 'string');
+                assert.ok(isDate(r[0].dateProperty));
             }),
 
         ctx.X.load()
             .done(function(r) {
-                assert.strictEqual(typeof r[0].dateProperty, 'string');
+                assert.ok(isDate(r[0].dateProperty));
             }),
 
         ctx.Y.load()
