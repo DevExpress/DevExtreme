@@ -1,5 +1,5 @@
 #gridContainer .ai__cell {
-  background-color: var(--dx-color-main-bg);
+  background-color: var(--dx-datagrid-row-alternation-bg);
 }
 
 .trademark__wrapper {
