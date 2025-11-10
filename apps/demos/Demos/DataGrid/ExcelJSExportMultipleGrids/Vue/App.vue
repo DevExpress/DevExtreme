@@ -88,20 +88,26 @@ import DxTabPanel, { DxItem } from 'devextreme-vue/tab-panel';
 import { DxDataGrid, DxColumn } from 'devextreme-vue/data-grid';
 import { Workbook } from 'devextreme-exceljs-fork';
 import { type DataGridCell as ExсelDataGridCell, exportDataGrid } from 'devextreme-vue/common/export/excel';
-import { type DataSourceOptions } from 'devextreme-vue/common/data';
+import { ArrayStore, type DataSourceOptions } from 'devextreme-vue/common/data';
 import { products } from './data.ts';
 
 const priceGridRef = ref<DxDataGrid | null>(null);
 const ratingGridRef = ref<DxDataGrid | null>(null);
 
 const priceDataSource: DataSourceOptions = {
-  store: products,
+  store: new ArrayStore({
+    data: products,
+    key: 'Product_ID',
+  }),
   select: ['Product_ID', 'Product_Name', 'Product_Sale_Price', 'Product_Retail_Price'],
   filter: ['Product_ID', '<', 10],
 };
 
 const ratingDataSource: DataSourceOptions = {
-  store: products,
+  store: new ArrayStore({
+    data: products,
+    key: 'Product_ID',
+  }),
   select: ['Product_ID', 'Product_Name', 'Product_Consumer_Rating', 'Product_Category'],
   filter: ['Product_ID', '<', 10],
 };

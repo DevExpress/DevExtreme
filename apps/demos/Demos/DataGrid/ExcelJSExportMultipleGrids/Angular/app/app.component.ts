@@ -6,7 +6,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
   DxButtonModule, DxTabPanelModule, DxDataGridModule, DxDataGridComponent,
 } from 'devextreme-angular';
-import { DataSourceOptions } from 'devextreme-angular/common/data';
+import { ArrayStore, DataSourceOptions } from 'devextreme-angular/common/data';
 import { Workbook } from 'devextreme-exceljs-fork';
 import { saveAs } from 'file-saver-es';
 // Our demo infrastructure requires us to use 'file-saver-es'. We recommend that you use the official 'file-saver' package in your applications.
@@ -41,13 +41,19 @@ export class AppComponent {
 
   constructor(service: Service) {
     this.priceDataSource = {
-      store: service.getProducts(),
+      store: new ArrayStore({
+        data: service.getProducts(),
+        key: 'Product_ID',
+      }),
       select: ['Product_ID', 'Product_Name', 'Product_Sale_Price', 'Product_Retail_Price'],
       filter: ['Product_ID', '<', 10],
     };
 
     this.ratingDataSource = {
-      store: service.getProducts(),
+      store: new ArrayStore({
+        data: service.getProducts(),
+        key: 'Product_ID',
+      }),
       select: ['Product_ID', 'Product_Name', 'Product_Consumer_Rating', 'Product_Category'],
       filter: ['Product_ID', '<', 10],
     };
