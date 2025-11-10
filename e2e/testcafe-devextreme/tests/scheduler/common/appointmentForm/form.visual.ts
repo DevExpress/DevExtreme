@@ -129,34 +129,34 @@ const getResources = (withIcons = false) => ([
         allowTimeZoneEditing: true,
       },
     });
+  });
 
-    test.meta({ browserSize: [1500, 1500] })('appointment form readonly state', async (t) => {
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  test.meta({ browserSize: [1500, 1500] })('appointment form readonly state', async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      const appointmentPopup = await openAppointmentPopup(t, appointment, false);
+    const appointmentPopup = await openAppointmentPopup(t, appointment, false);
 
-      await testScreenshot(
-        t,
-        takeScreenshot,
-        `scheduler__appointment__readonly-form (recurring=${isRecurringAppointment},allDay=${isAllDay}).png`,
-        { element: appointmentPopup.contentElement },
-      );
+    await testScreenshot(
+      t,
+      takeScreenshot,
+      `scheduler__appointment__readonly-form (recurring=${isRecurringAppointment},allDay=${isAllDay}).png`,
+      { element: appointmentPopup.contentElement },
+    );
 
-      await t
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
-    }).before(async () => {
-      await createWidget('dxScheduler', {
-        dataSource: [],
-        views: ['week'],
-        currentView: 'week',
-        currentDate: new Date(2021, 2, 25),
-        resources: getResources(),
-        editing: {
-          allowUpdating: false,
-          allowTimeZoneEditing: true,
-        },
-      });
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await createWidget('dxScheduler', {
+      dataSource: [],
+      views: ['week'],
+      currentView: 'week',
+      currentDate: new Date(2021, 2, 25),
+      resources: getResources(),
+      editing: {
+        allowUpdating: false,
+        allowTimeZoneEditing: true,
+      },
     });
   });
 });
