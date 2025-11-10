@@ -130,21 +130,22 @@ const getResources = (withIcons = false) => ([
       },
     });
 
-    test.meta({ browserSize: [1500, 1500] })(`appointment form readonly state (${theme})`, async (t) => {
+    test.meta({ browserSize: [1500, 1500] })('appointment form readonly state', async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       const appointmentPopup = await openAppointmentPopup(t, appointment, false);
 
-      await takeScreenshot(
-        `scheduler__appointment__readonly-form (recurring=${isRecurringAppointment},allDay=${isAllDay},theme=${theme})`,
-        appointmentPopup.contentElement,
+      await testScreenshot(
+        t,
+        takeScreenshot,
+        `scheduler__appointment__readonly-form (recurring=${isRecurringAppointment},allDay=${isAllDay}).png`,
+        { element: appointmentPopup.contentElement },
       );
 
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async () => {
-      await changeTheme(theme);
       await createWidget('dxScheduler', {
         dataSource: [],
         views: ['week'],
@@ -156,8 +157,6 @@ const getResources = (withIcons = false) => ([
           allowTimeZoneEditing: true,
         },
       });
-    }).after(async () => {
-      await changeTheme('generic.light');
     });
   });
 });

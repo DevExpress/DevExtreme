@@ -749,7 +749,7 @@ test.clientScripts([
 test.clientScripts([
   { module: 'mockdate' },
   { content: 'window.MockDate = MockDate;' },
-])(`recurrence settings opened in readonly mode (${theme})`, async (t) => {
+])('recurrence settings opened in readonly mode', async (t) => {
   await ClientFunction(() => {
     (window as any).MockDate.set('2025/10/29');
   })();
@@ -766,9 +766,11 @@ test.clientScripts([
   const appointmentPopup = await openAppointmentPopup(t, appointment, false);
   await appointmentPopup.openRecurrenceSettings(t);
 
-  await takeScreenshot(
-    `scheduler__recurrence-form__readonly-mode(theme=${theme})`,
-    appointmentPopup.recurrence.group,
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'scheduler__recurrence-form__readonly-mode.png',
+    { element: appointmentPopup.recurrence.group },
   );
 
   await t
