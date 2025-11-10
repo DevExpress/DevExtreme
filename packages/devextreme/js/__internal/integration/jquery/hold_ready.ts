@@ -1,16 +1,17 @@
-// eslint-disable-next-line no-restricted-imports
+import readyCallbacks from '@ts/core/utils/m_ready_callbacks';
+import { themeReadyCallback } from '@ts/ui/m_themes_callback';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import jQuery from 'jquery';
-import { themeReadyCallback } from '../../ui/themes_callback';
-import readyCallbacks from '../../core/utils/ready_callbacks';
 
-if(jQuery && !themeReadyCallback.fired()) {
-    const holdReady = jQuery.holdReady || jQuery.fn.holdReady;
+if (jQuery && !themeReadyCallback.fired()) {
+  // @ts-expect-error
+  const holdReady = jQuery.holdReady || jQuery.fn.holdReady;
 
-    holdReady(true);
+  holdReady(true);
 
-    themeReadyCallback.add(function() {
-        readyCallbacks.add(function() {
-            holdReady(false);
-        });
+  themeReadyCallback.add(() => {
+    readyCallbacks.add(() => {
+      holdReady(false);
     });
+  });
 }

@@ -1,42 +1,54 @@
-// eslint-disable-next-line no-restricted-imports
+import registerEventCallbacks from '@js/common/core/events/core/event_registrator_callbacks';
+import domAdapter from '@ts/core/m_dom_adapter';
+import eventsEngine from '@ts/events/core/m_events_engine';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import jQuery from 'jquery';
-import eventsEngine from '../../common/core/events/core/events_engine';
+
 import useJQueryFn from './use_jquery';
-import registerEventCallbacks from '../../common/core/events/core/event_registrator_callbacks';
-import domAdapter from '../../core/dom_adapter';
+
 const useJQuery = useJQueryFn();
 
-if(useJQuery) {
-    registerEventCallbacks.add(function(name, eventObject) {
-        jQuery.event.special[name] = eventObject;
-    });
+if (useJQuery) {
+  registerEventCallbacks.add((name, eventObject) => {
+    jQuery.event.special[name] = eventObject;
+  });
 
-    if(eventsEngine.passiveEventHandlersSupported()) {
-        eventsEngine.forcePassiveFalseEventNames.forEach(function(eventName) {
-            jQuery.event.special[eventName] = {
-                setup: function(data, namespaces, handler) {
-                    domAdapter.listen(this, eventName, handler, { passive: false });
-                }
-            };
-        });
-    }
-
-    eventsEngine.set({
-        on: function(element) {
-            jQuery(element).on.apply(jQuery(element), Array.prototype.slice.call(arguments, 1));
+  if (eventsEngine.passiveEventHandlersSupported()) {
+    eventsEngine.forcePassiveFalseEventNames.forEach((eventName) => {
+      jQuery.event.special[eventName] = {
+        setup(data, namespaces, handler): void {
+          domAdapter.listen(this, eventName, handler, { passive: false });
         },
-        one: function(element) {
-            jQuery(element).one.apply(jQuery(element), Array.prototype.slice.call(arguments, 1));
-        },
-        off: function(element) {
-            jQuery(element).off.apply(jQuery(element), Array.prototype.slice.call(arguments, 1));
-        },
-        trigger: function(element) {
-            jQuery(element).trigger.apply(jQuery(element), Array.prototype.slice.call(arguments, 1));
-        },
-        triggerHandler: function(element) {
-            jQuery(element).triggerHandler.apply(jQuery(element), Array.prototype.slice.call(arguments, 1));
-        },
-        Event: jQuery.Event
+      };
     });
+  }
+
+  eventsEngine.set({
+    on(element) {
+      // @ts-expect-error
+      // eslint-disable-next-line prefer-spread,prefer-rest-params
+      jQuery(element).on.apply(jQuery(element), Array.prototype.slice.call(arguments, 1));
+    },
+    one(element) {
+      // @ts-expect-error
+      // eslint-disable-next-line prefer-spread,prefer-rest-params
+      jQuery(element).one.apply(jQuery(element), Array.prototype.slice.call(arguments, 1));
+    },
+    off(element) {
+      // @ts-expect-error
+      // eslint-disable-next-line prefer-spread,prefer-rest-params
+      jQuery(element).off.apply(jQuery(element), Array.prototype.slice.call(arguments, 1));
+    },
+    trigger(element) {
+      // @ts-expect-error
+      // eslint-disable-next-line prefer-spread,prefer-rest-params
+      jQuery(element).trigger.apply(jQuery(element), Array.prototype.slice.call(arguments, 1));
+    },
+    triggerHandler(element) {
+      // @ts-expect-error
+      // eslint-disable-next-line prefer-spread,prefer-rest-params,@stylistic/max-len
+      jQuery(element).triggerHandler.apply(jQuery(element), Array.prototype.slice.call(arguments, 1));
+    },
+    Event: jQuery.Event,
+  });
 }
