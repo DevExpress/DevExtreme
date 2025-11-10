@@ -646,13 +646,11 @@ $scheduler-appointment-form-label-padding: 20px;
         }
       }
 
-      &.dx-scheduler-form-readonly {
-        .dx-scheduler-form-repeat-editor .dx-scheduler-form-recurrence-settings-button {
-          margin-right: 0;
+      .dx-scheduler-form-repeat-editor .dx-selectbox.dx-state-readonly .dx-scheduler-form-recurrence-settings-button {
+        margin-right: 0;
 
-          &::after {
-            content: none;
-          }
+        &::after {
+          content: none;
         }
       }
 

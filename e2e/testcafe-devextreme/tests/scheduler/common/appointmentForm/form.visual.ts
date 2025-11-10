@@ -137,6 +137,36 @@ const getResources = (withIcons = false) => ([
     }).after(async () => {
       await changeTheme('generic.light');
     });
+
+    test.meta({ browserSize: [1500, 1500] })(`appointment form readonly state (${theme})`, async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+      const appointmentPopup = await openAppointmentPopup(t, appointment, false);
+
+      await takeScreenshot(
+        `scheduler__appointment__readonly-form (recurring=${isRecurringAppointment},allDay=${isAllDay},theme=${theme})`,
+        appointmentPopup.contentElement,
+      );
+
+      await t
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async () => {
+      await changeTheme(theme);
+      await createWidget('dxScheduler', {
+        dataSource: [],
+        views: ['week'],
+        currentView: 'week',
+        currentDate: new Date(2021, 2, 25),
+        resources: getResources(),
+        editing: {
+          allowUpdating: false,
+          allowTimeZoneEditing: true,
+        },
+      });
+    }).after(async () => {
+      await changeTheme('generic.light');
+    });
   });
 });
 
@@ -169,58 +199,3 @@ test.meta({ browserSize: [1500, 1500] })('main form with resources that have ico
   currentDate: new Date(2021, 2, 25),
   resources: getResources(true),
 }));
-
-[
-  'generic.light',
-  'generic.light.compact',
-  'material.blue.light',
-  'material.blue.light.compact',
-  'fluent.blue.light',
-  'fluent.blue.light.compact',
-].forEach((theme) => {
-  [
-    { isRecurringAppointment: false, isAllDay: false },
-    { isRecurringAppointment: true, isAllDay: false },
-  ].forEach(({ isRecurringAppointment, isAllDay }) => {
-    const appointment = {
-      text: 'Readonly Appointment',
-      startDate: new Date('2021-04-26T16:30:00.000Z'),
-      endDate: new Date('2021-04-26T18:30:00.000Z'),
-      allDay: isAllDay,
-      recurrenceRule: isRecurringAppointment ? 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=10' : undefined,
-      assigneeId: [1, 2],
-      roomId: 1,
-      priorityId: 1,
-    };
-
-    test.meta({ browserSize: [1500, 1500] })(`appointment form readonly state (${theme})`, async (t) => {
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-      const appointmentPopup = await openAppointmentPopup(t, appointment, false);
-
-      await takeScreenshot(
-        `scheduler__appointment__readonly-form (recurring=${isRecurringAppointment},theme=${theme})`,
-        appointmentPopup.contentElement,
-      );
-
-      await t
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
-    }).before(async () => {
-      await changeTheme(theme);
-      await createWidget('dxScheduler', {
-        dataSource: [],
-        views: ['week'],
-        currentView: 'week',
-        currentDate: new Date(2021, 2, 25),
-        resources: getResources(),
-        editing: {
-          allowUpdating: false,
-          allowTimeZoneEditing: true,
-        },
-      });
-    }).after(async () => {
-      await changeTheme('generic.light');
-    });
-  });
-});
