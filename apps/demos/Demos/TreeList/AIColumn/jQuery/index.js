@@ -203,7 +203,7 @@ $(() => {
         width: 180,
       },
       {
-        name: 'origin',
+        name: 'AI Column',
         caption: 'AI Column',
         type: 'ai',
         ai: {
