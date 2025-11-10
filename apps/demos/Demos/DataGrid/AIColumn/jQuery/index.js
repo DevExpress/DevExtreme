@@ -100,6 +100,9 @@ $(() => {
       src: `../../../../images/vehicles/image_${ID}.png`,
       alt: `${TrademarkName} ${Name}`,
       tabindex: 0,
+      role: 'button',
+      'aria-haspopup': 'dialog',
+      'aria-label': `${TrademarkName} ${Name} - press Enter for image info`,
     });
 
     const showPopup = () => {
