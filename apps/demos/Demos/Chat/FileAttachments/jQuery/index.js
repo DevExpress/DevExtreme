@@ -15,6 +15,10 @@ $(() => {
 
   const uploadedFilesMap = new Map();
 
+  function getFileUrl(filename) {
+    return uploadedFilesMap.get(filename);
+  }
+
   $('#chat').dxChat({
     height: 600,
     dataSource,
@@ -22,20 +26,18 @@ $(() => {
     user: currentUser,
     fileUploaderOptions: {
       uploadFile: () => {},
-      onValueChanged(e) {
-        e.value.forEach((file) => {
-          const url = URL.createObjectURL(file);
-          uploadedFilesMap.set(file.name, url);
-        });
+      onUploaded({ file }) {
+        const url = URL.createObjectURL(file);
+        uploadedFilesMap.set(file.name, url);
       },
     },
     onMessageEntered(e) {
       const { message } = e;
 
-      const attachmentsWithUrls = message.attachments?.map((attachment) => {
-        const url = uploadedFilesMap.get(attachment.name);
-        return { ...attachment, url };
-      });
+      const attachmentsWithUrls = message.attachments?.map((attachment) => ({
+        ...attachment,
+        url: getFileUrl(attachment.name),
+      }));
 
       dataSource.store().push([{
         type: 'insert',
