@@ -97,7 +97,7 @@ export const attachments = [
   },
   {
     name: '9138cf2e-ced3-426a-bb53-4478536f690b.zip',
-    size: 1024000,
+    size: 102400,
   },
 ];
 

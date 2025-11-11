@@ -16,41 +16,41 @@ const supportAgent = {
   avatarUrl: '../../../../images/petersmith.png',
 };
 
-const createEmptyAttachment = (name, type) => {
-  const blob = new Blob([''], { type });
-  const url = URL.createObjectURL(blob);
-
-  return {
-    name,
-    url,
-    size: 1024 * 10,
-  };
-};
-
-const screenshot1 = createEmptyAttachment('Screenshot1.jpg', 'image/jpeg');
-const screenshot2 = createEmptyAttachment('Screenshot2.jpg', 'image/jpeg');
-const screenshot3 = createEmptyAttachment('Screenshot3.jpg', 'image/jpeg');
-const instructions = createEmptyAttachment('Instructions.pdf', 'application/pdf');
-
 const messages = [
-  {
-    id: new DevExpress.data.Guid(),
-    timestamp: getTimestamp(date, -9),
-    author: supportAgent,
-    text: 'Hello, John!\nHow can I assist you today?',
-  },
   {
     id: new DevExpress.data.Guid(),
     timestamp: getTimestamp(date, -7),
     author: currentUser,
-    text: "Hi, I'm having trouble accessing my account.\nIt says my password is incorrect. I’ve attached some screenshots for you to check.",
-    attachments: [screenshot1, screenshot2, screenshot3],
+    text: "Hi! I'm having trouble accessing my account.\nThe website says my password is incorrect. I'm sending a few screenshots so you can see where I get the error.",
+    attachments: [
+      {
+        name: 'Pic1.png',
+        url: '../../../../images/Chat/FileAttachments/Pic1.png',
+        size: 1024 * 10,
+      },
+      {
+        name: 'Pic2.png',
+        url: '../../../../images/Chat/FileAttachments/Pic2.png',
+        size: 1024 * 10,
+      },
+      {
+        name: 'Pic3.png',
+        url: '../../../../images/Chat/FileAttachments/Pic3.png',
+        size: 1024 * 10,
+      },
+    ],
   },
   {
     id: new DevExpress.data.Guid(),
     timestamp: getTimestamp(date, -7),
     author: supportAgent,
-    text: 'Thanks for the screenshots! I can help you with that. Please refer to the attached file for instructions to restore access.',
-    attachments: [instructions],
+    text: 'Hello! Thanks for including screenshots. To restore access, please follow instructions in the attached file.\nLet me know if you need anything else.',
+    attachments: [
+      {
+        name: 'Instructions.pdf',
+        url: '../../../../images/Chat/FileAttachments/Instructions.pdf',
+        size: 1024 * 10,
+      },
+    ],
   },
 ];
