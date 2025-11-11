@@ -3,7 +3,7 @@ import config from 'core/config';
 import { deferUpdate } from 'core/utils/common';
 import support from '__internal/core/utils/m_support';
 import { isRenderer } from 'core/utils/type';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import $ from 'jquery';
 import TabPanel from 'ui/tab_panel';
 import keyboardMock from '../../helpers/keyboardMock.js';
@@ -131,12 +131,10 @@ QUnit.module('rendering', {
             const textRect = $title.find('span').get(0).getBoundingClientRect();
 
             const epsilon = 2.1;
-            assert.roughEqual((iconRect.top + iconRect.height / 2), textRect.top + textRect.height / 2, epsilon, `correct vertical centering of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);
+            assert.roughEqual((iconRect.left + iconRect.width / 2), textRect.left + textRect.width / 2, epsilon, `correct horizontal centering of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);
 
-            const horizontalMargin = rtlEnabled
-                ? iconRect.right - textRect.right - iconRect.width
-                : textRect.left - iconRect.left - iconRect.width;
-            assert.strictEqual(horizontalMargin, 8, `correct horizontal alignment of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);
+            const verticalMargin = textRect.top - iconRect.bottom;
+            assert.strictEqual(verticalMargin, 4, `correct vertical alignment of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);
         });
     });
 
@@ -159,9 +157,9 @@ QUnit.module('rendering', {
             const $tabPanelContainer = $tabPanel.find(`.${TABPANEL_CONTAINER_CLASS}`);
 
             if(tabsPosition === 'top' || tabsPosition === 'bottom') {
-                assert.strictEqual($tabPanelContainer.get(0).clientHeight, 62);
+                assert.strictEqual($tabPanelContainer.get(0).clientHeight, 55);
             } else {
-                assert.strictEqual($tabPanelContainer.get(0).clientWidth, 72);
+                assert.strictEqual($tabPanelContainer.get(0).clientWidth, 71);
             }
         });
     });
@@ -218,19 +216,19 @@ QUnit.module('options', {
     });
 
     QUnit.test('iconPosition option should be passed to tabs correctly', function(assert) {
-        assert.strictEqual(this.tabWidgetInstance.option('iconPosition'), 'start', 'option <iconPosition> successfully passed to nested tabs widget');
+        assert.strictEqual(this.tabWidgetInstance.option('iconPosition'), 'top', 'option <iconPosition> successfully passed to nested tabs widget');
 
-        this.tabPanelInstance.option('iconPosition', 'top');
+        this.tabPanelInstance.option('iconPosition', 'start');
 
-        assert.strictEqual(this.tabWidgetInstance.option('iconPosition'), 'top', 'option <iconPosition> of nested tabs widget successfully changed');
+        assert.strictEqual(this.tabWidgetInstance.option('iconPosition'), 'start', 'option <iconPosition> of nested tabs widget successfully changed');
     });
 
     QUnit.test('stylingMode option should be passed to tabs correctly', function(assert) {
-        assert.strictEqual(this.tabWidgetInstance.option('stylingMode'), 'primary', 'option <stylingMode> successfully passed to nested tabs widget');
+        assert.strictEqual(this.tabWidgetInstance.option('stylingMode'), 'secondary', 'option <stylingMode> successfully passed to nested tabs widget');
 
-        this.tabPanelInstance.option('stylingMode', 'secondary');
+        this.tabPanelInstance.option('stylingMode', 'primary');
 
-        assert.strictEqual(this.tabWidgetInstance.option('stylingMode'), 'secondary', 'option <stylingMode> of nested tabs widget successfully changed');
+        assert.strictEqual(this.tabWidgetInstance.option('stylingMode'), 'primary', 'option <stylingMode> of nested tabs widget successfully changed');
     });
 
     QUnit.test('dataSource option test', function(assert) {
