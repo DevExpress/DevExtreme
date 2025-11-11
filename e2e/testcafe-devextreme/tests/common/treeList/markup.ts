@@ -213,7 +213,7 @@ test('The shading should alternate correctly after expanding the node when repai
   ['single-line', 'multiple-line'].forEach((contentType) => {
     [false, true].forEach((rtlEnabled) => {
       test.meta({
-        // eslint-disable-next-line @stylistic/max-len
+        // eslint-disable-next-line max-len
         themes: !rtlEnabled ? [Themes.materialBlue, Themes.materialBlueCompact, Themes.genericLight] : [],
       })(
         `Markup should be correct [T1291914 & T1294907]:selection=${selectionMode},content=${contentType},rtl=${rtlEnabled}`,
