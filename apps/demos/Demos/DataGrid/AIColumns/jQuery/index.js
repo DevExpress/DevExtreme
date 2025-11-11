@@ -136,6 +136,7 @@ $(() => {
 
   $('#gridContainer').dxDataGrid({
     dataSource: vehicles,
+    showBorders: true,
     keyExpr: 'ID',
     paging: {
       pageSize: 10,
@@ -150,7 +151,7 @@ $(() => {
     columns: [
       {
         caption: 'Trademark',
-        width: 220,
+        width: 200,
         cellTemplate: (container, options) => {
           const vehicle = options.data;
           const imageWrapper = createTrademarkTemplate(vehicle);
@@ -159,6 +160,7 @@ $(() => {
       },
       {
         dataField: 'Price',
+        alignment: 'left',
         format: 'currency',
         width: 100,
       },
