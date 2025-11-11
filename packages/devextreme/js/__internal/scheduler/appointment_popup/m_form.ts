@@ -914,6 +914,7 @@ export class AppointmentForm {
         location: 'after',
         name: 'settings',
         options: {
+          disabled: false,
           icon: 'optionsoutline',
           stylingMode: 'text',
           onClick: (): void => {
