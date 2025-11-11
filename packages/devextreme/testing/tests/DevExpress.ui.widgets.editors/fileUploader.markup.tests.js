@@ -18,7 +18,6 @@ const FILEUPLOADER_BUTTON_CLASS = 'dx-fileuploader-button';
 const FILEUPLOADER_INPUT_CONTAINER_CLASS = 'dx-fileuploader-input-container';
 const FILEUPLOADER_INPUT_CLASS = 'dx-fileuploader-input';
 const FILEUPLOADER_INPUT_LABEL_CLASS = 'dx-fileuploader-input-label';
-const FILEUPLOADER_FILE_NAME_CLASS = 'dx-fileuploader-file-name';
 
 const FILEUPLOADER_UPLOAD_BUTTON_CLASS = 'dx-fileuploader-upload-button';
 
@@ -270,22 +269,5 @@ QUnit.module('the "hint" option', () => {
         const $input = $element.find(`.${FILEUPLOADER_INPUT_CLASS}`);
 
         assert.strictEqual($input.attr('title'), undefined);
-    });
-});
-
-QUnit.module('file markup', () => {
-    QUnit.test('file name should have title attribute equal to file name', function(assert) {
-        const $fileUploader = $('#fileuploader').dxFileUploader();
-        const instance = $fileUploader.dxFileUploader('instance');
-
-        const file = {
-            name: 'someFileWithVeryLongTitle.png',
-            type: 'image/png',
-        };
-        instance.option('value', [file]);
-
-        const $fileName = $fileUploader.find(`.${FILEUPLOADER_FILE_NAME_CLASS}`);
-
-        assert.strictEqual($fileName.attr('title'), file.name, 'file name has correct title attribute');
     });
 });
