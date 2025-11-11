@@ -46,9 +46,6 @@ test('Warning should be thrown in console after set new views(T1100758)', async 
   });
 });
 
-// TODO
-// The matrix test to split, so it was not possible to achieve a working state matrix test
-
 test('Warning shouldn\'t be thrown in console in case currentView=\'week\' if keyField exists(T1100758)', async (t) => {
   const messages = await t.getBrowserConsoleMessages();
 
@@ -92,8 +89,6 @@ test('Warning shouldn\'t be thrown in console in case currentView=\'agenda\' if 
     };
   });
 });
-
-//
 
 ['week', 'agenda'].forEach((currentView) => {
   test(`Warning should be thrown in console in case currentView='${currentView}' if keyField not set in Store(T1100758)`, async (t) => {

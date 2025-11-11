@@ -1,6 +1,7 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { Themes } from '../../../../helpers/themes';
 
 fixture.disablePageReloads`Scheduler - Multiday appointments`
   .page(url(__dirname, '../../../container.html'));
@@ -55,7 +56,7 @@ const checkRegularAppointment = async (
     .within(height - 1, height + 1);
 };
 
-test('it should render multi-day and multi-view appointments correctly if allDayPanelMode is "hidden"', async (t) => {
+test.meta({ runInTheme: Themes.genericLight })('it should render multi-day and multi-view appointments correctly if allDayPanelMode is "hidden"', async (t) => {
   const scheduler = new Scheduler('#container');
 
   let appointmentCount = await scheduler.getAppointmentCount();
@@ -115,7 +116,7 @@ test('it should render multi-day and multi-view appointments correctly if allDay
   },
 ));
 
-test('it should render all-day appointments if allDayPanelMode is "all"', async (t) => {
+test.meta({ runInTheme: Themes.genericLight })('it should render all-day appointments if allDayPanelMode is "all"', async (t) => {
   const scheduler = new Scheduler('#container');
 
   let appointmentCount = await scheduler.getAppointmentCount();
@@ -173,11 +174,11 @@ test('it should render all-day and multi-day appointments if allDayPanelMode is 
     .expect(scheduler.getAppointmentCount())
     .eql(5);
 
-  await checkAllDayAppointment(t, scheduler, 'allDay', 0, undefined, 109);
-  await checkRegularAppointment(t, scheduler, 'multiDay', 0, 'head', 200);
-  await checkRegularAppointment(t, scheduler, 'multiDay', 1, 'body', 200);
-  await checkRegularAppointment(t, scheduler, 'multiDay', 2, 'body', 200);
-  await checkRegularAppointment(t, scheduler, 'multiDay', 3, 'tail', 150);
+  await checkAllDayAppointment(t, scheduler, 'allDay', 0, undefined, 117);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 0, 'head', 151);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 1, 'body', 151);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 2, 'body', 151);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 3, 'tail', 113);
 }).before(async () => createWidget(
   'dxScheduler',
   {
@@ -207,18 +208,18 @@ test('it should correctly change allDayPanelOption at runtime', async (t) => {
   await t
     .expect(scheduler.getAppointmentCount())
     .eql(2);
-  await checkAllDayAppointment(t, scheduler, 'allDay', 0, undefined, 95);
-  await checkAllDayAppointment(t, scheduler, 'multiDay', 0, undefined, 395);
+  await checkAllDayAppointment(t, scheduler, 'allDay', 0, undefined, 103);
+  await checkAllDayAppointment(t, scheduler, 'multiDay', 0, undefined, 417);
 
   await scheduler.option('allDayPanelMode', 'allDay');
   await t
     .expect(scheduler.getAppointmentCount())
     .eql(5);
-  await checkAllDayAppointment(t, scheduler, 'allDay', 0, undefined, 95);
-  await checkRegularAppointment(t, scheduler, 'multiDay', 0, 'head', 400);
-  await checkRegularAppointment(t, scheduler, 'multiDay', 1, 'body', 400);
-  await checkRegularAppointment(t, scheduler, 'multiDay', 2, 'body', 400);
-  await checkRegularAppointment(t, scheduler, 'multiDay', 3, 'tail', 150);
+  await checkAllDayAppointment(t, scheduler, 'allDay', 0, undefined, 103);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 0, 'head', 303);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 1, 'body', 303);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 2, 'body', 303);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 3, 'tail', 113);
 
   await scheduler.option('allDayPanelMode', 'hidden');
   await t
@@ -226,28 +227,27 @@ test('it should correctly change allDayPanelOption at runtime', async (t) => {
     .eql(5)
     .expect(scheduler.allDayTableCells.exists)
     .notOk();
-  await checkRegularAppointment(t, scheduler, 'allDay', 0, undefined, 400);
-  await checkRegularAppointment(t, scheduler, 'multiDay', 0, 'head', 400);
-  await checkRegularAppointment(t, scheduler, 'multiDay', 1, 'body', 400);
-  await checkRegularAppointment(t, scheduler, 'multiDay', 2, 'body', 400);
-  await checkRegularAppointment(t, scheduler, 'multiDay', 3, 'tail', 150);
+  await checkRegularAppointment(t, scheduler, 'allDay', 0, undefined, 303);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 0, 'head', 303);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 1, 'body', 303);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 2, 'body', 303);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 3, 'tail', 113);
 
   await scheduler.option('allDayPanelMode', 'allDay');
   await t
     .expect(scheduler.getAppointmentCount())
     .eql(5);
-  await checkAllDayAppointment(t, scheduler, 'allDay', 0, undefined, 95);
-  await checkRegularAppointment(t, scheduler, 'multiDay', 0, 'head', 400);
-  await checkRegularAppointment(t, scheduler, 'multiDay', 1, 'body', 400);
-  await checkRegularAppointment(t, scheduler, 'multiDay', 2, 'body', 400);
-  await checkRegularAppointment(t, scheduler, 'multiDay', 3, 'tail', 150);
-
+  await checkAllDayAppointment(t, scheduler, 'allDay', 0, undefined, 103);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 0, 'head', 303);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 1, 'body', 303);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 2, 'body', 303);
+  await checkRegularAppointment(t, scheduler, 'multiDay', 3, 'tail', 113);
   await scheduler.option('allDayPanelMode', 'all');
   await t
     .expect(scheduler.getAppointmentCount())
     .eql(2);
-  await checkAllDayAppointment(t, scheduler, 'allDay', 0, undefined, 95);
-  await checkAllDayAppointment(t, scheduler, 'multiDay', 0, undefined, 395);
+  await checkAllDayAppointment(t, scheduler, 'allDay', 0, undefined, 103);
+  await checkAllDayAppointment(t, scheduler, 'multiDay', 0, undefined, 417);
 }).before(async () => createWidget(
   'dxScheduler',
   {
@@ -273,7 +273,7 @@ test('it should correctly change allDayPanelOption at runtime', async (t) => {
   },
 ));
 
-test('it should correctly handle allDayPanelMode for the wokrspace', async (t) => {
+test.meta({ runInTheme: Themes.genericLight })('it should correctly handle allDayPanelMode for the workspace', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t

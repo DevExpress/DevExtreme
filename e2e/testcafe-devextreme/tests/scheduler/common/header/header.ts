@@ -28,7 +28,7 @@ test('dateNavigator buttons should not be selected after clicking', async (t) =>
   height: 580,
 }));
 
-test('dateNavigator buttons should have "contained" styling mode with generic theme', async (t) => {
+test.meta({ runInTheme: 'generic.blue.light' })('dateNavigator buttons should have "contained" styling mode with generic theme', async (t) => {
   const { toolbar } = new Scheduler('#container');
 
   await t
