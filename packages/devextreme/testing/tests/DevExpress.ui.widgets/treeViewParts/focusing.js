@@ -14,8 +14,6 @@ const TOGGLE_ITEM_VISIBILITY_CLASS = 'dx-treeview-toggle-item-visibility';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 const CHECKBOX_CHECKED_STATE_CLASS = 'dx-checkbox-checked';
 
-import 'generic_light.css!';
-
 QUnit.module('Focusing');
 
 QUnit.testInActiveWindow('item should have focus-state class after click on it', function(assert) {

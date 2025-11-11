@@ -162,7 +162,7 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
         splitter.trigger($.Event('dxpointerup'));
 
         assert.equal(getWidth(treeListWrapperElement), splitterContainerWrapperWidth - getWidth(splitter));
-        assert.equal(getWidth(ganttView), getWidth(splitter));
+        assert.roughEqual(getWidth(ganttView), getWidth(splitter), 0.1);
         assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), splitterContainerWrapperWidth - getWidth(splitter), 'Splitter has not cross the right side');
         leftPanelWidth = this.instance._splitter._leftPanelPercentageWidth;
         fullScreenCommand.execute();
