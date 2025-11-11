@@ -147,7 +147,7 @@ QUnit.module('Scroll', moduleConfig, () => {
     test('Details view must keep scroll position when selection is changed', function(assert) {
         this.fileManager.option({
             width: 500,
-            height: 250,
+            height: 300,
             fileSystemProvider: createHugeFileSystem(),
             itemView: {
                 mode: 'details'

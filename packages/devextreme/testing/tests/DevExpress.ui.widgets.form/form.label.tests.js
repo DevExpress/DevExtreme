@@ -1,6 +1,6 @@
 import { getWidth } from 'core/utils/size';
 import { EDITORS_WITHOUT_LABELS } from '__internal/ui/form/form.layout_manager.utils';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import $ from 'jquery';
 import 'ui/autocomplete';
 import 'ui/calendar';
@@ -295,6 +295,7 @@ function findLabelTextsInColumn($container, columnIndex) {
 QUnit.test('Align labels in column', function(assert) {
     const testContainer = $('#form');
     const form = testContainer.dxForm({
+        labelLocation: 'left',
         formData: this.testObject,
         colCount: 4,
         customizeItem: function(item) {
@@ -358,6 +359,7 @@ QUnit.test('Align labels in column', function(assert) {
 QUnit.test('Align labels in column when labels text is identical', function(assert) {
     const testContainer = $('#form');
     const form = testContainer.dxForm({
+        labelLocation: 'left',
         formData: { TestBool: true, ShipName: 'Test' }
     }).dxForm('instance');
 
@@ -389,6 +391,7 @@ QUnit.test('Disable alignItemLabels in group', function(assert) {
     const testContainer = $('#form');
 
     testContainer.dxForm({
+        labelLocation: 'left',
         formData: { TestBool: true, ShipName: 'Test', Name: 'John', LastName: 'Smith' },
         items: [
             {
@@ -415,6 +418,7 @@ QUnit.test('Disable alignItemLabels in group', function(assert) {
 QUnit.test('Align labels in column when alignItemLabelsInAllGroups is enabled', function(assert) {
     const testContainer = $('#form');
     const form = testContainer.dxForm({
+        labelLocation: 'left',
         colCount: 2,
         formData: {
             firstName: 'John',
@@ -543,6 +547,7 @@ QUnit.test('Align labels in column when alignItemLabelsInAllGroups is disabled',
 QUnit.test('Align labels in columns when there are rows', function(assert) {
     const testContainer = $('#form');
     const form = testContainer.dxForm({
+        labelLocation: 'left',
         formData: this.testObject,
         colCount: 4,
         items: [{
@@ -603,6 +608,7 @@ QUnit.test('Align labels in columns when there are rows', function(assert) {
 QUnit.test('Align labels when layout is changed in responsive box_T306106', function(assert) {
     const testContainer = $('#form');
     const form = testContainer.dxForm({
+        labelLocation: 'left',
         formData: this.testObject,
         colCount: 4,
         customizeItem: function(item) {
@@ -645,6 +651,7 @@ QUnit.test('Align labels when layout is changed when small window size by defaul
 
     const testContainer = $('#form');
     const form = testContainer.dxForm({
+        labelLocation: 'left',
         formData: this.testObject,
         colCount: 4,
         customizeItem: function(item) {
@@ -744,6 +751,7 @@ QUnit.test('required mark aligned', function(assert) {
 
 QUnit.test('Align with "" required mark, T1031458', function(assert) {
     const $testContainer = $('#form').dxForm({
+        labelLocation: 'left',
         width: 200,
         requiredMark: '',
         items: [{
@@ -761,6 +769,7 @@ QUnit.test('Align with "" required mark, T1031458', function(assert) {
 
 QUnit.test('Align with " " required mark, T1031458', function(assert) {
     const $testContainer = $('#form').dxForm({
+        labelLocation: 'left',
         width: 200,
         requiredMark: ' ',
         items: [{
@@ -778,6 +787,7 @@ QUnit.test('Align with " " required mark, T1031458', function(assert) {
 
 QUnit.test('Align with "!" required mark, T1031458', function(assert) {
     const $testContainer = $('#form').dxForm({
+        labelLocation: 'left',
         width: 200,
         requiredMark: '!',
         items: [{
@@ -795,6 +805,7 @@ QUnit.test('Align with "!" required mark, T1031458', function(assert) {
 
 QUnit.test('Align with "×" required mark, T1031458', function(assert) {
     const $testContainer = $('#form').dxForm({
+        labelLocation: 'left',
         width: 200,
         requiredMark: '×',
         items: [{
@@ -830,6 +841,7 @@ QUnit.test('optional mark aligned', function(assert) {
 QUnit.test('Check align labels', function(assert) {
     const testContainer = $('#form');
     const form = testContainer.dxForm({
+        labelLocation: 'left',
         formData: {
             firstName: 'John',
             lastName: 'Smith',
@@ -899,6 +911,7 @@ QUnit.test('Check align labels when layout is changed by default_T306106', funct
 
     const testContainer = $('#form');
     const form = testContainer.dxForm({
+        labelLocation: 'left',
         formData: {
             firstName: 'John',
             lastName: 'Smith',
@@ -964,6 +977,7 @@ QUnit.test('Check align labels when layout is changed by default_T306106', funct
 QUnit.test('Check align labels when layout is changed_T306106', function(assert) {
     const testContainer = $('#form');
     const form = testContainer.dxForm({
+        labelLocation: 'left',
         formData: {
             firstName: 'John',
             lastName: 'Smith',

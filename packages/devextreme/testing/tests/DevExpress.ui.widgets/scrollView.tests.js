@@ -5,11 +5,10 @@ import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translat
 import animationFrame from '__internal/common/core/animation/frameModule';
 import devices from '__internal/core/m_devices';
 import eventsEngine from 'common/core/events/core/events_engine';
-import messageLocalization from 'common/core/localization/message';
 import themes from 'ui/themes';
 import pointerMock from '../../helpers/pointerMock.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import 'ui/scroll_view';
 
 const SCROLLVIEW_CLASS = 'dx-scrollview';
@@ -142,10 +141,10 @@ QUnit.module('render', moduleConfig, () => {
         const pullDownText = $scrollView.find('.' + SCROLLVIEW_PULLDOWN_TEXT_CLASS);
         const scrollBottomText = $scrollView.find('.' + SCROLLVIEW_REACHBOTTOM_TEXT_CLASS);
 
-        assert.equal(pullDownText.children().eq(0).text(), messageLocalization.format('dxScrollView-pullingDownText'));
-        assert.equal(pullDownText.children().eq(1).text(), messageLocalization.format('dxScrollView-pulledDownText'));
-        assert.equal(pullDownText.children().eq(2).text(), messageLocalization.format('dxScrollView-refreshingText'));
-        assert.equal(scrollBottomText.text(), 'Loading...');
+        assert.equal(pullDownText.children().eq(0).text(), '');
+        assert.equal(pullDownText.children().eq(1).text(), '');
+        assert.equal(pullDownText.children().eq(2).text(), '');
+        assert.equal(scrollBottomText.text(), '');
     });
 
     QUnit.test('scrollView scrollbottom markup', function(assert) {
