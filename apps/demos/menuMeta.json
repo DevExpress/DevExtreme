@@ -588,8 +588,8 @@
                 "DemoType": "Web"
               },
               {
-                "Title": "AI Column",
-                "Name": "AIColumn",
+                "Title": "AI Columns",
+                "Name": "AIColumns",
                 "Widget": "DataGrid",
                 "DemoType": "Web",
                 "Badge": "New",
@@ -1342,8 +1342,8 @@
                 "DemoType": "Web"
               },
               {
-                "Title": "AI Column",
-                "Name": "AIColumn",
+                "Title": "AI Columns",
+                "Name": "AIColumns",
                 "Widget": "TreeList",
                 "DemoType": "Web",
                 "Badge": "New",
