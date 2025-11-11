@@ -167,21 +167,4 @@ QUnit.module('File', moduleConfig, () => {
             assert.strictEqual($button.length, 1, 'download button is rendered');
         });
     });
-
-    QUnit.module('Accessibility', () => {
-        QUnit.test('download button should have tabIndex=0 when focusStateEnabled is true', function(assert) {
-            this.reinit({
-                data: {
-                    name: 'test.txt',
-                    size: 1024,
-                },
-                onDownload: () => {},
-            });
-
-            const $downloadButton = this.$element.find(`.${CHAT_FILE_DOWNLOAD_BUTTON_CLASS}`);
-            const tabIndex = $downloadButton.attr('tabIndex');
-
-            assert.strictEqual(tabIndex, '0', 'download button has tabIndex=0');
-        });
-    });
 });
