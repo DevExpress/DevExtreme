@@ -23,7 +23,6 @@ fixture.disablePageReloads`Pagination`
             + `snb_${showNavigationButtons.toString()}-`
             + `spss_${showPageSizeSelector.toString()}`, async (t) => {
             const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-            const pagination = new Pagination('#container');
 
             await testScreenshot(
               t,
@@ -34,7 +33,6 @@ fixture.disablePageReloads`Pagination`
                 + `snb_${showNavigationButtons.toString()}-`
                 + `spss_${showPageSizeSelector.toString()}`
                 + '.png',
-              { element: pagination.element },
             );
             await t
               .expect(compareResults.isValid())
