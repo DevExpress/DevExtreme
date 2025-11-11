@@ -99,7 +99,7 @@ jobs:
 
           { name: "generic", theme: 'generic.light' },
           { name: "material", theme: 'material.blue.light' },
-          { name: "material", theme: 'material.blue.light.compact' },
+          { name: "material - compact", theme: 'material.blue.light.compact' },
 
           # { componentFolder: "common", name: "common - themes" },
           # { componentFolder: "dataGrid", name: "dataGrid - themes" },
