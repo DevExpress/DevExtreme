@@ -754,6 +754,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     $('<div>')
       .addClass(FILEUPLOADER_FILE_NAME_CLASS)
       .text(value.name)
+      .attr('title', value.name)
       .appendTo($fileInfo);
 
     if (isDefined(value.size)) {
