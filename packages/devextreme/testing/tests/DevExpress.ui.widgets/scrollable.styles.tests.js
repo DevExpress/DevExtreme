@@ -10,7 +10,7 @@ import {
 } from './scrollableParts/scrollable.constants.js';
 import { extend } from 'core/utils/extend';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(function() {
     const markup = `
@@ -52,10 +52,10 @@ QUnit.module('Paddings: simulated strategy', () => {
                     const $outerScrollable = $('#outerScrollable').dxScrollable({ width: 200, height: 200, direction: direction, showScrollbar: 'always', useNative: false, rtlEnabled: rtlEnabled });
                     const $innerScrollable = $('#innerScrollable').dxScrollable({ width: 100, height: 100, direction: direction, showScrollbar: showScrollbar, useNative: false });
 
-                    const expectedHorizontalOuterScrollablePaddings = { bottom: '8px' };
-                    const expectedHorizontalInnerScrollablePaddings = { bottom: showScrollbar === 'always' ? '8px' : '0px' };
-                    const expectedVerticalOuterScrollablePaddings = rtlEnabled ? { left: '8px' } : { right: '8px' };
-                    const expectedVerticalInnerScrollablePaddings = rtlEnabled ? { left: showScrollbar === 'always' ? '8px' : '0px' } : { right: showScrollbar === 'always' ? '8px' : '0px' };
+                    const expectedHorizontalOuterScrollablePaddings = { bottom: '6px' };
+                    const expectedHorizontalInnerScrollablePaddings = { bottom: showScrollbar === 'always' ? '6px' : '0px' };
+                    const expectedVerticalOuterScrollablePaddings = rtlEnabled ? { left: '6px' } : { right: '6px' };
+                    const expectedVerticalInnerScrollablePaddings = rtlEnabled ? { left: showScrollbar === 'always' ? '6px' : '0px' } : { right: showScrollbar === 'always' ? '6px' : '0px' };
 
                     if(direction === 'horizontal') {
                         checkPaddings(assert, $outerScrollable, expectedHorizontalOuterScrollablePaddings);

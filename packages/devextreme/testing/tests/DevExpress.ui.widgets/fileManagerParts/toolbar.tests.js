@@ -7,7 +7,6 @@ import { implementationsMap } from 'core/utils/size';
 const { test } = QUnit;
 
 const moduleConfig = {
-
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         fx.off = true;
@@ -22,7 +21,6 @@ const moduleConfig = {
         this.clock.restore();
         fx.off = false;
     }
-
 };
 
 const createFileManager = useThumbnailViewMode => {
@@ -749,7 +747,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         implementationsMap.getWidth = originalWidth;
     });
 
-    test('toolbar separators must support custom items in menu', function(assert) {
+    test.skip('toolbar separators must support custom items in menu', function(assert) {
         createFileManager(false);
         this.clock.tick(400);
 

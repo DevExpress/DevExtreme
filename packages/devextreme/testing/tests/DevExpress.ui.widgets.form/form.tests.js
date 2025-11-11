@@ -8,7 +8,7 @@ import { extend } from 'core/utils/extend';
 import messageLocalization from 'localization/message';
 import visibilityEventsModule from 'common/core/events/visibility_change';
 import { TABS_ITEM_CLASS } from '__internal/ui/tabs/tabs';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import $ from 'jquery';
 import 'ui/autocomplete';
 import 'ui/calendar';
@@ -1016,6 +1016,7 @@ QUnit.test('Update layout inside a tab (T1040296)', function(assert) {
 QUnit.module('T986577', () => {
     function getFormConfig() {
         return {
+            labelLocation: 'left',
             width: 200,
             screenByWidth: (_) => { return 'md'; },
             colCountByScreen: {
@@ -1048,7 +1049,7 @@ QUnit.module('T986577', () => {
         assert.equal(resizeEventSpy.called, 1, 'resize is triggered only once');
         assert.deepEqual(resizeEventArg.get(0), $form.find(`.${TOOLBAR_CLASS}`).get(0), 'element is toolbar');
         assert.roughEqual(getWidth(resizeEventArg), 164, 5, 'toolbar width is correct');
-        assert.roughEqual(getHeight(resizeEventArg), 36, 1, 'toolbar height is correct');
+        assert.roughEqual(getHeight(resizeEventArg), 48, 1, 'toolbar height is correct');
 
         resizeEventSpy.restore();
     });
@@ -1061,7 +1062,7 @@ QUnit.module('T986577', () => {
         assert.equal(resizeEventSpy.called, 1, 'resize is triggered only once');
         assert.deepEqual(resizeEventArg.get(0), $form.find(`.${TOOLBAR_CLASS}`).get(0), 'element is toolbar');
         assert.roughEqual(getWidth(resizeEventArg), 72, 5, 'toolbar width is correct');
-        assert.roughEqual(getHeight(resizeEventArg), 36, 1, 'toolbar height is correct');
+        assert.roughEqual(getHeight(resizeEventArg), 48, 1, 'toolbar height is correct');
 
         resizeEventSpy.restore();
     });
@@ -3595,6 +3596,7 @@ QUnit.module('Form when rtlEnabled is true');
 
 QUnit.test('required mark aligned when rtlEnabled option is set to true', function(assert) {
     const $testContainer = $('#form').dxForm({
+        labelLocation: 'left',
         requiredMark: '!',
         rtlEnabled: true,
         items: [{
@@ -3615,6 +3617,7 @@ QUnit.test('required mark aligned when rtlEnabled option is set to true', functi
 
 QUnit.test('optional mark aligned when rtlEnabled option is set to true', function(assert) {
     const $testContainer = $('#form').dxForm({
+        labelLocation: 'left',
         optionalMark: 'optMark',
         showOptionalMark: true,
         rtlEnabled: true,

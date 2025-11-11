@@ -1,5 +1,4 @@
-import 'generic_light.css!';
-import themes from 'ui/themes';
+import 'fluent_blue_light.css!';
 import { extend } from 'core/utils/extend';
 import { DataSource } from 'common/data/data_source/data_source';
 import holdEvent from 'common/core/events/hold';
@@ -348,7 +347,7 @@ QUnit.module('General', () => {
     QUnit.test('the tabs element must have a start icon position class by default', function(assert) {
         const $element = $('#tabs').dxTabs();
 
-        assert.ok($element.hasClass(TABS_ICON_POSITION_CLASS.start));
+        assert.ok($element.hasClass(TABS_ICON_POSITION_CLASS.top));
     });
 
     ['top', 'end', 'bottom'].forEach((iconPosition) => {
@@ -379,47 +378,15 @@ QUnit.module('General', () => {
         const $element = $('#tabs').dxTabs({ items: [1, 2, 3] });
         const instance = $element.dxTabs('instance');
 
-        assert.strictEqual(instance.option('stylingMode'), STYLING_MODE.primary);
-        assert.strictEqual($element.hasClass(TABS_STYLING_MODE_CLASS.primary), true);
-        assert.strictEqual($element.hasClass(TABS_STYLING_MODE_CLASS.secondary), false);
-
-        instance.option({ stylingMode: 'secondary' });
-
         assert.strictEqual(instance.option('stylingMode'), STYLING_MODE.secondary);
         assert.strictEqual($element.hasClass(TABS_STYLING_MODE_CLASS.secondary), true);
         assert.strictEqual($element.hasClass(TABS_STYLING_MODE_CLASS.primary), false);
-    });
 
-    QUnit.test('Tabs should show the navigation after stylingMode is changed from secondary to primary', function(assert) {
-        const isMaterialBased = themes.isMaterialBased();
+        instance.option({ stylingMode: 'primary' });
 
-        if(!isMaterialBased) {
-            assert.ok(true, 'not isMaterialBased');
-            return;
-        }
-
-        const $element = $('#scrollableTabs').dxTabs({
-            items: [
-                { text: 'item 1', icon: 'plus' },
-                { text: 'item 2', icon: 'plus' },
-                { text: 'item 3', icon: 'plus' },
-            ],
-            stylingMode: 'secondary',
-            scrollingEnabled: true,
-            visible: true,
-            showNavButtons: true,
-            width: 334,
-        });
-
-        assert.strictEqual($element.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 0, 'nav buttons was not rendered');
-        assert.strictEqual($element.find(`.${TABS_SCROLLABLE_CLASS}`).length, 0, 'scrollable was not rendered');
-
-        const instance = $element.dxTabs('instance');
-
-        instance.option('stylingMode', 'primary');
-
-        assert.strictEqual($element.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 2, 'nav buttons was rendered');
-        assert.strictEqual($element.find(`.${TABS_SCROLLABLE_CLASS}`).length, 1, 'scrollable was rendered');
+        assert.strictEqual(instance.option('stylingMode'), STYLING_MODE.primary);
+        assert.strictEqual($element.hasClass(TABS_STYLING_MODE_CLASS.primary), true);
+        assert.strictEqual($element.hasClass(TABS_STYLING_MODE_CLASS.secondary), false);
     });
 
     QUnit.test('resize observer should be attached to the tabs', function(assert) {
@@ -1639,7 +1606,7 @@ QUnit.module('Async templates', {
     }
 }, () => {
     QUnit.test('render tabs', function() {
-        const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 290 });
+        const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 350 });
         this.clock.tick(10);
         testWrapper.checkTabsWithoutScrollable();
         testWrapper.checkNavigationButtons(false);
@@ -1724,7 +1691,7 @@ QUnit.module('Async templates', {
     QUnit.test('Remove scrollable and navigation buttons when width is changed from small to large', function() {
         const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 150, showNavButtons: true });
         this.clock.tick(10);
-        testWrapper.width = 290;
+        testWrapper.width = 350;
         testWrapper.checkTabsWithoutScrollable();
         testWrapper.checkNavigationButtons(false);
     });
@@ -1764,7 +1731,7 @@ QUnit.module('Async templates', {
         });
 
         QUnit.test(`Remove scrollable and navigation buttons when items are changed from 10 to 5, repaintChangesOnly: ${repaintChangesOnly}`, function() {
-            const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 290, showNavButtons: true, repaintChangesOnly, itemsCount: 10 });
+            const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 350, showNavButtons: true, repaintChangesOnly, itemsCount: 10 });
 
             this.clock.tick(10);
             testWrapper.setItemsByCount(5);

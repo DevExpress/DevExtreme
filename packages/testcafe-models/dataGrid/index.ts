@@ -21,6 +21,7 @@ import TextBox from '../textBox';
 import { GroupPanel } from './groupPanel';
 import GridCore from '../gridCore';
 import { CLASS as CLASS_BASE } from '../gridCore';
+import { AIPromptEditor } from './aiPromptEditor';
 
 export const CLASS = {
   ...CLASS_BASE,
@@ -72,6 +73,7 @@ export const CLASS = {
   columnsSeparator: 'dx-datagrid-columns-separator',
   toast: 'dx-toast-wrapper',
   dragHeader: 'drag-header',
+  aiPromptEditor: 'dx-ai-prompt-editor',
 };
 
 const E2E_ATTRIBUTES = {
@@ -938,5 +940,9 @@ export default class DataGrid extends GridCore {
   
   getDraggableHeader() {
     return this.body.find(`.${this.addWidgetPrefix(CLASS.dragHeader)}`);
+  }
+
+  getAIPromptEditor(): AIPromptEditor {
+    return new AIPromptEditor(this.body.find(`.${CLASS.aiPromptEditor}`));
   }
 }

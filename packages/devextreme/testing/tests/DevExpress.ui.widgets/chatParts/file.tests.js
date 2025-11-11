@@ -346,7 +346,7 @@ QUnit.module('File', moduleConfig, () => {
             assert.strictEqual(this.$element.attr('role'), 'listitem', 'file element should have correct role');
         });
 
-        QUnit.test('download button should have correct aria-label with file name', function(assert) {
+        QUnit.test('download button should have correct aria-label and title with file name', function(assert) {
             const testFileName = 'document.pdf';
 
             this.reinit({
@@ -361,13 +361,23 @@ QUnit.module('File', moduleConfig, () => {
                 `Download file ${testFileName}`,
                 'download button should have aria-label with file name',
             );
+            assert.strictEqual(
+                this.$downloadButton.attr('title'),
+                `Download file ${testFileName}`,
+                'download button should have title with file name',
+            );
         });
 
-        QUnit.test('download button aria-label should be updated when data is changed', function(assert) {
+        QUnit.test('download button aria-label and title should be updated when data is changed', function(assert) {
             assert.strictEqual(
                 this.$downloadButton.attr('aria-label'),
                 'Download file test-file.txt',
                 'download button should have correct aria-label',
+            );
+            assert.strictEqual(
+                this.$downloadButton.attr('title'),
+                'Download file test-file.txt',
+                'download button should have correct title',
             );
 
             const secondFileName = 'file2.pdf';
@@ -384,9 +394,14 @@ QUnit.module('File', moduleConfig, () => {
                 `Download file ${secondFileName}`,
                 'download button aria-label should be updated with new file name',
             );
+            assert.strictEqual(
+                $newDownloadButton.attr('title'),
+                `Download file ${secondFileName}`,
+                'download button title should be updated with new file name',
+            );
         });
 
-        QUnit.test('download button should have aria-label when file name is empty', function(assert) {
+        QUnit.test('download button should have aria-label and title when file name is empty', function(assert) {
             this.reinit({
                 data: {
                     name: '',
@@ -398,6 +413,11 @@ QUnit.module('File', moduleConfig, () => {
                 this.$downloadButton.attr('aria-label'),
                 'Download file ',
                 'download button should have aria-label even with empty file name',
+            );
+            assert.strictEqual(
+                this.$downloadButton.attr('title'),
+                'Download file ',
+                'download button should have title even with empty file name',
             );
         });
 
@@ -417,6 +437,20 @@ QUnit.module('File', moduleConfig, () => {
             });
 
             assert.strictEqual(this.$element.attr('role'), 'listitem', 'role should remain "listitem" after data change');
+        });
+
+        QUnit.test('download button should have tabIndex=0 when focusStateEnabled is true', function(assert) {
+            this.reinit({
+                data: {
+                    name: 'test.txt',
+                    size: 1024,
+                },
+                onDownload: () => {},
+            });
+
+            const tabIndex = this.$downloadButton.attr('tabIndex');
+
+            assert.strictEqual(tabIndex, '0', 'download button has tabIndex=0');
         });
     });
 });

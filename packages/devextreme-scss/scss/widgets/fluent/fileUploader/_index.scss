@@ -129,9 +129,19 @@ $fluent-fileuploader-file-container-boxshadow: 0 1px 3px 0 color.change($base-sh
       width: $fluent-fileuploader-file-container-button-size;
       margin-right: $fluent-fileuploader-file-container-button-margin;
 
+      &.dx-fileuploader-cancel-button-position-end {
+        margin-right: 0;
+        margin-left: $fluent-fileuploader-file-cancel-button-margin-left;
+      }
+
       .dx-rtl & {
         margin-left: $fluent-fileuploader-file-container-button-margin;
         margin-right: 0;
+
+        &.dx-fileuploader-cancel-button-position-end {
+          margin-left: 0;
+          margin-right: $fluent-fileuploader-file-cancel-button-margin-left;
+        }
       }
     }
   }
@@ -145,6 +155,11 @@ $fluent-fileuploader-file-container-boxshadow: 0 1px 3px 0 color.change($base-sh
   display: block;
   padding-top: 5px;
   line-height: 13px;
+}
+
+.dx-fileuploader-file-icon {
+  color: $fileuploader-file-icon-color;
+  font-size: $fluent-fileuploader-file-icon-font-size;
 }
 
 .dx-fileuploader-file-name {
