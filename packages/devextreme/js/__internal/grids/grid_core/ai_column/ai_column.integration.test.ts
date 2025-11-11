@@ -2565,7 +2565,6 @@ describe('API Handlers', () => {
         abortSpy();
       },
     });
-
     const columnAIIntegration = new AIIntegration({
       sendRequest(): RequestResult {
         return aiIntegrationResult();
