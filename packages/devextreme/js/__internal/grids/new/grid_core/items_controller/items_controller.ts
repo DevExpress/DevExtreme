@@ -21,7 +21,7 @@ export class ItemsController {
 
   public readonly items = computed(
     () => {
-      // NOTE: We should trigger computed by search options change
+      // NOTE: We should trigger computed by search options change,
       // But all work with these options encapsulated in SearchHighlightTextProcessor
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       this.searchController.highlightTextOptions.value;
