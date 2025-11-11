@@ -86,7 +86,7 @@ export class AIColumnIntegrationController extends Controller {
       cachedResponse = this.aiColumnCacheController.getCachedResponse(columnName, keys);
     }
 
-    const reducedData = reduceDataCachedKeys(data, cachedResponse, keyField);
+    const reducedData = reduceDataCachedKeys(args.data, cachedResponse, keyField);
     const areAllDataCached = Object.keys(reducedData).length === 0;
 
     if (areAllDataCached) {

@@ -22,6 +22,13 @@ $(() => {
 
   const aiIntegration = new DevExpress.aiIntegration({
     sendRequest({ prompt }) {
+      const isValidRequest = JSON.stringify(prompt.user).length < 5000;
+      if (!isValidRequest) {
+        return {
+          promise: Promise.reject(new Error('Request is too large')),
+          abort: () => {},
+        };
+      }
       const controller = new AbortController();
       const signal = controller.signal;
 
@@ -201,5 +208,17 @@ $(() => {
         cssClass: 'ai__cell',
       },
     ],
+    onAIColumnRequestCreating(e) {
+      e.data = e.data.map((item) => ({
+        ID: item.ID,
+        TrademarkName: item.TrademarkName,
+        Name: item.Name,
+        Modification: item.Modification,
+        Horsepower: item.Horsepower,
+        CategoryName: item.CategoryName,
+        Price: item.Price,
+        BodyStyleName: item.BodyStyleName,
+      }));
+    },
   });
 });
