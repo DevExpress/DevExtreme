@@ -24,18 +24,18 @@ const messages = [
     text: "Hi! I'm having trouble accessing my account.\nThe website says my password is incorrect. I'm sending a few screenshots so you can see where I get the error.",
     attachments: [
       {
-        name: 'Image1.png',
-        url: '../../../../images/Chat/FileAttachments/Image1.png',
+        name: 'Pic1.png',
+        url: '../../../../images/Chat/FileAttachments/Pic1.png',
         size: 1024 * 10,
       },
       {
-        name: 'Image2.png',
-        url: '../../../../images/Chat/FileAttachments/Image2.png',
+        name: 'Pic2.png',
+        url: '../../../../images/Chat/FileAttachments/Pic2.png',
         size: 1024 * 10,
       },
       {
-        name: 'Image3.png',
-        url: '../../../../images/Chat/FileAttachments/Image3.png',
+        name: 'Pic3.png',
+        url: '../../../../images/Chat/FileAttachments/Pic3.png',
         size: 1024 * 10,
       },
     ],
