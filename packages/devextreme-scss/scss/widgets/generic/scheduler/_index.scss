@@ -546,17 +546,21 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
   }
 }
 
-.dx-scheduler-appointment-10min,
-.dx-scheduler-appointment-15min {
-  .dx-scheduler-appointment-content {
-    padding: 0 7px;
-  }
-}
-
-@if $size == "compact" {
+.dx-scheduler-work-space-day,
+.dx-scheduler-work-space-week,
+.dx-scheduler-work-space-work-week {
+  .dx-scheduler-appointment-10min,
   .dx-scheduler-appointment-15min {
-    .dx-scheduler-appointment-title {
-      line-height: 12px;
+    .dx-scheduler-appointment-content {
+      padding: 0 7px;
+    }
+  }
+
+  @if $size == "compact" {
+    .dx-scheduler-appointment-15min {
+      .dx-scheduler-appointment-title {
+        line-height: 12px;
+      }
     }
   }
 }
