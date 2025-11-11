@@ -84,36 +84,31 @@ import DxButton from 'devextreme-vue/button';
 import DxTabPanel, { DxItem } from 'devextreme-vue/tab-panel';
 import { DxDataGrid, DxColumn } from 'devextreme-vue/data-grid';
 
-import { type DataSourceOptions } from 'devextreme-vue/common/data';
+import { ArrayStore, DataSource } from 'devextreme-vue/common/data';
 import { exportDataGrid, type DataGridCell, type Cell } from 'devextreme-vue/common/export/pdf';
 import { jsPDF } from 'jspdf';
 
-import 'devextreme/data/odata/store';
+import { products, type Product } from './data.ts';
 
 const priceGridRef = ref<DxDataGrid | null>(null);
 const ratingGridRef = ref<DxDataGrid | null>(null);
 
-const priceDataSource: DataSourceOptions = {
-  store: {
-    type: 'odata',
-    version: 2,
-    url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
-    key: 'Product_ID',
-  },
+const store = new ArrayStore<Product, number>({
+  data: products,
+  key: 'Product_ID',
+});
+
+const priceDataSource = new DataSource<Product, number>({
+  store,
   select: ['Product_ID', 'Product_Name', 'Product_Sale_Price', 'Product_Retail_Price'],
   filter: ['Product_ID', '<', 10],
-};
+});
 
-const ratingDataSource: DataSourceOptions = {
-  store: {
-    type: 'odata',
-    version: 2,
-    url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
-    key: 'Product_ID',
-  },
+const ratingDataSource = new DataSource<Product, number>({
+  store,
   select: ['Product_ID', 'Product_Name', 'Product_Consumer_Rating', 'Product_Category'],
   filter: ['Product_ID', '<', 10],
-};
+});
 
 const exportGrids = () => {
   const priceGrid = priceGridRef.value?.instance!;
