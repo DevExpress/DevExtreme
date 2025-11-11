@@ -2,7 +2,7 @@ import $ from 'jquery';
 import 'ui/button';
 import 'ui/button_group';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const BUTTON_GROUP_CLASS = 'dx-buttongroup';
 const BUTTON_GROUP_WRAPPER_CLASS = BUTTON_GROUP_CLASS + '-wrapper';

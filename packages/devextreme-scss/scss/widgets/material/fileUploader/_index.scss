@@ -120,9 +120,19 @@ $material-fileuploader-file-wrapper-border-size: 3px;
       width: $material-fileuploader-file-container-button-size;
       margin-right: $material-fileuploader-file-container-button-margin;
 
+      &.dx-fileuploader-cancel-button-position-end {
+        margin-right: 0;
+        margin-left: $material-fileuploader-file-cancel-button-margin-left;
+      }
+
       .dx-rtl & {
         margin-left: $material-fileuploader-file-container-button-margin;
         margin-right: 0;
+
+        &.dx-fileuploader-cancel-button-position-end {
+          margin-left: 0;
+          margin-right: $material-fileuploader-file-cancel-button-margin-left;
+        }
       }
     }
   }
@@ -131,6 +141,11 @@ $material-fileuploader-file-wrapper-border-size: 3px;
 .dx-fileuploader-file {
   padding-top: 5px;
   line-height: 13px;
+}
+
+.dx-fileuploader-file-icon {
+  color: $fileuploader-file-icon-color;
+  font-size: $material-fileuploader-file-icon-font-size;
 }
 
 .dx-fileuploader-file-name {

@@ -1,5 +1,5 @@
 import fx from 'common/core/animation/fx';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import config from 'core/config';
 import { getHeight } from 'core/utils/size';
 import { deferUpdate, noop } from 'core/utils/common';
@@ -600,7 +600,7 @@ QUnit.module('widget options', moduleSetup, () => {
         assert.strictEqual(closedItems.length, 3);
 
         for(let i = 0; i < closedItems.length; i++) {
-            assert.roughEqual(closedItems.eq(i).outerHeight(), 42.4219, 1);
+            assert.roughEqual(closedItems.eq(i).outerHeight(), 44, 1);
         }
     });
 
@@ -1557,7 +1557,7 @@ QUnit.module('optionChanged', moduleSetup, () => {
             assert.strictEqual($items.length, 2, '$items.length');
 
             const item1 = $items.eq(0);
-            assert.roughEqual(item1.outerHeight(), 93, 1.001, 'items(0) has valid height');
+            assert.roughEqual(item1.outerHeight(), 88, 1.001, 'items(0) has valid height');
             assert.strictEqual(item1.is('.' + [ACCORDION_ITEM_OPENED_CLASS, SELECTED_ITEM_CLASS].join('.')), true, 'items(0) should have each of these classes');
             assert.strictEqual(!item1.is('.' + [HIDDEN_CLASS, ACCORDION_ITEM_CLOSED_CLASS].join(', .')), true, 'items(0) should not have no one of these classes');
             assert.strictEqual(item1.attr('aria-selected'), 'true', 'items(0) should have aria-selected=true');

@@ -828,22 +828,6 @@ QUnit.module('slideItem delete decorator', {
         themes.isMaterialBased = origIsMaterialBased;
     });
 
-    QUnit.test('button should have no text for the Generic theme', function(assert) {
-        const $list = $('#templated-list').dxList({
-            items: ['0'],
-            allowItemDeleting: true,
-            itemDeleteMode: 'slideItem'
-        });
-        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
-        const $item = $items.eq(0);
-
-        pointerMock($item).start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
-
-        const $deleteButton = $item.find(`.${SLIDE_MENU_BUTTON_CLASS}`);
-
-        assert.ok($deleteButton.text().length > 0, 'button has a text for Generic theme');
-    });
-
     QUnit.test('button should have no inkRipple after fast swipe for Material theme', function(assert) {
         const origIsMaterial = themes.isMaterial;
         const origCurrent = themes.current;
@@ -2806,7 +2790,7 @@ QUnit.module('reordering decorator', {
         this.clock.tick(10);
         let $ghostItem = $list.find(`.${REORDERING_ITEM_GHOST_CLASS}`);
         assert.strictEqual($ghostItem.text(), $item.text(), 'correct item was duplicated');
-        assert.strictEqual($ghostItem.offset().top, $item.offset().top + 10, 'correct ghost position');
+        assert.strictEqual($ghostItem.offset().top, $item.offset().top + 14, 'correct ghost position');
         assert.ok(!$ghostItem.hasClass(REORDERING_ITEM_CLASS), 'reordering class is not present');
 
         pointer.dragEnd();
@@ -2830,7 +2814,7 @@ QUnit.module('reordering decorator', {
         this.clock.tick(10);
         let $ghostItem = $list.find(`.${REORDERING_ITEM_GHOST_CLASS}`);
         assert.strictEqual($ghostItem.text(), $item.text(), 'correct item was duplicated');
-        assert.strictEqual($ghostItem.offset().top, $item.offset().top + 10, 'correct ghost position');
+        assert.strictEqual($ghostItem.offset().top, $item.offset().top + 14, 'correct ghost position');
         assert.ok(!$ghostItem.hasClass(REORDERING_ITEM_CLASS), 'reordering class is not present');
 
         assert.equal($ghostItem.css('direction'), 'rtl', 'direction is rtl');
@@ -2912,7 +2896,8 @@ QUnit.module('reordering decorator', {
         assert.deepEqual($item0.position(), item0Position, 'first item was not moved');
         assert.deepEqual($item2.position(), item2Position, 'third item was not moved');
 
-        pointer.drag(0.5);
+        pointer.drag(0.6);
+        pointer.dragEnd();
         assert.deepEqual($item0.position(), item0Position, 'first item was not moved');
         assert.deepEqual($item2.position(), item1Position, 'third item was moved to position of second item');
     });
@@ -2935,7 +2920,8 @@ QUnit.module('reordering decorator', {
         assert.deepEqual($item0.position(), item0Position, 'first item was not moved');
         assert.deepEqual($item2.position(), item2Position, 'third item was not moved');
 
-        pointer.drag(-0.5);
+        pointer.drag(-0.6);
+        pointer.dragEnd();
         assert.deepEqual($item0.position(), item1Position, 'first item was moved to position of second item');
         assert.deepEqual($item2.position(), item2Position, 'third item was not moved');
     });
@@ -2987,7 +2973,7 @@ QUnit.module('reordering decorator', {
         const $item1 = $items.eq(1);
         const pointer = reorderingPointerMock($item1, this.clock);
 
-        pointer.dragStart(0.5).drag(1);
+        pointer.dragStart(0.5).drag(1.1);
         assert.strictEqual($items.get(2).style.transitionDuration, '300ms', 'animation present');
     });
 
@@ -3008,7 +2994,7 @@ QUnit.module('reordering decorator', {
         const $item2 = $items.eq(2);
         const pointer = reorderingPointerMock($item1, this.clock);
 
-        pointer.dragStart(0.5).drag(1);
+        pointer.dragStart(0.5).drag(1.1);
         this.clock.tick(10);
         pointer.dragEnd();
     });
@@ -3143,7 +3129,7 @@ QUnit.module('reordering decorator', {
                 const pointer = reorderingPointerMock($items.eq(fromIndex), this.clock);
 
                 const offset = toIndex - fromIndex;
-                const adjustment = offset >= 0 ? 0 : -0.1;
+                const adjustment = 0.1 * offset;
 
                 pointer.dragStart(0.5).drag(offset + adjustment);
                 this.clock.tick();

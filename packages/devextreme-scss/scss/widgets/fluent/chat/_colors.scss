@@ -2,6 +2,7 @@
 @use "../sizes" as *;
 @use "../colors" as *;
 @use "../textEditor/colors" as *;
+@use "../button/colors" as *;
 
 // adduse
 
@@ -17,6 +18,7 @@ $chat-background-color: $base-bg !default;
 */
 $chat-border-color: $base-border-color !default;
 $chat-messagebox-border-color: $chat-border-color !default;
+$chat-messagebox-file-background-color: $button-normal-text-hover-bg !default;
 $chat-message-editing-preview-accent-color: $base-accent !default;
 $chat-message-editing-preview-cancel-button-color: $texteditor-label-color !default;
 
@@ -141,7 +143,7 @@ $chat-file-secondary-color: null !default;
   $chat-typingindicator-circle-bg-color-center: darken($base-bg, 56.08) !default;
 
   $chat-file-container-box-shadow: 0 0 2px 0 color.change($base-shadow-color, $alpha: 0.12), 0 1px 2px 0 color.change($base-shadow-color, $alpha: 0.14) !default;
-  $chat-file-secondary-color: lighten($base-text-color, 29.80) !default;
+  $chat-file-secondary-color: $base-icon-color !default;
 
   @if $color == "blue" {
     $chat-bubble-background-color-primary: lighten(desaturate(adjust-hue($base-accent, 3.8), 11.4), 55.5) !default;
@@ -171,7 +173,7 @@ $chat-file-secondary-color: null !default;
   $chat-typingindicator-circle-bg-color-center: lighten($base-bg, 43.92) !default;
 
   $chat-file-container-box-shadow: 0 0 2px 0 color.change($base-shadow-color, $alpha: 0.28), 0 1px 2px 0 color.change($base-shadow-color, $alpha: 0.32) !default;
-  $chat-file-secondary-color: darken($base-text-color, 40.00) !default;
+  $chat-file-secondary-color: $base-icon-color !default;
 }
 
 /**

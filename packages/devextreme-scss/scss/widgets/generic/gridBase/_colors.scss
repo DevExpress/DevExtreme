@@ -538,3 +538,7 @@ $datagrid-draggable-column-text-color: null !default;
   $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
   $datagrid-draggable-column-text-color: lighten($base-text-color, 40%) !default;
 }
+
+:root {
+  --dx-datagrid-row-alternation-bg: #{$datagrid-row-alternation-bg};
+}

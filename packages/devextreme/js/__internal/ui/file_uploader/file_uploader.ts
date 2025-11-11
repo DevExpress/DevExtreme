@@ -66,6 +66,7 @@ const FILEUPLOADER_FILE_ICON_CLASS = 'dx-fileuploader-file-icon';
 const FILEUPLOADER_BUTTON_CLASS = 'dx-fileuploader-button';
 const FILEUPLOADER_BUTTON_CONTAINER_CLASS = 'dx-fileuploader-button-container';
 export const FILEUPLOADER_CANCEL_BUTTON_CLASS = 'dx-fileuploader-cancel-button';
+export const FILEUPLOADER_CANCEL_BUTTON_POSITION_END_CLASS = 'dx-fileuploader-cancel-button-position-end';
 const FILEUPLOADER_UPLOAD_BUTTON_CLASS = 'dx-fileuploader-upload-button';
 
 const FILEUPLOADER_INVALID_CLASS = 'dx-fileuploader-invalid';
@@ -753,6 +754,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     $('<div>')
       .addClass(FILEUPLOADER_FILE_NAME_CLASS)
       .text(value.name)
+      .attr('title', value.name)
       .appendTo($fileInfo);
 
     if (isDefined(value.size)) {
@@ -848,7 +850,8 @@ class FileUploader extends Editor<FileUploaderProperties> {
   }
 
   _getCancelButton(file: FileUploaderItem): dxElementWrapper | null {
-    const { uploadMode } = this.option();
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { uploadMode, _cancelButtonPosition } = this.option();
     if (uploadMode === 'useForm') {
       return null;
     }
@@ -881,6 +884,10 @@ class FileUploader extends Editor<FileUploaderProperties> {
         },
       },
     );
+
+    if (_cancelButtonPosition === 'end') {
+      file.cancelButton.$element().addClass(FILEUPLOADER_CANCEL_BUTTON_POSITION_END_CLASS);
+    }
 
     return $('<div>')
       .addClass(FILEUPLOADER_BUTTON_CONTAINER_CLASS)

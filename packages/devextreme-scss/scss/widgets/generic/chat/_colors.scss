@@ -2,6 +2,7 @@
 @use "../sizes" as *;
 @use "../colors" as *;
 @use "../textEditor/colors" as *;
+@use "../button/colors" as *;
 
 // adduse
 
@@ -17,6 +18,7 @@ $chat-background-color: $base-bg !default;
 */
 $chat-border-color: $base-border-color !default;
 $chat-messagebox-border-color: $chat-border-color !default;
+$chat-messagebox-file-background-color: $button-normal-text-bg-hover !default;
 $chat-message-editing-preview-accent-color: $base-accent !default;
 $chat-message-editing-preview-cancel-button-color: $texteditor-label-color !default;
 
