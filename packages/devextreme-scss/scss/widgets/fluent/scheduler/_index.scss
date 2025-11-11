@@ -974,28 +974,9 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
   }
 }
 
-@if $size == "default" {
-  .dx-scheduler-appointment-25min {
-    .dx-scheduler-appointment-content {
-      padding: 0 8px 0 12px;
-    }
-  }
-}
-
 @if $size == "compact" {
   .dx-scheduler-appointment-15min {
     .dx-scheduler-appointment-title {
-      line-height: 12px;
-    }
-  }
-
-  .dx-scheduler-appointment-30min {
-    .dx-scheduler-appointment-content {
-      padding: 0 8px 0 12px;
-    }
-
-    .dx-scheduler-appointment-title {
-      font-size: 10px;
       line-height: 12px;
     }
   }
