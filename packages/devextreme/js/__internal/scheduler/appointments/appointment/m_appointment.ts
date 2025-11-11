@@ -237,7 +237,6 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
       return;
     }
 
-    // Get appointment duration in minutes
     const startDate = this.dataAccessors.get('startDate', this.rawAppointment);
     const endDate = this.dataAccessors.get('endDate', this.rawAppointment);
 
@@ -248,7 +247,6 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
     const durationMs = new Date(endDate).getTime() - new Date(startDate).getTime();
     const durationMinutes = Math.round(durationMs / (1000 * 60));
 
-    // Apply classes based on actual appointment duration
     switch (true) {
       case durationMinutes <= 10:
         (this.$element() as any).addClass(APPOINTMENT_10MIN_CLASS);
