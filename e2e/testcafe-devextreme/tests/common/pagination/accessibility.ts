@@ -3,6 +3,7 @@ import Pagination from 'devextreme-testcafe-models/pagination';
 import url from '../../../helpers/getPageUrl';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import { createWidget } from '../../../helpers/createWidget';
+import { Themes } from '../../../helpers/themes';
 
 fixture.disablePageReloads`Pagination`
   .page(url(__dirname, '../../container.html'));
@@ -12,7 +13,11 @@ fixture.disablePageReloads`Pagination`
     [true, false].forEach((showInfo) => {
       [true, false].forEach((showNavigationButtons) => {
         [true, false].forEach((showPageSizeSelector) => {
-          test(`Pagination dm_${displayMode}-`
+          test.meta({
+            themes: infoText && showInfo && showNavigationButtons && showPageSizeSelector
+              ? [Themes.materialBlue, Themes.genericLight]
+              : [],
+          })(`Pagination dm_${displayMode}-`
             + `${infoText ? 'has' : 'has_no'}_it-`
             + `si_${showInfo.toString()}-`
             + `snb_${showNavigationButtons.toString()}-`

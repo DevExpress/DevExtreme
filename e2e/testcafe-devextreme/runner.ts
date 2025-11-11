@@ -125,17 +125,19 @@ async function main() {
     testCafe = await createTestCafe(TESTCAFE_CONFIG);
 
     const args = getArgs();
+
     const testName = args.test.trim();
     const reporter = typeof args.reporter === 'string' ? args.reporter.trim() : args.reporter;
     const indices = args.indices.trim();
-    let componentFolder = args.componentFolder.trim();
     const file = args.file.trim();
 
     setTestingPlatform(args);
     setTestingTheme(args);
     setShadowDom(args);
 
-    componentFolder = componentFolder ? `${componentFolder}/**` : '**';
+    const componentFolderArg = typeof args.componentFolder === 'string' ? args.componentFolder.trim() : '';
+    const componentFolder = componentFolderArg ? `${componentFolderArg}/**` : '**';
+
     if (fs.existsSync('./screenshots')) {
       fs.rmSync('./screenshots', { recursive: true });
     }
@@ -199,6 +201,21 @@ async function main() {
           _fixturePath: string,
           testMeta?: any,
         ) => !(testMeta)?.unstable);
+      }
+
+      if (!componentFolderArg && args.theme) {
+        filters.push((
+          _testName: string,
+          _fixtureName: string,
+          _fixturePath: string,
+          testMeta?: any,
+        ) => {
+          if (!testMeta?.themes || !Array.isArray(testMeta.themes)) {
+            return false;
+          }
+
+          return testMeta.themes.includes(args.theme);
+        });
       }
 
       if (filters.length) {

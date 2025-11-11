@@ -3,6 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
+import { Themes } from '../../../helpers/themes';
 
 const CONTEXT_MENU_CLASS = 'dx-context-menu';
 const FIELD_CHOOSER_AREA_FIELDS_CLASS = 'dx-area-fields';
@@ -10,7 +11,7 @@ const FIELD_CHOOSER_AREA_FIELDS_CLASS = 'dx-area-fields';
 fixture.disablePageReloads`PivotGrid_contextMenu`
   .page(url(__dirname, '../../container.html'));
 
-test('ContextMenu width should be adjusted to the width of the item text (T1106236)', async (t) => {
+test.meta({ themes: [Themes.materialBlue, Themes.genericLight] })('ContextMenu width should be adjusted to the width of the item text (T1106236)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t.rightClick(Selector(`.${FIELD_CHOOSER_AREA_FIELDS_CLASS}`).nth(1));
