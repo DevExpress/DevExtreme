@@ -448,8 +448,7 @@ QUnit.module('File', moduleConfig, () => {
                 onDownload: () => {},
             });
 
-            const $downloadButton = this.$element.find(`.${CHAT_FILE_DOWNLOAD_BUTTON_CLASS}`);
-            const tabIndex = $downloadButton.attr('tabIndex');
+            const tabIndex = this.$downloadButton.attr('tabIndex');
 
             assert.strictEqual(tabIndex, '0', 'download button has tabIndex=0');
         });
