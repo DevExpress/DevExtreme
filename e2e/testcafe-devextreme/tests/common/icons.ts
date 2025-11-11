@@ -352,7 +352,7 @@ test.meta({ themes: [Themes.materialBlue, Themes.genericLight] })('Icon set', as
   }, { dependencies: { iconSet, ICON_CLASS } })(icons, ICON_CLASS);
 });
 
-test.meta({ themes: [Themes.fluentBlue, Themes.genericLight] })('SVG icon set', async (t) => {
+test.meta({ themes: [Themes.materialBlue, Themes.genericLight] })('SVG icon set', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await testScreenshot(t, takeScreenshot, 'SVG icon set.png');
@@ -384,7 +384,6 @@ test.meta({ themes: [Themes.fluentBlue, Themes.genericLight] })('SVG icon set', 
       if (el) {
         const img = document.createElement('img');
         img.src = src;
-        img.alt = iconName;
 
         const nameDiv = document.createElement('div');
         nameDiv.textContent = iconName;
