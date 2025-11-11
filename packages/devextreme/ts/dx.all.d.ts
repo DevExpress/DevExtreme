@@ -4546,7 +4546,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:AIColumnRequestCreatingInfo.data]
      */
-    readonly data: TRowData[];
+    data: TRowData[];
     /**
      * [descr:AIColumnRequestCreatingInfo.cancel]
      */
