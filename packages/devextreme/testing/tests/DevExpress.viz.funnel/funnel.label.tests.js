@@ -71,7 +71,7 @@ QUnit.test('Create labels with styles', function(assert) {
     assert.deepEqual(options.attributes.font, {
         color: 'red',
         cursor: 'default',
-        family: '-apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, adwaita sans, cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
+        family: '-apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'segoe ui\', \'helvetica neue\', \'adwaita sans\', cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
         size: 12,
         weight: 400
     }, 'font');

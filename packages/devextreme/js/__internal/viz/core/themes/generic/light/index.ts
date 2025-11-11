@@ -24,7 +24,7 @@ export default [{
     isDefault: true,
     font: {
       color: SECONDARY_TITLE_COLOR,
-      family: '-apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, adwaita sans, cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
+      family: '-apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'segoe ui\', \'helvetica neue\', \'adwaita sans\', cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
       weight: 400,
       size: 12,
       cursor: 'default',
@@ -39,7 +39,7 @@ export default [{
       backgroundColor: WHITE,
       font: {
         size: 28,
-        family: '-apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, adwaita sans, cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
+        family: '-apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'segoe ui\', \'helvetica neue\', \'adwaita sans\', cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
         weight: 200,
       },
       subtitle: {
