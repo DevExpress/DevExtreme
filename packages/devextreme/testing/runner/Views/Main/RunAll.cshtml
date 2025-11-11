@@ -85,13 +85,13 @@
             WORKER_COUNT;
 
         var calcWorkerFrameCount = function() {
-            @* if(runWorkerInNewWindow)
+            if(runWorkerInNewWindow)
                 return 1; // NOTE: more than 1 window cause problems with tests that use focus
 
             var ua = navigator.userAgent;
 
             if(window.ActiveXObject !== undefined)
-                return 1; *@
+                return 1;
 
             return 2;
         };

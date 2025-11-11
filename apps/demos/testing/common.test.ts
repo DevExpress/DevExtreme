@@ -1,7 +1,7 @@
 import { glob } from 'glob';
 import { join } from 'path';
 import { existsSync } from 'fs';
-import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { axeCheck, createReport } from '@testcafe-community/axe';
 import {
   getPortByIndex,
@@ -180,23 +180,25 @@ Object.values(FRAMEWORKS).forEach((approach) => {
         } else {
           const testTheme = process.env.THEME;
 
-          let comparisonResult;
+          const consoleMessages = await t.getBrowserConsoleMessages();
+          const errors = [...consoleMessages.error, ...consoleMessages.warn]
+            .filter((e) => !knownWarnings.some((kw) => e.startsWith(kw)));
+          await t.expect(errors).eql([]);
+
+          const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
           if (isGitHubDemos) {
-            comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions && {
+            await takeScreenshot(`${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions && {
               ...comparisonOptions,
               looksSameComparisonOptions: { antialiasingTolerance: 10 },
             });
           } else {
-            comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
+            await takeScreenshot(`${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
           }
 
-          const consoleMessages = await t.getBrowserConsoleMessages();
-
-          const errors = [...consoleMessages.error, ...consoleMessages.warn]
-            .filter((e) => !knownWarnings.some((kw) => e.startsWith(kw)));
-
-          await t.expect(errors).eql([]);
-          await t.expect(comparisonResult).ok('INVALID_SCREENSHOT');
+          await t
+            .expect(compareResults.isValid())
+            .ok(compareResults.errorMessages());
         }
       });
   });

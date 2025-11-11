@@ -63,43 +63,45 @@ export const injectStyle = (style) => `
 
 export const waitForAngularLoading = ClientFunction(() => new Promise<void>((resolve) => {
   const start = performance.now();
+  const timeout = 10000;
+  let rafId: number | null = null;
+
+  const cleanup = () => {
+    if (rafId !== null) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+  };
 
   const check = () => {
     const demoApp = document.querySelector('demo-app') as HTMLElement | null;
 
-    if (demoApp && demoApp.innerText.trim() !== 'Loading...') {
-      return setTimeout(resolve, 100);
+  
+    if (demoApp) {
+      const text = demoApp.innerText.trim();
+      const hasLoadingText = text === 'Loading...' || text === '';
+      const hasDevExtremeWidgets = document.querySelector('.dx-widget') !== null;
+      const hasDemoContent = document.querySelector('.demo-container') !== null;
+      
+      if (!hasLoadingText && (hasDevExtremeWidgets || hasDemoContent)) {
+        cleanup();
+        // Small delay to ensure rendering is complete
+        return setTimeout(resolve, 50);
+      }
     }
 
-    if (performance.now() - start > 10_000) {
+
+    if (performance.now() - start > timeout) {
+      cleanup();
+      console.warn('Angular loading timeout exceeded');
       return resolve();
     }
 
-    requestAnimationFrame(check);
+
+    rafId = requestAnimationFrame(check);
   };
 
   check();
-}));
-
-export const waitForFontsLoading = ClientFunction(() => new Promise<void>((resolve) => {
-  if (!document.fonts) {
-    return setTimeout(resolve, 500);
-  }
-
-  const timeout = setTimeout(() => {
-    console.warn('Font loading timeout');
-    resolve();
-  }, 5000);
-
-  document.fonts.ready.then(() => {
-    clearTimeout(timeout);
-    // Additional delay to ensure fonts are fully applied
-    setTimeout(resolve, 200);
-  }).catch((error) => {
-    console.error('Font loading error:', error);
-    clearTimeout(timeout);
-    setTimeout(resolve, 200);
-  });
 }));
 
 function getInterestProcessArgs() {
@@ -140,9 +142,14 @@ export function changeTheme(dirName, demoPath, theme) {
   }
 
   const updatedContent = globalReadFrom(dirName, demoPath, (data) => {
-    const result = data.replace(/data-theme="[^"]+"/g, `data-theme="${theme}"`);
+    let result = data.replace(/data-theme="[^"]+"/g, `data-theme="${theme}"`);
 
-    return result.replace(/dx\.[^.]+(\.css")/g, `dx.${theme}$1`);
+    // Replace CSS theme: dx.light.css, dx.dark.css, dx.material.blue.light.css, etc.
+    // Match dx. followed by any characters until .css
+    result = result.replace(/dx\.[^"]+\.css/g, `dx.${theme}.css`);
+
+
+    return result;
   });
 
   const indexFilePath = join(dirName, demoPath);
@@ -236,9 +243,6 @@ export function shouldRunTestAtIndex(testIndex) {
 const SKIPPED_TESTS = {
   jQuery: { 
     DataGrid: ['RemoteGrouping'],
-    // Charts: [
-    //   { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
-    // ],
   },
   Angular: {
     Charts: ['Crosshair'],
@@ -392,14 +396,6 @@ export function runManualTestCore(
 
     if (FRAMEWORKS[framework] === 'Angular') {
       await waitForAngularLoading();
-    }
-
-    // Wait for fonts to load (critical for Material theme)
-    await waitForFontsLoading();
-    
-    // Additional stabilization delay for Material theme
-    if (process.env.THEME === THEME.material) {
-      await t.wait(300);
     }
   });
 

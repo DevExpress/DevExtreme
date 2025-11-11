@@ -201,7 +201,7 @@ jobs:
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - uses: actions/cache@v4
+      - uses: actions/cache/restore@v4
         name: Setup pnpm cache
         with:
           path: |
@@ -270,7 +270,7 @@ jobs:
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - uses: actions/cache@v4
+      - uses: actions/cache/restore@v4
         name: Setup pnpm cache
         with:
           path: |
@@ -337,7 +337,7 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache@v4
+    - uses: actions/cache/restore@v4
       name: Setup pnpm cache
       with:
         path: |
@@ -426,7 +426,7 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache@v4
+    - uses: actions/cache/restore@v4
       name: Setup pnpm cache
       with:
         path: |
@@ -534,7 +534,7 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache@v4
+    - uses: actions/cache/restore@v4
       name: Setup pnpm cache
       with:
         path: |
@@ -550,6 +550,19 @@ jobs:
     - name: DevExtreme - Build
       run: pnpx nx build devextreme
 
+    - name: Install Roboto font for Material theme
+      if: contains(matrix.THEME, 'material')
+      run: |
+        if [ ! -d "/usr/share/fonts/truetype/roboto" ]; then
+          echo "Installing Roboto font..."
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq fonts-roboto fonts-roboto-unhinted
+          sudo fc-cache -f -v > /dev/null 2>&1 || true
+          echo "Roboto font installed"
+        else
+          echo "Roboto font already installed"
+        fi
+
     - name: Run Web Server
       run: |
         python -m http.server 8080 &
@@ -557,13 +570,25 @@ jobs:
         python -m http.server 8082 &
         python -m http.server 8083 &
 
+    - name: Set Chrome flags
+      id: chrome-flags
+      run: |
+        BASE_FLAGS="chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=\"swiftshader\" --disable-features=PaintHolding --js-flags=--random-seed=2147483647"
+        
+        # For Material theme, enable better font rendering to avoid instability
+        if [[ "${{ matrix.THEME }}" != *"material"* ]]; then
+          BASE_FLAGS="$BASE_FLAGS --font-render-hinting=none --disable-font-subpixel-positioning"
+        fi
+        
+        echo "flags=$BASE_FLAGS" >> $GITHUB_OUTPUT
+
     - name: Run TestCafe tests
       shell: bash
       working-directory: apps/demos
       env:
         STRATEGY: ${{ matrix.STRATEGY }}
         CHANGEDFILEINFOSPATH: changed-files.json
-        BROWSERS: chrome:headless --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
+        BROWSERS: ${{ steps.chrome-flags.outputs.flags }}
         #DEBUG: hammerhead:*,testcafe:*
         CONCURRENCY: 4
         TCQUARANTINE: true
@@ -644,7 +669,7 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache@v4
+    - uses: actions/cache/restore@v4
       name: Setup pnpm cache
       with:
         path: |
@@ -677,7 +702,6 @@ jobs:
       with:
         name: devextreme-bundles
         path: apps/demos/bundles
-
     - name: Run Web Server
       run: |
         python -m http.server 8080 &
@@ -762,7 +786,7 @@ jobs:
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - uses: actions/cache@v4
+      - uses: actions/cache/restore@v4
         name: Setup pnpm cache
         with:
           path: |

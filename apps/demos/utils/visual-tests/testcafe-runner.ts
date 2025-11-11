@@ -3,209 +3,6 @@ import { ClientFunction } from 'testcafe';
 import { THEME } from './helpers/theme-utils';
 import fs from 'fs';
 
-// function reporter() {
-//   return {
-//     noColors: false,
-//     startTime: null,
-//     afterErrorList: false,
-//     testCount: 0,
-//     skipped: 0,
-
-//     reportTaskStart(startTime, userAgents, testCount) {
-//       this.startTime = startTime;
-//       this.testCount = testCount;
-
-//       this.setIndent(1)
-//         .useWordWrap(true)
-//         .write(this.chalk.bold('Running tests in:'))
-//         .newline();
-
-//       userAgents.forEach((ua) => {
-//         this
-//           .write(`- ${this.chalk.blue(ua)}`)
-//           .newline();
-//       });
-//     },
-
-//     reportFixtureStart(name) {
-//       this.setIndent(1)
-//         .useWordWrap(true);
-
-//       if (this.afterErrorList) this.afterErrorList = false;
-//       else this.newline();
-
-//       this.write(name)
-//         .newline();
-//     },
-
-//     formatError(err) {
-//       let result = '';
-      
-//       if (err.errMsg) {
-//         result += err.errMsg;
-//       } else if (err.message) {
-//         result += err.message;
-//       }
-      
-//       if (err.callsite) {
-//         result += '\n\n' + this.formatCallsite(err.callsite);
-//       }
-      
-//       if (err.screenshotPath) {
-//         result += `\n\nScreenshot: ${err.screenshotPath}`;
-//       }
-      
-//       return result || JSON.stringify(err, null, 2);
-//     },
-
-//     formatCallsite(callsite) {
-//       if (!callsite) return '';
-      
-//       let result = '';
-      
-//       if (callsite.filename) {
-//         result += `at ${callsite.filename}`;
-        
-//         if (callsite.lineNum) {
-//           result += `:${callsite.lineNum}`;
-          
-//           if (callsite.columnNum) {
-//             result += `:${callsite.columnNum}`;
-//           }
-//         }
-//       }
-      
-//       if (callsite.stackFrames && callsite.stackFrames.length) {
-//         result += '\n\nStack:\n';
-//         callsite.stackFrames.forEach((frame) => {
-//           if (frame.source) {
-//             result += `  ${frame.source}\n`;
-//           }
-//         });
-//       }
-      
-//       return result;
-//     },
-
-//     renderErrors(errs) {
-//       const filteredErrors = errs.filter((x) => {
-//         // eslint-disable-next-line spellcheck/spell-checker
-//         if (x && x.errMsg && typeof x.errMsg === 'string' && x.errMsg.indexOf('INVALID_SCREENSHOT') !== -1) return false;
-//         return true;
-//       });
-//       if (!filteredErrors.length) return;
-
-//       this.setIndent(3)
-//         .newline();
-
-//       filteredErrors.forEach((err, index) => {
-//         const prefix = this.chalk.red(`${index + 1}) `);
-
-//         this.newline()
-//           .write(prefix + this.formatError(err))
-//           .newline()
-//           .newline();
-//       });
-//     },
-//     dateTimeNow() {
-//       const toString = ((value, count) => `${value}`.padStart(count, '0'));
-//       const now = new Date();
-//       const result = `${toString(now.getHours(), 2)}:${toString(now.getMinutes(), 2)}:${toString(now.getSeconds(), 2)}.${toString(now.getMilliseconds(), 3)}`;
-//       return result;
-//     },
-
-//     reportTestStart(name) {
-//       this
-//         .setIndent(1)
-//         .write(`[${this.dateTimeNow()}] start   ${name}`)
-//         .newline();
-//     },
-
-//     reportTestDone(name, testRunInfo) {
-//       const hasErr = !!testRunInfo.errs.length;
-//       let symbol = null;
-//       let nameStyle = null;
-
-//       if (testRunInfo.skipped) {
-//         this.skipped += 1;
-
-//         symbol = this.chalk.cyan('-');
-//         nameStyle = this.chalk.cyan;
-//       } else if (hasErr) {
-//         symbol = this.chalk.red.bold(this.symbols.err);
-//         nameStyle = this.chalk.red.bold;
-//       } else {
-//         symbol = this.chalk.green(this.symbols.ok);
-//         // eslint-disable-next-line spellcheck/spell-checker
-//         nameStyle = this.chalk.grey;
-//       }
-
-//       let doneMessage = 'done';
-//       if (testRunInfo.skipped) doneMessage = 'skip';
-//       if (hasErr) doneMessage = 'fail';
-
-//       let title = `[${this.dateTimeNow()}]  ${doneMessage} ${symbol} ${nameStyle(name)} [${testRunInfo.durationMs} ms]`;
-
-//       this.setIndent(1)
-//         .useWordWrap(true);
-
-//       if (testRunInfo.unstable) title += this.chalk.yellow(' (unstable)');
-
-//       this.write(title);
-
-//       if (hasErr) this.renderErrors(testRunInfo.errs);
-
-//       this.afterErrorList = hasErr;
-
-//       this.newline();
-//     },
-
-//     renderWarnings(warnings) {
-//       const filteredWarnings = warnings.filter((x) => x.indexOf('It has just been rewritten with a recent screenshot.') === -1);
-//       this.newline()
-//         .setIndent(1)
-//         .write(this.chalk.bold.yellow(`Warnings (${filteredWarnings.length}):`))
-//         .newline();
-
-//       filteredWarnings.forEach((message) => {
-//         this.setIndent(1)
-//           .write(this.chalk.bold.yellow('--'))
-//           .newline()
-//           .setIndent(2)
-//           .write(message)
-//           .newline();
-//       });
-//     },
-
-//     reportTaskDone(endTime, passed, warnings, result) {
-//       const durationMs = endTime - this.startTime;
-//       const durationStr = this.moment.duration(durationMs).format('h[h] mm[m] ss[s]');
-//       let footer = passed === this.testCount
-//         ? this.chalk.bold.green(`${this.testCount} passed`)
-//         : this.chalk.bold.red(`${this.testCount - passed}/${this.testCount} failed`);
-
-//       // eslint-disable-next-line spellcheck/spell-checker
-//       footer += this.chalk.grey(` (${durationStr})`);
-
-//       if (!this.afterErrorList) this.newline();
-
-//       this.setIndent(1)
-//         .useWordWrap(true);
-
-//       this.newline()
-//         .write(footer)
-//         .newline();
-
-//       if (this.skipped > 0) {
-//         this.write(this.chalk.cyan(`${this.skipped} skipped`))
-//           .newline();
-//       }
-
-//       if (warnings.length) this.renderWarnings(warnings);
-//     },
-//   };
-// }
-
 function accessibilityTestCafeReporter() {
   return {
     violationsCount: {
@@ -267,9 +64,9 @@ async function main() {
   }
 
   const getQuarantineMode = () => {
-    if(process.env.THEME === THEME.material) {
-      return false; // { successThreshold: 1, attemptLimit: 5 };
-    }
+    // if(process.env.THEME === THEME.material) {
+    //   return false; // { successThreshold: 1, attemptLimit: 5 };
+    // }
 
     if (process.env.TCQUARANTINE) {
       return { successThreshold: 1, attemptLimit: 2 };
@@ -277,6 +74,8 @@ async function main() {
     
     return false;
   }
+
+  (runner as any).cache = true;
 
   const failedCount = await runner
     .reporter(reporters)
@@ -294,14 +93,14 @@ async function main() {
               }
               window.getSelection()?.removeAllRanges();
               
-              // Ensure fonts are loaded before taking screenshots
-              if (document.fonts) {
-                return document.fonts.ready.then(() => {
-                  // Small delay to ensure rendering is complete
-                  return new Promise(resolve => setTimeout(resolve, 100));
-                });
-              }
-              return Promise.resolve();
+              // // Ensure fonts are loaded before taking screenshots
+              // if (document.fonts) {
+              //   return document.fonts.ready.then(() => {
+              //     // Small delay to ensure rendering is complete
+              //     return new Promise(resolve => setTimeout(resolve, 100));
+              //   });
+              // }
+              // return Promise.resolve();
             }).with({ boundTestRun: t })();
           },
         },
