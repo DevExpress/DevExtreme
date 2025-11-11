@@ -102,6 +102,8 @@ export class RecurrenceForm {
 
   private _weekDayButtons: Record<string, dxButton> = {};
 
+  private _readOnly = false;
+
   constructor(scheduler: Scheduler) {
     this.scheduler = scheduler;
     this.weekDayItems = this.createWeekDayItems();
@@ -161,9 +163,7 @@ export class RecurrenceForm {
   }
 
   setReadOnly(value: boolean): void {
-    Object.values(this._weekDayButtons).forEach((button) => {
-      button?.option('disabled', value);
-    });
+    this._readOnly = value;
   }
 
   get recurrenceRule(): RecurrenceRule {
@@ -333,6 +333,7 @@ export class RecurrenceForm {
 
           this._weekDayButtons[item.key] = this.scheduler.createComponent(buttonContainer, Button, {
             text: item.text,
+            disabled: this._readOnly,
             onClick: (): void => {
               const isSelected = this.recurrenceRule.byDay.includes(item.key);
 
