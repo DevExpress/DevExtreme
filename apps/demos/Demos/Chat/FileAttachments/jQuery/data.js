@@ -35,22 +35,16 @@ const instructions = createEmptyAttachment('Instructions.pdf', 'application/pdf'
 const messages = [
   {
     id: new DevExpress.data.Guid(),
-    timestamp: getTimestamp(date, -9),
-    author: supportAgent,
-    text: 'Hello, John!\nHow can I assist you today?',
-  },
-  {
-    id: new DevExpress.data.Guid(),
     timestamp: getTimestamp(date, -7),
     author: currentUser,
-    text: "Hi, I'm having trouble accessing my account.\nIt says my password is incorrect. I’ve attached some screenshots for you to check.",
+    text: "Hi! I'm having trouble accessing my account.\nThe website says my password is incorrect. I'm sending a few screenshots so you can see where I get the error.",
     attachments: [screenshot1, screenshot2, screenshot3],
   },
   {
     id: new DevExpress.data.Guid(),
     timestamp: getTimestamp(date, -7),
     author: supportAgent,
-    text: 'Thanks for the screenshots! I can help you with that. Please refer to the attached file for instructions to restore access.',
+    text: 'Hello! Thanks for including screenshots. To restore access, please follow instructions in the attached file. Let me know if you need anything else.',
     attachments: [instructions],
   },
 ];
