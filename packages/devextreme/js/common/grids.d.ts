@@ -94,7 +94,7 @@ export type AIColumnRequestCreatingInfo<TRowData = any> = {
    * @docid
    * @type Array<object>
    */
-  readonly data: TRowData[];
+  data: TRowData[];
   /** @docid */
   cancel?: boolean;
   /**
