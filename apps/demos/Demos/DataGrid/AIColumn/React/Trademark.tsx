@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Vehicle } from "./types";
-import { type DataGridTypes } from 'devextreme-react/data-grid';
 
-export default function Trademark(props: DataGridTypes.ColumnCellTemplateData<Vehicle>) {
+type TrademarkProps = {
+  vehicle: Vehicle;
+  onShowInfo: (vehicle: Vehicle) => void;
+};
 
-  const {ID, TrademarkName, Name} = props.data;
+export default function Trademark({vehicle, onShowInfo}: TrademarkProps) {
+
+  const {ID, TrademarkName, Name} = vehicle;
 
   return (
     <div className='trademark__wrapper'>
@@ -13,6 +17,7 @@ export default function Trademark(props: DataGridTypes.ColumnCellTemplateData<Ve
           className='trademark__img'
           src={`../../../../images/vehicles/image_${ID}.png`}
           alt={`${TrademarkName} ${Name}`}
+          onClick={() => onShowInfo(vehicle)}
         />
       </div>
       <div className='trademark__text-wrapper'>
