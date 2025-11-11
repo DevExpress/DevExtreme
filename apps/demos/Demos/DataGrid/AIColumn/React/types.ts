@@ -1,3 +1,5 @@
+import { OpenAI } from 'openai';
+
 export interface Vehicle {
   ID: number;
   TrademarkName: string;
@@ -25,3 +27,7 @@ export interface Vehicle {
   Author: string;
   Source: string;
 }
+
+export type AIMessage = (OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionSystemMessageParam) & {
+  content: string;
+};

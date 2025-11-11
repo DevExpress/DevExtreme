@@ -1,14 +1,13 @@
-import React, { useCallback } from 'react';
-import { Vehicle } from "./types";
+import React from 'react';
+import { Vehicle } from './types';
 
 type TrademarkProps = {
   vehicle: Vehicle;
   onShowInfo: (vehicle: Vehicle) => void;
 };
 
-export default function Trademark({vehicle, onShowInfo}: TrademarkProps) {
-
-  const {ID, TrademarkName, Name} = vehicle;
+export default function Trademark({ vehicle, onShowInfo }: TrademarkProps) {
+  const { ID, TrademarkName, Name } = vehicle;
 
   return (
     <div className='trademark__wrapper'>
@@ -20,7 +19,7 @@ export default function Trademark({vehicle, onShowInfo}: TrademarkProps) {
           onClick={() => onShowInfo(vehicle)}
         />
       </div>
-      <div className='trademark__text-wrapper'>
+      <div className='trademark__text'>
         <div className='trademark__text trademark__text--title'>{TrademarkName}</div>
         <div className='trademark__text trademark__text--subtitle'>{Name}</div>
       </div>

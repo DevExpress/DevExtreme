@@ -1,14 +1,10 @@
-import { Vehicle } from "./types";
+import { Vehicle, AIMessage } from "./types";
 import {
   AIIntegration,
   RequestParams,
   Response,
 } from 'devextreme-react/common/ai-integration';
-import { AzureOpenAI, OpenAI } from 'openai';
-
-type AIMessage = (OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionSystemMessageParam) & {
-  content: string;
-};
+import { AzureOpenAI } from 'openai';
 
 const AzureOpenAIConfig = {
   dangerouslyAllowBrowser: true,
