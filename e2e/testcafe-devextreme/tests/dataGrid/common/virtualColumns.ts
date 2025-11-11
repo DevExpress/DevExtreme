@@ -4,7 +4,7 @@ import DataGrid, { CLASS } from 'devextreme-testcafe-models/dataGrid';
 import type { Column } from 'devextreme/ui/data_grid';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 const showDataGrid = ClientFunction(() => {
   $('#wrapperContainer').css('display', '');
@@ -34,7 +34,7 @@ const generateColumns = (columnCount: number): Column[] => [...new Array(columnC
     dataField: `field${index + 1}`,
   }));
 
-test.meta({ unstable: true })('DataGrid should not scroll back to the focused cell after horizontal scrolling to the right when columnRenderingMode is virtual', async (t) => {
+test('DataGrid should not scroll back to the focused cell after horizontal scrolling to the right when columnRenderingMode is virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t
@@ -100,7 +100,7 @@ test('DataGrid should not scroll back to the focused cell after horizontal scrol
 }));
 
 // T1090735
-safeSizeTest('The updateDimensions method should render the grid if a container was hidden and columnRenderingMode is virtual', async (t) => {
+test('The updateDimensions method should render the grid if a container was hidden and columnRenderingMode is virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -117,9 +117,8 @@ safeSizeTest('The updateDimensions method should render the grid if a container 
 
   await dataGrid.apiUpdateDimensions();
 
+  await testScreenshot(t, takeScreenshot, 'T1090735-grid-virtual-columns.png', { element: '#wrapperContainer' });
   await t
-    .expect(await takeScreenshot('T1090735-grid-virtual-columns.png', '#wrapperContainer'))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async (t) => {
@@ -159,14 +158,14 @@ safeSizeTest('The updateDimensions method should render the grid if a container 
     await dataGrid.scrollTo(t, { y: 5000 });
 
     // assert
-    await takeScreenshot(`T1176160-master-detail-with-virtual-columns-and-useNative=${useNative}-1.png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `T1176160-master-detail-with-virtual-columns-and-useNative=${useNative}-1.png`, { element: dataGrid.element });
 
     // act
     await dataGrid.scrollTo(t, { x: 1000 });
     await dataGrid.scrollTo(t, { x: 2000 });
 
     // assert
-    await takeScreenshot(`T1176160-master-detail-with-virtual-columns-and-useNative=${useNative}-2.png`, dataGrid.element);
+    await testScreenshot(t, takeScreenshot, `T1176160-master-detail-with-virtual-columns-and-useNative=${useNative}-2.png`, { element: dataGrid.element });
 
     await t
       .expect(compareResults.isValid())
@@ -218,13 +217,13 @@ test('The markup should be correct after horizontal scrolling and collapse of th
   await dataGrid.scrollTo(t, { x: 4000 });
 
   // assert
-  await takeScreenshot('T1176161-master-detail-with-virtual-columns-1.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1176161-master-detail-with-virtual-columns-1.png', { element: dataGrid.element });
 
   // act
   await dataGrid.apiCollapseRow(0);
 
   // assert
-  await takeScreenshot('T1176161-master-detail-with-virtual-columns-2.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1176161-master-detail-with-virtual-columns-2.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())
@@ -281,9 +280,8 @@ test('Columns should be rendered correctly after reinit of columns controller', 
   await dataGrid.option('columns', columns);
   await t.expect(dataGrid.getScrollLeft()).eql(1000);
 
+  await testScreenshot(t, takeScreenshot, 'grid-virtual-columns-after-reinit.png');
   await t
-    .expect(await takeScreenshot('grid-virtual-columns-after-reinit.png'))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -308,9 +306,8 @@ test('Columns reordering should work with virtual columns', async (t) => {
     0,
   );
 
+  await testScreenshot(t, takeScreenshot, 'data-grid__virtual-columns__reoder.png', { element: dataGrid.element });
   await t
-    .expect(await takeScreenshot('data-grid__virtual-columns__reoder.png', dataGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -335,9 +332,8 @@ test('Grouping should work with virtual columns', async (t) => {
     dataGrid.getGroupPanel().element,
   );
 
+  await testScreenshot(t, takeScreenshot, 'data-grid__virtual-columns__grouping.png', { element: dataGrid.element });
   await t
-    .expect(await takeScreenshot('data-grid__virtual-columns__grouping.png', dataGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -368,9 +364,8 @@ test('Column chooser should work with virtual columns', async (t) => {
     dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(499).element,
     dataGrid.getColumnChooser().content,
   );
+  await testScreenshot(t, takeScreenshot, 'data-grid__virtual-columns__column-chooser.png', { element: dataGrid.element });
   await t
-    .expect(await takeScreenshot('data-grid__virtual-columns__column-chooser.png', dataGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -390,18 +385,18 @@ test('Group row should have right colspan with summary, virtual columns and fixe
   const grid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await takeScreenshot('T1221369_fixed-summary-with-virtual-cols_0.png', grid.element);
+  await testScreenshot(t, takeScreenshot, 'T1221369_fixed-summary-with-virtual-cols_0.png', { element: grid.element });
 
   // NOTE: There is an issue with Scrollable
   // So, we should scroll two times to reach maximum right scroll position
   await grid.scrollTo(t, { x: 10000 });
   await grid.scrollTo(t, { x: 10000 });
 
-  await takeScreenshot('T1221369_fixed-summary-with-virtual-cols_1.png', grid.element);
+  await testScreenshot(t, takeScreenshot, 'T1221369_fixed-summary-with-virtual-cols_1.png', { element: grid.element });
 
   await grid.scrollTo(t, { x: 0 });
 
-  await takeScreenshot('T1221369_fixed-summary-with-virtual-cols_2.png', grid.element);
+  await testScreenshot(t, takeScreenshot, 'T1221369_fixed-summary-with-virtual-cols_2.png', { element: grid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -456,12 +451,12 @@ test('Header, fixed columns and virtual scroll bar should have stable position d
   await t.expect(dataGrid.getDataRow(0).element.exists).ok(); // wait for initial render
   await ClientFunction(() => { (window as any).deferred = $.Deferred(); })();
   await dataGrid.scrollTo(t, { x: 2000 });
-  await takeScreenshot('T1260472-async-render-during-horizontal-scrolling.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1260472-async-render-during-horizontal-scrolling.png', { element: dataGrid.element });
   await ClientFunction(() => {
     (window as any).deferred.resolve();
     (window as any).deferred = undefined;
   })();
-  await takeScreenshot('T1260472-async-render-after-horizontal-scrolling.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1260472-async-render-after-horizontal-scrolling.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())

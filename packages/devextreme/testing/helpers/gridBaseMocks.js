@@ -932,8 +932,11 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             getScrollTop: function() {
                 return options.scrollTop;
-            }
+            },
 
+            renderDragCellContent: function($dragContainer, column) {
+                $dragContainer.text(column.caption);
+            }
         };
     };
 

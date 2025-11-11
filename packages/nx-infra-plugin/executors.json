@@ -1,0 +1,44 @@
+{
+  "executors": {
+    "generate-react-components": {
+      "implementation": "./src/executors/generate-react-components/executor",
+      "schema": "./src/executors/generate-react-components/schema.json",
+      "description": "Generate React components from DevExtreme metadata"
+    },
+    "clean": {
+      "implementation": "./src/executors/clean/executor",
+      "schema": "./src/executors/clean/schema.json",
+      "description": "Clean directories with support for simple or recursive mode"
+    },
+    "add-license-headers": {
+      "implementation": "./src/executors/add-license-headers/executor",
+      "schema": "./src/executors/add-license-headers/schema.json",
+      "description": "Add license headers to compiled files"
+    },
+    "prepare-submodules": {
+      "implementation": "./src/executors/prepare-submodules/executor",
+      "schema": "./src/executors/prepare-submodules/schema.json",
+      "description": "Prepare submodule entry points with package.json files"
+    },
+    "copy-files": {
+      "implementation": "./src/executors/copy-files/executor",
+      "schema": "./src/executors/copy-files/schema.json",
+      "description": "Copy files to destination"
+    },
+    "build-typescript": {
+      "implementation": "./src/executors/build-typescript/executor",
+      "schema": "./src/executors/build-typescript/schema.json",
+      "description": "Build TypeScript modules (CJS or ESM) with configurable output format"
+    },
+    "prepare-package-json": {
+      "implementation": "./src/executors/prepare-package-json/executor",
+      "schema": "./src/executors/prepare-package-json/schema.json",
+      "description": "Create npm distribution package.json"
+    },
+    "pack-npm": {
+      "implementation": "./src/executors/pack-npm/executor",
+      "schema": "./src/executors/pack-npm/schema.json",
+      "description": "Run pnpm pack for npm distribution"
+    }
+  }
+}

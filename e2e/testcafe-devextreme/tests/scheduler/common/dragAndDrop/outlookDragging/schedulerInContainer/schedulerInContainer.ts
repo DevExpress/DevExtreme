@@ -1,6 +1,7 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
+import { testScreenshot } from '../../../../../../helpers/themeUtils';
 import { createWidget } from '../../../../../../helpers/createWidget';
 import url from '../../../../../../helpers/getPageUrl';
 
@@ -13,19 +14,19 @@ test('Dragging should be work right in case dxScheduler placed in dxTabPanel', a
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
 
+  await t.drag(draggableAppointment.element, 0, 120);
+
+  await testScreenshot(t, takeScreenshot, 'dxScheduler-placed-in-dxTabPanel-drag-to-bottom.png');
+
+  await t.drag(draggableAppointment.element, 0, -170);
+
+  await testScreenshot(t, takeScreenshot, 'dxScheduler-placed-in-dxTabPanel-drag-to-top.png');
+
+  await t.drag(draggableAppointment.element, 100, 0);
+
+  await testScreenshot(t, takeScreenshot, 'dxScheduler-placed-in-dxTabPanel-drag-to-right.png');
+
   await t
-    .drag(draggableAppointment.element, 0, 120)
-    .expect(await takeScreenshot('dxScheduler-placed-in-dxTabPanel-drag-to-bottom.png'))
-    .ok()
-
-    .drag(draggableAppointment.element, 0, -170)
-    .expect(await takeScreenshot('dxScheduler-placed-in-dxTabPanel-drag-to-top.png'))
-    .ok()
-
-    .drag(draggableAppointment.element, 100, 0)
-    .expect(await takeScreenshot('dxScheduler-placed-in-dxTabPanel-drag-to-right.png'))
-    .ok()
-
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {

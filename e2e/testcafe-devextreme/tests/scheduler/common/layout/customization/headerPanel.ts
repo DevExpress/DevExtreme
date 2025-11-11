@@ -3,6 +3,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { insertStylesheetRulesToPage } from '../../../../../helpers/domUtils';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Scheduler: Layout Customization: Header Panel`
   .page(url(__dirname, '../../../../container.html'));
@@ -70,9 +71,12 @@ const views = [{
     for (const view of views) {
       await scheduler.option('currentView', view.type);
 
-      await t.expect(
-        await takeScreenshot(`custom-header-panel-in-${view.type}-cross-scrolling=${crossScrollingEnabled}.png`, scheduler.element),
-      ).ok();
+      await testScreenshot(
+        t,
+        takeScreenshot,
+        `custom-header-panel-in-${view.type}-cross-scrolling=${crossScrollingEnabled}.png`,
+        { element: scheduler.element },
+      );
     }
 
     await t.expect(compareResults.isValid())

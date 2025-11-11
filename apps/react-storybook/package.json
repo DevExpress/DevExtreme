@@ -14,12 +14,11 @@
   "dependencies": {
     "devextreme": "workspace:*",
     "devextreme-react": "workspace:*",
+    "html-react-parser": "^5.2.2",
     "inferno": "catalog:",
-    "html-react-parser": "^5.2.2"
+    "openai": "4.73.1"
   },
   "devDependencies": {
-    "@types/react": "18.0.0",
-    "@types/react-dom": "18.0.0",
     "@storybook/addon-essentials": "7.6.19",
     "@storybook/addon-interactions": "7.6.19",
     "@storybook/addon-links": "7.6.19",
@@ -27,6 +26,8 @@
     "@storybook/react": "7.6.19",
     "@storybook/react-webpack5": "7.6.19",
     "@storybook/test": "7.6.19",
+    "@types/react": "18.0.0",
+    "@types/react-dom": "18.0.0",
     "http-server": "14.1.1",
     "prop-types": "15.8.1",
     "react": "18.0.0",

@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import positionUtils from 'common/core/animation/position';
-import translator from 'common/core/animation/translator';
+import translator from '__internal/common/core/animation/translatorModule';
 import browser from 'core/utils/browser';
 import fixtures from '../../helpers/positionFixtures.js';
 import { implementationsMap } from 'core/utils/size';
@@ -1020,11 +1020,9 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
 
     // T664522
     QUnit.test('setup should call resetPosition with finishTransition argument', function(assert) {
-        const origResetPosition = translator.resetPosition;
-
-        translator.resetPosition = ($element, finishTransition) => {
+        const resetPositionStub = sinon.stub(translator, 'resetPosition').callsFake(($element, finishTransition) => {
             assert.equal(finishTransition, true, 'finishTransition is true');
-        };
+        });
 
         try {
             const $what = $('#what').width(100);
@@ -1033,7 +1031,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
                 of: $(window)
             });
         } finally {
-            translator.resetPosition = origResetPosition;
+            resetPositionStub.restore();
         }
     });
 })();

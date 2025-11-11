@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "metadataPath": {
+      "type": "string",
+      "description": "Path to metadata JSON file"
+    },
+    "componentsDir": {
+      "type": "string",
+      "description": "Output directory for generated components",
+      "default": "./src"
+    },
+    "indexFileName": {
+      "type": "string",
+      "description": "Index file name",
+      "default": "./src/index.ts"
+    },
+    "baseComponent": {
+      "type": "string",
+      "description": "Base component path",
+      "default": "./core/component"
+    },
+    "extensionComponent": {
+      "type": "string",
+      "description": "Extension component path",
+      "default": "./core/extension-component"
+    },
+    "configComponent": {
+      "type": "string",
+      "description": "Config component path",
+      "default": "./core/nested-option"
+    }
+  },
+  "required": ["metadataPath"]
+}

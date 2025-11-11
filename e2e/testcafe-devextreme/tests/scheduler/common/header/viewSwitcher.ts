@@ -3,6 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Scheduler header - View switcher`
   .page(url(__dirname, '../../../container.html'));
@@ -74,10 +75,14 @@ test('Changing view does not reset toolbar items state', async (t) => {
 
     const { toolbar } = new Scheduler('#container');
 
-    await t
-      .expect(await takeScreenshot(`toolbar-without-view-switcher-(useDropDownViewSwitcher=${useDropDownViewSwitcher}).png`, toolbar.element))
-      .ok()
+    await testScreenshot(
+      t,
+      takeScreenshot,
+      `toolbar-without-view-switcher-(useDropDownViewSwitcher=${useDropDownViewSwitcher}).png`,
+      { element: toolbar.element },
+    );
 
+    await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => createWidget('dxScheduler', {

@@ -1,31 +1,33 @@
 <dx-html-editor height="750px" [value]="valueContent">
-  <dxo-table-context-menu
+  <dxo-html-editor-table-context-menu
     [enabled]="contextMenuEnabled"
-  ></dxo-table-context-menu>
-  <dxo-table-resizing [enabled]="allowResizing"></dxo-table-resizing>
-  <dxo-toolbar>
-    <dxi-item name="bold"></dxi-item>
-    <dxi-item name="color"></dxi-item>
-    <dxi-item name="separator"></dxi-item>
-    <dxi-item name="alignLeft"></dxi-item>
-    <dxi-item name="alignCenter"></dxi-item>
-    <dxi-item name="alignRight"></dxi-item>
-    <dxi-item name="separator"></dxi-item>
-    <dxi-item name="insertTable"></dxi-item>
-    <dxi-item name="insertHeaderRow"></dxi-item>
-    <dxi-item name="insertRowAbove"></dxi-item>
-    <dxi-item name="insertRowBelow"></dxi-item>
-    <dxi-item name="separator"></dxi-item>
-    <dxi-item name="insertColumnLeft"></dxi-item>
-    <dxi-item name="insertColumnRight"></dxi-item>
-    <dxi-item name="separator"></dxi-item>
-    <dxi-item name="deleteColumn"></dxi-item>
-    <dxi-item name="deleteRow"></dxi-item>
-    <dxi-item name="deleteTable"></dxi-item>
-    <dxi-item name="separator"></dxi-item>
-    <dxi-item name="cellProperties"></dxi-item>
-    <dxi-item name="tableProperties"></dxi-item>
-  </dxo-toolbar>
+  ></dxo-html-editor-table-context-menu>
+  <dxo-html-editor-table-resizing
+    [enabled]="allowResizing"
+  ></dxo-html-editor-table-resizing>
+  <dxo-html-editor-toolbar>
+    <dxi-html-editor-item name="bold"></dxi-html-editor-item>
+    <dxi-html-editor-item name="color"></dxi-html-editor-item>
+    <dxi-html-editor-item name="separator"></dxi-html-editor-item>
+    <dxi-html-editor-item name="alignLeft"></dxi-html-editor-item>
+    <dxi-html-editor-item name="alignCenter"></dxi-html-editor-item>
+    <dxi-html-editor-item name="alignRight"></dxi-html-editor-item>
+    <dxi-html-editor-item name="separator"></dxi-html-editor-item>
+    <dxi-html-editor-item name="insertTable"></dxi-html-editor-item>
+    <dxi-html-editor-item name="insertHeaderRow"></dxi-html-editor-item>
+    <dxi-html-editor-item name="insertRowAbove"></dxi-html-editor-item>
+    <dxi-html-editor-item name="insertRowBelow"></dxi-html-editor-item>
+    <dxi-html-editor-item name="separator"></dxi-html-editor-item>
+    <dxi-html-editor-item name="insertColumnLeft"></dxi-html-editor-item>
+    <dxi-html-editor-item name="insertColumnRight"></dxi-html-editor-item>
+    <dxi-html-editor-item name="separator"></dxi-html-editor-item>
+    <dxi-html-editor-item name="deleteColumn"></dxi-html-editor-item>
+    <dxi-html-editor-item name="deleteRow"></dxi-html-editor-item>
+    <dxi-html-editor-item name="deleteTable"></dxi-html-editor-item>
+    <dxi-html-editor-item name="separator"></dxi-html-editor-item>
+    <dxi-html-editor-item name="cellProperties"></dxi-html-editor-item>
+    <dxi-html-editor-item name="tableProperties"></dxi-html-editor-item>
+  </dxo-html-editor-toolbar>
 </dx-html-editor>
 
 <div class="options">

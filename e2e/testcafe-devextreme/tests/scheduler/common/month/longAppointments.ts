@@ -1,7 +1,8 @@
-import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Scheduler: long appointments in month view`
   .page(url(__dirname, '../../../container.html'));
@@ -23,8 +24,19 @@ fixture.disablePageReloads`Scheduler: long appointments in month view`
     },
   ].forEach((appointment) => {
     test(`Long appointment should display valid on month view(rtl='${rtlEnabled}', text='${appointment.text}')`, async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
       const scheduler = new Scheduler('#container');
-      await t.expect(await compareScreenshot(t, `month-long-appointment(rtl=${rtlEnabled}, text=${appointment.text}).png`, scheduler.workSpace)).ok();
+
+      await testScreenshot(
+        t,
+        takeScreenshot,
+        `month-long-appointment(rtl=${rtlEnabled}, text=${appointment.text}).png`,
+        { element: scheduler.workSpace },
+      );
+
+      await t
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
     })
       .meta({ renovation: true })
       .before(async () => createWidget('dxScheduler', {
@@ -39,18 +51,37 @@ fixture.disablePageReloads`Scheduler: long appointments in month view`
 
 [false, true].forEach((rtlEnabled) => {
   test(`Long appointment(several months) should display valid on month view(rtl='${rtlEnabled})`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const { toolbar, workSpace } = new Scheduler('#container');
 
-    await t
-      .expect(await compareScreenshot(t, `month-long-appointment-several-months-january(rtl=${rtlEnabled}).png`, workSpace)).ok();
+    await testScreenshot(
+      t,
+      takeScreenshot,
+      `month-long-appointment-several-months-january(rtl=${rtlEnabled}).png`,
+      { element: workSpace },
+    );
+
+    await t.click(toolbar.navigator.nextButton);
+
+    await testScreenshot(
+      t,
+      takeScreenshot,
+      `month-long-appointment-several-months-february(rtl=${rtlEnabled}).png`,
+      { element: workSpace },
+    );
+
+    await t.click(toolbar.navigator.nextButton);
+
+    await testScreenshot(
+      t,
+      takeScreenshot,
+      `month-long-appointment-several-months-march(rtl=${rtlEnabled}).png`,
+      { element: workSpace },
+    );
 
     await t
-      .click(toolbar.navigator.nextButton)
-      .expect(await compareScreenshot(t, `month-long-appointment-several-months-february(rtl=${rtlEnabled}).png`, workSpace)).ok();
-
-    await t
-      .click(toolbar.navigator.nextButton)
-      .expect(await compareScreenshot(t, `month-long-appointment-several-months-march(rtl=${rtlEnabled}).png`, workSpace)).ok();
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
   }).before(async () => createWidget('dxScheduler', {
     dataSource: [{
       text: 'Text',
@@ -65,14 +96,28 @@ fixture.disablePageReloads`Scheduler: long appointments in month view`
 });
 
 test('Long recurrence appointment should display valid on month view', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const { toolbar, workSpace } = new Scheduler('#container');
 
-  await t
-    .expect(await compareScreenshot(t, 'month-long-recurrence-appointment-several-months-january.png', workSpace)).ok();
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'month-long-recurrence-appointment-several-months-january.png',
+    { element: workSpace },
+  );
+
+  await t.click(toolbar.navigator.nextButton);
+
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'month-long-recurrence-appointment-several-months-february.png',
+    { element: workSpace },
+  );
 
   await t
-    .click(toolbar.navigator.nextButton)
-    .expect(await compareScreenshot(t, 'month-long-recurrence-appointment-several-months-february.png', workSpace)).ok();
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxScheduler', {
   dataSource: [{
     text: 'Text',

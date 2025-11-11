@@ -101,7 +101,6 @@ $fluent-fileuploader-file-container-boxshadow: 0 1px 3px 0 color.change($base-sh
   }
 
   .dx-fileuploader-file-container {
-    display: flex;
     padding: $fluent-fileuploader-file-container-padding;
     margin-bottom: 4px;
     border-radius: $fluent-fileuploader-files-container-rounding;
@@ -130,9 +129,19 @@ $fluent-fileuploader-file-container-boxshadow: 0 1px 3px 0 color.change($base-sh
       width: $fluent-fileuploader-file-container-button-size;
       margin-right: $fluent-fileuploader-file-container-button-margin;
 
+      &.dx-fileuploader-cancel-button-position-end {
+        margin-right: 0;
+        margin-left: $fluent-fileuploader-file-cancel-button-margin-left;
+      }
+
       .dx-rtl & {
         margin-left: $fluent-fileuploader-file-container-button-margin;
         margin-right: 0;
+
+        &.dx-fileuploader-cancel-button-position-end {
+          margin-left: 0;
+          margin-right: $fluent-fileuploader-file-cancel-button-margin-left;
+        }
       }
     }
   }
@@ -148,6 +157,11 @@ $fluent-fileuploader-file-container-boxshadow: 0 1px 3px 0 color.change($base-sh
   line-height: 13px;
 }
 
+.dx-fileuploader-file-icon {
+  color: $fileuploader-file-icon-color;
+  font-size: $fluent-fileuploader-file-icon-font-size;
+}
+
 .dx-fileuploader-file-name {
   padding-bottom: math.div($fluent-fileuploader-vertical-padding, 2);
   color: $fileuploader-filename-color;
@@ -156,7 +170,7 @@ $fluent-fileuploader-file-container-boxshadow: 0 1px 3px 0 color.change($base-sh
 
 .dx-fileuploader-file-size {
   float: right;
-  margin: $fluent-fileuploader-file-size-margin;
+  padding: $fluent-fileuploader-file-size-margin;
   color: $base-label-color;
 }
 

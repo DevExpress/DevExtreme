@@ -3,22 +3,25 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { appendElementTo, setAttribute, removeAttribute } from '../../../helpers/domUtils';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
+import {
+  appendElementTo, setAttribute, removeAttribute, addFocusableElementBefore,
+} from '../../../helpers/domUtils';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 fixture.disablePageReloads`ValidationMessage`
   .page(url(__dirname, '../../container.html'));
 
-safeSizeTest('Validation Message position should be correct after change visibility of parent container (T1095900)', async (t) => {
+test.meta({ browserSize: [300, 200] })('Validation Message position should be correct after change visibility of parent container (T1095900)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await addFocusableElementBefore('#container');
 
   await t
     .click(Selector(`.${TEXTEDITOR_INPUT_CLASS}`))
     .pressKey('backspace')
     .pressKey('enter')
-    .pressKey('tab');
+    .click(Selector('#focusable-start'));
 
   await setAttribute('#container', 'hidden', 'true');
   await removeAttribute('#container', 'hidden');
@@ -28,7 +31,7 @@ safeSizeTest('Validation Message position should be correct after change visibil
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [300, 200]).before(async () => {
+}).before(async () => {
   await appendElementTo('#container', 'div', 'textbox', {});
 
   await createWidget('dxTextBox', {

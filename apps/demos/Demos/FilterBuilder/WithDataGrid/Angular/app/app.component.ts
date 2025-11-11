@@ -8,7 +8,7 @@ import {
 } from 'devextreme-angular';
 
 import { Service } from './app.service';
-import type { Fields, Condition, Product } from './app.service';
+import type { Fields, Columns, Condition, Product } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -32,12 +32,15 @@ export class AppComponent {
 
   fields: Fields;
 
+  columns: Columns;
+
   filter: Condition;
 
   gridFilterValue: Condition;
 
   constructor(service: Service) {
     this.fields = service.getFields();
+    this.columns = service.getColumns();
     this.filter = service.getFilter();
     this.gridFilterValue = this.filter;
     this.dataSource = service.getProducts();

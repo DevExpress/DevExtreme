@@ -2055,19 +2055,19 @@ module('Align labels', () => {
             }]
         });
 
-        testWrapper.setItemOption('title1.group1.description', 'visible', false);
+        testWrapper.setItemOption('title1.group2.description', 'visible', false);
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 0, etalonLabelText: 'Home Address' });
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 1, etalonLabelText: 'Last Name' });
 
-        testWrapper.setItemOption('title1.group1.homeAddress', 'visible', false);
+        testWrapper.setItemOption('title1.group2.homeAddress', 'visible', false);
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 0, etalonLabelText: 'Name' });
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 1, etalonLabelText: 'Last Name' });
 
-        testWrapper.setItemOption('title1.group1.description', 'visible', true);
+        testWrapper.setItemOption('title1.group2.description', 'visible', true);
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 0, etalonLabelText: 'Description' });
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 1, etalonLabelText: 'Last Name' });
 
-        testWrapper.setItemOption('title1.group1.homeAddress', 'visible', true);
+        testWrapper.setItemOption('title1.group2.homeAddress', 'visible', true);
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 0, etalonLabelText: 'Description' });
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 1, etalonLabelText: 'Home Address' });
     });

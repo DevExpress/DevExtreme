@@ -5,6 +5,7 @@ import type { ViewType, Orientation } from 'devextreme/ui/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { generateOptionMatrix } from '../../../../helpers/generateOptionMatrix';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Scheduler: Virtual scrolling (many cells)`
   .page(url(__dirname, '../../../container.html'));
@@ -24,21 +25,15 @@ testCases.forEach(({ viewType, groupOrientation }) => {
 
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t
-      .expect(await takeScreenshot(buildScreenshotName(viewType, groupOrientation, 'start'), scheduler.element))
-      .ok();
+    await testScreenshot(t, takeScreenshot, buildScreenshotName(viewType, groupOrientation, 'start'), { element: scheduler.element });
 
     await scheduler.scrollTo(new Date(2024, 1, 1, 1), { groupId: resourceCount / 2 });
 
-    await t
-      .expect(await takeScreenshot(buildScreenshotName(viewType, groupOrientation, 'middle'), scheduler.element))
-      .ok();
+    await testScreenshot(t, takeScreenshot, buildScreenshotName(viewType, groupOrientation, 'middle'), { element: scheduler.element });
 
     await scheduler.scrollTo(new Date(2024, 1, 1, 1), { groupId: resourceCount - 1 });
 
-    await t
-      .expect(await takeScreenshot(buildScreenshotName(viewType, groupOrientation, 'end'), scheduler.element))
-      .ok();
+    await testScreenshot(t, takeScreenshot, buildScreenshotName(viewType, groupOrientation, 'end'), { element: scheduler.element });
 
     await t
       .expect(compareResults.isValid())
