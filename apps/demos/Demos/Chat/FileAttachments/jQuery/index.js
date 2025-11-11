@@ -54,12 +54,11 @@ $(() => {
       }
 
       const link = document.createElement('a');
-      link.href = attachment.url;
-      link.download = attachment.name;
+      link.setAttribute('href', attachment.url);
+      link.setAttribute('download', attachment.name);
+
       document.body.appendChild(link);
-
       link.click();
-
       document.body.removeChild(link);
     },
   }).dxChat('instance');
