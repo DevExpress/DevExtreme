@@ -183,7 +183,7 @@ test.meta({ browserSize: [1500, 1500] })('appointment form readonly state', asyn
   await testScreenshot(
     t,
     takeScreenshot,
-    'scheduler__appointment__readonly.png',
+    'scheduler__appointment__main-form__readonly.png',
     { element: appointmentPopup.contentElement },
   );
 
