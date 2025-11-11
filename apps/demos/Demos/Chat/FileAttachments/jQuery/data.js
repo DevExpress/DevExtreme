@@ -16,35 +16,41 @@ const supportAgent = {
   avatarUrl: '../../../../images/petersmith.png',
 };
 
-const createEmptyAttachment = (name, type) => {
-  const blob = new Blob([''], { type });
-  const url = URL.createObjectURL(blob);
-
-  return {
-    name,
-    url,
-    size: 1024 * 10,
-  };
-};
-
-const screenshot1 = createEmptyAttachment('Screenshot1.jpg', 'image/jpeg');
-const screenshot2 = createEmptyAttachment('Screenshot2.jpg', 'image/jpeg');
-const screenshot3 = createEmptyAttachment('Screenshot3.jpg', 'image/jpeg');
-const instructions = createEmptyAttachment('Instructions.pdf', 'application/pdf');
-
 const messages = [
   {
     id: new DevExpress.data.Guid(),
     timestamp: getTimestamp(date, -7),
     author: currentUser,
     text: "Hi! I'm having trouble accessing my account.\nThe website says my password is incorrect. I'm sending a few screenshots so you can see where I get the error.",
-    attachments: [screenshot1, screenshot2, screenshot3],
+    attachments: [
+      {
+        name: 'Screenshot1.jpg',
+        url: '../../../../images/Chat/FileAttachments/Screenshot1.jpg',
+        size: 1024 * 10,
+      },
+      {
+        name: 'Screenshot2.jpg',
+        url: '../../../../images/Chat/FileAttachments/Screenshot2.jpg',
+        size: 1024 * 10,
+      },
+      {
+        name: 'Screenshot3.jpg',
+        url: '../../../../images/Chat/FileAttachments/Screenshot3.jpg',
+        size: 1024 * 10,
+      },
+    ],
   },
   {
     id: new DevExpress.data.Guid(),
     timestamp: getTimestamp(date, -7),
     author: supportAgent,
     text: 'Hello! Thanks for including screenshots. To restore access, please follow instructions in the attached file. Let me know if you need anything else.',
-    attachments: [instructions],
+    attachments: [
+      {
+        name: 'Instructions.pdf',
+        url: '../../../../images/Chat/FileAttachments/Instructions.pdf',
+        size: 1024 * 10,
+      },
+    ],
   },
 ];
