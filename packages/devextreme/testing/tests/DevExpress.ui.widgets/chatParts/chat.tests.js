@@ -2484,7 +2484,7 @@ QUnit.module('Chat', () => {
 
     QUnit.module('Proxy state options', moduleConfig, () => {
         [true, false].forEach(value => {
-            QUnit.test('passed state enabled options should be equal chat state enabled options', function(assert) {
+            QUnit.test('passed state enabled options should be equal chat state enabled options in MessageBox', function(assert) {
                 const options = {
                     activeStateEnabled: value,
                     focusStateEnabled: value,
