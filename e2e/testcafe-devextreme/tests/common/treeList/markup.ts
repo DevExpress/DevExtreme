@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import TreeList from 'devextreme-testcafe-models/treeList';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import { Themes } from '../../../helpers/themes';
 import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`TreeList - Markup`
@@ -22,10 +23,7 @@ const tasksT1223168 = [{
   Task_Parent_ID: 2,
 }];
 
-// visual: generic.light
-// visual: material.blue.light
-// visual: fluent.blue.light
-test('TreeList - Expand/collapse buttons are too close to column borders if the first column is a boolean column (T1223168)', async (t) => {
+test.meta({ themes: [Themes.materialBlue, Themes.genericLight] })('TreeList - Expand/collapse buttons are too close to column borders if the first column is a boolean column (T1223168)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const treeList = new TreeList('#container');
 
@@ -54,9 +52,6 @@ test('TreeList - Expand/collapse buttons are too close to column borders if the 
 });
 
 // T1221037
-// visual: generic.light
-// visual: material.blue.light
-// visual: fluent.blue.light
 test('TreeList screenshot when the first cell has a template', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const treeList = new TreeList('#container');
@@ -214,16 +209,13 @@ test('The shading should alternate correctly after expanding the node when repai
   columns: [{ dataField: 'id', fixed: true }, 'text'],
 }));
 
-// visual: generic.light
-// visual: generic.light.compact
-// visual: material.blue.light
-// visual: material.blue.light.compact
-// visual: fluent.blue.light
-// visual: fluent.blue.light.compact
 ['single', 'multiple'].forEach((selectionMode) => {
   ['single-line', 'multiple-line'].forEach((contentType) => {
     [false, true].forEach((rtlEnabled) => {
-      test(
+      test.meta({
+        // eslint-disable-next-line @stylistic/max-len
+        themes: !rtlEnabled ? [Themes.materialBlue, Themes.materialBlueCompact, Themes.genericLight] : [],
+      })(
         `Markup should be correct [T1291914 & T1294907]:selection=${selectionMode},content=${contentType},rtl=${rtlEnabled}`,
         async (t) => {
           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

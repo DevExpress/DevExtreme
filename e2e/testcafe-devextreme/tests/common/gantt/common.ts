@@ -6,6 +6,7 @@ import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { appendElementTo } from '../../../helpers/domUtils';
+import { Themes } from '../../../helpers/themes';
 
 const TOOLBAR_ITEM_BUTTON = '.dx-button';
 
@@ -118,7 +119,7 @@ const data = {
   }],
 };
 
-test('Gantt - show resources button should not have focus state (T1264485)', async (t) => {
+test.meta({ themes: [Themes.materialBlue] })('Gantt - show resources button should not have focus state (T1264485)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t

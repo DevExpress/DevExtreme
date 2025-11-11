@@ -98,11 +98,23 @@ jobs:
           { componentFolder: "accessibility", name: "accessibility" },
           { componentFolder: "common", name: "common" },
 
-          # Grids tests need to be reworked to work in fluent theme
+          { name: "generic", theme: 'generic.light' },
+          { name: "material", theme: 'material.blue.light' },
+          { name: "material", theme: 'material.blue.light.compact' },
+
+          # { componentFolder: "common", name: "common - themes" },
+          # { componentFolder: "dataGrid", name: "dataGrid - themes" },
+          # { componentFolder: "scheduler", name: "scheduler - themes" },
+          # { componentFolder: "editors", name: "editors - themes" },
+          # { componentFolder: "navigation", name: "navigation - themes" },
+
+          { componentFolder: "cardView", name: "cardView" },
           { componentFolder: "dataGrid", name: "dataGrid (1/3)", indices: "1/3" },
           { componentFolder: "dataGrid", name: "dataGrid (2/3)", indices: "2/3" },
           { componentFolder: "dataGrid", name: "dataGrid (3/3)", indices: "3/3" },
-          { componentFolder: "cardView", name: "cardView" },
+
+          { componentFolder: "editors", name: "editors" },
+          { componentFolder: "navigation", name: "navigation" },
 
           # Scheduler tests need to be reworked to work in fluent theme
           { componentFolder: "scheduler/common", name: "scheduler / common (1/6)", indices: "1/6", theme: 'generic.light' },
@@ -115,9 +127,6 @@ jobs:
           { componentFolder: "scheduler/viewOffset/markup", name: "scheduler / offset markups", theme: 'generic.light' },
           { componentFolder: "scheduler/timezones", name: "scheduler / timezones (Europe/Berlin)", timezone: "Europe/Berlin", theme: 'generic.light' },
           { componentFolder: "scheduler/timezones", name: "scheduler / timezones (America/Los_Angeles)", timezone: "America/Los_Angeles", theme: 'generic.light' },
-
-          { componentFolder: "editors", name: "editors" },
-          { componentFolder: "navigation", name: "navigation" },
         ]
     runs-on: devextreme-shr2
     timeout-minutes: 45
