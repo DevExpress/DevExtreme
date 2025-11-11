@@ -192,3 +192,43 @@ test.meta({ browserSize: [1500, 1500] })('main form with resources that have ico
   currentDate: new Date(2021, 2, 25),
   resources: getResources(true),
 }));
+
+test.meta({ browserSize: [1500, 1500] })('appointment form readonly state', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const appointment = {
+    text: 'Appointment',
+    startDate: new Date('2021-04-26T16:30:00.000Z'),
+    endDate: new Date('2021-04-26T18:30:00.000Z'),
+    allDay: false,
+    recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TH;COUNT=10',
+    assigneeId: [1, 2],
+    roomId: 1,
+    priorityId: 1,
+  };
+
+  const appointmentPopup = await openAppointmentPopup(t, appointment, false);
+
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'scheduler__appointment__readonly.png',
+    { element: appointmentPopup.contentElement },
+  );
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxScheduler', {
+    dataSource: [],
+    views: ['week'],
+    currentView: 'week',
+    currentDate: new Date(2021, 2, 25),
+    resources: getResources(),
+    editing: {
+      allowUpdating: false,
+      allowTimeZoneEditing: true,
+    },
+  });
+});
