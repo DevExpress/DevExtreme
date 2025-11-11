@@ -1840,12 +1840,12 @@ QUnit.test('Dates, processDatesAsUtc = true, ODataContext', function(assert) {
     const promises = [
         ctx.get('function')
             .done(function(r) {
-                assert.ok(isDate(r[0].dateProperty));
+                assert.ok(isDate(r.dateProperty));
             }),
 
         ctx.invoke('action')
             .done(function(r) {
-                assert.ok(isDate(r[0].dateProperty));
+                assert.ok(isDate(r.dateProperty));
             }),
 
         ctx.X.load()
