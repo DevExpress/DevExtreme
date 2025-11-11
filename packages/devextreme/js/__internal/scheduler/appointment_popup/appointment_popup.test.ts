@@ -1554,6 +1554,61 @@ describe('Appointment Popup Form', () => {
 
       focusSpy.mockRestore();
     });
+
+    it('should preserve custom toolbarItems when popup opens', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          popup: {
+            toolbarItems: [{
+              toolbar: 'top', location: 'before', text: 'Custom Title', cssClass: 'custom-title',
+            }, {
+              toolbar: 'top', location: 'after', widget: 'dxButton', options: { text: 'Custom Save' },
+            }],
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const toolbarItems = POM.popup.component.option('toolbarItems');
+
+      expect(toolbarItems).toBeDefined();
+      expect(toolbarItems).toHaveLength(2);
+      expect(toolbarItems).toContainEqual(expect.objectContaining({
+        cssClass: 'custom-title', location: 'before', text: 'Custom Title', toolbar: 'top',
+      }));
+      expect(toolbarItems).toContainEqual(expect.objectContaining(
+        {
+          toolbar: 'top',
+          location: 'after',
+          widget: 'dxButton',
+          options: expect.objectContaining({ text: 'Custom Save' }),
+        },
+      ));
+    });
+
+    it('should preserve custom toolbarItems when popup is reopened', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          popup: {
+            toolbarItems: [{ toolbar: 'top', location: 'before', text: 'Custom Toolbar' }],
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+      scheduler.hideAppointmentPopup();
+      scheduler.showAppointmentPopup(allDayAppointment);
+
+      const toolbarItems = POM.popup.component.option('toolbarItems');
+      expect(toolbarItems).toBeDefined();
+      expect(toolbarItems).toHaveLength(1);
+      expect(toolbarItems?.[0]?.text).toBe('Custom Toolbar');
+    });
   });
 });
 
