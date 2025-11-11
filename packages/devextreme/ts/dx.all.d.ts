@@ -3795,9 +3795,9 @@ declare module DevExpress.common.data {
      */
     deserializeDates?: boolean;
     /**
-     * [descr:ODataContextOptions.processDatesAsUTC]
+     * [descr:ODataContextOptions.processDatesAsUtc]
      */
-    processDatesAsUTC?: boolean;
+    processDatesAsUtc?: boolean;
     /**
      * [descr:ODataContextOptions.entities]
      */
@@ -3883,9 +3883,9 @@ declare module DevExpress.common.data {
      */
     deserializeDates?: boolean;
     /**
-     * [descr:ODataStoreOptions.processDatesAsUTC]
+     * [descr:ODataStoreOptions.processDatesAsUtc]
      */
-    processDatesAsUTC?: boolean;
+    processDatesAsUtc?: boolean;
     /**
      * [descr:ODataStoreOptions.errorHandler]
      */
