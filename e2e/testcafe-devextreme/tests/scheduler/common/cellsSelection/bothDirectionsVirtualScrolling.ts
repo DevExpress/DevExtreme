@@ -27,13 +27,13 @@ test('Selected cells shouldn\'t disapppear on scroll', async (t) => {
   await t
     .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 1));
 
-  await checkSelectionWhenFocusedInViewport(t, scheduler, 8, 6, 1);
+  await checkSelectionWhenFocusedInViewport(t, scheduler, 11, 6, 1);
 
   await scrollTo(1000, 0);
   await checkSelectionWhenFocusedIsNotInViewport(t, scheduler, 0);
 
   await scrollTo(0, 0);
-  await checkSelectionWhenFocusedInViewport(t, scheduler, 8, 6, 1);
+  await checkSelectionWhenFocusedInViewport(t, scheduler, 11, 6, 1);
 }).before(async () => createScheduler({
   ...baseConfig,
 }));
@@ -44,13 +44,13 @@ test('Selected cells shouldn\'t disapppear on scroll when horizontal grouping is
   await t
     .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 1));
 
-  await checkSelectionWhenFocusedInViewport(t, scheduler, 8, 6, 1);
+  await checkSelectionWhenFocusedInViewport(t, scheduler, 11, 6, 1);
 
   await scrollTo(1000, 0);
   await checkSelectionWhenFocusedIsNotInViewport(t, scheduler, 0);
 
   await scrollTo(0, 0);
-  await checkSelectionWhenFocusedInViewport(t, scheduler, 8, 6, 1);
+  await checkSelectionWhenFocusedInViewport(t, scheduler, 11, 6, 1);
 }).before(async () => createScheduler({
   groups: ['resourceId0'],
   resources: [{
@@ -66,13 +66,13 @@ test('Selected cells shouldn\'t disapppear on scroll when appointments are group
   await t
     .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 2));
 
-  await checkSelectionWhenFocusedInViewport(t, scheduler, 8, 6, 2);
+  await checkSelectionWhenFocusedInViewport(t, scheduler, 11, 6, 2);
 
   await scrollTo(1000, 0);
   await checkSelectionWhenFocusedIsNotInViewport(t, scheduler, 0);
 
   await scrollTo(0, 0);
-  await checkSelectionWhenFocusedInViewport(t, scheduler, 8, 6, 2);
+  await checkSelectionWhenFocusedInViewport(t, scheduler, 11, 6, 2);
 }).before(async () => createScheduler({
   ...baseConfig,
   groups: ['resourceId0'],
@@ -89,13 +89,13 @@ test('Selected cells shouldn\'t disapppear on scroll when appointments are group
   await t
     .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 1));
 
-  await checkSelectionWhenFocusedInViewport(t, scheduler, 7, 5, 1);
+  await checkSelectionWhenFocusedInViewport(t, scheduler, 10, 5, 1);
 
   await scrollTo(1000, 0);
   await checkSelectionWhenFocusedIsNotInViewport(t, scheduler, 0);
 
   await scrollTo(0, 0);
-  await checkSelectionWhenFocusedInViewport(t, scheduler, 7, 5, 1);
+  await checkSelectionWhenFocusedInViewport(t, scheduler, 10, 5, 1);
 }).before(async () => createScheduler({
   ...baseConfig,
   groups: ['resourceId0'],

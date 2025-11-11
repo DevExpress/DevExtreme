@@ -3,6 +3,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { ClientFunction } from 'testcafe';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
+import { Themes } from '../../../../../helpers/themes';
 import { testScreenshot } from '../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Outlook dragging base tests`
@@ -106,7 +107,7 @@ test('Basic drag-n-drop movements from tooltip in week view', async (t) => {
   width: 1000,
 }));
 
-test('Basic drag-n-drop movements from tooltip in month view', async (t) => {
+test.meta({ runInTheme: Themes.genericLight })('Basic drag-n-drop movements from tooltip in month view', async (t) => {
   const scheduler = new Scheduler('#container');
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
