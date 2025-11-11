@@ -1,8 +1,8 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
+import { ClientFunction } from 'testcafe';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
-import { ClientFunction } from 'testcafe';
 import { testScreenshot } from '../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Outlook dragging base tests`
@@ -316,7 +316,7 @@ test('Basic drag-n-drop movements within the cell', async (t) => {
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-   const blurActiveElement = ClientFunction(() => {
+  const blurActiveElement = ClientFunction(() => {
     const el = document.activeElement as HTMLElement | null;
     el?.blur();
   });
