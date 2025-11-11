@@ -15,4 +15,8 @@ export class AIPromptEditorViewController extends ViewController {
   ): Promise<boolean> {
     return this.aiPromptEditorView.show(cellElement, column);
   }
+
+  public hide(): Promise<boolean> {
+    return this.aiPromptEditorView.hide();
+  }
 }

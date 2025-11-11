@@ -7,7 +7,7 @@ import Scrollable from 'ui/scroll_view/ui.scrollable';
 import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
 import { getElementOverflowY, getElementOverflowX } from '__internal/ui/scroll_view/utils/get_element_style';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 import {
     DIRECTION_HORIZONTAL,
@@ -222,12 +222,12 @@ QUnit.test('scrollbar position calculated correctly with scaled content', functi
 
     instance.scrollTo({ left: 200, top: 200 });
     assert.strictEqual(getTranslateValues($hScrollBar.get(0)).left, 100, 'Correct scrollbar position');
-    assert.strictEqual(getTranslateValues($vScrollBar.get(0)).top, 100, 'Correct scrollbar position');
+    assert.roughEqual(getTranslateValues($vScrollBar.get(0)).top, 100, 1, 'Correct scrollbar position');
 
     instance.scrollTo({ left: 100, top: 100 });
 
     assert.strictEqual(getTranslateValues($hScrollBar.get(0)).left, 50, 'Correct scrollbar position');
-    assert.strictEqual(getTranslateValues($vScrollBar.get(0)).top, 50, 'Correct scrollbar position');
+    assert.roughEqual(getTranslateValues($vScrollBar.get(0)).top, 50, 1, 'Correct scrollbar position');
 
     const hScrollbarRect = $hScrollBar.get(0).getBoundingClientRect();
     const vScrollbarRect = $vScrollBar.get(0).getBoundingClientRect();

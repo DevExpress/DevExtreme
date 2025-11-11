@@ -175,12 +175,13 @@ export const columnHeadersViewExtender = (
 
     this.columnsResizer.resizeStarted.add(() => {
       /**
-       * We need to manually close the DropDownMenu button
+       * We need to manually close the DropDownMenu button and AIPromptEditor
        * because the stopPropagation method is called
        * when the cell resize is initiated.
        * Calling this method is necessary to fix bug T252661.
        */
       this.activeDropDownButtonInstance?.close();
+      this.aiPromptEditorController.hide();
     });
 
     this.aiColumnOptionChangedHandler = this.aiColumnOptionChanged.bind(this);

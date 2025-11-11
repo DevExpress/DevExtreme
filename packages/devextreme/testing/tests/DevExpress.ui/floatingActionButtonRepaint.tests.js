@@ -4,7 +4,7 @@ import repaintFloatingActionButton from 'ui/speed_dial_action/repaint_floating_a
 import fx from 'common/core/animation/fx';
 
 import 'ui/speed_dial_action';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const { test } = QUnit;
 
@@ -45,19 +45,19 @@ QUnit.module('apply current config options', (hooks) => {
 
         let $fabMainContent = $('.' + FAB_MAIN_CLASS).find('.dx-overlay-content');
         let $fabContent = $(FAB_SELECTOR).find('.dx-overlay-content');
-        const fabMainDimensions = 64;
+        const fabMainDimensions = 60;
 
         assert.equal($fabMainContent.offset().top, $(window).height() - fabMainDimensions, 'default position top');
         assert.equal($fabMainContent.offset().left, $(window).width() - fabMainDimensions, 'default position left');
         assert.equal($fabMainContent.find('.dx-icon-add').length, 1, 'default icon');
         assert.equal($fabMainContent.find('.dx-icon-close').length, 1, 'default close icon');
 
-        const fabItemDimensions = 30;
+        const fabItemDimensions = 26;
 
         $fabMainContent.trigger('dxclick');
 
-        assert.equal($(window).height() - $fabContent.eq(1).offset().top - fabItemDimensions, 80, 'right first action position');
-        assert.equal($(window).height() - $fabContent.eq(2).offset().top - fabItemDimensions, 120, 'right second action position');
+        assert.equal($(window).height() - $fabContent.eq(1).offset().top - fabItemDimensions, 94, 'right first action position');
+        assert.equal($(window).height() - $fabContent.eq(2).offset().top - fabItemDimensions, 154, 'right second action position');
 
         config({
             floatingActionButtonConfig: {
@@ -85,8 +85,8 @@ QUnit.module('apply current config options', (hooks) => {
 
         assert.equal($fabMainContent.closest('.dx-overlay-shader').length, 1, 'there is shading after FAB click');
 
-        assert.equal($fabContent.eq(1).offset().top, 64, 'right first action position');
-        assert.equal($fabContent.eq(2).offset().top, 104, 'right second action position');
+        assert.equal($fabContent.eq(1).offset().top, 60, 'right first action position');
+        assert.equal($fabContent.eq(2).offset().top, 120, 'right second action position');
     });
 
     test('repaint with one action', function(assert) {
