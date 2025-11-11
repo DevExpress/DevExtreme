@@ -8,7 +8,8 @@
   $chat-file-secondary-font-size,
   $chat-file-secondary-color,
   $chat-file-base-section-gap,
-  $chat-file-file-size-max-width
+  $chat-file-size-max-width,
+  $chat-file-icon-font-size,
 ) {
   .dx-chat-file {
     width: $chat-file-container-width;
@@ -25,6 +26,7 @@
 
     .dx-icon {
       color: $chat-file-secondary-color;
+      font-size: $chat-file-icon-font-size;
     }
   }
 
@@ -34,7 +36,7 @@
   }
 
   .dx-chat-file-size {
-    max-width: $chat-file-file-size-max-width;
+    max-width: $chat-file-size-max-width;
     margin-inline-end: $chat-file-base-section-gap;
     font-size: $chat-file-secondary-font-size;
     color: $chat-file-secondary-color;

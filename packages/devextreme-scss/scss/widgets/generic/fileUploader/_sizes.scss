@@ -3,11 +3,14 @@
 // adduse
 
 $generic-fileuploader-vertical-padding: null !default;
+$generic-fileuploader-file-icon-font-size: null !default;
 
 @if $size == "default" {
   $generic-fileuploader-vertical-padding: 7px !default;
+  $generic-fileuploader-file-icon-font-size: 18px !default;
 }
 
 @else if $size == "compact" {
   $generic-fileuploader-vertical-padding: 2px !default;
+  $generic-fileuploader-file-icon-font-size: 14px !default;
 }

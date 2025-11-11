@@ -110,8 +110,14 @@
     height: 28px;
     margin-right: 10px;
 
+    &.dx-fileuploader-cancel-button-position-end {
+      margin-right: 0;
+      margin-left: 4px;
+    }
+
     &.dx-state-invisible {
       margin-right: 0;
+      margin-left: 0;
     }
   }
 }
@@ -214,6 +220,11 @@
     .dx-fileuploader-file-container .dx-fileuploader-button {
       margin-left: 10px;
       margin-right: 0;
+
+      &.dx-fileuploader-cancel-button-position-end {
+        margin-left: 0;
+        margin-right: 4px;
+      }
     }
 
     .dx-fileuploader-file-name,
