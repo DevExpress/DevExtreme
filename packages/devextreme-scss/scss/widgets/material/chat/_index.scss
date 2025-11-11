@@ -27,7 +27,8 @@
   $chat-file-secondary-font-size,
   $chat-file-secondary-color,
   $chat-file-base-section-gap,
-  $chat-file-file-size-max-width,
+  $chat-file-size-max-width,
+  $chat-file-icon-font-size,
 );
 @include chat-fileview(
   $chat-file-view-items-gap,
@@ -48,8 +49,9 @@
   $chat-messagebox-textarea-padding,
   $chat-messagebox-toolbar-min-height,
   $chat-file-container-width,
-  $chat-messagebox-file-container-padding,
-  $chat-messagebox-file-container-padding-top,
+  $chat-messagebox-files-container-padding,
+  $chat-messagebox-files-container-padding-top,
+  $chat-messagebox-file-background-color,
 );
 @include chat-messagebubble(
   $chat-bubble-padding,
@@ -136,4 +138,18 @@
 
 .dx-chat-file {
   @include dx-base-typography();
+
+  .dx-chat-file-name {
+    font-weight: $chat-file-name-font-weight;
+  }
+}
+
+.dx-chat-textarea.dx-textarea {
+  .dx-fileuploader-file-container {
+    border-radius: $chat-messagebox-file-container-border-radius;
+  }
+
+  .dx-fileuploader-cancel-button {
+    background-color: transparent;
+  }
 }

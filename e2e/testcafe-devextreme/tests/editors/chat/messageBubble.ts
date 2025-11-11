@@ -5,6 +5,7 @@ import {
   generateImageMessage,
   generateMessages,
   generateFileMessage,
+  generateFileMessageWithoutText,
 } from './data';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
@@ -69,6 +70,13 @@ test('Chat: messagebubble with images and files', async (t) => {
     items: fileMessages,
   });
   await testScreenshot(t, takeScreenshot, 'Bubbles with files.png', { element: '#chat' });
+
+  await chat.option({
+    width: 600,
+    height: 600,
+    items: [generateFileMessageWithoutText(user)],
+  });
+  await testScreenshot(t, takeScreenshot, 'Bubble with files without text.png', { element: '#chat' });
 
   await t.expect(compareResults.isValid()).ok(compareResults.errorMessages());
 }).before(async () => {
