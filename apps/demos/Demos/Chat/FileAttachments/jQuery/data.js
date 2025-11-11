@@ -44,7 +44,7 @@ const messages = [
     id: new DevExpress.data.Guid(),
     timestamp: getTimestamp(date, -7),
     author: supportAgent,
-    text: 'Hello! Thanks for including screenshots. To restore access, please follow instructions in the attached file. Let me know if you need anything else.',
+    text: 'Hello! Thanks for including screenshots. To restore access, please follow instructions in the attached file.\nLet me know if you need anything else.',
     attachments: [
       {
         name: 'Instructions.pdf',
