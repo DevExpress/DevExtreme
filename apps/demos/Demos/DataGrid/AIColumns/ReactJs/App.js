@@ -39,21 +39,17 @@ export default function App() {
       TrademarkName: item.TrademarkName,
       Name: item.Name,
       Modification: item.Modification,
-      Horsepower: item.Horsepower,
-      CategoryName: item.CategoryName,
-      Price: item.Price,
-      BodyStyleName: item.BodyStyleName,
     }));
   }, []);
   return (
     <React.Fragment>
       <DataGrid
         dataSource={vehicles}
+        showBorders={true}
         keyExpr="ID"
         paging={gridConfig.paging}
-        grouping={gridConfig.grouping}
         aiIntegration={aiIntegration}
-        showBorders={true}
+        grouping={gridConfig.grouping}
         onAIColumnRequestCreating={onAIColumnRequestCreating}
       >
         <GroupPanel visible={false} />
