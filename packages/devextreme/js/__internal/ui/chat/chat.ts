@@ -685,9 +685,7 @@ class Chat extends Widget<Properties> {
         break;
       case 'onAttachmentDownloadClick':
         this._createAttachmentDownloadAction();
-        this._messageList.option({
-          onAttachmentDownloadClick: this._getAttachmentDownloadHandler(),
-        });
+        this._updateAttachmentDownloadHandler();
         break;
       case 'showDayHeaders':
       case 'showAvatar':
