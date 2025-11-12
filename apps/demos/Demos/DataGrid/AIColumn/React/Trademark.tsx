@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Vehicle } from './types';
 
 type TrademarkProps = {
@@ -9,6 +9,12 @@ type TrademarkProps = {
 export default function Trademark({ vehicle, onShowInfo }: TrademarkProps) {
   const { ID, TrademarkName, Name } = vehicle;
 
+  const onKeyPress = useCallback((event: React.KeyboardEvent<HTMLImageElement>) => {
+    if (event.key === 'Enter') {
+      onShowInfo(vehicle);
+    }
+  }, [onShowInfo, vehicle]);
+
   return (
     <div className='trademark__wrapper'>
       <div className='trademark__img-wrapper'>
@@ -16,7 +22,11 @@ export default function Trademark({ vehicle, onShowInfo }: TrademarkProps) {
           className='trademark__img'
           src={`../../../../images/vehicles/image_${ID}.png`}
           alt={`${TrademarkName} ${Name}`}
+          tabIndex={0}
           onClick={() => onShowInfo(vehicle)}
+          onKeyPress={onKeyPress}
+          aria-haspopup='dialog'
+          aria-label={`${TrademarkName} ${Name} - press Enter for image info`}
         />
       </div>
       <div className='trademark__text'>

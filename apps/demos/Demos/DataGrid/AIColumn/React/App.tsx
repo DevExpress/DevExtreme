@@ -16,6 +16,7 @@ const gridConfig = {
   ai: {
     prompt: 'Identify the country where this vehicle model is originally manufactured or developed, based on its brand, model, and specifications.',
     mode: 'auto' as const,
+    noDataText: 'No data',
   },
 };
 
@@ -34,6 +35,19 @@ export default function App() {
     <Trademark vehicle={vehicle.data} onShowInfo={showInfo} />
   ), [showInfo]);
 
+  const onAIColumnRequestCreating = useCallback((e) => {
+    return e.data.map((item) => ({
+      ID: item.ID,
+      TrademarkName: item.TrademarkName,
+      Name: item.Name,
+      Modification: item.Modification,
+      Horsepower: item.Horsepower,
+      CategoryName: item.CategoryName,
+      Price: item.Price,
+      BodyStyleName: item.BodyStyleName,
+    }));
+  }, []);
+
   return (
     <React.Fragment>
       <DataGrid
@@ -42,16 +56,19 @@ export default function App() {
         paging={gridConfig.paging}
         grouping={gridConfig.grouping}
         aiIntegration={aiIntegration}
+        showBorders={true}
+        onAIColumnRequestCreating={onAIColumnRequestCreating}
       >
         <GroupPanel visible={false} />
         <Column
           caption="Trademark"
-          width={220}
+          width={200}
           dataField='TrademarkName'
           cellRender={cellRender}
         />
         <Column
           dataField="Price"
+          alignment='left'
           format="currency"
           width={100}
         />

@@ -32,6 +32,14 @@ async function getAIResponse(messages: AIMessage[], signal: AbortSignal) {
 
 export const aiIntegration = new AIIntegration({
   sendRequest({ prompt }: RequestParams): Response {
+    const isValidRequest = JSON.stringify(prompt.user).length < 5000;
+    if (!isValidRequest) {
+      return {
+        promise: Promise.reject(new Error('Request is too large')),
+        abort: () => {},
+      };
+    }
+
     const controller = new AbortController();
     const signal = controller.signal;
 
