@@ -79,7 +79,11 @@ export type CellAppointmentsLimit = 'auto' | 'unlimited';
 export type RecurrenceEditMode = 'dialog' | 'occurrence' | 'series';
 /** @public */
 export type AppointmentFormIconsShowMode = 'both' | 'main' | 'recurrence' | 'none';
-/** @public */
+/**
+ * @docid
+ * @public
+ * @type object
+ */
 export type SchedulerAppointmentFormOptions = FormProperties & {
   /**
    * @docid

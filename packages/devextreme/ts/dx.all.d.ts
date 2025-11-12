@@ -26206,6 +26206,9 @@ declare module DevExpress.ui {
         DevExpress.common.core.events.ChangedOptionInfo;
     export type Properties = dxSchedulerOptions;
     export type RecurrenceEditMode = 'dialog' | 'occurrence' | 'series';
+    /**
+     * [descr:SchedulerAppointmentFormOptions]
+     */
     export type SchedulerAppointmentFormOptions =
       DevExpress.ui.dxForm.Properties & {
         /**
