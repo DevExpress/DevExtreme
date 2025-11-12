@@ -9,7 +9,7 @@ import type { Constructor } from '@ts/grids/new/grid_core/types';
 
 import * as Base from '../../grid_core/content_view/public_methods';
 import type { Key } from '../../grid_core/data_controller/types';
-import { ItemsController } from '../items_controller/items_controller';
+import { ItemsController } from '../../grid_core/items_controller/items_controller';
 import type { CardViewBase } from '../widget';
 import * as cardModule from './content/card/card';
 
