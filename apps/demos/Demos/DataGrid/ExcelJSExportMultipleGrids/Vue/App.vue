@@ -127,7 +127,7 @@ const exportGrids = () => {
     worksheet: priceSheet,
     component: priceGridRef.value?.instance,
     topLeftCell: { row: 4, column: 2 },
-    customizeCell: ({ gridCell, excelCell }: { gridCell?: ExelDataGridCell, excelCell?: any }) => {
+    customizeCell: ({ gridCell, excelCell }: { gridCell?: ExсelDataGridCell, excelCell?: any }) => {
       if (gridCell) {
         setAlternatingRowsBackground(gridCell, excelCell);
       }
@@ -136,7 +136,7 @@ const exportGrids = () => {
     worksheet: ratingSheet,
     component: ratingGridRef.value?.instance,
     topLeftCell: { row: 4, column: 2 },
-    customizeCell: ({ gridCell, excelCell }: { gridCell?: ExelDataGridCell, excelCell?: any }) => {
+    customizeCell: ({ gridCell, excelCell }: { gridCell?: ExсelDataGridCell, excelCell?: any }) => {
       if (gridCell) {
         setAlternatingRowsBackground(gridCell, excelCell);
       }
@@ -148,7 +148,7 @@ const exportGrids = () => {
   });
 };
 
-const setAlternatingRowsBackground = (gridCell: ExelDataGridCell, excelCell: any) => {
+const setAlternatingRowsBackground = (gridCell: ExсelDataGridCell, excelCell: any) => {
   if (gridCell.rowType === 'header' || gridCell.rowType === 'data') {
     if (excelCell.fullAddress.row % 2 === 0) {
       excelCell.fill = {
