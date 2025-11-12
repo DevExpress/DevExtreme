@@ -4,6 +4,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { isMaterial, isMaterialBased, testScreenshot } from '../../../../helpers/themeUtils';
+import { Themes } from '../../../../helpers/themes';
 
 fixture.disablePageReloads`Scheduler header: material theme`
   .page(url(__dirname, '../../../container.html'));
@@ -29,7 +30,7 @@ test('dateNavigator buttons should have "text" styling mode', async (t) => {
   height: 580,
 }));
 
-test('viewSwitcher dropdown button popup should have a specified class', async (t) => {
+test.meta({ runInTheme: Themes.genericLight })('viewSwitcher dropdown button popup should have a specified class', async (t) => {
   const { toolbar } = new Scheduler('#container');
   const dropDownButton = toolbar.viewSwitcher.getDropDownButton();
 

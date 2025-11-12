@@ -20,7 +20,7 @@ $(() => {
   }
 
   $('#chat').dxChat({
-    height: 600,
+    height: 700,
     dataSource,
     reloadOnChange: false,
     user: currentUser,

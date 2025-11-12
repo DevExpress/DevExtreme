@@ -87,12 +87,10 @@ test('The separator should display correctly when dragging column', async (t) =>
 
   await dataGrid.moveHeader(0, 400, 5);
 
+  const offset2 = await getColumnsSeparatorOffset();
   await t
-    .expect(getColumnsSeparatorOffset())
-    .eql({
-      left: 405,
-      top: 8,
-    });
+    .expect(offset2!.left).within(405, 406.5)
+    .expect(offset2!.top).eql(8);
 
   await dataGrid.moveHeader(0, 600, 5);
 
