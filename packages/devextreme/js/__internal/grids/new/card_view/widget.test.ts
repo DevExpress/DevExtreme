@@ -69,96 +69,158 @@ describe('regressions', () => {
   });
 });
 
-describe('rendering budget', () => {
+describe('absence of multiple re-render', () => {
   const dataSource = [
-    {
-      id: 1,
-      name: 'Audi',
-    },
-    {
-      id: 2,
-      name: 'BMW',
-    },
+    { id: 1, name: 'Audi' },
+    { id: 2, name: 'BMW' },
   ];
 
   const columns = [
-    {
-      dataField: 'id',
-      caption: 'ID',
-    },
-    {
-      dataField: 'name',
-      caption: 'Name',
-    },
+    { dataField: 'id', caption: 'ID' },
+    { dataField: 'name', caption: 'Name' },
   ];
 
-  it('should render each card template not more than once per sort update', () => {
-    const cardTemplate = jest.fn();
+  describe('card template', () => {
+    it('should render each card template not more than once per sort update', () => {
+      const cardTemplate = jest.fn();
 
-    const container = document.createElement('div');
-    const cardView = new CardView(container, {
-      keyExpr: 'id',
-      dataSource,
-      columns,
-      cardTemplate,
-      sorting: {
-        mode: 'single',
-      },
-    } as CardViewOptions);
+      const container = document.createElement('div');
+      const cardView = new CardView(container, {
+        keyExpr: 'id',
+        dataSource,
+        columns,
+        cardTemplate,
+        sorting: {
+          mode: 'single',
+        },
+      } as CardViewOptions);
 
-    cardTemplate.mockClear();
-    cardView.columnOption('name', 'sortOrder', 'asc');
+      cardTemplate.mockClear();
+      cardView.columnOption('name', 'sortOrder', 'asc');
 
-    expect(cardTemplate).toBeCalledTimes(dataSource.length);
+      expect(cardTemplate).toBeCalledTimes(dataSource.length);
+    });
+
+    it('should render each card template not more than once per filter update', () => {
+      const cardTemplate = jest.fn();
+
+      const container = document.createElement('div');
+      const cardView = new CardView(container, {
+        keyExpr: 'id',
+        dataSource,
+        cardTemplate,
+        columns: [
+          ...columns.slice(0, -1),
+          {
+            dataField: 'name',
+            caption: 'Name',
+            filterValues: ['Audi'],
+          }],
+        headerFilter: {
+          visible: true,
+        },
+      } as CardViewOptions);
+
+      cardTemplate.mockClear();
+      cardView.clearFilter();
+
+      expect(cardTemplate).toBeCalledTimes(dataSource.length);
+    });
+
+    it('should render each card template not more than once per search update', () => {
+      const cardTemplate = jest.fn();
+      const searchValue = 'audi';
+      const foundCards = dataSource.filter((card) => card.name.toLowerCase().includes(searchValue));
+      const calledTimes = foundCards.length + dataSource.length;
+
+      const container = document.createElement('div');
+      const cardView = new CardView(container, {
+        keyExpr: 'id',
+        dataSource,
+        columns,
+        cardTemplate,
+        searchPanel: {
+          visible: true,
+        },
+      } as CardViewOptions);
+
+      cardTemplate.mockClear();
+      cardView.searchByText(searchValue);
+      cardView.searchByText('');
+
+      expect(cardTemplate).toBeCalledTimes(calledTimes);
+    });
   });
 
-  it('should render each card template not more than once per filter update', () => {
-    const cardTemplate = jest.fn();
+  describe('card footer template', () => {
+    it('should render each card template not more than once per sort update', () => {
+      const cardFooterTemplate = jest.fn();
 
-    const container = document.createElement('div');
-    const cardView = new CardView(container, {
-      keyExpr: 'id',
-      dataSource,
-      cardTemplate,
-      columns: [
-        ...columns.slice(0, -1),
-        {
-          dataField: 'name',
-          caption: 'Name',
-          filterValues: ['Audi'],
-        }],
-      headerFilter: {
-        visible: true,
-      },
-    } as CardViewOptions);
+      const container = document.createElement('div');
+      const cardView = new CardView(container, {
+        keyExpr: 'id',
+        dataSource,
+        columns,
+        cardFooterTemplate,
+        sorting: {
+          mode: 'single',
+        },
+      } as CardViewOptions);
 
-    cardTemplate.mockClear();
-    cardView.clearFilter();
+      cardFooterTemplate.mockClear();
+      cardView.columnOption('name', 'sortOrder', 'asc');
 
-    expect(cardTemplate).toBeCalledTimes(dataSource.length);
-  });
+      expect(cardFooterTemplate).toBeCalledTimes(dataSource.length);
+    });
 
-  it('should render each card template not more than once per search update', () => {
-    const cardTemplate = jest.fn();
-    const searchValue = 'audi';
-    const foundCards = dataSource.filter((card) => card.name.toLowerCase().includes(searchValue));
-    const calledTimes = foundCards.length + dataSource.length;
+    it('should render each card template not more than once per filter update', () => {
+      const cardFooterTemplate = jest.fn();
 
-    const container = document.createElement('div');
-    const cardView = new CardView(container, {
-      keyExpr: 'id',
-      dataSource,
-      columns,
-      cardTemplate,
-      searchPanel: {
-        visible: true,
-      },
-    } as CardViewOptions);
+      const container = document.createElement('div');
+      const cardView = new CardView(container, {
+        keyExpr: 'id',
+        dataSource,
+        cardFooterTemplate,
+        columns: [
+          ...columns.slice(0, -1),
+          {
+            dataField: 'name',
+            caption: 'Name',
+            filterValues: ['Audi'],
+          }],
+        headerFilter: {
+          visible: true,
+        },
+      } as CardViewOptions);
 
-    cardTemplate.mockClear();
-    cardView.searchByText(searchValue);
-    cardView.searchByText('');
+      cardFooterTemplate.mockClear();
+      cardView.clearFilter();
 
-    expect(cardTemplate).toBeCalledTimes(calledTimes);
+      expect(cardFooterTemplate).toBeCalledTimes(dataSource.length);
+    });
+
+    it('should render each card template not more than once per search update', () => {
+      const cardFooterTemplate = jest.fn();
+      const searchValue = 'audi';
+      const foundCards = dataSource.filter((card) => card.name.toLowerCase().includes(searchValue));
+      const calledTimes = foundCards.length + dataSource.length;
+
+      const container = document.createElement('div');
+      const cardView = new CardView(container, {
+        keyExpr: 'id',
+        dataSource,
+        columns,
+        cardFooterTemplate,
+        searchPanel: {
+          visible: true,
+        },
+      } as CardViewOptions);
+
+      cardFooterTemplate.mockClear();
+      cardView.searchByText(searchValue);
+      cardView.searchByText('');
+
+      expect(cardFooterTemplate).toBeCalledTimes(calledTimes);
+    });
   });
 });
