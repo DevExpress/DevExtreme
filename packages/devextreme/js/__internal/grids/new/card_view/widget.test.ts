@@ -112,7 +112,7 @@ describe('rendering budget', () => {
     expect(cardTemplate).toBeCalledTimes(dataSource.length);
   });
 
-  it('each filtered card template should rendered once per search update', () => {
+  it('should render each card template not more than once per filter update', () => {
     const cardTemplate = jest.fn();
 
     const container = document.createElement('div');
@@ -138,7 +138,7 @@ describe('rendering budget', () => {
     expect(cardTemplate).toBeCalledTimes(dataSource.length);
   });
 
-  it('each found card template should rendered once per search update', () => {
+  it('should render each card template not more than once per search update', () => {
     const cardTemplate = jest.fn();
     const searchValue = 'audi';
     const foundCards = dataSource.filter((card) => card.name.toLowerCase().includes(searchValue));

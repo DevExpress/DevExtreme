@@ -9,7 +9,7 @@ import type { CardInfo, Column, FieldInfo } from '../columns_controller/types';
 import type { DataObject, Key } from '../data_controller/types';
 
 export class ItemsController {
-  private readonly selectedCardKeys = signal<Key[]>([]);
+  protected readonly selectedCardKeys = signal<Key[]>([]);
 
   public static dependencies = [
     DataController,
@@ -28,8 +28,7 @@ export class ItemsController {
       return this.dataController.items.value.map(
         (item, itemIndex) => this.createCardInfo(
           item,
-          // this.columnsController.visibleColumns.value,
-          this.columnsController.visibleColumns.peek(),
+          this.columnsController.visibleColumns.value,
           itemIndex,
           this.selectedCardKeys.value,
         ),
@@ -42,7 +41,7 @@ export class ItemsController {
   constructor(
     protected readonly dataController: DataController,
     protected readonly columnsController: ColumnsController,
-    private readonly searchController: SearchController,
+    protected readonly searchController: SearchController,
   ) {}
 
   public setSelectionState(keys: Key[]): void {

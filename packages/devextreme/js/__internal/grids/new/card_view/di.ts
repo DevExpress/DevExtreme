@@ -5,11 +5,13 @@ import { setupStateManager } from '@ts/core/state_manager/index';
 import * as BaseContentViewModule from '../grid_core/content_view/index';
 import { BaseContextMenuController } from '../grid_core/context_menu/controller';
 import { register as gridCoreDIRegister } from '../grid_core/di';
+import { ItemsController as BaseItemsController } from '../grid_core/items_controller/items_controller';
 import * as ContentViewModule from './content_view/index';
 import { ContextMenuController } from './context_menu/controller';
 import { ContextMenuView } from './context_menu/view';
 import { HeaderPanelController } from './header_panel/controller';
 import { HeaderPanelView } from './header_panel/view';
+import { ItemsController } from './items_controller/items_controller';
 
 export function register(diContext: DIContext): void {
   setupStateManager({ diContext, componentName: 'CardView' });
@@ -24,6 +26,8 @@ export function register(diContext: DIContext): void {
   diContext.register(HeaderPanelView);
   diContext.register(ContextMenuView);
 
+  diContext.register(ItemsController);
+  diContext.addAlias(BaseItemsController, ItemsController);
   diContext.register(ContextMenuController);
   diContext.addAlias(BaseContextMenuController, ContextMenuController);
 }
