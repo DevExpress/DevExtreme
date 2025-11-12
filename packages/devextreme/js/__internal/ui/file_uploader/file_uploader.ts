@@ -66,14 +66,13 @@ const FILEUPLOADER_FILE_ICON_CLASS = 'dx-fileuploader-file-icon';
 const FILEUPLOADER_BUTTON_CLASS = 'dx-fileuploader-button';
 const FILEUPLOADER_BUTTON_CONTAINER_CLASS = 'dx-fileuploader-button-container';
 export const FILEUPLOADER_CANCEL_BUTTON_CLASS = 'dx-fileuploader-cancel-button';
+export const FILEUPLOADER_CANCEL_BUTTON_POSITION_END_CLASS = 'dx-fileuploader-cancel-button-position-end';
 const FILEUPLOADER_UPLOAD_BUTTON_CLASS = 'dx-fileuploader-upload-button';
 
 const FILEUPLOADER_INVALID_CLASS = 'dx-fileuploader-invalid';
 
 const FILEUPLOADER_AFTER_LOAD_DELAY = 400;
 const DRAG_EVENT_DELTA = 1;
-const GAP = 10;
-const REFERENCE_TEXT = '1023 bytes';
 
 const DIALOG_TRIGGER_EVENT_NAMESPACE = 'dxFileUploaderDialogTrigger';
 
@@ -753,6 +752,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     $('<div>')
       .addClass(FILEUPLOADER_FILE_NAME_CLASS)
       .text(value.name)
+      .attr('title', value.name)
       .appendTo($fileInfo);
 
     if (isDefined(value.size)) {
@@ -803,12 +803,11 @@ class FileUploader extends Editor<FileUploaderProperties> {
     const iconWidth = _showFileIcon ? getOuterWidth($icon) : 0;
 
     const prevFileSize = $fileSize?.text();
-    $fileSize?.text(REFERENCE_TEXT);
+    $fileSize?.text('1000 Mb');
     const fileSizeWidth = getWidth($fileSize);
     $fileSize?.text(prevFileSize ?? '');
 
-    const maxWidth = filesContainerWidth - buttonsWidth - fileSizeWidth - iconWidth - GAP;
-
+    const maxWidth = filesContainerWidth - buttonsWidth - fileSizeWidth - iconWidth;
     this._$filesContainer?.find(`.${FILEUPLOADER_FILE_NAME_CLASS}`).css('maxWidth', maxWidth);
   }
 
@@ -848,7 +847,8 @@ class FileUploader extends Editor<FileUploaderProperties> {
   }
 
   _getCancelButton(file: FileUploaderItem): dxElementWrapper | null {
-    const { uploadMode } = this.option();
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { uploadMode, _cancelButtonPosition } = this.option();
     if (uploadMode === 'useForm') {
       return null;
     }
@@ -881,6 +881,10 @@ class FileUploader extends Editor<FileUploaderProperties> {
         },
       },
     );
+
+    if (_cancelButtonPosition === 'end') {
+      file.cancelButton.$element().addClass(FILEUPLOADER_CANCEL_BUTTON_POSITION_END_CLASS);
+    }
 
     return $('<div>')
       .addClass(FILEUPLOADER_BUTTON_CONTAINER_CLASS)

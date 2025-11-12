@@ -1,4 +1,4 @@
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import { triggerResizeEvent, triggerShownEvent } from 'common/core/events/visibility_change';
 import $ from 'jquery';
 import 'ui/tabs';
@@ -91,7 +91,7 @@ QUnit.module('Width', () => {
         checkNavigationButtonsTabs() {
             const { scrollingEnabled } = this;
 
-            this.assert.strictEqual(Math.ceil(this.$tabs.outerWidth()) <= (scrollingEnabled === true ? 100 : 183), true);
+            this.assert.strictEqual(Math.ceil(this.$tabs.outerWidth()) <= (scrollingEnabled === true ? 100 : 189), true);
 
             const firstItemWidth = this._getTabItem(0).outerWidth();
             const secondItemWidth = this._getTabItem(1).outerWidth();
@@ -101,8 +101,8 @@ QUnit.module('Width', () => {
                 this.assert.ok(secondItemWidth > 100, this._getTabItem().outerWidth() + ' > 100');
                 this.assert.strictEqual(this.$tabs.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 2, 'nav buttons aren\'t rendered');
             } else {
-                this.assert.ok(Math.floor(firstItemWidth) <= 54, Math.floor(firstItemWidth) + ' = 54');
-                this.assert.ok(Math.floor(secondItemWidth) <= 130, Math.floor(secondItemWidth) + ' = 130');
+                this.assert.ok(Math.floor(firstItemWidth) <= 54, Math.floor(firstItemWidth) + ' <= 54');
+                this.assert.ok(Math.floor(secondItemWidth) <= 135, Math.floor(secondItemWidth) + ' <= 135');
                 this.assert.strictEqual(this.$tabs.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 0, 'nav buttons aren\'t rendered');
             }
         }

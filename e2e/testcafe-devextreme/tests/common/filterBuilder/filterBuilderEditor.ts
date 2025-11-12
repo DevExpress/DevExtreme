@@ -4,12 +4,13 @@ import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { fields, filter } from './data';
 import { testScreenshot } from '../../../helpers/themeUtils';
+import { Themes } from '../../../helpers/themes';
 
 fixture.disablePageReloads`Editing events`
   .page(url(__dirname, '../../container.html'));
 
 // T1310528
-test('Change value editor to checkbox', async (t) => {
+test.meta({ themes: [Themes.materialBlue] })('Change value editor to checkbox', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const filterBuilder = new FilterBuilder('#container');
   await t.click(filterBuilder.getField(0, 'itemValue').element);

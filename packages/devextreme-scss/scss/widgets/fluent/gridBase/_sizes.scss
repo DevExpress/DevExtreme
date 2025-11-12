@@ -43,6 +43,7 @@ $fluent-grid-base-filter-icon-size: $fluent-button-icon-size !default;
 $fluent-grid-base-command-ai-chatsparkleoutline-icon-size: null !default;
 $fluent-grid-base-command-ai-text-content-padding: null !default;
 $fluent-grid-base-command-ai-header-button-offset: null !default;
+$fluent-grid-base-ai-prompt-editor-progressbar-height: 4px !default;
 
 @if $size == "default" {
   $fluent-grid-base-cell-height: 48px !default;
