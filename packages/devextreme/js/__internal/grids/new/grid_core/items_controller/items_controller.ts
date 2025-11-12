@@ -28,7 +28,8 @@ export class ItemsController {
       return this.dataController.items.value.map(
         (item, itemIndex) => this.createCardInfo(
           item,
-          this.columnsController.visibleColumns.value,
+          // this.columnsController.visibleColumns.value,
+          this.columnsController.visibleColumns.peek(),
           itemIndex,
           this.selectedCardKeys.value,
         ),
