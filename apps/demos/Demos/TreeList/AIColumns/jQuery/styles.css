@@ -40,14 +40,6 @@
   text-overflow: ellipsis;
 }
 
-.name__text--title {
-  font-weight: 600;
-}
-
-.name__text--subtitle {
-  font-weight: 400;
-}
-
 .status {
   display: flex;
   align-items: center;

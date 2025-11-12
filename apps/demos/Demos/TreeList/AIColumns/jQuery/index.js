@@ -73,8 +73,8 @@ $(() => {
     nameWrapper.append(imgWrapper);
 
     const textWrapper = $('<div>').addClass('name__text-wrapper');
-    const firstNameText = $('<div>').addClass('name__text name__text--title').text(First_Name);
-    const lastNameText = $('<div>').addClass('name__text name__text--subtitle').text(Last_Name);
+    const firstNameText = $('<div>').text(First_Name);
+    const lastNameText = $('<div>').text(Last_Name);
 
     textWrapper.append(firstNameText, lastNameText);
     nameWrapper.append(textWrapper);
