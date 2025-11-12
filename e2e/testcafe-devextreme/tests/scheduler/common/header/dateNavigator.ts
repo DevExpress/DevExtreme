@@ -18,7 +18,10 @@ fixture.disablePageReloads`Date navigator`
     const { toolbar } = new Scheduler('#container');
 
     await t
-      .click(toolbar.viewSwitcher.getButton('Agenda').element);
+      .click(toolbar.viewSwitcher.getButton('Month').element)
+      .pressKey('down')
+      .pressKey('down')
+      .pressKey('enter');
 
     await t
       .expect(toolbar.navigator.caption.innerText)

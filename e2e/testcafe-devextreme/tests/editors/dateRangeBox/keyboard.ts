@@ -446,7 +446,8 @@ test('DateRangeBox should not be closed by press tab key on startDate input', as
     .ok();
 
   await t
-    .pressKey('tab');
+    .pressKey('tab')
+    .wait(100);
 
   await t
     .expect(dateRangeBox.option('opened'))

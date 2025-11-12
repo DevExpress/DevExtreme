@@ -5362,7 +5362,9 @@ test('Focus events should be called when pressing the Ctrl + End key when rowRen
   await resetFocusedEventsTestData();
 
   // act
-  await t.pressKey('ctrl+end');
+  await t
+    .pressKey('ctrl+end')
+    .wait(100);
 
   // assert
   await t
