@@ -314,7 +314,6 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
         }
       }
 
-      // RadioGroup and Inputs columns - use generic inline widget height
       .dx-item.dx-radiobutton {
         height: $generic-base-inline-widget-height !important; // stylelint-disable-line declaration-no-important
       }

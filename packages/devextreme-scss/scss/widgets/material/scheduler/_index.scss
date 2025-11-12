@@ -621,7 +621,6 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
         }
       }
 
-      // RadioGroup and Inputs columns - use material inline widget height
       .dx-item.dx-radiobutton {
         height: $material-base-inline-widget-height !important; // stylelint-disable-line declaration-no-important
       }
