@@ -50,119 +50,63 @@ $(() => {
     },
   });
 
-  const popupContentTemplate = function (vehicle) {
-    const {
-      Source,
-      LicenseName,
-      Author,
-      Edits,
-    } = vehicle;
-    const sourceLink = `https://${Source}`;
-    return $('<div>').append(
-      $('<p>')
-        .append($('<b>').text('Image licensed under: '))
-        .append($('<span>').text(LicenseName)),
-      $('<p>')
-        .append($('<b>').text('Author: '))
-        .append($('<span>').text(Author)),
-      $('<p>')
-        .append($('<b>').text('Source link: '))
-        .append(
-          $('<a>', {
-            href: sourceLink,
-            target: '_blank',
-          })
-            .text(sourceLink),
-        ),
-      $('<p>')
-        .append($('<b>').text('Edits: '))
-        .append($('<span>').text(Edits)),
-    );
-  };
-
-  const popup = $('#popup').dxPopup({
-    width: 360,
-    height: 260,
-    visible: false,
-    dragEnabled: false,
-    hideOnOutsideClick: true,
-    showCloseButton: true,
-    title: 'Image Info',
-    position: {
-      at: 'center',
-      my: 'center',
-      collision: 'fit',
-    },
-  }).dxPopup('instance');
-
-  const createTrademarkTemplate = (vehicle) => {
+  const createNameTemplate = (employee) => {
     const {
       ID,
-      Name,
-      TrademarkName,
-      Type,
-    } = vehicle;
+      First_Name,
+      Last_Name,
+    } = employee;
 
-    if (Type) {
-      return $('<div>').text(Type);
-    }
-
-    if (!ID || !TrademarkName || !Name) {
+    if (!ID || !First_Name || !Last_Name) {
       return $('<div>').text('');
     }
 
-    const trademarkWrapper = $('<div>').addClass('trademark__wrapper');
-    const imgWrapper = $('<div>').addClass('trademark__img-wrapper');
-    const img = $('<img>').addClass('trademark__img');
+    const nameWrapper = $('<div>').addClass('name__wrapper');
+    const imgWrapper = $('<div>').addClass('name__img-wrapper');
+    const img = $('<img>').addClass('name__img');
     img.attr({
-      src: `../../../../images/vehicles/image_${ID}.png`,
-      alt: `${TrademarkName} ${Name}`,
-      tabindex: 0,
-      role: 'button',
-      'aria-haspopup': 'dialog',
-      'aria-label': `${TrademarkName} ${Name} - press Enter for image info`,
-    });
-
-    const showPopup = () => {
-      popup.option('contentTemplate', () => popupContentTemplate(vehicle));
-      popup.show();
-    };
-
-    img.on('click', showPopup);
-
-    img.on('keydown', (e) => {
-      if (e.key === 'Enter') {
-        showPopup();
-      }
+      src: `../../../../images/employees/new/${First_Name} ${Last_Name}.jpg`,
+      alt: `${First_Name} ${Last_Name}`,
     });
 
     imgWrapper.append(img);
-    trademarkWrapper.append(imgWrapper);
+    nameWrapper.append(imgWrapper);
 
-    const textWrapper = $('<div>').addClass('trademark__text-wrapper');
-    const trademarkText = $('<div>').addClass('trademark__text trademark__text--title').text(TrademarkName);
-    const nameText = $('<div>').addClass('trademark__text trademark__text--subtitle').text(Name);
+    const textWrapper = $('<div>').addClass('name__text-wrapper');
+    const firstNameText = $('<div>').addClass('name__text name__text--title').text(First_Name);
+    const lastNameText = $('<div>').addClass('name__text name__text--subtitle').text(Last_Name);
 
-    textWrapper.append(trademarkText, nameText);
-    trademarkWrapper.append(textWrapper);
+    textWrapper.append(firstNameText, lastNameText);
+    nameWrapper.append(textWrapper);
 
-    return trademarkWrapper;
+    return nameWrapper;
   };
 
-  const createCategoryTemplate = ({ CategoryName }) => {
-    if (!CategoryName) {
-      return $('<div>').text('');
-    }
+  const createStatusTemplate = (status) => $('<div>')
+    .append(
+      $('<div>').addClass('indicator'),
+    )
+    .append(
+      $('<div>').text(status),
+    )
+    .addClass('status')
+    .toggleClass('status--salaried', status === 'Salaried')
+    .toggleClass('status--commission', status === 'Commission')
+    .toggleClass('status--terminated', status === 'Terminated');
 
-    return $('<div>').addClass('category__wrapper').text(CategoryName);
+  const createEmailTemplate = (email) => {
+    const emailLink = $('<a>')
+      .attr('href', `mailto:${email}`)
+      .text(email);
+    return emailLink;
   };
 
   $('#treeList').dxTreeList({
-    dataSource: vehicles,
+    dataSource: employees,
     showBorders: true,
     keyExpr: 'ID',
-    parentIdExpr: 'CategoryID',
-    expandedRowKeys: [1],
+    parentIdExpr: 'Head_ID',
+    expandedRowKeys: [1, 3, 4, 5, 32],
     aiIntegration,
     scrolling: {
       mode: 'standard',
@@ -179,48 +123,51 @@ $(() => {
     },
     columns: [
       {
-        caption: 'Trademark',
+        caption: 'Name',
         width: 200,
         cellTemplate: (container, options) => {
-          const vehicle = options.data;
-          const imageWrapper = createTrademarkTemplate(vehicle);
+          const employee = options.data;
+          const imageWrapper = createNameTemplate(employee);
           container.append(imageWrapper);
         },
+        cssClass: 'name_cell',
       },
       {
-        dataField: 'Price',
-        alignment: 'left',
-        format: 'currency',
-        width: 100,
+        dataField: 'Title',
+        width: 180,
       },
       {
-        caption: 'Category',
+        dataField: 'Status',
         cellTemplate: (container, options) => {
-          const category = options.data;
-          const categoryWrapper = createCategoryTemplate(category);
-          container.append(categoryWrapper);
+          const status = options.data.Status;
+          const statusWrapper = createStatusTemplate(status);
+          container.append(statusWrapper);
         },
         minWidth: 180,
       },
       {
-        dataField: 'Modification',
+        dataField: 'City',
         width: 180,
       },
       {
-        dataField: 'Horsepower',
+        dataField: 'State',
         width: 140,
       },
       {
-        dataField: 'BodyStyleName',
-        caption: 'Body Style',
-        width: 180,
+        dataField: 'Email',
+        cellTemplate: (container, options) => {
+          const email = options.data.Email;
+          const emailLink = createEmailTemplate(email);
+          container.append(emailLink);
+        },
+        minWidth: 200,
       },
       {
         name: 'AI Column',
         caption: 'AI Column',
         type: 'ai',
         ai: {
-          prompt: 'Identify the country where this vehicle model is originally manufactured or developed, based on its brand, model, and specifications.',
+          prompt: 'Show person initials.',
           mode: 'auto',
           noDataText: 'No data',
         },
@@ -234,13 +181,13 @@ $(() => {
       e.data = e.data.filter((item) => !item.Type)
         .map((item) => ({
           ID: item.ID,
-          TrademarkName: item.TrademarkName,
-          Name: item.Name,
-          Modification: item.Modification,
-          Horsepower: item.Horsepower,
-          CategoryName: item.CategoryName,
-          Price: item.Price,
-          BodyStyleName: item.BodyStyleName,
+          First_Name: item.First_Name,
+          Last_Name: item.Last_Name,
+          Title: item.Title,
+          Status: item.Status,
+          City: item.City,
+          State: item.State,
+          Email: item.Email,
         }));
     },
   });
