@@ -1,5 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
+import { ClientFunction } from 'testcafe';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 import { testScreenshot } from '../../../../../helpers/themeUtils';
@@ -315,13 +316,21 @@ test('Basic drag-n-drop movements within the cell', async (t) => {
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  const blurActiveElement = ClientFunction(() => {
+    const el = document.activeElement as HTMLElement | null;
+    el?.blur();
+  });
+
   await t.drag(draggableAppointment.element, 55, 0);
+  await blurActiveElement();
   await testScreenshot(t, takeScreenshot, 'drag-n-drop-within-cell-to-right.png', { element: scheduler.workSpace });
 
   await t.drag(draggableAppointment.element, -50, 0);
+  await blurActiveElement();
   await testScreenshot(t, takeScreenshot, 'drag-n-drop-within-cell-to-left.png', { element: scheduler.workSpace });
 
   await t.drag(draggableAppointment.element, 0, 30);
+  await blurActiveElement();
   await testScreenshot(t, takeScreenshot, 'drag-n-drop-within-cell-to-bottom.png', { element: scheduler.workSpace });
 
   await t
