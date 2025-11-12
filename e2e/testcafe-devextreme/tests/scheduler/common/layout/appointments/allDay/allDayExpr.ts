@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../../../helpers/createWidget';
 import url from '../../../../../../helpers/getPageUrl';
+import { Themes } from '../../../../../../helpers/themes';
 import { testScreenshot } from '../../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Layout:Appointments:allDayExpr`
@@ -21,7 +22,7 @@ fixture.disablePageReloads`Layout:Appointments:allDayExpr`
     allDay: true,
   },
 }].forEach(({ config, data }) => {
-  test(`All day appointment should be render valid in case without endDate property with allDayExpr=${config.allDayExpr}(T1155630)`, async (t) => {
+  test.meta({ runInTheme: Themes.genericLight })(`All day appointment should be render valid in case without endDate property with allDayExpr=${config.allDayExpr}(T1155630)`, async (t) => {
     const { toolbar, workSpace } = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
