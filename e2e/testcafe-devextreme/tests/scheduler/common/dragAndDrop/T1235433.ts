@@ -2,6 +2,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import type Appointment from 'devextreme-testcafe-models/scheduler/appointment';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { Themes } from '../../../../helpers/themes';
 import { scrollTo } from '../../helpers/utils';
 
 fixture.disablePageReloads`Scheduler Drag-and-Drop inside Group`
@@ -81,7 +82,7 @@ const appointmentDescriptions = ['Group: Low Priority', 'Group: High Priority', 
 const appointment1Times = ['9:00 AM - 10:00 AM', '9:00 AM - 10:00 AM', '10:00 AM - 11:00 AM', '10:00 AM - 11:00 AM'];
 const appointment2Times = ['4:00 PM - 5:15 PM', '4:00 PM - 5:15 PM', '5:00 PM - 6:15 PM', '5:00 PM - 6:15 PM'];
 
-test('T1235433: Scheduler - Drag-n-Drop works inside the group with virtual scrolling (timelineDay)', async (t) => {
+test.meta({ runInTheme: Themes.genericLight })('T1235433: Scheduler - Drag-n-Drop works inside the group with virtual scrolling (timelineDay)', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t.expect(scheduler.element.exists).ok();
@@ -91,7 +92,7 @@ test('T1235433: Scheduler - Drag-n-Drop works inside the group with virtual scro
   await dragAppointmentByCircle(t, scheduler.getAppointment('Book 2'), appointment2Times, appointmentDescriptions);
 }).before(async () => createScheduler('timelineDay'));
 
-test('T1235433: Scheduler - Drag-n-Drop works inside the group with virtual scrolling (timelineWorkWeek)', async (t) => {
+test.meta({ runInTheme: Themes.genericLight })('T1235433: Scheduler - Drag-n-Drop works inside the group with virtual scrolling (timelineWorkWeek)', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t.expect(scheduler.element.exists).ok();
@@ -102,7 +103,7 @@ test('T1235433: Scheduler - Drag-n-Drop works inside the group with virtual scro
   await dragAppointmentByCircle(t, scheduler.getAppointment('Book 2'), appointment2Times, appointmentDescriptions);
 }).before(async () => createScheduler('timelineWorkWeek'));
 
-test('T1235433: Scheduler - Drag-n-Drop works inside the group with virtual scrolling (timelineMonth)', async (t) => {
+test.meta({ runInTheme: Themes.genericLight })('T1235433: Scheduler - Drag-n-Drop works inside the group with virtual scrolling (timelineMonth)', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t.expect(scheduler.element.exists).ok();

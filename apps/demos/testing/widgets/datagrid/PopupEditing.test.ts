@@ -16,7 +16,6 @@ runManualTest('DataGrid', 'PopupEditing', (test) => {
 
     await t
       .click($('.dx-link-edit').nth(0));
-    // .wait(500);
 
     await testScreenshot(t, takeScreenshot, 'datagrid_popup_editing_2_desktop.png', '.dx-overlay-content');
 
