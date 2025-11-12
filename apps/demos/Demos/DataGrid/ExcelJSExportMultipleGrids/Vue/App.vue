@@ -87,29 +87,27 @@ import DxButton from 'devextreme-vue/button';
 import DxTabPanel, { DxItem } from 'devextreme-vue/tab-panel';
 import { DxDataGrid, DxColumn } from 'devextreme-vue/data-grid';
 import { Workbook } from 'devextreme-exceljs-fork';
-import { type DataGridCell as ExelDataGridCell, exportDataGrid } from 'devextreme-vue/common/export/excel';
-import { type DataSourceOptions } from 'devextreme-vue/common/data';
+import { type DataGridCell as ExсelDataGridCell, exportDataGrid } from 'devextreme-vue/common/export/excel';
+import { ArrayStore, type DataSourceOptions } from 'devextreme-vue/common/data';
+import { products } from './data.ts';
 
 const priceGridRef = ref<DxDataGrid | null>(null);
 const ratingGridRef = ref<DxDataGrid | null>(null);
 
 const priceDataSource: DataSourceOptions = {
-  store: {
-    type: 'odata',
-    version: 2,
-    url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
+  store: new ArrayStore({
+    data: products,
     key: 'Product_ID',
-  },
+  }),
   select: ['Product_ID', 'Product_Name', 'Product_Sale_Price', 'Product_Retail_Price'],
   filter: ['Product_ID', '<', 10],
 };
+
 const ratingDataSource: DataSourceOptions = {
-  store: {
-    type: 'odata',
-    version: 2,
-    url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
+  store: new ArrayStore({
+    data: products,
     key: 'Product_ID',
-  },
+  }),
   select: ['Product_ID', 'Product_Name', 'Product_Consumer_Rating', 'Product_Category'],
   filter: ['Product_ID', '<', 10],
 };
@@ -129,7 +127,7 @@ const exportGrids = () => {
     worksheet: priceSheet,
     component: priceGridRef.value?.instance,
     topLeftCell: { row: 4, column: 2 },
-    customizeCell: ({ gridCell, excelCell }: { gridCell?: ExelDataGridCell, excelCell?: any }) => {
+    customizeCell: ({ gridCell, excelCell }: { gridCell?: ExсelDataGridCell, excelCell?: any }) => {
       if (gridCell) {
         setAlternatingRowsBackground(gridCell, excelCell);
       }
@@ -138,7 +136,7 @@ const exportGrids = () => {
     worksheet: ratingSheet,
     component: ratingGridRef.value?.instance,
     topLeftCell: { row: 4, column: 2 },
-    customizeCell: ({ gridCell, excelCell }: { gridCell?: ExelDataGridCell, excelCell?: any }) => {
+    customizeCell: ({ gridCell, excelCell }: { gridCell?: ExсelDataGridCell, excelCell?: any }) => {
       if (gridCell) {
         setAlternatingRowsBackground(gridCell, excelCell);
       }
@@ -150,7 +148,7 @@ const exportGrids = () => {
   });
 };
 
-const setAlternatingRowsBackground = (gridCell: ExelDataGridCell, excelCell: any) => {
+const setAlternatingRowsBackground = (gridCell: ExсelDataGridCell, excelCell: any) => {
   if (gridCell.rowType === 'header' || gridCell.rowType === 'data') {
     if (excelCell.fullAddress.row % 2 === 0) {
       excelCell.fill = {
