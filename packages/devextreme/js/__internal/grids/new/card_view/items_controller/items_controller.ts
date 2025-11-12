@@ -1,4 +1,4 @@
-import { computed } from '@ts/core/state_manager';
+import { computed } from '@ts/core/state_manager/index';
 import { ItemsController as ItemsControllerBase } from '@ts/grids/new/grid_core/items_controller/items_controller';
 
 export class ItemsController extends ItemsControllerBase {
