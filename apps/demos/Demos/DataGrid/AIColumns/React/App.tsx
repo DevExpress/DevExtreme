@@ -36,7 +36,7 @@ export default function App() {
   ), [showInfo]);
 
   const onAIColumnRequestCreating = useCallback((e) => {
-    return e.data.map((item) => ({
+    e.data = e.data.map((item) => ({
       ID: item.ID,
       TrademarkName: item.TrademarkName,
       Name: item.Name,
