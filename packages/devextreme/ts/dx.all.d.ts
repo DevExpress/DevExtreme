@@ -26206,6 +26206,21 @@ declare module DevExpress.ui {
         DevExpress.common.core.events.ChangedOptionInfo;
     export type Properties = dxSchedulerOptions;
     export type RecurrenceEditMode = 'dialog' | 'occurrence' | 'series';
+    export type SchedulerAppointmentFormOptions =
+      DevExpress.ui.dxForm.Properties & {
+        /**
+         * [descr:SchedulerAppointmentFormOptions.onSaved]
+         */
+        onSaved?: (formData: any) => void;
+        /**
+         * [descr:SchedulerAppointmentFormOptions.onCanceled]
+         */
+        onCanceled?: (formData: any) => void;
+        /**
+         * [descr:SchedulerAppointmentFormOptions.iconsShowMode]
+         */
+        iconsShowMode?: AppointmentFormIconsShowMode;
+      };
     export type SchedulerPredefinedDateNavigatorItem =
       | 'prev'
       | 'next'
@@ -26482,22 +26497,7 @@ declare module DevExpress.ui {
           /**
            * [descr:dxSchedulerOptions.editing.form]
            */
-          form?:
-            | (DevExpress.ui.dxForm.Properties & {
-                /**
-                 * [descr:dxSchedulerOptions.editing.form.onSaved]
-                 */
-                onSaved?: (formData: any) => void;
-                /**
-                 * [descr:dxSchedulerOptions.editing.form.onCanceled]
-                 */
-                onCanceled?: (formData: any) => void;
-                /**
-                 * [descr:dxSchedulerOptions.editing.form.iconsShowMode]
-                 */
-                iconsShowMode?: DevExpress.ui.dxScheduler.AppointmentFormIconsShowMode;
-              })
-            | undefined;
+          form?: DevExpress.ui.dxScheduler.SchedulerAppointmentFormOptions;
           /**
            * [descr:dxSchedulerOptions.editing.popup]
            */

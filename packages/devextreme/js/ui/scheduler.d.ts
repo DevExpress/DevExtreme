@@ -80,6 +80,29 @@ export type RecurrenceEditMode = 'dialog' | 'occurrence' | 'series';
 /** @public */
 export type AppointmentFormIconsShowMode = 'both' | 'main' | 'recurrence' | 'none';
 /** @public */
+export type SchedulerAppointmentFormOptions = FormProperties & {
+  /**
+   * @docid
+   * @type_function_param1 formData:object
+   * @default undefined
+   * @public
+   */
+  onSaved?: ((formData: any) => void);
+  /**
+   * @docid
+   * @type_function_param1 formData:object
+   * @default undefined
+   * @public
+   */
+  onCanceled?: ((formData: any) => void);
+  /**
+   * @docid
+   * @default "main"
+   * @public
+   */
+  iconsShowMode?: AppointmentFormIconsShowMode;
+};
+/** @public */
 export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
 /** @public */
 export type SchedulerPredefinedToolbarItem = 'today' | 'dateNavigator' | 'viewSwitcher';
@@ -634,30 +657,8 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       /**
        * @docid
        * @public
-       * @type dxFormOptions
        */
-      form?: FormProperties & {
-        /**
-         * @docid
-         * @type_function_param1 formData:object
-         * @default undefined
-         * @public
-         */
-        onSaved?: ((formData: any) => void);
-        /**
-         * @docid
-         * @type_function_param1 formData:object
-         * @default undefined
-         * @public
-         */
-        onCanceled?: ((formData: any) => void);
-        /**
-         * @docid
-         * @default "main"
-         * @public
-         */
-        iconsShowMode?: AppointmentFormIconsShowMode;
-      } | undefined;
+      form?: SchedulerAppointmentFormOptions;
       /**
        * @docid
        * @public
