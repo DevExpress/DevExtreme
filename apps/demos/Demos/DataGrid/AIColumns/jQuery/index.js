@@ -214,10 +214,6 @@ $(() => {
         TrademarkName: item.TrademarkName,
         Name: item.Name,
         Modification: item.Modification,
-        Horsepower: item.Horsepower,
-        CategoryName: item.CategoryName,
-        Price: item.Price,
-        BodyStyleName: item.BodyStyleName,
       }));
     },
   });
