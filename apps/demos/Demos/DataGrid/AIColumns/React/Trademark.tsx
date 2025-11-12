@@ -9,7 +9,7 @@ type TrademarkProps = {
 export default function Trademark({ vehicle, onShowInfo }: TrademarkProps) {
   const { ID, TrademarkName, Name } = vehicle;
 
-  const onKeyPress = useCallback((event: React.KeyboardEvent<HTMLImageElement>) => {
+  const onKeyDown = useCallback((event: React.KeyboardEvent<HTMLImageElement>) => {
     if (event.key === 'Enter') {
       onShowInfo(vehicle);
     }
@@ -24,7 +24,7 @@ export default function Trademark({ vehicle, onShowInfo }: TrademarkProps) {
           alt={`${TrademarkName} ${Name}`}
           tabIndex={0}
           onClick={() => onShowInfo(vehicle)}
-          onKeyPress={onKeyPress}
+          onKeyDown={onKeyDown}
           aria-haspopup='dialog'
           aria-label={`${TrademarkName} ${Name} - press Enter for image info`}
         />

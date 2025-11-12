@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 
 export default function Trademark({ vehicle, onShowInfo }) {
   const { ID, TrademarkName, Name } = vehicle;
-  const onKeyPress = useCallback(
+  const onKeyDown = useCallback(
     (event) => {
       if (event.key === 'Enter') {
         onShowInfo(vehicle);
@@ -19,7 +19,7 @@ export default function Trademark({ vehicle, onShowInfo }) {
           alt={`${TrademarkName} ${Name}`}
           tabIndex={0}
           onClick={() => onShowInfo(vehicle)}
-          onKeyPress={onKeyPress}
+          onKeyDown={onKeyDown}
           aria-haspopup="dialog"
           aria-label={`${TrademarkName} ${Name} - press Enter for image info`}
         />
