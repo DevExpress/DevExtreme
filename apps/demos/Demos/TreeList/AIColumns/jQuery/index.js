@@ -178,17 +178,16 @@ $(() => {
       },
     ],
     onAIColumnRequestCreating(e) {
-      e.data = e.data.filter((item) => !item.Type)
-        .map((item) => ({
-          ID: item.ID,
-          First_Name: item.First_Name,
-          Last_Name: item.Last_Name,
-          Title: item.Title,
-          Status: item.Status,
-          City: item.City,
-          State: item.State,
-          Email: item.Email,
-        }));
+      e.data = e.data.map((item) => ({
+        ID: item.ID,
+        First_Name: item.First_Name,
+        Last_Name: item.Last_Name,
+        Title: item.Title,
+        Status: item.Status,
+        City: item.City,
+        State: item.State,
+        Email: item.Email,
+      }));
     },
   });
 });
