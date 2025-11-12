@@ -18,7 +18,6 @@ const employees = [{
   Birth_Date: '1964-03-16',
   Hire_Date: '1995-01-15',
   Status: 'Salaried',
-  Department: 'Management',
 }, {
   ID: 3,
   Head_ID: 1,
@@ -33,7 +32,6 @@ const employees = [{
   Birth_Date: '1972-07-11',
   Hire_Date: '2007-12-18',
   Status: 'Salaried',
-  Department: 'Management',
 }, {
   ID: 4,
   Head_ID: 1,
@@ -48,7 +46,6 @@ const employees = [{
   Birth_Date: '1974-09-07',
   Hire_Date: '2002-11-08',
   Status: 'Salaried',
-  Department: 'Management',
 }, {
   ID: 5,
   Head_ID: 1,
@@ -63,7 +60,6 @@ const employees = [{
   Birth_Date: '1977-11-22',
   Hire_Date: '1998-04-23',
   Status: 'Salaried',
-  Department: 'Human Resources',
 }, {
   ID: 6,
   Head_ID: 3,
@@ -78,7 +74,6 @@ const employees = [{
   Birth_Date: '1968-12-01',
   Hire_Date: '2009-03-06',
   Status: 'Salaried',
-  Department: 'IT',
 }, {
   ID: 7,
   Head_ID: 5,
@@ -93,7 +88,6 @@ const employees = [{
   Birth_Date: '1974-11-15',
   Hire_Date: '2005-05-11',
   Status: 'Salaried',
-  Department: 'Human Resources',
 }, {
   ID: 10,
   Head_ID: 2,
@@ -108,7 +102,6 @@ const employees = [{
   Birth_Date: '1978-01-09',
   Hire_Date: '2009-08-11',
   Status: 'Salaried',
-  Department: 'Shipping',
 }, {
   ID: 14,
   Head_ID: 10,
@@ -123,7 +116,6 @@ const employees = [{
   Birth_Date: '1986-07-23',
   Hire_Date: '2012-07-23',
   Status: 'Salaried',
-  Department: 'Shipping',
 }, {
   ID: 15,
   Head_ID: 10,
@@ -138,7 +130,6 @@ const employees = [{
   Birth_Date: '1982-04-08',
   Hire_Date: '2012-08-12',
   Status: 'Salaried',
-  Department: 'Shipping',
 }, {
   ID: 16,
   Head_ID: 10,
@@ -153,7 +144,6 @@ const employees = [{
   Birth_Date: '1981-06-12',
   Hire_Date: '2012-09-01',
   Status: 'Salaried',
-  Department: 'Shipping',
 }, {
   ID: 17,
   Head_ID: 9,
@@ -168,7 +158,6 @@ const employees = [{
   Birth_Date: '1988-05-11',
   Hire_Date: '2012-10-13',
   Status: 'Salaried',
-  Department: 'Support',
 }, {
   ID: 18,
   Head_ID: 9,
@@ -183,7 +172,6 @@ const employees = [{
   Birth_Date: '1987-01-29',
   Hire_Date: '2012-10-18',
   Status: 'Salaried',
-  Department: 'Support',
 }, {
   ID: 20,
   Head_ID: 8,
@@ -198,7 +186,6 @@ const employees = [{
   Birth_Date: '1981-06-03',
   Hire_Date: '2012-05-14',
   Status: 'Salaried',
-  Department: 'Sales',
 }, {
   ID: 21,
   Head_ID: 6,
@@ -213,7 +200,6 @@ const employees = [{
   Birth_Date: '1982-08-14',
   Hire_Date: '2012-04-14',
   Status: 'Salaried',
-  Department: 'IT',
 }, {
   ID: 22,
   Head_ID: 6,
@@ -228,7 +214,6 @@ const employees = [{
   Birth_Date: '1983-11-19',
   Hire_Date: '2011-02-10',
   Status: 'Salaried',
-  Department: 'IT',
 }, {
   ID: 25,
   Head_ID: 6,
@@ -243,7 +228,6 @@ const employees = [{
   Birth_Date: '1987-04-26',
   Hire_Date: '2011-03-14',
   Status: 'Salaried',
-  Department: 'IT',
 }, {
   ID: 26,
   Head_ID: 5,
@@ -258,7 +242,6 @@ const employees = [{
   Birth_Date: '1982-03-02',
   Hire_Date: '2005-05-19',
   Status: 'Salaried',
-  Department: 'Human Resources',
 }, {
   ID: 28,
   Head_ID: 6,
@@ -273,7 +256,6 @@ const employees = [{
   Birth_Date: '1984-07-17',
   Hire_Date: '2012-01-11',
   Status: 'Salaried',
-  Department: 'IT',
 }, {
   ID: 29,
   Head_ID: 28,
@@ -288,7 +270,6 @@ const employees = [{
   Birth_Date: '1985-06-10',
   Hire_Date: '2012-01-19',
   Status: 'Salaried',
-  Department: 'IT',
 }, {
   ID: 32,
   Head_ID: 3,
@@ -303,7 +284,6 @@ const employees = [{
   Birth_Date: '1979-11-01',
   Hire_Date: '2008-06-29',
   Status: 'Salaried',
-  Department: 'Engineering',
 }, {
   ID: 33,
   Head_ID: 32,
@@ -318,7 +298,6 @@ const employees = [{
   Birth_Date: '1983-04-19',
   Hire_Date: '2009-02-14',
   Status: 'Salaried',
-  Department: 'Engineering',
 }, {
   ID: 36,
   Head_ID: 32,
@@ -333,7 +312,6 @@ const employees = [{
   Birth_Date: '1984-12-01',
   Hire_Date: '2008-01-22',
   Status: 'Salaried',
-  Department: 'Engineering',
 }, {
   ID: 38,
   Head_ID: 32,
@@ -348,7 +326,6 @@ const employees = [{
   Birth_Date: '1984-01-09',
   Hire_Date: '2007-10-18',
   Status: 'Salaried',
-  Department: 'Engineering',
 }, {
   ID: 40,
   Head_ID: 8,
@@ -363,7 +340,6 @@ const employees = [{
   Birth_Date: '1986-08-09',
   Hire_Date: '2006-07-19',
   Status: 'Salaried',
-  Department: 'Sales',
 }, {
   ID: 44,
   Head_ID: 4,
@@ -378,7 +354,6 @@ const employees = [{
   Birth_Date: '1988-04-07',
   Hire_Date: '2012-04-11',
   Status: 'Commission',
-  Department: 'Sales',
 }, {
   ID: 45,
   Head_ID: 4,
@@ -393,7 +368,6 @@ const employees = [{
   Birth_Date: '1987-03-25',
   Hire_Date: '2012-04-19',
   Status: 'Commission',
-  Department: 'Sales',
 }, {
   ID: 47,
   Head_ID: 8,
@@ -408,7 +382,6 @@ const employees = [{
   Birth_Date: '1990-08-02',
   Hire_Date: '2012-05-11',
   Status: 'Salaried',
-  Department: 'Sales',
 }, {
   ID: 48,
   Head_ID: 32,
@@ -423,7 +396,6 @@ const employees = [{
   Birth_Date: '1991-03-17',
   Hire_Date: '2010-04-15',
   Status: 'Terminated',
-  Department: 'Engineering',
 }, {
   ID: 50,
   Head_ID: 10,
@@ -438,7 +410,6 @@ const employees = [{
   Birth_Date: '1994-08-19',
   Hire_Date: '2012-06-18',
   Status: 'Terminated',
-  Department: 'Shipping',
 }, {
   ID: 51,
   Head_ID: 32,
@@ -453,5 +424,4 @@ const employees = [{
   Birth_Date: '1985-09-11',
   Hire_Date: '2011-07-19',
   Status: 'Terminated',
-  Department: 'Engineering',
 }];
