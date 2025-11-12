@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DxChat, { type DxChatTypes } from 'devextreme-vue/chat';
-import Guid from 'devextreme/core/guid';
+import { Guid } from 'devextreme-vue/common';
 
 import {
   dataSource,
