@@ -123,7 +123,7 @@ $(() => {
     },
     columns: [
       {
-        caption: 'Name',
+        caption: 'Employee',
         width: 200,
         cellTemplate: (container, options) => {
           const employee = options.data;
@@ -134,6 +134,7 @@ $(() => {
       },
       {
         dataField: 'Title',
+        caption: 'Position',
         width: 180,
       },
       {
