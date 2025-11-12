@@ -1,6 +1,6 @@
 import { CustomStore, DataSource } from 'devextreme-vue/common/data';
 import { type DxChatTypes } from 'devextreme-vue/chat';
-import Guid from 'devextreme/core/guid';
+import { Guid } from 'devextreme-vue/common';
 
 function getTimestamp(date: Date, offsetMinutes = 0): number {
   return date.getTime() + offsetMinutes * 60000;
@@ -25,7 +25,7 @@ const messages: DxChatTypes.Message[] = [
     id: new Guid().toString(),
     timestamp: getTimestamp(date, -7),
     author: currentUser,
-    text: "Hi! I'm having trouble accessing my account.\nThe website says my password is incorrect. I'm sending a few screenshots so you can see where I get the error.",
+    text: 'Hi! I\'m having trouble accessing my account.\nThe website says my password is incorrect. I\'m sending a few screenshots so you can see where I get the error.',
     attachments: [
       {
         name: 'Pic1.png',
