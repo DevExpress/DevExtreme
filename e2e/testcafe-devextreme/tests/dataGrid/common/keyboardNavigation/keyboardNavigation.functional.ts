@@ -4077,7 +4077,7 @@ test('DataGrid - "Maximum call stack size exceeded" error occurs on navigating s
   // act
   await t
     .click(Selector('#focusable-start'))
-    .pressKey('tab tab tab tab tab tab tab tab tab tab tab');
+    .pressKey('tab tab tab tab tab tab tab tab tab tab tab', { speed: 0.5 });
 
   // assert
   await t
