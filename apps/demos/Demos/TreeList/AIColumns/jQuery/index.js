@@ -22,6 +22,13 @@ $(() => {
 
   const aiIntegration = new DevExpress.aiIntegration({
     sendRequest({ prompt }) {
+      const isValidRequest = JSON.stringify(prompt.user).length < 5000;
+      if (!isValidRequest) {
+        return {
+          promise: Promise.reject(new Error('Request is too large')),
+          abort: () => {},
+        };
+      }
       const controller = new AbortController();
       const signal = controller.signal;
 
@@ -93,7 +100,17 @@ $(() => {
       ID,
       Name,
       TrademarkName,
+      Type,
     } = vehicle;
+
+    if (Type) {
+      return $('<div>').text(Type);
+    }
+
+    if (!ID || !TrademarkName || !Name) {
+      return $('<div>').text('');
+    }
+
     const trademarkWrapper = $('<div>').addClass('trademark__wrapper');
     const imgWrapper = $('<div>').addClass('trademark__img-wrapper');
     const img = $('<img>').addClass('trademark__img');
@@ -132,15 +149,28 @@ $(() => {
     return trademarkWrapper;
   };
 
-  const createCategoryTemplate = ({ CategoryName }) => $('<div>').addClass('category__wrapper').text(CategoryName);
+  const createCategoryTemplate = ({ CategoryName }) => {
+    if (!CategoryName) {
+      return $('<div>').text('');
+    }
 
-  $('#gridContainer').dxDataGrid({
+    return $('<div>').addClass('category__wrapper').text(CategoryName);
+  };
+
+  $('#treeList').dxTreeList({
     dataSource: vehicles,
+    showBorders: true,
     keyExpr: 'ID',
+    parentIdExpr: 'CategoryID',
+    expandedRowKeys: [1],
+    aiIntegration,
+    scrolling: {
+      mode: 'standard',
+    },
     paging: {
+      enabled: true,
       pageSize: 10,
     },
-    aiIntegration,
     grouping: {
       contextMenuEnabled: false,
     },
@@ -150,7 +180,7 @@ $(() => {
     columns: [
       {
         caption: 'Trademark',
-        width: 220,
+        width: 200,
         cellTemplate: (container, options) => {
           const vehicle = options.data;
           const imageWrapper = createTrademarkTemplate(vehicle);
@@ -159,6 +189,7 @@ $(() => {
       },
       {
         dataField: 'Price',
+        alignment: 'left',
         format: 'currency',
         width: 100,
       },
@@ -185,12 +216,13 @@ $(() => {
         width: 180,
       },
       {
-        name: 'AI column',
+        name: 'AI Column',
         caption: 'AI Column',
         type: 'ai',
         ai: {
           prompt: 'Identify the country where this vehicle model is originally manufactured or developed, based on its brand, model, and specifications.',
           mode: 'auto',
+          noDataText: 'No data',
         },
         width: 200,
         fixed: true,
@@ -198,5 +230,18 @@ $(() => {
         cssClass: 'ai__cell',
       },
     ],
+    onAIColumnRequestCreating(e) {
+      e.data = e.data.filter((item) => !item.Type)
+        .map((item) => ({
+          ID: item.ID,
+          TrademarkName: item.TrademarkName,
+          Name: item.Name,
+          Modification: item.Modification,
+          Horsepower: item.Horsepower,
+          CategoryName: item.CategoryName,
+          Price: item.Price,
+          BodyStyleName: item.BodyStyleName,
+        }));
+    },
   });
 });

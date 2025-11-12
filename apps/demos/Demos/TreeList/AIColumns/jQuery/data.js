@@ -7,19 +7,19 @@ const vehicles = [
   // Category records
   {
     ID: 1,
-    Manufacturer: 'Passenger Car',
+    Type: 'Passenger Car',
   },
   {
     ID: 2,
-    Manufacturer: 'Crossover & SUV',
+    Type: 'Crossover & SUV',
   },
   {
     ID: 3,
-    Manufacturer: 'Truck',
+    Type: 'Truck',
   },
   {
     ID: 4,
-    Manufacturer: 'Minivan',
+    Type: 'Minivan',
   },
   // Vehicle records
   {
