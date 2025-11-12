@@ -5,16 +5,21 @@
       :data-source="dataSource"
       :reload-on-change="false"
       :user="currentUser"
-      :file-uploader-options="fileUploaderOptions"
       @message-entered="onMessageEntered($event)"
       @attachment-download-click="onAttachmentDownloadClick($event)"
-    />
+    >
+      <DxFileUploaderOptions
+        :upload-file="uploadFile"
+        @uploaded="onUploaded"
+      />
+    </DxChat>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxChat, { type DxChatTypes } from 'devextreme-vue/chat';
+import DxChat, { DxFileUploaderOptions, type DxChatTypes } from 'devextreme-vue/chat';
+import { type DxFileUploaderTypes } from 'devextreme-vue/file-uploader';
 import { Guid } from 'devextreme-vue/common';
 
 import {
@@ -28,12 +33,11 @@ function getFileUrl(filename: string): string | undefined {
   return uploadedFilesMap.value.get(filename);
 }
 
-const fileUploaderOptions = {
-  uploadFile: () => {},
-  onUploaded({ file }: { file: File }): void {
-    const url = URL.createObjectURL(file);
-    uploadedFilesMap.value.set(file.name, url);
-  },
+function uploadFile(): void {};
+
+function onUploaded({ file }: DxFileUploaderTypes.UploadedEvent): void {
+  const url = URL.createObjectURL(file);
+  uploadedFilesMap.value.set(file.name, url);
 };
 
 function onMessageEntered({ message }: DxChatTypes.MessageEnteredEvent): void {

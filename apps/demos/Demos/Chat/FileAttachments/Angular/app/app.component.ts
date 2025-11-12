@@ -4,6 +4,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { DxChatModule } from 'devextreme-angular';
 import { DxChatTypes } from 'devextreme-angular/ui/chat';
+import { type DxFileUploaderTypes } from 'devextreme-angular/ui/file_uploader';
 import { DataSource } from 'devextreme-angular/common/data';
 import { AppService } from './app.service';
 
@@ -42,7 +43,7 @@ export class AppComponent {
     }
   }
 
-  onUploaded = (e: { file: File }): void => {
+  onUploaded = (e: DxFileUploaderTypes.UploadedEvent): void => {
     this.appService.onUploaded(e.file);
   };
 
