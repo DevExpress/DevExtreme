@@ -167,7 +167,7 @@ $(() => {
         caption: 'AI Column',
         type: 'ai',
         ai: {
-          prompt: 'Show person initials.',
+          prompt: 'Identify department for each employee. It should be one of the following department types:  "Management", "Human Resources", "IT", "Shipping", "Support", "Sales",  "Engineering".',
           mode: 'auto',
           noDataText: 'No data',
         },
@@ -183,10 +183,6 @@ $(() => {
         First_Name: item.First_Name,
         Last_Name: item.Last_Name,
         Title: item.Title,
-        Status: item.Status,
-        City: item.City,
-        State: item.State,
-        Email: item.Email,
       }));
     },
   });
