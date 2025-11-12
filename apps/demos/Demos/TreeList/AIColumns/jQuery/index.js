@@ -106,7 +106,7 @@ $(() => {
     showBorders: true,
     keyExpr: 'ID',
     parentIdExpr: 'Head_ID',
-    expandedRowKeys: [1, 3, 4, 5, 32],
+    autoExpandAll: true,
     aiIntegration,
     scrolling: {
       mode: 'standard',
@@ -167,7 +167,7 @@ $(() => {
         caption: 'AI Column',
         type: 'ai',
         ai: {
-          prompt: 'Identify department for each employee. It should be one of the following department types:  "Management", "Human Resources", "IT", "Shipping", "Support", "Sales",  "Engineering".',
+          prompt: 'Identify department for each employee. It should be one of the following department types:  "Management", "Human Resources", "IT", "Shipping", "Support", "Sales",  "Engineering". Use "Engineering" by default.',
           mode: 'auto',
           noDataText: 'No data',
         },
