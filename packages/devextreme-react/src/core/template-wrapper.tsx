@@ -19,6 +19,8 @@ import { RemovalLockerContext } from './contexts';
 
 const GUARD_NODE_CLASS_NAME = '__dx_react_guard_node__';
 
+const patchedContainers = new WeakSet<HTMLElement>();
+
 const createHiddenNode = (
   containerNodeName: string,
   ref: React.LegacyRef<any>,
@@ -67,8 +69,15 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
       removalListenerElement.current,
     ].forEach((el) => el && events.off(el, DX_REMOVE_EVENT, onTemplateRemoved));
 
-    onRemoved(componentKey);
-  }, [onRemoved]);
+    // In case of multiple root elements, letting the widget remove them all sync
+    Promise.resolve().then(() => {
+      // Skip unmount if container was removed by Inferno
+      if (container && !container.isConnected) {
+        return;
+      }
+      onRemoved(componentKey);
+    });
+  }, [onRemoved, container]);
 
   useLayoutEffect(() => {
     const elementNodes = elements.current.filter((el) => el.nodeType === Node.ELEMENT_NODE);
@@ -83,6 +92,24 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
     } else if (removalListenerElement.current) {
       events.off(removalListenerElement.current, DX_REMOVE_EVENT, onTemplateRemoved);
       events.on(removalListenerElement.current, DX_REMOVE_EVENT, onTemplateRemoved);
+    }
+
+    // T1311967: Patch removeChild to suppress NotFoundError during React portal cleanup
+    if (container && !patchedContainers.has(container)) {
+      const originalRemoveChild = container.removeChild.bind(container);
+      container.removeChild = function (child: Node) {
+        try {
+          return originalRemoveChild(child);
+        } catch (e) {
+          // Suppress NotFoundError - happens when Inferno removes container
+          // while React is cleaning up portal
+          if (e instanceof DOMException && e.name === 'NotFoundError') {
+            return child;
+          }
+          throw e;
+        }
+      };
+      patchedContainers.add(container);
     }
 
     return () => {
