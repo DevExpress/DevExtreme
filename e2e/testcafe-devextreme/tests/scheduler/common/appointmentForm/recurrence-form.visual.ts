@@ -539,7 +539,6 @@ test.clientScripts([
   })();
 });
 
-// TODO: fix this test
 test.clientScripts([
   { module: 'mockdate' },
   { content: 'window.MockDate = MockDate;' },
