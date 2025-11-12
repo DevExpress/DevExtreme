@@ -119,10 +119,8 @@ jobs:
           { componentFolder: "scheduler/common", name: "scheduler / common (1/3)", indices: "1/3" },
           { componentFolder: "scheduler/common", name: "scheduler / common (2/3)", indices: "2/3" },
           { componentFolder: "scheduler/common", name: "scheduler / common (3/3)", indices: "3/3" },
-          { componentFolder: "scheduler/viewOffset", name: "scheduler / viewOffset (1/4)", indices: "1/4" },
-          { componentFolder: "scheduler/viewOffset", name: "scheduler / viewOffset (2/4)", indices: "2/4" },
-          { componentFolder: "scheduler/viewOffset", name: "scheduler / viewOffset (3/4)", indices: "3/4" },
-          { componentFolder: "scheduler/viewOffset", name: "scheduler / viewOffset (4/4)", indices: "4/4" },
+          { componentFolder: "scheduler/viewOffset", name: "scheduler / viewOffset (1/2)", indices: "1/2" },
+          { componentFolder: "scheduler/viewOffset", name: "scheduler / viewOffset (2/2)", indices: "2/2" },
           { componentFolder: "scheduler/timezones", name: "scheduler / timezones (Europe/Berlin)", timezone: "Europe/Berlin" },
           { componentFolder: "scheduler/timezones", name: "scheduler / timezones (America/Los_Angeles)", timezone: "America/Los_Angeles" },
         ]

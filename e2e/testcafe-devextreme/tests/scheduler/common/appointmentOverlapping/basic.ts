@@ -93,7 +93,7 @@ test('Simple appointment should not overlap allDay appointment when specific wid
 
   await t
     .expect(scheduler.collectors.count).eql(1)
-    .expect(await element.getBoundingClientRectProperty('top')).eql(138.828125);
+    .expect(await element.getBoundingClientRectProperty('top')).eql(108.828125);
 }).before(async () => createWidget('dxScheduler', {
   ...SCHEDULER_DEFAULT_OPTIONS,
   dataSource: ALL_DAY_DATA,
