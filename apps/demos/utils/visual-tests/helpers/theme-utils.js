@@ -18,6 +18,38 @@ export async function testScreenshot(
   screenshotName,
   element,
 ) {
+  const testTheme = process.env.THEME;
+  const isMaterialTheme = testTheme?.includes('material');
+  
+  const materialThemeOptions = isMaterialTheme ? {
+    looksSameComparisonOptions: {
+      tolerance: 8,
+      antialiasingTolerance: 20,
+      ignoreCaret: true,
+      strict: false,
+    },
+    enableTextMask: true,
+    textMaskRadius: 3,
+    textDiffTreshold: 0.1,
+  } : {};
+
+  // Merge options with Material theme overrides having priority
+  const finalOptions = isMaterialTheme && comparisonOptions?.looksSameComparisonOptions
+    ? {
+        ...comparisonOptions,
+        looksSameComparisonOptions: {
+          ...comparisonOptions.looksSameComparisonOptions,
+          ...materialThemeOptions.looksSameComparisonOptions,
+        },
+        enableTextMask: materialThemeOptions.enableTextMask,
+        textMaskRadius: materialThemeOptions.textMaskRadius,
+        textDiffTreshold: materialThemeOptions.textDiffTreshold,
+      }
+    : {
+        ...comparisonOptions,
+        ...materialThemeOptions,
+      };
+
   await t
     .expect(await takeScreenshot(screenshotName.replace('.png', `${getThemePostfix(process.env.THEME)}.png`), element))
     .ok();

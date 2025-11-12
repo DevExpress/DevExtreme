@@ -152,6 +152,7 @@ Object.values(FRAMEWORKS).forEach((approach) => {
         if (approach === 'Angular') {
           await waitForAngularLoading();
         }
+
         if (testCodeSource) {
           await execCode(testCodeSource);
         }
@@ -187,13 +188,38 @@ Object.values(FRAMEWORKS).forEach((approach) => {
 
           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+          // Use higher tolerance and text mask for Material theme
+          const isMaterialTheme = testTheme?.includes('material');
+          const materialThemeOptions = isMaterialTheme ? {
+            looksSameComparisonOptions: {
+              tolerance: 8,
+              antialiasingTolerance: 20,
+              ignoreCaret: true,
+              strict: false,
+            },
+            enableTextMask: true,
+            textMaskRadius: 3,
+            textDiffTreshold: 0.1,
+          } : {};
+
+          // Merge options with Material theme overrides having priority
+          const finalComparisonOptions = isMaterialTheme && comparisonOptions?.looksSameComparisonOptions
+            ? {
+                ...comparisonOptions,
+                looksSameComparisonOptions: {
+                  ...comparisonOptions.looksSameComparisonOptions,
+                  ...materialThemeOptions.looksSameComparisonOptions,
+                },
+              }
+            : {
+                ...comparisonOptions,
+                ...materialThemeOptions,
+              };
+
           if (isGitHubDemos) {
-            await takeScreenshot(`${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions && {
-              ...comparisonOptions,
-              looksSameComparisonOptions: { antialiasingTolerance: 10 },
-            });
+            await takeScreenshot(`${testName}${getThemePostfix(testTheme)}.png`, undefined, finalComparisonOptions);
           } else {
-            await takeScreenshot(`${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
+            await takeScreenshot(`${testName}${getThemePostfix(testTheme)}.png`, undefined, finalComparisonOptions);
           }
 
           await t

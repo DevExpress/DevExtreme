@@ -75,28 +75,25 @@ export const waitForAngularLoading = ClientFunction(() => new Promise<void>((res
 
   const check = () => {
     const demoApp = document.querySelector('demo-app') as HTMLElement | null;
+    
+    // Check if Angular app is loaded and has actual content
+    const hasContent = demoApp && (
+      demoApp.querySelector('.dx-widget') !== null || 
+      demoApp.querySelector('.demo-container') !== null
+    );
+    
+    const isNotLoading = demoApp && demoApp.innerText.trim() !== 'Loading...';
 
-  
-    if (demoApp) {
-      const text = demoApp.innerText.trim();
-      const hasLoadingText = text === 'Loading...' || text === '';
-      const hasDevExtremeWidgets = document.querySelector('.dx-widget') !== null;
-      const hasDemoContent = document.querySelector('.demo-container') !== null;
-      
-      if (!hasLoadingText && (hasDevExtremeWidgets || hasDemoContent)) {
-        cleanup();
-        // Small delay to ensure rendering is complete
-        return setTimeout(resolve, 50);
-      }
+    if (hasContent && isNotLoading) {
+      cleanup();
+      return setTimeout(resolve, 100);
     }
-
 
     if (performance.now() - start > timeout) {
       cleanup();
       console.warn('Angular loading timeout exceeded');
       return resolve();
     }
-
 
     rafId = requestAnimationFrame(check);
   };
@@ -419,7 +416,7 @@ export function runManualTest(widget, demo, callback) {
 }
 
 export function getPortByIndex(testIndex) {
-  return (settings.total && (Math.floor(testIndex / settings.total) % settings.concurrency)) || 0;
+  return testIndex % settings.concurrency;
 }
 
 export function updateConfig(customSettings) {

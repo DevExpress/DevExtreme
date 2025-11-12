@@ -633,7 +633,22 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        CONSTEL: [react(1/4), react(2/4), react(3/4), react(4/4), vue(1/4), vue(2/4), vue(3/4), vue(4/4), angular(1/4), angular(2/4), angular(3/4), angular(4/4)]
+        CONSTEL: [
+          react(1/4),
+          react(2/4),
+          react(3/4),
+          react(4/4),
+          vue(1/4),
+          vue(2/4),
+          vue(3/4),
+          vue(4/4),
+          angular(1/6),
+          angular(2/6),
+          angular(3/6),
+          angular(4/6),
+          angular(5/6),
+          angular(6/6)
+        ]
         THEME: ['fluent.blue.light']
 
     runs-on: devextreme-shr2
@@ -708,6 +723,8 @@ jobs:
         python -m http.server 8081 &
         python -m http.server 8082 &
         python -m http.server 8083 &
+        python -m http.server 8084 &
+        python -m http.server 8085 &
 
     - name: Run TestCafe tests
       shell: bash
@@ -715,7 +732,7 @@ jobs:
       env:
         BROWSERS: chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
         # DEBUG: hammerhead:*,testcafe:*
-        CONCURRENCY: 4
+        CONCURRENCY: 6
         TCQUARANTINE: true
         CONSTEL: ${{ matrix.CONSTEL }}
         THEME: ${{ matrix.THEME }}
