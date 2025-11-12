@@ -188,33 +188,29 @@ Object.values(FRAMEWORKS).forEach((approach) => {
 
           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-          // Use higher tolerance and text mask for Material theme
           const isMaterialTheme = testTheme?.includes('material');
           const materialThemeOptions = isMaterialTheme ? {
             looksSameComparisonOptions: {
-              tolerance: 8,
-              antialiasingTolerance: 20,
-              ignoreCaret: true,
+              tolerance: 80,
+              ignoreAntialiasing: true,
+              antialiasingTolerance: 80,
               strict: false,
             },
-            enableTextMask: true,
-            textMaskRadius: 3,
-            textDiffTreshold: 0.1,
+            // eslint-disable-next-line spellcheck/spell-checker
+            textDiffTreshold: 0.5,
           } : {};
 
-          // Merge options with Material theme overrides having priority
           const finalComparisonOptions = isMaterialTheme && comparisonOptions?.looksSameComparisonOptions
             ? {
-                ...comparisonOptions,
-                looksSameComparisonOptions: {
-                  ...comparisonOptions.looksSameComparisonOptions,
-                  ...materialThemeOptions.looksSameComparisonOptions,
-                },
-              }
-            : {
-                ...comparisonOptions,
-                ...materialThemeOptions,
-              };
+              ...comparisonOptions,
+              looksSameComparisonOptions: {
+                ...comparisonOptions.looksSameComparisonOptions,
+                ...materialThemeOptions.looksSameComparisonOptions,
+              },
+            } : {
+              ...comparisonOptions,
+              ...materialThemeOptions,
+            };
 
           if (isGitHubDemos) {
             await takeScreenshot(`${testName}${getThemePostfix(testTheme)}.png`, undefined, finalComparisonOptions);

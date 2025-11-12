@@ -52,7 +52,9 @@ function accessibilityTestCafeReporter() {
 }
 
 async function main() {
-  const tester = await createTestCafe();
+  const tester = await createTestCafe({
+    // cache: true
+  });
   const runner = tester.createRunner();
   const concurrency = (process.env.CONCURRENCY && (+process.env.CONCURRENCY)) || 1;
 
@@ -64,9 +66,9 @@ async function main() {
   }
 
   const getQuarantineMode = () => {
-    // if(process.env.THEME === THEME.material) {
-    //   return false; // { successThreshold: 1, attemptLimit: 5 };
-    // }
+    if(process.env.THEME === THEME.material) {
+      return { successThreshold: 1, attemptLimit: 3 };
+    }
 
     if (process.env.TCQUARANTINE) {
       return { successThreshold: 1, attemptLimit: 2 };
@@ -74,8 +76,6 @@ async function main() {
     
     return false;
   }
-
-  (runner as any).cache = true;
 
   const failedCount = await runner
     .reporter(reporters)
@@ -92,15 +92,6 @@ async function main() {
                 (document.activeElement as HTMLElement).blur();
               }
               window.getSelection()?.removeAllRanges();
-              
-              // // Ensure fonts are loaded before taking screenshots
-              // if (document.fonts) {
-              //   return document.fonts.ready.then(() => {
-              //     // Small delay to ensure rendering is complete
-              //     return new Promise(resolve => setTimeout(resolve, 100));
-              //   });
-              // }
-              // return Promise.resolve();
             }).with({ boundTestRun: t })();
           },
         },

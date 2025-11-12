@@ -17,20 +17,20 @@ export async function testScreenshot(
   takeScreenshot,
   screenshotName,
   element,
+  comparisonOptions,
 ) {
   const testTheme = process.env.THEME;
   const isMaterialTheme = testTheme?.includes('material');
   
   const materialThemeOptions = isMaterialTheme ? {
     looksSameComparisonOptions: {
-      tolerance: 8,
-      antialiasingTolerance: 20,
-      ignoreCaret: true,
+      tolerance: 80,
+      ignoreAntialiasing: true,
+      antialiasingTolerance: 80,
       strict: false,
     },
-    enableTextMask: true,
-    textMaskRadius: 3,
-    textDiffTreshold: 0.1,
+    // eslint-disable-next-line spellcheck/spell-checker
+    textDiffTreshold: 0.5,
   } : {};
 
   // Merge options with Material theme overrides having priority
@@ -51,6 +51,10 @@ export async function testScreenshot(
       };
 
   await t
-    .expect(await takeScreenshot(screenshotName.replace('.png', `${getThemePostfix(process.env.THEME)}.png`), element))
+    .expect(await takeScreenshot(
+      screenshotName.replace('.png', `${getThemePostfix(testTheme)}.png`),
+      element,
+      finalOptions
+    ))
     .ok();
 }

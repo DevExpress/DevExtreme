@@ -10,22 +10,7 @@ body {
 
 .dx-theme-material * {
   -webkit-font-smoothing: antialiased !important;
-  
-  /* stylelint-disable-next-line value-keyword-case */
-  /* stylelint-disable-next-line comment-empty-line-before */
-  /* text-rendering: optimizeLegibility !important; */
-  /* stylelint-disable-next-line value-keyword-case */
 
   /* stylelint-disable-next-line value-keyword-case */
   text-rendering: geometricPrecision !important;
 }
-
-/* .dx-theme-material,
-.dx-theme-material-typography,
-.dx-theme-material .dx-widget {  */
-  /* stylelint-disable-next-line font-family-name-quotes */
-  
-  /* stylelint-disable-next-line font-family-name-quotes */
-  /* stylelint-disable-next-line comment-empty-line-before */
-  /* font-family: 'Roboto', sans-serif !important;
-} */

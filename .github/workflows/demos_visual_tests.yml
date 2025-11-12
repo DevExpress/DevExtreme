@@ -147,6 +147,15 @@ jobs:
           BUILD_TEST_INTERNAL_PACKAGE: true
         run: pnpm run all:build-dev
 
+      - name: Upload DevExtreme build artifacts for jQuery tests
+        if: needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'none'
+        uses: actions/upload-artifact@v4
+        with:
+          name: devextreme-build
+          path: |
+            packages/devextreme/artifacts/
+          retention-days: 1
+
       - name: Move packages
         if: needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
         run: |
@@ -224,6 +233,10 @@ jobs:
 #    - name: Link wrappers packages
 #      run: pnpm install
 
+      - name: Prepare JS
+        working-directory: apps/demos
+        run: pnpm run prepare-js
+
       - name: Prepare bundles
         working-directory: apps/demos
         run: pnpx nx prepare-bundles
@@ -231,6 +244,15 @@ jobs:
       - name: Demos - Run tsc
         working-directory: apps/demos
         run: pnpm exec tsc --noEmit
+
+      - name: Copy prepared JS artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: devextreme-demos-js
+          path: |
+            apps/demos/Demos/**/jQuery/
+            apps/demos/bundles/
+          retention-days: 1
 
       - name: Copy build artifacts
         uses: actions/upload-artifact@v4
@@ -443,7 +465,14 @@ jobs:
       working-directory: apps/demos
       run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
 
-    - name: Prepare JS
+    - name: Download prepared JS artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: devextreme-demos-js
+        path: apps/demos/
+      continue-on-error: true
+
+    - name: Prepare JS (if artifacts not available)
       working-directory: apps/demos
       run: pnpm run prepare-js
 
@@ -504,6 +533,7 @@ jobs:
           - STRATEGY: screenshots
             CONSTEL: jquery
     env:
+      NODE_OPTIONS: --max-old-space-size=8192
       ACCESSIBILITY_TESTCAFE_REPORT_PATH: "accessibility_testcafe_report"
 
     runs-on: devextreme-shr2
@@ -534,7 +564,7 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache/restore@v4
+    - uses: actions/cache@v4
       name: Setup pnpm cache
       with:
         path: |
@@ -547,7 +577,14 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
-    - name: DevExtreme - Build
+    - name: Download DevExtreme build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: devextreme-build
+        path: packages/devextreme/artifacts/
+      continue-on-error: true
+
+    - name: DevExtreme - Build (if artifacts not available)
       run: pnpx nx build devextreme
 
     - name: Install Roboto font for Material theme
@@ -569,6 +606,7 @@ jobs:
         python -m http.server 8081 &
         python -m http.server 8082 &
         python -m http.server 8083 &
+        python -m http.server 8084 &
 
     - name: Set Chrome flags
       id: chrome-flags
@@ -586,11 +624,12 @@ jobs:
       shell: bash
       working-directory: apps/demos
       env:
+        NODE_OPTIONS: --max-old-space-size=8192
         STRATEGY: ${{ matrix.STRATEGY }}
         CHANGEDFILEINFOSPATH: changed-files.json
         BROWSERS: ${{ steps.chrome-flags.outputs.flags }}
         #DEBUG: hammerhead:*,testcafe:*
-        CONCURRENCY: 4
+        CONCURRENCY: 3
         TCQUARANTINE: true
         CONSTEL: ${{ matrix.CONSTEL }}
         THEME: ${{ matrix.THEME }}
@@ -634,20 +673,18 @@ jobs:
       fail-fast: false
       matrix:
         CONSTEL: [
-          react(1/4),
-          react(2/4),
-          react(3/4),
-          react(4/4),
+          react(1/3),
+          react(2/3),
+          react(3/3),
           vue(1/4),
           vue(2/4),
           vue(3/4),
           vue(4/4),
-          angular(1/6),
-          angular(2/6),
-          angular(3/6),
-          angular(4/6),
-          angular(5/6),
-          angular(6/6)
+          angular(1/5),
+          angular(2/5),
+          angular(3/5),
+          angular(4/5),
+          angular(5/5),
         ]
         THEME: ['fluent.blue.light']
 
@@ -701,22 +738,15 @@ jobs:
       working-directory: apps/demos
       run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
 
-    - name: Prepare JS
-      working-directory: apps/demos
-      run: pnpm run prepare-js
+    - name: Download prepared JS and bundles artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: devextreme-demos-js
+        path: apps/demos/
 
     - name: Update bundles config
       working-directory: apps/demos
       run: pnpx gulp update-config
-
-    - name: Create bundles dir
-      run: mkdir -p apps/demos/bundles
-
-    - name: Download bundles artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: devextreme-bundles
-        path: apps/demos/bundles
     - name: Run Web Server
       run: |
         python -m http.server 8080 &
@@ -724,15 +754,15 @@ jobs:
         python -m http.server 8082 &
         python -m http.server 8083 &
         python -m http.server 8084 &
-        python -m http.server 8085 &
 
     - name: Run TestCafe tests
       shell: bash
       working-directory: apps/demos
       env:
+        NODE_OPTIONS: --max-old-space-size=8192
         BROWSERS: chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
         # DEBUG: hammerhead:*,testcafe:*
-        CONCURRENCY: 6
+        CONCURRENCY: 3
         TCQUARANTINE: true
         CONSTEL: ${{ matrix.CONSTEL }}
         THEME: ${{ matrix.THEME }}
@@ -820,22 +850,11 @@ jobs:
         working-directory: apps/demos
         run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
 
-      - name: Prepare JS
-        working-directory: apps/demos
-        run: pnpm run prepare-js
-
-      - name: Update bundles config
-        working-directory: apps/demos
-        run: pnpx gulp update-config
-
-      - name: Create bundles dir
-        run: mkdir -p apps/demos/bundles
-
-      - name: Download bundles artifacts
+      - name: Download prepared JS and bundles artifacts
         uses: actions/download-artifact@v4
         with:
-          name: devextreme-bundles
-          path: apps/demos/bundles
+          name: devextreme-demos-js
+          path: apps/demos/
 
       - name: Download changes artifacts
         uses: actions/download-artifact@v4
@@ -843,12 +862,17 @@ jobs:
           name: changed-demos
           path: apps/demos
 
+      - name: Update bundles config
+        working-directory: apps/demos
+        run: pnpx gulp update-config
+
       - name: Run Web Server
         run: |
           python -m http.server 8080 &
           python -m http.server 8081 &
           python -m http.server 8082 &
           python -m http.server 8083 &
+          python -m http.server 8084 &
 
       - name: Run TestCafe tests
         shell: bash

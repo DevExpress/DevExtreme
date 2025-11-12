@@ -61,44 +61,17 @@ export const injectStyle = (style) => `
   document.getElementsByTagName('head')[0].appendChild(style);
 `;
 
-export const waitForAngularLoading = ClientFunction(() => new Promise<void>((resolve) => {
-  const start = performance.now();
-  const timeout = 10000;
-  let rafId: number | null = null;
+export const waitForAngularLoading = ClientFunction(() => new Promise((resolve) => {
+  let demoAppCounter = 0;
+  const demoAppIntervalHandle = setInterval(() => {
 
-  const cleanup = () => {
-    if (rafId !== null) {
-      cancelAnimationFrame(rafId);
-      rafId = null;
+  const demoApp = document.querySelector('demo-app') as HTMLElement;
+    if ((demoApp && demoApp.innerText !== 'Loading...') || demoAppCounter === 90) {
+      setTimeout(resolve, 300);
+      clearInterval(demoAppIntervalHandle);
     }
-  };
-
-  const check = () => {
-    const demoApp = document.querySelector('demo-app') as HTMLElement | null;
-    
-    // Check if Angular app is loaded and has actual content
-    const hasContent = demoApp && (
-      demoApp.querySelector('.dx-widget') !== null || 
-      demoApp.querySelector('.demo-container') !== null
-    );
-    
-    const isNotLoading = demoApp && demoApp.innerText.trim() !== 'Loading...';
-
-    if (hasContent && isNotLoading) {
-      cleanup();
-      return setTimeout(resolve, 100);
-    }
-
-    if (performance.now() - start > timeout) {
-      cleanup();
-      console.warn('Angular loading timeout exceeded');
-      return resolve();
-    }
-
-    rafId = requestAnimationFrame(check);
-  };
-
-  check();
+    demoAppCounter += 1;
+  }, 1000);
 }));
 
 function getInterestProcessArgs() {
@@ -141,8 +114,6 @@ export function changeTheme(dirName, demoPath, theme) {
   const updatedContent = globalReadFrom(dirName, demoPath, (data) => {
     let result = data.replace(/data-theme="[^"]+"/g, `data-theme="${theme}"`);
 
-    // Replace CSS theme: dx.light.css, dx.dark.css, dx.material.blue.light.css, etc.
-    // Match dx. followed by any characters until .css
     result = result.replace(/dx\.[^"]+\.css/g, `dx.${theme}.css`);
 
 
