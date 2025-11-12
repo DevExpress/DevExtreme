@@ -42,9 +42,9 @@ export class AppComponent {
     }
   }
 
-  onUploaded(e: { file: File }): void {
+  onUploaded = (e: { file: File }): void => {
     this.appService.onUploaded(e.file);
-  }
+  };
 
   uploadFile = () => {};
 }
