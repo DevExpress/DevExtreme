@@ -124,7 +124,7 @@ $(() => {
     columns: [
       {
         caption: 'Employee',
-        width: 200,
+        width: 260,
         cellTemplate: (container, options) => {
           const employee = options.data;
           const imageWrapper = createNameTemplate(employee);
@@ -135,7 +135,7 @@ $(() => {
       {
         dataField: 'Title',
         caption: 'Position',
-        width: 180,
+        width: 140,
       },
       {
         dataField: 'Status',
@@ -172,7 +172,7 @@ $(() => {
           mode: 'auto',
           noDataText: 'No data',
         },
-        width: 200,
+        width: 180,
         fixed: true,
         fixedPosition: 'right',
         cssClass: 'ai__cell',
