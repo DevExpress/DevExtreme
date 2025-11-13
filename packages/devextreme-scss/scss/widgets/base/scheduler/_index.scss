@@ -633,28 +633,6 @@ $scheduler-appointment-form-label-padding: 20px;
         .dx-icon {
           color: $scheduler-workspace-accent-color;
         }
-
-        &::after {
-          content: '';
-          position: absolute;
-          top: 0;
-          right: -2px;
-          width: 1px;
-          height: 100%;
-          background-color: $scheduler-base-border-color;
-        }
-      }
-
-      .dx-scheduler-form-repeat-editor .dx-selectbox.dx-state-readonly .dx-scheduler-form-recurrence-settings-button {
-        margin-right: 0;
-
-        &::after {
-          content: none;
-        }
-      }
-
-      .dx-scheduler-form-repeat-editor .dx-dropdowneditor-button {
-        margin-left: 2px;
       }
 
       /* Recurrence Day Buttons */

@@ -597,9 +597,3 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
     background: $base-bg;
   }
 }
-
-@media (max-width: 450px) {
-  .dx-scheduler-appointment-popup .dx-form .dx-scheduler-days-of-week-buttons {
-    gap: 6px;
-  }
-}
