@@ -29,19 +29,19 @@ $(() => {
       const movie = getMovieById(model.targetedAppointmentData.movieId);
       return movieInfoTemplate(movie);
     },
-    onAppointmentFormOpening(e) {
-      form = e.form;
-
-      form.on('fieldDataChanged', (e) => {
-        if (e.dataField === 'startDate') {
-          const movie = getMovieById(form.option('formData').movieId);
-          updateEndDate(form, movie);
-        }
-      });
-    },
     editing: {
       allowAdding: false,
       form: {
+        onInitialized: (e) => {
+          form = e.component;
+
+          form.on('fieldDataChanged', (e) => {
+            if (e.dataField === 'startDate') {
+              const movie = getMovieById(form.option('formData').movieId);
+              updateEndDate(form, movie);
+            }
+          });
+        },
         items: [
           {
             template: () => {
@@ -68,13 +68,9 @@ $(() => {
                   onValueChanged(e) {
                     const movie = getMovieById(e.value);
 
-                    updateMovieInfoContainer(movie);
-
-                    if (!form) {
-                      return;
-                    }
-
                     form.updateData('director', movie.director);
+
+                    updateMovieInfoContainer(movie);
                     updateEndDate(form, movie);
                   },
                   onContentReady: (e) => {
@@ -104,6 +100,14 @@ $(() => {
             disabled: true,
           },
         ],
+      },
+      popup: {
+        onOptionChanged: (e) => {
+          if (e.name === 'toolbarItems' && e.value) {
+            e.component.option('toolbarItems[1].toolbar', 'bottom');
+            e.component.option('toolbarItems[2].toolbar', 'bottom');
+          }
+        },
       },
     },
   }).dxScheduler('instance');
