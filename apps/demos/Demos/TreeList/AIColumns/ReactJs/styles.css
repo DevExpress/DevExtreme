@@ -1,8 +1,8 @@
-#treeList .ai__cell {
+#app .ai__cell {
   background-color: var(--dx-datagrid-row-alternation-bg);
 }
 
-#treeList .name_cell > div {
+#app .name_cell > div {
   align-items: flex-end;
 }
 
