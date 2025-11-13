@@ -18,7 +18,7 @@ const LicenseInfo = ({
         <b>Source link: </b>
         <a
           href={vehicleLink}
-          target='_blank'
+          target="_blank"
           rel="noopener noreferrer"
         >
           {vehicleLink}

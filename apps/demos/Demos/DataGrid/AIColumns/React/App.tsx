@@ -60,12 +60,12 @@ export default function App() {
         <Column
           caption="Trademark"
           width={200}
-          dataField='TrademarkName'
+          dataField="TrademarkName"
           cellRender={cellRender}
         />
         <Column
           dataField="Price"
-          alignment='left'
+          alignment="left"
           format="currency"
           width={100}
         />

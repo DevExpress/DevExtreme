@@ -7,7 +7,7 @@ export default function Status(props: TreeListTypes.ColumnCellTemplateData<Emplo
 
   return (
     <div className={`status status--${Status.toLowerCase()}`}>
-      <div className='indicator' />
+      <div className="indicator" />
       <div>{Status}</div>
     </div>
   );

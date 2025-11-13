@@ -34,7 +34,7 @@ export default function App() {
 
   return (
     <TreeList
-      id='employees'
+      id="employees"
       dataSource={employees}
       keyExpr="ID"
       parentIdExpr="Head_ID"
@@ -76,12 +76,12 @@ export default function App() {
       <Column
         name="AI Column"
         caption="AI Column"
-        type='ai'
+        type="drag"
         ai={treeConfig.ai}
         width={180}
         fixed={true}
-        fixedPosition='right'
-        cssClass='ai__cell'
+        fixedPosition="right"
+        cssClass="ai__cell"
       />
     </TreeList>
   );
