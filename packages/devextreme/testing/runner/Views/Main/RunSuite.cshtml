@@ -29,7 +29,7 @@
                 yield return Url.Content(testingBasePath + "helpers/jQueryEventsPatch.js");
                 yield return Url.Content(testingBasePath + "helpers/argumentsValidator.js");
                 yield return Url.Content(testingBasePath + "helpers/dataPatch.js");
-                yield return Url.Content("~/packages/devextreme/artifacts/" + npmModule + "/integration/jquery/component_registrator.js");
+                yield return Url.Content("~/packages/devextreme/artifacts/" + npmModule + "/__internal/integration/jquery/component_registrator.js");
             } else {
                 yield return Url.Content("~/packages/devextreme/artifacts/" + npmModule + "/integration/jquery.js");
             }
