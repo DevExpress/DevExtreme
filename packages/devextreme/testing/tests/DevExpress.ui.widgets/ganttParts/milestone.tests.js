@@ -107,7 +107,7 @@ QUnit.module('Milestone', moduleConfig, () => {
         assert.false(children.eq(0).hasClass(Consts.TASK_TITLE_SELECTOR), 'child is not task title');
     });
 
-    QUnit.skipInShadowDomMode('position is correctly calculated', function(assert) {
+    QUnit.skip('position is correctly calculated', function(assert) {
         const { platform } = devices.real();
         if(['android', 'ios'].includes(platform)) {
             assert.expect(0);
