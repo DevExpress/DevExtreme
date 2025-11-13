@@ -82,7 +82,6 @@ export type AppointmentFormIconsShowMode = 'both' | 'main' | 'recurrence' | 'non
 /**
  * @docid
  * @public
- * @type object
  */
 export type SchedulerAppointmentFormOptions = FormProperties & {
   /**
@@ -661,7 +660,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       /**
        * @docid
        * @public
-       * @type dxSchedulerAppointmentFormOptions
+       * @type SchedulerAppointmentFormOptions|dxFormOptions
        */
       form?: SchedulerAppointmentFormOptions;
       /**
