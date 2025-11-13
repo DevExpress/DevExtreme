@@ -29,8 +29,8 @@ function App() {
   const treeViewRef = useRef(null);
   const [treeBoxValue, setTreeBoxValue] = useState('1_1');
   const [gridBoxValue, setGridBoxValue] = useState([3]);
-  const [isGridBoxOpened, setIsGridBoxOpened] = useState(false);
   const [isTreeBoxOpened, setIsTreeBoxOpened] = useState(false);
+  const [isGridBoxOpened, setIsGridBoxOpened] = useState(false);
 
   const treeViewItemSelectionChanged = useCallback(
     (e: { component: { getSelectedNodeKeys: () => any } }) => {
@@ -52,10 +52,6 @@ function App() {
     [treeBoxValue],
   );
 
-  const onTreeItemClick = useCallback(() => {
-    setIsTreeBoxOpened(false);
-  }, []);
-
   const treeViewRender = useCallback(
     () => (
       <TreeView
@@ -68,11 +64,10 @@ function App() {
         displayExpr="name"
         selectByClick={true}
         onContentReady={treeViewOnContentReady}
-        onItemClick={onTreeItemClick}
         onItemSelectionChanged={treeViewItemSelectionChanged}
       />
     ),
-    [treeViewRef, treeViewOnContentReady, onTreeItemClick, treeViewItemSelectionChanged],
+    [treeViewRef, treeViewOnContentReady, treeViewItemSelectionChanged],
   );
 
   const dataGridRender = useCallback(
@@ -106,23 +101,24 @@ function App() {
       treeViewRef.current.instance().unselectAll();
     } else {
       treeViewRef.current.instance().selectItem(e.value);
+    }    
+    setIsTreeBoxOpened(false);
+  }, [treeViewRef]);
+
+  const onTreeBoxOptionChanged = useCallback((e: DropDownBoxTypes.OptionChangedEvent) => {
+    if (e.name === 'opened') {
+      setIsTreeBoxOpened(e.value);
     }
   }, []);
 
-  const syncDataGridSelection = useCallback((e: DropDownBoxTypes.ValueChangedEvent) => {
-    setGridBoxValue(e.value);
-  }, []);
-
-  const onGridBoxOpened = useCallback((e: DropDownBoxTypes.OptionChangedEvent) => {
+  const onGridBoxOptionChanged = useCallback((e: DropDownBoxTypes.OptionChangedEvent) => {
     if (e.name === 'opened') {
       setIsGridBoxOpened(e.value);
     }
   }, []);
 
-  const onTreeBoxOpened = useCallback((e: DropDownBoxTypes.OptionChangedEvent) => {
-    if (e.name === 'opened') {
-      setIsTreeBoxOpened(e.value);
-    }
+  const syncDataGridSelection = useCallback((e: DropDownBoxTypes.ValueChangedEvent) => {
+    setGridBoxValue(e.value);
   }, []);
 
   return (
@@ -140,7 +136,7 @@ function App() {
             showClearButton={true}
             dataSource={treeDataSource}
             onValueChanged={syncTreeViewSelection}
-            onOptionChanged={onTreeBoxOpened}
+            onOptionChanged={onTreeBoxOptionChanged}
             contentRender={treeViewRender}
           />
         </div>
@@ -159,7 +155,7 @@ function App() {
             showClearButton={true}
             dataSource={gridDataSource}
             onValueChanged={syncDataGridSelection}
-            onOptionChanged={onGridBoxOpened}
+            onOptionChanged={onGridBoxOptionChanged}
             contentRender={dataGridRender}
           />
         </div>
