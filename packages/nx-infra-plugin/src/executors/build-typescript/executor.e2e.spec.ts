@@ -78,7 +78,7 @@ describe('BuildTypescriptExecutor E2E', () => {
       const options: BuildTypescriptExecutorSchema = {
         module: 'esm',
         srcPattern: './src/**/*.{ts,tsx}',
-        excludePattern: './src/**/__tests__/**/*',
+        excludePatterns: ['./src/**/__tests__/**/*'],
         tsconfig: './tsconfig.esm.json',
         outDir: './npm/esm',
       };
@@ -107,7 +107,7 @@ describe('BuildTypescriptExecutor E2E', () => {
       const options: BuildTypescriptExecutorSchema = {
         module: 'cjs',
         srcPattern: './src/**/*.{ts,tsx}',
-        excludePattern: './src/**/__tests__/**/*',
+        excludePatterns: ['./src/**/__tests__/**/*'],
         tsconfig: './tsconfig.json',
         outDir: './npm/cjs',
       };

@@ -62,7 +62,7 @@
       "dependsOn": ["npm:clean"],
       "options": {
         "srcPattern": "./src/**/*.ts",
-        "excludePattern": "./src/**/__tests__/**/*",
+        "excludePatterns": ["./src/**/__tests__/**/*", "./src/**/__mocks__/**/*"],
         "tsconfig": "./tsconfig.esm.json",
         "outDir": "./npm/esm",
         "module": "esm"
@@ -76,7 +76,7 @@
       "dependsOn": ["npm:clean"],
       "options": {
         "srcPattern": "./src/**/*.ts",
-        "excludePattern": "./src/**/__tests__/**/*",
+        "excludePatterns": ["./src/**/__tests__/**/*", "./src/**/__mocks__/**/*"],
         "tsconfig": "./tsconfig.json",
         "outDir": "./npm/cjs",
         "module": "cjs"
