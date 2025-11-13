@@ -282,16 +282,28 @@ export class KeyboardNavigationController extends modules.ViewController {
     return this._rowsView.getScrollable() as Scrollable;
   }
 
-  protected scrollToNextCell($nextCell?: dxElementWrapper): void {
+  protected scrollToNextCell($nextCell?: dxElementWrapper): Promise<void> {
     const scrollable = this.getScrollable();
 
     if (!scrollable) {
-      return;
+      return Promise.resolve();
     }
 
     const leftOffset = this.getNextCellLocation($nextCell);
 
-    scrollable.scrollBy({ left: leftOffset, top: 0 });
+    if (leftOffset !== 0) {
+      return new Promise((resolve) => {
+        const scrollHandler = (): void => {
+          scrollable.off('scroll', scrollHandler);
+          resolve();
+        };
+
+        scrollable.on('scroll', scrollHandler);
+        scrollable.scrollBy({ left: leftOffset, top: 0 });
+      });
+    }
+
+    return Promise.resolve();
   }
 
   protected _isVirtualColumnRender(): boolean {

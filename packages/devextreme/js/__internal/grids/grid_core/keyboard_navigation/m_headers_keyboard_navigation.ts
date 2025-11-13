@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import {
   isCommandKeyPressed,
 } from '@js/common/core/events/utils/index';
@@ -6,11 +5,9 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getBoundingRect } from '@js/core/utils/position';
 import { isDefined } from '@js/core/utils/type';
-import type { DxEvent } from '@js/events';
 
-import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { Column } from '../columns_controller/m_columns_controller';
-import type { ModuleType, Views } from '../m_types';
+import type { Views } from '../m_types';
 import { StickyPosition } from '../sticky_columns/const';
 import { GridCoreStickyColumnsDom } from '../sticky_columns/dom';
 import { getColumnFixedPosition } from '../sticky_columns/utils';
@@ -220,10 +217,13 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
     );
 
     if (focusedCellIsOutsideVisibleArea) {
-      this.scrollToNextCell($focusedCell);
-    } else {
-      super.restoreFocus();
+      this.scrollToNextCell($focusedCell).then(() => {
+        super.restoreFocus();
+      });
+      return;
     }
+
+    super.restoreFocus();
   }
 
   public needToFocus(): boolean {
@@ -231,33 +231,9 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
   }
 }
 
-const columnHeadersView = (
-  Base: ModuleType<ColumnHeadersView>,
-) => class ColumnHeadersViewKeyboardNavigationExtender extends Base {
-  protected handleScroll(e: DxEvent): void {
-    super.handleScroll(e);
-
-    if (!this._headersKeyboardNavigation?.needToFocus()) {
-      return;
-    }
-
-    const isNeedToRenderVirtualColumns = this._columnsController
-      ?.isNeedToRenderVirtualColumns(e.target.scrollLeft);
-
-    if (!isNeedToRenderVirtualColumns) {
-      this._headersKeyboardNavigation.restoreFocus();
-    }
-  }
-};
-
 export const headersKeyboardNavigationModule = {
   controllers: {
     headersKeyboardNavigation: HeadersKeyboardNavigationController,
     columnFocusDispatcher: ColumnFocusDispatcher,
-  },
-  extenders: {
-    views: {
-      columnHeadersView,
-    },
   },
 };
