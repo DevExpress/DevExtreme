@@ -33,12 +33,12 @@ function getFileUrl(filename: string): string | undefined {
   return uploadedFilesMap.value.get(filename);
 }
 
-function uploadFile(): void {};
+function uploadFile(): void {}
 
 function onUploaded({ file }: DxFileUploaderTypes.UploadedEvent): void {
   const url = URL.createObjectURL(file);
   uploadedFilesMap.value.set(file.name, url);
-};
+}
 
 function onMessageEntered({ message }: DxChatTypes.MessageEnteredEvent): void {
   const attachmentsWithUrls = message.attachments?.map((attachment: DxChatTypes.Attachment) => ({
