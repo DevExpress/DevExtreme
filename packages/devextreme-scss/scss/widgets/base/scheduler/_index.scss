@@ -627,7 +627,6 @@ $scheduler-appointment-form-label-padding: 20px;
 
       /* Repeat editor separator */
       .dx-scheduler-form-repeat-editor .dx-scheduler-form-recurrence-settings-button {
-        overflow: visible;
         position: relative;
 
         .dx-icon {
@@ -639,14 +638,10 @@ $scheduler-appointment-form-label-padding: 20px;
       .dx-scheduler-days-of-week-buttons {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 8px; // TODO: this gap should theme dependent
 
         .dx-button {
           border-radius: 50%;
-
-          .dx-button-content {
-            padding: 0;
-          }
         }
       }
     }

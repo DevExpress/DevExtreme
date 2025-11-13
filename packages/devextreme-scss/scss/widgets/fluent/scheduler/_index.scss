@@ -651,7 +651,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 
     .dx-scheduler-form-recurrence-end-group .dx-field-item-label {
       height: $fluent-scheduler-appointment-popup-all-day-item-height - $fluent-form-layout-manager-vertical-padding;
-      margin-bottom: $fluent-form-layout-manager-vertical-padding;
+      margin-bottom: $fluent-form-layout-manager-vertical-padding; // TODO: create a separate variable for this value
     }
 
     .dx-scheduler-days-of-week-buttons {
