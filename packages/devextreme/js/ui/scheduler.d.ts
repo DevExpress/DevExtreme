@@ -30,7 +30,7 @@ import {
 
 import dxDraggable from './draggable';
 
-import dxForm, { Item as FormItem } from './form';
+import dxForm, { Properties as FormProperties } from './form';
 import dxPopup, { Properties as PopupProperties } from './popup';
 
 import dxSortable from './sortable';
@@ -79,6 +79,29 @@ export type CellAppointmentsLimit = 'auto' | 'unlimited';
 export type RecurrenceEditMode = 'dialog' | 'occurrence' | 'series';
 /** @public */
 export type AppointmentFormIconsShowMode = 'both' | 'main' | 'recurrence' | 'none';
+/** @public */
+export type SchedulerAppointmentFormOptions = FormProperties & {
+  /**
+   * @docid
+   * @type_function_param1 formData:object
+   * @default undefined
+   * @public
+   */
+  onSaved?: ((formData: any) => void);
+  /**
+   * @docid
+   * @type_function_param1 formData:object
+   * @default undefined
+   * @public
+   */
+  onCanceled?: ((formData: any) => void);
+  /**
+   * @docid
+   * @default "main"
+   * @public
+   */
+  iconsShowMode?: AppointmentFormIconsShowMode;
+};
 /** @public */
 export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
 /** @public */
@@ -633,38 +656,10 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       allowUpdating?: boolean;
       /**
        * @docid
-       * @default undefined
        * @public
+       * @type dxSchedulerAppointmentFormOptions
        */
-      form?: {
-        /**
-         * @docid
-         * @type Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>
-         * @default []
-         * @public
-         */
-        items?: Array<FormItem>;
-        /**
-         * @docid
-         * @type_function_param1 formData:object
-         * @default undefined
-         * @public
-         */
-        onSaved?: ((formData: any) => void);
-        /**
-         * @docid
-         * @type_function_param1 formData:object
-         * @default undefined
-         * @public
-         */
-        onCanceled?: ((formData: any) => void);
-        /**
-         * @docid
-         * @default "main"
-         * @public
-         */
-        iconsShowMode?: AppointmentFormIconsShowMode;
-      } | undefined;
+      form?: SchedulerAppointmentFormOptions;
       /**
        * @docid
        * @public
