@@ -67,10 +67,10 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
       removalListenerElement.current,
     ].forEach((el) => el && events.off(el, DX_REMOVE_EVENT, onTemplateRemoved));
 
-    // Defer removal to allow Inferno to complete synchronous DOM operations
-    // eslint-disable-next-line spellcheck/spell-checker
-    queueMicrotask(() => {
+    Promise.resolve().then(() => {
       onRemoved(componentKey);
+    }).catch((e) => {
+      throw e;
     });
   }, [onRemoved, container, componentKey]);
 
