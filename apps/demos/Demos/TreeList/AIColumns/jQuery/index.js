@@ -7,17 +7,37 @@ $(() => {
     apiKey,
   });
 
-  async function getAIResponse(messages, signal) {
+  async function getAIResponseCore(messages, signal) {
     const params = {
       messages,
       model: deployment,
       max_tokens: 1000,
       temperature: 0.7,
     };
-    const response = await aiService.chat.completions.create(params, { signal });
+    const response = await aiService.chat.completions
+      .create(params, { signal });
     const result = response.choices[0].message?.content;
 
     return result;
+  }
+
+  async function getAIResponseRecursive(messages, signal) {
+    return getAIResponseCore(messages, signal)
+      .catch(async (error) => {
+        if (!error.message.includes('Connection error')) {
+          return Promise.reject(error);
+        }
+
+        DevExpress.ui.notify({
+          message: 'This demo uses a shared AI endpoint with rate limitations. Retrying in 30 seconds...',
+          type: 'error',
+          displayTime: 5000,
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, 30000));
+
+        return getAIResponseRecursive(messages, signal);
+      });
   }
 
   const aiIntegration = new DevExpress.aiIntegration({
@@ -37,7 +57,7 @@ $(() => {
         { role: 'user', content: prompt.user },
       ];
 
-      const promise = getAIResponse(aiPrompt, signal);
+      const promise = getAIResponseRecursive(aiPrompt, signal);
 
       const result = {
         promise,
