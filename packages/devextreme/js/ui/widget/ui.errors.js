@@ -397,9 +397,4 @@ export default errorUtils(errors.ERROR_MESSAGES, {
      * @name ErrorsUIWidgets.W1028
      */
     W1028: 'Nested/banded columns do not support the following properties: {0}.',
-    /* Angular wrapper specific warnings (W3xxx) */
-    /**
-     * @name ErrorsUIWidgets.W3001
-     */
-    W3001: 'You are using a legacy configuration component.',
 });
