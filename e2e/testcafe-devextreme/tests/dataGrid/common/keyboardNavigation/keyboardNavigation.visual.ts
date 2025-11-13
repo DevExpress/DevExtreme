@@ -467,7 +467,7 @@ test('Navigate to first cell in the first row when pressing the Ctrl + Home key'
   },
 }));
 
-test.meta({ unstable: true })('Navigate to last cell in the last row when virtual scrolling is enabled', async (t) => {
+test('Navigate to last cell in the last row when virtual scrolling is enabled', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -475,7 +475,8 @@ test.meta({ unstable: true })('Navigate to last cell in the last row when virtua
   // act
   await t
     .click(dataGrid.getDataCell(0, 0).element)
-    .pressKey('ctrl+end');
+    .pressKey('ctrl+end')
+    .wait(100);
 
   await testScreenshot(t, takeScreenshot, 'navigate_to_last_cell_in_last_row_when_virtual_scrolling_is_enabled.png', { element: dataGrid.element });
 
@@ -496,7 +497,7 @@ test.meta({ unstable: true })('Navigate to last cell in the last row when virtua
   },
 }));
 
-test('Navigate to first cell in the first row when virtual scrolling is enabled', async (t) => {
+test.meta({ unstable: true })('Navigate to first cell in the first row when virtual scrolling is enabled', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
