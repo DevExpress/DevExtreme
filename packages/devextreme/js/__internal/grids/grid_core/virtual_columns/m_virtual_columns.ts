@@ -13,8 +13,6 @@ import type { ColumnsView } from '../views/m_columns_view';
 import type { RowsView } from '../views/m_rows_view';
 import { createColumnsInfo } from './m_virtual_columns_core';
 
-const DEFAULT_COLUMN_WIDTH = 50;
-
 const baseView = <T extends ModuleType<ColumnsView>>(Base: T) => class BaseViewVirtualColumnsExtender extends Base {
   protected _needToSetCellWidths() {
     let result = super._needToSetCellWidths();
@@ -96,10 +94,6 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class Virtual
   }
 };
 
-const getWidths = function (columns) {
-  return columns.map((column) => column.visibleWidth || parseFloat(column.width) || DEFAULT_COLUMN_WIDTH);
-};
-
 const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsControllerExtender extends Base {
   private _beginPageIndex: any;
 
@@ -141,7 +135,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
 
   private getBeginPageIndex(position) {
     const visibleColumns = this.getVisibleColumns(undefined, true);
-    const widths = getWidths(visibleColumns);
+    const widths = gridCoreUtils.getColumnWidths(visibleColumns);
     let currentPosition = 0;
 
     for (let index = 0; index < widths.length; index++) {
@@ -164,7 +158,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
 
   private getEndPageIndex(position) {
     const visibleColumns = this.getVisibleColumns(undefined, true);
-    const widths = getWidths(visibleColumns);
+    const widths = gridCoreUtils.getColumnWidths(visibleColumns);
     let currentPosition = 0;
 
     position += this.getTotalWidth();
@@ -287,7 +281,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
     const beginFixedColumnCount = fixedColumns.length ? transparentColumnIndex : 0;
     let beginFixedColumns = visibleColumns.slice(0, beginFixedColumnCount);
     const beginColumns = visibleColumns.slice(beginFixedColumnCount, startIndex);
-    const beginWidth = getWidths(beginColumns).reduce((a, b) => a + b, 0);
+    const beginWidth = gridCoreUtils.getColumnWidths(beginColumns).reduce((a, b) => a + b, 0);
 
     if (!beginWidth) {
       startIndex = 0;
@@ -296,7 +290,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
     const endFixedColumnCount = fixedColumns.length ? fixedColumns.length - transparentColumnIndex - 1 : 0;
     let endFixedColumns = visibleColumns.slice(visibleColumns.length - endFixedColumnCount);
     const endColumns = visibleColumns.slice(endIndex, visibleColumns.length - endFixedColumnCount);
-    const endWidth = getWidths(endColumns).reduce((a, b) => a + b, 0);
+    const endWidth = gridCoreUtils.getColumnWidths(endColumns).reduce((a, b) => a + b, 0);
 
     if (!endWidth) {
       endIndex = visibleColumns.length;

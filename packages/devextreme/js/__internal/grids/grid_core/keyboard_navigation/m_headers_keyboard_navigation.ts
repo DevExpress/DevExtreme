@@ -7,7 +7,6 @@ import $ from '@js/core/renderer';
 import { getBoundingRect } from '@js/core/utils/position';
 import { isDefined } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
-import { getElementLocationInternal } from '@ts/ui/scroll_view/utils/get_element_location_internal';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { Column } from '../columns_controller/m_columns_controller';
@@ -199,26 +198,6 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
       || elementRectRight > containerBoundingRect.right;
   };
 
-  protected scrollToColumn($cell: dxElementWrapper): void {
-    const scrollable = this.getView('rowsView')?.getScrollable();
-
-    if (!scrollable) {
-      return;
-    }
-
-    const scrollPadding = this.getScrollPadding($(scrollable.container()));
-    const scrollPosition = getElementLocationInternal(
-      $cell[0],
-      'horizontal',
-      $(this._columnHeadersView.getContent())[0],
-      scrollable.scrollOffset(),
-      scrollPadding,
-      this.addWidgetPrefix('table'),
-    );
-
-    scrollable.scrollTo({ x: scrollPosition });
-  }
-
   public init(): void {
     super.init();
 
@@ -265,7 +244,7 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
     );
 
     if (focusedCellIsOutsideVisibleArea) {
-      this.scrollToColumn($focusedCell);
+      this.scrollToNextCell($focusedCell);
     } else {
       super.restoreFocus();
     }

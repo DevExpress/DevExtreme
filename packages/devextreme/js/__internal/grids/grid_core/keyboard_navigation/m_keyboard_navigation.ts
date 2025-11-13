@@ -2536,10 +2536,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     );
   }
 
-  private _isVirtualColumnRender() {
-    return this.option('scrolling.columnRenderingMode') === 'virtual';
-  }
-
   private _scrollBy(left, top, rowIndex?, $event?) {
     const that = this;
     const scrollable = this._rowsView.getScrollable();

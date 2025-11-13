@@ -1,9 +1,13 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { keyboard } from '@js/common/core/events/short';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import { getOuterWidth } from '@ts/core/utils/m_size';
+import type Scrollable from '@ts/ui/scroll_view/scrollable';
 
 import modules from '../m_modules';
-import type { Controllers, OptionChanged } from '../m_types';
+import type { Controllers, OptionChanged, Views } from '../m_types';
+import gridCoreUtils from '../m_utils';
 import { Direction } from './const';
 import { isElementDefined, isFixedColumnIndexOffsetRequired } from './m_keyboard_navigation_utils';
 
@@ -21,6 +25,8 @@ export class KeyboardNavigationController extends modules.ViewController {
   protected _columnsController!: Controllers['columns'];
 
   protected _resizeController!: Controllers['resizing'];
+
+  protected _rowsView!: Views['rowsView'];
 
   public _focusedCellPosition: any;
 
@@ -50,6 +56,35 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
   }
 
+  private unsubscribeFromFocusinEvent(): void {
+    const $focusedView = this.getFocusedViewElement();
+
+    if ($focusedView) {
+      eventsEngine.off($focusedView, 'focusin', this.focusinHandlerContext);
+    }
+  }
+
+  private subscribeToFocusinEvent(): void {
+    const $focusedView = this.getFocusedViewElement();
+    const focusinSelector = this.getFocusinSelector();
+
+    if ($focusedView) {
+      eventsEngine.on($focusedView, 'focusin', focusinSelector, this.focusinHandlerContext);
+    }
+  }
+
+  private getCellWidth($cell?: dxElementWrapper): number {
+    if (!$cell?.length && this._isVirtualColumnRender()) {
+      const visibleColumns = this._columnsController.getVisibleColumns(undefined, true);
+      const widths = gridCoreUtils.getColumnWidths(visibleColumns);
+      const focusedColumnIndex = this._focusedCellPosition?.columnIndex ?? 0;
+
+      return widths[focusedColumnIndex];
+    }
+
+    return getOuterWidth($cell) as number;
+  }
+
   protected resizeCompleted() {}
 
   protected getColumnIndexOffset(visibleIndex) {
@@ -75,23 +110,6 @@ export class KeyboardNavigationController extends modules.ViewController {
   protected initKeyDownHandler(): void {
     this.unsubscribeFromKeyDownEvent();
     this.subscribeToKeyDownEvent();
-  }
-
-  private unsubscribeFromFocusinEvent(): void {
-    const $focusedView = this.getFocusedViewElement();
-
-    if ($focusedView) {
-      eventsEngine.off($focusedView, 'focusin', this.focusinHandlerContext);
-    }
-  }
-
-  private subscribeToFocusinEvent(): void {
-    const $focusedView = this.getFocusedViewElement();
-    const focusinSelector = this.getFocusinSelector();
-
-    if ($focusedView) {
-      eventsEngine.on($focusedView, 'focusin', focusinSelector, this.focusinHandlerContext);
-    }
   }
 
   protected getFocusinSelector(): string {
@@ -229,9 +247,30 @@ export class KeyboardNavigationController extends modules.ViewController {
     this.subscribeToFocusinEvent();
   }
 
+  protected getScrollable(): Scrollable {
+    return this._rowsView.getScrollable() as Scrollable;
+  }
+
+  protected scrollToNextCell($nextCell?: dxElementWrapper): void {
+    const scrollable = this.getScrollable();
+
+    if (!scrollable) {
+      return;
+    }
+
+    const leftOffset = this.getCellWidth($nextCell);
+
+    scrollable.scrollBy({ left: leftOffset, top: 0 });
+  }
+
+  protected _isVirtualColumnRender(): boolean {
+    return this.option('scrolling.columnRenderingMode') === 'virtual';
+  }
+
   public init() {
     this._columnsController = this.getController('columns');
     this._resizeController = this.getController('resizing');
+    this._rowsView = this.getView('rowsView');
     this._focusedCellPosition = {};
 
     if (this.isKeyboardEnabled()) {
