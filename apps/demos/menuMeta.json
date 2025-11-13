@@ -593,7 +593,8 @@
                 "Widget": "DataGrid",
                 "DemoType": "Web",
                 "Badge": "New",
-                "Equivalents": "Smart Column, AI generated column, AI field, AI Autofill column, Smart Field"
+                "Equivalents": "Smart Column, AI generated column, AI field, AI Autofill column, Smart Field",
+                "Modules": "openai"
               }
             ]
           },
@@ -1347,7 +1348,8 @@
                 "Widget": "TreeList",
                 "DemoType": "Web",
                 "Badge": "New",
-                "Equivalents": "Smart Column, AI generated column, AI field, AI Autofill column, Smart Field"
+                "Equivalents": "Smart Column, AI generated column, AI field, AI Autofill column, Smart Field",
+                "Modules": "openai"
               }
             ]
           },
