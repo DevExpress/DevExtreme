@@ -36,9 +36,6 @@ import type {
   SelectionChangedEvent,
   ToolbarItemClickEvent,
 } from '@js/ui/file_manager';
-import FileManagerAdaptivityControl from '@js/ui/file_manager/ui.file_manager.adaptivity';
-import FileManagerBreadcrumbs from '@js/ui/file_manager/ui.file_manager.breadcrumbs';
-import { defaultPermissions, FileManagerCommandManager } from '@js/ui/file_manager/ui.file_manager.command_manager';
 import { extendAttributes, findItemsByKeys } from '@js/ui/file_manager/ui.file_manager.common';
 import FileManagerContextMenu from '@js/ui/file_manager/ui.file_manager.context_menu';
 import FileManagerEditingControl from '@js/ui/file_manager/ui.file_manager.editing';
@@ -46,10 +43,13 @@ import FileManagerFilesTreeView from '@js/ui/file_manager/ui.file_manager.files_
 import FileManagerDetailsItemList from '@js/ui/file_manager/ui.file_manager.item_list.details';
 import FileManagerThumbnailsItemList from '@js/ui/file_manager/ui.file_manager.item_list.thumbnails';
 import FileManagerNotificationControl from '@js/ui/file_manager/ui.file_manager.notification';
-import FileManagerToolbar from '@js/ui/file_manager/ui.file_manager.toolbar';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import { FileItemsController, OPERATIONS } from '@ts/ui/file_manager/file_items_controller';
+import FileManagerAdaptivityControl from '@ts/ui/file_manager/ui.file_manager.adaptivity';
+import FileManagerBreadcrumbs from '@ts/ui/file_manager/ui.file_manager.breadcrumbs';
+import { defaultPermissions, FileManagerCommandManager } from '@ts/ui/file_manager/ui.file_manager.command_manager';
+import FileManagerToolbar from '@ts/ui/file_manager/ui.file_manager.toolbar';
 import notify from '@ts/ui/notify';
 
 const FILE_MANAGER_CLASS = 'dx-filemanager';
@@ -143,8 +143,7 @@ class FileManager extends Widget<Properties> {
 
   _breadcrumbs?: FileManagerBreadcrumbs;
 
-  _initTemplates(): void {
-  }
+  _initTemplates(): void {}
 
   _init(): void {
     super._init();
@@ -188,7 +187,8 @@ class FileManager extends Widget<Properties> {
     this._itemKeyToFocus = undefined;
     this._loadedWidgets = [];
 
-    this._commandManager = new FileManagerCommandManager(this.option('permissions'));
+    const { permissions } = this.option();
+    this._commandManager = new FileManagerCommandManager(permissions);
 
     this.$element().addClass(FILE_MANAGER_CLASS);
 
@@ -904,7 +904,7 @@ class FileManager extends Widget<Properties> {
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  executeCommand(commandName) {
+  executeCommand(commandName: string) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._commandManager?.executeCommand(commandName);
   }

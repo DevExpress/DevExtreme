@@ -1,0 +1,18 @@
+<div class="demo-container">
+  <div class="chat-container">
+    <dx-chat
+      [dataSource]="dataSource"
+      [reloadOnChange]="false"
+      [user]="user"
+      height="710"
+      (onMessageEntered)="onMessageEntered($event)"
+      (onAttachmentDownloadClick)="onAttachmentDownloadClick($event)"
+    >
+      <dxo-chat-file-uploader-options
+        [uploadFile]="uploadFile"
+        [onUploaded]="onUploaded"
+      >
+      </dxo-chat-file-uploader-options>
+    </dx-chat>
+  </div>
+</div>
