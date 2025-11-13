@@ -1,11 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import CardView from 'devextreme-testcafe-models/cardView';
+import { ClientFunction } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import { MouseAction, MouseUpEvents } from '../../../helpers/mouseUpEvents';
 import { createWidget } from '../../../helpers/createWidget';
 import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
-import { ClientFunction } from 'testcafe';
 
 fixture.disablePageReloads`CardView - HeaderPanel`
   .page(url(__dirname, '../../container.html'));
@@ -20,6 +20,7 @@ const blurActiveElement = ClientFunction(() => {
   const el = document.activeElement as HTMLElement | null;
   el?.blur();
 });
+
 // NOTE: Main idea of these offsets -> drag header item elements
 // on the "coefficient * size" distance from an initial position
 // to trigger the dxSortable indicator
