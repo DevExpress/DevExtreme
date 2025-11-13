@@ -4,17 +4,9 @@ import { OpenedStateMode } from 'devextreme/ui/drawer';
 import { Position } from 'devextreme/common';
 import url from '../../../helpers/getPageUrl';
 import { createDrawer } from './drawer.helpers';
-import { isFluent, testScreenshot } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
-const testFixture = () => {
-  if (!isFluent()) {
-    // Theme non-dependent tests
-    return fixture.disablePageReloads.skip;
-  }
-  return fixture.disablePageReloads;
-};
-
-testFixture()`Drawer`
+fixture.disablePageReloads`Drawer`
   .page(url(__dirname, '../../container.html'));
 
 ['overlap', 'shrink', 'push'].forEach((openedStateMode: OpenedStateMode) => {

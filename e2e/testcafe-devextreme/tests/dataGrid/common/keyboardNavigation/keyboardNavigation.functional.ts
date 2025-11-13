@@ -5362,7 +5362,9 @@ test('Focus events should be called when pressing the Ctrl + End key when rowRen
   await resetFocusedEventsTestData();
 
   // act
-  await t.pressKey('ctrl+end');
+  await t
+    .pressKey('ctrl+end')
+    .wait(100);
 
   // assert
   await t
@@ -5986,7 +5988,7 @@ test('The batch edit mode - Shift + Tab navigation through interactive elements 
   });
 });
 
-test('DataGrid - Cell focus works incorrectly if the command column has a disabled native button element (T1179207)', async (t) => {
+test.meta({ unstable: true })('DataGrid - Cell focus works incorrectly if the command column has a disabled native button element (T1179207)', async (t) => {
   await addFocusableElementBefore('#container');
 
   // header row

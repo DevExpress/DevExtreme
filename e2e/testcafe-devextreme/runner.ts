@@ -12,7 +12,7 @@ import {
 } from './helpers/testPageUtils';
 import { getCurrentTheme } from './helpers/themeUtils';
 
-const LAUNCH_RETRY_ATTEMPTS = 5;
+const LAUNCH_RETRY_ATTEMPTS = 3;
 const LAUNCH_RETRY_TIMEOUT = 10000;
 const FAILED_TESTS_RETRY_ATTEMPTS = 2;
 
@@ -203,6 +203,18 @@ async function main() {
         ) => !(testMeta)?.unstable);
       }
 
+      filters.push((
+        _testName: string,
+        _fixtureName: string,
+        _fixturePath: string,
+        testMeta?: any,
+      ) => {
+        if (testMeta?.runInTheme) {
+          return testMeta.runInTheme === process.env.theme;
+        }
+        return true;
+      });
+
       if (!componentFolderArg && args.theme) {
         filters.push((
           _testName: string,
@@ -210,6 +222,10 @@ async function main() {
           _fixturePath: string,
           testMeta?: any,
         ) => {
+          if (testMeta?.runInTheme === process.env.theme) {
+            return true;
+          }
+
           if (!testMeta?.themes || !Array.isArray(testMeta.themes)) {
             return false;
           }
