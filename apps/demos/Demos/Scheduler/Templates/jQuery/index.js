@@ -102,6 +102,7 @@ $(() => {
         ],
       },
       popup: {
+        maxWidth: 440,
         onOptionChanged: (e) => {
           if (e.name === 'toolbarItems' && e.value && e.value.length) {
             e.component.option('toolbarItems[1].toolbar', 'bottom');
