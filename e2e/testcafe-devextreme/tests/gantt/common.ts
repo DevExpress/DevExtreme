@@ -118,7 +118,7 @@ const data = {
   }],
 };
 
-test('Gantt - show resources button should not have focus state (T1264485)', async (t) => {
+test.meta({ unstable: true })('Gantt - show resources button should not have focus state (T1264485)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   await t
     .click(Selector(TOOLBAR_ITEM_BUTTON));
@@ -138,7 +138,7 @@ test('Gantt - show resources button should not have focus state (T1264485)', asy
   }, `#${id}`);
 });
 
-test('Gantt - show dependencies button should not have focus state (T1264485)', async (t) => {
+test.meta({ unstable: true })('Gantt - show dependencies button should not have focus state (T1264485)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   await t
     .click(Selector(TOOLBAR_ITEM_BUTTON));

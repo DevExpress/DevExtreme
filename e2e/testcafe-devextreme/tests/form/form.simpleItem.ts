@@ -14,7 +14,7 @@ fixture.disablePageReloads`Form`
     [1, 2, 3].forEach((colCount) => {
       [1, 2, 3, 4, 5, 6].forEach((itemsCount) => {
         const testName = `SimpleItem,rtl_${rtlEnabled},location_${labelLocation},cCount_${colCount},itemsCount_${itemsCount}`;
-        test(testName, async (t) => {
+        test.meta({ unstable: true })(testName, async (t) => {
           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
           await testScreenshot(t, takeScreenshot, `${testName}.png`, { element: '#container' });

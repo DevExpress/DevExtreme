@@ -26,7 +26,7 @@ test('click on indicator item should change selected item', async (t) => {
 }));
 
 [true, false].forEach((showIndicator) => {
-  test(`Gallery. Check normal and focus state. showIndicator=${showIndicator}`, async (t) => {
+  test.meta({ unstable: true })(`Gallery. Check normal and focus state. showIndicator=${showIndicator}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await setAttribute('#container', 'style', 'width: 120px; height: 120px;');

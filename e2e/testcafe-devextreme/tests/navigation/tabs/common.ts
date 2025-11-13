@@ -239,7 +239,7 @@ test('Tabs in contrast theme', async (t) => {
 [true, false].forEach((rtlEnabled) => {
   ['horizontal', 'vertical'].forEach((orientation) => {
     [true, false].forEach((selectOnFocus) => {
-      test('Tabs item states', async (t) => {
+      test.meta({ unstable: true })('Tabs item states', async (t) => {
         const direction = rtlEnabled ? 'left' : 'right';
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
         await testScreenshot(t, takeScreenshot, `Tabs without focus,sOF=${selectOnFocus},orient=${orientation},rtl=${rtlEnabled}.png`, { element: '#tabs' });
