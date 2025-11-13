@@ -502,7 +502,7 @@ test('Column chooser with the \'dragAndDrop\' mode', async (t) => {
   ],
 }, DATA_GRID_SELECTOR));
 
-test.meta({ unstable: true })('Column chooser with the \'select\' mode', async (t) => {
+test('Column chooser with the \'select\' mode', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const columnChooser = dataGrid.getColumnChooser();
