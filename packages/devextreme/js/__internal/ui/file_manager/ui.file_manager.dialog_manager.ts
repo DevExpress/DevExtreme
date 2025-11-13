@@ -1,74 +1,123 @@
-import $ from '../../core/renderer';
-import { extend } from '../../core/utils/extend';
+import messageLocalization from '@js/common/core/localization/message';
+import type { dxElementWrapper } from '@js/core/renderer';
+import $ from '@js/core/renderer';
+import { extend } from '@js/core/utils/extend';
+import type FileSystemProviderBase from '@js/file_management/provider_base';
+import FileManagerDeleteItemDialog from '@ts/ui/file_manager/ui.file_manager.dialog.delete_item';
+import FileManagerFolderChooserDialog from '@ts/ui/file_manager/ui.file_manager.dialog.folder_chooser';
+import FileManagerNameEditorDialog from '@ts/ui/file_manager/ui.file_manager.dialog.name_editor';
 
-import messageLocalization from '../../common/core/localization/message';
-
-import FileManagerNameEditorDialog from './ui.file_manager.dialog.name_editor';
-import FileManagerFolderChooserDialog from './ui.file_manager.dialog.folder_chooser';
-import FileManagerDeleteItemDialog from './ui.file_manager.dialog.delete_item';
+interface FileManagerDialogManagerOptions {
+  rtlEnabled?: boolean;
+  chooseDirectoryDialog?: {
+    provider?: FileSystemProviderBase;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    getDirectories?: (args?: any) => any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    getCurrentDirectory?: (args?: any) => any;
+  };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onDialogClosed?: ((args?: any) => void);
+}
 
 class FileManagerDialogManager {
-    constructor($element, options) {
-        this._$element = $element;
-        this._options = options;
-        const baseDialogOptions = {
-            onClosed: this._options['onDialogClosed'],
-            rtlEnabled: this._options['rtlEnabled']
-        };
+  _$element: dxElementWrapper;
 
-        const $chooseFolderDialog = $('<div>').appendTo(this._$element);
-        this._chooseDirectoryDialog = new FileManagerFolderChooserDialog($chooseFolderDialog, extend(baseDialogOptions,
-            this._options['chooseDirectoryDialog']
-        ));
+  _options: FileManagerDialogManagerOptions;
 
-        const $renameDialog = $('<div>').appendTo(this._$element);
-        this._renameItemDialog = new FileManagerNameEditorDialog($renameDialog, extend(baseDialogOptions, {
-            title: messageLocalization.format('dxFileManager-dialogRenameItemTitle'),
-            buttonText: messageLocalization.format('dxFileManager-dialogRenameItemButtonText')
-        }));
+  _chooseDirectoryDialog: FileManagerFolderChooserDialog;
 
-        const $createDialog = $('<div>').appendTo(this._$element);
-        this._createItemDialog = new FileManagerNameEditorDialog($createDialog, extend(baseDialogOptions, {
-            title: messageLocalization.format('dxFileManager-dialogCreateDirectoryTitle'),
-            buttonText: messageLocalization.format('dxFileManager-dialogCreateDirectoryButtonText')
-        }));
+  _renameItemDialog: FileManagerNameEditorDialog;
 
-        const $deleteItemDialog = $('<div>').appendTo(this._$element);
-        this._deleteItemDialog = new FileManagerDeleteItemDialog($deleteItemDialog, baseDialogOptions);
-    }
+  _createItemDialog: FileManagerNameEditorDialog;
 
-    getCopyDialog(targetItemInfos) {
-        this._chooseDirectoryDialog.switchToCopyDialog(targetItemInfos);
-        return this._chooseDirectoryDialog;
-    }
+  _deleteItemDialog: FileManagerDeleteItemDialog;
 
-    getMoveDialog(targetItemInfos) {
-        this._chooseDirectoryDialog.switchToMoveDialog(targetItemInfos);
-        return this._chooseDirectoryDialog;
-    }
+  constructor($element: dxElementWrapper, options: FileManagerDialogManagerOptions) {
+    this._$element = $element;
+    this._options = options;
+    const baseDialogOptions = {
+      onClosed: this._options.onDialogClosed,
+      rtlEnabled: this._options.rtlEnabled,
+    };
 
-    getRenameItemDialog() {
-        return this._renameItemDialog;
-    }
+    const $chooseFolderDialog = $('<div>').appendTo(this._$element);
+    this._chooseDirectoryDialog = new FileManagerFolderChooserDialog(
+      // @ts-expect-error ts-error
+      $chooseFolderDialog,
+      extend(baseDialogOptions, this._options.chooseDirectoryDialog),
+    );
 
-    getCreateItemDialog() {
-        return this._createItemDialog;
-    }
+    const $renameDialog = $('<div>').appendTo(this._$element);
+    this._renameItemDialog = new FileManagerNameEditorDialog(
+      // @ts-expect-error ts-error
+      $renameDialog,
+      extend(baseDialogOptions, {
+        title: messageLocalization.format(
+          'dxFileManager-dialogRenameItemTitle',
+        ),
+        buttonText: messageLocalization.format(
+          'dxFileManager-dialogRenameItemButtonText',
+        ),
+      }),
+    );
 
-    getDeleteItemDialog() {
-        return this._deleteItemDialog;
-    }
+    const $createDialog = $('<div>').appendTo(this._$element);
+    this._createItemDialog = new FileManagerNameEditorDialog(
+      // @ts-expect-error ts-error
+      $createDialog,
+      extend(baseDialogOptions, {
+        title: messageLocalization.format(
+          'dxFileManager-dialogCreateDirectoryTitle',
+        ),
+        buttonText: messageLocalization.format(
+          'dxFileManager-dialogCreateDirectoryButtonText',
+        ),
+      }),
+    );
 
-    updateDialogRtl(value) {
-        [
-            this._chooseDirectoryDialog,
-            this._renameItemDialog,
-            this._createItemDialog,
-            this._deleteItemDialog
-        ].forEach(dialog => {
-            dialog.option('rtlEnabled', value);
-        });
-    }
+    const $deleteItemDialog = $('<div>').appendTo(this._$element);
+    this._deleteItemDialog = new FileManagerDeleteItemDialog(
+      // @ts-expect-error ts-error
+      $deleteItemDialog,
+      baseDialogOptions,
+    );
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  getCopyDialog(targetItemInfos): FileManagerFolderChooserDialog {
+    this._chooseDirectoryDialog.switchToCopyDialog(targetItemInfos);
+    return this._chooseDirectoryDialog;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  getMoveDialog(targetItemInfos): FileManagerFolderChooserDialog {
+    this._chooseDirectoryDialog.switchToMoveDialog(targetItemInfos);
+    return this._chooseDirectoryDialog;
+  }
+
+  getRenameItemDialog(): FileManagerNameEditorDialog {
+    return this._renameItemDialog;
+  }
+
+  getCreateItemDialog(): FileManagerNameEditorDialog {
+    return this._createItemDialog;
+  }
+
+  getDeleteItemDialog(): FileManagerDeleteItemDialog {
+    return this._deleteItemDialog;
+  }
+
+  updateDialogRtl(value: boolean): void {
+    [
+      this._chooseDirectoryDialog,
+      this._renameItemDialog,
+      this._createItemDialog,
+      this._deleteItemDialog,
+    ].forEach((dialog): void => {
+      dialog.option('rtlEnabled', value);
+    });
+  }
 }
 
 export default FileManagerDialogManager;
