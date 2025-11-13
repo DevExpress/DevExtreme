@@ -50,8 +50,7 @@ test('Filter expression should be valid when sortingMethod, remoteOperations, an
   };
 }));
 
-// unskip test when Fluent theme will be default
-test.meta({ unstable: true })('Multiple sorting alphabetical icons should be correct in Fluent Theme (T1243658)', async (t) => {
+test('Multiple sorting alphabetical icons should be correct in Fluent Theme (T1243658)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
