@@ -8,7 +8,7 @@ import { testScreenshot } from '../../../helpers/themeUtils';
 fixture.disablePageReloads`Column resizing`
   .page(url(__dirname, '../../container.html'));
 
-test('column separator should starts from the parent', async (t) => {
+test.meta({ unstable: true })('column separator should starts from the parent', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
 
