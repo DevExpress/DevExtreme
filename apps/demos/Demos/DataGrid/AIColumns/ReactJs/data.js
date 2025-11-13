@@ -1,5 +1,6 @@
 import { AIIntegration } from 'devextreme-react/common/ai-integration';
 import { AzureOpenAI } from 'openai';
+import notify from 'devextreme/ui/notify';
 
 const AzureOpenAIConfig = {
   dangerouslyAllowBrowser: true,
@@ -20,6 +21,21 @@ async function getAIResponse(messages, signal) {
   const result = response.choices[0].message?.content;
   return result;
 }
+async function getAIResponseRecursive(messages, signal) {
+  return getAIResponse(messages, signal).catch(async (error) => {
+    if (!error.message.includes('Connection error')) {
+      return Promise.reject(error);
+    }
+    notify({
+      message: 'You have reached the AI rate limits of this demo. Retrying in 30 seconds...',
+      width: 'auto',
+      type: 'error',
+      displayTime: 5000,
+    });
+    await new Promise((resolve) => setTimeout(resolve, 30000));
+    return getAIResponseRecursive(messages, signal);
+  });
+}
 export const aiIntegration = new AIIntegration({
   sendRequest({ prompt }) {
     const isValidRequest = JSON.stringify(prompt.user).length < 5000;
@@ -35,7 +51,7 @@ export const aiIntegration = new AIIntegration({
       { role: 'system', content: prompt.system },
       { role: 'user', content: prompt.user },
     ];
-    const promise = getAIResponse(aiPrompt, signal);
+    const promise = getAIResponseRecursive(aiPrompt, signal);
     const result = {
       promise,
       abort: () => {
