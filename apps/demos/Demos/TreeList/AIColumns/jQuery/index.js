@@ -7,7 +7,7 @@ $(() => {
     apiKey,
   });
 
-  async function getAIResponseCore(messages, signal) {
+  async function getAIResponse(messages, signal) {
     const params = {
       messages,
       model: deployment,
@@ -22,14 +22,15 @@ $(() => {
   }
 
   async function getAIResponseRecursive(messages, signal) {
-    return getAIResponseCore(messages, signal)
+    return getAIResponse(messages, signal)
       .catch(async (error) => {
         if (!error.message.includes('Connection error')) {
           return Promise.reject(error);
         }
 
         DevExpress.ui.notify({
-          message: 'This demo uses a shared AI endpoint with rate limitations. Retrying in 30 seconds...',
+          message: 'You have reached the AI rate limits of this demo. Retrying in 30 seconds...',
+          width: 'auto',
           type: 'error',
           displayTime: 5000,
         });
