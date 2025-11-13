@@ -977,10 +977,58 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
     }
   }
 
-  @if $size == "compact" {
+  @if $size == "default" {
+    .dx-scheduler-appointment-10min {
+      &.dx-scheduler-appointment-recurrence .dx-scheduler-appointment-content {
+        padding-right: 14px;
+      }
+
+      .dx-scheduler-appointment-recurrence-icon {
+        top: 0px;
+        right: 2px;
+        font-size: 12px;
+      }
+    }
+
     .dx-scheduler-appointment-15min {
+      &.dx-scheduler-appointment-recurrence .dx-scheduler-appointment-content {
+        padding-right: 14px;
+      }
+
+      .dx-scheduler-appointment-recurrence-icon {
+        top: unset;
+        bottom: 2px;
+        right: 2px;
+        font-size: 12px;
+      }
+    }
+  }
+
+  @if $size == "compact" {
+    .dx-scheduler-appointment-10min {
+      .dx-scheduler-appointment-content {
+        display: none;
+      }
+    }
+
+    .dx-scheduler-appointment-15min {
+      &.dx-scheduler-appointment-recurrence .dx-scheduler-appointment-content {
+        padding-right: 14px;
+      }
+
       .dx-scheduler-appointment-title {
         line-height: 12px;
+      }
+
+      .dx-scheduler-appointment-recurrence-icon {
+        bottom: 0;
+      }
+    }
+
+    .dx-scheduler-appointment-20min {
+      .dx-scheduler-appointment-recurrence-icon {
+        top: 0;
+        right: 5px;
       }
     }
   }
