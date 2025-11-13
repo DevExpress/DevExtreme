@@ -300,8 +300,8 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
     }
 
     .dx-scheduler-form-recurrence-end-group .dx-field-item-label {
-      height: $generic-scheduler-appointment-popup-all-day-item-height;
-      margin-bottom: $generic-scheduler-appointment-popup-item-padding-top; // 
+      height: $generic-scheduler-appointment-popup-recurrence-end-group-label-height;
+      margin-bottom: $generic-scheduler-appointment-popup-recurrence-end-group-label-margin-bottom;
     }
 
     .dx-scheduler-form-recurrence-end-editors {

@@ -598,14 +598,14 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 
     .dx-scheduler-form-recurrence-end-group .dx-field-item-label {
       padding-left: 0;
-      margin-bottom: 6px;
+      margin-bottom: $material-scheduler-appointment-popup-recurrence-end-group-label-margin-bottom;
 
       .dx-field-item-label-text {
         color: $base-text-color;
       }
 
       @if $size == "compact" {
-        height: $material-scheduler-appointment-popup-icon-container-height;
+        height: $material-scheduler-appointment-popup-recurrence-end-group-label-height;
       }
     }
 
