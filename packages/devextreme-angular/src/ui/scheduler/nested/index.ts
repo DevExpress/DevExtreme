@@ -1,6 +1,5 @@
 export * from './appointment-dragging';
 export * from './editing';
-export * from './form';
 export * from './item-dxi';
 export * from './options-item-dxi';
 export * from './options';

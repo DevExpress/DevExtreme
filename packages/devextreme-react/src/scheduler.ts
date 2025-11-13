@@ -8,10 +8,9 @@ import dxScheduler, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { ViewType, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, AppointmentFormIconsShowMode, SchedulerPredefinedToolbarItem, DateNavigatorItemProperties, SchedulerPredefinedDateNavigatorItem, dxSchedulerToolbarItem, AllDayPanelMode, AppointmentCollectorTemplateData, AppointmentTemplateData, AppointmentTooltipTemplateData, CellAppointmentsLimit, dxSchedulerScrolling } from "devextreme/ui/scheduler";
+import type { ViewType, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, SchedulerPredefinedToolbarItem, DateNavigatorItemProperties, SchedulerPredefinedDateNavigatorItem, dxSchedulerToolbarItem, AllDayPanelMode, AppointmentCollectorTemplateData, AppointmentTemplateData, AppointmentTooltipTemplateData, CellAppointmentsLimit, dxSchedulerScrolling } from "devextreme/ui/scheduler";
 import type { ContentReadyEvent as ButtonGroupContentReadyEvent, DisposingEvent as ButtonGroupDisposingEvent, InitializedEvent as ButtonGroupInitializedEvent, dxButtonGroupItem, ItemClickEvent, OptionChangedEvent, SelectionChangedEvent } from "devextreme/ui/button_group";
 import type { event } from "devextreme/events/events.types";
-import type { SchedulerAppointmentFormOptions } from "UNKNOWN_MODULE";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { ToolbarItemLocation, template, ToolbarItemComponent, ButtonType, SingleMultipleOrNone, ButtonStyle, ScrollMode, FirstDayOfWeek, Orientation } from "devextreme/common";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
@@ -192,7 +191,7 @@ type IEditingProps = React.PropsWithChildren<{
   allowResizing?: boolean;
   allowTimeZoneEditing?: boolean;
   allowUpdating?: boolean;
-  form?: SchedulerAppointmentFormOptions;
+  form?: any;
   popup?: Record<string, any>;
 }>
 const _componentEditing = (props: IEditingProps) => {
@@ -200,34 +199,11 @@ const _componentEditing = (props: IEditingProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "editing",
-      ExpectedChildren: {
-        form: { optionName: "form", isCollectionItem: false }
-      },
     },
   });
 };
 
 const Editing = Object.assign<typeof _componentEditing, NestedComponentMeta>(_componentEditing, {
-  componentType: "option",
-});
-
-// owners:
-// Editing
-type IFormProps = React.PropsWithChildren<{
-  iconsShowMode?: AppointmentFormIconsShowMode;
-  onCanceled?: ((formData: any) => void);
-  onSaved?: ((formData: any) => void);
-}>
-const _componentForm = (props: IFormProps) => {
-  return React.createElement(NestedOption<IFormProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "form",
-    },
-  });
-};
-
-const Form = Object.assign<typeof _componentForm, NestedComponentMeta>(_componentForm, {
   componentType: "option",
 });
 
@@ -591,8 +567,6 @@ export {
   IAppointmentDraggingProps,
   Editing,
   IEditingProps,
-  Form,
-  IFormProps,
   Item,
   IItemProps,
   Options,

@@ -32,7 +32,6 @@ import {
  RecurrenceEditMode,
  dxSchedulerScrolling,
  dxSchedulerToolbar,
- AppointmentFormIconsShowMode,
  SchedulerPredefinedToolbarItem,
  DateNavigatorItemProperties,
  SchedulerPredefinedDateNavigatorItem,
@@ -400,7 +399,7 @@ const DxEditingConfig = {
     allowResizing: Boolean,
     allowTimeZoneEditing: Boolean,
     allowUpdating: Boolean,
-    form: Object,
+    form: {},
     popup: Object as PropType<Record<string, any>>
   }
 };
@@ -410,30 +409,6 @@ prepareConfigurationComponentConfig(DxEditingConfig);
 const DxEditing = defineComponent(DxEditingConfig);
 
 (DxEditing as any).$_optionName = "editing";
-(DxEditing as any).$_expectedChildren = {
-  form: { isCollectionItem: false, optionName: "form" }
-};
-
-const DxFormConfig = {
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:iconsShowMode": null,
-    "update:onCanceled": null,
-    "update:onSaved": null,
-  },
-  props: {
-    iconsShowMode: String as PropType<AppointmentFormIconsShowMode>,
-    onCanceled: Function as PropType<((formData: any) => void)>,
-    onSaved: Function as PropType<((formData: any) => void)>
-  }
-};
-
-prepareConfigurationComponentConfig(DxFormConfig);
-
-const DxForm = defineComponent(DxFormConfig);
-
-(DxForm as any).$_optionName = "form";
 
 const DxItemConfig = {
   emits: {
@@ -782,7 +757,6 @@ export {
   DxScheduler,
   DxAppointmentDragging,
   DxEditing,
-  DxForm,
   DxItem,
   DxOptions,
   DxOptionsItem,

@@ -657,6 +657,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       /**
        * @docid
        * @public
+       * @type dxSchedulerAppointmentFormOptions
        */
       form?: SchedulerAppointmentFormOptions;
       /**

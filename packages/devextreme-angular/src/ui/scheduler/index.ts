@@ -30,7 +30,6 @@ import { AllDayPanelMode, ViewType, dxSchedulerAppointment, CellAppointmentsLimi
 import { event } from 'devextreme/events/events.types';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
-import { SchedulerAppointmentFormOptions } from 'UNKNOWN_MODULE';
 import { FirstDayOfWeek, Orientation } from 'devextreme/common';
 
 import DxScheduler from 'devextreme/ui/scheduler';
@@ -55,7 +54,6 @@ import { DxiViewModule } from 'devextreme-angular/ui/nested';
 
 import { DxoSchedulerAppointmentDraggingModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxoSchedulerEditingModule } from 'devextreme-angular/ui/scheduler/nested';
-import { DxoSchedulerFormModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxiSchedulerItemModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxoSchedulerOptionsModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxiSchedulerOptionsItemModule } from 'devextreme-angular/ui/scheduler/nested';
@@ -359,10 +357,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get editing(): boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: SchedulerAppointmentFormOptions, popup?: Record<string, any> } {
+    get editing(): boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: any, popup?: Record<string, any> } {
         return this._getOption('editing');
     }
-    set editing(value: boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: SchedulerAppointmentFormOptions, popup?: Record<string, any> }) {
+    set editing(value: boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: any, popup?: Record<string, any> }) {
         this._setOption('editing', value);
     }
 
@@ -1168,7 +1166,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() editingChange: EventEmitter<boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: SchedulerAppointmentFormOptions, popup?: Record<string, any> }>;
+    @Output() editingChange: EventEmitter<boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: any, popup?: Record<string, any> }>;
 
     /**
     
@@ -1603,7 +1601,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     DxiViewModule,
     DxoSchedulerAppointmentDraggingModule,
     DxoSchedulerEditingModule,
-    DxoSchedulerFormModule,
     DxiSchedulerItemModule,
     DxoSchedulerOptionsModule,
     DxiSchedulerOptionsItemModule,
@@ -1624,7 +1621,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     DxiViewModule,
     DxoSchedulerAppointmentDraggingModule,
     DxoSchedulerEditingModule,
-    DxoSchedulerFormModule,
     DxiSchedulerItemModule,
     DxoSchedulerOptionsModule,
     DxiSchedulerOptionsItemModule,
