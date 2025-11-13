@@ -656,6 +656,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 
     .dx-scheduler-days-of-week-buttons {
       height: $fluent-toolbar-height;
+      gap: $fluent-scheduler-days-of-week-buttons-gap;
     }
 
     .dx-field-item:not(.dx-first-col) {

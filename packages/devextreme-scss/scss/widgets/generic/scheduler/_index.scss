@@ -289,6 +289,7 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
 
     .dx-scheduler-days-of-week-buttons {
       height: $generic-toolbar-height;
+      gap: $generic-scheduler-days-of-week-buttons-gap;
 
       .dx-button {
         width: $generic-scheduler-days-of-week-button-size;

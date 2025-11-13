@@ -638,7 +638,6 @@ $scheduler-appointment-form-label-padding: 20px;
       .dx-scheduler-days-of-week-buttons {
         display: flex;
         align-items: center;
-        gap: 8px; // TODO: this gap should theme dependent
 
         .dx-button {
           border-radius: 50%;

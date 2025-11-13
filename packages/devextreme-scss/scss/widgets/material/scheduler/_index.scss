@@ -593,6 +593,7 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 
     .dx-scheduler-days-of-week-buttons {
       height: $material-toolbar-height;
+      gap: $material-scheduler-days-of-week-buttons-gap;
     }
 
     .dx-scheduler-form-recurrence-end-group .dx-field-item-label {
