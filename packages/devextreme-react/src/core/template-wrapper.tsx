@@ -67,10 +67,12 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
       removalListenerElement.current,
     ].forEach((el) => el && events.off(el, DX_REMOVE_EVENT, onTemplateRemoved));
 
-    Promise.resolve().then(() => {
+    // eslint-disable-next-line spellcheck/spell-checker
+    queueMicrotask(() => {
+      if (container && !container.isConnected) {
+        return;
+      }
       onRemoved(componentKey);
-    }).catch((e) => {
-      throw e;
     });
   }, [onRemoved, container, componentKey]);
 
