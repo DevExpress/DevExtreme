@@ -1,6 +1,7 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import { Themes } from '../../../helpers/themes';
 
 fixture.disablePageReloads`Week view in adaptive mode`
   .page(url(__dirname, '../../container.html'));
@@ -75,7 +76,7 @@ const roughEqual = (actual: number, expected: number): boolean => {
 }].forEach(({
   windowWidth, name, left, bottom, top, width,
 }) => {
-  test.meta({ browserSize: [windowWidth, 700] })(`Mobile tooltip should be ${name} screen`, async (t) => {
+  test.meta({ runInTheme: Themes.genericLight, browserSize: [windowWidth, 700] })(`Mobile tooltip should be ${name} screen`, async (t) => {
     const scheduler = new Scheduler('#container');
 
     await t
@@ -99,7 +100,7 @@ const roughEqual = (actual: number, expected: number): boolean => {
     .before(async () => createScheduler(sampleData, '80%'));
 });
 
-test.meta({ browserSize: [350, 600] })('Compact appointment should be center by vertical alignment', async (t) => {
+test.meta({ runInTheme: Themes.genericLight, browserSize: [350, 600] })('Compact appointment should be center by vertical alignment', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t
@@ -130,7 +131,7 @@ test.meta({ browserSize: [350, 600] })('Compact appointment should be center by 
     .ok();
 }).before(async () => createScheduler(sampleDataNotRoundedMinutes));
 
-test.meta({ browserSize: [350, 600] })('With a large browser width, should be visible common appointment instead of a compact', async (t) => {
+test.meta({ runInTheme: Themes.genericLight, browserSize: [350, 600] })('With a large browser width, should be visible common appointment instead of a compact', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t

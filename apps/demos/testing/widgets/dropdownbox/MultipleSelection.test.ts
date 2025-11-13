@@ -15,17 +15,14 @@ runManualTest('DropDownBox', 'MultipleSelection', (test) => {
 
     await t
       .click($(`.${DROP_DOWN_BOX_CLASS}`).nth(0));
-    // .wait(200);
 
     await testScreenshot(t, takeScreenshot, 'dropdownbox_multiple_selection_treebox.png');
 
     await t
       .click($(`.${DROP_DOWN_BOX_CLASS}`).nth(0));
-    // .wait(200);
 
     await t
       .click($(`.${DROP_DOWN_BOX_CLASS}`).nth(1));
-    // .wait(200);
 
     await testScreenshot(t, takeScreenshot, 'dropdownbox_multiple_selection_gridbox.png');
 

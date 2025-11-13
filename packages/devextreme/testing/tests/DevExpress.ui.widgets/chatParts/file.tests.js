@@ -438,5 +438,19 @@ QUnit.module('File', moduleConfig, () => {
 
             assert.strictEqual(this.$element.attr('role'), 'listitem', 'role should remain "listitem" after data change');
         });
+
+        QUnit.test('download button should have tabIndex=0 when focusStateEnabled is true', function(assert) {
+            this.reinit({
+                data: {
+                    name: 'test.txt',
+                    size: 1024,
+                },
+                onDownload: () => {},
+            });
+
+            const tabIndex = this.$downloadButton.attr('tabIndex');
+
+            assert.strictEqual(tabIndex, '0', 'download button has tabIndex=0');
+        });
     });
 });

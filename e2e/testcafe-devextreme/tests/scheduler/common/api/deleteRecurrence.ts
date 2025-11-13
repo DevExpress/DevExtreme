@@ -66,16 +66,16 @@ test('should exclude from recurrence if mode is "occurrence"', async (t) => {
   const rect0 = await appointment0.element.boundingClientRect;
   await t
     .expect(rect0.left)
-    .within(341, 342)
+    .within(318, 319)
     .expect(rect0.top)
-    .within(139, 140);
+    .within(140, 141);
 
   const rect1 = await appointment1.element.boundingClientRect;
   await t
     .expect(rect1.left)
-    .within(574, 575)
+    .within(562, 563)
     .expect(rect1.top)
-    .within(139, 140);
+    .within(140, 141);
 }).before(async () => createWidget(
   'dxScheduler',
   {

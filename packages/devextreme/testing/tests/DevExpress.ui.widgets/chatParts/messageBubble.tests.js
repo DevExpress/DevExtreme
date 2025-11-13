@@ -7,7 +7,7 @@ import MessageBubble, {
     CHAT_MESSAGEBUBBLE_HAS_IMAGE_CLASS
 } from '__internal/ui/chat/messagebubble';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
-import { CHAT_FILE_VIEW_CLASS } from '__internal/ui/chat/file_view/file_view';
+import FileView, { CHAT_FILE_VIEW_CLASS } from '__internal/ui/chat/file_view/file_view';
 import { CHAT_FILE_CLASS, CHAT_FILE_NAME_CLASS, CHAT_FILE_SIZE_CLASS } from '__internal/ui/chat/file_view/file';
 
 const moduleConfig = {
@@ -18,6 +18,10 @@ const moduleConfig = {
             this.$content = this.$element.find(`.${CHAT_MESSAGEBUBBLE_CONTENT_CLASS}`);
             this.$getAttachments = () => this.$element.find(`.${CHAT_FILE_VIEW_CLASS}`);
             this.getDownloadButton = () => this.$element.find(`.${BUTTON_CLASS}`);
+            this.getFileViewInstance = () => {
+                const $fileView = this.$getAttachments();
+                return $fileView.length ? FileView.getInstance($fileView) : null;
+            };
         };
 
         this.reinit = (options) => {
@@ -29,6 +33,7 @@ const moduleConfig = {
         init();
     }
 };
+
 
 QUnit.module('MessageBubble', moduleConfig, () => {
     QUnit.module('Render', () => {
@@ -256,6 +261,25 @@ QUnit.module('MessageBubble', moduleConfig, () => {
             assert.strictEqual(onAttachmentDownloadClick.callCount, 1);
         });
     });
+
+    QUnit.module('Proxy state options', () => {
+        QUnit.test('MessageBubble state options should not affect FileView state options', function(assert) {
+            const options = {
+                activeStateEnabled: false,
+                focusStateEnabled: false,
+                hoverStateEnabled: false,
+            };
+
+            this.reinit({
+                ...options,
+                attachments: [{ name: 'test.txt', size: 1024 }],
+            });
+
+            const fileViewInstance = this.getFileViewInstance();
+
+            Object.entries(options).forEach(([key]) => {
+                assert.strictEqual(fileViewInstance.option(key), true, `${key} value is correct`);
+            });
+        });
+    });
 });
-
-
