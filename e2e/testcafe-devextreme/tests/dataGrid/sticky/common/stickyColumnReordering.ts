@@ -83,7 +83,9 @@ test.meta({ browserSize: [1000, 800] })('Move fixed column with fixedPosition = 
   await t.expect(dataGrid.isReady()).ok();
 
   // act
-  await t.drag(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(5).element, 200, 0);
+  await t
+    .drag(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(5).element, 200, 0, { speed: 0.5 })
+    .wait(100);
 
   await testScreenshot(t, takeScreenshot, 'move_fixed_column_with_sticky_position_to_right.png', { element: dataGrid.element });
 
