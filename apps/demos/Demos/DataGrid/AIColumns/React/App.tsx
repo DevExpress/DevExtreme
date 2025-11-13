@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import DataGrid, {
   Column,
   GroupPanel,
-  type DataGridTypes
+  type DataGridTypes,
 } from 'devextreme-react/data-grid';
 import Popup, { Position } from 'devextreme-react/popup';
 import { vehicles, aiIntegration } from './data.ts';
