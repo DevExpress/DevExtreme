@@ -7,6 +7,7 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { salesApiMock } from './apiMocks/salesApiMock';
 import { testScreenshot } from '../../../helpers/themeUtils';
+import { Themes } from '../../../helpers/themes';
 
 async function getMaxRightOffset(dataGrid: DataGrid): Promise<number> {
   const scrollWidth = await dataGrid.getScrollWidth();
@@ -352,7 +353,7 @@ test('Scroll position after grouping when RTL (T388508)', async (t) => {
   }],
 }));
 
-test.meta({ unstable: true })('Header container should have padding-right after expanding the master row with a detail grid when using native scrolling (T1004507)', async (t) => {
+test('Header container should have padding-right after expanding the master row with a detail grid when using native scrolling (T1004507)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -1046,7 +1047,7 @@ test('The data should display correctly after changing the dataSource and focuse
 }));
 
 // T1166649
-test.meta({ unstable: true, browserSize: [800, 800] })('The scroll position of a fixed table should be synchronized with the main table when fast scrolling to the end', async (t) => {
+test.meta({ browserSize: [800, 800] })('The scroll position of a fixed table should be synchronized with the main table when fast scrolling to the end', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -1327,7 +1328,7 @@ test('New virtual mode. Virtual rows should not be in view port after scrolling 
   })();
 });
 
-test.meta({ unstable: true })('New virtual mode. Navigation to the last row if new row is added (T1069849)', async (t) => {
+test.meta({ runInTheme: Themes.genericLight })('New virtual mode. Navigation to the last row if new row is added (T1069849)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   const addRowButton = dataGrid.getHeaderPanel().getAddRowButton();
@@ -1368,7 +1369,7 @@ test.meta({ unstable: true })('New virtual mode. Navigation to the last row if n
 }));
 
 [false, true].forEach((useNative) => {
-  test.meta({ unstable: true })(`New virtual mode. Virtual rows should not be in view port after switching to the last page with row numbers less than page size (useNative = ${useNative}) (T1085775)`, async (t) => {
+  test.meta({ runInTheme: Themes.genericLight })(`New virtual mode. Virtual rows should not be in view port after switching to the last page with row numbers less than page size (useNative = ${useNative}) (T1085775)`, async (t) => {
     const dataGrid = new DataGrid('#container');
 
     // assert
@@ -1696,7 +1697,7 @@ test('The row alternation should display correctly when grouping and virtual scr
   scrolling: { mode: 'virtual', useNative: false },
 })));
 
-test.meta({ unstable: true })('DataGrid - Gray boxes appear when the push method is used to remove rows in infinite scrolling mode (T1240079)', async (t) => {
+test('DataGrid - Gray boxes appear when the push method is used to remove rows in infinite scrolling mode (T1240079)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const data = [
