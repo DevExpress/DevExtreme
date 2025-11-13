@@ -2,6 +2,7 @@ import { Selector } from 'testcafe';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import { Themes } from '../../../helpers/themes';
 
 fixture.disablePageReloads`Appointment popup form`
   .page(url(__dirname, '../../container.html'));
@@ -98,7 +99,7 @@ test('Custom form shouldn\'t throw exception, after second show appointment form
   ],
 }));
 
-test('Appointment should have correct form data on consecutive shows (T832711)', async (t) => {
+test.meta({ runInTheme: Themes.genericLight })('Appointment should have correct form data on consecutive shows (T832711)', async (t) => {
   const APPOINTMENT_TEXT = 'Google AdWords Strategy';
 
   const scheduler = new Scheduler('#container');
