@@ -2,13 +2,14 @@ import React, { useCallback, useState } from 'react';
 import DataGrid, {
   Column,
   GroupPanel,
+  type DataGridTypes
 } from 'devextreme-react/data-grid';
 import Popup, { Position } from 'devextreme-react/popup';
 import { vehicles, aiIntegration } from './data.ts';
 import Trademark from './Trademark.tsx';
 import Category from './Category.tsx';
 import LicenseInfo from './LicenseInfo.tsx';
-import { Vehicle } from './types.ts';
+import { type Vehicle } from './types.ts';
 
 const gridConfig = {
   paging: { pageSize: 10 },
@@ -31,7 +32,7 @@ export default function App() {
     setCurrentVehicle(null);
   }, []);
 
-  const cellRender = useCallback((vehicle: { data: Vehicle }) => (
+  const cellRender = useCallback((vehicle: DataGridTypes.ColumnCellTemplateData<Vehicle>) => (
     <Trademark vehicle={vehicle.data} onShowInfo={showInfo} />
   ), [showInfo]);
 

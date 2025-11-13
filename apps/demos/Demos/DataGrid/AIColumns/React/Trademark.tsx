@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Vehicle } from './types';
+import { type Vehicle } from './types';
 
 type TrademarkProps = {
   vehicle: Vehicle;

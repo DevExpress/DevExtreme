@@ -1,4 +1,4 @@
-import { Vehicle, AIMessage } from "./types";
+import { type Vehicle, type AIMessage } from "./types";
 import {
   AIIntegration,
   RequestParams,

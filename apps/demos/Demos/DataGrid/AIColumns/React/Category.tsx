@@ -1,5 +1,5 @@
 import React from 'react';
-import { Vehicle } from './types';
+import { type Vehicle } from './types';
 import { type DataGridTypes } from 'devextreme-react/data-grid';
 
 export default function Category(props: DataGridTypes.ColumnCellTemplateData<Vehicle>) {
