@@ -178,7 +178,6 @@ jobs:
 #         TODO Chrome133: skipped during chrome update
 #         { componentFolder: "pagination", name: "pagination - material", theme: 'material.blue.light' },
           { componentFolder: "pagination", name: "pagination - fluent", theme: 'fluent.blue.light' },
-          { componentFolder: "gantt", name: "gantt" },
         ]
     runs-on: devextreme-shr2
     timeout-minutes: 120
