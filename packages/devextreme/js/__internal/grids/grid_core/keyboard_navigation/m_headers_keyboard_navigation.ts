@@ -161,30 +161,6 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
     return result;
   }
 
-  protected getContainerBoundingRect($container: dxElementWrapper) {
-    const containerRect = getBoundingRect($container.get(0));
-
-    return {
-      left: containerRect.left,
-      right: containerRect.right,
-    };
-  }
-
-  protected getScrollPadding(
-    $container: dxElementWrapper,
-  ): {
-      left: number;
-      right: number;
-    } {
-    const containerRect = getBoundingRect($container.get(0));
-    const containerBoundingRect = this.getContainerBoundingRect($container);
-
-    return {
-      left: containerBoundingRect.left - containerRect.left,
-      right: containerRect.right - containerBoundingRect.right,
-    };
-  }
-
   protected isOutsideVisibleArea = (
     $element: dxElementWrapper,
     $container: dxElementWrapper,

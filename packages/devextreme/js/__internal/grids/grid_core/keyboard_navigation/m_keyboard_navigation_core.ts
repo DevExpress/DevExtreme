@@ -2,8 +2,9 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import { keyboard } from '@js/common/core/events/short';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { getOuterWidth } from '@ts/core/utils/m_size';
+import { getBoundingRect } from '@js/core/utils/position';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
+import { getElementLocationInternal } from '@ts/ui/scroll_view/utils/get_element_location_internal';
 
 import modules from '../m_modules';
 import type { Controllers, OptionChanged, Views } from '../m_types';
@@ -73,16 +74,46 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
   }
 
-  private getCellWidth($cell?: dxElementWrapper): number {
-    if (!$cell?.length && this._isVirtualColumnRender()) {
-      const visibleColumns = this._columnsController.getVisibleColumns(undefined, true);
-      const widths = gridCoreUtils.getColumnWidths(visibleColumns);
-      const focusedColumnIndex = this._focusedCellPosition?.columnIndex ?? 0;
+  private getScrollPadding(
+    $container: dxElementWrapper,
+  ): {
+      left: number;
+      right: number;
+    } {
+    const containerRect = getBoundingRect($container.get(0));
+    const containerBoundingRect = this.getContainerBoundingRect($container);
 
-      return widths[focusedColumnIndex];
+    return {
+      left: containerBoundingRect.left - containerRect.left,
+      right: containerRect.right - containerBoundingRect.right,
+    };
+  }
+
+  private getVirtualCellWidth(): number {
+    const visibleColumns = this._columnsController.getVisibleColumns(undefined, true);
+    const widths = gridCoreUtils.getColumnWidths(visibleColumns);
+    const focusedColumnIndex = this._focusedCellPosition?.columnIndex ?? 0;
+
+    return widths[focusedColumnIndex];
+  }
+
+  private getNextCellLocation($cell?: dxElementWrapper): number {
+    if (!$cell?.length) {
+      return this._isVirtualColumnRender() ? this.getVirtualCellWidth() : 0;
     }
 
-    return getOuterWidth($cell) as number;
+    const scrollable = this.getScrollable();
+    const scrollLeft = scrollable.scrollLeft();
+    const scrollPadding = this.getScrollPadding($(scrollable.container()));
+
+    return getElementLocationInternal(
+      $cell[0],
+      'horizontal',
+      $(this.getFocusedView()?.getContent())[0],
+      scrollable.scrollOffset(),
+      scrollPadding,
+      this.addWidgetPrefix('table'),
+    ) - scrollLeft;
   }
 
   protected resizeCompleted() {}
@@ -258,13 +289,22 @@ export class KeyboardNavigationController extends modules.ViewController {
       return;
     }
 
-    const leftOffset = this.getCellWidth($nextCell);
+    const leftOffset = this.getNextCellLocation($nextCell);
 
     scrollable.scrollBy({ left: leftOffset, top: 0 });
   }
 
   protected _isVirtualColumnRender(): boolean {
     return this.option('scrolling.columnRenderingMode') === 'virtual';
+  }
+
+  protected getContainerBoundingRect($container: dxElementWrapper) {
+    const containerRect = getBoundingRect($container.get(0));
+
+    return {
+      left: containerRect.left,
+      right: containerRect.right,
+    };
   }
 
   public init() {
