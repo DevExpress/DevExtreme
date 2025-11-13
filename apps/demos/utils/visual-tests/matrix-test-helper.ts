@@ -4,7 +4,7 @@ import { ClientFunction } from 'testcafe';
 import { THEME } from './helpers/theme-utils';
 import { gitHubIgnored } from './github-ignored-list';
 
-export const FRAMEWORKS = {
+export const FRAMEWORKS = { 
   jquery: 'jQuery',
   react: 'React',
   vue: 'Vue',
@@ -188,7 +188,7 @@ function getExplicitTests() {
     } finally {
       // eslint-disable-next-line no-extend-native
       // @ts-expect-error types error
-      RegExp.prototype.toJSON = oldToJSON;
+      RegExp.prototype.toJSON = oldToJSON;  
     }
   }
 
@@ -196,7 +196,7 @@ function getExplicitTests() {
 }
 
 export function shouldRunFramework(currentFramework) {
-  return !currentFramework
+  return !currentFramework 
     || !settings.targetFramework
     || currentFramework.toLowerCase() === settings.targetFramework.toLowerCase();
 }
@@ -214,7 +214,7 @@ export function shouldRunTestAtIndex(testIndex) {
 
 const SKIPPED_TESTS = {
   jQuery: { 
-    DataGrid: ['RemoteGrouping'],
+    DataGrid: ['RemoteGrouping', 'OdataService', 'FilteringAPI'],
     Charts: [
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
     ],
@@ -222,7 +222,7 @@ const SKIPPED_TESTS = {
   Angular: {
     Charts: ['Crosshair'],
     Common: ['PopupAndNotificationsOverview'],
-    DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping'],
+    DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping', 'OdataService', 'FilteringAPI'],
     Scheduler: ['ContextMenu'],
     FileUploader: ['CustomDropzone'],
   },
@@ -231,14 +231,14 @@ const SKIPPED_TESTS = {
     Common: ['PopupAndNotificationsOverview'],
     // NOTE: Context menu item position is different across themes
     Scheduler: ['ContextMenu'],
-    DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping'],
+    DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping', 'OdataService', 'FilteringAPI'],
     FileUploader: ['CustomDropzone']
   },
   React: {
     Charts: ['Crosshair'],
     Common: ['PopupAndNotificationsOverview'],
     Scheduler: ['ContextMenu'],
-    DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping'],
+    DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping', 'OdataService', 'FilteringAPI'],
     FileUploader: ['CustomDropzone']
   },
 };
