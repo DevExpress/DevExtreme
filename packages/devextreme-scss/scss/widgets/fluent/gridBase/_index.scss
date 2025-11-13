@@ -1374,4 +1374,9 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
     left: $fluent-grid-base-command-ai-header-button-offset;
     right: auto;
   }
+
+  .dx-ai-prompt-editor__progressbar .dx-progressbar-animating-container {
+    height: $fluent-grid-base-ai-prompt-editor-progressbar-height;
+    border-radius: 0;
+  }
 }

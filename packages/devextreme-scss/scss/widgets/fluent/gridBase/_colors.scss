@@ -210,3 +210,6 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
 
 $datagrid-border: 1px solid $datagrid-border-color !default;
 
+:root {
+  --dx-datagrid-row-alternation-bg: #{$datagrid-row-alternation-bg};
+}

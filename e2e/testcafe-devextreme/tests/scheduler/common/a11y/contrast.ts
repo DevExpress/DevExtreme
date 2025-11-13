@@ -7,6 +7,10 @@ import { testScreenshot } from '../../../../helpers/themeUtils';
 fixture.disablePageReloads`a11y - contrast`
   .page(url(__dirname, '../../../container.html'));
 
+// visual: generic.light
+// visual: generic.dark
+// visual: fluent.light
+// visual: fluent.dark
 test('Scheduler a11y: Insufficient contrast of day numbers in the MonthView', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

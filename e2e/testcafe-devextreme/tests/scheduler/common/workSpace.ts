@@ -180,6 +180,9 @@ test('All day panel should be hidden when allDayPanelMode=hidden by initializing
   }],
 }));
 
+// visual: generic.light
+// visual: fluent.blue.light
+// visual: material.blue.light
 test('Month workspace should be scrollable to the last row (T1203250)', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -200,6 +203,14 @@ test('Month workspace should be scrollable to the last row (T1203250)', async (t
   });
 });
 
+// visual: generic.light
+// visual: generic.dark
+// visual: fluent.blue.light
+// visual: fluent.blue.dark
+// visual: fluent.saas.light
+// visual: fluent.saas.dark
+// visual: material.blue.light
+// visual: material.blue.dark
 test('Check cell hover state', async (t) => {
   // arrange
   const scheduler = new Scheduler('#container');

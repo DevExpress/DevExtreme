@@ -21,13 +21,13 @@ fixture.disablePageReloads`Scheduler: Cells Selection in Virtual Scrolling`
     await t
       .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 1));
 
-    await checkSelectionWhenFocusedInViewport(t, scheduler, 8, 6, 1);
+    await checkSelectionWhenFocusedInViewport(t, scheduler, 11, 6, 1);
 
     await scrollTo(0, 500);
-    await checkSelectionWhenFocusedIsNotInViewport(t, scheduler, 9, 6, 1);
+    await checkSelectionWhenFocusedIsNotInViewport(t, scheduler, 13, 6, 1);
 
     await scrollTo(0, 0);
-    await checkSelectionWhenFocusedInViewport(t, scheduler, 8, 6, 1);
+    await checkSelectionWhenFocusedInViewport(t, scheduler, 11, 6, 1);
   }).before(async () => createScheduler({ showAllDayPanel }));
 
   test(`Selected cells shouldn't disapppear on scroll when showAllDayPanel is equal to ${showAllDayPanel} and horizontal grouping is used`, async (t) => {
@@ -36,13 +36,13 @@ fixture.disablePageReloads`Scheduler: Cells Selection in Virtual Scrolling`
     await t
       .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 1));
 
-    await checkSelectionWhenFocusedInViewport(t, scheduler, 8, 6, 1);
+    await checkSelectionWhenFocusedInViewport(t, scheduler, 11, 6, 1);
 
     await scrollTo(0, 500);
-    await checkSelectionWhenFocusedIsNotInViewport(t, scheduler, 9, 6, 1);
+    await checkSelectionWhenFocusedIsNotInViewport(t, scheduler, 13, 6, 1);
 
     await scrollTo(0, 0);
-    await checkSelectionWhenFocusedInViewport(t, scheduler, 8, 6, 1);
+    await checkSelectionWhenFocusedInViewport(t, scheduler, 11, 6, 1);
   }).before(async () => createScheduler({
     showAllDayPanel,
     groups: ['resourceId0'],
@@ -58,13 +58,13 @@ fixture.disablePageReloads`Scheduler: Cells Selection in Virtual Scrolling`
     await t
       .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 2));
 
-    await checkSelectionWhenFocusedInViewport(t, scheduler, 8, 6, 2);
+    await checkSelectionWhenFocusedInViewport(t, scheduler, 11, 6, 2);
 
     await scrollTo(0, 500);
-    await checkSelectionWhenFocusedIsNotInViewport(t, scheduler, 9, 6, 2);
+    await checkSelectionWhenFocusedIsNotInViewport(t, scheduler, 13, 6, 2);
 
     await scrollTo(0, 0);
-    await checkSelectionWhenFocusedInViewport(t, scheduler, 8, 6, 2);
+    await checkSelectionWhenFocusedInViewport(t, scheduler, 11, 6, 2);
   }).before(async () => createScheduler({
     showAllDayPanel,
     groups: ['resourceId0'],
@@ -85,8 +85,8 @@ fixture.disablePageReloads`Scheduler: Cells Selection in Virtual Scrolling`
     await checkSelectionWhenFocusedInViewport(
       t,
       scheduler,
-      8 - indexDifference,
-      6 - indexDifference,
+      11 - indexDifference,
+      6,
       1,
     );
 
@@ -94,7 +94,7 @@ fixture.disablePageReloads`Scheduler: Cells Selection in Virtual Scrolling`
     await checkSelectionWhenFocusedIsNotInViewport(
       t,
       scheduler,
-      4 + indexDifference,
+      0,
       2 + indexDifference,
       1,
     );
@@ -103,7 +103,7 @@ fixture.disablePageReloads`Scheduler: Cells Selection in Virtual Scrolling`
     await checkSelectionWhenFocusedInViewport(
       t,
       scheduler,
-      8 - indexDifference,
+      11 - indexDifference,
       6 - indexDifference,
       1,
     );
@@ -166,15 +166,15 @@ test('Selection should work correctly while scrolling', async (t) => {
     scheduler.getDateTableCell(0, 1),
   );
 
-  await checkSelectionWhenFocusedInViewport(t, scheduler, 8, 6, 1);
+  await checkSelectionWhenFocusedInViewport(t, scheduler, 11, 6, 1);
 
   await scrollTo(0, 500);
 
   await moveMouse(scheduler.dateTable, scheduler.getDateTableCell(4, 1));
-  await checkSelectionWhenFocusedInViewport(t, scheduler, 14, 6, 1, 4);
+  await checkSelectionWhenFocusedInViewport(t, scheduler, 18, 6, 1, 4);
 
   await scrollTo(0, 0);
-  await checkSelectionWhenFocusedIsNotInViewport(t, scheduler, 14, 6, 6);
+  await checkSelectionWhenFocusedIsNotInViewport(t, scheduler, 20, 6, 6);
 }).before(async () => createScheduler({
   groups: ['resourceId0'],
 }));
@@ -188,15 +188,15 @@ test('Selection should work correctly while scrolling when appointments are grou
     scheduler.getDateTableCell(0, 1),
   );
 
-  await checkSelectionWhenFocusedInViewport(t, scheduler, 7, 5, 1);
+  await checkSelectionWhenFocusedInViewport(t, scheduler, 10, 5, 1);
 
   await scrollTo(0, 500);
 
   await moveMouse(scheduler.dateTable, scheduler.getDateTableCell(4, 1));
-  await checkSelectionWhenFocusedInViewport(t, scheduler, 14, 6, 1, 4);
+  await checkSelectionWhenFocusedInViewport(t, scheduler, 18, 6, 1, 4);
 
   await scrollTo(0, 0);
-  await checkSelectionWhenFocusedIsNotInViewport(t, scheduler, 12, 5, 5);
+  await checkSelectionWhenFocusedIsNotInViewport(t, scheduler, 18, 5, 5);
 }).before(async () => createScheduler({
   groups: ['resourceId0'],
   views: [{

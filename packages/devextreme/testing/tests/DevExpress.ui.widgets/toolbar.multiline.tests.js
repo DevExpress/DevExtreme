@@ -8,11 +8,11 @@ import { value as viewPort } from 'core/utils/view_port';
 import { MultiLineStrategy } from '__internal/ui/toolbar/strategy/toolbar.multiline';
 import { SingleLineStrategy } from '__internal/ui/toolbar/strategy/toolbar.singleline';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const TOOLBAR_ITEMS_CLASS = 'dx-toolbar-item';
 const TOOLBAR_ITEMS_CONTAINER_CLASS = 'dx-toolbar-items-container';
-const TOOLBAR_ITEM_HEIGHT = 36;
+const TOOLBAR_ITEM_HEIGHT = 48;
 
 const BUTTON_TEXT_CLASS = 'dx-button-text';
 
@@ -118,7 +118,7 @@ QUnit.module('render', () => {
         testWrapper.checkMultilineCssClass(false);
 
         testWrapper.width = 150;
-        testWrapper.checkToolBarHeight(36);
+        testWrapper.checkToolBarHeight(48);
         testWrapper.checkItemsInLine([0, 1, 2, 3, 4, 5, 6], 0);
     });
 
@@ -126,38 +126,38 @@ QUnit.module('render', () => {
         const testWrapper = new ToolbarTestWrapper({ multiline: true });
         testWrapper.width = 550;
         testWrapper.checkMultilineCssClass(true);
-        testWrapper.checkToolBarHeight(36);
+        testWrapper.checkToolBarHeight(48);
         testWrapper.checkItemsInLine([0, 1, 2, 3, 4, 5, 6], 0);
     });
 
     QUnit.test('2 lines: [0, 1, 2, 3, 4], [5, 6]', function() {
         const testWrapper = new ToolbarTestWrapper({ multiline: true });
         testWrapper.width = 330;
-        testWrapper.checkToolBarHeight(72);
+        testWrapper.checkToolBarHeight(96);
         testWrapper.checkItemsInLine([0, 1, 2, 3, 4], 0);
         testWrapper.checkItemsInLine([5, 6], 1);
     });
 
     QUnit.test('2 lines: [0, 1, 2, 3], [4, 5, 6]', function() {
         const testWrapper = new ToolbarTestWrapper({ multiline: true });
-        testWrapper.width = 300;
-        testWrapper.checkToolBarHeight(72);
+        testWrapper.width = 260;
+        testWrapper.checkToolBarHeight(96);
         testWrapper.checkItemsInLine([0, 1, 2, 3], 0);
         testWrapper.checkItemsInLine([4, 5, 6], 1);
     });
 
     QUnit.test('2 lines: [0, 1, 2], [3, 4, 5, 6]', function() {
         const testWrapper = new ToolbarTestWrapper({ multiline: true });
-        testWrapper.width = 265;
-        testWrapper.checkToolBarHeight(72);
+        testWrapper.width = 250;
+        testWrapper.checkToolBarHeight(96);
         testWrapper.checkItemsInLine([0, 1, 2], 0);
         testWrapper.checkItemsInLine([3, 4, 5, 6], 1);
     });
 
     QUnit.test('3 lines: [0, 1, 2], [3, 4, 5], [6]', function() {
         const testWrapper = new ToolbarTestWrapper({ multiline: true });
-        testWrapper.width = 260;
-        testWrapper.checkToolBarHeight(108);
+        testWrapper.width = 245;
+        testWrapper.checkToolBarHeight(144);
         testWrapper.checkItemsInLine([0, 1, 2], 0);
         testWrapper.checkItemsInLine([3, 4, 5], 1);
         testWrapper.checkItemsInLine([6], 2);
@@ -165,9 +165,9 @@ QUnit.module('render', () => {
 
     QUnit.test('4 lines: [0, 1], [2], [3, 4], [5, 6]', function() {
         const testWrapper = new ToolbarTestWrapper({ multiline: true });
-        testWrapper.width = 185;
+        testWrapper.width = 178;
 
-        testWrapper.checkToolBarHeight(144);
+        testWrapper.checkToolBarHeight(192);
         testWrapper.checkItemsInLine([0, 1], 0);
         testWrapper.checkItemsInLine([2], 1);
         testWrapper.checkItemsInLine([3, 4], 2);
@@ -176,9 +176,9 @@ QUnit.module('render', () => {
 
     QUnit.test('5 lines: [0, 1], [2], [3, 4], [5], [6]', function() {
         const testWrapper = new ToolbarTestWrapper({ multiline: true });
-        testWrapper.width = 180;
+        testWrapper.width = 175;
 
-        testWrapper.checkToolBarHeight(180);
+        testWrapper.checkToolBarHeight(240);
         testWrapper.checkItemsInLine([0, 1], 0);
         testWrapper.checkItemsInLine([2], 1);
         testWrapper.checkItemsInLine([3, 4], 2);
@@ -234,7 +234,7 @@ QUnit.module('option changed', () => {
         testWrapper.checkMultilineOption(false);
         testWrapper.checkMultilineCssClass(false);
         testWrapper.checkRenderLayoutStrategy(false);
-        testWrapper.checkToolBarHeight(36);
+        testWrapper.checkToolBarHeight(48);
         testWrapper.checkItemsInLine([0, 1, 2, 3, 4, 5, 6], 0);
     });
 
@@ -246,7 +246,7 @@ QUnit.module('option changed', () => {
         testWrapper.checkMultilineOption(true);
         testWrapper.checkMultilineCssClass(true);
         testWrapper.checkRenderLayoutStrategy(true);
-        testWrapper.checkToolBarHeight(72);
+        testWrapper.checkToolBarHeight(96);
         testWrapper.checkItemsInLine([0, 1, 2, 3, 4], 0);
         testWrapper.checkItemsInLine([5, 6], 1);
     });

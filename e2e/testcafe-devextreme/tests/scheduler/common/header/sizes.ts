@@ -20,7 +20,7 @@ test('items inside toolbar menu should stretch', async (t) => {
 
   await t.click(scheduler.toolbar.menuButton);
 
-  await takeScreenshot('scheduler-toolbar-menu.png');
+  await testScreenshot(t, takeScreenshot, 'scheduler-toolbar-menu.png');
 
   await t
     .expect(compareResults.isValid())
@@ -37,6 +37,9 @@ test('items inside toolbar menu should stretch', async (t) => {
   },
 }));
 
+// visual: generic.light
+// visual: fluent.blue.light
+// visual: material.blue.light
 test('Scheduler header should have correct sizes', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const scheduler = new Scheduler('#container');

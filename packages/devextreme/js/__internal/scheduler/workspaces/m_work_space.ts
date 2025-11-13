@@ -511,7 +511,13 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
     const isMultiSelectionAllowed = this.option('allowMultipleCellSelection');
     const currentCellData = this._getFullCellData($cell);
-    const focusedCellData = this.cellsSelectionState.getFocusedCell().cellData;
+    const focusedCell = this.cellsSelectionState.getFocusedCell();
+
+    if (!focusedCell) {
+      return;
+    }
+
+    const focusedCellData = focusedCell.cellData;
 
     const nextFocusedCellData = this.cellsSelectionController.moveToCell({
       isMultiSelection,
@@ -576,7 +582,13 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   _focusInHandler(e) {
-    if ($(e.target).is(this._focusTarget() as any) && this._isCellClick) {
+    const $target = $(e.target);
+    const $focusTarget = this._focusTarget();
+    // T1312256: On macOS, e.target can be a child element of the workspace root
+    const isTargetInsideWorkspace = $target.is($focusTarget)
+      || $target.closest($focusTarget).length > 0;
+
+    if (isTargetInsideWorkspace && this._isCellClick) {
       delete this._isCellClick;
       delete this._contextMenuHandled;
       // @ts-expect-error

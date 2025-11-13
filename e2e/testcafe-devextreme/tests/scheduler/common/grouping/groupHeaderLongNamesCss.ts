@@ -116,7 +116,7 @@ test('Group header CSS should work with vertical grouping and long resource name
   await createScheduler({ currentView: 'Vertical Grouping' });
 });
 
-test.meta({ unstable: true })('Group header CSS should work with horizontal grouping and long resource names', async (t) => {
+test('Group header CSS should work with horizontal grouping and long resource names', async (t) => {
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
