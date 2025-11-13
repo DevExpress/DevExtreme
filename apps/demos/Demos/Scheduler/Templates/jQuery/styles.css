@@ -1,3 +1,11 @@
+.dx-scheduler-work-space-week .dx-scheduler-date-table {
+  width: 3500px
+}
+
+.dx-scheduler-timeline-day .dx-scheduler-date-table {
+  width: 3500px
+}
+
 .dx-tooltip-wrapper .dx-overlay-content .dx-popup-content {
   padding: 12px;
 }
@@ -7,8 +15,10 @@
 }
 
 .movie-preview-image {
-  height: 80px;
-  width: 80px;
+  max-height: 80px;
+  max-width: 80px;
+  min-height: 80px;
+  min-width: 80px;
   border-radius: 2px;
   overflow: hidden;
 }
@@ -23,6 +33,8 @@
 .movie-preview {
   display: flex;
   gap: 8px;
+  max-height: 100%;
+  white-space: normal;
 }
 
 .movie-preview > .movie-details {
