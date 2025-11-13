@@ -5,6 +5,7 @@ import { testScreenshot } from '../../../helpers/themeUtils';
 import { MouseAction, MouseUpEvents } from '../../../helpers/mouseUpEvents';
 import { createWidget } from '../../../helpers/createWidget';
 import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
+import { ClientFunction } from 'testcafe';
 
 fixture.disablePageReloads`CardView - HeaderPanel`
   .page(url(__dirname, '../../container.html'));
@@ -15,6 +16,10 @@ const CARD_VIEW_SELECTOR = '#container';
 const DRAG_MOVE_X_COEFFICIENT = 1.5;
 const DRAG_MOVE_Y_COEFFICIENT = 1;
 
+const blurActiveElement = ClientFunction(() => {
+  const el = document.activeElement as HTMLElement | null;
+  el?.blur();
+});
 // NOTE: Main idea of these offsets -> drag header item elements
 // on the "coefficient * size" distance from an initial position
 // to trigger the dxSortable indicator
@@ -49,6 +54,7 @@ const getDragCoordinates = async (
       dragOffsetY,
     } = await getDragCoordinates(item.element, rtlEnabled, 'left');
     await t.drag(item.element, dragOffsetX, dragOffsetY);
+    await blurActiveElement();
 
     await testScreenshot(
       t,
@@ -86,6 +92,7 @@ const getDragCoordinates = async (
       dragOffsetY,
     } = await getDragCoordinates(item.element, rtlEnabled, 'right');
     await t.drag(item.element, dragOffsetX, dragOffsetY);
+    await blurActiveElement();
 
     await testScreenshot(
       t,
@@ -123,6 +130,7 @@ const getDragCoordinates = async (
       dragOffsetY,
     } = await getDragCoordinates(item.element, rtlEnabled, 'right');
     await t.drag(item.element, dragOffsetX, dragOffsetY);
+    await blurActiveElement();
 
     await testScreenshot(
       t,
