@@ -12,7 +12,8 @@
           value-expr="ID"
           display-expr="name"
           placeholder="Select a value..."
-          @value-changed="syncTreeViewSelection()"
+          @value-changed="syncTreeViewSelection"
+          :defer-rendering="false"
         >
           <template #content="{ data }">
             <DxTreeView
@@ -25,7 +26,6 @@
               display-expr="name"
               @content-ready="treeViewContentReady($event)"
               @item-selection-changed="treeViewItemSelectionChanged($event)"
-              @item-click="onTreeItemClick()"
             />
           </template>
         </DxDropDownBox>
@@ -107,25 +107,23 @@ function makeAsyncDataSource(jsonFile: string) {
 
 function syncTreeViewSelection() {
   if (!treeView) return;
-
-  if (treeBoxValue.value != null) {
-    treeView?.selectItem(treeBoxValue.value);
+  const value = treeBoxValue.value;
+  if (value != null) {
+    treeView.selectItem(value);
   } else {
-    treeView?.unselectAll();
+    treeView.unselectAll();
   }
 }
 
 function treeViewItemSelectionChanged(e: DxTreeViewTypes.ItemSelectionChangedEvent) {
   const selectedKeys = e.component.getSelectedNodeKeys();
   treeBoxValue.value = selectedKeys.length > 0 ? selectedKeys[0] : null;
+
+  isTreeBoxOpened.value = false;
 }
 
 function gridBoxDisplayExpr(item: any) {
   return item && `${item.CompanyName} <${item.Phone}>`;
-}
-
-function onTreeItemClick() {
-  isTreeBoxOpened.value = false;
 }
 
 function onGridSelectionChanged() {

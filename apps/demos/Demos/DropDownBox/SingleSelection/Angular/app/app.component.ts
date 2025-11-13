@@ -67,16 +67,14 @@ export class AppComponent {
     } else {
       this.treeView.instance.unselectAll();
     }
+
+    this.isTreeBoxOpened = false;
+    this.ref.detectChanges();
   }
 
   treeView_itemSelectionChanged(e: DxTreeViewTypes.ItemSelectionChangedEvent) {
     const selectedKeys = e.component.getSelectedNodeKeys();
     this.treeBoxValue = selectedKeys.length > 0 ? selectedKeys[0] : null;
-  }
-
-  treeView_itemClick() {
-    this.isTreeBoxOpened = false;
-    this.ref.detectChanges();
   }
 
   dataGrid_selectionChanged(e: DxDataGridTypes.SelectionChangedEvent) {
@@ -86,20 +84,6 @@ export class AppComponent {
   }
 
   gridBox_displayExpr = ({ CompanyName, Phone }) => CompanyName && `${CompanyName} <${Phone}>`;
-
-  onTreeBoxOptionChanged(e: DxDropDownBoxTypes.OptionChangedEvent) {
-    if (e.name === 'opened') {
-      this.isTreeBoxOpened = e.value;
-      this.ref.detectChanges();
-    }
-  }
-
-  onGridBoxOptionChanged(e: DxDropDownBoxTypes.OptionChangedEvent) {
-    if (e.name === 'opened') {
-      this.isGridBoxOpened = e.value;
-      this.ref.detectChanges();
-    }
-  }
 }
 
 @NgModule({

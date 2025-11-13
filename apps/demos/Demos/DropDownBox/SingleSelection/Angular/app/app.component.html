@@ -12,7 +12,6 @@
         [showClearButton]="true"
         [dataSource]="treeDataSource"
         (onValueChanged)="syncTreeViewSelection()"
-        (onOptionChanged)="onTreeBoxOptionChanged($event)"
       >
         <div *dxTemplate="let data of 'content'">
           <dx-tree-view
@@ -24,7 +23,6 @@
             displayExpr="name"
             [selectByClick]="true"
             (onContentReady)="$event.component.selectItem(treeBoxValue)"
-            (onItemClick)="treeView_itemClick()"
             (onItemSelectionChanged)="treeView_itemSelectionChanged($event)"
           >
           </dx-tree-view>
@@ -45,7 +43,6 @@
         [inputAttr]="{ 'aria-label': 'Owner' }"
         [showClearButton]="true"
         [dataSource]="gridDataSource"
-        (onOptionChanged)="onGridBoxOptionChanged($event)"
       >
         <div *dxTemplate="let data of 'content'">
           <dx-data-grid
