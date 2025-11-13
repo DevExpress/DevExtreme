@@ -68,7 +68,7 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
     ].forEach((el) => el && events.off(el, DX_REMOVE_EVENT, onTemplateRemoved));
 
     onRemoved(componentKey);
-  }, [onRemoved, container, componentKey]);
+  }, [onRemoved]);
 
   useLayoutEffect(() => {
     const elementNodes = elements.current.filter((el) => el.nodeType === Node.ELEMENT_NODE);
