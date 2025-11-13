@@ -300,7 +300,6 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
     }
 
     .dx-scheduler-form-recurrence-end-group .dx-field-item-label {
-      height: $generic-scheduler-appointment-popup-recurrence-end-group-label-height;
       margin-bottom: $generic-scheduler-appointment-popup-recurrence-end-group-label-margin-bottom;
     }
 
@@ -310,35 +309,37 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
         .dx-lookup-field,
         .dx-placeholder::before,
         .dx-texteditor-input {
-          padding-left: 8px;
-          padding-right: 8px;
+          padding-left: $generic-scheduler-appointment-popup-recurrence-end-editors-texteditor-input-padding-horizontal;
+          padding-right: $generic-scheduler-appointment-popup-recurrence-end-editors-texteditor-input-padding-horizontal;
         }
       }
 
-      .dx-item.dx-radiobutton {
-        height: $generic-base-inline-widget-height !important; // stylelint-disable-line declaration-no-important
-      }
-
-      .dx-box-item {
-        height: $generic-base-inline-widget-height;
-
-        .dx-box-item-content {
-          height: $generic-base-inline-widget-height;
+      @if $generic-scheduler-appointment-popup-recurrence-end-editors-item-height != null {
+        .dx-item.dx-radiobutton {
+          height: $generic-scheduler-appointment-popup-recurrence-end-editors-item-height !important; // stylelint-disable-line declaration-no-important
         }
-      }
 
-      .dx-field-item,
-      .dx-empty-item {
-        height: $generic-base-inline-widget-height;
+        .dx-box-item {
+          height: $generic-scheduler-appointment-popup-recurrence-end-editors-item-height;
 
-        .dx-field-item-content {
-          height: $generic-base-inline-widget-height;
+          .dx-box-item-content {
+            height: $generic-scheduler-appointment-popup-recurrence-end-editors-item-height;
+          }
         }
-      }
 
-      .dx-texteditor,
-      .dx-numberbox {
-        height: $generic-base-inline-widget-height;
+        .dx-field-item,
+        .dx-empty-item {
+          height: $generic-scheduler-appointment-popup-recurrence-end-editors-item-height;
+
+          .dx-field-item-content {
+            height: $generic-scheduler-appointment-popup-recurrence-end-editors-item-height;
+          }
+        }
+
+        .dx-texteditor,
+        .dx-numberbox {
+          height: $generic-scheduler-appointment-popup-recurrence-end-editors-item-height;
+        }
       }
     }
 

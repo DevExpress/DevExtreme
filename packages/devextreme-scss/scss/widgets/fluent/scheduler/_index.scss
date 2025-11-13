@@ -640,13 +640,9 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
     }
 
     .dx-scheduler-form-recurrence-end-group .dx-texteditor-input {
-      padding-left: 8px;
-      padding-right: 8px;
-      padding-inline-end: 8px !important; // stylelint-disable-line declaration-no-important
-    }
-
-    .dx-scheduler-form-recurrence-end-editors {
-      margin-top: $fluent-form-layout-manager-vertical-padding;
+      padding-left: $fluent-scheduler-appointment-popup-recurrence-end-editors-texteditor-input-padding-horizontal;
+      padding-right: $fluent-scheduler-appointment-popup-recurrence-end-editors-texteditor-input-padding-horizontal;
+      padding-inline-end: $fluent-scheduler-appointment-popup-recurrence-end-editors-texteditor-input-padding-horizontal !important; // stylelint-disable-line declaration-no-important
     }
 
     .dx-scheduler-form-recurrence-end-group .dx-field-item-label {
