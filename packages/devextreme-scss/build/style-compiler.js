@@ -1,21 +1,32 @@
-'use strict';
+import gulp from 'gulp';
 
-const { task, src, parallel, series, dest, watch } = require('gulp');
-const { join } = require('path');
-const { existsSync, readFileSync, writeFileSync, mkdirSync } = require('fs');
-const replace = require('gulp-replace');
-const plumber = require('gulp-plumber');
-const sass = require('gulp-sass')(require('sass-embedded'));
+const { task, src, parallel, series, dest, watch } = gulp;
+import { join } from 'path';
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
+import replace from 'gulp-replace';
+import plumber from 'gulp-plumber';
+import gulpSass from 'gulp-sass';
+import sassEmbedded from 'sass-embedded';
+import CleanCss from 'clean-css';
+import through from 'through2';
+import parseArguments from 'minimist';
+import autoprefixer from 'gulp-autoprefixer';
+import { createRequire } from 'module';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
-const CleanCss = require('clean-css');
-const through = require('through2');
-const parseArguments = require('minimist');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
+const require = createRequire(import.meta.url);
 const cleanCssSanitizeOptions = require('./clean-css-options.json');
 const cleanCssOptions = require('../../devextreme-themebuilder/src/data/clean-css-options.json');
-const { getThemes } = require('./theme-options');
-const functions = require('./gulp-data-uri').sassFunctions;
-const starLicense = require('../../devextreme/build/gulp/header-pipes').starLicense;
+const { starLicense } = require('../../devextreme/build/gulp/header-pipes.js');
+
+import { getThemes } from './theme-options.js';
+import { sassFunctions } from './gulp-data-uri.js';
+
+const sass = gulpSass(sassEmbedded);
 
 const cssArtifactsPath = join(process.cwd(), '..', 'devextreme', 'artifacts', 'css');
 
@@ -36,17 +47,7 @@ const DEFAULT_DEV_BUNDLE_NAMES = [
 
 const getBundleSourcePath = name => `scss/bundles/dx.${name}.scss`;
 
-let autoprefixer;
-
-async function getAutoprefixer() {
-    if (!autoprefixer) {
-        autoprefixer = (await import('gulp-autoprefixer')).default;
-    }
-    return autoprefixer;
-}
-
-const compileBundles = async (bundles, isDevBundle) => {
-    const autoPrefix = await getAutoprefixer();
+const compileBundles = (bundles, isDevBundle) => {
     return src(bundles)
         .pipe(plumber(e => {
             console.log(e);
@@ -54,13 +55,13 @@ const compileBundles = async (bundles, isDevBundle) => {
         }))
         .on('data', (chunk) => console.log('Build: ', chunk.path))
         .pipe(sass({
-            functions
+            functions: sassFunctions
         }))
-        .pipe(autoPrefix())
+        .pipe(autoprefixer())
         .pipe(through.obj((file, enc, callback) => {
             const content = file.contents.toString();
             new CleanCss(isDevBundle ? cleanCssOptions : cleanCssSanitizeOptions).minify(content, (_, css) => {
-                file.contents = new Buffer.from(css.styles);
+                file.contents = Buffer.from(css.styles);
                 callback(null, file);
             });
         }))

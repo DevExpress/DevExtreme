@@ -1,13 +1,16 @@
 /* eslint-env node */
 /* eslint-disable no-console */
 
-const gulp = require('gulp');
-const env = require('../devextreme/build/gulp/env-variables');
-const cache = require('gulp-cache');
-const shell = require('gulp-shell');
+import gulp from 'gulp';
+import cache from 'gulp-cache';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+const env = require('../devextreme/build/gulp/env-variables.js');
+const del = require('del');
 
 gulp.task('clean', function(callback) {
-    require('del').sync([
+    del.sync([
         '../devextreme/artifacts/css/**',
         '../devextreme/scss/bundles/**'
     ], { force: true });
@@ -15,7 +18,7 @@ gulp.task('clean', function(callback) {
     callback();
 });
 
-require('./build/style-compiler');
+import './build/style-compiler.js';
 
 if(env.TEST_CI) {
     console.warn('Using test CI mode!');

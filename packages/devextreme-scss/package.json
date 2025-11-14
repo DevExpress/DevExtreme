@@ -1,5 +1,6 @@
 {
   "name": "devextreme-scss",
+  "type": "module",
   "devDependencies": {
     "clean-css": "5.3.3",
     "del": "2.2.2",
