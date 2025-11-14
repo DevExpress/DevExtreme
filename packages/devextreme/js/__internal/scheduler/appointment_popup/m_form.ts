@@ -824,7 +824,9 @@ export class AppointmentForm {
     }
 
     this._$mainGroup?.addClass(CLASSES.mainHidden);
+    this._$mainGroup?.attr('tabindex', '-1');
     this._$recurrenceGroup?.removeClass(CLASSES.recurrenceHidden);
+    this._$recurrenceGroup?.removeAttr('tabindex');
 
     const repeatEditorValue = this.dxForm.getEditor(REPEAT_EDITOR_NAME)?.option('value');
 
@@ -847,7 +849,9 @@ export class AppointmentForm {
     }
 
     this._$mainGroup?.removeClass(CLASSES.mainHidden);
+    this._$mainGroup?.removeAttr('tabindex');
     this._$recurrenceGroup?.addClass(CLASSES.recurrenceHidden);
+    this._$recurrenceGroup?.attr('tabindex', '-1');
 
     this._popup.updateToolbarForMainGroup();
 

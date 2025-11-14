@@ -639,12 +639,6 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
       margin-top: $fluent-scheduler-appointment-popup-description-icon-margin-top;
     }
 
-    .dx-scheduler-form-recurrence-end-group .dx-texteditor-input {
-      padding-left: $fluent-scheduler-appointment-popup-recurrence-end-editors-texteditor-input-padding-horizontal;
-      padding-right: $fluent-scheduler-appointment-popup-recurrence-end-editors-texteditor-input-padding-horizontal;
-      padding-inline-end: $fluent-scheduler-appointment-popup-recurrence-end-editors-texteditor-input-padding-horizontal !important; // stylelint-disable-line declaration-no-important
-    }
-
     .dx-scheduler-form-recurrence-end-group .dx-field-item-label {
       height: $fluent-scheduler-appointment-popup-recurrence-end-group-label-height;
       margin-bottom: $fluent-scheduler-appointment-popup-recurrence-end-group-label-margin-bottom;

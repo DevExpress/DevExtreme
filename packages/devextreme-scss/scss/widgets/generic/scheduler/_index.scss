@@ -304,16 +304,6 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
     }
 
     .dx-scheduler-form-recurrence-end-editors {
-      .dx-texteditor.dx-editor-filled,
-      .dx-texteditor.dx-editor-outlined {
-        .dx-lookup-field,
-        .dx-placeholder::before,
-        .dx-texteditor-input {
-          padding-left: $generic-scheduler-appointment-popup-recurrence-end-editors-texteditor-input-padding-horizontal;
-          padding-right: $generic-scheduler-appointment-popup-recurrence-end-editors-texteditor-input-padding-horizontal;
-        }
-      }
-
       .dx-item.dx-radiobutton {
         height: $generic-scheduler-appointment-popup-recurrence-end-editors-item-height !important; // stylelint-disable-line declaration-no-important
       }
