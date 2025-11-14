@@ -639,8 +639,11 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
       margin-top: $fluent-scheduler-appointment-popup-description-icon-margin-top;
     }
 
-    .dx-scheduler-form-recurrence-end-group .dx-field-item-label {
+    .dx-scheduler-form-group-with-icon.dx-scheduler-form-recurrence-end-group:has(.dx-scheduler-form-icon:not(.dx-hidden)) .dx-field-item-label {
       height: $fluent-scheduler-appointment-popup-recurrence-end-group-label-height;
+    }
+
+    .dx-scheduler-form-recurrence-end-group .dx-field-item-label {
       margin-bottom: $fluent-scheduler-appointment-popup-recurrence-end-group-label-margin-bottom;
     }
 

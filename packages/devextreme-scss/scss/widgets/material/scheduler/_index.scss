@@ -596,6 +596,10 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
       gap: $material-scheduler-days-of-week-buttons-gap;
     }
 
+    .dx-scheduler-form-group-with-icon.dx-scheduler-form-recurrence-end-group:has(.dx-scheduler-form-icon:not(.dx-hidden)) .dx-field-item-label {
+      height: $material-scheduler-appointment-popup-recurrence-end-group-label-height;
+    }
+
     .dx-scheduler-form-recurrence-end-group .dx-field-item-label {
       padding: 0;
       margin-bottom: $material-scheduler-appointment-popup-recurrence-end-group-label-margin-bottom;
