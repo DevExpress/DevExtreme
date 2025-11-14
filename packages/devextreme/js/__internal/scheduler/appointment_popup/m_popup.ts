@@ -155,6 +155,7 @@ export class AppointmentPopup {
       if (canceled) {
         e.cancel = true;
       } else {
+        this.updateToolbarForMainGroup();
         this.updatePopupFullScreenMode();
       }
     });
@@ -180,6 +181,8 @@ export class AppointmentPopup {
   }
 
   _updateForm(): void {
+    this.form.showMainGroup(false);
+
     const rawAppointment = this.state.appointment.data;
     const appointmentAdapter = this._createAppointmentAdapter(rawAppointment)
       .clone()
@@ -189,8 +192,6 @@ export class AppointmentPopup {
 
     this.form.formData = formData;
     this.form.readOnly = this._isReadOnly(appointmentAdapter);
-
-    this.form.showMainGroup(false);
   }
 
   _createFormData(appointmentAdapter: AppointmentAdapter): Record<string, any> {
@@ -251,13 +252,6 @@ export class AppointmentPopup {
       const clonedAdapter = adapter
         .clone()
         .calculateDates(this.scheduler.getTimeZoneCalculator(), 'fromAppointment');
-
-      const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
-      const recurrenceRuleValue = this.form.formData[recurrenceRuleExpr];
-      if (recurrenceRuleValue === undefined) {
-        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-        delete clonedAdapter.source[recurrenceRuleExpr];
-      }
 
       this._addMissingDSTTime(adapter, clonedAdapter);
 
