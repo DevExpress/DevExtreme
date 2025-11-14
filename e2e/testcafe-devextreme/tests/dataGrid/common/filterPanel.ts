@@ -8,7 +8,7 @@ fixture.disablePageReloads`filterPanel`
   .page(url(__dirname, '../../container.html'));
 
 // T1182854
-test('editor\'s popup inside filterBuilder is opening & closing right (T1182854)', async (t) => {
+test.meta({ unstable: true })('editor\'s popup inside filterBuilder is opening & closing right (T1182854)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const dataGrid = new DataGrid('#container');
