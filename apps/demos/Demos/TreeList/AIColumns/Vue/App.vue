@@ -5,6 +5,7 @@
     parentIdExpr="Head_ID"
     :dataSource="employees"
     :autoExpandAll="true"
+    :showBorders="true"
     :scrolling="{ mode: 'standard' }"
     :paging="{ enabled: true, pageSize: 10 }"
     :aiIntegration="aiIntegration"
@@ -14,6 +15,7 @@
     <DxRemoteOperations :grouping="false"/>
     <DxColumn
       caption="Employee"
+      cssClass="name_cell"
       :width="260"
       cellTemplate="name-cell"
     />
