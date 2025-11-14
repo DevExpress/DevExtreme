@@ -51,7 +51,9 @@ $fluent-scheduler-appointment-15min-icon-top: null !default;
 $fluent-scheduler-appointment-15min-icon-bottom: null !default;
 $fluent-scheduler-appointment-15min-icon-right: null !default;
 $fluent-scheduler-appointment-20min-icon-top: null !default;
+$fluent-scheduler-appointment-20min-recurrence-padding-right: null !default;
 $fluent-scheduler-appointment-20min-icon-right: null !default;
+$fluent-scheduler-appointment-20min-title-line-height: null !default;
 
 $scheduler-left-column-width: 65px !default;
 $fluent-scheduler-timeline-date-table-cell-height: 50px !default;
@@ -147,6 +149,8 @@ $header-panel-time-cell-padding: null !default;
   $fluent-scheduler-appointment-15min-icon-font-size: 12px !default;
   $fluent-scheduler-appointment-15min-icon-bottom: 2px !default;
   $fluent-scheduler-appointment-15min-icon-right: 2px !default;
+
+  $fluent-scheduler-appointment-20min-title-line-height: 20px !default;
 }
 
 @else if $size == "compact" {
@@ -203,6 +207,8 @@ $header-panel-time-cell-padding: null !default;
   $fluent-scheduler-appointment-15min-title-line-height: 12px !default;
   $fluent-scheduler-appointment-15min-icon-bottom: 0 !default;
 
+  $fluent-scheduler-appointment-20min-recurrence-padding-right: 20px !default;
   $fluent-scheduler-appointment-20min-icon-top: 0 !default;
   $fluent-scheduler-appointment-20min-icon-right: 5px !default;
+  $fluent-scheduler-appointment-20min-title-line-height: 18px !default;
 }
