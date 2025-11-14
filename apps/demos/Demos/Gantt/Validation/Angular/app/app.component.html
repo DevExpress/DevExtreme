@@ -22,28 +22,28 @@
   </div>
   <div class="widget-container">
     <dx-gantt taskListWidth="500" height="700" taskTitlePosition="none">
-      <dxo-validation
+      <dxo-gantt-validation
         [autoUpdateParentTasks]="autoUpdateParentTasks"
         [validateDependencies]="validateDependencies"
         [enablePredecessorGap]="enablePredecessorGap"
-      ></dxo-validation>
+      ></dxo-gantt-validation>
 
-      <dxo-tasks [dataSource]="tasks"></dxo-tasks>
-      <dxo-dependencies [dataSource]="dependencies"></dxo-dependencies>
+      <dxo-gantt-tasks [dataSource]="tasks"></dxo-gantt-tasks>
+      <dxo-gantt-dependencies [dataSource]="dependencies"></dxo-gantt-dependencies>
 
-      <dxi-column dataField="title" caption="Task" [width]="300"></dxi-column>
-      <dxi-column
+      <dxi-gantt-column dataField="title" caption="Task" [width]="300"></dxi-gantt-column>
+      <dxi-gantt-column
         dataField="start"
         caption="Start Date"
         dataType="date"
-      ></dxi-column>
-      <dxi-column
+      ></dxi-gantt-column>
+      <dxi-gantt-column
         dataField="end"
         caption="End Date"
         dataType="date"
-      ></dxi-column>
+      ></dxi-gantt-column>
 
-      <dxo-editing [enabled]="true"></dxo-editing>
+      <dxo-gantt-editing [enabled]="true"></dxo-gantt-editing>
     </dx-gantt>
   </div>
 </div>

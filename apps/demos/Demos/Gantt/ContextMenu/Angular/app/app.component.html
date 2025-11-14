@@ -25,31 +25,31 @@
       (onCustomCommand)="onCustomCommandClick($event)"
       (onContextMenuPreparing)="onContextMenuPreparing($event)"
     >
-      <dxo-context-menu [items]="contextMenuItems"></dxo-context-menu>
-      <dxo-tasks [dataSource]="tasks"></dxo-tasks>
-      <dxo-dependencies [dataSource]="dependencies"></dxo-dependencies>
-      <dxo-resources [dataSource]="resources"></dxo-resources>
-      <dxo-resource-assignments
+      <dxo-gantt-context-menu [items]="contextMenuItems"></dxo-gantt-context-menu>
+      <dxo-gantt-tasks [dataSource]="tasks"></dxo-gantt-tasks>
+      <dxo-gantt-dependencies [dataSource]="dependencies"></dxo-gantt-dependencies>
+      <dxo-gantt-resources [dataSource]="resources"></dxo-gantt-resources>
+      <dxo-gantt-resource-assignments
         [dataSource]="resourceAssignments"
-      ></dxo-resource-assignments>
+      ></dxo-gantt-resource-assignments>
 
-      <dxi-column
+      <dxi-gantt-column
         dataField="title"
         caption="Subject"
         [width]="300"
-      ></dxi-column>
-      <dxi-column
+      ></dxi-gantt-column>
+      <dxi-gantt-column
         dataField="start"
         caption="Start Date"
         dataType="date"
-      ></dxi-column>
-      <dxi-column
+      ></dxi-gantt-column>
+      <dxi-gantt-column
         dataField="end"
         caption="End Date"
         dataType="date"
-      ></dxi-column>
+      ></dxi-gantt-column>
 
-      <dxo-editing [enabled]="true"></dxo-editing>
+      <dxo-gantt-editing [enabled]="true"></dxo-gantt-editing>
     </dx-gantt>
   </div>
 </div>
