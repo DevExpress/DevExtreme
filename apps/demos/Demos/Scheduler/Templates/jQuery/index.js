@@ -104,7 +104,7 @@ $(() => {
       popup: {
         maxWidth: 440,
         onOptionChanged: (e) => {
-          if (e.value) {
+          if (e.fullName === 'toolbarItems' && e.value) {
             e.value.forEach((item, index) => {
               if (item.shortcut === 'done' || item.shortcut === 'cancel') {
                 e.component.option(`toolbarItems[${index}].toolbar`, 'bottom');
