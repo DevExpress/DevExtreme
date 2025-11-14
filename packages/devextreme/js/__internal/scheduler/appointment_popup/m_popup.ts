@@ -253,6 +253,13 @@ export class AppointmentPopup {
         .clone()
         .calculateDates(this.scheduler.getTimeZoneCalculator(), 'fromAppointment');
 
+      const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
+      const recurrenceRuleValue = this.form.formData[recurrenceRuleExpr];
+      if (recurrenceRuleValue === undefined) {
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+        delete clonedAdapter.source[recurrenceRuleExpr];
+      }
+
       this._addMissingDSTTime(adapter, clonedAdapter);
 
       const appointment = clonedAdapter.source;
