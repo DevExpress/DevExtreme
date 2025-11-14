@@ -1,4 +1,4 @@
-export type Employee = {
+export interface IEmployee {
   ID: number;
   Head_ID: number;
   First_Name: string;
@@ -13,9 +13,9 @@ export type Employee = {
   Birth_Date: string;
   Hire_Date: string;
   Status: string;
-};
+}
 
-export const employees: Employee[] = [{
+export const employees: IEmployee[] = [{
   ID: 1,
   Head_ID: 0,
   First_Name: 'John',

@@ -15,12 +15,12 @@
     <DxRemoteOperations :grouping="false"/>
     <DxColumn
       caption="Employee"
-      cssClass="name_cell"
+      cssClass="employee__cell"
       :width="260"
-      cellTemplate="name-cell"
+      cellTemplate="employee-cell"
     />
-    <template #name-cell="{ data: { data: employee} }">
-      <Name
+    <template #employee-cell="{ data: { data: employee} }">
+      <Employee
         :firstName="employee.First_Name"
         :lastName="employee.Last_Name"
       />
@@ -70,9 +70,9 @@
 <script setup lang="ts">
 import { DxTreeList, DxColumn, DxColumnFixing, DxRemoteOperations } from 'devextreme-vue/tree-list';
 import Email from './Email.vue';
-import Name from './Name.vue';
+import Employee from './Employee.vue';
 import Status from './Status.vue';
-import { type Employee, employees } from './data.ts';
+import { type IEmployee, employees } from './data.ts';
 import { aiIntegration } from './service.ts';
 
 const aiConfig = {
@@ -81,7 +81,7 @@ const aiConfig = {
   noDataText: 'No data',
 };
 
-const onAIColumnRequestCreating = (e: { data: Partial<Employee>[] }) => {
+const onAIColumnRequestCreating = (e: { data: Partial<IEmployee>[] }) => {
   e.data = e.data.map((item) => ({
     ID: item.ID,
     First_Name: item.First_Name,
@@ -96,7 +96,7 @@ const onAIColumnRequestCreating = (e: { data: Partial<Employee>[] }) => {
   background-color: var(--dx-datagrid-row-alternation-bg);
 }
 
-#app .name_cell > div {
+#app .employee__cell > div {
   align-items: flex-end;
 }
 </style>

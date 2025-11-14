@@ -1,12 +1,12 @@
 <template>
-  <div class="name__wrapper">
-    <div class="name__img-wrapper">
+  <div class="employee__wrapper">
+    <div class="employee__img-wrapper">
       <img
         :src="`../../../../images/employees/new/${firstName} ${lastName}.jpg`"
         :alt="`${firstName} ${lastName}`"
       >
     </div>
-    <div class="name__text-wrapper">
+    <div class="employee__text-wrapper">
       <div>{{ firstName }}</div>
       <div>{{ lastName }}</div>
     </div>
@@ -21,13 +21,13 @@ defineProps<{
 </script>
 
 <style scoped>
-.name__wrapper {
+.employee__wrapper {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.name__img-wrapper {
+.employee__img-wrapper {
   width: 40px;
   height: 40px;
   border: var(--dx-border-width) solid var(--dx-color-border);
@@ -35,7 +35,7 @@ defineProps<{
   cursor: pointer;
 }
 
-.name__img-wrapper img {
+.employee__img-wrapper img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -43,7 +43,7 @@ defineProps<{
   border-radius: 50%;
 }
 
-.name__text-wrapper {
+.employee__text-wrapper {
   width: calc(100% - 48px);
 }
 </style>
