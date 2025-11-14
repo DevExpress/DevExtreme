@@ -24,7 +24,7 @@ const onAIColumnRequestCreating = (e) => {
     Last_Name: item.Last_Name,
     Title: item.Title,
   }));
-}
+};
 
 export default function App() {
   return (

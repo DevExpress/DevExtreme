@@ -3,7 +3,6 @@ import { type Vehicle } from './types';
 import { type DataGridTypes } from 'devextreme-react/data-grid';
 
 const LicenseInfo = (props: DataGridTypes.ColumnCellTemplateData<Vehicle>) => {
-
   if (!props.data) {
     return null;
   }

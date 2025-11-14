@@ -2,7 +2,6 @@ import React, { useCallback, useState } from 'react';
 import DataGrid, {
   Column,
   GroupPanel,
-  type DataGridTypes,
 } from 'devextreme-react/data-grid';
 import Popup, { Position } from 'devextreme-react/popup';
 import { vehicles, aiIntegration } from './data.ts';
@@ -28,7 +27,7 @@ const onAIColumnRequestCreating = (e) => {
     Name: item.Name,
     Modification: item.Modification,
   }));
-}
+};
 
 export default function App() {
   const [currentVehicle, setCurrentVehicle] = useState<Vehicle | null>(null);
