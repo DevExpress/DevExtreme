@@ -65,5 +65,8 @@
       "@devexpress/callsite-record@^4.1.6": "4.1.6"
     }
   },
-  "packageManager": "pnpm@9.15.4"
+  "packageManager": "pnpm@9.15.4",
+  "optionalDependencies": {
+    "sass-embedded-win32-arm64": "^1.93.3"
+  }
 }
