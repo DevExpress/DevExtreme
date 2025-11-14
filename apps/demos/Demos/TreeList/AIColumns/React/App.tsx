@@ -1,16 +1,11 @@
-import React, { useCallback } from 'react';
-import TreeList, {
-  Column, RemoteOperations,
-} from 'devextreme-react/tree-list';
+import React from 'react';
+import TreeList, { Column, Scrolling } from 'devextreme-react/tree-list';
 import { employees, aiIntegration } from './data.ts';
-import Name from './Name.tsx';
+import Employee from './Empoyee.tsx';
 import Status from './Status.tsx';
 import Email from './Email.tsx';
 
 const treeConfig = {
-  scrolling: {
-    mode: 'standard' as const,
-  },
   paging: {
     enabled: true,
     pageSize: 10,
@@ -22,16 +17,16 @@ const treeConfig = {
   },
 };
 
-export default function App() {
-  const onAIColumnRequestCreating = useCallback((e) => {
-    e.data = e.data.map((item) => ({
-      ID: item.ID,
-      First_Name: item.First_Name,
-      Last_Name: item.Last_Name,
-      Title: item.Title,
-    }));
-  }, []);
+const onAIColumnRequestCreating = (e) => {
+  e.data = e.data.map((item) => ({
+    ID: item.ID,
+    First_Name: item.First_Name,
+    Last_Name: item.Last_Name,
+    Title: item.Title,
+  }));
+}
 
+export default function App() {
   return (
     <TreeList
       id="employees"
@@ -40,15 +35,14 @@ export default function App() {
       parentIdExpr="Head_ID"
       autoExpandAll={true}
       aiIntegration={aiIntegration}
-      scrolling={treeConfig.scrolling}
       paging={treeConfig.paging}
       onAIColumnRequestCreating={onAIColumnRequestCreating}
     >
-      <RemoteOperations grouping={false} />
+      <Scrolling mode="standard" />
       <Column
         caption="Employee"
         width={260}
-        cellRender={Name}
+        cellRender={Employee}
       />
       <Column
         dataField="Title"

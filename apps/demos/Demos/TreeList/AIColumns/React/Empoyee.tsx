@@ -2,7 +2,7 @@ import React from 'react';
 import { type TreeListTypes } from 'devextreme-react/tree-list';
 import { type Employee } from './types';
 
-export default function Name(props: TreeListTypes.ColumnCellTemplateData<Employee>) {
+export default function Employee(props: TreeListTypes.ColumnCellTemplateData<Employee>) {
   const { First_Name, Last_Name } = props.data;
 
   return (

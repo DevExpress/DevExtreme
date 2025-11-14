@@ -21,6 +21,15 @@ const gridConfig = {
   },
 };
 
+const onAIColumnRequestCreating = (e) => {
+  e.data = e.data.map((item) => ({
+    ID: item.ID,
+    TrademarkName: item.TrademarkName,
+    Name: item.Name,
+    Modification: item.Modification,
+  }));
+}
+
 export default function App() {
   const [currentVehicle, setCurrentVehicle] = useState<Vehicle | null>(null);
 
@@ -30,19 +39,6 @@ export default function App() {
 
   const hideInfo = useCallback(() => {
     setCurrentVehicle(null);
-  }, []);
-
-  const cellRender = useCallback((vehicle: DataGridTypes.ColumnCellTemplateData<Vehicle>) => (
-    <Trademark vehicle={vehicle.data} onShowInfo={showInfo} />
-  ), [showInfo]);
-
-  const onAIColumnRequestCreating = useCallback((e) => {
-    e.data = e.data.map((item) => ({
-      ID: item.ID,
-      TrademarkName: item.TrademarkName,
-      Name: item.Name,
-      Modification: item.Modification,
-    }));
   }, []);
 
   return (
@@ -61,7 +57,7 @@ export default function App() {
           caption="Trademark"
           width={200}
           dataField="TrademarkName"
-          cellRender={cellRender}
+          cellRender={(cellData) => <Trademark vehicle={cellData.data} onShowInfo={showInfo} />}
         />
         <Column
           dataField="Price"
@@ -106,9 +102,7 @@ export default function App() {
         hideOnOutsideClick={true}
         title="Image Info"
         onHiding={hideInfo}
-        contentRender={() =>
-          currentVehicle ? <LicenseInfo vehicle={currentVehicle} /> : null
-        }
+        contentRender={LicenseInfo}
       >
         <Position
           at="center"

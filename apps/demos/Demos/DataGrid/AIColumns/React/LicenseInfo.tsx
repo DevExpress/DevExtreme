@@ -1,14 +1,14 @@
-import { type Vehicle } from './types';
 import React from 'react';
+import { type Vehicle } from './types';
+import { type DataGridTypes } from 'devextreme-react/data-grid';
 
-const LicenseInfo = ({
-  vehicle: {
-    LicenseName,
-    Author,
-    Source,
-    Edits,
-  },
-}: { vehicle: Vehicle }) => {
+const LicenseInfo = (props: DataGridTypes.ColumnCellTemplateData<Vehicle>) => {
+
+  if (!props.data) {
+    return null;
+  }
+
+  const { LicenseName, Author, Source, Edits } = props.data;
   const vehicleLink = `https://${Source}`;
   return (
     <div>
