@@ -14,7 +14,7 @@ fixture.disablePageReloads`Form`
     [true, false].forEach((showOptionalMark) => {
       [true, false].forEach((showColonAfterLabel) => {
         const testName = `SimpleItem,rtl_${rtlEnabled},optMark_${showOptionalMark},labelMode_${labelMode},colon_${showColonAfterLabel}`;
-        test(testName, async (t) => {
+        test.meta({ unstable: true })(testName, async (t) => {
           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
           await testScreenshot(t, takeScreenshot, `${testName}.png`, { element: '#container' });

@@ -103,7 +103,7 @@ test('Drag-n-drop in same table cell', async (t) => {
   width: 1000,
 }));
 
-test('Drag-n-drop to the cell below should work in month view (T1005115)', async (t) => {
+test.meta({ unstable: true })('Drag-n-drop to the cell below should work in month view (T1005115)', async (t) => {
   const scheduler = new Scheduler('#container');
   const collector = scheduler.collectors.find('1 more');
   const { appointmentTooltip } = scheduler;

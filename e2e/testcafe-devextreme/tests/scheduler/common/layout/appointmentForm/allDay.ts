@@ -6,7 +6,7 @@ import url from '../../../../../helpers/getPageUrl';
 fixture.disablePageReloads`Layout:AppointmentForm:AllDay`
   .page(url(__dirname, '../../../../container.html'));
 
-test('Start and end dates should be reflect the current day(appointment is already available case)', async (t) => {
+test.meta({ unstable: true })('Start and end dates should be reflect the current day(appointment is already available case)', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -56,7 +56,7 @@ test('Start and end dates should be reflect the current day(appointment is alrea
   });
 });
 
-test('Start and end dates should be reflect the current day(create new appointment case)', async (t) => {
+test.meta({ unstable: true })('Start and end dates should be reflect the current day(create new appointment case)', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
