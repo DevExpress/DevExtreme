@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Name(props) {
+export default function Employee(props) {
   const { First_Name, Last_Name } = props.data;
   return (
     <div className="name__wrapper">
