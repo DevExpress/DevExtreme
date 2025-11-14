@@ -45,7 +45,7 @@ type SelectionInfo<TItem, TKey = CollectionItemKey> = SelectionChangeInfo<TItem>
   removedItemKeys: TKey[];
 };
 
-type SelectOption = 'selectedIndex' | 'selectedItems' | 'selectedItem' | 'selectedItemKeys';
+export type SelectOption = 'selectedIndex' | 'selectedItems' | 'selectedItem' | 'selectedItemKeys';
 
 export interface CollectionWidgetEditProperties<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

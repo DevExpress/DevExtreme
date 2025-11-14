@@ -8,15 +8,15 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { format } from '@js/core/utils/string';
 import { isDefined } from '@js/core/utils/type';
-import FileManagerFileUploader from '@js/ui/file_manager/ui.file_manager.file_uploader';
-import { ErrorCode, FileManagerMessages } from '@js/ui/file_manager/ui.file_manager.messages';
-import type FileManagerNotificationControl from '@js/ui/file_manager/ui.file_manager.notification';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import type { FileItemsController } from '@ts/ui/file_manager/file_items_controller';
 import type { ItemThumbnailInfo } from '@ts/ui/file_manager/ui.file_manager';
 import FileManagerDialogManager from '@ts/ui/file_manager/ui.file_manager.dialog_manager';
+import FileManagerFileUploader from '@ts/ui/file_manager/ui.file_manager.file_uploader';
+import { ErrorCode, FileManagerMessages } from '@ts/ui/file_manager/ui.file_manager.messages';
+import type FileManagerNotificationControl from '@ts/ui/file_manager/ui.file_manager.notification';
 
 interface FileManagerActionMetadata {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -379,14 +379,13 @@ class FileManagerEditingControl extends Widget<FileManagerEditingControlOptions>
 
   _createFileUploader(): FileManagerFileUploader {
     const $fileUploader = $('<div>').appendTo(this.$element());
+    const { uploadDropZonePlaceholderContainer } = this.option();
     return this._createComponent(
       $fileUploader,
       this._getFileUploaderComponent(),
       {
         getController: this._getFileUploaderController.bind(this),
-        dropZonePlaceholderContainer: this.option(
-          'uploadDropZonePlaceholderContainer',
-        ),
+        dropZonePlaceholderContainer: uploadDropZonePlaceholderContainer,
         onUploadSessionStarted: (e) => this._onUploadSessionStarted(e),
         onUploadProgress: (e) => this._onUploadProgress(e),
         onUploadFinished: (e) => this._onUploadFinished(e),
