@@ -9,7 +9,6 @@ const sass = require('gulp-sass')(require('sass-embedded'));
 
 const CleanCss = require('clean-css');
 const through = require('through2');
-const autoPrefix = require('gulp-autoprefixer');
 const parseArguments = require('minimist');
 
 const cleanCssSanitizeOptions = require('./clean-css-options.json');
@@ -37,7 +36,17 @@ const DEFAULT_DEV_BUNDLE_NAMES = [
 
 const getBundleSourcePath = name => `scss/bundles/dx.${name}.scss`;
 
-const compileBundles = (bundles, isDevBundle) => {
+let autoprefixer;
+
+async function getAutoprefixer() {
+    if (!autoprefixer) {
+        autoprefixer = (await import('gulp-autoprefixer')).default;
+    }
+    return autoprefixer;
+}
+
+const compileBundles = async (bundles, isDevBundle) => {
+    const autoPrefix = await getAutoprefixer();
     return src(bundles)
         .pipe(plumber(e => {
             console.log(e);
