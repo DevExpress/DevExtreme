@@ -37,8 +37,6 @@ import type {
   ToolbarItemClickEvent,
 } from '@js/ui/file_manager';
 import { extendAttributes, findItemsByKeys } from '@js/ui/file_manager/ui.file_manager.common';
-import FileManagerContextMenu from '@js/ui/file_manager/ui.file_manager.context_menu';
-import FileManagerEditingControl from '@js/ui/file_manager/ui.file_manager.editing';
 import FileManagerFilesTreeView from '@js/ui/file_manager/ui.file_manager.files_tree_view';
 import FileManagerDetailsItemList from '@js/ui/file_manager/ui.file_manager.item_list.details';
 import FileManagerThumbnailsItemList from '@js/ui/file_manager/ui.file_manager.item_list.thumbnails';
@@ -49,6 +47,8 @@ import { FileItemsController, OPERATIONS } from '@ts/ui/file_manager/file_items_
 import FileManagerAdaptivityControl from '@ts/ui/file_manager/ui.file_manager.adaptivity';
 import FileManagerBreadcrumbs from '@ts/ui/file_manager/ui.file_manager.breadcrumbs';
 import { defaultPermissions, FileManagerCommandManager } from '@ts/ui/file_manager/ui.file_manager.command_manager';
+import FileManagerContextMenu from '@ts/ui/file_manager/ui.file_manager.context_menu';
+import FileManagerEditingControl from '@ts/ui/file_manager/ui.file_manager.editing';
 import FileManagerToolbar from '@ts/ui/file_manager/ui.file_manager.toolbar';
 import notify from '@ts/ui/notify';
 
@@ -93,7 +93,7 @@ export interface FileManagerActions {
   };
 }
 
-interface ItemThumbnailInfo {
+export interface ItemThumbnailInfo {
   thumbnail?: string;
   cssClass?: string;
 }
@@ -216,7 +216,7 @@ class FileManager extends Widget<Properties> {
         progressPanelContainer: this.$element(),
         // eslint-disable-next-line @stylistic/max-len
         contentTemplate: (container, notificationControl): void => this._createWrapper(container, notificationControl),
-        onActionProgress: (e) => this._onActionProgress(e),
+        onActionProgress: (e): void => this._onActionProgress(e),
         positionTargetSelector: `.${FILE_MANAGER_CONTAINER_CLASS}`,
         showProgressPanel: notifications?.showPanel,
         showNotificationPopup: notifications?.showPopup,
@@ -361,7 +361,10 @@ class FileManager extends Widget<Properties> {
     this._breadcrumbs.setCurrentDirectory(this._getCurrentDirectory());
   }
 
-  _createContextMenu(isolateCreationItemCommands, viewArea): FileManagerContextMenu {
+  _createContextMenu(
+    isolateCreationItemCommands: boolean,
+    viewArea: string,
+  ): FileManagerContextMenu {
     const $contextMenu = $('<div>').appendTo(this._$wrapper);
     const { contextMenu } = this.option();
     return this._createComponent($contextMenu, FileManagerContextMenu, {

@@ -1,263 +1,339 @@
-import $ from '../../core/renderer';
-import { extend } from '../../core/utils/extend';
-import { isDefined, isString } from '../../core/utils/type';
-import { ensureDefined } from '../../core/utils/common';
-
-import Widget from '../widget/ui.widget';
-import ContextMenu from '../context_menu';
-import { extendAttributes } from './ui.file_manager.common';
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import type { PositionConfig } from '@js/common/core/animation';
+import $ from '@js/core/renderer';
+import { ensureDefined } from '@js/core/utils/common';
+import { extend } from '@js/core/utils/extend';
+import { isDefined, isString } from '@js/core/utils/type';
+import ContextMenu from '@js/ui/context_menu';
+import type {
+  ContextMenuItem,
+  ContextMenuItemClickEvent,
+  ContextMenuShowingEvent,
+  Properties as FileManagerProperties,
+} from '@js/ui/file_manager';
+import { extendAttributes } from '@js/ui/file_manager/ui.file_manager.common';
+import type { OptionChanged } from '@ts/core/widget/types';
+import type { WidgetProperties } from '@ts/core/widget/widget';
+import Widget from '@ts/core/widget/widget';
+import type { FileManagerCommandManager } from '@ts/ui/file_manager/ui.file_manager.command_manager';
 
 const FILEMANAGER_CONTEXT_MEMU_CLASS = 'dx-filemanager-context-menu';
 
 const DEFAULT_CONTEXT_MENU_ITEMS = {
-    create: {},
-    upload: {},
-    download: {},
-    rename: {},
-    move: {},
-    copy: {},
-    delete: {},
-    refresh: {
-        beginGroup: true
-    }
+  create: {},
+  upload: {},
+  download: {},
+  rename: {},
+  move: {},
+  copy: {},
+  delete: {},
+  refresh: {
+    beginGroup: true,
+  },
 };
 
 const DEFAULT_ITEM_ALLOWED_PROPERTIES = [
-    'beginGroup',
-    'closeMenuOnClick',
-    'disabled',
-    'icon',
-    'selectable',
-    'selected',
-    'text',
-    'visible'
+  'beginGroup',
+  'closeMenuOnClick',
+  'disabled',
+  'icon',
+  'selectable',
+  'selected',
+  'text',
+  'visible',
 ];
 
-class FileManagerContextMenu extends Widget {
+interface FileManagerContextMenuActions {
+  onItemClick?: (e: Partial<ContextMenuItemClickEvent>) => void;
+  onContextMenuShowing?: (e: Partial<ContextMenuShowingEvent>) => void;
+  onContextMenuHidden?: () => void;
+}
 
-    _initMarkup() {
-        this._initActions();
+interface FileManagerContextMenuOptions extends WidgetProperties {
+  commandManager?: FileManagerCommandManager;
+  items?: NonNullable<FileManagerProperties['contextMenu']>['items'];
+  onItemClick?: (e: ContextMenuItemClickEvent) => void;
+  onContextMenuShowing?: (e: ContextMenuShowingEvent) => void;
+  onContextMenuHidden?: () => void;
+  isolateCreationItemCommands?: boolean;
+  viewArea?: string;
+}
 
-        this._isVisible = false;
+class FileManagerContextMenu extends Widget<FileManagerContextMenuOptions> {
+  _actions!: FileManagerContextMenuActions;
 
-        const $menu = $('<div>').appendTo(this.$element());
-        this._contextMenu = this._createComponent($menu, ContextMenu, {
-            cssClass: FILEMANAGER_CONTEXT_MEMU_CLASS,
-            showEvent: '',
-            onItemClick: (args) => this._onContextMenuItemClick(args.itemData.name, args),
-            onShowing: e => this._onContextMenuShowing(e),
-            onShown: () => this._onContextMenuShown(),
-            onHidden: () => this._onContextMenuHidden()
-        });
+  _contextMenu?: ContextMenu;
 
-        super._initMarkup();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _menuShowingContext?: any;
+
+  // @ts-expect-error ts-error
+  _isVisible?: boolean;
+
+  _targetFileItem?: ContextMenuItem;
+
+  _targetFileItems?: ContextMenuItem[];
+
+  _initMarkup(): void {
+    this._initActions();
+
+    this._isVisible = false;
+
+    const $menu = $('<div>').appendTo(this.$element());
+    this._contextMenu = this._createComponent($menu, ContextMenu, {
+      cssClass: FILEMANAGER_CONTEXT_MEMU_CLASS,
+      showEvent: '',
+      onItemClick: (args): void => this._onContextMenuItemClick(args.itemData.name, args),
+      onShowing: (e): void => this._onContextMenuShowing(e),
+      onShown: (): void => this._onContextMenuShown(),
+      onHidden: (): void => this._onContextMenuHidden(),
+    });
+
+    super._initMarkup();
+  }
+
+  showAt(fileItems, element, event, target): void {
+    const { itemData, itemElement, isActionButton = false } = target;
+    if (this._isVisible) {
+      this._onContextMenuHidden();
+    }
+    this._menuShowingContext = {
+      targetElement: itemElement,
+      itemData,
+      fileItems,
+      event,
+      isActionButton,
+    };
+
+    const position: PositionConfig = {
+      of: element,
+      // @ts-expect-error ts-error
+      at: 'top left',
+      // @ts-expect-error ts-error
+      my: 'top left',
+      offset: '',
+    };
+
+    if (event) {
+      position.offset = `${event.offsetX} ${event.offsetY}`;
+    } else {
+      position.my = 'left top';
+      position.at = 'left bottom';
+      position.boundaryOffset = '1';
     }
 
-    showAt(fileItems, element, event, target) {
-        const { itemData, itemElement, isActionButton = false } = target;
-        if(this._isVisible) {
-            this._onContextMenuHidden();
-        }
-        this._menuShowingContext = {
-            targetElement: itemElement,
-            itemData,
-            fileItems,
-            event,
-            isActionButton
-        };
+    this._contextMenu?.option({
+      target: element,
+      position,
+    });
 
-        const position = {
-            of: element,
-            at: 'top left',
-            my: 'top left',
-            offset: ''
-        };
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    this._contextMenu?.show();
+  }
 
-        if(event) {
-            position.offset = event.offsetX + ' ' + event.offsetY;
-        } else {
-            position.my = 'left top';
-            position.at = 'left bottom';
-            position.boundaryOffset = '1';
-        }
+  createContextMenuItems(fileItems, contextMenuItems?, targetFileItem?): ContextMenuItem[] {
+    this._targetFileItems = fileItems;
+    this._targetFileItem = isDefined(targetFileItem)
+      ? targetFileItem
+      : fileItems?.[0];
 
-        this._contextMenu.option({
-            target: element,
-            position
-        });
+    const result: ContextMenuItem[] = [];
 
-        this._contextMenu.show();
+    const itemArray = contextMenuItems || this.option('items');
+    itemArray.forEach((srcItem): void => {
+      const commandName = isString(srcItem) ? srcItem : srcItem.name;
+      const item = this._configureItemByCommandName(
+        commandName,
+        srcItem,
+        fileItems,
+        this._targetFileItem,
+      );
+      if (this._isContextMenuItemAvailable(item, fileItems)) {
+        result.push(item);
+      }
+    });
+
+    return result;
+  }
+
+  _isContextMenuItemAvailable(menuItem, fileItems): boolean | undefined {
+    if (!this._isDefaultItem(menuItem.name) || !menuItem._autoHide) {
+      return ensureDefined<boolean>(menuItem.visible, true);
     }
 
-    createContextMenuItems(fileItems, contextMenuItems, targetFileItem) {
-        this._targetFileItems = fileItems;
-        this._targetFileItem = isDefined(targetFileItem) ? targetFileItem : fileItems?.[0];
-
-        const result = [];
-
-        const itemArray = contextMenuItems || this.option('items');
-        itemArray.forEach(srcItem => {
-            const commandName = isString(srcItem) ? srcItem : srcItem.name;
-            const item = this._configureItemByCommandName(commandName, srcItem, fileItems, this._targetFileItem);
-            if(this._isContextMenuItemAvailable(item, fileItems)) {
-                result.push(item);
-            }
-        });
-
-        return result;
+    if (
+      this._isIsolatedCreationItemCommand(menuItem.name)
+      && fileItems?.length
+    ) {
+      return false;
     }
 
-    _isContextMenuItemAvailable(menuItem, fileItems) {
-        if(!this._isDefaultItem(menuItem.name) || !menuItem._autoHide) {
-            return ensureDefined(menuItem.visible, true);
-        }
+    return this._commandManager?.isCommandAvailable(menuItem.name, fileItems);
+  }
 
-        if(this._isIsolatedCreationItemCommand(menuItem.name) && fileItems && fileItems.length) {
-            return false;
-        }
+  _isIsolatedCreationItemCommand(commandName: string): boolean | undefined {
+    const { isolateCreationItemCommands } = this.option();
+    return (
+      (commandName === 'create' || commandName === 'upload')
+      && isolateCreationItemCommands
+    );
+  }
 
-        return this._commandManager.isCommandAvailable(menuItem.name, fileItems);
+  _isDefaultItem(commandName: string): boolean {
+    return !!DEFAULT_CONTEXT_MENU_ITEMS[commandName];
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  _configureItemByCommandName(commandName: string, item, fileItems, targetFileItem) {
+    if (!this._isDefaultItem(commandName)) {
+      const res = extend(true, {}, item);
+      res.originalItemData = item;
+      this._addItemClickHandler(commandName, res);
+      if (Array.isArray(item.items)) {
+        res.items = this.createContextMenuItems(
+          fileItems,
+          item.items,
+          targetFileItem,
+        );
+      }
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return res;
     }
 
-    _isIsolatedCreationItemCommand(commandName) {
-        return (commandName === 'create' || commandName === 'upload') && this.option('isolateCreationItemCommands');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const result: any = this._createMenuItemByCommandName(commandName);
+    const defaultConfig = DEFAULT_CONTEXT_MENU_ITEMS[commandName];
+    extend(result, defaultConfig);
+    result.originalItemData = item;
+    extendAttributes(result, item, DEFAULT_ITEM_ALLOWED_PROPERTIES);
+
+    if (!isDefined(result.visible)) {
+      result._autoHide = true;
     }
 
-    _isDefaultItem(commandName) {
-        return !!DEFAULT_CONTEXT_MENU_ITEMS[commandName];
+    if (commandName && !result.name) {
+      extend(result, { name: commandName });
     }
 
-    _configureItemByCommandName(commandName, item, fileItems, targetFileItem) {
-        if(!this._isDefaultItem(commandName)) {
-            const res = extend(true, {}, item);
-            res.originalItemData = item;
-            this._addItemClickHandler(commandName, res);
-            if(Array.isArray(item.items)) {
-                res.items = this.createContextMenuItems(fileItems, item.items, targetFileItem);
-            }
-            return res;
-        }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return result;
+  }
 
-        const result = this._createMenuItemByCommandName(commandName);
-        const defaultConfig = DEFAULT_CONTEXT_MENU_ITEMS[commandName];
-        extend(result, defaultConfig);
-        result.originalItemData = item;
-        extendAttributes(result, item, DEFAULT_ITEM_ALLOWED_PROPERTIES);
+  _createMenuItemByCommandName(commandName: string): ContextMenuItem {
+    const { text, icon } = this._commandManager?.getCommandByName(commandName) ?? {};
+    const menuItem = {
+      name: commandName,
+      text,
+      icon,
+    };
+    this._addItemClickHandler(commandName, menuItem);
+    return menuItem;
+  }
 
-        if(!isDefined(result.visible)) {
-            result._autoHide = true;
-        }
+  _addItemClickHandler(commandName: string, contextMenuItem): void {
+    contextMenuItem.onItemClick = (args): void => this._onContextMenuItemClick(commandName, args);
+  }
 
-        if(commandName && !result.name) {
-            extend(result, { name: commandName });
-        }
-
-        return result;
+  _onContextMenuItemClick(commandName: string, args): void {
+    const changedArgs = extend(true, {}, args);
+    changedArgs.itemData = args.itemData.originalItemData;
+    changedArgs.fileSystemItem = this._targetFileItem?.fileItem;
+    const { viewArea } = this.option();
+    changedArgs.viewArea = viewArea;
+    this._actions?.onItemClick?.(changedArgs);
+    if (this._isDefaultItem(commandName)) {
+      const targetFileItems = this._isIsolatedCreationItemCommand(commandName)
+        ? null
+        : this._targetFileItems;
+      this._commandManager?.executeCommand(commandName, targetFileItems);
     }
+  }
 
-    _createMenuItemByCommandName(commandName) {
-        const { text, icon } = this._commandManager.getCommandByName(commandName);
-        const menuItem = {
-            name: commandName,
-            text,
-            icon
-        };
-        this._addItemClickHandler(commandName, menuItem);
-        return menuItem;
+  _initActions(): void {
+    this._actions = {
+      onContextMenuHidden: this._createActionByOption('onContextMenuHidden'),
+      onContextMenuShowing: this._createActionByOption('onContextMenuShowing'),
+      onItemClick: this._createActionByOption('onItemClick'),
+    };
+  }
+
+  _onContextMenuShowing(e): void {
+    if (this._isVisible) {
+      this._onContextMenuHidden(true);
     }
-
-    _addItemClickHandler(commandName, contextMenuItem) {
-        contextMenuItem.onItemClick = (args) => this._onContextMenuItemClick(commandName, args);
+    // eslint-disable-next-line no-param-reassign
+    e = extend(e, this._menuShowingContext, {
+      options: this.option(),
+      cancel: false,
+    });
+    this._actions?.onContextMenuShowing?.(e);
+    if (!e.cancel) {
+      const items = this.createContextMenuItems(
+        this._menuShowingContext.fileItems,
+        null,
+        this._menuShowingContext.fileSystemItem,
+      );
+      this._contextMenu?.option('dataSource', items);
     }
+  }
 
-    _onContextMenuItemClick(commandName, args) {
-        const changedArgs = extend(true, {}, args);
-        changedArgs.itemData = args.itemData.originalItemData;
-        changedArgs.fileSystemItem = this._targetFileItem?.fileItem;
-        changedArgs.viewArea = this.option('viewArea');
-        this._actions.onItemClick(changedArgs);
-        if(this._isDefaultItem(commandName)) {
-            const targetFileItems = this._isIsolatedCreationItemCommand(commandName) ? null : this._targetFileItems;
-            this._commandManager.executeCommand(commandName, targetFileItems);
-        }
+  tryUpdateVisibleContextMenu(): void {
+    if (this._isVisible) {
+      const items = this.createContextMenuItems(this._targetFileItems);
+      this._contextMenu?.option('dataSource', items);
     }
+  }
 
-    _initActions() {
-        this._actions = {
-            onContextMenuHidden: this._createActionByOption('onContextMenuHidden'),
-            onContextMenuShowing: this._createActionByOption('onContextMenuShowing'),
-            onItemClick: this._createActionByOption('onItemClick')
-        };
+  _onContextMenuShown(): void {
+    this._isVisible = true;
+  }
+
+  _onContextMenuHidden(preserveContext?): void {
+    this._isVisible = false;
+    if (!preserveContext) {
+      this._menuShowingContext = {};
     }
+    this._contextMenu?.option('visible', false);
+    this._raiseContextMenuHidden();
+  }
 
-    _onContextMenuShowing(e) {
-        if(this._isVisible) {
-            this._onContextMenuHidden(true);
-        }
-        e = extend(e, this._menuShowingContext, { options: this.option(), cancel: false });
-        this._actions.onContextMenuShowing(e);
-        if(!e.cancel) {
-            const items = this.createContextMenuItems(this._menuShowingContext.fileItems, null, this._menuShowingContext.fileSystemItem);
-            this._contextMenu.option('dataSource', items);
-        }
+  _raiseContextMenuHidden(): void {
+    this._actions?.onContextMenuHidden?.();
+  }
+
+  _getDefaultOptions(): FileManagerContextMenuOptions {
+    return {
+      ...super._getDefaultOptions(),
+      commandManager: undefined,
+      onContextMenuHidden: undefined,
+      onItemClick: undefined,
+    };
+  }
+
+  _optionChanged(args: OptionChanged<FileManagerContextMenuOptions>): void {
+    const { name } = args;
+
+    switch (name) {
+      case 'commandManager':
+        this.repaint();
+        break;
+      case 'items':
+        this.tryUpdateVisibleContextMenu();
+        break;
+      case 'onItemClick':
+      case 'onContextMenuShowing':
+      case 'onContextMenuHidden':
+        this._actions[name] = this._createActionByOption(name);
+        break;
+      default:
+        super._optionChanged(args);
     }
+  }
 
-    tryUpdateVisibleContextMenu() {
-        if(this._isVisible) {
-            const items = this.createContextMenuItems(this._targetFileItems);
-            this._contextMenu.option('dataSource', items);
-        }
-    }
-
-    _onContextMenuShown() {
-        this._isVisible = true;
-    }
-
-    _onContextMenuHidden(preserveContext) {
-        this._isVisible = false;
-        if(!preserveContext) {
-            this._menuShowingContext = {};
-        }
-        this._contextMenu.option('visible', false);
-        this._raiseContextMenuHidden();
-    }
-
-    _raiseContextMenuHidden() {
-        this._actions.onContextMenuHidden();
-    }
-
-    _getDefaultOptions() {
-        return extend(super._getDefaultOptions(), {
-            commandManager: null,
-            onContextMenuHidden: null,
-            onItemClick: null
-        });
-    }
-
-    _optionChanged(args) {
-        const name = args.name;
-
-        switch(name) {
-            case 'commandManager':
-                this.repaint();
-                break;
-            case 'items':
-                this.tryUpdateVisibleContextMenu();
-                break;
-            case 'onItemClick':
-            case 'onContextMenuShowing':
-            case 'onContextMenuHidden':
-                this._actions[name] = this._createActionByOption(name);
-                break;
-            default:
-                super._optionChanged(args);
-        }
-    }
-
-    get _commandManager() {
-        return this.option('commandManager');
-    }
-
+  get _commandManager(): FileManagerCommandManager | undefined {
+    const { commandManager } = this.option();
+    return commandManager;
+  }
 }
 
 export default FileManagerContextMenu;
