@@ -321,10 +321,6 @@ class DateBoxMask extends DateBoxBase {
       return;
     }
 
-    if (!isNaN(parseInt(text, 10))) {
-      return;
-    }
-
     const limits = this._getActivePartProp('limits')(this._maskValue);
     const startString = this._searchValue + char.toLowerCase();
     const endLimit = limits.max - limits.min;
