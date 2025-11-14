@@ -580,13 +580,26 @@ jobs:
       run: pnpm install --frozen-lockfile
 
     - name: Download DevExtreme build artifacts
+      id: download-artifacts
       uses: actions/download-artifact@v4
       with:
         name: devextreme-build
         path: packages/devextreme/artifacts/
       continue-on-error: true
 
+    - name: Check if artifacts were downloaded
+      id: check-artifacts
+      run: |
+        if [ -d "packages/devextreme/artifacts/js" ] && [ "$(ls -A packages/devextreme/artifacts/js)" ]; then
+          echo "Artifacts found"
+          echo "artifacts-exist=true" >> $GITHUB_OUTPUT
+        else
+          echo "Artifacts not found or empty"
+          echo "artifacts-exist=false" >> $GITHUB_OUTPUT
+        fi
+
     - name: DevExtreme - Build (if artifacts not available)
+      if: steps.check-artifacts.outputs.artifacts-exist != 'true'
       run: pnpx nx build devextreme
 
     - name: Install Roboto font for Material theme
@@ -758,6 +771,15 @@ jobs:
         python -m http.server 8083 &
         python -m http.server 8084 &
 
+    - name: Set concurrency based on framework
+      id: set-concurrency
+      run: |
+        if [[ "${{ matrix.CONSTEL }}" == angular* ]]; then
+          echo "concurrency=2" >> $GITHUB_OUTPUT
+        else
+          echo "concurrency=6" >> $GITHUB_OUTPUT
+        fi
+
     - name: Run TestCafe tests
       shell: bash
       working-directory: apps/demos
@@ -765,7 +787,7 @@ jobs:
         NODE_OPTIONS: --max-old-space-size=8192
         BROWSERS: chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
         # DEBUG: hammerhead:*,testcafe:*
-        CONCURRENCY: 3
+        CONCURRENCY: ${{ steps.set-concurrency.outputs.concurrency }}
         TCQUARANTINE: true
         CONSTEL: ${{ matrix.CONSTEL }}
         THEME: ${{ matrix.THEME }}
@@ -877,6 +899,15 @@ jobs:
           python -m http.server 8083 &
           python -m http.server 8084 &
 
+      - name: Set concurrency based on framework
+        id: set-concurrency
+        run: |
+          if [[ "${{ matrix.CONSTEL }}" == "angular" ]]; then
+            echo "concurrency=1" >> $GITHUB_OUTPUT
+          else
+            echo "concurrency=2" >> $GITHUB_OUTPUT
+          fi
+
       - name: Run TestCafe tests
         shell: bash
         working-directory: apps/demos
@@ -884,7 +915,7 @@ jobs:
           CHANGEDFILEINFOSPATH: changed-files.json
           BROWSERS: chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
           # DEBUG: hammerhead:*,testcafe:*
-          CONCURRENCY: 1
+          CONCURRENCY: ${{ steps.set-concurrency.outputs.concurrency }}
           TCQUARANTINE: true
           CONSTEL: ${{ matrix.CONSTEL }}
           THEME: ${{ matrix.THEME }}

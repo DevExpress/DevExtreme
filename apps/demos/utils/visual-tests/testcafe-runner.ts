@@ -53,7 +53,7 @@ function accessibilityTestCafeReporter() {
 
 async function main() {
   const tester = await createTestCafe({
-    // cache: true
+    cache: true
   });
   const runner = tester.createRunner();
   const concurrency = (process.env.CONCURRENCY && (+process.env.CONCURRENCY)) || 1;
