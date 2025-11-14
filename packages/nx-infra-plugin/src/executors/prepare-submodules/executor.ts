@@ -46,6 +46,12 @@ const runExecutor: PromiseExecutor<PrepareSubmodulesExecutorSchema> = async (opt
   try {
     logger.info(MSG_PREPARING);
 
+    if (options.submoduleFolders) {
+      logger.info(
+        `Using custom submoduleFolders: ${JSON.stringify(options.submoduleFolders, null, 2)}`,
+      );
+    }
+
     const packParamsForFolders = options.submoduleFolders || DEFAULT_SUBMODULE_FOLDERS;
 
     const esmIndexPath = path.join(distDirectory, ESM_DIR, 'index.js');

@@ -2354,7 +2354,7 @@ describe('API Handlers', () => {
       expect(columnSendRequestResolved).toHaveBeenCalledTimes(0);
     });
 
-    it('should take into account reduced data', async () => {
+    it('should take into account reduced row count', async () => {
       const { instance } = await createDataGrid({
         dataSource: [
           { id: 1, name: 'Name 1', value: 10 },
@@ -2389,6 +2389,47 @@ describe('API Handlers', () => {
       expect(columnSendRequestResolved).toHaveBeenCalledTimes(1);
       expect(sendRequestPromptSpy).toHaveBeenCalledWith(expect.objectContaining({
         user: expect.stringContaining('Dataset: {"2":{"id":2,"name":"Name 2","value":20}}'),
+      }));
+
+      await Promise.resolve();
+      expect(abortSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('should take into account reduced column count', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+          { id: 2, name: 'Name 2', value: 20 },
+        ],
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration: columnAIIntegration,
+              mode: 'manual',
+              prompt: 'Test prompt',
+            },
+          },
+        ],
+        onAIColumnRequestCreating: (e) => {
+          const reduced = e.data.map((item) => ({ id: item.id }));
+          e.data.splice(0, e.data.length, ...reduced);
+        },
+      });
+
+      instance.sendAIColumnRequest('myColumn');
+      // There is enough time to resolve a promise
+      jest.advanceTimersByTime(10000);
+      expect(columnSendRequestStarted).toHaveBeenCalledTimes(1);
+      expect(columnSendRequestResolved).toHaveBeenCalledTimes(1);
+      expect(sendRequestPromptSpy).toHaveBeenCalledWith(expect.objectContaining({
+        user: expect.stringContaining('Dataset: {"1":{"id":1},"2":{"id":2}}.'),
       }));
 
       await Promise.resolve();

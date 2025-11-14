@@ -12,25 +12,25 @@ fixture.disablePageReloads`Resize appointments in the Scheduler basic views`
 
   await t
     .drag(resizableAppointment.resizableHandle.bottom, 0, 100)
-    .expect(resizableAppointment.size.height).eql('200px')
+    .expect(resizableAppointment.size.height).eql('190px')
     .expect(resizableAppointment.date.time)
-    .eql('10:00 AM - 12:00 PM')
+    .eql('10:00 AM - 12:30 PM')
 
     .drag(resizableAppointment.resizableHandle.top, 0, 100)
     .expect(resizableAppointment.size.height)
-    .eql('100px')
+    .eql('76px')
     .expect(resizableAppointment.date.time)
-    .eql('11:00 AM - 12:00 PM')
+    .eql('11:30 AM - 12:30 PM')
 
     .drag(resizableAppointment.resizableHandle.top, 0, -100)
     .expect(resizableAppointment.size.height)
-    .eql('200px')
+    .eql('190px')
     .expect(resizableAppointment.date.time)
-    .eql('10:00 AM - 12:00 PM')
+    .eql('10:00 AM - 12:30 PM')
 
     .drag(resizableAppointment.resizableHandle.bottom, 0, -100)
     .expect(resizableAppointment.size.height)
-    .eql('100px')
+    .eql('76px')
     .expect(resizableAppointment.date.time)
     .eql('10:00 AM - 11:00 AM');
 }).before(async () => createScheduler({
@@ -78,15 +78,15 @@ test('Resize should work correctly with startDateExpr (T944693)', async (t) => {
 
   await t
     .drag(resizableAppointment.resizableHandle.bottom, 0, 100)
-    .expect(resizableAppointment.size.height).eql('200px')
+    .expect(resizableAppointment.size.height).eql('190px')
     .expect(resizableAppointment.date.time)
-    .eql('10:00 AM - 12:00 PM')
+    .eql('10:00 AM - 12:30 PM')
 
     .drag(resizableAppointment.resizableHandle.top, 0, 100)
     .expect(resizableAppointment.size.height)
-    .eql('100px')
+    .eql('76px')
     .expect(resizableAppointment.date.time)
-    .eql('11:00 AM - 12:00 PM');
+    .eql('11:30 AM - 12:30 PM');
 }).before(async () => createScheduler({
   views: ['week'],
   currentView: 'week',

@@ -19,6 +19,7 @@ $chat-background-color: $base-bg !default;
 $chat-border-color: $base-border-color !default;
 $chat-messagebox-border-color: $chat-border-color !default;
 $chat-messagebox-file-background-color: $button-normal-text-hover-bg !default;
+$chat-messagebox-file-cancel-button-secondary-color: $button-normal-text-selected-bg !default;
 $chat-message-editing-preview-accent-color: $base-accent !default;
 $chat-message-editing-preview-cancel-button-color: $texteditor-label-color !default;
 
@@ -172,7 +173,7 @@ $chat-file-secondary-color: null !default;
   $chat-typingindicator-circle-bg-color: lighten($base-bg, 33.92) !default;
   $chat-typingindicator-circle-bg-color-center: lighten($base-bg, 43.92) !default;
 
-  $chat-file-container-box-shadow: 0 0 2px 0 color.change($base-shadow-color, $alpha: 0.28), 0 1px 2px 0 color.change($base-shadow-color, $alpha: 0.32) !default;
+  $chat-file-container-box-shadow: 0 0 2px 0 color.change($base-shadow-color, $alpha: 0.24), 0 1px 2px 0 color.change($base-shadow-color, $alpha: 0.28) !default;
   $chat-file-secondary-color: $base-icon-color !default;
 }
 

@@ -1,0 +1,88 @@
+{
+  "type": "object",
+  "properties": {
+    "metadataPath": {
+      "type": "string",
+      "description": "Path to metadata JSON file"
+    },
+    "framework": {
+      "type": "string",
+      "enum": ["react", "vue"],
+      "default": "react",
+      "description": "Target framework for component generation"
+    },
+    "generatorConfig": {
+      "type": "string",
+      "description": "Name of config object from tools/generators-config.js (e.g., 'reactConfig', 'vueConfig')"
+    },
+    "componentsDir": {
+      "type": "string",
+      "description": "Output directory for generated components",
+      "default": "./src"
+    },
+    "indexFileName": {
+      "type": "string",
+      "description": "Index file name",
+      "default": "./src/index.ts"
+    },
+    "baseComponent": {
+      "type": "string",
+      "description": "Base component path",
+      "default": "./core/component"
+    },
+    "extensionComponent": {
+      "type": "string",
+      "description": "Extension component path",
+      "default": "./core/extension-component"
+    },
+    "configComponent": {
+      "type": "string",
+      "description": "Config component path",
+      "default": "./core/nested-option"
+    },
+    "quotes": {
+      "type": "string",
+      "enum": ["single", "double"],
+      "description": "Quote style for generated code"
+    },
+    "explicitIndexInImports": {
+      "type": "boolean",
+      "description": "Include /index in import paths"
+    },
+    "componentGeneratorTplConfig": {
+      "type": "object",
+      "description": "Framework-specific template configuration (Vue only)",
+      "properties": {
+        "createComponentFn": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "path": { "type": "string" }
+          }
+        },
+        "prepareComponentConfigFn": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "path": { "type": "string" }
+          }
+        },
+        "prepareExtensionComponentConfigFn": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "path": { "type": "string" }
+          }
+        },
+        "prepareConfigurationComponentConfigFn": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "path": { "type": "string" }
+          }
+        }
+      }
+    }
+  },
+  "required": ["metadataPath", "quotes", "explicitIndexInImports"]
+}

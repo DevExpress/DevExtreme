@@ -9,6 +9,8 @@
   $messagebox-files-container-padding,
   $messagebox-files-container-padding-top,
   $messagebox-file-background-color,
+  $messagebox-file-cancel-button-secondary-color,
+  $messagebox-file-box-shadow,
 ) {
   .dx-chat-messagebox {
     padding: $messagebox-padding;
@@ -42,6 +44,12 @@
 
       .dx-fileuploader-file-container {
         background-color: $messagebox-file-background-color;
+        box-shadow: $messagebox-file-box-shadow;
+
+        .dx-fileuploader-cancel-button.dx-state-hover,
+        .dx-fileuploader-cancel-button.dx-state-focused {
+          background-color: $messagebox-file-cancel-button-secondary-color;
+        }
       }
     }
   }

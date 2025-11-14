@@ -11,10 +11,10 @@
   "module": "./esm/index.js",
   "types": "./cjs/index.d.ts",
   "scripts": {
-    "clean": "gulp clean",
-    "regenerate": "pnpm run clean && gulp generate",
+    "clean": "pnpm --workspace-root nx run devextreme-vue:clean",
+    "regenerate": "pnpm --workspace-root nx run devextreme-vue:regenerate",
     "lint": "eslint --ignore-pattern src/core/__tests__/ src/core",
-    "pack": "gulp npm.pack",
+    "pack": "pnpm --workspace-root nx run devextreme-vue:pack",
     "test": "jest"
   },
   "keywords": [
@@ -63,15 +63,10 @@
   "devDependencies": {
     "@vue/compiler-sfc": "3.3.4",
     "@vue/test-utils": "2.0.0-beta.7",
-    "del": "3.0.0",
     "devextreme-metadata": "workspace:*",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-devextreme": "1.1.5",
     "eslint-plugin-spellcheck": "0.0.20",
-    "gulp": "4.0.2",
-    "gulp-header": "2.0.9",
-    "gulp-shell": "0.6.5",
-    "gulp-typescript": "5.0.1",
     "jest-environment-jsdom": "29.7.0",
     "ts-jest": "29.1.3",
     "typescript": "4.9.5",
