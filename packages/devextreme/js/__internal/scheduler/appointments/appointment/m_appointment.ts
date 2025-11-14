@@ -15,6 +15,7 @@ import {
   ALL_DAY_APPOINTMENT_CLASS,
   APPOINTMENT_10MIN_CLASS,
   APPOINTMENT_15MIN_CLASS,
+  APPOINTMENT_20MIN_CLASS,
   APPOINTMENT_CONTENT_CLASSES,
   APPOINTMENT_DRAG_SOURCE_CLASS,
   APPOINTMENT_HAS_RESOURCE_COLOR_CLASS,
@@ -253,6 +254,9 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
         break;
       case durationMinutes <= 15:
         (this.$element() as any).addClass(APPOINTMENT_15MIN_CLASS);
+        break;
+      case durationMinutes <= 20:
+        (this.$element() as any).addClass(APPOINTMENT_20MIN_CLASS);
         break;
       default:
         break;

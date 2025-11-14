@@ -171,6 +171,68 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 
     height: 2px;
   }
+
+  .dx-scheduler-appointment-10min,
+  .dx-scheduler-appointment-15min {
+    .dx-scheduler-appointment-content {
+      padding: $material-scheduler-appointment-short-content-padding;
+    }
+  }
+
+  .dx-scheduler-appointment-15min {
+    &.dx-scheduler-appointment-recurrence .dx-scheduler-appointment-content {
+      padding-right: $material-scheduler-appointment-15min-recurrence-padding-right;
+    }
+
+    .dx-scheduler-appointment-recurrence-icon {
+      font-size: $material-scheduler-appointment-15min-icon-font-size;
+      top: $material-scheduler-appointment-15min-icon-top;
+      right: $material-scheduler-appointment-15min-icon-right;
+    }
+  }
+
+  @if $size == "default" {
+    .dx-scheduler-appointment-10min {
+      &.dx-scheduler-appointment-recurrence .dx-scheduler-appointment-content {
+        padding-right: $material-scheduler-appointment-10min-recurrence-padding-right;
+      }
+
+      .dx-scheduler-appointment-title {
+        line-height: $material-scheduler-appointment-10min-title-line-height;
+      }
+
+      .dx-scheduler-appointment-recurrence-icon {
+        font-size: $material-scheduler-appointment-10min-icon-font-size;
+        top: $material-scheduler-appointment-10min-icon-top;
+        right: $material-scheduler-appointment-10min-icon-right;
+      }
+    }
+  }
+
+  @if $size == "compact" {
+    .dx-scheduler-appointment-10min {
+      .dx-scheduler-appointment-content {
+        display: none;
+      }
+    }
+
+    .dx-scheduler-appointment-15min {
+      .dx-scheduler-appointment-title {
+        font-size: $material-scheduler-appointment-15min-title-font-size;
+        line-height: $material-scheduler-appointment-15min-title-line-height;
+      }
+    }
+
+    .dx-scheduler-appointment-20min {
+      .dx-scheduler-appointment-title {
+        line-height: $material-scheduler-appointment-20min-title-line-height;
+      }
+
+      .dx-scheduler-appointment-recurrence-icon {
+        top: $material-scheduler-appointment-20min-icon-top;
+      }
+    }
+  }
 }
 
 .dx-scheduler-header-panel {
@@ -942,80 +1004,4 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 
 .dx-scheduler-header-panel-empty-cell {
   margin-top: 0;
-}
-
-.dx-scheduler-work-space-day,
-.dx-scheduler-work-space-week,
-.dx-scheduler-work-space-work-week {
-  .dx-scheduler-appointment-10min,
-  .dx-scheduler-appointment-15min {
-    .dx-scheduler-appointment-content {
-      padding: 0 7px;
-    }
-  }
-
-  @if $size == "default" {
-    .dx-scheduler-appointment-10min {
-      &.dx-scheduler-appointment-recurrence .dx-scheduler-appointment-content {
-        padding-right: 14px;
-      }
-
-      .dx-scheduler-appointment-title {
-        line-height: 12px;
-      }
-
-      .dx-scheduler-appointment-recurrence-icon {
-        font-size: 12px;
-        top: 0;
-        right: 2px;
-      }
-    }
-
-    .dx-scheduler-appointment-15min {
-      &.dx-scheduler-appointment-recurrence .dx-scheduler-appointment-content {
-        padding-right: 18px;
-      }
-
-      .dx-scheduler-appointment-recurrence-icon {
-        font-size: 16px;
-        top: 1px;
-        right: 2px;
-      }
-    }
-  }
-
-  @if $size == "compact" {
-    .dx-scheduler-appointment-10min {
-      .dx-scheduler-appointment-content {
-        display: none;
-      }
-    }
-
-    .dx-scheduler-appointment-15min {
-      &.dx-scheduler-appointment-recurrence .dx-scheduler-appointment-content {
-        padding-right: 14px;
-      }
-
-      .dx-scheduler-appointment-title {
-        font-size: 8px;
-        line-height: 12px;
-      }
-
-      .dx-scheduler-appointment-recurrence-icon {
-        font-size: 12px;
-        top: 1px;
-        right: 2px;
-      }
-    }
-
-    .dx-scheduler-appointment-20min {
-      .dx-scheduler-appointment-title {
-        line-height: 12px;
-      }
-
-      .dx-scheduler-appointment-recurrence-icon {
-        top: 0;
-      }
-    }
-  }
 }
