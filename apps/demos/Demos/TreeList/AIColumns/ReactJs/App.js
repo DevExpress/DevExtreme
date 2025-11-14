@@ -1,7 +1,7 @@
 import React from 'react';
 import TreeList, { Column, Scrolling } from 'devextreme-react/tree-list';
 import { employees, aiIntegration } from './data.js';
-import Employee from './Empoyee.js';
+import Employee from './Employee.js';
 import Status from './Status.js';
 import Email from './Email.js';
 
