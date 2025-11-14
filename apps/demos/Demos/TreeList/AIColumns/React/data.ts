@@ -31,7 +31,7 @@ async function getAIResponse(messages: AIMessage[], signal: AbortSignal) {
   return result;
 }
 
-async function getAIResponseRecursive(messages, signal) {
+async function getAIResponseRecursive(messages: AIMessage[], signal: AbortSignal) {
   return getAIResponse(messages, signal)
     .catch(async (error) => {
       if (!error.message.includes('Connection error')) {

@@ -98,7 +98,7 @@ export default function App() {
         hideOnOutsideClick={true}
         title="Image Info"
         onHiding={hideInfo}
-        contentRender={LicenseInfo}
+        contentRender={() => <LicenseInfo vehicle={currentVehicle} />}
       >
         <Position
           at="center"

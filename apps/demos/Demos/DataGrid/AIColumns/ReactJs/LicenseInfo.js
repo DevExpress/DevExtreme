@@ -1,12 +1,12 @@
 import React from 'react';
 
-const LicenseInfo = (props) => {
-  if (!props.data) {
+const LicenseInfo = ({ vehicle }) => {
+  if (!vehicle) {
     return null;
   }
   const {
     LicenseName, Author, Source, Edits,
-  } = props.data;
+  } = vehicle;
   const vehicleLink = `https://${Source}`;
   return (
     <div>

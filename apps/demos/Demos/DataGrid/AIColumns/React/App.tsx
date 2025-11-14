@@ -56,7 +56,12 @@ export default function App() {
           caption="Trademark"
           width={200}
           dataField="TrademarkName"
-          cellRender={(cellData) => <Trademark vehicle={cellData.data} onShowInfo={showInfo} />}
+          cellRender={(cellData) =>
+            <Trademark
+              vehicle={cellData.data}
+              onShowInfo={showInfo}
+            />
+          }
         />
         <Column
           dataField="Price"
@@ -101,7 +106,9 @@ export default function App() {
         hideOnOutsideClick={true}
         title="Image Info"
         onHiding={hideInfo}
-        contentRender={LicenseInfo}
+        contentRender={() =>
+          <LicenseInfo vehicle={currentVehicle} />
+        }
       >
         <Position
           at="center"
