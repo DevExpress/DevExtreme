@@ -1,5 +1,6 @@
 <template>
   <DxDataGrid
+    keyExpr="ID"
     :data-source="vehicles"
     :show-borders="true"
     :grouping="{ contextMenuEnabled: false }"
