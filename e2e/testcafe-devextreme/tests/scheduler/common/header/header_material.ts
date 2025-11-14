@@ -46,8 +46,7 @@ test.meta({ runInTheme: Themes.genericLight })('viewSwitcher dropdown button pop
   height: 580,
 }));
 
-// visual: material.blue.light
-test.skip('The toolbar should not display if the config is empty', async (t) => {
+test.meta({ runInTheme: Themes.materialBlue })('The toolbar should not display if the config is empty', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const scheduler = new Scheduler('#container');

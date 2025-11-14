@@ -93,7 +93,7 @@ test('The Select All checkbox should be visible when a column headerCellTemplate
 });
 
 // T1214734
-test.meta({ unstable: true })('Select rows by shift should work when grid has real time updates', async (t) => {
+test('Select rows by shift should work when grid has real time updates', async (t) => {
   const dataGrid = new DataGrid('#container');
   const secondRow = dataGrid.getDataRow(1).getSelectCheckBox();
   const seventhRow = dataGrid.getDataRow(6).getSelectCheckBox();

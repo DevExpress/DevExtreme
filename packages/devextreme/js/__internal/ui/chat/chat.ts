@@ -237,9 +237,7 @@ class Chat extends Widget<Properties> {
   }
 
   _getAttachmentDownloadHandler(): ((e: AttachmentDownloadClickEvent) => void) | undefined {
-    const { onAttachmentDownloadClick } = this.option();
-
-    if (!onAttachmentDownloadClick) {
+    if (!this.hasActionSubscription('onAttachmentDownloadClick')) {
       return;
     }
 
@@ -247,8 +245,35 @@ class Chat extends Widget<Properties> {
     return (e: AttachmentDownloadClickEvent): void => { this._attachmentDownloadAction?.(e); };
   }
 
+  on(eventName: string, ...args: unknown[]): this {
+    // @ts-expect-error ts-error
+    const result = super.on.apply(this, [eventName, ...args]);
+
+    if (eventName === 'attachmentDownloadClick') {
+      this._updateAttachmentDownloadHandler();
+    }
+
+    return result;
+  }
+
+  off(eventName: string, ...args: unknown[]): this {
+    // @ts-expect-error ts-error
+    const result = super.off.apply(this, [eventName, ...args]);
+
+    if (eventName === 'attachmentDownloadClick') {
+      this._updateAttachmentDownloadHandler();
+    }
+
+    return result;
+  }
+
+  _updateAttachmentDownloadHandler(): void {
+    this._messageList?.option('onAttachmentDownloadClick', this._getAttachmentDownloadHandler());
+  }
+
   protected _allowEditAction(message: Message): boolean {
     const { editing } = this.option();
+
     if (!editing) {
       return false;
     }
@@ -660,9 +685,7 @@ class Chat extends Widget<Properties> {
         break;
       case 'onAttachmentDownloadClick':
         this._createAttachmentDownloadAction();
-        this._messageList.option({
-          onAttachmentDownloadClick: this._getAttachmentDownloadHandler(),
-        });
+        this._updateAttachmentDownloadHandler();
         break;
       case 'showDayHeaders':
       case 'showAvatar':

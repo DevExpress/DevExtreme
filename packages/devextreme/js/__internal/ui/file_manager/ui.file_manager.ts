@@ -36,10 +36,6 @@ import type {
   SelectionChangedEvent,
   ToolbarItemClickEvent,
 } from '@js/ui/file_manager';
-import { FileItemsController, OPERATIONS } from '@js/ui/file_manager/file_items_controller';
-import FileManagerAdaptivityControl from '@js/ui/file_manager/ui.file_manager.adaptivity';
-import FileManagerBreadcrumbs from '@js/ui/file_manager/ui.file_manager.breadcrumbs';
-import { defaultPermissions, FileManagerCommandManager } from '@js/ui/file_manager/ui.file_manager.command_manager';
 import { extendAttributes, findItemsByKeys } from '@js/ui/file_manager/ui.file_manager.common';
 import FileManagerContextMenu from '@js/ui/file_manager/ui.file_manager.context_menu';
 import FileManagerEditingControl from '@js/ui/file_manager/ui.file_manager.editing';
@@ -47,9 +43,13 @@ import FileManagerFilesTreeView from '@js/ui/file_manager/ui.file_manager.files_
 import FileManagerDetailsItemList from '@js/ui/file_manager/ui.file_manager.item_list.details';
 import FileManagerThumbnailsItemList from '@js/ui/file_manager/ui.file_manager.item_list.thumbnails';
 import FileManagerNotificationControl from '@js/ui/file_manager/ui.file_manager.notification';
-import FileManagerToolbar from '@js/ui/file_manager/ui.file_manager.toolbar';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
+import { FileItemsController, OPERATIONS } from '@ts/ui/file_manager/file_items_controller';
+import FileManagerAdaptivityControl from '@ts/ui/file_manager/ui.file_manager.adaptivity';
+import FileManagerBreadcrumbs from '@ts/ui/file_manager/ui.file_manager.breadcrumbs';
+import { defaultPermissions, FileManagerCommandManager } from '@ts/ui/file_manager/ui.file_manager.command_manager';
+import FileManagerToolbar from '@ts/ui/file_manager/ui.file_manager.toolbar';
 import notify from '@ts/ui/notify';
 
 const FILE_MANAGER_CLASS = 'dx-filemanager';
@@ -67,7 +67,7 @@ const VIEW_AREAS = {
   items: 'itemView',
 };
 
-interface FileManagerActions {
+export interface FileManagerActions {
   onContextMenuItemClick?: (e: Partial<ContextMenuItemClickEvent>) => void;
   onContextMenuShowing?: (e: Partial<ContextMenuShowingEvent>) => void;
   onCurrentDirectoryChanged?: (e: Partial<CurrentDirectoryChangedEvent>) => void;
@@ -143,8 +143,7 @@ class FileManager extends Widget<Properties> {
 
   _breadcrumbs?: FileManagerBreadcrumbs;
 
-  _initTemplates(): void {
-  }
+  _initTemplates(): void {}
 
   _init(): void {
     super._init();
@@ -188,7 +187,8 @@ class FileManager extends Widget<Properties> {
     this._itemKeyToFocus = undefined;
     this._loadedWidgets = [];
 
-    this._commandManager = new FileManagerCommandManager(this.option('permissions'));
+    const { permissions } = this.option();
+    this._commandManager = new FileManagerCommandManager(permissions);
 
     this.$element().addClass(FILE_MANAGER_CLASS);
 
@@ -504,7 +504,7 @@ class FileManager extends Widget<Properties> {
         .then((items) => this._getPreparedItemViewItems(items));
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    // @ts-expect-error ts-error
     return result;
   }
 
@@ -516,7 +516,7 @@ class FileManager extends Widget<Properties> {
     this._firstItemViewLoad = false;
     const { selectedItemKeys } = this.option();
     if (selectedItemKeys?.length && selectedItemKeys.length > 0) {
-      when(itemsResult).done((items) => {
+      when(itemsResult).done((items): void => {
         const selectedItems = findItemsByKeys(items, selectedItemKeys);
         if (selectedItems.length > 0) {
           this._updateToolbar(selectedItems);
@@ -743,16 +743,16 @@ class FileManager extends Widget<Properties> {
       }
       case 'selectedItemKeys':
         if (!this._lockSelectionProcessing && this._itemView) {
-          this._itemView.option('selectedItemKeys', args.value);
+          this._itemView.option('selectedItemKeys', value);
         }
         break;
       case 'focusedItemKey':
         if (!this._lockFocusedItemProcessing && this._itemView) {
-          this._itemView.option('focusedItemKey', args.value);
+          this._itemView.option('focusedItemKey', value);
         }
         break;
       case 'rootFolderName':
-        this._controller?.setRootText(args.value);
+        this._controller?.setRootText(value);
         this._invalidate();
         break;
       case 'fileSystemProvider': {
@@ -762,7 +762,7 @@ class FileManager extends Widget<Properties> {
         }
         const { currentPathKeys } = this.option();
         const pathKeys = this._lockCurrentPathProcessing ? undefined : currentPathKeys;
-        this._controller?.updateProvider(args.value, pathKeys)
+        this._controller?.updateProvider(value, pathKeys)
           // eslint-disable-next-line @stylistic/max-len,@typescript-eslint/no-misused-promises
           .then((): DeferredObj<unknown> | null | undefined => this._providerUpdateDeferred?.resolve())
           .always((): void => {
@@ -772,7 +772,7 @@ class FileManager extends Widget<Properties> {
         break;
       }
       case 'allowedFileExtensions':
-        this._controller?.setAllowedFileExtensions(args.value);
+        this._controller?.setAllowedFileExtensions(value);
         this._invalidate();
         break;
       case 'upload': {
@@ -904,7 +904,7 @@ class FileManager extends Widget<Properties> {
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  executeCommand(commandName) {
+  executeCommand(commandName: string) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._commandManager?.executeCommand(commandName);
   }
@@ -919,13 +919,13 @@ class FileManager extends Widget<Properties> {
     return this._controller?.getCurrentDirectory();
   }
 
-  _onControllerInitialized({ controller }): void {
+  _onControllerInitialized({ controller }: { controller: FileItemsController }): void {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     this._controller = this._controller || controller;
     this._syncToCurrentDirectory();
   }
 
-  _onDataLoading({ operation }): void {
+  _onDataLoading({ operation }: { operation: string }): void {
     let options: object | null = null;
 
     const { selectedItemKeys } = this.option();
@@ -990,7 +990,6 @@ class FileManager extends Widget<Properties> {
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   getDirectories(parentDirectoryInfo, skipNavigationOnError) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._controller?.getDirectories(parentDirectoryInfo, skipNavigationOnError);
   }
 

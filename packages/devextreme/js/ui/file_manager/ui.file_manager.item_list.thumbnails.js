@@ -10,7 +10,7 @@ import messageLocalization from '../../common/core/localization/message';
 
 import FileManagerThumbnailListBox from './ui.file_manager.items_list.thumbnails.list_box';
 import FileManagerItemListBase from './ui.file_manager.item_list';
-import { OPERATIONS } from './file_items_controller';
+import { OPERATIONS } from '../../__internal/ui/file_manager/file_items_controller';
 
 const FILE_MANAGER_THUMBNAILS_ITEM_LIST_CLASS = 'dx-filemanager-thumbnails';
 const FILE_MANAGER_THUMBNAILS_ITEM_CLASS = 'dx-filemanager-thumbnails-item';
