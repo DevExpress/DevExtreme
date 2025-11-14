@@ -116,7 +116,7 @@ const onAIColumnRequestCreating = (e: { data: Partial<Vehicle>[] }) => {
 </script>
 
 <style scoped>
-#gridContainer .ai__cell {
+#app .ai__cell {
   background-color: var(--dx-datagrid-row-alternation-bg);
 }
 </style>
