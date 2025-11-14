@@ -168,10 +168,7 @@ AspNet.makeMetadata({
       ['ui/sortable:dxSortableOptions', 'ui/list:dxListOptions.itemDragging'],
       ['ui/splitter:dxSplitterOptions', 'ui/splitter:dxSplitterItem.splitter'],
       ['ui/tab_panel:dxTabPanelOptions', 'ui/form:dxFormTabbedItem.tabPanelOptions'],
-      [
-        'ui/text_box:dxTextBoxOptions',
-        'common/grids:ColumnAIOptions.editorOptions'
-      ],
+      ['ui/text_box:dxTextBoxOptions', 'common/grids:ColumnAIOptions.editorOptions'],
       [
         'ui/text_box:dxTextBoxOptions',
         'ui/widget/ui.search_box_mixin:SearchBoxMixinOptions.searchEditorOptions',
