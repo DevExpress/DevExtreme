@@ -1,5 +1,4 @@
 /* eslint-disable import/first */
-
 import errors from '@ts/core/utils/m_error';
 import { compare as compareVersions } from '@ts/core/utils/m_version';
 // eslint-disable-next-line import/no-extraneous-dependencies
