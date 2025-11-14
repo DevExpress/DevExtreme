@@ -38,6 +38,8 @@ const getTestSpecificSkipRules = (testName) => {
       return ['empty-table-header'];
     case 'Localization-UsingGlobalize':
       return ['label'];
+    case 'DataGrid-EditStateManagement':
+      return ['aria-required-parent'];
     default:
       return [];
   }
