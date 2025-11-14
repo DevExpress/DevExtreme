@@ -166,6 +166,7 @@ window.config = {
     '@angular/platform-browser-dynamic': 'bundles:@angular/platform-browser-dynamic.umd.js',
     '@angular/core': 'bundles:@angular/core.umd.js',
     '@angular/core/primitives/signals': 'bundles:@angular/core.primitives.signals.umd.js',
+    '@angular/core/primitives/di': 'bundles:@angular/core.primitives.di.umd.js',
     '@angular/common': 'bundles:@angular/common.umd.js',
     '@angular/common/http': 'bundles:@angular/common-http.umd.js',
     '@angular/platform-browser': 'bundles:@angular/platform-browser.umd.js',
@@ -281,6 +282,8 @@ window.config = {
     // Prettier
     'prettier/standalone': 'npm:prettier/standalone.js',
     'prettier/parser-html': 'npm:prettier/parser-html.js',
+
+    'zone.js': 'npm:zone.js/bundles/zone.umd.js',
   },
   packages: {
     'app': {

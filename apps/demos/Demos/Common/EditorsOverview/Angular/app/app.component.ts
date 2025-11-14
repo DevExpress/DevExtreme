@@ -20,6 +20,7 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
+  standalone: false,
   selector: 'demo-app',
   providers: [],
   templateUrl: `.${modulePrefix}/app.component.html`,

@@ -19,6 +19,7 @@ function getOrderDay({ OrderDate }: Order): number {
 }
 
 @Component({
+  standalone: false,
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   providers: [Service],

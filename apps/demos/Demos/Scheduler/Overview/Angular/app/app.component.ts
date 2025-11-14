@@ -7,7 +7,7 @@ import { DxSchedulerModule } from 'devextreme-angular';
 import { DataSource } from 'devextreme-angular/common/data';
 import { Service, Employee, Data } from './app.service';
 
-@Pipe({ name: 'apply' })
+@Pipe({ name: 'apply', standalone: true })
 export class ApplyPipe<TArgs, TReturn> implements PipeTransform {
   transform(func: ((...args: TArgs[]) => TReturn), ...args: TArgs[]): TReturn { return func(...args); }
 }
@@ -23,6 +23,7 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
+  standalone: false,
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
@@ -70,8 +71,9 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxSchedulerModule,
+    ApplyPipe,
   ],
-  declarations: [AppComponent, ApplyPipe],
+  declarations: [AppComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

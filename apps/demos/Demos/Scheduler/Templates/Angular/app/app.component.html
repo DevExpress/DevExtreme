@@ -41,14 +41,17 @@
         >Ticket Price:
         <strong>{{ "$" + model.targetedAppointmentData.price }}</strong>
       </div>
-      <div class="dropdown-appointment-dates">
-        {{
-          (model.targetedAppointmentData.displayStartDate
-            | date : "shortTime") +
-            " - " +
-            (model.targetedAppointmentData.displayEndDate | date : "shortTime")
-        }}
-      </div>
+      <div class="dropdown-appointment-dates">{{
+        (formatDate
+          | apply
+            : model.targetedAppointmentData.displayStartDate
+            : "shortTime") +
+          " - " +
+          (formatDate
+            | apply
+              : model.targetedAppointmentData.displayEndDate
+              : "shortTime")
+      }}</div>
     </div>
   </div>
 

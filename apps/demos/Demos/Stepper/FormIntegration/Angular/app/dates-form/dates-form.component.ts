@@ -10,6 +10,7 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
+  standalone: false,
   selector: 'dates-form',
   templateUrl: `.${modulePrefix}/dates-form/dates-form.component.html`,
 })
