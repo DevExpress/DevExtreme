@@ -11,10 +11,10 @@ const remove = (element) => {
 
   if (parentNode) {
     const { nextSibling } = element;
+    cleanDataRecursive(element);
     parentNode.$V = element.$V;
     render(null, parentNode);
     parentNode.insertBefore(element, nextSibling);
-    cleanDataRecursive(element);
     element.innerHTML = '';
     delete parentNode.$V;
   }
