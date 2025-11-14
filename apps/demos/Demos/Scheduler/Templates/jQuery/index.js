@@ -104,9 +104,12 @@ $(() => {
       popup: {
         maxWidth: 440,
         onOptionChanged: (e) => {
-          if (e.name === 'toolbarItems' && e.value && e.value.length) {
-            e.component.option('toolbarItems[1].toolbar', 'bottom');
-            e.component.option('toolbarItems[2].toolbar', 'bottom');
+          if (e.value) {
+            e.value.forEach((item, index) => {
+              if (item.shortcut === 'done' || item.shortcut === 'cancel') {
+                e.component.option(`toolbarItems[${index}].toolbar`, 'bottom');
+              }
+            });
           }
         },
       },
