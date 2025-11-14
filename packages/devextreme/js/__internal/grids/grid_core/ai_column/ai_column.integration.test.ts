@@ -44,7 +44,12 @@ const createDataGrid = async (
     .attr('id', GRID_CONTAINER_ID)
     .appendTo(document.body);
 
-  const instance = new DataGrid($container.get(0) as HTMLDivElement, options);
+  const dataGridOptions: DataGridProperties = {
+    keyExpr: 'id',
+    ...options,
+  };
+
+  const instance = new DataGrid($container.get(0) as HTMLDivElement, dataGridOptions);
   const component = new DataGridModel($container.get(0) as HTMLElement);
 
   jest.runAllTimers();
@@ -59,6 +64,7 @@ const createDataGrid = async (
 const beforeTest = (): void => {
   jest.useFakeTimers();
   jest.spyOn(errors, 'log').mockImplementation(jest.fn());
+  jest.spyOn(errors, 'Error').mockImplementation(() => ({}));
 };
 
 const afterTest = (): void => {
@@ -581,6 +587,91 @@ describe('Options', () => {
 
       expect(component.getDataCell(0, 3).getText()).toBe('Test - No Data');
       expect(component.getDataCell(1, 3).getText()).toBe('Test - No Data');
+    });
+  });
+
+  describe('when the keyExpr is not set', () => {
+    it('should throw E1042', async () => {
+      const onDataErrorOccurredMock = jest.fn();
+      const sendRequestMock = jest.fn((): RequestResult => ({
+        promise: new Promise<string>((resolve) => {
+          resolve('{}');
+        }),
+        abort: (): void => {},
+      }));
+
+      await createDataGrid({
+        keyExpr: undefined,
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            ai: {
+              prompt: 'Initial Prompt',
+              aiIntegration: new AIIntegration({
+                sendRequest: sendRequestMock,
+              }),
+            },
+          },
+        ],
+        onDataErrorOccurred: onDataErrorOccurredMock,
+      });
+
+      expect(sendRequestMock).toHaveBeenCalledTimes(0);
+      expect(onDataErrorOccurredMock).toHaveBeenCalledTimes(1);
+      expect(errors.Error).toHaveBeenCalledWith('E1042', 'AI Column');
+    });
+  });
+
+  describe('when the keyExpr is not set', () => {
+    it('should throw E1042 when sending the request', async () => {
+      const onDataErrorOccurredMock = jest.fn();
+      const sendRequestMock = jest.fn((): RequestResult => ({
+        promise: new Promise<string>((resolve) => {
+          resolve('{}');
+        }),
+        abort: (): void => {},
+      }));
+
+      const { instance } = await createDataGrid({
+        keyExpr: undefined,
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'aiColumn',
+            ai: {
+              aiIntegration: new AIIntegration({
+                sendRequest: sendRequestMock,
+              }),
+            },
+          },
+        ],
+        onDataErrorOccurred: onDataErrorOccurredMock,
+      });
+
+      expect(sendRequestMock).toHaveBeenCalledTimes(0);
+      expect(onDataErrorOccurredMock).toHaveBeenCalledTimes(1);
+      expect(errors.Error).toHaveBeenCalledWith('E1042', 'AI Column');
+
+      instance.columnOption('aiColumn', 'ai.prompt', 'New Prompt');
+
+      expect(sendRequestMock).toHaveBeenCalledTimes(0);
+      expect(onDataErrorOccurredMock).toHaveBeenCalledTimes(2);
+      expect(errors.Error).toHaveBeenCalledTimes(2);
+      expect(errors.Error).toHaveBeenLastCalledWith('E1042', 'AI Column');
     });
   });
 });
