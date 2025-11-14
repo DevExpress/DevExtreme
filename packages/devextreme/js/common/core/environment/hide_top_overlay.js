@@ -1,5 +1,3 @@
-import { hideCallback } from './hide_callback';
+import { fireCallback } from '../../../__internal/core/environment/hide_callback';
 
-export default function() {
-    return hideCallback.fire();
-}
+export default fireCallback;
