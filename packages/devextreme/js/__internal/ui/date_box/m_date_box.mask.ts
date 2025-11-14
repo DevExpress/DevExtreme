@@ -314,8 +314,14 @@ class DateBoxMask extends DateBoxBase {
   }
 
   _searchString(char) {
-    // eslint-disable-next-line radix
-    if (!isNaN(parseInt(this._getActivePartProp('text')))) {
+    const text = this._getActivePartProp('text');
+    const convertedText = numberLocalization.convertDigits(text, true);
+
+    if (!isNaN(parseInt(convertedText, 10))) {
+      return;
+    }
+
+    if (!isNaN(parseInt(text, 10))) {
       return;
     }
 
