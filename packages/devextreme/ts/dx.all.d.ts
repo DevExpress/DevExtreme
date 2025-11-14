@@ -998,6 +998,9 @@ declare module DevExpress.aiIntegration {
   export type GenerateGridColumnCommandResponse =
     | string
     | {
+        /**
+         * [descr:GenerateGridColumnCommandResponse.data]
+         */
         data: string | Record<PropertyKey, string>;
       };
   /**
