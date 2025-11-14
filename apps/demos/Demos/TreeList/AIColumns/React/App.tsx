@@ -43,6 +43,7 @@ export default function App() {
         caption="Employee"
         width={260}
         cellRender={Employee}
+        cssClass="name_cell"
       />
       <Column
         dataField="Title"
