@@ -2,14 +2,14 @@ import * as React from 'react';
 import * as events from 'devextreme/events';
 
 import {
-  useCallback,
-  useLayoutEffect,
-  useEffect,
-  useState,
-  useRef,
-  useMemo,
-  memo,
-  FC,
+    useCallback,
+    useLayoutEffect,
+    useEffect,
+    useState,
+    useRef,
+    useMemo,
+    memo,
+    FC,
 } from 'react';
 
 import { createPortal } from 'react-dom';
@@ -20,125 +20,125 @@ import { RemovalLockerContext } from './contexts';
 const GUARD_NODE_CLASS_NAME = '__dx_react_guard_node__';
 
 const createHiddenNode = (
-  containerNodeName: string,
-  ref: React.LegacyRef<any>,
-  defaultElement: string,
-  className = '',
+    containerNodeName: string,
+    ref: React.LegacyRef<any>,
+    defaultElement: string,
+    className = '',
 ) => {
-  const style = { display: 'none' };
-  switch (containerNodeName) {
-    case 'TABLE':
-      return <tbody style={style} ref={ref} className={className} />;
-    case 'TBODY':
-      return <tr style={style} ref={ref} className={className} />;
-    default:
-      return React.createElement(defaultElement, { style, ref, className });
-  }
+    const style = { display: 'none' };
+    switch (containerNodeName) {
+        case 'TABLE':
+            return <tbody style={style} ref={ref} className={className} />;
+        case 'TBODY':
+            return <tr style={style} ref={ref} className={className} />;
+        default:
+            return React.createElement(defaultElement, { style, ref, className });
+    }
 };
 
 const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
-  templateFactory,
-  data,
-  index,
-  container,
-  onRemoved,
-  onRendered,
-  componentKey,
-}) => {
-  const [removalListenerRequired, setRemovalListenerRequired] = useState(false);
-  const isRemovalLocked = useRef(false);
-  const removalLocker = useMemo(() => ({
-    lock(): void { isRemovalLocked.current = true; },
-    unlock(): void { isRemovalLocked.current = false; },
-  }), []);
+                                                                templateFactory,
+                                                                data,
+                                                                index,
+                                                                container,
+                                                                onRemoved,
+                                                                onRendered,
+                                                                componentKey,
+                                                            }) => {
+    const [removalListenerRequired, setRemovalListenerRequired] = useState(false);
+    const isRemovalLocked = useRef(false);
+    const removalLocker = useMemo(() => ({
+        lock(): void { isRemovalLocked.current = true; },
+        unlock(): void { isRemovalLocked.current = false; },
+    }), []);
 
-  const elements = useRef<HTMLElement[]>([]);
-  const guardElement = useRef<HTMLElement>();
-  const removalListenerElement = useRef<HTMLElement>();
+    const elements = useRef<HTMLElement[]>([]);
+    const guardElement = useRef<HTMLElement>();
+    const removalListenerElement = useRef<HTMLElement>();
 
-  const onTemplateRemoved = useCallback((_, args: DXRemoveCustomArgs | undefined) => {
-    // eslint-disable-next-line spellcheck/spell-checker
-    if (args?.isUnmounting || isRemovalLocked.current) {
-      return;
-    }
-
-    [
-      ...elements.current,
-      removalListenerElement.current,
-    ].forEach((el) => el && events.off(el, DX_REMOVE_EVENT, onTemplateRemoved));
-
-    onRemoved(componentKey);
-  }, [onRemoved]);
-
-  useLayoutEffect(() => {
-    const elementNodes = elements.current.filter((el) => el.nodeType === Node.ELEMENT_NODE);
-
-    if (elementNodes.length) {
-      elementNodes.forEach((el) => {
-        events.off(el, DX_REMOVE_EVENT, onTemplateRemoved);
-        events.on(el, DX_REMOVE_EVENT, onTemplateRemoved);
-      });
-    } else if (!removalListenerRequired) {
-      setRemovalListenerRequired(true);
-    } else if (removalListenerElement.current) {
-      events.off(removalListenerElement.current, DX_REMOVE_EVENT, onTemplateRemoved);
-      events.on(removalListenerElement.current, DX_REMOVE_EVENT, onTemplateRemoved);
-    }
-
-    return () => {
-      const safeAppend = (child: HTMLElement | undefined) => {
-        if (child && container && !container.contains(child)) {
-          container.appendChild(child);
+    const onTemplateRemoved = useCallback((_, args: DXRemoveCustomArgs | undefined) => {
+        // eslint-disable-next-line spellcheck/spell-checker
+        if (args?.isUnmounting || isRemovalLocked.current) {
+            return;
         }
-      };
 
-      [
-        ...elements.current,
-        guardElement.current,
-        removalListenerElement.current,
-      ].forEach((el) => safeAppend(el));
+        [
+            ...elements.current,
+            removalListenerElement.current,
+        ].forEach((el) => el && events.off(el, DX_REMOVE_EVENT, onTemplateRemoved));
 
-      if (elementNodes.length) {
-        elementNodes.forEach((el) => events.off(el, DX_REMOVE_EVENT, onTemplateRemoved));
-      }
-    };
-  }, [onTemplateRemoved, removalListenerRequired, container]);
+        onRemoved(componentKey);
+    }, [onRemoved]);
 
-  useEffect(() => {
-    onRendered();
-  }, [onRendered]);
+    useLayoutEffect(() => {
+        const elementNodes = elements.current.filter((el) => el.nodeType === Node.ELEMENT_NODE);
 
-  const guardNode = createHiddenNode(container?.nodeName, (node: HTMLElement) => {
-    guardElement.current = node;
-    elements.current = [];
+        if (elementNodes.length) {
+            elementNodes.forEach((el) => {
+                events.off(el, DX_REMOVE_EVENT, onTemplateRemoved);
+                events.on(el, DX_REMOVE_EVENT, onTemplateRemoved);
+            });
+        } else if (!removalListenerRequired) {
+            setRemovalListenerRequired(true);
+        } else if (removalListenerElement.current) {
+            events.off(removalListenerElement.current, DX_REMOVE_EVENT, onTemplateRemoved);
+            events.on(removalListenerElement.current, DX_REMOVE_EVENT, onTemplateRemoved);
+        }
 
-    let currentNode = node?.previousSibling as HTMLElement;
+        return () => {
+            const safeAppend = (child: HTMLElement | undefined) => {
+                if (child && container && !container.contains(child)) {
+                    container.appendChild(child);
+                }
+            };
 
-    while (
-      currentNode && (
-        typeof currentNode.className !== 'string'
-        || !currentNode.className.includes(GUARD_NODE_CLASS_NAME)
-      )
-    ) {
-      elements.current.push(currentNode);
-      currentNode = currentNode?.previousSibling as HTMLElement;
-    }
-  }, 'div', GUARD_NODE_CLASS_NAME);
+            [
+                ...elements.current,
+                guardElement.current,
+                removalListenerElement.current,
+            ].forEach((el) => safeAppend(el));
 
-  const removalListener = removalListenerRequired
-    ? createHiddenNode(container?.nodeName, (node: HTMLElement) => { removalListenerElement.current = node; }, 'span')
-    : undefined;
+            if (elementNodes.length) {
+                elementNodes.forEach((el) => events.off(el, DX_REMOVE_EVENT, onTemplateRemoved));
+            }
+        };
+    }, [onTemplateRemoved, removalListenerRequired, container]);
 
-  return createPortal(
-      <>
-        <RemovalLockerContext.Provider value={removalLocker}>
-          {templateFactory({ data, index, onRendered })}
-          {guardNode}
-          {removalListener}
-        </RemovalLockerContext.Provider>
-      </>,
-      container,
-  );
+    useEffect(() => {
+        onRendered();
+    }, [onRendered]);
+
+    const guardNode = createHiddenNode(container?.nodeName, (node: HTMLElement) => {
+        guardElement.current = node;
+        elements.current = [];
+
+        let currentNode = node?.previousSibling as HTMLElement;
+
+        while (
+            currentNode && (
+                typeof currentNode.className !== 'string'
+                || !currentNode.className.includes(GUARD_NODE_CLASS_NAME)
+            )
+            ) {
+            elements.current.push(currentNode);
+            currentNode = currentNode?.previousSibling as HTMLElement;
+        }
+    }, 'div', GUARD_NODE_CLASS_NAME);
+
+    const removalListener = removalListenerRequired
+        ? createHiddenNode(container?.nodeName, (node: HTMLElement) => { removalListenerElement.current = node; }, 'span')
+        : undefined;
+
+    return createPortal(
+        <>
+            <RemovalLockerContext.Provider value={removalLocker}>
+                {templateFactory({ data, index, onRendered })}
+                {guardNode}
+                {removalListener}
+            </RemovalLockerContext.Provider>
+        </>,
+        container,
+    );
 };
 
 export const TemplateWrapper = memo(TemplateWrapperComponent);
