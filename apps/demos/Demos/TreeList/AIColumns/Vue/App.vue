@@ -1,122 +1,100 @@
 <template>
-  <DxDataGrid
+  <DxTreeList
+    id="employees"
     keyExpr="ID"
-    :data-source="vehicles"
-    :show-borders="true"
-    :grouping="{ contextMenuEnabled: false }"
-    :groupPanel="{ visible: false }"
-    :paging="{ pageSize: 10 }"
+    parentIdExpr="Head_ID"
+    :dataSource="employees"
+    :autoExpandAll="true"
+    :scrolling="{ mode: 'standard' }"
+    :paging="{ enabled: true, pageSize: 10 }"
     :aiIntegration="aiIntegration"
     :onAIColumnRequestCreating="onAIColumnRequestCreating"
   >
+    <DxColumnFixing :enabled="true"/>
+    <DxRemoteOperations :grouping="false"/>
     <DxColumn
-      caption="Trademark"
-      dataField="TrademarkName"
-      :width="200"
-      cell-template="trademark-cell"
+      caption="Employee"
+      :width="260"
+      cellTemplate="name-cell"
     />
-    <template #trademark-cell="{ data: { data: vehicle} }">
-      <Trademark
-        :vehicle="vehicle"
-        @showInfo="showInfo"
+    <template #name-cell="{ data: { data: employee} }">
+      <Name
+        :firstName="employee.First_Name"
+        :lastName="employee.Last_Name"
       />
     </template>
     <DxColumn
-      dataField="Price"
-      alignment="left"
-      format="currency"
-      :width="100"
-    />
-    <DxColumn
-      caption="Category"
-      :minWidth="180"
-      cell-template="category-cell"
-    />
-    <template #category-cell="{ data: { data: vehicle} }">
-      <Category :category="vehicle.CategoryName"/>
-    </template>
-    <DxColumn
-      dataField="Modification"
-      :width="180"
-    />
-    <DxColumn
-      dataField="Horsepower"
+      dataField="Title"
+      caption="Position"
       :width="140"
     />
     <DxColumn
-      dataField="BodyStyleName"
-      caption="Body Style"
+      dataField="Status"
+      :minWidth="180"
+      cellTemplate="status-cell"
+    />
+    <template #status-cell="{ data: { data: employee} }">
+      <Status :status="employee.Status"/>
+    </template>
+    <DxColumn
+      dataField="City"
       :width="180"
     />
     <DxColumn
+      dataField="State"
+      :width="140"
+    />
+    <DxColumn
+      dataField="Email"
+      :minWidth="200"
+      cellTemplate="email-cell"
+    />
+    <template #email-cell="{ data: { data: employee} }">
+      <Email :email="employee.Email"/>
+    </template>
+    <DxColumn
       name="AI Column"
       caption="AI Column"
-      cssClass="ai__cell"
       type="ai"
-      :ai="{
-        prompt: 'Identify the country where this vehicle model is originally manufactured or developed, based on its brand, model, and specifications.',
-        mode: 'auto',
-        noDataText: 'No data',
-      }"
+      cssClass="ai__cell"
+      :ai="aiConfig"
       :fixed="true"
       fixedPosition="right"
-      :width="200"
+      :width="180"
     />
-  </DxDataGrid>
-  <DxPopup
-    v-model:visible="popupVisible"
-    title="Image Info"
-    width="360"
-    height="260"
-    :dragEnabled="false"
-    :hideOnOutsideClick="true"
-    :onHiding="hideInfo"
-  >
-    <DxPosition
-      at="center"
-      my="center"
-      collision="fit"
-    />
-    <template #content>
-      <LicenseInfo :vehicle="currentVehicle"/>
-    </template>
-  </DxPopup>
+  </DxTreeList>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { DxDataGrid, DxColumn } from 'devextreme-vue/data-grid';
-import { DxPopup, DxPosition } from 'devextreme-vue/popup';
-import { vehicles, type Vehicle } from './data.ts';
+import { DxTreeList, DxColumn, DxColumnFixing, DxRemoteOperations } from 'devextreme-vue/tree-list';
+import Email from './Email.vue';
+import Name from './Name.vue';
+import Status from './Status.vue';
+import { type Employee, employees } from './data.ts';
 import { aiIntegration } from './service.ts';
-import Trademark from './Trademark.vue';
-import Category from './Category.vue';
-import LicenseInfo from './LicenseInfo.vue';
 
-const currentVehicle = ref<Vehicle | undefined>();
-const popupVisible = ref(false);
-
-const showInfo = (vehicle: Vehicle) => {
-  currentVehicle.value = vehicle;
-  popupVisible.value = true;
+const aiConfig = {
+  prompt: 'Identify department for each employee. It should be one of the following department types:  "Management", "Human Resources", "IT", "Shipping", "Support", "Sales",  "Engineering". Use "Engineering" by default.',
+  mode: 'auto' as const,
+  noDataText: 'No data',
 };
 
-const hideInfo = () => {
-  popupVisible.value = false;
-};
-
-const onAIColumnRequestCreating = (e: { data: Partial<Vehicle>[] }) => {
+const onAIColumnRequestCreating = (e: { data: Partial<Employee>[] }) => {
   e.data = e.data.map((item) => ({
     ID: item.ID,
-    TrademarkName: item.TrademarkName,
-    Name: item.Name,
-    Modification: item.Modification,
+    First_Name: item.First_Name,
+    Last_Name: item.Last_Name,
+    Title: item.Title,
   }));
 };
 </script>
 
 <style scoped>
-#gridContainer .ai__cell {
+#app .ai__cell {
   background-color: var(--dx-datagrid-row-alternation-bg);
+}
+
+#app .name_cell > div {
+  align-items: flex-end;
 }
 </style>
