@@ -13,8 +13,8 @@
 .movie-preview-image {
   max-height: 80px;
   max-width: 80px;
-  min-height: 80px;
-  min-width: 80px;
+  min-height: 60px;
+  min-width: 60px;
   border-radius: 2px;
   overflow: hidden;
 }
