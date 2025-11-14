@@ -5,7 +5,7 @@
         class="trademark__img"
         :src="`../../../../images/vehicles/image_${ID}.png`"
         :alt="`${TrademarkName} ${Name}`"
-        @click="onShowInfo(vehicle)"
+        @click="emit('showInfo', vehicle)"
         @keydown="onKeyDown"
         role="button"
         tabIndex="0"
@@ -23,15 +23,17 @@
 <script setup lang="ts">
 import type { Vehicle } from './data.ts';
 
-const { vehicle, onShowInfo } = defineProps<{
-  vehicle: Vehicle;
-  onShowInfo(vehicle: Vehicle): void;
-}>();
+interface TrademarkNameProps { vehicle: Vehicle }
+interface TrademarkNameEmits { (e: 'showInfo', v: Vehicle): void }
+
+const { vehicle } = defineProps<TrademarkNameProps>();
+const emit = defineEmits<TrademarkNameEmits>();
+
 const { ID, TrademarkName, Name } = vehicle;
 
 const onKeyDown = (event: KeyboardEvent) => {
   if (event.key === 'Enter') {
-    onShowInfo(vehicle);
+    emit('showInfo', vehicle);
   }
 };
 </script>

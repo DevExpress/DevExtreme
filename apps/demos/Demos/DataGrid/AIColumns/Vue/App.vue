@@ -17,7 +17,7 @@
     <template #trademark-cell="{ data: { data: vehicle} }">
       <TrademarkCell
         :vehicle="vehicle"
-        :onShowInfo="showInfo"
+        @showInfo="showInfo"
       />
     </template>
     <DxColumn
@@ -61,28 +61,25 @@
       fixedPosition="right"
       :width="200"
     />
-    <DxPopup
-      v-model:visible="popupVisible"
-      title="Image Info"
-      container=".dx-viewport"
-      :width="360"
-      :height="260"
-      :dragEnabled="false"
-      :showTitle="true"
-      :showCloseButton="false"
-      :hideOnOutsideClick="true"
-      :onHiding="hideInfo"
-    >
-      <DxPosition
-        at="center"
-        my="center"
-        collision="fit"
-      />
-      <template #content>
-        <LicenseInfo v-model:vehicle="currentVehicle"/>
-      </template>
-    </DxPopup>
   </DxDataGrid>
+  <DxPopup
+    v-model:visible="popupVisible"
+    title="Image Info"
+    width="360"
+    height="260"
+    :dragEnabled="false"
+    :hideOnOutsideClick="true"
+    :onHiding="hideInfo"
+  >
+    <DxPosition
+      at="center"
+      my="center"
+      collision="fit"
+    />
+    <template #content>
+      <LicenseInfo :vehicle="currentVehicle"/>
+    </template>
+  </DxPopup>
 </template>
 
 <script setup lang="ts">
@@ -99,8 +96,8 @@ const currentVehicle = ref<Vehicle | undefined>();
 const popupVisible = ref(false);
 
 const showInfo = (vehicle: Vehicle) => {
-  popupVisible.value = true;
   currentVehicle.value = vehicle;
+  popupVisible.value = true;
 };
 
 const hideInfo = () => {
