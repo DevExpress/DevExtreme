@@ -1242,7 +1242,7 @@ describe('Appointment Popup Form', () => {
         startDate: expectedStartDate,
         endDate: expectedEndDate,
         description: undefined,
-        recurrenceRule: undefined,
+        recurrenceRule: '',
         startDateTimeZone: undefined,
         endDateTimeZone: undefined,
       });
