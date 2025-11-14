@@ -223,7 +223,7 @@ async function main() {
     }
 
     if (process.env.TCQUARANTINE) {
-      return false; // { successThreshold: 1, attemptLimit: 1 };
+      return { successThreshold: 1, attemptLimit: 2 };
     }
     
     return false;
