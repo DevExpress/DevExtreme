@@ -111,8 +111,10 @@ const SUBJECT_GROUP_NAME = 'subjectGroup';
 const REPEAT_GROUP_NAME = 'repeatGroup';
 const DESCRIPTION_GROUP_NAME = 'descriptionGroup';
 
+const START_DATE_TIME_GROUP_NAME = 'startDateTimeGroup';
 const START_DATE_EDITOR_NAME = 'startDateEditor';
 const START_TIME_EDITOR_NAME = 'startTimeEditor';
+const END_DATE_TIME_GROUP_NAME = 'endDateTimeGroup';
 const END_DATE_EDITOR_NAME = 'endDateEditor';
 const END_TIME_EDITOR_NAME = 'endTimeEditor';
 const REPEAT_EDITOR_NAME = 'repeatEditor';
@@ -554,51 +556,56 @@ export class AppointmentForm {
 
     return {
       itemType: 'group',
-      colCount: 2,
-      colCountByScreen: {
-        xs: 2,
-      },
       items: [
-        extend(
-          true,
-          getStartDateCommonConfig(this.scheduler.getFirstDayOfWeek()),
-          {
-            editorOptions: {
-              onValueChanged: (e) => {
-                dateValueChanged(e, (date: Date): void => {
-                  date.setFullYear(e.value.getFullYear(), e.value.getMonth(), e.value.getDate());
-                });
-              },
-              onContentReady: (e): void => {
-                e.component.option('value', getEditorsDate());
-              },
-            } as DateBoxProperties,
+        {
+          name: isStartDateEditor ? START_DATE_TIME_GROUP_NAME : END_DATE_TIME_GROUP_NAME,
+          itemType: 'group',
+          colCount: 2,
+          colCountByScreen: {
+            xs: 2,
           },
-          dateItemOptions,
-        ),
-        extend(true, {
-          itemType: 'simple',
-          colSpan: 1,
-          editorType: 'dxDateBox',
-          validationRules: [{
-            type: 'required',
-          }],
-          editorOptions: {
-            type: 'time',
-            useMaskBehavior: true,
-            calendarOptions: {
-              firstDayOfWeek: this.scheduler.getFirstDayOfWeek(),
-            },
-            onValueChanged: (e) => {
-              dateValueChanged(e, (date: Date): void => {
-                date.setHours(e.value.getHours(), e.value.getMinutes());
-              });
-            },
-            onContentReady: (e): void => {
-              e.component.option('value', getEditorsDate());
-            },
-          } as DateBoxProperties,
-        }, timeItemOptions),
+          items: [
+            extend(
+              true,
+              getStartDateCommonConfig(this.scheduler.getFirstDayOfWeek()),
+              {
+                editorOptions: {
+                  onValueChanged: (e) => {
+                    dateValueChanged(e, (date: Date): void => {
+                      date.setFullYear(e.value.getFullYear(), e.value.getMonth(), e.value.getDate());
+                    });
+                  },
+                  onContentReady: (e): void => {
+                    e.component.option('value', getEditorsDate());
+                  },
+                } as DateBoxProperties,
+              },
+              dateItemOptions,
+            ),
+            extend(true, {
+              itemType: 'simple',
+              colSpan: 1,
+              editorType: 'dxDateBox',
+              validationRules: [{
+                type: 'required',
+              }],
+              editorOptions: {
+                type: 'time',
+                useMaskBehavior: true,
+                calendarOptions: {
+                  firstDayOfWeek: this.scheduler.getFirstDayOfWeek(),
+                },
+                onValueChanged: (e) => {
+                  dateValueChanged(e, (date: Date): void => {
+                    date.setHours(e.value.getHours(), e.value.getMinutes());
+                  });
+                },
+                onContentReady: (e): void => {
+                  e.component.option('value', getEditorsDate());
+                },
+              } as DateBoxProperties,
+            }, timeItemOptions)],
+        },
         extend(true, {
           itemType: 'simple',
           colSpan: 2,
@@ -949,10 +956,13 @@ export class AppointmentForm {
     const { allDayExpr } = this.scheduler.getDataAccessors().expr;
     const visible = !this.formData[allDayExpr];
 
-    const startDateItemName = `${MAIN_GROUP_NAME}.${DATE_GROUP_NAME}.${START_DATE_GROUP_NAME}.${START_DATE_EDITOR_NAME}`;
-    const startTimeItemName = `${MAIN_GROUP_NAME}.${DATE_GROUP_NAME}.${START_DATE_GROUP_NAME}.${START_TIME_EDITOR_NAME}`;
-    const endDateItemName = `${MAIN_GROUP_NAME}.${DATE_GROUP_NAME}.${END_DATE_GROUP_NAME}.${END_DATE_EDITOR_NAME}`;
-    const endTimeItemName = `${MAIN_GROUP_NAME}.${DATE_GROUP_NAME}.${END_DATE_GROUP_NAME}.${END_TIME_EDITOR_NAME}`;
+    const startDateGroupPath = `${MAIN_GROUP_NAME}.${DATE_GROUP_NAME}.${START_DATE_GROUP_NAME}.${START_DATE_TIME_GROUP_NAME}`;
+    const endDateGroupPath = `${MAIN_GROUP_NAME}.${DATE_GROUP_NAME}.${END_DATE_GROUP_NAME}.${END_DATE_TIME_GROUP_NAME}`;
+
+    const startDateItemName = `${startDateGroupPath}.${START_DATE_EDITOR_NAME}`;
+    const startTimeItemName = `${startDateGroupPath}.${START_TIME_EDITOR_NAME}`;
+    const endDateItemName = `${endDateGroupPath}.${END_DATE_EDITOR_NAME}`;
+    const endTimeItemName = `${endDateGroupPath}.${END_TIME_EDITOR_NAME}`;
 
     this.dxForm.beginUpdate();
     this.dxForm.itemOption(startDateItemName, 'colSpan', visible ? 1 : 2);
