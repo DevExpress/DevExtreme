@@ -1,11 +1,12 @@
 import { PromiseExecutor, logger, ExecutorContext } from '@nx/devkit';
 import * as fs from 'fs';
 import * as path from 'path';
-import { GenerateReactComponentsExecutorSchema } from './schema';
+import { GenerateReactComponentsExecutorSchema, Framework } from './schema';
 import { resolveProjectPath } from '../../utils/path-resolver';
 import { logError, getErrorMessage } from '../../utils/error-handler';
 import cleanExecutor from '../clean/executor';
 import { CleanExecutorSchema } from '../clean/schema';
+import { getFrameworkHandler, GenerationConfig } from './framework-handlers';
 
 const DEFAULT_COMPONENTS_DIR = './src';
 const DEFAULT_INDEX_FILE_NAME = './src/index.ts';
@@ -17,7 +18,6 @@ const GENERATORS_CONFIG_FILE = 'generators-config.js';
 const METADATA_PACKAGE = 'devextreme-metadata';
 const METADATA_FILE = 'integration-data.json';
 const INTERNAL_TOOLS_PACKAGE = 'devextreme-internal-tools';
-const GENERATION_FUNCTION = 'generateReactComponents';
 
 const DEFAULT_BASE_COMPONENT = './core/component';
 const DEFAULT_EXTENSION_COMPONENT = './core/extension-component';
@@ -32,12 +32,18 @@ const MSG_CLEANED = '✓ Successfully cleaned components directory';
 const MSG_LOADING_METADATA = '📋 Loading metadata';
 const MSG_GENERATORS_CONFIG_NOT_FOUND =
   '⚠️  generators-config.js not found, proceeding without unifiedConfig';
-const MSG_LOADED_REACT_CONFIG = '✓ Loaded React configuration from generators-config.js';
-const MSG_GENERATING = '⚙️  Generating React components';
 const MSG_GENERATION_COMPLETED = '✓ Component generation completed';
-const MSG_GENERATION_SUCCESS = '✨ React component generation successful!';
-const MSG_STARTING = '🔧 Starting React component generation';
-const MSG_GENERATION_FAILED = '❌ Component generation failed';
+
+function createMessages(framework: Framework) {
+  const frameworkName = framework.charAt(0).toUpperCase() + framework.slice(1);
+  return {
+    loadedConfig: `✓ Loaded ${frameworkName} configuration from generators-config.js`,
+    generating: `⚙️  Generating ${frameworkName} components`,
+    generationSuccess: `✨ ${frameworkName} component generation successful!`,
+    starting: `🔧 Starting ${frameworkName} component generation`,
+    generationFailed: `❌ ${frameworkName} component generation failed`,
+  };
+}
 
 const ERROR_METADATA_NOT_FOUND =
   'Could not find devextreme-metadata/integration-data.json. Please ensure devextreme-metadata is installed or provide a metadataPath option.';
@@ -47,11 +53,6 @@ const PARENT_DIR_PREFIX = '../';
 const DOT_SLASH_PREFIX = './';
 
 const ENCODING_UTF8 = 'utf-8';
-
-const GENERATE_REEXPORTS = 'generateReexports';
-const GENERATE_CUSTOM_TYPES = 'generateCustomTypes';
-const QUOTES_DOUBLE = 'double';
-const EXPLICIT_INDEX_IN_IMPORTS = 'excplicitIndexInImports';
 
 const EXPORT_PATTERN = /export \{/g;
 
@@ -146,7 +147,48 @@ function loadMetadata(metadataPath: string): any {
   return metaData;
 }
 
-function loadReactConfig(workspaceRoot: string): any {
+function loadFrameworkConfig(
+  workspaceRoot: string,
+  projectRoot: string,
+  configName: string,
+  framework: Framework,
+): any {
+  const isFilePath =
+    configName.startsWith(DOT_SLASH_PREFIX) || configName.startsWith(PARENT_DIR_PREFIX);
+
+  if (isFilePath) {
+    return loadConfigFromFile(projectRoot, configName, framework);
+  }
+
+  return loadConfigFromGeneratorsFile(workspaceRoot, configName, framework);
+}
+
+function loadConfigFromFile(projectRoot: string, configPath: string, framework: Framework): any {
+  const absoluteConfigPath = path.resolve(projectRoot, configPath);
+
+  if (!fs.existsSync(absoluteConfigPath)) {
+    logger.warn(`⚠️  Configuration file not found: ${configPath}`);
+    return undefined;
+  }
+
+  try {
+    delete require.cache[require.resolve(absoluteConfigPath)];
+    const config = require(absoluteConfigPath);
+
+    const frameworkName = framework.charAt(0).toUpperCase() + framework.slice(1);
+    logger.info(`✓ Loaded ${frameworkName} configuration from ${configPath}`);
+    return config;
+  } catch (error) {
+    logger.warn(`⚠️  Could not load configuration from ${configPath}: ${getErrorMessage(error)}`);
+    return undefined;
+  }
+}
+
+function loadConfigFromGeneratorsFile(
+  workspaceRoot: string,
+  configName: string,
+  framework: Framework,
+): any {
   const generatorsConfigPath = path.join(workspaceRoot, TOOLS_DIR, GENERATORS_CONFIG_FILE);
 
   if (!fs.existsSync(generatorsConfigPath)) {
@@ -156,21 +198,40 @@ function loadReactConfig(workspaceRoot: string): any {
 
   try {
     const generatorsConfig = require(generatorsConfigPath);
-    logger.info(MSG_LOADED_REACT_CONFIG);
-    return generatorsConfig.reactConfig;
+    const config = generatorsConfig[configName];
+
+    if (!config) {
+      logger.warn(`⚠️  Configuration '${configName}' not found in generators-config.js`);
+      return undefined;
+    }
+
+    const messages = createMessages(framework);
+    logger.info(messages.loadedConfig);
+    return config;
   } catch (error) {
     logger.warn(`⚠️  Could not load generators-config.js: ${getErrorMessage(error)}`);
     return undefined;
   }
 }
 
-function loadGenerationFunction(): any {
+function loadGenerationFunction(framework: Framework): any {
+  const handler = getFrameworkHandler(framework);
+  const functionName = handler.getDefaults().generationFunctionName;
+
   try {
     const internalTools = require(INTERNAL_TOOLS_PACKAGE);
-    return internalTools[GENERATION_FUNCTION];
+    const generationFunction = internalTools[functionName];
+
+    if (!generationFunction) {
+      throw new Error(
+        `Generation function '${functionName}' not found in ${INTERNAL_TOOLS_PACKAGE}`,
+      );
+    }
+
+    return generationFunction;
   } catch (error) {
     throw new Error(
-      `Could not load devextreme-internal-tools. Please ensure devextreme-internal-tools is installed as a dependency. Error: ${getErrorMessage(
+      `Could not load ${functionName} from devextreme-internal-tools. Please ensure devextreme-internal-tools is installed as a dependency. Error: ${getErrorMessage(
         error,
       )}`,
     );
@@ -181,8 +242,8 @@ function buildGenerationConfig(
   options: GenerateReactComponentsExecutorSchema,
   componentsDir: string,
   indexFileName: string,
-  reactConfig: any,
-): any {
+  frameworkConfig: any,
+): GenerationConfig {
   return {
     metaData: undefined,
     components: {
@@ -196,28 +257,32 @@ function buildGenerationConfig(
     },
     widgetsPackage: WIDGETS_PACKAGE,
     typeGenerationOptions: {
-      [GENERATE_REEXPORTS]: true,
-      [GENERATE_CUSTOM_TYPES]: true,
+      generateReexports: true,
+      generateCustomTypes: true,
     },
     templatingOptions: {
-      quotes: QUOTES_DOUBLE,
-      [EXPLICIT_INDEX_IN_IMPORTS]: true,
+      quotes: options.quotes ?? 'double',
+      excplicitIndexInImports: options.explicitIndexInImports ?? true,
     },
-    unifiedConfig: reactConfig,
+    unifiedConfig: frameworkConfig,
+    componentGeneratorTplConfig: options.componentGeneratorTplConfig,
   };
 }
 
 async function executeGeneration(
-  generateReactComponents: any,
-  config: any,
+  generateComponents: any,
+  config: GenerationConfig,
   metaData: any,
   componentsDir: string,
   indexFileName: string,
+  framework: Framework,
 ): Promise<void> {
-  logger.info(MSG_GENERATING);
+  const messages = createMessages(framework);
+  const handler = getFrameworkHandler(framework);
 
-  config.metaData = metaData;
-  await generateReactComponents(config);
+  logger.info(messages.generating);
+
+  await handler.executeGeneration(generateComponents, config, metaData);
 
   logger.info(MSG_GENERATION_COMPLETED);
 
@@ -234,7 +299,7 @@ async function executeGeneration(
     logger.info(`   Component Directories: ${dirCount}`);
   }
 
-  logger.info(MSG_GENERATION_SUCCESS);
+  logger.info(messages.generationSuccess);
 }
 
 const runExecutor: PromiseExecutor<GenerateReactComponentsExecutorSchema> = async (
@@ -244,9 +309,13 @@ const runExecutor: PromiseExecutor<GenerateReactComponentsExecutorSchema> = asyn
   const absoluteProjectRoot = resolveProjectPath(context);
   const workspaceRoot = context.root;
 
-  logger.info(MSG_STARTING);
+  const framework: Framework = options.framework || 'react';
+  const messages = createMessages(framework);
+
+  logger.info(messages.starting);
   const projectRelativePath = path.relative(workspaceRoot, absoluteProjectRoot) || DOT_SLASH_PREFIX;
   logger.info(`   Project root: ${projectRelativePath}`);
+  logger.info(`   Framework: ${framework}`);
 
   try {
     const componentsDir = path.resolve(
@@ -265,22 +334,31 @@ const runExecutor: PromiseExecutor<GenerateReactComponentsExecutorSchema> = asyn
     const metadataPath = resolveMetadataPath(options, absoluteProjectRoot, workspaceRoot);
     const metaData = loadMetadata(metadataPath);
 
-    const reactConfig = loadReactConfig(workspaceRoot);
+    const handler = getFrameworkHandler(framework);
+    const configName = options.generatorConfig || handler.getDefaults().configName;
+    const frameworkConfig = loadFrameworkConfig(
+      workspaceRoot,
+      absoluteProjectRoot,
+      configName,
+      framework,
+    );
 
-    const generateReactComponents = loadGenerationFunction();
+    const generateComponents = loadGenerationFunction(framework);
 
-    const config = buildGenerationConfig(options, componentsDir, indexFileName, reactConfig);
+    const config = buildGenerationConfig(options, componentsDir, indexFileName, frameworkConfig);
+
     await executeGeneration(
-      generateReactComponents,
+      generateComponents,
       config,
       metaData,
       componentsDir,
       indexFileName,
+      framework,
     );
 
     return { success: true };
   } catch (error) {
-    logError(MSG_GENERATION_FAILED, error);
+    logError(messages.generationFailed, error);
     return { success: false };
   }
 };

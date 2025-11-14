@@ -21,6 +21,7 @@ describe('AddLicenseHeadersExecutor E2E', () => {
     await writeJson(path.join(projectDir, 'package.json'), {
       name: 'test-package',
       version: '1.0.0',
+      repository: 'https://github.com/DevExpress/test-package',
     });
 
     await writeFileText(
@@ -288,6 +289,7 @@ describe('AddLicenseHeadersExecutor E2E', () => {
       await writeJson(path.join(projectDir, 'custom-package.json'), {
         name: 'custom-package-name',
         version: '2.0.0',
+        repository: 'https://github.com/DevExpress/custom-package',
       });
 
       const options: AddLicenseHeadersExecutorSchema = {
