@@ -2,7 +2,6 @@ import { execSync } from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
 
-const PLUGIN_DIR_NAME = 'nx-infra-plugin';
 const DIST_DIR_NAME = 'dist';
 const SRC_DIR_NAME = 'src';
 const TEMP_TSCONFIG_NAME = 'tsconfig.bootstrap.json';
@@ -35,12 +34,12 @@ interface AssetCopyResult {
 }
 
 const buildPathConfig = (rootDir: string): PathConfig => {
-  const pluginDir = path.join(rootDir, '../../packages', PLUGIN_DIR_NAME);
+  const pluginDir = path.join(rootDir, '..');
   return {
     pluginDir,
     distDir: path.join(pluginDir, DIST_DIR_NAME),
     srcDir: path.join(pluginDir, SRC_DIR_NAME),
-    tsconfig: path.join(pluginDir, TSCONFIG_LIB_NAME)
+    tsconfig: path.join(pluginDir, TSCONFIG_LIB_NAME),
   };
 };
 
@@ -60,8 +59,8 @@ const createBootstrapConfig = (original: TsConfig): TsConfig => ({
   compilerOptions: {
     ...original.compilerOptions,
     rootDir: undefined,
-    outDir: `./${DIST_DIR_NAME}`
-  }
+    outDir: `./${DIST_DIR_NAME}`,
+  },
 });
 
 const writeTsConfig = (configPath: string, config: TsConfig): void => {
@@ -70,19 +69,16 @@ const writeTsConfig = (configPath: string, config: TsConfig): void => {
 
 const compileTypeScript = (pluginDir: string, configPath: string): CompilationResult => {
   try {
-    execSync(
-      `npx tsc -p ${configPath}`,
-      {
-        cwd: pluginDir,
-        stdio: 'inherit',
-        env: { ...process.env, NODE_ENV: 'production' }
-      }
-    );
+    execSync(`npx tsc -p ${configPath}`, {
+      cwd: pluginDir,
+      stdio: 'inherit',
+      env: { ...process.env, NODE_ENV: 'production' },
+    });
     return { success: true };
   } catch (error) {
     return {
       success: false,
-      error: (error as Error).message
+      error: (error as Error).message,
     };
   }
 };
@@ -120,14 +116,17 @@ const copyJsonAssets = (srcDir: string, destDir: string): AssetCopyResult => {
 const updateExecutorPaths = (config: Record<string, unknown>): Record<string, unknown> => {
   const executors = config.executors as Record<string, { implementation: string; schema: string }>;
 
-  const updated = Object.entries(executors).reduce((acc, [key, value]) => {
-    acc[key] = {
-      ...value,
-      implementation: value.implementation.replace('./src/', './'),
-      schema: value.schema.replace('./src/', './')
-    };
-    return acc;
-  }, {} as Record<string, { implementation: string; schema: string }>);
+  const updated = Object.entries(executors).reduce(
+    (acc, [key, value]) => {
+      acc[key] = {
+        ...value,
+        implementation: value.implementation.replace('./src/', './'),
+        schema: value.schema.replace('./src/', './'),
+      };
+      return acc;
+    },
+    {} as Record<string, { implementation: string; schema: string }>,
+  );
 
   return { ...config, executors: updated };
 };
@@ -190,7 +189,7 @@ const buildPlugin = (paths: PathConfig, forceRebuild = false): void => {
 const parseArgs = (): { forceRebuild: boolean } => {
   const args = process.argv.slice(2);
   return {
-    forceRebuild: args.includes('--force') || args.includes('-f')
+    forceRebuild: args.includes('--force') || args.includes('-f'),
   };
 };
 
@@ -204,7 +203,7 @@ const main = (): void => {
   } catch (error) {
     console.error('⚠ Failed to build plugin:', (error as Error).message);
     console.error('  The plugin will be built on first use by NX');
-    process.exit(0);
+    process.exit(1);
   }
 };
 
