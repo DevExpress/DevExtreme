@@ -232,6 +232,10 @@ export type GenerateGridColumnCommandResult = {
  * @public
  */
 export type GenerateGridColumnCommandResponse = string | {
+/**
+ * @docid
+ * @public
+ */
   data: string | Record<PropertyKey, string>;
 };
 
