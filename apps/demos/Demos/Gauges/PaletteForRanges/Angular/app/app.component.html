@@ -1,14 +1,14 @@
 <dx-circular-gauge id="gauge" [value]="105">
-  <dxo-scale [startValue]="50" [endValue]="150" [tickInterval]="10">
-    <dxo-label [useRangeColors]="true"></dxo-label>
-  </dxo-scale>
-  <dxo-range-container palette="pastel">
-    <dxi-range [startValue]="50" [endValue]="90"></dxi-range>
-    <dxi-range [startValue]="90" [endValue]="130"></dxi-range>
-    <dxi-range [startValue]="130" [endValue]="150"></dxi-range>
-  </dxo-range-container>
-  <dxo-export [enabled]="true"></dxo-export>
-  <dxo-title text="Temperature of the Liquid in the Boiler">
-    <dxo-font [size]="28"></dxo-font>
-  </dxo-title>
+  <dxo-circular-gauge-scale [startValue]="50" [endValue]="150" [tickInterval]="10">
+    <dxo-circular-gauge-label [useRangeColors]="true"></dxo-circular-gauge-label>
+  </dxo-circular-gauge-scale>
+  <dxo-circular-gauge-range-container palette="pastel">
+    <dxi-circular-gauge-range [startValue]="50" [endValue]="90"></dxi-circular-gauge-range>
+    <dxi-circular-gauge-range [startValue]="90" [endValue]="130"></dxi-circular-gauge-range>
+    <dxi-circular-gauge-range [startValue]="130" [endValue]="150"></dxi-circular-gauge-range>
+  </dxo-circular-gauge-range-container>
+  <dxo-circular-gauge-export [enabled]="true"></dxo-circular-gauge-export>
+  <dxo-circular-gauge-title text="Temperature of the Liquid in the Boiler">
+    <dxo-circular-gauge-font [size]="28"></dxo-circular-gauge-font>
+  </dxo-circular-gauge-title>
 </dx-circular-gauge>
