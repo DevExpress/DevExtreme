@@ -132,16 +132,23 @@ function start_runner_watchdog {
     local last_suite_time_file="$PWD/testing/LastSuiteTime.txt"
     local raw_log_file="$PWD/testing/RawLog.txt"
     local last_suite_time=unknown
+    local stall_count=0
 
     while true; do
-        sleep 300
+        sleep 120
 
         if [ ! -f $last_suite_time_file ] || [ $(cat $last_suite_time_file) == $last_suite_time ]; then
-            echo "Runner stalled"
-            # tail -n 100 $raw_log_file
-            # kill -9 $1
+            stall_count=$((stall_count + 1))
+            echo "Runner stalled (attempt $stall_count/2)"
+            
+            if [ $stall_count -ge 2 ]; then
+                echo "Runner stalled for 10 minutes, killing process..."
+                tail -n 100 $raw_log_file
+                kill -9 $1
+            fi
         else
             last_suite_time=$(cat $last_suite_time_file)
+            stall_count=0
         fi
     done &
 }
