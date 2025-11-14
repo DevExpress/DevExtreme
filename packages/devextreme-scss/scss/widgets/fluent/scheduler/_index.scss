@@ -218,6 +218,12 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
     }
   }
 
+  .dx-scheduler-appointment-20min {
+    .dx-scheduler-appointment-title {
+      line-height: $fluent-scheduler-appointment-20min-title-line-height;
+    }
+  }
+
   @if $size == "default" {
     .dx-scheduler-appointment-10min {
       &.dx-scheduler-appointment-recurrence .dx-scheduler-appointment-content {
@@ -246,6 +252,11 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
     }
 
     .dx-scheduler-appointment-20min {
+      .dx-scheduler-appointment-content {
+        padding: $fluent-scheduler-appointment-short-content-padding;
+        padding-right: $fluent-scheduler-appointment-20min-recurrence-padding-right;
+      }
+
       .dx-scheduler-appointment-recurrence-icon {
         top: $fluent-scheduler-appointment-20min-icon-top;
         right: $fluent-scheduler-appointment-20min-icon-right;
