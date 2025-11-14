@@ -1,12 +1,15 @@
-// eslint-disable-next-line no-restricted-imports
+/* eslint-disable import/first */
+import errors from '@ts/core/utils/m_error';
+import { compare as compareVersion } from '@ts/core/utils/m_version';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import ko from 'knockout';
-import errors from '../core/errors';
-import { compare as compareVersion } from '../core/utils/version';
+
 // Check availability in global environment
-if(ko) {
-    if(compareVersion(ko.version, [2, 3]) < 0) {
-        throw errors.Error('E0013');
-    }
+if (ko) {
+  if (compareVersion(ko.version, [2, 3]) < 0) {
+    // @ts-expect-error
+    throw errors.Error('E0013');
+  }
 }
 
 import './knockout/component_registrator';
