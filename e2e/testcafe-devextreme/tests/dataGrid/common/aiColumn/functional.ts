@@ -21,6 +21,7 @@ test('The AI column with a given width', async (t) => {
     { id: 2, name: 'Name 2', value: 20 },
     { id: 3, name: 'Name 3', value: 30 },
   ],
+  keyExpr: 'id',
   columns: [
     { dataField: 'id', caption: 'ID' },
     { dataField: 'name', caption: 'Name' },
@@ -47,6 +48,7 @@ test('The AI column with a given min-width', async (t) => {
     { id: 2, name: 'Name 2', value: 20 },
     { id: 3, name: 'Name 3', value: 30 },
   ],
+  keyExpr: 'id',
   width: 300,
   columns: [
     { dataField: 'id', caption: 'ID' },
