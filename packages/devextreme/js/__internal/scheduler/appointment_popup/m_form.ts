@@ -111,16 +111,16 @@ const SUBJECT_GROUP_NAME = 'subjectGroup';
 const REPEAT_GROUP_NAME = 'repeatGroup';
 const DESCRIPTION_GROUP_NAME = 'descriptionGroup';
 
-const START_DATE_EDITOR_NAME = 'startDate';
-const START_TIME_EDITOR_NAME = 'startTime';
-const END_DATE_EDITOR_NAME = 'endDate';
-const END_TIME_EDITOR_NAME = 'endTime';
-const REPEAT_EDITOR_NAME = 'repeat';
-const ALL_DAY_EDITOR_NAME = 'allDay';
-const SUBJECT_EDITOR_NAME = 'subject';
-const DESCRIPTION_EDITOR_NAME = 'description';
-const START_DATE_TIMEZONE_EDITOR_NAME = 'startDateTimeZone';
-const END_DATE_TIMEZONE_EDITOR_NAME = 'endDateTimeZone';
+const START_DATE_EDITOR_NAME = 'startDateEditor';
+const START_TIME_EDITOR_NAME = 'startTimeEditor';
+const END_DATE_EDITOR_NAME = 'endDateEditor';
+const END_TIME_EDITOR_NAME = 'endTimeEditor';
+const REPEAT_EDITOR_NAME = 'repeatEditor';
+const ALL_DAY_EDITOR_NAME = 'allDayEditor';
+const SUBJECT_EDITOR_NAME = 'subjectEditor';
+const DESCRIPTION_EDITOR_NAME = 'descriptionEditor';
+const START_DATE_TIMEZONE_EDITOR_NAME = 'startDateTimeZoneEditor';
+const END_DATE_TIMEZONE_EDITOR_NAME = 'endDateTimeZoneEditor';
 
 const SUBJECT_ICON_NAME = 'subjectIcon';
 const DATE_ICON_NAME = 'dateIcon';
@@ -236,8 +236,12 @@ export class AppointmentForm {
 
   private createForm(items: FormProperties['items']): dxForm {
     const element = $('<div>');
+    const editingConfig = this.scheduler.getEditingConfig();
+    const {
+      items: formItems, onContentReady, onInitialized, ...customFormOptions
+    } = editingConfig?.form ?? {};
 
-    return this.scheduler.createComponent(element, dxForm, {
+    const defaultOptions: FormProperties = {
       items,
       formData: {},
       showColonAfterLabel: false,
@@ -285,13 +289,20 @@ export class AppointmentForm {
       onInitialized: (e): void => {
         this._dxForm = e.component;
         this._recurrenceForm.dxForm = this.dxForm;
+
+        onInitialized?.call(this, e);
       },
       onContentReady: (e): void => {
         const $formElement = e.component.$element();
         this._$mainGroup = $formElement.find(`.${CLASSES.mainGroup}`);
         this._$recurrenceGroup = $formElement.find(`.${CLASSES.recurrenceGroup}`);
+
+        onContentReady?.call(this, e);
       },
-    } as FormProperties) as dxForm;
+    } as FormProperties;
+
+    const formOptions = extend(true, defaultOptions, customFormOptions);
+    return this.scheduler.createComponent(element, dxForm, formOptions) as dxForm;
   }
 
   private createMainFormGroup(): GroupItem {

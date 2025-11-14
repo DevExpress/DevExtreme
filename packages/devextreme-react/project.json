@@ -13,15 +13,17 @@
       }
     },
     "regenerate": {
-      "executor": "devextreme-nx-infra-plugin:generate-react-components",
-      "dependsOn": ["devextreme-metadata:generate","clean"],
+      "executor": "devextreme-nx-infra-plugin:generate-components",
+      "dependsOn": ["devextreme-metadata:generate", "clean"],
       "options": {
         "metadataPath": "../devextreme-metadata/dist/integration-data.json",
         "componentsDir": "./src",
         "indexFileName": "./src/index.ts",
         "baseComponent": "./core/component",
         "extensionComponent": "./core/extension-component",
-        "configComponent": "./core/nested-option"
+        "configComponent": "./core/nested-option",
+        "quotes": "double",
+        "explicitIndexInImports": true
       }
     },
     "build:esm": {
@@ -29,7 +31,7 @@
       "dependsOn": ["npm:clean"],
       "options": {
         "srcPattern": "./src/**/*.{ts,tsx}",
-        "excludePattern": "./src/**/__tests__/**/*",
+        "excludePatterns": ["./src/**/__tests__/**/*", "./src/**/__mocks__/**/*"],
         "tsconfig": "./tsconfig.esm.json",
         "outDir": "./npm/esm",
         "module": "esm"
@@ -43,7 +45,7 @@
       "dependsOn": ["npm:clean"],
       "options": {
         "srcPattern": "./src/**/*.{ts,tsx}",
-        "excludePattern": "./src/**/__tests__/**/*",
+        "excludePatterns": ["./src/**/__tests__/**/*", "./src/**/__mocks__/**/*"],
         "tsconfig": "./tsconfig.json",
         "outDir": "./npm/cjs",
         "module": "cjs"
@@ -135,7 +137,6 @@
       "{projectRoot}/devextreme-metadata/**/*",
       "{projectRoot}/src/**/*",
       "!{projectRoot}/src/**/__tests__/*",
-      "{projectRoot}/build.config.js",
       "{projectRoot}/tsconfig*",
       "{workspaceRoot}/tsconfig.json"
     ],
