@@ -32,6 +32,7 @@ $material-grid-base-header-icon-size: 15px !default;
 $material-grid-base-column-chooser-item-margin: 8px !default;
 $material-command-edit-icon-margin: 4px !default;
 $material-command-edit-text-margin: 2px !default;
+$material-grid-base-ai-prompt-editor-progressbar-height: 4px !default;
 
 @if $size == "default" {
   $material-grid-base-cell-height: 48px !default;

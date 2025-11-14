@@ -10,7 +10,7 @@ import DataGrid from '../../ui/data_grid';
 import FileManagerItemListBase from './ui.file_manager.item_list';
 import FileManagerFileActionsButton from './ui.file_manager.file_actions_button';
 import { Deferred } from '../../core/utils/deferred';
-import { OPERATIONS } from './file_items_controller';
+import { OPERATIONS } from '../../__internal/ui/file_manager/file_items_controller';
 
 const FILE_MANAGER_DETAILS_ITEM_LIST_CLASS = 'dx-filemanager-details';
 const FILE_MANAGER_DETAILS_ITEM_THUMBNAIL_CLASS = 'dx-filemanager-details-item-thumbnail';

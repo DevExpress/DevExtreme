@@ -1354,4 +1354,9 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
   .dx-command-ai .dx-command-ai-header-button .dx-button {
     @include dx-button-onlyicon-sizing();
   }
+
+  .dx-ai-prompt-editor__progressbar .dx-progressbar-animating-container {
+    height: $material-grid-base-ai-prompt-editor-progressbar-height;
+    border-radius: 0;
+  }
 }

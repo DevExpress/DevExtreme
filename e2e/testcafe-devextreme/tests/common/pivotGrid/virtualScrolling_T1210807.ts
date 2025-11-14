@@ -3,6 +3,7 @@ import PivotGrid from 'devextreme-testcafe-models/pivotGrid';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
+import { Themes } from '../../../helpers/themes';
 
 fixture.disablePageReloads`PivotGrid_scrolling`
   .page(url(__dirname, '../../container.html'));
@@ -25,7 +26,7 @@ const createData = (count, innerCount) => {
   return result;
 };
 
-test('Row fields overlap data fields if dataFieldArea is set to "row" and virtual scrolling is enabled (T1210807)', async (t) => {
+test.meta({ themes: [Themes.materialBlue, Themes.genericLight] })('Row fields overlap data fields if dataFieldArea is set to "row" and virtual scrolling is enabled (T1210807)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const pivotGrid = new PivotGrid('#container');
   const firstHeaderRow = pivotGrid.getRowsArea(2).getCell(0);

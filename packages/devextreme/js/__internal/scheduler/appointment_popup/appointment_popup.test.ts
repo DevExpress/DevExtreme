@@ -440,6 +440,29 @@ describe('Appointment Popup Form', () => {
   });
 
   describe('Recurrence', () => {
+    it('should allow opening recurrence settings when allowUpdating is false', async () => {
+      const appointment = {
+        text: 'Recurrent Appointment',
+        startDate: new Date(2017, 4, 1, 9, 30),
+        endDate: new Date(2017, 4, 1, 11),
+        recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=10',
+      };
+
+      const { POM, scheduler } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: { allowUpdating: false },
+      });
+
+      scheduler.showAppointmentPopup(appointment);
+
+      const recurrenceGroup = $(POM.popup.recurrenceGroup);
+      expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(true);
+
+      POM.popup.openRecurrenceSettings();
+
+      expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(false);
+    });
+
     it('changes visibility of groups when opening recurrence form', async () => {
       const { scheduler, POM } = await createScheduler(getDefaultConfig());
 
@@ -1339,6 +1362,53 @@ describe('Appointment Popup Form', () => {
     });
   });
 
+  describe('Form customization', () => {
+    it('should propagate editing.form options to the form instance', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          form: {
+            height: 500,
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const { form } = POM.popup;
+      const formHeight = form.option('height') as number;
+
+      expect(formHeight).toBe(500);
+    });
+
+    it('should merge editing.form options with default form configuration', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          form: {
+            height: 500,
+            elementAttr: { id: 'custom-form' },
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const { form } = POM.popup;
+      const formHeight = form.option('height') as number;
+      const elementAttr = form.option('elementAttr') as { class?: string; id?: string };
+      const { class: className, id } = elementAttr;
+
+      expect(formHeight).toBe(500);
+      expect(className).toBe('dx-scheduler-form');
+      expect(id).toBe('custom-form');
+    });
+  });
+
   it('should update form data after another appointment was open', async () => {
     const { scheduler, POM } = await createScheduler(getDefaultConfig());
 
@@ -1553,6 +1623,61 @@ describe('Appointment Popup Form', () => {
       expect(focusSpy).toHaveBeenCalledTimes(1);
 
       focusSpy.mockRestore();
+    });
+
+    it('should preserve custom toolbarItems when popup opens', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          popup: {
+            toolbarItems: [{
+              toolbar: 'top', location: 'before', text: 'Custom Title', cssClass: 'custom-title',
+            }, {
+              toolbar: 'top', location: 'after', widget: 'dxButton', options: { text: 'Custom Save' },
+            }],
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const toolbarItems = POM.popup.component.option('toolbarItems');
+
+      expect(toolbarItems).toBeDefined();
+      expect(toolbarItems).toHaveLength(2);
+      expect(toolbarItems).toContainEqual(expect.objectContaining({
+        cssClass: 'custom-title', location: 'before', text: 'Custom Title', toolbar: 'top',
+      }));
+      expect(toolbarItems).toContainEqual(expect.objectContaining(
+        {
+          toolbar: 'top',
+          location: 'after',
+          widget: 'dxButton',
+          options: expect.objectContaining({ text: 'Custom Save' }),
+        },
+      ));
+    });
+
+    it('should preserve custom toolbarItems when popup is reopened', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          popup: {
+            toolbarItems: [{ toolbar: 'top', location: 'before', text: 'Custom Toolbar' }],
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+      scheduler.hideAppointmentPopup();
+      scheduler.showAppointmentPopup(allDayAppointment);
+
+      const toolbarItems = POM.popup.component.option('toolbarItems');
+      expect(toolbarItems).toBeDefined();
+      expect(toolbarItems).toHaveLength(1);
+      expect(toolbarItems?.[0]?.text).toBe('Custom Toolbar');
     });
   });
 });
@@ -1775,6 +1900,37 @@ describe('Customize form items', () => {
 
       expect(formItems?.length ?? 0).toBe(1);
     });
+  });
+
+  it('should call custom onContentReady and onInitialized and preserving default', async () => {
+    const onContentReady = jest.fn();
+    const onInitialized = jest.fn();
+    const { scheduler, POM } = await createScheduler({
+      ...getDefaultConfig(),
+      ...{
+        editing: {
+          form: {
+            onContentReady,
+            onInitialized,
+          },
+        },
+      },
+    });
+
+    scheduler.showAppointmentPopup();
+    const recurrenceGroup = $(POM.popup.recurrenceGroup);
+
+    POM.popup.selectRepeatValue('weekly');
+
+    await new Promise(process.nextTick);
+
+    const mainGroup = $(POM.popup.mainGroup);
+
+    expect(mainGroup.hasClass(CLASSES.mainGroupHidden)).toBe(true);
+    expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(false);
+
+    expect(onContentReady).toHaveBeenCalled();
+    expect(onInitialized).toHaveBeenCalled();
   });
 
   describe('Form customization with editing.items', () => {

@@ -1,0 +1,23 @@
+.demo-container {
+  min-width: 720px;
+}
+
+.chat-container {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+::ng-deep .dx-chat {
+  max-width: 480px;
+}
+
+::ng-deep .caption {
+  font-size: var(--dx-font-size-sm);
+  font-weight: 500;
+}
+
+::ng-deep .dx-avatar {
+  border: 1px solid var(--dx-color-border);
+}

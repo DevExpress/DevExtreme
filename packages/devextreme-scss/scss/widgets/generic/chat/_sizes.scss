@@ -18,8 +18,10 @@ $chat-messagebox-textarea-border-radius: $texteditor-input-border-radius !defaul
 $chat-messagebox-textarea-padding: null !default;
 $chat-messagebox-toolbar-min-height: null !default;
 $chat-messagebox-gap: 8px !default;
-$chat-messagebox-file-container-padding: 3px !default;
-$chat-messagebox-file-container-padding-top: 2px !default;
+$chat-messagebox-files-container-padding: 3px !default;
+$chat-messagebox-files-container-padding-top: 2px !default;
+$chat-messagebox-file-container-padding: null !default;
+$chat-messagebox-file-container-border-radius: 4px !default;
 $chat-messagelist-padding: null !default;
 $chat-messagegroup-gap: 4px !default;
 $chat-messagegroup-padding: null !default;
@@ -73,7 +75,8 @@ $chat-file-container-border-radius: $base-border-radius !default;
 $chat-file-button-size: null !default;
 $chat-file-secondary-font-size: 10px !default;
 $chat-file-base-section-gap: 4px !default;
-$chat-file-file-size-max-width: 4em !default;
+$chat-file-size-max-width: 4em !default;
+$chat-file-icon-font-size: null !default;
 $chat-file-view-items-gap: 8px !default;
 $chat-bubble-gap: 8px !default;
 
@@ -84,6 +87,7 @@ $chat-bubble-gap: 8px !default;
   $chat-messagebox-padding: 20px !default;
   $chat-messagebox-textarea-padding: 9px !default;
   $chat-messagebox-toolbar-min-height: 36px !default;
+  $chat-messagebox-file-container-padding: 5px 8px !default;
   $chat-messagelist-padding: 20px !default;
   $chat-messagegroup-padding: 24px !default;
 
@@ -111,6 +115,8 @@ $chat-bubble-gap: 8px !default;
 
   $chat-confirmation-popup-content-padding: 0 !default;
   $chat-confirmation-popup-toolbar-gap: 8px !default;
+
+  $chat-file-icon-font-size: 18px !default;
 }
 
 @else if $size == "compact" {
@@ -120,6 +126,7 @@ $chat-bubble-gap: 8px !default;
   $chat-messagebox-padding: 16px !default;
   $chat-messagebox-textarea-padding: 5px !default;
   $chat-messagebox-toolbar-min-height: 26px !default;
+  $chat-messagebox-file-container-padding: 2px 4px !default;
   $chat-messagelist-padding: 16px !default;
   $chat-messagegroup-padding: 12px !default;
 
@@ -147,4 +154,6 @@ $chat-bubble-gap: 8px !default;
 
   $chat-confirmation-popup-content-padding: $generic-popup-content-padding !default;
   $chat-confirmation-popup-toolbar-gap: 4px !default;
+
+  $chat-file-icon-font-size: 14 !default;
 }

@@ -2395,6 +2395,36 @@ QUnit.module('Chat', () => {
 
                 assert.strictEqual(this.getDownloadButton().length, 0, 'button is hidden');
             });
+
+            QUnit.test('should show download button if subscribed via .on() event', function(assert) {
+                this.reinit({
+                    dataSource: this.dataSourceWithAttachments,
+                });
+
+                const onAttachmentDownloadClick = sinon.spy();
+                this.instance.on('attachmentDownloadClick', onAttachmentDownloadClick);
+
+                assert.strictEqual(this.getDownloadButton().length, 1, 'button is visible when subscribed via .on()');
+
+                this.getDownloadButton().trigger('dxclick');
+
+                assert.strictEqual(onAttachmentDownloadClick.callCount, 1, 'event handler was called');
+            });
+
+            QUnit.test('should hide download button after unsubscribing via .off() event', function(assert) {
+                this.reinit({
+                    dataSource: this.dataSourceWithAttachments,
+                });
+
+                const onAttachmentDownloadClick = sinon.spy();
+                this.instance.on('attachmentDownloadClick', onAttachmentDownloadClick);
+
+                assert.strictEqual(this.getDownloadButton().length, 1, 'button is visible when subscribed');
+
+                this.instance.off('attachmentDownloadClick', onAttachmentDownloadClick);
+
+                assert.strictEqual(this.getDownloadButton().length, 0, 'button is hidden after unsubscribing');
+            });
         });
     });
 

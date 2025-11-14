@@ -207,7 +207,7 @@ test('Month workspace should be scrollable to the last row (T1203250)', async (t
 // visual: generic.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-// visual: fluent.saas.lighr
+// visual: fluent.saas.light
 // visual: fluent.saas.dark
 // visual: material.blue.light
 // visual: material.blue.dark

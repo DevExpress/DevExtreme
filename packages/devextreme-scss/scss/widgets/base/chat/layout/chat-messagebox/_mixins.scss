@@ -6,8 +6,11 @@
   $textarea-padding,
   $toolbar-min-height,
   $chat-file-container-width,
-  $messagebox-file-container-padding,
-  $messagebox-file-container-padding-top,
+  $messagebox-files-container-padding,
+  $messagebox-files-container-padding-top,
+  $messagebox-file-background-color,
+  $messagebox-file-cancel-button-secondary-color,
+  $messagebox-file-box-shadow,
 ) {
   .dx-chat-messagebox {
     padding: $messagebox-padding;
@@ -34,10 +37,20 @@
     }
 
     .dx-fileuploader-files-container {
-      padding: $messagebox-file-container-padding;
-      padding-top: $messagebox-file-container-padding-top;
+      padding: $messagebox-files-container-padding;
+      padding-top: $messagebox-files-container-padding-top;
       gap: $gap;
       grid-template-columns: repeat(auto-fit, $chat-file-container-width);
+
+      .dx-fileuploader-file-container {
+        background-color: $messagebox-file-background-color;
+        box-shadow: $messagebox-file-box-shadow;
+
+        .dx-fileuploader-cancel-button.dx-state-hover,
+        .dx-fileuploader-cancel-button.dx-state-focused {
+          background-color: $messagebox-file-cancel-button-secondary-color;
+        }
+      }
     }
   }
 

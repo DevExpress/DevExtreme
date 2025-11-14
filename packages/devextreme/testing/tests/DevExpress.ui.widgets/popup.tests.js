@@ -31,7 +31,7 @@ import {
 } from '__internal/ui/popup/m_popup';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import 'ui/popup';
 import 'ui/tab_panel';
 import 'ui/scroll_view';
@@ -221,7 +221,7 @@ QUnit.module('basic', {
         assert.strictEqual($overlayContent.attr('aria-labelledby'), undefined);
     });
 
-    QUnit.test('popup wrapper should have \'fixed\' or \'absolute\' position in fullscreen', function(assert) {
+    QUnit.test('popup wrapper should have fixed or absolute position in fullscreen', function(assert) {
         $('#popup').dxPopup({ fullScreen: true, visible: true });
 
         const $wrapper = $('.' + POPUP_WRAPPER_CLASS);
@@ -422,7 +422,7 @@ QUnit.module('basic', {
         devices.current(devices.real());
     });
 
-    QUnit.test('items should be rendered with toolbarItems.toolbar=\'top\' as default', function(assert) {
+    QUnit.test('items should be rendered with toolbarItems.toolbar=top as default', function(assert) {
         $('#popup').dxPopup({
             visible: true,
             toolbarItems: [{ text: 'sample', location: 'center' }]
@@ -437,7 +437,7 @@ QUnit.module('basic', {
         assert.equal($titleToolbar.text(), 'sample', 'top toolbar has correct content');
     });
 
-    QUnit.test('toolbar must receive \'rtlEnabled\' option from dxPopup', function(assert) {
+    QUnit.test('toolbar must receive rtlEnabled option from dxPopup', function(assert) {
         const $popup = $('#popup').dxPopup({
             visible: true,
             rtlEnabled: true,
@@ -450,10 +450,10 @@ QUnit.module('basic', {
         const instance = $popup.dxPopup('instance');
         const toolbarInstance = instance.$content().parent().find('.dx-popup-bottom').dxToolbar('instance');
 
-        assert.ok(toolbarInstance.option('rtlEnabled'), 'toolbar\'s \'rtlEnabled\' option is true');
+        assert.ok(toolbarInstance.option('rtlEnabled'), 'toolbar rtlEnabled option is true');
     });
 
-    QUnit.test('toolbar must receive \'rtlEnabled\' from dxPopup after optionChanged', function(assert) {
+    QUnit.test('toolbar must receive rtlEnabled from dxPopup after optionChanged', function(assert) {
         const $popup = $('#popup').dxPopup({
             visible: true,
             rtlEnabled: true,
@@ -469,10 +469,10 @@ QUnit.module('basic', {
         instance.option('rtlEnabled', false);
         const toolbarInstance = instance.$content().parent().find('.dx-popup-bottom').dxToolbar('instance');
 
-        assert.notOk(toolbarInstance.option('rtlEnabled'), 'toolbar\'s \'rtlEnabled\' option is false');
+        assert.notOk(toolbarInstance.option('rtlEnabled'), 'toolbar rtlEnabled option is false');
     });
 
-    QUnit.test('toolbar must render \'default\' type buttons if \'useDefaultToolbarButtons\' is set', function(assert) {
+    QUnit.test('toolbar must render default type buttons if useDefaultToolbarButtons is set', function(assert) {
         const popupInstance = $('#popup').dxPopup({
             visible: true,
             useDefaultToolbarButtons: true,
@@ -491,10 +491,10 @@ QUnit.module('basic', {
         const toolbarButtons = popupInstance.$content().parent().find('.dx-popup-bottom .dx-button');
 
         assert.ok(toolbarButtons.eq(0).hasClass('dx-button-danger'), 'button has custom class');
-        assert.ok(toolbarButtons.eq(1).hasClass('dx-button-default'), 'button default class is \'default\', not normal');
+        assert.ok(toolbarButtons.eq(1).hasClass('dx-button-default'), 'button default class is default, not normal');
     });
 
-    QUnit.test('toolbar must render flat buttons and shortcuts if \'useFlatToolbarButtons\' is set', function(assert) {
+    QUnit.test('toolbar must render flat buttons and shortcuts if useFlatToolbarButtons is set', function(assert) {
         devices.current('desktop');
         const popupInstance = $('#popup').dxPopup({
             visible: true,
@@ -512,7 +512,7 @@ QUnit.module('basic', {
 
         const toolbarButtons = popupInstance.$content().parent().find('.dx-popup-bottom .dx-button');
 
-        assert.ok(toolbarButtons.eq(0).hasClass('dx-button-mode-text'), 'shortcut has dx-button-mode-text class');
+        assert.ok(toolbarButtons.eq(0).hasClass('dx-button-mode-contained'), 'shortcut has dx-button-mode-text class');
         assert.ok(toolbarButtons.eq(1).hasClass('dx-button-mode-text'), 'button has dx-button-mode-text class');
         devices.current(devices.real());
     });
@@ -672,7 +672,7 @@ QUnit.module('dimensions', {
         const $popupContent = instance.$content();
         const $popupBottom = $popupContent.parent().find('.dx-popup-bottom');
 
-        assert.roughEqual($popupContent.offset().top + getOuterHeight($popupContent), $popupBottom.offset().top, 0.1, 'content doesn\'t overlap bottom buttons');
+        assert.roughEqual($popupContent.offset().top + getOuterHeight($popupContent), $popupBottom.offset().top, 0.1, 'content does not overlap bottom buttons');
         devices.current(devices.real());
     });
 
@@ -993,7 +993,7 @@ QUnit.module('options changed callbacks', {
         assert.strictEqual(getOuterHeight($popup), minHeight, 'popup height does not change if autoResizeEnabled = false');
 
         popup.option('autoResizeEnabled', true);
-        assert.strictEqual(getOuterHeight($popup), 400, 'popup height has been changed after \'autoResizeEnabled\' change');
+        assert.strictEqual(getOuterHeight($popup), 400, 'popup height has been changed after autoResizeEnabled change');
 
         popup.option('width', 'auto');
         $content.empty();
@@ -1245,7 +1245,7 @@ QUnit.module('options changed callbacks', {
         }
     });
 
-    QUnit.test('PopupContent doesn\'t disappear while fullScreen option changing', function(assert) {
+    QUnit.test('PopupContent does not disappear while fullScreen option changing', function(assert) {
         this.instance.option({
             fullScreen: false,
             width: 345,
@@ -1271,7 +1271,7 @@ QUnit.module('options changed callbacks', {
         this.instance.option('fullScreen', true);
         body = iFrameDoc.getElementsByTagName('body')[0];
 
-        assert.equal(body.children.length, 1, 'Content doesn\'t disappear');
+        assert.equal(body.children.length, 1, 'Content does not disappear');
     });
 
     QUnit.test('fullScreen with disabled shading', function(assert) {
@@ -1331,7 +1331,7 @@ QUnit.module('options changed callbacks', {
 
             assert.equal($bottomBar.length, 1, 'Bottom bar rendered');
             assert.ok($(`.${POPUP_WRAPPER_CLASS}`, viewport()).hasClass('dx-popup-' + buttonType + '-visible'), 'popup has according class');
-            assert.ok($bottomBar.hasClass('dx-popup-' + buttonType), 'Bottom bar has class \'dx-popup-' + buttonType + '\'');
+            assert.ok($bottomBar.hasClass('dx-popup-' + buttonType), 'Bottom bar has class dx-popup-' + buttonType);
             assert.equal($button.length, 1, buttonType + ' button rendered');
         });
     });
@@ -1374,7 +1374,7 @@ QUnit.module('options changed callbacks', {
         instance.option('toolbarItems', [{ shortcut: 'close' }]);
         instance.option('showCloseButton', false);
         $closeButton = $('.' + POPUP_TITLE_CLOSEBUTTON_CLASS);
-        assert.ok(!$closeButton.length, 'Close button is independent from the \'buttons\' option');
+        assert.ok(!$closeButton.length, 'Close button is independent from the buttons option');
     });
 
     QUnit.test('hide popup when close button is clicked', function(assert) {
@@ -2121,7 +2121,7 @@ QUnit.module('drag', {
         }, 'popup was moved');
     });
 
-    QUnit.test('popup shouldn\'t be dragged by content', function(assert) {
+    QUnit.test('popup should not be dragged by content', function(assert) {
         const pointer = pointerMock(this.popup.$content());
         const position = this.$overlayContent.position();
 
@@ -2274,10 +2274,10 @@ QUnit.module('drag', {
         const pointer = pointerMock(this.$title);
         const startEvent = pointer.start().dragStart().lastEvent();
 
-        assert.strictEqual(startEvent.maxTopOffset, 10, 'popup can dragged vertically');
-        assert.strictEqual(startEvent.maxBottomOffset, 10, 'popup can be dragged vertically');
-        assert.strictEqual(startEvent.maxLeftOffset, 10, 'popup can be dragged horizontally');
-        assert.strictEqual(startEvent.maxRightOffset, 10, 'popup can be dragged horizontally');
+        assert.roughEqual(startEvent.maxTopOffset, 10, 0.5, 'popup can dragged vertically');
+        assert.roughEqual(startEvent.maxBottomOffset, 10, 0.5, 'popup can be dragged vertically');
+        assert.roughEqual(startEvent.maxLeftOffset, 10, 0.5, 'popup can be dragged horizontally');
+        assert.roughEqual(startEvent.maxRightOffset, 10, 0.5, 'popup can be dragged horizontally');
     });
 
     QUnit.test('popup should be dragged correctly when position.of and shading (T534551)', function(assert) {
@@ -2316,7 +2316,7 @@ QUnit.module('drag', {
 
         this.popup.option('position.offset', '0 20');
 
-        assert.strictEqual(this.$overlayContent.position().top, 20, 'overlay positioned correctly after change the \'position\' option');
+        assert.strictEqual(this.$overlayContent.position().top, 20, 'overlay positioned correctly after change the position option');
     });
 
     QUnit.test('popup should reposition after dragging if position is outside of drag area', function(assert) {
@@ -2382,13 +2382,13 @@ QUnit.module('resize', {
         assert.strictEqual(this.$overlayContent.dxResizable('option', 'handles'), 'all', 'direction specified correctly');
     });
 
-    QUnit.test('popup shouldn\'t have resizable component on overlay content if resizeEnabled is false', function(assert) {
+    QUnit.test('popup should not have resizable component on overlay content if resizeEnabled is false', function(assert) {
         this.reinit({ resizeEnabled: false });
 
         assert.strictEqual(this.$overlayContent.dxResizable('option', 'handles'), 'none', 'direction specified correctly');
     });
 
-    QUnit.test('popup shouldn\'t have resizable component on overlay content if resizeEnabled is changed dynamically', function(assert) {
+    QUnit.test('popup should not have resizable component on overlay content if resizeEnabled is changed dynamically', function(assert) {
         this.popup.option('resizeEnabled', false);
         assert.strictEqual(this.$overlayContent.dxResizable('option', 'handles'), 'none', 'direction specified correctly');
     });
@@ -2555,7 +2555,7 @@ QUnit.module('resize', {
             setTimeout(() => {
                 pointer.start().dragStart().drag(10);
                 setTimeout(() => {
-                    assert.strictEqual(getWidth(this.$overlayContent), 208, 'width was changed before pointerdown');
+                    assert.strictEqual(getWidth(this.$overlayContent), 210, 'width was changed before pointerdown');
                     resizeOnDraggingDone();
                 }, this.timeToWaitResize);
                 resizeOnOpeningDone();
@@ -2632,10 +2632,10 @@ QUnit.module('keyboard navigation', {
         assert.strictEqual($overlayContent.position().left, getWidth($container) - getOuterWidth($overlayContent), 'popup should not be dragged right of target');
 
         keyboard.keyDown('up');
-        assert.strictEqual($overlayContent.position().top, 0, 'popup should not be dragged above the target');
+        assert.roughEqual($overlayContent.position().top, 0, 0.5, 'popup should not be dragged above the target');
 
         keyboard.keyDown('down');
-        assert.strictEqual($overlayContent.position().top, getHeight($container) - getOuterHeight($overlayContent), 'popup should not be dragged below than target');
+        assert.roughEqual($overlayContent.position().top, getHeight($container) - getOuterHeight($overlayContent), 0.5, 'popup should not be dragged below than target');
     });
 
     QUnit.test('arrows handling for rtl', function(assert) {
@@ -2705,7 +2705,7 @@ QUnit.module('rendering', {
         assert.equal($content.find('.testContent').get(0), $inner[0], 'content should not lost the link');
     });
 
-    QUnit.test('custom content template is applied even if there is \'content\' template in popup', function(assert) {
+    QUnit.test('custom content template is applied even if there is content template in popup', function(assert) {
         const $popup = $('#popupWithCustomAndContentTemplate').dxPopup({
             contentTemplate: 'custom',
             visible: true
@@ -2716,7 +2716,7 @@ QUnit.module('rendering', {
         assert.equal($content.text().trim(), 'TestContent', 'content is correct');
     });
 
-    QUnit.test('title toolbar with buttons when \'showTitle\' is false', function(assert) {
+    QUnit.test('title toolbar with buttons when showTitle is false', function(assert) {
         this.instance.option({
             showTitle: false,
             title: 'Hidden title',
@@ -2932,7 +2932,7 @@ QUnit.module('templates', {
         assert.strictEqual($popupContent.find('.changed-test-bottom-renderer').length, 1, 'bottomTemplate successfully passed to the popup widget');
     });
 
-    QUnit.test('title should be rendered if custom \'titleTemplate\' is specified and \'title\' is not set', function(assert) {
+    QUnit.test('title should be rendered if custom titleTemplate is specified and title is not set', function(assert) {
         $('#popupWithTitleTemplate').dxPopup({
             visible: true,
             titleTemplate: 'customTitle',

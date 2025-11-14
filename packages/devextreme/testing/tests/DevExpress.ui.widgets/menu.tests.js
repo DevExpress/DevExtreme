@@ -15,7 +15,7 @@ import eventsEngine from 'common/core/events/core/events_engine';
 import { DataSource } from 'common/data/data_source/data_source';
 import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import { implementationsMap, getHeight, getWidth, getOuterHeight } from 'core/utils/size';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 import {
@@ -137,7 +137,7 @@ QUnit.module('Render content delimiters', {
         assert.ok(delimiter.hasClass(DX_CONTEXT_MENU_DELIMETER_CLASS));
         assert.equal(getHeight(delimiter), 3, 'ok');
         assert.notEqual(getWidth(delimiter), 0, 'ok');
-        assert.roughEqual(rootMenuItem.offset().left + 1, delimiter.offset().left, 1.01, 'ok');
+        assert.roughEqual($(submenu._overlay.content()).offset().left + 1, delimiter.offset().left, 1.01, 'ok');
         assert.roughEqual($(submenu._overlay.content()).offset().top - 2.5, delimiter.offset().top, 1.01, 'ok');
     });
 
@@ -156,7 +156,7 @@ QUnit.module('Render content delimiters', {
         assert.ok(delimiter.hasClass(DX_CONTEXT_MENU_DELIMETER_CLASS));
         assert.equal(getWidth(delimiter), 3, 'ok');
         assert.notEqual(getHeight(delimiter), 0, 'ok');
-        assert.roughEqual(rootMenuItem.offset().left - 2.5, delimiter.offset().left, 1.01, 'ok');
+        assert.roughEqual(rootMenuItem.offset().left, delimiter.offset().left, 1.01, 'ok');
         assert.roughEqual($(submenu._overlay.content()).offset().top + 1, delimiter.offset().top, 1.01, 'ok');
     });
 
@@ -392,8 +392,9 @@ QUnit.module('Rendering Scrollable', {
     const DX_SCROLLABLE_CLASS = 'dx-scrollable';
     const DX_SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
     const DX_SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
-    const BORDER_WIDTH = 1;
     const SUBMENU_PADDING = 10;
+    const MENU_CONTAINER_PADDING = 4;
+    const MENU_ADJUSTMENT = 1;
     const FIXTURE_OFFSET = 10000;
     const menuRootOffset = $(window).height() - 50;
 
@@ -515,10 +516,10 @@ QUnit.module('Rendering Scrollable', {
         const $nestedSubmenu = $(submenu._overlay.content()).find(`.${DX_SUBMENU_CLASS}`).eq(1);
         const $nestedItemsContainer = $nestedSubmenu.find(`.${DX_CONTEXT_MENU_ITEMS_CONTAINER_CLASS}`).eq(0);
 
-        assert.roughEqual($nestedItemsContainer.offset().top, $menuItem.offset().top, .1, 'Nested submenu positioned to a clicked item');
+        assert.roughEqual($nestedItemsContainer.offset().top, $menuItem.offset().top - MENU_ADJUSTMENT, .1, 'Nested submenu positioned to a clicked item');
         assert.roughEqual(
             $nestedSubmenu.height(),
-            $(window).height() - $nestedSubmenu.offset().top - BORDER_WIDTH - SUBMENU_PADDING,
+            $(window).height() - $nestedSubmenu.offset().top - SUBMENU_PADDING - MENU_ADJUSTMENT + MENU_CONTAINER_PADDING,
             .1,
             'Nested submenu uses all available space'
         );
@@ -571,7 +572,7 @@ QUnit.module('Rendering Scrollable', {
         const $nestedSubmenu = $(submenu._overlay.content()).find(`.${DX_SUBMENU_CLASS}`).eq(1);
         const availableHeight = Math.min($menuItem.offset().top + $menuItem.outerHeight(), $(window).height()) - SUBMENU_PADDING;
 
-        assert.roughEqual($nestedSubmenu.offset().top, SUBMENU_PADDING - BORDER_WIDTH, .5, 'Nested submenu flipped to top');
+        assert.roughEqual($nestedSubmenu.offset().top, SUBMENU_PADDING + MENU_ADJUSTMENT, .5, 'Nested submenu flipped to top');
         assert.roughEqual($nestedSubmenu.height(), availableHeight, .5, 'Nested submenu aligned to a clicked item');
     });
 
@@ -600,12 +601,12 @@ QUnit.module('Rendering Scrollable', {
             .press('up');
 
         assert.roughEqual($scrollableContent.position().top,
-            $scrollableContainer.height() - $scrollableContent.height(), 2, 'scrolled to bottom');
+            $scrollableContainer.height() - $scrollableContent.height() + MENU_CONTAINER_PADDING, 2, 'scrolled to bottom');
 
         keyboardMock(itemsContainer)
             .press('down');
 
-        assert.roughEqual($scrollableContent.position().top, 0, 2, 'scrolled back to 1st item');
+        assert.roughEqual($scrollableContent.position().top, -MENU_CONTAINER_PADDING, 2, 'scrolled back to 1st item');
     });
 
     QUnit.test('Selected item should be always visible during keyboard navigation (nested submenu)', function(assert) {
@@ -637,12 +638,12 @@ QUnit.module('Rendering Scrollable', {
             .press('up');
 
         assert.roughEqual($scrollableContent.position().top,
-            $scrollableContainer.height() - $scrollableContent.height(), 2, 'scrolled to bottom');
+            $scrollableContainer.height() - $scrollableContent.height() + MENU_CONTAINER_PADDING, 2, 'scrolled to bottom');
 
         keyboardMock(itemsContainer)
             .press('down');
 
-        assert.roughEqual($scrollableContent.position().top, 0, 2, 'scrolled back to 1st item');
+        assert.roughEqual($scrollableContent.position().top, -MENU_CONTAINER_PADDING, 2, 'scrolled back to 1st item');
     });
 
     QUnit.test('Scroll position should be set to 0 after reopen (root submenu)', function(assert) {
@@ -670,7 +671,7 @@ QUnit.module('Rendering Scrollable', {
 
         assert.roughEqual(
             $scrollableContent.position().top,
-            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH,
+            $scrollableContainer.height() - $scrollableContent.height() + MENU_CONTAINER_PADDING,
             1,
             'scrolled to bottom',
         );
@@ -717,7 +718,7 @@ QUnit.module('Rendering Scrollable', {
 
         assert.roughEqual(
             $scrollableContent.position().top,
-            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH,
+            $scrollableContainer.height() - $scrollableContent.height() + MENU_CONTAINER_PADDING,
             1,
             'scrolled to bottom'
         );
@@ -773,7 +774,7 @@ QUnit.module('Rendering Scrollable', {
 
         assert.roughEqual(
             $scrollableContent.position().top,
-            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH,
+            $scrollableContainer.height() - $scrollableContent.height() + MENU_CONTAINER_PADDING,
             1,
             'scrolled to bottom'
         );
@@ -935,7 +936,7 @@ QUnit.module('Rendering Scrollable', {
 
             assert.roughEqual(
                 $nestedSubmenu.height(),
-                windowHeight - $nestedItemsContainer.offset().top - SUBMENU_PADDING,
+                windowHeight - $nestedItemsContainer.offset().top - SUBMENU_PADDING + MENU_CONTAINER_PADDING - MENU_ADJUSTMENT,
                 1,
                 'Nested submenu uses height is updated'
             );
@@ -964,13 +965,13 @@ QUnit.module('Rendering Scrollable', {
 
             const $nestedSubmenu = $menuItem1.find(`.${DX_SUBMENU_CLASS}`).eq(0);
 
-            assert.roughEqual($nestedSubmenu.offset().top + BORDER_WIDTH, $menuItem1.offset().top, 1, 'submenu expanded to bottom');
+            assert.roughEqual($nestedSubmenu.offset().top, $menuItem1.offset().top - MENU_ADJUSTMENT, 1, 'submenu expanded to bottom');
 
             const windowHeight = 200;
             this.setWindowHeight(windowHeight);
             resizeCallbacks.fire();
 
-            assert.roughEqual($nestedSubmenu.offset().top, SUBMENU_PADDING - BORDER_WIDTH, 1, 'submenu flipped to top');
+            assert.roughEqual($nestedSubmenu.offset().top, SUBMENU_PADDING + MENU_ADJUSTMENT, 1, 'submenu flipped to top');
         });
 
         QUnit.test('Submenu scrolling to an expanded item', function(assert) {
@@ -1044,7 +1045,7 @@ QUnit.module('Menu - templates', {
         });
         $('#input1').focus();
 
-        assert.strictEqual(checkStyleHelper.getColor($template[0]), 'rgb(51, 51, 51)', 'color');
+        assert.strictEqual(checkStyleHelper.getColor($template[0]), 'rgb(36, 36, 36)', 'color');
         assert.strictEqual(checkStyleHelper.getBackgroundColor($template[0]), 'rgba(0, 0, 0, 0)', 'backgroundColor');
         assert.strictEqual(checkStyleHelper.getOverflowX($template[0].parentNode), 'visible', 'overflowX');
         assert.strictEqual(checkStyleHelper.getTextOverflow($template[0].parentNode), 'clip', 'textOverflow');
@@ -1059,8 +1060,8 @@ QUnit.module('Menu - templates', {
         });
         menu.instance.focus();
 
-        assert.strictEqual(checkStyleHelper.getColor($template[0]), 'rgb(255, 255, 255)', 'color');
-        assert.strictEqual(checkStyleHelper.getBackgroundColor($template[0]), 'rgb(51, 122, 183)', 'backgroundColor');
+        assert.strictEqual(checkStyleHelper.getColor($template[0]), 'rgb(36, 36, 36)', 'color');
+        assert.strictEqual(checkStyleHelper.getBackgroundColor($template[0]), 'rgb(245, 245, 245)', 'backgroundColor');
         assert.strictEqual(checkStyleHelper.getOverflowX($template[0].parentNode), 'visible', 'overflowX');
         assert.strictEqual(checkStyleHelper.getTextOverflow($template[0].parentNode), 'clip', 'textOverflow');
         assert.strictEqual(checkStyleHelper.getWhiteSpace($template[0].parentNode), 'nowrap', 'whiteSpace');
@@ -2764,7 +2765,7 @@ QUnit.module('keyboard navigation', {
 
             assert.ok($rootMenuItem.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'root item should have expanded class');
             assert.ok($rootMenuItem.hasClass(DX_STATE_FOCUSED_CLASS), 'root item should have focused class');
-            assert.strictEqual(checkStyleHelper.getColor($rootMenuItem[0]), 'rgb(51, 51, 51)', 'color');
+            assert.strictEqual(checkStyleHelper.getColor($rootMenuItem[0]), 'rgb(36, 36, 36)', 'color');
         });
     });
 
