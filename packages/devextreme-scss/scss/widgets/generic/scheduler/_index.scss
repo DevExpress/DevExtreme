@@ -314,32 +314,30 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
         }
       }
 
-      @if $generic-scheduler-appointment-popup-recurrence-end-editors-item-height != null {
-        .dx-item.dx-radiobutton {
-          height: $generic-scheduler-appointment-popup-recurrence-end-editors-item-height !important; // stylelint-disable-line declaration-no-important
-        }
+      .dx-item.dx-radiobutton {
+        height: $generic-scheduler-appointment-popup-recurrence-end-editors-item-height !important; // stylelint-disable-line declaration-no-important
+      }
 
-        .dx-box-item {
-          height: $generic-scheduler-appointment-popup-recurrence-end-editors-item-height;
+      .dx-box-item {
+        height: $generic-scheduler-appointment-popup-recurrence-end-editors-item-height;
 
-          .dx-box-item-content {
-            height: $generic-scheduler-appointment-popup-recurrence-end-editors-item-height;
-          }
-        }
-
-        .dx-field-item,
-        .dx-empty-item {
-          height: $generic-scheduler-appointment-popup-recurrence-end-editors-item-height;
-
-          .dx-field-item-content {
-            height: $generic-scheduler-appointment-popup-recurrence-end-editors-item-height;
-          }
-        }
-
-        .dx-texteditor,
-        .dx-numberbox {
+        .dx-box-item-content {
           height: $generic-scheduler-appointment-popup-recurrence-end-editors-item-height;
         }
+      }
+
+      .dx-field-item,
+      .dx-empty-item {
+        height: $generic-scheduler-appointment-popup-recurrence-end-editors-item-height;
+
+        .dx-field-item-content {
+          height: $generic-scheduler-appointment-popup-recurrence-end-editors-item-height;
+        }
+      }
+
+      .dx-texteditor,
+      .dx-numberbox {
+        height: $generic-scheduler-appointment-popup-recurrence-end-editors-item-height;
       }
     }
 
