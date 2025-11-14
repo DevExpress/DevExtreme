@@ -18,6 +18,9 @@ const AzureOpenAIConfig = {
   apiKey: 'DEMO',
 };
 
+const RATE_LIMIT_RETRY_DELAY_MS = 30000;
+const MAX_PROMPT_SIZE = 5000;
+
 const service = new AzureOpenAI(AzureOpenAIConfig);
 
 async function getAIResponse(messages: AIMessage[], signal: AbortSignal) {
@@ -34,7 +37,7 @@ async function getAIResponse(messages: AIMessage[], signal: AbortSignal) {
   return result;
 }
 
-async function getAIResponseRecursive(messages, signal) {
+async function getAIResponseRecursive(messages: AIMessage[], signal: AbortSignal) {
   return getAIResponse(messages, signal)
     .catch(async (error) => {
       if (!error.message.includes('Connection error')) {
@@ -48,7 +51,7 @@ async function getAIResponseRecursive(messages, signal) {
         displayTime: 5000,
       });
 
-      await new Promise((resolve) => setTimeout(resolve, 30000));
+      await new Promise((resolve) => setTimeout(resolve, RATE_LIMIT_RETRY_DELAY_MS));
 
       return getAIResponseRecursive(messages, signal);
     });
@@ -56,7 +59,7 @@ async function getAIResponseRecursive(messages, signal) {
 
 export const aiIntegration = new AIIntegration({
   sendRequest({ prompt }: RequestParams): Response {
-    const isValidRequest = JSON.stringify(prompt.user).length < 5000;
+    const isValidRequest = JSON.stringify(prompt.user).length < MAX_PROMPT_SIZE;
 
     if (!isValidRequest) {
       return {

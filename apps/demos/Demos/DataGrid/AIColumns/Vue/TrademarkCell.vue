@@ -8,7 +8,7 @@
         @click="emit('showInfo', vehicle)"
         @keydown="onKeyDown"
         role="button"
-        tabIndex="0"
+        tabindex="0"
         aria-haspopup="dialog"
         :aria-label="`${TrademarkName} ${Name} - press Enter for image info`"
       >
