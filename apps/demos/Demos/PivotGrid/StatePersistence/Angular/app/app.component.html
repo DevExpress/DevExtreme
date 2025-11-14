@@ -22,14 +22,14 @@
     [dataSource]="pivotGridDataSource"
     (onContextMenuPreparing)="prepareContextMenu($event)"
   >
-    <dxo-field-panel [visible]="true"></dxo-field-panel>
-    <dxo-field-chooser [enabled]="true"></dxo-field-chooser>
+    <dxo-pivot-grid-field-panel [visible]="true"></dxo-pivot-grid-field-panel>
+    <dxo-pivot-grid-field-chooser [enabled]="true"></dxo-pivot-grid-field-chooser>
 
-    <dxo-state-storing
+    <dxo-pivot-grid-state-storing
       [enabled]="true"
       type="localStorage"
       storageKey="dx-widget-gallery-pivotgrid-storing"
     >
-    </dxo-state-storing>
+    </dxo-pivot-grid-state-storing>
   </dx-pivot-grid>
 </div>
