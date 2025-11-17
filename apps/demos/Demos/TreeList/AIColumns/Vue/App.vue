@@ -6,13 +6,16 @@
     :dataSource="employees"
     :autoExpandAll="true"
     :showBorders="true"
-    :scrolling="{ mode: 'standard' }"
-    :paging="{ enabled: true, pageSize: 10 }"
     :aiIntegration="aiIntegration"
     :onAIColumnRequestCreating="onAIColumnRequestCreating"
   >
+    <DxScrolling :mode="'standard'"/>
+    <DxPaging
+      :enabled="true"
+      :pageSize="10"
+    />
     <DxColumnFixing :enabled="true"/>
-    <DxRemoteOperations :grouping="false"/>
+
     <DxColumn
       caption="Employee"
       cssClass="employee__cell"
@@ -68,7 +71,7 @@
 </template>
 
 <script setup lang="ts">
-import { DxTreeList, DxColumn, DxColumnFixing, DxRemoteOperations } from 'devextreme-vue/tree-list';
+import { DxTreeList, DxColumn, DxColumnFixing, DxScrolling, DxPaging } from 'devextreme-vue/tree-list';
 import Email from './Email.vue';
 import Employee from './Employee.vue';
 import Status from './Status.vue';
