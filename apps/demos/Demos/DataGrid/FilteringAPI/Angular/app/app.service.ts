@@ -1665,7 +1665,7 @@ const tasks: Task[] = [
     Task_Status: 'In Progress',
     Task_Priority: 2,
     Employee_Full_Name: 'Marcus Orbison',
-  }
+  },
 ];
 
 @Injectable()

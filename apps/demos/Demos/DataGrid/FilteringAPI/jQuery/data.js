@@ -1647,5 +1647,5 @@ const tasks = [
     Task_Status: 'In Progress',
     Task_Priority: 2,
     Employee_Full_Name: 'Marcus Orbison',
-  }
+  },
 ];
