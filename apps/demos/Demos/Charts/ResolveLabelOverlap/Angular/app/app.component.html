@@ -1,7 +1,10 @@
 <dx-chart id="chart" [dataSource]="population" title="Population by Countries">
   <dxi-chart-series argumentField="country"></dxi-chart-series>
   <dxo-chart-argument-axis>
-    <dxo-chart-label wordWrap="none" [overlappingBehavior]="currentMode"></dxo-chart-label>
+    <dxo-chart-label
+      wordWrap="none"
+      [overlappingBehavior]="currentMode"
+    ></dxo-chart-label>
   </dxo-chart-argument-axis>
   <dxo-chart-legend [visible]="false"></dxo-chart-legend>
 </dx-chart>

@@ -6,16 +6,28 @@
     <dxo-chart-point [size]="7"></dxo-chart-point>
   </dxo-chart-common-series-settings>
   <dxo-chart-legend [visible]="false"></dxo-chart-legend>
-  <dxo-chart-argument-axis [visualRange]="visualRange"> </dxo-chart-argument-axis>
+  <dxo-chart-argument-axis [visualRange]="visualRange">
+  </dxo-chart-argument-axis>
 </dx-chart>
 <dx-range-selector [dataSource]="zoomingData" [(value)]="visualRange">
   <dxo-range-selector-size [height]="120"></dxo-range-selector-size>
   <dxo-range-selector-margin [left]="10"></dxo-range-selector-margin>
   <dxo-range-selector-scale [minorTickCount]="1"></dxo-range-selector-scale>
-  <dxo-range-selector-behavior valueChangeMode="onHandleMove"></dxo-range-selector-behavior>
+  <dxo-range-selector-behavior
+    valueChangeMode="onHandleMove"
+  ></dxo-range-selector-behavior>
   <dxo-range-selector-chart palette="Harmony Light">
-    <dxi-range-selector-series argumentField="arg" valueField="y1"></dxi-range-selector-series>
-    <dxi-range-selector-series argumentField="arg" valueField="y2"></dxi-range-selector-series>
-    <dxi-range-selector-series argumentField="arg" valueField="y3"></dxi-range-selector-series>
+    <dxi-range-selector-series
+      argumentField="arg"
+      valueField="y1"
+    ></dxi-range-selector-series>
+    <dxi-range-selector-series
+      argumentField="arg"
+      valueField="y2"
+    ></dxi-range-selector-series>
+    <dxi-range-selector-series
+      argumentField="arg"
+      valueField="y3"
+    ></dxi-range-selector-series>
   </dxo-range-selector-chart>
 </dx-range-selector>

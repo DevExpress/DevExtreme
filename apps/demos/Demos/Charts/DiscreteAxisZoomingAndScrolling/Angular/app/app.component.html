@@ -33,9 +33,14 @@
     <dxo-range-selector-size [height]="120"></dxo-range-selector-size>
     <dxo-range-selector-margin [left]="10"></dxo-range-selector-margin>
     <dxo-range-selector-scale [minorTickCount]="1"></dxo-range-selector-scale>
-    <dxo-range-selector-behavior valueChangeMode="onHandleMove"></dxo-range-selector-behavior>
+    <dxo-range-selector-behavior
+      valueChangeMode="onHandleMove"
+    ></dxo-range-selector-behavior>
     <dxo-range-selector-chart palette="soft">
-      <dxo-range-selector-common-series-settings type="bar" [ignoreEmptyPoints]="true">
+      <dxo-range-selector-common-series-settings
+        type="bar"
+        [ignoreEmptyPoints]="true"
+      >
       </dxo-range-selector-common-series-settings>
       <dxi-range-selector-series
         *ngFor="let item of seriesSource"

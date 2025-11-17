@@ -4,8 +4,10 @@
   palette="bright"
   title="Top 10 Most Populated States in US"
 >
-  <dxi-pie-chart-series argumentField="name" valueField="population"> </dxi-pie-chart-series>
-  <dxo-pie-chart-tooltip [enabled]="true" contentTemplate="content"> </dxo-pie-chart-tooltip>
+  <dxi-pie-chart-series argumentField="name" valueField="population">
+  </dxi-pie-chart-series>
+  <dxo-pie-chart-tooltip [enabled]="true" contentTemplate="content">
+  </dxo-pie-chart-tooltip>
   <dxo-pie-chart-export [enabled]="true"></dxo-pie-chart-export>
   <div *dxTemplate="let info of 'content'" class="state-tooltip">
     <img src="{{ getImagePath(info.point) }}" /><h4 class="state">{{

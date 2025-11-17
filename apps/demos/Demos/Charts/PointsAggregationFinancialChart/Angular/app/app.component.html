@@ -37,12 +37,23 @@
       [placeholderHeight]="20"
     >
     </dxo-range-selector-scale>
-    <dxo-range-selector-behavior valueChangeMode="onHandleMove" [snapToTicks]="false">
+    <dxo-range-selector-behavior
+      valueChangeMode="onHandleMove"
+      [snapToTicks]="false"
+    >
     </dxo-range-selector-behavior>
     <dxo-range-selector-chart>
-      <dxo-range-selector-value-axis valueType="numeric"></dxo-range-selector-value-axis>
-      <dxi-range-selector-series type="line" valueField="Open" argumentField="Date">
-        <dxo-range-selector-aggregation [enabled]="true"></dxo-range-selector-aggregation>
+      <dxo-range-selector-value-axis
+        valueType="numeric"
+      ></dxo-range-selector-value-axis>
+      <dxi-range-selector-series
+        type="line"
+        valueField="Open"
+        argumentField="Date"
+      >
+        <dxo-range-selector-aggregation
+          [enabled]="true"
+        ></dxo-range-selector-aggregation>
       </dxi-range-selector-series>
     </dxo-range-selector-chart>
   </dx-range-selector>

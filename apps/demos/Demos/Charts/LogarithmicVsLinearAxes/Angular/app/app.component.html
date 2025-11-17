@@ -3,14 +3,18 @@
   <dxi-chart-pane name="bottom"></dxi-chart-pane>
   <dxi-chart-series pane="top"></dxi-chart-series>
   <dxi-chart-series pane="bottom"></dxi-chart-series>
-  <dxo-chart-common-axis-settings [endOnTick]="false"> </dxo-chart-common-axis-settings>
+  <dxo-chart-common-axis-settings [endOnTick]="false">
+  </dxo-chart-common-axis-settings>
   <dxi-chart-value-axis
     title="Logarithmic Axis"
     type="logarithmic"
     pane="top"
     [linearThreshold]="-3"
   ></dxi-chart-value-axis>
-  <dxi-chart-value-axis title="Linear Axis" pane="bottom"></dxi-chart-value-axis>
+  <dxi-chart-value-axis
+    title="Linear Axis"
+    pane="bottom"
+  ></dxi-chart-value-axis>
   <dxo-chart-tooltip [enabled]="true" format="exponential"></dxo-chart-tooltip>
   <dxo-chart-crosshair [enabled]="true">
     <dxo-chart-label [visible]="true">

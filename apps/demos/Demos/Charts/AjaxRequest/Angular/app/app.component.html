@@ -4,8 +4,16 @@
   dataSource="../../../../data/simpleJSON.json"
   [rotated]="true"
 >
-  <dxi-chart-series color="#79cac4" type="bar" argumentField="day" valueField="sales">
-    <dxo-chart-label [visible]="true" backgroundColor="#c18e92"></dxo-chart-label>
+  <dxi-chart-series
+    color="#79cac4"
+    type="bar"
+    argumentField="day"
+    valueField="sales"
+  >
+    <dxo-chart-label
+      [visible]="true"
+      backgroundColor="#c18e92"
+    ></dxo-chart-label>
   </dxi-chart-series>
   <dxo-chart-argument-axis>
     <dxo-chart-label [customizeText]="customizeText"></dxo-chart-label>

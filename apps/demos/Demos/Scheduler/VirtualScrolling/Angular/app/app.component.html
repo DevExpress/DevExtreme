@@ -14,9 +14,19 @@
     name="Timeline"
     groupOrientation="vertical"
   ></dxi-scheduler-view>
-  <dxi-scheduler-view type="workWeek" groupOrientation="vertical"></dxi-scheduler-view>
-  <dxi-scheduler-view type="month" groupOrientation="horizontal"></dxi-scheduler-view>
-  <dxi-scheduler-resource fieldExpr="humanId" [dataSource]="resources" label="Employee">
+  <dxi-scheduler-view
+    type="workWeek"
+    groupOrientation="vertical"
+  ></dxi-scheduler-view>
+  <dxi-scheduler-view
+    type="month"
+    groupOrientation="horizontal"
+  ></dxi-scheduler-view>
+  <dxi-scheduler-resource
+    fieldExpr="humanId"
+    [dataSource]="resources"
+    label="Employee"
+  >
   </dxi-scheduler-resource>
   <dxo-scheduler-scrolling mode="virtual"> </dxo-scheduler-scrolling>
 </dx-scheduler>

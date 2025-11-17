@@ -6,13 +6,23 @@
   <dxi-polar-chart-series type="scatter" name="Test results" valueField="value">
     <dxo-polar-chart-point [size]="8"></dxo-polar-chart-point>
   </dxi-polar-chart-series>
-  <dxi-polar-chart-series type="line" name="Expected average" valueField="originalValue">
+  <dxi-polar-chart-series
+    type="line"
+    name="Expected average"
+    valueField="originalValue"
+  >
     <dxo-polar-chart-point [visible]="false"></dxo-polar-chart-point>
   </dxi-polar-chart-series>
-  <dxo-polar-chart-common-series-settings argumentField="argument" [closed]="false">
+  <dxo-polar-chart-common-series-settings
+    argumentField="argument"
+    [closed]="false"
+  >
   </dxo-polar-chart-common-series-settings>
-  <dxo-polar-chart-argument-axis [startAngle]="90" [tickInterval]="30"> </dxo-polar-chart-argument-axis>
-  <dxo-polar-chart-value-axis [visualRange]="visualRange"></dxo-polar-chart-value-axis>
+  <dxo-polar-chart-argument-axis [startAngle]="90" [tickInterval]="30">
+  </dxo-polar-chart-argument-axis>
+  <dxo-polar-chart-value-axis
+    [visualRange]="visualRange"
+  ></dxo-polar-chart-value-axis>
   <dxo-polar-chart-export [enabled]="true"></dxo-polar-chart-export>
   <dxo-polar-chart-legend
     hoverMode="excludePoints"
@@ -23,14 +33,19 @@
 </dx-polar-chart>
 <dx-range-selector [(value)]="visualRange">
   <dxo-range-selector-size [height]="100"></dxo-range-selector-size>
-  <dxo-range-selector-margin [top]="10" [left]="60" [bottom]="10" [right]="50"> </dxo-range-selector-margin>
+  <dxo-range-selector-margin [top]="10" [left]="60" [bottom]="10" [right]="50">
+  </dxo-range-selector-margin>
   <dxo-range-selector-scale
     [startValue]="0"
     [endValue]="8"
     [minorTickInterval]="0.1"
     [tickInterval]="1"
   >
-    <dxo-range-selector-minor-tick [visible]="false"></dxo-range-selector-minor-tick>
+    <dxo-range-selector-minor-tick
+      [visible]="false"
+    ></dxo-range-selector-minor-tick>
   </dxo-range-selector-scale>
-  <dxo-range-selector-behavior valueChangeMode="onHandleMove"></dxo-range-selector-behavior>
+  <dxo-range-selector-behavior
+    valueChangeMode="onHandleMove"
+  ></dxo-range-selector-behavior>
 </dx-range-selector>

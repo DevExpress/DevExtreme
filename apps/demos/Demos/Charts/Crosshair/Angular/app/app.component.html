@@ -14,7 +14,12 @@
   >
     <dxo-chart-grid [visible]="true"></dxo-chart-grid>
   </dxo-chart-argument-axis>
-  <dxo-chart-crosshair [enabled]="true" color="#949494" [width]="3" dashStyle="dot">
+  <dxo-chart-crosshair
+    [enabled]="true"
+    color="#949494"
+    [width]="3"
+    dashStyle="dot"
+  >
     <dxo-chart-label [visible]="true" backgroundColor="#949494">
       <dxo-chart-font color="#fff" [size]="12"> </dxo-chart-font>
     </dxo-chart-label>
@@ -26,7 +31,9 @@
   >
   </dxo-chart-legend>
   <dxo-chart-title text="Energy Consumption in 2004">
-    <dxo-chart-subtitle text="(Millions of Tons, Oil Equivalent)"></dxo-chart-subtitle>
+    <dxo-chart-subtitle
+      text="(Millions of Tons, Oil Equivalent)"
+    ></dxo-chart-subtitle>
   </dxo-chart-title>
   <dxo-chart-tooltip [enabled]="true"></dxo-chart-tooltip>
   <dxo-chart-export [enabled]="true"></dxo-chart-export>

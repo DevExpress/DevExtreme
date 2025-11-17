@@ -13,12 +13,22 @@
     name="Monthly Temperature Ranges, °C"
   >
   </dxi-chart-series>
-  <dxi-chart-series pane="topPane" valueField="avgT" name="Average Temperature, °C">
-    <dxo-chart-label [visible]="true" [customizeText]="temperatureCustomizeText">
+  <dxi-chart-series
+    pane="topPane"
+    valueField="avgT"
+    name="Average Temperature, °C"
+  >
+    <dxo-chart-label
+      [visible]="true"
+      [customizeText]="temperatureCustomizeText"
+    >
     </dxo-chart-label>
   </dxi-chart-series>
   <dxi-chart-series type="bar" valueField="prec" name="prec, mm">
-    <dxo-chart-label [visible]="true" [customizeText]="precipitationCustomizeText">
+    <dxo-chart-label
+      [visible]="true"
+      [customizeText]="precipitationCustomizeText"
+    >
     </dxo-chart-label>
   </dxi-chart-series>
   <dxo-chart-common-series-settings
