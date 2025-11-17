@@ -1,10 +1,10 @@
 $(() => {
   const dataGrid = $('#gridContainer').dxDataGrid({
-    dataSource: new DevExpress.data.DataSource({ 
-      store: new DevExpress.data.ArrayStore({ 
+    dataSource: new DevExpress.data.DataSource({
+      store: new DevExpress.data.ArrayStore({
         data: tasks,
         key: 'Task_ID',
-      })
+      }),
     }),
     columns: [
       {
