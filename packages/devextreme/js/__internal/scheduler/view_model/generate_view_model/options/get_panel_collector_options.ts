@@ -21,6 +21,7 @@ export const getPanelCollectorOptions = (schedulerStore: Scheduler, {
   collectorCSS,
   DOMMetaData,
   panelName,
+  isMonthView,
 }: {
   DOMMetaData: {
     dateTableCellsMeta: RealSize[][];
@@ -32,6 +33,7 @@ export const getPanelCollectorOptions = (schedulerStore: Scheduler, {
   isAdaptivityEnabled: boolean;
   collectorCSS: CollectorCSS;
   panelName: PanelName;
+  isMonthView?: boolean;
 }): {
   allDayPanelCellSize: RealSize;
   cellSize: RealSize;
@@ -64,21 +66,20 @@ export const getPanelCollectorOptions = (schedulerStore: Scheduler, {
         ? cellSize.width * ALL_DAY_COLLECTOR_WIDTH_FACTOR
         : 0,
     );
-  const maxLevel = getMaxLevel({
+  const maxLevelOptions = {
     maxAppointmentsPerCell,
     cellSize,
     collectorSize: collectorSizes.collectorWithMarginsSize,
     viewOrientation,
     isTimelineView,
     isAdaptivityEnabled,
-  });
+    isAllDayPanel: panelName === 'allDayPanel',
+    isMonthView,
+  };
+  const maxLevel = getMaxLevel(maxLevelOptions);
   const minLevel = viewOrientation === 'vertical' ? MIN_LEVEL_VERTICAL_VIEW : getMaxLevel({
+    ...maxLevelOptions,
     maxAppointmentsPerCell: 'auto',
-    cellSize,
-    collectorSize: collectorSizes.collectorWithMarginsSize,
-    viewOrientation,
-    isTimelineView,
-    isAdaptivityEnabled,
   });
 
   return {

@@ -248,6 +248,10 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
     const durationMs = new Date(endDate).getTime() - new Date(startDate).getTime();
     const durationMinutes = Math.round(durationMs / (1000 * 60));
 
+    if (durationMinutes === 0) {
+      return;
+    }
+
     switch (true) {
       case durationMinutes <= 10:
         (this.$element() as any).addClass(APPOINTMENT_10MIN_CLASS);
