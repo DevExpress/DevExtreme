@@ -148,13 +148,11 @@ jobs:
         run: pnpm run all:build-dev
 
       - name: Zip artifacts (for jQuery tests)
-        if: needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'none'
         working-directory: ./packages/devextreme
         run: |
           7z a -tzip -mx3 -mmt2 artifacts.zip artifacts ../devextreme-scss/scss/bundles
 
       - name: Upload build artifacts (for jQuery tests)
-        if: needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'none'
         uses: actions/upload-artifact@v4
         with:
           name: devextreme-artifacts-jquery
@@ -557,7 +555,7 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install --frozen-lockfile --filter devextreme-demos
+      run: pnpm install --frozen-lockfile
 
     - name: Cache Roboto font
       if: contains(matrix.THEME, 'material')

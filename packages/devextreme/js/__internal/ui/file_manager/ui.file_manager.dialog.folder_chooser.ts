@@ -3,9 +3,9 @@ import messageLocalization from '@js/common/core/localization/message';
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { getMapFromObject } from '@js/ui/file_manager/ui.file_manager.common';
-import FileManagerFilesTreeView from '@js/ui/file_manager/ui.file_manager.files_tree_view';
 import type { DialogOptions } from '@ts/ui/file_manager/ui.file_manager.dialog';
 import FileManagerDialogBase from '@ts/ui/file_manager/ui.file_manager.dialog';
+import FileManagerFilesTreeView from '@ts/ui/file_manager/ui.file_manager.files_tree_view';
 
 const FILE_MANAGER_DIALOG_FOLDER_CHOOSER = 'dx-filemanager-dialog-folder-chooser';
 const FILE_MANAGER_DIALOG_FOLDER_CHOOSER_POPUP = 'dx-filemanager-dialog-folder-chooser-popup';

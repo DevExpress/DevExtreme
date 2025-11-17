@@ -40,6 +40,8 @@ const ERRORS = {
 
 const isMobile = (): boolean => devices.current().deviceType !== 'desktop';
 
+export const DEFAULT_ALLOWED_FILE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp', '.pdf', '.docx', '.xlsx', '.pptx', '.txt', '.rtf', '.csv', '.md'];
+
 type EnterKeyEvent = NativeEventInfo<ChatTextArea, KeyboardEvent>;
 
 export type SendEvent = ClickEvent | EnterKeyEvent;
@@ -94,7 +96,6 @@ class ChatTextArea extends TextArea<Properties> {
       autoResizeEnabled: true,
       valueChangeEvent: 'input',
       maxHeight: '53.86em',
-      fileUploaderOptions: undefined,
     };
   }
 
@@ -309,12 +310,16 @@ class ChatTextArea extends TextArea<Properties> {
   _getFileUploaderOptions(): FileUploaderProperties {
     const { fileUploaderOptions = {} } = this.option();
 
-    const multiple = fileUploaderOptions.multiple ?? true;
     const visible = this._shouldHideFileUploader(fileUploaderOptions.value);
 
+    const defaultFileUploaderOptions = {
+      multiple: true,
+      allowedFileExtensions: DEFAULT_ALLOWED_FILE_EXTENSIONS,
+    };
+
     return {
+      ...defaultFileUploaderOptions,
       ...fileUploaderOptions,
-      multiple,
       visible,
       uploadMode: 'instantly',
       dialogTrigger: this.$element().find(`.${CHAT_TEXT_AREA_ATTACH_BUTTON}`).get(0),

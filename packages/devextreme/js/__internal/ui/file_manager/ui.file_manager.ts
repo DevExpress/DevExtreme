@@ -37,10 +37,6 @@ import type {
   ToolbarItemClickEvent,
 } from '@js/ui/file_manager';
 import { extendAttributes, findItemsByKeys } from '@js/ui/file_manager/ui.file_manager.common';
-import FileManagerFilesTreeView from '@js/ui/file_manager/ui.file_manager.files_tree_view';
-import FileManagerDetailsItemList from '@js/ui/file_manager/ui.file_manager.item_list.details';
-import FileManagerThumbnailsItemList from '@js/ui/file_manager/ui.file_manager.item_list.thumbnails';
-import FileManagerNotificationControl from '@js/ui/file_manager/ui.file_manager.notification';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import { FileItemsController, OPERATIONS } from '@ts/ui/file_manager/file_items_controller';
@@ -49,6 +45,10 @@ import FileManagerBreadcrumbs from '@ts/ui/file_manager/ui.file_manager.breadcru
 import { defaultPermissions, FileManagerCommandManager } from '@ts/ui/file_manager/ui.file_manager.command_manager';
 import FileManagerContextMenu from '@ts/ui/file_manager/ui.file_manager.context_menu';
 import FileManagerEditingControl from '@ts/ui/file_manager/ui.file_manager.editing';
+import FileManagerFilesTreeView from '@ts/ui/file_manager/ui.file_manager.files_tree_view';
+import FileManagerDetailsItemList from '@ts/ui/file_manager/ui.file_manager.item_list.details';
+import FileManagerThumbnailsItemList from '@ts/ui/file_manager/ui.file_manager.item_list.thumbnails';
+import FileManagerNotificationControl from '@ts/ui/file_manager/ui.file_manager.notification';
 import FileManagerToolbar from '@ts/ui/file_manager/ui.file_manager.toolbar';
 import notify from '@ts/ui/notify';
 
@@ -307,7 +307,7 @@ class FileManager extends Widget<Properties> {
       getDirectories: this.getDirectories.bind(this),
       getCurrentDirectory: this._getCurrentDirectory.bind(this),
       onDirectoryClick: ({ itemData }): void => this._setCurrentDirectory(itemData),
-      onItemListDataLoaded: () => this._tryEndLoading(VIEW_AREAS.folders),
+      onItemListDataLoaded: (): void => this._tryEndLoading(VIEW_AREAS.folders),
     });
 
     this._filesTreeView.updateCurrentDirectory();
@@ -491,7 +491,8 @@ class FileManager extends Widget<Properties> {
   }
 
   _redrawComponent(onlyFileItemsView): void {
-    this._itemView?.refresh().then(() => !onlyFileItemsView && this._filesTreeView?.refresh());
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    this._itemView?.refresh()?.then(() => !onlyFileItemsView && this._filesTreeView?.refresh());
   }
 
   _getItemViewItems(): Properties['itemView'][] {
@@ -941,6 +942,7 @@ class FileManager extends Widget<Properties> {
       this._itemKeyToFocus = undefined;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._itemView?.refresh(options, operation);
   }
 
@@ -998,7 +1000,6 @@ class FileManager extends Widget<Properties> {
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   _getSelectedItemInfos() {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._itemView ? this._itemView.getSelectedItems() : [];
   }
 
@@ -1018,7 +1019,7 @@ class FileManager extends Widget<Properties> {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   getSelectedItems() {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this._getSelectedItemInfos().map((itemInfo) => itemInfo.fileItem);
+    return this._getSelectedItemInfos()?.map((itemInfo) => itemInfo.fileItem);
   }
 
   _onSelectedItemOpened({ fileItemInfo }): void {
