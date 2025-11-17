@@ -29,6 +29,7 @@ export default function App() {
   return (
     <TreeList
       id="employees"
+      showBorders={true}
       dataSource={employees}
       keyExpr="ID"
       parentIdExpr="Head_ID"
