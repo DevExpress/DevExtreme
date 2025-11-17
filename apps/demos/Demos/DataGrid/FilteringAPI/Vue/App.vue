@@ -65,7 +65,7 @@ import {
   DxPager,
 } from 'devextreme-vue/data-grid';
 import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
-import { tasks, statuses } from './data';
+import { tasks, statuses } from './data.ts';
 
 const dataGridRef = ref<DxDataGrid | null>(null);
 
