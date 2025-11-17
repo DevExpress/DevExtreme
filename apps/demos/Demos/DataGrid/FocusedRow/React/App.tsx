@@ -4,28 +4,17 @@ import {
 } from 'devextreme-react/data-grid';
 import { NumberBox, type NumberBoxTypes } from 'devextreme-react/number-box';
 import { CheckBox, type CheckBoxTypes } from 'devextreme-react/check-box';
-import 'devextreme-react/common/data';
+import { ArrayStore, DataSource } from 'devextreme-react/common/data';
+import { type Task, tasks } from './data.ts';
 
 const focusedRowKeyLabel = { 'aria-label': 'Focused Row Key' };
 
-const dataSourceOptions = {
-  store: {
-    type: 'odata' as const,
-    version: 2,
+const dataSource = new DataSource({
+  store: new ArrayStore({
     key: 'Task_ID',
-    url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks',
-  },
-  expand: 'ResponsibleEmployee',
-  select: [
-    'Task_ID',
-    'Task_Subject',
-    'Task_Start_Date',
-    'Task_Status',
-    'Task_Description',
-    'Task_Completion',
-    'ResponsibleEmployee/Employee_Full_Name',
-  ],
-};
+    data: tasks,
+  }),
+});
 
 const App = () => {
   const [taskSubject, setTaskSubject] = useState('');
@@ -59,7 +48,7 @@ const App = () => {
     }
   }, []);
 
-  const onFocusedRowChanged = useCallback((e: DataGridTypes.FocusedRowChangedEvent) => {
+  const onFocusedRowChanged = useCallback((e: DataGridTypes.FocusedRowChangedEvent<Task, number>) => {
     const data = e.row.data;
     const progress = data.Task_Completion ? `${data.Task_Completion}%` : '';
 
@@ -78,7 +67,7 @@ const App = () => {
     <div>
       <DataGrid
         id="gridContainer"
-        dataSource={dataSourceOptions}
+        dataSource={dataSource}
         focusedRowEnabled={true}
         focusedRowKey={focusedRowKey}
         autoNavigateToFocusedRow={autoNavigateToFocusedRow}
