@@ -35,7 +35,7 @@ import {
 } from 'devextreme-angular/core/tokens';
 
 @Component({
-    selector: 'dxi-data-grid-group-item',
+    selector: 'dxi-tree-list-group-item',
     standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
@@ -45,11 +45,11 @@ import {
         DxTemplateHost,
         {
            provide: PROPERTY_TOKEN_items,
-           useExisting: DxiDataGridGroupItemComponent,
+           useExisting: DxiTreeListGroupItemComponent,
         }
     ]
 })
-export class DxiDataGridGroupItemComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiTreeListGroupItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
@@ -197,10 +197,10 @@ export class DxiDataGridGroupItemComponent extends CollectionNestedOption implem
 
 @NgModule({
   imports: [
-    DxiDataGridGroupItemComponent
+    DxiTreeListGroupItemComponent
   ],
   exports: [
-    DxiDataGridGroupItemComponent
+    DxiTreeListGroupItemComponent
   ],
 })
-export class DxiDataGridGroupItemModule { }
+export class DxiTreeListGroupItemModule { }

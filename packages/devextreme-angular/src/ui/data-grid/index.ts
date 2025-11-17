@@ -213,6 +213,11 @@ import { DxiDataGridToolbarItemModule } from 'devextreme-angular/ui/data-grid/ne
 import { DxiDataGridTotalItemModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxiDataGridValidationRuleModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridValueFormatModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridButtonItemModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridEmptyItemModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridSimpleItemModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridTabbedItemModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridTabModule } from 'devextreme-angular/ui/data-grid/nested';
 import { 
            PROPERTY_TOKEN_validationRules,
            PROPERTY_TOKEN_buttons,
@@ -225,6 +230,7 @@ import {
            PROPERTY_TOKEN_sortByGroupSummaryInfo,
            PROPERTY_TOKEN_toolbarItems,
            PROPERTY_TOKEN_totalItems,
+           PROPERTY_TOKEN_tabs,
      } from 'devextreme-angular/core/tokens';
 
 
@@ -300,6 +306,11 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     @ContentChildren(PROPERTY_TOKEN_totalItems)
     set _totalItemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('totalItems', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_tabs)
+    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('tabs', value);
     }
 
     instance: DxDataGrid<TRowData, TKey> = null;
@@ -2509,6 +2520,11 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxiDataGridTotalItemModule,
     DxiDataGridValidationRuleModule,
     DxoDataGridValueFormatModule,
+    DxiDataGridButtonItemModule,
+    DxiDataGridEmptyItemModule,
+    DxiDataGridSimpleItemModule,
+    DxiDataGridTabbedItemModule,
+    DxiDataGridTabModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -2672,6 +2688,11 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxiDataGridTotalItemModule,
     DxiDataGridValidationRuleModule,
     DxoDataGridValueFormatModule,
+    DxiDataGridButtonItemModule,
+    DxiDataGridEmptyItemModule,
+    DxiDataGridSimpleItemModule,
+    DxiDataGridTabbedItemModule,
+    DxiDataGridTabModule,
     DxTemplateModule
   ]
 })
