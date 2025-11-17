@@ -1,21 +1,13 @@
 import React, { useCallback, useState } from 'react';
-import DataGrid, { Column, GroupPanel } from 'devextreme-react/data-grid';
+import DataGrid, {
+  Column, GroupPanel, Paging, Grouping, Ai,
+} from 'devextreme-react/data-grid';
 import Popup, { Position } from 'devextreme-react/popup';
 import { vehicles, aiIntegration } from './data.js';
 import Trademark from './Trademark.js';
 import Category from './Category.js';
 import LicenseInfo from './LicenseInfo.js';
 
-const gridConfig = {
-  paging: { pageSize: 10 },
-  grouping: { contextMenuEnabled: false },
-  ai: {
-    prompt:
-      'Identify the country where this vehicle model is originally manufactured or developed, based on its brand, model, and specifications.',
-    mode: 'auto',
-    noDataText: 'No data',
-  },
-};
 const onAIColumnRequestCreating = (e) => {
   e.data = e.data.map((item) => ({
     ID: item.ID,
@@ -38,11 +30,14 @@ export default function App() {
         dataSource={vehicles}
         showBorders={true}
         keyExpr="ID"
-        paging={gridConfig.paging}
         aiIntegration={aiIntegration}
-        grouping={gridConfig.grouping}
         onAIColumnRequestCreating={onAIColumnRequestCreating}
       >
+        <Paging
+          enabled={true}
+          pageSize={10}
+        />
+        <Grouping contextMenuEnabled={false} />
         <GroupPanel visible={false} />
         <Column
           caption="Trademark"
@@ -83,12 +78,17 @@ export default function App() {
           name="AI Column"
           caption="AI Column"
           type="ai"
-          ai={gridConfig.ai}
           width={200}
           fixed={true}
           fixedPosition="right"
           cssClass="ai__cell"
-        />
+        >
+          <Ai
+            mode="auto"
+            noDataText="No data"
+            prompt="Identify the country where this vehicle model is originally manufactured or developed, based on its brand, model, and specifications."
+          />
+        </Column>
       </DataGrid>
       <Popup
         width={360}

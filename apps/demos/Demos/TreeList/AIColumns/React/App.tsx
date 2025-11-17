@@ -1,21 +1,9 @@
 import React from 'react';
-import TreeList, { Column, Scrolling } from 'devextreme-react/tree-list';
+import TreeList, { Column, Scrolling, Paging, Ai } from 'devextreme-react/tree-list';
 import { employees, aiIntegration } from './data.ts';
 import Employee from './Employee.tsx';
 import Status from './Status.tsx';
 import Email from './Email.tsx';
-
-const treeConfig = {
-  paging: {
-    enabled: true,
-    pageSize: 10,
-  },
-  ai: {
-    prompt: 'Identify department for each employee. It should be one of the following department types:  "Management", "Human Resources", "IT", "Shipping", "Support", "Sales",  "Engineering". Use "Engineering" by default.',
-    mode: 'auto' as const,
-    noDataText: 'No data',
-  },
-};
 
 const onAIColumnRequestCreating = (e) => {
   e.data = e.data.map((item) => ({
@@ -36,9 +24,9 @@ export default function App() {
       parentIdExpr="Head_ID"
       autoExpandAll={true}
       aiIntegration={aiIntegration}
-      paging={treeConfig.paging}
       onAIColumnRequestCreating={onAIColumnRequestCreating}
     >
+      <Paging enabled={true} pageSize={10} />
       <Scrolling mode="standard" />
       <Column
         caption="Employee"
@@ -73,12 +61,17 @@ export default function App() {
         name="AI Column"
         caption="AI Column"
         type="ai"
-        ai={treeConfig.ai}
         width={180}
         fixed={true}
         fixedPosition="right"
         cssClass="ai__cell"
-      />
+      >
+        <Ai
+          mode="auto"
+          noDataText="No data"
+          prompt="Identify department for each employee. It should be one of the following department types:  'Management', 'Human Resources', 'IT', 'Shipping', 'Support', 'Sales',  'Engineering'. Use 'Engineering' by default."
+        />
+      </Column>
     </TreeList>
   );
 }
