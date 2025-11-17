@@ -1,22 +1,23 @@
 <template>
   <DxDataGrid
     keyExpr="ID"
-    :data-source="vehicles"
-    :show-borders="true"
-    :grouping="{ contextMenuEnabled: false }"
-    :groupPanel="{ visible: false }"
-    :paging="{ pageSize: 10 }"
+    :dataSource="vehicles"
+    :showBorders="true"
     :aiIntegration="aiIntegration"
     :onAIColumnRequestCreating="onAIColumnRequestCreating"
   >
+    <DxGrouping :contextMenuEnabled="false"/>
+    <DxGroupPanel :visible="false"/>
+    <DxPaging :pageSize="10"/>
+
     <DxColumn
       caption="Trademark"
       dataField="TrademarkName"
       :width="200"
-      cell-template="trademark-cell"
+      cellTemplate="trademark-cell"
     />
     <template #trademark-cell="{ data: { data: vehicle} }">
-      <TrademarkCell
+      <Trademark
         :vehicle="vehicle"
         @showInfo="showInfo"
       />
@@ -30,7 +31,7 @@
     <DxColumn
       caption="Category"
       :minWidth="180"
-      cell-template="category-cell"
+      cellTemplate="category-cell"
     />
     <template #category-cell="{ data: { data: vehicle} }">
       <Category :category="vehicle.CategoryName"/>
@@ -85,11 +86,11 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { DxDataGrid, DxColumn } from 'devextreme-vue/data-grid';
+import { DxDataGrid, DxColumn, DxGrouping, DxGroupPanel, DxPaging } from 'devextreme-vue/data-grid';
 import { DxPopup, DxPosition } from 'devextreme-vue/popup';
 import { vehicles, type Vehicle } from './data.ts';
 import { aiIntegration } from './service.ts';
-import TrademarkCell from './TrademarkCell.vue';
+import Trademark from './Trademark.vue';
 import Category from './Category.vue';
 import LicenseInfo from './LicenseInfo.vue';
 
