@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react';
-import { ODataStore } from 'devextreme-react/common/data';
 import DataGrid, {
   Column,
   Grouping,
@@ -9,34 +8,24 @@ import DataGrid, {
   SearchPanel,
 } from 'devextreme-react/data-grid';
 import DiscountCell from './DiscountCell.js';
+import { sales } from './data.js';
 
 const pageSizes = [10, 25, 50, 100];
-const dataSourceOptions = {
-  store: new ODataStore({
-    version: 2,
-    url: 'https://js.devexpress.com/Demos/SalesViewer/odata/DaySaleDtoes',
-    key: 'Id',
-    beforeSend(request) {
-      const year = new Date().getFullYear() - 1;
-      request.params.startDate = `${year}-05-10`;
-      request.params.endDate = `${year}-5-15`;
-    },
-  }),
-};
+
 const App = () => {
   const [collapsed, setCollapsed] = useState(true);
-  const onContentReady = useCallback(
-    (e) => {
-      if (collapsed) {
-        e.component.expandRow(['EnviroCare']);
-        setCollapsed(false);
-      }
-    },
-    [collapsed],
-  );
+
+  const onContentReady = useCallback((e) => {
+    if (collapsed) {
+      e.component.expandRow(['EnviroCare']);
+      setCollapsed(false);
+    }
+  }, [collapsed]);
+
   return (
     <DataGrid
-      dataSource={dataSourceOptions}
+      dataSource={sales}
+      keyExpr="Id"
       allowColumnReordering={true}
       rowAlternationEnabled={true}
       showBorders={true}

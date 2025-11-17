@@ -1,6 +1,7 @@
 <dx-data-grid
   id="gridContainer"
-  [dataSource]="dataSource"
+  [dataSource]="sales"
+  keyExpr="Id"
   [remoteOperations]="false"
   [allowColumnReordering]="true"
   [rowAlternationEnabled]="true"
