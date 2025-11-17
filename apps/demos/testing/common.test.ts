@@ -16,7 +16,7 @@ import {
   execCode,
   injectStyle,
 } from '../utils/visual-tests/matrix-test-helper';
-import { getThemePostfix } from '../utils/visual-tests/helpers/theme-utils';
+import { testScreenshot } from '../utils/visual-tests/helpers/theme-utils';
 import { createMdReport, createTestCafeReport } from '../utils/axe-reporter/reporter';
 import { accessibilityUnsupportedComponents } from './accessibility-unsupported-components';
 import { knownWarnings } from './known-warnings';
@@ -178,45 +178,16 @@ Object.values(FRAMEWORKS).forEach((approach) => {
           await t.expect(error).notOk();
           await t.expect(results.violations.length === 0).ok(createReport(results.violations));
         } else {
-          const testTheme = process.env.THEME;
-
           const consoleMessages = await t.getBrowserConsoleMessages();
 
           const errors = [...consoleMessages.error, ...consoleMessages.warn]
             .filter((e) => !knownWarnings.some((kw) => e.startsWith(kw)));
 
           await t.expect(errors).eql([]);
-           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-          const isMaterialTheme = testTheme?.includes('material');
-          const materialThemeOptions = isMaterialTheme ? {
-            looksSameComparisonOptions: {
-              tolerance: 80,
-              ignoreAntialiasing: true,
-              antialiasingTolerance: 80,
-              strict: false,
-            },
-            // eslint-disable-next-line spellcheck/spell-checker
-            textDiffTreshold: 0.5,
-          } : {};
+          const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-          const finalComparisonOptions = isMaterialTheme && comparisonOptions?.looksSameComparisonOptions
-            ? {
-              ...comparisonOptions,
-              looksSameComparisonOptions: {
-                ...comparisonOptions.looksSameComparisonOptions,
-                ...materialThemeOptions.looksSameComparisonOptions,
-              },
-            } : {
-              ...comparisonOptions,
-              ...materialThemeOptions,
-            };
-
-          if (isGitHubDemos) {
-            await takeScreenshot(`${testName}${getThemePostfix(testTheme)}.png`, undefined, finalComparisonOptions);
-          } else {
-            await takeScreenshot(`${testName}${getThemePostfix(testTheme)}.png`, undefined, finalComparisonOptions);
-          }
+          await testScreenshot(t, takeScreenshot, `${testName}.png`, undefined, comparisonOptions);
 
           await t
             .expect(compareResults.isValid())
