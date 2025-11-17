@@ -3,5 +3,74 @@
   keyExpr="ID"
   [dataSource]="vehicles"
   [showBorders]="true"
+  [aiIntegration]="aiIntegration"
+  (onAIColumnRequestCreating)="(onAIColumnRequestCreating)"
 >
+  <dxo-grouping [contextMenuEnabled]="true" />
+  <dxo-paging [pageSize]="10" />
+
+  <dxi-data-grid-column
+    dataField="TrademarkName"
+    caption="Trademark"
+    [width]="200"
+    cellTemplate="trademarkTemplate"
+  />
+  <div *dxTemplate="let model of 'trademarkTemplate'">
+    <trademark
+      [id]="model.data.ID"
+      [name]="model.data.Name"
+      [trademarkName]="model.data.TrademarkName"
+      (showInfo)="showInfo(model.data)"
+    />
+  </div>
+  <dxi-data-grid-column
+    dataField="Price"
+    format="currency"
+    alignment="left"
+    [width]="100"
+  />
+  <dxi-data-grid-column
+    caption="Category"
+    [minWidth]="180"
+    cellTemplate="categoryTemplate"
+  />
+  <div *dxTemplate="let model of 'categoryTemplate'">
+    <category [category]="model.data.CategoryName" />
+  </div>
+  <dxi-data-grid-column dataField="Modification" [width]="180" />
+  <dxi-data-grid-column dataField="Horsepower" [width]="140" />
+  <dxi-data-grid-column
+    dataField="BodyStyleName"
+    caption="Body Style"
+    [width]="180"
+  />
+  <dxi-data-grid-column
+    name="AI Column"
+    caption="AI Column"
+    cssClass="ai__cell"
+    type="ai"
+    [ai]="{
+            prompt: 'Identify the country where this vehicle model is originally manufactured or developed, based on its brand, model, and specifications.',
+            mode: 'auto',
+            noDataText: 'No data',
+        }"
+    [fixed]="true"
+    fixedPosition="right"
+    [width]="200"
+  />
 </dx-data-grid>
+
+<dx-popup
+  title="Image Info"
+  [width]="360"
+  [height]="260"
+  [(visible)]="popupVisible"
+  [dragEnabled]="false"
+  [hideOnOutsideClick]="true"
+  (onHiding)="hideInfo()"
+>
+  <dxo-position at="center" my="center" collision="fit" />
+  <div *dxTemplate="let _ of 'content'">
+    <license-info *ngIf="currentVehicle" [vehicle]="currentVehicle" />
+  </div>
+</dx-popup>
