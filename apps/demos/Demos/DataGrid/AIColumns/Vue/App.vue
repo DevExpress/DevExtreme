@@ -85,7 +85,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { DxDataGrid, DxColumn, DxGrouping, DxGroupPanel, DxPaging } from 'devextreme-vue/data-grid';
+import { DxDataGrid, DxColumn, DxGrouping, DxPaging } from 'devextreme-vue/data-grid';
 import { DxPopup, DxPosition } from 'devextreme-vue/popup';
 import { vehicles, type Vehicle } from './data.ts';
 import { aiIntegration } from './service.ts';
