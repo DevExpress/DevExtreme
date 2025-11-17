@@ -13,7 +13,7 @@ export interface Task {
 
   Task_Description: string;
 
-  Task_Completion: number;
+  Task_Completion: number | null;
 
   ResponsibleEmployee: Employee;
 }
