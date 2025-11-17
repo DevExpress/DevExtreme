@@ -6,9 +6,10 @@ import {
 } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxNumberBoxComponent, DxNumberBoxModule, DxCheckBoxModule } from 'devextreme-angular';
-import { DataSourceOptions } from 'devextreme-angular/common/data';
+import { DataSource, ArrayStore } from 'devextreme-angular/common/data';
 
 import { DxDataGridComponent, DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import { type Task, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -24,14 +25,13 @@ if (window && window.config?.packageConfigPaths) {
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
+  providers: [Service],
   preserveWhitespaces: true,
 })
 export class AppComponent {
   @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent;
 
   @ViewChild(DxNumberBoxComponent, { static: false }) numberBox: DxNumberBoxComponent;
-
-  isReady: boolean;
 
   taskSubject: string;
 
@@ -45,24 +45,7 @@ export class AppComponent {
 
   autoNavigateToFocusedRow = true;
 
-  dataSource: DataSourceOptions = {
-    store: {
-      type: 'odata',
-      version: 2,
-      key: 'Task_ID',
-      url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks',
-    },
-    expand: 'ResponsibleEmployee',
-    select: [
-      'Task_ID',
-      'Task_Subject',
-      'Task_Start_Date',
-      'Task_Status',
-      'Task_Description',
-      'Task_Completion',
-      'ResponsibleEmployee/Employee_Full_Name',
-    ],
-  };
+  dataSource: DataSource;
 
   columns: DxDataGridTypes.Column[] = [
     {
@@ -87,9 +70,16 @@ export class AppComponent {
     },
   ];
 
-  constructor(private sanitizer: DomSanitizer) {}
+  constructor(private sanitizer: DomSanitizer, service: Service) {
+    this.dataSource = new DataSource({
+      store: new ArrayStore({
+        data: service.getTasks(),
+        key: 'Task_ID',
+      }),
+    });
+  }
 
-  onFocusedRowChanging(e) {
+  onFocusedRowChanging(e: DxDataGridTypes.FocusedRowChangingEvent<Task, number>) {
     const rowsCount = e.component.getVisibleRows().length;
     const pageCount = e.component.pageCount();
     const pageIndex = e.component.pageIndex();
@@ -108,7 +98,7 @@ export class AppComponent {
     }
   }
 
-  onFocusedRowChanged({ row: { data } }: DxDataGridTypes.FocusedRowChangedEvent) {
+  onFocusedRowChanged({ row: { data } }: DxDataGridTypes.FocusedRowChangedEvent<Task, number>) {
     this.taskSubject = data.Task_Subject;
     this.taskDetailsHtml = this.sanitizer.bypassSecurityTrustHtml(data.Task_Description);
     this.taskStatus = data.Task_Status;
