@@ -4136,6 +4136,7 @@
                 "Name": "FileAttachments",
                 "Widget": "Chat",
                 "DemoType": "Web",
+                "Badge": "New",
                 "DocUrl": "",
                 "MvcDescription": "",
                 "NetCoreDescription": "",

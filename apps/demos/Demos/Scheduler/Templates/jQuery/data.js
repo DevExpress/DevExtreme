@@ -5,7 +5,7 @@ const moviesData = [{
   year: 1940,
   image: '../../../../images/movies/HisGirlFriday.jpg',
   duration: 92,
-  color: '#cb6bb2',
+  color: '#9FD89F',
 }, {
   id: 2,
   text: 'Royal Wedding',
@@ -13,7 +13,7 @@ const moviesData = [{
   year: 1951,
   image: '../../../../images/movies/RoyalWedding.jpg',
   duration: 93,
-  color: '#56ca85',
+  color: '#F1BBBC',
 }, {
   id: 3,
   text: 'A Star Is Born',
@@ -21,7 +21,7 @@ const moviesData = [{
   year: 1937,
   image: '../../../../images/movies/AStartIsBorn.jpg',
   duration: 111,
-  color: '#1e90ff',
+  color: '#F9E2AE',
 }, {
   id: 4,
   text: 'The Screaming Skull',
@@ -29,7 +29,7 @@ const moviesData = [{
   year: 1958,
   image: '../../../../images/movies/ScreamingSkull.jpg',
   duration: 68,
-  color: '#ff9747',
+  color: '#EDBBE7',
 }, {
   id: 5,
   text: "It's a Wonderful Life",
@@ -37,7 +37,7 @@ const moviesData = [{
   year: 1946,
   image: '../../../../images/movies/ItsAWonderfulLife.jpg',
   duration: 130,
-  color: '#f05797',
+  color: '#B4D6FA',
 }, {
   id: 6,
   text: 'City Lights',
@@ -45,7 +45,7 @@ const moviesData = [{
   year: 1931,
   image: '../../../../images/movies/CityLights.jpg',
   duration: 87,
-  color: '#2a9010',
+  color: '#C6B1DE',
 }];
 
 const theatreData = [{

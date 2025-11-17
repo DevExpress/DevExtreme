@@ -2,6 +2,7 @@ export {
     AIIntegration,
     AIProvider,
     AIResponse,
+    GenerateGridColumnCommandResponse,
     Prompt,
     RequestParams,
     RequestParamsData,

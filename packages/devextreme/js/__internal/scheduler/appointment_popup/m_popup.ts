@@ -20,7 +20,7 @@ import type { AppointmentForm } from './m_form';
 
 export const APPOINTMENT_POPUP_CLASS = 'dx-scheduler-appointment-popup';
 
-const POPUP_FULL_SCREEN_MODE_WINDOW_WIDTH_THRESHOLD = 460;
+const POPUP_FULL_SCREEN_MODE_WINDOW_WIDTH_THRESHOLD = 485;
 
 const DAY_IN_MS = dateUtils.dateToMilliseconds('day');
 
@@ -155,7 +155,6 @@ export class AppointmentPopup {
       if (canceled) {
         e.cancel = true;
       } else {
-        this.updateToolbarForMainGroup();
         this.updatePopupFullScreenMode();
       }
     });
@@ -181,8 +180,6 @@ export class AppointmentPopup {
   }
 
   _updateForm(): void {
-    this.form.showMainGroup(false);
-
     const rawAppointment = this.state.appointment.data;
     const appointmentAdapter = this._createAppointmentAdapter(rawAppointment)
       .clone()
@@ -192,6 +189,8 @@ export class AppointmentPopup {
 
     this.form.formData = formData;
     this.form.readOnly = this._isReadOnly(appointmentAdapter);
+
+    this.form.showMainGroup(false);
   }
 
   _createFormData(appointmentAdapter: AppointmentAdapter): Record<string, any> {

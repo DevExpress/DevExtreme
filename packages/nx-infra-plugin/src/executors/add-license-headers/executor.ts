@@ -17,8 +17,6 @@ const COMMENT_PREFIX = ' *';
 const NEWLINE = '\n';
 const EMPTY_LINE = '';
 
-const GITHUB_URL = 'https://github.com/DevExpress/devextreme-react';
-
 const COPYRIGHT_START =
   ' * Copyright (c) 2012 - <%= year %> Developer Express Inc. ALL RIGHTS RESERVED';
 
@@ -31,7 +29,7 @@ const BANNER_LICENSE_LINE2 =
   COMMENT_PREFIX
   + ' '
   + 'of the MIT license. See the LICENSE file in the root of the project for details.';
-const BANNER_GITHUB = COMMENT_PREFIX + ' ' + GITHUB_URL;
+const BANNER_GITHUB = COMMENT_PREFIX + ' ' + '<%= githubUrl %>';
 
 const TEMPLATE_REGEX = /<%=\s*(\w+(?:\.\w+)*)\s*%>/g;
 
@@ -55,10 +53,28 @@ const runExecutor: PromiseExecutor<AddLicenseHeadersExecutorSchema> = async (opt
   }
 
   const now = new Date();
+
+  let githubUrl: string;
+
+  if (!pkg.repository) {
+    throw new Error(
+      `Missing 'repository' field in ${packageJsonPath}. License headers require a repository URL.`,
+    );
+  } else if (typeof pkg.repository === 'string') {
+    githubUrl = pkg.repository.replace(/^git\+/, '').replace(/\.git$/, '');
+  } else if (pkg.repository.url) {
+    githubUrl = pkg.repository.url.replace(/^git\+/, '').replace(/\.git$/, '');
+  } else {
+    throw new Error(
+      `Invalid 'repository' format in ${packageJsonPath}. Expected string or object with 'url' property.`,
+    );
+  }
+
   const data = {
     pkg,
     date: now.toDateString(),
     year: now.getFullYear(),
+    githubUrl,
   };
 
   const bannerTemplate = [

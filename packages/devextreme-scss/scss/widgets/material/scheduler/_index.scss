@@ -4,6 +4,7 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+@use "../toolbar/sizes" as *;
 @use '../../base/scheduler/layout/header' as *;
 @use "../../base/mixins" as *;
 @use "../../base/icons" as *;
@@ -585,15 +586,58 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
     }
 
     .dx-scheduler-form-description-group .dx-scheduler-form-icon,
-    .dx-scheduler-form-resources-group .dx-scheduler-default-resources-icon {
+    .dx-scheduler-form-resources-group .dx-scheduler-default-resources-icon,
+    .dx-scheduler-form-recurrence-settings-group .dx-scheduler-form-icon {
       margin-top: $material-scheduler-appointment-popup-description-icon-margin-top;
     }
 
-    .dx-scheduler-form-recurrence-end-group .dx-field-item-label {
-      padding-left: 0;
+    .dx-scheduler-days-of-week-buttons {
+      height: $material-toolbar-height;
+      gap: $material-scheduler-days-of-week-buttons-gap;
+    }
 
-      @if $size == "compact" {
-        height: $material-scheduler-appointment-popup-icon-container-height;
+    .dx-scheduler-form-group-with-icon.dx-scheduler-form-recurrence-end-group:has(.dx-scheduler-form-icon:not(.dx-hidden)) .dx-field-item-label {
+      height: $material-scheduler-appointment-popup-recurrence-end-group-label-height;
+    }
+
+    .dx-scheduler-form-recurrence-end-group .dx-field-item-label {
+      padding: 0;
+      margin-bottom: $material-scheduler-appointment-popup-recurrence-end-group-label-margin-bottom;
+
+      .dx-field-item-label-text {
+        color: $base-text-color;
+      }
+    }
+
+    .dx-scheduler-form-recurrence-end-editors {
+      .dx-item.dx-radiobutton {
+        height: $material-scheduler-appointment-popup-recurrence-end-editors-item-height !important; // stylelint-disable-line declaration-no-important
+
+        .dx-radiobutton-icon::after {
+          content: unset;
+        }
+      }
+
+      .dx-box-item {
+        height: $material-scheduler-appointment-popup-recurrence-end-editors-item-height;
+
+        .dx-box-item-content {
+          height: $material-scheduler-appointment-popup-recurrence-end-editors-item-height;
+        }
+      }
+
+      .dx-field-item,
+      .dx-empty-item {
+        height: $material-scheduler-appointment-popup-recurrence-end-editors-item-height;
+
+        .dx-field-item-content {
+          height: $material-scheduler-appointment-popup-recurrence-end-editors-item-height;
+        }
+      }
+
+      .dx-texteditor,
+      .dx-numberbox {
+        height: $material-scheduler-appointment-popup-recurrence-end-editors-item-height;
       }
     }
 
