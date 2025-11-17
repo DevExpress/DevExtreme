@@ -490,8 +490,7 @@ jobs:
       fail-fast: false
       matrix:
         STRATEGY: [screenshots, accessibility]
-        # THEME: ['material.blue.light', 'fluent.blue.light']
-        THEME: ['fluent.blue.light']
+        THEME: ['material.blue.light', 'fluent.blue.light']
         CONSTEL: [jquery(1/4), jquery(2/4), jquery(3/4), jquery(4/4), jquery]
         exclude:
           - STRATEGY: accessibility
@@ -551,6 +550,19 @@ jobs:
     - name: DevExtreme - Build
       run: pnpx nx build devextreme
 
+    - name: Install Roboto font for Material theme
+      if: contains(matrix.THEME, 'material')
+      run: |
+        if [ ! -d "/usr/share/fonts/truetype/roboto" ]; then
+          echo "Installing Roboto font..."
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq fonts-roboto fonts-roboto-unhinted
+          sudo fc-cache -f -v > /dev/null 2>&1 || true
+          echo "Roboto font installed"
+        else
+          echo "Roboto font already installed"
+        fi
+
     - name: Run Web Server
       run: |
         python -m http.server 8080 &
@@ -562,6 +574,7 @@ jobs:
       shell: bash
       working-directory: apps/demos
       env:
+        NODE_OPTIONS: --max-old-space-size=8192
         STRATEGY: ${{ matrix.STRATEGY }}
         CHANGEDFILEINFOSPATH: changed-files.json
         BROWSERS: chrome:headless --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
@@ -609,7 +622,20 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        CONSTEL: [react(1/4), react(2/4), react(3/4), react(4/4), vue(1/4), vue(2/4), vue(3/4), vue(4/4), angular(1/4), angular(2/4), angular(3/4), angular(4/4)]
+        CONSTEL: [
+          react(1/4),
+          react(2/4),
+          react(3/4),
+          react(4/4),
+          vue(1/4),
+          vue(2/4),
+          vue(3/4),
+          vue(4/4),
+          angular(1/4),
+          angular(2/4),
+          angular(3/4),
+          angular(4/4)
+        ]
         THEME: ['fluent.blue.light']
 
     runs-on: devextreme-shr2
@@ -690,6 +716,7 @@ jobs:
       shell: bash
       working-directory: apps/demos
       env:
+        NODE_OPTIONS: --max-old-space-size=8192
         BROWSERS: chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
         # DEBUG: hammerhead:*,testcafe:*
         CONCURRENCY: 4

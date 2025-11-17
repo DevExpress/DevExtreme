@@ -149,6 +149,7 @@
         "stylelint-config-standard": "35.0.0",
         "systemjs-builder": "0.16.15",
         "testcafe": "3.7.2",
+        "testcafe-reporter-spec-time": "4.0.0",
         "ts-node": "10.9.2",
         "vue-tsc": "^3.0.6"
     },
