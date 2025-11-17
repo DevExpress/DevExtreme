@@ -19,8 +19,8 @@ import {
   pathCombine,
 } from '@js/file_management/utils';
 import type { Properties as FileManagerProperties } from '@js/ui/file_manager';
-import { whenSome } from '@js/ui/file_manager/ui.file_manager.common';
 import type { FileManagerActions } from '@ts/ui/file_manager/ui.file_manager';
+import { whenSome } from '@ts/ui/file_manager/ui.file_manager.common';
 
 const DEFAULT_ROOT_FILE_SYSTEM_ITEM_NAME = 'Files';
 
@@ -945,7 +945,7 @@ export class FileItemsController {
 
     if (!args.cancel) {
       deferred.resolve();
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
     } else if (args.cancel === true) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return deferred.reject({

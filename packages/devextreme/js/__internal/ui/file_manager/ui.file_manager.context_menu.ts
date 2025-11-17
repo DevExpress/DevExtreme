@@ -11,11 +11,11 @@ import type {
   ContextMenuShowingEvent,
   Properties as FileManagerProperties,
 } from '@js/ui/file_manager';
-import { extendAttributes } from '@js/ui/file_manager/ui.file_manager.common';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import type { FileManagerCommandManager } from '@ts/ui/file_manager/ui.file_manager.command_manager';
+import { extendAttributes } from '@ts/ui/file_manager/ui.file_manager.common';
 
 const FILEMANAGER_CONTEXT_MEMU_CLASS = 'dx-filemanager-context-menu';
 

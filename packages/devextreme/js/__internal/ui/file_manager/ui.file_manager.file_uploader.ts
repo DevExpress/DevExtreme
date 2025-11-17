@@ -5,11 +5,11 @@ import $ from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
 import { getInnerHeight, setHeight, setWidth } from '@js/core/utils/size';
 import { hasWindow } from '@js/core/utils/window';
-import { whenSome } from '@js/ui/file_manager/ui.file_manager.common';
 import FileUploader from '@js/ui/file_uploader';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
+import { whenSome } from '@ts/ui/file_manager/ui.file_manager.common';
 
 const FILE_MANAGER_FILE_UPLOADER_CLASS = 'dx-filemanager-fileuploader';
 const FILE_MANAGER_FILE_UPLOADER_DROPZONE_PLACEHOLDER_CLASS = 'dx-filemanager-fileuploader-dropzone-placeholder';

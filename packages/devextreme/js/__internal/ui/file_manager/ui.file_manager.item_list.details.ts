@@ -5,12 +5,13 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined, isFunction, isString } from '@js/core/utils/type';
+import type { ClickEvent } from '@js/ui/button';
 import type { Scrollable } from '@js/ui/data_grid';
 // NOTE: Using the "public" export here for the theme-builder deps check
 import DataGrid from '@js/ui/data_grid';
-import { extendAttributes, getDisplayFileSize } from '@js/ui/file_manager/ui.file_manager.common';
-import FileManagerFileActionsButton from '@js/ui/file_manager/ui.file_manager.file_actions_button';
 import { OPERATIONS } from '@ts/ui/file_manager/file_items_controller';
+import { extendAttributes, getDisplayFileSize } from '@ts/ui/file_manager/ui.file_manager.common';
+import FileManagerFileActionsButton from '@ts/ui/file_manager/ui.file_manager.file_actions_button';
 import FileManagerItemListBase from '@ts/ui/file_manager/ui.file_manager.item_list';
 
 const FILE_MANAGER_DETAILS_ITEM_LIST_CLASS = 'dx-filemanager-details';
@@ -242,8 +243,9 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     return !!DEFAULT_COLUMN_CONFIGS[columnDataField];
   }
 
-  _onFileItemActionButtonClick({ component, element, event }): void {
-    event.stopPropagation();
+  _onFileItemActionButtonClick(e: ClickEvent): void {
+    const { component, element, event } = e;
+    event?.stopPropagation();
 
     const $row = component.$element().closest(this._getItemSelector());
     const fileItemInfo = $row.data('item');
@@ -255,6 +257,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     };
     const items = this._getFileItemsForContextMenu(fileItemInfo);
     this._showContextMenu(items, element, event, target);
+    // @ts-expect-error ts-error
     this._activeFileActionsButton = component;
     this._activeFileActionsButton?.setActive(true);
   }
@@ -461,7 +464,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     $(container).append($wrapper);
 
     this._createComponent($button, FileManagerFileActionsButton, {
-      onClick: (e) => this._onFileItemActionButtonClick(e),
+      onClick: (e): void => this._onFileItemActionButtonClick(e),
     });
   }
 

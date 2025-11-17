@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { name as contextMenuEventName } from '@js/common/core/events/contextmenu';
 import eventsEngine from '@js/common/core/events/core/events_engine';
-import { addNamespace } from '@js/common/core/events/utils/index';
+import { addNamespace } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
-import { getDisplayFileSize } from '@js/ui/file_manager/ui.file_manager.common';
 import { OPERATIONS } from '@ts/ui/file_manager/file_items_controller';
+import { getDisplayFileSize } from '@ts/ui/file_manager/ui.file_manager.common';
 import FileManagerItemListBase from '@ts/ui/file_manager/ui.file_manager.item_list';
 import FileManagerThumbnailListBox from '@ts/ui/file_manager/ui.file_manager.items_list.thumbnails.list_box';
 

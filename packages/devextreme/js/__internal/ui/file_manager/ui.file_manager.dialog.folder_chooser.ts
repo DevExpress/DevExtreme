@@ -2,7 +2,7 @@
 import messageLocalization from '@js/common/core/localization/message';
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
-import { getMapFromObject } from '@js/ui/file_manager/ui.file_manager.common';
+import { getMapFromObject } from '@ts/ui/file_manager/ui.file_manager.common';
 import type { DialogOptions } from '@ts/ui/file_manager/ui.file_manager.dialog';
 import FileManagerDialogBase from '@ts/ui/file_manager/ui.file_manager.dialog';
 import FileManagerFilesTreeView from '@ts/ui/file_manager/ui.file_manager.files_tree_view';
