@@ -94,6 +94,7 @@ export class OptionManager {
         collectorCSS,
         DOMMetaData: workspace.getDOMElementsMetaData(),
         panelName,
+        isMonthView,
       });
 
       const {
