@@ -1450,6 +1450,17 @@ QUnit.module('rendering', () => {
 
         assert.ok($uploadButton.length && !$uploadButton.is(':visible'), 'the upload button is hidden');
     });
+
+    QUnit.test('file name should have title attribute equal to file name', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader();
+        const instance = $fileUploader.dxFileUploader('instance');
+
+        instance.option('value', [fakeFile]);
+
+        const $fileName = $fileUploader.find(`.${FILEUPLOADER_FILE_NAME_CLASS}`);
+
+        assert.strictEqual($fileName.attr('title'), fakeFile.name, 'file name has correct title attribute');
+    });
 });
 
 QUnit.module('files rendering', moduleConfig, () => {

@@ -14,7 +14,7 @@ fixture.disablePageReloads`Drag-and-drop appointments in the Scheduler basic vie
 
   await t
     .dragToElement(draggableAppointment.element, scheduler.getDateTableCell(4, 0))
-    .expect(draggableAppointment.size.height).eql('50px')
+    .expect(draggableAppointment.size.height).eql('38px')
     .expect(draggableAppointment.date.time)
     .eql('11:00 AM - 11:30 AM');
 }).before(async () => createScheduler({
@@ -29,7 +29,7 @@ test('Drag-n-drop in the "month" view', async (t) => {
 
   await t
     .dragToElement(draggableAppointment.element, scheduler.getDateTableCell(0, 4))
-    .expect(draggableAppointment.size.height).eql('23.75px')
+    .expect(draggableAppointment.size.height).eql('23.8281px')
     .expect(draggableAppointment.date.time)
     .eql('9:00 AM - 9:30 AM');
 }).before(async () => createScheduler({

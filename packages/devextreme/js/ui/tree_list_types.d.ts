@@ -106,7 +106,6 @@ export {
   RowDraggingReorderEvent,
   ColumnButtonClickEvent,
   AIColumnRequestCreatingEvent,
-  AIColumnResponseReceivedEvent,
   ColumnButtonTemplateData,
   ColumnCellTemplateData,
   ColumnEditCellTemplateData,

@@ -33,6 +33,7 @@ test('Check context menu items', async (t) => {
     { id: 2, name: 'Name 2', value: 20 },
     { id: 3, name: 'Name 3', value: 30 },
   ],
+  keyExpr: 'id',
   width: 600,
   columnWidth: 200,
   columnFixing: {
@@ -72,6 +73,7 @@ test('Check context menu items when allowFixing is false', async (t) => {
     { id: 2, name: 'Name 2', value: 20 },
     { id: 3, name: 'Name 3', value: 30 },
   ],
+  keyExpr: 'id',
   width: 600,
   columnWidth: 200,
   columnFixing: {

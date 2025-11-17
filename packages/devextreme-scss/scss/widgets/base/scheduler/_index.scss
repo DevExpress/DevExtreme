@@ -480,7 +480,7 @@ $scheduler-appointment-form-label-padding: 20px;
         position: relative;
 
         &.dx-scheduler-form-main-group-hidden {
-          transform: translateX(-100%);
+          transform: translateX(-110%);
           position: absolute;
           top: 0;
         }
@@ -493,7 +493,7 @@ $scheduler-appointment-form-label-padding: 20px;
         position: relative;
 
         &.dx-scheduler-form-recurrence-group-hidden {
-          transform: translateX(100%);
+          transform: translateX(110%);
           position: absolute;
           top: 0;
         }
@@ -543,6 +543,12 @@ $scheduler-appointment-form-label-padding: 20px;
         align-items: end;
 
         .dx-datebox input.dx-texteditor-input {
+          padding-inline-end: 0;
+        }
+      }
+
+      .dx-scheduler-form-recurrence-end-group .dx-item {
+        .dx-texteditor-input-container .dx-texteditor-input {
           padding-inline-end: 0;
         }
       }
@@ -625,42 +631,26 @@ $scheduler-appointment-form-label-padding: 20px;
         }
       }
 
-      /* Repeat editor separator */
+      /* Repeat editor settings button */
       .dx-scheduler-form-repeat-editor .dx-scheduler-form-recurrence-settings-button {
-        overflow: visible;
         position: relative;
-        height: auto;
 
         .dx-icon {
           color: $scheduler-workspace-accent-color;
         }
+      }
 
-        &::after {
-          content: '';
-          position: absolute;
-          top: 0;
-          right: 0;
-          width: 1px;
-          height: 100%;
-          background-color: $scheduler-base-border-color;
-        }
+      .dx-scheduler-form-repeat-editor .dx-selectbox.dx-state-readonly .dx-scheduler-form-recurrence-settings-button {
+        margin-right: 0;
       }
 
       /* Recurrence Day Buttons */
       .dx-scheduler-days-of-week-buttons {
         display: flex;
-        gap: 8px;
+        align-items: center;
 
         .dx-button {
           border-radius: 50%;
-          width: $scheduler-days-of-week-button-size;
-          height: $scheduler-days-of-week-button-size;
-          min-width: $scheduler-days-of-week-button-size;
-          min-height: $scheduler-days-of-week-button-size;
-
-          .dx-button-content {
-            padding: 0;
-          }
         }
       }
     }

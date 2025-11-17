@@ -15,7 +15,7 @@ import { makeSlowDataSource } from './treeViewParts/testUtils.js';
 const { module, test, assert } = QUnit;
 const createInstance = (options) => new TreeViewTestWrapper(options);
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(function() {
     const markup = '<div id="treeView"></div>';

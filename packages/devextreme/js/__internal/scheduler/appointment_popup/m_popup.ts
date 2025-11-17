@@ -20,7 +20,7 @@ import type { AppointmentForm } from './m_form';
 
 export const APPOINTMENT_POPUP_CLASS = 'dx-scheduler-appointment-popup';
 
-const POPUP_FULL_SCREEN_MODE_WINDOW_WIDTH_THRESHOLD = 460;
+const POPUP_FULL_SCREEN_MODE_WINDOW_WIDTH_THRESHOLD = 485;
 
 const DAY_IN_MS = dateUtils.dateToMilliseconds('day');
 
@@ -36,6 +36,8 @@ export class AppointmentPopup {
   form: AppointmentForm;
 
   private _popup?: dxPopup;
+
+  private customToolbarItems?: ToolbarItem[];
 
   state: any;
 
@@ -97,6 +99,8 @@ export class AppointmentPopup {
     const editingConfig = this.scheduler.getEditingConfig();
     const customPopupOptions = editingConfig?.popup ?? {};
 
+    this.customToolbarItems = customPopupOptions.toolbarItems;
+
     const defaultPopupConfig = {
       height: 'auto',
       maxHeight: '90%',
@@ -151,7 +155,6 @@ export class AppointmentPopup {
       if (canceled) {
         e.cancel = true;
       } else {
-        this.updateToolbarForMainGroup();
         this.updatePopupFullScreenMode();
       }
     });
@@ -177,8 +180,6 @@ export class AppointmentPopup {
   }
 
   _updateForm(): void {
-    this.form.showMainGroup(false);
-
     const rawAppointment = this.state.appointment.data;
     const appointmentAdapter = this._createAppointmentAdapter(rawAppointment)
       .clone()
@@ -188,6 +189,8 @@ export class AppointmentPopup {
 
     this.form.formData = formData;
     this.form.readOnly = this._isReadOnly(appointmentAdapter);
+
+    this.form.showMainGroup(false);
   }
 
   _createFormData(appointmentAdapter: AppointmentAdapter): Record<string, any> {
@@ -368,7 +371,19 @@ export class AppointmentPopup {
       : clonedDate;
   }
 
+  private tryApplyCustomToolbarItems(): boolean {
+    if (this.customToolbarItems) {
+      this.popup.option('toolbarItems', this.customToolbarItems);
+      return true;
+    }
+    return false;
+  }
+
   updateToolbarForRecurrenceGroup(): void {
+    if (this.tryApplyCustomToolbarItems()) {
+      return;
+    }
+
     const toolbarItems: ToolbarItem[] = [
       {
         toolbar: 'top',
@@ -421,6 +436,10 @@ export class AppointmentPopup {
   }
 
   updateToolbarForMainGroup(): void {
+    if (this.tryApplyCustomToolbarItems()) {
+      return;
+    }
+
     const isCreating = this.state.action === ACTION_TO_APPOINTMENT.CREATE;
     const formTitleKey = isCreating ? 'dxScheduler-newPopupTitle' : 'dxScheduler-editPopupTitle';
 
