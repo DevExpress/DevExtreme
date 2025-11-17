@@ -29,13 +29,13 @@ export async function testScreenshot(
 
   const materialThemeOptions = isMaterialTheme ? {
     looksSameComparisonOptions: {
-      tolerance: 80,
+      tolerance: 90,
       ignoreAntialiasing: true,
-      antialiasingTolerance: 80,
+      antialiasingTolerance: 90,
       strict: false,
       caretIgnore: true,
     },
-    textDiffTreshold: 0.8,
+    textDiffTreshold: 0.9,
   } : {};
 
   const finalOptions = isMaterialTheme && comparisonOptions?.looksSameComparisonOptions

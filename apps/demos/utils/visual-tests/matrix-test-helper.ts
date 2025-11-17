@@ -112,9 +112,11 @@ export function changeTheme(dirName, demoPath, theme) {
   }
 
   const updatedContent = globalReadFrom(dirName, demoPath, (data) => {
-    const result = data.replace(/data-theme="[^"]+"/g, `data-theme="${theme}"`);
+    let result = data.replace(/data-theme="[^"]+"/g, `data-theme="${theme}"`);
 
-    return result.replace(/dx\.[^.]+(\.css")/g, `dx.${theme}$1`);
+    result = result.replace(/dx\.[^"]+\.css/g, `dx.${theme}.css`);
+
+    return result;
   });
 
   const indexFilePath = join(dirName, demoPath);
@@ -320,10 +322,10 @@ export function runManualTestCore(
     }
 
     const theme = process.env.THEME.replace('generic.', '');
-    testURL = `http://127.0.0.1:808${getPortByIndex(index)}/${widget}/${demo}/${FRAMEWORKS[framework]}/?theme=dx.${theme}`;
+    testURL = `http://127.0.0.1:8080/${widget}/${demo}/${FRAMEWORKS[framework]}/?theme=dx.${theme}`;
   } else {
     changeTheme(__dirname, `../../Demos/${widget}/${demo}/${FRAMEWORKS[framework]}/index.html`, process.env.THEME);
-    testURL = `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widget}/${demo}/${FRAMEWORKS[framework]}/`;
+    testURL = `http://127.0.0.1:8080/apps/demos/Demos/${widget}/${demo}/${FRAMEWORKS[framework]}/`;
   }
   
   const getTestStyles = (demoName) => {
