@@ -1,9 +1,9 @@
-import Guid from '../../core/guid';
-import $ from '../../core/renderer';
-import { extend } from '../../core/utils/extend';
-import { getImageContainer } from '../../core/utils/icon';
-
-import FileManagerProgressPanel from './ui.file_manager.notification.progress_panel';
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types,max-classes-per-file */
+import Guid from '@js/core/guid';
+import $ from '@js/core/renderer';
+import { extend } from '@js/core/utils/extend';
+import { getImageContainer } from '@js/core/utils/icon';
+import FileManagerProgressPanel from '@ts/ui/file_manager/ui.file_manager.notification.progress_panel';
 
 const FILE_MANAGER_PROGRESS_BOX_CLASS = 'dx-filemanager-progress-box';
 const FILE_MANAGER_PROGRESS_BOX_ERROR_CLASS = `${FILE_MANAGER_PROGRESS_BOX_CLASS}-error`;
@@ -13,243 +13,335 @@ const FILE_MANAGER_PROGRESS_BOX_COMMON_CLASS = `${FILE_MANAGER_PROGRESS_BOX_CLAS
 
 const MANAGER_ID_NAME = '__operationInfoManager';
 const ACTION_PROGRESS_STATUS = {
-    default: 'default',
-    progress: 'progress',
-    error: 'error',
-    success: 'success'
+  default: 'default',
+  progress: 'progress',
+  error: 'error',
+  success: 'success',
 };
 
 class NotificationManagerBase {
-    constructor({ onActionProgressStatusChanged, isActual }) {
-        this._id = new Guid().toString();
-        this._isActual = isActual || false;
-        this._actionProgressStatus = ACTION_PROGRESS_STATUS.default;
-        this._raiseActionProgress = onActionProgressStatusChanged;
+  _id: string;
+
+  _isActual: boolean;
+
+  _actionProgressStatus: string;
+
+  _raiseActionProgress: (message: string, status: string) => void;
+
+  constructor({ onActionProgressStatusChanged, isActual }) {
+    this._id = new Guid().toString();
+    this._isActual = isActual || false;
+    this._actionProgressStatus = ACTION_PROGRESS_STATUS.default;
+    this._raiseActionProgress = onActionProgressStatusChanged;
+  }
+
+  getId(): string {
+    return this._id;
+  }
+
+  isActual(): boolean {
+    return this._isActual;
+  }
+
+  createErrorDetailsProgressBox($container, item, errorText): void {
+    const detailsItem = this._createDetailsItem($container, item);
+    this.renderError(detailsItem.$wrapper, errorText);
+  }
+
+  renderError($container, errorText): void {
+    $('<div>')
+      .text(errorText)
+      .addClass(FILE_MANAGER_PROGRESS_BOX_ERROR_CLASS)
+      .appendTo($container);
+  }
+
+  isActionProgressStatusDefault(): boolean {
+    return this._actionProgressStatus === ACTION_PROGRESS_STATUS.default;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  _createDetailsItem($container, item) {
+    const $detailsItem = $('<div>').appendTo($container);
+    return this._createProgressBox($detailsItem, {
+      commonText: item.commonText,
+      imageUrl: item.imageUrl,
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  _createProgressBox($container, options) {
+    $container.addClass(FILE_MANAGER_PROGRESS_BOX_CLASS);
+
+    if (options.imageUrl) {
+      getImageContainer(options.imageUrl)
+        ?.addClass(FILE_MANAGER_PROGRESS_BOX_IMAGE_CLASS)
+        .appendTo($container);
     }
 
-    getId() {
-        return this._id;
-    }
+    const $wrapper = $('<div>')
+      .addClass(FILE_MANAGER_PROGRESS_BOX_WRAPPER_CLASS)
+      .appendTo($container);
 
-    isActual() {
-        return this._isActual;
-    }
+    const $commonText = $('<div>')
+      .addClass(FILE_MANAGER_PROGRESS_BOX_COMMON_CLASS)
+      .text(options.commonText)
+      .appendTo($wrapper);
 
-    createErrorDetailsProgressBox($container, item, errorText) {
-        const detailsItem = this._createDetailsItem($container, item);
-        this.renderError(detailsItem.$wrapper, errorText);
-    }
-
-    renderError($container, errorText) {
-        $('<div>')
-            .text(errorText)
-            .addClass(FILE_MANAGER_PROGRESS_BOX_ERROR_CLASS)
-            .appendTo($container);
-    }
-
-    isActionProgressStatusDefault() {
-        return this._actionProgressStatus === ACTION_PROGRESS_STATUS.default;
-    }
-
-    _createDetailsItem($container, item) {
-        const $detailsItem = $('<div>').appendTo($container);
-        return this._createProgressBox($detailsItem, {
-            commonText: item.commonText,
-            imageUrl: item.imageUrl
-        });
-    }
-
-    _createProgressBox($container, options) {
-        $container.addClass(FILE_MANAGER_PROGRESS_BOX_CLASS);
-
-        if(options.imageUrl) {
-            getImageContainer(options.imageUrl)
-                .addClass(FILE_MANAGER_PROGRESS_BOX_IMAGE_CLASS)
-                .appendTo($container);
-        }
-
-        const $wrapper = $('<div>')
-            .addClass(FILE_MANAGER_PROGRESS_BOX_WRAPPER_CLASS)
-            .appendTo($container);
-
-        const $commonText = $('<div>')
-            .addClass(FILE_MANAGER_PROGRESS_BOX_COMMON_CLASS)
-            .text(options.commonText)
-            .appendTo($wrapper);
-
-        return {
-            $commonText, $element: $container, $wrapper
-        };
-    }
+    return {
+      $commonText,
+      $element: $container,
+      $wrapper,
+    };
+  }
 }
 
 class NotificationManagerStub extends NotificationManagerBase {
-    addOperation() {
-        return {
-            [MANAGER_ID_NAME]: this._id
-        };
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  addOperation() {
+    return {
+      [MANAGER_ID_NAME]: this._id,
+    };
+  }
+
+  addOperationDetails(): void {}
+
+  updateOperationItemProgress(): void {}
+
+  completeOperationItem(): void {}
+
+  finishOperation(): void {}
+
+  completeOperation(): void {}
+
+  completeSingleOperationWithError(): void {}
+
+  addOperationDetailsError(): void {}
+
+  handleDimensionChanged(): boolean {
+    return false;
+  }
+
+  ensureProgressPanelCreated(): void {}
+
+  tryHideActionProgress(): void {
+    this._updateActionProgress('', ACTION_PROGRESS_STATUS.default);
+  }
+
+  updateActionProgressStatus(): void {
+    this._updateActionProgress('', ACTION_PROGRESS_STATUS.default);
+  }
+
+  _updateActionProgress(message, status): void {
+    if (
+      status !== ACTION_PROGRESS_STATUS.default
+      && status !== ACTION_PROGRESS_STATUS.progress
+    ) {
+      return;
     }
+    this._actionProgressStatus = status;
+    this._raiseActionProgress(message, status);
+  }
 
-    addOperationDetails() {}
+  hasNoOperations(): boolean {
+    return true;
+  }
 
-    updateOperationItemProgress() {}
+  get _operationInProgressCount(): number {
+    return 0;
+  }
 
-    completeOperationItem() {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  set _operationInProgressCount(_value: number) {}
 
-    finishOperation() {}
+  get _failedOperationCount(): number {
+    return 0;
+  }
 
-    completeOperation() {}
-
-    completeSingleOperationWithError() {}
-
-    addOperationDetailsError() {}
-
-    handleDimensionChanged() { return false; }
-
-    ensureProgressPanelCreated() {}
-
-    tryHideActionProgress() {
-        this._updateActionProgress('', ACTION_PROGRESS_STATUS.default);
-    }
-
-    updateActionProgressStatus() {
-        this._updateActionProgress('', ACTION_PROGRESS_STATUS.default);
-    }
-
-    _updateActionProgress(message, status) {
-        if(status !== ACTION_PROGRESS_STATUS.default && status !== ACTION_PROGRESS_STATUS.progress) {
-            return;
-        }
-        this._actionProgressStatus = status;
-        this._raiseActionProgress(message, status);
-    }
-
-    hasNoOperations() { return true; }
-
-    get _operationInProgressCount() { return 0; }
-
-    set _operationInProgressCount(value) {}
-
-    get _failedOperationCount() { return 0; }
-
-    set _failedOperationCount(value) {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  set _failedOperationCount(_value: number) {}
 }
 
 class NotificationManager extends NotificationManagerBase {
-    constructor(options) {
-        super(options);
+  _progressPanel?: FileManagerProgressPanel;
 
-        this._failedOperationCount = 0;
-        this._operationInProgressCount = 0;
+  _operationInProgressCountInternal!: number;
+
+  _failedOperationCountInternal!: number;
+
+  constructor(options) {
+    super(options);
+
+    this._failedOperationCount = 0;
+    this._operationInProgressCount = 0;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  addOperation(processingMessage, allowCancel, allowProgressAutoUpdate) {
+    this._operationInProgressCount += 1;
+    const operationInfo = this._progressPanel?.addOperation(
+      processingMessage,
+      allowCancel,
+      allowProgressAutoUpdate,
+    );
+    operationInfo[MANAGER_ID_NAME] = this._id;
+    this._updateActionProgress(
+      processingMessage,
+      ACTION_PROGRESS_STATUS.progress,
+    );
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return operationInfo;
+  }
+
+  addOperationDetails(operationInfo, details, showCloseButton): void {
+    this._progressPanel?.addOperationDetails(
+      operationInfo,
+      details,
+      showCloseButton,
+    );
+  }
+
+  updateOperationItemProgress(
+    operationInfo,
+    itemIndex,
+    itemProgress,
+    commonProgress,
+  ): void {
+    this._progressPanel?.updateOperationItemProgress(
+      operationInfo,
+      itemIndex,
+      itemProgress,
+      commonProgress,
+    );
+  }
+
+  completeOperationItem(operationInfo, itemIndex, commonProgress): void {
+    this._progressPanel?.completeOperationItem(
+      operationInfo,
+      itemIndex,
+      commonProgress,
+    );
+  }
+
+  finishOperation(operationInfo, commonProgress): void {
+    this._progressPanel?.updateOperationCommonProgress(
+      operationInfo,
+      commonProgress,
+    );
+  }
+
+  completeOperation(operationInfo, commonText, isError, statusText): void {
+    this._operationInProgressCount -= 1;
+    if (isError) {
+      this._failedOperationCount += 1;
     }
+    this._progressPanel?.completeOperation(
+      operationInfo,
+      commonText,
+      isError,
+      statusText,
+    );
+  }
 
-    addOperation(processingMessage, allowCancel, allowProgressAutoUpdate) {
-        this._operationInProgressCount++;
-        const operationInfo = this._progressPanel.addOperation(processingMessage, allowCancel, allowProgressAutoUpdate);
-        operationInfo[MANAGER_ID_NAME] = this._id;
-        this._updateActionProgress(processingMessage, ACTION_PROGRESS_STATUS.progress);
-        return operationInfo;
+  completeSingleOperationWithError(operationInfo, errorInfo): void {
+    this._progressPanel?.completeSingleOperationWithError(
+      operationInfo,
+      errorInfo.detailErrorText,
+    );
+    this._notifyError(errorInfo);
+  }
+
+  addOperationDetailsError(operationInfo, errorInfo): void {
+    this._progressPanel?.addOperationDetailsError(
+      operationInfo,
+      errorInfo.itemIndex,
+      errorInfo.detailErrorText,
+    );
+    this._notifyError(errorInfo);
+  }
+
+  handleDimensionChanged(): boolean {
+    if (this._progressPanel) {
+      this._progressPanel.$element().detach();
     }
+    return true;
+  }
 
-    addOperationDetails(operationInfo, details, showCloseButton) {
-        this._progressPanel.addOperationDetails(operationInfo, details, showCloseButton);
+  ensureProgressPanelCreated(container, options): void {
+    if (!this._progressPanel) {
+      const $progressPanelElement = $('<div>').appendTo(container);
+      const ProgressPanelClass = this._getProgressPanelComponent();
+      this._progressPanel = new ProgressPanelClass(
+        // @ts-expect-error ts-error
+        $progressPanelElement,
+        extend({}, options, {
+          onOperationClosed: ({ info }) => this._onProgressPanelOperationClosed(info),
+        }),
+      );
+    } else {
+      this._progressPanel.$element().appendTo(container);
     }
+  }
 
-    updateOperationItemProgress(operationInfo, itemIndex, itemProgress, commonProgress) {
-        this._progressPanel.updateOperationItemProgress(operationInfo, itemIndex, itemProgress, commonProgress);
+  // needed for editingProgress.tests.js
+  _getProgressPanelComponent(): typeof FileManagerProgressPanel {
+    return FileManagerProgressPanel;
+  }
+
+  _onProgressPanelOperationClosed(operationInfo): void {
+    if (operationInfo.hasError) {
+      this._failedOperationCount -= 1;
+      this.tryHideActionProgress();
     }
+  }
 
-    completeOperationItem(operationInfo, itemIndex, commonProgress) {
-        this._progressPanel.completeOperationItem(operationInfo, itemIndex, commonProgress);
+  tryHideActionProgress(): void {
+    if (this.hasNoOperations()) {
+      this._updateActionProgress('', ACTION_PROGRESS_STATUS.default);
     }
+  }
 
-    finishOperation(operationInfo, commonProgress) {
-        this._progressPanel.updateOperationCommonProgress(operationInfo, commonProgress);
+  updateActionProgressStatus(operationInfo): void {
+    if (operationInfo) {
+      const status = this._failedOperationCount === 0
+        ? ACTION_PROGRESS_STATUS.success
+        : ACTION_PROGRESS_STATUS.error;
+      this._updateActionProgress('', status);
     }
+  }
 
-    completeOperation(operationInfo, commonText, isError, statusText) {
-        this._operationInProgressCount--;
-        if(isError) {
-            this._failedOperationCount++;
-        }
-        this._progressPanel.completeOperation(operationInfo, commonText, isError, statusText);
-    }
+  _notifyError(errorInfo): void {
+    const status = this.hasNoOperations()
+      ? ACTION_PROGRESS_STATUS.default
+      : ACTION_PROGRESS_STATUS.error;
+    this._updateActionProgress(errorInfo.commonErrorText, status);
+  }
 
-    completeSingleOperationWithError(operationInfo, errorInfo) {
-        this._progressPanel.completeSingleOperationWithError(operationInfo, errorInfo.detailErrorText);
-        this._notifyError(errorInfo);
-    }
+  _updateActionProgress(message, status): void {
+    this._actionProgressStatus = status;
+    this._raiseActionProgress(message, status);
+  }
 
-    addOperationDetailsError(operationInfo, errorInfo) {
-        this._progressPanel.addOperationDetailsError(operationInfo, errorInfo.itemIndex, errorInfo.detailErrorText);
-        this._notifyError(errorInfo);
-    }
+  hasNoOperations(): boolean {
+    return (
+      this._operationInProgressCount === 0 && this._failedOperationCount === 0
+    );
+  }
 
-    handleDimensionChanged() {
-        if(this._progressPanel) {
-            this._progressPanel.$element().detach();
-        }
-        return true;
-    }
+  get _operationInProgressCount(): number {
+    return this._operationInProgressCountInternal;
+  }
 
-    ensureProgressPanelCreated(container, options) {
-        if(!this._progressPanel) {
-            const $progressPanelElement = $('<div>').appendTo(container);
-            const ProgressPanelClass = this._getProgressPanelComponent();
-            this._progressPanel = new ProgressPanelClass($progressPanelElement, extend({}, options, {
-                onOperationClosed: ({ info }) => this._onProgressPanelOperationClosed(info)
-            }));
-        } else {
-            this._progressPanel.$element().appendTo(container);
-        }
-    }
+  set _operationInProgressCount(value: number) {
+    this._operationInProgressCountInternal = value;
+  }
 
-    // needed for editingProgress.tests.js
-    _getProgressPanelComponent() {
-        return FileManagerProgressPanel;
-    }
+  get _failedOperationCount(): number {
+    return this._failedOperationCountInternal;
+  }
 
-    _onProgressPanelOperationClosed(operationInfo) {
-        if(operationInfo.hasError) {
-            this._failedOperationCount--;
-            this.tryHideActionProgress();
-        }
-    }
-
-    tryHideActionProgress() {
-        if(this.hasNoOperations()) {
-            this._updateActionProgress('', ACTION_PROGRESS_STATUS.default);
-        }
-    }
-
-    updateActionProgressStatus(operationInfo) {
-        if(operationInfo) {
-            const status = this._failedOperationCount === 0 ? ACTION_PROGRESS_STATUS.success : ACTION_PROGRESS_STATUS.error;
-            this._updateActionProgress('', status);
-        }
-    }
-
-    _notifyError(errorInfo) {
-        const status = this.hasNoOperations() ? ACTION_PROGRESS_STATUS.default : ACTION_PROGRESS_STATUS.error;
-        this._updateActionProgress(errorInfo.commonErrorText, status);
-    }
-
-    _updateActionProgress(message, status) {
-        this._actionProgressStatus = status;
-        this._raiseActionProgress(message, status);
-    }
-
-    hasNoOperations() {
-        return this._operationInProgressCount === 0 && this._failedOperationCount === 0;
-    }
-
-    get _operationInProgressCount() { return this._operationInProgressCountInternal; }
-
-    set _operationInProgressCount(value) { this._operationInProgressCountInternal = value; }
-
-    get _failedOperationCount() { return this._failedOperationCountInternal; }
-
-    set _failedOperationCount(value) { this._failedOperationCountInternal = value; }
+  set _failedOperationCount(value: number) {
+    this._failedOperationCountInternal = value;
+  }
 }
 
-export { NotificationManager, NotificationManagerStub, MANAGER_ID_NAME };
+export { MANAGER_ID_NAME, NotificationManager, NotificationManagerStub };

@@ -7,14 +7,14 @@ import { getWidth } from '@js/core/utils/size';
 import { isFunction } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import Drawer from '@js/ui/drawer';
+import Popup from '@js/ui/popup/ui.popup';
+import type { WidgetProperties } from '@ts/core/widget/widget';
+import Widget from '@ts/core/widget/widget';
 import {
   MANAGER_ID_NAME,
   NotificationManager,
   NotificationManagerStub,
-} from '@js/ui/file_manager/ui.file_manager.notification_manager';
-import Popup from '@js/ui/popup/ui.popup';
-import type { WidgetProperties } from '@ts/core/widget/widget';
-import Widget from '@ts/core/widget/widget';
+} from '@ts/ui/file_manager/ui.file_manager.notification_manager';
 
 const window = getWindow();
 const ADAPTIVE_STATE_SCREEN_WIDTH = 1000;

@@ -36,13 +36,13 @@ import type {
   SelectionChangedEvent,
   ToolbarItemClickEvent,
 } from '@js/ui/file_manager';
-import { extendAttributes, findItemsByKeys } from '@js/ui/file_manager/ui.file_manager.common';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import { FileItemsController, OPERATIONS } from '@ts/ui/file_manager/file_items_controller';
 import FileManagerAdaptivityControl from '@ts/ui/file_manager/ui.file_manager.adaptivity';
 import FileManagerBreadcrumbs from '@ts/ui/file_manager/ui.file_manager.breadcrumbs';
 import { defaultPermissions, FileManagerCommandManager } from '@ts/ui/file_manager/ui.file_manager.command_manager';
+import { extendAttributes, findItemsByKeys } from '@ts/ui/file_manager/ui.file_manager.common';
 import FileManagerContextMenu from '@ts/ui/file_manager/ui.file_manager.context_menu';
 import FileManagerEditingControl from '@ts/ui/file_manager/ui.file_manager.editing';
 import FileManagerFilesTreeView from '@ts/ui/file_manager/ui.file_manager.files_tree_view';
