@@ -389,7 +389,7 @@ prepareComponentConfig(componentConfig);
 const DxScheduler = defineComponent(componentConfig);
 
 
-const DxAiOptionsConfig = {
+const DxAIOptionsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -402,11 +402,11 @@ const DxAiOptionsConfig = {
   }
 };
 
-prepareConfigurationComponentConfig(DxAiOptionsConfig);
+prepareConfigurationComponentConfig(DxAIOptionsConfig);
 
-const DxAiOptions = defineComponent(DxAiOptionsConfig);
+const DxAIOptions = defineComponent(DxAIOptionsConfig);
 
-(DxAiOptions as any).$_optionName = "aiOptions";
+(DxAIOptions as any).$_optionName = "aiOptions";
 
 const DxAppointmentDraggingConfig = {
   emits: {
@@ -1727,7 +1727,7 @@ const DxView = defineComponent(DxViewConfig);
 export default DxScheduler;
 export {
   DxScheduler,
-  DxAiOptions,
+  DxAIOptions,
   DxAppointmentDragging,
   DxAsyncRule,
   DxButtonItem,

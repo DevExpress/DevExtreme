@@ -163,12 +163,12 @@ const Scheduler = memo(
 
 // owners:
 // SimpleItem
-type IAiOptionsProps = React.PropsWithChildren<{
+type IAIOptionsProps = React.PropsWithChildren<{
   disabled?: boolean;
   instruction?: string | undefined;
 }>
-const _componentAiOptions = (props: IAiOptionsProps) => {
-  return React.createElement(NestedOption<IAiOptionsProps>, {
+const _componentAIOptions = (props: IAIOptionsProps) => {
+  return React.createElement(NestedOption<IAIOptionsProps>, {
     ...props,
     elementDescriptor: {
       OptionName: "aiOptions",
@@ -176,7 +176,7 @@ const _componentAiOptions = (props: IAiOptionsProps) => {
   });
 };
 
-const AiOptions = Object.assign<typeof _componentAiOptions, NestedComponentMeta>(_componentAiOptions, {
+const AIOptions = Object.assign<typeof _componentAIOptions, NestedComponentMeta>(_componentAIOptions, {
   componentType: "option",
 });
 
@@ -1482,8 +1482,8 @@ export {
   Scheduler,
   ISchedulerOptions,
   SchedulerRef,
-  AiOptions,
-  IAiOptionsProps,
+  AIOptions,
+  IAIOptionsProps,
   AppointmentDragging,
   IAppointmentDraggingProps,
   AsyncRule,
