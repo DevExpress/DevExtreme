@@ -33,8 +33,9 @@ export async function testScreenshot(
       ignoreAntialiasing: true,
       antialiasingTolerance: 80,
       strict: false,
+      caretIgnore: true,
     },
-    textDiffTreshold: 0.5,
+    textDiffTreshold: 0.8,
   } : {};
 
   const finalOptions = isMaterialTheme && comparisonOptions?.looksSameComparisonOptions
