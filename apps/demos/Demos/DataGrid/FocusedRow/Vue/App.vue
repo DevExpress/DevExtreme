@@ -126,9 +126,9 @@ const onFocusedRowChanging = (e: DxDataGridTypes.FocusedRowChangingEvent) => {
 const onFocusedRowChanged = (e: DxDataGridTypes.FocusedRowChangedEvent<Task, number>) => {
   const data = e.row?.data;
 
-  taskSubject.value = data?.Task_Subject;
-  taskDetails.value = data?.Task_Description;
-  taskStatus.value = data?.Task_Status;
+  taskSubject.value = data?.Task_Subject ?? '';
+  taskDetails.value = data?.Task_Description ?? '';
+  taskStatus.value = data?.Task_Status ?? '';
   taskProgress.value = data?.Task_Completion ? `${data.Task_Completion}%` : '';
 };
 </script>
