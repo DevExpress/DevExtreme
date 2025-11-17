@@ -79,8 +79,13 @@ export type CellAppointmentsLimit = 'auto' | 'unlimited';
 export type RecurrenceEditMode = 'dialog' | 'occurrence' | 'series';
 /** @public */
 export type AppointmentFormIconsShowMode = 'both' | 'main' | 'recurrence' | 'none';
-/** @public */
-export type SchedulerAppointmentFormOptions = FormProperties & {
+
+/**
+ * @docid
+ * @public
+ * @inherits dxFormOptions
+ */
+export type AppointmentFormOptions = FormProperties & {
   /**
    * @docid
    * @type_function_param1 formData:object
@@ -657,9 +662,8 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       /**
        * @docid
        * @public
-       * @type dxSchedulerAppointmentFormOptions
        */
-      form?: SchedulerAppointmentFormOptions;
+      form?: AppointmentFormOptions;
       /**
        * @docid
        * @public

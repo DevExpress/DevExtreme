@@ -6,7 +6,7 @@ export {
   CellAppointmentsLimit,
   RecurrenceEditMode,
   AppointmentFormIconsShowMode,
-  SchedulerAppointmentFormOptions,
+  AppointmentFormOptions,
   ViewType,
   SchedulerPredefinedToolbarItem,
   SchedulerPredefinedDateNavigatorItem,
