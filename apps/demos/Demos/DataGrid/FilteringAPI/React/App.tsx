@@ -24,14 +24,14 @@ const App = () => {
 
   return (
     <div>
-      <div className="left-side">
-        <div className="logo">
-          <img src="../../../../images/logo-devav.png" alt="DEVAV" />
+      <div className='left-side'>
+        <div className='logo'>
+          <img src='../../../../images/logo-devav.png' alt='DEVAV' />
           &nbsp;
-          <img src="../../../../images/logo-tasks.png" alt="Tasks" />
+          <img src='../../../../images/logo-tasks.png' alt='Tasks' />
         </div>
       </div>
-      <div className="right-side">
+      <div className='right-side'>
         <SelectBox
           items={statuses}
           inputAttr={statusLabel}
@@ -40,33 +40,33 @@ const App = () => {
       </div>
 
       <DataGrid
-        id="gridContainer"
+        id='gridContainer'
         ref={dataGridRef}
         dataSource={tasks}
-        keyExpr="Task_ID"
+        keyExpr='Task_ID'
         columnAutoWidth={true}
         showBorders={true}
       >
         <Pager visible={true} />
         <Column
-          dataField="Task_ID"
+          dataField='Task_ID'
           width={80} />
         <Column
-          dataField="Task_Start_Date"
-          caption="Start Date"
-          dataType="date" />
+          dataField='Task_Start_Date'
+          caption='Start Date'
+          dataType='date' />
         <Column
           allowSorting={false}
-          dataField="Employee_Full_Name"
-          cssClass="employee"
-          caption="Assigned To" />
+          dataField='Employee_Full_Name'
+          cssClass='employee'
+          caption='Assigned To' />
         <Column
-          dataField="Task_Subject"
-          caption="Subject"
+          dataField='Task_Subject'
+          caption='Subject'
           width={350} />
         <Column
-          dataField="Task_Status"
-          caption="Status" />
+          dataField='Task_Status'
+          caption='Status' />
       </DataGrid>
     </div>
   );
