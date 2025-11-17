@@ -100,10 +100,10 @@ export class AppComponent {
 
   onFocusedRowChanged(e: DxDataGridTypes.FocusedRowChangedEvent<Task, number>) {
     const data = e.row?.data;
-    this.taskSubject = data?.Task_Subject;
-    this.taskDetailsHtml = this.sanitizer.bypassSecurityTrustHtml(data?.Task_Description);
-    this.taskStatus = data?.Task_Status;
-    this.taskProgress = data?.Task_Completion ? `${data.Task_Completion}%` : '';
+    this.taskSubject = data?.Task_Subject ?? '';
+    this.taskDetailsHtml = this.sanitizer.bypassSecurityTrustHtml(data?.Task_Description ?? '');
+    this.taskStatus = data?.Task_Status ?? '';
+    this.taskProgress = data?.Task_Completion ? `${data?.Task_Completion}%` : '';
   }
 }
 

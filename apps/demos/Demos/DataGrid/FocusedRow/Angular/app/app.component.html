@@ -10,14 +10,15 @@
 >
   <dxo-data-grid-paging [pageSize]="10"> </dxo-data-grid-paging>
   <dxo-data-grid-pager [visible]="true"></dxo-data-grid-pager>
-  <dxi-data-grid-column *ngFor="let column of columns" 
+  <dxi-data-grid-column
+    *ngFor="let column of columns"
     [dataField]="column?.dataField"
     [width]="column?.width"
     [dataType]="column?.dataType"
     [caption]="column?.caption"
     [cssClass]="column?.cssClass"
     [allowSorting]="column?.allowSorting"
-    >
+  >
   </dxi-data-grid-column>
 </dx-data-grid>
 
