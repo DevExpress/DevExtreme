@@ -126,9 +126,7 @@ jobs:
       - uses: actions/cache@v4
         name: Setup pnpm cache
         with:
-          path: |
-            ${{ env.STORE_PATH }}
-            .nx/cache
+          path: ${{ env.STORE_PATH }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store
@@ -139,13 +137,29 @@ jobs:
       - name: DevExtreme - Build
         if: needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'none'
         shell: bash
-        run: pnpx nx build devextreme
+        run: |
+          pnpx nx build devextreme-scss
+          pnpx nx build devextreme
 
       - name: DevExtreme - Build-all
         if: needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
         env:
           BUILD_TEST_INTERNAL_PACKAGE: true
         run: pnpm run all:build-dev
+
+      - name: Zip artifacts (for jQuery tests)
+        if: needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'none'
+        working-directory: ./packages/devextreme
+        run: |
+          7z a -tzip -mx3 -mmt2 artifacts.zip artifacts ../devextreme-scss/scss/bundles
+
+      - name: Upload build artifacts (for jQuery tests)
+        if: needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'none'
+        uses: actions/upload-artifact@v4
+        with:
+          name: devextreme-artifacts-jquery
+          path: ./packages/devextreme/artifacts.zip
+          retention-days: 1
 
       - name: Move packages
         if: needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
@@ -204,9 +218,7 @@ jobs:
       - uses: actions/cache@v4
         name: Setup pnpm cache
         with:
-          path: |
-            ${{ env.STORE_PATH }}
-            .nx/cache
+          path: ${{ env.STORE_PATH }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store
@@ -514,6 +526,16 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v4
 
+    - name: Download artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: devextreme-artifacts-jquery
+        path: ./packages/devextreme
+
+    - name: Unpack artifacts
+      working-directory: ./packages/devextreme
+      run: 7z x artifacts.zip -aoa
+
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
@@ -534,21 +556,16 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache@v4
-      name: Setup pnpm cache
+    - uses: actions/cache/restore@v4
+      name: Restore pnpm cache
       with:
-        path: |
-          ${{ env.STORE_PATH }}
-          .nx/cache
+        path: ${{ env.STORE_PATH }}
         key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
-
-    - name: DevExtreme - Build
-      run: pnpx nx build devextreme
 
     - name: Install Roboto font for Material theme
       if: contains(matrix.THEME, 'material')
