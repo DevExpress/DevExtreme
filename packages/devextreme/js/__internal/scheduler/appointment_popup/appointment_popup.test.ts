@@ -472,6 +472,7 @@ describe('Appointment Popup Form', () => {
       const recurrenceGroup = $(POM.popup.recurrenceGroup);
 
       expect(mainGroup.hasClass(CLASSES.mainGroupHidden)).toBe(false);
+      expect(mainGroup.attr('tabindex')).toBeUndefined();
       expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(true);
       expect(recurrenceGroup.attr('tabindex')).toBe('-1');
 
@@ -483,6 +484,7 @@ describe('Appointment Popup Form', () => {
       expect(typeof popupHeight).toBe('number');
 
       expect(mainGroup.hasClass(CLASSES.mainGroupHidden)).toBe(true);
+      expect(mainGroup.attr('tabindex')).toBe('-1');
       expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(false);
       expect(recurrenceGroup.attr('tabindex')).toBeUndefined();
 
@@ -490,6 +492,7 @@ describe('Appointment Popup Form', () => {
 
       expect(POM.popup.component.option('height')).toBe('auto');
       expect(mainGroup.hasClass(CLASSES.mainGroupHidden)).toBe(false);
+      expect(mainGroup.attr('tabindex')).toBeUndefined();
       expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(true);
       expect(recurrenceGroup.attr('tabindex')).toBe('-1');
     });
