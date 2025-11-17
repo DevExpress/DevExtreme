@@ -14,6 +14,8 @@ import {
 
 
 
+import { dxFormOptions } from 'devextreme/ui/form';
+import { SchedulerAppointmentFormOptions } from 'devextreme/ui/scheduler';
 
 import {
     DxIntegrationModule,
@@ -80,10 +82,10 @@ export class DxoSchedulerEditingComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get form(): any {
+    get form(): dxFormOptions | SchedulerAppointmentFormOptions {
         return this._getOption('form');
     }
-    set form(value: any) {
+    set form(value: dxFormOptions | SchedulerAppointmentFormOptions) {
         this._setOption('form', value);
     }
 

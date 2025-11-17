@@ -26,10 +26,11 @@ import dxScheduler from 'devextreme/ui/scheduler';
 import dxSortable from 'devextreme/ui/sortable';
 import dxDraggable from 'devextreme/ui/draggable';
 import DataSource from 'devextreme/data/data_source';
-import { AllDayPanelMode, ViewType, dxSchedulerAppointment, CellAppointmentsLimit, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, RecurrenceEditMode, dxSchedulerScrolling, dxSchedulerToolbar } from 'devextreme/ui/scheduler';
+import { AllDayPanelMode, ViewType, dxSchedulerAppointment, SchedulerAppointmentFormOptions, CellAppointmentsLimit, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, RecurrenceEditMode, dxSchedulerScrolling, dxSchedulerToolbar } from 'devextreme/ui/scheduler';
 import { event } from 'devextreme/events/events.types';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
+import { dxFormOptions } from 'devextreme/ui/form';
 import { FirstDayOfWeek, Orientation } from 'devextreme/common';
 
 import DxScheduler from 'devextreme/ui/scheduler';
@@ -52,19 +53,44 @@ import { DxiResourceModule } from 'devextreme-angular/ui/nested';
 import { DxoScrollingModule } from 'devextreme-angular/ui/nested';
 import { DxiViewModule } from 'devextreme-angular/ui/nested';
 
+import { DxoSchedulerAiOptionsModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxoSchedulerAppointmentDraggingModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerAsyncRuleModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerButtonItemModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxoSchedulerButtonOptionsModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxoSchedulerColCountByScreenModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerCompareRuleModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerCustomRuleModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxoSchedulerEditingModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerEmailRuleModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerEmptyItemModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxoSchedulerFormModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerGroupItemModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxiSchedulerItemModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxoSchedulerLabelModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerNumericRuleModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxoSchedulerOptionsModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxiSchedulerOptionsItemModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerPatternRuleModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerRangeRuleModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerRequiredRuleModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxiSchedulerResourceModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxoSchedulerScrollingModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerSimpleItemModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerStringLengthRuleModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerTabModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerTabbedItemModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxoSchedulerTabPanelOptionsModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerTabPanelOptionsItemModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxoSchedulerToolbarModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxiSchedulerToolbarItemModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerValidationRuleModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxiSchedulerViewModule } from 'devextreme-angular/ui/scheduler/nested';
 import { 
+           PROPERTY_TOKEN_validationRules,
            PROPERTY_TOKEN_items,
            PROPERTY_TOKEN_resources,
+           PROPERTY_TOKEN_tabs,
            PROPERTY_TOKEN_views,
      } from 'devextreme-angular/core/tokens';
 
@@ -88,6 +114,11 @@ import {
 })
 export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
 
+    @ContentChildren(PROPERTY_TOKEN_validationRules)
+    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('validationRules', value);
+    }
+
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('items', value);
@@ -96,6 +127,11 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     @ContentChildren(PROPERTY_TOKEN_resources)
     set _resourcesContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('resources', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_tabs)
+    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('tabs', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_views)
@@ -357,10 +393,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get editing(): boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: any, popup?: Record<string, any> } {
+    get editing(): boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: dxFormOptions | SchedulerAppointmentFormOptions, popup?: Record<string, any> } {
         return this._getOption('editing');
     }
-    set editing(value: boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: any, popup?: Record<string, any> }) {
+    set editing(value: boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: dxFormOptions | SchedulerAppointmentFormOptions, popup?: Record<string, any> }) {
         this._setOption('editing', value);
     }
 
@@ -1166,7 +1202,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() editingChange: EventEmitter<boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: any, popup?: Record<string, any> }>;
+    @Output() editingChange: EventEmitter<boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: dxFormOptions | SchedulerAppointmentFormOptions, popup?: Record<string, any> }>;
 
     /**
     
@@ -1599,15 +1635,38 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     DxiResourceModule,
     DxoScrollingModule,
     DxiViewModule,
+    DxoSchedulerAiOptionsModule,
     DxoSchedulerAppointmentDraggingModule,
+    DxiSchedulerAsyncRuleModule,
+    DxiSchedulerButtonItemModule,
+    DxoSchedulerButtonOptionsModule,
+    DxoSchedulerColCountByScreenModule,
+    DxiSchedulerCompareRuleModule,
+    DxiSchedulerCustomRuleModule,
     DxoSchedulerEditingModule,
+    DxiSchedulerEmailRuleModule,
+    DxiSchedulerEmptyItemModule,
+    DxoSchedulerFormModule,
+    DxiSchedulerGroupItemModule,
     DxiSchedulerItemModule,
+    DxoSchedulerLabelModule,
+    DxiSchedulerNumericRuleModule,
     DxoSchedulerOptionsModule,
     DxiSchedulerOptionsItemModule,
+    DxiSchedulerPatternRuleModule,
+    DxiSchedulerRangeRuleModule,
+    DxiSchedulerRequiredRuleModule,
     DxiSchedulerResourceModule,
     DxoSchedulerScrollingModule,
+    DxiSchedulerSimpleItemModule,
+    DxiSchedulerStringLengthRuleModule,
+    DxiSchedulerTabModule,
+    DxiSchedulerTabbedItemModule,
+    DxoSchedulerTabPanelOptionsModule,
+    DxiSchedulerTabPanelOptionsItemModule,
     DxoSchedulerToolbarModule,
     DxiSchedulerToolbarItemModule,
+    DxiSchedulerValidationRuleModule,
     DxiSchedulerViewModule,
     DxIntegrationModule,
     DxTemplateModule
@@ -1619,15 +1678,38 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     DxiResourceModule,
     DxoScrollingModule,
     DxiViewModule,
+    DxoSchedulerAiOptionsModule,
     DxoSchedulerAppointmentDraggingModule,
+    DxiSchedulerAsyncRuleModule,
+    DxiSchedulerButtonItemModule,
+    DxoSchedulerButtonOptionsModule,
+    DxoSchedulerColCountByScreenModule,
+    DxiSchedulerCompareRuleModule,
+    DxiSchedulerCustomRuleModule,
     DxoSchedulerEditingModule,
+    DxiSchedulerEmailRuleModule,
+    DxiSchedulerEmptyItemModule,
+    DxoSchedulerFormModule,
+    DxiSchedulerGroupItemModule,
     DxiSchedulerItemModule,
+    DxoSchedulerLabelModule,
+    DxiSchedulerNumericRuleModule,
     DxoSchedulerOptionsModule,
     DxiSchedulerOptionsItemModule,
+    DxiSchedulerPatternRuleModule,
+    DxiSchedulerRangeRuleModule,
+    DxiSchedulerRequiredRuleModule,
     DxiSchedulerResourceModule,
     DxoSchedulerScrollingModule,
+    DxiSchedulerSimpleItemModule,
+    DxiSchedulerStringLengthRuleModule,
+    DxiSchedulerTabModule,
+    DxiSchedulerTabbedItemModule,
+    DxoSchedulerTabPanelOptionsModule,
+    DxiSchedulerTabPanelOptionsItemModule,
     DxoSchedulerToolbarModule,
     DxiSchedulerToolbarItemModule,
+    DxiSchedulerValidationRuleModule,
     DxiSchedulerViewModule,
     DxTemplateModule
   ]
