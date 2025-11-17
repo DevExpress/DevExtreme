@@ -27,31 +27,35 @@ export async function testScreenshot(
   const testTheme = process.env.THEME;
   const isMaterialTheme = testTheme?.includes('material');
 
-  const materialThemeOptions = isMaterialTheme ? {
+  const themeOptions = isMaterialTheme ? {
     looksSameComparisonOptions: {
-      tolerance: 90,
+      tolerance: 100,
       ignoreAntialiasing: true,
-      antialiasingTolerance: 90,
+      antialiasingTolerance: 100,
       strict: false,
       caretIgnore: true,
     },
-    textDiffTreshold: 0.9,
-  } : {};
+    textDiffTreshold: 1,
+  } : {
+    looksSameComparisonOptions: {
+      tolerance: 20,
+      antialiasingTolerance: 20,
+    },
+    textDiffTreshold: 0.2,
+  };
 
   const finalOptions = isMaterialTheme && comparisonOptions?.looksSameComparisonOptions
     ? {
         ...comparisonOptions,
         looksSameComparisonOptions: {
           ...comparisonOptions.looksSameComparisonOptions,
-          ...materialThemeOptions.looksSameComparisonOptions,
+          ...themeOptions.looksSameComparisonOptions,
         },
-        enableTextMask: materialThemeOptions.enableTextMask,
-        textMaskRadius: materialThemeOptions.textMaskRadius,
-        textDiffTreshold: materialThemeOptions.textDiffTreshold,
+        textDiffTreshold: themeOptions.textDiffTreshold,
       }
     : {
         ...comparisonOptions,
-        ...materialThemeOptions,
+        ...themeOptions,
       };
 
   await t

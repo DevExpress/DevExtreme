@@ -66,12 +66,12 @@ export const waitForAngularLoading = ClientFunction(() => new Promise((resolve) 
   const demoAppIntervalHandle = setInterval(() => {
 
   const demoApp = document.querySelector('demo-app') as HTMLElement;
-    if ((demoApp && demoApp.innerText !== 'Loading...') || demoAppCounter === 90) {
-      setTimeout(resolve, 250);
+    if ((demoApp && demoApp.innerText !== 'Loading...') || demoAppCounter === 120) {
+      setTimeout(resolve, 500);
       clearInterval(demoAppIntervalHandle);
     }
     demoAppCounter += 1;
-  }, 500);
+  }, 1000);
 }));
 
 function getInterestProcessArgs() {

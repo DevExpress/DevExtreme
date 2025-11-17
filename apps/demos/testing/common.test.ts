@@ -4,7 +4,6 @@ import { existsSync } from 'fs';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { axeCheck, createReport } from '@testcafe-community/axe';
 import {
-  getPortByIndex,
   runTestAtPage,
   shouldRunFramework,
   shouldRunTestAtIndex,
