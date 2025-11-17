@@ -24,7 +24,8 @@
     <DxDataGrid
       id="gridContainer"
       ref="dataGridRef"
-      :data-source="dataSource"
+      :data-source="tasks"
+      key-expr="Task_ID"
       :column-auto-width="true"
       :show-borders="true"
     >
@@ -40,7 +41,7 @@
       />
       <DxColumn
         :allow-sorting="false"
-        data-field="ResponsibleEmployee.Employee_Full_Name"
+        data-field="Employee_Full_Name"
         css-class="employee"
         caption="Assigned To"
       />
@@ -64,26 +65,8 @@ import {
   DxPager,
 } from 'devextreme-vue/data-grid';
 import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
-import 'devextreme-vue/common/data';
-import { type DataSourceOptions } from 'devextreme-vue/common/data';
+import { tasks, statuses } from './data';
 
-const dataSource: DataSourceOptions = {
-  store: {
-    type: 'odata',
-    version: 2,
-    url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks',
-    key: 'Task_ID',
-  },
-  expand: 'ResponsibleEmployee',
-  select: [
-    'Task_ID',
-    'Task_Subject',
-    'Task_Start_Date',
-    'Task_Status',
-    'ResponsibleEmployee/Employee_Full_Name',
-  ],
-};
-const statuses = ['All', 'Not Started', 'In Progress', 'Need Assistance', 'Deferred', 'Completed'];
 const dataGridRef = ref<DxDataGrid | null>(null);
 
 const onValueChanged = ({ value }: DxSelectBoxTypes.ValueChangedEvent) => {

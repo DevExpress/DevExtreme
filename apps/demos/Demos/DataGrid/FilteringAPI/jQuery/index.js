@@ -9,24 +9,8 @@ $(() => {
   });
 
   const dataGrid = $('#gridContainer').dxDataGrid({
-    dataSource: {
-      store: {
-        type: 'odata',
-        version: 2,
-        url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks',
-        key: 'Task_ID',
-      },
-      expand: 'ResponsibleEmployee',
-      select: [
-        'Task_ID',
-        'Task_Subject',
-        'Task_Start_Date',
-        'Task_Due_Date',
-        'Task_Status',
-        'Task_Priority',
-        'ResponsibleEmployee/Employee_Full_Name',
-      ],
-    },
+    dataSource: tasks,
+    keyExpr: 'Task_ID',
     pager: {
       visible: true,
     },
@@ -42,7 +26,7 @@ $(() => {
         dataType: 'date',
       }, {
         caption: 'Assigned To',
-        dataField: 'ResponsibleEmployee.Employee_Full_Name',
+        dataField: 'Employee_Full_Name',
         cssClass: 'employee',
         allowSorting: false,
       }, {

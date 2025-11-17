@@ -1,6 +1,24 @@
-const statuses = ['All', 'Not Started', 'In Progress', 'Need Assistance', 'Deferred', 'Completed'];
+import { Injectable } from '@angular/core';
 
-const tasks = [
+export interface Task {
+  Task_ID: number;
+
+  Task_Subject: string;
+
+  Task_Start_Date: string;
+
+  Task_Due_Date: string;
+
+  Task_Status: string;
+
+  Task_Priority: number;
+
+  Employee_Full_Name: string;
+}
+
+const statuses: string[] = ['All', 'Not Started', 'In Progress', 'Need Assistance', 'Deferred', 'Completed'];
+
+const tasks: Task[] = [
   {
     Task_ID: 5,
     Task_Subject: 'Choose between PPO and HMO Health Plan',
@@ -1649,3 +1667,14 @@ const tasks = [
     Employee_Full_Name: 'Todd Hoffman',
   }
 ];
+
+@Injectable()
+export class Service {
+  getTasks() {
+    return tasks;
+  }
+  
+  getStatuses() {
+    return statuses;
+  }
+}
