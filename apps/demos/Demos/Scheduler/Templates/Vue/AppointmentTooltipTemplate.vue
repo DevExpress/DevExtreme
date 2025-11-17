@@ -1,10 +1,16 @@
 <template>
-  <div class="movie-tooltip">
-    <img :src="movieData.image">
-    <div class="movie-info">
-      <div class="movie-title">
+  <div class="movie-info">
+    <div class="movie-preview-image">
+      <img
+        :src="movieData.image"
+        :alt="movieData.text"
+      >
+    </div>
+    <div class="movie-details">
+      <div class="title">
         {{ movieData.text }} ({{ movieData.year }})
-      </div><div>
+      </div>
+      <div>
         Director: {{ movieData.director }}
       </div>
       <div>

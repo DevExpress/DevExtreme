@@ -1,12 +1,20 @@
 <template>
-  <div class="showtime-preview">
-    <div> {{ movieData.text }}</div>
-    <div>
-      Ticket Price: <strong>${{ templateModel.targetedAppointmentData?.price }}</strong>
+  <div class="movie-preview">
+    <div class="movie-preview-image">
+      <img
+        :src="movieData.image"
+        :alt="movieData.text"
+      >
     </div>
-    <div>
-      {{ getFormatDate(templateModel.targetedAppointmentData?.displayStartDate) }} -
-      {{ getFormatDate(templateModel.targetedAppointmentData?.displayEndDate) }}
+    <div class="movie-details">
+      <div class="title">{{ movieData.text }}</div>
+      <div>
+        Ticket Price: <strong>${{ templateModel.targetedAppointmentData?.price }}</strong>
+      </div>
+      <div>
+        {{ getFormatDate(templateModel.targetedAppointmentData?.displayStartDate) }} -
+        {{ getFormatDate(templateModel.targetedAppointmentData?.displayEndDate) }}
+      </div>
     </div>
   </div>
 </template>
@@ -35,20 +43,6 @@ const movieData = getMovieById(props.templateModel.targetedAppointmentData?.movi
 
 </script>
 <style scoped>
-  .dx-tooltip-wrapper .dx-overlay-content .dx-popup-content {
-    padding: 14px;
-  }
-
-  .showtime-preview > div:first-child {
-    font-size: 12px;
-    white-space: normal;
-  }
-
-  .showtime-preview > div:not(:first-child) {
-    font-size: 11px;
-    white-space: normal;
-  }
-
   .movie-tooltip .movie-info {
     display: inline-block;
     margin-left: 10px;
