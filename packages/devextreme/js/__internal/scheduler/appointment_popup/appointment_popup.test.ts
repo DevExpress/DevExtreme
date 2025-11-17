@@ -484,7 +484,7 @@ describe('Appointment Popup Form', () => {
 
       expect(mainGroup.hasClass(CLASSES.mainGroupHidden)).toBe(true);
       expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(false);
-      expect(recurrenceGroup.attr('tabindex')).not.toBe('-1');
+      expect(recurrenceGroup.attr('tabindex')).toBeUndefined();
 
       POM.popup.getBackButton().click();
 
@@ -511,6 +511,7 @@ describe('Appointment Popup Form', () => {
       const recurrenceGroup = $(POM.popup.recurrenceGroup);
 
       expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(true);
+      expect(recurrenceGroup.attr('tabindex')).toBe('-1');
     });
 
     it('Should discard recurrence changes when clicking \'cancel\' button in recurrence form', async () => {
@@ -1930,7 +1931,9 @@ describe('Customize form items', () => {
     const mainGroup = $(POM.popup.mainGroup);
 
     expect(mainGroup.hasClass(CLASSES.mainGroupHidden)).toBe(true);
+    expect(mainGroup.attr('tabindex')).toBe('-1');
     expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(false);
+    expect(recurrenceGroup.attr('tabindex')).toBeUndefined();
 
     expect(onContentReady).toHaveBeenCalled();
     expect(onInitialized).toHaveBeenCalled();
