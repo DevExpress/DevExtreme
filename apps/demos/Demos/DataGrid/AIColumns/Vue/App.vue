@@ -7,7 +7,6 @@
     :onAIColumnRequestCreating="onAIColumnRequestCreating"
   >
     <DxGrouping :contextMenuEnabled="false"/>
-    <DxGroupPanel :visible="false"/>
     <DxPaging :pageSize="10"/>
 
     <DxColumn
