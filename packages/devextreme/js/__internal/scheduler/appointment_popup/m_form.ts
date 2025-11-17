@@ -659,7 +659,7 @@ export class AppointmentForm {
             onValueChanged: (e): void => {
               if (e.value === repeatNeverValue) {
                 const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
-                this.dxForm.updateData(recurrenceRuleExpr, undefined);
+                this.dxForm.updateData(recurrenceRuleExpr, '');
               } else if (e.event) {
                 this.showRecurrenceGroup();
               }
@@ -831,7 +831,9 @@ export class AppointmentForm {
     }
 
     this._$mainGroup?.addClass(CLASSES.mainHidden);
+    this._$mainGroup?.attr('tabindex', '-1');
     this._$recurrenceGroup?.removeClass(CLASSES.recurrenceHidden);
+    this._$recurrenceGroup?.removeAttr('tabindex');
 
     const repeatEditorValue = this.dxForm.getEditor(REPEAT_EDITOR_NAME)?.option('value');
 
@@ -854,7 +856,9 @@ export class AppointmentForm {
     }
 
     this._$mainGroup?.removeClass(CLASSES.mainHidden);
+    this._$mainGroup?.removeAttr('tabindex');
     this._$recurrenceGroup?.addClass(CLASSES.recurrenceHidden);
+    this._$recurrenceGroup?.attr('tabindex', '-1');
 
     this._popup.updateToolbarForMainGroup();
 
@@ -864,7 +868,7 @@ export class AppointmentForm {
 
       this.dxForm.updateData(
         recurrenceRuleExpr,
-        recurrenceRule.toString() ?? undefined,
+        recurrenceRule.toString() ?? '',
       );
       this.dxForm.getEditor(START_DATE_EDITOR_NAME)?.option('value', recurrenceRule.startDate);
     }
@@ -939,7 +943,7 @@ export class AppointmentForm {
             this.showRecurrenceGroup();
           },
           elementAttr: {
-            class: CLASSES.recurrenceSettingsButton,
+            class: `${CLASSES.recurrenceSettingsButton} dx-shape-standard`,
           },
         },
       });

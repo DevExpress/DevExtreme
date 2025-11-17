@@ -20,7 +20,7 @@ import type { AppointmentForm } from './m_form';
 
 export const APPOINTMENT_POPUP_CLASS = 'dx-scheduler-appointment-popup';
 
-const POPUP_FULL_SCREEN_MODE_WINDOW_WIDTH_THRESHOLD = 460;
+const POPUP_FULL_SCREEN_MODE_WINDOW_WIDTH_THRESHOLD = 485;
 
 const DAY_IN_MS = dateUtils.dateToMilliseconds('day');
 
