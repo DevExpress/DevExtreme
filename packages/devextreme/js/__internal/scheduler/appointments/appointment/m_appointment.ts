@@ -159,7 +159,7 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
     this._renderAppointmentGeometry();
     this._renderAriaLabel();
     this._renderEmptyClass();
-    this._renderShortAppointmentClass();
+    this._renderAppointmentDurationClass();
     this._renderReducedAppointment();
     this._renderAllDayClass();
     this._renderDragSourceClass();
@@ -231,7 +231,7 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
     }
   }
 
-  _renderShortAppointmentClass() {
+  _renderAppointmentDurationClass() {
     const geometry: any = this.option('geometry');
 
     if (!geometry || geometry.empty) {
