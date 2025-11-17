@@ -49,12 +49,12 @@ const App = () => {
   }, []);
 
   const onFocusedRowChanged = useCallback((e: DataGridTypes.FocusedRowChangedEvent<Task, number>) => {
-    const data = e.row.data;
-    const progress = data.Task_Completion ? `${data.Task_Completion}%` : '';
+    const data = e.row?.data;
+    const progress = data?.Task_Completion ? `${data.Task_Completion}%` : '';
 
-    setTaskSubject(data.Task_Subject);
-    setTaskDetails(data.Task_Description);
-    setTaskStatus(data.Task_Status);
+    setTaskSubject(data?.Task_Subject);
+    setTaskDetails(data?.Task_Description);
+    setTaskStatus(data?.Task_Status);
     setTaskProgress(progress);
     setFocusedRowKey(e.component.option('focusedRowKey'));
   }, []);
