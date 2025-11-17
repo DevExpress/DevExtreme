@@ -1,5 +1,25 @@
 #!/bin/bash -e
 
+# QUnit Test Runner Script
+# 
+# Despite the "docker" in the filename, this script runs in multiple modes:
+#
+# 1. GITHUBACTION=true (GitHub Actions)
+#    - Runs NATIVELY on GitHub runner (NO Docker container!)
+#    - Uses pre-installed Chrome and dotnet
+#    - Dependencies already installed by workflow
+#    - Fastest and most stable mode
+#
+# 2. LOCAL=true (Local development with Docker)
+#    - Runs inside Docker container
+#    - Uses host.docker.internal for networking
+#
+# 3. Default (Legacy CI with Docker)
+#    - Runs inside Docker container
+#    - Installs dependencies inside container
+#
+# Current GitHub Actions workflow runs in mode #1 (native, no Docker)
+
 trap "echo 'Interrupted!' && kill -9 0" TERM INT
 
 export DEVEXTREME_TEST_CI=true
@@ -23,6 +43,17 @@ function run_test_impl {
     local url="http://0.0.0.0:$port/run?notimers=true"
     local runner_pid
     local runner_result=0
+
+    # Print execution mode
+    echo "========================================="
+    if [ "$GITHUBACTION" == "true" ]; then
+        echo "MODE: GitHub Actions (native, no Docker)"
+    elif [ "$LOCAL" == "true" ]; then
+        echo "MODE: Local Docker"
+    else
+        echo "MODE: CI Docker"
+    fi
+    echo "========================================="
 
     [ -z "$CHROME_CMD" ] && CHROME_CMD=google-chrome-stable
     [ "$LOCAL" == "true" ] && url="http://host.docker.internal:$port/run?notimers=true"
@@ -49,29 +80,34 @@ function run_test_impl {
         pnpm run build
         fi
 
+        # Start test runner
+        echo "Starting ASP.NET Core test runner..."
         dotnet ./testing/runner/bin/runner.dll --single-run & runner_pid=$!
+        echo "Runner PID: $runner_pid"
 
-        for i in {15..0}; do
+        # Wait for runner to be ready (GitHub Actions is faster, give it more attempts)
+        local max_attempts=30
+        [ "$GITHUBACTION" == "true" ] && max_attempts=45  # 45 seconds for GitHub Actions
+        
+        for i in $(seq $max_attempts -1 0); do
             if [ -n "$runner_pid" ] && [ ! -e "/proc/$runner_pid" ]; then
-                echo "Runner exited unexpectedly"
+                echo "❌ Runner exited unexpectedly"
                 return 1
             fi
 
-            if curl --head --silent --fail $url 2> /dev/null;
-             then
-              echo "Runner reached!"
-              break
-             else
-              echo "Page $url does not exist."
+            if curl --head --silent --fail $url 2> /dev/null; then
+                echo "✅ Runner reached at $url"
+                break
+            else
+                echo "⏳ Waiting for runner... (${i}s remaining)"
             fi
 
             if [ $i -eq 0 ]; then
-                echo "Runner not reached"
+                echo "❌ Runner not reached after ${max_attempts} seconds"
                 return 1
             fi
 
             sleep 1
-            echo "Waiting for runner..."
         done
     fi
 
@@ -101,6 +137,19 @@ function run_test_impl {
         --disable-font-subpixel-positioning
         --disable-extensions
     )
+    
+    # GitHub Actions optimizations
+    if [ "$GITHUBACTION" == "true" ]; then
+        chrome_args+=(
+            --disable-dev-shm-usage       # Use /tmp instead of /dev/shm (more space)
+            --disable-software-rasterizer # Faster rendering
+            --js-flags="--max-old-space-size=4096" # More memory for JS
+            --disable-background-networking # Less background activity
+            --disable-sync                # Disable Chrome sync
+            --metrics-recording-only      # Minimal metrics
+            --disable-default-apps        # No default apps
+        )
+    fi
 
     if [ "$NO_HEADLESS" == "true" ]; then
         chrome_command="dbus-launch --exit-with-session $chrome_command"
@@ -129,28 +178,78 @@ function run_test_impl {
 }
 
 function start_runner_watchdog {
+    local runner_pid=$1
     local last_suite_time_file="$PWD/testing/LastSuiteTime.txt"
     local raw_log_file="$PWD/testing/RawLog.txt"
-    local last_suite_time=unknown
+    local last_suite_time=""
     local stall_count=0
+    local check_count=0
 
-    while true; do
-        sleep 120
-
-        if [ ! -f $last_suite_time_file ] || [ $(cat $last_suite_time_file) == $last_suite_time ]; then
-            stall_count=$((stall_count + 1))
-            echo "Runner stalled (attempt $stall_count/2)"
+    echo "Watchdog started: monitoring PID $runner_pid, checking every 300s, max 6 failures = 30min timeout"
+    
+    # Background loop
+    (
+        while true; do
+            sleep 300  # Check every 5 minutes
+            check_count=$((check_count + 1))
             
-            if [ $stall_count -ge 2 ]; then
-                echo "Runner stalled for 10 minutes, killing process..."
-                tail -n 100 $raw_log_file
-                kill -9 $1
+            # Check if runner process still exists
+            if [ -n "$runner_pid" ] && ! kill -0 $runner_pid 2>/dev/null; then
+                echo "Watchdog: Runner process $runner_pid no longer exists, exiting watchdog"
+                exit 0
             fi
-        else
-            last_suite_time=$(cat $last_suite_time_file)
-            stall_count=0
-        fi
-    done &
+
+            if [ ! -f $last_suite_time_file ]; then
+                echo "Watchdog [check #$check_count]: LastSuiteTime.txt does not exist yet (waiting for first test...)"
+                # Don't increment stall_count on first checks
+                if [ $check_count -gt 2 ]; then
+                    stall_count=$((stall_count + 1))
+                    echo "Watchdog WARNING: No LastSuiteTime.txt after $((check_count * 5)) minutes"
+                fi
+            else
+                local current_time=$(cat $last_suite_time_file)
+                
+                if [ -z "$last_suite_time" ]; then
+                    # First read
+                    echo "Watchdog [check #$check_count]: Initial LastSuiteTime detected: $current_time"
+                    last_suite_time=$current_time
+                    stall_count=0
+                elif [ "$current_time" == "$last_suite_time" ]; then
+                    # No change detected
+                    stall_count=$((stall_count + 1))
+                    echo "Watchdog [check #$check_count]: STALL DETECTED (attempt $stall_count/6) - LastSuiteTime unchanged: $last_suite_time"
+                    
+                    if [ $stall_count -ge 6 ]; then
+                        echo "========================================="
+                        echo "WATCHDOG TIMEOUT: Runner stalled for 30 minutes (6 checks × 5 min)"
+                        echo "Last suite time: $last_suite_time"
+                        echo "========================================="
+                        echo "===== Last 100 lines of RawLog.txt ====="
+                        tail -n 100 $raw_log_file 2>/dev/null || echo "(RawLog.txt not found)"
+                        echo ""
+                        echo "===== MiscErrors.log (JavaScript logs) ====="
+                        if [ -f "$PWD/testing/MiscErrors.log" ]; then
+                            tail -n 200 "$PWD/testing/MiscErrors.log"
+                        else
+                            echo "(MiscErrors.log not found)"
+                        fi
+                        echo ""
+                        echo "Killing runner process $runner_pid..."
+                        kill -9 $runner_pid 2>/dev/null
+                        exit 1
+                    fi
+                else
+                    # Progress detected
+                    echo "Watchdog [check #$check_count]: Progress detected - LastSuiteTime: $last_suite_time → $current_time"
+                    last_suite_time=$current_time
+                    stall_count=0
+                fi
+            fi
+        done
+    ) &
+    
+    local watchdog_pid=$!
+    echo "Watchdog running in background (PID: $watchdog_pid)"
 }
 
 echo "node $(node -v), pnpm $(pnpm -v), dotnet $(dotnet --version)"

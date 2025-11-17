@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Runner.Models;
@@ -9,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using IOFile = System.IO.File;
 
 namespace Runner.Controllers
@@ -17,6 +19,7 @@ namespace Runner.Controllers
     public class MainController : Controller
     {
         static readonly object IO_SYNC = new object();
+        static readonly SemaphoreSlim ASYNC_SYNC = new SemaphoreSlim(1, 1);
         readonly string _completedSuitesFileName;
 
         UIModelHelper _uiModelHelper;
@@ -128,15 +131,57 @@ namespace Runner.Controllers
             }
         }
         [HttpPost]
-        public void NotifySuiteFinalized(string name, bool passed, int runtime)
+        public async System.Threading.Tasks.Task NotifySuiteFinalized(string name, bool passed, int runtime)
         {
             Response.ContentType = "text/plain";
-            lock (IO_SYNC)
+            
+            var threadId = System.Threading.Thread.CurrentThread.ManagedThreadId;
+            Console.WriteLine($"[THREAD-{threadId}] NotifySuiteFinalized ENTER: {name}");
+            
+            try
             {
-                if (passed && _runFlags.IsContinuousIntegration)
+                Console.WriteLine($"[THREAD-{threadId}] Waiting for semaphore: {name}");
+                
+                // Use SemaphoreSlim for async-safe synchronization
+                await ASYNC_SYNC.WaitAsync();
+                try
                 {
-                    IOFile.AppendAllLines(_completedSuitesFileName, new[] { name });
+                    Console.WriteLine($"[THREAD-{threadId}] Semaphore acquired: {name}");
+                    
+                    if (passed && _runFlags.IsContinuousIntegration)
+                    {
+                        IOFile.AppendAllLines(_completedSuitesFileName, new[] { name });
+                    }
+                    
+                    // Update alive timestamp to prevent watchdog timeout
+                    if (_runFlags.IsContinuousIntegration)
+                    {
+                        var timestamp = DateTime.Now.ToString("s");
+                        var filePath = Path.Combine(_env.ContentRootPath, "testing/LastSuiteTime.txt");
+                        
+                        // Write and verify
+                        IOFile.WriteAllText(filePath, timestamp);
+                        
+                        // Verify write was successful
+                        var verifyContent = IOFile.ReadAllText(filePath);
+                        if (verifyContent != timestamp)
+                        {
+                            Console.WriteLine($"[THREAD-{threadId}] WARNING: LastSuiteTime verification failed! Expected '{timestamp}', got '{verifyContent}'");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"[THREAD-{threadId}] LastSuiteTime verified: {timestamp}");
+                        }
+                    }
+                    
+                    Console.WriteLine($"[THREAD-{threadId}] Semaphore released: {name}");
                 }
+                finally
+                {
+                    ASYNC_SYNC.Release();
+                }
+                
+                // Console output OUTSIDE semaphore - don't block other requests for I/O
                 ConsoleHelper.Write("[");
                 if (passed)
                     ConsoleHelper.Write(" OK ", ConsoleColor.Green);
@@ -145,19 +190,58 @@ namespace Runner.Controllers
 
                 TimeSpan runSpan = TimeSpan.FromMilliseconds(runtime);
                 ConsoleHelper.WriteLine($"] {name} in {Math.Round(runSpan.TotalSeconds, 3)}s");
-
-                NotifyIsAlive();
+                
+                // Explicitly write response body and flush
+                await Response.WriteAsync("OK");
+                await Response.Body.FlushAsync();
+                
+                Console.WriteLine($"[THREAD-{threadId}] NotifySuiteFinalized EXIT: {name}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[THREAD-{threadId}] NotifySuiteFinalized EXCEPTION for {name}: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                // Continue execution - don't let exceptions break the test runner
             }
         }
 
-        static readonly object IOLock = new object();
-
         [HttpPost]
-        public void NotifyIsAlive() {
+        public async System.Threading.Tasks.Task NotifyIsAlive()
+        {
+            Response.ContentType = "text/plain";
+            
             if (_runFlags.IsContinuousIntegration)
-                lock (IOLock) {
-                    IOFile.WriteAllText(Path.Combine(_env.ContentRootPath, "testing/LastSuiteTime.txt"), DateTime.Now.ToString("s"));
+            {
+                try
+                {
+                    var timestamp = DateTime.Now.ToString("s");
+                    Console.WriteLine($"[ALIVE] NotifyIsAlive called at {timestamp}");
+                    
+                    await ASYNC_SYNC.WaitAsync();
+                    try
+                    {
+                        var filePath = Path.Combine(_env.ContentRootPath, "testing/LastSuiteTime.txt");
+                        IOFile.WriteAllText(filePath, timestamp);
+                        Console.WriteLine($"[ALIVE] LastSuiteTime.txt updated to {timestamp}");
+                    }
+                    finally
+                    {
+                        ASYNC_SYNC.Release();
+                    }
+                    
+                    await Response.WriteAsync("OK");
+                    await Response.Body.FlushAsync();
                 }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"[ALIVE] NotifyIsAlive EXCEPTION: {ex.Message}");
+                    Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                }
+            }
+            else
+            {
+                await Response.WriteAsync("OK");
+            }
         }
 
         [HttpPost]
