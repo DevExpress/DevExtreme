@@ -62,6 +62,7 @@ const TESTCAFE_CONFIG: Partial<TestCafeConfigurationOptions> = {
   hostname: 'localhost',
   port1: 1437,
   port2: 1438,
+  cache: true,
 };
 
 const changeTheme = async (t: TestController, themeName: string): Promise<void> => {
@@ -244,10 +245,6 @@ async function main() {
           }
           return true;
         });
-      }
-
-      if (args.cache) {
-        (runner as any).cache = args.cache;
       }
 
       return runner;
