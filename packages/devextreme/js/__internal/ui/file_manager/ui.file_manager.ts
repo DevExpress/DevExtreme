@@ -36,20 +36,20 @@ import type {
   SelectionChangedEvent,
   ToolbarItemClickEvent,
 } from '@js/ui/file_manager';
-import FileManagerAdaptivityControl from '@js/ui/file_manager/ui.file_manager.adaptivity';
-import FileManagerBreadcrumbs from '@js/ui/file_manager/ui.file_manager.breadcrumbs';
-import { defaultPermissions, FileManagerCommandManager } from '@js/ui/file_manager/ui.file_manager.command_manager';
 import { extendAttributes, findItemsByKeys } from '@js/ui/file_manager/ui.file_manager.common';
-import FileManagerContextMenu from '@js/ui/file_manager/ui.file_manager.context_menu';
-import FileManagerEditingControl from '@js/ui/file_manager/ui.file_manager.editing';
-import FileManagerFilesTreeView from '@js/ui/file_manager/ui.file_manager.files_tree_view';
-import FileManagerDetailsItemList from '@js/ui/file_manager/ui.file_manager.item_list.details';
-import FileManagerThumbnailsItemList from '@js/ui/file_manager/ui.file_manager.item_list.thumbnails';
-import FileManagerNotificationControl from '@js/ui/file_manager/ui.file_manager.notification';
-import FileManagerToolbar from '@js/ui/file_manager/ui.file_manager.toolbar';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import { FileItemsController, OPERATIONS } from '@ts/ui/file_manager/file_items_controller';
+import FileManagerAdaptivityControl from '@ts/ui/file_manager/ui.file_manager.adaptivity';
+import FileManagerBreadcrumbs from '@ts/ui/file_manager/ui.file_manager.breadcrumbs';
+import { defaultPermissions, FileManagerCommandManager } from '@ts/ui/file_manager/ui.file_manager.command_manager';
+import FileManagerContextMenu from '@ts/ui/file_manager/ui.file_manager.context_menu';
+import FileManagerEditingControl from '@ts/ui/file_manager/ui.file_manager.editing';
+import FileManagerFilesTreeView from '@ts/ui/file_manager/ui.file_manager.files_tree_view';
+import FileManagerDetailsItemList from '@ts/ui/file_manager/ui.file_manager.item_list.details';
+import FileManagerThumbnailsItemList from '@ts/ui/file_manager/ui.file_manager.item_list.thumbnails';
+import FileManagerNotificationControl from '@ts/ui/file_manager/ui.file_manager.notification';
+import FileManagerToolbar from '@ts/ui/file_manager/ui.file_manager.toolbar';
 import notify from '@ts/ui/notify';
 
 const FILE_MANAGER_CLASS = 'dx-filemanager';
@@ -93,7 +93,7 @@ export interface FileManagerActions {
   };
 }
 
-interface ItemThumbnailInfo {
+export interface ItemThumbnailInfo {
   thumbnail?: string;
   cssClass?: string;
 }
@@ -143,8 +143,7 @@ class FileManager extends Widget<Properties> {
 
   _breadcrumbs?: FileManagerBreadcrumbs;
 
-  _initTemplates(): void {
-  }
+  _initTemplates(): void {}
 
   _init(): void {
     super._init();
@@ -188,7 +187,8 @@ class FileManager extends Widget<Properties> {
     this._itemKeyToFocus = undefined;
     this._loadedWidgets = [];
 
-    this._commandManager = new FileManagerCommandManager(this.option('permissions'));
+    const { permissions } = this.option();
+    this._commandManager = new FileManagerCommandManager(permissions);
 
     this.$element().addClass(FILE_MANAGER_CLASS);
 
@@ -216,7 +216,7 @@ class FileManager extends Widget<Properties> {
         progressPanelContainer: this.$element(),
         // eslint-disable-next-line @stylistic/max-len
         contentTemplate: (container, notificationControl): void => this._createWrapper(container, notificationControl),
-        onActionProgress: (e) => this._onActionProgress(e),
+        onActionProgress: (e): void => this._onActionProgress(e),
         positionTargetSelector: `.${FILE_MANAGER_CONTAINER_CLASS}`,
         showProgressPanel: notifications?.showPanel,
         showNotificationPopup: notifications?.showPopup,
@@ -307,7 +307,7 @@ class FileManager extends Widget<Properties> {
       getDirectories: this.getDirectories.bind(this),
       getCurrentDirectory: this._getCurrentDirectory.bind(this),
       onDirectoryClick: ({ itemData }): void => this._setCurrentDirectory(itemData),
-      onItemListDataLoaded: () => this._tryEndLoading(VIEW_AREAS.folders),
+      onItemListDataLoaded: (): void => this._tryEndLoading(VIEW_AREAS.folders),
     });
 
     this._filesTreeView.updateCurrentDirectory();
@@ -361,7 +361,10 @@ class FileManager extends Widget<Properties> {
     this._breadcrumbs.setCurrentDirectory(this._getCurrentDirectory());
   }
 
-  _createContextMenu(isolateCreationItemCommands, viewArea): FileManagerContextMenu {
+  _createContextMenu(
+    isolateCreationItemCommands: boolean,
+    viewArea: string,
+  ): FileManagerContextMenu {
     const $contextMenu = $('<div>').appendTo(this._$wrapper);
     const { contextMenu } = this.option();
     return this._createComponent($contextMenu, FileManagerContextMenu, {
@@ -488,7 +491,8 @@ class FileManager extends Widget<Properties> {
   }
 
   _redrawComponent(onlyFileItemsView): void {
-    this._itemView?.refresh().then(() => !onlyFileItemsView && this._filesTreeView?.refresh());
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    this._itemView?.refresh()?.then(() => !onlyFileItemsView && this._filesTreeView?.refresh());
   }
 
   _getItemViewItems(): Properties['itemView'][] {
@@ -904,7 +908,7 @@ class FileManager extends Widget<Properties> {
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  executeCommand(commandName) {
+  executeCommand(commandName: string) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._commandManager?.executeCommand(commandName);
   }
@@ -938,6 +942,7 @@ class FileManager extends Widget<Properties> {
       this._itemKeyToFocus = undefined;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._itemView?.refresh(options, operation);
   }
 
@@ -995,7 +1000,6 @@ class FileManager extends Widget<Properties> {
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   _getSelectedItemInfos() {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._itemView ? this._itemView.getSelectedItems() : [];
   }
 
@@ -1015,7 +1019,7 @@ class FileManager extends Widget<Properties> {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   getSelectedItems() {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this._getSelectedItemInfos().map((itemInfo) => itemInfo.fileItem);
+    return this._getSelectedItemInfos()?.map((itemInfo) => itemInfo.fileItem);
   }
 
   _onSelectedItemOpened({ fileItemInfo }): void {

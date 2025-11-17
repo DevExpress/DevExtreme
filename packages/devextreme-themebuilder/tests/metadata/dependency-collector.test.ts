@@ -105,7 +105,9 @@ const filesContent: { [key: string]: string } = {
   [path.resolve(__dirname, '../../../devextreme-scss/scss/widgets/lesstheme/_index.scss')]: '// public widgets\n@use "./toolbar";',
 
   // collect test
-  [path.resolve(__dirname, '../../../devextreme/js/bundles/dx.all.js')]: 'import t from \'./toolbar\';import b from \'./button\';',
+  [path.resolve(__dirname, '../../../devextreme/build/bundle-templates/dx.all.js')]: 'import t from \'../toolbar\';import b from \'../button\';',
+  '../../js/toolbar.js': 'import m from \'./menu\';import u from \'./utils\';\n// STYLE toolbar',
+  '../../js/button.js': 'import u from \'./utils\';\n// STYLE button',
   [path.resolve(__dirname, '../../../devextreme-scss/scss/widgets/generic/_index.scss')]: '// public widgets\n@use "./toolbar";@use "./button";@use "./icon";@use "./menu";',
   [path.resolve(__dirname, '../../../devextreme-scss/scss/widgets/material/_index.scss')]: '// public widgets\n@use "./toolbar";@use "./button";@use "./icon";@use "./menu";',
 };
@@ -133,7 +135,7 @@ jest.mock('fs', () => ({
 jest.mock('filing-cabinet', () => ({
   __esModule: true,
   default: (options: cabinet.Options): string => {
-    const normalizedPartial = options.partial.replace('./', '');
+    const normalizedPartial = options.partial.replace(/^\.\//, '');
     return `${normalizedPartial}.${tsFilesSet.has(normalizedPartial) ? 'ts' : 'js'}`;
   },
 }));
@@ -293,3 +295,4 @@ describe('Integration test', () => {
     expect(builtDependenciesCopy).toEqual(idealDependenciesCopy);
   });
 });
+

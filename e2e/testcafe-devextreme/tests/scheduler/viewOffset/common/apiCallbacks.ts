@@ -133,6 +133,7 @@ const EXPECTED = {
       startDate: getCellDateWithOffset('2023-09-05T01:00:00Z', offset),
       endDate: getCellDateWithOffset('2023-09-05T02:00:00Z', offset),
       text: '',
+      recurrenceRule: '',
     };
 
     await t.doubleClick(cell);

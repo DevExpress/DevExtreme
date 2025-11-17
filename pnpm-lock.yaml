@@ -354,8 +354,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/devextreme/artifacts/npm/devextreme-dist
       devextreme-exceljs-fork:
-        specifier: ^4.4.3
-        version: 4.4.3
+        specifier: ^4.4.4
+        version: 4.4.4
       devextreme-quill:
         specifier: 'catalog:'
         version: 1.7.6
@@ -1389,8 +1389,8 @@ importers:
         specifier: 1.0.3
         version: 1.0.3
       devextreme-exceljs-fork:
-        specifier: ^4.4.2
-        version: 4.4.2
+        specifier: ^4.4.4
+        version: 4.4.4
       devextreme-screenshot-comparer:
         specifier: 2.0.17
         version: 2.0.17(testcafe@3.7.2)
@@ -2136,9 +2136,6 @@ importers:
       '@vue/test-utils':
         specifier: 2.0.0-beta.7
         version: 2.0.0-beta.7(vue@3.2.47)
-      del:
-        specifier: 3.0.0
-        version: 3.0.0
       devextreme-metadata:
         specifier: workspace:*
         version: link:../devextreme-metadata
@@ -2166,18 +2163,6 @@ importers:
       eslint-plugin-spellcheck:
         specifier: 0.0.20
         version: 0.0.20(eslint@9.18.0(jiti@1.21.6))
-      gulp:
-        specifier: 4.0.2
-        version: 4.0.2
-      gulp-header:
-        specifier: 2.0.9
-        version: 2.0.9
-      gulp-shell:
-        specifier: 0.6.5
-        version: 0.6.5
-      gulp-typescript:
-        specifier: 5.0.1
-        version: 5.0.1(typescript@4.9.5)
       jest-environment-jsdom:
         specifier: 29.7.0
         version: 29.7.0
@@ -4839,11 +4824,11 @@ packages:
   '@fal-works/esbuild-plugin-global-externals@2.1.2':
     resolution: {integrity: sha512-cEee/Z+I12mZcFJshKcCqC8tuX5hG3s+d+9nZ3LabqKF1vKdF41B92pJVCBggjAGORAeOzyyDDKrZwIkLffeOQ==}
 
-  '@fast-csv/format@4.3.5':
-    resolution: {integrity: sha512-8iRn6QF3I8Ak78lNAa+Gdl5MJJBM5vRHivFtMRUWINdevNo00K7OXxS2PshawLKTejVwieIlPmK5YlLu6w4u8A==}
+  '@fast-csv/format@5.0.5':
+    resolution: {integrity: sha512-0P9SJXXnqKdmuWlLaTelqbrfdgN37Mvrb369J6eNmqL41IEIZQmV4sNM4GgAK2Dz3aH04J0HKGDMJFkYObThTw==}
 
-  '@fast-csv/parse@4.3.6':
-    resolution: {integrity: sha512-uRsLYksqpbDmWaSmzvJcuApSEe38+6NQZBUsuAyMZKqHxH0g1wcJgsKUvN3WC8tewaqFjBMMGrkHmC+T7k8LvA==}
+  '@fast-csv/parse@5.0.5':
+    resolution: {integrity: sha512-M0IbaXZDbxfOnpVE5Kps/a6FGlILLhtLsvWd9qNH3d2TxNnpbNkFf3KD26OmJX6MHq7PdQAl5htStDwnuwHx6w==}
 
   '@floating-ui/core@1.6.8':
     resolution: {integrity: sha512-7XJ9cPU+yI2QeLS+FCSlqNFZJq8arvswefkZrYI1yQBbftw6FyrZOxYSh+9S7z7TpeWlRt9zJ5IhM1WIL334jA==}
@@ -7313,9 +7298,6 @@ packages:
 
   '@types/node@12.20.55':
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
-
-  '@types/node@14.18.63':
-    resolution: {integrity: sha512-fAtCfv4jJg+ExtXhvCkCqUKZ+4ok/JQk01qDKhL5BDDoS3AxKXhV5/MAVUZyQnSEd2GT92fkgZl0pz0Q0AzcIQ==}
 
   '@types/node@18.19.64':
     resolution: {integrity: sha512-955mDqvO2vFf/oL7V3WiUtiz+BugyX8uVbaT2H8oj3+8dRyH2FLiNdowe7eNqRM7IOIZvzDH76EoAT+gwm6aIQ==}
@@ -10266,12 +10248,8 @@ packages:
   devextreme-cldr-data@1.0.3:
     resolution: {integrity: sha512-xd+uWv1KzEhr+ZH/MOWfDei3GFz+NAYyKUR9HgjM9BBwPel7PpMElYp4whM+PtAjziBaTssQnA//ob5c3BovTA==}
 
-  devextreme-exceljs-fork@4.4.2:
-    resolution: {integrity: sha512-+HFrt1BAGomEEkKE0sQNH5OW8NaBt3iiSKYOFZ2Yi1+G0wJZzcvdMNxPMd3yI4c1M8X5WT+LUxjYCChv4FNlyA==}
-    engines: {node: '>=8.3.0'}
-
-  devextreme-exceljs-fork@4.4.3:
-    resolution: {integrity: sha512-h+8HVdgXOEtIgKG636y/BxOoIfq3XRNis2OeZDZIvPAcYGurAqjnTL8utdbT3IKQzMqcFcmH9Cyb9Tr2xlf+1g==}
+  devextreme-exceljs-fork@4.4.4:
+    resolution: {integrity: sha512-WdlwIj3vNZ44u/Nb0y7Lk1zmgkm23VpTRSgPNfvDheZrwK6bbbtTb57jdRsEB/UwKgOBKKtp47WpTOG6w+NWog==}
     engines: {node: '>=16.20.2'}
 
   devextreme-internal-tools@20.0.1:
@@ -11415,8 +11393,8 @@ packages:
     resolution: {integrity: sha512-9CzxZbACXMUXW13tS0tI8XsGGmxWzO2DmYrGuBJOJ8k8q2K7hwfJA5qHjuPPe8wtsco33YR9wc+Rlr5wYFvhSA==}
     engines: {node: '>=10.13.0'}
 
-  fast-csv@4.3.6:
-    resolution: {integrity: sha512-2RNSpuwwsJGP0frGsOmTb9oUF+VkFSM4SyLTDgwf2ciHWTarN0lQTC+F2f/t5J9QjW+c65VFIAAu85GsvMIusw==}
+  fast-csv@5.0.5:
+    resolution: {integrity: sha512-9//QpogDIPln5Dc8e3Q3vbSSLXlTeU7z1JqsUOXZYOln8EIn/OOO8+NS2c3ukR6oYngDd3+P1HXSkby3kNV9KA==}
     engines: {node: '>=10.0.0'}
 
   fast-deep-equal@3.1.3:
@@ -12194,10 +12172,6 @@ packages:
   gulp-sass@5.1.0:
     resolution: {integrity: sha512-7VT0uaF+VZCmkNBglfe1b34bxn/AfcssquLKVDYnCDJ3xNBaW7cUuI3p3BQmoKcoKFrs9jdzUxyb+u+NGfL4OQ==}
     engines: {node: '>=12'}
-
-  gulp-shell@0.6.5:
-    resolution: {integrity: sha512-f3m1WcS0o2B72/PGj1Jbv9zYR9rynBh/EQJv64n01xQUo7j7anols0eww9GG/WtDTzGVQLrupVDYkifRFnj5Zg==}
-    engines: {node: '>=4.8.0 <5.0.0 || >=5.7.0'}
 
   gulp-shell@0.8.0:
     resolution: {integrity: sha512-wHNCgmqbWkk1c6Gc2dOL5SprcoeujQdeepICwfQRo91DIylTE7a794VEE+leq3cE2YDoiS5ulvRfKVIEMazcTQ==}
@@ -23646,18 +23620,15 @@ snapshots:
 
   '@fal-works/esbuild-plugin-global-externals@2.1.2': {}
 
-  '@fast-csv/format@4.3.5':
+  '@fast-csv/format@5.0.5':
     dependencies:
-      '@types/node': 14.18.63
       lodash.escaperegexp: 4.1.2
       lodash.isboolean: 3.0.3
-      lodash.isequal: 4.5.0
       lodash.isfunction: 3.0.9
       lodash.isnil: 4.0.0
 
-  '@fast-csv/parse@4.3.6':
+  '@fast-csv/parse@5.0.5':
     dependencies:
-      '@types/node': 14.18.63
       lodash.escaperegexp: 4.1.2
       lodash.groupby: 4.6.0
       lodash.isfunction: 3.0.9
@@ -24800,15 +24771,13 @@ snapshots:
     transitivePeerDependencies:
       - '@parcel/core'
 
-  '@parcel/cache@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)':
+  '@parcel/cache@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))':
     dependencies:
       '@parcel/core': 2.12.0(@swc/helpers@0.5.15)
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/logger': 2.12.0
       '@parcel/utils': 2.12.0
       lmdb: 2.8.5
-    transitivePeerDependencies:
-      - '@swc/helpers'
 
   '@parcel/codeframe@2.12.0':
     dependencies:
@@ -24868,7 +24837,7 @@ snapshots:
   '@parcel/core@2.12.0(@swc/helpers@0.5.15)':
     dependencies:
       '@mischnic/json-sourcemap': 0.1.1
-      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
+      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
       '@parcel/diagnostic': 2.12.0
       '@parcel/events': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
@@ -25283,7 +25252,7 @@ snapshots:
 
   '@parcel/types@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)':
     dependencies:
-      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
+      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
       '@parcel/diagnostic': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/package-manager': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
@@ -27208,8 +27177,6 @@ snapshots:
       '@types/node': 18.19.64
 
   '@types/node@12.20.55': {}
-
-  '@types/node@14.18.63': {}
 
   '@types/node@18.19.64':
     dependencies:
@@ -31359,23 +31326,11 @@ snapshots:
 
   devextreme-cldr-data@1.0.3: {}
 
-  devextreme-exceljs-fork@4.4.2:
+  devextreme-exceljs-fork@4.4.4:
     dependencies:
       archiver: 7.0.1
       dayjs: 1.11.13
-      fast-csv: 4.3.6
-      jszip: 3.10.1
-      readable-stream: 3.6.2
-      saxes: 5.0.1
-      tmp: 0.2.3
-      unzipper: 0.12.3
-      uuid: 8.3.2
-
-  devextreme-exceljs-fork@4.4.3:
-    dependencies:
-      archiver: 7.0.1
-      dayjs: 1.11.13
-      fast-csv: 4.3.6
+      fast-csv: 5.0.5
       jszip: 3.10.1
       readable-stream: 3.6.2
       saxes: 5.0.1
@@ -33416,10 +33371,10 @@ snapshots:
     dependencies:
       color-support: 1.1.3
 
-  fast-csv@4.3.6:
+  fast-csv@5.0.5:
     dependencies:
-      '@fast-csv/format': 4.3.5
-      '@fast-csv/parse': 4.3.6
+      '@fast-csv/format': 5.0.5
+      '@fast-csv/parse': 5.0.5
 
   fast-deep-equal@3.1.3: {}
 
@@ -34441,16 +34396,6 @@ snapshots:
       replace-ext: 2.0.0
       strip-ansi: 6.0.1
       vinyl-sourcemaps-apply: 0.2.1
-
-  gulp-shell@0.6.5:
-    dependencies:
-      async: 2.6.4
-      chalk: 2.4.2
-      fancy-log: 1.3.3
-      lodash: 4.17.21
-      lodash.template: 4.5.0
-      plugin-error: 0.1.2
-      through2: 2.0.5
 
   gulp-shell@0.8.0:
     dependencies:

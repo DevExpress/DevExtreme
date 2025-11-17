@@ -29,6 +29,7 @@ test('The AI column should be hidden when columnHidingEnabled is true', async (t
     { id: 2, name: 'Name 2', value: 20 },
     { id: 3, name: 'Name 3', value: 30 },
   ],
+  keyExpr: 'id',
   width: 350,
   columnWidth: 100,
   columnHidingEnabled: true,
@@ -65,6 +66,7 @@ test('The AI column should be hidden when hidingPriority is set for it', async (
     { id: 2, name: 'Name 2', value: 20 },
     { id: 3, name: 'Name 3', value: 30 },
   ],
+  keyExpr: 'id',
   width: 350,
   columnWidth: 100,
   columns: [
@@ -107,6 +109,7 @@ test('The AI column should not be hidden when there is a second AI column with a
     { id: 2, name: 'Name 2', value: 20 },
     { id: 3, name: 'Name 3', value: 30 },
   ],
+  keyExpr: 'id',
   width: 350,
   columnWidth: 100,
   columns: [

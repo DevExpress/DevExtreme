@@ -1,12 +1,4 @@
-// eslint-disable-next-line no-restricted-imports
-import jQuery from 'jquery';
-import config from '../../core/config';
-const useJQuery = config().useJQuery;
+// deprecated
+import useJQuery from '../../__internal/integration/jquery/use_jquery';
 
-if(jQuery && useJQuery !== false) {
-    config({ useJQuery: true });
-}
-
-export default function() {
-    return jQuery && config().useJQuery;
-}
+export default useJQuery;

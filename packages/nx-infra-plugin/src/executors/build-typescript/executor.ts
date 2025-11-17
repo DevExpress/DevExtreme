@@ -70,14 +70,17 @@ const runExecutor: PromiseExecutor<BuildTypescriptExecutorSchema> = async (optio
 
     const srcPattern = options.srcPattern || DEFAULT_SRC_PATTERN;
     const globPattern = normalizeGlobPathForWindows(path.join(absoluteProjectRoot, srcPattern));
-    const excludePattern = options.excludePattern
-      ? normalizeGlobPathForWindows(path.join(absoluteProjectRoot, options.excludePattern))
-      : undefined;
+
+    const excludePatterns = options.excludePatterns
+      ? options.excludePatterns.map((pattern) =>
+          normalizeGlobPathForWindows(path.join(absoluteProjectRoot, pattern)),
+        )
+      : [];
 
     const sourceFiles = await glob(globPattern, {
       absolute: true,
       nodir: true,
-      ignore: excludePattern ? [excludePattern] : [],
+      ignore: excludePatterns,
     });
 
     if (sourceFiles.length === 0) {
