@@ -28,6 +28,7 @@ test('Default render', async (t) => {
     { id: 2, name: 'Name 2', value: 20 },
     { id: 3, name: 'Name 3', value: 30 },
   ],
+  keyExpr: 'id',
   columns: [
     { dataField: 'id', caption: 'ID' },
     { dataField: 'name', caption: 'Name' },
@@ -61,6 +62,7 @@ test('Default render', async (t) => {
         { id: 2, name: 'Name 2', value: 20 },
         { id: 3, name: 'Name 3', value: 30 },
       ],
+      keyExpr: 'id',
       columns: [
         { dataField: 'id', caption: 'ID' },
         { dataField: 'name', caption: 'Name' },
@@ -101,6 +103,7 @@ test('Default render', async (t) => {
         { id: 2, name: 'Name 2', value: 20 },
         { id: 3, name: 'Name 3', value: 30 },
       ],
+      keyExpr: 'id',
       columns: [
         { dataField: 'id', caption: 'ID' },
         { dataField: 'name', caption: 'Name' },

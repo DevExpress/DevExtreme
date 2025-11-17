@@ -28,6 +28,7 @@ test('Column reordering should work when allowColumnReordering is true', async (
     { id: 2, name: 'Name 2', value: 20 },
     { id: 3, name: 'Name 3', value: 30 },
   ],
+  keyExpr: 'id',
   allowColumnReordering: true,
   columnWidth: 100,
   columns: [
@@ -63,6 +64,7 @@ test('Column reordering should not work when allowColumnReordering is false', as
     { id: 2, name: 'Name 2', value: 20 },
     { id: 3, name: 'Name 3', value: 30 },
   ],
+  keyExpr: 'id',
   allowColumnReordering: false,
   columnWidth: 100,
   columns: [
@@ -98,6 +100,7 @@ test('Column reordering should not work when it has allowReordering set to false
     { id: 2, name: 'Name 2', value: 20 },
     { id: 3, name: 'Name 3', value: 30 },
   ],
+  keyExpr: 'id',
   allowColumnReordering: true,
   columnWidth: 100,
   columns: [
