@@ -112,9 +112,11 @@ export function changeTheme(dirName, demoPath, theme) {
   }
 
   const updatedContent = globalReadFrom(dirName, demoPath, (data) => {
-    const result = data.replace(/data-theme="[^"]+"/g, `data-theme="${theme}"`);
+    let result = data.replace(/data-theme="[^"]+"/g, `data-theme="${theme}"`);
 
-    return result.replace(/dx\.[^.]+(\.css")/g, `dx.${theme}$1`);
+    result = result.replace(/dx\.[^"]+\.css/g, `dx.${theme}.css`);
+
+    return result;
   });
 
   const indexFilePath = join(dirName, demoPath);
