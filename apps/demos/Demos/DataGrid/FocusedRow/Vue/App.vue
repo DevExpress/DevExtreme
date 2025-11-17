@@ -85,10 +85,9 @@ import {
 } from 'devextreme-vue/data-grid';
 import DxNumberBox from 'devextreme-vue/number-box';
 import DxCheckBox from 'devextreme-vue/check-box';
-import { type DataSourceOptions } from 'devextreme-vue/common/data';
-import 'devextreme-vue/common/data';
+import { ArrayStore, DataSource } from 'devextreme-vue/common/data';
 
-import { type Task } from './data.ts';
+import { type Task, tasks } from './data.ts';
 
 const taskSubject = ref('');
 const taskDetails = ref('');
@@ -98,24 +97,12 @@ const taskProgress = ref('');
 const focusedRowKey = ref(117);
 const autoNavigateToFocusedRow = ref(true);
 
-const dataSource: DataSourceOptions = {
-  store: {
-    type: 'odata',
-    version: 2,
+const dataSource = new DataSource({
+  store: new ArrayStore({
     key: 'Task_ID',
-    url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks',
-  },
-  expand: 'ResponsibleEmployee',
-  select: [
-    'Task_ID',
-    'Task_Subject',
-    'Task_Start_Date',
-    'Task_Status',
-    'Task_Description',
-    'Task_Completion',
-    'ResponsibleEmployee/Employee_Full_Name',
-  ],
-};
+    data: tasks,
+  }),
+});
 
 const onFocusedRowChanging = (e: DxDataGridTypes.FocusedRowChangingEvent) => {
   const rowsCount = e.component.getVisibleRows().length;
@@ -136,12 +123,12 @@ const onFocusedRowChanging = (e: DxDataGridTypes.FocusedRowChangingEvent) => {
   }
 };
 
-const onFocusedRowChanged = (e: DxDataGridTypes.FocusedRowChangedEvent<Task>) => {
-  const data = e.row!.data!;
+const onFocusedRowChanged = (e: DxDataGridTypes.FocusedRowChangedEvent<Task, number>) => {
+  const data = e.row?.data;
 
-  taskSubject.value = data.Task_Subject;
-  taskDetails.value = data.Task_Description;
-  taskStatus.value = data.Task_Status;
-  taskProgress.value = data.Task_Completion ? `${data.Task_Completion}%` : '';
+  taskSubject.value = data?.Task_Subject;
+  taskDetails.value = data?.Task_Description;
+  taskStatus.value = data?.Task_Status;
+  taskProgress.value = data?.Task_Completion ? `${data.Task_Completion}%` : '';
 };
 </script>
