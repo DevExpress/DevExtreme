@@ -1665,7 +1665,7 @@ const tasks: Task[] = [
     Task_Status: 'Deferred',
     Task_Priority: 3,
     Employee_Full_Name: 'Todd Hoffman',
-  }
+  },
 ];
 
 @Injectable()
@@ -1673,7 +1673,7 @@ export class Service {
   getTasks() {
     return tasks;
   }
-  
+
   getStatuses() {
     return statuses;
   }
