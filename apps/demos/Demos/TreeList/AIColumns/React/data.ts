@@ -1,4 +1,6 @@
-const employees = [{
+import { type Employee } from "./types";
+
+export const employees: Employee[] = [{
   ID: 1,
   Head_ID: 0,
   First_Name: 'John',

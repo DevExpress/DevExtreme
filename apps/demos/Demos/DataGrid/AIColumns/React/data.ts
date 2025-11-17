@@ -1,4 +1,6 @@
-const vehicles = [
+import { type Vehicle } from "./types";
+
+export const vehicles: Vehicle[] = [
   {
     ID: 1,
     TrademarkName: 'Toyota',
