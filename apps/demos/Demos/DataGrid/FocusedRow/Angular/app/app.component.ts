@@ -79,7 +79,7 @@ export class AppComponent {
     });
   }
 
-  onFocusedRowChanging(e: DxDataGridTypes.FocusedRowChangingEvent<Task, number>) {
+  onFocusedRowChanging(e: DxDataGridTypes.FocusedRowChangingEvent) {
     const rowsCount = e.component.getVisibleRows().length;
     const pageCount = e.component.pageCount();
     const pageIndex = e.component.pageIndex();
@@ -98,11 +98,12 @@ export class AppComponent {
     }
   }
 
-  onFocusedRowChanged({ row: { data } }: DxDataGridTypes.FocusedRowChangedEvent<Task, number>) {
-    this.taskSubject = data.Task_Subject;
-    this.taskDetailsHtml = this.sanitizer.bypassSecurityTrustHtml(data.Task_Description);
-    this.taskStatus = data.Task_Status;
-    this.taskProgress = data.Task_Completion ? `${data.Task_Completion}%` : '';
+  onFocusedRowChanged(e: DxDataGridTypes.FocusedRowChangedEvent<Task, number>) {
+    const data = e.row?.data;
+    this.taskSubject = data?.Task_Subject;
+    this.taskDetailsHtml = this.sanitizer.bypassSecurityTrustHtml(data?.Task_Description);
+    this.taskStatus = data?.Task_Status;
+    this.taskProgress = data?.Task_Completion ? `${data.Task_Completion}%` : '';
   }
 }
 

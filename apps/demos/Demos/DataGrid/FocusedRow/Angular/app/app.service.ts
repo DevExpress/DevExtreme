@@ -1,15 +1,23 @@
 import { Injectable } from '@angular/core';
 
+export interface Employee {
+  Employee_Full_Name: string;
+}
+
 export interface Task {
   Task_ID: number;
+
   Task_Subject: string;
+
   Task_Start_Date: string;
+
   Task_Status: string;
+
   Task_Description: string;
+
   Task_Completion: number;
-  ResponsibleEmployee: {
-    Employee_Full_Name: string;
-  };
+
+  ResponsibleEmployee: Employee;
 }
 
 const tasks: Task[] = [
