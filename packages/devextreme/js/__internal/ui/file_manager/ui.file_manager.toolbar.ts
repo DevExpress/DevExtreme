@@ -13,7 +13,6 @@ import type {
   Properties as FileManagerProperties,
   ToolbarItemClickEvent,
 } from '@js/ui/file_manager';
-import { extendAttributes } from '@js/ui/file_manager/ui.file_manager.common';
 import {
   current, isCompact, isFluent, isMaterial,
 } from '@js/ui/themes';
@@ -22,6 +21,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import type { Command, FileManagerCommandManager } from '@ts/ui/file_manager/ui.file_manager.command_manager';
+import { extendAttributes } from '@ts/ui/file_manager/ui.file_manager.common';
 
 const FILE_MANAGER_TOOLBAR_CLASS = 'dx-filemanager-toolbar';
 const FILE_MANAGER_GENERAL_TOOLBAR_CLASS = 'dx-filemanager-general-toolbar';
@@ -166,6 +166,7 @@ class FileManagerToolbar extends Widget<FileManagerToolbarOptions> {
 
   _isRefreshVisibleInFileToolbar?: boolean;
 
+  // eslint-disable-next-line no-restricted-globals
   _refreshItemTextTimeout?: ReturnType<typeof setTimeout>;
 
   _init(): void {
@@ -731,7 +732,7 @@ class FileManagerToolbar extends Widget<FileManagerToolbarOptions> {
     isDeferredUpdate,
     text,
     showText,
-
+    // eslint-disable-next-line no-restricted-globals
   ): ReturnType<typeof setTimeout> | undefined {
     const options = {
       showText,
@@ -740,6 +741,7 @@ class FileManagerToolbar extends Widget<FileManagerToolbarOptions> {
       },
     };
     if (isDeferredUpdate) {
+      // eslint-disable-next-line no-restricted-globals
       return setTimeout((): void => {
         this._applyRefreshItemOptions(options);
         this._refreshItemTextTimeout = undefined;
