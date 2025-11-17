@@ -12,5 +12,5 @@ if (window && window.config?.packageConfigPaths) {
   styleUrls: [`.${modulePrefix}/category/category.component.css`],
 })
 export class Category {
-  @Input() category: string;
+  @Input() category!: string;
 }

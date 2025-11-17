@@ -5,7 +5,7 @@
       src="../../../../images/vehicles/image_{{ id }}.png"
       alt="{{ trademarkName }} {{ name }}"
       (click)="showInfo.emit()"
-      (keydown)="(onKeyDown)"
+      (keydown)="onKeyDown($event)"
       role="button"
       tabindex="0"
       [attr.aria-haspopup]="'dialog'"

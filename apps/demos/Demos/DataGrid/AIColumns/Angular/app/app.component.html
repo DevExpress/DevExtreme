@@ -6,7 +6,7 @@
   [aiIntegration]="aiIntegration"
   (onAIColumnRequestCreating)="onAIColumnRequestCreating($event)"
 >
-  <dxo-grouping [contextMenuEnabled]="true" />
+  <dxo-grouping [contextMenuEnabled]="false" />
   <dxo-paging [pageSize]="10" />
 
   <dxi-data-grid-column
@@ -50,10 +50,10 @@
     cssClass="ai__cell"
     type="ai"
     [ai]="{
-            prompt: 'Identify the country where this vehicle model is originally manufactured or developed, based on its brand, model, and specifications.',
-            mode: 'auto',
-            noDataText: 'No data',
-        }"
+      prompt: 'Identify the country where this vehicle model is originally manufactured or developed, based on its brand, model, and specifications.',
+      mode: 'auto',
+      noDataText: 'No data',
+    }"
     [fixed]="true"
     fixedPosition="right"
     [width]="200"
