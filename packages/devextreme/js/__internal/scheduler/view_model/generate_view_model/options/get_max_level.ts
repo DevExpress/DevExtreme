@@ -42,12 +42,13 @@ export const getMaxLevel = ({
         return ADAPTIVITY_MIN_APPOINTMENT_COUNT;
       }
 
+      const detectedIsMonthView = isMonthView || (viewOrientation === 'horizontal' && !isTimelineView);
       const defaultAppointmentSize = getDefaultAppointmentSize({
         isTimelineView,
         isAdaptivityEnabled,
         viewOrientation,
         isAllDayPanel,
-        isMonthView,
+        isMonthView: detectedIsMonthView,
       });
       const minAbstractSize = getAbstractSizeByViewOrientation(
         defaultAppointmentSize,
