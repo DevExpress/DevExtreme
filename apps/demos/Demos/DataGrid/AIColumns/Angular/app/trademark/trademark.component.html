@@ -8,8 +8,8 @@
       (keydown)="(onKeyDown)"
       role="button"
       tabindex="0"
-      aria-haspopup="dialog"
-      aria-label="{{ trademarkName }} {{ name }} - press Enter for image info"
+      [attr.aria-haspopup]="'dialog'"
+      [attr.aria-label]="trademarkName + ' ' + name + ' - press Enter for image info'"
     />
   </div>
   <div class="trademark__text-wrapper">

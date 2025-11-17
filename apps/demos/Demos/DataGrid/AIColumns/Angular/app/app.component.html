@@ -4,7 +4,7 @@
   [dataSource]="vehicles"
   [showBorders]="true"
   [aiIntegration]="aiIntegration"
-  (onAIColumnRequestCreating)="(onAIColumnRequestCreating)"
+  (onAIColumnRequestCreating)="onAIColumnRequestCreating($event)"
 >
   <dxo-grouping [contextMenuEnabled]="true" />
   <dxo-paging [pageSize]="10" />
