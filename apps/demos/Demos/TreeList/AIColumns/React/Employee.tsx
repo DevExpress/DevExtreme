@@ -14,8 +14,8 @@ export default function Employee(props: TreeListTypes.ColumnCellTemplateData<Emp
         />
       </div>
       <div className="name__text-wrapper">
-        <div>{First_Name}</div>
-        <div>{Last_Name}</div>
+        <div className="name__text">{First_Name}</div>
+        <div className="name__text">{Last_Name}</div>
       </div>
     </div>
   );

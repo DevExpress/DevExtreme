@@ -1,6 +1,7 @@
 import React from 'react';
 import TreeList, { Column, Scrolling, Paging, Ai } from 'devextreme-react/tree-list';
-import { employees, aiIntegration } from './data.ts';
+import { employees } from './data.ts';
+import { aiIntegration } from './service.ts';
 import Employee from './Employee.tsx';
 import Status from './Status.tsx';
 import Email from './Email.tsx';

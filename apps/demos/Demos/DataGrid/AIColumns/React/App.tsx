@@ -1,13 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import DataGrid, {
   Column,
-  GroupPanel,
   Paging,
   Grouping,
   Ai,
 } from 'devextreme-react/data-grid';
 import Popup, { Position } from 'devextreme-react/popup';
-import { vehicles, aiIntegration } from './data.ts';
+import { vehicles } from './data.ts';
+import { aiIntegration } from './service.ts';
 import Trademark from './Trademark.tsx';
 import Category from './Category.tsx';
 import LicenseInfo from './LicenseInfo.tsx';
@@ -47,7 +47,6 @@ export default function App() {
           pageSize={10}
         />
         <Grouping contextMenuEnabled={false} />
-        <GroupPanel visible={false} />
         <Column
           caption="Trademark"
           width={200}

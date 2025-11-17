@@ -2,7 +2,8 @@ import React from 'react';
 import TreeList, {
   Column, Scrolling, Paging, Ai,
 } from 'devextreme-react/tree-list';
-import { employees, aiIntegration } from './data.js';
+import { employees } from './data.js';
+import { aiIntegration } from './service.js';
 import Employee from './Employee.js';
 import Status from './Status.js';
 import Email from './Email.js';
