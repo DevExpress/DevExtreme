@@ -472,7 +472,9 @@ describe('Appointment Popup Form', () => {
       const recurrenceGroup = $(POM.popup.recurrenceGroup);
 
       expect(mainGroup.hasClass(CLASSES.mainGroupHidden)).toBe(false);
+      expect(mainGroup.attr('tabindex')).toBeUndefined();
       expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(true);
+      expect(recurrenceGroup.attr('tabindex')).toBe('-1');
 
       POM.popup.selectRepeatValue('weekly');
       await new Promise(process.nextTick);
@@ -482,13 +484,17 @@ describe('Appointment Popup Form', () => {
       expect(typeof popupHeight).toBe('number');
 
       expect(mainGroup.hasClass(CLASSES.mainGroupHidden)).toBe(true);
+      expect(mainGroup.attr('tabindex')).toBe('-1');
       expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(false);
+      expect(recurrenceGroup.attr('tabindex')).toBeUndefined();
 
       POM.popup.getBackButton().click();
 
       expect(POM.popup.component.option('height')).toBe('auto');
       expect(mainGroup.hasClass(CLASSES.mainGroupHidden)).toBe(false);
+      expect(mainGroup.attr('tabindex')).toBeUndefined();
       expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(true);
+      expect(recurrenceGroup.attr('tabindex')).toBe('-1');
     });
 
     it('Check that after opening recurrence appointment current form is main form', async () => {
@@ -508,6 +514,7 @@ describe('Appointment Popup Form', () => {
       const recurrenceGroup = $(POM.popup.recurrenceGroup);
 
       expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(true);
+      expect(recurrenceGroup.attr('tabindex')).toBe('-1');
     });
 
     it('Should discard recurrence changes when clicking \'cancel\' button in recurrence form', async () => {
@@ -1242,7 +1249,7 @@ describe('Appointment Popup Form', () => {
         startDate: expectedStartDate,
         endDate: expectedEndDate,
         description: undefined,
-        recurrenceRule: undefined,
+        recurrenceRule: '',
         startDateTimeZone: undefined,
         endDateTimeZone: undefined,
       });
@@ -1927,7 +1934,9 @@ describe('Customize form items', () => {
     const mainGroup = $(POM.popup.mainGroup);
 
     expect(mainGroup.hasClass(CLASSES.mainGroupHidden)).toBe(true);
+    expect(mainGroup.attr('tabindex')).toBe('-1');
     expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(false);
+    expect(recurrenceGroup.attr('tabindex')).toBeUndefined();
 
     expect(onContentReady).toHaveBeenCalled();
     expect(onInitialized).toHaveBeenCalled();
