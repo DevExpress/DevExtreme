@@ -1,6 +1,22 @@
-const statuses = ['All', 'Not Started', 'In Progress', 'Need Assistance', 'Deferred', 'Completed'];
+export interface Task {
+  Task_ID: number;
 
-const tasks = [
+  Task_Subject: string;
+
+  Task_Start_Date: string;
+
+  Task_Due_Date: string;
+
+  Task_Status: string;
+
+  Task_Priority: number;
+
+  Employee_Full_Name: string;
+}
+
+export const statuses: string[] = ['All', 'Not Started', 'In Progress', 'Need Assistance', 'Deferred', 'Completed'];
+
+export const tasks: Task[] = [
   {
     Task_ID: 1,
     Task_Subject: 'Prepare 2013 Financial',
