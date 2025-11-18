@@ -2,7 +2,7 @@
   "name": "devextreme-angular-playground",
   "description": "DevExtreme Angular UI and Visualization Components",
   "private": true,
-  "version": "25.2.0",
+  "version": "25.2.2-beta",
   "author": "Developer Express Inc.",
   "license": "MIT",
   "dependencies": {
