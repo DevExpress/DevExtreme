@@ -1,3 +1,4 @@
+import { bigIntFromBytes } from './byte_utils';
 import type { PublicKey } from './key';
 
 interface Args {
@@ -7,9 +8,7 @@ interface Args {
 }
 export function compareSignatures(args: Args): boolean {
   try {
-    const zero = BigInt(0);
     const one = BigInt(1);
-    const eight = BigInt(8);
 
     const modExp = (base: bigint, exponent: bigint, modulus: bigint): bigint => {
       let result = one;
@@ -26,11 +25,6 @@ export function compareSignatures(args: Args): boolean {
 
       return result;
     };
-
-    const bigIntFromBytes = (bytes: Uint8Array): bigint => bytes.reduce(
-      (acc, cur) => (acc << eight) + BigInt(cur), // eslint-disable-line no-bitwise
-      zero,
-    );
 
     const actual = bigIntFromBytes(args.actual);
 
