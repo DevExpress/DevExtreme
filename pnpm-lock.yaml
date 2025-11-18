@@ -675,6 +675,9 @@ importers:
       testcafe:
         specifier: 3.7.2
         version: 3.7.2
+      testcafe-reporter-spec-time:
+        specifier: 4.0.0
+        version: 4.0.0
       ts-node:
         specifier: 10.9.2
         version: 10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.15))(@types/node@18.19.64)(typescript@5.4.5)
