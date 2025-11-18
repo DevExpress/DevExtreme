@@ -20,7 +20,8 @@
     "all:build": "ts-node tools/scripts/build-all.ts",
     "all:build-dev": "pnpm run all:build --dev",
     "all:pack-and-copy": "nx run-many -t pack-and-copy",
-    "webserver": "http-server --port 8080 -c-1"
+    "demos:prepare": "nx run devextreme-demos:prepare-js",
+    "demos:start": "http-server ./apps/demos --port 8080 -c-1"
   },
   "nx": {},
   "private": true,

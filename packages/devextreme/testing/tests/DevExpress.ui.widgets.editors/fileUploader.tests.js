@@ -1450,6 +1450,17 @@ QUnit.module('rendering', () => {
 
         assert.ok($uploadButton.length && !$uploadButton.is(':visible'), 'the upload button is hidden');
     });
+
+    QUnit.test('file name should have title attribute equal to file name', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader();
+        const instance = $fileUploader.dxFileUploader('instance');
+
+        instance.option('value', [fakeFile]);
+
+        const $fileName = $fileUploader.find(`.${FILEUPLOADER_FILE_NAME_CLASS}`);
+
+        assert.strictEqual($fileName.attr('title'), fakeFile.name, 'file name has correct title attribute');
+    });
 });
 
 QUnit.module('files rendering', moduleConfig, () => {
@@ -3669,6 +3680,51 @@ QUnit.module('uploading events', moduleConfig, () => {
         const $cancelButton = $fileUploader.find(`.${FILEUPLOADER_CANCEL_BUTTON_CLASS}`);
 
         $cancelButton.trigger('dxclick');
+    });
+
+    QUnit.test('onFileValidationError event should rise if file has not allowed extension', function(assert) {
+        assert.expect(2);
+
+        const $element = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            allowedFileExtensions: ['.pdf'],
+            onFileValidationError: ({ file }) => {
+                assert.ok(true, 'onFileValidationError is called');
+                assert.strictEqual(file, fakeFile, 'file is passed');
+            },
+        });
+
+        simulateFileChoose($element, fakeFile);
+    });
+
+    QUnit.test('onFileValidationError event should rise if file has size bigger than maxFileSize', function(assert) {
+        assert.expect(2);
+
+        const $element = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            maxFileSize: 1000,
+            onFileValidationError: ({ file }) => {
+                assert.ok(true, 'onFileValidationError is called');
+                assert.strictEqual(file, fakeFile2, 'file is passed');
+            },
+        });
+
+        simulateFileChoose($element, fakeFile2);
+    });
+
+    QUnit.test('onFileValidationError event should rise if file has size less than minFileSize', function(assert) {
+        assert.expect(2);
+
+        const $element = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            minFileSize: 5000,
+            onFileValidationError: ({ file }) => {
+                assert.ok(true, 'onFileValidationError is called');
+                assert.strictEqual(file, fakeFile2, 'file is passed');
+            },
+        });
+
+        simulateFileChoose($element, fakeFile2);
     });
 });
 

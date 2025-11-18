@@ -4,66 +4,89 @@
   (onContextMenuItemClick)="onItemClick($event)"
   height="450"
 >
-  <dxo-permissions
+  <dxo-file-manager-permissions
     [create]="true"
     [delete]="true"
     [rename]="true"
     [download]="true"
   >
-  </dxo-permissions>
-  <dxo-item-view [showParentFolder]="false">
-    <dxo-details>
-      <dxi-column dataField="thumbnail"></dxi-column>
-      <dxi-column dataField="name"></dxi-column>
-      <dxi-column
+  </dxo-file-manager-permissions>
+  <dxo-file-manager-item-view [showParentFolder]="false">
+    <dxo-file-manager-details>
+      <dxi-file-manager-column dataField="thumbnail"></dxi-file-manager-column>
+      <dxi-file-manager-column dataField="name"></dxi-file-manager-column>
+      <dxi-file-manager-column
         dataField="category"
         caption="Category"
         width="95"
-      ></dxi-column>
-      <dxi-column dataField="dateModified"></dxi-column>
-      <dxi-column dataField="size"></dxi-column>
-    </dxo-details>
-  </dxo-item-view>
-  <dxo-toolbar>
-    <dxi-item name="showNavPane" [visible]="true"></dxi-item>
-    <dxi-item name="separator"></dxi-item>
-    <dxi-item name="create"></dxi-item>
-    <dxi-item
+      ></dxi-file-manager-column>
+      <dxi-file-manager-column
+        dataField="dateModified"
+      ></dxi-file-manager-column>
+      <dxi-file-manager-column dataField="size"></dxi-file-manager-column>
+    </dxo-file-manager-details>
+  </dxo-file-manager-item-view>
+  <dxo-file-manager-toolbar>
+    <dxi-file-manager-item
+      name="showNavPane"
+      [visible]="true"
+    ></dxi-file-manager-item>
+    <dxi-file-manager-item name="separator"></dxi-file-manager-item>
+    <dxi-file-manager-item name="create"></dxi-file-manager-item>
+    <dxi-file-manager-item
       widget="dxMenu"
       location="before"
       [options]="newFileMenuOptions"
-    ></dxi-item>
-    <dxi-item name="refresh"></dxi-item>
-    <dxi-item name="separator" location="after"></dxi-item>
-    <dxi-item name="switchView"></dxi-item>
+    ></dxi-file-manager-item>
+    <dxi-file-manager-item name="refresh"></dxi-file-manager-item>
+    <dxi-file-manager-item
+      name="separator"
+      location="after"
+    ></dxi-file-manager-item>
+    <dxi-file-manager-item name="switchView"></dxi-file-manager-item>
 
-    <dxi-file-selection-item name="rename"></dxi-file-selection-item>
-    <dxi-file-selection-item name="separator"></dxi-file-selection-item>
-    <dxi-file-selection-item name="delete"></dxi-file-selection-item>
-    <dxi-file-selection-item name="separator"></dxi-file-selection-item>
-    <dxi-file-selection-item
+    <dxi-file-manager-file-selection-item
+      name="rename"
+    ></dxi-file-manager-file-selection-item>
+    <dxi-file-manager-file-selection-item
+      name="separator"
+    ></dxi-file-manager-file-selection-item>
+    <dxi-file-manager-file-selection-item
+      name="delete"
+    ></dxi-file-manager-file-selection-item>
+    <dxi-file-manager-file-selection-item
+      name="separator"
+    ></dxi-file-manager-file-selection-item>
+    <dxi-file-manager-file-selection-item
       widget="dxMenu"
       location="before"
       [options]="changeCategoryMenuOptions"
-    ></dxi-file-selection-item>
-    <dxi-file-selection-item name="refresh"></dxi-file-selection-item>
-    <dxi-file-selection-item name="clearSelection"></dxi-file-selection-item>
-  </dxo-toolbar>
-  <dxo-context-menu>
-    <dxi-item name="create"></dxi-item>
-    <dxi-item text="Create new file" icon="plus">
-      <dxi-item text="Text Document"></dxi-item>
-      <dxi-item text="RTF Document"></dxi-item>
-      <dxi-item text="Spreadsheet"></dxi-item>
-    </dxi-item>
-    <dxi-item name="rename" [beginGroup]="true"></dxi-item>
-    <dxi-item name="delete"></dxi-item>
-    <dxi-item text="Category" icon="tags" [beginGroup]="true">
-      <dxi-item text="Work"></dxi-item>
-      <dxi-item text="Important"></dxi-item>
-      <dxi-item text="Home"></dxi-item>
-      <dxi-item text="None"></dxi-item>
-    </dxi-item>
-    <dxi-item name="refresh"></dxi-item>
-  </dxo-context-menu>
+    ></dxi-file-manager-file-selection-item>
+    <dxi-file-manager-file-selection-item
+      name="refresh"
+    ></dxi-file-manager-file-selection-item>
+    <dxi-file-manager-file-selection-item
+      name="clearSelection"
+    ></dxi-file-manager-file-selection-item>
+  </dxo-file-manager-toolbar>
+  <dxo-file-manager-context-menu>
+    <dxi-file-manager-item name="create"></dxi-file-manager-item>
+    <dxi-file-manager-item text="Create new file" icon="plus">
+      <dxi-file-manager-item text="Text Document"></dxi-file-manager-item>
+      <dxi-file-manager-item text="RTF Document"></dxi-file-manager-item>
+      <dxi-file-manager-item text="Spreadsheet"></dxi-file-manager-item>
+    </dxi-file-manager-item>
+    <dxi-file-manager-item
+      name="rename"
+      [beginGroup]="true"
+    ></dxi-file-manager-item>
+    <dxi-file-manager-item name="delete"></dxi-file-manager-item>
+    <dxi-file-manager-item text="Category" icon="tags" [beginGroup]="true">
+      <dxi-file-manager-item text="Work"></dxi-file-manager-item>
+      <dxi-file-manager-item text="Important"></dxi-file-manager-item>
+      <dxi-file-manager-item text="Home"></dxi-file-manager-item>
+      <dxi-file-manager-item text="None"></dxi-file-manager-item>
+    </dxi-file-manager-item>
+    <dxi-file-manager-item name="refresh"></dxi-file-manager-item>
+  </dxo-file-manager-context-menu>
 </dx-file-manager>

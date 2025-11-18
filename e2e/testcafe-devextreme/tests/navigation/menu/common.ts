@@ -9,7 +9,6 @@ import {
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Menu_common`
   .page(url(__dirname, '../../container.html'));
@@ -90,7 +89,7 @@ test('Menu items render', async (t) => {
 });
 
 [true, false].forEach((adaptivityEnabled) => {
-  safeSizeTest(`Menu item with link, adaptivityEnabled=${adaptivityEnabled}`, async (t) => {
+  test.meta({ browserSize: [250, 500] })(`Menu item with link, adaptivityEnabled=${adaptivityEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const menu = new Menu(adaptivityEnabled);
 
@@ -114,7 +113,7 @@ test('Menu items render', async (t) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [250, 500]).before(async () => {
+  }).before(async () => {
     await appendElementTo('#container', 'div', 'menu');
     await setAttribute('#container', 'style', 'width: 200px; height: 400px;');
 
@@ -150,7 +149,7 @@ test('Menu items render', async (t) => {
   });
 });
 
-safeSizeTest('Menu scrolling', async (t) => {
+test.meta({ browserSize: [500, 500] })('Menu scrolling', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const menu = new Menu();
 
@@ -166,7 +165,7 @@ safeSizeTest('Menu scrolling', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [500, 500]).before(async () => {
+}).before(async () => {
   const items: any[] = new Array(99).fill(null).map((_, idx) => ({ text: `item ${idx}` }));
 
   items[98].items = new Array(99).fill(null).map((_, idx) => ({ text: `item ${idx}` }));

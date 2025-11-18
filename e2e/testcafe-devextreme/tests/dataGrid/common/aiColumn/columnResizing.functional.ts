@@ -33,6 +33,7 @@ const DATA_GRID_SELECTOR = '#container';
       { id: 2, name: 'Name 2', value: 20 },
       { id: 3, name: 'Name 3', value: 30 },
     ],
+    keyExpr: 'id',
     allowColumnResizing: true,
     columnResizingMode,
     columnWidth: 100,
@@ -73,6 +74,7 @@ const DATA_GRID_SELECTOR = '#container';
       { id: 2, name: 'Name 2', value: 20 },
       { id: 3, name: 'Name 3', value: 30 },
     ],
+    keyExpr: 'id',
     allowColumnResizing: false,
     columnResizingMode,
     columnWidth: 100,
@@ -119,6 +121,7 @@ const DATA_GRID_SELECTOR = '#container';
       { id: 2, name: 'Name 2', value: 20 },
       { id: 3, name: 'Name 3', value: 30 },
     ],
+    keyExpr: 'id',
     allowColumnResizing: true,
     columnResizingMode,
     columnWidth: 100,
@@ -160,6 +163,7 @@ const DATA_GRID_SELECTOR = '#container';
       { id: 2, name: 'Name 2', value: 20 },
       { id: 3, name: 'Name 3', value: 30 },
     ],
+    keyExpr: 'id',
     allowColumnResizing: true,
     columnResizingMode,
     columnWidth: 100,
@@ -205,6 +209,7 @@ test('DropDownButton should be hidden during resizing', async (t) => {
     { id: 2, name: 'Name 2', value: 20 },
     { id: 3, name: 'Name 3', value: 30 },
   ],
+  keyExpr: 'id',
   allowColumnResizing: true,
   columnWidth: 150,
   columns: [
@@ -216,5 +221,54 @@ test('DropDownButton should be hidden during resizing', async (t) => {
     { dataField: 'id', caption: 'ID' },
     { dataField: 'name', caption: 'Name' },
     { dataField: 'value', caption: 'Value' },
+  ],
+}));
+
+test('AIPromptEditor should be hidden during resizing', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const aiDropDownButton = dataGrid
+    .getHeaders()
+    .getHeaderRow(0)
+    .getCommandCell(0)
+    .getAIDropDownButton();
+  const aiPromptEditor = dataGrid.getAIPromptEditor();
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  // act
+  await t.click(aiDropDownButton.element);
+
+  // assert
+  await t.expect(await aiDropDownButton.isOpened()).ok();
+
+  // act
+  await t.click((await aiDropDownButton.getList()).getItem(0).element);
+
+  // assert
+  await t.expect(aiPromptEditor.isVisible()).ok();
+
+  // act
+  await dataGrid.resizeHeader(1, 50);
+
+  // assert
+  await t.expect(aiPromptEditor.isVisible()).notOk();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { id: 1, name: 'Name 1', value: 10 },
+    { id: 2, name: 'Name 2', value: 20 },
+    { id: 3, name: 'Name 3', value: 30 },
+  ],
+  keyExpr: 'id',
+  allowColumnResizing: true,
+  columnWidth: 450,
+  columns: [
+    {
+      type: 'ai',
+      caption: 'AI Column',
+      name: 'myAIColumn',
+      alignment: 'right',
+    },
+    { dataField: 'id', caption: 'ID' },
   ],
 }));

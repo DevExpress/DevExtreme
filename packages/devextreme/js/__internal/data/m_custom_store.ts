@@ -225,6 +225,25 @@ function runRawLoadWithKey(pendingDeferred, store, key) {
   });
 }
 
+export function isGroupItem(item): boolean {
+  if (item === undefined || item === null || typeof item !== 'object') {
+    return false;
+  }
+  return 'key' in item && 'items' in item;
+}
+
+export function isLoadResultObject(res): boolean {
+  return !Array.isArray(res) && 'data' in res;
+}
+
+export function isGroupItemsArray(res): boolean {
+  return Array.isArray(res) && !!res.length && isGroupItem(res[0]);
+}
+
+export function isItemsArray(res): boolean {
+  return Array.isArray(res) && !isGroupItem(res[0]);
+}
+
 // @ts-expect-error
 const CustomStore = Store.inherit({
   ctor(options) {

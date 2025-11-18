@@ -1,6 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { defaultConfig } from '../helpers/data';
@@ -11,7 +10,7 @@ const DATA_GRID_SELECTOR = '#container';
 fixture.disablePageReloads`FixedColumns - MasterDetail`
   .page(url(__dirname, '../../../container.html'));
 
-safeSizeTest('Sticky columns with master-detail', async (t) => {
+test.meta({ browserSize: [900, 800] })('Sticky columns with master-detail', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -31,7 +30,7 @@ safeSizeTest('Sticky columns with master-detail', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [900, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
   masterDetail: {
     enabled: true,
@@ -42,7 +41,7 @@ safeSizeTest('Sticky columns with master-detail', async (t) => {
   },
 }));
 
-safeSizeTest('Master detail resizing', async (t) => {
+test.meta({ browserSize: [900, 800] })('Master detail resizing', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -60,7 +59,7 @@ safeSizeTest('Master detail resizing', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [900, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
   masterDetail: {
     enabled: true,

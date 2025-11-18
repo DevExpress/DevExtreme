@@ -1,5 +1,4 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import LoadIndicator from 'devextreme-testcafe-models/loadindicator';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
@@ -16,14 +15,6 @@ fixture.disablePageReloads`LoadIndicator`
 ['circle', 'sparkle'].forEach((animationType) => {
   test(`LoadIndicator: start stage of the ${animationType} animation`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const loadIndicator = new LoadIndicator('#container');
-
-    await testScreenshot(t, takeScreenshot, `LoadIndicator with ${animationType} animation.png`, {
-      element: '#container',
-      themeChanged: async () => {
-        await loadIndicator.repaint();
-      },
-    });
 
     await testScreenshot(t, takeScreenshot, `LoadIndicator with ${animationType} animation.png`, {
       element: '#container',

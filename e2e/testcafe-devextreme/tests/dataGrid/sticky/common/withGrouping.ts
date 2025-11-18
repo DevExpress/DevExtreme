@@ -1,6 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { defaultConfig } from '../helpers/data';
@@ -13,7 +12,7 @@ fixture.disablePageReloads`FixedColumns - Grouping`
   .page(url(__dirname, '../../../container.html'));
 
 [false, true].forEach((rtlEnabled) => {
-  safeSizeTest(`Sticky columns with grouping & summary (rtl=${rtlEnabled})`, async (t) => {
+  test.meta({ browserSize: [900, 800] })(`Sticky columns with grouping & summary (rtl=${rtlEnabled})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -31,7 +30,7 @@ fixture.disablePageReloads`FixedColumns - Grouping`
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [900, 800]).before(async () => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     ...defaultConfig,
     rtlEnabled,
     customizeColumns(columns) {
@@ -83,7 +82,7 @@ fixture.disablePageReloads`FixedColumns - Grouping`
   }));
 });
 
-safeSizeTest('Sticky columns with grouping & summary (multiple groups)', async (t) => {
+test.meta({ browserSize: [900, 800] })('Sticky columns with grouping & summary (multiple groups)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -101,7 +100,7 @@ safeSizeTest('Sticky columns with grouping & summary (multiple groups)', async (
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [900, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
   customizeColumns(columns) {
     columns[2].groupIndex = 0;
@@ -153,7 +152,7 @@ safeSizeTest('Sticky columns with grouping & summary (multiple groups)', async (
   },
 }));
 
-safeSizeTest('Sticky columns with grouping - overflow of group cell', async (t) => {
+test.meta({ browserSize: [900, 800] })('Sticky columns with grouping - overflow of group cell', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -165,7 +164,7 @@ safeSizeTest('Sticky columns with grouping - overflow of group cell', async (t) 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [900, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
   customizeColumns(columns) {
     columns[2].groupIndex = 0;
@@ -182,17 +181,21 @@ safeSizeTest('Sticky columns with grouping - overflow of group cell', async (t) 
 // visual: generic.light
 // visual: material.blue.light
 // visual: fluent.blue.light
-safeSizeTest('The header row should be highlighted correctly when dragging column when there are fixed columns and allowColumnReordering=false (generic.light theme)', async (t) => {
+test.meta({ browserSize: [900, 800] })('The header row should be highlighted correctly when dragging column when there are fixed columns and allowColumnReordering=false (generic.light theme)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
 
+  await t.expect(dataGrid.isReady()).ok();
+  await t.wait(300);
+
   await t.drag(dataGrid.getGroupPanel().getHeader(0).element, 200, 35);
+  await t.wait(200);
 
   await testScreenshot(t, takeScreenshot, 'header_row_highlight_with_fixed_columns.png', { element: dataGrid.element });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [900, 800]).before(async () => {
+}).before(async () => {
   await MouseUpEvents.disable(MouseAction.dragToOffset);
 
   return createWidget('dxDataGrid', {
@@ -209,17 +212,21 @@ safeSizeTest('The header row should be highlighted correctly when dragging colum
   await MouseUpEvents.enable(MouseAction.dragToOffset);
 });
 
-safeSizeTest('The group separator should be visible when dragging a fixed column into the group panel', async (t) => {
+test.meta({ browserSize: [900, 800] })('The group separator should be visible when dragging a fixed column into the group panel', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
 
+  await t.expect(dataGrid.isReady()).ok();
+  await t.wait(300);
+
   await t.drag(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1).element, 100, -50);
+  await t.wait(200);
 
   await testScreenshot(t, takeScreenshot, 'dragging_fixed_column_to_group_panel.png', { element: dataGrid.element });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [900, 800]).before(async () => {
+}).before(async () => {
   await MouseUpEvents.disable(MouseAction.dragToOffset);
 
   return createWidget('dxDataGrid', {
@@ -282,7 +289,7 @@ test('DataGrid - Group row content is scrolled if repaintChangesOnly is enabled 
 
 [false, true].forEach((rtlEnabled) => {
   // T1284612
-  safeSizeTest(`DataGrid - Group summaries are shown over sticky columns on a horizontal scroll (rtl=${rtlEnabled})`, async (t) => {
+  test.meta({ browserSize: [900, 800] })(`DataGrid - Group summaries are shown over sticky columns on a horizontal scroll (rtl=${rtlEnabled})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -290,6 +297,7 @@ test('DataGrid - Group row content is scrolled if repaintChangesOnly is enabled 
     await t.expect(dataGrid.isReady()).ok();
 
     await dataGrid.scrollTo(t, { x: rtlEnabled ? 100 : 250 });
+    await t.wait(300);
     await testScreenshot(t, takeScreenshot, `grouping-scroll-total_summary_intersection-rtl=${rtlEnabled}.png`, { element: dataGrid.element });
 
     await dataGrid.apiOption('summary.totalItems', [{
@@ -297,15 +305,18 @@ test('DataGrid - Group row content is scrolled if repaintChangesOnly is enabled 
       summaryType: 'max',
       valueFormat: 'currency',
     }]);
+    await t.wait(300);
     await dataGrid.scrollTo(t, { x: 0 });
+    await t.wait(200);
     await dataGrid.scrollTo(t, { x: rtlEnabled ? 100 : 250 });
+    await t.wait(300);
 
     await testScreenshot(t, takeScreenshot, `grouping-scroll-total_summary-rtl=${rtlEnabled}.png`, { element: dataGrid.element });
 
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [900, 800]).meta({ unstable: true }).before(async () => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     ...defaultConfig,
     rtlEnabled,
     customizeColumns(columns) {

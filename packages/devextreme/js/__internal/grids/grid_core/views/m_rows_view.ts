@@ -29,10 +29,10 @@ import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
 import { CLASSES as REORDERING_CLASSES } from '../columns_resizing_reordering/const';
 import type { EditingController } from '../editing/m_editing';
-import type { EditorFactory } from '../editor_factory/m_editor_factory';
 import gridCoreUtils from '../m_utils';
 import { CLASSES } from '../sticky_columns/const';
 import { ColumnsView } from './m_columns_view';
+import { getCellText } from './utils';
 
 const ROWS_VIEW_CLASS = 'rowsview';
 const CONTENT_CLASS = 'content';
@@ -911,7 +911,7 @@ export class RowsView extends ColumnsView {
     parameters.data = data;
     parameters.rowType = row.rowType;
     parameters.values = row.values;
-    parameters.text = !column.command ? gridCoreUtils.formatValue(displayValue, column) : '';
+    parameters.text = getCellText(column, displayValue);
     parameters.rowIndex = row.rowIndex;
     parameters.summaryItems = summaryCells && summaryCells[options.columnIndex];
     parameters.resized = column.resizedCallbacks;

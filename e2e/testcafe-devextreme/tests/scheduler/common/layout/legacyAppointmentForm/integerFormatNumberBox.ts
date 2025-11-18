@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Layout:AppointmentForm:IntegerFormatNumberBox`
   .page(url(__dirname, '../../../../container.html'));
@@ -18,9 +19,9 @@ test('dxNumberBox should not allow to enter not integer chars(T1002864)', async 
   await t
     .typeText(appointmentPopup.repeatEveryElement, '.,2', { speed: 0.5 });
 
-  await t
-    .expect(await takeScreenshot('dx-number-boxes-not-integer-chars.png', appointmentPopup.content))
-    .ok();
+  await testScreenshot(t, takeScreenshot, 'dx-number-boxes-not-integer-chars.png', {
+    element: appointmentPopup.content,
+  });
 
   await t
     .expect(compareResults.isValid())

@@ -1,6 +1,8 @@
 import $ from 'jquery';
 import 'ui/tree_view';
 
+import 'fluent_blue_light.css!';
+
 QUnit.testStart(function() {
     const markup = '<div id="treeView"></div>';
 

@@ -586,6 +586,15 @@
                   "/Models/SampleData/DataGridEmployees.cs"
                 ],
                 "DemoType": "Web"
+              },
+              {
+                "Title": "AI Columns",
+                "Name": "AIColumns",
+                "Widget": "DataGrid",
+                "DemoType": "Web",
+                "Badge": "New",
+                "Equivalents": "Smart Column, AI generated column, AI field, AI Autofill column, Smart Field",
+                "Modules": "openai"
               }
             ]
           },
@@ -1332,6 +1341,15 @@
                   "/Models/SampleData/TreeListEmployees.cs"
                 ],
                 "DemoType": "Web"
+              },
+              {
+                "Title": "AI Columns",
+                "Name": "AIColumns",
+                "Widget": "TreeList",
+                "DemoType": "Web",
+                "Badge": "New",
+                "Equivalents": "Smart Column, AI generated column, AI field, AI Autofill column, Smart Field",
+                "Modules": "openai"
               }
             ]
           },
@@ -4099,6 +4117,28 @@
                 "Name": "MessageEditing",
                 "Widget": "Chat",
                 "DemoType": "Web",
+                "DocUrl": "",
+                "MvcDescription": "",
+                "NetCoreDescription": "",
+                "MvcAdditionalFiles": [
+                  "/Models/SampleData/ChatData.cs",
+                  "/Models/Chat/User.cs",
+                  "/Models/Chat/Message.cs",
+                  "/ViewModels/ChatViewModel.cs"
+                ]
+              }
+            ]
+          },
+          {
+            "Name": "File Attachments",
+            "Equivalents": "Files Sending, Messages with files, Files Attached, Message Attachments, Document Attachments",
+            "Demos": [
+              {
+                "Title": "File Attachments",
+                "Name": "FileAttachments",
+                "Widget": "Chat",
+                "DemoType": "Web",
+                "Badge": "New",
                 "DocUrl": "",
                 "MvcDescription": "",
                 "NetCoreDescription": "",

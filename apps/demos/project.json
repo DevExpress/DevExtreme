@@ -102,6 +102,25 @@
         "{projectRoot}/**/*"
       ],
       "cache": true
+    },
+    "prepare-js": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "prepare-js"
+      },
+      "dependsOn": [
+        { "projects": ["devextreme"], "target": "build" },
+        { "projects": ["devextreme-angular", "devextreme-react", "devextreme-vue"], "target": "pack" }
+      ],
+      "inputs": [
+        "default",
+        "{projectRoot}/gulpfile.js/**/*",
+        "{projectRoot}/rollup.devextreme-angular.umd.config.mjs"
+      ],
+      "outputs": [
+        "{projectRoot}/Demos/**/config.js"
+      ],
+      "cache": true
     }
   },
   "namedInputs": {

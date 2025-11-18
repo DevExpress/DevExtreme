@@ -1,8 +1,9 @@
-import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { getTimezoneTest, MACHINE_TIMEZONES } from '../../../../helpers/machineTimezones';
 import url from '../../../../helpers/getPageUrl';
 import createScheduler from './init/widget.setup';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Resize appointment that cross DTC time`
   .page(url(__dirname, '../../../container.html'));
@@ -10,16 +11,24 @@ fixture.disablePageReloads`Resize appointment that cross DTC time`
 const appointmentText = 'Book Flights to San Fran for Sales Trip';
 
 getTimezoneTest([MACHINE_TIMEZONES.EuropeBerlin])('Resize appointment that cross DTC time', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointment(appointmentText);
 
   await t
     .drag(appointment.resizableHandle.right, 100, 0)
-    .drag(appointment.resizableHandle.right, -100, 0)
-    .expect(
-      await compareScreenshot(t, 'T1255474-resize-all-day-appointment.png', scheduler.element),
-    )
-    .ok();
+    .drag(appointment.resizableHandle.right, -100, 0);
+
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'T1255474-resize-all-day-appointment.png',
+    { element: scheduler.element },
+  );
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
 }).before(async () => createScheduler({
   timeZone: 'America/Los_Angeles',
   views: ['week'],

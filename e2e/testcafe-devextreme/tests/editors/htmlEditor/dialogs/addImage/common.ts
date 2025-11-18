@@ -8,7 +8,7 @@ import { testScreenshot } from '../../../../../helpers/themeUtils';
 const TEST_IMAGE_PATH_1 = './images/test-image-1.png';
 
 fixture`HtmlEditor - common`
-  .page(url(__dirname, '../../../../container.html'));
+  .page(url(__dirname, '../../../../container-extended.html'));
 
 const ADD_IMAGE_POPUP_CONTENT_SELECTOR = '.dx-htmleditor-add-image-popup .dx-overlay-content';
 

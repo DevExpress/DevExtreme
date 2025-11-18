@@ -6,7 +6,6 @@ import Guid from 'devextreme/core/guid';
 import { isMaterial, isMaterialBased, testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import {
   appendElementTo, insertStylesheetRulesToPage, setStyleAttribute,
 } from '../../../helpers/domUtils';
@@ -87,7 +86,7 @@ if (!isMaterialBased()) {
   }));
 }
 
-safeSizeTest('Check popup height with no found data option', async (t) => {
+test.meta({ browserSize: [300, 400] })('Check popup height with no found data option', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
   await t.hover(`.${OVERLAY_CLASS}`);
@@ -97,9 +96,9 @@ safeSizeTest('Check popup height with no found data option', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [300, 400]).before(async () => createWidget('dxLookup', { dataSource: [], searchEnabled: true }));
+}).before(async () => createWidget('dxLookup', { dataSource: [], searchEnabled: true }));
 
-safeSizeTest('Check popup height in loading state', async (t) => {
+test.meta({ browserSize: [300, 400] })('Check popup height in loading state', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
@@ -110,7 +109,7 @@ safeSizeTest('Check popup height in loading state', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [300, 400]).before(async () => createWidget('dxLookup', {
+}).before(async () => createWidget('dxLookup', {
   dataSource: {
     load() {
       return new Promise((resolve) => {

@@ -1,12 +1,11 @@
 import TreeList from 'devextreme-testcafe-models/treeList';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Adaptive Row`
   .page(url(__dirname, '../container.html'));
 
-safeSizeTest('Should be shown and hidden when the window is resized', async (t) => {
+test.meta({ browserSize: [400, 400] })('Should be shown and hidden when the window is resized', async (t) => {
   const treeList = new TreeList('#container');
   await treeList.isReady();
 
@@ -20,7 +19,7 @@ safeSizeTest('Should be shown and hidden when the window is resized', async (t) 
 
   await t.expect(treeList.isAdaptiveColumnHidden()).ok();
   await t.expect(treeList.getAdaptiveRow(0).element.exists).notOk();
-}, [400, 400]).before(async () => createWidget('dxTreeList', {
+}).before(async () => createWidget('dxTreeList', {
   dataSource: [{
     ID: 1,
     Head_ID: -1,

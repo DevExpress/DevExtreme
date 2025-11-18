@@ -66,6 +66,7 @@ const FILEUPLOADER_FILE_ICON_CLASS = 'dx-fileuploader-file-icon';
 const FILEUPLOADER_BUTTON_CLASS = 'dx-fileuploader-button';
 const FILEUPLOADER_BUTTON_CONTAINER_CLASS = 'dx-fileuploader-button-container';
 export const FILEUPLOADER_CANCEL_BUTTON_CLASS = 'dx-fileuploader-cancel-button';
+export const FILEUPLOADER_CANCEL_BUTTON_POSITION_END_CLASS = 'dx-fileuploader-cancel-button-position-end';
 const FILEUPLOADER_UPLOAD_BUTTON_CLASS = 'dx-fileuploader-upload-button';
 
 const FILEUPLOADER_INVALID_CLASS = 'dx-fileuploader-invalid';
@@ -138,6 +139,8 @@ class FileUploader extends Editor<FileUploaderProperties> {
 
   _filesUploadedAction?: (event?: Record<string, unknown>) => void;
 
+  _fileValidationErrorAction?: (event?: Record<string, unknown>) => void;
+
   _uploadedAction?: (event?: Record<string, unknown>) => void;
 
   _beforeSendAction?: (event?: Record<string, unknown>) => void;
@@ -207,6 +210,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
         onUploadStarted: null,
         onUploaded: null,
         onFilesUploaded: null,
+        onFileValidationError: null,
         onProgress: null,
         onUploadError: null,
         onUploadAborted: null,
@@ -312,6 +316,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     this._createUploadStartedAction();
     this._createUploadedAction();
     this._createFilesUploadedAction();
+    this._createFileValidationErrorAction();
     this._createProgressAction();
     this._createUploadErrorAction();
     this._createUploadAbortedAction();
@@ -617,6 +622,10 @@ class FileUploader extends Editor<FileUploaderProperties> {
     this._filesUploadedAction = this._createActionByOption('onFilesUploaded', { excludeValidators: ['readOnly'] });
   }
 
+  _createFileValidationErrorAction(): void {
+    this._fileValidationErrorAction = this._createActionByOption('onFileValidationError', { excludeValidators: ['readOnly'] });
+  }
+
   _createProgressAction(): void {
     this._progressAction = this._createActionByOption('onProgress', { excludeValidators: ['readOnly'] });
   }
@@ -743,6 +752,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     $('<div>')
       .addClass(FILEUPLOADER_FILE_NAME_CLASS)
       .text(value.name)
+      .attr('title', value.name)
       .appendTo($fileInfo);
 
     if (isDefined(value.size)) {
@@ -767,6 +777,8 @@ class FileUploader extends Editor<FileUploaderProperties> {
       if (!file.isValidMinSize) {
         file.$statusMessage.append(this._createValidationElement('invalidMinFileSizeMessage'));
       }
+
+      this._fileValidationErrorAction?.({ file: file.value });
       $fileContainer.addClass(FILEUPLOADER_INVALID_CLASS);
     }
   }
@@ -795,7 +807,8 @@ class FileUploader extends Editor<FileUploaderProperties> {
     const fileSizeWidth = getWidth($fileSize);
     $fileSize?.text(prevFileSize ?? '');
 
-    this._$filesContainer?.find(`.${FILEUPLOADER_FILE_NAME_CLASS}`).css('maxWidth', filesContainerWidth - buttonsWidth - fileSizeWidth - iconWidth);
+    const maxWidth = filesContainerWidth - buttonsWidth - fileSizeWidth - iconWidth;
+    this._$filesContainer?.find(`.${FILEUPLOADER_FILE_NAME_CLASS}`).css('maxWidth', maxWidth);
   }
 
   _renderFileButtons(file: FileUploaderItem, $container: dxElementWrapper): void {
@@ -834,7 +847,8 @@ class FileUploader extends Editor<FileUploaderProperties> {
   }
 
   _getCancelButton(file: FileUploaderItem): dxElementWrapper | null {
-    const { uploadMode } = this.option();
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { uploadMode, _cancelButtonPosition } = this.option();
     if (uploadMode === 'useForm') {
       return null;
     }
@@ -867,6 +881,10 @@ class FileUploader extends Editor<FileUploaderProperties> {
         },
       },
     );
+
+    if (_cancelButtonPosition === 'end') {
+      file.cancelButton.$element().addClass(FILEUPLOADER_CANCEL_BUTTON_POSITION_END_CLASS);
+    }
 
     return $('<div>')
       .addClass(FILEUPLOADER_BUTTON_CONTAINER_CLASS)
@@ -1711,6 +1729,9 @@ class FileUploader extends Editor<FileUploaderProperties> {
         break;
       case 'onFilesUploaded':
         this._createFilesUploadedAction();
+        break;
+      case 'onFileValidationError':
+        this._createFileValidationErrorAction();
         break;
       case 'onProgress':
         this._createProgressAction();

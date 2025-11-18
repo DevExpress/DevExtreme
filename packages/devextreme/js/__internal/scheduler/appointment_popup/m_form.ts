@@ -1,6 +1,7 @@
 import type { TextEditorButton } from '@js/common';
 import messageLocalization from '@js/common/core/localization/message';
 import { DataSource } from '@js/common/data';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
@@ -10,12 +11,13 @@ import type {
   GroupItem, Item as FormItem, Properties as FormProperties, SimpleItem,
 } from '@js/ui/form';
 import dxForm from '@js/ui/form';
-import type { Properties as SchedulerProperties } from '@js/ui/scheduler';
+import type { AppointmentFormIconsShowMode, Properties as SchedulerProperties } from '@js/ui/scheduler';
 import type { Properties as SelectBoxProperties } from '@js/ui/select_box';
 import type { Properties as SwitchProperties } from '@js/ui/switch';
 import type { Properties as TextAreaProperties } from '@js/ui/text_area';
 import { current, isFluent } from '@js/ui/themes';
 import { dateSerialization } from '@ts/core/utils/m_date_serialization';
+import type Popup from '@ts/ui/popup/m_popup';
 
 import timeZoneUtils from '../m_utils_time_zone';
 import type { SafeAppointment } from '../types';
@@ -23,6 +25,7 @@ import type { ResourceLoader } from '../utils/loader/resource_loader';
 import { DEFAULT_ICONS_SHOW_MODE } from '../utils/options/constants';
 import { getAppointmentGroupIndex, getRawAppointmentGroupValues, getSafeGroupValues } from '../utils/resource_manager/appointment_groups_utils';
 import type { ResourceManager } from '../utils/resource_manager/resource_manager';
+import { customizeFormItems } from './m_customize_form_items';
 import { RecurrenceForm } from './m_recurrence_form';
 import { createFormIconTemplate, getStartDateCommonConfig, RecurrenceRule } from './utils';
 
@@ -59,17 +62,9 @@ const CLASSES = {
   descriptionEditor: 'dx-scheduler-form-description-editor',
 
   recurrenceSettingsButton: 'dx-scheduler-form-recurrence-settings-button',
-  mainHidden: 'dx-scheduler-form-main-hidden',
+  mainHidden: 'dx-scheduler-form-main-group-hidden',
   recurrenceGroup: 'dx-scheduler-form-recurrence-group',
-  recurrenceHidden: 'dx-scheduler-form-recurrence-hidden',
-};
-
-const EDITOR_NAMES = {
-  startDate: 'startDateEditor',
-  startTime: 'startTimeEditor',
-  endDate: 'endDateEditor',
-  endTime: 'endTimeEditor',
-  repeat: 'repeatEditor',
+  recurrenceHidden: 'dx-scheduler-form-recurrence-group-hidden',
 };
 
 const repeatSelectBoxItems = [
@@ -108,6 +103,31 @@ const createTimeZoneDataSource = (): DataSource => new DataSource({
 });
 
 const MAIN_GROUP_NAME = 'mainGroup';
+const DATE_GROUP_NAME = 'dateGroup';
+const START_DATE_GROUP_NAME = 'startDateGroup';
+const END_DATE_GROUP_NAME = 'endDateGroup';
+const RESOURCES_GROUP_NAME = 'resourcesGroup';
+const SUBJECT_GROUP_NAME = 'subjectGroup';
+const REPEAT_GROUP_NAME = 'repeatGroup';
+const DESCRIPTION_GROUP_NAME = 'descriptionGroup';
+
+const START_DATE_TIME_GROUP_NAME = 'startDateTimeGroup';
+const START_DATE_EDITOR_NAME = 'startDateEditor';
+const START_TIME_EDITOR_NAME = 'startTimeEditor';
+const END_DATE_TIME_GROUP_NAME = 'endDateTimeGroup';
+const END_DATE_EDITOR_NAME = 'endDateEditor';
+const END_TIME_EDITOR_NAME = 'endTimeEditor';
+const REPEAT_EDITOR_NAME = 'repeatEditor';
+const ALL_DAY_EDITOR_NAME = 'allDayEditor';
+const SUBJECT_EDITOR_NAME = 'subjectEditor';
+const DESCRIPTION_EDITOR_NAME = 'descriptionEditor';
+const START_DATE_TIMEZONE_EDITOR_NAME = 'startDateTimeZoneEditor';
+const END_DATE_TIMEZONE_EDITOR_NAME = 'endDateTimeZoneEditor';
+
+const SUBJECT_ICON_NAME = 'subjectIcon';
+const DATE_ICON_NAME = 'dateIcon';
+const REPEAT_ICON_NAME = 'repeatIcon';
+const DESCRIPTION_ICON_NAME = 'descriptionIcon';
 
 export class AppointmentForm {
   private readonly scheduler: any;
@@ -120,8 +140,16 @@ export class AppointmentForm {
 
   private _popup!: any;
 
+  private _$mainGroup?: dxElementWrapper;
+
+  private _$recurrenceGroup?: dxElementWrapper;
+
   get dxForm(): dxForm {
     return this._dxForm as dxForm;
+  }
+
+  private get dxPopup(): Popup {
+    return this._popup.dxPopup as Popup;
   }
 
   get readOnly(): boolean {
@@ -192,10 +220,13 @@ export class AppointmentForm {
     this.setStylingModeToEditors(mainGroup, showMainGroupIcons);
     this.setStylingModeToEditors(recurrenceGroup, showRecurrenceGroupIcons);
 
-    this.createForm(items);
+    const editingConfig = this.scheduler.getEditingConfig();
+    const customizedItems = customizeFormItems(items, editingConfig?.form?.items);
+
+    this.createForm(customizedItems);
   }
 
-  private getIconsShowMode(): 'main' | 'recurrence' | 'both' | 'none' {
+  private getIconsShowMode(): AppointmentFormIconsShowMode {
     const editingConfig = this.scheduler.getEditingConfig() as SchedulerProperties['editing'];
 
     if (isBoolean(editingConfig)) {
@@ -207,8 +238,12 @@ export class AppointmentForm {
 
   private createForm(items: FormProperties['items']): dxForm {
     const element = $('<div>');
+    const editingConfig = this.scheduler.getEditingConfig();
+    const {
+      items: formItems, onContentReady, onInitialized, ...customFormOptions
+    } = editingConfig?.form ?? {};
 
-    return this.scheduler.createComponent(element, dxForm, {
+    const defaultOptions: FormProperties = {
       items,
       formData: {},
       showColonAfterLabel: false,
@@ -256,8 +291,20 @@ export class AppointmentForm {
       onInitialized: (e): void => {
         this._dxForm = e.component;
         this._recurrenceForm.dxForm = this.dxForm;
+
+        onInitialized?.call(this, e);
       },
-    } as FormProperties) as dxForm;
+      onContentReady: (e): void => {
+        const $formElement = e.component.$element();
+        this._$mainGroup = $formElement.find(`.${CLASSES.mainGroup}`);
+        this._$recurrenceGroup = $formElement.find(`.${CLASSES.recurrenceGroup}`);
+
+        onContentReady?.call(this, e);
+      },
+    } as FormProperties;
+
+    const formOptions = extend(true, defaultOptions, customFormOptions);
+    return this.scheduler.createComponent(element, dxForm, formOptions) as dxForm;
   }
 
   private createMainFormGroup(): GroupItem {
@@ -280,6 +327,7 @@ export class AppointmentForm {
     const { textExpr } = this.scheduler.getDataAccessors().expr;
 
     return {
+      name: SUBJECT_GROUP_NAME,
       itemType: 'group',
       cssClass: `${CLASSES.subjectGroup} ${CLASSES.groupWithIcon}`,
       colCount: 2,
@@ -288,11 +336,13 @@ export class AppointmentForm {
       },
       items: [
         {
+          name: SUBJECT_ICON_NAME,
           colSpan: 1,
           cssClass: CLASSES.formIcon,
           template: createFormIconTemplate('isnotblank'),
         },
         {
+          name: SUBJECT_EDITOR_NAME,
           colSpan: 1,
           itemType: 'simple',
           cssClass: CLASSES.textEditor,
@@ -308,6 +358,7 @@ export class AppointmentForm {
 
   private createDateRangeGroup(): GroupItem {
     return {
+      name: DATE_GROUP_NAME,
       itemType: 'group',
       cssClass: `${CLASSES.dateRangeGroup} ${CLASSES.groupWithIcon}`,
       colCount: 2,
@@ -316,6 +367,7 @@ export class AppointmentForm {
       },
       items: [
         {
+          name: DATE_ICON_NAME,
           colSpan: 1,
           cssClass: CLASSES.formIcon,
           template: createFormIconTemplate('clock'),
@@ -337,6 +389,7 @@ export class AppointmentForm {
     const { allDayExpr, startDateExpr, endDateExpr } = this.scheduler.getDataAccessors().expr;
 
     return {
+      name: ALL_DAY_EDITOR_NAME,
       itemType: 'simple',
       dataField: allDayExpr,
       cssClass: CLASSES.allDaySwitch,
@@ -380,20 +433,22 @@ export class AppointmentForm {
     return this.createDateGroup(
       startDateExpr,
       {
+        name: START_DATE_GROUP_NAME,
         cssClass: CLASSES.startDateGroup,
       },
       {
-        name: EDITOR_NAMES.startDate,
+        name: START_DATE_EDITOR_NAME,
         label: {
           text: messageLocalization.format('dxScheduler-editorLabelStartDate'),
         },
         cssClass: CLASSES.startDateEditor,
       },
       {
-        name: EDITOR_NAMES.startTime,
+        name: START_TIME_EDITOR_NAME,
         cssClass: CLASSES.startTimeEditor,
       },
       {
+        name: START_DATE_TIMEZONE_EDITOR_NAME,
         dataField: startDateTimeZoneExpr,
         cssClass: CLASSES.startDateTimeZoneEditor,
         editorOptions: {
@@ -413,20 +468,22 @@ export class AppointmentForm {
     return this.createDateGroup(
       endDateExpr,
       {
+        name: END_DATE_GROUP_NAME,
         cssClass: CLASSES.endDateGroup,
       },
       {
-        name: EDITOR_NAMES.endDate,
+        name: END_DATE_EDITOR_NAME,
         label: {
           text: messageLocalization.format('dxScheduler-editorLabelEndDate'),
         },
         cssClass: CLASSES.endDateEditor,
       },
       {
-        name: EDITOR_NAMES.endTime,
+        name: END_TIME_EDITOR_NAME,
         cssClass: CLASSES.endTimeEditor,
       },
       {
+        name: END_DATE_TIMEZONE_EDITOR_NAME,
         dataField: endDateTimeZoneExpr,
         cssClass: CLASSES.endDateTimeZoneEditor,
       },
@@ -499,51 +556,56 @@ export class AppointmentForm {
 
     return {
       itemType: 'group',
-      colCount: 2,
-      colCountByScreen: {
-        xs: 2,
-      },
       items: [
-        extend(
-          true,
-          getStartDateCommonConfig(this.scheduler.getFirstDayOfWeek()),
-          {
-            editorOptions: {
-              onValueChanged: (e) => {
-                dateValueChanged(e, (date: Date): void => {
-                  date.setFullYear(e.value.getFullYear(), e.value.getMonth(), e.value.getDate());
-                });
-              },
-              onContentReady: (e): void => {
-                e.component.option('value', getEditorsDate());
-              },
-            } as DateBoxProperties,
+        {
+          name: isStartDateEditor ? START_DATE_TIME_GROUP_NAME : END_DATE_TIME_GROUP_NAME,
+          itemType: 'group',
+          colCount: 2,
+          colCountByScreen: {
+            xs: 2,
           },
-          dateItemOptions,
-        ),
-        extend(true, {
-          itemType: 'simple',
-          colSpan: 1,
-          editorType: 'dxDateBox',
-          validationRules: [{
-            type: 'required',
-          }],
-          editorOptions: {
-            type: 'time',
-            useMaskBehavior: true,
-            calendarOptions: {
-              firstDayOfWeek: this.scheduler.getFirstDayOfWeek(),
-            },
-            onValueChanged: (e) => {
-              dateValueChanged(e, (date: Date): void => {
-                date.setHours(e.value.getHours(), e.value.getMinutes());
-              });
-            },
-            onContentReady: (e): void => {
-              e.component.option('value', getEditorsDate());
-            },
-          } as DateBoxProperties,
-        }, timeItemOptions),
+          items: [
+            extend(
+              true,
+              getStartDateCommonConfig(this.scheduler.getFirstDayOfWeek()),
+              {
+                editorOptions: {
+                  onValueChanged: (e) => {
+                    dateValueChanged(e, (date: Date): void => {
+                      date.setFullYear(e.value.getFullYear(), e.value.getMonth(), e.value.getDate());
+                    });
+                  },
+                  onContentReady: (e): void => {
+                    e.component.option('value', getEditorsDate());
+                  },
+                } as DateBoxProperties,
+              },
+              dateItemOptions,
+            ),
+            extend(true, {
+              itemType: 'simple',
+              colSpan: 1,
+              editorType: 'dxDateBox',
+              validationRules: [{
+                type: 'required',
+              }],
+              editorOptions: {
+                type: 'time',
+                useMaskBehavior: true,
+                calendarOptions: {
+                  firstDayOfWeek: this.scheduler.getFirstDayOfWeek(),
+                },
+                onValueChanged: (e) => {
+                  dateValueChanged(e, (date: Date): void => {
+                    date.setHours(e.value.getHours(), e.value.getMinutes());
+                  });
+                },
+                onContentReady: (e): void => {
+                  e.component.option('value', getEditorsDate());
+                },
+              } as DateBoxProperties,
+            }, timeItemOptions)],
+        },
         extend(true, {
           itemType: 'simple',
           colSpan: 2,
@@ -564,6 +626,7 @@ export class AppointmentForm {
 
   private createRepeatGroup(): GroupItem {
     return {
+      name: REPEAT_GROUP_NAME,
       itemType: 'group',
       colCount: 2,
       colCountByScreen: {
@@ -572,12 +635,13 @@ export class AppointmentForm {
       cssClass: `${CLASSES.repeatGroup} ${CLASSES.groupWithIcon}`,
       items: [
         {
+          name: REPEAT_ICON_NAME,
           colSpan: 1,
           cssClass: CLASSES.formIcon,
           template: createFormIconTemplate('repeat'),
         },
         {
-          name: EDITOR_NAMES.repeat,
+          name: REPEAT_EDITOR_NAME,
           colSpan: 1,
           itemType: 'simple',
           cssClass: CLASSES.repeatEditor,
@@ -595,7 +659,7 @@ export class AppointmentForm {
             onValueChanged: (e): void => {
               if (e.value === repeatNeverValue) {
                 const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
-                this.dxForm.updateData(recurrenceRuleExpr, undefined);
+                this.dxForm.updateData(recurrenceRuleExpr, '');
               } else if (e.event) {
                 this.showRecurrenceGroup();
               }
@@ -608,6 +672,7 @@ export class AppointmentForm {
 
   private createDescriptionGroup(): GroupItem {
     return {
+      name: DESCRIPTION_GROUP_NAME,
       itemType: 'group',
       colCount: 2,
       colCountByScreen: {
@@ -616,11 +681,13 @@ export class AppointmentForm {
       cssClass: `${CLASSES.descriptionGroup} ${CLASSES.groupWithIcon}`,
       items: [
         {
+          name: DESCRIPTION_ICON_NAME,
           colSpan: 1,
           cssClass: CLASSES.formIcon,
           template: createFormIconTemplate('description'),
         },
         {
+          name: DESCRIPTION_EDITOR_NAME,
           colSpan: 1,
           itemType: 'simple',
           cssClass: CLASSES.descriptionEditor,
@@ -663,6 +730,7 @@ export class AppointmentForm {
 
     if (noCustomResourceIcons) {
       return {
+        name: RESOURCES_GROUP_NAME,
         itemType: 'group',
         visible: resourcesItems.length > 0,
         colCount: 2,
@@ -687,9 +755,11 @@ export class AppointmentForm {
 
     resourcesItems = resourcesItems.map((item, index) => {
       const icon = resourcesLoaders[index].icon ?? '';
+      const name = resourcesLoaders[index].resourceName ?? `resource_${index}`;
 
       return {
         itemType: 'group',
+        name: `${name}Group`,
         colCount: 2,
         colCountByScreen: {
           xs: 2,
@@ -698,15 +768,17 @@ export class AppointmentForm {
         items: [
           {
             colSpan: 1,
+            name: `${name}Icon`,
             cssClass: CLASSES.formIcon,
             template: createFormIconTemplate(icon),
           },
-          item,
+          { ...item, name },
         ],
       } as GroupItem;
     });
 
     return {
+      name: RESOURCES_GROUP_NAME,
       itemType: 'group',
       colCount: 1,
       colCountByScreen: {
@@ -751,14 +823,19 @@ export class AppointmentForm {
   }
 
   showRecurrenceGroup(): void {
-    const $formElement = $(this.dxForm.element());
-    const mainGroup = $formElement.find(`.${CLASSES.mainGroup}`);
-    const recurrenceGroup = $formElement.find(`.${CLASSES.recurrenceGroup}`);
+    const currentHeight = this.dxPopup.option('height') as string | number | undefined;
 
-    mainGroup.addClass(CLASSES.mainHidden);
-    recurrenceGroup.removeClass(CLASSES.recurrenceHidden);
+    if (currentHeight === 'auto' || currentHeight === undefined) {
+      const overlayHeight = this.dxPopup.$overlayContent().get(0).clientHeight;
+      this.dxPopup.option('height', overlayHeight);
+    }
 
-    const repeatEditorValue = this.dxForm.getEditor(EDITOR_NAMES.repeat)?.option('value');
+    this._$mainGroup?.addClass(CLASSES.mainHidden);
+    this._$mainGroup?.attr('tabindex', '-1');
+    this._$recurrenceGroup?.removeClass(CLASSES.recurrenceHidden);
+    this._$recurrenceGroup?.removeAttr('tabindex');
+
+    const repeatEditorValue = this.dxForm.getEditor(REPEAT_EDITOR_NAME)?.option('value');
 
     this._recurrenceForm.updateRecurrenceFormValues(
       repeatEditorValue,
@@ -770,12 +847,18 @@ export class AppointmentForm {
   }
 
   showMainGroup(saveRecurrenceValue = true): void {
-    const $formElement = $(this.dxForm.element());
-    const mainGroup = $formElement.find(`.${CLASSES.mainGroup}`);
-    const recurrenceGroup = $formElement.find(`.${CLASSES.recurrenceGroup}`);
+    const currentHeight = this.dxPopup.option('height') as string | number | undefined;
+    const editingConfig = this.scheduler.getEditingConfig();
+    const configuredHeight = editingConfig?.popup?.height ?? 'auto';
 
-    mainGroup.removeClass(CLASSES.mainHidden);
-    recurrenceGroup.addClass(CLASSES.recurrenceHidden);
+    if (typeof currentHeight === 'number') {
+      this.dxPopup.option('height', configuredHeight);
+    }
+
+    this._$mainGroup?.removeClass(CLASSES.mainHidden);
+    this._$mainGroup?.removeAttr('tabindex');
+    this._$recurrenceGroup?.addClass(CLASSES.recurrenceHidden);
+    this._$recurrenceGroup?.attr('tabindex', '-1');
 
     this._popup.updateToolbarForMainGroup();
 
@@ -785,9 +868,9 @@ export class AppointmentForm {
 
       this.dxForm.updateData(
         recurrenceRuleExpr,
-        recurrenceRule.toString() ?? undefined,
+        recurrenceRule.toString() ?? '',
       );
-      this.dxForm.getEditor(EDITOR_NAMES.startDate)?.option('value', recurrenceRule.startDate);
+      this.dxForm.getEditor(START_DATE_EDITOR_NAME)?.option('value', recurrenceRule.startDate);
     }
   }
 
@@ -811,10 +894,10 @@ export class AppointmentForm {
   }
 
   private updateDateEditorsValues(): void {
-    const startDateEditor = this.dxForm.getEditor(EDITOR_NAMES.startDate);
-    const startTimeEditor = this.dxForm.getEditor(EDITOR_NAMES.startTime);
-    const endDateEditor = this.dxForm.getEditor(EDITOR_NAMES.endDate);
-    const endTimeEditor = this.dxForm.getEditor(EDITOR_NAMES.endTime);
+    const startDateEditor = this.dxForm.getEditor(START_DATE_EDITOR_NAME);
+    const startTimeEditor = this.dxForm.getEditor(START_TIME_EDITOR_NAME);
+    const endDateEditor = this.dxForm.getEditor(END_DATE_EDITOR_NAME);
+    const endTimeEditor = this.dxForm.getEditor(END_TIME_EDITOR_NAME);
 
     startDateEditor?.option('value', this.startDate);
     startTimeEditor?.option('value', this.startDate);
@@ -823,7 +906,7 @@ export class AppointmentForm {
   }
 
   private updateRepeatEditor(): void {
-    const repeatEditor = this.dxForm.getEditor(EDITOR_NAMES.repeat);
+    const repeatEditor = this.dxForm.getEditor(REPEAT_EDITOR_NAME);
 
     if (!repeatEditor) {
       return;
@@ -845,7 +928,7 @@ export class AppointmentForm {
   private getRepeatEditorButtons(): TextEditorButton[] {
     const buttons: TextEditorButton[] = [];
 
-    const repeatEditor = this.dxForm.getEditor(EDITOR_NAMES.repeat);
+    const repeatEditor = this.dxForm.getEditor(REPEAT_EDITOR_NAME);
     const selectedValue = repeatEditor?.option('value');
 
     if (selectedValue && selectedValue !== 'never') {
@@ -853,13 +936,14 @@ export class AppointmentForm {
         location: 'after',
         name: 'settings',
         options: {
+          disabled: false,
           icon: 'optionsoutline',
           stylingMode: 'text',
           onClick: (): void => {
             this.showRecurrenceGroup();
           },
           elementAttr: {
-            class: CLASSES.recurrenceSettingsButton,
+            class: `${CLASSES.recurrenceSettingsButton} dx-shape-standard`,
           },
         },
       });
@@ -876,11 +960,19 @@ export class AppointmentForm {
     const { allDayExpr } = this.scheduler.getDataAccessors().expr;
     const visible = !this.formData[allDayExpr];
 
+    const startDateGroupPath = `${MAIN_GROUP_NAME}.${DATE_GROUP_NAME}.${START_DATE_GROUP_NAME}.${START_DATE_TIME_GROUP_NAME}`;
+    const endDateGroupPath = `${MAIN_GROUP_NAME}.${DATE_GROUP_NAME}.${END_DATE_GROUP_NAME}.${END_DATE_TIME_GROUP_NAME}`;
+
+    const startDateItemName = `${startDateGroupPath}.${START_DATE_EDITOR_NAME}`;
+    const startTimeItemName = `${startDateGroupPath}.${START_TIME_EDITOR_NAME}`;
+    const endDateItemName = `${endDateGroupPath}.${END_DATE_EDITOR_NAME}`;
+    const endTimeItemName = `${endDateGroupPath}.${END_TIME_EDITOR_NAME}`;
+
     this.dxForm.beginUpdate();
-    this.dxForm.itemOption(`${MAIN_GROUP_NAME}.${EDITOR_NAMES.startDate}`, 'colSpan', visible ? 1 : 2);
-    this.dxForm.itemOption(`${MAIN_GROUP_NAME}.${EDITOR_NAMES.startTime}`, 'visible', visible);
-    this.dxForm.itemOption(`${MAIN_GROUP_NAME}.${EDITOR_NAMES.endDate}`, 'colSpan', visible ? 1 : 2);
-    this.dxForm.itemOption(`${MAIN_GROUP_NAME}.${EDITOR_NAMES.endTime}`, 'visible', visible);
+    this.dxForm.itemOption(startDateItemName, 'colSpan', visible ? 1 : 2);
+    this.dxForm.itemOption(startTimeItemName, 'visible', visible);
+    this.dxForm.itemOption(endDateItemName, 'colSpan', visible ? 1 : 2);
+    this.dxForm.itemOption(endTimeItemName, 'visible', visible);
     this.dxForm.endUpdate();
   }
 }

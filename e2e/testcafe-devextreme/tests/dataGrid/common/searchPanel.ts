@@ -2,15 +2,14 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { Themes } from '../../../helpers/themes';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Search Panel`
   .page(url(__dirname, '../../container.html'));
 
 // T1046688
-safeSizeTest('searchPanel has correct view inside masterDetail', async (t) => {
+// visual: material.blue.light
+test.meta({ browserSize: [800, 800] })('searchPanel has correct view inside masterDetail', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const dataGrid = new DataGrid('#container');
@@ -22,11 +21,11 @@ safeSizeTest('searchPanel has correct view inside masterDetail', async (t) => {
   const masterGrid = masterRow.getDataGrid();
 
   // assert
-  await testScreenshot(t, takeScreenshot, 'T1046688.searchPanel.png', { element: masterGrid.element, theme: Themes.materialBlue });
+  await testScreenshot(t, takeScreenshot, 'T1046688.searchPanel.png', { element: masterGrid.element });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ column1: 'first' }],
   columns: ['column1'],
   masterDetail: {
@@ -48,7 +47,7 @@ safeSizeTest('searchPanel has correct view inside masterDetail', async (t) => {
 }));
 
 // T1272535
-safeSizeTest('Base sensitivity search should accept rows with accent letters in lookup columns', async (t) => {
+test.meta({ browserSize: [800, 800] })('Base sensitivity search should accept rows with accent letters in lookup columns', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t
@@ -58,7 +57,7 @@ safeSizeTest('Base sensitivity search should accept rows with accent letters in 
   await t.expect(dataGrid.dataRows.count).eql(2);
   await t.expect(dataGrid.dataRows.withText('another').exists).ok();
   await t.expect(dataGrid.dataRows.withText('ánother').exists).ok();
-}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: {
     store: [
       { id: 1, text: 'tešt', lookup: 1 },

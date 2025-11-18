@@ -5,7 +5,6 @@ import { appendElementTo, setAttribute } from '../../../helpers/domUtils';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Menu_common`
   .page(url(__dirname, '../../container.html'));
@@ -37,7 +36,7 @@ const items: Item[] = [
 
 ['horizontal', 'vertical'].forEach((orientation) => {
   const testName = `Menu delimiter, orientation=${orientation}`;
-  safeSizeTest(testName, async (t) => {
+  test.meta({ browserSize: [500, 500] })(testName, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const menu = new Menu();
 
@@ -58,7 +57,7 @@ const items: Item[] = [
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [500, 500]).before(() => createWidget(
+  }).before(async () => createWidget(
     'dxMenu',
     {
       items,
@@ -71,7 +70,7 @@ const items: Item[] = [
 ['horizontal', 'vertical'].forEach((orientation) => {
   ['bottom', 'right', 'bottom right'].forEach((collision) => {
     const testName = `Menu delimiter ${collision} collision, orientation=${orientation}`;
-    safeSizeTest(testName, async (t) => {
+    test.meta({ browserSize: [515, 515] })(testName, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
       const menu = new Menu();
 
@@ -82,7 +81,7 @@ const items: Item[] = [
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }, [515, 515]).before(async () => {
+    }).before(async () => {
       await appendElementTo('#container', 'div', 'menu');
       const additionalStyles = {
         bottom: 'justify-content: start;',
@@ -105,7 +104,7 @@ const items: Item[] = [
   });
 });
 
-safeSizeTest('Menu delimiter appearance when the Menu is used as a toolbar item', async (t) => {
+test.meta({ browserSize: [500, 500] })('Menu delimiter appearance when the Menu is used as a toolbar item', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const menu = new Menu();
 
@@ -116,7 +115,7 @@ safeSizeTest('Menu delimiter appearance when the Menu is used as a toolbar item'
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [500, 500]).before(async () => {
+}).before(async () => {
   const toolbarItems = [
     {
       location: 'before',

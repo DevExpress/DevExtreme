@@ -7,19 +7,20 @@ import { resourceApiMock } from '../../apiMocks/resourceApiMock';
 fixture`Scheduler API - request counting`
   .page(url(__dirname, '../../../container.html'));
 
-const requestLogger = RequestLogger(/\/api\/data/);
-
 test('Request should be requested only once for color appointments (week)', async (t) => {
   const scheduler = new Scheduler('#container');
+  const { requestLogger } = (t.ctx as any);
+
+  await t.expect(scheduler.workSpace.exists).ok();
+  await t.wait(300);
+
   const initialRequestCount = await requestLogger.count(() => true);
 
-  await t
-    .expect(scheduler.workSpace.exists)
-    .ok()
-    .expect(initialRequestCount)
-    .eql(1);
+  await t.expect(initialRequestCount).eql(1);
 }).before(async (t) => {
-  requestLogger.clear();
+  const requestLogger = RequestLogger(/\/api\/data/);
+  (t.ctx as any).requestLogger = requestLogger;
+
   await t.addRequestHooks(resourceApiMock);
   await t.addRequestHooks(requestLogger);
   await createWidget('dxScheduler', () => ({
@@ -56,15 +57,18 @@ test('Request should be requested only once for color appointments (week)', asyn
 
 test('Request should be requested only once for color appointments (agenda)', async (t) => {
   const scheduler = new Scheduler('#container');
+  const { requestLogger } = (t.ctx as any);
+
+  await t.expect(scheduler.workSpace.exists).ok();
+  await t.wait(300);
+
   const initialRequestCount = await requestLogger.count(() => true);
 
-  await t
-    .expect(scheduler.workSpace.exists)
-    .ok()
-    .expect(initialRequestCount)
-    .eql(1);
+  await t.expect(initialRequestCount).eql(1);
 }).before(async (t) => {
-  requestLogger.clear();
+  const requestLogger = RequestLogger(/\/api\/data/);
+  (t.ctx as any).requestLogger = requestLogger;
+
   await t.addRequestHooks(resourceApiMock);
   await t.addRequestHooks(requestLogger);
   await createWidget('dxScheduler', () => ({
@@ -101,16 +105,24 @@ test('Request should be requested only once for color appointments (agenda)', as
 
 test('Request should be requested only once for grouping', async (t) => {
   const scheduler = new Scheduler('#container');
-  const initialRequestCount = await requestLogger.count(() => true);
+  const { requestLogger } = (t.ctx as any);
 
   await t.expect(scheduler.workSpace.exists).ok();
+  await t.wait(300);
+
+  const initialRequestCount = await requestLogger.count(() => true);
+
   await scheduler.option('groups', ['ownerId', 'roomId']);
+  await t.wait(300);
+
   const afterUpdateRequestCount = await requestLogger.count(() => true);
 
   await t.expect(initialRequestCount).eql(1);
   await t.expect(afterUpdateRequestCount).eql(2);
 }).before(async (t) => {
-  requestLogger.clear();
+  const requestLogger = RequestLogger(/\/api\/data/);
+  (t.ctx as any).requestLogger = requestLogger;
+
   await t.addRequestHooks(resourceApiMock);
   await t.addRequestHooks(requestLogger);
   await createWidget('dxScheduler', () => ({
@@ -135,15 +147,18 @@ test('Request should be requested only once for grouping', async (t) => {
 
 test('should be no requests for no grouping and appointments without color', async (t) => {
   const scheduler = new Scheduler('#container');
+  const { requestLogger } = (t.ctx as any);
+
+  await t.expect(scheduler.workSpace.exists).ok();
+  await t.wait(300);
+
   const initialRequestCount = await requestLogger.count(() => true);
 
-  await t
-    .expect(scheduler.workSpace.exists)
-    .ok()
-    .expect(initialRequestCount)
-    .eql(0);
+  await t.expect(initialRequestCount).eql(0);
 }).before(async (t) => {
-  requestLogger.clear();
+  const requestLogger = RequestLogger(/\/api\/data/);
+  (t.ctx as any).requestLogger = requestLogger;
+
   await t.addRequestHooks(resourceApiMock);
   await t.addRequestHooks(requestLogger);
   await createWidget('dxScheduler', () => ({

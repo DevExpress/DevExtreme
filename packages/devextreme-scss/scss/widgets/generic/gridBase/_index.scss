@@ -1173,4 +1173,10 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
       outline-offset: -2px;
     }
   }
+
+  .dx-ai-prompt-editor__progressbar .dx-progressbar-animating-container {
+    height: $generic-grid-base-ai-prompt-editor-progressbar-height;
+    border: none;
+    border-radius: 0;
+  }
 }

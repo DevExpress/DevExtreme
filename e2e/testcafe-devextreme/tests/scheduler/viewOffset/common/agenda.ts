@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Offset: Agenda`
   .page(url(__dirname, '../../../container.html'));
@@ -17,7 +18,7 @@ const SCHEDULER_SELECTOR = '#container';
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
-    await takeScreenshot(`offset_agenda-not-affected_offset-${offset}.png`, scheduler.workSpace);
+    await testScreenshot(t, takeScreenshot, `offset_agenda-not-affected_offset-${offset}.png`, { element: scheduler.workSpace });
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());

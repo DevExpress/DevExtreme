@@ -162,7 +162,7 @@ function onStopClick() {
 function onResult({ event }: Record<string, any>) {
   const { results } = event;
   const resultText = Object.values(results)
-    .map((resultItem: any) => resultItem[0].transcript)
+    .map((resultItem: any) => resultItem[0].transcript.trim())
     .join(' ');
   textAreaValue.value = resultText;
 

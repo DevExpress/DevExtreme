@@ -43,7 +43,7 @@ $(() => {
       onResult: ({ event }) => {
         const { results } = event;
         const resultText = Object.values(results)
-          .map((resultItem) => resultItem[0].transcript)
+          .map((resultItem) => resultItem[0].transcript.trim())
           .join(' ');
 
         textArea.option('value', resultText);

@@ -1,6 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { defaultConfig } from '../helpers/data';
@@ -11,7 +10,7 @@ const DATA_GRID_SELECTOR = '#container';
 fixture.disablePageReloads`Sticky columns - Editing`
   .page(url(__dirname, '../../../container.html'));
 
-safeSizeTest('The row edit mode: Edit row when there are sticky columns', async (t) => {
+test.meta({ browserSize: [800, 800] })('The row edit mode: Edit row when there are sticky columns', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -29,7 +28,7 @@ safeSizeTest('The row edit mode: Edit row when there are sticky columns', async 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
   editing: {
     mode: 'row',
@@ -40,7 +39,7 @@ safeSizeTest('The row edit mode: Edit row when there are sticky columns', async 
   },
 }));
 
-safeSizeTest('The form edit mode: Edit row when there are sticky columns', async (t) => {
+test.meta({ browserSize: [800, 800] })('The form edit mode: Edit row when there are sticky columns', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -57,7 +56,7 @@ safeSizeTest('The form edit mode: Edit row when there are sticky columns', async
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
   editing: {
     mode: 'form',
@@ -68,7 +67,7 @@ safeSizeTest('The form edit mode: Edit row when there are sticky columns', async
   },
 }));
 
-safeSizeTest('The batch edit mode: Edit cell whene there are sticky columns', async (t) => {
+test.meta({ browserSize: [800, 800] })('The batch edit mode: Edit cell whene there are sticky columns', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -85,7 +84,7 @@ safeSizeTest('The batch edit mode: Edit cell whene there are sticky columns', as
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
   editing: {
     mode: 'batch',
@@ -100,7 +99,7 @@ safeSizeTest('The batch edit mode: Edit cell whene there are sticky columns', as
   },
 }));
 
-safeSizeTest('The batch edit mode: Edit fixed cell', async (t) => {
+test.meta({ browserSize: [800, 800] })('The batch edit mode: Edit fixed cell', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -117,7 +116,7 @@ safeSizeTest('The batch edit mode: Edit fixed cell', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
   editing: {
     mode: 'batch',
@@ -132,7 +131,7 @@ safeSizeTest('The batch edit mode: Edit fixed cell', async (t) => {
   },
 }));
 
-safeSizeTest('The batch edit mode: Edit fixed cell with sticky position', async (t) => {
+test.meta({ browserSize: [800, 800] })('The batch edit mode: Edit fixed cell with sticky position', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -149,7 +148,7 @@ safeSizeTest('The batch edit mode: Edit fixed cell with sticky position', async 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
   editing: {
     mode: 'batch',
@@ -166,7 +165,7 @@ safeSizeTest('The batch edit mode: Edit fixed cell with sticky position', async 
   },
 }));
 
-safeSizeTest('The cell edit mode: Edit fixed cell with validation rule', async (t) => {
+test.meta({ browserSize: [800, 800] })('The cell edit mode: Edit fixed cell with validation rule', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -184,7 +183,7 @@ safeSizeTest('The cell edit mode: Edit fixed cell with validation rule', async (
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
   editing: {
     mode: 'cell',
@@ -199,7 +198,7 @@ safeSizeTest('The cell edit mode: Edit fixed cell with validation rule', async (
   },
 }));
 
-safeSizeTest('The cell edit mode: Edit fixed cell with the sticky position and validation rule', async (t) => {
+test.meta({ browserSize: [800, 800] })('The cell edit mode: Edit fixed cell with the sticky position and validation rule', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -217,7 +216,7 @@ safeSizeTest('The cell edit mode: Edit fixed cell with the sticky position and v
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
   editing: {
     mode: 'cell',
@@ -234,7 +233,7 @@ safeSizeTest('The cell edit mode: Edit fixed cell with the sticky position and v
   },
 }));
 
-safeSizeTest('The cell edit mode: Edit cell with validation rule when there fixed columns', async (t) => {
+test.meta({ browserSize: [800, 800] })('The cell edit mode: Edit cell with validation rule when there fixed columns', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -252,7 +251,7 @@ safeSizeTest('The cell edit mode: Edit cell with validation rule when there fixe
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
   editing: {
     mode: 'cell',
@@ -267,7 +266,7 @@ safeSizeTest('The cell edit mode: Edit cell with validation rule when there fixe
   },
 }));
 
-safeSizeTest('The cell edit mode: Edit last unfixed cell with validation rule when there are fixed columns on the right', async (t) => {
+test.meta({ browserSize: [800, 800] })('The cell edit mode: Edit last unfixed cell with validation rule when there are fixed columns on the right', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -286,7 +285,7 @@ safeSizeTest('The cell edit mode: Edit last unfixed cell with validation rule wh
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
   editing: {
     mode: 'cell',
@@ -301,7 +300,7 @@ safeSizeTest('The cell edit mode: Edit last unfixed cell with validation rule wh
   },
 }));
 
-safeSizeTest('The cell edit mode: The validation message and a revert button should scroll vertically', async (t) => {
+test.meta({ browserSize: [800, 800] })('The cell edit mode: The validation message and a revert button should scroll vertically', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -319,7 +318,7 @@ safeSizeTest('The cell edit mode: The validation message and a revert button sho
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
   editing: {
     mode: 'cell',
@@ -334,7 +333,7 @@ safeSizeTest('The cell edit mode: The validation message and a revert button sho
   },
 }));
 
-safeSizeTest('The cell edit mode: The focus overlay element should scroll vertically', async (t) => {
+test.meta({ browserSize: [800, 800] })('The cell edit mode: The focus overlay element should scroll vertically', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -351,7 +350,7 @@ safeSizeTest('The cell edit mode: The focus overlay element should scroll vertic
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
   editing: {
     mode: 'cell',

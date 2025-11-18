@@ -4,7 +4,6 @@ import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTex
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { getNumberData, getData } from '../../helpers/generateDataSourceData';
-import { Themes } from '../../../../helpers/themes';
 import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`FilterRow`
@@ -53,11 +52,12 @@ test('Filter should reset if the filter row editor text is cleared (T1257261)', 
   },
 }));
 
+// visual: material.blue.light
 test('Filter row\'s height should be adjusted by content (T1072609)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'T1072609.png', { element: dataGrid.element, theme: Themes.materialBlue });
+  await testScreenshot(t, takeScreenshot, 'T1072609.png', { element: dataGrid.element });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -100,6 +100,9 @@ test('FilterRow range overlay screenshot', async (t) => {
   filterRow: {
     visible: true,
     applyFilter: 'auto',
+  },
+  scrolling: {
+    showScrollbar: 'never',
   },
 }));
 
@@ -155,7 +158,8 @@ test('Filter Row\'s Reset button does not work after a custom filter is set in F
 });
 
 // T1287288
-test('Focus overlay should be visible in filter row when focusedRowEnabled is enabled (Fluent SaaS)', async (t) => {
+// visual: fluent.blue.light
+test('Focus overlay should be visible in filter row when focusedRowEnabled is enabled', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
   const filterEditor = dataGrid.getFilterEditor(1, FilterTextBox);
@@ -166,7 +170,7 @@ test('Focus overlay should be visible in filter row when focusedRowEnabled is en
     // assert
     .expect(filterEditor.input.focused)
     .ok();
-  await testScreenshot(t, takeScreenshot, 'filter-row-focus-overlay.png', { element: dataGrid.element, theme: Themes.fluentBlue });
+  await testScreenshot(t, takeScreenshot, 'filter-row-focus-overlay.png', { element: dataGrid.element });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

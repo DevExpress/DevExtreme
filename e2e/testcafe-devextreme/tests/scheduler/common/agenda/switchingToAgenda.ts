@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Agenda:view switching`
   .page(url(__dirname, '../../../container.html'));
@@ -13,9 +14,7 @@ test('View switching should work for empty agenda', async (t) => {
   await scheduler.option('currentDate', new Date(2021, 4, 26));
   await scheduler.option('currentView', 'agenda');
 
-  await t.expect(
-    await takeScreenshot('switch-to-agenda-without-appointments.png'),
-  ).ok();
+  await testScreenshot(t, takeScreenshot, 'switch-to-agenda-without-appointments.png');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

@@ -1,6 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { defaultConfig } from '../helpers/data';
@@ -14,7 +13,7 @@ fixture.disablePageReloads`Sticky columns - Filter row`
 // visual: generic.light
 // visual: material.blue.light
 // visual: fluent.blue.light
-safeSizeTest('Filter row with sticky columns (generic.light theme)', async (t) => {
+test.meta({ browserSize: [800, 800] })('Filter row with sticky columns (generic.light theme)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -31,17 +30,16 @@ safeSizeTest('Filter row with sticky columns (generic.light theme)', async (t) =
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800])
-  .before(async () => {
-    await createWidget('dxDataGrid', {
-      ...defaultConfig,
-      filterRow: {
-        visible: true,
-      },
-    });
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    ...defaultConfig,
+    filterRow: {
+      visible: true,
+    },
   });
+});
 
-safeSizeTest('Filter row with sticky columns when there are band columns and showColumnHeaders = false', async (t) => {
+test.meta({ browserSize: [800, 800] })('Filter row with sticky columns when there are band columns and showColumnHeaders = false', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -58,17 +56,16 @@ safeSizeTest('Filter row with sticky columns when there are band columns and sho
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800])
-  .before(async () => createWidget('dxDataGrid', {
-    ...defaultConfig,
-    filterRow: {
-      visible: true,
-    },
-    showColumnHeaders: false,
-    customizeColumns(columns) {
-      columns.push({
-        caption: 'Band column',
-        columns: ['CustomerStoreCity', 'CustomerStoreState'],
-      });
-    },
-  }));
+}).before(async () => createWidget('dxDataGrid', {
+  ...defaultConfig,
+  filterRow: {
+    visible: true,
+  },
+  showColumnHeaders: false,
+  customizeColumns(columns) {
+    columns.push({
+      caption: 'Band column',
+      columns: ['CustomerStoreCity', 'CustomerStoreState'],
+    });
+  },
+}));

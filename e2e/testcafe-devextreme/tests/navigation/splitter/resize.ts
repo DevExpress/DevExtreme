@@ -1,12 +1,11 @@
 import Splitter from 'devextreme-testcafe-models/splitter';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Splitter_integration`
   .page(url(__dirname, '../../container.html'));
 
-safeSizeTest('non resizable pane should not change its size during resize', async (t) => {
+test.meta({ browserSize: [800, 800] })('non resizable pane should not change its size during resize', async (t) => {
   const splitter = new Splitter('#container');
 
   await t
@@ -18,7 +17,7 @@ safeSizeTest('non resizable pane should not change its size during resize', asyn
   await t
     .expect(splitter.getItem(2).element.clientWidth)
     .eql(145);
-}, [800, 800]).before(async () => createWidget('dxSplitter', {
+}).before(async () => createWidget('dxSplitter', {
   width: '100%',
   height: 300,
   dataSource: [{

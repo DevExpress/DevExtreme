@@ -12,10 +12,10 @@
   "module": "./esm/index.js",
   "types": "./cjs/index.d.ts",
   "scripts": {
-    "clean": "gulp clean",
-    "regenerate": "pnpm run clean && gulp generate",
+    "clean": "nx clean devextreme-react",
+    "regenerate": "pnpm --workspace-root nx regenerate devextreme-react",
     "lint": "eslint src/core",
-    "pack": "gulp npm.pack",
+    "pack": "pnpm --workspace-root nx pack devextreme-react",
     "test": "jest"
   },
   "keywords": [
@@ -69,12 +69,8 @@
     "@testing-library/user-event": "14.5.2",
     "@types/react": "~18.0.0",
     "@types/react-dom": "~18.0.0",
-    "del": "3.0.0",
     "devextreme-metadata": "workspace:*",
-    "gulp": "4.0.2",
-    "gulp-header": "2.0.9",
-    "gulp-shell": "0.8.0",
-    "gulp-typescript": "5.0.1",
+    "devextreme-nx-infra-plugin": "workspace:*",
     "jest-environment-jsdom": "29.7.0",
     "react": "18.0.0",
     "react-dom": "18.0.0",

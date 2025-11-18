@@ -2,58 +2,24 @@ import { RequestLogger, RequestMock } from 'testcafe';
 import PivotGrid from 'devextreme-testcafe-models/pivotGrid';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { isMaterial } from '../../../../helpers/themeUtils';
 
-const testFixture = () => (isMaterial() ? fixture.skip : fixture);
-
-testFixture()`pivotGrid_sort`
+fixture`pivotGrid_sort`
   .page(url(__dirname, '../../../container.html'));
 
-const requestLogger = RequestLogger(/\/api\/data/);
-const apiRequestMock = RequestMock()
-  .onRequestTo(/\/api\/data\?skip/)
-  .respond(
-    {
-      data: [
-        { id: 0, label: 'A', value: 10 },
-        { id: 1, label: 'B', value: 20 },
-        { id: 2, label: 'C', value: 30 },
-      ],
-    },
-    200,
-    { 'access-control-allow-origin': '*' },
-  )
-  .onRequestTo(/\/api\/data\?group/)
-  .respond(
-    {
-      data: [
-        {
-          key: 'A',
-          items: null,
-          summary: [10],
-        },
-        {
-          key: 'B',
-          items: null,
-          summary: [20],
-        },
-        {
-          key: 'C',
-          items: null,
-          summary: [30],
-        },
-      ],
-    },
-    200,
-    { 'access-control-allow-origin': '*' },
-  );
-
-test.meta({ unstable: true })('Should sort without DataSource reload if scrolling mode isn\'t virtual', async (t) => {
+test('Should sort without DataSource reload if scrolling mode isn\'t virtual', async (t) => {
+  const requestLogger = RequestLogger(/\/api\/data/);
   const pivotGrid = new PivotGrid('#container');
+
   await t.addRequestHooks(requestLogger);
+
+  await t.wait(500);
+
+  requestLogger.clear();
   const initialRequestCount = await requestLogger.count(() => true);
 
   await t.click(pivotGrid.getColumnHeaderArea().getField());
+
+  await t.wait(500);
 
   const afterSortRequestCount = await requestLogger.count(() => true);
   const requestCount = afterSortRequestCount - initialRequestCount;
@@ -62,7 +28,47 @@ test.meta({ unstable: true })('Should sort without DataSource reload if scrollin
 
   await t.removeRequestHooks(requestLogger);
 }).before(async (t) => {
+  const apiRequestMock = RequestMock()
+    .onRequestTo(/\/api\/data\?skip/)
+    .respond(
+      {
+        data: [
+          { id: 0, label: 'A', value: 10 },
+          { id: 1, label: 'B', value: 20 },
+          { id: 2, label: 'C', value: 30 },
+        ],
+      },
+      200,
+      { 'access-control-allow-origin': '*' },
+    )
+    .onRequestTo(/\/api\/data\?group/)
+    .respond(
+      {
+        data: [
+          {
+            key: 'A',
+            items: null,
+            summary: [10],
+          },
+          {
+            key: 'B',
+            items: null,
+            summary: [20],
+          },
+          {
+            key: 'C',
+            items: null,
+            summary: [30],
+          },
+        ],
+      },
+      200,
+      { 'access-control-allow-origin': '*' },
+    );
+
+  (t.ctx as any).apiRequestMock = apiRequestMock;
   await t.addRequestHooks(apiRequestMock);
+
   return createWidget('dxPivotGrid', () => ({
     allowSorting: true,
     fieldPanel: { visible: true },
@@ -86,12 +92,18 @@ test.meta({ unstable: true })('Should sort without DataSource reload if scrollin
     },
   }));
 }).after(async (t) => {
-  await t.removeRequestHooks(apiRequestMock);
+  await t.removeRequestHooks((t.ctx as any).apiRequestMock);
 });
 
-test.meta({ unstable: true })('Should sort with DataSource reload if scrolling mode is virtual', async (t) => {
+test('Should sort with DataSource reload if scrolling mode is virtual', async (t) => {
+  const requestLogger = RequestLogger(/\/api\/data/);
   const pivotGrid = new PivotGrid('#container');
+
   await t.addRequestHooks(requestLogger);
+
+  await t.wait(500);
+
+  requestLogger.clear();
   const initialRequestCount = await requestLogger.count(() => true);
 
   await t.click(pivotGrid.getColumnHeaderArea().getField());
@@ -103,7 +115,47 @@ test.meta({ unstable: true })('Should sort with DataSource reload if scrolling m
 
   await t.removeRequestHooks(requestLogger);
 }).before(async (t) => {
+  const apiRequestMock = RequestMock()
+    .onRequestTo(/\/api\/data\?skip/)
+    .respond(
+      {
+        data: [
+          { id: 0, label: 'A', value: 10 },
+          { id: 1, label: 'B', value: 20 },
+          { id: 2, label: 'C', value: 30 },
+        ],
+      },
+      200,
+      { 'access-control-allow-origin': '*' },
+    )
+    .onRequestTo(/\/api\/data\?group/)
+    .respond(
+      {
+        data: [
+          {
+            key: 'A',
+            items: null,
+            summary: [10],
+          },
+          {
+            key: 'B',
+            items: null,
+            summary: [20],
+          },
+          {
+            key: 'C',
+            items: null,
+            summary: [30],
+          },
+        ],
+      },
+      200,
+      { 'access-control-allow-origin': '*' },
+    );
+
+  (t.ctx as any).apiRequestMock = apiRequestMock;
   await t.addRequestHooks(apiRequestMock);
+
   return createWidget('dxPivotGrid', () => ({
     allowSorting: true,
     fieldPanel: { visible: true },
@@ -128,5 +180,5 @@ test.meta({ unstable: true })('Should sort with DataSource reload if scrolling m
     },
   }));
 }).after(async (t) => {
-  await t.removeRequestHooks(apiRequestMock);
+  await t.removeRequestHooks((t.ctx as any).apiRequestMock);
 });

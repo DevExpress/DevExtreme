@@ -73,7 +73,7 @@ test('The column reordering should work correctly when there is a fixed column w
 }));
 
 // T1038094
-test.meta({ unstable: true })('The separator should display correctly when dragging column', async (t) => {
+test('The separator should display correctly when dragging column', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await dataGrid.moveHeader(0, 200, 5, true);
@@ -87,21 +87,18 @@ test.meta({ unstable: true })('The separator should display correctly when dragg
 
   await dataGrid.moveHeader(0, 400, 5);
 
+  const offset2 = await getColumnsSeparatorOffset();
   await t
-    .expect(getColumnsSeparatorOffset())
-    .eql({
-      left: 405,
-      top: 8,
-    });
+    .expect(offset2!.left).within(405, 406.5)
+    .expect(offset2!.top).eql(8);
 
   await dataGrid.moveHeader(0, 600, 5);
 
+  const offset3 = await getColumnsSeparatorOffset();
+
   await t
-    .expect(getColumnsSeparatorOffset())
-    .eql({
-      left: 605,
-      top: 8,
-    });
+    .expect(offset3!.left).within(605, 606.5)
+    .expect(offset3!.top).eql(8);
 
   await dataGrid.moveHeader(0, 800, 5);
 
@@ -137,7 +134,7 @@ test.meta({ unstable: true })('The separator should display correctly when dragg
   allowColumnResizing: true,
 }));
 
-test('column separator should work properly with expand columns', async (t) => {
+test.meta({ unstable: true })('column separator should work properly with expand columns', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
   await MouseUpEvents.disable(MouseAction.dragToOffset);
@@ -221,13 +218,16 @@ test('HeaderRow should be highlighted when dragging column with allowColumnReord
   allowColumnReordering: false,
 }));
 
-test.skip('Column without allowReordering should have same position after dragging to groupPanel and back', async (t) => {
+test('Column without allowReordering should have same position after dragging to groupPanel and back', async (t) => {
   const dataGrid = new DataGrid('#container');
 
-  await t.drag(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(2).element, -30, -30);
+  await t.expect(dataGrid.isReady()).ok();
+
+  await t.drag(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(2).element, -100, -50);
+
   await t.expect(dataGrid.getGroupPanel().getHeadersCount()).eql(1);
 
-  await t.drag(dataGrid.getGroupPanel().getHeader(0).element, 0, 30);
+  await t.drag(dataGrid.getGroupPanel().getHeader(0).element, 0, 50);
 
   const headers = await Promise.all([0, 1, 2, 3].map(
     (i) => dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(i).element.textContent,

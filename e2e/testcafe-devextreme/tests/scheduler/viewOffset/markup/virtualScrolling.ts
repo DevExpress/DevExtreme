@@ -3,6 +3,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Offset: Markup virtual scrolling`
   .page(url(__dirname, '../../../container.html'));
@@ -74,9 +75,11 @@ end: ${endDayHour},
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
         const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
-        await takeScreenshot(
+        await testScreenshot(
+          t,
+          takeScreenshot,
           getScreenshotName(views[0].type, offset, startDayHour, endDayHour),
-          scheduler.workSpace,
+          { element: scheduler.workSpace },
         );
 
         await t.expect(compareResults.isValid())
@@ -122,9 +125,11 @@ end: ${endDayHour},
 //         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 //         const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 //
-//         await takeScreenshot(
+//         await testScreenshot(
+//           t,
+//           takeScreenshot,
 //           getScreenshotName(views[0].type, offset, startDayHour, endDayHour),
-//           scheduler.workSpace,
+//           { element: scheduler.workSpace },
 //         );
 //
 //         await t.expect(compareResults.isValid())

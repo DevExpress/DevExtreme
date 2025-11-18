@@ -4,6 +4,7 @@ import Appointment from 'devextreme-testcafe-models/scheduler/appointment';
 import { createWidget } from '../../../../helpers/createWidget';
 import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Offset: Resize appointments`
   .page(url(__dirname, '../../../container.html'));
@@ -151,46 +152,38 @@ const getScreenshotName = (
 
       await doResize(t, usualAppointment, viewType, ResizeType.startMinus, false);
       await doResize(t, allDayAppointment, viewType, ResizeType.startMinus, true);
-      await takeScreenshot(
-        getScreenshotName(
-          viewType,
-          ResizeType.startMinus,
-          offset,
-        ),
-        scheduler.workSpace,
+      await testScreenshot(
+        t,
+        takeScreenshot,
+        getScreenshotName(viewType, ResizeType.startMinus, offset),
+        { element: scheduler.workSpace },
       );
 
       await doResize(t, usualAppointment, viewType, ResizeType.startPlus, false);
       await doResize(t, allDayAppointment, viewType, ResizeType.startPlus, true);
-      await takeScreenshot(
-        getScreenshotName(
-          viewType,
-          ResizeType.startPlus,
-          offset,
-        ),
-        scheduler.workSpace,
+      await testScreenshot(
+        t,
+        takeScreenshot,
+        getScreenshotName(viewType, ResizeType.startPlus, offset),
+        { element: scheduler.workSpace },
       );
 
       await doResize(t, usualAppointment, viewType, ResizeType.endMinus, false);
       await doResize(t, allDayAppointment, viewType, ResizeType.endMinus, true);
-      await takeScreenshot(
-        getScreenshotName(
-          viewType,
-          ResizeType.endMinus,
-          offset,
-        ),
-        scheduler.workSpace,
+      await testScreenshot(
+        t,
+        takeScreenshot,
+        getScreenshotName(viewType, ResizeType.endMinus, offset),
+        { element: scheduler.workSpace },
       );
 
       await doResize(t, usualAppointment, viewType, ResizeType.endPlus, false);
       await doResize(t, allDayAppointment, viewType, ResizeType.endPlus, true);
-      await takeScreenshot(
-        getScreenshotName(
-          viewType,
-          ResizeType.endPlus,
-          offset,
-        ),
-        scheduler.workSpace,
+      await testScreenshot(
+        t,
+        takeScreenshot,
+        getScreenshotName(viewType, ResizeType.endPlus, offset),
+        { element: scheduler.workSpace },
       );
 
       await t.expect(compareResults.isValid())
@@ -224,7 +217,12 @@ const getScreenshotName = (
     await t.drag(allDayAppointment.resizableHandle.left, -100, 0);
     await t.drag(allDayAppointment.resizableHandle.right, 100, 0);
 
-    await takeScreenshot(`offset_resize-appts_week_offset-${offset}_startDayHour-10_endDayHour-12.png`, scheduler.workSpace);
+    await testScreenshot(
+      t,
+      takeScreenshot,
+      `offset_resize-appts_week_offset-${offset}_startDayHour-10_endDayHour-12.png`,
+      { element: scheduler.workSpace },
+    );
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
@@ -265,7 +263,12 @@ const getScreenshotName = (
     await t.drag(usualAppointment.resizableHandle.left, 200, 0);
     await t.drag(usualAppointment.resizableHandle.right, -200, 0);
 
-    await takeScreenshot(`offset_resize-appts_timelineDay_offset-${offset}_startDayHour-10_endDayHour-12.png`, scheduler.workSpace);
+    await testScreenshot(
+      t,
+      takeScreenshot,
+      `offset_resize-appts_timelineDay_offset-${offset}_startDayHour-10_endDayHour-12.png`,
+      { element: scheduler.workSpace },
+    );
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());

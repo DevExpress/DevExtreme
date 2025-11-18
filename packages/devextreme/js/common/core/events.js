@@ -1,15 +1,8 @@
-import eventsEngine from './events/core/events_engine';
+export { on, one, off, trigger, Event } from '../../__internal/events/core/events';
 
 /**
 * @name events
 */
-
-
-export const on = eventsEngine.on;
-
-export const one = eventsEngine.one;
-export const off = eventsEngine.off;
-export const trigger = eventsEngine.trigger;
 
 /**
 * @name events.Event
@@ -21,5 +14,3 @@ export const trigger = eventsEngine.trigger;
 * @export Event
 * @hidden
 */
-
-export const Event = eventsEngine.Event;

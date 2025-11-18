@@ -6,11 +6,13 @@
     dataSourceField="BirthYear"
     (onValueChanged)="onValueChanged($event)"
   >
-    <dxo-margin [top]="20"></dxo-margin>
-    <dxo-scale [tickInterval]="1" [minorTickInterval]="1">
-      <dxo-label format="decimal"></dxo-label>
-    </dxo-scale>
-    <dxo-behavior valueChangeMode="onHandleMove"></dxo-behavior>
+    <dxo-range-selector-margin [top]="20"></dxo-range-selector-margin>
+    <dxo-range-selector-scale [tickInterval]="1" [minorTickInterval]="1">
+      <dxo-range-selector-label format="decimal"></dxo-range-selector-label>
+    </dxo-range-selector-scale>
+    <dxo-range-selector-behavior
+      valueChangeMode="onHandleMove"
+    ></dxo-range-selector-behavior>
   </dx-range-selector>
   <h2>Selected Employees</h2>
   <dx-data-grid

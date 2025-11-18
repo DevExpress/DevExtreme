@@ -17,7 +17,6 @@ runManualTest('TreeView', 'ItemSelectionAndCustomization', (test) => {
 
     await t
       .click($(`.${OPTION_CLASS} .${SELECTBOX_CLASS}`).nth(0));
-    //  .wait(200);
 
     await testScreenshot(t, takeScreenshot, 'treeview_selection_field_is_open.png');
 
