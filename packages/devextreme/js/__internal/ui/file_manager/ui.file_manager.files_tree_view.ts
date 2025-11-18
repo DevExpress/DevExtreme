@@ -6,11 +6,11 @@ import { Deferred } from '@js/core/utils/deferred';
 import { getImageContainer } from '@js/core/utils/icon';
 import { isNumeric } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import FileManagerFileActionsButton from '@js/ui/file_manager/ui.file_manager.file_actions_button';
 import TreeViewSearch from '@js/ui/tree_view';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import type FileManagerContextMenu from '@ts/ui/file_manager/ui.file_manager.context_menu';
+import FileManagerFileActionsButton from '@ts/ui/file_manager/ui.file_manager.file_actions_button';
 
 const FILE_MANAGER_DIRS_TREE_CLASS = 'dx-filemanager-dirs-tree';
 const FILE_MANAGER_DIRS_TREE_FOCUSED_ITEM_CLASS = 'dx-filemanager-focused-item';

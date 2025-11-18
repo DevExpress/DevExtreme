@@ -40,8 +40,9 @@ import 'ui/date_box';
 const IS_SAFARI = !!browser.safari;
 const IS_IOS_DEVICE = devices.real().platform === 'ios';
 const IS_OLD_SAFARI = IS_SAFARI && compareVersions(browser.version, [11]) < 0;
-const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
+const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
+const CUSTOM_ITEM_CLASS = 'custom-item-class';
 const TOOLBAR_LABEL_CLASS = 'dx-toolbar-label';
 
 themes.setDefaultTimeout(0);
@@ -2826,6 +2827,10 @@ QUnit.module('rendering', {
 QUnit.module('templates', {
     beforeEach: function() {
         executeAsyncMock.setup();
+
+        this.getInstance = () => $('#popup').dxPopup('instance');
+        this.getOverlayContent = () => this.getInstance().$overlayContent();
+        this.getCustomItem = () => this.getOverlayContent().find(`.${CUSTOM_ITEM_CLASS}`);
     },
     afterEach: function() {
         executeAsyncMock.teardown();
@@ -3039,6 +3044,43 @@ QUnit.module('templates', {
 
         assert.strictEqual(toolbarButtonText, buttonText, 'default content template rendered');
         assert.strictEqual(toolbarTabTitleText, `${titleText}${titleText}`, 'default title template rendered');
+    });
+
+    QUnit.test('Popup toolbar should render custom template from integrationOptions after runtime toolbarItems change (T1312079)', function(assert) {
+        const popup = $('#popup').dxPopup({
+            visible: true,
+            showTitle: true,
+            title: 'Title',
+        }).dxPopup('instance');
+
+        const $customItemOnInit = this.getCustomItem();
+
+        assert.strictEqual($customItemOnInit.length, 0, 'custom template not rendered initially');
+
+        popup.option({
+            integrationOptions: {
+                templates: {
+                    'customToolbarTemplate': {
+                        render(args) {
+                            $('<div>')
+                                .attr('class', CUSTOM_ITEM_CLASS)
+                                .appendTo(args.container);
+                        },
+                    },
+                },
+            },
+            toolbarItems: [
+                {
+                    location: 'after',
+                    toolbar: 'top',
+                    template: 'customToolbarTemplate',
+                },
+            ],
+        });
+
+        const $customItemAfterRuntimeChange = this.getCustomItem();
+
+        assert.strictEqual($customItemAfterRuntimeChange.length, 1, 'custom template rendered after runtime change');
     });
 });
 

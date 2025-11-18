@@ -975,7 +975,7 @@ QUnit.module('Lifecycle', {
             font: {
                 color: '#333333',
                 cursor: 'default',
-                family: '\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana, sans-serif',
+                family: '-apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'segoe ui\', \'helvetica neue\', \'adwaita sans\', cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
                 size: 12,
                 weight: 400
             },
@@ -1163,7 +1163,7 @@ QUnit.module('Lifecycle', {
             font: {
                 color: '#333333',
                 cursor: 'default',
-                family: '\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana, sans-serif',
+                family: '-apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'segoe ui\', \'helvetica neue\', \'adwaita sans\', cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
                 size: 12,
                 weight: 400
             },
