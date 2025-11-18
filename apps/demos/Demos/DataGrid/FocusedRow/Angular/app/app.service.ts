@@ -1,11 +1,11 @@
+import { Injectable } from '@angular/core';
+
 export interface Employee {
   Employee_Full_Name: string;
 }
 
 export interface Task {
   Task_ID: number;
-
-  ResponsibleEmployee: Employee;
 
   Task_Subject: string;
 
@@ -16,9 +16,11 @@ export interface Task {
   Task_Description: string;
 
   Task_Completion: number | null;
+
+  ResponsibleEmployee: Employee;
 }
 
-export const tasks: Task[] = [
+const tasks: Task[] = [
   {
     "ResponsibleEmployee": {
       "Employee_Full_Name": "Sandra Johnson",
@@ -1851,3 +1853,10 @@ export const tasks: Task[] = [
     "Task_Completion": 50,
   },
 ];
+
+@Injectable()
+export class Service {
+  getTasks(): Task[] {
+    return tasks;
+  }
+}

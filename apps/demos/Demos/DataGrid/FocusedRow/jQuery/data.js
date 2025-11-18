@@ -1,24 +1,4 @@
-export interface Employee {
-  Employee_Full_Name: string;
-}
-
-export interface Task {
-  Task_ID: number;
-
-  ResponsibleEmployee: Employee;
-
-  Task_Subject: string;
-
-  Task_Start_Date: string;
-
-  Task_Status: string;
-
-  Task_Description: string;
-
-  Task_Completion: number | null;
-}
-
-export const tasks: Task[] = [
+const tasks = [
   {
     "ResponsibleEmployee": {
       "Employee_Full_Name": "Sandra Johnson",

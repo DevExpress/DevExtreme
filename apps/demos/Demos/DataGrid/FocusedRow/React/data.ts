@@ -1,11 +1,9 @@
-export interface Employee {
+interface Employee {
   Employee_Full_Name: string;
 }
 
 export interface Task {
   Task_ID: number;
-
-  ResponsibleEmployee: Employee;
 
   Task_Subject: string;
 
@@ -16,6 +14,8 @@ export interface Task {
   Task_Description: string;
 
   Task_Completion: number | null;
+
+  ResponsibleEmployee: Employee;
 }
 
 export const tasks: Task[] = [
