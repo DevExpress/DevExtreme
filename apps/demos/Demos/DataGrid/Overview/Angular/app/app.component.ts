@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxBulletModule } from 'devextreme-angular';
 import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
-import { Sale, Service, } from './app.service';
+import { Sale, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

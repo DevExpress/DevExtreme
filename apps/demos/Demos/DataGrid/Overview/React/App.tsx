@@ -9,7 +9,7 @@ import DataGrid, {
   SearchPanel,
 } from 'devextreme-react/data-grid';
 import DiscountCell from './DiscountCell.tsx';
-import { sales, type Sale } from './data.ts';
+import { sales } from './data.ts';
 
 const pageSizes = [10, 25, 50, 100];
 
