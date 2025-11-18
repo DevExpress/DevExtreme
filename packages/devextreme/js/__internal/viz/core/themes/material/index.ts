@@ -1,4 +1,4 @@
-const FONT_FAMILY = '\'Roboto\', \'RobotoFallback\', \'Helvetica\', \'Arial\', sans-serif';
+const FONT_FAMILY = 'roboto, \'roboto fallback\', helvetica, arial, sans-serif';
 
 const LIGHT_TITLE_COLOR = 'rgba(0,0,0,0.87)';
 const LIGHT_LABEL_COLOR = 'rgba(0,0,0,0.54)';
