@@ -4,27 +4,16 @@ import {
 } from 'devextreme-react/data-grid';
 import { NumberBox } from 'devextreme-react/number-box';
 import { CheckBox } from 'devextreme-react/check-box';
-import 'devextreme-react/common/data';
+import { ArrayStore, DataSource } from 'devextreme-react/common/data';
+import { tasks } from './data.js';
 
 const focusedRowKeyLabel = { 'aria-label': 'Focused Row Key' };
-const dataSourceOptions = {
-  store: {
-    type: 'odata',
-    version: 2,
+const dataSource = new DataSource({
+  store: new ArrayStore({
     key: 'Task_ID',
-    url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks',
-  },
-  expand: 'ResponsibleEmployee',
-  select: [
-    'Task_ID',
-    'Task_Subject',
-    'Task_Start_Date',
-    'Task_Status',
-    'Task_Description',
-    'Task_Completion',
-    'ResponsibleEmployee/Employee_Full_Name',
-  ],
-};
+    data: tasks,
+  }),
+});
 const App = () => {
   const [taskSubject, setTaskSubject] = useState('');
   const [taskDetails, setTaskDetails] = useState('');
@@ -54,11 +43,11 @@ const App = () => {
     }
   }, []);
   const onFocusedRowChanged = useCallback((e) => {
-    const data = e.row.data;
-    const progress = data.Task_Completion ? `${data.Task_Completion}%` : '';
-    setTaskSubject(data.Task_Subject);
-    setTaskDetails(data.Task_Description);
-    setTaskStatus(data.Task_Status);
+    const data = e.row?.data;
+    const progress = data?.Task_Completion ? `${data?.Task_Completion}%` : '';
+    setTaskSubject(data?.Task_Subject ?? '');
+    setTaskDetails(data?.Task_Description ?? '');
+    setTaskStatus(data?.Task_Status ?? '');
     setTaskProgress(progress);
     setFocusedRowKey(e.component.option('focusedRowKey'));
   }, []);
@@ -69,7 +58,7 @@ const App = () => {
     <div>
       <DataGrid
         id="gridContainer"
-        dataSource={dataSourceOptions}
+        dataSource={dataSource}
         focusedRowEnabled={true}
         focusedRowKey={focusedRowKey}
         autoNavigateToFocusedRow={autoNavigateToFocusedRow}

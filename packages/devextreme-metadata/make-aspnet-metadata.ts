@@ -152,6 +152,7 @@ AspNet.makeMetadata({
       ['ui/filter_builder:dxFilterBuilderOptions', 'ui/card_view:dxCardViewOptions.filterBuilder'],
       ['ui/form:dxFormOptions', 'common/grids:EditingBase.form'],
       ['ui/form:dxFormOptions', 'ui/card_view:Editing.form'],
+      ['ui/form:dxFormOptions', 'ui/scheduler:dxSchedulerOptions.editing.form'],
       ['ui/popover:dxPopoverOptions', 'ui/lookup:dxLookupOptions.dropDownOptions'],
       ['ui/popup:dxPopupOptions', 'common/grids:ColumnAIOptions.popup'],
       ['ui/popup:dxPopupOptions', 'common/grids:EditingBase.popup'],
