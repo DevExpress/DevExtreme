@@ -148,7 +148,7 @@ $header-panel-time-cell-padding: null !default;
   $fluent-scheduler-appointment-15min-icon-bottom: 2px !default;
   $fluent-scheduler-appointment-15min-icon-right: 2px !default;
 
-  $fluent-scheduler-appointment-20min-title-line-height: 20px !default;
+  $fluent-scheduler-appointment-20min-title-line-height: 24px !default;
 }
 
 @else if $size == "compact" {

@@ -200,7 +200,8 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
   }
 
   .dx-scheduler-appointment-10min,
-  .dx-scheduler-appointment-15min {
+  .dx-scheduler-appointment-15min,
+  .dx-scheduler-appointment-20min {
     .dx-scheduler-appointment-content {
       padding: $fluent-scheduler-appointment-short-content-padding;
     }
@@ -248,7 +249,6 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 
     .dx-scheduler-appointment-20min {
       .dx-scheduler-appointment-content {
-        padding: $fluent-scheduler-appointment-short-content-padding;
         padding-right: $fluent-scheduler-appointment-20min-recurrence-padding-right;
       }
 
