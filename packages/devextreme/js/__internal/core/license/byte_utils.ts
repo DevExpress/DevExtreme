@@ -48,6 +48,16 @@ export function leftRotate(x: number, n: number): number {
   return ((x << n) | (x >>> (32 - n))) >>> 0;
 }
 
+export function bigIntFromBytes(bytes: Uint8Array): bigint {
+  const eight = BigInt(8);
+  const zero = BigInt(0);
+
+  return bytes.reduce(
+    (acc, cur) => (acc << eight) + BigInt(cur),
+    zero,
+  );
+}
+
 export function concatBytes(a: Uint8Array, b: Uint8Array): Uint8Array {
   const result = new Uint8Array(a.length + b.length);
   result.set(a, 0);
