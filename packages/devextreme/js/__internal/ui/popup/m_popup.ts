@@ -621,6 +621,16 @@ class Popup<
     return this._renderByTemplate(template, $container);
   }
 
+  _getIntegrationOptions(): Record<string, unknown> {
+    // @ts-expect-error integrationOptions
+    const { integrationOptions } = this.option();
+
+    return {
+      ...integrationOptions as Record<string, unknown>,
+      skipTemplates: ['content', 'title'],
+    };
+  }
+
   _renderByPolymorphicTemplate(
     items: ToolbarItem[],
     $container: dxElementWrapper,
@@ -633,11 +643,7 @@ class Popup<
       useFlatToolbarButtons,
     } = this.option();
 
-    const integrationOptions = extend(
-      {},
-      this.option('integrationOptions'),
-      { skipTemplates: ['content', 'title'] },
-    );
+    const integrationOptions = this._getIntegrationOptions();
 
     const toolbarOptions = extend(additionalToolbarOptions, {
       disabled,
@@ -684,7 +690,17 @@ class Popup<
   _updateToolbarOptions(toolbar: string, options: Partial<ToolbarProperties>): void {
     const instance = toolbar === 'top' ? this._topToolbar : this._bottomToolbar;
 
-    instance?.option(options);
+    if (!instance) {
+      return;
+    }
+
+    const integrationOptions = this._getIntegrationOptions();
+
+    // @ts-expect-error integrationOptions
+    instance.option({
+      ...options,
+      integrationOptions,
+    });
   }
 
   _toggleAriaLabel(): void {

@@ -5,7 +5,7 @@ import holdEvent from '@js/common/core/events/hold';
 import {
   addNamespace,
   isCommandKeyPressed,
-} from '@js/common/core/events/utils/index';
+} from '@js/common/core/events/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
@@ -148,13 +148,6 @@ class ListBoxLayoutUtils {
 
     this._scrollView.scrollTo(newScrollTop);
   }
-}
-
-interface FileManagerThumbnailListBoxActions {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onItemEnterKeyPressed?: (args: any) => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onFocusedItemChanged?: (args: any) => void;
 }
 
 interface FileManagerThumbnailListBoxOptions extends
@@ -492,8 +485,7 @@ class FileManagerThumbnailListBox extends CollectionWidget<FileManagerThumbnailL
   }
 
   _updateSelectedItems(args): void {
-    const { addedItemKeys } = args;
-    const { removedItemKeys } = args;
+    const { addedItemKeys, removedItemKeys } = args;
 
     if (this._rendered && (addedItemKeys.length || removedItemKeys.length)) {
       if (!this._rendering) {
