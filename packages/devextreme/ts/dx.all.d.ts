@@ -26041,19 +26041,19 @@ declare module DevExpress.ui {
           readonly popup: dxPopup;
         };
     /**
-     * [descr:AppointmentFormOptions]
+     * [descr:AppointmentFormProperties]
      */
-    export type AppointmentFormOptions = DevExpress.ui.dxForm.Properties & {
+    export type AppointmentFormProperties = DevExpress.ui.dxForm.Properties & {
       /**
-       * [descr:AppointmentFormOptions.onSaved]
+       * [descr:AppointmentFormProperties.onSaved]
        */
       onSaved?: (formData: any) => void;
       /**
-       * [descr:AppointmentFormOptions.onCanceled]
+       * [descr:AppointmentFormProperties.onCanceled]
        */
       onCanceled?: (formData: any) => void;
       /**
-       * [descr:AppointmentFormOptions.iconsShowMode]
+       * [descr:AppointmentFormProperties.iconsShowMode]
        */
       iconsShowMode?: AppointmentFormIconsShowMode;
     };
@@ -26475,7 +26475,7 @@ declare module DevExpress.ui {
           /**
            * [descr:dxSchedulerOptions.editing.form]
            */
-          form?: DevExpress.ui.dxScheduler.AppointmentFormOptions;
+          form?: DevExpress.ui.dxScheduler.AppointmentFormProperties;
           /**
            * [descr:dxSchedulerOptions.editing.popup]
            */
