@@ -18,7 +18,7 @@ export const tasks = [
   },
   {
     Task_ID: 2,
-    Task_Subject: 'Prepare 3013 Marketing Plan',
+    Task_Subject: 'Prepare 2013 Marketing Plan',
     Task_Start_Date: '2013-01-01T00:00:00',
     Task_Due_Date: '2013-01-31T00:00:00',
     Task_Status: 'Completed',
@@ -486,7 +486,7 @@ export const tasks = [
   },
   {
     Task_ID: 54,
-    Task_Subject: 'Review Training Course for any Ommissions',
+    Task_Subject: 'Review Training Course for any Omissions',
     Task_Start_Date: '2013-06-01T00:00:00',
     Task_Due_Date: '2013-06-15T00:00:00',
     Task_Status: 'Completed',
@@ -1530,7 +1530,7 @@ export const tasks = [
   },
   {
     Task_ID: 170,
-    Task_Subject: 'Sumit Travel Expenses for Recent Trip',
+    Task_Subject: 'Submit Travel Expenses for Recent Trip',
     Task_Start_Date: '2014-04-30T00:00:00',
     Task_Due_Date: '2014-05-05T00:00:00',
     Task_Status: 'In Progress',
