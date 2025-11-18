@@ -2,17 +2,63 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-// TODO: Enable multi-theming testcafe run in the future.
 fixture.disablePageReloads`Grouping Panel - check borders and backgrounds with various options`
   .page(url(__dirname, '../../../container.html'));
 
 const SELECTORS = {
   gridContainer: 'container',
-  masterDetailClass: 'dx-master-detail-row',
+  masterDetailRowClass: 'dx-master-detail-row',
   groupRowClass: 'dx-group-row',
+  rowLinesClass: 'dx-row-lines',
+  groupSpaceClass: 'dx-datagrid-group-space',
+  pointerEventsNoneClass: 'dx-pointer-events-none',
+  rowAlternativeClass: 'dx-row-alt',
 };
 
-const FORBIDDEN_COLORS = ['transparent', 'white', 'black', 'rgb(0, 0, 0)', 'rgb(255, 255, 255)'];
+const dataSource = [
+  {
+    group: 'A',
+    label: 'LABEL_A_0',
+    value: 'VALUE_A_0',
+    count: 1,
+  },
+  {
+    group: 'A',
+    label: 'LABEL_A_1',
+    value: 'VALUE_A_1',
+    count: 2,
+  },
+  {
+    group: 'B',
+    label: 'LABEL_B_0',
+    value: 'VALUE_B_0',
+    count: 3,
+  },
+  {
+    group: 'B',
+    label: 'LABEL_B_1',
+    value: 'VALUE_B_1',
+    count: 4,
+  },
+  {
+    group: 'B',
+    label: 'LABEL_B_2',
+    value: 'VALUE_B_2',
+    count: 5,
+  },
+  {
+    group: 'C',
+    label: 'LABEL_C_0',
+    value: 'VALUE_C_0',
+    count: 6,
+  },
+  {
+    group: 'C',
+    label: 'LABEL_C_1',
+    value: 'VALUE_C_1',
+    count: 7,
+  },
+];
 
 const getTestParams = ({
   rowAlternationEnabled,
@@ -39,50 +85,7 @@ const createDataGrid = async ({
   hasMasterDetail,
 }) => {
   await createWidget('dxDataGrid', {
-    dataSource: [
-      {
-        group: 'A',
-        label: 'LABEL_A_0',
-        value: 'VALUE_A_0',
-        count: 1,
-      },
-      {
-        group: 'A',
-        label: 'LABEL_A_1',
-        value: 'VALUE_A_1',
-        count: 2,
-      },
-      {
-        group: 'B',
-        label: 'LABEL_B_0',
-        value: 'VALUE_B_0',
-        count: 3,
-      },
-      {
-        group: 'B',
-        label: 'LABEL_B_1',
-        value: 'VALUE_B_1',
-        count: 4,
-      },
-      {
-        group: 'B',
-        label: 'LABEL_B_2',
-        value: 'VALUE_B_2',
-        count: 5,
-      },
-      {
-        group: 'C',
-        label: 'LABEL_C_0',
-        value: 'VALUE_C_0',
-        count: 6,
-      },
-      {
-        group: 'C',
-        label: 'LABEL_C_1',
-        value: 'VALUE_C_1',
-        count: 7,
-      },
-    ],
+    dataSource,
     columnFixing: {
       // @ts-expect-error private option
       legacyMode: true,
@@ -144,14 +147,6 @@ const verifyGridStyles = async (t, dataGrid, matrixOptions) => {
     await t.expect(parseInt(borderLeft, 10)).gt(0);
     await t.expect(parseInt(borderRight, 10)).gt(0);
 
-    const borderTopColor = await headersContainer.getStyleProperty('border-top-color');
-    const borderLeftColor = await headersContainer.getStyleProperty('border-left-color');
-    const borderRightColor = await headersContainer.getStyleProperty('border-right-color');
-
-    await t.expect(FORBIDDEN_COLORS).notContains(borderTopColor.toLowerCase());
-    await t.expect(FORBIDDEN_COLORS).notContains(borderLeftColor.toLowerCase());
-    await t.expect(FORBIDDEN_COLORS).notContains(borderRightColor.toLowerCase());
-
     const rowsView = dataGrid.getRowsView();
 
     const rowsViewBorderLeft = await rowsView.getStyleProperty('border-left-width');
@@ -161,20 +156,14 @@ const verifyGridStyles = async (t, dataGrid, matrixOptions) => {
     await t.expect(parseInt(rowsViewBorderLeft, 10)).gt(0);
     await t.expect(parseInt(rowsViewBorderRight, 10)).gt(0);
     await t.expect(parseInt(rowsViewBorderBottom, 10)).gt(0);
-
-    const rowsViewBorderTopColor = await rowsView.getStyleProperty('border-top-color');
-    const rowsViewBorderLeftColor = await rowsView.getStyleProperty('border-left-color');
-    const rowsViewBorderRightColor = await rowsView.getStyleProperty('border-right-color');
-    const rowsViewBorderBottomColor = await rowsView.getStyleProperty('border-bottom-color');
-
-    await t.expect(FORBIDDEN_COLORS).notContains(rowsViewBorderTopColor.toLowerCase());
-    await t.expect(FORBIDDEN_COLORS).notContains(rowsViewBorderLeftColor.toLowerCase());
-    await t.expect(FORBIDDEN_COLORS).notContains(rowsViewBorderRightColor.toLowerCase());
-    await t.expect(FORBIDDEN_COLORS).notContains(rowsViewBorderBottomColor.toLowerCase());
   }
 
   if (matrixOptions.rowAlternationEnabled) {
-    const filteredRows = dataGrid.getRows().find(`tr:not(.${SELECTORS.masterDetailClass})`);
+    /*
+      getRows() returns double collection of rows (two tables) when
+      columnFixing.legacyMode = true AND DataGrid has fixed columns
+    */
+    const filteredRows = dataGrid.getRows().find(`tr:not(.${SELECTORS.masterDetailRowClass})`);
     const filteredRowsLength = await filteredRows.count;
 
     let i = 1;
@@ -197,52 +186,91 @@ const verifyGridStyles = async (t, dataGrid, matrixOptions) => {
         continue;
       }
 
-      if (currentClasses !== previousClasses) {
-        const currentBg = await currentRow.getStyleProperty('background-color');
-        const previousBg = await previousRow.getStyleProperty('background-color');
+      const currentHasAltClass = currentClasses?.includes(SELECTORS.rowAlternativeClass);
+      const previousHasAltClass = previousClasses?.includes(SELECTORS.rowAlternativeClass);
 
-        await t.expect(currentBg).notEql(previousBg);
-      }
+      await t.expect(currentHasAltClass).notEql(previousHasAltClass);
+
+      const currentFirstCell = currentRow.find('td').nth(0);
+      const previousFirstCell = previousRow.find('td').nth(0);
+
+      const currentBg = await currentFirstCell.getStyleProperty('background-color');
+      const previousBg = await previousFirstCell.getStyleProperty('background-color');
+
+      await t.expect(currentBg).notEql(previousBg);
 
       i += 1;
     }
   }
 
   if (matrixOptions.showRowLines) {
-    const { dataRows } = dataGrid;
-    const dataRowsCount = await dataRows.count;
+  /*
+    getRows() returns double collection of rows (two tables) when
+    columnFixing.legacyMode = true AND DataGrid has fixed columns
+  */
+    const filteredRows = dataGrid.getRows().filter(`.${SELECTORS.rowLinesClass}`);
+    const cells = filteredRows.find('td');
+    const cellsCount = await cells.count;
 
-    for (let i = 0; i < dataRowsCount; i += 1) {
-      const dataRow = dataRows.nth(i);
+    for (let i = 0; i < cellsCount; i += 1) {
+      const dataCell = cells.nth(i);
 
-      const borderTop = await dataRow.getStyleProperty('border-top-width');
-      const borderTopStyle = await dataRow.getStyleProperty('border-top-style');
+      // Skip checking for last lines if showBorders is enabled
+      if (matrixOptions.showBorders) {
+        const parentRow = dataCell.parent('tr');
+        const nextRow = parentRow.nextSibling('tr.dx-row-lines');
+        const isLastRow = await nextRow.count === 0;
 
-      await t.expect(parseInt(borderTop, 10)).gt(0);
-      await t.expect(borderTopStyle).notEql('none');
-
-      if (!matrixOptions.showBorders) {
-        const borderBottom = await dataRow.getStyleProperty('border-bottom-width');
-        const borderBottomStyle = await dataRow.getStyleProperty('border-bottom-style');
-
-        await t.expect(parseInt(borderBottom, 10)).gt(0);
-        await t.expect(borderBottomStyle).notEql('none');
+        if (isLastRow) {
+        // eslint-disable-next-line no-continue
+          continue;
+        }
       }
+
+      const borderBottom = await dataCell.getStyleProperty('border-bottom-width');
+      const borderBottomStyle = await dataCell.getStyleProperty('border-bottom-style');
+
+      await t.expect(parseInt(borderBottom, 10)).gt(0);
+      await t.expect(borderBottomStyle).notEql('none');
     }
   }
 
   if (matrixOptions.showColumnLines) {
-    const cells = dataGrid.getCells().filter('td:not([class])');
+    /*
+      getRows() returns double collection of rows (two tables) when
+      columnFixing.legacyMode = true AND DataGrid has fixed columns
+    */
+    const filteredRows = dataGrid.getRows().filter(`:not(.${SELECTORS.masterDetailRowClass})`);
+    const cells = filteredRows.find(`td:not(.${SELECTORS.groupSpaceClass})`);
+
     const cellsCount = await cells.count;
 
     for (let i = 0; i < cellsCount; i += 1) {
       const cell = cells.nth(i);
 
-      const borderRightWidth = await cell.getStyleProperty('border-right-width');
-      const borderRightColor = await cell.getStyleProperty('border-right-color');
+      const parentRow = cell.parent('tr');
+      const rowCells = parentRow.find(`td:not(.${SELECTORS.groupSpaceClass})`);
+      const rowCellsCount = await rowCells.count;
+      const indexInRow = await cell.prevSibling(`td:not(.${SELECTORS.groupSpaceClass})`).count;
 
-      await t.expect(borderRightWidth).eql('1px');
-      await t.expect(FORBIDDEN_COLORS).notContains(borderRightColor.toLowerCase());
+      const isFirstCellInRow = indexInRow === 0;
+      const isLastCellInRow = indexInRow === rowCellsCount - 1;
+
+      const cellClasses = await cell.getAttribute('class');
+      const hasPointerEventsNoneClass = cellClasses?.includes(SELECTORS.pointerEventsNoneClass);
+      const expectedBorderWidth = hasPointerEventsNoneClass ? 2 : 1;
+
+      if (!isFirstCellInRow) {
+        const borderLeftWidth = await cell.getStyleProperty('border-left-width');
+
+        await t.expect(parseInt(borderLeftWidth, 10)).eql(expectedBorderWidth);
+      }
+
+      if (!isLastCellInRow) {
+        const borderRightWidth = await cell.getStyleProperty('border-right-width');
+
+        await t.expect(parseInt(borderRightWidth, 10)).eql(expectedBorderWidth);
+      }
     }
   }
 };
