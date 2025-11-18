@@ -204,10 +204,10 @@ const verifyGridStyles = async (t, dataGrid, matrixOptions) => {
   }
 
   if (matrixOptions.showRowLines) {
-  /*
-    getRows() returns double collection of rows (two tables) when
-    columnFixing.legacyMode = true AND DataGrid has fixed columns
-  */
+    /*
+      getRows() returns double collection of rows (two tables) when
+      columnFixing.legacyMode = true AND DataGrid has fixed columns
+    */
     const filteredRows = dataGrid.getRows().filter(`.${SELECTORS.rowLinesClass}`);
     const cells = filteredRows.find('td');
     const cellsCount = await cells.count;

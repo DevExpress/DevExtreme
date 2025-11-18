@@ -170,7 +170,7 @@ export default class DataGrid extends GridCore {
   }
 
   /*
-    getRows() returns double collection of rows (two tables) when 
+    getRows() returns double collection of rows (two tables) when
     columnFixing.legacyMode = true AND DataGrid has fixed columns
   */
   getRows(): Selector {
