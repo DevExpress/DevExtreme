@@ -1,93 +1,163 @@
-import { ensureDefined, noop } from '../core/utils/common';
-import { isFunction } from '../core/utils/type';
-import { compileGetter } from '../core/utils/data';
-
-import FileSystemProviderBase from './provider_base';
+import { ensureDefined, noop } from '@js/core/utils/common';
+import { compileGetter } from '@js/core/utils/data';
+import { isFunction } from '@js/core/utils/type';
+import type { Options } from '@js/file_management/custom_provider';
+import type UploadInfo from '@js/file_management/upload_info';
+import type FileSystemItem from '@ts/file_management/file_system_item';
+import FileSystemProviderBase from '@ts/file_management/provider_base';
 
 class CustomFileSystemProvider extends FileSystemProviderBase {
+  _hasSubDirsGetter?: Function;
 
-    constructor(options) {
-        options = ensureDefined(options, { });
-        super(options);
+  _getItemsFunction?: Function;
 
-        this._hasSubDirsGetter = compileGetter(options.hasSubDirectoriesExpr || 'hasSubDirectories');
+  _renameItemFunction?: Function;
 
-        this._getItemsFunction = this._ensureFunction(options.getItems, () => []);
+  _createDirectoryFunction?: Function;
 
-        this._renameItemFunction = this._ensureFunction(options.renameItem);
+  _deleteItemFunction?: Function;
 
-        this._createDirectoryFunction = this._ensureFunction(options.createDirectory);
+  _moveItemFunction?: Function;
 
-        this._deleteItemFunction = this._ensureFunction(options.deleteItem);
+  _copyItemFunction?: Function;
 
-        this._moveItemFunction = this._ensureFunction(options.moveItem);
+  _uploadFileChunkFunction?: Function;
 
-        this._copyItemFunction = this._ensureFunction(options.copyItem);
+  _abortFileUploadFunction?: Function;
 
-        this._uploadFileChunkFunction = this._ensureFunction(options.uploadFileChunk);
+  _downloadItemsFunction?: Function;
 
-        this._abortFileUploadFunction = this._ensureFunction(options.abortFileUpload);
+  _getItemsContentFunction?: Function;
 
-        this._downloadItemsFunction = this._ensureFunction(options.downloadItems);
+  constructor(options: Options) {
+    // eslint-disable-next-line no-param-reassign
+    options = ensureDefined(options, { });
+    super(options);
 
-        this._getItemsContentFunction = this._ensureFunction(options.getItemsContent);
-    }
+    // @ts-expect-error ts-error
+    this._hasSubDirsGetter = compileGetter(options.hasSubDirectoriesExpr ?? 'hasSubDirectories');
 
-    getItems(parentDir) {
-        const pathInfo = parentDir.getFullPathInfo();
-        return this._executeActionAsDeferred(() => this._getItemsFunction(parentDir), true)
-            .then(dataItems => this._convertDataObjectsToFileItems(dataItems, pathInfo));
-    }
+    this._getItemsFunction = this._ensureFunction(options.getItems, () => []);
 
-    renameItem(item, name) {
-        return this._executeActionAsDeferred(() => this._renameItemFunction(item, name));
-    }
+    this._renameItemFunction = this._ensureFunction(options.renameItem);
 
-    createDirectory(parentDir, name) {
-        return this._executeActionAsDeferred(() => this._createDirectoryFunction(parentDir, name));
-    }
+    this._createDirectoryFunction = this._ensureFunction(options.createDirectory);
 
-    deleteItems(items) {
-        return items.map(item => this._executeActionAsDeferred(() => this._deleteItemFunction(item)));
-    }
+    this._deleteItemFunction = this._ensureFunction(options.deleteItem);
 
-    moveItems(items, destinationDirectory) {
-        return items.map(item => this._executeActionAsDeferred(() => this._moveItemFunction(item, destinationDirectory)));
-    }
+    this._moveItemFunction = this._ensureFunction(options.moveItem);
 
-    copyItems(items, destinationFolder) {
-        return items.map(item => this._executeActionAsDeferred(() => this._copyItemFunction(item, destinationFolder)));
-    }
+    this._copyItemFunction = this._ensureFunction(options.copyItem);
 
-    uploadFileChunk(fileData, chunksInfo, destinationDirectory) {
-        return this._executeActionAsDeferred(() => this._uploadFileChunkFunction(fileData, chunksInfo, destinationDirectory));
-    }
+    this._uploadFileChunkFunction = this._ensureFunction(options.uploadFileChunk);
 
-    abortFileUpload(fileData, chunksInfo, destinationDirectory) {
-        return this._executeActionAsDeferred(() => this._abortFileUploadFunction(fileData, chunksInfo, destinationDirectory));
-    }
+    this._abortFileUploadFunction = this._ensureFunction(options.abortFileUpload);
 
-    downloadItems(items) {
-        return this._executeActionAsDeferred(() => this._downloadItemsFunction(items));
-    }
+    this._downloadItemsFunction = this._ensureFunction(options.downloadItems);
 
-    getItemsContent(items) {
-        return this._executeActionAsDeferred(() => this._getItemsContentFunction(items));
-    }
+    this._getItemsContentFunction = this._ensureFunction(options.getItemsContent);
+  }
 
-    _hasSubDirs(dataObj) {
-        const hasSubDirs = this._hasSubDirsGetter(dataObj);
-        return typeof hasSubDirs === 'boolean' ? hasSubDirs : true;
-    }
+  getItems(parentDirectory: FileSystemItem): Promise<FileSystemItem[]> {
+    const pathInfo = parentDirectory.getFullPathInfo();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return this._executeActionAsDeferred(() => this._getItemsFunction?.(parentDirectory), true)
+      .then((dataItems) => this._convertDataObjectsToFileItems(dataItems, pathInfo));
+  }
 
-    _getKeyExpr(options) {
-        return options.keyExpr || 'key';
-    }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  renameItem(item: FileSystemItem, name: string): Promise<any> {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return this._executeActionAsDeferred(() => this._renameItemFunction?.(item, name));
+  }
 
-    _ensureFunction(functionObject, defaultFunction) {
-        defaultFunction = defaultFunction || noop;
-        return isFunction(functionObject) ? functionObject : defaultFunction;
-    }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  createDirectory(parentDirectory: FileSystemItem, name: string): Promise<any> {
+    return this._executeActionAsDeferred(
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      () => this._createDirectoryFunction?.(parentDirectory, name),
+    );
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  deleteItems(items: FileSystemItem[]): Promise<any>[] {
+    return items.map((item) => this._executeActionAsDeferred(
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      () => this._deleteItemFunction?.(item),
+    ));
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  moveItems(items: FileSystemItem[], destinationDirectory: FileSystemItem): Promise<any>[] {
+    return items.map((item) => this._executeActionAsDeferred(
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      () => this._moveItemFunction?.(item, destinationDirectory),
+    ));
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  copyItems(items: FileSystemItem[], destinationFolder: FileSystemItem): Promise<any>[] {
+    return items.map((item) => this._executeActionAsDeferred(
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      () => this._copyItemFunction?.(item, destinationFolder),
+    ));
+  }
+
+  uploadFileChunk(
+    fileData: File,
+    chunksInfo: UploadInfo,
+    destinationDirectory: FileSystemItem,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ): Promise<any> {
+    return this._executeActionAsDeferred(
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      () => this._uploadFileChunkFunction?.(fileData, chunksInfo, destinationDirectory),
+    );
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  abortFileUpload(
+    fileData: File,
+    chunksInfo: UploadInfo,
+    destinationDirectory: FileSystemItem,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ): Promise<any> {
+    return this._executeActionAsDeferred(
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      () => this._abortFileUploadFunction?.(fileData, chunksInfo, destinationDirectory),
+    );
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  downloadItems(items: FileSystemItem[]): Promise<any> {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return this._executeActionAsDeferred(() => this._downloadItemsFunction?.(items));
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  getItemsContent(items: FileSystemItem[]): Promise<any> {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return this._executeActionAsDeferred(() => this._getItemsContentFunction?.(items));
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  _hasSubDirs(dataObj): boolean {
+    const hasSubDirs = this._hasSubDirsGetter?.(dataObj);
+    return typeof hasSubDirs === 'boolean' ? hasSubDirs : true;
+  }
+
+  _getKeyExpr(options: Options): string | Function {
+    return options.keyExpr ?? 'key';
+  }
+
+  // eslint-disable-next-line @stylistic/max-len
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types,@typescript-eslint/no-explicit-any
+  _ensureFunction(functionObject: any, defaultFunction?: Function): Function {
+    // eslint-disable-next-line no-param-reassign
+    defaultFunction = defaultFunction ?? noop;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return isFunction(functionObject) ? functionObject : defaultFunction;
+  }
 }
 
 export default CustomFileSystemProvider;

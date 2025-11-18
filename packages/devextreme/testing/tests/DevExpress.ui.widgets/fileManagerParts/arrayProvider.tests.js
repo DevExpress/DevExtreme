@@ -3,7 +3,7 @@ const { test } = QUnit;
 import 'ui/file_manager';
 import ObjectFileSystemProvider from 'file_management/object_provider';
 import FileSystemItem from 'file_management/file_system_item';
-import ErrorCode from 'file_management/error_codes';
+import ErrorCode from '__internal/file_management/error_codes';
 import { fileSaver } from '__internal/exporter/file_saver';
 
 import { createUploaderFiles, createUploadInfo } from '../../../helpers/fileManagerHelpers.js';
