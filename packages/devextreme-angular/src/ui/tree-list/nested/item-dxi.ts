@@ -21,8 +21,8 @@ import { DOCUMENT } from '@angular/common';
 import * as CommonTypes from 'devextreme/common';
 import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 import { ToolbarItemLocation, ToolbarItemComponent, HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
-import { CardHeaderPredefinedItem, PredefinedToolbarItem } from 'devextreme/ui/card_view';
-import { FormPredefinedButtonItem, FormItemComponent, FormItemType, LabelLocation, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
+import { TreeListPredefinedToolbarItem } from 'devextreme/ui/tree_list';
+import { FormItemComponent, FormItemType, LabelLocation, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
 import { dxTabPanelOptions } from 'devextreme/ui/tab_panel';
 import { dxButtonOptions } from 'devextreme/ui/button';
 
@@ -123,10 +123,10 @@ export class DxiTreeListItemComponent extends CollectionNestedOption implements 
     }
 
     @Input()
-    get name(): CardHeaderPredefinedItem | string | undefined | FormPredefinedButtonItem | PredefinedToolbarItem {
+    get name(): string | TreeListPredefinedToolbarItem {
         return this._getOption('name');
     }
-    set name(value: CardHeaderPredefinedItem | string | undefined | FormPredefinedButtonItem | PredefinedToolbarItem) {
+    set name(value: string | TreeListPredefinedToolbarItem) {
         this._setOption('name', value);
     }
 
