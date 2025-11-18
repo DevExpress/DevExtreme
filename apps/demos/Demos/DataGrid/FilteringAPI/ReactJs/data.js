@@ -1,6 +1,12 @@
-const statuses = ['All', 'Not Started', 'In Progress', 'Need Assistance', 'Deferred', 'Completed'];
-
-const tasks = [
+export const statuses = [
+  'All',
+  'Not Started',
+  'In Progress',
+  'Need Assistance',
+  'Deferred',
+  'Completed',
+];
+export const tasks = [
   {
     Task_ID: 1,
     Task_Subject: 'Prepare 2013 Financial',
