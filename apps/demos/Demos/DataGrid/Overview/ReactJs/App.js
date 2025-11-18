@@ -11,17 +11,17 @@ import DiscountCell from './DiscountCell.js';
 import { sales } from './data.js';
 
 const pageSizes = [10, 25, 50, 100];
-
 const App = () => {
   const [collapsed, setCollapsed] = useState(true);
-
-  const onContentReady = useCallback((e) => {
-    if (collapsed) {
-      e.component.expandRow(['EnviroCare']);
-      setCollapsed(false);
-    }
-  }, [collapsed]);
-
+  const onContentReady = useCallback(
+    (e) => {
+      if (collapsed) {
+        e.component.expandRow(['EnviroCare']);
+        setCollapsed(false);
+      }
+    },
+    [collapsed],
+  );
   return (
     <DataGrid
       dataSource={sales}
