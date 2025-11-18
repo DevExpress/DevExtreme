@@ -1,22 +1,23 @@
-// eslint-disable-next-line no-restricted-imports
+import { enCldr } from '@js/common/core/localization/cldr-data/en';
+import { supplementalCldr } from '@js/common/core/localization/cldr-data/supplemental';
+import coreLocalization from '@ts/core/localization/core';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import Globalize from 'globalize';
-import coreLocalization from '../core';
-import { enCldr } from '../cldr-data/en';
-import { supplementalCldr } from '../cldr-data/supplemental';
 
+if (Globalize?.load) {
+  if (!Globalize.locale()) {
+    Globalize.load(enCldr, supplementalCldr);
+    Globalize.locale('en');
+  }
 
-if(Globalize && Globalize.load) {
-    if(!Globalize.locale()) {
-        Globalize.load(enCldr, supplementalCldr);
-        Globalize.locale('en');
-    }
-
-    coreLocalization.inject({
-        locale: function(locale) {
-            if(!locale) {
-                return Globalize.locale().locale;
-            }
-            Globalize.locale(locale);
-        }
-    });
+  coreLocalization.inject({
+    // eslint-disable-next-line consistent-return,@typescript-eslint/no-invalid-void-type
+    locale(locale?: string): string | void {
+      if (!locale) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        return Globalize.locale().locale;
+      }
+      Globalize.locale(locale);
+    },
+  });
 }
