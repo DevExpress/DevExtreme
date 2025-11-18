@@ -12,8 +12,6 @@ interface Options {
   viewOrientation: Orientation;
   isTimelineView: boolean;
   isAdaptivityEnabled: boolean;
-  isAllDayPanel?: boolean;
-  isMonthView?: boolean;
 }
 
 const ADAPTIVITY_MIN_APPOINTMENT_COUNT = 0;
@@ -27,8 +25,6 @@ export const getMaxLevel = ({
   viewOrientation,
   isTimelineView,
   isAdaptivityEnabled,
-  isAllDayPanel = false,
-  isMonthView = false,
 }: Options): number => {
   switch (maxAppointmentsPerCell) {
     case 'auto': {
@@ -42,13 +38,10 @@ export const getMaxLevel = ({
         return ADAPTIVITY_MIN_APPOINTMENT_COUNT;
       }
 
-      const detectedIsMonthView = isMonthView || (viewOrientation === 'horizontal' && !isTimelineView);
       const defaultAppointmentSize = getDefaultAppointmentSize({
         isTimelineView,
         isAdaptivityEnabled,
         viewOrientation,
-        isAllDayPanel,
-        isMonthView: detectedIsMonthView,
       });
       const minAbstractSize = getAbstractSizeByViewOrientation(
         defaultAppointmentSize,

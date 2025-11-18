@@ -9,6 +9,10 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import Resizable from '@js/ui/resizable';
+import {
+  current,
+  isCompact,
+} from '@js/ui/themes';
 import { hide, show } from '@ts/ui/tooltip/m_tooltip';
 
 import {
@@ -159,7 +163,7 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
     this._renderAppointmentGeometry();
     this._renderAriaLabel();
     this._renderEmptyClass();
-    this._renderShortAppointmentClass();
+    this._renderAppointmentDurationClass();
     this._renderReducedAppointment();
     this._renderAllDayClass();
     this._renderDragSourceClass();
@@ -231,35 +235,46 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
     }
   }
 
-  _renderShortAppointmentClass() {
+  _renderAppointmentDurationClass() {
+    const theme = current();
     const geometry: any = this.option('geometry');
 
-    if (!geometry || geometry.empty) {
+    if (!geometry || geometry.empty || this.option('allDay') || !theme) {
       return;
     }
 
-    const startDate = this.dataAccessors.get('startDate', this.rawAppointment);
-    const endDate = this.dataAccessors.get('endDate', this.rawAppointment);
+    const themeType = theme.split('.')[0];
 
-    if (!startDate || !endDate) {
-      return;
+    interface AppointmentClassThresholds {
+      default: { 10: number; 15: number; 20: number };
+      compact: { 10: number; 15: number; 20: number };
     }
+    const themeThresholds: Record<string, AppointmentClassThresholds> = {
+      fluent: {
+        default: { 10: 14, 15: 20, 20: 26 },
+        compact: { 10: 10, 15: 15, 20: 19 },
+      },
+      material: {
+        default: { 10: 13, 15: 20, 20: 26 },
+        compact: { 10: 10, 15: 15, 20: 19 },
+      },
+      generic: {
+        default: { 10: 17, 15: 26, 20: 34 },
+        compact: { 10: 13, 15: 19, 20: 25 },
+      },
+    };
 
-    const durationMs = new Date(endDate).getTime() - new Date(startDate).getTime();
-    const durationMinutes = Math.round(durationMs / (1000 * 60));
-
-    if (durationMinutes === 0 || this.option('allDay')) {
-      return;
-    }
+    const thresholds = themeThresholds[themeType][isCompact(theme) ? 'compact' : 'default'];
+    const { height } = geometry;
 
     switch (true) {
-      case durationMinutes <= 10:
+      case height < thresholds[10]:
         (this.$element() as any).addClass(APPOINTMENT_10MIN_CLASS);
         break;
-      case durationMinutes <= 15:
+      case height < thresholds[15]:
         (this.$element() as any).addClass(APPOINTMENT_15MIN_CLASS);
         break;
-      case durationMinutes <= 20:
+      case height < thresholds[20]:
         (this.$element() as any).addClass(APPOINTMENT_20MIN_CLASS);
         break;
       default:

@@ -210,12 +210,6 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
   }
 
   @if $size == "compact" {
-    .dx-scheduler-appointment-10min {
-      .dx-scheduler-appointment-content {
-        display: none;
-      }
-    }
-
     .dx-scheduler-appointment-15min {
       .dx-scheduler-appointment-title {
         font-size: $material-scheduler-appointment-15min-title-font-size;
