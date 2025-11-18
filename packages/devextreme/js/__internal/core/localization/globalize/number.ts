@@ -1,126 +1,150 @@
-import './core';
-// eslint-disable-next-line no-restricted-imports
-import Globalize from 'globalize';
-import numberLocalization from '../number';
-import errors from '../../../../core/errors';
-
-// eslint-disable-next-line no-restricted-imports, import/no-unresolved
+import '@ts/core/localization/globalize/core';
 import 'globalize/number';
+
+import errors from '@js/core/errors';
+import type { FormatConfig, NormalizedConfig, NumberFormatter } from '@ts/core/localization/number';
+import numberLocalization from '@ts/core/localization/number';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import Globalize from 'globalize';
+
 const MAX_FRACTION_DIGITS = 20;
 
-if(Globalize && Globalize.formatNumber) {
-    if(Globalize.locale().locale === 'en') {
-        Globalize.locale('en');
+if (Globalize?.formatNumber) {
+  if (Globalize.locale().locale === 'en') {
+    Globalize.locale('en');
+  }
+
+  const formattersCache: Record<string, NumberFormatter> = {};
+
+  const getFormatter = (format: string | NormalizedConfig | undefined): NumberFormatter => {
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let formatter: NumberFormatter;
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let formatCacheKey: string;
+
+    if (typeof format === 'object') {
+      formatCacheKey = `${Globalize.locale().locale}:${JSON.stringify(format)}`;
+    } else {
+      formatCacheKey = `${Globalize.locale().locale}:${format}`;
+    }
+    formatter = formattersCache[formatCacheKey];
+    if (!formatter) {
+      formatter = Globalize.numberFormatter(format);
+      formattersCache[formatCacheKey] = formatter;
     }
 
-    const formattersCache = {};
+    return formatter;
+  };
 
-    const getFormatter = format => {
-        let formatter;
-        let formatCacheKey;
+  const globalizeNumberLocalization = {
+    engine(): string {
+      return 'globalize';
+    },
 
-        if(typeof format === 'object') {
-            formatCacheKey = Globalize.locale().locale + ':' + JSON.stringify(format);
-        } else {
-            formatCacheKey = Globalize.locale().locale + ':' + format;
-        }
-        formatter = formattersCache[formatCacheKey];
-        if(!formatter) {
-            formatter = formattersCache[formatCacheKey] = Globalize.numberFormatter(format);
-        }
+    _formatNumberCore(value: number, format: string, formatConfig: FormatConfig): string {
+      if (format === 'exponential') {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        return this.callBase.apply(this, [value, format, formatConfig]);
+      }
 
-        return formatter;
-    };
+      return getFormatter(this._normalizeFormatConfig(format, formatConfig, value))(value);
+    },
+    _normalizeFormatConfig(
+      format: string,
+      formatConfig: FormatConfig,
+      value: number,
+    ): NormalizedConfig {
+      // eslint-disable-next-line @typescript-eslint/init-declarations
+      let config: NormalizedConfig;
 
-    const globalizeNumberLocalization = {
-        engine: function() {
-            return 'globalize';
-        },
+      if (format === 'decimal') {
+        config = {
+          // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+          minimumIntegerDigits: formatConfig.precision || 1,
+          useGrouping: false,
+          minimumFractionDigits: 0,
+          maximumFractionDigits: MAX_FRACTION_DIGITS,
+          round: value < 0 ? 'ceil' : 'floor',
+        };
+      } else {
+        config = this._getPrecisionConfig(formatConfig.precision);
+      }
+      if (format === 'percent') {
+        config.style = 'percent';
+      }
 
-        _formatNumberCore: function(value, format, formatConfig) {
-            if(format === 'exponential') {
-                return this.callBase.apply(this, arguments);
-            }
+      return config;
+    },
 
-            return getFormatter(this._normalizeFormatConfig(format, formatConfig, value))(value);
-        },
-        _normalizeFormatConfig: function(format, formatConfig, value) {
-            let config;
+    _getPrecisionConfig(precision: number | undefined): Pick<NormalizedConfig, 'minimumFractionDigits' | 'maximumFractionDigits'> {
+      // eslint-disable-next-line @typescript-eslint/init-declarations
+      let config: Pick<NormalizedConfig, 'minimumFractionDigits' | 'maximumFractionDigits'>;
 
-            if(format === 'decimal') {
-                config = {
-                    minimumIntegerDigits: formatConfig.precision || 1,
-                    useGrouping: false,
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: MAX_FRACTION_DIGITS,
-                    round: value < 0 ? 'ceil' : 'floor'
-                };
-            } else {
-                config = this._getPrecisionConfig(formatConfig.precision);
-            }
-            if(format === 'percent') {
-                config.style = 'percent';
-            }
+      if (precision === null) {
+        config = {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: MAX_FRACTION_DIGITS,
+        };
+      } else {
+        config = {
+          minimumFractionDigits: precision ?? 0,
+          maximumFractionDigits: precision ?? 0,
+        };
+      }
 
-            return config;
-        },
+      return config;
+    },
 
-        _getPrecisionConfig: function(precision) {
-            let config;
+    format(
+      value: string | number,
+      format: number | string | FormatConfig | Function | undefined,
+    ): string {
+      if (typeof value !== 'number') {
+        return value;
+      }
 
-            if(precision === null) {
-                config = {
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: MAX_FRACTION_DIGITS
-                };
-            } else {
-                config = {
-                    minimumFractionDigits: precision || 0,
-                    maximumFractionDigits: precision || 0
-                };
-            }
+      // eslint-disable-next-line no-param-reassign
+      format = this._normalizeFormat(format);
 
-            return config;
-        },
+      // eslint-disable-next-line @stylistic/no-mixed-operators
+      if (!format || typeof format !== 'function' && !(format as FormatConfig).type && !(format as FormatConfig).formatter) {
+        // @ts-expect-error
+        return getFormatter(format)(value);
+      }
 
-        format: function(value, format) {
-            if(typeof value !== 'number') {
-                return value;
-            }
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return this.callBase.apply(this, [value, format]);
+    },
 
-            format = this._normalizeFormat(format);
+    parse(
+      text: string,
+      format: FormatConfig | string,
+    ): number | null | undefined {
+      if (!text) {
+        return undefined;
+      }
 
-            if(!format || typeof (format) !== 'function' && !format.type && !format.formatter) {
-                return getFormatter(format)(value);
-            }
+      if (format && (typeof format === 'string' || format.parser)) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        return this.callBase.apply(this, [text, format]);
+      }
 
-            return this.callBase.apply(this, arguments);
-        },
+      if (format) {
+        // Current parser functionality provided as-is and
+        // is independent of the most of capabilities of formatter.
+        errors.log('W0011');
+      }
 
-        parse: function(text, format) {
-            if(!text) {
-                return;
-            }
+      let result: number = Globalize.parseNumber(text);
 
-            if(format && (format.parser || typeof format === 'string')) {
-                return this.callBase.apply(this, arguments);
-            }
+      if (isNaN(result)) {
+        result = this.callBase.apply(this, [text, format]);
+      }
 
-            if(format) {
-                // Current parser functionality provided as-is and is independent of the most of capabilities of formatter.
-                errors.log('W0011');
-            }
+      return result;
+    },
+  };
 
-            let result = Globalize.parseNumber(text);
-
-            if(isNaN(result)) {
-                result = this.callBase.apply(this, arguments);
-            }
-
-            return result;
-        }
-    };
-
-    numberLocalization.resetInjection();
-    numberLocalization.inject(globalizeNumberLocalization);
+  numberLocalization.resetInjection();
+  numberLocalization.inject(globalizeNumberLocalization);
 }
