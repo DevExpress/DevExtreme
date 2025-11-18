@@ -1,26 +1,4 @@
-import { Injectable } from '@angular/core';
-
-export interface Sale {
-  Id: number;
-
-  Product: string;
-
-  Amount: number;
-
-  Discount: string;
-
-  SaleDate: string;
-
-  Region: string;
-
-  Sector: string;
-
-  Channel: string;
-
-  Customer: string;
-}
-
-const sales: Sale[] = [
+const sales = [
   {
     "Id": 1,
     "Product": "Eco Supreme",
@@ -16907,10 +16885,3 @@ const sales: Sale[] = [
     "Customer": "Apollo Inc",
   },
 ];
-
-@Injectable()
-export class Service {
-  getSales(): Sale[] {
-    return sales;
-  }
-}
