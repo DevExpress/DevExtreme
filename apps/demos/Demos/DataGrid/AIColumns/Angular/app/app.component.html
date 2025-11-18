@@ -6,8 +6,8 @@
   [aiIntegration]="aiIntegration"
   (onAIColumnRequestCreating)="onAIColumnRequestCreating($event)"
 >
-  <dxo-grouping [contextMenuEnabled]="false" />
-  <dxo-paging [pageSize]="10" />
+  <dxo-data-grid-grouping [contextMenuEnabled]="false" />
+  <dxo-data-grid-paging [pageSize]="10" />
 
   <dxi-data-grid-column
     dataField="TrademarkName"
