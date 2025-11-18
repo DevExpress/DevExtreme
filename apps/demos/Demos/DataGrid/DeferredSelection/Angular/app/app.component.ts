@@ -1,9 +1,15 @@
 import {
-  Component, ViewChild, AfterViewInit, enableProdMode, provideZoneChangeDetection,
+  NgModule,
+  Component,
+  ViewChild,
+  AfterViewInit,
+  enableProdMode,
+  provideZoneChangeDetection,
 } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxDataGridModule, DxDataGridComponent, DxButtonModule } from 'devextreme-angular';
 import { query, DataSourceOptions } from 'devextreme-angular/common/data';
-import { bootstrapApplication } from "@angular/platform-browser";
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -16,14 +22,11 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
+  standalone: false,
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   preserveWhitespaces: true,
-  imports: [
-    DxDataGridModule,
-    DxButtonModule,
-  ],
 })
 export class AppComponent implements AfterViewInit {
   @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent;
@@ -76,8 +79,18 @@ export class AppComponent implements AfterViewInit {
   }
 }
 
-bootstrapApplication(AppComponent, {
+@NgModule({
+  imports: [
+    BrowserModule,
+    DxDataGridModule,
+    DxButtonModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+  ]
+})
+export class AppModule { }
+
+platformBrowserDynamic().bootstrapModule(AppModule);

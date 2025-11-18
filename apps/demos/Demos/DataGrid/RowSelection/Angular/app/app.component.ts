@@ -1,5 +1,6 @@
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
-import { bootstrapApplication } from '@angular/platform-browser';
+import {NgModule, Component, enableProdMode, provideZoneChangeDetection} from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxDataGridModule } from 'devextreme-angular';
 import { Service, Employee } from './app.service';
 
@@ -15,10 +16,10 @@ if (window && window.config?.packageConfigPaths) {
 
 @Component({
   selector: 'demo-app',
+  standalone: false,
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
-  imports: [DxDataGridModule],
 })
 export class AppComponent {
   employees: Employee[];
@@ -28,8 +29,17 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
+@NgModule({
+  imports: [
+    BrowserModule,
+    DxDataGridModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+  ]
+})
+export class AppModule { }
+
+platformBrowserDynamic().bootstrapModule(AppModule);

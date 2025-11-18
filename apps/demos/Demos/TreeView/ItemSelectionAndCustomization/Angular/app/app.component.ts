@@ -1,13 +1,14 @@
 import {
-  Component, Pipe, PipeTransform, enableProdMode, ViewChild, provideZoneChangeDetection,
+  NgModule, Component, Pipe, PipeTransform, enableProdMode, ViewChild, provideZoneChangeDetection,
 } from '@angular/core';
-import {bootstrapApplication, BrowserModule} from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxListModule, DxCheckBoxModule } from 'devextreme-angular';
 import { DxTreeViewModule, DxTreeViewComponent, DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
 import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import { Service, Employee } from './app.service';
 
-@Pipe({ name: 'title', standalone: true })
+@Pipe({ name: 'title' })
 export class TitlePipe implements PipeTransform {
   transform(item: Record<string, unknown>): string {
     return item.text + (item.price ? ` ($${item.price})` : '');
@@ -26,18 +27,11 @@ if (window && window.config?.packageConfigPaths) {
 
 @Component({
   selector: 'demo-app',
+  standalone: false,
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
   preserveWhitespaces: true,
-  imports: [
-    BrowserModule,
-    DxTreeViewModule,
-    DxListModule,
-    DxCheckBoxModule,
-    DxSelectBoxModule,
-    TitlePipe,
-  ],
 })
 export class AppComponent {
   @ViewChild(DxTreeViewComponent<Employee>, { static: false }) treeView: DxTreeViewComponent;
@@ -100,8 +94,20 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
+@NgModule({
+  imports: [
+    BrowserModule,
+    DxTreeViewModule,
+    DxListModule,
+    DxCheckBoxModule,
+    DxSelectBoxModule,
+  ],
+  declarations: [AppComponent, TitlePipe],
+  bootstrap: [AppComponent],
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+  ]
+})
+export class AppModule { }
+
+platformBrowserDynamic().bootstrapModule(AppModule);
