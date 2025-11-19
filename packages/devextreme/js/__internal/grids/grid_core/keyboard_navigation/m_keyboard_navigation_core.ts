@@ -2,10 +2,12 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import { keyboard } from '@js/common/core/events/short';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import { Deferred } from '@js/core/utils/deferred';
 import { getBoundingRect } from '@js/core/utils/position';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
 import { getElementLocationInternal } from '@ts/ui/scroll_view/utils/get_element_location_internal';
 
+import type { DeferredObj } from '../../../../core/utils/deferred';
 import modules from '../m_modules';
 import type { Controllers, OptionChanged, Views } from '../m_types';
 import gridCoreUtils from '../m_utils';
@@ -98,12 +100,12 @@ export class KeyboardNavigationController extends modules.ViewController {
   }
 
   private getNextCellLocation($cell?: dxElementWrapper): number {
-    if (!$cell?.length) {
-      return this._isVirtualColumnRender() ? this.getVirtualCellWidth() : 0;
+    const scrollable = this.getScrollable();
+
+    if (!scrollable || !$cell?.length) {
+      return 0;
     }
 
-    const scrollable = this.getScrollable();
-    const scrollLeft = scrollable.scrollLeft();
     const scrollPadding = this.getScrollPadding($(scrollable.container()));
 
     return getElementLocationInternal(
@@ -113,7 +115,7 @@ export class KeyboardNavigationController extends modules.ViewController {
       scrollable.scrollOffset(),
       scrollPadding,
       this.addWidgetPrefix('table'),
-    ) - scrollLeft;
+    );
   }
 
   protected resizeCompleted() {}
@@ -282,28 +284,43 @@ export class KeyboardNavigationController extends modules.ViewController {
     return this._rowsView.getScrollable() as Scrollable;
   }
 
-  protected scrollToNextCell($nextCell?: dxElementWrapper): Promise<void> {
+  protected scrollLeft(scrollLeft: number): DeferredObj<void> {
     const scrollable = this.getScrollable();
 
-    if (!scrollable) {
-      return Promise.resolve();
+    if (!scrollable || scrollable.scrollLeft() === scrollLeft) {
+      // @ts-expect-error
+      return Deferred().resolve().promise();
     }
 
-    const leftOffset = this.getNextCellLocation($nextCell);
+    const d = Deferred();
+    const scrollHandler = (): void => {
+      scrollable.off('scroll', scrollHandler);
 
-    if (leftOffset !== 0) {
-      return new Promise((resolve) => {
-        const scrollHandler = (): void => {
-          scrollable.off('scroll', scrollHandler);
-          resolve();
+      const normalizeScrollLeft = this._rowsView.normalizeScrollLeft(scrollLeft);
+
+      if (this._columnsController?.isNeedToRenderVirtualColumns(normalizeScrollLeft)) {
+        const renderCompletedHandler = (): void => {
+          this._rowsView.renderCompleted.remove(renderCompletedHandler);
+          d.resolve();
         };
 
-        scrollable.on('scroll', scrollHandler);
-        scrollable.scrollBy({ left: leftOffset, top: 0 });
-      });
-    }
+        this._rowsView.renderCompleted.add(renderCompletedHandler);
+      } else {
+        d.resolve();
+      }
+    };
 
-    return Promise.resolve();
+    scrollable.on('scroll', scrollHandler);
+    scrollable.scrollTo({ left: scrollLeft });
+
+    // @ts-expect-error
+    return d.promise();
+  }
+
+  protected scrollToNextCell($nextCell?: dxElementWrapper): DeferredObj<void> {
+    const scrollLeft = this.getNextCellLocation($nextCell);
+
+    return this.scrollLeft(scrollLeft);
   }
 
   protected _isVirtualColumnRender(): boolean {

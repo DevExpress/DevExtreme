@@ -12,7 +12,7 @@ And to make navigation via Tab key working properly some focus event handlers ar
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { isDefined, isEmptyObject } from '@js/core/utils/type';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { KeyDownEvent, ModuleType } from '@ts/grids/grid_core/m_types';
 
 import type { KeyboardNavigationController } from './m_keyboard_navigation';
 
@@ -67,19 +67,19 @@ export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<Keyboa
     this.makeScrollableFocusableIfNeed();
   }
 
-  protected _tabKeyHandler(eventArgs: any, isEditing: any): void {
+  protected _tabKeyHandler(event: KeyDownEvent): void {
     const isCellPositionDefined = isDefined(this._focusedCellPosition)
       && !isEmptyObject(this._focusedCellPosition);
     const isOriginalHandlerRequired = !isCellPositionDefined
-      || (!eventArgs.shift && this._isLastValidCell(this._focusedCellPosition))
-      || (eventArgs.shift && this._isFirstValidCell(this._focusedCellPosition));
+      || (!event.shift && this._isLastValidCell(this._focusedCellPosition))
+      || (event.shift && this._isFirstValidCell(this._focusedCellPosition));
     const isNeedFocusable = this.isScrollableNeedFocusable();
 
     if (isOriginalHandlerRequired && isNeedFocusable) {
       this._$firstNotFixedCell?.removeAttr('tabIndex');
     }
 
-    super._tabKeyHandler(eventArgs, isEditing);
+    super._tabKeyHandler(event);
   }
 
   private getFirstNotFixedCell(): dxElementWrapper | undefined {

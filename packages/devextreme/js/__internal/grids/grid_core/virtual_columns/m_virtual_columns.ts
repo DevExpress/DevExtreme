@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import browser from '@js/core/utils/browser';
-import { getHeight, getOuterWidth, getWidth } from '@js/core/utils/size';
+import { getHeight, getOuterWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
@@ -36,21 +36,15 @@ const rowsView = (Base: ModuleType<RowsView>) => class VirtualColumnsRowsViewExt
   }
 
   protected _handleScroll(e) {
-    const that = this;
-    const scrollable = this.getScrollable();
-    let { left } = e.scrollOffset;
+    const left = this.normalizeScrollLeft(e.scrollOffset.left);
 
     this._scrollLeft = left;
 
     // @ts-expect-error
-    super._handleScroll.apply(that, arguments);
-
-    if (that.option('rtlEnabled') && scrollable) {
-      left = getWidth(scrollable.$content()) - getWidth(scrollable.$element()) - left;
-    }
+    super._handleScroll.apply(this, arguments);
 
     // @ts-expect-error
-    that._columnsController.setScrollPosition(left, e.event);
+    this._columnsController.setScrollPosition(left, e.event);
   }
 
   protected _renderCore(e) {
@@ -200,20 +194,6 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
     return scrollingTimeout;
   }
 
-  private setScrollPosition(position, event?) {
-    const scrollingTimeout = this.getScrollingTimeout();
-
-    if (scrollingTimeout > 0) {
-      clearTimeout(this._changedTimeout);
-
-      this._changedTimeout = setTimeout(() => {
-        this._setScrollPositionCore(position, event);
-      }, scrollingTimeout);
-    } else {
-      this._setScrollPositionCore(position, event);
-    }
-  }
-
   private resize() {
     this._setScrollPositionCore(this._position);
   }
@@ -336,6 +316,20 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
 
   public isVirtualMode(): boolean {
     return hasWindow() && this.option('scrolling.columnRenderingMode') === 'virtual';
+  }
+
+  public setScrollPosition(position, event?) {
+    const scrollingTimeout = this.getScrollingTimeout();
+
+    if (scrollingTimeout > 0) {
+      clearTimeout(this._changedTimeout);
+
+      this._changedTimeout = setTimeout(() => {
+        this._setScrollPositionCore(position, event);
+      }, scrollingTimeout);
+    } else {
+      this._setScrollPositionCore(position, event);
+    }
   }
 };
 
