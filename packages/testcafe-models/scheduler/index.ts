@@ -230,12 +230,12 @@ export default class Scheduler extends Widget {
     isRecurringAppointment: boolean,
   ): Promise<AppointmentPopup> {
     const { getInstance } = this;
-    const showPopup = (): any => (getInstance() as any).showAppointmentPopup(appointment);
 
-    await ClientFunction(showPopup, {
-      dependencies: { appointment, getInstance },
-    })();
-
+    await ClientFunction((appointmentData) => {
+      (getInstance() as any).showAppointmentPopup(appointmentData);
+    })(appointment);
+  
+  
     if (isRecurringAppointment) {
       await t.click(Scheduler.getEditRecurrenceDialog().series);
     }
