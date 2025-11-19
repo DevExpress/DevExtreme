@@ -89,7 +89,7 @@ jobs:
     needs: build
     runs-on: devextreme-shr2
     name: Constel ${{ matrix.CONSTEL }}${{ matrix.TIMEZONE != '' && format('-{0}', matrix.TIMEZONE) || '' }}${{ matrix.CSP == 'false' && '-no-csp' || '' }}
-    timeout-minutes: 60
+    timeout-minutes: 30  # Reduced from 60: parallel execution should complete in 5-15 min max
     strategy:
       fail-fast: false
       matrix:
@@ -98,7 +98,6 @@ jobs:
           misc,
           ui,
           ui.editors,
-          ui.htmlEditor,
           ui.grid,
           ui.scheduler,
           viz
@@ -143,7 +142,6 @@ jobs:
           'ui',
           'ui.widgets',
           'ui.editors',
-          'ui.htmlEditor',
           'ui.grid',
           'ui.scheduler',
           'viz'

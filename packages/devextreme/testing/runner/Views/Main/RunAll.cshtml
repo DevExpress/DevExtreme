@@ -622,8 +622,28 @@
             }
         }
 
+        // Queue for suite finalization to prevent AJAX flood
+        var activeFinalizationRequests = 0;
+        var maxConcurrentFinalizations = 3; // Max 3 simultaneous POST requests
+        var finalizationQueue = [];
+        
         function notifySuiteFinalized(name, passed, runtime, callback) {
-            serverLog('notifySuiteFinalized: Sending POST for ' + name);
+            // Add to queue
+            finalizationQueue.push({ name: name, passed: passed, runtime: runtime, callback: callback });
+            processFinalizationQueue();
+        }
+        
+        function processFinalizationQueue() {
+            // Process queue if we have capacity
+            while (finalizationQueue.length > 0 && activeFinalizationRequests < maxConcurrentFinalizations) {
+                var item = finalizationQueue.shift();
+                executeNotifySuiteFinalized(item.name, item.passed, item.runtime, item.callback);
+            }
+        }
+        
+        function executeNotifySuiteFinalized(name, passed, runtime, callback) {
+            activeFinalizationRequests++;
+            serverLog('notifySuiteFinalized: Sending POST for ' + name + ' (active=' + activeFinalizationRequests + ', queued=' + finalizationQueue.length + ')');
             console.log('[CLIENT] notifySuiteFinalized START for ' + name);
             
             var callbackCalled = false;
@@ -656,7 +676,14 @@
             
             var safetyTimer = setTimeout(function() {
                 serverLog('WARNING: AJAX timeout for ' + name + ' after ' + safetyTimeout + 'ms, forcing callback');
+                
+                // Decrement active counter even on timeout
+                activeFinalizationRequests--;
+                
                 safeCallback('safety-timeout');
+                
+                // Process next item in queue
+                processFinalizationQueue();
             }, safetyTimeout);
             
             var ajaxRequest = $.ajax({
@@ -685,13 +712,44 @@
                 // This ALWAYS runs, regardless of success or failure (unless process killed)
                 console.log('[CLIENT] AJAX always for ' + name + ', status=' + textStatus);
                 clearTimeout(safetyTimer); // Cancel safety timeout since AJAX completed
+                
+                // Decrement active counter and process next in queue
+                activeFinalizationRequests--;
+                serverLog('notifySuiteFinalized: Request complete for ' + name + ' (active=' + activeFinalizationRequests + ', queued=' + finalizationQueue.length + ')');
+                
                 safeCallback('ajax-always');
+                
+                // Process next item in queue
+                processFinalizationQueue();
             });
             
-            console.log('[CLIENT] notifySuiteFinalized END (async) for ' + name);
+            console.log('[CLIENT] executeNotifySuiteFinalized END (async) for ' + name);
         }
+        // Throttle notifyIsAlive to prevent AJAX flood
+        var lastAliveTime = 0;
+        var aliveThrottleMs = 5000; // Minimum 5 seconds between alive pings
+        var pendingAlive = false;
+        
         function notifyIsAlive(){
-            serverLog('[ALIVE] Sending NotifyIsAlive ping');
+            var now = Date.now();
+            var timeSinceLastAlive = now - lastAliveTime;
+            
+            // If called too frequently, ignore (throttle)
+            if (timeSinceLastAlive < aliveThrottleMs) {
+                if (!pendingAlive) {
+                    // Schedule one for later
+                    pendingAlive = true;
+                    setTimeout(function() {
+                        pendingAlive = false;
+                        notifyIsAlive();
+                    }, aliveThrottleMs - timeSinceLastAlive);
+                }
+                return;
+            }
+            
+            lastAliveTime = now;
+            serverLog('[ALIVE] Sending NotifyIsAlive ping (throttled)');
+            
             $.ajax({
                 url: @Html.Raw(Json.Serialize(Url.Action("NotifyIsAlive"))),
                 type: 'POST',
