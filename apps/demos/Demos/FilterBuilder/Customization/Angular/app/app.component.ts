@@ -1,5 +1,6 @@
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
-import {bootstrapApplication, BrowserModule} from '@angular/platform-browser';
+import { NgModule, Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxListModule, DxButtonModule, DxTagBoxModule } from 'devextreme-angular';
 import { DxFilterBuilderModule, DxFilterBuilderComponent, DxFilterBuilderTypes } from 'devextreme-angular/ui/filter-builder';
 import { Service } from './app.service';
@@ -30,16 +31,10 @@ if (window && window.config?.packageConfigPaths) {
 
 @Component({
   selector: 'demo-app',
+  standalone: false,
   providers: [Service],
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
-  imports: [
-    BrowserModule,
-    DxListModule,
-    DxButtonModule,
-    DxTagBoxModule,
-    DxFilterBuilderModule,
-  ],
 })
 
 export class AppComponent {
@@ -85,9 +80,19 @@ export class AppComponent {
   private static getLineBreak = (spaces: number) => `\r\n${new Array(spaces + 1).join(' ')}`;
 }
 
-
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
+@NgModule({
+  imports: [
+    BrowserModule,
+    DxListModule,
+    DxButtonModule,
+    DxTagBoxModule,
+    DxFilterBuilderModule,
   ],
-});
+  declarations: [AppComponent],
+  providers: [provideZoneChangeDetection({ eventCoalescing: true })],
+  bootstrap: [AppComponent],
+})
+
+export class AppModule { }
+
+platformBrowserDynamic().bootstrapModule(AppModule);

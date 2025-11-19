@@ -1,5 +1,6 @@
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
-import { bootstrapApplication, BrowserModule } from '@angular/platform-browser';
+import { NgModule, Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxTreeMapModule, DxSelectBoxModule } from 'devextreme-angular';
 import { PopulationByAge, Service } from './app.service';
 
@@ -15,15 +16,11 @@ if (window && window.config?.packageConfigPaths) {
 
 @Component({
   selector: 'demo-app',
+  standalone: false,
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
   preserveWhitespaces: true,
-  imports: [
-    BrowserModule,
-    DxTreeMapModule,
-    DxSelectBoxModule,
-  ],
 })
 export class AppComponent {
   getPopulationsByAge: PopulationByAge[];
@@ -69,8 +66,16 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
+@NgModule({
+  imports: [
+    BrowserModule,
+    DxTreeMapModule,
+    DxSelectBoxModule,
   ],
-});
+  declarations: [AppComponent],
+  providers: [provideZoneChangeDetection({ eventCoalescing: true })],
+  bootstrap: [AppComponent],
+})
+export class AppModule { }
+
+platformBrowserDynamic().bootstrapModule(AppModule);

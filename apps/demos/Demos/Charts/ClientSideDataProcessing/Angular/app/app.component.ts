@@ -1,9 +1,9 @@
 import {
-   Component, AfterViewInit, enableProdMode, provideZoneChangeDetection, inject,
+  NgModule, Component, AfterViewInit, enableProdMode, provideZoneChangeDetection,
 } from '@angular/core';
-import { bootstrapApplication } from '@angular/platform-browser';
-
-import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
+import { BrowserModule } from '@angular/platform-browser';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 
 import { DxChartModule, DxSelectBoxModule } from 'devextreme-angular';
@@ -21,12 +21,9 @@ if (window && window.config?.packageConfigPaths) {
 
 @Component({
   selector: 'demo-app',
+  standalone: false,
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
-  imports: [
-    DxChartModule,
-    DxSelectBoxModule,
-  ],
 })
 export class AppComponent implements AfterViewInit {
   temperature: number[] = [2, 4, 6, 8, 9, 10, 11];
@@ -37,7 +34,7 @@ export class AppComponent implements AfterViewInit {
 
   monthWeather = {} as DataSource;
 
-  http = inject(HttpClient);
+  constructor(private http: HttpClient) {}
 
   ngAfterViewInit() {
     this.monthWeather = new DataSource({
@@ -70,9 +67,17 @@ export class AppComponent implements AfterViewInit {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-    provideHttpClient(withFetch())
+@NgModule({
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    DxChartModule,
+    DxSelectBoxModule,
   ],
-});
+  declarations: [AppComponent],
+  providers: [provideZoneChangeDetection({ eventCoalescing: true })],
+  bootstrap: [AppComponent],
+})
+export class AppModule { }
+
+platformBrowserDynamic().bootstrapModule(AppModule);

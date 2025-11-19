@@ -1,5 +1,6 @@
-import { Component, enableProdMode, provideZoneChangeDetection} from '@angular/core';
-import { bootstrapApplication, BrowserModule } from '@angular/platform-browser';
+import { NgModule, Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DataSource, ArrayStore } from 'devextreme-angular/common/data';
 import { DxSelectBoxModule, DxCheckBoxModule } from 'devextreme-angular';
 import { SingleMultipleAllOrNone } from 'devextreme-angular/common';
@@ -18,16 +19,11 @@ if (window && window.config?.packageConfigPaths) {
 
 @Component({
   selector: 'demo-app',
+  standalone: false,
   providers: [Service],
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   preserveWhitespaces: true,
-  imports: [
-    BrowserModule,
-    DxSelectBoxModule,
-    DxListModule,
-    DxCheckBoxModule,
-  ],
 })
 export class AppComponent {
   tasks: DataSource;
@@ -48,8 +44,17 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
+@NgModule({
+  imports: [
+    BrowserModule,
+    DxSelectBoxModule,
+    DxListModule,
+    DxCheckBoxModule,
   ],
-});
+  declarations: [AppComponent],
+  providers: [provideZoneChangeDetection({ eventCoalescing: true })],
+  bootstrap: [AppComponent],
+})
+export class AppModule { }
+
+platformBrowserDynamic().bootstrapModule(AppModule);

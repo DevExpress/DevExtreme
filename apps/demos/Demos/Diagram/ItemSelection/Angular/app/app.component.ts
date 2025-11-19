@@ -1,7 +1,9 @@
 import {
-  Component, Pipe, PipeTransform, enableProdMode, provideZoneChangeDetection,
+  NgModule, Component, Pipe, PipeTransform, enableProdMode, provideZoneChangeDetection,
 } from '@angular/core';
-import { bootstrapApplication } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { HttpClientModule } from '@angular/common/http';
 import { ArrayStore } from 'devextreme-angular/common/data';
 import { DxDiagramModule, DxDiagramTypes } from 'devextreme-angular/ui/diagram';
 import { Service } from './app.service';
@@ -16,25 +18,13 @@ if (window && window.config?.packageConfigPaths) {
   modulePrefix = '/app';
 }
 
-@Pipe({ name: 'stringifyItems', standalone: true })
-export class StringifyItemsPipe implements PipeTransform {
-  transform(items: DxDiagramTypes.Item[], textExpression: string): string {
-    return items
-        .map((item) => item.dataItem[textExpression])
-        .join(', ');
-  }
-}
-
 @Component({
   selector: 'demo-app',
+  standalone: false,
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
   preserveWhitespaces: true,
-  imports: [
-    DxDiagramModule,
-    StringifyItemsPipe,
-  ],
 })
 export class AppComponent {
   dataSource: ArrayStore;
@@ -66,8 +56,25 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
+@Pipe({ name: 'stringifyItems' })
+export class StringifyItemsPipe implements PipeTransform {
+  transform(items: DxDiagramTypes.Item[], textExpression: string): string {
+    return items
+      .map((item) => item.dataItem[textExpression])
+      .join(', ');
+  }
+}
+
+@NgModule({
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    DxDiagramModule,
   ],
-});
+  declarations: [AppComponent, StringifyItemsPipe],
+  providers: [provideZoneChangeDetection({ eventCoalescing: true })],
+  bootstrap: [AppComponent],
+})
+export class AppModule { }
+
+platformBrowserDynamic().bootstrapModule(AppModule);
