@@ -59,29 +59,24 @@
     $(function() {
         var ROOT_URL = "@Url.Content("~/")";
 
-        // Set global AJAX timeout to prevent hanging requests
         $.ajaxSetup({
-            timeout: 30000 // 30 seconds timeout for all AJAX requests
+            timeout: 30000
         });
 
-        // Send important logs to server for CI debugging
         var serverLog = function(message) {
-            console.log(message); // Also log to browser console
+            console.log(message);
             
-            // Send to server if in CI mode
             if(@Html.Raw(Json.Serialize(Model.IsContinuousIntegration))) {
                 $.post(@Html.Raw(Json.Serialize(Url.Action("LogMiscError"))), { 
                     msg: "[JS] " + message,
-                    timeout: 5000 // Short timeout for logging
-                }).fail(function() {
-                    // Silently ignore failures to avoid recursion
-                });
+                    timeout: 5000
+                }).fail(function() { });
             }
         };
 
         var TEST_TIMEOUT_SECONDS = 45,
             TEST_TIMEOUT = TEST_TIMEOUT_SECONDS * 1000,
-            WORKER_STUCK_TIMEOUT = 60 * 1000, // 60 seconds without any activity
+            WORKER_STUCK_TIMEOUT = 60 * 1000,
             WORKER_NAME_PREFIX = "workerFrame",
             busyCount = 0,
             suitesDescription = {
@@ -90,7 +85,7 @@
                 version: "@(Model.Version)"
             },
             suitesInProgress = [ ],
-            workerLastActivity = [ ], // Track last activity time for each worker
+            workerLastActivity = [ ],
             urls = @Html.Raw(Json.Serialize(Model.Suites)),
             originalUrls = urls.slice(0),
             noTryCatch = @Html.Raw(Json.Serialize(Model.NoTryCatch)),
@@ -110,7 +105,6 @@
             if(runWorkerInNewWindow)
                 return 1; // NOTE: more than 1 window cause problems with tests that use focus
 
-            // Use MAX_WORKERS from environment variable if set
             if(maxWorkersFromEnv !== null && maxWorkersFromEnv > 0)
                 return maxWorkersFromEnv;
 
@@ -154,7 +148,7 @@
                 type: "post",
                 contentType: "application/json",
                 data: JSON.stringify(testResults),
-                timeout: 60000 // 60 second timeout for saving results
+                timeout: 60000
             }).done(function() {
                 notifyDeviceTestManager("QUnit.saveResults.done");
                 removeWorkers();
@@ -164,7 +158,7 @@
                 frame.setAttribute("src", @Html.Raw(Json.Serialize(Url.Action("DisplayResults"))));
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 serverLog('SaveResults FAILED: ' + textStatus + ' ' + errorThrown);
-                // Try to continue anyway
+
                 notifyDeviceTestManager("QUnit.saveResults.failed");
                 removeWorkers();
             });
@@ -173,41 +167,18 @@
         var resultSaving = false;
 
         var nextUrl = function(i) {
-            console.log('nextUrl: worker=' + i + ', urls.length=' + urls.length + ', busyCount=' + busyCount + 
-                ', currentSuite=' + (suitesInProgress[i] ? suitesInProgress[i].name : 'null'));
-            
-            // Safety check: if worker is still busy, do not load next test
             if(suitesInProgress[i] !== null && suitesInProgress[i] !== undefined) {
                 serverLog('ERROR: nextUrl called but worker ' + i + ' is still busy with ' + suitesInProgress[i].name + '! Skipping.');
                 return;
             }
             
             if(!urls.length) {
-                console.log('nextUrl: No more URLs for worker ' + i);
-                // $.ajax(ROOT_URL + "run/something/FrameHasFinishedRunningASuite.js?frame=" + i);
                 if(!resultSaving && !busyCount) {
-                    console.log('All tests completed, saving results...');
                     resultSaving = true;
                     rootSuite.time = roundTime((new Date() - rootStartTime) / 1000);
                     rootSuite.pureTime = roundTime(rootSuite.pureTime);
                     saveResults();
                     window.onbeforeunload = $.noop;
-                } else {
-                    console.log('Waiting for tests to complete: resultSaving=' + resultSaving + ', busyCount=' + busyCount);
-                    if(busyCount < 0) {
-                        console.error('ERROR: busyCount is negative! This should not happen.');
-                    }
-                    
-                    // Debug: show which workers are still busy
-                    var busyWorkers = [];
-                    for(var w = 0; w < WORKER_COUNT; w++) {
-                        if(suitesInProgress[w]) {
-                            busyWorkers.push('Worker' + w + ':' + suitesInProgress[w].name);
-                        }
-                    }
-                    if(busyWorkers.length > 0) {
-                        console.log('Busy workers: ' + busyWorkers.join(', '));
-                    }
                 }
                 return;
             }
@@ -246,16 +217,13 @@
 
                 startTime: new Date(),
                 pureTime: 0,
-                finalized: false, // Track if suite has been finalized
+                finalized: false,
 
                 finalize: function(success) {
                     if(this.finalized) {
                         serverLog('Suite already finalized: ' + this.name + ', skipping duplicate finalize');
                         return;
                     }
-                    
-                    var suiteName = this.name; // Save name before cleanup
-                    serverLog('===== FINALIZE CALLED for ' + suiteName + ' =====');
                     
                     this.finalized = true;
                     this.time = roundTime((new Date() - this.startTime) / 1000);
@@ -268,21 +236,13 @@
                     rootSuite.results.push(this);
                     suitesInProgress[i] = null;
                     busyCount--;
-                    
-                    serverLog('Suite finalized: ' + suiteName + ', worker=' + _i + ', busyCount=' + busyCount);
-                    
-                    // NOTE: Do NOT call nextUrl here! 
-                    // It will be called after notifySuiteFinalized completes (or fails) 
-                    // to ensure proper sequencing
                 }
             };
 
             worker.name = WORKER_NAME_PREFIX + i;
             busyCount++;
-            console.log('Loading test in worker ' + i + ': ' + urlInfo.FullName + ', busyCount=' + busyCount + 
-                ', urls remaining=' + urls.length);
             worker.location = urlInfo.Url + "?" + $.param(additionalParams);
-            workerLastActivity[i] = Date.now(); // Mark worker as active
+            workerLastActivity[i] = Date.now();
         };
 
         var workers = [ ];
@@ -338,38 +298,28 @@
                         serverLog('ERROR: Worker ' + i + ' is STUCK on test: ' + suite.name + ' (no activity for ' + 
                             inactiveSeconds + ' seconds), busyCount=' + busyCount);
                         serverLog('Force finalizing stuck worker ' + i + ' and loading next test');
+
+                        suite.finalize(false);
                         
-                        // Force finalize the stuck suite (finalize checks for double-finalization)
-                        suite.finalize(false); // Mark as failed
-                        
-                        // Clear worker state
                         suitesInProgress[i] = null;
                         workerLastActivity[i] = now;
-                        
-                        // Try to reload the worker by loading next test
+
                         var worker = workerByIndex(i);
                         if(worker) {
                             try {
-                                // Force stop any running tests in the iframe
                                 if(worker.contentWindow && worker.contentWindow.stop) {
                                     worker.contentWindow.stop();
                                 }
                             } catch(e) {
                                 serverLog('Could not stop worker iframe: ' + e.message);
                             }
-                            
-                            // Load next test
+
                             setTimeout(function() {
-                                serverLog('Loading next test for recovered worker ' + i);
                                 nextUrl(i);
                             }, 100);
                         }
                     }
                 }
-            }
-            
-            if(activeWorkers.length > 0 || busyCount > 0) {
-                console.log('checkStuckWorkers: busyCount=' + busyCount + ', active: [' + activeWorkers.join(', ') + ']');
             }
         };
 
@@ -399,7 +349,7 @@
             var i = indexFromWorkerName(worker),
                 testSuite = suitesInProgress[i];
 
-            workerLastActivity[i] = Date.now(); // Mark worker activity
+            workerLastActivity[i] = Date.now();
             notifyIsAlive();
 
             var testCase = {
@@ -511,9 +461,8 @@
                 testCases,
                 testCase;
 
-            workerLastActivity[i] = Date.now(); // Mark worker activity
-            
-            // Always notify on test done (removed throttling to prevent stalling)
+            workerLastActivity[i] = Date.now();
+
             notifyDeviceTestManager("QUnit.testCaseDone");
             notifyIsAlive();
 
@@ -552,48 +501,24 @@
         };
 
         window.RUNNER_ON_DONE = function(worker, qunitData) {
-            serverLog('===== RUNNER_ON_DONE CALLED =====');
-            
             var i = indexFromWorkerName(worker),
                 suite = suitesInProgress[i],
                 passed = !qunitData.failed;
 
-            serverLog('RUNNER_ON_DONE: worker=' + i + ', suite=' + (suite ? suite.name : 'null') + 
-                ', busyCount=' + busyCount + ', failed=' + qunitData.failed + ', total=' + qunitData.total);
-
             if(suite) {
                 if(suite.finalized) {
-                    console.error('RUNNER_ON_DONE: suite ' + suite.name + ' is already finalized but still in suitesInProgress[' + i + ']!');
-                    // This should not happen, but clean up just in case
                     suitesInProgress[i] = null;
-                    return; // Do NOT call nextUrl - finalize() already did
+                    return;
                 }
                 
-                var suiteName = suite.name; // Save before finalize clears it
-                serverLog('RUNNER_ON_DONE: About to finalize suite ' + suiteName + ' (worker=' + i + ')');
-                
-                // finalize() handles busyCount-- internally and prevents double-finalization
+                var suiteName = suite.name;
                 suite.finalize(passed, qunitData.total);
-                
-                serverLog('RUNNER_ON_DONE: About to notify server about ' + suiteName + ' completion');
-                console.log('[CLIENT] RUNNER_ON_DONE: calling notifySuiteFinalized for ' + suiteName + ', worker=' + i);
-                
-                // Notify server and only then proceed to next test
+
                 notifySuiteFinalized(suiteName, passed, qunitData.runtime, function() {
-                    // Success or error - either way, continue to next test
-                    console.log('[CLIENT] RUNNER_ON_DONE: callback fired for ' + suiteName + ', worker=' + i);
-                    serverLog('RUNNER_ON_DONE: Server notified about ' + suiteName + ', calling nextUrl for worker ' + i);
-                    
                     setTimeout(function() {
-                        console.log('[CLIENT] RUNNER_ON_DONE: setTimeout fired, calling nextUrl for worker ' + i);
                         nextUrl.call(window, i);
-                        console.log('[CLIENT] RUNNER_ON_DONE: nextUrl called for worker ' + i);
                     }, 0);
                 });
-            } else {
-                console.warn('RUNNER_ON_DONE: suite is null for worker ' + i + ' - already finalized, skipping nextUrl call');
-                // Suite is null - it was already finalized and nextUrl was already scheduled
-                // Do NOT call nextUrl again to avoid loading tests twice in the same worker
             }
         };
 
@@ -626,19 +551,16 @@
             }
         }
 
-        // Queue for suite finalization to prevent AJAX flood
         var activeFinalizationRequests = 0;
-        var maxConcurrentFinalizations = 3; // Max 3 simultaneous POST requests
+        var maxConcurrentFinalizations = 3;
         var finalizationQueue = [];
         
         function notifySuiteFinalized(name, passed, runtime, callback) {
-            // Add to queue
             finalizationQueue.push({ name: name, passed: passed, runtime: runtime, callback: callback });
             processFinalizationQueue();
         }
         
         function processFinalizationQueue() {
-            // Process queue if we have capacity
             while (finalizationQueue.length > 0 && activeFinalizationRequests < maxConcurrentFinalizations) {
                 var item = finalizationQueue.shift();
                 executeNotifySuiteFinalized(item.name, item.passed, item.runtime, item.callback);
@@ -647,46 +569,30 @@
         
         function executeNotifySuiteFinalized(name, passed, runtime, callback) {
             activeFinalizationRequests++;
-            serverLog('notifySuiteFinalized: Sending POST for ' + name + ' (active=' + activeFinalizationRequests + ', queued=' + finalizationQueue.length + ')');
-            console.log('[CLIENT] notifySuiteFinalized START for ' + name);
             
             var callbackCalled = false;
             var safeCallback = function(source) {
                 if(callbackCalled) {
-                    console.warn('[CLIENT] Callback already called for ' + name + ', ignoring duplicate from ' + source);
                     return;
                 }
                 callbackCalled = true;
-                serverLog('notifySuiteFinalized: Calling callback for ' + name + ' (source: ' + source + ')');
                 
                 if(callback) {
-                    console.log('[CLIENT] About to call callback for ' + name);
                     try {
                         callback();
-                        console.log('[CLIENT] Callback executed successfully for ' + name);
                     } catch(e) {
-                        console.error('[CLIENT] Callback threw exception for ' + name + ': ' + e.message);
                         serverLog('ERROR: Callback exception for ' + name + ': ' + e.message);
                     }
-                } else {
-                    console.log('[CLIENT] No callback provided for ' + name);
                 }
             };
             
-            // Safety timeout: force callback even if AJAX never completes
-            // CI environments (Docker + headless Chrome) are much slower, use longer timeouts
-            var ajaxTimeout = farmMode ? 60000 : 15000; // 60 sec for CI, 15 sec local
-            var safetyTimeout = farmMode ? 90000 : 20000; // 90 sec for CI, 20 sec local
+            var ajaxTimeout = farmMode ? 60000 : 15000;
+            var safetyTimeout = farmMode ? 90000 : 20000;
             
             var safetyTimer = setTimeout(function() {
-                serverLog('WARNING: AJAX timeout for ' + name + ' after ' + safetyTimeout + 'ms, forcing callback');
-                
-                // Decrement active counter even on timeout
+                serverLog('WARNING: AJAX timeout for ' + name + ' after ' + safetyTimeout + 'ms');
                 activeFinalizationRequests--;
-                
                 safeCallback('safety-timeout');
-                
-                // Process next item in queue
                 processFinalizationQueue();
             }, safetyTimeout);
             
@@ -697,51 +603,27 @@
                 timeout: ajaxTimeout
             });
             
-            ajaxRequest.done(function() {
-                serverLog('notifySuiteFinalized: Server responded OK for ' + name);
-                console.log('[CLIENT] AJAX done for ' + name);
-            });
-            
             ajaxRequest.fail(function(jqXHR, textStatus, errorThrown) {
-                var errorMsg = 'NotifySuiteFinalized FAILED for ' + name + 
-                    ': status=' + textStatus + 
-                    ', error=' + errorThrown + 
-                    ', httpStatus=' + jqXHR.status + 
-                    ', responseText=' + (jqXHR.responseText || 'none');
-                serverLog(errorMsg);
-                console.error('[CLIENT] AJAX fail for ' + name + ': ' + errorMsg);
+                serverLog('NotifySuiteFinalized FAILED for ' + name + ': ' + textStatus + ', error=' + errorThrown);
             });
             
             ajaxRequest.always(function(dataOrJqXHR, textStatus) {
-                // This ALWAYS runs, regardless of success or failure (unless process killed)
-                console.log('[CLIENT] AJAX always for ' + name + ', status=' + textStatus);
-                clearTimeout(safetyTimer); // Cancel safety timeout since AJAX completed
-                
-                // Decrement active counter and process next in queue
+                clearTimeout(safetyTimer);
                 activeFinalizationRequests--;
-                serverLog('notifySuiteFinalized: Request complete for ' + name + ' (active=' + activeFinalizationRequests + ', queued=' + finalizationQueue.length + ')');
-                
                 safeCallback('ajax-always');
-                
-                // Process next item in queue
                 processFinalizationQueue();
             });
-            
-            console.log('[CLIENT] executeNotifySuiteFinalized END (async) for ' + name);
         }
-        // Throttle notifyIsAlive to prevent AJAX flood
         var lastAliveTime = 0;
-        var aliveThrottleMs = 5000; // Minimum 5 seconds between alive pings
+        var aliveThrottleMs = 5000;
         var pendingAlive = false;
         
         function notifyIsAlive(){
             var now = Date.now();
             var timeSinceLastAlive = now - lastAliveTime;
             
-            // If called too frequently, ignore (throttle)
             if (timeSinceLastAlive < aliveThrottleMs) {
                 if (!pendingAlive) {
-                    // Schedule one for later
                     pendingAlive = true;
                     setTimeout(function() {
                         pendingAlive = false;
@@ -752,40 +634,18 @@
             }
             
             lastAliveTime = now;
-            serverLog('[ALIVE] Sending NotifyIsAlive ping (throttled)');
             
             $.ajax({
                 url: @Html.Raw(Json.Serialize(Url.Action("NotifyIsAlive"))),
                 type: 'POST',
-                timeout: farmMode ? 30000 : 10000 // 30 sec for CI, 10 sec local
-            })
-            .done(function() {
-                serverLog('[ALIVE] NotifyIsAlive ping successful');
+                timeout: farmMode ? 30000 : 10000
             })
             .fail(function(jqXHR, textStatus, errorThrown) {
-                serverLog('[ALIVE] NotifyIsAlive FAILED: ' + textStatus + ', status=' + jqXHR.status);
+                serverLog('NotifyIsAlive FAILED: ' + textStatus);
             });
         }
 
-        // Check for stuck workers every 15 seconds
         setInterval(checkStuckWorkers, 15000);
-        
-        // Log overall state every 10 seconds for debugging
-        setInterval(function() {
-            var activeSuites = [];
-            for(var i = 0; i < WORKER_COUNT; i++) {
-                if(suitesInProgress[i]) {
-                    activeSuites.push('Worker' + i + ':' + suitesInProgress[i].name);
-                }
-            }
-            
-            // Only log to server if there are active suites or issues
-            if(activeSuites.length > 0 || busyCount > 0 || (urls.length === 0 && !resultSaving)) {
-                var stateMsg = '===== STATE: busyCount=' + busyCount + ', urls=' + urls.length + 
-                    ', resultSaving=' + resultSaving + ', active=' + (activeSuites.length > 0 ? activeSuites.join('; ') : 'none');
-                serverLog(stateMsg);
-            }
-        }, 10000);
 
         function roundTime(time) {
             return +(time.toFixed(3));
@@ -793,15 +653,10 @@
 
         createWorkers();
         
-        setInterval(function() {
+        @* setInterval(function() {
             notifyIsAlive();
-        }, 30000); // Reduced from 60000ms to 30000ms (30 seconds) to prevent watchdog timeout
+        }, 30000); *@
         
-        var mode = farmMode ? 'CI' : 'LOCAL';
-        var ajaxTimeouts = farmMode ? '60s AJAX / 90s safety' : '15s AJAX / 20s safety';
-        serverLog('===== STARTING TEST RUN =====');
-        serverLog('Mode: ' + mode + ', Workers: ' + WORKER_COUNT + ', Tests: ' + urls.length);
-        serverLog('AJAX timeouts: ' + ajaxTimeouts);
         runFirstBatch();
     });
 </script>

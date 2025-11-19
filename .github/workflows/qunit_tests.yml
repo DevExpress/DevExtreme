@@ -115,7 +115,6 @@ jobs:
           - CONSTEL: misc
             CSP: 'false'
             useJQuery: 'true'
-            MAX_WORKERS: '3'
           - CONSTEL: ui.widgets
             CSP: 'false'
             useJQuery: 'false'

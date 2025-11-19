@@ -136,52 +136,30 @@ namespace Runner.Controllers
             Response.ContentType = "text/plain";
             
             var threadId = System.Threading.Thread.CurrentThread.ManagedThreadId;
-            Console.WriteLine($"[THREAD-{threadId}] NotifySuiteFinalized ENTER: {name}");
             
             try
-            {
-                Console.WriteLine($"[THREAD-{threadId}] Waiting for semaphore: {name}");
-                
-                // Use SemaphoreSlim for async-safe synchronization
+            {                
                 await ASYNC_SYNC.WaitAsync();
                 try
                 {
-                    Console.WriteLine($"[THREAD-{threadId}] Semaphore acquired: {name}");
-                    
                     if (passed && _runFlags.IsContinuousIntegration)
                     {
                         IOFile.AppendAllLines(_completedSuitesFileName, new[] { name });
                     }
                     
-                    // Update alive timestamp to prevent watchdog timeout
                     if (_runFlags.IsContinuousIntegration)
                     {
                         var timestamp = DateTime.Now.ToString("s");
                         var filePath = Path.Combine(_env.ContentRootPath, "testing/LastSuiteTime.txt");
                         
-                        // Write and verify
                         IOFile.WriteAllText(filePath, timestamp);
-                        
-                        // Verify write was successful
-                        var verifyContent = IOFile.ReadAllText(filePath);
-                        if (verifyContent != timestamp)
-                        {
-                            Console.WriteLine($"[THREAD-{threadId}] WARNING: LastSuiteTime verification failed! Expected '{timestamp}', got '{verifyContent}'");
-                        }
-                        else
-                        {
-                            Console.WriteLine($"[THREAD-{threadId}] LastSuiteTime verified: {timestamp}");
-                        }
                     }
-                    
-                    Console.WriteLine($"[THREAD-{threadId}] Semaphore released: {name}");
                 }
                 finally
                 {
                     ASYNC_SYNC.Release();
                 }
-                
-                // Console output OUTSIDE semaphore - don't block other requests for I/O
+
                 ConsoleHelper.Write("[");
                 if (passed)
                     ConsoleHelper.Write(" OK ", ConsoleColor.Green);
@@ -191,18 +169,10 @@ namespace Runner.Controllers
                 TimeSpan runSpan = TimeSpan.FromMilliseconds(runtime);
                 ConsoleHelper.WriteLine($"] {name} in {Math.Round(runSpan.TotalSeconds, 3)}s");
                 
-                // Explicitly write response body and flush
                 await Response.WriteAsync("OK");
                 await Response.Body.FlushAsync();
-                
-                Console.WriteLine($"[THREAD-{threadId}] NotifySuiteFinalized EXIT: {name}");
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"[THREAD-{threadId}] NotifySuiteFinalized EXCEPTION for {name}: {ex.Message}");
-                Console.WriteLine($"Stack trace: {ex.StackTrace}");
-                // Continue execution - don't let exceptions break the test runner
-            }
+            catch (Exception) { }
         }
 
         [HttpPost]
@@ -215,14 +185,12 @@ namespace Runner.Controllers
                 try
                 {
                     var timestamp = DateTime.Now.ToString("s");
-                    Console.WriteLine($"[ALIVE] NotifyIsAlive called at {timestamp}");
                     
                     await ASYNC_SYNC.WaitAsync();
                     try
                     {
                         var filePath = Path.Combine(_env.ContentRootPath, "testing/LastSuiteTime.txt");
                         IOFile.WriteAllText(filePath, timestamp);
-                        Console.WriteLine($"[ALIVE] LastSuiteTime.txt updated to {timestamp}");
                     }
                     finally
                     {
@@ -232,11 +200,7 @@ namespace Runner.Controllers
                     await Response.WriteAsync("OK");
                     await Response.Body.FlushAsync();
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"[ALIVE] NotifyIsAlive EXCEPTION: {ex.Message}");
-                    Console.WriteLine($"Stack trace: {ex.StackTrace}");
-                }
+                catch (Exception) { }
             }
             else
             {

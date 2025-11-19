@@ -1712,8 +1712,12 @@ test('DataGrid - Gray boxes appear when the push method is used to remove rows i
     key: item.id,
   }));
 
+  await t.expect(dataGrid.isReady()).ok();
+
   await dataGrid.apiPush(changes);
-  await t.wait(300);
+  await t.wait(500);
+
+  await t.expect(dataGrid.isReady()).ok();
 
   const visibleRows = await dataGrid.apiGetVisibleRows();
   await t

@@ -44,7 +44,6 @@ function run_test_impl {
     local runner_pid
     local runner_result=0
 
-    # Print execution mode
     echo "========================================="
     if [ "$GITHUBACTION" == "true" ]; then
         echo "MODE: GitHub Actions (native, no Docker)"
@@ -80,14 +79,12 @@ function run_test_impl {
         pnpm run build
         fi
 
-        # Start test runner
         echo "Starting ASP.NET Core test runner..."
         dotnet ./testing/runner/bin/runner.dll --single-run & runner_pid=$!
         echo "Runner PID: $runner_pid"
 
-        # Wait for runner to be ready (GitHub Actions is faster, give it more attempts)
         local max_attempts=30
-        [ "$GITHUBACTION" == "true" ] && max_attempts=45  # 45 seconds for GitHub Actions
+        [ "$GITHUBACTION" == "true" ] && max_attempts=45
         
         for i in $(seq $max_attempts -1 0); do
             if [ -n "$runner_pid" ] && [ ! -e "/proc/$runner_pid" ]; then
@@ -137,17 +134,16 @@ function run_test_impl {
         --disable-font-subpixel-positioning
         --disable-extensions
     )
-    
-    # GitHub Actions optimizations
+
     if [ "$GITHUBACTION" == "true" ]; then
         chrome_args+=(
-            --disable-dev-shm-usage       # Use /tmp instead of /dev/shm (more space)
-            --disable-software-rasterizer # Faster rendering
-            --js-flags="--max-old-space-size=4096" # More memory for JS
-            --disable-background-networking # Less background activity
-            --disable-sync                # Disable Chrome sync
-            --metrics-recording-only      # Minimal metrics
-            --disable-default-apps        # No default apps
+            --disable-dev-shm-usage
+            --disable-software-rasterizer
+            --js-flags="--max-old-space-size=4096"
+            --disable-background-networking
+            --disable-sync
+            --metrics-recording-only
+            --disable-default-apps
         )
     fi
 
@@ -186,14 +182,12 @@ function start_runner_watchdog {
     local check_count=0
 
     echo "Watchdog started: monitoring PID $runner_pid, checking every 300s, max 6 failures = 30min timeout"
-    
-    # Background loop
+
     (
         while true; do
-            sleep 300  # Check every 5 minutes
+            sleep 180
             check_count=$((check_count + 1))
-            
-            # Check if runner process still exists
+
             if [ -n "$runner_pid" ] && ! kill -0 $runner_pid 2>/dev/null; then
                 echo "Watchdog: Runner process $runner_pid no longer exists, exiting watchdog"
                 exit 0
@@ -201,7 +195,6 @@ function start_runner_watchdog {
 
             if [ ! -f $last_suite_time_file ]; then
                 echo "Watchdog [check #$check_count]: LastSuiteTime.txt does not exist yet (waiting for first test...)"
-                # Don't increment stall_count on first checks
                 if [ $check_count -gt 2 ]; then
                     stall_count=$((stall_count + 1))
                     echo "Watchdog WARNING: No LastSuiteTime.txt after $((check_count * 5)) minutes"
@@ -210,12 +203,10 @@ function start_runner_watchdog {
                 local current_time=$(cat $last_suite_time_file)
                 
                 if [ -z "$last_suite_time" ]; then
-                    # First read
                     echo "Watchdog [check #$check_count]: Initial LastSuiteTime detected: $current_time"
                     last_suite_time=$current_time
                     stall_count=0
                 elif [ "$current_time" == "$last_suite_time" ]; then
-                    # No change detected
                     stall_count=$((stall_count + 1))
                     echo "Watchdog [check #$check_count]: STALL DETECTED (attempt $stall_count/6) - LastSuiteTime unchanged: $last_suite_time"
                     
@@ -239,7 +230,6 @@ function start_runner_watchdog {
                         exit 1
                     fi
                 else
-                    # Progress detected
                     echo "Watchdog [check #$check_count]: Progress detected - LastSuiteTime: $last_suite_time → $current_time"
                     last_suite_time=$current_time
                     stall_count=0
