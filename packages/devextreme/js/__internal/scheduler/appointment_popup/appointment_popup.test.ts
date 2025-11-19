@@ -497,7 +497,7 @@ describe('Appointment Popup Form', () => {
       expect(recurrenceGroup.attr('tabindex')).toBe('-1');
     });
 
-    it('Check that after opening recurrence appointment current form is main form', async () => {
+    it('check that after opening recurrence appointment current form is main form', async () => {
       const appointment = {
         text: 'Recurrent Appointment',
         startDate: new Date(2017, 4, 1, 9, 30),
@@ -517,7 +517,7 @@ describe('Appointment Popup Form', () => {
       expect(recurrenceGroup.attr('tabindex')).toBe('-1');
     });
 
-    it('Should discard recurrence changes when clicking \'cancel\' button in recurrence form', async () => {
+    it('should discard recurrence changes when clicking \'cancel\' button in recurrence form', async () => {
       const data = [
         {
           text: 'meet',
@@ -543,7 +543,7 @@ describe('Appointment Popup Form', () => {
     });
 
     describe('Recurrence frequency types', () => {
-      it('Should show day selection buttons when frequency is weekly', async () => {
+      it('should show day selection buttons when frequency is weekly', async () => {
         const appointment = {
           text: 'Test Appointment',
           startDate: new Date(2017, 4, 1, 9, 30),
@@ -563,7 +563,7 @@ describe('Appointment Popup Form', () => {
         expect(buttons7Days.length).toBe(7);
       });
 
-      it('Check that firstDayOfWeek is applied to week day buttons', async () => {
+      it('check that firstDayOfWeek is applied to week day buttons', async () => {
         const appointment = {
           text: 'Test Appointment',
           startDate: new Date(2017, 4, 1, 9, 30),
@@ -600,7 +600,7 @@ describe('Appointment Popup Form', () => {
         expect(dayButtonsSunday.eq(6).text()).toBe('S');
       });
 
-      it('Check that firstDayOfWeek is applied to recurrence form startDate', async () => {
+      it('check that firstDayOfWeek is applied to recurrence form startDate', async () => {
         const appointment = {
           text: 'Test Appointment',
           startDate: new Date(2017, 4, 1, 9, 30),
@@ -629,7 +629,7 @@ describe('Appointment Popup Form', () => {
         expect(recurrenceStartDateEditorAfter?.option('calendarOptions.firstDayOfWeek')).toBe(0);
       });
 
-      it('Should show month day input when frequency is monthly', async () => {
+      it('should show month day input when frequency is monthly', async () => {
         const appointment = {
           text: 'Test Appointment',
           startDate: new Date(2017, 4, 15, 9, 30),
@@ -653,7 +653,7 @@ describe('Appointment Popup Form', () => {
         expect(dayButtons).toBeNull();
       });
 
-      it('Should show month and day inputs when frequency is yearly', async () => {
+      it('should show month and day inputs when frequency is yearly', async () => {
         const appointment = {
           text: 'Test Appointment',
           startDate: new Date(2017, 11, 25, 9, 30),
@@ -680,7 +680,7 @@ describe('Appointment Popup Form', () => {
         expect(dayOfMonthEditor).toBeTruthy();
       });
 
-      it('Should hide all repeat-on options for daily frequency', async () => {
+      it('should hide all repeat-on options for daily frequency', async () => {
         const appointment = {
           text: 'Test Appointment',
           startDate: new Date(2017, 4, 1, 9, 30),
@@ -707,7 +707,7 @@ describe('Appointment Popup Form', () => {
         expect(yearlyGroup).toBeNull();
       });
 
-      it('Should hide all repeat-on options for hourly frequency', async () => {
+      it('should hide all repeat-on options for hourly frequency', async () => {
         const appointment = {
           text: 'Test Appointment',
           startDate: new Date(2017, 4, 1, 9, 30),
@@ -736,7 +736,7 @@ describe('Appointment Popup Form', () => {
     });
 
     describe('Editing and saving recurrence', () => {
-      it('Should populate form with existing weekly recurrence rule', async () => {
+      it('should populate form with existing weekly recurrence rule', async () => {
         setupSchedulerTestEnvironment({ height: 200 });
         const { POM } = await createScheduler({
           dataSource: [{
@@ -781,7 +781,7 @@ describe('Appointment Popup Form', () => {
         expect(countEditor.option('value')).toBe(10);
       });
 
-      it('Should save changes when saving from recurrence form', async () => {
+      it('should save changes when saving from recurrence form', async () => {
         const data = [
           {
             text: 'Meeting',
@@ -816,7 +816,7 @@ describe('Appointment Popup Form', () => {
         });
       });
 
-      it('Check that appointment is saved after editing data in recurrence form', async () => {
+      it('saves appointment after editing data in recurrence form', async () => {
         const data = [
           {
             text: 'Team Meeting',
