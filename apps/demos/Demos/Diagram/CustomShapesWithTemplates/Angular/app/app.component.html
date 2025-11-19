@@ -3,7 +3,7 @@
   customShapeTemplate="customShapeTemplate"
   [readOnly]="true"
 >
-  <dxi-custom-shape
+  <dxi-diagram-custom-shape
     *ngFor="let emp of employees"
     [type]="'employee' + emp.ID"
     baseType="rectangle"
@@ -12,7 +12,7 @@
     [allowEditText]="false"
     [allowResize]="false"
   >
-  </dxi-custom-shape>
+  </dxi-diagram-custom-shape>
   <svg *dxTemplate="let item of 'customShapeTemplate'" class="template">
     <text class="template-name" x="50%" y="20%">
       {{ item.dataItem.Full_Name }}
@@ -29,14 +29,14 @@
       Show Details
     </text>
   </svg>
-  <dxo-nodes
+  <dxo-diagram-nodes
     [dataSource]="dataSource"
     keyExpr="ID"
     [typeExpr]="itemTypeExpr"
     parentKeyExpr="Head_ID"
   >
-    <dxo-auto-layout type="tree"></dxo-auto-layout>
-  </dxo-nodes>
+    <dxo-diagram-auto-layout type="tree"></dxo-diagram-auto-layout>
+  </dxo-diagram-nodes>
 </dx-diagram>
 
 <dx-popup

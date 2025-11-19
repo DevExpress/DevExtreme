@@ -1,13 +1,13 @@
 <dx-diagram #diagram id="diagram">
-  <dxo-nodes
+  <dxo-diagram-nodes
     [dataSource]="dataSource"
     keyExpr="ID"
     textExpr="Title"
     parentKeyExpr="Head_ID"
   >
-    <dxo-auto-layout type="tree"></dxo-auto-layout>
-  </dxo-nodes>
-  <dxo-toolbox>
-    <dxi-group category="general" title="General"></dxi-group>
-  </dxo-toolbox>
+    <dxo-diagram-auto-layout type="tree"></dxo-diagram-auto-layout>
+  </dxo-diagram-nodes>
+  <dxo-diagram-toolbox>
+    <dxi-diagram-group category="general" title="General"></dxi-diagram-group>
+  </dxo-diagram-toolbox>
 </dx-diagram>
