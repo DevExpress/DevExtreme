@@ -27,7 +27,6 @@ function run_test_impl {
     [ -z "$CHROME_CMD" ] && CHROME_CMD=google-chrome-stable
     [ "$LOCAL" == "true" ] && url="http://host.docker.internal:$port/run?notimers=true"
     [ -n "$CONSTEL" ] && url="$url&constellation=$CONSTEL"
-    [ -n "$MOBILE_UA" ] && url="$url&deviceMode=true"
     [ "$JQUERY" == "false"  ] && url="$url&nojquery=true"
     [ "$SHADOW_DOM" == "true" ] && url="$url&shadowDom=true"
     [ "$NO_CSP" == "true" ] && url="$url&nocsp=true"
@@ -112,27 +111,6 @@ function run_test_impl {
         )
     fi
 
-    if [ -n "$MOBILE_UA" ]; then
-        local user_agent
-
-        if [ "$MOBILE_UA" == "ios10" ]; then
-            user_agent="Mozilla/5.0 (iPad; CPU OS 10_2_1 like Mac OS X) AppleWebKit/602.4.6 (KHTML, like Gecko) Version/10.0 Mobile/14D27 Safari/602.1)"
-        elif [ "$MOBILE_UA" == "android6" ]; then
-            user_agent="Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Mobile Safari/537.36"
-        else
-            return 1
-        fi
-
-        echo "Mobile user agent: $MOBILE_UA"
-
-        chrome_args+=(
-            --user-agent="'$user_agent'"
-            --enable-viewport
-            --touch-events
-            --enable-overlay-scrollbar
-            --enable-features=OverlayScrollbar
-        )
-    fi
     if [ "$GITHUBACTION" == "true" ]; then
         echo "$chrome_command"
         printf '  %s\n' "${chrome_args[@]}"
