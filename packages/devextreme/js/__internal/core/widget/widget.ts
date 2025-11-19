@@ -360,7 +360,7 @@ class Widget<
   _toggleFocusClass(isFocused: boolean, $element?: dxElementWrapper): void {
     const $focusTarget = $element?.length ? $element : this._focusTarget();
 
-    $focusTarget.toggleClass(FOCUSED_STATE_CLASS, isFocused);
+    $focusTarget?.toggleClass(FOCUSED_STATE_CLASS, isFocused);
   }
 
   _hasFocusClass(element?: dxElementWrapper): boolean {
@@ -435,7 +435,7 @@ class Widget<
   _cleanFocusState(): void {
     const $element = this._focusTarget();
 
-    $element.removeAttr('tabIndex');
+    $element?.removeAttr('tabIndex');
     this._toggleFocusClass(false);
     this._detachFocusEvents();
     this._detachKeyboardEvents();

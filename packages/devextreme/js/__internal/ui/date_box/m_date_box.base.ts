@@ -377,7 +377,7 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
 
   _renderPopup(): void {
     super._renderPopup();
-    this._popup?.$wrapper().addClass(DATEBOX_WRAPPER_CLASS);
+    this._popup?.$wrapper()?.addClass(DATEBOX_WRAPPER_CLASS);
     this._renderPopupWrapper();
   }
 
@@ -411,7 +411,7 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     const { type } = this.option();
 
     this._popup.$wrapper()
-      .addClass(`${DATEBOX_WRAPPER_CLASS}-${type}`)
+      ?.addClass(`${DATEBOX_WRAPPER_CLASS}-${type}`)
       .addClass(`${DATEBOX_WRAPPER_CLASS}-${this._pickerType}`)
       .addClass(DROPDOWNEDITOR_OVERLAY_CLASS);
   }
