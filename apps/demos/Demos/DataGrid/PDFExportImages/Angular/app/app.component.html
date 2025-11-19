@@ -7,7 +7,10 @@
   [showColumnLines]="false"
   (onExporting)="onExporting($event)"
 >
-  <dxo-data-grid-export [enabled]="true" [formats]="['pdf']"></dxo-data-grid-export>
+  <dxo-data-grid-export
+    [enabled]="true"
+    [formats]="['pdf']"
+  ></dxo-data-grid-export>
   <dxi-data-grid-column
     dataField="Picture"
     cellTemplate="cellTemplate"
@@ -16,8 +19,14 @@
   <dxi-data-grid-column dataField="FirstName"></dxi-data-grid-column>
   <dxi-data-grid-column dataField="LastName"></dxi-data-grid-column>
   <dxi-data-grid-column dataField="Position"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="BirthDate" dataType="date"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="HireDate" dataType="date"></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="BirthDate"
+    dataType="date"
+  ></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="HireDate"
+    dataType="date"
+  ></dxi-data-grid-column>
 
   <div *dxTemplate="let cell of 'cellTemplate'">
     <img src="{{ cell.value }}" alt="Employee photo" />

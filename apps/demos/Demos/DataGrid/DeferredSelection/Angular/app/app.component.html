@@ -4,10 +4,16 @@
   [selectionFilter]="['Task_Status', '=', 'Completed']"
   [showBorders]="true"
 >
-  <dxo-data-grid-selection mode="multiple" [deferred]="true"></dxo-data-grid-selection>
+  <dxo-data-grid-selection
+    mode="multiple"
+    [deferred]="true"
+  ></dxo-data-grid-selection>
   <dxo-data-grid-filter-row [visible]="true"></dxo-data-grid-filter-row>
   <dxo-data-grid-pager [visible]="true"></dxo-data-grid-pager>
-  <dxi-data-grid-column caption="Subject" dataField="Task_Subject"></dxi-data-grid-column>
+  <dxi-data-grid-column
+    caption="Subject"
+    dataField="Task_Subject"
+  ></dxi-data-grid-column>
   <dxi-data-grid-column
     caption="Start Date"
     dataField="Task_Start_Date"

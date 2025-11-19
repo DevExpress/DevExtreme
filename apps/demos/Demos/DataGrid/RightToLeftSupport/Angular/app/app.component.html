@@ -34,7 +34,10 @@
     [format]="{ type: 'fixedPoint', precision: 0 }"
   >
   </dxi-data-grid-column>
-  <dxi-data-grid-column dataField="accession" [visible]="false"></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="accession"
+    [visible]="false"
+  ></dxi-data-grid-column>
 
   <div *dxTemplate="let item of 'englishTemplate'">
     <div>Area (km<sup>2</sup>)</div>

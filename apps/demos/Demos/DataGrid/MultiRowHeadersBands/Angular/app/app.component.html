@@ -21,7 +21,11 @@
       format="fixedPoint"
     >
     </dxi-data-grid-column>
-    <dxi-data-grid-column caption="Urban" dataField="Population_Urban" format="percent">
+    <dxi-data-grid-column
+      caption="Urban"
+      dataField="Population_Urban"
+      format="percent"
+    >
     </dxi-data-grid-column>
   </dxi-data-grid-column>
   <dxi-data-grid-column caption="Nominal GDP">
@@ -38,13 +42,24 @@
         [width]="95"
         dataField="GDP_Agriculture"
       >
-        <dxo-data-grid-format type="percent" [precision]="1"> </dxo-data-grid-format>
+        <dxo-data-grid-format type="percent" [precision]="1">
+        </dxo-data-grid-format>
       </dxi-data-grid-column>
-      <dxi-data-grid-column caption="Industry" [width]="80" dataField="GDP_Industry">
-        <dxo-data-grid-format type="percent" [precision]="1"> </dxo-data-grid-format>
+      <dxi-data-grid-column
+        caption="Industry"
+        [width]="80"
+        dataField="GDP_Industry"
+      >
+        <dxo-data-grid-format type="percent" [precision]="1">
+        </dxo-data-grid-format>
       </dxi-data-grid-column>
-      <dxi-data-grid-column caption="Services" [width]="85" dataField="GDP_Services">
-        <dxo-data-grid-format type="percent" [precision]="1"> </dxo-data-grid-format>
+      <dxi-data-grid-column
+        caption="Services"
+        [width]="85"
+        dataField="GDP_Services"
+      >
+        <dxo-data-grid-format type="percent" [precision]="1">
+        </dxo-data-grid-format>
       </dxi-data-grid-column>
     </dxi-data-grid-column>
   </dxi-data-grid-column>

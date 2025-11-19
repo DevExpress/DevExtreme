@@ -20,15 +20,18 @@
       </dxo-data-grid-editing>
 
       <dxi-data-grid-column dataField="Prefix" caption="Title" [width]="50">
-        <dxi-data-grid-validation-rule type="required"> </dxi-data-grid-validation-rule>
+        <dxi-data-grid-validation-rule type="required">
+        </dxi-data-grid-validation-rule>
       </dxi-data-grid-column>
 
       <dxi-data-grid-column dataField="FirstName">
-        <dxi-data-grid-validation-rule type="required"> </dxi-data-grid-validation-rule>
+        <dxi-data-grid-validation-rule type="required">
+        </dxi-data-grid-validation-rule>
       </dxi-data-grid-column>
 
       <dxi-data-grid-column dataField="StateID" caption="State">
-        <dxi-data-grid-validation-rule type="required"> </dxi-data-grid-validation-rule>
+        <dxi-data-grid-validation-rule type="required">
+        </dxi-data-grid-validation-rule>
         <dxo-data-grid-lookup
           [dataSource]="stateDataSource"
           displayExpr="Name"

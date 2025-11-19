@@ -6,7 +6,11 @@
     [showBorders]="true"
     (onEditorPreparing)="onEditorPreparing($event)"
   >
-    <dxo-data-grid-editing mode="row" [allowUpdating]="true" [allowAdding]="true">
+    <dxo-data-grid-editing
+      mode="row"
+      [allowUpdating]="true"
+      [allowAdding]="true"
+    >
     </dxo-data-grid-editing>
 
     <dxi-data-grid-column dataField="FirstName"></dxi-data-grid-column>
@@ -17,7 +21,11 @@
       caption="State"
       [setCellValue]="setStateValue"
     >
-      <dxo-data-grid-lookup [dataSource]="states" valueExpr="ID" displayExpr="Name">
+      <dxo-data-grid-lookup
+        [dataSource]="states"
+        valueExpr="ID"
+        displayExpr="Name"
+      >
       </dxo-data-grid-lookup>
     </dxi-data-grid-column>
     <dxi-data-grid-column dataField="CityID" caption="City">

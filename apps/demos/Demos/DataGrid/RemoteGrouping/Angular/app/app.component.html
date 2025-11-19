@@ -8,9 +8,16 @@
 >
   <dxo-data-grid-scrolling mode="virtual"></dxo-data-grid-scrolling>
   <dxo-data-grid-group-panel [visible]="true"></dxo-data-grid-group-panel>
-  <dxo-data-grid-grouping #expand [autoExpandAll]="false"></dxo-data-grid-grouping>
+  <dxo-data-grid-grouping
+    #expand
+    [autoExpandAll]="false"
+  ></dxo-data-grid-grouping>
 
-  <dxi-data-grid-column dataField="Id" dataType="number" [width]="75"></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="Id"
+    dataType="number"
+    [width]="75"
+  ></dxi-data-grid-column>
   <dxi-data-grid-column
     dataField="ProductSubcategoryName"
     caption="Subcategory"
@@ -28,7 +35,10 @@
     [width]="120"
     [groupIndex]="1"
   ></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="ProductName" caption="Product"></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="ProductName"
+    caption="Product"
+  ></dxi-data-grid-column>
   <dxi-data-grid-column
     dataField="DateKey"
     caption="Date"
@@ -44,6 +54,7 @@
   ></dxi-data-grid-column>
 
   <dxo-data-grid-summary>
-    <dxi-data-grid-group-item column="Id" summaryType="count"> </dxi-data-grid-group-item>
+    <dxi-data-grid-group-item column="Id" summaryType="count">
+    </dxi-data-grid-group-item>
   </dxo-data-grid-summary>
 </dx-data-grid>

@@ -30,7 +30,10 @@
   </dxo-data-grid-pager>
 
   <dxo-data-grid-paging [pageSize]="8"></dxo-data-grid-paging>
-  <dxo-data-grid-column-chooser [enabled]="true" mode="select"></dxo-data-grid-column-chooser>
+  <dxo-data-grid-column-chooser
+    [enabled]="true"
+    mode="select"
+  ></dxo-data-grid-column-chooser>
 
   <dxi-data-grid-column
     [allowGrouping]="false"
@@ -38,9 +41,21 @@
     [width]="130"
     caption="Invoice Number"
   ></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="CustomerStoreCity" caption="City"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="CustomerStoreState" caption="State"></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="CustomerStoreCity"
+    caption="City"
+  ></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="CustomerStoreState"
+    caption="State"
+  ></dxi-data-grid-column>
   <dxi-data-grid-column dataField="Employee"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="OrderDate" dataType="date"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="SaleAmount" format="currency"></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="OrderDate"
+    dataType="date"
+  ></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="SaleAmount"
+    format="currency"
+  ></dxi-data-grid-column>
 </dx-data-grid>

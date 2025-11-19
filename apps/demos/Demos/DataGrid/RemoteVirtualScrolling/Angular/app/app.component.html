@@ -5,20 +5,30 @@
   [wordWrapEnabled]="true"
   [showBorders]="true"
 >
-  <dxo-data-grid-scrolling mode="virtual" rowRenderingMode="virtual"></dxo-data-grid-scrolling>
+  <dxo-data-grid-scrolling
+    mode="virtual"
+    rowRenderingMode="virtual"
+  ></dxo-data-grid-scrolling>
   <dxo-data-grid-paging [pageSize]="100"></dxo-data-grid-paging>
   <dxo-data-grid-header-filter [visible]="true">
     <dxo-data-grid-search [enabled]="true"></dxo-data-grid-search>
   </dxo-data-grid-header-filter>
 
   <dxi-data-grid-column dataField="Id" width="90"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="StoreName" caption="Store" width="150"></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="StoreName"
+    caption="Store"
+    width="150"
+  ></dxi-data-grid-column>
   <dxi-data-grid-column
     dataField="ProductCategoryName"
     caption="Category"
     width="120"
   ></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="ProductName" caption="Product"></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="ProductName"
+    caption="Product"
+  ></dxi-data-grid-column>
   <dxi-data-grid-column
     dataField="DateKey"
     caption="Date"
@@ -32,6 +42,8 @@
     format="currency"
     width="100"
   >
-    <dxo-data-grid-header-filter [groupInterval]="1000"></dxo-data-grid-header-filter>
+    <dxo-data-grid-header-filter
+      [groupInterval]="1000"
+    ></dxo-data-grid-header-filter>
   </dxi-data-grid-column>
 </dx-data-grid>

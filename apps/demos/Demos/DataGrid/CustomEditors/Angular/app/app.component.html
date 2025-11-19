@@ -8,7 +8,11 @@
   <dxo-data-grid-pager [visible]="true"></dxo-data-grid-pager>
   <dxo-data-grid-header-filter [visible]="true"></dxo-data-grid-header-filter>
   <dxo-data-grid-search-panel [visible]="true"></dxo-data-grid-search-panel>
-  <dxo-data-grid-editing mode="cell" [allowUpdating]="true" [allowAdding]="true">
+  <dxo-data-grid-editing
+    mode="cell"
+    [allowUpdating]="true"
+    [allowAdding]="true"
+  >
   </dxo-data-grid-editing>
   <dxi-data-grid-column
     dataField="Owner"
@@ -16,9 +20,15 @@
     [allowSorting]="false"
     editCellTemplate="singleDropDownBoxEditor"
   >
-    <dxo-data-grid-lookup [dataSource]="employees" displayExpr="FullName" valueExpr="ID">
+    <dxo-data-grid-lookup
+      [dataSource]="employees"
+      displayExpr="FullName"
+      valueExpr="ID"
+    >
     </dxo-data-grid-lookup>
-    <dxi-data-grid-validation-rule type="required"></dxi-data-grid-validation-rule>
+    <dxi-data-grid-validation-rule
+      type="required"
+    ></dxi-data-grid-validation-rule>
   </dxi-data-grid-column>
   <dxi-data-grid-column
     dataField="AssignedEmployee"
@@ -29,17 +39,35 @@
     [cellTemplate]="cellTemplate"
     [calculateFilterExpression]="calculateFilterExpression"
   >
-    <dxo-data-grid-lookup [dataSource]="employees" valueExpr="ID" displayExpr="FullName">
+    <dxo-data-grid-lookup
+      [dataSource]="employees"
+      valueExpr="ID"
+      displayExpr="FullName"
+    >
     </dxo-data-grid-lookup>
-    <dxi-data-grid-validation-rule type="required"></dxi-data-grid-validation-rule>
+    <dxi-data-grid-validation-rule
+      type="required"
+    ></dxi-data-grid-validation-rule>
   </dxi-data-grid-column>
   <dxi-data-grid-column dataField="Subject">
-    <dxi-data-grid-validation-rule type="required"></dxi-data-grid-validation-rule>
+    <dxi-data-grid-validation-rule
+      type="required"
+    ></dxi-data-grid-validation-rule>
   </dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Status" width="200" [editorOptions]="editorOptions">
-    <dxo-data-grid-lookup [dataSource]="statuses" displayExpr="name" valueExpr="id">
+  <dxi-data-grid-column
+    dataField="Status"
+    width="200"
+    [editorOptions]="editorOptions"
+  >
+    <dxo-data-grid-lookup
+      [dataSource]="statuses"
+      displayExpr="name"
+      valueExpr="id"
+    >
     </dxo-data-grid-lookup>
-    <dxi-data-grid-validation-rule type="required"></dxi-data-grid-validation-rule>
+    <dxi-data-grid-validation-rule
+      type="required"
+    ></dxi-data-grid-validation-rule>
   </dxi-data-grid-column>
 
   <div *dxTemplate="let cellInfo of 'tagBoxEditor'">
@@ -87,7 +115,10 @@
           <dxi-data-grid-column dataField="FullName"></dxi-data-grid-column>
           <dxi-data-grid-column dataField="Title"></dxi-data-grid-column>
           <dxi-data-grid-column dataField="Department"></dxi-data-grid-column>
-          <dxo-data-grid-paging [enabled]="true" [pageSize]="10"></dxo-data-grid-paging>
+          <dxo-data-grid-paging
+            [enabled]="true"
+            [pageSize]="10"
+          ></dxo-data-grid-paging>
           <dxo-data-grid-scrolling mode="virtual"></dxo-data-grid-scrolling>
           <dxo-data-grid-selection mode="single"></dxo-data-grid-selection>
         </dx-data-grid>

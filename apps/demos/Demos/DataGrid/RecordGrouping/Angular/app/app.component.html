@@ -10,13 +10,19 @@
   <dxi-data-grid-column dataField="Phone"></dxi-data-grid-column>
   <dxi-data-grid-column dataField="Fax"></dxi-data-grid-column>
   <dxi-data-grid-column dataField="City"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="State" [groupIndex]="0"></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="State"
+    [groupIndex]="0"
+  ></dxi-data-grid-column>
 
   <dxo-data-grid-search-panel [visible]="true"></dxo-data-grid-search-panel>
   <dxo-data-grid-paging [pageSize]="10"></dxo-data-grid-paging>
   <dxo-data-grid-pager [visible]="true"></dxo-data-grid-pager>
   <dxo-data-grid-group-panel [visible]="true"></dxo-data-grid-group-panel>
-  <dxo-data-grid-grouping #expand [autoExpandAll]="true"></dxo-data-grid-grouping>
+  <dxo-data-grid-grouping
+    #expand
+    [autoExpandAll]="true"
+  ></dxo-data-grid-grouping>
 </dx-data-grid>
 <div class="options">
   <div class="caption">Options</div>

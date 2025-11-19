@@ -8,12 +8,25 @@
   [selectedRowKeys]="[]"
 >
   <dxo-data-grid-selection mode="single"></dxo-data-grid-selection>
-  <dxi-data-grid-column dataField="Prefix" caption="Title" [width]="70"></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="Prefix"
+    caption="Title"
+    [width]="70"
+  ></dxi-data-grid-column>
   <dxi-data-grid-column dataField="FirstName"></dxi-data-grid-column>
   <dxi-data-grid-column dataField="LastName"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Position" [width]="180"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="BirthDate" dataType="date"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="HireDate" dataType="date"></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="Position"
+    [width]="180"
+  ></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="BirthDate"
+    dataType="date"
+  ></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="HireDate"
+    dataType="date"
+  ></dxi-data-grid-column>
 </dx-data-grid>
 <div id="employeeInfo" *ngIf="grid.selectedRowKeys.length">
   <img

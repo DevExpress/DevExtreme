@@ -21,7 +21,11 @@
         displayExpr="FullName"
       ></dxo-data-grid-lookup>
     </dxi-data-grid-column>
-    <dxi-data-grid-column dataField="AssignedEmployee" caption="Assignee" [width]="150">
+    <dxi-data-grid-column
+      dataField="AssignedEmployee"
+      caption="Assignee"
+      [width]="150"
+    >
       <dxo-data-grid-lookup
         [dataSource]="employees"
         valueExpr="ID"

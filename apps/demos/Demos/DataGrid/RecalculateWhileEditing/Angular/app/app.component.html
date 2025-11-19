@@ -19,10 +19,19 @@
     [width]="130"
     caption="Invoice Number"
   ></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="OrderDate" dataType="date"></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="OrderDate"
+    dataType="date"
+  ></dxi-data-grid-column>
   <dxi-data-grid-column dataField="Employee"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="CustomerStoreCity" caption="City"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="CustomerStoreState" caption="State"></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="CustomerStoreCity"
+    caption="City"
+  ></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="CustomerStoreState"
+    caption="State"
+  ></dxi-data-grid-column>
   <dxi-data-grid-column
     dataField="SaleAmount"
     [width]="160"
@@ -32,7 +41,8 @@
   ></dxi-data-grid-column>
 
   <dxo-data-grid-summary [recalculateWhileEditing]="true">
-    <dxi-data-grid-total-item column="OrderNumber" summaryType="count"> </dxi-data-grid-total-item>
+    <dxi-data-grid-total-item column="OrderNumber" summaryType="count">
+    </dxi-data-grid-total-item>
     <dxi-data-grid-total-item
       column="SaleAmount"
       summaryType="sum"

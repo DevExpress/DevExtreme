@@ -8,15 +8,23 @@
     [visible]="showFilterRow"
     [applyFilter]="currentFilter"
   ></dxo-data-grid-filter-row>
-  <dxo-data-grid-header-filter [visible]="showHeaderFilter"></dxo-data-grid-header-filter>
+  <dxo-data-grid-header-filter
+    [visible]="showHeaderFilter"
+  ></dxo-data-grid-header-filter>
   <dxo-data-grid-search-panel
     [visible]="true"
     [width]="240"
     placeholder="Search..."
   ></dxo-data-grid-search-panel>
   <dxo-data-grid-pager [visible]="true"></dxo-data-grid-pager>
-  <dxi-data-grid-column dataField="OrderNumber" [width]="140" caption="Invoice Number">
-    <dxo-data-grid-header-filter [groupInterval]="10000"></dxo-data-grid-header-filter>
+  <dxi-data-grid-column
+    dataField="OrderNumber"
+    [width]="140"
+    caption="Invoice Number"
+  >
+    <dxo-data-grid-header-filter
+      [groupInterval]="10000"
+    ></dxo-data-grid-header-filter>
   </dxi-data-grid-column>
   <dxi-data-grid-column
     dataField="OrderDate"
@@ -25,7 +33,9 @@
     [width]="120"
     [calculateFilterExpression]="calculateFilterExpression"
   >
-    <dxo-data-grid-header-filter [dataSource]="orderHeaderFilter"></dxo-data-grid-header-filter>
+    <dxo-data-grid-header-filter
+      [dataSource]="orderHeaderFilter"
+    ></dxo-data-grid-header-filter>
   </dxi-data-grid-column>
   <dxi-data-grid-column
     dataField="DeliveryDate"

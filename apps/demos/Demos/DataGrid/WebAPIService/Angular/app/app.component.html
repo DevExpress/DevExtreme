@@ -17,7 +17,10 @@
   >
   </dxo-data-grid-editing>
   <dxo-data-grid-grouping [autoExpandAll]="false"></dxo-data-grid-grouping>
-  <dxo-data-grid-master-detail [enabled]="true" template="detail"></dxo-data-grid-master-detail>
+  <dxo-data-grid-master-detail
+    [enabled]="true"
+    template="detail"
+  ></dxo-data-grid-master-detail>
   <dxi-data-grid-column dataField="CustomerID" caption="Customer">
     <dxi-data-grid-validation-rule
       type="stringLength"
@@ -37,7 +40,9 @@
     ></dxi-data-grid-validation-rule>
   </dxi-data-grid-column>
   <dxi-data-grid-column dataField="Freight">
-    <dxo-data-grid-header-filter groupInterval="100"></dxo-data-grid-header-filter>
+    <dxo-data-grid-header-filter
+      groupInterval="100"
+    ></dxo-data-grid-header-filter>
     <dxi-data-grid-validation-rule
       type="range"
       [min]="0"
@@ -53,7 +58,11 @@
       message="The field ShipCountry must be a string with a maximum length of 15."
     ></dxi-data-grid-validation-rule>
   </dxi-data-grid-column>
-  <dxi-data-grid-column dataField="ShipVia" caption="Shipping Company" dataType="number">
+  <dxi-data-grid-column
+    dataField="ShipVia"
+    caption="Shipping Company"
+    dataType="number"
+  >
     <dxo-data-grid-lookup
       [dataSource]="shippersData"
       valueExpr="Value"
@@ -66,10 +75,16 @@
   </div>
   <dxo-data-grid-summary>
     <dxi-data-grid-total-item column="Freight" summaryType="sum">
-      <dxo-data-grid-value-format type="decimal" [precision]="2"></dxo-data-grid-value-format>
+      <dxo-data-grid-value-format
+        type="decimal"
+        [precision]="2"
+      ></dxo-data-grid-value-format>
     </dxi-data-grid-total-item>
     <dxi-data-grid-group-item column="Freight" summaryType="sum">
-      <dxo-data-grid-value-format type="decimal" [precision]="2"></dxo-data-grid-value-format>
+      <dxo-data-grid-value-format
+        type="decimal"
+        [precision]="2"
+      ></dxo-data-grid-value-format>
     </dxi-data-grid-group-item>
     <dxi-data-grid-group-item summaryType="count"> </dxi-data-grid-group-item>
   </dxo-data-grid-summary>

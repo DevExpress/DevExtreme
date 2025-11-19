@@ -13,7 +13,10 @@
       ></dxo-data-grid-row-dragging>
       <dxo-data-grid-scrolling mode="virtual"></dxo-data-grid-scrolling>
 
-      <dxi-data-grid-column dataField="Subject" dataType="string"></dxi-data-grid-column>
+      <dxi-data-grid-column
+        dataField="Subject"
+        dataType="string"
+      ></dxi-data-grid-column>
       <dxi-data-grid-column dataField="Priority" dataType="number" [width]="80">
         <dxo-data-grid-lookup
           [dataSource]="priorities"

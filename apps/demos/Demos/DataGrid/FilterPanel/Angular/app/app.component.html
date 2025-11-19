@@ -21,9 +21,14 @@
     caption="Invoice Number"
     dataType="number"
   >
-    <dxo-data-grid-header-filter [groupInterval]="10000"></dxo-data-grid-header-filter>
+    <dxo-data-grid-header-filter
+      [groupInterval]="10000"
+    ></dxo-data-grid-header-filter>
   </dxi-data-grid-column>
-  <dxi-data-grid-column dataField="OrderDate" dataType="date"></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="OrderDate"
+    dataType="date"
+  ></dxi-data-grid-column>
   <dxi-data-grid-column
     dataField="SaleAmount"
     format="currency"
@@ -38,7 +43,10 @@
       [dataSource]="saleAmountHeaderFilter"
     ></dxo-data-grid-header-filter>
   </dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Employee" dataType="string"></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="Employee"
+    dataType="string"
+  ></dxi-data-grid-column>
   <dxi-data-grid-column
     dataField="CustomerInfo.StoreCity"
     caption="City"

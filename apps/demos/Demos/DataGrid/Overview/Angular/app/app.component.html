@@ -21,7 +21,10 @@
   <dxo-data-grid-group-panel [visible]="true"></dxo-data-grid-group-panel>
   <dxo-data-grid-grouping [autoExpandAll]="false"></dxo-data-grid-grouping>
 
-  <dxi-data-grid-column dataField="Product" [groupIndex]="0"></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="Product"
+    [groupIndex]="0"
+  ></dxi-data-grid-column>
   <dxi-data-grid-column
     dataField="Amount"
     caption="Sale Amount"
@@ -39,11 +42,27 @@
     [allowGrouping]="false"
     cssClass="bullet"
   ></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="SaleDate" dataType="date"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Region" dataType="string"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Sector" dataType="string"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Channel" dataType="string"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Customer" dataType="string" [width]="150"></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="SaleDate"
+    dataType="date"
+  ></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="Region"
+    dataType="string"
+  ></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="Sector"
+    dataType="string"
+  ></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="Channel"
+    dataType="string"
+  ></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="Customer"
+    dataType="string"
+    [width]="150"
+  ></dxi-data-grid-column>
 
   <div *dxTemplate="let d of 'discountCellTemplate'">
     <div class="chart-cell">
@@ -62,7 +81,11 @@
         >
           <dxo-bullet-font [size]="18"></dxo-bullet-font>
         </dxo-bullet-tooltip>
-        <dxo-bullet-margin [top]="5" [bottom]="0" [left]="5"></dxo-bullet-margin>
+        <dxo-bullet-margin
+          [top]="5"
+          [bottom]="0"
+          [left]="5"
+        ></dxo-bullet-margin>
       </dx-bullet>
     </div>
   </div>

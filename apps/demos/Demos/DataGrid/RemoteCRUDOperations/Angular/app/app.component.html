@@ -21,10 +21,17 @@
       displayExpr="Text"
     ></dxo-data-grid-lookup>
   </dxi-data-grid-column>
-  <dxi-data-grid-column dataField="OrderDate" dataType="date"></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="OrderDate"
+    dataType="date"
+  ></dxi-data-grid-column>
   <dxi-data-grid-column dataField="Freight"></dxi-data-grid-column>
   <dxi-data-grid-column dataField="ShipCountry"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="ShipVia" caption="Shipping Company" dataType="number">
+  <dxi-data-grid-column
+    dataField="ShipVia"
+    caption="Shipping Company"
+    dataType="number"
+  >
     <dxo-data-grid-lookup
       [dataSource]="shippersData"
       valueExpr="Value"
@@ -33,8 +40,13 @@
   </dxi-data-grid-column>
 
   <dxo-data-grid-summary>
-    <dxi-data-grid-total-item column="CustomerID" summaryType="count"> </dxi-data-grid-total-item>
-    <dxi-data-grid-total-item column="Freight" summaryType="sum" valueFormat="#0.00">
+    <dxi-data-grid-total-item column="CustomerID" summaryType="count">
+    </dxi-data-grid-total-item>
+    <dxi-data-grid-total-item
+      column="Freight"
+      summaryType="sum"
+      valueFormat="#0.00"
+    >
     </dxi-data-grid-total-item>
   </dxo-data-grid-summary>
 </dx-data-grid>

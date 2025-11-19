@@ -11,12 +11,22 @@
     [allowSorting]="false"
     cellTemplate="cellTemplate"
   ></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Prefix" [width]="70" caption="Title"></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="Prefix"
+    [width]="70"
+    caption="Title"
+  ></dxi-data-grid-column>
   <dxi-data-grid-column dataField="FirstName"></dxi-data-grid-column>
   <dxi-data-grid-column dataField="LastName"></dxi-data-grid-column>
   <dxi-data-grid-column dataField="Position"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="BirthDate" dataType="date"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="HireDate" dataType="date"></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="BirthDate"
+    dataType="date"
+  ></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="HireDate"
+    dataType="date"
+  ></dxi-data-grid-column>
 
   <div *dxTemplate="let data of 'cellTemplate'">
     <img

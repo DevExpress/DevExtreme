@@ -9,12 +9,27 @@
 >
   <dxo-data-grid-selection mode="multiple"> </dxo-data-grid-selection>
 
-  <dxi-data-grid-column dataField="Prefix" caption="Title" [width]="70"></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="Prefix"
+    caption="Title"
+    [width]="70"
+  ></dxi-data-grid-column>
   <dxi-data-grid-column dataField="FirstName"></dxi-data-grid-column>
   <dxi-data-grid-column dataField="LastName"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Position" [width]="180"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="BirthDate" dataType="date" [width]="125"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="HireDate" dataType="date" [width]="125"></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="Position"
+    [width]="180"
+  ></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="BirthDate"
+    dataType="date"
+    [width]="125"
+  ></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="HireDate"
+    dataType="date"
+    [width]="125"
+  ></dxi-data-grid-column>
   <dxo-data-grid-toolbar>
     <dxi-data-grid-item location="before">
       <dx-select-box

@@ -37,7 +37,11 @@
   <dxi-data-grid-column dataField="Position"> </dxi-data-grid-column>
 
   <dxi-data-grid-column dataField="StateID" caption="State">
-    <dxo-data-grid-lookup [dataSource]="states" valueExpr="ID" displayExpr="Name">
+    <dxo-data-grid-lookup
+      [dataSource]="states"
+      valueExpr="ID"
+      displayExpr="Name"
+    >
     </dxo-data-grid-lookup>
   </dxi-data-grid-column>
 </dx-data-grid>

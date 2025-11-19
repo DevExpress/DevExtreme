@@ -15,18 +15,31 @@
     </dxo-data-grid-editing>
     <dxo-data-grid-selection mode="multiple"></dxo-data-grid-selection>
 
-    <dxi-data-grid-column dataField="Prefix" caption="Title" [width]="55"></dxi-data-grid-column>
+    <dxi-data-grid-column
+      dataField="Prefix"
+      caption="Title"
+      [width]="55"
+    ></dxi-data-grid-column>
     <dxi-data-grid-column dataField="FirstName"></dxi-data-grid-column>
     <dxi-data-grid-column dataField="LastName"></dxi-data-grid-column>
-    <dxi-data-grid-column dataField="Position" [width]="170"></dxi-data-grid-column>
+    <dxi-data-grid-column
+      dataField="Position"
+      [width]="170"
+    ></dxi-data-grid-column>
     <dxi-data-grid-column dataField="StateID" caption="State" [width]="125">
-      <dxo-data-grid-lookup [dataSource]="states" displayExpr="Name" valueExpr="ID">
+      <dxo-data-grid-lookup
+        [dataSource]="states"
+        displayExpr="Name"
+        valueExpr="ID"
+      >
       </dxo-data-grid-lookup>
     </dxi-data-grid-column>
-    <dxi-data-grid-column dataField="BirthDate" dataType="date"> </dxi-data-grid-column>
+    <dxi-data-grid-column dataField="BirthDate" dataType="date">
+    </dxi-data-grid-column>
 
     <dxo-data-grid-toolbar>
-      <dxi-data-grid-item name="addRowButton" showText="always"> </dxi-data-grid-item>
+      <dxi-data-grid-item name="addRowButton" showText="always">
+      </dxi-data-grid-item>
       <dxi-data-grid-item location="after">
         <dx-button
           (onClick)="deleteRecords()"

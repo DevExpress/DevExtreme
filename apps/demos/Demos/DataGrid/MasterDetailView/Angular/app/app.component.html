@@ -4,13 +4,26 @@
   keyExpr="ID"
   [showBorders]="true"
 >
-  <dxi-data-grid-column dataField="Prefix" [width]="70" caption="Title"></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="Prefix"
+    [width]="70"
+    caption="Title"
+  ></dxi-data-grid-column>
   <dxi-data-grid-column dataField="FirstName"></dxi-data-grid-column>
   <dxi-data-grid-column dataField="LastName"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Position" [width]="170"></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="Position"
+    [width]="170"
+  ></dxi-data-grid-column>
   <dxi-data-grid-column dataField="State" [width]="125"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="BirthDate" dataType="date"></dxi-data-grid-column>
-  <dxo-data-grid-master-detail [enabled]="true" template="detail"></dxo-data-grid-master-detail>
+  <dxi-data-grid-column
+    dataField="BirthDate"
+    dataType="date"
+  ></dxi-data-grid-column>
+  <dxo-data-grid-master-detail
+    [enabled]="true"
+    template="detail"
+  ></dxo-data-grid-master-detail>
   <div *dxTemplate="let employee of 'detail'">
     <div class="master-detail-caption">{{
       employee.data.FirstName + " " + employee.data.LastName + "'s Tasks:"

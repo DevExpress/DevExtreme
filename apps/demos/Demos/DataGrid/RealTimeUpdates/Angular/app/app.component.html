@@ -7,14 +7,23 @@
 >
   <dxo-data-grid-paging [pageSize]="10"></dxo-data-grid-paging>
 
-  <dxi-data-grid-column dataField="ProductName" dataType="string"></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="ProductName"
+    dataType="string"
+  ></dxi-data-grid-column>
   <dxi-data-grid-column
     dataField="UnitPrice"
     dataType="number"
     format="currency"
   ></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="OrderCount" dataType="number"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Quantity" dataType="number"></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="OrderCount"
+    dataType="number"
+  ></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="Quantity"
+    dataType="number"
+  ></dxi-data-grid-column>
   <dxi-data-grid-column
     dataField="Amount"
     dataType="number"
@@ -22,7 +31,10 @@
     [allowSorting]="true"
   ></dxi-data-grid-column>
   <dxo-data-grid-summary>
-    <dxi-data-grid-total-item column="ProductName" summaryType="count"></dxi-data-grid-total-item>
+    <dxi-data-grid-total-item
+      column="ProductName"
+      summaryType="count"
+    ></dxi-data-grid-total-item>
     <dxi-data-grid-total-item
       column="Amount"
       summaryType="sum"
@@ -47,8 +59,14 @@
     >
       <dxo-data-grid-paging [pageSize]="5"></dxo-data-grid-paging>
 
-      <dxi-data-grid-column dataField="OrderID" dataType="number"></dxi-data-grid-column>
-      <dxi-data-grid-column dataField="ShipCity" dataType="string"></dxi-data-grid-column>
+      <dxi-data-grid-column
+        dataField="OrderID"
+        dataType="number"
+      ></dxi-data-grid-column>
+      <dxi-data-grid-column
+        dataField="ShipCity"
+        dataType="string"
+      ></dxi-data-grid-column>
       <dxi-data-grid-column
         dataField="OrderDate"
         dataType="datetime"
@@ -59,7 +77,10 @@
         dataType="number"
         format="currency"
       ></dxi-data-grid-column>
-      <dxi-data-grid-column dataField="Quantity" dataType="number"></dxi-data-grid-column>
+      <dxi-data-grid-column
+        dataField="Quantity"
+        dataType="number"
+      ></dxi-data-grid-column>
       <dxi-data-grid-column
         caption="Amount"
         dataType="number"
@@ -69,7 +90,10 @@
       ></dxi-data-grid-column>
 
       <dxo-data-grid-summary>
-        <dxi-data-grid-total-item column="OrderID" summaryType="count"></dxi-data-grid-total-item>
+        <dxi-data-grid-total-item
+          column="OrderID"
+          summaryType="count"
+        ></dxi-data-grid-total-item>
         <dxi-data-grid-total-item
           column="Quantity"
           summaryType="sum"

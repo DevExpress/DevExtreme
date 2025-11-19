@@ -48,17 +48,30 @@
       </dxo-data-grid-form>
     </dxo-data-grid-editing>
 
-    <dxi-data-grid-column dataField="Prefix" caption="Title" [width]="70"></dxi-data-grid-column>
+    <dxi-data-grid-column
+      dataField="Prefix"
+      caption="Title"
+      [width]="70"
+    ></dxi-data-grid-column>
     <dxi-data-grid-column dataField="FirstName"></dxi-data-grid-column>
     <dxi-data-grid-column dataField="LastName"></dxi-data-grid-column>
-    <dxi-data-grid-column dataField="BirthDate" dataType="date"> </dxi-data-grid-column>
-    <dxi-data-grid-column dataField="Position" [width]="170"> </dxi-data-grid-column>
-    <dxi-data-grid-column dataField="HireDate" dataType="date"> </dxi-data-grid-column>
+    <dxi-data-grid-column dataField="BirthDate" dataType="date">
+    </dxi-data-grid-column>
+    <dxi-data-grid-column dataField="Position" [width]="170">
+    </dxi-data-grid-column>
+    <dxi-data-grid-column dataField="HireDate" dataType="date">
+    </dxi-data-grid-column>
     <dxi-data-grid-column dataField="StateID" caption="State" [width]="125">
-      <dxo-data-grid-lookup [dataSource]="states" displayExpr="Name" valueExpr="ID">
+      <dxo-data-grid-lookup
+        [dataSource]="states"
+        displayExpr="Name"
+        valueExpr="ID"
+      >
       </dxo-data-grid-lookup>
     </dxi-data-grid-column>
-    <dxi-data-grid-column dataField="Address" [visible]="false"> </dxi-data-grid-column>
-    <dxi-data-grid-column dataField="Notes" [visible]="false"> </dxi-data-grid-column>
+    <dxi-data-grid-column dataField="Address" [visible]="false">
+    </dxi-data-grid-column>
+    <dxi-data-grid-column dataField="Notes" [visible]="false">
+    </dxi-data-grid-column>
   </dx-data-grid>
 </div>

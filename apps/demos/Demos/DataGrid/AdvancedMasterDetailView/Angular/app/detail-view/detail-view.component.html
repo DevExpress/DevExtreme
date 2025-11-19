@@ -26,12 +26,21 @@
           <dxo-data-grid-paging [pageSize]="5"></dxo-data-grid-paging>
 
           <dxi-data-grid-column dataField="OrderID"></dxi-data-grid-column>
-          <dxi-data-grid-column dataField="OrderDate" dataType="date"></dxi-data-grid-column>
+          <dxi-data-grid-column
+            dataField="OrderDate"
+            dataType="date"
+          ></dxi-data-grid-column>
           <dxi-data-grid-column dataField="ShipCountry"></dxi-data-grid-column>
           <dxi-data-grid-column dataField="ShipCity"></dxi-data-grid-column>
-          <dxi-data-grid-column dataField="UnitPrice" format="currency"></dxi-data-grid-column>
+          <dxi-data-grid-column
+            dataField="UnitPrice"
+            format="currency"
+          ></dxi-data-grid-column>
           <dxi-data-grid-column dataField="Quantity"></dxi-data-grid-column>
-          <dxi-data-grid-column dataField="Discount" format="percent"></dxi-data-grid-column>
+          <dxi-data-grid-column
+            dataField="Discount"
+            format="percent"
+          ></dxi-data-grid-column>
 
           <dxo-data-grid-summary>
             <dxi-data-grid-total-item column="UnitPrice" summaryType="sum">
@@ -49,7 +58,10 @@
       </div>
     </dx-form>
   </div>
-  <dxi-tab-panel-item title="Address" template="addressTab"></dxi-tab-panel-item>
+  <dxi-tab-panel-item
+    title="Address"
+    template="addressTab"
+  ></dxi-tab-panel-item>
   <div *dxTemplate="let addressTabItem of 'addressTab'">
     <dx-form
       [formData]="rowData"
