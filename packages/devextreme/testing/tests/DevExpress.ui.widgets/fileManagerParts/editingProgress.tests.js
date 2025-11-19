@@ -2,7 +2,7 @@ import $ from 'jquery';
 import fx from 'common/core/animation/fx';
 import { Deferred } from 'core/utils/deferred';
 import ObjectFileSystemProvider from 'file_management/object_provider';
-import ErrorCode from 'file_management/error_codes';
+import ErrorCode from '__internal/file_management/error_codes';
 import { FileItemsController } from '__internal/ui/file_manager/file_items_controller';
 import { createTestFileSystem, createUploaderFiles, stubFileReader, createEditingEvents } from '../../../helpers/fileManagerHelpers.js';
 import TestFileSystemProvider from '../../../helpers/fileManager/file_provider.test.js';

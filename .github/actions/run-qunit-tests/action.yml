@@ -101,7 +101,6 @@ runs:
       env:
         CONSTEL: ${{ inputs.constel }}
         JQUERY: ${{ inputs.useJQuery }}
-        MOBILE_UA: ${{ inputs.userAgent }}
         SHADOW_DOM: ${{ inputs.useShadowDom }}
         TZ: ${{ inputs.timezone }}
         NO_HEADLESS: ${{ inputs.headless == 'false' && 'true' || 'false' }}

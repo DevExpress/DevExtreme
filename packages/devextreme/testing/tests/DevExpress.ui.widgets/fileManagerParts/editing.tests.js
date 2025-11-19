@@ -6,7 +6,7 @@ import pointerEvents from 'common/core/events/pointer';
 import ObjectFileSystemProvider from 'file_management/object_provider';
 import CustomFileSystemProvider from 'file_management/custom_provider';
 import FileSystemError from 'file_management/error.js';
-import ErrorCode from 'file_management/error_codes';
+import ErrorCode from '__internal/file_management/error_codes';
 import { Consts, FileManagerWrapper, FileManagerProgressPanelWrapper, createTestFileSystem, createUploaderFiles, stubFileReader, getDropFileEvent } from '../../../helpers/fileManagerHelpers.js';
 import NoDuplicatesFileProvider from '../../../helpers/fileManager/file_provider.no_duplicates.js';
 import SlowFileProvider from '../../../helpers/fileManager/file_provider.slow.js';
