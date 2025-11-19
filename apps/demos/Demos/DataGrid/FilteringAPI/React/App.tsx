@@ -1,54 +1,37 @@
 import React, { useCallback, useRef, useState } from 'react';
 import DataGrid, { Column, DataGridRef, Pager } from 'devextreme-react/data-grid';
-import SelectBox from 'devextreme-react/select-box';
+import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
 import 'devextreme-react/common/data';
+import { tasks, statuses } from './data.ts';
 
-const dataSourceOptions = {
-  store: {
-    type: 'odata' as const,
-    version: 2,
-    url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks',
-    key: 'Task_ID',
-  },
-  expand: 'ResponsibleEmployee',
-  select: [
-    'Task_ID',
-    'Task_Subject',
-    'Task_Start_Date',
-    'Task_Status',
-    'ResponsibleEmployee/Employee_Full_Name',
-  ],
-};
-
-const statuses = ['All', 'Not Started', 'In Progress', 'Need Assistance', 'Deferred', 'Completed'];
 const statusLabel = { 'aria-label': 'Status' };
 
 const App = () => {
   const [filterStatus, setFilterStatus] = useState(statuses[0]);
   const dataGridRef = useRef<DataGridRef>(null);
 
-  const onValueChanged = useCallback(({ value }) => {
+  const onValueChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     const dataGrid = dataGridRef.current.instance();
 
-    if (value === 'All') {
+    if (e.value === 'All') {
       dataGrid.clearFilter();
     } else {
-      dataGrid.filter(['Task_Status', '=', value]);
+      dataGrid.filter(['Task_Status', '=', e.value]);
     }
 
-    setFilterStatus(value);
+    setFilterStatus(e.value);
   }, []);
 
   return (
     <div>
-      <div className="left-side">
-        <div className="logo">
-          <img src="../../../../images/logo-devav.png" alt="DEVAV" />
+      <div className='left-side'>
+        <div className='logo'>
+          <img src='../../../../images/logo-devav.png' alt='DEVAV' />
           &nbsp;
-          <img src="../../../../images/logo-tasks.png" alt="Tasks" />
+          <img src='../../../../images/logo-tasks.png' alt='Tasks' />
         </div>
       </div>
-      <div className="right-side">
+      <div className='right-side'>
         <SelectBox
           items={statuses}
           inputAttr={statusLabel}
@@ -57,32 +40,33 @@ const App = () => {
       </div>
 
       <DataGrid
-        id="gridContainer"
+        id='gridContainer'
         ref={dataGridRef}
-        dataSource={dataSourceOptions}
+        dataSource={tasks}
+        keyExpr='Task_ID'
         columnAutoWidth={true}
         showBorders={true}
       >
         <Pager visible={true} />
         <Column
-          dataField="Task_ID"
+          dataField='Task_ID'
           width={80} />
         <Column
-          dataField="Task_Start_Date"
-          caption="Start Date"
-          dataType="date" />
+          dataField='Task_Start_Date'
+          caption='Start Date'
+          dataType='date' />
         <Column
           allowSorting={false}
-          dataField="ResponsibleEmployee.Employee_Full_Name"
-          cssClass="employee"
-          caption="Assigned To" />
+          dataField='Employee_Full_Name'
+          cssClass='employee'
+          caption='Assigned To' />
         <Column
-          dataField="Task_Subject"
-          caption="Subject"
+          dataField='Task_Subject'
+          caption='Subject'
           width={350} />
         <Column
-          dataField="Task_Status"
-          caption="Status" />
+          dataField='Task_Status'
+          caption='Status' />
       </DataGrid>
     </div>
   );

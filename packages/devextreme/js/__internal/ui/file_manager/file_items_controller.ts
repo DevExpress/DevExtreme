@@ -5,22 +5,22 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined, isObject, isPromise } from '@js/core/utils/type';
-import CustomFileSystemProvider from '@js/file_management/custom_provider';
-import FileSystemError from '@js/file_management/error';
-import ErrorCode from '@js/file_management/error_codes';
-import FileSystemItem from '@js/file_management/file_system_item';
-import ObjectFileSystemProvider from '@js/file_management/object_provider';
-import FileSystemProviderBase from '@js/file_management/provider_base';
-import RemoteFileSystemProvider from '@js/file_management/remote_provider';
+import type { Properties as FileManagerProperties } from '@js/ui/file_manager';
+import CustomFileSystemProvider from '@ts/file_management/custom_provider';
+import FileSystemError from '@ts/file_management/error';
+import ErrorCode from '@ts/file_management/error_codes';
+import FileSystemItem from '@ts/file_management/file_system_item';
+import ObjectFileSystemProvider from '@ts/file_management/object_provider';
+import FileSystemProviderBase from '@ts/file_management/provider_base';
+import RemoteFileSystemProvider from '@ts/file_management/remote_provider';
 import {
   getEscapedFileName,
   getFileExtension,
   getPathParts,
   pathCombine,
-} from '@js/file_management/utils';
-import type { Properties as FileManagerProperties } from '@js/ui/file_manager';
-import { whenSome } from '@js/ui/file_manager/ui.file_manager.common';
+} from '@ts/file_management/utils';
 import type { FileManagerActions } from '@ts/ui/file_manager/ui.file_manager';
+import { whenSome } from '@ts/ui/file_manager/ui.file_manager.common';
 
 const DEFAULT_ROOT_FILE_SYSTEM_ITEM_NAME = 'Files';
 
@@ -63,21 +63,20 @@ class FileSecurityController {
       return items;
     }
     return items.filter(
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       (item: FileSystemItem): boolean => item.isDirectory || this._isValidExtension(item.name),
     );
   }
 
   validateExtension(name: string): void {
     if (!this._isValidExtension(name)) {
-      // @ts-expect-error ts-error
-      throw new FileSystemError(ErrorCode.WrongFileExtension, null);
+      throw new FileSystemError(ErrorCode.WrongFileExtension);
     }
   }
 
   validateMaxFileSize(size: number): void {
     if (this._maxFileSize && size > this._maxFileSize) {
-      // @ts-expect-error ts-error
-      throw new FileSystemError(ErrorCode.MaxFileSizeExceeded, null);
+      throw new FileSystemError(ErrorCode.MaxFileSizeExceeded);
     }
   }
 
@@ -746,8 +745,6 @@ export class FileItemsController {
     if (chunkSize && chunkSize > 0) {
       return chunkSize;
     }
-    // @ts-expect-error ts-error
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._fileProvider?.getFileUploadChunkSize();
   }
 
@@ -989,7 +986,6 @@ export class FileItemsController {
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let i = 0; i < files.length; i += 1) {
       const file = files[i];
-      // @ts-expect-error ts-error
       const item = new FileSystemItem(pathInfo, file.name, false);
       const itemInfo = this._createFileInfo(item, parentDirectoryInfo);
       // @ts-expect-error ts-error
@@ -1196,7 +1192,6 @@ export class FileItemsController {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   _createDirInfoByName(name, parentDirectoryInfo) {
     const dirPathInfo = this._getPathInfo(parentDirectoryInfo);
-    // @ts-expect-error ts-error
     const fileItem = new FileSystemItem(dirPathInfo, name, true);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._createDirectoryInfo(fileItem, parentDirectoryInfo);
@@ -1270,7 +1265,6 @@ export class FileItemsController {
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   _createRootDirectoryInfo(text) {
-    // @ts-expect-error ts-error
     const rootDirectory = new FileSystemItem(null, '', true);
 
     const result = this._createDirectoryInfo(rootDirectory, null);

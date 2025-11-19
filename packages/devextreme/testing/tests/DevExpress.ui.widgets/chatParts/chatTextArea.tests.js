@@ -3,7 +3,7 @@ import keyboardMock from '../../../helpers/keyboardMock.js';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 
-import ChatTextArea, { CHAT_TEXT_AREA_ATTACH_BUTTON } from '__internal/ui/chat/message_box/chat_text_area';
+import ChatTextArea, { CHAT_TEXT_AREA_ATTACH_BUTTON, DEFAULT_ALLOWED_FILE_EXTENSIONS } from '__internal/ui/chat/message_box/chat_text_area';
 import Button from 'ui/button';
 import FileUploader, { FILEUPLOADER_CLASS, FILEUPLOADER_CANCEL_BUTTON_CLASS } from '__internal/ui/file_uploader/file_uploader';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
@@ -314,7 +314,7 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
                 fileUploaderOptions: {},
             });
 
-            assert.strictEqual(this.$fileUploader.length, 1, 'file uploader is not rendered');
+            assert.strictEqual(this.$fileUploader.length, 1, 'file uploader is rendered');
             assert.strictEqual(this.getFileUploader() instanceof FileUploader, true, 'file uploader has correct instance');
         });
 
@@ -334,6 +334,7 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
             { name: '_showFileIcon', value: true },
             { name: '_cancelButtonPosition', value: 'end' },
             { name: 'multiple', value: true },
+            { name: 'allowedFileExtensions', value: DEFAULT_ALLOWED_FILE_EXTENSIONS },
         ].forEach(({ name, value }) => {
             QUnit.test(`${name} should equal ${value} by default`, function(assert) {
                 this.reinit({
@@ -344,14 +345,19 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
             });
         });
 
-        QUnit.test('It should be possible to redefine fileUploaderOptions.multiple option', function(assert) {
-            this.reinit({
-                fileUploaderOptions: {
-                    multiple: false,
-                },
-            });
+        [
+            { name: 'multiple', value: false },
+            { name: 'allowedFileExtensions', value: [] },
+        ].forEach(({ name, value }) => {
+            QUnit.test(`It should be possible to redefine fileUploaderOptions.${name} option`, function(assert) {
+                this.reinit({
+                    fileUploaderOptions: {
+                        [name]: value,
+                    },
+                });
 
-            assert.strictEqual(this.getFileUploader().option('multiple'), false, 'multiple option is redefined');
+                assert.strictEqual(this.getFileUploader().option(name), value, `${name} option is redefined`);
+            });
         });
 
         QUnit.test('It should not be possible to redefine fileUploaderOptions.uploadMode option', function(assert) {

@@ -44,7 +44,12 @@ const createDataGrid = async (
     .attr('id', GRID_CONTAINER_ID)
     .appendTo(document.body);
 
-  const instance = new DataGrid($container.get(0) as HTMLDivElement, options);
+  const dataGridOptions: DataGridProperties = {
+    keyExpr: 'id',
+    ...options,
+  };
+
+  const instance = new DataGrid($container.get(0) as HTMLDivElement, dataGridOptions);
   const component = new DataGridModel($container.get(0) as HTMLElement);
 
   jest.runAllTimers();
@@ -59,6 +64,7 @@ const createDataGrid = async (
 const beforeTest = (): void => {
   jest.useFakeTimers();
   jest.spyOn(errors, 'log').mockImplementation(jest.fn());
+  jest.spyOn(errors, 'Error').mockImplementation(() => ({}));
 };
 
 const afterTest = (): void => {
@@ -581,6 +587,91 @@ describe('Options', () => {
 
       expect(component.getDataCell(0, 3).getText()).toBe('Test - No Data');
       expect(component.getDataCell(1, 3).getText()).toBe('Test - No Data');
+    });
+  });
+
+  describe('when the keyExpr is not set', () => {
+    it('should throw E1042', async () => {
+      const onDataErrorOccurredMock = jest.fn();
+      const sendRequestMock = jest.fn((): RequestResult => ({
+        promise: new Promise<string>((resolve) => {
+          resolve('{}');
+        }),
+        abort: (): void => {},
+      }));
+
+      await createDataGrid({
+        keyExpr: undefined,
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            ai: {
+              prompt: 'Initial Prompt',
+              aiIntegration: new AIIntegration({
+                sendRequest: sendRequestMock,
+              }),
+            },
+          },
+        ],
+        onDataErrorOccurred: onDataErrorOccurredMock,
+      });
+
+      expect(sendRequestMock).toHaveBeenCalledTimes(0);
+      expect(onDataErrorOccurredMock).toHaveBeenCalledTimes(1);
+      expect(errors.Error).toHaveBeenCalledWith('E1042', 'AI Column');
+    });
+  });
+
+  describe('when the keyExpr is not set', () => {
+    it('should throw E1042 when sending the request', async () => {
+      const onDataErrorOccurredMock = jest.fn();
+      const sendRequestMock = jest.fn((): RequestResult => ({
+        promise: new Promise<string>((resolve) => {
+          resolve('{}');
+        }),
+        abort: (): void => {},
+      }));
+
+      const { instance } = await createDataGrid({
+        keyExpr: undefined,
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'aiColumn',
+            ai: {
+              aiIntegration: new AIIntegration({
+                sendRequest: sendRequestMock,
+              }),
+            },
+          },
+        ],
+        onDataErrorOccurred: onDataErrorOccurredMock,
+      });
+
+      expect(sendRequestMock).toHaveBeenCalledTimes(0);
+      expect(onDataErrorOccurredMock).toHaveBeenCalledTimes(1);
+      expect(errors.Error).toHaveBeenCalledWith('E1042', 'AI Column');
+
+      instance.columnOption('aiColumn', 'ai.prompt', 'New Prompt');
+
+      expect(sendRequestMock).toHaveBeenCalledTimes(0);
+      expect(onDataErrorOccurredMock).toHaveBeenCalledTimes(2);
+      expect(errors.Error).toHaveBeenCalledTimes(2);
+      expect(errors.Error).toHaveBeenLastCalledWith('E1042', 'AI Column');
     });
   });
 });
@@ -2589,189 +2680,6 @@ describe('API Handlers', () => {
       jest.runAllTimers();
       await Promise.resolve();
       expect(sendRequestDataSpy).toHaveBeenCalledTimes(3);
-    });
-  });
-
-  describe('onAIColumnResponseReceived', () => {
-    const aiIntegrationResult = (): RequestResult => ({
-      promise: new Promise<string>((resolve) => {
-        columnSendRequestStarted();
-        // Timeouts are mocked and do not delay tests execution
-        setTimeout(() => {
-          columnSendRequestResolved();
-          resolve('1');
-        }, 10000);
-      }),
-      abort: (): void => {
-        abortSpy();
-      },
-    });
-    const columnAIIntegration = new AIIntegration({
-      sendRequest(): RequestResult {
-        return aiIntegrationResult();
-      },
-    });
-    it('should call onAIColumnResponseReceived handler', async () => {
-      const onAIColumnResponseReceived = jest.fn();
-      const { instance } = await createDataGrid({
-        dataSource: [
-          { id: 1, name: 'Name 1', value: 10 },
-          { id: 2, name: 'Name 2', value: 20 },
-        ],
-        keyExpr: 'id',
-        columns: [
-          { dataField: 'id', caption: 'ID' },
-          { dataField: 'name', caption: 'Name' },
-          { dataField: 'value', caption: 'Value' },
-          {
-            type: 'ai',
-            caption: 'AI Column',
-            name: 'myColumn',
-            ai: {
-              aiIntegration: columnAIIntegration,
-              mode: 'manual',
-              prompt: 'Test prompt',
-            },
-          },
-        ],
-        onAIColumnResponseReceived,
-      });
-
-      instance.sendAIColumnRequest('myColumn');
-      expect(columnSendRequestStarted).toHaveBeenCalledTimes(1);
-      expect(onAIColumnResponseReceived).toHaveBeenCalledTimes(0);
-      expect(abortSpy).toHaveBeenCalledTimes(0);
-      // There is enough time to resolve a promise
-      jest.advanceTimersByTime(10000);
-      await Promise.resolve();
-      expect(columnSendRequestResolved).toHaveBeenCalledTimes(1);
-      expect(onAIColumnResponseReceived).toHaveBeenCalledTimes(1);
-      expect(onAIColumnResponseReceived).toHaveBeenCalledWith(
-        expect.objectContaining({
-          component: expect.objectContaining({ NAME: 'dxDataGrid' }),
-          element: expect.objectContaining({ id: GRID_CONTAINER_ID }),
-          column: expect.objectContaining({
-            name: 'myColumn',
-            ai: expect.objectContaining({
-              mode: 'manual',
-              prompt: 'Test prompt',
-            }),
-          }),
-          data: 1,
-          error: null,
-        }),
-      );
-      expect(abortSpy).toHaveBeenCalledTimes(1);
-    });
-
-    it('should not call onAIColumnResponseReceived handler if the request is aborted', async () => {
-      const onAIColumnResponseReceived = jest.fn();
-      const { instance } = await createDataGrid({
-        dataSource: [
-          { id: 1, name: 'Name 1', value: 10 },
-          { id: 2, name: 'Name 2', value: 20 },
-        ],
-        keyExpr: 'id',
-        columns: [
-          { dataField: 'id', caption: 'ID' },
-          { dataField: 'name', caption: 'Name' },
-          { dataField: 'value', caption: 'Value' },
-          {
-            type: 'ai',
-            caption: 'AI Column',
-            name: 'myColumn',
-            ai: {
-              aiIntegration: columnAIIntegration,
-              mode: 'manual',
-              prompt: 'Test prompt',
-            },
-          },
-        ],
-        onAIColumnResponseReceived,
-      });
-
-      instance.sendAIColumnRequest('myColumn');
-      expect(columnSendRequestStarted).toHaveBeenCalledTimes(1);
-      expect(onAIColumnResponseReceived).toHaveBeenCalledTimes(0);
-      expect(abortSpy).toHaveBeenCalledTimes(0);
-
-      instance.abortAIColumnRequest('myColumn');
-      expect(abortSpy).toHaveBeenCalledTimes(1);
-      // There is enough time to resolve a promise
-      jest.advanceTimersByTime(10000);
-      await Promise.resolve();
-      expect(onAIColumnResponseReceived).toHaveBeenCalledTimes(0);
-    });
-
-    it('should call onAIColumnResponseReceived handler with error object if the request is rejected', async () => {
-      const aiIntegrationResultWithError = (): RequestResult => ({
-        promise: new Promise<string>((_resolve, reject) => {
-          columnSendRequestStarted();
-          // Timeouts are mocked and do not delay tests execution
-          setTimeout(() => {
-            reject(new Error('Test error'));
-          }, 10000);
-        }),
-        abort: (): void => {
-          abortSpy();
-        },
-      });
-      const columnAIIntegrationWithError = new AIIntegration({
-        sendRequest(): RequestResult {
-          return aiIntegrationResultWithError();
-        },
-      });
-      const onAIColumnResponseReceived = jest.fn();
-      const { instance } = await createDataGrid({
-        dataSource: [
-          { id: 1, name: 'Name 1', value: 10 },
-          { id: 2, name: 'Name 2', value: 20 },
-        ],
-        keyExpr: 'id',
-        columns: [
-          { dataField: 'id', caption: 'ID' },
-          { dataField: 'name', caption: 'Name' },
-          { dataField: 'value', caption: 'Value' },
-          {
-            type: 'ai',
-            caption: 'AI Column',
-            name: 'myColumn',
-            ai: {
-              aiIntegration: columnAIIntegrationWithError,
-              mode: 'manual',
-              prompt: 'Test prompt',
-            },
-          },
-        ],
-        onAIColumnResponseReceived,
-      });
-
-      instance.sendAIColumnRequest('myColumn');
-      expect(columnSendRequestStarted).toHaveBeenCalledTimes(1);
-      expect(onAIColumnResponseReceived).toHaveBeenCalledTimes(0);
-      expect(abortSpy).toHaveBeenCalledTimes(0);
-      // There is enough time to resolve a promise
-      jest.advanceTimersByTime(10000);
-      await Promise.resolve();
-      await Promise.resolve();
-
-      expect(abortSpy).toHaveBeenCalledTimes(1);
-      expect(onAIColumnResponseReceived).toHaveBeenCalledTimes(1);
-      expect(onAIColumnResponseReceived).toHaveBeenCalledWith(
-        expect.objectContaining({
-          component: expect.objectContaining({ NAME: 'dxDataGrid' }),
-          element: expect.objectContaining({ id: GRID_CONTAINER_ID }),
-          column: expect.objectContaining({
-            name: 'myColumn',
-            ai: expect.objectContaining({
-              mode: 'manual',
-              prompt: 'Test prompt',
-            }),
-          }),
-          data: null,
-          error: 'Test error',
-        }),
-      );
     });
   });
 });
