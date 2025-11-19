@@ -258,10 +258,10 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
         default: { 15: 18, 20: 24, 25: 32 },
         compact: { 15: 12, 20: 18, 25: 24 },
       },
-      // generic: {
-      //   default: { 10: 17, 15: 26, 20: 34 },
-      //   compact: { 10: 13, 15: 19, 20: 25 },
-      // },
+      generic: {
+        default: { 15: 24, 20: 32, 25: 40 },
+        compact: { 15: 18, 20: 24, 25: 30 },
+      },
     };
 
     const thresholds = themeThresholds[themeType][isCompact(theme) ? 'compact' : 'default'];
