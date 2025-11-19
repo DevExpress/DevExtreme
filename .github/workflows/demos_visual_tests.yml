@@ -364,6 +364,7 @@ jobs:
       working-directory: apps/demos
       env:
         DEBUG: 'eslint:cli-engine,stylelint:standalone'
+        NODE_OPTIONS: --max-old-space-size=8192
       run: pnpx nx lint
 
     - name: Run lint on changed demos
