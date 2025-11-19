@@ -99,7 +99,6 @@ jobs:
           ui.editors,
           ui.grid,
           ui.scheduler,
-          viz
         ]
         TIMEZONE: ['']
         CSP: ['true']
@@ -116,6 +115,7 @@ jobs:
           - CONSTEL: misc
             CSP: 'false'
             useJQuery: 'true'
+            MAX_WORKERS: '3'
           - CONSTEL: ui.widgets
             CSP: 'false'
             useJQuery: 'false'
@@ -150,7 +150,6 @@ jobs:
           'ui.editors',
           'ui.grid',
           'ui.scheduler',
-          'viz'
         ]
 
     steps:
@@ -165,7 +164,7 @@ jobs:
           useJQuery: 'true'
           useShadowDom: 'true'
           useCsp: 'true'
-          maxWorkers: ${{ matrix.constel == 'ui.editors' && '3' || '' }}
+          maxWorkers: ${{ (matrix.constel == 'ui.editors' || matrix.constel == 'ui.widgets') && '3' || '' }}
 
   notify:
     runs-on: devextreme-shr2
