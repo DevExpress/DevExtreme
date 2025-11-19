@@ -27,6 +27,7 @@ $material-scheduler-appointment-tooltip-remove-padding-top: null !default;
 
 $material-scheduler-appointment-short-content-padding: null !default;
 $material-scheduler-appointment-10min-recurrence-padding-right: null !default;
+$material-scheduler-appointment-10min-title-font-size: null !default;
 $material-scheduler-appointment-10min-title-line-height: null !default;
 $material-scheduler-appointment-10min-icon-font-size: null !default;
 $material-scheduler-appointment-10min-icon-top: null !default;
@@ -37,8 +38,12 @@ $material-scheduler-appointment-15min-title-line-height: null !default;
 $material-scheduler-appointment-15min-icon-font-size: null !default;
 $material-scheduler-appointment-15min-icon-top: null !default;
 $material-scheduler-appointment-15min-icon-right: null !default;
+$material-scheduler-appointment-20min-recurrence-padding-right: null !default;
+$material-scheduler-appointment-20min-title-font-size: null !default;
 $material-scheduler-appointment-20min-title-line-height: null !default;
+$material-scheduler-appointment-20min-icon-font-size: null !default;
 $material-scheduler-appointment-20min-icon-top: null !default;
+$material-scheduler-appointment-20min-icon-right: null !default;
 
 $scheduler-left-column-width: 65px !default;
 $material-scheduler-timeline-date-table-cell-height: 50px !default;
@@ -135,15 +140,25 @@ $scheduler-timeline-cell-height: 50px !default;
   $material-scheduler-appointment-short-content-padding: 0 7px !default;
 
   $material-scheduler-appointment-10min-recurrence-padding-right: 14px !default;
+  $material-scheduler-appointment-10min-title-font-size: 8px !default;
   $material-scheduler-appointment-10min-title-line-height: 12px !default;
   $material-scheduler-appointment-10min-icon-font-size: 12px !default;
   $material-scheduler-appointment-10min-icon-top: 0 !default;
   $material-scheduler-appointment-10min-icon-right: 2px !default;
 
   $material-scheduler-appointment-15min-recurrence-padding-right: 18px !default;
+  $material-scheduler-appointment-15min-title-font-size: 12px !default;
+  $material-scheduler-appointment-15min-title-line-height: 18px !default;
   $material-scheduler-appointment-15min-icon-font-size: 16px !default;
   $material-scheduler-appointment-15min-icon-top: 1px !default;
   $material-scheduler-appointment-15min-icon-right: 2px !default;
+
+  $material-scheduler-appointment-20min-recurrence-padding-right: 25px !default;
+  $material-scheduler-appointment-20min-title-font-size: 12px !default;
+  $material-scheduler-appointment-20min-title-line-height: 15px !default;
+  $material-scheduler-appointment-20min-icon-font-size: 18px !default;
+  $material-scheduler-appointment-20min-icon-top: 4px !default;
+  $material-scheduler-appointment-20min-icon-right: 4px !default;
 }
 
 @else if $size == "compact" {
@@ -205,6 +220,10 @@ $scheduler-timeline-cell-height: 50px !default;
   $material-scheduler-appointment-15min-icon-top: 1px !default;
   $material-scheduler-appointment-15min-icon-right: 2px !default;
 
+  $material-scheduler-appointment-20min-recurrence-padding-right: 25px !default;
+  $material-scheduler-appointment-20min-title-font-size: 12px !default;
   $material-scheduler-appointment-20min-title-line-height: 12px !default;
-  $material-scheduler-appointment-20min-icon-top: 0 !default;
+  $material-scheduler-appointment-20min-icon-font-size: 16px !default;
+  $material-scheduler-appointment-20min-icon-top: 1px !default;
+  $material-scheduler-appointment-20min-icon-right: 4px !default;
 }

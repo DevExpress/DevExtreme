@@ -252,7 +252,7 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
     const themeThresholds: Record<string, AppointmentClassThresholds> = {
       fluent: {
         default: { 15: 18, 20: 24, 25: 32 },
-        compact: { 15: 18, 20: 18, 25: 24 },
+        compact: { 15: 14, 20: 18, 25: 24 },
       },
       material: {
         default: { 15: 18, 20: 24, 25: 32 },

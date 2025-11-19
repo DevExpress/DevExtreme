@@ -8,6 +8,7 @@ fixture.disablePageReloads`Monthly recurrent appointments with timezones`
   .page(url(__dirname, '../../../../container.html'));
 
 test('Should correctly display the recurrent monthly appointment with the same timezone', async (t) => {
+  await t.wait(10000000); // 10000 seconds delay
   // expected date: 4/28/2021 10:00 AM - 12:00 PM
   await screenshotTestFunc(t, SCREENSHOT_BASE_NAME, 'same-date__same-timezone');
 }).before(async () => {

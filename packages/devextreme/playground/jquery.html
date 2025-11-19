@@ -41,6 +41,10 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
+
+    <style>
+        /* .dx-scheduler-cell-sizes-vertical { height: 25px; } */
+    </style>
 </head>
 <body class="dx-surface">
     <div role="main">
@@ -49,14 +53,62 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+        <div id="scheduler"></div>
         <script>
             $(() => {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: () => { alert("clicked"); }
-                });
-            });
+  // Monday, May 1, 2017
+  const baseDate = new Date(2017, 4, 1, 9, 0);
+  
+  $('#scheduler').dxScheduler({
+      dataSource: [
+        // Day 1 - Monday, May 1, 2017
+        {
+          text: '10 min appointment with very very very very very very very very very very very very very long title',
+          startDate: new Date(baseDate),
+          endDate: new Date(baseDate.getTime() + 10 * 60 * 1000), // +10 minutes
+          recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO',
+        },
+        {
+          text: '15 min appointment with very very very very very very very very very very very very very long title',
+          startDate: new Date(baseDate.getTime() + 20 * 60 * 1000), // +20 minutes (10 min appointment + 10 min gap)
+          endDate: new Date(baseDate.getTime() + 35 * 60 * 1000), // +35 minutes (20 + 15)
+          recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO',
+        },
+        {
+          text: '20 min appointment with very very very very very very very very very very very very very long title',
+          startDate: new Date(baseDate.getTime() + 45 * 60 * 1000), // +45 minutes (35 + 10 min gap)
+          endDate: new Date(baseDate.getTime() + 65 * 60 * 1000), // +65 minutes (45 + 20)
+          recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO',
+        },
+        // Day 2 - Tuesday, May 2, 2017 (next day, same pattern)
+        {
+          text: '10 min appointment with very very very very very very very very very very very very very long title',
+          startDate: new Date(2017, 4, 2, 9, 0),
+          endDate: new Date(2017, 4, 2, 9, 10),
+          recurrenceRule: 'FREQ=WEEKLY;BYDAY=TU',
+        },
+        {
+          text: '15 min appointment with very very very very very very very very very very very very very long title',
+          startDate: new Date(2017, 4, 2, 9, 20),
+          endDate: new Date(2017, 4, 2, 9, 35),
+          recurrenceRule: 'FREQ=WEEKLY;BYDAY=TU',
+        },
+        {
+          text: '20 min appointment with very very very very very very very very very very very very very long title',
+          startDate: new Date(2017, 4, 2, 9, 45),
+          endDate: new Date(2017, 4, 2, 10, 5),
+          recurrenceRule: 'FREQ=WEEKLY;BYDAY=TU',
+        },
+      ],
+      views: ['day', 'week', 'month'],
+      currentView: 'week',
+      currentDate: new Date(2017, 4, 1),
+      firstDayOfWeek: 1,
+      startDayHour: 9,
+      cellDuration: 30,
+    }).dxScheduler('instance');
+});
+
         </script>
     </div>
 </body>

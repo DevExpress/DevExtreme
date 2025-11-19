@@ -45,11 +45,13 @@ $generic-scheduler-recurrence-end-item-height: null !default;
 
 $generic-scheduler-appointment-short-content-padding: null !default;
 $generic-scheduler-appointment-10min-recurrence-padding-right: null !default;
+$generic-scheduler-appointment-10min-title-font-size: null !default;
 $generic-scheduler-appointment-10min-title-line-height: null !default;
 $generic-scheduler-appointment-10min-icon-font-size: null !default;
 $generic-scheduler-appointment-10min-icon-top: null !default;
 $generic-scheduler-appointment-10min-icon-right: null !default;
 $generic-scheduler-appointment-15min-recurrence-padding-right: null !default;
+$generic-scheduler-appointment-15min-title-font-size: null !default;
 $generic-scheduler-appointment-15min-title-line-height: null !default;
 $generic-scheduler-appointment-15min-icon-font-size: null !default;
 $generic-scheduler-appointment-15min-icon-top: null !default;
@@ -114,12 +116,14 @@ $generic-scheduler-group-header-agenda-font-size: 14px !default;
   $generic-scheduler-appointment-short-content-padding: 0 7px !default;
 
   $generic-scheduler-appointment-10min-recurrence-padding-right: 16px !default;
+  $generic-scheduler-appointment-10min-title-font-size: 8px !default;
   $generic-scheduler-appointment-10min-title-line-height: 16px !default;
   $generic-scheduler-appointment-10min-icon-font-size: 14px !default;
   $generic-scheduler-appointment-10min-icon-top: 2px !default;
   $generic-scheduler-appointment-10min-icon-right: 2px !default;
 
   $generic-scheduler-appointment-15min-recurrence-padding-right: 20px !default;
+  $generic-scheduler-appointment-15min-title-font-size: 12px !default;
   $generic-scheduler-appointment-15min-title-line-height: 24px !default;
   $generic-scheduler-appointment-15min-icon-font-size: 18px !default;
   $generic-scheduler-appointment-15min-icon-top: 4px !default;
@@ -180,8 +184,11 @@ $generic-scheduler-group-header-agenda-font-size: 14px !default;
   $generic-scheduler-appointment-short-content-padding: 0 7px !default;
 
   $generic-scheduler-appointment-15min-recurrence-padding-right: 16px !default;
+  $generic-scheduler-appointment-15min-title-font-size: 12px !default;
   $generic-scheduler-appointment-15min-title-line-height: 16px !default;
   $generic-scheduler-appointment-15min-icon-font-size: 14px !default;
   $generic-scheduler-appointment-15min-icon-top: 2px !default;
   $generic-scheduler-appointment-15min-icon-right: 2px !default;
+
+  $generic-scheduler-appointment-20min-title-line-height: 16px !default;
 }
