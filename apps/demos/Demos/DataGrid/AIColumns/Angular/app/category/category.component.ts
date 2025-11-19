@@ -8,6 +8,7 @@ if (window && window.config?.packageConfigPaths) {
 
 @Component({
   selector: 'category',
+  standalone: false,
   templateUrl: `.${modulePrefix}/category/category.component.html`,
   styleUrls: [`.${modulePrefix}/category/category.component.css`],
 })

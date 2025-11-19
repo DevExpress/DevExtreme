@@ -9,6 +9,7 @@ if (window && window.config?.packageConfigPaths) {
 
 @Component({
   selector: 'license-info',
+  standalone: false,
   templateUrl: `.${modulePrefix}/license-info/license-info.component.html`,
 })
 export class LicenseInfo {

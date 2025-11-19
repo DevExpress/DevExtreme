@@ -8,6 +8,7 @@ if (window && window.config?.packageConfigPaths) {
 
 @Component({
   selector: 'trademark',
+  standalone: false,
   templateUrl: `.${modulePrefix}/trademark/trademark.component.html`,
   styleUrls: [`.${modulePrefix}/trademark/trademark.component.css`],
 })
