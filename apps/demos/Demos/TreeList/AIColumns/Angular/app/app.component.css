@@ -1,0 +1,7 @@
+::ng-deep #employees .ai__cell {
+  background-color: var(--dx-datagrid-row-alternation-bg);
+}
+
+::ng-deep #employees .employee__cell > div {
+  align-items: flex-end;
+}

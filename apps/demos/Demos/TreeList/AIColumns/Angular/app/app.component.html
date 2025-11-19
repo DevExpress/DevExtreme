@@ -1,0 +1,61 @@
+<dx-tree-list
+  id="employees"
+  keyExpr="ID"
+  parentIdExpr="Head_ID"
+  [dataSource]="employees"
+  [autoExpandAll]="true"
+  [showBorders]="true"
+  [aiIntegration]="aiIntegration"
+  (onAIColumnRequestCreating)="onAIColumnRequestCreating($event)"
+>
+  <dxo-tree-list-scrolling mode="standard" />
+  <dxo-tree-list-paging [pageSize]="10" />
+  <dxo-tree-list-column-fixing [enabled]="true" />
+
+  <dxi-tree-list-column
+    caption="Employee"
+    cssClass="employee__cell"
+    [width]="260"
+    cellTemplate="employeeTemplate"
+  />
+  <div *dxTemplate="let model of 'employeeTemplate'">
+    <employee
+      [firstName]="model.data.First_Name"
+      [lastName]="model.data.Last_Name"
+    />
+  </div>
+  <dxi-tree-list-column dataField="Title" caption="Position" [width]="140" />
+  <dxi-tree-list-column
+    dataField="Status"
+    [minWidth]="180"
+    cellTemplate="statusTemplate"
+  />
+  <div *dxTemplate="let model of 'statusTemplate'">
+    <status [status]="model.data.Status" />
+  </div>
+  <dxi-tree-list-column dataField="City" [width]="180" />
+  <dxi-tree-list-column dataField="State" [width]="140" />
+  <dxi-tree-list-column
+    dataField="Email"
+    [minWidth]="200"
+    cellTemplate="emailTemplate"
+  />
+  <div *dxTemplate="let model of 'emailTemplate'">
+    <email [email]="model.data.Email" />
+  </div>
+  <dxi-tree-list-column
+    name="AI Column"
+    caption="AI Column"
+    type="ai"
+    cssClass="ai__cell"
+    [fixed]="true"
+    fixedPosition="right"
+    [width]="180"
+  >
+    <dxo-tree-list-ai
+      prompt='Identify department for each employee. It should be one of the following department types:  "Management", "Human Resources", "IT", "Shipping", "Support", "Sales",  "Engineering". Use "Engineering" by default.'
+      mode="auto"
+      noDataText="No data"
+    />
+  </dxi-tree-list-column>
+</dx-tree-list>
