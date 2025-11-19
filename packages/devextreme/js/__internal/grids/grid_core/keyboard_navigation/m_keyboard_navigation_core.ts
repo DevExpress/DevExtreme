@@ -96,14 +96,20 @@ export class KeyboardNavigationController extends modules.ViewController {
     const widths = gridCoreUtils.getColumnWidths(visibleColumns);
     const focusedColumnIndex = this._focusedCellPosition?.columnIndex ?? 0;
 
-    return widths[focusedColumnIndex];
+    return widths[focusedColumnIndex] ?? 0;
   }
 
   private getNextCellLocation($cell?: dxElementWrapper): number {
     const scrollable = this.getScrollable();
 
-    if (!scrollable || !$cell?.length) {
+    if (!scrollable || !($cell?.length || this._isVirtualColumnRender())) {
       return 0;
+    }
+
+    if (!$cell) {
+      const rtlMultiplier = this.option('rtlEnabled') ? -1 : 1;
+
+      return scrollable.scrollLeft() + rtlMultiplier * this.getVirtualCellWidth();
     }
 
     const scrollPadding = this.getScrollPadding($(scrollable.container()));

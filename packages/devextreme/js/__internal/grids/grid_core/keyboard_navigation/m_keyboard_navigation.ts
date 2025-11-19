@@ -18,7 +18,6 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import {
   getHeight,
   getOuterHeight,
-  getOuterWidth,
   getWidth,
 } from '@js/core/utils/size';
 import { isDeferred, isDefined, isEmptyObject } from '@js/core/utils/type';
@@ -930,19 +929,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
     // @ts-expect-error
     return Deferred().resolve().promise();
-  }
-
-  private _getHorizontalScrollPositionOffset(direction) {
-    let positionOffset = 0;
-    const $currentCell = this._getCell(this._focusedCellPosition);
-    const currentCellWidth = $currentCell && getOuterWidth($currentCell);
-    if (currentCellWidth > 0) {
-      const rtlMultiplier = this.option('rtlEnabled') ? -1 : 1;
-      positionOffset = direction === 'nextInRow' || direction === 'next'
-        ? currentCellWidth * rtlMultiplier
-        : currentCellWidth * rtlMultiplier * -1;
-    }
-    return positionOffset;
   }
 
   private _editingCellTabHandler(eventArgs, direction) {
