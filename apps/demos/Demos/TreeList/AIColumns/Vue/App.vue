@@ -14,7 +14,6 @@
       :enabled="true"
       :pageSize="10"
     />
-    <DxColumnFixing :enabled="true"/>
 
     <DxColumn
       caption="Employee"
