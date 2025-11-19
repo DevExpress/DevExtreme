@@ -1,7 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxDataGridModule } from 'devextreme-angular';
+import { DxTreeListModule } from 'devextreme-angular';
 import type { AIIntegration } from 'devextreme-angular/common/ai-integration';
 import { Service, type IEmployee } from './app.service';
 import { AiService } from './ai.service';
@@ -22,6 +22,7 @@ if (window && window.config?.packageConfigPaths) {
 @Component({
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
+  styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service, AiService],
 })
 export class AppComponent {
@@ -47,7 +48,7 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    DxDataGridModule,
+    DxTreeListModule,
   ],
   declarations: [
     AppComponent,
