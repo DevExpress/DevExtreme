@@ -1,1 +1,1 @@
-import '../../common/core/localization/globalize/currency';
+import '../../__internal/core/localization/globalize/currency';
