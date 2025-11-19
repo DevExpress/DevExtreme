@@ -2144,4 +2144,56 @@ describe('Customize form items', () => {
       expect(mainGroup?.items?.length).toBe(0);
     });
   });
+
+  describe('editing.form.(onSaved & onCanceled) callbacks', () => {
+    it('should call onSaved when appointment form is successfully saved', async () => {
+      const onSaved = jest.fn();
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          form: {
+            onSaved,
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      POM.popup.setInputValueByLabel('Subject', 'Modified Subject');
+      POM.popup.getSaveButton().click();
+
+      expect(onSaved).toHaveBeenCalledTimes(1);
+      expect(onSaved).toHaveBeenCalledWith(
+        expect.objectContaining({
+          ...commonAppointment,
+          text: 'Modified Subject',
+        }),
+      );
+    });
+
+    it('should call onCanceled when appointment form is successfully canceled', async () => {
+      const onCanceled = jest.fn();
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          form: {
+            onCanceled,
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      POM.popup.setInputValueByLabel('Subject', 'Modified Subject');
+      POM.popup.getCancelButton().click();
+
+      expect(onCanceled).toHaveBeenCalledTimes(1);
+      expect(onCanceled).toHaveBeenCalledWith(
+        expect.objectContaining({
+          ...commonAppointment,
+          text: 'Modified Subject',
+        }),
+      );
+    });
+  });
 });

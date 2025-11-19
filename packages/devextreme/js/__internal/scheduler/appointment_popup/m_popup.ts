@@ -81,6 +81,15 @@ export class AppointmentPopup {
     this._popup?.hide();
   }
 
+  cancelEditData(): void {
+    const editingConfig = this.scheduler.getEditingConfig();
+    if (editingConfig?.form?.onCanceled) {
+      editingConfig.form.onCanceled(this.form.formData);
+    }
+
+    this.hide();
+  }
+
   dispose() {
     this.form.dispose();
     this._popup?.dispose();
@@ -308,6 +317,11 @@ export class AppointmentPopup {
 
           this.scheduler.updateScrollPosition(startDate, appointmentGroupValues, inAllDayRow);
           this.state.lastEditData = null;
+
+          const editingConfig = this.scheduler.getEditingConfig();
+          if (editingConfig?.form?.onSaved) {
+            editingConfig.form.onSaved(this.form.formData);
+          }
         }
 
         this._unlockSaveChanges();
@@ -426,7 +440,7 @@ export class AppointmentPopup {
           text: messageLocalization.format('Cancel'),
           stylingMode: 'outlined',
           onClick: (): void => {
-            this.hide();
+            this.cancelEditData();
           },
         },
       },
@@ -473,6 +487,9 @@ export class AppointmentPopup {
       shortcut: 'cancel',
       options: {
         stylingMode: 'outlined',
+        onClick: (): void => {
+          this.cancelEditData();
+        },
       },
     } as ToolbarItem);
 
