@@ -146,7 +146,7 @@ const createDataGrid = async ({
   });
 };
 
-const checkShowBorders = async (
+const checkShowBordersState = async (
   t: TestController,
   dataGrid: DataGrid,
   showBorders: boolean,
@@ -183,7 +183,7 @@ const checkShowBorders = async (
   await t.expect(parseInt(rowsViewBorderBottom, 10)).eql(expectedBorderWidth);
 };
 
-const checkShowRowLines = async (
+const checkShowRowLinesState = async (
   t: TestController,
   dataGrid: DataGrid,
   showRowLines: boolean,
@@ -218,7 +218,7 @@ const checkShowRowLines = async (
   }
 };
 
-const checkShowColumnLines = async (
+const checkShowColumnLinesState = async (
   t: TestController,
   dataGrid: DataGrid,
   showColumnLines: boolean,
@@ -276,15 +276,11 @@ const checkShowColumnLines = async (
   }
 };
 
-const checkRowAlternationEnabled = async (
+const checkRowAlternationEnabledState = async (
   t: TestController,
   dataGrid: DataGrid,
   rowAlternationEnabled: boolean,
 ) => {
-  if (!rowAlternationEnabled) {
-    return;
-  }
-
   /*
     getRows() returns double collection of rows (two tables) when
     columnFixing.legacyMode = true AND DataGrid has fixed columns
@@ -315,7 +311,11 @@ const checkRowAlternationEnabled = async (
     const currentHasAltClass = currentClasses?.includes(SELECTORS.rowAlternativeClass);
     const previousHasAltClass = previousClasses?.includes(SELECTORS.rowAlternativeClass);
 
-    await t.expect(currentHasAltClass).notEql(previousHasAltClass);
+    if (rowAlternationEnabled) {
+      await t.expect(currentHasAltClass).notEql(previousHasAltClass);
+    } else {
+      await t.expect(currentHasAltClass).eql(previousHasAltClass);
+    }
 
     const currentFirstCell = currentRow.find('td').nth(0);
     const previousFirstCell = previousRow.find('td').nth(0);
@@ -323,7 +323,11 @@ const checkRowAlternationEnabled = async (
     const currentFirstCellBg = await currentFirstCell.getStyleProperty('background-color');
     const previousFirstCellBg = await previousFirstCell.getStyleProperty('background-color');
 
-    await t.expect(currentFirstCellBg).notEql(previousFirstCellBg);
+    if (rowAlternationEnabled) {
+      await t.expect(currentFirstCellBg).notEql(previousFirstCellBg);
+    } else {
+      await t.expect(currentFirstCellBg).eql(previousFirstCellBg);
+    }
 
     i += 1;
   }
@@ -332,10 +336,10 @@ const checkRowAlternationEnabled = async (
 const verifyGridStyles = async (t: TestController, dataGrid: DataGrid, {
   showBorders, showRowLines, rowAlternationEnabled, showColumnLines,
 }: MatrixOptions) => {
-  await checkShowBorders(t, dataGrid, showBorders);
-  await checkShowRowLines(t, dataGrid, showRowLines, showBorders);
-  await checkShowColumnLines(t, dataGrid, showColumnLines);
-  await checkRowAlternationEnabled(t, dataGrid, rowAlternationEnabled);
+  await checkShowBordersState(t, dataGrid, showBorders);
+  await checkShowRowLinesState(t, dataGrid, showRowLines, showBorders);
+  await checkShowColumnLinesState(t, dataGrid, showColumnLines);
+  await checkRowAlternationEnabledState(t, dataGrid, rowAlternationEnabled);
 };
 
 const functionalTest = (matrixOptions: MatrixOptions) => {
