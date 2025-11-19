@@ -62,7 +62,11 @@ const getResources = (withIcons = false) => ([
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-    const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, isRecurringAppointment);
+    const appointmentPopup = await scheduler.openAppointmentPopup(
+      t,
+      appointment,
+      isRecurringAppointment,
+    );
 
     await testScreenshot(
       t,
@@ -87,7 +91,11 @@ const getResources = (withIcons = false) => ([
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-    const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, isRecurringAppointment);
+    const appointmentPopup = await scheduler.openAppointmentPopup(
+      t,
+      appointment,
+      isRecurringAppointment,
+    );
 
     await testScreenshot(
       t,
