@@ -1,5 +1,5 @@
 import messageLocalization from '@js/common/core/localization/message';
-import ErrorCode from '@js/file_management/error_codes';
+import ErrorCode from '@ts/file_management/error_codes';
 
 export const FileManagerMessages = {
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
