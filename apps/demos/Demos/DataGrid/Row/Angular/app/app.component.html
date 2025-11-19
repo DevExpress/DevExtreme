@@ -6,18 +6,18 @@
   [showBorders]="true"
   dataRowTemplate="dataRowTemplateName"
 >
-  <dxi-column
+  <dxi-data-grid-column
     caption="Photo"
     [width]="100"
     [allowFiltering]="false"
     [allowSorting]="false"
-  ></dxi-column>
-  <dxi-column dataField="Prefix" [width]="70" caption="Title"></dxi-column>
-  <dxi-column dataField="FirstName"></dxi-column>
-  <dxi-column dataField="LastName"></dxi-column>
-  <dxi-column dataField="Position"></dxi-column>
-  <dxi-column dataField="BirthDate" dataType="date"></dxi-column>
-  <dxi-column dataField="HireDate" dataType="date"></dxi-column>
+  ></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="Prefix" [width]="70" caption="Title"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="FirstName"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="LastName"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="Position"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="BirthDate" dataType="date"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="HireDate" dataType="date"></dxi-data-grid-column>
 
   <ng-container *dxTemplate="let employee of 'dataRowTemplateName'">
     <tr class="main-row" role="row">

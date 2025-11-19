@@ -5,24 +5,24 @@
     keyExpr="orderId"
     [showBorders]="true"
   >
-    <dxo-selection
+    <dxo-data-grid-selection
       [selectAllMode]="allMode"
       [showCheckBoxesMode]="checkBoxesMode"
       mode="multiple"
-    ></dxo-selection>
-    <dxo-paging [pageSize]="10"></dxo-paging>
-    <dxo-pager [visible]="true"></dxo-pager>
-    <dxo-filter-row [visible]="true"></dxo-filter-row>
-    <dxi-column
+    ></dxo-data-grid-selection>
+    <dxo-data-grid-paging [pageSize]="10"></dxo-data-grid-paging>
+    <dxo-data-grid-pager [visible]="true"></dxo-data-grid-pager>
+    <dxo-data-grid-filter-row [visible]="true"></dxo-data-grid-filter-row>
+    <dxi-data-grid-column
       dataField="orderId"
       caption="Order ID"
       [width]="90"
-    ></dxi-column>
-    <dxi-column dataField="city"></dxi-column>
-    <dxi-column dataField="country" [width]="180"></dxi-column>
-    <dxi-column dataField="region"></dxi-column>
-    <dxi-column dataField="date" dataType="date"></dxi-column>
-    <dxi-column dataField="amount" format="currency" [width]="90"></dxi-column>
+    ></dxi-data-grid-column>
+    <dxi-data-grid-column dataField="city"></dxi-data-grid-column>
+    <dxi-data-grid-column dataField="country" [width]="180"></dxi-data-grid-column>
+    <dxi-data-grid-column dataField="region"></dxi-data-grid-column>
+    <dxi-data-grid-column dataField="date" dataType="date"></dxi-data-grid-column>
+    <dxi-data-grid-column dataField="amount" format="currency" [width]="90"></dxi-data-grid-column>
   </dx-data-grid>
   <div class="options">
     <div class="caption">Options</div>

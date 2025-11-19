@@ -6,35 +6,35 @@
     [repaintChangesOnly]="true"
     [highlightChanges]="true"
   >
-    <dxi-column
+    <dxi-data-grid-column
       dataField="lastUpdate"
       dataType="date"
       [width]="115"
       format="longTime"
     >
-    </dxi-column>
-    <dxi-column dataField="symbol"> </dxi-column>
-    <dxi-column
+    </dxi-data-grid-column>
+    <dxi-data-grid-column dataField="symbol"> </dxi-data-grid-column>
+    <dxi-data-grid-column
       dataField="price"
       dataType="number"
       format="#0.####"
       cellTemplate="priceCellTemplate"
     >
-    </dxi-column>
-    <dxi-column
+    </dxi-data-grid-column>
+    <dxi-data-grid-column
       dataField="change"
       dataType="number"
       [width]="140"
       format="#0.####"
       cellTemplate="changeCellTemplate"
     >
-    </dxi-column>
-    <dxi-column dataField="dayOpen" dataType="number" format="#0.####">
-    </dxi-column>
-    <dxi-column dataField="dayMin" dataType="number" format="#0.####">
-    </dxi-column>
-    <dxi-column dataField="dayMax" dataType="number" format="#0.####">
-    </dxi-column>
+    </dxi-data-grid-column>
+    <dxi-data-grid-column dataField="dayOpen" dataType="number" format="#0.####">
+    </dxi-data-grid-column>
+    <dxi-data-grid-column dataField="dayMin" dataType="number" format="#0.####">
+    </dxi-data-grid-column>
+    <dxi-data-grid-column dataField="dayMax" dataType="number" format="#0.####">
+    </dxi-data-grid-column>
 
     <div
       *dxTemplate="let cell of 'priceCellTemplate'"

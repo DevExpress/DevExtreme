@@ -6,41 +6,41 @@
   [columnHidingEnabled]="true"
   [showBorders]="true"
 >
-  <dxo-editing
+  <dxo-data-grid-editing
     [allowAdding]="true"
     [allowUpdating]="true"
     mode="batch"
-  ></dxo-editing>
-  <dxo-grouping
+  ></dxo-data-grid-editing>
+  <dxo-data-grid-grouping
     [contextMenuEnabled]="true"
     expandMode="rowClick"
-  ></dxo-grouping>
-  <dxo-group-panel
+  ></dxo-data-grid-grouping>
+  <dxo-data-grid-group-panel
     [visible]="true"
     emptyPanelText="Use the context menu of header columns to group data"
-  ></dxo-group-panel>
+  ></dxo-data-grid-group-panel>
 
-  <dxo-pager
+  <dxo-data-grid-pager
     [allowedPageSizes]="[5, 8, 15, 30]"
     [showInfo]="true"
     [showNavigationButtons]="true"
     [showPageSizeSelector]="true"
     [visible]="true"
   >
-  </dxo-pager>
+  </dxo-data-grid-pager>
 
-  <dxo-paging [pageSize]="8"></dxo-paging>
-  <dxo-column-chooser [enabled]="true" mode="select"></dxo-column-chooser>
+  <dxo-data-grid-paging [pageSize]="8"></dxo-data-grid-paging>
+  <dxo-data-grid-column-chooser [enabled]="true" mode="select"></dxo-data-grid-column-chooser>
 
-  <dxi-column
+  <dxi-data-grid-column
     [allowGrouping]="false"
     dataField="OrderNumber"
     [width]="130"
     caption="Invoice Number"
-  ></dxi-column>
-  <dxi-column dataField="CustomerStoreCity" caption="City"></dxi-column>
-  <dxi-column dataField="CustomerStoreState" caption="State"></dxi-column>
-  <dxi-column dataField="Employee"></dxi-column>
-  <dxi-column dataField="OrderDate" dataType="date"></dxi-column>
-  <dxi-column dataField="SaleAmount" format="currency"></dxi-column>
+  ></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="CustomerStoreCity" caption="City"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="CustomerStoreState" caption="State"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="Employee"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="OrderDate" dataType="date"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="SaleAmount" format="currency"></dxi-data-grid-column>
 </dx-data-grid>

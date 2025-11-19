@@ -6,29 +6,29 @@
     keyExpr="ID"
     [showBorders]="true"
   >
-    <dxo-row-dragging
+    <dxo-data-grid-row-dragging
       [allowReordering]="true"
       [onReorder]="onReorder"
       [showDragIcons]="showDragIcons"
-    ></dxo-row-dragging>
-    <dxo-scrolling mode="virtual"></dxo-scrolling>
-    <dxo-sorting mode="none"></dxo-sorting>
-    <dxi-column dataField="ID" [width]="55"></dxi-column>
-    <dxi-column dataField="Owner" [width]="150">
-      <dxo-lookup
+    ></dxo-data-grid-row-dragging>
+    <dxo-data-grid-scrolling mode="virtual"></dxo-data-grid-scrolling>
+    <dxo-data-grid-sorting mode="none"></dxo-data-grid-sorting>
+    <dxi-data-grid-column dataField="ID" [width]="55"></dxi-data-grid-column>
+    <dxi-data-grid-column dataField="Owner" [width]="150">
+      <dxo-data-grid-lookup
         [dataSource]="employees"
         valueExpr="ID"
         displayExpr="FullName"
-      ></dxo-lookup>
-    </dxi-column>
-    <dxi-column dataField="AssignedEmployee" caption="Assignee" [width]="150">
-      <dxo-lookup
+      ></dxo-data-grid-lookup>
+    </dxi-data-grid-column>
+    <dxi-data-grid-column dataField="AssignedEmployee" caption="Assignee" [width]="150">
+      <dxo-data-grid-lookup
         [dataSource]="employees"
         valueExpr="ID"
         displayExpr="FullName"
-      ></dxo-lookup>
-    </dxi-column>
-    <dxi-column dataField="Subject"></dxi-column>
+      ></dxo-data-grid-lookup>
+    </dxi-data-grid-column>
+    <dxi-data-grid-column dataField="Subject"></dxi-data-grid-column>
   </dx-data-grid>
 
   <div class="options">

@@ -5,24 +5,24 @@
   (onFocusedCellChanging)="onFocusedCellChanging($event)"
   [showBorders]="true"
 >
-  <dxo-keyboard-navigation
+  <dxo-data-grid-keyboard-navigation
     [editOnKeyPress]="editOnkeyPress"
     [enterKeyAction]="enterKeyAction"
     [enterKeyDirection]="enterKeyDirection"
   >
-  </dxo-keyboard-navigation>
-  <dxo-paging [enabled]="false"> </dxo-paging>
-  <dxo-editing mode="batch" [allowUpdating]="true" startEditAction="dblClick">
-  </dxo-editing>
-  <dxi-column dataField="Prefix" [width]="70" caption="Title"> </dxi-column>
-  <dxi-column dataField="FirstName"> </dxi-column>
-  <dxi-column dataField="LastName"> </dxi-column>
-  <dxi-column dataField="Position" [width]="170"> </dxi-column>
-  <dxi-column dataField="StateID" caption="State" [width]="125">
-    <dxo-lookup [dataSource]="states" displayExpr="Name" valueExpr="ID">
-    </dxo-lookup>
-  </dxi-column>
-  <dxi-column dataField="BirthDate" dataType="date"> </dxi-column>
+  </dxo-data-grid-keyboard-navigation>
+  <dxo-data-grid-paging [enabled]="false"> </dxo-data-grid-paging>
+  <dxo-data-grid-editing mode="batch" [allowUpdating]="true" startEditAction="dblClick">
+  </dxo-data-grid-editing>
+  <dxi-data-grid-column dataField="Prefix" [width]="70" caption="Title"> </dxi-data-grid-column>
+  <dxi-data-grid-column dataField="FirstName"> </dxi-data-grid-column>
+  <dxi-data-grid-column dataField="LastName"> </dxi-data-grid-column>
+  <dxi-data-grid-column dataField="Position" [width]="170"> </dxi-data-grid-column>
+  <dxi-data-grid-column dataField="StateID" caption="State" [width]="125">
+    <dxo-data-grid-lookup [dataSource]="states" displayExpr="Name" valueExpr="ID">
+    </dxo-data-grid-lookup>
+  </dxi-data-grid-column>
+  <dxi-data-grid-column dataField="BirthDate" dataType="date"> </dxi-data-grid-column>
 </dx-data-grid>
 
 <div class="options">

@@ -5,35 +5,35 @@
   [showBorders]="true"
   [repaintChangesOnly]="true"
 >
-  <dxo-paging [enabled]="false"></dxo-paging>
-  <dxo-editing mode="batch" [allowUpdating]="true" [allowAdding]="true">
-  </dxo-editing>
+  <dxo-data-grid-paging [enabled]="false"></dxo-data-grid-paging>
+  <dxo-data-grid-editing mode="batch" [allowUpdating]="true" [allowAdding]="true">
+  </dxo-data-grid-editing>
 
-  <dxi-column dataField="FirstName">
-    <dxi-validation-rule type="required"></dxi-validation-rule>
-  </dxi-column>
-  <dxi-column dataField="LastName">
-    <dxi-validation-rule type="required"></dxi-validation-rule>
-  </dxi-column>
-  <dxi-column dataField="Position">
-    <dxi-validation-rule type="required"></dxi-validation-rule>
-  </dxi-column>
-  <dxi-column dataField="Phone">
-    <dxi-validation-rule type="required"></dxi-validation-rule>
-    <dxi-validation-rule
+  <dxi-data-grid-column dataField="FirstName">
+    <dxi-data-grid-validation-rule type="required"></dxi-data-grid-validation-rule>
+  </dxi-data-grid-column>
+  <dxi-data-grid-column dataField="LastName">
+    <dxi-data-grid-validation-rule type="required"></dxi-data-grid-validation-rule>
+  </dxi-data-grid-column>
+  <dxi-data-grid-column dataField="Position">
+    <dxi-data-grid-validation-rule type="required"></dxi-data-grid-validation-rule>
+  </dxi-data-grid-column>
+  <dxi-data-grid-column dataField="Phone">
+    <dxi-data-grid-validation-rule type="required"></dxi-data-grid-validation-rule>
+    <dxi-data-grid-validation-rule
       type="pattern"
       [pattern]="pattern"
       message="Your phone must have &#34;(555) 555-5555&#34; format!"
-    ></dxi-validation-rule>
-  </dxi-column>
-  <dxi-column dataField="Email">
-    <dxi-validation-rule type="required"></dxi-validation-rule>
-    <dxi-validation-rule type="email"></dxi-validation-rule>
-    <dxi-validation-rule
+    ></dxi-data-grid-validation-rule>
+  </dxi-data-grid-column>
+  <dxi-data-grid-column dataField="Email">
+    <dxi-data-grid-validation-rule type="required"></dxi-data-grid-validation-rule>
+    <dxi-data-grid-validation-rule type="email"></dxi-data-grid-validation-rule>
+    <dxi-data-grid-validation-rule
       type="async"
       message="Email address is not unique"
       [validationCallback]="asyncValidation"
     >
-    </dxi-validation-rule>
-  </dxi-column>
+    </dxi-data-grid-validation-rule>
+  </dxi-data-grid-column>
 </dx-data-grid>

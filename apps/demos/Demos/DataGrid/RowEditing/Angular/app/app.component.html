@@ -17,24 +17,24 @@
   (onEditCanceling)="logEvent('EditCanceling')"
   (onEditCanceled)="logEvent('EditCanceled')"
 >
-  <dxo-paging [enabled]="true"></dxo-paging>
-  <dxo-editing
+  <dxo-data-grid-paging [enabled]="true"></dxo-data-grid-paging>
+  <dxo-data-grid-editing
     mode="row"
     [allowUpdating]="true"
     [allowDeleting]="true"
     [allowAdding]="true"
   >
-  </dxo-editing>
+  </dxo-data-grid-editing>
 
-  <dxi-column dataField="Prefix" caption="Title"></dxi-column>
-  <dxi-column dataField="FirstName"></dxi-column>
-  <dxi-column dataField="LastName"></dxi-column>
-  <dxi-column dataField="Position" [width]="130"></dxi-column>
-  <dxi-column dataField="StateID" caption="State" [width]="125">
-    <dxo-lookup [dataSource]="states" displayExpr="Name" valueExpr="ID">
-    </dxo-lookup>
-  </dxi-column>
-  <dxi-column dataField="BirthDate" [width]="125" dataType="date"> </dxi-column>
+  <dxi-data-grid-column dataField="Prefix" caption="Title"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="FirstName"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="LastName"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="Position" [width]="130"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="StateID" caption="State" [width]="125">
+    <dxo-data-grid-lookup [dataSource]="states" displayExpr="Name" valueExpr="ID">
+    </dxo-data-grid-lookup>
+  </dxi-data-grid-column>
+  <dxi-data-grid-column dataField="BirthDate" [width]="125" dataType="date"> </dxi-data-grid-column>
 </dx-data-grid>
 
 <div id="events">

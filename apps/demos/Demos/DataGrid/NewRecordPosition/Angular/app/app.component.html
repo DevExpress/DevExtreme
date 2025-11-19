@@ -6,8 +6,8 @@
   [remoteOperations]="true"
   (onRowInserted)="onRowInserted($event)"
 >
-  <dxo-scrolling [mode]="scrollingMode"></dxo-scrolling>
-  <dxo-editing
+  <dxo-data-grid-scrolling [mode]="scrollingMode"></dxo-data-grid-scrolling>
+  <dxo-data-grid-editing
     mode="row"
     [allowAdding]="true"
     [allowDeleting]="true"
@@ -17,32 +17,32 @@
     [newRowPosition]="newRowPosition"
     [changes]="changes"
     [(editRowKey)]="editRowKey"
-  ></dxo-editing>
-  <dxo-pager [visible]="true"></dxo-pager>
+  ></dxo-data-grid-editing>
+  <dxo-data-grid-pager [visible]="true"></dxo-data-grid-pager>
 
-  <dxi-column dataField="OrderID" [allowEditing]="false"></dxi-column>
-  <dxi-column dataField="OrderDate" dataType="date">
-    <dxi-validation-rule type="required"></dxi-validation-rule>
-  </dxi-column>
-  <dxi-column dataField="ShipName"></dxi-column>
-  <dxi-column dataField="ShipCity"></dxi-column>
-  <dxi-column dataField="ShipPostalCode"></dxi-column>
-  <dxi-column dataField="ShipCountry"></dxi-column>
-  <dxi-column type="buttons">
-    <dxi-button
+  <dxi-data-grid-column dataField="OrderID" [allowEditing]="false"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="OrderDate" dataType="date">
+    <dxi-data-grid-validation-rule type="required"></dxi-data-grid-validation-rule>
+  </dxi-data-grid-column>
+  <dxi-data-grid-column dataField="ShipName"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="ShipCity"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="ShipPostalCode"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="ShipCountry"></dxi-data-grid-column>
+  <dxi-data-grid-column type="buttons">
+    <dxi-data-grid-button
       icon="add"
       text="Add"
       [onClick]="onAddButtonClick"
       [visible]="isAddButtonVisible"
-    ></dxi-button>
-    <dxi-button name="delete"></dxi-button>
-    <dxi-button name="save"></dxi-button>
-    <dxi-button name="cancel"></dxi-button>
-  </dxi-column>
+    ></dxi-data-grid-button>
+    <dxi-data-grid-button name="delete"></dxi-data-grid-button>
+    <dxi-data-grid-button name="save"></dxi-data-grid-button>
+    <dxi-data-grid-button name="cancel"></dxi-data-grid-button>
+  </dxi-data-grid-column>
 
-  <dxo-toolbar>
-    <dxi-item name="addRowButton" showText="always"></dxi-item>
-  </dxo-toolbar>
+  <dxo-data-grid-toolbar>
+    <dxi-data-grid-item name="addRowButton" showText="always"></dxi-data-grid-item>
+  </dxo-data-grid-toolbar>
 </dx-data-grid>
 
 <div class="options">

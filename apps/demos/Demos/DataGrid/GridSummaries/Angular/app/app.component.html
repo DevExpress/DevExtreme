@@ -4,38 +4,38 @@
   keyExpr="ID"
   [showBorders]="true"
 >
-  <dxo-selection mode="single"></dxo-selection>
-  <dxo-pager [visible]="true"></dxo-pager>
+  <dxo-data-grid-selection mode="single"></dxo-data-grid-selection>
+  <dxo-data-grid-pager [visible]="true"></dxo-data-grid-pager>
 
-  <dxi-column
+  <dxi-data-grid-column
     dataField="OrderNumber"
     [width]="130"
     caption="Invoice Number"
-  ></dxi-column>
-  <dxi-column dataField="OrderDate" dataType="date"></dxi-column>
-  <dxi-column dataField="Employee"></dxi-column>
-  <dxi-column dataField="CustomerStoreCity" caption="City"></dxi-column>
-  <dxi-column dataField="CustomerStoreState" caption="State"></dxi-column>
-  <dxi-column
+  ></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="OrderDate" dataType="date"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="Employee"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="CustomerStoreCity" caption="City"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="CustomerStoreState" caption="State"></dxi-data-grid-column>
+  <dxi-data-grid-column
     dataField="SaleAmount"
     alignment="right"
     format="currency"
     [width]="160"
-  ></dxi-column>
+  ></dxi-data-grid-column>
 
-  <dxo-summary>
-    <dxi-total-item column="OrderNumber" summaryType="count"> </dxi-total-item>
-    <dxi-total-item
+  <dxo-data-grid-summary>
+    <dxi-data-grid-total-item column="OrderNumber" summaryType="count"> </dxi-data-grid-total-item>
+    <dxi-data-grid-total-item
       column="OrderDate"
       summaryType="min"
       [customizeText]="customizeDate"
     >
-    </dxi-total-item>
-    <dxi-total-item
+    </dxi-data-grid-total-item>
+    <dxi-data-grid-total-item
       column="SaleAmount"
       summaryType="sum"
       valueFormat="currency"
     >
-    </dxi-total-item>
-  </dxo-summary>
+    </dxi-data-grid-total-item>
+  </dxo-data-grid-summary>
 </dx-data-grid>

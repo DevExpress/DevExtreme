@@ -6,27 +6,27 @@
     [showBorders]="true"
     (onEditorPreparing)="onEditorPreparing($event)"
   >
-    <dxo-editing mode="row" [allowUpdating]="true" [allowAdding]="true">
-    </dxo-editing>
+    <dxo-data-grid-editing mode="row" [allowUpdating]="true" [allowAdding]="true">
+    </dxo-data-grid-editing>
 
-    <dxi-column dataField="FirstName"></dxi-column>
-    <dxi-column dataField="LastName"></dxi-column>
-    <dxi-column dataField="Position"></dxi-column>
-    <dxi-column
+    <dxi-data-grid-column dataField="FirstName"></dxi-data-grid-column>
+    <dxi-data-grid-column dataField="LastName"></dxi-data-grid-column>
+    <dxi-data-grid-column dataField="Position"></dxi-data-grid-column>
+    <dxi-data-grid-column
       dataField="StateID"
       caption="State"
       [setCellValue]="setStateValue"
     >
-      <dxo-lookup [dataSource]="states" valueExpr="ID" displayExpr="Name">
-      </dxo-lookup>
-    </dxi-column>
-    <dxi-column dataField="CityID" caption="City">
-      <dxo-lookup
+      <dxo-data-grid-lookup [dataSource]="states" valueExpr="ID" displayExpr="Name">
+      </dxo-data-grid-lookup>
+    </dxi-data-grid-column>
+    <dxi-data-grid-column dataField="CityID" caption="City">
+      <dxo-data-grid-lookup
         [dataSource]="getFilteredCities"
         valueExpr="ID"
         displayExpr="Name"
       >
-      </dxo-lookup>
-    </dxi-column>
+      </dxo-data-grid-lookup>
+    </dxi-data-grid-column>
   </dx-data-grid>
 </div>

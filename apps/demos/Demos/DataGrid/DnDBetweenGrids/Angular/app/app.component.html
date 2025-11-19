@@ -6,26 +6,26 @@
       [showBorders]="true"
       [filterValue]="['Status', '=', status]"
     >
-      <dxo-row-dragging
+      <dxo-data-grid-row-dragging
         [data]="status"
         group="tasksGroup"
         [onAdd]="onAdd"
-      ></dxo-row-dragging>
-      <dxo-scrolling mode="virtual"></dxo-scrolling>
+      ></dxo-data-grid-row-dragging>
+      <dxo-data-grid-scrolling mode="virtual"></dxo-data-grid-scrolling>
 
-      <dxi-column dataField="Subject" dataType="string"></dxi-column>
-      <dxi-column dataField="Priority" dataType="number" [width]="80">
-        <dxo-lookup
+      <dxi-data-grid-column dataField="Subject" dataType="string"></dxi-data-grid-column>
+      <dxi-data-grid-column dataField="Priority" dataType="number" [width]="80">
+        <dxo-data-grid-lookup
           [dataSource]="priorities"
           valueExpr="id"
           displayExpr="text"
-        ></dxo-lookup>
-      </dxi-column>
-      <dxi-column
+        ></dxo-data-grid-lookup>
+      </dxi-data-grid-column>
+      <dxi-data-grid-column
         dataField="Status"
         dataType="number"
         [visible]="false"
-      ></dxi-column>
+      ></dxi-data-grid-column>
     </dx-data-grid>
   </div>
 </div>

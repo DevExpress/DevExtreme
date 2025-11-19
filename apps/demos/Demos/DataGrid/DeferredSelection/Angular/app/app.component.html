@@ -4,33 +4,33 @@
   [selectionFilter]="['Task_Status', '=', 'Completed']"
   [showBorders]="true"
 >
-  <dxo-selection mode="multiple" [deferred]="true"></dxo-selection>
-  <dxo-filter-row [visible]="true"></dxo-filter-row>
-  <dxo-pager [visible]="true"></dxo-pager>
-  <dxi-column caption="Subject" dataField="Task_Subject"></dxi-column>
-  <dxi-column
+  <dxo-data-grid-selection mode="multiple" [deferred]="true"></dxo-data-grid-selection>
+  <dxo-data-grid-filter-row [visible]="true"></dxo-data-grid-filter-row>
+  <dxo-data-grid-pager [visible]="true"></dxo-data-grid-pager>
+  <dxi-data-grid-column caption="Subject" dataField="Task_Subject"></dxi-data-grid-column>
+  <dxi-data-grid-column
     caption="Start Date"
     dataField="Task_Start_Date"
     width="auto"
     dataType="date"
-  ></dxi-column>
-  <dxi-column
+  ></dxi-data-grid-column>
+  <dxi-data-grid-column
     caption="Due Date"
     dataField="Task_Due_Date"
     width="auto"
     dataType="date"
-  ></dxi-column>
-  <dxi-column
+  ></dxi-data-grid-column>
+  <dxi-data-grid-column
     caption="Assigned To"
     dataField="ResponsibleEmployee.Employee_Full_Name"
     width="auto"
     [allowSorting]="false"
-  ></dxi-column>
-  <dxi-column
+  ></dxi-data-grid-column>
+  <dxi-data-grid-column
     caption="Status"
     dataField="Task_Status"
     width="auto"
-  ></dxi-column>
+  ></dxi-data-grid-column>
 </dx-data-grid>
 <div class="selection-summary center">
   <dx-button
