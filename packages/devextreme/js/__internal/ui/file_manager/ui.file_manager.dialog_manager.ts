@@ -2,7 +2,7 @@ import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
-import type FileSystemProviderBase from '@js/file_management/provider_base';
+import type FileSystemProviderBase from '@ts/file_management/provider_base';
 import FileManagerDeleteItemDialog from '@ts/ui/file_manager/ui.file_manager.dialog.delete_item';
 import FileManagerFolderChooserDialog from '@ts/ui/file_manager/ui.file_manager.dialog.folder_chooser';
 import FileManagerNameEditorDialog from '@ts/ui/file_manager/ui.file_manager.dialog.name_editor';
