@@ -325,6 +325,12 @@ namespace Runner.Controllers
             m.ShadowDom = q.ContainsKey("shadowDom");
             m.WorkerInWindow = q.ContainsKey("workerinwindow");
             m.NoCsp = q.ContainsKey("nocsp") || false;
+
+            var maxWorkersEnv = Environment.GetEnvironmentVariable("MAX_WORKERS");
+            if (!String.IsNullOrEmpty(maxWorkersEnv) && Int32.TryParse(maxWorkersEnv, out int maxWorkers))
+            {
+                m.MaxWorkers = maxWorkers;
+            }
         }
 
         bool HasDeviceModeFlag()

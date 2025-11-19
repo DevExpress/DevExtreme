@@ -70,9 +70,10 @@ jobs:
       shell: bash
       env:
         NODE_OPTIONS: --max-old-space-size=8192
+        BUILD_TEST_INTERNAL_PACKAGE: "true"
       run: |
         pnpx nx build devextreme-scss
-        pnpx nx build devextreme
+        pnpx nx build:dev devextreme
 
     - name: Zip artifacts
       working-directory: ./packages/devextreme

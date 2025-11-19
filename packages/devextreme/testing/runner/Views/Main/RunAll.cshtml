@@ -102,12 +102,17 @@
             farmMode = @Html.Raw(Json.Serialize(Model.IsContinuousIntegration)),
             DX_HTTP_CACHE = Date.now(),
             runWorkerInNewWindow = @Html.Raw(Json.Serialize(Model.WorkerInWindow)),
+            maxWorkersFromEnv = @Html.Raw(Json.Serialize(Model.MaxWorkers)),
 
             WORKER_COUNT;
 
         var calcWorkerFrameCount = function() {
             if(runWorkerInNewWindow)
                 return 1; // NOTE: more than 1 window cause problems with tests that use focus
+
+            // Use MAX_WORKERS from environment variable if set
+            if(maxWorkersFromEnv !== null && maxWorkersFromEnv > 0)
+                return maxWorkersFromEnv;
 
             return 2;
         };

@@ -25,6 +25,9 @@ inputs:
   useCsp:
     description: "Indicates if tests should run with Content Security Policy (CSP) enabled"
     default: "true"
+  maxWorkers:
+    description: "Maximum number of parallel test workers"
+    default: ""
 
 runs:
   using: composite
@@ -101,6 +104,7 @@ runs:
         GITHUBACTION: "true"
         TARGET: "test"
         CHROME_CMD: ${{ env.CHROME_SHELL }}
+        MAX_WORKERS: ${{ inputs.maxWorkers }}
       run: |
         chmod +x ./docker-ci.sh
         ./docker-ci.sh

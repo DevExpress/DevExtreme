@@ -68,7 +68,7 @@ jobs:
       working-directory: ./packages/devextreme
       shell: bash
       env:
-        # DEVEXTREME_TEST_CI: "true"
+        DEVEXTREME_TEST_CI: "true"
         DOTNET_CLI_TELEMETRY_OPTOUT: "true"
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
       run: pnpx nx build:systemjs
@@ -94,7 +94,6 @@ jobs:
       fail-fast: false
       matrix:
         CONSTEL: [
-          export,
           misc,
           ui,
           ui.editors,
@@ -105,7 +104,12 @@ jobs:
         TIMEZONE: ['']
         CSP: ['true']
         useJQuery: ['false']
+        MAX_WORKERS: ['']
         include:
+          - CONSTEL: export
+            MAX_WORKERS: '3'
+            useJQuery: 'false'
+            CSP: 'true'
           - CONSTEL: ui.scheduler
             TIMEZONE: US/Pacific
             useJQuery: 'false'
@@ -115,6 +119,7 @@ jobs:
           - CONSTEL: ui.widgets
             CSP: 'false'
             useJQuery: 'false'
+            MAX_WORKERS: '3'
 
     steps:
     - name: Get sources
@@ -128,6 +133,7 @@ jobs:
         timezone: ${{ matrix.TIMEZONE }}
         useJQuery: ${{ matrix.useJQuery }}
         useCsp: ${{ matrix.CSP }}
+        maxWorkers: ${{ matrix.MAX_WORKERS || '' }}
 
   qunit-tests-shadow-dom:
     needs: [check-should-run-all, build]
@@ -159,6 +165,7 @@ jobs:
           useJQuery: 'true'
           useShadowDom: 'true'
           useCsp: 'true'
+          maxWorkers: ${{ matrix.constel == 'ui.editors' && '3' || '' }}
 
   notify:
     runs-on: devextreme-shr2

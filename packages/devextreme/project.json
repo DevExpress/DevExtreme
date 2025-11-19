@@ -79,13 +79,7 @@
         "script": "build:systemjs"
       },
       "dependsOn": [
-        "build"
-      ],
-      "outputs": [
-        "{projectRoot}/artifacts/js/dx.all.js",
-        "{projectRoot}/artifacts/js/dx.all.debug.js",
-        "{projectRoot}/artifacts/js/modules",
-        "{projectRoot}/artifacts/systemjs"
+        "build:dev"
       ],
       "cache": true
     },
