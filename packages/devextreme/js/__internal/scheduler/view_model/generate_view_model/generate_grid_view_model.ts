@@ -69,7 +69,11 @@ export const generateGridViewModel = (
   const step6 = cropByVirtualScreen(step5, optionManager.getVirtualCropOptions());
 
   const step7 = addDirection(step6, 'horizontal', viewOrientation);
-  const step8 = addEmptiness(step7, { isTimelineView, isAdaptivityEnabled });
+  const step8 = addEmptiness(step7, {
+    isTimelineView,
+    isAdaptivityEnabled,
+    viewType: optionManager.options.type,
+  });
 
   return step8;
 };
