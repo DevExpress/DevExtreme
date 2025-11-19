@@ -10,10 +10,59 @@ fixture`Appointment Form: Recurrence Form`
 
 const SCHEDULER_SELECTOR = '#container';
 
+// visual: generic.light
+// visual: fluent.blue.light
+// visual: material.blue.light
+['Hourly', 'Daily', 'Weekly', 'Monthly', 'Yearly'].forEach((frequency) => {
+  test.clientScripts([
+    { module: 'mockdate' },
+    { content: 'window.MockDate = MockDate;' },
+  ])(`recurrence form in ${frequency} frequency`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    const appointment = {
+      text: 'Appointment',
+      startDate: new Date('2024-01-01T10:00:00'),
+      endDate: new Date('2024-01-01T11:00:00'),
+    };
+
+    const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+    const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, false);
+
+    await appointmentPopup.openRecurrenceForm(t, frequency);
+
+    await testScreenshot(
+      t,
+      takeScreenshot,
+      `scheduler__appointment__recurrence-form__${frequency.toLowerCase()}.png`,
+      { element: appointmentPopup.recurrence.group },
+    );
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await ClientFunction(() => {
+      (window as any).MockDate.set('2025/10/20');
+    })();
+
+    return createWidget('dxScheduler', {
+      dataSource: [],
+      views: ['week'],
+      currentView: 'week',
+      currentDate: new Date(2024, 0, 1),
+    });
+  }).after(async () => {
+    await ClientFunction(() => {
+      (window as any).MockDate.reset();
+    })();
+  });
+});
+
 test.clientScripts([
   { module: 'mockdate' },
   { content: 'window.MockDate = MockDate;' },
-])('weekly frequency with days mon-wed-fri', async (t) => {
+])('firstDayOfWeek is applied to recurrence form', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const appointment = {
@@ -50,424 +99,6 @@ test.clientScripts([
     currentView: 'week',
     currentDate: new Date(2024, 0, 1),
     firstDayOfWeek: 1,
-  });
-}).after(async () => {
-  await ClientFunction(() => {
-    (window as any).MockDate.reset();
-  })();
-});
-
-test.clientScripts([
-  { module: 'mockdate' },
-  { content: 'window.MockDate = MockDate;' },
-])('weekly frequency with days weekend', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  const appointment = {
-    text: 'Weekly Appointment',
-    startDate: new Date('2024-01-01T10:00:00'),
-    endDate: new Date('2024-01-01T11:00:00'),
-  };
-
-  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-  const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, false);
-
-  await appointmentPopup.openRecurrenceForm(t, 'Weekly');
-  await appointmentPopup.selectRecurrenceWeekDays(t, [5, 6]);
-  await appointmentPopup.setRecurrenceEnd(t, 'count', 15);
-
-  await testScreenshot(
-    t,
-    takeScreenshot,
-    'scheduler__appointment__recurrence-form__weekly__weekend.png',
-    { element: appointmentPopup.recurrence.group },
-  );
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await ClientFunction(() => {
-    (window as any).MockDate.set('2025/10/20');
-  })();
-
-  return createWidget('dxScheduler', {
-    dataSource: [],
-    views: ['week'],
-    currentView: 'week',
-    currentDate: new Date(2024, 0, 1),
-    firstDayOfWeek: 1,
-  });
-}).after(async () => {
-  await ClientFunction(() => {
-    (window as any).MockDate.reset();
-  })();
-});
-
-test.clientScripts([
-  { module: 'mockdate' },
-  { content: 'window.MockDate = MockDate;' },
-])('weekly frequency with interval 2', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  const appointment = {
-    text: 'Weekly Appointment',
-    startDate: new Date('2024-01-01T10:00:00'),
-    endDate: new Date('2024-01-01T11:00:00'),
-  };
-
-  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-  const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, false);
-
-  await appointmentPopup.openRecurrenceForm(t, 'Weekly');
-  await appointmentPopup.setRecurrenceInterval(t, 2);
-  await appointmentPopup.selectRecurrenceWeekDays(t, [1, 5]);
-
-  await testScreenshot(
-    t,
-    takeScreenshot,
-    'scheduler__appointment__recurrence-form__weekly__interval-2.png',
-    { element: appointmentPopup.recurrence.group },
-  );
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await ClientFunction(() => {
-    (window as any).MockDate.set('2025/10/20');
-  })();
-
-  return createWidget('dxScheduler', {
-    dataSource: [],
-    views: ['week'],
-    currentView: 'week',
-    currentDate: new Date(2024, 0, 1),
-  });
-}).after(async () => {
-  await ClientFunction(() => {
-    (window as any).MockDate.reset();
-  })();
-});
-
-test.clientScripts([
-  { module: 'mockdate' },
-  { content: 'window.MockDate = MockDate;' },
-])('weekly frequency with interval 5', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  const appointment = {
-    text: 'Weekly Appointment',
-    startDate: new Date('2024-01-01T10:00:00'),
-    endDate: new Date('2024-01-01T11:00:00'),
-  };
-
-  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-  const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, false);
-
-  await appointmentPopup.openRecurrenceForm(t, 'Weekly');
-  await appointmentPopup.setRecurrenceInterval(t, 5);
-  await appointmentPopup.selectRecurrenceWeekDays(t, [1, 5]);
-
-  await testScreenshot(
-    t,
-    takeScreenshot,
-    'scheduler__appointment__recurrence-form__weekly__interval-5.png',
-    { element: appointmentPopup.recurrence.group },
-  );
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await ClientFunction(() => {
-    (window as any).MockDate.set('2025/10/20');
-  })();
-
-  return createWidget('dxScheduler', {
-    dataSource: [],
-    views: ['week'],
-    currentView: 'week',
-    currentDate: new Date(2024, 0, 1),
-  });
-}).after(async () => {
-  await ClientFunction(() => {
-    (window as any).MockDate.reset();
-  })();
-});
-
-test.clientScripts([
-  { module: 'mockdate' },
-  { content: 'window.MockDate = MockDate;' },
-])('monthly frequency with day 1', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  const appointment = {
-    text: 'Monthly Appointment',
-    startDate: new Date('2024-01-01T10:00:00'),
-    endDate: new Date('2024-01-01T11:00:00'),
-  };
-
-  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-  const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, false);
-
-  await appointmentPopup.openRecurrenceForm(t, 'Monthly');
-  await appointmentPopup.setRecurrenceMonthDay(t, 1);
-  await appointmentPopup.setRecurrenceEnd(t, 'count', 12);
-
-  await testScreenshot(
-    t,
-    takeScreenshot,
-    'scheduler__appointment__recurrence-form__monthly__day-1.png',
-    { element: appointmentPopup.recurrence.group },
-  );
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await ClientFunction(() => {
-    (window as any).MockDate.set('2025/10/20');
-  })();
-
-  return createWidget('dxScheduler', {
-    dataSource: [],
-    views: ['month'],
-    currentView: 'month',
-    currentDate: new Date(2024, 0, 1),
-  });
-}).after(async () => {
-  await ClientFunction(() => {
-    (window as any).MockDate.reset();
-  })();
-});
-
-test.clientScripts([
-  { module: 'mockdate' },
-  { content: 'window.MockDate = MockDate;' },
-])('monthly frequency with day 15', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  const appointment = {
-    text: 'Monthly Appointment',
-    startDate: new Date('2024-01-01T10:00:00'),
-    endDate: new Date('2024-01-01T11:00:00'),
-  };
-
-  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-  const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, false);
-
-  await appointmentPopup.openRecurrenceForm(t, 'Monthly');
-  await appointmentPopup.setRecurrenceMonthDay(t, 15);
-  await appointmentPopup.setRecurrenceEnd(t, 'count', 12);
-
-  await testScreenshot(
-    t,
-    takeScreenshot,
-    'scheduler__appointment__recurrence-form__monthly__day-15.png',
-    { element: appointmentPopup.recurrence.group },
-  );
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await ClientFunction(() => {
-    (window as any).MockDate.set('2025/10/20');
-  })();
-
-  return createWidget('dxScheduler', {
-    dataSource: [],
-    views: ['month'],
-    currentView: 'month',
-    currentDate: new Date(2024, 0, 1),
-  });
-}).after(async () => {
-  await ClientFunction(() => {
-    (window as any).MockDate.reset();
-  })();
-});
-
-test.clientScripts([
-  { module: 'mockdate' },
-  { content: 'window.MockDate = MockDate;' },
-])('yearly frequency with jan-1', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  const appointment = {
-    text: 'Yearly Appointment',
-    startDate: new Date('2024-01-01T10:00:00'),
-    endDate: new Date('2024-01-01T11:00:00'),
-  };
-
-  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-  const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, false);
-
-  await appointmentPopup.openRecurrenceForm(t, 'Yearly');
-  await appointmentPopup.setRecurrenceYearlyDate(t, 'January', 1);
-  await appointmentPopup.setRecurrenceEnd(t, 'until', '01/01/2030');
-
-  await testScreenshot(
-    t,
-    takeScreenshot,
-    'scheduler__appointment__recurrence-form__yearly__jan-1.png',
-    { element: appointmentPopup.recurrence.group },
-  );
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await ClientFunction(() => {
-    (window as any).MockDate.set('2025/10/20');
-  })();
-
-  return createWidget('dxScheduler', {
-    dataSource: [],
-    views: ['month'],
-    currentView: 'month',
-    currentDate: new Date(2024, 0, 1),
-  });
-}).after(async () => {
-  await ClientFunction(() => {
-    (window as any).MockDate.reset();
-  })();
-});
-
-test.clientScripts([
-  { module: 'mockdate' },
-  { content: 'window.MockDate = MockDate;' },
-])('yearly frequency with dec-31', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  const appointment = {
-    text: 'Yearly Appointment',
-    startDate: new Date('2024-01-01T10:00:00'),
-    endDate: new Date('2024-01-01T11:00:00'),
-  };
-
-  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-  const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, false);
-
-  await appointmentPopup.openRecurrenceForm(t, 'Yearly');
-  await appointmentPopup.setRecurrenceYearlyDate(t, 'December', 31);
-  await appointmentPopup.setRecurrenceEnd(t, 'until', '01/01/2030');
-
-  await testScreenshot(
-    t,
-    takeScreenshot,
-    'scheduler__appointment__recurrence-form__yearly__dec-31.png',
-    { element: appointmentPopup.recurrence.group },
-  );
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await ClientFunction(() => {
-    (window as any).MockDate.set('2025/10/20');
-  })();
-
-  return createWidget('dxScheduler', {
-    dataSource: [],
-    views: ['month'],
-    currentView: 'month',
-    currentDate: new Date(2024, 0, 1),
-  });
-}).after(async () => {
-  await ClientFunction(() => {
-    (window as any).MockDate.reset();
-  })();
-});
-
-test.clientScripts([
-  { module: 'mockdate' },
-  { content: 'window.MockDate = MockDate;' },
-])('hourly frequency', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  const appointment = {
-    text: 'Hourly Appointment',
-    startDate: new Date('2024-01-01T10:00:00'),
-    endDate: new Date('2024-01-01T11:00:00'),
-  };
-
-  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-  const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, false);
-
-  await appointmentPopup.openRecurrenceForm(t, 'Hourly');
-  await appointmentPopup.setRecurrenceInterval(t, 2);
-  await appointmentPopup.setRecurrenceEnd(t, 'count', 20);
-
-  await testScreenshot(
-    t,
-    takeScreenshot,
-    'scheduler__appointment__recurrence-form__hourly.png',
-    { element: appointmentPopup.recurrence.group },
-  );
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await ClientFunction(() => {
-    (window as any).MockDate.set('2025/10/20');
-  })();
-
-  return createWidget('dxScheduler', {
-    dataSource: [],
-    views: ['week'],
-    currentView: 'week',
-    currentDate: new Date(2024, 0, 1),
-  });
-}).after(async () => {
-  await ClientFunction(() => {
-    (window as any).MockDate.reset();
-  })();
-});
-
-test.clientScripts([
-  { module: 'mockdate' },
-  { content: 'window.MockDate = MockDate;' },
-])('editing existing recurrence rule', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  const appointment = {
-    text: 'Existing Recurrent',
-    startDate: new Date('2024-01-01T10:00:00'),
-    endDate: new Date('2024-01-01T11:00:00'),
-    recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=1',
-  };
-
-  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-  const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, true);
-  await appointmentPopup.openRecurrenceSettings(t);
-
-  await testScreenshot(
-    t,
-    takeScreenshot,
-    'scheduler__appointment__recurrence-form__editing-existing.png',
-    { element: appointmentPopup.recurrence.group },
-  );
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await ClientFunction(() => {
-    (window as any).MockDate.set('2025/10/20');
-  })();
-
-  return createWidget('dxScheduler', {
-    dataSource: [{
-      text: 'Existing Recurrent',
-      startDate: new Date('2024-01-01T10:00:00'),
-      endDate: new Date('2024-01-01T11:00:00'),
-      recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=1',
-    }],
-    views: ['week'],
-    currentView: 'week',
-    currentDate: new Date(2024, 0, 1),
   });
 }).after(async () => {
   await ClientFunction(() => {
