@@ -4352,3 +4352,59 @@ QUnit.module('wrapper covered element choice', {
         assert.roughEqual(wrapperLocation.top, containerLocation.top, 0.51, 'wrapper is top positioned by position.of');
     });
 });
+
+QUnit.module('Memory Leaks', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        this.$element = $('#overlay');
+
+        this.getPositionController = (instance) => {
+            return instance._positionController;
+        };
+    },
+    afterEach: function() {
+        this.$element.remove();
+        this.clock.restore();
+    }
+}, () => {
+    QUnit.test('should clear _$wrapper reference on dispose', function(assert) {
+        const instance = new Overlay(this.$element, { visible: true });
+
+        this.clock.tick(0);
+
+        assert.notStrictEqual(instance.$wrapper(), null, 'wrapper exists before dispose');
+
+        instance.dispose();
+
+        assert.strictEqual(instance.$wrapper(), null, '$wrapper() returns null after dispose');
+    });
+
+    QUnit.test('should clear _$content reference on dispose', function(assert) {
+        const instance = new Overlay(this.$element, { visible: true });
+
+        this.clock.tick(0);
+
+        assert.notStrictEqual(instance.$content(), null, 'content exists before dispose');
+
+        instance.dispose();
+
+        assert.strictEqual(instance.$content(), null, '$content() returns null after dispose');
+    });
+
+    QUnit.test('should clear PositionController references on dispose', function(assert) {
+        const instance = new Overlay(this.$element, { visible: true });
+
+        this.clock.tick(0);
+
+        const positionController = this.getPositionController(instance);
+        assert.ok(positionController._$content, 'PositionController._$content exists before dispose');
+
+        instance.dispose();
+
+        assert.strictEqual(positionController._$content, undefined, 'PositionController._$content is undefined after dispose');
+        assert.strictEqual(positionController._$wrapper, undefined, 'PositionController._$wrapper is undefined after dispose');
+        assert.strictEqual(positionController._$root, undefined, 'PositionController._$root is undefined after dispose');
+        assert.strictEqual(positionController._$markupContainer, undefined, 'PositionController._$markupContainer is undefined after dispose');
+        assert.strictEqual(positionController._$visualContainer, undefined, 'PositionController._$visualContainer is undefined after dispose');
+    });
+});

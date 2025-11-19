@@ -156,7 +156,7 @@ class Popover<
     this._timeouts = {};
 
     this.$element().addClass(POPOVER_CLASS);
-    this.$wrapper().addClass(POPOVER_WRAPPER_CLASS);
+    this.$wrapper()?.addClass(POPOVER_WRAPPER_CLASS);
 
     const { toolbarItems } = this.option();
 
@@ -305,7 +305,7 @@ class Popover<
   }
 
   _renderTopToolbar(): void {
-    this.$wrapper().toggleClass(POPOVER_WITHOUT_TITLE_CLASS, !this.option('showTitle'));
+    this.$wrapper()?.toggleClass(POPOVER_WITHOUT_TITLE_CLASS, !this.option('showTitle'));
     super._renderTopToolbar();
   }
 
@@ -401,13 +401,13 @@ class Popover<
 
   _togglePositionClass(positionClass) {
     this.$wrapper()
-      .removeClass('dx-position-left dx-position-right dx-position-top dx-position-bottom')
+      ?.removeClass('dx-position-left dx-position-right dx-position-top dx-position-bottom')
       .addClass(positionClass);
   }
 
   _toggleFlippedClass(isFlippedHorizontal, isFlippedVertical) {
     this.$wrapper()
-      .toggleClass('dx-popover-flipped-horizontal', isFlippedHorizontal)
+      ?.toggleClass('dx-popover-flipped-horizontal', isFlippedHorizontal)
       .toggleClass('dx-popover-flipped-vertical', isFlippedVertical);
   }
 
@@ -504,7 +504,7 @@ class Popover<
 
   _renderWrapperDimensions() {
     if (this.option('shading')) {
-      this.$wrapper().css({
+      this.$wrapper()?.css({
         width: '100%',
         height: '100%',
       });

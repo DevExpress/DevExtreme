@@ -552,11 +552,12 @@ class Menu extends MenuBase<MenuProperties> {
     this._treeView = this._createComponent($('<div>'), TreeView, this._getTreeViewOptions());
     this._overlay = this._createComponent($('<div>'), Overlay, this._getAdaptiveOverlayOptions());
     this._overlay.$content()
-      .append(this._treeView.$element())
+      ?.append(this._treeView.$element())
       .addClass(DX_ADAPTIVE_MODE_CLASS)
       // @ts-expect-error ts-error
       .addClass(cssClass);
-    this._overlay.$wrapper().addClass(DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS);
+
+    this._overlay.$wrapper()?.addClass(DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS);
 
     this._$adaptiveContainer = $('<div>').addClass(DX_ADAPTIVE_MODE_CLASS);
     this._$adaptiveContainer.append($hamburger);
