@@ -1,0 +1,2 @@
+// deprecated
+export { getFormat } from '../../../../__internal/core/localization/ldml/date.format';
