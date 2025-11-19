@@ -57,7 +57,7 @@ test.clientScripts([
   await testScreenshot(
     t,
     takeScreenshot,
-    'scheduler__recurrence-form__weekly__mon-wed-fri.png',
+    'scheduler__appointment__recurrence-form__weekly__mon-wed-fri.png',
     { element: appointmentPopup.recurrence.group },
   );
 
@@ -109,7 +109,7 @@ test.clientScripts([
   await testScreenshot(
     t,
     takeScreenshot,
-    'scheduler__recurrence-form__weekly__weekend.png',
+    'scheduler__appointment__recurrence-form__weekly__weekend.png',
     { element: appointmentPopup.recurrence.group },
   );
 
@@ -161,7 +161,7 @@ test.clientScripts([
   await testScreenshot(
     t,
     takeScreenshot,
-    'scheduler__recurrence-form__weekly__interval-2.png',
+    'scheduler__appointment__recurrence-form__weekly__interval-2.png',
     { element: appointmentPopup.recurrence.group },
   );
 
@@ -212,7 +212,7 @@ test.clientScripts([
   await testScreenshot(
     t,
     takeScreenshot,
-    'scheduler__recurrence-form__weekly__interval-5.png',
+    'scheduler__appointment__recurrence-form__weekly__interval-5.png',
     { element: appointmentPopup.recurrence.group },
   );
 
@@ -263,7 +263,7 @@ test.clientScripts([
   await testScreenshot(
     t,
     takeScreenshot,
-    'scheduler__recurrence-form__monthly__day-1.png',
+    'scheduler__appointment__recurrence-form__monthly__day-1.png',
     { element: appointmentPopup.recurrence.group },
   );
 
@@ -314,7 +314,7 @@ test.clientScripts([
   await testScreenshot(
     t,
     takeScreenshot,
-    'scheduler__recurrence-form__monthly__day-15.png',
+    'scheduler__appointment__recurrence-form__monthly__day-15.png',
     { element: appointmentPopup.recurrence.group },
   );
 
@@ -365,7 +365,7 @@ test.clientScripts([
   await testScreenshot(
     t,
     takeScreenshot,
-    'scheduler__recurrence-form__yearly__jan-1.png',
+    'scheduler__appointment__recurrence-form__yearly__jan-1.png',
     { element: appointmentPopup.recurrence.group },
   );
 
@@ -416,7 +416,7 @@ test.clientScripts([
   await testScreenshot(
     t,
     takeScreenshot,
-    'scheduler__recurrence-form__yearly__dec-31.png',
+    'scheduler__appointment__recurrence-form__yearly__dec-31.png',
     { element: appointmentPopup.recurrence.group },
   );
 
@@ -467,7 +467,7 @@ test.clientScripts([
   await testScreenshot(
     t,
     takeScreenshot,
-    'scheduler__recurrence-form__hourly.png',
+    'scheduler__appointment__recurrence-form__hourly.png',
     { element: appointmentPopup.recurrence.group },
   );
 
@@ -518,7 +518,7 @@ test.clientScripts([
   await testScreenshot(
     t,
     takeScreenshot,
-    'scheduler__recurrence-form__editing-existing.png',
+    'scheduler__appointment__recurrence-form__editing-existing.png',
     { element: appointmentPopup.recurrence.group },
   );
 
@@ -618,7 +618,7 @@ test.clientScripts([
   await testScreenshot(
     t,
     takeScreenshot,
-    'scheduler__recurrence-form__readonly.png',
+    'scheduler__appointment__recurrence-form__readonly.png',
     { element: appointmentPopup.recurrence.group },
   );
 
