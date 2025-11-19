@@ -109,8 +109,7 @@
             if(runWorkerInNewWindow)
                 return 1; // NOTE: more than 1 window cause problems with tests that use focus
 
-            // Temporarily reduced to 1 worker to debug stalling issues
-            return 10; // Was: return 2;
+            return 4;
         };
 
         WORKER_COUNT = calcWorkerFrameCount();
