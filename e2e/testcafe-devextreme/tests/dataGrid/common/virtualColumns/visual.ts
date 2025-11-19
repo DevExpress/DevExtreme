@@ -10,8 +10,8 @@ const showDataGrid = ClientFunction(() => {
   $('#wrapperContainer').css('display', '');
 });
 
-fixture.disablePageReloads`Virtual  Columns`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Virtual Columns.Visual`
+  .page(url(__dirname, '../../../container.html'));
 
 const generateData = (rowCount: number, columnCount: number): Record<string, unknown>[] => {
   const items: Record<string, unknown>[] = [];
