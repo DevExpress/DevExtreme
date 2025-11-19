@@ -11,7 +11,7 @@ import devices from '__internal/core/m_devices';
 import dataUtils from 'core/element_data';
 import renderer from 'core/renderer';
 import { triggerShownEvent } from 'common/core/events/visibility_change';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import $ from 'jquery';
 import { PivotGridDataSource } from '__internal/grids/pivot_grid/data_source/m_data_source';
 import '__internal/grids/pivot_grid/field_chooser/m_field_chooser';

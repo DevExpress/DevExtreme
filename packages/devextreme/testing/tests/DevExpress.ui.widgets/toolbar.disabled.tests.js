@@ -7,7 +7,6 @@ import eventsEngine from 'common/core/events/core/events_engine';
 import 'ui/button_group';
 import 'ui/text_box';
 
-import 'generic_light.css!';
 import 'ui/button';
 import 'ui/drop_down_button';
 import 'ui/tabs';

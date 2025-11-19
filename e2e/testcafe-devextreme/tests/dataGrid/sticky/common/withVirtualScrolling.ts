@@ -1,16 +1,16 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { getData } from '../../helpers/generateDataSourceData';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const DATA_GRID_SELECTOR = '#container';
 
 fixture.disablePageReloads`Sticky columns - Virtual Scrolling`
   .page(url(__dirname, '../../../container.html'));
 
-safeSizeTest('Fixed columns should display correctly when scrolling vertically quickly', async (t) => {
+test.meta({ browserSize: [800, 800] })('Fixed columns should display correctly when scrolling vertically quickly', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -25,18 +25,18 @@ safeSizeTest('Fixed columns should display correctly when scrolling vertically q
   await dataGrid.scrollTo(t, { y: 1500 });
   await t.wait(100);
 
-  await takeScreenshot('fixed_columns_with_virtual_scrolling_1.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'fixed_columns_with_virtual_scrolling_1.png', { element: dataGrid.element });
 
   // waiting for size update
   await t.wait(3000);
 
-  await takeScreenshot('fixed_columns_with_virtual_scrolling_2.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'fixed_columns_with_virtual_scrolling_2.png', { element: dataGrid.element });
 
   // assert
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(400, 15),
   height: 700,
   columnWidth: 100,
@@ -56,7 +56,7 @@ safeSizeTest('Fixed columns should display correctly when scrolling vertically q
   },
 }));
 
-safeSizeTest('Fixed columns should display correctly when horizontal scrolling', async (t) => {
+test.meta({ browserSize: [800, 800] })('Fixed columns should display correctly when horizontal scrolling', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -66,13 +66,13 @@ safeSizeTest('Fixed columns should display correctly when horizontal scrolling',
   // act
   await dataGrid.scrollTo(t, { x: 10000 });
 
-  await takeScreenshot('fixed_columns_with_horizontal_scrolling.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'fixed_columns_with_horizontal_scrolling.png', { element: dataGrid.element });
 
   // assert
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(400, 15),
   height: 700,
   columnWidth: 100,

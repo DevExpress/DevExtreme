@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Offset: Appointment expressions`
   .page(url(__dirname, '../../../container.html'));
@@ -42,17 +43,17 @@ const APPOINTMENTS = {
       const allDayAppointment = scheduler.getAppointment(APPOINTMENT_TITLES.allDay);
       const viewType = views[0].type;
 
-      await takeScreenshot(`offset_appt-expr_${viewType}_offset-${offset}.png`, scheduler.workSpace);
+      await testScreenshot(t, takeScreenshot, `offset_appt-expr_${viewType}_offset-${offset}.png`, { element: scheduler.workSpace });
 
       await t.drag(usualAppointment.element, 100, 100);
       await t.drag(allDayAppointment.element, -100, 0);
 
-      await takeScreenshot(`offset_appt-expr_drag-n-drop_${viewType}_offset-${offset}.png`, scheduler.workSpace);
+      await testScreenshot(t, takeScreenshot, `offset_appt-expr_drag-n-drop_${viewType}_offset-${offset}.png`, { element: scheduler.workSpace });
 
       await t.drag(usualAppointment.resizableHandle.bottom, 0, 100);
       await t.drag(allDayAppointment.resizableHandle.left, -100, 0);
 
-      await takeScreenshot(`offset_appt-expr_resize_${viewType}_offset-${offset}.png`, scheduler.workSpace);
+      await testScreenshot(t, takeScreenshot, `offset_appt-expr_resize_${viewType}_offset-${offset}.png`, { element: scheduler.workSpace });
 
       await t.expect(compareResults.isValid())
         .ok(compareResults.errorMessages());

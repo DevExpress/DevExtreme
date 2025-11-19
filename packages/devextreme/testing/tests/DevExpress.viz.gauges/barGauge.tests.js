@@ -16,7 +16,7 @@ import loadingIndicatorModule from 'viz/core/loading_indicator';
 import titleModule from 'viz/core/title';
 import tooltipModule from 'viz/core/tooltip';
 import * as barGaugeModule from '__internal/viz/gauges/bar_gauge';
-import exportModule from 'viz/core/export';
+import exportModule from '__internal/viz/core/exportModule';
 import themeModule from 'viz/themes';
 
 const { BarWrapper, stubBarWrapper, restoreBarWrapper } = barGaugeModule;

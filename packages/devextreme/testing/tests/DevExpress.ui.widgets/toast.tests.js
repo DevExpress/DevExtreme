@@ -5,7 +5,7 @@ import fx from 'common/core/animation/fx';
 import { value as setViewPort } from 'core/utils/view_port';
 import Toast from 'ui/toast';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const TOAST_CLASS = 'dx-toast';
 const TOAST_CLASS_PREFIX = TOAST_CLASS + '-';

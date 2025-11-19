@@ -9,8 +9,6 @@ import { isRenderer } from 'core/utils/type';
 import browser from 'core/utils/browser';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
 
-import 'generic_light.css!';
-
 import {
     SCROLLABLE_CONTAINER_CLASS,
     SCROLLABLE_CONTENT_CLASS,

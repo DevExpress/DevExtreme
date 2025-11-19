@@ -112,6 +112,8 @@
         "dxDataGrid-aiPromptEditorApplyButton": "Apply",
         "dxDataGrid-aiPromptEditorRegenerateButton": "Regenerate Data",
         "dxDataGrid-aiPromptEditorStopButton": "Stop",
+        "dxDataGrid-aiDropDownAutofill": "Autofill with AI",
+        "dxDataGrid-aiDropDownClear": "Clear Data",
         "dxDataGrid-emptyHeaderWithColumnChooserText": "Використовуйте {0}, щоб відобразити стовпці",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "Перетягніть сюди стовпець з панелі групування",
         "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Використовуйте {0} або перетягніть стовпець з панелі групування",
@@ -274,10 +276,10 @@
         "dxScheduler-appointmentAriaLabel-recurring": "Повторювана подія",
 
         "dxScheduler-appointmentListAriaLabel": "Список подій",
-
+        "dxScheduler-newPopupTitle": "New Appointment",
         "dxScheduler-editPopupTitle": "Edit Appointment",
         "dxScheduler-editPopupSaveButtonText": "Save",
-        
+
         "dxScheduler-editorLabelTitle": "Тема",
         "dxScheduler-editorLabelStartDate": "Дата початку",
         "dxScheduler-editorLabelEndDate": "Дата завершення",
@@ -415,6 +417,7 @@
         "dxChat-defaultImageAlt": "Зображення, надіслане в чаті",
         "dxChat-fileViewLabel": "File list",
         "dxChat-downloadButtonLabel": "Download file {0}",
+        "dxChat-fileLimitReachedWarning": "You selected too many files. Select no more than {0} files and retry.",
 
         "dxColorView-ariaRed": "Червоний",
         "dxColorView-ariaGreen": "Зелений",

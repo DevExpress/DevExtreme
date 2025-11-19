@@ -27,6 +27,10 @@ export class PopupModel {
     return this.element.querySelector('.dx-scheduler-form-recurrence-group');
   }
 
+  get subjectIcon(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-subject-group .dx-scheduler-form-icon .dx-icon');
+  }
+
   get startDate(): Element | null {
     return this.element.querySelector('.dx-scheduler-form-start-date-editor .dx-datebox.dx-widget');
   }
@@ -221,7 +225,7 @@ export class PopupModel {
   };
 
   getBackButton = (): HTMLButtonElement => {
-    const backButton = this.element.querySelector('.dx-toolbar-button  .dx-button[aria-label="Back"]') as HTMLButtonElement;
+    const backButton = this.element.querySelector('.dx-toolbar-button  .dx-button[aria-label="arrowleft"]') as HTMLButtonElement;
     if (!backButton) {
       throw new Error('Back button not found');
     }

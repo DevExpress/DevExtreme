@@ -47,7 +47,7 @@ runs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome-headless-shell
       with:
-        chrome-version: '133.0.6943.53'
+        chrome-version: '141.0.7390.122'
 
     - name: Use Node.js
       uses: actions/setup-node@v4
@@ -101,7 +101,6 @@ runs:
       env:
         CONSTEL: ${{ inputs.constel }}
         JQUERY: ${{ inputs.useJQuery }}
-        MOBILE_UA: ${{ inputs.userAgent }}
         SHADOW_DOM: ${{ inputs.useShadowDom }}
         TZ: ${{ inputs.timezone }}
         NO_HEADLESS: ${{ inputs.headless == 'false' && 'true' || 'false' }}

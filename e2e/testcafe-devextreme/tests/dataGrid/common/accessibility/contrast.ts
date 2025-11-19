@@ -4,6 +4,7 @@ import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTex
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { getData } from '../../helpers/generateDataSourceData';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`DataGrid - contrast`
   .page(url(__dirname, '../../../container.html'));
@@ -26,9 +27,9 @@ test('DataGrid - Contrast between icons in the Filter Row menu and their backgro
     .click(searchButton)
     .expect(filterMenu.element.exists)
     .ok();
+
+  await testScreenshot(t, takeScreenshot, 'T1257970-datagrid-menu-icon-contrast.png', { element: dataGrid.element });
   await t
-    .expect(await takeScreenshot('T1257970-datagrid-menu-icon-contrast-generic.light.png', dataGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(
@@ -67,9 +68,8 @@ test('DataGrid - Filter icon should remain visible when it\'s focused', async (t
     .expect(searchIconContainer.focused)
     .ok();
 
+  await testScreenshot(t, takeScreenshot, 'T1286345-datagrid-menu-icon-when-focused.png', { element: dataGrid.element });
   await t
-    .expect(await takeScreenshot('T1286345-datagrid-menu-icon-when-focused-generic.light.png', dataGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(

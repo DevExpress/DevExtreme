@@ -1,0 +1,12 @@
+arrowParens: always
+bracketSameLine: true
+bracketSpacing: true
+endOfLine: lf
+experimentalOperatorPosition: start
+objectWrap: preserve
+printWidth: 100
+quoteProps: preserve
+semi: true
+singleQuote: true
+tabWidth: 2
+trailingComma: all

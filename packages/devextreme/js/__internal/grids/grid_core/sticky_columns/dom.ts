@@ -194,6 +194,7 @@ const noNeedToCreateResizingPoint = (
     point,
     column,
     nextColumn,
+    cells,
   }: {
     point: {
       x: number;
@@ -204,6 +205,7 @@ const noNeedToCreateResizingPoint = (
     };
     column;
     nextColumn;
+    cells: dxElementWrapper | undefined;
   },
   addWidgetPrefix,
 ): boolean => {
@@ -212,7 +214,7 @@ const noNeedToCreateResizingPoint = (
   const offsetX = Math.round(point.x);
   const rtlEnabled = that.option('rtlEnabled') as boolean;
   const isSplitPoint = isDefined(isLeftBoundary) || isDefined(isRightBoundary);
-  const $cells = $(that.getColumnElements() ?? '');
+  const $cells = $(cells ?? '');
   const $container = $(that.getContent());
   const isFixedPoint = column?.fixed && nextColumn?.fixed;
   const nonFixedAreaBoundingRect = getNonFixedAreaBoundingRect($cells, $container, addWidgetPrefix);

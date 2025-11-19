@@ -12,7 +12,6 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import devices from '__internal/core/m_devices';
 import 'ui/switch';
 
-import 'generic_light.css!';
 import '__internal/scheduler/m_scheduler';
 
 const { testStart, test, module } = QUnit;

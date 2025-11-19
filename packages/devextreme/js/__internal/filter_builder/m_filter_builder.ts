@@ -922,6 +922,10 @@ class FilterBuilder extends Widget<any> {
     const treeViewNode = treeViewPopup?.find?.(`.${TREEVIEW_NODE_CONTAINER}`);
     treeViewNode?.attr('role', 'presentation');
   }
+
+  addWidgetPrefix(className: string): string {
+    return `${FILTER_BUILDER_CLASS}-${className}`;
+  }
 }
 
 registerComponent('dxFilterBuilder', FilterBuilder);

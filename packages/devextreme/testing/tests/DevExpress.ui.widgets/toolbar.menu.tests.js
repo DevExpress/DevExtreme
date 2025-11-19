@@ -16,7 +16,7 @@ import { isRenderer } from 'core/utils/type';
 import themes from 'ui/themes';
 import errors from 'core/errors';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(function() {
     const markup =

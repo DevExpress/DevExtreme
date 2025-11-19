@@ -4,7 +4,7 @@ import ExpandableCell from 'devextreme-testcafe-models/treeList/expandableCell';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
-fixture.disablePageReloads`Row dragging`
+fixture`Row dragging`
   .page(url(__dirname, '../../container.html'));
 
 const tasksT1228650 = [{
@@ -70,6 +70,8 @@ test('TreeList - Expand/collapse mechanism breaks after dragging action in the s
     await treeList.isReady();
 
     await treeList.moveRow(0, 10, 10, true);
+
+    await t.wait(100);
 
     const consoleMessages = await t.getBrowserConsoleMessages();
     const warningExists = !!consoleMessages?.warn.find((message) => message.startsWith('W1025'));

@@ -9,7 +9,7 @@ testUtils.importAnd(() => 'devextreme/viz/polar_chart', () => DevExpress.viz.dxP
   });
 
   return testUtils
-    .postponeUntilFound('#zoomedChart', 100, 10000)
+    .postponeUntilFound('#zoomedChart', 100, 5000)
     .then(() => {
       const instance = dxPolarChart.getInstance(document.querySelector('#zoomedChart'));
       instance.option('dataSource', dataSource);

@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import FilterBuilder, { type FilterBuilderTypes } from 'devextreme-react/filter-builder';
 import Button from 'devextreme-react/button';
 import DataGrid from 'devextreme-react/data-grid';
-import { filter, fields, products } from './data.ts';
+import { filter, fields, columns, products } from './data.ts';
 
 const App = () => {
   const [value, setValue] = useState(filter);
@@ -27,7 +27,7 @@ const App = () => {
         dataSource={products}
         filterValue={gridFilterValue}
         showBorders={true}
-        columns={fields}
+        columns={columns}
         height={300}
       />
     </div>

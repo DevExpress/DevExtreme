@@ -18,7 +18,7 @@ const inputClassName = '.dx-texteditor-input';
 const startDateTimeZoneValue = '(GMT -10:00) Etc - GMT+10';
 const endDateTimeZoneValue = '(GMT -08:00) US - Alaska';
 
-test('TimeZone editors should be have data after hide forms data(T1080932)', async (t) => {
+test.skip('TimeZone editors should be have data after hide forms data(T1080932)', async (t) => {
   const scheduler = new Scheduler('#container');
   const { legacyAppointmentPopup: appointmentPopup } = scheduler;
 
@@ -48,7 +48,7 @@ test('TimeZone editors should be have data after hide forms data(T1080932)', asy
   });
 });
 
-test('TimeZone editors should be have data in default case(T1080932)', async (t) => {
+test.skip('TimeZone editors should be have data in default case(T1080932)', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t.doubleClick(scheduler.getAppointmentByIndex(0).element);

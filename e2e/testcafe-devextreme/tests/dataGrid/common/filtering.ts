@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Filtering`
   .page(url(__dirname, '../../container.html'));
@@ -19,7 +20,7 @@ test('Data should be filtered if True is selected via the filter method when cas
   // assert
   await t.expect(dataGrid.isReady()).ok();
 
-  await takeScreenshot('filter-method-with-case-sensitive-1.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'filter-method-with-case-sensitive-1.png', { element: dataGrid.element });
 
   // act
   await dataGrid.apiFilter(['text', '=', 'True']);
@@ -27,7 +28,7 @@ test('Data should be filtered if True is selected via the filter method when cas
   // assert
   await t.expect(dataGrid.isReady()).ok();
 
-  await takeScreenshot('filter-method-with-case-sensitive-2.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'filter-method-with-case-sensitive-2.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())
@@ -57,7 +58,7 @@ test('Data should be filtered if True is selected via the option method when cas
   // assert
   await t.expect(dataGrid.isReady()).ok();
 
-  await takeScreenshot('filtering-via-option-method-with-case-sensitive-1.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'filtering-via-option-method-with-case-sensitive-1.png', { element: dataGrid.element });
 
   // act
   await dataGrid.option('columns', ['ID', { dataField: 'text', filterValue: 'True' }]);
@@ -65,7 +66,7 @@ test('Data should be filtered if True is selected via the option method when cas
   // assert
   await t.expect(dataGrid.isReady()).ok();
 
-  await takeScreenshot('filtering-via-option-method-with-case-sensitive-2.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'filtering-via-option-method-with-case-sensitive-2.png', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())

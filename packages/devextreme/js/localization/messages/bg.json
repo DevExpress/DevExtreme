@@ -112,6 +112,8 @@
         "dxDataGrid-aiPromptEditorApplyButton": "Apply",
         "dxDataGrid-aiPromptEditorRegenerateButton": "Regenerate Data",
         "dxDataGrid-aiPromptEditorStopButton": "Stop",
+        "dxDataGrid-aiDropDownAutofill": "Autofill with AI",
+        "dxDataGrid-aiDropDownClear": "Clear Data",
         "dxDataGrid-emptyHeaderWithColumnChooserText": "Use {0} to display columns",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "Drag a column from the group panel here",
         "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Use {0} or drag a column from the group panel",
@@ -274,10 +276,10 @@
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
 
         "dxScheduler-appointmentListAriaLabel": "Appointment list",
-
+        "dxScheduler-newPopupTitle": "New Appointment",
         "dxScheduler-editPopupTitle": "Edit Appointment",
         "dxScheduler-editPopupSaveButtonText": "Save",
-        
+
         "dxScheduler-editorLabelTitle": "Заглавие",
         "dxScheduler-editorLabelStartDate": "Начална дата",
         "dxScheduler-editorLabelEndDate": "Краен срок",
@@ -415,6 +417,7 @@
         "dxChat-defaultImageAlt": "Image shared in chat",
         "dxChat-fileViewLabel": "File list",
         "dxChat-downloadButtonLabel": "Download file {0}",
+        "dxChat-fileLimitReachedWarning": "You selected too many files. Select no more than {0} files and retry.",
 
         "dxColorView-ariaRed": "Red",
         "dxColorView-ariaGreen": "Green",

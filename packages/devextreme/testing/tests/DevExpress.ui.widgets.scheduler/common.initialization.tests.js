@@ -9,6 +9,8 @@ import { AppointmentDataSource } from '__internal/scheduler/view_model/m_appoint
 import { createWrapper, initTestMarkup, SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
 import { waitForAsync, waitGlobalFailure } from '../../helpers/scheduler/waitForAsync.js';
 
+import 'generic_light.css!';
+
 QUnit.testStart(() => initTestMarkup());
 
 QUnit.module('Initialization', {

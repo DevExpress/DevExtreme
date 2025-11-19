@@ -13,6 +13,7 @@
     label="Room"
     [dataSource]="rooms"
     [useColorAsDefault]="currentResource === 'Room'"
+    icon="conferenceroomoutline"
   >
   </dxi-scheduler-resource>
   <dxi-scheduler-resource
@@ -20,6 +21,7 @@
     label="Priority"
     [dataSource]="priorities"
     [useColorAsDefault]="currentResource === 'Priority'"
+    icon="tags"
   >
   </dxi-scheduler-resource>
   <dxi-scheduler-resource
@@ -28,6 +30,7 @@
     [allowMultiple]="true"
     [dataSource]="assignees"
     [useColorAsDefault]="currentResource === 'Assignee'"
+    icon="user"
   >
   </dxi-scheduler-resource>
 </dx-scheduler>

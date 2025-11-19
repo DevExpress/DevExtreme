@@ -7,7 +7,7 @@ QUnit.testStart(function() {
             </div>');
 });
 
-require('generic_light.css!');
+require('fluent_blue_light.css!');
 
 const fx = require('common/core/animation/fx');
 const dragEvents = require('common/core/events/drag');

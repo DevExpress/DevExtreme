@@ -18,6 +18,8 @@ import ArrayStore from 'common/data/array_store';
 import dragEvents from 'common/core/events/drag';
 import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
 
+import 'generic_light.css!';
+
 const { testStart, test, module } = QUnit;
 
 const timeZones = {

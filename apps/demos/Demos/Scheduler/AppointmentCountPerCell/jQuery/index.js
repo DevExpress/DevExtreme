@@ -21,6 +21,7 @@ $(() => {
       fieldExpr: 'roomId',
       dataSource: resourcesData,
       label: 'Room',
+      icon: 'conferenceroomoutline',
     }],
     height: 730,
   }).dxScheduler('instance');

@@ -14,6 +14,7 @@ $(() => {
       allowMultiple: true,
       dataSource: assignees,
       label: 'Assignee',
+      icon: 'user',
     }],
     toolbar: {
       items: [

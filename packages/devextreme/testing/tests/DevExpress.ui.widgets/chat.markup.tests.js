@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(() => {
     const markup = '<div id="component"></div>';

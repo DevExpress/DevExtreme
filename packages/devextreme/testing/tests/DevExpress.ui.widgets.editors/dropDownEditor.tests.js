@@ -19,7 +19,7 @@ import {
     DROP_DOWN_EDITOR_AFTER_FIELD_ADDON
 } from '__internal/ui/drop_down_editor/m_drop_down_editor';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import 'ui/validator';
 
 QUnit.testStart(function() {

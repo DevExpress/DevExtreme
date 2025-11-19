@@ -5,6 +5,8 @@ import fx from 'common/core/animation/fx';
 
 import { getEmptyResourceManager } from '../../helpers/scheduler/mockResourceManager.js';
 
+import 'fluent_blue_light.css!';
+
 const { module, test, testStart } = QUnit;
 
 const CELL_HEIGHT = 20;

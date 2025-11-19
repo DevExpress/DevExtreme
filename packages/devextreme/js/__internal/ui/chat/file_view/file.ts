@@ -5,7 +5,7 @@ import type { ClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type {
   Attachment,
-  AttachmentDownloadEvent,
+  AttachmentDownloadClickEvent,
 } from '@js/ui/chat';
 import { getImageContainer } from '@ts/core/utils/m_icon';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
@@ -23,19 +23,19 @@ export type Properties = DOMComponentProperties<File> & {
 
   data: Attachment;
 
-  onDownload?: (e: AttachmentDownloadEvent) => void;
+  onDownload?: (e: AttachmentDownloadClickEvent) => void;
 };
 
 export const CHAT_FILE_CLASS = 'dx-chat-file';
 const CHAT_FILE_ICON_CONTAINER_CLASS = 'dx-chat-file-icon-container';
-const CHAT_FILE_NAME_CLASS = 'dx-chat-file-name';
-const CHAT_FILE_SIZE_CLASS = 'dx-chat-file-size';
+export const CHAT_FILE_NAME_CLASS = 'dx-chat-file-name';
+export const CHAT_FILE_SIZE_CLASS = 'dx-chat-file-size';
 const CHAT_FILE_DOWNLOAD_BUTTON_CLASS = 'dx-chat-file-download-button';
 
 class File extends DOMComponent<File, Properties> {
   private _downloadButton?: Button | null;
 
-  private _downloadAction?: (e: Partial<AttachmentDownloadEvent>) => void;
+  private _downloadAction?: (e: Partial<AttachmentDownloadClickEvent>) => void;
 
   _getDefaultOptions(): Properties {
     return {
@@ -120,6 +120,12 @@ class File extends DOMComponent<File, Properties> {
   }
 
   private _renderButton(): void {
+    const { onDownload } = this.option();
+
+    if (!onDownload) {
+      return;
+    }
+
     const $button = $('<div>').addClass(CHAT_FILE_DOWNLOAD_BUTTON_CLASS);
 
     this._downloadButton = this._createComponent<Button, ButtonProperties>(
@@ -138,29 +144,53 @@ class File extends DOMComponent<File, Properties> {
       focusStateEnabled,
       hoverStateEnabled,
     } = this.option();
+    // @ts-expect-error format params should be extended
+    const ariaLabel = messageLocalization.format('dxChat-downloadButtonLabel', data?.name ?? '');
 
     // @ts-expect-error useInkRipple should be optional
     const configuration: ButtonProperties = {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
+      hint: ariaLabel,
       elementAttr: {
-        // @ts-expect-error format params should be extended
-        'aria-label': messageLocalization.format('dxChat-downloadButtonLabel', data?.name ?? ''),
+        'aria-label': ariaLabel,
       },
       icon: 'download',
       stylingMode: 'text' as const,
       onClick: (e: ClickEvent): void => {
-        const event = {
-          event: e.event,
-          attachment: data,
-        };
-
-        this._downloadAction?.(event);
+        this._downloadHandler(e);
       },
     };
 
     return configuration;
+  }
+
+  _downloadHandler(e: ClickEvent): void {
+    const { data } = this.option();
+
+    const event = {
+      event: e.event,
+      attachment: data,
+    };
+
+    this._downloadAction?.(event);
+  }
+
+  _handleOnDownloadOptionChange(): void {
+    const { onDownload } = this.option();
+
+    if (!onDownload) {
+      this._cleanDownloadButton();
+
+      return;
+    }
+
+    if (this._downloadButton) {
+      this._downloadButton?.option({ onClick: (e) => this._downloadHandler(e) });
+    } else {
+      this._renderButton();
+    }
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
@@ -179,6 +209,7 @@ class File extends DOMComponent<File, Properties> {
 
       case 'onDownload':
         this._createDownloadAction();
+        this._handleOnDownloadOptionChange();
         break;
 
       default:

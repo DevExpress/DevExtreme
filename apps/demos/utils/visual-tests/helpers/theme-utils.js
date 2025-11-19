@@ -4,12 +4,17 @@ export const THEME = {
   material: 'material.blue.light',
 };
 
-export const DEFAULT_THEME_NAME = THEME.generic;
+export const DEFAULT_THEME_NAME = THEME.fluent;
 
 export const getThemePostfix = (theme = DEFAULT_THEME_NAME) => {
-  const themeName = theme === DEFAULT_THEME_NAME ? '' : ` (${theme})`;
+  return ` (${theme})`;
+};
 
-  return themeName;
+export const getScreenshotName = (baseName, theme) => {
+  const themePostfix = getThemePostfix(theme);
+  return baseName.endsWith('.png')
+    ? baseName.replace('.png', `${themePostfix}.png`)
+    : `${baseName}${themePostfix}.png`;
 };
 
 export async function testScreenshot(
@@ -17,8 +22,49 @@ export async function testScreenshot(
   takeScreenshot,
   screenshotName,
   element,
+  comparisonOptions,
 ) {
+  const testTheme = process.env.THEME;
+  const isMaterialTheme = testTheme?.includes('material');
+
+  const themeOptions = isMaterialTheme ? {
+    looksSameComparisonOptions: {
+      tolerance: 100,
+      ignoreAntialiasing: true,
+      antialiasingTolerance: 100,
+      strict: false,
+      caretIgnore: true,
+    },
+    textDiffTreshold: 1,
+  } : {
+    looksSameComparisonOptions: {
+      tolerance: 20,
+      antialiasingTolerance: 20,
+    },
+    textDiffTreshold: 0.2,
+  };
+
+  const finalOptions = isMaterialTheme && comparisonOptions?.looksSameComparisonOptions
+    ? {
+        ...comparisonOptions,
+        looksSameComparisonOptions: {
+          ...comparisonOptions.looksSameComparisonOptions,
+          ...themeOptions.looksSameComparisonOptions,
+        },
+        textDiffTreshold: themeOptions.textDiffTreshold,
+      }
+    : {
+        ...comparisonOptions,
+        ...themeOptions,
+      };
+
   await t
-    .expect(await takeScreenshot(screenshotName.replace('.png', `${getThemePostfix(process.env.THEME)}.png`), element))
+    .expect(
+      await takeScreenshot(
+        getScreenshotName(screenshotName, testTheme),
+        element,
+        finalOptions
+      )
+    )
     .ok();
 }

@@ -61,14 +61,14 @@
         position="top"
         [width]="300"
       >
-        <dxo-animation>
-          <dxo-show
+        <dxo-popover-animation>
+          <dxo-popover-show
             type="pop"
             [from]="{ scale: 0 }"
             [to]="{ scale: 1 }"
-          ></dxo-show>
-          <dxo-hide type="fade" [from]="1" [to]="0"></dxo-hide>
-        </dxo-animation>
+          ></dxo-popover-show>
+          <dxo-popover-hide type="fade" [from]="1" [to]="0"></dxo-popover-hide>
+        </dxo-popover-animation>
         <div *dxTemplate="let data = model; of: 'content'">
           2012 Sales Report has to be completed so we can determine if major
           changes are required to sales strategy.

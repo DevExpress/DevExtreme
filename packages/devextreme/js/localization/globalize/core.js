@@ -1,1 +1,1 @@
-import '../../common/core/localization/globalize/core';
+import '../../__internal/core/localization/globalize/core';

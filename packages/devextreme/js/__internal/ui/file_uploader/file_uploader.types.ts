@@ -114,11 +114,17 @@ export interface FileUploaderChunkUploadResponse {
   error?: string;
 }
 
+export type FileValidationErrorEvent = NativeEventInfo<FileUploader> & {
+  readonly file: File;
+};
+
 export type CancelButtonClickEvent = NativeEventInfo<InteractionEvent> & {
   readonly file?: File;
 };
 
-interface Properties extends PublicProperties {
+export type FileLimitReachedEvent = NativeEventInfo<FileUploader>;
+
+export interface Properties extends PublicProperties {
   _buttonStylingMode?: ButtonStyle;
 
   _uploadButtonType?: ButtonType;
@@ -128,6 +134,8 @@ interface Properties extends PublicProperties {
   _showFileIcon?: boolean;
 
   _cancelButtonPosition?: 'start' | 'end';
+
+  _maxFileCount?: number;
 
   extendSelection?: boolean;
 
@@ -139,7 +147,11 @@ interface Properties extends PublicProperties {
 
   useDragOver?: boolean;
 
-  onCancelButtonClick?: ((e: CancelButtonClickEvent) => void);
+  onCancelButtonClick?: (e: CancelButtonClickEvent) => void;
+
+  onFileLimitReached?: (e: FileLimitReachedEvent) => void;
+
+  onFileValidationError?: (e: FileValidationErrorEvent) => void;
 }
 
 export interface FileUploaderProperties extends Properties,

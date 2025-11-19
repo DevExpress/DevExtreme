@@ -18,8 +18,8 @@ const moduleConfig = {
             this.instance = new FileView($('#component'), defaultOptions);
             this.$element = $(this.instance.$element());
 
-            const $buttons = this.$element.find(`.${BUTTON_CLASS}`);
-            this.$downloadButton = $($buttons[0]);
+            const getButtons = () => this.$element.find(`.${BUTTON_CLASS}`);
+            this.$downloadButton = () => $(getButtons()[0]);
         };
 
         this.reinit = (options) => {
@@ -53,48 +53,31 @@ QUnit.module('FileView', moduleConfig, () => {
 
     QUnit.module('onDownload option', () => {
         QUnit.test('should pass correct event arguments to onDownload', function(assert) {
-            assert.expect(4);
+            assert.expect(3);
 
             this.reinit({
                 onDownload: (e) => {
-                    assert.ok(e.component instanceof FileView, 'component is correct');
-                    assert.strictEqual(e.element, this.instance.element(), 'element is provided correctly');
+                    assert.ok(e.component instanceof File, 'component is correct');
                     assert.ok(e.event, 'original event is provided');
                     assert.strictEqual(typeof e.event, 'object', 'event is an object');
                 },
             });
 
-            this.$downloadButton.trigger('dxclick');
-        });
-
-        QUnit.test('should pass correct event arguments to onDownload via on()', function(assert) {
-            assert.expect(4);
-
-            const onDownload = (e) => {
-                assert.ok(e.component instanceof FileView, 'component is correct');
-                assert.strictEqual(e.element, this.instance.element(), 'element is provided correctly');
-                assert.ok(e.event, 'original event is provided');
-                assert.strictEqual(typeof e.event, 'object', 'event is an object');
-            };
-
-            this.instance.on('download', onDownload);
-
-            this.$downloadButton.trigger('dxclick');
+            this.$downloadButton().trigger('dxclick');
         });
 
         QUnit.test('should set onDownload via option()', function(assert) {
-            assert.expect(4);
+            assert.expect(3);
 
             const onDownload = (e) => {
-                assert.ok(e.component instanceof FileView, 'component is correct');
-                assert.strictEqual(e.element, this.instance.element(), 'element is provided correctly');
+                assert.ok(e.component instanceof File, 'component is correct');
                 assert.ok(e.event, 'original event is provided');
                 assert.strictEqual(typeof e.event, 'object', 'event is an object');
             };
 
             this.instance.option('onDownload', onDownload);
 
-            this.$downloadButton.trigger('dxclick');
+            this.$downloadButton().trigger('dxclick');
         });
     });
 

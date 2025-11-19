@@ -1,5 +1,3 @@
-import 'generic_light.css!';
-
 import $ from 'jquery';
 import 'ui/data_grid';
 import commonUtils from 'core/utils/common';

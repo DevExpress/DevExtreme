@@ -12,6 +12,7 @@ Imd.makeMetadata({
     replaceTypes('common/grids:ColumnAIOptions.popup', ['*'], ['object']),
     replaceTypes('ui/card_view:dxCardViewOptions.filterBuilderPopup', ['*'], ['object']),
     replaceTypes('ui/card_view:Editing.popup', ['*'], ['object']),
+    replaceTypes('ui/scheduler:dxSchedulerOptions.editing.popup', ['*'], ['object']),
 
     removeMembers('core/dom_component:DOMComponentOptions.bindingOptions'),
 

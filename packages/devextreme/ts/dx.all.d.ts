@@ -993,11 +993,21 @@ declare module DevExpress.aiIntegration {
     additionalInfo?: Record<PropertyKey, unknown>;
   };
   /**
+   * [descr:GenerateGridColumnCommandResponse]
+   */
+  export type GenerateGridColumnCommandResponse =
+    | string
+    | {
+        /**
+         * [descr:GenerateGridColumnCommandResponse.data]
+         */
+        data: string | Record<PropertyKey, string>;
+      };
+  /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type GenerateGridColumnCommandResult = {
     data: Record<PropertyKey, string>;
-    additionalInfo?: Record<PropertyKey, unknown>;
   };
   /**
    * [descr:Prompt]
@@ -4529,6 +4539,7 @@ declare module DevExpress.common.grids {
   export type AIColumnMode = 'auto' | 'manual';
   /**
    * [descr:AIColumnRequestCreatingInfo]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type AIColumnRequestCreatingInfo<TRowData = any> = {
     /**
@@ -4538,7 +4549,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:AIColumnRequestCreatingInfo.data]
      */
-    readonly data: TRowData[];
+    data: TRowData[];
     /**
      * [descr:AIColumnRequestCreatingInfo.cancel]
      */
@@ -4551,27 +4562,6 @@ declare module DevExpress.common.grids {
      * [descr:AIColumnRequestCreatingInfo.useCache]
      */
     useCache?: boolean;
-  };
-  /**
-   * [descr:AIColumnResponseReceivedInfo]
-   */
-  export type AIColumnResponseReceivedInfo = {
-    /**
-     * [descr:AIColumnResponseReceivedInfo.column]
-     */
-    readonly column: ColumnBase;
-    /**
-     * [descr:AIColumnResponseReceivedInfo.error]
-     */
-    error?: string;
-    /**
-     * [descr:AIColumnResponseReceivedInfo.data]
-     */
-    data: any[];
-    /**
-     * [descr:AIColumnResponseReceivedInfo.additionalInfo]
-     */
-    additionalInfo?: Record<string, any>;
   };
   export type ApplyChangesMode = 'instantly' | 'onDemand';
   export type ApplyFilterMode = 'auto' | 'onClick';
@@ -11152,12 +11142,12 @@ declare module DevExpress.ui {
   }
   module dxChat {
     /**
-     * [descr:_ui_chat_AttachmentDownloadEvent]
+     * [descr:_ui_chat_AttachmentDownloadClickEvent]
      */
-    export type AttachmentDownloadEvent =
+    export type AttachmentDownloadClickEvent =
       DevExpress.common.core.events.EventInfo<dxChat> & {
         /**
-         * [descr:_ui_chat_AttachmentDownloadEvent.attachment]
+         * [descr:_ui_chat_AttachmentDownloadClickEvent.attachment]
          */
         readonly attachment?: Attachment;
       };
@@ -11317,7 +11307,7 @@ declare module DevExpress.ui {
      */
     fileUploaderOptions?: Omit<
       DevExpress.ui.dxFileUploader.Properties,
-      'dialogTrigger' | 'showFileList' | 'uploadMode'
+      'dialogTrigger' | 'showFileList' | 'uploadMode' | 'value'
     >;
     /**
      * [descr:dxChatOptions.focusStateEnabled]
@@ -11419,10 +11409,10 @@ declare module DevExpress.ui {
      */
     showMessageTimestamp?: boolean;
     /**
-     * [descr:dxChatOptions.onAttachmentDownload]
+     * [descr:dxChatOptions.onAttachmentDownloadClick]
      */
-    onAttachmentDownload?:
-      | ((e: DevExpress.ui.dxChat.AttachmentDownloadEvent) => void)
+    onAttachmentDownloadClick?:
+      | ((e: DevExpress.ui.dxChat.AttachmentDownloadClickEvent) => void)
       | undefined;
     /**
      * [descr:dxChatOptions.onMessageEntered]
@@ -12173,14 +12163,6 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.EventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.common.grids.AIColumnRequestCreatingInfo<TRowData>;
-    /**
-     * [descr:_ui_data_grid_AIColumnResponseReceivedEvent]
-     */
-    export type AIColumnResponseReceivedEvent<
-      TRowData = any,
-      TKey = any
-    > = DevExpress.common.core.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-      DevExpress.common.grids.AIColumnResponseReceivedInfo;
     /**
      * [descr:_ui_data_grid_CellClickEvent]
      */
@@ -14288,12 +14270,6 @@ declare module DevExpress.ui {
      */
     onAIColumnRequestCreating?: (
       e: DevExpress.ui.dxDataGrid.AIColumnRequestCreatingEvent
-    ) => void;
-    /**
-     * [descr:dxDataGridOptions.onAIColumnResponseReceived]
-     */
-    onAIColumnResponseReceived?: (
-      e: DevExpress.ui.dxDataGrid.AIColumnResponseReceivedEvent
     ) => void;
   };
   /**
@@ -26065,6 +26041,23 @@ declare module DevExpress.ui {
           readonly popup: dxPopup;
         };
     /**
+     * [descr:AppointmentFormProperties]
+     */
+    export type AppointmentFormProperties = DevExpress.ui.dxForm.Properties & {
+      /**
+       * [descr:AppointmentFormProperties.onSaved]
+       */
+      onSaved?: (formData: any) => void;
+      /**
+       * [descr:AppointmentFormProperties.onCanceled]
+       */
+      onCanceled?: (formData: any) => void;
+      /**
+       * [descr:AppointmentFormProperties.iconsShowMode]
+       */
+      iconsShowMode?: AppointmentFormIconsShowMode;
+    };
+    /**
      * [descr:_ui_scheduler_AppointmentRenderedEvent]
      */
     export type AppointmentRenderedEvent =
@@ -26482,26 +26475,11 @@ declare module DevExpress.ui {
           /**
            * [descr:dxSchedulerOptions.editing.form]
            */
-          form?:
-            | {
-                /**
-                 * [descr:dxSchedulerOptions.editing.form.items]
-                 */
-                items?: Array<DevExpress.ui.dxForm.Item>;
-                /**
-                 * [descr:dxSchedulerOptions.editing.form.onSaved]
-                 */
-                onSaved?: (formData: any) => void;
-                /**
-                 * [descr:dxSchedulerOptions.editing.form.onCanceled]
-                 */
-                onCanceled?: (formData: any) => void;
-                /**
-                 * [descr:dxSchedulerOptions.editing.form.iconsShowMode]
-                 */
-                iconsShowMode?: DevExpress.ui.dxScheduler.AppointmentFormIconsShowMode;
-              }
-            | undefined;
+          form?: DevExpress.ui.dxScheduler.AppointmentFormProperties;
+          /**
+           * [descr:dxSchedulerOptions.editing.popup]
+           */
+          popup?: DevExpress.ui.dxPopup.Properties;
         };
     /**
      * [descr:dxSchedulerOptions.endDateExpr]
@@ -30601,14 +30579,6 @@ declare module DevExpress.ui {
     > = DevExpress.common.core.events.EventInfo<dxTreeList<TRowData, TKey>> &
       DevExpress.common.grids.AIColumnRequestCreatingInfo<TRowData>;
     /**
-     * [descr:_ui_tree_list_AIColumnResponseReceivedEvent]
-     */
-    export type AIColumnResponseReceivedEvent<
-      TRowData = any,
-      TKey = any
-    > = DevExpress.common.core.events.EventInfo<dxTreeList<TRowData, TKey>> &
-      DevExpress.common.grids.AIColumnResponseReceivedInfo;
-    /**
      * [descr:_ui_tree_list_CellClickEvent]
      */
     export type CellClickEvent<
@@ -32123,12 +32093,6 @@ declare module DevExpress.ui {
      */
     onAIColumnRequestCreating?: (
       e: DevExpress.ui.dxTreeList.AIColumnRequestCreatingEvent
-    ) => void;
-    /**
-     * [descr:dxTreeListOptions.onAIColumnResponseReceived]
-     */
-    onAIColumnResponseReceived?: (
-      e: DevExpress.ui.dxTreeList.AIColumnResponseReceivedEvent
     ) => void;
   };
   /**
@@ -33998,6 +33962,8 @@ declare module DevExpress.ui.dxChat {
      * [descr:Attachment.size]
      */
     size: number;
+
+    [key: string]: any;
   };
   /**
    * [descr:ImageMessage]
@@ -41516,15 +41482,15 @@ declare module DevExpress.viz {
      */
     export type PointInfo = BasePointInfo<piePointObject> & {
       /**
-       * [descr:PointInfo.percent]
+       * [descr:dxPieChartPointInfo.percent]
        */
       percent?: number;
       /**
-       * [descr:PointInfo.percentText]
+       * [descr:dxPieChartPointInfo.percentText]
        */
       percentText?: string;
       /**
-       * [descr:PointInfo.points]
+       * [descr:dxPieChartPointInfo.points]
        */
       points?: PointInfo;
     };

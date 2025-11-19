@@ -5,6 +5,7 @@ import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { getData } from '../../helpers/generateDataSourceData';
 import { makeRowsViewTemplatesAsync } from '../../helpers/asyncTemplates';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`State Storing`
   .page(url(__dirname, '../../../container.html'));
@@ -70,9 +71,10 @@ test('The rows should render correctly when cellTemplates are used and the selec
   // assert
   await t
     .expect(dataGrid.isReady())
-    .ok()
-    .expect(await takeScreenshot('T1188828-state-storing-with-selected-row-keys.png', dataGrid.element))
-    .ok()
+    .ok();
+
+  await testScreenshot(t, takeScreenshot, 'T1188828-state-storing-with-selected-row-keys.png', { element: dataGrid.element });
+  await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {

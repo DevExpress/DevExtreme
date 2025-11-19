@@ -13,7 +13,7 @@ const INFORMER_ALIGNMENT_START_CLASS = 'dx-informer-alignment-start';
 const INFORMER_ALIGNMENT_CENTER_CLASS = 'dx-informer-alignment-center';
 const INFORMER_ALIGNMENT_END_CLASS = 'dx-informer-alignment-end';
 const INFORMER_BG_CLASS = 'dx-informer-bg';
-const INFORMER_TEXT_CLASS = 'dx-informer-text';
+export const INFORMER_TEXT_CLASS = 'dx-informer-text';
 const INFORMER_ICON_CLASS = 'dx-informer-icon';
 
 export interface Properties extends WidgetOptions<Informer> {

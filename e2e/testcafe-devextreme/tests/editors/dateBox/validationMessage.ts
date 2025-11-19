@@ -1,7 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DateBox from 'devextreme-testcafe-models/dateBox';
 import Guid from 'devextreme/core/guid';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
@@ -12,7 +11,7 @@ fixture.disablePageReloads`DateBox ValidationMessagePosition`
 
 const positions = ['top', 'right', 'bottom', 'left'];
 
-safeSizeTest('DateBox ValidationMessage position is correct', async (t) => {
+test.meta({ browserSize: [600, 400] })('DateBox ValidationMessage position is correct', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   // eslint-disable-next-line no-restricted-syntax
@@ -26,7 +25,7 @@ safeSizeTest('DateBox ValidationMessage position is correct', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [600, 400]).before(async (t) => {
+}).before(async (t) => {
   t.ctx.ids = [];
 
   // eslint-disable-next-line no-restricted-syntax

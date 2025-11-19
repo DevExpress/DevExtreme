@@ -8,7 +8,7 @@ import dxChat, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { Message, AttachmentDownloadEvent, DisposingEvent, InitializedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, TypingEndEvent, TypingStartEvent, Attachment as ChatAttachment, User as ChatUser } from "devextreme/ui/chat";
+import type { Message, AttachmentDownloadClickEvent, DisposingEvent, InitializedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, TypingEndEvent, TypingStartEvent, Attachment as ChatAttachment, User as ChatUser } from "devextreme/ui/chat";
 import type { DisposingEvent as FileUploaderDisposingEvent, InitializedEvent as FileUploaderInitializedEvent, BeforeSendEvent, ContentReadyEvent, DropZoneEnterEvent, DropZoneLeaveEvent, FilesUploadedEvent, OptionChangedEvent, ProgressEvent, UploadAbortedEvent, UploadedEvent, UploadErrorEvent, UploadStartedEvent, ValueChangedEvent, UploadHttpMethod, FileUploadMode } from "devextreme/ui/file_uploader";
 import type { Format, ValidationStatus } from "devextreme/common";
 
@@ -19,7 +19,7 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 }
 
 type IChatOptionsNarrowedEvents = {
-  onAttachmentDownload?: ((e: AttachmentDownloadEvent) => void) | undefined;
+  onAttachmentDownloadClick?: ((e: AttachmentDownloadClickEvent) => void) | undefined;
   onDisposing?: ((e: DisposingEvent) => void);
   onInitialized?: ((e: InitializedEvent) => void);
   onMessageDeleted?: ((e: MessageDeletedEvent) => void) | undefined;
@@ -60,7 +60,7 @@ const Chat = memo(
       ), []);
 
       const subscribableOptions = useMemo(() => (["items"]), []);
-      const independentEvents = useMemo(() => (["onAttachmentDownload","onDisposing","onInitialized","onMessageDeleted","onMessageDeleting","onMessageEditCanceled","onMessageEditingStart","onMessageEntered","onMessageUpdated","onMessageUpdating","onTypingEnd","onTypingStart"]), []);
+      const independentEvents = useMemo(() => (["onAttachmentDownloadClick","onDisposing","onInitialized","onMessageDeleted","onMessageDeleting","onMessageEditCanceled","onMessageEditingStart","onMessageEntered","onMessageUpdated","onMessageUpdating","onTypingEnd","onTypingStart"]), []);
 
       const defaults = useMemo(() => ({
         defaultItems: "items",

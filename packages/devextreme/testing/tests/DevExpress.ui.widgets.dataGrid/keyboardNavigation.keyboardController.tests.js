@@ -1,7 +1,5 @@
 import $ from 'jquery';
 
-import 'generic_light.css!';
-
 import 'ui/data_grid';
 
 import { keyboardNavigationModule } from '__internal/grids/grid_core/keyboard_navigation/m_keyboard_navigation';

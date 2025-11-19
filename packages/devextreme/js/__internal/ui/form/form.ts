@@ -1448,11 +1448,11 @@ class Form extends Widget<FormProperties> {
   _getItemByField(field: string | {
     fieldName: string;
     fieldPath: string[];
-  }, items: PreparedItem[]): PreparedItem | false {
+  }, items: PreparedItem[]): PreparedItem | null {
     const fieldParts = isObject(field) ? field : this._getFieldParts(field);
     const { fieldName } = fieldParts;
     const { fieldPath } = fieldParts;
-    let resultItem: PreparedItem | false = false;
+    let resultItem: PreparedItem | null = null;
 
     if (items.length) {
       each(items, (_index: number, item: PreparedItem): boolean => {
@@ -1491,21 +1491,11 @@ class Form extends Widget<FormProperties> {
     fieldName: string;
     fieldPath: string[];
   } {
-    const fieldSeparator = '.';
-    let fieldName = field;
-    let separatorIndex = fieldName.indexOf(fieldSeparator);
-    const resultPath = [];
-
-    while (separatorIndex !== -1) {
-      // @ts-expect-error ts-error
-      resultPath.push(fieldName.substr(0, separatorIndex));
-      fieldName = fieldName.substr(separatorIndex + 1);
-      separatorIndex = fieldName.indexOf(fieldSeparator);
-    }
+    const [fieldName, ...fieldPath] = field.split('.').reverse();
 
     return {
       fieldName,
-      fieldPath: resultPath.reverse(),
+      fieldPath,
     };
   }
 
@@ -1513,12 +1503,12 @@ class Form extends Widget<FormProperties> {
     path: string[],
     fieldName: string,
     item: Item,
-  ): Item | false {
+  ): Item | null {
     const { itemType } = item;
     const subItemsField = this._getSubItemField(itemType);
 
     const isItemWithSubItems = itemType === 'group' || itemType === 'tabbed' || (item as TabItem).title;
-    let result: Item | false = false;
+    let result: Item | null = null;
 
     do {
       if (isItemWithSubItems) {
@@ -1534,7 +1524,7 @@ class Form extends Widget<FormProperties> {
           pathNode = path.pop();
         }
 
-        if (!path.length) {
+        if (!path.length && nameWithoutSpaces === pathNode) {
           result = this._getItemByField(fieldName, item[subItemsField]);
 
           // eslint-disable-next-line max-depth
@@ -1543,10 +1533,15 @@ class Form extends Widget<FormProperties> {
           }
         }
 
-        if (!isGroupWithName || (isGroupWithName && nameWithoutSpaces === pathNode)) {
+        const isGroupPathNodeOrUnnamed = !isGroupWithName
+          || (isGroupWithName && nameWithoutSpaces === pathNode);
+
+        if (isGroupPathNodeOrUnnamed && path.length) {
+          result = this._searchItemInEverySubItem(path, fieldName, item[subItemsField]);
+
           // eslint-disable-next-line max-depth
-          if (path.length) {
-            result = this._searchItemInEverySubItem(path, fieldName, item[subItemsField]);
+          if (!result) {
+            break;
           }
         }
       } else {
@@ -1565,19 +1560,16 @@ class Form extends Widget<FormProperties> {
     path: string[],
     fieldName: string,
     items: Item[],
-  ): Item | false {
-    let result: Item | false = false;
+  ): Item | null {
+    let result: Item | null = null;
     each(items, (_index: number, groupItem: GroupItem): boolean => {
       result = this._getItemByFieldPath(path.slice(), fieldName, groupItem);
+
       if (result) {
         return false;
       }
       return true;
     });
-
-    if (!result) {
-      return false;
-    }
 
     return result;
   }

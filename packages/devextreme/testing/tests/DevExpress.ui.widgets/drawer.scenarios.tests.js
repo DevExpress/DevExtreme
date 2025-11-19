@@ -12,7 +12,7 @@ import 'ui/tab_panel';
 import 'ui/text_box';
 import 'ui/tree_view';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 import dxDrawer from 'ui/drawer';
 import fx from 'common/core/animation/fx';

@@ -1,6 +1,15 @@
 import { type DxDataGridTypes } from 'devextreme-vue/data-grid';
 import { type DxFilterBuilderTypes } from 'devextreme-vue/filter-builder';
 
+interface Product {
+  Product_ID: number;
+  Product_Name: string;
+  Product_Cost: string;
+  Product_Sale_Price: string;
+  Product_Retail_Price: string;
+  Product_Current_Inventory: number;
+}
+
 export const filter = [
   ['Product_Current_Inventory', '<>', 0],
   'or',
@@ -11,7 +20,37 @@ export const filter = [
   ],
 ];
 
-export const fields: (DxFilterBuilderTypes.Field & DxDataGridTypes.Column)[] = [
+export const fields: (DxFilterBuilderTypes.Field)[] = [
+  {
+    caption: 'ID',
+    dataField: 'Product_ID',
+    dataType: 'number',
+  }, {
+    dataField: 'Product_Name',
+    dataType: 'string',
+  }, {
+    caption: 'Cost',
+    dataField: 'Product_Cost',
+    dataType: 'number',
+    format: 'currency',
+  }, {
+    dataField: 'Product_Sale_Price',
+    caption: 'Sale Price',
+    dataType: 'number',
+    format: 'currency',
+  }, {
+    dataField: 'Product_Retail_Price',
+    caption: 'Retail Price',
+    dataType: 'number',
+    format: 'currency',
+  }, {
+    dataField: 'Product_Current_Inventory',
+    dataType: 'number',
+    caption: 'Inventory',
+  },
+];
+
+export const columns: (DxDataGridTypes.Column)[] = [
   {
     caption: 'ID',
     dataField: 'Product_ID',
@@ -41,15 +80,6 @@ export const fields: (DxFilterBuilderTypes.Field & DxDataGridTypes.Column)[] = [
     caption: 'Inventory',
   },
 ];
-
-interface Product {
-  Product_ID: number;
-  Product_Name: string;
-  Product_Cost: string;
-  Product_Sale_Price: string;
-  Product_Retail_Price: string;
-  Product_Current_Inventory: number;
-}
 
 export const products: Product[] = [
   {

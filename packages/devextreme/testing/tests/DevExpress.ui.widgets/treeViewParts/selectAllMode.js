@@ -1,6 +1,6 @@
-/* global DATA, initTree */
-
 import $ from 'jquery';
+import { DATA } from './testData.js';
+import { initTree } from './testUtils.js';
 
 function initFixture(items) {
     this.treeView = initTree({

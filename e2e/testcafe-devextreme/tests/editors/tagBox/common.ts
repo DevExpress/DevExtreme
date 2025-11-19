@@ -3,7 +3,6 @@ import TagBox from 'devextreme-testcafe-models/tagBox';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`TagBox`
   .page(url(__dirname, '../../container.html'));
@@ -124,7 +123,7 @@ test('Select all checkbox should be focused by tab and closed by escape (T389453
   applyValueMode: 'useButtons',
 }));
 
-safeSizeTest('TagBox with selection controls', async (t) => {
+test.meta({ browserSize: [300, 300] })('TagBox with selection controls', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const tagBox = new TagBox('#container');
 
@@ -135,7 +134,7 @@ safeSizeTest('TagBox with selection controls', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [300, 300]).before(async () => createWidget('dxTagBox', {
+}).before(async () => createWidget('dxTagBox', {
   items: [1, 2, 3, 4, 5, 6, 7],
   showSelectionControls: true,
   width: 300,

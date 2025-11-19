@@ -1,18 +1,7 @@
 $(() => {
   $('#gridContainer').dxDataGrid({
-    dataSource: {
-      store: {
-        type: 'odata',
-        version: 2,
-        url: 'https://js.devexpress.com/Demos/SalesViewer/odata/DaySaleDtoes',
-        key: 'Id',
-        beforeSend(request) {
-          const year = new Date().getFullYear() - 1;
-          request.params.startDate = `${year}-05-10`;
-          request.params.endDate = `${year}-5-15`;
-        },
-      },
-    },
+    dataSource: sales,
+    keyExpr: 'Id',
     paging: {
       pageSize: 10,
     },
@@ -21,7 +10,6 @@ $(() => {
       showPageSizeSelector: true,
       allowedPageSizes: [10, 25, 50, 100],
     },
-    remoteOperations: false,
     searchPanel: {
       visible: true,
       highlightCaseSensitive: true,

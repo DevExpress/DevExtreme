@@ -34,6 +34,7 @@ const App = () => {
           allowMultiple={false}
           dataSource={priorityData}
           label="Priority"
+          icon="tags"
         />
         <View type="week" name="Week" />
         <View type="month" name="Month" />

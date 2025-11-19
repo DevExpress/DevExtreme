@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import 'ui/data_grid';
 import { createEvent } from 'common/core/events/utils/index';
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';

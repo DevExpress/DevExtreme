@@ -10,7 +10,7 @@
   align-items: flex-end;
 }
 
-.dx-chat-messagebox-textarea.dx-textarea {
+.dx-chat-textarea.dx-textarea {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -21,11 +21,33 @@
       .dx-placeholder::before {
         padding: 0;
       }
+
+      .dx-texteditor-input {
+        max-height: 7.1em;
+      }
     }
   }
 }
 
-.dx-textarea-toolbar.dx-toolbar {
+.dx-chat-textarea-attachments {
+  .dx-fileuploader-input-wrapper {
+    display: none;
+  }
+
+  .dx-fileuploader-wrapper {
+    padding: 0;
+  }
+
+  .dx-fileuploader-files-container {
+    display: grid;
+
+    .dx-fileuploader-file-container {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.dx-chat-textarea-toolbar.dx-toolbar {
   .dx-toolbar-items-container {
     height: auto;
   }

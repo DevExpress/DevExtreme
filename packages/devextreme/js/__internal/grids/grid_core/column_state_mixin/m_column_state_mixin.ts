@@ -1,3 +1,4 @@
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { getDefaultAlignment } from '@js/core/utils/position';
@@ -48,8 +49,11 @@ export const ColumnStateMixin = <T extends new(...args: any[]) => ColumnStateMix
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _getIndicatorClassName(name: string): string {}
 
-  private _getColumnAlignment(alignment, rtlEnabled) {
-    rtlEnabled = rtlEnabled || this.option('rtlEnabled');
+  protected _getColumnAlignment(
+    alignment: string,
+    rtl = false,
+  ): string {
+    const rtlEnabled = rtl || this.option('rtlEnabled');
 
     return alignment && alignment !== 'center' ? alignment : getDefaultAlignment(rtlEnabled);
   }
@@ -71,10 +75,14 @@ export const ColumnStateMixin = <T extends new(...args: any[]) => ColumnStateMix
     return $cell && $cell.find(`.${COLUMN_INDICATORS_CLASS}`);
   }
 
-  private _getIndicatorElements($cell) {
+  protected _getIndicatorElements(
+    $cell: dxElementWrapper,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    returnAll = false,
+  ): dxElementWrapper {
     const $indicatorContainer = this._getIndicatorContainer($cell);
 
-    return $indicatorContainer && $indicatorContainer.children();
+    return $indicatorContainer?.children();
   }
 
   /**

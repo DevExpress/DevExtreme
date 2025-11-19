@@ -7,7 +7,7 @@ import {
 } from './scrollableParts/scrollable.constants.js';
 import 'ui/tree_view';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const { testStart } = QUnit;
 

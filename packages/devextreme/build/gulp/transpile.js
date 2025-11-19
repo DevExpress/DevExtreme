@@ -34,7 +34,6 @@ const src = [
 ];
 
 const esmTranspileSrc = src.concat([
-    '!js/bundles/**/*',
     '!js/viz/docs/**/*',
     '!**/*.json'
 ]);
@@ -57,8 +56,6 @@ const generatedTs = [
     'events/transform.d.ts',
     'integration/jquery.d.ts'
 ];
-
-const bundlesSrc = ['js/bundles/**/*.js'];
 
 const TS_OUTPUT_BASE_DIR = 'artifacts/dist_ts';
 const TS_OUTPUT_SRC = [`${TS_OUTPUT_BASE_DIR}/__internal/**/*.{js,jsx}`];
@@ -153,11 +150,19 @@ const transpile = (src, dist, { jsPipes, tsPipes }) => {
 const cachedJsBabelCjs = () =>
     cache(babel(transpileConfig.cjs), { name: 'babel-cjs' });
 
+const bundlesSrc = 'build/bundle-templates/**/*.js';
 
-const transpileDefault = () => transpile(src, ctx.TRANSPILED_PATH, {
-    jsPipes: [ cachedJsBabelCjs() ],
-    tsPipes: [ babel(transpileConfig.tsCjs) ],
+const transpileBundles = (dist) => transpile(bundlesSrc, path.join(dist, './bundles'), {
+    jsPipes: [ removeDebug(), cachedJsBabelCjs() ],
 });
+
+const transpileDefault = () => gulp.series(
+    transpile(src, ctx.TRANSPILED_PATH, {
+        jsPipes: [ cachedJsBabelCjs() ],
+        tsPipes: [ babel(transpileConfig.tsCjs) ],
+    }),
+    transpileBundles(ctx.TRANSPILED_PATH),
+);
 
 const transpileProd = (dist, isEsm) => transpile(
     src,
@@ -174,14 +179,15 @@ const transpileProd = (dist, isEsm) => transpile(
     },
 );
 
-const transpileRenovationProd = (watch) => transpileProd(ctx.TRANSPILED_PROD_RENOVATION_PATH, false, watch);
+const transpileRenovationProd = (watch) => gulp.series(
+    transpileProd(ctx.TRANSPILED_PROD_RENOVATION_PATH, false, watch),
+    transpileBundles(ctx.TRANSPILED_PROD_RENOVATION_PATH),
+);
 
 const transpileEsm = (dist) => gulp.series.apply(gulp, [
     transpileProd(path.join(dist, './cjs'), false),
     transpileProd(path.join(dist, './esm'), true),
-    transpile(bundlesSrc, path.join(dist, './bundles'), {
-        jsPipes: [ removeDebug(), cachedJsBabelCjs() ],
-    }),
+    transpileBundles(dist),
     () => gulp
         .src(esmTranspileSrc)
         .pipe(flatMap((stream, file) => {

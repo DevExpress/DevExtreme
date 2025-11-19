@@ -3,8 +3,6 @@ import GoogleStaticProvider from '__internal/ui/map/provider.google_static';
 import fx from 'common/core/animation/fx';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
-import 'generic_light.css!';
-
 import 'bundles/modules/parts/widgets-web';
 
 GoogleStaticProvider.remapConstant('/mapURL?');
@@ -14,8 +12,6 @@ QUnit.testStart(function() {
 
     $('#qunit-fixture').html(markup);
 });
-
-executeAsyncMock.setup();
 
 const BOOTSTRAP_CSS_URL = window.ROOT_URL + 'packages/devextreme-themebuilder/node_modules/bootstrap/dist/css/bootstrap.css';
 

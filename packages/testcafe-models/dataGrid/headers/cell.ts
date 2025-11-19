@@ -12,6 +12,7 @@ const CLASS = {
   sticky: 'dx-datagrid-sticky-column',
   stickyLeft: 'dx-datagrid-sticky-column-left',
   stickyRight: 'dx-datagrid-sticky-column-right',
+  aiHeaderButton: 'dx-command-ai-header-button',
 };
 
 const getStickyClassNames = (position: StickyPosition | undefined): string[] => {

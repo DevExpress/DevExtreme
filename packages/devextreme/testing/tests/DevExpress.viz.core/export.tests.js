@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { Renderer } from '../../helpers/vizMocks.js';
-import exportModule from 'viz/core/export';
+import exportModule from '__internal/viz/core/exportModule';
 import themeModule from 'viz/themes';
 import clientExporter from 'exporter';
 import localization from 'localization';
@@ -35,7 +35,7 @@ QUnit.module('Creation', {
             font: {
                 size: 16,
                 color: '#707070',
-                family: '\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana',
+                family: '-apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'segoe ui\', \'helvetica neue\', \'adwaita sans\', cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
                 cursor: 'pointer',
                 weight: 200
             },
@@ -170,7 +170,7 @@ QUnit.test('List creation', function(assert) {
     assert.deepEqual(this.renderer.text.getCall(0).args, ['Print'], 'Printing text params');
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.css.getCall(0).args[0], {
         'font-size': 16,
-        'font-family': '\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana',
+        'font-family': '-apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'segoe ui\', \'helvetica neue\', \'adwaita sans\', cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
         fill: '#707070',
         'font-weight': 200,
         'pointer-events': 'none',
@@ -188,7 +188,7 @@ QUnit.test('List creation', function(assert) {
     assert.deepEqual(this.renderer.text.getCall(1).args, ['JPEG file'], 'JPEG text params');
     assert.deepEqual(this.renderer.text.getCall(1).returnValue.css.getCall(0).args[0], {
         'font-size': 16,
-        'font-family': '\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana',
+        'font-family': '-apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'segoe ui\', \'helvetica neue\', \'adwaita sans\', cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
         fill: '#707070',
         'pointer-events': 'none',
         'font-weight': 200,
@@ -207,7 +207,7 @@ QUnit.test('List creation', function(assert) {
     assert.deepEqual(this.renderer.text.getCall(2).args, ['PNG file'], 'PNG text params');
     assert.deepEqual(this.renderer.text.getCall(2).returnValue.css.getCall(0).args[0], {
         'font-size': 16,
-        'font-family': '\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana',
+        'font-family': '-apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'segoe ui\', \'helvetica neue\', \'adwaita sans\', cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
         fill: '#707070',
         'pointer-events': 'none',
         'font-weight': 200,
@@ -250,7 +250,7 @@ QUnit.test('List creation, without printing', function(assert) {
     }, 'JPEG text attrs');
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.css.getCall(0).args[0], {
         'font-size': 16,
-        'font-family': '\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana',
+        'font-family': '-apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'segoe ui\', \'helvetica neue\', \'adwaita sans\', cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
         fill: '#707070',
         'pointer-events': 'none',
         'font-weight': 200,
@@ -279,7 +279,7 @@ QUnit.test('List creation, without formats', function(assert) {
 
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.css.getCall(0).args[0], {
         'font-size': 16,
-        'font-family': '\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana',
+        'font-family': '-apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'segoe ui\', \'helvetica neue\', \'adwaita sans\', cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
         fill: '#707070',
         'pointer-events': 'none',
         'font-weight': 200,
@@ -976,7 +976,7 @@ QUnit.test('Set options', function(assert) {
             size: 16,
             color: '#707070',
             cursor: 'pointer',
-            family: '\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana',
+            family: '-apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'segoe ui\', \'helvetica neue\', \'adwaita sans\', cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
             weight: 200
         },
         button: {
@@ -1033,7 +1033,7 @@ QUnit.test('Set options', function(assert) {
     }, 'PNG text attributes');
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.css.getCall(0).args[0], {
         'font-size': 16,
-        'font-family': '\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana',
+        'font-family': '-apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'segoe ui\', \'helvetica neue\', \'adwaita sans\', cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
         fill: '#707070',
         'pointer-events': 'none',
         'font-weight': 200,

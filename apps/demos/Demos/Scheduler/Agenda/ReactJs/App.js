@@ -25,11 +25,13 @@ const App = () => (
       fieldExpr="assigneeId"
       label="Assignee"
       useColorAsDefault={true}
+      icon="user"
     />
     <Resource
       dataSource={priorities}
       fieldExpr="priorityId"
       label="Priority"
+      icon="tags"
     />
   </Scheduler>
 );

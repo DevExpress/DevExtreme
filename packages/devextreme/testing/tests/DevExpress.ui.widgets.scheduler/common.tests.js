@@ -9,7 +9,6 @@ import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibi
 import 'generic_light.css!';
 import $ from 'jquery';
 import { getTimeZones } from 'time_zone_utils';
-import themes from 'ui/themes';
 
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';

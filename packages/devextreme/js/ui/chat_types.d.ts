@@ -11,7 +11,7 @@ export {
   MessageEditCanceledEvent,
   MessageUpdatingEvent,
   MessageUpdatedEvent,
-  AttachmentDownloadEvent,
+  AttachmentDownloadClickEvent,
   User,
   Alert,
   Attachment,

@@ -4,6 +4,7 @@ import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTex
 import HeaderFilter from 'devextreme-testcafe-models/dataGrid/headers/headerFilter';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 import { getData } from '../../helpers/generateDataSourceData';
 
 fixture.disablePageReloads`Common tests`
@@ -19,9 +20,9 @@ const screenshotCheck = async (
 ) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await testScreenshot(t, takeScreenshot, `${screenshotName}.png`);
+
   await t
-    .expect(await takeScreenshot(`${screenshotName}.png`))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 };
@@ -501,7 +502,7 @@ test('Column chooser with the \'dragAndDrop\' mode', async (t) => {
   ],
 }, DATA_GRID_SELECTOR));
 
-test('Column chooser with the \'select\' mode', async (t) => {
+test.meta({ unstable: true })('Column chooser with the \'select\' mode', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const columnChooser = dataGrid.getColumnChooser();

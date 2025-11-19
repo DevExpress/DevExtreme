@@ -112,6 +112,8 @@
         "dxDataGrid-aiPromptEditorApplyButton": "Apply",
         "dxDataGrid-aiPromptEditorRegenerateButton": "Regenerate Data",
         "dxDataGrid-aiPromptEditorStopButton": "Stop",
+        "dxDataGrid-aiDropDownAutofill": "Autofill with AI",
+        "dxDataGrid-aiDropDownClear": "Clear Data",
         "dxDataGrid-emptyHeaderWithColumnChooserText": "Use {0} para exibir colunas",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "Arraste uma coluna do painel do grupo aqui",
         "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Use {0} ou arraste uma coluna do painel do grupo",
@@ -274,10 +276,10 @@
         "dxScheduler-appointmentAriaLabel-recurring": "Compromisso recorrente",
 
         "dxScheduler-appointmentListAriaLabel": "Lista de compromissos",
-
+        "dxScheduler-newPopupTitle": "New Appointment",
         "dxScheduler-editPopupTitle": "Edit Appointment",
         "dxScheduler-editPopupSaveButtonText": "Save",
-        
+
         "dxScheduler-editorLabelTitle": "Assunto",
         "dxScheduler-editorLabelStartDate": "Data de Início",
         "dxScheduler-editorLabelEndDate": "Data Final",
@@ -415,6 +417,7 @@
         "dxChat-defaultImageAlt": "Image shared in chat",
         "dxChat-fileViewLabel": "File list",
         "dxChat-downloadButtonLabel": "Download file {0}",
+        "dxChat-fileLimitReachedWarning": "You selected too many files. Select no more than {0} files and retry.",
 
         "dxColorView-ariaRed": "Vermelho",
         "dxColorView-ariaGreen": "Verde",

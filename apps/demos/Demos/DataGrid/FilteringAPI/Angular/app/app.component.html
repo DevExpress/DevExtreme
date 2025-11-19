@@ -16,6 +16,7 @@
   id="gridContainer"
   [columnAutoWidth]="true"
   [dataSource]="tasks"
+  keyExpr="Task_ID"
   [showBorders]="true"
 >
   <dxo-pager [visible]="true"></dxo-pager>
@@ -27,7 +28,7 @@
   ></dxi-column>
   <dxi-column
     cssClass="employee"
-    dataField="ResponsibleEmployee.Employee_Full_Name"
+    dataField="Employee_Full_Name"
     dataType="string"
     caption="Assigned To"
     [allowSorting]="false"
