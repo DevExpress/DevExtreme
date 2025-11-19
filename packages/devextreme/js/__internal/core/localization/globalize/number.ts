@@ -2,7 +2,9 @@ import '@ts/core/localization/globalize/core';
 import 'globalize/number';
 
 import errors from '@js/core/errors';
-import type { FormatConfig, NormalizedConfig, NumberFormatter } from '@ts/core/localization/number';
+import type {
+  FormatConfig, LocalizationFormat, NormalizedConfig, NumberFormatter,
+} from '@ts/core/localization/number';
 import numberLocalization from '@ts/core/localization/number';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import Globalize from 'globalize';
@@ -97,7 +99,7 @@ if (Globalize?.formatNumber) {
 
     format(
       value: string | number,
-      format: number | string | FormatConfig | Function | undefined,
+      format: LocalizationFormat,
     ): string {
       if (typeof value !== 'number') {
         return value;
