@@ -1,1 +1,1 @@
-export { default } from '../common/core/localization/parentLocale';
+export { default } from '../__internal/core/localization/parentLocale';
