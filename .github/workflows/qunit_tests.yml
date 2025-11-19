@@ -68,7 +68,7 @@ jobs:
       working-directory: ./packages/devextreme
       shell: bash
       env:
-        DEVEXTREME_TEST_CI: "true"
+        # DEVEXTREME_TEST_CI: "true"
         DOTNET_CLI_TELEMETRY_OPTOUT: "true"
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
       run: pnpx nx build:systemjs
@@ -89,7 +89,7 @@ jobs:
     needs: build
     runs-on: devextreme-shr2
     name: Constel ${{ matrix.CONSTEL }}${{ matrix.TIMEZONE != '' && format('-{0}', matrix.TIMEZONE) || '' }}${{ matrix.CSP == 'false' && '-no-csp' || '' }}
-    timeout-minutes: 30  # Reduced from 60: parallel execution should complete in 5-15 min max
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:

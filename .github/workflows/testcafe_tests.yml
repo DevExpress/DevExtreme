@@ -139,10 +139,10 @@ jobs:
       working-directory: ./packages/devextreme
       run: 7z x artifacts.zip -aoa
 
-    - name: Setup Chrome
-      uses: ./.github/actions/setup-chrome
-      with:
-        chrome-version: '141.0.7390.122'
+    # - name: Setup Chrome
+    #   uses: ./.github/actions/setup-chrome
+    #   with:
+    #     chrome-version: '141.0.7390.122'
 
     - name: Use Node.js
       uses: actions/setup-node@v4
@@ -187,11 +187,11 @@ jobs:
         pnpm run test $all_args
 
     - name: Sanitize job name
-      if: ${{ failure() }}
+      if: ${{ always() }}
       run: echo "JOB_NAME=$(echo "${{ matrix.ARGS.name }}" | tr '/' '-')" >> $GITHUB_ENV
 
     - name: Copy compared screenshot artifacts
-      if: ${{ failure() }}
+      if: ${{ always() }}
       uses: actions/upload-artifact@v4
       with:
         name: compared-screenshots-${{ env.JOB_NAME }}
@@ -199,7 +199,7 @@ jobs:
         if-no-files-found: ignore
 
     - name: Copy failed test artifacts
-      if: ${{ failure() }}
+      if: ${{ always() }}
       uses: actions/upload-artifact@v4
       with:
         name: failed-tests-${{ env.JOB_NAME }}
@@ -209,7 +209,7 @@ jobs:
   merge-artifacts:
     runs-on: devextreme-shr2
     needs: testcafe
-    if: ${{ failure() }}
+    if: ${{ always() }}
 
     steps:
     - name: Merge screenshot artifacts
