@@ -1,7 +1,6 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
-import AppointmentPopup from 'devextreme-testcafe-models/scheduler/appointment/popup';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { testScreenshot } from '../../../../helpers/themeUtils';
@@ -10,25 +9,6 @@ fixture`Appointment Form: Recurrence Form`
   .page(url(__dirname, '../../../container.html'));
 
 const SCHEDULER_SELECTOR = '#container';
-
-const openAppointmentPopup = async (
-  t: TestController,
-  appointment: any,
-  isRecurringAppointment: boolean,
-): Promise<AppointmentPopup> => {
-  await ClientFunction((appointmentData) => {
-    const instance = ($('#container') as any).dxScheduler('instance');
-    instance.showAppointmentPopup(appointmentData);
-  })(appointment);
-
-  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-
-  if (isRecurringAppointment) {
-    await t.click(Scheduler.getEditRecurrenceDialog().series);
-  }
-
-  return scheduler.appointmentPopup;
-};
 
 test.clientScripts([
   { module: 'mockdate' },
@@ -42,13 +22,8 @@ test.clientScripts([
     endDate: new Date('2024-01-01T11:00:00'),
   };
 
-  await ClientFunction((appointmentData) => {
-    const instance = ($('#container') as any).dxScheduler('instance');
-    instance.showAppointmentPopup(appointmentData);
-  })(appointment);
-
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-  const { appointmentPopup } = scheduler;
+  const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, false);
 
   await appointmentPopup.openRecurrenceForm(t, 'Weekly');
   await appointmentPopup.selectRecurrenceWeekDays(t, [0, 2, 4]);
@@ -94,13 +69,8 @@ test.clientScripts([
     endDate: new Date('2024-01-01T11:00:00'),
   };
 
-  await ClientFunction((appointmentData) => {
-    const instance = ($('#container') as any).dxScheduler('instance');
-    instance.showAppointmentPopup(appointmentData);
-  })(appointment);
-
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-  const { appointmentPopup } = scheduler;
+  const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, false);
 
   await appointmentPopup.openRecurrenceForm(t, 'Weekly');
   await appointmentPopup.selectRecurrenceWeekDays(t, [5, 6]);
@@ -146,13 +116,8 @@ test.clientScripts([
     endDate: new Date('2024-01-01T11:00:00'),
   };
 
-  await ClientFunction((appointmentData) => {
-    const instance = ($('#container') as any).dxScheduler('instance');
-    instance.showAppointmentPopup(appointmentData);
-  })(appointment);
-
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-  const { appointmentPopup } = scheduler;
+  const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, false);
 
   await appointmentPopup.openRecurrenceForm(t, 'Weekly');
   await appointmentPopup.setRecurrenceInterval(t, 2);
@@ -197,13 +162,8 @@ test.clientScripts([
     endDate: new Date('2024-01-01T11:00:00'),
   };
 
-  await ClientFunction((appointmentData) => {
-    const instance = ($('#container') as any).dxScheduler('instance');
-    instance.showAppointmentPopup(appointmentData);
-  })(appointment);
-
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-  const { appointmentPopup } = scheduler;
+  const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, false);
 
   await appointmentPopup.openRecurrenceForm(t, 'Weekly');
   await appointmentPopup.setRecurrenceInterval(t, 5);
@@ -248,13 +208,8 @@ test.clientScripts([
     endDate: new Date('2024-01-01T11:00:00'),
   };
 
-  await ClientFunction((appointmentData) => {
-    const instance = ($('#container') as any).dxScheduler('instance');
-    instance.showAppointmentPopup(appointmentData);
-  })(appointment);
-
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-  const { appointmentPopup } = scheduler;
+  const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, false);
 
   await appointmentPopup.openRecurrenceForm(t, 'Monthly');
   await appointmentPopup.setRecurrenceMonthDay(t, 1);
@@ -299,13 +254,8 @@ test.clientScripts([
     endDate: new Date('2024-01-01T11:00:00'),
   };
 
-  await ClientFunction((appointmentData) => {
-    const instance = ($('#container') as any).dxScheduler('instance');
-    instance.showAppointmentPopup(appointmentData);
-  })(appointment);
-
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-  const { appointmentPopup } = scheduler;
+  const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, false);
 
   await appointmentPopup.openRecurrenceForm(t, 'Monthly');
   await appointmentPopup.setRecurrenceMonthDay(t, 15);
@@ -350,13 +300,8 @@ test.clientScripts([
     endDate: new Date('2024-01-01T11:00:00'),
   };
 
-  await ClientFunction((appointmentData) => {
-    const instance = ($('#container') as any).dxScheduler('instance');
-    instance.showAppointmentPopup(appointmentData);
-  })(appointment);
-
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-  const { appointmentPopup } = scheduler;
+  const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, false);
 
   await appointmentPopup.openRecurrenceForm(t, 'Yearly');
   await appointmentPopup.setRecurrenceYearlyDate(t, 'January', 1);
@@ -401,13 +346,8 @@ test.clientScripts([
     endDate: new Date('2024-01-01T11:00:00'),
   };
 
-  await ClientFunction((appointmentData) => {
-    const instance = ($('#container') as any).dxScheduler('instance');
-    instance.showAppointmentPopup(appointmentData);
-  })(appointment);
-
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-  const { appointmentPopup } = scheduler;
+  const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, false);
 
   await appointmentPopup.openRecurrenceForm(t, 'Yearly');
   await appointmentPopup.setRecurrenceYearlyDate(t, 'December', 31);
@@ -452,13 +392,8 @@ test.clientScripts([
     endDate: new Date('2024-01-01T11:00:00'),
   };
 
-  await ClientFunction((appointmentData) => {
-    const instance = ($('#container') as any).dxScheduler('instance');
-    instance.showAppointmentPopup(appointmentData);
-  })(appointment);
-
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-  const { appointmentPopup } = scheduler;
+  const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, false);
 
   await appointmentPopup.openRecurrenceForm(t, 'Hourly');
   await appointmentPopup.setRecurrenceInterval(t, 2);
@@ -504,15 +439,8 @@ test.clientScripts([
     recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=1',
   };
 
-  await ClientFunction((appointmentData) => {
-    const instance = ($('#container') as any).dxScheduler('instance');
-    instance.showAppointmentPopup(appointmentData);
-  })(appointment);
-
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-  const { appointmentPopup } = scheduler;
-
-  await t.click(Scheduler.getEditRecurrenceDialog().series);
+  const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, true);
   await appointmentPopup.openRecurrenceSettings(t);
 
   await testScreenshot(
@@ -567,7 +495,8 @@ test.clientScripts([
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  const appointmentPopup = await openAppointmentPopup(t, appointment, true);
+  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+  const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, true);
   await appointmentPopup.openRecurrenceSettings(t);
 
   await testScreenshot(
@@ -612,7 +541,8 @@ test.clientScripts([
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  const appointmentPopup = await openAppointmentPopup(t, appointment, false);
+  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+  const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, false);
   await appointmentPopup.openRecurrenceSettings(t);
 
   await testScreenshot(

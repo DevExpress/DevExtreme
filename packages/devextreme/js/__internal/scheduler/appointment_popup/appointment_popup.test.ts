@@ -463,7 +463,7 @@ describe('Appointment Popup Form', () => {
       expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(false);
     });
 
-    it('changes visibility of groups when opening recurrence form', async () => {
+    it('should be visible after changing repeat editor\'s value', async () => {
       const { scheduler, POM } = await createScheduler(getDefaultConfig());
 
       scheduler.showAppointmentPopup();
