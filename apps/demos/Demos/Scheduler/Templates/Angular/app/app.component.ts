@@ -1,23 +1,15 @@
 import {
-  Component,
-  ViewChild,
-  enableProdMode,
-  Pipe,
-  PipeTransform,
-  provideZoneChangeDetection,
-  inject,
+  NgModule, Component, ViewChild, enableProdMode, Pipe, PipeTransform, provideZoneChangeDetection,
 } from '@angular/core';
-import { bootstrapApplication } from '@angular/platform-browser';
-
-import { formatDate } from 'devextreme-angular/common/core/localization';
+import { BrowserModule } from '@angular/platform-browser';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { query as Query } from 'devextreme-angular/common/data';
 import { DxSchedulerModule, DxSchedulerComponent, DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
-
 import {
   Service, MovieData, TheatreData, Data,
 } from './app.service';
 
-@Pipe({ name: 'apply', standalone: true })
+@Pipe({ name: 'apply', standalone: false })
 export class ApplyPipe<TArgs, TReturn> implements PipeTransform {
   transform(func: ((...args: TArgs[]) => TReturn), ...args: TArgs[]): TReturn { return func(...args); }
 }
@@ -34,28 +26,27 @@ if (window && window.config?.packageConfigPaths) {
 
 @Component({
   selector: 'demo-app',
+  standalone: false,
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
-  imports: [
-    DxSchedulerModule,
-    ApplyPipe,
-  ],
 })
 export class AppComponent {
   @ViewChild(DxSchedulerComponent, { static: false }) scheduler: DxSchedulerComponent;
-  
-  private formatDate = formatDate;
-  
-  private service = inject(Service);
-  
-  data: Data[] = this.service.getData();
+
+  data: Data[];
 
   currentDate: Date = new Date(2021, 3, 27);
 
-  moviesData: MovieData[] = this.service.getMoviesData();
+  moviesData: MovieData[];
 
-  theatreData: TheatreData[] = this.service.getTheatreData();
+  theatreData: TheatreData[];
+
+  constructor(service: Service) {
+    this.data = service.getData();
+    this.moviesData = service.getMoviesData();
+    this.theatreData = service.getTheatreData();
+  }
 
   onAppointmentFormOpening = (data: DxSchedulerTypes.AppointmentFormOpeningEvent) => {
     const that = this;
@@ -124,8 +115,15 @@ export class AppComponent {
   getMovieById = (id: string) => Query(this.moviesData).filter(['id', '=', id]).toArray()[0];
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
+@NgModule({
+  imports: [
+    BrowserModule,
+    DxSchedulerModule,
   ],
-});
+  declarations: [AppComponent, ApplyPipe],
+  bootstrap: [AppComponent],
+  providers: [provideZoneChangeDetection({ eventCoalescing: true })],
+})
+export class AppModule { }
+
+platformBrowserDynamic().bootstrapModule(AppModule);

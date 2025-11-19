@@ -8,6 +8,7 @@ if (window && window.config?.packageConfigPaths) {
 
 @Component({
   selector: 'email',
+  standalone: false,
   templateUrl: `.${modulePrefix}/email/email.component.html`,
 })
 export class Email {

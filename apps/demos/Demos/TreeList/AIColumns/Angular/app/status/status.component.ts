@@ -8,6 +8,7 @@ if (window && window.config?.packageConfigPaths) {
 
 @Component({
   selector: 'status',
+  standalone: false,
   templateUrl: `.${modulePrefix}/status/status.component.html`,
   styleUrls: [`.${modulePrefix}/status/status.component.css`],
 })

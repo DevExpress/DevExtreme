@@ -1,5 +1,5 @@
 import { Component, NgModule, enableProdMode, provideZoneChangeDetection } from '@angular/core';
-import { bootstrapApplication } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxPopupModule, DxScrollViewModule } from 'devextreme-angular';
 import { DxButtonModule, DxButtonTypes } from 'devextreme-angular/ui/button';
@@ -16,13 +16,9 @@ if (window && window.config?.packageConfigPaths) {
 
 @Component({
   selector: 'demo-app',
+  standalone: false,
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
-  imports: [
-    DxPopupModule,
-    DxButtonModule,
-    DxScrollViewModule,
-  ],
 })
 
 export class AppComponent {
@@ -50,8 +46,18 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
+@NgModule({
+  imports: [
+    BrowserModule,
+    DxPopupModule,
+    DxButtonModule,
+    DxScrollViewModule,
   ],
-});
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
+  providers: [provideZoneChangeDetection({ eventCoalescing: true })],
+})
+
+export class AppModule { }
+
+platformBrowserDynamic().bootstrapModule(AppModule);
