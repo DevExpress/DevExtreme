@@ -706,15 +706,21 @@ jobs:
       run: |
         python -m http.server 8080 &
 
+    - name: Check runner resources
+      run: |
+        echo "CPU cores: $(nproc)"
+        echo "Memory: $(free -h)"
+        echo "Disk: $(df -h)"
+
     - name: Set concurrency based on framework
       id: set-concurrency
       run: |
         if [[ "${{ matrix.CONSTEL }}" == react* ]]; then
           echo "concurrency=4" >> $GITHUB_OUTPUT
         elif [[ "${{ matrix.CONSTEL }}" == angular* ]]; then
-          echo "concurrency=3" >> $GITHUB_OUTPUT
+          echo "concurrency=2" >> $GITHUB_OUTPUT
         else
-          echo "concurrency=3" >> $GITHUB_OUTPUT
+          echo "concurrency=2" >> $GITHUB_OUTPUT
         fi
 
     - name: Run TestCafe tests
