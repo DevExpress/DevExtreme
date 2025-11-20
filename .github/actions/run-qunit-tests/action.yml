@@ -25,6 +25,9 @@ inputs:
   useCsp:
     description: "Indicates if tests should run with Content Security Policy (CSP) enabled"
     default: "true"
+  maxWorkers:
+    description: "Maximum number of parallel test workers"
+    default: ""
 
 runs:
   using: composite
@@ -36,23 +39,15 @@ runs:
         echo "MATRIX_ENVS_NAME_SAFE=$MATRIX_ENVS_NAME_SAFE"
         echo "MATRIX_ENVS_NAME_SAFE=$MATRIX_ENVS_NAME_SAFE" >> $GITHUB_ENV
 
-#    - name: Update apt
-#      run: |
-#        sudo apt-get update
+    # - name: Setup Chrome
+    #   uses: ./.github/actions/setup-chrome-headless-shell
+    #   with:
+    #     chrome-version: '141.0.7390.122'
 
-#    - name: Setup utils
-#      run: |
-#        sudo apt-get install -y dbus-x11 httping x11vnc xvfb
-
-    - name: Setup Chrome
-      uses: ./.github/actions/setup-chrome-headless-shell
-      with:
-        chrome-version: '141.0.7390.122'
-
-    - name: Use Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
+    # - name: Use Node.js
+    #   uses: actions/setup-node@v4
+    #   with:
+    #     node-version: '20'
 
     - name: Download artifacts
       uses: actions/download-artifact@v4
@@ -108,14 +103,14 @@ runs:
         NORENOVATION: "false"
         GITHUBACTION: "true"
         TARGET: "test"
-        DISPLAY: ":99"
         CHROME_CMD: ${{ env.CHROME_SHELL }}
+        MAX_WORKERS: ${{ inputs.maxWorkers }}
       run: |
         chmod +x ./docker-ci.sh
         ./docker-ci.sh
 
     - name: Copy RawLog.txt
-      if: ${{ failure() }}
+      if: ${{ always() }}
       uses: actions/upload-artifact@v4
       with:
         name: RawLog-${{ env.MATRIX_ENVS_NAME_SAFE }}
