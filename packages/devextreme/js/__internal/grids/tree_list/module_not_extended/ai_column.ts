@@ -3,7 +3,7 @@ import {
   AIPromptEditorView,
   AIPromptEditorViewController,
   columnHeadersViewExtender,
-} from '@ts/grids/grid_core/ai_column';
+} from '@ts/grids/grid_core/ai_column/index';
 
 import gridCore from '../m_core';
 
