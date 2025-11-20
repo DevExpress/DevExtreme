@@ -27,16 +27,11 @@ const getMinAppointmentHeightByTheme = (): number => (
     : APPOINTMENT_DEFAULT_HEIGHT
 );
 
-const getVerticalViewMinHeight = (options: Options): number => {
-  if (options.isMonthView || options.isAllDayAppointment) {
-    return getMinAppointmentHeightByTheme();
-  }
-
-  return DAY_VIEW_APPOINTMENT_MIN_HEIGHT;
-};
-
 export const getMinAppointmentSize = (options: Options): RealSize => {
-  const { isTimelineView, isAdaptivityEnabled } = options;
+  const {
+    isTimelineView, isAdaptivityEnabled, isMonthView, isAllDayAppointment,
+  } = options;
+
   if (isAdaptivityEnabled) {
     return {
       width: ADAPTIVE_APPOINTMENT_DEFAULT_WIDTH,
@@ -44,10 +39,19 @@ export const getMinAppointmentSize = (options: Options): RealSize => {
     };
   }
 
-  return {
-    width: APPOINTMENT_MIN_WIDTH,
-    height: isTimelineView ? APPOINTMENT_MIN_HEIGHT : getVerticalViewMinHeight(options),
-  };
+  if (isTimelineView) {
+    return {
+      width: APPOINTMENT_MIN_WIDTH,
+      height: APPOINTMENT_MIN_HEIGHT,
+    };
+  }
+
+  const width = APPOINTMENT_MIN_WIDTH;
+  const height = isMonthView || isAllDayAppointment
+    ? getMinAppointmentHeightByTheme()
+    : DAY_VIEW_APPOINTMENT_MIN_HEIGHT;
+
+  return { width, height };
 };
 
 export const getDefaultAppointmentSize = ({
