@@ -11,6 +11,7 @@ import type {
   HeaderFilterTextOptions, HeaderFilterType,
 } from '@ts/grids/new/grid_core/filtering/header_filter/types';
 import type { Options as GridCoreOptions } from '@ts/grids/new/grid_core/options';
+import * as zIndexPool from '@ts/ui/overlay/z_index';
 import { rerender } from 'inferno';
 
 import { defaultOptions } from './options';
@@ -71,6 +72,8 @@ describe('Options', () => {
     const cardView = rootQuerySelector(SELECTORS.cardView);
     // @ts-expect-error bad typed renderer
     $(cardView ?? undefined as any)?.dxCardView('dispose');
+
+    zIndexPool.reset();
   });
 
   describe('HeaderFilter', () => {
