@@ -1,5 +1,5 @@
-import { defaultMessages } from '@js/common/core/localization/default_messages';
 import coreLocalization from '@ts/core/localization/core';
+import { defaultMessages } from '@ts/core/localization/default_messages';
 import { injector as dependencyInjector } from '@ts/core/utils/m_dependency_injector';
 import { extend } from '@ts/core/utils/m_extend';
 import { humanize } from '@ts/core/utils/m_inflector';
