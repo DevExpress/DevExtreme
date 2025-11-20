@@ -5,21 +5,21 @@
   palette="Soft Pastel"
   [dataSource]="populationByRegions"
 >
-  <dxi-series argumentField="region">
-    <dxo-label [visible]="true" format="millions">
-      <dxo-connector [visible]="true"></dxo-connector>
-    </dxo-label>
-  </dxi-series>
-  <dxo-export [enabled]="true"></dxo-export>
-  <dxo-legend
+  <dxi-pie-chart-series argumentField="region">
+    <dxo-pie-chart-label [visible]="true" format="millions">
+      <dxo-pie-chart-connector [visible]="true"></dxo-pie-chart-connector>
+    </dxo-pie-chart-label>
+  </dxi-pie-chart-series>
+  <dxo-pie-chart-export [enabled]="true"></dxo-pie-chart-export>
+  <dxo-pie-chart-legend
     [margin]="0"
     horizontalAlignment="right"
     verticalAlignment="top"
-  ></dxo-legend>
-  <dxo-tooltip
+  ></dxo-pie-chart-legend>
+  <dxo-pie-chart-tooltip
     [enabled]="true"
     [customizeTooltip]="customizeTooltip"
     format="millions"
   >
-  </dxo-tooltip>
+  </dxo-pie-chart-tooltip>
 </dx-pie-chart>
