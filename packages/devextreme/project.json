@@ -81,7 +81,7 @@
       "dependsOn": [
         "build:dev"
       ],
-      "cache": false
+      "cache": true
     },
     "lint-css": {
       "executor": "nx:run-script",

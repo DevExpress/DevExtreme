@@ -57,8 +57,6 @@
 
 <script>
     $(function() {
-        var ROOT_URL = "@Url.Content("~/")";
-
         var TEST_TIMEOUT_SECONDS = 45,
             TEST_TIMEOUT = TEST_TIMEOUT_SECONDS * 1000,
             WORKER_NAME_PREFIX = "workerFrame",
@@ -70,7 +68,6 @@
             },
             suitesInProgress = [ ],
             urls = @Html.Raw(Json.Serialize(Model.Suites)),
-            originalUrls = urls.slice(0),
             noTryCatch = @Html.Raw(Json.Serialize(Model.NoTryCatch)),
             noGlobals = @Html.Raw(Json.Serialize(Model.NoGlobals)),
             noTimers = @Html.Raw(Json.Serialize(Model.NoTimers)),
@@ -79,8 +76,8 @@
             noCsp = @Html.Raw(Json.Serialize(Model.NoCsp)),
             farmMode = @Html.Raw(Json.Serialize(Model.IsContinuousIntegration)),
             DX_HTTP_CACHE = Date.now(),
-            lastTestCaseDoneTime = 0,
             runWorkerInNewWindow = @Html.Raw(Json.Serialize(Model.WorkerInWindow)),
+            maxWorkersFromEnv = @Html.Raw(Json.Serialize(Model.MaxWorkers)),
 
             WORKER_COUNT;
 
@@ -88,10 +85,8 @@
             if(runWorkerInNewWindow)
                 return 1; // NOTE: more than 1 window cause problems with tests that use focus
 
-            var ua = navigator.userAgent;
-
-            if(window.ActiveXObject !== undefined)
-                return 1;
+            if(maxWorkersFromEnv !== null && maxWorkersFromEnv > 0)
+                return maxWorkersFromEnv;
 
             return 2;
         };
@@ -132,7 +127,8 @@
                 url: @Html.Raw(Json.Serialize(Url.Action("SaveResults"))),
                 type: "post",
                 contentType: "application/json",
-                data: JSON.stringify(testResults)
+                data: JSON.stringify(testResults),
+                timeout: 60000
             }).done(function() {
                 notifyDeviceTestManager("QUnit.saveResults.done");
                 removeWorkers();
@@ -140,14 +136,20 @@
                 var frame = document.getElementById("reportFrame");
                 frame.style.display = "block";
                 frame.setAttribute("src", @Html.Raw(Json.Serialize(Url.Action("DisplayResults"))));
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                notifyDeviceTestManager("QUnit.saveResults.failed");
+                removeWorkers();
             });
         };
 
         var resultSaving = false;
 
         var nextUrl = function(i) {
+            if(suitesInProgress[i] !== null && suitesInProgress[i] !== undefined) {
+                return;
+            }
+            
             if(!urls.length) {
-                // $.ajax(ROOT_URL + "run/something/FrameHasFinishedRunningASuite.js?frame=" + i);
                 if(!resultSaving && !busyCount) {
                     resultSaving = true;
                     rootSuite.time = roundTime((new Date() - rootStartTime) / 1000);
@@ -160,9 +162,7 @@
 
             notifyDeviceTestManager("QUnit.nextUrl");
 
-            var that = this,
-                _i = i,
-                urlInfo = urls.shift(),
+            var urlInfo = urls.shift(),
                 worker = workerByIndex(i),
                 additionalParams = { };
 
@@ -192,8 +192,14 @@
 
                 startTime: new Date(),
                 pureTime: 0,
+                finalized: false,
 
                 finalize: function(success) {
+                    if(this.finalized) {
+                        return;
+                    }
+                    
+                    this.finalized = true;
                     this.time = roundTime((new Date() - this.startTime) / 1000);
                     this.pureTime = roundTime(this.pureTime);
                     delete this.startTime;
@@ -204,14 +210,12 @@
                     rootSuite.results.push(this);
                     suitesInProgress[i] = null;
                     busyCount--;
-
-                    setTimeout(function() { nextUrl.call(that, _i); }, 0);
                 }
             };
 
             worker.name = WORKER_NAME_PREFIX + i;
-            worker.location = urlInfo.Url + "?" + $.param(additionalParams);
             busyCount++;
+            worker.location = urlInfo.Url + "?" + $.param(additionalParams);
         };
 
         var workers = [ ];
@@ -276,6 +280,8 @@
         window.RUNNER_ON_TEST_START = function(worker, qunitData) {
             var i = indexFromWorkerName(worker),
                 testSuite = suitesInProgress[i];
+
+            notifyIsAlive();
 
             var testCase = {
                 __type: "case",
@@ -377,17 +383,13 @@
         };
 
         window.RUNNER_ON_TEST_DONE = function(worker, qunitData) {
-
             var i = indexFromWorkerName(worker),
                 testSuite = suitesInProgress[i],
                 testCases,
                 testCase;
 
-            if(Date.now() - lastTestCaseDoneTime > 1000) {
-                lastTestCaseDoneTime = Date.now();
-                notifyDeviceTestManager("QUnit.testCaseDone");
-                notifyIsAlive();
-            }
+            notifyDeviceTestManager("QUnit.testCaseDone");
+            notifyIsAlive();
 
             if(testSuite && StringEndsWith(qunitData.suiteUrl, escape(testSuite.name))) {
                 testCases = suitesInProgress[i].results;
@@ -421,12 +423,22 @@
         };
 
         window.RUNNER_ON_DONE = function(worker, qunitData) {
-            var suite = suitesInProgress[indexFromWorkerName(worker)],
+            var i = indexFromWorkerName(worker),
+                suite = suitesInProgress[i],
                 passed = !qunitData.failed;
 
             if(suite) {
+                if(suite.finalized) {
+                    suitesInProgress[i] = null;
+                    return;
+                }
+                
+                var suiteName = suite.name;
                 suite.finalize(passed, qunitData.total);
-                notifySuiteFinalized(suite.name, passed, qunitData.runtime);
+
+                notifySuiteFinalized(suiteName, passed, qunitData.runtime, function() {
+                    nextUrl.call(window, i);
+                });
             }
         };
 
@@ -459,11 +471,76 @@
             }
         }
 
-        function notifySuiteFinalized(name, passed, runtime) {
-            $.post(@Html.Raw(Json.Serialize(Url.Action("NotifySuiteFinalized"))), { name: name, passed: passed, runtime: runtime });
+        var activeFinalizationRequests = 0;
+        var maxConcurrentFinalizations = 3;
+        var finalizationQueue = [];
+        
+        function notifySuiteFinalized(name, passed, runtime, callback) {
+            finalizationQueue.push({ name: name, passed: passed, runtime: runtime, callback: callback });
+            processFinalizationQueue();
         }
+        
+        function processFinalizationQueue() {
+            while (finalizationQueue.length > 0 && activeFinalizationRequests < maxConcurrentFinalizations) {
+                var item = finalizationQueue.shift();
+                executeNotifySuiteFinalized(item.name, item.passed, item.runtime, item.callback);
+            }
+        }
+        
+        function executeNotifySuiteFinalized(name, passed, runtime, callback) {
+            activeFinalizationRequests++;
+            
+            var callbackCalled = false;
+            var safeCallback = function() {
+                if(callbackCalled) return;
+                callbackCalled = true;
+                if(callback) callback();
+            };
+            
+            var safetyTimer = setTimeout(function() {
+                activeFinalizationRequests--;
+                safeCallback();
+                processFinalizationQueue();
+            }, 20000);
+            
+            $.ajax({
+                url: @Html.Raw(Json.Serialize(Url.Action("NotifySuiteFinalized"))),
+                type: 'POST',
+                data: { name: name, passed: passed, runtime: runtime },
+                timeout: 10000
+            }).always(function() {
+                clearTimeout(safetyTimer);
+                activeFinalizationRequests--;
+                safeCallback();
+                processFinalizationQueue();
+            });
+        }
+        var lastAliveTime = 0;
+        var aliveThrottleMs = 5000;
+        var pendingAlive = false;
+        
         function notifyIsAlive(){
-            $.post(@Html.Raw(Json.Serialize(Url.Action("NotifyIsAlive"))));
+            var now = Date.now();
+            var timeSinceLastAlive = now - lastAliveTime;
+            
+            if (timeSinceLastAlive < aliveThrottleMs) {
+                if (!pendingAlive) {
+                    pendingAlive = true;
+                    setTimeout(function() {
+                        pendingAlive = false;
+                        notifyIsAlive();
+                    }, aliveThrottleMs - timeSinceLastAlive);
+                }
+                return;
+            }
+            
+            lastAliveTime = now;
+            
+            $.ajax({
+                url: @Html.Raw(Json.Serialize(Url.Action("NotifyIsAlive"))),
+                type: 'POST',
+                timeout: 10000
+            });
         }
 
         function roundTime(time) {

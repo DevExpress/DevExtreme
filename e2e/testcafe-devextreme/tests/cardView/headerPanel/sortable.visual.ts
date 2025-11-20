@@ -48,7 +48,7 @@ const getDragCoordinates = async (
       dragOffsetX,
       dragOffsetY,
     } = await getDragCoordinates(item.element, rtlEnabled, 'left');
-    await t.drag(item.element, dragOffsetX, dragOffsetY);
+    await t.drag(item.element, dragOffsetX, dragOffsetY, { speed: 0.5 });
 
     await testScreenshot(
       t,
