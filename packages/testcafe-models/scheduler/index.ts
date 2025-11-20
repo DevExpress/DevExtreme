@@ -233,6 +233,8 @@ export default class Scheduler extends Widget {
 
     await ClientFunction((appointmentData) => {
       (getInstance() as any).showAppointmentPopup(appointmentData);
+    }, {
+      dependencies: { appointment, getInstance },
     })(appointment);
   
   
