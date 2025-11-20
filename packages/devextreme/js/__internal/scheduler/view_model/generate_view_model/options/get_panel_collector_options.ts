@@ -32,7 +32,6 @@ export const getPanelCollectorOptions = (schedulerStore: Scheduler, {
   isAdaptivityEnabled: boolean;
   collectorCSS: CollectorCSS;
   panelName: PanelName;
-  isMonthView?: boolean;
 }): {
   allDayPanelCellSize: RealSize;
   cellSize: RealSize;
