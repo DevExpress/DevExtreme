@@ -101,7 +101,7 @@ function App() {
       treeViewRef.current.instance().unselectAll();
     } else {
       treeViewRef.current.instance().selectItem(e.value);
-    }    
+    }
     setIsTreeBoxOpened(false);
   }, [treeViewRef]);
 
