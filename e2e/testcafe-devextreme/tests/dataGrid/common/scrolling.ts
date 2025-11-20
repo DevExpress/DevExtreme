@@ -1709,8 +1709,11 @@ test('DataGrid - Gray boxes appear when the push method is used to remove rows i
     key: item.id,
   }));
 
+  await t.expect(dataGrid.isReady()).ok();
+
   await dataGrid.apiPush(changes);
   await testScreenshot(t, takeScreenshot, 'T1240079.png', { element: dataGrid.element });
+
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
