@@ -151,6 +151,7 @@ Object.values(FRAMEWORKS).forEach((approach) => {
         if (approach === 'Angular') {
           await waitForAngularLoading();
         }
+
         if (testCodeSource) {
           await execCode(testCodeSource);
         }
@@ -178,10 +179,8 @@ Object.values(FRAMEWORKS).forEach((approach) => {
           await t.expect(results.violations.length === 0).ok(createReport(results.violations));
         } else {
           const consoleMessages = await t.getBrowserConsoleMessages();
-
           const errors = [...consoleMessages.error, ...consoleMessages.warn]
             .filter((e) => !knownWarnings.some((kw) => e.startsWith(kw)));
-
           await t.expect(errors).eql([]);
 
           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

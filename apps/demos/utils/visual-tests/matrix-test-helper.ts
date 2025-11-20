@@ -210,9 +210,6 @@ export function shouldRunTestAtIndex(testIndex) {
 const SKIPPED_TESTS = {
   jQuery: { 
     DataGrid: ['RemoteGrouping'],
-    Charts: [
-      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
-    ],
   },
   Angular: {
     Charts: ['Crosshair'],

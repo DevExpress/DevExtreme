@@ -12,7 +12,7 @@ body {
 
 .dx-theme-material * {
   -webkit-font-smoothing: antialiased !important;
-  
-  /* text-rendering: optimizeLegibility !important; */
-  text-rendering: geometricprecision !important;
+
+  /* stylelint-disable-next-line value-keyword-case */
+  text-rendering: geometricPrecision !important;
 }
