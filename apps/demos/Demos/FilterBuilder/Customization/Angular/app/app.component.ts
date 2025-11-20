@@ -89,7 +89,8 @@ export class AppComponent {
     DxFilterBuilderModule,
   ],
   declarations: [AppComponent],
-  providers: [provideZoneChangeDetection({ eventCoalescing: true })],
+  providers: [
+      // provideZoneChangeDetection({ eventCoalescing: true })],
   bootstrap: [AppComponent],
 })
 

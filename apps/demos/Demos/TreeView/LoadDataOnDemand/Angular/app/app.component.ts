@@ -42,7 +42,7 @@ export class AppComponent {
   ],
   providers: [
     provideHttpClient(withFetch()),
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
+    // provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

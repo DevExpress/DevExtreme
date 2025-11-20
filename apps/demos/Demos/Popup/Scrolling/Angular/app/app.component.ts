@@ -55,7 +55,9 @@ export class AppComponent {
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
-  providers: [provideZoneChangeDetection({ eventCoalescing: true })],
+  providers: [
+      // provideZoneChangeDetection({ eventCoalescing: true })
+  ],
 })
 
 export class AppModule { }

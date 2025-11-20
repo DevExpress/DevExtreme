@@ -55,7 +55,9 @@ export class AppComponent {
     DxChartModule,
   ],
   declarations: [AppComponent],
-  providers: [provideZoneChangeDetection({ eventCoalescing: true })],
+  providers: [
+      // provideZoneChangeDetection({ eventCoalescing: true })
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

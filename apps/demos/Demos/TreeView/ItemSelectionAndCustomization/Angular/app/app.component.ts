@@ -105,7 +105,7 @@ export class AppComponent {
   declarations: [AppComponent, TitlePipe],
   bootstrap: [AppComponent],
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
+    // provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ]
 })
 export class AppModule { }

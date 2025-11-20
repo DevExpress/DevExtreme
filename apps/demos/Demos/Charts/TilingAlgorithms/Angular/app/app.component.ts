@@ -73,7 +73,9 @@ export class AppComponent {
     DxSelectBoxModule,
   ],
   declarations: [AppComponent],
-  providers: [provideZoneChangeDetection({ eventCoalescing: true })],
+  providers: [
+      // provideZoneChangeDetection({ eventCoalescing: true })
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

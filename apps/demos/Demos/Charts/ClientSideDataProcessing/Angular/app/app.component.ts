@@ -76,7 +76,7 @@ export class AppComponent implements AfterViewInit {
   declarations: [AppComponent],
   providers: [
     provideHttpClient(withFetch()),
-    provideZoneChangeDetection({ eventCoalescing: true })
+    // provideZoneChangeDetection({ eventCoalescing: true })
   ],
   bootstrap: [AppComponent],
 })

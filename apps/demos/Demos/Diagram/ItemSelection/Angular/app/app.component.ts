@@ -72,7 +72,9 @@ export class StringifyItemsPipe implements PipeTransform {
     DxDiagramModule,
   ],
   declarations: [AppComponent, StringifyItemsPipe],
-  providers: [provideZoneChangeDetection({ eventCoalescing: true })],
+  providers: [
+      // provideZoneChangeDetection({ eventCoalescing: true })
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

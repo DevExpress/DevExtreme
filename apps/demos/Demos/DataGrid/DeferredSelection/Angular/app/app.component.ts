@@ -88,7 +88,7 @@ export class AppComponent implements AfterViewInit {
   declarations: [AppComponent],
   bootstrap: [AppComponent],
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
+    // provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ]
 })
 export class AppModule { }
