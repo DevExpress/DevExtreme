@@ -251,10 +251,10 @@ npm run lint-staged
 - Checks wrapper regeneration is up-to-date
 - Timeout: 20 minutes
 
-**5. QUnit Tests (`.github/workflows/qunit_tests-renovation.yml`):**
+**5. QUnit Tests (`.github/workflows/qunit_tests.yml`):**
 - Builds with `DEVEXTREME_TEST_CI=true`
 - Runs tests in parallel across multiple constellations
-- Timeout: 60 minutes
+- Timeout: 20 minutes
 
 **6. TestCafe Tests (`.github/workflows/testcafe_tests.yml`):**
 - Accessibility tests across multiple themes

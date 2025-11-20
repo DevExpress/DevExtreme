@@ -58,12 +58,12 @@ interface ParsedArgs {
   retryFailed: boolean;
 }
 
-const TESTCAFE_CONFIG: Partial<TestCafeConfigurationOptions> = {
+const getTestCafeConfig = (cache: boolean): Partial<TestCafeConfigurationOptions> => ({
   hostname: 'localhost',
   port1: 1437,
   port2: 1438,
-  cache: true,
-};
+  cache,
+});
 
 const changeTheme = async (t: TestController, themeName: string): Promise<void> => {
   const changeThemeClientFn = ClientFunction(() => new Promise<void>((resolve) => {
@@ -106,7 +106,7 @@ function getArgs(): ParsedArgs {
       reporter: 'spec-time',
       componentFolder: '',
       file: '*',
-      cache: true,
+      cache: false,
       quarantineMode: false,
       indices: '',
       platform: '',
@@ -123,9 +123,8 @@ async function main() {
   let testCafe: Awaited<ReturnType<typeof createTestCafe>> | null = null;
 
   try {
-    testCafe = await createTestCafe(TESTCAFE_CONFIG);
-
     const args = getArgs();
+    testCafe = await createTestCafe(getTestCafeConfig(args.cache));
 
     const testName = args.test.trim();
     const reporter = typeof args.reporter === 'string' ? args.reporter.trim() : args.reporter;
