@@ -468,7 +468,9 @@ describe('Appointment Popup Form', () => {
       scheduler.showAppointmentPopup();
 
       expect(POM.popup.isMainGroupVisible()).toBe(true);
+      expect(POM.popup.mainGroup?.getAttribute('tabindex')).toBeNull();
       expect(POM.popup.isRecurrenceGroupVisible()).toBe(false);
+      expect(POM.popup.recurrenceGroup?.getAttribute('tabindex')).toBe('-1');
 
       POM.popup.selectRepeatValue('weekly');
       await new Promise(process.nextTick);
@@ -478,13 +480,17 @@ describe('Appointment Popup Form', () => {
       expect(typeof popupHeight).toBe('number');
 
       expect(POM.popup.isMainGroupVisible()).toBe(false);
+      expect(POM.popup.mainGroup?.getAttribute('tabindex')).toBe('-1');
       expect(POM.popup.isRecurrenceGroupVisible()).toBe(true);
+      expect(POM.popup.recurrenceGroup?.getAttribute('tabindex')).toBeNull();
 
       POM.popup.getBackButton().click();
 
       expect(POM.popup.component.option('height')).toBe('auto');
       expect(POM.popup.isMainGroupVisible()).toBe(true);
+      expect(POM.popup.mainGroup?.getAttribute('tabindex')).toBeNull();
       expect(POM.popup.isRecurrenceGroupVisible()).toBe(false);
+      expect(POM.popup.recurrenceGroup?.getAttribute('tabindex')).toBe('-1');
     });
 
     it('check that after opening recurrence appointment current form is main form', async () => {

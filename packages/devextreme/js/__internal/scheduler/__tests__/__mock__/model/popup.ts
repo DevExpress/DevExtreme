@@ -31,16 +31,14 @@ export class PopupModel {
     const group = this.mainGroup;
     if (!group) return false;
     const $group = $(group);
-    return !$group.hasClass('dx-scheduler-form-main-group-hidden')
-      && $group.attr('tabindex') === undefined;
+    return !$group.hasClass('dx-scheduler-form-main-group-hidden');
   }
 
   isRecurrenceGroupVisible(): boolean {
     const group = this.recurrenceGroup;
     if (!group) return false;
     const $group = $(group);
-    return !$group.hasClass('dx-scheduler-form-recurrence-group-hidden')
-      && $group.attr('tabindex') === undefined;
+    return !$group.hasClass('dx-scheduler-form-recurrence-group-hidden');
   }
 
   get subjectIcon(): Element | null {
