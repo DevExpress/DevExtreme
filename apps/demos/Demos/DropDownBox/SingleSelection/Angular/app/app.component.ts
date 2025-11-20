@@ -9,7 +9,7 @@ import { CustomStore } from 'devextreme-angular/common/data';
 import { DxDataGridModule } from 'devextreme-angular';
 import { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { DxTreeViewModule, DxTreeViewComponent, DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
-import { DxDropDownBoxModule, DxDropDownBoxTypes } from 'devextreme-angular/ui/drop-down-box';
+import { DxDropDownBoxModule } from 'devextreme-angular/ui/drop-down-box';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
