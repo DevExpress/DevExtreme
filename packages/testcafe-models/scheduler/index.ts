@@ -223,4 +223,25 @@ export default class Scheduler extends Widget {
   isAllDayPanelCollapsed(): Promise<boolean> {
     return this.workSpace.hasClass(CLASS.allDayCollapsed);
   }
+
+  async openAppointmentPopup(
+    t: TestController,
+    appointment: any,
+    isRecurringAppointment: boolean,
+  ): Promise<AppointmentPopup> {
+    const { getInstance } = this;
+
+    await ClientFunction((appointmentData) => {
+      (getInstance() as any).showAppointmentPopup(appointmentData);
+    }, {
+      dependencies: { appointment, getInstance },
+    })(appointment);
+  
+  
+    if (isRecurringAppointment) {
+      await t.click(Scheduler.getEditRecurrenceDialog().series);
+    }
+
+    return this.appointmentPopup;
+  }
 }
