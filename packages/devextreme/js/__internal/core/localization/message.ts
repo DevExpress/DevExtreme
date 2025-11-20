@@ -1,92 +1,118 @@
-import dependencyInjector from '../../../core/utils/dependency_injector';
-import { extend } from '../../../core/utils/extend';
-import { format as stringFormat } from '../../../core/utils/string';
-import { humanize } from '../../../core/utils/inflector';
-import coreLocalization from './core';
-import { defaultMessages } from './default_messages';
+import { defaultMessages } from '@js/common/core/localization/default_messages';
+import coreLocalization from '@ts/core/localization/core';
+import { injector as dependencyInjector } from '@ts/core/utils/m_dependency_injector';
+import { extend } from '@ts/core/utils/m_extend';
+import { humanize } from '@ts/core/utils/m_inflector';
+import { format as stringFormat } from '@ts/core/utils/m_string';
 
-const baseDictionary = extend(true, {}, defaultMessages);
+export type MessageFormatter = () => string;
+export type MessageDictionary = Record<string, Record<string, string>>;
 
-const getDataByLocale = (localeData, locale) => {
-    return localeData[locale]
+const baseDictionary: MessageDictionary = extend(true, {}, defaultMessages);
+
+const getDataByLocale = (
+  localeData: MessageDictionary,
+  locale: string,
+): Record<string, string> => localeData[locale]
         || (locale?.toLowerCase && Object.entries(localeData).find(
-            ([key,]) => key.toLowerCase() === locale.toLowerCase())?.[1])
+          ([key]) => key.toLowerCase() === locale.toLowerCase(),
+        )?.[1])
         || {};
-};
 
 const newMessages = {};
 
 const messageLocalization = dependencyInjector({
-    engine: function() {
-        return 'base';
-    },
+  engine(): string {
+    return 'base';
+  },
 
-    _dictionary: baseDictionary,
+  _dictionary: baseDictionary,
 
-    load: function(messages) {
-        extend(true, this._dictionary, messages);
-    },
+  load(messages: MessageDictionary): void {
+    extend(true, this._dictionary, messages);
+  },
 
-    _localizablePrefix: '@',
+  _localizablePrefix: '@',
 
-    setup: function(localizablePrefix) {
-        this._localizablePrefix = localizablePrefix;
-    },
+  setup(localizablePrefix: string): void {
+    this._localizablePrefix = localizablePrefix;
+  },
 
-    localizeString: function(text) {
-        const that = this;
-        const regex = new RegExp('(^|[^a-zA-Z_0-9' + that._localizablePrefix + '-]+)(' + that._localizablePrefix + '{1,2})([a-zA-Z_0-9-]+)', 'g');
-        const escapeString = that._localizablePrefix + that._localizablePrefix;
+  localizeString(text: string): string {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const that = this;
+    const regex = new RegExp(`(^|[^a-zA-Z_0-9${that._localizablePrefix}-]+)(${that._localizablePrefix}{1,2})([a-zA-Z_0-9-]+)`, 'g');
+    const escapeString = that._localizablePrefix + that._localizablePrefix;
 
-        return text.replace(regex, (str, prefix, escape, localizationKey) => {
-            const defaultResult = that._localizablePrefix + localizationKey;
-            let result;
+    return text.replace(regex, (_, prefix: string, escape: string, localizationKey: string) => {
+      const defaultResult = that._localizablePrefix + localizationKey;
+      // eslint-disable-next-line @typescript-eslint/init-declarations
+      let result: string | undefined;
 
-            if(escape !== escapeString) {
-                result = that.format(localizationKey);
-            }
+      if (escape !== escapeString) {
+        result = that.format(localizationKey);
+      }
 
-            if(!result) {
-                newMessages[localizationKey] = humanize(localizationKey);
-            }
+      if (!result) {
+        newMessages[localizationKey] = humanize(localizationKey);
+      }
 
-            return prefix + (result || defaultResult);
-        });
-    },
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      return prefix + (result || defaultResult);
+    });
+  },
 
-    getMessagesByLocales: function() {
-        return this._dictionary;
-    },
+  getMessagesByLocales(): MessageDictionary {
+    return this._dictionary as MessageDictionary;
+  },
 
-    getDictionary: function(onlyNew) {
-        if(onlyNew) {
-            return newMessages;
-        }
-        return extend({}, newMessages, this.getMessagesByLocales()[coreLocalization.locale()]);
-    },
-
-    getFormatter: function(key) {
-        return this._getFormatterBase(key) || this._getFormatterBase(key, 'en');
-    },
-
-    _getFormatterBase: function(key, locale) {
-        const message = coreLocalization.getValueByClosestLocale((locale) => getDataByLocale(this._dictionary, locale)[key]);
-
-        if(message) {
-            return function() {
-                const args = arguments.length === 1 && Array.isArray(arguments[0]) ? arguments[0].slice(0) : Array.prototype.slice.call(arguments, 0);
-                args.unshift(message);
-                return stringFormat.apply(this, args);
-            };
-        }
-    },
-
-    format: function(key) {
-        const formatter = this.getFormatter(key);
-        const values = Array.prototype.slice.call(arguments, 1);
-
-        return formatter && formatter.apply(this, values) || '';
+  getDictionary(onlyNew: boolean): Record<string, string> {
+    if (onlyNew) {
+      return newMessages;
     }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return extend({}, newMessages, this.getMessagesByLocales()[coreLocalization.locale()]);
+  },
+
+  getFormatter(key: string): MessageFormatter {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return this._getFormatterBase(key) || this._getFormatterBase(key, 'en');
+  },
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _getFormatterBase(key: string, _locale: string): MessageFormatter | undefined {
+    const message: string | undefined = coreLocalization.getValueByClosestLocale(
+      (locale: string): string | undefined => getDataByLocale(this._dictionary, locale)[key],
+    );
+
+    if (message) {
+      // eslint-disable-next-line func-names
+      return function (): string {
+        // eslint-disable-next-line prefer-rest-params
+        const args = arguments.length === 1 && Array.isArray(arguments[0])
+          // eslint-disable-next-line prefer-rest-params
+          ? arguments[0].slice(0)
+          // eslint-disable-next-line prefer-rest-params
+          : Array.prototype.slice.call(arguments, 0);
+        args.unshift(message);
+
+        // @ts-expect-error
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        return stringFormat.apply(this, args);
+      };
+    }
+
+    return undefined;
+  },
+
+  format(key: string): string {
+    const formatter: MessageFormatter = this.getFormatter(key);
+    // eslint-disable-next-line prefer-rest-params
+    const values = Array.prototype.slice.call(arguments, 1);
+
+    // @ts-expect-error
+    return formatter?.apply(this, values) || '';
+  },
 });
 
 export default messageLocalization;
