@@ -1,6 +1,6 @@
 import gulp from 'gulp';
-
 const { task, src, parallel, series, dest, watch } = gulp;
+
 import { join } from 'path';
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import replace from 'gulp-replace';
