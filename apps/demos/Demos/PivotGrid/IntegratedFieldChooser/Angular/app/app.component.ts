@@ -1,4 +1,4 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
+import { NgModule, Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxSelectBoxModule } from 'devextreme-angular';
@@ -16,8 +16,9 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  styleUrls: [`.${modulePrefix}/app.component.css`],
   selector: 'demo-app',
+  standalone: false,
+  styleUrls: [`.${modulePrefix}/app.component.css`],
   templateUrl: `.${modulePrefix}/app.component.html`,
 })
 export class AppComponent {
@@ -57,6 +58,7 @@ export class AppComponent {
     DxSelectBoxModule,
   ],
   declarations: [AppComponent],
+  providers: [provideZoneChangeDetection({ eventCoalescing: true })],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

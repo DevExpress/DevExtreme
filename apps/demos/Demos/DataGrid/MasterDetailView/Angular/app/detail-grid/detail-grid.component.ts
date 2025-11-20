@@ -1,4 +1,4 @@
-import { Component, Input, AfterViewInit } from '@angular/core';
+import { Component, Input, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { DataSource, ArrayStore } from 'devextreme-angular/common/data';
 import { Service, Task } from '../app.service';
 
@@ -9,6 +9,7 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
+  standalone: false,
   selector: 'detail-grid',
   templateUrl: `.${modulePrefix && (`${modulePrefix}/detail-grid`)}/detail-grid.component.html`,
   providers: [Service],
@@ -20,7 +21,7 @@ export class DetailGridComponent implements AfterViewInit {
 
   tasks: Task[];
 
-  constructor(private service: Service) {
+  constructor(private service: Service, private cdr: ChangeDetectorRef) {
     this.tasks = service.getTasks();
   }
 
@@ -32,6 +33,8 @@ export class DetailGridComponent implements AfterViewInit {
       }),
       filter: ['EmployeeID', '=', this.key],
     });
+    
+    this.cdr.detectChanges();
   }
 
   completedValue(rowData) {

@@ -21,6 +21,7 @@ const isProductItem = (item: Product | ProductItem): item is ProductItem =>
   !('items' in item);
 
 @Component({
+  standalone: false,
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],

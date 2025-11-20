@@ -1,5 +1,5 @@
 import {
-  NgModule, Component, ViewChild, enableProdMode, Pipe, PipeTransform,
+  NgModule, Component, ViewChild, enableProdMode, Pipe, PipeTransform, provideZoneChangeDetection,
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
@@ -9,7 +9,7 @@ import {
   Service, MovieData, TheatreData, Data,
 } from './app.service';
 
-@Pipe({ name: 'apply' })
+@Pipe({ name: 'apply', standalone: false })
 export class ApplyPipe<TArgs, TReturn> implements PipeTransform {
   transform(func: ((...args: TArgs[]) => TReturn), ...args: TArgs[]): TReturn { return func(...args); }
 }
@@ -26,6 +26,7 @@ if (window && window.config?.packageConfigPaths) {
 
 @Component({
   selector: 'demo-app',
+  standalone: false,
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
@@ -121,6 +122,7 @@ export class AppComponent {
   ],
   declarations: [AppComponent, ApplyPipe],
   bootstrap: [AppComponent],
+  providers: [provideZoneChangeDetection({ eventCoalescing: true })],
 })
 export class AppModule { }
 

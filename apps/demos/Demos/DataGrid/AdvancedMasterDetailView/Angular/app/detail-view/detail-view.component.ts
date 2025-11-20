@@ -1,4 +1,4 @@
-import { Component, Input, AfterViewInit } from '@angular/core';
+import {Component, Input, AfterViewInit, ChangeDetectorRef} from '@angular/core';
 import { DataSource } from 'devextreme-angular/common/data';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import { DxFormTypes } from 'devextreme-angular/ui/form';
@@ -11,6 +11,7 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
+  standalone: false,
   selector: 'detail-view',
   templateUrl: `.${modulePrefix && (`${modulePrefix}/detail-view`)}/detail-view.component.html`,
   styleUrls: [`.${modulePrefix && (`${modulePrefix}/detail-view`)}/detail-view.component.css`],
@@ -29,7 +30,7 @@ export class DetailViewComponent implements AfterViewInit {
 
   orderHistoryData: DataSource;
 
-  constructor() {
+  constructor(private cdr: ChangeDetectorRef) {
     this.url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridAdvancedMasterDetailView';
   }
 
@@ -42,6 +43,8 @@ export class DetailViewComponent implements AfterViewInit {
         onLoaded: (items) => this.setDefaultProduct(items),
       }),
     });
+
+    this.cdr.detectChanges();
   }
 
   setDefaultProduct(items) {
@@ -50,6 +53,7 @@ export class DetailViewComponent implements AfterViewInit {
     if (firstItem && this.productIdBySupplier === undefined) {
       this.productIdBySupplier = firstItem.ProductID;
     }
+    this.cdr.detectChanges();
   }
 
   handleValueChange(e: DxSelectBoxTypes.ValueChangedEvent) {

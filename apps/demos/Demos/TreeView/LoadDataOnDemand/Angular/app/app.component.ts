@@ -1,7 +1,7 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
+import { NgModule, Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { DxTreeViewComponent, DxTreeViewModule } from 'devextreme-angular';
 
@@ -16,6 +16,7 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
+  standalone: false,
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   providers: [],
@@ -28,7 +29,7 @@ export class AppComponent {
       const parentId = parent ? parent.itemData.id : '';
 
       return lastValueFrom(
-        http.get(`https://js.devexpress.com/Demos/NetCore/api/TreeViewData?parentId=${parentId}`),
+          http.get(`https://js.devexpress.com/Demos/NetCore/api/TreeViewData?parentId=${parentId}`),
       );
     };
   }
@@ -38,7 +39,10 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxTreeViewModule,
-    HttpClientModule,
+  ],
+  providers: [
+    provideHttpClient(withFetch()),
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

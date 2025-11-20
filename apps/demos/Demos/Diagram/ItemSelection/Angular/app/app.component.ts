@@ -1,5 +1,5 @@
 import {
-  NgModule, Component, Pipe, PipeTransform, enableProdMode,
+  NgModule, Component, Pipe, PipeTransform, enableProdMode, provideZoneChangeDetection,
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
@@ -20,6 +20,7 @@ if (window && window.config?.packageConfigPaths) {
 
 @Component({
   selector: 'demo-app',
+  standalone: false,
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
@@ -55,7 +56,7 @@ export class AppComponent {
   }
 }
 
-@Pipe({ name: 'stringifyItems' })
+@Pipe({ name: 'stringifyItems', standalone: false })
 export class StringifyItemsPipe implements PipeTransform {
   transform(items: DxDiagramTypes.Item[], textExpression: string): string {
     return items
@@ -71,6 +72,7 @@ export class StringifyItemsPipe implements PipeTransform {
     DxDiagramModule,
   ],
   declarations: [AppComponent, StringifyItemsPipe],
+  providers: [provideZoneChangeDetection({ eventCoalescing: true })],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

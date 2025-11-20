@@ -1,5 +1,10 @@
 import {
-  NgModule, Component, ViewChild, AfterViewInit, enableProdMode,
+  NgModule,
+  Component,
+  ViewChild,
+  AfterViewInit,
+  enableProdMode,
+  provideZoneChangeDetection,
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
@@ -17,6 +22,7 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
+  standalone: false,
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
@@ -81,6 +87,9 @@ export class AppComponent implements AfterViewInit {
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
+  ]
 })
 export class AppModule { }
 

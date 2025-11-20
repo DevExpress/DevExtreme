@@ -17,6 +17,7 @@ if (window && window.config?.packageConfigPaths) {
 const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
 
 @Component({
+  standalone: false,
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
 })

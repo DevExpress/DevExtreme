@@ -12,7 +12,7 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-@Pipe({ name: 'demodate' })
+@Pipe({ name: 'demodate', standalone: true })
 export class DemoDatePipe implements PipeTransform {
   transform(date: number) {
     return new Date(date);
@@ -30,6 +30,7 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
+  standalone: false,
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
@@ -44,8 +45,9 @@ export class AppComponent {
     DxCheckBoxModule,
     DxFileUploaderModule,
     DxSelectBoxModule,
+    DemoDatePipe,
   ],
-  declarations: [AppComponent, DemoDatePipe],
+  declarations: [AppComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

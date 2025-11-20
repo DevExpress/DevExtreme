@@ -25,6 +25,7 @@ type AIMessage = (OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionS
 };
 
 @Component({
+  standalone: false,
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],

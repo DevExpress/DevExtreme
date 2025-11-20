@@ -15,7 +15,8 @@
   <dxi-column dataField="BirthDate" dataType="date"></dxi-column>
   <dxi-column dataField="HireDate" dataType="date"></dxi-column>
 </dx-data-grid>
-<div id="employeeInfo" *ngIf="grid.selectedRowKeys.length">
+@if (grid.selectedRowKeys.length) {
+<div id="employeeInfo">
   <img
     class="employeePhoto"
     [src]="grid.instance.getSelectedRowsData()[0].Picture"
@@ -25,3 +26,4 @@
     grid.instance.getSelectedRowsData()[0].Notes
   }}</p>
 </div>
+}

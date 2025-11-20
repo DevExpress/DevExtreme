@@ -1,5 +1,5 @@
 import {
-  NgModule, Component, Pipe, PipeTransform, enableProdMode, ViewChild,
+  NgModule, Component, Pipe, PipeTransform, enableProdMode, ViewChild, provideZoneChangeDetection,
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
@@ -27,6 +27,7 @@ if (window && window.config?.packageConfigPaths) {
 
 @Component({
   selector: 'demo-app',
+  standalone: false,
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
@@ -103,6 +104,9 @@ export class AppComponent {
   ],
   declarations: [AppComponent, TitlePipe],
   bootstrap: [AppComponent],
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
+  ]
 })
 export class AppModule { }
 

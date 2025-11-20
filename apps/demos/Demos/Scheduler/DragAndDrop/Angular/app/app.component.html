@@ -5,6 +5,7 @@
     [group]="draggingGroupName"
     (onDragStart)="onListDragStart($event)"
   >
+    @for (task of tasks; track task.id) {
     <dx-draggable
       class="item dx-card"
       [clone]="true"
@@ -12,10 +13,10 @@
       [data]="task"
       (onDragStart)="onItemDragStart($event)"
       (onDragEnd)="onItemDragEnd($event)"
-      *ngFor="let task of tasks"
     >
       {{ task.text }}
     </dx-draggable>
+    }
   </dx-draggable>
 </dx-scroll-view>
 

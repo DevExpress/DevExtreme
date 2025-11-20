@@ -10,6 +10,7 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
+  standalone: false,
   selector: 'guests-form',
   templateUrl: `.${modulePrefix}/guests-form/guests-form.component.html`,
 })
