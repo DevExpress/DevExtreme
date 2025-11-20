@@ -57,26 +57,8 @@
 
 <script>
     $(function() {
-        var ROOT_URL = "@Url.Content("~/")";
-
-        $.ajaxSetup({
-            timeout: 30000
-        });
-
-        var serverLog = function(message) {
-            console.log(message);
-            
-            if(@Html.Raw(Json.Serialize(Model.IsContinuousIntegration))) {
-                $.post(@Html.Raw(Json.Serialize(Url.Action("LogMiscError"))), { 
-                    msg: "[JS] " + message,
-                    timeout: 5000
-                }).fail(function() { });
-            }
-        };
-
         var TEST_TIMEOUT_SECONDS = 45,
             TEST_TIMEOUT = TEST_TIMEOUT_SECONDS * 1000,
-            WORKER_STUCK_TIMEOUT = 60 * 1000,
             WORKER_NAME_PREFIX = "workerFrame",
             busyCount = 0,
             suitesDescription = {
@@ -85,9 +67,7 @@
                 version: "@(Model.Version)"
             },
             suitesInProgress = [ ],
-            workerLastActivity = [ ],
             urls = @Html.Raw(Json.Serialize(Model.Suites)),
-            originalUrls = urls.slice(0),
             noTryCatch = @Html.Raw(Json.Serialize(Model.NoTryCatch)),
             noGlobals = @Html.Raw(Json.Serialize(Model.NoGlobals)),
             noTimers = @Html.Raw(Json.Serialize(Model.NoTimers)),
@@ -157,8 +137,6 @@
                 frame.style.display = "block";
                 frame.setAttribute("src", @Html.Raw(Json.Serialize(Url.Action("DisplayResults"))));
             }).fail(function(jqXHR, textStatus, errorThrown) {
-                serverLog('SaveResults FAILED: ' + textStatus + ' ' + errorThrown);
-
                 notifyDeviceTestManager("QUnit.saveResults.failed");
                 removeWorkers();
             });
@@ -168,7 +146,6 @@
 
         var nextUrl = function(i) {
             if(suitesInProgress[i] !== null && suitesInProgress[i] !== undefined) {
-                serverLog('ERROR: nextUrl called but worker ' + i + ' is still busy with ' + suitesInProgress[i].name + '! Skipping.');
                 return;
             }
             
@@ -185,9 +162,7 @@
 
             notifyDeviceTestManager("QUnit.nextUrl");
 
-            var that = this,
-                _i = i,
-                urlInfo = urls.shift(),
+            var urlInfo = urls.shift(),
                 worker = workerByIndex(i),
                 additionalParams = { };
 
@@ -221,7 +196,6 @@
 
                 finalize: function(success) {
                     if(this.finalized) {
-                        serverLog('Suite already finalized: ' + this.name + ', skipping duplicate finalize');
                         return;
                     }
                     
@@ -242,7 +216,6 @@
             worker.name = WORKER_NAME_PREFIX + i;
             busyCount++;
             worker.location = urlInfo.Url + "?" + $.param(additionalParams);
-            workerLastActivity[i] = Date.now();
         };
 
         var workers = [ ];
@@ -308,7 +281,6 @@
             var i = indexFromWorkerName(worker),
                 testSuite = suitesInProgress[i];
 
-            workerLastActivity[i] = Date.now();
             notifyIsAlive();
 
             var testCase = {
@@ -411,13 +383,10 @@
         };
 
         window.RUNNER_ON_TEST_DONE = function(worker, qunitData) {
-
             var i = indexFromWorkerName(worker),
                 testSuite = suitesInProgress[i],
                 testCases,
                 testCase;
-
-            workerLastActivity[i] = Date.now();
 
             notifyDeviceTestManager("QUnit.testCaseDone");
             notifyIsAlive();
@@ -468,9 +437,7 @@
                 suite.finalize(passed, qunitData.total);
 
                 notifySuiteFinalized(suiteName, passed, qunitData.runtime, function() {
-                    setTimeout(function() {
-                        nextUrl.call(window, i);
-                    }, 0);
+                    nextUrl.call(window, i);
                 });
             }
         };
@@ -524,46 +491,27 @@
             activeFinalizationRequests++;
             
             var callbackCalled = false;
-            var safeCallback = function(source) {
-                if(callbackCalled) {
-                    return;
-                }
+            var safeCallback = function() {
+                if(callbackCalled) return;
                 callbackCalled = true;
-                
-                if(callback) {
-                    try {
-                        callback();
-                    } catch(e) {
-                        serverLog('ERROR: Callback exception for ' + name + ': ' + e.message);
-                    }
-                }
+                if(callback) callback();
             };
             
-            var ajaxTimeout = farmMode ? 60000 : 15000;
-            var safetyTimeout = farmMode ? 90000 : 20000;
-            
             var safetyTimer = setTimeout(function() {
-                serverLog('WARNING: AJAX timeout for ' + name + ' after ' + safetyTimeout + 'ms');
                 activeFinalizationRequests--;
-                safeCallback('safety-timeout');
+                safeCallback();
                 processFinalizationQueue();
-            }, safetyTimeout);
+            }, 20000);
             
-            var ajaxRequest = $.ajax({
+            $.ajax({
                 url: @Html.Raw(Json.Serialize(Url.Action("NotifySuiteFinalized"))),
                 type: 'POST',
                 data: { name: name, passed: passed, runtime: runtime },
-                timeout: ajaxTimeout
-            });
-            
-            ajaxRequest.fail(function(jqXHR, textStatus, errorThrown) {
-                serverLog('NotifySuiteFinalized FAILED for ' + name + ': ' + textStatus + ', error=' + errorThrown);
-            });
-            
-            ajaxRequest.always(function(dataOrJqXHR, textStatus) {
+                timeout: 10000
+            }).always(function() {
                 clearTimeout(safetyTimer);
                 activeFinalizationRequests--;
-                safeCallback('ajax-always');
+                safeCallback();
                 processFinalizationQueue();
             });
         }
@@ -591,19 +539,15 @@
             $.ajax({
                 url: @Html.Raw(Json.Serialize(Url.Action("NotifyIsAlive"))),
                 type: 'POST',
-                timeout: farmMode ? 30000 : 10000
+                timeout: 10000
             });
         }
-
-
 
         function roundTime(time) {
             return +(time.toFixed(3));
         }
 
         createWorkers();
-        
-        
         runFirstBatch();
     });
 </script>
