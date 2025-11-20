@@ -1,7 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import DataGrid, {
-  Column, Paging, Grouping, Ai,
-} from 'devextreme-react/data-grid';
+import DataGrid, { Column, Paging, Grouping } from 'devextreme-react/data-grid';
 import Popup, { Position } from 'devextreme-react/popup';
 import { vehicles } from './data.js';
 import { aiIntegration } from './service.js';
@@ -9,6 +7,12 @@ import Trademark from './Trademark.js';
 import Category from './Category.js';
 import LicenseInfo from './LicenseInfo.js';
 
+const aiConfig = {
+  mode: 'auto',
+  noDataText: 'No data',
+  prompt:
+    'Identify the country where this vehicle model is originally manufactured or developed, based on its brand, model, and specifications.',
+};
 const onAIColumnRequestCreating = (e) => {
   e.data = e.data.map((item) => ({
     ID: item.ID,
@@ -82,13 +86,8 @@ export default function App() {
           fixed={true}
           fixedPosition="right"
           cssClass="ai__cell"
-        >
-          <Ai
-            mode="auto"
-            noDataText="No data"
-            prompt="Identify the country where this vehicle model is originally manufactured or developed, based on its brand, model, and specifications."
-          />
-        </Column>
+          ai={aiConfig}
+        ></Column>
       </DataGrid>
       <Popup
         width={360}

@@ -1,13 +1,17 @@
 import React from 'react';
-import TreeList, {
-  Column, Scrolling, Paging, Ai,
-} from 'devextreme-react/tree-list';
+import TreeList, { Column, Scrolling, Paging } from 'devextreme-react/tree-list';
 import { employees } from './data.js';
 import { aiIntegration } from './service.js';
 import Employee from './Employee.js';
 import Status from './Status.js';
 import Email from './Email.js';
 
+const aiConfig = {
+  mode: 'auto',
+  noDataText: 'No data',
+  prompt:
+    "Identify department for each employee. It should be one of the following department types:  'Management', 'Human Resources', 'IT', 'Shipping', 'Support', 'Sales',  'Engineering'. Use 'Engineering' by default.",
+};
 const onAIColumnRequestCreating = (e) => {
   e.data = e.data.map((item) => ({
     ID: item.ID,
@@ -70,13 +74,8 @@ export default function App() {
         fixed={true}
         fixedPosition="right"
         cssClass="ai__cell"
-      >
-        <Ai
-          mode="auto"
-          noDataText="No data"
-          prompt="Identify department for each employee. It should be one of the following department types:  'Management', 'Human Resources', 'IT', 'Shipping', 'Support', 'Sales',  'Engineering'. Use 'Engineering' by default."
-        />
-      </Column>
+        ai={aiConfig}
+      ></Column>
     </TreeList>
   );
 }
