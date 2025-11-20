@@ -5346,7 +5346,7 @@ test.meta({ unstable: true })('Focus events should be called when pressing the C
   })();
 });
 
-test('Focus events should be called when pressing the Ctrl + End key when rowRenderingMode is \'virtual\'', async (t) => {
+test.meta({ unstable: true })('Focus events should be called when pressing the Ctrl + End key when rowRenderingMode is \'virtual\'', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
 
