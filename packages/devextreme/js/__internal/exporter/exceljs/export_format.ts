@@ -68,7 +68,7 @@ function _hasArabicDigits(text) {
 
 function _convertDateFormat(format) {
   const formattedValue = (dateLocalization.format(new Date(2009, 8, 8, 6, 5, 4), format) || '').toString();
-  let result = getFormat((value) => dateLocalization.format(value, format));
+  let result = getFormat((value) => dateLocalization.format(value, format) as string);
 
   if (result) {
     result = _convertDateFormatToOpenXml(result);

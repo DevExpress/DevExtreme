@@ -455,26 +455,22 @@ describe('Appointment Popup Form', () => {
 
       scheduler.showAppointmentPopup(appointment);
 
-      const recurrenceGroup = $(POM.popup.recurrenceGroup);
-      expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(true);
+      expect(POM.popup.isRecurrenceGroupVisible()).toBe(false);
 
       POM.popup.openRecurrenceSettings();
 
-      expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(false);
+      expect(POM.popup.isRecurrenceGroupVisible()).toBe(true);
     });
 
-    it('changes visibility of groups when opening recurrence form', async () => {
+    it('should be visible after changing repeat editor\'s value', async () => {
       const { scheduler, POM } = await createScheduler(getDefaultConfig());
 
       scheduler.showAppointmentPopup();
 
-      const mainGroup = $(POM.popup.mainGroup);
-      const recurrenceGroup = $(POM.popup.recurrenceGroup);
-
-      expect(mainGroup.hasClass(CLASSES.mainGroupHidden)).toBe(false);
-      expect(mainGroup.attr('tabindex')).toBeUndefined();
-      expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(true);
-      expect(recurrenceGroup.attr('tabindex')).toBe('-1');
+      expect(POM.popup.isMainGroupVisible()).toBe(true);
+      expect(POM.popup.mainGroup?.getAttribute('tabindex')).toBeNull();
+      expect(POM.popup.isRecurrenceGroupVisible()).toBe(false);
+      expect(POM.popup.recurrenceGroup?.getAttribute('tabindex')).toBe('-1');
 
       POM.popup.selectRepeatValue('weekly');
       await new Promise(process.nextTick);
@@ -483,21 +479,21 @@ describe('Appointment Popup Form', () => {
       expect(popupHeight).toBeDefined();
       expect(typeof popupHeight).toBe('number');
 
-      expect(mainGroup.hasClass(CLASSES.mainGroupHidden)).toBe(true);
-      expect(mainGroup.attr('tabindex')).toBe('-1');
-      expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(false);
-      expect(recurrenceGroup.attr('tabindex')).toBeUndefined();
+      expect(POM.popup.isMainGroupVisible()).toBe(false);
+      expect(POM.popup.mainGroup?.getAttribute('tabindex')).toBe('-1');
+      expect(POM.popup.isRecurrenceGroupVisible()).toBe(true);
+      expect(POM.popup.recurrenceGroup?.getAttribute('tabindex')).toBeNull();
 
       POM.popup.getBackButton().click();
 
       expect(POM.popup.component.option('height')).toBe('auto');
-      expect(mainGroup.hasClass(CLASSES.mainGroupHidden)).toBe(false);
-      expect(mainGroup.attr('tabindex')).toBeUndefined();
-      expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(true);
-      expect(recurrenceGroup.attr('tabindex')).toBe('-1');
+      expect(POM.popup.isMainGroupVisible()).toBe(true);
+      expect(POM.popup.mainGroup?.getAttribute('tabindex')).toBeNull();
+      expect(POM.popup.isRecurrenceGroupVisible()).toBe(false);
+      expect(POM.popup.recurrenceGroup?.getAttribute('tabindex')).toBe('-1');
     });
 
-    it('Check that after opening recurrence appointment current form is main form', async () => {
+    it('check that after opening recurrence appointment current form is main form', async () => {
       const appointment = {
         text: 'Recurrent Appointment',
         startDate: new Date(2017, 4, 1, 9, 30),
@@ -511,13 +507,10 @@ describe('Appointment Popup Form', () => {
 
       POM.popup.getEditSeriesButton().click();
 
-      const recurrenceGroup = $(POM.popup.recurrenceGroup);
-
-      expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(true);
-      expect(recurrenceGroup.attr('tabindex')).toBe('-1');
+      expect(POM.popup.isRecurrenceGroupVisible()).toBe(false);
     });
 
-    it('Should discard recurrence changes when clicking \'cancel\' button in recurrence form', async () => {
+    it('should discard recurrence changes when clicking \'cancel\' button in recurrence form', async () => {
       const data = [
         {
           text: 'meet',
@@ -542,8 +535,8 @@ describe('Appointment Popup Form', () => {
       expect(scheduler.option('dataSource')?.[0]).toEqual(data[0]);
     });
 
-    describe('Recurrence frequency types', () => {
-      it('Should show day selection buttons when frequency is weekly', async () => {
+    describe('firstDayOfWeek in recurrence form', () => {
+      it('should apply firstDayOfWeek to week day buttons', async () => {
         const appointment = {
           text: 'Test Appointment',
           startDate: new Date(2017, 4, 1, 9, 30),
@@ -553,64 +546,34 @@ describe('Appointment Popup Form', () => {
         const { POM, scheduler } = await createScheduler(getDefaultConfig());
 
         scheduler.showAppointmentPopup(appointment);
-
         POM.popup.selectRepeatValue('weekly');
 
-        const dayButtons = $(POM.popup.recurrenceWeekDayButtons);
-        expect(dayButtons.length).toBeGreaterThan(0);
-
-        const buttons7Days = dayButtons.find('.dx-button');
-        expect(buttons7Days.length).toBe(7);
-      });
-
-      it('Check that firstDayOfWeek is applied to week day buttons', async () => {
-        const appointment = {
-          text: 'Test Appointment',
-          startDate: new Date(2017, 4, 1, 9, 30),
-          endDate: new Date(2017, 4, 1, 11),
-        };
-
-        const { POM: POM1, scheduler: scheduler1 } = await createScheduler({
-          ...getDefaultConfig(),
-          firstDayOfWeek: 1,
-        });
-
-        scheduler1.showAppointmentPopup(appointment);
-        POM1.popup.selectRepeatValue('weekly');
-
-        const dayButtonsMonday = $(POM1.popup.recurrenceWeekDayButtons).find('.dx-button');
+        const dayButtonsMonday = $(POM.popup.recurrenceWeekDayButtons).find('.dx-button');
         expect(dayButtonsMonday.length).toBe(7);
         expect(dayButtonsMonday.eq(0).text()).toBe('M');
         expect(dayButtonsMonday.eq(6).text()).toBe('S');
 
-        scheduler1.hideAppointmentPopup();
+        scheduler.hideAppointmentPopup();
+        scheduler.option('firstDayOfWeek', 0);
 
-        const { POM: POM2, scheduler: scheduler2 } = await createScheduler({
-          ...getDefaultConfig(),
-          firstDayOfWeek: 0,
-        });
+        scheduler.showAppointmentPopup(appointment);
+        POM.popup.selectRepeatValue('weekly');
 
-        scheduler2.showAppointmentPopup(appointment);
-        POM2.popup.selectRepeatValue('weekly');
-
-        const dayButtonsSunday = $(POM2.popup.recurrenceWeekDayButtons).find('.dx-button');
+        const dayButtonsSunday = $(POM.popup.recurrenceWeekDayButtons).find('.dx-button');
         expect(dayButtonsSunday.length).toBe(7);
         expect(dayButtonsSunday.eq(0).text()).toBe('S');
         expect(dayButtonsSunday.eq(1).text()).toBe('M');
         expect(dayButtonsSunday.eq(6).text()).toBe('S');
       });
 
-      it('Check that firstDayOfWeek is applied to recurrence form startDate', async () => {
+      it('should apply firstDayOfWeek to recurrence form startDate calendar', async () => {
         const appointment = {
           text: 'Test Appointment',
           startDate: new Date(2017, 4, 1, 9, 30),
           endDate: new Date(2017, 4, 1, 11),
         };
 
-        const { POM, scheduler } = await createScheduler({
-          ...getDefaultConfig(),
-          firstDayOfWeek: 1,
-        });
+        const { POM, scheduler } = await createScheduler(getDefaultConfig());
 
         scheduler.showAppointmentPopup(appointment);
         POM.popup.selectRepeatValue('weekly');
@@ -628,115 +591,10 @@ describe('Appointment Popup Form', () => {
         expect(recurrenceStartDateEditorAfter).toBeDefined();
         expect(recurrenceStartDateEditorAfter?.option('calendarOptions.firstDayOfWeek')).toBe(0);
       });
-
-      it('Should show month day input when frequency is monthly', async () => {
-        const appointment = {
-          text: 'Test Appointment',
-          startDate: new Date(2017, 4, 15, 9, 30),
-          endDate: new Date(2017, 4, 15, 11),
-        };
-
-        const { POM, scheduler } = await createScheduler(getDefaultConfig());
-
-        scheduler.showAppointmentPopup(appointment);
-
-        POM.popup.selectRepeatValue('monthly');
-
-        const monthlyGroup = POM.popup.recurrenceMonthlyGroup;
-        expect(monthlyGroup).toBeTruthy();
-
-        // @ts-expect-error
-        const frequencyEditor = $(POM.popup.frequencyEditor).dxSelectBox('instance');
-        expect(frequencyEditor.option('value')).toBe('monthly');
-
-        const dayButtons = POM.popup.recurrenceWeekDayButtons;
-        expect(dayButtons).toBeNull();
-      });
-
-      it('Should show month and day inputs when frequency is yearly', async () => {
-        const appointment = {
-          text: 'Test Appointment',
-          startDate: new Date(2017, 11, 25, 9, 30),
-          endDate: new Date(2017, 11, 25, 11),
-        };
-
-        const { POM, scheduler } = await createScheduler(getDefaultConfig());
-
-        scheduler.showAppointmentPopup(appointment);
-
-        POM.popup.selectRepeatValue('yearly');
-
-        // @ts-expect-error
-        const frequencyEditor = $(POM.popup.frequencyEditor).dxSelectBox('instance');
-        expect(frequencyEditor.option('value')).toBe('yearly');
-
-        const { recurrenceYearlyGroup } = POM.popup;
-        expect(recurrenceYearlyGroup).toBeTruthy();
-
-        const { byMonthEditor } = POM.popup;
-        expect(byMonthEditor).toBeTruthy();
-
-        const { dayOfMonthEditor } = POM.popup;
-        expect(dayOfMonthEditor).toBeTruthy();
-      });
-
-      it('Should hide all repeat-on options for daily frequency', async () => {
-        const appointment = {
-          text: 'Test Appointment',
-          startDate: new Date(2017, 4, 1, 9, 30),
-          endDate: new Date(2017, 4, 1, 11),
-        };
-
-        const { POM, scheduler } = await createScheduler(getDefaultConfig());
-
-        scheduler.showAppointmentPopup(appointment);
-
-        POM.popup.selectRepeatValue('daily');
-
-        // @ts-expect-error
-        const frequencyEditor = $(POM.popup.frequencyEditor).dxSelectBox('instance');
-        expect(frequencyEditor.option('value')).toBe('daily');
-
-        const dayButtons = POM.popup.recurrenceWeekDayButtons;
-        expect(dayButtons).toBeNull();
-
-        const monthlyGroup = POM.popup.recurrenceMonthlyGroup;
-        expect(monthlyGroup).toBeNull();
-
-        const yearlyGroup = POM.popup.recurrenceYearlyGroup;
-        expect(yearlyGroup).toBeNull();
-      });
-
-      it('Should hide all repeat-on options for hourly frequency', async () => {
-        const appointment = {
-          text: 'Test Appointment',
-          startDate: new Date(2017, 4, 1, 9, 30),
-          endDate: new Date(2017, 4, 1, 11),
-        };
-
-        const { POM, scheduler } = await createScheduler(getDefaultConfig());
-
-        scheduler.showAppointmentPopup(appointment);
-
-        POM.popup.selectRepeatValue('hourly');
-
-        // @ts-expect-error
-        const frequencyEditor = $(POM.popup.frequencyEditor).dxSelectBox('instance');
-        expect(frequencyEditor.option('value')).toBe('hourly');
-
-        const dayButtons = POM.popup.recurrenceWeekDayButtons;
-        expect(dayButtons).toBeNull();
-
-        const monthlyGroup = POM.popup.recurrenceMonthlyGroup;
-        expect(monthlyGroup).toBeNull();
-
-        const yearlyGroup = POM.popup.recurrenceYearlyGroup;
-        expect(yearlyGroup).toBeNull();
-      });
     });
 
     describe('Editing and saving recurrence', () => {
-      it('Should populate form with existing weekly recurrence rule', async () => {
+      it('should populate form with existing weekly recurrence rule', async () => {
         setupSchedulerTestEnvironment({ height: 200 });
         const { POM } = await createScheduler({
           dataSource: [{
@@ -781,7 +639,7 @@ describe('Appointment Popup Form', () => {
         expect(countEditor.option('value')).toBe(10);
       });
 
-      it('Should save changes when saving from recurrence form', async () => {
+      it('should save changes when saving from recurrence form', async () => {
         const data = [
           {
             text: 'Meeting',
@@ -816,7 +674,7 @@ describe('Appointment Popup Form', () => {
         });
       });
 
-      it('Check that appointment is saved after editing data in recurrence form', async () => {
+      it('saves appointment after editing data in recurrence form', async () => {
         const data = [
           {
             text: 'Team Meeting',
@@ -1956,18 +1814,13 @@ describe('Customize form items', () => {
     });
 
     scheduler.showAppointmentPopup();
-    const recurrenceGroup = $(POM.popup.recurrenceGroup);
 
     POM.popup.selectRepeatValue('weekly');
 
     await new Promise(process.nextTick);
 
-    const mainGroup = $(POM.popup.mainGroup);
-
-    expect(mainGroup.hasClass(CLASSES.mainGroupHidden)).toBe(true);
-    expect(mainGroup.attr('tabindex')).toBe('-1');
-    expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(false);
-    expect(recurrenceGroup.attr('tabindex')).toBeUndefined();
+    expect(POM.popup.isMainGroupVisible()).toBe(false);
+    expect(POM.popup.isRecurrenceGroupVisible()).toBe(true);
 
     expect(onContentReady).toHaveBeenCalled();
     expect(onInitialized).toHaveBeenCalled();

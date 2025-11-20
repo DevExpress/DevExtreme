@@ -12,7 +12,7 @@ fixture.disablePageReloads`SelectBox`
 const purePressKey = async (t, key): Promise<void> => {
   await t
     .pressKey(key)
-    .wait(500);
+    .wait(100);
 };
 
 test('Click on action button should correctly work with SelectBox containing the field template (T811890)', async (t) => {

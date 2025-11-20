@@ -1,1 +1,1 @@
-export * from '../../common/core/localization/ldml/date.parser';
+export * from '../../__internal/core/localization/ldml/date.parser';

@@ -27,6 +27,20 @@ export class PopupModel {
     return this.element.querySelector('.dx-scheduler-form-recurrence-group');
   }
 
+  isMainGroupVisible(): boolean {
+    const group = this.mainGroup;
+    if (!group) return false;
+    const $group = $(group);
+    return !$group.hasClass('dx-scheduler-form-main-group-hidden');
+  }
+
+  isRecurrenceGroupVisible(): boolean {
+    const group = this.recurrenceGroup;
+    if (!group) return false;
+    const $group = $(group);
+    return !$group.hasClass('dx-scheduler-form-recurrence-group-hidden');
+  }
+
   get subjectIcon(): Element | null {
     return this.element.querySelector('.dx-scheduler-form-subject-group .dx-scheduler-form-icon .dx-icon');
   }
