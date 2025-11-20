@@ -1,6 +1,7 @@
 import type { Orientation } from '@js/common';
 import type { Properties } from '@js/ui/scheduler';
 
+import type { ViewType } from '../../../types';
 import { getAbstractSizeByViewOrientation } from '../steps/add_geometry/swap_by_view_orientation';
 import type { RealSize } from '../steps/add_geometry/types';
 import { getDefaultAppointmentSize } from './get_min_appointment_size';
@@ -12,6 +13,7 @@ interface Options {
   viewOrientation: Orientation;
   isTimelineView: boolean;
   isAdaptivityEnabled: boolean;
+  viewType?: ViewType;
 }
 
 const ADAPTIVITY_MIN_APPOINTMENT_COUNT = 0;
@@ -25,6 +27,7 @@ export const getMaxLevel = ({
   viewOrientation,
   isTimelineView,
   isAdaptivityEnabled,
+  viewType,
 }: Options): number => {
   switch (maxAppointmentsPerCell) {
     case 'auto': {
@@ -42,6 +45,7 @@ export const getMaxLevel = ({
         isTimelineView,
         isAdaptivityEnabled,
         viewOrientation,
+        viewType,
       });
       const minAbstractSize = getAbstractSizeByViewOrientation(
         defaultAppointmentSize,

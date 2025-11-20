@@ -1,5 +1,6 @@
 import type { Orientation } from '@js/common';
 import type Scheduler from '@ts/scheduler/m_scheduler';
+import type { ViewType } from '@ts/scheduler/types';
 
 import type { PanelName } from '../../types';
 import type { CollectorCSS, RealSize } from '../steps/add_geometry/types';
@@ -21,6 +22,7 @@ export const getPanelCollectorOptions = (schedulerStore: Scheduler, {
   collectorCSS,
   DOMMetaData,
   panelName,
+  viewType,
 }: {
   DOMMetaData: {
     dateTableCellsMeta: RealSize[][];
@@ -32,6 +34,7 @@ export const getPanelCollectorOptions = (schedulerStore: Scheduler, {
   isAdaptivityEnabled: boolean;
   collectorCSS: CollectorCSS;
   panelName: PanelName;
+  viewType?: ViewType;
 }): {
   allDayPanelCellSize: RealSize;
   cellSize: RealSize;
@@ -71,6 +74,7 @@ export const getPanelCollectorOptions = (schedulerStore: Scheduler, {
     viewOrientation,
     isTimelineView,
     isAdaptivityEnabled,
+    viewType,
   });
   const minLevel = viewOrientation === 'vertical' ? MIN_LEVEL_VERTICAL_VIEW : getMaxLevel({
     maxAppointmentsPerCell: 'auto',
@@ -79,6 +83,7 @@ export const getPanelCollectorOptions = (schedulerStore: Scheduler, {
     viewOrientation,
     isTimelineView,
     isAdaptivityEnabled,
+    viewType,
   });
 
   return {
