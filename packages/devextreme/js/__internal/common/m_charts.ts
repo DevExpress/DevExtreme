@@ -2,6 +2,8 @@ import { getNextDefsSvgId } from '@ts/viz/core/utils';
 
 const graphicObjects = {};
 
+// test
+
 export const registerPattern = (options) => {
   const id = getNextDefsSvgId();
   graphicObjects[id] = { type: 'pattern', ...options };
