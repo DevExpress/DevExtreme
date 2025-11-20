@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 
 import { DxChartModule, DxSelectBoxModule } from 'devextreme-angular';
@@ -70,12 +70,14 @@ export class AppComponent implements AfterViewInit {
 @NgModule({
   imports: [
     BrowserModule,
-    HttpClientModule,
     DxChartModule,
     DxSelectBoxModule,
   ],
   declarations: [AppComponent],
-  providers: [provideZoneChangeDetection({ eventCoalescing: true })],
+  providers: [
+    provideHttpClient(withFetch()),
+    provideZoneChangeDetection({ eventCoalescing: true })
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

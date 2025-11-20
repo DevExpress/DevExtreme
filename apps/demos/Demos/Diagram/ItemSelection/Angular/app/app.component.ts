@@ -56,7 +56,7 @@ export class AppComponent {
   }
 }
 
-@Pipe({ name: 'stringifyItems' })
+@Pipe({ name: 'stringifyItems', standalone: false })
 export class StringifyItemsPipe implements PipeTransform {
   transform(items: DxDiagramTypes.Item[], textExpression: string): string {
     return items
