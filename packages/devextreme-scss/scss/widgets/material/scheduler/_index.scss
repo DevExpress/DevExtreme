@@ -175,15 +175,31 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
   .dx-scheduler-appointment {
     container-type: size;
 
+    &.dx-scheduler-appointment-recurrence {
+      @container (max-height: #{$material-scheduler-appointment-15min-height}) {
+        .dx-item-content.dx-scheduler-appointment-content {
+          padding-right: $material-scheduler-appointment-10min-recurrence-padding-right;
+        }
+      }
+
+      @container (min-height: #{$material-scheduler-appointment-15min-height}) and (max-height: #{$material-scheduler-appointment-20min-height}) {
+        .dx-item-content.dx-scheduler-appointment-content {
+          padding-right: $material-scheduler-appointment-15min-recurrence-padding-right;
+        }
+      }
+
+      @container (min-height: #{$material-scheduler-appointment-20min-height}) and (max-height: #{$material-scheduler-appointment-25min-height}) {
+        .dx-item-content.dx-scheduler-appointment-content {
+          padding-right: $material-scheduler-appointment-20min-recurrence-padding-right;
+        }
+      }
+    }
+
     @container (max-height: #{$material-scheduler-appointment-15min-height}) {
       .dx-item-content.dx-scheduler-appointment-content {
         display: flex;
         align-items: center;
         padding: $material-scheduler-appointment-short-content-padding;
-
-        &.dx-scheduler-appointment-recurrence {
-          padding-right: $material-scheduler-appointment-10min-recurrence-padding-right;
-        }
 
         .dx-scheduler-appointment-content-details {
           display: none;
@@ -209,10 +225,6 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
         align-items: center;
         padding: $material-scheduler-appointment-short-content-padding;
 
-        &.dx-scheduler-appointment-recurrence {
-          padding-right: $material-scheduler-appointment-15min-recurrence-padding-right;
-        }
-
         .dx-scheduler-appointment-content-details {
           display: none;
         }
@@ -236,10 +248,6 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
         display: flex;
         align-items: center;
         padding: $material-scheduler-appointment-short-content-padding;
-
-        &.dx-scheduler-appointment-recurrence {
-          padding-right: $material-scheduler-appointment-20min-recurrence-padding-right;
-        }
 
         .dx-scheduler-appointment-content-details {
           display: none;
