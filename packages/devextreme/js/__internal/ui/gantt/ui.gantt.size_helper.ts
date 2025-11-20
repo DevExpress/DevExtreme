@@ -7,6 +7,7 @@ import {
 } from '@js/core/utils/size';
 import { hasWindow } from '@js/core/utils/window';
 import type Gantt from '@ts/ui/gantt/ui.gantt';
+import type { ApplyPanelSizeEvent } from '@ts/ui/splitter_control';
 
 type Dimension = 'width' | 'height';
 
@@ -34,10 +35,9 @@ export class GanttSizeHelper {
     this._gantt._setGanttViewOption(dimension, getter(this._gantt._$ganttView));
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  _getPanelsWidthByOption() {
+  _getPanelsWidthByOption(): ApplyPanelSizeEvent {
     const ganttWidth = getWidth(this._gantt.$element());
-    const leftPanelWidth = this._gantt.option('taskListWidth');
+    const { taskListWidth: leftPanelWidth } = this._gantt.option();
     // eslint-disable-next-line @typescript-eslint/init-declarations
     let rightPanelWidth;
     // @ts-expect-error ts-error
@@ -53,6 +53,7 @@ export class GanttSizeHelper {
       // @ts-expect-error ts-error
       rightPanelWidth = `${100 - parseInt(leftPanelWidth.replace('%', ''), 10)}%`;
     }
+    // @ts-expect-error ts-error
     return { leftPanelWidth, rightPanelWidth };
   }
 
@@ -85,7 +86,7 @@ export class GanttSizeHelper {
     }
   }
 
-  setInnerElementsWidth(widths?): void {
+  setInnerElementsWidth(widths?: ApplyPanelSizeEvent): void {
     if (!hasWindow()) {
       return;
     }
@@ -96,8 +97,8 @@ export class GanttSizeHelper {
       this._setTreeListDimension('width', 0);
       this._setGanttViewDimension('width', 0);
     }
-    this._setTreeListDimension('width', widths.leftPanelWidth);
-    this._setGanttViewDimension('width', widths.rightPanelWidth);
+    this._setTreeListDimension('width', widths?.leftPanelWidth);
+    this._setGanttViewDimension('width', widths?.rightPanelWidth);
     if (takeWithFromOption) {
       this._gantt._splitter?._setSplitterPositionLeft();
     }

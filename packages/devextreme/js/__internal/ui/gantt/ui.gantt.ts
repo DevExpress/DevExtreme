@@ -247,10 +247,8 @@ class Gantt extends Widget<Properties> {
         this._sizeHelper?.onApplyPanelSize(e);
       },
     });
-    this._splitter.option(
-      'initialLeftPanelWidth',
-      this.option('taskListWidth'),
-    );
+    const { taskListWidth } = this.option();
+    this._splitter.option('initialLeftPanelWidth', taskListWidth);
   }
 
   _renderBars(): void {

@@ -1,6 +1,5 @@
 import createTestCafe from 'testcafe';
 import { ClientFunction } from 'testcafe';
-import { THEME } from './helpers/theme-utils';
 import fs from 'fs';
 
 const LAUNCH_RETRY_ATTEMPTS = 3;
@@ -79,9 +78,7 @@ function accessibilityTestCafeReporter() {
 }
 
 async function main() {
-  const tester = await createTestCafe({
-    cache: true,
-  });
+  const tester = await createTestCafe({});
   const runner = tester.createRunner();
   const concurrency = (process.env.CONCURRENCY && (+process.env.CONCURRENCY)) || 1;
 
