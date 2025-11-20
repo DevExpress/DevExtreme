@@ -180,7 +180,10 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
         display: flex;
         align-items: center;
         padding: $material-scheduler-appointment-short-content-padding;
-        padding-right: $material-scheduler-appointment-10min-recurrence-padding-right;
+
+        &.dx-scheduler-appointment-recurrence {
+          padding-right: $material-scheduler-appointment-10min-recurrence-padding-right;
+        }
 
         .dx-scheduler-appointment-content-details {
           display: none;
@@ -205,7 +208,10 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
         display: flex;
         align-items: center;
         padding: $material-scheduler-appointment-short-content-padding;
-        padding-right: $material-scheduler-appointment-15min-recurrence-padding-right;
+
+        &.dx-scheduler-appointment-recurrence {
+          padding-right: $material-scheduler-appointment-15min-recurrence-padding-right;
+        }
 
         .dx-scheduler-appointment-content-details {
           display: none;
@@ -230,7 +236,10 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
         display: flex;
         align-items: center;
         padding: $material-scheduler-appointment-short-content-padding;
-        padding-right: $material-scheduler-appointment-20min-recurrence-padding-right;
+
+        &.dx-scheduler-appointment-recurrence {
+          padding-right: $material-scheduler-appointment-20min-recurrence-padding-right;
+        }
 
         .dx-scheduler-appointment-content-details {
           display: none;

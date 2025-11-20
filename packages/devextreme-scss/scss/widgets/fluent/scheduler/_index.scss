@@ -207,7 +207,10 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
         display: flex;
         align-items: center;
         padding: $fluent-scheduler-appointment-short-content-padding;
-        padding-right: $fluent-scheduler-appointment-10min-recurrence-padding-right;
+
+        &.dx-scheduler-appointment-recurrence {
+          padding-right: $fluent-scheduler-appointment-10min-recurrence-padding-right;
+        }
 
         .dx-scheduler-appointment-content-details {
           display: none;
@@ -232,7 +235,10 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
         display: flex;
         align-items: center;
         padding: $fluent-scheduler-appointment-short-content-padding;
-        padding-right: $fluent-scheduler-appointment-15min-recurrence-padding-right;
+
+        &.dx-scheduler-appointment-recurrence {
+          padding-right: $fluent-scheduler-appointment-15min-recurrence-padding-right;
+        }
 
         .dx-scheduler-appointment-content-details {
           display: none;
@@ -257,7 +263,10 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
         display: flex;
         align-items: center;
         padding: $fluent-scheduler-appointment-short-content-padding;
-        padding-right: $fluent-scheduler-appointment-20min-recurrence-padding-right;
+
+        &.dx-scheduler-appointment-recurrence {
+          padding-right: $fluent-scheduler-recurring-appointment-content-padding-right;
+        }
 
         .dx-scheduler-appointment-content-details {
           display: none;

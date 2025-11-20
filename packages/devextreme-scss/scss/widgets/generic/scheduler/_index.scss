@@ -603,7 +603,10 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
         display: flex;
         align-items: center;
         padding: $generic-scheduler-appointment-short-content-padding;
-        padding-right: $generic-scheduler-appointment-10min-recurrence-padding-right;
+
+        &.dx-scheduler-appointment-recurrence {
+          padding-right: $generic-scheduler-appointment-10min-recurrence-padding-right;
+        }
 
         .dx-scheduler-appointment-content-details {
           display: none;
@@ -628,7 +631,10 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
         display: flex;
         align-items: center;
         padding: $generic-scheduler-appointment-short-content-padding;
-        padding-right: $generic-scheduler-appointment-15min-recurrence-padding-right;
+
+        &.dx-scheduler-appointment-recurrence {
+          padding-right: $generic-scheduler-appointment-15min-recurrence-padding-right;
+        }
 
         .dx-scheduler-appointment-content-details {
           display: none;
@@ -653,7 +659,10 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
         display: flex;
         align-items: center;
         padding: $generic-scheduler-appointment-short-content-padding;
-        padding-right: $generic-scheduler-appointment-20min-recurrence-padding-right;
+
+        &.dx-scheduler-appointment-recurrence {
+          padding-right: $generic-scheduler-appointment-20min-recurrence-padding-right;
+        }
 
         .dx-scheduler-appointment-content-details {
           display: none;
