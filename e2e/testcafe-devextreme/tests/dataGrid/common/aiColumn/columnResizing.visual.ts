@@ -33,6 +33,7 @@ test('Resize AI Column when wordWrapEnabled is true', async (t) => {
     { id: 2, name: 'Name 2', value: 20 },
     { id: 3, name: 'Name 3', value: 30 },
   ],
+  keyExpr: 'id',
   allowColumnResizing: true,
   wordWrapEnabled: true,
   columnWidth: 100,

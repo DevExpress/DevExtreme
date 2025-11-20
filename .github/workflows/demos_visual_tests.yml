@@ -126,9 +126,7 @@ jobs:
       - uses: actions/cache@v4
         name: Setup pnpm cache
         with:
-          path: |
-            ${{ env.STORE_PATH }}
-            .nx/cache
+          path: ${{ env.STORE_PATH }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store
@@ -139,7 +137,9 @@ jobs:
       - name: DevExtreme - Build
         if: needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'none'
         shell: bash
-        run: pnpx nx build devextreme
+        run: |
+          pnpx nx build devextreme-scss
+          pnpx nx build devextreme
 
       - name: DevExtreme - Build for framework tests (optimized)
         if: needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
@@ -172,6 +172,18 @@ jobs:
             packages/devextreme/artifacts/
           retention-days: 1
           compression-level: 6
+
+      - name: Zip artifacts (for jQuery tests)
+        working-directory: ./packages/devextreme
+        run: |
+          7z a -tzip -mx3 -mmt2 artifacts.zip artifacts ../devextreme-scss/scss/bundles
+
+      - name: Upload build artifacts (for jQuery tests)
+        uses: actions/upload-artifact@v4
+        with:
+          name: devextreme-artifacts-jquery
+          path: ./packages/devextreme/artifacts.zip
+          retention-days: 1
 
       - name: Move packages
         if: needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
@@ -229,11 +241,9 @@ jobs:
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
       - uses: actions/cache/restore@v4
-        name: Setup pnpm cache
+        name: Restore pnpm cache
         with:
-          path: |
-            ${{ env.STORE_PATH }}
-            .nx/cache
+          path: ${{ env.STORE_PATH }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store
@@ -308,11 +318,9 @@ jobs:
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
       - uses: actions/cache/restore@v4
-        name: Setup pnpm cache
+        name: Restore pnpm cache
         with:
-          path: |
-            ${{ env.STORE_PATH }}
-            .nx/cache
+          path: ${{ env.STORE_PATH }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store
@@ -444,6 +452,16 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v4
 
+    - name: Download artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: devextreme-artifacts-jquery
+        path: ./packages/devextreme
+
+    - name: Unpack artifacts
+      working-directory: ./packages/devextreme
+      run: 7z x artifacts.zip -aoa
+
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
@@ -465,11 +483,9 @@ jobs:
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
     - uses: actions/cache/restore@v4
-      name: Setup pnpm cache
+      name: Restore pnpm cache
       with:
-        path: |
-          ${{ env.STORE_PATH }}
-          .nx/cache
+        path: ${{ env.STORE_PATH }}
         key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-pnpm-store
@@ -514,18 +530,12 @@ jobs:
         fi
 
     - name: Run Web Server
-      run: |
-        python -m http.server 8080 &
-        python -m http.server 8081 &
-        python -m http.server 8082 &
-        python -m http.server 8083 &
-        python -m http.server 8084 &
-        python -m http.server 8085 &
+      run: python -m http.server 8080 &
 
     - name: Set Chrome flags
       id: chrome-flags
       run: |
-        BASE_FLAGS="chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=\"swiftshader\" --disable-features=PaintHolding --js-flags=--random-seed=2147483647"
+        BASE_FLAGS="chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647"
         
         # For Material theme, enable better font rendering to avoid instability
         if [[ "${{ matrix.THEME }}" != *"material"* ]]; then
@@ -534,7 +544,7 @@ jobs:
         
         echo "flags=$BASE_FLAGS" >> $GITHUB_OUTPUT
 
-    - name: Run TestCafe tests
+    - name: Run TestCafe tests (jQuery)
       shell: bash
       working-directory: apps/demos
       env:
@@ -595,12 +605,16 @@ jobs:
           vue(3/5),
           vue(4/5),
           vue(5/5),
-          angular(1/6),
-          angular(2/6),
-          angular(3/6),
-          angular(4/6),
-          angular(5/6),
-          angular(6/6),
+          angular(1/10),
+          angular(2/10),
+          angular(3/10),
+          angular(4/10),
+          angular(5/10),
+          angular(6/10),
+          angular(7/10),
+          angular(8/10),
+          angular(9/10),
+          angular(10/10),
         ]
         THEME: ['fluent.blue.light']
 
@@ -638,11 +652,9 @@ jobs:
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
     - uses: actions/cache/restore@v4
-      name: Setup pnpm cache
+      name: Restore pnpm cache
       with:
-        path: |
-          ${{ env.STORE_PATH }}
-          .nx/cache
+        path: ${{ env.STORE_PATH }}
         key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-pnpm-store
@@ -666,17 +678,14 @@ jobs:
     - name: Run Web Server
       run: |
         python -m http.server 8080 &
-        python -m http.server 8081 &
-        python -m http.server 8082 &
-        python -m http.server 8083 &
-        python -m http.server 8084 &
-        python -m http.server 8085 &
 
     - name: Set concurrency based on framework
       id: set-concurrency
       run: |
         if [[ "${{ matrix.CONSTEL }}" == react* ]]; then
-          echo "concurrency=6" >> $GITHUB_OUTPUT
+          echo "concurrency=4" >> $GITHUB_OUTPUT
+        elif [[ "${{ matrix.CONSTEL }}" == angular* ]]; then
+          echo "concurrency=3" >> $GITHUB_OUTPUT
         else
           echo "concurrency=3" >> $GITHUB_OUTPUT
         fi
@@ -686,7 +695,7 @@ jobs:
       working-directory: apps/demos
       env:
         NODE_OPTIONS: --max-old-space-size=8192
-        BROWSERS: chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
+        BROWSERS: chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
         # DEBUG: hammerhead:*,testcafe:*
         CONCURRENCY: ${{ steps.set-concurrency.outputs.concurrency }}
         TCQUARANTINE: true
@@ -760,11 +769,9 @@ jobs:
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
       - uses: actions/cache/restore@v4
-        name: Setup pnpm cache
+        name: Restore pnpm cache
         with:
-          path: |
-            ${{ env.STORE_PATH }}
-            .nx/cache
+          path: ${{ env.STORE_PATH }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store
@@ -805,7 +812,7 @@ jobs:
         working-directory: apps/demos
         env:
           CHANGEDFILEINFOSPATH: changed-files.json
-          BROWSERS: chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
+          BROWSERS: chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
           # DEBUG: hammerhead:*,testcafe:*
           CONCURRENCY: 1
           TCQUARANTINE: true

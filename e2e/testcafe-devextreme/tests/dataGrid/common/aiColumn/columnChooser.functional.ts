@@ -42,6 +42,7 @@ test('The AI column can be hidden when columnChooser.mode is "dragAndDrop"', asy
     { id: 2, name: 'Name 2', value: 20 },
     { id: 3, name: 'Name 3', value: 30 },
   ],
+  keyExpr: 'id',
   width: 600,
   columnWidth: 200,
   columnChooser: {
@@ -95,6 +96,7 @@ test('The AI column cannot be hidden when columnChooser.mode is "dragAndDrop" an
     { id: 2, name: 'Name 2', value: 20 },
     { id: 3, name: 'Name 3', value: 30 },
   ],
+  keyExpr: 'id',
   width: 600,
   columnWidth: 200,
   columnChooser: {
@@ -147,6 +149,7 @@ test('The AI column can be hidden when columnChooser.mode is "select"', async (t
     { id: 2, name: 'Name 2', value: 20 },
     { id: 3, name: 'Name 3', value: 30 },
   ],
+  keyExpr: 'id',
   width: 600,
   columnWidth: 200,
   columnChooser: {
@@ -196,6 +199,7 @@ test('The AI column cannot be hidden when columnChooser.mode is "select" and all
     { id: 2, name: 'Name 2', value: 20 },
     { id: 3, name: 'Name 3', value: 30 },
   ],
+  keyExpr: 'id',
   width: 600,
   columnWidth: 200,
   columnChooser: {
@@ -250,6 +254,7 @@ test('The AI column can be shown when columnChooser.mode is "dragAndDrop"', asyn
     { id: 2, name: 'Name 2', value: 20 },
     { id: 3, name: 'Name 3', value: 30 },
   ],
+  keyExpr: 'id',
   width: 600,
   columnWidth: 200,
   columnChooser: {
@@ -295,6 +300,7 @@ test('The AI column cannot be shown when columnChooser.mode is "dragAndDrop" and
     { id: 2, name: 'Name 2', value: 20 },
     { id: 3, name: 'Name 3', value: 30 },
   ],
+  keyExpr: 'id',
   width: 600,
   columnWidth: 200,
   columnChooser: {
@@ -347,6 +353,7 @@ test('The AI column can be shown when columnChooser.mode is "select"', async (t)
     { id: 2, name: 'Name 2', value: 20 },
     { id: 3, name: 'Name 3', value: 30 },
   ],
+  keyExpr: 'id',
   width: 600,
   columnWidth: 200,
   columnChooser: {
@@ -397,6 +404,7 @@ test('The AI column cannot be shown when columnChooser.mode is "select" and allo
     { id: 2, name: 'Name 2', value: 20 },
     { id: 3, name: 'Name 3', value: 30 },
   ],
+  keyExpr: 'id',
   width: 600,
   columnWidth: 200,
   columnChooser: {
@@ -441,6 +449,7 @@ test('The AI column should not be visible in column chooser when showInColumnCho
     { id: 2, name: 'Name 2', value: 20 },
     { id: 3, name: 'Name 3', value: 30 },
   ],
+  keyExpr: 'id',
   width: 600,
   columnWidth: 200,
   columnChooser: {
@@ -485,6 +494,7 @@ test('The AI column should not be visible in column chooser when showInColumnCho
     { id: 2, name: 'Name 2', value: 20 },
     { id: 3, name: 'Name 3', value: 30 },
   ],
+  keyExpr: 'id',
   width: 600,
   columnWidth: 200,
   columnChooser: {

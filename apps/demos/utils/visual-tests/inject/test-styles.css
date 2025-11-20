@@ -6,6 +6,8 @@ body {
   outline: none !important;
 }
 
+* { caret-color: transparent !important; }
+
 .dx-scrollable-scroll { visibility: hidden !important; }
 
 .dx-theme-material * {

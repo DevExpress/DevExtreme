@@ -353,8 +353,8 @@ export function isCompact(themeName) {
 }
 
 export function isWebFontLoaded(text, fontWeight) {
-    const testedFont = 'Roboto, RobotoFallback, Arial';
-    const etalonFont = 'Arial';
+    const testedFont = 'roboto, \'roboto fallback\', arial';
+    const etalonFont = 'arial';
 
     const document = domAdapter.getDocument();
     const testElement = document.createElement('span');

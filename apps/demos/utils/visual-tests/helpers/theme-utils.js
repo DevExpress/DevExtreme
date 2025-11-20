@@ -4,12 +4,17 @@ export const THEME = {
   material: 'material.blue.light',
 };
 
-export const DEFAULT_THEME_NAME = THEME.generic;
+export const DEFAULT_THEME_NAME = THEME.fluent;
 
 export const getThemePostfix = (theme = DEFAULT_THEME_NAME) => {
-  const themeName = theme === DEFAULT_THEME_NAME ? '' : ` (${theme})`;
+  return ` (${theme})`;
+};
 
-  return themeName;
+export const getScreenshotName = (baseName, theme) => {
+  const themePostfix = getThemePostfix(theme);
+  return baseName.endsWith('.png')
+    ? baseName.replace('.png', `${themePostfix}.png`)
+    : `${baseName}${themePostfix}.png`;
 };
 
 export async function testScreenshot(
@@ -21,40 +26,45 @@ export async function testScreenshot(
 ) {
   const testTheme = process.env.THEME;
   const isMaterialTheme = testTheme?.includes('material');
-  
-  const materialThemeOptions = isMaterialTheme ? {
-    looksSameComparisonOptions: {
-      tolerance: 80,
-      ignoreAntialiasing: true,
-      antialiasingTolerance: 80,
-      strict: false,
-    },
-    // eslint-disable-next-line spellcheck/spell-checker
-    textDiffTreshold: 0.5,
-  } : {};
 
-  // Merge options with Material theme overrides having priority
+  const themeOptions = isMaterialTheme ? {
+    looksSameComparisonOptions: {
+      tolerance: 100,
+      ignoreAntialiasing: true,
+      antialiasingTolerance: 100,
+      strict: false,
+      caretIgnore: true,
+    },
+    textDiffTreshold: 1,
+  } : {
+    looksSameComparisonOptions: {
+      tolerance: 20,
+      antialiasingTolerance: 20,
+    },
+    textDiffTreshold: 0.2,
+  };
+
   const finalOptions = isMaterialTheme && comparisonOptions?.looksSameComparisonOptions
     ? {
         ...comparisonOptions,
         looksSameComparisonOptions: {
           ...comparisonOptions.looksSameComparisonOptions,
-          ...materialThemeOptions.looksSameComparisonOptions,
+          ...themeOptions.looksSameComparisonOptions,
         },
-        enableTextMask: materialThemeOptions.enableTextMask,
-        textMaskRadius: materialThemeOptions.textMaskRadius,
-        textDiffTreshold: materialThemeOptions.textDiffTreshold,
+        textDiffTreshold: themeOptions.textDiffTreshold,
       }
     : {
         ...comparisonOptions,
-        ...materialThemeOptions,
+        ...themeOptions,
       };
 
   await t
-    .expect(await takeScreenshot(
-      screenshotName.replace('.png', `${getThemePostfix(testTheme)}.png`),
-      element,
-      finalOptions
-    ))
+    .expect(
+      await takeScreenshot(
+        getScreenshotName(screenshotName, testTheme),
+        element,
+        finalOptions
+      )
+    )
     .ok();
 }

@@ -1,1 +1,1 @@
-export * from '../common/core/localization/utils';
+export * from '../__internal/core/localization/utils';

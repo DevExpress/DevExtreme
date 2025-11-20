@@ -27,7 +27,6 @@ function run_test_impl {
     [ -z "$CHROME_CMD" ] && CHROME_CMD=google-chrome-stable
     [ "$LOCAL" == "true" ] && url="http://host.docker.internal:$port/run?notimers=true"
     [ -n "$CONSTEL" ] && url="$url&constellation=$CONSTEL"
-    [ -n "$MOBILE_UA" ] && url="$url&deviceMode=true"
     [ "$JQUERY" == "false"  ] && url="$url&nojquery=true"
     [ "$SHADOW_DOM" == "true" ] && url="$url&shadowDom=true"
     [ "$NO_CSP" == "true" ] && url="$url&nocsp=true"

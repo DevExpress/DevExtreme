@@ -26041,6 +26041,23 @@ declare module DevExpress.ui {
           readonly popup: dxPopup;
         };
     /**
+     * [descr:AppointmentFormProperties]
+     */
+    export type AppointmentFormProperties = DevExpress.ui.dxForm.Properties & {
+      /**
+       * [descr:AppointmentFormProperties.onSaved]
+       */
+      onSaved?: (formData: any) => void;
+      /**
+       * [descr:AppointmentFormProperties.onCanceled]
+       */
+      onCanceled?: (formData: any) => void;
+      /**
+       * [descr:AppointmentFormProperties.iconsShowMode]
+       */
+      iconsShowMode?: AppointmentFormIconsShowMode;
+    };
+    /**
      * [descr:_ui_scheduler_AppointmentRenderedEvent]
      */
     export type AppointmentRenderedEvent =
@@ -26458,26 +26475,7 @@ declare module DevExpress.ui {
           /**
            * [descr:dxSchedulerOptions.editing.form]
            */
-          form?:
-            | {
-                /**
-                 * [descr:dxSchedulerOptions.editing.form.items]
-                 */
-                items?: Array<DevExpress.ui.dxForm.Item>;
-                /**
-                 * [descr:dxSchedulerOptions.editing.form.onSaved]
-                 */
-                onSaved?: (formData: any) => void;
-                /**
-                 * [descr:dxSchedulerOptions.editing.form.onCanceled]
-                 */
-                onCanceled?: (formData: any) => void;
-                /**
-                 * [descr:dxSchedulerOptions.editing.form.iconsShowMode]
-                 */
-                iconsShowMode?: DevExpress.ui.dxScheduler.AppointmentFormIconsShowMode;
-              }
-            | undefined;
+          form?: DevExpress.ui.dxScheduler.AppointmentFormProperties;
           /**
            * [descr:dxSchedulerOptions.editing.popup]
            */

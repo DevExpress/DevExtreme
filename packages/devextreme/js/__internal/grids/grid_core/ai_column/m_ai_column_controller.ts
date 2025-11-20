@@ -62,6 +62,34 @@ export class AIColumnController extends Controller {
     });
   }
 
+  private checkStoreKey(): boolean {
+    const store = this.dataController.store();
+
+    if (store && !store.key()) {
+      this.dataController.fireError('E1042', 'AI Column');
+
+      return false;
+    }
+
+    return true;
+  }
+
+  private handleDataSourceChanged(args?: HandleDataChangedArguments): void {
+    const aiColumns = this.getAIColumns();
+
+    if (args?.changeType === 'loadError'
+      || aiColumns.length === 0
+      || !this.checkStoreKey()) {
+      return;
+    }
+
+    for (const col of aiColumns) {
+      if (isAIColumnAutoMode(col)) {
+        this.sendRequest(col.name as string, true);
+      }
+    }
+  }
+
   protected callbackNames(): string[] {
     return ['aiRequestCompleted', 'aiRequestRejected'];
   }
@@ -82,20 +110,6 @@ export class AIColumnController extends Controller {
 
   public getAIColumns(): Column[] {
     return this.columnsController.getColumns().filter((col) => col.type === 'ai') as Column[];
-  }
-
-  private handleDataSourceChanged(args?: HandleDataChangedArguments): void {
-    const aiColumns = this.getAIColumns();
-
-    if (args?.changeType === 'loadError') {
-      return;
-    }
-
-    for (const col of aiColumns) {
-      if (isAIColumnAutoMode(col)) {
-        this.sendRequest(col.name as string, true);
-      }
-    }
   }
 
   // API methods
@@ -123,6 +137,10 @@ export class AIColumnController extends Controller {
     useCache: boolean,
     needToShowLoadPanel = true,
   ): void {
+    if (!this.checkStoreKey()) {
+      return;
+    }
+
     const callbacks = this.getRequestCallbacks();
 
     this.aiColumnIntegrationController.sendRequestCore({
