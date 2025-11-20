@@ -1,20 +1,20 @@
 import $ from '@js/core/renderer';
 import domAdapter from '@ts/core/m_dom_adapter';
 
-import type { Column, ColumnsController } from '../columns_controller/m_columns_controller';
-import { getColumnHeaderCellSelector } from '../columns_controller/m_columns_controller_utils';
-import { View } from '../m_modules';
-import { AIPromptEditor } from './ai_prompt_editor/ai_prompt_editor';
-import type { AIPromptEditorOptions } from './ai_prompt_editor/types';
-import { AI_COLUMN_NAME } from './const';
-import type { AIColumnController } from './m_ai_column_controller';
+import { AIPromptEditor } from '../../ai_prompt_editor/ai_prompt_editor';
+import type { AIPromptEditorOptions } from '../../ai_prompt_editor/types';
+import type { Column, ColumnsController } from '../../columns_controller/m_columns_controller';
+import { getColumnHeaderCellSelector } from '../../columns_controller/m_columns_controller_utils';
+import { View } from '../../m_modules';
+import { AI_COLUMN_NAME } from '../const';
+import type { AIColumnController } from '../controllers/m_ai_column_controller';
 import {
   isAIColumnAutoMode,
   isEditorOptions,
   isPopupOptions,
   isPromptOption,
   isRefreshOption,
-} from './utils';
+} from '../utils';
 
 export class AIPromptEditorView extends View {
   private columnsController!: ColumnsController;
