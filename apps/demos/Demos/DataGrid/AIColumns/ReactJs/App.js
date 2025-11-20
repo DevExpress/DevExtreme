@@ -7,12 +7,6 @@ import Trademark from './Trademark.js';
 import Category from './Category.js';
 import LicenseInfo from './LicenseInfo.js';
 
-const aiConfig = {
-  mode: 'auto',
-  noDataText: 'No data',
-  prompt:
-    'Identify the country where this vehicle model is originally manufactured or developed, based on its brand, model, and specifications.',
-};
 const onAIColumnRequestCreating = (e) => {
   e.data = e.data.map((item) => ({
     ID: item.ID,
@@ -20,6 +14,12 @@ const onAIColumnRequestCreating = (e) => {
     Name: item.Name,
     Modification: item.Modification,
   }));
+};
+const aiConfig = {
+  mode: 'auto',
+  noDataText: 'No data',
+  prompt:
+    'Identify the country where this vehicle model is originally manufactured or developed, based on its brand, model, and specifications.',
 };
 export default function App() {
   const [currentVehicle, setCurrentVehicle] = useState(null);

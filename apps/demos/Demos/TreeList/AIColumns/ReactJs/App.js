@@ -6,12 +6,6 @@ import Employee from './Employee.js';
 import Status from './Status.js';
 import Email from './Email.js';
 
-const aiConfig = {
-  mode: 'auto',
-  noDataText: 'No data',
-  prompt:
-    "Identify department for each employee. It should be one of the following department types:  'Management', 'Human Resources', 'IT', 'Shipping', 'Support', 'Sales',  'Engineering'. Use 'Engineering' by default.",
-};
 const onAIColumnRequestCreating = (e) => {
   e.data = e.data.map((item) => ({
     ID: item.ID,
@@ -19,6 +13,12 @@ const onAIColumnRequestCreating = (e) => {
     Last_Name: item.Last_Name,
     Title: item.Title,
   }));
+};
+const aiConfig = {
+  mode: 'auto',
+  noDataText: 'No data',
+  prompt:
+    "Identify department for each employee. It should be one of the following department types:  'Management', 'Human Resources', 'IT', 'Shipping', 'Support', 'Sales',  'Engineering'. Use 'Engineering' by default.",
 };
 export default function App() {
   return (

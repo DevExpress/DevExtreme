@@ -12,12 +12,6 @@ import Category from './Category.tsx';
 import LicenseInfo from './LicenseInfo.tsx';
 import { type Vehicle } from './types.ts';
 
-const aiConfig = {
-  mode: 'auto' as const,
-  noDataText: 'No data',
-  prompt: 'Identify the country where this vehicle model is originally manufactured or developed, based on its brand, model, and specifications.',
-};
-
 const onAIColumnRequestCreating = (e) => {
   e.data = e.data.map((item) => ({
     ID: item.ID,
@@ -25,6 +19,12 @@ const onAIColumnRequestCreating = (e) => {
     Name: item.Name,
     Modification: item.Modification,
   }));
+};
+
+const aiConfig = {
+  mode: 'auto' as const,
+  noDataText: 'No data',
+  prompt: 'Identify the country where this vehicle model is originally manufactured or developed, based on its brand, model, and specifications.',
 };
 
 export default function App() {
