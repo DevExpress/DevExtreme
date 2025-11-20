@@ -1,83 +1,85 @@
-import './core';
-
-// eslint-disable-next-line no-restricted-imports
-import Globalize from 'globalize';
-import messageLocalization from '../message';
-import coreLocalization from '../core';
-
-// eslint-disable-next-line no-restricted-imports, import/no-unresolved
+import '@ts/core/localization/globalize/core';
 import 'globalize/message';
 
-if(Globalize && Globalize.formatMessage) {
+import coreLocalization from '@ts/core/localization/core';
+import type { MessageDictionary, MessageFormatter } from '@ts/core/localization/message';
+import messageLocalization from '@ts/core/localization/message';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import Globalize from 'globalize';
 
-    const DEFAULT_LOCALE = 'en';
+if (Globalize?.formatMessage) {
+  const DEFAULT_LOCALE = 'en';
 
-    const originalLoadMessages = Globalize.loadMessages;
+  const originalLoadMessages = Globalize.loadMessages;
 
-    Globalize.loadMessages = messages => {
-        messageLocalization.load(messages);
-    };
+  Globalize.loadMessages = (messages: MessageDictionary): void => {
+    messageLocalization.load(messages);
+  };
 
-    const globalizeMessageLocalization = {
-        engine: function() {
-            return 'globalize';
-        },
+  const globalizeMessageLocalization = {
+    engine(): string {
+      return 'globalize';
+    },
 
-        ctor: function() {
-            this.load(this._dictionary);
-        },
+    ctor(): void {
+      this.load(this._dictionary);
+    },
 
-        load: function(messages) {
-            this.callBase(messages);
-            originalLoadMessages(messages);
-        },
+    load(messages: MessageDictionary): void {
+      this.callBase(messages);
+      originalLoadMessages(messages);
+    },
 
-        getMessagesByLocales: function() {
-            return Globalize.cldr.get('globalize-messages');
-        },
+    getMessagesByLocales(): MessageDictionary {
+      return Globalize.cldr.get('globalize-messages') as MessageDictionary;
+    },
 
-        getFormatter: function(key, locale) {
-            const currentLocale = locale || coreLocalization.locale();
-            let formatter = this._getFormatterBase(key, locale);
+    getFormatter(key: string, locale?: string): MessageFormatter {
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      const currentLocale = locale || coreLocalization.locale();
+      let formatter: MessageFormatter = this._getFormatterBase(key, locale);
 
-            if(!formatter) {
-                formatter = this._formatterByGlobalize(key, locale);
-            }
+      if (!formatter) {
+        formatter = this._formatterByGlobalize(key, locale);
+      }
 
-            if(!formatter && currentLocale !== DEFAULT_LOCALE) {
-                formatter = this.getFormatter(key, DEFAULT_LOCALE);
-            }
+      if (!formatter && currentLocale !== DEFAULT_LOCALE) {
+        formatter = this.getFormatter(key, DEFAULT_LOCALE);
+      }
 
-            return formatter;
-        },
+      return formatter;
+    },
 
-        _formatterByGlobalize: function(key, locale) {
-            const currentGlobalize = !locale || locale === coreLocalization.locale() ? Globalize : new Globalize(locale);
-            let result;
+    _formatterByGlobalize(key: string, locale?: string): MessageFormatter | undefined {
+      const currentGlobalize = !locale || locale === coreLocalization.locale()
+        ? Globalize
+        : new Globalize(locale);
+      // eslint-disable-next-line @typescript-eslint/init-declarations
+      let result: MessageFormatter | undefined;
 
-            if(this._messageLoaded(key, locale)) {
-                result = currentGlobalize.messageFormatter(key);
-            }
+      if (this._messageLoaded(key, locale)) {
+        result = currentGlobalize.messageFormatter(key);
+      }
 
-            return result;
-        },
+      return result;
+    },
 
-        _messageLoaded: function(key, locale) {
-            const currentCldr = locale ? new Globalize(locale).cldr : Globalize.locale();
-            const value = currentCldr.get(['globalize-messages/{bundle}', key]);
+    _messageLoaded(key: string, locale: string | undefined): boolean {
+      const currentCldr = locale ? new Globalize(locale).cldr : Globalize.locale();
+      const value = currentCldr.get(['globalize-messages/{bundle}', key]);
 
-            return !!value;
-        },
+      return !!value;
+    },
 
-        _loadSingle: function(key, value, locale) {
-            const data = {};
+    _loadSingle(key: string, value: string, locale: string): void {
+      const data = {};
 
-            data[locale] = {};
-            data[locale][key] = value;
+      data[locale] = {};
+      data[locale][key] = value;
 
-            this.load(data);
-        }
-    };
+      this.load(data);
+    },
+  };
 
-    messageLocalization.inject(globalizeMessageLocalization);
+  messageLocalization.inject(globalizeMessageLocalization);
 }
