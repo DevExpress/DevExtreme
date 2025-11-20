@@ -75,7 +75,7 @@ export default function App() {
         fixedPosition="right"
         cssClass="ai__cell"
         ai={aiConfig}
-      ></Column>
+      />
     </TreeList>
   );
 }
