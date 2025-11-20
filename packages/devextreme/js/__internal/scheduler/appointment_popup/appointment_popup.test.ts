@@ -2146,7 +2146,7 @@ describe('Customize form items', () => {
   });
 
   describe('editing.form.(onSaved & onCanceled) callbacks', () => {
-    it('should call onSaved when appointment form is successfully saved', async () => {
+    it('should call onSaved when appointment form is saved', async () => {
       const onSaved = jest.fn();
       const { scheduler, POM } = await createScheduler({
         ...getDefaultConfig(),
@@ -2171,7 +2171,39 @@ describe('Customize form items', () => {
       );
     });
 
-    it('should call onCanceled when appointment form is successfully canceled', async () => {
+    it('should call onSaved when appointment form is saved with timezone', async () => {
+      const onSaved = jest.fn();
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowTimeZoneEditing: true,
+          form: {
+            onSaved,
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup({
+        ...commonAppointment,
+        startDate: new Date('2024-06-10T14:00:00Z'),
+        startDateTimeZone: 'America/New_York',
+      });
+
+      // @ts-expect-error: dxSelectBox type issue
+      const startTimeZoneSelectBox = $(POM.popup.startTimeZone).dxSelectBox('instance');
+      startTimeZoneSelectBox.option('value', 'America/Los_Angeles');
+
+      POM.popup.getSaveButton().click();
+
+      expect(onSaved).toHaveBeenCalledTimes(1);
+      expect(onSaved).toHaveBeenCalledWith(
+        expect.objectContaining({
+          startDate: new Date('2024-06-10T17:00:00Z'),
+        }),
+      );
+    });
+
+    it('should call onCanceled when appointment form is canceled', async () => {
       const onCanceled = jest.fn();
       const { scheduler, POM } = await createScheduler({
         ...getDefaultConfig(),

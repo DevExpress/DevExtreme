@@ -316,12 +316,12 @@ export class AppointmentPopup {
           );
 
           this.scheduler.updateScrollPosition(startDate, appointmentGroupValues, inAllDayRow);
-          this.state.lastEditData = null;
 
           const editingConfig = this.scheduler.getEditingConfig();
           if (editingConfig?.form?.onSaved) {
-            editingConfig.form.onSaved(this.form.formData);
+            editingConfig.form.onSaved(this.state.lastEditData);
           }
+          this.state.lastEditData = null;
         }
 
         this._unlockSaveChanges();
