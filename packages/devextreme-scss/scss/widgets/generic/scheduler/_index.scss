@@ -595,57 +595,82 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
 .dx-scheduler-work-space-day,
 .dx-scheduler-work-space-week,
 .dx-scheduler-work-space-work-week {
-  .dx-scheduler-appointment-10min,
-  .dx-scheduler-appointment-15min {
-    .dx-scheduler-appointment-content {
-      padding: $generic-scheduler-appointment-short-content-padding;
-    }
-  }
+  .dx-scheduler-appointment {
+    container-type: size;
 
-  .dx-scheduler-appointment-15min {
-    &.dx-scheduler-appointment-recurrence .dx-scheduler-appointment-content {
-      padding-right: $generic-scheduler-appointment-15min-recurrence-padding-right;
-    }
-
-    .dx-scheduler-appointment-title {
-      line-height: $generic-scheduler-appointment-15min-title-line-height;
-    }
-
-    .dx-scheduler-appointment-recurrence-icon {
-      font-size: $generic-scheduler-appointment-15min-icon-font-size;
-      top: $generic-scheduler-appointment-15min-icon-top;
-      right: $generic-scheduler-appointment-15min-icon-right;
-    }
-  }
-
-  @if $size == "default" {
-    .dx-scheduler-appointment-10min {
-      &.dx-scheduler-appointment-recurrence .dx-scheduler-appointment-content {
+    @container (max-height: #{$generic-scheduler-appointment-15min-height}) {
+      .dx-item-content.dx-scheduler-appointment-content {
+        display: flex;
+        align-items: center;
+        padding: $generic-scheduler-appointment-short-content-padding;
         padding-right: $generic-scheduler-appointment-10min-recurrence-padding-right;
-      }
 
-      .dx-scheduler-appointment-title {
-        line-height: $generic-scheduler-appointment-10min-title-line-height;
-      }
+        .dx-scheduler-appointment-content-details {
+          display: none;
+        }
 
-      .dx-scheduler-appointment-recurrence-icon {
-        font-size: $generic-scheduler-appointment-10min-icon-font-size;
-        top: $generic-scheduler-appointment-10min-icon-top;
-        right: $generic-scheduler-appointment-10min-icon-right;
+        .dx-scheduler-appointment-title {
+          font-size: $generic-scheduler-appointment-10min-title-font-size;
+          line-height: $generic-scheduler-appointment-10min-title-line-height;
+        }
+
+        .dx-scheduler-appointment-recurrence-icon {
+          top: 50%;
+          transform: translateY(-50%);
+          right: $generic-scheduler-appointment-10min-icon-right;
+          font-size: $generic-scheduler-appointment-10min-icon-font-size;
+        }
       }
     }
 
-    .dx-scheduler-appointment-20min {
-      .dx-scheduler-appointment-title {
-        line-height: $generic-scheduler-appointment-20min-title-line-height;
+    @container (min-height: #{$generic-scheduler-appointment-15min-height}) and (max-height: #{$generic-scheduler-appointment-20min-height}) {
+      .dx-item-content.dx-scheduler-appointment-content {
+        display: flex;
+        align-items: center;
+        padding: $generic-scheduler-appointment-short-content-padding;
+        padding-right: $generic-scheduler-appointment-15min-recurrence-padding-right;
+
+        .dx-scheduler-appointment-content-details {
+          display: none;
+        }
+
+        .dx-scheduler-appointment-title {
+          font-size: $generic-scheduler-appointment-15min-title-font-size;
+          line-height: $generic-scheduler-appointment-15min-title-line-height;
+        }
+
+        .dx-scheduler-appointment-recurrence-icon {
+          top: 50%;
+          transform: translateY(-50%);
+          right: $generic-scheduler-appointment-15min-icon-right;
+          font-size: $generic-scheduler-appointment-15min-icon-font-size;
+        }
       }
     }
-  }
 
-  @if $size == "compact" {
-    .dx-scheduler-appointment-10min {
-      .dx-scheduler-appointment-content {
-        display: none;
+    @container (min-height: #{$generic-scheduler-appointment-20min-height}) and (max-height: #{$generic-scheduler-appointment-25min-height}) {
+      .dx-item-content.dx-scheduler-appointment-content {
+        display: flex;
+        align-items: center;
+        padding: $generic-scheduler-appointment-short-content-padding;
+        padding-right: $generic-scheduler-appointment-20min-recurrence-padding-right;
+
+        .dx-scheduler-appointment-content-details {
+          display: none;
+        }
+
+        .dx-scheduler-appointment-recurrence-icon {
+          top: 50%;
+          transform: translateY(-50%);
+        }
+      }
+    }
+
+    @if $size == "compact" {
+      @container (max-height: #{$generic-scheduler-appointment-10min-height}) {
+        .dx-item-content.dx-scheduler-appointment-content {
+          display: none;
+        }
       }
     }
   }

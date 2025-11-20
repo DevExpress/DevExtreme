@@ -39,19 +39,21 @@ $fluent-scheduler-days-of-week-buttons-gap: null !default;
 $fluent-scheduler-recurrence-end-item-height: null !default;
 
 $fluent-scheduler-appointment-short-content-padding: null !default;
+$fluent-scheduler-appointment-15min-height: null !default;
+$fluent-scheduler-appointment-20min-height: null !default;
+$fluent-scheduler-appointment-25min-height: null !default;
 $fluent-scheduler-appointment-10min-recurrence-padding-right: null !default;
+$fluent-scheduler-appointment-10min-title-font-size: null !default;
+$fluent-scheduler-appointment-10min-title-line-height: null !default;
 $fluent-scheduler-appointment-10min-icon-font-size: null !default;
-$fluent-scheduler-appointment-10min-icon-top: null !default;
 $fluent-scheduler-appointment-10min-icon-right: null !default;
 $fluent-scheduler-appointment-15min-recurrence-padding-right: null !default;
+$fluent-scheduler-appointment-15min-title-font-size: null !default;
 $fluent-scheduler-appointment-15min-title-line-height: null !default;
 $fluent-scheduler-appointment-15min-icon-font-size: null !default;
-$fluent-scheduler-appointment-15min-icon-bottom: null !default;
 $fluent-scheduler-appointment-15min-icon-right: null !default;
-$fluent-scheduler-appointment-20min-icon-top: null !default;
 $fluent-scheduler-appointment-20min-recurrence-padding-right: null !default;
 $fluent-scheduler-appointment-20min-icon-right: null !default;
-$fluent-scheduler-appointment-20min-title-line-height: null !default;
 
 $scheduler-left-column-width: 65px !default;
 $fluent-scheduler-timeline-date-table-cell-height: 50px !default;
@@ -137,18 +139,24 @@ $header-panel-time-cell-padding: null !default;
   $agenda-appointment-title-font-size: 14px;
 
   $fluent-scheduler-appointment-short-content-padding: 0 8px 0 12px !default;
+  $fluent-scheduler-appointment-15min-height: 17px !default;
+  $fluent-scheduler-appointment-20min-height: 24px !default;
+  $fluent-scheduler-appointment-25min-height: 32px !default;
 
   $fluent-scheduler-appointment-10min-recurrence-padding-right: 14px !default;
+  $fluent-scheduler-appointment-10min-title-font-size: 8px !default;
+  $fluent-scheduler-appointment-10min-title-line-height: 12px !default;
   $fluent-scheduler-appointment-10min-icon-font-size: 12px !default;
-  $fluent-scheduler-appointment-10min-icon-top: 0 !default;
   $fluent-scheduler-appointment-10min-icon-right: 2px !default;
 
   $fluent-scheduler-appointment-15min-recurrence-padding-right: 14px !default;
+  $fluent-scheduler-appointment-15min-title-font-size: 12px !default;
+  $fluent-scheduler-appointment-15min-title-line-height: 18px !default;
   $fluent-scheduler-appointment-15min-icon-font-size: 12px !default;
-  $fluent-scheduler-appointment-15min-icon-bottom: 2px !default;
   $fluent-scheduler-appointment-15min-icon-right: 2px !default;
 
-  $fluent-scheduler-appointment-20min-title-line-height: 24px !default;
+  $fluent-scheduler-appointment-20min-icon-right: 2px !default;
+  $fluent-scheduler-appointment-20min-recurrence-padding-right: 16px !default;
 }
 
 @else if $size == "compact" {
@@ -199,14 +207,21 @@ $header-panel-time-cell-padding: null !default;
   $agenda-appointment-title-font-size: 13px;
 
   $fluent-scheduler-appointment-short-content-padding: 0 8px 0 12px !default;
+  $fluent-scheduler-appointment-15min-height: 17px !default;
+  $fluent-scheduler-appointment-20min-height: 24px !default;
+  $fluent-scheduler-appointment-25min-height: 32px !default;
+
+  $fluent-scheduler-appointment-10min-recurrence-padding-right: 14px !default;
+  $fluent-scheduler-appointment-10min-title-font-size: 8px !default;
+  $fluent-scheduler-appointment-10min-title-line-height: 12px !default;
+  $fluent-scheduler-appointment-10min-icon-font-size: 12px !default;
+  $fluent-scheduler-appointment-10min-icon-right: 2px !default;
 
   $fluent-scheduler-appointment-15min-recurrence-padding-right: 16px !default;
-  $fluent-scheduler-appointment-15min-icon-font-size: 12px !default;
+  $fluent-scheduler-appointment-15min-title-font-size: 12px !default;
   $fluent-scheduler-appointment-15min-title-line-height: 12px !default;
-  $fluent-scheduler-appointment-15min-icon-bottom: 0 !default;
+  $fluent-scheduler-appointment-15min-icon-font-size: 12px !default;
 
   $fluent-scheduler-appointment-20min-recurrence-padding-right: 20px !default;
-  $fluent-scheduler-appointment-20min-icon-top: 0 !default;
   $fluent-scheduler-appointment-20min-icon-right: 5px !default;
-  $fluent-scheduler-appointment-20min-title-line-height: 18px !default;
 }
