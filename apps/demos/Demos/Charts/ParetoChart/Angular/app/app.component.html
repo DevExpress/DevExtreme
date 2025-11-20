@@ -30,33 +30,33 @@
     }
   ]"
 >
-  <dxo-argument-axis>
-    <dxo-label overlappingBehavior="stagger"></dxo-label>
-  </dxo-argument-axis>
-  <dxo-tooltip
+  <dxo-chart-argument-axis>
+    <dxo-chart-label overlappingBehavior="stagger"></dxo-chart-label>
+  </dxo-chart-argument-axis>
+  <dxo-chart-tooltip
     [enabled]="true"
     [shared]="true"
     [customizeTooltip]="customizeTooltip"
   >
-  </dxo-tooltip>
-  <dxo-common-series-settings argumentField="complaint">
-  </dxo-common-series-settings>
-  <dxi-series
+  </dxo-chart-tooltip>
+  <dxo-chart-common-series-settings argumentField="complaint">
+  </dxo-chart-common-series-settings>
+  <dxi-chart-series
     type="bar"
     valueField="count"
     axis="frequency"
     name="Complaint frequency"
     color="#fac29a"
   >
-  </dxi-series>
-  <dxi-series
+  </dxi-chart-series>
+  <dxi-chart-series
     type="spline"
     valueField="cumulativePercent"
     axis="percentage"
     name="Cumulative percentage"
     color="#6b71c3"
   >
-  </dxi-series>
-  <dxo-legend verticalAlignment="top" horizontalAlignment="center">
-  </dxo-legend>
+  </dxi-chart-series>
+  <dxo-chart-legend verticalAlignment="top" horizontalAlignment="center">
+  </dxo-chart-legend>
 </dx-chart>

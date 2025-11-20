@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { renderDateParts, getDatePartIndexByPosition } from '__internal/ui/date_box/m_date_box.mask.parts';
-import dateParser from 'common/core/localization/ldml/date.parser';
+import dateParser from '__internal/core/localization/ldml/dateParserModule';
 import dateLocalization from 'common/core/localization/date';
 import { noop } from 'core/utils/common';
 import pointerMock from '../../helpers/pointerMock.js';

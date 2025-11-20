@@ -9,13 +9,19 @@
   [showAllDayPanel]="false"
   [groups]="['humanId']"
 >
-  <dxi-view
+  <dxi-scheduler-view
     type="timelineWorkWeek"
     name="Timeline"
     groupOrientation="vertical"
-  ></dxi-view>
-  <dxi-view type="workWeek" groupOrientation="vertical"></dxi-view>
-  <dxi-view type="month" groupOrientation="horizontal"></dxi-view>
+  ></dxi-scheduler-view>
+  <dxi-scheduler-view
+    type="workWeek"
+    groupOrientation="vertical"
+  ></dxi-scheduler-view>
+  <dxi-scheduler-view
+    type="month"
+    groupOrientation="horizontal"
+  ></dxi-scheduler-view>
   <dxi-scheduler-resource
     fieldExpr="humanId"
     [dataSource]="resources"
@@ -23,5 +29,5 @@
     icon="group"
   >
   </dxi-scheduler-resource>
-  <dxo-scrolling mode="virtual"> </dxo-scrolling>
+  <dxo-scheduler-scrolling mode="virtual"> </dxo-scheduler-scrolling>
 </dx-scheduler>

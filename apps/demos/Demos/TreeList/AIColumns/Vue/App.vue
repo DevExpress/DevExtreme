@@ -14,7 +14,6 @@
       :enabled="true"
       :pageSize="10"
     />
-    <DxColumnFixing :enabled="true"/>
 
     <DxColumn
       caption="Employee"
@@ -80,7 +79,7 @@ import { aiIntegration } from './service.ts';
 
 const aiConfig = {
   prompt: 'Identify department for each employee. It should be one of the following department types:  "Management", "Human Resources", "IT", "Shipping", "Support", "Sales",  "Engineering". Use "Engineering" by default.',
-  mode: 'auto' as const,
+  mode: 'auto',
   noDataText: 'No data',
 };
 

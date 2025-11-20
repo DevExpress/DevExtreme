@@ -4,17 +4,17 @@
     title="Weather in Las Vegas, NV (2017)"
     [dataSource]="weatherIndicators"
   >
-    <dxo-common-series-settings argumentField="date">
-    </dxo-common-series-settings>
-    <dxi-series
+    <dxo-chart-common-series-settings argumentField="date">
+    </dxo-chart-common-series-settings>
+    <dxi-chart-series
       axis="precipitation"
       color="#03a9f4"
       type="bar"
       valueField="precip"
       name="Precipitation"
     >
-    </dxi-series>
-    <dxi-series
+    </dxi-chart-series>
+    <dxi-chart-series
       axis="temperature"
       color="#ffc0bb"
       type="rangeArea"
@@ -22,53 +22,53 @@
       rangeValue2Field="maxTemp"
       name="Temperature range"
     >
-      <dxo-aggregation
+      <dxo-chart-aggregation
         [enabled]="useAggregation"
         method="custom"
         [calculate]="calculateRangeArea"
       >
-      </dxo-aggregation>
-    </dxi-series>
-    <dxi-series
+      </dxo-chart-aggregation>
+    </dxi-chart-series>
+    <dxi-chart-series
       axis="temperature"
       color="#e91e63"
       valueField="temp"
       name="Average temperature"
     >
-      <dxo-point [size]="7"></dxo-point>
-      <dxo-aggregation
+      <dxo-chart-point [size]="7"></dxo-chart-point>
+      <dxo-chart-aggregation
         #pointsAggregationSettings
         [enabled]="useAggregation"
         method="avg"
       >
-      </dxo-aggregation>
-    </dxi-series>
-    <dxo-argument-axis
+      </dxo-chart-aggregation>
+    </dxi-chart-series>
+    <dxo-chart-argument-axis
       #argumentAxisSettings
       argumentType="datetime"
       aggregationInterval="week"
       [valueMarginsEnabled]="false"
     >
-    </dxo-argument-axis>
-    <dxi-value-axis name="temperature">
-      <dxo-title text="Temperature, °C">
-        <dxo-font color="#e91e63"></dxo-font>
-      </dxo-title>
-      <dxo-label>
-        <dxo-font color="#e91e63"></dxo-font>
-      </dxo-label>
-    </dxi-value-axis>
-    <dxi-value-axis name="precipitation" position="right">
-      <dxo-title text="Precipitation, mm">
-        <dxo-font color="#03a9f4"></dxo-font>
-      </dxo-title>
-      <dxo-label>
-        <dxo-font color="#03a9f4"></dxo-font>
-      </dxo-label>
-    </dxi-value-axis>
-    <dxo-legend [visible]="false"></dxo-legend>
-    <dxo-tooltip [enabled]="true" [customizeTooltip]="customizeTooltip">
-    </dxo-tooltip>
+    </dxo-chart-argument-axis>
+    <dxi-chart-value-axis name="temperature">
+      <dxo-chart-title text="Temperature, °C">
+        <dxo-chart-font color="#e91e63"></dxo-chart-font>
+      </dxo-chart-title>
+      <dxo-chart-label>
+        <dxo-chart-font color="#e91e63"></dxo-chart-font>
+      </dxo-chart-label>
+    </dxi-chart-value-axis>
+    <dxi-chart-value-axis name="precipitation" position="right">
+      <dxo-chart-title text="Precipitation, mm">
+        <dxo-chart-font color="#03a9f4"></dxo-chart-font>
+      </dxo-chart-title>
+      <dxo-chart-label>
+        <dxo-chart-font color="#03a9f4"></dxo-chart-font>
+      </dxo-chart-label>
+    </dxi-chart-value-axis>
+    <dxo-chart-legend [visible]="false"></dxo-chart-legend>
+    <dxo-chart-tooltip [enabled]="true" [customizeTooltip]="customizeTooltip">
+    </dxo-chart-tooltip>
   </dx-chart>
   <div class="options">
     <div class="caption">Options</div>

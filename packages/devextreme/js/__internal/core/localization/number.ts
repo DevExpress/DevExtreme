@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import type { FormatObject as PublicFormatConfig } from '@js/common/core/localization';
+import type { Format, FormatObject as PublicFormatConfig } from '@js/common/core/localization';
 import config from '@js/core/config';
 import errors from '@js/core/errors';
 import currencyLocalization from '@ts/core/localization/currency';
@@ -42,8 +42,9 @@ export type NumberFormatter = (value: number) => string;
 
 export type FormatConfig = PublicFormatConfig & {
   unlimitedIntegerDigits?: boolean;
-  formatter?: NumberFormatter;
 };
+
+export type LocalizationFormat = Format | FormatConfig;
 
 export interface NormalizedConfig {
   minimumFractionDigits?: number;
@@ -310,7 +311,7 @@ const numberLocalization = dependencyInjector({
 
   format(
     value: string | number,
-    format: number | string | FormatConfig | Function | undefined,
+    format: LocalizationFormat,
   ): string | number {
     if (typeof value !== 'number') {
       return value;
@@ -321,27 +322,27 @@ const numberLocalization = dependencyInjector({
     }
 
     // @ts-expect-error
-    // eslint-disable-next-line @stylistic/no-mixed-operators
-    format = format && format.formatter || format;
+    format = format?.formatter || format;
 
     if (typeof format === 'function') {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return format(value);
+      return (format as NumberFormatter)(value);
     }
 
     format = this._normalizeFormat(format) as FormatConfig;
 
-    if (!format.type) {
-      format.type = 'decimal';
+    if (!(format as FormatConfig).type) {
+      (format as FormatConfig).type = 'decimal';
     }
 
-    const numberConfig: FormatObject | undefined = this._parseNumberFormatString(format.type);
+    // eslint-disable-next-line @stylistic/max-len
+    const numberConfig: FormatObject | undefined = this._parseNumberFormatString((format as FormatConfig).type);
 
     if (!numberConfig) {
       const formatterConfig: FormatterConfig = this._getSeparators();
-      formatterConfig.unlimitedIntegerDigits = format.unlimitedIntegerDigits;
+      formatterConfig.unlimitedIntegerDigits = (format as FormatConfig).unlimitedIntegerDigits;
 
-      const formattedValue = getFormatter(format.type, formatterConfig)(value);
+      // @ts-expect-error
+      const formattedValue = getFormatter((format as FormatConfig).type, formatterConfig)(value);
 
       return this.convertDigits(formattedValue) as string | number;
     }

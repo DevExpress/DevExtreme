@@ -18,7 +18,9 @@ export default dependencyInjector({
     };
   })(),
 
-  getValueByClosestLocale(getter: (locale: string) => string | undefined): string | undefined {
+  getValueByClosestLocale(
+    getter: (locale: string) => string | number | undefined,
+  ): string | number | undefined {
     let locale: string = this.locale();
     let value = getter(locale);
     let isRootLocale = false;
