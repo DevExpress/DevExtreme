@@ -29,6 +29,7 @@ export const CLASS = {
   headers: 'headers',
   headerPanel: 'header-panel',
   searchBox: 'dx-searchbox',
+  row: 'dx-row',
   dataRow: 'dx-data-row',
   groupRow: 'dx-group-row',
   groupPanel: 'group-panel',
@@ -138,6 +139,10 @@ export default class DataGrid extends GridCore {
   constructor(id: string | Selector) {
     super(id);
 
+    /*
+      dataRows contains double collection of rows (two tables) when
+      columnFixing.legacyMode = true AND DataGrid has fixed columns
+    */
     this.dataRows = this.element.find(`.${CLASS.dataRow}`);
   }
 
@@ -146,6 +151,10 @@ export default class DataGrid extends GridCore {
 
   getContainer(): Selector {
     return this.element.find(`.${CLASS.dataGrid}`);
+  }
+
+  getHeadersContainer(): Selector {
+    return this.element.find(`.${this.addWidgetPrefix(CLASS.headers)}`);
   }
 
   getHeaders(): Headers {
@@ -158,6 +167,18 @@ export default class DataGrid extends GridCore {
 
   getScrollContainer(): Selector {
     return this.getRowsView().find(`.${CLASS.scrollableContainer}`);
+  }
+
+  /*
+    getRows() returns double collection of rows (two tables) when
+    columnFixing.legacyMode = true AND DataGrid has fixed columns
+  */
+  getRows(): Selector {
+    return this.getRowsView().find(`.${CLASS.row}`);
+  }
+
+  getCells(): Selector {
+    return this.getRowsView().find('td');
   }
 
   getDataRow(index: number): DataRow {
