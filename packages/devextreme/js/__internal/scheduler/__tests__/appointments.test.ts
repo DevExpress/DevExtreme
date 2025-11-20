@@ -22,4 +22,27 @@ describe('Appointments', () => {
     const appointment = POM.getAppointment();
     expect(appointment.element && !appointment.element.classList.contains('dx-resizable')).toBe(true);
   });
+
+  it('should display "(No subject)" for appointments without title', async () => {
+    setupSchedulerTestEnvironment({ height: 200 });
+    const appointmentWithoutTitle = {
+      startDate: new Date(2017, 4, 9, 9, 30),
+      endDate: new Date(2017, 4, 9, 11),
+      text: '',
+    };
+
+    const { POM } = await createScheduler({
+      dataSource: [appointmentWithoutTitle],
+      views: ['month'],
+      currentView: 'month',
+      currentDate: new Date(2017, 4, 25),
+      firstDayOfWeek: 1,
+      startDayHour: 9,
+      height: 600,
+      width: 600,
+    });
+
+    const appointment = POM.getAppointment();
+    expect(appointment.getText()).toBe('(No subject)');
+  });
 });

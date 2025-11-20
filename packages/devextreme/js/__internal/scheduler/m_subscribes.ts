@@ -3,7 +3,6 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
-import { isPlainObject } from '@js/core/utils/type';
 
 import { formatDates, getFormatType } from './appointments/m_text_utils';
 import { getDeltaTime } from './appointments/resizing/get_delta_time';
@@ -137,14 +136,6 @@ const subscribes = {
       text: adapter.text || messageLocalization.format('dxScheduler-noSubject'),
       formatDate: formatDates(startDate, endDate, formatType),
     };
-  },
-
-  _createAppointmentTitle(data) {
-    if (isPlainObject(data)) {
-      return data.text || messageLocalization.format('dxScheduler-noSubject');
-    }
-
-    return String(data);
   },
 
   getResizableAppointmentArea(options) {
