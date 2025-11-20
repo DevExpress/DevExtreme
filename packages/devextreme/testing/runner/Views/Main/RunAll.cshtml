@@ -282,47 +282,6 @@
             return workers[index];
         };
 
-        var checkStuckWorkers = function() {
-            var now = Date.now();
-            var activeWorkers = [];
-            
-            for(var i = 0; i < WORKER_COUNT; i++) {
-                var lastActivity = workerLastActivity[i];
-                var suite = suitesInProgress[i];
-                
-                if(suite && !suite.finalized) {
-                    var inactiveSeconds = Math.round((now - lastActivity) / 1000);
-                    activeWorkers.push('Worker' + i + ':' + suite.name + '(' + inactiveSeconds + 's)');
-                    
-                    if(lastActivity && (now - lastActivity) > WORKER_STUCK_TIMEOUT) {
-                        serverLog('ERROR: Worker ' + i + ' is STUCK on test: ' + suite.name + ' (no activity for ' + 
-                            inactiveSeconds + ' seconds), busyCount=' + busyCount);
-                        serverLog('Force finalizing stuck worker ' + i + ' and loading next test');
-
-                        suite.finalize(false);
-                        
-                        suitesInProgress[i] = null;
-                        workerLastActivity[i] = now;
-
-                        var worker = workerByIndex(i);
-                        if(worker) {
-                            try {
-                                if(worker.contentWindow && worker.contentWindow.stop) {
-                                    worker.contentWindow.stop();
-                                }
-                            } catch(e) {
-                                serverLog('Could not stop worker iframe: ' + e.message);
-                            }
-
-                            setTimeout(function() {
-                                nextUrl(i);
-                            }, 100);
-                        }
-                    }
-                }
-            }
-        };
-
         var indexFromWorkerName = function(worker) {
             return Number(worker.name.substr(WORKER_NAME_PREFIX.length));
         };
@@ -403,10 +362,7 @@
                 );
             }
 
-            $.post(@Html.Raw(Json.Serialize(Url.Action("NotifyTestStarted"))), { name: getTestCaseName(testSuite, qunitData) })
-                .fail(function(jqXHR, textStatus, errorThrown) {
-                    console.warn('NotifyTestStarted failed:', textStatus, errorThrown);
-                });
+            $.post(@Html.Raw(Json.Serialize(Url.Action("NotifyTestStarted"))), { name: getTestCaseName(testSuite, qunitData) });
         };
 
         var indicateTestStatusInTitle = function(failed) {
@@ -494,10 +450,7 @@
                 );
             }
 
-            $.post(@Html.Raw(Json.Serialize(Url.Action("NotifyTestCompleted"))), { name: getTestCaseName(testSuite, qunitData), passed:  qunitData.passed === qunitData.total})
-                .fail(function(jqXHR, textStatus, errorThrown) {
-                    console.warn('NotifyTestCompleted failed:', textStatus, errorThrown);
-                });
+            $.post(@Html.Raw(Json.Serialize(Url.Action("NotifyTestCompleted"))), { name: getTestCaseName(testSuite, qunitData), passed:  qunitData.passed === qunitData.total});
         };
 
         window.RUNNER_ON_DONE = function(worker, qunitData) {
@@ -639,13 +592,10 @@
                 url: @Html.Raw(Json.Serialize(Url.Action("NotifyIsAlive"))),
                 type: 'POST',
                 timeout: farmMode ? 30000 : 10000
-            })
-            .fail(function(jqXHR, textStatus, errorThrown) {
-                serverLog('NotifyIsAlive FAILED: ' + textStatus);
             });
         }
 
-        setInterval(checkStuckWorkers, 15000);
+
 
         function roundTime(time) {
             return +(time.toFixed(3));
@@ -653,9 +603,6 @@
 
         createWorkers();
         
-        @* setInterval(function() {
-            notifyIsAlive();
-        }, 30000); *@
         
         runFirstBatch();
     });

@@ -102,9 +102,9 @@ jobs:
           { name: "material - compact", theme: 'material.blue.light.compact' },
 
           { componentFolder: "cardView", name: "cardView" },
-          { componentFolder: "dataGrid", name: "dataGrid (1/3)", indices: "1/3" },
-          { componentFolder: "dataGrid", name: "dataGrid (2/3)", indices: "2/3" },
-          { componentFolder: "dataGrid", name: "dataGrid (3/3)", indices: "3/3" },
+          { componentFolder: "dataGrid", name: "dataGrid (1/3)", indices: "1/3", cache: true },
+          { componentFolder: "dataGrid", name: "dataGrid (2/3)", indices: "2/3", cache: true },
+          { componentFolder: "dataGrid", name: "dataGrid (3/3)", indices: "3/3", cache: true },
 
           { componentFolder: "editors", name: "editors" },
           { componentFolder: "navigation", name: "navigation" },
@@ -182,7 +182,8 @@ jobs:
         [ "${{ matrix.ARGS.indices }}" != "" ] && INDICES="--indices ${{ matrix.ARGS.indices }}"
         [ "${{ matrix.ARGS.concurrency }}" != "" ] && CONCURRENCY="--concurrency ${{ matrix.ARGS.concurrency }}"
         [ "${{ matrix.ARGS.platform }}" != "" ] && PLATFORM="--platform ${{ matrix.ARGS.platform }}"
-        all_args="--browsers=chrome:devextreme-shr2 --componentFolder ${{ matrix.ARGS.componentFolder }} $CONCURRENCY $INDICES $PLATFORM $THEME"
+        [ "${{ matrix.ARGS.cache }}" == "true" ] && CACHE="--cache true"
+        all_args="--browsers=chrome:devextreme-shr2 --componentFolder ${{ matrix.ARGS.componentFolder }} $CONCURRENCY $INDICES $PLATFORM $THEME $CACHE"
         echo "$all_args"
         pnpm run test $all_args
 

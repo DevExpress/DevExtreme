@@ -203,7 +203,6 @@ function start_runner_watchdog {
                 local current_time=$(cat $last_suite_time_file)
                 
                 if [ -z "$last_suite_time" ]; then
-                    echo "Watchdog [check #$check_count]: Initial LastSuiteTime detected: $current_time"
                     last_suite_time=$current_time
                     stall_count=0
                 elif [ "$current_time" == "$last_suite_time" ]; then
