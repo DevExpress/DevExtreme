@@ -671,6 +671,8 @@ export class AppointmentForm {
   }
 
   private createDescriptionGroup(): GroupItem {
+    const { descriptionExpr } = this.scheduler.getDataAccessors().expr;
+
     return {
       name: DESCRIPTION_GROUP_NAME,
       itemType: 'group',
@@ -688,6 +690,7 @@ export class AppointmentForm {
         },
         {
           name: DESCRIPTION_EDITOR_NAME,
+          dataField: descriptionExpr,
           colSpan: 1,
           itemType: 'simple',
           cssClass: CLASSES.descriptionEditor,

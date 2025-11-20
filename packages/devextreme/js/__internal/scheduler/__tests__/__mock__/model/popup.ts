@@ -45,6 +45,10 @@ export class PopupModel {
     return this.element.querySelector('.dx-scheduler-form-subject-group .dx-scheduler-form-icon .dx-icon');
   }
 
+  get subjectInput(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-text-editor .dx-textbox.dx-widget');
+  }
+
   get startDate(): Element | null {
     return this.element.querySelector('.dx-scheduler-form-start-date-editor .dx-datebox.dx-widget');
   }
@@ -71,6 +75,10 @@ export class PopupModel {
 
   get repeatEditor(): Element | null {
     return this.element.querySelector('.dx-scheduler-form-repeat-editor .dx-selectbox.dx-widget');
+  }
+
+  get descriptionTextArea(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-description-editor .dx-textarea.dx-widget');
   }
 
   get frequencyEditor(): Element | null {

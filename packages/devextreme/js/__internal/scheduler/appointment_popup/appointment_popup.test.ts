@@ -118,6 +118,30 @@ describe('Appointment Popup Form', () => {
       const dataItem = scheduler.option('dataSource')?.[1];
       expect(dataItem).toMatchObject({ ...commonAppointment });
     });
+
+    it('should have empty description, subject and timezone inputs when showing empty appointment after saving previous appointment', async () => {
+      const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const subjectEditor = ($(POM.popup.subjectInput) as any).dxTextBox('instance');
+      const descriptionEditor = ($(POM.popup.descriptionTextArea) as any).dxTextArea('instance');
+      const startTimeZoneEditor = ($(POM.popup.startTimeZone) as any).dxSelectBox('instance');
+      const endTimeZoneEditor = ($(POM.popup.endTimeZone) as any).dxSelectBox('instance');
+
+      descriptionEditor.option('value', 'temp');
+      startTimeZoneEditor.option('value', 'America/Los_Angeles');
+      endTimeZoneEditor.option('value', 'America/Anchorage');
+
+      POM.popup.getSaveButton().click();
+
+      scheduler.showAppointmentPopup();
+
+      expect(subjectEditor.option('value')).toBe('');
+      expect(descriptionEditor.option('value')).toBe('');
+      expect(startTimeZoneEditor.option('value')).toBeNull();
+      expect(endTimeZoneEditor.option('value')).toBeNull();
+    });
   });
 
   describe('Toolbar', () => {
