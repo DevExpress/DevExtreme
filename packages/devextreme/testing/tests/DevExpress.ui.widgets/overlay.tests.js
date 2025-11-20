@@ -137,7 +137,7 @@ const moduleConfig = {
         fx.off = true;
     },
     afterEach: function() {
-        zIndex.clearStack();
+        zIndex.reset();
         Overlay.baseZIndex(1500);
         fx.off = false;
     }
@@ -3919,7 +3919,7 @@ testModule('overlay utils', moduleConfig, () => {
         zIndex.create();
         zIndex.create();
 
-        zIndex.clearStack();
+        zIndex.reset();
         assert.strictEqual(zIndex.create(), 1501);
     });
 
@@ -3976,6 +3976,28 @@ testModule('overlay utils', moduleConfig, () => {
 
         assert.strictEqual(zIndex.create(), index + 1, 'the next index has been created');
     });
+
+    test('overlay instance should not overtake z-index of overlay created after it (T1308742)', function(assert) {
+        const $overlay1 = $('<div id="overlay1">').appendTo('#qunit-fixture');
+        const $overlay2 = $('<div id="overlay2">').appendTo('#qunit-fixture');
+
+        const overlay1 = new Overlay($overlay1, { visible: true });
+        const zIndexInitial1 = Number(getComputedStyle(overlay1.$content()[0]).zIndex);
+
+        overlay1.option('visible', false);
+
+        const overlay2 = new Overlay($overlay2, { visible: true });
+        const zIndex2 = Number(getComputedStyle(overlay2.$content()[0]).zIndex);
+
+        overlay1.option('visible', true);
+        const zIndex1 = Number(getComputedStyle(overlay1.$content()[0]).zIndex);
+
+        assert.strictEqual(zIndex1, zIndexInitial1, 'first overlay keeps its original zindex');
+        assert.ok(zIndex2 > zIndex1, 'second overlay remains above the first one');
+
+        overlay1.dispose();
+        overlay2.dispose();
+    });
 });
 
 testModule('renderGeometry', {
@@ -4000,7 +4022,7 @@ testModule('renderGeometry', {
         };
     },
     afterEach: function() {
-        zIndex.clearStack();
+        zIndex.reset();
         Overlay.baseZIndex(1500);
         fx.off = false;
     }

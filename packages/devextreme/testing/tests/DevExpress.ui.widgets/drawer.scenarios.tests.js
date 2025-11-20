@@ -3,7 +3,7 @@ import { extend } from 'core/utils/extend';
 import { isNumeric } from 'core/utils/type';
 import { drawerTesters } from '../../helpers/drawerHelpers.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
-import { clearStack } from '__internal/ui/overlay/z_index';
+import { reset } from '__internal/ui/overlay/z_index';
 import 'ui/file_manager';
 import 'ui/color_box';
 import 'ui/menu';
@@ -33,17 +33,17 @@ const moduleConfig = {
         );
         this.$fixture.html(this.$element);
         this.clock = sinon.useFakeTimers();
-        clearStack();
+        reset();
         fx.off = true;
     },
     afterEach: function() {
+        reset();
         fx.off = false;
         this.$element.dxDrawer('instance').dispose();
         this.$element.remove();
         delete this.$element;
         this.clock.restore();
         this.clock = undefined;
-        clearStack();
     }
 };
 
@@ -336,6 +336,7 @@ baseConfigs.forEach(baseConfig => {
                 }));
 
                 this.clock.tick(100);
+                reset();
                 drawer.repaint();
                 this.clock.tick(100);
 

@@ -13,7 +13,7 @@ import Button from 'ui/button';
 import Drawer from 'ui/drawer';
 import { animation } from '__internal/ui/drawer/drawer.animation';
 import Overlay from 'ui/overlay/ui.overlay';
-
+import * as zIndex from '__internal/ui/overlay/z_index';
 
 const DRAWER_WRAPPER_CLASS = 'dx-drawer-wrapper';
 const DRAWER_PANEL_CONTENT_CLASS = 'dx-drawer-panel-content';
@@ -98,7 +98,11 @@ QUnit.testStart(() => {
     $('#qunit-fixture').html(markup);
 });
 
-QUnit.module('Drawer behavior', () => {
+QUnit.module('Drawer behavior', {
+    afterEach: function() {
+        zIndex.reset();
+    }
+}, () => {
     QUnit.test('defaults', function(assert) {
         const $element = $('#drawer').dxDrawer({});
         const instance = $element.dxDrawer('instance');

@@ -30,6 +30,7 @@ import {
     POPUP_CONTENT_SCROLLABLE_CLASS,
 } from '__internal/ui/popup/m_popup';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
+import * as zIndex from '__internal/ui/overlay/z_index';
 
 import 'fluent_blue_light.css!';
 import 'ui/popup';
@@ -148,6 +149,7 @@ QUnit.module('basic', {
     },
     afterEach: function() {
         executeAsyncMock.teardown();
+        zIndex.reset();
     }
 }, () => {
     QUnit.test('markup init', function(assert) {
