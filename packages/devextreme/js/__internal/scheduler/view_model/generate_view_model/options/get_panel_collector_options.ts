@@ -21,7 +21,6 @@ export const getPanelCollectorOptions = (schedulerStore: Scheduler, {
   collectorCSS,
   DOMMetaData,
   panelName,
-  isMonthView,
 }: {
   DOMMetaData: {
     dateTableCellsMeta: RealSize[][];
@@ -73,8 +72,6 @@ export const getPanelCollectorOptions = (schedulerStore: Scheduler, {
     viewOrientation,
     isTimelineView,
     isAdaptivityEnabled,
-    isAllDayPanel: panelName === 'allDayPanel',
-    isMonthView,
   };
   const maxLevel = getMaxLevel(maxLevelOptions);
   const minLevel = viewOrientation === 'vertical' ? MIN_LEVEL_VERTICAL_VIEW : getMaxLevel({
