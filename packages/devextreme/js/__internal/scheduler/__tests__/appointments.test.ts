@@ -1,11 +1,14 @@
 import {
-  describe, expect, it,
+  afterEach, describe, expect, it, jest,
 } from '@jest/globals';
 
 import { createScheduler } from './__mock__/create_scheduler';
 import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
 
 describe('Appointments', () => {
+  afterEach(() => {
+    jest.useRealTimers();
+  });
   it('All-day appointment should not be resizable if current view is "day"', async () => {
     setupSchedulerTestEnvironment();
     const { POM } = await createScheduler({
@@ -44,5 +47,38 @@ describe('Appointments', () => {
 
     const appointment = POM.getAppointment();
     expect(appointment.getText()).toBe('(No subject)');
+  });
+
+  it('should display "(No subject)" in tooltip for appointments without title', async () => {
+    setupSchedulerTestEnvironment({ height: 200 });
+    const appointmentWithoutTitle = {
+      startDate: new Date(2017, 4, 9, 9, 30),
+      endDate: new Date(2017, 4, 9, 11),
+      text: '',
+    };
+
+    const { POM } = await createScheduler({
+      dataSource: [appointmentWithoutTitle],
+      views: ['month'],
+      currentView: 'month',
+      currentDate: new Date(2017, 4, 25),
+      firstDayOfWeek: 1,
+      startDayHour: 9,
+      height: 600,
+      width: 600,
+    });
+
+    const appointment = POM.getAppointment();
+    if (appointment.element) {
+      jest.useFakeTimers();
+      appointment.element.click();
+      jest.advanceTimersByTime(1000);
+
+      const tooltipAppointment = POM.getTooltipAppointment();
+      expect(tooltipAppointment).not.toBeNull();
+
+      const tooltipTitleElement = tooltipAppointment?.querySelector('.dx-tooltip-appointment-item-content-subject');
+      expect(tooltipTitleElement?.textContent?.trim()).toBe('(No subject)');
+    }
   });
 });
