@@ -1,4 +1,4 @@
-import { Controller } from '../m_modules';
+import { Controller } from '../../m_modules';
 
 export class AIColumnCacheController extends Controller {
   private readonly cache: Record<string, Record<PropertyKey, string> | undefined> = {};

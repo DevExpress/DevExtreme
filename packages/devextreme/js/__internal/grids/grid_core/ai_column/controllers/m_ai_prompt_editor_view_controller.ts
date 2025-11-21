@@ -1,6 +1,6 @@
-import type { Column } from '../columns_controller/m_columns_controller';
-import { ViewController } from '../m_modules';
-import type { AIPromptEditorView } from './m_ai_prompt_editor_view';
+import type { Column } from '../../columns_controller/m_columns_controller';
+import { ViewController } from '../../m_modules';
+import type { AIPromptEditorView } from '../views/m_ai_prompt_editor_view';
 
 export class AIPromptEditorViewController extends ViewController {
   private aiPromptEditorView!: AIPromptEditorView;
