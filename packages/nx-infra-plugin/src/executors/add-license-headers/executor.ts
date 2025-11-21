@@ -3,6 +3,7 @@ import * as path from 'path';
 import { glob } from 'glob';
 import { AddLicenseHeadersExecutorSchema } from './schema';
 import { resolveProjectPath, normalizeGlobPathForWindows } from '../../utils/path-resolver';
+import { isWindowsOS } from '../../utils/common';
 import { logError } from '../../utils/error-handler';
 import { readJson, readFileText, writeFileText } from '../../utils/file-operations';
 
@@ -104,9 +105,15 @@ const runExecutor: PromiseExecutor<AddLicenseHeadersExecutorSchema> = async (opt
     const includePatterns = options.includePatterns || DEFAULT_INCLUDE_PATTERNS;
     const excludePatterns = options.excludePatterns || DEFAULT_EXCLUDE_PATTERNS;
 
-    const patterns = includePatterns.map((pattern) =>
-      normalizeGlobPathForWindows(path.join(targetDirectory, pattern)),
-    );
+    const patterns = includePatterns.map((pattern) => {
+      const result = path.join(targetDirectory, pattern);
+
+      if (isWindowsOS()) {
+        return normalizeGlobPathForWindows(result);
+      }
+
+      return result;
+    });
 
     const allFiles: string[] = [];
     for (const pattern of patterns) {
