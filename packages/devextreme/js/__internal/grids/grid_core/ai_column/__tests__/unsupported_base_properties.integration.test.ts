@@ -1,11 +1,13 @@
 import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
+import type { GenerateGridColumnCommandResponse } from '@js/common/ai-integration';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import DataGrid from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
+import { AIIntegration } from '@ts/core/ai_integration/core/ai_integration';
 import { DataGridModel } from '@ts/grids/data_grid/__tests__/__mock__/model/data_grid';
 
 const SELECTORS = {
@@ -19,6 +21,13 @@ const dataSource = [
   { id: 2, name: 'Item 2', value: 2 },
   { id: 3, name: 'Item 3', value: 3 },
 ];
+
+const EMPTY_CELL_TEXT = '\u00A0';
+
+interface RequestResult {
+  promise: Promise<GenerateGridColumnCommandResponse>;
+  abort: () => void;
+}
 
 const createDataGrid = async (
   options: DataGridProperties = {},
@@ -390,5 +399,62 @@ describe('Unsupported properties', () => {
         });
       },
     );
+  });
+
+  describe('Formatting properties', () => {
+    it('Should not apply format to AI column (first load)', async () => {
+      const aiIntegration = new AIIntegration({
+        sendRequest(prompt): RequestResult {
+          return {
+            promise: new Promise<string>((resolve) => {
+              const result = {};
+              Object.entries(prompt.data?.data).forEach(([key, value]) => {
+                const { id, name } = value as { id: number; name: string };
+                if (id === 1) {
+                  result[key] = '';
+                } else {
+                  result[key] = `Response ${name}`;
+                }
+              });
+              resolve(JSON.stringify(result));
+            }),
+            abort: (): void => {},
+          };
+        },
+      });
+      const { component } = await createDataGrid({
+        dataSource,
+        showBorders: true,
+        keyExpr: 'id',
+        columns: [
+          'id',
+          {
+            caption: 'AI',
+            type: 'ai',
+            name: 'AItest',
+            ai: {
+              prompt: 'Provide name for item with value {value}',
+              aiIntegration,
+            },
+            format: {
+              type: 'currency',
+              precision: 0,
+              currency: 'EUR',
+            },
+            trueText: 'Yes',
+            falseText: 'No',
+            buttons: ['edit', 'delete'],
+            setCellValue: (rowData, value) => {
+              rowData.name = value;
+            },
+          },
+        ],
+      });
+
+      await Promise.resolve();
+
+      expect(component.getDataCell(0, 1).getText()).toBe(EMPTY_CELL_TEXT);
+      expect(component.getDataCell(1, 1).getText()).toBe('Response Item 2');
+    });
   });
 });
