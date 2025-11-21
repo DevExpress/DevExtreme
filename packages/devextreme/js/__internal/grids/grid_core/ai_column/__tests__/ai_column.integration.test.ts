@@ -13,7 +13,7 @@ import { AIIntegration } from '@ts/core/ai_integration/core/ai_integration';
 import ArrayStore from '@ts/data/m_array_store';
 import { DataGridModel } from '@ts/grids/data_grid/__tests__/__mock__/model/data_grid';
 
-import { CLASSES } from './const';
+import { CLASSES } from '../const';
 
 const SELECTORS = {
   gridContainer: '#gridContainer',
@@ -845,6 +845,115 @@ describe('columnOption', () => {
 
     expect(visibleColumns.map(({ caption }) => caption))
       .toEqual(['ID', 'AI Column', 'Name', 'Value']);
+  });
+
+  it('should apply encodeHtml to AI column', async () => {
+    const aiIntegration = new AIIntegration({
+      sendRequest(prompt): RequestResult {
+        return {
+          promise: new Promise<string>((resolve) => {
+            const result = {};
+            Object.entries(prompt.data?.data).forEach(([key]) => {
+              result[key] = '<script>alert(\'XSS\')</script>';
+            });
+            resolve(JSON.stringify(result));
+          }),
+          abort: (): void => {},
+        };
+      },
+    });
+    const { component } = await createDataGrid({
+      dataSource: [
+        { id: 1, name: 'Name 1', value: 10 },
+      ],
+      columns: [
+        { dataField: 'id', caption: 'ID' },
+        {
+          type: 'ai',
+          caption: 'AI Column',
+          name: 'myColumn',
+          ai: {
+            aiIntegration,
+            prompt: 'Initial Prompt',
+          },
+        },
+      ],
+    });
+
+    await Promise.resolve();
+    expect(component.getDataCell(0, 1).getText()).toBe('<script>alert(\'XSS\')</script>');
+
+    component.apiColumnOption('myColumn', 'encodeHtml', false);
+    expect(component.getDataCell(0, 1).getText()).toBe('alert(\'XSS\')');
+    expect(component.apiColumnOption('myColumn').encodeHtml).toBe(false);
+  });
+
+  it('should use calculateDisplayValue for AI column', async () => {
+    const aiIntegration = new AIIntegration({
+      sendRequest(): RequestResult {
+        return {
+          promise: new Promise<string>((resolve) => {
+            resolve('{"1":"AI Value"}');
+          }),
+          abort: (): void => {},
+        };
+      },
+    });
+    const { component } = await createDataGrid({
+      dataSource: [
+        { id: 1, name: 'Name 1', value: 10 },
+      ],
+      columns: [
+        { dataField: 'id', caption: 'ID' },
+        {
+          type: 'ai',
+          caption: 'AI Column',
+          name: 'myColumn',
+          ai: {
+            aiIntegration,
+            prompt: 'Initial Prompt',
+          },
+          calculateDisplayValue: (): string => 'Calculated AI Value',
+        },
+      ],
+    });
+
+    await Promise.resolve();
+    expect(component.getDataCell(0, 1).getText()).toBe('Calculated AI Value');
+  });
+
+  it('should use customizeText for AI column', async () => {
+    const aiIntegration = new AIIntegration({
+      sendRequest(): RequestResult {
+        return {
+          promise: new Promise<string>((resolve) => {
+            resolve('{"1":"AI Value"}');
+          }),
+          abort: (): void => {},
+        };
+      },
+    });
+    const { component } = await createDataGrid({
+      dataSource: [
+        { id: 1, name: 'Name 1', value: 10 },
+      ],
+      columns: [
+        { dataField: 'id', caption: 'ID' },
+        {
+          type: 'ai',
+          caption: 'AI Column',
+          name: 'myColumn',
+          ai: {
+            aiIntegration,
+            prompt: 'Initial Prompt',
+          },
+          customizeText: (cellInfo): string => `Customized: ${cellInfo.valueText}`,
+        },
+      ],
+    });
+
+    await Promise.resolve();
+    expect(component.getDataCell(0, 1).getText()).toBe('Customized: AI Value');
   });
 
   describe('when the name is reset', () => {

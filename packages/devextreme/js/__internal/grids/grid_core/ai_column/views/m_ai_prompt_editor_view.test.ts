@@ -14,12 +14,12 @@ import Callbacks from '@js/core/utils/callbacks';
 import wrapInstanceWithMocks from '@ts/grids/grid_core/__tests__/__mock__/helpers/wrapInstance';
 import { AIPromptEditorModel } from '@ts/grids/grid_core/__tests__/__mock__/model/ai_prompt_editor';
 
-import type { Column } from '../columns_controller/m_columns_controller';
-import { AIPromptEditor } from './ai_prompt_editor/ai_prompt_editor';
+import { AIPromptEditor } from '../../ai_prompt_editor/ai_prompt_editor';
+import type { Column } from '../../columns_controller/m_columns_controller';
 import { AIPromptEditorView } from './m_ai_prompt_editor_view';
 
-jest.mock('./ai_prompt_editor/ai_prompt_editor', (): any => {
-  const original = jest.requireActual<any>('./ai_prompt_editor/ai_prompt_editor');
+jest.mock('../../ai_prompt_editor/ai_prompt_editor', (): any => {
+  const original = jest.requireActual<any>('../../ai_prompt_editor/ai_prompt_editor');
 
   return {
     ...original,

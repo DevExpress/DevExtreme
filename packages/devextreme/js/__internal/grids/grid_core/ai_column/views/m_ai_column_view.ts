@@ -4,19 +4,19 @@ import $ from '@js/core/renderer';
 import type { Item, ItemClickEvent, Properties as DropDownProperties } from '@js/ui/drop_down_button';
 import DropDownButton from '@js/ui/drop_down_button';
 
-import type { ColumnHeadersView } from '../column_headers/m_column_headers';
-import type { Column } from '../columns_controller/m_columns_controller';
-import type { ColumnsResizerViewController } from '../columns_resizing_reordering/m_columns_resizing_reordering';
-import type { ModuleType } from '../m_types';
-import { AI_COLUMN_NAME, CLASSES, ICON_NAMES } from './const';
-import { createAIHeaderContainer, createChatSparkleOutlineIcon } from './dom';
-import type { AIColumnController } from './m_ai_column_controller';
-import type { AIPromptEditorViewController } from './m_ai_prompt_editor_view_controller';
+import type { ColumnHeadersView } from '../../column_headers/m_column_headers';
+import type { Column } from '../../columns_controller/m_columns_controller';
+import type { ColumnsResizerViewController } from '../../columns_resizing_reordering/m_columns_resizing_reordering';
+import type { ModuleType } from '../../m_types';
+import { AI_COLUMN_NAME, CLASSES, ICON_NAMES } from '../const';
+import type { AIColumnController } from '../controllers/m_ai_column_controller';
+import type { AIPromptEditorViewController } from '../controllers/m_ai_prompt_editor_view_controller';
+import { createAIHeaderContainer, createChatSparkleOutlineIcon } from '../dom';
 import {
   isAIColumnHeader,
   isHeaderDropDownButtonVisible,
   isPromptOption,
-} from './utils';
+} from '../utils';
 
 export const columnHeadersViewExtender = (
   Base: ModuleType<ColumnHeadersView>,
