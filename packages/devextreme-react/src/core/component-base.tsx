@@ -384,6 +384,12 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       onComponentUpdated();
     });
 
+    const imperativeCreateWidget = useRef(createWidget);
+
+    useLayoutEffect(() => {
+      imperativeCreateWidget.current = createWidget;
+    }, [createWidget]);
+
     useImperativeHandle(ref, () => (
       {
         getInstance() {
@@ -393,7 +399,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
           return element.current;
         },
         createWidget(el) {
-          createWidget(el);
+          imperativeCreateWidget.current?.(el);
         },
       }
     ), []);

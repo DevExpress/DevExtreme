@@ -8,6 +8,7 @@ import {
   useCallback,
   useContext,
   useRef,
+  useLayoutEffect,
   forwardRef,
   ReactElement,
 } from 'react';
@@ -65,6 +66,12 @@ const TestComponent = memo(forwardRef<TestComponentRef, any>(function TestCompon
     Widget.resetOption.mockReset();
   }, []);
 
+  const propsRef = useRef(props);
+
+  useLayoutEffect(() => {
+    propsRef.current = props;
+  }, [props]);
+
   useImperativeHandle(ref, () => {
     return {
       instance() {
@@ -72,13 +79,13 @@ const TestComponent = memo(forwardRef<TestComponentRef, any>(function TestCompon
           element() {
             return getElement();
           }
-        }
+        };
       },
       getProps() {
-        return props;
+        return propsRef.current;
       },
     };
-  }, [props]);
+  }, []);
 
   return (
     <Component<P & IHtmlOptions>

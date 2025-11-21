@@ -38,6 +38,12 @@ const ExtensionComponent = forwardRef<ComponentBaseRef, any>(
       }
     }, []);
 
+    const imperativeCreateWidget = useRef(createWidget);
+
+    useLayoutEffect(() => {
+      imperativeCreateWidget.current = createWidget;
+    }, [createWidget]);
+
     useImperativeHandle(ref, () => (
       {
         getInstance() {
@@ -47,7 +53,7 @@ const ExtensionComponent = forwardRef<ComponentBaseRef, any>(
           return componentBaseRef.current?.getElement();
         },
         createWidget(el) {
-          createWidget(el);
+          imperativeCreateWidget.current?.(el);
         },
       }
     ), []);
