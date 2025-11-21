@@ -57,7 +57,7 @@ export default class CardView extends GridCore {
   }
 
   getHeaderFilterPopup(): Popup {
-      const popupElement = this.element.find(`.${CLASS.headerFilterMenu}`).nth(-1);
+      const popupElement = this.element.find(`.${CLASS.headerFilterMenu}`);
       return new Popup(popupElement);
   }
 
