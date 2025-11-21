@@ -119,7 +119,7 @@ describe('Appointment Popup Form', () => {
       expect(dataItem).toMatchObject({ ...commonAppointment });
     });
 
-    it.only('should have empty description, subject and timezone inputs when showing empty appointment after saving previous appointment', async () => {
+    it('should have empty description, subject and timezone inputs when showing empty appointment after saving previous appointment', async () => {
       const { scheduler, POM } = await createScheduler({
         ...getDefaultConfig(),
         editing: {
@@ -147,130 +147,6 @@ describe('Appointment Popup Form', () => {
       expect(descriptionEditor.option('value')).toBe('');
       expect(startTimeZoneEditor.option('value')).toBeNull();
       expect(endTimeZoneEditor.option('value')).toBeNull();
-    });
-  });
-
-  describe('Toolbar', () => {
-    const toolbarWithSaveButton = [
-      {
-        toolbar: 'top',
-        location: 'before',
-        cssClass: 'dx-toolbar-label',
-      },
-      {
-        toolbar: 'top',
-        location: 'after',
-        options: {
-          onClick: expect.any(Function),
-          stylingMode: 'contained',
-          type: 'default',
-          text: 'Save',
-        },
-        shortcut: 'done',
-      },
-      {
-        toolbar: 'top',
-        location: 'after',
-        shortcut: 'cancel',
-        options: { stylingMode: 'outlined' },
-      },
-    ];
-    const toolbarWithCancelButton = [
-      {
-        toolbar: 'top',
-        location: 'before',
-        cssClass: 'dx-toolbar-label',
-      },
-      {
-        toolbar: 'top',
-        location: 'after',
-        shortcut: 'cancel',
-        options: { stylingMode: 'outlined' },
-      },
-    ];
-
-    describe('Popup Title', () => {
-      it('should display "New Appointment" when creating new appointment', async () => {
-        const { scheduler, POM } = await createScheduler({
-          ...getDefaultConfig(),
-          editing: { allowAdding: true },
-        });
-
-        scheduler.showAppointmentPopup();
-
-        const toolbarItems = POM.popup.component.option('toolbarItems');
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const titleItem = toolbarItems?.find((item: any) => item.cssClass === 'dx-toolbar-label');
-
-        expect(titleItem?.text).toBe('New Appointment');
-      });
-
-      it('should display "Edit Appointment" when editing existing appointment', async () => {
-        const { scheduler, POM } = await createScheduler({
-          ...getDefaultConfig(),
-          editing: { allowUpdating: true },
-        });
-
-        scheduler.showAppointmentPopup(commonAppointment);
-
-        const toolbarItems = POM.popup.component.option('toolbarItems');
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const titleItem = toolbarItems?.find((item: any) => item.cssClass === 'dx-toolbar-label');
-
-        expect(titleItem?.text).toBe('Edit Appointment');
-      });
-    });
-
-    it.each([
-      { allowUpdating: false, disabled: false },
-      { allowUpdating: false, disabled: true },
-      { allowUpdating: true, disabled: false },
-      { allowUpdating: true, disabled: true },
-    ])('Buttons visibility when %p', async ({ allowUpdating, disabled }) => {
-      setupSchedulerTestEnvironment({ height: 200 });
-      const shouldHaveSaveButton = allowUpdating && !disabled;
-
-      const { POM } = await createScheduler({
-        ...getDefaultConfig(),
-        editing: { allowUpdating },
-      });
-
-      POM.openPopupByDblClick(disabled ? 'disabled-app' : 'common-app');
-
-      if (shouldHaveSaveButton) {
-        expect(POM.popup.component.option('toolbarItems')).toMatchObject(toolbarWithSaveButton);
-      } else {
-        expect(POM.popup.component.option('toolbarItems')).toMatchObject(toolbarWithCancelButton);
-      }
-
-      await POM.popup.component.hide();
-    });
-
-    it('Buttons visibility after editing option changed', async () => {
-      const { scheduler, POM } = await createScheduler({
-        ...getDefaultConfig(),
-        editing: {
-          allowUpdating: true,
-          allowAdding: true,
-        },
-      });
-
-      const newAppointment = {
-        text: 'a',
-        startDate: new Date(2015, 5, 15, 10),
-        endDate: new Date(2015, 5, 15, 11),
-      };
-
-      scheduler.showAppointmentPopup(newAppointment);
-      expect(POM.popup.component.option('toolbarItems')).toMatchObject(toolbarWithSaveButton);
-
-      scheduler.option('editing', { allowUpdating: false, allowAdding: true });
-      scheduler.showAppointmentPopup(newAppointment);
-      expect(POM.popup.component.option('toolbarItems')).toMatchObject(toolbarWithCancelButton);
-
-      await POM.popup.component.hide();
-      scheduler.showAppointmentPopup();
-      expect(POM.popup.component.option('toolbarItems')).toMatchObject(toolbarWithSaveButton);
     });
   });
 
@@ -1412,22 +1288,6 @@ describe('Appointment Popup Form', () => {
     expect(POM.popup.form.option('formData')).toMatchObject({ ...allDayAppointment });
   });
 
-  it('should open appointment on tooltip click', async () => {
-    setupSchedulerTestEnvironment({ height: 200 });
-    const { POM } = await createScheduler(getDefaultConfig());
-
-    expect(POM.getPopups().length).toBe(0);
-
-    jest.useFakeTimers();
-    POM.getAppointment('common-app').element?.click();
-    jest.runAllTimers();
-
-    POM.getTooltipAppointment()?.click();
-
-    expect(POM.getPopups().length).toBe(1);
-    expect(POM.popup.form.option('formData')).toMatchObject({ ...commonAppointment });
-  });
-
   it('should update correct field if textExpr is defined', async () => {
     const data: Record<string, unknown>[] = [];
     const textExpValue = 'Subject';
@@ -1457,8 +1317,173 @@ describe('Appointment Popup Form', () => {
     expect(data[0].Subject).toBe('qwerty');
     expect(data[0].text).toBeUndefined();
   });
+});
 
-  describe('Popup options', () => {
+describe('Appointment Popup', () => {
+  beforeEach(() => {
+    fx.off = true;
+    setupSchedulerTestEnvironment();
+  });
+
+  afterEach(() => {
+    fx.off = false;
+    document.body.innerHTML = '';
+    jest.useRealTimers();
+  });
+
+  it('should open on double click on appointment', async () => {
+    setupSchedulerTestEnvironment({ height: 200 });
+    const { POM } = await createScheduler(getDefaultConfig());
+
+    expect(POM.getPopups().length).toBe(0);
+
+    POM.openPopupByDblClick('common-app');
+
+    expect(POM.getPopups().length).toBe(1);
+    expect(POM.popup.form.option('formData')).toMatchObject({ ...commonAppointment });
+  });
+
+  it('should open appointment on tooltip click', async () => {
+    setupSchedulerTestEnvironment({ height: 200 });
+    const { POM } = await createScheduler(getDefaultConfig());
+
+    expect(POM.getPopups().length).toBe(0);
+
+    jest.useFakeTimers();
+    POM.getAppointment('common-app').element?.click();
+    jest.runAllTimers();
+
+    POM.getTooltipAppointment()?.click();
+
+    expect(POM.getPopups().length).toBe(1);
+    expect(POM.popup.form.option('formData')).toMatchObject({ ...commonAppointment });
+  });
+
+  describe('Toolbar', () => {
+    const toolbarWithSaveButton = [
+      {
+        toolbar: 'top',
+        location: 'before',
+        cssClass: 'dx-toolbar-label',
+      },
+      {
+        toolbar: 'top',
+        location: 'after',
+        options: {
+          onClick: expect.any(Function),
+          stylingMode: 'contained',
+          type: 'default',
+          text: 'Save',
+        },
+        shortcut: 'done',
+      },
+      {
+        toolbar: 'top',
+        location: 'after',
+        shortcut: 'cancel',
+        options: { stylingMode: 'outlined' },
+      },
+    ];
+    const toolbarWithCancelButton = [
+      {
+        toolbar: 'top',
+        location: 'before',
+        cssClass: 'dx-toolbar-label',
+      },
+      {
+        toolbar: 'top',
+        location: 'after',
+        shortcut: 'cancel',
+        options: { stylingMode: 'outlined' },
+      },
+    ];
+
+    describe('Popup Title', () => {
+      it('should display "New Appointment" when creating new appointment', async () => {
+        const { scheduler, POM } = await createScheduler({
+          ...getDefaultConfig(),
+          editing: { allowAdding: true },
+        });
+
+        scheduler.showAppointmentPopup();
+
+        const toolbarItems = POM.popup.component.option('toolbarItems');
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const titleItem = toolbarItems?.find((item: any) => item.cssClass === 'dx-toolbar-label');
+
+        expect(titleItem?.text).toBe('New Appointment');
+      });
+
+      it('should display "Edit Appointment" when editing existing appointment', async () => {
+        const { scheduler, POM } = await createScheduler({
+          ...getDefaultConfig(),
+          editing: { allowUpdating: true },
+        });
+
+        scheduler.showAppointmentPopup(commonAppointment);
+
+        const toolbarItems = POM.popup.component.option('toolbarItems');
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const titleItem = toolbarItems?.find((item: any) => item.cssClass === 'dx-toolbar-label');
+
+        expect(titleItem?.text).toBe('Edit Appointment');
+      });
+    });
+
+    it.each([
+      { allowUpdating: false, disabled: false },
+      { allowUpdating: false, disabled: true },
+      { allowUpdating: true, disabled: false },
+      { allowUpdating: true, disabled: true },
+    ])('Buttons visibility when %p', async ({ allowUpdating, disabled }) => {
+      setupSchedulerTestEnvironment({ height: 200 });
+      const shouldHaveSaveButton = allowUpdating && !disabled;
+
+      const { POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: { allowUpdating },
+      });
+
+      POM.openPopupByDblClick(disabled ? 'disabled-app' : 'common-app');
+
+      if (shouldHaveSaveButton) {
+        expect(POM.popup.component.option('toolbarItems')).toMatchObject(toolbarWithSaveButton);
+      } else {
+        expect(POM.popup.component.option('toolbarItems')).toMatchObject(toolbarWithCancelButton);
+      }
+
+      await POM.popup.component.hide();
+    });
+
+    it('Buttons visibility after editing option changed', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowUpdating: true,
+          allowAdding: true,
+        },
+      });
+
+      const newAppointment = {
+        text: 'a',
+        startDate: new Date(2015, 5, 15, 10),
+        endDate: new Date(2015, 5, 15, 11),
+      };
+
+      scheduler.showAppointmentPopup(newAppointment);
+      expect(POM.popup.component.option('toolbarItems')).toMatchObject(toolbarWithSaveButton);
+
+      scheduler.option('editing', { allowUpdating: false, allowAdding: true });
+      scheduler.showAppointmentPopup(newAppointment);
+      expect(POM.popup.component.option('toolbarItems')).toMatchObject(toolbarWithCancelButton);
+
+      await POM.popup.component.hide();
+      scheduler.showAppointmentPopup();
+      expect(POM.popup.component.option('toolbarItems')).toMatchObject(toolbarWithSaveButton);
+    });
+  });
+
+  describe('Customization', () => {
     it('should pass custom popup options from editing.popup to appointment popup', async () => {
       const { scheduler, POM } = await createScheduler({
         ...getDefaultConfig(),
@@ -1711,16 +1736,6 @@ describe('Appointment Popup Content', () => {
   it.todo('Load panel should be hidden if event validation fail');
   it.todo('Load panel should be hidden at the second appointment form opening');
   it.todo('Appointment popup should contain resources and recurrence editor');
-});
-
-describe('Appointment Popup', () => {
-  it.todo('focus is called on popup hiding');
-  it.todo('Multiple showing appointment popup for recurrence appointments should work correctly');
-  it.todo('Appointment popup will render even if no appointmentData is provided (T734413)');
-  it.todo('Appointment popup will render with currentDate on showAppointmentPopup with no arguments');
-  it.todo('Appointment form will have right dates on multiple openings (T727713)');
-  it.todo('The vertical scroll bar is shown when an appointment popup fill to a small window\'s height');
-  it.todo('The resize event of appointment popup is triggered the the window is resize');
 });
 
 describe('Timezone Editors', () => {
