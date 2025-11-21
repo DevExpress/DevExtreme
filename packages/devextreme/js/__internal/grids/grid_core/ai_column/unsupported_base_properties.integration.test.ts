@@ -457,4 +457,56 @@ describe('Unsupported properties', () => {
       expect(component.getDataCell(1, 1).getText()).toBe('Response Item 2');
     });
   });
+
+  describe('Banding properties', () => {
+    it('Should not affect AI column appearance (first load)', async () => {
+      const aiIntegration = new AIIntegration({
+        sendRequest(prompt): RequestResult {
+          return {
+            promise: new Promise<string>((resolve) => {
+              const result = {};
+              Object.entries(prompt.data?.data).forEach(([key, value]) => {
+                const { name } = value as { name: string };
+                result[key] = `Response ${name}`;
+              });
+              resolve(JSON.stringify(result));
+            }),
+            abort: (): void => {},
+          };
+        },
+      });
+      const { component } = await createDataGrid({
+        dataSource,
+        showBorders: true,
+        keyExpr: 'id',
+        columns: [
+          'id',
+          {
+            caption: 'AI',
+            type: 'ai',
+            name: 'AItest',
+            ai: {
+              prompt: 'Provide name for item with value {value}',
+              aiIntegration,
+            },
+          },
+        ],
+      });
+
+      // Band:
+      // columns
+      // isBand
+      // ownerBand
+
+      // Binding:
+      // dataField
+      // calculateCellValue
+      // lookup
+      // allowExporting
+
+      const aiTestHeader = component.getHeaderByText('AI');
+      expect(aiTestHeader).toHaveLength(1);
+      expect(aiTestHeader.attr('aria-colindex')).toEqual('2');
+    });
+  });
 });
