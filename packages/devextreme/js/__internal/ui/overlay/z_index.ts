@@ -28,6 +28,7 @@ export const remove = (zIndex: number): void => {
 
   if (position >= 0) {
     zIndexStack.splice(position, 1);
+    globalInstanceZIndex -= 1;
   }
 };
 

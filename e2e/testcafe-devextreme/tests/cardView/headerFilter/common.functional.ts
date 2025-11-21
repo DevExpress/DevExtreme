@@ -434,6 +434,8 @@ test('FilterBuilder should work with custom headerFilter data source', async (t)
     .click(filterBuilder.getField(0, 'itemOperation').element)
     .click(FilterBuilder.getPopupTreeViewNode(IS_ANY_OPERATION_ITEM_INDEX))
     .click(filterBuilder.getField(0, 'itemValue').element)
+    .click(cardView.getHeaderFilterList().getItem(1).element)
+    .click(cardView.getHeaderFilterList().getItem(2).element)
     .click(cardView.getHeaderFilterPopup().getOkButton().element)
     .click(filterBuilderPopup.asPopup().getOkButton().element);
 
