@@ -1,7 +1,5 @@
 import React from 'react';
-import TreeList, {
-  Column, Scrolling, Paging, AI,
-} from 'devextreme-react/tree-list';
+import TreeList, { Column, Scrolling, Paging } from 'devextreme-react/tree-list';
 import { employees } from './data.js';
 import { aiIntegration } from './service.js';
 import Employee from './Employee.js';
@@ -15,6 +13,12 @@ const onAIColumnRequestCreating = (e) => {
     Last_Name: item.Last_Name,
     Title: item.Title,
   }));
+};
+const aiConfig = {
+  mode: 'auto',
+  noDataText: 'No data',
+  prompt:
+    "Identify department for each employee. It should be one of the following department types:  'Management', 'Human Resources', 'IT', 'Shipping', 'Support', 'Sales',  'Engineering'. Use 'Engineering' by default.",
 };
 export default function App() {
   return (
@@ -70,13 +74,8 @@ export default function App() {
         fixed={true}
         fixedPosition="right"
         cssClass="ai__cell"
-      >
-        <AI
-          mode="auto"
-          noDataText="No data"
-          prompt="Identify department for each employee. It should be one of the following department types:  'Management', 'Human Resources', 'IT', 'Shipping', 'Support', 'Sales',  'Engineering'. Use 'Engineering' by default."
-        />
-      </Column>
+        ai={aiConfig}
+      />
     </TreeList>
   );
 }

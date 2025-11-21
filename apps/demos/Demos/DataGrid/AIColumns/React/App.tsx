@@ -3,7 +3,6 @@ import DataGrid, {
   Column,
   Paging,
   Grouping,
-  AI,
 } from 'devextreme-react/data-grid';
 import Popup, { Position } from 'devextreme-react/popup';
 import { vehicles } from './data.ts';
@@ -20,6 +19,12 @@ const onAIColumnRequestCreating = (e) => {
     Name: item.Name,
     Modification: item.Modification,
   }));
+};
+
+const aiConfig = {
+  mode: 'auto' as const,
+  noDataText: 'No data',
+  prompt: 'Identify the country where this vehicle model is originally manufactured or developed, based on its brand, model, and specifications.',
 };
 
 export default function App() {
@@ -90,13 +95,8 @@ export default function App() {
           fixed={true}
           fixedPosition="right"
           cssClass="ai__cell"
-        >
-          <AI
-            mode="auto"
-            noDataText="No data"
-            prompt="Identify the country where this vehicle model is originally manufactured or developed, based on its brand, model, and specifications."
-          />
-        </Column>
+          ai={aiConfig}
+        />
       </DataGrid>
       <Popup
         width={360}
