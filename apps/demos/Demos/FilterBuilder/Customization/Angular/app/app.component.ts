@@ -90,7 +90,8 @@ export class AppComponent {
   ],
   declarations: [AppComponent],
   providers: [
-      // provideZoneChangeDetection({ eventCoalescing: true })],
+      // provideZoneChangeDetection({ eventCoalescing: true })
+  ],
   bootstrap: [AppComponent],
 })
 
