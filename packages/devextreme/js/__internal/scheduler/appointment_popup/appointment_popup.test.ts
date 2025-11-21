@@ -130,23 +130,18 @@ describe('Appointment Popup Form', () => {
 
       scheduler.showAppointmentPopup({ ...commonAppointment });
 
-      const subjectEditor = POM.popup.form.getEditor('subjectEditor');
-      const descriptionEditor = POM.popup.form.getEditor('descriptionEditor');
-      const startTimeZoneEditor = POM.popup.form.getEditor('startTimeZoneEditor');
-      const endTimeZoneEditor = POM.popup.form.getEditor('endTimeZoneEditor');
-
-      descriptionEditor?.option('value', 'temp');
-      startTimeZoneEditor?.option('value', 'America/Los_Angeles');
-      endTimeZoneEditor?.option('value', 'America/Anchorage');
+      POM.popup.form.getEditor('descriptionEditor')?.option('value', 'temp');
+      POM.popup.form.getEditor('startTimeZoneEditor')?.option('value', 'America/Los_Angeles');
+      POM.popup.form.getEditor('endTimeZoneEditor')?.option('value', 'America/Anchorage');
 
       POM.popup.getSaveButton().click();
 
       scheduler.showAppointmentPopup();
 
-      expect(subjectEditor?.option('value')).toBe('');
-      expect(descriptionEditor?.option('value')).toBe('');
-      expect(startTimeZoneEditor?.option('value')).toBeUndefined();
-      expect(endTimeZoneEditor?.option('value')).toBeUndefined();
+      expect(POM.popup.form.getEditor('subjectEditor')?.option('value')).toBe('');
+      expect(POM.popup.form.getEditor('descriptionEditor')?.option('value')).toBe('');
+      expect(POM.popup.form.getEditor('startTimeZoneEditor')?.option('value')).toBeUndefined();
+      expect(POM.popup.form.getEditor('endTimeZoneEditor')?.option('value')).toBeUndefined();
     });
   });
 
