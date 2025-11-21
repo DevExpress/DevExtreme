@@ -188,6 +188,60 @@ describe('option update', () => {
     expect(Widget.option.mock.calls[1][1]).toEqual(ref.current?.instance().element());
   });
 
+  it('provides component ref instance inside onOptionChanged during option sync', () => {
+    const ref = React.createRef<TestComponentRef>();
+    const optionChangedInstances: Array<ReturnType<TestComponentRef['instance']> | undefined> = [];
+
+    const handleOptionChanged = () => {
+      optionChangedInstances.push(ref.current?.instance());
+    };
+
+    const renderComponent = (text: string) => (
+      <TestComponent
+        ref={ref}
+        text={text}
+        onOptionChanged={handleOptionChanged}
+        independentEvents={['onOptionChanged']}
+      />
+    );
+
+    const { rerender } = render(renderComponent('value-1'));
+
+    let currentOnOptionChanged = WidgetClass.mock.calls[0][1].onOptionChanged;
+
+    expect(typeof currentOnOptionChanged).toBe('function');
+
+    Widget.option.mockImplementation((name: string, value: unknown) => {
+      if (name === 'integrationOptions.useDeferUpdateForTemplates') {
+        return false;
+      }
+
+      if (name === 'onOptionChanged') {
+        currentOnOptionChanged = value as typeof currentOnOptionChanged;
+        return undefined;
+      }
+
+      if (name === 'text' && typeof currentOnOptionChanged === 'function') {
+        currentOnOptionChanged({
+          component: Widget,
+          element: undefined,
+          fullName: name,
+          model: undefined,
+          name,
+          previousValue: undefined,
+          value,
+        });
+      }
+
+      return undefined;
+    });
+
+    rerender(renderComponent('value-2'));
+
+    expect(optionChangedInstances).toHaveLength(1);
+    expect(optionChangedInstances[0]).toBeTruthy();
+  });
+
   it('updates nested collection item', () => {
     const TestContainer = (props: any) => {
       const { value } = props;
