@@ -48,7 +48,7 @@ const ExtensionComponent = forwardRef<ComponentBaseRef, any>(
           createWidget(el);
         },
       }
-    ), [componentBaseRef.current, createWidget]);
+    ), []);
 
     return (
       <ComponentBase<P>
