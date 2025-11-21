@@ -1,3 +1,4 @@
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type dxForm from '@js/ui/form';
 import type dxPopup from '@js/ui/popup';
@@ -45,6 +46,10 @@ export class PopupModel {
     return this.element.querySelector('.dx-scheduler-form-subject-group .dx-scheduler-form-icon .dx-icon');
   }
 
+  get subjectInput(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-text-editor .dx-textbox.dx-widget');
+  }
+
   get startDate(): Element | null {
     return this.element.querySelector('.dx-scheduler-form-start-date-editor .dx-datebox.dx-widget');
   }
@@ -71,6 +76,10 @@ export class PopupModel {
 
   get repeatEditor(): Element | null {
     return this.element.querySelector('.dx-scheduler-form-repeat-editor .dx-selectbox.dx-widget');
+  }
+
+  get descriptionTextArea(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-description-editor .dx-textarea.dx-widget');
   }
 
   get frequencyEditor(): Element | null {
@@ -132,6 +141,18 @@ export class PopupModel {
   get recurrenceYearlyGroup(): Element | null {
     return this.element.querySelector('.dx-scheduler-form-day-of-year-group');
   }
+
+  getInput = (editorName: string): dxElementWrapper | undefined => {
+    const editor = this.form.getEditor(editorName);
+    return editor?.$element().find('input.dx-texteditor-input');
+  };
+
+  getInputValue = (editorName: string): string | undefined => {
+    const result = this.getInput(editorName)?.val();
+    return result as string | undefined;
+  };
+
+  isInputVisible = (editorName: string): boolean => this.getInput(editorName)?.length === 1;
 
   getLabelIdByText = (labelText: string): string => {
     const labels = Array.from(this.element.querySelectorAll('label'));
