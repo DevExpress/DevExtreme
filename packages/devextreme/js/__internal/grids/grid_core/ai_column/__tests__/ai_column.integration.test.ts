@@ -13,7 +13,7 @@ import { AIIntegration } from '@ts/core/ai_integration/core/ai_integration';
 import ArrayStore from '@ts/data/m_array_store';
 import { DataGridModel } from '@ts/grids/data_grid/__tests__/__mock__/model/data_grid';
 
-import { CLASSES } from './const';
+import { CLASSES } from '../const';
 
 const SELECTORS = {
   gridContainer: '#gridContainer',
