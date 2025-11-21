@@ -4,38 +4,59 @@
     <dxo-linear-gauge-title text="Temperature (°C)">
       <dxo-linear-gauge-font [size]="16"></dxo-linear-gauge-font>
     </dxo-linear-gauge-title>
-    <dxo-linear-gauge-geometry orientation="vertical"></dxo-linear-gauge-geometry>
+    <dxo-linear-gauge-geometry
+      orientation="vertical"
+    ></dxo-linear-gauge-geometry>
     <dxo-linear-gauge-scale
       [startValue]="-40"
       [endValue]="40"
       [tickInterval]="40"
     ></dxo-linear-gauge-scale>
     <dxo-linear-gauge-range-container backgroundColor="none">
-      <dxi-linear-gauge-range [startValue]="-40" [endValue]="0" color="#679EC5"></dxi-linear-gauge-range>
-      <dxi-linear-gauge-range [startValue]="0" [endValue]="40"></dxi-linear-gauge-range>
+      <dxi-linear-gauge-range
+        [startValue]="-40"
+        [endValue]="0"
+        color="#679EC5"
+      ></dxi-linear-gauge-range>
+      <dxi-linear-gauge-range
+        [startValue]="0"
+        [endValue]="40"
+      ></dxi-linear-gauge-range>
     </dxo-linear-gauge-range-container>
   </dx-linear-gauge>
 
   <dx-linear-gauge class="gauge-element" [value]="weatherData.humidity">
-    <dxo-linear-gauge-value-indicator type="rhombus" color="#A4DDED"></dxo-linear-gauge-value-indicator>
+    <dxo-linear-gauge-value-indicator
+      type="rhombus"
+      color="#A4DDED"
+    ></dxo-linear-gauge-value-indicator>
     <dxo-linear-gauge-title text="Humidity (%)">
       <dxo-linear-gauge-font [size]="16"></dxo-linear-gauge-font>
     </dxo-linear-gauge-title>
-    <dxo-linear-gauge-geometry orientation="vertical"></dxo-linear-gauge-geometry>
+    <dxo-linear-gauge-geometry
+      orientation="vertical"
+    ></dxo-linear-gauge-geometry>
     <dxo-linear-gauge-scale
       [startValue]="0"
       [endValue]="100"
       [tickInterval]="10"
     ></dxo-linear-gauge-scale>
-    <dxo-linear-gauge-range-container backgroundColor="#CACACA"></dxo-linear-gauge-range-container>
+    <dxo-linear-gauge-range-container
+      backgroundColor="#CACACA"
+    ></dxo-linear-gauge-range-container>
   </dx-linear-gauge>
 
   <dx-linear-gauge class="gauge-element" [value]="weatherData.pressure">
-    <dxo-linear-gauge-value-indicator type="circle" color="#E3A857"></dxo-linear-gauge-value-indicator>
+    <dxo-linear-gauge-value-indicator
+      type="circle"
+      color="#E3A857"
+    ></dxo-linear-gauge-value-indicator>
     <dxo-linear-gauge-title text="Barometric Pressure (mb)">
       <dxo-linear-gauge-font [size]="16"></dxo-linear-gauge-font>
     </dxo-linear-gauge-title>
-    <dxo-linear-gauge-geometry orientation="vertical"></dxo-linear-gauge-geometry>
+    <dxo-linear-gauge-geometry
+      orientation="vertical"
+    ></dxo-linear-gauge-geometry>
     <dxo-linear-gauge-scale
       [startValue]="900"
       [endValue]="1100"

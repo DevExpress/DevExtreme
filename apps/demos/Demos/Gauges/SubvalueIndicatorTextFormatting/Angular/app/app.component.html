@@ -1,11 +1,20 @@
 <dx-circular-gauge id="gauge" [value]="2200" [subvalues]="[2700]">
   <dxo-circular-gauge-subvalue-indicator type="textcloud">
     <dxo-circular-gauge-text [customizeText]="customizeText">
-      <dxo-circular-gauge-format type="thousands" [precision]="1"></dxo-circular-gauge-format>
+      <dxo-circular-gauge-format
+        type="thousands"
+        [precision]="1"
+      ></dxo-circular-gauge-format>
     </dxo-circular-gauge-text>
   </dxo-circular-gauge-subvalue-indicator>
-  <dxo-circular-gauge-scale [startValue]="0" [endValue]="3000" [tickInterval]="500">
-    <dxo-circular-gauge-label [customizeText]="customizeText"></dxo-circular-gauge-label>
+  <dxo-circular-gauge-scale
+    [startValue]="0"
+    [endValue]="3000"
+    [tickInterval]="500"
+  >
+    <dxo-circular-gauge-label
+      [customizeText]="customizeText"
+    ></dxo-circular-gauge-label>
   </dxo-circular-gauge-scale>
   <dxo-circular-gauge-export [enabled]="true"></dxo-circular-gauge-export>
   <dxo-circular-gauge-title text="Oven Temperature (includes Recommended)">

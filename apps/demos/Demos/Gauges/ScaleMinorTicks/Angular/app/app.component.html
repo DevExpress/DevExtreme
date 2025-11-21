@@ -6,9 +6,14 @@
     [minorTickInterval]="25"
   >
     <dxo-circular-gauge-tick color="#9c9c9c"></dxo-circular-gauge-tick>
-    <dxo-circular-gauge-minor-tick color="#9c9c9c" [visible]="true"></dxo-circular-gauge-minor-tick>
+    <dxo-circular-gauge-minor-tick
+      color="#9c9c9c"
+      [visible]="true"
+    ></dxo-circular-gauge-minor-tick>
   </dxo-circular-gauge-scale>
-  <dxo-circular-gauge-range-container backgroundColor="none"></dxo-circular-gauge-range-container>
+  <dxo-circular-gauge-range-container
+    backgroundColor="none"
+  ></dxo-circular-gauge-range-container>
   <dxo-circular-gauge-export [enabled]="true"></dxo-circular-gauge-export>
   <dxo-circular-gauge-title text="Fan Speed (in rpm)">
     <dxo-circular-gauge-font [size]="28"></dxo-circular-gauge-font>

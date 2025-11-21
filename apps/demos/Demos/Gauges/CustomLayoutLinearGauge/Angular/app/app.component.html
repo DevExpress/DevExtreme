@@ -1,10 +1,26 @@
 <dx-linear-gauge id="gauge" [value]="17" [subvalues]="[5, 25]">
-  <dxo-linear-gauge-subvalue-indicator [offset]="-15"></dxo-linear-gauge-subvalue-indicator>
-  <dxo-linear-gauge-value-indicator [offset]="20"></dxo-linear-gauge-value-indicator>
+  <dxo-linear-gauge-subvalue-indicator
+    [offset]="-15"
+  ></dxo-linear-gauge-subvalue-indicator>
+  <dxo-linear-gauge-value-indicator
+    [offset]="20"
+  ></dxo-linear-gauge-value-indicator>
   <dxo-linear-gauge-range-container [offset]="10">
-    <dxi-linear-gauge-range [startValue]="0" [endValue]="5" color="#92000A"></dxi-linear-gauge-range>
-    <dxi-linear-gauge-range [startValue]="5" [endValue]="20" color="#E6E200"></dxi-linear-gauge-range>
-    <dxi-linear-gauge-range [startValue]="20" [endValue]="30" color="#77DD77"></dxi-linear-gauge-range>
+    <dxi-linear-gauge-range
+      [startValue]="0"
+      [endValue]="5"
+      color="#92000A"
+    ></dxi-linear-gauge-range>
+    <dxi-linear-gauge-range
+      [startValue]="5"
+      [endValue]="20"
+      color="#E6E200"
+    ></dxi-linear-gauge-range>
+    <dxi-linear-gauge-range
+      [startValue]="20"
+      [endValue]="30"
+      color="#77DD77"
+    ></dxi-linear-gauge-range>
   </dxo-linear-gauge-range-container>
   <dxo-linear-gauge-scale [startValue]="0" [endValue]="30" [tickInterval]="5">
     <dxo-linear-gauge-tick color="#536878"></dxo-linear-gauge-tick>

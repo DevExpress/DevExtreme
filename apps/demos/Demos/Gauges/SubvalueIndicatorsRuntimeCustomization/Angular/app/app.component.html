@@ -5,14 +5,18 @@
     [subvalues]="currentValue.secondary"
   >
     <dxo-linear-gauge-scale [startValue]="0" [endValue]="10" [tickInterval]="2">
-      <dxo-linear-gauge-label [customizeText]="customizeText"></dxo-linear-gauge-label>
+      <dxo-linear-gauge-label
+        [customizeText]="customizeText"
+      ></dxo-linear-gauge-label>
     </dxo-linear-gauge-scale>
     <dxo-linear-gauge-tooltip
       [enabled]="true"
       [customizeTooltip]="customizeTooltip"
     ></dxo-linear-gauge-tooltip>
     <dxo-linear-gauge-export [enabled]="true"></dxo-linear-gauge-export>
-    <dxo-linear-gauge-title text="Power of Air Conditioners in Store Departments (kW)">
+    <dxo-linear-gauge-title
+      text="Power of Air Conditioners in Store Departments (kW)"
+    >
       <dxo-linear-gauge-font [size]="28"></dxo-linear-gauge-font>
     </dxo-linear-gauge-title>
   </dx-linear-gauge>
