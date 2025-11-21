@@ -25,8 +25,6 @@ const DEFAULT_CONFIG_COMPONENT = './core/nested-option';
 
 const WIDGETS_PACKAGE = 'devextreme';
 
-const CLEAN_MODE = 'shallow';
-
 const MSG_CLEANING = '🧹 Cleaning generated components';
 const MSG_CLEANED = '✓ Successfully cleaned components directory';
 const MSG_LOADING_METADATA = '📋 Loading metadata';
@@ -76,7 +74,6 @@ async function cleanComponentsDirectory(
       }
       return currentPath;
     }),
-    mode: CLEAN_MODE,
   };
 
   const result = await cleanExecutor(cleanOptions, context);
@@ -215,6 +212,10 @@ function loadConfigFromGeneratorsFile(
 }
 
 function loadGenerationFunction(framework: Framework): any {
+  if (framework === 'angular') {
+    return null;
+  }
+
   const handler = getFrameworkHandler(framework);
   const functionName = handler.getDefaults().generationFunctionName;
 
@@ -329,7 +330,15 @@ const runExecutor: PromiseExecutor<GenerateReactComponentsExecutorSchema> = asyn
 
     const coreDir = path.join(componentsDir, CORE_DIR);
     const commonDir = path.join(componentsDir, COMMON_DIR);
-    await cleanComponentsDirectory(componentsDir, [coreDir, commonDir, indexFileName], context);
+
+    const defaultPreservePaths = [coreDir, commonDir, indexFileName];
+    const additionalExcludePatterns = options.excludePatterns || [];
+    const resolvedExcludePaths = additionalExcludePatterns.map((pattern) =>
+      path.resolve(absoluteProjectRoot, pattern),
+    );
+    const allPreservePaths = [...defaultPreservePaths, ...resolvedExcludePaths];
+
+    await cleanComponentsDirectory(componentsDir, allPreservePaths, context);
 
     const metadataPath = resolveMetadataPath(options, absoluteProjectRoot, workspaceRoot);
     const metaData = loadMetadata(metadataPath);

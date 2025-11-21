@@ -12,10 +12,24 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "glob": "11.1.0",
+    "fs-extra": "^11.2.0",
+    "glob": "10.4.5",
     "rimraf": "3.0.2"
   },
+  "peerDependencies": {
+    "karma": ">=6.0.0",
+    "ng-packagr": ">=17.0.0"
+  },
+  "peerDependenciesMeta": {
+    "karma": {
+      "optional": true
+    },
+    "ng-packagr": {
+      "optional": true
+    }
+  },
   "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
     "@types/node": "^18.0.0",
     "typescript": "4.9.5",
     "prettier": "catalog:tools",

@@ -3,70 +3,409 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/devextreme-angular",
   "projectType": "library",
+  "implicitDependencies": ["devextreme"],
   "targets": {
-    "build": {
-      "executor": "nx:run-script",
+    "clean": {
+      "executor": "devextreme-nx-infra-plugin:clean",
       "options": {
-        "script": "build"
+        "targetDirectory": "./src/ui",
+        "excludePatterns": [
+          "./src/ui/popup/service",
+          "./src/ui/popup/index.ts"
+        ],
+        "mode": "recursive"
       },
-      "inputs": [
-        "default"
-      ],
-      "outputs": [
-        "{projectRoot}/dist",
-        "{projectRoot}/npm/dist"
-      ],
-      "cache": true
-    },
-    "pack": {
-      "executor": "nx:run-script",
-      "options": {
-        "script": "pack"
-      },
-      "inputs": [
-        "default"
-      ],
-      "outputs": [
-        "{projectRoot}/dist",
-        "{projectRoot}/npm/dist"
-      ],
-      "cache": true
+      "cache": false
     },
     "regenerate": {
-      "executor": "nx:run-script",
-      "dependsOn": ["devextreme-metadata:generate"],
+      "executor": "devextreme-nx-infra-plugin:generate-components",
       "options": {
-        "script": "regenerate"
+        "framework": "angular",
+        "generatorConfig": "angularConfig",
+        "metadataPath": "../devextreme-metadata/dist/integration-data.json",
+        "componentsDir": "./src/ui",
+        "indexFileName": "./src/index.ts",
+        "quotes": "single",
+        "explicitIndexInImports": true,
+        "excludePatterns": [
+          "./src/ui/popup/service",
+          "./src/ui/popup/index.ts"
+        ]
+      },
+      "dependsOn": ["devextreme-metadata:generate", "clean"],
+      "cache": true,
+      "inputs": ["default"],
+      "outputs": [
+        "{projectRoot}/src/ui/**/*",
+        "!{projectRoot}/src/ui/popup/service/**/*",
+        "!{projectRoot}/src/ui/popup/index.ts",
+        "{projectRoot}/src/index.ts",
+        "{projectRoot}/src/common/index.ts",
+        "{projectRoot}/metadata/generated/**/*"
+      ]
+    },
+    "npm:clean": {
+      "executor": "devextreme-nx-infra-plugin:clean",
+      "dependsOn": ["clean:dist"],
+      "options": {
+        "targetDirectory": "./npm",
+        "mode": "simple"
+      },
+      "cache": false
+    },
+    "clean:dist": {
+      "executor": "devextreme-nx-infra-plugin:clean",
+      "options": {
+        "targetDirectory": "./dist",
+        "mode": "simple"
+      },
+      "cache": false
+    },
+    "build.copy-sources": {
+      "executor": "devextreme-nx-infra-plugin:copy-files",
+      "dependsOn": ["clean:dist"],
+      "options": {
+        "files": [
+          {
+            "from": "./src",
+            "to": "./dist"
+          },
+          {
+            "from": "./package.json",
+            "to": "./dist/package.json"
+          },
+          {
+            "from": "./ng-package.json",
+            "to": "./dist/ng-package.json"
+          }
+        ]
+      },
+      "outputs": ["{projectRoot}/dist"],
+      "cache": true,
+      "inputs": ["default"]
+    },
+    "build.license-headers": {
+      "executor": "devextreme-nx-infra-plugin:add-license-headers",
+      "dependsOn": ["build.copy-sources"],
+      "options": {
+        "targetDirectory": "./dist",
+        "packageJsonPath": "./package.json",
+        "includePatterns": ["**/*.ts"]
       }
     },
-    "test:dev": {
-      "executor": "nx:run-script",
+    "build.ngc": {
+      "executor": "devextreme-nx-infra-plugin:build-angular-library",
+      "dependsOn": ["build.license-headers", "npm:clean"],
       "options": {
-        "script": "test:dev"
+        "project": "dist/ng-package.json",
+        "tsConfig": "tsconfig.lib.json"
       },
+      "outputs": ["{projectRoot}/npm/dist"],
+      "cache": true,
+      "inputs": ["default"]
+    },
+    "npm.content": {
+      "executor": "devextreme-nx-infra-plugin:copy-files",
+      "dependsOn": ["build.ngc"],
+      "options": {
+        "files": [
+          {
+            "from": "./LICENSE",
+            "to": "./npm/dist/LICENSE"
+          },
+          {
+            "from": "./README.md",
+            "to": "./npm/dist/README.md"
+          },
+          {
+            "from": "./src/schematics",
+            "to": "./npm/dist/schematics"
+          }
+        ]
+      }
+    },
+    "npm.package-json": {
+      "executor": "devextreme-nx-infra-plugin:prepare-package-json",
+      "dependsOn": ["npm.content"],
+      "options": {
+        "sourcePackageJson": "./package.json",
+        "distDirectory": "./npm/dist"
+      }
+    },
+    "npm.pack-preparation": {
+      "executor": "devextreme-nx-infra-plugin:pack-npm",
+      "dependsOn": ["npm.package-json"],
+      "options": {
+        "workingDirectory": "./npm/dist"
+      },
+      "outputs": ["{projectRoot}/npm/dist/*.tgz"],
+      "cache": true,
+      "inputs": ["default"]
+    },
+    "npm.pack": {
+      "executor": "devextreme-nx-infra-plugin:copy-files",
+      "dependsOn": ["npm.pack-preparation"],
+      "options": {
+        "files": [
+          {
+            "from": "./npm/dist",
+            "to": "./node_modules/devextreme-angular"
+          }
+        ]
+      },
+      "outputs": ["{projectRoot}/node_modules/devextreme-angular/**/*"],
+      "cache": true,
+      "inputs": ["default"]
+    },
+    "npm.pack-with-descriptions": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["npm.package-json"],
+      "options": {
+        "commands": [
+          "pnpm --workspace-root nx npm.pack devextreme-angular",
+          "pnpm --workspace-root run angular:inject-descriptions"
+        ],
+        "parallel": false
+      }
+    },
+    "build": {
+      "executor": "devextreme-nx-infra-plugin:pack-npm",
+      "dependsOn": ["^build", "build.ngc"],
+      "options": {
+        "workingDirectory": "./npm/dist"
+      },
+      "outputs": [
+        "{projectRoot}/npm/dist",
+        "{projectRoot}/npm/dist/*.tgz"
+      ],
+      "cache": true,
+      "inputs": ["default"]
+    },
+    "copy.dist.dx-angular": {
+      "executor": "devextreme-nx-infra-plugin:copy-files",
+      "options": {
+        "files": [
+          {
+            "from": "./npm/dist",
+            "to": "./tests/dist/node_modules/devextreme-angular"
+          }
+        ]
+      },
+      "dependsOn": ["build.ngc"],
+      "inputs": [
+        "{projectRoot}/npm/dist/**/*"
+      ],
+      "outputs": [
+        "{projectRoot}/tests/dist/node_modules/devextreme-angular"
+      ]
+    },
+    "test": {
+      "executor": "devextreme-nx-infra-plugin:karma-multi-env",
+      "options": {
+        "karmaConfig": "karma.conf.js",
+        "environments": ["client", "server", "hydration"]
+      },
+      "dependsOn": ["build.tests"],
       "inputs": [
         "default",
+        "test",
+        "{projectRoot}/tests/dist/**/*"
+      ],
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}/**/*"
+      ],
+      "cache": true
+    },
+    "test.components.client": {
+      "executor": "devextreme-nx-infra-plugin:karma-multi-env",
+      "options": {
+        "karmaConfig": "karma.conf.js",
+        "environments": ["client"]
+      },
+      "dependsOn": ["build.tests"],
+      "inputs": [
+        "default",
+        "test",
+        "{projectRoot}/tests/dist/**/*"
+      ],
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}/**/*"
+      ],
+      "cache": true
+    },
+    "test.components.client.debug": {
+      "executor": "devextreme-nx-infra-plugin:karma-multi-env",
+      "options": {
+        "karmaConfig": "karma.conf.js",
+        "environments": ["client"],
+        "debug": true
+      },
+      "dependsOn": ["build.tests"]
+    },
+    "test.components.server": {
+      "executor": "devextreme-nx-infra-plugin:karma-multi-env",
+      "options": {
+        "karmaConfig": "karma.conf.js",
+        "environments": ["server", "hydration"]
+      },
+      "dependsOn": ["build.tests"],
+      "inputs": [
+        "default",
+        "test",
+        "{projectRoot}/tests/dist/**/*"
+      ],
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}/**/*"
+      ],
+      "cache": true
+    },
+    "test.components.server.debug": {
+      "executor": "devextreme-nx-infra-plugin:karma-multi-env",
+      "options": {
+        "karmaConfig": "karma.conf.js",
+        "environments": ["server", "hydration"],
+        "debug": true
+      },
+      "dependsOn": ["build.tests"],
+      "inputs": [
+        "default",
+        "test",
+        "{projectRoot}/tests/dist/**/*"
+      ],
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}/**/*"
+      ],
+      "cache": true
+    },
+    "watch.test": {
+      "executor": "devextreme-nx-infra-plugin:karma-multi-env",
+      "options": {
+        "karmaConfig": "karma.conf.js",
+        "watch": true,
+        "environments": ["client"]
+      },
+      "dependsOn": ["build.tests"],
+      "inputs": [
+        "default",
+        "test",
+        "{projectRoot}/tests/dist/**/*"
+      ],
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}/**/*"
+      ],
+      "cache": false
+    },
+    "run.tests": {
+      "executor": "devextreme-nx-infra-plugin:karma-multi-env",
+      "options": {
+        "karmaConfig": "karma.conf.js",
+        "environments": ["client", "server", "hydration"]
+      },
+      "dependsOn": [],
+      "inputs": [
+        "default",
+        "test",
+        "{projectRoot}/tests/dist/**/*"
+      ],
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}/**/*"
+      ],
+      "cache": true
+    },
+    "watch.spec": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "nx run devextreme-angular:build.tests --watch",
+        "cwd": "packages/devextreme-angular"
+      },
+      "inputs": [
         "test"
+      ],
+      "cache": false
+    },
+    "generate-component-names": {
+      "executor": "devextreme-nx-infra-plugin:generate-component-names",
+      "options": {
+        "componentFilesPath": "./src/ui/",
+        "excludedFileNames": [
+          "nested",
+          "validation-group",
+          "validation-summary",
+          "validator",
+          "button-group",
+          "drop-down-button",
+          "file-manager"
+        ],
+        "outputFileName": "./tests/src/server/component-names.ts"
+      },
+      "dependsOn": ["build.ngc"],
+      "inputs": [
+        "default",
+        "{projectRoot}/src/ui/**/*"
+      ],
+      "outputs": [
+        "{projectRoot}/tests/src/server/component-names.ts"
+      ],
+      "cache": true
+    },
+    "clean.tests": {
+      "executor": "devextreme-nx-infra-plugin:clean",
+      "options": {
+        "targetDirectory": "./tests/dist"
+      },
+      "cache": false
+    },
+    "build.tests": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "nx run devextreme-angular:clean.tests",
+          "tsc --project tsconfig.tests.json --outDir tests/dist"
+        ],
+        "cwd": "packages/devextreme-angular",
+        "parallel": false
+      },
+      "dependsOn": ["build.ngc", "generate-component-names", "copy.dist.dx-angular"],
+      "inputs": [
+        "default",
+        "test",
+        "{projectRoot}/tests/src/server/component-names.ts"
+      ],
+      "outputs": [
+        "{projectRoot}/tests/dist/**/*",
+        "{projectRoot}/tests/dist/**/*.js.map"
       ],
       "cache": true
     }
   },
   "namedInputs": {
     "default": [
-      "{projectRoot}/devextreme-metadata/**/*",
       "{projectRoot}/src/**/*",
-      "{projectRoot}/build.config.js",
-      "{projectRoot}/gulpfile.js",
+      "!{projectRoot}/src/**/__tests__/*",
       "{projectRoot}/ng-package.json",
       "{projectRoot}/tsconfig.json",
       "{projectRoot}/tsconfig.lib.json",
-      "{workspaceRoot}/tsconfig.json"
+      "{projectRoot}/package.json",
+      "{projectRoot}/metadata/**/*",
+      "{workspaceRoot}/tsconfig.json",
+      "{workspaceRoot}/tools/generators-config.js"
+    ],
+    "production": [
+      "default",
+      "!{projectRoot}/src/**/*.spec.ts",
+      "!{projectRoot}/src/**/*.test.ts",
+      "!{projectRoot}/**/*.stories.@(js|jsx|ts|tsx|mdx)"
     ],
     "test": [
       "{projectRoot}/tests/**/*",
-      "{projectRoot}/karma*",
+      "{projectRoot}/karma.conf.js",
+      "{projectRoot}/karma.test.shim.js",
+      "{projectRoot}/karma.server.test.shim.js",
+      "{projectRoot}/karma.hydration.test.shim.js",
+      "{projectRoot}/webpack.test.js",
       "{projectRoot}/tsconfig.tests.json",
-      "{projectRoot}/webpack.test.js"
+      "{projectRoot}/src/**/*.spec.ts",
+      "{projectRoot}/src/**/*.test.ts"
     ]
   },
   "tags": []

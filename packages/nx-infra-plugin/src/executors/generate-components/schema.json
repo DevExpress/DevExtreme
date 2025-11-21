@@ -7,7 +7,7 @@
     },
     "framework": {
       "type": "string",
-      "enum": ["react", "vue"],
+      "enum": ["react", "vue", "angular"],
       "default": "react",
       "description": "Target framework for component generation"
     },
@@ -81,6 +81,13 @@
             "path": { "type": "string" }
           }
         }
+      }
+    },
+    "excludePatterns": {
+      "type": "array",
+      "description": "Patterns to exclude from cleaning during component generation",
+      "items": {
+        "type": "string"
       }
     }
   },
