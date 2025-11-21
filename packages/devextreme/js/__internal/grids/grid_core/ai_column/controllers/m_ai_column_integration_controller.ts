@@ -5,13 +5,13 @@ import type {
 } from '@js/common/ai-integration';
 import errors from '@js/ui/widget/ui.errors';
 
-import type { ColumnsController } from '../columns_controller/m_columns_controller';
-import type { DataController } from '../data_controller/m_data_controller';
-import type { ErrorHandlingController } from '../error_handling/m_error_handling';
-import { Controller } from '../m_modules';
+import type { ColumnsController } from '../../columns_controller/m_columns_controller';
+import type { DataController } from '../../data_controller/m_data_controller';
+import type { ErrorHandlingController } from '../../error_handling/m_error_handling';
+import { Controller } from '../../m_modules';
+import type { InternalRequestCallbacks } from '../types';
+import { getDataFromRowItems, reduceDataCachedKeys } from '../utils';
 import { AIColumnCacheController } from './m_ai_column_cache_controller';
-import type { InternalRequestCallbacks } from './types';
-import { getDataFromRowItems, reduceDataCachedKeys } from './utils';
 
 export class AIColumnIntegrationController extends Controller {
   private aborts: Record<string, (() => void) | undefined> = { };
