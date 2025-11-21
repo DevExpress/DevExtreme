@@ -1,6 +1,6 @@
 {
   "name": "devextreme-testcafe-tests",
-  "version": "25.2.0",
+  "version": "25.2.2",
   "scripts": {
     "test": "ts-node ./runner.ts",
     "lint": "eslint",
@@ -15,7 +15,7 @@
     "devextreme": "workspace:*",
     "devextreme-screenshot-comparer": "2.0.17",
     "devextreme-testcafe-models": "workspace:*",
-    "glob": "10.4.5",
+    "glob": "11.1.0",
     "minimist": "1.2.8",
     "mockdate": "3.0.5",
     "nconf": "0.12.1",

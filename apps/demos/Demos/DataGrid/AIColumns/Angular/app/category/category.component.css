@@ -1,0 +1,6 @@
+.category__wrapper {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 24px;
+  background-color: var(--dx-color-separator);
+}

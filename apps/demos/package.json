@@ -1,6 +1,6 @@
 {
     "name": "devextreme-demos",
-    "version": "25.2.0",
+    "version": "25.2.2",
     "description": "",
     "repository": {
         "type": "git",
@@ -126,7 +126,7 @@
         "eslint-plugin-react-hooks": "^5.1.0",
         "eslint-plugin-react-perf": "3.3.2",
         "express": "4.21.1",
-        "glob": "10.4.5",
+        "glob": "11.1.0",
         "globals": "catalog:",
         "gulp": "4.0.2",
         "gulp-clean": "0.4.0",
@@ -149,6 +149,7 @@
         "stylelint-config-standard": "35.0.0",
         "systemjs-builder": "0.16.15",
         "testcafe": "3.7.2",
+        "testcafe-reporter-spec-time": "4.0.0",
         "ts-node": "10.9.2",
         "vue-tsc": "^3.0.6"
     },

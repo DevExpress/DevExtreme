@@ -5,15 +5,15 @@
     title="Olympic Gold Medals in 2008"
     [rotated]="true"
   >
-    <dxi-series
+    <dxi-chart-series
       color="#f3c40b"
       type="bar"
       argumentField="country"
       valueField="medals"
     >
-      <dxo-label [visible]="true"></dxo-label>
-    </dxi-series>
-    <dxo-legend [visible]="false"></dxo-legend>
+      <dxo-chart-label [visible]="true"></dxo-chart-label>
+    </dxi-chart-series>
+    <dxo-chart-legend [visible]="false"></dxo-chart-legend>
   </dx-chart>
 
   <dx-pie-chart
@@ -22,11 +22,11 @@
     [title]="title"
     palette="Harmony Light"
   >
-    <dxi-series argumentField="country" valueField="medals">
-      <dxo-label [visible]="true">
-        <dxo-connector [visible]="true"></dxo-connector>
-      </dxo-label>
-    </dxi-series>
+    <dxi-pie-chart-series argumentField="country" valueField="medals">
+      <dxo-pie-chart-label [visible]="true">
+        <dxo-pie-chart-connector [visible]="true"></dxo-pie-chart-connector>
+      </dxo-pie-chart-label>
+    </dxi-pie-chart-series>
   </dx-pie-chart>
 </div>
 

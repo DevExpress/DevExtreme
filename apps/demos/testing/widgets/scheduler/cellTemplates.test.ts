@@ -18,7 +18,8 @@ runManualTest('Scheduler', 'CellTemplates', (test) => {
         await testScreenshot(t, takeScreenshot, 'scheduler_CellTemplates_month_view.png'),
       ).ok();
 
-    await t.expect(compareResults.isValid())
+    await t
+      .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   });
 
