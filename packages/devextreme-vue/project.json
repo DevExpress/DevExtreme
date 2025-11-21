@@ -8,8 +8,7 @@
       "executor": "devextreme-nx-infra-plugin:clean",
       "options": {
         "targetDirectory": "./src",
-        "excludePatterns": ["./src/core", "./src/common"],
-        "mode": "recursive"
+        "excludePatterns": ["./src/core", "./src/common"]
       }
     },
     "regenerate": {
@@ -53,8 +52,7 @@
     "npm:clean": {
       "executor": "devextreme-nx-infra-plugin:clean",
       "options": {
-        "targetDirectory": "./npm",
-        "mode": "simple"
+        "targetDirectory": "./npm"
       }
     },
     "build:esm": {

@@ -12,8 +12,7 @@
         "excludePatterns": [
           "./src/ui/popup/service",
           "./src/ui/popup/index.ts"
-        ],
-        "mode": "recursive"
+        ]
       },
       "cache": false
     },
@@ -48,16 +47,14 @@
       "executor": "devextreme-nx-infra-plugin:clean",
       "dependsOn": ["clean:dist"],
       "options": {
-        "targetDirectory": "./npm",
-        "mode": "simple"
+        "targetDirectory": "./npm"
       },
       "cache": false
     },
     "clean:dist": {
       "executor": "devextreme-nx-infra-plugin:clean",
       "options": {
-        "targetDirectory": "./dist",
-        "mode": "simple"
+        "targetDirectory": "./dist"
       },
       "cache": false
     },
