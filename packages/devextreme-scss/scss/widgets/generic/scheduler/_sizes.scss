@@ -43,6 +43,23 @@ $generic-scheduler-days-of-week-button-size: null !default;
 $generic-scheduler-days-of-week-buttons-gap: null !default;
 $generic-scheduler-recurrence-end-item-height: null !default;
 
+$generic-scheduler-appointment-short-content-padding: null !default;
+$generic-scheduler-appointment-10min-height: null !default;
+$generic-scheduler-appointment-15min-height: null !default;
+$generic-scheduler-appointment-20min-height: null !default;
+$generic-scheduler-appointment-25min-height: null !default;
+$generic-scheduler-appointment-10min-recurrence-padding-right: null !default;
+$generic-scheduler-appointment-10min-title-font-size: null !default;
+$generic-scheduler-appointment-10min-title-line-height: null !default;
+$generic-scheduler-appointment-10min-icon-font-size: null !default;
+$generic-scheduler-appointment-10min-icon-right: null !default;
+$generic-scheduler-appointment-15min-recurrence-padding-right: null !default;
+$generic-scheduler-appointment-15min-title-font-size: null !default;
+$generic-scheduler-appointment-15min-title-line-height: null !default;
+$generic-scheduler-appointment-15min-icon-font-size: null !default;
+$generic-scheduler-appointment-15min-icon-right: null !default;
+$generic-scheduler-appointment-20min-recurrence-padding-right: null !default;
+
 $agenda-appointment-title-font-size: null !default;
 $scheduler-timeline-cell-height: null !default;
 
@@ -97,6 +114,26 @@ $generic-scheduler-group-header-agenda-font-size: 14px !default;
   $agenda-appointment-title-font-size: 16px;
 
   $scheduler-timeline-cell-height: 78px !default;
+
+  $generic-scheduler-appointment-short-content-padding: 0 7px !default;
+  $generic-scheduler-appointment-10min-height: 23px !default;
+  $generic-scheduler-appointment-15min-height: 23px !default;
+  $generic-scheduler-appointment-20min-height: 32px !default;
+  $generic-scheduler-appointment-25min-height: 41px !default;
+
+  $generic-scheduler-appointment-10min-recurrence-padding-right: 16px !default;
+  $generic-scheduler-appointment-10min-title-font-size: 8px !default;
+  $generic-scheduler-appointment-10min-title-line-height: 16px !default;
+  $generic-scheduler-appointment-10min-icon-font-size: 14px !default;
+  $generic-scheduler-appointment-10min-icon-right: 2px !default;
+
+  $generic-scheduler-appointment-15min-recurrence-padding-right: 20px !default;
+  $generic-scheduler-appointment-15min-title-font-size: 12px !default;
+  $generic-scheduler-appointment-15min-title-line-height: 24px !default;
+  $generic-scheduler-appointment-15min-icon-font-size: 18px !default;
+  $generic-scheduler-appointment-15min-icon-right: 2px !default;
+
+  $generic-scheduler-appointment-20min-recurrence-padding-right: 24px !default;
 }
 
 @else if $size == "compact" {
@@ -147,4 +184,24 @@ $generic-scheduler-group-header-agenda-font-size: 14px !default;
   $agenda-appointment-title-font-size: 16px;
 
   $scheduler-timeline-cell-height: 50px !default;
+
+  $generic-scheduler-appointment-short-content-padding: 0 5px !default;
+  $generic-scheduler-appointment-10min-height: 14px !default;
+  $generic-scheduler-appointment-15min-height: 23px !default;
+  $generic-scheduler-appointment-20min-height: 32px !default;
+  $generic-scheduler-appointment-25min-height: 41px !default;
+
+  $generic-scheduler-appointment-10min-title-font-size: 8px !default;
+  $generic-scheduler-appointment-10min-title-line-height: 16px !default;
+  $generic-scheduler-appointment-10min-recurrence-padding-right: 16px !default;
+  $generic-scheduler-appointment-10min-icon-font-size: 14px !default;
+  $generic-scheduler-appointment-10min-icon-right: 2px !default;
+
+  $generic-scheduler-appointment-15min-recurrence-padding-right: 16px !default;
+  $generic-scheduler-appointment-15min-title-font-size: 12px !default;
+  $generic-scheduler-appointment-15min-title-line-height: 16px !default;
+  $generic-scheduler-appointment-15min-icon-font-size: 14px !default;
+  $generic-scheduler-appointment-15min-icon-right: 2px !default;
+
+  $generic-scheduler-appointment-20min-recurrence-padding-right: 20px !default;
 }

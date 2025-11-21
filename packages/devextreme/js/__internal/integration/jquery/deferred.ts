@@ -20,7 +20,9 @@ if (useJQuery) {
       if (arguments.length === 0) {
         // @ts-expect-error
         return (new Deferred() as DeferredObj<unknown>).resolve();
-      } if (arguments.length === 1) {
+      }
+
+      if (arguments.length === 1) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return singleArg?.then
           ? singleArg

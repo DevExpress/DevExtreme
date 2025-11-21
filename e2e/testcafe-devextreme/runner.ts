@@ -58,11 +58,12 @@ interface ParsedArgs {
   retryFailed: boolean;
 }
 
-const TESTCAFE_CONFIG: Partial<TestCafeConfigurationOptions> = {
+const getTestCafeConfig = (cache: boolean): Partial<TestCafeConfigurationOptions> => ({
   hostname: 'localhost',
   port1: 1437,
   port2: 1438,
-};
+  cache,
+});
 
 const changeTheme = async (t: TestController, themeName: string): Promise<void> => {
   const changeThemeClientFn = ClientFunction(() => new Promise<void>((resolve) => {
@@ -88,7 +89,7 @@ function setShadowDom(args: ParsedArgs): void {
 function expandBrowserAlias(browser: string): string {
   switch (browser) {
     case 'chrome:devextreme-shr2':
-      return 'chrome:headless --no-sandbox --disable-dev-shm-usage --disable-gpu --window-size=1200,800 --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning';
+      return 'chrome:headless --no-sandbox --disable-dev-shm-usage --disable-gpu --window-size=1200,800 --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning';
     case 'chrome:docker':
       return 'chromium:headless --no-sandbox --disable-gpu --window-size=1200,800';
     default:
@@ -105,7 +106,7 @@ function getArgs(): ParsedArgs {
       reporter: 'spec-time',
       componentFolder: '',
       file: '*',
-      cache: true,
+      cache: false,
       quarantineMode: false,
       indices: '',
       platform: '',
@@ -122,9 +123,8 @@ async function main() {
   let testCafe: Awaited<ReturnType<typeof createTestCafe>> | null = null;
 
   try {
-    testCafe = await createTestCafe(TESTCAFE_CONFIG);
-
     const args = getArgs();
+    testCafe = await createTestCafe(getTestCafeConfig(args.cache));
 
     const testName = args.test.trim();
     const reporter = typeof args.reporter === 'string' ? args.reporter.trim() : args.reporter;
@@ -244,10 +244,6 @@ async function main() {
           }
           return true;
         });
-      }
-
-      if (args.cache) {
-        (runner as any).cache = args.cache;
       }
 
       return runner;

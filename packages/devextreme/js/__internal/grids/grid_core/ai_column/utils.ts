@@ -9,6 +9,7 @@ export const getAICommandColumnDefaultOptions = (): object => ({
   command: AI_COLUMN_NAME,
   cssClass: CLASSES.aiColumn,
   fixed: false,
+  encodeHtml: true,
   minWidth: 120,
 });
 

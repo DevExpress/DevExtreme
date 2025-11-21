@@ -1,6 +1,6 @@
 {
   "name": "devextreme-nx-infra-plugin",
-  "version": "0.0.1",
+  "version": "25.2.2",
   "type": "commonjs",
   "private": true,
   "executors": "./dist/executors.json",
@@ -12,7 +12,7 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "glob": "10.4.5",
+    "glob": "11.1.0",
     "rimraf": "3.0.2"
   },
   "devDependencies": {

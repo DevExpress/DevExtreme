@@ -1,7 +1,5 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import AppointmentPopup from 'devextreme-testcafe-models/scheduler/appointment/popup';
-import { ClientFunction } from 'testcafe';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { testScreenshot } from '../../../../helpers/themeUtils';
@@ -10,25 +8,6 @@ fixture.disablePageReloads`Appointment Form: Main Form`
   .page(url(__dirname, '../../../container.html'));
 
 const SCHEDULER_SELECTOR = '#container';
-
-const openAppointmentPopup = async (
-  t: TestController,
-  appointment: any,
-  isRecurringAppointment: boolean,
-): Promise<AppointmentPopup> => {
-  await ClientFunction((appointmentData) => {
-    const instance = ($('#container') as any).dxScheduler('instance');
-    instance.showAppointmentPopup(appointmentData);
-  })(appointment);
-
-  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-
-  if (isRecurringAppointment) {
-    await t.click(Scheduler.getEditRecurrenceDialog().series);
-  }
-
-  return scheduler.appointmentPopup;
-};
 
 const getResources = (withIcons = false) => ([
   {
@@ -82,7 +61,12 @@ const getResources = (withIcons = false) => ([
   test.meta({ browserSize: [1500, 1500] })('appointment main form', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    const appointmentPopup = await openAppointmentPopup(t, appointment, isRecurringAppointment);
+    const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+    const appointmentPopup = await scheduler.openAppointmentPopup(
+      t,
+      appointment,
+      isRecurringAppointment,
+    );
 
     await testScreenshot(
       t,
@@ -106,7 +90,12 @@ const getResources = (withIcons = false) => ([
   test.meta({ browserSize: [1500, 1500] })('appointment main form with resources and timezones', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    const appointmentPopup = await openAppointmentPopup(t, appointment, isRecurringAppointment);
+    const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+    const appointmentPopup = await scheduler.openAppointmentPopup(
+      t,
+      appointment,
+      isRecurringAppointment,
+    );
 
     await testScreenshot(
       t,
@@ -144,7 +133,8 @@ test.meta({ browserSize: [1500, 1500] })('main form with resources that have ico
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  const appointmentPopup = await openAppointmentPopup(t, appointment, false);
+  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+  const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, false);
 
   await testScreenshot(
     t,
@@ -178,7 +168,8 @@ test.meta({ browserSize: [1500, 1500] })('appointment form readonly state', asyn
     priorityId: 1,
   };
 
-  const appointmentPopup = await openAppointmentPopup(t, appointment, false);
+  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+  const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, false);
 
   await testScreenshot(
     t,

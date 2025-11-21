@@ -5,16 +5,24 @@
   [currentDate]="currentDate"
   [height]="730"
 >
-  <dxi-view name="Auto Mode" type="month" maxAppointmentsPerCell="auto">
-  </dxi-view>
-  <dxi-view
+  <dxi-scheduler-view
+    name="Auto Mode"
+    type="month"
+    maxAppointmentsPerCell="auto"
+  >
+  </dxi-scheduler-view>
+  <dxi-scheduler-view
     name="Unlimited Mode"
     type="month"
     maxAppointmentsPerCell="unlimited"
   >
-  </dxi-view>
-  <dxi-view name="Numeric Mode" type="month" [maxAppointmentsPerCell]="2">
-  </dxi-view>
+  </dxi-scheduler-view>
+  <dxi-scheduler-view
+    name="Numeric Mode"
+    type="month"
+    [maxAppointmentsPerCell]="2"
+  >
+  </dxi-scheduler-view>
   <dxi-scheduler-resource
     fieldExpr="roomId"
     label="room"
