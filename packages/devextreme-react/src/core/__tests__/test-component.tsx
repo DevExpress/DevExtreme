@@ -78,7 +78,7 @@ const TestComponent = memo(forwardRef<TestComponentRef, any>(function TestCompon
         return props;
       },
     };
-  }, [componentRef.current, getElement, props]);
+  }, [props]);
 
   return (
     <Component<P & IHtmlOptions>

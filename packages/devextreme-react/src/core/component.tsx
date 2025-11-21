@@ -100,7 +100,7 @@ const Component = forwardRef<ComponentRef, any>(
           clearExtensions();
         },
       }
-    ), [componentBaseRef.current, createWidget, clearExtensions]);
+    ), []);
 
     return (
       <ComponentBase<P>

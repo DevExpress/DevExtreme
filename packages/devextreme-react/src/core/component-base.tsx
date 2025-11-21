@@ -392,7 +392,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
           createWidget(el);
         },
       }
-    ), [instance.current, element.current, createWidget]);
+    ), []);
 
     const _renderChildren = useCallback(() => {
       if (renderChildren) {
