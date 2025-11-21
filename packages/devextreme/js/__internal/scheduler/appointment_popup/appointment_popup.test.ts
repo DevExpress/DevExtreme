@@ -128,7 +128,7 @@ describe('Appointment Popup Form', () => {
         },
       });
 
-      scheduler.showAppointmentPopup(commonAppointment);
+      scheduler.showAppointmentPopup({ ...commonAppointment });
 
       const subjectEditor = POM.popup.form.getEditor('subjectEditor');
       const descriptionEditor = POM.popup.form.getEditor('descriptionEditor');
