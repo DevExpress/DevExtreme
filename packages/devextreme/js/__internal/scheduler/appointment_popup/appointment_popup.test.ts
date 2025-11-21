@@ -130,23 +130,23 @@ describe('Appointment Popup Form', () => {
 
       scheduler.showAppointmentPopup(commonAppointment);
 
-      const subjectEditor = ($(POM.popup.subjectInput) as any).dxTextBox('instance');
-      const descriptionEditor = ($(POM.popup.descriptionTextArea) as any).dxTextArea('instance');
-      const startTimeZoneEditor = ($(POM.popup.startTimeZone) as any).dxSelectBox('instance');
-      const endTimeZoneEditor = ($(POM.popup.endTimeZone) as any).dxSelectBox('instance');
+      const subjectEditor = POM.popup.form.getEditor('subjectEditor');
+      const descriptionEditor = POM.popup.form.getEditor('descriptionEditor');
+      const startTimeZoneEditor = POM.popup.form.getEditor('startTimeZoneEditor');
+      const endTimeZoneEditor = POM.popup.form.getEditor('endTimeZoneEditor');
 
-      descriptionEditor.option('value', 'temp');
-      startTimeZoneEditor.option('value', 'America/Los_Angeles');
-      endTimeZoneEditor.option('value', 'America/Anchorage');
+      descriptionEditor?.option('value', 'temp');
+      startTimeZoneEditor?.option('value', 'America/Los_Angeles');
+      endTimeZoneEditor?.option('value', 'America/Anchorage');
 
       POM.popup.getSaveButton().click();
 
       scheduler.showAppointmentPopup();
 
-      expect(subjectEditor.option('value')).toBe('');
-      expect(descriptionEditor.option('value')).toBe('');
-      expect(startTimeZoneEditor.option('value')).toBeNull();
-      expect(endTimeZoneEditor.option('value')).toBeNull();
+      expect(subjectEditor?.option('value')).toBe('');
+      expect(descriptionEditor?.option('value')).toBe('');
+      expect(startTimeZoneEditor?.option('value')).toBeUndefined();
+      expect(endTimeZoneEditor?.option('value')).toBeUndefined();
     });
   });
 
@@ -535,64 +535,6 @@ describe('Appointment Popup Form', () => {
       expect(scheduler.option('dataSource')?.[0]).toEqual(data[0]);
     });
 
-    describe('firstDayOfWeek in recurrence form', () => {
-      it('should apply firstDayOfWeek to week day buttons', async () => {
-        const appointment = {
-          text: 'Test Appointment',
-          startDate: new Date(2017, 4, 1, 9, 30),
-          endDate: new Date(2017, 4, 1, 11),
-        };
-
-        const { POM, scheduler } = await createScheduler(getDefaultConfig());
-
-        scheduler.showAppointmentPopup(appointment);
-        POM.popup.selectRepeatValue('weekly');
-
-        const dayButtonsMonday = $(POM.popup.recurrenceWeekDayButtons).find('.dx-button');
-        expect(dayButtonsMonday.length).toBe(7);
-        expect(dayButtonsMonday.eq(0).text()).toBe('M');
-        expect(dayButtonsMonday.eq(6).text()).toBe('S');
-
-        scheduler.hideAppointmentPopup();
-        scheduler.option('firstDayOfWeek', 0);
-
-        scheduler.showAppointmentPopup(appointment);
-        POM.popup.selectRepeatValue('weekly');
-
-        const dayButtonsSunday = $(POM.popup.recurrenceWeekDayButtons).find('.dx-button');
-        expect(dayButtonsSunday.length).toBe(7);
-        expect(dayButtonsSunday.eq(0).text()).toBe('S');
-        expect(dayButtonsSunday.eq(1).text()).toBe('M');
-        expect(dayButtonsSunday.eq(6).text()).toBe('S');
-      });
-
-      it('should apply firstDayOfWeek to recurrence form startDate calendar', async () => {
-        const appointment = {
-          text: 'Test Appointment',
-          startDate: new Date(2017, 4, 1, 9, 30),
-          endDate: new Date(2017, 4, 1, 11),
-        };
-
-        const { POM, scheduler } = await createScheduler(getDefaultConfig());
-
-        scheduler.showAppointmentPopup(appointment);
-        POM.popup.selectRepeatValue('weekly');
-
-        const recurrenceStartDateEditor = POM.popup.form.getEditor('recurrenceStartDateEditor');
-        expect(recurrenceStartDateEditor).toBeDefined();
-        expect(recurrenceStartDateEditor?.option('calendarOptions.firstDayOfWeek')).toBe(1);
-
-        scheduler.option('firstDayOfWeek', 0);
-
-        scheduler.showAppointmentPopup(appointment);
-        POM.popup.selectRepeatValue('weekly');
-
-        const recurrenceStartDateEditorAfter = POM.popup.form.getEditor('recurrenceStartDateEditor');
-        expect(recurrenceStartDateEditorAfter).toBeDefined();
-        expect(recurrenceStartDateEditorAfter?.option('calendarOptions.firstDayOfWeek')).toBe(0);
-      });
-    });
-
     describe('Editing and saving recurrence', () => {
       it('should populate form with existing weekly recurrence rule', async () => {
         setupSchedulerTestEnvironment({ height: 200 });
@@ -712,6 +654,88 @@ describe('Appointment Popup Form', () => {
           recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,FR',
         });
       });
+    });
+  });
+
+  describe('firstDayOfWeek', () => {
+    it('should apply firstDayOfWeek to week day buttons', async () => {
+      const { POM, scheduler } = await createScheduler(getDefaultConfig());
+
+      scheduler.showAppointmentPopup(commonAppointment);
+      POM.popup.selectRepeatValue('weekly');
+
+      const dayButtonsMonday = $(POM.popup.recurrenceWeekDayButtons).find('.dx-button');
+      expect(dayButtonsMonday.length).toBe(7);
+      expect(dayButtonsMonday.eq(0).text()).toBe('M');
+      expect(dayButtonsMonday.eq(6).text()).toBe('S');
+
+      scheduler.hideAppointmentPopup();
+      scheduler.option('firstDayOfWeek', 0);
+
+      scheduler.showAppointmentPopup(commonAppointment);
+      POM.popup.selectRepeatValue('weekly');
+
+      const dayButtonsSunday = $(POM.popup.recurrenceWeekDayButtons).find('.dx-button');
+      expect(dayButtonsSunday.length).toBe(7);
+      expect(dayButtonsSunday.eq(0).text()).toBe('S');
+      expect(dayButtonsSunday.eq(1).text()).toBe('M');
+      expect(dayButtonsSunday.eq(6).text()).toBe('S');
+    });
+
+    it('should apply firstDayOfWeek to recurrence form startDate calendar', async () => {
+      const { POM, scheduler } = await createScheduler(getDefaultConfig());
+
+      scheduler.showAppointmentPopup(commonAppointment);
+      POM.popup.selectRepeatValue('weekly');
+
+      const recurrenceStartDateEditor = POM.popup.form.getEditor('recurrenceStartDateEditor');
+      expect(recurrenceStartDateEditor).toBeDefined();
+      expect(recurrenceStartDateEditor?.option('calendarOptions.firstDayOfWeek')).toBe(1);
+
+      scheduler.option('firstDayOfWeek', 0);
+
+      scheduler.showAppointmentPopup(commonAppointment);
+      POM.popup.selectRepeatValue('weekly');
+
+      const recurrenceStartDateEditorAfter = POM.popup.form.getEditor('recurrenceStartDateEditor');
+      expect(recurrenceStartDateEditorAfter).toBeDefined();
+      expect(recurrenceStartDateEditorAfter?.option('calendarOptions.firstDayOfWeek')).toBe(0);
+    });
+
+    it('should apply firstDayOfWeek to startDate calendar', async () => {
+      const { POM, scheduler } = await createScheduler(getDefaultConfig());
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const startDateEditor = POM.popup.form.getEditor('startDateEditor');
+      expect(startDateEditor).toBeDefined();
+      expect(startDateEditor?.option('calendarOptions.firstDayOfWeek')).toBe(1);
+
+      scheduler.option('firstDayOfWeek', 0);
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const startDateEditorAfter = POM.popup.form.getEditor('startDateEditor');
+      expect(startDateEditorAfter).toBeDefined();
+      expect(startDateEditorAfter?.option('calendarOptions.firstDayOfWeek')).toBe(0);
+    });
+
+    it('should apply firstDayOfWeek to endDate calendar', async () => {
+      const { POM, scheduler } = await createScheduler(getDefaultConfig());
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const endDateEditor = POM.popup.form.getEditor('endDateEditor');
+      expect(endDateEditor).toBeDefined();
+      expect(endDateEditor?.option('calendarOptions.firstDayOfWeek')).toBe(1);
+
+      scheduler.option('firstDayOfWeek', 0);
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const endDateEditorAfter = POM.popup.form.getEditor('endDateEditor');
+      expect(endDateEditorAfter).toBeDefined();
+      expect(endDateEditorAfter?.option('calendarOptions.firstDayOfWeek')).toBe(0);
     });
   });
 
