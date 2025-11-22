@@ -165,7 +165,7 @@ export class PopupModel {
     return $input.val() as unknown as string;
   };
 
-  setInputValue = (editorName: string, value: string): void => {
+  setInputValue = (editorName: string, value: string | Date | boolean): void => {
     this.form.getEditor(editorName)?.option('value', value);
   };
 
