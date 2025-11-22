@@ -501,9 +501,10 @@ describe('Unsupported properties', () => {
         instance.editRow(0);
         jest.runAllTimers();
 
+        const aiCell = component.getDataCell(0, 1);
         expect(component.getDataRow(0).isEditRow).toBe(true);
-        expect(component.getDataCell(0, 1).isEditCell).toBe(false);
-        expect(component.getDataCell(0, 1).getHTML()).toBe('Test1');
+        expect(aiCell.isEditCell).toBe(false);
+        expect(aiCell.getHTML()).toBe('Test1');
       });
 
       it('should not apply editing options to AI column', async () => {
@@ -575,8 +576,9 @@ describe('Unsupported properties', () => {
         instance.editCell(0, 1);
         jest.runAllTimers();
 
-        expect(component.getDataCell(0, 1).isEditCell).toBe(false);
-        expect(component.getDataCell(0, 1).getHTML()).toBe('Test1');
+        const aiCell = component.getDataCell(0, 1);
+        expect(aiCell.isEditCell).toBe(false);
+        expect(aiCell.getHTML()).toBe('Test1');
       });
     });
 
@@ -606,8 +608,9 @@ describe('Unsupported properties', () => {
         instance.editRow(0);
         jest.runAllTimers();
 
-        expect(component.getEditForm().getItems()?.length).toBe(1);
-        expect(component.getEditForm().getItem('id')).not.toBeNull();
+        const editForm = component.getEditForm();
+        expect(editForm.getItems()?.length).toBe(1);
+        expect(editForm.getItem('id')).not.toBeNull();
       });
 
       it('should not apply editing options to AI column', async () => {
@@ -649,8 +652,9 @@ describe('Unsupported properties', () => {
         instance.editRow(0);
         jest.runAllTimers();
 
-        expect(component.getEditForm().getItems()?.length).toBe(1);
-        expect(component.getEditForm().getItem('id')).not.toBeNull();
+        const editForm = component.getEditForm();
+        expect(editForm.getItems()?.length).toBe(1);
+        expect(editForm.getItem('id')).not.toBeNull();
       });
     });
 
