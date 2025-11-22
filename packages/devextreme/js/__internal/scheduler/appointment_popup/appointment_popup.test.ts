@@ -242,7 +242,7 @@ describe('Appointment Form', () => {
     });
   });
 
-  describe.only('Field expressions', () => {
+  describe('Field expressions', () => {
     it.each([
       ['textExpr', 'subjectEditor', 'qwerty'],
       ['allDayExpr', 'allDayEditor', true],
