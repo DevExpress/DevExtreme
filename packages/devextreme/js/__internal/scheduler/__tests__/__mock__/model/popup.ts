@@ -142,17 +142,42 @@ export class PopupModel {
     return this.element.querySelector('.dx-scheduler-form-day-of-year-group');
   }
 
-  getInput = (editorName: string): dxElementWrapper | undefined => {
+  getInput = (editorName: string): dxElementWrapper => {
     const editor = this.form.getEditor(editorName);
-    return editor?.$element().find('input.dx-texteditor-input');
+
+    const textInput = editor?.$element().find('.dx-texteditor-input');
+
+    if (textInput?.length) {
+      return textInput;
+    }
+
+    const input = editor?.$element().find('input');
+
+    if (input?.length) {
+      return input;
+    }
+
+    throw new Error(`Input element of editor with name "${editorName}" not found`);
   };
 
-  getInputValue = (editorName: string): string | undefined => {
-    const result = this.getInput(editorName)?.val();
-    return result as string | undefined;
+  getInputValue = (editorName: string): string => {
+    const $input = this.getInput(editorName);
+    return $input.val() as unknown as string;
   };
 
-  isInputVisible = (editorName: string): boolean => this.getInput(editorName)?.length === 1;
+  setInputValue = (editorName: string, value: string): void => {
+    this.form.getEditor(editorName)?.option('value', value);
+  };
+
+  isInputVisible = (editorName: string): boolean => {
+    const editor = this.form.getEditor(editorName);
+
+    if (!editor) {
+      return false;
+    }
+
+    return editor.$element().is(':visible');
+  };
 
   getLabelIdByText = (labelText: string): string => {
     const labels = Array.from(this.element.querySelectorAll('label'));

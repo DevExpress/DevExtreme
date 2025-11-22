@@ -55,7 +55,7 @@ const getDefaultConfig = () => ({
   width: 600,
 });
 
-describe('Appointment Popup Form', () => {
+describe('Appointment Form', () => {
   beforeEach(() => {
     fx.off = true;
     setupSchedulerTestEnvironment();
@@ -142,6 +142,89 @@ describe('Appointment Popup Form', () => {
       expect(POM.popup.form.getEditor('descriptionEditor')?.option('value')).toBe('');
       expect(POM.popup.form.getEditor('startTimeZoneEditor')?.option('value')).toBeUndefined();
       expect(POM.popup.form.getEditor('endTimeZoneEditor')?.option('value')).toBeUndefined();
+    });
+
+    it('should save appointment when data source is a custom store', async () => {
+      const appointment = { ...commonAppointment, id: 0 };
+
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        dataSource: {
+          store: {
+            type: 'array',
+            key: 'id',
+            data: [appointment],
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(appointment);
+
+      POM.popup.form.getEditor('subjectEditor')?.option('value', 'Updated subject');
+
+      scheduler.hideAppointmentPopup(true);
+
+      const dataSource = (scheduler as any).getDataSource();
+
+      expect(dataSource.items()).toHaveLength(1);
+      expect(dataSource.items()[0]).toMatchObject({
+        ...appointment,
+        text: 'Updated subject',
+      });
+    });
+  });
+
+  describe('Empty appointment', () => {
+    // add test to check editors values when form is opened on empty cell
+    it('should have correct editor values when opening for empty date cell - 1', async () => {
+      const { POM } = await createScheduler({
+        ...getDefaultConfig(),
+        currentView: 'week',
+      });
+
+      POM.dblClickDateTableCell(0, 0);
+
+      expect(POM.popup.getInputValue('subjectEditor')).toBe('');
+      expect(POM.popup.getInputValue('startDateEditor')).toBe('5/22/2017');
+      expect(POM.popup.getInputValue('startTimeEditor')).toBe('9:00 AM');
+      expect(POM.popup.getInputValue('endDateEditor')).toBe('5/22/2017');
+      expect(POM.popup.getInputValue('endTimeEditor')).toBe('9:30 AM');
+      expect(POM.popup.getInputValue('allDayEditor')).toBe('false');
+      expect(POM.popup.getInputValue('descriptionEditor')).toBe('');
+    });
+
+    it('should have correct editor values when opening for empty date cell - 2', async () => {
+      const { POM } = await createScheduler({
+        ...getDefaultConfig(),
+        currentView: 'week',
+      });
+
+      POM.dblClickDateTableCell(1, 1);
+
+      expect(POM.popup.getInputValue('subjectEditor')).toBe('');
+      expect(POM.popup.getInputValue('startDateEditor')).toBe('5/23/2017');
+      expect(POM.popup.getInputValue('startTimeEditor')).toBe('9:30 AM');
+      expect(POM.popup.getInputValue('endDateEditor')).toBe('5/23/2017');
+      expect(POM.popup.getInputValue('endTimeEditor')).toBe('10:00 AM');
+      expect(POM.popup.getInputValue('allDayEditor')).toBe('false');
+      expect(POM.popup.getInputValue('descriptionEditor')).toBe('');
+    });
+
+    it('should have correct editor values when opening for empty all day cell', async () => {
+      const { POM } = await createScheduler({
+        ...getDefaultConfig(),
+        currentView: 'week',
+      });
+
+      POM.dblClickAllDayTableCell(1);
+
+      expect(POM.popup.getInputValue('subjectEditor')).toBe('');
+      expect(POM.popup.getInputValue('startDateEditor')).toBe('5/23/2017');
+      expect(POM.popup.isInputVisible('startTimeEditor')).toBe(false);
+      expect(POM.popup.getInputValue('endDateEditor')).toBe('5/23/2017');
+      expect(POM.popup.isInputVisible('endTimeEditor')).toBe(false);
+      expect(POM.popup.getInputValue('allDayEditor')).toBe('true');
+      expect(POM.popup.getInputValue('descriptionEditor')).toBe('');
     });
   });
 

@@ -1,3 +1,5 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import $ from '@js/core/renderer';
 import { ToolbarModel } from '@ts/scheduler/__tests__/__mock__/model/toolbar';
 
 import { APPOINTMENT_POPUP_CLASS } from '../../../appointment_popup/m_popup';
@@ -53,6 +55,31 @@ export class SchedulerModel {
     return getTexts(cells);
   }
 
+  getDateTableCell(rowIndex = 0, cellIndex = 0): HTMLElement {
+    const rowSelector = `.dx-scheduler-date-table-row:nth-child(${rowIndex + 1})`;
+    const cellSelector = `.dx-scheduler-date-table-cell:nth-child(${cellIndex + 1})`;
+    const selector = `${rowSelector} ${cellSelector}`;
+
+    const result = this.container.querySelector(selector);
+
+    if (!result) {
+      throw new Error(`Date cell in row ${rowIndex} and column ${cellIndex} not found`);
+    }
+
+    return result as HTMLElement;
+  }
+
+  getAllDayTableCell(cellIndex = 0): HTMLElement {
+    const cellSelector = `.dx-scheduler-all-day-table-cell:nth-child(${cellIndex + 1})`;
+    const result = this.container.querySelector(cellSelector);
+
+    if (!result) {
+      throw new Error(`All-day cell in column ${cellIndex} not found`);
+    }
+
+    return result as HTMLElement;
+  }
+
   getHeaderPanelContent(): string[] {
     const cells = this.container.querySelectorAll('.dx-scheduler-header-panel-cell');
     return getTexts(cells);
@@ -97,6 +124,34 @@ export class SchedulerModel {
     appointment.element.click();
 
     return appointment;
+  }
+
+  dblClickDateTableCell(rowIndex = 0, cellIndex = 0): void {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const $cell = $(this.getDateTableCell(rowIndex, cellIndex)) as any;
+
+    // @ts-expect-error
+    eventsEngine.trigger($cell, 'dxpointerdown');
+    // @ts-expect-error
+    eventsEngine.trigger($cell, 'dxclick');
+    // @ts-expect-error
+    eventsEngine.trigger($cell, 'dxpointerdown');
+    // @ts-expect-error
+    eventsEngine.trigger($cell, 'dxclick');
+  }
+
+  dblClickAllDayTableCell(cellIndex = 0): void {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const $cell = $(this.getAllDayTableCell(cellIndex)) as any;
+
+    // @ts-expect-error
+    eventsEngine.trigger($cell, 'dxpointerdown');
+    // @ts-expect-error
+    eventsEngine.trigger($cell, 'dxclick');
+    // @ts-expect-error
+    eventsEngine.trigger($cell, 'dxpointerdown');
+    // @ts-expect-error
+    eventsEngine.trigger($cell, 'dxclick');
   }
 }
 
