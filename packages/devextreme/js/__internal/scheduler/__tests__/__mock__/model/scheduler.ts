@@ -107,6 +107,10 @@ export class SchedulerModel {
     return new PopupModel(popupElement);
   }
 
+  isPopupVisible(): boolean {
+    return this.getPopups().length > 0;
+  }
+
   getPopups = (): NodeListOf<Element> => document.querySelectorAll(`.dx-overlay-wrapper.${APPOINTMENT_POPUP_CLASS}, .dx-overlay-wrapper.${POPUP_DIALOG_CLASS}`);
 
   getLoadPanel = (): HTMLElement | null => document.querySelector('.dx-loadpanel');

@@ -535,7 +535,6 @@ export class AppointmentForm {
       }
 
       if (!e.value) {
-        // todo: maybe we should update form data here too?
         return;
       }
 

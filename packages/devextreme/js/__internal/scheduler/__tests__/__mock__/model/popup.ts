@@ -165,7 +165,7 @@ export class PopupModel {
     return $input.val() as unknown as string;
   };
 
-  setInputValue = (editorName: string, value: string | Date | boolean): void => {
+  setInputValue = (editorName: string, value: string | Date | boolean | null): void => {
     this.form.getEditor(editorName)?.option('value', value);
   };
 
@@ -177,6 +177,16 @@ export class PopupModel {
     }
 
     return editor.$element().is(':visible');
+  };
+
+  getWeekDaysSelection = (): boolean[] => {
+    const buttons = this.element.querySelectorAll('.dx-scheduler-days-of-week-buttons .dx-button');
+
+    if (buttons.length === 0) {
+      throw new Error('Week day buttons not found');
+    }
+
+    return Array.from(buttons).map((button) => button.classList.contains('dx-button-mode-contained'));
   };
 
   getLabelIdByText = (labelText: string): string => {

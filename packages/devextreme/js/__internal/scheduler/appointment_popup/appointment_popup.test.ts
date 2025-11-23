@@ -2,7 +2,6 @@ import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 import $ from '@js/core/renderer';
-import type dxDateBox from '@js/ui/date_box';
 import type { GroupItem, Item as FormItem } from '@js/ui/form';
 import { toMilliseconds } from '@ts/utils/toMilliseconds';
 
@@ -21,7 +20,7 @@ const CLASSES = {
 
 const getDefaultData = () => [
   {
-    text: 'recurrent-app',
+    text: 'recurring-app',
     startDate: new Date(2017, 4, 1, 9, 30),
     endDate: new Date(2017, 4, 1, 11),
     recurrenceRule: 'FREQ=DAILY;COUNT=5',
@@ -42,6 +41,7 @@ const getDefaultData = () => [
   },
 ];
 
+const recurringAppointment = getDefaultData()[0];
 const commonAppointment = getDefaultData()[1];
 const allDayAppointment = getDefaultData()[3];
 
@@ -59,7 +59,7 @@ const getDefaultConfig = () => ({
 describe('Appointment Form', () => {
   beforeEach(() => {
     fx.off = true;
-    setupSchedulerTestEnvironment();
+    setupSchedulerTestEnvironment({ height: 600 });
   });
 
   afterEach(() => {
@@ -68,36 +68,12 @@ describe('Appointment Form', () => {
     jest.useRealTimers();
   });
 
-  describe('Appointment changes saving/canceling', () => {
-    it.each([
-      'startDate', 'startTime', 'endDate', 'endTime',
-    ])('should not close popup on save button click when %s is empty', async (field) => {
-      const { scheduler, POM } = await createScheduler(getDefaultConfig());
-
-      scheduler.showAppointmentPopup(commonAppointment);
-
-      let fieldEditorElement: Element | null = null;
-      if (field === 'startDate') { fieldEditorElement = POM.popup.startDate; }
-      if (field === 'startTime') { fieldEditorElement = POM.popup.startTime; }
-      if (field === 'endDate') { fieldEditorElement = POM.popup.endDate; }
-      if (field === 'endTime') { fieldEditorElement = POM.popup.endTime; }
-
-      // @ts-expect-error
-      const dateBox = $(fieldEditorElement).dxDateBox('instance') as dxDateBox;
-
-      dateBox.option('value', null);
-
-      POM.popup.getSaveButton().click();
-
-      expect(POM.popup.component.option('visible')).toBe(true);
-    });
-
-    it('should save data to appointment after save button was clicked', async () => {
-      setupSchedulerTestEnvironment({ height: 200 });
+  describe('Changes saving/canceling', () => {
+    it('should update appointment on save button click', async () => {
       const { scheduler, POM } = await createScheduler(getDefaultConfig());
 
       POM.openPopupByDblClick('common-app');
-      POM.popup.setInputValueByLabel('Subject', 'New Subject');
+      POM.popup.setInputValue('subjectEditor', 'New Subject');
       POM.popup.getSaveButton().click();
 
       const dataItem = scheduler.option('dataSource')?.[1];
@@ -108,44 +84,76 @@ describe('Appointment Form', () => {
       });
     });
 
-    it('should not update appointment if popup was closed by cancel button', async () => {
-      setupSchedulerTestEnvironment({ height: 200 });
+    it('should not update appointment on cancel button click', async () => {
       const { scheduler, POM } = await createScheduler(getDefaultConfig());
 
       POM.openPopupByDblClick('common-app');
-      POM.popup.setInputValueByLabel('Subject', 'New Subject');
+      POM.popup.setInputValue('subjectEditor', 'New Subject');
       POM.popup.getCancelButton().click();
 
       const dataItem = scheduler.option('dataSource')?.[1];
-      expect(dataItem).toMatchObject({ ...commonAppointment });
+      expect(dataItem).toMatchObject(commonAppointment);
     });
 
-    it('should have empty description, subject and timezone inputs when showing empty appointment after saving previous appointment', async () => {
-      const { scheduler, POM } = await createScheduler({
-        ...getDefaultConfig(),
-        editing: {
-          allowUpdating: true,
-          allowTimeZoneEditing: true,
-        },
-      });
+    it('should update recurring appointment on save button click in recurrence form', async () => {
+      const { scheduler, POM } = await createScheduler(getDefaultConfig());
 
-      scheduler.showAppointmentPopup({ ...commonAppointment });
-
-      POM.popup.form.getEditor('descriptionEditor')?.option('value', 'temp');
-      POM.popup.form.getEditor('startTimeZoneEditor')?.option('value', 'America/Los_Angeles');
-      POM.popup.form.getEditor('endTimeZoneEditor')?.option('value', 'America/Anchorage');
-
+      POM.openPopupByDblClick('recurring-app');
+      POM.popup.getEditSeriesButton().click();
+      POM.popup.setInputValue('subjectEditor', 'New Subject');
+      POM.popup.openRecurrenceSettings();
       POM.popup.getSaveButton().click();
 
-      scheduler.showAppointmentPopup();
+      const dataItem = scheduler.option('dataSource')?.[0];
 
-      expect(POM.popup.form.getEditor('subjectEditor')?.option('value')).toBe('');
-      expect(POM.popup.form.getEditor('descriptionEditor')?.option('value')).toBe('');
-      expect(POM.popup.form.getEditor('startTimeZoneEditor')?.option('value')).toBeUndefined();
-      expect(POM.popup.form.getEditor('endTimeZoneEditor')?.option('value')).toBeUndefined();
+      expect(dataItem).toMatchObject({
+        ...recurringAppointment,
+        text: 'New Subject',
+      });
     });
 
-    it('should save appointment when data source is a custom store', async () => {
+    it('should not update recurring appointment on cancel button click in recurrence form', async () => {
+      const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+      POM.openPopupByDblClick('recurring-app');
+      POM.popup.getEditSeriesButton().click();
+      POM.popup.setInputValue('subjectEditor', 'New Subject');
+      POM.popup.openRecurrenceSettings();
+      POM.popup.getCancelButton().click();
+
+      const dataItem = scheduler.option('dataSource')?.[0];
+
+      expect(dataItem).toMatchObject(recurringAppointment);
+    });
+
+    it('should update appointment recurrence rule changes on save button click', async () => {
+      const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+      POM.openPopupByDblClick('common-app');
+      POM.popup.selectRepeatValue('daily');
+      POM.popup.getSaveButton().click();
+
+      const dataItem = scheduler.option('dataSource')?.[1];
+
+      expect(dataItem).toMatchObject({
+        ...commonAppointment,
+        recurrenceRule: 'FREQ=DAILY',
+      });
+    });
+
+    it('should not update appointment recurrence rule changes on cancel button click', async () => {
+      const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+      POM.openPopupByDblClick('common-app');
+      POM.popup.selectRepeatValue('daily');
+      POM.popup.getCancelButton().click();
+
+      const dataItem = scheduler.option('dataSource')?.[1];
+
+      expect(dataItem).toMatchObject(commonAppointment);
+    });
+
+    it('should update appointment when data source is a custom store', async () => {
       const appointment = { ...commonAppointment, id: 0 };
 
       const { scheduler, POM } = await createScheduler({
@@ -160,18 +168,118 @@ describe('Appointment Form', () => {
       });
 
       scheduler.showAppointmentPopup(appointment);
-
-      POM.popup.form.getEditor('subjectEditor')?.option('value', 'Updated subject');
-
+      POM.popup.setInputValue('subjectEditor', 'Updated subject');
       scheduler.hideAppointmentPopup(true);
 
-      const dataSource = (scheduler as any).getDataSource();
+      const items = (scheduler as any).getDataSource().items();
 
-      expect(dataSource.items()).toHaveLength(1);
-      expect(dataSource.items()[0]).toMatchObject({
+      expect(items).toHaveLength(1);
+      expect(items[0]).toMatchObject({
         ...appointment,
         text: 'Updated subject',
       });
+    });
+
+    it('should create appointment when data source is a custom store', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        dataSource: {
+          store: {
+            type: 'array',
+            key: 'id',
+            data: [],
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup();
+      POM.popup.setInputValue('subjectEditor', 'New subject');
+      POM.popup.setInputValue('startDateEditor', new Date(2017, 4, 25, 9, 0));
+      POM.popup.setInputValue('startTimeEditor', new Date(2017, 4, 25, 9, 0));
+      POM.popup.setInputValue('endDateEditor', new Date(2017, 4, 25, 10, 0));
+      POM.popup.setInputValue('endTimeEditor', new Date(2017, 4, 25, 10, 0));
+      POM.popup.setInputValue('descriptionEditor', 'New appointment description');
+      scheduler.hideAppointmentPopup(true);
+
+      const items = (scheduler as any).getDataSource().items();
+
+      expect(items).toHaveLength(1);
+      expect(items[0]).toMatchObject({
+        text: 'New subject',
+        startDate: new Date(2017, 4, 25, 9, 0),
+        endDate: new Date(2017, 4, 25, 10, 0),
+        description: 'New appointment description',
+      });
+    });
+  });
+
+  describe('Validation', () => {
+    it.each([
+      'startDateEditor', 'startDateEditor', 'startDateEditor', 'startDateEditor',
+    ])('should not close popup on save button click when %s is empty', async (editorName) => {
+      const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+      scheduler.showAppointmentPopup({ ...commonAppointment });
+
+      POM.popup.setInputValue(editorName, null);
+      POM.popup.getSaveButton().click();
+
+      expect(POM.isPopupVisible()).toBe(true);
+    });
+
+    it.each([
+      'startTimeEditor', 'endDateEditor', 'endTimeEditor',
+    ])('should not close popup on save button click in recurrence form when %s editor is empty', async (editorName) => {
+      const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+      scheduler.showAppointmentPopup({ ...commonAppointment });
+
+      POM.popup.setInputValue(editorName, null);
+      POM.popup.selectRepeatValue('daily');
+      POM.popup.getSaveButton().click();
+
+      expect(POM.isPopupVisible()).toBe(true);
+    });
+
+    it('should close popup on save button click in recurrence form when startEditor editor is empty', async () => {
+      const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+      scheduler.showAppointmentPopup({ ...commonAppointment });
+
+      POM.popup.setInputValue('startDateEditor', null);
+      POM.popup.selectRepeatValue('daily');
+
+      expect(POM.popup.getInputValue('recurrenceStartDateEditor')).toBe('5/9/2017');
+
+      POM.popup.getSaveButton().click();
+
+      expect(POM.isPopupVisible()).toBe(false);
+    });
+  });
+
+  describe('State', () => {
+    it('should have empty description, subject and timezone inputs when showing empty appointment after saving previous appointment', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowUpdating: true,
+          allowTimeZoneEditing: true,
+        },
+      });
+
+      scheduler.showAppointmentPopup({ ...commonAppointment });
+
+      POM.popup.setInputValue('descriptionEditor', 'temp');
+      POM.popup.setInputValue('startDateTimeZoneEditor', 'America/Los_Angeles');
+      POM.popup.setInputValue('endDateTimeZoneEditor', 'America/Anchorage');
+      POM.popup.getSaveButton().click();
+
+      scheduler.showAppointmentPopup();
+
+      expect(POM.popup.getInputValue('subjectEditor')).toBe('');
+      expect(POM.popup.getInputValue('descriptionEditor')).toBe('');
+      expect(POM.popup.getInputValue('startDateTimeZoneEditor')).toBe('');
+      expect(POM.popup.getInputValue('endDateTimeZoneEditor')).toBe('');
     });
 
     it('should have correct form data when opening second appointment', async () => {
@@ -187,9 +295,7 @@ describe('Appointment Form', () => {
 
       expect(POM.popup.form.option('formData')).toMatchObject({ ...allDayAppointment });
     });
-  });
 
-  describe('Empty appointment', () => {
     it('should have correct editor values when opening for empty date cell - 1', async () => {
       const { POM } = await createScheduler({
         ...getDefaultConfig(),
@@ -600,7 +706,7 @@ describe('Appointment Form', () => {
     });
   });
 
-  describe('Recurrence', () => {
+  describe('Recurrence Form', () => {
     it('should allow opening recurrence settings when allowUpdating is false', async () => {
       const appointment = {
         text: 'Recurrent Appointment',
@@ -654,7 +760,7 @@ describe('Appointment Form', () => {
       expect(POM.popup.recurrenceGroup?.getAttribute('tabindex')).toBe('-1');
     });
 
-    it('check that after opening recurrence appointment current form is main form', async () => {
+    it('should open main form when opening recurring appointment', async () => {
       const appointment = {
         text: 'Recurrent Appointment',
         startDate: new Date(2017, 4, 1, 9, 30),
@@ -668,152 +774,126 @@ describe('Appointment Form', () => {
 
       POM.popup.getEditSeriesButton().click();
 
+      expect(POM.popup.isMainGroupVisible()).toBe(true);
       expect(POM.popup.isRecurrenceGroupVisible()).toBe(false);
     });
 
-    it('should discard recurrence changes when clicking \'cancel\' button in recurrence form', async () => {
-      const data = [
-        {
-          text: 'meet',
-          startDate: new Date(2017, 4, 22, 9, 30),
-          endDate: new Date(2017, 4, 22, 11, 30),
-          recurrenceRule: 'FREQ=DAILY;',
-        },
-      ];
+    describe('State', () => {
+      it('should have correct input values for appointment with hour frequency', async () => {
+        const { scheduler, POM } = await createScheduler(getDefaultConfig());
 
-      const { POM, scheduler } = await createScheduler({
-        dataSource: data,
-        currentDate: new Date(2017, 4, 22),
-      });
-
-      scheduler.showAppointmentPopup(data[0]);
-
-      POM.popup.selectRepeatValue('weekly');
-
-      // TODO: this method works weirdly
-      scheduler.hideAppointmentPopup(true);
-
-      expect(scheduler.option('dataSource')?.[0]).toEqual(data[0]);
-    });
-
-    describe('Editing and saving recurrence', () => {
-      it('should populate form with existing weekly recurrence rule', async () => {
-        setupSchedulerTestEnvironment({ height: 200 });
-        const { POM } = await createScheduler({
-          dataSource: [{
-            text: 'Weekly Meeting',
-            startDate: new Date(2017, 4, 1, 9, 30),
-            endDate: new Date(2017, 4, 1, 11),
-            recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=10',
-            repeatEnd: 'count',
-          }],
-          views: ['month'],
-          currentView: 'month',
-          currentDate: new Date(2017, 4, 25),
-          firstDayOfWeek: 1,
-          startDayHour: 9,
-        });
-
-        POM.openPopupByDblClick('Weekly Meeting');
-
-        POM.popup.getEditSeriesButton().click();
-
-        // @ts-expect-error
-        const repeatEditorRecurrent = $(POM.popup.repeatEditor).dxSelectBox('instance');
-
-        expect(repeatEditorRecurrent.option('value')).toBe('weekly');
-
-        POM.popup.openRecurrenceSettings();
-
-        // @ts-expect-error
-        const frequencyEditor = $(POM.popup.frequencyEditor).dxSelectBox('instance');
-        expect(frequencyEditor.option('value')).toBe('weekly');
-
-        const dayButtons = $(POM.popup.recurrenceWeekDayButtons).find('.dx-button');
-        const selectedButtons = dayButtons.filter('.dx-button-mode-contained');
-        expect(selectedButtons.length).toBe(3);
-
-        // @ts-expect-error
-        const repeatEndEditor = $(POM.popup.repeatEndEditors).dxRadioGroup('instance');
-        expect(repeatEndEditor.option('value')).toBe('count');
-
-        // @ts-expect-error
-        const countEditor = $(POM.popup.countEditor).dxNumberBox('instance');
-        expect(countEditor.option('value')).toBe(10);
-      });
-
-      it('should save changes when saving from recurrence form', async () => {
-        const data = [
-          {
-            text: 'Meeting',
-            startDate: new Date(2017, 4, 22, 9, 30),
-            endDate: new Date(2017, 4, 22, 11, 30),
-          },
-        ];
-
-        const { POM, scheduler } = await createScheduler({
-          dataSource: data,
-          currentDate: new Date(2017, 4, 22),
-        });
-
-        POM.openPopupByDblClick('Meeting');
-
-        POM.popup.selectRepeatValue('daily');
-
-        // @ts-expect-error
-        const frequencyEditor = $(POM.popup.frequencyEditor).dxSelectBox('instance');
-        frequencyEditor.option('value', 'weekly');
-
-        POM.popup.getBackButton().click();
-
-        POM.popup.getSaveButton().click();
-
-        expect(scheduler.option('dataSource')?.[0]).toEqual({
-          allDay: false,
+        scheduler.showAppointmentPopup({
           text: 'Meeting',
-          startDate: new Date(2017, 4, 22, 9, 30),
-          endDate: new Date(2017, 4, 22, 11, 30),
-          recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO',
+          startDate: new Date(2017, 4, 1, 10, 30),
+          endDate: new Date(2017, 4, 1, 11),
+          recurrenceRule: 'FREQ=HOURLY;INTERVAL=2;COUNT=10',
+          repeatEnd: 'count',
         });
-      });
-
-      it('saves appointment after editing data in recurrence form', async () => {
-        const data = [
-          {
-            text: 'Team Meeting',
-            startDate: new Date(2017, 4, 15, 10, 0),
-            endDate: new Date(2017, 4, 15, 11, 0),
-            recurrenceRule: 'FREQ=DAILY',
-          },
-        ];
-
-        const { POM, scheduler } = await createScheduler({
-          dataSource: data,
-          currentDate: new Date(2017, 4, 15),
-          firstDayOfWeek: 1,
-        });
-
-        POM.openPopupByDblClick('Team Meeting');
-
         POM.popup.getEditSeriesButton().click();
 
-        POM.popup.selectRepeatValue('weekly');
+        expect(POM.popup.getInputValue('repeatEditor')).toBe('Hourly');
 
         POM.popup.openRecurrenceSettings();
 
-        POM.popup.selectRecurrenceWeekDays([0, 4]);
+        expect(POM.popup.getInputValue('recurrenceStartDateEditor')).toBe('5/1/2017');
+        expect(POM.popup.getInputValue('recurrenceCountEditor')).toBe('2');
+        expect(POM.popup.getInputValue('recurrencePeriodEditor')).toBe('Hour(s)');
+        expect(POM.popup.getInputValue('countEditor')).toBe('10 occurrence(s)');
+      });
 
-        POM.popup.getBackButton().click();
+      it('should have correct input values for appointment with daily frequency', async () => {
+        const { scheduler, POM } = await createScheduler(getDefaultConfig());
 
-        POM.popup.getSaveButton().click();
-
-        const savedAppointment = scheduler.option('dataSource')?.[0];
-        expect(savedAppointment).toMatchObject({
-          text: 'Team Meeting',
-          startDate: new Date(2017, 4, 15, 10, 0),
-          endDate: new Date(2017, 4, 15, 11, 0),
-          recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,FR',
+        scheduler.showAppointmentPopup({
+          text: 'Meeting',
+          startDate: new Date(2017, 4, 1, 10, 30),
+          endDate: new Date(2017, 4, 1, 11),
+          recurrenceRule: 'FREQ=DAILY;INTERVAL=2;COUNT=10',
+          repeatEnd: 'count',
         });
+        POM.popup.getEditSeriesButton().click();
+
+        expect(POM.popup.getInputValue('repeatEditor')).toBe('Daily');
+
+        POM.popup.openRecurrenceSettings();
+
+        expect(POM.popup.getInputValue('recurrenceStartDateEditor')).toBe('5/1/2017');
+        expect(POM.popup.getInputValue('recurrenceCountEditor')).toBe('2');
+        expect(POM.popup.getInputValue('recurrencePeriodEditor')).toBe('Day(s)');
+        expect(POM.popup.getInputValue('countEditor')).toBe('10 occurrence(s)');
+      });
+
+      it('should have correct input values for appointment with week frequency', async () => {
+        const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+        scheduler.showAppointmentPopup({
+          text: 'Meeting',
+          startDate: new Date(2017, 4, 1, 10, 30),
+          endDate: new Date(2017, 4, 1, 11),
+          recurrenceRule: 'FREQ=WEEKLY;INTERVAL=2;BYDAY=MO,WE,FR;COUNT=10',
+          repeatEnd: 'count',
+        });
+        POM.popup.getEditSeriesButton().click();
+
+        expect(POM.popup.getInputValue('repeatEditor')).toBe('Weekly');
+
+        POM.popup.openRecurrenceSettings();
+
+        expect(POM.popup.getInputValue('recurrenceStartDateEditor')).toBe('5/1/2017');
+        expect(POM.popup.getInputValue('recurrenceCountEditor')).toBe('2');
+        expect(POM.popup.getInputValue('recurrencePeriodEditor')).toBe('Week(s)');
+
+        const expectedWeekDaysSelection = [true, false, true, false, true, false, false];
+        expect(POM.popup.getWeekDaysSelection()).toEqual(expectedWeekDaysSelection);
+
+        expect(POM.popup.getInputValue('countEditor')).toBe('10 occurrence(s)');
+      });
+
+      it('should have correct input values for appointment with monthly frequency', async () => {
+        const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+        scheduler.showAppointmentPopup({
+          text: 'Meeting',
+          startDate: new Date(2017, 4, 1, 10, 30),
+          endDate: new Date(2017, 4, 1, 11),
+          recurrenceRule: 'FREQ=MONTHLY;INTERVAL=2;BYMONTHDAY=1;COUNT=10',
+          repeatEnd: 'count',
+        });
+        POM.popup.getEditSeriesButton().click();
+
+        expect(POM.popup.getInputValue('repeatEditor')).toBe('Monthly');
+
+        POM.popup.openRecurrenceSettings();
+
+        expect(POM.popup.getInputValue('recurrenceStartDateEditor')).toBe('5/1/2017');
+        expect(POM.popup.getInputValue('recurrenceCountEditor')).toBe('2');
+        expect(POM.popup.getInputValue('recurrencePeriodEditor')).toBe('Month(s)');
+        expect(POM.popup.getInputValue('recurrenceDayOfMonthEditor')).toBe('1');
+        expect(POM.popup.getInputValue('countEditor')).toBe('10 occurrence(s)');
+      });
+
+      it('should have correct input values for appointment with yearly frequency', async () => {
+        const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+        scheduler.showAppointmentPopup({
+          text: 'Meeting',
+          startDate: new Date(2017, 4, 1, 10, 30),
+          endDate: new Date(2017, 4, 1, 11),
+          recurrenceRule: 'FREQ=YEARLY;INTERVAL=2;BYMONTHDAY=1;BYMONTH=5;COUNT=10',
+          repeatEnd: 'count',
+        });
+        POM.popup.getEditSeriesButton().click();
+
+        expect(POM.popup.getInputValue('repeatEditor')).toBe('Yearly');
+
+        POM.popup.openRecurrenceSettings();
+
+        expect(POM.popup.getInputValue('recurrenceStartDateEditor')).toBe('5/1/2017');
+        expect(POM.popup.getInputValue('recurrenceCountEditor')).toBe('2');
+        expect(POM.popup.getInputValue('recurrencePeriodEditor')).toBe('Year(s)');
+        expect(POM.popup.getInputValue('recurrenceDayOfYearDayEditor')).toBe('1');
+        expect(POM.popup.getInputValue('recurrenceDayOfYearMonthEditor')).toBe('May');
+        expect(POM.popup.getInputValue('countEditor')).toBe('10 occurrence(s)');
       });
     });
   });
@@ -1128,7 +1208,6 @@ describe('Appointment Form', () => {
       });
 
       it('should handle e.cancel value: false', async () => {
-        setupSchedulerTestEnvironment({ height: 200 });
         const { scheduler, POM } = await createScheduler({
           views: ['day'],
           dataSource: [],
@@ -1311,7 +1390,6 @@ describe('Appointment Form', () => {
 
   describe('hideAppointmentPopup', () => {
     it('should hide appointment popup without saving changes', async () => {
-      setupSchedulerTestEnvironment({ height: 200 });
       const { scheduler, POM } = await createScheduler(getDefaultConfig());
 
       POM.openPopupByDblClick('common-app');
@@ -1324,7 +1402,6 @@ describe('Appointment Form', () => {
     });
 
     it('should hide appointment popup with saving changes', async () => {
-      setupSchedulerTestEnvironment({ height: 200 });
       const { scheduler, POM } = await createScheduler(getDefaultConfig());
 
       POM.openPopupByDblClick('common-app');
@@ -1337,82 +1414,7 @@ describe('Appointment Form', () => {
     });
   });
 
-  describe('CustomStore', () => {
-    it('Update appointment if CustomStore', async () => {
-      const data: Record<string, unknown>[] = [{
-        startDate: new Date(2015, 4, 24, 9),
-        endDate: new Date(2015, 4, 24, 11),
-      }];
-
-      const { scheduler, POM } = await createScheduler({
-        views: ['day'],
-        dataSource: {
-          key: 'id',
-          load: () => data,
-          update: (key: unknown, values: Record<string, unknown>) => Promise.resolve().then(() => {
-            const appointmentData = data.filter((
-              item: Record<string, unknown>,
-            ) => (item as { id: unknown }).id === key)[0];
-            Object.assign(appointmentData, values);
-            scheduler.repaint();
-          }),
-        },
-        currentDate: new Date(2015, 4, 24),
-        startDayHour: 8,
-        endDayHour: 18,
-      });
-
-      scheduler.showAppointmentPopup({
-        startDate: new Date(2015, 4, 24, 9),
-        endDate: new Date(2015, 4, 24, 11),
-        text: 'Subject',
-      });
-
-      POM.popup.setInputValueByLabel('Subject', 'New Subject');
-      POM.popup.getSaveButton().click();
-      const loadPanel = POM.getLoadPanel();
-      expect(loadPanel).toBeTruthy();
-      await new Promise(process.nextTick);
-      const loadPanelAfter = POM.getLoadPanel();
-      expect(loadPanelAfter).toBeFalsy();
-    });
-
-    it('Insert appointment if CustomStore', async () => {
-      const fn = jest.fn();
-      const data: Record<string, unknown>[] = [];
-      const { scheduler, POM } = await createScheduler({
-        views: ['day'],
-        dataSource: {
-          key: 'id',
-          load: () => data,
-          insert: (appointmentData: Record<string, unknown>) => Promise.resolve().then(() => {
-            (appointmentData as { id: number }).id = data.length;
-            data.push(appointmentData);
-            fn();
-          }),
-        },
-        currentDate: new Date(2015, 4, 24),
-        startDayHour: 8,
-        endDayHour: 18,
-      });
-
-      scheduler.showAppointmentPopup();
-
-      POM.popup.setInputValueByLabel('Subject', 'New Subject');
-      POM.popup.setInputValueByLabel('Start Date', '05/24/2015, 9:00 AM');
-      POM.popup.setInputValueByLabel('End Date', '05/24/2015, 11:00 AM');
-
-      POM.popup.getSaveButton().click();
-      const loadPanel = POM.getLoadPanel();
-      expect(loadPanel).toBeTruthy();
-      await new Promise(process.nextTick);
-      const loadPanelAfter = POM.getLoadPanel();
-      expect(loadPanelAfter).toBeFalsy();
-      expect(fn).toBeCalled();
-    });
-  });
-
-  describe('Form customization', () => {
+  describe('Customization', () => {
     it('should propagate editing.form options to the form instance', async () => {
       const { scheduler, POM } = await createScheduler({
         ...getDefaultConfig(),
@@ -1463,7 +1465,7 @@ describe('Appointment Form', () => {
 describe('Appointment Popup', () => {
   beforeEach(() => {
     fx.off = true;
-    setupSchedulerTestEnvironment();
+    setupSchedulerTestEnvironment({ height: 600 });
   });
 
   afterEach(() => {
@@ -1473,7 +1475,6 @@ describe('Appointment Popup', () => {
   });
 
   it('should open on double click on appointment', async () => {
-    setupSchedulerTestEnvironment({ height: 200 });
     const { POM } = await createScheduler(getDefaultConfig());
 
     expect(POM.getPopups().length).toBe(0);
@@ -1485,7 +1486,6 @@ describe('Appointment Popup', () => {
   });
 
   it('should open appointment on tooltip click', async () => {
-    setupSchedulerTestEnvironment({ height: 200 });
     const { POM } = await createScheduler(getDefaultConfig());
 
     expect(POM.getPopups().length).toBe(0);
@@ -1577,7 +1577,6 @@ describe('Appointment Popup', () => {
       { allowUpdating: true, disabled: false },
       { allowUpdating: true, disabled: true },
     ])('Buttons visibility when %p', async ({ allowUpdating, disabled }) => {
-      setupSchedulerTestEnvironment({ height: 200 });
       const shouldHaveSaveButton = allowUpdating && !disabled;
 
       const { POM } = await createScheduler({
@@ -1888,7 +1887,7 @@ describe('Timezone Editors', () => {
 describe('Customize form items', () => {
   beforeEach(() => {
     fx.off = true;
-    setupSchedulerTestEnvironment();
+    setupSchedulerTestEnvironment({ height: 600 });
   });
 
   afterEach(() => {
