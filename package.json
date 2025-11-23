@@ -62,7 +62,8 @@
   ],
   "pnpm": {
     "overrides": {
-      "@devexpress/callsite-record@^4.1.6": "4.1.6"
+      "@devexpress/callsite-record@^4.1.6": "4.1.6",
+      "sha.js@<=2.4.11": ">=2.4.12"
     }
   },
   "packageManager": "pnpm@9.15.4"
