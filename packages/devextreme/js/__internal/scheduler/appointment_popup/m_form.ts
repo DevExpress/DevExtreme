@@ -276,7 +276,7 @@ export class AppointmentForm {
         }
 
         if (isRecurrenceRuleChanged) {
-          this.updateRepeatEditor();
+          this.updateRepeatEditorValue();
         }
 
         if (isResourceChanged) {
@@ -622,6 +622,8 @@ export class AppointmentForm {
   }
 
   private createRepeatGroup(): GroupItem {
+    const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
+
     return {
       name: REPEAT_GROUP_NAME,
       itemType: 'group',
@@ -651,15 +653,16 @@ export class AppointmentForm {
             valueExpr: 'value',
             displayExpr: 'text',
             onContentReady: (): void => {
-              this.updateRepeatEditor();
+              this.updateRepeatEditorValue();
             },
             onValueChanged: (e): void => {
               if (e.value === repeatNeverValue) {
-                const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
                 this.dxForm.updateData(recurrenceRuleExpr, '');
               } else if (e.event) {
                 this.showRecurrenceGroup();
               }
+
+              e.component.option('buttons', this.getRepeatEditorButtons());
             },
           } as SelectBoxProperties,
         },
@@ -846,7 +849,7 @@ export class AppointmentForm {
     this._popup.updateToolbarForRecurrenceGroup();
   }
 
-  showMainGroup(saveRecurrenceValue = true): void {
+  showMainGroup(): void {
     const currentHeight = this.dxPopup.option('height') as string | number | undefined;
     const editingConfig = this.scheduler.getEditingConfig();
     const configuredHeight = editingConfig?.popup?.height ?? 'auto';
@@ -861,15 +864,20 @@ export class AppointmentForm {
     this._$recurrenceGroup?.attr('tabindex', '-1');
 
     this._popup.updateToolbarForMainGroup();
+  }
 
-    if (saveRecurrenceValue) {
-      const { recurrenceRule } = this._recurrenceForm;
-      const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
+  saveRecurrenceValue(): void {
+    const { recurrenceRule } = this._recurrenceForm;
+    const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
 
-      this.dxForm.updateData(
-        recurrenceRuleExpr,
-        recurrenceRule.toString() ?? '',
-      );
+    const recurrenceRuleSerialized = recurrenceRule.toString() ?? '';
+
+    this.dxForm.updateData(
+      recurrenceRuleExpr,
+      recurrenceRuleSerialized,
+    );
+
+    if (recurrenceRuleSerialized) {
       this.dxForm.getEditor(START_DATE_EDITOR_NAME)?.option('value', recurrenceRule.startDate);
     }
   }
@@ -905,7 +913,7 @@ export class AppointmentForm {
     endTimeEditor?.option('value', this.endDate);
   }
 
-  private updateRepeatEditor(): void {
+  private updateRepeatEditorValue(): void {
     const repeatEditor = this.dxForm.getEditor(REPEAT_EDITOR_NAME);
 
     if (!repeatEditor) {
@@ -921,8 +929,6 @@ export class AppointmentForm {
 
       repeatEditor.option('value', value);
     }
-
-    repeatEditor.option('buttons', this.getRepeatEditorButtons());
   }
 
   private getRepeatEditorButtons(): TextEditorButton[] {

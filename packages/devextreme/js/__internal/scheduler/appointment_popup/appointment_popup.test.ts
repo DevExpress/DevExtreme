@@ -279,7 +279,7 @@ describe('Appointment Form', () => {
     ])('should update correct field if startDateExpr is defined', async (fieldExpr, dateEditorName, timeEditorName) => {
       const value = new Date(2017, 4, 9, 9, 30);
 
-      const defaultField = DEFAULT_SCHEDULER_OPTIONS[fieldExpr];
+      const defaultField = DEFAULT_SCHEDULER_OPTIONS[fieldExpr] as string;
 
       const { scheduler, POM } = await createScheduler({
         ...getDefaultConfig(),
@@ -303,9 +303,9 @@ describe('Appointment Form', () => {
       expect(dataItem?.[defaultField]).toBeUndefined();
     });
 
-    it.skip('should update correct field if recurrenceRuleExpr is defined', async () => {
+    it('should update correct field if recurrenceRuleExpr is defined', async () => {
       const fieldExpr = 'recurrenceRuleExpr';
-      const defaultField = DEFAULT_SCHEDULER_OPTIONS[fieldExpr];
+      const defaultField = DEFAULT_SCHEDULER_OPTIONS[fieldExpr] as string;
 
       const { scheduler, POM } = await createScheduler({
         ...getDefaultConfig(),
@@ -318,20 +318,18 @@ describe('Appointment Form', () => {
       });
 
       scheduler.showAppointmentPopup();
-
-      POM.popup.setInputValue('recurrenceEditor', 'weekly');
-
+      POM.popup.selectRepeatValue('daily');
       scheduler.hideAppointmentPopup(true);
 
       const dataItem = scheduler.option('dataSource')?.[0];
 
-      expect(dataItem?.customField).toBe('FREQ=WEEKLY;INTERVAL=1');
+      expect(dataItem?.customField).toBe('FREQ=DAILY');
       expect(dataItem?.[defaultField]).toBeUndefined();
     });
 
     it('should update correct field if startDateExpr is defined and value is set in recurrence form', async () => {
       const fieldExpr = 'startDateExpr';
-      const defaultField = DEFAULT_SCHEDULER_OPTIONS[fieldExpr];
+      const defaultField = DEFAULT_SCHEDULER_OPTIONS[fieldExpr] as string;
 
       const appointment = {
         text: 'Team Meeting',
@@ -356,8 +354,7 @@ describe('Appointment Form', () => {
       POM.popup.getEditSeriesButton().click();
       POM.popup.openRecurrenceSettings();
       POM.popup.setInputValue('recurrenceStartDateEditor', value);
-      POM.popup.getBackButton().click();
-      POM.popup.getSaveButton().click();
+      scheduler.hideAppointmentPopup(true);
 
       const dataItem = scheduler.option('dataSource')?.[0];
 

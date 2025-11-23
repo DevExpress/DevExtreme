@@ -277,7 +277,7 @@ export class PopupModel {
   getTitle = (): HTMLElement | null => document.querySelector('.dx-popup-title .dx-toolbar-label');
 
   getSaveButton = (): HTMLButtonElement => {
-    const saveButton = this.element.querySelector('.dx-button.dx-popup-done') as HTMLButtonElement;
+    const saveButton = this.element.querySelector('.dx-button[aria-label="Save"]') as HTMLButtonElement;
     if (!saveButton) {
       throw new Error('Done button not found');
     }
@@ -293,7 +293,7 @@ export class PopupModel {
   };
 
   getCancelButton = (): HTMLButtonElement => {
-    const cancelButton = this.element.querySelector('.dx-button.dx-popup-cancel') as HTMLButtonElement;
+    const cancelButton = this.element.querySelector('.dx-button[aria-label="Cancel"]') as HTMLButtonElement;
     if (!cancelButton) {
       throw new Error('Cancel button not found');
     }
@@ -365,6 +365,7 @@ export class PopupModel {
 
     if (originalOnValueChanged) {
       originalOnValueChanged({
+        component: repeatEditor,
         value,
         previousValue,
         event: new Event('change'),
