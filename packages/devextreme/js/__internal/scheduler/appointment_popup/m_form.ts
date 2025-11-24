@@ -258,7 +258,7 @@ export class AppointmentForm {
       },
       onFieldDataChanged: (e) => {
         const {
-          startDateExpr, endDateExpr, recurrenceRuleExpr, allDayExpr,
+          startDateExpr, endDateExpr, recurrenceRuleExpr,
         } = this.scheduler.getDataAccessors().expr;
 
         const { dataField } = e;
@@ -267,14 +267,9 @@ export class AppointmentForm {
           return;
         }
 
-        const isAllDayChanged = dataField === allDayExpr;
         const isDateRangeChanged = [startDateExpr, endDateExpr].includes(dataField);
         const isRecurrenceRuleChanged = dataField === recurrenceRuleExpr;
         const isResourceChanged = Object.keys(this.scheduler.getResourceById()).includes(dataField);
-
-        if (isAllDayChanged) {
-          this.updateDateTimeEditorsVisibility();
-        }
 
         if (isDateRangeChanged) {
           this.updateDateEditorsValues();
@@ -400,9 +395,11 @@ export class AppointmentForm {
       editorType: 'dxSwitch',
       editorOptions: {
         onValueChanged: (e) => {
+          this.updateDateTimeEditorsVisibility();
+
           const { startDate } = this;
 
-          if (!startDate) {
+          if (!startDate || e.event === undefined) {
             return;
           }
 
@@ -415,10 +412,10 @@ export class AppointmentForm {
             const startHour = this.scheduler.getStartDayHour();
             startDate.setHours(startHour);
 
-            const endDate = this.scheduler.getCalculatedEndDate(startDate);
+            const calculatedEndDate = this.scheduler.getCalculatedEndDate(startDate);
 
             this.dxForm.updateData(startDateExpr, startDate);
-            this.dxForm.updateData(endDateExpr, endDate);
+            this.dxForm.updateData(endDateExpr, calculatedEndDate);
           }
         },
       } as SwitchProperties,
@@ -671,6 +668,8 @@ export class AppointmentForm {
   }
 
   private createDescriptionGroup(): GroupItem {
+    const { descriptionExpr } = this.scheduler.getDataAccessors().expr;
+
     return {
       name: DESCRIPTION_GROUP_NAME,
       itemType: 'group',
@@ -688,6 +687,7 @@ export class AppointmentForm {
         },
         {
           name: DESCRIPTION_EDITOR_NAME,
+          dataField: descriptionExpr,
           colSpan: 1,
           itemType: 'simple',
           cssClass: CLASSES.descriptionEditor,
