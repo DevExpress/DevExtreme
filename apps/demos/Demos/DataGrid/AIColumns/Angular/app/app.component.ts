@@ -1,6 +1,5 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxDataGridModule, DxPopupModule } from 'devextreme-angular';
 import type { AIIntegration } from 'devextreme-angular/common/ai-integration';
 import { Service, type Vehicle } from './app.service';
@@ -24,6 +23,13 @@ if (window && window.config?.packageConfigPaths) {
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service, AiService],
+  imports: [
+    DxDataGridModule,
+    DxPopupModule,
+    Trademark,
+    Category,
+    LicenseInfo
+  ],
 })
 export class AppComponent {
   vehicles: Vehicle[];
@@ -58,20 +64,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxDataGridModule,
-    DxPopupModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [
-    AppComponent,
-    Trademark,
-    Category,
-    LicenseInfo,
-  ],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

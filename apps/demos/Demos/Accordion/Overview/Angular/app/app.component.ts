@@ -1,6 +1,5 @@
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
-import { bootstrapApplication, BrowserModule } from '@angular/platform-browser';
-
+import { bootstrapApplication } from '@angular/platform-browser';
 import {
   DxAccordionModule, DxCheckBoxModule, DxSliderModule, DxTagBoxModule,
 } from 'devextreme-angular';
