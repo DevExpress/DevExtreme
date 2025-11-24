@@ -19,8 +19,6 @@ import {
  CardPreparedEvent,
  CardRemovedEvent,
  CardRemovingEvent,
- CardSavedEvent,
- CardSavingEvent,
  CardUpdatedEvent,
  CardUpdatingEvent,
  ContextMenuPreparingEvent,
@@ -35,6 +33,8 @@ import {
  FieldValuePreparedEvent,
  FocusedCardChanged,
  InitNewCardEvent,
+ SavedEvent,
+ SavingEvent,
  SelectionChangedEvent,
  Paging,
  RemoteOperations,
@@ -250,8 +250,6 @@ type AccessibleOptions = Pick<Properties,
   "onCardPrepared" |
   "onCardRemoved" |
   "onCardRemoving" |
-  "onCardSaved" |
-  "onCardSaving" |
   "onCardUpdated" |
   "onCardUpdating" |
   "onContentReady" |
@@ -271,6 +269,8 @@ type AccessibleOptions = Pick<Properties,
   "onInitialized" |
   "onInitNewCard" |
   "onOptionChanged" |
+  "onSaved" |
+  "onSaving" |
   "onSelectionChanged" |
   "pager" |
   "paging" |
@@ -335,8 +335,6 @@ const componentConfig = {
     onCardPrepared: Function as PropType<((e: CardPreparedEvent) => void)>,
     onCardRemoved: Function as PropType<((e: CardRemovedEvent) => void)>,
     onCardRemoving: Function as PropType<((e: CardRemovingEvent) => void)>,
-    onCardSaved: Function as PropType<((e: CardSavedEvent) => void)>,
-    onCardSaving: Function as PropType<((e: CardSavingEvent) => void)>,
     onCardUpdated: Function as PropType<((e: CardUpdatedEvent) => void)>,
     onCardUpdating: Function as PropType<((e: CardUpdatingEvent) => void)>,
     onContentReady: Function as PropType<((e: EventInfo<any>) => void)>,
@@ -356,6 +354,8 @@ const componentConfig = {
     onInitialized: Function as PropType<((e: { component: Component<any>, element: any }) => void)>,
     onInitNewCard: Function as PropType<((e: InitNewCardEvent) => void)>,
     onOptionChanged: Function as PropType<((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void)>,
+    onSaved: Function as PropType<((e: SavedEvent) => void)>,
+    onSaving: Function as PropType<((e: SavingEvent) => void)>,
     onSelectionChanged: Function as PropType<((e: SelectionChangedEvent) => void)>,
     pager: Object as PropType<Pager | Record<string, any> | PagerBase>,
     paging: Object as PropType<Paging | Record<string, any>>,
@@ -416,8 +416,6 @@ const componentConfig = {
     "update:onCardPrepared": null,
     "update:onCardRemoved": null,
     "update:onCardRemoving": null,
-    "update:onCardSaved": null,
-    "update:onCardSaving": null,
     "update:onCardUpdated": null,
     "update:onCardUpdating": null,
     "update:onContentReady": null,
@@ -437,6 +435,8 @@ const componentConfig = {
     "update:onInitialized": null,
     "update:onInitNewCard": null,
     "update:onOptionChanged": null,
+    "update:onSaved": null,
+    "update:onSaving": null,
     "update:onSelectionChanged": null,
     "update:pager": null,
     "update:paging": null,
