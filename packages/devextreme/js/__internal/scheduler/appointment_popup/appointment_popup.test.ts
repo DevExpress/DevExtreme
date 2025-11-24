@@ -239,6 +239,33 @@ describe('Appointment Form', () => {
         description: 'New appointment description',
       });
     });
+
+    it('should update resource value on save button click', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        dataSource: [{
+          text: 'Resource test app',
+          startDate: new Date(2017, 4, 9, 9, 30),
+          endDate: new Date(2017, 4, 9, 11),
+          roomId: 1,
+        }],
+        resources: [{
+          fieldExpr: 'roomId',
+          dataSource: [
+            { text: 'Room 1', id: 1, color: '#00af2c' },
+            { text: 'Room 2', id: 2, color: '#56ca85' },
+            { text: 'Room 3', id: 3, color: '#8ecd3c' },
+          ],
+        }],
+      });
+
+      POM.openPopupByDblClick('Resource test app');
+      POM.popup.setInputValue('roomId', 2);
+      POM.popup.getSaveButton().click();
+
+      const dataItem = scheduler.option('dataSource')?.[0];
+      expect(dataItem.roomId).toBe(2);
+    });
   });
 
   describe('Validation', () => {
@@ -286,7 +313,7 @@ describe('Appointment Form', () => {
   });
 
   describe('State', () => {
-    it('should have empty description, subject and timezone inputs when showing empty appointment after saving previous appointment', async () => {
+    it('should have empty description, subject and timezone inputs when opening second appointment', async () => {
       const { scheduler, POM } = await createScheduler({
         ...getDefaultConfig(),
         editing: {
@@ -310,6 +337,27 @@ describe('Appointment Form', () => {
       expect(POM.popup.getInputValue('endDateTimeZoneEditor')).toBe('');
     });
 
+    it('should have correct timezone editors values', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowUpdating: true,
+          allowTimeZoneEditing: true,
+        },
+      });
+
+      scheduler.showAppointmentPopup({
+        text: 'Watercolor Landscape',
+        startDate: new Date('2020-06-01T17:30:00.000Z'),
+        endDate: new Date('2020-06-01T19:00:00.000Z'),
+        startDateTimeZone: 'Etc/GMT+10',
+        endDateTimeZone: 'US/Alaska',
+      });
+
+      expect(POM.popup.getInputValue('startDateTimeZoneEditor')).toBe('Etc/GMT+10');
+      expect(POM.popup.getInputValue('endDateTimeZoneEditor')).toBe('US/Alaska');
+    });
+
     it('should have correct form data when opening second appointment', async () => {
       const { scheduler, POM } = await createScheduler(getDefaultConfig());
 
@@ -322,6 +370,33 @@ describe('Appointment Form', () => {
       scheduler.showAppointmentPopup(allDayAppointment);
 
       expect(POM.popup.form.option('formData')).toMatchObject({ ...allDayAppointment });
+    });
+
+    it('should have empty resource editor value when opening second appointment', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        dataSource: [],
+        resources: [{
+          fieldExpr: 'roomId',
+          dataSource: [
+            { text: 'Room 1', id: 1, color: '#00af2c' },
+            { text: 'Room 2', id: 2, color: '#56ca85' },
+            { text: 'Room 3', id: 3, color: '#8ecd3c' },
+          ],
+        }],
+      });
+
+      scheduler.showAppointmentPopup({
+        text: 'Resource test app',
+        startDate: new Date(2017, 4, 9, 9, 30),
+        endDate: new Date(2017, 4, 9, 11),
+        roomId: 1,
+      });
+      POM.popup.setInputValue('roomId', 2);
+      scheduler.hideAppointmentPopup(true);
+
+      scheduler.showAppointmentPopup();
+      expect(POM.popup.getInputValue('roomId')).toBe('');
     });
 
     it('should have correct editor values when opening for empty date cell - 1', async () => {
@@ -373,6 +448,146 @@ describe('Appointment Form', () => {
       expect(POM.popup.isInputVisible('endTimeEditor')).toBe(false);
       expect(POM.popup.getInputValue('allDayEditor')).toBe('true');
       expect(POM.popup.getInputValue('descriptionEditor')).toBe('');
+    });
+  });
+
+  describe('startDate/endDate editors behavior', () => {
+    it.each([
+      ['startDateEditor', 'startTimeEditor'],
+      ['endDateEditor', 'endTimeEditor'],
+      ['startTimeEditor', 'startDateEditor'],
+      ['endTimeEditor', 'endDateEditor'],
+    ])('when %s value is set to null, %s value should not be null', async (dateEditorName, timeEditorName) => {
+      const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+      scheduler.showAppointmentPopup({ ...commonAppointment });
+
+      POM.popup.setInputValue(dateEditorName, null);
+
+      expect(POM.popup.getInputValue(timeEditorName)).not.toBeNull();
+    });
+
+    it('should update endDate when startDate is changed to a value greater than endDate', async () => {
+      const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+      scheduler.showAppointmentPopup({
+        text: 'test app',
+        startDate: new Date(2017, 4, 9, 9, 30),
+        endDate: new Date(2017, 4, 9, 11),
+      });
+
+      POM.popup.setInputValue('startDateEditor', new Date(2017, 4, 10));
+
+      expect(POM.popup.getInputValue('startTimeEditor')).toEqual('9:30 AM');
+      expect(POM.popup.getInputValue('endDateEditor')).toEqual('5/10/2017');
+      expect(POM.popup.getInputValue('endTimeEditor')).toEqual('11:00 AM');
+    });
+
+    it('should update endDate when startTime is changed to a value greater than endDate time', async () => {
+      const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+      scheduler.showAppointmentPopup({
+        text: 'test app',
+        startDate: new Date(2017, 4, 9, 9, 30),
+        endDate: new Date(2017, 4, 9, 11),
+      });
+
+      POM.popup.setInputValue('startTimeEditor', new Date(2017, 4, 9, 12));
+
+      expect(POM.popup.getInputValue('startDateEditor')).toEqual('5/9/2017');
+      expect(POM.popup.getInputValue('endDateEditor')).toEqual('5/9/2017');
+      expect(POM.popup.getInputValue('endTimeEditor')).toEqual('1:30 PM');
+    });
+
+    it('should update startDate when endDate is changed to a value less than startDate', async () => {
+      const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+      scheduler.showAppointmentPopup({
+        text: 'test app',
+        startDate: new Date(2017, 4, 9, 9, 30),
+        endDate: new Date(2017, 4, 9, 11),
+      });
+
+      POM.popup.setInputValue('endDateEditor', new Date(2017, 4, 8));
+
+      expect(POM.popup.getInputValue('startDateEditor')).toEqual('5/8/2017');
+      expect(POM.popup.getInputValue('startTimeEditor')).toEqual('9:30 AM');
+      expect(POM.popup.getInputValue('endTimeEditor')).toEqual('11:00 AM');
+    });
+
+    it('should update startDate when endTime is changed to a value less than startDate time', async () => {
+      const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+      scheduler.showAppointmentPopup({
+        text: 'test app',
+        startDate: new Date(2017, 4, 9, 9, 30),
+        endDate: new Date(2017, 4, 9, 11),
+      });
+      POM.popup.setInputValue('endTimeEditor', new Date(2017, 4, 9, 9, 0));
+
+      expect(POM.popup.getInputValue('startDateEditor')).toEqual('5/9/2017');
+      expect(POM.popup.getInputValue('startTimeEditor')).toEqual('7:30 AM');
+      expect(POM.popup.getInputValue('endDateEditor')).toEqual('5/9/2017');
+    });
+
+    it('should not update endDate when startDate is changed to a value less than endDate', async () => {
+      const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+      scheduler.showAppointmentPopup({
+        text: 'test app',
+        startDate: new Date(2017, 4, 9, 9, 30),
+        endDate: new Date(2017, 4, 9, 11),
+      });
+      POM.popup.setInputValue('startDateEditor', new Date(2017, 4, 8));
+
+      expect(POM.popup.getInputValue('startTimeEditor')).toEqual('9:30 AM');
+      expect(POM.popup.getInputValue('endDateEditor')).toEqual('5/9/2017');
+      expect(POM.popup.getInputValue('endTimeEditor')).toEqual('11:00 AM');
+    });
+
+    it('should not update endDate when startTime is changed to a value less than endDate time', async () => {
+      const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+      scheduler.showAppointmentPopup({
+        text: 'test app',
+        startDate: new Date(2017, 4, 9, 9, 30),
+        endDate: new Date(2017, 4, 9, 11),
+      });
+      POM.popup.setInputValue('startTimeEditor', new Date(2017, 4, 9, 10, 0));
+
+      expect(POM.popup.getInputValue('startDateEditor')).toEqual('5/9/2017');
+      expect(POM.popup.getInputValue('endDateEditor')).toEqual('5/9/2017');
+      expect(POM.popup.getInputValue('endTimeEditor')).toEqual('11:00 AM');
+    });
+
+    it('should not update startDate when endDate is changed to a value greater than startDate', async () => {
+      const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+      scheduler.showAppointmentPopup({
+        text: 'test app',
+        startDate: new Date(2017, 4, 9, 9, 30),
+        endDate: new Date(2017, 4, 9, 11),
+      });
+      POM.popup.setInputValue('endDateEditor', new Date(2017, 4, 10));
+
+      expect(POM.popup.getInputValue('startDateEditor')).toEqual('5/9/2017');
+      expect(POM.popup.getInputValue('startTimeEditor')).toEqual('9:30 AM');
+      expect(POM.popup.getInputValue('endTimeEditor')).toEqual('11:00 AM');
+    });
+
+    it('should not update startDate when endTime is changed to a value greater than startDate time', async () => {
+      const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+      scheduler.showAppointmentPopup({
+        text: 'test app',
+        startDate: new Date(2017, 4, 9, 9, 30),
+        endDate: new Date(2017, 4, 9, 11),
+      });
+      POM.popup.setInputValue('endTimeEditor', new Date(2017, 4, 9, 12));
+
+      expect(POM.popup.getInputValue('startDateEditor')).toEqual('5/9/2017');
+      expect(POM.popup.getInputValue('startTimeEditor')).toEqual('9:30 AM');
+      expect(POM.popup.getInputValue('endDateEditor')).toEqual('5/9/2017');
     });
   });
 
@@ -734,6 +949,31 @@ describe('Appointment Form', () => {
     });
   });
 
+  describe('Resources', () => {
+    it('should have correct resource editor value', async () => {
+      const { POM } = await createScheduler({
+        ...getDefaultConfig(),
+        dataSource: [{
+          text: 'Resource test app',
+          startDate: new Date(2017, 4, 9, 9, 30),
+          endDate: new Date(2017, 4, 9, 11),
+          roomId: 2,
+        }],
+        resources: [{
+          fieldExpr: 'roomId',
+          dataSource: [
+            { text: 'Room 1', id: 1, color: '#00af2c' },
+            { text: 'Room 2', id: 2, color: '#56ca85' },
+            { text: 'Room 3', id: 3, color: '#8ecd3c' },
+          ],
+        }],
+      });
+
+      POM.openPopupByDblClick('Resource test app');
+      expect(POM.popup.getInputValue('roomId')).toBe(2);
+    });
+  });
+
   describe('Recurrence Form', () => {
     it('should allow opening recurrence settings when allowUpdating is false', async () => {
       const appointment = {
@@ -921,6 +1161,56 @@ describe('Appointment Form', () => {
         expect(POM.popup.getInputValue('recurrencePeriodEditor')).toBe('Year(s)');
         expect(POM.popup.getInputValue('recurrenceDayOfYearDayEditor')).toBe('1');
         expect(POM.popup.getInputValue('recurrenceDayOfYearMonthEditor')).toBe('May');
+        expect(POM.popup.getInputValue('countEditor')).toBe('10 occurrence(s)');
+      });
+
+      it('should have correct input values for appointment with no end', async () => {
+        const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+        scheduler.showAppointmentPopup({
+          text: 'Meeting',
+          startDate: new Date(2017, 4, 1, 10, 30),
+          endDate: new Date(2017, 4, 1, 11),
+          recurrenceRule: 'FREQ=DAILY;INTERVAL=2',
+          repeatEnd: 'never',
+        });
+        POM.popup.getEditSeriesButton().click();
+        POM.popup.openRecurrenceSettings();
+
+        expect(POM.popup.getInputValue('repeatEndEditor')).toBe('never');
+      });
+
+      it('should have correct input values for appointment with end by date', async () => {
+        const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+        scheduler.showAppointmentPopup({
+          text: 'Meeting',
+          startDate: new Date(2017, 4, 1, 10, 30),
+          endDate: new Date(2017, 4, 1, 11),
+          recurrenceRule: 'FREQ=DAILY;INTERVAL=2;UNTIL=20170601T000000Z',
+          repeatEnd: 'until',
+        });
+        POM.popup.getEditSeriesButton().click();
+        POM.popup.openRecurrenceSettings();
+
+        expect(POM.popup.getInputValue('repeatEndEditor')).toBe('until');
+        expect(POM.popup.getInputValue('untilEditor')).toBe('6/1/2017');
+      });
+
+      it('should have correct input values for appointment with end by count', async () => {
+        const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+        scheduler.showAppointmentPopup({
+          text: 'Meeting',
+          startDate: new Date(2017, 4, 1, 10, 30),
+          endDate: new Date(2017, 4, 1, 11),
+          recurrenceRule: 'FREQ=DAILY;INTERVAL=2;COUNT=10',
+          repeatEnd: 'count',
+        });
+        POM.popup.getEditSeriesButton().click();
+        POM.popup.openRecurrenceSettings();
+
+        expect(POM.popup.getInputValue('repeatEndEditor')).toBe('count');
         expect(POM.popup.getInputValue('countEditor')).toBe('10 occurrence(s)');
       });
     });
@@ -1421,24 +1711,42 @@ describe('Appointment Form', () => {
       const { scheduler, POM } = await createScheduler(getDefaultConfig());
 
       POM.openPopupByDblClick('common-app');
-      POM.popup.setInputValueByLabel('Subject', 'New Subject');
-      scheduler.hideAppointmentPopup();
+      POM.popup.setInputValue('subjectEditor', 'New Subject');
+      scheduler.hideAppointmentPopup(false);
 
       const dataItem = scheduler.option('dataSource')?.[1];
 
-      expect(dataItem).toMatchObject({ ...commonAppointment });
+      expect(dataItem).toMatchObject(commonAppointment);
     });
 
     it('should hide appointment popup with saving changes', async () => {
       const { scheduler, POM } = await createScheduler(getDefaultConfig());
 
       POM.openPopupByDblClick('common-app');
-      POM.popup.setInputValueByLabel('Subject', 'New Subject');
+      POM.popup.setInputValue('subjectEditor', 'New Subject');
       scheduler.hideAppointmentPopup(true);
 
       const dataItem = scheduler.option('dataSource')?.[1];
 
       expect(dataItem).toMatchObject({ ...commonAppointment, text: 'New Subject' });
+    });
+
+    it('should hide appointment popup with saving changes when recurrence form is opened', async () => {
+      const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+      POM.openPopupByDblClick('common-app');
+      POM.popup.selectRepeatValue('weekly');
+      POM.popup.setInputValue('recurrenceStartDateEditor', new Date(2024, 4, 25));
+      scheduler.hideAppointmentPopup(true);
+
+      const dataItem = scheduler.option('dataSource')?.[1];
+
+      expect(dataItem).toMatchObject({
+        ...commonAppointment,
+        startDate: new Date(2024, 4, 25, 9, 30),
+        endDate: new Date(2024, 4, 25, 11),
+        recurrenceRule: 'FREQ=WEEKLY;BYDAY=TU',
+      });
     });
   });
 
