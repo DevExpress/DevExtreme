@@ -243,7 +243,7 @@ describe('Appointment Form', () => {
 
   describe('Validation', () => {
     it.each([
-      'startDateEditor', 'startDateEditor', 'startDateEditor', 'startDateEditor',
+      'startDateEditor', 'startTimeEditor', 'endDateEditor', 'endTimeEditor',
     ])('should not close popup on save button click when %s is empty', async (editorName) => {
       const { scheduler, POM } = await createScheduler(getDefaultConfig());
 
