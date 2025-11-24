@@ -3104,18 +3104,18 @@ testModule('API', moduleConfig, () => {
     test('Changing zIndex option to undefined resets the default pool zIndex', function(assert) {
         const overlay = $('#overlay').dxOverlay({
             visible: true,
-            zIndex: 5000,
+            zIndex: 5000
         }).dxOverlay('instance');
 
         const initialZIndex = Number(getComputedStyle(overlay.$content()[0]).zIndex);
 
-        assert.strictEqual(initialZIndex, 5000, 'overlay has initial custom zIndex');
+        assert.strictEqual(initialZIndex, 5000, 'overlay has custom zIndex');
 
         overlay.option('zIndex', undefined);
 
         const finalZIndex = Number(getComputedStyle(overlay.$content()[0]).zIndex);
 
-        assert.strictEqual(finalZIndex, 5000, 'initial pool zIndex applied');
+        assert.strictEqual(finalZIndex, 1501, 'initial pool zIndex applied');
     });
 });
 
