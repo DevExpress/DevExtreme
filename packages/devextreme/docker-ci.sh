@@ -181,11 +181,11 @@ function start_runner_watchdog {
     local stall_count=0
     local check_count=0
 
-    echo "Watchdog started: monitoring PID $runner_pid, checking every 300s, max 6 failures = 30min timeout"
+    echo "Watchdog started: monitoring PID $runner_pid, checking every 60s, max 6 failures = 6min timeout"
 
     (
         while true; do
-            sleep 180
+            sleep 60
             check_count=$((check_count + 1))
 
             if [ -n "$runner_pid" ] && ! kill -0 $runner_pid 2>/dev/null; then
@@ -197,7 +197,7 @@ function start_runner_watchdog {
                 echo "Watchdog [check #$check_count]: LastSuiteTime.txt does not exist yet (waiting for first test...)"
                 if [ $check_count -gt 2 ]; then
                     stall_count=$((stall_count + 1))
-                    echo "Watchdog WARNING: No LastSuiteTime.txt after $((check_count * 5)) minutes"
+                    echo "Watchdog WARNING: No LastSuiteTime.txt after ${check_count} minute(s)"
                 fi
             else
                 local current_time=$(cat $last_suite_time_file)
@@ -211,7 +211,7 @@ function start_runner_watchdog {
                     
                     if [ $stall_count -ge 6 ]; then
                         echo "========================================="
-                        echo "WATCHDOG TIMEOUT: Runner stalled for 30 minutes (6 checks × 5 min)"
+                        echo "WATCHDOG TIMEOUT: Runner stalled for 6 minutes (6 checks × 1 min)"
                         echo "Last suite time: $last_suite_time"
                         echo "========================================="
                         echo "===== Last 100 lines of RawLog.txt ====="
