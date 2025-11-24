@@ -64,21 +64,18 @@ export const getPanelCollectorOptions = (schedulerStore: Scheduler, {
         ? cellSize.width * ALL_DAY_COLLECTOR_WIDTH_FACTOR
         : 0,
     );
-  const maxLevel = getMaxLevel({
+  const maxLevelOptions = {
     maxAppointmentsPerCell,
     cellSize,
     collectorSize: collectorSizes.collectorWithMarginsSize,
     viewOrientation,
     isTimelineView,
     isAdaptivityEnabled,
-  });
+  };
+  const maxLevel = getMaxLevel(maxLevelOptions);
   const minLevel = viewOrientation === 'vertical' ? MIN_LEVEL_VERTICAL_VIEW : getMaxLevel({
+    ...maxLevelOptions,
     maxAppointmentsPerCell: 'auto',
-    cellSize,
-    collectorSize: collectorSizes.collectorWithMarginsSize,
-    viewOrientation,
-    isTimelineView,
-    isAdaptivityEnabled,
   });
 
   return {

@@ -1,4 +1,9 @@
 $(() => {
+  const deployment = 'gpt-4o-mini';
+  const apiVersion = '2024-02-01';
+  const endpoint = 'https://public-api.devexpress.com/demo-openai';
+  const apiKey = 'DEMO';
+
   const aiService = new AzureOpenAI({
     dangerouslyAllowBrowser: true,
     deployment,
@@ -172,9 +177,6 @@ $(() => {
     aiIntegration,
     grouping: {
       contextMenuEnabled: false,
-    },
-    groupPanel: {
-      visible: false,
     },
     columns: [
       {

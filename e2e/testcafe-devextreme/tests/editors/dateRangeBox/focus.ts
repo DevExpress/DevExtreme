@@ -229,6 +229,7 @@ test('onFocusIn should be called only on focus of startDate input', async (t) =>
 
   await t
     .pressKey('shift+tab')
+    .wait(100)
     .expect(dateRangeBox.isFocused)
     .ok()
     .expect(dateRangeBox.getStartDateBox().isFocused)
@@ -242,6 +243,7 @@ test('onFocusIn should be called only on focus of startDate input', async (t) =>
 
   await t
     .pressKey('shift+tab')
+    .wait(100)
     .expect(dateRangeBox.isFocused)
     .notOk()
     .expect(dateRangeBox.getStartDateBox().isFocused)

@@ -6,13 +6,13 @@
   [dataSource]="olympicMedals"
   (onPointClick)="pointClickHandler($event)"
 >
-  <dxo-export [enabled]="true"></dxo-export>
-  <dxo-legend
+  <dxo-pie-chart-export [enabled]="true"></dxo-pie-chart-export>
+  <dxo-pie-chart-legend
     [margin]="0"
     horizontalAlignment="right"
     verticalAlignment="top"
-  ></dxo-legend>
-  <dxi-series argumentField="country" valueField="medals">
-    <dxo-hover-style color="#ffd700"></dxo-hover-style>
-  </dxi-series>
+  ></dxo-pie-chart-legend>
+  <dxi-pie-chart-series argumentField="country" valueField="medals">
+    <dxo-pie-chart-hover-style color="#ffd700"></dxo-pie-chart-hover-style>
+  </dxi-pie-chart-series>
 </dx-pie-chart>

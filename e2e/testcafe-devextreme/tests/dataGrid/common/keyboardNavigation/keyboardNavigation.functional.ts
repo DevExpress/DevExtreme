@@ -5275,7 +5275,7 @@ test('Focus events should be called when pressing the Ctrl + End key when virtua
   })();
 });
 
-test('Focus events should be called when pressing the Ctrl + End key when virtual scrolling and columns are enabled', async (t) => {
+test.meta({ unstable: true })('Focus events should be called when pressing the Ctrl + End key when virtual scrolling and columns are enabled', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
 
@@ -5346,7 +5346,7 @@ test('Focus events should be called when pressing the Ctrl + End key when virtua
   })();
 });
 
-test('Focus events should be called when pressing the Ctrl + End key when rowRenderingMode is \'virtual\'', async (t) => {
+test.meta({ unstable: true })('Focus events should be called when pressing the Ctrl + End key when rowRenderingMode is \'virtual\'', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
 

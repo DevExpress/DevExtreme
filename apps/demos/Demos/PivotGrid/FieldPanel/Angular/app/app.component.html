@@ -8,9 +8,9 @@
   [dataSource]="pivotGridDataSource"
   (onContextMenuPreparing)="contextMenuPreparing($event)"
 >
-  <dxo-field-chooser [height]="500"></dxo-field-chooser>
+  <dxo-pivot-grid-field-chooser [height]="500"></dxo-pivot-grid-field-chooser>
 
-  <dxo-field-panel
+  <dxo-pivot-grid-field-panel
     [showDataFields]="showDataFields"
     [showRowFields]="showRowFields"
     [showColumnFields]="showColumnFields"
@@ -18,7 +18,7 @@
     [allowFieldDragging]="true"
     [visible]="true"
   >
-  </dxo-field-panel>
+  </dxo-pivot-grid-field-panel>
 </dx-pivot-grid>
 
 <div class="options">

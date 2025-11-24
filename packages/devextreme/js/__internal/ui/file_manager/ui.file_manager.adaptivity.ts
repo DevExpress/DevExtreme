@@ -8,6 +8,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import Drawer from '@ts/ui/drawer/drawer';
+import type { ActiveStateChangedEvent, ApplyPanelSizeEvent } from '@ts/ui/splitter_control';
 
 const window = getWindow();
 const ADAPTIVE_STATE_SCREEN_WIDTH = 573;
@@ -15,11 +16,6 @@ const ADAPTIVE_STATE_SCREEN_WIDTH = 573;
 const FILE_MANAGER_ADAPTIVITY_DRAWER_PANEL_CLASS = 'dx-filemanager-adaptivity-drawer-panel';
 const DRAWER_PANEL_CONTENT_INITIAL = 'dx-drawer-panel-content-initial';
 const DRAWER_PANEL_CONTENT_ADAPTIVE = 'dx-drawer-panel-content-adaptive';
-
-interface PanelSize {
-  leftPanelWidth: string | number;
-  rightPanelWidth: string | number;
-}
 
 interface FileManagerAdaptivityControlOptions extends WidgetProperties {
   drawerTemplate?: (container: dxElementWrapper | Element) => void;
@@ -87,7 +83,7 @@ class FileManagerAdaptivityControl extends Widget<FileManagerAdaptivityControlOp
     this._checkAdaptiveState();
   }
 
-  _onApplyPanelSize(e: PanelSize): void {
+  _onApplyPanelSize(e: ApplyPanelSizeEvent): void {
     if (!hasWindow()) {
       return;
     }
@@ -100,9 +96,9 @@ class FileManagerAdaptivityControl extends Widget<FileManagerAdaptivityControlOp
     this._setDrawerWidth(e.leftPanelWidth);
   }
 
-  _onActiveStateChanged({ isActive }: { isActive: boolean }): void {
-    this._splitter?.disableSplitterCalculation(!isActive);
-    if (!isActive) {
+  _onActiveStateChanged(e: ActiveStateChangedEvent): void {
+    this._splitter?.disableSplitterCalculation(!e.isActive);
+    if (!e.isActive) {
       this._splitter?.$element().css('left', 'auto');
     }
   }

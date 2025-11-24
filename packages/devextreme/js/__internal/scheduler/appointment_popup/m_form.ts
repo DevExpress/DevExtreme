@@ -258,7 +258,7 @@ export class AppointmentForm {
       },
       onFieldDataChanged: (e) => {
         const {
-          startDateExpr, endDateExpr, recurrenceRuleExpr, allDayExpr,
+          startDateExpr, endDateExpr, recurrenceRuleExpr,
         } = this.scheduler.getDataAccessors().expr;
 
         const { dataField } = e;
@@ -267,14 +267,9 @@ export class AppointmentForm {
           return;
         }
 
-        const isAllDayChanged = dataField === allDayExpr;
         const isDateRangeChanged = [startDateExpr, endDateExpr].includes(dataField);
         const isRecurrenceRuleChanged = dataField === recurrenceRuleExpr;
         const isResourceChanged = Object.keys(this.scheduler.getResourceById()).includes(dataField);
-
-        if (isAllDayChanged) {
-          this.updateDateTimeEditorsVisibility();
-        }
 
         if (isDateRangeChanged) {
           this.updateDateEditorsValues();
@@ -400,9 +395,11 @@ export class AppointmentForm {
       editorType: 'dxSwitch',
       editorOptions: {
         onValueChanged: (e) => {
+          this.updateDateTimeEditorsVisibility();
+
           const { startDate } = this;
 
-          if (!startDate) {
+          if (!startDate || e.event === undefined) {
             return;
           }
 
@@ -415,10 +412,10 @@ export class AppointmentForm {
             const startHour = this.scheduler.getStartDayHour();
             startDate.setHours(startHour);
 
-            const endDate = this.scheduler.getCalculatedEndDate(startDate);
+            const calculatedEndDate = this.scheduler.getCalculatedEndDate(startDate);
 
             this.dxForm.updateData(startDateExpr, startDate);
-            this.dxForm.updateData(endDateExpr, endDate);
+            this.dxForm.updateData(endDateExpr, calculatedEndDate);
           }
         },
       } as SwitchProperties,
@@ -659,7 +656,7 @@ export class AppointmentForm {
             onValueChanged: (e): void => {
               if (e.value === repeatNeverValue) {
                 const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
-                this.dxForm.updateData(recurrenceRuleExpr, undefined);
+                this.dxForm.updateData(recurrenceRuleExpr, '');
               } else if (e.event) {
                 this.showRecurrenceGroup();
               }
@@ -671,6 +668,8 @@ export class AppointmentForm {
   }
 
   private createDescriptionGroup(): GroupItem {
+    const { descriptionExpr } = this.scheduler.getDataAccessors().expr;
+
     return {
       name: DESCRIPTION_GROUP_NAME,
       itemType: 'group',
@@ -688,6 +687,7 @@ export class AppointmentForm {
         },
         {
           name: DESCRIPTION_EDITOR_NAME,
+          dataField: descriptionExpr,
           colSpan: 1,
           itemType: 'simple',
           cssClass: CLASSES.descriptionEditor,
@@ -831,7 +831,9 @@ export class AppointmentForm {
     }
 
     this._$mainGroup?.addClass(CLASSES.mainHidden);
+    this._$mainGroup?.attr('tabindex', '-1');
     this._$recurrenceGroup?.removeClass(CLASSES.recurrenceHidden);
+    this._$recurrenceGroup?.removeAttr('tabindex');
 
     const repeatEditorValue = this.dxForm.getEditor(REPEAT_EDITOR_NAME)?.option('value');
 
@@ -854,7 +856,9 @@ export class AppointmentForm {
     }
 
     this._$mainGroup?.removeClass(CLASSES.mainHidden);
+    this._$mainGroup?.removeAttr('tabindex');
     this._$recurrenceGroup?.addClass(CLASSES.recurrenceHidden);
+    this._$recurrenceGroup?.attr('tabindex', '-1');
 
     this._popup.updateToolbarForMainGroup();
 
@@ -864,7 +868,7 @@ export class AppointmentForm {
 
       this.dxForm.updateData(
         recurrenceRuleExpr,
-        recurrenceRule.toString() ?? undefined,
+        recurrenceRule.toString() ?? '',
       );
       this.dxForm.getEditor(START_DATE_EDITOR_NAME)?.option('value', recurrenceRule.startDate);
     }
@@ -939,7 +943,7 @@ export class AppointmentForm {
             this.showRecurrenceGroup();
           },
           elementAttr: {
-            class: CLASSES.recurrenceSettingsButton,
+            class: `${CLASSES.recurrenceSettingsButton} dx-shape-standard`,
           },
         },
       });

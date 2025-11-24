@@ -1,4 +1,9 @@
 $(() => {
+  const deployment = 'gpt-4o-mini';
+  const apiVersion = '2024-02-01';
+  const endpoint = 'https://public-api.devexpress.com/demo-openai';
+  const apiKey = 'DEMO';
+
   const aiService = new AzureOpenAI({
     dangerouslyAllowBrowser: true,
     deployment,
@@ -94,8 +99,8 @@ $(() => {
     nameWrapper.append(imgWrapper);
 
     const textWrapper = $('<div>').addClass('name__text-wrapper');
-    const firstNameText = $('<div>').text(First_Name);
-    const lastNameText = $('<div>').text(Last_Name);
+    const firstNameText = $('<div>').addClass('name__text').text(First_Name);
+    const lastNameText = $('<div>').addClass('name__text').text(Last_Name);
 
     textWrapper.append(firstNameText, lastNameText);
     nameWrapper.append(textWrapper);
@@ -135,12 +140,6 @@ $(() => {
     paging: {
       enabled: true,
       pageSize: 10,
-    },
-    grouping: {
-      contextMenuEnabled: false,
-    },
-    groupPanel: {
-      visible: false,
     },
     columns: [
       {

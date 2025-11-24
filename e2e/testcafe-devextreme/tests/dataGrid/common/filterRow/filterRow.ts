@@ -6,7 +6,7 @@ import { createWidget } from '../../../../helpers/createWidget';
 import { getNumberData, getData } from '../../helpers/generateDataSourceData';
 import { testScreenshot } from '../../../../helpers/themeUtils';
 
-fixture.disablePageReloads`FilterRow`
+fixture`FilterRow`
   .page(url(__dirname, '../../../container.html'));
 
 test('Filter should reset if the filter row editor text is cleared (T1257261)', async (t) => {
@@ -282,6 +282,4 @@ test('DataGrid - filter row\'s search-box\'s aria-label should be customizable v
       visible: true,
     },
   });
-}).after(async (t) => {
-  await t.eval(() => location.reload());
 });

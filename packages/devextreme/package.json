@@ -1,6 +1,6 @@
 {
   "name": "devextreme",
-  "version": "25.2.0",
+  "version": "25.2.2",
   "description": "HTML5 JavaScript Component Suite for Responsive Web Development",
   "keywords": [
     "devextreme",
@@ -105,7 +105,7 @@
     "del": "2.2.2",
     "devextreme-aspnet-data": "5.0.0",
     "devextreme-cldr-data": "1.0.3",
-    "devextreme-exceljs-fork": "^4.4.2",
+    "devextreme-exceljs-fork": "^4.4.4",
     "devextreme-screenshot-comparer": "2.0.17",
     "enzyme": "3.11.0",
     "enzyme-adapter-react-16": "1.15.8",
@@ -130,7 +130,7 @@
     "eslint-plugin-unicorn": "^60.0.0",
     "fancy-log": "2.0.0",
     "file-saver": "2.0.5",
-    "glob": "10.4.5",
+    "glob": "11.1.0",
     "globalize": "1.7.0",
     "globals": "catalog:",
     "gulp": "4.0.2",
@@ -256,9 +256,13 @@
     "devextreme-bundler": "bin/bundler.js"
   },
   "browserslist": [
-    "last 2 versions",
-    "ios > 9",
-    "> 1%",
+    "last 2 Chrome versions",
+    "last 2 Firefox versions",
+    "last 2 Safari versions",
+    "last 2 Edge versions",
+    "last 2 Opera versions",
+    "last 2 iOS versions",
+    "last 2 ChromeAndroid versions",
     "not dead"
   ],
   "publishConfig": {

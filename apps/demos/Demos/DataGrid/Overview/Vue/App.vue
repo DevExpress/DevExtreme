@@ -1,7 +1,7 @@
 <template>
   <DxDataGrid
-    :data-source="dataSource"
-    :remote-operations="false"
+    :data-source="sales"
+    key-expr="Id"
     :allow-column-reordering="true"
     :row-alternation-enabled="true"
     :show-borders="true"
@@ -79,23 +79,8 @@ import {
   DxSearchPanel,
   type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
-import { DataSource } from 'devextreme-vue/common/data';
-
 import DiscountCell from './DiscountCell.vue';
-
-const dataSource = new DataSource({
-  store: {
-    type: 'odata',
-    version: 2,
-    url: 'https://js.devexpress.com/Demos/SalesViewer/odata/DaySaleDtoes',
-    key: 'Id',
-    beforeSend(request) {
-      const year = new Date().getFullYear() - 1;
-      request.params.startDate = `${year}-05-10`;
-      request.params.endDate = `${year}-5-15`;
-    },
-  },
-});
+import { sales } from './data.ts';
 
 const pageSizes = [10, 25, 50, 100];
 

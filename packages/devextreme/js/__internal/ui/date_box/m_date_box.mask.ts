@@ -1,6 +1,5 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/common/core/events/utils/index';
-import dateLocalization from '@js/common/core/localization/date';
 import defaultDateNames from '@js/common/core/localization/default_date_names';
 import { getFormat } from '@js/common/core/localization/ldml/date.format';
 import { getRegExpInfo } from '@js/common/core/localization/ldml/date.parser';
@@ -13,6 +12,7 @@ import {
   isDate, isDefined, isFunction, isString,
 } from '@js/core/utils/type';
 import type { Properties } from '@js/ui/date_box';
+import dateLocalization from '@ts/core/localization/date';
 
 import DateBoxBase from './m_date_box.base';
 import { getDatePartIndexByPosition, renderDateParts } from './m_date_box.mask.parts';
@@ -131,6 +131,7 @@ class DateBoxMask extends DateBoxBase {
 
   _toggleAmPm(): void {
     const currentValue = this._getActivePartProp('text');
+    // @ts-expect-error ts-error
     const indexOfCurrentValue = defaultDateNames.getPeriodNames().indexOf(currentValue);
     const newValue = indexOfCurrentValue ^ 1;
     this._setActivePartValue(newValue);
@@ -261,7 +262,6 @@ class DateBoxMask extends DateBoxBase {
     }
 
     const format = this._strategy.getDisplayFormat(this.option('displayFormat'));
-    // @ts-expect-error ts-error
     const isLDMLPattern = isString(format) && !dateLocalization._getPatternByFormat(format);
 
     if (isLDMLPattern) {
@@ -364,6 +364,7 @@ class DateBoxMask extends DateBoxBase {
   }
 
   _prepareRegExpInfo(): void {
+    // @ts-expect-error ts-error
     this._regExpInfo = getRegExpInfo(this._getFormatPattern(), dateLocalization);
     const { regexp } = this._regExpInfo;
     // @ts-expect-error ts-error
@@ -625,7 +626,6 @@ class DateBoxMask extends DateBoxBase {
 
   _maskPasteHandler(e): void {
     const newText = this._replaceSelectedText(this.option('text'), this._caret(), clipboardText(e));
-    // @ts-expect-error ts-error
     const date = dateLocalization.parse(newText, this._getFormatPattern());
 
     if (date && this._isDateValid(date)) {
