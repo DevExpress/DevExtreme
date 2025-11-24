@@ -143,7 +143,7 @@ QUnit.module('ExportController', {
     const aiIntegration = new AIIntegration({
         sendRequest(prompt) {
             return {
-                promise: (resolve) => {
+                promise: new Promise((resolve) => {
                     const result = {};
                     const data = prompt.data && prompt.data.data;
                     if(data) {
@@ -153,7 +153,7 @@ QUnit.module('ExportController', {
                         });
                     }
                     resolve(JSON.stringify(result));
-                },
+                }),
                 abort: () => {},
             };
         },
