@@ -62,7 +62,7 @@ import { data, moviesData, theatreData } from './data.ts';
 const views = ['day', 'week', 'timelineDay'];
 const groups = ['theatreId'];
 const scheduler = ref<DxScheduler['instance']>();
-const currentDate = new Date(2021, 3, 27);
+const currentDate = new Date(2025, 3, 27);
 const dataSource = data;
 const editing = { allowAdding: false };
 

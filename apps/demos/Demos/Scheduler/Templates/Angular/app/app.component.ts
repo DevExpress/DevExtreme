@@ -36,7 +36,7 @@ export class AppComponent {
 
   data: Data[];
 
-  currentDate: Date = new Date(2021, 3, 27);
+  currentDate: Date = new Date(2025, 3, 27);
 
   moviesData: MovieData[];
 
