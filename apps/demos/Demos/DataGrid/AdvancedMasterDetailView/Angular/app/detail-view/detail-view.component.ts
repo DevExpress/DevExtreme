@@ -1,6 +1,7 @@
 import {Component, Input, AfterViewInit, ChangeDetectorRef} from '@angular/core';
 import { DataSource } from 'devextreme-angular/common/data';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
+import {DxFormModule, DxDataGridModule, DxSelectBoxModule, DxTabPanelModule} from 'devextreme-angular';
 import { DxFormTypes } from 'devextreme-angular/ui/form';
 import { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 
@@ -14,7 +15,12 @@ if (window && window.config?.packageConfigPaths) {
   selector: 'detail-view',
   templateUrl: `.${modulePrefix && (`${modulePrefix}/detail-view`)}/detail-view.component.html`,
   styleUrls: [`.${modulePrefix && (`${modulePrefix}/detail-view`)}/detail-view.component.css`],
-  providers: [],
+  imports: [
+    DxDataGridModule,
+    DxFormModule,
+    DxSelectBoxModule,
+    DxTabPanelModule,
+  ],
 })
 export class DetailViewComponent implements AfterViewInit {
   @Input() key: number;

@@ -1,4 +1,5 @@
 import { Component, Input, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { DxDataGridModule } from 'devextreme-angular';
 import { DataSource, ArrayStore } from 'devextreme-angular/common/data';
 import { Service, Task } from '../app.service';
 
@@ -11,6 +12,7 @@ if (window && window.config?.packageConfigPaths) {
 @Component({
   selector: 'detail-grid',
   templateUrl: `.${modulePrefix && (`${modulePrefix}/detail-grid`)}/detail-grid.component.html`,
+  imports: [DxDataGridModule],
   providers: [Service],
 })
 export class DetailGridComponent implements AfterViewInit {
