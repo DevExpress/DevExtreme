@@ -113,13 +113,13 @@ function syncTreeViewSelection() {
   } else {
     treeView.unselectAll();
   }
+
+  isTreeBoxOpened.value = false;
 }
 
 function treeViewItemSelectionChanged(e: DxTreeViewTypes.ItemSelectionChangedEvent) {
   const selectedKeys = e.component.getSelectedNodeKeys();
   treeBoxValue.value = selectedKeys.length > 0 ? selectedKeys[0] : null;
-
-  isTreeBoxOpened.value = false;
 }
 
 function gridBoxDisplayExpr(item: any) {

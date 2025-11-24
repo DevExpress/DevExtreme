@@ -103,7 +103,7 @@ function App() {
       treeViewRef.current.instance().selectItem(e.value);
     }
     setIsTreeBoxOpened(false);
-  }, [treeViewRef]);
+  }, []);
 
   const onTreeBoxOptionChanged = useCallback((e: DropDownBoxTypes.OptionChangedEvent) => {
     if (e.name === 'opened') {
