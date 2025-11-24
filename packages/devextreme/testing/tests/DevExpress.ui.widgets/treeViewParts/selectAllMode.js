@@ -1,6 +1,6 @@
 /* global DATA, initTree */
 
-import $ from 'jquery'; 
+import $ from 'jquery';
 import {
     SELECT_ALL_ITEM_CLASS,
     CHECK_BOX_CLASS,

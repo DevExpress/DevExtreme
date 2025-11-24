@@ -105,7 +105,7 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
     return this.callBase();
   },
 
-    _applyToAllItemContainers(callback: (itemsContainer) => void): void {
+  _applyToAllItemContainers(callback: (itemsContainer) => void): void {
     if (this.getScrollable()) {
       callback($(this.getScrollable().content()));
     }
