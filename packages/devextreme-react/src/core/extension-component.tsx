@@ -25,7 +25,7 @@ const ExtensionComponent = forwardRef<ComponentBaseRef, any>(
 
     const createWidget = useCallback((el?: Element) => {
       componentBaseRef.current?.createWidget(el);
-    }, [componentBaseRef.current]);
+    }, []);
 
     useLayoutEffect(() => {
       const { onMounted } = props as any;

@@ -41,11 +41,11 @@ const Component = forwardRef<ComponentRef, any>(
 
     const registerExtension = useCallback((creator: any) => {
       extensionCreators.current.push(creator);
-    }, [extensionCreators.current]);
+    }, []);
 
     const createExtensions = useCallback(() => {
       extensionCreators.current.forEach((creator) => creator(componentBaseRef.current?.getElement() as HTMLDivElement));
-    }, [extensionCreators.current, componentBaseRef.current]);
+    }, []);
 
     const renderChildren = useCallback(() => React.Children.map(
       props.children,
@@ -63,18 +63,12 @@ const Component = forwardRef<ComponentRef, any>(
 
     const createWidget = useCallback((el?: Element) => {
       componentBaseRef.current?.createWidget(el);
-    }, [componentBaseRef.current]);
+    }, []);
 
     const clearExtensions = useCallback(() => {
-      if (props.clearExtensions) {
-        props.clearExtensions();
-      }
-
+      props.clearExtensions?.();
       extensionCreators.current = [];
-    }, [
-      extensionCreators.current,
-      props.clearExtensions,
-    ]);
+    }, [props.clearExtensions]);
 
     useLayoutEffect(() => {
       createWidget();
