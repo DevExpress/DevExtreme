@@ -1,5 +1,5 @@
-import { enCldr } from '@js/common/core/localization/cldr-data/en';
-import { supplementalCldr } from '@js/common/core/localization/cldr-data/supplemental';
+import { enCldr } from '@ts/core/localization/cldr-data/en';
+import { supplementalCldr } from '@ts/core/localization/cldr-data/supplemental';
 import coreLocalization from '@ts/core/localization/core';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import Globalize from 'globalize';
