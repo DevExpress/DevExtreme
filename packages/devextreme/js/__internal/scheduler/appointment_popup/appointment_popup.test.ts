@@ -153,6 +153,34 @@ describe('Appointment Form', () => {
       expect(dataItem).toMatchObject(commonAppointment);
     });
 
+    it('should not update recurrence rule on save button click if recurrence rule was not changed', async () => {
+      const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+      POM.openPopupByDblClick('recurring-app');
+      POM.popup.getEditSeriesButton().click();
+      POM.popup.getSaveButton().click();
+
+      const dataItem = scheduler.option('dataSource')?.[0];
+
+      expect(dataItem).toMatchObject(recurringAppointment);
+    });
+
+    it('should update recurrence rule on save button click if repeat editor value was set to never', async () => {
+      const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+      POM.openPopupByDblClick('recurring-app');
+      POM.popup.getEditSeriesButton().click();
+      POM.popup.selectRepeatValue('never');
+      POM.popup.getSaveButton().click();
+
+      const dataItem = scheduler.option('dataSource')?.[0];
+
+      expect(dataItem).toMatchObject({
+        ...recurringAppointment,
+        recurrenceRule: '',
+      });
+    });
+
     it('should update appointment when data source is a custom store', async () => {
       const appointment = { ...commonAppointment, id: 0 };
 

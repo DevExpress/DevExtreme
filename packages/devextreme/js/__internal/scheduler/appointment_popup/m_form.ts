@@ -866,6 +866,12 @@ export class AppointmentForm {
   }
 
   saveRecurrenceValue(): void {
+    const isRecurrenceFormOpened = !this._$recurrenceGroup?.hasClass(CLASSES.recurrenceHidden);
+
+    if (!isRecurrenceFormOpened) {
+      return;
+    }
+
     const { recurrenceRule } = this._recurrenceForm;
     const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
 
