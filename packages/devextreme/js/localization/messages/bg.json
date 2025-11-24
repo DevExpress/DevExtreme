@@ -286,6 +286,8 @@
         "dxScheduler-editorLabelDescription": "Описание",
         "dxScheduler-editorLabelRecurrence": "Repeat",
 
+        "dxScheduler-noSubject": "(No subject)",
+
         "dxScheduler-navigationToday": "Today",
         "dxScheduler-navigationPrevious": "Предишна Страница",
         "dxScheduler-navigationNext": "Следваща Страница",
