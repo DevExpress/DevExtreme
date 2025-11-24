@@ -3073,6 +3073,50 @@ testModule('API', moduleConfig, () => {
         assert.strictEqual(resizeStub.callCount, 1, '\'dxresize\' event handler was called');
         resizeStub.restore();
     });
+
+    test('Overlay uses custom zIndex on init if zIndex option is provided', function(assert) {
+        const overlay = $('#overlay').dxOverlay({
+            visible: true,
+            zIndex: 2000
+        }).dxOverlay('instance');
+
+        const contentZIndex = Number(getComputedStyle(overlay.$content()[0]).zIndex);
+
+        assert.strictEqual(contentZIndex, 2000, 'custom zIndex assigned');
+    });
+
+    test('Changing zIndex option replaces old pool zIndex with custom', function(assert) {
+        const overlay = $('#overlay').dxOverlay({
+            visible: true
+        }).dxOverlay('instance');
+
+        const initialZIndex = Number(getComputedStyle(overlay.$content()[0]).zIndex);
+
+        assert.strictEqual(initialZIndex, 1501, 'overlay has initial pool zIndex');
+
+        overlay.option('zIndex', 5000);
+
+        const finalZIndex = Number(getComputedStyle(overlay.$content()[0]).zIndex);
+
+        assert.strictEqual(finalZIndex, 5000, 'custom zIndex applied');
+    });
+
+    test('Changing zIndex option to undefined resets the default pool zIndex', function(assert) {
+        const overlay = $('#overlay').dxOverlay({
+            visible: true,
+            zIndex: 5000,
+        }).dxOverlay('instance');
+
+        const initialZIndex = Number(getComputedStyle(overlay.$content()[0]).zIndex);
+
+        assert.strictEqual(initialZIndex, 5000, 'overlay has initial custom zIndex');
+
+        overlay.option('zIndex', undefined);
+
+        const finalZIndex = Number(getComputedStyle(overlay.$content()[0]).zIndex);
+
+        assert.strictEqual(finalZIndex, 5000, 'initial pool zIndex applied');
+    });
 });
 
 
