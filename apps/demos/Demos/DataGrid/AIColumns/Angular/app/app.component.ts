@@ -4,7 +4,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxDataGridModule, DxPopupModule } from 'devextreme-angular';
 import type { AIIntegration } from 'devextreme-angular/common/ai-integration';
 import { Service, type Vehicle } from './app.service';
-import { AiService } from './ai.service';
+import { AiService } from './ai/ai.service';
 import { Trademark } from './trademark/trademark.component';
 import { Category } from './category/category.component';
 import { LicenseInfo } from './license-info/license-info.component';
