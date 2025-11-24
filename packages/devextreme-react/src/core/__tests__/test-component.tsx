@@ -111,12 +111,17 @@ const TestPortalComponent = memo(forwardRef<TestComponentRef, any>(function Test
 
 const TestRestoreTreeComponent = forwardRef((_, ref: React.ForwardedRef<{ restoreTree?: () => void }>) => {
   const restoreParentLink = useContext(RestoreTreeContext);
+  const restoreParentLinkRef = useRef<() => void>(() => {});
+
+  useLayoutEffect(() => {
+    restoreParentLinkRef.current = restoreParentLink ?? (() => {});
+  }, [restoreParentLink]);
 
   useImperativeHandle(ref, () => {
     return {
-      restoreTree: restoreParentLink
+      restoreTree: () => restoreParentLinkRef.current(),
     };
-  }, [restoreParentLink]);
+  }, []);
 
   return <div>Context Component</div>;
 });
