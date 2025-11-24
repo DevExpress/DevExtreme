@@ -14,6 +14,7 @@ import DataSource, { DataSourceLike } from '../data/data_source';
 import Widget, { WidgetOptions } from './widget/ui.widget';
 import {
     Cancelable,
+    ChangedOptionInfo,
     EventInfo,
     NativeEventInfo,
     PointerInteractionEvent,
@@ -714,6 +715,14 @@ export type CardHoverChangedEvent = EventInfo<dxCardView> & WithCardInfo & {
     /** @docid _ui_card_view_CardHoverChangedEvent.eventType */
     eventType: string;
 };
+
+/**
+ * @docid _ui_card_view_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
+export type OptionChangedEvent<TCardData = any, TKey = any> = EventInfo<dxCardView<TCardData, TKey>> & ChangedOptionInfo;
 
 /**
  * @public

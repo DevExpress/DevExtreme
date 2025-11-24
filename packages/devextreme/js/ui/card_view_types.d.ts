@@ -19,6 +19,7 @@ export {
   FieldValueDblClickEvent,
   FieldCaptionPreparedEvent,
   CardHoverChangedEvent,
+  OptionChangedEvent,
   FieldTemplateData,
   CardTemplateData,
   ColumnTemplateData,
