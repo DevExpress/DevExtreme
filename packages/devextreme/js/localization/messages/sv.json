@@ -286,6 +286,8 @@
         "dxScheduler-editorLabelDescription": "Beskrivning",
         "dxScheduler-editorLabelRecurrence": "Upprepa",
 
+        "dxScheduler-noSubject": "(No subject)",
+
         "dxScheduler-navigationToday": "Idag",
         "dxScheduler-navigationPrevious": "Föregående sida",
         "dxScheduler-navigationNext": "Nästa sida",
