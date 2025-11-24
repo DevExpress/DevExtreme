@@ -129,7 +129,7 @@ QUnit.test('Select and unselect all items via API', function(assert) {
     assert.strictEqual(this.checkAllItemsSelection(false), 6, 'all items are unselected');
 });
 
-QUnit.module('Events should not duplicate when container changes (T1234567)', {
+QUnit.module('Events should not duplicate when container changes (T1314209)', {
     beforeEach: function() {
         this.items = [
             { id: 1, text: 'Item 1', parentId: 0 },
@@ -209,7 +209,7 @@ QUnit.module('Events should not duplicate when container changes (T1234567)', {
         const instance = $treeView.dxTreeView('instance');
         instance.option('items', this.items);
 
-        const $firstItem = $treeView$treeView.find(`.${ITEM_CLASS}`).first();
+        const $firstItem = $treeView.find(`.${ITEM_CLASS}`).first();
         $firstItem.trigger('dxclick');
 
         assert.strictEqual(onSelectionChangedStub.callCount, 1, 'onSelectionChanged should fire exactly once');
@@ -231,7 +231,7 @@ QUnit.module('Events should not duplicate when container changes (T1234567)', {
         const instance = $treeView.dxTreeView('instance');
         instance.option('items', this.items);
 
-        const $firstItem = $treeView$treeView.find(`.${ITEM_CLASS}`).first();
+        const $firstItem = $treeView.find(`.${ITEM_CLASS}`).first();
 
         $firstItem.trigger('dxclick');
         assert.strictEqual(onSelectionChangedStub.callCount, 1, 'first click: selection changed once');
@@ -263,7 +263,7 @@ QUnit.module('Events should not duplicate when container changes (T1234567)', {
 
         onItemClickStub.reset();
         onSelectionChangedStub.reset();
-        const $firstItem = $treeView$treeView.find(`.${ITEM_CLASS}`).first();
+        const $firstItem = $treeView.find(`.${ITEM_CLASS}`).first();
         $firstItem.trigger('dxclick');
 
         assert.strictEqual(onItemClickStub.callCount, 1, 'clicking item should trigger onItemClick once');
@@ -298,7 +298,7 @@ QUnit.module('Events should not duplicate when container changes (T1234567)', {
         const instance = $treeView.dxTreeView('instance');
         instance.option('items', this.items);
 
-        const $firstItem = $treeView$treeView.find(`.${ITEM_CLASS}`).first();
+        const $firstItem = $treeView.find(`.${ITEM_CLASS}`).first();
         $firstItem.trigger('dxhold');
 
         assert.strictEqual(onItemHoldStub.callCount, 1, 'onItemHold fired exactly once');
@@ -315,7 +315,7 @@ QUnit.module('Events should not duplicate when container changes (T1234567)', {
         const instance = $treeView.dxTreeView('instance');
         instance.option('items', this.items);
 
-        const $firstItem = $treeView$treeView.find(`.${ITEM_CLASS}`).first();
+        const $firstItem = $treeView.find(`.${ITEM_CLASS}`).first();
         $firstItem.trigger('dxcontextmenu');
 
         assert.strictEqual(onItemContextMenuStub.callCount, 1, 'onItemContextMenu fired exactly once');
@@ -332,7 +332,7 @@ QUnit.module('Events should not duplicate when container changes (T1234567)', {
         const instance = $treeView.dxTreeView('instance');
         instance.option('items', this.items);
 
-        const $firstItem = $treeView$treeView.find(`.${ITEM_CLASS}`).first();
+        const $firstItem = $treeView.find(`.${ITEM_CLASS}`).first();
         $firstItem.trigger('dxclick');
 
         assert.strictEqual(onItemClickStub.callCount, 1, 'onItemClick should fire once even in normal mode');
@@ -353,7 +353,7 @@ QUnit.module('Events should not duplicate when container changes (T1234567)', {
             { id: 3, text: 'Item 3', parentId: 0 }
         ]);
 
-        const $firstItem = $treeView$treeView.find(`.${ITEM_CLASS}`).first();
+        const $firstItem = $treeView.find(`.${ITEM_CLASS}`).first();
         $firstItem.trigger('dxclick');
 
         assert.strictEqual(onItemClickStub.callCount, 1, 'onItemClick should fire once after multiple option changes');
