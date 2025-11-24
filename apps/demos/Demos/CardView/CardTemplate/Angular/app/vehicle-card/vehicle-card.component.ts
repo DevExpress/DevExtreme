@@ -7,6 +7,7 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
+  standalone: false,
   selector: 'vehicle-card',
   templateUrl: `.${modulePrefix}/vehicle-card/vehicle-card.component.html`,
   styleUrls: [`.${modulePrefix}/vehicle-card/vehicle-card.component.css`],

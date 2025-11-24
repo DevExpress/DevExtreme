@@ -10,6 +10,7 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
+  standalone: false,
   selector: 'room-meal-plan-form',
   templateUrl: `.${modulePrefix}/room-meal-plan-form/room-meal-plan-form.component.html`,
 })

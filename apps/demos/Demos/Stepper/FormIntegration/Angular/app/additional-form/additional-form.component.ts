@@ -10,6 +10,7 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
+  standalone: false,
   selector: 'additional-form',
   templateUrl: `.${modulePrefix}/additional-form/additional-form.component.html`,
 })

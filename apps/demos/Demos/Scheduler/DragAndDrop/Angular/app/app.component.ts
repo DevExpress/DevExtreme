@@ -1,6 +1,5 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import {ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection} from '@angular/core';
+import { bootstrapApplication } from '@angular/platform-browser';
 import { DxSchedulerModule, DxDraggableModule, DxScrollViewModule } from 'devextreme-angular';
 import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
 import { DxDraggableTypes } from 'devextreme-angular/ui/draggable';
@@ -21,6 +20,11 @@ if (window && window.config?.packageConfigPaths) {
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
+  imports: [
+    DxSchedulerModule,
+    DxDraggableModule,
+    DxScrollViewModule,
+  ],
 })
 export class AppComponent {
   draggingGroupName = 'appointmentsGroup';
@@ -31,9 +35,10 @@ export class AppComponent {
 
   currentDate: Date = new Date(2021, 3, 26);
 
-  constructor(service: Service) {
+  constructor(service: Service, private cdr: ChangeDetectorRef) {
     this.tasks = service.getTasks();
     this.appointments = service.getAppointments();
+    
   }
 
   onAppointmentRemove = (e: DxSchedulerTypes.AppointmentDraggingRemoveEvent) => {
@@ -69,16 +74,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxSchedulerModule,
-    DxDraggableModule,
-    DxScrollViewModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

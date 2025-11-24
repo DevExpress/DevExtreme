@@ -1,7 +1,7 @@
 import {
   enableProdMode, ChangeDetectionStrategy, ChangeDetectorRef, Component, NgModule, ViewChild,
 } from '@angular/core';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { lastValueFrom } from 'rxjs';
@@ -21,6 +21,7 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
+  standalone: false,
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
@@ -94,9 +95,9 @@ export class AppComponent {
     BrowserModule,
     DxTreeViewModule,
     DxDropDownBoxModule,
-    HttpClientModule,
     DxDataGridModule,
   ],
+  providers: [provideHttpClient(withFetch())],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
 })
