@@ -1,6 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
-import firstDayOfWeekData from '@js/common/core/localization/cldr-data/first_day_of_week_data';
 import type { Format as LocalizationFormat, FormatObject } from '@js/localization';
+import firstDayOfWeekData from '@ts/core/localization/cldr-data/first_day_of_week_data';
 import localizationCore from '@ts/core/localization/core';
 import defaultDateNames from '@ts/core/localization/default_date_names';
 import intlDateLocalization from '@ts/core/localization/intl/date';
