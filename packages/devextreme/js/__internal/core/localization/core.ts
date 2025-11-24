@@ -1,4 +1,4 @@
-import parentLocales from '@js/common/core/localization/cldr-data/parent_locales';
+import parentLocales from '@ts/core/localization/cldr-data/parent_locales';
 import getParentLocale from '@ts/core/localization/parentLocale';
 import { injector as dependencyInjector } from '@ts/core/utils/m_dependency_injector';
 
