@@ -7,7 +7,7 @@ describe('addEmptiness', () => {
     expect(addEmptiness([
       { height: 34, width: 41 },
       { height: 36, width: 41 },
-    ] as any, { isTimelineView: true, isAdaptivityEnabled: false })).toEqual([
+    ] as any, { isTimelineView: true, isAdaptivityEnabled: false, isMonthView: false })).toEqual([
       { height: 34, width: 41, empty: true },
       { height: 36, width: 41, empty: false },
     ]);
@@ -18,7 +18,7 @@ describe('addEmptiness', () => {
       { height: 34, width: 39 },
       { height: 36, width: 41 },
       { height: 20, width: 20, isAllDayPanelOccupied: true },
-    ] as any, { isTimelineView: false, isAdaptivityEnabled: false })).toEqual([
+    ] as any, { isTimelineView: false, isAdaptivityEnabled: false, isMonthView: false })).toEqual([
       { height: 34, width: 39, empty: true },
       { height: 36, width: 41, empty: false },
       {
@@ -31,7 +31,7 @@ describe('addEmptiness', () => {
     expect(addEmptiness([
       { height: 25, width: 40 },
       { height: 30, width: 40 },
-    ] as any, { isTimelineView: false, isAdaptivityEnabled: true })).toEqual([
+    ] as any, { isTimelineView: false, isAdaptivityEnabled: true, isMonthView: false })).toEqual([
       { height: 25, width: 40, empty: true },
       { height: 30, width: 40, empty: false },
     ]);
