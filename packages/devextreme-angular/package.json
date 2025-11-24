@@ -13,6 +13,7 @@
     "lint:fix": "eslint . --fix",
     "test": "pnpm --workspace-root nx test devextreme-angular",
     "pack": "pnpm --workspace-root nx npm.pack devextreme-angular",
+    "pack-with-descriptions": "pnpm --workspace-root nx npm.pack --configuration with-descriptions devextreme-angular",
     "test:dev": "pnpm --workspace-root nx run.tests devextreme-angular"
   },
   "author": "Developer Express Inc.",
