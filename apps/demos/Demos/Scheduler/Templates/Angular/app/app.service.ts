@@ -619,8 +619,8 @@ const data: Data[] = [{
   theatreId: 1,
   movieId: 3,
   price: 10,
-  startDate: new Date('2021-04-27T02:30:00.000Z'),
-  endDate: new Date('2021-04-26T18:21:00.000Z'),
+  startDate: new Date('2021-04-26T16:10:00.000Z'),
+  endDate: new Date('2021-04-26T18:01:00.000Z'),
 }, {
   theatreId: 1,
   movieId: 1,
@@ -649,7 +649,7 @@ const data: Data[] = [{
   theatreId: 1,
   movieId: 1,
   price: 10,
-  startDate: new Date('2021-04-26T16:30:00.000Z'),
+  startDate: new Date('2021-04-27T02:30:00.000Z'),
   endDate: new Date('2021-04-27T04:02:00.000Z'),
 }, {
   theatreId: 1,
