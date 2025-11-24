@@ -98,11 +98,54 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
       return this._getNodeContainer();
     }
 
-    if (this._scrollable && isSearchMode) {
-      return $(this._scrollable.content());
+    if (this.getScrollable() && isSearchMode) {
+      return $(this.getScrollable().content());
     }
 
     return this.callBase();
+  },
+
+    _applyToAllItemContainers(callback: (itemsContainer) => void): void {
+    if (this.getScrollable()) {
+      callback($(this.getScrollable().content()));
+    }
+
+    const nodeContainer = this._getNodeContainer();
+    if (nodeContainer.length) {
+      callback(nodeContainer);
+    }
+
+    callback(this.$element());
+  },
+
+  _attachClickEvent(): void {
+    if (this._selectAllEnabled()) {
+      this._applyToAllItemContainers((itemsContainer) => {
+        this._detachClickEvent(itemsContainer);
+      });
+    }
+
+    this.callBase();
+  },
+
+  _attachHoldEvent(): void {
+    if (this._selectAllEnabled()) {
+      this._applyToAllItemContainers((itemsContainer) => {
+        this._detachHoldEvent(itemsContainer);
+      });
+    }
+
+    this.callBase();
+  },
+
+  _attachContextMenuEvent(): void {
+    if (this._selectAllEnabled()) {
+      this._applyToAllItemContainers((itemsContainer) => {
+        this._detachContextMenuEvent(itemsContainer);
+      });
+    }
+
+    this.callBase();
   },
 
   _addWidgetClass() {
