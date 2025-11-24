@@ -10667,6 +10667,14 @@ declare module DevExpress.ui {
          */
         promise?: PromiseLike<void>;
       };
+    /**
+     * [descr:_ui_card_view_OptionChangedEvent]
+     */
+    export type OptionChangedEvent<
+      TCardData = any,
+      TKey = any
+    > = DevExpress.common.core.events.EventInfo<dxCardView<TCardData, TKey>> &
+      DevExpress.common.core.events.ChangedOptionInfo;
 
     export type PredefinedToolbarItem =
       | 'columnChooserButton'
