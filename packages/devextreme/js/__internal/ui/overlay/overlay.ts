@@ -29,7 +29,6 @@ import { each } from '@js/core/utils/iterator';
 import readyCallbacks from '@js/core/utils/ready_callbacks';
 import { getOuterHeight, getOuterWidth } from '@js/core/utils/size';
 import {
-  isDefined,
   isFunction, isObject, isPromise, isWindow,
 } from '@js/core/utils/type';
 import { changeCallback } from '@js/core/utils/view_port';
@@ -883,15 +882,9 @@ class Overlay<
   _handleZIndexOptionChanged(): void {
     const { zIndex } = this.option();
 
-    if (isDefined(this._zIndex)) {
-      zIndexPool.remove(this._zIndex);
-    }
-
     this._zIndex = zIndex ?? zIndexPool.create(this._zIndexInitValue());
 
-    if (this._isVisible()) {
-      this._updateZIndex();
-    }
+    this._updateZIndexStackPosition(this._isVisible());
   }
 
   _updateZIndexStackPosition(pushToStack: boolean): void {
