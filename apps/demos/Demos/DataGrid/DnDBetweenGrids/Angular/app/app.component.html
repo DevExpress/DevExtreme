@@ -1,5 +1,6 @@
 <div class="tables">
-  <div *ngFor="let status of statuses" class="column">
+  @for(status of statuses; track status) {
+  <div class="column">
     <dx-data-grid
       [dataSource]="dataSource"
       [height]="440"
@@ -31,4 +32,5 @@
       ></dxi-data-grid-column>
     </dx-data-grid>
   </div>
+  }
 </div>

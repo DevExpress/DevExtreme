@@ -68,7 +68,9 @@
       </dx-button>
     </div>
     <ul>
-      <li *ngFor="let request of requests">{{ request }}</li>
+      @for(request of requests; track request) {
+      <li>{{ request }}</li>
+      }
     </ul>
   </div>
 </div>

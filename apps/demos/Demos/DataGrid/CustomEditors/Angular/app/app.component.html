@@ -127,15 +127,18 @@
   </div>
 
   <div *dxTemplate="let status of 'statusTemplate'">
-    <div *ngIf="status === null" ; else elseBlock>
+    @if(status === null) {
+    <div>
       <span>(All)</span>
     </div>
-    <div dx-template #elseBlock>
-      <img
-        src="images/icons/status-{{ status.id }}.svg"
-        class="status-icon middle"
-      />
+    } @else {
+    <div dx-template>
+      <img 
+          src="images/icons/status-{{ status.id }}.svg"
+          class="status-icon middle"
+        />
       <span class="middle">{{ status.name }}</span>
     </div>
+    }
   </div>
 </dx-data-grid>

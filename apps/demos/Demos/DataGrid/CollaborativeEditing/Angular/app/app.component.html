@@ -1,5 +1,6 @@
 <div class="tables">
-  <div *ngFor="let dataSource of dataSources" class="column">
+  @for(dataSource of dataSources; track dataSource) {
+  <div class="column">
     <dx-data-grid
       [dataSource]="dataSource"
       [height]="600"
@@ -50,4 +51,5 @@
       </dxi-data-grid-column>
     </dx-data-grid>
   </div>
+  }
 </div>

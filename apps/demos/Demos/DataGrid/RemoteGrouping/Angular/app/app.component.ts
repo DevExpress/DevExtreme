@@ -1,8 +1,6 @@
+import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  NgModule, Component, enableProdMode, ChangeDetectionStrategy,
-} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+  Component, enableProdMode, ChangeDetectionStrategy, provideZoneChangeDetection } from '@angular/core';
 import { DxDataGridModule } from 'devextreme-angular';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
@@ -17,11 +15,13 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  standalone: false,
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    DxDataGridModule,
+  ],
 })
 export class AppComponent {
   dataSource = AspNetData.createStore({
@@ -30,14 +30,8 @@ export class AppComponent {
   });
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxDataGridModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});
