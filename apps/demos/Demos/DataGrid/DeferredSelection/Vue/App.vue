@@ -75,7 +75,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import {
-  DxDataGrid, DxColumn, DxFilterRow, DxSelection, type DxDataGridTypes, DxPager, DxLookup
+  DxDataGrid, DxColumn, DxFilterRow, DxSelection, type DxDataGridTypes, DxPager, DxLookup,
 } from 'devextreme-vue/data-grid';
 import DxButton from 'devextreme-vue/button';
 import { query } from 'devextreme-vue/common/data';
@@ -112,7 +112,7 @@ const calculateStatistics = async () => {
   const selectedItems = await dataGrid.getSelectedRowsData();
 
   const totalDuration = selectedItems.reduce((currentValue, item) => {
-    const duration = new Date(item.Task_Due_Date) - new Date(item.Task_Start_Date);
+    const duration = +new Date(item.Task_Due_Date) - +new Date(item.Task_Start_Date);
 
     return currentValue + duration;
   }, 0);
