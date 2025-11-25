@@ -1,6 +1,5 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxTreeViewModule } from 'devextreme-angular';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
@@ -15,9 +14,9 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  standalone: false,
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
+  imports: [DxTreeViewModule],
 })
 export class AppComponent {
   dataSource = AspNetData.createStore({
@@ -26,14 +25,8 @@ export class AppComponent {
   });
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxTreeViewModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

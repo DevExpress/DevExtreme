@@ -1,9 +1,6 @@
+import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  NgModule, Component, enableProdMode, ViewChild,
-} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
+  Component, enableProdMode, ViewChild, provideZoneChangeDetection } from '@angular/core';
 import { DxListModule } from 'devextreme-angular';
 import { DxTreeViewComponent, DxTreeViewModule, type DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
 import { DxContextMenuModule, DxContextMenuComponent, type DxContextMenuTypes } from 'devextreme-angular/ui/context-menu';
@@ -21,11 +18,15 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  standalone: false,
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
+  imports: [
+    DxListModule,
+    DxTreeViewModule,
+    DxContextMenuModule,
+  ],
 })
 export class AppComponent {
   @ViewChild(DxTreeViewComponent<Product>, { static: false }) treeView: DxTreeViewComponent<Product>;
@@ -86,16 +87,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxListModule,
-    DxTreeViewModule,
-    DxContextMenuModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

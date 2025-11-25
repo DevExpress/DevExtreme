@@ -1,6 +1,5 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { HttpClient, HttpParams, provideHttpClient, withFetch } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { DxTreeListModule } from 'devextreme-angular';
@@ -17,10 +16,12 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  standalone: false,
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
+  imports: [
+    DxTreeListModule,
+  ],
 })
 export class AppComponent {
   dataSource: DataSource;
@@ -44,15 +45,9 @@ export class AppComponent {
   customizeSizeText = ({ value }) => (value === null ? '' : `${Math.ceil(value / 1024)} KB`);
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxTreeListModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
+    provideHttpClient(withFetch()),
   ],
-  providers: [provideHttpClient(withFetch())],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});
