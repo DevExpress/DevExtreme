@@ -21,6 +21,7 @@ import LoadPanel from '@js/ui/load_panel';
 import sharedFiltering from '@js/ui/shared/filtering';
 import type { ColumnPoint } from '@ts/grids/grid_core/m_types';
 
+import { AI_COLUMN_NAME } from './ai_column/const';
 import { isEqualSelectors, isSelectorEqualWithCallback } from './utils/index';
 
 const BASE_LOAD_PANEL_Z_INDEX = 1000;
@@ -342,11 +343,19 @@ export default {
   getDisplayValue(column, value, data, rowType?) {
     if (column.displayValueMap && column.displayValueMap[value] !== undefined) {
       return column.displayValueMap[value];
-    } if (column.calculateDisplayValue && data && rowType !== 'group') {
+    }
+    if (column.calculateDisplayValue && data && rowType !== 'group') {
       return column.calculateDisplayValue(data);
-    } if (column.lookup && !(rowType === 'group' && (column.calculateGroupValue || column.calculateDisplayValue))) {
+    }
+
+    const isCalculatedFromLookup = column.lookup
+      && column.type !== AI_COLUMN_NAME
+      && (rowType !== 'group' || (!column.calculateGroupValue && !column.calculateDisplayValue));
+
+    if (isCalculatedFromLookup) {
       return column.lookup.calculateCellValue(value);
     }
+
     return value;
   },
 
