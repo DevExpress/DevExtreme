@@ -38,6 +38,7 @@ export {
   CardRemovingEvent,
   CardUpdatedEvent,
   CardUpdatingEvent,
+  OptionChangedEvent,
   SavedEvent,
   SavingEvent,
   SelectionConfiguration,
