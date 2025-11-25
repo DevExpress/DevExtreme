@@ -14,6 +14,7 @@ import DataSource, { DataSourceLike } from '../data/data_source';
 import Widget, { WidgetOptions } from './widget/ui.widget';
 import {
     Cancelable,
+    ChangedOptionInfo,
     EventInfo,
     NativeEventInfo,
     PointerInteractionEvent,
@@ -1126,6 +1127,14 @@ export type CardUpdatingEvent<TCardData = unknown, TKey = unknown> = EventInfo<d
 };
 
 /**
+ * @docid _ui_card_view_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
+export type OptionChangedEvent<TCardData = unknown, TKey = unknown> = EventInfo<dxCardView<TCardData, TKey>> & ChangedOptionInfo;
+
+/**
  * @docid _ui_card_view_SavedEvent
  * @public
  * @type object
@@ -1290,7 +1299,7 @@ export type FocusedCardChanged = EventInfo<dxCardView> & WithCardInfo;
  * @docid
  * @deprecated use Properties instead
  */
-export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends WidgetOptions<dxCardView> {
+export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends Omit<WidgetOptions<dxCardView>, 'onOptionChanged'> {
 
     // #region DataController
 
@@ -1686,6 +1695,13 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
      * @action
      */
     onCardUpdating?: (e: CardUpdatingEvent) => void;
+    /**
+     * @docid
+     * @public
+     * @type_function_param1 e:{ui/card_view:OptionChangedEvent}
+     * @action
+     */
+    onOptionChanged?: (e: OptionChangedEvent) => void;
     /**
      * @docid
      * @public

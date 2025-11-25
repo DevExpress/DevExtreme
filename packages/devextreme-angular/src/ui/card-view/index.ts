@@ -24,7 +24,7 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/card_view';
 
 import DataSource from 'devextreme/data/data_source';
-import { CardCover, CardHeader, ColumnProperties, dxCardViewEditing, HeaderPanel, CardClickEvent, CardDblClickEvent, CardHoverChangedEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, FocusedCardChanged, InitNewCardEvent, SavedEvent, SavingEvent, SelectionChangedEvent, Paging, RemoteOperations, SelectionConfiguration, dxCardViewToolbar } from 'devextreme/ui/card_view';
+import { CardCover, CardHeader, ColumnProperties, dxCardViewEditing, HeaderPanel, CardClickEvent, CardDblClickEvent, CardHoverChangedEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, FocusedCardChanged, InitNewCardEvent, OptionChangedEvent, SavedEvent, SavingEvent, SelectionChangedEvent, Paging, RemoteOperations, SelectionConfiguration, dxCardViewToolbar } from 'devextreme/ui/card_view';
 import { Mode, ScrollbarMode } from 'devextreme/common';
 import { ColumnChooser, FilterPanel, HeaderFilter, Pager, SearchPanel, Sorting } from 'devextreme/common/grids';
 import { DataSourceOptions } from 'devextreme/data/data_source';
@@ -872,7 +872,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     
     
      */
-    @Output() onOptionChanged: EventEmitter<Object>;
+    @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
     
