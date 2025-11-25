@@ -1,5 +1,3 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
-import $ from '@js/core/renderer';
 import { ToolbarModel } from '@ts/scheduler/__tests__/__mock__/model/toolbar';
 
 import { APPOINTMENT_POPUP_CLASS } from '../../../appointment_popup/m_popup';
@@ -131,31 +129,21 @@ export class SchedulerModel {
   }
 
   dblClickDateTableCell(rowIndex = 0, cellIndex = 0): void {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const $cell = $(this.getDateTableCell(rowIndex, cellIndex)) as any;
+    const cellElement = this.getDateTableCell(rowIndex, cellIndex);
 
-    // @ts-expect-error
-    eventsEngine.trigger($cell, 'dxpointerdown');
-    // @ts-expect-error
-    eventsEngine.trigger($cell, 'dxclick');
-    // @ts-expect-error
-    eventsEngine.trigger($cell, 'dxpointerdown');
-    // @ts-expect-error
-    eventsEngine.trigger($cell, 'dxclick');
+    cellElement.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+    cellElement.click();
+    cellElement.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+    cellElement.click();
   }
 
   dblClickAllDayTableCell(cellIndex = 0): void {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const $cell = $(this.getAllDayTableCell(cellIndex)) as any;
+    const cellElement = this.getAllDayTableCell(cellIndex);
 
-    // @ts-expect-error
-    eventsEngine.trigger($cell, 'dxpointerdown');
-    // @ts-expect-error
-    eventsEngine.trigger($cell, 'dxclick');
-    // @ts-expect-error
-    eventsEngine.trigger($cell, 'dxpointerdown');
-    // @ts-expect-error
-    eventsEngine.trigger($cell, 'dxclick');
+    cellElement.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+    cellElement.click();
+    cellElement.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+    cellElement.click();
   }
 }
 
