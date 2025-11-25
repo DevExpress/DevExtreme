@@ -51,11 +51,7 @@
     <DxColumn
       dataField="Email"
       :minWidth="200"
-      cellTemplate="email-cell"
     />
-    <template #email-cell="{ data: { data: employee} }">
-      <Email :email="employee.Email"/>
-    </template>
     <DxColumn
       name="AI Column"
       caption="AI Column"
@@ -71,7 +67,6 @@
 
 <script setup lang="ts">
 import { DxTreeList, DxColumn, DxColumnFixing, DxScrolling, DxPaging } from 'devextreme-vue/tree-list';
-import Email from './Email.vue';
 import Employee from './Employee.vue';
 import Status from './Status.vue';
 import { type IEmployee, employees } from './data.ts';
