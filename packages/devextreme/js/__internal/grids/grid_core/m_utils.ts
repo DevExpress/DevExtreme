@@ -23,6 +23,8 @@ import type { ColumnPoint } from '@ts/grids/grid_core/m_types';
 
 import { isEqualSelectors, isSelectorEqualWithCallback } from './utils/index';
 
+const BASE_LOAD_PANEL_Z_INDEX = 1000;
+
 const DATAGRID_SELECTION_DISABLED_CLASS = 'dx-selection-disabled';
 const DATAGRID_GROUP_OPENED_CLASS = 'dx-datagrid-group-opened';
 const DATAGRID_GROUP_CLOSED_CLASS = 'dx-datagrid-group-closed';
@@ -230,6 +232,7 @@ export default {
         shading: false,
         message: loadPanelOptions.text,
         container: $container,
+        zIndex: BASE_LOAD_PANEL_Z_INDEX,
       }, loadPanelOptions);
 
       that._loadPanel = that._createComponent($('<div>').appendTo($container), LoadPanel, loadPanelOptions);
