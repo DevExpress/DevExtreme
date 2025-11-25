@@ -39,6 +39,10 @@ export class AppointmentPopup {
 
   private customToolbarItems?: ToolbarItem[];
 
+  private customWidth?: number | string;
+
+  private customMaxWidth?: number | string;
+
   state: any;
 
   get popup(): dxPopup {
@@ -100,6 +104,8 @@ export class AppointmentPopup {
     const customPopupOptions = editingConfig?.popup ?? {};
 
     this.customToolbarItems = customPopupOptions.toolbarItems;
+    this.customWidth = customPopupOptions.width;
+    this.customMaxWidth = customPopupOptions.maxWidth;
 
     const defaultPopupConfig = {
       height: 'auto',
@@ -226,10 +232,19 @@ export class AppointmentPopup {
       };
 
       const isFullScreen = isPopupFullScreenNeeded();
-      const maxWidth = isFluent(current()) ? 380 : 420;
 
       this.popup.option('fullScreen', isFullScreen);
-      this.popup.option('maxWidth', isFullScreen ? '100%' : maxWidth);
+
+      if (this.customWidth !== undefined) {
+        this.popup.option('width', this.customWidth);
+      }
+
+      if (this.customMaxWidth !== undefined) {
+        this.popup.option('maxWidth', isFullScreen ? '100%' : this.customMaxWidth);
+      } else {
+        const defaultMaxWidth = isFluent(current()) ? 380 : 420;
+        this.popup.option('maxWidth', isFullScreen ? '100%' : defaultMaxWidth);
+      }
     }
   }
 
