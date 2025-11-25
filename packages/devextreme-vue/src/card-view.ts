@@ -4,7 +4,6 @@ import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import CardView, { Properties } from "devextreme/ui/card_view";
 import  DataSource from "devextreme/data/data_source";
-import  DOMComponent from "devextreme/core/dom_component";
 import {
  CardCover,
  CardHeader,
@@ -33,6 +32,7 @@ import {
  FieldValuePreparedEvent,
  FocusedCardChanged,
  InitNewCardEvent,
+ OptionChangedEvent,
  SavedEvent,
  SavingEvent,
  SelectionChangedEvent,
@@ -149,7 +149,7 @@ import {
  ContentReadyEvent,
  DisposingEvent,
  InitializedEvent,
- OptionChangedEvent,
+ OptionChangedEvent as ButtonOptionChangedEvent,
 } from "devextreme/ui/button";
 import {
  FormItemType,
@@ -353,7 +353,7 @@ const componentConfig = {
     onFocusedCardChanged: Function as PropType<((e: FocusedCardChanged) => void)>,
     onInitialized: Function as PropType<((e: { component: Component<any>, element: any }) => void)>,
     onInitNewCard: Function as PropType<((e: InitNewCardEvent) => void)>,
-    onOptionChanged: Function as PropType<((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
     onSaved: Function as PropType<((e: SavedEvent) => void)>,
     onSaving: Function as PropType<((e: SavingEvent) => void)>,
     onSelectionChanged: Function as PropType<((e: SelectionChangedEvent) => void)>,
@@ -683,7 +683,7 @@ const DxButtonOptionsConfig = {
     onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
     onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
     onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
-    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: ButtonOptionChangedEvent) => void)>,
     rtlEnabled: Boolean,
     stylingMode: String as PropType<ButtonStyle>,
     tabIndex: Number,

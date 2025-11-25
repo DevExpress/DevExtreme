@@ -10796,7 +10796,7 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxCardViewOptions]
    */
   export interface dxCardViewOptions<TCardData = unknown, TKey = unknown>
-    extends WidgetOptions<dxCardView> {
+    extends Omit<WidgetOptions<dxCardView>, 'onOptionChanged'> {
     /**
      * [descr:dxCardViewOptions.dataSource]
      */
@@ -11089,6 +11089,10 @@ declare module DevExpress.ui {
      * [descr:dxCardViewOptions.onCardUpdating]
      */
     onCardUpdating?: (e: DevExpress.ui.dxCardView.CardUpdatingEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onOptionChanged]
+     */
+    onOptionChanged?: (e: DevExpress.ui.dxCardView.OptionChangedEvent) => void;
     /**
      * [descr:dxCardViewOptions.onSaved]
      */
