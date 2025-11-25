@@ -13,6 +13,7 @@ import type { Controllers, OptionChanged, Views } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import { Direction } from './const';
 import { isElementDefined, isFixedColumnIndexOffsetRequired } from './m_keyboard_navigation_utils';
+import type { NavigationDirection } from './types';
 
 export class KeyboardNavigationController extends modules.ViewController {
   private keyDownListener: any;
@@ -99,17 +100,22 @@ export class KeyboardNavigationController extends modules.ViewController {
     return widths[focusedColumnIndex] ?? 0;
   }
 
-  private getNextCellLocation($cell?: dxElementWrapper): number {
+  private getNextCellLocation(
+    $cell: dxElementWrapper | null,
+    direction?: NavigationDirection,
+  ): number {
     const scrollable = this.getScrollable();
+    const isVirtualColumnRender = this._isVirtualColumnRender();
 
-    if (!scrollable || !($cell?.length || this._isVirtualColumnRender())) {
+    if (!scrollable || ($cell === null && !isVirtualColumnRender)) {
       return 0;
     }
 
-    if (!$cell) {
-      const rtlMultiplier = this.option('rtlEnabled') ? -1 : 1;
+    if ($cell === null) {
+      const isLeftDirection = direction === 'previous' || direction === 'previousInRow';
+      const multiplier = isLeftDirection !== this.option('rtlEnabled') ? -1 : 1;
 
-      return scrollable.scrollLeft() + rtlMultiplier * this.getVirtualCellWidth();
+      return scrollable.scrollLeft() + multiplier * this.getVirtualCellWidth();
     }
 
     const scrollPadding = this.getScrollPadding($(scrollable.container()));
@@ -323,8 +329,11 @@ export class KeyboardNavigationController extends modules.ViewController {
     return d.promise();
   }
 
-  protected scrollToNextCell($nextCell?: dxElementWrapper): DeferredObj<void> {
-    const scrollLeft = this.getNextCellLocation($nextCell);
+  protected scrollToNextCell(
+    $nextCell: dxElementWrapper | null,
+    direction?: NavigationDirection,
+  ): DeferredObj<void> {
+    const scrollLeft = this.getNextCellLocation($nextCell, direction);
 
     return this.scrollLeft(scrollLeft);
   }

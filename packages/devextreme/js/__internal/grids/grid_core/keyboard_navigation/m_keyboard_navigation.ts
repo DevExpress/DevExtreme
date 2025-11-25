@@ -98,6 +98,7 @@ import {
   shouldPreventScroll,
 } from './m_keyboard_navigation_utils';
 import { keyboardNavigationScrollableA11yExtender } from './scrollable_a11y';
+import type { NavigationDirection } from './types';
 
 export class KeyboardNavigationController extends KeyboardNavigationControllerCore {
   private _updateFocusTimeout: any;
@@ -864,7 +865,10 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     return !!column && column.command === 'virtual';
   }
 
-  private _processVirtualHorizontalPosition(direction, event: KeyDownEvent): DeferredObj<void> {
+  private _processVirtualHorizontalPosition(
+    direction: NavigationDirection,
+    event: KeyDownEvent,
+  ): DeferredObj<void> {
     const columnIndex = this.getColumnIndex();
     let nextColumnIndex;
     let horizontalScrollPosition = 0;
@@ -924,7 +928,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     ) {
       event.originalEvent.preventDefault();
 
-      return this.scrollToNextCell();
+      return this.scrollToNextCell(null, direction);
     }
 
     // @ts-expect-error
