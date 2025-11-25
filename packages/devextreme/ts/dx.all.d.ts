@@ -10671,8 +10671,8 @@ declare module DevExpress.ui {
      * [descr:_ui_card_view_OptionChangedEvent]
      */
     export type OptionChangedEvent<
-      TCardData = any,
-      TKey = any
+      TCardData = unknown,
+      TKey = unknown
     > = DevExpress.common.core.events.EventInfo<dxCardView<TCardData, TKey>> &
       DevExpress.common.core.events.ChangedOptionInfo;
 

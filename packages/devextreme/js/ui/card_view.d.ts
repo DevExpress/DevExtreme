@@ -722,7 +722,7 @@ export type CardHoverChangedEvent = EventInfo<dxCardView> & WithCardInfo & {
  * @type object
  * @inherits EventInfo,ChangedOptionInfo
  */
-export type OptionChangedEvent<TCardData = any, TKey = any> = EventInfo<dxCardView<TCardData, TKey>> & ChangedOptionInfo;
+export type OptionChangedEvent<TCardData = unknown, TKey = unknown> = EventInfo<dxCardView<TCardData, TKey>> & ChangedOptionInfo;
 
 /**
  * @public
