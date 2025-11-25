@@ -8,7 +8,7 @@
       "executor": "devextreme-nx-infra-plugin:clean",
       "options": {
         "targetDirectory": "./src",
-        "excludePatterns": ["./src/core", "./src/common"]
+        "excludePatterns": ["./src/core", "./src/common", "./src/index.ts"]
       }
     },
     "regenerate": {
