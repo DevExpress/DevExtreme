@@ -915,7 +915,15 @@ export const mergeColumns = (that: ColumnsController, columns, commandColumns, n
   return result;
 };
 
-export const isColumnFixed = (that: ColumnsController, column) => (isDefined(column.fixed) || !column.type ? column.fixed && column.fixedPosition !== StickyPosition.Sticky : that._isColumnFixing());
+export const isColumnFixed = (that: ColumnsController, column) => {
+  const isNotCommandColumn = !column.type || isDefined(column.fixed) || column.type === AI_COLUMN_NAME;
+
+  if (isNotCommandColumn) {
+    return column.fixed && column.fixedPosition !== StickyPosition.Sticky;
+  }
+
+  return that._isColumnFixing();
+};
 
 export const convertOwnerBandToColumnReference = (columns) => {
   columns.forEach((column) => {
