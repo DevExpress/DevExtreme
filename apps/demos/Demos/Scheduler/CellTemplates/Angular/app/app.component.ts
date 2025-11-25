@@ -1,6 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
   Component, enableProdMode, Pipe, PipeTransform, provideZoneChangeDetection } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { DxSchedulerComponent, DxSchedulerModule } from 'devextreme-angular';
 import { DataSource } from 'devextreme-angular/common/data';
 import notify from 'devextreme/ui/notify';
@@ -8,7 +9,7 @@ import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
 import { DxFormComponent } from 'devextreme-angular/ui/form';
 import { DataService } from './app.service';
 
-@Pipe({ name: 'apply', standalone: true })
+@Pipe({ name: 'apply' })
 export class ApplyPipe<TArgs, TReturn> implements PipeTransform {
   transform(func: ((...args: TArgs[]) => TReturn), ...args: TArgs[]): TReturn { return func(...args); }
 }
@@ -31,6 +32,7 @@ if (window && window.config?.packageConfigPaths) {
   imports: [
     DxSchedulerModule,
     ApplyPipe,
+    DatePipe,
   ],
 })
 export class AppComponent {
