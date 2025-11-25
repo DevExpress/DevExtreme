@@ -118,6 +118,8 @@ export interface OverlayProperties extends Properties {
 
   templatesRenderAsynchronously?: boolean;
 
+  zIndex?: number;
+
   _loopFocus?: boolean;
 
   _ignorePreventScrollEventsDeprecation?: boolean;
@@ -877,25 +879,42 @@ class Overlay<
     this._toggleSubscriptions(visible);
   }
 
+  _handleZIndexOptionChanged(): void {
+    const { zIndex } = this.option();
+
+    this._zIndex = zIndex ?? zIndexPool.create(this._zIndexInitValue());
+
+    this._updateZIndexStackPosition(this._isVisible());
+  }
+
   _updateZIndexStackPosition(pushToStack: boolean): void {
     const overlayStack = this._overlayStack();
     // @ts-expect-error this and Overlay have no overlap
     const index = overlayStack.indexOf(this);
+    const isInStack = index !== -1;
+    const { zIndex } = this.option();
 
-    if (pushToStack) {
-      if (index === -1) {
-        this._zIndex = zIndexPool.create(this._zIndexInitValue());
-
-        // @ts-expect-error this and Overlay have no overlap
-        overlayStack.push(this);
+    if (!pushToStack) {
+      if (isInStack) {
+        overlayStack.splice(index, 1);
+        zIndexPool.remove(this._zIndex);
       }
 
-      this._$wrapper.css('zIndex', this._zIndex);
-      this._$content.css('zIndex', this._zIndex);
-    } else if (index !== -1) {
-      overlayStack.splice(index, 1);
-      zIndexPool.remove(this._zIndex);
+      return;
     }
+
+    if (!isInStack) {
+      this._zIndex = zIndex ?? zIndexPool.create(this._zIndexInitValue());
+      // @ts-expect-error this and Overlay have no overlap
+      overlayStack.push(this);
+    }
+
+    this._updateZIndex();
+  }
+
+  _updateZIndex(): void {
+    this._$wrapper.css('zIndex', this._zIndex);
+    this._$content.css('zIndex', this._zIndex);
   }
 
   _toggleShading(visible?: boolean): void {
@@ -1550,6 +1569,9 @@ class Overlay<
         // @ts-expect-error ts-error
         this._initHideTopOverlayHandler(value);
         this._toggleHideTopOverlayCallback(this._isVisible());
+        break;
+      case 'zIndex':
+        this._handleZIndexOptionChanged();
         break;
       case 'hideOnParentScroll':
       case '_hideOnParentScrollTarget': {

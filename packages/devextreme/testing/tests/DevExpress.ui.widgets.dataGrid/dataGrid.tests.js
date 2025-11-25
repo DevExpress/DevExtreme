@@ -1260,6 +1260,21 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // assert
         assert.strictEqual(onContentReadySpy.callCount, 1, 'onContentReadySpy call count');
     });
+
+    QUnit.test('Load panel has custom z-index (T1308742)', function(assert) {
+        const dataGrid = createDataGrid({
+            dataSource: {
+                load: function() {
+                    return;
+                }
+            }
+        });
+
+        const loadPanel = dataGrid.getView('rowsView')._loadPanel;
+        const loadPanelZIndex = loadPanel._zIndex;
+
+        assert.strictEqual(loadPanelZIndex, 1000, 'load z-index is set to 1000 by default');
+    });
 });
 
 
