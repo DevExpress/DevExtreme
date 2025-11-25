@@ -8,6 +8,13 @@ import "./form-customization.css";
 
 const Scheduler = wrapDxWithReact<Properties>(dxScheduler);
 
+const iconsShowModeArgType = {
+  "editing.form.iconsShowMode": {
+    control: "radio",
+    options: ["both", "main", "recurrence", "none"],
+  },
+} as Record<string, unknown>;
+
 const meta: Meta<typeof Scheduler> = {
   title: "Components/Scheduler/Form Customization",
   component: Scheduler,
@@ -20,20 +27,22 @@ export default meta;
 
 type Story = StoryObj<typeof Scheduler>;
 
-const baseConfig: Properties = {
+const baseConfig = {
   height: 600,
   views: ["day", "week", "workWeek", "month"],
   currentView: "week",
   startDayHour: 9,
   currentDate: new Date(2021, 3, 29),
   dataSource: data,
-};
+  "editing.form.iconsShowMode": "main",
+} as Properties;
 
 export const DefaultForm: Story = {
   args: {
     ...baseConfig,
     resources,
   },
+  argTypes: iconsShowModeArgType,
 };
 
 interface ShowOnlySpecificItemsArgs extends Properties {
@@ -70,6 +79,7 @@ export const ShowOnlySpecificItems: Story = {
     showResourcesGroup: {
       control: "boolean",
     },
+    ...iconsShowModeArgType,
   } as Record<string, unknown>,
   render: (args: ShowOnlySpecificItemsArgs) => {
     const items: unknown[] = [];
@@ -83,7 +93,12 @@ export const ShowOnlySpecificItems: Story = {
       <Scheduler
         {...baseConfig}
         resources={resources}
-        editing={{ form: { items } } as Properties['editing']}
+        editing={{ 
+          form: { 
+            items,
+            iconsShowMode: args["editing.form.iconsShowMode"]
+          } 
+        } as Properties['editing']}
       />
     );
   },
@@ -130,6 +145,7 @@ export const ReorderItems: Story = {
       control: { type: "select" },
       options: positions,
     },
+    ...iconsShowModeArgType,
   } as Record<string, unknown>,
   render: (args: ReorderItemsArgs) => {
     const groups = [
@@ -147,7 +163,12 @@ export const ReorderItems: Story = {
       <Scheduler
         {...baseConfig}
         resources={resources}
-        editing={{ form: { items } } as Properties['editing']}
+        editing={{ 
+          form: { 
+            items,
+            iconsShowMode: args["editing.form.iconsShowMode"]
+          } 
+        } as Properties['editing']}
       />
     );
   },
@@ -157,126 +178,146 @@ export const AddCustomItems: Story = {
   args: {
     ...baseConfig,
     resources,
-    editing: {
-      form: {
-        items: [
-          "subjectGroup",
-          "dateGroup",
-          {
-            name: "likeGroup",
-            itemType: "group",
-            caption: "Feedback",
+  },
+  argTypes: iconsShowModeArgType,
+  render: (args) => {
+    return (
+      <Scheduler
+        {...baseConfig}
+        resources={resources}
+        editing={{
+          form: {
             items: [
+              "subjectGroup",
+              "dateGroup",
               {
-                name: "commentIcon",
-                template: () => {
-                  const element = document.createElement("div");
-                  element.classList.add("dx-icon", "dx-icon-comment");
-                  return element;
-                },
-              },
-              {
-                itemType: "simple",
-                editorType: "dxTextArea",
-                name: "comments",
-                editorOptions: {
-                  placeholder: "Your comments...",
-                  height: 100
-                }
-              },
-              {
-                name: "likeButton",
-                itemType: "button",
-                buttonOptions: {
-                  icon: "like",
-                  type: "success",
-                  text: "Like",
-                  onClick: () => {
-                    alert("You liked this appointment!");
+                name: "likeGroup",
+                itemType: "group",
+                caption: "Feedback",
+                items: [
+                  {
+                    name: "commentIcon",
+                    template: () => {
+                      const element = document.createElement("div");
+                      element.classList.add("dx-icon", "dx-icon-comment");
+                      return element;
+                    },
                   },
-                },
+                  {
+                    itemType: "simple",
+                    editorType: "dxTextArea",
+                    name: "comments",
+                    editorOptions: {
+                      placeholder: "Your comments...",
+                      height: 100
+                    }
+                  },
+                  {
+                    name: "likeButton",
+                    itemType: "button",
+                    buttonOptions: {
+                      icon: "like",
+                      type: "success",
+                      text: "Like",
+                      onClick: () => {
+                        alert("You liked this appointment!");
+                      },
+                    },
+                  },
+                ],
               },
             ],
-          },
-        ],
-      }
-    },
-  } as Record<string, unknown>,
+            iconsShowMode: args["editing.form.iconsShowMode"]
+          }
+        } as Properties['editing']}
+      />
+    );
+  },
 };
 
 export const CustomizeExistingItems: Story = {
   args: {
     ...baseConfig,
     resources,
-    editing: {
-      form: {
-        items: [
-          {
-            name: "subjectGroup",
+  },
+  argTypes: iconsShowModeArgType,
+  render: (args) => {
+    return (
+      <Scheduler
+        {...baseConfig}
+        resources={resources}
+        editing={{
+          form: {
             items: [
               {
-                name: "subjectIcon",
-                itemType: "button",
-                buttonOptions: {
-                  elementAttr: { id: 'customize-subjectIcon', class: "scheduler-form-custom-icon-button" },
-                  icon: "floppy",
-                  stylingMode: "text",
-                  onClick: () => {
-                    alert("Subject icon clicked!");
+                name: "subjectGroup",
+                items: [
+                  {
+                    name: "subjectIcon",
+                    itemType: "button",
+                    buttonOptions: {
+                      elementAttr: { id: 'customize-subjectIcon', class: "scheduler-form-custom-icon-button" },
+                      icon: "floppy",
+                      stylingMode: "text",
+                      onClick: () => {
+                        alert("Subject icon clicked!");
+                      },
+                    },
                   },
-                },
+                  {
+                    name: "subject",
+                    label: { text: "Event Title" },
+                    editorOptions: {
+                      placeholder: "Enter event title..."
+                    }
+                  },
+                ],
               },
               {
-                name: "subject",
-                label: { text: "Event Title" },
-                editorOptions: {
-                  placeholder: "Enter event title..."
-                }
+                name: "dateGroup",
+                items: [
+                  {
+                    name: "startDate",
+                    label: { text: "From" },
+                    editorOptions: {
+                      width: "100%"
+                    }
+                  },
+                  {
+                    name: "endDate",
+                    label: { text: "To" },
+                    editorOptions: {
+                      width: "100%"
+                    }
+                  },
+                  {
+                    colSpan: 2,
+                    name: "allDay",
+                    label: { text: "All day event" }
+                  },
+                ],
+              },
+              {
+                name: "descriptionGroup",
+                items: [
+                  {
+                    colSpan: 2,
+                    name: "description",
+                    label: { text: "Notes" },
+                    editorOptions: {
+                      height: 120,
+                      placeholder: "Add notes about this event..."
+                    }
+                  }
+                ]
               },
             ],
+            iconsShowMode: args["editing.form.iconsShowMode"]
           },
-          {
-            name: "dateGroup",
-            items: [
-              {
-                name: "startDate",
-                label: { text: "From" },
-                editorOptions: {
-                  width: "100%"
-                }
-              },
-              {
-                name: "endDate",
-                label: { text: "To" },
-                editorOptions: {
-                  width: "100%"
-                }
-              },
-              {
-                colSpan: 2,
-                name: "allDay",
-                label: { text: "All day event" }
-              },
-            ],
-          },
-          {
-            name: "descriptionGroup",
-            items: [
-              {
-                colSpan: 2,
-                name: "description",
-                label: { text: "Notes" },
-                editorOptions: {
-                  height: 120,
-                  placeholder: "Add notes about this event..."
-                }
-              }
-            ]
-          },
-        ],
-      },
-    },
-  } as Record<string, unknown>,
+        } as Properties['editing']}
+      />
+    );
+  },
 };
 
 export const RTL: Story = {
@@ -285,42 +326,29 @@ export const RTL: Story = {
     resources,
     rtlEnabled: true,
   },
+  argTypes: iconsShowModeArgType,
 };
 
 export const LegacyPopup: Story = {
   args: {
     ...baseConfig,
     resources,
-    editing: {
-      legacyForm: true,
-    },
-  } as Record<string, unknown>,
-};
-
-interface IconsShowModeArgs extends Properties {
-  "editing.form.iconsShowMode"?: "both" | "main" | "recurrence" | "never";
-}
-
-export const IconsShowMode: Story = {
-  args: {
-    ...baseConfig,
-    resources,
-    editing: {
-      form: {
-        iconsShowMode: "main",
-      },
-    },
-  } as IconsShowModeArgs,
-  argTypes: {
-    editing: {
-      form: {
-        iconsShowMode: {
-          control: "radio",
-          options: ["both", "main", "recurrence", "never"],
-        },
-      },
-    },
-  } as Record<string, unknown>,
+  },
+  argTypes: iconsShowModeArgType,
+  render: (args) => {
+    return (
+      <Scheduler
+        {...baseConfig}
+        resources={resources}
+        editing={{
+          legacyForm: true,
+          form: {
+            iconsShowMode: args["editing.form.iconsShowMode"]
+          }
+        } as Properties['editing']}
+      />
+    );
+  },
 };
 
 interface ResourceGroupColSpanArgs extends Properties {
@@ -338,6 +366,7 @@ export const ResourceGroupColSpan: Story = {
       control: { type: "select" },
       options: [1, 2, 3],
     },
+    ...iconsShowModeArgType,
   } as Record<string, unknown>,
   render: (args: ResourceGroupColSpanArgs) => {
     const items: unknown[] = [
@@ -354,7 +383,12 @@ export const ResourceGroupColSpan: Story = {
       <Scheduler
         {...baseConfig}
         resources={resources}
-        editing={{ form: { items } } as Properties['editing']}
+        editing={{ 
+          form: { 
+            items,
+            iconsShowMode: args["editing.form.iconsShowMode"]
+          } 
+        } as Properties['editing']}
       />
     );
   },
