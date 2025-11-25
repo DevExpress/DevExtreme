@@ -27,9 +27,9 @@
   [width]="200"
 >
   <div *dxTemplate="let e of 'item'">
-    <div *ngIf="e.color">
-      <div class="item-badge" [ngStyle]="{ backgroundColor: e.color }"></div>
-    </div>
+    @if(e.color) {
+    <div class="item-badge" [ngStyle]="{ backgroundColor: e.color }"></div>
+    }
     <div class="item-text">{{ e.text }}</div>
   </div>
 </dx-context-menu>

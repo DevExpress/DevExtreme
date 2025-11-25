@@ -56,23 +56,21 @@
   </div>
 
   <div *dxTemplate="let model of 'tooltip-template'">
-    <ng-container
-      *ngIf="getMovieById | apply : model.appointmentData.movieId as movie"
-    >
-      <div class="movie-tooltip">
-        <img [src]="movie.image" />
-        <div class="movie-info">
-          <div class="movie-title">
-            {{ movie.text + " (" + movie.year + ")" }}
-          </div>
-          <div>
-            {{ "Director: " + movie.director }}
-          </div>
-          <div>
-            {{ "Duration: " + movie.duration + " minutes" }}
-          </div>
+    @if(getMovieById | apply : model.appointmentData.movieId as movie) {
+    <div class="movie-tooltip">
+      <img [src]="movie.image" />
+      <div class="movie-info">
+        <div class="movie-title">
+          {{ movie.text + " (" + movie.year + ")" }}
+        </div>
+        <div>
+          {{ "Director: " + movie.director }}
+        </div>
+        <div>
+           {{ "Duration: " + movie.duration + " minutes" }}
         </div>
       </div>
-    </ng-container>
+    </div>
+    }
   </div>
 </dx-scheduler>

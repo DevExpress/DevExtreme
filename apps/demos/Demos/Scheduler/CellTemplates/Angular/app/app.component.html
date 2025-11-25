@@ -44,6 +44,8 @@
     [ngClass]="{ dinner: isDinner | apply : timeCell.date }"
   >
     {{ timeCell.text }}
-    <div *ngIf="hasCoffeeCupIcon | apply : timeCell.date" class="cafe"></div>
+    @if(hasCoffeeCupIcon | apply : timeCell.date) {
+      <div class="cafe"></div>
+    }
   </div>
 </dx-scheduler>

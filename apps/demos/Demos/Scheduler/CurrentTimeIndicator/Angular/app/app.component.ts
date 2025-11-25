@@ -1,8 +1,6 @@
+import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  NgModule, ViewChild, Component, enableProdMode, Pipe, PipeTransform,
-} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+  ViewChild, Component, enableProdMode, Pipe, PipeTransform, provideZoneChangeDetection } from '@angular/core';
 import {
   DxSchedulerModule,
   DxSchedulerComponent,
@@ -14,7 +12,7 @@ import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
 import { DxNumberBoxTypes } from 'devextreme-angular/ui/number-box';
 import { Appointment, Service, MovieData } from './app.service';
 
-@Pipe({ name: 'apply', standalone: true })
+@Pipe({ name: 'apply'})
 export class ApplyPipe<TArgs, TReturn> implements PipeTransform {
   transform(func: ((...args: TArgs[]) => TReturn), ...args: TArgs[]): TReturn { return func(...args); }
 }
@@ -30,12 +28,17 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  standalone: false,
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
   preserveWhitespaces: true,
+  imports: [
+    DxSchedulerModule,
+    DxSwitchModule,
+    DxNumberBoxModule,
+    ApplyPipe,
+  ],
 })
 export class AppComponent {
   @ViewChild(DxSchedulerComponent, { static: false }) scheduler: DxSchedulerComponent;
@@ -78,17 +81,8 @@ export class AppComponent {
   getMovieById = (id: string | number) => Query(this.moviesData).filter(['id', '=', id]).toArray()[0];
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxSchedulerModule,
-    DxSwitchModule,
-    DxNumberBoxModule,
-    ApplyPipe,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});
