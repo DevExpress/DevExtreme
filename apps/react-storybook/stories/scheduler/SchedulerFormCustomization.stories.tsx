@@ -93,11 +93,11 @@ export const ShowOnlySpecificItems: Story = {
       <Scheduler
         {...baseConfig}
         resources={resources}
-        editing={{ 
-          form: { 
+        editing={{
+          form: {
             items,
             iconsShowMode: args["editing.form.iconsShowMode"]
-          } 
+          }
         } as Properties['editing']}
       />
     );
@@ -163,11 +163,11 @@ export const ReorderItems: Story = {
       <Scheduler
         {...baseConfig}
         resources={resources}
-        editing={{ 
-          form: { 
+        editing={{
+          form: {
             items,
             iconsShowMode: args["editing.form.iconsShowMode"]
-          } 
+          }
         } as Properties['editing']}
       />
     );
@@ -333,7 +333,8 @@ export const LegacyPopup: Story = {
   args: {
     ...baseConfig,
     resources,
-  },
+    "editing.form.iconsShowMode": "none",
+  } as Properties,
   argTypes: iconsShowModeArgType,
   render: (args) => {
     return (
@@ -341,8 +342,18 @@ export const LegacyPopup: Story = {
         {...baseConfig}
         resources={resources}
         editing={{
-          legacyForm: true,
           form: {
+            items: [
+              {
+                name: "mainGroup",
+                items: [
+                  "subjectGroup",
+                  "dateGroup",
+                  "descriptionGroup",
+                  "resourcesGroup",
+                ]
+              },
+            ],
             iconsShowMode: args["editing.form.iconsShowMode"]
           }
         } as Properties['editing']}
@@ -359,7 +370,7 @@ export const ResourceGroupColSpan: Story = {
   args: {
     ...baseConfig,
     resources,
-    resourceGroupColSpan: 1,
+    resourceGroupColSpan: 2,
   } as ResourceGroupColSpanArgs,
   argTypes: {
     resourceGroupColSpan: {
@@ -369,25 +380,29 @@ export const ResourceGroupColSpan: Story = {
     ...iconsShowModeArgType,
   } as Record<string, unknown>,
   render: (args: ResourceGroupColSpanArgs) => {
-    const items: unknown[] = [
-      "subjectGroup",
-      "dateGroup",
-      {
-        name: "resourcesGroup",
-        colSpan: args.resourceGroupColSpan ?? 1,
-      },
-      "descriptionGroup",
-    ];
-
     return (
       <Scheduler
         {...baseConfig}
         resources={resources}
-        editing={{ 
-          form: { 
-            items,
+        editing={{
+          form: {
+            items: [
+              {
+                name: "mainGroup",
+                colCount: 2,
+                items: [
+                  "subjectGroup",
+                  "dateGroup",
+                  "descriptionGroup", 
+                  {
+                    name: "resourcesGroup",
+                    colSpan: args.resourceGroupColSpan ?? 2
+                  }
+                ]
+              },
+            ],
             iconsShowMode: args["editing.form.iconsShowMode"]
-          } 
+          }
         } as Properties['editing']}
       />
     );
