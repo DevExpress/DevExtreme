@@ -10400,31 +10400,6 @@ declare module DevExpress.ui {
         key: TKey;
       };
     /**
-     * [descr:_ui_card_view_CardSavedEvent]
-     */
-    export type CardSavedEvent =
-      DevExpress.common.core.events.EventInfo<dxCardView> & {
-        /**
-         * [descr:_ui_card_view_CardSavedEvent.changes]
-         */
-        changes: DevExpress.common.grids.DataChange[];
-      };
-    /**
-     * [descr:_ui_card_view_CardSavingEvent]
-     */
-    export type CardSavingEvent =
-      DevExpress.common.core.events.EventInfo<dxCardView> &
-        DevExpress.common.core.events.Cancelable & {
-          /**
-           * [descr:_ui_card_view_CardSavingEvent.promise]
-           */
-          promise?: PromiseLike<void>;
-          /**
-           * [descr:_ui_card_view_CardSavingEvent.changes]
-           */
-          changes: DevExpress.common.grids.DataChange[];
-        };
-    /**
      * [descr:CardTemplateData]
      */
     export type CardTemplateData = {
@@ -10686,6 +10661,31 @@ declare module DevExpress.ui {
       TCardData = unknown,
       TKey = unknown
     > = dxCardViewOptions<TCardData, TKey>;
+    /**
+     * [descr:_ui_card_view_SavedEvent]
+     */
+    export type SavedEvent =
+      DevExpress.common.core.events.EventInfo<dxCardView> & {
+        /**
+         * [descr:_ui_card_view_SavedEvent.changes]
+         */
+        changes: DevExpress.common.grids.DataChange[];
+      };
+    /**
+     * [descr:_ui_card_view_SavingEvent]
+     */
+    export type SavingEvent =
+      DevExpress.common.core.events.EventInfo<dxCardView> &
+        DevExpress.common.core.events.Cancelable & {
+          /**
+           * [descr:_ui_card_view_SavingEvent.promise]
+           */
+          promise?: PromiseLike<void>;
+          /**
+           * [descr:_ui_card_view_SavingEvent.changes]
+           */
+          changes: DevExpress.common.grids.DataChange[];
+        };
     /**
      * [descr:_ui_card_view_SelectionChangedEvent]
      */
@@ -11090,13 +11090,13 @@ declare module DevExpress.ui {
      */
     onCardUpdating?: (e: DevExpress.ui.dxCardView.CardUpdatingEvent) => void;
     /**
-     * [descr:dxCardViewOptions.onCardSaved]
+     * [descr:dxCardViewOptions.onSaved]
      */
-    onCardSaved?: (e: DevExpress.ui.dxCardView.CardSavedEvent) => void;
+    onSaved?: (e: DevExpress.ui.dxCardView.SavedEvent) => void;
     /**
-     * [descr:dxCardViewOptions.onCardSaving]
+     * [descr:dxCardViewOptions.onSaving]
      */
-    onCardSaving?: (e: DevExpress.ui.dxCardView.CardSavingEvent) => void;
+    onSaving?: (e: DevExpress.ui.dxCardView.SavingEvent) => void;
 
     /**
      * [descr:dxCardViewOptions.selectedCardKeys]
