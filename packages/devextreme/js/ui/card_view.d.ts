@@ -1126,34 +1126,34 @@ export type CardUpdatingEvent<TCardData = unknown, TKey = unknown> = EventInfo<d
 };
 
 /**
- * @docid _ui_card_view_CardSavedEvent
+ * @docid _ui_card_view_SavedEvent
  * @public
  * @type object
  * @inherits EventInfo
  */
-export type CardSavedEvent = EventInfo<dxCardView> & {
+export type SavedEvent = EventInfo<dxCardView> & {
     /**
-     * @docid _ui_card_view_CardSavedEvent.changes
+     * @docid _ui_card_view_SavedEvent.changes
      * @public
      */
     changes: DataChange[];
 };
 
 /**
- * @docid _ui_card_view_CardSavingEvent
+ * @docid _ui_card_view_SavingEvent
  * @public
  * @type object
  * @inherits EventInfo,Cancelable
  */
-export type CardSavingEvent = EventInfo<dxCardView> & Cancelable & {
+export type SavingEvent = EventInfo<dxCardView> & Cancelable & {
     /**
-     * @docid _ui_card_view_CardSavingEvent.promise
+     * @docid _ui_card_view_SavingEvent.promise
      * @type Promise<void>
      * @public
      */
     promise?: PromiseLike<void>;
     /**
-     * @docid _ui_card_view_CardSavingEvent.changes
+     * @docid _ui_card_view_SavingEvent.changes
      * @public
      */
     changes: DataChange[];
@@ -1689,17 +1689,17 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
     /**
      * @docid
      * @public
-     * @type_function_param1 e:{ui/card_view:CardSavedEvent}
+     * @type_function_param1 e:{ui/card_view:SavedEvent}
      * @action
      */
-    onCardSaved?: (e: CardSavedEvent) => void;
+    onSaved?: (e: SavedEvent) => void;
     /**
      * @docid
      * @public
-     * @type_function_param1 e:{ui/card_view:CardSavingEvent}
+     * @type_function_param1 e:{ui/card_view:SavingEvent}
      * @action
      */
-    onCardSaving?: (e: CardSavingEvent) => void;
+    onSaving?: (e: SavingEvent) => void;
 
     // #endregion
 
