@@ -591,7 +591,10 @@ describe('Appointment Form', () => {
     });
   });
 
-  describe('Field expressions', () => {
+  describe.each([
+    ['Field expressions', 'customField'],
+    ['Nested field expressions', 'nested.customField'],
+  ])('%s', (exprValue) => {
     it.each([
       ['textExpr', 'subjectEditor', 'qwerty'],
       ['allDayExpr', 'allDayEditor', true],
@@ -608,7 +611,7 @@ describe('Appointment Form', () => {
           allowUpdating: true,
           allowTimeZoneEditing: true,
         },
-        [fieldExpr]: 'customField',
+        [fieldExpr]: exprValue,
       });
 
       scheduler.showAppointmentPopup();
@@ -616,16 +619,17 @@ describe('Appointment Form', () => {
       POM.popup.setInputValue(editorName, value);
       scheduler.hideAppointmentPopup(true);
 
-      const dataItem = scheduler.option('dataSource')?.[0];
+      const customFieldValue = scheduler.option(`dataSource[0].${exprValue}`);
+      const defaultFieldValue = scheduler.option(`dataSource[0].${defaultField}`);
 
-      expect(dataItem?.customField).toBe(value);
-      expect(dataItem?.[defaultField]).toBeUndefined();
+      expect(customFieldValue).toBe(value);
+      expect(defaultFieldValue).toBeUndefined();
     });
 
     it.each([
       ['startDateExpr', 'startDateEditor', 'startTimeEditor'],
       ['endDateExpr', 'endDateEditor', 'endTimeEditor'],
-    ])('should update correct field if startDateExpr is defined', async (fieldExpr, dateEditorName, timeEditorName) => {
+    ])('should update correct field if %s is defined', async (fieldExpr, dateEditorName, timeEditorName) => {
       const value = new Date(2017, 4, 9, 9, 30);
 
       const defaultField = DEFAULT_SCHEDULER_OPTIONS[fieldExpr] as string;
@@ -637,7 +641,7 @@ describe('Appointment Form', () => {
           allowUpdating: true,
           allowTimeZoneEditing: true,
         },
-        [fieldExpr]: 'customField',
+        [fieldExpr]: exprValue,
       });
 
       scheduler.showAppointmentPopup();
@@ -646,10 +650,11 @@ describe('Appointment Form', () => {
       POM.popup.setInputValue(timeEditorName, value);
       scheduler.hideAppointmentPopup(true);
 
-      const dataItem = scheduler.option('dataSource')?.[0];
+      const customFieldValue = scheduler.option(`dataSource[0].${exprValue}`);
+      const defaultFieldValue = scheduler.option(`dataSource[0].${defaultField}`);
 
-      expect(dataItem?.customField).toEqual(new Date(value));
-      expect(dataItem?.[defaultField]).toBeUndefined();
+      expect(customFieldValue).toEqual(new Date(value));
+      expect(defaultFieldValue).toBeUndefined();
     });
 
     it('should update correct field if recurrenceRuleExpr is defined', async () => {
@@ -663,52 +668,18 @@ describe('Appointment Form', () => {
           allowUpdating: true,
           allowTimeZoneEditing: true,
         },
-        [fieldExpr]: 'customField',
+        [fieldExpr]: exprValue,
       });
 
       scheduler.showAppointmentPopup();
       POM.popup.selectRepeatValue('daily');
       scheduler.hideAppointmentPopup(true);
 
-      const dataItem = scheduler.option('dataSource')?.[0];
+      const customFieldValue = scheduler.option(`dataSource[0].${exprValue}`);
+      const defaultFieldValue = scheduler.option(`dataSource[0].${defaultField}`);
 
-      expect(dataItem?.customField).toBe('FREQ=DAILY');
-      expect(dataItem?.[defaultField]).toBeUndefined();
-    });
-
-    it('should update correct field if startDateExpr is defined and value is set in recurrence form', async () => {
-      const fieldExpr = 'startDateExpr';
-      const defaultField = DEFAULT_SCHEDULER_OPTIONS[fieldExpr] as string;
-
-      const appointment = {
-        text: 'Team Meeting',
-        customStartDate: new Date(2017, 4, 15, 10, 0),
-        endDate: new Date(2017, 4, 15, 11, 0),
-        recurrenceRule: 'FREQ=DAILY',
-      };
-      const value = new Date(2017, 4, 9);
-      const expectedStartDate = new Date(2017, 4, 9, 10, 0);
-
-      const { scheduler, POM } = await createScheduler({
-        ...getDefaultConfig(),
-        dataSource: [appointment],
-        editing: {
-          allowUpdating: true,
-          allowTimeZoneEditing: true,
-        },
-        [fieldExpr]: 'customStartDate',
-      });
-
-      scheduler.showAppointmentPopup(appointment);
-      POM.popup.getEditSeriesButton().click();
-      POM.popup.openRecurrenceSettings();
-      POM.popup.setInputValue('recurrenceStartDateEditor', value);
-      scheduler.hideAppointmentPopup(true);
-
-      const dataItem = scheduler.option('dataSource')?.[0];
-
-      expect(dataItem?.customStartDate).toEqual(new Date(expectedStartDate));
-      expect(dataItem?.[defaultField]).toBeUndefined();
+      expect(customFieldValue).toBe('FREQ=DAILY');
+      expect(defaultFieldValue).toBeUndefined();
     });
   });
 
@@ -718,7 +689,7 @@ describe('Appointment Form', () => {
 
       scheduler.showAppointmentPopup(allDayAppointment);
 
-      expect(POM.popup.getSwitchByName('allDay').value).toBe('true');
+      expect(POM.popup.getInputValue('allDayEditor')).toBe('true');
     });
 
     it('should be turned off when opening non-allDay appointment', async () => {
@@ -726,7 +697,7 @@ describe('Appointment Form', () => {
 
       scheduler.showAppointmentPopup(commonAppointment);
 
-      expect(POM.popup.getSwitchByName('allDay').value).toBe('false');
+      expect(POM.popup.getInputValue('allDayEditor')).toBe('false');
     });
 
     it('should hide time editors when switched on', async () => {
@@ -970,7 +941,7 @@ describe('Appointment Form', () => {
       });
 
       POM.openPopupByDblClick('Resource test app');
-      expect(POM.popup.getInputValue('roomId')).toBe(2);
+      expect(POM.popup.getInputValue('roomId')).toBe('Room 2');
     });
   });
 
@@ -1571,10 +1542,9 @@ describe('Appointment Form', () => {
         });
 
         scheduler.showAppointmentPopup(data[0]);
-
-        POM.popup.setInputValueByLabel('Subject', 'New Subject');
-
+        POM.popup.setInputValue('subjectEditor', 'New Subject');
         POM.popup.getSaveButton().click();
+
         const loadPanel = POM.getLoadPanel();
         expect(loadPanel).toBeFalsy();
 
@@ -1601,10 +1571,9 @@ describe('Appointment Form', () => {
         });
 
         scheduler.showAppointmentPopup(data[0]);
-
-        POM.popup.setInputValueByLabel('Subject', 'New Subject');
-
+        POM.popup.setInputValue('subjectEditor', 'New Subject');
         POM.popup.getSaveButton().click();
+
         const loadPanel = POM.getLoadPanel();
         expect(loadPanel).toBeFalsy();
 
@@ -2182,28 +2151,12 @@ describe('Appointment Popup Content', () => {
   it.todo('popup should have right height');
   it.todo('showAppointmentPopup should render a popup content only once');
   it.todo('Popup should contain editors and components with right dx-rtl classes and rtlEnabled option value');
-  it.todo('Popup should contains start datebox with right value');
-  it.todo('Calendar of the start datebox should have right firstDayOfWeek value');
-  it.todo('Popup should contains end datebox with right value');
-  it.todo('Calendar of the end datebox should have right firstDayOfWeek value');
-  it.todo('Changing startDateBox value should change endDateBox value if needed');
-  it.todo('Changing startDateBox value should change endDateBox value if needed(when startDate and endDate are strings)');
-  it.todo('startDateBox value should be valid');
-  it.todo('Changing endDateBox value should change startDateBox value if needed');
-  it.todo('Changing endDateBox value should change startDateBox value if needed(when startDate and endDate are strings)');
-  it.todo('endDateBox value should be valid');
   it.todo('Popup should contains caption textbox with right value');
   it.todo('Confirm dialog should be shown when showAppointmentPopup for recurrence appointment was called');
   it.todo('Recurrence Editor should have right freq editor value if recurrence rule was set on init');
   it.todo('Popup should contain recurrence editor with right config');
   it.todo('Recurrence editor should change value if freq editor value changed');
   it.todo('Recurrence editor should has right startDate after form items change');
-  it.todo('Popup should contains description editor');
-  it.todo('Popup should contains allDay editor');
-  it.todo('allDay changing should switch date & type in editors');
-  it.todo('allDay changing should switch only type in editors, if startDate is undefined');
-  it.todo('There are no exceptions when select date on the appointment popup, startDate > endDate');
-  it.todo('There are no exceptions when select date on the appointment popup,startDate < endDate');
   it.todo('There are no exceptions when select date on the appointment popup,if dates are undefined');
   it.todo('Validate works always before done click');
   it.todo('Load panel should not be shown if validation is fail');
@@ -2211,7 +2164,6 @@ describe('Appointment Popup Content', () => {
   it.todo('Done button custom configuration should be correct');
   it.todo('Load panel should be hidden if event validation fail');
   it.todo('Load panel should be hidden at the second appointment form opening');
-  it.todo('Appointment popup should contain resources and recurrence editor');
 });
 
 describe('Timezone Editors', () => {

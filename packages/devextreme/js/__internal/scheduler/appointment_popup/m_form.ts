@@ -171,21 +171,21 @@ export class AppointmentForm {
 
   get startDate(): Date | null {
     const { startDateExpr } = this.scheduler.getDataAccessors().expr;
-    const value = this.formData[startDateExpr];
+    const value = this.getFormDataField(startDateExpr);
 
     return value ? new Date(dateSerialization.deserializeDate(value)) : null;
   }
 
   get endDate(): Date | null {
     const { endDateExpr } = this.scheduler.getDataAccessors().expr;
-    const value = this.formData[endDateExpr];
+    const value = this.getFormDataField(endDateExpr);
 
     return value ? new Date(dateSerialization.deserializeDate(value)) : null;
   }
 
   get recurrenceRuleRaw(): string | null {
     const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
-    const value = this.formData[recurrenceRuleExpr] as string | undefined;
+    const value = this.getFormDataField(recurrenceRuleExpr) as string | undefined;
 
     return value ?? null;
   }
@@ -193,6 +193,10 @@ export class AppointmentForm {
   constructor(scheduler: any) {
     this.scheduler = scheduler;
     this.resourceManager = scheduler.getResourceManager();
+  }
+
+  private getFormDataField(field: string): any {
+    return this.dxForm.option(`formData.${field}`);
   }
 
   dispose(): void {
@@ -969,7 +973,7 @@ export class AppointmentForm {
 
   private updateDateTimeEditorsVisibility(): void {
     const { allDayExpr } = this.scheduler.getDataAccessors().expr;
-    const visible = !this.formData[allDayExpr];
+    const visible = !this.getFormDataField(allDayExpr);
 
     const startDateGroupPath = `${MAIN_GROUP_NAME}.${DATE_GROUP_NAME}.${START_DATE_GROUP_NAME}.${START_DATE_TIME_GROUP_NAME}`;
     const endDateGroupPath = `${MAIN_GROUP_NAME}.${DATE_GROUP_NAME}.${END_DATE_GROUP_NAME}.${END_DATE_TIME_GROUP_NAME}`;
