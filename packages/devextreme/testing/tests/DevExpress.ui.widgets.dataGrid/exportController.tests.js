@@ -8,6 +8,7 @@ import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import ArrayStore from 'common/data/array_store';
 import messageLocalization from 'common/core/localization/message';
 import { prepareItems } from '__internal/grids/grid_core/m_export';
+import { AIIntegration } from '__internal/core/ai_integration/core/ai_integration';
 
 QUnit.testStart(function() {
     const markup =
@@ -27,7 +28,7 @@ QUnit.module('ExportController', {
 
             initDefaultOptions = initDefaultOptions !== undefined ? initDefaultOptions : true;
 
-            setupDataGridModules(this, ['data', 'columns', 'rows', 'editorFactory', 'editing', 'selection', 'grouping', 'summary', 'masterDetail', 'virtualColumns', 'export'], {
+            setupDataGridModules(this, ['data', 'columns', 'rows', 'editorFactory', 'editing', 'selection', 'grouping', 'summary', 'masterDetail', 'virtualColumns', 'aiColumn', 'export'], {
                 initViews: true,
                 initDefaultOptions: initDefaultOptions,
                 options: $.extend(true, { loadingTimeout: null }, this.options)
@@ -137,6 +138,59 @@ QUnit.module('ExportController', {
         assert.ok(columnCompare(columns[0], { width: 40, dataType: 'number', alignment: 'right', caption: 'Test Field 2' }), 'column 2');
         assert.ok(columnCompare(columns[1], { width: 50, dataType: 'date', alignment: 'left', caption: 'Test Field 3' }), 'column 3');
         assert.ok(columnCompare(columns[2], { width: 90, dataType: 'boolean', alignment: 'center', caption: 'Test Field 4' }), 'column 4');
+    });
+
+    const aiIntegration = new AIIntegration({
+        sendRequest(prompt) {
+            return {
+                promise: new Promise((resolve) => {
+                    const result = {};
+                    const data = prompt.data && prompt.data.data;
+                    if(data) {
+                        Object.entries(data).forEach(([key, value]) => {
+                            const { name } = value;
+                            result[key] = `Response ${name}`;
+                        });
+                    }
+                    resolve(JSON.stringify(result));
+                }),
+                abort: () => {},
+            };
+        },
+    });
+
+    [true, false].forEach((allowExporting) => {
+        QUnit.test(`Get columns from data provider when visible columns has AI column and allowExporting=${allowExporting}`, function(assert) {
+            this.setupModules({
+                columns: [{
+                    width: 100,
+                    type: 'ai',
+                    allowExporting: allowExporting,
+                    name: 'AIColumn',
+                    caption: 'Test AI Column',
+                    ai: {
+                        prompt: 'Test prompt',
+                        aiIntegration,
+                    },
+                }, {
+                    dataField: 'TestField2', width: 40, dataType: 'number'
+                }, {
+                    dataField: 'TestField3', width: 50, dataType: 'date'
+                }, {
+                    dataField: 'TestField4', width: 90, dataType: 'boolean'
+                }]
+            });
+
+            const dataProvider = this.exportController.getDataProvider();
+
+            dataProvider.ready();
+            const columns = dataProvider.getColumns();
+
+            assert.equal(columns.length, 3, 'columns length');
+            assert.ok(columnCompare(columns[0], { width: 40, dataType: 'number', alignment: 'right', caption: 'Test Field 2' }), 'column 1');
+            assert.ok(columnCompare(columns[1], { width: 50, dataType: 'date', alignment: 'left', caption: 'Test Field 3' }), 'column 2');
+            assert.ok(columnCompare(columns[2], { width: 90, dataType: 'boolean', alignment: 'center', caption: 'Test Field 4' }), 'column 3');
+        });
     });
 
     QUnit.test('Get columns with percent value in width of column', function(assert) {
