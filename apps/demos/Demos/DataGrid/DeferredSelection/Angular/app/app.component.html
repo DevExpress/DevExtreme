@@ -1,6 +1,7 @@
 <dx-data-grid
   id="grid-container"
-  [dataSource]="dataSource"
+  [dataSource]="tasksDataSource"
+  [remoteOperations]="true"
   [selectionFilter]="['Task_Status', '=', 'Completed']"
   [showBorders]="true"
 >
@@ -28,10 +29,16 @@
   ></dxi-data-grid-column>
   <dxi-data-grid-column
     caption="Assigned To"
-    dataField="ResponsibleEmployee.Employee_Full_Name"
+    dataField="Task_Assigned_Employee_ID"
     width="auto"
     [allowSorting]="false"
-  ></dxi-data-grid-column>
+  >
+    <dxi-data-grid-lookup
+      [dataSource]="employeesDataSource"
+      valueExpr="ID"
+      displayExpr="Name"
+    ></dxi-data-grid-lookup>
+  </dxi-data-grid-column>
   <dxi-data-grid-column
     caption="Status"
     dataField="Task_Status"

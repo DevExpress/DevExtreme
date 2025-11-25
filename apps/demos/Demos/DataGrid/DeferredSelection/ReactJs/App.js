@@ -1,28 +1,27 @@
 import React, { useCallback, useState } from 'react';
 import DataGrid, {
-  Column, FilterRow, Selection, Pager,
+  Column, FilterRow, Selection, Pager, Lookup,
 } from 'devextreme-react/data-grid';
 import Button from 'devextreme-react/button';
 import { query } from 'devextreme-react/common/data';
+import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
-const dataSource = {
-  store: {
-    type: 'odata',
-    version: 2,
-    url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks',
-    key: 'Task_ID',
+const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
+const tasksDataSource = createStore({
+  key: 'Task_ID',
+  loadUrl: `${url}/Tasks`,
+  onBeforeSend(method, ajaxOptions) {
+    ajaxOptions.xhrFields = { withCredentials: true };
   },
-  expand: 'ResponsibleEmployee',
-  select: [
-    'Task_ID',
-    'Task_Subject',
-    'Task_Start_Date',
-    'Task_Due_Date',
-    'Task_Status',
-    'ResponsibleEmployee/Employee_Full_Name',
-  ],
-};
+});
+const employeesDataSource = createStore({
+  key: 'ID',
+  loadUrl: `${url}/TaskEmployees`,
+  onBeforeSend(method, ajaxOptions) {
+    ajaxOptions.xhrFields = { withCredentials: true };
+  },
+});
 const selectionFilter = ['Task_Status', '=', 'Completed'];
 let dataGrid;
 const App = () => {
@@ -32,14 +31,12 @@ const App = () => {
   const calculateStatistics = useCallback(async () => {
     const selectedItems = await dataGrid.getSelectedRowsData();
     const totalDuration = selectedItems.reduce((currentValue, item) => {
-      const duration = item.Task_Due_Date - item.Task_Start_Date;
+      const duration = +new Date(item.Task_Due_Date) - +new Date(item.Task_Start_Date);
       return currentValue + duration;
     }, 0);
     const averageDurationInDays = totalDuration / MILLISECONDS_IN_DAY / selectedItems.length;
     setTaskCount(selectedItems.length);
-    setPeopleCount(
-      query(selectedItems).groupBy('ResponsibleEmployee.Employee_Full_Name').toArray().length,
-    );
+    setPeopleCount(query(selectedItems).groupBy('Task_Assigned_Employee_ID').toArray().length);
     setAvgDuration(Math.round(averageDurationInDays) || 0);
   }, []);
   const onInitialized = useCallback(
@@ -53,7 +50,8 @@ const App = () => {
     <div>
       <DataGrid
         id="grid-container"
-        dataSource={dataSource}
+        dataSource={tasksDataSource}
+        remoteOperations={true}
         showBorders={true}
         defaultSelectionFilter={selectionFilter}
         onInitialized={onInitialized}
@@ -82,10 +80,16 @@ const App = () => {
         />
         <Column
           caption="Assigned To"
-          dataField="ResponsibleEmployee.Employee_Full_Name"
+          dataField="Task_Assigned_Employee_ID"
           width="auto"
           allowSorting={false}
-        />
+        >
+          <Lookup
+            dataSource={employeesDataSource}
+            valueExpr="ID"
+            displayExpr="Name"
+          />
+        </Column>
         <Column
           caption="Status"
           width="auto"
