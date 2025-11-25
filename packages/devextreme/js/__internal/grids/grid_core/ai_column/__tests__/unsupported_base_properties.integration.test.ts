@@ -693,4 +693,184 @@ describe('Unsupported properties', () => {
       expect(aiCell.getText()).toBe(EMPTY_CELL_TEXT);
     });
   });
+
+  describe('Binding properties', () => {
+    const aiIntegration = new AIIntegration({
+      sendRequest(prompt): RequestResult {
+        return {
+          promise: new Promise<string>((resolve) => {
+            const result = {};
+            Object.entries(prompt.data?.data).forEach(([key, value]) => {
+              const { name } = value as { name: string };
+              result[key] = `Response ${name}`;
+            });
+            resolve(JSON.stringify(result));
+          }),
+          abort: (): void => {},
+        };
+      },
+    });
+    it('Should not bind AI column to dataField (first load)', async () => {
+      const { component } = await createDataGrid({
+        dataSource,
+        showBorders: true,
+        keyExpr: 'id',
+        columns: [
+          'id',
+          {
+            caption: 'AI',
+            type: 'ai',
+            name: 'AItest',
+            dataField: 'name',
+            ai: {
+              prompt: 'Provide name for item with value {value}',
+              aiIntegration,
+            },
+          },
+        ],
+      });
+      await Promise.resolve();
+      expect(component.getDataCell(0, 1).getText()).toBe('Response Item 1');
+      expect(component.getDataCell(1, 1).getText()).toBe('Response Item 2');
+    });
+
+    it('Should not bind AI column to dataField (dynamic update)', async () => {
+      const { instance, component } = await createDataGrid({
+        dataSource,
+        showBorders: true,
+        keyExpr: 'id',
+        columns: [
+          'id',
+          {
+            caption: 'AI',
+            type: 'ai',
+            name: 'AItest',
+            ai: {
+              prompt: 'Provide name for item with value {value}',
+              aiIntegration,
+            },
+          },
+        ],
+      });
+      await Promise.resolve();
+      instance.columnOption('AItest', 'dataField', 'name');
+      await Promise.resolve();
+      expect(component.getDataCell(0, 1).getText()).toBe('Response Item 1');
+      expect(component.getDataCell(1, 1).getText()).toBe('Response Item 2');
+    });
+
+    it('Should not take into account calculateCellValue (first load)', async () => {
+      const { component } = await createDataGrid({
+        dataSource,
+        showBorders: true,
+        keyExpr: 'id',
+        columns: [
+          'id',
+          {
+            caption: 'AI',
+            type: 'ai',
+            name: 'AItest',
+            dataField: 'name',
+            calculateCellValue: (data) => data.name,
+            ai: {
+              prompt: 'Provide name for item with value {value}',
+              aiIntegration,
+            },
+          },
+        ],
+      });
+      await Promise.resolve();
+      expect(component.getDataCell(0, 1).getText()).toBe('Response Item 1');
+      expect(component.getDataCell(1, 1).getText()).toBe('Response Item 2');
+    });
+
+    it('Should not take into account calculateCellValue (dynamic update)', async () => {
+      const { instance, component } = await createDataGrid({
+        dataSource,
+        showBorders: true,
+        keyExpr: 'id',
+        columns: [
+          'id',
+          {
+            caption: 'AI',
+            type: 'ai',
+            name: 'AItest',
+            ai: {
+              prompt: 'Provide name for item with value {value}',
+              aiIntegration,
+            },
+          },
+        ],
+      });
+      await Promise.resolve();
+      instance.columnOption('AItest', 'dataField', 'name');
+      instance.columnOption('AItest', 'calculateCellValue', (data) => data.name);
+      await Promise.resolve();
+      expect(component.getDataCell(0, 1).getText()).toBe('Response Item 1');
+      expect(component.getDataCell(1, 1).getText()).toBe('Response Item 2');
+    });
+
+    it('Should not bind AI column to lookup (first load)', async () => {
+      const { component } = await createDataGrid({
+        dataSource,
+        showBorders: true,
+        keyExpr: 'id',
+        columns: [
+          'id',
+          {
+            caption: 'AI',
+            type: 'ai',
+            name: 'AItest',
+            lookup: {
+              dataSource: [
+                { id: 1, name: 'Lookup 1' },
+                { id: 2, name: 'Lookup 2' },
+              ],
+              valueExpr: 'id',
+              displayExpr: 'name',
+            },
+            ai: {
+              prompt: 'Provide name for item with value {value}',
+              aiIntegration,
+            },
+          },
+        ],
+      });
+      await Promise.resolve();
+      expect(component.getDataCell(0, 1).getText()).toBe('Response Item 1');
+      expect(component.getDataCell(1, 1).getText()).toBe('Response Item 2');
+    });
+
+    it('Should not bind AI column to lookup (dynamic update)', async () => {
+      const { instance, component } = await createDataGrid({
+        dataSource,
+        showBorders: true,
+        keyExpr: 'id',
+        columns: [
+          'id',
+          {
+            caption: 'AI',
+            type: 'ai',
+            name: 'AItest',
+            ai: {
+              prompt: 'Provide name for item with value {value}',
+              aiIntegration,
+            },
+          },
+        ],
+      });
+      await Promise.resolve();
+      instance.columnOption('AItest', 'lookup', {
+        dataSource: [
+          { id: 1, name: 'Lookup 1' },
+          { id: 2, name: 'Lookup 2' },
+        ],
+        valueExpr: 'id',
+        displayExpr: 'name',
+      });
+      await Promise.resolve();
+      expect(component.getDataCell(0, 1).getText()).toBe('Response Item 1');
+      expect(component.getDataCell(1, 1).getText()).toBe('Response Item 2');
+    });
+  });
 });
