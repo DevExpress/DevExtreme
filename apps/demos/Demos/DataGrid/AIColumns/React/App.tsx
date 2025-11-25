@@ -3,7 +3,7 @@ import DataGrid, {
   Column,
   Paging,
   Grouping,
-  Ai,
+  AI,
 } from 'devextreme-react/data-grid';
 import Popup, { Position } from 'devextreme-react/popup';
 import { vehicles } from './data.ts';
@@ -91,10 +91,10 @@ export default function App() {
           fixedPosition="right"
           cssClass="ai__cell"
         >
-          <Ai
+          <AI
             mode="auto"
             noDataText="No data"
-            prompt="Identify the country where this vehicle model is originally manufactured or developed, based on its brand, model, and specifications."
+            prompt="Identify the country where the vehicle model is manufactured. When looking up a country, consider vehicle brand, model, and specifications."
           />
         </Column>
       </DataGrid>

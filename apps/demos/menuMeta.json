@@ -45,14 +45,6 @@
                 "Equivalents": "ajax request"
               },
               {
-                "Title": "OData Service",
-                "Name": "OdataService",
-                "Widget": "DataGrid",
-                "MvcDocUrl": "https://docs.devexpress.com/DevExtremeAspNetMvc/400704/concepts/data-binding#odata",
-                "NetCoreDocUrl": "https://docs.devexpress.com/AspNetCore/401022/devextreme-based-controls/concepts/bind-controls-to-data/odata",
-                "DemoType": "Web"
-              },
-              {
                 "Title": "Custom Data Source",
                 "Name": "CustomDataSource",
                 "Widget": "DataGrid",
