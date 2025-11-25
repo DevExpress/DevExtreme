@@ -34,7 +34,7 @@ $(() => {
         }
 
         DevExpress.ui.notify({
-          message: 'You have reached the AI rate limits of this demo. Retrying in 30 seconds...',
+          message: 'Our demo AI service reached a temporary request limit. Retrying in 30 seconds.',
           width: 'auto',
           type: 'error',
           displayTime: 5000,
@@ -51,7 +51,7 @@ $(() => {
       const isValidRequest = JSON.stringify(prompt.user).length < 5000;
       if (!isValidRequest) {
         return {
-          promise: Promise.reject(new Error('Request is too large')),
+          promise: Promise.reject(new Error('Request is too long. Specify a shorter prompt.')),
           abort: () => {},
         };
       }
@@ -221,7 +221,7 @@ $(() => {
         caption: 'AI Column',
         type: 'ai',
         ai: {
-          prompt: 'Identify the country where this vehicle model is originally manufactured or developed, based on its brand, model, and specifications.',
+          prompt: 'Identify the country where the vehicle model is manufactured. When looking up a country, consider vehicle brand, model, and specifications.',
           mode: 'auto',
           noDataText: 'No data',
         },

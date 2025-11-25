@@ -34,7 +34,7 @@ $(() => {
         }
 
         DevExpress.ui.notify({
-          message: 'You have reached the AI rate limits of this demo. Retrying in 30 seconds...',
+          message: 'Our demo AI service reached a temporary request limit. Retrying in 30 seconds.',
           width: 'auto',
           type: 'error',
           displayTime: 5000,
@@ -51,7 +51,7 @@ $(() => {
       const isValidRequest = JSON.stringify(prompt.user).length < 5000;
       if (!isValidRequest) {
         return {
-          promise: Promise.reject(new Error('Request is too large')),
+          promise: Promise.reject(new Error('Request is too long. Specify a shorter prompt.')),
           abort: () => {},
         };
       }
@@ -188,7 +188,7 @@ $(() => {
         caption: 'AI Column',
         type: 'ai',
         ai: {
-          prompt: 'Identify department for each employee. It should be one of the following department types:  "Management", "Human Resources", "IT", "Shipping", "Support", "Sales",  "Engineering". Use "Engineering" by default.',
+          prompt: 'Identify the department where the employee works. Select from the following department list: "Management", "Human Resources", "IT", "Shipping", "Support", "Sales", "Engineering". Use "Engineering" if you cannot find a better match.',
           mode: 'auto',
           noDataText: 'No data',
         },

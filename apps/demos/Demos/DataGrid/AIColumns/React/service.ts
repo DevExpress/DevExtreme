@@ -39,7 +39,7 @@ async function getAIResponseRecursive(messages: AIMessage[], signal: AbortSignal
       }
 
       notify({
-        message: 'You have reached the AI rate limits of this demo. Retrying in 30 seconds...',
+        message: 'Our demo AI service reached a temporary request limit. Retrying in 30 seconds.',
         width: 'auto',
         type: 'error',
         displayTime: 5000,
@@ -56,7 +56,7 @@ export const aiIntegration = new AIIntegration({
     const isValidRequest = JSON.stringify(prompt.user).length < 5000;
     if (!isValidRequest) {
       return {
-        promise: Promise.reject(new Error('Request is too large')),
+        promise: Promise.reject(new Error('Request is too long. Specify a shorter prompt.')),
         abort: () => {},
       };
     }

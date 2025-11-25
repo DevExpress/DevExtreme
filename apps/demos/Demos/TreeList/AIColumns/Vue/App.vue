@@ -78,7 +78,7 @@ import { type IEmployee, employees } from './data.ts';
 import { aiIntegration } from './service.ts';
 
 const aiConfig = {
-  prompt: 'Identify department for each employee. It should be one of the following department types:  "Management", "Human Resources", "IT", "Shipping", "Support", "Sales",  "Engineering". Use "Engineering" by default.',
+  prompt: 'Identify the department where the employee works. Select from the following department list: "Management", "Human Resources", "IT", "Shipping", "Support", "Sales", "Engineering". Use "Engineering" if you cannot find a better match.',
   mode: 'auto',
   noDataText: 'No data',
 };
