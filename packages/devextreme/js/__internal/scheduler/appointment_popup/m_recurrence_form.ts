@@ -72,17 +72,16 @@ const FREQ = {
 } as const;
 
 const EDITOR_NAMES = {
-  recurrenceStartDate: 'recurrenceStartDateEditor',
+  recurrenceStartDateEditor: 'recurrenceStartDateEditor',
   recurrenceCountEditor: 'recurrenceCountEditor',
   recurrencePeriodEditor: 'recurrencePeriodEditor',
-  recurrenceDayOfYearMonthEditor: 'recurrenceDayOfYearMonthEditor',
   recurrenceDayOfMonthEditor: 'recurrenceDayOfMonthEditor',
   recurrenceDayOfYearDayEditor: 'recurrenceDayOfYearDayEditor',
-  byMonthDayYearly: 'byMonthDayYearlyEditor',
+  recurrenceDayOfYearMonthEditor: 'recurrenceDayOfYearMonthEditor',
   recurrenceEndEditor: 'recurrenceEndEditor',
-  repeatEnd: 'repeatEndEditor',
-  until: 'untilEditor',
-  count: 'countEditor',
+  repeatEndEditor: 'repeatEndEditor',
+  untilEditor: 'untilEditor',
+  countEditor: 'countEditor',
 };
 
 const GROUP_NAMES = {
@@ -222,7 +221,7 @@ export class RecurrenceForm {
           true,
           getStartDateCommonConfig(this.scheduler.getFirstDayOfWeek()),
           {
-            name: EDITOR_NAMES.recurrenceStartDate,
+            name: EDITOR_NAMES.recurrenceStartDateEditor,
             label: {
               text: messageLocalization.format('dxScheduler-editorLabelStartDate'),
             },
@@ -416,7 +415,7 @@ export class RecurrenceForm {
             },
           } as SelectBoxProperties,
         } as SimpleItem,
-        this.createByMonthDayNumberBoxItem(EDITOR_NAMES.byMonthDayYearly, false),
+        this.createByMonthDayNumberBoxItem(EDITOR_NAMES.recurrenceDayOfYearDayEditor, false),
       ],
     } as GroupItem;
   }
@@ -458,7 +457,7 @@ export class RecurrenceForm {
   private createRecurrenceEndRadioGroup(): SimpleItem {
     return {
       itemType: 'simple',
-      name: EDITOR_NAMES.repeatEnd,
+      name: EDITOR_NAMES.repeatEndEditor,
       colSpan: 1,
       editorType: 'dxRadioGroup',
       cssClass: CLASSES.recurrenceEndEditors,
@@ -495,7 +494,7 @@ export class RecurrenceForm {
         },
         {
           itemType: 'simple',
-          name: EDITOR_NAMES.until,
+          name: EDITOR_NAMES.untilEditor,
           label: {
             visible: false,
           },
@@ -516,7 +515,7 @@ export class RecurrenceForm {
         },
         {
           itemType: 'simple',
-          name: EDITOR_NAMES.count,
+          name: EDITOR_NAMES.countEditor,
           cssClass: CLASSES.countEditor,
           label: {
             visible: false,
@@ -550,12 +549,12 @@ export class RecurrenceForm {
       startDate,
     );
 
-    this.dxForm.getEditor(EDITOR_NAMES.recurrenceStartDate)?.option('value', this.recurrenceRule.startDate);
+    this.dxForm.getEditor(EDITOR_NAMES.recurrenceStartDateEditor)?.option('value', this.recurrenceRule.startDate);
     this.dxForm.getEditor(EDITOR_NAMES.recurrencePeriodEditor)?.option('value', repeatEditorValue);
     this.dxForm.getEditor(EDITOR_NAMES.recurrenceCountEditor)?.option('value', this.recurrenceRule.interval);
-    this.dxForm.getEditor(EDITOR_NAMES.repeatEnd)?.option('value', this.recurrenceRule.repeatEnd);
-    this.dxForm.getEditor(EDITOR_NAMES.until)?.option('value', this.recurrenceRule.until);
-    this.dxForm.getEditor(EDITOR_NAMES.count)?.option('value', this.recurrenceRule.count);
+    this.dxForm.getEditor(EDITOR_NAMES.repeatEndEditor)?.option('value', this.recurrenceRule.repeatEnd);
+    this.dxForm.getEditor(EDITOR_NAMES.untilEditor)?.option('value', this.recurrenceRule.until);
+    this.dxForm.getEditor(EDITOR_NAMES.countEditor)?.option('value', this.recurrenceRule.count);
 
     this.updateRepeatEndEditors();
     this.updateDayEditorsVisibility();
@@ -586,8 +585,8 @@ export class RecurrenceForm {
   private updateRepeatEndEditors(): void {
     const repeatEndValue = this.recurrenceRule.repeatEnd;
 
-    const untilEditor = this.dxForm.getEditor(EDITOR_NAMES.until);
-    const countEditor = this.dxForm.getEditor(EDITOR_NAMES.count);
+    const untilEditor = this.dxForm.getEditor(EDITOR_NAMES.untilEditor);
+    const countEditor = this.dxForm.getEditor(EDITOR_NAMES.countEditor);
 
     untilEditor?.option('disabled', repeatEndValue !== 'until');
     countEditor?.option('disabled', repeatEndValue !== 'count');

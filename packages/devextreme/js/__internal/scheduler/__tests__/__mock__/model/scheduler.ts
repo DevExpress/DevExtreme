@@ -53,6 +53,31 @@ export class SchedulerModel {
     return getTexts(cells);
   }
 
+  getDateTableCell(rowIndex = 0, cellIndex = 0): HTMLElement {
+    const rowSelector = `.dx-scheduler-date-table-row:nth-child(${rowIndex + 1})`;
+    const cellSelector = `.dx-scheduler-date-table-cell:nth-child(${cellIndex + 1})`;
+    const selector = `${rowSelector} ${cellSelector}`;
+
+    const result = this.container.querySelector(selector);
+
+    if (!result) {
+      throw new Error(`Date cell in row ${rowIndex} and column ${cellIndex} not found`);
+    }
+
+    return result as HTMLElement;
+  }
+
+  getAllDayTableCell(cellIndex = 0): HTMLElement {
+    const cellSelector = `.dx-scheduler-all-day-table-cell:nth-child(${cellIndex + 1})`;
+    const result = this.container.querySelector(cellSelector);
+
+    if (!result) {
+      throw new Error(`All-day cell in column ${cellIndex} not found`);
+    }
+
+    return result as HTMLElement;
+  }
+
   getHeaderPanelContent(): string[] {
     const cells = this.container.querySelectorAll('.dx-scheduler-header-panel-cell');
     return getTexts(cells);
@@ -80,6 +105,10 @@ export class SchedulerModel {
     return new PopupModel(popupElement);
   }
 
+  isPopupVisible(): boolean {
+    return this.getPopups().length > 0;
+  }
+
   getPopups = (): NodeListOf<Element> => document.querySelectorAll(`.dx-overlay-wrapper.${APPOINTMENT_POPUP_CLASS}, .dx-overlay-wrapper.${POPUP_DIALOG_CLASS}`);
 
   getLoadPanel = (): HTMLElement | null => document.querySelector('.dx-loadpanel');
@@ -97,6 +126,24 @@ export class SchedulerModel {
     appointment.element.click();
 
     return appointment;
+  }
+
+  dblClickDateTableCell(rowIndex = 0, cellIndex = 0): void {
+    const cellElement = this.getDateTableCell(rowIndex, cellIndex);
+
+    cellElement.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+    cellElement.click();
+    cellElement.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+    cellElement.click();
+  }
+
+  dblClickAllDayTableCell(cellIndex = 0): void {
+    const cellElement = this.getAllDayTableCell(cellIndex);
+
+    cellElement.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+    cellElement.click();
+    cellElement.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+    cellElement.click();
   }
 }
 
