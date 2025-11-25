@@ -1,1 +1,1 @@
-export * from '../../common/core/localization/cldr-data/en';
+export * from '../../__internal/core/localization/cldr-data/en';
