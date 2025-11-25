@@ -257,6 +257,7 @@ class Overlay<
 
   _setDeprecatedOptions(): void {
     super._setDeprecatedOptions();
+
     extend(this._deprecatedOptions, {
       closeOnOutsideClick: { since: '22.1', alias: 'hideOnOutsideClick' },
     });
