@@ -190,7 +190,7 @@ export class AppointmentPopup {
     this.form.formData = formData;
     this.form.readOnly = this._isReadOnly(appointmentAdapter);
 
-    this.form.showMainGroup(false);
+    this.form.showMainGroup();
   }
 
   _createFormData(appointmentAdapter: AppointmentAdapter): Record<string, any> {
@@ -234,6 +234,8 @@ export class AppointmentPopup {
   }
 
   saveChangesAsync(isShowLoadPanel) {
+    this.form.saveRecurrenceValue();
+
     // @ts-expect-error
     const deferred = new Deferred();
     const validation = this.form.dxForm.validate();
@@ -393,6 +395,7 @@ export class AppointmentPopup {
           icon: 'arrowleft',
           stylingMode: 'text',
           onClick: (): void => {
+            this.form.saveRecurrenceValue();
             this.form.showMainGroup();
           },
         },
@@ -412,9 +415,7 @@ export class AppointmentPopup {
           stylingMode: 'contained',
           type: 'default',
           onClick: (e): void => {
-            this.form.showMainGroup();
-            e.cancel = true;
-            this.saveEditDataAsync();
+            this._saveButtonClickHandler(e);
           },
         },
       },
