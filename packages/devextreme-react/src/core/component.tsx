@@ -79,15 +79,15 @@ const Component = forwardRef<ComponentRef, any>(
       };
     }, []);
 
-    const imperativeCreateWidget = useRef(createWidget);
-    const imperativeClearExtensions = useRef(clearExtensions);
+    const createWidgetRef = useRef(createWidget);
+    const clearExtensionsRef = useRef(clearExtensions);
 
     useLayoutEffect(() => {
-      imperativeCreateWidget.current = createWidget;
+      createWidgetRef.current = createWidget;
     }, [createWidget]);
 
     useLayoutEffect(() => {
-      imperativeClearExtensions.current = clearExtensions;
+      clearExtensionsRef.current = clearExtensions;
     }, [clearExtensions]);
 
     useImperativeHandle(ref, () => (
@@ -99,10 +99,10 @@ const Component = forwardRef<ComponentRef, any>(
           return componentBaseRef.current?.getElement();
         },
         createWidget(el) {
-          imperativeCreateWidget.current?.(el);
+          createWidgetRef.current?.(el);
         },
         clearExtensions() {
-          imperativeClearExtensions.current?.();
+          clearExtensionsRef.current?.();
         },
       }
     ), []);
