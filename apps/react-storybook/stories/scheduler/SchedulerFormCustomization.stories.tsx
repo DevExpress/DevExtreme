@@ -332,7 +332,6 @@ export const RTL: Story = {
 export const LegacyPopup: Story = {
   args: {
     ...baseConfig,
-    resources,
     "editing.form.iconsShowMode": "none",
   } as Properties,
   argTypes: iconsShowModeArgType,
@@ -340,19 +339,11 @@ export const LegacyPopup: Story = {
     return (
       <Scheduler
         {...baseConfig}
-        resources={resources}
         editing={{
           form: {
             items: [
-              {
-                name: "mainGroup",
-                items: [
-                  "subjectGroup",
-                  "dateGroup",
-                  "descriptionGroup",
-                  "resourcesGroup",
-                ]
-              },
+              "mainGroup",
+              {name: 'recurenceGroup', visible: true}
             ],
             iconsShowMode: args["editing.form.iconsShowMode"]
           }
@@ -361,4 +352,3 @@ export const LegacyPopup: Story = {
     );
   },
 };
-
