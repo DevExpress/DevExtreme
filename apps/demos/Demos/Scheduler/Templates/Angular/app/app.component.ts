@@ -17,7 +17,7 @@ import {
   Service, MovieData, TheatreData, Data,
 } from './app.service';
 
-@Pipe({ name: 'apply', standalone: true })
+@Pipe({ name: 'apply' })
 export class ApplyPipe<TArgs, TReturn> implements PipeTransform {
   transform(func: ((...args: TArgs[]) => TReturn), ...args: TArgs[]): TReturn { return func(...args); }
 }

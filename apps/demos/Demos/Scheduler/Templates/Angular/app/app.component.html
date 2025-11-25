@@ -56,7 +56,7 @@
   </div>
 
   <div *dxTemplate="let model of 'tooltip-template'">
-    @if(getMovieById | apply : model.appointmentData.movieId as movie) {
+    @if(getMovieById | apply : model.appointmentData.movieId; as movie) {
     <div class="movie-tooltip">
       <img [src]="movie.image" />
       <div class="movie-info">
