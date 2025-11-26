@@ -371,13 +371,13 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     const $content = this._popup!.$content();
     const template = this._getTemplateByOption('dropDownContentTemplate');
 
-    $content.empty();
+    $content?.empty();
 
     this._popupContentId = `dx-${new Guid()}`;
     this.setAria('id', this._popupContentId, $content);
 
     const result = template.render({
-      container: getPublicElement($content),
+      container: $content ? getPublicElement($content) : undefined,
       model: this.option('items') || this._dataController.getDataSource(),
     });
 
@@ -498,8 +498,8 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     const $popup = $('<div>');
     this.$element().append($popup);
     this._popup = this._createComponent($popup, Popup, this._popupOptions());
-    this._popup.$content().addClass(DROP_DOWN_BUTTON_CONTENT);
-    this._popup.$wrapper().addClass(DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS);
+    this._popup.$content()?.addClass(DROP_DOWN_BUTTON_CONTENT);
+    this._popup.$wrapper()?.addClass(DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS);
     this._popup.$overlayContent().attr('aria-label', OVERLAY_CONTENT_LABEL);
     this._popup.on('hiding', this._popupHidingHandler.bind(this));
     this._popup.on('showing', this._popupShowingHandler.bind(this));

@@ -348,11 +348,16 @@ class TextEditorBase<
     this._buttonCollection.clean();
     this._disposePendingIndicator();
     this._unobserveLabelContainerResize();
+
+    super._clean();
+
     this._$beforeButtonsContainer = null;
     this._$afterButtonsContainer = null;
-    // @ts-expect-error ts-error
+    // @ts-expect-error _$textEditorContainer can be null and undefined
     this._$textEditorContainer = null;
-    super._clean();
+    // @ts-expect-error _$textEditorInputContainer can be null and undefined
+    this._$textEditorInputContainer = null;
+    this._$placeholder = null;
   }
 
   _createInput(): dxElementWrapper {
@@ -1015,6 +1020,7 @@ class TextEditorBase<
   }
 
   getButton(name: string): dxButton | undefined | null {
+    // @ts-expect-error TextEditorButtonCollection should use generic
     return this._buttonCollection.getButton(name);
   }
 

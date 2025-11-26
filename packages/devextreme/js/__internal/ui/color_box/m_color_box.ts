@@ -148,7 +148,13 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
   _createColorView(): void {
     this._popup.$overlayContent().addClass(COLOR_BOX_OVERLAY_CLASS);
 
-    const $colorView = $('<div>').appendTo(this._popup.$content());
+    const $content = this._popup.$content();
+
+    if (!$content) {
+      return;
+    }
+
+    const $colorView = $('<div>').appendTo($content);
 
     this._colorView = this._createComponent($colorView, ColorView, this._colorViewConfig());
   }
