@@ -13,7 +13,7 @@
           display-expr="name"
           placeholder="Select a value..."
           @value-changed="syncTreeViewSelection"
-          :defer-rendering="false"
+          @option-changed="onTreeBoxOptionChanged"
         >
           <template #content="{ data }">
             <DxTreeView
@@ -71,7 +71,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxDropDownBox from 'devextreme-vue/drop-down-box';
+import DxDropDownBox, { DxDropDownBoxTypes } from 'devextreme-vue/drop-down-box';
 import DxTreeView, { type DxTreeViewTypes } from 'devextreme-vue/tree-view';
 import {
   DxDataGrid, DxSelection, DxPaging, DxFilterRow, DxScrolling,
@@ -91,7 +91,7 @@ let treeView: DxTreeView['instance'];
 
 function treeViewContentReady({ component }: DxTreeViewTypes.ContentReadyEvent) {
   treeView = component;
-  syncTreeViewSelection();
+  component.scrollToItem(treeBoxValue.value);
 }
 
 function makeAsyncDataSource(jsonFile: string) {
@@ -113,7 +113,6 @@ function syncTreeViewSelection() {
   } else {
     treeView.unselectAll();
   }
-
   isTreeBoxOpened.value = false;
 }
 
@@ -124,6 +123,12 @@ function treeViewItemSelectionChanged(e: DxTreeViewTypes.ItemSelectionChangedEve
 
 function gridBoxDisplayExpr(item: any) {
   return item && `${item.CompanyName} <${item.Phone}>`;
+}
+
+function onTreeBoxOptionChanged(e: DxDropDownBoxTypes.OptionChangedEvent) {
+  if (e.name === 'opened') {
+    isTreeBoxOpened.value = e.value;
+  }
 }
 
 function onGridSelectionChanged() {
