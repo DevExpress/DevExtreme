@@ -1586,9 +1586,6 @@ importers:
       stylelint:
         specifier: 15.11.0
         version: 15.11.0(typescript@4.9.5)
-      stylelint-devextreme:
-        specifier: 0.0.6
-        version: 0.0.6
       systemjs:
         specifier: 0.19.41
         version: 0.19.41
@@ -17534,9 +17531,6 @@ packages:
     engines: {node: '>=18.12.0'}
     peerDependencies:
       stylelint: ^16.0.0
-
-  stylelint-devextreme@0.0.6:
-    resolution: {integrity: sha512-o0qbp2y2dfORxlLB4fnWAqAa0BfWXwVKtbVOXtZWIaRmZ/gI3HARXWt032XCNGDtn6KbNUSO+p+rKaSAF/Chvg==}
 
   stylelint-scss@4.7.0:
     resolution: {integrity: sha512-TSUgIeS0H3jqDZnby1UO1Qv3poi1N8wUYIJY6D1tuUq2MN3lwp/rITVo0wD+1SWTmRm0tNmGO0b7nKInnqF6Hg==}
@@ -41160,8 +41154,6 @@ snapshots:
       stylelint: 16.5.0(typescript@5.4.5)
       stylelint-config-recommended: 14.0.1(stylelint@16.5.0(typescript@5.4.5))
 
-  stylelint-devextreme@0.0.6: {}
-
   stylelint-scss@4.7.0(stylelint@15.11.0(typescript@5.9.2)):
     dependencies:
       postcss-media-query-parser: 0.2.3
@@ -43718,7 +43710,7 @@ snapshots:
       '@webassemblyjs/wasm-parser': 1.14.1
       acorn: 8.15.0
       acorn-import-phases: 1.0.4(acorn@8.15.0)
-      browserslist: 4.25.3
+      browserslist: 4.28.0
       chrome-trace-event: 1.0.4
       enhanced-resolve: 5.18.3
       es-module-lexer: 1.5.4
