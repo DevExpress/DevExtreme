@@ -52,10 +52,6 @@ export class AppointmentPopup {
 
   popup: any;
 
-  private customWidth?: number | string;
-
-  private customMaxWidth?: number | string;
-
   state: any;
 
   constructor(scheduler, form) {
@@ -115,12 +111,6 @@ export class AppointmentPopup {
   }
 
   _createPopupConfig() {
-    const editingConfig = this.scheduler.getEditingConfig();
-    const customPopupOptions = editingConfig?.popup ?? {};
-
-    this.customWidth = customPopupOptions.width;
-    this.customMaxWidth = customPopupOptions.maxWidth;
-
     return {
       ...POPUP_CONFIG,
       onHiding: () => this.scheduler.focus(),
@@ -224,17 +214,11 @@ export class AppointmentPopup {
   changeSize(isRecurrence) {
     if (this.popup) {
       const isFullScreen = isPopupFullScreenNeeded();
+      const maxWidth = isFullScreen
+        ? '100%'
+        : getMaxWidth(isRecurrence);
       this.popup.option('fullScreen', isFullScreen);
-
-      if (this.customWidth !== undefined) {
-        this.popup.option('width', this.customWidth);
-      }
-
-      if (this.customMaxWidth !== undefined) {
-        this.popup.option('maxWidth', isFullScreen ? '100%' : this.customMaxWidth);
-      } else {
-        this.popup.option('maxWidth', isFullScreen ? '100%' : getMaxWidth(isRecurrence));
-      }
+      this.popup.option('maxWidth', maxWidth);
     }
   }
 
