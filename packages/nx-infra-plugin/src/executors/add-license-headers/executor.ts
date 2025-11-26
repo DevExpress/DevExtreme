@@ -46,7 +46,7 @@ const runExecutor: PromiseExecutor<AddLicenseHeadersExecutorSchema> = async (opt
     options.packageJsonPath || DEFAULT_PACKAGE_JSON,
   );
   const separatorBetweenBannerAndContent =
-    typeof options.separatorBetweenBannerAndContent === undefined
+    typeof options.separatorBetweenBannerAndContent === 'undefined'
       ? NEWLINE
       : options.separatorBetweenBannerAndContent;
 
