@@ -5,12 +5,13 @@
     [dataSource]="chemicalComposition"
     title="The Chemical Composition of the Earth Layers"
   >
+    @for(item of seriesSource; track item.name) {
     <dxi-chart-series
-      *ngFor="let item of seriesSource"
       [valueField]="item.valueField"
       [name]="item.name"
     >
     </dxi-chart-series>
+    }
     <dxo-chart-common-series-settings type="bar" [ignoreEmptyPoints]="true">
     </dxo-chart-common-series-settings>
     <dxi-chart-value-axis>
@@ -42,12 +43,13 @@
         [ignoreEmptyPoints]="true"
       >
       </dxo-range-selector-common-series-settings>
+      @for(item of seriesSource; track item.name) {
       <dxi-range-selector-series
-        *ngFor="let item of seriesSource"
         [valueField]="item.valueField"
         [name]="item.name"
       >
       </dxi-range-selector-series>
+      }
     </dxo-range-selector-chart>
   </dx-range-selector>
 </div>

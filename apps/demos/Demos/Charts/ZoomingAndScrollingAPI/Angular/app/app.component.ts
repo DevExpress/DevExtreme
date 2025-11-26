@@ -1,8 +1,6 @@
+import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  NgModule, Component, enableProdMode,
-} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+  Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxRangeSelectorModule } from 'devextreme-angular';
 import { VisualRange } from 'devextreme-angular/common/charts';
 import { DxChartModule } from 'devextreme-angular/ui/chart';
@@ -19,10 +17,13 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  standalone: false,
   selector: 'demo-app',
   providers: [Service],
   templateUrl: `.${modulePrefix}/app.component.html`,
+  imports: [
+    DxChartModule,
+    DxRangeSelectorModule,
+  ],
 })
 export class AppComponent {
   zoomingData: ZoomingData[];
@@ -34,15 +35,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxChartModule,
-    DxRangeSelectorModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

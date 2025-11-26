@@ -7,7 +7,8 @@
       <th>Gold (USD/troy ounce)</th>
       <th>Silver (USD/troy ounce)</th>
     </tr>
-    <tr *ngFor="let year of years">
+    @for(year of years; track year) {
+    <tr>
       <th>{{ year }}</th>
       <td>
         <dx-sparkline
@@ -55,5 +56,6 @@
         </dx-sparkline>
       </td>
     </tr>
+    }
   </table>
 </div>

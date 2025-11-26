@@ -13,12 +13,14 @@
   <dxo-tree-map-colorizer palette="soft"></dxo-tree-map-colorizer>
 </dx-tree-map>
 <div id="drill-down-title">
-  <span *ngFor="let drillInfo of drillInfos; let isLast = last">
-    <span
-      [ngClass]="{ link: !!drillInfo.node }"
-      (click)="drillInfoClick(drillInfo.node)"
-      >{{ drillInfo.text }}</span
+  @for(drillInfo of drillInfos; track drillInfo; let isLast = $last) {
+  <span>
+  <span
+    [class.link]="!!drillInfo.node"
+    (click)="drillInfoClick(drillInfo.node)"
+    >{{ drillInfo.text }}</span
     >
-    {{ isLast ? "" : " > " }}
+  {{ isLast ? "" : " > " }}
   </span>
+  }
 </div>

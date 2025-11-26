@@ -1,6 +1,5 @@
-import { enableProdMode, Component, NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { enableProdMode, Component, provideZoneChangeDetection } from '@angular/core';
 import { DxChartModule, DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
 import {
   Service, WeatherIndicators, AggregationInterval, AggregationFunction,
@@ -17,12 +16,16 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  standalone: false,
   selector: 'demo-app',
   providers: [Service],
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   preserveWhitespaces: true,
+  imports: [
+    DxChartModule,
+    DxSelectBoxModule,
+    DxCheckBoxModule,
+  ],
 })
 export class AppComponent {
   weatherIndicators: WeatherIndicators[];
@@ -97,16 +100,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxChartModule,
-    DxSelectBoxModule,
-    DxCheckBoxModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

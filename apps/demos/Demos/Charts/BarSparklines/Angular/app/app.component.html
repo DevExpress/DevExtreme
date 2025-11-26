@@ -9,7 +9,8 @@
       <th>Nickel (USD/ton)</th>
       <th>Copper (USD/ton)</th>
     </tr>
-    <tr *ngFor="let year of years">
+    @for(year of years; track year) {
+    <tr>
       <th>{{ year }}</th>
       <td>
         <dx-sparkline
@@ -53,6 +54,7 @@
         </dx-sparkline>
       </td>
     </tr>
+    }
   </table>
   <div class="action">
     <div class="label">Choose a number of months: </div>

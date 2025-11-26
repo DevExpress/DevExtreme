@@ -14,12 +14,14 @@
     [allowDragging]="true"
   >
   </dxo-chart-common-annotation-settings>
+  @for(data of populationData; track data.name) {
   <dxi-chart-annotation
-    *ngFor="let data of populationData"
     [data]="data"
     [argument]="data.name"
   >
   </dxi-chart-annotation>
+  }
+  
   <dxo-chart-legend [visible]="false"></dxo-chart-legend>
   <svg *dxTemplate="let annotation of 'template'" class="annotation">
     <image attr.href="{{ getImagePath(annotation) }}" width="60" height="40" />
