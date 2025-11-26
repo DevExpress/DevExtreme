@@ -145,19 +145,25 @@ export class PopupModel {
   getInput = (editorName: string): dxElementWrapper => {
     const editor = this.form.getEditor(editorName);
 
-    const textInput = editor?.$element().find('.dx-texteditor-input');
+    let $input: dxElementWrapper | undefined | null = null;
 
-    if (textInput?.length) {
-      return textInput;
+    if (editorName === 'startDateTimeZoneEditor' || editorName === 'endDateTimeZoneEditor') {
+      $input = editor?.$element().find('input[type="hidden"]');
     }
 
-    const input = editor?.$element().find('input');
-
-    if (input?.length) {
-      return input;
+    if (!$input?.length) {
+      $input = editor?.$element().find('.dx-texteditor-input');
     }
 
-    throw new Error(`Input element of editor with name "${editorName}" not found`);
+    if (!$input?.length) {
+      $input = editor?.$element().find('input');
+    }
+
+    if (!$input?.length) {
+      throw new Error(`Input element of editor with name "${editorName}" not found`);
+    }
+
+    return $input;
   };
 
   getInputValue = (editorName: string): string => {
@@ -165,7 +171,7 @@ export class PopupModel {
     return $input.val() as unknown as string;
   };
 
-  setInputValue = (editorName: string, value: string | Date | boolean | null): void => {
+  setInputValue = (editorName: string, value: string | number | Date | boolean | null): void => {
     this.form.getEditor(editorName)?.option('value', value);
   };
 
