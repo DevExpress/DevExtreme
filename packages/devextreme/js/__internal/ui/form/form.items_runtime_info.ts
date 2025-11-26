@@ -19,6 +19,7 @@ export type PreparedItem<T = Item> = T & {
   items?: PreparedItem<T>[];
   template?: template | ((data: Item, itemElement: Element) => string | dxElementWrapper);
   allowIndeterminateState?: boolean;
+  validationGroup?: string;
 };
 
 export type TabItem = NonNullable<TabbedItem['tabs']>[number];

@@ -739,9 +739,11 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
 
   _renderButtonItem(info: TemplatesInfo): void {
     const { item, $parent, rootElementCssClassList } = info;
-    const { validationGroup } = this.option();
+    const { validationGroup: formValidationGroup } = this.option();
 
     this._configureDefaultButton(item);
+    const validationGroup = item.buttonOptions?.validationGroup
+      ?? item.validationGroup ?? formValidationGroup;
 
     const { $rootElement, buttonInstance } = renderButtonItem({
       item,
@@ -798,11 +800,16 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
       form,
       labelLocation,
       requiredMessage,
-      validationGroup,
+      validationGroup: formValidationGroup,
       validationBoundary,
       showColonAfterLabel,
       labelMode,
     } = this.option();
+
+    const validationGroup = item.editorOptions?.validationGroup
+      ?? item.validationGroup ?? formValidationGroup;
+
+    form?._validationGroups?.add(validationGroup);
 
     const fieldItemOptions = convertToRenderFieldItemOptions({
       $parent,

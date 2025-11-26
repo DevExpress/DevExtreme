@@ -175,6 +175,8 @@ class Form extends Widget<FormProperties> {
 
   _loadPanel?: FormLoadPanel;
 
+  _validationGroups!: Set<string>;
+
   _smartPastingAction?: (e: Partial<SmartPastingEvent>) => void;
 
   _smartPastedAction?: (e: Partial<SmartPastedEvent>) => void;
@@ -186,6 +188,7 @@ class Form extends Widget<FormProperties> {
     this._cachedColCountOptions = [];
     this._itemsRunTimeInfo = new FormItemsRunTimeInfo();
     this._groupsColCount = [];
+    this._validationGroups = new Set<string>();
 
     this._attachSyncSubscriptions();
     this._createSmartPastingAction();
@@ -598,6 +601,19 @@ class Form extends Widget<FormProperties> {
     }
   }
 
+  _getParentValidationGroup(path: string | undefined): string | undefined {
+    if (path) {
+      const parentPath = path.split('.').slice(0, -1).join('.');
+      const parentGuid = this._itemsRunTimeInfo.findKeyByPath(parentPath);
+
+      // @ts-expect-error ts-error
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return this._itemsRunTimeInfo.getItems()[parentGuid]?.preparedItem?.validationGroup;
+    }
+
+    return undefined;
+  }
+
   _prepareItems(
     items: Item[] | TabbedItem['tabs'] | undefined,
     parentIsTabbedItem?: boolean,
@@ -632,7 +648,30 @@ class Form extends Widget<FormProperties> {
 
           // eslint-disable-next-line max-depth
           if (preparedItem.items) {
-            preparedItem.items = this._prepareItems(preparedItem.items, parentIsTabbedItem, path);
+            // @ts-expect-error ts-error
+            const { validationGroup: parentValidationGroup } = item;
+
+            // TODO: better pass parentValidationGroup to _prepareItems as argument
+            //  to avoid duplication for string items
+            const itemsWithValidationGroup = preparedItem.items.map((childItem) => {
+              if (isString(childItem)) {
+                return {
+                  validationGroup: parentValidationGroup,
+                  dataField: childItem,
+                };
+              }
+
+              return {
+                validationGroup: parentValidationGroup,
+                ...childItem,
+              };
+            });
+
+            preparedItem.items = this._prepareItems(
+              itemsWithValidationGroup,
+              parentIsTabbedItem,
+              path,
+            );
           }
           result.push(preparedItem);
         } else {
@@ -1840,8 +1879,23 @@ class Form extends Widget<FormProperties> {
     return undefined;
   }
 
-  validate(): ValidationResult {
-    return ValidationEngine.validateGroup(this._getValidationGroup());
+  validate(group?: string): ValidationResult {
+    if (group) {
+      return ValidationEngine.validateGroup(group);
+    }
+
+    return [...this._validationGroups.values()]
+      .reduce<ValidationResult>((acc, validationGroup) => {
+        const groupRes = ValidationEngine.validateGroup(validationGroup);
+
+        return {
+          brokenRules: [...acc.brokenRules ?? [], ...groupRes.brokenRules ?? []],
+          // complete: DxPromise<dxValidationGroupResult>;
+          isValid: (acc.isValid ?? true) && groupRes.isValid,
+          // status: ValidationStatus;
+          validators: [...acc.validators ?? [], ...groupRes.validators ?? []],
+        };
+      }, { brokenRules: [], isValid: true, validators: [] });
   }
 
   getItemID(name: string): string {
