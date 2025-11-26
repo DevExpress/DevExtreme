@@ -2164,14 +2164,14 @@ describe('Appointment Popup', () => {
       expect(toolbarItems?.[0]?.text).toBe('Custom Toolbar');
     });
 
-    it('should open popup if popup.deferRendering is true', async () => {
+    it('should open popup if popup.deferRendering is false', async () => {
       const { scheduler, POM } = await createScheduler({
         ...getDefaultConfig(),
         editing: {
           allowAdding: true,
           allowUpdating: true,
           popup: {
-            deferRendering: true,
+            deferRendering: false,
           },
         },
       });
