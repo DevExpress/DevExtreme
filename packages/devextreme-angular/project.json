@@ -185,7 +185,7 @@
       "cache": true,
       "inputs": ["default"]
     },
-    "npm.pack": {
+    "pack": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
