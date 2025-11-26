@@ -13,6 +13,7 @@ When helping me write code or reviewing my existing code, please follow these sp
      - ✓ `createJsonParser` (not `createJSONParser`)
      - ✓ `apiEndpoint` (not `APIEndpoint`)
    - This applies to all acronyms regardless of length (DOM, HTML, JSON, API, etc.)
+   - The exception is `AI`, which should always be capitalized fully (e.g., `AIIntegration`, `aiOptions`)
 
 2. **JSDoc Format - Omit @type:**
    - Do not include the `@type` tag in JSDoc comments when the type is already indicated by TypeScript type annotation
