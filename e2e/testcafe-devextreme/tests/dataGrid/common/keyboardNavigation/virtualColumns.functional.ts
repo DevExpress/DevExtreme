@@ -104,7 +104,7 @@ test('DataGrid should scroll to the last cell of the previous row and focus it w
 
 [true, false].forEach((rtlEnabled) => {
   [true, false].forEach((useNative) => {
-    test(`DataGrid should scroll to the next virtual cell and focus it when navigating with Tab key (rtlEnabled: ${rtlEnabled})`, async (t) => {
+    test(`DataGrid should scroll to the next virtual cell and focus it when navigating with Tab key (rtlEnabled: ${rtlEnabled}, useNative: ${useNative})`, async (t) => {
       // arrange
       const dataGrid = new DataGrid('#container');
       const headerRow = dataGrid.getHeaders().getHeaderRow(0);
@@ -153,7 +153,7 @@ test('DataGrid should scroll to the last cell of the previous row and focus it w
       },
     }));
 
-    test(`DataGrid should scroll to the previous virtual cell and focus it when navigating with Shift+Tab key (rtlEnabled: ${rtlEnabled})`, async (t) => {
+    test(`DataGrid should scroll to the previous virtual cell and focus it when navigating with Shift+Tab key (rtlEnabled: ${rtlEnabled}, useNative: ${useNative})`, async (t) => {
       // arrange
       const dataGrid = new DataGrid('#container');
       const headerRow = dataGrid.getHeaders().getHeaderRow(0);
@@ -211,7 +211,7 @@ test('DataGrid should scroll to the last cell of the previous row and focus it w
       },
     }));
 
-    test(`DataGrid should scroll to the next virtual cell and focus it when navigating with Right key (rtlEnabled: ${rtlEnabled})`, async (t) => {
+    test(`DataGrid should scroll to the next virtual cell and focus it when navigating with Right key (rtlEnabled: ${rtlEnabled}, useNative: ${useNative})`, async (t) => {
       // arrange
       const dataGrid = new DataGrid('#container');
       const headerRow = dataGrid.getHeaders().getHeaderRow(0);
@@ -261,7 +261,7 @@ test('DataGrid should scroll to the last cell of the previous row and focus it w
       },
     }));
 
-    test(`DataGrid should scroll to the previous virtual cell and focus it when navigating with Left key (rtlEnabled: ${rtlEnabled})`, async (t) => {
+    test(`DataGrid should scroll to the previous virtual cell and focus it when navigating with Left key (rtlEnabled: ${rtlEnabled}, useNative: ${useNative})`, async (t) => {
       // arrange
       const dataGrid = new DataGrid('#container');
       const headerRow = dataGrid.getHeaders().getHeaderRow(0);
