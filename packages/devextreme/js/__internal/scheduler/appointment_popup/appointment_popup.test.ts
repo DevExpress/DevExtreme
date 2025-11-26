@@ -14,6 +14,7 @@ const CLASSES = {
   icon: 'dx-scheduler-form-icon',
   hidden: 'dx-hidden',
 
+  scheduler: 'dx-scheduler',
   mainGroupHidden: 'dx-scheduler-form-main-group-hidden',
   recurrenceGroupHidden: 'dx-scheduler-form-recurrence-group-hidden',
 };
@@ -63,8 +64,10 @@ describe('Appointment Form', () => {
   });
 
   afterEach(() => {
+    const $scheduler = $(document.querySelector(`.${CLASSES.scheduler}`));
+    // @ts-expect-error
+    $scheduler.dxScheduler('dispose');
     fx.off = false;
-    document.body.innerHTML = '';
     jest.useRealTimers();
   });
 
@@ -1774,8 +1777,10 @@ describe('Appointment Popup', () => {
   });
 
   afterEach(() => {
+    const $scheduler = $(document.querySelector(`.${CLASSES.scheduler}`));
+    // @ts-expect-error
+    $scheduler.dxScheduler('dispose');
     fx.off = false;
-    document.body.innerHTML = '';
     jest.useRealTimers();
   });
 
@@ -2216,8 +2221,10 @@ describe('Customize form items', () => {
   });
 
   afterEach(() => {
+    const $scheduler = $(document.querySelector(`.${CLASSES.scheduler}`));
+    // @ts-expect-error
+    $scheduler.dxScheduler('dispose');
     fx.off = false;
-    document.body.innerHTML = '';
     jest.useRealTimers();
   });
 
