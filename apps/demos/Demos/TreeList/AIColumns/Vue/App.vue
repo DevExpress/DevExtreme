@@ -71,7 +71,7 @@
 </template>
 
 <script setup lang="ts">
-import { DxTreeList, DxColumn, DxColumnFixing, DxScrolling, DxPaging, DxAI } from 'devextreme-vue/tree-list';
+import { DxTreeList, DxColumn, DxScrolling, DxPaging, DxAI } from 'devextreme-vue/tree-list';
 import Employee from './Employee.vue';
 import Status from './Status.vue';
 import { type IEmployee, employees } from './data.ts';
