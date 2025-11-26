@@ -916,9 +916,9 @@ export const mergeColumns = (that: ColumnsController, columns, commandColumns, n
 };
 
 export const isColumnFixed = (that: ColumnsController, column) => {
-  const isNotCommandColumn = !column.type || isDefined(column.fixed) || column.type === AI_COLUMN_NAME;
+  const isFixedCommandColumn = column.type && column.type !== AI_COLUMN_NAME;
 
-  if (isNotCommandColumn) {
+  if (!isFixedCommandColumn) {
     return column.fixed && column.fixedPosition !== StickyPosition.Sticky;
   }
 
