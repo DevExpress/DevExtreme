@@ -67,6 +67,7 @@ describe('Appointment Form', () => {
     const $scheduler = $(document.querySelector(`.${CLASSES.scheduler}`));
     // @ts-expect-error
     $scheduler.dxScheduler('dispose');
+    document.body.innerHTML = '';
     fx.off = false;
     jest.useRealTimers();
   });
@@ -1780,6 +1781,7 @@ describe('Appointment Popup', () => {
     const $scheduler = $(document.querySelector(`.${CLASSES.scheduler}`));
     // @ts-expect-error
     $scheduler.dxScheduler('dispose');
+    document.body.innerHTML = '';
     fx.off = false;
     jest.useRealTimers();
   });
@@ -2224,6 +2226,7 @@ describe('Customize form items', () => {
     const $scheduler = $(document.querySelector(`.${CLASSES.scheduler}`));
     // @ts-expect-error
     $scheduler.dxScheduler('dispose');
+    document.body.innerHTML = '';
     fx.off = false;
     jest.useRealTimers();
   });
