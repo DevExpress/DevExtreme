@@ -1,8 +1,6 @@
+import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  NgModule, Component, enableProdMode, ViewChild, ChangeDetectorRef,
-} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+  Component, enableProdMode, ViewChild, ChangeDetectorRef, provideZoneChangeDetection } from '@angular/core';
 import {
   DxGanttComponent,
   DxGanttModule,
@@ -33,12 +31,18 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  standalone: false,
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
   preserveWhitespaces: true,
+  imports: [
+    DxGanttModule,
+    DxCheckBoxModule,
+    DxNumberBoxModule,
+    DxDateBoxModule,
+    DxSelectBoxModule,
+  ],
 })
 export class AppComponent {
   @ViewChild(DxGanttComponent, { static: false }) gantt: DxGanttComponent;
@@ -138,18 +142,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxGanttModule,
-    DxCheckBoxModule,
-    DxNumberBoxModule,
-    DxDateBoxModule,
-    DxSelectBoxModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

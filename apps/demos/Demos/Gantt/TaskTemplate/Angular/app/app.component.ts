@@ -1,6 +1,5 @@
-import { NgModule, Component, enableProdMode, ViewEncapsulation } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, ViewEncapsulation, provideZoneChangeDetection } from '@angular/core';
 import { DxGanttModule, DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
 import {
   Service, Task, Dependency, Resource, ResourceAssignment,
@@ -17,13 +16,17 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  standalone: false,
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
   preserveWhitespaces: true,
   encapsulation: ViewEncapsulation.None,
+  imports: [
+    DxGanttModule,
+    DxCheckBoxModule,
+    DxSelectBoxModule,
+  ],
 })
 export class AppComponent {
   tasks: Task[];
@@ -54,16 +57,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxGanttModule,
-    DxCheckBoxModule,
-    DxSelectBoxModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});
