@@ -91,7 +91,7 @@
       "executor": "devextreme-nx-infra-plugin:prepare-package-json",
       "dependsOn": ["npm.content"],
       "options": {
-        "sourcePackageJson": "./package.json",
+        "sourcePackageJson": "./npm/dist/package.json",
         "distDirectory": "./npm/dist"
       }
     },
