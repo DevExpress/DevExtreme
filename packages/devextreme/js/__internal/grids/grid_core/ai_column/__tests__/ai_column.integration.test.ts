@@ -4007,7 +4007,7 @@ describe('Cache', () => {
   });
 
   describe('when data is removed', () => {
-    it('should clear cached data and send a prompt request', async () => {
+    it('should clear cached data without sending a new prompt request', async () => {
       const aiIntegration = new AIIntegration({
         sendRequest(prompt: RequestParams): RequestResult {
           sendRequestSpy(prompt.data?.data);
@@ -4106,7 +4106,7 @@ describe('Cache', () => {
       expect(instance.getAIColumnText('myAIColumn', 1)).toEqual('Response with value=10');
 
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      instance.addRow();// This method returns a non-native Promise
+      instance.addRow(); // This method returns a non-native Promise
       jest.runAllTimers();
       await Promise.resolve();
 

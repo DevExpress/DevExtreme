@@ -18,11 +18,11 @@ export class AIColumnController extends Controller {
 
   private dataSourceChangedHandler!: (e?: HandleDataChangedArguments) => void;
 
-  private storeUpdatedHandler!: ((key: PropertyKey) => void) | null;
+  private storeUpdatedHandler!: (key: PropertyKey) => void;
 
-  private storeRemovedHandler!: ((key: PropertyKey) => void) | null;
+  private storeRemovedHandler!: (key: PropertyKey) => void;
 
-  private storeBeforePushHandler!: (({ changes }: { changes: DataChange[] }) => void) | null;
+  private storeBeforePushHandler!: ({ changes }: { changes: DataChange[] }) => void;
 
   private aiColumnOptionChangedHandler!: (
     column: Column,
@@ -67,9 +67,15 @@ export class AIColumnController extends Controller {
   private unsubscribeFromStoreEvents(): void {
     const store = this.dataController.store();
 
-    store?.off('updated', this.storeUpdatedHandler);
-    store?.off('removed', this.storeRemovedHandler);
-    store?.off('beforePush', this.storeBeforePushHandler);
+    if (this.storeUpdatedHandler) {
+      store?.off('updated', this.storeUpdatedHandler);
+    }
+    if (this.storeRemovedHandler) {
+      store?.off('removed', this.storeRemovedHandler);
+    }
+    if (this.storeBeforePushHandler) {
+      store?.off('beforePush', this.storeBeforePushHandler);
+    }
   }
 
   private subscribeToStoreEvents(): void {
