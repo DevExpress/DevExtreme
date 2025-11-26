@@ -379,8 +379,8 @@ const data: Data[] = [{
   theatreId: 0,
   movieId: 1,
   price: 5,
-  startDate: new Date('2025-05-04T16:30:00.000Z'),
-  endDate: new Date('2025-05-04T18:02:00.000Z'),
+  startDate: new Date('2025-05-03T23:00:00.000Z'),
+  endDate: new Date('2025-05-04T00:32:00.000Z'),
 }, {
   theatreId: 0,
   movieId: 2,
@@ -445,8 +445,8 @@ const data: Data[] = [{
   theatreId: 0,
   movieId: 2,
   price: 5,
-  startDate: new Date('2025-05-06T04:00:00.000Z'),
-  endDate: new Date('2025-05-06T05:33:00.000Z'),
+  startDate: new Date('2025-05-05T18:00:00.000Z'),
+  endDate: new Date('2025-05-05T19:33:00.000Z'),
 }, {
   theatreId: 0,
   movieId: 3,
