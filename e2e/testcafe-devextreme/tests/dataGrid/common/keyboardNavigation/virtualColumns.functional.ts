@@ -114,10 +114,16 @@ test('DataGrid should scroll to the last cell of the previous row and focus it w
       await t
         .expect(dataGrid.isReady())
         .ok()
-        .expect(headerRow.getHeaderCells().count)
+        .expect(headerRow.getDataHeaderCells().count)
         .eql(5);
 
       // act
+      /*
+        We can't use the TestCafe API (for example, click)
+        because it doesn't work correctly in RTL mode.
+        Specifically, the negative scroll position is reset
+        when calling the click method.
+      */
       await triggerEvent(dataGrid.getDataCell(0, 4).element, 'dxpointerdown');
 
       // assert
@@ -134,7 +140,7 @@ test('DataGrid should scroll to the last cell of the previous row and focus it w
         .eql(expectedScrollLeft)
         .expect(dataGrid.getDataCell(0, 5).element.focused)
         .ok()
-        .expect(headerRow.getHeaderCells().count)
+        .expect(headerRow.getDataHeaderCells().count)
         .eql(10);
     }).before(async () => createWidget('dxDataGrid', {
       width: 500,
@@ -166,10 +172,16 @@ test('DataGrid should scroll to the last cell of the previous row and focus it w
         .eql(rtlEnabled ? 0 : 1500)
         .expect(dataGrid.getDataCell(0, 19).element.exists)
         .ok()
-        .expect(headerRow.getHeaderCells().count)
+        .expect(headerRow.getDataHeaderCells().count)
         .eql(5);
 
       // act
+      /*
+        We can't use the TestCafe API (for example, click)
+        because it doesn't work correctly in RTL mode.
+        Specifically, the negative scroll position is reset
+        when calling the click method.
+      */
       await triggerEvent(dataGrid.getDataCell(0, 15).element, 'dxpointerdown');
 
       // assert
@@ -186,7 +198,7 @@ test('DataGrid should scroll to the last cell of the previous row and focus it w
         .eql(rtlEnabled ? 100 : 1400)
         .expect(dataGrid.getDataCell(0, 14).element.focused)
         .ok()
-        .expect(headerRow.getHeaderCells().count)
+        .expect(headerRow.getDataHeaderCells().count)
         .eql(10);
     }).before(async () => createWidget('dxDataGrid', {
       width: 500,
@@ -210,10 +222,16 @@ test('DataGrid should scroll to the last cell of the previous row and focus it w
       await t
         .expect(dataGrid.isReady())
         .ok()
-        .expect(headerRow.getHeaderCells().count)
+        .expect(headerRow.getDataHeaderCells().count)
         .eql(5);
 
       // act
+      /*
+        We can't use the TestCafe API (for example, click)
+        because it doesn't work correctly in RTL mode.
+        Specifically, the negative scroll position is reset
+        when calling the click method.
+      */
       await triggerEvent(dataGrid.getDataCell(0, 4).element, 'dxpointerdown');
 
       // assert
@@ -230,7 +248,7 @@ test('DataGrid should scroll to the last cell of the previous row and focus it w
         .eql(expectedScrollLeft)
         .expect(dataGrid.getDataCell(0, 5).element.focused)
         .ok()
-        .expect(headerRow.getHeaderCells().count)
+        .expect(headerRow.getDataHeaderCells().count)
         .eql(10);
     }).before(async () => createWidget('dxDataGrid', {
       width: 500,
@@ -263,10 +281,16 @@ test('DataGrid should scroll to the last cell of the previous row and focus it w
         .eql(rtlEnabled ? 0 : 1500)
         .expect(dataGrid.getDataCell(0, 19).element.exists)
         .ok()
-        .expect(headerRow.getHeaderCells().count)
+        .expect(headerRow.getDataHeaderCells().count)
         .eql(5);
 
       // act
+      /*
+        We can't use the TestCafe API (for example, click)
+        because it doesn't work correctly in RTL mode.
+        Specifically, the negative scroll position is reset
+        when calling the click method.
+      */
       await triggerEvent(dataGrid.getDataCell(0, 15).element, 'dxpointerdown');
 
       // assert
@@ -283,7 +307,7 @@ test('DataGrid should scroll to the last cell of the previous row and focus it w
         .eql(rtlEnabled ? 100 : 1400)
         .expect(dataGrid.getDataCell(0, 14).element.focused)
         .ok()
-        .expect(headerRow.getHeaderCells().count)
+        .expect(headerRow.getDataHeaderCells().count)
         .eql(10);
     }).before(async () => createWidget('dxDataGrid', {
       width: 500,

@@ -15,7 +15,11 @@ export default class HeaderRow extends FocusableElement {
   }
 
   getHeaderCells(): Selector {
-    return this.element.child('td[role="columnheader"]');
+    return this.element.child('td');
+  }
+
+  getDataHeaderCells(): Selector {
+    return this.getHeaderCells().filter('[role="columnheader"]');
   }
 
   async getHeaderTexts(): Promise<string[]> {
