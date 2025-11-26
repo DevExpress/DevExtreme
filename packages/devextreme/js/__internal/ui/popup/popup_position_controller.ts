@@ -123,7 +123,9 @@ export class PopupPositionController<
 
   positionContent(): void {
     if (this._properties.fullScreen) {
-      move(this._$content, { top: 0, left: 0 });
+      if (this._$content) {
+        move(this._$content, { top: 0, left: 0 });
+      }
 
       this.detectVisualPositionChange();
     } else {
@@ -131,6 +133,11 @@ export class PopupPositionController<
 
       super.positionContent();
     }
+  }
+
+  clean(): void {
+    this._$dragResizeContainer = undefined;
+    super.clean();
   }
 
   _normalizePosition(position?: TPosition): OverlayPosition {

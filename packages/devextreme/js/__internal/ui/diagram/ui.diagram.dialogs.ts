@@ -148,7 +148,7 @@ class DiagramDialog extends Widget<Properties> {
   }
 
   _show(): void {
-    this._popup?.$content().empty().append(this._onGetContentAction());
+    this._popup?.$content()?.empty().append(this._onGetContentAction());
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._popup?.show();
     this._isShown = true;
