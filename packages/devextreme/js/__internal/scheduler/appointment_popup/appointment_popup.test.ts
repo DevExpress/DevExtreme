@@ -2031,6 +2031,26 @@ describe('Appointment Popup', () => {
       expect(wrapperAttr.class).toBeDefined();
     });
 
+    it('should call onInitialized callback when popup is initialized', async () => {
+      const onInitialized = jest.fn();
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          popup: {
+            onInitialized,
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      expect(POM.isPopupVisible()).toBe(true);
+      expect(onInitialized).toHaveBeenCalled();
+      expect(onInitialized).toHaveBeenCalledTimes(1);
+    });
+
     it('should call onShowing callback when popup is shown', async () => {
       const onShowing = jest.fn();
       const onAppointmentFormOpening = jest.fn();
@@ -2137,6 +2157,23 @@ describe('Appointment Popup', () => {
       expect(toolbarItems).toBeDefined();
       expect(toolbarItems).toHaveLength(1);
       expect(toolbarItems?.[0]?.text).toBe('Custom Toolbar');
+    });
+
+    it('should open popup if popup.deferRendering is true', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowAdding: true,
+          allowUpdating: true,
+          popup: {
+            deferRendering: true,
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      expect(POM.isPopupVisible()).toBe(true);
     });
   });
 });
