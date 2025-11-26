@@ -1475,6 +1475,53 @@ describe('aiMode', () => {
     jest.runAllTimers();
     expect(columnSendRequestSpy).toBeCalledTimes(0);
   });
+
+  describe('when mode is manual', () => {
+    it('should apply prompt change at runtime', async () => {
+      const { component } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration: columnAIIntegration,
+              mode: 'manual',
+            },
+          },
+        ],
+      });
+      const dropDownButton = component.getAIHeaderCell(3).getDropDownButton();
+
+      expect(columnSendRequestSpy).toBeCalledTimes(0);
+
+      dropDownButton?.getButtonElement()?.click();
+
+      expect(dropDownButton.isOpened()).toBe(true);
+
+      dropDownButton.getList()?.getItem(0)?.getElement()?.click(); // show AIPromptEditor
+
+      const aiPromptEditor = component.getAIPromptEditor();
+
+      expect(aiPromptEditor.isVisible()).toBe(true);
+
+      aiPromptEditor.getTextArea().setValue('Updated prompt');
+      aiPromptEditor.getApplyButton().getElement().click();
+
+      expect(aiPromptEditor.getProgressBar().isVisible()).toBe(true);
+
+      await Promise.resolve();
+
+      expect(aiPromptEditor.getProgressBar().isVisible()).toBe(false);
+      expect(columnSendRequestSpy).toBeCalledTimes(1);
+    });
+  });
 });
 
 describe('API Methods', () => {
