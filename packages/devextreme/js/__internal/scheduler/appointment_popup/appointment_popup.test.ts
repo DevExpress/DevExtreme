@@ -18,6 +18,7 @@ const CLASSES = {
   recurrenceGroupHidden: 'dx-scheduler-form-recurrence-group-hidden',
 };
 
+// some change
 const getDefaultData = () => [
   {
     text: 'recurring-app',
