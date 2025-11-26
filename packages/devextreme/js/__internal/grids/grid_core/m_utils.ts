@@ -19,9 +19,11 @@ import { getWindow } from '@js/core/utils/window';
 import formatHelper from '@js/format_helper';
 import LoadPanel from '@js/ui/load_panel';
 import sharedFiltering from '@js/ui/shared/filtering';
+import { isNumeric } from '@ts/core/utils/m_type';
 import type { ColumnPoint } from '@ts/grids/grid_core/m_types';
 
 import { AI_COLUMN_NAME } from './ai_column/const';
+import type { Column } from './columns_controller/m_columns_controller';
 import { isEqualSelectors, isSelectorEqualWithCallback } from './utils/index';
 
 const BASE_LOAD_PANEL_Z_INDEX = 1000;
@@ -59,6 +61,8 @@ const DATE_INTERVAL_SELECTORS = {
     return value && value.getSeconds();
   },
 };
+
+const DEFAULT_COLUMN_WIDTH = 50;
 
 const getIntervalSelector = function () {
   const data = arguments[1];
@@ -170,6 +174,14 @@ const addPointIfNeed = <T extends ColumnPoint> (points: ColumnPoint[], pointProp
     points.push(point);
   }
 };
+
+const getColumnWidths = (columns: Column[]): number[] => columns
+  .map((column) => {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    const width = column.visibleWidth || column.width;
+
+    return isNumeric(width) ? parseFloat(width as string) : DEFAULT_COLUMN_WIDTH;
+  });
 
 function normalizeGroupingLoadOptions(group) {
   if (!Array.isArray(group)) {
@@ -804,4 +816,5 @@ export default {
   // New utils
   isEqualSelectors,
   isSelectorEqualWithCallback,
+  getColumnWidths,
 };

@@ -127,3 +127,13 @@ export const checkFocusedRowChangedEventArgs = async (
     .expect(args.rowIndex)
     .eql(expectedArgs.rowIndex);
 };
+
+export const triggerEvent = async (
+  element: Selector,
+  eventName: string,
+  eventOptions: Record<string, unknown> = {},
+): Promise<void> => ClientFunction(() => {
+  $(element()).trigger($.Event(eventName, eventOptions));
+}, {
+  dependencies: { element, eventName, eventOptions },
+})();
