@@ -591,10 +591,6 @@ class CollectionWidget<
   }
 
   _refreshActiveDescendant($target?: dxElementWrapper | null): void {
-    if (!$target) {
-      return;
-    }
-
     const { focusedElement } = this.option();
 
     if (isDefined(focusedElement)) {
