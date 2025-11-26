@@ -107,10 +107,6 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
     }
   }
 
-  public restoreViewFocus() {
-    this.columnFocusDispatcher?.restoreFocus(this);
-  }
-
   public restoreFocus() {
     this.needToRestoreFocus = false;
 
