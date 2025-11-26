@@ -243,6 +243,7 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
+          "pnpm --workspace-root nx build devextreme-angular",
           "pnpm --workspace-root nx clean.tests devextreme-angular",
           "pnpm --workspace-root nx generate-component-names-for-tests devextreme-angular",
           "pnpm --workspace-root nx copy.dist.dx-angular.tests.dist devextreme-angular",
@@ -272,7 +273,6 @@
           }
         ]
       },
-      "dependsOn": ["build.ngc"],
       "inputs": [
         "{projectRoot}/npm/dist/**/*"
       ],
