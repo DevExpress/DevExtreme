@@ -5757,6 +5757,93 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.equal(editor.getInputElement().length, 0, 'cell has no editor');
     });
 
+    QUnit.testInActiveWindow('editing.changes should collect invalid showEditorAlways edits when repaintChangesOnly is true', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [
+                { id: 1, name: 'Job 1', article: 'Article A' },
+                { id: 2, name: 'Job 2', article: 'Article B' },
+            ],
+            keyExpr: 'id',
+            loadingTimeout: null,
+            repaintChangesOnly: true,
+            columns: [{
+                dataField: 'name',
+                showEditorAlways: true,
+                validationRules: [{ type: 'required' }],
+            }, 'article'],
+            editing: {
+                mode: 'cell',
+                allowUpdating: true,
+            },
+        });
+        this.clock.tick(10);
+
+        const getEditor = (rowIndex) => $(dataGrid.getCellElement(rowIndex, 0)).find('.dx-textbox').dxTextBox('instance');
+        const blurAnotherCell = (rowIndex) => $(dataGrid.getCellElement(rowIndex === 0 ? 1 : 0, 1)).trigger('dxclick');
+        const clearNameCell = (rowIndex) => {
+            dataGrid.editCell(rowIndex, 0);
+            this.clock.tick(10);
+            getEditor(rowIndex).option('value', '');
+            this.clock.tick(10);
+            blurAnotherCell(rowIndex);
+            this.clock.tick(10);
+        };
+
+        clearNameCell(0);
+        clearNameCell(1);
+
+        const changes = dataGrid.option('editing.changes');
+        assert.deepEqual(changes.map((change) => change.key), [1, 2], 'changes tracked for every invalid row');
+        assert.deepEqual(changes.map((change) => change.data), [{ name: '' }, { name: '' }], 'empty values stored per row');
+    });
+
+    QUnit.testInActiveWindow('cancelEditData should restore showEditorAlways editors when repaintChangesOnly is true', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [
+                { id: 1, name: 'Job 1', article: 'Article A' },
+                { id: 2, name: 'Job 2', article: 'Article B' },
+            ],
+            keyExpr: 'id',
+            loadingTimeout: null,
+            repaintChangesOnly: true,
+            columns: [{
+                dataField: 'name',
+                showEditorAlways: true,
+                validationRules: [{ type: 'required' }],
+            }, 'article'],
+            editing: {
+                mode: 'cell',
+                allowUpdating: true,
+            },
+        });
+        this.clock.tick(10);
+
+        const getEditor = (rowIndex) => $(dataGrid.getCellElement(rowIndex, 0)).find('.dx-textbox').dxTextBox('instance');
+        const blurAnotherCell = (rowIndex) => $(dataGrid.getCellElement(rowIndex === 0 ? 1 : 0, 1)).trigger('dxclick');
+        const clearNameCell = (rowIndex) => {
+            dataGrid.editCell(rowIndex, 0);
+            this.clock.tick(10);
+            getEditor(rowIndex).option('value', '');
+            this.clock.tick(10);
+            blurAnotherCell(rowIndex);
+            this.clock.tick(10);
+        };
+
+        clearNameCell(0);
+        clearNameCell(1);
+
+        // act
+        dataGrid.cancelEditData();
+        this.clock.tick(10);
+
+        // assert
+        assert.strictEqual(getEditor(0).option('value'), 'Job 1', 'first editor restored');
+        assert.strictEqual(getEditor(1).option('value'), 'Job 2', 'second editor restored');
+        assert.deepEqual(dataGrid.option('editing.changes'), [], 'no pending changes');
+    });
+
     QUnit.test('Using watch in cellPrepared event for editor if repaintChangesOnly', function(assert) {
         // arrange
         const dataSource = new DataSource({

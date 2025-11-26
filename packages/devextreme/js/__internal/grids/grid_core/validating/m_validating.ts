@@ -844,41 +844,65 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
   }
 
   protected _beforeSaveEditData(change, editIndex?) {
-    let result: any = super._beforeSaveEditData.apply(this, arguments as any);
-    const validationData = this._validatingController._getValidationData(change?.key, true);
+    const baseResult: any = super._beforeSaveEditData.apply(this, arguments as any);
 
     if (change) {
-      const isValid = change.type === 'remove' || validationData.isValid;
-      result = result || !isValid;
-    } else {
-      const disposeValidators = this._createInvisibleColumnValidators(this.getChanges());
-      // @ts-expect-error
-      result = new Deferred();
-      this.executeOperation(result, () => {
-        this._validatingController.validate(true).done((isFullValid) => {
-          disposeValidators();
-          this._updateRowAndPageIndices();
+      if (change.type === EDIT_DATA_REMOVE_TYPE) {
+        return baseResult || false;
+      }
 
-          // eslint-disable-next-line default-case, @typescript-eslint/switch-exhaustiveness-check
-          switch (this.getEditMode()) {
-            case EDIT_MODE_CELL:
-              if (!isFullValid) {
-                this._focusEditingCell();
-              }
-              break;
-            case EDIT_MODE_BATCH:
-              if (!isFullValid) {
-                this._resetEditRowKey();
-                this._resetEditColumnName();
-                this._dataController.updateItems();
-              }
-              break;
-          }
-          result.resolve(!isFullValid);
-        });
+      const disposeValidators = this._createInvisibleColumnValidators([change]);
+      // @ts-expect-error
+      const deferred = new Deferred();
+
+      this.executeOperation(deferred, () => {
+        this._validatingController.validate(true)
+          .done(() => {
+            disposeValidators();
+            const validationData = this._validatingController._getValidationData(change?.key, true);
+            const isValid = validationData?.isValid;
+            deferred.resolve(baseResult || !isValid);
+          })
+          .fail((error) => {
+            disposeValidators();
+            deferred.reject(error);
+          });
       });
+
+      return deferred.promise();
     }
-    return result.promise ? result.promise() : result;
+
+    const disposeValidators = this._createInvisibleColumnValidators(this.getChanges());
+    // @ts-expect-error
+    const result = new Deferred();
+    this.executeOperation(result, () => {
+      this._validatingController.validate(true).done((isFullValid) => {
+        disposeValidators();
+        this._updateRowAndPageIndices();
+
+        // eslint-disable-next-line default-case, @typescript-eslint/switch-exhaustiveness-check
+        switch (this.getEditMode()) {
+          case EDIT_MODE_CELL:
+            if (!isFullValid) {
+              this._focusEditingCell();
+            }
+            break;
+          case EDIT_MODE_BATCH:
+            if (!isFullValid) {
+              this._resetEditRowKey();
+              this._resetEditColumnName();
+              this._dataController.updateItems();
+            }
+            break;
+        }
+        result.resolve(baseResult || !isFullValid);
+      }).fail((error) => {
+        disposeValidators();
+        result.reject(error);
+      });
+    });
+
+    return result.promise();
   }
 
   /**

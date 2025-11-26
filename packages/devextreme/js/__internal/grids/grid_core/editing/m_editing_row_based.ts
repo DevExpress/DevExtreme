@@ -19,16 +19,25 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return this.getEditMode() === EDIT_MODE_ROW;
   }
 
-  protected _afterCancelEditData(rowIndex) {
+  protected _afterCancelEditData(rowIndex, rowIndices: number[] = []) {
     const dataController = this._dataController;
 
     if (this.isRowBasedEditMode() && rowIndex >= 0) {
+      const combinedRowIndices = rowIndices.slice();
+
+      [rowIndex, rowIndex + 1].forEach((index) => {
+        if (index >= 0 && !combinedRowIndices.includes(index)) {
+          combinedRowIndices.push(index);
+        }
+      });
+
       dataController.updateItems({
         changeType: 'update',
-        rowIndices: [rowIndex, rowIndex + 1],
+        rowIndices: combinedRowIndices,
+        repaintChangesOnly: this.option('repaintChangesOnly'),
       });
     } else {
-      super._afterCancelEditData(rowIndex);
+      super._afterCancelEditData(rowIndex, rowIndices);
     }
   }
 

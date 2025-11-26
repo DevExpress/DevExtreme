@@ -9140,6 +9140,39 @@ QUnit.module('Editing with real dataController', {
             assert.equal(this.option('editing.editRowKey'), 3, 'editRowKey');
         });
 
+        QUnit.test('Cell values should be restored for all changed rows after cancelEditData when repaintChangesOnly is enabled', function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+
+            this.options.repaintChangesOnly = true;
+            $.extend(this.options.editing, {
+                allowUpdating: true,
+                mode: 'cell'
+            });
+            rowsView.render($testElement);
+
+            // act
+            this.editCell(0, 0);
+            this.cellValue(0, 'name', 'updated name 1');
+            this.closeEditCell();
+            this.clock.tick(10);
+
+            this.editCell(1, 0);
+            this.cellValue(1, 'name', 'updated name 2');
+            this.closeEditCell();
+            this.clock.tick(10);
+
+            assert.deepEqual(this.option('editing.changes').map(function(change) { return change.key; }), ['test1', 'test2'], 'changes are tracked for both rows');
+
+            this.cancelEditData();
+            this.clock.tick(10);
+
+            // assert
+            assert.strictEqual($(rowsView.getCellElement(0, 0)).text(), 'test1', 'first row value is restored');
+            assert.strictEqual($(rowsView.getCellElement(1, 0)).text(), 'test2', 'second row value is restored');
+        });
+
         ['cell', 'batch'].forEach(editMode => {
             QUnit.test(`editColumnName should be reset after cancelEditData (editing.mode = ${editMode})`, function(assert) {
                 // arrange

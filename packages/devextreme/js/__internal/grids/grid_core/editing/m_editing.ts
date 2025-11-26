@@ -1937,6 +1937,7 @@ class EditingControllerImpl extends modules.ViewController {
 
   protected _cancelEditDataCore() {
     const rowIndex = this._getVisibleEditRowIndex();
+    const rowIndices = this._getRowIndicesToUpdateAfterCancel(rowIndex);
 
     this._beforeCancelEditData();
 
@@ -1945,18 +1946,47 @@ class EditingControllerImpl extends modules.ViewController {
     this._resetEditColumnName();
     this._resetEditRowKey();
 
-    this._afterCancelEditData(rowIndex);
+    this._afterCancelEditData(rowIndex, rowIndices);
+  }
+
+  private _getRowIndicesToUpdateAfterCancel(rowIndex): number[] {
+    const dataController = this._dataController;
+    const changes = [...this.getChanges()];
+    const rowIndices: number[] = changes
+      .map(({ key }) => dataController.getRowIndexByKey(key))
+      .filter((index, position, array) => index >= 0 && array.indexOf(index) === position);
+
+    if (rowIndex >= 0 && !rowIndices.includes(rowIndex)) {
+      rowIndices.push(rowIndex);
+    }
+
+    return rowIndices;
   }
 
   /**
    * @extended: filter_row
    */
-  protected _afterCancelEditData(rowIndex) {
+  protected _afterCancelEditData(rowIndex, rowIndices: number[] = []) {
     const dataController = this._dataController;
+    const repaintChangesOnly = this.option('repaintChangesOnly');
+    const uniqueRowIndices = rowIndices
+      .filter((index, position, array) => index >= 0 && array.indexOf(index) === position);
 
-    dataController.updateItems({
-      repaintChangesOnly: this.option('repaintChangesOnly'),
-    });
+    if (rowIndex >= 0 && !uniqueRowIndices.includes(rowIndex)) {
+      uniqueRowIndices.push(rowIndex);
+    }
+
+    if (uniqueRowIndices.length) {
+      dataController.updateItems({
+        changeType: 'update',
+        rowIndices: uniqueRowIndices,
+        repaintChangesOnly,
+      });
+    } else {
+      dataController.updateItems({
+        repaintChangesOnly,
+      });
+    }
   }
 
   protected _hideEditPopup(): any {}
