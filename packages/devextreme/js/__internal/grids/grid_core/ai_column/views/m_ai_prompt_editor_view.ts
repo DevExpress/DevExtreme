@@ -104,14 +104,10 @@ export class AIPromptEditorView extends View {
     this.aiColumnController = this.getController('aiColumn');
 
     this.aiColumnController.aiRequestCompleted.add(() => {
-      // eslint-disable-next-line no-console
-      console.log('[BUG DEBUG] aiRequestCompleted fired - stopping editor');
       this.promptEditorInstance?.updatePrompt(this.promptEditorInstance.getEditorValue());
       this.promptEditorInstance?.updateStateOnAction('stop');
     });
     this.aiColumnController.aiRequestRejected.add(() => {
-      // eslint-disable-next-line no-console
-      console.log('[BUG DEBUG] aiRequestRejected fired - stopping editor');
       this.promptEditorInstance?.updateStateOnAction('stop');
     });
     this.renderCompleted.add(() => {
@@ -146,20 +142,10 @@ export class AIPromptEditorView extends View {
     const isPromptOptionName = isPromptOption(optionName, value);
 
     if (isPromptOptionName) {
-      // eslint-disable-next-line no-console
-      console.log('[BUG DEBUG] Prompt option changed', {
-        columnName: column.name,
-        newPrompt: value,
-        isAutoMode: isAIColumnAutoMode(column),
-        isEditorVisible: this.promptEditorInstance?.isVisible(),
-      });
-
       this.promptEditorInstance?.updatePrompt(value as string);
     }
 
     if (isPromptOptionName && isAIColumnAutoMode(column)) {
-      // eslint-disable-next-line no-console
-      console.log('[BUG DEBUG] Sending request from aiColumnOptionChanged');
       this.aiColumnController.sendRequest(
         column.name as string,
         false,
