@@ -27,6 +27,11 @@
       "type": "number",
       "description": "Test timeout in milliseconds",
       "default": 300000
+    },
+    "verbose": {
+      "type": "boolean",
+      "description": "Enable verbose logging output",
+      "default": false
     }
   },
   "required": ["karmaConfig"]

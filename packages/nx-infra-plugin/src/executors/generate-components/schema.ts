@@ -32,5 +32,4 @@ export interface GenerateReactComponentsExecutorSchema {
   quotes?: QuoteStyle;
   explicitIndexInImports?: boolean;
   componentGeneratorTplConfig?: ComponentGeneratorTplConfig;
-  excludePatterns?: string[];
 }
