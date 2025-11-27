@@ -4864,6 +4864,101 @@ describe('Load panel', () => {
     });
   });
 
+  describe('when paging changes during AI loading', () => {
+    const createDelayedAIIntegration = (
+      prefix: string,
+      delay: number,
+    ): AIIntegration => new AIIntegration({
+      sendRequest(prompt: RequestParams): RequestResult {
+        let timeoutId: ReturnType<typeof setTimeout> | null = null;
+        const promise = new Promise<string>((resolve) => {
+          const result: Record<string, string> = {};
+
+          Object.entries(prompt.data?.data ?? {}).forEach(([key, value]) => {
+            result[key] = `${prefix} ${(value as any).name}`;
+          });
+
+          timeoutId = setTimeout(() => {
+            resolve(JSON.stringify(result));
+          }, delay);
+        });
+
+        return {
+          promise,
+          abort: (): void => {
+            if (timeoutId !== null) {
+              clearTimeout(timeoutId);
+            }
+          },
+        };
+      },
+    });
+
+    it('should hide loader after requests are canceled', async () => {
+      const firstRequestDelay = 100;
+      const secondRequestDelay = 200;
+      const dataSource = Array.from({ length: 20 }, (_, index) => ({
+        id: index + 1,
+        name: `Name ${index + 1}`,
+        value: index + 1,
+      }));
+
+      const { component, instance } = await createDataGrid({
+        dataSource,
+        paging: {
+          pageSize: 10,
+        },
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column 1',
+            name: 'myColumn1',
+            ai: {
+              aiIntegration: createDelayedAIIntegration('AI Column 1', firstRequestDelay),
+            },
+          },
+          {
+            type: 'ai',
+            caption: 'AI Column 2',
+            name: 'myColumn2',
+            ai: {
+              aiIntegration: createDelayedAIIntegration('AI Column 2', secondRequestDelay),
+            },
+          },
+        ],
+      });
+
+      component.apiColumnOption('myColumn1', 'ai.prompt', 'Prompt 1');
+      component.apiColumnOption('myColumn2', 'ai.prompt', 'Prompt 2');
+
+      expect(component.getLoadPanel().isVisible()).toBe(true);
+
+      jest.advanceTimersByTime(secondRequestDelay);
+      await Promise.resolve();
+      jest.runAllTimers();
+
+      expect(component.getLoadPanel().isVisible()).toBe(false);
+      expect(instance.getAIColumnText('myColumn1', 1)).toContain('AI Column 1');
+      expect(instance.getAIColumnText('myColumn2', 1)).toContain('AI Column 2');
+
+      instance.option('paging.pageIndex', 1);
+      await Promise.resolve();
+
+      expect(component.getLoadPanel().isVisible()).toBe(true);
+
+      instance.option('paging.pageIndex', 0);
+      await Promise.resolve();
+
+      jest.runAllTimers();
+      await Promise.resolve();
+
+      expect(component.getLoadPanel().isVisible()).toBe(false);
+    });
+  });
+
   describe('when a request is made using AIPromptEditor', () => {
     it('should be hidden', async () => {
       const { component } = await createDataGrid({
