@@ -4790,6 +4790,80 @@ describe('Load panel', () => {
     });
   });
 
+  describe('when AI columns resolve at different times', () => {
+    const createAIIntegration = (
+      delay: number,
+      response: string,
+    ): AIIntegration => new AIIntegration({
+      sendRequest(): RequestResult {
+        return {
+          promise: new Promise<string>((resolve) => {
+            setTimeout(() => {
+              resolve(response);
+            }, delay);
+          }),
+          abort: (): void => {},
+        };
+      },
+    });
+
+    it('should remain visible until all responses are received', async () => {
+      const firstRequestDelay = 100;
+      const secondRequestDelay = 300;
+
+      const { component, instance } = await createDataGrid({
+        dataSource: items,
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column 1',
+            name: 'myColumn1',
+            ai: {
+              aiIntegration: createAIIntegration(firstRequestDelay, '{"1":"AI Response 1","2":"AI Response 2"}'),
+            },
+          },
+          {
+            type: 'ai',
+            caption: 'AI Column 2',
+            name: 'myColumn2',
+            ai: {
+              aiIntegration: createAIIntegration(secondRequestDelay, '{"1":"AI Response 3","2":"AI Response 4"}'),
+            },
+          },
+        ],
+      });
+
+      const dataController = (instance as any).getController('data');
+      const endCustomLoadingSpy = jest.spyOn(dataController, 'endCustomLoading');
+
+      component.apiColumnOption('myColumn1', 'ai.prompt', 'Updated prompt 1');
+      component.apiColumnOption('myColumn2', 'ai.prompt', 'Updated prompt 2');
+
+      expect(component.getLoadPanel().isVisible()).toBe(true);
+
+      jest.advanceTimersByTime(firstRequestDelay);
+      await Promise.resolve();
+
+      expect(endCustomLoadingSpy).not.toHaveBeenCalled();
+      expect(component.getLoadPanel().isVisible()).toBe(true);
+
+      jest.advanceTimersByTime(secondRequestDelay - firstRequestDelay);
+      await Promise.resolve();
+
+      expect(endCustomLoadingSpy).toHaveBeenCalledTimes(1);
+      expect(component.getLoadPanel().isVisible()).toBe(true);
+
+      jest.runAllTimers();
+
+      expect(endCustomLoadingSpy).toHaveBeenCalledTimes(1);
+      expect(component.getLoadPanel().isVisible()).toBe(false);
+    });
+  });
+
   describe('when a request is made using AIPromptEditor', () => {
     it('should be hidden', async () => {
       const { component } = await createDataGrid({
