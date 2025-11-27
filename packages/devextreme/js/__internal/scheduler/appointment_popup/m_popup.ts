@@ -81,15 +81,6 @@ export class AppointmentPopup {
     this._popup?.hide();
   }
 
-  cancelEditData(): void {
-    const editingConfig = this.scheduler.getEditingConfig();
-    if (editingConfig?.form?.onCanceled) {
-      editingConfig.form.onCanceled(this.form.formData);
-    }
-
-    this.hide();
-  }
-
   dispose() {
     this.form.dispose();
     this._popup?.dispose();
@@ -120,6 +111,9 @@ export class AppointmentPopup {
       _ignorePreventScrollEventsDeprecation: true,
       onHiding: (e): void => {
         this.scheduler.focus();
+        if (editingConfig?.form?.onCanceled) {
+          editingConfig.form.onCanceled(this.form.formData);
+        }
         customPopupOptions?.onHiding?.(e);
       },
       contentTemplate: (): dxElementWrapper => {
@@ -440,7 +434,7 @@ export class AppointmentPopup {
           text: messageLocalization.format('Cancel'),
           stylingMode: 'outlined',
           onClick: (): void => {
-            this.cancelEditData();
+            this.hide();
           },
         },
       },
@@ -488,7 +482,7 @@ export class AppointmentPopup {
       options: {
         stylingMode: 'outlined',
         onClick: (): void => {
-          this.cancelEditData();
+          this.hide();
         },
       },
     } as ToolbarItem);

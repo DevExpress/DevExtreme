@@ -2227,5 +2227,38 @@ describe('Customize form items', () => {
         }),
       );
     });
+
+    it('should call onCanceled and hide popup when ESC key is pressed', async () => {
+      const onCanceled = jest.fn();
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          form: {
+            onCanceled,
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const focusable = POM.popup.element.querySelector(':focus');
+
+      const opts = {
+        key: 'Escape',
+        code: 'Escape',
+        keyCode: 27,
+        which: 27,
+        bubbles: true,
+        cancelable: true,
+      };
+
+      focusable?.dispatchEvent(new KeyboardEvent('keydown', opts));
+      focusable?.dispatchEvent(new KeyboardEvent('keyup', opts));
+
+      expect(onCanceled).toHaveBeenCalledTimes(1);
+      expect(onCanceled).toHaveBeenCalledWith(
+        expect.objectContaining(commonAppointment),
+      );
+    });
   });
 });
