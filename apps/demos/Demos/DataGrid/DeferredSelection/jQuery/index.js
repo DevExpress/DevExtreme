@@ -51,6 +51,9 @@ $(() => {
         dataSource: DevExpress.data.AspNet.createStore({
           key: 'ID',
           loadUrl: `${url}/TaskEmployees`,
+          onBeforeSend(method, ajaxOptions) {
+            ajaxOptions.xhrFields = { withCredentials: true };
+          },
         }),
         valueExpr: 'ID',
         displayExpr: 'Name',

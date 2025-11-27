@@ -94,6 +94,9 @@ const tasksDataSource = createStore({
 const employeesDataSource = createStore({
   key: 'ID',
   loadUrl: `${url}/TaskEmployees`,
+  onBeforeSend(method, ajaxOptions) {
+    ajaxOptions.xhrFields = { withCredentials: true };
+  },
 });
 
 let dataGrid: DxDataGrid['instance'];

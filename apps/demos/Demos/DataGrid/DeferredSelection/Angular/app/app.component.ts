@@ -52,6 +52,9 @@ export class AppComponent implements AfterViewInit {
     this.employeesDataSource = AspNetData.createStore({
       key: 'ID',
       loadUrl: `${url}/TaskEmployees`,
+      onBeforeSend(method, ajaxOptions) {
+        ajaxOptions.xhrFields = { withCredentials: true };
+      },
     });
   }
 
