@@ -112,7 +112,9 @@ const calculateStatistics = async () => {
   const selectedItems = await dataGrid.getSelectedRowsData();
 
   const totalDuration = selectedItems.reduce((currentValue, item) => {
-    const duration = new Date(item.Task_Due_Date).getTime() - new Date(item.Task_Start_Date).getTime();
+    const dueDateTime = new Date(item.Task_Due_Date).getTime();
+    const startDateTime = new Date(item.Task_Start_Date).getTime();
+    const duration = dueDateTime - startDateTime;
 
     return currentValue + duration;
   }, 0);

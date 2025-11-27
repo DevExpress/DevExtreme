@@ -66,7 +66,9 @@ export class AppComponent implements AfterViewInit {
     const selectedItems = await this.dataGrid.instance.getSelectedRowsData();
 
     const totalDuration = selectedItems.reduce((currentValue, item) => {
-      const duration = new Date(item.Task_Due_Date) - new Date(item.Task_Start_Date);
+      const dueDateTime = new Date(item.Task_Due_Date).getTime();
+      const startDateTime = new Date(item.Task_Start_Date).getTime();
+      const duration = dueDateTime - startDateTime;
 
       return currentValue + duration;
     }, 0);
