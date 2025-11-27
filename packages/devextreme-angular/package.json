@@ -14,7 +14,7 @@
     "test": "pnpm --workspace-root nx test devextreme-angular",
     "pack": "pnpm --workspace-root nx pack devextreme-angular",
     "pack-with-descriptions": "pnpm --workspace-root nx pack --configuration with-descriptions devextreme-angular",
-    "test:dev": "pnpm --workspace-root nx run.tests devextreme-angular"
+    "test:dev": "pnpm --workspace-root nx run:tests devextreme-angular"
   },
   "author": "Developer Express Inc.",
   "license": "MIT",
