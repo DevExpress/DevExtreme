@@ -4,7 +4,8 @@ import {
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxDataGridModule, DxDataGridComponent, DxButtonModule } from 'devextreme-angular';
-import { query, DataSourceOptions } from 'devextreme-angular/common/data';
+import { query } from 'devextreme-angular/common/data';
+import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -27,29 +28,35 @@ export class AppComponent implements AfterViewInit {
 
   MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
 
-  dataSource: DataSourceOptions = {
-    store: {
-      type: 'odata',
-      version: 2,
-      url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks',
-      key: 'Task_ID',
-    },
-    expand: 'ResponsibleEmployee',
-    select: [
-      'Task_ID',
-      'Task_Subject',
-      'Task_Start_Date',
-      'Task_Due_Date',
-      'Task_Status',
-      'ResponsibleEmployee/Employee_Full_Name',
-    ],
-  };
+  tasksDataSource: AspNetData.CustomStore;
+
+  employeesDataSource: AspNetData.CustomStore;
 
   taskCount = 0;
 
   peopleCount = 0;
 
   avgDuration = 0;
+
+  constructor() {
+    const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
+
+    this.tasksDataSource = AspNetData.createStore({
+      key: 'Task_ID',
+      loadUrl: `${url}/Tasks`,
+      onBeforeSend(method, ajaxOptions) {
+        ajaxOptions.xhrFields = { withCredentials: true };
+      },
+    });
+
+    this.employeesDataSource = AspNetData.createStore({
+      key: 'ID',
+      loadUrl: `${url}/TaskEmployees`,
+      onBeforeSend(method, ajaxOptions) {
+        ajaxOptions.xhrFields = { withCredentials: true };
+      },
+    });
+  }
 
   ngAfterViewInit() {
     this.calculateStatistics();
@@ -59,7 +66,9 @@ export class AppComponent implements AfterViewInit {
     const selectedItems = await this.dataGrid.instance.getSelectedRowsData();
 
     const totalDuration = selectedItems.reduce((currentValue, item) => {
-      const duration = item.Task_Due_Date - item.Task_Start_Date;
+      const dueDateTime = new Date(item.Task_Due_Date).getTime();
+      const startDateTime = new Date(item.Task_Start_Date).getTime();
+      const duration = dueDateTime - startDateTime;
 
       return currentValue + duration;
     }, 0);
@@ -67,7 +76,7 @@ export class AppComponent implements AfterViewInit {
 
     this.taskCount = selectedItems.length;
     this.peopleCount = query(selectedItems)
-      .groupBy('ResponsibleEmployee.Employee_Full_Name')
+      .groupBy('Task_Assigned_Employee_ID')
       .toArray().length;
     this.avgDuration = Math.round(averageDurationInDays) || 0;
   }
