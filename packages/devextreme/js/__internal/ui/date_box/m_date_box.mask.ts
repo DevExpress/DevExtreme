@@ -236,9 +236,12 @@ class DateBoxMask extends DateBoxBase {
     }
   }
 
-  _processInputKey(key) {
-    if (this._isAllSelected()) {
+  _processInputKey(key: string): void {
+    const hasMultipleParts = this._dateParts?.length > 1;
+
+    if (this._isAllSelected() && hasMultipleParts) {
       this._activePartIndex = 0;
+      this._clearSearchValue();
     }
     this._setNewDateIfEmpty();
     // eslint-disable-next-line radix
