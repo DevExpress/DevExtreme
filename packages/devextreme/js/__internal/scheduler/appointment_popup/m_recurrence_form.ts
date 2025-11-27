@@ -78,7 +78,6 @@ const EDITOR_NAMES = {
   recurrenceDayOfYearMonthEditor: 'recurrenceDayOfYearMonthEditor',
   recurrenceDayOfMonthEditor: 'recurrenceDayOfMonthEditor',
   recurrenceDayOfYearDayEditor: 'recurrenceDayOfYearDayEditor',
-  byMonthDayYearly: 'recurrenceByMonthDayYearlyEditor',
   recurrenceEndEditor: 'recurrenceEndEditor',
   repeatEnd: 'recurrenceRepeatEndEditor',
   until: 'recurrenceEndUntilEditor',
