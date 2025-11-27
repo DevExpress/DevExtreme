@@ -48,8 +48,8 @@ export class AIPromptEditor {
       height: 110,
       stylingMode: 'outlined',
       onValueChanged: (e): void => {
-        this.updateButtonOption(APPLY_BUTTON_INDEX, 'disabled', !e.value || e.value === this.prompt);
-        this.updateButtonOption(REGENERATE_DATA_BUTTON_INDEX, 'disabled', e.value !== this.prompt);
+        this.updateButtonOption(APPLY_BUTTON_INDEX, 'disabled', !e.value || e.value === this.prompt); // Update the disable state of the Apply button
+        this.updateButtonOption(REGENERATE_DATA_BUTTON_INDEX, 'disabled', e.value !== this.prompt); // Update the disable state of the Regenerate Data button
       },
       placeholder: messageLocalization.format('dxDataGrid-aiPromptEditorPlaceholder'),
       valueChangeEvent: 'input change keyup',
