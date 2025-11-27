@@ -118,6 +118,8 @@ export interface OverlayProperties extends Properties {
 
   templatesRenderAsynchronously?: boolean;
 
+  zIndex?: number;
+
   _loopFocus?: boolean;
 
   _ignorePreventScrollEventsDeprecation?: boolean;
@@ -181,9 +183,9 @@ ready(() => {
 class Overlay<
   TProperties extends OverlayProperties = OverlayProperties,
 > extends Widget<TProperties> {
-  _$wrapper!: dxElementWrapper;
+  _$wrapper?: dxElementWrapper | null;
 
-  _$content!: dxElementWrapper;
+  _$content?: dxElementWrapper | null;
 
   _contentAlreadyRendered?: boolean;
 
@@ -330,11 +332,12 @@ class Overlay<
     };
   }
 
-  $wrapper(): dxElementWrapper {
+  $wrapper(): dxElementWrapper | null | undefined {
     return this._$wrapper;
   }
 
-  _eventBindingTarget(): dxElementWrapper {
+  // @ts-expect-error LSP
+  _eventBindingTarget(): dxElementWrapper | null | undefined {
     return this._$content;
   }
 
@@ -397,7 +400,7 @@ class Overlay<
   _initInnerOverlayClass(): void {
     const { innerOverlay } = this.option();
 
-    this._$content.toggleClass(INNER_OVERLAY_CLASS, innerOverlay);
+    this._$content?.toggleClass(INNER_OVERLAY_CLASS, innerOverlay);
   }
 
   _initHideTopOverlayHandler(handler?: () => void): void {
@@ -454,11 +457,12 @@ class Overlay<
     const isTargetDocument = domUtils.contains(window.document, target);
     const isAttachedTarget = $(window.document).is($target) || isTargetDocument;
     const isInnerOverlay = $($target).closest(`.${INNER_OVERLAY_CLASS}`).length;
-    const isTargetContent = this._$content.is($target);
-    const isTargetInContent = domUtils.contains(this._$content.get(0), target);
+    const isTargetContent = this._$content?.is($target);
+    const isTargetInContent = domUtils.contains(this._$content?.get(0), target);
 
     const isOutsideClick = isAttachedTarget
       && !isInnerOverlay
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       && !(isTargetContent || isTargetInContent);
 
     if (isOutsideClick && this._shouldHideOnOutsideClick(e)) {
@@ -557,13 +561,13 @@ class Overlay<
 
     const $wrapper = this.$wrapper();
 
-    $wrapper.attr(attributes);
+    $wrapper?.attr(attributes);
 
     if (this._customWrapperClass) {
-      $wrapper.removeClass(this._customWrapperClass);
+      $wrapper?.removeClass(this._customWrapperClass);
     }
 
-    $wrapper.addClass(classNames);
+    $wrapper?.addClass(classNames);
 
     this._customWrapperClass = classNames;
   }
@@ -676,8 +680,8 @@ class Overlay<
 
         this._toggleBodyScroll(enableBodyScroll);
         this._toggleVisibility(true);
-        this._$content.css('visibility', 'hidden');
-        this._$content.toggleClass(INVISIBLE_STATE_CLASS, false);
+        this._$content?.css('visibility', 'hidden');
+        this._$content?.toggleClass(INVISIBLE_STATE_CLASS, false);
         this._updateZIndexStackPosition(true);
         this._positionController.openingHandled();
         this._renderContent();
@@ -689,8 +693,8 @@ class Overlay<
 
         const cancelShow = (): void => {
           this._toggleVisibility(false);
-          this._$content.css('visibility', '');
-          this._$content.toggleClass(INVISIBLE_STATE_CLASS, true);
+          this._$content?.css('visibility', '');
+          this._$content?.toggleClass(INVISIBLE_STATE_CLASS, true);
           this._isShowingActionCanceled = true;
           this._moveFromContainer();
           this._toggleBodyScroll(true);
@@ -699,7 +703,7 @@ class Overlay<
         };
 
         const applyShow = (): void => {
-          this._$content.css('visibility', '');
+          this._$content?.css('visibility', '');
           this._renderVisibility(true);
           this._animateShowing();
         };
@@ -744,7 +748,7 @@ class Overlay<
     const completeHideAnimation = hideAnimation?.complete ?? noop;
 
     const completeCallback = (element: HTMLElement, config: AnimationConfig): void => {
-      this._$content.css('pointerEvents', '');
+      this._$content?.css('pointerEvents', '');
       this._renderVisibility(false);
 
       completeHideAnimation.call(this, element, config);
@@ -757,7 +761,7 @@ class Overlay<
     };
 
     const startCallback = (element: HTMLElement, config: AnimationConfig): void => {
-      this._$content.css('pointerEvents', 'none');
+      this._$content?.css('pointerEvents', 'none');
       startHideAnimation.call(this, element, config);
       this._hideAnimationProcessing = true;
     };
@@ -814,7 +818,7 @@ class Overlay<
 
   _forceFocusLost(): void {
     const activeElement = domAdapter.getActiveElement();
-    const shouldResetActiveElement = !!this._$content.find(activeElement).length;
+    const shouldResetActiveElement = !!this._$content?.find(activeElement).length;
 
     if (shouldResetActiveElement) {
       domUtils.resetActiveElement();
@@ -835,8 +839,10 @@ class Overlay<
         complete: completeCallback,
       };
 
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      fx.animate(this._$content.get(0), configuration);
+      if (this._$content) {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        fx.animate(this._$content.get(0), configuration);
+      }
     } else {
       // @ts-expect-error complate in AnimationConfig contains required params
       completeCallback();
@@ -844,7 +850,9 @@ class Overlay<
   }
 
   _stopAnimation(): void {
-    fx.stop(this._$content.get(0), true);
+    if (this._$content) {
+      fx.stop(this._$content.get(0), true);
+    }
   }
 
   _renderVisibility(visible: boolean): void {
@@ -868,7 +876,7 @@ class Overlay<
       triggerResizeEvent(this._$content);
     } else {
       this._toggleVisibility(visible);
-      this._$content.toggleClass(INVISIBLE_STATE_CLASS, !visible);
+      this._$content?.toggleClass(INVISIBLE_STATE_CLASS, !visible);
       this._updateZIndexStackPosition(visible);
       this._moveFromContainer();
     }
@@ -877,32 +885,49 @@ class Overlay<
     this._toggleSubscriptions(visible);
   }
 
+  _handleZIndexOptionChanged(): void {
+    const { zIndex } = this.option();
+
+    this._zIndex = zIndex ?? zIndexPool.create(this._zIndexInitValue());
+
+    this._updateZIndexStackPosition(this._isVisible());
+  }
+
   _updateZIndexStackPosition(pushToStack: boolean): void {
     const overlayStack = this._overlayStack();
     // @ts-expect-error this and Overlay have no overlap
     const index = overlayStack.indexOf(this);
+    const isInStack = index !== -1;
+    const { zIndex } = this.option();
 
-    if (pushToStack) {
-      if (index === -1) {
-        this._zIndex = zIndexPool.create(this._zIndexInitValue());
-
-        // @ts-expect-error this and Overlay have no overlap
-        overlayStack.push(this);
+    if (!pushToStack) {
+      if (isInStack) {
+        overlayStack.splice(index, 1);
+        zIndexPool.remove(this._zIndex);
       }
 
-      this._$wrapper.css('zIndex', this._zIndex);
-      this._$content.css('zIndex', this._zIndex);
-    } else if (index !== -1) {
-      overlayStack.splice(index, 1);
-      zIndexPool.remove(this._zIndex);
+      return;
     }
+
+    if (!isInStack) {
+      this._zIndex = zIndex ?? zIndexPool.create(this._zIndexInitValue());
+      // @ts-expect-error this and Overlay have no overlap
+      overlayStack.push(this);
+    }
+
+    this._updateZIndex();
+  }
+
+  _updateZIndex(): void {
+    this._$wrapper?.css('zIndex', this._zIndex);
+    this._$content?.css('zIndex', this._zIndex);
   }
 
   _toggleShading(visible?: boolean): void {
     const { shading, shadingColor } = this.option();
 
-    this._$wrapper.toggleClass(OVERLAY_SHADER_CLASS, visible && shading);
-    this._$wrapper.css('backgroundColor', shading ? shadingColor ?? '' : '');
+    this._$wrapper?.toggleClass(OVERLAY_SHADER_CLASS, visible && shading);
+    this._$wrapper?.css('backgroundColor', shading ? shadingColor ?? '' : '');
     this._toggleTabTerminator(Boolean(visible && shading));
   }
 
@@ -935,15 +960,15 @@ class Overlay<
     $first: dxElementWrapper | null;
     $last: dxElementWrapper | null;
   } {
-    const $elements = this._$wrapper.find('*');
-    const elementsCount = $elements.length - 1;
+    const $elements = this._$wrapper?.find('*');
+    const elementsCount = ($elements?.length ?? 0) - 1;
 
     let $first: dxElementWrapper | null = null;
     let $last: dxElementWrapper | null = null;
 
     for (let i = 0; i <= elementsCount; i += 1) {
-      const $currentElement = $elements.eq(i);
-      const $reverseElement = $elements.eq(elementsCount - i);
+      const $currentElement = $elements?.eq(i) ?? null;
+      const $reverseElement = $elements?.eq(elementsCount - i) ?? null;
 
       // @ts-expect-error is should can get function as callback
       if (!$first && $currentElement.is(selectors.tabbable)) {
@@ -968,7 +993,7 @@ class Overlay<
       return;
     }
 
-    const wrapper = this._$wrapper.get(0) as HTMLElement;
+    const wrapper = this._$wrapper?.get(0) as HTMLElement;
     const activeElement = domAdapter.getActiveElement(wrapper);
 
     const {
@@ -1025,10 +1050,10 @@ class Overlay<
     const { hideOnParentScroll } = this.option();
 
     if (needSubscribe && hideOnParentScroll) {
-      let $parents = this._getHideOnParentScrollTarget().parents();
+      let $parents = this._getHideOnParentScrollTarget()?.parents();
 
       if (devices.real().deviceType === 'desktop') {
-        $parents = $parents.add(window);
+        $parents = $parents?.add(window);
       }
 
       eventsEngine.on($parents, scrollEvent, handler);
@@ -1056,7 +1081,7 @@ class Overlay<
     }
   }
 
-  _getHideOnParentScrollTarget(): dxElementWrapper {
+  _getHideOnParentScrollTarget(): dxElementWrapper | null | undefined {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     const { _hideOnParentScrollTarget } = this.option();
     const $hideOnParentScrollTarget = $(_hideOnParentScrollTarget);
@@ -1078,8 +1103,8 @@ class Overlay<
   }
 
   _appendContentToElement(): void {
-    if (!this._$content.parent().is(this.$element())) {
-      this._$content.appendTo(this.$element());
+    if (!this._$content?.parent().is(this.$element())) {
+      this._$content?.appendTo(this.$element());
     }
   }
 
@@ -1147,7 +1172,7 @@ class Overlay<
     const transclude = this._templateManager.anonymousTemplateName === contentTemplateOption;
 
     contentTemplate?.render({
-      container: getPublicElement(this.$content()),
+      container: this.content(),
       noModel: true,
       transclude,
       onRendered: () => {
@@ -1275,8 +1300,8 @@ class Overlay<
   }
 
   _moveFromContainer(): void {
-    this._$content.appendTo(this.$element());
-    this._$wrapper.detach();
+    this._$content?.appendTo(this.$element());
+    this._$wrapper?.detach();
   }
 
   _checkContainerExists(): void {
@@ -1298,10 +1323,12 @@ class Overlay<
     const $wrapperContainer = this._positionController.$container;
 
     if ($wrapperContainer !== undefined) {
-      this._$wrapper.appendTo($wrapperContainer);
+      this._$wrapper?.appendTo($wrapperContainer);
     }
 
-    this._$content.appendTo(this._$wrapper);
+    if (this._$wrapper) {
+      this._$content?.appendTo(this._$wrapper);
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -1378,16 +1405,16 @@ class Overlay<
       ? window.innerHeight
       : getOuterHeight($visualContainer);
 
-    this._$wrapper.css({
+    this._$wrapper?.css({
       width: wrapperWidth,
       height: wrapperHeight,
     });
   }
 
   _renderDimensions(): void {
-    const content = this._$content.get(0);
+    const content = this._$content?.get(0);
 
-    this._$content.css({
+    this._$content?.css({
       minWidth: this._getOptionValue('minWidth', content),
       maxWidth: this._getOptionValue('maxWidth', content),
       minHeight: this._getOptionValue('minHeight', content),
@@ -1397,7 +1424,8 @@ class Overlay<
     });
   }
 
-  _focusTarget(): dxElementWrapper {
+  // @ts-expect-error LSP
+  _focusTarget(): dxElementWrapper | null | undefined {
     return this._$content;
   }
 
@@ -1416,7 +1444,7 @@ class Overlay<
 
     const { ignoreChildEvents } = this.option();
 
-    if ($target.is(this._$content) || !ignoreChildEvents) {
+    if ($target.is(this._$content ?? '') || !ignoreChildEvents) {
       super._keyboardHandler(options, onlyChildProcessing);
     }
   }
@@ -1445,7 +1473,7 @@ class Overlay<
 
   _clean(): void {
     if (!this._contentAlreadyRendered) {
-      this.$content().empty();
+      this.$content()?.empty();
     }
 
     this._renderVisibility(false);
@@ -1453,14 +1481,13 @@ class Overlay<
   }
 
   _dispose(): void {
-    fx.stop(this._$content.get(0), false);
+    if (this._$content) {
+      fx.stop(this._$content.get(0), false);
+    }
 
     this._toggleViewPortSubscription(false);
     this._toggleSubscriptions(false);
     this._updateZIndexStackPosition(false);
-
-    this._actions = {};
-    this._parentsScrollSubscriptionInfo = undefined;
 
     super._dispose();
 
@@ -1470,14 +1497,22 @@ class Overlay<
       zIndexPool.remove(this._zIndex);
     }
 
-    this._$wrapper.remove();
-    this._$content.remove();
-
     this._destroyTabTerminator();
+
+    this._positionController.clean();
+
+    this._actions = {};
+    this._parentsScrollSubscriptionInfo = undefined;
+
+    this._$wrapper?.remove();
+    this._$content?.remove();
+
+    this._$wrapper = null;
+    this._$content = null;
   }
 
   _toggleRTLDirection(rtl: boolean): void {
-    this._$content.toggleClass(RTL_DIRECTION_CLASS, rtl);
+    this._$content?.toggleClass(RTL_DIRECTION_CLASS, rtl);
   }
 
   _optionChanged(args: OptionChanged<TProperties>): void {
@@ -1551,6 +1586,9 @@ class Overlay<
         this._initHideTopOverlayHandler(value);
         this._toggleHideTopOverlayCallback(this._isVisible());
         break;
+      case 'zIndex':
+        this._handleZIndexOptionChanged();
+        break;
       case 'hideOnParentScroll':
       case '_hideOnParentScrollTarget': {
         this._toggleHideOnParentsScrollSubscription(this._isVisible());
@@ -1614,7 +1652,7 @@ class Overlay<
     return result.promise();
   }
 
-  $content(): dxElementWrapper {
+  $content(): dxElementWrapper | null | undefined {
     return this._$content;
   }
 
@@ -1627,7 +1665,7 @@ class Overlay<
   }
 
   content(): Element {
-    return getPublicElement(this._$content);
+    return getPublicElement(this._$content as dxElementWrapper);
   }
 
   repaint(): void {

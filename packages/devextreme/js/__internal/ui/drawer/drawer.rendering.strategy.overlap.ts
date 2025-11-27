@@ -180,18 +180,21 @@ class OverlapStrategy extends DrawerStrategy {
         });
       } else if (revealMode === 'expand') {
         this._initialPosition = drawer.isHorizontalDirection() ? { left: 0 } : { top: 0 };
-        move($panelOverlayContent, this._initialPosition);
 
-        animation.size({
-          complete: () => {
-            whenAnimationCompleted?.resolve();
-          },
-          duration: animationDuration,
-          direction: targetPanelPosition,
-          $element: $panelOverlayContent,
-          size: panelSize,
-          marginTop,
-        });
+        if ($panelOverlayContent) {
+          move($panelOverlayContent, this._initialPosition);
+
+          animation.size({
+            complete: () => {
+              whenAnimationCompleted?.resolve();
+            },
+            duration: animationDuration,
+            direction: targetPanelPosition,
+            $element: $panelOverlayContent,
+            size: panelSize,
+            marginTop,
+          });
+        }
       }
     } else if (revealMode === 'slide') {
       this._initialPosition = drawer.isHorizontalDirection()
@@ -200,7 +203,11 @@ class OverlapStrategy extends DrawerStrategy {
       move($panel, this._initialPosition);
     } else if (revealMode === 'expand') {
       this._initialPosition = drawer.isHorizontalDirection() ? { left: 0 } : { top: 0 };
-      move($panelOverlayContent, this._initialPosition);
+
+      if ($panelOverlayContent) {
+        move($panelOverlayContent, this._initialPosition);
+      }
+
       if (drawer.isHorizontalDirection()) {
         $($panelOverlayContent).css('width', panelSize);
       } else {

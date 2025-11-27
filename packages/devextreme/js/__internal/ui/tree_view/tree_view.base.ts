@@ -1,7 +1,9 @@
 import { fx } from '@js/common/core/animation';
 import { name as clickEventName } from '@js/common/core/events/click';
+import { name as contextMenuEventName } from '@js/common/core/events/contextmenu';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { name as dblclickEvent } from '@js/common/core/events/double_click';
+import holdEvent from '@js/common/core/events/hold';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
@@ -63,14 +65,14 @@ const CUSTOM_EXPANDER_ICON_ITEM_CONTAINER_CLASS = `${WIDGET_CLASS}-custom-expand
 const ITEM_WITHOUT_CHECKBOX_CLASS = `${ITEM_CLASS}-without-checkbox`;
 const ITEM_DATA_KEY = `${ITEM_CLASS}-data`;
 
-const TOGGLE_ITEM_VISIBILITY_CLASS = `${WIDGET_CLASS}-toggle-item-visibility`;
+export const TOGGLE_ITEM_VISIBILITY_CLASS = `${WIDGET_CLASS}-toggle-item-visibility`;
 const CUSTOM_COLLAPSE_ICON_CLASS = `${WIDGET_CLASS}-custom-collapse-icon`;
 const CUSTOM_EXPAND_ICON_CLASS = `${WIDGET_CLASS}-custom-expand-icon`;
 
 const LOAD_INDICATOR_CLASS = `${WIDGET_CLASS}-loadindicator`;
 const LOAD_INDICATOR_WRAPPER_CLASS = `${WIDGET_CLASS}-loadindicator-wrapper`;
 const TOGGLE_ITEM_VISIBILITY_OPENED_CLASS = `${WIDGET_CLASS}-toggle-item-visibility-opened`;
-const SELECT_ALL_ITEM_CLASS = `${WIDGET_CLASS}-select-all-item`;
+export const SELECT_ALL_ITEM_CLASS = `${WIDGET_CLASS}-select-all-item`;
 
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
@@ -78,7 +80,7 @@ const SELECTED_ITEM_CLASS = 'dx-state-selected';
 const EXPAND_EVENT_NAMESPACE = 'dxTreeView_expand';
 const DATA_ITEM_ID = 'data-item-id';
 const ITEM_URL_CLASS = 'dx-item-url';
-const CHECK_BOX_CLASS = 'dx-checkbox';
+export const CHECK_BOX_CLASS = 'dx-checkbox';
 const CHECK_BOX_ICON_CLASS = 'dx-checkbox-icon';
 const ROOT_NODE_CLASS = `${WIDGET_CLASS}-root-node`;
 export const EXPANDER_ICON_STUB_CLASS = `${WIDGET_CLASS}-expander-icon-stub`;
@@ -1075,6 +1077,22 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     eventsEngine.off(itemsContainer, `.${EXPAND_EVENT_NAMESPACE}`, this._itemSelector());
   }
 
+  _detachHoldEvent(itemsContainer: dxElementWrapper): void {
+    const itemSelector = this._itemSelector();
+    // @ts-expect-error ts-error
+    const eventName = addNamespace(holdEvent.name, this.NAME);
+
+    eventsEngine.off(itemsContainer, eventName, itemSelector);
+  }
+
+  _detachContextMenuEvent(itemsContainer: dxElementWrapper): void {
+    const itemSelector = this._itemSelector();
+    // @ts-expect-error ts-error
+    const eventName = addNamespace(contextMenuEventName, this.NAME);
+
+    eventsEngine.off(itemsContainer, eventName, itemSelector);
+  }
+
   _getEventNameByOption(name: TreeViewExpandEvent | undefined): string {
     const event = name === 'click' ? clickEventName : dblclickEvent;
     return addNamespace(event, EXPAND_EVENT_NAMESPACE);
@@ -1818,7 +1836,10 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
 
   _detachClickEvent(itemsContainer: dxElementWrapper): void {
     const {
-      clickEventNamespace, itemSelector, pointerDownEventNamespace, nodeSelector,
+      clickEventNamespace,
+      pointerDownEventNamespace,
+      nodeSelector,
+      itemSelector,
     } = this._getItemClickEventData();
 
     eventsEngine.off(itemsContainer, clickEventNamespace, itemSelector);

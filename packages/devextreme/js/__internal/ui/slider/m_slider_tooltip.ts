@@ -65,7 +65,7 @@ class SliderTooltip extends Tooltip<SliderTooltipProperties> {
     const { value, format } = this.option();
 
     const formattedText = numberLocalization.format(value ?? 0, format);
-    this.$content().text(formattedText);
+    this.$content()?.text(formattedText);
 
     this._renderPosition();
   }

@@ -10,7 +10,7 @@ if (window && window.config?.packageConfigPaths) {
 
 @Component({
   selector: 'detail-grid',
-  templateUrl: `.${modulePrefix && (`${modulePrefix}/detail-grid`)}/detail-grid.component.html`,
+  templateUrl: `.${modulePrefix}/detail-grid/detail-grid.component.html`,
   providers: [],
 })
 export class DetailGridComponent implements AfterViewInit {
