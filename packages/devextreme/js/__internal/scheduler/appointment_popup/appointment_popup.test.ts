@@ -2184,23 +2184,10 @@ describe('Appointment Popup', () => {
     });
 
     describe('Popup width and maxWidth options', () => {
-      let originalClientWidth = document.documentElement.clientWidth;
-
       // Mock window width to avoid fullscreen mode
       beforeEach(() => {
-        originalClientWidth = document.documentElement.clientWidth;
         Object.defineProperty(document.documentElement, 'clientWidth', {
-          writable: true,
-          configurable: true,
           value: 1280,
-        });
-      });
-
-      afterEach(() => {
-        Object.defineProperty(document.documentElement, 'clientWidth', {
-          writable: true,
-          configurable: true,
-          value: originalClientWidth,
         });
       });
 
