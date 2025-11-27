@@ -7,7 +7,7 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { getWidth } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
-import type { ToolbarItem } from '@js/ui/popup';
+import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
 import type dxPopup from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import { current, isFluent } from '@js/ui/themes';
@@ -37,11 +37,7 @@ export class AppointmentPopup {
 
   private _popup?: dxPopup;
 
-  private customToolbarItems?: ToolbarItem[];
-
-  private customWidth?: number | string;
-
-  private customMaxWidth?: number | string;
+  private customPopupOptions?: PopupProperties;
 
   state: any;
 
@@ -103,9 +99,7 @@ export class AppointmentPopup {
     const editingConfig = this.scheduler.getEditingConfig();
     const customPopupOptions = editingConfig?.popup ?? {};
 
-    this.customToolbarItems = customPopupOptions.toolbarItems;
-    this.customWidth = customPopupOptions.width;
-    this.customMaxWidth = customPopupOptions.maxWidth;
+    this.customPopupOptions = customPopupOptions;
 
     const defaultPopupConfig = {
       height: 'auto',
@@ -223,8 +217,11 @@ export class AppointmentPopup {
   }
 
   getMaxWidth(): number | string {
-    if (this.customMaxWidth !== undefined) {
-      return this.customMaxWidth;
+    if (this.customPopupOptions?.maxWidth !== undefined) {
+      return this.customPopupOptions.maxWidth;
+    }
+    if (this.customPopupOptions?.width !== undefined) {
+      return this.customPopupOptions.width;
     }
     return isFluent(current()) ? 380 : 420;
   }
@@ -242,8 +239,8 @@ export class AppointmentPopup {
 
       this.popup.option('fullScreen', isFullScreen);
 
-      if (this.customWidth !== undefined) {
-        this.popup.option('width', this.customWidth);
+      if (this.customPopupOptions?.width !== undefined) {
+        this.popup.option('width', this.customPopupOptions.width);
       }
 
       const maxWidth = this.getMaxWidth();
@@ -390,8 +387,8 @@ export class AppointmentPopup {
   }
 
   private tryApplyCustomToolbarItems(): boolean {
-    if (this.customToolbarItems) {
-      this.popup.option('toolbarItems', this.customToolbarItems);
+    if (this.customPopupOptions?.toolbarItems) {
+      this.popup.option('toolbarItems', this.customPopupOptions.toolbarItems);
       return true;
     }
     return false;
