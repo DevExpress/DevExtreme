@@ -222,6 +222,13 @@ export class AppointmentPopup {
     }
   }
 
+  getMaxWidth(): number | string {
+    if (this.customMaxWidth !== undefined) {
+      return this.customMaxWidth;
+    }
+    return isFluent(current()) ? 380 : 420;
+  }
+
   updatePopupFullScreenMode(): void {
     if (this.visible) {
       const isPopupFullScreenNeeded = () => {
@@ -239,12 +246,8 @@ export class AppointmentPopup {
         this.popup.option('width', this.customWidth);
       }
 
-      if (this.customMaxWidth !== undefined) {
-        this.popup.option('maxWidth', isFullScreen ? '100%' : this.customMaxWidth);
-      } else {
-        const defaultMaxWidth = isFluent(current()) ? 380 : 420;
-        this.popup.option('maxWidth', isFullScreen ? '100%' : defaultMaxWidth);
-      }
+      const maxWidth = this.getMaxWidth();
+      this.popup.option('maxWidth', isFullScreen ? '100%' : maxWidth);
     }
   }
 
