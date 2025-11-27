@@ -483,25 +483,30 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
   }
 
   public getColumnElements(index?, bandColumnIndex?) {
-    const that = this;
     let $cellElement;
-    const columnsController = that._columnsController;
-    const rowCount = that.getRowCount();
+    const columnsController = this._columnsController;
+    const rowCount = this.getRowCount();
 
-    if (that.option('showColumnHeaders')) {
+    if (this.option('showColumnHeaders')) {
       if (rowCount > 1 && (!isDefined(index) || isDefined(bandColumnIndex))) {
         const result: any[] = [];
-        const visibleColumns = isDefined(bandColumnIndex) ? columnsController.getChildrenByBandColumn(bandColumnIndex, true) : columnsController.getVisibleColumns();
+        let visibleColumns = columnsController.getVisibleColumns();
+        if (isDefined(bandColumnIndex)) {
+          visibleColumns = columnsController.getChildrenByBandColumn(bandColumnIndex, true);
+        }
 
-        each(visibleColumns, (_, column) => {
-          const rowIndex = isDefined(index) ? index : columnsController.getRowIndex(column.index);
-          $cellElement = that._getCellElement(rowIndex, columnsController.getVisibleIndex(column.index, rowIndex));
-          $cellElement && result.push($cellElement.get(0));
+        visibleColumns.forEach((column) => {
+          const rowIndex = index ?? columnsController.getRowIndex(column.index);
+          const visibleIndex = columnsController.getVisibleIndex(column.index, rowIndex);
+          $cellElement = this._getCellElement(rowIndex, visibleIndex);
+          if ($cellElement) {
+            result.push($cellElement.get(0));
+          }
         });
 
         return $(result);
       } if (!index || index < rowCount) {
-        return that.getCellElements(index || 0);
+        return this.getCellElements(index || 0);
       }
     }
 
