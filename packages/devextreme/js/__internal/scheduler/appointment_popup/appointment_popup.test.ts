@@ -1660,6 +1660,86 @@ describe('Appointment Popup', () => {
       expect(toolbarItems).toHaveLength(1);
       expect(toolbarItems?.[0]?.text).toBe('Custom Toolbar');
     });
+
+    describe('Popup width and maxWidth options', () => {
+      let originalClientWidth = document.documentElement.clientWidth;
+
+      // Mock window width to avoid fullscreen mode
+      beforeEach(() => {
+        originalClientWidth = document.documentElement.clientWidth;
+        Object.defineProperty(document.documentElement, 'clientWidth', {
+          writable: true,
+          configurable: true,
+          value: 1280,
+        });
+      });
+
+      afterEach(() => {
+        Object.defineProperty(document.documentElement, 'clientWidth', {
+          writable: true,
+          configurable: true,
+          value: originalClientWidth,
+        });
+      });
+
+      it('should use custom maxWidth when specified', async () => {
+        const { scheduler, POM } = await createScheduler({
+          ...getDefaultConfig(),
+          editing: {
+            allowAdding: true,
+            allowUpdating: true,
+            popup: {
+              maxWidth: 500,
+            },
+          },
+        });
+
+        scheduler.showAppointmentPopup(commonAppointment);
+
+        const maxWidth = POM.popup.component.option('maxWidth');
+        expect(maxWidth).toBe(500);
+      });
+
+      it('should use custom width as maxWidth when maxWidth is not specified', async () => {
+        const { scheduler, POM } = await createScheduler({
+          ...getDefaultConfig(),
+          editing: {
+            allowAdding: true,
+            allowUpdating: true,
+            popup: {
+              width: 600,
+            },
+          },
+        });
+
+        scheduler.showAppointmentPopup(commonAppointment);
+
+        const width = POM.popup.component.option('width');
+        expect(width).toBe(600);
+
+        const maxWidth = POM.popup.component.option('maxWidth');
+        expect(maxWidth).toBe(600);
+      });
+
+      it('should use maxWidth option value (not width) for maxWidth when both maxWidth and width are specified', async () => {
+        const { scheduler, POM } = await createScheduler({
+          ...getDefaultConfig(),
+          editing: {
+            allowAdding: true,
+            allowUpdating: true,
+            popup: {
+              width: 600,
+              maxWidth: 500,
+            },
+          },
+        });
+
+        scheduler.showAppointmentPopup(commonAppointment);
+
+        const maxWidth = POM.popup.component.option('maxWidth');
+        expect(maxWidth).toBe(500);
+      });
+    });
   });
 });
 
