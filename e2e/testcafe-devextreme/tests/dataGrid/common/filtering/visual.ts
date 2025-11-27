@@ -1,15 +1,15 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import url from '../../../helpers/getPageUrl';
-import { createWidget } from '../../../helpers/createWidget';
-import { testScreenshot } from '../../../helpers/themeUtils';
+import url from '../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../helpers/createWidget';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Filtering`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const GRID_CONTAINER = '#container';
 
-test('Data should be filtered if True is selected via the filter method when case sensitive is enabled', async (t) => {
+test('Data should be filtered if True is selected via the filter method when case sensitivity is enabled', async (t) => {
   // arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(GRID_CONTAINER);
@@ -50,7 +50,7 @@ test('Data should be filtered if True is selected via the filter method when cas
   showBorders: true,
 }));
 
-test('Data should be filtered if True is selected via the option method when case sensitive is enabled', async (t) => {
+test('Data should be filtered if True is selected via the option method when case sensitivity is enabled', async (t) => {
   // arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(GRID_CONTAINER);
