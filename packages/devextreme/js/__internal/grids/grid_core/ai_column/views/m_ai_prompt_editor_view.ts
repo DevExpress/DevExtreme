@@ -37,18 +37,11 @@ export class AIPromptEditorView extends View {
       container: this.element(),
       createComponent: this._createComponent.bind(this),
       onSubmit: (): void => {
-        const newPrompt = this.promptEditorInstance.getEditorValue();
-        const isChanged = newPrompt !== column.ai?.prompt;
-
-        if (!isChanged) {
-          return;
-        }
-
         this.promptEditorInstance.updateStateOnAction('apply');
         this.columnsController.columnOption(
           column.index,
           'ai.prompt',
-          newPrompt,
+          this.promptEditorInstance.getEditorValue(),
           true,
         );
       },
