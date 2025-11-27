@@ -250,6 +250,9 @@ export class AIColumnController extends Controller {
         this._endCustomLoadingIfNoPendingRequests();
         this.aiRequestRejected.fire(error);
       },
+      onRequestCanceled: (): void => {
+        this._endCustomLoadingIfNoPendingRequests();
+      },
     };
   }
 
