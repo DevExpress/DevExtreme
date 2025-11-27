@@ -71,10 +71,10 @@ export class AppointmentPopup {
 
     if (!this._popup) {
       const popupConfig = this._createPopupConfig();
-      this._popup = this._createPopup(popupConfig);
+      this._createPopup(popupConfig);
     }
 
-    this._popup.show();
+    this._popup!.show();
   }
 
   hide() {
@@ -87,15 +87,15 @@ export class AppointmentPopup {
     this._popup = undefined;
   }
 
-  _createPopup(options): dxPopup {
+  _createPopup(options): void {
     const popupElement = $('<div>')
       .addClass(APPOINTMENT_POPUP_CLASS)
       .appendTo(this.scheduler.getElement());
 
-    return this.scheduler.createComponent(popupElement, Popup, options);
+    this.scheduler.createComponent(popupElement, Popup, options);
   }
 
-  _createPopupConfig() {
+  _createPopupConfig(): PopupProperties {
     const editingConfig = this.scheduler.getEditingConfig();
     const customPopupOptions = editingConfig?.popup ?? {};
 
@@ -109,6 +109,10 @@ export class AppointmentPopup {
       preventScrollEvents: false,
       enableBodyScroll: false,
       _ignorePreventScrollEventsDeprecation: true,
+      onInitialized: (e): void => {
+        this._popup = e.component;
+        customPopupOptions?.onInitialized?.(e);
+      },
       onHiding: (e): void => {
         this.scheduler.focus();
         customPopupOptions?.onHiding?.(e);
@@ -130,9 +134,10 @@ export class AppointmentPopup {
     };
 
     return extend(true, {}, defaultPopupConfig, customPopupOptions, {
+      onInitialized: defaultPopupConfig.onInitialized,
       onHiding: defaultPopupConfig.onHiding,
       onShowing: defaultPopupConfig.onShowing,
-    });
+    }) as PopupProperties;
   }
 
   _onShowing(e) {
@@ -190,7 +195,7 @@ export class AppointmentPopup {
     this.form.formData = formData;
     this.form.readOnly = this._isReadOnly(appointmentAdapter);
 
-    this.form.showMainGroup(false);
+    this.form.showMainGroup();
   }
 
   _createFormData(appointmentAdapter: AppointmentAdapter): Record<string, any> {
@@ -249,6 +254,8 @@ export class AppointmentPopup {
   }
 
   saveChangesAsync(isShowLoadPanel) {
+    this.form.saveRecurrenceValue();
+
     // @ts-expect-error
     const deferred = new Deferred();
     const validation = this.form.dxForm.validate();
@@ -408,6 +415,7 @@ export class AppointmentPopup {
           icon: 'arrowleft',
           stylingMode: 'text',
           onClick: (): void => {
+            this.form.saveRecurrenceValue();
             this.form.showMainGroup();
           },
         },
@@ -427,9 +435,7 @@ export class AppointmentPopup {
           stylingMode: 'contained',
           type: 'default',
           onClick: (e): void => {
-            this.form.showMainGroup();
-            e.cancel = true;
-            this.saveEditDataAsync();
+            this._saveButtonClickHandler(e);
           },
         },
       },

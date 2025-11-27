@@ -121,7 +121,7 @@ export const custom = (params: DialogParams): BaseDialog => {
     const component = e.component as Popup;
 
     component.$content()
-      .addClass(DX_DIALOG_CONTENT_CLASSNAME)
+      ?.addClass(DX_DIALOG_CONTENT_CLASSNAME)
       .append($message);
 
     if (messageId) {
@@ -264,7 +264,7 @@ export const custom = (params: DialogParams): BaseDialog => {
   popupInstance = new Popup($element, options);
 
   popupInstance.$wrapper()
-    .addClass(DX_DIALOG_WRAPPER_CLASSNAME)
+    ?.addClass(DX_DIALOG_WRAPPER_CLASSNAME)
     .addClass(DX_DIALOG_ROOT_CLASSNAME);
 
   const dialog: BaseDialog = {

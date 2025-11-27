@@ -150,3 +150,32 @@ test('recurrence form readonly state', async (t) => {
     allowUpdating: false,
   },
 }));
+
+test.meta({ browserSize: [450, 1000] })('recurrence form on mobile screen', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+
+  const appointmentPopup = await scheduler.openAppointmentPopup(t, undefined, false);
+  await appointmentPopup.openRecurrenceForm(t, 'Weekly');
+
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'scheduler__appointment__recurrence-form__mobile.png',
+  );
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxScheduler', {
+  dataSource: [],
+  views: ['week'],
+  currentView: 'week',
+  currentDate: new Date(2021, 2, 25),
+  editing: {
+    form: {
+      iconsShowMode: 'both',
+    },
+  },
+}));

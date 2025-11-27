@@ -861,7 +861,7 @@ const headersKeyboardNavigation = (Base: ModuleType<HeadersKeyboardNavigationCon
     );
 
     if (nextCellIsOutsideVisibleArea) {
-      this.scrollToColumn($nextCell);
+      this.scrollToNextCell($nextCell);
     }
   }
 };

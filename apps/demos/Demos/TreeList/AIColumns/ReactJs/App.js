@@ -1,6 +1,6 @@
 import React from 'react';
 import TreeList, {
-  Column, Scrolling, Paging, Ai,
+  Column, Scrolling, Paging, AI,
 } from 'devextreme-react/tree-list';
 import { employees } from './data.js';
 import { aiIntegration } from './service.js';
@@ -71,10 +71,10 @@ export default function App() {
         fixedPosition="right"
         cssClass="ai__cell"
       >
-        <Ai
+        <AI
           mode="auto"
           noDataText="No data"
-          prompt="Identify department for each employee. It should be one of the following department types:  'Management', 'Human Resources', 'IT', 'Shipping', 'Support', 'Sales',  'Engineering'. Use 'Engineering' by default."
+          prompt="Identify the department where the employee works. Select from the following department list: 'Management', 'Human Resources', 'IT', 'Shipping', 'Support', 'Sales', 'Engineering'. Use 'Engineering' if you cannot find a better match."
         />
       </Column>
     </TreeList>

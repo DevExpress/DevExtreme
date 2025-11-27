@@ -1445,6 +1445,16 @@ export class RowsView extends ColumnsView {
   ): dxElementWrapper {
     return $iconContainer;
   }
+
+  public normalizeScrollLeft(scrollLeft: number): number {
+    const scrollable = this.getScrollable();
+
+    if (this.option('rtlEnabled') && scrollable) {
+      return getWidth(scrollable.$content()) - getWidth(scrollable.$element()) - scrollLeft;
+    }
+
+    return scrollLeft;
+  }
 }
 
 export const rowsModule = {
