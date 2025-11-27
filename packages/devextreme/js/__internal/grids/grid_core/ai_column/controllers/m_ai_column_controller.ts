@@ -5,6 +5,7 @@ import { isDefined } from '@ts/core/utils/m_type';
 import type { Column, ColumnsController } from '../../columns_controller/m_columns_controller';
 import type { DataController, HandleDataChangedArguments, UserData } from '../../data_controller/m_data_controller';
 import { Controller } from '../../m_modules';
+import gridCoreUtils from '../../m_utils';
 import type { InternalRequestCallbacks } from '../types';
 import { getAICommandColumnDefaultOptions, isAIColumnAutoMode, isPromptOption } from '../utils';
 import { AIColumnIntegrationController } from './m_ai_column_integration_controller';
@@ -23,6 +24,8 @@ export class AIColumnController extends Controller {
   private storeRemovedHandler!: (key: PropertyKey) => void;
 
   private storeBeforePushHandler!: ({ changes }: { changes: DataChange[] }) => void;
+
+  private dataControllerChangedHandler!: () => void;
 
   private aiColumnOptionChangedHandler!: (
     column: Column,
@@ -62,6 +65,31 @@ export class AIColumnController extends Controller {
   private subscribeToDataSourceChanged(): void {
     this.dataSourceChangedHandler = this.handleDataSourceChanged.bind(this);
     this.dataController.dataSource()?.changed.add(this.dataSourceChangedHandler);
+  }
+
+  private unsubscribeFromDataControllerChanged(): void {
+    if (!this.dataControllerChangedHandler) {
+      return;
+    }
+
+    this.dataController.changed.remove(this.dataControllerChangedHandler);
+  }
+
+  private subscribeToDataControllerChanged(): void {
+    if (!this.getAIColumns().length || !gridCoreUtils.isVirtualRowRendering(this)) {
+      return;
+    }
+
+    this.dataControllerChangedHandler = this.dataControllerChangedHandler
+      ?? this.handleDataControllerChanged.bind(this);
+
+    this.dataController.changed.add(this.dataControllerChangedHandler.bind(this));
+  }
+
+  private handleDataControllerChanged(): void {
+    if (this.dataController.isViewportChanging()) {
+      this.sendRequests();
+    }
   }
 
   private unsubscribeFromStoreEvents(): void {
@@ -137,12 +165,10 @@ export class AIColumnController extends Controller {
     });
   }
 
-  private handleDataSourceChanged(args?: HandleDataChangedArguments): void {
+  private sendRequests(): void {
     const aiColumns = this.getAIColumns();
 
-    if (args?.changeType === 'loadError'
-      || aiColumns.length === 0
-      || !this.checkStoreKey()) {
+    if (!aiColumns.length || !this.checkStoreKey()) {
       return;
     }
 
@@ -151,6 +177,14 @@ export class AIColumnController extends Controller {
         this.sendRequest(col.name as string, true);
       }
     }
+  }
+
+  private handleDataSourceChanged(args?: HandleDataChangedArguments): void {
+    if (args?.changeType === 'loadError') {
+      return;
+    }
+
+    this.sendRequests();
   }
 
   protected callbackNames(): string[] {
@@ -171,6 +205,9 @@ export class AIColumnController extends Controller {
 
     this.unsubscribeFromStoreEvents();
     this.subscribeToStoreEvents();
+
+    this.unsubscribeFromDataControllerChanged();
+    this.subscribeToDataControllerChanged();
 
     this.addAICommandColumn();
   }
@@ -280,5 +317,6 @@ export class AIColumnController extends Controller {
     super.dispose();
     this.dataController.dataSource()?.changed.remove(this.dataSourceChangedHandler);
     this.unsubscribeFromStoreEvents();
+    this.unsubscribeFromDataControllerChanged();
   }
 }

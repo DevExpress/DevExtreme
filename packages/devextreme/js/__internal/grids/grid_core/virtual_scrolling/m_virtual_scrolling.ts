@@ -564,10 +564,6 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     }
   }
 
-  private isViewportChanging() {
-    return this._viewportChanging;
-  }
-
   private _getRowsScrollDataOptions() {
     const that = this;
     const isItemCountable = function (item) {
@@ -1289,6 +1285,10 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
   private setViewportItemIndex() {
     return this._dataSource?.setViewportItemIndex.apply(this._dataSource, arguments as any);
   }
+
+  public isViewportChanging(): boolean {
+    return this._viewportChanging || super.isViewportChanging();
+  }
 };
 
 export const resizing = (Base: ModuleType<ResizingController>) => class VirtualScrollingResizingControllerExtender extends Base {
@@ -1780,9 +1780,9 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
   public setLoading(isLoading, messageText) {
     const dataController = this._dataController;
     const hasBottomLoadPanel = dataController.pageIndex() > 0 && dataController.isLoaded() && !!this._findBottomLoadPanel();
+    const isDefaultLoading = isLoading && !this._dataController.isCustomLoading();
 
-    // @ts-expect-error
-    if (this.option(LEGACY_SCROLLING_MODE) === false && isLoading && dataController.isViewportChanging()) {
+    if (this.option(LEGACY_SCROLLING_MODE) === false && isDefaultLoading && dataController.isViewportChanging()) {
       return;
     }
 
