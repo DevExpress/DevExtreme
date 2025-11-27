@@ -1652,6 +1652,11 @@ module('Regression', () => {
     });
 
     QUnit.test('mask for HH:mm should be reset after selecting all multiple times (T1308916)', function(assert) {
+        if(devices.real().android || devices.real().ios) {
+            assert.ok(true, 'desktop-only');
+            return;
+        }
+
         const $dateBox = $('#dateBox').dxDateBox({
             value: new Date(2021, 9, 17, 16, 6),
             displayFormat: 'HH:mm',
