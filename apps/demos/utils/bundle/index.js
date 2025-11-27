@@ -87,7 +87,7 @@ const getDefaultBuilderConfig = (framework, additionPaths, map) => ({
   },
 });
 
-const prepareDevextremexAngularFiles = () => {
+const prepareDevExtremeAngularFiles = () => {
   const dxNgBaseDir = path.resolve('node_modules/devextreme-angular/bundles');
 
   try {
@@ -134,7 +134,7 @@ const prepareConfigs = (framework)=> {
       main = `devextreme-${framework}`;
       minify = false;
 
-      prepareDevextremexAngularFiles();
+      prepareDevExtremeAngularFiles();
 
       const bundlesRoot = 'node_modules/devextreme-angular/bundles';
 
