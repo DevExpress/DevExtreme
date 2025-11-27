@@ -104,6 +104,7 @@ const createTimeZoneDataSource = (): DataSource => new DataSource({
 
 const MAIN_GROUP_NAME = 'mainGroup';
 const DATE_GROUP_NAME = 'dateGroup';
+const DATE_OPTIONS_GROUP_NAME = 'dateOptionsGroup';
 const START_DATE_GROUP_NAME = 'startDateGroup';
 const END_DATE_GROUP_NAME = 'endDateGroup';
 const RESOURCES_GROUP_NAME = 'resourcesGroup';
@@ -373,6 +374,7 @@ export class AppointmentForm {
         },
         {
           colSpan: 1,
+          name: DATE_OPTIONS_GROUP_NAME,
           itemType: 'group',
           items: [
             this.createAllDaySwitch(),
@@ -720,6 +722,7 @@ export class AppointmentForm {
 
       return {
         itemType: 'simple',
+        name: dataField,
         dataField,
         label: { text: label },
         colSpan: 1,
@@ -746,11 +749,13 @@ export class AppointmentForm {
         cssClass: `${CLASSES.resourcesGroup} ${CLASSES.groupWithIcon}`,
         items: [
           {
+            name: `${RESOURCES_GROUP_NAME}Icon`,
             colSpan: 1,
             cssClass: `${CLASSES.formIcon} ${CLASSES.defaultResourceIcon}`,
             template: createFormIconTemplate('addcircleoutline'),
           },
           {
+            name: `${RESOURCES_GROUP_NAME}Content`,
             itemType: 'group',
             colSpan: 1,
             items: resourcesItems,
@@ -761,11 +766,11 @@ export class AppointmentForm {
 
     resourcesItems = resourcesItems.map((item, index) => {
       const icon = resourcesLoaders[index].icon ?? '';
-      const name = resourcesLoaders[index].resourceName ?? `resource_${index}`;
+      const dataField = resourcesLoaders[index].resourceIndex;
 
       return {
         itemType: 'group',
-        name: `${name}Group`,
+        name: `${dataField}Group`,
         colCount: 2,
         colCountByScreen: {
           xs: 2,
@@ -774,11 +779,11 @@ export class AppointmentForm {
         items: [
           {
             colSpan: 1,
-            name: `${name}Icon`,
+            name: `${dataField}Icon`,
             cssClass: CLASSES.formIcon,
             template: createFormIconTemplate(icon),
           },
-          { ...item, name },
+          item,
         ],
       } as GroupItem;
     });
@@ -975,8 +980,9 @@ export class AppointmentForm {
     const { allDayExpr } = this.scheduler.getDataAccessors().expr;
     const visible = !this.getFormDataField(allDayExpr);
 
-    const startDateGroupPath = `${MAIN_GROUP_NAME}.${DATE_GROUP_NAME}.${START_DATE_GROUP_NAME}.${START_DATE_TIME_GROUP_NAME}`;
-    const endDateGroupPath = `${MAIN_GROUP_NAME}.${DATE_GROUP_NAME}.${END_DATE_GROUP_NAME}.${END_DATE_TIME_GROUP_NAME}`;
+    const dateOptionsGroupPath = `${MAIN_GROUP_NAME}.${DATE_GROUP_NAME}.${DATE_OPTIONS_GROUP_NAME}`;
+    const startDateGroupPath = `${dateOptionsGroupPath}.${START_DATE_GROUP_NAME}.${START_DATE_TIME_GROUP_NAME}`;
+    const endDateGroupPath = `${dateOptionsGroupPath}.${END_DATE_GROUP_NAME}.${END_DATE_TIME_GROUP_NAME}`;
 
     const startDateItemName = `${startDateGroupPath}.${START_DATE_EDITOR_NAME}`;
     const startTimeItemName = `${startDateGroupPath}.${START_TIME_EDITOR_NAME}`;
