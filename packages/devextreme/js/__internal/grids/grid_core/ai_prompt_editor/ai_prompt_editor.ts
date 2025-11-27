@@ -24,6 +24,8 @@ export class AIPromptEditor {
 
   private prompt: string;
 
+  private currentAction: AIPromptEditorAction | null = null;
+
   constructor(
     private options: AIPromptEditorOptions,
   ) {
@@ -215,6 +217,8 @@ export class AIPromptEditor {
   public updateStateOnAction(
     action: AIPromptEditorAction,
   ): void {
+    this.currentAction = action;
+
     // eslint-disable-next-line default-case
     switch (action) {
       case 'apply':
@@ -235,5 +239,9 @@ export class AIPromptEditor {
     this.options = options;
     this.updatePrompt(getPrompt(options.prompt));
     this.popupInstance.option(this.getPopupConfig());
+  }
+
+  public isApplying(): boolean {
+    return this.currentAction === 'apply';
   }
 }

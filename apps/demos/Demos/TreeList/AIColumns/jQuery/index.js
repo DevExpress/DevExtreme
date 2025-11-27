@@ -120,13 +120,6 @@ $(() => {
     .toggleClass('status--commission', status === 'Commission')
     .toggleClass('status--terminated', status === 'Terminated');
 
-  const createEmailTemplate = (email) => {
-    const emailLink = $('<a>')
-      .attr('href', `mailto:${email}`)
-      .text(email);
-    return emailLink;
-  };
-
   $('#treeList').dxTreeList({
     dataSource: employees,
     showBorders: true,
@@ -176,11 +169,6 @@ $(() => {
       },
       {
         dataField: 'Email',
-        cellTemplate: (container, options) => {
-          const email = options.data.Email;
-          const emailLink = createEmailTemplate(email);
-          container.append(emailLink);
-        },
         minWidth: 200,
       },
       {

@@ -4,7 +4,6 @@ import { DxTreeListModule } from 'devextreme-angular';
 import type { AIIntegration } from 'devextreme-angular/common/ai-integration';
 import { Service, type IEmployee } from './app.service';
 import { AiService } from './ai/ai.service';
-import { Email } from './email/email.component';
 import { Employee } from './employee/employee.component';
 import { Status } from './status/status.component';
 
@@ -25,7 +24,6 @@ if (window && window.config?.packageConfigPaths) {
   providers: [Service, AiService],
   imports: [
     DxTreeListModule,
-    Email,
     Employee,
     Status,
   ],

@@ -1,4 +1,6 @@
+import type { DataChange } from '@js/common/grids';
 import type { Callback } from '@js/core/utils/callbacks';
+import { isDefined } from '@ts/core/utils/m_type';
 
 import type { Column, ColumnsController } from '../../columns_controller/m_columns_controller';
 import type { DataController, HandleDataChangedArguments, UserData } from '../../data_controller/m_data_controller';
@@ -15,6 +17,12 @@ export class AIColumnController extends Controller {
   private aiColumnIntegrationController!: AIColumnIntegrationController;
 
   private dataSourceChangedHandler!: (e?: HandleDataChangedArguments) => void;
+
+  private storeUpdatedHandler!: (key: PropertyKey) => void;
+
+  private storeRemovedHandler!: (key: PropertyKey) => void;
+
+  private storeBeforePushHandler!: ({ changes }: { changes: DataChange[] }) => void;
 
   private aiColumnOptionChangedHandler!: (
     column: Column,
@@ -56,6 +64,53 @@ export class AIColumnController extends Controller {
     this.dataController.dataSource()?.changed.add(this.dataSourceChangedHandler);
   }
 
+  private unsubscribeFromStoreEvents(): void {
+    const store = this.dataController.store();
+
+    if (this.storeUpdatedHandler) {
+      store?.off('updated', this.storeUpdatedHandler);
+    }
+    if (this.storeRemovedHandler) {
+      store?.off('removed', this.storeRemovedHandler);
+    }
+    if (this.storeBeforePushHandler) {
+      store?.off('beforePush', this.storeBeforePushHandler);
+    }
+  }
+
+  private subscribeToStoreEvents(): void {
+    const store = this.dataController.store();
+
+    if (!store) {
+      return;
+    }
+
+    this.storeUpdatedHandler = this.storeUpdatedHandler ?? this.handleStoreUpdated.bind(this);
+    this.storeRemovedHandler = this.storeRemovedHandler ?? this.handleStoreRemoved.bind(this);
+    this.storeBeforePushHandler = this.storeBeforePushHandler
+      ?? this.handleStoreBeforePush.bind(this);
+
+    store.on('updated', this.storeUpdatedHandler);
+    store.on('removed', this.storeRemovedHandler);
+    store.on('beforePush', this.storeBeforePushHandler);
+  }
+
+  private handleStoreUpdated(key: PropertyKey): void {
+    this.clearAIColumnsByKey(key);
+  }
+
+  private handleStoreRemoved(key: PropertyKey): void {
+    this.clearAIColumnsByKey(key);
+  }
+
+  private handleStoreBeforePush({ changes }: { changes: DataChange[] }): void {
+    changes.forEach(({ key }) => {
+      if (isDefined(key)) {
+        this.clearAIColumnsByKey(key);
+      }
+    });
+  }
+
   private updateAICells(): void {
     this.dataController.updateItems({
       repaintChangesOnly: this.option('repaintChangesOnly'),
@@ -72,6 +127,14 @@ export class AIColumnController extends Controller {
     }
 
     return true;
+  }
+
+  private clearAIColumnsByKey(key: PropertyKey): void {
+    const aiColumns = this.getAIColumns();
+
+    aiColumns.forEach((col) => {
+      this.aiColumnIntegrationController.clearAIColumnByKey(col.name as string, key);
+    });
   }
 
   private handleDataSourceChanged(args?: HandleDataChangedArguments): void {
@@ -105,6 +168,10 @@ export class AIColumnController extends Controller {
     this.columnsController.aiColumnOptionChanged.add(this.aiColumnOptionChangedHandler);
 
     this.subscribeToDataSourceChanged();
+
+    this.unsubscribeFromStoreEvents();
+    this.subscribeToStoreEvents();
+
     this.addAICommandColumn();
   }
 
@@ -212,5 +279,6 @@ export class AIColumnController extends Controller {
   public dispose(): void {
     super.dispose();
     this.dataController.dataSource()?.changed.remove(this.dataSourceChangedHandler);
+    this.unsubscribeFromStoreEvents();
   }
 }

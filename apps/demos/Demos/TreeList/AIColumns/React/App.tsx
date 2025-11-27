@@ -9,7 +9,6 @@ import { employees } from './data.ts';
 import { aiIntegration } from './service.ts';
 import Employee from './Employee.tsx';
 import Status from './Status.tsx';
-import Email from './Email.tsx';
 
 const onAIColumnRequestCreating = (e) => {
   e.data = e.data.map((item) => ({
@@ -61,7 +60,6 @@ export default function App() {
       <Column
         dataField="Email"
         minWidth={200}
-        cellRender={Email}
       />
       <Column
         name="AI Column"

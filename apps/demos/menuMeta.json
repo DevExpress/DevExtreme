@@ -428,6 +428,7 @@
                 "Title": "Deferred Selection",
                 "Name": "DeferredSelection",
                 "Widget": "DataGrid",
+                "Modules": "devextreme-aspnet-data-nojquery",
                 "DemoType": "Web"
               }
             ]

@@ -232,7 +232,7 @@ jobs:
 #      run: pnpm exec nx run-many -t pack -p devextreme-angular devextreme-react devetreme-vue
 
 #    - name: Link wrappers packages
-#      run: pnpm install
+#      run: pnpm install --frozen-lockfile
 
       - name: Prepare bundles
         working-directory: apps/demos
