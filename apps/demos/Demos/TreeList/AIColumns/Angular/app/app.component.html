@@ -37,11 +37,7 @@
   <dxi-tree-list-column
     dataField="Email"
     [minWidth]="200"
-    cellTemplate="emailTemplate"
   />
-  <div *dxTemplate="let model of 'emailTemplate'">
-    <email [email]="model.data.Email" />
-  </div>
   <dxi-tree-list-column
     name="AI Column"
     caption="AI Column"
