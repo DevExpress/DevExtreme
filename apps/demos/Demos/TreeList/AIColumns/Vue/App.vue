@@ -64,7 +64,9 @@
       <DxAi
         mode="auto"
         noDataText="No data"
-        prompt="Identify the department where the employee works. Select from the following department list: 'Management', 'Human Resources', 'IT', 'Shipping', 'Support', 'Sales', 'Engineering'. Use 'Engineering' if you cannot find a better match."
+        prompt="Identify the department where the employee works.
+Select from the following department list: 'Management', 'Human Resources', 'IT', 'Shipping',
+'Support', 'Sales', 'Engineering'. Use 'Engineering' if you cannot find a better match."
       />
     </DxColumn>
   </DxTreeList>
