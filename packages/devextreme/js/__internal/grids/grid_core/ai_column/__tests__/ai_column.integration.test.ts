@@ -3952,6 +3952,236 @@ describe('Cache', () => {
       expect(instance.getAIColumnText('myColumn', 1)).toBe('');
     });
   });
+
+  describe('when data is updated', () => {
+    it('should clear cached data and send a prompt request', async () => {
+      const aiIntegration = new AIIntegration({
+        sendRequest(prompt: RequestParams): RequestResult {
+          sendRequestSpy(prompt.data?.data);
+
+          return {
+            promise: new Promise((resolve) => {
+              resolve(`{"1":"Response with value=${prompt.data?.data[1].value}"}`);
+            }),
+            abort: (): void => {},
+          };
+        },
+      });
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        editing: {
+          mode: 'batch',
+          allowUpdating: true,
+        },
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myAIColumn',
+            ai: {
+              aiIntegration,
+              prompt: 'Initial prompt',
+            },
+          },
+        ],
+      });
+
+      expect(sendRequestSpy).toHaveBeenCalledTimes(1);
+      expect(instance.getAIColumnText('myAIColumn', 1)).toEqual('Response with value=10');
+
+      instance.cellValue(0, 'value', 20);
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      instance.saveEditData(); // This method returns a non-native Promise
+      jest.runAllTimers();
+      await Promise.resolve();
+
+      expect(sendRequestSpy).toHaveBeenCalledTimes(2);
+      expect(sendRequestSpy).toHaveBeenLastCalledWith({ 1: { id: 1, name: 'Name 1', value: 20 } });
+      expect(instance.getAIColumnText('myAIColumn', 1)).toEqual('Response with value=20');
+    });
+  });
+
+  describe('when data is removed', () => {
+    it('should clear cached data without sending a new prompt request', async () => {
+      const aiIntegration = new AIIntegration({
+        sendRequest(prompt: RequestParams): RequestResult {
+          sendRequestSpy(prompt.data?.data);
+
+          return {
+            promise: new Promise((resolve) => {
+              resolve(`{"1":"Response with value=${prompt.data?.data[1].value}"}`);
+            }),
+            abort: (): void => {},
+          };
+        },
+      });
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        editing: {
+          mode: 'batch',
+          allowUpdating: true,
+        },
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myAIColumn',
+            ai: {
+              aiIntegration,
+              prompt: 'Initial prompt',
+            },
+          },
+        ],
+      });
+
+      expect(sendRequestSpy).toHaveBeenCalledTimes(1);
+      expect(instance.getAIColumnText('myAIColumn', 1)).toEqual('Response with value=10');
+
+      instance.deleteRow(0);
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      instance.saveEditData(); // This method returns a non-native Promise
+      jest.runAllTimers();
+      await Promise.resolve();
+
+      expect(sendRequestSpy).toHaveBeenCalledTimes(1);
+      expect(instance.getAIColumnText('myAIColumn', 1)).toEqual(undefined);
+    });
+  });
+
+  describe('when data is added', () => {
+    it('should send a prompt request', async () => {
+      const aiIntegration = new AIIntegration({
+        sendRequest(prompt: RequestParams): RequestResult {
+          sendRequestSpy(prompt.data?.data);
+
+          return {
+            promise: new Promise((resolve) => {
+              const result = {};
+
+              Object.entries(prompt.data?.data).forEach(([key, value]) => {
+                result[key] = `Response with value=${(value as any).value}`;
+              });
+
+              resolve(JSON.stringify(result));
+            }),
+            abort: (): void => {},
+          };
+        },
+      });
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        editing: {
+          mode: 'batch',
+          allowUpdating: true,
+        },
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myAIColumn',
+            ai: {
+              aiIntegration,
+              prompt: 'Initial prompt',
+            },
+          },
+        ],
+      });
+
+      expect(sendRequestSpy).toHaveBeenCalledTimes(1);
+      expect(instance.getAIColumnText('myAIColumn', 1)).toEqual('Response with value=10');
+
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      instance.addRow(); // This method returns a non-native Promise
+      jest.runAllTimers();
+      await Promise.resolve();
+
+      instance.cellValue(0, 'value', 20);
+
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      instance.saveEditData(); // This method returns a non-native Promise
+      jest.runAllTimers();
+      await Promise.resolve();
+
+      const visibleRows = instance.getVisibleRows();
+      expect(visibleRows[0].key).toEqual(1); // existing row
+      expect(visibleRows[1].key).toBeDefined(); // new row
+      expect(sendRequestSpy).toHaveBeenCalledTimes(2);
+      expect(sendRequestSpy).toHaveBeenLastCalledWith({
+        [visibleRows[1].key]: { id: visibleRows[1].key, value: 20 },
+      });
+      expect(instance.getAIColumnText('myAIColumn', visibleRows[1].key)).toEqual('Response with value=20');
+    });
+  });
+
+  describe('when data is updated via Push API', () => {
+    it('should clear cached data and send a prompt request', async () => {
+      const aiIntegration = new AIIntegration({
+        sendRequest(prompt: RequestParams): RequestResult {
+          sendRequestSpy(prompt.data?.data);
+
+          return {
+            promise: new Promise((resolve) => {
+              resolve(`{"1":"Response with value=${prompt.data?.data[1].value}"}`);
+            }),
+            abort: (): void => {},
+          };
+        },
+      });
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        editing: {
+          mode: 'batch',
+          allowUpdating: true,
+        },
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myAIColumn',
+            ai: {
+              aiIntegration,
+              prompt: 'Initial prompt',
+            },
+          },
+        ],
+      });
+
+      expect(sendRequestSpy).toHaveBeenCalledTimes(1);
+      expect(instance.getAIColumnText('myAIColumn', 1)).toEqual('Response with value=10');
+
+      instance.getDataSource().store().push([{
+        type: 'update',
+        key: 1,
+        data: { value: 20 },
+      }]);
+      jest.runAllTimers();
+      await Promise.resolve();
+
+      expect(sendRequestSpy).toHaveBeenCalledTimes(2);
+      expect(sendRequestSpy).toHaveBeenLastCalledWith({ 1: { id: 1, name: 'Name 1', value: 20 } });
+      expect(instance.getAIColumnText('myAIColumn', 1)).toEqual('Response with value=20');
+    });
+  });
 });
 
 describe('AI data', () => {
