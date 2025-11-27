@@ -2258,6 +2258,9 @@ describe('Appointment Popup', () => {
 
         scheduler.showAppointmentPopup(commonAppointment);
 
+        const width = POM.popup.component.option('width');
+        expect(width).toBe(600);
+
         const maxWidth = POM.popup.component.option('maxWidth');
         expect(maxWidth).toBe(500);
       });
