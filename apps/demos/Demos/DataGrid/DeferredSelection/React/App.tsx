@@ -31,7 +31,7 @@ const App = () => {
     const selectedItems = await dataGrid.getSelectedRowsData();
 
     const totalDuration = selectedItems.reduce((currentValue: number, item: { Task_Due_Date: string; Task_Start_Date: string; }) => {
-      const duration = +new Date(item.Task_Due_Date) - +new Date(item.Task_Start_Date);
+      const duration = new Date(item.Task_Due_Date).getTime() - new Date(item.Task_Start_Date).getTime();
 
       return currentValue + duration;
     }, 0);
