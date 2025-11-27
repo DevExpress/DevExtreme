@@ -84,7 +84,7 @@
       "cache": true,
       "inputs": ["default"]
    },
-    "generate-components": {
+   "generate-components": {
       "executor": "devextreme-nx-infra-plugin:generate-components",
       "dependsOn": ["devextreme-metadata:generate"],
       "options": {
