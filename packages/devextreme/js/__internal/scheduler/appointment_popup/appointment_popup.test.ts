@@ -2182,6 +2182,76 @@ describe('Appointment Popup', () => {
 
       expect(POM.isPopupVisible()).toBe(true);
     });
+
+    describe('Popup width and maxWidth options', () => {
+      // Mock window width to avoid fullscreen mode
+      beforeEach(() => {
+        Object.defineProperty(document.documentElement, 'clientWidth', {
+          value: 1280,
+        });
+      });
+
+      it('should use custom maxWidth when specified', async () => {
+        const { scheduler, POM } = await createScheduler({
+          ...getDefaultConfig(),
+          editing: {
+            allowAdding: true,
+            allowUpdating: true,
+            popup: {
+              maxWidth: 500,
+            },
+          },
+        });
+
+        scheduler.showAppointmentPopup(commonAppointment);
+
+        const maxWidth = POM.popup.component.option('maxWidth');
+        expect(maxWidth).toBe(500);
+      });
+
+      it('should use custom width as maxWidth when maxWidth is not specified', async () => {
+        const { scheduler, POM } = await createScheduler({
+          ...getDefaultConfig(),
+          editing: {
+            allowAdding: true,
+            allowUpdating: true,
+            popup: {
+              width: 600,
+            },
+          },
+        });
+
+        scheduler.showAppointmentPopup(commonAppointment);
+
+        const width = POM.popup.component.option('width');
+        expect(width).toBe(600);
+
+        const maxWidth = POM.popup.component.option('maxWidth');
+        expect(maxWidth).toBe(600);
+      });
+
+      it('should use maxWidth option value (not width) for maxWidth when both maxWidth and width are specified', async () => {
+        const { scheduler, POM } = await createScheduler({
+          ...getDefaultConfig(),
+          editing: {
+            allowAdding: true,
+            allowUpdating: true,
+            popup: {
+              width: 600,
+              maxWidth: 500,
+            },
+          },
+        });
+
+        scheduler.showAppointmentPopup(commonAppointment);
+
+        const width = POM.popup.component.option('width');
+        expect(width).toBe(600);
+
+        const maxWidth = POM.popup.component.option('maxWidth');
+        expect(maxWidth).toBe(500);
+      });
+    });
   });
 });
 
