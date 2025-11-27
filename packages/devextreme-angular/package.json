@@ -29,7 +29,7 @@
     "@angular-devkit/schematics": "17.3.11",
     "@angular/animations": "17.3.12",
     "@angular/cli": "17.3.11",
-    "@angular/common": "17.3.12",
+    "@angular/common": "19.2.16",
     "@angular/compiler": "17.3.12",
     "@angular/compiler-cli": "17.3.12",
     "@angular/core": "17.3.12",
