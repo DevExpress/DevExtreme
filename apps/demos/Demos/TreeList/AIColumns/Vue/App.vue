@@ -51,37 +51,31 @@
     <DxColumn
       dataField="Email"
       :minWidth="200"
-      cellTemplate="email-cell"
     />
-    <template #email-cell="{ data: { data: employee} }">
-      <Email :email="employee.Email"/>
-    </template>
     <DxColumn
       name="AI Column"
       caption="AI Column"
       type="ai"
       cssClass="ai__cell"
-      :ai="aiConfig"
       :fixed="true"
       fixedPosition="right"
       :width="180"
-    />
+    >
+      <DxAI
+        mode="auto"
+        noDataText="No data"
+        prompt="Identify the department where the employee works. Select from the following department list: 'Management', 'Human Resources', 'IT', 'Shipping', 'Support', 'Sales', 'Engineering'. Use 'Engineering' if you cannot find a better match."
+      />
+    </DxColumn>
   </DxTreeList>
 </template>
 
 <script setup lang="ts">
-import { DxTreeList, DxColumn, DxColumnFixing, DxScrolling, DxPaging } from 'devextreme-vue/tree-list';
-import Email from './Email.vue';
+import { DxTreeList, DxColumn, DxScrolling, DxPaging, DxAI } from 'devextreme-vue/tree-list';
 import Employee from './Employee.vue';
 import Status from './Status.vue';
 import { type IEmployee, employees } from './data.ts';
 import { aiIntegration } from './service.ts';
-
-const aiConfig = {
-  prompt: 'Identify department for each employee. It should be one of the following department types:  "Management", "Human Resources", "IT", "Shipping", "Support", "Sales",  "Engineering". Use "Engineering" by default.',
-  mode: 'auto',
-  noDataText: 'No data',
-};
 
 const onAIColumnRequestCreating = (e: { data: Partial<IEmployee>[] }) => {
   e.data = e.data.map((item) => ({

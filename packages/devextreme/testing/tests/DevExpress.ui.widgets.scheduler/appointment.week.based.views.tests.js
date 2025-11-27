@@ -803,7 +803,7 @@ module('Integration: Appointment Day, Week views', {
                 const $appointmentDetails = $appointmentContent.find('.dx-scheduler-appointment-content-details');
                 const $appointmentRecurringIcon = $appointmentContent.find('.dx-scheduler-appointment-recurrence-icon');
 
-                assert.equal($appointmentContent.css('display'), 'block', 'Appointment content is visible');
+                assert.equal($appointmentContent.css('display'), 'flex', 'Appointment content is visible');
                 assert.equal($appointmentTitle.css('display'), 'none', 'Appointment title isn\'t visible');
                 assert.equal($appointmentDetails.css('display'), 'none', 'Appointment title isn\'t visible');
                 assert.equal($appointmentRecurringIcon.css('display'), 'none', 'Appointment recurring icon isn\'t visible');

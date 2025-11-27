@@ -53,15 +53,16 @@
       caption="AI Column"
       cssClass="ai__cell"
       type="ai"
-      :ai="{
-        prompt: 'Identify the country where this vehicle model is originally manufactured or developed, based on its brand, model, and specifications.',
-        mode: 'auto',
-        noDataText: 'No data',
-      }"
       :fixed="true"
       fixedPosition="right"
       :width="200"
-    />
+    >
+      <DxAI
+        mode="auto"
+        noDataText="No data"
+        prompt="Identify the country where the vehicle model is manufactured. When looking up a country, consider vehicle brand, model, and specifications."
+      />
+    </DxColumn>
   </DxDataGrid>
   <DxPopup
     v-model:visible="popupVisible"
@@ -85,7 +86,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { DxDataGrid, DxColumn, DxGrouping, DxPaging } from 'devextreme-vue/data-grid';
+import { DxDataGrid, DxColumn, DxGrouping, DxPaging, DxAI } from 'devextreme-vue/data-grid';
 import { DxPopup, DxPosition } from 'devextreme-vue/popup';
 import { vehicles, type Vehicle } from './data.ts';
 import { aiIntegration } from './service.ts';

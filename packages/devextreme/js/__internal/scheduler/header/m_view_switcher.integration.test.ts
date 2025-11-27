@@ -28,7 +28,10 @@ const createScheduler = (options: SchedulerProperties): Promise<{
     .attr('id', SCHEDULER_CONTAINER_ID)
     .appendTo(document.body);
 
-  const instance = new Scheduler($container.get(0) as HTMLDivElement, {
+  // eslint-disable-next-line @typescript-eslint/init-declarations
+  let instance: Scheduler;
+  // eslint-disable-next-line prefer-const
+  instance = new Scheduler($container.get(0) as HTMLDivElement, {
     ...options,
     onContentReady: (): void => {
       resolve({ $container, instance });

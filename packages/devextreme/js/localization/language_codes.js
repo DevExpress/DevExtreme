@@ -1,1 +1,1 @@
-export * from '../common/core/localization/language_codes';
+export * from '../__internal/core/localization/language_codes';

@@ -1,7 +1,7 @@
-import accountingFormats from '@js/common/core/localization/cldr-data/accounting_formats';
 import dxConfig from '@js/core/config';
+import accountingFormats from '@ts/core/localization/cldr-data/accounting_formats';
 import localizationCoreUtils from '@ts/core/localization/core';
-import type { FormatConfig as BaseFormatConfig } from '@ts/core/localization/number';
+import type { FormatConfig as BaseFormatConfig, LocalizationFormat } from '@ts/core/localization/number';
 import openXmlCurrencyFormat from '@ts/core/localization/open_xml_currency_format';
 
 interface CurrencySymbolInfo {
@@ -100,7 +100,7 @@ export default {
   },
   format(
     value: string | number,
-    format: number | string | FormatConfig | Function | undefined,
+    format: LocalizationFormat,
   ): string {
     if (typeof value !== 'number') {
       return value;
@@ -114,7 +114,7 @@ export default {
     }
 
     // eslint-disable-next-line @stylistic/no-mixed-operators
-    if (!format || typeof format !== 'function' && !format.type && !format.formatter) {
+    if (!format || typeof format !== 'function' && !(format as FormatConfig).type && !(format as FormatConfig).formatter) {
       return getFormatter(format)(value);
     }
 

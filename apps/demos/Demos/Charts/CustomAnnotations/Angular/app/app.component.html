@@ -1,26 +1,26 @@
 <dx-chart id="chart" [dataSource]="populationData">
-  <dxo-title text="Top 5 Most Populated States in US"> </dxo-title>
-  <dxi-series
+  <dxo-chart-title text="Top 5 Most Populated States in US"> </dxo-chart-title>
+  <dxi-chart-series
     type="bar"
     name="Population"
     argumentField="name"
     valueField="population"
   >
-  </dxi-series>
-  <dxo-common-annotation-settings
+  </dxi-chart-series>
+  <dxo-chart-common-annotation-settings
     type="custom"
     series="Population"
     template="template"
     [allowDragging]="true"
   >
-  </dxo-common-annotation-settings>
-  <dxi-annotation
+  </dxo-chart-common-annotation-settings>
+  <dxi-chart-annotation
     *ngFor="let data of populationData"
     [data]="data"
     [argument]="data.name"
   >
-  </dxi-annotation>
-  <dxo-legend [visible]="false"></dxo-legend>
+  </dxi-chart-annotation>
+  <dxo-chart-legend [visible]="false"></dxo-chart-legend>
   <svg *dxTemplate="let annotation of 'template'" class="annotation">
     <image attr.href="{{ getImagePath(annotation) }}" width="60" height="40" />
     <rect x="0" y="0" class="border" />

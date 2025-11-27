@@ -189,15 +189,15 @@ class Popup<
 
   _bodyOverflowManager?: OverflowManager;
 
-  _$topToolbar?: dxElementWrapper;
+  _$topToolbar?: dxElementWrapper | null;
 
   _topToolbar?: Toolbar;
 
-  _$bottomToolbar?: dxElementWrapper;
+  _$bottomToolbar?: dxElementWrapper | null;
 
   _bottomToolbar?: Toolbar;
 
-  _$popupContent!: dxElementWrapper;
+  _$popupContent?: dxElementWrapper;
 
   _resizable!: Resizable;
 
@@ -379,10 +379,10 @@ class Popup<
     this._updateResizeCallbackSkipCondition();
 
     this.$element().addClass(POPUP_CLASS);
-    this.$wrapper().addClass(popupWrapperClasses);
+    this.$wrapper()?.addClass(popupWrapperClasses);
 
     this._$popupContent = this._$content
-      .wrapInner($('<div>').addClass(POPUP_CONTENT_CLASS))
+      ?.wrapInner($('<div>').addClass(POPUP_CONTENT_CLASS))
       .children().eq(0);
 
     this._toggleContentScrollClass();
@@ -450,7 +450,8 @@ class Popup<
       return;
     }
 
-    const contentElement = this._$content.get(0);
+    const contentElement = this._$content?.get(0);
+
     if (shouldObserve) {
       resizeObserverSingleton.observe(contentElement, (
         entry: ResizeObserverEntry,
@@ -531,10 +532,15 @@ class Popup<
     this._$topToolbar?.remove();
 
     const items = this._getTopToolbarItems();
+    const $content = this.$content();
+
+    if (!$content) {
+      return;
+    }
     const $toolbarContainer = $('<div>')
       .addClass(POPUP_TITLE_CLASS)
       .addClass(TOOLBAR_CLASS)
-      .insertBefore(this.$content());
+      .insertBefore($content);
 
     this._$topToolbar = this._renderToolbar(
       'titleTemplate',
@@ -575,10 +581,16 @@ class Popup<
     this._$bottomToolbar?.remove();
 
     const items = this._getToolbarItems('bottom');
+    const $content = this.$content();
+
+    if (!$content) {
+      return;
+    }
+
     const $toolbarContainer = $('<div>')
       .addClass(POPUP_BOTTOM_CLASS)
       .addClass(TOOLBAR_CLASS)
-      .insertAfter(this.$content());
+      .insertAfter($content);
 
     this._$bottomToolbar = this._renderToolbar(
       'bottomTemplate',
@@ -880,7 +892,7 @@ class Popup<
     // @ts-expect-error ts-error
     super._toggleDisabledState(...arguments);
 
-    this.$content().toggleClass(DISABLED_STATE_CLASS, Boolean(value));
+    this.$content()?.toggleClass(DISABLED_STATE_CLASS, Boolean(value));
   }
 
   _toggleClasses(): void {
@@ -890,7 +902,7 @@ class Popup<
       const className = `${POPUP_CLASS}-${alias}`;
       const isVisible = this._toolbarItemClasses.includes(className);
 
-      this.$wrapper().toggleClass(`${className}-visible`, isVisible);
+      this.$wrapper()?.toggleClass(`${className}-visible`, isVisible);
       this._$bottomToolbar?.toggleClass(className, isVisible);
     });
   }
@@ -905,15 +917,15 @@ class Popup<
 
       this._zIndex = zIndex;
 
-      this._$wrapper.css('zIndex', zIndex);
-      this._$content.css('zIndex', zIndex);
+      this._$wrapper?.css('zIndex', zIndex);
+      this._$content?.css('zIndex', zIndex);
     }
   }
 
   _toggleContentScrollClass(): void {
     const isNativeScrollingEnabled = !this.option('preventScrollEvents');
 
-    this.$content().toggleClass(POPUP_CONTENT_SCROLLABLE_CLASS, isNativeScrollingEnabled);
+    this.$content()?.toggleClass(POPUP_CONTENT_SCROLLABLE_CLASS, isNativeScrollingEnabled);
   }
 
   _getPositionControllerConfig(): PopupPositionControllerConstructor {
@@ -958,7 +970,7 @@ class Popup<
     );
   }
 
-  _getDragTarget(): dxElementWrapper | undefined {
+  _getDragTarget(): dxElementWrapper | undefined | null {
     return this.topToolbar();
   }
 
@@ -1014,7 +1026,7 @@ class Popup<
     const height = this._getOptionValue('height');
 
     if (height === 'auto') {
-      this.$content().css({
+      this.$content()?.css({
         height: 'auto',
         maxHeight: 'none',
       });
@@ -1032,7 +1044,7 @@ class Popup<
     const config = {
       dragEnabled,
       handle: $dragTarget.get(0),
-      draggableElement: this._$content.get(0),
+      draggableElement: this._$content?.get(0),
       positionController: this._positionController,
     };
 
@@ -1046,6 +1058,10 @@ class Popup<
   }
 
   _renderResize(): void {
+    if (!this._$content) {
+      return;
+    }
+
     this._resizable = this._createComponent(this._$content, Resizable, {
       handles: this.option('resizeEnabled') ? 'all' : 'none',
       onResizeStart: (e: ResizeStartEvent) => {
@@ -1095,7 +1111,7 @@ class Popup<
     const overlayContent = this.$overlayContent().get(0) as HTMLElement;
     const currentHeightStrategyClass = this._chooseHeightStrategy(overlayContent);
 
-    this.$content().css(this._getHeightCssStyles(currentHeightStrategyClass, overlayContent));
+    this.$content()?.css(this._getHeightCssStyles(currentHeightStrategyClass, overlayContent));
     this._setHeightClasses(this.$overlayContent(), currentHeightStrategyClass);
   }
 
@@ -1202,8 +1218,8 @@ class Popup<
       header: getVisibleHeight(topToolbar?.get(0)),
       footer: getVisibleHeight(bottomToolbar?.get(0)),
       contentVerticalOffsets: getVerticalOffsets(this.$overlayContent().get(0), true),
-      popupVerticalOffsets: getVerticalOffsets(this.$content().get(0), true),
-      popupVerticalPaddings: getVerticalOffsets(this.$content().get(0), false),
+      popupVerticalOffsets: getVerticalOffsets(this.$content()?.get(0), true),
+      popupVerticalPaddings: getVerticalOffsets(this.$content()?.get(0), false),
     };
   }
 
@@ -1245,6 +1261,11 @@ class Popup<
     super._dispose();
 
     this._toggleBodyScroll(true);
+
+    this._$topToolbar = null;
+    this._$bottomToolbar = null;
+    // @ts-expect-error _$popupContent can be null
+    this._$popupContent = null;
   }
 
   _renderFullscreenWidthClass(): void {
@@ -1399,28 +1420,34 @@ class Popup<
     }
   }
 
-  bottomToolbar(): dxElementWrapper | undefined {
+  bottomToolbar(): dxElementWrapper | undefined | null {
     return this._$bottomToolbar;
   }
 
-  topToolbar(): dxElementWrapper | undefined {
+  topToolbar(): dxElementWrapper | undefined | null {
     return this._$topToolbar;
   }
 
-  $content(): dxElementWrapper {
+  $content(): dxElementWrapper | null | undefined {
     return this._$popupContent;
   }
 
   content(): HTMLElement {
-    return getPublicElement(this.$content());
+    return getPublicElement(this.$content() as dxElementWrapper);
   }
 
   $overlayContent(): dxElementWrapper {
-    return this._$content;
+    return this._$content as dxElementWrapper;
   }
 
   getFocusableElements(): dxElementWrapper {
-    return this.$wrapper()
+    const $wrapper = this.$wrapper();
+
+    if (!$wrapper) {
+      return $();
+    }
+
+    return $wrapper
       .find('[tabindex]')
       // @ts-expect-error ts-error
       .filter((_, item) => item.getAttribute('tabindex') >= 0);

@@ -37,11 +37,7 @@
   <dxi-tree-list-column
     dataField="Email"
     [minWidth]="200"
-    cellTemplate="emailTemplate"
   />
-  <div *dxTemplate="let model of 'emailTemplate'">
-    <email [email]="model.data.Email" />
-  </div>
   <dxi-tree-list-column
     name="AI Column"
     caption="AI Column"
@@ -52,7 +48,7 @@
     [width]="180"
   >
     <dxo-tree-list-ai
-      prompt='Identify department for each employee. It should be one of the following department types:  "Management", "Human Resources", "IT", "Shipping", "Support", "Sales",  "Engineering". Use "Engineering" by default.'
+      prompt='Identify the department where the employee works. Select from the following department list: "Management", "Human Resources", "IT", "Shipping", "Support", "Sales", "Engineering". Use "Engineering" if you cannot find a better match.'
       mode="auto"
       noDataText="No data"
     />

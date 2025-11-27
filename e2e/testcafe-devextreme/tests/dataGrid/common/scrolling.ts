@@ -1702,7 +1702,7 @@ test('The row alternation should display correctly when grouping and virtual scr
 
 test('DataGrid - Gray boxes appear when the push method is used to remove rows in infinite scrolling mode (T1240079)', async (t) => {
   const dataGrid = new DataGrid('#container');
-
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const data = [
     { id: 1, text: 'text 1' },
     { id: 2, text: 'text 2' },
@@ -1715,14 +1715,11 @@ test('DataGrid - Gray boxes appear when the push method is used to remove rows i
   await t.expect(dataGrid.isReady()).ok();
 
   await dataGrid.apiPush(changes);
-  await t.wait(500);
+  await testScreenshot(t, takeScreenshot, 'T1240079.png', { element: dataGrid.element });
 
-  await t.expect(dataGrid.isReady()).ok();
-
-  const visibleRows = await dataGrid.apiGetVisibleRows();
   await t
-    .expect(visibleRows.length)
-    .eql(0, 'All rows should be removed after push');
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
 }).before(async () => {
   await createWidget('dxDataGrid', () => {
     const data = [
@@ -1734,11 +1731,7 @@ test('DataGrid - Gray boxes appear when the push method is used to remove rows i
       store: new (window as any).DevExpress.data.CustomStore({
         key: 'id',
         loadMode: 'raw',
-        load: () => new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(data);
-          }, 100);
-        }),
+        load: () => Promise.resolve(data),
       }),
     };
 

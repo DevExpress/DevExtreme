@@ -145,10 +145,10 @@ jobs:
     #   with:
     #     chrome-version: '141.0.7390.122'
 
-    - name: Use Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
+    # - name: Use Node.js
+    #   uses: actions/setup-node@v4
+    #   with:
+    #     node-version: '20'
 
     - uses: pnpm/action-setup@v4
       with:
@@ -169,6 +169,12 @@ jobs:
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
+
+    - name: Check runner resources
+      run: |
+        echo "CPU cores: $(nproc)"
+        echo "Memory: $(free -h)"
+        echo "Disk: $(df -h)"
 
     - name: Run TestCafe tests
       working-directory: ./e2e/testcafe-devextreme

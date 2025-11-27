@@ -45,8 +45,8 @@ export type Position = OverlayPosition | OverlayPositionAlignment;
 
 export interface ControllerOverlayElements {
   $root?: dxElementWrapper;
-  $content?: dxElementWrapper;
-  $wrapper?: dxElementWrapper;
+  $content?: dxElementWrapper | null;
+  $wrapper?: dxElementWrapper | null;
 }
 
 export type BaseControllerProperties = Pick<
@@ -250,7 +250,9 @@ export class OverlayPositionController<
     if (this._shouldRenderContentInitialPosition) {
       this._renderContentInitialPosition();
     } else {
-      move(this._$content, this._visualPosition);
+      if (this._$content) {
+        move(this._$content, this._visualPosition);
+      }
 
       this.detectVisualPositionChange();
     }
@@ -275,15 +277,27 @@ export class OverlayPositionController<
     this._$wrapper?.css('position', positionStyle);
   }
 
+  clean(): void {
+    this._$root = undefined;
+    this._$content = undefined;
+    this._$wrapper = undefined;
+    this._$markupContainer = undefined;
+    this._$visualContainer = undefined;
+  }
+
   _updateVisualPositionValue(): void {
     this._previousVisualPosition = this._visualPosition;
-    this._visualPosition = locate(this._$content);
+    if (this._$content) {
+      this._visualPosition = locate(this._$content);
+    }
   }
 
   _renderContentInitialPosition(): void {
     this._renderBoundaryOffset();
 
-    resetPosition(this._$content);
+    if (this._$content) {
+      resetPosition(this._$content);
+    }
 
     const wrapperOverflow = this._$wrapper?.css('overflow') ?? '';
 

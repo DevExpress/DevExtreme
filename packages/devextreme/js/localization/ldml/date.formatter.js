@@ -1,1 +1,1 @@
-export * from '../../common/core/localization/ldml/date.formatter';
+export * from '../../__internal/core/localization/ldml/date.formatter';
