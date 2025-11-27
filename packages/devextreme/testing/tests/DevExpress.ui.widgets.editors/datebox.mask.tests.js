@@ -11,6 +11,7 @@ import devices from '__internal/core/m_devices';
 const { test, module } = QUnit;
 
 const CLEAR_BUTTON_AREA_CLASS = 'dx-clear-button-area';
+const TEXT_EDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 const DROP_EVENT_NAME = 'drop';
 
@@ -1648,6 +1649,33 @@ module('Regression', () => {
         }).dxDateBox('instance');
 
         instance.focus();
+    });
+
+    QUnit.test('mask for HH:mm should be reset after selecting all multiple times (T1308916)', function(assert) {
+        const $dateBox = $('#dateBox').dxDateBox({
+            value: new Date(2021, 9, 17, 16, 6),
+            displayFormat: 'HH:mm',
+            type: 'time',
+            useMaskBehavior: true,
+        });
+
+        const $input = $dateBox.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        const { length } = $input.val();
+
+        keyboard
+            .focus()
+            .caret({ start: 0, end: length })
+            .type('1234');
+
+        assert.strictEqual($input.val(), '12:34', 'text is correct after typing "1234" over full selection');
+
+        keyboard
+            .caret({ start: 0, end: length })
+            .type('12');
+
+        assert.strictEqual($input.val(), '12:34', 'both digits go to hours and minutes stay unchanged');
     });
 });
 
