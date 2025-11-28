@@ -365,7 +365,8 @@ class Overlay<
     const isAttachedTarget = $(window.document).is($target) || isTargetDocument;
     const isInnerOverlay = $($target).closest(`.${INNER_OVERLAY_CLASS}`).length;
     const isTargetContent = this._$content?.is($target);
-    const isTargetInContent = domUtils.contains(this._$content?.get(0), target);
+    const content = this._$content?.get(0);
+    const isTargetInContent = content ? domUtils.contains(content, target) : false;
 
     const isOutsideClick = isAttachedTarget
       && !isInnerOverlay
