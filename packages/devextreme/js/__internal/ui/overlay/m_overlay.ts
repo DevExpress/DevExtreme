@@ -30,7 +30,6 @@ import {
 } from '@js/core/utils/type';
 import { changeCallback } from '@js/core/utils/view_port';
 import type { Properties } from '@js/ui/overlay';
-import { tabbable } from '@js/ui/widget/selectors';
 import uiErrors from '@js/ui/widget/ui.errors';
 import domUtils from '@ts/core/utils/m_dom';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -416,7 +415,7 @@ class Overlay<
     for (let i = overlayStack.length - 1; i >= 0; i--) {
       const tabbableElements = overlayStack[i]._findTabbableBounds();
 
-      if (tabbableElements.first || tabbableElements.last) {
+      if (tabbableElements.$first || tabbableElements.$last) {
         // @ts-ignore
         return overlayStack[i] === this;
       }
@@ -455,16 +454,21 @@ class Overlay<
 
   _renderWrapperAttributes(): void {
     const { wrapperAttr } = this.option();
-    const attributes = extend({}, wrapperAttr);
+
+    const attributes = { ...wrapperAttr };
     const classNames = attributes.class;
 
     delete attributes.class;
-    // @ts-expect-error ts-error
-    this.$wrapper()
-      .attr(attributes)
-      // @ts-expect-error ts-error
-      .removeClass(this._customWrapperClass)
-      .addClass(classNames);
+
+    const $wrapper = this.$wrapper();
+
+    $wrapper?.attr(attributes);
+
+    if (this._customWrapperClass) {
+      $wrapper?.removeClass(this._customWrapperClass);
+    }
+
+    $wrapper?.addClass(classNames);
 
     this._customWrapperClass = classNames;
   }
@@ -688,14 +692,18 @@ class Overlay<
 
   _animate(animation, completeCallback, startCallback): void {
     if (animation) {
-      startCallback = startCallback || animation.start || noop;
+      const actualStartCallback = startCallback ?? animation.start ?? noop;
+
+      const configuration = {
+        ...animation,
+        start: actualStartCallback,
+        complete: completeCallback,
+      };
 
       if (this._$content) {
-        // @ts-expect-error ts-error
-        fx.animate(this._$content, extend({}, animation, {
-          start: startCallback,
-          complete: completeCallback,
-        }));
+        // @ts-expect-error this._$content
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        fx.animate(this._$content, configuration);
       }
     } else {
       completeCallback();
@@ -704,7 +712,7 @@ class Overlay<
 
   _stopAnimation(): void {
     if (this._$content) {
-      // @ts-expect-error ts-error
+      // @ts-expect-error this._$content
       fx.stop(this._$content, true);
     }
   }
@@ -808,31 +816,36 @@ class Overlay<
     }
   }
 
-  _findTabbableBounds(): { first: dxElementWrapper | null; last: dxElementWrapper | null } {
+  _findTabbableBounds(): {
+    $first: dxElementWrapper | null;
+    $last: dxElementWrapper | null;
+  } {
     const $elements = this._$wrapper?.find('*');
     const elementsCount = ($elements?.length ?? 0) - 1;
 
-    let first = null;
-    let last = null;
+    let $first: dxElementWrapper | null = null;
+    let $last: dxElementWrapper | null = null;
 
     for (let i = 0; i <= elementsCount; i += 1) {
-      // @ts-expect-error ts-error
-      if (!first && $elements.eq(i).is(tabbable)) {
-        // @ts-expect-error ts-error
-        first = $elements.eq(i);
-      }
-      // @ts-expect-error ts-error
-      if (!last && $elements.eq(elementsCount - i).is(tabbable)) {
-        // @ts-expect-error ts-error
-        last = $elements.eq(elementsCount - i);
+      const $currentElement = $elements?.eq(i) ?? null;
+      const $reverseElement = $elements?.eq(elementsCount - i) ?? null;
+
+      // @ts-expect-error is should can get function as callback
+      if (!$first && $currentElement.is(selectors.tabbable)) {
+        $first = $currentElement;
       }
 
-      if (first && last) {
+      // @ts-expect-error is should can get function as callback
+      if (!$last && $reverseElement.is(selectors.tabbable)) {
+        $last = $reverseElement;
+      }
+
+      if ($first && $last) {
         break;
       }
     }
 
-    return { first, last };
+    return { $first, $last };
   }
 
   _tabKeyHandler(e: KeyboardEvent): void {
@@ -843,7 +856,10 @@ class Overlay<
     const wrapper = this._$wrapper?.get(0) as HTMLElement;
     const activeElement = domAdapter.getActiveElement(wrapper);
 
-    const { first: $firstTabbable, last: $lastTabbable } = this._findTabbableBounds();
+    const {
+      $first: $firstTabbable,
+      $last: $lastTabbable,
+    } = this._findTabbableBounds();
 
     const isTabOnLast = !e.shiftKey && activeElement === $lastTabbable?.get(0);
     const isShiftTabOnFirst = e.shiftKey && activeElement === $firstTabbable?.get(0);
@@ -1268,27 +1284,31 @@ class Overlay<
   }
 
   _dispose(): void {
-    // @ts-expect-error
-    fx.stop(this._$content, false);
+    if (this._$content) {
+      // @ts-expect-error this._$content
+      fx.stop(this._$content, false);
+    }
 
     this._toggleViewPortSubscription(false);
     this._toggleSubscriptions(false);
     this._updateZIndexStackPosition(false);
     this._toggleTabTerminator(false);
 
-    this._actions = null;
-    this._parentsScrollSubscriptionInfo = null;
-
     super._dispose();
 
     this._toggleSafariScrolling();
-    this.option('visible') && zIndexPool.remove(this._zIndex);
+
+    if (this._isVisible()) {
+      zIndexPool.remove(this._zIndex);
+    }
 
     this._positionController.clean();
 
     this._$wrapper?.remove();
     this._$content?.remove();
 
+    this._actions = null;
+    this._parentsScrollSubscriptionInfo = null;
     this._$wrapper = null;
     this._$content = null;
   }

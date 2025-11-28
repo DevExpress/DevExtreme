@@ -267,10 +267,11 @@ TProperties extends PopoverProperties = PopoverProperties,
       .prependTo(this.$overlayContent());
   }
 
-  _documentDownHandler(e): boolean | undefined {
+  _documentDownHandler(e): boolean {
     if (this._isOutsideClick(e)) {
       return super._documentDownHandler(e);
     }
+
     return true;
   }
 
