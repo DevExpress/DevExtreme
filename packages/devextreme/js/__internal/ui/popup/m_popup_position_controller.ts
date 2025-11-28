@@ -90,7 +90,9 @@ class PopupPositionController extends OverlayPositionController {
 
   positionContent(): void {
     if (this._props.fullScreen) {
-      move(this._$content, { top: 0, left: 0 });
+      if (this._$content) {
+        move(this._$content, { top: 0, left: 0 });
+      }
       this.detectVisualPositionChange();
     } else {
       this._props.forceApplyBindings?.();

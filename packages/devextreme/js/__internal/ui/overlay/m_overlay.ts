@@ -30,6 +30,7 @@ import {
 } from '@js/core/utils/type';
 import { changeCallback } from '@js/core/utils/view_port';
 import type { Properties } from '@js/ui/overlay';
+import { tabbable } from '@js/ui/widget/selectors';
 import uiErrors from '@js/ui/widget/ui.errors';
 import domUtils from '@ts/core/utils/m_dom';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -831,12 +832,12 @@ class Overlay<
       const $reverseElement = $elements?.eq(elementsCount - i) ?? null;
 
       // @ts-expect-error is should can get function as callback
-      if (!$first && $currentElement.is(selectors.tabbable)) {
+      if (!$first && $currentElement.is(tabbable)) {
         $first = $currentElement;
       }
 
       // @ts-expect-error is should can get function as callback
-      if (!$last && $reverseElement.is(selectors.tabbable)) {
+      if (!$last && $reverseElement.is(tabbable)) {
         $last = $reverseElement;
       }
 

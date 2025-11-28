@@ -143,9 +143,9 @@ class Popup<
 
   _bodyOverflowManager?: OverflowManager;
 
-  _$title?: dxElementWrapper;
+  _$title?: dxElementWrapper | null;
 
-  _$bottom?: dxElementWrapper;
+  _$bottom?: dxElementWrapper | null;
 
   _$popupContent?: dxElementWrapper;
 
@@ -1181,11 +1181,11 @@ class Popup<
     }
   }
 
-  bottomToolbar(): dxElementWrapper | undefined {
+  bottomToolbar(): dxElementWrapper | undefined | null {
     return this._$bottom;
   }
 
-  topToolbar(): dxElementWrapper | undefined {
+  topToolbar(): dxElementWrapper | undefined | null {
     return this._$title;
   }
 

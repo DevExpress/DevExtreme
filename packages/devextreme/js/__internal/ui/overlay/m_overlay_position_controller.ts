@@ -87,7 +87,7 @@ class OverlayPositionController {
     this.updateVisualContainer(visualContainer);
   }
 
-  get $container() {
+  get $container(): dxElementWrapper | undefined {
     this.updateContainer(); // NOTE: swatch classes can be updated runtime
 
     return this._$markupContainer;
@@ -154,7 +154,9 @@ class OverlayPositionController {
     if (this._shouldRenderContentInitialPosition) {
       this._renderContentInitialPosition();
     } else {
-      move(this._$content, this._visualPosition);
+      if (this._$content) {
+        move(this._$content, this._visualPosition);
+      }
       this.detectVisualPositionChange();
     }
   }
@@ -182,12 +184,16 @@ class OverlayPositionController {
 
   _updateVisualPositionValue(): void {
     this._previousVisualPosition = this._visualPosition;
-    this._visualPosition = locate(this._$content);
+    if (this._$content) {
+      this._visualPosition = locate(this._$content);
+    }
   }
 
   _renderContentInitialPosition(): void {
     this._renderBoundaryOffset();
-    resetPosition(this._$content);
+    if (this._$content) {
+      resetPosition(this._$content);
+    }
     // @ts-expect-error ts-error
     const wrapperOverflow = this._$wrapper?.css('overflow');
     this._$wrapper?.css('overflow', 'hidden');
@@ -197,7 +203,7 @@ class OverlayPositionController {
       this._initialPosition = resultPosition;
     }
     // @ts-expect-error ts-error
-    this._$wrapper.css('overflow', wrapperOverflow);
+    this._$wrapper?.css('overflow', wrapperOverflow);
     this.detectVisualPositionChange();
   }
 
