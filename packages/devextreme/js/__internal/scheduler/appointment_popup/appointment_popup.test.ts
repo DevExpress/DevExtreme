@@ -947,6 +947,115 @@ describe('Appointment Form', () => {
       POM.openPopupByDblClick('Resource test app');
       expect(POM.popup.getInputValue('roomId')).toBe('Room 2');
     });
+
+    it('should create resourceEditorsGroup when resources have no custom icons', async () => {
+      const { POM } = await createScheduler({
+        ...getDefaultConfig(),
+        dataSource: [{
+          text: 'Resource test app',
+          startDate: new Date(2017, 4, 9, 9, 30),
+          endDate: new Date(2017, 4, 9, 11),
+          roomId: 1,
+          ownerId: 2,
+        }],
+        resources: [{
+          fieldExpr: 'roomId',
+          dataSource: [{ text: 'Room 1', id: 1 }, { text: 'Room 2', id: 2 }],
+        }, {
+          fieldExpr: 'ownerId',
+          dataSource: [{ text: 'Owner 1', id: 1 }, { text: 'Owner 2', id: 2 }],
+        }],
+      });
+
+      POM.openPopupByDblClick('Resource test app');
+
+      const formItems = POM.popup.form.option('items') as FormItem[];
+      const mainGroup = formItems.find((item) => item.name === 'mainGroup') as GroupItem;
+      const resourcesGroup = mainGroup?.items?.find((item) => item.name === 'resourcesGroup') as GroupItem;
+
+      expect(resourcesGroup).toBeDefined();
+      expect(resourcesGroup?.items?.length).toBe(2);
+
+      expect(resourcesGroup?.items).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: 'resourcesGroupContent',
+            itemType: 'group',
+            items: expect.arrayContaining([
+              expect.objectContaining({
+                name: 'roomId',
+              }),
+              expect.objectContaining({
+                name: 'ownerId',
+              }),
+            ]),
+          }),
+        ]),
+      );
+    });
+
+    it('should create individual resource groups when resources have custom icons', async () => {
+      const { POM } = await createScheduler({
+        ...getDefaultConfig(),
+        dataSource: [{
+          text: 'Resource test app',
+          startDate: new Date(2017, 4, 9, 9, 30),
+          endDate: new Date(2017, 4, 9, 11),
+          roomId: 1,
+          ownerId: 2,
+        }],
+        resources: [
+          {
+            fieldExpr: 'roomId',
+            icon: 'home',
+            dataSource: [{ text: 'Room 1', id: 1 }, { text: 'Room 2', id: 2 }],
+          },
+          {
+            fieldExpr: 'ownerId',
+            icon: 'user',
+            dataSource: [{ text: 'Owner 1', id: 1 }, { text: 'Owner 2', id: 2 }],
+          },
+        ],
+      });
+
+      POM.openPopupByDblClick('Resource test app');
+
+      const formItems = POM.popup.form.option('items') as FormItem[];
+      const mainGroup = formItems.find((item) => item.name === 'mainGroup') as GroupItem;
+      const resourcesGroup = mainGroup?.items?.find((item) => item.name === 'resourcesGroup') as GroupItem;
+
+      expect(resourcesGroup).toBeDefined();
+      expect(resourcesGroup?.items?.length).toBe(2);
+
+      expect(resourcesGroup?.items).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: 'roomIdGroup',
+            itemType: 'group',
+            items: expect.arrayContaining([
+              expect.objectContaining({
+                name: 'roomId',
+              }),
+              expect.objectContaining({
+                name: 'roomIdIcon',
+              }),
+            ]),
+          }),
+          expect.objectContaining({
+            name: 'ownerIdGroup',
+            itemType: 'group',
+            items: expect.arrayContaining([
+              expect.objectContaining({
+                name: 'ownerId',
+              }),
+              expect.objectContaining({
+                name: 'ownerIdIcon',
+              }),
+            ]),
+          }),
+        ]),
+      );
+    });
   });
 
   describe('Recurrence Form', () => {
@@ -1041,7 +1150,7 @@ describe('Appointment Form', () => {
         expect(POM.popup.getInputValue('recurrenceStartDateEditor')).toBe('5/1/2017');
         expect(POM.popup.getInputValue('recurrenceCountEditor')).toBe('2');
         expect(POM.popup.getInputValue('recurrencePeriodEditor')).toBe('Hour(s)');
-        expect(POM.popup.getInputValue('countEditor')).toBe('10 occurrence(s)');
+        expect(POM.popup.getInputValue('recurrenceEndCountEditor')).toBe('10 occurrence(s)');
       });
 
       it('should have correct input values for appointment with daily frequency', async () => {
@@ -1063,7 +1172,7 @@ describe('Appointment Form', () => {
         expect(POM.popup.getInputValue('recurrenceStartDateEditor')).toBe('5/1/2017');
         expect(POM.popup.getInputValue('recurrenceCountEditor')).toBe('2');
         expect(POM.popup.getInputValue('recurrencePeriodEditor')).toBe('Day(s)');
-        expect(POM.popup.getInputValue('countEditor')).toBe('10 occurrence(s)');
+        expect(POM.popup.getInputValue('recurrenceEndCountEditor')).toBe('10 occurrence(s)');
       });
 
       it('should have correct input values for appointment with week frequency', async () => {
@@ -1089,7 +1198,7 @@ describe('Appointment Form', () => {
         const expectedWeekDaysSelection = [true, false, true, false, true, false, false];
         expect(POM.popup.getWeekDaysSelection()).toEqual(expectedWeekDaysSelection);
 
-        expect(POM.popup.getInputValue('countEditor')).toBe('10 occurrence(s)');
+        expect(POM.popup.getInputValue('recurrenceEndCountEditor')).toBe('10 occurrence(s)');
       });
 
       it('should have correct input values for appointment with monthly frequency', async () => {
@@ -1112,7 +1221,7 @@ describe('Appointment Form', () => {
         expect(POM.popup.getInputValue('recurrenceCountEditor')).toBe('2');
         expect(POM.popup.getInputValue('recurrencePeriodEditor')).toBe('Month(s)');
         expect(POM.popup.getInputValue('recurrenceDayOfMonthEditor')).toBe('1');
-        expect(POM.popup.getInputValue('countEditor')).toBe('10 occurrence(s)');
+        expect(POM.popup.getInputValue('recurrenceEndCountEditor')).toBe('10 occurrence(s)');
       });
 
       it('should have correct input values for appointment with yearly frequency', async () => {
@@ -1136,7 +1245,7 @@ describe('Appointment Form', () => {
         expect(POM.popup.getInputValue('recurrencePeriodEditor')).toBe('Year(s)');
         expect(POM.popup.getInputValue('recurrenceDayOfYearDayEditor')).toBe('1');
         expect(POM.popup.getInputValue('recurrenceDayOfYearMonthEditor')).toBe('May');
-        expect(POM.popup.getInputValue('countEditor')).toBe('10 occurrence(s)');
+        expect(POM.popup.getInputValue('recurrenceEndCountEditor')).toBe('10 occurrence(s)');
       });
 
       it('should have correct input values for appointment with no end', async () => {
@@ -1152,7 +1261,7 @@ describe('Appointment Form', () => {
         POM.popup.getEditSeriesButton().click();
         POM.popup.openRecurrenceSettings();
 
-        expect(POM.popup.getInputValue('repeatEndEditor')).toBe('never');
+        expect(POM.popup.getInputValue('recurrenceRepeatEndEditor')).toBe('never');
       });
 
       it('should have correct input values for appointment with end by date', async () => {
@@ -1168,8 +1277,8 @@ describe('Appointment Form', () => {
         POM.popup.getEditSeriesButton().click();
         POM.popup.openRecurrenceSettings();
 
-        expect(POM.popup.getInputValue('repeatEndEditor')).toBe('until');
-        expect(POM.popup.getInputValue('untilEditor')).toBe('6/1/2017');
+        expect(POM.popup.getInputValue('recurrenceRepeatEndEditor')).toBe('until');
+        expect(POM.popup.getInputValue('recurrenceEndUntilEditor')).toBe('6/1/2017');
       });
 
       it('should have correct input values for appointment with end by count', async () => {
@@ -1185,8 +1294,8 @@ describe('Appointment Form', () => {
         POM.popup.getEditSeriesButton().click();
         POM.popup.openRecurrenceSettings();
 
-        expect(POM.popup.getInputValue('repeatEndEditor')).toBe('count');
-        expect(POM.popup.getInputValue('countEditor')).toBe('10 occurrence(s)');
+        expect(POM.popup.getInputValue('recurrenceRepeatEndEditor')).toBe('count');
+        expect(POM.popup.getInputValue('recurrenceEndCountEditor')).toBe('10 occurrence(s)');
       });
     });
   });
