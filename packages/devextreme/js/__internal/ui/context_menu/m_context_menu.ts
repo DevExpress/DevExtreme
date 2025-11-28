@@ -181,7 +181,7 @@ class ContextMenu extends MenuBase {
 
   _itemContainer(): dxElementWrapper {
     // @ts-expect-error
-    return this._overlay ? this._overlay.$content() : $();
+    return this._overlay?.$content() ?? $();
   }
 
   _eventBindingTarget(): dxElementWrapper {
@@ -425,6 +425,11 @@ class ContextMenu extends MenuBase {
 
     // @ts-expect-error
     const $overlayContent = this._overlay.$content();
+
+    if (!$overlayContent) {
+      return;
+    }
+
     $overlayContent.addClass(DX_CONTEXT_MENU_CLASS);
 
     this._addCustomCssClass($overlayContent);
@@ -669,7 +674,7 @@ class ContextMenu extends MenuBase {
 
   _getItemsContainers(): dxElementWrapper {
     // @ts-expect-error
-    return this._overlay.$content().find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
+    return this._overlay?.$content()?.find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`) ?? $();
   }
 
   _searchActiveItem(target): dxElementWrapper {
@@ -977,7 +982,7 @@ class ContextMenu extends MenuBase {
   _hideAllShownSubmenus(): void {
     const shownSubmenus = extend([], this._shownSubmenus);
     // @ts-expect-error
-    const $expandedItems = this._overlay.$content().find(`.${DX_MENU_ITEM_EXPANDED_CLASS}`);
+    const $expandedItems = this._overlay?.$content()?.find(`.${DX_MENU_ITEM_EXPANDED_CLASS}`) ?? $();
 
     $expandedItems.removeClass(DX_MENU_ITEM_EXPANDED_CLASS);
 
@@ -1051,8 +1056,7 @@ class ContextMenu extends MenuBase {
     if (position) {
       if (!this._overlay) {
         this._renderContextMenuOverlay();
-        // @ts-expect-error
-        this._overlay.$content().addClass(this._widgetClass());
+        (this._overlay as unknown as Overlay).$content()?.addClass(this._widgetClass());
         this._renderFocusState();
         this._attachHoverEvents();
         this._attachClickEvent();

@@ -21,7 +21,7 @@ export default class DropDownButton extends TextEditorButton {
     this.currentTemplate = null;
   }
 
-  _attachEvents(instance): void {
+  _attachEvents(instance: Button): void {
     instance.option('onClick', (e) => {
       // @ts-expect-error _shouldCallOpenHandler should be typed
       if (this.editor?._shouldCallOpenHandler?.()) {
