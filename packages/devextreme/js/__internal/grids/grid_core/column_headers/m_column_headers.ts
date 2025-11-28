@@ -5,7 +5,6 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
 import { getHeight } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m_header_filter';
