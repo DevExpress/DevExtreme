@@ -24,7 +24,7 @@ const SCROLL_BAR_END_EVENT_NAME = 'dxc-scroll-end' + EVENTS_NS;
 
 const GESTURE_TIMEOUT = 300;
 const MIN_DRAG_DELTA = 5;
-export const SCROLL_PREVENTION_TIMEOUT = 500;
+const SCROLL_PREVENTION_TIMEOUT = 500;
 
 const _min = Math.min;
 const _max = Math.max;

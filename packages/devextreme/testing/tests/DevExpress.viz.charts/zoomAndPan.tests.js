@@ -2,10 +2,10 @@ import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';
 
 import 'viz/chart';
-import { SCROLL_PREVENTION_TIMEOUT } from '__internal/viz/chart_components/zoom_and_pan';
 
 const CHART_SVG_SELECTOR = 'svg.dxc.dxc-chart';
 const TOOLTIP_CLASS = 'dxc-tooltip';
+const SCROLL_PREVENTION_TIMEOUT = 500;
 
 const dataSource = (() => {
     const arr = [];
