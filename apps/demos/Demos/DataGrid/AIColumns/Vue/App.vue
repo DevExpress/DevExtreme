@@ -60,7 +60,10 @@
       <DxAi
         mode="auto"
         noDataText="No data"
-        prompt="Identify the country where the vehicle model is manufactured. When looking up a country, consider vehicle brand, model, and specifications."
+        prompt="
+          Identify the country where the vehicle model is manufactured. 
+          When looking up a country, consider vehicle brand, model, and specifications.
+        "
       />
     </DxColumn>
   </DxDataGrid>
