@@ -1780,7 +1780,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
   public setLoading(isLoading, messageText) {
     const dataController = this._dataController;
     const hasBottomLoadPanel = dataController.pageIndex() > 0 && dataController.isLoaded() && !!this._findBottomLoadPanel();
-    const isDefaultLoading = isLoading && !this._dataController.isCustomLoading();
+    const isDefaultLoading = isLoading && !dataController.isCustomLoading();
 
     if (this.option(LEGACY_SCROLLING_MODE) === false && isDefaultLoading && dataController.isViewportChanging()) {
       return;
