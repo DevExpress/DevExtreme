@@ -5,4 +5,5 @@ import type {
 
 export type InternalRequestCallbacks = RequestCallbacks<GenerateGridColumnCommandResult> & {
   onRequestSending: (needToShowLoadPanel: boolean) => void;
+  onRequestCanceled: () => void;
 };
