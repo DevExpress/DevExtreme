@@ -42,6 +42,12 @@ export class AIColumnController extends Controller {
     return column.ai?.noDataText ?? null;
   }
 
+  private _endCustomLoadingIfNoPendingRequests(): void {
+    if (!this.aiColumnIntegrationController.isAnyRequestAwaitingCompletion()) {
+      this.dataController.endCustomLoading();
+    }
+  }
+
   private addAICommandColumn(): void {
     const that = this;
     const { dataController, aiColumnIntegrationController } = this;
@@ -194,9 +200,7 @@ export class AIColumnController extends Controller {
   public abortAIColumnRequest(columnName: string): void {
     this.aiColumnIntegrationController.abortRequest(columnName);
 
-    if (!this.aiColumnIntegrationController.isAnyRequestAwaitingCompletion()) {
-      this.dataController.endCustomLoading();
-    }
+    this._endCustomLoadingIfNoPendingRequests();
   }
 
   public sendRequest(
@@ -238,13 +242,16 @@ export class AIColumnController extends Controller {
         }
       },
       onComplete: (data): void => {
-        this.dataController.endCustomLoading();
+        this._endCustomLoadingIfNoPendingRequests();
         this.aiRequestCompleted.fire(data);
         this.updateAICells();
       },
       onError: (error: Error): void => {
-        this.dataController.endCustomLoading();
+        this._endCustomLoadingIfNoPendingRequests();
         this.aiRequestRejected.fire(error);
+      },
+      onRequestCanceled: (): void => {
+        this._endCustomLoadingIfNoPendingRequests();
       },
     };
   }
