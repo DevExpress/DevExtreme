@@ -1650,11 +1650,13 @@ QUnit.module('Keyboard keys', {
         this.columns = [
             {
                 caption: 'Column 0',
+                name: 'column0',
                 visible: true,
                 allowEditing: true
             },
             {
                 caption: 'Column 1',
+                name: 'column1',
                 visible: true,
                 showEditorAlways: true,
                 allowEditing: true,
@@ -1665,6 +1667,7 @@ QUnit.module('Keyboard keys', {
             },
             {
                 caption: 'Column 2',
+                name: 'column2',
                 visible: true,
                 allowEditing: true
             }
@@ -1681,7 +1684,7 @@ QUnit.module('Keyboard keys', {
                 target: $('#container').find('.txt').first(),
                 preventDefault: commonUtils.noop
             }
-        }, true);
+        });
 
         // assert
         assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 2, 'column index');
