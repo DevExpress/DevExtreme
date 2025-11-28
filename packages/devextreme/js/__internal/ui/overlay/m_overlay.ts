@@ -353,24 +353,32 @@ class Overlay<
     this._initPositionController();
   }
 
-  _documentDownHandler(e): boolean | undefined {
+  _documentDownHandler(e): boolean {
     if (this._showAnimationProcessing) {
       this._stopAnimation();
     }
-    const isAttachedTarget = $(window.document).is(e.target)
-      || domUtils.contains(window.document, e.target);
-    const isInnerOverlay = $(e.target).closest(`.${INNER_OVERLAY_CLASS}`).length;
-    const outsideClick = isAttachedTarget && !isInnerOverlay && !(this._$content?.is(e.target)
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-      || domUtils.contains(this._$content?.get(0), e.target));
 
-    if (outsideClick && this._shouldHideOnOutsideClick(e)) {
+    const { target } = e;
+    const $target = $(target);
+
+    const isTargetDocument = domUtils.contains(window.document, target);
+    const isAttachedTarget = $(window.document).is($target) || isTargetDocument;
+    const isInnerOverlay = $($target).closest(`.${INNER_OVERLAY_CLASS}`).length;
+    const isTargetContent = this._$content?.is($target);
+    const isTargetInContent = domUtils.contains(this._$content?.get(0), target);
+
+    const isOutsideClick = isAttachedTarget
+      && !isInnerOverlay
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      && !(isTargetContent || isTargetInContent);
+
+    if (isOutsideClick && this._shouldHideOnOutsideClick(e)) {
       this._outsideClickHandler(e);
     }
 
     const { propagateOutsideClick } = this.option();
 
-    return propagateOutsideClick;
+    return Boolean(propagateOutsideClick);
   }
 
   _shouldHideOnOutsideClick(e): boolean | undefined {
