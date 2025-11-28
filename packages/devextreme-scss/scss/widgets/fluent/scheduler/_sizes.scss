@@ -32,11 +32,8 @@ $fluent-scheduler-appointment-popup-icon-padding-right: null !default;
 $fluent-scheduler-appointment-popup-description-icon-margin-top: null !default;
 $fluent-scheduler-appointment-popup-item-padding-horizontal: null !default;
 $fluent-scheduler-appointment-popup-all-day-item-height: null !default;
-$fluent-scheduler-appointment-popup-recurrence-end-group-label-margin-bottom: null !default;
-$fluent-scheduler-appointment-popup-recurrence-end-group-label-height: null !default;
-$fluent-scheduler-days-of-week-button-size: null !default;
-$fluent-scheduler-days-of-week-buttons-gap: null !default;
-$fluent-scheduler-recurrence-end-item-height: null !default;
+$fluent-scheduler-appointment-popup-days-of-week-buttons-gap: null !default;
+$fluent-scheduler-appointment-popup-repeat-end-item-height: null !default;
 
 $fluent-scheduler-appointment-short-content-padding: null !default;
 $fluent-scheduler-appointment-15min-height: null !default;
@@ -130,11 +127,8 @@ $header-panel-time-cell-padding: null !default;
   $fluent-scheduler-appointment-popup-description-icon-margin-top: 24px !default;
   $fluent-scheduler-appointment-popup-item-padding-horizontal: 6px !default;
   $fluent-scheduler-appointment-popup-all-day-item-height: 40px !default;
-  $fluent-scheduler-appointment-popup-recurrence-end-group-label-margin-bottom: 16px !default;
-  $fluent-scheduler-appointment-popup-recurrence-end-group-label-height: 32px !default;
-  $fluent-scheduler-days-of-week-button-size: 32px !default;
-  $fluent-scheduler-days-of-week-buttons-gap: 12px !default;
-  $fluent-scheduler-recurrence-end-item-height: 32px !default;
+  $fluent-scheduler-appointment-popup-days-of-week-buttons-gap: 12px !default;
+  $fluent-scheduler-appointment-popup-repeat-end-item-height: 32px !default;
 
   $agenda-appointment-title-font-size: 14px;
 
@@ -198,11 +192,8 @@ $header-panel-time-cell-padding: null !default;
   $fluent-scheduler-appointment-popup-description-icon-margin-top: 18px !default;
   $fluent-scheduler-appointment-popup-item-padding-horizontal: 4px !default;
   $fluent-scheduler-appointment-popup-all-day-item-height: 30px !default;
-  $fluent-scheduler-appointment-popup-recurrence-end-group-label-margin-bottom: 12px !default;
-  $fluent-scheduler-appointment-popup-recurrence-end-group-label-height: 24px !default;
-  $fluent-scheduler-days-of-week-button-size: 22px !default;
-  $fluent-scheduler-days-of-week-buttons-gap: 8px !default;
-  $fluent-scheduler-recurrence-end-item-height: 22px !default;
+  $fluent-scheduler-appointment-popup-days-of-week-buttons-gap: 8px !default;
+  $fluent-scheduler-appointment-popup-repeat-end-item-height: 24px !default;
 
   $agenda-appointment-title-font-size: 13px;
 
