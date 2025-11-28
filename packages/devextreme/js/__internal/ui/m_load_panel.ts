@@ -134,15 +134,16 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
   _renderContentImpl(): void {
     super._renderContentImpl();
 
+    const $content = this.$content();
+
+    if (!$content) {
+      return;
+    }
+
     this.$content()?.addClass(LOADPANEL_CONTENT_CLASS);
 
     this._$loadPanelContentWrapper = $('<div>').addClass(LOADPANEL_CONTENT_WRAPPER_CLASS);
-
-    const $content = this.$content();
-
-    if ($content) {
-      this._$loadPanelContentWrapper.appendTo($content);
-    }
+    this._$loadPanelContentWrapper.appendTo($content);
 
     this._togglePaneVisible();
 

@@ -83,7 +83,7 @@ class SpeedDialItem extends Overlay<SpeedDialItemProperties> {
 
   _moveToContainer(): void {
     if (this._$wrapper) {
-      this._$wrapper?.appendTo(this.$element());
+      this._$wrapper.appendTo(this.$element());
       this._$content?.appendTo(this._$wrapper);
     }
   }

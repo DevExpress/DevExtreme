@@ -97,11 +97,11 @@ export const custom = function (options) {
     dragAndResizeArea: window,
     onContentReady(args) {
       args.component.$content()
-        .addClass(DX_DIALOG_CONTENT_CLASSNAME)
+        ?.addClass(DX_DIALOG_CONTENT_CLASSNAME)
         .append($message);
 
       if (messageId) {
-        args.component.$overlayContent().attr('aria-labelledby', messageId);
+        args.component.$overlayContent()?.attr('aria-labelledby', messageId);
       }
     },
     onShowing(e) {

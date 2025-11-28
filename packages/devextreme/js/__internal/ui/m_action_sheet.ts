@@ -169,8 +169,7 @@ class ActionSheet extends CollectionWidget<Properties> {
       target: this.option('target'),
     }));
 
-    this._popup.$overlayContent().attr('role', 'dialog');
-
+    this._popup.$overlayContent()?.attr('role', 'dialog');
     this._popup.$wrapper()?.addClass(ACTION_SHEET_POPOVER_WRAPPER_CLASS);
   }
 
@@ -250,15 +249,18 @@ class ActionSheet extends CollectionWidget<Properties> {
 
     if (this.option('showCancelButton')) {
       const cancelClickAction = this._createActionByOption('onCancelClick') || noop;
-      const that = this;
-
-      this._$cancelButton = $('<div>').addClass(ACTION_SHEET_CANCEL_BUTTON_CLASS);
 
       const $content = this._popup?.$content();
 
-      if ($content) {
-        this._$cancelButton.appendTo($content);
+      if (!$content) {
+        return;
       }
+
+      const that = this;
+
+      this._$cancelButton = $('<div>')
+        .addClass(ACTION_SHEET_CANCEL_BUTTON_CLASS)
+        .appendTo($content);
 
       this._createComponent(this._$cancelButton, Button, {
         disabled: false,

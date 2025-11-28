@@ -189,7 +189,7 @@ TProperties extends ToastProperties = ToastProperties,
   _render(): void {
     super._render();
 
-    this.$element().addClass(TOAST_CLASS);
+    this.$element()?.addClass(TOAST_CLASS);
     this.$wrapper()?.addClass(TOAST_WRAPPER_CLASS);
 
     const { type } = this.option();

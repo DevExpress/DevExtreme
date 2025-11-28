@@ -38,7 +38,7 @@ export default class ClearButton extends TextEditorButton {
     return !!editor?._isClearButtonVisible();
   }
 
-  _attachEvents(instance, $button: dxElementWrapper): void {
+  _attachEvents(instance: dxElementWrapper, $button: dxElementWrapper): void {
     const editorName = this.editor?.NAME ?? '';
 
     eventsEngine.on(
