@@ -179,14 +179,14 @@ export const custom = function (options) {
 
   popupInstance.option('toolbarItems', popupToolbarItems);
 
-  popupInstance.$wrapper().addClass(DX_DIALOG_WRAPPER_CLASSNAME);
+  popupInstance.$wrapper()?.addClass(DX_DIALOG_WRAPPER_CLASSNAME);
 
   if (options.position) {
     popupInstance.option('position', options.position);
   }
 
   popupInstance.$wrapper()
-    .addClass(DX_DIALOG_ROOT_CLASSNAME);
+    ?.addClass(DX_DIALOG_ROOT_CLASSNAME);
 
   function show() {
     if (devices.real().deviceType === 'phone') {

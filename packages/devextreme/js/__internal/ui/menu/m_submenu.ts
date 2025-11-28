@@ -194,9 +194,9 @@ class Submenu extends ContextMenu {
     return this._overlay.option('visible');
   }
 
-  getOverlayContent(): dxElementWrapper {
-    // @ts-expect-error
-    return this._overlay.$content();
+  getOverlayContent(): dxElementWrapper | undefined | null {
+    // @ts-expect-error _overlay
+    return this._overlay?.$content();
   }
 }
 

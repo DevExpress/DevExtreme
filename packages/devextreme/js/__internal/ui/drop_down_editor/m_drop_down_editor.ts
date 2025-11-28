@@ -648,9 +648,13 @@ class DropDownEditor<
     });
 
     this._attachPopupKeyHandler();
-
     this._contentReadyHandler();
-    this._setPopupContentId(this._popup.$content());
+
+    const $content = this._popup.$content();
+
+    if ($content) {
+      this._setPopupContentId($content);
+    }
 
     this._bindInnerWidgetOptions(this._popup, 'dropDownOptions');
   }

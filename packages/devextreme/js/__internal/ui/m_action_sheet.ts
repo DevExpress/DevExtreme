@@ -137,7 +137,7 @@ class ActionSheet extends CollectionWidget<Properties> {
 
   _renderPopupTitle(): void {
     this._mapPopupOption('showTitle');
-    this._popup?.$wrapper().toggleClass(ACTION_SHEET_WITHOUT_TITLE_CLASS, !this.option('showTitle'));
+    this._popup?.$wrapper()?.toggleClass(ACTION_SHEET_WITHOUT_TITLE_CLASS, !this.option('showTitle'));
   }
 
   _clean() {
@@ -171,7 +171,7 @@ class ActionSheet extends CollectionWidget<Properties> {
 
     this._popup.$overlayContent().attr('role', 'dialog');
 
-    this._popup.$wrapper().addClass(ACTION_SHEET_POPOVER_WRAPPER_CLASS);
+    this._popup.$wrapper()?.addClass(ACTION_SHEET_POPOVER_WRAPPER_CLASS);
   }
 
   _createPopup(): void {
@@ -225,11 +225,11 @@ class ActionSheet extends CollectionWidget<Properties> {
       },
     }));
 
-    this._popup.$wrapper().addClass(ACTION_SHEET_POPUP_WRAPPER_CLASS);
+    this._popup.$wrapper()?.addClass(ACTION_SHEET_POPUP_WRAPPER_CLASS);
   }
 
   _popupContentReadyAction(): void {
-    this._popup.$content().append(this._$itemContainer);
+    this._popup.$content()?.append(this._$itemContainer);
     this._attachClickEvent();
     this._attachHoldEvent();
 
@@ -252,8 +252,14 @@ class ActionSheet extends CollectionWidget<Properties> {
       const cancelClickAction = this._createActionByOption('onCancelClick') || noop;
       const that = this;
 
-      this._$cancelButton = $('<div>').addClass(ACTION_SHEET_CANCEL_BUTTON_CLASS)
-        .appendTo(this._popup?.$content());
+      this._$cancelButton = $('<div>').addClass(ACTION_SHEET_CANCEL_BUTTON_CLASS);
+
+      const $content = this._popup?.$content();
+
+      if ($content) {
+        this._$cancelButton.appendTo($content);
+      }
+
       this._createComponent(this._$cancelButton, Button, {
         disabled: false,
         stylingMode: ACTION_SHEET_BUTTON_DEFAULT_STYLING_MODE,

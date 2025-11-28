@@ -114,11 +114,15 @@ class SpeedDialItem extends Overlay<SpeedDialItemProperties> {
     const $element = $('<div>').addClass(FAB_LABEL_CLASS);
     const $wrapper = $('<div>').addClass(FAB_LABEL_WRAPPER_CLASS);
 
-    this._$label = $wrapper
-      .prependTo(this.$content())
-      .append($element.text(label));
+    const $content = this.$content();
 
-    this.$content().toggleClass(FAB_CONTENT_REVERSE_CLASS, this._isPositionLeft(this.option('parentPosition')));
+    if ($content) {
+      this._$label = $wrapper
+        .prependTo($content)
+        .append($element.text(label));
+
+      $content.toggleClass(FAB_CONTENT_REVERSE_CLASS, this._isPositionLeft(this.option('parentPosition')));
+    }
   }
 
   _isPositionLeft(position) {
@@ -229,7 +233,7 @@ class SpeedDialItem extends Overlay<SpeedDialItemProperties> {
     this._inkRipple = render();
   }
 
-  _getInkRippleContainer(): dxElementWrapper | undefined {
+  _getInkRippleContainer(): dxElementWrapper | undefined | null {
     return this._$icon;
   }
 

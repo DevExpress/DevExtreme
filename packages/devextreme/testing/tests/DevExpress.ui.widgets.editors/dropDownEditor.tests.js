@@ -2677,3 +2677,55 @@ QUnit.module('aria accessibility', () => {
         });
     });
 });
+
+QUnit.module('Memory Leaks', {
+    beforeEach: function() {
+        this.$element = $('<div>').appendTo('#qunit-fixture');
+        this.getButton = (instance, name) => instance._buttonCollection.buttons.find(button => button.name === name);
+    },
+    afterEach: function() {
+        this.$element.remove();
+    }
+}, () => {
+    QUnit.test('should clear popup and template references on dispose', function(assert) {
+        const instance = this.$element.dxDropDownEditor({
+            opened: true,
+            fieldTemplate: () => {
+                return $('<div>').dxTextBox({ value: 'Custom Field' });
+            },
+        }).dxDropDownEditor('instance');
+
+        assert.notStrictEqual(instance._$templateWrapper, undefined, '_$templateWrapper exists before dispose');
+        assert.notStrictEqual(instance.content(), null, 'content() returns popup content before dispose');
+        assert.notStrictEqual(instance._popup, undefined, '_popup instance exists before dispose');
+        assert.notStrictEqual(instance._$popup, undefined, '_$popup element exists before dispose');
+
+        instance.dispose();
+
+        assert.strictEqual(instance._$templateWrapper, undefined, '_$templateWrapper is undefined after dispose');
+        assert.strictEqual(instance.content(), null, 'content() returns null after dispose');
+        assert.strictEqual(instance._popup, undefined, '_popup is undefined after dispose');
+        assert.strictEqual(instance._$popup, undefined, '_$popup is undefined after dispose');
+    });
+
+    [
+        'editor',
+        '$container',
+        'instance',
+        '$placeMarker',
+    ].forEach((property) => {
+        QUnit.test(`DropDownButton should clear ${property} reference on dispose`, function(assert) {
+            const instance = this.$element.dxDropDownEditor({
+                showDropDownButton: property !== '$placeMarker',
+            }).dxDropDownEditor('instance');
+
+            const dropDownButton = this.getButton(instance, 'dropDown');
+
+            assert.notStrictEqual(dropDownButton[property], property === '$placeMarker' ? null : undefined, `button has ${property} reference before dispose`);
+
+            instance.dispose();
+
+            assert.strictEqual(dropDownButton[property], null, `button.${property} is null after dispose`);
+        });
+    });
+});

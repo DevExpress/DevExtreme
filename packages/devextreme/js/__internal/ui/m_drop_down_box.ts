@@ -233,7 +233,11 @@ class DropDownBox<
       component: this,
     };
 
-    $popupContent.empty();
+    $popupContent?.empty();
+
+    if (!$popupContent) {
+      return;
+    }
 
     contentTemplate.render({
       container: getPublicElement($popupContent),

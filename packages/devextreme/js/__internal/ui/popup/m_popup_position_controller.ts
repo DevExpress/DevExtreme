@@ -99,14 +99,20 @@ class PopupPositionController extends OverlayPositionController {
     }
   }
 
+  clean(): void {
+    this._$dragResizeContainer = undefined;
+    super.clean();
+  }
+
   _updateDragResizeContainer(): void {
     this._$dragResizeContainer = this._getDragResizeContainer();
   }
 
-  _getDragResizeContainer(): dxElementWrapper {
+  _getDragResizeContainer(): dxElementWrapper | undefined {
     if (this._props.dragOutsideBoundary) {
       return $(window);
     }
+
     if (this._props.dragAndResizeArea) {
       return $(this._props.dragAndResizeArea);
     }

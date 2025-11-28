@@ -148,7 +148,7 @@ TProperties extends PopoverProperties = PopoverProperties,
     this._timeouts = {};
 
     this.$element().addClass(POPOVER_CLASS);
-    this.$wrapper().addClass(POPOVER_WRAPPER_CLASS);
+    this.$wrapper()?.addClass(POPOVER_WRAPPER_CLASS);
 
     const { toolbarItems } = this.option();
 
@@ -296,7 +296,7 @@ TProperties extends PopoverProperties = PopoverProperties,
   }
 
   _renderTitle(): void {
-    this.$wrapper().toggleClass(POPOVER_WITHOUT_TITLE_CLASS, !this.option('showTitle'));
+    this.$wrapper()?.toggleClass(POPOVER_WITHOUT_TITLE_CLASS, !this.option('showTitle'));
     super._renderTitle();
   }
 
@@ -376,13 +376,13 @@ TProperties extends PopoverProperties = PopoverProperties,
 
   _togglePositionClass(positionClass) {
     this.$wrapper()
-      .removeClass('dx-position-left dx-position-right dx-position-top dx-position-bottom')
+      ?.removeClass('dx-position-left dx-position-right dx-position-top dx-position-bottom')
       .addClass(positionClass);
   }
 
   _toggleFlippedClass(isFlippedHorizontal, isFlippedVertical) {
     this.$wrapper()
-      .toggleClass('dx-popover-flipped-horizontal', isFlippedHorizontal)
+      ?.toggleClass('dx-popover-flipped-horizontal', isFlippedHorizontal)
       .toggleClass('dx-popover-flipped-vertical', isFlippedVertical);
   }
 
@@ -457,7 +457,7 @@ TProperties extends PopoverProperties = PopoverProperties,
 
   _renderWrapperDimensions() {
     if (this.option('shading')) {
-      this.$wrapper().css({
+      this.$wrapper()?.css({
         width: '100%',
         height: '100%',
       });

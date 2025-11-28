@@ -374,7 +374,7 @@ class SpeedDialMainItem extends SpeedDialItem {
     return this._getDefaultOptions().position;
   }
 
-  _getInkRippleContainer() {
+  _getInkRippleContainer(): dxElementWrapper | undefined | null {
     return this.$content();
   }
 

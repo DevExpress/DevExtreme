@@ -100,13 +100,13 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
     super._render();
 
     this.$element().addClass(LOADPANEL_CLASS);
-    this.$wrapper().addClass(LOADPANEL_WRAPPER_CLASS);
+    this.$wrapper()?.addClass(LOADPANEL_WRAPPER_CLASS);
     this._updateWrapperAria();
   }
 
   _updateWrapperAria(): void {
     this.$wrapper()
-      .removeAttr('aria-label')
+      ?.removeAttr('aria-label')
       .removeAttr('role');
 
     const showIndicator = this.option('showIndicator');
@@ -134,10 +134,15 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
   _renderContentImpl(): void {
     super._renderContentImpl();
 
-    this.$content().addClass(LOADPANEL_CONTENT_CLASS);
+    this.$content()?.addClass(LOADPANEL_CONTENT_CLASS);
 
     this._$loadPanelContentWrapper = $('<div>').addClass(LOADPANEL_CONTENT_WRAPPER_CLASS);
-    this._$loadPanelContentWrapper.appendTo(this.$content());
+
+    const $content = this.$content();
+
+    if ($content) {
+      this._$loadPanelContentWrapper.appendTo($content);
+    }
 
     this._togglePaneVisible();
 
@@ -209,13 +214,13 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
   }
 
   _cleanPreviousContent(): void {
-    this.$content().find(`.${LOADPANEL_MESSAGE_CLASS}`).remove();
-    this.$content().find(`.${LOADPANEL_INDICATOR_CLASS}`).remove();
+    this.$content()?.find(`.${LOADPANEL_MESSAGE_CLASS}`).remove();
+    this.$content()?.find(`.${LOADPANEL_INDICATOR_CLASS}`).remove();
     delete this._$indicator;
   }
 
   _togglePaneVisible(): void {
-    this.$content().toggleClass(LOADPANEL_PANE_HIDDEN_CLASS, !this.option('showPane'));
+    this.$content()?.toggleClass(LOADPANEL_PANE_HIDDEN_CLASS, !this.option('showPane'));
   }
 
   _optionChanged(args: OptionChanged<LoadPanelProperties>): void {
