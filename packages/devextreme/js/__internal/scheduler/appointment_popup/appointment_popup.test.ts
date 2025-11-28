@@ -2165,8 +2165,12 @@ describe('Customize form items', () => {
       expect(onSaved).toHaveBeenCalledTimes(1);
       expect(onSaved).toHaveBeenCalledWith(
         expect.objectContaining({
-          ...commonAppointment,
-          text: 'Modified Subject',
+          element: scheduler.$element(),
+          component: scheduler,
+          data: expect.objectContaining({
+            ...commonAppointment,
+            text: 'Modified Subject',
+          }),
         }),
       );
     });
@@ -2198,7 +2202,11 @@ describe('Customize form items', () => {
       expect(onSaved).toHaveBeenCalledTimes(1);
       expect(onSaved).toHaveBeenCalledWith(
         expect.objectContaining({
-          startDate: new Date('2024-06-10T17:00:00Z'),
+          element: scheduler.$element(),
+          component: scheduler,
+          data: expect.objectContaining({
+            startDate: new Date('2024-06-10T17:00:00Z'),
+          }),
         }),
       );
     });
@@ -2222,8 +2230,12 @@ describe('Customize form items', () => {
       expect(onCanceled).toHaveBeenCalledTimes(1);
       expect(onCanceled).toHaveBeenCalledWith(
         expect.objectContaining({
-          ...commonAppointment,
-          text: 'Modified Subject',
+          element: scheduler.$element(),
+          component: scheduler,
+          data: expect.objectContaining({
+            ...commonAppointment,
+            text: 'Modified Subject',
+          }),
         }),
       );
     });
@@ -2257,7 +2269,11 @@ describe('Customize form items', () => {
 
       expect(onCanceled).toHaveBeenCalledTimes(1);
       expect(onCanceled).toHaveBeenCalledWith(
-        expect.objectContaining(commonAppointment),
+        expect.objectContaining({
+          element: scheduler.$element(),
+          component: scheduler,
+          data: expect.objectContaining(commonAppointment),
+        }),
       );
     });
   });

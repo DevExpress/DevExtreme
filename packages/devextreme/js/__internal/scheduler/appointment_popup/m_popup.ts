@@ -112,7 +112,7 @@ export class AppointmentPopup {
       onHiding: (e): void => {
         this.scheduler.focus();
         if (editingConfig?.form?.onCanceled) {
-          editingConfig.form.onCanceled(this.form.formData);
+          editingConfig.form.onCanceled(this.getCallbackArgs(this.form.formData));
         }
         customPopupOptions?.onHiding?.(e);
       },
@@ -313,7 +313,7 @@ export class AppointmentPopup {
 
           const editingConfig = this.scheduler.getEditingConfig();
           if (editingConfig?.form?.onSaved) {
-            editingConfig.form.onSaved(this.state.lastEditData);
+            editingConfig.form.onSaved(this.getCallbackArgs(this.state.lastEditData));
           }
           this.state.lastEditData = null;
         }
@@ -325,6 +325,14 @@ export class AppointmentPopup {
     }
 
     return deferred.promise();
+  }
+
+  private getCallbackArgs(data) {
+    return {
+      data,
+      component: this.scheduler.getInstance(),
+      element: this.scheduler.getElement(),
+    };
   }
 
   _showLoadPanel() {

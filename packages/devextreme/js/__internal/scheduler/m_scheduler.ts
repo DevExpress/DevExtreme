@@ -1082,6 +1082,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   createAppointmentPopup(form) {
     const scheduler = {
       getElement: () => this.$element(),
+      getInstance: () => this,
       // @ts-expect-error
       createComponent: (element, component, options) => this._createComponent(element, component, options),
       focus: () => this.focus(),
