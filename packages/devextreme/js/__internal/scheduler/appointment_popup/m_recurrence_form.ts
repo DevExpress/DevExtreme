@@ -565,6 +565,7 @@ export class RecurrenceForm {
     this.dxForm.getEditor(EDITOR_NAMES.recurrenceEndUntilEditor)?.option('value', this.recurrenceRule.until);
     this.dxForm.getEditor(EDITOR_NAMES.recurrenceEndCountEditor)?.option('value', this.recurrenceRule.count);
 
+    this.updateRepeatEndEditors();
     this.updateDayEditorsVisibility();
   }
 
