@@ -102,4 +102,22 @@ QUnit.test('callbacks should have correct context', function(assert) {
     $element.remove();
 });
 
+QUnit.module('Memory leaks', {
+    beforeEach: function() {
+        const markup = '<div id="element"></div>';
+        $('#qunit-fixture').html(markup);
+    },
+    afterEach: function() {
+        $('#element').remove();
+    }
+}, () => {
+    QUnit.test('should clear _owner reference after dispose', function(assert) {
+        const strategy = new EventsStrategy({});
 
+        assert.notStrictEqual(strategy._owner, null, '_owner is set before dispose');
+
+        strategy.dispose();
+
+        assert.strictEqual(strategy._owner, null, '_owner is null after dispose');
+    });
+});

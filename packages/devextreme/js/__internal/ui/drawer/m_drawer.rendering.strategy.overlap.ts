@@ -161,19 +161,22 @@ class OverlapStrategy extends DrawerStrategy {
       } else if (revealMode === 'expand') {
         // @ts-expect-error
         this._initialPosition = drawer.isHorizontalDirection() ? { left: 0 } : { top: 0 };
-        // @ts-expect-error
-        move($panelOverlayContent, this._initialPosition);
 
-        animation.size({
-          complete: () => {
-            whenAnimationCompleted.resolve();
-          },
-          duration: drawer.option('animationDuration'),
-          direction: targetPanelPosition,
-          $element: $panelOverlayContent,
-          size: panelSize,
-          marginTop,
-        });
+        if ($panelOverlayContent) {
+          // @ts-expect-error
+          move($panelOverlayContent, this._initialPosition);
+
+          animation.size({
+            complete: () => {
+              whenAnimationCompleted?.resolve();
+            },
+            duration: drawer.option('animationDuration'),
+            direction: targetPanelPosition,
+            $element: $panelOverlayContent,
+            size: panelSize,
+            marginTop,
+          });
+        }
       }
     } else if (revealMode === 'slide') {
       // @ts-expect-error
@@ -183,8 +186,10 @@ class OverlapStrategy extends DrawerStrategy {
     } else if (revealMode === 'expand') {
       // @ts-expect-error
       this._initialPosition = drawer.isHorizontalDirection() ? { left: 0 } : { top: 0 };
-      // @ts-expect-error
-      move($panelOverlayContent, this._initialPosition);
+      if ($panelOverlayContent) {
+        // @ts-expect-error
+        move($panelOverlayContent, this._initialPosition);
+      }
       // @ts-expect-error
       if (drawer.isHorizontalDirection()) {
         $($panelOverlayContent).css('width', panelSize);

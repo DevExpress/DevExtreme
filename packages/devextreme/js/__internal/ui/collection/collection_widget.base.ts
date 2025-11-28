@@ -558,7 +558,7 @@ class CollectionWidget<
     return shouldSkipRefreshId;
   }
 
-  _refreshActiveDescendant($target?: dxElementWrapper): void {
+  _refreshActiveDescendant($target?: dxElementWrapper | null): void {
     const { focusedElement } = this.option();
 
     if (isDefined(focusedElement)) {

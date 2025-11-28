@@ -143,11 +143,11 @@ class Popup<
 
   _bodyOverflowManager?: OverflowManager;
 
-  _$title?: dxElementWrapper;
+  _$title?: dxElementWrapper | null;
 
-  _$bottom?: dxElementWrapper;
+  _$bottom?: dxElementWrapper | null;
 
-  _$popupContent!: dxElementWrapper;
+  _$popupContent?: dxElementWrapper;
 
   _resizable!: Resizable;
 
@@ -331,9 +331,9 @@ class Popup<
     this._updateResizeCallbackSkipCondition();
 
     this.$element().addClass(POPUP_CLASS);
-    this.$wrapper().addClass(popupWrapperClasses);
+    this.$wrapper()?.addClass(popupWrapperClasses);
     this._$popupContent = this._$content
-      .wrapInner($('<div>').addClass(POPUP_CONTENT_CLASS))
+      ?.wrapInner($('<div>').addClass(POPUP_CONTENT_CLASS))
       .children().eq(0);
 
     this._toggleContentScrollClass();
@@ -401,7 +401,7 @@ class Popup<
       return;
     }
 
-    const contentElement = this._$content.get(0);
+    const contentElement = this._$content?.get(0);
     if (shouldObserve) {
       resizeObserverSingleton.observe(contentElement, (
         entry: ResizeObserverEntry,
@@ -453,10 +453,15 @@ class Popup<
     }
 
     if (showTitle || items.length > 0) {
-      if (this._$title) {
-        this._$title.remove();
+      this._$title?.remove();
+
+      const $title = $('<div>').addClass(POPUP_TITLE_CLASS);
+      const $content = this.$content();
+
+      if ($content) {
+        $title.insertBefore($content);
       }
-      const $title = $('<div>').addClass(POPUP_TITLE_CLASS).insertBefore(this.$content());
+
       this._$title = this._renderTemplateByType('titleTemplate', items, $title).addClass(POPUP_TITLE_CLASS);
       this._renderDrag();
       this._executeTitleRenderAction(this._$title);
@@ -684,7 +689,14 @@ class Popup<
 
     if (items.length) {
       this._$bottom?.remove();
-      const $bottom = $('<div>').addClass(POPUP_BOTTOM_CLASS).insertAfter(this.$content());
+
+      const $bottom = $('<div>').addClass(POPUP_BOTTOM_CLASS);
+      const $content = this.$content();
+
+      if ($content) {
+        $bottom.insertAfter($content);
+      }
+
       this._$bottom = this._renderTemplateByType('bottomTemplate', items, $bottom, { compactMode: true }).addClass(POPUP_BOTTOM_CLASS);
       this._toggleClasses();
     } else {
@@ -696,7 +708,7 @@ class Popup<
     // @ts-expect-error ts-error
     super._toggleDisabledState(...arguments);
 
-    this.$content().toggleClass(DISABLED_STATE_CLASS, Boolean(value));
+    this.$content()?.toggleClass(DISABLED_STATE_CLASS, Boolean(value));
   }
 
   _toggleClasses(): void {
@@ -706,10 +718,10 @@ class Popup<
       const className = `${POPUP_CLASS}-${alias}`;
 
       if (this._toolbarItemClasses.includes(className)) {
-        this.$wrapper().addClass(`${className}-visible`);
+        this.$wrapper()?.addClass(`${className}-visible`);
         this._$bottom?.addClass(className);
       } else {
-        this.$wrapper().removeClass(`${className}-visible`);
+        this.$wrapper()?.removeClass(`${className}-visible`);
         this._$bottom?.removeClass(className);
       }
     });
@@ -723,15 +735,15 @@ class Popup<
       zIndexPool.remove(this._zIndex);
       this._zIndex = zIndex;
 
-      this._$wrapper.css('zIndex', zIndex);
-      this._$content.css('zIndex', zIndex);
+      this._$wrapper?.css('zIndex', zIndex);
+      this._$content?.css('zIndex', zIndex);
     }
   }
 
   _toggleContentScrollClass(): void {
     const isNativeScrollingEnabled = !this.option('preventScrollEvents');
 
-    this.$content().toggleClass(POPUP_CONTENT_SCROLLABLE_CLASS, isNativeScrollingEnabled);
+    this.$content()?.toggleClass(POPUP_CONTENT_SCROLLABLE_CLASS, isNativeScrollingEnabled);
   }
 
   _getPositionControllerConfig() {
@@ -811,7 +823,7 @@ class Popup<
     const height = this._getOptionValue('height');
 
     if (height === 'auto') {
-      this.$content().css({
+      this.$content()?.css({
         height: 'auto',
         maxHeight: 'none',
       });
@@ -829,7 +841,7 @@ class Popup<
     const config = {
       dragEnabled,
       handle: $dragTarget.get(0),
-      draggableElement: this._$content.get(0),
+      draggableElement: this._$content?.get(0),
       positionController: this._positionController,
     };
 
@@ -843,6 +855,10 @@ class Popup<
   }
 
   _renderResize(): void {
+    if (!this._$content) {
+      return;
+    }
+
     this._resizable = this._createComponent(this._$content, Resizable, {
       handles: this.option('resizeEnabled') ? 'all' : 'none',
       onResizeEnd: (e) => {
@@ -885,7 +901,7 @@ class Popup<
     const overlayContent = this.$overlayContent().get(0) as HTMLElement;
     const currentHeightStrategyClass = this._chooseHeightStrategy(overlayContent);
 
-    this.$content().css(this._getHeightCssStyles(currentHeightStrategyClass, overlayContent));
+    this.$content()?.css(this._getHeightCssStyles(currentHeightStrategyClass, overlayContent));
     this._setHeightClasses(this.$overlayContent(), currentHeightStrategyClass);
   }
 
@@ -972,16 +988,15 @@ class Popup<
       header: getVisibleHeight(topToolbar?.get(0)),
       footer: getVisibleHeight(bottomToolbar?.get(0)),
       contentVerticalOffsets: getVerticalOffsets(this.$overlayContent().get(0), true),
-      popupVerticalOffsets: getVerticalOffsets(this.$content().get(0), true),
-      popupVerticalPaddings: getVerticalOffsets(this.$content().get(0), false),
+      popupVerticalOffsets: getVerticalOffsets(this.$content()?.get(0), true),
+      popupVerticalPaddings: getVerticalOffsets(this.$content()?.get(0), false),
     };
   }
 
-  _isAllWindowCovered(): boolean | undefined {
+  _isAllWindowCovered(): boolean {
     const { fullScreen } = this.option();
 
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return super._isAllWindowCovered() || fullScreen;
+    return super._isAllWindowCovered() || Boolean(fullScreen);
   }
 
   _renderDimensions(): void {
@@ -1015,6 +1030,10 @@ class Popup<
     super._dispose();
 
     this._toggleBodyScroll(true);
+
+    this._$title = undefined;
+    this._$bottom = undefined;
+    this._$popupContent = undefined;
   }
 
   _renderFullscreenWidthClass(): void {
@@ -1162,29 +1181,37 @@ class Popup<
     }
   }
 
-  bottomToolbar(): dxElementWrapper | undefined {
+  bottomToolbar(): dxElementWrapper | undefined | null {
     return this._$bottom;
   }
 
-  topToolbar(): dxElementWrapper | undefined {
+  topToolbar(): dxElementWrapper | undefined | null {
     return this._$title;
   }
 
-  $content(): dxElementWrapper {
+  $content(): dxElementWrapper | null | undefined {
     return this._$popupContent;
   }
 
-  content() {
-    return getPublicElement(this.$content());
+  content(): HTMLElement {
+    return getPublicElement(this.$content() as dxElementWrapper);
   }
 
   $overlayContent(): dxElementWrapper {
-    return this._$content;
+    return this._$content as dxElementWrapper;
   }
 
   getFocusableElements(): dxElementWrapper {
-    // @ts-expect-error ts-error
-    return this.$wrapper().find('[tabindex]').filter((index, item) => item.getAttribute('tabindex') >= 0);
+    const $wrapper = this.$wrapper();
+
+    if (!$wrapper) {
+      return $();
+    }
+
+    return $wrapper
+      .find('[tabindex]')
+      // @ts-expect-error ts-error
+      .filter((_, item) => item.getAttribute('tabindex') >= 0);
   }
 }
 

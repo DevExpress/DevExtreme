@@ -43,9 +43,9 @@ class SpeedDialItem extends Overlay<SpeedDialItemProperties> {
 
   _currentVisible?: boolean;
 
-  _$wrapper!: dxElementWrapper;
+  _$wrapper?: dxElementWrapper | null;
 
-  _$content!: dxElementWrapper;
+  _$content?: dxElementWrapper | null;
 
   _inkRipple?: any;
 
@@ -82,8 +82,10 @@ class SpeedDialItem extends Overlay<SpeedDialItemProperties> {
   }
 
   _moveToContainer(): void {
-    this._$wrapper.appendTo(this.$element());
-    this._$content.appendTo(this._$wrapper);
+    if (this._$wrapper) {
+      this._$wrapper.appendTo(this.$element());
+      this._$content?.appendTo(this._$wrapper);
+    }
   }
 
   _render(): void {
@@ -114,11 +116,15 @@ class SpeedDialItem extends Overlay<SpeedDialItemProperties> {
     const $element = $('<div>').addClass(FAB_LABEL_CLASS);
     const $wrapper = $('<div>').addClass(FAB_LABEL_WRAPPER_CLASS);
 
-    this._$label = $wrapper
-      .prependTo(this.$content())
-      .append($element.text(label));
+    const $content = this.$content();
 
-    this.$content().toggleClass(FAB_CONTENT_REVERSE_CLASS, this._isPositionLeft(this.option('parentPosition')));
+    if ($content) {
+      this._$label = $wrapper
+        .prependTo($content)
+        .append($element.text(label));
+
+      $content.toggleClass(FAB_CONTENT_REVERSE_CLASS, this._isPositionLeft(this.option('parentPosition')));
+    }
   }
 
   _isPositionLeft(position) {
@@ -194,8 +200,8 @@ class SpeedDialItem extends Overlay<SpeedDialItemProperties> {
   _updateZIndexStackPosition(): void {
     const { zIndex } = this.option();
 
-    this._$wrapper.css('zIndex', zIndex);
-    this._$content.css('zIndex', zIndex);
+    this._$wrapper?.css('zIndex', zIndex);
+    this._$content?.css('zIndex', zIndex);
   }
 
   _setClickAction(): void {
@@ -229,7 +235,7 @@ class SpeedDialItem extends Overlay<SpeedDialItemProperties> {
     this._inkRipple = render();
   }
 
-  _getInkRippleContainer(): dxElementWrapper | undefined {
+  _getInkRippleContainer(): dxElementWrapper | undefined | null {
     return this._$icon;
   }
 
