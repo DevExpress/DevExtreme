@@ -336,6 +336,57 @@ describe('AIPromptEditorView', () => {
           true,
         );
       });
+
+      it('should not trigger loading state when prompt has not changed', async () => {
+        const {
+          cellElement,
+          aiPromptEditorView,
+          aiPromptEditorPOM,
+        } = createAIPromptEditorView();
+        const columnWithPrompt = {
+          ...mockColumn,
+          index: 2,
+          ai: { prompt: 'existing prompt' },
+        };
+
+        await aiPromptEditorView.show(cellElement, columnWithPrompt);
+
+        aiPromptEditorPOM.getTextArea().setValue('existing prompt');
+        aiPromptEditorPOM.getApplyButton().getElement().click();
+
+        expect(aiPromptEditorView.getPromptEditorInstance().updateStateOnAction)
+          .not.toHaveBeenCalled();
+
+        expect(mockColumnsController.columnOption).not.toHaveBeenCalled();
+      });
+
+      it('should trigger loading state only when prompt has changed', async () => {
+        const {
+          cellElement,
+          aiPromptEditorView,
+          aiPromptEditorPOM,
+        } = createAIPromptEditorView();
+        const columnWithPrompt = {
+          ...mockColumn,
+          index: 2,
+          ai: { prompt: 'old prompt' },
+        };
+
+        await aiPromptEditorView.show(cellElement, columnWithPrompt);
+
+        aiPromptEditorPOM.getTextArea().setValue('new prompt');
+        aiPromptEditorPOM.getApplyButton().getElement().click();
+
+        expect(aiPromptEditorView.getPromptEditorInstance().updateStateOnAction)
+          .toHaveBeenCalledWith('apply');
+
+        expect(mockColumnsController.columnOption).toHaveBeenCalledWith(
+          2,
+          'ai.prompt',
+          'new prompt',
+          true,
+        );
+      });
     });
 
     describe('onStop', () => {

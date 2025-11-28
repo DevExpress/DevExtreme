@@ -261,6 +261,25 @@ describe('Regenerate Data button', () => {
       expect(POM.getRefreshButton().isDisabled()).toBe(false);
     });
   });
+
+  describe('when text area value is changed back to initial value', () => {
+    it('should be enabled', () => {
+      const { POM } = createAIPromptEditor({
+        prompt: 'initial text',
+        popupOptions: { visible: true },
+      });
+
+      expect(POM.getRefreshButton().isDisabled()).toBe(false);
+
+      // Change value
+      POM.getTextArea().setValue('changed text');
+      expect(POM.getRefreshButton().isDisabled()).toBe(true);
+
+      // Change back to initial
+      POM.getTextArea().setValue('initial text');
+      expect(POM.getRefreshButton().isDisabled()).toBe(false);
+    });
+  });
 });
 
 describe('Apply button', () => {
@@ -318,7 +337,7 @@ describe('Apply button', () => {
   });
 
   describe('when text area value is changed back to initial value', () => {
-    it('should be enabled', () => {
+    it('should be disabled', () => {
       const { POM } = createAIPromptEditor({
         prompt: 'initial text',
         popupOptions: { visible: true },
@@ -332,7 +351,7 @@ describe('Apply button', () => {
 
       // Change back to initial
       POM.getTextArea().setValue('initial text');
-      expect(POM.getApplyButton().isDisabled()).toBe(false);
+      expect(POM.getApplyButton().isDisabled()).toBe(true);
     });
   });
 

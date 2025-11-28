@@ -75,13 +75,14 @@ const EDITOR_NAMES = {
   recurrenceStartDateEditor: 'recurrenceStartDateEditor',
   recurrenceCountEditor: 'recurrenceCountEditor',
   recurrencePeriodEditor: 'recurrencePeriodEditor',
+  recurrenceDayOfYearMonthEditor: 'recurrenceDayOfYearMonthEditor',
   recurrenceDayOfMonthEditor: 'recurrenceDayOfMonthEditor',
   recurrenceDayOfYearDayEditor: 'recurrenceDayOfYearDayEditor',
-  recurrenceDayOfYearMonthEditor: 'recurrenceDayOfYearMonthEditor',
   recurrenceEndEditor: 'recurrenceEndEditor',
-  repeatEndEditor: 'repeatEndEditor',
-  untilEditor: 'untilEditor',
-  countEditor: 'countEditor',
+  recurrenceRepeatEndEditor: 'recurrenceRepeatEndEditor',
+  recurrenceEndUntilEditor: 'recurrenceEndUntilEditor',
+  recurrenceEndCountEditor: 'recurrenceEndCountEditor',
+  recurrenceEndSpacer: 'recurrenceEndSpacer',
 };
 
 const GROUP_NAMES = {
@@ -92,6 +93,7 @@ const GROUP_NAMES = {
   recurrenceEndGroup: 'recurrenceEndGroup',
   recurrenceDaysOfWeekEditor: 'recurrenceDaysOfWeekEditor',
   recurrenceDayOfYearGroup: 'recurrenceDayOfYearGroup',
+  recurrenceEndEditorsGroup: 'recurrenceEndEditorsGroup',
 };
 
 const ICON_NAMES = {
@@ -457,10 +459,9 @@ export class RecurrenceForm {
   private createRecurrenceEndRadioGroup(): SimpleItem {
     return {
       itemType: 'simple',
-      name: EDITOR_NAMES.repeatEndEditor,
+      name: EDITOR_NAMES.recurrenceRepeatEndEditor,
       colSpan: 1,
       editorType: 'dxRadioGroup',
-      cssClass: CLASSES.recurrenceEndEditors,
       label: {
         visible: false,
       },
@@ -486,15 +487,17 @@ export class RecurrenceForm {
   private createRecurrenceEndEditors(): GroupItem {
     return {
       itemType: 'group',
+      name: GROUP_NAMES.recurrenceEndEditorsGroup,
       cssClass: CLASSES.recurrenceEndEditors,
       colSpan: 1,
       items: [
         {
           itemType: 'empty',
+          name: EDITOR_NAMES.recurrenceEndSpacer,
         },
         {
           itemType: 'simple',
-          name: EDITOR_NAMES.untilEditor,
+          name: EDITOR_NAMES.recurrenceEndUntilEditor,
           label: {
             visible: false,
           },
@@ -504,6 +507,9 @@ export class RecurrenceForm {
             useMaskBehavior: true,
             calendarOptions: {
               firstDayOfWeek: this.scheduler.getFirstDayOfWeek(),
+            },
+            inputAttr: {
+              'aria-label': messageLocalization.format('dxScheduler-recurrenceUntilDateLabel'),
             },
             onContentReady: (e): void => {
               e.component.option('value', this.recurrenceRule.until);
@@ -515,7 +521,7 @@ export class RecurrenceForm {
         },
         {
           itemType: 'simple',
-          name: EDITOR_NAMES.countEditor,
+          name: EDITOR_NAMES.recurrenceEndCountEditor,
           cssClass: CLASSES.countEditor,
           label: {
             visible: false,
@@ -526,6 +532,9 @@ export class RecurrenceForm {
             min: 1,
             showSpinButtons: true,
             useLargeSpinButtons: false,
+            inputAttr: {
+              'aria-label': messageLocalization.format('dxScheduler-recurrenceOccurrenceLabel'),
+            },
             onContentReady: (e): void => {
               e.component.option('value', this.recurrenceRule.count ?? undefined);
             },
@@ -552,9 +561,9 @@ export class RecurrenceForm {
     this.dxForm.getEditor(EDITOR_NAMES.recurrenceStartDateEditor)?.option('value', this.recurrenceRule.startDate);
     this.dxForm.getEditor(EDITOR_NAMES.recurrencePeriodEditor)?.option('value', repeatEditorValue);
     this.dxForm.getEditor(EDITOR_NAMES.recurrenceCountEditor)?.option('value', this.recurrenceRule.interval);
-    this.dxForm.getEditor(EDITOR_NAMES.repeatEndEditor)?.option('value', this.recurrenceRule.repeatEnd);
-    this.dxForm.getEditor(EDITOR_NAMES.untilEditor)?.option('value', this.recurrenceRule.until);
-    this.dxForm.getEditor(EDITOR_NAMES.countEditor)?.option('value', this.recurrenceRule.count);
+    this.dxForm.getEditor(EDITOR_NAMES.recurrenceRepeatEndEditor)?.option('value', this.recurrenceRule.repeatEnd);
+    this.dxForm.getEditor(EDITOR_NAMES.recurrenceEndUntilEditor)?.option('value', this.recurrenceRule.until);
+    this.dxForm.getEditor(EDITOR_NAMES.recurrenceEndCountEditor)?.option('value', this.recurrenceRule.count);
 
     this.updateRepeatEndEditors();
     this.updateDayEditorsVisibility();
@@ -585,8 +594,8 @@ export class RecurrenceForm {
   private updateRepeatEndEditors(): void {
     const repeatEndValue = this.recurrenceRule.repeatEnd;
 
-    const untilEditor = this.dxForm.getEditor(EDITOR_NAMES.untilEditor);
-    const countEditor = this.dxForm.getEditor(EDITOR_NAMES.countEditor);
+    const untilEditor = this.dxForm.getEditor(EDITOR_NAMES.recurrenceEndUntilEditor);
+    const countEditor = this.dxForm.getEditor(EDITOR_NAMES.recurrenceEndCountEditor);
 
     untilEditor?.option('disabled', repeatEndValue !== 'until');
     countEditor?.option('disabled', repeatEndValue !== 'count');

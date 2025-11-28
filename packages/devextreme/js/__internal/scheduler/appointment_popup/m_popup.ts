@@ -37,7 +37,7 @@ export class AppointmentPopup {
 
   private _popup?: dxPopup;
 
-  private customToolbarItems?: ToolbarItem[];
+  private customPopupOptions?: PopupProperties;
 
   state: any;
 
@@ -99,7 +99,7 @@ export class AppointmentPopup {
     const editingConfig = this.scheduler.getEditingConfig();
     const customPopupOptions = editingConfig?.popup ?? {};
 
-    this.customToolbarItems = customPopupOptions.toolbarItems;
+    this.customPopupOptions = customPopupOptions;
 
     const defaultPopupConfig = {
       height: 'auto',
@@ -221,6 +221,16 @@ export class AppointmentPopup {
     }
   }
 
+  getMaxWidth(): number | string {
+    if (this.customPopupOptions?.maxWidth !== undefined) {
+      return this.customPopupOptions.maxWidth;
+    }
+    if (this.customPopupOptions?.width !== undefined) {
+      return this.customPopupOptions.width;
+    }
+    return isFluent(current()) ? 380 : 420;
+  }
+
   updatePopupFullScreenMode(): void {
     if (this.visible) {
       const isPopupFullScreenNeeded = () => {
@@ -231,9 +241,14 @@ export class AppointmentPopup {
       };
 
       const isFullScreen = isPopupFullScreenNeeded();
-      const maxWidth = isFluent(current()) ? 380 : 420;
 
       this.popup.option('fullScreen', isFullScreen);
+
+      if (this.customPopupOptions?.width !== undefined) {
+        this.popup.option('width', this.customPopupOptions.width);
+      }
+
+      const maxWidth = this.getMaxWidth();
       this.popup.option('maxWidth', isFullScreen ? '100%' : maxWidth);
     }
   }
@@ -379,8 +394,8 @@ export class AppointmentPopup {
   }
 
   private tryApplyCustomToolbarItems(): boolean {
-    if (this.customToolbarItems) {
-      this.popup.option('toolbarItems', this.customToolbarItems);
+    if (this.customPopupOptions?.toolbarItems) {
+      this.popup.option('toolbarItems', this.customPopupOptions.toolbarItems);
       return true;
     }
     return false;

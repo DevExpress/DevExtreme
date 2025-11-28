@@ -162,7 +162,7 @@ import DxNumberBox, { type DxNumberBoxTypes } from 'devextreme-vue/number-box';
 import DxDateBox from 'devextreme-vue/date-box';
 import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import { jsPDF } from 'jspdf';
-import 'jspdf-autotable';
+import { applyPlugin } from 'jspdf-autotable';
 import { exportGantt as exportGanttToPdf } from 'devextreme-vue/common/export/pdf';
 import type { GanttPdfExportMode, GanttPdfExportDateRange } from 'devextreme/ui/gantt';
 import {
@@ -174,6 +174,8 @@ import {
   exportModes,
   dateRanges,
 } from './data.ts';
+
+applyPlugin(jsPDF);
 
 const ganttRef = ref();
 
