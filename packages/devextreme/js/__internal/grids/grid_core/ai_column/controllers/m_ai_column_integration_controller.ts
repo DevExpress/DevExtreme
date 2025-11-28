@@ -125,6 +125,7 @@ export class AIColumnIntegrationController extends Controller {
 
     if (this.isRequestAwaitingCompletion(columnName)) {
       this.abortRequest(columnName);
+      callbacks.onRequestCanceled();
     }
 
     const rowItems = this.dataController.items();

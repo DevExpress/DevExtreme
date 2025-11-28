@@ -17,7 +17,7 @@
         :height="400"
         :layout="layout"
         :apply-changes-mode="applyChangesMode"
-        :state="state"
+        v-model:state="state"
       >
         <DxTexts
           all-fields="All"
