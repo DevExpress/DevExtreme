@@ -554,7 +554,7 @@ export type EditorPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGr
   /** @docid _ui_data_grid_EditorPreparedEvent.setValue */
   readonly setValue?: any;
   /** @docid _ui_data_grid_EditorPreparedEvent.updateValueTimeout */
-  readonly updateValueTimeout?: number;
+  updateValueTimeout?: number;
   /** @docid _ui_data_grid_EditorPreparedEvent.width */
   readonly width?: number;
   /** @docid _ui_data_grid_EditorPreparedEvent.disabled */
