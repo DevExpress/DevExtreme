@@ -565,7 +565,6 @@ export class RecurrenceForm {
     this.dxForm.getEditor(EDITOR_NAMES.recurrenceEndUntilEditor)?.option('value', this.recurrenceRule.until);
     this.dxForm.getEditor(EDITOR_NAMES.recurrenceEndCountEditor)?.option('value', this.recurrenceRule.count);
 
-    this.updateRepeatEndEditors();
     this.updateDayEditorsVisibility();
   }
 
@@ -597,8 +596,8 @@ export class RecurrenceForm {
     const untilEditor = this.dxForm.getEditor(EDITOR_NAMES.recurrenceEndUntilEditor);
     const countEditor = this.dxForm.getEditor(EDITOR_NAMES.recurrenceEndCountEditor);
 
-    untilEditor?.option('disabled', this._readOnly || repeatEndValue !== 'until');
-    countEditor?.option('disabled', this._readOnly || repeatEndValue !== 'count');
+    untilEditor?.option('disabled', repeatEndValue !== 'until');
+    countEditor?.option('disabled', repeatEndValue !== 'count');
   }
 
   private updateDayEditorsVisibility(): void {

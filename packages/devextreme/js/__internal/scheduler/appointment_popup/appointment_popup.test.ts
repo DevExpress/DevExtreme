@@ -1297,61 +1297,6 @@ describe('Appointment Form', () => {
         expect(POM.popup.getInputValue('recurrenceRepeatEndEditor')).toBe('count');
         expect(POM.popup.getInputValue('recurrenceEndCountEditor')).toBe('10 occurrence(s)');
       });
-
-      it('should have disabled repeat end editors when opening disabled appointment', async () => {
-        const disabledAppointment = {
-          text: 'Disabled appointment',
-          startDate: new Date('2021-04-26T16:30:00.000Z'),
-          endDate: new Date('2021-04-26T18:30:00.000Z'),
-          recurrenceRule: 'FREQ=WEEKLY;COUNT=10',
-          disabled: true,
-        };
-
-        const { scheduler, POM } = await createScheduler({
-          ...getDefaultConfig(),
-          dataSource: [disabledAppointment],
-        });
-
-        scheduler.showAppointmentPopup(disabledAppointment);
-        POM.popup.getEditSeriesButton().click();
-        POM.popup.openRecurrenceSettings();
-
-        expect(POM.popup.form.getEditor('recurrenceEndUntilEditor')?.option('disabled')).toBe(true);
-        expect(POM.popup.form.getEditor('recurrenceEndCountEditor')?.option('disabled')).toBe(true);
-      });
-
-      it('should have disabled repeat end editors when opening enabled appointment after disabled appointment', async () => {
-        const disabledAppointment = {
-          text: 'Disabled appointment',
-          startDate: new Date('2021-04-26T16:30:00.000Z'),
-          endDate: new Date('2021-04-26T18:30:00.000Z'),
-          recurrenceRule: 'FREQ=WEEKLY;COUNT=10',
-          disabled: true,
-        };
-
-        const enabledAppointment = {
-          text: 'Enabled appointment',
-          startDate: new Date('2021-04-27T17:00:00.000Z'),
-          endDate: new Date('2021-04-27T18:00:00.000Z'),
-          recurrenceRule: 'FREQ=WEEKLY;BYDAY=TU;COUNT=5',
-        };
-        const { scheduler, POM } = await createScheduler({
-          ...getDefaultConfig(),
-          dataSource: [disabledAppointment, enabledAppointment],
-        });
-
-        scheduler.showAppointmentPopup(disabledAppointment);
-        POM.popup.getEditSeriesButton().click();
-        POM.popup.openRecurrenceSettings();
-        scheduler.hideAppointmentPopup();
-
-        scheduler.showAppointmentPopup(enabledAppointment);
-        POM.popup.getEditSeriesButton().click();
-        POM.popup.openRecurrenceSettings();
-
-        expect(POM.popup.form.getEditor('recurrenceEndUntilEditor')?.option('disabled')).toBe(true);
-        expect(POM.popup.form.getEditor('recurrenceEndCountEditor')?.option('disabled')).toBe(false);
-      });
     });
   });
 
