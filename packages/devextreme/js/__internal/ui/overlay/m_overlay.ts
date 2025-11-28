@@ -357,7 +357,8 @@ class Overlay<
     if (this._showAnimationProcessing) {
       this._stopAnimation();
     }
-    const isAttachedTarget = $(window.document).is(e.target) || domUtils.contains(window.document, e.target);
+    const isAttachedTarget = $(window.document).is(e.target)
+      || domUtils.contains(window.document, e.target);
     const isInnerOverlay = $(e.target).closest(`.${INNER_OVERLAY_CLASS}`).length;
     const outsideClick = isAttachedTarget && !isInnerOverlay && !(this._$content?.is(e.target)
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
@@ -695,7 +696,8 @@ class Overlay<
 
   _stopAnimation(): void {
     if (this._$content) {
-      fx.stop(this._$content.get(0), true);
+      // @ts-expect-error ts-error
+      fx.stop(this._$content, true);
     }
   }
 
