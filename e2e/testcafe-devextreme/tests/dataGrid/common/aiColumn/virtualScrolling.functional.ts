@@ -3,7 +3,7 @@ import { ClientFunction } from 'testcafe';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 
-fixture.disablePageReloads`Ai Column.Virtual Scrolling.Functional`
+fixture`Ai Column.Virtual Scrolling.Functional`
   .page(url(__dirname, './pages/containerWithAIIntegration.html'));
 
 const DATA_GRID_SELECTOR = '#container';

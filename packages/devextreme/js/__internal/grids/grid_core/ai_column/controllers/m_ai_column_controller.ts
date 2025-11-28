@@ -83,7 +83,7 @@ export class AIColumnController extends Controller {
     this.dataControllerChangedHandler = this.dataControllerChangedHandler
       ?? this.handleDataControllerChanged.bind(this);
 
-    this.dataController.changed.add(this.dataControllerChangedHandler.bind(this));
+    this.dataController.changed.add(this.dataControllerChangedHandler);
   }
 
   private handleDataControllerChanged(): void {
