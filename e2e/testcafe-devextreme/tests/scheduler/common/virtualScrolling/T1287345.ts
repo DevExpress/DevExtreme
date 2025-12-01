@@ -6,6 +6,7 @@ import { scrollTo } from '../../helpers/utils';
 import {
   insertStylesheetRulesToPage,
 } from '../../../../helpers/domUtils';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Scheduler: Virtual scrolling`
   .page(url(__dirname, '../../../container.html'));
@@ -17,7 +18,7 @@ test.meta({ browserSize: [600, 800] })('Cell width set in css should be correct 
 
   await scrollTo(0, 3000);
   await t.click(scheduler.toolbar.navigator.nextButton);
-  await t.expect(await takeScreenshot('virtual_scroll_cell_width.png', scheduler.workSpace)).ok();
+  await testScreenshot(t, takeScreenshot, 'virtual_scroll_cell_width.png', { element: scheduler.workSpace });
 
   await t
     .expect(compareResults.isValid())

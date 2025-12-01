@@ -1,13 +1,13 @@
 <dx-chart id="chart" [dataSource]="dataSource">
-  <dxo-title text="Production of Crude Oil">
-    <dxo-subtitle text="(in Barrels)"></dxo-subtitle>
-  </dxo-title>
-  <dxo-common-series-settings
+  <dxo-chart-title text="Production of Crude Oil">
+    <dxo-chart-subtitle text="(in Barrels)"></dxo-chart-subtitle>
+  </dxo-chart-title>
+  <dxo-chart-common-series-settings
     argumentField="state"
     valueField="value"
     type="bar"
   >
-    <dxo-aggregation enabled="true" method="sum"></dxo-aggregation>
-  </dxo-common-series-settings>
-  <dxo-series-template nameField="year"></dxo-series-template>
+    <dxo-chart-aggregation enabled="true" method="sum"></dxo-chart-aggregation>
+  </dxo-chart-common-series-settings>
+  <dxo-chart-series-template nameField="year"></dxo-chart-series-template>
 </dx-chart>

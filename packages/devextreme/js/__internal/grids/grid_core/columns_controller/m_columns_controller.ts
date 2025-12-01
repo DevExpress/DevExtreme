@@ -92,6 +92,7 @@ export interface Column extends ColumnBase {
   visibleWidth?: string | number;
   hidingPriority?: number;
   ai?: ColumnAIOptions;
+  command?: string;
 }
 
 export class ColumnsController extends modules.Controller {
@@ -1186,6 +1187,10 @@ export class ColumnsController extends modules.Controller {
     let isColumnDataTypesUpdated = false;
 
     each(that._columns, (index, column) => {
+      if (column.type === AI_COLUMN_NAME) {
+        return;
+      }
+
       let i;
       let value;
       let dataType;
@@ -1757,7 +1762,7 @@ export class ColumnsController extends modules.Controller {
     if (columnOptions.selectedFilterOperation && !('defaultSelectedFilterOperation' in calculatedColumnOptions)) {
       calculatedColumnOptions.defaultSelectedFilterOperation = columnOptions.selectedFilterOperation;
     }
-    if (columnOptions.lookup) {
+    if (columnOptions.lookup && columnOptions.type !== AI_COLUMN_NAME) {
       calculatedColumnOptions.lookup = {
         calculateCellValue(value, skipDeserialization) {
           if (this.valueExpr) {

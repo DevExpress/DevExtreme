@@ -4,7 +4,6 @@ import devices from '@js/core/devices';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { getOuterHeight } from '@js/core/utils/size';
 import type { DxEvent, NativeEventInfo } from '@js/events';
 import type {
   ClickEvent,
@@ -40,6 +39,8 @@ const ERRORS = {
 };
 
 const isMobile = (): boolean => devices.current().deviceType !== 'desktop';
+
+export const DEFAULT_ALLOWED_FILE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp', '.pdf', '.docx', '.xlsx', '.pptx', '.txt', '.rtf', '.csv', '.md'];
 
 type EnterKeyEvent = NativeEventInfo<ChatTextArea, KeyboardEvent>;
 
@@ -95,7 +96,6 @@ class ChatTextArea extends TextArea<Properties> {
       autoResizeEnabled: true,
       valueChangeEvent: 'input',
       maxHeight: '53.86em',
-      fileUploaderOptions: undefined,
     };
   }
 
@@ -310,12 +310,16 @@ class ChatTextArea extends TextArea<Properties> {
   _getFileUploaderOptions(): FileUploaderProperties {
     const { fileUploaderOptions = {} } = this.option();
 
-    const multiple = fileUploaderOptions.multiple ?? true;
     const visible = this._shouldHideFileUploader(fileUploaderOptions.value);
 
+    const defaultFileUploaderOptions = {
+      multiple: true,
+      allowedFileExtensions: DEFAULT_ALLOWED_FILE_EXTENSIONS,
+    };
+
     return {
+      ...defaultFileUploaderOptions,
       ...fileUploaderOptions,
-      multiple,
       visible,
       uploadMode: 'instantly',
       dialogTrigger: this.$element().find(`.${CHAT_TEXT_AREA_ATTACH_BUTTON}`).get(0),
@@ -404,29 +408,20 @@ class ChatTextArea extends TextArea<Properties> {
 
   _renderButtonContainers(): void {}
 
-  _getHeightDifference($input: dxElementWrapper): number {
-    const baseDifference = super._getHeightDifference($input);
+  _getAdjustedMaxHeight(maxHeight: number): number {
+    return maxHeight;
+  }
 
-    const gap = parseFloat(this.$element().css('gap') ?? '0');
+  _getMaxHeight(): number | undefined {
+    const cssValue = this._input().css('maxHeight');
 
-    const informerHeight = this._informer ? getOuterHeight(this._informer.$element()) : 0;
-    const fileUploaderHeight = getOuterHeight(this._$fileUploader);
-    const toolbarHeight = getOuterHeight(this._$toolbar);
+    if (!cssValue || cssValue === 'none') {
+      return undefined;
+    }
 
-    const visibleSections = [
-      toolbarHeight,
-      informerHeight,
-      fileUploaderHeight,
-    ].filter(Boolean).length;
+    const maxHeight = parseFloat(cssValue);
 
-    const totalExtraHeight = toolbarHeight
-      + informerHeight
-      + fileUploaderHeight
-      + visibleSections * gap;
-
-    const difference: number = baseDifference + totalExtraHeight;
-
-    return difference;
+    return maxHeight;
   }
 
   _keyPressHandler(e: InputEvent): void {

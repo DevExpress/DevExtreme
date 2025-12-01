@@ -24,6 +24,7 @@ test('The AI column should not be fixed when the columnFixing.enabled option is 
     { id: 2, name: 'Name 2', value: 20 },
     { id: 3, name: 'Name 3', value: 30 },
   ],
+  keyExpr: 'id',
   width: 600,
   columnWidth: 200,
   columnFixing: {
@@ -58,6 +59,7 @@ test('The AI column should be fixed when its fixed option is true', async (t) =>
     { id: 2, name: 'Name 2', value: 20 },
     { id: 3, name: 'Name 3', value: 30 },
   ],
+  keyExpr: 'id',
   width: 600,
   columnWidth: 200,
   columns: [
@@ -90,6 +92,7 @@ test('The AI column should be fixed when its fixed option is true and its fixed 
     { id: 2, name: 'Name 2', value: 20 },
     { id: 3, name: 'Name 3', value: 30 },
   ],
+  keyExpr: 'id',
   width: 600,
   columnWidth: 200,
   columns: [
@@ -123,6 +126,7 @@ test('The AI column should be fixed when its fixed option is true and its fixed 
     { id: 2, name: 'Name 2', value: 20 },
     { id: 3, name: 'Name 3', value: 30 },
   ],
+  keyExpr: 'id',
   width: 600,
   columnWidth: 200,
   columns: [
@@ -168,6 +172,7 @@ test('Fix an AI column using the context menu', async (t) => {
     { id: 2, name: 'Name 2', value: 20 },
     { id: 3, name: 'Name 3', value: 30 },
   ],
+  keyExpr: 'id',
   width: 600,
   columnWidth: 200,
   columnFixing: {

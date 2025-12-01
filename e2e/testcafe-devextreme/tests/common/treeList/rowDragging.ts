@@ -71,6 +71,8 @@ test('TreeList - Expand/collapse mechanism breaks after dragging action in the s
 
     await treeList.moveRow(0, 10, 10, true);
 
+    await t.wait(100);
+
     const consoleMessages = await t.getBrowserConsoleMessages();
     const warningExists = !!consoleMessages?.warn.find((message) => message.startsWith('W1025'));
 

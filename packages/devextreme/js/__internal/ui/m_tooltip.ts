@@ -35,7 +35,7 @@ TProperties extends TooltipProperties = TooltipProperties,
 
   _render(): void {
     this.$element().addClass(TOOLTIP_CLASS);
-    this.$wrapper().addClass(TOOLTIP_WRAPPER_CLASS);
+    this.$wrapper()?.addClass(TOOLTIP_WRAPPER_CLASS);
     super._render();
   }
 

@@ -62,7 +62,7 @@ export default function App() {
   const onResult = useCallback(({ event }) => {
     const { results } = event;
     const resultText = Object.values(results)
-      .map((resultItem) => resultItem[0].transcript)
+      .map((resultItem) => resultItem[0].transcript.trim())
       .join(' ');
     setTextAreaValue(resultText);
   }, []);

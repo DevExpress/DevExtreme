@@ -7,7 +7,9 @@
     [inputAttr]="{ 'aria-label': 'Lookup' }"
     (onValueChanged)="valueChanged($event)"
   >
-    <dxo-drop-down-options [showTitle]="false"></dxo-drop-down-options>
+    <dxo-lookup-drop-down-options
+      [showTitle]="false"
+    ></dxo-lookup-drop-down-options>
   </dx-lookup>
 </div>
 <div class="selected" *ngIf="selectedEmployee">

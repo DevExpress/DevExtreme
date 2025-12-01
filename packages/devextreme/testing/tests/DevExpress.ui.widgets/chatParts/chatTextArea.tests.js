@@ -3,12 +3,13 @@ import keyboardMock from '../../../helpers/keyboardMock.js';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 
-import ChatTextArea, { CHAT_TEXT_AREA_ATTACH_BUTTON } from '__internal/ui/chat/message_box/chat_text_area';
+import ChatTextArea, { CHAT_TEXT_AREA_ATTACH_BUTTON, DEFAULT_ALLOWED_FILE_EXTENSIONS } from '__internal/ui/chat/message_box/chat_text_area';
 import Button from 'ui/button';
 import FileUploader, { FILEUPLOADER_CLASS, FILEUPLOADER_CANCEL_BUTTON_CLASS } from '__internal/ui/file_uploader/file_uploader';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
 import Informer, { INFORMER_CLASS, INFORMER_TEXT_CLASS } from '__internal/ui/informer/informer';
 import { TEXTEDITOR_INPUT_CLASS } from '__internal/ui/text_box/m_text_editor.base';
+import { TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE } from '__internal/ui/m_text_area';
 
 const fakeFile = {
     name: 'fakefile.png',
@@ -313,7 +314,7 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
                 fileUploaderOptions: {},
             });
 
-            assert.strictEqual(this.$fileUploader.length, 1, 'file uploader is not rendered');
+            assert.strictEqual(this.$fileUploader.length, 1, 'file uploader is rendered');
             assert.strictEqual(this.getFileUploader() instanceof FileUploader, true, 'file uploader has correct instance');
         });
 
@@ -333,6 +334,7 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
             { name: '_showFileIcon', value: true },
             { name: '_cancelButtonPosition', value: 'end' },
             { name: 'multiple', value: true },
+            { name: 'allowedFileExtensions', value: DEFAULT_ALLOWED_FILE_EXTENSIONS },
         ].forEach(({ name, value }) => {
             QUnit.test(`${name} should equal ${value} by default`, function(assert) {
                 this.reinit({
@@ -343,14 +345,19 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
             });
         });
 
-        QUnit.test('It should be possible to redefine fileUploaderOptions.multiple option', function(assert) {
-            this.reinit({
-                fileUploaderOptions: {
-                    multiple: false,
-                },
-            });
+        [
+            { name: 'multiple', value: false },
+            { name: 'allowedFileExtensions', value: [] },
+        ].forEach(({ name, value }) => {
+            QUnit.test(`It should be possible to redefine fileUploaderOptions.${name} option`, function(assert) {
+                this.reinit({
+                    fileUploaderOptions: {
+                        [name]: value,
+                    },
+                });
 
-            assert.strictEqual(this.getFileUploader().option('multiple'), false, 'multiple option is redefined');
+                assert.strictEqual(this.getFileUploader().option(name), value, `${name} option is redefined`);
+            });
         });
 
         QUnit.test('It should not be possible to redefine fileUploaderOptions.uploadMode option', function(assert) {
@@ -866,6 +873,50 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
 
                 assert.strictEqual(this.$element.find(`.${INFORMER_CLASS}`).length, 0, 'informer is hidden after text is cleared');
             });
+        });
+    });
+
+    QUnit.module('MaxHeight and scroll behavior', () => {
+        QUnit.test('input should have auto-resize class by default', function(assert) {
+            const hasAutoResizeClass = this.$input.hasClass(TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE);
+
+            assert.ok(hasAutoResizeClass, 'input has auto-resize class');
+        });
+
+        QUnit.test('textarea should expand when text is added', function(assert) {
+            const initialHeight = this.$input.height();
+
+            this.typeText('Line 1\nLine 2\nLine 3');
+
+            const heightAfterTyping = this.$input.height();
+
+            assert.ok(heightAfterTyping > initialHeight, 'textarea height increased after adding multiline text');
+        });
+
+        QUnit.test('textarea should not exceed default maxHeight', function(assert) {
+            const longText = Array(100).fill('Line of text that should cause scrolling').join('\n');
+            this.typeText(longText);
+
+            const inputHeight = this.$input.height();
+            const maxHeightValue = parseFloat(this.$input.css('maxHeight'));
+
+            assert.roughEqual(inputHeight, maxHeightValue, 0.01, 'input height respects default maxHeight');
+            assert.notStrictEqual(maxHeightValue, undefined, 'default maxHeight is applied');
+        });
+
+        QUnit.test('textarea height should be restored after clearing text', function(assert) {
+            const initialHeight = this.$input.height();
+
+            this.typeText('Line 1\nLine 2\nLine 3\nLine 4\nLine 5');
+
+            const heightWithText = this.$input.height();
+            assert.ok(heightWithText > initialHeight, 'height increased with text');
+
+            this.instance.option('value', '');
+
+            const heightAfterClear = this.$input.height();
+
+            assert.roughEqual(heightAfterClear, initialHeight, 0.01, 'height is restored after clearing text');
         });
     });
 });

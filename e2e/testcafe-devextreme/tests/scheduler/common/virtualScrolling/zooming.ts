@@ -3,6 +3,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { scrollToDate } from '../../helpers/utils';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 import {
   resources,
   views,
@@ -43,15 +44,19 @@ test('Virtual scrolling layout in scheduler views when horizontal grouping is en
 
     await scheduler.option('currentView', view.type);
 
-    await t.expect(
-      await takeScreenshot(`virtual-scrolling-${view.type}-before-scroll-horizontal-grouping-scaling.png`),
-    ).ok();
+    await testScreenshot(
+      t,
+      takeScreenshot,
+      `virtual-scrolling-${view.type}-before-scroll-horizontal-grouping-scaling.png`,
+    );
 
     await scrollToDate(scrollConfig[i].firstDate, { resourceId: 7 });
 
-    await t.expect(
-      await takeScreenshot(`virtual-scrolling-${view.type}-after-scroll-horizontal-grouping-scaling.png`),
-    ).ok();
+    await testScreenshot(
+      t,
+      takeScreenshot,
+      `virtual-scrolling-${view.type}-after-scroll-horizontal-grouping-scaling.png`,
+    );
   }
 
   await setZoomLevel(0);

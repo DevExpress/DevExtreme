@@ -3,13 +3,13 @@ import TreeList from 'devextreme-testcafe-models/treeList';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
+import { Themes } from '../../../helpers/themes';
 
 fixture.disablePageReloads`Columns`
   .page(url(__dirname, '../../container.html'));
 
 // T1054312
-// visual: material
-test('CheckBox position with double rows columns', async (t) => {
+test.meta({ themes: [Themes.materialBlue] })('CheckBox position with double rows columns', async (t) => {
   const treeList = new TreeList('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

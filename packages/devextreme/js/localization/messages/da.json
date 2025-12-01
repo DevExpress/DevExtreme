@@ -286,6 +286,8 @@
         "dxScheduler-editorLabelDescription": "Beskrivelse",
         "dxScheduler-editorLabelRecurrence": "Gentag",
 
+        "dxScheduler-noSubject": "(No subject)",
+
         "dxScheduler-navigationToday": "Today",
         "dxScheduler-navigationPrevious": "Forrige side",
         "dxScheduler-navigationNext": "Næste side",

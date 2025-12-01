@@ -97,12 +97,19 @@ export const attachments = [
   },
   {
     name: '9138cf2e-ced3-426a-bb53-4478536f690b.zip',
-    size: 1024000,
+    size: 102400,
   },
 ];
 
 export const generateFileMessage = (author: User, longText = false): Message => ({
   text: longText ? getLongText() : getShortText(),
+  timestamp,
+  author,
+  attachments,
+});
+
+export const generateFileMessageWithoutText = (author: User): Message => ({
+  text: '',
   timestamp,
   author,
   attachments,

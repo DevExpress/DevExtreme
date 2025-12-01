@@ -1,23 +1,11 @@
 $(() => {
   const dataGrid = $('#gridContainer').dxDataGrid({
-    dataSource: {
-      store: {
-        type: 'odata',
-        version: 2,
+    dataSource: new DevExpress.data.DataSource({
+      store: new DevExpress.data.ArrayStore({
+        data: tasks,
         key: 'Task_ID',
-        url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks',
-      },
-      expand: 'ResponsibleEmployee',
-      select: [
-        'Task_ID',
-        'Task_Subject',
-        'Task_Start_Date',
-        'Task_Status',
-        'Task_Description',
-        'Task_Completion',
-        'ResponsibleEmployee/Employee_Full_Name',
-      ],
-    },
+      }),
+    }),
     columns: [
       {
         dataField: 'Task_ID',

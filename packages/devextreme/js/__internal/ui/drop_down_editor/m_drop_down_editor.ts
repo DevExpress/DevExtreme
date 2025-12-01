@@ -842,7 +842,7 @@ class DropDownEditor<
     this.close();
   }
 
-  _setPopupContentId($popupContent: dxElementWrapper): void {
+  _setPopupContentId($popupContent?: dxElementWrapper | null): void {
     this._popupContentId = `dx-${new Guid()}`;
     this.setAria('id', this._popupContentId, $popupContent);
   }
@@ -1004,16 +1004,14 @@ class DropDownEditor<
   }
 
   _clean(): void {
-    delete this._openOnFieldClickAction;
-    delete this._$templateWrapper;
-
     this._clearFieldAddons(true);
 
-    if (this._$popup) {
-      this._$popup.remove();
-      delete this._$popup;
-      delete this._popup;
-    }
+    this._$popup?.remove();
+
+    this._openOnFieldClickAction = undefined;
+    this._$templateWrapper = undefined;
+    this._popup = undefined;
+    this._$popup = undefined;
 
     super._clean();
   }

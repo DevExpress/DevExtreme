@@ -1,5 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import CardView from 'devextreme-testcafe-models/cardView';
+import { ClientFunction } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import { MouseAction, MouseUpEvents } from '../../../helpers/mouseUpEvents';
@@ -14,6 +15,11 @@ const PARENT_STYLES = `${PARENT_CONTAINER} { width: 400px; padding: 0 20px; }`;
 const CARD_VIEW_SELECTOR = '#container';
 const DRAG_MOVE_X_COEFFICIENT = 1.5;
 const DRAG_MOVE_Y_COEFFICIENT = 1;
+
+const blurActiveElement = ClientFunction(() => {
+  const el = document.activeElement as HTMLElement | null;
+  el?.blur();
+});
 
 // NOTE: Main idea of these offsets -> drag header item elements
 // on the "coefficient * size" distance from an initial position
@@ -49,6 +55,7 @@ const getDragCoordinates = async (
       dragOffsetY,
     } = await getDragCoordinates(item.element, rtlEnabled, 'left');
     await t.drag(item.element, dragOffsetX, dragOffsetY);
+    await blurActiveElement();
 
     await testScreenshot(
       t,
@@ -86,6 +93,7 @@ const getDragCoordinates = async (
       dragOffsetY,
     } = await getDragCoordinates(item.element, rtlEnabled, 'right');
     await t.drag(item.element, dragOffsetX, dragOffsetY);
+    await blurActiveElement();
 
     await testScreenshot(
       t,
@@ -123,6 +131,7 @@ const getDragCoordinates = async (
       dragOffsetY,
     } = await getDragCoordinates(item.element, rtlEnabled, 'right');
     await t.drag(item.element, dragOffsetX, dragOffsetY);
+    await blurActiveElement();
 
     await testScreenshot(
       t,

@@ -1,17 +1,23 @@
-import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Scheduler: View with first day of week`
   .page(url(__dirname, '../../../../container.html'));
 
 test('WorkWeek should generate correct start view date', async (t) => {
   const scheduler = new Scheduler('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t.expect(
-    await compareScreenshot(t, 'work-week-first-day-of-week.png', scheduler.element),
-  ).ok();
+  await testScreenshot(t, takeScreenshot, 'work-week-first-day-of-week.png', {
+    element: scheduler.element,
+  });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
 }).before(async () => {
   await createWidget('dxScheduler', {
     views: ['workWeek'],

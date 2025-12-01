@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../../../helpers/createWidget';
 import url from '../../../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Layout:BrowserResize`
   .page(url(__dirname, '../../../../../container.html'));
@@ -117,16 +118,23 @@ const resourceDataSource = [{
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t
-      .expect(await takeScreenshot(`browser-resize-currentView=${currentView}-before-resize.png`, scheduler.workSpace))
-      .ok();
+    await testScreenshot(
+      t,
+      takeScreenshot,
+      `browser-resize-currentView=${currentView}-before-resize.png`,
+      { element: scheduler.workSpace },
+    );
 
     await t.resizeWindow(600, 600);
 
-    await t
-      .expect(await takeScreenshot(`browser-resize-currentView=${currentView}-after-resize.png`, scheduler.workSpace))
-      .ok()
+    await testScreenshot(
+      t,
+      takeScreenshot,
+      `browser-resize-currentView=${currentView}-after-resize.png`,
+      { element: scheduler.workSpace },
+    );
 
+    await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {

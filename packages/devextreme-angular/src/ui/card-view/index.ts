@@ -24,7 +24,7 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/card_view';
 
 import DataSource from 'devextreme/data/data_source';
-import { CardCover, CardHeader, ColumnProperties, dxCardViewEditing, HeaderPanel, CardClickEvent, CardDblClickEvent, CardHoverChangedEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardSavedEvent, CardSavingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, FocusedCardChanged, InitNewCardEvent, SelectionChangedEvent, Paging, RemoteOperations, SelectionConfiguration, dxCardViewToolbar } from 'devextreme/ui/card_view';
+import { CardCover, CardHeader, ColumnProperties, dxCardViewEditing, HeaderPanel, CardClickEvent, CardDblClickEvent, CardHoverChangedEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, FocusedCardChanged, InitNewCardEvent, OptionChangedEvent, SavedEvent, SavingEvent, SelectionChangedEvent, Paging, RemoteOperations, SelectionConfiguration, dxCardViewToolbar } from 'devextreme/ui/card_view';
 import { Mode, ScrollbarMode } from 'devextreme/common';
 import { ColumnChooser, FilterPanel, HeaderFilter, Pager, SearchPanel, Sorting } from 'devextreme/common/grids';
 import { DataSourceOptions } from 'devextreme/data/data_source';
@@ -728,22 +728,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     
     
      */
-    @Output() onCardSaved: EventEmitter<CardSavedEvent>;
-
-    /**
-    
-     * [descr:undefined]
-    
-    
-     */
-    @Output() onCardSaving: EventEmitter<CardSavingEvent>;
-
-    /**
-    
-     * [descr:undefined]
-    
-    
-     */
     @Output() onCardUpdated: EventEmitter<CardUpdatedEvent>;
 
     /**
@@ -888,7 +872,23 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     
     
      */
-    @Output() onOptionChanged: EventEmitter<Object>;
+    @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
+
+    /**
+    
+     * [descr:undefined]
+    
+    
+     */
+    @Output() onSaved: EventEmitter<SavedEvent>;
+
+    /**
+    
+     * [descr:undefined]
+    
+    
+     */
+    @Output() onSaving: EventEmitter<SavingEvent>;
 
     /**
     
@@ -1248,8 +1248,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
             { subscribe: 'cardPrepared', emit: 'onCardPrepared' },
             { subscribe: 'cardRemoved', emit: 'onCardRemoved' },
             { subscribe: 'cardRemoving', emit: 'onCardRemoving' },
-            { subscribe: 'cardSaved', emit: 'onCardSaved' },
-            { subscribe: 'cardSaving', emit: 'onCardSaving' },
             { subscribe: 'cardUpdated', emit: 'onCardUpdated' },
             { subscribe: 'cardUpdating', emit: 'onCardUpdating' },
             { subscribe: 'contentReady', emit: 'onContentReady' },
@@ -1269,6 +1267,8 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
             { subscribe: 'initialized', emit: 'onInitialized' },
             { subscribe: 'initNewCard', emit: 'onInitNewCard' },
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { subscribe: 'saved', emit: 'onSaved' },
+            { subscribe: 'saving', emit: 'onSaving' },
             { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
             { emit: 'accessKeyChange' },
             { emit: 'activeStateEnabledChange' },

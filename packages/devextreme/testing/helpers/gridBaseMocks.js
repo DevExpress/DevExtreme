@@ -180,6 +180,10 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return false;
             },
 
+            isCustomLoading: function() {
+                return false;
+            },
+
             isStateLoading: function() {
                 return false;
             },

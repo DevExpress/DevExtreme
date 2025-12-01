@@ -1,10 +1,9 @@
 import { glob } from 'glob';
 import { join } from 'path';
 import { existsSync } from 'fs';
-import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { axeCheck, createReport } from '@testcafe-community/axe';
 import {
-  getPortByIndex,
   runTestAtPage,
   shouldRunFramework,
   shouldRunTestAtIndex,
@@ -16,7 +15,7 @@ import {
   execCode,
   injectStyle,
 } from '../utils/visual-tests/matrix-test-helper';
-import { getThemePostfix } from '../utils/visual-tests/helpers/theme-utils';
+import { testScreenshot } from '../utils/visual-tests/helpers/theme-utils';
 import { createMdReport, createTestCafeReport } from '../utils/axe-reporter/reporter';
 import { accessibilityUnsupportedComponents } from './accessibility-unsupported-components';
 import { knownWarnings } from './known-warnings';
@@ -38,6 +37,8 @@ const getTestSpecificSkipRules = (testName) => {
       return ['empty-table-header'];
     case 'Localization-UsingGlobalize':
       return ['label'];
+    case 'DataGrid-EditStateManagement':
+      return ['aria-required-parent'];
     default:
       return [];
   }
@@ -123,10 +124,10 @@ Object.values(FRAMEWORKS).forEach((approach) => {
     let pageURL = '';
     const theme = process.env.THEME.replace('generic.', '');
     if (isGitHubDemos) {
-      pageURL = `http://127.0.0.1:808${getPortByIndex(index)}/Demos/${widgetName}/${demoName}/${approach}/?theme=dx.${theme}`;
+      pageURL = `http://127.0.0.1:8080/Demos/${widgetName}/${demoName}/${approach}/?theme=dx.${theme}`;
     } else {
       changeTheme(__dirname, `../${demoPath}/index.html`, process.env.THEME);
-      pageURL = `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`;
+      pageURL = `http://127.0.0.1:8080/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`;
     }
     // remove when tests enabled not only for datagrid
     if (isGitHubDemos && (widgetName !== 'DataGrid' || gitHubIgnored.includes(demoName))) {
@@ -150,6 +151,7 @@ Object.values(FRAMEWORKS).forEach((approach) => {
         if (approach === 'Angular') {
           await waitForAngularLoading();
         }
+
         if (testCodeSource) {
           await execCode(testCodeSource);
         }
@@ -176,25 +178,18 @@ Object.values(FRAMEWORKS).forEach((approach) => {
           await t.expect(error).notOk();
           await t.expect(results.violations.length === 0).ok(createReport(results.violations));
         } else {
-          const testTheme = process.env.THEME;
-
-          let comparisonResult;
-          if (isGitHubDemos) {
-            comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions && {
-              ...comparisonOptions,
-              looksSameComparisonOptions: { antialiasingTolerance: 10 },
-            });
-          } else {
-            comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
-          }
-
           const consoleMessages = await t.getBrowserConsoleMessages();
-
           const errors = [...consoleMessages.error, ...consoleMessages.warn]
             .filter((e) => !knownWarnings.some((kw) => e.startsWith(kw)));
-
           await t.expect(errors).eql([]);
-          await t.expect(comparisonResult).ok('INVALID_SCREENSHOT');
+
+          const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+          await testScreenshot(t, takeScreenshot, `${testName}.png`, undefined, comparisonOptions);
+
+          await t
+            .expect(compareResults.isValid())
+            .ok(compareResults.errorMessages());
         }
       });
   });

@@ -655,7 +655,7 @@ QUnit.module('web font checker', () => {
         }
 
         const done = assert.async();
-        const font = new FontFace('RobotoFallback', 'url(../../packages/devextreme/artifacts/css/fonts/Roboto-400.woff2)', { weight: 400, unicodeRange: 'U+26' });
+        const font = new FontFace('roboto fallback', 'url(../../packages/devextreme/artifacts/css/fonts/Roboto-400.woff2)', { weight: 400, unicodeRange: 'U+26' });
 
         document.fonts.add(font);
         font.load();
@@ -691,7 +691,7 @@ QUnit.module('web font checker', () => {
         }
 
         const done = assert.async();
-        const font = new FontFace('RobotoFallback', 'url(../../artifacts/css/fonts/Roboto-400.woff2)', { weight: 400 });
+        const font = new FontFace('roboto fallback', 'url(../../artifacts/css/fonts/Roboto-400.woff2)', { weight: 400 });
         document.fonts.add(font);
 
         document.fonts.ready.then(() => {

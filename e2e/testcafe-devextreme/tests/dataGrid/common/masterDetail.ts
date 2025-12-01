@@ -90,7 +90,7 @@ test('pageSizeSelector has correct layout inside masterDetail', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 })
-  .before(() => createWidget('dxDataGrid', {
+  .before(async () => createWidget('dxDataGrid', {
     dataSource: [{ column1: 'first' }],
     columns: ['column1'],
     masterDetail: {

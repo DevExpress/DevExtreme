@@ -1,8 +1,8 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import Pagination from 'devextreme-testcafe-models/pagination';
 import url from '../../../helpers/getPageUrl';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import { createWidget } from '../../../helpers/createWidget';
+import { Themes } from '../../../helpers/themes';
 
 fixture.disablePageReloads`Pagination`
   .page(url(__dirname, '../../container.html'));
@@ -12,13 +12,16 @@ fixture.disablePageReloads`Pagination`
     [true, false].forEach((showInfo) => {
       [true, false].forEach((showNavigationButtons) => {
         [true, false].forEach((showPageSizeSelector) => {
-          test(`Pagination dm_${displayMode}-`
+          test.meta({
+            themes: infoText && showInfo && showNavigationButtons && showPageSizeSelector
+              ? [Themes.materialBlue, Themes.genericLight]
+              : [],
+          })(`Pagination dm_${displayMode}-`
             + `${infoText ? 'has' : 'has_no'}_it-`
             + `si_${showInfo.toString()}-`
             + `snb_${showNavigationButtons.toString()}-`
             + `spss_${showPageSizeSelector.toString()}`, async (t) => {
             const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-            const pagination = new Pagination('#container');
 
             await testScreenshot(
               t,
@@ -29,7 +32,6 @@ fixture.disablePageReloads`Pagination`
                 + `snb_${showNavigationButtons.toString()}-`
                 + `spss_${showPageSizeSelector.toString()}`
                 + '.png',
-              { element: pagination.element },
             );
             await t
               .expect(compareResults.isValid())

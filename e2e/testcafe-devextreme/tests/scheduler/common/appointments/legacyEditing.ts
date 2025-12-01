@@ -3,6 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const CLICK_OPTIONS = { speed: 0.5 };
 const SCHEDULER_SELECTOR = '#container';
@@ -96,12 +97,11 @@ test('Appointment EditForm screenshot', async (t) => {
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
   const appointment = scheduler.getAppointment(INITIAL_APPOINTMENT_TITLE);
 
+  await t.doubleClick(appointment.element);
+
+  await testScreenshot(t, takeScreenshot, 'appointment-popup-screenshot.png', { element: appointment.element });
+
   await t
-    .doubleClick(appointment.element)
-    // act
-    .expect(await takeScreenshot('appointment-popup-screenshot.png', appointment.element))
-    .ok()
-    // assert
     .expect(scheduler.legacyAppointmentPopup.element.exists)
     .ok()
     .expect(compareResults.isValid())

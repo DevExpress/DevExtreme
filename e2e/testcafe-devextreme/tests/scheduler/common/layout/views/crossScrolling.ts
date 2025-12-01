@@ -1,21 +1,27 @@
-import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Scheduler: View with cross-scrolling`
   .page(url(__dirname, '../../../../container.html'));
 
 test('Scrollable synchronization should work after changing current date (T1027231)', async (t) => {
   const scheduler = new Scheduler('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await scheduler.option('currentDate', new Date(2021, 4, 5));
   await scheduler.scrollTo(new Date(2021, 4, 15), { priorityId: 2 });
 
-  await t.expect(
-    await compareScreenshot(t, 'cross-scrolling-sync.png', scheduler.workSpace),
-  ).ok();
+  await testScreenshot(t, takeScreenshot, 'cross-scrolling-sync.png', {
+    element: scheduler.workSpace,
+  });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
 }).before(async () => {
   await createWidget('dxScheduler', {
     views: [{
@@ -51,13 +57,18 @@ test('Scrollable synchronization should work after changing current date (T10272
 
 test('Scrollable should be prepared correctly after change visibility (T1032171)', async (t) => {
   const scheduler = new Scheduler('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await scheduler.option('visible', true);
   await scheduler.scrollTo(new Date(2021, 1, 12));
 
-  await t.expect(
-    await compareScreenshot(t, 'cross-scrolling-sync-visibility.png', scheduler.workSpace),
-  ).ok();
+  await testScreenshot(t, takeScreenshot, 'cross-scrolling-sync-visibility.png', {
+    element: scheduler.workSpace,
+  });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
 }).before(async () => {
   await createWidget('dxScheduler', {
     dataSource: [],

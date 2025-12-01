@@ -377,7 +377,7 @@ QUnit.test('Should render center template in group on widget creating', function
     assert.deepEqual(centerTemplateGroup.css.args[0][0], {
         cursor: 'default',
         fill: '#767676',
-        'font-family': '\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana, sans-serif',
+        'font-family': '-apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'segoe ui\', \'helvetica neue\', \'adwaita sans\', cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
         'font-size': 12,
         'font-weight': 400
     }, 'styles applied on group');

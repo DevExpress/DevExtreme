@@ -4,10 +4,8 @@ import {
   removeStylesheetRulesFromPage,
 } from './domUtils';
 
-export async function clearTestPage(testController: TestController): Promise<void> {
-  const shadowDom = process.env.shadowDom === 'true';
-
-  const clearTestPageFn = ClientFunction(() => {
+export async function clearTestPage(t: TestController): Promise<void> {
+  await ClientFunction(() => {
     const widgetSelector = '.dx-widget';
     const $elements = $(widgetSelector)
       .filter((_, element) => $(element).parents(widgetSelector).length === 0);
@@ -22,6 +20,9 @@ export async function clearTestPage(testController: TestController): Promise<voi
       });
       $widgetElement.empty();
     });
+
+    const element = document.getElementById('focusable-start');
+    element?.remove();
 
     const body = document.querySelector('body');
     if (body) {
@@ -40,18 +41,13 @@ export async function clearTestPage(testController: TestController): Promise<voi
     `;
 
     body?.prepend(temp.firstElementChild!);
-  }, {
-    dependencies: {
-      shadowDom,
-    },
-  });
+  }).with({ boundTestRun: t })();
 
-  await clearTestPageFn.with({ boundTestRun: testController })();
-  await removeStylesheetRulesFromPage.with({ boundTestRun: testController })();
+  await removeStylesheetRulesFromPage.with({ boundTestRun: t })();
 }
 
 export async function loadAxeCore(t: TestController): Promise<void> {
-  await t.eval(() => new Promise<void>((resolve, reject) => {
+  await ClientFunction(() => new Promise<void>((resolve, reject) => {
     // @ts-expect-error ts-error
     if (window.axe) {
       resolve();
@@ -59,10 +55,44 @@ export async function loadAxeCore(t: TestController): Promise<void> {
     }
 
     const script = document.createElement('script');
+    script.id = 'axe-core-script';
     script.src = '../../../node_modules/axe-core/axe.min.js';
     // @ts-expect-error ts-error
     script.onload = resolve;
     script.onerror = reject;
     document.head.appendChild(script);
-  }));
+  })).with({ boundTestRun: t })();
 }
+
+export async function loadShadowDomExtension(t: TestController): Promise<void> {
+  await ClientFunction(() => new Promise<void>((resolve, reject) => {
+    if (document.getElementById('shadow-dom-extension-script')) {
+      resolve();
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.id = 'shadow-dom-extension-script';
+    script.src = '../../helpers/shadowDom/shadowDomExtension.js';
+    // @ts-expect-error ts-error
+    script.onload = resolve;
+    script.onerror = reject;
+    document.head.appendChild(script);
+  })).with({ boundTestRun: t })();
+}
+
+export const addShadowRootTree = async (t: TestController): Promise<void> => {
+  await ClientFunction(() => {
+    const root = document.querySelector('#parentContainer') as HTMLElement;
+    const { childNodes } = root;
+
+    if (!root.shadowRoot) {
+      root.attachShadow({ mode: 'open' });
+    }
+
+    const shadowContainer = document.createElement('div');
+    shadowContainer.append(...Array.from(childNodes));
+
+    root.shadowRoot!.appendChild(shadowContainer);
+  }).with({ boundTestRun: t })();
+};

@@ -2,6 +2,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../../helpers/createWidget';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Appointments with adaptive`
   .page(url(__dirname, '../../../../container.html'));
@@ -10,7 +11,7 @@ test('Should correctly render scheduler in workWeek view with interval, skipping
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const scheduler = new Scheduler('#container');
 
-  await takeScreenshot('work_week_interval-2.png', scheduler.workSpace);
+  await testScreenshot(t, takeScreenshot, 'work_week_interval-2.png', { element: scheduler.workSpace });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

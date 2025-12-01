@@ -4,7 +4,7 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/icons" as *;
+@use "../../base/icon_fonts" as *;
 @use "../dropDownEditor" as *;
 @use "../textEditor" as *;
 @use "../textEditor/sizes" as *;
@@ -1373,5 +1373,10 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
   td[style*="text-align: right"] .dx-command-ai-header-button {
     left: $fluent-grid-base-command-ai-header-button-offset;
     right: auto;
+  }
+
+  .dx-ai-prompt-editor__progressbar .dx-progressbar-animating-container {
+    height: $fluent-grid-base-ai-prompt-editor-progressbar-height;
+    border-radius: 0;
   }
 }

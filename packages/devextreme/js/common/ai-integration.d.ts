@@ -224,15 +224,19 @@ export type SmartPasteCommandResult = Array<{
  */
 export type GenerateGridColumnCommandResult = {
   data: Record<PropertyKey, string>;
-  additionalInfo?: Record<PropertyKey, unknown>;
 };
 
 /**
+ * @docid
  * @namespace DevExpress.aiIntegration
+ * @public
  */
 export type GenerateGridColumnCommandResponse = string | {
+/**
+ * @docid
+ * @public
+ */
   data: string | Record<PropertyKey, string>;
-  additionalInfo?: Record<PropertyKey, unknown>;
 };
 
 /**

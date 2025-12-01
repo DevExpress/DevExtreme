@@ -2,6 +2,7 @@
   "screenshots": {
     "path": "./",
     "takeOnFails": true,
+    "thumbnails": false,
     "pathPattern": "/artifacts/failedtests/${TEST}"
   },
   "screenshots-comparer": {

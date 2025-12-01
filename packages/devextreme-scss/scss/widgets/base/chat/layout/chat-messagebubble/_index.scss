@@ -26,6 +26,10 @@ $chat-messagebubble-max-height-image: 400px !default;
   &.dx-has-image {
     padding: $chat-messagebubble-padding-image;
   }
+
+  .dx-chat-messagebubble-content:empty {
+    display: none;
+  }
 }
 
 .dx-chat-messagegroup-alignment-start {

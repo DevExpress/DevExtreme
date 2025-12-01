@@ -1,5 +1,6 @@
 import { cancelAnimationFrame, requestAnimationFrame } from '@js/common/core/animation/frame';
 import Class from '@js/core/class';
+import { isDefined } from '@js/core/utils/type';
 
 type AnimationFrameId = ReturnType<typeof requestAnimationFrame>;
 
@@ -24,7 +25,10 @@ abstract class Animator {
 
   stop(): void {
     this._stopped = true;
-    cancelAnimationFrame(this._stepAnimationFrame);
+
+    if (isDefined(this._stepAnimationFrame)) {
+      cancelAnimationFrame(this._stepAnimationFrame);
+    }
   }
 
   _stepCore(): void {

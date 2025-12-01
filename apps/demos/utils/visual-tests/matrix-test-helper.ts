@@ -61,24 +61,17 @@ export const injectStyle = (style) => `
   document.getElementsByTagName('head')[0].appendChild(style);
 `;
 
-export const waitForAngularLoading = ClientFunction(() => new Promise<void>((resolve) => {
-  const start = performance.now();
+export const waitForAngularLoading = ClientFunction(() => new Promise((resolve) => {
+  let demoAppCounter = 0;
+  const demoAppIntervalHandle = setInterval(() => {
 
-  const check = () => {
-    const demoApp = document.querySelector('demo-app') as HTMLElement | null;
-
-    if (demoApp && demoApp.innerText.trim() !== 'Loading...') {
-      return setTimeout(resolve, 100);
+  const demoApp = document.querySelector('demo-app') as HTMLElement;
+    if ((demoApp && demoApp.innerText !== 'Loading...') || demoAppCounter === 120) {
+      setTimeout(resolve, 500);
+      clearInterval(demoAppIntervalHandle);
     }
-
-    if (performance.now() - start > 10_000) {
-      return resolve();
-    }
-
-    requestAnimationFrame(check);
-  };
-
-  check();
+    demoAppCounter += 1;
+  }, 1000);
 }));
 
 function getInterestProcessArgs() {
@@ -119,9 +112,11 @@ export function changeTheme(dirName, demoPath, theme) {
   }
 
   const updatedContent = globalReadFrom(dirName, demoPath, (data) => {
-    const result = data.replace(/data-theme="[^"]+"/g, `data-theme="${theme}"`);
+    let result = data.replace(/data-theme="[^"]+"/g, `data-theme="${theme}"`);
 
-    return result.replace(/dx\.[^.]+(\.css")/g, `dx.${theme}$1`);
+    result = result.replace(/dx\.[^"]+\.css/g, `dx.${theme}.css`);
+
+    return result;
   });
 
   const indexFilePath = join(dirName, demoPath);
@@ -162,7 +157,7 @@ function getExplicitTestsInternal() {
       result.masks.push(patternGroupFromValues(
         groups.product,
         groups.demo,
-        groups.framework,
+        undefined,
       ));
     } else {
       // eslint-disable-next-line no-console
@@ -215,9 +210,6 @@ export function shouldRunTestAtIndex(testIndex) {
 const SKIPPED_TESTS = {
   jQuery: { 
     DataGrid: ['RemoteGrouping'],
-    Charts: [
-      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
-    ],
   },
   Angular: {
     Charts: ['Crosshair'],
@@ -327,10 +319,10 @@ export function runManualTestCore(
     }
 
     const theme = process.env.THEME.replace('generic.', '');
-    testURL = `http://127.0.0.1:808${getPortByIndex(index)}/${widget}/${demo}/${FRAMEWORKS[framework]}/?theme=dx.${theme}`;
+    testURL = `http://127.0.0.1:8080/${widget}/${demo}/${FRAMEWORKS[framework]}/?theme=dx.${theme}`;
   } else {
     changeTheme(__dirname, `../../Demos/${widget}/${demo}/${FRAMEWORKS[framework]}/index.html`, process.env.THEME);
-    testURL = `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widget}/${demo}/${FRAMEWORKS[framework]}/`;
+    testURL = `http://127.0.0.1:8080/apps/demos/Demos/${widget}/${demo}/${FRAMEWORKS[framework]}/`;
   }
   
   const getTestStyles = (demoName) => {
@@ -394,7 +386,7 @@ export function runManualTest(widget, demo, callback) {
 }
 
 export function getPortByIndex(testIndex) {
-  return (settings.total && (Math.floor(testIndex / settings.total) % settings.concurrency)) || 0;
+  return testIndex % (settings.concurrency || 4);
 }
 
 export function updateConfig(customSettings) {
