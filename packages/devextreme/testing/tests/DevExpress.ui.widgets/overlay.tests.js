@@ -2199,6 +2199,27 @@ testModule('hide on outside click', moduleConfig, () => {
         assert.strictEqual(overlay2.option('visible'), false, 'Second overlay is hidden, because of outsideclick');
     });
 
+    test('overlay should handle outside click without errors when content is null', function(assert) {
+        const overlay = $('#overlay').dxOverlay({
+            hideOnOutsideClick: true,
+            visible: true,
+        }).dxOverlay('instance');
+
+        const originalContent = overlay._$content;
+
+        overlay._$content = null;
+
+        try {
+            $(document).trigger('dxpointerdown');
+            assert.ok(true, 'No error when content is null');
+            assert.strictEqual(overlay.option('visible'), false, 'Overlay should hide on outside click when content is null');
+        } catch(e) {
+            assert.ok(false, `Error occurred with null content: ${e.message}`);
+        } finally {
+            overlay._$content = originalContent;
+        }
+    });
+
     test('document events should be unsubscribed at each overlay hiding', function(assert) {
         const $overlay1 = $('#overlay').dxOverlay({
             hideOnOutsideClick: true,
