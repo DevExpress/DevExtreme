@@ -32,7 +32,6 @@ jobs:
 
       - name: Install security lint dependencies
         working-directory: .github/eslint
-        shell: pwsh
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -40,25 +39,29 @@ jobs:
 
       - name: Run ESLint (do not fail job on errors)
         id: eslint
-        shell: pwsh
+        shell: bash
         run: |
-          $targets = Get-Content .\.github\eslint\targets.txt |
-            ForEach-Object { $_.Trim() } |
-            Where-Object { $_ -and -not $_.StartsWith('#') }
-          $eslint = ".github\eslint\node_modules\.bin\eslint.cmd"
+          mapfile -t TARGETS < <(
+            sed 's/^[[:space:]]*//;s/[[:space:]]*$//' .github/eslint/targets.txt \
+            | grep -vE '^\s*#' \
+            | sed '/^\s*$/d'
+          )
 
-          & $eslint $targets `
-            --ext .js,.ts `
-            --config .\.github\eslint\security.config.mjs `
-            --quiet `
-            -f .\.github\eslint\only-problems-html.mjs `
-            -o .\eslint-report.html
+          echo "ESLint targets:"
+          printf '  %s\n' "${TARGETS[@]}"
 
-          $code = $LASTEXITCODE
-          if ($code -ne 0) {
-            Write-Host "::warning::ESLint exited with code $code (issues found). The job will continue."
+          npx --prefix .github/eslint eslint "${TARGETS[@]}" \
+            --ext .js,.ts \
+            --config .github/eslint/security.config.mjs \
+            --quiet \
+            -f .github/eslint/only-problems-html.mjs \
+            -o eslint-report.html
+
+          code=$?
+          if [ "$code" -ne 0 ]; then
+            echo "::warning::ESLint exited with code $code (issues found). The job will continue."
             exit 0
-          }
+          fi
 
       - name: Upload ESLint HTML report
         if: always()
