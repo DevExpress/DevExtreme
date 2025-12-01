@@ -60,11 +60,10 @@ function deleteEmployee(employee: Employee) {
 }
 
 function itemTypeExpr(obj: { type: string; }, value: string) {
-  if (value) {
-    obj.type = value;
-  } else {
+  if (value === undefined) {
     return 'employee';
   }
+  obj.type = value;
   return null;
 }
 

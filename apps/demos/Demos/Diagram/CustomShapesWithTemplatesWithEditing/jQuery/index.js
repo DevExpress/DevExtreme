@@ -63,11 +63,10 @@ $(function () {
       dataSource: store,
       keyExpr: 'ID',
       typeExpr(obj, value) {
-        if (value) {
-          obj.type = value;
-        } else {
+        if (value === undefined) {
           return 'employee';
         }
+        obj.type = value;
         return null;
       },
       parentKeyExpr: 'Head_ID',

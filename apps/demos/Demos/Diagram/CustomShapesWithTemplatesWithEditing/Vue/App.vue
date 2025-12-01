@@ -187,11 +187,10 @@ const currentEmployee = ref({} as Record<string, any>);
 const popupVisible = ref(false);
 
 const itemTypeExpr = (obj: { type: string; }, value: string) => {
-  if (value) {
-    obj.type = value;
-  } else {
+  if (value === undefined) {
     return 'employee';
   }
+  obj.type = value;
   return null;
 };
 function itemCustomDataExpr(obj: Employee, value: Employee) {
