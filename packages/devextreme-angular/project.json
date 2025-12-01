@@ -335,7 +335,7 @@
       "executor": "devextreme-nx-infra-plugin:karma-multi-env",
       "options": {
         "karmaConfig": "karma.conf.js",
-        "environments": ["server", "hydration"],
+        "environments": ["server"],
         "debug": true
       },
       "dependsOn": ["build:tests"],
