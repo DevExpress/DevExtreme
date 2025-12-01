@@ -70,17 +70,17 @@ const Component = forwardRef<ComponentRef, any>(
       extensionCreators.current = [];
     }, [props.clearExtensions]);
 
+    const createWidgetRef = useRef(createWidget);
+    const clearExtensionsRef = useRef(clearExtensions);
+
     useLayoutEffect(() => {
       createWidget();
       createExtensions();
 
       return () => {
-        clearExtensions();
+        clearExtensionsRef.current?.();
       };
     }, []);
-
-    const createWidgetRef = useRef(createWidget);
-    const clearExtensionsRef = useRef(clearExtensions);
 
     useLayoutEffect(() => {
       createWidgetRef.current = createWidget;
