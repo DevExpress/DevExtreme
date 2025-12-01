@@ -56,8 +56,13 @@ export class AppComponent {
     });
   }
 
-  itemTypeExpr() {
-    return 'employee';
+  itemTypeExpr(obj, value) {
+    if (value) {
+      obj.type = value;
+    } else {
+      return 'employee';
+    }
+    return null;
   }
 
   itemCustomDataExpr(obj, value) {
