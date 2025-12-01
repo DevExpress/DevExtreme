@@ -59,7 +59,7 @@ function deleteEmployee(employee: Employee) {
   dataSource.push([{ type: 'remove', key: employee.ID }]);
 }
 
-function itemTypeExpr(obj, value) {
+function itemTypeExpr(obj: { type: string; }, value: string) {
   if (value) {
     obj.type = value;
   } else {

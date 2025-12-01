@@ -186,7 +186,7 @@ const dataSource = new ArrayStore({
 const currentEmployee = ref({} as Record<string, any>);
 const popupVisible = ref(false);
 
-const itemTypeExpr = (obj, value) => {
+const itemTypeExpr = (obj: { type: string; }, value: string) => {
   if (value) {
     obj.type = value;
   } else {
@@ -194,7 +194,7 @@ const itemTypeExpr = (obj, value) => {
   }
   return null;
 };
-function itemCustomDataExpr(obj: any, value: any) {
+function itemCustomDataExpr(obj: Employee, value: Employee) {
   if (value === undefined) {
     return { ...obj };
   }
