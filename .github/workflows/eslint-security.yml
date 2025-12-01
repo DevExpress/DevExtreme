@@ -50,12 +50,15 @@ jobs:
           echo "ESLint targets:"
           printf '  %s\n' "${TARGETS[@]}"
 
+          set +e
           npx --prefix .github/eslint eslint "${TARGETS[@]}" \
             --ext .js,.ts \
             --config .github/eslint/security.config.mjs \
             --quiet \
             -f .github/eslint/only-problems-html.mjs \
             -o eslint-report.html
+          code=$?
+          set -e
 
           code=$?
           if [ "$code" -ne 0 ]; then
