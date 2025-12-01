@@ -23,6 +23,7 @@ const STATUS_ICONS = {
   REFRESH: '🔄',
   DOCUMENTATION: '📋',
   CLOCK: '⏱️',
+  DEBUG: '🕵🏻‍♂️',
 } as const;
 
 interface TestResult {
@@ -89,18 +90,20 @@ function createTestConfig(
   options: KarmaMultiEnvExecutorSchema,
 ): KarmaConfigOptions {
   const isSingleRun = !options.debug && !options.watch;
-  const isWatchMode = options.debug || options.watch;
 
-  return {
+  const config = {
     ...baseConfig,
     files: [{ pattern: shimPath, watched: false }],
     preprocessors: { [shimPath]: ['webpack'] },
     singleRun: isSingleRun,
-    autoWatch: isWatchMode || false,
+    autoWatch: options.watch || false,
     plugins: baseConfig.plugins,
-    browsers: isWatchMode ? ['Chrome'] : baseConfig.browsers || ['ChromeHeadless'],
+    browsers:
+      options.watch || options.debug ? ['Chrome'] : baseConfig.browsers || ['ChromeHeadless'],
     logLevel: baseConfig.logLevel || 'info',
   };
+
+  return config;
 }
 
 function createExecutionOrder(
@@ -338,29 +341,6 @@ const createWatchModeCallback = (
   };
 };
 
-const setupWatchModeEvents = (environment: KarmaEnvironment, server: any): void => {
-  if (!server.on || typeof server.on !== 'function') return;
-
-  server.on('browsers_ready', () => {
-    logger.info(
-      `\n${STATUS_ICONS.WATCH} Watch mode active - browsers ready and watching for file changes...`,
-    );
-  });
-
-  server.on('run_complete', (_browsers: any, results: any) => {
-    const statusIcon = results.success ? STATUS_ICONS.SUCCESS : STATUS_ICONS.FAILURE;
-    const statusText = results.success ? 'All tests passed' : 'Some tests failed';
-
-    logger.info(`\n[${environment.toUpperCase()}] Test run completed. Success: ${results.success}`);
-    logger.info(`${statusIcon} ${statusText} in watch mode - continuing to watch...`);
-    logger.info('Press CTRL+C to stop watching...');
-  });
-
-  server.on('file_list_modified', () => {
-    logger.info(`\n${STATUS_ICONS.REFRESH} File changes detected, re-running tests...`);
-  });
-};
-
 const setupSignalHandlers = (server: any): void => {
   const handleExit = (signal: string) => {
     logger.info(`\n${STATUS_ICONS.STOP} Received ${signal} - stopping watch mode...`);
@@ -373,27 +353,6 @@ const setupSignalHandlers = (server: any): void => {
   process.on(SIGNALS.SIGINT, () => handleExit(SIGNALS.SIGINT));
   process.on(SIGNALS.SIGTERM, () => handleExit(SIGNALS.SIGTERM));
 };
-
-async function executeWatchMode(
-  environment: KarmaEnvironment,
-  config: KarmaConfigOptions,
-  _projectRoot: string,
-): Promise<TestResult> {
-  const startTime = Date.now();
-
-  return new Promise<TestResult>((resolve) => {
-    const server = createKarmaServer(config, (exitCode: number) => {
-      const callback = createWatchModeCallback(environment, startTime, server, resolve);
-      callback(exitCode);
-    });
-
-    setupWatchModeEvents(environment, server);
-    setupSignalHandlers(server);
-
-    logger.info(`\n${STATUS_ICONS.START} Starting Karma server in watch mode...`);
-    server.start();
-  });
-}
 
 async function loadKarmaConfig(
   projectRoot: string,
@@ -415,10 +374,19 @@ async function loadKarmaConfig(
   }
 }
 
-type ExecutionMode = 'watch' | 'single';
+type ExecutionMode = 'watch' | 'single' | 'debug';
 
-const getExecutionMode = (options: KarmaMultiEnvExecutorSchema): ExecutionMode =>
-  options.watch ? 'watch' : 'single';
+const getExecutionMode = (options: KarmaMultiEnvExecutorSchema): ExecutionMode => {
+  if (options.watch) {
+    return 'watch';
+  }
+
+  if (options.debug) {
+    return 'debug';
+  }
+
+  return 'single';
+};
 
 const shouldStopExecution = (result: TestResult, isWatchMode: boolean): boolean =>
   !isWatchMode && !result.success;
@@ -489,17 +457,49 @@ const logTestResults = (
   }
 };
 
-const runExecutor: PromiseExecutor<KarmaMultiEnvExecutorSchema> = async (options, context) => {
-  const projectRoot = resolveProjectPath(context);
-  const environments = options.environments || DEFAULT_ENVIRONMENTS;
+const setupWatchModeEvents = (environment: KarmaEnvironment, server: any): void => {
+  if (!server.on || typeof server.on !== 'function') return;
 
-  const executionMode = getExecutionMode(options);
-  if (executionMode === 'watch') {
-    return await handleWatchMode(options, context, projectRoot);
-  }
+  server.on('browsers_ready', () => {
+    logger.info(
+      `\n${STATUS_ICONS.WATCH} Watch mode active - browsers ready and watching for file changes...`,
+    );
+  });
 
-  return await handleSingleExecution(options, context, projectRoot, environments);
+  server.on('run_complete', (_browsers: any, results: any) => {
+    const statusIcon = results.success ? STATUS_ICONS.SUCCESS : STATUS_ICONS.FAILURE;
+    const statusText = results.success ? 'All tests passed' : 'Some tests failed';
+
+    logger.info(`\n[${environment.toUpperCase()}] Test run completed. Success: ${results.success}`);
+    logger.info(`${statusIcon} ${statusText} in watch mode - continuing to watch...`);
+    logger.info('Press CTRL+C to stop watching...');
+  });
+
+  server.on('file_list_modified', () => {
+    logger.info(`\n${STATUS_ICONS.REFRESH} File changes detected, re-running tests...`);
+  });
 };
+
+async function executeWatchMode(
+  environment: KarmaEnvironment,
+  config: KarmaConfigOptions,
+  _projectRoot: string,
+): Promise<TestResult> {
+  const startTime = Date.now();
+
+  return new Promise<TestResult>((resolve) => {
+    const server = createKarmaServer(config, (exitCode: number) => {
+      const callback = createWatchModeCallback(environment, startTime, server, resolve);
+      callback(exitCode);
+    });
+
+    setupWatchModeEvents(environment, server);
+    setupSignalHandlers(server);
+
+    logger.info(`\n${STATUS_ICONS.START} Starting Karma server in watch mode...`);
+    server.start();
+  });
+}
 
 const handleWatchMode = async (
   options: KarmaMultiEnvExecutorSchema,
@@ -519,6 +519,56 @@ const handleWatchMode = async (
 
     logTestResults(summary, plan, options);
     return { success: result.success, result: summary };
+  } catch (error) {
+    logger.error(`\n${STATUS_ICONS.ERROR} Test execution failed: ${error.message}`);
+    return { success: false, error: error.message };
+  }
+};
+
+const setupDebugModeEvents = (environment: KarmaEnvironment, server: any): void => {
+  if (!server.on || typeof server.on !== 'function') return;
+
+  server.on('browsers_ready', () => {
+    logger.info(
+      `\n${STATUS_ICONS.DEBUG} Debug mode for the ${environment} environment is active. Click the "DEBUG" button in the opened browser window to start debugging.`,
+    );
+    logger.info('Press CTRL+C to stop debugging...');
+  });
+};
+
+async function launchDebugMode(
+  environment: KarmaEnvironment,
+  config: KarmaConfigOptions,
+  _projectRoot: string,
+): Promise<TestResult> {
+  return new Promise<TestResult>((resolve) => {
+    const server = createKarmaServer(config, (exitCode: number) => {
+      resolve({ success: exitCode === 0, environment, duration: 0 });
+    });
+
+    setupDebugModeEvents(environment, server);
+    setupSignalHandlers(server);
+
+    logger.info(`\n${STATUS_ICONS.START} Starting Karma server in debug mode...`);
+    server.start();
+  });
+}
+
+const handleDebugMode = async (
+  options: KarmaMultiEnvExecutorSchema,
+  _context: any,
+  projectRoot: string,
+  environments: KarmaEnvironment[],
+): Promise<{ success: boolean; result?: TestSummary; error?: string }> => {
+  try {
+    const baseConfig = await loadKarmaConfig(projectRoot, options.karmaConfig);
+    const envConfig = ENVIRONMENT_CONFIGS[environments[0]];
+    const shimPath = path.join(projectRoot, envConfig.shimPath);
+    const config = createTestConfig(baseConfig, shimPath, options);
+
+    const result = await launchDebugMode(environments[0], config, projectRoot);
+
+    return { success: result.success };
   } catch (error) {
     logger.error(`\n${STATUS_ICONS.ERROR} Test execution failed: ${error.message}`);
     return { success: false, error: error.message };
@@ -569,6 +619,30 @@ const handleSingleExecution = async (
     logger.error(`\n${STATUS_ICONS.ERROR} Test execution failed: ${error.message}`);
     return { success: false, error: error.message };
   }
+};
+
+const runExecutor: PromiseExecutor<KarmaMultiEnvExecutorSchema> = async (options, context) => {
+  const projectRoot = resolveProjectPath(context);
+  const environments = options.environments || DEFAULT_ENVIRONMENTS;
+
+  const executionMode = getExecutionMode(options);
+  if (executionMode === 'watch') {
+    return await handleWatchMode(options, context, projectRoot);
+  }
+
+  if (executionMode === 'debug') {
+    if (options.environments && options.environments.length > 1) {
+      logger.error(
+        `Debug mode supports only a single environment, please specify one environment. Current environments: ${options.environments.join(', ')}`,
+      );
+
+      return Promise.resolve({ success: false });
+    }
+
+    return await handleDebugMode(options, context, projectRoot, environments);
+  }
+
+  return await handleSingleExecution(options, context, projectRoot, environments);
 };
 
 export default runExecutor;
