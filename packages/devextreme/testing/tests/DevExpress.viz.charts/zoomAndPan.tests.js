@@ -5,6 +5,7 @@ import 'viz/chart';
 
 const CHART_SVG_SELECTOR = 'svg.dxc.dxc-chart';
 const TOOLTIP_CLASS = 'dxc-tooltip';
+const SCROLL_PREVENTION_TIMEOUT = 500;
 
 const dataSource = (() => {
     const arr = [];
@@ -3209,6 +3210,57 @@ QUnit.test('Default behavior - no prevent. On mouse wheel', function(assert) {
     assert.equal(preventDefault.callCount, 0);
     assert.equal(stopPropagation.callCount, 0);
     assert.equal(this.trackerStopHandling.callCount, 0);
+});
+
+QUnit.test('On mouse wheel. Should prevent scroll page after max zoom level reached (T1314606)', function(assert) {
+    const preventDefault = sinon.spy();
+    const stopPropagation = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const wholeRange = { startValue: 0, endValue: 5 };
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 0.1,
+                endValue: 4.9
+            },
+            wholeRange,
+        },
+        zoomAndPan: {
+            argumentAxis: 'zoom',
+            allowMouseWheel: true
+        },
+        onZoomEnd: onZoomEnd
+    });
+
+    const $root = $(chart._renderer.root.element);
+
+    $root.trigger(new $.Event('dxmousewheel', { d: -10, pageX: 200, pageY: 250, preventDefault: preventDefault, stopPropagation: stopPropagation }));
+
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, wholeRange, 'chart zoomed out to wholeRange');
+    assert.strictEqual(preventDefault.callCount, 1, 'after zoom e.preventDefault called');
+    assert.strictEqual(stopPropagation.callCount, 1, 'after zoom e.stopPropagation called');
+    assert.strictEqual(this.trackerStopHandling.callCount, 1, 'chart stopped wheel event handling');
+
+    this.clock.tick(SCROLL_PREVENTION_TIMEOUT / 2);
+    $root.trigger(new $.Event('dxmousewheel', { d: -10, pageX: 200, pageY: 250, preventDefault: preventDefault, stopPropagation: stopPropagation }));
+
+    assert.equal(preventDefault.callCount, 2, 'e.preventDefault called');
+    assert.equal(stopPropagation.callCount, 2, 'e.stopPropagation called');
+    assert.equal(this.trackerStopHandling.callCount, 1, 'chart not passed event handling in SCROLL_PREVENTION_TIMEOUT window after zoom');
+
+    this.clock.tick(SCROLL_PREVENTION_TIMEOUT - 10);
+    $root.trigger(new $.Event('dxmousewheel', { d: -10, pageX: 200, pageY: 250, preventDefault: preventDefault, stopPropagation: stopPropagation }));
+
+    assert.equal(preventDefault.callCount, 3, 'e.preventDefault called');
+    assert.equal(stopPropagation.callCount, 3, 'e.stopPropagation called');
+    assert.equal(this.trackerStopHandling.callCount, 1, 'chart not passed event handling in SCROLL_PREVENTION_TIMEOUT window after last wheel event on chart');
+
+    this.clock.tick(SCROLL_PREVENTION_TIMEOUT + 10);
+    $root.trigger(new $.Event('dxmousewheel', { d: -10, pageX: 200, pageY: 250, preventDefault: preventDefault, stopPropagation: stopPropagation }));
+
+    assert.equal(preventDefault.callCount, 3, 'chart not prevents event handling after SCROLL_PREVENTION_TIMEOUT expires, e.preventDefault not called');
+    assert.equal(stopPropagation.callCount, 3, 'chart not prevent event propagation after SCROLL_PREVENTION_TIMEOUT expires, e.stopPropagation not called');
+    assert.equal(this.trackerStopHandling.callCount, 1, 'chart._stopCurrentHandling not called after SCROLL_PREVENTION_TIMEOUT window');
 });
 
 QUnit.test('On pinch zoom', function(assert) {
