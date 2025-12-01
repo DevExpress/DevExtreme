@@ -1,22 +1,7 @@
-const NG_BASE_DIR = '../../packages/devextreme-angular/node_modules/';
+const NG_BASE_DIR = './node_modules/';
 const OUTPUT_DIR = './bundles/';
 
 export default [
-  // animations
-  {
-    input: NG_BASE_DIR + `@angular/animations/fesm2022/animations.mjs`,
-    output: {
-      file: OUTPUT_DIR + `@angular/animations.umd.js`,
-      format: "umd",
-      name: "ng.animations",
-      globals: {
-        "@angular/animations": "ng.animations",
-        "@angular/common": "ng.common",
-        "@angular/core": "ng.core",
-      },
-    },
-    external: ["@angular/core", "@angular/common"],
-  },
   // common
   {
     input: NG_BASE_DIR + "@angular/common/fesm2022/common.mjs",
@@ -87,21 +72,6 @@ export default [
     },
     external: ["rxjs", "rxjs/operators", "zone.js"],
   },
-  {
-    input: NG_BASE_DIR + "@angular/core/fesm2022/primitives/di.mjs",
-    output: {
-      file: OUTPUT_DIR + `@angular/core.primitives.di.umd.js`,
-      format: "umd",
-      name: "ng.core.primitives.di",
-      globals: {
-        "@angular/core": "ng.core",
-        rxjs: "rxjs",
-        "rxjs/operators": "rxjs.operators",
-      },
-    },
-    external: ["rxjs", "rxjs/operators", "zone.js"],
-  },
-
   // forms
   {
     input: NG_BASE_DIR + "@angular/forms/fesm2022/forms.mjs",
