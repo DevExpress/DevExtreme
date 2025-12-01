@@ -16,7 +16,7 @@ jobs:
   lint:
     env:
       SECURITY_LINT: "1"
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     timeout-minutes: 30
 
     steps:
@@ -27,8 +27,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
-          cache-dependency-path: .github/eslint/package-lock.json
 
       - name: Install security lint dependencies
         working-directory: .github/eslint
@@ -40,13 +38,23 @@ jobs:
       - name: Run ESLint (do not fail job on errors)
         id: eslint
         shell: bash
-        run: |
+        run: |          
+          if [ ! -f .github/eslint/targets.txt ]; then
+            echo "::warning::.github/eslint/targets.txt not found, skipping ESLint."
+            exit 0
+          fi
+          
           mapfile -t TARGETS < <(
             sed 's/^[[:space:]]*//;s/[[:space:]]*$//' .github/eslint/targets.txt \
             | grep -vE '^\s*#' \
             | sed '/^\s*$/d'
           )
 
+          if [ "${#TARGETS[@]}" -eq 0 ]; then
+            echo "::warning::No targets in .github/eslint/targets.txt, skipping ESLint."
+            exit 0
+          fi
+          
           echo "ESLint targets:"
           printf '  %s\n' "${TARGETS[@]}"
 
