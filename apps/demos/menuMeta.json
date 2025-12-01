@@ -4360,7 +4360,9 @@
             "Widget": "Form",
             "MvcDescription": "",
             "NetCoreDescription": "",
-            "MvcAdditionalFiles": [],
+            "MvcAdditionalFiles": [
+              "/ViewModels/FormViewModel.cs"
+            ],
             "DemoType": "Web",
             "Badge": "New",
             "Modules": "openai"
