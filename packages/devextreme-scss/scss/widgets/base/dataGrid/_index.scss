@@ -13,7 +13,7 @@ $datagrid-text-stub-background-image-path: null !default;
 
 @use "sass:color";
 @use "../mixins" as *;
-@use "../icons" as *;
+@use "../icon_fonts" as *;
 @use "./common";
 @use "./variables" as *;
 
