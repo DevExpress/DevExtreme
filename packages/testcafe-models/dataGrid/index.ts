@@ -55,7 +55,7 @@ export const CLASS = {
 
   overlayContent: 'dx-overlay-content',
   overlayWrapper: 'dx-overlay-wrapper',
-  loadPanelWrapper: 'dx-loadpanel-wrapper',
+  loadPanel: 'dx-loadpanel',
   revertTooltip: 'revert-tooltip',
   invalidMessage: 'invalid-message',
 
@@ -264,7 +264,7 @@ export default class DataGrid extends GridCore {
   }
 
   getLoadPanel(): LoadPanel {
-    return new LoadPanel(this.element.find(`.${CLASS.loadPanelWrapper}`));
+    return new LoadPanel(this.element.find(`.${CLASS.loadPanel}`));
   }
 
   getConfirmDeletionButton(): Selector {
@@ -562,6 +562,8 @@ export default class DataGrid extends GridCore {
       const dataGrid = getInstance() as any;
       return dataGrid.getVisibleRows().map((r) => ({
         key: r.key,
+        data: r.data,
+        dataIndex: r.dataIndex,
         rowType: r.rowType,
       }));
     }, { dependencies: { getInstance } })();
@@ -709,7 +711,6 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-
   apiFocus(): Promise<void> {
     const { getInstance } = this;
 
@@ -720,6 +721,15 @@ export default class DataGrid extends GridCore {
           getInstance,
         },
       },
+    )();
+  }
+
+  apiPageIndex(): Promise<number> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).pageIndex(),
+      { dependencies: { getInstance } },
     )();
   }
 
