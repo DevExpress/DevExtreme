@@ -104,7 +104,10 @@ jobs:
     runs-on: devextreme-shr2
     name: Build DevExtreme
     needs: [check-should-run, determine-framework-tests-scope]
-    if: needs.check-should-run.outputs.should-run == 'true'
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success'
     env:
       NODE_OPTIONS: --max-old-space-size=8192
     timeout-minutes: 20
@@ -190,7 +193,12 @@ jobs:
     name: Build Demos Bundles
     timeout-minutes: 20
     needs: [check-should-run, determine-framework-tests-scope, build-devextreme]
-    if: needs.check-should-run.outputs.should-run == 'true' && needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&
+      needs.build-devextreme.result == 'success'
     env:
       NODE_OPTIONS: --max-old-space-size=8192
 
@@ -257,7 +265,12 @@ jobs:
   check-ts:
     name: Check TS
     needs: [check-should-run, determine-framework-tests-scope, build-devextreme]
-    if: needs.check-should-run.outputs.should-run == 'true' && needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&
+      needs.build-devextreme.result == 'success'
     runs-on: devextreme-shr2
     timeout-minutes: 20
 
@@ -313,7 +326,12 @@ jobs:
   lint:
     name: Lint code base
     needs: [check-should-run, determine-framework-tests-scope, build-devextreme]
-    if: needs.check-should-run.outputs.should-run == 'true' && needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&
+      needs.build-devextreme.result == 'success'
 
     runs-on: devextreme-shr2
     timeout-minutes: 60
@@ -375,7 +393,12 @@ jobs:
     runs-on: devextreme-shr2
     timeout-minutes: 10
     needs: [check-should-run, build-devextreme, determine-framework-tests-scope]
-    if: needs.check-should-run.outputs.should-run == 'true' && needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&
+      needs.build-devextreme.result == 'success'
 
     steps:
     - name: Get sources
@@ -465,7 +488,10 @@ jobs:
 
   testcafe-jquery:
     needs: [check-should-run, build-devextreme]
-    if: needs.check-should-run.outputs.should-run == 'true'
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.build-devextreme.result == 'success'
     strategy:
       fail-fast: false
       matrix:
@@ -614,7 +640,12 @@ jobs:
 
   testcafe-frameworks-all:
     needs: [check-should-run, determine-framework-tests-scope, build-demos]
-    if: needs.check-should-run.outputs.should-run == 'true' && needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'all'
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'all' &&
+      needs.build-demos.result == 'success'
     strategy:
       fail-fast: false
       matrix:
@@ -757,7 +788,12 @@ jobs:
 
   testcafe-frameworks-changed:
     needs: [check-should-run, determine-framework-tests-scope, build-demos]
-    if: needs.check-should-run.outputs.should-run == 'true' && needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'changed'
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'changed' &&
+      needs.build-demos.result == 'success'
     strategy:
       fail-fast: false
       matrix:
