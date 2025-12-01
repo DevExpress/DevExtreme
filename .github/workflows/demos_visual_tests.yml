@@ -78,7 +78,10 @@ jobs:
     runs-on: devextreme-shr2
     name: Determine scope for framework tests
     needs: [check-should-run, get-changes]
-    if: needs.check-should-run.outputs.should-run == 'true'
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      (needs.get-changes.result == 'success' || needs.get-changes.result == 'skipped')
     outputs:
       framework-tests-scope: ${{ steps.determine.outputs.framework-tests-scope }}
 
