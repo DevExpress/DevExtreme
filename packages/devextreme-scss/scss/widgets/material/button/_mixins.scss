@@ -4,7 +4,7 @@
 @use "../sizes" as *;
 @use "colors" as *;
 @use "../colors" as *;
-@use "../../base/icons" as *;
+@use "../../base/icon_fonts" as *;
 @use "../../base/button/mixins" as *;
 
 @mixin dx-button-onlyicon-sizing($icon-size: $material-button-icon-size) {
