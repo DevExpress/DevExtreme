@@ -131,35 +131,4 @@ export default class AppointmentPopup {
       .selectText(SELECTORS.dayOfMonthInput)
       .typeText(SELECTORS.dayOfMonthInput, day.toString(), { replace: true });
   }
-
-  async setRecurrenceEnd(
-    t: TestController,
-    type: 'never' | 'count' | 'until',
-    value?: number | string,
-  ): Promise<void> {
-    if (type === 'never') {
-      const neverRadio = this.recurrence.endRadioGroup.find('.dx-radiobutton').nth(0);
-      await t.click(neverRadio);
-    } else if (type === 'until') {
-      const untilRadio = this.recurrence.endRadioGroup.find('.dx-radiobutton').nth(1);
-      await t.click(untilRadio);
-
-      if (value !== undefined) {
-        const untilEditor = this.recurrence.endInputGroup.find('[type="text"]').nth(0);
-        await t
-          .selectText(untilEditor)
-          .typeText(untilEditor, value.toString(), { replace: true });
-      }
-    } else if (type === 'count') {
-      const countRadio = this.recurrence.endRadioGroup.find('.dx-radiobutton').nth(2);
-      await t.click(countRadio);
-
-      if (value !== undefined) {
-        const countEditor = this.recurrence.endInputGroup.find('[type="text"]').nth(1);
-        await t
-          .selectText(countEditor)
-          .typeText(countEditor, value.toString(), { replace: true });
-      }
-    }
-  }
 }
