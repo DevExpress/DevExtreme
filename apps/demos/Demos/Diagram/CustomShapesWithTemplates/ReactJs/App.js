@@ -10,8 +10,13 @@ const dataSource = new ArrayStore({
   key: 'ID',
   data: employees,
 });
-function itemTypeExpr(obj) {
-  return `employee${obj.ID}`;
+function itemTypeExpr(obj, value) {
+  if (value) {
+    obj.type = value;
+  } else {
+    return `employee${obj.ID}`;
+  }
+  return null;
 }
 export default function App() {
   const [currentEmployee, setCurrentEmployee] = useState({});
