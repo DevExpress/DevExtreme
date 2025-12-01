@@ -69,11 +69,11 @@ const currentEmployee = ref({} as Record<string, any>);
 const popupVisible = ref(false);
 const itemTypeExpr = (obj: { ID: number; type: string; }, value: string) => {
   if (value) {
-      obj.type = value;
-    } else {
-      return `employee${obj.ID}`;
-    }
-    return null;
+    obj.type = value;
+  } else {
+    return `employee${obj.ID}`;
+  }
+  return null;
 };
 
 function showInfo(employee: any) {
