@@ -81,10 +81,10 @@ class ValidationMessage extends Overlay<ValidationMessageProperties> {
   _toggleVisibilityClasses(visible): void {
     if (visible) {
       this.$element().addClass(INVALID_MESSAGE);
-      this.$wrapper().addClass(INVALID_MESSAGE);
+      this.$wrapper()?.addClass(INVALID_MESSAGE);
     } else {
       this.$element().removeClass(INVALID_MESSAGE);
-      this.$wrapper().removeClass(INVALID_MESSAGE);
+      this.$wrapper()?.removeClass(INVALID_MESSAGE);
     }
   }
 
@@ -93,7 +93,7 @@ class ValidationMessage extends Overlay<ValidationMessageProperties> {
     const id = contentId ?? $(container).attr('aria-describedby');
 
     this.$content()
-      .addClass(INVALID_MESSAGE_CONTENT)
+      ?.addClass(INVALID_MESSAGE_CONTENT)
       .attr('id', id);
   }
 
@@ -118,7 +118,7 @@ class ValidationMessage extends Overlay<ValidationMessageProperties> {
   _toggleModeClass(): void {
     const { mode } = this.option();
     this.$wrapper()
-      .toggleClass(INVALID_MESSAGE_AUTO, mode === 'auto')
+      ?.toggleClass(INVALID_MESSAGE_AUTO, mode === 'auto')
       .toggleClass(INVALID_MESSAGE_ALWAYS, mode === 'always');
   }
 

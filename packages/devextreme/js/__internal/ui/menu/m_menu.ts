@@ -455,12 +455,12 @@ class Menu extends MenuBase {
     this._overlay = this._createComponent($('<div>'), Overlay, this._getAdaptiveOverlayOptions());
     // @ts-expect-error
     this._overlay.$content()
-      .append(this._treeView.$element())
+      ?.append(this._treeView.$element())
       .addClass(DX_ADAPTIVE_MODE_CLASS)
       .addClass(this.option('cssClass'));
 
     // @ts-expect-error
-    this._overlay.$wrapper().addClass(DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS);
+    this._overlay.$wrapper()?.addClass(DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS);
 
     this._$adaptiveContainer.append($hamburger);
     this._$adaptiveContainer.append(this._overlay.$element());
@@ -743,7 +743,7 @@ class Menu extends MenuBase {
 
   _submenuMouseLeaveHandler($rootItem: dxElementWrapper, eventArgs): void {
     const target = $(eventArgs.relatedTarget).parents(`.${DX_CONTEXT_MENU_CLASS}`)[0];
-    const contextMenu = this._getSubmenuByRootElement($rootItem).getOverlayContent()[0];
+    const contextMenu = this._getSubmenuByRootElement($rootItem).getOverlayContent()?.[0];
 
     if (this.option('hideSubmenuOnMouseLeave') && target !== contextMenu) {
       this._clearTimeouts();
@@ -758,8 +758,8 @@ class Menu extends MenuBase {
 
     // @ts-expect-error
     const isRootItemHovered = $(this._visibleSubmenu.$element().context).hasClass(DX_STATE_HOVER_CLASS);
-    const isSubmenuItemHovered = this._visibleSubmenu.getOverlayContent().find(`.${DX_STATE_HOVER_CLASS}`).length;
-    const hoveredElementFromSubMenu = this._visibleSubmenu.getOverlayContent().get(0).querySelector(':hover');
+    const isSubmenuItemHovered = this._visibleSubmenu.getOverlayContent()?.find(`.${DX_STATE_HOVER_CLASS}`).length;
+    const hoveredElementFromSubMenu = this._visibleSubmenu.getOverlayContent()?.get(0).querySelector(':hover');
 
     if (!hoveredElementFromSubMenu && !isSubmenuItemHovered && !isRootItemHovered) {
       this._visibleSubmenu.hide();

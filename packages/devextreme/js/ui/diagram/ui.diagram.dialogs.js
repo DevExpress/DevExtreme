@@ -101,8 +101,8 @@ class DiagramDialog extends Widget {
     }
     _show() {
         this._popup
-            .$content()
-            .empty()
+            ?.$content()
+            ?.empty()
             .append(this._onGetContentAction());
         this._popup.show();
         this._isShown = true;

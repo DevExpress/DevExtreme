@@ -41,7 +41,10 @@ class SliderTooltipPositionController extends PopoverPositionController {
     const isLeftSide = collisionSide === 'left';
 
     const offset = (isLeftSide ? 1 : -1) * oversize;
-    move(this._$content, { left: left + offset });
+
+    if (this._$content) {
+      move(this._$content, { left: left + offset });
+    }
 
     this._updateVisualPositionValue();
   }

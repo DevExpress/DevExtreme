@@ -90,7 +90,9 @@ class PopupPositionController extends OverlayPositionController {
 
   positionContent(): void {
     if (this._props.fullScreen) {
-      move(this._$content, { top: 0, left: 0 });
+      if (this._$content) {
+        move(this._$content, { top: 0, left: 0 });
+      }
       this.detectVisualPositionChange();
     } else {
       this._props.forceApplyBindings?.();
@@ -99,14 +101,20 @@ class PopupPositionController extends OverlayPositionController {
     }
   }
 
+  clean(): void {
+    this._$dragResizeContainer = undefined;
+    super.clean();
+  }
+
   _updateDragResizeContainer(): void {
     this._$dragResizeContainer = this._getDragResizeContainer();
   }
 
-  _getDragResizeContainer(): dxElementWrapper {
+  _getDragResizeContainer(): dxElementWrapper | undefined {
     if (this._props.dragOutsideBoundary) {
       return $(window);
     }
+
     if (this._props.dragAndResizeArea) {
       return $(this._props.dragAndResizeArea);
     }

@@ -239,7 +239,7 @@ class SpeedDialMainItem extends SpeedDialItem {
       actions[i].option('animation', this._getActionAnimation(actions[i], i, lastActionIndex));
       actions[i].option('position', this._getActionPosition(actions, i));
       // @ts-expect-error
-      actions[i]._$wrapper.css('position', this._$wrapper.css('position'));
+      actions[i]._$wrapper?.css('position', this._$wrapper?.css('position'));
       actions[i].toggle();
     }
 
@@ -353,7 +353,7 @@ class SpeedDialMainItem extends SpeedDialItem {
 
   _outsideClickHandler(e): void {
     if (this._isShadingShown) {
-      const isShadingClick = $(e.target)[0] === this._$wrapper[0];
+      const isShadingClick = $(e.target)[0] === this._$wrapper?.[0];
 
       if (isShadingClick) {
         e.preventDefault();
@@ -374,7 +374,7 @@ class SpeedDialMainItem extends SpeedDialItem {
     return this._getDefaultOptions().position;
   }
 
-  _getInkRippleContainer() {
+  _getInkRippleContainer(): dxElementWrapper | undefined | null {
     return this.$content();
   }
 

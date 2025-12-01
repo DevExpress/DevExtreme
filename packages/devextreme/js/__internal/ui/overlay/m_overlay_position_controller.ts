@@ -32,15 +32,15 @@ const OVERLAY_DEFAULT_BOUNDARY_OFFSET = { h: 0, v: 0 };
 class OverlayPositionController {
   _props: any;
 
-  _$root: dxElementWrapper;
+  _$root?: dxElementWrapper;
 
-  _$content: dxElementWrapper;
+  _$content?: dxElementWrapper;
 
-  _$wrapper: dxElementWrapper;
+  _$wrapper?: dxElementWrapper;
 
-  _$markupContainer!: dxElementWrapper;
+  _$markupContainer?: dxElementWrapper;
 
-  _$visualContainer!: dxElementWrapper;
+  _$visualContainer?: dxElementWrapper;
 
   _shouldRenderContentInitialPosition: boolean;
 
@@ -74,9 +74,7 @@ class OverlayPositionController {
     this._$root = $root;
     this._$content = $content;
     this._$wrapper = $wrapper;
-    // @ts-expect-error ts-error
     this._$markupContainer = undefined;
-    // @ts-expect-error ts-error
     this._$visualContainer = undefined;
 
     this._shouldRenderContentInitialPosition = true;
@@ -89,13 +87,13 @@ class OverlayPositionController {
     this.updateVisualContainer(visualContainer);
   }
 
-  get $container() {
+  get $container(): dxElementWrapper | undefined {
     this.updateContainer(); // NOTE: swatch classes can be updated runtime
 
     return this._$markupContainer;
   }
 
-  get $visualContainer(): dxElementWrapper {
+  get $visualContainer(): dxElementWrapper | undefined {
     return this._$visualContainer;
   }
 
@@ -156,7 +154,9 @@ class OverlayPositionController {
     if (this._shouldRenderContentInitialPosition) {
       this._renderContentInitialPosition();
     } else {
-      move(this._$content, this._visualPosition);
+      if (this._$content) {
+        move(this._$content, this._visualPosition);
+      }
       this.detectVisualPositionChange();
     }
   }
@@ -168,30 +168,42 @@ class OverlayPositionController {
   }
 
   styleWrapperPosition(): void {
-    const useFixed = isWindow(this.$visualContainer.get(0)) || this._props._fixWrapperPosition;
+    const useFixed = isWindow(this.$visualContainer?.get(0)) || this._props._fixWrapperPosition;
 
     const positionStyle = useFixed ? 'fixed' : 'absolute';
-    this._$wrapper.css('position', positionStyle);
+    this._$wrapper?.css('position', positionStyle);
+  }
+
+  clean(): void {
+    this._$root = undefined;
+    this._$content = undefined;
+    this._$wrapper = undefined;
+    this._$markupContainer = undefined;
+    this._$visualContainer = undefined;
   }
 
   _updateVisualPositionValue(): void {
     this._previousVisualPosition = this._visualPosition;
-    this._visualPosition = locate(this._$content);
+    if (this._$content) {
+      this._visualPosition = locate(this._$content);
+    }
   }
 
   _renderContentInitialPosition(): void {
     this._renderBoundaryOffset();
-    resetPosition(this._$content);
+    if (this._$content) {
+      resetPosition(this._$content);
+    }
     // @ts-expect-error ts-error
-    const wrapperOverflow = this._$wrapper.css('overflow');
-    this._$wrapper.css('overflow', 'hidden');
+    const wrapperOverflow = this._$wrapper?.css('overflow');
+    this._$wrapper?.css('overflow', 'hidden');
 
     if (!this._props._skipContentPositioning) {
       const resultPosition = positionUtils.setup(this._$content, this._position);
       this._initialPosition = resultPosition;
     }
     // @ts-expect-error ts-error
-    this._$wrapper.css('overflow', wrapperOverflow);
+    this._$wrapper?.css('overflow', wrapperOverflow);
     this.detectVisualPositionChange();
   }
 
@@ -218,7 +230,7 @@ class OverlayPositionController {
   _renderBoundaryOffset(): void {
     const boundaryOffset = this._position ?? { boundaryOffset: OVERLAY_DEFAULT_BOUNDARY_OFFSET };
 
-    this._$content.css('margin', `${boundaryOffset.v}px ${boundaryOffset.h}px`);
+    this._$content?.css('margin', `${boundaryOffset.v}px ${boundaryOffset.h}px`);
   }
 
   _getVisualContainer(): dxElementWrapper {

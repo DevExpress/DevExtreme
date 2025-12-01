@@ -3277,3 +3277,85 @@ QUnit.module('positioning', {
         });
     });
 });
+
+QUnit.module('Memory Leaks', {
+    beforeEach: function() {
+        executeAsyncMock.setup();
+        this.$element = $('#popup');
+
+        this.getPositionController = (instance) => {
+            return instance._positionController;
+        };
+    },
+    afterEach: function() {
+        this.$element.remove();
+        executeAsyncMock.teardown();
+    }
+}, () => {
+    QUnit.test('should clear topToolbar reference on dispose', function(assert) {
+        const instance = $('#popup').dxPopup({
+            visible: true,
+            title: 'Test Title',
+        }).dxPopup('instance');
+
+        assert.notStrictEqual(instance.topToolbar(), undefined, 'topToolbar exists before dispose');
+
+        instance.dispose();
+
+        assert.strictEqual(instance.topToolbar(), undefined, 'topToolbar() returns undefined after dispose');
+    });
+
+    QUnit.test('should clear bottomToolbar reference on dispose', function(assert) {
+        const instance = $('#popup').dxPopup({
+            visible: true,
+            toolbarItems: [{
+                toolbar: 'bottom',
+                widget: 'dxButton',
+                options: { text: 'OK' },
+            }],
+        }).dxPopup('instance');
+
+        assert.notStrictEqual(instance.bottomToolbar(), undefined, 'bottomToolbar exists before dispose');
+
+        instance.dispose();
+
+        assert.strictEqual(instance.bottomToolbar(), undefined, 'bottomToolbar() returns undefined after dispose');
+    });
+
+    QUnit.test('should clear $content reference on dispose', function(assert) {
+        const instance = $('#popup').dxPopup({
+            visible: true,
+            contentTemplate: function() {
+                return $('<div>').text('Test Content');
+            },
+        }).dxPopup('instance');
+
+        assert.notStrictEqual(instance.$content(), undefined, 'content exists before dispose');
+
+        instance.dispose();
+
+        assert.strictEqual(instance.$content(), undefined, '$content() returns undefined after dispose');
+    });
+
+    QUnit.test('should clear PopupPositionController references on dispose', function(assert) {
+        const instance = $('#popup').dxPopup({
+            visible: true,
+            dragEnabled: true,
+        }).dxPopup('instance');
+
+        const positionController = this.getPositionController(instance);
+
+        assert.ok(positionController._$content, 'PositionController._$content exists before dispose');
+
+        instance.dispose();
+
+        assert.strictEqual(
+            positionController._$dragResizeContainer,
+            undefined,
+            'PopupPositionController._$dragResizeContainer is undefined after dispose',
+        );
+        assert.strictEqual(positionController._$content, undefined, 'PositionController._$content is undefined after dispose');
+        assert.strictEqual(positionController._$wrapper, undefined, 'PositionController._$wrapper is undefined after dispose');
+        assert.strictEqual(positionController._$root, undefined, 'PositionController._$root is undefined after dispose');
+    });
+});

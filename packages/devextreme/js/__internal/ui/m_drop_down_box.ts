@@ -226,8 +226,13 @@ class DropDownBox<
     if (!(contentTemplate && this.option('contentTemplate'))) {
       return;
     }
-    // @ts-expect-error ts-error
-    const $popupContent = this._popup.$content();
+
+    const $popupContent = this._popup?.$content();
+
+    if (!$popupContent) {
+      return;
+    }
+
     const templateData = {
       value: this._fieldRenderData(),
       component: this,
