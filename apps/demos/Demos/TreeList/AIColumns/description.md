@@ -1,4 +1,4 @@
-DevExtreme TreeList supports AI columns. These columns augment your data and transform our TreeList into an AI-powered data exploration tool. This demo implements an AI column (fixed on the right side of the component) to display one additional AI-generated data field. You can also integrate multiple AI columns to expand the scope of generated insights.
+DevExtreme TreeList allows you to create one or multiple AI columns. These columns generate meaningful cell values based on component data and a custom prompt, transforming DevExtreme TreeList into an AI-augmented data exploration tool. In this demo, an AI column is fixed on the right side of the component.
 
 <!--split-->
 
@@ -14,8 +14,8 @@ This demo implements a prompt that instructs AI to identify the department of ea
 
 To integrate an AI column into your DevExtreme TreeList, you must:
 
-- Configure [aiIntegration](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/#aiIntegration) (or **columns[]**.**ai**.[aiIntegration](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/ai/#aiIntegration)).
-- Set a column's [type](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/#type) to *"ai"*.
+- Configure the **aiIntegration** property at the component or column level ([aiIntegration](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/#aiIntegration) or **columns[]**.**ai**.[aiIntegration](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/ai/#aiIntegration)).
+- Set the column [type](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/#type) to *"ai"*.
 - Specify the column [name](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/#name).
 - Configure **columns[]**.**ai** options, such as generation [mode](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/ai/#mode), predefined [prompt](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/ai/#prompt), and [no data text](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/ai/#noDataText) (displayed when the AI service returns no data for a row).
 
