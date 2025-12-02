@@ -13,7 +13,7 @@ $base-focus-color: null !default;
 
 @use "sass:color";
 @use "../mixins" as *;
-@use "../icons" as *;
+@use "../icon_fonts" as *;
 @use "./common" as *;
 @use "./expandable" as *;
 
