@@ -1,8 +1,6 @@
+import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  NgModule, Component, enableProdMode, ViewChild,
-} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+  Component, enableProdMode, ViewChild, provideZoneChangeDetection } from '@angular/core';
 import { DxTextBoxModule, DxSwitchModule } from 'devextreme-angular';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
@@ -20,12 +18,17 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  standalone: false,
   selector: 'demo-app',
   providers: [Service],
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   preserveWhitespaces: true,
+  imports: [
+    DxVectorMapModule,
+    DxSelectBoxModule,
+    DxSwitchModule,
+    DxTextBoxModule,
+  ],
 })
 
 export class AppComponent {
@@ -57,17 +60,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxVectorMapModule,
-    DxSelectBoxModule,
-    DxSwitchModule,
-    DxTextBoxModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});
