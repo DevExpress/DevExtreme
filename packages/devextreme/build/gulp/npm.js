@@ -57,7 +57,7 @@ const distGlobsPattern = (jsFolder, exclude) => [
     `!${jsFolder}/cldr*`,
     `!${jsFolder}/globalize/*.*`,
     `!${jsFolder}/globalize*`,
-    `!${jsFolder}/exceljs*`,
+    `!${jsFolder}/dx-exceljs-fork*`,
     `!${jsFolder}/file-saver*`,
     `!${jsFolder}/jquery*`,
     `!${jsFolder}/jspdf*`,
@@ -127,6 +127,19 @@ const sources = (src, dist, distGlob) => (() => merge(
                 delete pkg.devDependencies;
                 delete pkg.publishConfig;
                 delete pkg.scripts;
+
+                pkg.exports = {
+                    "./common": {
+                        "import": "./esm/common.js",
+                            "require": "./cjs/common.js",
+                            "types": "./common.d.ts"
+                    },
+                    "./common/ai-integration": {
+                        "import": "./esm/common/ai-integration.js",
+                            "require": "./cjs/common/ai-integration.js",
+                            "types": "./common/ai-integration.d.ts"
+                    }
+                }
 
                 file.contents = Buffer.from(JSON.stringify(pkg, null, 2));
                 callback(null, file);

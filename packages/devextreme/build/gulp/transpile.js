@@ -100,19 +100,12 @@ const createModuleConfig = (name, dir, filePath, dist) => {
         sideEffects: sideEffectFiles.length ? sideEffectFiles : false,
         main: normalize(cjsFile),
         module: normalize(esmFile),
-        exports: {
-            ".": {
-                "import": normalize(esmFile),
-                "require": normalize(cjsFile),
-            }
-        }
     };
 
     if(hasDTS) {
         const typingFile = name.replace(/\.js$/, '.d.ts');
 
         result['typings'] = `${isIndex ? './' : '../'}${typingFile}`;
-        result.exports['types'] = `${isIndex ? './' : '../'}${typingFile}`;
     }
 
     return JSON.stringify(result, null, 2);
