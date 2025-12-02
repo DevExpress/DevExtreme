@@ -183,7 +183,13 @@ export class AdaptiveColumnsController extends modules.ViewController {
       }
     });
     const rowData = cellOptions.row.data;
-    const value = column.calculateCellValue(rowData);
+    let value;
+    if (column.type === 'ai') {
+      const columnIndex = that._columnsController.getVisibleIndex(column.index);
+      value = cellOptions.row.values[columnIndex];
+    } else {
+      value = column.calculateCellValue(rowData);
+    }
     const displayValue = gridCoreUtils.getDisplayValue(column, value, rowData, cellOptions.rowType);
     const text = gridCoreUtils.formatValue(displayValue, column);
     const isCellOrBatchEditMode = this._editingController.isCellOrBatchEditMode();
