@@ -61,7 +61,7 @@ $(() => {
     const name = `${TrademarkName} ${Name}`;
     const vehicleName = $('<div>').addClass('vehicle__name').text(name).attr('title', name);
 
-    const priceText = card.fields.find(f => f.column.dataField === 'Price')?.text;
+    const priceText = card.fields.find((f) => f.column.dataField === 'Price')?.text;
     const priceInfo = $('<div>').addClass('vehicle__price').text(priceText);
 
     const typeContainer = $('<div>').addClass('vehicle__type-container');
@@ -76,7 +76,7 @@ $(() => {
     specContainer.append(bodyInfo);
     specContainer.append(horsepowerInfo);
 
-    const popupContentTemplate = function() {
+    const popupContentTemplate = function () {
       const sourceLink = `https://${Source}`;
       return $('<div>').append(
         $('<p>')
@@ -89,9 +89,9 @@ $(() => {
           .append($('<b>').text('Source link: '))
           .append(
             $('<a>', {
-                href: sourceLink,
-                target: '_blank',
-              })
+              href: sourceLink,
+              target: '_blank',
+            })
               .text(sourceLink),
           ),
         $('<p>')
@@ -123,7 +123,7 @@ $(() => {
     return vehicleInfo;
   };
 
-  $(function () {
+  $(() => {
     $('#card-view').dxCardView({
       dataSource: vehicles,
       height: 1120,
@@ -146,7 +146,7 @@ $(() => {
           format: 'currency',
           headerFilter: {
             groupInterval: 20000,
-          }
+          },
         },
         {
           dataField: 'CategoryName',
@@ -165,9 +165,7 @@ $(() => {
       searchPanel: {
         visible: true,
       },
-      cardTemplate: (info) => {
-        return createVehicleCard(info.card);
-      },
+      cardTemplate: (info) => createVehicleCard(info.card),
     });
   });
 });

@@ -2,28 +2,7 @@ import React, { useCallback, useState } from 'react';
 import FilterBuilder, { type FilterBuilderTypes } from 'devextreme-react/filter-builder';
 import Button from 'devextreme-react/button';
 import DataGrid from 'devextreme-react/data-grid';
-import { DataSource, ODataStore } from 'devextreme-react/common/data';
-import { filter, fields } from './data.ts';
-
-const dataSource = new DataSource({
-  store: new ODataStore({
-    version: 2,
-    fieldTypes: {
-      Product_Cost: 'Decimal',
-      Product_Sale_Price: 'Decimal',
-      Product_Retail_Price: 'Decimal',
-    },
-    url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
-  }),
-  select: [
-    'Product_ID',
-    'Product_Name',
-    'Product_Cost',
-    'Product_Sale_Price',
-    'Product_Retail_Price',
-    'Product_Current_Inventory',
-  ],
-});
+import { filter, fields, columns, products } from './data.ts';
 
 const App = () => {
   const [value, setValue] = useState(filter);
@@ -45,10 +24,10 @@ const App = () => {
         <div className="dx-clearfix"></div>
       </div>
       <DataGrid
-        dataSource={dataSource}
+        dataSource={products}
         filterValue={gridFilterValue}
         showBorders={true}
-        columns={fields}
+        columns={columns}
         height={300}
       />
     </div>

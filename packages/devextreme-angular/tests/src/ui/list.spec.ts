@@ -41,6 +41,17 @@ class TestContainerComponent implements AfterViewChecked {
   ngAfterViewChecked() {}
 }
 
+const testData = [
+  {
+    testName: 'legacy',
+    nestedItem: 'dxi-item',
+  },
+  {
+    testName: 'modern',
+    nestedItem: 'dxi-list-item',
+  },
+];
+
 describe('DxList', () => {
   beforeEach(() => {
     TestBed.configureTestingModule(
@@ -121,46 +132,6 @@ describe('DxList', () => {
     optionSpy.calls.reset();
   });
 
-  it('should be able to accept items as a static nested components list', () => {
-    TestBed.overrideComponent(TestContainerComponent, {
-      set: {
-        template: `
-                    <dx-list>
-                        <dxi-item>Item 1</dxi-item>
-                        <dxi-item>Item 2</dxi-item>
-                    </dx-list>
-                `,
-      },
-    });
-    const fixture = TestBed.createComponent(TestContainerComponent);
-    fixture.detectChanges();
-
-    const { instance } = fixture.componentInstance.innerWidget;
-    expect(instance?.option('items')?.length).toBe(2);
-    expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(2);
-    expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('Item 1');
-    expect(instance.element().querySelectorAll('.dx-item-content')[1].textContent).toBe('Item 2');
-  });
-
-  it('should have correct item template', () => {
-    TestBed.overrideComponent(TestContainerComponent, {
-      set: {
-        template: `
-                    <dx-list>
-                        <dxi-item>item</dxi-item>
-                    </dx-list>
-                `,
-      },
-    });
-    const fixture = TestBed.createComponent(TestContainerComponent);
-    fixture.detectChanges();
-
-    const { instance } = fixture.componentInstance.innerWidget;
-    const element = instance.element().querySelector('.dx-item-content');
-    expect(element?.innerHTML).toBe('item');
-    expect(element && window.getComputedStyle(element).display).toBe('block');
-  });
-
   it('should react to item option change', () => {
     TestBed.overrideComponent(TestContainerComponent, {
       set: {
@@ -183,240 +154,327 @@ describe('DxList', () => {
     expect(listItemHasDisabledClass).toBeTruthy();
   });
 
-  it('should use properties of the nested components', () => {
-    TestBed.overrideComponent(TestContainerComponent, {
-      set: {
-        template: `
+  testData.forEach(
+    ({ testName, nestedItem }) => {
+      it(`should be able to accept items as a static nested components list (with ${testName} nested items)`, () => {
+        TestBed.overrideComponent(TestContainerComponent, {
+          set: {
+            template: `
                     <dx-list>
-                        <dxi-item [disabled]="true">Item 1</dxi-item>
-                        <dxi-item>Item 2</dxi-item>
+                        <${nestedItem}>Item 1</${nestedItem}>
+                        <${nestedItem}>Item 2</${nestedItem}>
                     </dx-list>
                 `,
-      },
-    });
-    const fixture = TestBed.createComponent(TestContainerComponent);
-    fixture.detectChanges();
+          },
+        });
+        const fixture = TestBed.createComponent(TestContainerComponent);
+        fixture.detectChanges();
 
-    const { instance } = fixture.componentInstance.innerWidget;
-    expect(instance?.option('items')?.length).toBe(2);
-    expect(instance.element().querySelectorAll('.dx-item').length).toBe(2);
-    expect(instance.element().querySelectorAll('.dx-item.dx-state-disabled').length).toBe(1);
-  });
-
-  it('nested component property bindings work', () => {
-    TestBed.overrideComponent(TestContainerComponent, {
-      set: {
-        template: `
-                    <dx-list>
-                        <dxi-item [disabled]="disabled">Item 1</dxi-item>
-                        <dxi-item>Item 2</dxi-item>
-                    </dx-list>
-                `,
-      },
-    });
-    const fixture = TestBed.createComponent(TestContainerComponent);
-    fixture.detectChanges();
-
-    const testComponent = fixture.componentInstance;
-    const { instance } = testComponent.innerWidget;
-
-    expect(instance.element().querySelectorAll('.dx-item.dx-state-disabled').length).toBe(0);
-
-    testComponent.disabled = true;
-    fixture.detectChanges();
-
-    expect(instance.element().querySelectorAll('.dx-item.dx-state-disabled').length).toBe(1);
-  });
-
-  [
-    { name: '*ngFor', tpl: '<dxi-item *ngFor="let item of items">{{item}}</dxi-item>' },
-    {
-      name: '@for', tpl: `@for (item of items; track item) {
-        <dxi-item>{{item}}</dxi-item>
-     }`,
-    },
-  ].forEach(({ name, tpl }) => {
-    it(`should be able to accept items as an ${name} components list`, () => {
-      TestBed.overrideComponent(TestContainerComponent, {
-        set: {
-          template: `<dx-list>${tpl}</dx-list>`,
-        },
+        const { instance } = fixture.componentInstance.innerWidget;
+        expect(instance?.option('items')?.length).toBe(2);
+        expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(2);
+        expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('Item 1');
+        expect(instance.element().querySelectorAll('.dx-item-content')[1].textContent).toBe('Item 2');
       });
 
-      const fixture = TestBed.createComponent(TestContainerComponent);
+      it(`should have correct item template (with ${testName} nested items)`, () => {
+        TestBed.overrideComponent(TestContainerComponent, {
+          set: {
+            template: `
+                    <dx-list>
+                        <${nestedItem}>item</${nestedItem}>
+                    </dx-list>
+                `,
+          },
+        });
+        const fixture = TestBed.createComponent(TestContainerComponent);
+        fixture.detectChanges();
 
-      fixture.detectChanges();
+        const { instance } = fixture.componentInstance.innerWidget;
+        const element = instance.element().querySelector('.dx-item-content');
+        expect(element?.innerHTML).toBe('item');
+        expect(element && window.getComputedStyle(element).display).toBe('block');
+      });
 
-      const testComponent = fixture.componentInstance; const
-        { instance } = testComponent.innerWidget;
+      it(`should use properties of the nested components (with ${testName} nested items)`, () => {
+        TestBed.overrideComponent(TestContainerComponent, {
+          set: {
+            template: `
+                    <dx-list>
+                        <${nestedItem} [disabled]="true">Item 1</${nestedItem}>
+                        <${nestedItem}>Item 2</${nestedItem}>
+                    </dx-list>
+                `,
+          },
+        });
+        const fixture = TestBed.createComponent(TestContainerComponent);
+        fixture.detectChanges();
 
-      expect(instance?.option('items')?.length).toBe(1);
-      expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(1);
-      expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('1');
+        const { instance } = fixture.componentInstance.innerWidget;
+        expect(instance?.option('items')?.length).toBe(2);
+        expect(instance.element().querySelectorAll('.dx-item').length).toBe(2);
+        expect(instance.element().querySelectorAll('.dx-item.dx-state-disabled').length).toBe(1);
+      });
 
-      testComponent.items.push(2);
+      it(`nested component property bindings work (with ${testName} nested items)`, () => {
+        TestBed.overrideComponent(TestContainerComponent, {
+          set: {
+            template: `
+                    <dx-list>
+                        <${nestedItem} [disabled]="disabled">Item 1</${nestedItem}>
+                        <${nestedItem}>Item 2</${nestedItem}>
+                    </dx-list>
+                `,
+          },
+        });
+        const fixture = TestBed.createComponent(TestContainerComponent);
+        fixture.detectChanges();
 
-      fixture.detectChanges();
+        const testComponent = fixture.componentInstance;
+        const { instance } = testComponent.innerWidget;
 
-      expect(instance?.option('items')?.length).toBe(2);
-      expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(2);
-      expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('1');
-      expect(instance.element().querySelectorAll('.dx-item-content')[1].textContent).toBe('2');
-    });
+        expect(instance.element().querySelectorAll('.dx-item.dx-state-disabled').length).toBe(0);
 
-    it(`should be able to clear items rendered with ${name}`, () => {
-      TestBed.overrideComponent(TestContainerComponent, {
-        set: {
-          template: `<dx-list>
+        testComponent.disabled = true;
+        fixture.detectChanges();
+
+        expect(instance.element().querySelectorAll('.dx-item.dx-state-disabled').length).toBe(1);
+      });
+
+      [
+        { name: '*ngFor', tpl: `<${nestedItem} *ngFor="let item of items">{{item}}</${nestedItem}>` },
+        {
+          name: '@for',
+          tpl: `@for (item of items; track item) {
+        <${nestedItem}>{{item}}</${nestedItem}>
+     }`,
+        },
+      ].forEach(({ name, tpl }) => {
+        it(`should be able to accept items as an ${name} components list (with ${testName} nested items)`, () => {
+          TestBed.overrideComponent(TestContainerComponent, {
+            set: {
+              template: `<dx-list>${tpl}</dx-list>`,
+            },
+          });
+
+          const fixture = TestBed.createComponent(TestContainerComponent);
+
+          fixture.detectChanges();
+
+          const testComponent = fixture.componentInstance; const
+            { instance } = testComponent.innerWidget;
+
+          expect(instance?.option('items')?.length).toBe(1);
+          expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(1);
+          expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('1');
+
+          testComponent.items.push(2);
+
+          fixture.detectChanges();
+
+          expect(instance?.option('items')?.length).toBe(2);
+          expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(2);
+          expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('1');
+          expect(instance.element().querySelectorAll('.dx-item-content')[1].textContent).toBe('2');
+        });
+
+        it(`should be able to clear items rendered with ${name} (with ${testName} nested items)`, () => {
+          TestBed.overrideComponent(TestContainerComponent, {
+            set: {
+              template: `<dx-list>
                         ${tpl}
                     </dx-list>`,
-        },
+            },
+          });
+          const fixture = TestBed.createComponent(TestContainerComponent);
+          fixture.detectChanges();
+
+          const testComponent = fixture.componentInstance;
+          const { instance } = testComponent.innerWidget;
+
+          expect(instance?.option('items')?.length).toBe(1);
+          expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(1);
+          expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('1');
+
+          testComponent.items.pop();
+          expect(testComponent.items.length).toBe(0);
+          fixture.detectChanges();
+
+          expect(instance?.option('items')?.length).toBe(0);
+          expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(0);
+        });
       });
-      const fixture = TestBed.createComponent(TestContainerComponent);
-      fixture.detectChanges();
 
-      const testComponent = fixture.componentInstance;
-      const { instance } = testComponent.innerWidget;
-
-      expect(instance?.option('items')?.length).toBe(1);
-      expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(1);
-      expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('1');
-
-      testComponent.items.pop();
-      expect(testComponent.items.length).toBe(0);
-      fixture.detectChanges();
-
-      expect(instance?.option('items')?.length).toBe(0);
-      expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(0);
-    });
-  });
-
-  [
-    { name: '*ngFor', tpl: '<dxi-item *ngFor="let item of items" [badge]="10">{{item}}</dxi-item>' },
-    {
-      name: '@for', tpl: `@for (item of items; track item) {
-        <dxi-item [badge]="10">{{item}}</dxi-item>
+      [
+        { name: '*ngFor', tpl: `<${nestedItem} *ngFor="let item of items" [badge]="10">{{item}}</${nestedItem}>` },
+        {
+          name: '@for',
+          tpl: `@for (item of items; track item) {
+        <${nestedItem} [badge]="10">{{item}}</${nestedItem}>
      }`,
-    },
-  ].forEach(({ name, tpl }) => {
-    it(`should be able to replace items by ${name}`, () => {
-      TestBed.overrideComponent(TestContainerComponent, {
-        set: {
-          template: `<dx-list>${tpl}</dx-list>`,
         },
+      ].forEach(({ name, tpl }) => {
+        it(`should be able to replace items by ${name} (with ${testName} nested items)`, () => {
+          TestBed.overrideComponent(TestContainerComponent, {
+            set: {
+              template: `<dx-list>${tpl}</dx-list>`,
+            },
+          });
+          const fixture = TestBed.createComponent(TestContainerComponent);
+          const testComponent = fixture.componentInstance;
+
+          testComponent.items = [1, 2];
+          fixture.detectChanges();
+
+          const { instance } = testComponent.innerWidget;
+
+          testComponent.items = [3, 4];
+          fixture.detectChanges();
+
+          expect(instance?.option('items')?.length).toBe(2);
+          expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(2);
+          expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('3');
+          expect(instance.element().querySelectorAll('.dx-item-content')[1].textContent).toBe('4');
+        });
       });
-      const fixture = TestBed.createComponent(TestContainerComponent);
-      const testComponent = fixture.componentInstance;
 
-      testComponent.items = [1, 2];
-      fixture.detectChanges();
-
-      const { instance } = testComponent.innerWidget;
-
-      testComponent.items = [3, 4];
-      fixture.detectChanges();
-
-      expect(instance?.option('items')?.length).toBe(2);
-      expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(2);
-      expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('3');
-      expect(instance.element().querySelectorAll('.dx-item-content')[1].textContent).toBe('4');
-    });
-  });
-
-  [
-    { name: '*ngFor', tpl: '<dxi-item *ngFor="let item of complexItems">{{item.text}}</dxi-item>' },
-    {
-      name: '@for', tpl: `@for (item of complexItems; track item.text) {
-        <dxi-item>{{item.text}}</dxi-item>
+      [
+        { name: '*ngFor', tpl: `<${nestedItem} *ngFor="let item of complexItems">{{item.text}}</${nestedItem}>` },
+        {
+          name: '@for',
+          tpl: `@for (item of complexItems; track item.text) {
+        <${nestedItem}>{{item.text}}</${nestedItem}>
      }`,
-    },
-  ].forEach(({ name, tpl }) => {
-    it(`should respond to items changes rendered with ${name}`, () => {
-      TestBed.overrideComponent(TestContainerComponent, {
-        set: {
-          template: `<dx-list>${tpl}</dx-list>`,
         },
+      ].forEach(({ name, tpl }) => {
+        it(`should respond to items changes rendered with ${name}  (with ${testName} nested items)`, () => {
+          TestBed.overrideComponent(TestContainerComponent, {
+            set: {
+              template: `<dx-list>${tpl}</dx-list>`,
+            },
+          });
+
+          const fixture = TestBed.createComponent(TestContainerComponent);
+
+          fixture.detectChanges();
+
+          const testComponent = fixture.componentInstance;
+          const { instance } = testComponent.innerWidget;
+
+          expect(instance?.option('items')?.length).toBe(1);
+          expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(1);
+          expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('Item 1');
+
+          const optionSpy = spyOn(instance, 'option').and.callThrough();
+
+          fixture.detectChanges();
+
+          expect(instance.option).not.toHaveBeenCalled;
+
+          testComponent.complexItems.push({ text: 'Item 2' });
+
+          fixture.detectChanges();
+
+          expect(instance.option).toHaveBeenCalled;
+          expect(instance?.option('items')?.length).toBe(2);
+          expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(2);
+          expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('Item 1');
+          expect(instance.element().querySelectorAll('.dx-item-content')[1].textContent).toBe('Item 2');
+
+          optionSpy.calls.reset();
+
+          testComponent.complexItems[0].text = 'Changed';
+
+          fixture.detectChanges();
+
+          expect(optionSpy).toHaveBeenCalledTimes(1);
+          expect(optionSpy.calls.allArgs().length).toBe(1);
+          expect(instance?.option('items')?.length).toBe(2);
+          expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(2);
+          expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('Changed');
+          expect(instance.element().querySelectorAll('.dx-item-content')[1].textContent).toBe('Item 2');
+
+          optionSpy.calls.reset();
+        });
       });
 
-      const fixture = TestBed.createComponent(TestContainerComponent);
-
-      fixture.detectChanges();
-
-      const testComponent = fixture.componentInstance;
-      const { instance } = testComponent.innerWidget;
-
-      expect(instance?.option('items')?.length).toBe(1);
-      expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(1);
-      expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('Item 1');
-
-      const optionSpy = spyOn(instance, 'option').and.callThrough();
-
-      fixture.detectChanges();
-
-      expect(instance.option).not.toHaveBeenCalled;
-
-      testComponent.complexItems.push({ text: 'Item 2' });
-
-      fixture.detectChanges();
-
-      expect(instance.option).toHaveBeenCalled;
-      expect(instance?.option('items')?.length).toBe(2);
-      expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(2);
-      expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('Item 1');
-      expect(instance.element().querySelectorAll('.dx-item-content')[1].textContent).toBe('Item 2');
-
-      optionSpy.calls.reset();
-
-      testComponent.complexItems[0].text = 'Changed';
-
-      fixture.detectChanges();
-
-      expect(optionSpy).toHaveBeenCalledTimes(1);
-      expect(optionSpy.calls.allArgs().length).toBe(1);
-      expect(instance?.option('items')?.length).toBe(2);
-      expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(2);
-      expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('Changed');
-      expect(instance.element().querySelectorAll('.dx-item-content')[1].textContent).toBe('Item 2');
-
-      optionSpy.calls.reset();
-    });
-  });
-
-  it('should be able to set option "template" for each item', () => {
-    TestBed.overrideComponent(TestContainerComponent, {
-      set: {
-        template: `
+      it(`should be able to set option "template" for each item (with ${testName} nested items)`, () => {
+        TestBed.overrideComponent(TestContainerComponent, {
+          set: {
+            template: `
                     <dx-list>
-                        <dxi-item [template]="'testTemplate'"></dxi-item>
+                        <${nestedItem} [template]="'testTemplate'"></${nestedItem}>
 
                         <div *dxTemplate="let item of 'testTemplate'">testTemplate</div>
                     </dx-list>
                 `,
-      },
-    });
-    const fixture = TestBed.createComponent(TestContainerComponent);
-    fixture.detectChanges();
+          },
+        });
+        const fixture = TestBed.createComponent(TestContainerComponent);
+        fixture.detectChanges();
 
-    const { instance } = fixture.componentInstance.innerWidget;
-    expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('testTemplate');
-  });
+        const { instance } = fixture.componentInstance.innerWidget;
+        expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('testTemplate');
+      });
 
-  it('should be able to define item without template', () => {
-    TestBed.overrideComponent(TestContainerComponent, {
-      set: {
-        template: `
+      it(`should be able to define item without template (with ${testName} nested items)`, () => {
+        TestBed.overrideComponent(TestContainerComponent, {
+          set: {
+            template: `
                     <dx-list>
-                        <dxi-item text="TestText"></dxi-item>
+                        <${nestedItem} text="TestText"></${nestedItem}>
                     </dx-list>
                 `,
-      },
-    });
-    const fixture = TestBed.createComponent(TestContainerComponent);
-    fixture.detectChanges();
+          },
+        });
+        const fixture = TestBed.createComponent(TestContainerComponent);
+        fixture.detectChanges();
 
-    const { instance } = fixture.componentInstance.innerWidget;
-    expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('TestText');
-  });
+        const { instance } = fixture.componentInstance.innerWidget;
+        expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('TestText');
+      });
+
+      it(`should use item template to render/rerender an item with a template (T532675) (with ${testName} nested items)`, () => {
+        const ngTemplateName = Number(VERSION.major) >= 4 ? 'ng-template' : 'template';
+
+        TestBed.configureTestingModule({
+          declarations: [TestContainerComponent],
+          imports: [DxButtonModule, DxListModule],
+        });
+
+        TestBed.overrideComponent(TestContainerComponent, {
+          set: {
+            template: `
+                    <dx-list>
+                        <${nestedItem}>
+                            <dx-button *dxTemplate></dx-button>
+                        </${nestedItem}>
+                        <${nestedItem}>
+                            <${ngTemplateName} dxTemplate>
+                                <dx-button></dx-button>
+                            </${ngTemplateName}>
+                        </${nestedItem}>
+                    </dx-list>
+                `,
+          },
+        });
+
+        const fixture = TestBed.createComponent(TestContainerComponent);
+        fixture.detectChanges();
+
+        const { instance } = fixture.componentInstance.innerWidget;
+        let elements = instance.element().querySelectorAll('.dx-button');
+        expect(DxButton.getInstance(elements[0])).not.toBeUndefined();
+        expect(DxButton.getInstance(elements[1])).not.toBeUndefined();
+
+        instance.repaint();
+        fixture.detectChanges();
+        elements = instance.element().querySelectorAll('.dx-button');
+        expect(DxButton.getInstance(elements[0])).not.toBeUndefined();
+        expect(DxButton.getInstance(elements[1])).not.toBeUndefined();
+      });
+    },
+  );
 
   it('should destroy angular components inside template', () => {
     let destroyed = false;
@@ -530,45 +588,5 @@ describe('DxList', () => {
     fixture.detectChanges();
 
     expect(fixture.componentInstance.buttonDestroyed).toBe(true);
-  });
-
-  it('should use item template to render/rerender an item with a template (T532675)', () => {
-    const ngTemplateName = Number(VERSION.major) >= 4 ? 'ng-template' : 'template';
-
-    TestBed.configureTestingModule({
-      declarations: [TestContainerComponent],
-      imports: [DxButtonModule, DxListModule],
-    });
-
-    TestBed.overrideComponent(TestContainerComponent, {
-      set: {
-        template: `
-                    <dx-list>
-                        <dxi-item>
-                            <dx-button *dxTemplate></dx-button>
-                        </dxi-item>
-                        <dxi-item>
-                            <${ngTemplateName} dxTemplate>
-                                <dx-button></dx-button>
-                            </${ngTemplateName}>
-                        </dxi-item>
-                    </dx-list>
-                `,
-      },
-    });
-
-    const fixture = TestBed.createComponent(TestContainerComponent);
-    fixture.detectChanges();
-
-    const { instance } = fixture.componentInstance.innerWidget;
-    let elements = instance.element().querySelectorAll('.dx-button');
-    expect(DxButton.getInstance(elements[0])).not.toBeUndefined();
-    expect(DxButton.getInstance(elements[1])).not.toBeUndefined();
-
-    instance.repaint();
-    fixture.detectChanges();
-    elements = instance.element().querySelectorAll('.dx-button');
-    expect(DxButton.getInstance(elements[0])).not.toBeUndefined();
-    expect(DxButton.getInstance(elements[1])).not.toBeUndefined();
   });
 });

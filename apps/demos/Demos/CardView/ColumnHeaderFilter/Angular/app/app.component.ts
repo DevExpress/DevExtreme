@@ -32,7 +32,7 @@ export class AppComponent {
       });
       return results;
     };
-  };
+  }
 
   saleAmountHeaderFilterDataSource = [
     {

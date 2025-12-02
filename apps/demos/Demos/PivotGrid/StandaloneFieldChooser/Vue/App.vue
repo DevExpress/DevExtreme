@@ -17,7 +17,7 @@
         :height="400"
         :layout="layout"
         :apply-changes-mode="applyChangesMode"
-        :state="state"
+        v-model:state="state"
       >
         <DxTexts
           all-fields="All"
@@ -113,7 +113,7 @@ const dataSource = new PivotGridDataSource({
         enabled: true,
       },
     },
-    selector(data) {
+    selector(data: Record<string, unknown>) {
       return `${data.city} (${data.country})`;
     },
   }, {

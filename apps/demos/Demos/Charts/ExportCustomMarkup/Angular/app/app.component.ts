@@ -43,8 +43,8 @@ export class AppComponent {
       svgToCanvas(svg, canvas) {
         return new Promise((resolve) => {
           const v = Canvg.fromString(
-              canvas.getContext("2d"),
-              new XMLSerializer().serializeToString(svg)
+            canvas.getContext('2d'),
+            new XMLSerializer().serializeToString(svg)
           );
 
           resolve(v.render());

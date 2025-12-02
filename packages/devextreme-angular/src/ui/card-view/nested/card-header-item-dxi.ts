@@ -26,10 +26,11 @@ import {
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-card-view-card-header-item',
@@ -37,7 +38,14 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost]
+    providers: [
+        NestedOptionHost,
+        DxTemplateHost,
+        {
+           provide: PROPERTY_TOKEN_items,
+           useExisting: DxiCardViewCardHeaderItemComponent,
+        }
+    ]
 })
 export class DxiCardViewCardHeaderItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {

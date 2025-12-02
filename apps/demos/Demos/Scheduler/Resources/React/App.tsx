@@ -35,12 +35,14 @@ const App = () => {
           fieldExpr="roomId"
           label="Room"
           useColorAsDefault={currentResource === 'Room'}
+          icon="conferenceroomoutline"
         />
         <Resource
           dataSource={priorities}
           fieldExpr="priorityId"
           label="Priority"
           useColorAsDefault={currentResource === 'Priority'}
+          icon="tags"
         />
         <Resource
           dataSource={assignees}
@@ -48,6 +50,7 @@ const App = () => {
           fieldExpr="assigneeId"
           label="Assignee"
           useColorAsDefault={currentResource === 'Assignee'}
+          icon="user"
         />
       </Scheduler>
       <div className="options">

@@ -11,7 +11,7 @@ const employees = [{
   'Birth_Date': '1972-07-11T00:00:00',
   'Hire_Date': '2007-12-18T00:00:00',
   'Department': 'Management',
-  'State': 'California'
+  'State': 'California',
 }, {
   'ID': 4,
   'First_Name': 'Robert',
@@ -25,7 +25,7 @@ const employees = [{
   'Birth_Date': '1974-09-07T00:00:00',
   'Hire_Date': '2002-11-08T00:00:00',
   'Department': 'Management',
-  'State': 'California'
+  'State': 'California',
 }, {
   'ID': 5,
   'First_Name': 'Greta',
@@ -39,7 +39,7 @@ const employees = [{
   'Birth_Date': '1977-11-22T00:00:00',
   'Hire_Date': '1998-04-23T00:00:00',
   'Department': 'Human Resources',
-  'State': 'California'
+  'State': 'California',
 }, {
   'ID': 6,
   'First_Name': 'Brett',
@@ -53,7 +53,7 @@ const employees = [{
   'Birth_Date': '1968-12-01T00:00:00',
   'Hire_Date': '2009-03-06T00:00:00',
   'Department': 'IT',
-  'State': 'California'
+  'State': 'California',
 }, {
   'ID': 7,
   'First_Name': 'Sandra',
@@ -67,7 +67,7 @@ const employees = [{
   'Birth_Date': '1974-11-15T00:00:00',
   'Hire_Date': '2005-05-11T00:00:00',
   'Department': 'Human Resources',
-  'State': 'California'
+  'State': 'California',
 }, {
   'ID': 10,
   'First_Name': 'Kevin',
@@ -81,7 +81,7 @@ const employees = [{
   'Birth_Date': '1978-01-09T00:00:00',
   'Hire_Date': '2009-08-11T00:00:00',
   'Department': 'Shipping',
-  'State': 'California'
+  'State': 'California',
 }, {
   'ID': 14,
   'First_Name': 'Victor',
@@ -95,7 +95,7 @@ const employees = [{
   'Birth_Date': '1986-07-23T00:00:00',
   'Hire_Date': '2012-07-23T00:00:00',
   'Department': 'Shipping',
-  'State': 'California'
+  'State': 'California',
 }, {
   'ID': 15,
   'First_Name': 'Mary',
@@ -109,7 +109,7 @@ const employees = [{
   'Birth_Date': '1982-04-08T00:00:00',
   'Hire_Date': '2012-08-12T00:00:00',
   'Department': 'Shipping',
-  'State': 'California'
+  'State': 'California',
 }, {
   'ID': 16,
   'First_Name': 'Robin',
@@ -123,7 +123,7 @@ const employees = [{
   'Birth_Date': '1981-06-12T00:00:00',
   'Hire_Date': '2012-09-01T00:00:00',
   'Department': 'Shipping',
-  'State': 'California'
+  'State': 'California',
 }, {
   'ID': 17,
   'First_Name': 'Kelly',
@@ -137,7 +137,7 @@ const employees = [{
   'Birth_Date': '1988-05-11T00:00:00',
   'Hire_Date': '2012-10-13T00:00:00',
   'Department': 'Support',
-  'State': 'California'
+  'State': 'California',
 }, {
   'ID': 18,
   'First_Name': 'James',
@@ -151,7 +151,7 @@ const employees = [{
   'Birth_Date': '1987-01-29T00:00:00',
   'Hire_Date': '2012-10-18T00:00:00',
   'Department': 'Support',
-  'State': 'California'
+  'State': 'California',
 }, {
   'ID': 20,
   'First_Name': 'Olivia',
@@ -165,7 +165,7 @@ const employees = [{
   'Birth_Date': '1981-06-03T00:00:00',
   'Hire_Date': '2012-05-14T00:00:00',
   'Department': 'Sales',
-  'State': 'California'
+  'State': 'California',
 }, {
   'ID': 21,
   'First_Name': 'Taylor',
@@ -179,7 +179,7 @@ const employees = [{
   'Birth_Date': '1982-08-14T00:00:00',
   'Hire_Date': '2012-04-14T00:00:00',
   'Department': 'IT',
-  'State': 'California'
+  'State': 'California',
 }, {
   'ID': 22,
   'First_Name': 'Amelia',
@@ -193,7 +193,7 @@ const employees = [{
   'Birth_Date': '1983-11-19T00:00:00',
   'Hire_Date': '2011-02-10T00:00:00',
   'Department': 'IT',
-  'State': 'California'
+  'State': 'California',
 }, {
   'ID': 25,
   'First_Name': 'Karen',
@@ -207,7 +207,7 @@ const employees = [{
   'Birth_Date': '1987-04-26T00:00:00',
   'Hire_Date': '2011-03-14T00:00:00',
   'Department': 'IT',
-  'State': 'California'
+  'State': 'California',
 }, {
   'ID': 26,
   'First_Name': 'Marcus',
@@ -221,7 +221,7 @@ const employees = [{
   'Birth_Date': '1982-03-02T00:00:00',
   'Hire_Date': '2005-05-19T00:00:00',
   'Department': 'Human Resources',
-  'State': 'California'
+  'State': 'California',
 }, {
   'ID': 28,
   'First_Name': 'Morgan',
@@ -235,7 +235,7 @@ const employees = [{
   'Birth_Date': '1984-07-17T00:00:00',
   'Hire_Date': '2012-01-11T00:00:00',
   'Department': 'IT',
-  'State': 'California'
+  'State': 'California',
 }, {
   'ID': 29,
   'First_Name': 'Violet',
@@ -249,7 +249,7 @@ const employees = [{
   'Birth_Date': '1985-06-10T00:00:00',
   'Hire_Date': '2012-01-19T00:00:00',
   'Department': 'IT',
-  'State': 'California'
+  'State': 'California',
 }, {
   'ID': 32,
   'First_Name': 'Bart',
@@ -263,7 +263,7 @@ const employees = [{
   'Birth_Date': '1979-11-01T00:00:00',
   'Hire_Date': '2008-06-29T00:00:00',
   'Department': 'Engineering',
-  'State': 'California'
+  'State': 'California',
 }, {
   'ID': 33,
   'First_Name': 'Leah',
@@ -277,7 +277,7 @@ const employees = [{
   'Birth_Date': '1983-04-19T00:00:00',
   'Hire_Date': '2009-02-14T00:00:00',
   'Department': 'Engineering',
-  'State': 'California'
+  'State': 'California',
 }, {
   'ID': 36,
   'First_Name': 'Samantha',
@@ -291,7 +291,7 @@ const employees = [{
   'Birth_Date': '1984-12-01T00:00:00',
   'Hire_Date': '2008-01-22T00:00:00',
   'Department': 'Engineering',
-  'State': 'California'
+  'State': 'California',
 }, {
   'ID': 38,
   'First_Name': 'Terry',
@@ -305,7 +305,7 @@ const employees = [{
   'Birth_Date': '1984-01-09T00:00:00',
   'Hire_Date': '2007-10-18T00:00:00',
   'Department': 'Engineering',
-  'State': 'California'
+  'State': 'California',
 }, {
   'ID': 40,
   'First_Name': 'Lucy',
@@ -319,7 +319,7 @@ const employees = [{
   'Birth_Date': '1986-08-09T00:00:00',
   'Hire_Date': '2006-07-19T00:00:00',
   'Department': 'Sales',
-  'State': 'California'
+  'State': 'California',
 }, {
   'ID': 44,
   'First_Name': 'Clark',
@@ -333,7 +333,7 @@ const employees = [{
   'Birth_Date': '1988-04-07T00:00:00',
   'Hire_Date': '2012-04-11T00:00:00',
   'Department': 'Sales',
-  'State': 'California'
+  'State': 'California',
 }, {
   'ID': 45,
   'First_Name': 'Todd',
@@ -347,7 +347,7 @@ const employees = [{
   'Birth_Date': '1987-03-25T00:00:00',
   'Hire_Date': '2012-04-19T00:00:00',
   'Department': 'Sales',
-  'State': 'California'
+  'State': 'California',
 }, {
   'ID': 47,
   'First_Name': 'Lincoln',
@@ -361,7 +361,7 @@ const employees = [{
   'Birth_Date': '1990-08-02T00:00:00',
   'Hire_Date': '2012-05-11T00:00:00',
   'Department': 'Sales',
-  'State': 'California'
+  'State': 'California',
 }, {
   'ID': 48,
   'First_Name': 'Brad',
@@ -375,7 +375,7 @@ const employees = [{
   'Birth_Date': '1991-03-17T00:00:00',
   'Hire_Date': '2010-04-15T00:00:00',
   'Department': 'Engineering',
-  'State': 'California'
+  'State': 'California',
 }, {
   'ID': 50,
   'First_Name': 'Dallas',
@@ -389,7 +389,7 @@ const employees = [{
   'Birth_Date': '1994-08-19T00:00:00',
   'Hire_Date': '2012-06-18T00:00:00',
   'Department': 'Shipping',
-  'State': 'California'
+  'State': 'California',
 }, {
   'ID': 51,
   'First_Name': 'Stu',
@@ -403,5 +403,5 @@ const employees = [{
   'Birth_Date': '1985-09-11T00:00:00',
   'Hire_Date': '2011-07-19T00:00:00',
   'Department': 'Engineering',
-  'State': 'California'
+  'State': 'California',
 }];

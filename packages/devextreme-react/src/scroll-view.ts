@@ -39,7 +39,7 @@ const ScrollView = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const independentEvents = useMemo(() => (["onDisposing","onInitialized","onPullDown","onReachBottom","onScroll","onUpdated"]), []);
 

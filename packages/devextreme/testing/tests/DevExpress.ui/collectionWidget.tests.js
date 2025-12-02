@@ -8,6 +8,7 @@ import Store from 'data/abstract_store';
 import ArrayStore from 'common/data/array_store';
 import { setTemplateEngine } from 'core/templates/template_engine_registry';
 import support from '__internal/core/utils/m_support';
+import pointerEvents from 'common/core/events/pointer';
 import holdEvent from 'common/core/events/hold';
 import CollectionWidget from 'ui/collection/ui.collection_widget.edit';
 import List from 'ui/list';
@@ -16,13 +17,18 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 
-const ITEM_CLASS = 'dx-item';
+import {
+    ITEM_CLASS,
+} from '__internal/ui/collection/collection_widget.base';
+import {
+    FOCUSED_STATE_CLASS,
+    ACTIVE_STATE_CLASS,
+} from '__internal/core/widget/widget';
+
 const ITEM_CONTENT_CLASS = `${ITEM_CLASS}-content`;
 const DEFAULT_EMPTY_TEXT = 'No data to display';
 const EMPTY_MESSAGE_CLASS = 'dx-empty-message';
 const COLLECTION_CLASS = 'dx-collection';
-const FOCUSED_ITEM_CLASS = 'dx-state-focused';
-const ACTIVE_ITEM_CLASS = 'dx-state-active';
 const ITEM_CUSTOM_CLASS = 'item';
 
 const { module, test, testInActiveWindow } = QUnit;
@@ -31,9 +37,9 @@ class TestComponent extends CollectionWidget {
     constructor(element, options) {
         super(element, options);
         this.NAME = 'TestComponent';
-        this._activeStateUnit = '.item';
     }
 
+    _activeStateUnit() { return '.item'; }
     _itemClass() { return ITEM_CUSTOM_CLASS; }
     _itemDataKey() { return '123'; }
     _itemContainer() { return this.$element(); }
@@ -90,7 +96,6 @@ module('render', {
         this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
-        executeAsyncMock.teardown();
         this.clock.restore();
     }
 }, () => {
@@ -532,6 +537,7 @@ module('render', {
         });
 
         assert.equal(this.element.find('.' + EMPTY_MESSAGE_CLASS).length, 0);
+        executeAsyncMock.teardown();
     });
 
     test('No data text message - value', function(assert) {
@@ -870,7 +876,7 @@ module('events', {
 
         pointer.start().down();
         this.clock.tick(30);
-        assert.ok(!$item.hasClass(ACTIVE_ITEM_CLASS), 'active state was not toggled for disabled item');
+        assert.ok(!$item.hasClass(ACTIVE_STATE_CLASS), 'active state was not toggled for disabled item');
     });
 
     test('item should not have focus-state class after focusin by mousedown event, if it is disabled', function(assert) {
@@ -883,10 +889,10 @@ module('events', {
 
         const $item = $element.find('.item').eq(0);
 
-        $item.trigger('dxpointerdown');
+        $item.trigger(pointerEvents.down);
         this.clock.tick();
 
-        assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), 'focus state was not toggled for disabled item');
+        assert.ok(!$item.hasClass(FOCUSED_STATE_CLASS), 'focus state was not toggled for disabled item');
     });
 
     test('Action should be fired when item is held', function(assert) {
@@ -1140,9 +1146,9 @@ module('events', {
 
         const $secondItem = $element.find(`.${ITEM_CUSTOM_CLASS}`).eq(1);
 
-        $secondItem.trigger('dxpointerdown');
+        $secondItem.trigger(pointerEvents.down);
         this.clock.tick(10);
-        assert.strictEqual($secondItem.hasClass(FOCUSED_ITEM_CLASS), true);
+        assert.strictEqual($secondItem.hasClass(FOCUSED_STATE_CLASS), true);
     });
 });
 
@@ -1158,14 +1164,18 @@ module('option change', () => {
     });
 
     test('user defined selectedItem with null value should be more important than default selected index', function(assert) {
-        const TestCollection = CollectionWidget.inherit({
-            NAME: 'TestCollection',
+        class TestCollection extends CollectionWidget {
+            ctor(element, options) {
+                this.NAME = 'TestCollection';
+                super.ctor(element, options);
+            }
+
             _getDefaultOptions() {
-                return $.extend(this.callBase(), {
+                return $.extend(super._getDefaultOptions(), {
                     selectedIndex: 0
                 });
             }
-        });
+        }
 
         const instance = new TestCollection($('#cmp'), {
             items: [1, 2, 3],
@@ -1256,11 +1266,11 @@ module('keyboard navigation', {
 
         $element.focusin();
         keyboard.keyDown('left');
-        assert.ok($lastItem.hasClass(FOCUSED_ITEM_CLASS), 'press left arrow on first item change focused item on last (focus is looping)');
+        assert.ok($lastItem.hasClass(FOCUSED_STATE_CLASS), 'press left arrow on first item change focused item on last (focus is looping)');
 
         instance.option('loopItemFocus', false);
         keyboard.keyDown('right');
-        assert.ok(!$firstItem.hasClass(FOCUSED_ITEM_CLASS), 'focus is not looping when option loopItemFocus set to false');
+        assert.ok(!$firstItem.hasClass(FOCUSED_STATE_CLASS), 'focus is not looping when option loopItemFocus set to false');
     });
 
     test('onItemClick fires on enter and space', function(assert) {
@@ -1280,7 +1290,7 @@ module('keyboard navigation', {
         const $item = $element.find('.item').eq(0);
         const keyboard = keyboardMock($element);
 
-        $item.trigger('dxpointerdown');
+        $item.trigger(pointerEvents.down);
         this.clock.tick();
         keyboard.keyDown('enter');
         assert.equal(itemClicked, 1, 'press enter on item call item click action');
@@ -1320,7 +1330,7 @@ module('keyboard navigation', {
             }
         });
 
-        $element.find('.item').eq(0).trigger('dxpointerdown');
+        $element.find('.item').eq(0).trigger(pointerEvents.down);
         this.clock.tick();
 
         keyboardMock($element).keyDown('space');
@@ -1344,11 +1354,11 @@ module('keyboard navigation', {
 
         $item = $item.next();
         assert.equal(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
-        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), 'press right arrow on item change focused item on next');
+        assert.ok($item.hasClass(FOCUSED_STATE_CLASS), 'press right arrow on item change focused item on next');
 
         keyboard.keyDown('left');
         $item = $item.prev();
-        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), 'press left arrow on item change focused item on prev');
+        assert.ok($item.hasClass(FOCUSED_STATE_CLASS), 'press left arrow on item change focused item on prev');
     }),
 
     test('focused item changed after press right/left arrows for rtl', function(assert) {
@@ -1366,16 +1376,16 @@ module('keyboard navigation', {
         const keyboard = keyboardMock($element);
 
         $element.trigger('focusin');
-        $item.trigger('dxpointerdown');
+        $item.trigger(pointerEvents.down);
         this.clock.tick();
 
         keyboard.keyDown('left');
         $item = $item.next();
-        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), 'press left arrow on item change focused item on prev');
+        assert.ok($item.hasClass(FOCUSED_STATE_CLASS), 'press left arrow on item change focused item on prev');
 
         keyboard.keyDown('right');
         $item = $item.prev();
-        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), 'press right arrow on item change focused item on next');
+        assert.ok($item.hasClass(FOCUSED_STATE_CLASS), 'press right arrow on item change focused item on next');
     }),
 
     test('focused item changed after press up/down arrows', function(assert) {
@@ -1392,16 +1402,16 @@ module('keyboard navigation', {
         const keyboard = keyboardMock($element);
 
         $element.trigger('focusin');
-        $item.trigger('dxpointerdown');
+        $item.trigger(pointerEvents.down);
         this.clock.tick();
 
         keyboard.keyDown('down');
         $item = $item.next();
-        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), 'press down arrow on item change focused item on next');
+        assert.ok($item.hasClass(FOCUSED_STATE_CLASS), 'press down arrow on item change focused item on next');
 
         keyboard.keyDown('up');
         $item = $item.prev();
-        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), 'press up arrow on item change focused item on prev');
+        assert.ok($item.hasClass(FOCUSED_STATE_CLASS), 'press up arrow on item change focused item on prev');
     }),
 
     test('focused item changed on next not hidden item after press left/right', function(assert) {
@@ -1420,17 +1430,17 @@ module('keyboard navigation', {
         const keyboard = keyboardMock($element);
 
         $element.trigger('focusin');
-        $element.find('.item').eq(3).trigger('dxpointerdown');
+        $element.find('.item').eq(3).trigger(pointerEvents.down);
         this.clock.tick();
 
         $items.eq(2).toggle(false);
         keyboard.keyDown('left');
         $item = $items.eq(1);
-        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), 'next not hidden item has focused class after press left when next item is hidden');
+        assert.ok($item.hasClass(FOCUSED_STATE_CLASS), 'next not hidden item has focused class after press left when next item is hidden');
 
         keyboard.keyDown('right');
         $item = $items.eq(3);
-        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), 'next not hidden item has focused class after press right when next item is hidden');
+        assert.ok($item.hasClass(FOCUSED_STATE_CLASS), 'next not hidden item has focused class after press right when next item is hidden');
     });
 
     test('focused item cycle', function(assert) {
@@ -1447,16 +1457,16 @@ module('keyboard navigation', {
         const keyboard = keyboardMock($element);
 
         $element.trigger('focusin');
-        $item.trigger('dxpointerdown');
+        $item.trigger(pointerEvents.down);
         this.clock.tick();
 
         keyboard.keyDown('up');
         $item = $element.find('.item').last();
-        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), 'press up arrow on first item change focused item on last');
+        assert.ok($item.hasClass(FOCUSED_STATE_CLASS), 'press up arrow on first item change focused item on last');
 
         keyboard.keyDown('down');
         $item = $element.find('.item').first();
-        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), 'press down arrow on last item change focused item on first');
+        assert.ok($item.hasClass(FOCUSED_STATE_CLASS), 'press down arrow on last item change focused item on first');
     }),
 
     test('focused item changed after press pageUp/Down', function(assert) {
@@ -1473,16 +1483,16 @@ module('keyboard navigation', {
         const keyboard = keyboardMock($element);
 
         $element.trigger('focusin');
-        $item.trigger('dxpointerdown');
+        $item.trigger(pointerEvents.down);
         this.clock.tick();
 
         keyboard.keyDown('pagedown');
         $item = $item.next();
-        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), 'press pageDown on item change focused item on next');
+        assert.ok($item.hasClass(FOCUSED_STATE_CLASS), 'press pageDown on item change focused item on next');
 
         keyboard.keyDown('pageup');
         $item = $item.prev();
-        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), 'press pageUp on item change focused item on prev');
+        assert.ok($item.hasClass(FOCUSED_STATE_CLASS), 'press pageUp on item change focused item on prev');
     }),
 
     test('focused item changed after press home/end', function(assert) {
@@ -1500,15 +1510,15 @@ module('keyboard navigation', {
         const keyboard = keyboardMock($element);
 
         $element.focusin();
-        $item.trigger('dxpointerdown');
+        $item.trigger(pointerEvents.down);
         this.clock.tick();
         keyboard.keyDown('end');
         $item = $items.last();
-        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), 'press end on item change focused item on next');
+        assert.ok($item.hasClass(FOCUSED_STATE_CLASS), 'press end on item change focused item on next');
 
         keyboard.keyDown('home');
         $item = $items.first();
-        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), 'press home on item change focused item on prev');
+        assert.ok($item.hasClass(FOCUSED_STATE_CLASS), 'press home on item change focused item on prev');
     }),
 
     test('focused item changed on last but one after press home/end if last is hidden', function(assert) {
@@ -1527,16 +1537,16 @@ module('keyboard navigation', {
 
         $element.focusin();
         $items.last().toggle(false);
-        $item.trigger('dxpointerdown');
+        $item.trigger(pointerEvents.down);
         this.clock.tick();
         keyboard.keyDown('end');
         $item = $items.last().prev();
-        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), 'last by one item has focused class after press end when last item is hidden');
+        assert.ok($item.hasClass(FOCUSED_STATE_CLASS), 'last by one item has focused class after press end when last item is hidden');
 
         $items.first().toggle(false);
         keyboard.keyDown('home');
         $item = $items.first().next();
-        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), 'second item has focused class after press home when first item is hidden');
+        assert.ok($item.hasClass(FOCUSED_STATE_CLASS), 'second item has focused class after press home when first item is hidden');
     });
 
     test('focus attribute', function(assert) {
@@ -1557,14 +1567,14 @@ module('keyboard navigation', {
         $element.focusin();
         assert.strictEqual($element.attr('aria-activedescendant'), String(focusedItemId), 'element has attribute aria-activedescendant, whose value active');
 
-        $item.trigger('dxpointerdown');
+        $item.trigger(pointerEvents.down);
         this.clock.tick();
         assert.ok($item.attr('id').match(focusedItemId), 'first item has id active');
 
         keyboard.keyDown('down');
-        assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), 'first item does not has id active after press down arrow key');
+        assert.ok(!$item.hasClass(FOCUSED_STATE_CLASS), 'first item does not has id active after press down arrow key');
         $item = $items.next();
-        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), 'second item has id active after press down arrow key');
+        assert.ok($item.hasClass(FOCUSED_STATE_CLASS), 'second item has id active after press down arrow key');
     });
 
     test('selectOnFocus test', function(assert) {
@@ -1585,7 +1595,7 @@ module('keyboard navigation', {
         const $item = $items.first();
         const keyboard = keyboardMock($element);
 
-        $item.trigger('dxpointerdown');
+        $item.trigger(pointerEvents.down);
 
         this.clock.tick();
         keyboard.keyDown('right');
@@ -1627,7 +1637,7 @@ module('keyboard navigation', {
         const $items = $element.find('.item');
         const $item = $items.first();
 
-        $item.trigger('dxpointerdown');
+        $item.trigger(pointerEvents.down);
         assert.equal(instance.option('focusedElement'), null, 'focus isn\'t set');
 
         this.clock.tick();
@@ -1645,7 +1655,7 @@ module('keyboard navigation', {
         const $items = $element.find('.item');
         const $item = $items.eq(1);
 
-        $item.trigger('dxpointerdown');
+        $item.trigger(pointerEvents.down);
         instance.focus();
         assert.equal($(instance.option('focusedElement')).get(0), $item.get(0), 'focus isn\'t set');
     });
@@ -1661,7 +1671,7 @@ module('keyboard navigation', {
         const $items = $element.find('.item');
         const $item = $items.first();
 
-        const event = $.Event('dxpointerdown');
+        const event = $.Event(pointerEvents.down);
         $item.trigger(event);
         event.preventDefault();
         this.clock.tick();
@@ -1685,7 +1695,7 @@ module('keyboard navigation', {
         const keyboard = keyboardMock($element);
 
         $element.focusin();
-        $item.trigger('dxpointerdown');
+        $item.trigger(pointerEvents.down);
 
         this.clock.tick();
 
@@ -1693,7 +1703,7 @@ module('keyboard navigation', {
         assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is correct');
 
         $item = $($items.get(1));
-        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), 'correct item has an focused-state');
+        assert.ok($item.hasClass(FOCUSED_STATE_CLASS), 'correct item has an focused-state');
     });
 
     test('Item should not lose focus class when you use arrows with \'selectOnFocus\' option', function(assert) {
@@ -1713,15 +1723,15 @@ module('keyboard navigation', {
         const keyboard = keyboardMock($element);
 
         $element.focusin();
-        $firstItem.trigger('dxpointerdown');
+        $firstItem.trigger(pointerEvents.down);
         this.clock.tick();
         keyboard.keyDown('left');
-        assert.ok($firstItem.hasClass(FOCUSED_ITEM_CLASS), 'First item must stay focused when we press \'left\' button on the keyboard');
+        assert.ok($firstItem.hasClass(FOCUSED_STATE_CLASS), 'First item must stay focused when we press \'left\' button on the keyboard');
 
-        $lastItem.trigger('dxpointerdown');
+        $lastItem.trigger(pointerEvents.down);
         this.clock.tick();
         keyboard.keyDown('right');
-        assert.ok($lastItem.hasClass(FOCUSED_ITEM_CLASS), 'Last item must stay focused when we press \'right\' button on the keyboard');
+        assert.ok($lastItem.hasClass(FOCUSED_STATE_CLASS), 'Last item must stay focused when we press \'right\' button on the keyboard');
     });
 
     [false, true].forEach((ctrlKey) => {
@@ -1742,16 +1752,50 @@ module('keyboard navigation', {
                     const keyboard = keyboardMock($element);
 
                     $element.trigger('focusin');
-                    $element.find('.item').eq(3).trigger('dxpointerdown');
+                    $element.find('.item').eq(3).trigger(pointerEvents.down);
                     this.clock.tick();
 
                     keyboard.keyDown(key, { ctrlKey, metaKey });
-                    assert.strictEqual($item.hasClass(FOCUSED_ITEM_CLASS), isSameItemFocused, `${isSameItemFocused ? 'same' : 'another'} item focused`);
+                    assert.strictEqual($item.hasClass(FOCUSED_STATE_CLASS), isSameItemFocused, `${isSameItemFocused ? 'same' : 'another'} item focused`);
                     assert.strictEqual(keyboard.event.isDefaultPrevented(), !isSameItemFocused, `event is ${isSameItemFocused ? 'not' : ''} prevented`);
                     assert.strictEqual(keyboard.event.isPropagationStopped(), !isSameItemFocused, `propogation is ${isSameItemFocused ? 'not' : ''} stopped`);
                 });
             });
         });
+    });
+});
+
+QUnit.module('Pointer event handlers registration', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+
+        this.component = new TestComponent($('#cmp'), {
+            items: [1]
+        });
+
+        this.pointerDownSpy = sinon.spy(this.component, '_itemPointerHandler');
+        this.pointerUpSpy = sinon.spy(this.component, '_itemPointerUpHandler');
+
+        this.$item = $(this.component.itemElements()).eq(0);
+    },
+    afterEach: function() {
+        this.pointerDownSpy.restore();
+        this.pointerUpSpy.restore();
+        this.clock.restore();
+    }
+}, () => {
+    QUnit.test('pointerDown handler should be registered', function(assert) {
+        this.$item.trigger(pointerEvents.down);
+        this.clock.tick(10);
+
+        assert.ok(this.pointerDownSpy.calledOnce, 'pointerDown handler was called once on pointerDown');
+    });
+
+    QUnit.test('pointerUp handler should be registered', function(assert) {
+        this.$item.trigger(pointerEvents.up);
+        this.clock.tick(10);
+
+        assert.ok(this.pointerUpSpy.calledOnce, 'pointerUp handler was called once on pointerUp');
     });
 });
 
@@ -1775,9 +1819,9 @@ module('focus policy', {
 
         const $item = $element.find('.item').eq(0);
 
-        $item.trigger('dxpointerdown');
+        $item.trigger(pointerEvents.down);
         this.clock.tick();
-        assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), 'focus set to first item');
+        assert.ok(!$item.hasClass(FOCUSED_STATE_CLASS), 'focus set to first item');
     });
 
     test('dx-state-focused is not set for item when it is not closest focused target by dxpoinerdown', function(assert) {
@@ -1795,9 +1839,9 @@ module('focus policy', {
 
         const $item = $element.find('.item').eq(0);
 
-        $item.trigger($.Event('dxpointerdown', { target: $item.find('input').get(0) }));
+        $item.trigger($.Event(pointerEvents.down, { target: $item.find('input').get(0) }));
         this.clock.tick();
-        assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), 'focus set to first item');
+        assert.ok(!$item.hasClass(FOCUSED_STATE_CLASS), 'focus set to first item');
     });
 
     test('focusedElement is set for item when nested element selected by dxpoinerdown', function(assert) {
@@ -1815,7 +1859,7 @@ module('focus policy', {
 
         const $item = $element.find('.item').eq(0);
 
-        $item.trigger($.Event('dxpointerdown', { target: $item.find('span').get(0) }));
+        $item.trigger($.Event(pointerEvents.down, { target: $item.find('span').get(0) }));
         this.clock.tick();
         assert.equal(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
         assert.equal($(instance.option('focusedElement')).get(0), $item.get(0), 'focus set to first item');
@@ -1837,7 +1881,7 @@ module('focus policy', {
         const $item = $element.find('.item').eq(0);
 
         $element.trigger($.Event('focusin', { target: $item.find('input').get(0) }));
-        assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), 'focus set to first item');
+        assert.ok(!$item.hasClass(FOCUSED_STATE_CLASS), 'focus set to first item');
     });
 
     test('option focusOnSelectedItem: false', function(assert) {
@@ -1854,7 +1898,7 @@ module('focus policy', {
         });
 
         $element.trigger('focusin');
-        assert.ok($element.find('.item').eq(0).hasClass(FOCUSED_ITEM_CLASS), 'focus set to first item');
+        assert.ok($element.find('.item').eq(0).hasClass(FOCUSED_STATE_CLASS), 'focus set to first item');
     });
 
     test('option focusOnSelectedItem: true', function(assert) {
@@ -1871,7 +1915,7 @@ module('focus policy', {
         });
 
         $element.trigger('focusin');
-        assert.ok($element.find('.item').eq(1).hasClass(FOCUSED_ITEM_CLASS), 'focus set to selected item');
+        assert.ok($element.find('.item').eq(1).hasClass(FOCUSED_STATE_CLASS), 'focus set to selected item');
     });
 
     test('item is focused after setting focusedElement option', function(assert) {
@@ -1888,11 +1932,11 @@ module('focus policy', {
 
         $element.focusin();
 
-        assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), 'item is not focused');
+        assert.ok(!$item.hasClass(FOCUSED_STATE_CLASS), 'item is not focused');
 
         instance.option('focusedElement', $item);
 
-        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), 'item is focused after setting focusedItem option');
+        assert.ok($item.hasClass(FOCUSED_STATE_CLASS), 'item is focused after setting focusedItem option');
     });
 
     test('first item  should be focused after setting focusedElement option to empty array', function(assert) {
@@ -1910,7 +1954,7 @@ module('focus policy', {
 
         $element.focusin();
 
-        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), 'item is focused');
+        assert.ok($item.hasClass(FOCUSED_STATE_CLASS), 'item is focused');
     });
 
     test('item is focused after focusing on element', function(assert) {
@@ -1928,7 +1972,47 @@ module('focus policy', {
         $element.focusin();
 
         assert.equal(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
-        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), 'item is focused');
+        assert.ok($item.hasClass(FOCUSED_STATE_CLASS), 'item is focused');
+    });
+
+    test(`${FOCUSED_STATE_CLASS} is not applied, accessibility attributes are preserved after programmatic navigation when focusStateEnabled=false (T1306949)`, function(assert) {
+        const $element = $('#cmp');
+
+        const instance = new TestComponent($element, {
+            focusStateEnabled: false,
+            items: ['0', '1']
+        });
+
+        const $item = $element.find('.item').eq(0);
+        const focusedItemId = instance.getFocusedItemId();
+
+        instance.option('focusedElement', $item.get(0));
+
+        assert.strictEqual($item.hasClass(FOCUSED_STATE_CLASS), false, `${FOCUSED_STATE_CLASS} class is not applied when focusStateEnabled is false`);
+        assert.strictEqual($element.attr('aria-activedescendant'), String(focusedItemId), 'aria-activedescendant is set on container');
+        assert.strictEqual(!!$item.attr('id'), true, 'focused item has id attribute');
+        assert.strictEqual($item.attr('id').includes(focusedItemId), true, 'focused item id contains focusedItemId');
+    });
+
+    test(`${FOCUSED_STATE_CLASS} is applied, accessibility attributes are preserved during keyboard navigation when focusStateEnabled=true`, function(assert) {
+        const $element = $('#cmp');
+
+        const instance = new TestComponent($element, {
+            focusStateEnabled: true,
+            items: ['0', '1']
+        });
+
+        const $item = $element.find('.item').eq(0);
+        const focusedItemId = instance.getFocusedItemId();
+
+        $element.focusin();
+        $item.trigger(pointerEvents.down);
+        this.clock.tick();
+
+        assert.strictEqual($item.hasClass(FOCUSED_STATE_CLASS), true, `${FOCUSED_STATE_CLASS} class is applied when focusStateEnabled is true`);
+        assert.strictEqual($element.attr('aria-activedescendant'), String(focusedItemId), 'aria-activedescendant is set on container');
+        assert.strictEqual(!!$item.attr('id'), true, 'focused item has id attribute');
+        assert.strictEqual($item.attr('id').includes(focusedItemId), true, 'focused item id contains focusedItemId');
     });
 });
 
@@ -1954,29 +2038,32 @@ module('isReady', () => {
     });
 });
 
-const TestWidget = CollectionWidget.inherit({
-    NAME: 'TestWidget',
+class TestWidget extends CollectionWidget {
+    ctor(element, options) {
+        this.NAME = 'TestWidget';
+        super.ctor(element, options);
+    }
 
     _renderItem(...args) {
-        this.callBase(...args);
-    },
+        super._renderItem(...args);
+    }
 
     _itemClass() {
         return 'div';
-    },
+    }
 
     _itemDataKey() {
         return '3AE08BA7-F7BC-464B-8B43-53C1F7307920';
     }
-});
+}
 
 let loadCount = 0;
-const TestStore = Store.inherit({
+class TestStore extends Store {
     _loadImpl() {
         loadCount++;
         return $.Deferred().resolve([1, 2, 3]);
     }
-});
+}
 
 module('Data layer integration', {
     beforeEach: function() {

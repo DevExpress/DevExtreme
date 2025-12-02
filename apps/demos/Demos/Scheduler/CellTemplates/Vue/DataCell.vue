@@ -6,13 +6,11 @@
 <script setup lang="ts">
 import Utils from './utils.ts';
 
-withDefaults(defineProps<{
-  cellData?: any
-}>(), {
-  cellData: () => {},
-});
+defineProps<{
+  cellData: Record<string, any>
+}>();
 
-function markDataCell(cellData) {
+function markDataCell(cellData: Record<string, any>) {
   const date = cellData.startDate;
   const isDisableDate = Utils.isHoliday(date) || Utils.isWeekend(date);
   const isDinner = !isDisableDate && Utils.isDinner(date);

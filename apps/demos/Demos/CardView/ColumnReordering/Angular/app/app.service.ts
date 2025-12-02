@@ -8,7 +8,7 @@ export interface Order {
   SaleAmount: number,
   Terms: string;
   Location: string;
-  Customer:  string;
+  Customer: string;
 }
 
 const orders: Order[] = [{
@@ -309,7 +309,6 @@ const orders: Order[] = [{
   Location: 'Phoenix, AZ',
   Customer: 'Clark Morgan',
 }];
-
 
 @Injectable()
 export class Service {

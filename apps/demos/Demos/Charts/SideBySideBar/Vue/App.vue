@@ -46,12 +46,13 @@ import {
   DxFormat,
   DxLegend,
   DxExport,
+  type DxChartTypes,
 } from 'devextreme-vue/chart';
 import { grossProductData } from './data.ts';
 
 const dataSource = grossProductData;
 
-function onPointClick({ target }) {
+function onPointClick({ target }: DxChartTypes.PointClickEvent): void {
   target.select();
 }
 </script>

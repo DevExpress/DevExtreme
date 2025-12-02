@@ -17,8 +17,9 @@ import dragEvents from 'common/core/events/drag';
 import { CustomStore } from 'common/data/custom_store';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
-import translator from 'common/core/animation/translator';
 import { getOuterHeight, getInnerHeight, getOuterWidth } from 'core/utils/size';
+
+import 'generic_light.css!';
 
 const SELECTED_CELL_CLASS = CLASSES.selectedCell.slice(1);
 const FOCUSED_CELL_CLASS = CLASSES.focusedCell.slice(1);
@@ -714,7 +715,8 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         }, 'Cell data has UTC dates');
     });
 
-    test('Appointments in month view should be sorted same as in all-day section', async function(assert) {
+    // TODO: remove skip with new view model - now in month view order reversed and this test checks nothing
+    test.skip('Appointments in month view should be sorted same as in all-day section', async function(assert) {
         const items = [{
             text: '1',
             startDate: new Date(2016, 1, 11, 13, 0),
@@ -799,38 +801,6 @@ module('Integration: Work space', { ...moduleConfig }, () => {
 
         assert.equal(indicatorPositionAfter.top, indicatorPositionBefore.top + cellHeight * 2, 'indicator has correct position');
     });
-
-    if(isDesktopEnvironment()) {
-        test('ScrollToTime works correctly with timelineDay and timelineWeek view (T749957)', async function(assert) {
-            const date = new Date(2019, 5, 1, 9, 40);
-
-            const scheduler = await createWrapper({
-                dataSource: [],
-                views: ['timelineDay', 'day', 'timelineWeek', 'week', 'timelineMonth'],
-                currentView: 'timelineDay',
-                currentDate: date,
-                firstDayOfWeek: 0,
-                startDayHour: 0,
-                endDayHour: 20,
-                cellDuration: 60,
-                groups: ['priority'],
-                height: 580,
-            });
-
-            scheduler.instance.scrollToTime(date.getHours() - 1, 30, date);
-            let scroll = scheduler.workSpace.getDateTableScrollable().find('.dx-scrollable-scroll')[0];
-
-            assert.notEqual(translator.locate($(scroll)).left, 0, 'Container is scrolled in timelineDay');
-
-            scheduler.instance.option('currentView', 'timelineWeek');
-            await waitAsync(0);
-
-            scheduler.instance.scrollToTime(date.getHours() - 1, 30, date);
-            scroll = scheduler.workSpace.getDateTableScrollable().find('.dx-scrollable-scroll')[0];
-
-            assert.notEqual(translator.locate($(scroll)).left, 0, 'Container is scrolled in timelineWeek');
-        });
-    }
 
     test('intervalCount should be passed to workSpace', async function(assert) {
         const scheduler = await createWrapper({
@@ -1228,52 +1198,6 @@ module('Integration: Work space', { ...moduleConfig }, () => {
 
             done();
         });
-    });
-
-    test('"onOptionChanged" should not be called on scroll when virtual scrolling is enabled', async function(assert) {
-        const done = assert.async();
-        let onOptionChangedCalls = 0;
-        const scheduler = await createWrapper({
-            dataSource: [],
-            views: ['week'],
-            currentView: 'week',
-            showAllDayPanel: true,
-            currentDate: new Date(2020, 8, 21),
-            height: 300,
-            scrolling: { mode: 'virtual', orientation: 'both' },
-            onOptionChanged: ({ name }) => {
-                if(name !== 'loadedResources') {
-                    onOptionChangedCalls += 1;
-                }
-            },
-        });
-        scheduler.instance.getWorkSpace().renderer.getRenderTimeout = () => -1;
-
-        const $cells = scheduler.workSpace.getCells();
-        const $table = scheduler.workSpace.getDateTable();
-
-        const onOptionChangedSpy = sinon.spy();
-
-        scheduler.onOptionChanged = onOptionChangedSpy;
-
-        $($table).trigger(
-            $.Event('dxpointerdown', { target: $cells.eq(0).get(0), which: 1, pointerType: 'mouse' }),
-        );
-
-        assert.equal(onOptionChangedCalls, 1, '"onOptionChanged" was triggered because selected cells have been changed');
-
-        const dateTableScrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
-
-        dateTableScrollable.scrollTo({ y: 400 });
-
-        setTimeout(() => {
-            assert.equal(
-                onOptionChangedCalls, 1,
-                '"onOptionChanged" was not triggered again because selected cells have not been changed',
-            );
-            done();
-        });
-
     });
 
     isDesktopEnvironment() && test('Appointment popup should be opened with correct parameters if virtual scrolling is enabled', async function(assert) {

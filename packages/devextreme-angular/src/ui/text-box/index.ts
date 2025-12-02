@@ -41,7 +41,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
@@ -49,10 +50,9 @@ import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
 
 import { DxiTextBoxButtonModule } from 'devextreme-angular/ui/text-box/nested';
 import { DxoTextBoxOptionsModule } from 'devextreme-angular/ui/text-box/nested';
-
-import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiTextBoxButtonComponent } from 'devextreme-angular/ui/text-box/nested';
+import { 
+           PROPERTY_TOKEN_buttons,
+     } from 'devextreme-angular/core/tokens';
 
 
 
@@ -80,6 +80,12 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxTextBoxComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_buttons)
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('buttons', value);
+    }
+
     instance: DxTextBox = null;
 
     /**
@@ -1012,26 +1018,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
-
-    @ContentChildren(DxiTextBoxButtonComponent)
-    get buttonsChildren(): QueryList<DxiTextBoxButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsChildren(value) {
-        this._setChildren('buttons', value, 'DxiTextBoxButtonComponent');
-    }
-
-
-    @ContentChildren(DxiButtonComponent)
-    get buttonsLegacyChildren(): QueryList<DxiButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsLegacyChildren(value) {
-        this._setChildren('buttons', value, 'DxiButtonComponent');
-    }
-
-
 
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,

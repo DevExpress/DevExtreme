@@ -10,7 +10,6 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -26,10 +25,13 @@ import { AxisScale } from 'devextreme/viz/range_selector';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiBreakComponent } from './break-dxi';
 
+import {
+    PROPERTY_TOKEN_breaks,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-scale',
@@ -40,6 +42,11 @@ import { DxiBreakComponent } from './break-dxi';
     providers: [NestedOptionHost]
 })
 export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_breaks)
+    set _breaksContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('breaks', value);
+    }
+    
     @Input()
     get allowDecimals(): boolean | undefined {
         return this._getOption('allowDecimals');
@@ -325,14 +332,6 @@ export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit
         return 'scale';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiBreakComponent))
-    get breaksChildren(): QueryList<DxiBreakComponent> {
-        return this._getOption('breaks');
-    }
-    set breaksChildren(value) {
-        this.setChildren('breaks', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

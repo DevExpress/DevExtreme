@@ -4,7 +4,8 @@ import Button from 'devextreme-react/button';
 import CheckBox from 'devextreme-react/check-box';
 import { markersData } from './data.js';
 
-const markerUrl = 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/maps/map-marker.png';
+const markerUrl =
+  'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/maps/map-marker.png';
 const apiKey = {
   azure: '6N8zuPkBsnfwniNAJkldM3cUgm3lXg3y9gkIKy59benICnnepK4DJQQJ99AIACYeBjFllM6LAAAgAZMPGFXE',
 };

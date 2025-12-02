@@ -43,7 +43,7 @@ const Resizable = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["height","width"]), []);
       const independentEvents = useMemo(() => (["onDisposing","onInitialized","onResize","onResizeEnd","onResizeStart"]), []);

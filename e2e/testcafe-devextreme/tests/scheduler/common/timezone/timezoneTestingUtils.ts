@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-
 import Scheduler from 'devextreme-testcafe-models/scheduler';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const generateTimezoneOffsets = (): Record<string, number> => {
   const result: Record<string, number> = {};
@@ -47,12 +47,14 @@ const screenshotTestFunc = async (
   const scheduler = new Scheduler(schedulerSelector);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    getScreenshotName(testModuleName, screenshotName),
+    { element: scheduler.workSpace },
+  );
+
   await t
-    .expect(await takeScreenshot(
-      getScreenshotName(testModuleName, screenshotName),
-      scheduler.workSpace,
-    ))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 };

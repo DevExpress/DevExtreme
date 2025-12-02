@@ -36,6 +36,7 @@
   </DxVectorMap>
 </template>
 <script setup lang="ts">
+// @ts-ignore
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import {
   DxVectorMap,
@@ -43,19 +44,20 @@ import {
   DxLegend,
   DxSource,
   DxTooltip,
+  type DxVectorMapTypes,
 } from 'devextreme-vue/vector-map';
 import { markers } from './data.ts';
 
 const mapsWorld = mapsData.world;
 const bounds = [-180, 85, 180, -60];
 const sizeGroups = [0, 8000, 10000, 50000];
-const customizeText = ({ index }) => ['< 8000K', '8000K to 10000K', '> 10000K'][index];
-const customizeItems = (items: unknown[]) => items.reverse();
-function customizeTooltip(info) {
+const customizeText = ({ index }: Record<string, any>) => ['< 8000K', '8000K to 10000K', '> 10000K'][index];
+const customizeItems = (items: DxVectorMapTypes.LegendItem[]) => items.reverse();
+function customizeTooltip(info: any) {
   if (info.layer.type === 'marker') {
     return { text: info.attribute('tooltip') };
   }
-  return null;
+  return {};
 }
 </script>
 <style>

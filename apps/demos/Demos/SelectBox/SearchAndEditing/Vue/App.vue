@@ -137,7 +137,7 @@ const searchExprItems = [
   },
 ];
 
-function customItemCreating(data) {
+function customItemCreating(data: DxSelectBoxTypes.CustomItemCreatingEvent) {
   if (!data.text) {
     data.customItem = null;
     return;

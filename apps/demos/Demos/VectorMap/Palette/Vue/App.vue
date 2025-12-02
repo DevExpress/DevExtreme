@@ -26,6 +26,7 @@
   </DxVectorMap>
 </template>
 <script setup lang="ts">
+// @ts-ignore
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import {
   DxVectorMap,
@@ -34,23 +35,25 @@ import {
   DxSource,
   DxTooltip,
 } from 'devextreme-vue/vector-map';
+import { type MapLayerElement } from 'devextreme/viz/vector_map';
 import { populations } from './data.ts';
 
 const mapsWorld = mapsData.world;
 const bounds = [-180, 85, 180, -60];
 const colorGroups = [0, 0.5, 0.8, 1, 2, 3, 100];
 
-const customizeTooltip = (arg) => ((arg.attribute('population'))
-  ? { text: `${arg.attribute('name')}: ${arg.attribute('population')}% of world population` } : null);
+const customizeTooltip = (arg: any) => ((arg.attribute('population'))
+  ? { text: `${arg.attribute('name')}: ${arg.attribute('population')}% of world population` } : {});
 
-const customizeText = ({ index, start, end }) => {
+const customizeText = (
+  { index, start, end }: Record<string, any> & { end: number; index: number; start: number; }) => {
   if (index === 0) {
     return '< 0.5%';
   }
 
   return (index === 5) ? '> 3%' : `${start}% to ${end}%`;
 };
-function customizeLayer(elements) {
+function customizeLayer(elements: MapLayerElement[]) {
   elements.forEach((element) => {
     element.attribute('population', populations[element.attribute('name')]);
   });

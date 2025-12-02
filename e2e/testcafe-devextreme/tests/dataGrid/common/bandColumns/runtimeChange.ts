@@ -4,6 +4,7 @@ import Button from 'devextreme-testcafe-models/button';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Band columns: runtime change`
   .page(url(__dirname, '../../../container.html'));
@@ -95,11 +96,13 @@ test('Should change usual columns to band columns without error in React (T12136
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(GRID_CONTAINER);
 
-  await takeScreenshot('band-columns_before-runtime-update.png', dataGrid.element);
+  await t.expect(dataGrid.isReady()).ok();
+
+  await testScreenshot(t, takeScreenshot, 'band-columns_before-runtime-update.png', { element: dataGrid.element });
 
   await changeDataGridColumnsReactWay();
 
-  await takeScreenshot('band-columns_after-runtime-update.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'band-columns_after-runtime-update.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

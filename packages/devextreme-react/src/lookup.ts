@@ -62,7 +62,7 @@ const Lookup = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["opened","value"]), []);
       const independentEvents = useMemo(() => (["onClosed","onContentReady","onDisposing","onInitialized","onItemClick","onOpened","onPageLoading","onPullRefresh","onScroll","onValueChanged"]), []);
@@ -199,7 +199,6 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
     hide?: AnimationConfig;
     show?: AnimationConfig;
   };
-  bindingOptions?: Record<string, any>;
   container?: any | string | undefined;
   contentTemplate?: ((contentElement: any) => string | any) | template;
   deferRendering?: boolean;

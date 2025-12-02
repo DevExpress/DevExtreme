@@ -73,7 +73,6 @@ export class DxoDataGridGroupPanelComponent extends NestedOption implements OnDe
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'visibleChange' }
         ]);

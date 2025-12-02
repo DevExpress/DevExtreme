@@ -1,0 +1,43 @@
+@use "../../../mixins" as *;
+
+.dx-chat-file {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.dx-chat-file-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.dx-chat-file-name {
+  display: block;
+  flex: 1 1 auto;
+  min-width: 0;
+  font-weight: 600;
+  line-height: 1.2857;
+
+  @include dx-overflow();
+}
+
+.dx-chat-file-size {
+  display: block;
+  flex: 1 0 auto;
+  min-width: 0;
+  text-align: end;
+
+  @include dx-overflow();
+}
+
+.dx-chat-file-download-button {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.dx-chat-file-view {
+  display: grid;
+}

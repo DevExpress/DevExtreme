@@ -1,7 +1,6 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DateBox from 'devextreme-testcafe-models/dateBox';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
@@ -11,7 +10,7 @@ const waitFont = ClientFunction(() => (window as any).DevExpress.ui.themes.waitW
 fixture.disablePageReloads`DateBox (datetime) geometry (T896846)`
   .page(url(__dirname, '../../container.html'));
 
-safeSizeTest('Geometry is good', async (t) => {
+test.meta({ browserSize: [600, 550] })('Geometry is good', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dateBox = new DateBox('#container');
 
@@ -40,7 +39,7 @@ safeSizeTest('Geometry is good', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [600, 550]).before(async () => {
+}).before(async () => {
   await waitFont();
 
   return createWidget('dxDateBox', {

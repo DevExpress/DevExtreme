@@ -8,4 +8,3 @@ export const dataSource = [
   { t: new Date(2012, 1, 2), costs: 14, income: 21 },
   { t: new Date(2012, 1, 9), costs: 14, income: 25 },
 ];
-

@@ -1,3 +1,5 @@
+/* eslint-disable spellcheck/spell-checker */
+
 import {
   readdirSync, lstatSync, existsSync, copyFileSync,
 } from 'fs';

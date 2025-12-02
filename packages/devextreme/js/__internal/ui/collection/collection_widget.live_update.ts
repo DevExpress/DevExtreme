@@ -12,16 +12,16 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import CollectionWidgetAsync from '@ts/ui/collection/collection_widget.async';
 import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
 
-import type { DataChange } from './collection_widget.base';
+import type { CollectionItemKey, DataChange } from './collection_widget.base';
 
-const PRIVATE_KEY_FIELD = '__dx_key__';
+export const PRIVATE_KEY_FIELD = '__dx_key__';
 
-type CachedItem<TItem> = TItem | {
+export type CachedItem<TItem> = TItem | {
   [PRIVATE_KEY_FIELD]: TItem;
   data: TItem;
 };
 
-export interface KeyInfo<TItem = unknown, TKey = string | number> {
+export interface KeyInfo<TItem = unknown, TKey = CollectionItemKey> {
   key: () => string | Function | undefined;
   keyOf: (item: TItem) => TKey;
 }
@@ -38,7 +38,8 @@ export interface CollectionWidgetLiveUpdateProperties<
   TComponent extends CollectionWidgetLiveUpdate<any, TItem, TKey> | any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends ItemLike = any,
-  TKey = string | number,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TKey extends CollectionItemKey = any,
 > extends CollectionWidgetEditProperties<TComponent, TItem, TKey> {
   repaintChangesOnly?: boolean;
 }
@@ -49,8 +50,8 @@ class CollectionWidgetLiveUpdate<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends ItemLike = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TKey = any,
-> extends CollectionWidgetAsync<TProperties> {
+  TKey extends CollectionItemKey = any,
+> extends CollectionWidgetAsync<TProperties, TItem, TKey> {
   _itemsCache!: CachedItem<TItem>[];
 
   _getDefaultOptions(): TProperties {
@@ -86,7 +87,7 @@ class CollectionWidgetLiveUpdate<
 
   _dataSourceChangedHandler(
     newItems: TItem[],
-    e?: { changes?: DataChange<TItem>[] },
+    e?: { changes?: DataChange<TItem, TKey>[] },
   ): void {
     if (e?.changes) {
       this._modifyByChanges(e.changes);
@@ -118,7 +119,9 @@ class CollectionWidgetLiveUpdate<
     items: CachedItem<TItem>[],
   ): boolean {
     let result = false;
-    if (this.option('grouped')) {
+    const { grouped } = this.option();
+
+    if (grouped) {
       if (!changes.length) {
         result = true;
       }
@@ -147,7 +150,7 @@ class CollectionWidgetLiveUpdate<
           // eslint-disable-next-line @typescript-eslint/no-unsafe-return
           return data[PRIVATE_KEY_FIELD];
         }
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+
         return this.keyOf(data);
       };
       const result = findChanges({
@@ -188,7 +191,7 @@ class CollectionWidgetLiveUpdate<
   _updateByChange(
     keyInfo: KeyInfo<TItem, TKey>,
     items: TItem[],
-    change: DataChange<TItem>,
+    change: DataChange<TItem, TKey>,
     isPartialRefresh?: boolean,
   ): void {
     if (isPartialRefresh) {
@@ -196,7 +199,7 @@ class CollectionWidgetLiveUpdate<
         change.index,
         change.data,
         null,
-        this._findItemElementByKey(change.key as TKey),
+        this._findItemElementByKey(change.key),
       );
     } else {
       const changedItem = items[indexByKey(keyInfo, items, change.key)];
@@ -207,7 +210,7 @@ class CollectionWidgetLiveUpdate<
             items.indexOf(changedItem),
             changedItem,
             null,
-            this._findItemElementByKey(change.key as TKey),
+            this._findItemElementByKey(change.key),
           );
         });
       }
@@ -217,7 +220,7 @@ class CollectionWidgetLiveUpdate<
   _insertByChange(
     keyInfo: KeyInfo<TItem, TKey>,
     items: TItem[],
-    change: DataChange<TItem>,
+    change: DataChange<TItem, TKey>,
     isPartialRefresh?: boolean,
   ): void {
     when(
@@ -245,7 +248,7 @@ class CollectionWidgetLiveUpdate<
     }
   }
 
-  _beforeItemElementInserted(change: DataChange<TItem>): void {
+  _beforeItemElementInserted(change: DataChange<TItem, TKey>): void {
     const { selectedIndex } = this.option();
     const index = selectedIndex as number;
 
@@ -261,13 +264,13 @@ class CollectionWidgetLiveUpdate<
   _removeByChange(
     keyInfo: KeyInfo<TItem, TKey>,
     items: TItem[],
-    change: DataChange<TItem> & { oldItem?: TItem },
+    change: DataChange<TItem, TKey>,
     isPartialRefresh?: boolean,
   ): void {
     const index = isPartialRefresh ? change.index : indexByKey(keyInfo, items, change.key);
     const removedItem = isPartialRefresh ? change.oldItem : items[index];
     if (removedItem) {
-      const $removedItemElement = this._findItemElementByKey(change.key as TKey);
+      const $removedItemElement = this._findItemElementByKey(change.key);
       const deletedActionArgs = this._extendActionArgs($removedItemElement);
       // @ts-expect-error ts-error
       this._waitDeletingPrepare($removedItemElement).done(() => {
@@ -283,7 +286,7 @@ class CollectionWidgetLiveUpdate<
     }
   }
 
-  _modifyByChanges(changes: DataChange<TItem>[], isPartialRefresh?: boolean): void {
+  _modifyByChanges(changes: DataChange<TItem, TKey>[], isPartialRefresh?: boolean): void {
     const items = this._editStrategy.itemsGetter();
     const keyInfo: KeyInfo<TItem, TKey> = {
       key: this.key.bind(this),
@@ -296,11 +299,13 @@ class CollectionWidgetLiveUpdate<
     let filteredChanges = changes;
     if (paginate || group) {
       filteredChanges = changes.filter((
-        item: DataChange<TItem>,
+        item: DataChange<TItem, TKey>,
       ) => item.type !== 'insert' || item.index !== undefined);
     }
 
-    filteredChanges.forEach((change: DataChange<TItem>) => this[`_${change.type}ByChange`](keyInfo, items, change, isPartialRefresh));
+    filteredChanges.forEach((
+      change: DataChange<TItem, TKey>,
+    ) => this[`_${change.type}ByChange`](keyInfo, items, change, isPartialRefresh));
     this._renderedItemsCount = items.length;
     this._refreshItemsCache();
     this._fireContentReadyAction();

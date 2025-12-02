@@ -25,9 +25,9 @@
               :data="list"
               class="sortable-cards"
               group="tasksGroup"
-              @drag-start="onTaskDragStart($event)"
-              @reorder="onTaskDrop($event)"
-              @add="onTaskDrop($event)"
+              @drag-start="onTaskDragStart"
+              @reorder="onTaskDrop"
+              @add="onTaskDrop"
             >
               <div
                 v-for="task in list"
@@ -49,32 +49,32 @@
 import { reactive } from 'vue';
 import { DxScrollView } from 'devextreme-vue/scroll-view';
 import { DxSortable } from 'devextreme-vue/sortable';
-import { tasks, employees } from './data.ts';
+import { tasks, employees, type Task } from './data.ts';
 
 const statuses = ['Not Started', 'Need Assistance', 'In Progress', 'Deferred', 'Completed'];
-const employeesMap = {};
+const employeesMap: Record<number, string> = {};
 employees.forEach((employee) => {
   employeesMap[employee.ID] = employee.Name;
 });
-const lists = reactive([]);
+const lists: Task[][] = reactive([]);
 statuses.forEach((status) => {
-  lists.push(tasks.filter((task) => task.Task_Status === status));
+  lists.push(tasks.filter((task: Task) => task.Task_Status === status));
 });
-function onListReorder(e) {
+function onListReorder(e: Record<string, any>) {
   const list = lists.splice(e.fromIndex, 1)[0];
   lists.splice(e.toIndex, 0, list);
 
   const status = statuses.splice(e.fromIndex, 1)[0];
   statuses.splice(e.toIndex, 0, status);
 }
-function onTaskDragStart(e) {
+function onTaskDragStart(e: Record<string, any>) {
   e.itemData = e.fromData[e.fromIndex];
 }
-function onTaskDrop(e) {
+function onTaskDrop(e: Record<string, any>) {
   e.fromData.splice(e.fromIndex, 1);
   e.toData.splice(e.toIndex, 0, e.itemData);
 }
-function getPriorityClass(task) {
+function getPriorityClass(task: Task) {
   return `priority-${task.Task_Priority}`;
 }
 </script>

@@ -1,16 +1,22 @@
 <dx-vector-map id="vector-map" [bounds]="[-180, 85, 180, -60]">
-  <dxo-tooltip
+  <dxo-vector-map-tooltip
     [enabled]="true"
     [customizeTooltip]="customizeTooltip"
-  ></dxo-tooltip>
-  <dxi-layer [dataSource]="worldMap" [hoverEnabled]="false"></dxi-layer>
-  <dxi-layer
+  ></dxo-vector-map-tooltip>
+  <dxi-vector-map-layer
+    [dataSource]="worldMap"
+    [hoverEnabled]="false"
+  ></dxi-vector-map-layer>
+  <dxi-vector-map-layer
     [dataSource]="markers"
     name="pies"
     elementType="pie"
     dataField="values"
-  ></dxi-layer>
-  <dxi-legend [customizeText]="customizeText">
-    <dxo-source layer="pies" grouping="color"></dxo-source>
-  </dxi-legend>
+  ></dxi-vector-map-layer>
+  <dxi-vector-map-legend [customizeText]="customizeText">
+    <dxo-vector-map-source
+      layer="pies"
+      grouping="color"
+    ></dxo-vector-map-source>
+  </dxi-vector-map-legend>
 </dx-vector-map>

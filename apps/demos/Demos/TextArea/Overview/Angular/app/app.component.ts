@@ -51,7 +51,7 @@ export class AppComponent {
   }
 
   onCheckboxValueChanged({ value }: DxCheckBoxTypes.ValueChangedEvent) {
-    let str = this.service.getContent();
+    const str = this.service.getContent();
     this.value = value ? str.substring(0, 100) : str;
     this.maxLength = value ? 100 : null;
   }

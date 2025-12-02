@@ -38,7 +38,7 @@ export class AppComponent {
 
     return (value < this.lowAverage)
       ? { color: '#8c8cff', hoverStyle: { color: '#8c8cff' } }
-      : undefined;
+      : null;
   };
 
   customizeLabel: DxChartTypes.Properties['customizeLabel'] = ({ value }) => {
@@ -49,6 +49,7 @@ export class AppComponent {
         customizeText: this.customizeText,
       };
     }
+    return null;
   };
 
   customizeText: DxChartTypes.ValueAxisLabel['customizeText'] = ({ valueText }) => `${valueText}&#176F`;

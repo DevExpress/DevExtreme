@@ -23,7 +23,7 @@ export class SimpleProduct {
   ID: number;
 }
 
-const simpleProducts:SimpleProduct[] = [
+const simpleProducts: SimpleProduct[] = [
   { Name: 'HD Video Player', ID: 0 },
   { Name: 'SuperHD Video Player', ID: 1 },
   { Name: 'SuperPlasma 50', ID: 2 },

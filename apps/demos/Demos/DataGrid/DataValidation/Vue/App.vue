@@ -64,7 +64,7 @@ const dataSource = createStore({
 
 const pattern = /^\(\d{3}\) \d{3}-\d{4}$/i;
 
-const asyncValidation = async(params: ValidationCallbackData) => {
+const asyncValidation = async (params: ValidationCallbackData) => {
   const response = await fetch(emailValidationUrl, {
     method: 'POST',
     headers: {

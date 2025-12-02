@@ -204,11 +204,11 @@ testOptions.forEach(({
     const appointments = resourceDataSource.reduce<Appointment[]>((acc, resource) => acc.concat(
       appointmentDates
         .map<Appointment>((date) => ({
-        text: resource.text,
-        startDate: date,
-        endDate: new Date(date.getTime() + HOUR / 2),
-        groupId: resource.id,
-      })),
+          text: resource.text,
+          startDate: date,
+          endDate: new Date(date.getTime() + HOUR / 2),
+          groupId: resource.id,
+        })),
     ), []);
 
     await createWidget('dxScheduler', {

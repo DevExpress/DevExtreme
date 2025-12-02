@@ -21,14 +21,15 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { DxToast, type DxToastTypes } from 'devextreme-vue/toast';
-import { products } from './data.ts';
+import { type DxCheckBoxTypes } from 'devextreme-vue/check-box';
+import { products, type Product } from './data.ts';
 import ProductItem from './ProductItem.vue';
 
 const isVisible = ref(false);
 const message = ref('');
 const type = ref<DxToastTypes.ToastType>('info');
 
-function checkAvailability(e, product) {
+function checkAvailability(e: DxCheckBoxTypes.ValueChangedEvent, product: Product) {
   type.value = e.value ? 'success' : 'error';
   message.value = product.Name + (e.value ? ' is available' : ' is not available');
   isVisible.value = true;

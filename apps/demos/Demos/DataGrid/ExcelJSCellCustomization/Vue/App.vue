@@ -70,11 +70,11 @@ import {
   DxTotalItem,
   type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
-import { Workbook } from 'exceljs';
+import { Workbook } from 'devextreme-exceljs-fork';
 // Our demo infrastructure requires us to use 'file-saver-es'.
 // We recommend that you use the official 'file-saver' package in your applications.
 import { saveAs } from 'file-saver-es';
-import { exportDataGrid } from 'devextreme-vue/common/export/excel';
+import { exportDataGrid, type DataGridCell } from 'devextreme-vue/common/export/excel';
 import { companies } from './data.ts';
 
 const onExporting = (e: DxDataGridTypes.ExportingEvent) => {
@@ -90,22 +90,22 @@ const onExporting = (e: DxDataGridTypes.ExportingEvent) => {
     worksheet,
     keepColumnWidths: false,
     topLeftCell: { row: 2, column: 2 },
-    customizeCell: ({ gridCell, excelCell }) => {
-      if (gridCell.rowType === 'data') {
-        if (gridCell.column.dataField === 'Phone') {
+    customizeCell: ({ gridCell, excelCell }: { gridCell?: DataGridCell, excelCell?: any }) => {
+      if (gridCell?.rowType === 'data') {
+        if (gridCell.column?.dataField === 'Phone') {
           excelCell.value = parseInt(gridCell.value, 10);
           excelCell.numFmt = '[<=9999999]###-####;(###) ###-####';
         }
-        if (gridCell.column.dataField === 'Website') {
+        if (gridCell.column?.dataField === 'Website') {
           excelCell.value = { text: gridCell.value, hyperlink: gridCell.value };
           excelCell.font = { color: { argb: 'FF0000FF' }, underline: true };
           excelCell.alignment = { horizontal: 'left' };
         }
       }
-      if (gridCell.rowType === 'group') {
+      if (gridCell?.rowType === 'group') {
         excelCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'BEDFE6' } };
       }
-      if (gridCell.rowType === 'totalFooter' && excelCell.value) {
+      if (gridCell?.rowType === 'totalFooter' && excelCell.value) {
         excelCell.font.italic = true;
       }
     },

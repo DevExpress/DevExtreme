@@ -1,7 +1,9 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import { extend } from 'core/utils/extend';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+} from '../../helpers/vizMocks.js';
 import legendModule from 'viz/components/legend';
 import module from 'viz/core/title';
 
@@ -12,7 +14,7 @@ const defaultMarkerBBox = { x: 0, y: 0, height: 14, width: 14 };
 const environment = {
     beforeEach: function() {
         const that = this;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.bBoxes = [];
         this.markerBBoxes = [];
 
@@ -1413,7 +1415,6 @@ QUnit.test('Mapping indexes', function(assert) {
         visible: true
     }];
 
-
     const legend = this.createSimpleLegend();
 
     legend.draw(200, 200);
@@ -1481,18 +1482,15 @@ QUnit.test('coordsIn after erase', function(assert) {
 
 // T205280
 QUnit.test('coordsIn after update without data', function(assert) {
-    // arrange
     const legend = this.createSimpleLegend();
     const legendSize = { width: 200, height: 200, top: 0, bottom: 0, left: 0, right: 0 };
 
     legend.draw(200, 200);
     legend.shift(10, 15);
 
-    // act
     legend.update([], getLegendOptions());
     legend.draw(legendSize);
 
-    // assert
     assert.strictEqual(legend.coordsIn(10, 10), false);
 });
 
@@ -1800,7 +1798,6 @@ QUnit.test('horizontalAlignment specified incorrectly', function(assert) {
 
     assert.equal(legend._options.horizontalAlignment, 'right');
 });
-
 
 QUnit.module('Life cycle', $.extend({}, environment, {
     beforeEach: function() {
@@ -2561,7 +2558,6 @@ QUnit.test('Shift legend with title after erase. Title position - bottom', funct
     assert.deepEqual(this.title.shift.lastCall.args, [0, 2], 'title must have moved');
 });
 
-
 QUnit.test('Shift simple title; horizontalAlignment = \'right\' verticalAlignment = \'top\' title.horizontalAlignment = \'center\'; margins not zero', function(assert) {
     this.options.title = {
         text: 'Simple title',
@@ -2708,7 +2704,6 @@ QUnit.test('can customize legendItem.size', function(assert) {
 
     assert.deepEqual(this.options.markerTemplate.lastCall.args[0].marker.size, 60);
 });
-
 
 QUnit.test('Pass customized item size to hover state', function(assert) {
     this.options.customizeItems = items => {

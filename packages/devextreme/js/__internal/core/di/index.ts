@@ -11,6 +11,8 @@ interface DIItem<T, TDeps extends readonly any[]> extends Constructor<T, TDeps> 
   dependencies: readonly [...{ [P in keyof TDeps]: AbstractType<TDeps[P]> }];
 }
 
+export type DecoratorFunction<T = any> = (instance: T) => T;
+
 export class DIContext {
   private readonly instances: Map<unknown, unknown> = new Map();
 
@@ -19,6 +21,8 @@ export class DIContext {
   private readonly aliases: Map<unknown, unknown> = new Map();
 
   private readonly antiRecursionSet = new Set();
+
+  private readonly globalDecorators: DecoratorFunction[] = [];
 
   public register<TId, TFabric extends TId, TDeps extends readonly any[]>(
     id: AbstractType<TId>,
@@ -40,7 +44,9 @@ export class DIContext {
     id: AbstractType<T>,
     instance: T,
   ): void {
-    this.instances.set(id, instance);
+    const decoratedInstance = this.applyGlobalDecorators(instance);
+
+    this.instances.set(id, decoratedInstance);
   }
 
   public get<T>(
@@ -67,13 +73,35 @@ export class DIContext {
 
     const fabric = this.fabrics.get(id);
     if (fabric) {
-      const res: T = this.create(fabric as any);
-      this.instances.set(id, res);
-      this.instances.set(fabric, res);
-      return res;
+      const instance: T = this.create(fabric as any);
+
+      const decoratedInstance = this.applyGlobalDecorators(instance);
+
+      this.instances.set(id, decoratedInstance);
+      this.instances.set(fabric, decoratedInstance);
+      return decoratedInstance;
     }
 
     return null;
+  }
+
+  public registerDecorator<T>(decoratorFn: DecoratorFunction<T>): void {
+    if (this.hasInitiatedInstances) {
+      throw new Error('Cannot register decorator: decorators must be registered before any instances are created or retrieved from the DI container.');
+    }
+
+    this.globalDecorators.push(decoratorFn);
+  }
+
+  private get hasInitiatedInstances(): boolean {
+    return this.instances.size > 0;
+  }
+
+  private applyGlobalDecorators<T>(instance: T): T {
+    return this.globalDecorators.reduce(
+      (currentInstance, currentDecorator) => currentDecorator(currentInstance),
+      instance,
+    );
   }
 
   private create<T, TDeps extends readonly any[]>(fabric: DIItem<T, TDeps>): T {

@@ -19,6 +19,7 @@ import {
 } from 'devextreme-angular/core';
 import { DxiFilterBuilderCustomOperation } from './base/filter-builder-custom-operation-dxi';
 
+import { PROPERTY_TOKEN_customOperations } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-custom-operation',
@@ -26,7 +27,13 @@ import { DxiFilterBuilderCustomOperation } from './base/filter-builder-custom-op
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_customOperations,
+           useExisting: DxiCustomOperationComponent,
+        }
+    ],
     inputs: [
         'calculateFilterExpression',
         'caption',

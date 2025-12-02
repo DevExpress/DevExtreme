@@ -1,0 +1,17 @@
+.dx-speech-to-text-listening {
+  animation: dx-speech-to-text-listening-animation 1.5s ease-in-out 0.5s infinite;
+}
+
+@keyframes dx-speech-to-text-listening-animation {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

@@ -41,13 +41,15 @@ export class AppComponent {
         return '../../../../images/thumbnails/doc-rtf.svg';
       case '.xml':
         return '../../../../images/thumbnails/doc-xml.svg';
+      default:
+        return '../../../../images/thumbnails/doc-txt.svg';
     }
   }
 }
 
 @NgModule({
   imports: [
-    BrowserModule,    DxFileManagerModule,
+    BrowserModule, DxFileManagerModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

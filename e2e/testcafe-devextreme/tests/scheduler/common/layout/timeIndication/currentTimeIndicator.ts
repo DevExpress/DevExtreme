@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Scheduler: Current Time Indication`
   .page(url(__dirname, '../../../../container.html'));
@@ -17,9 +18,12 @@ test('Current time indicator should be placed correctly when there are many grou
   for (const view of ['day', 'week']) {
     await scheduler.option('currentView', view);
 
-    await t.expect(
-      await takeScreenshot(`current-time-indicator-in-${view}-with-many-groups.png`, scheduler.workSpace),
-    ).ok();
+    await testScreenshot(
+      t,
+      takeScreenshot,
+      `current-time-indicator-in-${view}-with-many-groups.png`,
+      { element: scheduler.workSpace },
+    );
   }
 
   await t.expect(compareResults.isValid())
@@ -74,7 +78,7 @@ test('Current time indicator should be placed correctly when there are many grou
         '2023-12-03T17:30:00',
         '2023-12-03T23:59:59',
       ].forEach((indicatorTime) => {
-        // NOTE: Due the technical reasons we cannot test these cases by testcafe here.
+      // NOTE: Due the technical reasons we cannot test these cases by testcafe here.
         if (grouping === 'horizontal' && TIMELINE_VIEWS.includes(view)) {
           return;
         }
@@ -96,9 +100,11 @@ endDayHour: ${endDayHour}
           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
           const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
-          await takeScreenshot(
+          await testScreenshot(
+            t,
+            takeScreenshot,
             `current-time-indicator_${view}_${indicatorTime.replace(/:/g, '-')}_g-${grouping}_${startDayHour}_${endDayHour}.png`,
-            scheduler.workSpace,
+            { element: scheduler.workSpace },
           );
 
           await t.expect(compareResults.isValid())

@@ -4,9 +4,6 @@ import config from 'core/config';
 import MenuBase from 'ui/context_menu/ui.menu_base';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
-
-import 'generic_light.css!';
 
 QUnit.testStart(function() {
     const markup =
@@ -51,15 +48,19 @@ const ITEM_URL_CLASS = 'dx-item-url';
 const DX_MENU_ITEM_TEXT_URL_CLASS = `${DX_MENU_ITEM_TEXT_CLASS}-with-url`;
 const DX_ICON_WITH_URL_CLASS = `${DX_ICON_CLASS}-with-url`;
 
-const TestComponent = MenuBase.inherit({
-    NAME: 'TestComponent',
-    _itemDataKey: function() {
+class TestComponent extends MenuBase {
+    ctor(element, options) {
+        this.NAME = 'TestComponent';
+        super.ctor(element, options);
+    }
+
+    _itemDataKey() {
         return '123';
-    },
-    _itemContainer: function() {
+    }
+    _itemContainer() {
         return this.$element();
     }
-});
+}
 
 function createMenu(options) {
     const element = $('#menu');
@@ -475,25 +476,55 @@ QUnit.module('Menu rendering', () => {
         assert.strictEqual(content.text, 'Item text');
     });
 
-    QUnit.test('Link should be programmatically clicked if item.url is set and text inside link is clicked', function(assert) {
-        const clickSpy = sinon.spy();
+    QUnit.test('onItemClick should be raised once if item.url is set and text inside link is clicked', function(assert) {
+        const onItemClickSpy = sinon.spy();
+
         const menuBase = createMenu({
             items: [{ text: 'Item text', url: 'http://some_url' }],
+            onItemClick: onItemClickSpy,
         });
 
-        const $menuItemLink = menuBase.element
+        const menuItemLink = menuBase.element
             .find(`.${ITEM_URL_CLASS}`)
             .get(0);
 
-        $menuItemLink.click = clickSpy;
+        menuItemLink.addEventListener('click', (e) => {
+            e.preventDefault();
+        });
 
         const $itemText = menuBase.element
             .find(`.${DX_MENU_ITEM_TEXT_CLASS}`)
             .eq(0);
 
-        $itemText.trigger('dxclick');
+        $itemText.trigger('click');
 
-        assert.ok(clickSpy.calledOnce);
+        assert.strictEqual(onItemClickSpy.callCount, 1, 'onItemClick called once');
+    });
+
+    QUnit.test('Link should be clicked if item.url is set and text inside link is clicked', function(assert) {
+        const clickSpy = sinon.spy();
+
+        const menuBase = createMenu({
+            items: [{ text: 'Item text', url: 'http://some_url' }],
+        });
+
+        const menuItemLink = menuBase.element
+            .find(`.${ITEM_URL_CLASS}`)
+            .get(0);
+
+        menuItemLink.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            clickSpy(e);
+        });
+
+        const $itemText = menuBase.element
+            .find(`.${DX_MENU_ITEM_TEXT_CLASS}`)
+            .eq(0);
+
+        $itemText.trigger('click');
+
+        assert.strictEqual(clickSpy.callCount, 1, 'link clicked once');
     });
 
     QUnit.test('Link should be programmatically clicked if item.url is set and item is clicked', function(assert) {
@@ -502,11 +533,11 @@ QUnit.module('Menu rendering', () => {
             items: [{ text: 'Item text', url: 'http://some_url' }],
         });
 
-        const $menuItemLink = menuBase.element
+        const menuItemLink = menuBase.element
             .find(`.${ITEM_URL_CLASS}`)
             .get(0);
 
-        $menuItemLink.click = clickSpy;
+        menuItemLink.click = clickSpy;
 
         const $item = menuBase.element
             .find(`.${DX_MENU_ITEM_CLASS}`)
@@ -515,6 +546,31 @@ QUnit.module('Menu rendering', () => {
         $item.trigger('dxclick');
 
         assert.ok(clickSpy.calledOnce);
+    });
+
+
+    QUnit.test('onItemClick should be raised once  if item.url is set and item is clicked', function(assert) {
+        const onItemClickSpy = sinon.spy();
+        const menuBase = createMenu({
+            items: [{ text: 'Item text', url: 'http://some_url' }],
+            onItemClick: onItemClickSpy,
+        });
+
+        const menuItemLink = menuBase.element
+            .find(`.${ITEM_URL_CLASS}`)
+            .get(0);
+
+        menuItemLink.addEventListener('click', (e) => {
+            e.preventDefault();
+        });
+
+        const $item = menuBase.element
+            .find(`.${DX_MENU_ITEM_CLASS}`)
+            .eq(0);
+
+        $item.trigger('dxclick');
+
+        assert.strictEqual(onItemClickSpy.calledOnce, true, 'onItemClick called once');
     });
 
     QUnit.test('Link should be rendered with empty text (T1181344)', function(assert) {
@@ -572,10 +628,6 @@ QUnit.module('ShowSubmenuMode', {
     });
 
     QUnit.test('showSubmenuMode - by default', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menuBase = createMenu({ items: [{ text: 'item1', items: [{ text: 'item1-1' }] }] });
         const $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
@@ -588,10 +640,6 @@ QUnit.module('ShowSubmenuMode', {
     });
 
     QUnit.test('showSubmenuMode - onHover - set as object and delay set as number', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menuBase = createMenu({ items: [{ text: 'item1', items: [{ text: 'item1-1' }] }], showSubmenuMode: { type: 'onHover', delay: 50 } });
         const $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
@@ -604,10 +652,6 @@ QUnit.module('ShowSubmenuMode', {
     });
 
     QUnit.test('showSubmenuMode - onHover - function has item element as parameter', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menuBase = createMenu({ items: [{ text: 'item1', items: [{ text: 'item1-1' }] }], showSubmenuMode: { type: 'onHover', delay: 50 } });
         const $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
@@ -620,10 +664,6 @@ QUnit.module('ShowSubmenuMode', {
     });
 
     QUnit.test('showSubmenuMode - onHover - set as object and delay set as object too', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menuBase = createMenu({ items: [{ text: 'item1', items: [{ text: 'item1-1' }] }], showSubmenuMode: { type: 'onHover', delay: { show: 100, hide: 500 } } });
         const $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
@@ -636,10 +676,6 @@ QUnit.module('ShowSubmenuMode', {
     });
 
     QUnit.test('showSubmenuMode - onHover - set as string without delay', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menuBase = createMenu({ items: [{ text: 'item1', items: [{ text: 'item1-1' }] }], showSubmenuMode: 'onHover' });
         const $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
@@ -652,10 +688,6 @@ QUnit.module('ShowSubmenuMode', {
     });
 
     QUnit.test('previous submenu should not appear if other submenu shown timeout is started', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const menuBase = createMenu({
             items: [
                 { text: 'item1', items: [{ text: 'item1-1' }] },
@@ -970,6 +1002,62 @@ QUnit.module('Selection', () => {
         const $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(1);
 
         $item.trigger('dxclick');
+    });
+
+    QUnit.test('onSelectionChanged should have been called with correct arguments', function(assert) {
+        const items = [
+            { text: 'item1' },
+            { text: 'item2' },
+        ];
+        const selectionChangedHandler = sinon.stub();
+        const menuBase = createMenu({
+            items: items,
+            selectionMode: 'single',
+            selectByClick: true,
+            onSelectionChanged: selectionChangedHandler,
+        });
+        const $items = menuBase.element.find(`.${DX_MENU_ITEM_CLASS}`);
+        const $item1 = $items.eq(0);
+        const $item2 = $items.eq(1);
+
+        $item2.trigger('dxclick');
+
+        assert.strictEqual(selectionChangedHandler.callCount, 1, 'onSelectionChanged was called for the first time');
+        assert.deepEqual(selectionChangedHandler.args[0][0].addedItems, [{ text: 'item2', selected: true }], 'onSelectionChanged is called with selected item as added item');
+        assert.deepEqual(selectionChangedHandler.args[0][0].removedItems, [null], 'onSelectionChanged first called with null as removed item');
+
+        $item1.trigger('dxclick');
+
+        assert.strictEqual(selectionChangedHandler.callCount, 2, 'onSelectionChanged was called for the second time');
+        assert.deepEqual(selectionChangedHandler.args[1][0].addedItems, [{ text: 'item1', selected: true }], 'onSelectionChanged is called with selected item as added item');
+        assert.deepEqual(selectionChangedHandler.args[1][0].removedItems, [{ text: 'item2', selected: false }], 'onSelectionChanged is called with previously selected item as removed item');
+    });
+
+    QUnit.test('onSelectionChanged should have been called with correct arguments on unselect', function(assert) {
+        const items = [
+            { text: 'item1' },
+            { text: 'item2' },
+        ];
+        const selectionChangedHandler = sinon.stub();
+        const menuBase = createMenu({
+            items: items,
+            selectionMode: 'single',
+            selectByClick: true,
+            onSelectionChanged: selectionChangedHandler,
+        });
+        const $item = menuBase.element.find(`.${DX_MENU_ITEM_CLASS}`).eq(1);
+
+        $item.trigger('dxclick');
+
+        assert.strictEqual(selectionChangedHandler.callCount, 1, 'onSelectionChanged was called for the first time');
+        assert.deepEqual(selectionChangedHandler.args[0][0].addedItems, [{ text: 'item2', selected: true }], 'onSelectionChanged was called with selected item as added item');
+        assert.deepEqual(selectionChangedHandler.args[0][0].removedItems, [null], 'onSelectionChanged first called with null as removed item');
+
+        $item.trigger('dxclick');
+
+        assert.strictEqual(selectionChangedHandler.callCount, 2, 'onSelectionChanged was called for the second time');
+        assert.deepEqual(selectionChangedHandler.args[1][0].addedItems, [null], 'onSelectionChanged was called with null as added item');
+        assert.deepEqual(selectionChangedHandler.args[1][0].removedItems, [{ text: 'item2', selected: false }], 'onSelectionChanged was called with previously selected item as removed item');
     });
 
     QUnit.test('Prevent selection item on click', function(assert) {

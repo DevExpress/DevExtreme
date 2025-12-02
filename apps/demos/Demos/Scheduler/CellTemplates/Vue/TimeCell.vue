@@ -22,7 +22,7 @@ const hasCoffeeCupIcon = computed(() => {
   return Utils.hasCoffeeCupIcon(date);
 });
 
-function markTimeCell(cellData) {
+function markTimeCell(cellData: Record<string, any>) {
   return { dinner: Utils.isDinner(cellData.date) };
 }
 </script>

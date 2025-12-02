@@ -78,6 +78,7 @@
         return $.inArray(componentName, [
             'dxDashboardViewer',
             'dxCardView', // TODO
+            'dxSpeechToText',
         ]) === -1;
     };
 

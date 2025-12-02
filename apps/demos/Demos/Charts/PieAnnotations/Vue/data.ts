@@ -1,4 +1,8 @@
-const annotationSources = [{
+import { type DxPieChartTypes } from 'devextreme-vue/pie-chart';
+
+type Annotation = Record<string, any> & { location?: DxPieChartTypes.PieChartAnnotationLocation };
+
+const annotationSources: Annotation[] = [{
   country: 'Russia',
   offsetX: 15,
   offsetY: 5,
@@ -86,7 +90,7 @@ export const dataSource = [{
 }];
 
 export function getAnnotationSources() {
-  const annotations = [];
+  const annotations: Annotation[] = [];
   for (let i = 0; i < annotationSources.length; i += 1) {
     const annotation = annotationSources[i];
     const { country } = annotation;

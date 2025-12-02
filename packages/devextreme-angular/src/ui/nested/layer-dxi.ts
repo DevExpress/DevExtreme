@@ -24,6 +24,7 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_layers } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-layer',
@@ -31,7 +32,13 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_layers,
+           useExisting: DxiLayerComponent,
+        }
+    ]
 })
 export class DxiLayerComponent extends CollectionNestedOption {
     @Input()

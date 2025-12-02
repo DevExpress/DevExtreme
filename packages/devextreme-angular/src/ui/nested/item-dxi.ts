@@ -12,7 +12,6 @@ import {
     AfterViewInit,
     SkipSelf,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -26,14 +25,18 @@ import {
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { DxiButtonGroupItem } from './base/button-group-item-dxi';
-import { DxiValidationRuleComponent } from './validation-rule-dxi';
-import { DxiTabComponent } from './tab-dxi';
-import { DxiCommandComponent } from './command-dxi';
-import { DxiLocationComponent } from './location-dxi';
 
+import {
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_validationRules,
+    PROPERTY_TOKEN_tabs,
+    PROPERTY_TOKEN_commands,
+    PROPERTY_TOKEN_location,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-item',
@@ -41,7 +44,14 @@ import { DxiLocationComponent } from './location-dxi';
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost],
+    providers: [
+        NestedOptionHost,
+        DxTemplateHost,
+        {
+           provide: PROPERTY_TOKEN_items,
+           useExisting: DxiItemComponent,
+        }
+    ],
     inputs: [
         'disabled',
         'html',
@@ -129,51 +139,36 @@ import { DxiLocationComponent } from './location-dxi';
 })
 export class DxiItemComponent extends DxiButtonGroupItem implements AfterViewInit,
     IDxTemplateHost {
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
+    @ContentChildren(PROPERTY_TOKEN_validationRules)
+    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('validationRules', value);
+    }
+    
+    @ContentChildren(PROPERTY_TOKEN_tabs)
+    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('tabs', value);
+    }
+    
+    @ContentChildren(PROPERTY_TOKEN_commands)
+    set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('commands', value);
+    }
+    
+    @ContentChildren(PROPERTY_TOKEN_location)
+    set _locationContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('location', value);
+    }
+    
 
     protected get _optionPath() {
         return 'items';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiItemComponent))
-    get itemsChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiValidationRuleComponent))
-    get validationRulesChildren(): QueryList<DxiValidationRuleComponent> {
-        return this._getOption('validationRules');
-    }
-    set validationRulesChildren(value) {
-        this.setChildren('validationRules', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiTabComponent))
-    get tabsChildren(): QueryList<DxiTabComponent> {
-        return this._getOption('tabs');
-    }
-    set tabsChildren(value) {
-        this.setChildren('tabs', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiCommandComponent))
-    get commandsChildren(): QueryList<DxiCommandComponent> {
-        return this._getOption('commands');
-    }
-    set commandsChildren(value) {
-        this.setChildren('commands', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiLocationComponent))
-    get locationChildren(): QueryList<DxiLocationComponent> {
-        return this._getOption('location');
-    }
-    set locationChildren(value) {
-        this.setChildren('location', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

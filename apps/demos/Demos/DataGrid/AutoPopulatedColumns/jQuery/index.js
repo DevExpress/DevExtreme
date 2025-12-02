@@ -5,6 +5,6 @@ $(() => {
     showBorders: true,
     pager: {
       visible: true,
-    }
+    },
   });
 });

@@ -8,8 +8,8 @@ import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { setHeight, setOuterHeight } from '@js/core/utils/size';
+import { EMPTY_ACTIVE_STATE_UNIT } from '@ts/core/widget/widget';
 
-import { VIEWS } from '../constants';
 import {
   DATE_TABLE_CLASS,
   DATE_TABLE_ROW_CLASS,
@@ -19,8 +19,10 @@ import {
 } from '../m_classes';
 import tableCreatorModule from '../m_table_creator';
 import { agendaUtils, formatWeekday, getVerticalGroupCountClass } from '../r1/utils/index';
-import type { SafeAppointment } from '../types';
-import { convertToOldTree, reduceResourcesTree } from '../utils/resource_manager/agenda_group_utils';
+import { VIEWS } from '../utils/options/constants_view';
+import { reduceResourcesTree } from '../utils/resource_manager/agenda_group_utils';
+import type { GroupNode } from '../utils/resource_manager/types';
+import type { ListEntity } from '../view_model/types';
 import WorkSpace from './m_work_space';
 
 const { tableCreator } = tableCreatorModule;
@@ -41,17 +43,18 @@ const OUTER_CELL_MARGIN = 20;
 class SchedulerAgenda extends WorkSpace {
   _startViewDate: any;
 
-  _rows: any;
+  _rows: number[][] = [];
 
   _$rows: any;
 
   _$noDataContainer: any;
 
+  // eslint-disable-next-line class-methods-use-this
+  protected _activeStateUnit(): string {
+    return EMPTY_ACTIVE_STATE_UNIT;
+  }
+
   get type() { return VIEWS.AGENDA; }
-
-  get renderingStrategy() { return (this.invoke as any)('getLayoutManager').getRenderingStrategyInstance(); }
-
-  get appointmentDataProvider() { return (this.option('getAppointmentDataProvider') as any)(); }
 
   getStartViewDate() {
     return this._startViewDate;
@@ -59,7 +62,6 @@ class SchedulerAgenda extends WorkSpace {
 
   _init() {
     super._init();
-    this._activeStateUnit = undefined;
   }
 
   _getDefaultOptions() {
@@ -118,12 +120,8 @@ class SchedulerAgenda extends WorkSpace {
     return AGENDA_CLASS;
   }
 
-  _calculateStartViewDate() {
-    return agendaUtils.calculateStartViewDate(this.option('currentDate') as any, this.option('startDayHour') as any);
-  }
-
   _getRowCount() {
-    return this.option('agendaDuration');
+    return this.option('agendaDuration') as number;
   }
 
   _getCellCount() {
@@ -131,7 +129,7 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   _getTimePanelRowCount() {
-    return this.option('agendaDuration');
+    return this.option('agendaDuration') as number;
   }
 
   _renderAllDayPanel() { return noop(); }
@@ -156,9 +154,8 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   _renderView() {
-    this._startViewDate = this._calculateStartViewDate();
+    this._startViewDate = agendaUtils.calculateStartViewDate(this.option('currentDate') as any, this.option('startDayHour') as any);
     this._rows = [];
-    this._initPositionHelper();
   }
 
   _recalculateAgenda(rows) {
@@ -178,7 +175,6 @@ class SchedulerAgenda extends WorkSpace {
 
     this._renderTimePanel();
     this._renderDateTable();
-    (this.invoke as any)('onAgendaReady', rows);
     this._applyCellTemplates(cellTemplates);
     this._dateTableScrollable.update();
   }
@@ -254,33 +250,38 @@ class SchedulerAgenda extends WorkSpace {
 
   _makeGroupRows() {
     const resourceManager = this.option('getResourceManager')();
-    const allAppointments = (this.option('getFilteredItems') as any)();
+    const allAppointments = (this.option('getFilteredItems') as any)() as ListEntity[];
     const tree = reduceResourcesTree(
       resourceManager.resourceById,
       resourceManager.groupsTree,
       allAppointments,
     );
-    const oldTree = convertToOldTree(resourceManager.resourceById, tree);
 
     const cellTemplate: any = this.option('resourceCellTemplate');
     const getGroupHeaderContentClass = GROUP_HEADER_CONTENT_CLASS;
     const cellTemplates: any[] = [];
 
-    const table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, oldTree, {
+    const table = tableCreator.makeGroupedTableFromJSON(tree, {
       cellTag: 'th',
       groupTableClass: GROUP_TABLE_CLASS,
       groupRowClass: GROUP_ROW_CLASS,
       groupCellClass: this._getGroupHeaderClass(),
-      groupCellCustomContent(cell, cellTextElement, index, data) {
+      groupCellCustomContent(cell: HTMLDivElement, cellTextElement: HTMLElement, index: number, node: GroupNode) {
         const container = domAdapter.createElement('div');
         container.className = getGroupHeaderContentClass;
+        const value = node.grouped[node.resourceIndex];
+        const resource = resourceManager.resourceById[node.resourceIndex];
+        const resourceData = resource?.data
+          .find((rItem) => resource.dataAccessor.get('id', rItem) === value);
+        const resourceItem = resource?.items
+          .find((rItem) => rItem.id === value);
 
         if (cellTemplate?.render) {
           cellTemplates.push(cellTemplate.render.bind(cellTemplate, {
             model: {
-              data: data.data,
-              id: data.value,
-              color: data.color,
+              data: resourceData,
+              id: value,
+              color: resourceItem?.color,
               text: cellTextElement.textContent,
             },
             container: getPublicElement($(container)),
@@ -471,20 +472,15 @@ class SchedulerAgenda extends WorkSpace {
     return result;
   }
 
-  _calculateRows(appointments?: SafeAppointment[]) {
-    return this.renderingStrategy.calculateRows(
-      appointments,
-      this.option('agendaDuration'),
-      this.option('currentDate'),
-    );
-  }
-
-  onDataSourceChanged(appointments?: SafeAppointment[]) {
-    super.onDataSourceChanged();
-
+  renderAgendaLayout(appointments: ListEntity[]): void {
     this._renderView();
 
-    const rows = this._calculateRows(appointments);
+    const rows = agendaUtils.calculateRows(
+      appointments,
+      this.option('agendaDuration') as number,
+      this.getStartViewDate(),
+      this.resourceManager.groupCount(),
+    );
     this._recalculateAgenda(rows);
   }
 
@@ -515,7 +511,7 @@ class SchedulerAgenda extends WorkSpace {
     const startDateMinutes = newDate.getMinutes();
 
     if (this.needUpdateScrollPosition(startDateHour, startDateMinutes, bounds, newDate)) {
-      this.scrollToTime(startDateHour, startDateMinutes, newDate);
+      this.scrollTo(newDate);
     }
   }
 

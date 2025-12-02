@@ -6,8 +6,9 @@ import {
 
 import { IOptionElement } from './configuration/react/element';
 import { mergeNameParts } from './configuration/utils';
-import { createConfigBuilder, IConfigNode } from './configuration/config-node';
+import { createConfigBuilder } from './configuration/config-node';
 import { NestedOptionContext, NestedOptionContextContent } from './contexts';
+import { IConfigNode } from './types';
 
 export function useOptionScanning(
   optionElement: IOptionElement,
@@ -48,7 +49,12 @@ export function useOptionScanning(
         configBuilder.addTemplate(template);
       }
     },
-    onChildOptionsReady: (childConfigNode, childDescriptor, childUpdateToken, childComponentKey) => {
+    onChildOptionsReady: (
+      childConfigNode,
+      childDescriptor,
+      childUpdateToken,
+      childComponentKey,
+    ) => {
       if (childUpdateToken !== updateToken) {
         return;
       }

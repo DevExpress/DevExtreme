@@ -12,7 +12,6 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -24,11 +23,14 @@ import { dxFilterBuilderCustomOperation, dxFilterBuilderField, GroupOperation, C
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiDataGridCustomOperationComponent } from './custom-operation-dxi';
-import { DxiDataGridFieldComponent } from './field-dxi';
 
+import {
+    PROPERTY_TOKEN_customOperations,
+    PROPERTY_TOKEN_fields,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-data-grid-filter-builder',
@@ -39,6 +41,16 @@ import { DxiDataGridFieldComponent } from './field-dxi';
     providers: [NestedOptionHost]
 })
 export class DxoDataGridFilterBuilderComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_customOperations)
+    set _customOperationsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('customOperations', value);
+    }
+    
+    @ContentChildren(PROPERTY_TOKEN_fields)
+    set _fieldsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('fields', value);
+    }
+    
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -267,26 +279,9 @@ export class DxoDataGridFilterBuilderComponent extends NestedOption implements O
     }
 
 
-    @ContentChildren(forwardRef(() => DxiDataGridCustomOperationComponent))
-    get customOperationsChildren(): QueryList<DxiDataGridCustomOperationComponent> {
-        return this._getOption('customOperations');
-    }
-    set customOperationsChildren(value) {
-        this.setChildren('customOperations', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiDataGridFieldComponent))
-    get fieldsChildren(): QueryList<DxiDataGridFieldComponent> {
-        return this._getOption('fields');
-    }
-    set fieldsChildren(value) {
-        this.setChildren('fields', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'valueChange' }
         ]);

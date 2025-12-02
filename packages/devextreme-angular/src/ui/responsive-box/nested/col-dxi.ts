@@ -19,6 +19,7 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_cols } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-responsive-box-col',
@@ -26,7 +27,13 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_cols,
+           useExisting: DxiResponsiveBoxColComponent,
+        }
+    ]
 })
 export class DxiResponsiveBoxColComponent extends CollectionNestedOption {
     @Input()

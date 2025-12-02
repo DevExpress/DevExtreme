@@ -17,7 +17,7 @@ const OUTPUT_ARTIFACTS_DIR = 'artifacts/ts';
 
 const TS_BUNDLE_FILE = './ts/dx.all.d.ts';
 const TS_BUNDLE_SOURCES = [TS_BUNDLE_FILE, './ts/aliases.d.ts'];
-const src = ['./js/**/*.d.ts', '!./js/renovation/**/*'];
+const src = ['./js/**/*.d.ts'];
 
 function compileTS(settings) {
     return ts.createProject({

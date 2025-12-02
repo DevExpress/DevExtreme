@@ -4,6 +4,7 @@ import 'ui/data_grid';
 import 'common/data/odata/store';
 
 import $ from 'jquery';
+import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 import ArrayStore from 'common/data/array_store';
 import pointerEvents from 'common/core/events/pointer';
 import clickEvent from 'common/core/events/click';
@@ -50,6 +51,8 @@ const getModuleConfig = function(keyboardNavigationEnabled) {
             });
         },
         beforeEach: function() {
+            this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+            gridCoreUtils.isElementInCurrentGrid = () => true;
             this.clock = sinon.useFakeTimers();
         },
         afterEach: function() {
@@ -57,6 +60,7 @@ const getModuleConfig = function(keyboardNavigationEnabled) {
             if(this.dispose) {
                 this.dispose();
             }
+            gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
         }
     };
 };
@@ -555,7 +559,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.clock.tick(10);
 
         // act
-        this.triggerKeyDown('tab', false, false, $(this.getCellElement(0, 0)));
+        this.triggerKeyDown('tab', false, false, $(this.getCellElement(0, 0)).find('.dx-texteditor-input').get(0));
 
         // assert
         const keyboardController = this.getController('keyboardNavigation');

@@ -24,7 +24,6 @@ const employeesStore = createStore({
     ajaxOptions.xhrFields = { withCredentials: true };
   },
 });
-// eslint-disable-next-line space-before-function-paren
 const processReorder = async (e) => {
   const visibleRows = e.component.getVisibleRows();
   const newOrderIndex = visibleRows[e.toIndex].data.OrderIndex;

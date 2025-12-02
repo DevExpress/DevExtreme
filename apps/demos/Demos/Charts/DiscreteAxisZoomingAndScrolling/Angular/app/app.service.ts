@@ -24,7 +24,7 @@ export class ChemicalComposition {
   K?: number;
 }
 
-export class SerieDescription {
+export class SeriesDescription {
   name: string;
 
   valueField: string;
@@ -85,7 +85,7 @@ const chemicalComposition: ChemicalComposition[] = [{
   Mg: 1.87,
 }];
 
-const seriesSource: SerieDescription[] = [{
+const seriesSource: SeriesDescription[] = [{
   name: 'Si',
   valueField: 'Si',
 }, {
@@ -120,7 +120,7 @@ export class Service {
     return chemicalComposition;
   }
 
-  getSeries(): SerieDescription[] {
+  getSeries(): SeriesDescription[] {
     return seriesSource;
   }
 }

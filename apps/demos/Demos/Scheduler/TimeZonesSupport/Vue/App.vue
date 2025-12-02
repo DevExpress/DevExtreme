@@ -40,10 +40,7 @@ const views = ['workWeek'];
 const dataSource = data;
 const currentDate = new Date(2021, 3, 27);
 
-const getTimeZones = function(date: Date) {
-  const timeZones = getTimeZonesUtility(date);
-  return timeZones.filter((timeZone) => locations.indexOf(timeZone.id) !== -1);
-};
+const getTimeZones = (date: Date) => getTimeZonesUtility(date, locations);
 
 const timeZones = ref(getTimeZones(currentDate));
 const currentTimeZone = ref(timeZones.value[0].id);
@@ -52,8 +49,8 @@ function onAppointmentFormOpening(args: DxSchedulerTypes.AppointmentFormOpeningE
 
   const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
   const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
-  const startDateDataSource = startDateTimezoneEditor.option('dataSource') as DataSource;
-  const endDateDataSource = endDateTimezoneEditor.option('dataSource') as DataSource;
+  const startDateDataSource = startDateTimezoneEditor?.option('dataSource') as DataSource;
+  const endDateDataSource = endDateTimezoneEditor?.option('dataSource') as DataSource;
 
   startDateDataSource.filter(['id', 'contains', 'Europe']);
   endDateDataSource.filter(['id', 'contains', 'Europe']);
@@ -61,7 +58,7 @@ function onAppointmentFormOpening(args: DxSchedulerTypes.AppointmentFormOpeningE
   startDateDataSource.load();
   endDateDataSource.load();
 }
-function onOptionChanged(args) {
+function onOptionChanged(args: DxSchedulerTypes.OptionChangedEvent) {
   if (args.name === 'currentDate') {
     timeZones.value = getTimeZones(args.value);
   }

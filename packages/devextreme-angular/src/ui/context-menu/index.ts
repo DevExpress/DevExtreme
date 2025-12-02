@@ -41,7 +41,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
@@ -75,10 +76,9 @@ import { DxoContextMenuShowModule } from 'devextreme-angular/ui/context-menu/nes
 import { DxoContextMenuShowEventModule } from 'devextreme-angular/ui/context-menu/nested';
 import { DxoContextMenuShowSubmenuModeModule } from 'devextreme-angular/ui/context-menu/nested';
 import { DxoContextMenuToModule } from 'devextreme-angular/ui/context-menu/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiContextMenuItemComponent } from 'devextreme-angular/ui/context-menu/nested';
+import { 
+           PROPERTY_TOKEN_items,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -98,8 +98,14 @@ import { DxiContextMenuItemComponent } from 'devextreme-angular/ui/context-menu/
         IterableDifferHelper
     ]
 })
-export class DxContextMenuComponent<TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxContextMenu<TKey> = null;
+export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
+    instance: DxContextMenu<TItem, TKey> = null;
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -288,10 +294,10 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Input()
-    get items(): Array<dxContextMenuItem> {
+    get items(): Array<any | dxContextMenuItem> {
         return this._getOption('items');
     }
-    set items(value: Array<dxContextMenuItem>) {
+    set items(value: Array<any | dxContextMenuItem>) {
         this._setOption('items', value);
     }
 
@@ -697,7 +703,7 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<dxContextMenuItem>>;
+    @Output() itemsChange: EventEmitter<Array<any | dxContextMenuItem>>;
 
     /**
     
@@ -803,26 +809,6 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
-
-    @ContentChildren(DxiContextMenuItemComponent)
-    get itemsChildren(): QueryList<DxiContextMenuItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiContextMenuItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
 
 
 

@@ -31,6 +31,8 @@ test('After drag to draggable component, should be called onAppointmentDeleting 
   await t
     .dragToElement(scheduler.getAppointment('Regular test app').element, Selector('#drag-container'), { speed: 0.5 });
 
+  await t.wait(500);
+
   await t
     .expect(ClientFunction(() => (window as any).eventName)())
     .eql('onAppointmentDeleting');
@@ -91,7 +93,7 @@ test('After drag over component area, shouldn\'t called onAppointment* data even
     .expect(ClientFunction(() => (window as any).eventName)())
     .eql('')
     .expect(scheduler.getAppointment('All day test app 2').date.time)
-    .eql('12:00 AM - 12:01 AM');
+    .eql('April 27');
 
   await t
     .dragToElement(scheduler.getAppointment('Regular test app').element, Selector('#left-right'));

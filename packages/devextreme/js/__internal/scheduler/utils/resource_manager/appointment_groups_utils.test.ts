@@ -4,7 +4,7 @@ import {
 import {
   complexIdResourceMock,
   getResourceManagerMock, resourceIndexesMock, resourceItemsByIdMock,
-} from '@ts/scheduler/__mock__/resourceManager.mock';
+} from '@ts/scheduler/__mock__/resource_manager.mock';
 
 import {
   getAppointmentGroupIndex,

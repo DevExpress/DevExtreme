@@ -30,4 +30,3 @@ export const grossProductData = [{
   year2001: 132,
   year2004: 162,
 }];
-

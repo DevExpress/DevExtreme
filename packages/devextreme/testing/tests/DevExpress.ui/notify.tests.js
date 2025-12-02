@@ -3,7 +3,7 @@ import notify from 'ui/notify';
 import fx from 'common/core/animation/fx';
 import { value as viewPort } from 'core/utils/view_port';
 import { isPlainObject } from 'core/utils/type';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const TOAST_CLASS = 'dx-toast';
 const TOAST_WRAPPER_CLASS = 'dx-toast-wrapper';

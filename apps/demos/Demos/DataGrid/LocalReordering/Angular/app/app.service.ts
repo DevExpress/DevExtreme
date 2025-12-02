@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export type Task  = {
+export type Task = {
   ID: number;
 
   Subject: string;
@@ -14,9 +14,9 @@ export type Task  = {
   OrderIndex: number;
 
   Priority: number;
-}
+};
 
-export type Employee  = {
+export type Employee = {
   ID: number;
 
   FullName: string;
@@ -24,16 +24,15 @@ export type Employee  = {
   Department: string;
 
   Title: string;
-}
+};
 
 export type Status = {
   id: number;
 
   name: string;
-}
+};
 
-const employees = [
-    {
+const employees = [{
   ID: 1,
   FullName: 'John Heart',
   Department: 'Management',
@@ -289,8 +288,7 @@ const employees = [
   Department: 'Engineering',
   Title: 'Engineer',
 }];
-const statuses = [
-    {
+const statuses = [{
   id: 1, name: 'Not Started',
 }, {
   id: 2, name: 'In Progress',
@@ -301,6 +299,7 @@ const statuses = [
 }, {
   id: 5, name: 'Completed',
 }];
+
 const tasks = [{
   ID: 1,
   Subject: 'Prepare 2013 Financial',

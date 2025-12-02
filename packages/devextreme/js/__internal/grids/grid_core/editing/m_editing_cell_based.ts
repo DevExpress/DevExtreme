@@ -33,6 +33,7 @@ import {
 } from './const';
 import type { EditingController } from './m_editing';
 import { isEditable } from './m_editing_utils';
+import type { NormalizedEditCellOptions } from './types';
 
 export interface ICellBasedEditingControllerExtender {
   // eslint-disable-next-line @typescript-eslint/method-signature-style
@@ -234,17 +235,14 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return coreResult !== undefined ? coreResult : d.promise();
   }
 
-  private _editCellCore(options) {
-    const dataController = this._dataController;
-    const isEditByOptionChanged = isDefined(options.oldColumnIndex) || isDefined(options.oldRowIndex);
+  private _editCellCore(options): boolean | DeferredObj<boolean> | undefined {
+    const editCellOptions: NormalizedEditCellOptions = this._getNormalizedEditCellOptions(options);
     const {
-      columnIndex, rowIndex, column, item,
-    } = this._getNormalizedEditCellOptions(options) as any;
-    const params = {
-      data: item?.data,
-      cancel: false,
+      columnIndex,
+      rowIndex,
       column,
-    };
+      item,
+    } = editCellOptions;
 
     if (item.key === undefined) {
       this._dataController.fireError('E1043');
@@ -252,18 +250,16 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
 
     if (column && (item.rowType === 'data' || item.rowType === 'detailAdaptive') && !item.removed && this.isCellOrBatchEditMode()) {
-      if (!isEditByOptionChanged && this.isEditCell(rowIndex, columnIndex)) {
+      if (this.isEditCell(rowIndex, columnIndex)) {
         return true;
       }
-
-      const editRowIndex = rowIndex + dataController.getRowIndexOffset();
 
       return when(this._beforeEditCell(rowIndex, columnIndex, item)).done((cancel) => {
         if (cancel) {
           return;
         }
 
-        if (!this._prepareEditCell(params, item, columnIndex, editRowIndex)) {
+        if (!this._prepareEditCell(editCellOptions)) {
           this._processCanceledEditingCell();
         }
       });
@@ -294,8 +290,16 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   }
 
   private _getNormalizedEditCellOptions({
-    oldColumnIndex, oldRowIndex, columnIndex, rowIndex,
-  }) {
+    oldColumnIndex,
+    oldRowIndex,
+    columnIndex,
+    rowIndex,
+  }: {
+    oldColumnIndex: number;
+    oldRowIndex: number;
+    columnIndex: number;
+    rowIndex: number;
+  }): NormalizedEditCellOptions {
     const columnsController = this._columnsController;
     const visibleColumns = columnsController.getVisibleColumns();
     const items = this._dataController.items();
@@ -324,22 +328,31 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private _prepareEditCell(params, item, editColumnIndex, editRowIndex) {
-    if (!item.isNewRow) {
-      params.key = item.key;
-    }
+  protected _prepareEditCell({
+    item,
+    column,
+    oldColumn,
+    columnIndex,
+    oldRowIndex,
+  }: NormalizedEditCellOptions): boolean {
+    const editingStartParams = {
+      data: item?.data,
+      cancel: false,
+      column,
+      key: !item.isNewRow ? item.key : undefined,
+    };
 
-    if (this._isEditingStart(params)) {
+    if (this._isEditingStart(editingStartParams)) {
       return false;
     }
 
     this._pageIndex = this._dataController.pageIndex();
 
-    this._setEditRowKey(item.key);
-    this._setEditColumnNameByIndex(editColumnIndex);
+    this._setEditRowKey(item.key, true);
+    this._setEditColumnNameByIndex(columnIndex, true);
+    this._repaintEditCell(column, oldColumn, oldRowIndex);
 
-    if (!params.column.showEditorAlways) {
+    if (!column.showEditorAlways) {
       this._addInternalData({
         key: item.key,
         oldData: item.oldData ?? item.data,
@@ -419,7 +432,6 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _prepareChange(options, value, text) {
     const $cellElement = $(options.cellElement);
 
@@ -516,7 +528,6 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _allowRowAdding(params) {
     if (this.isBatchEditMode()) {
       return true;

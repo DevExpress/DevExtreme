@@ -1,4 +1,4 @@
-function getImageUrl(name) {
+function getImageUrl(name: string) {
   return `../../../../images/VectorMap/${name}.png`;
 }
 

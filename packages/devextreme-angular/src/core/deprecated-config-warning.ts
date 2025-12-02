@@ -1,0 +1,80 @@
+import type { BaseNestedOption, INestedOptionContainer } from './nested-option';
+import { DEPRECATED_CONFIG_COMPONENTS } from './deprecated-config-map';
+import WARNING_CODES from './warning-codes';
+import { logWarning } from './warning-helper';
+
+const warnedUsages = new Set<string>();
+
+const NESTED_CLASS_NAME_REGEXP = /^(Dx[io][A-Z]\w+)Component$/;
+
+type DeprecatedConfigEntry = Record<string, string>;
+
+function getLegacySelector(nestedOption: BaseNestedOption): string | undefined {
+  const className = nestedOption?.constructor?.name;
+  if (!className) {
+    return undefined;
+  }
+
+  const match = NESTED_CLASS_NAME_REGEXP.exec(className);
+  if (!match) {
+    return undefined;
+  }
+
+  const [, legacyName] = match;
+
+  return toKebabCase(legacyName);
+}
+
+function getHostMapping(host: INestedOptionContainer | undefined): DeprecatedConfigEntry | undefined {
+  const visited = new Set<INestedOptionContainer>();
+  let current = host;
+
+  while (current && !visited.has(current)) {
+    visited.add(current);
+
+    const ctorName = current.constructor?.name;
+    if (ctorName && Object.prototype.hasOwnProperty.call(DEPRECATED_CONFIG_COMPONENTS, ctorName)) {
+      return DEPRECATED_CONFIG_COMPONENTS[ctorName] as DeprecatedConfigEntry;
+    }
+
+    current = (current as { _host?: INestedOptionContainer })._host;
+  }
+
+  return undefined;
+}
+
+export function warnIfLegacyNestedComponent(nestedOption: BaseNestedOption, host: INestedOptionContainer | undefined): void {
+  const legacySelector = getLegacySelector(nestedOption);
+  if (!legacySelector) {
+    return;
+  }
+
+  const mappingEntry = getHostMapping(host);
+  if (!mappingEntry) {
+    return;
+  }
+
+  const replacement = mappingEntry[legacySelector];
+  if (!replacement) {
+    return;
+  }
+
+  const cacheKey = `${legacySelector}|${replacement}`;
+  if (warnedUsages.has(cacheKey)) {
+    return;
+  }
+
+  warnedUsages.add(cacheKey);
+
+  logWarning(
+    WARNING_CODES.LEGACY_CONFIG_COMPONENT_USED,
+    { legacySelector, replacement },
+  );
+}
+
+function toKebabCase(value: string): string {
+  return value
+    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+    .replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
+    .toLowerCase();
+}

@@ -4,9 +4,10 @@ import {
 import {
   complexIdResourceMock,
   getResourceManagerMock,
+  resourceConfigMock,
   resourceIndexesMock,
   resourceItemsByIdMock,
-} from '@ts/scheduler/__mock__/resourceManager.mock';
+} from '@ts/scheduler/__mock__/resource_manager.mock';
 
 import { getAppointmentColor, getPaintedResource } from './appointment_color_utils';
 
@@ -41,8 +42,11 @@ const customResourceConfig = [
 describe('appointment color utils', () => {
   describe('getPaintedResources', () => {
     it('should return useColorAsDefault resource', () => {
-      const manager = getResourceManagerMock();
-      manager.resources[1].useColorAsDefault = true;
+      const manager = getResourceManagerMock([
+        { ...resourceConfigMock[0] },
+        { ...resourceConfigMock[1], useColorAsDefault: true },
+        { ...resourceConfigMock[2] },
+      ]);
 
       expect(
         getPaintedResource(manager.resources, resourceIndexesMock, resourceIndexesMock),
@@ -82,8 +86,11 @@ describe('appointment color utils', () => {
     });
 
     it('should return last resource filtered by appointment groups that exclude useColorAsDefault resource', () => {
-      const manager = getResourceManagerMock();
-      manager.resources[1].useColorAsDefault = true;
+      const manager = getResourceManagerMock([
+        { ...resourceConfigMock[0] },
+        { ...resourceConfigMock[1], useColorAsDefault: true },
+        { ...resourceConfigMock[2] },
+      ]);
 
       expect(
         getPaintedResource(
@@ -138,9 +145,12 @@ describe('appointment color utils', () => {
     });
 
     it('should return color of default resource', async () => {
-      const manager = getResourceManagerMock();
+      const manager = getResourceManagerMock([
+        { ...resourceConfigMock[0] },
+        { ...resourceConfigMock[1], useColorAsDefault: true },
+        { ...resourceConfigMock[2] },
+      ]);
       await manager.loadGroupResources(['roomId', 'nested.priorityId']);
-      manager.resources[1].useColorAsDefault = true;
 
       expect(
         await getAppointmentColor(

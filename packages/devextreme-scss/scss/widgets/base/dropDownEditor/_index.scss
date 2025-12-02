@@ -51,6 +51,13 @@
   }
 }
 
+.dx-dropdowneditor-field-before-template-wrapper,
+.dx-dropdowneditor-field-after-template-wrapper {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+}
+
 .dx-dropdowneditor-active {
   .dx-dropdowneditor-icon {
     opacity: 0.35;

@@ -1,4 +1,4 @@
-name: DevExtreme Wrappers Tests
+name: Wrappers Tests
 
 on:
   pull_request:
@@ -13,27 +13,21 @@ env:
   BUILD_TEST_INTERNAL_PACKAGE: true
 
 jobs:
-  test:
+  build:
     runs-on: devextreme-shr2
-    timeout-minutes: 80
+    timeout-minutes: 15
 
     steps:
       - name: Get sources
         uses: actions/checkout@v4
-
-      - name: Setup Chrome
-        uses: ./.github/actions/setup-chrome
-        with:
-          chrome-version: '133.0.6943.53'
 
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - uses: pnpm/action-setup@v3
+      - uses: pnpm/action-setup@v4
         with:
-          version: 9
           run_install: false
 
       - name: Get pnpm store directory
@@ -52,13 +46,48 @@ jobs:
             ${{ runner.os }}-pnpm-store
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Build devextreme package
         env:
           BUILD_TEST_INTERNAL_PACKAGE: true
         working-directory: ./packages/devextreme
         run: pnpx nx build
+
+  check-regenerate:
+    runs-on: devextreme-shr2
+    timeout-minutes: 10
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: |
+            ${{ env.STORE_PATH }}
+            .nx/cache
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Generate wrappers
         run: pnpm run regenerate-all
@@ -75,33 +104,51 @@ jobs:
             exit 1
           fi
 
-      - name: Angular - Download Browser
+  test:
+    timeout-minutes: 20
+    needs: build
+    runs-on: devextreme-shr2
+    strategy:
+      fail-fast: false
+      matrix:
+        framework: [angular, react, vue]
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: |
+            ${{ env.STORE_PATH }}
+            .nx/cache
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Download Browser
+        if: matrix.framework == 'angular'
         run: pnpx puppeteer browsers install chrome@130.0.6723.69
 
-      - name: Angular - Build
-        run: pnpx nx build devextreme-angular
+      - name: Test ${{ matrix.framework }}
+        run: pnpx nx test devextreme-${{ matrix.framework }}
 
-      - name: Angular - Run tests
-        run: pnpx nx test:dev devextreme-angular
-
-      - name: Angular - Check packing
-        run: pnpx nx pack devextreme-angular
-
-      - name: React - Run tests
-        run: pnpm exec nx test devextreme-react
-
-      - name: React - Check packing
-        run: pnpm exec nx pack devextreme-react
-
-      - name: Vue - Run tests
-        run: pnpx nx test devextreme-vue
-
-      - name: Vue - Check packing
-        run: pnpx nx pack devextreme-vue
-
-      - name: Archive devextreme-metadata artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: devextreme-metadata-artifacts
-          path: packages/devextreme-metadata/dist/
-          retention-days: 7
+      - name: Pack ${{ matrix.framework }}
+        run: pnpx nx pack devextreme-${{ matrix.framework }}

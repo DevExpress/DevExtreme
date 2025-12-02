@@ -133,7 +133,7 @@ import {
   DxCircularGauge, DxScale, DxLabel, DxGeometry, DxValueIndicator,
 } from 'devextreme-vue/circular-gauge';
 
-const customizeText = ({ valueText }) => `${valueText} %`;
+const customizeText = ({ valueText }: Record<string, any>) => `${valueText} %`;
 </script>
 <style scoped>
 #chart-demo {

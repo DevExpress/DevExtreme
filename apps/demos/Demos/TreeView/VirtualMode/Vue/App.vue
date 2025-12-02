@@ -4,21 +4,20 @@
       :data-source="dataSource"
       :virtual-mode-enabled="true"
       data-structure="plain"
-      key-expr="Id"
-      display-expr="Name"
+      key-expr="ID"
+      display-expr="Text"
       parent-id-expr="CategoryId"
       has-items-expr="IsGroup"
+      :root-value="null"
     />
   </div>
 </template>
 <script setup lang="ts">
-import { DataSource, ODataStore } from 'devextreme-vue/common/data';
 import DxTreeView from 'devextreme-vue/tree-view';
+import { createStore } from 'devextreme-aspnet-data-nojquery';
 
-const dataSource = new DataSource({
-  store: new ODataStore({
-    version: 2,
-    url: 'https://js.devexpress.com/Demos/WidgetsGallery/odata/HierarchicalItems',
-  }),
+const dataSource = createStore({
+  loadUrl: 'https://js.devexpress.com/Demos/NetCore/api/TreeViewPlainData',
+  key: 'ID',
 });
 </script>

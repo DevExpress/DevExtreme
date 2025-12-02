@@ -1,5 +1,5 @@
-const $ = require('jquery');
-const dxFunnel = require('viz/funnel');
+import $ from 'jquery';
+import dxFunnel from 'viz/funnel';
 
 QUnit.module('Plugins');
 

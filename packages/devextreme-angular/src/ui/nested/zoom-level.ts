@@ -64,7 +64,6 @@ export class DxoZoomLevelComponent extends NestedOption implements OnDestroy, On
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'valueChange' }
         ]);

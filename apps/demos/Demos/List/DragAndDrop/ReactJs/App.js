@@ -7,9 +7,10 @@ const App = () => {
   const [doingTasksState, setDoingTasksState] = useState(doingTasks);
   const onDragStart = useCallback(
     (e) => {
-      e.itemData = e.fromData === 'plannedTasks'
-        ? plannedTasksState[e.fromIndex]
-        : doingTasksState[e.fromIndex];
+      e.itemData =
+        e.fromData === 'plannedTasks'
+          ? plannedTasksState[e.fromIndex]
+          : doingTasksState[e.fromIndex];
     },
     [plannedTasksState, doingTasksState],
   );

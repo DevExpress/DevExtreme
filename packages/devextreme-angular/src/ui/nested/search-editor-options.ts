@@ -12,7 +12,6 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -23,10 +22,13 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { DxoTextBoxOptions } from './base/text-box-options';
-import { DxiButtonComponent } from './button-dxi';
 
+import {
+    PROPERTY_TOKEN_buttons,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-search-editor-options',
@@ -94,6 +96,11 @@ import { DxiButtonComponent } from './button-dxi';
     ]
 })
 export class DxoSearchEditorOptionsComponent extends DxoTextBoxOptions implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_buttons)
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('buttons', value);
+    }
+    
 
     /**
     
@@ -113,18 +120,9 @@ export class DxoSearchEditorOptionsComponent extends DxoTextBoxOptions implement
     }
 
 
-    @ContentChildren(forwardRef(() => DxiButtonComponent))
-    get buttonsChildren(): QueryList<DxiButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsChildren(value) {
-        this.setChildren('buttons', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'textChange' },
             { emit: 'valueChange' }

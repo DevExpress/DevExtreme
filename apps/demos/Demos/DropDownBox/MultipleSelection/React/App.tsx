@@ -31,59 +31,17 @@ function App() {
   const [gridBoxValue, setGridBoxValue] = useState([3]);
   const treeViewRef = useRef<TreeViewRef>();
 
-  const treeViewRender = useCallback(
-    () => (
-      <TreeView
-        dataSource={treeDataSource}
-        ref={treeViewRef}
-        dataStructure="plain"
-        keyExpr="ID"
-        parentIdExpr="categoryId"
-        selectionMode="multiple"
-        showCheckBoxesMode="normal"
-        selectNodesRecursive={false}
-        displayExpr="name"
-        selectByClick={true}
-        onContentReady={syncTreeViewSelection}
-        onItemSelectionChanged={treeViewItemSelectionChanged}
-      />
-    ),
-    [treeDataSource],
-  );
-
-  const dataGridRender = useCallback(
-    () => (
-      <DataGrid
-        height={345}
-        dataSource={gridDataSource}
-        columns={gridColumns}
-        hoverStateEnabled={true}
-        selectedRowKeys={gridBoxValue}
-        onSelectionChanged={dataGridOnSelectionChanged}
-      >
-        <Selection mode="multiple" />
-        <Scrolling mode="virtual" />
-        <Paging
-          enabled={true}
-          pageSize={10}
-        />
-        <FilterRow visible={true} />
-      </DataGrid>
-    ),
-    [gridDataSource, gridBoxValue],
-  );
-
   const syncTreeViewSelection = useCallback(
     (e: DropDownBoxTypes.ValueChangedEvent | any) => {
       const treeView = (e.component.selectItem && e.component)
-        || (treeViewRef.current && treeViewRef.current.instance());
+        || (treeViewRef.current?.instance());
 
       if (treeView) {
         if (e.value === null) {
           treeView.unselectAll();
         } else {
           const values = e.value || treeBoxValue;
-          values && values.forEach((value) => {
+          values?.forEach((value) => {
             treeView.selectItem(value);
           });
         }
@@ -110,6 +68,48 @@ function App() {
   const dataGridOnSelectionChanged = useCallback((e: DataGridTypes.SelectionChangedEvent) => {
     setGridBoxValue((e.selectedRowKeys.length && e.selectedRowKeys) || []);
   }, []);
+
+  const treeViewRender = useCallback(
+    () => (
+      <TreeView
+        dataSource={treeDataSource}
+        ref={treeViewRef}
+        dataStructure="plain"
+        keyExpr="ID"
+        parentIdExpr="categoryId"
+        selectionMode="multiple"
+        showCheckBoxesMode="normal"
+        selectNodesRecursive={false}
+        displayExpr="name"
+        selectByClick={true}
+        onContentReady={syncTreeViewSelection}
+        onItemSelectionChanged={treeViewItemSelectionChanged}
+      />
+    ),
+    [syncTreeViewSelection, treeViewItemSelectionChanged],
+  );
+
+  const dataGridRender = useCallback(
+    () => (
+      <DataGrid
+        height={345}
+        dataSource={gridDataSource}
+        columns={gridColumns}
+        hoverStateEnabled={true}
+        selectedRowKeys={gridBoxValue}
+        onSelectionChanged={dataGridOnSelectionChanged}
+      >
+        <Selection mode="multiple" />
+        <Scrolling mode="virtual" />
+        <Paging
+          enabled={true}
+          pageSize={10}
+        />
+        <FilterRow visible={true} />
+      </DataGrid>
+    ),
+    [gridBoxValue, dataGridOnSelectionChanged],
+  );
 
   return (
     <div className="dx-fieldset">

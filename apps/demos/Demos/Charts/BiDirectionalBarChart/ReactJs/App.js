@@ -11,7 +11,7 @@ import Chart, {
 import { dataSource } from './data.js';
 
 function customizeTooltip(e) {
-  return { text: Math.abs(e.valueText) };
+  return { text: Math.abs(Number(e.valueText)) };
 }
 function customizeLabel(e) {
   return `${Math.abs(e.value)}%`;

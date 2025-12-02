@@ -3,7 +3,8 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+    InteractionEvent,
+} from '../events';
 
 import {
     TextEditorButton,
@@ -147,7 +148,7 @@ export type PasteEvent = NativeEventInfo<dxNumberBox, ClipboardEvent>;
  * @type object
  * @inherits NativeEventInfo,ValueChangedInfo
  */
-export type ValueChangedEvent = NativeEventInfo<dxNumberBox, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxNumberBox, InteractionEvent | Event> & ValueChangedInfo;
 
 /**
  * @deprecated use Properties instead
@@ -230,8 +231,9 @@ export default class dxNumberBox extends dxTextEditor<dxNumberBoxOptions> {
      * @docid
      * @publicName reset(value)
      * @public
+     * @param1 value:number
      */
-    reset(value?: number): void;
+    reset(value?: Properties['value']): void;
 }
 
 /** @public */

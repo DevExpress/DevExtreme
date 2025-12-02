@@ -1,32 +1,35 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const vizMocks = require('../../helpers/vizMocks.js');
-const BaseRangeContainer = require('viz/gauges/base_range_container');
-const CircularRangeContainer = require('viz/gauges/circular_range_container');
-const LinearRangeContainer = require('viz/gauges/linear_range_container');
-const Translator1D = require('viz/translators/translator1d').Translator1D;
-const themeManagerModule = require('viz/gauges/theme_manager');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import {
+    Renderer,
+    Element,
+} from '../../helpers/vizMocks.js';
+import BaseRangeContainer from '__internal/viz/gauges/base_range_container';
+import CircularRangeContainer from '__internal/viz/gauges/circular_range_container';
+import LinearRangeContainer from '__internal/viz/gauges/linear_range_container';
+import { Translator1D } from '__internal/viz/translators/translator1d';
+import themeManagerModule from '__internal/viz/gauges/theme_manager';
 
-const TestRangeContainer = BaseRangeContainer.inherit({
-    _processOptions: function() {
-    },
-    _createRange: function(range, settings) {
+class TestRangeContainer extends BaseRangeContainer {
+    _processOptions() {
+    }
+    _createRange(range, settings) {
         this.elements = this.elements || [];
         const element = this._renderer.g();
         element.range = range;
         element.data = settings;
         this.elements.push(element);
         return element;
-    },
-    _isVisible: function() {
+    }
+    _isVisible() {
         return true;
     }
-});
+}
 
 const environment = {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
-        this.container = new vizMocks.Element();
+        this.renderer = new Renderer();
+        this.container = new Element();
         this.translator = new Translator1D();
         this.themeManager = new themeManagerModule.ThemeManager({});
 
@@ -39,7 +42,6 @@ const environment = {
             themeManager: this.themeManager
         });
     },
-
     afterEach: function() {
         this.rangeContainer.dispose();
     }

@@ -5,22 +5,23 @@ import holdEvent from '@js/common/core/events/hold';
 import { addNamespace, isCommandKeyPressed } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
 import { applyBatch } from '@js/common/data/array_utils';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
-import { isDefined } from '@js/core/utils/type';
+import { isDefined, isObject } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
 import supportUtils from '@ts/core/utils/m_support';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
-import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { Column, ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type { ContextMenuController } from '@ts/grids/grid_core/context_menu/m_context_menu';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m_state_storing_core';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
-import Selection from '@ts/ui/selection/m_selection';
+import Selection from '@ts/ui/selection/selection';
 
 import type { DataController } from '../data_controller/m_data_controller';
 import modules from '../m_modules';
@@ -298,6 +299,7 @@ export class SelectionController extends modules.Controller {
   private _createSelection() {
     const options = this._getSelectionConfig();
 
+    // @ts-expect-error TKey
     return new Selection(options);
   }
 
@@ -436,6 +438,10 @@ export class SelectionController extends modules.Controller {
           }
 
           this.selectRows(selectedRowKeys).always(() => {
+            this._fireSelectionChanged();
+          });
+        } else {
+          this.refresh().always(() => {
             this._fireSelectionChanged();
           });
         }
@@ -649,17 +655,19 @@ export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => 
     return dataItem;
   }
 
-  public refresh(options) {
-    const that = this;
+  public refresh(options): any {
     // @ts-expect-error
-    const d = new Deferred();
+    const d: DeferredObj<void> = new Deferred();
 
-    super.refresh.apply(this, arguments as any).done(() => {
-      if (!options || options.selection) {
-        that._selectionController.refresh().done(d.resolve).fail(d.reject);
-      } else {
+    super.refresh(options).done(() => {
+      const skipSelectionRefresh = isObject(options) && !(options as any).selection;
+
+      if (skipSelectionRefresh) {
         d.resolve();
+        return;
       }
+
+      this._selectionController.refresh().done(d.resolve).fail(d.reject);
     }).fail(d.reject);
 
     return d.promise();
@@ -717,15 +725,22 @@ export const columnHeadersSelectionExtenderMixin = (Base: ModuleType<ColumnHeade
     this._selectionController.selectionChanged.add(this._updateSelectAllValue.bind(this));
   }
 
+  private _isSelectAllCheckBoxVisible() {
+    const isEmptyData = this._dataController.isEmpty();
+    const allowSelectAll = this.option('selection.allowSelectAll');
+    const isSelectAll = this._selectionController.isSelectAll();
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    return !isEmptyData && (allowSelectAll || isSelectAll !== false);
+  }
+
   private _updateSelectAllValue() {
     const that = this;
     const $element = that.element();
     const $editor = $element?.find(`.${SELECT_CHECKBOX_CLASS}`);
 
-    if ($element && $editor.length && that.option('selection.mode') === 'multiple') {
-      const selectAllValue = that._selectionController.isSelectAll();
-      const hasSelection = selectAllValue !== false;
-      const isVisible = that.option('selection.allowSelectAll') ? !that._dataController.isEmpty() : hasSelection;
+    if ($element && $editor.length && this.option('selection.mode') === 'multiple') {
+      const selectAllValue = this._selectionController.isSelectAll();
+      const isVisible = this._isSelectAllCheckBoxVisible();
 
       $editor.dxCheckBox('instance').option({
         visible: isVisible,
@@ -744,28 +759,35 @@ export const columnHeadersSelectionExtenderMixin = (Base: ModuleType<ColumnHeade
     }
   }
 
-  protected _renderSelectAllCheckBox($container, column?) {
-    const that = this;
-    const isEmptyData = that._dataController.isEmpty();
+  protected _renderSelectAllCheckBox(
+    $container: dxElementWrapper,
+    column?: Column,
+  ): dxElementWrapper {
+    const $checkbox = this._createSelectAllCheckboxElement(column);
+    $checkbox.appendTo($container);
 
-    const groupElement = $('<div>')
-      .appendTo($container)
+    return $checkbox;
+  }
+
+  protected _createSelectAllCheckboxElement(
+    column?: Column,
+  ): dxElementWrapper {
+    const $groupElement = $('<div>')
       .addClass(SELECT_CHECKBOX_CLASS);
 
-    that.setAria('label', messageLocalization.format('dxDataGrid-ariaSelectAll'), groupElement);
+    this.setAria('label', messageLocalization.format('dxDataGrid-ariaSelectAll'), $groupElement);
 
-    that._editorFactoryController.createEditor(groupElement, extend({}, column, {
+    this._editorFactoryController.createEditor($groupElement, extend({}, column, {
       parentType: 'headerRow',
       dataType: 'boolean',
       value: this._selectionController.isSelectAll(),
       editorOptions: {
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-        visible: !isEmptyData && (that.option('selection.allowSelectAll') || this._selectionController.isSelectAll() !== false),
+        visible: this._isSelectAllCheckBoxVisible(),
       },
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-      tabIndex: that.option('useLegacyKeyboardNavigation') ? -1 : that.option('tabIndex') || 0,
+      tabIndex: this.option('useLegacyKeyboardNavigation') ? -1 : this.option('tabIndex') || 0,
       setValue: (value, e) => {
-        const allowSelectAll = that.option('selection.allowSelectAll');
+        const allowSelectAll = this.option('selection.allowSelectAll');
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         e.component.option('visible', allowSelectAll || e.component.option('value') !== false);
 
@@ -783,12 +805,17 @@ export const columnHeadersSelectionExtenderMixin = (Base: ModuleType<ColumnHeade
       },
     }));
 
-    return groupElement;
+    return $groupElement;
   }
 
   private _attachSelectAllCheckBoxClickEvent($element) {
     eventsEngine.on($element, clickEventName, this.createAction((e) => {
       const { event } = e;
+
+      if (!this._isSelectAllCheckBoxVisible()) {
+        event.preventDefault();
+        return;
+      }
 
       if (!$(event.target).closest(`.${SELECT_CHECKBOX_CLASS}`).length) {
         // @ts-expect-error

@@ -20,6 +20,7 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_commands } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-html-editor-command',
@@ -27,7 +28,13 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_commands,
+           useExisting: DxiHtmlEditorCommandComponent,
+        }
+    ]
 })
 export class DxiHtmlEditorCommandComponent extends CollectionNestedOption {
     @Input()

@@ -31,6 +31,7 @@ interface ICollectionOptionInfo {
 }
 
 export const isIE = (): boolean => {
+  // eslint-disable-next-line no-restricted-globals
   const ua = window?.navigator?.userAgent ?? ''; // Check the userAgent property of the window.navigator object
   const msie = ua.indexOf('MSIE'); // IE 10 or older
   const trident = ua.indexOf('Trident/'); // IE 11

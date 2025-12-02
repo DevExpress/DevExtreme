@@ -1,7 +1,7 @@
 import { Component, NgModule, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxPopupModule, DxScrollViewModule, DxTemplateModule } from 'devextreme-angular';
+import { DxPopupModule, DxScrollViewModule } from 'devextreme-angular';
 import { DxButtonModule, DxButtonTypes } from 'devextreme-angular/ui/button';
 
 if (!/localhost/.test(document.location.host)) {
@@ -51,7 +51,6 @@ export class AppComponent {
     DxPopupModule,
     DxButtonModule,
     DxScrollViewModule,
-    DxTemplateModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

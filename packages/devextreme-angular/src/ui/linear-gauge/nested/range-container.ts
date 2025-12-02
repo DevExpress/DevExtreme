@@ -10,7 +10,6 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -23,10 +22,13 @@ import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiLinearGaugeRangeComponent } from './range-dxi';
 
+import {
+    PROPERTY_TOKEN_ranges,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-linear-gauge-range-container',
@@ -37,6 +39,11 @@ import { DxiLinearGaugeRangeComponent } from './range-dxi';
     providers: [NestedOptionHost]
 })
 export class DxoLinearGaugeRangeContainerComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_ranges)
+    set _rangesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('ranges', value);
+    }
+    
     @Input()
     get backgroundColor(): ChartsColor | string {
         return this._getOption('backgroundColor');
@@ -106,14 +113,6 @@ export class DxoLinearGaugeRangeContainerComponent extends NestedOption implemen
         return 'rangeContainer';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiLinearGaugeRangeComponent))
-    get rangesChildren(): QueryList<DxiLinearGaugeRangeComponent> {
-        return this._getOption('ranges');
-    }
-    set rangesChildren(value) {
-        this.setChildren('ranges', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

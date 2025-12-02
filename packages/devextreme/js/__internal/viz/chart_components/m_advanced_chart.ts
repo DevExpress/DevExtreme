@@ -2,16 +2,16 @@ import { noop as _noop } from '@js/core/utils/common';
 import { extend as _extend } from '@js/core/utils/extend';
 import { reverseEach as _reverseEach } from '@js/core/utils/iterator';
 import { isDefined as _isDefined, type } from '@js/core/utils/type';
-import { Axis } from '@js/viz/axes/base_axis';
-import { SeriesFamily } from '@js/viz/core/series_family';
+// @ts-expect-error
+import { areCanvasesDifferent, floorCanvasDimensions } from '@js/viz/utils';
+import { Axis } from '@ts/viz/axes/base_axis';
+import { SeriesFamily } from '@ts/viz/core/series_family';
 import {
   convertVisualRangeObject, map as _map,
   mergeMarginOptions, rangesAreEqual, setCanvasValues, unique,
-} from '@js/viz/core/utils';
-import rangeDataCalculator from '@js/viz/series/helpers/range_data_calculator';
-import { Range } from '@js/viz/translators/range';
-// @ts-expect-error
-import { areCanvasesDifferent, floorCanvasDimensions } from '@js/viz/utils';
+} from '@ts/viz/core/utils';
+import rangeDataCalculator from '@ts/viz/series/helpers/range_data_calculator';
+import { Range } from '@ts/viz/translators/range';
 
 import { BaseChart } from './m_base_chart';
 
@@ -624,7 +624,7 @@ export const AdvancedChart = BaseChart.inherit({
       isArgumentAxis: isArgumentAxes,
       getTemplate: (template) => this._getTemplate(template),
     }, this._getAxisRenderingOptions(typeSelector));
-    const axis = new Axis(renderingSettings) as any;
+    const axis = new Axis(renderingSettings);
     axis.updateOptions(options);
     axis.isVirtual = virtual;
 

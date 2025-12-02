@@ -1,5 +1,5 @@
 export interface BookingFormData {
-  dates: Array<Date | null>;
+  dates: (Date | null)[];
   adultsCount: number;
   childrenCount: number;
   petsCount: number;

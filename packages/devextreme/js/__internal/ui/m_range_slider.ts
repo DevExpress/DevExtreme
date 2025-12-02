@@ -8,6 +8,7 @@ import $ from '@js/core/renderer';
 import { applyServerDecimalSeparator } from '@js/core/utils/common';
 import { getWidth } from '@js/core/utils/size';
 import type { Properties } from '@js/ui/range_slider';
+import type { SupportedKeys } from '@ts/core/widget/widget';
 import Slider from '@ts/ui/slider/m_slider';
 
 import SliderHandle from './slider/m_slider_handle';
@@ -31,7 +32,7 @@ class RangeSlider extends Slider<RangeSliderProperties> {
 
   _$submitEndElement!: dxElementWrapper;
 
-  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
+  _supportedKeys(): SupportedKeys {
     const { rtlEnabled } = this.option();
 
     const that = this;
@@ -92,7 +93,7 @@ class RangeSlider extends Slider<RangeSliderProperties> {
       },
       home(e): void {
         this._processKeyboardEvent(e);
-        // @ts-expect-error ts-error
+
         const isStart = $(e.target).hasClass(RANGE_SLIDER_START_HANDLE_CLASS);
         const valueOption = isStart ? 'start' : 'end';
         const startOption = isStart ? 'min' : 'start';
@@ -102,7 +103,7 @@ class RangeSlider extends Slider<RangeSliderProperties> {
       },
       end(e): void {
         this._processKeyboardEvent(e);
-        // @ts-expect-error ts-error
+
         const isStart = $(e.target).hasClass(RANGE_SLIDER_START_HANDLE_CLASS);
         const valueOption = isStart ? 'start' : 'end';
         const endOption = isStart ? 'end' : 'max';

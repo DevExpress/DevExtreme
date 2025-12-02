@@ -1,7 +1,5 @@
-const $ = require('jquery');
-const common = require('./commonParts/common.js');
-const createSankey = common.createSankey;
-const environment = common.environment;
+import $ from 'jquery';
+import { createSankey, environment } from './commonParts/common.js';
 
 const getHorizontalOffset = labels => labels.map(label => label.children[0].attr.lastCall.args[0].translateX);
 const getVerticalOffset = labels => labels.map(label => label.children[0].attr.lastCall.args[0].translateY);
@@ -81,7 +79,7 @@ QUnit.test('Create labels with styles', function(assert) {
     assert.deepEqual(css, {
         fill: 'red',
         cursor: 'default',
-        'font-family': '\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana, sans-serif',
+        'font-family': '-apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'segoe ui\', \'helvetica neue\', \'adwaita sans\', cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
         'font-size': 26,
         'font-weight': 400
     });
@@ -147,7 +145,6 @@ QUnit.test('Label color if useNodeColors set to true', function(assert) {
 });
 
 QUnit.test('Labels customize text', function(assert) {
-
     const customizeText = function(node) {
         return 'test text ' + node.label;
     };
@@ -196,7 +193,6 @@ QUnit.test('Labels alignment through cascades with rtlEnabled', function(assert)
     assert.ok(nodes[1].attr.firstCall.args[0].x < this.label(1).attr.lastCall.args[0].translateX, 'First cascade');
     assert.ok(nodes[2].attr.firstCall.args[0].x > this.label(2).attr.lastCall.args[0].translateX, 'Last cascade');
 });
-
 
 QUnit.test('Labels offsets', function(assert) {
     createSankey({

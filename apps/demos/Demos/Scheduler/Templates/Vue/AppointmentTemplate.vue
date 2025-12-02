@@ -2,11 +2,11 @@
   <div class="showtime-preview">
     <div> {{ movieData.text }}</div>
     <div>
-      Ticket Price: <strong>${{ templateModel.targetedAppointmentData.price }}</strong>
+      Ticket Price: <strong>${{ templateModel.targetedAppointmentData?.price }}</strong>
     </div>
     <div>
-      {{ getFormatDate(templateModel.targetedAppointmentData.displayStartDate) }} -
-      {{ getFormatDate(templateModel.targetedAppointmentData.displayEndDate) }}
+      {{ getFormatDate(templateModel.targetedAppointmentData?.displayStartDate) }} -
+      {{ getFormatDate(templateModel.targetedAppointmentData?.displayEndDate) }}
     </div>
   </div>
 </template>
@@ -22,16 +22,16 @@ const props = defineProps<{
   templateModel: DxSchedulerTypes.AppointmentTemplateData;
 }>();
 
-function getFormatDate(value) {
+function getFormatDate(value: Date) {
   return formatDate(value, 'shortTime');
 }
-const getMovieById = function(resourceId) {
+const getMovieById = function (resourceId: string) {
   return Query(moviesData)
     .filter(['id', resourceId])
     .toArray()[0];
 };
 
-const movieData = getMovieById(props.templateModel.targetedAppointmentData.movieId);
+const movieData = getMovieById(props.templateModel.targetedAppointmentData?.movieId);
 
 </script>
 <style scoped>

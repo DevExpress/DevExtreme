@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <div class="dx-fieldset">
@@ -66,10 +65,10 @@
             :input-attr="{ 'aria-label': 'Templated Product' }"
             display-expr="Name"
             value-expr="ID"
-            field-template="field"
+            :field-addons="{ beforeTemplate: 'before' }"
             item-template="item"
           >
-            <template #field="{ data }">
+            <template #before="{ data }">
               <Field :field-data="data"/>
             </template>
             <template #item="{ data }">
@@ -100,7 +99,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxSelectBox from 'devextreme-vue/select-box';
+import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import { ArrayStore } from 'devextreme-vue/common/data';
 import notify from 'devextreme/ui/notify';
 import Field from './Field.vue';
@@ -114,7 +113,7 @@ const data = new ArrayStore({
   data: products,
   key: 'ID',
 });
-function onValueChanged(e) {
+function onValueChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
   notify(`The value is changed to: "${e.value}"`);
 }
 
@@ -128,6 +127,12 @@ function onValueChanged(e) {
 .custom-item {
   position: relative;
   min-height: 30px;
+}
+
+.custom-addon {
+  padding-left: 8px;
+  display: flex;
+  align-items: center;
 }
 
 .dx-dropdowneditor-input-wrapper .custom-item > img {

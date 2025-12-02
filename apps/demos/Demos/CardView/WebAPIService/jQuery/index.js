@@ -22,7 +22,7 @@ $(() => {
       {
         caption: 'Subject',
         dataField: 'Task_Subject',
-        validationRules: [{ type: 'required' }]
+        validationRules: [{ type: 'required' }],
       },
       {
         dataField: 'Task_Start_Date',
@@ -61,7 +61,7 @@ $(() => {
           editorOptions: {
             dataSource: ['Low', 'Normal', 'High', 'Urgent'],
           },
-        }, 'Task_Status']
+        }, 'Task_Status'],
       },
     },
     searchPanel: {

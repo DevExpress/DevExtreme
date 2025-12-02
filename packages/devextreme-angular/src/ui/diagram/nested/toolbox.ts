@@ -10,9 +10,7 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
-    QueryList,
-    AfterContentInit
+    QueryList
 } from '@angular/core';
 
 
@@ -23,11 +21,13 @@ import { ShapeCategory, ToolboxDisplayMode, ShapeType, PanelVisibility } from 'd
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiDiagramGroupComponent } from './group-dxi';
-import { DxiDiagramToolboxGroupComponent } from './toolbox-group-dxi';
 
+import {
+    PROPERTY_TOKEN_groups,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-diagram-toolbox',
@@ -37,7 +37,12 @@ import { DxiDiagramToolboxGroupComponent } from './toolbox-group-dxi';
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoDiagramToolboxComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
+export class DxoDiagramToolboxComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_groups)
+    set _groupsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('groups', value);
+    }
+    
     @Input()
     get groups(): { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, expanded?: boolean, shapes?: Array<ShapeType>, title?: string }[] {
         return this._getOption('groups');
@@ -84,21 +89,6 @@ export class DxoDiagramToolboxComponent extends NestedOption implements OnDestro
     }
 
 
-    @ContentChildren(forwardRef(() => DxiDiagramGroupComponent)) groupsChildren!: QueryList<DxiDiagramGroupComponent>
-    
-    @ContentChildren(forwardRef(() => DxiDiagramToolboxGroupComponent)) toolboxGroupsChildren!: QueryList<DxiDiagramToolboxGroupComponent>
-    
-    setGroups() {
-        const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.groupsChildren.toArray(),
-            ...this.toolboxGroupsChildren.toArray(),
-        ]);
-        this.setChildren('groups', q);
-    }
-
-
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -116,12 +106,6 @@ export class DxoDiagramToolboxComponent extends NestedOption implements OnDestro
     }
 
 
-    ngAfterContentInit() {
-        this.setGroups();
-        
-        this.groupsChildren.changes.subscribe(() => { this.setGroups() });
-        this.toolboxGroupsChildren.changes.subscribe(() => { this.setGroups() });
-    }
 }
 
 @NgModule({

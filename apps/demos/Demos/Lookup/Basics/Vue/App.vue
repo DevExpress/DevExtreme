@@ -38,9 +38,8 @@ import { employeesList, employeesTasks } from './data.ts';
 const dataSource = new DataSource({
   store: new ArrayStore({
     data: employeesTasks,
-    key: 'ID'
+    key: 'ID',
   }),
   group: 'Assigned',
 });
 </script>
-

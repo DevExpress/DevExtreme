@@ -327,7 +327,7 @@ type ScrollableDirection = 'both' | 'horizontal' | 'vertical';
 
           await scrollable.setContainerCssWidth(75);
 
-          // eslint-disable-next-line max-len
+          // eslint-disable-next-line @stylistic/max-len
           let expectedScrollOffset = (await scrollable.getMaxScrollOffset()).horizontal - scrollOffset;
           await t
             .expect((await scrollable.scrollOffset()).left)

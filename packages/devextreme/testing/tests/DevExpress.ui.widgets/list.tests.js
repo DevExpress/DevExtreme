@@ -1,11 +1,14 @@
 import $ from 'jquery';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(() => {
     const markup =
         `<style nonce="qunit-test">
             .dx-list-item {
+                height: 40px;
+            }
+            .dx-list-group-header{
                 height: 40px;
             }
             .dx-icon-remove {

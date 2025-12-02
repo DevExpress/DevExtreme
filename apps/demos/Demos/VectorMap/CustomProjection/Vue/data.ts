@@ -1,11 +1,19 @@
-export const coordLinesData = {
+export const coordLinesData: {
+  type: string;
+  features: {
+    geometry: {
+      type: string;
+      coordinates: number[][];
+    };
+  }[];
+} = {
   type: 'FeatureCollection',
   features: [],
 };
 
 // add meridians
 for (let longitude = -180; longitude <= 180; longitude += 30) {
-  const lineCoords = [];
+  const lineCoords: number[][] = [];
   for (let latitude = -90; latitude <= 90; latitude += 5) {
     lineCoords.push([longitude, latitude]);
   }

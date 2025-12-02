@@ -18,7 +18,6 @@ import { DxContextMenuModule } from 'devextreme-angular/ui/context-menu';
 import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
 import { DxDateBoxModule } from 'devextreme-angular/ui/date-box';
 import { DxDateRangeBoxModule } from 'devextreme-angular/ui/date-range-box';
-import { DxDeferRenderingModule } from 'devextreme-angular/ui/defer-rendering';
 import { DxDiagramModule } from 'devextreme-angular/ui/diagram';
 import { DxDraggableModule } from 'devextreme-angular/ui/draggable';
 import { DxDrawerModule } from 'devextreme-angular/ui/drawer';
@@ -62,6 +61,7 @@ import { DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
 import { DxSliderModule } from 'devextreme-angular/ui/slider';
 import { DxSortableModule } from 'devextreme-angular/ui/sortable';
 import { DxSparklineModule } from 'devextreme-angular/ui/sparkline';
+import { DxSpeechToTextModule } from 'devextreme-angular/ui/speech-to-text';
 import { DxSpeedDialActionModule } from 'devextreme-angular/ui/speed-dial-action';
 import { DxSplitterModule } from 'devextreme-angular/ui/splitter';
 import { DxStepperModule } from 'devextreme-angular/ui/stepper';
@@ -105,7 +105,6 @@ import { DxTemplateModule } from 'devextreme-angular/core';
     DxDataGridModule,
     DxDateBoxModule,
     DxDateRangeBoxModule,
-    DxDeferRenderingModule,
     DxDiagramModule,
     DxDraggableModule,
     DxDrawerModule,
@@ -149,6 +148,7 @@ import { DxTemplateModule } from 'devextreme-angular/core';
     DxSliderModule,
     DxSortableModule,
     DxSparklineModule,
+    DxSpeechToTextModule,
     DxSpeedDialActionModule,
     DxSplitterModule,
     DxStepperModule,
@@ -191,7 +191,6 @@ import { DxTemplateModule } from 'devextreme-angular/core';
     DxDataGridModule,
     DxDateBoxModule,
     DxDateRangeBoxModule,
-    DxDeferRenderingModule,
     DxDiagramModule,
     DxDraggableModule,
     DxDrawerModule,
@@ -235,6 +234,7 @@ import { DxTemplateModule } from 'devextreme-angular/core';
     DxSliderModule,
     DxSortableModule,
     DxSparklineModule,
+    DxSpeechToTextModule,
     DxSpeedDialActionModule,
     DxSplitterModule,
     DxStepperModule,

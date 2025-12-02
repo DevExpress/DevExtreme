@@ -23,8 +23,6 @@ export class Service {
     const b2 = this.random(-100, 100) / 10;
     let k1 = this.random(-100, 100) / 10;
     let k2 = this.random(-100, 100) / 10;
-    let deviation1;
-    let deviation2;
     let i;
     let x1;
     let x2;
@@ -39,9 +37,9 @@ export class Service {
     if (k2 < 0.1 && k2 >= 0) { k2 = 0.1; }
     if (k2 > -0.1 && k2 < 0) { k2 = -0.1; }
 
-    deviation1 = Math.abs(k1 * 8);
-    deviation2 = Math.abs(k2 * 8);
-    for (i = 0; i < 30; i++) {
+    const deviation1 = Math.abs(k1 * 8);
+    const deviation2 = Math.abs(k2 * 8);
+    for (i = 0; i < 30; i += 1) {
       x1 = this.random(1, 20);
       x2 = this.random(1, 20);
 

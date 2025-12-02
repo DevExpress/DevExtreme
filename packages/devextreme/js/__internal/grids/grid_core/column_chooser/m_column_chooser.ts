@@ -1,6 +1,5 @@
 /* eslint-disable max-classes-per-file */
 import messageLocalization from '@js/common/core/localization/message';
-import devices from '@js/core/devices';
 import $ from '@js/core/renderer';
 import { deferUpdate } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
@@ -23,7 +22,6 @@ import { defaultOptions } from './const';
 
 const COLUMN_CHOOSER_CLASS = 'column-chooser';
 const COLUMN_CHOOSER_BUTTON_CLASS = 'column-chooser-button';
-const NOTOUCH_ACTION_CLASS = 'notouch-action';
 const COLUMN_CHOOSER_LIST_CLASS = 'column-chooser-list';
 const COLUMN_CHOOSER_PLAIN_CLASS = 'column-chooser-plain';
 const COLUMN_CHOOSER_DRAG_CLASS = 'column-chooser-mode-drag';
@@ -145,11 +143,6 @@ export class ColumnChooserView extends ColumnsView {
 
   }
 
-  private _isWinDevice() {
-    // @ts-expect-error
-    return !!devices.real().win;
-  }
-
   private _initializePopupContainer() {
     const that = this;
     const columnChooserClass = that.addWidgetPrefix(COLUMN_CHOOSER_CLASS);
@@ -171,11 +164,6 @@ export class ColumnChooserView extends ColumnsView {
       width: columnChooserOptions.width,
       height: columnChooserOptions.height,
       rtlEnabled: that.option('rtlEnabled'),
-      onHidden() {
-        if (that._isWinDevice()) {
-          $('body').removeClass(that.addWidgetPrefix(NOTOUCH_ACTION_CLASS));
-        }
-      },
       container: columnChooserOptions.container,
       _loopFocus: true,
     } as PopupProperties;
@@ -249,10 +237,6 @@ export class ColumnChooserView extends ColumnsView {
       searchTimeout,
       searchEditorOptions: columnChooser.search?.editorOptions,
     };
-
-    if (this._isWinDevice()) {
-      treeViewConfig.useNativeScrolling = false;
-    }
 
     extend(treeViewConfig, isSelectMode ? this._prepareSelectModeConfig() : this._prepareDragModeConfig());
 
@@ -392,25 +376,45 @@ export class ColumnChooserView extends ColumnsView {
     this._columnChooserList.endUpdate();
   }
 
-  protected _columnOptionChanged(e) {
-    super._columnOptionChanged(e);
+  protected _columnOptionChanged(changes): void {
+    super._columnOptionChanged(changes);
 
+    const { optionNames } = changes;
     const isSelectMode = this.isSelectMode();
+    const onlyVisibleChanged = this.isColumnVisibilityOnlyUpdated(optionNames);
+    const isOnlyColumnVisibilityUpdated = this._isUpdatingColumnVisibility
+      && onlyVisibleChanged;
 
-    if (isSelectMode && this._columnChooserList && !this._isUpdatingColumnVisibility) {
-      const { optionNames } = e;
-      const onlyVisibleChanged = optionNames.visible && optionNames.length === 1;
-      const columnIndices = isDefined(e.columnIndex) ? [e.columnIndex] : e.columnIndices;
-      const needUpdate = COLUMN_OPTIONS_USED_IN_ITEMS.some((optionName) => optionNames[optionName]) || (e.changeTypes.columns && optionNames.all);
-
-      if (needUpdate) {
-        this._updateItemsSelection(columnIndices);
-
-        if (!onlyVisibleChanged) {
-          this._updateItems();
-        }
-      }
+    if (!isSelectMode || !this._columnChooserList || isOnlyColumnVisibilityUpdated) {
+      return;
     }
+
+    const columnIndices = isDefined(changes.columnIndex)
+      ? [changes.columnIndex]
+      : changes.columnIndices;
+    const hasItemsOptionNames = COLUMN_OPTIONS_USED_IN_ITEMS
+      .some((optionName) => optionNames[optionName]);
+    const needUpdate: boolean = hasItemsOptionNames
+      || (changes.changeTypes.columns && optionNames.all);
+
+    if (!needUpdate) {
+      return;
+    }
+
+    this._updateItemsSelection(columnIndices);
+    if (!onlyVisibleChanged) {
+      this._updateItems();
+    }
+  }
+
+  private isColumnVisibilityOnlyUpdated(
+    optionNames: { length: number } & Record<string, unknown>,
+  ): boolean {
+    const optionKeys = Object
+      .keys(optionNames ?? {})
+      .filter((key) => key !== 'length');
+
+    return optionKeys.length === 1 && optionKeys[0] === 'visible';
   }
 
   public getColumnElements() {
@@ -481,10 +485,6 @@ export class ColumnChooserView extends ColumnsView {
       this.render();
     }
     this._popupContainer.show();
-
-    if (this._isWinDevice()) {
-      $('body').addClass(this.addWidgetPrefix(NOTOUCH_ACTION_CLASS));
-    }
   }
 
   private hideColumnChooser() {

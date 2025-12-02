@@ -26,8 +26,8 @@ const editingStrategy = {
 const store = [...initialMessages];
 const customStore = new CustomStore({
   key: 'id',
-  load: async() => store,
-  insert: async(message) => {
+  load: async () => store,
+  insert: async (message) => {
     store.push(message);
     return message;
   },

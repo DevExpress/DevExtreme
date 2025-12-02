@@ -10,23 +10,24 @@ $material-aidialog-selects-gap: null !default;
 $material-aidialog-content-gap: null !default;
 $material-aidialog-content-padding: null !default;
 $material-aidialog-toolbar-padding: null !default;
+$material-aidialog-border-radius: $base-border-radius * 2 !default;
 
 @if $size == "default" {
   $material-toolbar-size-editor-width: 120px !default;
   $material-htmleditor-toolbar-padding: 16px !default;
-  $material-html-editor-add-image-dialog-fileuploader-padding: 50px 40px;
-  $material-aidialog-selects-gap: 8px;
-  $material-aidialog-content-gap: 24px;
-  $material-aidialog-content-padding: 24px;
-  $material-aidialog-toolbar-padding: 16px 24px;
+  $material-html-editor-add-image-dialog-fileuploader-padding: 50px 40px !default;
+  $material-aidialog-selects-gap: 8px !default;
+  $material-aidialog-content-gap: 24px !default;
+  $material-aidialog-content-padding: 24px !default;
+  $material-aidialog-toolbar-padding: 0 24px 16px !default;
 }
 
 @else if $size == "compact" {
   $material-toolbar-size-editor-width: 90px !default;
   $material-htmleditor-toolbar-padding: 11px !default;
-  $material-html-editor-add-image-dialog-fileuploader-padding: 40px 30px;
-  $material-aidialog-selects-gap: 8px;
-  $material-aidialog-content-gap: 16px;
-  $material-aidialog-content-padding: 16px;
-  $material-aidialog-toolbar-padding: 8px 16px;
+  $material-html-editor-add-image-dialog-fileuploader-padding: 40px 30px !default;
+  $material-aidialog-selects-gap: 8px !default;
+  $material-aidialog-content-gap: 16px !default;
+  $material-aidialog-content-padding: 16px !default;
+  $material-aidialog-toolbar-padding: 0 16px 8px !default;
 }

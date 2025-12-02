@@ -13,12 +13,9 @@ const App = () => {
       notify(`The "${e.itemData.text}" item was clicked`, 'success', 1500);
     }
   }, []);
-  const limitSubmenuHeightOnMouseClick = useCallback(
-    (e) => {
-      setLimitSubmenuHeight(e.value);
-    },
-    [setLimitSubmenuHeight],
-  );
+  const limitSubmenuHeightOnMouseClick = useCallback((e) => {
+    setLimitSubmenuHeight(e.value);
+  }, []);
   const onSubmenuShowing = useCallback(
     ({ submenuContainer }) => {
       submenuContainer.style.maxHeight = limitSubmenuHeight ? `${SUBMENU_HEIGHT}px` : '';

@@ -10,8 +10,7 @@ if (window && window.config?.packageConfigPaths) {
 
 @Component({
   selector: 'detail-grid',
-  templateUrl: `.${modulePrefix && (modulePrefix + '/detail-grid')}/detail-grid.component.html`,
-  styleUrls: [`.${modulePrefix && (modulePrefix + '/detail-grid')}/detail-grid.component.css`],
+  templateUrl: `.${modulePrefix && (`${modulePrefix}/detail-grid`)}/detail-grid.component.html`,
   providers: [Service],
 })
 export class DetailGridComponent implements AfterViewInit {
@@ -36,6 +35,6 @@ export class DetailGridComponent implements AfterViewInit {
   }
 
   completedValue(rowData) {
-    return rowData.Status == 'Completed';
+    return rowData.Status === 'Completed';
   }
 }

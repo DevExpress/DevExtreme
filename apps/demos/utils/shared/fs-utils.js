@@ -3,6 +3,7 @@
 const fs = require('fs');
 const { copySync } = require('fs-extra');
 const path = require('path');
+const menuMetaUtils = require('./menu-meta-utils');
 
 const demosPathPrefix = path.join('utils', 'templates');
 const descriptionFileName = 'description.md';
@@ -26,9 +27,7 @@ class FileSystemUtils {
   copyFilesFromExistingDemos(approaches, demoPath, newOrExisting, menuMetaData, baseDemosDir) {
     approaches.forEach((approach) => {
       const demoPathByMeta = this.getDemoPathByMeta(
-        newOrExisting.category,
-        newOrExisting.group,
-        newOrExisting.demo,
+        newOrExisting.path,
         baseDemosDir,
         menuMetaData,
       );
@@ -42,11 +41,35 @@ class FileSystemUtils {
     });
   }
 
+  replaceRelativePaths(fromPath, toPath) {
+    if (!fs.existsSync(toPath)) {
+      fs.mkdirSync(toPath, { recursive: true });
+    }
+    fs.readdirSync(fromPath, { withFileTypes: true })
+      .forEach((entry) => {
+        const entryPath = path.join(fromPath, entry.name);
+        const updatedToPath = path.join(toPath, entry.name);
+
+        if (entry.isDirectory()) {
+          this.replaceRelativePaths(entryPath, updatedToPath);
+        } else {
+          const parentsLength = toPath.split('/').length;
+          const relativePath = '../'.repeat(parentsLength);
+
+          let content = fs.readFileSync(entryPath, 'utf-8');
+          content = content.replaceAll('__RELATIVE_PATH__', relativePath);
+
+          fs.writeFileSync(updatedToPath, content);
+        }
+      })
+  }
+
   copyFilesFromBlankDemos(approaches, demoPath) {
     approaches.forEach((approach) => {
       const fromPath = path.join(demosPathPrefix, approach);
       const toPath = path.join(demoPath, approach);
-      copySync(fromPath, toPath);
+
+      this.replaceRelativePaths(fromPath, toPath);
     });
 
     fs.writeFileSync(path.join(demoPath, descriptionFileName), '', (err) => {
@@ -55,12 +78,8 @@ class FileSystemUtils {
     });
   }
 
-  getDemoPathByMeta(categoryName, groupName, demoName, baseDemosDir, menuMetaData) {
-    const categoryIndex = menuMetaData.findIndex((x) => x.Name === categoryName);
-    const groupIndex = menuMetaData[categoryIndex].Groups.findIndex((x) => x.Name === groupName);
-    const demo = menuMetaData[categoryIndex]
-      .Groups[groupIndex]
-      .Demos.find((x) => x.Name === demoName);
+  getDemoPathByMeta(pathParts, baseDemosDir, menuMetaData) {
+    const demo = menuMetaUtils.getByPath(menuMetaData, pathParts);
     const result = path.join(baseDemosDir, demo.Widget, demo.Name);
     return result;
   }
@@ -73,7 +92,7 @@ class FileSystemUtils {
 
   saveMetaDataFile(menuMetaDataFilePath, metaData) {
     console.log('Saving: menuMeta.json');
-    fs.writeFileSync(menuMetaDataFilePath, JSON.stringify(metaData, null, 2));
+    fs.writeFileSync(menuMetaDataFilePath, `${JSON.stringify(metaData, null, 2)}\n`);
     console.log('Saved: menuMeta.json');
   }
 

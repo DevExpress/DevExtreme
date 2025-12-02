@@ -7,7 +7,6 @@ import {
   DxDataGridComponent,
   DxDataGridModule,
   DxPopupModule,
-  DxTemplateModule,
 } from 'devextreme-angular';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import { DataSource } from 'devextreme-angular/common/data';
@@ -70,7 +69,7 @@ export class AppComponent {
   }
 
   onPivotCellClick(e: DxPivotGridTypes.CellClickEvent) {
-    if (e.area == 'data') {
+    if (e.area === 'data') {
       const rowPathLength = e.cell.rowPath.length;
       const rowPathName = e.cell.rowPath[rowPathLength - 1];
 
@@ -88,7 +87,6 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    DxTemplateModule,
     DxPivotGridModule,
     DxPopupModule,
     DxDataGridModule,

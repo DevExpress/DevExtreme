@@ -22,7 +22,7 @@ const { format } = new Intl.NumberFormat('en-US', {
 const customizeLayer = (elements) => {
   elements.forEach((element) => {
     const countryGDPData = countriesGDP[element.attribute('name')];
-    element.attribute('total', (countryGDPData && countryGDPData.total) || 0);
+    element.attribute('total', countryGDPData?.total || 0);
   });
 };
 const customizeLegendText = ({ start, end }) => `${format(start)} to ${format(end)}`;

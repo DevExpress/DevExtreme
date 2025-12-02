@@ -3,7 +3,6 @@ import Button from 'devextreme-react/button';
 import Sortable, { type SortableTypes } from 'devextreme-react/sortable';
 import TabPanel, { type TabPanelTypes } from 'devextreme-react/tab-panel';
 
-
 import service from './data.ts';
 import EmployeeTemplate from './EmployeeTemplate.tsx';
 
@@ -39,10 +38,10 @@ function App() {
 
   const renderTitle = useCallback((data) => (
     <React.Fragment>
-        <span>
-          {data.FirstName} {data.LastName}
-        </span>
-        {employees.length >= 2 && <i className="dx-icon dx-icon-close" onClick={() => { closeButtonHandler(data); }} />}
+      <span>
+        {data.FirstName} {data.LastName}
+      </span>
+      {employees.length >= 2 && <i className="dx-icon dx-icon-close" onClick={() => { closeButtonHandler(data); }} />}
     </React.Fragment>
   ), [employees, closeButtonHandler]);
 

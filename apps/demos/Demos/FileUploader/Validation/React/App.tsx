@@ -10,14 +10,14 @@ export default function App() {
         <FileUploader multiple={true} uploadMode="useButtons" uploadUrl="https://js.devexpress.com/Demos/NetCore/FileUploader/Upload" allowedFileExtensions={fileExtensions} />
         <span className="note">{'Allowed file extensions: '}
           <span>.jpg, .jpeg, .gif, .png</span>
-            .
+          .
         </span>
       </div>
       <div className="file-uploader-block" style={{ float: 'right' }}>
         <FileUploader multiple={true} uploadMode="useButtons" uploadUrl="https://js.devexpress.com/Demos/NetCore/FileUploader/Upload" maxFileSize={4000000} />
         <span className="note">{'Maximum file size: '}
           <span>4 MB</span>
-            .
+          .
         </span>
       </div>
     </div>

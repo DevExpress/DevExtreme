@@ -1,4 +1,3 @@
-/* eslint-disable func-style */
 import React, { useCallback, useMemo, useState } from 'react';
 
 import Scheduler, { type SchedulerTypes } from 'devextreme-react/scheduler';
@@ -17,11 +16,11 @@ const ariaDescription = () => {
   const disabledDates = holidays
     .filter((date) => !Utils.isWeekend(date))
     .map((date) => new Date(date).toLocaleDateString('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      })
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
     );
   if (disabledDates?.length === 1) {
     return `${disabledDates} is a disabled date`;
@@ -29,6 +28,7 @@ const ariaDescription = () => {
   if (disabledDates?.length > 1) {
     return `${disabledDates.join(', ')} are disabled dates`;
   }
+  return '';
 };
 
 const notifyDisableDate = () => {
@@ -37,7 +37,7 @@ const notifyDisableDate = () => {
 
 const onContentReady = (e: SchedulerTypes.ContentReadyEvent) => {
   setComponentAria(e.component?.$element());
-}
+};
 
 const applyDisableDatesToDateEditors = (form: ReturnType<FormRef['instance']>) => {
   const startDateEditor = form.getEditor('startDate');
@@ -76,8 +76,10 @@ const onAppointmentUpdating = (e: SchedulerTypes.AppointmentUpdatingEvent) => {
 
 const setComponentAria = (element) => {
   const prevAria = element?.attr('aria-label') || '';
-  element?.attr('aria-label', `${prevAria} ${ariaDescription()}`);
-}
+  const description = ariaDescription();
+  const nextAria = `${prevAria}${description ? ` ${description}` : ''}`;
+  element?.attr('aria-label', nextAria);
+};
 
 const App = () => {
   const [currentView, setCurrentView] = useState<SchedulerTypes.ViewType>(views[0]);
@@ -90,7 +92,7 @@ const App = () => {
 
   const renderDateCell = useCallback((itemData) => (
     <DateCell itemData={itemData} currentView={currentView} />
-  ), []);
+  ), [currentView]);
 
   return (
     <Scheduler

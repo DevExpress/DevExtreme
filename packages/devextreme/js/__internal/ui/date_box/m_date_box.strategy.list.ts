@@ -1,4 +1,4 @@
-import '@ts/ui/list/modules/m_selection';
+import '@ts/ui/list/modules/selection';
 
 import dateLocalization from '@js/common/core/localization/date';
 import { ensureDefined, noop } from '@js/core/utils/common';
@@ -6,8 +6,8 @@ import dateSerialization from '@js/core/utils/date_serialization';
 import { getHeight, getOuterHeight } from '@js/core/utils/size';
 import { isDate } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
-import List from '@js/ui/list_light';
 import { getSizeValue } from '@ts/ui/drop_down_editor/m_utils';
+import List from '@ts/ui/list/list.edit.search';
 
 import DateBoxStrategy from './m_date_box.strategy';
 import dateUtils from './m_date_utils';

@@ -114,7 +114,7 @@ const componentConfig = {
     hideOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     hint: String,
     hoverStateEnabled: Boolean,
-    items: Array as PropType<Array<dxContextMenuItem>>,
+    items: Array as PropType<Array<any | dxContextMenuItem>>,
     itemsExpr: [Function, String] as PropType<((() => void)) | string>,
     itemTemplate: {},
     onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,

@@ -23,6 +23,7 @@ import type { RowsView } from '../../grid_core/views/m_rows_view';
 import AggregateCalculator from '../m_aggregate_calculator';
 import gridCore from '../m_core';
 import dataSourceAdapterProvider from '../m_data_source_adapter';
+import { getSummaryCellIndex } from './utils';
 
 const DATAGRID_TOTAL_FOOTER_CLASS = 'dx-datagrid-total-footer';
 const DATAGRID_SUMMARY_ITEM_CLASS = 'dx-datagrid-summary-item';
@@ -538,10 +539,12 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
         }
       }
     });
+
     if (!isEmptyObject(summaryCellsByColumns)) {
       visibleColumns.forEach((column, visibleIndex) => {
         const prevColumn = visibleColumns[visibleIndex - 1];
-        const columnIndex = isGroupRow && (prevColumn?.command === 'expand' || column.command === 'expand') ? prevColumn?.index : column.index;
+        const columnIndex = getSummaryCellIndex(column, prevColumn, isGroupRow);
+
         summaryCells.push(summaryCellsByColumns[columnIndex] || []);
       });
     }

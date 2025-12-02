@@ -1,4 +1,5 @@
 @use "../sizes" as *;
+@use '../../base/dataGrid/variables' as *;
 
 // adduse
 
@@ -17,3 +18,5 @@ $area-field-top-bottom-padding: null !default;
   $area-field-border-radius: 4px !default;
   $area-field-top-bottom-padding: 2px !default;
 }
+
+$datagrid-cell-padding: $fluent-datagrid-cell-padding !default;

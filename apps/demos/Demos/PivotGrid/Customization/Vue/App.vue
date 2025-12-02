@@ -47,9 +47,9 @@ import DxPivotGrid, {
   DxFieldChooser,
   type DxPivotGridTypes,
 } from 'devextreme-vue/pivot-grid';
+import DxCheckBox, { type DxCheckBoxTypes } from 'devextreme-vue/check-box';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
-import DxCheckBox from 'devextreme-vue/check-box';
-import sales from './data.ts';
+import { sales } from './data.ts';
 
 const showTotalsPrior = ref<DxPivotGridTypes.PivotGridTotalDisplayMode>('none');
 const dataFieldArea = ref<DxPivotGridTypes.PivotGridDataFieldArea>('column');
@@ -91,13 +91,13 @@ const dataSource = new PivotGridDataSource({
   store: sales,
 });
 
-function onShowTotalsPriorChanged(data) {
+function onShowTotalsPriorChanged(data: DxCheckBoxTypes.ValueChangedEvent) {
   showTotalsPrior.value = data.value ? 'both' : 'none';
 }
-function onDataFieldAreaChanged(data) {
+function onDataFieldAreaChanged(data: DxCheckBoxTypes.ValueChangedEvent) {
   dataFieldArea.value = data.value ? 'row' : 'column';
 }
-function onRowHeaderLayoutChanged(data) {
+function onRowHeaderLayoutChanged(data: DxCheckBoxTypes.ValueChangedEvent) {
   rowHeaderLayout.value = data.value ? 'tree' : 'standard';
 }
 </script>

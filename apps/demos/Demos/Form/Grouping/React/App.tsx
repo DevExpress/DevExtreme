@@ -17,7 +17,7 @@ const groupCaptionNamedRender = (iconName) => {
       />
     );
   return groupCaptionRender;
-}
+};
 
 export default function App() {
   return (

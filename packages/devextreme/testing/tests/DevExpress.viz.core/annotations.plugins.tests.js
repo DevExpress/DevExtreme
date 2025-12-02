@@ -1,8 +1,11 @@
 import $ from 'jquery';
-import { __test_utils, plugins } from 'viz/core/annotations';
-import rendererModule from 'viz/core/renderers/renderer';
+import { __test_utils, plugins } from '__internal/viz/core/annotations';
+import rendererModule from 'viz/core/renderers/renderer_default';
 import TooltipModule from 'viz/core/tooltip';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    Tooltip,
+} from '../../helpers/vizMocks.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import eventsEngine from 'common/core/events/core/events_engine';
 import { getDocument } from 'core/dom_adapter';
@@ -892,7 +895,7 @@ QUnit.test('Get coordinates using argument and location `edge`', function(assert
 
 QUnit.module('Lifecycle', {
     beforeEach() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         rendererModule.Renderer = sinon.spy(() => this.renderer);
 
         this.createAnnotationStub = sinon.stub().returns([{ draw: sinon.spy(), plaque: { clear: sinon.spy() } }]);
@@ -972,7 +975,7 @@ QUnit.module('Lifecycle', {
             font: {
                 color: '#333333',
                 cursor: 'default',
-                family: '\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana, sans-serif',
+                family: '-apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'segoe ui\', \'helvetica neue\', \'adwaita sans\', cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
                 size: 12,
                 weight: 400
             },
@@ -1051,7 +1054,6 @@ QUnit.module('Lifecycle', {
         ];
         chart.option({ annotations: newItems });
 
-        // assert
         assert.equal(this.createAnnotationStub.callCount, 1);
         assert.deepEqual(this.createAnnotationStub.getCall(0).args[1], newItems);
         assert.equal(this.createAnnotationStub.getCall(0).args[2].some, 'options');
@@ -1082,7 +1084,6 @@ QUnit.module('Lifecycle', {
         };
         chart.option({ commonAnnotationSettings: newAnnotationOptions });
 
-        // assert
         assert.equal(this.createAnnotationStub.callCount, 1);
         assert.deepEqual(this.createAnnotationStub.getCall(0).args[1], items);
         assert.equal(this.createAnnotationStub.getCall(0).args[2].some, 'otherOptions');
@@ -1162,7 +1163,7 @@ QUnit.module('Lifecycle', {
             font: {
                 color: '#333333',
                 cursor: 'default',
-                family: '\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana, sans-serif',
+                family: '-apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'segoe ui\', \'helvetica neue\', \'adwaita sans\', cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
                 size: 12,
                 weight: 400
             },
@@ -1241,7 +1242,6 @@ QUnit.module('Lifecycle', {
         ];
         polarChart.option({ annotations: newItems });
 
-        // assert
         assert.equal(this.createAnnotationStub.callCount, 1);
         assert.deepEqual(this.createAnnotationStub.getCall(0).args[1], newItems);
         assert.equal(this.createAnnotationStub.getCall(0).args[2].some, 'options');
@@ -1272,7 +1272,6 @@ QUnit.module('Lifecycle', {
         };
         polarChart.option({ commonAnnotationSettings: newAnnotationOptions });
 
-        // assert
         assert.equal(this.createAnnotationStub.callCount, 1);
         assert.deepEqual(this.createAnnotationStub.getCall(0).args[1], items);
         assert.equal(this.createAnnotationStub.getCall(0).args[2].some, 'otherOptions');
@@ -1289,11 +1288,11 @@ QUnit.module('Lifecycle', {
 
 const environment = {
     beforeEach() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         rendererModule.Renderer = sinon.spy(() => this.renderer);
 
         TooltipModule.Tooltip = sinon.spy((options) => {
-            this.tooltip = new vizMocks.Tooltip(options);
+            this.tooltip = new Tooltip(options);
             this.tooltip.show = sinon.stub().returns(true);
             this.tooltip.hide = sinon.spy();
             this.tooltip.move = sinon.spy();

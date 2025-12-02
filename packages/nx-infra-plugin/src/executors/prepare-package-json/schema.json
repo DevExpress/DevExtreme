@@ -1,0 +1,16 @@
+{
+  "type": "object",
+  "properties": {
+    "sourcePackageJson": {
+      "type": "string",
+      "description": "Path to source package.json",
+      "default": "./package.json"
+    },
+    "distDirectory": {
+      "type": "string",
+      "description": "Distribution directory",
+      "default": "./npm"
+    }
+  },
+  "required": []
+}

@@ -1,7 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { Anchor, Workbook } from 'exceljs';
+import { Anchor, Workbook } from 'devextreme-exceljs-fork';
 import { saveAs } from 'file-saver-es';
 // Our demo infrastructure requires us to use 'file-saver-es'. We recommend that you use the official 'file-saver' package in your applications.
 import { exportDataGrid } from 'devextreme-angular/common/export/excel';
@@ -29,7 +29,7 @@ export class AppComponent {
   employees: Employee[];
 
   constructor(service: Service) {
-    this.employees = service.getEmployess();
+    this.employees = service.getEmployees();
   }
 
   onExporting(e: DxDataGridTypes.ExportingEvent) {

@@ -540,7 +540,6 @@ QUnit.test('Can be reinited (recalculate canvas options)', function(assert) {
     canvas.left = 50;
     canvas.right = 150;
 
-    // act
     translator.reinit();
 
     assert.ok(translator);
@@ -927,7 +926,6 @@ QUnit.test('isValid', function(assert) {
     assert.strictEqual(translator.isValid(undefined), false, 'undefined');
     assert.strictEqual(translator.isValid({}), false, 'object');
 });
-
 
 QUnit.test('Default positioin when 0 is in break', function(assert) {
     const translator = createTranslatorWithScaleBreaks.call(this, { min: -200, max: 700, breaks: [{ from: -100, to: 100 }] });
@@ -2167,7 +2165,6 @@ QUnit.test('from.', function(assert) {
 
     assert.equal(translator.from(1500, -1), 30, 'Coord on the max. negative offset');
     assert.equal(translator.from(1500, 1), 30, 'Coord on the max. positive offset');
-
 });
 
 QUnit.test('from. DateTime', function(assert) {
@@ -2385,7 +2382,6 @@ QUnit.test('scroll', function(assert) {
     assert.equal(zoom.translate.toFixed(2), -10.00, 'negative scroll translate');
     assert.equal(zoom.scale.toFixed(2), 1.00, 'negative scroll scale');
 
-
     assert.deepEqual(translator.zoom(0, 1), {
         min: 10,
         max: 90,
@@ -2440,7 +2436,6 @@ QUnit.test('scroll. Logarithmic axis', function(assert) {
 
     assert.equal(zoom.translate.toFixed(2), -10.00, 'negative scroll translate');
     assert.equal(zoom.scale.toFixed(2), 1.00, 'negative scroll scale');
-
 
     zoom = translator.zoom(600, 1);
 
@@ -2514,7 +2509,6 @@ QUnit.test('scroll inverted range', function(assert) {
     assert.equal(zoom.translate.toFixed(2), -10.00, 'negative scroll translate');
     assert.equal(zoom.scale.toFixed(2), 1.00, 'negative scroll scale');
 
-
     assert.deepEqual(translator.zoom(0, 1), {
         min: 90,
         max: 10,
@@ -2536,7 +2530,6 @@ QUnit.test('scroll inverted range', function(assert) {
 
     assert.equal(zoom.translate.toFixed(2), -100, 'negative big scroll translate');
     assert.roughEqual(zoom.scale.toFixed(2), 1.00, 0.1, 'negative big scroll scale');
-
 });
 
 QUnit.test('zoom single point range', function(assert) {
@@ -2587,7 +2580,6 @@ QUnit.test('scale without scroll', function(assert) {
 
     assert.roughEqual(zoom.translate.toFixed(2), 0, 0.001, 'zoom in translate');
     assert.roughEqual(zoom.scale.toFixed(2), 2, 0.001, 'zoom in scale');
-
 
     zoom = translator.zoom(0, 0.98);
     assert.roughEqual(zoom.min.toFixed(2), 10.22, 0.1, 'zoom out min');
@@ -2903,7 +2895,6 @@ QUnit.test('Negative scroll. Horizontal Translator. Horizontal translator', func
     assert.equal(zoom.max, 'a4');
     assert.equal(zoom.translate, -250);
     assert.equal(zoom.scale, 1);
-
 });
 
 QUnit.test('Negative scroll. Horizontal Translator. Inverted', function(assert) {
@@ -2939,7 +2930,6 @@ QUnit.test('Negative scroll. Horizontal Translator. Inverted', function(assert) 
     assert.equal(zoom.max, 'a5');
     assert.equal(zoom.translate, -250);
     assert.equal(zoom.scale, 1);
-
 });
 
 QUnit.test('Negative scroll. Vertical Translator', function(assert) {
@@ -2975,7 +2965,6 @@ QUnit.test('Negative scroll. Vertical Translator', function(assert) {
     assert.equal(zoom.max, 'a5');
     assert.equal(zoom.translate, -250);
     assert.equal(zoom.scale, 1);
-
 });
 
 QUnit.test('Negative scroll. Vertical Translator. Inverted', function(assert) {
@@ -3011,7 +3000,6 @@ QUnit.test('Negative scroll. Vertical Translator. Inverted', function(assert) {
     assert.equal(zoom.max, 'a4');
     assert.equal(zoom.translate, -250);
     assert.equal(zoom.scale, 1);
-
 });
 
 QUnit.test('positive scroll. Horizontal Translator', function(assert) {
@@ -3230,7 +3218,6 @@ QUnit.test('scale with stick=true', function(assert) {
 
     assert.deepEqual(translator.visibleCategories, ['a1', 'a2', 'a3', 'a4']);
 
-
     zoom = translator.zoom(0, 0.75);
     assert.equal(zoom.min, 'a1');
     assert.equal(zoom.max, 'a5');
@@ -3251,7 +3238,6 @@ QUnit.test('scale with stick=true', function(assert) {
 });
 
 QUnit.test('getMinScale', function(assert) {
-
     const categories = [];
 
     for(let i = 0; i < 1000; i++) {
@@ -3272,7 +3258,6 @@ QUnit.test('getMinScale', function(assert) {
 
     assert.equal(this.createTranslator({ minVisible: 'a2', maxVisible: 'a4' }).getMinScale(true).toFixed(2), 3, 'visibleCategories zoom in');
     assert.equal(this.createTranslator({ minVisible: 'a2', maxVisible: 'a4' }).getMinScale(false).toFixed(2), 0.6, 'visibleCategories zoom out');
-
 });
 
 QUnit.test('get scale. stick=true', function(assert) {

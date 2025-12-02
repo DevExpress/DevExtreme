@@ -34,7 +34,7 @@ import { ColumnStateMixin } from '@ts/grids/grid_core/column_state_mixin/m_colum
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 
-import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { Column, ColumnsController } from '../columns_controller/m_columns_controller';
 import type { DataController } from '../data_controller/m_data_controller';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
@@ -79,6 +79,11 @@ const subscribeToRowEvents = function (that, $table) {
   }
 
   eventsEngine.on($table, 'touchstart touchend', '.dx-row', (e) => {
+    // NOTE: checking for target only for mocks in qunits
+    if (e?.event?.target && !gridCoreUtils.isElementInCurrentGrid(that, $(e.event.target))) {
+      return;
+    }
+
     clearTimeout(timeoutId);
     if (e.type === 'touchstart') {
       touchTarget = e.target;
@@ -91,6 +96,11 @@ const subscribeToRowEvents = function (that, $table) {
 
   eventsEngine.on($table, [clickEventName, dblclickEvent, pointerEvents.down].join(' '), '.dx-row', that.createAction((e) => {
     const { event } = e;
+
+    // NOTE: checking for target only for mocks in qunits
+    if (e?.event?.target && !gridCoreUtils.isElementInCurrentGrid(that, $(event.target))) {
+      return;
+    }
 
     if (touchTarget) {
       event.target = touchTarget;
@@ -394,7 +404,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
         const visibleColumns = this._columnsController.getVisibleColumns();
         const rowOptions: any = $row.data('options');
         const columnIndex = $cell.index();
-        // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+
         const cellOptions = rowOptions && rowOptions.cells && rowOptions.cells[columnIndex];
         const column = cellOptions ? cellOptions.column : visibleColumns[columnIndex];
 
@@ -1104,7 +1114,6 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   private needWaitAsyncTemplates() {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
     return this.option('templatesRenderAsynchronously') && this.option('renderAsync') === false;
   }
 
@@ -1154,11 +1163,9 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     const result: number[] = [];
     const cellElements = $cellElements.toArray();
 
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     (cellElements as HTMLElement[]).forEach((cell) => {
       let width = cell.offsetWidth;
 
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       if ((cell as any).getBoundingClientRect) {
         const rect = getBoundingRect(cell);
 
@@ -1468,5 +1475,9 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   public isDisposed() {
     return this.component?._disposed;
+  }
+
+  public renderDragCellContent($dragContainer: dxElementWrapper, column: Column): void {
+    $dragContainer.text(column.caption ?? '');
   }
 }

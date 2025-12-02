@@ -96,29 +96,34 @@ const ITEM_CLASS = 'dx-item';
 const EMPTY_MESSAGE_CLASS = 'dx-empty-message';
 const ITEM_SELECTED_CLASS = 'dx-item-selected';
 
-const TestComponent = CollectionWidget.inherit({
+class TestComponent extends CollectionWidget {
+    ctor(element, options) {
+        this.NAME = 'TestComponent';
 
-    NAME: 'TestComponent',
-
-    _activeStateUnit: '.item',
-
-    _itemClass: function() {
-        return 'item';
-    },
-
-    _itemDataKey: function() {
-        return '123';
-    },
-
-    _itemContainer: function() {
-        return this.$element();
+        super.ctor(element, options);
     }
 
-});
+    _activeStateUnit() {
+        return '.item';
+    }
+
+    _itemClass() {
+        return 'item';
+    }
+
+    _itemDataKey() {
+        return '123';
+    }
+
+    _itemContainer() {
+        return this.$element();
+    }
+}
 
 
 moduleWithoutCsp('render', {
     beforeEach: function() {
+        executeAsyncMock.setup();
         this.element = $('#cmp');
         this.clock = sinon.useFakeTimers();
     },

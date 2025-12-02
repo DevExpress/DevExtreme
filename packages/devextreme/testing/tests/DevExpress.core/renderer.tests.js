@@ -202,6 +202,58 @@ QUnit.test('class should be removed from SVG', function(assert) {
     assert.notOk(element.hasClass('someClass'));
 });
 
+QUnit.module('hasClass method');
+
+QUnit.test('should return true if element has class', function(assert) {
+    const element = renderer('<div>');
+    element.addClass('someClass');
+
+    assert.ok(element.hasClass('someClass'));
+});
+
+QUnit.test('should return false if element has not class', function(assert) {
+    const element = renderer('<div>');
+
+    assert.notOk(element.hasClass('someClass'));
+});
+
+QUnit.test('should return true if element has multiple classes', function(assert) {
+    const element = renderer('<div>');
+    element.addClass('someClass someClass2');
+
+    assert.ok(element.hasClass('someClass'));
+    assert.ok(element.hasClass('someClass2'));
+    assert.notOk(element.hasClass('someClass3'));
+});
+
+QUnit.test('should return true if one of element has class', function(assert) {
+    const fixture = document.getElementById('qunit-fixture');
+
+    const $wrapper = renderer('<div>').html('<div class="one two">1</div><div class="two three">2</div>');
+
+    const $allInnerElements = $wrapper.find('div');
+
+    fixture.appendChild($allInnerElements.get(0));
+
+    assert.ok($allInnerElements.hasClass('one'));
+    assert.ok($allInnerElements.hasClass('two'));
+    assert.ok($allInnerElements.hasClass('three'));
+    assert.notOk($allInnerElements.hasClass('five'));
+});
+
+QUnit.test('should return false if elements collection is empty', function(assert) {
+
+    const $wrapper = renderer('<div>').html('<div class="one two">1</div><div class="two three">2</div>');
+
+    const $allInnerElements = $wrapper.find('h1');
+
+    assert.notOk($allInnerElements.hasClass('one'));
+    assert.notOk($allInnerElements.hasClass('two'));
+    assert.notOk($allInnerElements.hasClass('three'));
+    assert.notOk($allInnerElements.hasClass('five'));
+});
+
+
 QUnit.module('width and height methods');
 
 QUnit.test('width and height should take into consideration borders and paddings if box-sizing is border-box', function(assert) {

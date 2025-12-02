@@ -1,6 +1,6 @@
-import { exportDataGrid } from '../../exporter/jspdf/export_data_grid';
-import { exportDataGrid as exportDataGridWithAutoTable } from '../../exporter/jspdf/autotable/export_data_grid';
-import { exportGantt } from '../../exporter/jspdf/export_gantt';
+import { exportDataGrid } from '../../__internal/exporter/jspdf/export_data_grid';
+import { exportDataGrid as exportDataGridWithAutoTable } from '../../__internal/exporter/jspdf/autotable/export_data_grid';
+import { exportGantt } from '../../__internal/exporter/jspdf/export_gantt';
 
 /**
  * @name PdfDataGridCell

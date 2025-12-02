@@ -6,7 +6,7 @@ export interface Order {
   SaleAmount: number,
   Terms: string;
   Location: string;
-  Customer:  string;
+  Customer: string;
 }
 
 export const orders: Order[] = [{

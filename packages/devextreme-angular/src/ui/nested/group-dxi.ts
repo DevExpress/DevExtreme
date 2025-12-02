@@ -8,7 +8,6 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -22,8 +21,11 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiCommandComponent } from './command-dxi';
 
+import { PROPERTY_TOKEN_groups } from 'devextreme-angular/core/tokens';
+import {
+    PROPERTY_TOKEN_commands,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-group',
@@ -31,9 +33,20 @@ import { DxiCommandComponent } from './command-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_groups,
+           useExisting: DxiGroupComponent,
+        }
+    ]
 })
 export class DxiGroupComponent extends CollectionNestedOption {
+    @ContentChildren(PROPERTY_TOKEN_commands)
+    set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('commands', value);
+    }
+    
     @Input()
     get commands(): Array<CustomCommand | Command> {
         return this._getOption('commands');
@@ -87,14 +100,6 @@ export class DxiGroupComponent extends CollectionNestedOption {
         return 'groups';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiCommandComponent))
-    get commandsChildren(): QueryList<DxiCommandComponent> {
-        return this._getOption('commands');
-    }
-    set commandsChildren(value) {
-        this.setChildren('commands', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

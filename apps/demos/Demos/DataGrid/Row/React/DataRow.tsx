@@ -3,7 +3,7 @@ import React from 'react';
 
 const formatDate = new Intl.DateTimeFormat('en-US').format;
 
-const DataRow = (rowInfo: DataGridTypes.RowTemplateData) => (
+const DataRow = (rowInfo: DataGridTypes.DataRowTemplateData) => (
   <React.Fragment>
     <tr className="main-row" role="row">
       <td rowSpan={2} role="gridcell"><img src={rowInfo.data.Picture} alt={`Picture of ${rowInfo.data.FirstName} ${rowInfo.data.LastName}`} tabIndex={0} /></td>

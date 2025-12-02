@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import ExcelJS from 'exceljs';
+import ExcelJS from 'devextreme-exceljs-fork';
 import { ExcelJSPivotGridTestHelper } from './ExcelJSTestHelper.js';
 import { exportPivotGrid } from 'excel_exporter';
 import ExcelJSLocalizationFormatTests from './exceljs.format.tests.js';
@@ -11,8 +11,8 @@ import 'ui/pivot_grid/ui.pivot_grid';
 
 import 'generic_light.css!';
 
-import { DataController__internals } from 'ui/pivot_grid/ui.pivot_grid.data_controller';
-import { PivotGridExport } from 'ui/pivot_grid/ui.pivot_grid.export';
+import { DataController__internals } from '__internal/grids/pivot_grid/data_controller/m_data_controller';
+import { PivotGridExport } from '__internal/grids/pivot_grid/export/m_export';
 
 let helper;
 
@@ -23,7 +23,6 @@ const alignRightTopNoWrap = { horizontal: 'right', vertical: 'top', wrapText: fa
 const alignCenterTopWrap = { horizontal: 'center', vertical: 'top', wrapText: true };
 const alignCenterTopNoWrap = { horizontal: 'center', vertical: 'top', wrapText: false };
 
-// eslint-disable-next-line spellcheck/spell-checker
 const borderStyle = { style: 'thin', color: { argb: 'FF7E7E7E' } };
 const defaultBorderStyle = {
     bottom: borderStyle,
@@ -672,9 +671,9 @@ QUnit.module('Scenarios', moduleConfig, () => {
             customizeCell: ({ excelCell, pivotCell }) => {
                 if(pivotCell.area === 'column' && pivotCell.text === '$20') {
                     Object.assign(excelCell, {
-                        // eslint-disable-next-line spellcheck/spell-checker
+
                         fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFC7CE' } },
-                        // eslint-disable-next-line spellcheck/spell-checker
+
                         font: { color: { argb: '9C0006' }, bold: true }
                     });
                 }
@@ -835,9 +834,9 @@ QUnit.module('Scenarios', moduleConfig, () => {
             customizeCell: ({ excelCell, pivotCell }) => {
                 if(pivotCell.area === 'row' && pivotCell.text === '$15') {
                     Object.assign(excelCell, {
-                        // eslint-disable-next-line spellcheck/spell-checker
+
                         fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFC7CE' } },
-                        // eslint-disable-next-line spellcheck/spell-checker
+
                         font: { color: { argb: '9C0006' }, bold: true }
                     });
                 }
@@ -3945,9 +3944,9 @@ QUnit.module('Scenarios', moduleConfig, () => {
             customizeCell: ({ excelCell, pivotCell }) => {
                 if(pivotCell.area === 'row' && pivotCell.text === '$15') {
                     Object.assign(excelCell, {
-                        // eslint-disable-next-line spellcheck/spell-checker
+
                         fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFC7CE' } },
-                        // eslint-disable-next-line spellcheck/spell-checker
+
                         font: { color: { argb: '9C0006' }, bold: true }
                     });
                 }
@@ -7830,6 +7829,38 @@ QUnit.module('Scenarios', moduleConfig, () => {
                 done();
             });
         });
+
+        // T1325416 - Fields with visible:false should not be exported in field headers
+        QUnit.test('Data fields with visible:false should not be exported in data field headers', function(assert) {
+            const done = assert.async();
+            const ds = {
+                fields: [
+                    { area: 'row', dataField: 'row' },
+                    { area: 'data', dataField: 'Sales', summaryType: 'sum', caption: 'Sales', visible: true },
+                    { area: 'data', dataField: 'Sales2', summaryType: 'sum', caption: 'Sales2', visible: false },
+                    { area: 'data', dataField: 'Sales3', summaryType: 'sum', caption: 'Sales3', visible: false }
+                ],
+                store: []
+            };
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({ dataSource: ds }).dxPivotGrid('instance');
+
+            exportPivotGrid({
+                component: pivotGrid,
+                worksheet: this.worksheet,
+                topLeftCell: topLeft,
+                exportDataFieldHeaders: true
+            }).then(() => {
+                const dataFieldHeaderCell = this.worksheet.getRow(topLeft.row).getCell(topLeft.column);
+                const cellValue = dataFieldHeaderCell.value;
+
+                assert.strictEqual(cellValue, 'Sales', `Data field header should show 'Sales', got: '${cellValue}'`);
+
+                assert.ok(!cellValue.includes('Sales2'), 'Data field header should not contain Sales2');
+                assert.ok(!cellValue.includes('Sales3'), 'Data field header should not contain Sales3');
+                done();
+            });
+        });
+
     });
 });
 
@@ -8074,7 +8105,6 @@ ExcelJSLocalizationFormatTests.runPivotGridCurrencyTests([
     { value: 'SEK', expected: '$#,##0_);\\($#,##0\\)' } // NOT SUPPORTED in default
 ]);
 ExcelJSOptionTests.runTests(moduleConfig, exportPivotGrid.__internals._getFullOptions, () => $('#pivotGrid').dxPivotGrid({}).dxPivotGrid('instance'));
-
 
 [
     { enabled: true },

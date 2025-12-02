@@ -3,6 +3,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { scrollToDate } from '../../helpers/utils';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 import {
   resources,
   views,
@@ -11,9 +12,8 @@ import {
   scrollConfig,
 } from './utils';
 
-// TODO Chrome133: skipped during chrome update
 // We don't support zooming (known limitation)
-fixture.skip.disablePageReloads`Scheduler: Virtual Scrolling with Zooming`
+fixture.disablePageReloads`Scheduler: Virtual Scrolling with Zooming`
   .page(url(__dirname, '../../../container.html'));
 
 const createScheduler = async (
@@ -44,19 +44,19 @@ test('Virtual scrolling layout in scheduler views when horizontal grouping is en
 
     await scheduler.option('currentView', view.type);
 
-    await t.expect(
-      await takeScreenshot(`virtual-scrolling-${view.type}-before-scroll-horizontal-grouping-scaling.png`),
-    ).ok();
+    await testScreenshot(
+      t,
+      takeScreenshot,
+      `virtual-scrolling-${view.type}-before-scroll-horizontal-grouping-scaling.png`,
+    );
 
     await scrollToDate(scrollConfig[i].firstDate, { resourceId: 7 });
 
-    // NOTE: waiting for async scrollable
-    await t
-      .wait(100);
-
-    await t.expect(
-      await takeScreenshot(`virtual-scrolling-${view.type}-after-scroll-horizontal-grouping-scaling.png`),
-    ).ok();
+    await testScreenshot(
+      t,
+      takeScreenshot,
+      `virtual-scrolling-${view.type}-after-scroll-horizontal-grouping-scaling.png`,
+    );
   }
 
   await setZoomLevel(0);

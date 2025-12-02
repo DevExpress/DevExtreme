@@ -133,7 +133,7 @@ const refreshModes: DxDataGridTypes.GridsEditRefreshMode[] = ['full', 'reshape',
 const requests = ref<string[]>([]);
 const refreshMode = ref(refreshModes[1]);
 
-const sendRequest = async(url: string, method = 'GET', data: Record<string, string> = {}) => {
+const sendRequest = async (url: string, method = 'GET', data: Record<string, string> = {}) => {
   logRequest(method, url, data);
 
   const request: any = {

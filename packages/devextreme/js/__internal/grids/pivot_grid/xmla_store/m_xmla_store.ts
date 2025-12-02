@@ -1,6 +1,5 @@
 import { getLanguageId } from '@js/common/core/localization/language_codes';
 import { errors } from '@js/common/data/errors';
-import Class from '@js/core/class';
 import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
 import { Deferred, when } from '@js/core/utils/deferred';
@@ -14,29 +13,147 @@ import { getWindow } from '@js/core/utils/window';
 
 import pivotGridUtils, {
   foreachTree,
-  getExpandedLevel, storeDrillDownMixin,
+  getExpandedLevel,
+  storeDrillDownMixin,
 } from '../m_widget_utils';
 
+// Utility functions
+function union(elements: any[]): string {
+  const elementsString = elements.join(',');
+  return elements.length > 1 ? `Union(${elementsString})` : elementsString;
+}
+
+function crossJoinElements(elements: any[]): string {
+  const elementsString = elements.join(',');
+  return elements.length > 1 ? stringFormat(MDX_CROSS_JOIN_TEMPLATE, elementsString) : elementsString;
+}
+
+function mdxDescendants(level: string, levelMember: string, nextLevel: string): string {
+  const memberExpression = levelMember || level;
+  return `Descendants({${memberExpression}}, ${nextLevel}, SELF_AND_BEFORE)`;
+}
+
+function getAllMember(dimension: any): string {
+  return `${dimension.hierarchyName || dimension.dataField}.[All]`;
+}
+
+function getAllMembers(field: any): string {
+  let result = `${field.dataField}.allMembers`;
+  let { searchValue } = field;
+
+  if (searchValue) {
+    searchValue = searchValue.replace(/'/g, '\'\'');
+    result = `Filter(${result}, instr(${field.dataField}.currentmember.member_caption,'${searchValue}') > 0)`;
+  }
+
+  return result;
+}
+
+function preparePathValue(pathValue: any, dataField?: string): any {
+  if (pathValue) {
+    const shouldSkipWrappingPathValue = isString(pathValue) && (
+      pathValue.includes('&') || pathValue.startsWith(`${dataField}.`)
+    );
+    pathValue = shouldSkipWrappingPathValue ? pathValue : `[${pathValue}]`;
+
+    if (dataField && pathValue.indexOf(`${dataField}.`) === 0) {
+      pathValue = pathValue.slice(dataField.length + 1, pathValue.length);
+    }
+  }
+  return pathValue;
+}
+
+function getNumber(str: string): number {
+  return parseInt(str, 10);
+}
+
+function parseValue(valueText: string): any {
+  return isNumeric(valueText) ? parseFloat(valueText) : valueText;
+}
+
+function getFirstChild(node: any, tagName: string): any {
+  return (node.getElementsByTagName(tagName) || [])[0];
+}
+
+function getFirstChildText(node: any, childTagName: string): string {
+  return getNodeText(getFirstChild(node, childTagName));
+}
+
+function getNodeText(node: any): string {
+  return node && (node.textContent || node.text || node.innerHTML) || '';
+}
+
+function parseStringWithUnicodeSymbols(str: string): string {
+  str = str.replace(/_x(....)_/g, (_, group1) => String.fromCharCode(parseInt(group1, 16)));
+
+  const stringArray = str.match(/\[.+?\]/gi);
+  if (stringArray && stringArray.length) {
+    str = stringArray[stringArray.length - 1];
+  }
+
+  return str
+    .replace(/\[/gi, '')
+    .replace(/\]/gi, '')
+    .replace(/\$/gi, '')
+    .replace(/\./gi, ' ');
+}
+
+function getLocaleIdProperty(): string {
+  const languageId = getLanguageId();
+
+  if (languageId !== undefined) {
+    return stringFormat('<LocaleIdentifier>{0}</LocaleIdentifier>', languageId);
+  }
+  return '';
+}
+
+// Constants
 const window = getWindow();
 
-const XmlaStore = Class.inherit((function () {
-  const discover = '<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Body><Discover xmlns="urn:schemas-microsoft-com:xml-analysis"><RequestType>{2}</RequestType><Restrictions><RestrictionList><CATALOG_NAME>{0}</CATALOG_NAME><CUBE_NAME>{1}</CUBE_NAME></RestrictionList></Restrictions><Properties><PropertyList><Catalog>{0}</Catalog>{3}</PropertyList></Properties></Discover></Body></Envelope>';
-  const execute = '<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Body><Execute xmlns="urn:schemas-microsoft-com:xml-analysis"><Command><Statement>{0}</Statement></Command><Properties><PropertyList><Catalog>{1}</Catalog><ShowHiddenCubes>True</ShowHiddenCubes><SspropInitAppName>Microsoft SQL Server Management Studio</SspropInitAppName><Timeout>3600</Timeout>{2}</PropertyList></Properties></Execute></Body></Envelope>';
-  const mdx = 'SELECT {2} FROM {0} {1} CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS';
-  const mdxFilterSelect = '(SELECT {0} FROM {1})';
-  const mdxSubset = 'Subset({0}, {1}, {2})';
-  const mdxOrder = 'Order({0}, {1}, {2})';
-  const mdxWith = '{0} {1} as {2}';
-  const mdxSlice = 'WHERE ({0})';
-  const mdxNonEmpty = 'NonEmpty({0}, {1})';
-  const mdxAxis = '{0} DIMENSION PROPERTIES PARENT_UNIQUE_NAME,HIERARCHY_UNIQUE_NAME, MEMBER_VALUE ON {1}';
-  const mdxCrossJoin = 'CrossJoin({0})';
-  const mdxSet = '{{0}}';
+const XMLA_DISCOVER_TEMPLATE = '<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Body><Discover xmlns="urn:schemas-microsoft-com:xml-analysis"><RequestType>{2}</RequestType><Restrictions><RestrictionList><CATALOG_NAME>{0}</CATALOG_NAME><CUBE_NAME>{1}</CUBE_NAME></RestrictionList></Restrictions><Properties><PropertyList><Catalog>{0}</Catalog>{3}</PropertyList></Properties></Discover></Body></Envelope>';
 
-  const MEASURE_DEMENSION_KEY = 'DX_MEASURES';
-  const MD_DIMTYPE_MEASURE = '2';
+const XMLA_EXECUTE_TEMPLATE = '<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Body><Execute xmlns="urn:schemas-microsoft-com:xml-analysis"><Command><Statement>{0}</Statement></Command><Properties><PropertyList><Catalog>{1}</Catalog><ShowHiddenCubes>True</ShowHiddenCubes><SspropInitAppName>Microsoft SQL Server Management Studio</SspropInitAppName><Timeout>3600</Timeout>{2}</PropertyList></Properties></Execute></Body></Envelope>';
 
-  function execXMLA(requestOptions, data) {
+const MDX_SELECT_TEMPLATE = 'SELECT {2} FROM {0} {1} CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS';
+
+const MDX_FILTER_SELECT_TEMPLATE = '(SELECT {0} FROM {1})';
+
+const MDX_SUBSET_TEMPLATE = 'Subset({0}, {1}, {2})';
+
+const MDX_ORDER_TEMPLATE = 'Order({0}, {1}, {2})';
+
+const MDX_WITH_TEMPLATE = '{0} {1} as {2}';
+
+const MDX_SLICE_TEMPLATE = 'WHERE ({0})';
+
+const MDX_NON_EMPTY_TEMPLATE = 'NonEmpty({0}, {1})';
+
+const MDX_AXIS_TEMPLATE = '{0} DIMENSION PROPERTIES PARENT_UNIQUE_NAME,HIERARCHY_UNIQUE_NAME, MEMBER_VALUE ON {1}';
+
+const MDX_CROSS_JOIN_TEMPLATE = 'CrossJoin({0})';
+
+const MDX_SET_TEMPLATE = '{{0}}';
+
+const MEASURE_DIMENSION_KEY = 'DX_MEASURES';
+
+const MD_DIMTYPE_MEASURE = '2';
+
+class XmlaStore {
+  _options: any;
+
+  constructor(options: any) {
+    this._options = options;
+  }
+
+  key() {
+    noop();
+  }
+
+  filter() {
+    noop();
+  }
+
+  execXMLA(requestOptions, data) {
     // @ts-expect-error
     const deferred = new Deferred();
     const { beforeSend } = requestOptions;
@@ -84,48 +201,7 @@ const XmlaStore = Class.inherit((function () {
     return deferred;
   }
 
-  function getLocaleIdProperty() {
-    const languageId = getLanguageId();
-
-    if (languageId !== undefined) {
-      return stringFormat('<LocaleIdentifier>{0}</LocaleIdentifier>', languageId);
-    }
-    return '';
-  }
-
-  function mdxDescendants(level, levelMember, nextLevel) {
-    const memberExpression = levelMember || level;
-
-    return `Descendants({${memberExpression}}, ${nextLevel}, SELF_AND_BEFORE)`;
-  }
-
-  function getAllMember(dimension) {
-    return `${dimension.hierarchyName || dimension.dataField}.[All]`;
-  }
-
-  function getAllMembers(field) {
-    let result = `${field.dataField}.allMembers`;
-    let { searchValue } = field;
-
-    if (searchValue) {
-      searchValue = searchValue.replace(/'/g, '\'\'');
-      result = `Filter(${result}, instr(${field.dataField}.currentmember.member_caption,'${searchValue}') > 0)`;
-    }
-
-    return result;
-  }
-
-  function crossJoinElements(elements) {
-    const elementsString = elements.join(',');
-    return elements.length > 1 ? stringFormat(mdxCrossJoin, elementsString) : elementsString;
-  }
-
-  function union(elements) {
-    const elementsString = elements.join(',');
-    return elements.length > 1 ? `Union(${elementsString})` : elementsString;
-  }
-
-  function generateCrossJoin(
+  generateCrossJoin(
     path,
     expandLevel,
     expandAllCount,
@@ -195,10 +271,10 @@ const XmlaStore = Class.inherit((function () {
         }
       }
       if (arg) {
-        arg = stringFormat(mdxSet, arg);
+        arg = stringFormat(MDX_SET_TEMPLATE, arg);
         if (take) {
           const sortBy = (field.hierarchyName || field.dataField) + (field.sortBy === 'displayText' ? '.MEMBER_CAPTION' : '.MEMBER_VALUE');
-          arg = stringFormat(mdxOrder, arg, sortBy, field.sortOrder === 'desc' ? 'DESC' : 'ASC');
+          arg = stringFormat(MDX_ORDER_TEMPLATE, arg, sortBy, field.sortOrder === 'desc' ? 'DESC' : 'ASC');
         }
         crossJoinArgs.push(arg);
       }
@@ -207,7 +283,7 @@ const XmlaStore = Class.inherit((function () {
     return crossJoinElements(crossJoinArgs);
   }
 
-  function fillCrossJoins(
+  fillCrossJoins(
     crossJoins,
     path,
     expandLevel,
@@ -226,7 +302,7 @@ const XmlaStore = Class.inherit((function () {
     do {
       expandAllCount += 1;
       dimensionIndex = path.length + expandAllCount + expandIndex;
-      let crossJoin = generateCrossJoin(
+      let crossJoin = this.generateCrossJoin(
         path,
         expandLevel,
         expandAllCount,
@@ -237,7 +313,7 @@ const XmlaStore = Class.inherit((function () {
         take,
       );
       if (!take && !totalsOnly) {
-        crossJoin = stringFormat(mdxNonEmpty, crossJoin, cellsString);
+        crossJoin = stringFormat(MDX_NON_EMPTY_TEMPLATE, crossJoin, cellsString);
       }
       crossJoins.push(crossJoin);
     } while (
@@ -247,15 +323,15 @@ const XmlaStore = Class.inherit((function () {
     );
   }
 
-  function declare(expression, withArray, name?, type?) {
+  declare(expression, withArray, name?, type?) {
     name = name || `[DX_Set_${withArray.length}]`;
     type = type || 'set';
 
-    withArray.push(stringFormat(mdxWith, type, name, expression));
+    withArray.push(stringFormat(MDX_WITH_TEMPLATE, type, name, expression));
     return name;
   }
 
-  function generateAxisMdx(options, axisName, cells, withArray, parseOptions) {
+  generateAxisMdx(options, axisName, cells, withArray, parseOptions) {
     const dimensions = options[axisName];
     const crossJoins = [];
     let path = [];
@@ -263,7 +339,7 @@ const XmlaStore = Class.inherit((function () {
     let expandIndex = 0;
     let expandLevel = 0;
     const result: any = [];
-    const cellsString = stringFormat(mdxSet, cells.join(','));
+    const cellsString = stringFormat(MDX_SET_TEMPLATE, cells.join(','));
 
     if (dimensions && dimensions.length) {
       if (options.headerName === axisName) {
@@ -277,9 +353,9 @@ const XmlaStore = Class.inherit((function () {
       }
       expandLevel = getExpandedLevel(options, axisName);
 
-      fillCrossJoins(crossJoins, [], expandLevel, expandIndex, path, options, axisName, cellsString, axisName === 'rows' ? options.rowTake : options.columnTake, options.totalsOnly);
+      this.fillCrossJoins(crossJoins, [], expandLevel, expandIndex, path, options, axisName, cellsString, axisName === 'rows' ? options.rowTake : options.columnTake, options.totalsOnly);
       each(expandedPaths, (_, expandedPath) => {
-        fillCrossJoins(
+        this.fillCrossJoins(
           crossJoins,
           expandedPath,
           expandLevel,
@@ -306,7 +382,7 @@ const XmlaStore = Class.inherit((function () {
       let expression = union(crossJoins);
       if (axisName === 'rows' && options.rowTake) {
         expression = stringFormat(
-          mdxSubset,
+          MDX_SUBSET_TEMPLATE,
           expression,
           options.rowSkip > 0
             ? options.rowSkip + 1
@@ -318,7 +394,7 @@ const XmlaStore = Class.inherit((function () {
       }
       if (axisName === 'columns' && options.columnTake) {
         expression = stringFormat(
-          mdxSubset,
+          MDX_SUBSET_TEMPLATE,
           expression,
           options.columnSkip > 0
             ? options.columnSkip + 1
@@ -330,10 +406,10 @@ const XmlaStore = Class.inherit((function () {
       }
 
       const axisSet = `[DX_${axisName}]`;
-      result.push(declare(expression, withArray, axisSet));
+      result.push(this.declare(expression, withArray, axisSet));
 
       if (options.totalsOnly) {
-        result.push(declare(`COUNT(${axisSet})`, withArray, `[DX_${axisName}_count]`, 'member'));
+        result.push(this.declare(`COUNT(${axisSet})`, withArray, `[DX_${axisName}_count]`, 'member'));
       }
     }
 
@@ -341,10 +417,10 @@ const XmlaStore = Class.inherit((function () {
       result.push(cellsString);
     }
 
-    return stringFormat(mdxAxis, crossJoinElements(result), axisName);
+    return stringFormat(MDX_AXIS_TEMPLATE, crossJoinElements(result), axisName);
   }
 
-  function generateAxisFieldsFilter(fields) {
+  generateAxisFieldsFilter(fields) {
     const filterMembers: any = [];
 
     each(fields, (_, field) => {
@@ -368,7 +444,7 @@ const XmlaStore = Class.inherit((function () {
       });
 
       if (filterValues.length) {
-        filterStringExpression = stringFormat(mdxSet, filterExpression.join(','));
+        filterStringExpression = stringFormat(MDX_SET_TEMPLATE, filterExpression.join(','));
 
         if (field.filterType === 'exclude') {
           filterStringExpression = `Except(${getAllMembers(field)},${filterStringExpression})`;
@@ -381,19 +457,19 @@ const XmlaStore = Class.inherit((function () {
     return filterMembers.length ? crossJoinElements(filterMembers) : '';
   }
 
-  function generateFrom(columnsFilter, rowsFilter, filter, cubeName) {
+  generateFrom(columnsFilter, rowsFilter, filter, cubeName) {
     let from = `[${cubeName}]`;
 
     each([columnsFilter, rowsFilter, filter], (_, filter) => {
       if (filter) {
-        from = stringFormat(mdxFilterSelect, `${filter}on 0`, from);
+        from = stringFormat(MDX_FILTER_SELECT_TEMPLATE, `${filter}on 0`, from);
       }
     });
 
     return from;
   }
 
-  function generateMdxCore(
+  generateMdxCore(
     axisStrings,
     withArray,
     columns,
@@ -421,14 +497,14 @@ const XmlaStore = Class.inherit((function () {
         select = axisStrings.join(',');
       }
       mdxString = withString + stringFormat(
-        mdx,
-        generateFrom(
-          generateAxisFieldsFilter(columns),
-          generateAxisFieldsFilter(rows),
-          generateAxisFieldsFilter(filters || []),
+        MDX_SELECT_TEMPLATE,
+        this.generateFrom(
+          this.generateAxisFieldsFilter(columns),
+          this.generateAxisFieldsFilter(rows),
+          this.generateAxisFieldsFilter(filters || []),
           cubeName,
         ),
-        slice.length ? stringFormat(mdxSlice, slice.join(',')) : '',
+        slice.length ? stringFormat(MDX_SLICE_TEMPLATE, slice.join(',')) : '',
         select,
       );
     }
@@ -436,16 +512,16 @@ const XmlaStore = Class.inherit((function () {
     return mdxString;
   }
 
-  function prepareDataFields(withArray, valueFields) {
+  prepareDataFields(withArray, valueFields) {
     return map(valueFields, (cell) => {
       if (isString(cell.expression)) {
-        declare(cell.expression, withArray, cell.dataField, 'member');
+        this.declare(cell.expression, withArray, cell.dataField, 'member');
       }
       return cell.dataField;
     });
   }
 
-  function addSlices(slices, options, headerName, path) {
+  addSlices(slices, options, headerName, path) {
     each(path, (index: number, value) => {
       const dimension = options[headerName][index];
       if (
@@ -453,40 +529,40 @@ const XmlaStore = Class.inherit((function () {
         || dimension.hierarchyName !== options[headerName][index + 1]
           .hierarchyName
       ) {
-        slices.push(`${dimension.dataField}.${preparePathValue(value, dimension.dataField)}`);
+        slices.push(`${dimension.dataField}.${this.preparePathValue(value, dimension.dataField)}`);
       }
     });
   }
 
-  function generateMDX(options, cubeName, parseOptions) {
+  generateMDX(options, cubeName, parseOptions) {
     const columns = options.columns || [];
     const rows = options.rows || [];
     const values = options.values && options.values.length ? options.values : [{ dataField: '[Measures]' }];
     const slice = [];
     const withArray = [];
     const axisStrings: any = [];
-    const dataFields = prepareDataFields(withArray, values);
+    const dataFields = this.prepareDataFields(withArray, values);
 
     parseOptions.measureCount = options.skipValues ? 1 : values.length;
     parseOptions.visibleLevels = {};
 
     if (options.headerName && options.path) {
-      addSlices(slice, options, options.headerName, options.path);
+      this.addSlices(slice, options, options.headerName, options.path);
     }
 
     if (options.headerName && options.oppositePath) {
-      addSlices(slice, options, options.headerName === 'rows' ? 'columns' : 'rows', options.oppositePath);
+      this.addSlices(slice, options, options.headerName === 'rows' ? 'columns' : 'rows', options.oppositePath);
     }
 
     if (columns.length || dataFields.length) {
-      axisStrings.push(generateAxisMdx(options, 'columns', dataFields, withArray, parseOptions));
+      axisStrings.push(this.generateAxisMdx(options, 'columns', dataFields, withArray, parseOptions));
     }
 
     if (rows.length) {
-      axisStrings.push(generateAxisMdx(options, 'rows', dataFields, withArray, parseOptions));
+      axisStrings.push(this.generateAxisMdx(options, 'rows', dataFields, withArray, parseOptions));
     }
 
-    return generateMdxCore(
+    return this.generateMdxCore(
       axisStrings,
       withArray,
       columns,
@@ -498,37 +574,37 @@ const XmlaStore = Class.inherit((function () {
     );
   }
 
-  function createDrillDownAxisSlice(slice, fields, path) {
+  createDrillDownAxisSlice(slice, fields, path) {
     each(path, (index: number, value) => {
       const field = fields[index];
       if (field.hierarchyName && (fields[index + 1] || {}).hierarchyName === field.hierarchyName) {
         return;
       }
-      slice.push(`${field.dataField}.${preparePathValue(value, field.dataField)}`);
+      slice.push(`${field.dataField}.${this.preparePathValue(value, field.dataField)}`);
     });
   }
 
-  function generateDrillDownMDX(options, cubeName, params) {
+  generateDrillDownMDX(options, cubeName, params) {
     const columns = options.columns || [];
     const rows = options.rows || [];
     const values = options.values && options.values.length ? options.values : [{ dataField: '[Measures]' }];
     const slice: any = [];
     const withArray: any = [];
     const axisStrings: any = [];
-    const dataFields = prepareDataFields(withArray, values);
+    const dataFields = this.prepareDataFields(withArray, values);
     const { maxRowCount } = params;
     const customColumns = params.customColumns || [];
     const customColumnsString = customColumns.length > 0 ? ` return ${customColumns.join(',')}` : '';
 
-    createDrillDownAxisSlice(slice, columns, params.columnPath || []);
+    this.createDrillDownAxisSlice(slice, columns, params.columnPath || []);
 
-    createDrillDownAxisSlice(slice, rows, params.rowPath || []);
+    this.createDrillDownAxisSlice(slice, rows, params.rowPath || []);
 
     if (columns.length || dataFields.length) {
       axisStrings.push([`${dataFields[params.dataIndex] || dataFields[0]} on 0`]);
     }
 
-    const coreMDX = generateMdxCore(
+    const coreMDX = this.generateMdxCore(
       axisStrings,
       withArray,
       columns,
@@ -541,24 +617,7 @@ const XmlaStore = Class.inherit((function () {
     return coreMDX ? `drillthrough${maxRowCount > 0 ? ` maxrows ${maxRowCount}` : ''}${coreMDX}${customColumnsString}` : coreMDX;
   }
 
-  function getNumber(str) {
-    return parseInt(str, 10);
-  }
-
-  function parseValue(valueText) {
-    // @ts-expect-error
-    return isNumeric(valueText) ? parseFloat(valueText) : valueText;
-  }
-
-  function getFirstChild(node, tagName) {
-    return (node.getElementsByTagName(tagName) || [])[0];
-  }
-
-  function getFirstChildText(node, childTagName) {
-    return getNodeText(getFirstChild(node, childTagName));
-  }
-
-  function parseAxes(xml, skipValues) {
+  parseAxes(xml, skipValues) {
     const axes: any = [];
 
     each(xml.getElementsByTagName('Axis'), (_, axisElement) => {
@@ -614,11 +673,11 @@ const XmlaStore = Class.inherit((function () {
     return axes;
   }
 
-  function getNodeText(node) {
-    return node && (node.textContent || node.text || node.innerHTML) || '';
+  getNodeText(node) {
+    return getNodeText(node);
   }
 
-  function parseCells(xml, axes, measureCount) {
+  parseCells(xml, axes, measureCount) {
     const cells: any = [];
     let cell: any = [];
     let index = 0;
@@ -626,21 +685,21 @@ const XmlaStore = Class.inherit((function () {
     const cellElements = xml.getElementsByTagName('Cell');
     const errorDictionary = {};
 
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let i = 0; i < cellElements.length; i += 1) {
       const xmlCell = cellElements[i];
       const valueElement = xmlCell.getElementsByTagName('Value')[0];
       const errorElements = valueElement && valueElement.getElementsByTagName('Error') || [];
-      const text = errorElements.length === 0 ? getNodeText(valueElement) : '#N/A';
+      const text = errorElements.length === 0 ? this.getNodeText(valueElement) : '#N/A';
       const value = parseFloat(text);
-      const isNumeric = (text - value + 1) > 0;
       const cellOrdinal = getNumber(xmlCell.getAttribute('CellOrdinal'));
 
       if (errorElements.length) {
-        errorDictionary[getNodeText(errorElements[0].getElementsByTagName('ErrorCode')[0])] = getNodeText(errorElements[0].getElementsByTagName('Description')[0]);
+        errorDictionary[this.getNodeText(errorElements[0].getElementsByTagName('ErrorCode')[0])] = this.getNodeText(errorElements[0].getElementsByTagName('Description')[0]);
       }
 
       cellsOriginal[cellOrdinal] = {
-        value: isNumeric ? value : text || null,
+        value: isNumeric(text) ? value : text || null,
       };
     }
 
@@ -667,21 +726,11 @@ const XmlaStore = Class.inherit((function () {
     return cells;
   }
 
-  function preparePathValue(pathValue, dataField?) {
-    if (pathValue) {
-      const shouldSkipWrappingPathValue = isString(pathValue) && (
-        pathValue.includes('&') || pathValue.startsWith(`${dataField}.`)
-      );
-      pathValue = shouldSkipWrappingPathValue ? pathValue : `[${pathValue}]`;
-
-      if (dataField && pathValue.indexOf(`${dataField}.`) === 0) {
-        pathValue = pathValue.slice(dataField.length + 1, pathValue.length);
-      }
-    }
-    return pathValue;
+  preparePathValue(pathValue, dataField?) {
+    return preparePathValue(pathValue, dataField);
   }
 
-  function getItem(hash, name, member?, index?) {
+  getItem(hash, name, member?, index?) {
     let item = hash[name];
 
     if (!item) {
@@ -703,7 +752,7 @@ const XmlaStore = Class.inherit((function () {
     return item;
   }
 
-  function getVisibleChildren(item, visibleLevels) {
+  getVisibleChildren(item, visibleLevels) {
     const result = [];
     const children = item.children
       && (item.children.length
@@ -726,24 +775,24 @@ const XmlaStore = Class.inherit((function () {
     } if (firstChild) {
       for (let i = 0; i < children.length; i += 1) {
         if (children[i].hierarchyName === firstChild.hierarchyName) {
-          result.push.apply(result, getVisibleChildren(children[i], visibleLevels));
+          result.push.apply(result, this.getVisibleChildren(children[i], visibleLevels));
         }
       }
     }
     return result;
   }
 
-  function processMember(dataIndex, member, parentItem) {
+  processMember(dataIndex, member, parentItem) {
     let children = parentItem.children = parentItem.children || [];
     const hash = children.hash = children.hash || {};
     const grandTotalHash = children.grandTotalHash = children.grandTotalHash || {};
 
     if (member.parentName) {
-      parentItem = getItem(hash, member.parentName);
+      parentItem = this.getItem(hash, member.parentName);
       children = parentItem.children = parentItem.children || [];
     }
 
-    const currentItem = getItem(hash, member.name, member, dataIndex);
+    const currentItem = this.getItem(hash, member.name, member, dataIndex);
 
     if (member.hasValue && !currentItem.added) {
       currentItem.index = dataIndex;
@@ -760,7 +809,7 @@ const XmlaStore = Class.inherit((function () {
     return currentItem;
   }
 
-  function getGrandTotalIndex(parentItem, visibleLevels) {
+  getGrandTotalIndex(parentItem, visibleLevels) {
     let grandTotalIndex;
     if (parentItem.children.length === 1 && parentItem.children[0].parentName === '') {
       grandTotalIndex = parentItem.children[0].index;
@@ -770,7 +819,7 @@ const XmlaStore = Class.inherit((function () {
 
       parentItem.children.grandTotalHash = grandTotalHash;
 
-      parentItem.children = getVisibleChildren(parentItem, visibleLevels);
+      parentItem.children = this.getVisibleChildren(parentItem, visibleLevels);
     } else if (parentItem.children.length === 0) {
       grandTotalIndex = 0;
     }
@@ -778,7 +827,7 @@ const XmlaStore = Class.inherit((function () {
     return grandTotalIndex;
   }
 
-  function fillDataSourceAxes(dataSourceAxis, axisTuples, measureCount, visibleLevels) {
+  fillDataSourceAxes(dataSourceAxis, axisTuples, measureCount, visibleLevels) {
     const result = [];
 
     each(axisTuples, (tupleIndex, members) => {
@@ -790,7 +839,7 @@ const XmlaStore = Class.inherit((function () {
         : tupleIndex;
 
       each(members, (_, member) => {
-        parentItem = processMember(dataIndex, member, parentItem);
+        parentItem = this.processMember(dataIndex, member, parentItem);
       });
     });
 
@@ -798,13 +847,13 @@ const XmlaStore = Class.inherit((function () {
       children: result,
     };
 
-    parentItem.children = getVisibleChildren(parentItem, visibleLevels);
+    parentItem.children = this.getVisibleChildren(parentItem, visibleLevels);
 
-    const grandTotalIndex = getGrandTotalIndex(parentItem, visibleLevels);
+    const grandTotalIndex = this.getGrandTotalIndex(parentItem, visibleLevels);
 
     foreachTree(parentItem.children, (items) => {
       const item = items[0];
-      const children = getVisibleChildren(item, visibleLevels);
+      const children = this.getVisibleChildren(item, visibleLevels);
 
       if (children.length) {
         item.children = children;
@@ -825,7 +874,7 @@ const XmlaStore = Class.inherit((function () {
     return grandTotalIndex;
   }
 
-  function checkError(xml) {
+  checkError(xml) {
     const faultElementNS = xml.getElementsByTagName('soap:Fault');
     const faultElement = xml.getElementsByTagName('Fault');
     const errorElement = $(([] as any).slice.call(faultElement.length ? faultElement : faultElementNS)).find('Error');
@@ -839,7 +888,7 @@ const XmlaStore = Class.inherit((function () {
     return null;
   }
 
-  function parseResult(xml, parseOptions) {
+  parseResult(xml, parseOptions) {
     const dataSource: any = {
       columns: [],
       rows: [],
@@ -847,28 +896,28 @@ const XmlaStore = Class.inherit((function () {
 
     const { measureCount } = parseOptions;
 
-    const axes = parseAxes(xml, parseOptions.skipValues);
+    const axes = this.parseAxes(xml, parseOptions.skipValues);
 
-    dataSource.grandTotalColumnIndex = fillDataSourceAxes(
+    dataSource.grandTotalColumnIndex = this.fillDataSourceAxes(
       dataSource.columns,
       axes[0],
       measureCount,
       parseOptions.visibleLevels,
     );
 
-    dataSource.grandTotalRowIndex = fillDataSourceAxes(
+    dataSource.grandTotalRowIndex = this.fillDataSourceAxes(
       dataSource.rows,
       axes[1],
       undefined,
       parseOptions.visibleLevels,
     );
 
-    dataSource.values = parseCells(xml, axes, measureCount);
+    dataSource.values = this.parseCells(xml, axes, measureCount);
 
     return dataSource;
   }
 
-  function parseDiscoverRowSet(xml, schema, dimensions, translatedDisplayFolders?) {
+  parseDiscoverRowSet(xml, schema, dimensions, translatedDisplayFolders?) {
     const result: any = [];
     const isMeasure = schema === 'MEASURE';
     const displayFolderField = isMeasure ? 'MEASUREGROUP_NAME' : `${schema}_DISPLAY_FOLDER`;
@@ -883,7 +932,7 @@ const XmlaStore = Class.inherit((function () {
       }
 
       if ((levelNumber !== '0' || getFirstChildText(row, `${schema}_IS_VISIBLE`) !== 'true') && (getFirstChildText(row, 'DIMENSION_TYPE') !== MD_DIMTYPE_MEASURE)) {
-        const dimension = isMeasure ? MEASURE_DEMENSION_KEY : getFirstChildText(row, 'DIMENSION_UNIQUE_NAME');
+        const dimension = isMeasure ? MEASURE_DIMENSION_KEY : getFirstChildText(row, 'DIMENSION_UNIQUE_NAME');
         const dataField = getFirstChildText(row, `${schema}_UNIQUE_NAME`);
         result.push({
           dimension: dimensions.names[dimension] || dimension,
@@ -902,7 +951,7 @@ const XmlaStore = Class.inherit((function () {
     return result;
   }
 
-  function parseMeasureGroupDiscoverRowSet(xml) {
+  parseMeasureGroupDiscoverRowSet(xml) {
     const measureGroups = {};
     each(xml.getElementsByTagName('row'), (_, row) => {
       measureGroups[getFirstChildText(row, 'MEASUREGROUP_NAME')] = getFirstChildText(row, 'MEASUREGROUP_CAPTION');
@@ -910,7 +959,7 @@ const XmlaStore = Class.inherit((function () {
     return measureGroups;
   }
 
-  function parseDimensionsDiscoverRowSet(xml) {
+  parseDimensionsDiscoverRowSet(xml) {
     const result = {
       names: {},
       defaultHierarchies: {},
@@ -919,7 +968,7 @@ const XmlaStore = Class.inherit((function () {
     each($(xml).find('row'), function () {
       const $row = $(this);
       const type = $row.children('DIMENSION_TYPE').text();
-      const dimensionName = type === MD_DIMTYPE_MEASURE ? MEASURE_DEMENSION_KEY : $row.children('DIMENSION_UNIQUE_NAME').text();
+      const dimensionName = type === MD_DIMTYPE_MEASURE ? MEASURE_DIMENSION_KEY : $row.children('DIMENSION_UNIQUE_NAME').text();
 
       result.names[dimensionName] = $row.children('DIMENSION_CAPTION').text();
       result.defaultHierarchies[$row.children('DEFAULT_HIERARCHY').text()] = true;
@@ -927,22 +976,11 @@ const XmlaStore = Class.inherit((function () {
     return result;
   }
 
-  function parseStringWithUnicodeSymbols(str) {
-    str = str.replace(/_x(....)_/g, (_, group1) => String.fromCharCode(parseInt(group1, 16)));
-
-    const stringArray = str.match(/\[.+?\]/gi);
-    if (stringArray && stringArray.length) {
-      str = stringArray[stringArray.length - 1];
-    }
-
-    return str
-      .replace(/\[/gi, '')
-      .replace(/\]/gi, '')
-      .replace(/\$/gi, '')
-      .replace(/\./gi, ' ');
+  parseStringWithUnicodeSymbols(str) {
+    return parseStringWithUnicodeSymbols(str);
   }
 
-  function parseDrillDownRowSet(xml) {
+  parseDrillDownRowSet(xml) {
     const rows = xml.getElementsByTagName('row');
     const result: any = [];
     const columnNames: any = {};
@@ -954,8 +992,8 @@ const XmlaStore = Class.inherit((function () {
       for (let j = 0; j < children.length; j += 1) {
         const { tagName } = children[j];
         const name = columnNames[tagName] = columnNames[tagName]
-          || parseStringWithUnicodeSymbols(tagName);
-        item[name] = getNodeText(children[j]);
+          || this.parseStringWithUnicodeSymbols(tagName);
+        item[name] = this.getNodeText(children[j]);
       }
       result.push(item);
     }
@@ -963,15 +1001,15 @@ const XmlaStore = Class.inherit((function () {
     return result;
   }
 
-  function sendQuery(storeOptions, mdxString) {
+  sendQuery(storeOptions, mdxString) {
     mdxString = ($('<div>') as any).text(mdxString).html();
-    return execXMLA(
+    return this.execXMLA(
       storeOptions,
-      stringFormat(execute, mdxString, storeOptions.catalog, getLocaleIdProperty()),
+      stringFormat(XMLA_EXECUTE_TEMPLATE, mdxString, storeOptions.catalog, getLocaleIdProperty()),
     );
   }
 
-  function processTotalCount(data, options, totalCountXml) {
+  processTotalCount(data, options, totalCountXml) {
     const axes: any = [];
     const columnOptions = options.columns || [];
     const rowOptions = options.rows || [];
@@ -982,7 +1020,7 @@ const XmlaStore = Class.inherit((function () {
     if (rowOptions.length) {
       axes.push({});
     }
-    const cells = parseCells(totalCountXml, [[{}], [{}, {}]], 1);
+    const cells = this.parseCells(totalCountXml, [[{}], [{}, {}]], 1);
     if (!columnOptions.length && rowOptions.length) {
       data.rowCount = Math.max(cells[0][0][0] - 1, 0);
     }
@@ -1013,145 +1051,139 @@ const XmlaStore = Class.inherit((function () {
     }
   }
 
-  return {
-    ctor(options) {
-      this._options = options;
-    },
+  getFields() {
+    const options = this._options;
+    const { catalog } = options;
+    const { cube } = options;
+    const localeIdProperty = getLocaleIdProperty();
+    const dimensionsRequest = this.execXMLA(options, stringFormat(XMLA_DISCOVER_TEMPLATE, catalog, cube, 'MDSCHEMA_DIMENSIONS', localeIdProperty));
+    const measuresRequest = this.execXMLA(options, stringFormat(XMLA_DISCOVER_TEMPLATE, catalog, cube, 'MDSCHEMA_MEASURES', localeIdProperty));
+    const hierarchiesRequest = this.execXMLA(options, stringFormat(XMLA_DISCOVER_TEMPLATE, catalog, cube, 'MDSCHEMA_HIERARCHIES', localeIdProperty));
+    const levelsRequest = this.execXMLA(options, stringFormat(XMLA_DISCOVER_TEMPLATE, catalog, cube, 'MDSCHEMA_LEVELS', localeIdProperty));
+    // @ts-expect-error
+    const result = new Deferred();
 
-    getFields() {
-      const options = this._options;
-      const { catalog } = options;
-      const { cube } = options;
-      const localeIdProperty = getLocaleIdProperty();
-      const dimensionsRequest = execXMLA(options, stringFormat(discover, catalog, cube, 'MDSCHEMA_DIMENSIONS', localeIdProperty));
-      const measuresRequest = execXMLA(options, stringFormat(discover, catalog, cube, 'MDSCHEMA_MEASURES', localeIdProperty));
-      const hierarchiesRequest = execXMLA(options, stringFormat(discover, catalog, cube, 'MDSCHEMA_HIERARCHIES', localeIdProperty));
-      const levelsRequest = execXMLA(options, stringFormat(discover, catalog, cube, 'MDSCHEMA_LEVELS', localeIdProperty));
-      // @ts-expect-error
-      const result = new Deferred();
+    when(dimensionsRequest, measuresRequest, hierarchiesRequest, levelsRequest)
+      .then((dimensionsResponse, measuresResponse, hierarchiesResponse, levelsResponse) => {
+        this.execXMLA(options, stringFormat(XMLA_DISCOVER_TEMPLATE, catalog, cube, 'MDSCHEMA_MEASUREGROUPS', localeIdProperty))
+          .done((measureGroupsResponse) => {
+            const dimensions = this.parseDimensionsDiscoverRowSet(dimensionsResponse);
+            const hierarchies = this.parseDiscoverRowSet(hierarchiesResponse, 'HIERARCHY', dimensions);
+            const levels = this.parseDiscoverRowSet(levelsResponse, 'LEVEL', dimensions);
+            const measureGroups = this.parseMeasureGroupDiscoverRowSet(measureGroupsResponse);
+            const fields = this.parseDiscoverRowSet(measuresResponse, 'MEASURE', dimensions, measureGroups)
+              .concat(hierarchies);
+            const levelsByHierarchy = {};
 
-      when(dimensionsRequest, measuresRequest, hierarchiesRequest, levelsRequest)
-        .then((dimensionsResponse, measuresResponse, hierarchiesResponse, levelsResponse) => {
-          execXMLA(options, stringFormat(discover, catalog, cube, 'MDSCHEMA_MEASUREGROUPS', localeIdProperty))
-            .done((measureGroupsResponse) => {
-              const dimensions = parseDimensionsDiscoverRowSet(dimensionsResponse);
-              const hierarchies = parseDiscoverRowSet(hierarchiesResponse, 'HIERARCHY', dimensions);
-              const levels = parseDiscoverRowSet(levelsResponse, 'LEVEL', dimensions);
-              const measureGroups = parseMeasureGroupDiscoverRowSet(measureGroupsResponse);
-              const fields = parseDiscoverRowSet(measuresResponse, 'MEASURE', dimensions, measureGroups)
-                .concat(hierarchies);
-              const levelsByHierarchy = {};
+            each(levels, (_, level) => {
+              levelsByHierarchy[level.hierarchyName] = levelsByHierarchy[level.hierarchyName]
+                || [];
+              levelsByHierarchy[level.hierarchyName].push(level);
+            });
 
-              each(levels, (_, level) => {
-                levelsByHierarchy[level.hierarchyName] = levelsByHierarchy[level.hierarchyName]
-                  || [];
-                levelsByHierarchy[level.hierarchyName].push(level);
-              });
+            each(hierarchies, (_, hierarchy) => {
+              if (levelsByHierarchy[hierarchy.dataField]
+                && levelsByHierarchy[hierarchy.dataField].length > 1) {
+                hierarchy.groupName = hierarchy.hierarchyName = hierarchy.dataField;
 
-              each(hierarchies, (_, hierarchy) => {
-                if (levelsByHierarchy[hierarchy.dataField]
-                  && levelsByHierarchy[hierarchy.dataField].length > 1) {
-                  hierarchy.groupName = hierarchy.hierarchyName = hierarchy.dataField;
-
-                  fields.push.apply(fields, levelsByHierarchy[hierarchy.hierarchyName]);
-                }
-              });
-              result.resolve(fields);
-            }).fail(result.reject);
-        }).fail(result.reject);
-
-      return result;
-    },
-
-    load(options) {
-      // @ts-expect-error
-      const result = new Deferred();
-      const storeOptions = this._options;
-      const parseOptions = {
-        skipValues: options.skipValues,
-      };
-      const mdxString = generateMDX(options, storeOptions.cube, parseOptions);
-
-      let rowCountMdx;
-      if (options.rowSkip || options.rowTake || options.columnTake || options.columnSkip) {
-        rowCountMdx = generateMDX(extend({}, options, {
-          totalsOnly: true,
-          rowSkip: null,
-          rowTake: null,
-          columnSkip: null,
-          columnTake: null,
-        }), storeOptions.cube, {});
-      }
-
-      const load = () => {
-        if (mdxString) {
-          when(
-            sendQuery(storeOptions, mdxString),
-            rowCountMdx && sendQuery(storeOptions, rowCountMdx),
-          )
-            .done((executeXml, rowCountXml) => {
-              const error = checkError(executeXml) || rowCountXml && checkError(rowCountXml);
-              if (!error) {
-                const response = parseResult(executeXml, parseOptions);
-                if (rowCountXml) {
-                  processTotalCount(response, options, rowCountXml);
-                }
-
-                result.resolve(response);
-              } else {
-                result.reject(error);
+                fields.push.apply(fields, levelsByHierarchy[hierarchy.hierarchyName]);
               }
-            }).fail(result.reject);
-        } else {
-          result.resolve({
-            columns: [],
-            rows: [],
-            values: [],
-            grandTotalColumnIndex: 0,
-            grandTotalRowIndex: 0,
-          });
-        }
-      };
+            });
+            result.resolve(fields);
+          }).fail(result.reject);
+      }).fail(result.reject);
 
-      if (options.delay) {
-        setTimeout(load, options.delay);
-      } else {
-        load();
-      }
+    return result;
+  }
 
-      return result;
-    },
+  load(options) {
+    // @ts-expect-error
+    const result = new Deferred();
+    const storeOptions = this._options;
+    const parseOptions = {
+      skipValues: options.skipValues,
+    };
+    const mdxString = this.generateMDX(options, storeOptions.cube, parseOptions);
 
-    supportPaging() {
-      return true;
-    },
+    let rowCountMdx;
+    if (options.rowSkip || options.rowTake || options.columnTake || options.columnSkip) {
+      rowCountMdx = this.generateMDX(extend({}, options, {
+        totalsOnly: true,
+        rowSkip: null,
+        rowTake: null,
+        columnSkip: null,
+        columnTake: null,
+      }), storeOptions.cube, {});
+    }
 
-    getDrillDownItems(options, params) {
-      // @ts-expect-error
-      const result = new Deferred();
-      const storeOptions = this._options;
-      const mdxString = generateDrillDownMDX(options, storeOptions.cube, params);
-
+    const load = () => {
       if (mdxString) {
-        when(sendQuery(storeOptions, mdxString)).done((executeXml) => {
-          const error = checkError(executeXml);
+        when(
+          this.sendQuery(storeOptions, mdxString),
+          rowCountMdx && this.sendQuery(storeOptions, rowCountMdx),
+        )
+          .done((executeXml, rowCountXml) => {
+            const error = this.checkError(executeXml) || rowCountXml && this.checkError(rowCountXml);
+            if (!error) {
+              const response = this.parseResult(executeXml, parseOptions);
+              if (rowCountXml) {
+                this.processTotalCount(response, options, rowCountXml);
+              }
 
-          if (!error) {
-            result.resolve(parseDrillDownRowSet(executeXml));
-          } else {
-            result.reject(error);
-          }
-        }).fail(result.reject);
+              result.resolve(response);
+            } else {
+              result.reject(error);
+            }
+          }).fail(result.reject);
       } else {
-        result.resolve([]);
+        result.resolve({
+          columns: [],
+          rows: [],
+          values: [],
+          grandTotalColumnIndex: 0,
+          grandTotalRowIndex: 0,
+        });
       }
-      return result;
-    },
+    };
 
-    key: noop,
-    filter: noop,
-  };
-})()).include(storeDrillDownMixin);
+    if (options.delay) {
+      setTimeout(load, options.delay);
+    } else {
+      load();
+    }
+
+    return result;
+  }
+
+  supportPaging() {
+    return true;
+  }
+
+  getDrillDownItems(options, params) {
+    // @ts-expect-error
+    const result = new Deferred();
+    const storeOptions = this._options;
+    const mdxString = this.generateDrillDownMDX(options, storeOptions.cube, params);
+
+    if (mdxString) {
+      when(this.sendQuery(storeOptions, mdxString)).done((executeXml) => {
+        const error = this.checkError(executeXml);
+
+        if (!error) {
+          result.resolve(this.parseDrillDownRowSet(executeXml));
+        } else {
+          result.reject(error);
+        }
+      }).fail(result.reject);
+    } else {
+      result.resolve([]);
+    }
+    return result;
+  }
+}
+
+// Apply storeDrillDownMixin methods to XmlaStore prototype
+Object.assign(XmlaStore.prototype, storeDrillDownMixin);
 
 // NOTE: Exports default object for mocks in QUnit only.
 export default { XmlaStore };

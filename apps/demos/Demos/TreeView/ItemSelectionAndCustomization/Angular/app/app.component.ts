@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxListModule, DxTemplateModule, DxCheckBoxModule } from 'devextreme-angular';
+import { DxListModule, DxCheckBoxModule } from 'devextreme-angular';
 import { DxTreeViewModule, DxTreeViewComponent, DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
 import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import { Service, Employee } from './app.service';
@@ -33,7 +33,7 @@ if (window && window.config?.packageConfigPaths) {
   preserveWhitespaces: true,
 })
 export class AppComponent {
-  @ViewChild(DxTreeViewComponent, { static: false }) treeView: DxTreeViewComponent;
+  @ViewChild(DxTreeViewComponent<Employee>, { static: false }) treeView: DxTreeViewComponent;
 
   employees: Employee[];
 
@@ -59,19 +59,19 @@ export class AppComponent {
     this.employees = service.getEmployees();
   }
 
-  treeViewSelectionChanged(e: DxTreeViewTypes.SelectionChangedEvent) {
+  treeViewSelectionChanged(e: DxTreeViewTypes.SelectionChangedEvent<Employee>) {
     this.syncSelection(e.component);
   }
 
-  treeViewContentReady(e: DxTreeViewTypes.ContentReadyEvent) {
+  treeViewContentReady(e: DxTreeViewTypes.ContentReadyEvent<Employee>) {
     this.syncSelection(e.component);
   }
 
-  syncSelection(treeView: DxTreeViewComponent['instance']) {
+  syncSelection(treeView: DxTreeViewComponent<Employee>['instance']) {
     const selectedEmployees = treeView.getSelectedNodes()
       .map((node) => node.itemData);
 
-    this.selectedEmployees = selectedEmployees as Employee[];
+    this.selectedEmployees = selectedEmployees;
   }
 
   showCheckBoxesModeValueChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
@@ -98,7 +98,6 @@ export class AppComponent {
     BrowserModule,
     DxTreeViewModule,
     DxListModule,
-    DxTemplateModule,
     DxCheckBoxModule,
     DxSelectBoxModule,
   ],

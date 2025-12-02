@@ -13,7 +13,9 @@ test('Context menu should be shown in the same position when item was added in r
 
   await t
     .click(target)
-    .expect(contextMenu.overlay.getContent().getStyleProperty('visibility')).eql('visible');
+    .expect(Selector('.dx-context-menu').exists).ok('Context menu element should exist')
+    .expect(contextMenu.overlay.getContent().getStyleProperty('visibility'))
+    .eql('visible');
 
   const initialOverlayOffset = await contextMenu.overlay.getOverlayOffset();
 

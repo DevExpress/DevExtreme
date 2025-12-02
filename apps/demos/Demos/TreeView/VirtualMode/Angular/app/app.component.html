@@ -1,9 +1,10 @@
 <dx-tree-view
   [dataSource]="dataSource"
   dataStructure="plain"
-  keyExpr="Id"
-  displayExpr="Name"
+  keyExpr="ID"
+  displayExpr="Text"
   parentIdExpr="CategoryId"
   hasItemsExpr="IsGroup"
+  [rootValue]="null"
   [virtualModeEnabled]="true"
 ></dx-tree-view>

@@ -168,7 +168,7 @@ export class TimePanelDataGenerator {
       if (currentGroupIndex !== previousGroupIndex) {
         previousGroupedData.push({
           dateTable: [],
-          isGroupedAllDayPanel: getIsGroupedAllDayPanel(!!cellData.allDay, isVerticalGrouping),
+          isGroupedAllDayPanel: getIsGroupedAllDayPanel(Boolean(cellData.allDay), isVerticalGrouping),
           groupIndex: currentGroupIndex,
           key: getKeyByGroup(currentGroupIndex, isVerticalGrouping),
         });
@@ -198,10 +198,10 @@ export class TimePanelDataGenerator {
   ): boolean {
     // NOTE: today date value shifted by -viewOffset for the render purposes.
     // Therefore, we roll-backing here this shift.
-    const realToday = dateUtilsTs.addOffsets(today, [viewOffset]);
+    const realToday = dateUtilsTs.addOffsets(today, viewOffset);
     // NOTE: start view date value calculated from the render options and hasn't viewOffset.
     // So, we must shift it by viewOffset to get the real start view date here.
-    const realStartViewDate = dateUtilsTs.addOffsets(startViewDate, [viewOffset]);
+    const realStartViewDate = dateUtilsTs.addOffsets(startViewDate, viewOffset);
 
     if (
       !showCurrentTimeIndicator

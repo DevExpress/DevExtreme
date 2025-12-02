@@ -3,7 +3,7 @@ import {
 } from '@jest/globals';
 import {
   getResourceManagerMock,
-} from '@ts/scheduler/__mock__/resourceManager.mock';
+} from '@ts/scheduler/__mock__/resource_manager.mock';
 
 import { createResourceEditorModel } from './popup_utils';
 

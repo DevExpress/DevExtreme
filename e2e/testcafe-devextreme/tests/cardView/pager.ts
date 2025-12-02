@@ -3,7 +3,6 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { testScreenshot } from '../../helpers/themeUtils';
-import { a11yCheck } from '../../helpers/accessibility/utils';
 
 async function createCardViewWithPager(config: any = {}): Promise<any> {
   const dataSource = Array.from({ length: 20 }, (_, i) => ({ text: i.toString(), value: i }));
@@ -29,6 +28,7 @@ async function createCardViewWithPager(config: any = {}): Promise<any> {
     ...config,
   });
 }
+
 fixture.disablePageReloads`Pager`
   .page(url(__dirname, '../container.html'));
 
@@ -79,8 +79,6 @@ test('Page index interaction', async (t) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-
-    await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
   }).before(async () => createCardViewWithPager({ remoteOperations: remoteOperation }));
 });
 

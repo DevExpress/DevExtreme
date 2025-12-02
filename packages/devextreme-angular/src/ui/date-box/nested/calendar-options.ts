@@ -276,6 +276,14 @@ export class DxoDateBoxCalendarOptionsComponent extends NestedOption implements 
     }
 
     @Input()
+    get todayButtonText(): string {
+        return this._getOption('todayButtonText');
+    }
+    set todayButtonText(value: string) {
+        this._setOption('todayButtonText', value);
+    }
+
+    @Input()
     get validationError(): any {
         return this._getOption('validationError');
     }
@@ -377,7 +385,6 @@ export class DxoDateBoxCalendarOptionsComponent extends NestedOption implements 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'valueChange' },
             { emit: 'zoomLevelChange' }

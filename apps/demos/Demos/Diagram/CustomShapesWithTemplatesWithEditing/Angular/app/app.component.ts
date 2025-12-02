@@ -5,7 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import {
-  DxPopupModule, DxTemplateModule, DxDiagramModule, DxDiagramComponent, DxTextBoxModule, DxButtonModule,
+  DxPopupModule, DxDiagramModule, DxDiagramComponent, DxTextBoxModule, DxButtonModule,
 } from 'devextreme-angular';
 import { ArrayStore } from 'devextreme-angular/common/data';
 import { Service, Employee } from './app.service';
@@ -47,14 +47,14 @@ export class AppComponent {
       key: 'ID',
       data: service.getEmployees(),
       onInserting(values) {
-        values.ID = values.ID || that.generatedID++;
+        values.ID = values.ID || (that.generatedID += 1);
         values.Full_Name = values.Full_Name || "Employee's Name";
         values.Title = values.Title || "Employee's Title";
       },
     });
   }
 
-  itemTypeExpr(obj) {
+  itemTypeExpr() {
     return 'employee';
   }
 
@@ -79,10 +79,11 @@ export class AppComponent {
     obj.Email = value.Email;
     obj.Skype = value.Skype;
     obj.Mobile_Phone = value.Mobile_Phone;
+    return null;
   }
 
   requestLayoutUpdateHandler(e) {
-    for (let i = 0; i < e.changes.length; i++) {
+    for (let i = 0; i < e.changes.length; i += 1) {
       if (e.changes[i].type === 'remove') { e.allowed = true; } else if (e.changes[i].data.Head_ID !== undefined && e.changes[i].data.Head_ID !== null) { e.allowed = true; }
     }
   }
@@ -126,7 +127,6 @@ export class AppComponent {
     DxPopupModule,
     DxTextBoxModule,
     DxButtonModule,
-    DxTemplateModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

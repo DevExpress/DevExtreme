@@ -1,4 +1,4 @@
-import Drawer from '../__internal/ui/drawer/m_drawer';
+import Drawer from '../__internal/ui/drawer/drawer';
 export default Drawer;
 
 // STYLE drawer

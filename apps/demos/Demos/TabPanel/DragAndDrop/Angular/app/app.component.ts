@@ -2,7 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
-  DxButtonModule, DxSortableModule, DxTabPanelModule, DxListModule, DxTemplateModule,
+  DxButtonModule, DxSortableModule, DxTabPanelModule, DxListModule,
 } from 'devextreme-angular';
 import { DxSortableTypes } from 'devextreme-angular/ui/sortable';
 import { Employee, Service, Task } from './app.service';
@@ -103,7 +103,6 @@ export class AppComponent {
     DxSortableModule,
     DxTabPanelModule,
     DxListModule,
-    DxTemplateModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

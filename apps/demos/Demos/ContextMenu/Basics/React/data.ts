@@ -1,4 +1,6 @@
-export const contextMenuItems = [
+import type { ContextMenuItem } from './types';
+
+export const contextMenuItems: ContextMenuItem[] = [
   {
     text: 'Share',
     items: [
@@ -9,4 +11,3 @@ export const contextMenuItems = [
   { text: 'Comment' },
   { text: 'Favorite' },
 ];
-

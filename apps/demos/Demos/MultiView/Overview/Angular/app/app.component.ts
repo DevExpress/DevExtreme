@@ -2,7 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import { DxMultiViewModule, DxCheckBoxModule, DxTemplateModule } from 'devextreme-angular';
+import { DxMultiViewModule, DxCheckBoxModule } from 'devextreme-angular';
 
 import { Company, Service } from './app.service';
 
@@ -39,7 +39,6 @@ export class AppComponent {
     BrowserModule,
     DxMultiViewModule,
     DxCheckBoxModule,
-    DxTemplateModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

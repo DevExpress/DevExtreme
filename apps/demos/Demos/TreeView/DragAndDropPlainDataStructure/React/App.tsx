@@ -1,8 +1,11 @@
 import React, { useCallback, useRef, useState } from 'react';
-import TreeView, { type TreeViewRef } from 'devextreme-react/tree-view';
+import TreeView, { type TreeViewTypes, TreeViewRef } from 'devextreme-react/tree-view';
 import Sortable, { type SortableTypes } from 'devextreme-react/sortable';
 
 import service from './data.ts';
+import type { FileSystemItem } from './types';
+
+type Node = TreeViewTypes.Node<FileSystemItem>;
 
 const getStateFieldName = (driveName: string) => (driveName === 'driveC'
   ? 'itemsDriveC'
@@ -26,7 +29,7 @@ const findNode = (treeView, index: string | number) => {
   return null;
 };
 
-const findNodeById = (nodes, id) => {
+const findNodeById = (nodes: Node[], id: string | number): Node => {
   for (let i = 0; i < nodes.length; i += 1) {
     if (nodes[i].itemData.id === id) {
       return nodes[i];
@@ -41,7 +44,7 @@ const findNodeById = (nodes, id) => {
   return null;
 };
 
-const moveNode = (fromNode, toNode, fromItems, toItems, isDropInsideItem) => {
+const moveNode = (fromNode: Node, toNode: Node, fromItems, toItems, isDropInsideItem) => {
   const fromIndex = fromItems.findIndex((item) => item.id === fromNode.itemData.id);
   fromItems.splice(fromIndex, 1);
 
@@ -60,7 +63,7 @@ const moveNode = (fromNode, toNode, fromItems, toItems, isDropInsideItem) => {
   }
 };
 
-const moveChildren = (node, fromDataSource, toDataSource: any[]) => {
+const moveChildren = (node: Node, fromDataSource, toDataSource: any[]) => {
   if (!node.itemData.isDirectory) {
     return;
   }
@@ -76,7 +79,7 @@ const moveChildren = (node, fromDataSource, toDataSource: any[]) => {
   });
 };
 
-const isChildNode = (parentNode: { itemData: { id: any; }; }, childNode: { parent: any; }) => {
+const isChildNode = (parentNode: Node, childNode: Node) => {
   let { parent } = childNode;
   while (parent !== null) {
     if (parent.itemData.id === parentNode.itemData.id) {
@@ -102,8 +105,8 @@ const getTopVisibleNode = (component) => {
 };
 
 const App = () => {
-  const treeViewDriveCRef = useRef<TreeViewRef>(null);
-  const treeViewDriveDRef = useRef<TreeViewRef>(null);
+  const treeViewDriveCRef = useRef<TreeViewRef<FileSystemItem>>(null);
+  const treeViewDriveDRef = useRef<TreeViewRef<FileSystemItem>>(null);
 
   const [itemsDriveC, setItemsDriveC] = useState(service.getItemsDriveC());
   const [itemsDriveD, setItemsDriveD] = useState(service.getItemsDriveD());

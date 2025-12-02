@@ -12,7 +12,7 @@ const App = () => (
     timeZone="America/Los_Angeles"
     dataSource={data}
     groups={groups}
-    defaultCurrentView={'Vertical Grouping'}
+    defaultCurrentView="Vertical Grouping"
     defaultCurrentDate={currentDate}
     startDayHour={9}
     endDayHour={16}
@@ -37,6 +37,7 @@ const App = () => (
       allowMultiple={false}
       dataSource={priorityData}
       label="Priority"
+      icon="tags"
     />
   </Scheduler>
 );

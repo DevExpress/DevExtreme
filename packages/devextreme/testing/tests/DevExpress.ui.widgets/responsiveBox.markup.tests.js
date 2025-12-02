@@ -7,8 +7,6 @@ import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
 import 'ui/box';
 import 'ui/responsive_box';
 
-import 'generic_light.css!';
-
 QUnit.testStart(() => {
     const markup =
         '<div id="responsiveBox"></div>\
@@ -475,7 +473,8 @@ QUnit.module('template rendering', moduleConfig, () => {
 
         this.updateScreenSize(1000);
 
-        registerComponent('dxWidget', Widget.inherit({}));
+        class DxWidget extends Widget {}
+        registerComponent('dxWidget', DxWidget);
 
         const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
             rows: [{}],

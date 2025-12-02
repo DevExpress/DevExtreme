@@ -1,17 +1,23 @@
 import { Injectable } from '@angular/core';
 
+export class ProductItem {
+  id: string;
+
+  name: string;
+
+  icon: string;
+
+  price: number;
+
+  disabled?: boolean;
+}
+
 export class Product {
   id: string;
 
   name: string;
 
-  icon?: string;
-
-  price?: number;
-
-  disabled?: boolean;
-
-  items?: Product[];
+  items: (Product | ProductItem)[];
 }
 
 const products: Product[] = [{

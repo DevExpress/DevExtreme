@@ -1,11 +1,20 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+
 import notify from 'devextreme/ui/notify';
-import { DxContextMenuModule, DxContextMenuTypes } from 'devextreme-angular/ui/context-menu';
+import { DxContextMenuModule, type DxContextMenuTypes } from 'devextreme-angular/ui/context-menu';
 
 if (!document.location.host.includes('localhost')) {
   enableProdMode();
+}
+
+class ContextMenuItem {
+  text: string;
+
+  icon?: string;
+
+  items?: ContextMenuItem[];
 }
 
 let modulePrefix = '';
@@ -20,7 +29,7 @@ if (window && window.config?.packageConfigPaths) {
   styleUrls: [`.${modulePrefix}/app.component.css`],
 })
 export class AppComponent {
-  dataSource = [{
+  dataSource: ContextMenuItem[] = [{
     text: 'Share',
     icon: 'dx-icon-globe',
     items: [
@@ -32,7 +41,7 @@ export class AppComponent {
   { text: 'Add to Favorite', icon: 'dx-icon-favorites' },
   ];
 
-  itemClick({ itemData: { items, text } }: DxContextMenuTypes.ItemClickEvent) {
+  itemClick({ itemData: { items, text } }: DxContextMenuTypes.ItemClickEvent<ContextMenuItem>) {
     if (!items) {
       notify(`The "${text}" item was clicked`, 'success', 1500);
     }

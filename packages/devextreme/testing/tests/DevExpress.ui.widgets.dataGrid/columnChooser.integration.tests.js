@@ -2,6 +2,8 @@ import $ from 'jquery';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import messageLocalization from 'common/core/localization/message';
 
+import 'fluent_blue_light.css!';
+
 QUnit.testStart(function() {
     const gridMarkup = `
         <div id='container'>

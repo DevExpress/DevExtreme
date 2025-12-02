@@ -1,4 +1,4 @@
-import { exportDataGrid } from 'exporter/jspdf/export_data_grid';
+import { exportDataGrid } from '__internal/exporter/jspdf/export_data_grid';
 import errors from 'core/errors';
 import { extend } from 'core/utils/extend';
 import { moduleConfig, createDataGrid } from './jspdf.dataGrid_utils.js';

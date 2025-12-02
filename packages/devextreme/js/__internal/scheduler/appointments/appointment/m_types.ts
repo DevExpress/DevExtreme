@@ -1,4 +1,5 @@
 import type { Orientation } from '@js/common';
+import type NotifyScheduler from '@ts/scheduler/base/m_widget_notify_scheduler';
 import type { TimeZoneCalculator } from '@ts/scheduler/r1/timezone_calculator/calculator';
 import type { SafeAppointment } from '@ts/scheduler/types';
 import type { AppointmentDataAccessor } from '@ts/scheduler/utils/data_accessor/appointment_data_accessor';
@@ -8,7 +9,7 @@ export interface AppointmentProperties extends Record<string, unknown> {
   data: SafeAppointment;
   groupIndex?: number;
   groupTexts: string[];
-  observer: any;
+  notifyScheduler: NotifyScheduler | undefined;
   geometry: any;
   direction: Orientation;
   allowResize: boolean;

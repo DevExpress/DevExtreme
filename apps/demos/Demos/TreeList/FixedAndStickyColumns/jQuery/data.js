@@ -16,7 +16,7 @@ const employees = [
     Skype: 'jheart_DX_skype',
     HomePhone: '(213) 555-9208',
     Department: 'Management',
-    MobilePhone: '(213) 555-9392'
+    MobilePhone: '(213) 555-9392',
   },
   {
     ID: 2,
@@ -35,7 +35,7 @@ const employees = [
     Skype: 'samanthab_DX_skype',
     HomePhone: '2135550288',
     Department: 'Management',
-    MobilePhone: '(213) 555-2858'
+    MobilePhone: '(213) 555-2858',
   },
   {
     ID: 3,
@@ -54,7 +54,7 @@ const employees = [
     Skype: 'arthurm_DX_skype',
     HomePhone: '3105556542',
     Department: 'Management',
-    MobilePhone: '3105558583'
+    MobilePhone: '3105558583',
   },
   {
     ID: 4,
@@ -73,7 +73,7 @@ const employees = [
     Skype: 'robertr_DX_skype',
     HomePhone: '8185552438',
     Department: 'Management',
-    MobilePhone: '8185552387'
+    MobilePhone: '8185552387',
   },
   {
     ID: 5,
@@ -92,7 +92,7 @@ const employees = [
     Skype: 'gretas_DX_skype',
     HomePhone: '8185550976',
     Department: 'Human Resources',
-    MobilePhone: '8185556546'
+    MobilePhone: '8185556546',
   },
   {
     ID: 6,
@@ -111,7 +111,7 @@ const employees = [
     Skype: 'brettw_DX_skype',
     HomePhone: '6265555985',
     Department: 'IT',
-    MobilePhone: '6265550358'
+    MobilePhone: '6265550358',
   },
   {
     ID: 7,
@@ -130,7 +130,7 @@ const employees = [
     Skype: 'sandraj_DX_skype',
     HomePhone: '5625558272',
     Department: 'Human Resources',
-    MobilePhone: '5625552082'
+    MobilePhone: '5625552082',
   },
   {
     ID: 8,
@@ -149,7 +149,7 @@ const employees = [
     Skype: 'edwardh_DX_skype',
     HomePhone: '3105556098',
     Department: 'Sales',
-    MobilePhone: '3105551288'
+    MobilePhone: '3105551288',
   },
   {
     ID: 9,
@@ -168,7 +168,7 @@ const employees = [
     Skype: 'barbarab_DX_skype',
     HomePhone: '3105559792',
     Department: 'Support',
-    MobilePhone: '3105553355'
+    MobilePhone: '3105553355',
   },
   {
     ID: 10,
@@ -187,7 +187,7 @@ const employees = [
     Skype: 'kevinc_DX_skype',
     HomePhone: '2135558038',
     Department: 'Shipping',
-    MobilePhone: '2135552840'
+    MobilePhone: '2135552840',
   },
   {
     ID: 11,
@@ -206,7 +206,7 @@ const employees = [
     Skype: 'cindys_DX_skype',
     HomePhone: '8185550828',
     Department: 'Human Resources',
-    MobilePhone: '8185556655'
+    MobilePhone: '8185556655',
   },
   {
     ID: 12,
@@ -225,7 +225,7 @@ const employees = [
     Skype: 'sammyh_DX_skype',
     HomePhone: '6265543168',
     Department: 'Sales',
-    MobilePhone: '6265557292'
+    MobilePhone: '6265557292',
   },
   {
     ID: 13,
@@ -244,7 +244,7 @@ const employees = [
     Skype: 'davidj_DX_skype',
     HomePhone: '6265554422',
     Department: 'Shipping',
-    MobilePhone: '6265550281'
+    MobilePhone: '6265550281',
   },
   {
     ID: 14,
@@ -263,7 +263,7 @@ const employees = [
     Skype: 'victorn_DX_skype',
     HomePhone: '2135552827',
     Department: 'Shipping',
-    MobilePhone: '2135559278'
+    MobilePhone: '2135559278',
   },
   {
     ID: 15,
@@ -282,7 +282,7 @@ const employees = [
     Skype: 'marys_DX_skype',
     HomePhone: '8185558375',
     Department: 'Shipping',
-    MobilePhone: '8185557857'
+    MobilePhone: '8185557857',
   },
   {
     ID: 16,
@@ -301,7 +301,7 @@ const employees = [
     Skype: 'robinc_DX_skype',
     HomePhone: '8185559266',
     Department: 'Shipping',
-    MobilePhone: '8185550942'
+    MobilePhone: '8185550942',
   },
   {
     ID: 17,
@@ -320,7 +320,7 @@ const employees = [
     Skype: 'kellyr_DX_skype',
     HomePhone: '8185559792',
     Department: 'Support',
-    MobilePhone: '8185559248'
+    MobilePhone: '8185559248',
   },
   {
     ID: 18,
@@ -339,7 +339,7 @@ const employees = [
     Skype: 'jamesa_DX_skype',
     HomePhone: '3235552087',
     Department: 'Support',
-    MobilePhone: '3235554702'
+    MobilePhone: '3235554702',
   },
   {
     ID: 19,
@@ -358,7 +358,7 @@ const employees = [
     Skype: 'anthonyr_DX_skype',
     HomePhone: '3105550009',
     Department: 'Support',
-    MobilePhone: '3105556625'
+    MobilePhone: '3105556625',
   },
   {
     ID: 20,
@@ -377,7 +377,7 @@ const employees = [
     Skype: 'oliviap_DX_skype',
     HomePhone: '3105558247',
     Department: 'Sales',
-    MobilePhone: '3105552728'
+    MobilePhone: '3105552728',
   },
   {
     ID: 21,
@@ -396,7 +396,7 @@ const employees = [
     Skype: 'taylorr_DX_skype',
     HomePhone: '3105552134',
     Department: 'IT',
-    MobilePhone: '3105557276'
+    MobilePhone: '3105557276',
   },
   {
     ID: 22,
@@ -415,7 +415,7 @@ const employees = [
     Skype: 'ameliah_DX_skype',
     HomePhone: '2135553792',
     Department: 'IT',
-    MobilePhone: '2135554276'
+    MobilePhone: '2135554276',
   },
   {
     ID: 23,
@@ -434,7 +434,7 @@ const employees = [
     Skype: 'wallyh_DX_skype',
     HomePhone: '8185552478',
     Department: 'IT',
-    MobilePhone: '8185558872'
+    MobilePhone: '8185558872',
   },
   {
     ID: 24,
@@ -453,7 +453,7 @@ const employees = [
     Skype: 'bradleyj_DX_skype',
     HomePhone: '8185559098',
     Department: 'IT',
-    MobilePhone: '8185554646'
+    MobilePhone: '8185554646',
   },
   {
     ID: 25,
@@ -472,7 +472,7 @@ const employees = [
     Skype: 'kareng_DX_skype',
     HomePhone: '6265550822',
     Department: 'IT',
-    MobilePhone: '6265550908'
+    MobilePhone: '6265550908',
   },
   {
     ID: 26,
@@ -491,7 +491,7 @@ const employees = [
     Skype: 'marcuso_DX_skype',
     HomePhone: '2135552608',
     Department: 'Human Resources',
-    MobilePhone: '2135557098'
+    MobilePhone: '2135557098',
   },
   {
     ID: 27,
@@ -510,7 +510,7 @@ const employees = [
     Skype: 'sandrab_DX_skype',
     HomePhone: '8185555072',
     Department: 'Human Resources',
-    MobilePhone: '8185550524'
+    MobilePhone: '8185550524',
   },
   {
     ID: 28,
@@ -529,7 +529,7 @@ const employees = [
     Skype: 'morgank_DX_skype',
     HomePhone: '8185553973',
     Department: 'IT',
-    MobilePhone: '8185558238'
+    MobilePhone: '8185558238',
   },
   {
     ID: 29,
@@ -548,7 +548,7 @@ const employees = [
     Skype: 'violetb_DX_skype',
     HomePhone: '8185553085',
     Department: 'IT',
-    MobilePhone: '8185552478'
+    MobilePhone: '8185552478',
   },
   {
     ID: 30,
@@ -567,6 +567,6 @@ const employees = [
     Skype: 'kents_DX_skype',
     HomePhone: '5625559248',
     Department: 'Human Resources',
-    MobilePhone: '5625559282'
-  }
+    MobilePhone: '5625559282',
+  },
 ];

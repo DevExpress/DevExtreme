@@ -7,7 +7,7 @@ import {
 
 import '__internal/scheduler/m_scheduler';
 import 'ui/switch';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const {
     module,

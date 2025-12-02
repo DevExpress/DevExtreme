@@ -43,7 +43,7 @@ const value = ref(colors[0].code);
 
 const values = computed(() => getBasicColors(value.value));
 
-function getBasicColors(selectValue) {
+function getBasicColors(selectValue: string) {
   const code = Number(`0x${selectValue.slice(1)}`);
   return [
     (code >> 16) & 0xff,

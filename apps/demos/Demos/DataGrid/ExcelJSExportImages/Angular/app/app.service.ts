@@ -44,7 +44,7 @@ const employees: Employee[] = [{
 
 @Injectable()
 export class Service {
-  getEmployess() {
+  getEmployees() {
     return employees;
   }
 }

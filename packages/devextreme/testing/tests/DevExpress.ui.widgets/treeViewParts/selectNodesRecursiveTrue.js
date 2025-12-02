@@ -1,6 +1,6 @@
-/* global DATA, internals, initTree */
-
 import $ from 'jquery';
+import { DATA, internals } from './testData.js';
+import { initTree } from './testUtils.js';
 
 QUnit.module('selectNodesRecursive = true', {
     beforeEach: function() {

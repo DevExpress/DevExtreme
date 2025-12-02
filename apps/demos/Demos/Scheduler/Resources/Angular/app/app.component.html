@@ -8,28 +8,31 @@
   [endDayHour]="19"
   [height]="600"
 >
-  <dxi-resource
+  <dxi-scheduler-resource
     fieldExpr="roomId"
     label="Room"
     [dataSource]="rooms"
     [useColorAsDefault]="currentResource === 'Room'"
+    icon="conferenceroomoutline"
   >
-  </dxi-resource>
-  <dxi-resource
+  </dxi-scheduler-resource>
+  <dxi-scheduler-resource
     fieldExpr="priorityId"
     label="Priority"
     [dataSource]="priorities"
     [useColorAsDefault]="currentResource === 'Priority'"
+    icon="tags"
   >
-  </dxi-resource>
-  <dxi-resource
+  </dxi-scheduler-resource>
+  <dxi-scheduler-resource
     fieldExpr="assigneeId"
     label="Assignee"
     [allowMultiple]="true"
     [dataSource]="assignees"
     [useColorAsDefault]="currentResource === 'Assignee'"
+    icon="user"
   >
-  </dxi-resource>
+  </dxi-scheduler-resource>
 </dx-scheduler>
 
 <div class="options">

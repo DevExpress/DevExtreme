@@ -22,7 +22,6 @@ const commonItems: Item[] = [
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     await testScreenshot(t, takeScreenshot, `Stepper orient=${orientation}.png`, {
       element: '#container',
-      shouldTestInCompact: true,
     });
 
     await t

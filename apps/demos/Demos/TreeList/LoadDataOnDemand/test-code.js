@@ -8,7 +8,6 @@ testUtils.importAnd(() => 'devextreme/ui/tree_list', () => DevExpress.ui.dxTreeL
 
   instance.option('dataSource', {
     load() {
-      // eslint-disable-next-line no-shadow
       return new Promise((resolve) => setTimeout(() => resolve([
         {
           id: 'App_Data',

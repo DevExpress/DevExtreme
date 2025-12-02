@@ -2,13 +2,10 @@ import $ from 'jquery';
 
 import MessageBox, {
     CHAT_MESSAGEBOX_CLASS,
-    CHAT_MESSAGEBOX_INPUT_CONTAINER_CLASS,
-    CHAT_MESSAGEBOX_TEXTAREA_CLASS,
-    CHAT_MESSAGEBOX_BUTTON_CLASS,
-} from '__internal/ui/chat/messagebox';
+    CHAT_MESSAGEBOX_TEXTAREA_CONTAINER_CLASS,
+} from '__internal/ui/chat/message_box/message_box';
 
 const TEXTAREA_CLASS = 'dx-textarea';
-const BUTTON_CLASS = 'dx-button';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -33,31 +30,17 @@ QUnit.module('MessageBox', moduleConfig, () => {
             assert.strictEqual(this.$element.hasClass(CHAT_MESSAGEBOX_CLASS), true);
         });
 
-        QUnit.test('root element should contain only input container by default', function(assert) {
+        QUnit.test('root element should contain input container', function(assert) {
             const $messageBoxContent = this.$element.children();
 
             assert.strictEqual($messageBoxContent.length, 1, 'message box content has one elements');
-            assert.strictEqual($messageBoxContent.eq(0).hasClass(CHAT_MESSAGEBOX_INPUT_CONTAINER_CLASS), true, 'message box contains input container');
+            assert.strictEqual($messageBoxContent.eq(0).hasClass(CHAT_MESSAGEBOX_TEXTAREA_CONTAINER_CLASS), true, 'message box contains input container');
         });
 
-        QUnit.test(`textarea field should have ${CHAT_MESSAGEBOX_TEXTAREA_CLASS} class`, function(assert) {
+        QUnit.test('root element should contain textarea element', function(assert) {
             const $textArea = this.$element.find(`.${TEXTAREA_CLASS}`);
 
-            assert.strictEqual($textArea.hasClass(CHAT_MESSAGEBOX_TEXTAREA_CLASS), true);
-        });
-
-        QUnit.test(`send button should have ${CHAT_MESSAGEBOX_BUTTON_CLASS} class`, function(assert) {
-            const $button = this.$element.find(`.${BUTTON_CLASS}`);
-
-            assert.strictEqual($button.hasClass(CHAT_MESSAGEBOX_BUTTON_CLASS), true);
-        });
-    });
-
-    QUnit.module('Accessibility', moduleConfig, () => {
-        QUnit.test('send button should have correct aria-label', function(assert) {
-            const $button = this.$element.find(`.${BUTTON_CLASS}`);
-
-            assert.strictEqual($button.attr('aria-label'), 'Send');
+            assert.strictEqual($textArea.length, 1);
         });
     });
 });

@@ -42,57 +42,65 @@
       field-template="progressTemplate"
     />
 
-    <template #headerTemplate="{
+    <template
+      #headerTemplate="{
         data: {
           card: {
             data: task,
           }
         }
-      }">
+      }"
+    >
       <HeaderTemplate :text="task.Task_Subject"/>
     </template>
-    <template #priorityTemplate="{
+    <template
+      #priorityTemplate="{
         data: {
           field: {
             value,
           }
         }
-      }">
+      }"
+    >
       <Priority :priorityID="value"/>
     </template>
-    <template #employeeTemplate="{
+    <template
+      #employeeTemplate="{
         data: {
           field: {
             value,
           }
         }
-      }">
+      }"
+    >
       <Employee :employeeID="value"/>
     </template>
-    <template #progressTemplate="{
+    <template
+      #progressTemplate="{
         data: {
           field: {
             value,
           }
         }
-      }">
+      }"
+    >
       <Progress :value="value"/>
     </template>
   </DxCardView>
 </template>
 
 <script setup lang="ts">
-  import {
-    DxCardView,
-    DxColumn,
-    DxCardHeader,
-    DxPaging,
-  } from 'devextreme-vue/card-view';
-  import { tasks } from './data.ts';
-  import HeaderTemplate from './HeaderTemplate.vue';
-  import Priority from './Priority.vue';
-  import Employee from './Employee.vue';
-  import Progress from './Progress.vue';
+import {
+  DxCardView,
+  DxColumn,
+  DxCardHeader,
+  DxPaging,
+} from 'devextreme-vue/card-view';
+import { tasks } from './data.ts';
+import HeaderTemplate from './HeaderTemplate.vue';
+import Priority from './Priority.vue';
+import Employee from './Employee.vue';
+import Progress from './Progress.vue';
 </script>
 
 <style>

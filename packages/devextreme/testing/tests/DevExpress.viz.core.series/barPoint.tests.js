@@ -1,5 +1,7 @@
 import $ from 'jquery';
-import * as vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+} from '../../helpers/vizMocks.js';
 import pointModule from 'viz/series/points/base_point';
 import labelModule from 'viz/series/points/label';
 import { MockTranslator, MockAxis } from '../../helpers/chartMocks.js';
@@ -13,7 +15,7 @@ const createPoint = function(series, data, options) {
 };
 
 function getMockAxisFunction(renderer, getTranslator, visibleArea) {
-    const axis = new MockAxis({ renderer: renderer || new vizMocks.Renderer({}) });
+    const axis = new MockAxis({ renderer: renderer || new Renderer({}) });
 
     axis.getTranslator = getTranslator;
     if(visibleArea) {
@@ -25,7 +27,7 @@ function getMockAxisFunction(renderer, getTranslator, visibleArea) {
 const environment = {
     beforeEach: function() {
         const that = this;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.renderer.bBoxTemplate = { x: 55, y: 40, height: 10, width: 20 };
 
@@ -122,7 +124,6 @@ QUnit.module('Point coordinates translation', {
             _argumentChecker: function() { return true; },
             _valueChecker: function() { return true; }
         };
-
     },
     translateXData: { 1: 110, 2: 220, 3: 330, 4: 440, 5: 550, 'canvas_position_default': 70 },
     translateYData: { 1: 111, 2: 222, 3: 333, 4: 444, 5: 555, 'canvas_position_default': 600 },
@@ -325,7 +326,6 @@ QUnit.module('Point coordinates translation with correction on canvas visible ar
 
         const translateXData = { 1: 0, 2: 80, 3: 200, 4: 300, 5: 400, 6: visibleAreaX[1], 7: 600, 'canvas_position_default': 100 };
         const translateYData = { 0.1: null, 1: 350, 2: 325, 3: 290, 4: 250, 5: 225, 6: 150, 'canvas_position_default': 295 };
-
 
         this.continuousTranslators = {
             arg: new MockTranslator({
@@ -870,7 +870,7 @@ QUnit.test('Null value. Rotated', function(assert) {
 
 QUnit.module('Draw point', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.errorBarGroup = this.renderer.g();
         this.options = {
@@ -1007,7 +1007,6 @@ QUnit.test('draw errorBar', function(assert) {
     assert.ok(point.graphic);
 
     assert.equal(this.renderer.stub('path').callCount, 0);
-
 });
 
 QUnit.test('draw errorBar when argument out of the canvas', function(assert) {
@@ -1524,10 +1523,9 @@ QUnit.module('Graphic Settings', {
 
 QUnit.test('Get Graphic Settings', function(assert) {
     const point = createPoint(this.series, { argument: 1, value: 1 }, this.options);
-    const renderer = new vizMocks.Renderer();
+    const renderer = new Renderer();
     point.graphic = renderer.rect(250, 100, 430, 133);
 
-    // act
     const settings = point.getGraphicSettings();
 
     assert.equal(settings.x, 250);
@@ -2498,7 +2496,6 @@ QUnit.test('coordsIn', function(assert) {
     assert.ok(point.coordsIn(210, 590), 'bottom inside');
     assert.ok(point.coordsIn(210, 600), 'bottom side');
     assert.ok(!point.coordsIn(210, 601), 'bottom side out');
-
 });
 
 QUnit.test('getCenterCoord', function(assert) {
@@ -2512,7 +2509,7 @@ QUnit.test('getCenterCoord', function(assert) {
 
 QUnit.module('get point radius', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.options = {
             visible: true,
@@ -2535,7 +2532,6 @@ QUnit.module('get point radius', {
         this.groups = {
             markers: this.group
         };
-
     }
 });
 

@@ -1,5 +1,5 @@
 import messageLocalization from '@js/localization/message';
-import { computed, effect, signal } from '@preact/signals-core';
+import { computed, effect, signal } from '@ts/core/state_manager/index';
 
 import { ColumnsController } from '../columns_controller/columns_controller';
 import { DataController } from '../data_controller/index';

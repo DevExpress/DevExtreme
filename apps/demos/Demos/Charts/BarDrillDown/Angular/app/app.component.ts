@@ -1,5 +1,5 @@
 import {
-  NgModule, Component, ElementRef, enableProdMode,
+  NgModule, Component, enableProdMode,
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
@@ -33,7 +33,7 @@ export class AppComponent {
 
   isFirstLevel: boolean;
 
-  constructor(service: Service, element: ElementRef) {
+  constructor(service: Service) {
     this.dataSource = service.filterData('');
     this.colors = service.getColors();
     this.service = service;

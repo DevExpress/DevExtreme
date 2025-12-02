@@ -39,6 +39,7 @@ $(() => {
       fieldExpr: 'humanId',
       dataSource: resources,
       label: 'Employee',
+      icon: 'group',
     }],
   });
 });

@@ -24,19 +24,19 @@ export default function App() {
   };
 
   const onSelectOnFocusChanged = (e: CheckBoxTypes.ValueChangedEvent) => {
-    setSelectOnFocus(e.value)
+    setSelectOnFocus(e.value);
   };
 
   const onRtlModeChanged = (e: CheckBoxTypes.ValueChangedEvent) => {
-    setRtlMode(e.value)
+    setRtlMode(e.value);
   };
 
-  const widgetWrapperOrientationClass: string = 'widget-wrapper-' + orientation;
+  const widgetWrapperOrientationClass: string = `widget-wrapper-${orientation}`;
 
   return (
     <div className="stepper-demo">
       <div className="widget-container">
-        <div className={"widget-wrapper " + widgetWrapperOrientationClass}>
+        <div className={`widget-wrapper ${widgetWrapperOrientationClass}`}>
           <Steppers
             orientation={orientation}
             navigationMode={navigationMode}

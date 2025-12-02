@@ -1,11 +1,10 @@
-import {
-  NgModule, Component, ViewChild, enableProdMode,
-} from '@angular/core';
+import { NgModule, Component, ViewChild, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
-import { DataSourceOptions } from 'devextreme-angular/common/data';
 import { DxDataGridComponent, DxDataGridModule, DxSelectBoxModule } from 'devextreme-angular';
+import { type DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
+
+import { Service, Task } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -22,37 +21,25 @@ if (window && window.config?.packageConfigPaths) {
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   preserveWhitespaces: true,
+  providers: [Service],
 })
-
 export class AppComponent {
   @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent;
 
-  statuses = ['All', 'Not Started', 'In Progress', 'Need Assistance', 'Deferred', 'Completed'];
+  statuses: string[];
 
-  tasks: DataSourceOptions = {
-    store: {
-      type: 'odata',
-      version: 2,
-      url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks',
-      key: 'Task_ID',
-    },
-    expand: 'ResponsibleEmployee',
-    select: [
-      'Task_ID',
-      'Task_Subject',
-      'Task_Start_Date',
-      'Task_Due_Date',
-      'Task_Status',
-      'Task_Priority',
-      'ResponsibleEmployee/Employee_Full_Name',
-    ],
-  };
+  tasks: Task[];
 
-  selectStatus({ value }) {
-    if (value == 'All') {
+  constructor(private service: Service) {
+    this.statuses = this.service.getStatuses();
+    this.tasks = this.service.getTasks();
+  }
+
+  selectStatus(e: DxSelectBoxTypes.ValueChangedEvent) {
+    if (e.value === 'All') {
       this.dataGrid.instance.clearFilter();
     } else {
-      this.dataGrid.instance.filter(['Task_Status', '=', value]);
+      this.dataGrid.instance.filter(['Task_Status', '=', e.value]);
     }
   }
 }

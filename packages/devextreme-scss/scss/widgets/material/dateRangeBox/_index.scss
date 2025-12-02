@@ -7,7 +7,7 @@
 @use "colors" as *;
 @use "../colors" as *;
 @use "../../base/dateRangeBox";
-@use "../../base/icons" as *;
+@use "../../base/icon_fonts" as *;
 @use "../textEditor" as *;
 
 // adduse
@@ -15,7 +15,7 @@
 $material-editor-custom-button-margin: 5px;
 
 .dx-daterangebox {
-  @include dx-dropdowneditor-button-icon-styling(eventall);
+  @include dx-dropdowneditor-button-icon-styling(daterangepicker);
 
   .dx-editor-outlined {
     &::before {

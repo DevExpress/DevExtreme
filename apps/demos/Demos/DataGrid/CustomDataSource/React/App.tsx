@@ -32,7 +32,7 @@ const store = new CustomStore({
         summary: result.summary,
         groupCount: result.groupCount,
       };
-    } catch (err) {
+    } catch {
       throw new Error('Data Loading Error');
     }
   },

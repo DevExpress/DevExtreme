@@ -1,4 +1,4 @@
-import React, { FC, memo } from 'react';
+import React, { FC } from 'react';
 import 'devextreme-react/date-range-box';
 
 import { BookingFormData } from './types.ts';

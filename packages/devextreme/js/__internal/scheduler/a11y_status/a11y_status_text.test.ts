@@ -9,6 +9,10 @@ describe('getA11yStatusText', () => {
         name: 'Two Weeks',
         type: 'week',
         intervalCount: 2,
+        groupOrientation: 'horizontal',
+        maxAppointmentsPerCell: 'auto',
+        allDayPanelMode: 'all',
+        skippedDays: [],
       },
       new Date(2021, 10, 17, 1),
       new Date(2021, 10, 27, 12),
@@ -18,7 +22,15 @@ describe('getA11yStatusText', () => {
 
   it('should return text month view', () => {
     expect(getA11yStatusText(
-      'month',
+      {
+        name: 'Month',
+        type: 'month',
+        intervalCount: 1,
+        groupOrientation: 'horizontal',
+        maxAppointmentsPerCell: 'auto',
+        allDayPanelMode: 'all',
+        skippedDays: [],
+      },
       new Date(2021, 9, 27, 1),
       new Date(2021, 11, 3, 12),
       20,
@@ -27,7 +39,15 @@ describe('getA11yStatusText', () => {
 
   it('should return text week view', () => {
     expect(getA11yStatusText(
-      'week',
+      {
+        name: 'Week',
+        type: 'week',
+        intervalCount: 1,
+        groupOrientation: 'horizontal',
+        maxAppointmentsPerCell: 'auto',
+        allDayPanelMode: 'all',
+        skippedDays: [],
+      },
       new Date(2021, 10, 21, 1),
       new Date(2021, 10, 27, 12),
       20,
@@ -36,7 +56,15 @@ describe('getA11yStatusText', () => {
 
   it('should return text day view', () => {
     expect(getA11yStatusText(
-      'day',
+      {
+        name: 'Day',
+        type: 'day',
+        intervalCount: 1,
+        groupOrientation: 'horizontal',
+        maxAppointmentsPerCell: 'auto',
+        allDayPanelMode: 'all',
+        skippedDays: [],
+      },
       new Date(2021, 10, 24, 1),
       new Date(2021, 10, 24, 12),
       20,
@@ -45,7 +73,15 @@ describe('getA11yStatusText', () => {
 
   it('should return text with indicator on the view', () => {
     expect(getA11yStatusText(
-      'day',
+      {
+        name: 'Day',
+        type: 'day',
+        intervalCount: 1,
+        groupOrientation: 'horizontal',
+        maxAppointmentsPerCell: 'auto',
+        allDayPanelMode: 'all',
+        skippedDays: [],
+      },
       new Date(2021, 10, 24, 1),
       new Date(2021, 10, 24, 12),
       20,
@@ -55,7 +91,15 @@ describe('getA11yStatusText', () => {
 
   it('should return text with indicator out of the view', () => {
     expect(getA11yStatusText(
-      'day',
+      {
+        name: 'Day',
+        type: 'day',
+        intervalCount: 1,
+        groupOrientation: 'horizontal',
+        maxAppointmentsPerCell: 'auto',
+        allDayPanelMode: 'all',
+        skippedDays: [],
+      },
       new Date(2021, 10, 24, 1),
       new Date(2021, 10, 24, 12),
       20,

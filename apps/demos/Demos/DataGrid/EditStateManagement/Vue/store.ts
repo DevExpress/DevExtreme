@@ -92,7 +92,7 @@ export default createStore<State>({
     },
 
     async saveChange({ commit, dispatch }, change: DataChange) {
-      if (change && change.type) {
+      if (change?.type) {
         commit('updateIsLoading', true);
 
         try {

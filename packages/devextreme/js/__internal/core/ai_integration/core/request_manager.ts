@@ -1,9 +1,15 @@
-import type { AIProvider, Prompt, RequestParams } from '@js/common/ai-integration';
+import type {
+  AIProvider,
+  AIResponse,
+  Prompt,
+  RequestParams,
+  RequestParamsData,
+} from '@js/common/ai-integration';
 import errors from '@js/core/errors';
 
 export interface RequestManagerCallbacks {
   onChunk?: (chunk: string) => void;
-  onComplete?: (response: string) => void;
+  onComplete?: (response: AIResponse) => void;
   onError?: (error: Error) => void;
 }
 
@@ -25,11 +31,16 @@ export class RequestManager {
     }
   }
 
-  public sendRequest(prompt: Prompt, callbacks: RequestManagerCallbacks): () => void {
+  public sendRequest(
+    prompt: Prompt,
+    callbacks: RequestManagerCallbacks,
+    data?: RequestParamsData,
+  ): () => void {
     let aborted = false;
 
     const params: RequestManagerParams = {
       prompt,
+      data,
       onChunk: (chunk: string): void => { if (!aborted) { callbacks?.onChunk?.(chunk); } },
     };
 

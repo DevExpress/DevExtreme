@@ -1,1 +1,1 @@
-require('../DevExpress.ui.widgets/list.markup.tests.js');
+import '../DevExpress.ui.widgets/list.markup.tests.js';

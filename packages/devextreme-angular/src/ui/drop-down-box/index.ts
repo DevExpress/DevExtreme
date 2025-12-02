@@ -25,7 +25,7 @@ import {
 
 
 import DataSource from 'devextreme/data/data_source';
-import { DropDownPredefinedButton } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
+import { DropDownPredefinedButton, FieldAddons } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
 import { TextEditorButton, LabelMode, EditorStyle, ValidationMessageMode, Mode, Position, ValidationStatus } from 'devextreme/common';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
@@ -46,7 +46,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
@@ -71,6 +72,7 @@ import { DxoDropDownBoxBoundaryOffsetModule } from 'devextreme-angular/ui/drop-d
 import { DxiDropDownBoxButtonModule } from 'devextreme-angular/ui/drop-down-box/nested';
 import { DxoDropDownBoxCollisionModule } from 'devextreme-angular/ui/drop-down-box/nested';
 import { DxoDropDownBoxDropDownOptionsModule } from 'devextreme-angular/ui/drop-down-box/nested';
+import { DxoDropDownBoxFieldAddonsModule } from 'devextreme-angular/ui/drop-down-box/nested';
 import { DxoDropDownBoxFromModule } from 'devextreme-angular/ui/drop-down-box/nested';
 import { DxoDropDownBoxHideModule } from 'devextreme-angular/ui/drop-down-box/nested';
 import { DxoDropDownBoxMyModule } from 'devextreme-angular/ui/drop-down-box/nested';
@@ -80,11 +82,11 @@ import { DxoDropDownBoxPositionModule } from 'devextreme-angular/ui/drop-down-bo
 import { DxoDropDownBoxShowModule } from 'devextreme-angular/ui/drop-down-box/nested';
 import { DxoDropDownBoxToModule } from 'devextreme-angular/ui/drop-down-box/nested';
 import { DxiDropDownBoxToolbarItemModule } from 'devextreme-angular/ui/drop-down-box/nested';
-
-import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiDropDownBoxButtonComponent } from 'devextreme-angular/ui/drop-down-box/nested';
+import { 
+           PROPERTY_TOKEN_buttons,
+           PROPERTY_TOKEN_toolbarItems,
+           PROPERTY_TOKEN_items,
+     } from 'devextreme-angular/core/tokens';
 
 
 
@@ -112,6 +114,22 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_buttons)
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('buttons', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_toolbarItems)
+    set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('toolbarItems', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
     instance: DxDropDownBox = null;
 
     /**
@@ -284,7 +302,22 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
 
     /**
+     * [descr:dxDropDownEditorOptions.fieldAddons]
+    
+     */
+    @Input()
+    get fieldAddons(): FieldAddons {
+        return this._getOption('fieldAddons');
+    }
+    set fieldAddons(value: FieldAddons) {
+        this._setOption('fieldAddons', value);
+    }
+
+
+    /**
      * [descr:dxDropDownBoxOptions.fieldTemplate]
+    
+     * @deprecated [depNote:dxDropDownBoxOptions.fieldTemplate]
     
      */
     @Input()
@@ -935,6 +968,13 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() fieldAddonsChange: EventEmitter<FieldAddons>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() fieldTemplateChange: EventEmitter<any>;
 
     /**
@@ -1174,34 +1214,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-    @ContentChildren(DxiDropDownBoxButtonComponent)
-    get buttonsChildren(): QueryList<DxiDropDownBoxButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsChildren(value) {
-        this._setChildren('buttons', value, 'DxiDropDownBoxButtonComponent');
-    }
-
-
-    @ContentChildren(DxiButtonComponent)
-    get buttonsLegacyChildren(): QueryList<DxiButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsLegacyChildren(value) {
-        this._setChildren('buttons', value, 'DxiButtonComponent');
-    }
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
-
-
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -1241,6 +1253,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
             { emit: 'dropDownButtonTemplateChange' },
             { emit: 'dropDownOptionsChange' },
             { emit: 'elementAttrChange' },
+            { emit: 'fieldAddonsChange' },
             { emit: 'fieldTemplateChange' },
             { emit: 'focusStateEnabledChange' },
             { emit: 'heightChange' },
@@ -1369,6 +1382,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     DxiDropDownBoxButtonModule,
     DxoDropDownBoxCollisionModule,
     DxoDropDownBoxDropDownOptionsModule,
+    DxoDropDownBoxFieldAddonsModule,
     DxoDropDownBoxFromModule,
     DxoDropDownBoxHideModule,
     DxoDropDownBoxMyModule,
@@ -1404,6 +1418,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     DxiDropDownBoxButtonModule,
     DxoDropDownBoxCollisionModule,
     DxoDropDownBoxDropDownOptionsModule,
+    DxoDropDownBoxFieldAddonsModule,
     DxoDropDownBoxFromModule,
     DxoDropDownBoxHideModule,
     DxoDropDownBoxMyModule,

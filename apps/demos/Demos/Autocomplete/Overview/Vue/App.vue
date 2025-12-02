@@ -54,13 +54,13 @@
           <DxAutocomplete
             :data-source="states"
             v-model:value="state"
-            value-expr="State_Long"
+            value-expr="Name"
             placeholder="Type state name..."
             item-template="stateTemplate"
             @value-changed="updateEmployeeInfo"
           >
             <template #stateTemplate="{ data }">
-              <span>{{ data.State_Long }} ({{ data.State_Short }})</span>
+              <span>{{ data.Name }} ({{ data.Short }})</span>
             </template>
           </DxAutocomplete>
         </div>
@@ -96,18 +96,15 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import { ODataStore, CustomStore, type LoadOptions } from 'devextreme-vue/common/data';
+import { CustomStore, type LoadOptions } from 'devextreme-vue/common/data';
 import { DxAutocomplete } from 'devextreme-vue/autocomplete';
 import 'whatwg-fetch';
+import { createStore } from 'devextreme-aspnet-data-nojquery';
 import { names, surnames, positions } from './data.ts';
 
-
-const statesStore = new ODataStore({
-  version: 2,
-  url:
-      'https://js.devexpress.com/Demos/DevAV/odata/States?$select=Sate_ID,State_Long,State_Short',
-  key: 'Sate_ID',
-  keyType: 'Int32',
+const statesStore = createStore({
+  loadUrl: 'https://js.devexpress.com/Demos/NetCore/api/DataGridStatesLookup',
+  key: 'ID',
 });
 
 const clientsCustomStore = new CustomStore({

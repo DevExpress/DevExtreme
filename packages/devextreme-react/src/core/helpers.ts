@@ -53,7 +53,8 @@ export class DoubleKeyMap<TKey1, TKey2, TValue> {
   }
 }
 
-export class TemplateInstantiationModels extends DoubleKeyMap<any, HTMLElement, TemplateInstantiationModel> {}
+// eslint-disable-next-line @stylistic/max-len
+export class TemplateInstantiationModels extends DoubleKeyMap<any, HTMLElement, TemplateInstantiationModel> { }
 
 export function capitalizeFirstLetter(text: string): string {
   if (text.length) {

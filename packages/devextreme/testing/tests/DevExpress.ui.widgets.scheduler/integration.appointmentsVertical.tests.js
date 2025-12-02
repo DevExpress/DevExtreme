@@ -269,33 +269,26 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
     });
 
     QUnit.test('Recurring appointments should be rendered correctly with a custom timezone(T385377)', async function(assert) {
-        const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-10800000);
+        const scheduler = await createWrapper({
+            dataSource: [],
+            currentDate: new Date('2016-05-06T07:00:00.000Z'),
+            timeZone: 'Asia/Ashkhabad',
+            height: 500,
+            currentView: 'week',
+            firstDayOfWeek: 1
+        });
 
-        try {
-            const scheduler = await createWrapper({
-                dataSource: [],
-                currentDate: new Date(2016, 4, 7),
-                timeZone: 'Asia/Ashkhabad',
-                height: 500,
-                currentView: 'week',
-                firstDayOfWeek: 1
-            });
+        scheduler.instance.addAppointment({
+            startDate: '2016-05-01T07:00:00.000Z',
+            endDate: '2016-05-01T07:30:00.000Z',
+            recurrenceRule: 'FREQ=DAILY'
+        });
 
-            scheduler.instance.addAppointment({
-                startDate: new Date(2016, 4, 2),
-                endDate: new Date(2016, 4, 2, 0, 30),
-                recurrenceRule: 'FREQ=DAILY'
-            });
+        const $appt = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS).eq(0);
+        const apptPosition = $appt.position();
 
-            const $appt = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS).eq(0);
-            const apptPosition = $appt.position();
-
-            assert.roughEqual(apptPosition.top, 200, 2.001, 'Appts top is OK');
-            assert.roughEqual(apptPosition.left, 0, 2.001, 'Appts left is OK');
-
-        } finally {
-            tzOffsetStub.restore();
-        }
+        assert.roughEqual(apptPosition.top, 1200, 2.001, 'Appts top is OK');
+        assert.roughEqual(apptPosition.left, 0, 2.001, 'Appts left is OK');
     });
 
     QUnit.test('Appointments should have correctly height with a custom timezone(T387561)', async function(assert) {
@@ -325,8 +318,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
             const $appts = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
             const cellHeight = getOuterHeight($element.find('.' + DATE_TABLE_CELL_CLASS).eq(0));
 
-            assert.roughEqual(getOuterHeight($appts.eq(0)), cellHeight / 2, 2.001, 'Appts top is OK');
-            assert.roughEqual(getOuterHeight($appts.eq(1)), cellHeight * 4, 2.001, 'Appts top is OK');
+            assert.roughEqual(getOuterHeight($appts.eq(1)), cellHeight / 2, 2.001, 'Appts top is OK');
+            assert.roughEqual(getOuterHeight($appts.eq(0)), cellHeight * 4, 2.001, 'Appts top is OK');
 
         } finally {
             tzOffsetStub.restore();

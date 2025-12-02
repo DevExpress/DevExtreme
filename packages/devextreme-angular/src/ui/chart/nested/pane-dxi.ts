@@ -20,6 +20,7 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_panes } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-chart-pane',
@@ -27,7 +28,13 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_panes,
+           useExisting: DxiChartPaneComponent,
+        }
+    ]
 })
 export class DxiChartPaneComponent extends CollectionNestedOption {
     @Input()

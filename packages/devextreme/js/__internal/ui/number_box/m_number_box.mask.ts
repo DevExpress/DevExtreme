@@ -20,7 +20,8 @@ import {
   getCaretWithOffset, isCaretInBoundaries,
 } from './m_number_box.caret';
 import {
-  adjustPercentValue, getNthOccurrence, getRealSeparatorIndex, splitByIndex,
+  adjustPercentValue, getNthOccurrence, getRealSeparatorIndex,
+  splitByIndex,
 } from './m_utils';
 
 const NUMBER_FORMATTER_NAMESPACE = 'dxNumberFormatter';

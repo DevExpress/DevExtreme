@@ -5,5 +5,5 @@
 
 // adduse
 
-$treelist-chevron-icon-color: lighten($base-spin-icon-color, 38.5%) !default;
+$treelist-chevron-icon-color: $base-spin-icon-color !default;
 $treelist-selection-chevron-icon-color: $treelist-chevron-icon-color !default;

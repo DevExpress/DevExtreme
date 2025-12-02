@@ -1,4 +1,3 @@
-
 export const dataSource = [{
   year: 1896,
   gold: 2,

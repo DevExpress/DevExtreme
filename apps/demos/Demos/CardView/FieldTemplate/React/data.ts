@@ -1510,7 +1510,8 @@ export const employees: Employee[] = [{
   Name: 'Stu Pizaro',
 }];
 
-export const priorities: Priority[] = [{
+export const priorities: Priority[] = [
+  {
     id: 1,
     text: 'Low',
     postfix: 'low',
@@ -1526,4 +1527,5 @@ export const priorities: Priority[] = [{
     id: 4,
     text: 'High',
     postfix: 'high',
-}];
+  },
+];

@@ -32,6 +32,7 @@
       :allow-multiple="false"
       field-expr="priorityId"
       label="Priority"
+      icon="tags"
     />
     <DxResource
       :data-source="typeData"

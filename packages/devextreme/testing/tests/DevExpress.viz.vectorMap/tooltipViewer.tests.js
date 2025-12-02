@@ -1,18 +1,22 @@
-const noop = require('core/utils/common').noop;
-const vizMocks = require('../../helpers/vizMocks.js');
-const mapLayerModule = require('viz/vector_map/map_layer');
-const tooltipViewerModule = require('viz/vector_map/tooltip_viewer');
+import { noop } from 'core/utils/common';
+import {
+    Tooltip,
+    stubClass,
+} from '../../helpers/vizMocks.js';
+import mapLayerModule from 'viz/vector_map/map_layer';
+import tooltipViewerModule from 'viz/vector_map/tooltip_viewer';
+
 let StubMapLayerCollection;
 
 QUnit.begin(function() {
-    StubMapLayerCollection = vizMocks.stubClass(mapLayerModule.MapLayerCollection);
+    StubMapLayerCollection = stubClass(mapLayerModule.MapLayerCollection);
 });
 
 QUnit.module('TooltipViewer', {
     beforeEach: function() {
         this.tracker = { on: sinon.spy(function() { return noop; }) };
         this.layerCollection = new StubMapLayerCollection();
-        this.tooltip = new vizMocks.Tooltip();
+        this.tooltip = new Tooltip();
         this.tooltipViewer = new tooltipViewerModule.TooltipViewer({
             tracker: this.tracker,
             layerCollection: this.layerCollection,

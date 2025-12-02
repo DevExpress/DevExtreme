@@ -166,3 +166,13 @@
     unicode-bidi: embed;
   }
 }
+
+.dx-form {
+  position: relative;
+}
+
+.dx-form-loadpanel-wrapper {
+  .dx-loadpanel-content {
+    padding: 0;
+  }
+}

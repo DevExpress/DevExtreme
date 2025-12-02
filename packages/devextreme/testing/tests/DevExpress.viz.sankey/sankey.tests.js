@@ -1,4 +1,4 @@
-const dxSankey = require('viz/sankey');
+import dxSankey from 'viz/sankey';
 
 QUnit.module('Plugins');
 

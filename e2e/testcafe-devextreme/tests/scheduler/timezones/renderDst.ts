@@ -8,7 +8,8 @@ import {
 import url from '../../../helpers/getPageUrl';
 import { generateOptionMatrix } from '../../../helpers/generateOptionMatrix';
 import { createWidget } from '../../../helpers/createWidget';
-import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../helpers/domUtils';
+import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Scheduler render during DST`
   .page(url(__dirname, '../../container.html'));
@@ -68,9 +69,11 @@ generateOptionMatrix({
       const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
       const timezoneName = normalizeTimezoneName(timezone);
-      await takeScreenshot(
+      await testScreenshot(
+        t,
+        takeScreenshot,
         `${currentView}_usual-appts-render-dts_t-${timezoneName}-${caseName}_offset-${offset}.png`,
-        scheduler.workSpace,
+        { element: scheduler.workSpace },
       );
 
       await t.expect(compareResults.isValid())
@@ -89,8 +92,6 @@ generateOptionMatrix({
       cellDuration: 60,
       height: 800,
     });
-  }).after(async () => {
-    await removeStylesheetRulesFromPage();
   });
 });
 
@@ -120,9 +121,11 @@ generateOptionMatrix({
       const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
       const timezoneName = normalizeTimezoneName(timezone);
-      await takeScreenshot(
+      await testScreenshot(
+        t,
+        takeScreenshot,
         `${currentView}_usual-appts-start-cell-dts_t-${timezoneName}-${caseName}_offset-${offset}.png`,
-        scheduler.workSpace,
+        { element: scheduler.workSpace },
       );
 
       await t.expect(compareResults.isValid())
@@ -142,7 +145,5 @@ generateOptionMatrix({
       cellDuration: 30,
       height: 800,
     });
-  }).after(async () => {
-    await removeStylesheetRulesFromPage();
   });
 });

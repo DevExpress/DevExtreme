@@ -37,7 +37,7 @@ export class AppComponent {
   customizeLayers = (elements: Record<string, Function>[]) => {
     elements.forEach((element) => {
       const countryGDPData = this.gdpData[element.attribute('name')];
-      element.attribute('total', countryGDPData && countryGDPData.total || 0);
+      element.attribute('total', countryGDPData?.total || 0);
     });
   };
 

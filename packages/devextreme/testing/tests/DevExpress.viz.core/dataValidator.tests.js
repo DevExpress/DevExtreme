@@ -1,10 +1,9 @@
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const commonUtils = require('core/utils/common');
-const seriesModule = require('viz/series/base_series');
-const dataValidatorModule = require('viz/components/data_validator');
-const chartMocks = require('../../helpers/chartMocks.js');
-const MockAxis = chartMocks.MockAxis;
+import $ from 'jquery';
+import { Renderer } from '../../helpers/vizMocks.js';
+import { noop } from 'core/utils/common';
+import { Series } from 'viz/series/base_series';
+import { validateData } from 'viz/components/data_validator';
+import { MockAxis } from '../../helpers/chartMocks.js';
 
 function checkTypes(assert, data, groupsData, argumentAxisType, argumentType, valueAxisType, valueType, callCount, options) {
     testValidateData(data, groupsData, null, options);
@@ -695,7 +694,6 @@ QUnit.test('Numeric from dates', function(assert) {
             arg: [1, 2, 3, 4, 5]
         }
     }, { assert: assert });
-
 });
 
 QUnit.test('Datetime from dates', function(assert) {
@@ -1159,11 +1157,10 @@ QUnit.test('ArgumentType & ValueType merge. in one Group', function(assert) {
     assert.equal(groupData2.groups[0].series[0].updateDataType.lastCall.args[0].valueType, 'string');
 });
 
-QUnit.test('ArgumentType & ValueType merge. Different group', function(assert) {
+QUnit.test('ArgumentType & ValueType merge. Different fields', function(assert) {
     const groupData1 = createGroupsData({ argumentType: 'string', valueType: 'string' });
     const groupData2 = createGroupsData({ argumentType: 'string', valueType: 'numeric' });
     const groupsData = {};
-
 
     groupsData.groups = groupData1.groups.concat(groupData2.groups);
     groupsData.argumentOptions = groupData1.argumentOptions;
@@ -2343,7 +2340,7 @@ function createStubSeries(options) {
         valueFields: Array.isArray(options.valueFields) ? options.valueFields : [options.valueFields]
     };
     $.extend(options, prepOptions);
-    const mockSeries = sinon.createStubInstance(seriesModule.Series);
+    const mockSeries = sinon.createStubInstance(Series);
     mockSeries.getArgumentField.returns(options.argumentField);
     mockSeries.getValueFields.returns(options.valueFields);
     mockSeries.getSizeField.returns(options.sizeField);
@@ -2357,8 +2354,8 @@ function createGroupsData(opt, isEmpty) {
     const mockSeries = createStubSeries(options);
     const valueGroup = isEmpty ? [] : [mockSeries];
     const argumentGroup = { groups: [{ series: valueGroup }] };
-    const valueAxis = new MockAxis({ renderer: new vizMocks.Renderer() });
-    const argumentAxis = new MockAxis({ renderer: new vizMocks.Renderer() });
+    const valueAxis = new MockAxis({ renderer: new Renderer() });
+    const argumentAxis = new MockAxis({ renderer: new Renderer() });
 
     valueAxis.updateOptions({});
     argumentAxis.updateOptions({});
@@ -2384,7 +2381,7 @@ function createGroupsData(opt, isEmpty) {
 }
 
 function testValidateData(data, groupsData, incidentOccurred, options) {
-    return dataValidatorModule.validateData(data, groupsData, incidentOccurred || commonUtils.noop, $.extend(true, {
+    return validateData(data, groupsData, incidentOccurred || noop, $.extend(true, {
         checkTypeForAllData: false,
         convertToAxisDataType: true,
         sortingMethod: null

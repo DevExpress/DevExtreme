@@ -13,10 +13,10 @@
       <div class="dx-clearfix"/>
     </div>
     <DxDataGrid
-      :data-source="dataSource"
+      :data-source="products"
       :filter-value="gridFilterValue"
       :show-borders="true"
-      :columns="fields as DxDataGridTypes.Column[]"
+      :columns="columns"
       :height="300"
     />
   </div>
@@ -25,31 +25,11 @@
 import { ref } from 'vue';
 import DxFilterBuilder from 'devextreme-vue/filter-builder';
 import DxButton from 'devextreme-vue/button';
-import DxDataGrid, { type DxDataGridTypes } from 'devextreme-vue/data-grid';
-import { DataSource, ODataStore } from 'devextreme-vue/common/data';
-import { filter, fields } from './data.ts';
+import DxDataGrid from 'devextreme-vue/data-grid';
+import { filter, fields, columns, products } from './data.ts';
 
 const filterValue = ref(filter);
 const gridFilterValue = ref(filter);
-const dataSource = new DataSource({
-  store: new ODataStore({
-    version: 2,
-    fieldTypes: {
-      Product_Cost: 'Decimal',
-      Product_Sale_Price: 'Decimal',
-      Product_Retail_Price: 'Decimal',
-    },
-    url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
-  }),
-  select: [
-    'Product_ID',
-    'Product_Name',
-    'Product_Cost',
-    'Product_Sale_Price',
-    'Product_Retail_Price',
-    'Product_Current_Inventory',
-  ],
-});
 
 function buttonClick() {
   gridFilterValue.value = filterValue.value;

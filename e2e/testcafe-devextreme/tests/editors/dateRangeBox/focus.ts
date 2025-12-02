@@ -3,15 +3,14 @@ import DateRangeBox from 'devextreme-testcafe-models/dateRangeBox';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 
-fixture`DateRangeBox focus state`
+fixture.disablePageReloads`DateRangeBox focus state`
   .page(url(__dirname, '../../container.html'));
 
 test('DateRangeBox & DateBoxes should have focus class if inputs are focused by tab', async (t) => {
   const dateRangeBox = new DateRangeBox('#container');
 
   await t
-    .click(Selector('body'), { offsetX: -50 })
-    .pressKey('tab')
+    .click(dateRangeBox.getStartDateBox().input)
     .expect(dateRangeBox.isFocused)
     .ok()
     .expect(dateRangeBox.getStartDateBox().isFocused)
@@ -186,8 +185,7 @@ test('onFocusIn should be called only on focus of startDate input', async (t) =>
   const dateRangeBox = new DateRangeBox('#container');
 
   await t
-    .click(Selector('body'), { offsetX: -50 })
-    .pressKey('tab');
+    .click(dateRangeBox.getStartDateBox().input);
 
   await t
     .expect(ClientFunction(() => (window as any).onFocusInCounter)())
@@ -231,6 +229,7 @@ test('onFocusIn should be called only on focus of startDate input', async (t) =>
 
   await t
     .pressKey('shift+tab')
+    .wait(100)
     .expect(dateRangeBox.isFocused)
     .ok()
     .expect(dateRangeBox.getStartDateBox().isFocused)
@@ -244,6 +243,7 @@ test('onFocusIn should be called only on focus of startDate input', async (t) =>
 
   await t
     .pressKey('shift+tab')
+    .wait(100)
     .expect(dateRangeBox.isFocused)
     .notOk()
     .expect(dateRangeBox.getStartDateBox().isFocused)
@@ -489,9 +489,7 @@ test('DateRangeBox & StartDateBox should be focused and stay opened after click 
   showClearButton: true,
   value: ['2021/09/17', '2021/10/24'],
   openOnFieldClick: true,
-}, '#container', {
-  disableFxAnimation: false,
-}));
+}, '#container'));
 
 test('DateRangeBox & StartDateBox should be focused after click on clear button', async (t) => {
   const dateRangeBox = new DateRangeBox('#container');

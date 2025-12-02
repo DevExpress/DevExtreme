@@ -1,6 +1,7 @@
 import { getThemeType } from '@ts/scheduler/r1/utils/themes';
 
 import {
+  calculateRows,
   calculateStartViewDate,
 } from './agenda';
 import {
@@ -26,9 +27,6 @@ import {
 import {
   getDateForHeaderText,
 } from './timeline_week';
-import {
-  getCurrentView,
-} from './views';
 import {
   calculateStartViewDate as weekCalculateStartViewDate,
   calculateViewStartDate as weekCalculateViewStartDate,
@@ -87,12 +85,10 @@ export {
   formatWeekday,
   formatWeekdayAndDay,
 } from './format_weekday';
-export {
-  getAppointmentDataItems,
-} from './get_appointment_data_items';
 
 export const agendaUtils = {
   calculateStartViewDate,
+  calculateRows,
 };
 
 export const dayUtils = {
@@ -123,10 +119,6 @@ export const timelineWeekUtils = {
 
 export const timelineMonthUtils = {
   calculateStartViewDate: timelineMonthCalculateStartViewDate,
-};
-
-export const viewsUtils = {
-  getCurrentView,
 };
 
 export const renderUtils = {

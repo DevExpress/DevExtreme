@@ -3,18 +3,18 @@ import TabPanel from 'devextreme-testcafe-models/tabPanel';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Splitter_integration`
   .page(url(__dirname, '../../container.html'));
 
-safeSizeTest('The splitter pane should be rendered with the correct ratio inside the tab content of TabPanel if pane.size uses pixels', async (t) => {
+test.meta({ browserSize: [400, 400] })('The splitter pane should be rendered with the correct ratio inside the tab content of TabPanel if pane.size uses pixels', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const tabPanel = new TabPanel('#container');
 
   await t
-    .click(tabPanel.tabs.getItem(1).element);
+    .click(tabPanel.tabs.getItem(1).element)
+    .click(tabPanel.multiView.element);
 
   await testScreenshot(t, takeScreenshot, 'Splitter in tab content, pane_1.size=`100px`.png', { element: '#container' });
 
@@ -25,7 +25,7 @@ safeSizeTest('The splitter pane should be rendered with the correct ratio inside
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [400, 400]).before(async () => createWidget('dxTabPanel', {
+}).before(async () => createWidget('dxTabPanel', {
   width: '100%',
   height: 300,
   deferRendering: true,

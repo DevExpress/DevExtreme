@@ -5,8 +5,10 @@ import ArrayStore from 'common/data/array_store';
 import { CustomStore } from 'common/data/custom_store';
 import executeAsyncMock from '../../../helpers/executeAsyncMock.js';
 import keyboardMock from '../../../helpers/keyboardMock.js';
+import {
+    ITEM_CLASS,
+} from '__internal/ui/collection/collection_widget.base';
 
-const ITEM_CLASS = 'dx-item';
 const ITEM_SELECTED_CLASS = `${ITEM_CLASS}-selected`;
 const ITEM_RESPONSE_WAIT_CLASS = `${ITEM_CLASS}-response-wait`;
 
@@ -16,9 +18,9 @@ class TestComponent extends CollectionWidget {
     constructor(element, options) {
         super(element, options);
         this.NAME = 'TestComponent';
-        this._activeStateUnit = '.item';
     }
 
+    _activeStateUnit() { return '.item'; }
     _itemClass() { return 'item'; }
     _itemDataKey() { return '123'; }
     _itemContainer() { return this.$element(); }
@@ -2820,4 +2822,41 @@ module('internal methods', () => {
         this.instance._editStrategy.getIndex(this.items[0]);
         assert.strictEqual(getCallSpy.callCount, 0);
     });
+});
+
+module('construction and initialization', {
+    beforeEach: function() {
+        this.element = document.createElement('div');
+    },
+    afterEach: function() {
+        TestComponent._initUserOptions = undefined;
+    }
+});
+
+test('passed options should be properly written in the non-static class field', function(assert) {
+    const testOptions = {
+        items: [1, 2, 3],
+        selectedIndex: 0,
+        customProp: 'test'
+    };
+
+    const widget = new TestComponent(this.element, testOptions);
+
+    assert.deepEqual(
+        widget._userOptions,
+        testOptions,
+        '_userOptions should contain passed options'
+    );
+});
+
+test('_initUserOptions static field should be cleared after init', function(assert) {
+    const testOptions = { items: [1, 2, 3] };
+
+    new TestComponent(this.element, testOptions);
+
+    assert.strictEqual(
+        TestComponent._initUserOptions,
+        undefined,
+        'static _initUserOptions should be cleared after widget initialization'
+    );
 });

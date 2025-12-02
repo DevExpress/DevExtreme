@@ -58,25 +58,30 @@
 </template>
 <script setup lang="ts">
 import { nextTick, ref } from 'vue';
-import DxTreeView from 'devextreme-vue/tree-view';
-import DxSortable from 'devextreme-vue/sortable';
-import service from './data.ts';
+import DxTreeView, { type DxTreeViewTypes } from 'devextreme-vue/tree-view';
+import DxSortable, { type DxSortableTypes } from 'devextreme-vue/sortable';
+
+import service, { type DriveItem } from './data.ts';
+import type { FileSystemItem } from './types';
+
+type DxSortableInstance = DxSortable['instance'];
+type Node = DxTreeViewTypes.Node<FileSystemItem>;
 
 const treeViewDriveCRef = ref();
 const treeViewDriveDRef = ref();
 const itemsDriveC = ref(service.getItemsDriveC());
 const itemsDriveD = ref(service.getItemsDriveD());
 
-function onDragChange(e) {
+function onDragChange(e: DxSortableTypes.DragChangeEvent) {
   if (e.fromComponent === e.toComponent) {
-    const fromNode = findNode(getTreeView(e.fromData), e.fromIndex);
+    const fromNode = findNode(getTreeView(e.fromData), e.fromIndex || 0);
     const toNode = findNode(getTreeView(e.toData), calculateToIndex(e));
-    if (toNode !== null && isChildNode(fromNode, toNode)) {
+    if (toNode !== null && fromNode && isChildNode(fromNode, toNode)) {
       e.cancel = true;
     }
   }
 }
-function onDragEnd(e) {
+function onDragEnd(e: DxSortableTypes.DragEndEvent) {
   if (e.fromComponent === e.toComponent && e.fromIndex === e.toIndex) {
     return;
   }
@@ -84,119 +89,133 @@ function onDragEnd(e) {
   const fromTreeView = getTreeView(e.fromData);
   const toTreeView = getTreeView(e.toData);
 
-  const fromNode = findNode(fromTreeView, e.fromIndex);
+  const fromNode = findNode(fromTreeView, e.fromIndex || 0);
   const toNode = findNode(toTreeView, calculateToIndex(e));
 
-  if (e.dropInsideItem && toNode !== null && !toNode.itemData.isDirectory) {
+  if (e.dropInsideItem && toNode !== null && !toNode.itemData?.isDirectory) {
     return;
   }
 
-  const fromTopVisibleNode = getTopVisibleNode(e.fromComponent);
-  const toTopVisibleNode = getTopVisibleNode(e.toComponent);
+  const fromTopVisibleNode = getTopVisibleNode(e.fromComponent as DxSortableInstance);
+  const toTopVisibleNode = getTopVisibleNode(e.toComponent as DxSortableInstance);
 
   const fromItems = getItems(e.fromData);
   const toItems = getItems(e.toData);
-  moveNode(fromNode, toNode, fromItems, toItems, e.dropInsideItem);
+  if (fromNode) {
+    moveNode(fromNode, toNode, fromItems, toItems, e.dropInsideItem);
+  }
 
-  itemsDriveC.value = [].concat(itemsDriveC.value);
-  itemsDriveD.value = [].concat(itemsDriveD.value);
+  itemsDriveC.value = [...itemsDriveC.value];
+  itemsDriveD.value = [...itemsDriveD.value];
 
   nextTick().then(() => {
     fromTreeView.scrollToItem(fromTopVisibleNode);
     toTreeView.scrollToItem(toTopVisibleNode);
   });
 }
-function getTreeView(driveName) {
+function getTreeView(driveName: string) {
   return driveName === 'driveC'
     ? treeViewDriveCRef.value.instance
     : treeViewDriveDRef.value.instance;
 }
-function getItems(driveName) {
+function getItems(driveName: string) {
   return driveName === 'driveC'
     ? itemsDriveC.value
     : itemsDriveD.value;
 }
-function calculateToIndex(e) {
+function calculateToIndex(e: DxSortableTypes.DragEndEvent | DxSortableTypes.DragChangeEvent) {
   if (e.fromComponent !== e.toComponent || e.dropInsideItem) {
-    return e.toIndex;
+    return e.toIndex || 0;
   }
 
-  return e.fromIndex >= e.toIndex
-    ? e.toIndex
-    : e.toIndex + 1;
+  return (e.fromIndex || 0) >= (e.toIndex || 0)
+    ? e.toIndex || 0
+    : (e.toIndex || 0) + 1;
 }
-function findNode(treeView, index) {
-  const nodeElement = treeView.element().querySelectorAll('.dx-treeview-node')[index];
+function findNode(treeView: DxTreeView['instance'], index: number) {
+  const nodeElement = treeView?.element()?.querySelectorAll('.dx-treeview-node')[index];
   if (nodeElement) {
-    return findNodeById(treeView.getNodes(), nodeElement.getAttribute('data-item-id'));
+    return findNodeById(treeView.getNodes(), nodeElement.getAttribute('data-item-id') || '');
   }
   return null;
 }
-function findNodeById(nodes, id) {
+function findNodeById(nodes: Node[], id: string): Node | null {
   for (let i = 0; i < nodes.length; i += 1) {
-    if (nodes[i].itemData.id === id) {
+    if (nodes[i].itemData?.id === id) {
       return nodes[i];
     }
     if (nodes[i].children) {
-      const node = findNodeById(nodes[i].children, id);
-      if (node != null) {
+      const nodeChildren = nodes[i].children;
+      const node = nodeChildren ? findNodeById(nodeChildren, id) : null;
+
+      if (node) {
         return node;
       }
     }
   }
   return null;
 }
-function moveNode(fromNode, toNode, fromItems, toItems, isDropInsideItem) {
-  const fromIndex = fromItems.findIndex((item) => item.id === fromNode.itemData.id);
+function moveNode(
+  fromNode: Node,
+  toNode: Node | null,
+  fromItems: DriveItem[],
+  toItems: any[],
+  isDropInsideItem: boolean,
+) {
+  const fromIndex = fromItems.findIndex((item) => item.id === fromNode.itemData?.id);
   fromItems.splice(fromIndex, 1);
 
   const toIndex = toNode === null || isDropInsideItem
     ? toItems.length
-    : toItems.findIndex((item) => item.id === toNode.itemData.id);
+    : toItems.findIndex((item) => item.id === toNode.itemData?.id);
   toItems.splice(toIndex, 0, fromNode.itemData);
 
   moveChildren(fromNode, fromItems, toItems);
-  if (isDropInsideItem) {
-    fromNode.itemData.parentId = toNode.itemData.id;
-  } else {
+  if (isDropInsideItem && toNode && fromNode.itemData) {
+    fromNode.itemData.parentId = toNode.itemData?.id;
+  } else if (fromNode.itemData) {
     fromNode.itemData.parentId = toNode != null
-      ? toNode.itemData.parentId
+      ? toNode.itemData?.parentId
       : undefined;
   }
 }
-function moveChildren(node, fromDataSource, toDataSource) {
-  if (!node.itemData.isDirectory) {
+function moveChildren(node: Node, fromDataSource: DriveItem[], toDataSource: any[]) {
+  if (!node.itemData?.isDirectory) {
     return;
   }
 
-  node.children.forEach((child) => {
-    if (child.itemData.isDirectory) {
+  node.children?.forEach((child) => {
+    if (child.itemData?.isDirectory) {
       moveChildren(child, fromDataSource, toDataSource);
     }
 
-    const fromIndex = fromDataSource.findIndex((item) => item.id === child.itemData.id);
-    fromDataSource.splice(fromIndex, 1);
-    toDataSource.splice(toDataSource.length, 0, child.itemData);
+    const fromIndex = fromDataSource.findIndex((item) => item.id === child.itemData?.id);
+    if (fromIndex !== -1) {
+      fromDataSource.splice(fromIndex, 1);
+      toDataSource.splice(toDataSource.length, 0, child.itemData);
+    }
   });
 }
-function isChildNode(parentNode, childNode) {
+function isChildNode(parentNode: Node, childNode: Node) {
   let { parent } = childNode;
-  while (parent !== null) {
-    if (parent.itemData.id === parentNode.itemData.id) {
+  while (parent) {
+    if (parent.itemData?.id === parentNode.itemData?.id) {
       return true;
     }
     parent = parent.parent;
   }
   return false;
 }
-function getTopVisibleNode(component) {
-  const treeViewElement = component.element();
-  const treeViewTopPosition = treeViewElement.getBoundingClientRect().top;
-  const nodes = treeViewElement.querySelectorAll('.dx-treeview-node');
-  for (let i = 0; i < nodes.length; i += 1) {
-    const nodeTopPosition = nodes[i].getBoundingClientRect().top;
-    if (nodeTopPosition >= treeViewTopPosition) {
-      return nodes[i];
+function getTopVisibleNode(component: DxSortableInstance) {
+  if (component) {
+    const treeViewElement = component.element();
+    const treeViewTopPosition = treeViewElement.getBoundingClientRect().top;
+    const nodes = treeViewElement.querySelectorAll('.dx-treeview-node');
+    for (let i = 0; i < nodes.length; i += 1) {
+      const nodeTopPosition = nodes[i].getBoundingClientRect().top;
+      if (nodeTopPosition >= treeViewTopPosition) {
+        return nodes[i];
+      }
     }
   }
 

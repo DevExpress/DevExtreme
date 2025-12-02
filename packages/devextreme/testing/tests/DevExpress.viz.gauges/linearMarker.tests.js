@@ -1,11 +1,11 @@
-const vizMocks = require('../../helpers/vizMocks.js');
-const linearIndicatorsModule = require('viz/gauges/linear_indicators');
-const getTextCloudInfo = require('viz/gauges/base_indicators').getTextCloudInfo;
-const Translator1D = require('viz/translators/translator1d').Translator1D;
+import { Renderer as VizMocksRenderer } from '../../helpers/vizMocks.js';
+import * as linearIndicatorsModule from '__internal/viz/gauges/linear_indicators';
+import { getTextCloudInfo } from '__internal/viz/gauges/base_indicators';
+import { Translator1D } from '__internal/viz/translators/translator1d';
 
 QUnit.module('TriangleMarker', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new VizMocksRenderer();
         this.owner = this.renderer.g();
         const tracker = {
             attach: function(arg) { this.attached = arg; },
@@ -186,7 +186,7 @@ QUnit.test('getTooltipParameters - vertical, right', function(assert) {
 
 QUnit.module('TextCloudMarker', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new VizMocksRenderer();
         this.owner = this.renderer.g();
         const tracker = {
             attach: function(arg) { this.attached = arg; },

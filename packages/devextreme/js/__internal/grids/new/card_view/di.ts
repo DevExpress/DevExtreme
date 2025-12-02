@@ -1,5 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { DIContext } from '@ts/core/di';
+import { setupStateManager } from '@ts/core/state_manager/index';
 
 import * as BaseContentViewModule from '../grid_core/content_view/index';
 import { BaseContextMenuController } from '../grid_core/context_menu/controller';
@@ -11,6 +12,8 @@ import { HeaderPanelController } from './header_panel/controller';
 import { HeaderPanelView } from './header_panel/view';
 
 export function register(diContext: DIContext): void {
+  setupStateManager({ diContext, componentName: 'CardView' });
+
   gridCoreDIRegister(diContext);
 
   diContext.register(ContentViewModule.View);

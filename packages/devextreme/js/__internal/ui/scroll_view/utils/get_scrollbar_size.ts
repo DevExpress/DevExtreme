@@ -1,6 +1,6 @@
-import type { ScrollableDirection } from '../types';
+import type { Orientation } from '@js/common';
 
-export function getScrollbarSize(element: HTMLElement, direction: Omit<ScrollableDirection, 'horizontal' | 'vertical'>): number {
+export function getScrollbarSize(element: HTMLElement, direction: Orientation): number {
   if (direction === 'vertical') {
     return element.offsetWidth - element.clientWidth;
   }

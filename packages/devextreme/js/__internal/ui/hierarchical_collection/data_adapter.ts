@@ -1,17 +1,16 @@
-import type { SearchMode } from '@js/common';
+import type { DataStructure, SearchMode } from '@js/common';
 import query from '@js/common/data/query';
 import storeHelper from '@js/common/data/store_helper';
 import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isFunction } from '@js/core/utils/type';
-import TextBox from '@js/ui/text_box';
 import errors from '@js/ui/widget/ui.errors';
-import uiSearchBoxMixin from '@js/ui/widget/ui.search_box_mixin';
+import SearchBoxController, { getOperationBySearchMode } from '@ts/ui/collection/search_box_controller';
+import TextBox from '@ts/ui/text_box/m_text_box';
 
 import HierarchicalDataConverter, {
   type DataAccessors,
-  type DataType,
   type InternalNode,
   type ItemData,
   type ItemKey,
@@ -31,49 +30,58 @@ interface LangParams {
   locale?: string;
   collator?: Intl.Collator;
 }
-export interface BaseDataAdapterOptions {
-  rootValue: ItemKey | undefined;
-  multipleSelection: boolean;
-  recursiveSelection?: boolean;
-  recursiveExpansion?: boolean;
-  searchValue: string;
-}
 
-export interface DataAdapterOptions extends BaseDataAdapterOptions {
+export interface DataAdapterOptions {
   dataAccessors: DataAccessors;
   items: ItemData[];
-  dataConverter: HierarchicalDataConverter;
-  onNodeChanged: (node: InternalNode) => void;
+
+  rootValue: ItemKey;
+  multipleSelection: boolean;
+  recursiveSelection: boolean;
+  recursiveExpansion: boolean;
+  searchValue: string;
+
   selectionRequired?: boolean;
-  dataType: DataType;
+  dataType: DataStructure;
   sort: SortOption | SortOption[] | null;
   langParams?: LangParams;
+  searchExpr?: string | Function | (string | Function)[] | ((item: ItemData) => unknown);
+
+  dataConverter: HierarchicalDataConverter;
+  onNodeChanged: (node: InternalNode) => void;
+
   searchMode: SearchMode;
-  searchExpr?: string | string[] | ((item: ItemData) => unknown);
 }
 
-// @ts-expect-error ts-error
-uiSearchBoxMixin.setEditorClass(TextBox);
+SearchBoxController.setEditorClass(TextBox);
 
 class DataAdapter {
-  options: DataAdapterOptions;
+  options: DataAdapterOptions = {
+    dataAccessors: {} as DataAccessors,
+    items: [],
+    multipleSelection: true,
+    recursiveSelection: false,
+    recursiveExpansion: false,
+    rootValue: 0,
+    searchValue: '',
+    dataType: 'tree',
+    searchMode: 'contains',
+    dataConverter: new HierarchicalDataConverter(),
+    onNodeChanged: noop,
+    sort: null,
+  };
 
-  _selectedNodesKeys: ItemKey[];
+  _selectedNodesKeys: ItemKey[] = [];
 
-  _expandedNodesKeys: ItemKey[];
+  _expandedNodesKeys: ItemKey[] = [];
 
-  _dataStructure: (InternalNode | null)[];
+  _dataStructure: (InternalNode | null)[] = [];
 
-  _initialDataStructure: InternalNode[] = [];
+  _initialDataStructure: (InternalNode | null)[] = [];
 
-  constructor(options: Partial<DataAdapterOptions>) {
-    this.options = {} as DataAdapterOptions;
-    extend(this.options, this._defaultOptions(), options);
+  constructor(options: DataAdapterOptions) {
+    extend(this.options, options);
     this.options.dataConverter.setDataAccessors(this.options.dataAccessors);
-
-    this._selectedNodesKeys = [];
-    this._expandedNodesKeys = [];
-    this._dataStructure = [];
 
     this._createInternalDataStructure();
     this.getTreeNodes();
@@ -90,23 +98,6 @@ class DataAdapter {
     }
   }
 
-  _defaultOptions(): DataAdapterOptions {
-    return {
-      dataAccessors: {} as DataAccessors,
-      items: [],
-      multipleSelection: true,
-      recursiveSelection: false,
-      recursiveExpansion: false,
-      rootValue: 0,
-      searchValue: '',
-      dataType: 'tree',
-      searchMode: 'contains',
-      dataConverter: new HierarchicalDataConverter(),
-      onNodeChanged: noop,
-      sort: null,
-    };
-  }
-
   _createInternalDataStructure(): void {
     this._initialDataStructure = this.options.dataConverter.createPlainStructure(
       this.options.items,
@@ -116,7 +107,7 @@ class DataAdapter {
     this._dataStructure = this.options.searchValue.length
       ? this.search(this.options.searchValue)
       : this._initialDataStructure;
-    // @ts-expect-error ts-error
+
     this.options.dataConverter._dataStructure = this._dataStructure;
 
     this._updateSelection();
@@ -147,7 +138,7 @@ class DataAdapter {
   _updateNodesKeysArray(property: typeof SELECTED | typeof EXPANDED | typeof DISABLED): ItemKey[] {
     let array: ItemKey[] = [];
 
-    each(this._getDataBySelectionMode(), (_, node) => {
+    each(this._getDataBySelectionMode(), (_index: number, node: InternalNode): void => {
       if (!this._isNodeVisible(node)) {
         return;
       }
@@ -178,30 +169,30 @@ class DataAdapter {
   _getByKey(data: (InternalNode | null)[], key: ItemKey): InternalNode | null {
     return data === this._dataStructure
       ? this.options.dataConverter._getByKey(key)
-      : this.options.dataConverter.getByKey(data.filter(Boolean) as InternalNode[], key);
+      : this.options.dataConverter.getByKey(data.filter(Boolean), key);
   }
 
   _setChildrenSelection(): void {
-    each(this._dataStructure, (_, node) => {
+    each(this._dataStructure, (_index: number, node: InternalNode): void => {
       if (!node?.internalFields.childrenKeys.length) {
         return;
       }
 
       const isSelected = node.internalFields.selected;
-      if (isSelected === true) {
+      if (isSelected) {
         this._toggleChildrenSelection(node, isSelected);
       }
     });
   }
 
   _setParentSelection(): void {
-    each(this._dataStructure, (_, node) => {
+    each(this._dataStructure, (_index: number, node: InternalNode): void => {
       if (!node) return;
 
       const parent = this.options.dataConverter.getParentNode(node);
 
       if (parent && node.internalFields.parentKey !== this.options.rootValue) {
-        this._iterateParents(node, (parentNode) => {
+        this._iterateParents(node, (parentNode: InternalNode): void => {
           const newParentState = this._calculateSelectedState(parentNode);
           this._setFieldState(parentNode, SELECTED, newParentState);
         });
@@ -210,7 +201,7 @@ class DataAdapter {
   }
 
   _setParentExpansion(): void {
-    each(this._dataStructure, (_, node) => {
+    each(this._dataStructure, (_index: number, node: InternalNode): void => {
       if (!node?.internalFields.expanded) {
         return;
       }
@@ -241,7 +232,7 @@ class DataAdapter {
     const keys = processedKeys ?? [];
     if (nodeKey !== undefined && !keys.includes(nodeKey)) {
       keys.push(nodeKey);
-      each(node.internalFields.childrenKeys, (_, key) => {
+      each(node.internalFields.childrenKeys, (_index: number, key: ItemKey) => {
         const child = this.getNodeByKey(key);
         callback(child);
         if (child?.internalFields.childrenKeys.length && recursive) {
@@ -322,20 +313,18 @@ class DataAdapter {
       return;
     }
 
-    // @ts-expect-error ts-error
     node.internalFields[field] = state;
     if (node.internalFields.publicNode) {
-      // @ts-expect-error ts-error
       node.internalFields.publicNode[field] = state;
     }
-    // @ts-expect-error ts-error
+
     this.options.dataAccessors.setters[field](node.internalFields.item, state);
 
     this.options.onNodeChanged(node);
   }
 
   _markChildren(keys: ItemKey[]): void {
-    each(keys, (_, key) => {
+    each(keys, (_index: number, key: ItemKey) => {
       const index = this.getIndexByKey(key);
       const node = this.getNodeByKey(key);
       this._dataStructure[index] = null;
@@ -357,7 +346,7 @@ class DataAdapter {
 
     let counter = 0;
     const items = extend([], this._dataStructure);
-    each(items, (index, item) => {
+    each(items, (index: number, item: InternalNode | null) => {
       if (!item) {
         this._dataStructure.splice(index - counter, 1);
         counter += 1;
@@ -395,14 +384,14 @@ class DataAdapter {
     return this._dataStructure;
   }
 
-  getFullData(): InternalNode[] {
+  getFullData(): (InternalNode | null)[] {
     return this._initialDataStructure;
   }
 
   getNodeByItem(item: ItemData): InternalNode | null {
     let result: InternalNode | null = null;
 
-    each(this._dataStructure, (_, node) => {
+    each(this._dataStructure, (_index: number, node: InternalNode): boolean => {
       if (node?.internalFields.item === item) {
         result = node;
         return false;
@@ -416,7 +405,7 @@ class DataAdapter {
   getNodesByItems(items: ItemData[]): InternalNode[] {
     const nodes: InternalNode[] = [];
 
-    each(items, (_, item) => {
+    each(items, (_index: number, item: ItemData) => {
       const node = this.getNodeByItem(item);
       if (node) {
         nodes.push(node);
@@ -447,8 +436,8 @@ class DataAdapter {
     return this.options.dataConverter.getVisibleItemsCount();
   }
 
-  getPublicNode(node: InternalNode): PublicNode | undefined {
-    return node.internalFields.publicNode;
+  getPublicNode(node: InternalNode | null): PublicNode | undefined {
+    return node?.internalFields.publicNode;
   }
 
   getRootNodes(): InternalNode[] {
@@ -481,6 +470,7 @@ class DataAdapter {
       ? this._initialDataStructure
       : this._dataStructure;
     const node = this._getByKey(dataArray, key);
+
     if (node) {
       this._setFieldState(node, SELECTED, state);
 
@@ -518,7 +508,7 @@ class DataAdapter {
       ? this._initialDataStructure
       : this._dataStructure;
 
-    each(dataStructure, (index, node) => {
+    each(dataStructure, (_index: number, node: InternalNode) => {
       if (node && this._isNodeVisible(node)) {
         this._setFieldState(node, SELECTED, state);
       }
@@ -549,22 +539,21 @@ class DataAdapter {
     this._expandedNodesKeys = this._updateNodesKeysArray(EXPANDED);
   }
 
-  isFiltered(item: ItemData): boolean {
+  isFiltered(item: InternalNode): boolean {
     return !this.options.searchValue.length
-      // @ts-expect-error ts-error
       || !!this._filterDataStructure(this.options.searchValue, [item]).length;
   }
 
   static _createCriteria(
-    selector: string | string[] | ((item: ItemData) => unknown),
+    selector: DataAdapterOptions['searchExpr'],
     value: string,
-    operation: string,
+    operation: string | undefined,
   ): unknown[] {
     const searchFilter: unknown[] = [];
     if (!Array.isArray(selector)) {
       return [selector, operation, value];
     }
-    each(selector, (i, item) => {
+    each(selector, (_index: number, item: string) => {
       searchFilter.push([item, operation, value], 'or');
     });
 
@@ -574,8 +563,8 @@ class DataAdapter {
 
   _filterDataStructure(filterValue: string, dataStructure?: InternalNode[]): InternalNode[] {
     const selector = this.options.searchExpr ?? this.options.dataAccessors.getters.display;
-    // @ts-expect-error ts-error
-    const operation = uiSearchBoxMixin.getOperationBySearchMode(this.options.searchMode);
+    const operation = getOperationBySearchMode(this.options.searchMode);
+
     const criteria = DataAdapter._createCriteria(selector, filterValue, operation);
 
     const data = dataStructure ?? this._initialDataStructure;
@@ -584,7 +573,7 @@ class DataAdapter {
     return query(data, { langParams: this.options.langParams }).filter(criteria).toArray();
   }
 
-  search(searchValue: string): InternalNode[] {
+  search(searchValue: string): (InternalNode | null)[] {
     let matches = this._filterDataStructure(searchValue);
     const { dataConverter } = this.options;
 
@@ -635,7 +624,7 @@ class DataAdapter {
     }
 
     dataConverter._indexByKey = {};
-    each(matches, (index, node) => {
+    each(matches, (index: number, node: InternalNode): void => {
       node.internalFields.childrenKeys = [];
       dataConverter._indexByKey[node.internalFields.key] = index;
     });

@@ -22,7 +22,8 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
-} from '../common/core/events';
+    PointerInteractionEvent,
+} from '../events';
 
 import CollectionWidget, {
     CollectionWidgetItem,
@@ -144,7 +145,7 @@ export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEve
  * @type object
  * @inherits NativeEventInfo,ListItemInfo
  */
-export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ListItemInfo<TItem>;
+export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>, PointerInteractionEvent> & ListItemInfo<TItem>;
 
 /**
  * @docid _ui_list_ItemDeletedEvent
@@ -174,7 +175,7 @@ export type ItemDeletingEvent<TItem extends ItemLike = any, TKey = any> = EventI
  * @type object
  * @inherits NativeEventInfo,ListItemInfo
  */
-export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ListItemInfo<TItem>;
+export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>, PointerInteractionEvent> & ListItemInfo<TItem>;
 
 /**
  * @docid _ui_list_ItemRenderedEvent
@@ -203,7 +204,7 @@ export type ItemReorderedEvent<TItem extends ItemLike = any, TKey = any> = Event
  * @type object
  * @inherits NativeEventInfo,ListItemInfo
  */
-export type ItemSwipeEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ListItemInfo<TItem> & {
+export type ItemSwipeEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>, PointerInteractionEvent> & ListItemInfo<TItem> & {
     /** @docid _ui_list_ItemSwipeEvent.direction */
     readonly direction: string;
 };

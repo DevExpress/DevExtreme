@@ -19,6 +19,7 @@ import {
 } from 'devextreme-angular/core';
 import { DxiFileManagerToolbarItem } from './base/file-manager-toolbar-item-dxi';
 
+import { PROPERTY_TOKEN_fileSelectionItems } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-file-selection-item',
@@ -26,7 +27,13 @@ import { DxiFileManagerToolbarItem } from './base/file-manager-toolbar-item-dxi'
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_fileSelectionItems,
+           useExisting: DxiFileSelectionItemComponent,
+        }
+    ],
     inputs: [
         'cssClass',
         'disabled',

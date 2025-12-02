@@ -1,5 +1,5 @@
-import { exportDataGrid } from '../../exporter/exceljs/export_data_grid';
-import { exportPivotGrid } from '../../exporter/exceljs/export_pivot_grid';
+import { exportDataGrid } from '../../__internal/exporter/exceljs/export_data_grid';
+import { exportPivotGrid } from '../../__internal/exporter/exceljs/export_pivot_grid';
 
 /**
 * @name excelExporter

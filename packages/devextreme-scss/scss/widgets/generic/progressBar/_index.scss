@@ -22,6 +22,14 @@ $generic-progress-bar-border: 1px solid $progressbar-border-color;
   border-radius: $generic-progressbar-border-radius;
 }
 
+.dx-progressbar-status {
+  padding-top: $progressbar-status-padding-top;
+
+  .dx-progressbar .dx-position-right & {
+    padding-top: 0;
+  }
+}
+
 .dx-progressbar-range {
   position: relative;
   border: 1px solid $progressbar-range-border-color;

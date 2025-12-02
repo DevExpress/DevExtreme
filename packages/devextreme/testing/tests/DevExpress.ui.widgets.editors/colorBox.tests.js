@@ -6,9 +6,13 @@ import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import fx from 'common/core/animation/fx';
 import { normalizeKeyName } from 'common/core/events/utils/index';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
+import {
+    DX_ICON_CLASS,
+    DX_ICON_COLOR_DISMISS
+} from '__internal/ui/color_box/m_color_box';
 
-import 'generic_light.css!';
+
+import 'fluent_blue_light.css!';
 import 'ui/color_box';
 
 QUnit.testStart(function() {
@@ -628,6 +632,22 @@ QUnit.module('Color Box', {
         assert.equal(colorBox._colorView.option('stylingMode'), 'underlined');
     });
 
+    QUnit.test('No-color icon toggles on value change', function(assert) {
+        const $colorBox = $('#color-box').dxColorBox({ value: null });
+        const instance = $colorBox.dxColorBox('instance');
+
+        const getIcon = () =>
+            $colorBox.find(`.${COLOR_BOX_COLOR_RESULT_PREVIEW_CLASS} .${DX_ICON_CLASS}.${DX_ICON_COLOR_DISMISS}`);
+
+        assert.strictEqual(getIcon().length, 1, 'icon exists initially');
+
+        instance.option('value', '#ffffff');
+        assert.strictEqual(getIcon().length, 0, 'icon removed after value set');
+
+        instance.option('value', null);
+        assert.strictEqual(getIcon().length, 1, 'icon added after value cleared');
+    });
+
     [
         { value: undefined, editAlphaChannel: false },
         { value: undefined, editAlphaChannel: true },
@@ -811,10 +831,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('first input focused on tab should have selected text (T1127632)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const toolbarItems = [{
             widget: 'dxTextBox',
             toolbar: 'top',

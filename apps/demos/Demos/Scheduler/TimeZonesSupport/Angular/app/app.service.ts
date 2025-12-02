@@ -18,7 +18,7 @@ export class Location {
   title: string;
 }
 
-export const data:Data[] = [{
+export const data: Data[] = [{
   text: 'Stand-up meeting',
   startDate: '2021-04-26T15:30:00.000Z',
   endDate: '2021-04-26T15:45:00.000Z',

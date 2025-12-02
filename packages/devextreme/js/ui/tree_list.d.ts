@@ -25,7 +25,8 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+    InteractionEvent,
+} from '../events';
 
 import {
     AdaptiveDetailRowPreparingInfo,
@@ -60,6 +61,7 @@ import {
     SelectionBase,
     SelectionChangedInfo,
     ToolbarPreparingInfo,
+    AIColumnRequestCreatingInfo,
 } from '../common/grids';
 
 import { dxToolbarItem } from './toolbar';
@@ -172,7 +174,7 @@ export type TreeListPredefinedColumnButton = 'add' | 'cancel' | 'delete' | 'edit
 /** @public */
 export type TreeListPredefinedToolbarItem = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
 /** @public */
-export type TreeListCommandColumnType = 'adaptive' | 'buttons' | 'drag';
+export type TreeListCommandColumnType = 'adaptive' | 'ai' | 'buttons' | 'drag';
 /** @public */
 export type TreeListFilterMode = 'fullBranch' | 'withAncestors' | 'matchOnly';
 
@@ -343,7 +345,7 @@ export type EditorPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeLi
     /** @docid _ui_tree_list_EditorPreparedEvent.setValue */
     readonly setValue?: any;
     /** @docid _ui_tree_list_EditorPreparedEvent.updateValueTimeout */
-    readonly updateValueTimeout?: number;
+    updateValueTimeout?: number;
     /** @docid _ui_tree_list_EditorPreparedEvent.width */
     readonly width?: number;
     /** @docid _ui_tree_list_EditorPreparedEvent.disabled */
@@ -435,7 +437,7 @@ export type FocusedCellChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTr
  * @type object
  * @inherits Cancelable,NativeEventInfo
  */
-export type FocusedCellChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxTreeList<TRowData, TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
+export type FocusedCellChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxTreeList<TRowData, TKey>, InteractionEvent> & {
     /** @docid _ui_tree_list_FocusedCellChangingEvent.cellElement */
     readonly cellElement: DxElement;
     /** @docid _ui_tree_list_FocusedCellChangingEvent.prevColumnIndex */
@@ -484,7 +486,7 @@ export type FocusedRowChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTre
  * @type object
  * @inherits Cancelable,NativeEventInfo
  */
-export type FocusedRowChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxTreeList<TRowData, TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
+export type FocusedRowChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxTreeList<TRowData, TKey>, InteractionEvent> & {
     /** @docid _ui_tree_list_FocusedRowChangingEvent.rowElement */
     readonly rowElement: DxElement;
     /** @docid _ui_tree_list_FocusedRowChangingEvent.prevRowIndex */
@@ -830,6 +832,14 @@ export type ColumnButtonClickEvent<TRowData = any, TKey = any> = NativeEventInfo
     column?: Column<TRowData, TKey>;
 };
 
+/**
+ * @docid _ui_tree_list_AIColumnRequestCreatingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,AIColumnRequestCreatingInfo
+ */
+export type AIColumnRequestCreatingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & AIColumnRequestCreatingInfo<TRowData>;
+
 /** @public */
 export type ColumnButtonTemplateData<TRowData = any, TKey = any> = {
     readonly component: dxTreeList<TRowData, TKey>;
@@ -1144,6 +1154,14 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
      * @public
      */
     toolbar?: Toolbar | undefined;
+    /**
+     * @docid
+     * @default null
+     * @type_function_param1 e:{ui/tree_list:AIColumnRequestCreatingEvent}
+     * @action
+     * @public
+     */
+    onAIColumnRequestCreating?: ((e: AIColumnRequestCreatingEvent) => void);
 };
 
 /**
@@ -1412,6 +1430,12 @@ export default class dxTreeList<TRowData = any, TKey = any> extends Widget<dxTre
      * @public
      */
     loadDescendants(keys: Array<TKey>, childrenOnly: boolean): DxPromise<void>;
+
+    abortAIColumnRequest(columnName: string): void;
+    sendAIColumnRequest(columnName: string): void;
+    refreshAIColumn(columnName: string): void;
+    clearAIColumn(columnName: string): void;
+    getAIColumnText(columnName: string, key: TKey): string;
 
     beginCustomLoading(messageText: string): void;
     byKey(key: TKey): DxPromise<TRowData>;
@@ -1839,7 +1863,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onNodesInitialized' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onAIColumnRequestCreating' | 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onNodesInitialized' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared'>;
 
 /**
 * @hidden

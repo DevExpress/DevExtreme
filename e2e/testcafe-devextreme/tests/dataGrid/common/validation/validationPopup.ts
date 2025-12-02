@@ -3,33 +3,34 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { getData } from '../../helpers/generateDataSourceData';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const GRID_SELECTOR = '#container';
 
 fixture.disablePageReloads`Validation`
   .page(url(__dirname, '../../../container.html'));
 
-// TODO: make this test stable
-safeSizeTest('Validation popup screenshot', async (t) => {
+test('Validation popup screenshot', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
   await t
     .maximizeWindow()
     .click(dataGrid.getDataCell(0, 0).element)
-    .pressKey('ctrl+a backspace enter')
-    // act
-    .expect(await takeScreenshot('validation-popup.png', dataGrid.element))
-    .ok()
-    // assert
+    .pressKey('ctrl+a backspace enter');
+
+  // act
+  await testScreenshot(t, takeScreenshot, 'validation-popup.png', { element: dataGrid.element });
+
+  // assert
+  await t
     .expect(dataGrid.getRevertTooltip().exists)
     .ok()
     .expect(dataGrid.getInvalidMessageTooltip().exists)
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).meta({ unstable: true }).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(20, 2),
   height: 400,
   showBorders: true,
@@ -47,7 +48,7 @@ safeSizeTest('Validation popup screenshot', async (t) => {
   },
 }));
 
-safeSizeTest('Validation popup with open master detail', async (t) => {
+test('Validation popup with open master detail', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -58,9 +59,9 @@ safeSizeTest('Validation popup with open master detail', async (t) => {
     .pressKey('ctrl+a backspace enter');
 
   // act
-  await takeScreenshot('validation-popup_master-detail.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'validation-popup_master-detail.png', { element: dataGrid.element });
   await dataGrid.scrollTo(t, { y: 150 });
-  await takeScreenshot('validation-popup_master-detail_after-scroll.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'validation-popup_master-detail_after-scroll.png', { element: dataGrid.element });
 
   // assert
   await t.expect(dataGrid.getRevertTooltip().exists)
@@ -91,7 +92,7 @@ safeSizeTest('Validation popup with open master detail', async (t) => {
   masterDetail: { enabled: true },
 }));
 
-safeSizeTest('Validation popup with open master detail and fixed columns', async (t) => {
+test('Validation popup with open master detail and fixed columns', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -102,9 +103,9 @@ safeSizeTest('Validation popup with open master detail and fixed columns', async
     .pressKey('ctrl+a backspace enter');
 
   // act
-  await takeScreenshot('validation-popup_master-detail_fixed-column.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'validation-popup_master-detail_fixed-column.png', { element: dataGrid.element });
   await dataGrid.scrollTo(t, { y: 150 });
-  await takeScreenshot('validation-popup_master-detail_fixed-column_after-scroll.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'validation-popup_master-detail_fixed-column_after-scroll.png', { element: dataGrid.element });
 
   // assert
   await t.expect(dataGrid.getRevertTooltip().exists)

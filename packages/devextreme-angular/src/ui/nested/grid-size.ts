@@ -64,7 +64,6 @@ export class DxoGridSizeComponent extends NestedOption implements OnDestroy, OnI
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'valueChange' }
         ]);

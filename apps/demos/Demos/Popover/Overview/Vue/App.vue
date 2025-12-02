@@ -145,4 +145,3 @@ const animationConfig = {
   border-bottom-style: solid;
 }
 </style>
-

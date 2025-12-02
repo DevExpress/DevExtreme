@@ -80,6 +80,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     const [, setForceUpdateToken] = useState(Symbol('initial force update token'));
     const removalLocker = useContext(RemovalLockerContext);
     const restoreParentLink = useContext(RestoreTreeContext);
+    const restoreParentLinkRef = useRef(restoreParentLink);
     const instance = useRef<any>();
     const element = useRef<HTMLDivElement>();
     const portalContainer = useRef<HTMLElement | null>();
@@ -98,6 +99,10 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     const childrenContainerRef = useRef<HTMLDivElement>(null);
 
     const { parentType } = useContext(NestedOptionContext);
+
+    if (parentType === 'option') {
+      return React.createElement('div');
+    }
 
     const [widgetConfig, context] = useOptionScanning(
       {
@@ -123,16 +128,12 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
         childElementsDetached.current = false;
       }
 
-      if (restoreParentLink && element.current && !element.current.isConnected) {
-        restoreParentLink();
+      if (restoreParentLinkRef.current && element.current && !element.current.isConnected) {
+        restoreParentLinkRef.current();
       }
-    }, [
-      childNodes.current,
-      element.current,
-      childElementsDetached.current,
-      restoreParentLink,
-    ]);
+    }, []);
 
+    // eslint-disable-next-line @stylistic/max-len
     const updateCssClasses = useCallback((prevProps: (P & ComponentBaseProps) | undefined, newProps: P & ComponentBaseProps) => {
       const prevClassName = prevProps ? getClassName(prevProps) : undefined;
       const newClassName = getClassName(newProps);
@@ -152,7 +153,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
           element.current?.classList.add(...classNames);
         }
       }
-    }, [element.current]);
+    }, []);
 
     const setInlineStyles = useCallback((styles) => {
       if (element.current) {
@@ -168,7 +169,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
           },
         );
       }
-    }, [element.current]);
+    }, []);
 
     const setTemplateManagerHooks = useCallback(({
       createDXTemplates: createDXTemplatesFn,
@@ -178,11 +179,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       createDXTemplates.current = createDXTemplatesFn;
       clearInstantiationModels.current = clearInstantiationModelsFn;
       updateTemplates.current = updateTemplatesFn;
-    }, [
-      createDXTemplates.current,
-      clearInstantiationModels.current,
-      updateTemplates.current,
-    ]);
+    }, []);
 
     const getElementProps = useCallback(() => {
       const elementProps: Record<string, any> = {
@@ -199,7 +196,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
         }
       });
       return elementProps;
-    }, [element.current, props]);
+    }, [props]);
 
     const scheduleTemplatesUpdate = useCallback(() => {
       if (guardsUpdateScheduled.current) {
@@ -210,6 +207,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
       const updateFunc = useDeferUpdateForTemplates.current ? deferUpdate : requestAnimationFrame;
 
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       updateFunc(() => {
         guardsUpdateScheduled.current = false;
 
@@ -217,15 +215,12 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       });
 
       unscheduleGuards();
-    }, [
-      guardsUpdateScheduled.current,
-      useDeferUpdateForTemplates.current,
-      updateTemplates.current,
-    ]);
+    }, []);
 
     const createWidget = useCallback((el?: Element) => {
       beforeCreateWidget();
 
+      // eslint-disable-next-line no-param-reassign
       el = el || element.current;
 
       let options: any = {
@@ -255,6 +250,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
         );
       }
 
+      // eslint-disable-next-line @stylistic/max-len
       optionsManager.current.setInstance(instance.current, widgetConfig, subscribableOptions, independentEvents);
       instance.current.on('optionChanged', optionsManager.current.onOptionChanged);
 
@@ -262,14 +258,8 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     }, [
       beforeCreateWidget,
       afterCreateWidget,
-      element.current,
-      optionsManager.current,
-      createDXTemplates.current,
-      clearInstantiationModels.current,
       WidgetClass,
       useRequestAnimationFrameFlag,
-      useDeferUpdateForTemplates.current,
-      instance.current,
       subscribableOptions,
       independentEvents,
       widgetConfig,
@@ -280,13 +270,9 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
         instance.current.focus();
         shouldRestoreFocus.current = false;
       }
-    }, [shouldRestoreFocus.current, instance.current]);
+    }, []);
 
     const onComponentUpdated = useCallback(() => {
-      if (parentType === 'option') {
-        return;
-      }
-
       if (!optionsManager.current?.isInstanceSet) {
         return;
       }
@@ -301,9 +287,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
       prevPropsRef.current = props;
     }, [
-      optionsManager.current,
-      prevPropsRef.current,
-      createDXTemplates.current,
       scheduleTemplatesUpdate,
       updateCssClasses,
       props,
@@ -311,10 +294,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     ]);
 
     const onComponentMounted = useCallback(() => {
-      if (parentType === 'option') {
-        return;
-      }
-
       const { style } = props;
 
       if (childElementsDetached.current) {
@@ -330,9 +309,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
       prevPropsRef.current = props;
     }, [
-      childNodes.current,
-      element.current,
-      childElementsDetached.current,
       updateCssClasses,
       setInlineStyles,
       props,
@@ -362,15 +338,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       optionsManager.current.dispose();
 
       removalLocker?.unlock();
-    }, [
-      removalLocker,
-      instance.current,
-      childNodes.current,
-      element.current,
-      optionsManager.current,
-      childElementsDetached.current,
-      shouldRestoreFocus.current,
-    ]);
+    }, [removalLocker]);
 
     useLayoutEffect(() => {
       onComponentMounted();
@@ -381,8 +349,18 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     }, []);
 
     useLayoutEffect(() => {
+      restoreParentLinkRef.current = restoreParentLink;
+    }, [restoreParentLink]);
+
+    useLayoutEffect(() => {
       onComponentUpdated();
     });
+
+    const createWidgetRef = useRef(createWidget);
+
+    useLayoutEffect(() => {
+      createWidgetRef.current = createWidget;
+    }, [createWidget]);
 
     useImperativeHandle(ref, () => (
       {
@@ -393,10 +371,10 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
           return element.current;
         },
         createWidget(el) {
-          createWidget(el);
+          createWidgetRef.current?.(el);
         },
       }
-    ), [instance.current, element.current, createWidget]);
+    ), []);
 
     const _renderChildren = useCallback(() => {
       if (renderChildren) {
@@ -410,7 +388,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     const renderPortal = useCallback(() => portalContainer.current && createPortal(
       _renderChildren(),
       portalContainer.current,
-    ), [portalContainer.current, _renderChildren]);
+    ), [_renderChildren]);
 
     const renderContent = useCallback(() => {
       const { children } = props;
@@ -429,7 +407,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     }, [
       props,
       isPortalComponent,
-      portalContainer.current,
       _renderChildren,
     ]);
 
@@ -444,18 +421,23 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
             <NestedOptionContext.Provider value={context}>
               {renderContent()}
             </NestedOptionContext.Provider>
-            <TemplateManager init={setTemplateManagerHooks} onTemplatesRendered={onTemplatesRendered}/>
-              { isPortalComponent
-                && <NestedOptionContext.Provider value={context}>
-                  { renderPortal() }
-                </NestedOptionContext.Provider>
-              }
+            <TemplateManager
+              init={setTemplateManagerHooks}
+              onTemplatesRendered={onTemplatesRendered}
+            />
+            {isPortalComponent
+              && <NestedOptionContext.Provider value={context}>
+                {renderPortal()}
+              </NestedOptionContext.Provider>
+            }
           </div>
         </TemplateRenderingContext.Provider>
       </RestoreTreeContext.Provider>
     );
   },
-) as <P extends IHtmlOptions>(props: P & ComponentBaseProps & { ref?: React.Ref<ComponentBaseRef> }) => ReactElement | null;
+) as <P extends IHtmlOptions>(props: P & ComponentBaseProps & {
+  ref?: React.Ref<ComponentBaseRef>;
+}) => ReactElement | null;
 
 export {
   IHtmlOptions,

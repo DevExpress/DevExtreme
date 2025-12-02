@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import config from 'core/config';
 import typeUtils from 'core/utils/type';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import 'ui/drawer';
 
 const DRAWER_CLASS = 'dx-drawer';

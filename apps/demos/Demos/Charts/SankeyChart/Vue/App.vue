@@ -27,7 +27,7 @@ import DxSankey, {
 } from 'devextreme-vue/sankey';
 import { data } from './data.ts';
 
-const customizeLinkTooltip = ({ source, target, weight }) => (
+const customizeLinkTooltip = ({ source, target, weight }: any) => (
   { html: `<b>From:</b> ${source}<br/><b>To:</b> ${target}<br/><b>Weight:</b> ${weight}` }
 );
 </script>

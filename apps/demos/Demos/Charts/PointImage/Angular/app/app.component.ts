@@ -39,6 +39,7 @@ export class AppComponent {
     if (color) {
       return { image: { url: `../../../../images/Charts/PointImage/icon-medal-${color}.png`, width: 20, height: 20 }, visible: true };
     }
+    return null;
   };
 
   customizeText: DxChartTypes.ValueAxisLabel['customizeText'] = ({ valueText }) => ({

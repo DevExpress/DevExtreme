@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import registerComponent from '@js/core/component_registrator';
 import { ComponentWrapper } from '@ts/core/r1/index';
 

@@ -37,11 +37,11 @@ import {
 import { pangaeaBorders, pangaeaContinents } from './data.ts';
 
 const projection = {
-  to: ([l, lt]) => [l / 100, lt / 100],
-  from: ([x, y]) => [x * 100, y * 100],
+  to: ([l, lt]: [number, number]) => [l / 100, lt / 100],
+  from: ([x, y]: [number, number]) => [x * 100, y * 100],
 };
 
-function customizeLayer(elements) {
+function customizeLayer(elements: any[]) {
   elements.forEach((element) => {
     element.applySettings({
       color: element.attribute('color'),

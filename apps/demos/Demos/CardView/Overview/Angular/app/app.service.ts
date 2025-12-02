@@ -29,7 +29,7 @@ const employees: Employee[] = [{
   Birth_Date: '1972-07-11',
   Hire_Date: '2007-12-18',
   Status: 'Salaried',
-  Department: 'Management'
+  Department: 'Management',
 }, {
   ID: 4,
   First_Name: 'Robert',
@@ -43,7 +43,7 @@ const employees: Employee[] = [{
   Birth_Date: '1974-09-07',
   Hire_Date: '2002-11-08',
   Status: 'Salaried',
-  Department: 'Management'
+  Department: 'Management',
 }, {
   ID: 5,
   First_Name: 'Greta',
@@ -57,7 +57,7 @@ const employees: Employee[] = [{
   Birth_Date: '1977-11-22',
   Hire_Date: '1998-04-23',
   Status: 'Salaried',
-  Department: 'Human Resources'
+  Department: 'Human Resources',
 }, {
   ID: 6,
   First_Name: 'Brett',
@@ -71,7 +71,7 @@ const employees: Employee[] = [{
   Birth_Date: '1968-12-01',
   Hire_Date: '2009-03-06',
   Status: 'Salaried',
-  Department: 'IT'
+  Department: 'IT',
 }, {
   ID: 7,
   First_Name: 'Sandra',
@@ -85,7 +85,7 @@ const employees: Employee[] = [{
   Birth_Date: '1974-11-15',
   Hire_Date: '2005-05-11',
   Status: 'Salaried',
-  Department: 'Human Resources'
+  Department: 'Human Resources',
 }, {
   ID: 10,
   First_Name: 'Kevin',
@@ -99,7 +99,7 @@ const employees: Employee[] = [{
   Birth_Date: '1978-01-09',
   Hire_Date: '2009-08-11',
   Status: 'Salaried',
-  Department: 'Shipping'
+  Department: 'Shipping',
 }, {
   ID: 14,
   First_Name: 'Victor',
@@ -113,7 +113,7 @@ const employees: Employee[] = [{
   Birth_Date: '1986-07-23',
   Hire_Date: '2012-07-23',
   Status: 'Salaried',
-  Department: 'Shipping'
+  Department: 'Shipping',
 }, {
   ID: 15,
   First_Name: 'Mary',
@@ -127,7 +127,7 @@ const employees: Employee[] = [{
   Birth_Date: '1982-04-08',
   Hire_Date: '2012-08-12',
   Status: 'Salaried',
-  Department: 'Shipping'
+  Department: 'Shipping',
 }, {
   ID: 16,
   First_Name: 'Robin',
@@ -141,7 +141,7 @@ const employees: Employee[] = [{
   Birth_Date: '1981-06-12',
   Hire_Date: '2012-09-01',
   Status: 'Salaried',
-  Department: 'Shipping'
+  Department: 'Shipping',
 }, {
   ID: 17,
   First_Name: 'Kelly',
@@ -155,7 +155,7 @@ const employees: Employee[] = [{
   Birth_Date: '1988-05-11',
   Hire_Date: '2012-10-13',
   Status: 'Salaried',
-  Department: 'Support'
+  Department: 'Support',
 }, {
   ID: 18,
   First_Name: 'James',
@@ -169,7 +169,7 @@ const employees: Employee[] = [{
   Birth_Date: '1987-01-29',
   Hire_Date: '2012-10-18',
   Status: 'Salaried',
-  Department: 'Support'
+  Department: 'Support',
 }, {
   ID: 20,
   First_Name: 'Olivia',
@@ -183,7 +183,7 @@ const employees: Employee[] = [{
   Birth_Date: '1981-06-03',
   Hire_Date: '2012-05-14',
   Status: 'Salaried',
-  Department: 'Sales'
+  Department: 'Sales',
 }, {
   ID: 21,
   First_Name: 'Taylor',
@@ -197,7 +197,7 @@ const employees: Employee[] = [{
   Birth_Date: '1982-08-14',
   Hire_Date: '2012-04-14',
   Status: 'Salaried',
-  Department: 'IT'
+  Department: 'IT',
 }, {
   ID: 22,
   First_Name: 'Amelia',
@@ -211,7 +211,7 @@ const employees: Employee[] = [{
   Birth_Date: '1983-11-19',
   Hire_Date: '2011-02-10',
   Status: 'Salaried',
-  Department: 'IT'
+  Department: 'IT',
 }, {
   ID: 25,
   First_Name: 'Karen',
@@ -225,7 +225,7 @@ const employees: Employee[] = [{
   Birth_Date: '1987-04-26',
   Hire_Date: '2011-03-14',
   Status: 'Salaried',
-  Department: 'IT'
+  Department: 'IT',
 }, {
   ID: 26,
   First_Name: 'Marcus',
@@ -239,7 +239,7 @@ const employees: Employee[] = [{
   Birth_Date: '1982-03-02',
   Hire_Date: '2005-05-19',
   Status: 'Salaried',
-  Department: 'Human Resources'
+  Department: 'Human Resources',
 }, {
   ID: 28,
   First_Name: 'Morgan',
@@ -253,7 +253,7 @@ const employees: Employee[] = [{
   Birth_Date: '1984-07-17',
   Hire_Date: '2012-01-11',
   Status: 'Salaried',
-  Department: 'IT'
+  Department: 'IT',
 }, {
   ID: 29,
   First_Name: 'Violet',
@@ -267,7 +267,7 @@ const employees: Employee[] = [{
   Birth_Date: '1985-06-10',
   Hire_Date: '2012-01-19',
   Status: 'Salaried',
-  Department: 'IT'
+  Department: 'IT',
 }, {
   ID: 32,
   First_Name: 'Bart',
@@ -281,7 +281,7 @@ const employees: Employee[] = [{
   Birth_Date: '1979-11-01',
   Hire_Date: '2008-06-29',
   Status: 'Salaried',
-  Department: 'Engineering'
+  Department: 'Engineering',
 }, {
   ID: 33,
   First_Name: 'Leah',
@@ -295,7 +295,7 @@ const employees: Employee[] = [{
   Birth_Date: '1983-04-19',
   Hire_Date: '2009-02-14',
   Status: 'Salaried',
-  Department: 'Engineering'
+  Department: 'Engineering',
 }, {
   ID: 36,
   First_Name: 'Samantha',
@@ -309,7 +309,7 @@ const employees: Employee[] = [{
   Birth_Date: '1984-12-01',
   Hire_Date: '2008-01-22',
   Status: 'Salaried',
-  Department: 'Engineering'
+  Department: 'Engineering',
 }, {
   ID: 38,
   First_Name: 'Terry',
@@ -323,7 +323,7 @@ const employees: Employee[] = [{
   Birth_Date: '1984-01-09',
   Hire_Date: '2007-10-18',
   Status: 'Salaried',
-  Department: 'Engineering'
+  Department: 'Engineering',
 }, {
   ID: 40,
   First_Name: 'Lucy',
@@ -337,7 +337,7 @@ const employees: Employee[] = [{
   Birth_Date: '1986-08-09',
   Hire_Date: '2006-07-19',
   Status: 'Salaried',
-  Department: 'Sales'
+  Department: 'Sales',
 }, {
   ID: 44,
   First_Name: 'Clark',
@@ -351,7 +351,7 @@ const employees: Employee[] = [{
   Birth_Date: '1988-04-07',
   Hire_Date: '2012-04-11',
   Status: 'Commission',
-  Department: 'Sales'
+  Department: 'Sales',
 }, {
   ID: 45,
   First_Name: 'Todd',
@@ -365,7 +365,7 @@ const employees: Employee[] = [{
   Birth_Date: '1987-03-25',
   Hire_Date: '2012-04-19',
   Status: 'Commission',
-  Department: 'Sales'
+  Department: 'Sales',
 }, {
   ID: 47,
   First_Name: 'Lincoln',
@@ -379,7 +379,7 @@ const employees: Employee[] = [{
   Birth_Date: '1990-08-02',
   Hire_Date: '2012-05-11',
   Status: 'Salaried',
-  Department: 'Sales'
+  Department: 'Sales',
 }, {
   ID: 48,
   First_Name: 'Brad',
@@ -393,7 +393,7 @@ const employees: Employee[] = [{
   Birth_Date: '1991-03-17',
   Hire_Date: '2010-04-15',
   Status: 'Terminated',
-  Department: 'Engineering'
+  Department: 'Engineering',
 }, {
   ID: 50,
   First_Name: 'Dallas',
@@ -407,7 +407,7 @@ const employees: Employee[] = [{
   Birth_Date: '1994-08-19',
   Hire_Date: '2012-06-18',
   Status: 'Terminated',
-  Department: 'Shipping'
+  Department: 'Shipping',
 }, {
   ID: 51,
   First_Name: 'Stu',
@@ -421,7 +421,7 @@ const employees: Employee[] = [{
   Birth_Date: '1985-09-11',
   Hire_Date: '2011-07-19',
   Status: 'Terminated',
-  Department: 'Engineering'
+  Department: 'Engineering',
 }];
 
 @Injectable({

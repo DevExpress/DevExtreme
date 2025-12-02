@@ -214,7 +214,7 @@ export class Service {
     return products;
   }
 
-  getFields(): Array<any> {
+  getFields(): any[] {
     return fields;
   }
 
@@ -222,7 +222,7 @@ export class Service {
     return categories;
   }
 
-  getFilter(): Array<any> {
+  getFilter(): any[] {
     return filter;
   }
 }

@@ -84,10 +84,8 @@ class ariaAccessibilityTestHelper {
             expectedAttributes['aria-disabled'] = 'true';
         }
 
-        if(CheckBox.IS_RENOVATED_WIDGET) {
-            expectedAttributes['aria-invalid'] = 'false';
-            expectedAttributes['aria-readonly'] = 'false';
-        }
+        expectedAttributes['aria-invalid'] = 'false';
+        expectedAttributes['aria-readonly'] = 'false';
 
         this.checkAttributes($checkBox, expectedAttributes, `checkbox[${index}]`);
     }

@@ -19,7 +19,9 @@ export type PromptTemplateName =
   | 'proofread'
   | 'shorten'
   | 'summarize'
-  | 'translate';
+  | 'translate'
+  | 'smartPaste'
+  | 'generateGridColumn';
 
 export type PromptTemplates = Map<PromptTemplateName, PromptTemplate>;
 

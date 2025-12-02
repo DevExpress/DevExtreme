@@ -1,11 +1,12 @@
 import Quill from 'devextreme-quill';
 
-// eslint-disable-next-line import/no-mutable-exports
-let FontStyle = {};
+import type { AttributorConstructor } from '../types/quill';
 
-if (Quill) {
-  FontStyle = Quill.import('attributors/style/font');
-  // @ts-expect-error
+type OptionalAttributor = AttributorConstructor | Record<string, never>;
+
+const FontStyle: OptionalAttributor = Quill?.import('attributors/style/font') || {};
+
+if ('whitelist' in FontStyle) {
   FontStyle.whitelist = null;
 }
 

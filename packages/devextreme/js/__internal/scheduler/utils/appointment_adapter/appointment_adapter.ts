@@ -2,7 +2,6 @@ import type { Appointment } from '@js/ui/scheduler';
 import { deepExtendArraySafe } from '@ts/core/utils/m_object';
 import type { PathTimeZoneConversion, TimeZoneCalculator } from '@ts/scheduler/r1/timezone_calculator';
 
-import { getRecurrenceProcessor } from '../../m_recurrence';
 import type { AppointmentDataAccessor } from '../data_accessor/appointment_data_accessor';
 
 export class AppointmentAdapter {
@@ -53,7 +52,7 @@ export class AppointmentAdapter {
   }
 
   get isRecurrent(): boolean {
-    return getRecurrenceProcessor().isValidRecurrenceRule(this.recurrenceRule);
+    return this.dataAccessors.isRecurrent(this.source);
   }
 
   clone(): AppointmentAdapter {

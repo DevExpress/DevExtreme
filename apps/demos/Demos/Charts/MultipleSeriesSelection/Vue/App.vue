@@ -43,14 +43,15 @@ import DxChart, {
   DxFormat,
   DxLegend,
   DxExport,
+  type DxChartTypes,
 } from 'devextreme-vue/chart';
 import { versionSources, statisticsData } from './data.ts';
 
-function onSeriesClick({ target: series }) {
-  if (series.isSelected()) {
-    series.clearSelection();
+function onSeriesClick(e: DxChartTypes.SeriesClickEvent): void {
+  if (e.target.isSelected()) {
+    e.target.clearSelection();
   } else {
-    series.select();
+    e.target.select();
   }
 }
 </script>

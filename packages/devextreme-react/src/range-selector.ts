@@ -54,7 +54,7 @@ const RangeSelector = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["loadingIndicator","loadingIndicator.show","value","value.endValue","value.startValue"]), []);
       const independentEvents = useMemo(() => (["onDisposing","onDrawn","onExported","onExporting","onFileSaving","onIncidentOccurred","onInitialized","onValueChanged"]), []);

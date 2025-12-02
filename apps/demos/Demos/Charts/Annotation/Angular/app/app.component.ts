@@ -25,9 +25,9 @@ if (window && window.config?.packageConfigPaths) {
 export class AppComponent {
   dataSource: Data[];
 
-  wwdcDate = new Date(2017, 5, 5);
+  appleWWDCDate = new Date(2017, 5, 5);
 
-  tvAnnounceDate = new Date(2019, 2, 25);
+  appleTVAnnouncementDate = new Date(2019, 2, 25);
 
   watchReleaseDate = new Date(2015, 3, 24);
 

@@ -5,7 +5,6 @@ import fx from 'common/core/animation/fx';
 import pointerEvents from 'common/core/events/pointer';
 import { Consts, FileManagerWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
 import devices from '__internal/core/m_devices';
-import { shouldSkipOnDesktop, shouldSkipOnMobile } from '../../../helpers/device.js';
 
 const moduleConfig = {
 
@@ -48,10 +47,6 @@ const moduleConfig = {
 QUnit.module('Raise context menu', moduleConfig, () => {
 
     test('right click by row on desktops', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const $row1 = this.wrapper.getRowInDetailsView(1);
         assert.notOk($row1.hasClass(Consts.SELECTION_CLASS));
         assert.equal(this.wrapper.getContextMenuItems().length, 0);
@@ -69,25 +64,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.ok(this.wrapper.getContextMenuItems().length > 0);
     });
 
-    test('right click by row on mobiles', function(assert) {
-        if(shouldSkipOnDesktop(assert)) {
-            return;
-        }
-
-        assert.equal(this.wrapper.getContextMenuItems().length, 0);
-
-        this.wrapper.getRowNameCellInDetailsView(1).trigger('dxcontextmenu');
-        assert.strictEqual(this.wrapper.getContextMenuItems().length, 0);
-
-        this.wrapper.getRowNameCellInDetailsView(2).trigger('dxcontextmenu');
-        assert.strictEqual(this.wrapper.getContextMenuItems().length, 0);
-    });
-
     test('right click by thumbnails item on desktops', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         this.wrapper.getInstance().option({
             itemView: {
                 mode: 'thumbnails',
@@ -115,33 +92,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.ok(item2.hasClass(Consts.ITEM_SELECTED_CLASS));
     });
 
-    test('right click by thumbnails item on mobiles', function(assert) {
-        if(shouldSkipOnDesktop(assert)) {
-            return;
-        }
-
-        this.wrapper.getInstance().option({
-            itemView: {
-                mode: 'thumbnails',
-                showFolders: true
-            }
-        });
-        this.clock.tick(400);
-
-        assert.equal(this.wrapper.getContextMenuItems().length, 0);
-
-        this.wrapper.findThumbnailsItem('File 1.txt').trigger('dxcontextmenu');
-        assert.strictEqual(this.wrapper.getContextMenuItems().length, 0);
-
-        this.wrapper.findThumbnailsItem('Folder 1').trigger('dxcontextmenu');
-        assert.strictEqual(this.wrapper.getContextMenuItems().length, 0);
-    });
-
     test('right click by row and click by select check box', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         this.wrapper.getSelectCheckBoxInDetailsView(1).trigger('dxclick');
 
         const $row1 = this.wrapper.getRowInDetailsView(1);
@@ -365,10 +316,6 @@ QUnit.module('Raise context menu', moduleConfig, () => {
     });
 
     test('Raise the ContextMenuItemClick event on subitems', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const spy = sinon.spy();
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
@@ -495,10 +442,6 @@ QUnit.module('Raise context menu', moduleConfig, () => {
     });
 
     test('Raise the contextMenuShowing event on treeView items', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const eventSpy = sinon.spy();
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
@@ -568,10 +511,6 @@ QUnit.module('Raise context menu', moduleConfig, () => {
     });
 
     test('Raise the contextMenuShowing event on detailsView items', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const eventSpy = sinon.spy();
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
@@ -624,10 +563,6 @@ QUnit.module('Raise context menu', moduleConfig, () => {
     });
 
     test('Raise the contextMenuShowing event on detailsView free space', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const eventSpy = sinon.spy();
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
@@ -668,10 +603,6 @@ QUnit.module('Raise context menu', moduleConfig, () => {
     });
 
     test('Raise the contextMenuShowing event on thumbnailsView items', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const eventSpy = sinon.spy();
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
@@ -699,10 +630,6 @@ QUnit.module('Raise context menu', moduleConfig, () => {
     });
 
     test('Raise the contextMenuShowing event on thumbnailsView free space', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const eventSpy = sinon.spy();
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
@@ -727,10 +654,6 @@ QUnit.module('Raise context menu', moduleConfig, () => {
     });
 
     test('Cancel the context menu on the contextMenuShowing event: thumbnailsView', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const fileManager = this.wrapper.getInstance();
         const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
         fileManager.option({
@@ -768,10 +691,6 @@ QUnit.module('Raise context menu', moduleConfig, () => {
 QUnit.module('Cutomize context menu', moduleConfig, () => {
 
     test('default items rearrangement and modification', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const testClick = sinon.spy();
 
         const fileManagerInstance = $('#fileManager').dxFileManager('instance');
@@ -821,10 +740,6 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test('custom items render and modification', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const testClick = sinon.spy();
 
         const fileManagerInstance = $('#fileManager').dxFileManager('instance');
@@ -905,10 +820,6 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test('nested items set and use', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const fileManagerInstance = $('#fileManager').dxFileManager('instance');
         fileManagerInstance.option('contextMenu', {
             items: [
@@ -960,10 +871,6 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test('context menu for parent directory item contains no edit actions', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const fileManager = this.$element.dxFileManager('instance');
         fileManager.option('currentPath', 'Folder 1');
         this.clock.tick(400);
@@ -984,10 +891,6 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test('context menu items can be updated on selection changed event after right button click', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         this.fileManager.option({
             contextMenu: {
                 items: [ { text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' } ]
@@ -1004,10 +907,6 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test('context menu items can be updated on selection changed event after action button click', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         this.fileManager.option({
             contextMenu: {
                 items: [ { text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' } ]
@@ -1025,10 +924,6 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test('context menu items can be updated for visible menu after action button click', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         this.fileManager.option('contextMenu.items', [ { text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' } ]);
 
         this.wrapper.getRowInDetailsView(1).trigger('dxhoverstart');
@@ -1042,10 +937,6 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test('default context menu items can be updated for visible menu after action button click', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         this.fileManager.option('contextMenu.items', [ { name: 'copy' }, 'move', 'refresh' ]);
 
         this.wrapper.getRowInDetailsView(1).trigger('dxhoverstart');
@@ -1062,10 +953,6 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test('default items visibility - all items are visible (T922557)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const fileManagerInstance = $('#fileManager').dxFileManager('instance');
         fileManagerInstance.option('contextMenu', {
             items: [
@@ -1123,10 +1010,6 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test('default items visibility - none items are visible (T922557)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const fileManagerInstance = $('#fileManager').dxFileManager('instance');
         fileManagerInstance.option('contextMenu', {
             items: [
@@ -1216,9 +1099,6 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test('Customize the context menu on the contextMenuShowing event: thumbnailsView', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
         const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
@@ -1241,10 +1121,6 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test.skip('default items missed and forbidden options (T972377)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const fileManagerInstance = $('#fileManager').dxFileManager('instance');
         fileManagerInstance.option('contextMenu', {
             items: ['upload', {
@@ -1278,10 +1154,6 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test('custom items missed and forbidden options (T972377)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const customText = 'customText';
         const clickSpy = sinon.spy();
         const fileManagerInstance = $('#fileManager').dxFileManager('instance');

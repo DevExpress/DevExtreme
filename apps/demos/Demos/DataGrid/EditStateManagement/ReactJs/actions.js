@@ -26,7 +26,7 @@ export async function loadOrders(dispatch) {
   }
 }
 export async function saveChange(dispatch, change) {
-  if (change && change.type) {
+  if (change?.type) {
     let data;
     dispatch({ type: SAVING_PENDING });
     try {

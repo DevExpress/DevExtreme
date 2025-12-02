@@ -11,11 +11,11 @@ fixture.disablePageReloads`Display* arguments in appointment templates and event
     const scheduler = new Scheduler('#container');
     const etalon = '09:30:00 10:00:00';
 
-    await t.doubleClick(scheduler.getDateTableCell(1, 0), { speed: 0.5 });
+    await t.doubleClick(scheduler.getDateTableCell(1, 0));
 
     await t
-      .typeText(scheduler.appointmentPopup.subjectElement, 'text')
-      .click(scheduler.appointmentPopup.doneButton);
+      .typeText(scheduler.appointmentPopup.textEditor.element, 'text')
+      .click(scheduler.appointmentPopup.saveButton.element);
 
     await t
       .expect(scheduler.getAppointmentByIndex(0).element.innerText)

@@ -1,5 +1,5 @@
 import fx from 'common/core/animation/fx';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import $ from 'jquery';
 import errors from 'ui/widget/ui.errors';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
@@ -422,6 +422,87 @@ module('ScrollTo', {
 
                 await checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date);
             });
+        });
+
+        test(`ScrollTo should work correctly with asynchronous rendering when ${scrolling.text} is used`, async function(assert) {
+            const scheduler = await createScheduler({
+                templatesRenderAsynchronously: true,
+                currentView: 'week',
+            });
+
+            const $scrollable = scheduler.workSpace.getDateTableScrollable();
+            const scrollableInstance = $scrollable.dxScrollable('instance');
+            const scrollByStub = sinon.stub(scrollableInstance, 'scrollBy');
+
+            const date = new Date(2020, 8, 7, 9);
+            scheduler.instance.scrollTo(date);
+
+            await waitAsync(50);
+
+            assert.ok(scrollByStub.calledOnce, 'ScrollBy was called after asynchronous rendering');
+        });
+
+        test(`ScrollTo should work correctly with asynchronous rendering and grouping when ${scrolling.text} is used`, async function(assert) {
+            const scheduler = await createScheduler({
+                templatesRenderAsynchronously: true,
+                views: [{
+                    type: 'week',
+                    groupOrientation: 'horizontal',
+                    groupByDate: false,
+                }],
+                currentView: 'week',
+                groups: ['ownerId'],
+                width: 400,
+            });
+
+            const $scrollable = scheduler.workSpace.getDateTableScrollable();
+            const scrollableInstance = $scrollable.dxScrollable('instance');
+            const scrollByStub = sinon.stub(scrollableInstance, 'scrollBy');
+
+            const date = new Date(2020, 8, 7, 9);
+            scheduler.instance.scrollTo(date, { ownerId: 2 });
+
+            await waitAsync(50);
+
+            assert.ok(scrollByStub.calledOnce, 'ScrollBy was called after asynchronous rendering with grouping');
+        });
+
+        test(`ScrollTo should work correctly with asynchronous rendering and all-day panel when ${scrolling.text} is used`, async function(assert) {
+            const scheduler = await createScheduler({
+                templatesRenderAsynchronously: true,
+                currentView: 'week',
+                showAllDayPanel: true,
+            });
+
+            const $scrollable = scheduler.workSpace.getDateTableScrollable();
+            const scrollableInstance = $scrollable.dxScrollable('instance');
+            const scrollByStub = sinon.stub(scrollableInstance, 'scrollBy');
+
+            const date = new Date(2020, 8, 7, 9);
+            scheduler.instance.scrollTo(date, undefined, true);
+
+            await waitAsync(50);
+
+            assert.ok(scrollByStub.calledOnce, 'ScrollBy was called after asynchronous rendering with all-day panel');
+        });
+
+        test(`ScrollTo should work correctly with asynchronous rendering and RTL when ${scrolling.text} is used`, async function(assert) {
+            const scheduler = await createScheduler({
+                templatesRenderAsynchronously: true,
+                rtlEnabled: true,
+                currentView: 'week',
+            });
+
+            const $scrollable = scheduler.workSpace.getDateTableScrollable();
+            const scrollableInstance = $scrollable.dxScrollable('instance');
+            const scrollByStub = sinon.stub(scrollableInstance, 'scrollBy');
+
+            const date = new Date(2020, 8, 7, 9);
+            scheduler.instance.scrollTo(date);
+
+            await waitAsync(50);
+
+            assert.ok(scrollByStub.calledOnce, 'ScrollBy was called after asynchronous rendering with RTL');
         });
     });
 });

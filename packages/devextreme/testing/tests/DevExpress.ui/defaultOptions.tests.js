@@ -16,13 +16,14 @@ import Avatar from '__internal/ui/chat/avatar';
 import Button from 'ui/button';
 import ColorBox from 'ui/color_box';
 import Chat from 'ui/chat';
-import ChatMessageBox from '__internal/ui/chat/messagebox';
+import ChatMessageBox from '__internal/ui/chat/message_box/message_box';
+import ChatTextArea from '__internal/ui/chat/message_box/chat_text_area';
 import ChatMessageBubble from '__internal/ui/chat/messagebubble';
 import ChatMessageGroup from '__internal/ui/chat/messagegroup';
 import ChatMessageList from '__internal/ui/chat/messagelist';
 import ChatAlertList from '__internal/ui/chat/alertlist';
 import ChatTypingIndicator from '__internal/ui/chat/typingindicator';
-import ChatEditingPreview from '__internal/ui/chat/editing_preview';
+import ChatEditingPreview from '__internal/ui/chat/message_box/editing_preview';
 import DataGrid from 'ui/data_grid';
 import DateBox from 'ui/date_box';
 import DateRangeBox from 'ui/date_range_box';
@@ -30,7 +31,7 @@ import DropDownEditor from 'ui/drop_down_editor/ui.drop_down_editor';
 import DropDownBox from 'ui/drop_down_box';
 import DropDownButton from 'ui/drop_down_button';
 import DropDownList from 'ui/drop_down_editor/ui.drop_down_list';
-import DropDownMenu from '__internal/ui/toolbar/internal/m_toolbar.menu';
+import DropDownMenu from '__internal/ui/toolbar/internal/toolbar.menu';
 import TextEditor from 'ui/text_box/ui.text_editor';
 import Gallery from 'ui/gallery';
 import Informer from 'ui/informer';
@@ -51,10 +52,11 @@ import RadioGroup from 'ui/radio_group';
 import Resizable from 'ui/resizable';
 import ResizeHandle from '__internal/ui/splitter/resize_handle';
 import Scheduler from '__internal/scheduler/m_scheduler';
-import Scrollable from '__internal/ui/scroll_view/m_scrollable';
+import Scrollable from '__internal/ui/scroll_view/scrollable';
 import ScrollView from 'ui/scroll_view';
 import SelectBox from 'ui/select_box';
 import SliderHandle from '__internal/ui/slider/m_slider_handle';
+import SpeechToText from 'ui/speech_to_text';
 import Splitter from 'ui/splitter';
 import Stepper from 'ui/stepper';
 import Tabs from 'ui/tabs';
@@ -63,11 +65,10 @@ import TagBox from 'ui/tag_box';
 import Toast from 'ui/toast';
 import TreeList from 'ui/tree_list';
 import TreeView from 'ui/tree_view';
-import TileView from '__internal/ui/m_tile_view';
+import TileView from '__internal/ui/tile_view';
 import FileUploader from 'ui/file_uploader';
 import Form from 'ui/form';
 import ValidationMessage from 'ui/validation_message';
-
 
 const DEFAULT_MARGIN = 20;
 
@@ -867,7 +868,7 @@ testComponentDefaults(Scrollable,
     {
         useNative: false,
         // NOTE: useSimulatedScrollbar setting value doesn't affect on simulated strategy
-        useSimulatedScrollbar: Scrollable.IS_RENOVATED_WIDGET ? false : true
+        useSimulatedScrollbar: true,
     },
     function() {
         this._supportNativeScrolling = support.nativeScrolling;
@@ -969,19 +970,18 @@ testComponentDefaults(Scrollable,
     }
 );
 
-if(!Scrollable.IS_RENOVATED_WIDGET) {
-    testComponentDefaults(ScrollView,
-        {},
-        { refreshStrategy: 'swipeDown' },
-        function() {
-            this._originalRealDevice = devices.real();
-            devices.real({ platform: 'android' });
-        },
-        function() {
-            devices.real(this._originalRealDevice);
-        }
-    );
-}
+
+testComponentDefaults(ScrollView,
+    {},
+    { refreshStrategy: 'swipeDown' },
+    function() {
+        this._originalRealDevice = devices.real();
+        devices.real({ platform: 'android' });
+    },
+    function() {
+        devices.real(this._originalRealDevice);
+    }
+);
 
 testComponentDefaults(ScrollView,
     {},
@@ -1363,6 +1363,7 @@ testComponentDefaults(Chat,
         items: [],
         alerts: [],
         typingUsers: [],
+        fileUploaderOptions: undefined,
         onMessageEntered: undefined,
         onTypingStart: undefined,
         onTypingEnd: undefined,
@@ -1392,11 +1393,25 @@ testComponentDefaults(ChatMessageBox,
         activeStateEnabled: true,
         focusStateEnabled: true,
         hoverStateEnabled: true,
+        fileUploaderOptions: undefined,
+        text: '',
         onMessageEntered: undefined,
         onTypingStart: undefined,
         onTypingEnd: undefined,
         onMessageEditCanceled: undefined,
         onMessageUpdating: undefined,
+    }
+);
+
+testComponentDefaults(ChatTextArea,
+    {},
+    {
+        stylingMode: 'outlined',
+        placeholder: 'Type a message',
+        autoResizeEnabled: true,
+        valueChangeEvent: 'input',
+        fileUploaderOptions: undefined,
+        onSend: undefined,
     }
 );
 
@@ -1455,6 +1470,27 @@ testComponentDefaults(ChatEditingPreview,
         hoverStateEnabled: true,
         text: '',
         onCancel: undefined,
+    }
+);
+
+testComponentDefaults(SpeechToText,
+    {},
+    {
+        activeStateEnabled: true,
+        customSpeechRecognizer: {
+            enabled: false,
+            isListening: false,
+        },
+        hoverStateEnabled: true,
+        startIcon: 'micoutline',
+        stopIcon: 'stopfilled',
+        startText: '',
+        stopText: '',
+        useInkRipple: false,
+        onStartClick: undefined,
+        onStopClick: undefined,
+        onResult: undefined,
+        onError: undefined,
     }
 );
 
@@ -1720,6 +1756,33 @@ testComponentDefaults(FileUploader,
 testComponentDefaults(Form,
     {},
     {
+        formData: {},
+        colCount: 1,
+        labelLocation: 'left',
+        readOnly: false,
+        onFieldDataChanged: null,
+        customizeItem: null,
+        onEditorEnterKey: null,
+        minColWidth: 200,
+        alignItemLabels: true,
+        alignItemLabelsInAllGroups: true,
+        alignRootItemLabels: true,
+        showColonAfterLabel: true,
+        showRequiredMark: true,
+        showOptionalMark: false,
+        requiredMark: '*',
+        showValidationSummary: false,
+        scrollingEnabled: false,
+        labelMode: 'outside',
+        isDirty: false,
+        onSmartPasted: null,
+        onSmartPasting: null,
+    },
+);
+
+testComponentDefaults(Form,
+    {},
+    {
         labelLocation: 'top',
     },
     function() {
@@ -1804,11 +1867,6 @@ testComponentDefaults(Scheduler,
     {},
     {
         useDropDownViewSwitcher: true,
-        _appointmentTooltipButtonsPosition: 'top',
-        _appointmentTooltipOpenButtonText: null,
-        _appointmentCountPerCell: 1,
-        _collectorOffset: 20,
-        _appointmentOffset: 30
     },
     function() {
         this.origIsMaterialBased = themes.isMaterialBased;

@@ -16,6 +16,7 @@ import {
 
 import { Format } from 'devextreme/common/core/localization';
 import { DashStyle, Font } from 'devextreme/common/charts';
+import { dxPieChartPointInfo } from 'devextreme/viz/pie_chart';
 
 import {
     DxIntegrationModule,
@@ -90,10 +91,10 @@ export class DxoPieChartTooltipComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get customizeTooltip(): ((pointInfo: any) => Record<string, any>) | undefined {
+    get customizeTooltip(): ((pointInfo: dxPieChartPointInfo) => Record<string, any>) | undefined {
         return this._getOption('customizeTooltip');
     }
-    set customizeTooltip(value: ((pointInfo: any) => Record<string, any>) | undefined) {
+    set customizeTooltip(value: ((pointInfo: dxPieChartPointInfo) => Record<string, any>) | undefined) {
         this._setOption('customizeTooltip', value);
     }
 

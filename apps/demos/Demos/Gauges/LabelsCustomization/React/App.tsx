@@ -24,7 +24,7 @@ function App() {
     >
       <Label indent={30} format={format} customizeText={customizeText} />
       <Export enabled={true} />
-      <Title text={"Series' Ratings"}>
+      <Title text="Series' Ratings">
         <Font size={28} />
       </Title>
     </BarGauge>

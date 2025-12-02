@@ -2,7 +2,7 @@ import $ from 'jquery';
 import fx from 'common/core/animation/fx';
 import '__internal/scheduler/m_scheduler';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
 
 QUnit.testStart(function() {
@@ -381,13 +381,13 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
     QUnit.test('Tasks should be rerendered after click on next/prev button', async function(assert) {
         await this.createInstance({ currentDate: new Date(2015, 1, 24) });
 
-        const spy = sinon.spy(this.instance.appointmentDataProvider, 'filterByDate');
+        const spy = sinon.spy(this.instance, '_filterAppointmentsByDate');
 
         try {
             $(this.instance.$element()).find('.dx-scheduler-navigator-previous').trigger('dxclick');
             assert.ok(spy.calledOnce, 'filterByDate is called');
         } finally {
-            this.instance.appointmentDataProvider.filterByDate.restore();
+            this.instance._filterAppointmentsByDate.restore();
         }
     });
 

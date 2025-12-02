@@ -1,31 +1,23 @@
 @use "sass:math";
 @use "../sizes" as *;
+@use "../../base/treeList/variables" as *;
 
 // adduse
 
-$treelist-expanded-icon-margin-left: null !default;
-$treelist-collapsed-icon-margin-left: null !default;
-$treelist-icon-margin-top: null !default;
-$treelist-expanded-collapsed-margin-right: null !default;
-$treelist-select-all-interaction-area-left: null !default;
-$treelist-select-all-interaction-area-top: null !default;
-$treelist-select-all-interaction-area-size: 24px !default;
+$treelist-generic-expand-icon-size: null !default;
 
 @if $size == "default" {
-  $treelist-expanded-icon-margin-left: 5px !default;
-  $treelist-collapsed-icon-margin-left: 6px !default;
-  $treelist-icon-margin-top: math.div($generic-base-icon-size, 2) - 1 !default;
-  $treelist-expanded-collapsed-margin-right: 4px !default;
-  $treelist-select-all-interaction-area-left: -4px !default;
-  $treelist-select-all-interaction-area-top: -5px !default;
+  $treelist-generic-expand-icon-size: 18px !default;
 }
 
 @else if $size == "compact" {
-  $treelist-expanded-icon-margin-left: 3px !default;
-  $treelist-collapsed-icon-margin-left: 4px !default;
-  $treelist-icon-margin-top: math.div($generic-base-icon-size, 2) !default;
-  $treelist-expanded-collapsed-margin-right: 1px !default;
-  $treelist-select-all-interaction-area-left: -4px !default;
-  $treelist-select-all-interaction-area-top: -4px !default;
+  $treelist-generic-expand-icon-size: 14px !default;
 }
+
+$treelist-expand-icon-size: $treelist-generic-expand-icon-size !default;
+$treelist-expand-icon-name-expanded: spindown !default;
+$treelist-expand-icon-name-collapsed: spinright !default;
+$treelist-expand-icon-right-gap: 4px !default;
+$treelist-expand-checkbox-size: 16px !default;
+$treelist-expand-checkbox-right-gap: 8px !default;
 

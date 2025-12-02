@@ -32,10 +32,18 @@ const LoadPanelTests = {
                     width: 100,
                     showIndicator: false,
                     showPane: false,
-                }
+                },
+                {
+                    indicatorOptions: {
+                        src: '',
+                        animationType: 'sparkle',
+                        height: 50,
+                        width: 100,
+                    },
+                },
             ].forEach((loadPanelOptions) => {
                 QUnit.test(`loadPanel: ${JSON.stringify(loadPanelOptions)}`, function(assert) {
-                    assert.expect(14);
+                    assert.expect(15);
                     const done = assert.async();
                     const component = getComponent(componentOptions);
                     const initialComponentLoadPanelValue = component.option('loadPanel');
@@ -50,13 +58,14 @@ const LoadPanelTests = {
                         enabled = true,
                         height = 90,
                         indicatorSrc = '',
+                        indicatorOptions,
                         showIndicator = true,
                         showPane = true,
                         text = 'Exporting...',
                         width = 200,
                     } = initialOptions;
 
-                    const expectedOptions = { message: text, animation, enabled, height, indicatorSrc, showIndicator, showPane, width };
+                    const expectedOptions = { message: text, animation, enabled, height, indicatorSrc, indicatorOptions, showIndicator, showPane, width };
 
                     let isFirstCall = true;
                     let exportLoadPanel;
@@ -73,7 +82,7 @@ const LoadPanelTests = {
                             assert.strictEqual(exportLoadPanel.option('visible'), true, 'export loadpanel is visible');
 
                             for(const optionName in expectedOptions) {
-                                assert.strictEqual(exportLoadPanel.option(optionName), expectedOptions[optionName], `loadPanel.${optionName}`);
+                                assert.deepEqual(exportLoadPanel.option()[optionName], expectedOptions[optionName], `loadPanel.${optionName}`);
                             }
                             isFirstCall = false;
                         }

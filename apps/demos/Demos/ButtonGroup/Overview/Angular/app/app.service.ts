@@ -64,11 +64,11 @@ const fontStyle: FontStyle[] = [
 
 @Injectable()
 export class Service {
-  getAlignments() : Alignment[] {
+  getAlignments(): Alignment[] {
     return alignments;
   }
 
-  getFontStyles() : FontStyle[] {
+  getFontStyles(): FontStyle[] {
     return fontStyle;
   }
 }

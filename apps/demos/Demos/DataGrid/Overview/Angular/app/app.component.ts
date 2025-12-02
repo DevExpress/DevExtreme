@@ -1,10 +1,9 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DataSource } from 'devextreme-angular/common/data';
-import { DxBulletModule, DxTemplateModule } from 'devextreme-angular';
+import { DxBulletModule } from 'devextreme-angular';
 import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
-import { Service } from './app.service';
+import { Sale, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -23,7 +22,7 @@ if (window && window.config?.packageConfigPaths) {
   providers: [Service],
 })
 export class AppComponent {
-  dataSource: DataSource;
+  sales: Sale[];
 
   collapsed = false;
 
@@ -37,7 +36,7 @@ export class AppComponent {
   customizeTooltip = ({ originalValue }: Record<string, string>) => ({ text: `${parseInt(originalValue)}%` });
 
   constructor(service: Service) {
-    this.dataSource = service.getDataSource();
+    this.sales = service.getSales();
   }
 }
 
@@ -45,7 +44,6 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxDataGridModule,
-    DxTemplateModule,
     DxBulletModule,
   ],
   declarations: [AppComponent],

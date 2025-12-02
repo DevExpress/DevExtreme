@@ -8,7 +8,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+} from '../events';
 
 /** @public */
 export type ResizeHandle = 'bottom' | 'left' | 'right' | 'top' | 'all';

@@ -23,10 +23,10 @@ $(() => {
         .toString();
 
       return result;
-    }
+    },
   };
 
-  const editorInstance = $('.html-editor').dxHtmlEditor({
+  $('.html-editor').dxHtmlEditor({
     height: 300,
     converter,
     value: markup,

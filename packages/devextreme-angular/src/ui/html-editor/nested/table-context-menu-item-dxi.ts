@@ -12,9 +12,7 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
-    QueryList,
-    AfterContentInit
+    QueryList
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -28,11 +26,13 @@ import {
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiHtmlEditorItemComponent } from './item-dxi';
 
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-html-editor-table-context-menu-item',
@@ -40,10 +40,22 @@ import { DxiHtmlEditorItemComponent } from './item-dxi';
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost]
+    providers: [
+        NestedOptionHost,
+        DxTemplateHost,
+        {
+           provide: PROPERTY_TOKEN_items,
+           useExisting: DxiHtmlEditorTableContextMenuItemComponent,
+        }
+    ]
 })
 export class DxiHtmlEditorTableContextMenuItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost, AfterContentInit  {
+    IDxTemplateHost {
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
     @Input()
     get beginGroup(): boolean {
         return this._getOption('beginGroup');
@@ -138,21 +150,6 @@ export class DxiHtmlEditorTableContextMenuItemComponent extends CollectionNested
     }
 
 
-    @ContentChildren(forwardRef(() => DxiHtmlEditorItemComponent)) itemsChildren!: QueryList<DxiHtmlEditorItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiHtmlEditorTableContextMenuItemComponent)) tableContextMenuItemsChildren!: QueryList<DxiHtmlEditorTableContextMenuItemComponent>
-    
-    setItems() {
-        const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.itemsChildren.toArray(),
-            ...this.tableContextMenuItemsChildren.toArray(),
-        ]);
-        this.setChildren('items', q);
-    }
-
-
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -178,12 +175,6 @@ export class DxiHtmlEditorTableContextMenuItemComponent extends CollectionNested
         this._deleteRemovedOptions(this._fullOptionPath());
     }
 
-    ngAfterContentInit() {
-        this.setItems();
-        
-        this.itemsChildren.changes.subscribe(() => { this.setItems() });
-        this.tableContextMenuItemsChildren.changes.subscribe(() => { this.setItems() });
-    }
 }
 
 @NgModule({

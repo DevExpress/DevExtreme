@@ -377,7 +377,7 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
 
   _renderPopup(): void {
     super._renderPopup();
-    this._popup?.$wrapper().addClass(DATEBOX_WRAPPER_CLASS);
+    this._popup?.$wrapper()?.addClass(DATEBOX_WRAPPER_CLASS);
     this._renderPopupWrapper();
   }
 
@@ -411,7 +411,7 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     const { type } = this.option();
 
     this._popup.$wrapper()
-      .addClass(`${DATEBOX_WRAPPER_CLASS}-${type}`)
+      ?.addClass(`${DATEBOX_WRAPPER_CLASS}-${type}`)
       .addClass(`${DATEBOX_WRAPPER_CLASS}-${this._pickerType}`)
       .addClass(DROPDOWNEDITOR_OVERLAY_CLASS);
   }
@@ -758,7 +758,7 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
   }
 
   _getSerializationFormat() {
-    const value = this.option('value');
+    const { value } = this.option();
 
     if (this.option('dateSerializationFormat') && config().forceIsoDateParsing) {
       return this.option('dateSerializationFormat');
@@ -768,7 +768,7 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
       return 'number';
     }
 
-    if (!isString(value)) {
+    if (!isString(value) || value === '') {
       return;
     }
 

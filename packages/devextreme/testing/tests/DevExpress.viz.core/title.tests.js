@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
+import { Renderer } from '../../helpers/vizMocks.js';
 import { Title } from 'viz/core/title';
 
 const environment = {
@@ -12,7 +12,7 @@ const environment = {
             width: 800,
             height: 600
         };
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.incidentOccurred = sinon.spy();
         this.title = new Title({ renderer: this.renderer, cssClass: 'test', incidentOccurred: this.incidentOccurred });
 

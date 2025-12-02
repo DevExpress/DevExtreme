@@ -3,7 +3,7 @@ import devices from '__internal/core/m_devices';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { validateGroup } from 'ui/validation_engine';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import 'ui/radio_group/radio_button';
 import 'ui/validator';
 

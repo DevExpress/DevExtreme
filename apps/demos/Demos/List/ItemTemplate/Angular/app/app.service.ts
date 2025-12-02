@@ -166,7 +166,7 @@ const products: Product[] = [{
 
 @Injectable()
 export class Service {
-  getProducts() : Product[] {
+  getProducts(): Product[] {
     return products;
   }
 }

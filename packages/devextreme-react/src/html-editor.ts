@@ -52,7 +52,7 @@ const HtmlEditor = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["value"]), []);
       const independentEvents = useMemo(() => (["onContentReady","onDisposing","onFocusIn","onFocusOut","onInitialized","onValueChanged"]), []);
@@ -138,7 +138,6 @@ type IFileUploaderOptionsProps = React.PropsWithChildren<{
   activeStateEnabled?: boolean;
   allowCanceling?: boolean;
   allowedFileExtensions?: Array<string>;
-  bindingOptions?: Record<string, any>;
   chunkSize?: number;
   dialogTrigger?: any | string | undefined;
   disabled?: boolean;

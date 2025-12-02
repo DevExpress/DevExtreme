@@ -32,16 +32,14 @@ $(() => {
   });
 
   $('#state').dxAutocomplete({
-    dataSource: new DevExpress.data.ODataStore({
-      version: 2,
-      url: 'https://js.devexpress.com/Demos/DevAV/odata/States?$select=Sate_ID,State_Long,State_Short',
-      key: 'Sate_ID',
-      keyType: 'Int32',
+    dataSource: DevExpress.data.AspNet.createStore({
+      loadUrl: 'https://js.devexpress.com/Demos/NetCore/api/DataGridStatesLookup',
+      key: 'ID',
     }),
     placeholder: 'Type state name...',
-    valueExpr: 'State_Long',
+    valueExpr: 'Name',
     itemTemplate(data) {
-      return $(`<div>${data.State_Long} (${data.State_Short})</div>`);
+      return $(`<div>${data.Name} (${data.Short})</div>`);
     },
     onValueChanged(data) {
       state = data.value;

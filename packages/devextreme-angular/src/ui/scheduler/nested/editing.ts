@@ -14,6 +14,7 @@ import {
 
 
 
+import { AppointmentFormProperties } from 'devextreme/ui/scheduler';
 
 import {
     DxIntegrationModule,
@@ -77,6 +78,22 @@ export class DxoSchedulerEditingComponent extends NestedOption implements OnDest
     }
     set allowUpdating(value: boolean) {
         this._setOption('allowUpdating', value);
+    }
+
+    @Input()
+    get form(): AppointmentFormProperties {
+        return this._getOption('form');
+    }
+    set form(value: AppointmentFormProperties) {
+        this._setOption('form', value);
+    }
+
+    @Input()
+    get popup(): Record<string, any> {
+        return this._getOption('popup');
+    }
+    set popup(value: Record<string, any>) {
+        this._setOption('popup', value);
     }
 
 

@@ -59,7 +59,7 @@ function App() {
               useMaskBehavior={true}
               inputAttr={dateLabel}
               type="date"
-              displayFormat={"'Year': yyyy"}
+              displayFormat="'Year': yyyy"
             />
           </div>
         </div>

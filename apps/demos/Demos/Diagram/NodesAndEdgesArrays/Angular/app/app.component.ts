@@ -1,11 +1,11 @@
 import {
-  NgModule, Component, ViewChild, enableProdMode,
+  NgModule, Component, enableProdMode,
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
-import { DxDiagramModule, DxDiagramComponent } from 'devextreme-angular';
+import { DxDiagramModule } from 'devextreme-angular';
 import { ArrayStore } from 'devextreme-angular/common/data';
 import { Service } from './app.service';
 

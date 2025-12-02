@@ -107,6 +107,10 @@ function isWeekend(date: Date) {
   const day = date.getDay();
   return day === 0 || day === 6;
 }
+const holidays = [[1, 0], [4, 6], [25, 11]];
+function isHoliday(date: Date) {
+  return holidays.some((item) => date.getDate() === item[0] && date.getMonth() === item[1]);
+}
 
 function useCellTemplate({ value }: DxCheckBoxTypes.ValueChangedEvent) {
   cellTemplate.value = value ? 'custom' : 'cell';
@@ -114,7 +118,6 @@ function useCellTemplate({ value }: DxCheckBoxTypes.ValueChangedEvent) {
 
 function getCellCssClass({ date, view }: { date: Date, view: string }) {
   let cssClass = '';
-  const holidays = [[1, 0], [4, 6], [25, 11]];
 
   if (view === 'month') {
     if (!date) {
@@ -122,11 +125,7 @@ function getCellCssClass({ date, view }: { date: Date, view: string }) {
     } else {
       if (isWeekend(date)) { cssClass = 'weekend'; }
 
-      holidays.forEach((item) => {
-        if (date.getDate() === item[0] && date.getMonth() === item[1]) {
-          cssClass = 'holiday';
-        }
-      });
+      if (isHoliday(date)) { cssClass = 'holiday'; }
     }
   }
 

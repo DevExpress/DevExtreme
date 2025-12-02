@@ -27,11 +27,11 @@ const App = () => (
       alignment="right"
       fixed={true}
     />
-    <Column dataField="Address"/>
-    <Column dataField="City"/>
-    <Column dataField="Zipcode"/>
-    <Column dataField="State"/>
-    <Column dataField="Department"/>
+    <Column dataField="Address" />
+    <Column dataField="City" />
+    <Column dataField="Zipcode" />
+    <Column dataField="State" />
+    <Column dataField="Department" />
     <Column
       dataField="BirthDate"
       dataType="date"
@@ -40,10 +40,10 @@ const App = () => (
       dataField="HireDate"
       dataType="date"
     />
-    <Column dataField="HomePhone"/>
-    <Column dataField="MobilePhone"/>
-    <Column dataField="Email"/>
-    <Column dataField="Skype"/>
+    <Column dataField="HomePhone" />
+    <Column dataField="MobilePhone" />
+    <Column dataField="Email" />
+    <Column dataField="Skype" />
   </TreeList>
 );
 

@@ -9,13 +9,13 @@ import {
   data, moviesData, theatreData, type Appointment as AppointmentType,
 } from './data.ts';
 
-const currentDate = new Date(2021, 3, 27);
+const currentDate = new Date(2025, 3, 27);
 const views: SchedulerTypes.ViewType[] = ['day', 'week', 'timelineDay'];
 const groups = ['theatreId'];
 
 const onAppointmentFormOpening = (e: SchedulerTypes.AppointmentFormOpeningEvent) => {
   let movieInfo = getMovieById((e.appointmentData as AppointmentType).movieId) || {};
-  let { startDate } = e.appointmentData!;
+  let { startDate } = e.appointmentData;
 
   e.form.option('items', [{
     label: {

@@ -1,4 +1,4 @@
-import Menu from '../__internal/ui/menu/m_menu';
+import Menu from '../__internal/ui/menu/menu';
 
 export default Menu;
 

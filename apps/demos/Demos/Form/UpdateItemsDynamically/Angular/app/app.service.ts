@@ -12,7 +12,7 @@ export class Employee {
   Phones: string[];
 }
 
-const employee : Employee = {
+const employee: Employee = {
   FirstName: 'John',
   LastName: 'Heart',
   Address: '351 S Hill St., Los Angeles, CA',
@@ -22,7 +22,7 @@ const employee : Employee = {
 
 @Injectable()
 export class Service {
-  getEmployee() : Employee {
+  getEmployee(): Employee {
     return employee;
   }
 }

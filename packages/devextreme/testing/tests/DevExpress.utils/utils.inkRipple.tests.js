@@ -1,6 +1,6 @@
-const $ = require('jquery');
-const inkRipple = require('ui/widget/utils.ink_ripple');
-const fx = require('common/core/animation/fx');
+import $ from 'jquery';
+import { render } from '__internal/core/utils/m_ink_ripple';
+import fx from 'common/core/animation/fx';
 
 const INKRIPPLE_CLASS = 'dx-inkripple';
 const INKRIPPLE_WAVE_CLASS = 'dx-inkripple-wave';
@@ -24,7 +24,7 @@ QUnit.module('rendering', moduleConfig);
 
 QUnit.test('inkRipple is rendered after the first \'showWave\' call', function(assert) {
     const $element = $('<div>');
-    const inkRippleInstance = inkRipple.render();
+    const inkRippleInstance = render();
 
     assert.equal($element.find('.' + INKRIPPLE_CLASS).length, 0, 'inkRipple element is not rendered before first active event');
 
@@ -33,7 +33,7 @@ QUnit.test('inkRipple is rendered after the first \'showWave\' call', function(a
 });
 
 QUnit.test('wave class depend on called method', function(assert) {
-    const inkRippleInstance = inkRipple.render();
+    const inkRippleInstance = render();
 
     inkRippleInstance.showWave({ element: this.$element, event: {} });
     const $wave = this.$element.find('.' + INKRIPPLE_WAVE_CLASS);
@@ -50,7 +50,7 @@ QUnit.test('wave class depend on called method', function(assert) {
 });
 
 QUnit.test('showing wave class is removed if call hideWave after showWave immediately', function(assert) {
-    const inkRippleInstance = inkRipple.render();
+    const inkRippleInstance = render();
 
     inkRippleInstance.showWave({ element: this.$element, event: {} });
     const $wave = this.$element.find('.' + INKRIPPLE_WAVE_CLASS);
@@ -62,7 +62,7 @@ QUnit.test('showing wave class is removed if call hideWave after showWave immedi
 
 QUnit.test('number of waves depend on \'wavesNumber\' option', function(assert) {
     const wavesNumber = 2;
-    const inkRippleInstance = inkRipple.render({
+    const inkRippleInstance = render({
         wavesNumber: wavesNumber
     });
 
@@ -81,7 +81,7 @@ QUnit.test('ink ripple wave has correct size', function(assert) {
         border: borderSize + 'px solid black'
     });
     const waveSizeCoefficient = 3;
-    const inkRippleInstance = inkRipple.render({
+    const inkRippleInstance = render({
         waveSizeCoefficient: waveSizeCoefficient
     });
 
@@ -100,7 +100,7 @@ QUnit.test('ink ripple wave size is diagonal size of element', function(assert) 
         height: elementHeight,
         width: elementWidth
     });
-    const inkRippleInstance = inkRipple.render({
+    const inkRippleInstance = render({
         waveSizeCoefficient: 1
     });
 
@@ -121,7 +121,7 @@ QUnit.test('wave is rendered in the center of ink ripple if the \'isCentered\' o
     });
     const waveSizeCoefficient = 2;
     const rippleSize = waveSize * waveSizeCoefficient;
-    const inkRippleInstance = inkRipple.render({
+    const inkRippleInstance = render({
         waveSizeCoefficient: waveSizeCoefficient,
         isCentered: true
     });
@@ -145,7 +145,7 @@ QUnit.test('wave is rendered in place of click by default', function(assert) {
     });
     const waveSizeCoefficient = 2;
     const rippleSize = waveSize * waveSizeCoefficient;
-    const inkRippleInstance = inkRipple.render({
+    const inkRippleInstance = render({
         waveSizeCoefficient: waveSizeCoefficient
     });
 

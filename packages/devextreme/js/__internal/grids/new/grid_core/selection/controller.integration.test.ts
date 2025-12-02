@@ -174,3 +174,128 @@ describe('when keyExpr is missing', () => {
     });
   });
 });
+
+describe('selectAll with filters', () => {
+  it('should select only cards matching filterValue', () => {
+    const cardView = setup({
+      keyExpr: 'id',
+      columns: ['id', 'category'],
+      dataSource: [
+        { id: 1, category: 'A' },
+        { id: 2, category: 'A' },
+        { id: 3, category: 'B' },
+        { id: 4, category: 'B' },
+      ],
+      selection: {
+        mode: 'multiple',
+        allowSelectAll: true,
+      },
+      filterPanel: {
+        filterEnabled: true,
+      },
+    });
+
+    cardView.option('filterValue', ['category', '=', 'A']);
+    cardView.selectAll();
+
+    expect(cardView.getSelectedCardKeys()).toEqual([1, 2]);
+  });
+
+  it('should select only cards matching headerFilter', () => {
+    const cardView = setup({
+      keyExpr: 'id',
+      columns: ['id', 'category'],
+      dataSource: [
+        { id: 1, category: 'A' },
+        { id: 2, category: 'A' },
+        { id: 3, category: 'B' },
+        { id: 4, category: 'B' },
+      ],
+      selection: {
+        mode: 'multiple',
+        allowSelectAll: true,
+      },
+      filterPanel: {
+        filterEnabled: true,
+      },
+    });
+
+    cardView.columnOption('category', 'filterValues', ['A']);
+    cardView.selectAll();
+
+    expect(cardView.getSelectedCardKeys()).toEqual([1, 2]);
+  });
+
+  it('should select only cards matching dataSource.filter()', () => {
+    const cardView = setup({
+      keyExpr: 'id',
+      columns: ['id', 'category'],
+      dataSource: [
+        { id: 1, category: 'A' },
+        { id: 2, category: 'A' },
+        { id: 3, category: 'B' },
+        { id: 4, category: 'B' },
+      ],
+      selection: {
+        mode: 'multiple',
+        allowSelectAll: true,
+      },
+      filterPanel: {
+        filterEnabled: true,
+      },
+    });
+
+    cardView.getDataSource().filter(['category', '=', 'A']);
+    cardView.selectAll();
+
+    expect(cardView.getSelectedCardKeys()).toEqual([1, 2]);
+  });
+
+  it('should select only cards matching filterValue, headerFilter and dataSource.filter()', () => {
+    const cardView = setup({
+      keyExpr: 'id',
+      columns: ['id', 'category1', 'category2', 'category3'],
+      dataSource: [
+        {
+          id: 1, category1: 'A', category2: '1', category3: true,
+        },
+        {
+          id: 2, category1: 'A', category2: '1', category3: false,
+        },
+        {
+          id: 3, category1: 'A', category2: '2', category3: true,
+        },
+        {
+          id: 4, category1: 'A', category2: '2', category3: false,
+        },
+        {
+          id: 5, category1: 'B', category2: '3', category3: true,
+        },
+        {
+          id: 6, category1: 'B', category2: '3', category3: false,
+        },
+        {
+          id: 7, category1: 'B', category2: '4', category3: true,
+        },
+        {
+          id: 8, category1: 'B', category2: '4', category3: false,
+        },
+      ],
+      selection: {
+        mode: 'multiple',
+        allowSelectAll: true,
+      },
+      filterPanel: {
+        filterEnabled: true,
+      },
+    });
+
+    cardView.option('filterValue', ['category1', '=', 'A']);
+    cardView.columnOption('category2', 'filterValues', ['1']);
+    cardView.getDataSource().filter(['category3', '=', true]);
+
+    cardView.selectAll();
+
+    expect(cardView.getSelectedCardKeys()).toEqual([1]);
+  });
+});

@@ -57,7 +57,7 @@ const FileManager = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const independentEvents = useMemo(() => (["onContentReady","onContextMenuItemClick","onContextMenuShowing","onDirectoryCreated","onDirectoryCreating","onDisposing","onErrorOccurred","onFileUploaded","onFileUploading","onInitialized","onItemCopied","onItemCopying","onItemDeleted","onItemDeleting","onItemDownloading","onItemMoved","onItemMoving","onItemRenamed","onItemRenaming","onSelectedFileOpened","onToolbarItemClick"]), []);
 

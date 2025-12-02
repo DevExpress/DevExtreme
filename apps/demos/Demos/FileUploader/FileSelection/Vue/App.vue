@@ -73,7 +73,7 @@ function onButtonClick() {
 
 .fileuploader-container {
   border: 1px solid #d3d3d3;
-  margin: 20px 20px 0 20px;
+  margin: 20px 20px 0;
 }
 
 #form h3 {

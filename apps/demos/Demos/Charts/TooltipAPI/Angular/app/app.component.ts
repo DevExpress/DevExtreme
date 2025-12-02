@@ -43,7 +43,7 @@ export class AppComponent {
     this.chart.instance.getAllSeries()[0].getPointsByArg(value)[0].showTooltip();
   }
 
-  customizeTooltip({ argumentText, valueText }: Record<string, string>) {
+  customizeTooltip({ argumentText, valueText }: DxPieChartTypes.PointInfo) {
     return {
       text: `${argumentText}<br/>${valueText}`,
     };

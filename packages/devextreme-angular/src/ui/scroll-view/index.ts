@@ -29,10 +29,8 @@ import {
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
-
-
 
 
 
@@ -54,6 +52,7 @@ import {
     ]
 })
 export class DxScrollViewComponent extends DxComponent implements OnDestroy {
+
     instance: DxScrollView = null;
 
     /**
@@ -410,10 +409,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
-
 
 
 

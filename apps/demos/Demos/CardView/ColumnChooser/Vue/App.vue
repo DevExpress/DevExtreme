@@ -8,21 +8,21 @@
           :data-source="['dragAndDrop', 'select']"
           :input-attr="{ 'aria-label': 'Column Chooser Mode' }"
           :value="columnChooserMode"
-          @value-changed="({ value }) => { columnChooserMode = value; }"
+          @value-changed="onModeChanged"
         />
       </div>
       <div className="option">
         <DxCheckBox
           text="Search Enabled"
           :value="searchEnabled"
-          @value-changed="({ value }) => { searchEnabled = value; }"
+          @value-changed="onSearchEnabledChanged"
         />
       </div>
       <div className="option">
         <DxCheckBox
           text="Allow Select All"
           :value="allowSelectAll"
-          @value-changed="({ value }) => { allowSelectAll = value; }"
+          @value-changed="onAllowSelectAllChanged"
           :disabled="columnChooserMode !== 'select'"
         />
       </div>
@@ -30,7 +30,7 @@
         <DxCheckBox
           text="Select By Click On Item"
           :value="selectByClick"
-          @value-changed="({ value }) => { selectByClick = value; }"
+          @value-changed="onSelectByClickChanged"
           :disabled="columnChooserMode !== 'select'"
         />
       </div>
@@ -38,7 +38,7 @@
         <DxCheckBox
           text="Allow Column Reordering"
           :value="allowColumnReordering"
-          @value-changed="({ value }) => { allowColumnReordering = value; }"
+          @value-changed="onAllowColumnReorderingChanged"
         />
       </div>
     </div>
@@ -101,10 +101,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import {
-  DxCardView, DxColumn, DxCardCover, DxSearchPanel, DxColumnChooser, DxColumnChooserSearch, DxColumnChooserSelection,
+  DxCardView, DxColumn, DxCardCover, DxSearchPanel, DxColumnChooser,
+  DxColumnChooserSearch, DxColumnChooserSelection,
 } from 'devextreme-vue/card-view';
-import { DxSelectBox } from 'devextreme-vue/select-box';
-import { DxCheckBox } from 'devextreme-vue/check-box';
+import { DxSelectBox, type DxSelectBoxTypes } from 'devextreme-vue/select-box';
+import { DxCheckBox, type DxCheckBoxTypes } from 'devextreme-vue/check-box';
 import { employees, type Employee } from './data.ts';
 
 function altExpr({ First_Name, Last_Name }: Employee): string {
@@ -124,6 +125,26 @@ const searchEnabled = ref(true);
 const allowSelectAll = ref(true);
 const selectByClick = ref(true);
 const allowColumnReordering = ref(false);
+
+function onModeChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
+  columnChooserMode.value = e.value;
+}
+
+function onSearchEnabledChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
+  searchEnabled.value = e.value;
+}
+
+function onAllowSelectAllChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
+  allowSelectAll.value = e.value;
+}
+
+function onSelectByClickChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
+  selectByClick.value = e.value;
+}
+
+function onAllowColumnReorderingChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
+  allowColumnReordering.value = e.value;
+}
 
 </script>
 <style>

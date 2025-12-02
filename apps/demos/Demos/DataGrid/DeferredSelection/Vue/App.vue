@@ -2,7 +2,8 @@
   <div>
     <DxDataGrid
       id="grid-container"
-      :data-source="dataSource"
+      :data-source="tasksDataSource"
+      :remote-operations="true"
       :show-borders="true"
       :selection-filter="selectionFilter"
       :on-initialized="onInitialized"
@@ -32,9 +33,15 @@
       <DxColumn
         :allow-sorting="false"
         caption="Assigned To"
-        data-field="ResponsibleEmployee.Employee_Full_Name"
+        data-field="Task_Assigned_Employee_ID"
         width="auto"
-      />
+      >
+        <DxLookup
+          :data-source="employeesDataSource"
+          value-expr="ID"
+          display-expr="Name"
+        />
+      </DxColumn>
       <DxColumn
         caption="Status"
         width="auto"
@@ -68,31 +75,29 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import {
-  DxDataGrid, DxColumn, DxFilterRow, DxSelection, type DxDataGridTypes, DxPager,
+  DxDataGrid, DxColumn, DxFilterRow, DxSelection, type DxDataGridTypes, DxPager, DxLookup,
 } from 'devextreme-vue/data-grid';
 import DxButton from 'devextreme-vue/button';
-import { type DataSourceOptions } from 'devextreme-vue/common/data';
 import { query } from 'devextreme-vue/common/data';
+import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
 
-const dataSource: DataSourceOptions = {
-  store: {
-    type: 'odata',
-    version: 2,
-    url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks',
-    key: 'Task_ID',
+const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
+const tasksDataSource = createStore({
+  key: 'Task_ID',
+  loadUrl: `${url}/Tasks`,
+  onBeforeSend(method, ajaxOptions) {
+    ajaxOptions.xhrFields = { withCredentials: true };
   },
-  expand: 'ResponsibleEmployee',
-  select: [
-    'Task_ID',
-    'Task_Subject',
-    'Task_Start_Date',
-    'Task_Due_Date',
-    'Task_Status',
-    'ResponsibleEmployee/Employee_Full_Name',
-  ],
-};
+});
+const employeesDataSource = createStore({
+  key: 'ID',
+  loadUrl: `${url}/TaskEmployees`,
+  onBeforeSend(method, ajaxOptions) {
+    ajaxOptions.xhrFields = { withCredentials: true };
+  },
+});
 
 let dataGrid: DxDataGrid['instance'];
 const selectionFilter = ['Task_Status', '=', 'Completed'];
@@ -101,11 +106,15 @@ const taskCount = ref(0);
 const peopleCount = ref(0);
 const avgDuration = ref(0);
 
-const calculateStatistics = async() => {
+const calculateStatistics = async () => {
+  if (!dataGrid) return;
+
   const selectedItems = await dataGrid.getSelectedRowsData();
 
   const totalDuration = selectedItems.reduce((currentValue, item) => {
-    const duration = item.Task_Due_Date - item.Task_Start_Date;
+    const dueDateTime = new Date(item.Task_Due_Date).getTime();
+    const startDateTime = new Date(item.Task_Start_Date).getTime();
+    const duration = dueDateTime - startDateTime;
 
     return currentValue + duration;
   }, 0);
@@ -113,7 +122,7 @@ const calculateStatistics = async() => {
 
   taskCount.value = selectedItems.length;
   peopleCount.value = query(selectedItems)
-    .groupBy('ResponsibleEmployee.Employee_Full_Name')
+    .groupBy('Task_Assigned_Employee_ID')
     .toArray().length;
   avgDuration.value = Math.round(averageDurationInDays) || 0;
 };

@@ -19,6 +19,7 @@ import {
 } from 'devextreme-angular/core';
 import { DxiChartSeries } from './base/chart-series-dxi';
 
+import { PROPERTY_TOKEN_series } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-series',
@@ -26,7 +27,13 @@ import { DxiChartSeries } from './base/chart-series-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_series,
+           useExisting: DxiSeriesComponent,
+        }
+    ],
     inputs: [
         'aggregation',
         'argumentField',

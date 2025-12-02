@@ -1,12 +1,14 @@
-import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import createScheduler from './init/widget.setup';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Resize appointments in All Day Panel`
   .page(url(__dirname, '../../../container.html'));
 
 test('Resize in the workWeek view between weeks', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const scheduler = new Scheduler('#container');
   const appointment1 = scheduler.getAppointment('1st');
   const appointment2 = scheduler.getAppointment('2nd');
@@ -15,20 +17,20 @@ test('Resize in the workWeek view between weeks', async (t) => {
   await t
     .drag(appointment1.resizableHandle.right, 400, 0)
     .drag(appointment2.resizableHandle.left, -400, 0)
-    .drag(appointment3.resizableHandle.right, -140, 0)
-    .expect(
-      await compareScreenshot(t, 'resize-all-day-workweek-weekend-0.png'),
-    )
-    .ok();
+    .drag(appointment3.resizableHandle.right, -140, 0);
+
+  await testScreenshot(t, takeScreenshot, 'resize-all-day-workweek-weekend-0.png');
 
   await t
     .drag(appointment1.resizableHandle.right, -400, 0)
     .drag(appointment2.resizableHandle.left, 400, 0)
-    .drag(appointment3.resizableHandle.right, 140, 0)
-    .expect(
-      await compareScreenshot(t, 'resize-all-day-workweek-weekend-1.png'),
-    )
-    .ok();
+    .drag(appointment3.resizableHandle.right, 140, 0);
+
+  await testScreenshot(t, takeScreenshot, 'resize-all-day-workweek-weekend-1.png');
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
 }).before(async () => createScheduler({
   width: 800,
   height: 600,

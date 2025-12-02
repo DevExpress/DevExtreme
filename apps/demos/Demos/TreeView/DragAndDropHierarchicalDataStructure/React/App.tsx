@@ -3,6 +3,9 @@ import TreeView, { type TreeViewTypes, TreeViewRef } from 'devextreme-react/tree
 import Sortable, { type SortableTypes } from 'devextreme-react/sortable';
 
 import service from './data.ts';
+import type { FileSystemItem } from './types';
+
+type Node = TreeViewTypes.Node<FileSystemItem>;
 
 const calculateToIndex = (e: SortableTypes.DragChangeEvent) => {
   if (e.fromComponent !== e.toComponent || e.dropInsideItem) {
@@ -14,7 +17,7 @@ const calculateToIndex = (e: SortableTypes.DragChangeEvent) => {
     : e.toIndex + 1;
 };
 
-const findNode = (treeView: any, index: string | number) => {
+const findNode = (treeView: any, index: string | number): Node => {
   const nodeElement = treeView.element().querySelectorAll('.dx-treeview-node')[index];
   if (nodeElement) {
     return findNodeById(treeView.getNodes(), nodeElement.getAttribute('data-item-id'));
@@ -22,7 +25,7 @@ const findNode = (treeView: any, index: string | number) => {
   return null;
 };
 
-const findNodeById = (nodes: TreeViewTypes.Node[], id) => {
+const findNodeById = (nodes: Node[], id: string | number): Node => {
   for (let i = 0; i < nodes.length; i += 1) {
     if (nodes[i].itemData.id === id) {
       return nodes[i];
@@ -37,7 +40,7 @@ const findNodeById = (nodes: TreeViewTypes.Node[], id) => {
   return null;
 };
 
-const moveNode = (fromNode: TreeViewTypes.Node, toNode: TreeViewTypes.Node, fromItems, toItems, isDropInsideItem) => {
+const moveNode = (fromNode: Node, toNode: Node, fromItems, toItems, isDropInsideItem) => {
   const fromNodeContainingArray = getNodeContainingArray(fromNode, fromItems);
   const fromIndex = fromNodeContainingArray.findIndex((item: { id: any; }) => item.id === fromNode.itemData.id);
   fromNodeContainingArray.splice(fromIndex, 1);
@@ -53,11 +56,13 @@ const moveNode = (fromNode: TreeViewTypes.Node, toNode: TreeViewTypes.Node, from
   }
 };
 
-const getNodeContainingArray = (node: TreeViewTypes.Node, rootArray) => (node === null || node.parent === null
-  ? rootArray
-  : node.parent.itemData.items);
+const getNodeContainingArray = (node: Node, rootArray) => (
+  !node?.parent
+    ? rootArray
+    : node.parent.itemData.items
+);
 
-const isChildNode = (parentNode: TreeViewTypes.Node, childNode: TreeViewTypes.Node) => {
+const isChildNode = (parentNode: Node, childNode: Node) => {
   let { parent } = childNode;
   while (parent !== null) {
     if (parent.itemData.id === parentNode.itemData.id) {
@@ -83,8 +88,8 @@ const getTopVisibleNode = (component) => {
 };
 
 const App = () => {
-  const treeViewDriveCRef = useRef<TreeViewRef>(null);
-  const treeViewDriveDRef = useRef<TreeViewRef>(null);
+  const treeViewDriveCRef = useRef<TreeViewRef<FileSystemItem>>(null);
+  const treeViewDriveDRef = useRef<TreeViewRef<FileSystemItem>>(null);
 
   const [itemsDriveC, setItemsDriveC] = useState(service.getItemsDriveC());
   const [itemsDriveD, setItemsDriveD] = useState(service.getItemsDriveD());

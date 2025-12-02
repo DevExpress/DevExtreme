@@ -44,8 +44,6 @@ import Scrollable from 'ui/scroll_view/ui.scrollable';
 
 import pointerMock from '../../helpers/pointerMock.js';
 
-const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
-
 const DATA_AREA_CELL_CLASS = 'dx-area-data-cell';
 
 function sumArray(array) {
@@ -765,7 +763,7 @@ QUnit.module('dxPivotGrid', {
         fieldChooserPopup.show();
         this.clock.tick(500);
 
-        assert.equal($(fieldChooserPopup._$bottom).find('.dx-toolbar-button').length, 2, '2 buttons in toolbar');
+        assert.equal($(fieldChooserPopup.bottomToolbar()).find('.dx-toolbar-button').length, 2, '2 buttons in toolbar');
     });
 
     QUnit.test('apply changes in fieldchooser on button click in onDemand mode', function(assert) {
@@ -791,7 +789,7 @@ QUnit.module('dxPivotGrid', {
 
         assert.notEqual(pivotGrid.getDataSource().state().fields[0].sortOrder, 'desc', 'ds state is not changed yet');
 
-        const applyButton = $(fieldChooserPopup._$bottom).find('.dx-button').eq(0);
+        const applyButton = $(fieldChooserPopup.bottomToolbar()).find('.dx-button').eq(0);
         applyButton.trigger('dxclick');
         this.clock.tick(500);
 
@@ -1133,7 +1131,7 @@ QUnit.module('dxPivotGrid', {
 
     QUnit.test('changing rtlEnabled for all children widgets', function(assert) {
         const pivotGrid = createPivotGrid({
-            rtlEnabled: true
+            rtlEnabled: true,
         });
 
         this.clock.tick(10);
@@ -1143,7 +1141,6 @@ QUnit.module('dxPivotGrid', {
         this.clock.tick(500);
 
         pivotGrid.option('rtlEnabled', false);
-
         pivotGrid._fieldChooserPopup.show();
 
         this.clock.tick(500);
@@ -1154,9 +1151,13 @@ QUnit.module('dxPivotGrid', {
             const $widget = $(this);
             const componentNames = dataUtils.data($widget[0], 'dxComponents');
 
-            $.each(componentNames, function(index, componentName) {
+            $.each(componentNames, function(_, componentName) {
                 if(componentName !== 'dxCheckBox' && componentName !== 'dxButton') {
-                    assert.ok(!dataUtils.data($widget[0], componentName).option('rtlEnabled'), 'rtlEnabled disabled for ' + componentName);
+                    const component = dataUtils.data($widget[0], componentName);
+                    const rtlEnabled = component.option('rtlEnabled');
+                    const result = !rtlEnabled;
+
+                    assert.ok(result, `rtlEnabled disabled for ${componentName}`);
                 }
             });
         });
@@ -1179,13 +1180,13 @@ QUnit.module('dxPivotGrid', {
                 const $rowsAreaScrollable = pivotGrid.$element().find('.dx-scrollable.dx-pivotgrid-vertical-headers');
 
                 assert.strictEqual($scrollable.hasClass('dx-rtl'), rtlEnabled);
-                assert.strictEqual($headersAreaScrollable.hasClass('dx-rtl'), isRenovatedScrollable && rtlEnabled);
+                assert.strictEqual($headersAreaScrollable.hasClass('dx-rtl'), false);
                 assert.strictEqual($rowsAreaScrollable.hasClass('dx-rtl'), false);
 
                 pivotGrid.option('rtlEnabled', !rtlEnabled);
 
                 assert.strictEqual($scrollable.hasClass('dx-rtl'), !rtlEnabled);
-                assert.strictEqual($headersAreaScrollable.hasClass('dx-rtl'), isRenovatedScrollable && !rtlEnabled);
+                assert.strictEqual($headersAreaScrollable.hasClass('dx-rtl'), false);
                 assert.strictEqual($rowsAreaScrollable.hasClass('dx-rtl'), false);
             });
         });
@@ -4095,7 +4096,7 @@ QUnit.module('T984139, T1010175', {
                 QUnit.assert.roughEqual(rowsAreaRect.top, expectedRowCellRect.top, 2, `expected row position ${errorMessageDetails}`);
                 // the rendered widget in native mode does not take into account the width of the dataArea scrollbar for the test Render -> scrollTo() -> filter -> clearFilter
                 // however, on the test page everything works as expected
-                QUnit.assert.roughEqual(columnsAreaRect.left, expectedColumnCellRect.left, isRenovatedScrollable ? 12 : 2, `expected column position ${errorMessageDetails}`);
+                QUnit.assert.roughEqual(columnsAreaRect.left, expectedColumnCellRect.left, 2, `expected column position ${errorMessageDetails}`);
             }
 
             function triggerScrollEvent(scrollable) {

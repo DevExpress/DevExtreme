@@ -47,7 +47,7 @@ export default function App() {
     ({ value }) => {
       setLabelMode(value);
     },
-    [setStylingMode],
+    [setLabelMode],
   );
   return (
     <React.Fragment>

@@ -94,6 +94,9 @@ $(() => {
 
     return day === 0 || day === 6;
   }
+  function isHoliday(d) {
+    return holidays.some((item) => d.date.getDate() === item[0] && d.date.getMonth() === item[1]);
+  }
 
   function getCellTemplate(data) {
     let cssClass = '';
@@ -104,13 +107,7 @@ $(() => {
       } else {
         if (isWeekend(data.date)) { cssClass = 'weekend'; }
 
-        $.each(holidays, (_, item) => {
-          if (data.date.getDate() === item[0] && data.date.getMonth() === item[1]) {
-            cssClass = 'holiday';
-            return false;
-          }
-          return true;
-        });
+        if (isHoliday(data.date)) { cssClass = 'holiday'; }
       }
     }
 

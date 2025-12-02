@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/method-signature-style */
 /* eslint-disable max-classes-per-file */
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
@@ -32,6 +31,7 @@ import modules from '../m_modules';
 import type { Module, ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import type { RowsView } from '../views/m_rows_view';
+import { getHideableColumns } from './utils';
 
 const COLUMN_HEADERS_VIEW = 'columnHeadersView';
 const ROWS_VIEW = 'rowsView';
@@ -506,6 +506,28 @@ export class AdaptiveColumnsController extends modules.ViewController {
     }
   }
 
+  public _toggleGroupAdaptiveRowVisibility(isBestFit: boolean) {
+    const hasHiddenColumns = this.hasHiddenColumns() || this.getHidingColumnsQueue().length > 0;
+
+    if (!hasHiddenColumns) {
+      return;
+    }
+
+    const rowsView = this.getView(ROWS_VIEW);
+    const items = this._dataController.items();
+
+    if (!items || items.length === 0) {
+      return;
+    }
+
+    items.forEach((item, index) => {
+      if (item.rowType === ADAPTIVE_ROW_TYPE) {
+        const $row = $(rowsView.getRowElement(index));
+        $row.css('display', isBestFit ? 'none' : '');
+      }
+    });
+  }
+
   private _isCellValid($cell) {
     return $cell && $cell.length && !$cell.hasClass(MASTER_DETAIL_CELL_CLASS) && !$cell.hasClass(GROUP_CELL_CLASS);
   }
@@ -741,7 +763,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
 
   public updateHidingQueue(columns) {
     const that = this;
-    const hideableColumns = columns.filter((column) => column.visible && !column.type && !column.fixed && !(isDefined(column.groupIndex) && column.groupIndex >= 0));
+    const hideableColumns = getHideableColumns(columns);
     let columnsHasHidingPriority;
     let i;
 
@@ -752,9 +774,11 @@ export class AdaptiveColumnsController extends modules.ViewController {
     }
 
     for (i = 0; i < hideableColumns.length; i++) {
-      if (isDefined(hideableColumns[i].hidingPriority) && hideableColumns[i].hidingPriority >= 0) {
+      const column = hideableColumns[i];
+
+      if (isDefined(column.hidingPriority) && column.hidingPriority >= 0) {
         columnsHasHidingPriority = true;
-        that._hidingColumnsQueue[hideableColumns[i].hidingPriority] = hideableColumns[i];
+        that._hidingColumnsQueue[column.hidingPriority] = column;
       }
     }
 
@@ -808,7 +832,6 @@ export class AdaptiveColumnsController extends modules.ViewController {
       return;
     }
 
-    // @ts-expect-errors
     const $row = $(this.component.getRowElement(rowIndex));
 
     this.setCommandAdaptiveAriaLabel($row, label);
@@ -973,8 +996,8 @@ const exportExtender = (
 const columnsResizer = (
   Base: ModuleType<ColumnsResizerViewController>,
 ) => class AdaptivityColumnsResizerExtender extends Base {
-  protected _pointCreated(point, cellsLength, columns) {
-    const result = super._pointCreated(point, cellsLength, columns);
+  protected _pointCreated(point, columns, cells?: dxElementWrapper) {
+    const result = super._pointCreated(point, columns, cells);
     const currentColumn = columns[point.columnIndex] || {};
     const nextColumnIndex = this._getNextColumnIndex(point.columnIndex);
     const nextColumn = columns[nextColumnIndex] || {};
@@ -999,8 +1022,12 @@ const columnsResizer = (
 const draggingHeader = (
   Base: ModuleType<DraggingHeaderViewController>,
 ) => class AdaptivityDraggingHeaderExtender extends Base {
-  protected _pointCreated(point, columns, location, sourceColumn) {
-    const result = super._pointCreated(point, columns, location, sourceColumn);
+  protected _pointCreated({
+    point, columns, location, sourceColumn, cells,
+  }) {
+    const result = super._pointCreated({
+      point, columns, location, sourceColumn, cells,
+    });
     const column = columns[point.columnIndex - 1] || {};
     const hasAdaptiveHiddenWidth = column.visibleWidth === HIDDEN_COLUMNS_WIDTH;
 
@@ -1300,6 +1327,7 @@ const resizing = (Base: ModuleType<ResizingController>) => class AdaptivityResiz
   }
 
   protected _toggleBestFitMode(isBestFit) {
+    this._adaptiveColumnsController._toggleGroupAdaptiveRowVisibility(isBestFit);
     isBestFit && this._adaptiveColumnsController._showHiddenColumns();
     super._toggleBestFitMode(isBestFit);
   }

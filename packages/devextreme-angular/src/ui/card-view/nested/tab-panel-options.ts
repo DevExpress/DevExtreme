@@ -12,9 +12,7 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    forwardRef,
-    QueryList,
-    AfterContentInit
+    QueryList
 } from '@angular/core';
 
 
@@ -29,11 +27,13 @@ import { TabsIconPosition, TabsStyle, Position } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiCardViewItemComponent } from './item-dxi';
-import { DxiCardViewTabPanelOptionsItemComponent } from './tab-panel-options-item-dxi';
 
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-card-view-tab-panel-options',
@@ -43,7 +43,12 @@ import { DxiCardViewTabPanelOptionsItemComponent } from './tab-panel-options-ite
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoCardViewTabPanelOptionsComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
+export class DxoCardViewTabPanelOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -170,6 +175,14 @@ export class DxoCardViewTabPanelOptionsComponent extends NestedOption implements
     }
     set itemTitleTemplate(value: any) {
         this._setOption('itemTitleTemplate', value);
+    }
+
+    @Input()
+    get keyExpr(): Function | string {
+        return this._getOption('keyExpr');
+    }
+    set keyExpr(value: Function | string) {
+        this._setOption('keyExpr', value);
     }
 
     @Input()
@@ -422,25 +435,9 @@ export class DxoCardViewTabPanelOptionsComponent extends NestedOption implements
     }
 
 
-    @ContentChildren(forwardRef(() => DxiCardViewItemComponent)) itemsChildren!: QueryList<DxiCardViewItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewTabPanelOptionsItemComponent)) tabPanelOptionsItemsChildren!: QueryList<DxiCardViewTabPanelOptionsItemComponent>
-    
-    setItems() {
-        const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.itemsChildren.toArray(),
-            ...this.tabPanelOptionsItemsChildren.toArray(),
-        ]);
-        this.setChildren('items', q);
-    }
-
-
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'itemsChange' },
             { emit: 'selectedIndexChange' },
@@ -461,12 +458,6 @@ export class DxoCardViewTabPanelOptionsComponent extends NestedOption implements
     }
 
 
-    ngAfterContentInit() {
-        this.setItems();
-        
-        this.itemsChildren.changes.subscribe(() => { this.setItems() });
-        this.tabPanelOptionsItemsChildren.changes.subscribe(() => { this.setItems() });
-    }
 }
 
 @NgModule({

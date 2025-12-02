@@ -1,18 +1,22 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const vizMocks = require('../../helpers/vizMocks.js');
-const gestureHandlerModule = require('viz/vector_map/gesture_handler');
-const projectionModule = require('viz/vector_map/projection.main');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import {
+    Renderer,
+    stubClass,
+} from '../../helpers/vizMocks.js';
+import gestureHandlerModule from 'viz/vector_map/gesture_handler';
+import projectionModule from 'viz/vector_map/projection.main';
+
 let StubProjection;
 
 QUnit.begin(function() {
-    StubProjection = vizMocks.stubClass(projectionModule.Projection);
+    StubProjection = stubClass(projectionModule.Projection);
 });
 
 QUnit.module('GestureHandler', {
     beforeEach: function() {
         this.projection = new StubProjection();
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.tracker = {
             on: sinon.stub().returns(noop)
         };

@@ -8,7 +8,8 @@ import {
     EventInfo,
     InitializedEventInfo,
     NativeEventInfo,
-} from '../common/core/events';
+    InteractionEvent,
+} from '../events';
 
 import {
     template,
@@ -74,11 +75,11 @@ export type OptionChangedEvent = EventInfo<dxCalendar> & ChangedOptionInfo;
  * @type object
  * @inherits NativeEventInfo,ValueChangedInfo
  */
-export type ValueChangedEvent = NativeEventInfo<dxCalendar, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxCalendar, InteractionEvent | Event> & ValueChangedInfo;
 
 /** @public */
 export type CellTemplateData = {
-    readonly date: Date;
+    readonly date?: Date;
     readonly view: string;
     readonly text?: string;
 };
@@ -199,6 +200,12 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     showWeekNumbers?: boolean;
     /**
      * @docid
+     * @default "Today"
+     * @public
+     */
+    todayButtonText?: string;
+    /**
+     * @docid
      * @default 'auto'
      * @public
      */
@@ -230,9 +237,9 @@ export default class dxCalendar extends Editor<dxCalendarOptions> {
      * @docid
      * @publicName reset(value)
      * @public
-     * @param1 value:Date|number|string|Array<Date|number|string|null>|null
+     * @param1 value:Date | number | string | Array<Date | number | string | null> | null
      */
-    reset(value?: DateLike | Array<Date | number | string | null>): void;
+    reset(value?: Properties['value']): void;
 }
 
 /** @public */

@@ -111,6 +111,7 @@ export {
   RowDraggingRemoveEvent,
   RowDraggingReorderEvent,
   ColumnButtonClickEvent,
+  AIColumnRequestCreatingEvent,
   ColumnButtonTemplateData,
   ColumnCellTemplateData,
   ColumnEditCellTemplateData,

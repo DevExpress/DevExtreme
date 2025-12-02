@@ -24,7 +24,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   _getToday() {
     const viewOffset = this.option('viewOffset') as number;
     const today = getToday(this.option('indicatorTime') as Date, this.timeZoneCalculator);
-    return dateUtilsTs.addOffsets(today, [-viewOffset]);
+    return dateUtilsTs.addOffsets(today, -viewOffset);
   }
 
   isIndicationOnView(): boolean {

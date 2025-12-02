@@ -1,15 +1,18 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const vizMocks = require('../../helpers/vizMocks.js');
-const mapLayerModule = require('viz/vector_map/map_layer');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import {
+    Renderer,
+    Element,
+} from '../../helpers/vizMocks.js';
+import mapLayerModule from 'viz/vector_map/map_layer';
 
 QUnit.module('Basic', {
     beforeEach: function() {
         this.str = { layerType: 'test-layer-type' };
         this.context = {
-            renderer: new vizMocks.Renderer(),
+            renderer: new Renderer(),
             projection: { tag: 'projection' },
-            root: new vizMocks.Element(),
+            root: new Element(),
             name: 'test-name',
             layer: { tag: 'layer' },
             str: this.str,
@@ -39,7 +42,7 @@ QUnit.module('Basic', {
         this.project(hasSeparateLabel);
         this.str.draw = function() {
             element.figure = arguments[1];
-            element.figure.root = new vizMocks.Element();
+            element.figure.root = new Element();
         };
         this.context.settings.label.enabled = labelEnabled;
         element.draw();
@@ -86,7 +89,7 @@ QUnit.test('Draw', function(assert) {
     let figure;
     this.str.draw = sinon.spy(function() {
         figure = arguments[1];
-        figure.root = new vizMocks.Element();
+        figure.root = new Element();
     });
 
     this.element.draw();
@@ -230,7 +233,7 @@ QUnit.test('Refresh with label when labels are disabled and particular label is 
 });
 
 QUnit.test('Refresh with separate labels', function(assert) {
-    this.context.labelRoot = new vizMocks.Element();
+    this.context.labelRoot = new Element();
     this.draw(true, true);
     this.str.getStyles = this.str.refresh = this.str.setState = noop;
     this.element.proxy.attribute('text', 'Hello');

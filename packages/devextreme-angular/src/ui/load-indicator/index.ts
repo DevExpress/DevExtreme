@@ -17,7 +17,7 @@ import {
 } from '@angular/core';
 
 
-import { ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/load_indicator';
+import { LoadingAnimationType, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/load_indicator';
 
 import DxLoadIndicator from 'devextreme/ui/load_indicator';
 
@@ -28,10 +28,8 @@ import {
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
-
-
 
 
 
@@ -53,7 +51,21 @@ import {
     ]
 })
 export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
+
     instance: DxLoadIndicator = null;
+
+    /**
+     * [descr:dxLoadIndicatorOptions.animationType]
+    
+     */
+    @Input()
+    get animationType(): LoadingAnimationType {
+        return this._getOption('animationType');
+    }
+    set animationType(value: LoadingAnimationType) {
+        this._setOption('animationType', value);
+    }
+
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -182,6 +194,13 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() animationTypeChange: EventEmitter<LoadingAnimationType>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
@@ -229,10 +248,6 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
 
 
 
-
-
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,
             optionHost: NestedOptionHost,
@@ -246,6 +261,7 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
             { subscribe: 'disposing', emit: 'onDisposing' },
             { subscribe: 'initialized', emit: 'onInitialized' },
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { emit: 'animationTypeChange' },
             { emit: 'elementAttrChange' },
             { emit: 'heightChange' },
             { emit: 'hintChange' },

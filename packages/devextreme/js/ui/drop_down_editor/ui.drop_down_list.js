@@ -8,6 +8,11 @@ export default DropDownList;
  */
 
 /**
+ * @name dxDropDownListOptions.fieldAddons
+ * @hidden
+ */
+
+/**
  * @name dxDropDownListOptions.applyValueMode
  * @hidden
  */

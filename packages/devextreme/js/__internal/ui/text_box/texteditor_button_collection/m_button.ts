@@ -1,18 +1,24 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Properties } from '@js/ui/button';
-import type Button from '@js/ui/button';
+import Button from '@js/ui/button';
 
 import type TextEditorBase from '../m_text_editor.base';
+
+type TextEditorButtonInstance = dxElementWrapper | Button;
+
+export const isButtonInstance = (
+  instance: unknown,
+): instance is Button => instance instanceof Button;
 
 export default class TextEditorButton {
   $container!: dxElementWrapper;
 
   $placeMarker?: dxElementWrapper | null;
 
-  instance?: Button | null;
+  instance?: TextEditorButtonInstance | null;
 
-  editor!: TextEditorBase;
+  editor!: TextEditorBase | null;
 
   name!: string;
 
@@ -47,7 +53,7 @@ export default class TextEditorButton {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
-  _attachEvents(instance: unknown, $element: dxElementWrapper): void {
+  _attachEvents(instance: unknown, $element?: dxElementWrapper): void {
     throw 'Not implemented';
   }
 
@@ -55,7 +61,7 @@ export default class TextEditorButton {
   _create(): {
     instance: Button | dxElementWrapper;
     $element: dxElementWrapper;
-  } {
+  } | undefined {
     throw 'Not implemented';
   }
 
@@ -67,7 +73,7 @@ export default class TextEditorButton {
     const { editor, options } = this;
 
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return options.visible || !editor.option('readOnly');
+    return options.visible || !editor?.option('readOnly');
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -80,28 +86,34 @@ export default class TextEditorButton {
   }
 
   dispose(): void {
-    const { instance, $placeMarker } = this;
+    const { instance } = this;
 
     if (instance) {
       // TODO: instance.dispose()
-      if (instance.dispose) {
+      if (isButtonInstance(instance)) {
         instance.dispose();
+        instance.$element().remove();
+        // @ts-expect-error _$element is private
+        instance._$element = null;
       } else {
-        // @ts-expect-error ts-error
         instance.remove();
       }
-      this.instance = null;
     }
 
-    $placeMarker?.remove();
+    this.instance = null;
+    this.editor = null;
+    // @ts-expect-error $container can be null and undefined
+    this.$container = null;
+    this.$placeMarker?.remove();
+    this.$placeMarker = null;
   }
 
   render($container: dxElementWrapper = this.$container): void {
     this.$container = $container;
 
     if (this._isVisible()) {
-      const { instance, $element } = this._create();
-      // @ts-expect-error ts-error
+      const { instance, $element } = this._create() ?? {};
+
       this.instance = instance;
       this._attachEvents(instance, $element);
     } else {

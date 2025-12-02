@@ -59,8 +59,8 @@ export class AppComponent {
 export class StringifyItemsPipe implements PipeTransform {
   transform(items: DxDiagramTypes.Item[], textExpression: string): string {
     return items
-        .map((item) => item.dataItem[textExpression])
-        .join(', ');
+      .map((item) => item.dataItem[textExpression])
+      .join(', ');
   }
 }
 

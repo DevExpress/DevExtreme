@@ -9,7 +9,7 @@ import { wrapRenovatedWidget } from '../../helpers/wrapRenovatedWidget.js';
 import Validator from 'ui/validator';
 import { getOuterWidth } from 'core/utils/size';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const wrapRenovatedEditor = (editor) => {
     const wrapperEditor = wrapRenovatedWidget(editor);
@@ -24,7 +24,6 @@ const INVALID_MESSAGE_CLASS = 'dx-invalid-message';
     [OldEditor, 'Old editor'],
     [wrapRenovatedEditor(CheckBoxEditor), 'CheckBox\'s r1 editor'],
 ].forEach(([Editor, name]) => {
-
     QUnit.module(name, () => {
         const Fixture = Class.inherit({
             createEditor(options) {
@@ -88,7 +87,6 @@ const INVALID_MESSAGE_CLASS = 'dx-invalid-message';
                 assert.strictEqual(editor.option('isDirty'), false);
             });
         });
-
 
         QUnit.module('reset', moduleConfig, () => {
             ['1', undefined, null].forEach((initialValue) => {
@@ -170,7 +168,6 @@ const INVALID_MESSAGE_CLASS = 'dx-invalid-message';
                 assert.strictEqual(editor.option('isDirty'), false);
             });
         });
-
 
         QUnit.module('base', moduleConfig, () => {
             QUnit.test('isEditor static method', function(assert) {
@@ -706,6 +703,29 @@ const INVALID_MESSAGE_CLASS = 'dx-invalid-message';
 
                                 const message = this.getValidationMessage().$content().text();
                                 assert.strictEqual(message, 'New error message');
+                            });
+
+                            QUnit.test('It should be possible to update 2nd lvl nested option in validationTooltipOptions', function(assert) {
+                                this.editor.option({
+                                    isValid: false,
+                                });
+                                this.editor.option('validationTooltipOptions.wrapperAttr.class', 'customClass');
+
+                                const message = this.getValidationMessage();
+                                const { wrapperAttr } = message.option();
+
+                                assert.deepEqual(wrapperAttr, { class: 'customClass' });
+                            });
+
+                            QUnit.test('validationTooltipOptions should be cached in _cached_validationTooltipOptions after validationTooltipOptions runtime change', function(assert) {
+                                this.editor.option({
+                                    isValid: false,
+                                });
+
+                                this.editor.option('validationTooltipOptions', { positionSide: 'left' });
+                                const { _cached_validationTooltipOptions } = this.editor.option();
+
+                                assert.deepEqual(_cached_validationTooltipOptions, { positionSide: 'left' });
                             });
                         });
                     });

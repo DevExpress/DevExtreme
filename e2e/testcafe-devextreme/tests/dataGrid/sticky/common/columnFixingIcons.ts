@@ -1,47 +1,36 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
-import { changeTheme } from '../../../../helpers/changeTheme';
-import { Themes } from '../../../../helpers/themes';
 import { getData } from '../../helpers/generateDataSourceData';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Column Fixing`.page(
   url(__dirname, '../../../container.html'),
 );
 
-[Themes.genericLight, Themes.materialBlue, Themes.fluentBlue].forEach(
-  (theme) => {
-    safeSizeTest('Fixed columns: Check context menu items', async (t) => {
-      const dataGrid = new DataGrid('#container');
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+// visual: generic.light
+// visual: material.blue
+// visual: fluent.blue
+test('Fixed columns: Check context menu items', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      await t.expect(dataGrid.isReady()).ok();
+  await t.expect(dataGrid.isReady()).ok();
 
-      await t
-        .rightClick(dataGrid.getHeaders().getHeaderRow(0).element)
-        .click(dataGrid.getContextMenu().getItemByText('Set Fixed Position'))
-        .expect(
-          await takeScreenshot(`sticky_columns_context_menu_(${theme}).png`),
-        )
-        .ok()
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
-    })
-      .before(async () => {
-        await changeTheme(theme);
-        await createWidget('dxDataGrid', {
-          dataSource: getData(5, 5),
-          width: '100%',
-          columnFixing: {
-            enabled: true,
-          },
-        });
-      })
-      .after(async () => {
-        await changeTheme(Themes.genericLight);
-      });
-  },
-);
+  await t
+    .rightClick(dataGrid.getHeaders().getHeaderRow(0).element)
+    .click(dataGrid.getContextMenu().getItemByText('Set Fixed Position'));
+  await testScreenshot(t, takeScreenshot, 'sticky_columns_context_menu.png');
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: getData(5, 5),
+    width: '100%',
+    columnFixing: {
+      enabled: true,
+    },
+  });
+});

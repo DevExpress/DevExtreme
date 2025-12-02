@@ -1,11 +1,11 @@
 import React, { useCallback, useRef, useState } from 'react';
 import PieChart, {
-  Series, Tooltip, Size, Legend, type PieChartTypes, PieChartRef
+  Series, Tooltip, Size, Legend, type PieChartTypes, PieChartRef,
 } from 'devextreme-react/pie-chart';
 import { SelectBox } from 'devextreme-react/select-box';
 import { populationData, regionLabel } from './data.ts';
 
-const customizeTooltip = (pointInfo) => ({
+const customizeTooltip = (pointInfo: PieChartTypes.PointInfo) => ({
   text: `${pointInfo.argumentText}<br/>${pointInfo.valueText}`,
 });
 

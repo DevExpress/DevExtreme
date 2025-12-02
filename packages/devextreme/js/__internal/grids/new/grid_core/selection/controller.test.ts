@@ -200,6 +200,38 @@ describe('SelectionController', () => {
       expect(selectionController.getSelectedCardsData())
         .toEqual(dataController.items.peek());
     });
+
+    describe('when the selected cards are on different pages', () => {
+      it('should return data for all selected cards', () => {
+        const {
+          selectionController,
+          dataController,
+        } = setup({
+          keyExpr: 'id',
+          dataSource: [
+            { id: 1, value: 'test1' },
+            { id: 2, value: 'test2' },
+            { id: 3, value: 'test3' },
+          ],
+          selectedCardKeys: [1, 3],
+          paging: {
+            enabled: true,
+            pageSize: 2,
+          },
+        });
+
+        expect(dataController.items.peek())
+          .toEqual([
+            { id: 1, value: 'test1' },
+            { id: 2, value: 'test2' },
+          ]);
+        expect(selectionController.getSelectedCardsData())
+          .toEqual([
+            { id: 1, value: 'test1' },
+            { id: 3, value: 'test3' },
+          ]);
+      });
+    });
   });
 
   describe('clearSelection', () => {

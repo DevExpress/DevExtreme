@@ -39,7 +39,7 @@ import {
   DxBehavior,
 } from 'devextreme-vue/range-selector';
 
-const customizeText = ({ valueText }) => `${valueText} mg/L`;
+const customizeText = ({ valueText }: Record<string, any>) => `${valueText} mg/L`;
 </script>
 <style scoped>
 #range-selector {

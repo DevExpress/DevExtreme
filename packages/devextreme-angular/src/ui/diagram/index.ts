@@ -38,7 +38,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoContextMenuModule } from 'devextreme-angular/ui/nested';
@@ -90,10 +91,14 @@ import { DxoDiagramToolboxModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxiDiagramToolboxGroupModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxoDiagramViewToolbarModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxoDiagramZoomLevelModule } from 'devextreme-angular/ui/diagram/nested';
-
-import { DxiCustomShapeComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiDiagramCustomShapeComponent } from 'devextreme-angular/ui/diagram/nested';
+import { 
+           PROPERTY_TOKEN_commands,
+           PROPERTY_TOKEN_items,
+           PROPERTY_TOKEN_connectionPoints,
+           PROPERTY_TOKEN_customShapes,
+           PROPERTY_TOKEN_groups,
+           PROPERTY_TOKEN_tabs,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -114,6 +119,37 @@ import { DxiDiagramCustomShapeComponent } from 'devextreme-angular/ui/diagram/ne
     ]
 })
 export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_commands)
+    set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('commands', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_connectionPoints)
+    set _connectionPointsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('connectionPoints', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_customShapes)
+    set _customShapesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('customShapes', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_groups)
+    set _groupsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('groups', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_tabs)
+    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('tabs', value);
+    }
+
     instance: DxDiagram = null;
 
     /**
@@ -914,26 +950,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Output() zoomLevelChange: EventEmitter<number | { items?: Array<number>, value?: number | undefined }>;
-
-
-
-
-    @ContentChildren(DxiDiagramCustomShapeComponent)
-    get customShapesChildren(): QueryList<DxiDiagramCustomShapeComponent> {
-        return this._getOption('customShapes');
-    }
-    set customShapesChildren(value) {
-        this._setChildren('customShapes', value, 'DxiDiagramCustomShapeComponent');
-    }
-
-
-    @ContentChildren(DxiCustomShapeComponent)
-    get customShapesLegacyChildren(): QueryList<DxiCustomShapeComponent> {
-        return this._getOption('customShapes');
-    }
-    set customShapesLegacyChildren(value) {
-        this._setChildren('customShapes', value, 'DxiCustomShapeComponent');
-    }
 
 
 

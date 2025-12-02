@@ -3,7 +3,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture`Editing - cell focus`
+fixture.disablePageReloads`Editing - cell focus`
   .page(url(__dirname, '../../../container.html'));
 
 const apiRequestMock = RequestMock()

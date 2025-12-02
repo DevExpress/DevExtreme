@@ -1,5 +1,6 @@
 import type { StorybookConfig } from "@storybook/react-webpack5";
 import path from 'path';
+
 const getAbsolutePath = (packageName: string): any =>
     path.dirname(require.resolve(path.join(packageName, 'package.json')));
 

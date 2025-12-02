@@ -13,7 +13,6 @@ import { customers } from './data.js';
 
 const exportFormats = ['pdf'];
 const onExporting = (e) => {
-  // eslint-disable-next-line new-cap
   const doc = new jsPDF();
   exportDataGrid({
     jsPDFDocument: doc,

@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 /* global RequestInit */
 import React, { useCallback, useState } from 'react';
 import {
@@ -62,7 +61,6 @@ const App = () => {
     setRequests((prevRequests: ConcatArray<string>) => [request].concat(prevRequests));
   }, []);
 
-  // eslint-disable-next-line consistent-return, space-before-function-paren
   const sendRequest = useCallback(async (url: string, method = 'GET', data = {}) => {
     logRequest(method, url, data);
 
