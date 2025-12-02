@@ -10,13 +10,13 @@ When connected to your own AI model/service without rate and data limits, TreeLi
 
 [/note]
 
-This demo implements a default prompt within the AI column. This prompt instructs AI to identify each employee's department within the TreeList. You can modify the default prompt or enter a custom prompt in the AI column's header menu.
+This demo implements a prompt that instructs AI to identify the department of each employee. You can modify the default prompt or enter a custom prompt in the AI column's header menu.
 
-To integrate an AI column, do the following:
+To integrate an AI column into your DevExtreme TreeList, you must:
 
 - Configure [aiIntegration](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/#aiIntegration) (or **columns[]**.**ai**.[aiIntegration](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/ai/#aiIntegration)).
 - Set a column's [type](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/#type) to *"ai"*.
-- Specify the column's [name](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/#name).
-- Configure **columns[]**.**ai** options, including the generation [mode](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/ai/#mode), predefined [prompt](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/ai/#prompt), and [no data text](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/ai/#noDataText) (displayed when the AI service returns no data for a row).
+- Specify the column [name](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/#name).
+- Configure **columns[]**.**ai** options, such as generation [mode](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/ai/#mode), predefined [prompt](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/ai/#prompt), and [no data text](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/ai/#noDataText) (displayed when the AI service returns no data for a row).
 
 This demo also configures the [onAIColumnRequestCreating](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/#onAIColumnRequestCreating) handler to limit data included in AI requests. The default TreeList behavior is to include all data from visible rows in AI requests, including data not bound to a column and data of hidden columns. This gives LLMs broader context, but increases the component's use of AI resources. To limit data included in AI requests, modify the **AIColumnRequestCreatingEvent**.[data](/Documentation/ApiReference/UI_Components/dxTreeList/Types/AIColumnRequestCreatingEvent/#data) parameter.
