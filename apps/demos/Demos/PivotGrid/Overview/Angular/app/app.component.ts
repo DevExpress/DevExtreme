@@ -1,8 +1,6 @@
+import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  NgModule, Component, ViewChild, AfterViewInit, enableProdMode,
-} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+  Component, ViewChild, AfterViewInit, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import {
   DxPivotGridModule,
   DxPivotGridComponent,
@@ -23,11 +21,14 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  standalone: false,
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
+  imports: [
+    DxPivotGridModule,
+    DxChartModule,
+  ],
 })
 export class AppComponent implements AfterViewInit {
   @ViewChild(DxPivotGridComponent, { static: false }) pivotGrid: DxPivotGridComponent;
@@ -91,15 +92,8 @@ export class AppComponent implements AfterViewInit {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxPivotGridModule,
-    DxChartModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

@@ -8,7 +8,6 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  standalone: false,
   selector: 'employee-card',
   templateUrl: `.${modulePrefix}/employee-card/employee-card.component.html`,
 })
