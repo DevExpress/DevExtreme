@@ -1,6 +1,5 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxRangeSelectorModule } from 'devextreme-angular';
 
 if (!/localhost/.test(document.location.host)) {
@@ -14,10 +13,12 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  standalone: false,
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
+  imports: [
+    DxRangeSelectorModule,
+  ],
 })
 export class AppComponent {
   startValue: Date = new Date(2011, 1, 1);
@@ -29,14 +30,8 @@ export class AppComponent {
   selectedEndValue: Date = new Date(2011, 2, 5);
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxRangeSelectorModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});
