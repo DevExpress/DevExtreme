@@ -19,6 +19,7 @@ import { isMaterial } from '@js/ui/themes';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
 import type { ExportController } from '../../data_grid/export/m_export';
+import { AI_COLUMN_NAME } from '../ai_column/const';
 import type { Column, ColumnsController } from '../columns_controller/m_columns_controller';
 import type { ColumnsResizerViewController, DraggingHeaderViewController } from '../columns_resizing_reordering/m_columns_resizing_reordering';
 import type { DataController } from '../data_controller/m_data_controller';
@@ -160,6 +161,10 @@ export class AdaptiveColumnsController extends modules.ViewController {
     return ['isAdaptiveDetailRowExpanded', 'expandAdaptiveDetailRow', 'collapseAdaptiveDetailRow'];
   }
 
+  private _getValueFromCellOptions(columnIndex, cellOptions) {
+    return cellOptions.row.values[columnIndex];
+  }
+
   private _isRowEditMode() {
     const editMode = this._getEditMode();
     return editMode === EDIT_MODE_ROW;
@@ -183,13 +188,11 @@ export class AdaptiveColumnsController extends modules.ViewController {
       }
     });
     const rowData = cellOptions.row.data;
-    let value;
-    if (column.type === 'ai') {
-      const columnIndex = that._columnsController.getVisibleIndex(column.index);
-      value = cellOptions.row.values[columnIndex];
-    } else {
-      value = column.calculateCellValue(rowData);
-    }
+
+    const value = column.type === AI_COLUMN_NAME
+      ? this._getValueFromCellOptions(column.index, cellOptions)
+      : column.calculateCellValue(rowData);
+
     const displayValue = gridCoreUtils.getDisplayValue(column, value, rowData, cellOptions.rowType);
     const text = gridCoreUtils.formatValue(displayValue, column);
     const isCellOrBatchEditMode = this._editingController.isCellOrBatchEditMode();
@@ -248,7 +251,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
 
       const renderFormTemplate = function () {
         const isItemEdited = that._isItemEdited(item);
-        templateOptions.value = cellOptions.row.values[columnIndex];
+        templateOptions.value = that._getValueFromCellOptions(column.index, cellOptions);
         if (isItemEdited || column.showEditorAlways) {
           editingController.renderFormEditorTemplate(templateOptions, item, options, $container, !isItemEdited);
         } else {
@@ -263,7 +266,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
       if (templateOptions.watch) {
         const dispose = templateOptions.watch(() => ({
           isItemEdited: that._isItemEdited(item),
-          value: cellOptions.row.values[columnIndex],
+          value: that._getValueFromCellOptions(column.index, cellOptions),
         }), () => {
           $container.contents().remove();
           $container.removeClass(ADAPTIVE_ITEM_TEXT_CLASS);
