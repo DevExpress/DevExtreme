@@ -420,13 +420,8 @@ jobs:
     name: Check generated demos
     runs-on: devextreme-shr2
     timeout-minutes: 10
-    needs: [check-should-run, build-devextreme, determine-framework-tests-scope]
-    if: |
-      always() &&
-      needs.check-should-run.outputs.should-run == 'true' &&
-      needs.determine-framework-tests-scope.result == 'success' &&
-      needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&
-      needs.build-devextreme.result == 'success'
+    needs: [check-should-run, get-changes, build-devextreme, determine-framework-tests-scope]
+    if: needs.check-should-run.outputs.should-run == 'true' && needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
 
     steps:
     - name: Get sources
@@ -483,15 +478,15 @@ jobs:
       run: |
         if [ -f "changed-files.json" ]; then
           echo "Running convert-to-js on changed files only"
-          
+
           CHANGED_DEMOS=$(jq -r '.[].filename' changed-files.json | grep '/React/' | grep '\.tsx$' | sed 's|^apps/demos/||' | sed 's|/[^/]*\.tsx$||' | sort | uniq)
-          
+
           if [ -z "$CHANGED_DEMOS" ]; then
             echo "No React demos found in changed files, skipping conversion"
           else
             echo "Changed React demos:"
             echo "$CHANGED_DEMOS"
-            
+
             echo "$CHANGED_DEMOS" | while read -r demo_dir; do
               if [ ! -z "$demo_dir" ]; then
                 echo "Converting: $demo_dir"
@@ -499,9 +494,6 @@ jobs:
               fi
             done
           fi
-        else
-          echo "Running convert-to-js on all files"
-          pnpm run convert-to-js
         fi
 
         git add ./Demos -N
@@ -509,9 +501,9 @@ jobs:
         if git diff --exit-code . ':!package.json' ; then
           echo "Generated JS demos are up-to-date"
         else
-            echo "Generated JS demos are outdated. Execute 'pnpm run convert-to-js split' and commit changes."
-            echo "If you see another diff, ensure that extra listed files have LF endings."
-            exit 1
+          echo "Generated JS demos are outdated. Execute 'pnpm run convert-to-js split' and commit changes."
+          echo "If you see another diff, ensure that extra listed files have LF endings."
+          exit 1
         fi
 
   testcafe-jquery:
