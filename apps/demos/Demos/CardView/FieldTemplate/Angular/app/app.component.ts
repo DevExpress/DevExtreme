@@ -1,6 +1,5 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import {
   DxCardViewModule,
   DxProgressBarModule,
@@ -22,10 +21,17 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  standalone: false,
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
+  imports: [
+    DxCardViewModule,
+    DxProgressBarModule,
+    CardHeader,
+    PriorityComponent,
+    EmployeeComponent,
+    ProgressComponent,
+  ],
 })
 export class AppComponent {
   tasks: Task[];
@@ -35,22 +41,9 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxCardViewModule,
-    DxProgressBarModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
+    Service,
   ],
-  declarations: [
-    AppComponent,
-    CardHeader,
-    PriorityComponent,
-    EmployeeComponent,
-    ProgressComponent,
-  ],
-  providers: [Service],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

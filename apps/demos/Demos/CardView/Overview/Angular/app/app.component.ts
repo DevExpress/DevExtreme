@@ -1,7 +1,5 @@
-import { NgModule, Component, enableProdMode, ViewChild } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, ViewChild, provideZoneChangeDetection } from '@angular/core';
 import { DxCardViewModule, DxCardViewComponent, DxButtonModule } from 'devextreme-angular';
 import { AppService, Employee } from './app.service';
 
@@ -18,10 +16,13 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  standalone: false,
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
+  imports: [
+    DxCardViewModule,
+    DxButtonModule,
+  ],
 })
 export class AppComponent {
   @ViewChild(DxCardViewComponent, { static: true }) cardView: DxCardViewComponent;
@@ -56,16 +57,9 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxCardViewModule,
-    DxButtonModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
+    AppService,
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-  providers: [AppService],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

@@ -5,8 +5,9 @@
   cardsPerRow="auto"
   [cardMinWidth]="320"
 >
+  @for (column of columns; track $index) {
   <dxi-card-view-column
-    *ngFor="let column of columns"
     [dataField]="column"
   ></dxi-card-view-column>
+  }
 </dx-card-view>

@@ -1,6 +1,5 @@
-import { NgModule, Component, enableProdMode, ViewChild } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, ViewChild, provideZoneChangeDetection } from '@angular/core';
 import { DxCardViewComponent, DxCardViewModule, DxSelectBoxModule, DxCheckBoxModule } from 'devextreme-angular';
 import { Employee, Service } from './app.service';
 
@@ -15,11 +14,15 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  standalone: false,
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
+  imports: [
+    DxCardViewModule,
+    DxSelectBoxModule,
+    DxCheckBoxModule,
+  ],
 })
 export class AppComponent {
   @ViewChild(DxCardViewComponent, { static: true }) cardView: DxCardViewComponent;
@@ -51,16 +54,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxCardViewModule,
-    DxSelectBoxModule,
-    DxCheckBoxModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

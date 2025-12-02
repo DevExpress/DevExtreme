@@ -7,7 +7,6 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  standalone: false,
   selector: 'progress-bar',
   templateUrl: `.${modulePrefix}/progress-bar/progress-bar.component.html`,
   styleUrls: [`.${modulePrefix}/progress-bar/progress-bar.component.css`],
