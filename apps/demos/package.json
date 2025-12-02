@@ -125,7 +125,7 @@
         "eslint-plugin-react": "7.37.5",
         "eslint-plugin-react-hooks": "^5.1.0",
         "eslint-plugin-react-perf": "3.3.2",
-        "express": "4.21.1",
+        "express": "4.22.0",
         "glob": "11.1.0",
         "globals": "catalog:",
         "gulp": "4.0.2",
