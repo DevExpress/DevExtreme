@@ -6,7 +6,7 @@ DevExtreme TreeList supports AI columns. These columns augment your data and tra
 
 AI services used for this demo have been rate and data limited. As such, you may experience performance-related delays when exploring the capabilities of TreeList AI Columns.
 
-When connected to your own AI model/service without rate and data limits, TreeList AI Columns will perform seamlessly, without artificial delays.
+When connected to your own AI model/service without rate and data limits, TreeList AI Columns will perform seamlessly, without artificial delays. Note that DevExtreme does not offer an AI REST API and does not ship any built-in LLMs/SLMs.
 
 [/note]
 
