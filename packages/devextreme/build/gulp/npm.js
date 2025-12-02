@@ -129,16 +129,16 @@ const sources = (src, dist, distGlob) => (() => merge(
                 delete pkg.scripts;
 
                 pkg.exports = {
-                    "./common": {
-                        "import": "./esm/common.js",
-                            "require": "./cjs/common.js",
-                            "types": "./common.d.ts"
+                    "./common/*": {
+                        "import": "./esm/*.js",
+                            "require": "./cjs/*.js",
+                            "types": "./*.d.ts"
                     },
-                    "./common/ai-integration": {
-                        "import": "./esm/common/ai-integration.js",
-                            "require": "./cjs/common/ai-integration.js",
-                            "types": "./common/ai-integration.d.ts"
-                    }
+                    "./core/utils/*": {
+                        "import": "./esm/*.js",
+                        "require": "./cjs/*.js",
+                        "types": "./*.d.ts"
+                    },
                 }
 
                 file.contents = Buffer.from(JSON.stringify(pkg, null, 2));
