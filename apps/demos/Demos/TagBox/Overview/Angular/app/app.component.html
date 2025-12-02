@@ -123,10 +123,8 @@
           </div>
           <div *dxTemplate="let product of 'customTag'">
             <div
-              [ngClass]="{
-                'dx-tag-content': true,
-                'disabled-tag': isDisabled(product)
-              }"
+              class="dx-tag-content"
+              [class.disabled-tag]="isDisabled(product)"
               [attr.aria-disabled]="isDisabled(product)"
               (mouseenter)="onMouseEnter($event, product)"
               (mouseleave)="onMouseLeave()"
@@ -137,10 +135,11 @@
                 class="tag-img"
               />
               <span>{{ product.Name }}</span>
+              @if (!isDisabled(product)) {
               <div
-                *ngIf="!isDisabled(product)"
                 class="dx-tag-remove-button"
               ></div>
+              }
             </div>
           </div>
         </dx-tag-box>

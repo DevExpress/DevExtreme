@@ -1,6 +1,11 @@
 <div class="tabs-demo">
   <div class="widget-container">
-    <div [ngClass]="widgetWrapperClasses">
+    <div 
+      [class.widget-wrapper]="widgetWrapperClasses['widget-wrapper']"
+      [class.widget-wrapper-horizontal]="widgetWrapperClasses['widget-wrapper-horizontal']"
+      [class.widget-wrapper-vertical]="widgetWrapperClasses['widget-wrapper-vertical']"
+      [class.strict-width]="widgetWrapperClasses['strict-width']"
+    >
       <dx-tabs
         #withText
         [width]="width"
