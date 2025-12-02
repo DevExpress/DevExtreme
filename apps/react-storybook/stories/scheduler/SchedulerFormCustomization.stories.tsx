@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import React from "react";
+import React, { useRef } from "react";
 import dxScheduler from "devextreme/ui/scheduler";
 import type { Properties } from "devextreme/ui/scheduler";
 import { wrapDxWithReact } from "../utils";
@@ -7,6 +7,8 @@ import { data, resources } from "./data";
 import "./form-customization.css";
 
 const Scheduler = wrapDxWithReact<Properties>(dxScheduler);
+
+import ReactScheduler from 'devextreme-react/scheduler';
 
 const iconsShowModeArgType = {
   "editing.form.iconsShowMode": {
@@ -332,21 +334,117 @@ export const RTL: Story = {
 export const LegacyPopup: Story = {
   args: {
     ...baseConfig,
-    "editing.form.iconsShowMode": "none",
+    "editing.form.iconsShowMode": "both",
   } as Properties,
   argTypes: iconsShowModeArgType,
   render: (args) => {
+    let form: any = null;
+
+    const schedulerRef = useRef(null);
+
     return (
-      <Scheduler
+      // @ts-ignore
+      <ReactScheduler
+        ref={schedulerRef}
         {...baseConfig}
         editing={{
-          form: {
-            items: [
-              "mainGroup",
-              {name: 'recurenceGroup', visible: true}
+          popup: {
+            maxWidth: 800,
+            toolbarItems: [
+              {
+                toolbar: 'top',
+                location: 'before',
+                text: "Edit Appointment",
+                cssClass: 'dx-toolbar-label',
+              },
+              {
+                toolbar: 'top',
+                location: 'after',
+                options: {
+                  stylingMode: 'contained',
+                  type: 'default',
+                  onClick: () => {
+                    // @ts-ignore
+                    schedulerRef.current?.instance()?.hideAppointmentPopup(true);
+                  },
+                  text: 'Save',
+                },
+                shortcut: 'done',
+              },
+              {
+                toolbar: 'top',
+                location: 'after',
+                shortcut: 'cancel',
+              },
             ],
-            iconsShowMode: args["editing.form.iconsShowMode"]
-          }
+          },
+          form: {
+            onContentReady: function (e) {
+              form = e.component;
+              const onValueChanged = form.getEditor("startDateEditor").option("onValueChanged");
+
+              form.getEditor("startDateEditor").option("onValueChanged", (e) => {
+                onValueChanged(e);
+                form.getEditor("recurrenceStartDateEditor")?.option("value", e.value);
+              });
+            },
+            iconsShowMode: "both",
+            items: [
+              {
+                name: "mainGroup",
+                cssClass: "",
+                items: [
+                  "subjectGroup",
+                  "dateGroup",
+                  {
+                    name: "repeatGroup",
+                    items: [
+                      "repeatIcon",
+                      {
+                        name: "customRepeatEditor",
+                        editorType: "dxSwitch",
+                        editorOptions: {
+                          onValueChanged: (e) => {
+                            if (e.value === true) {
+                              form.option("colCount", 2);
+                              form.itemOption("recurrenceGroup", "cssClass", "");
+
+                              const onValueChanged = form.getEditor("repeatEditor").option("onValueChanged");
+                              form.getEditor("repeatEditor").option("value", "daily");
+                              onValueChanged({ ...e, value: "daily" });
+                            } else {
+                              form.option("colCount", 1);
+                              form.itemOption("recurrenceGroup", "cssClass", "dx-hidden");
+
+                              const onValueChanged = form.getEditor("repeatEditor").option("onValueChanged");
+                              form.getEditor("repeatEditor").option("value", "never");
+                              onValueChanged({ ...e, value: "never" });
+                            }
+
+                            form.getEditor("customRepeatEditor").option("value", e.value);
+                          },
+                        },
+                      },
+                      { name: "repeatEditor", colCount: 0, cssClass: "dx-hidden" },
+                    ],
+                  },
+                  "resourcesGroup",
+                  "descriptionGroup",
+                ],
+              },
+              {
+                name: "recurrenceGroup",
+                itemType: "group",
+                items: [
+                  {
+                    name: "recurrenceStartDateEditor",
+                  },
+                  "recurrenceRuleGroup",
+                  "recurrenceEndGroup",
+                ],
+              },
+            ],
+          },
         } as Properties['editing']}
       />
     );
