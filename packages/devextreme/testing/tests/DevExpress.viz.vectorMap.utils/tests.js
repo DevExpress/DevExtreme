@@ -103,7 +103,6 @@ QUnit.module('data loader', {
                     });
                 });
             });
-
         }
 
         QUnit.module('node - parse Buffer');

@@ -9,11 +9,9 @@
 <script setup lang="ts">
 import DataCell from './DataCell.vue';
 
-const props = withDefaults(defineProps<{
-  cellData?: any
-}>(), {
-  cellData: () => {},
-});
+const props = defineProps<{
+  cellData: Record<string, any>
+}>();
 
 function day() {
   return props.cellData.startDate.getDate();

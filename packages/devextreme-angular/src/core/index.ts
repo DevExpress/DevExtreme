@@ -8,3 +8,5 @@ export * from './template';
 export * from './transfer-state';
 export * from './utils';
 export * from './watcher-helper';
+export * from './warning-helper';
+export * from './warning-codes';

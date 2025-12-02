@@ -2,8 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import { DxChatModule } from 'devextreme-angular';
-import { DxButtonModule } from 'devextreme-angular';
+import { DxChatModule, DxButtonModule } from 'devextreme-angular';
 import { type DxChatTypes } from 'devextreme-angular/ui/chat';
 import { Observable } from 'rxjs';
 import { AppService } from './app.service';
@@ -64,7 +63,7 @@ export class AppComponent {
     } else {
       event?.target.focus();
     }
-  };
+  }
 
   async onMessageEntered(e: DxChatTypes.MessageEnteredEvent) {
     if (!this.appService.alerts.length) {

@@ -35,7 +35,7 @@ export class AppComponent {
 
     http.get('../../../../data/diagram-employees.json').subscribe({
       next: (data) => { this.diagram.instance.import(JSON.stringify(data)); },
-      error: (err) => { throw 'Data Loading Error'; },
+      error: () => { throw 'Data Loading Error'; },
     });
   }
 }

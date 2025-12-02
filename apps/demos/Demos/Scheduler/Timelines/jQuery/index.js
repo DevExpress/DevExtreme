@@ -16,11 +16,13 @@ $(() => {
       dataSource: resourcesData,
       label: 'Owner',
       useColorAsDefault: true,
+      icon: 'user',
     }, {
       fieldExpr: 'priority',
       allowMultiple: false,
       dataSource: priorityData,
       label: 'Priority',
+      icon: 'tags',
     }],
     height: 580,
   });

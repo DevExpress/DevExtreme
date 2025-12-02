@@ -79,17 +79,12 @@ $(() => {
 
   function uploadDataByVisualRange(visualRange, component) {
     const dataSource = component.getDataSource();
-    const storage = dataSource.items();
     const ajaxArgs = {
       startVisible: getDateString(visualRange.startValue),
       endVisible: getDateString(visualRange.endValue),
-      startBound: getDateString(storage.length ? storage[0].date : null),
-      endBound: getDateString(storage.length
-        ? storage[storage.length - 1].date : null),
     };
 
-    if (ajaxArgs.startVisible !== ajaxArgs.startBound
-            && ajaxArgs.endVisible !== ajaxArgs.endBound && !packetsLock) {
+    if (!packetsLock) {
       packetsLock += 1;
       component.showLoadingIndicator();
       getDataFrame(ajaxArgs)
@@ -115,7 +110,7 @@ $(() => {
   function getDataFrame(args) {
     const deferred = $.Deferred();
     $.ajax({
-      url: 'https://js.devexpress.com/Demos/WidgetsGallery/data/temperatureData',
+      url: 'https://js.devexpress.com/Demos/NetCore/api/TemperatureData',
       dataType: 'json',
       data: args,
       success(result) {

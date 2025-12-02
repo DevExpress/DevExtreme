@@ -93,13 +93,12 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxTextBox from 'devextreme-vue/text-box';
+import DxTextBox, { type DxTextBoxTypes } from 'devextreme-vue/text-box';
 
 const emailValue = ref('smith@corp.com');
 const rules = { X: /[02-9]/ };
 
-function valueChanged(data) {
+function valueChanged(data: DxTextBoxTypes.ValueChangedEvent) {
   emailValue.value = `${data.value.replace(/\s/g, '').toLowerCase()}@corp.com`;
 }
 </script>
-

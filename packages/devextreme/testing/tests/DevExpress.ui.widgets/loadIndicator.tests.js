@@ -8,10 +8,10 @@ import {
     LOADINDICATOR_CONTENT_CLASS,
     LOADINDICATOR_SEGMENT_CLASS,
     LOADINDICATOR_IMAGE_CLASS,
-} from '__internal/ui/m_load_indicator';
+} from '__internal/ui/load_indicator';
 
 import 'ui/load_indicator';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(function() {
     const markup =

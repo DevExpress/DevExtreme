@@ -68,11 +68,21 @@ QUnit.module('hideToasts', {
         assert.equal(this.getToastCount(), 1);
     });
 
-    QUnit.test('with unexisted element parameter hides nothing', function(assert) {
-        assert.equal(this.getToastCount(), 2);
+    QUnit.test('with non-existent element parameter hides nothing', function(assert) {
+        assert.strictEqual(this.getToastCount(), 2);
 
-        hideToasts($('#containerr').get(0));
+        const undefinedElement = $('#containerr').get(0);
 
-        assert.equal(this.getToastCount(), 2);
+        hideToasts(undefinedElement);
+
+        assert.strictEqual(this.getToastCount(), 2, 'nothing has been hidden');
+    });
+
+    QUnit.test('with empty jquery element parameter hides nothing', function(assert) {
+        assert.strictEqual(this.getToastCount(), 2);
+
+        hideToasts($());
+
+        assert.strictEqual(this.getToastCount(), 2, 'nothing has been hidden');
     });
 });

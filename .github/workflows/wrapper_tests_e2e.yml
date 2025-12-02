@@ -32,9 +32,8 @@ jobs:
         with:
           node-version: '20'
 
-      - uses: pnpm/action-setup@v3
+      - uses: pnpm/action-setup@v4
         with:
-          version: 9
           run_install: false
 
       - name: Get pnpm store directory
@@ -53,7 +52,7 @@ jobs:
             ${{ runner.os }}-pnpm-store
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Build all DevExtreme packages
         env:
@@ -103,16 +102,15 @@ jobs:
       - name: Setup Chrome
         uses: ./.github/actions/setup-chrome
         with:
-          chrome-version: '133.0.6943.53'
+          chrome-version: '141.0.7390.122'
 
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - uses: pnpm/action-setup@v3
+      - uses: pnpm/action-setup@v4
         with:
-          version: 9
           run_install: false
 
       - name: Get pnpm store directory
@@ -131,7 +129,7 @@ jobs:
             ${{ runner.os }}-pnpm-store
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Start server for ${{ matrix.framework }}
         working-directory: e2e/wrappers

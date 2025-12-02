@@ -20,7 +20,7 @@ if (window && window.config?.packageConfigPaths) {
   styleUrls: [`.${modulePrefix}/app.component.css`],
 })
 export class AppComponent {
-  onUploadStarted(e) {
+  onUploadStarted() {
     this.getChunkPanel().innerHTML = '';
   }
 

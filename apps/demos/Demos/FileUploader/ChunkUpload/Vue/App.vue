@@ -33,13 +33,19 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxFileUploader from 'devextreme-vue/file-uploader';
+import DxFileUploader, { type DxFileUploaderTypes } from 'devextreme-vue/file-uploader';
 
-const chunks = ref([]);
+interface ChunkInfo {
+  segmentSize: number;
+  bytesLoaded: number;
+  bytesTotal: number;
+}
 
-const getValueInKb = (value) => `${(value / 1024).toFixed(0)}kb`;
+const chunks = ref<ChunkInfo[]>([]);
 
-function onUploadProgress(e) {
+const getValueInKb = (value: number) => `${(value / 1024).toFixed(0)}kb`;
+
+function onUploadProgress(e: DxFileUploaderTypes.ProgressEvent) {
   chunks.value.push({
     segmentSize: e.segmentSize,
     bytesLoaded: e.bytesLoaded,

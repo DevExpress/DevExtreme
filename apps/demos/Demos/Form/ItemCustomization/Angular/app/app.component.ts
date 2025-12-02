@@ -31,7 +31,7 @@ if (window && window.config?.packageConfigPaths) {
 })
 
 export class AppComponent implements AfterViewInit {
-  @ViewChild(DxFormComponent, { static: false }) myform: DxFormComponent;
+  @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;
 
   employee: Employee;
 
@@ -82,7 +82,7 @@ export class AppComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.myform.instance.validate();
+    this.form.instance.validate();
   }
 }
 

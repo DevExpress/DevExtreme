@@ -9,11 +9,11 @@
     <div class="dx-field-label">With labels</div>
     <div class="dx-field-value">
       <dx-slider [min]="0" [max]="100" [value]="50">
-        <dxo-label
+        <dxo-slider-label
           [visible]="true"
           [format]="format"
           position="top"
-        ></dxo-label>
+        ></dxo-slider-label>
       </dx-slider>
     </div>
   </div>
@@ -21,12 +21,12 @@
     <div class="dx-field-label">With tooltip</div>
     <div class="dx-field-value">
       <dx-slider [min]="0" [max]="100" [value]="35" [rtlEnabled]="false">
-        <dxo-tooltip
+        <dxo-slider-tooltip
           [enabled]="true"
           [format]="format"
           showMode="always"
           position="bottom"
-        ></dxo-tooltip>
+        ></dxo-slider-tooltip>
       </dx-slider>
     </div>
   </div>
@@ -45,7 +45,7 @@
     <div class="dx-field-label">With discrete step</div>
     <div class="dx-field-value">
       <dx-slider [min]="0" [max]="100" [value]="10" [step]="10">
-        <dxo-tooltip [enabled]="true"></dxo-tooltip>
+        <dxo-slider-tooltip [enabled]="true"></dxo-slider-tooltip>
       </dx-slider>
     </div>
   </div>

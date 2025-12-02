@@ -10,9 +10,7 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
-    QueryList,
-    AfterContentInit
+    QueryList
 } from '@angular/core';
 
 
@@ -23,11 +21,13 @@ import { dxHtmlEditorTableContextMenuItem, HtmlEditorPredefinedContextMenuItem }
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiHtmlEditorItemComponent } from './item-dxi';
-import { DxiHtmlEditorTableContextMenuItemComponent } from './table-context-menu-item-dxi';
 
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-html-editor-table-context-menu',
@@ -37,7 +37,12 @@ import { DxiHtmlEditorTableContextMenuItemComponent } from './table-context-menu
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoHtmlEditorTableContextMenuComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
+export class DxoHtmlEditorTableContextMenuComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
     @Input()
     get enabled(): boolean {
         return this._getOption('enabled');
@@ -60,21 +65,6 @@ export class DxoHtmlEditorTableContextMenuComponent extends NestedOption impleme
     }
 
 
-    @ContentChildren(forwardRef(() => DxiHtmlEditorItemComponent)) itemsChildren!: QueryList<DxiHtmlEditorItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiHtmlEditorTableContextMenuItemComponent)) tableContextMenuItemsChildren!: QueryList<DxiHtmlEditorTableContextMenuItemComponent>
-    
-    setItems() {
-        const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.itemsChildren.toArray(),
-            ...this.tableContextMenuItemsChildren.toArray(),
-        ]);
-        this.setChildren('items', q);
-    }
-
-
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -92,12 +82,6 @@ export class DxoHtmlEditorTableContextMenuComponent extends NestedOption impleme
     }
 
 
-    ngAfterContentInit() {
-        this.setItems();
-        
-        this.itemsChildren.changes.subscribe(() => { this.setItems() });
-        this.tableContextMenuItemsChildren.changes.subscribe(() => { this.setItems() });
-    }
 }
 
 @NgModule({

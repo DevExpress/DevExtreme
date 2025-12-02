@@ -12,11 +12,11 @@ import { dataSource } from './data.js';
 
 const App = () => {
   const customizeSeries = (valueFromNameField) =>
-    (valueFromNameField === 'USA'
+    valueFromNameField === 'USA'
       ? {
         color: 'red',
       }
-      : {});
+      : {};
   return (
     <RangeSelector
       id="range-selector"

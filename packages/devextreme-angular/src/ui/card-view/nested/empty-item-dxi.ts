@@ -20,6 +20,7 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-card-view-empty-item',
@@ -27,7 +28,13 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_items,
+           useExisting: DxiCardViewEmptyItemComponent,
+        }
+    ]
 })
 export class DxiCardViewEmptyItemComponent extends CollectionNestedOption {
     @Input()
@@ -89,6 +96,8 @@ export class DxiCardViewEmptyItemComponent extends CollectionNestedOption {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        this.itemType = 'empty';
+    
     }
 
 

@@ -12,9 +12,13 @@ export const changeRulesToStylistic = (devExtremeRules) => (
             .entries(devExtremeRules)
             .filter(([key]) => !REMOVED_TYPESCRIPT_RULES.includes(key))
             .map(([key, value]) => {
-                const rule = stylisticRules.find((r) => key.includes(r.name));
-                const newKey = rule ? `@stylistic/${rule.name}` : key;
+                const tsRulePrefix = '@typescript-eslint/';
+                const isTsRule = key.startsWith(tsRulePrefix);
+                const normalizedKey = isTsRule ? key.replace(tsRulePrefix, '') : key;
 
+                const rule = stylisticRules.find((r) => normalizedKey === r.name);
+                const newKey = rule ? `@stylistic/${rule.name}` : key;
+                
                 return [newKey, value];
             })),
     }

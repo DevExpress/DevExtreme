@@ -34,7 +34,7 @@ $(() => {
     },
     searchPanel: {
       visible: true,
-      text: 'an'
+      text: 'an',
     },
   });
 });

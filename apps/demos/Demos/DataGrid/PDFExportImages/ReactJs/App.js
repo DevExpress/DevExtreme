@@ -6,7 +6,6 @@ import { employees } from './data.js';
 
 const exportFormats = ['pdf'];
 const onExporting = ({ component }) => {
-  // eslint-disable-next-line new-cap
   const doc = new jsPDF();
   exportDataGrid({
     jsPDFDocument: doc,

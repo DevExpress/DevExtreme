@@ -38,14 +38,15 @@ const moveNode = (fromNode, toNode, fromItems, toItems, isDropInsideItem) => {
     toNode.itemData.items.splice(toNode.itemData.items.length, 0, fromNode.itemData);
   } else {
     const toNodeContainingArray = getNodeContainingArray(toNode, toItems);
-    const toIndex = toNode === null
-      ? toNodeContainingArray.length
-      : toNodeContainingArray.findIndex((item) => item.id === toNode.itemData.id);
+    const toIndex =
+      toNode === null
+        ? toNodeContainingArray.length
+        : toNodeContainingArray.findIndex((item) => item.id === toNode.itemData.id);
     toNodeContainingArray.splice(toIndex, 0, fromNode.itemData);
   }
 };
 const getNodeContainingArray = (node, rootArray) =>
-  (node === null || node.parent === null ? rootArray : node.parent.itemData.items);
+  !node?.parent ? rootArray : node.parent.itemData.items;
 const isChildNode = (parentNode, childNode) => {
   let { parent } = childNode;
   while (parent !== null) {
@@ -75,9 +76,9 @@ const App = () => {
   const [itemsDriveD, setItemsDriveD] = useState(service.getItemsDriveD());
   const getTreeView = useCallback(
     (driveName) =>
-      (driveName === 'driveC'
+      driveName === 'driveC'
         ? treeViewDriveCRef.current.instance()
-        : treeViewDriveDRef.current.instance()),
+        : treeViewDriveDRef.current.instance(),
     [],
   );
   const onDragChange = useCallback(

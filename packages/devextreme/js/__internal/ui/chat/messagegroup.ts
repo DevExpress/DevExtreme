@@ -5,7 +5,9 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { isDate, isDefined } from '@js/core/utils/type';
-import type { ImageMessage, Message, TextMessage } from '@js/ui/chat';
+import type {
+  AttachmentDownloadClickEvent, ImageMessage, Message, TextMessage,
+} from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
@@ -38,8 +40,9 @@ export interface Properties extends WidgetOptions<MessageGroup> {
   showAvatar: boolean;
   showUserName: boolean;
   showMessageTimestamp: boolean;
-  messageTemplate?: MessageTemplate;
   messageTimestampFormat?: Format;
+  messageTemplate?: MessageTemplate;
+  onAttachmentDownloadClick?: (e: AttachmentDownloadClickEvent) => void;
 }
 
 class MessageGroup extends Widget<Properties> {
@@ -113,22 +116,25 @@ class MessageGroup extends Widget<Properties> {
 
   _renderMessageBubble(message: Message): void {
     const $bubble = $('<div>')
-      .data(MESSAGE_DATA_KEY, message);
+      .data(MESSAGE_DATA_KEY, message)
+      .appendTo(this._$messageBubbleContainer);
 
     this._createComponent($bubble, MessageBubble, this._getMessageBubbleOptions(message));
-
-    this._$messageBubbleContainer.append($bubble);
   }
 
   _getMessageBubbleOptions(message: Message): MessageBubbleProperties {
+    const { messageTemplate, onAttachmentDownloadClick } = this.option();
+
+    const { isDeleted, type, attachments } = message;
+
     const options: MessageBubbleProperties = {
-      isDeleted: message.isDeleted,
-      type: message.type,
+      isDeleted,
+      type,
+      attachments,
+      onAttachmentDownloadClick,
     };
 
-    const { messageTemplate } = this.option();
-
-    if (message.type === 'image') {
+    if (type === 'image') {
       options.alt = (message as ImageMessage).alt;
       options.src = (message as ImageMessage).src;
     } else {
@@ -145,7 +151,9 @@ class MessageGroup extends Widget<Properties> {
   }
 
   _renderMessageBubbles(items: Message[]): void {
-    this._$messageBubbleContainer = $('<div>').addClass(CHAT_MESSAGEGROUP_CONTENT_CLASS);
+    this._$messageBubbleContainer = $('<div>')
+      .addClass(CHAT_MESSAGEGROUP_CONTENT_CLASS)
+      .appendTo(this.element());
 
     items.forEach((message, index) => {
       const shouldCreateEditedElement = index !== 0 && message.type !== 'image' && (message as TextMessage).isEdited === true && !message.isDeleted;
@@ -158,8 +166,6 @@ class MessageGroup extends Widget<Properties> {
 
       this._renderMessageBubble(message);
     });
-
-    this._$messageBubbleContainer.appendTo(this.element());
   }
 
   _renderMessageGroupInformation(message: Message, shouldRenderEditedMessage?: boolean): void {
@@ -307,6 +313,7 @@ class MessageGroup extends Widget<Properties> {
       case 'showMessageTimestamp':
       case 'messageTemplate':
       case 'messageTimestampFormat':
+      case 'onAttachmentDownloadClick':
         this._invalidate();
         break;
       default:

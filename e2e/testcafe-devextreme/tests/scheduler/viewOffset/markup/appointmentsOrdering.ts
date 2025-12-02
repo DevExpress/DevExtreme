@@ -1,9 +1,10 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
-import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../helpers/domUtils';
+import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
 import url from '../../../../helpers/getPageUrl';
 import { generateAppointments } from '../../helpers/generateAppointments';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Offset: Markup appointments ordering`
   .page(url(__dirname, '../../../container.html'));
@@ -95,14 +96,16 @@ end: ${endDayHour}
 
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-        await takeScreenshot(
+        await testScreenshot(
+          t,
+          takeScreenshot,
           getScreenshotName(
             views[0].type,
             offset,
             startDayHour,
             endDayHour,
           ),
-          scheduler.workSpace,
+          { element: scheduler.workSpace },
         );
 
         await t.expect(compareResults.isValid())
@@ -123,9 +126,6 @@ end: ${endDayHour}
             startDayHour,
             endDayHour,
           });
-        })
-        .after(async () => {
-          await removeStylesheetRulesFromPage();
         });
     });
   });
@@ -136,9 +136,11 @@ test('Appointments are ordered correctly with both recurrent and usual appointme
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await takeScreenshot(
+  await testScreenshot(
+    t,
+    takeScreenshot,
     'view_markup_ordering-appts_T1212573.png',
-    scheduler.workSpace,
+    { element: scheduler.workSpace },
   );
 
   await t.expect(compareResults.isValid())
@@ -208,6 +210,4 @@ test('Appointments are ordered correctly with both recurrent and usual appointme
     views: ['timelineMonth'],
     currentView: 'timelineMonth',
   });
-}).after(async () => {
-  await removeStylesheetRulesFromPage();
 });

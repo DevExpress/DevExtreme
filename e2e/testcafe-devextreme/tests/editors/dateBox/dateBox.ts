@@ -1,5 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DateBox from 'devextreme-testcafe-models/dateBox';
+import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import asyncForEach from '../../../helpers/asyncForEach';
 import { createWidget } from '../../../helpers/createWidget';
@@ -8,8 +9,10 @@ import { isMaterialBased, testScreenshot } from '../../../helpers/themeUtils';
 fixture.disablePageReloads`DateBox`
   .page(url(__dirname, '../../container.html'));
 
-const TIME_TO_WAIT = 1500;
 const ITEM_HEIGHT = 40;
+
+const TIME_VIEW_FIELD_CLASS = 'dx-timeview-field';
+const SELECT_BOX_CONTAINER_CLASS = 'dx-selectbox-container';
 
 if (!isMaterialBased()) {
   [[11, 12, 1925], [10, 23, 2001]].forEach(([month, day, year]) => {
@@ -18,19 +21,16 @@ if (!isMaterialBased()) {
       const { dropDownEditorButton } = dateBox;
 
       await t
-        .click(dropDownEditorButton)
-        .wait(TIME_TO_WAIT);
+        .click(dropDownEditorButton);
 
       await t
-        .click(DateBox.getDoneButton())
-        .wait(TIME_TO_WAIT);
+        .click(DateBox.getDoneButton());
 
       await t
         .typeText(dateBox.input, `${month}${day}${year}`);
 
       await t
-        .click(dropDownEditorButton)
-        .wait(TIME_TO_WAIT);
+        .click(dropDownEditorButton);
 
       const views = {
         month: month - 1,
@@ -42,7 +42,6 @@ if (!isMaterialBased()) {
 
         await t
           .expect(scrollTop)
-          // eslint-disable-next-line no-nested-ternary
           .eql(views[viewName] * ITEM_HEIGHT, `${viewName} view is scrolled correctly`);
       });
     }).before(async () => createWidget('dxDateBox', {
@@ -67,6 +66,34 @@ test('DateBox with datetime and root element as container (T1193495)', async (t)
   pickerType: 'calendar',
   opened: true,
   width: 300,
+  dropDownOptions: {
+    container: '#container',
+  },
+}, '#container'));
+
+test('DateBox with datetime and opened AM/PM select (T1312677)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const timeViewSelect = Selector(`#container .${TIME_VIEW_FIELD_CLASS} .${SELECT_BOX_CONTAINER_CLASS}`);
+
+  await t
+    .click(timeViewSelect);
+
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'DateBox with datetime and opened AMPM select.png',
+    { element: '#container' },
+  );
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDateBox', {
+  value: new Date(2022, 10, 23, 17, 23),
+  type: 'datetime',
+  pickerType: 'calendar',
+  opened: true,
   dropDownOptions: {
     container: '#container',
   },

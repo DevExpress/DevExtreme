@@ -55,7 +55,7 @@ export class AppComponent {
             summary: result.summary,
             groupCount: result.groupCount,
           };
-        } catch (err) {
+        } catch {
           throw new Error('Data Loading Error');
         }
       },

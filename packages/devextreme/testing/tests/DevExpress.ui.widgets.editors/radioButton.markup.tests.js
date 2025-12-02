@@ -11,8 +11,6 @@ QUnit.testStart(() => {
     $('#qunit-fixture').html(markup);
 });
 
-const toSelector = cssClass => '.' + cssClass;
-
 QUnit.module('button rendering', () => {
     QUnit.test('widget should be rendered', function(assert) {
         const $radioButton = $('#radioButton').dxRadioButton();
@@ -22,7 +20,7 @@ QUnit.module('button rendering', () => {
 
     QUnit.test('icon should be rendered', function(assert) {
         const $radioButton = $('#radioButton').dxRadioButton();
-        const $icon = $radioButton.children(toSelector(RADIO_BUTTON_ICON_CLASS));
+        const $icon = $radioButton.children(`.${RADIO_BUTTON_ICON_CLASS}`);
 
         assert.ok($icon.length, 'icon rendered');
     });

@@ -62,26 +62,27 @@ import DxChart, {
   DxTitle,
   DxGrid,
   DxFormat,
+  type DxChartTypes,
 } from 'devextreme-vue/chart';
 import { continentSources, populationData } from './data.ts';
 
-function customizeTooltip(pointInfo) {
-  const items = pointInfo.valueText.split('\n');
-  const color = pointInfo.point.getColor();
+function customizeTooltip(pointInfo: DxChartTypes.PointInfo) {
+  const items = pointInfo.valueText?.split('\n');
+  const color = pointInfo.point?.getColor();
 
-  items.forEach((item, index) => {
+  items?.forEach((item, index) => {
     if (item.indexOf(pointInfo.seriesName) === 0) {
       const element = document.createElement('span');
 
       element.textContent = item;
-      element.style.color = color;
+      element.style.color = color || '';
       element.className = 'active';
 
       items[index] = element.outerHTML;
     }
   });
 
-  return { text: items.join('\n') };
+  return { text: items?.join('\n') };
 }
 </script>
 <style>

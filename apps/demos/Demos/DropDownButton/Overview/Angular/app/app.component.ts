@@ -92,7 +92,7 @@ export class AppComponent {
 
 @NgModule({
   imports: [
-    BrowserModule,    DxDropDownButtonModule,
+    BrowserModule, DxDropDownButtonModule,
     DxToolbarModule,
   ],
   declarations: [AppComponent],

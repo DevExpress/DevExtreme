@@ -53,11 +53,11 @@ export const generateAppointments = (
           const appointmentEndISO = getIsoDate(date, endDateShiftDays ?? 0);
           const [, , dayISO] = appointmentStartISO.split('-');
 
-          const titleText = `#${appointmentIdx}: ${dayISO.padStart(2, '0')} ${
-            allDay
-              ? 'All'
-              : ''
+          const titleText = `#${appointmentIdx}: ${dayISO.padStart(2, '0')} ${allDay
+            ? 'All'
+            : ''
           } ${
+            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
             !text
               ? `${timeToText(startTime)}-${timeToText(endTime)}`
               : text

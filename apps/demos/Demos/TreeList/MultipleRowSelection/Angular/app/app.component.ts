@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxCheckBoxModule } from 'devextreme-angular';
 import { DxTreeListModule, DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
-import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
+import { DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
 import { Service, Employee } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -42,7 +42,7 @@ export class AppComponent {
     this.selectedEmployeeNames = this.getEmployeeNames(selectedData);
   }
 
-  onOptionsChanged(e: DxSelectBoxTypes.OptionChangedEvent) {
+  onOptionsChanged() {
     this.selectedRowKeys = [];
   }
 

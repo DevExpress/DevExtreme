@@ -50,6 +50,7 @@
           <DxButton
             :disabled="!selectedRowKeys.length"
             text="Clear Selection"
+            stylingMode="text"
             @click="clearSelection"
           />
         </DxItem>

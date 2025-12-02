@@ -1,6 +1,8 @@
 <template>
   <p>
-    Select your check-in and check-out dates. If your dates are flexible, include that information in Additional Requests. We will do our best to suggest best pricing options, depending on room availability.
+    Select your check-in and check-out dates.
+    If your dates are flexible, include that information in Additional Requests.
+    We will do our best to suggest best pricing options, depending on room availability.
   </p>
   <DxForm
     :form-data="formData"
@@ -24,18 +26,18 @@ import { ref, watch } from 'vue';
 import type { BookingFormData } from './types.ts';
 import { getInitialFormData } from './data.ts';
 
-const formRef = ref(null);
+const formRef = ref<DxForm>();
 
 const props = withDefaults(defineProps<{
   formData: BookingFormData;
   validationGroup?: string;
 }>(), {
   formData: getInitialFormData,
-  validationGroup: () => undefined,
+  validationGroup: () => '',
 });
 
 watch(() => props.formData, (value) => {
-  formRef.value.instance.reset(value);
+  formRef.value?.instance?.reset(value);
 });
 
 const labelOptions = {

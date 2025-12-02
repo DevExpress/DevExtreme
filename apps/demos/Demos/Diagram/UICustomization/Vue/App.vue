@@ -113,6 +113,7 @@ import {
   DxMainToolbar,
   DxCommand,
   DxToolbox,
+  type DxDiagramTypes,
 } from 'devextreme-vue/diagram';
 import { confirm } from 'devextreme/ui/dialog';
 import 'whatwg-fetch';
@@ -131,7 +132,7 @@ watch(diagram,
       });
   });
 
-function onCustomCommand(e) {
+function onCustomCommand(e: DxDiagramTypes.CustomCommandEvent) {
   if (e.name === 'clear') {
     const result = confirm('Are you sure you want to clear the diagram? This action cannot be undone.', 'Warning');
     result.then(

@@ -48,7 +48,7 @@ import { dataSource } from './data.ts';
 
 const range = ref([0, 5]);
 
-const customizeText = ({ valueText }) => `${valueText} s`;
+const customizeText = ({ valueText }: Record<string, any>) => `${valueText} s`;
 </script>
 <style scoped>
 #range-selector {

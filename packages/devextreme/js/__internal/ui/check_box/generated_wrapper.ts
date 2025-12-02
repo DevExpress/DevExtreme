@@ -3,6 +3,7 @@ import registerComponent from '@js/core/component_registrator';
 import { CheckBox as CheckBoxComponent, defaultOptions } from './check_box';
 import BaseComponent from './wrapper';
 
+// STYLE checkbox
 export default class CheckBox extends BaseComponent {
   getProps(): Record<string, unknown> {
     const props = super.getProps();
@@ -13,13 +14,13 @@ export default class CheckBox extends BaseComponent {
 
   focus(): unknown {
     // @ts-expect-error
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, prefer-rest-params
+    // eslint-disable-next-line prefer-rest-params
     return this.viewRef?.focus(...arguments);
   }
 
   blur(): unknown {
     // @ts-expect-error
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, prefer-rest-params
+    // eslint-disable-next-line prefer-rest-params
     return this.viewRef?.blur(...arguments);
   }
 

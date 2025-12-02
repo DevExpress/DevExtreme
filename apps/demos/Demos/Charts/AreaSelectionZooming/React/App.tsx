@@ -11,11 +11,12 @@ import Chart, {
   Crosshair,
   Legend,
   Border,
+  type ChartTypes,
 } from 'devextreme-react/chart';
 import Button from 'devextreme-react/button';
 import { birthLife } from './data.ts';
 
-function customizeTooltip(pointInfo: { point: { data: { country: string, year: number }; }; }) {
+function customizeTooltip(pointInfo: ChartTypes.CommonPointInfo) {
   const { data } = pointInfo.point;
   return {
     text: `${data.country} ${data.year}`,

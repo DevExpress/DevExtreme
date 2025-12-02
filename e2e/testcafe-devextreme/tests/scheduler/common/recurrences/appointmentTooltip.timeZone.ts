@@ -39,7 +39,7 @@ test('The only one displayed part of recurrence appointment '
   await t
     .click(scheduler.getAppointment('apt').element)
     .expect(scheduler.appointmentTooltip.getListItem('apt').date.textContent)
-    .eql('December 1 12:00 PM - 1:00 PM');
+    .eql('December 2 12:00 PM - 1:00 PM');
 }).before(async () => createWidget('dxScheduler', {
   timeZone: 'Europe/Moscow',
   startDateTimeZoneExpr: 'TimeZone',

@@ -45,6 +45,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
+
 type Annotation = Record<'data', Record<string, unknown>>;
 
 const props = withDefaults(defineProps<{

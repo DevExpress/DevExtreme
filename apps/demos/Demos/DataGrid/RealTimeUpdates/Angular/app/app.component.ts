@@ -44,7 +44,7 @@ export class AppComponent {
         return;
       }
 
-      for (let i = 0; i < this.updatesPerSecond / 20; i++) {
+      for (let i = 0; i < this.updatesPerSecond / 20; i += 1) {
         service.addOrder();
       }
     }, 50);

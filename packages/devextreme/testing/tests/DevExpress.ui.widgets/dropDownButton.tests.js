@@ -11,7 +11,7 @@ import { CustomStore } from 'common/data/custom_store';
 import { extend } from 'core/utils/extend';
 import devices from '__internal/core/m_devices';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const DROP_DOWN_BUTTON_CONTENT = 'dx-dropdownbutton-content';
 const DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS = 'dx-dropdownbutton-popup-wrapper';
@@ -93,6 +93,26 @@ QUnit.module('button group integration', {}, () => {
 
         const buttonGroup = getButtonGroup(dropDownButton);
         assert.strictEqual(buttonGroup.option('accessKey'), accessKey, 'accessKey is passed to buttonGroup');
+    });
+
+    QUnit.test('It should be possible to update 2nd lvl nested option in buttonGroupOptions', function(assert) {
+        const dropDownButton = $('#dropDownButton').dxDropDownButton({}).dxDropDownButton('instance');
+
+        dropDownButton.option('buttonGroupOptions.elementAttr.class', 'someClass');
+
+        const buttonGroup = getButtonGroup(dropDownButton);
+        const { elementAttr } = buttonGroup.option();
+
+        assert.deepEqual(elementAttr, { class: 'someClass', role: 'group' });
+    });
+
+    QUnit.test('buttonGroupOptions should be cached in _cached_buttonGroupOptions after buttonGroupOptions runtime change', function(assert) {
+        const dropDownButton = $('#dropDownButton').dxDropDownButton({}).dxDropDownButton('instance');
+
+        dropDownButton.option('buttonGroupOptions', { stylingMode: 'text' });
+        const { _cached_buttonGroupOptions } = dropDownButton.option();
+
+        assert.deepEqual(_cached_buttonGroupOptions, { stylingMode: 'text' });
     });
 
     ['normal', 'default', 'danger', 'success'].forEach((type) => {
@@ -685,6 +705,29 @@ QUnit.module('popup integration', {
         assert.strictEqual(popupContentElementRect.left, dropDownButtonElementRect.left, 'popup position is correct, rtlEnabled = false');
     });
 
+    QUnit.test('It should be possible to update 2nd lvl nested option in dropDownOptions', function(assert) {
+        const dropDownButton = $('#dropDownButton').dxDropDownButton({
+            opened: true,
+            dropDownOptions: { wrapperAttr: { class: 'customClass' } },
+        }).dxDropDownButton('instance');
+
+        dropDownButton.option('dropDownOptions.wrapperAttr.class', 'newClass');
+
+        const popup = getPopup(dropDownButton);
+        const { wrapperAttr } = popup.option();
+
+        assert.deepEqual(wrapperAttr, { class: 'newClass' });
+    });
+
+    QUnit.test('dropDownOptions should be cached in _cached_dropDownOptions after dropDownOptions runtime change', function(assert) {
+        const dropDownButton = $('#dropDownButton').dxDropDownButton({}).dxDropDownButton('instance');
+
+        dropDownButton.option('dropDownOptions', { width: 123 });
+        const { _cached_dropDownOptions } = dropDownButton.option();
+
+        assert.deepEqual(_cached_dropDownOptions, { width: 123 });
+    });
+
     QUnit.test('popup width should change if content is truncated', function(assert) {
         const $dropDownButton = $('#dropDownButton').dxDropDownButton({
             icon: 'square',
@@ -1074,7 +1117,7 @@ QUnit.module('list integration', {}, () => {
         });
 
         const $buttonText = $dropDownButton.find(`.${BUTTON_TEXT}`);
-        const dropDownButtonRect = $dropDownButton.get(0).getBoundingClientRect();
+        const dropDownButtonRect = $dropDownButton.find(`.${BUTTON}`).get(0).getBoundingClientRect();
         const buttonTextRect = $buttonText.get(0).getBoundingClientRect();
 
         const dropDownButtonVerticalCenter = (dropDownButtonRect.top + dropDownButtonRect.bottom) / 2;
@@ -1101,8 +1144,8 @@ QUnit.module('list integration', {}, () => {
         const toggleButtonElement = getToggleButton(dropDownButton);
         const actionButtonElement = getActionButton(dropDownButton);
 
-        assert.strictEqual(getOuterHeight(toggleButtonElement), 36, 'toggleButton has correct height in generic theme');
-        assert.strictEqual(getOuterHeight(actionButtonElement), 36, 'actionButton has correct height in generic theme');
+        assert.strictEqual(getOuterHeight(toggleButtonElement), 32, 'toggleButton has correct height in fluent theme');
+        assert.strictEqual(getOuterHeight(actionButtonElement), 32, 'actionButton has correct height in fluent theme');
     });
 
     QUnit.test('list selection should depend on selectedItemKey option', function(assert) {
@@ -1269,7 +1312,7 @@ QUnit.module('common use cases', {
 
         const toggleButtonElement = getToggleButton(dropDownButton);
 
-        assert.strictEqual(getWidth(toggleButtonElement), 18, 'toggleButton has correct width in generic theme');
+        assert.strictEqual(getWidth(toggleButtonElement), 24, 'toggleButton has correct width in fluent theme');
     });
 
     QUnit.test('it should be possible to set non-datasource action button', function(assert) {

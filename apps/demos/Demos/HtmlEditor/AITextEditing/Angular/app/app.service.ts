@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { type DxHtmlEditorTypes } from 'devextreme-angular/ui/html_editor';
 
 const AzureOpenAIConfig = {
-    dangerouslyAllowBrowser: true,
-    deployment: 'gpt-4o-mini',
-    apiVersion: '2024-02-01',
-    endpoint: 'https://public-api.devexpress.com/demo-openai',
-    apiKey: 'DEMO',
+  dangerouslyAllowBrowser: true,
+  deployment: 'gpt-4o-mini',
+  apiVersion: '2024-02-01',
+  endpoint: 'https://public-api.devexpress.com/demo-openai',
+  apiKey: 'DEMO',
 };
 
-const extractKeywordsPrompt: DxHtmlEditorTypes.AICustomCommand['prompt'] = () => 
+const extractKeywordsPrompt: DxHtmlEditorTypes.AICustomCommand['prompt'] = () =>
   'Extract a list of keywords from the text and return it as a comma-separated string';
 
 const markup = `
@@ -49,15 +49,15 @@ const markup = `
   providedIn: 'root',
 })
 export class Service {
-    getMarkup(): string {
-        return markup;
-    }
+  getMarkup(): string {
+    return markup;
+  }
 
-    getPrompt() {
-        return extractKeywordsPrompt;
-    }
+  getPrompt() {
+    return extractKeywordsPrompt;
+  }
 
-    getAzureOpenAIConfig() {
-        return AzureOpenAIConfig;
-    }
+  getAzureOpenAIConfig() {
+    return AzureOpenAIConfig;
+  }
 }

@@ -14,6 +14,7 @@ if (window && window.config?.packageConfigPaths) {
 })
 export class EmployeeComponent implements OnChanges {
   employees: Employee[];
+
   text: string;
 
   @Input() employeeID: number;
@@ -23,7 +24,7 @@ export class EmployeeComponent implements OnChanges {
   }
 
   ngOnChanges(): void {
-    const employee = this.employees.find(e => e.ID === this.employeeID);
+    const employee = this.employees.find((e) => e.ID === this.employeeID);
     this.text = employee.Name;
   }
 }

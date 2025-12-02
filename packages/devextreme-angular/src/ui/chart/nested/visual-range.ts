@@ -80,7 +80,6 @@ export class DxoChartVisualRangeComponent extends NestedOption implements OnDest
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'endValueChange' },
             { emit: 'startValueChange' }

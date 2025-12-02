@@ -38,17 +38,17 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxoBoxModule } from 'devextreme-angular/ui/nested';
 
 import { DxiBoxItemModule } from 'devextreme-angular/ui/box/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiBoxItemComponent } from 'devextreme-angular/ui/box/nested';
+import { 
+           PROPERTY_TOKEN_items,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -69,6 +69,12 @@ import { DxiBoxItemComponent } from 'devextreme-angular/ui/box/nested';
     ]
 })
 export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
     instance: DxBox<TItem, TKey> = null;
 
     /**
@@ -413,26 +419,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
-
-    @ContentChildren(DxiBoxItemComponent)
-    get itemsChildren(): QueryList<DxiBoxItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiBoxItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
 
 
 

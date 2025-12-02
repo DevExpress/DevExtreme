@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import 'ui/data_grid';
 import { createEvent } from 'common/core/events/utils/index';
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
@@ -152,7 +152,7 @@ QUnit.module('Keyboard navigation accessibility', {
         this.editRow(1);
         this.clock.tick(10);
         $(this.getCellElement(1, 1)).focus().trigger('dxclick');
-        this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 1)));
+        this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 1)).find('.dx-texteditor-input').get(0));
         this.clock.tick(10);
 
         // assert
@@ -160,13 +160,13 @@ QUnit.module('Keyboard navigation accessibility', {
         assert.equal($('#qunit-fixture').find(':focus').index(), 0, 'focused element index');
 
         // act
-        this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 2)).find('.dx-link').first());
+        this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 2)).find('.dx-link').first().get(0));
 
         // assert
         assert.equal(counter, 1, '_editingCellTabHandler counter');
 
         // act
-        this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 2)).find('.dx-link').last());
+        this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 2)).find('.dx-link').last().get(0));
 
         // assert
         assert.equal(counter, 2, '_editingCellTabHandler counter');
@@ -174,20 +174,20 @@ QUnit.module('Keyboard navigation accessibility', {
         assert.equal($('#qunit-fixture').find(':focus').closest('td').index(), 3, 'focused element index');
 
         // act
-        this.triggerKeyDown('tab', false, true, $('#qunit-fixture').find(':focus'));
+        this.triggerKeyDown('tab', false, true, $('#qunit-fixture').find(':focus').get(0));
 
         // assert
         assert.ok($('#qunit-fixture').find(':focus').hasClass('dx-link'), 'focused element');
         assert.equal($('#qunit-fixture').find(':focus').index(), 1, 'focused element index');
 
         // act
-        this.triggerKeyDown('tab', false, true, $(this.getCellElement(1, 2)).find('.dx-link').last());
+        this.triggerKeyDown('tab', false, true, $(this.getCellElement(1, 2)).find('.dx-link').last().get(0));
 
         // assert
         assert.equal(counter, 3, '_editingCellTabHandler counter');
 
         // act
-        this.triggerKeyDown('tab', false, true, $(this.getCellElement(1, 2)).find('.dx-link').first());
+        this.triggerKeyDown('tab', false, true, $(this.getCellElement(1, 2)).find('.dx-link').first().get(0));
 
         // assert
         assert.equal(counter, 4, '_editingCellTabHandler counter');
@@ -236,7 +236,7 @@ QUnit.module('Keyboard navigation accessibility', {
         // act
         this.editCell(1, 1);
         this.clock.tick(10);
-        this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 1)));
+        this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 1)).find('.dx-texteditor-input').get(0));
         this.clock.tick(10);
 
         // assert
@@ -245,7 +245,7 @@ QUnit.module('Keyboard navigation accessibility', {
         // act
         this.editCell(1, 4);
         this.clock.tick(10);
-        this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 4)));
+        this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 4)).find('.dx-texteditor-input').get(0));
         this.clock.tick(10);
 
         // assert
@@ -266,7 +266,7 @@ QUnit.module('Keyboard navigation accessibility', {
         // act
         this.editCell(1, 1);
         this.clock.tick(10);
-        this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 1)));
+        this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 1)).find('.dx-texteditor-input').get(0));
         this.clock.tick(10);
 
         // assert
@@ -275,7 +275,7 @@ QUnit.module('Keyboard navigation accessibility', {
         // act
         this.editCell(1, 4);
         this.clock.tick(10);
-        this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 4)));
+        this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 4)).find('.dx-texteditor-input').get(0));
         this.clock.tick(10);
 
         // assert
@@ -336,8 +336,8 @@ QUnit.module('Keyboard navigation accessibility', {
             columns: [
                 { dataField: 'name' },
                 { dataField: 'date', dataType: 'date' },
+                { dataField: 'phone', dataType: 'number' },
                 { dataField: 'room', dataType: 'number', groupIndex: 0 },
-                { dataField: 'phone', dataType: 'number' }
             ]
         };
 
@@ -775,6 +775,7 @@ QUnit.module('Keyboard navigation accessibility', {
             columns: [
                 { dataField: 'name', allowSorting: true, allowFiltering: true },
                 { dataField: 'date', dataType: 'date' },
+                { dataField: 'AdditionalPhone', dataType: 'number' },
                 { dataField: 'room', dataType: 'number', groupIndex: 0 },
                 { dataField: 'phone', dataType: 'number' }
             ]
@@ -789,7 +790,7 @@ QUnit.module('Keyboard navigation accessibility', {
         dataGridWrapper.headerPanel.getGroupPanelItem(0).focus();
         this.ctrlDown();
         // assert
-        assert.ok(dataGridWrapper.headers.getHeaderItem(0, 0).is(':focus'), 'focused element');
+        assert.ok(dataGridWrapper.headers.getHeaderItem(0, 1).is(':focus'), 'focused element');
 
         // act, assert
         dataGridWrapper.headers.getHeaderItem(0, 0).focus();
@@ -803,7 +804,7 @@ QUnit.module('Keyboard navigation accessibility', {
 
         // act, assert
         this.ctrlUp();
-        assert.ok(dataGridWrapper.headers.getHeaderItem(0, 0).is(':focus'), 'focused element');
+        assert.ok(dataGridWrapper.headers.getHeaderItem(0, 1).is(':focus'), 'focused element');
 
         // act, assert
         this.ctrlUp();
@@ -811,7 +812,7 @@ QUnit.module('Keyboard navigation accessibility', {
 
         // act, assert
         this.ctrlDown();
-        assert.ok(dataGridWrapper.headers.getHeaderItem(0, 0).is(':focus'), 'focused element');
+        assert.ok(dataGridWrapper.headers.getHeaderItem(0, 1).is(':focus'), 'focused element');
 
         // act, assert
         $(this.getCellElement(1, 1)).trigger(CLICK_EVENT).focus();

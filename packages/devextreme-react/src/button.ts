@@ -40,7 +40,7 @@ const Button = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const independentEvents = useMemo(() => (["onClick","onContentReady","onDisposing","onInitialized"]), []);
 

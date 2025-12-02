@@ -2,7 +2,7 @@ export {
     confirm,
     alert,
     custom
-} from '../__internal/ui/m_dialog';
+} from '../__internal/ui/dialog';
 
 /**
  * @name ui.dialog

@@ -18,10 +18,11 @@ const { module, testStart, test, testInActiveWindow } = QUnit;
 const SLIDER_PADDING = 7;
 
 testStart(() => {
-    const markup =
-        `<div id="slider"></div>
+    const markup = `
+        <div id="slider"></div>
         <div id="widget"></div>
-        <div id="widthRootStyle"></div>`;
+        <div id="widthRootStyle"></div>
+    `;
 
     $('#qunit-fixture').html(markup);
     $('#widthRootStyle').css('width', '300px');

@@ -1,4 +1,4 @@
-const Translator1D = require('viz/translators/translator1d').Translator1D;
+import { Translator1D } from '__internal/viz/translators/translator1d';
 
 const EPSILON = 1E-8;
 

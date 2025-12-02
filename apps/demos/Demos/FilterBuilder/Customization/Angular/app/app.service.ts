@@ -18,7 +18,7 @@ export class Product {
   ImageSrc: string;
 }
 
-const filter: Array<any> = [
+const filter: any[] = [
   ['Category', 'anyof', ['Automation', 'Monitors']],
   'or',
   [
@@ -34,7 +34,7 @@ const categories: string[] = [
   'Projectors',
   'Automation',
 ];
-const fields: Array<any> = [{
+const fields: any[] = [{
   dataField: 'Name',
 }, {
   dataField: 'Price',
@@ -55,7 +55,7 @@ const fields: Array<any> = [{
 
 @Injectable()
 export class Service {
-  getFields(): Array<any> {
+  getFields(): any[] {
     return fields;
   }
 
@@ -63,7 +63,7 @@ export class Service {
     return categories;
   }
 
-  getFilter(): Array<any> {
+  getFilter(): any[] {
     return filter;
   }
 }

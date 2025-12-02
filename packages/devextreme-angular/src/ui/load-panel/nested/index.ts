@@ -4,6 +4,7 @@ export * from './boundary-offset';
 export * from './collision';
 export * from './from';
 export * from './hide';
+export * from './indicator-options';
 export * from './my';
 export * from './offset';
 export * from './position';

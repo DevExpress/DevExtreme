@@ -19,6 +19,7 @@ import {
 } from 'devextreme-angular/core';
 import { DxiDataChange } from './base/data-change-dxi';
 
+import { PROPERTY_TOKEN_changes } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-change',
@@ -26,7 +27,13 @@ import { DxiDataChange } from './base/data-change-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_changes,
+           useExisting: DxiChangeComponent,
+        }
+    ],
     inputs: [
         'data',
         'insertAfterKey',

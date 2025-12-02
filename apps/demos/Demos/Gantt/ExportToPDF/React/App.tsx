@@ -16,7 +16,9 @@ import {
   documentFormatLabel, exportModeLabel, dateRangeLabel,
 } from './data.ts';
 
-import 'jspdf-autotable';
+import { applyPlugin } from 'jspdf-autotable';
+
+applyPlugin(jsPDF);
 
 type GanttPdfExportMode = 'all' | 'treeList' | 'chart';
 
@@ -45,7 +47,7 @@ class App extends React.Component {
 
   dateRangeBoxSelectionChanged: ISelectBoxOptions['onValueChanged'];
 
-  onLandscapeCheckBoxChanged: ICheckBoxOptions['onValueChanged'] ;
+  onLandscapeCheckBoxChanged: ICheckBoxOptions['onValueChanged'];
 
   startTaskIndexValueChanged: INumberBoxOptions['onValueChanged'];
 
@@ -258,7 +260,6 @@ class App extends React.Component {
     pdfExporter.exportGantt(
       {
         component: gantt,
-        // eslint-disable-next-line new-cap
         createDocumentMethod: (args) => new jsPDF(args),
         format,
         landscape: isLandscape,

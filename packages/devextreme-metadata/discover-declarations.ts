@@ -20,4 +20,13 @@ Declarations.discover({
       typeRoots: [],
     },
   },
+
+  variables: {
+    oldNamespaces: {
+      ComponentOptions: 'DevExpress',
+      DOMComponentOptions: 'DevExpress',
+      PivotGridDataSourceOptions: 'DevExpress.data',
+      XmlaStoreOptions: 'DevExpress.data',
+    },
+  },
 });

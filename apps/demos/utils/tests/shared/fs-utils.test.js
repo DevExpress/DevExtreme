@@ -23,7 +23,7 @@ describe('common functions', () => {
 
     expect(fs.writeFileSync).toHaveBeenCalledWith(
       './test.json',
-      JSON.stringify(testJson, null, 2),
+      `${JSON.stringify(testJson, null, 2)}\n`,
     );
   });
 
@@ -118,9 +118,7 @@ describe('common functions', () => {
     const expectedPath = path.join(baseDemosDir, 'Widget2', demoName);
 
     expect(fileSystemUtils.getDemoPathByMeta(
-      categoryName,
-      groupName,
-      demoName,
+      [ categoryName, groupName, demoName ],
       baseDemosDir,
       menuMetaData,
     )).toBe(expectedPath);
@@ -144,23 +142,87 @@ describe('Hi-level copy functions', () => {
     fs.existsSync.mockClear();
     fs.mkdirSync.mockClear();
     fs.writeFileSync.mockClear();
+    fs.readdirSync.mockClear();
     fileSystemExtra.copySync.mockClear();
+  });
+
+  test(`replaceRelativePaths (mkdir)`, () => {
+    fs.readdirSync.mockImplementation(() => []);
+    fs.existsSync.mockImplementation(() => false);
+
+    fileSystemUtils.replaceRelativePaths('from', 'to');
+
+    expect(fs.mkdirSync).toHaveBeenCalledTimes(1);
+  });
+
+  [
+    { basePath: path.join('Demo', 'Angular'), relativePath: '../../' },
+    { basePath: path.join('Parent', 'Demo', 'Angular'), relativePath: '../../../' },
+  ].forEach(({ basePath, relativePath }) => {
+    test(`replaceRelativePaths (${basePath})`, () => {
+      const file = 'index.html';
+      fs.existsSync.mockImplementation(() => true);
+      fs.readdirSync.mockImplementation(() => [({
+        isDirectory: () => false,
+        name: file,
+      })]);
+
+      fs.readFileSync.mockImplementation(() => '__RELATIVE_PATH__node_modules');
+      const fromPath = path.join('utils', 'templates', 'Angular');
+      fileSystemUtils.replaceRelativePaths(fromPath, basePath);
+
+      expect(fs.writeFileSync.mock.calls[0]).toStrictEqual([
+        path.join(basePath, file),
+        `${relativePath}node_modules`
+      ]);
+    });
+  });
+
+  test(`replaceRelativePaths (dir)`, () => {
+    const file = 'index.html';
+    const fromPath = path.join('utils', 'templates', 'Angular');
+    fs.existsSync.mockImplementation(() => true);
+    fs.readdirSync.mockImplementation((path) => {
+      if (path === fromPath) {
+        return [({
+          isDirectory: () => true,
+          name: 'app',
+        })]
+      }
+      return [({
+        isDirectory: () => false,
+        name: file,
+      })]
+    });
+
+    fs.readFileSync.mockImplementation(() => '__RELATIVE_PATH__node_modules');
+    fileSystemUtils.replaceRelativePaths(fromPath, path.join('Parent', 'Demo', 'Angular'));
+
+    expect(fs.writeFileSync.mock.calls[0]).toStrictEqual([
+      path.join('Parent', 'Demo', 'Angular', 'app', file),
+      `../../../../node_modules`
+    ]);
   });
 
   test('copyFilesFromBlankDemos', () => {
     fs.writeFileSync.mockImplementation((f1, f2, callback) => callback());
+    const replaceRelativePaths = fileSystemUtils.replaceRelativePaths;
+    fileSystemUtils.replaceRelativePaths = jest.fn().mockImplementation(() => {});
+    fs.readdirSync.mockImplementation(() => []);
+
     fileSystemUtils.copyFilesFromBlankDemos(approaches, demoPath);
 
     const demosPathPrefix = path.join('utils', 'templates');
-    const expectedCopySyncCalls = approaches.map((approach) => [
+    const expectedReplaceRelativePathsCalls = approaches.map((approach) => [
       path.join(demosPathPrefix, approach),
       path.join(demoPath, approach),
     ]);
 
-    expect(fileSystemExtra.copySync.mock.calls).toEqual(expectedCopySyncCalls);
+    expect(fileSystemUtils.replaceRelativePaths.mock.calls).toEqual(expectedReplaceRelativePathsCalls);
     expect(fs.writeFileSync).toHaveBeenCalledTimes(1);
     expect(fs.writeFileSync.mock.calls[0][0]).toBe(path.join(demoPath, 'description.md'));
     expect(fs.writeFileSync.mock.calls[0][1]).toBe('');
+    fileSystemUtils.replaceRelativePaths = replaceRelativePaths;
   });
 
   test('copyFilesFromBlankDemos (unable to copy description)', () => {

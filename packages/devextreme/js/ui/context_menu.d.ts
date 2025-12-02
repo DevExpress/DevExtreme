@@ -18,9 +18,9 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
-} from '../common/core/events';
-
-import { DxEvent } from '../events';
+    DxEvent,
+    PointerInteractionEvent,
+} from '../events';
 
 import dxMenuBase, {
     dxMenuBaseOptions,
@@ -34,6 +34,8 @@ import {
     SelectionChangeInfo,
 } from './collection/ui.collection_widget.base';
 
+type ItemLike = Item | any;
+
 /** @public */
 export type ContextSubmenuDirection = 'auto' | 'left' | 'right';
 
@@ -43,7 +45,7 @@ export type ContextSubmenuDirection = 'auto' | 'left' | 'right';
  * @type object
  * @inherits EventInfo
  */
-export type ContentReadyEvent<TKey = any> = EventInfo<dxContextMenu<TKey>>;
+export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxContextMenu<TItem, TKey>>;
 
 /**
  * @docid _ui_context_menu_DisposingEvent
@@ -51,7 +53,7 @@ export type ContentReadyEvent<TKey = any> = EventInfo<dxContextMenu<TKey>>;
  * @type object
  * @inherits EventInfo
  */
-export type DisposingEvent<TKey = any> = EventInfo<dxContextMenu<TKey>>;
+export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxContextMenu<TItem, TKey>>;
 
 /**
  * @docid _ui_context_menu_HiddenEvent
@@ -59,7 +61,7 @@ export type DisposingEvent<TKey = any> = EventInfo<dxContextMenu<TKey>>;
  * @type object
  * @inherits EventInfo
  */
-export type HiddenEvent<TKey = any> = EventInfo<dxContextMenu<TKey>>;
+export type HiddenEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxContextMenu<TItem, TKey>>;
 
 /**
  * @docid _ui_context_menu_HidingEvent
@@ -67,7 +69,7 @@ export type HiddenEvent<TKey = any> = EventInfo<dxContextMenu<TKey>>;
  * @type object
  * @inherits Cancelable,EventInfo
  */
-export type HidingEvent<TKey = any> = Cancelable & EventInfo<dxContextMenu<TKey>>;
+export type HidingEvent<TItem extends ItemLike = any, TKey = any> = Cancelable & EventInfo<dxContextMenu<TItem, TKey>>;
 
 /**
  * @docid _ui_context_menu_InitializedEvent
@@ -75,7 +77,7 @@ export type HidingEvent<TKey = any> = Cancelable & EventInfo<dxContextMenu<TKey>
  * @type object
  * @inherits InitializedEventInfo
  */
-export type InitializedEvent<TKey = any> = InitializedEventInfo<dxContextMenu<TKey>>;
+export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<dxContextMenu<TItem, TKey>>;
 
 /**
  * @docid _ui_context_menu_ItemClickEvent
@@ -83,7 +85,7 @@ export type InitializedEvent<TKey = any> = InitializedEventInfo<dxContextMenu<TK
  * @type object
  * @inherits NativeEventInfo,ItemInfo
  */
-export type ItemClickEvent<TKey = any> = NativeEventInfo<dxContextMenu<TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<Item>;
+export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxContextMenu<TItem, TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TItem>;
 
 /**
  * @docid _ui_context_menu_ItemContextMenuEvent
@@ -91,7 +93,7 @@ export type ItemClickEvent<TKey = any> = NativeEventInfo<dxContextMenu<TKey>, Ke
  * @type object
  * @inherits NativeEventInfo,ItemInfo
  */
-export type ItemContextMenuEvent<TKey = any> = NativeEventInfo<dxContextMenu<TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<Item>;
+export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxContextMenu<TItem, TKey>, PointerInteractionEvent> & ItemInfo<TItem>;
 
 /**
  * @docid _ui_context_menu_ItemRenderedEvent
@@ -99,7 +101,7 @@ export type ItemContextMenuEvent<TKey = any> = NativeEventInfo<dxContextMenu<TKe
  * @type object
  * @inherits EventInfo,ItemInfo
  */
-export type ItemRenderedEvent<TKey = any> = EventInfo<dxContextMenu<TKey>> & ItemInfo<Item>;
+export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxContextMenu<TItem, TKey>> & ItemInfo<TItem>;
 
 /**
  * @docid _ui_context_menu_OptionChangedEvent
@@ -107,7 +109,7 @@ export type ItemRenderedEvent<TKey = any> = EventInfo<dxContextMenu<TKey>> & Ite
  * @type object
  * @inherits EventInfo,ChangedOptionInfo
  */
-export type OptionChangedEvent<TKey = any> = EventInfo<dxContextMenu<TKey>> & ChangedOptionInfo;
+export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxContextMenu<TItem, TKey>> & ChangedOptionInfo;
 
 /**
  * @docid _ui_context_menu_PositioningEvent
@@ -115,7 +117,7 @@ export type OptionChangedEvent<TKey = any> = EventInfo<dxContextMenu<TKey>> & Ch
  * @type object
  * @inherits NativeEventInfo
  */
-export type PositioningEvent<TKey = any> = NativeEventInfo<dxContextMenu<TKey>, MouseEvent | PointerEvent | TouchEvent> & {
+export type PositioningEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxContextMenu<TItem, TKey>, PointerInteractionEvent> & {
     /** @docid _ui_context_menu_PositioningEvent.position */
     readonly position: PositionConfig;
 };
@@ -126,7 +128,7 @@ export type PositioningEvent<TKey = any> = NativeEventInfo<dxContextMenu<TKey>, 
  * @type object
  * @inherits EventInfo,SelectionChangeInfo
  */
-export type SelectionChangedEvent<TKey = any> = EventInfo<dxContextMenu<TKey>> & SelectionChangeInfo<Item>;
+export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxContextMenu<TItem, TKey>> & SelectionChangeInfo<TItem>;
 
 /**
  * @docid _ui_context_menu_ShowingEvent
@@ -134,7 +136,7 @@ export type SelectionChangedEvent<TKey = any> = EventInfo<dxContextMenu<TKey>> &
  * @type object
  * @inherits Cancelable,EventInfo
  */
-export type ShowingEvent<TKey = any> = Cancelable & EventInfo<dxContextMenu<TKey>>;
+export type ShowingEvent<TItem extends ItemLike = any, TKey = any> = Cancelable & EventInfo<dxContextMenu<TItem, TKey>>;
 
 /**
  * @docid _ui_context_menu_ShownEvent
@@ -142,7 +144,7 @@ export type ShowingEvent<TKey = any> = Cancelable & EventInfo<dxContextMenu<TKey
  * @type object
  * @inherits EventInfo
  */
-export type ShownEvent<TKey = any> = EventInfo<dxContextMenu<TKey>>;
+export type ShownEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxContextMenu<TItem, TKey>>;
 
 /**
  * @deprecated use Properties instead
@@ -151,15 +153,16 @@ export type ShownEvent<TKey = any> = EventInfo<dxContextMenu<TKey>>;
  * @docid
  */
 export interface dxContextMenuOptions<
+    TItem extends ItemLike = any,
     TKey = any,
-> extends dxMenuBaseOptions<dxContextMenu<TKey>, dxContextMenuItem, TKey> {
+> extends dxMenuBaseOptions<dxContextMenu<TItem, TKey>, TItem, TKey> {
     /**
      * @docid
      * @type string | Array<dxContextMenuItem> | Store | DataSource | DataSourceOptions | null
      * @default null
      * @public
      */
-    dataSource?: DataSourceLike<Item, TKey> | null;
+    dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
      * @docid
      * @default true
@@ -167,13 +170,13 @@ export interface dxContextMenuOptions<
      * @type_function_param1 event:event
      * @public
      */
-    hideOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
+    hideOnOutsideClick?: boolean | ((event: DxEvent<PointerInteractionEvent>) => boolean);
     /**
      * @docid
-     * @type Array<dxContextMenuItem>
+     * @type Array<dxContextMenuItem | any>
      * @public
      */
-    items?: Array<Item>;
+    items?: Array<TItem>;
     /**
      * @docid
      * @default null
@@ -181,7 +184,7 @@ export interface dxContextMenuOptions<
      * @action
      * @public
      */
-    onHidden?: ((e: HiddenEvent<TKey>) => void);
+    onHidden?: ((e: HiddenEvent<TItem, TKey>) => void);
     /**
      * @docid
      * @default null
@@ -189,7 +192,7 @@ export interface dxContextMenuOptions<
      * @action
      * @public
      */
-    onHiding?: ((e: HidingEvent<TKey>) => void);
+    onHiding?: ((e: HidingEvent<TItem, TKey>) => void);
     /**
      * @docid
      * @default null
@@ -197,7 +200,7 @@ export interface dxContextMenuOptions<
      * @action
      * @public
      */
-    onPositioning?: ((e: PositioningEvent<TKey>) => void);
+    onPositioning?: ((e: PositioningEvent<TItem, TKey>) => void);
     /**
      * @docid
      * @default null
@@ -205,7 +208,7 @@ export interface dxContextMenuOptions<
      * @action
      * @public
      */
-    onShowing?: ((e: ShowingEvent<TKey>) => void);
+    onShowing?: ((e: ShowingEvent<TItem, TKey>) => void);
     /**
      * @docid
      * @default null
@@ -213,7 +216,7 @@ export interface dxContextMenuOptions<
      * @action
      * @public
      */
-    onShown?: ((e: ShownEvent<TKey>) => void);
+    onShown?: ((e: ShownEvent<TItem, TKey>) => void);
     /**
      * @docid
      * @default { my: 'top left', at: 'top left' }
@@ -266,8 +269,9 @@ export interface dxContextMenuOptions<
  * @public
  */
 export default class dxContextMenu<
+    TItem extends ItemLike = any,
     TKey = any,
-> extends dxMenuBase<dxContextMenuOptions<TKey>, dxContextMenuItem, TKey> {
+> extends dxMenuBase<dxContextMenuOptions<TItem, TKey>, TItem, TKey> {
     /**
      * @docid
      * @publicName hide()
@@ -311,28 +315,28 @@ export interface dxContextMenuItem extends dxMenuBaseItem {
 }
 
 /** @public */
-export type ExplicitTypes<TKey = any> = {
-    Properties: Properties<TKey>;
-    ContentReadyEvent: ContentReadyEvent<TKey>;
-    DisposingEvent: DisposingEvent<TKey>;
-    HiddenEvent: HiddenEvent<TKey>;
-    HidingEvent: HidingEvent<TKey>;
-    InitializedEvent: InitializedEvent<TKey>;
-    ItemClickEvent: ItemClickEvent<TKey>;
-    ItemContextMenuEvent: ItemContextMenuEvent<TKey>;
-    ItemRenderedEvent: ItemRenderedEvent<TKey>;
-    OptionChangedEvent: OptionChangedEvent<TKey>;
-    PositioningEvent: PositioningEvent<TKey>;
-    SelectionChangedEvent: SelectionChangedEvent<TKey>;
-    ShowingEvent: ShowingEvent<TKey>;
-    ShownEvent: ShownEvent<TKey>;
+export type ExplicitTypes<TItem extends ItemLike = any, TKey = any> = {
+    Properties: Properties<TItem, TKey>;
+    ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
+    DisposingEvent: DisposingEvent<TItem, TKey>;
+    HiddenEvent: HiddenEvent<TItem, TKey>;
+    HidingEvent: HidingEvent<TItem, TKey>;
+    InitializedEvent: InitializedEvent<TItem, TKey>;
+    ItemClickEvent: ItemClickEvent<TItem, TKey>;
+    ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
+    ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
+    OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+    PositioningEvent: PositioningEvent<TItem, TKey>;
+    SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
+    ShowingEvent: ShowingEvent<TItem, TKey>;
+    ShownEvent: ShownEvent<TItem, TKey>;
 };
 
 /** @public */
-export type Properties<TKey = any> = dxContextMenuOptions<TKey>;
+export type Properties<TItem extends ItemLike = any, TKey = any> = dxContextMenuOptions<TItem, TKey>;
 
 /** @deprecated use Properties instead */
-export type Options<TKey = any> = Properties<TKey>;
+export type Options<TItem extends ItemLike = any, TKey = any> = Properties<TItem, TKey>;
 
 /// #DEBUG
 // eslint-disable-next-line import/first

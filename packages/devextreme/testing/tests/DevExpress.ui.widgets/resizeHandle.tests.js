@@ -6,7 +6,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import ResizeHandle from '__internal/ui/splitter/resize_handle';
 import { name as DOUBLE_CLICK_EVENT } from 'common/core/events/double_click';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(() => {
     const markup = '<div id="resizeHandle"></div>';

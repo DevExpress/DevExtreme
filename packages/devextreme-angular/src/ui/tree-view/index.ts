@@ -40,7 +40,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
@@ -52,10 +53,10 @@ import { DxiTreeViewButtonModule } from 'devextreme-angular/ui/tree-view/nested'
 import { DxiTreeViewItemModule } from 'devextreme-angular/ui/tree-view/nested';
 import { DxoTreeViewOptionsModule } from 'devextreme-angular/ui/tree-view/nested';
 import { DxoTreeViewSearchEditorOptionsModule } from 'devextreme-angular/ui/tree-view/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiTreeViewItemComponent } from 'devextreme-angular/ui/tree-view/nested';
+import { 
+           PROPERTY_TOKEN_buttons,
+           PROPERTY_TOKEN_items,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -75,8 +76,19 @@ import { DxiTreeViewItemComponent } from 'devextreme-angular/ui/tree-view/nested
         IterableDifferHelper
     ]
 })
-export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxTreeView<TKey> = null;
+export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_buttons)
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('buttons', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
+    instance: DxTreeView<TItem, TKey> = null;
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -369,10 +381,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     
      */
     @Input()
-    get items(): Array<dxTreeViewItem> {
+    get items(): Array<any | dxTreeViewItem> {
         return this._getOption('items');
     }
-    set items(value: Array<dxTreeViewItem>) {
+    set items(value: Array<any | dxTreeViewItem>) {
         this._setOption('items', value);
     }
 
@@ -964,7 +976,7 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<dxTreeViewItem>>;
+    @Output() itemsChange: EventEmitter<Array<any | dxTreeViewItem>>;
 
     /**
     
@@ -1140,26 +1152,6 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
-
-    @ContentChildren(DxiTreeViewItemComponent)
-    get itemsChildren(): QueryList<DxiTreeViewItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiTreeViewItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
 
 
 

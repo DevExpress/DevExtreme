@@ -5,7 +5,10 @@ window.jsPDF = window.jspdf.jsPDF;
 $(() => {
   const priceCaption = 'Price';
   const ratingCaption = 'Rating';
-
+  const store = new DevExpress.data.ArrayStore({
+    data: products,
+    key: 'Product_ID',
+  });
   $('#tabPanel').dxTabPanel({
     dataSource: [{
       title: priceCaption,
@@ -24,16 +27,11 @@ $(() => {
           ],
           showBorders: true,
           rowAlternationEnabled: true,
-          dataSource: {
-            store: {
-              type: 'odata',
-              version: 2,
-              url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
-              key: 'Product_ID',
-            },
+          dataSource: new DevExpress.data.DataSource({
+            store,
             select: ['Product_ID', 'Product_Name', 'Product_Sale_Price', 'Product_Retail_Price'],
             filter: ['Product_ID', '<', 10],
-          },
+          }),
         });
       },
     }, {
@@ -49,16 +47,11 @@ $(() => {
           ],
           showBorders: true,
           rowAlternationEnabled: true,
-          dataSource: {
-            store: {
-              type: 'odata',
-              version: 2,
-              url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
-              key: 'Product_ID',
-            },
+          dataSource: new DevExpress.data.DataSource({
+            store,
             select: ['Product_ID', 'Product_Name', 'Product_Consumer_Rating', 'Product_Category'],
             filter: ['Product_ID', '<', 10],
-          },
+          }),
         });
       },
     }],
@@ -81,7 +74,6 @@ $(() => {
     text: 'Export multiple grids',
     icon: 'exportpdf',
     onClick() {
-      // eslint-disable-next-line new-cap
       const doc = new jsPDF();
 
       const priceDataGrid = $('#priceDataGrid').dxDataGrid('instance');

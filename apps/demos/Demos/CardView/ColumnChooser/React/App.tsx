@@ -28,7 +28,7 @@ const App = () => {
   const [selectByClick, setSelectByClick] = useState(true);
   const [allowColumnReordering, setAllowColumnReordering] = useState(false);
 
-  return <>
+  return <React.Fragment>
     <div className="options-panel">
       <div className="caption">Options</div>
       <div className="options-container">
@@ -126,7 +126,7 @@ const App = () => {
         visible={false}
       />
     </CardView>
-  </>;
+  </React.Fragment>;
 };
 
 export default App;

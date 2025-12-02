@@ -1,7 +1,7 @@
 import registerComponent from '@js/core/component_registrator';
 import { weekUtils } from '@ts/scheduler/r1/utils/index';
 
-import { VIEWS } from '../constants';
+import { VIEWS } from '../utils/options/constants_view';
 import SchedulerWorkSpaceVertical from './m_work_space_vertical';
 
 const WEEK_CLASS = 'dx-scheduler-work-space-week';

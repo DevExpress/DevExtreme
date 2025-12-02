@@ -1,9 +1,12 @@
 import $ from 'jquery';
-import * as vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+} from '../../helpers/vizMocks.js';
 import pointModule from 'viz/series/points/base_point';
 import SeriesModule from 'viz/series/base_series';
-const Series = SeriesModule.Series;
 import { MockAxis, insertMockFactory, restoreMockFactory } from '../../helpers/chartMocks.js';
+
+const Series = SeriesModule.Series;
 
 const createPoint = function() {
     const stub = sinon.createStubInstance(pointModule.Point);
@@ -21,7 +24,7 @@ const environment = {
     beforeEach: function() {
         insertMockFactory();
         let mockPointIndex = 0;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.seriesGroup = this.renderer.g();
         this.data = [
             { date: 'arg1', high: 'high1', low: 'low1', open: 'open1', close: 'close1' }
@@ -44,7 +47,7 @@ const environment = {
 
 const createSeries = function(options, renderSettings) {
     renderSettings = renderSettings || {};
-    const renderer = renderSettings.renderer = renderSettings.renderer || new vizMocks.Renderer();
+    const renderer = renderSettings.renderer = renderSettings.renderer || new Renderer();
 
     options = $.extend(true, {
         containerBackgroundColor: 'containerColor',
@@ -105,8 +108,6 @@ const checkGroups = function(assert, series) {
 };
 
 (function StockSeries() {
-
-
     const seriesType = 'stock';
 
     QUnit.module('Creation', environment);
@@ -257,12 +258,10 @@ const checkGroups = function(assert, series) {
             type: seriesType,
             point: { visible: false }
         });
-        // act
+
         series.draw(false);
-        // assert
 
         checkGroups(assert, series);
-
     });
 
     QUnit.test('Draw simple data without animation', function(assert) {
@@ -277,9 +276,9 @@ const checkGroups = function(assert, series) {
             pt.x = pt.argument;
             pt.y = pt.value;
         });
-        // act
+
         series.draw(false);
-        // assert
+
         checkGroups(assert, series);
         assert.ok(series._points.length, 'points');
         $.each(series._points, function(i, p) {
@@ -298,16 +297,15 @@ const checkGroups = function(assert, series) {
             pt.x = pt.argument;
             pt.y = pt.value;
         });
-        // act
+
         series.draw(true);
-        // assert
+
         checkGroups(assert, series);
 
         assert.ok(series._points.length, 'points');
         $.each(series._points, function(i, p) {
             assert.equal(p.animate.callCount, 0, i + ' point draw with animate');
         });
-
     });
 
     QUnit.test('Create groups without animation. T101152', function(assert) {
@@ -315,9 +313,8 @@ const checkGroups = function(assert, series) {
             type: seriesType,
             point: { visible: false }
         });
-        // act
+
         series.draw(false);
-        // assert
 
         assert.ok(series._labelsGroup);
         assert.deepEqual(series._labelsGroup._stored_settings, {
@@ -330,15 +327,13 @@ const checkGroups = function(assert, series) {
         assert.ok(series._markersGroup);
     });
 
-
     QUnit.test('Create groups with animation. T101152', function(assert) {
         const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
         });
-        // act
+
         series.draw(true);
-        // assert
 
         assert.ok(series._labelsGroup);
         assert.deepEqual(series._labelsGroup._stored_settings, {
@@ -373,9 +368,9 @@ const checkGroups = function(assert, series) {
 
     QUnit.test('Draw without animation', function(assert) {
         const series = this.series;
-        // act
+
         series.draw(false);
-        // assert
+
         assert.ok(series._points.length);
         $.each(series._points, function(i, p) {
             assert.ok(p.draw.calledOnce);
@@ -387,9 +382,9 @@ const checkGroups = function(assert, series) {
 
     QUnit.test('Draw with animation', function(assert) {
         const series = this.series;
-        // act
+
         series.draw(true);
-        // assert
+
         assert.ok(series._points.length);
         $.each(series._points, function(i, p) {
             assert.ok(p.draw.calledOnce);
@@ -398,7 +393,6 @@ const checkGroups = function(assert, series) {
             assert.equal(p.draw.firstCall.args[2], true, 'animation should be enabled ' + i);
         });
     });
-
 
     QUnit.module('StockSeries Color', {
         beforeEach: function() {
@@ -410,8 +404,6 @@ const checkGroups = function(assert, series) {
                 { date: null, o: 5, h: 5, l: 3, c: 3 },
                 { date: 4, o: 4, h: 9, l: 2, c: null },
                 { date: 5, o: 4, h: 9, l: 2, c: 5 }];
-
-
         },
         afterEach: environment.afterEach
     });
@@ -482,10 +474,10 @@ const checkGroups = function(assert, series) {
         });
         series.updateData(data);
         series.createPoints();
-        // Act
+
         series.updateData(data);
         series.createPoints();
-        // Assert
+
         assert.equal(series.level, 'open');
 
         assert.equal(series._points.length, 5);
@@ -541,7 +533,6 @@ const checkGroups = function(assert, series) {
         series.updateData(this.data);
         series.createPoints();
         assert.equal(series.level, 'low');
-
 
         assert.equal(this.createPoint.callCount, 5);
 
@@ -653,7 +644,6 @@ const checkGroups = function(assert, series) {
                 },
                 normal: {
                     'stroke-width': 'n-width'
-
                 },
                 selection: {
                     fill: 'innerColor',
@@ -1197,8 +1187,6 @@ const checkGroups = function(assert, series) {
                 }
             }
         });
-
-
     });
 
     QUnit.module('StockSeries. Customize Point', {
@@ -1286,7 +1274,6 @@ const checkGroups = function(assert, series) {
                     fill: 'innerColor',
                     'stroke-width': 'c-n-width',
                     stroke: 'reduction',
-
                 },
                 selection: {
                     fill: 'innerColor',
@@ -1457,7 +1444,6 @@ const checkGroups = function(assert, series) {
                 displayMode: 'all'
             }
         }).updateDataType({ valueType: 'datetime' }).areErrorBarsVisible(), 'fixed, displayMode all');
-
     });
 
     QUnit.module('Null points', {
@@ -1614,7 +1600,6 @@ const checkGroups = function(assert, series) {
 })();
 
 (function CandleStick() {
-
     const seriesType = 'candlestick';
 
     QUnit.module('CandleStick series. Draw', {
@@ -1634,9 +1619,8 @@ const checkGroups = function(assert, series) {
             type: seriesType,
             point: { visible: false }
         });
-        // act
+
         series.draw(false);
-        // assert
 
         checkGroups(assert, series);
     });
@@ -1652,9 +1636,9 @@ const checkGroups = function(assert, series) {
             pt.x = pt.argument;
             pt.y = pt.value;
         });
-        // act
+
         series.draw(false);
-        // assert
+
         checkGroups(assert, series);
         assert.ok(series._points.length, 'points');
         $.each(series._points, function(i, p) {
@@ -1666,7 +1650,6 @@ const checkGroups = function(assert, series) {
         const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
         series.updateData(this.data);
         series.createPoints();
@@ -1674,16 +1657,15 @@ const checkGroups = function(assert, series) {
             pt.x = pt.argument;
             pt.y = pt.value;
         });
-        // act
+
         series.draw(true);
-        // assert
+
         checkGroups(assert, series);
 
         assert.ok(series._points.length, 'points');
         $.each(series._points, function(i, p) {
             assert.equal(p.animate.callCount, 0, i + ' point draw with animate');
         });
-
     });
 
     QUnit.module('CandleStick. Points animation', {
@@ -1708,9 +1690,9 @@ const checkGroups = function(assert, series) {
 
     QUnit.test('Draw without animation', function(assert) {
         const series = this.series;
-        // act
+
         series.draw(false);
-        // assert
+
         assert.ok(series._points.length);
         $.each(series._points, function(i, p) {
             assert.ok(p.draw.calledOnce);
@@ -1722,9 +1704,9 @@ const checkGroups = function(assert, series) {
 
     QUnit.test('Draw with animation', function(assert) {
         const series = this.series;
-        // act
+
         series.draw(true);
-        // assert
+
         assert.ok(series._points.length);
         $.each(series._points, function(i, p) {
             assert.ok(p.draw.calledOnce);
@@ -1733,7 +1715,6 @@ const checkGroups = function(assert, series) {
             assert.equal(p.draw.firstCall.args[2], true, 'animation should be enabled ' + i);
         });
     });
-
 
     QUnit.module('CandleStick Color', {
         beforeEach: function() {
@@ -1814,10 +1795,10 @@ const checkGroups = function(assert, series) {
         });
         series.updateData(data);
         series.createPoints();
-        // Act
+
         series.updateData(data);
         series.createPoints();
-        // Assert
+
         assert.equal(series.level, 'open');
 
         assert.equal(series._points.length, 5);
@@ -1874,7 +1855,6 @@ const checkGroups = function(assert, series) {
         series.createPoints();
         assert.equal(series.level, 'low');
 
-
         assert.equal(this.createPoint.callCount, 5);
 
         checkPointData(assert, this.createPoint.getCall(0).args[1], false, 0);
@@ -1893,7 +1873,6 @@ const checkGroups = function(assert, series) {
                 { date: null, o: 5, h: 5, l: 3, c: 3 },
                 { date: 4, o: 4, h: 9, l: 2, c: null },
                 { date: 5, o: 4, h: 9, l: 2, c: 5 }];
-
         },
         afterEach: environment.afterEach
     });
@@ -1961,7 +1940,6 @@ const checkGroups = function(assert, series) {
                 },
                 normal: {
                     'stroke-width': 'n-width'
-
                 },
                 selection: {
                     fill: 'innerColor',

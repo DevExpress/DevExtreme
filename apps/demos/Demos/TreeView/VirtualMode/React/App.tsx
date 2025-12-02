@@ -1,24 +1,23 @@
 import React from 'react';
 import TreeView from 'devextreme-react/tree-view';
 
-import { DataSource, ODataStore } from 'devextreme-react/common/data';
+import AspNetData from 'devextreme-aspnet-data-nojquery';
 
-const dataSource = new DataSource({
-  store: new ODataStore({
-    version: 2,
-    url: 'https://js.devexpress.com/Demos/WidgetsGallery/odata/HierarchicalItems',
-  }),
+const dataSource = AspNetData.createStore({
+  loadUrl: 'https://js.devexpress.com/Demos/NetCore/api/TreeViewPlainData',
+  key: 'ID',
 });
 const App = () => (
   <React.Fragment>
     <TreeView
       dataSource={dataSource}
       dataStructure="plain"
-      keyExpr="Id"
-      displayExpr="Name"
+      keyExpr="ID"
+      displayExpr="Text"
       parentIdExpr="CategoryId"
       hasItemsExpr="IsGroup"
       virtualModeEnabled={true}
+      rootValue={null}
     />
   </React.Fragment>
 );

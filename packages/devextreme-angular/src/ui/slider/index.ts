@@ -18,7 +18,7 @@ import {
     HostListener,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
 } from '@angular/core';
 
 
@@ -40,7 +40,7 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
 
 import { DxoLabelModule } from 'devextreme-angular/ui/nested';
@@ -50,8 +50,6 @@ import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
 import { DxoSliderFormatModule } from 'devextreme-angular/ui/slider/nested';
 import { DxoSliderLabelModule } from 'devextreme-angular/ui/slider/nested';
 import { DxoSliderTooltipModule } from 'devextreme-angular/ui/slider/nested';
-
-
 
 
 
@@ -79,6 +77,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxSliderComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+
     instance: DxSlider = null;
 
     /**
@@ -731,10 +730,6 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
-
-
-
 
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,

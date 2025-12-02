@@ -1,4 +1,6 @@
-import { isObject } from '@js/core/utils/type';
+import { logger } from '@js/core/utils/console';
+import { isDefined, isObject } from '@js/core/utils/type';
+import errors from '@js/ui/widget/ui.errors';
 
 const getKeyWrapper = function (item, getKey) {
   const key = getKey(item);
@@ -31,6 +33,22 @@ export const isKeysEqual = function (oldKeys, newKeys) {
   return true;
 };
 
+const mapIndexByKey = function (items, getKey) {
+  const indexByKey = {};
+
+  items.forEach((item, index) => {
+    const key = getKeyWrapper(item, getKey);
+
+    if (isDefined(indexByKey[String(key)])) {
+      throw errors.Error('E1040', key);
+    }
+
+    indexByKey[key] = index;
+  });
+
+  return indexByKey;
+};
+
 export const findChanges = function ({
   oldItems,
   newItems,
@@ -38,89 +56,85 @@ export const findChanges = function ({
   isItemEquals,
   detectReorders = false,
 }) {
-  const oldIndexByKey = {};
-  const newIndexByKey = {};
-  let addedCount = 0;
-  let removeCount = 0;
-  const result: any[] = [];
+  try {
+    const oldIndexByKey = mapIndexByKey(oldItems, getKey);
+    const newIndexByKey = mapIndexByKey(newItems, getKey);
+    let addedCount = 0;
+    let removeCount = 0;
+    const result: any[] = [];
 
-  oldItems.forEach(function (item, index) {
-    const key = getKeyWrapper(item, getKey);
-    oldIndexByKey[key] = index;
-  });
+    const itemCount = Math.max(oldItems.length, newItems.length);
+    for (let index = 0; index < itemCount + addedCount; index += 1) {
+      const newItem = newItems[index];
+      const oldNextIndex = index - addedCount + removeCount;
+      const nextOldItem = oldItems[oldNextIndex];
+      const isRemoved = !newItem || (nextOldItem && !getSameNewByOld(nextOldItem, newItems, newIndexByKey, getKey));
 
-  newItems.forEach(function (item, index) {
-    const key = getKeyWrapper(item, getKey);
-    newIndexByKey[key] = index;
-  });
-
-  const itemCount = Math.max(oldItems.length, newItems.length);
-  for (let index = 0; index < itemCount + addedCount; index++) {
-    const newItem = newItems[index];
-    const oldNextIndex = index - addedCount + removeCount;
-    const nextOldItem = oldItems[oldNextIndex];
-    const isRemoved = !newItem || (nextOldItem && !getSameNewByOld(nextOldItem, newItems, newIndexByKey, getKey));
-
-    if (isRemoved) {
-      if (nextOldItem) {
-        result.push({
-          type: 'remove',
-          key: getKey(nextOldItem),
-          index,
-          oldItem: nextOldItem,
-        });
-        removeCount++;
-        index--;
-      }
-    } else {
-      const key = getKeyWrapper(newItem, getKey);
-      const oldIndex = oldIndexByKey[key];
-      const oldItem = oldItems[oldIndex];
-      if (!oldItem) {
-        addedCount++;
-        result.push({
-          type: 'insert',
-          data: newItem,
-          index,
-        });
-      } else if (oldIndex === oldNextIndex) {
-        if (!isItemEquals(oldItem, newItem)) {
+      if (isRemoved) {
+        if (nextOldItem) {
           result.push({
-            type: 'update',
-            data: newItem,
-            key: getKey(newItem),
+            type: 'remove',
+            key: getKey(nextOldItem),
             index,
-            oldItem,
+            oldItem: nextOldItem,
           });
+          removeCount++;
+          index--;
         }
       } else {
-        if (!detectReorders) {
-          return;
-        }
+        const key = getKeyWrapper(newItem, getKey);
+        const oldIndex = oldIndexByKey[key];
+        const oldItem = oldItems[oldIndex];
+        if (!oldItem) {
+          addedCount++;
+          result.push({
+            type: 'insert',
+            data: newItem,
+            index,
+          });
+        } else if (oldIndex === oldNextIndex) {
+          if (!isItemEquals(oldItem, newItem)) {
+            result.push({
+              type: 'update',
+              data: newItem,
+              key: getKey(newItem),
+              index,
+              oldItem,
+            });
+          }
+        } else {
+          if (!detectReorders) {
+            return;
+          }
 
-        result.push({
-          type: 'remove',
-          key: getKey(oldItem),
-          index: oldIndex,
-          oldItem,
-        });
-        result.push({
-          type: 'insert',
-          data: newItem,
-          index,
-        });
-        addedCount++;
-        removeCount++;
+          result.push({
+            type: 'remove',
+            key: getKey(oldItem),
+            index: oldIndex,
+            oldItem,
+          });
+          result.push({
+            type: 'insert',
+            data: newItem,
+            index,
+          });
+          addedCount++;
+          removeCount++;
+        }
       }
     }
-  }
 
-  if (detectReorders) {
-    const removes = result.filter((r) => r.type === 'remove').sort((a, b) => b.index - a.index);
-    const inserts = result.filter((i) => i.type === 'insert').sort((a, b) => a.index - b.index);
-    const updates = result.filter((u) => u.type === 'update');
-    return [...removes, ...inserts, ...updates];
-  }
+    if (detectReorders) {
+      const removes = result.filter((r) => r.type === 'remove').sort((a, b) => b.index - a.index);
+      const inserts = result.filter((i) => i.type === 'insert').sort((a, b) => a.index - b.index);
+      const updates = result.filter((u) => u.type === 'update');
+      return [...removes, ...inserts, ...updates];
+    }
 
-  return result;
+    return result;
+  } catch (e) {
+    logger.error(e);
+
+    return undefined;
+  }
 };

@@ -1,45 +1,39 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { defaultConfig } from '../helpers/data';
-import { changeTheme } from '../../../../helpers/changeTheme';
-import { Themes } from '../../../../helpers/themes';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const DATA_GRID_SELECTOR = '#container';
 
 fixture.disablePageReloads`Sticky columns - Row Selection`
   .page(url(__dirname, '../../../container.html'));
 
-[Themes.genericLight, Themes.materialBlue, Themes.fluentBlue].forEach((theme) => {
-  safeSizeTest(`The selected row should be displayed correctly when there are sticky columns (${theme} theme)`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+// visual: generic.light
+// visual: material.blue.light
+// visual: fluent.blue.light
+test.meta({ browserSize: [800, 800] })('The selected row should be displayed correctly when there are sticky columns (generic.light theme)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
-    await t.expect(dataGrid.isReady()).ok();
+  await t.expect(dataGrid.isReady()).ok();
 
-    await takeScreenshot(`row_selection_with_sticky_columns_1_(${theme}).png`, dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'row_selection_with_sticky_columns_1.png', { element: dataGrid.element });
 
-    await dataGrid.scrollTo(t, { x: 10000 });
+  await dataGrid.scrollTo(t, { x: 10000 });
 
-    await takeScreenshot(`row_selection_with_sticky_columns_2_(${theme}).png`, dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'row_selection_with_sticky_columns_2.png', { element: dataGrid.element });
 
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }, [800, 800])
-    .before(async () => {
-      await changeTheme(theme);
-      await createWidget('dxDataGrid', {
-        ...defaultConfig,
-        selection: {
-          mode: 'multiple',
-        },
-        selectedRowKeys: [4],
-      });
-    })
-    .after(async () => {
-      await changeTheme(Themes.genericLight);
-    });
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    ...defaultConfig,
+    selection: {
+      mode: 'multiple',
+    },
+    selectedRowKeys: [4],
+  });
 });

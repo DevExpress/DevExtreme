@@ -20,3 +20,5 @@ export function findBestMatches(targetFilter: any, items: unknown[], mapFn?: Fun
 export function deferUpdate<T>(func: () => T, deferred?: DeferredObj<T>): T | Promise<T> | DeferredObj<T>;
 
 export function escapeRegExp(string: string): string;
+
+export function pairToObject(raw: unknown, preventRound?: unknown): { h: number; v: number };

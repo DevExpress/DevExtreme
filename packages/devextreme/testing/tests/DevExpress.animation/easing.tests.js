@@ -1,4 +1,4 @@
-const easing = require('common/core/animation/easing');
+import * as easing from '__internal/common/core/animation/easing';
 
 QUnit.module('easing');
 

@@ -101,7 +101,7 @@ describe('BaseCommand', () => {
       await new Promise(process.nextTick);
 
       expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith('AI response');
+      expect(spy).toHaveBeenCalledWith('AI response', params);
       expect(spy).toHaveReturnedWith('Parsed result: AI response');
     });
 

@@ -1,6 +1,5 @@
 /* tslint:disable:max-line-length */
 
-/* tslint:disable:use-input-property-decorator */
 
 import {
     Component,
@@ -8,18 +7,21 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
+    Input
 } from '@angular/core';
 
 
 
 
+import { AnimationEaseMode } from 'devextreme/common/charts';
+import { AnimationConfig } from 'devextreme/common/core/animation';
 
 import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
-import { DxoAnimationConfig } from './base/animation-config';
+import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
@@ -28,25 +30,57 @@ import { DxoAnimationConfig } from './base/animation-config';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
-    inputs: [
-        'hide',
-        'show',
-        'duration',
-        'easing',
-        'enabled',
-        'maxPointCountSupported',
-        'complete',
-        'delay',
-        'direction',
-        'from',
-        'staggerDelay',
-        'start',
-        'to',
-        'type'
-    ]
+    providers: [NestedOptionHost]
 })
-export class DxoAnimationComponent extends DxoAnimationConfig implements OnDestroy, OnInit  {
+export class DxoAnimationComponent extends NestedOption implements OnDestroy, OnInit  {
+    @Input()
+    get hide(): AnimationConfig {
+        return this._getOption('hide');
+    }
+    set hide(value: AnimationConfig) {
+        this._setOption('hide', value);
+    }
+
+    @Input()
+    get show(): AnimationConfig {
+        return this._getOption('show');
+    }
+    set show(value: AnimationConfig) {
+        this._setOption('show', value);
+    }
+
+    @Input()
+    get duration(): number {
+        return this._getOption('duration');
+    }
+    set duration(value: number) {
+        this._setOption('duration', value);
+    }
+
+    @Input()
+    get easing(): AnimationEaseMode {
+        return this._getOption('easing');
+    }
+    set easing(value: AnimationEaseMode) {
+        this._setOption('easing', value);
+    }
+
+    @Input()
+    get enabled(): boolean {
+        return this._getOption('enabled');
+    }
+    set enabled(value: boolean) {
+        this._setOption('enabled', value);
+    }
+
+    @Input()
+    get maxPointCountSupported(): number {
+        return this._getOption('maxPointCountSupported');
+    }
+    set maxPointCountSupported(value: number) {
+        this._setOption('maxPointCountSupported', value);
+    }
+
 
     protected get _optionPath() {
         return 'animation';

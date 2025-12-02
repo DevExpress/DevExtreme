@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/base_component';
@@ -15,10 +14,10 @@ export function TemplateWrapper<TProps = {}>(template: TemplateType<TProps>) {
     private readonly ref = createRef<HTMLDivElement>();
 
     private renderTemplate(): void {
-      $(this.ref.current!).empty();
+      $(this.ref.current).empty();
 
       template.render({
-        container: $(this.ref.current!),
+        container: $(this.ref.current),
         model: this.props,
       });
     }

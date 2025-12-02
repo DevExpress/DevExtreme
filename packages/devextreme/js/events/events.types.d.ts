@@ -1,7 +1,7 @@
 /**
  * @namespace DevExpress.events
  */
-export type EventObject = {
+export type EventObject<TNativeEvent = Event> = {
   /**
    * @docid
    * @public
@@ -19,6 +19,13 @@ export type EventObject = {
    * @public
    */
   delegateTarget: Element;
+
+  /**
+   * @docid
+   * @public
+   * @type event
+   */
+  originalEvent: TNativeEvent;
 
   /**
    * @docid
@@ -79,7 +86,16 @@ export interface EventType { }
  * @type EventObject|jQuery.Event
  *
  */
-export type DxEvent<TNativeEvent = Event> = {} extends EventType ? (EventObject & TNativeEvent) : EventType;
+export type DxEvent<TNativeEvent = Event> = {} extends EventType
+  ? (EventObject<TNativeEvent> & TNativeEvent)
+  : (Omit<EventType, 'originalEvent'> & {
+    /**
+     * @docid
+     * @public
+     * @type event
+     */
+    originalEvent: TNativeEvent;
+  });
 
 /** @deprecated EventObject */
 export type dxEvent = EventObject;
@@ -91,6 +107,16 @@ export type dxEvent = EventObject;
  * @deprecated DxEvent
  */
 export type event = DxEvent;
+
+/**
+ * @hidden
+ */
+export type PointerInteractionEvent = MouseEvent | TouchEvent | PointerEvent;
+
+/**
+ * @hidden
+ */
+export type InteractionEvent = PointerInteractionEvent | KeyboardEvent;
 
 /**
  * @docid eventsMethods.triggerHandler

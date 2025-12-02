@@ -5,11 +5,12 @@ import type { ErrorRowProperties } from '@ts/grids/new/grid_core/content_view/er
 import { ErrorRow } from '@ts/grids/new/grid_core/content_view/error_row';
 import type { NoDataTextProperties } from '@ts/grids/new/grid_core/content_view/no_data_text';
 import { NoDataText } from '@ts/grids/new/grid_core/content_view/no_data_text';
-import { LoadPanel, type LoadPanelProperties } from '@ts/grids/new/grid_core/inferno_wrappers/load_panel';
 import type { Props as ScrollableProps } from '@ts/grids/new/grid_core/inferno_wrappers/scrollable';
 import { Scrollable } from '@ts/grids/new/grid_core/inferno_wrappers/scrollable';
 import type { RefObject } from 'inferno';
 import { Component, createRef } from 'inferno';
+
+import { LoadPanel, type LoadPanelProperties } from './load_panel';
 
 export const CLASSES = {
   contentView: 'dx-gridcore-contentview',

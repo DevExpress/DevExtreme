@@ -1,0 +1,60 @@
+@mixin chat-file(
+  $chat-file-container-width,
+  $chat-file-container-padding,
+  $chat-file-container-background-color,
+  $chat-file-container-border-radius,
+  $chat-file-container-box-shadow,
+  $chat-file-button-size,
+  $chat-file-secondary-font-size,
+  $chat-file-secondary-color,
+  $chat-file-base-section-gap,
+  $chat-file-size-max-width,
+  $chat-file-icon-font-size,
+) {
+  .dx-chat-file {
+    width: $chat-file-container-width;
+    padding: $chat-file-container-padding;
+    background-color: $chat-file-container-background-color;
+    border-radius: $chat-file-container-border-radius;
+    box-shadow: $chat-file-container-box-shadow;
+  }
+
+  .dx-chat-file-icon-container {
+    flex-basis: $chat-file-button-size;
+    width: $chat-file-button-size;
+    height: $chat-file-button-size;
+
+    .dx-icon {
+      color: $chat-file-secondary-color;
+      font-size: $chat-file-icon-font-size;
+    }
+  }
+
+  .dx-chat-file-name {
+    margin-inline-end: $chat-file-base-section-gap * 2;
+    margin-inline-start: $chat-file-base-section-gap;
+  }
+
+  .dx-chat-file-size {
+    max-width: $chat-file-size-max-width;
+    margin-inline-end: $chat-file-base-section-gap;
+    font-size: $chat-file-secondary-font-size;
+    color: $chat-file-secondary-color;
+  }
+
+  .dx-chat-file-download-button {
+    width: $chat-file-button-size;
+    height: $chat-file-button-size;
+    flex-basis: $chat-file-button-size;
+  }
+}
+
+@mixin chat-fileview(
+  $chat-file-view-items-gap,
+  $chat-file-container-width,
+) {
+  .dx-chat-file-view {
+    gap: $chat-file-view-items-gap;
+    grid-template-columns: repeat(auto-fit, $chat-file-container-width);
+  }
+}

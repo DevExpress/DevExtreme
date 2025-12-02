@@ -26,7 +26,7 @@ export default function App() {
       setInProgress(!inProgress);
       clearInterval(intervalId);
     }
-  }, [seconds]);
+  }, [seconds, inProgress]);
 
   const onButtonClick = useCallback(() => {
     if (inProgress) {

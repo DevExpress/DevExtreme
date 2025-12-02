@@ -25,7 +25,7 @@ import {
 
 
 import { ApplyValueMode, TextEditorButton, LabelMode, EditorStyle, ValidationMessageMode, Mode, Position, ValidationStatus } from 'devextreme/common';
-import { DropDownPredefinedButton } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
+import { DropDownPredefinedButton, FieldAddons } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
 import { dxPopupOptions } from 'devextreme/ui/popup';
 import { ChangeEvent, ClosedEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/color_box';
 
@@ -43,7 +43,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
@@ -67,6 +68,7 @@ import { DxoColorBoxBoundaryOffsetModule } from 'devextreme-angular/ui/color-box
 import { DxiColorBoxButtonModule } from 'devextreme-angular/ui/color-box/nested';
 import { DxoColorBoxCollisionModule } from 'devextreme-angular/ui/color-box/nested';
 import { DxoColorBoxDropDownOptionsModule } from 'devextreme-angular/ui/color-box/nested';
+import { DxoColorBoxFieldAddonsModule } from 'devextreme-angular/ui/color-box/nested';
 import { DxoColorBoxFromModule } from 'devextreme-angular/ui/color-box/nested';
 import { DxoColorBoxHideModule } from 'devextreme-angular/ui/color-box/nested';
 import { DxoColorBoxMyModule } from 'devextreme-angular/ui/color-box/nested';
@@ -76,10 +78,10 @@ import { DxoColorBoxPositionModule } from 'devextreme-angular/ui/color-box/neste
 import { DxoColorBoxShowModule } from 'devextreme-angular/ui/color-box/nested';
 import { DxoColorBoxToModule } from 'devextreme-angular/ui/color-box/nested';
 import { DxiColorBoxToolbarItemModule } from 'devextreme-angular/ui/color-box/nested';
-
-import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiColorBoxButtonComponent } from 'devextreme-angular/ui/color-box/nested';
+import { 
+           PROPERTY_TOKEN_buttons,
+           PROPERTY_TOKEN_toolbarItems,
+     } from 'devextreme-angular/core/tokens';
 
 
 
@@ -107,6 +109,17 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxColorBoxComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_buttons)
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('buttons', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_toolbarItems)
+    set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('toolbarItems', value);
+    }
+
     instance: DxColorBox = null;
 
     /**
@@ -279,7 +292,22 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
 
     /**
+     * [descr:dxDropDownEditorOptions.fieldAddons]
+    
+     */
+    @Input()
+    get fieldAddons(): FieldAddons {
+        return this._getOption('fieldAddons');
+    }
+    set fieldAddons(value: FieldAddons) {
+        this._setOption('fieldAddons', value);
+    }
+
+
+    /**
      * [descr:dxColorBoxOptions.fieldTemplate]
+    
+     * @deprecated [depNote:dxColorBoxOptions.fieldTemplate]
     
      */
     @Input()
@@ -634,10 +662,10 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get value(): string {
+    get value(): null | string {
         return this._getOption('value');
     }
-    set value(value: string) {
+    set value(value: null | string) {
         this._setOption('value', value);
     }
 
@@ -891,6 +919,13 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() fieldAddonsChange: EventEmitter<FieldAddons>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() fieldTemplateChange: EventEmitter<any>;
 
     /**
@@ -1080,7 +1115,7 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueChange: EventEmitter<string>;
+    @Output() valueChange: EventEmitter<null | string>;
 
     /**
     
@@ -1107,26 +1142,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
-
-    @ContentChildren(DxiColorBoxButtonComponent)
-    get buttonsChildren(): QueryList<DxiColorBoxButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsChildren(value) {
-        this._setChildren('buttons', value, 'DxiColorBoxButtonComponent');
-    }
-
-
-    @ContentChildren(DxiButtonComponent)
-    get buttonsLegacyChildren(): QueryList<DxiButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsLegacyChildren(value) {
-        this._setChildren('buttons', value, 'DxiButtonComponent');
-    }
-
-
 
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
@@ -1168,6 +1183,7 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
             { emit: 'dropDownOptionsChange' },
             { emit: 'editAlphaChannelChange' },
             { emit: 'elementAttrChange' },
+            { emit: 'fieldAddonsChange' },
             { emit: 'fieldTemplateChange' },
             { emit: 'focusStateEnabledChange' },
             { emit: 'heightChange' },
@@ -1288,6 +1304,7 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     DxiColorBoxButtonModule,
     DxoColorBoxCollisionModule,
     DxoColorBoxDropDownOptionsModule,
+    DxoColorBoxFieldAddonsModule,
     DxoColorBoxFromModule,
     DxoColorBoxHideModule,
     DxoColorBoxMyModule,
@@ -1322,6 +1339,7 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     DxiColorBoxButtonModule,
     DxoColorBoxCollisionModule,
     DxoColorBoxDropDownOptionsModule,
+    DxoColorBoxFieldAddonsModule,
     DxoColorBoxFromModule,
     DxoColorBoxHideModule,
     DxoColorBoxMyModule,

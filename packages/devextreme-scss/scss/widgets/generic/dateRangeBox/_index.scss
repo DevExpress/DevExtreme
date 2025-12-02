@@ -7,14 +7,14 @@
 @use "colors" as *;
 @use "../colors" as *;
 @use "../../base/dateRangeBox";
-@use "../../base/icons" as *;
+@use "../../base/icon_fonts" as *;
 @use "../textEditor" as *;
 @use "../dropDownEditor" as *;
 
 // adduse
 
 .dx-daterangebox {
-  @include dx-dropdowneditor-button-icon-styling(eventall);
+  @include dx-dropdowneditor-button-icon-styling(daterangepicker);
 
   .dx-dropdowneditor-button {
     min-width: $generic-dropdowneditor-container-button-size - 2px;

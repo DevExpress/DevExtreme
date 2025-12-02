@@ -9,7 +9,7 @@ function CompanyItem({ data }) {
         <div>
           <p>
             <b>{ company.City } </b>
-              (<span>{ company.State }</span>)
+            (<span>{ company.State }</span>)
           </p>
           <p>
             <span>{ company.Zipcode } </span>
@@ -18,13 +18,13 @@ function CompanyItem({ data }) {
         </div>
         <div>
           <p>
-              Phone: <b>{ company.Phone }</b>
+            Phone: <b>{ company.Phone }</b>
           </p>
           <p>
-              Fax: <b>{ company.Fax }</b>
+            Fax: <b>{ company.Fax }</b>
           </p>
           <p>
-              Website: <a
+            Website: <a
               href={company.Website}
               target="_blank">
               { company.Website }

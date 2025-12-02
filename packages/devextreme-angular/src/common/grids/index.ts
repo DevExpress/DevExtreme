@@ -1,7 +1,10 @@
 export {
     AdaptiveDetailRowPreparingInfo,
+    AIColumnMode,
+    AIColumnRequestCreatingInfo,
     ApplyChangesMode,
     ApplyFilterMode,
+    ColumnAIOptions,
     ColumnBase,
     ColumnButtonBase,
     ColumnChooser,

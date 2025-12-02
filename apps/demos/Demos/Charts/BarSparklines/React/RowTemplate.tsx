@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 import Sparkline, {
@@ -61,4 +60,3 @@ export default function RowTemplate(props: RowTemplateProps) {
     </tr>
   );
 }
-

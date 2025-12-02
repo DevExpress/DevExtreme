@@ -20,6 +20,7 @@ export {
   TooltipHiddenEvent,
   TooltipShownEvent,
   ZoomFactorChangedEvent,
+  MapLayerElement,
   LegendItem,
   Legend,
   Tooltip,

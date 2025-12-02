@@ -12,6 +12,7 @@
       :data-source="resourcesData"
       field-expr="roomId"
       label="Room"
+      icon="conferenceroomoutline"
     />
   </DxScheduler>
 </template>

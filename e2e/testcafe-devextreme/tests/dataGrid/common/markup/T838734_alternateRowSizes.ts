@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Grouping Panel - Borders with enabled alternate rows`
   .page(url(__dirname, '../../../container.html'));
@@ -18,10 +19,7 @@ test('Alternate rows should be the same size', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
-  await takeScreenshot(
-    'T838734_alternate-rows-same-size.png',
-    dataGrid.element,
-  );
+  await testScreenshot(t, takeScreenshot, 'T838734_alternate-rows-same-size.png', { element: dataGrid.element });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

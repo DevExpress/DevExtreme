@@ -13,10 +13,11 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
-} from '../common/core/events';
+} from '../events';
 
 import {
     DropDownButtonTemplateDataModel,
+    FieldAddons,
 } from './drop_down_editor/ui.drop_down_editor';
 
 import dxDropDownList, {
@@ -26,6 +27,7 @@ import dxDropDownList, {
 
 import {
     ValueChangedInfo,
+    EditorOptionsWithValue,
 } from './editor/editor';
 
 import {
@@ -230,8 +232,15 @@ export interface dxSelectBoxOptions<TComponent> extends dxDropDownListOptions<TC
      * @type_function_param1 selectedItem:object
      * @type_function_return string|Element|jQuery
      * @public
+     * @deprecated dxDropDownEditorOptions.fieldAddons
      */
     fieldTemplate?: template | ((selectedItem: any, fieldElement: DxElement) => string | UserDefinedElement);
+    /**
+     * @docid
+     * @default null
+     * @public
+     */
+    fieldAddons?: FieldAddons;
     /**
      * @section Utils
      * @type function
@@ -271,7 +280,6 @@ export interface dxSelectBoxOptions<TComponent> extends dxDropDownListOptions<TC
      * @public
      */
     customItemCreateEvent?: string;
-
     /**
      * @docid
      * @type dxPopupOptions
@@ -285,7 +293,9 @@ export interface dxSelectBoxOptions<TComponent> extends dxDropDownListOptions<TC
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxSelectBox<TProperties = Properties> extends dxDropDownList<TProperties> { }
+export default class dxSelectBox<
+    TProperties extends EditorOptionsWithValue = Properties,
+> extends dxDropDownList<TProperties> { }
 
 interface SelectBoxInstance extends dxSelectBox<Properties> { }
 

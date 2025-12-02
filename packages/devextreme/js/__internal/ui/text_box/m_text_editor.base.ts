@@ -21,8 +21,8 @@ import type dxButton from '@js/ui/button';
 import LoadIndicator from '@js/ui/load_indicator';
 import type { dxTextEditorOptions } from '@js/ui/text_box/ui.text_editor.base';
 import { current, isFluent, isMaterial } from '@js/ui/themes';
-import { focused } from '@js/ui/widget/selectors';
 import errors from '@js/ui/widget/ui.errors';
+import { focused } from '@ts/core/utils/m_selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { ValueChangedEvent } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
@@ -280,7 +280,7 @@ class TextEditorBase<
     const $indicatorElement = $('<div>')
       .addClass(TEXTEDITOR_PENDING_INDICATOR_CLASS)
       .appendTo($inputContainer);
-    this._pendingIndicator = this._createComponent($indicatorElement, LoadIndicator);
+    this._pendingIndicator = this._createComponent($indicatorElement, LoadIndicator, {});
   }
 
   _disposePendingIndicator(): void {
@@ -348,11 +348,16 @@ class TextEditorBase<
     this._buttonCollection.clean();
     this._disposePendingIndicator();
     this._unobserveLabelContainerResize();
+
+    super._clean();
+
     this._$beforeButtonsContainer = null;
     this._$afterButtonsContainer = null;
-    // @ts-expect-error ts-error
+    // @ts-expect-error _$textEditorContainer can be null and undefined
     this._$textEditorContainer = null;
-    super._clean();
+    // @ts-expect-error _$textEditorInputContainer can be null and undefined
+    this._$textEditorInputContainer = null;
+    this._$placeholder = null;
   }
 
   _createInput(): dxElementWrapper {
@@ -683,7 +688,9 @@ class TextEditorBase<
     const $input = this._input();
 
     each(EVENTS_LIST, (_, event) => {
+      // @ts-expect-error
       if (this.hasActionSubscription(`on${event}`)) {
+        // @ts-expect-error
         const action = this._createActionByOption(`on${event}`, { excludeValidators: ['readOnly'] });
         // @ts-expect-error ts-error
         eventsEngine.on($input, addNamespace(event.toLowerCase(), this.NAME), (e) => {
@@ -1013,6 +1020,7 @@ class TextEditorBase<
   }
 
   getButton(name: string): dxButton | undefined | null {
+    // @ts-expect-error TextEditorButtonCollection should use generic
     return this._buttonCollection.getButton(name);
   }
 

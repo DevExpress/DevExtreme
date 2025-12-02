@@ -33,7 +33,7 @@ export class AppComponent {
 
   onValueChanged(e: DxRangeSelectorTypes.ValueChangedEvent) {
     this.selectedEmployees = this.employees.map(
-      (item, index) => (
+      (item) => (
         (item.BirthYear >= (e.value[0] as number) && item.BirthYear <= (e.value[1] as number))
           ? item
           : undefined

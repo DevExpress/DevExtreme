@@ -3,6 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Layout:Templates:CellTemplate`
   .page(url(__dirname, '../../../../container.html'));
@@ -14,10 +15,14 @@ const SCHEDULER_SELECTOR = '#container';
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t
-      .expect(await takeScreenshot(`data-cell-template-currentView=${currentView}.png`, scheduler.workSpace))
-      .ok()
+    await testScreenshot(
+      t,
+      takeScreenshot,
+      `data-cell-template-currentView=${currentView}.png`,
+      { element: scheduler.workSpace },
+    );
 
+    await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {

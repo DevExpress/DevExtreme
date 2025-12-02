@@ -1,10 +1,12 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+
 import { DxCheckBoxModule } from 'devextreme-angular';
-import { DxMenuModule, DxMenuTypes } from 'devextreme-angular/ui/menu';
+import { DxMenuModule, type DxMenuTypes } from 'devextreme-angular/ui/menu';
 import notify from 'devextreme/ui/notify';
-import { Product, Service } from './app.service';
+
+import { Service, type Product } from './app.service';
 
 if (!document.location.host.includes('localhost')) {
   enableProdMode();
@@ -33,7 +35,7 @@ export class AppComponent {
     this.products = service.getProducts();
   }
 
-  itemClick(e: DxMenuTypes.ItemClickEvent) {
+  itemClick(e: DxMenuTypes.ItemClickEvent<Product>) {
     if (!e.itemData.items) {
       notify(`The "${e.itemData.text}" item was clicked`, 'success', 1500);
     }

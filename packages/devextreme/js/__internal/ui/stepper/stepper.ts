@@ -1,7 +1,6 @@
-import type { Orientation, SingleOrNone } from '@js/common';
+import type { Orientation } from '@js/common';
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
-import type { DxElement } from '@js/core/element';
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
@@ -12,11 +11,14 @@ import type { Template } from '@ts/core/templates/m_template';
 import { getImageContainer } from '@ts/core/utils/m_icon';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { SupportedKeys } from '@ts/core/widget/widget';
 import CollectionWidgetAsync from '@ts/ui/collection/collection_widget.async';
 import type {
   ItemRenderInfo,
   PostprocessRenderItemInfo,
 } from '@ts/ui/collection/collection_widget.base';
+import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
+import type { ConnectorProperties } from '@ts/ui/stepper/connector';
 import Connector from '@ts/ui/stepper/connector';
 import StepperItem, {
   STEP_COMPLETED_CLASS,
@@ -43,16 +45,11 @@ export const ORIENTATION: Record<string, Orientation> = {
   vertical: 'vertical',
 };
 
-export interface StepperProperties extends Properties {
-  selectionMode?: SingleOrNone;
-
-  loopItemFocus?: boolean;
-
-  selectionRequired?: boolean;
-
+export interface StepperProperties extends Properties, Omit<
+  CollectionWidgetEditProperties<Stepper, Item>,
+  keyof Properties<Item>
+> {
   hintExpr?: (data: Item) => string | undefined;
-
-  _itemAttributes?: Record<string, unknown>;
 }
 
 class Stepper extends CollectionWidgetAsync<StepperProperties> {
@@ -79,7 +76,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     };
   }
 
-  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
+  _supportedKeys(): SupportedKeys {
     const defaultHandlers = super._supportedKeys();
     const { linear, selectOnFocus } = this.option();
 
@@ -186,7 +183,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
   _createItemByTemplate(
     itemTemplate: Template,
     renderArgs: ItemRenderInfo<Item>,
-  ): DxElement {
+  ): dxElementWrapper {
     const { itemData, index } = renderArgs;
 
     return super._createItemByTemplate(itemTemplate, {
@@ -195,7 +192,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
         text: `${index + 1}`,
         ...itemData,
       },
-    }) as DxElement;
+    });
   }
 
   _getItemInstance($item: dxElementWrapper): StepperItem {
@@ -263,18 +260,26 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     super._initMarkup();
   }
 
+  _getConnectorOptions(): ConnectorProperties {
+    const { orientation } = this.option();
+
+    return {
+      orientation,
+      size: this._getConnectorSize(),
+      value: this._getConnectorValue(),
+    };
+  }
+
   _renderConnector(): void {
     if (this._connector) {
       return;
     }
 
-    const { orientation } = this.option();
-
-    this._connector = this._createComponent($('<div>'), Connector, {
-      orientation,
-      size: this._getConnectorSize(),
-      value: this._getConnectorValue(),
-    });
+    this._connector = this._createComponent(
+      $('<div>'),
+      Connector,
+      this._getConnectorOptions(),
+    );
 
     $(this.element())
       .prepend(this._connector.$element());
@@ -339,9 +344,9 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     }
   }
 
-  _itemPointerDownHandler(e: DxEvent): void {
+  _itemPointerHandler(e: DxEvent): void {
     if (!this._shouldPreventItemEvent(e.currentTarget)) {
-      super._itemPointerDownHandler(e);
+      super._itemPointerHandler(e);
     }
   }
 
@@ -447,6 +452,10 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
         break;
       case 'hintExpr':
         this._invalidate();
+        break;
+      case 'items':
+        super._optionChanged(args);
+        this._connector.option(this._getConnectorOptions());
         break;
       default:
         super._optionChanged(args);

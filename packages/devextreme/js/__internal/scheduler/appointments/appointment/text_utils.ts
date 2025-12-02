@@ -44,7 +44,7 @@ const getDateText = (options: AppointmentProperties): string => {
 
 const getPartsText = (
   { partIndex, partTotalCount }: AppointmentProperties,
-): string => (isDefined(partIndex) ? ` (${partIndex + 1}/${partTotalCount})` : '');
+): string => (isDefined(partIndex) && partTotalCount > 0 ? ` (${partIndex + 1}/${partTotalCount})` : '');
 
 export const getAriaLabel = (options: AppointmentProperties): string => {
   const name = options.dataAccessors.get('text', options.data) ?? '';

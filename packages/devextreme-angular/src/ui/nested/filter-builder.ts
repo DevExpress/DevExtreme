@@ -12,7 +12,6 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -23,11 +22,14 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { DxoFilterBuilderOptions } from './base/filter-builder-options';
-import { DxiCustomOperationComponent } from './custom-operation-dxi';
-import { DxiFieldComponent } from './field-dxi';
 
+import {
+    PROPERTY_TOKEN_customOperations,
+    PROPERTY_TOKEN_fields,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-filter-builder',
@@ -67,6 +69,16 @@ import { DxiFieldComponent } from './field-dxi';
     ]
 })
 export class DxoFilterBuilderComponent extends DxoFilterBuilderOptions implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_customOperations)
+    set _customOperationsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('customOperations', value);
+    }
+    
+    @ContentChildren(PROPERTY_TOKEN_fields)
+    set _fieldsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('fields', value);
+    }
+    
 
     /**
     
@@ -79,26 +91,9 @@ export class DxoFilterBuilderComponent extends DxoFilterBuilderOptions implement
     }
 
 
-    @ContentChildren(forwardRef(() => DxiCustomOperationComponent))
-    get customOperationsChildren(): QueryList<DxiCustomOperationComponent> {
-        return this._getOption('customOperations');
-    }
-    set customOperationsChildren(value) {
-        this.setChildren('customOperations', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiFieldComponent))
-    get fieldsChildren(): QueryList<DxiFieldComponent> {
-        return this._getOption('fields');
-    }
-    set fieldsChildren(value) {
-        this.setChildren('fields', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'valueChange' }
         ]);

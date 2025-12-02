@@ -30,7 +30,7 @@ export class AppComponent {
 
   loadingVisible = false;
 
-  constructor(private cdr: ChangeDetectorRef, service: Service) {
+  constructor(private changeDetectorRef: ChangeDetectorRef, service: Service) {
     this.employee = service.getEmployee();
   }
 
@@ -42,7 +42,7 @@ export class AppComponent {
 
   onHidden() {
     this.employeeInfo = this.employee;
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
   }
 
   showLoadPanel() {

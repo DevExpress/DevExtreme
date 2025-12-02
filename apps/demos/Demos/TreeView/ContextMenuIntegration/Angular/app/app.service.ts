@@ -1,5 +1,15 @@
 import { Injectable } from '@angular/core';
 
+export class ProductItem {
+  id: string;
+
+  text: string;
+
+  price: number;
+
+  image: string;
+}
+
 export class Product {
   id: string;
 
@@ -7,11 +17,7 @@ export class Product {
 
   expanded?: boolean;
 
-  items?: Product[];
-
-  price?: number;
-
-  image?: string;
+  items: (Product | ProductItem)[];
 }
 
 export class MenuItem {

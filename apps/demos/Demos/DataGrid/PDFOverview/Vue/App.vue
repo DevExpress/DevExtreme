@@ -44,7 +44,6 @@ import { exportDataGrid } from 'devextreme-vue/common/export/pdf';
 import { customers } from './data.ts';
 
 const onExporting = (e: DxDataGridTypes.ExportingEvent) => {
-  // eslint-disable-next-line new-cap
   const doc = new jsPDF();
 
   exportDataGrid({

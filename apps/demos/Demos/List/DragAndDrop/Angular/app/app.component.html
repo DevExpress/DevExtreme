@@ -5,7 +5,7 @@
       keyExpr="id"
       [repaintChangesOnly]="true"
     >
-      <dxo-item-dragging
+      <dxo-list-item-dragging
         group="tasks"
         [data]="plannedTasks"
         [allowReordering]="true"
@@ -14,10 +14,10 @@
         [onRemove]="onRemove"
         [onReorder]="onReorder"
       >
-      </dxo-item-dragging>
+      </dxo-list-item-dragging>
     </dx-list>
     <dx-list [dataSource]="doingTasks" keyExpr="id" [repaintChangesOnly]="true">
-      <dxo-item-dragging
+      <dxo-list-item-dragging
         group="tasks"
         [data]="doingTasks"
         [allowReordering]="true"
@@ -26,7 +26,7 @@
         [onRemove]="onRemove"
         [onReorder]="onReorder"
       >
-      </dxo-item-dragging>
+      </dxo-list-item-dragging>
     </dx-list>
   </div>
 </div>

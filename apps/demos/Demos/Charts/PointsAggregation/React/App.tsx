@@ -21,8 +21,8 @@ import {
 
 const customizeTooltip = (pointInfo) => {
   const { aggregationInfo } = pointInfo.point;
-  const start: Date = aggregationInfo && aggregationInfo.intervalStart;
-  const end: Date = aggregationInfo && aggregationInfo.intervalEnd;
+  const start: Date = aggregationInfo?.intervalStart;
+  const end: Date = aggregationInfo?.intervalEnd;
   const handlers = {
     'Average temperature': (arg: { argument: Date; value: number; }) => ({
       text: `${(!aggregationInfo

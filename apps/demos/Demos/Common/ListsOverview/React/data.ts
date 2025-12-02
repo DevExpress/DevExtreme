@@ -1,4 +1,3 @@
-
 export const data = [{
   Id: 73,
   Hotel_Name: 'Hamburg Suites',

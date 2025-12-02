@@ -19,6 +19,7 @@ import {
 } from 'devextreme-angular/core';
 import { DxiHtmlEditorMention } from './base/html-editor-mention-dxi';
 
+import { PROPERTY_TOKEN_mentions } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-mention',
@@ -26,7 +27,13 @@ import { DxiHtmlEditorMention } from './base/html-editor-mention-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_mentions,
+           useExisting: DxiMentionComponent,
+        }
+    ],
     inputs: [
         'dataSource',
         'displayExpr',

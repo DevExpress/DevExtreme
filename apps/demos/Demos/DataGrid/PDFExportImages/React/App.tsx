@@ -7,7 +7,6 @@ import { employees } from './data.ts';
 const exportFormats = ['pdf'];
 
 const onExporting = ({ component }: DataGridTypes.ExportingEvent) => {
-  // eslint-disable-next-line new-cap
   const doc = new jsPDF();
 
   exportDataGrid({

@@ -5,7 +5,6 @@ import 'ui/tree_view';
 import 'ui/box';
 import 'ui/responsive_box';
 
-
 const TREEVIEW_ID = 'treeView_id';
 const PLACEMENT_STANDALONE = 'standalone';
 const PLACEMENT_INSIDE_BOX = 'insideBox';
@@ -141,7 +140,7 @@ QUnit.module('Size of one TreeView standalone/inside Box/inside ResponsiveBox', 
                 containerHeight: 100,
                 containerScrollHeight: 100,
                 nestedElementWidth: 75,
-                nestedElementHeight: [50, 90],
+                nestedElementHeight: [50, 100],
                 useNativeScrolling: true
             });
         });
@@ -161,9 +160,9 @@ QUnit.module('Size of one TreeView standalone/inside Box/inside ResponsiveBox', 
                 containerWidth: 75,
                 containerScrollWidth: 75,
                 containerHeight: 100,
-                containerScrollHeight: [100, 150],
+                containerScrollHeight: [100, 190],
                 nestedElementWidth: 75,
-                nestedElementHeight: [100, 150]
+                nestedElementHeight: [100, 190]
             });
         });
 
@@ -182,9 +181,9 @@ QUnit.module('Size of one TreeView standalone/inside Box/inside ResponsiveBox', 
                 containerWidth: 200,
                 containerScrollWidth: 200,
                 containerHeight: 100,
-                containerScrollHeight: [100, 150],
+                containerScrollHeight: [100, 190],
                 nestedElementWidth: 200,
-                nestedElementHeight: [100, 150]
+                nestedElementHeight: [100, 190]
             });
         });
     });
@@ -271,16 +270,21 @@ QUnit.module('Size of two TreeViews inside Box/ResponsiveBox', {
                 });
             }
 
+            let clientHeight = 100;
+            if(placement === PLACEMENT_INSIDE_RESPONSIVE_BOX) {
+                clientHeight = 131;
+            }
+
             [0, 1].forEach(index => checkScrollableSizes(assert, this.$container, {
                 id: TREEVIEW_ID + index,
                 width: 75,
-                height: 100,
+                height: clientHeight,
                 containerWidth: 75,
                 containerScrollWidth: 75,
-                containerHeight: 100,
-                containerScrollHeight: 100,
+                containerHeight: clientHeight,
+                containerScrollHeight: 131,
                 nestedElementWidth: 75,
-                nestedElementHeight: [50, 100],
+                nestedElementHeight: [50, 140],
                 useNativeScrolling: true
             }));
         });
@@ -374,9 +378,9 @@ QUnit.module('Size of two TreeViews inside Box/ResponsiveBox', {
                 containerWidth: 200,
                 containerScrollWidth: 200,
                 containerHeight: 75,
-                containerScrollHeight: [100, 150],
+                containerScrollHeight: [100, 190],
                 nestedElementWidth: 200,
-                nestedElementHeight: [100, 150]
+                nestedElementHeight: [100, 190]
             }));
         });
 
@@ -405,9 +409,9 @@ QUnit.module('Size of two TreeViews inside Box/ResponsiveBox', {
                 containerWidth: 200,
                 containerScrollWidth: 200,
                 containerHeight: 75,
-                containerScrollHeight: [100, 150],
+                containerScrollHeight: [100, 190],
                 nestedElementWidth: 200,
-                nestedElementHeight: [100, 150]
+                nestedElementHeight: [100, 190]
             }));
         });
     });

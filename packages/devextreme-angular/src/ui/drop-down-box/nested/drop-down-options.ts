@@ -12,7 +12,6 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -32,10 +31,13 @@ import { dxPopupToolbarItem } from 'devextreme/ui/popup';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiDropDownBoxToolbarItemComponent } from './toolbar-item-dxi';
 
+import {
+    PROPERTY_TOKEN_toolbarItems,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-drop-down-box-drop-down-options',
@@ -46,6 +48,11 @@ import { DxiDropDownBoxToolbarItemComponent } from './toolbar-item-dxi';
     providers: [NestedOptionHost]
 })
 export class DxoDropDownBoxDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_toolbarItems)
+    set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('toolbarItems', value);
+    }
+    
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -463,18 +470,9 @@ export class DxoDropDownBoxDropDownOptionsComponent extends NestedOption impleme
     }
 
 
-    @ContentChildren(forwardRef(() => DxiDropDownBoxToolbarItemComponent))
-    get toolbarItemsChildren(): QueryList<DxiDropDownBoxToolbarItemComponent> {
-        return this._getOption('toolbarItems');
-    }
-    set toolbarItemsChildren(value) {
-        this.setChildren('toolbarItems', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'heightChange' },
             { emit: 'positionChange' },

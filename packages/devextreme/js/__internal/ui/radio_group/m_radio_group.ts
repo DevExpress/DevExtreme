@@ -9,6 +9,7 @@ import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
 import type { Properties } from '@js/ui/radio_group';
+import type { OptionChanged } from '@ts/core/widget/types';
 import type { EditorProperties, UnresolvedEvents } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
 
@@ -31,8 +32,19 @@ class RadioGroup extends Editor<RadioGroupProperties> {
 
   private _$submitElement!: dxElementWrapper;
 
-  _dataSourceOptions() {
+  // eslint-disable-next-line class-methods-use-this
+  _dataSourceOptions(): { paginate: boolean } {
     return { paginate: false };
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  protected _activeStateUnit(): string {
+    return `.${RADIO_BUTTON_CLASS}`;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  protected _feedbackHideTimeout(): number {
+    return RADIO_FEEDBACK_HIDE_TIMEOUT;
   }
 
   _defaultOptionsRules(): DefaultOptionsRule<RadioGroupProperties>[] {
@@ -87,8 +99,6 @@ class RadioGroup extends Editor<RadioGroupProperties> {
   _init(): void {
     super._init();
 
-    this._activeStateUnit = `.${RADIO_BUTTON_CLASS}`;
-    this._feedbackHideTimeout = RADIO_FEEDBACK_HIDE_TIMEOUT;
     // @ts-expect-error
     this._initDataExpressions();
   }
@@ -135,7 +145,7 @@ class RadioGroup extends Editor<RadioGroupProperties> {
     this._validationMessage?.$content().attr('role', 'alert');
   }
 
-  _optionChanged(args: Record<string, unknown>): void {
+  _optionChanged(args: OptionChanged<RadioGroupProperties>): void {
     const { name, value } = args;
     // @ts-expect-error
     this._dataExpressionOptionChanged(args);

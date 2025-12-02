@@ -1,4 +1,4 @@
-export const countries = {
+export const countries: Record<string, Record<string, any>> = {
   Russia: { totalArea: 17.12, color: '#1E90FF' },
   Canada: { totalArea: 9.98, color: '#B8860B' },
   China: { totalArea: 9.59, color: '#BDB76B' },

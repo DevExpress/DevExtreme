@@ -27,7 +27,7 @@ $(() => {
       {
         dataField: 'Address',
         fixed: true,
-        fixedPosition: 'sticky'
+        fixedPosition: 'sticky',
       },
       'City',
       'Zipcode',
@@ -43,7 +43,7 @@ $(() => {
       }, {
         dataField: 'HireDate',
         dataType: 'date',
-      }, 
+      },
       'HomePhone',
       'MobilePhone',
       'Email',

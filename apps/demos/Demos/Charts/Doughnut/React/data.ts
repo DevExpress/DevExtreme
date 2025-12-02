@@ -1,4 +1,3 @@
-
 export const populationByRegions = [{
   region: 'Asia',
   val: 4119626293,

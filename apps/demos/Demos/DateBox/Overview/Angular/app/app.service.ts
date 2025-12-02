@@ -16,7 +16,7 @@ const federalHolidays: Date[] = [
 
 @Injectable()
 export class Service {
-  getFederalHolidays() : Date[] {
+  getFederalHolidays(): Date[] {
     return federalHolidays;
   }
 }

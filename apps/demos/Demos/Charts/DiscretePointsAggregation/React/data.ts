@@ -1,4 +1,3 @@
-
 export const oilProductionData = [
   {
     state: 'Alaska', month: 'Jan', year: '2016', value: 15985000,

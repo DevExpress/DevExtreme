@@ -67,7 +67,7 @@ export const fileItems = [{
   size: 2048,
 }];
 
-const fileExtensions = {
+const fileExtensions: Record<string, string> = {
   'Text Document': '.txt',
   'RTF Document': '.rtf',
   Spreadsheet: '.xls',

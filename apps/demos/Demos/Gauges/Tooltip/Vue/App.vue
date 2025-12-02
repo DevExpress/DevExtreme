@@ -38,11 +38,11 @@ import {
 } from 'devextreme-vue/bar-gauge';
 
 const values = [121.4, 135.4, 115.9, 141.1, 127.5];
-const getText = (item, text) => `Racer ${(item.index + 1)} - ${text} km/h`;
-const customizeTooltip = (arg) => ({
+const getText = (item: any, text: string) => `Racer ${(item.index + 1)} - ${text} km/h`;
+const customizeTooltip = (arg: Record<string, any>) => ({
   text: getText(arg, arg.valueText),
 });
-const customizeText = (arg) => getText(arg.item, arg.text);
+const customizeText = (arg: Record<string, any>) => getText(arg.item, arg.text);
 </script>
 <style scoped>
 #gauge {

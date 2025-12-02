@@ -88,7 +88,7 @@ const additionalGenerator1Value = ref(12);
 const additionalGenerator2Value = ref(23);
 const mainGeneratorValue = ref(34);
 const gauge = ref();
-const customizeText = ({ valueText }) => `${valueText} kV`;
+const customizeText = ({ valueText }: Record<string, any>) => `${valueText} kV`;
 
 onMounted(() => {
   updateValues();

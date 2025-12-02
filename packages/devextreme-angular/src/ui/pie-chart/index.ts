@@ -24,7 +24,7 @@ import {
 
 import DataSource from 'devextreme/data/data_source';
 import { AnimationEaseMode, ChartsDataType, DashStyle, ChartsColor, HatchDirection, Font, LabelPosition, TextOverflow, WordWrap, SeriesLabel, SeriesPoint, Palette, PaletteExtensionMode, ShiftLabelOverlap, Theme } from 'devextreme/common/charts';
-import { dxPieChartAnnotationConfig, dxPieChartCommonAnnotationConfig, PieChartSeriesInteractionMode, SmallValuesGroupingMode, PieChartLegendItem, PieChartLegendHoverMode, DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, OptionChangedEvent, PointClickEvent, PointHoverChangedEvent, PointSelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, PieChartSegmentDirection, PieChartSeries, PieChartType } from 'devextreme/viz/pie_chart';
+import { dxPieChartAnnotationConfig, dxPieChartCommonAnnotationConfig, PieChartSeriesInteractionMode, SmallValuesGroupingMode, PieChartLegendItem, PieChartLegendHoverMode, DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, OptionChangedEvent, PointClickEvent, PointHoverChangedEvent, PointSelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, PieChartSegmentDirection, PieChartSeries, dxPieChartPointInfo, PieChartType } from 'devextreme/viz/pie_chart';
 import { Format } from 'devextreme/common/core/localization';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
@@ -40,7 +40,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoAdaptiveLayoutModule } from 'devextreme-angular/ui/nested';
@@ -107,12 +108,10 @@ import { DxoPieChartSubtitleModule } from 'devextreme-angular/ui/pie-chart/neste
 import { DxoPieChartTitleModule } from 'devextreme-angular/ui/pie-chart/nested';
 import { DxoPieChartTooltipModule } from 'devextreme-angular/ui/pie-chart/nested';
 import { DxoPieChartTooltipBorderModule } from 'devextreme-angular/ui/pie-chart/nested';
-
-import { DxiAnnotationComponent } from 'devextreme-angular/ui/nested';
-import { DxiSeriesComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiPieChartAnnotationComponent } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxiPieChartSeriesComponent } from 'devextreme-angular/ui/pie-chart/nested';
+import { 
+           PROPERTY_TOKEN_annotations,
+           PROPERTY_TOKEN_series,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -134,6 +133,17 @@ import { DxiPieChartSeriesComponent } from 'devextreme-angular/ui/pie-chart/nest
     ]
 })
 export class DxPieChartComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_annotations)
+    set _annotationsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('annotations', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_series)
+    set _seriesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('series', value);
+    }
+
     instance: DxPieChart = null;
 
     /**
@@ -579,14 +589,14 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
 
     /**
-     * [descr:BaseChartOptions.tooltip]
+     * [descr:dxPieChartOptions.tooltip]
     
      */
     @Input()
-    get tooltip(): { argumentFormat?: Format | undefined, arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointInfo: any) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number | undefined } {
+    get tooltip(): { argumentFormat?: Format | undefined, arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointInfo: dxPieChartPointInfo) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number | undefined } {
         return this._getOption('tooltip');
     }
-    set tooltip(value: { argumentFormat?: Format | undefined, arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointInfo: any) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number | undefined }) {
+    set tooltip(value: { argumentFormat?: Format | undefined, arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointInfo: dxPieChartPointInfo) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number | undefined }) {
         this._setOption('tooltip', value);
     }
 
@@ -966,7 +976,7 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tooltipChange: EventEmitter<{ argumentFormat?: Format | undefined, arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointInfo: any) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number | undefined }>;
+    @Output() tooltipChange: EventEmitter<{ argumentFormat?: Format | undefined, arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointInfo: dxPieChartPointInfo) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number | undefined }>;
 
     /**
     
@@ -974,42 +984,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Output() typeChange: EventEmitter<PieChartType>;
-
-
-
-
-    @ContentChildren(DxiPieChartAnnotationComponent)
-    get annotationsChildren(): QueryList<DxiPieChartAnnotationComponent> {
-        return this._getOption('annotations');
-    }
-    set annotationsChildren(value) {
-        this._setChildren('annotations', value, 'DxiPieChartAnnotationComponent');
-    }
-
-    @ContentChildren(DxiPieChartSeriesComponent)
-    get seriesChildren(): QueryList<DxiPieChartSeriesComponent> {
-        return this._getOption('series');
-    }
-    set seriesChildren(value) {
-        this._setChildren('series', value, 'DxiPieChartSeriesComponent');
-    }
-
-
-    @ContentChildren(DxiAnnotationComponent)
-    get annotationsLegacyChildren(): QueryList<DxiAnnotationComponent> {
-        return this._getOption('annotations');
-    }
-    set annotationsLegacyChildren(value) {
-        this._setChildren('annotations', value, 'DxiAnnotationComponent');
-    }
-
-    @ContentChildren(DxiSeriesComponent)
-    get seriesLegacyChildren(): QueryList<DxiSeriesComponent> {
-        return this._getOption('series');
-    }
-    set seriesLegacyChildren(value) {
-        this._setChildren('series', value, 'DxiSeriesComponent');
-    }
 
 
 

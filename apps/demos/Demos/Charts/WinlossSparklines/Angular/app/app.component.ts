@@ -27,7 +27,7 @@ export class AppComponent {
 
   cooperCosts: CostInfo[];
 
-  years: Array<number>;
+  years: number[];
 
   constructor(service: Service) {
     this.aluminumCosts = service.getAluminumCosts();

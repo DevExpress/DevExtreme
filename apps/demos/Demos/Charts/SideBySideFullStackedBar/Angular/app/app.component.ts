@@ -1,6 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import type { DxChartTypes } from 'devextreme-angular/ui/chart';
 
 import { DxChartModule } from 'devextreme-angular';
 
@@ -29,7 +30,7 @@ export class AppComponent {
     this.populationData = service.getPopulationData();
   }
 
-  customizeTooltip = ({ valueText, percentText }) => (
+  customizeTooltip = ({ valueText, percentText }: DxChartTypes.StackedPointInfo) => (
     {
       text: `${percentText} - ${valueText}`,
     }

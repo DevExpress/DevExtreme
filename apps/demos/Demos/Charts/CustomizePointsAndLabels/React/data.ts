@@ -92,4 +92,3 @@ export const temperaturesData = [{
   day: '31',
   value: 74,
 }];
-

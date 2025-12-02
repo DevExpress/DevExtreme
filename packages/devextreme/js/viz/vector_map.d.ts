@@ -17,7 +17,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+} from '../events';
 
 import {
     Format,
@@ -246,6 +246,7 @@ export interface MapLayer {
 
 /**
  * @docid
+ * @public
  * @publicName Layer Element
  * @namespace DevExpress.viz
  */

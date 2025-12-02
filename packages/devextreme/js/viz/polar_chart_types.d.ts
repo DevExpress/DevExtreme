@@ -57,6 +57,7 @@ export {
   CommonAxisSettingsTick,
   CommonSeriesSettings,
   Legend,
+  PointInfo,
   Tooltip,
   ValueAxis,
   ValueAxisConstantLines,

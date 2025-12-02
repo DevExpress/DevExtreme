@@ -1,4 +1,4 @@
-import { type StepperTypes } from 'devextreme-react/stepper'
+import { type StepperTypes } from 'devextreme-react/stepper';
 import type { BookingFormData } from './types';
 
 export const initialSteps: StepperTypes.Item[] = [

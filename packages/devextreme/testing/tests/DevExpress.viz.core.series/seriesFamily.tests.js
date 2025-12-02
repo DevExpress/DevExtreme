@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
+import { Point } from '../../helpers/vizMocks.js';
 import pointModule from 'viz/series/points/base_point';
 import { MockTranslator, MockSeries, MockPoint } from '../../helpers/chartMocks.js';
 import { SeriesFamily } from 'viz/core/series_family';
@@ -578,7 +578,6 @@ const checkSeries = function(assert, series, expectedWidth, expectedOffset) {
 
         assert.roughEqual(point.coordinatesCorrection.width, expectedWidth, 0.01, 'Correct width was calculated');
         assert.roughEqual(point.coordinatesCorrection.offset, expectedOffset, 0.01, 'Correct offset was set');
-
     });
 };
 
@@ -644,7 +643,6 @@ QUnit.test('update old options', function(assert) {
 QUnit.module('Added series to Family');
 
 QUnit.test('Add array of correct series', function(assert) {
-    // arrange
     const type = 'bar';
     const series1 = new MockSeries();
     const series2 = new MockSeries();
@@ -656,9 +654,8 @@ QUnit.test('Add array of correct series', function(assert) {
     series1.type = 'bar';
     series2.type = 'bar';
     series3.type = 'bar';
-    // act
     family.add(series);
-    // assert
+
     assert.equal(family.series.length, 3);
     assert.equal(family.series[0], series1);
     assert.equal(family.series[1], series2);
@@ -666,7 +663,6 @@ QUnit.test('Add array of correct series', function(assert) {
 });
 
 QUnit.test('Add array of different series', function(assert) {
-    // arrange
     const type = 'bar';
     const series1 = new MockSeries();
     const series2 = new MockSeries();
@@ -678,9 +674,8 @@ QUnit.test('Add array of different series', function(assert) {
     series1.type = 'bar';
     series2.type = 'line';
     series3.type = 'bar';
-    // act
     family.add(series);
-    // assert
+
     assert.equal(family.series.length, 2);
     assert.equal(family.series[0], series1);
     assert.equal(family.series[1], series3);
@@ -2384,7 +2379,6 @@ QUnit.test('Set two series - matching points', function(assert) {
     checkSeries(assert, series2, expectedWidth, 0);
 
     checkStackedPoints(assert, mixedPoints1, mixedPoints2);
-
 });
 
 QUnit.test('Set three series - matching points', function(assert) {
@@ -2414,8 +2408,6 @@ QUnit.test('Set three series - matching points', function(assert) {
     checkStackedPointHeight(assert, family.series[0], -10, 20, -30, 0, 0, 0);
     checkStackedPointHeight(assert, family.series[1], 20, -40, -90, 0, 0, -30);
     checkStackedPointHeight(assert, family.series[2], -40, 80, -180, -10, 20, -90);
-
-
 });
 
 QUnit.test('Set three series in two groups - matching points', function(assert) {
@@ -2547,7 +2539,6 @@ QUnit.test('Set two series - matching points', function(assert) {
     checkSeries(assert, series2, expectedWidth, 0);
 
     checkFullStackedPoints(assert, points1, points2);
-
 });
 
 QUnit.test('Set three series - matching points', function(assert) {
@@ -2896,7 +2887,6 @@ QUnit.test('Set two series - matching points', function(assert) {
     checkSeries(assert, series2, expectedWidth, 0);
 
     checkFullStackedPoints(assert, negativePoints1, negativePoints2);
-
 });
 
 QUnit.test('Set three series - matching points', function(assert) {
@@ -3055,7 +3045,6 @@ QUnit.test('Set two series - matching points', function(assert) {
     checkSeries(assert, series2, expectedWidth, 0);
 
     checkFullStackedPoints(assert, mixedPoints1, mixedPoints2);
-
 });
 
 QUnit.test('Set three series - matching points', function(assert) {
@@ -3242,7 +3231,6 @@ QUnit.test('Set two series - matching points', function(assert) {
     createSeriesFamily('stackedarea', series, { });
 
     checkStackedPoints(assert, points1, points2);
-
 });
 
 QUnit.test('Set three series - matching points', function(assert) {
@@ -3269,7 +3257,6 @@ QUnit.test('Set three series. null point in the middle of first series', functio
     const points1 = pointsForStacking.points1();
     const points2 = pointsForStacking.points2();
     const points3 = pointsForStacking.points3();
-
 
     points1[1] = new MockPoint({ argument: 'Second', value: null });
 
@@ -3328,7 +3315,6 @@ QUnit.test('Set three series. null point in the middle of first series', functio
             assert.ok(p.resetHoles.calledBefore(p.setHole));
         }
     });
-
 });
 
 QUnit.test('Set three series. first point has null value', function(assert) {
@@ -3825,7 +3811,7 @@ QUnit.module('Stacked series. Negatives as zeroes');
 
 QUnit.test('When negativesAsZeroes true - all negative values treated as zeroes', function(assert) {
     function createPoint(arg, val) {
-        const p = new vizMocks.Point();
+        const p = new Point();
         p.argument = arg;
         p.initialValue = val;
         return p;

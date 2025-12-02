@@ -3,7 +3,7 @@ import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { getData } from '../../helpers/generateDataSourceData';
 
-fixture`Accessibility bugs`
+fixture.disablePageReloads`Accessibility bugs`
   .page(url(__dirname, '../../../container.html'));
 
 test('T1187314 - DataGrid displays an incorrect row count in "aria-label" if there is no data after filtering', async (t) => {

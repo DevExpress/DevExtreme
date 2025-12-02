@@ -20,12 +20,15 @@
 import { ref } from 'vue';
 import DxTreeView, { type DxTreeViewTypes } from 'devextreme-vue/tree-view';
 import service from './data.ts';
+import type { Product } from './types';
 
-const products: Record<string, any>[] = service.getProducts();
-const currentItem = ref(products[0]);
+const products: Product[] = service.getProducts();
+const currentItem = ref<Product>(products[0]);
 
 function selectItem({ itemData }: DxTreeViewTypes.ItemClickEvent) {
-  currentItem.value = itemData;
+  if (itemData) {
+    currentItem.value = itemData;
+  }
 }
 
 </script>

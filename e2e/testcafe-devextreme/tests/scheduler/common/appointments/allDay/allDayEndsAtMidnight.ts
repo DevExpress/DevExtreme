@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Scheduler - All day appointments`
   .page(url(__dirname, '../../../../container.html'));
@@ -31,9 +32,11 @@ const setViewOptions = (startDayHour, endDayHour) => {
         const scheduler = new Scheduler(SCHEDULER_SELECTOR);
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-        await takeScreenshot(
+        await testScreenshot(
+          t,
+          takeScreenshot,
           `midnight_all-day-appt_view=${view}_start=${startDayHour}_end=${endDayHour}.png`,
-          scheduler.workSpace,
+          { element: scheduler.workSpace },
         );
 
         await t.expect(compareResults.isValid())
@@ -80,18 +83,22 @@ const setViewOptions = (startDayHour, endDayHour) => {
 
     await scheduler.scrollTo(new Date(2022, 11, 31, 23, 59));
 
-    await takeScreenshot(
+    await testScreenshot(
+      t,
+      takeScreenshot,
       `midnight-next-month_all-day-appt_view=${view}_first.png`,
-      scheduler.workSpace,
+      { element: scheduler.workSpace },
     );
 
     await t.click(await scheduler.toolbar.navigator.nextButton());
     await t.wait(100);
     await scheduler.scrollTo(new Date(2023, 0, 1, 0, 1));
 
-    await takeScreenshot(
+    await testScreenshot(
+      t,
+      takeScreenshot,
       `midnight-next-month_all-day-appt_view=${view}_second.png`,
-      scheduler.workSpace,
+      { element: scheduler.workSpace },
     );
 
     await t.expect(compareResults.isValid())

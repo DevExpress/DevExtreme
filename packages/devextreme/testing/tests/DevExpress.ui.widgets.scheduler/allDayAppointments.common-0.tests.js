@@ -89,8 +89,8 @@ module('All day appointments common', config, () => {
                 const $appointments = $(scheduler.instance.$element()).find('.dx-scheduler-appointment');
 
                 assert.equal($appointments.length, 2, 'There are two appointments');
-                assert.deepEqual(dataUtils.data($appointments.get(0), 'dxItemData'), tasks[0], 'The first appointment is OK');
-                assert.deepEqual(dataUtils.data($appointments.get(1), 'dxItemData'), tasks[1], 'The second appointment is OK');
+                assert.deepEqual(dataUtils.data($appointments.get(0), 'dxItemData'), tasks[1], 'The first appointment is OK');
+                assert.deepEqual(dataUtils.data($appointments.get(1), 'dxItemData'), tasks[0], 'The second appointment is OK');
             });
 
             test('AllDay tasks should not be filtered by end day hour', async function(assert) {

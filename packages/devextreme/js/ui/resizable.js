@@ -1,4 +1,4 @@
-import Resizable from '../__internal/ui/resizable/m_resizable';
+import Resizable from '../__internal/ui/resizable/resizable';
 
 export default Resizable;
 

@@ -59,7 +59,6 @@ import { type State } from './store.ts';
 
 const loadPanelPosition = { of: '#gridContainer' };
 
-// eslint-disable-next-line react-hooks/rules-of-hooks
 const store = useStore<State>();
 
 const loadOrders = () => store.dispatch('loadOrders');
@@ -123,4 +122,3 @@ loadOrders();
   font-weight: bold;
 }
 </style>
-

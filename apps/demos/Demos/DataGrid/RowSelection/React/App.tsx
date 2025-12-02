@@ -11,8 +11,8 @@ const App = () => {
     const data = selectedRowsData[0];
 
     setShowEmployeeInfo(!!data);
-    setSelectedRowNotes(data && data.Notes);
-    setSelectedRowPicture(data && data.Picture);
+    setSelectedRowNotes(data?.Notes);
+    setSelectedRowPicture(data?.Picture);
   }, []);
 
   return (

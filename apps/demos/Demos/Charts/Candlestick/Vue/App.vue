@@ -56,7 +56,7 @@ import { dataSource } from './data.ts';
 
 const customizeTooltip = ({
   openValue, closeValue, highValue, lowValue,
-}) => ({
+}: Record<string, any>) => ({
   text: `Open: $${openValue}<br/>
 Close: $${closeValue}<br/>
 High: $${highValue}<br/>

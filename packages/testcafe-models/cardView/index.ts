@@ -7,7 +7,7 @@ import HeaderPanel from './headerPanel';
 import Toolbar from './toolbar';
 import Popup from "../popup";
 import List from "../list";
-import {ClientFunction} from "testcafe";
+import { ClientFunction, Selector} from "testcafe";
 import TreeView from '../treeView';
 
 export const CLASS = {
@@ -21,6 +21,7 @@ export const CLASS = {
     headerFilterMenu: 'dx-header-filter-menu',
     card: 'card',
     toolbar: 'dx-toolbar',
+    popup: 'dx-popup-normal'
 }
 
 export default class CardView extends GridCore {
@@ -58,6 +59,10 @@ export default class CardView extends GridCore {
   getHeaderFilterPopup(): Popup {
       const popupElement = this.element.find(`.${CLASS.headerFilterMenu}`);
       return new Popup(popupElement);
+  }
+
+  getEditingPopup(): Selector {
+    return Selector(`.${CLASS.popup}`);
   }
 
   getHeaderFilterList(): List {
@@ -100,6 +105,15 @@ export default class CardView extends GridCore {
 
   isCheckBoxesHidden(): Promise<boolean> {
     return this.element.find(`.${CLASS.cardViewContent}`).hasClass(`${CLASS.selectCheckBoxesHidden}`);
+  }
+
+  isReady(): Promise<unknown> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).isReady(),
+      { dependencies: { getInstance } },
+    )();
   }
 
   apiPageIndex(pageIndex: number): Promise<void> {

@@ -63,8 +63,6 @@ import {
   DxDataGrid, DxColumn, DxEditing, DxFilterRow,
 } from 'devextreme-vue/data-grid';
 import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
-/* eslint-disable import/no-unresolved */
-/* eslint-disable import/no-webpack-loader-syntax */
 // @ts-ignore
 import * as deMessages from 'npm:devextreme/localization/messages/de.json!json';
 // @ts-ignore
@@ -86,7 +84,7 @@ const amountEditorOptions = {
   },
 };
 const selectBoxInputAttr = { id: 'selectInput' };
-const formatMessage = ref((msg) => msg);
+const formatMessage = ref((msg: string) => msg);
 
 onBeforeMount(() => {
   dxLocale(locale);

@@ -1,17 +1,17 @@
 import $ from 'jquery';
 import { renderDateParts, getDatePartIndexByPosition } from '__internal/ui/date_box/m_date_box.mask.parts';
-import dateParser from 'common/core/localization/ldml/date.parser';
+import dateParser from '__internal/core/localization/ldml/dateParserModule';
 import dateLocalization from 'common/core/localization/date';
 import { noop } from 'core/utils/common';
 import pointerMock from '../../helpers/pointerMock.js';
 import 'ui/date_box';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import devices from '__internal/core/m_devices';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 const { test, module } = QUnit;
 
 const CLEAR_BUTTON_AREA_CLASS = 'dx-clear-button-area';
+const TEXT_EDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 const DROP_EVENT_NAME = 'drop';
 
@@ -1452,10 +1452,6 @@ module('Empty dateBox', {
     });
 
     test('space keydown event should be prevented', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const value = new Date(2020, 5, 5);
         this.instance.option({ value });
         this.keyboard.keyDown('space');
@@ -1648,6 +1644,33 @@ module('Regression', () => {
         }).dxDateBox('instance');
 
         instance.focus();
+    });
+
+    QUnit.test('mask for HH:mm should be reset after selecting all multiple times (T1308916)', function(assert) {
+        const $dateBox = $('#dateBox').dxDateBox({
+            value: new Date(2021, 9, 17, 16, 6),
+            displayFormat: 'HH:mm',
+            type: 'time',
+            useMaskBehavior: true,
+        });
+
+        const $input = $dateBox.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        const { length } = $input.val();
+
+        keyboard
+            .focus()
+            .caret({ start: 0, end: length })
+            .type('1234');
+
+        assert.strictEqual($input.val(), '12:34', 'text is correct after typing "1234" over full selection');
+
+        keyboard
+            .caret({ start: 0, end: length })
+            .type('12');
+
+        assert.strictEqual($input.val(), '12:34', 'both digits go to hours and minutes stay unchanged');
     });
 });
 

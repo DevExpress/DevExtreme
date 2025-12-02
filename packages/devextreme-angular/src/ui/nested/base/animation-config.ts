@@ -6,55 +6,12 @@ import {
 } from '@angular/core';
 
 import { Direction } from 'devextreme/common';
-import { AnimationEaseMode } from 'devextreme/common/charts';
-import { AnimationConfig, AnimationState, AnimationType } from 'devextreme/common/core/animation';
+import { AnimationState, AnimationType } from 'devextreme/common/core/animation';
 
 @Component({
     template: ''
 })
 export abstract class DxoAnimationConfig extends NestedOption {
-    get hide(): AnimationConfig {
-        return this._getOption('hide');
-    }
-    set hide(value: AnimationConfig) {
-        this._setOption('hide', value);
-    }
-
-    get show(): AnimationConfig {
-        return this._getOption('show');
-    }
-    set show(value: AnimationConfig) {
-        this._setOption('show', value);
-    }
-
-    get duration(): number {
-        return this._getOption('duration');
-    }
-    set duration(value: number) {
-        this._setOption('duration', value);
-    }
-
-    get easing(): AnimationEaseMode | string {
-        return this._getOption('easing');
-    }
-    set easing(value: AnimationEaseMode | string) {
-        this._setOption('easing', value);
-    }
-
-    get enabled(): boolean {
-        return this._getOption('enabled');
-    }
-    set enabled(value: boolean) {
-        this._setOption('enabled', value);
-    }
-
-    get maxPointCountSupported(): number {
-        return this._getOption('maxPointCountSupported');
-    }
-    set maxPointCountSupported(value: number) {
-        this._setOption('maxPointCountSupported', value);
-    }
-
     get complete(): Function {
         return this._getOption('complete');
     }
@@ -74,6 +31,20 @@ export abstract class DxoAnimationConfig extends NestedOption {
     }
     set direction(value: Direction | undefined) {
         this._setOption('direction', value);
+    }
+
+    get duration(): number {
+        return this._getOption('duration');
+    }
+    set duration(value: number) {
+        this._setOption('duration', value);
+    }
+
+    get easing(): string {
+        return this._getOption('easing');
+    }
+    set easing(value: string) {
+        this._setOption('easing', value);
     }
 
     get from(): AnimationState {

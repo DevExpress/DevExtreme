@@ -10,7 +10,6 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -24,10 +23,13 @@ import { ChartAxisScale } from 'devextreme/viz/range_selector';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiSeriesComponent } from './series-dxi';
 
+import {
+    PROPERTY_TOKEN_series,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-chart',
@@ -38,6 +40,11 @@ import { DxiSeriesComponent } from './series-dxi';
     providers: [NestedOptionHost]
 })
 export class DxoChartComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_series)
+    set _seriesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('series', value);
+    }
+    
     @Input()
     get barGroupPadding(): number {
         return this._getOption('barGroupPadding');
@@ -155,14 +162,6 @@ export class DxoChartComponent extends NestedOption implements OnDestroy, OnInit
         return 'chart';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiSeriesComponent))
-    get seriesChildren(): QueryList<DxiSeriesComponent> {
-        return this._getOption('series');
-    }
-    set seriesChildren(value) {
-        this.setChildren('series', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

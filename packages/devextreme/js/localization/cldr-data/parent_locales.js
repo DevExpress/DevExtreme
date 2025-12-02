@@ -1,1 +1,1 @@
-export { default } from '../../common/core/localization/cldr-data/parent_locales';
+export { default } from '../../__internal/core/localization/cldr-data/parent_locales';

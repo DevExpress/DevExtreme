@@ -1,3 +1,4 @@
+import type { ScrollDirection } from '@js/common';
 import { titleize } from '@js/core/utils/inflector';
 
 import {
@@ -6,7 +7,7 @@ import {
 } from '../consts';
 import type {
   ElementOffset,
-  ScrollableDirection, ScrollOffset,
+  ScrollOffset,
 } from '../types';
 import { getRelativeOffset } from './get_relative_offset';
 
@@ -14,7 +15,7 @@ import { getRelativeOffset } from './get_relative_offset';
 /* istanbul ignore next */
 export function getElementLocationInternal(
   targetElement: HTMLElement,
-  direction: ScrollableDirection,
+  direction: ScrollDirection,
   containerElement: HTMLDivElement,
   scrollOffset: ScrollOffset,
   offset?: ElementOffset,

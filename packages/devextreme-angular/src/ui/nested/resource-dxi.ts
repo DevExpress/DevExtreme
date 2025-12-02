@@ -21,6 +21,7 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_resources } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-resource',
@@ -28,7 +29,13 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_resources,
+           useExisting: DxiResourceComponent,
+        }
+    ]
 })
 export class DxiResourceComponent extends CollectionNestedOption {
     @Input()

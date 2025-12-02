@@ -1,6 +1,6 @@
 import React, { useCallback, useRef } from 'react';
 import FileManager, {
-  Permissions, Toolbar, ContextMenu, Item, FileSelectionItem, ItemView, Details, Column, FileManagerRef
+  Permissions, Toolbar, ContextMenu, Item, FileSelectionItem, ItemView, Details, Column, FileManagerRef,
 } from 'devextreme-react/file-manager';
 import { fileItems, getItemInfo } from './data.ts';
 

@@ -38,13 +38,13 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import { unified } from "unified";
-import remarkParse from "remark-parse";
-import remarkRehype from "remark-rehype";
-import remarkStringify from "remark-stringify";
-import rehypeParse from "rehype-parse";
-import rehypeRemark from "rehype-remark";
-import rehypeStringify from "rehype-stringify";
+import { unified } from 'unified';
+import remarkParse from 'remark-parse';
+import remarkRehype from 'remark-rehype';
+import remarkStringify from 'remark-stringify';
+import rehypeParse from 'rehype-parse';
+import rehypeRemark from 'rehype-remark';
+import rehypeStringify from 'rehype-stringify';
 import {
   DxHtmlEditor,
   DxToolbar,
@@ -57,7 +57,7 @@ const headerValues = [false, 1, 2, 3, 4, 5];
 const headerOptions = { inputAttr: { 'aria-label': 'Header' } };
 const converter = {
 
-  toHtml(value) {
+  toHtml(value: string) {
     const result = unified()
       .use(remarkParse)
       .use(remarkRehype)
@@ -67,7 +67,7 @@ const converter = {
 
     return result;
   },
-  fromHtml(value) {
+  fromHtml(value: string) {
     const result = unified()
       .use(rehypeParse)
       .use(rehypeRemark)

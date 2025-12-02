@@ -11,6 +11,7 @@ import NestedOption from "./core/nested-option";
 import type { PositionAlignment, HorizontalAlignment, VerticalAlignment, Direction } from "devextreme/common";
 import type { PositionConfig, AnimationConfig, CollisionResolution, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
 import type { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, ShowingEvent, ShownEvent } from "devextreme/ui/load_panel";
+import type { LoadingAnimationType } from "devextreme/ui/load_indicator";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -48,7 +49,7 @@ const LoadPanel = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["position","visible"]), []);
       const independentEvents = useMemo(() => (["onContentReady","onDisposing","onHidden","onHiding","onInitialized","onShowing","onShown"]), []);
@@ -60,6 +61,7 @@ const LoadPanel = memo(
 
       const expectedChildren = useMemo(() => ({
         animation: { optionName: "animation", isCollectionItem: false },
+        indicatorOptions: { optionName: "indicatorOptions", isCollectionItem: false },
         position: { optionName: "position", isCollectionItem: false }
       }), []);
 
@@ -214,6 +216,27 @@ const _componentHide = (props: IHideProps) => {
 };
 
 const Hide = Object.assign<typeof _componentHide, NestedComponentMeta>(_componentHide, {
+  componentType: "option",
+});
+
+// owners:
+// LoadPanel
+type IIndicatorOptionsProps = React.PropsWithChildren<{
+  animationType?: LoadingAnimationType;
+  height?: number | string | undefined;
+  src?: string;
+  width?: number | string | undefined;
+}>
+const _componentIndicatorOptions = (props: IIndicatorOptionsProps) => {
+  return React.createElement(NestedOption<IIndicatorOptionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "indicatorOptions",
+    },
+  });
+};
+
+const IndicatorOptions = Object.assign<typeof _componentIndicatorOptions, NestedComponentMeta>(_componentIndicatorOptions, {
   componentType: "option",
 });
 
@@ -377,6 +400,8 @@ export {
   IFromProps,
   Hide,
   IHideProps,
+  IndicatorOptions,
+  IIndicatorOptionsProps,
   My,
   IMyProps,
   Offset,

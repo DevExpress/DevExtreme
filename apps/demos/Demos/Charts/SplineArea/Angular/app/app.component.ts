@@ -4,7 +4,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { DxChartModule, DxSelectBoxModule } from 'devextreme-angular';
 
-import { СorporationInfo, Service } from './app.service';
+import { CorporationInfo, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -24,7 +24,7 @@ if (window && window.config?.packageConfigPaths) {
   preserveWhitespaces: true,
 })
 export class AppComponent {
-  corporationsInfo: СorporationInfo[];
+  corporationsInfo: CorporationInfo[];
 
   types: string[] = ['splinearea', 'stackedsplinearea', 'fullstackedsplinearea'];
 

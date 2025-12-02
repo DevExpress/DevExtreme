@@ -55,8 +55,8 @@ export class AppComponent {
   }
 
   timer() {
-    this.seconds--;
-    if (this.seconds == 0) {
+    this.seconds -= 1;
+    if (this.seconds === 0) {
       this.buttonText = 'Restart progress';
       this.inProgress = !this.inProgress;
       clearInterval(this.intervalId);

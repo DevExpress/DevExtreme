@@ -49,7 +49,7 @@ export const getAppointmentColor = async (
   groups: string[],
   appointmentConfig: {
     itemData: SafeAppointment;
-    groupIndex: string | number;
+    groupIndex: number;
   },
 ): Promise<string | undefined> => {
   const { groupIndex, itemData } = appointmentConfig;

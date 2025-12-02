@@ -3,7 +3,7 @@
     <div class="dx-fieldset">
       <div class="dx-field">
         <DxLookup
-          :items="items"
+          :items="employees"
           :display-expr="getDisplayExpr"
           :apply-value-mode="applyValueMode"
           placeholder="Select employee"
@@ -44,14 +44,12 @@ import { DxLookup, DxDropDownOptions, type DxLookupTypes } from 'devextreme-vue/
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { employees } from './data.ts';
 
-const items = employees;
-const selectedValue = ref(null);
+const selectedValue = ref<typeof employees[number]>();
 const applyValueModes: DxLookupTypes.ApplyValueMode[] = ['instantly', 'useButtons'];
 const applyValueMode = ref(applyValueModes[0]);
 
 const getDisplayExpr = ({ FirstName = '', LastName = '' } = {}) => `${FirstName} ${LastName}`.trim();
-function setSelectedValue(e) {
+function setSelectedValue(e: DxLookupTypes.ValueChangedEvent) {
   selectedValue.value = e.value;
 }
 </script>
-

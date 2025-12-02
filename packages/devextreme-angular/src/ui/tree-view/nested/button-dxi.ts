@@ -21,6 +21,7 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-tree-view-button',
@@ -28,7 +29,13 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_buttons,
+           useExisting: DxiTreeViewButtonComponent,
+        }
+    ]
 })
 export class DxiTreeViewButtonComponent extends CollectionNestedOption {
     @Input()

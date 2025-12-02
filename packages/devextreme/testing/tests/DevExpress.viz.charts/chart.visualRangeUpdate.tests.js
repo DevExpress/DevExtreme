@@ -990,7 +990,6 @@ QUnit.test('No data -> set Data(one point)', function(assert) {
 QUnit.module('Visual range on updates. Argument axis. Auto mode. Discrete', moduleSetup);
 
 QUnit.test('No data -> set visualRange - take given range', function(assert) {
-
     // Case 1
     let [chart, onOptionChanged] = this.createChart({
         argumentAxis: {
@@ -4222,7 +4221,6 @@ QUnit.test('Argument Axis. Reset visualRange with null option', function(assert)
     assert.deepEqual(onOptionChanged.getCall(0).args[0].value, [1, 5], 'Case 4');
     assert.deepEqual(onOptionChanged.getCall(1).args[0].fullName, 'valueAxis.visualRange', 'Case 4');
     assert.deepEqual(onOptionChanged.getCall(1).args[0].value, [10, 30], 'Case 4');
-
 
     // Case 5
     [chart, onOptionChanged] = this.createChart({

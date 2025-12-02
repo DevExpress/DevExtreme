@@ -16,7 +16,9 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
+    ContentChildren,
+    QueryList
 } from '@angular/core';
 
 
@@ -36,7 +38,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
@@ -90,8 +93,9 @@ import { DxoLinearGaugeTitleModule } from 'devextreme-angular/ui/linear-gauge/ne
 import { DxoLinearGaugeTooltipModule } from 'devextreme-angular/ui/linear-gauge/nested';
 import { DxoLinearGaugeValueIndicatorModule } from 'devextreme-angular/ui/linear-gauge/nested';
 import { DxoLinearGaugeWidthModule } from 'devextreme-angular/ui/linear-gauge/nested';
-
-
+import { 
+           PROPERTY_TOKEN_ranges,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -113,6 +117,12 @@ import { DxoLinearGaugeWidthModule } from 'devextreme-angular/ui/linear-gauge/ne
     ]
 })
 export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_ranges)
+    set _rangesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('ranges', value);
+    }
+
     instance: DxLinearGauge = null;
 
     /**
@@ -613,10 +623,6 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
     
      */
     @Output() valueIndicatorChange: EventEmitter<GaugeIndicator | { type?: "rectangle" | "circle" | "rhombus" | "rangeBar" | "triangleMarker" | "textCloud" }>;
-
-
-
-
 
 
 

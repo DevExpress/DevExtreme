@@ -47,7 +47,7 @@ const ButtonGroup = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["selectedItemKeys","selectedItems"]), []);
       const independentEvents = useMemo(() => (["onContentReady","onDisposing","onInitialized","onItemClick"]), []);

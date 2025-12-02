@@ -3,7 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
   DxCardViewModule,
-  DxTemplateModule,
   DxProgressBarModule,
 } from 'devextreme-angular';
 import { Task, Service } from './app.service';
@@ -40,7 +39,6 @@ export class AppComponent {
     BrowserModule,
     DxCardViewModule,
     DxProgressBarModule,
-    DxTemplateModule,
   ],
   declarations: [
     AppComponent,

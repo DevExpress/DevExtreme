@@ -1,4 +1,4 @@
-import Calendar from '../__internal/ui/calendar/m_calendar';
+import Calendar from '../__internal/ui/calendar/calendar';
 export default Calendar;
 
 // STYLE calendar

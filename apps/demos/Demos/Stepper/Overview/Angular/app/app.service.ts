@@ -2,11 +2,13 @@ import { Injectable } from "@angular/core";
 import { type DxStepperTypes } from 'devextreme-angular/ui/stepper';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class AppService {
   steps: DxStepperTypes.Item[] = [];
+
   orientations = [];
+
   navigationModes = [];
 
   constructor() {
@@ -14,40 +16,40 @@ export class AppService {
       {
         text: "A",
         label: "Cart",
-        icon: "cart"
+        icon: "cart",
       },
       {
         text: "B",
         label: "Shipping Info",
-        icon: "clipboardtasklist"
+        icon: "clipboardtasklist",
       },
       {
         text: "C",
         label: "Promo Code",
         icon: "gift",
-        optional: true
+        optional: true,
       },
       {
         text: "D",
         label: "Checkout",
-        icon: "packagebox"
+        icon: "packagebox",
       },
       {
         text: "E",
         label: "Ordered",
-        icon: "checkmarkcircle"
-      }
+        icon: "checkmarkcircle",
+      },
     ];
 
     this.orientations = [
       { text: "Horizontal", value: "horizontal" },
-      { text: "Vertical", value: "vertical" }
+      { text: "Vertical", value: "vertical" },
     ];
 
     this.navigationModes = [
       { text: 'Non-linear', value: false },
       { text: 'Linear', value: true },
-    ]
+    ];
   }
 
   getSteps(): DxStepperTypes.Item[] {

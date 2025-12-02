@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Runner.Models;
@@ -9,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using IOFile = System.IO.File;
 
 namespace Runner.Controllers
@@ -17,6 +19,7 @@ namespace Runner.Controllers
     public class MainController : Controller
     {
         static readonly object IO_SYNC = new object();
+        static readonly SemaphoreSlim ASYNC_SYNC = new SemaphoreSlim(1, 1);
         readonly string _completedSuitesFileName;
 
         UIModelHelper _uiModelHelper;
@@ -128,15 +131,35 @@ namespace Runner.Controllers
             }
         }
         [HttpPost]
-        public void NotifySuiteFinalized(string name, bool passed, int runtime)
+        public async System.Threading.Tasks.Task NotifySuiteFinalized(string name, bool passed, int runtime)
         {
             Response.ContentType = "text/plain";
-            lock (IO_SYNC)
-            {
-                if (passed && _runFlags.IsContinuousIntegration)
+            
+            var threadId = System.Threading.Thread.CurrentThread.ManagedThreadId;
+            
+            try
+            {                
+                await ASYNC_SYNC.WaitAsync();
+                try
                 {
-                    IOFile.AppendAllLines(_completedSuitesFileName, new[] { name });
+                    if (passed && _runFlags.IsContinuousIntegration)
+                    {
+                        IOFile.AppendAllLines(_completedSuitesFileName, new[] { name });
+                    }
+                    
+                    if (_runFlags.IsContinuousIntegration)
+                    {
+                        var timestamp = DateTime.Now.ToString("s");
+                        var filePath = Path.Combine(_env.ContentRootPath, "testing/LastSuiteTime.txt");
+                        
+                        IOFile.WriteAllText(filePath, timestamp);
+                    }
                 }
+                finally
+                {
+                    ASYNC_SYNC.Release();
+                }
+
                 ConsoleHelper.Write("[");
                 if (passed)
                     ConsoleHelper.Write(" OK ", ConsoleColor.Green);
@@ -145,19 +168,44 @@ namespace Runner.Controllers
 
                 TimeSpan runSpan = TimeSpan.FromMilliseconds(runtime);
                 ConsoleHelper.WriteLine($"] {name} in {Math.Round(runSpan.TotalSeconds, 3)}s");
-
-                NotifyIsAlive();
+                
+                await Response.WriteAsync("OK");
+                await Response.Body.FlushAsync();
             }
+            catch (Exception) { }
         }
 
-        static readonly object IOLock = new object();
-
         [HttpPost]
-        public void NotifyIsAlive() {
+        public async System.Threading.Tasks.Task NotifyIsAlive()
+        {
+            Response.ContentType = "text/plain";
+            
             if (_runFlags.IsContinuousIntegration)
-                lock (IOLock) {
-                    IOFile.WriteAllText(Path.Combine(_env.ContentRootPath, "testing/LastSuiteTime.txt"), DateTime.Now.ToString("s"));
+            {
+                try
+                {
+                    var timestamp = DateTime.Now.ToString("s");
+                    
+                    await ASYNC_SYNC.WaitAsync();
+                    try
+                    {
+                        var filePath = Path.Combine(_env.ContentRootPath, "testing/LastSuiteTime.txt");
+                        IOFile.WriteAllText(filePath, timestamp);
+                    }
+                    finally
+                    {
+                        ASYNC_SYNC.Release();
+                    }
+                    
+                    await Response.WriteAsync("OK");
+                    await Response.Body.FlushAsync();
                 }
+                catch (Exception) { }
+            }
+            else
+            {
+                await Response.WriteAsync("OK");
+            }
         }
 
         [HttpPost]
@@ -240,8 +288,13 @@ namespace Runner.Controllers
             m.NoJQuery = q.ContainsKey("nojquery");
             m.ShadowDom = q.ContainsKey("shadowDom");
             m.WorkerInWindow = q.ContainsKey("workerinwindow");
-            m.NoRenovation = q.ContainsKey("norenovation") || false;
             m.NoCsp = q.ContainsKey("nocsp") || false;
+
+            var maxWorkersEnv = Environment.GetEnvironmentVariable("MAX_WORKERS");
+            if (!String.IsNullOrEmpty(maxWorkersEnv) && Int32.TryParse(maxWorkersEnv, out int maxWorkers))
+            {
+                m.MaxWorkers = maxWorkers;
+            }
         }
 
         bool HasDeviceModeFlag()

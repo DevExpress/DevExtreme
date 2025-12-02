@@ -58,8 +58,8 @@ export class AppComponent {
     const signal = controller.signal;
 
     const aiPrompt: AIMessage[] = [
-      { role: 'system', content: prompt.system, },
-      { role: 'user', content: prompt.user, },
+      { role: 'system', content: prompt.system },
+      { role: 'user', content: prompt.user },
     ];
     const promise = this.getAIResponse(aiPrompt, signal);
 

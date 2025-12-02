@@ -10,7 +10,6 @@ import { companies } from './data.ts';
 const exportFormats = ['pdf'];
 
 const onExporting = (e: DataGridTypes.ExportingEvent) => {
-  // eslint-disable-next-line new-cap
   const doc = new jsPDF();
 
   exportDataGrid({
@@ -37,7 +36,8 @@ const onExporting = (e: DataGridTypes.ExportingEvent) => {
         const textHeight = doc.getTextDimensions(pdfCell.text).h;
         doc.textWithLink('website',
           options.rect.x + pdfCell.padding.left,
-          options.rect.y + options.rect.h / 2 + textHeight / 2, { url: pdfCell.text });
+          options.rect.y + options.rect.h / 2 + textHeight / 2,
+          { url: pdfCell.text });
       }
     },
   }).then(() => {

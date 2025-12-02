@@ -1,4 +1,4 @@
-import ScrollView from '../__internal/ui/scroll_view/m_scroll_view';
+import ScrollView from '../__internal/ui/scroll_view/scroll_view';
 export default ScrollView;
 
 /**

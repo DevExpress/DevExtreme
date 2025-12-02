@@ -1,8 +1,6 @@
 import $ from 'jquery';
 import 'ui/check_box';
 
-import 'generic_light.css!';
-
 QUnit.testStart(function() {
     const markup =
         '<div id="qunit-fixture">\

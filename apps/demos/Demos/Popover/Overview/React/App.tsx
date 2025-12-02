@@ -26,7 +26,7 @@ export default function App() {
         <div className="dx-field-value-static">
           <p>
             <span id="subject1">Google AdWords Strategy </span>
-              (<a id="link1">details</a>)
+            (<a id="link1">details</a>)
           </p>
           <Popover
             target="#link1"
@@ -35,9 +35,9 @@ export default function App() {
             position="top"
             width={300}
           >
-              Make final decision on whether we are going to
-              increase our Google AdWord spend based
-              on our 2013 marketing plan.
+            Make final decision on whether we are going to
+            increase our Google AdWord spend based
+            on our 2013 marketing plan.
           </Popover>
         </div>
       </div>
@@ -46,7 +46,7 @@ export default function App() {
         <div className="dx-field-value-static">
           <p>
             <span id="subject2">Rollout of New Website and Marketing Brochures </span>
-              (<a id="link2">details</a>)
+            (<a id="link2">details</a>)
           </p>
           <Popover
             target="#link2"
@@ -57,9 +57,9 @@ export default function App() {
             showTitle={true}
             title="Details"
           >
-              The designs for new brochures and
-              website have been approved.
-              Launch date is set for Feb 28.
+            The designs for new brochures and
+            website have been approved.
+            Launch date is set for Feb 28.
           </Popover>
         </div>
       </div>
@@ -68,7 +68,7 @@ export default function App() {
         <div className="dx-field-value-static">
           <p>
             <span id="subject3">Create 2012 Sales Report </span>
-              (<a id="link3">details</a>)
+            (<a id="link3">details</a>)
           </p>
           <Popover
             target="#link3"
@@ -78,9 +78,9 @@ export default function App() {
             width={300}
             animation={animationConfig}
           >
-              2012 Sales Report has to be completed
-              so we can determine if major changes
-              are required to sales strategy.
+            2012 Sales Report has to be completed
+            so we can determine if major changes
+            are required to sales strategy.
           </Popover>
         </div>
       </div>
@@ -89,7 +89,7 @@ export default function App() {
         <div className="dx-field-value-static">
           <p>
             <span id="subject4">Website Re-Design Plan </span>
-              (<a id="link4">more</a>)
+            (<a id="link4">more</a>)
           </p>
           <Popover
             target="#link4"
@@ -99,8 +99,8 @@ export default function App() {
             shading={true}
             shadingColor="rgba(0, 0, 0, 0.5)"
           >
-              The changes in our brochure designs for 2013 require
-              us to update key areas of our website.
+            The changes in our brochure designs for 2013 require
+            us to update key areas of our website.
           </Popover>
         </div>
       </div>

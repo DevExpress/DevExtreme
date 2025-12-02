@@ -19,6 +19,7 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_locations } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-map-location',
@@ -26,7 +27,13 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_locations,
+           useExisting: DxiMapLocationComponent,
+        }
+    ]
 })
 export class DxiMapLocationComponent extends CollectionNestedOption {
     @Input()

@@ -3,11 +3,11 @@ let focused;
 (function(root, factory) {
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
-            focused = require('ui/widget/selectors').focused;
+            focused = require('__internal/core/utils/m_selectors').focused;
             root.keyboardMock = module.exports = factory(require('jquery'), require('inferno'));
         });
     } else {
-        focused = DevExpress.require('ui/widget/selectors').focused;
+        focused = DevExpress.require('__internal/core/utils/m_selectors').focused;
         root.keyboardMock = factory(root.jQuery);
     }
 }(window, function($, inferno) {

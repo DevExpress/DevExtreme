@@ -3,6 +3,11 @@ import fx from 'common/core/animation/fx';
 
 import 'ui/color_box';
 
+import {
+    DX_ICON_CLASS,
+    DX_ICON_COLOR_DISMISS
+} from '__internal/ui/color_box/m_color_box';
+
 QUnit.testStart(function() {
     const markup =
         '<div id="color-box"></div>';
@@ -77,6 +82,20 @@ QUnit.module('ColorBox', {
         $('#color-box').dxColorBox({
             deferRendering: false
         });
+    });
+
+    QUnit.test('Should render no color icon when value is null', function(assert) {
+        const $colorBox = showColorBox.call(this);
+        const $icon = $colorBox.find(`.${COLOR_BOX_COLOR_RESULT_PREVIEW_CLASS} .${DX_ICON_CLASS}.${DX_ICON_COLOR_DISMISS}`);
+
+        assert.strictEqual($icon.length, 1, 'icon is rendered for empty value');
+    });
+
+    QUnit.test('Should not render no color icon when value is present', function(assert) {
+        const $colorBox = showColorBox.call(this, { value: '#fffff' });
+        const $icon = $colorBox.find(`.${COLOR_BOX_COLOR_RESULT_PREVIEW_CLASS} .${DX_ICON_CLASS}.${DX_ICON_COLOR_DISMISS}`);
+
+        assert.strictEqual($icon.length, 0, 'icon is not rendered for non-empty value');
     });
 });
 

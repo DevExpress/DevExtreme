@@ -28,10 +28,8 @@ import {
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
-
-
 
 
 
@@ -53,6 +51,7 @@ import {
     ]
 })
 export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy {
+
     instance: DxSpeedDialAction = null;
 
     /**
@@ -333,10 +332,6 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
     
      */
     @Output() visibleChange: EventEmitter<boolean>;
-
-
-
-
 
 
 

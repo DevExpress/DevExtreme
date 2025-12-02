@@ -8,7 +8,7 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-type FirstArgument<T> = T extends (...args: any) => any ? Parameters<T>[0]: never;
+type FirstArgument<T> = T extends (...args: any) => any ? Parameters<T>[0] : never;
 
 let modulePrefix = '';
 // @ts-ignore
@@ -19,7 +19,6 @@ if (window && window.config?.packageConfigPaths) {
 @Component({
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
 })
 export class AppComponent {

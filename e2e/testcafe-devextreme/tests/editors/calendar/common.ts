@@ -86,7 +86,7 @@ test('Cells on month view should have hover state class after hover when zoomLev
 test('Calendar with showWeekNumbers rendered correct', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'Calendar with showWeekNumbers.png', { element: '#container', shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Calendar with showWeekNumbers.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
@@ -148,7 +148,7 @@ test('Calendar with showWeekNumbers rendered correct with cellTemplate', async (
   test(`Calendar with ${selectionMode} selectionMode rendered correct`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await testScreenshot(t, takeScreenshot, `Calendar with ${selectionMode} selectionMode.png`, { element: '#container', shouldTestInCompact: true });
+    await testScreenshot(t, takeScreenshot, `Calendar with ${selectionMode} selectionMode.png`, { element: '#container' });
 
     await t
       .expect(compareResults.isValid())
@@ -166,7 +166,7 @@ test('Calendar with showWeekNumbers rendered correct with cellTemplate', async (
     await t
       .click(calendar.getView().getWeekNumberCellByIndex(3));
 
-    await testScreenshot(t, takeScreenshot, `Week cell click selection (selectionMode=${selectionMode}).png`, { element: '#container', shouldTestInCompact: true });
+    await testScreenshot(t, takeScreenshot, `Week cell click selection (selectionMode=${selectionMode}).png`, { element: '#container' });
 
     await t
       .expect(compareResults.isValid())
@@ -186,7 +186,7 @@ test('Calendar with showWeekNumbers rendered correct with cellTemplate', async (
 test('Calendar with multiview rendered correct', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'Calendar with multiview.png', { element: '#container', shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Calendar with multiview.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
@@ -201,7 +201,7 @@ test('Calendar with multiview rendered correct', async (t) => {
   test(`Calendar ${zoomLevel} view rendered correct`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await testScreenshot(t, takeScreenshot, `Calendar ${zoomLevel} view.png`, { element: '#container', shouldTestInCompact: true });
+    await testScreenshot(t, takeScreenshot, `Calendar ${zoomLevel} view.png`, { element: '#container' });
 
     await t
       .expect(compareResults.isValid())
@@ -240,7 +240,7 @@ test('Calendar with multiview rendered correct', async (t) => {
   test(`Calendar ${zoomLevel} view with today button rendered correct`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await testScreenshot(t, takeScreenshot, `Calendar ${zoomLevel} view with today button.png`, { element: '#container', shouldTestInCompact: true });
+    await testScreenshot(t, takeScreenshot, `Calendar ${zoomLevel} view with today button.png`, { element: '#container' });
 
     await t
       .expect(compareResults.isValid())
@@ -263,7 +263,7 @@ test('Calendar with multiview rendered correct', async (t) => {
 test('Calendar with disabled dates rendered correct', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'Calendar with disabled dates.png', { element: '#container', shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Calendar with disabled dates.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
@@ -327,7 +327,7 @@ test('Calendar with disabled dates rendered correct', async (t) => {
       }
     }
 
-    await testScreenshot(t, takeScreenshot, `${testName}.png`, { element: '#container', shouldTestInCompact: true });
+    await testScreenshot(t, takeScreenshot, `${testName}.png`, { element: '#container' });
 
     await t
       .expect(compareResults.isValid())
@@ -385,7 +385,7 @@ test('Calendar with disabled dates rendered correct', async (t) => {
       cellOffset += 1;
     }
 
-    await testScreenshot(t, takeScreenshot, `${testName}.png`, { element: '#container', shouldTestInCompact: true });
+    await testScreenshot(t, takeScreenshot, `${testName}.png`, { element: '#container' });
 
     await t
       .expect(compareResults.isValid())
@@ -401,7 +401,7 @@ test('Calendar with disabled dates rendered correct', async (t) => {
     }, '#calendar');
   });
 
-  test.skip(`Calendar with range selectionMode rendered correct (maxZoomLevel=${zoomLevel})`, async (t) => {
+  test(`Calendar with range selectionMode rendered correct (maxZoomLevel=${zoomLevel})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await testScreenshot(t, takeScreenshot, `Calendar with range selection (maxZoomLevel=${zoomLevel}).png`, { element: '#container' });

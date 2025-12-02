@@ -1,0 +1,23 @@
+<div class="trademark__wrapper">
+  <div class="trademark__img-wrapper">
+    <img
+      class="trademark__img"
+      src="../../../../images/vehicles/image_{{ id }}.png"
+      alt="{{ trademarkName }} {{ name }}"
+      (click)="showInfo.emit()"
+      (keydown)="onKeyDown($event)"
+      role="button"
+      tabindex="0"
+      [attr.aria-haspopup]="'dialog'"
+      [attr.aria-label]="
+        trademarkName + ' ' + name + ' - press Enter for image info'
+      "
+    />
+  </div>
+  <div class="trademark__text-wrapper">
+    <div class="trademark__text trademark__text--title">{{
+      trademarkName
+    }}</div>
+    <div class="trademark__text trademark__text--subtitle">{{ name }}</div>
+  </div>
+</div>

@@ -1,10 +1,13 @@
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+} from '../../helpers/vizMocks.js';
 import pointModule from 'viz/series/points/base_point';
 import labelModule from 'viz/series/points/label';
 import SeriesModule from 'viz/series/base_series';
-const Series = SeriesModule.Series;
 import { MockTranslator } from '../../helpers/chartMocks.js';
+
+const Series = SeriesModule.Series;
 
 const originalLabel = labelModule.Label;
 
@@ -59,7 +62,6 @@ QUnit.test('Create with empty data', function(assert) {
 
     assert.strictEqual(point.lowError, undefined, 'lowError should be undefined');
     assert.strictEqual(point.highError, undefined, 'highError should be undefined');
-
 
     assert.ok(point._options, 'Options should be created');
     assert.equal(point.series.name, 'series', 'Series option should be correct');
@@ -361,7 +363,7 @@ QUnit.test('Update close value of financial point', function(assert) {
 
 QUnit.module('Update type of point', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.options = {
             styles: { normal: { r: 6 }, hover: { r: 6 } },
@@ -419,7 +421,6 @@ QUnit.test('Update simple to simple without data', function(assert) {
     point.drawMarker = function() {
         drawMarkerCalled++;
     };
-    // act
     const newOptions = $.extend(true, {}, this.options, { type: 'area' });
     point.update(data, newOptions);
     point.translate();
@@ -440,7 +441,6 @@ QUnit.test('Update simple to simple with data', function(assert) {
     point.drawMarker = function() {
         drawMarkerCalled++;
     };
-    // act
     data = { argument: 2, value: 2 };
     point.update(data, this.options);
     point.translate();
@@ -523,7 +523,7 @@ QUnit.test('Update range to range', function(assert) {
 
 QUnit.module('Draw', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
 
         this.labelsGroup = this.renderer.g();
@@ -603,7 +603,7 @@ QUnit.test('Point is visible', function(assert) {
 
 QUnit.module('Label', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
 
         this.sinonFactory = sinon.stub(labelModule, 'Label').callsFake(function() {
@@ -737,7 +737,7 @@ QUnit.test('Update data with null value after data with value', function(assert)
 
 QUnit.module('Deleting', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.options = {
             styles: { normal: { r: 6 }, hover: { r: 6 } },
@@ -793,7 +793,7 @@ QUnit.test('Delete marker', function(assert) {
 
 QUnit.module('Point views', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.series = sinon.createStubInstance(Series);
         this.series.isVisible.returns(true);
@@ -1055,7 +1055,7 @@ QUnit.test('apply view with selected state in \'none\' mode', function(assert) {
 
 QUnit.module('states and styles', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.series = sinon.createStubInstance(Series);
         this.series.isVisible.returns(true);
@@ -1106,7 +1106,6 @@ QUnit.test('T333557', function(assert) {
     point.translate();
     point.draw(this.renderer, this.groups);
 
-    // act
     point.fullState = 1;
     point.applyView();
     point.fullState = 0;
@@ -1116,7 +1115,6 @@ QUnit.test('T333557', function(assert) {
     point.update(this.data, this.options);
     point.draw(this.renderer, this.groups);
 
-    // assert
     assert.deepEqual(point.graphic.stub('attr').lastCall.args[0].style, 'newStyle');
     assert.deepEqual(point.graphic.stub('attr').lastCall.args[0].fill, 'green');
 });
@@ -1126,7 +1124,6 @@ QUnit.test('Draw point without state', function(assert) {
     point.translate();
     point.draw(this.renderer, this.groups);
 
-    // assert
     assert.deepEqual(point.graphic.stub('attr').firstCall.args[0].style, 'normal');
 });
 
@@ -1134,9 +1131,8 @@ QUnit.test('Release hover state', function(assert) {
     const point = createPoint(this.series, this.data, this.options);
     point.translate();
     point.draw(this.renderer, this.groups);
-    // act
     point.releaseHoverState();
-    // assert
+
     assert.ok(point.graphic.stub('toBackground').calledOnce);
 });
 
@@ -1153,7 +1149,7 @@ QUnit.test('Release hover state check background when state is selected', functi
 
 QUnit.module('Event binding', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.series = sinon.createStubInstance(Series);
         this.options = {
@@ -1187,20 +1183,16 @@ QUnit.module('Event binding', {
 QUnit.test('Point selection event passed to series', function(assert) {
     const point = createPoint(this.series, this.data, this.options);
 
-    // act
     point.select();
 
-    // assert
     assert.ok(this.series.selectPoint.calledOnce);
     assert.strictEqual(this.series.selectPoint.lastCall.args[0], point, 'Point should be selectied on series level');
 });
 
 QUnit.test('Point clear selection event passed to series', function(assert) {
     const point = createPoint(this.series, this.data, this.options);
-    // act
     point.clearSelection();
 
-    // assert
     assert.ok(this.series.deselectPoint.calledOnce);
     assert.strictEqual(this.series.deselectPoint.lastCall.args[0], point, 'Point selection should be cleared on series level');
 });
@@ -1208,37 +1200,31 @@ QUnit.test('Point clear selection event passed to series', function(assert) {
 QUnit.test('Point clear hover passed to series', function(assert) {
     const point = createPoint(this.series, this.data, this.options);
 
-    // act
     point.clearHover();
 
-    // assert
     assert.ok(this.series.clearPointHover.calledOnce);
 });
 
 QUnit.test('Point showTooltip event passed to series', function(assert) {
     const point = createPoint(this.series, this.data, this.options);
 
-    // act
     point.showTooltip();
 
-    // assert
     assert.ok(this.series.showPointTooltip.calledOnce);
     assert.strictEqual(this.series.showPointTooltip.lastCall.args[0], point, 'Point should be selection on series level');
 });
 
 QUnit.test('Point hideTooltip selection event passed to series', function(assert) {
     const point = createPoint(this.series, this.data, this.options);
-    // act
     point.hideTooltip();
 
-    // assert
     assert.ok(this.series.hidePointTooltip.calledOnce);
     assert.strictEqual(this.series.hidePointTooltip.lastCall.args[0], point, 'Point selected should be cleared on series level');
 });
 
 QUnit.module('Dispose', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.labelsGroup = this.renderer.g();
 
@@ -1291,7 +1277,6 @@ QUnit.module('Dispose', {
             markers: this.group,
             labels: this.labelsGroup,
             errorBars: this.renderer.g()
-
         };
     },
     afterEach: function() {
@@ -1325,7 +1310,7 @@ QUnit.test('Dispose', function(assert) {
 
 QUnit.module('API', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.labelsGroup = {};
         this.data = { argument: 5, value: 5 };
@@ -1397,7 +1382,6 @@ QUnit.test('Get color with customize point point hasn\'t value', function(assert
     this.data.value = null;
 
     const point = createPoint(this.series, this.data, this.options);
-    // act
     point.getColor();
 
     assert.strictEqual(this.series.customizePoint.callCount, 1);
@@ -1410,7 +1394,6 @@ QUnit.test('Get color with customize point point hasn\'t value and has customize
     this.options.styles.usePointCustomOptions = true;
 
     const point = createPoint(this.series, this.data, this.options);
-    // act
     point.getColor();
 
     assert.strictEqual(this.series.customizePoint.callCount, 0);

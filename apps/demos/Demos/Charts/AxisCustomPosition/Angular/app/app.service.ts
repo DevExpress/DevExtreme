@@ -20,7 +20,7 @@ export class Service {
     let x1; let x2; let y1; let y2; let
       i;
     const ds = [];
-    for (i = 0; i < 20; i++) {
+    for (i = 0; i < 20; i += 1) {
       x1 = this.random(5, 15);
       y1 = this.random(5, 15);
 
@@ -28,7 +28,7 @@ export class Service {
         x1, y1, x2, y2,
       });
     }
-    for (i = 0; i < 20; i++) {
+    for (i = 0; i < 20; i += 1) {
       x2 = this.random(5, 15);
       y2 = this.random(-15, -5);
 
@@ -37,7 +37,7 @@ export class Service {
       });
     }
 
-    for (i = 0; i < 20; i++) {
+    for (i = 0; i < 20; i += 1) {
       x2 = this.random(-15, -5);
       y2 = this.random(5, 15);
 
@@ -45,7 +45,7 @@ export class Service {
         x1, y1, x2, y2,
       });
     }
-    for (i = 0; i < 20; i++) {
+    for (i = 0; i < 20; i += 1) {
       x1 = this.random(-15, -5);
       y1 = this.random(-15, -5);
 

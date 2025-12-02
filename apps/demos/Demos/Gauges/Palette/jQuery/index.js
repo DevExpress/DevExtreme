@@ -5,7 +5,7 @@ $(() => {
     baseValue: 0,
     values: [-2.13, 1.48, -3.09, 4.52, 4.9, 3.9],
     label: {
-      format: "##.## mm;-##.## mm",
+      format: '##.## mm;-##.## mm',
     },
     export: {
       enabled: true,

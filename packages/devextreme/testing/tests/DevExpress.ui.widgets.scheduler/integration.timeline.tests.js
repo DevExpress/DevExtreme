@@ -7,7 +7,7 @@ QUnit.testStart(() => {
             </div>');
 });
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 import fx from 'common/core/animation/fx';
 import { DataSource } from 'common/data/data_source/data_source';

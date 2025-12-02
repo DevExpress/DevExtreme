@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export class СorporationInfo {
+export class CorporationInfo {
   company: string;
 
   y2005: number;
@@ -8,7 +8,7 @@ export class СorporationInfo {
   y2004: number;
 }
 
-const corporationsInfo: СorporationInfo[] = [{
+const corporationsInfo: CorporationInfo[] = [{
   company: 'ExxonMobil',
   y2005: 377.28,
   y2004: 270.25,
@@ -36,7 +36,7 @@ const corporationsInfo: СorporationInfo[] = [{
 
 @Injectable()
 export class Service {
-  getCorporationsInfo(): СorporationInfo[] {
+  getCorporationsInfo(): CorporationInfo[] {
     return corporationsInfo;
   }
 }

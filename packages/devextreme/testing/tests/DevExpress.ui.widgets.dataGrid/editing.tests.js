@@ -1,4 +1,5 @@
 import fx from 'common/core/animation/fx';
+import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 import config from 'core/config';
 import devices from '__internal/core/m_devices';
 import dataUtils from 'core/element_data';
@@ -30,7 +31,6 @@ import pointerMock from '../../helpers/pointerMock.js';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { findShadowHostOrDocument } from '../../helpers/dataGridHelper.js';
 import { DataSource } from 'common/data/data_source/data_source';
-import { shouldSkipOnMobile, shouldSkipOnDesktop } from '../../helpers/device.js';
 
 QUnit.testStart(function() {
     const markup =
@@ -68,6 +68,8 @@ $('body').addClass('dx-viewport');
 
 QUnit.module('Editing', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
         this.$element = () => $('#container');
         this.gridContainer = $('#container > .dx-datagrid');
 
@@ -127,6 +129,7 @@ QUnit.module('Editing', {
     afterEach: function() {
         this.dispose();
         this.clock.restore();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 
@@ -1108,10 +1111,6 @@ QUnit.module('Editing', {
 
     // T124946
     QUnit.test('Api method editCell with button', function(assert) {
-        if(shouldSkipOnMobile(assert, 'The problem is fixed for desktop only')) {
-            return;
-        }
-
         const that = this;
         const rowsView = this.rowsView;
         const testElement = $('#container');
@@ -1686,52 +1685,6 @@ QUnit.module('Editing', {
         assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 0, 'editor is closed');
     });
 
-    // T749034
-    QUnit.test('Changed value should be saved on click outside dataGrid on mobile devices when cell editing mode', function(assert) {
-        if(shouldSkipOnDesktop(assert)) {
-            return;
-        }
-
-        // arrange
-        const that = this;
-        const rowsView = this.rowsView;
-        let updateArgs;
-        const testElement = $('#container');
-
-        $.extend(that.options.editing, {
-            allowUpdating: true,
-            mode: 'cell',
-            texts: {
-                editRow: 'Edit'
-            }
-        });
-
-        that.dataControllerOptions.store = {
-            key: function() { },
-            update: function(key, values) {
-                updateArgs = [key, values];
-                return $.Deferred().resolve(key, values);
-            }
-        };
-
-        rowsView.render(testElement);
-        testElement.find('td').first().trigger('dxclick'); // Edit
-        this.clock.tick(10);
-
-        assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1);
-
-        // act
-        testElement.find('input').first().val('Test update cell');
-        $(document).trigger('dxpointerdown');
-        testElement.find('input').first().trigger('change');
-        $(document).trigger('dxclick');
-        this.clock.tick(10);
-
-        // assert
-        assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 0);
-        assert.deepEqual(updateArgs, ['test1', { 'name': 'Test update cell' }]);
-    });
-
     // T113152
     QUnit.test('Not close Editing Cell in batch mode on click editor popup', function(assert) {
         // arrange
@@ -1767,9 +1720,6 @@ QUnit.module('Editing', {
 
     // T727856
     QUnit.test('Not close Editing Cell in batch mode on down in editing cell and up in another cell', function(assert) {
-        if(shouldSkipOnMobile(assert, 'focus is not actual for mobile devices')) {
-            return;
-        }
         // arrange
         const that = this;
         const rowsView = this.rowsView;
@@ -2890,6 +2840,8 @@ QUnit.module('Editing', {
 
 QUnit.module('Editing with real dataController', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
         this.clock = sinon.useFakeTimers();
 
         this.$element = () => $('#container');
@@ -2953,6 +2905,7 @@ QUnit.module('Editing with real dataController', {
     afterEach: function() {
         this.dispose();
         this.clock.restore();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 
@@ -7541,10 +7494,6 @@ QUnit.module('Editing with real dataController', {
 
     // T319885
     QUnit.testInActiveWindow('Focused lookup column with showEditorAlways is enabled', function(assert) {
-        if(shouldSkipOnMobile(assert, 'focus is not actual for mobile devices')) {
-            return;
-        }
-
         // arrange
         const that = this;
         let callCountFocusEditingCell = 0;
@@ -8969,6 +8918,9 @@ QUnit.module('Editing with real dataController', {
 
     QUnit.module('Editing state', {
         beforeEach: function() {
+            this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+            gridCoreUtils.isElementInCurrentGrid = () => true;
+
             this.options.dataSource = this.options.dataSource.store;
             this.options.keyExpr = 'room';
             this.dataController.init();
@@ -8993,6 +8945,9 @@ QUnit.module('Editing with real dataController', {
                     assert.notOk($editRow.hasClass('dx-datagrid-edit-form'), 'edit form was not shown');
                 }
             };
+        },
+        afterEach: function() {
+            gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
         }
     }, () => {
         QUnit.test('editRow should change editRowKey', function(assert) {
@@ -9887,9 +9842,15 @@ QUnit.module('Editing with real dataController', {
 
     QUnit.module('Save/cancel events', {
         beforeEach: function() {
+            this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+            gridCoreUtils.isElementInCurrentGrid = () => true;
+
             this.options.dataSource = this.options.dataSource.store;
             this.options.keyExpr = 'room';
             this.dataController.init();
+        },
+        afterEach: function() {
+            gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
         }
     }, () => {
         QUnit.test('onSaving/onSaved events should be fired after saveEditData call', function(assert) {
@@ -10400,6 +10361,9 @@ QUnit.module('Editing with real dataController', {
 
 QUnit.module('Refresh modes', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
+
         this.clock = sinon.useFakeTimers();
 
         this.$element = () => $('#container');
@@ -10455,6 +10419,7 @@ QUnit.module('Refresh modes', {
         };
     },
     afterEach: function() {
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
         this.dispose();
         this.clock.restore();
     }
@@ -10891,6 +10856,9 @@ QUnit.module('Refresh modes', {
 
 QUnit.module('Editing with validation', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
+
         this.$element = () => $('#container');
         this.gridContainer = $('#container > .dx-datagrid');
 
@@ -10952,6 +10920,7 @@ QUnit.module('Editing with validation', {
     afterEach: function() {
         this.dispose();
         this.clock.restore();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 
@@ -13302,9 +13271,6 @@ QUnit.module('Editing with validation', {
 
     // T497279
     QUnit.testInActiveWindow('Insert row using extern button when edit mode cell', function(assert) {
-        if(shouldSkipOnMobile(assert, 'focus is not actual for mobile devices')) {
-            return;
-        }
         // arrange
         const that = this;
         const rowsView = this.rowsView;
@@ -16258,6 +16224,9 @@ QUnit.module('Editing with validation', {
 
 QUnit.module('Editing with real dataController with grouping, masterDetail', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
+
         this.$element = () => $('#container');
         this.gridContainer = $('#container > .dx-datagrid');
 
@@ -16324,6 +16293,7 @@ QUnit.module('Editing with real dataController with grouping, masterDetail', {
 
     },
     afterEach: function() {
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
         this.dispose();
         this.clock.restore();
     }
@@ -16580,6 +16550,9 @@ const generateDataSource = function(countItem, countColumn) {
 
 QUnit.module('Editing with scrolling', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
+
         this.$element = () => $('#container');
         this.gridContainer = $('#container > .dx-datagrid');
 
@@ -16608,6 +16581,7 @@ QUnit.module('Editing with scrolling', {
         this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
         this.clock.restore();
         this.dispose();
     }
@@ -17473,6 +17447,9 @@ QUnit.module('Editing with scrolling', {
 
 QUnit.module('Edit Form', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
+
         this.clock = sinon.useFakeTimers();
 
         this.$element = () => $('#container');
@@ -17540,6 +17517,7 @@ QUnit.module('Edit Form', {
         // };
     },
     afterEach: function() {
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
         this.dispose();
         this.clock.restore();
     }
@@ -19029,6 +19007,9 @@ QUnit.module('Edit Form', {
 
 QUnit.module('Editing - "popup" mode', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
+
         this.clock = sinon.useFakeTimers();
 
         this.$element = () => $('#container');
@@ -19092,6 +19073,7 @@ QUnit.module('Editing - "popup" mode', {
         };
     },
     afterEach: function() {
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
         this.dispose();
         this.clock.restore();
     }
@@ -19990,6 +19972,9 @@ QUnit.module('Editing - "popup" mode', {
 
 QUnit.module('Promises in callbacks and events', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
+
         this.clock = sinon.useFakeTimers();
 
         this.$element = () => $('#container');
@@ -20058,6 +20043,7 @@ QUnit.module('Promises in callbacks and events', {
         };
     },
     afterEach: function() {
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
         this.dispose();
         this.clock.restore();
     }

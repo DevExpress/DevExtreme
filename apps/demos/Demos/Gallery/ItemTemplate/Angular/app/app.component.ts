@@ -1,7 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxTemplateModule, DxGalleryModule } from 'devextreme-angular';
+import { DxGalleryModule } from 'devextreme-angular';
 
 import { Service, House } from './app.service';
 
@@ -32,7 +32,6 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    DxTemplateModule,
     DxGalleryModule,
   ],
   declarations: [AppComponent],

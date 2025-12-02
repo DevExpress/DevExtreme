@@ -35,7 +35,7 @@ $(() => {
         dataField: 'Birth_Date',
         dataType: 'date',
       },
-      { 
+      {
         dataField: 'Hire_Date',
         dataType: 'date',
       },
@@ -43,14 +43,14 @@ $(() => {
       'Department',
       'State',
       'City',
-      { 
+      {
         dataField: 'Phone',
         allowHiding: false,
       },
       {
         dataField: 'Email',
         visible: false,
-      }
+      },
     ],
   }).dxCardView('instance');
 
@@ -58,7 +58,7 @@ $(() => {
     $('#column-chooser-mode').dxSelectBox({
       dataSource: ['dragAndDrop', 'select'],
       value: cardView.option('columnChooser.mode'),
-      onValueChanged: ({value}) => {
+      onValueChanged: ({ value }) => {
         cardView.option('columnChooser.mode', value);
         renderOptions();
       },
@@ -70,7 +70,7 @@ $(() => {
     $('#search-enabled').dxCheckBox({
       text: 'Search Enabled',
       value: cardView.option('columnChooser.search.enabled') ?? false,
-      onValueChanged: ({value}) => {
+      onValueChanged: ({ value }) => {
         cardView.option('columnChooser.search.enabled', value);
       },
     });
@@ -78,7 +78,7 @@ $(() => {
     $('#allow-select-all').dxCheckBox({
       text: 'Allow Select All',
       value: cardView.option('columnChooser.selection.allowSelectAll') ?? false,
-      onValueChanged: ({value}) => {
+      onValueChanged: ({ value }) => {
         cardView.option('columnChooser.selection.allowSelectAll', value);
       },
       disabled: cardView.option('columnChooser.mode') !== 'select',
@@ -87,7 +87,7 @@ $(() => {
     $('#select-by-click').dxCheckBox({
       text: 'Select By Click On Item',
       value: cardView.option('columnChooser.selection.selectByClick') ?? false,
-      onValueChanged: ({value}) => {
+      onValueChanged: ({ value }) => {
         cardView.option('columnChooser.selection.selectByClick', value);
       },
       disabled: cardView.option('columnChooser.mode') !== 'select',
@@ -96,11 +96,10 @@ $(() => {
     $('#allow-column-reordering').dxCheckBox({
       text: 'Allow Column Reordering',
       value: cardView.option('allowColumnReordering') ?? false,
-      onValueChanged: ({value}) => {
+      onValueChanged: ({ value }) => {
         cardView.option('allowColumnReordering', value);
       },
     });
-
   }
 
   renderOptions();

@@ -1,3 +1,12 @@
+export interface Task {
+  id: number,
+  parentId: number,
+  title: string,
+  start: Date,
+  end: Date,
+  progress: number,
+}
+
 export const tasks = [{
   id: 1,
   parentId: 0,

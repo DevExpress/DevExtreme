@@ -22,8 +22,6 @@ const RADIO_BUTTON_CHECKED_CLASS = 'dx-radiobutton-checked';
 const RADIO_GROUP_VERTICAL_CLASS = 'dx-radiogroup-vertical';
 const RADIO_GROUP_HORIZONTAL_CLASS = 'dx-radiogroup-horizontal';
 
-const toSelector = cssClass => '.' + cssClass;
-
 const moduleConfig = {
     beforeEach: function() {
         executeAsyncMock.setup();
@@ -49,7 +47,7 @@ QUnit.module('buttons group rendering', moduleConfig, () => {
             ]
         });
 
-        assert.equal($radioGroup.find(toSelector(RADIO_BUTTON_CLASS)).length, 3, 'buttons generated');
+        assert.equal($radioGroup.find(`.${RADIO_BUTTON_CLASS}`).length, 3, 'buttons generated');
     });
 
     QUnit.test('empty message should not be generated if no items', function(assert) {
@@ -112,7 +110,7 @@ QUnit.module('buttons rendering', moduleConfig, () => {
             valueExpr: 'value'
         });
 
-        const $radioButton = $radioGroup.find(toSelector(RADIO_BUTTON_CLASS)).eq(0);
+        const $radioButton = $radioGroup.find(`.${RADIO_BUTTON_CLASS}`).eq(0);
         assert.equal($radioButton.text(), '0', 'text rendered correctly');
     });
 
@@ -124,7 +122,7 @@ QUnit.module('buttons rendering', moduleConfig, () => {
             valueExpr: 'value'
         });
 
-        const $radioButton = $radioGroup.find(toSelector(RADIO_BUTTON_CLASS)).eq(0);
+        const $radioButton = $radioGroup.find(`.${RADIO_BUTTON_CLASS}`).eq(0);
         assert.equal($radioButton.text(), '0', 'text rendered correctly');
     });
 
@@ -135,7 +133,7 @@ QUnit.module('buttons rendering', moduleConfig, () => {
             ]
         });
 
-        const $radioButton = $radioGroup.find(toSelector(RADIO_BUTTON_CLASS)).eq(0);
+        const $radioButton = $radioGroup.find(`.${RADIO_BUTTON_CLASS}`).eq(0);
         assert.equal($radioButton.text(), '0', 'text rendered correctly');
     });
 
@@ -146,7 +144,7 @@ QUnit.module('buttons rendering', moduleConfig, () => {
             ]
         });
 
-        const $radioButton = $radioGroup.find(toSelector(RADIO_BUTTON_CLASS)).find('input');
+        const $radioButton = $radioGroup.find(`.${RADIO_BUTTON_CLASS}`).find('input');
 
         assert.equal($radioButton.prop('type'), 'radio', 'input type rendered correctly');
         assert.equal($radioButton.prop('value'), 'foo', 'input value rendered correctly');
@@ -225,7 +223,7 @@ QUnit.module('value', moduleConfig, () => {
         const radioGroup = $radioGroup.dxRadioGroup('instance');
 
         setTimeout(function() {
-            assert.equal($(radioGroup.itemElements()).filter(toSelector(RADIO_BUTTON_CHECKED_CLASS)).length, 1, 'one item checked');
+            assert.equal($(radioGroup.itemElements()).filter(`.${RADIO_BUTTON_CHECKED_CLASS}`).length, 1, 'one item checked');
             done();
         });
     });

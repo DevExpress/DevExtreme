@@ -40,7 +40,7 @@ export class ResourceManager {
     ));
   }
 
-  async loadGroupResources(groups: string[] = [], forceReload = false): Promise<ResourceLoader[]> {
+  async loadGroupResources(groups: string[] = [], forceReload = false): Promise<void> {
     await this.load(groups, forceReload);
 
     const { groupTree, groupLeafs } = groupResources(this.resourceById, groups);
@@ -48,9 +48,6 @@ export class ResourceManager {
     this.groups = groups;
     this.groupsLeafs = groupLeafs;
     this.groupsTree = groupTree;
-
-    // TODO(9): Get rid of it as soon as you can. Fallback, this class has all necessary
-    return this.groupResources();
   }
 
   public groupCount(): number {

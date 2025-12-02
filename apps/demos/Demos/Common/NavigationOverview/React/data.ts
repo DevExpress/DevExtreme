@@ -1,4 +1,3 @@
-
 export const continents = [{
   id: '1',
   text: 'Africa',

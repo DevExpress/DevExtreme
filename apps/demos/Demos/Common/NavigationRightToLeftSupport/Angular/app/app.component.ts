@@ -7,7 +7,6 @@ import {
   DxSelectBoxModule,
   DxMenuModule,
   DxTreeViewModule,
-  DxTemplateModule,
 } from 'devextreme-angular';
 
 import { Continent, EuropeCountry, Service } from './app.service';
@@ -57,7 +56,6 @@ export class AppComponent {
     DxSelectBoxModule,
     DxMenuModule,
     DxTreeViewModule,
-    DxTemplateModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

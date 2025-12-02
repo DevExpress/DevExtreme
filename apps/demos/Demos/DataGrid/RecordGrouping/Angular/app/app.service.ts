@@ -18,7 +18,7 @@ export class Customer {
   Fax: string;
 }
 
-const сustomers: Customer[] = [{
+const customers: Customer[] = [{
   ID: 1,
   CompanyName: 'Super Mart of the West',
   Address: '702 SW 8th Street',
@@ -203,6 +203,6 @@ const сustomers: Customer[] = [{
 @Injectable()
 export class Service {
   getCustomers() {
-    return сustomers;
+    return customers;
   }
 }

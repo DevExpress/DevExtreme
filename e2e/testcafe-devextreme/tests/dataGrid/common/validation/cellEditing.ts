@@ -3,8 +3,6 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { testScreenshot } from '../../../../helpers/themeUtils';
-import { Themes } from '../../../../helpers/themes';
-import { changeTheme } from '../../../../helpers/changeTheme';
 
 fixture.disablePageReloads`Validation`
   .page(url(__dirname, '../../../container.html'));
@@ -21,7 +19,7 @@ fixture.disablePageReloads`Validation`
     await t.pressKey('tab');
 
     await t.expect(true).ok('no errors');
-  }).before(() => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     dataSource: [{
       id: 1,
       col2: 30,
@@ -53,43 +51,38 @@ fixture.disablePageReloads`Validation`
     }],
   }));
 });
-[
-  Themes.genericLight,
-  Themes.materialBlue,
-  Themes.fluentBlue,
-].forEach((theme) => {
-  test('DataGrid - Validation message gets cut off in Fluent and Material themes (T1285387)', async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const dataGrid = new DataGrid('#container');
-    const dataCellEditLink = dataGrid.getDataCell(0, 1).getLinkEdit();
 
-    await t.click(dataCellEditLink);
-    await t.pressKey('backspace enter');
+// visual: generic.light
+// visual: material.blue.light
+// visual: fluent.blue.light
+test('DataGrid - Validation message gets cut off in Fluent and Material themes (T1285387)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+  const dataCellEditLink = dataGrid.getDataCell(0, 1).getLinkEdit();
 
-    await testScreenshot(t, takeScreenshot, `Invalid-message-word-wrapping-${theme}`, { element: dataGrid.element });
+  await t.click(dataCellEditLink);
+  await t.pressKey('backspace enter');
 
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => {
-    await changeTheme(theme);
-    await createWidget('dxDataGrid', {
-      dataSource: [
-        { A: 'n' },
-      ],
-      width: 800,
-      editing: {
-        mode: 'form',
-        allowUpdating: true,
-      },
-      columns: [{
-        dataField: 'A',
-        validationRules: [{ type: 'required', message: 'sampletextsampletextsampletextsampletextsampletextsampletextsampletextsampletext' }],
-      },
-      ],
-    });
-  }).after(async () => {
-    await changeTheme(Themes.genericLight);
+  await testScreenshot(t, takeScreenshot, 'Invalid-message-word-wrapping.png', { element: dataGrid.element });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [
+      { A: 'n' },
+    ],
+    width: 800,
+    editing: {
+      mode: 'form',
+      allowUpdating: true,
+    },
+    columns: [{
+      dataField: 'A',
+      validationRules: [{ type: 'required', message: 'sampletextsampletextsampletextsampletextsampletextsampletextsampletextsampletext' }],
+    },
+    ],
   });
 });
 
@@ -107,9 +100,8 @@ test('DataGrid - Validation message is hidden if there is only one Master-Detail
     .click(cellToggle)
     .click(textCell.element);
 
+  await testScreenshot(t, takeScreenshot, 'validation-message-shown-after-master-detail-collapse.png', { element: dataGrid.element });
   await t
-    .expect(await takeScreenshot('validation-message-shown-after-master-detail-collapse.png', dataGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {

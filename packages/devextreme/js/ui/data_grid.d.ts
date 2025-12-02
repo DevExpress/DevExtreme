@@ -26,7 +26,8 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+    InteractionEvent,
+} from '../events';
 
 import {
     dxToolbarItem,
@@ -79,6 +80,7 @@ import {
     SelectionColumnDisplayMode,
     SummaryType,
     ToolbarPreparingInfo,
+    AIColumnRequestCreatingInfo,
 } from '../common/grids';
 
 export {
@@ -183,7 +185,7 @@ export type ScrollingBase = ComponentScrollingBase;
 export type SelectionBase = ComponentSelectionBase;
 
 /** @public */
-export type DataGridCommandColumnType = 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection' | 'drag';
+export type DataGridCommandColumnType = 'adaptive' | 'ai' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection' | 'drag';
 /** @public */
 export type DataGridExportFormat = 'pdf' | 'xlsx';
 /** @public */
@@ -552,7 +554,7 @@ export type EditorPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGr
   /** @docid _ui_data_grid_EditorPreparedEvent.setValue */
   readonly setValue?: any;
   /** @docid _ui_data_grid_EditorPreparedEvent.updateValueTimeout */
-  readonly updateValueTimeout?: number;
+  updateValueTimeout?: number;
   /** @docid _ui_data_grid_EditorPreparedEvent.width */
   readonly width?: number;
   /** @docid _ui_data_grid_EditorPreparedEvent.disabled */
@@ -586,7 +588,7 @@ export type EditorPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxDataG
   /** @docid _ui_data_grid_EditorPreparingEvent.setValue */
   readonly setValue?: any;
   /** @docid _ui_data_grid_EditorPreparingEvent.updateValueTimeout */
-  readonly updateValueTimeout?: number;
+  updateValueTimeout?: number;
   /** @docid _ui_data_grid_EditorPreparingEvent.width */
   readonly width?: number;
   /** @docid _ui_data_grid_EditorPreparingEvent.disabled */
@@ -664,7 +666,7 @@ export type FocusedCellChangedEvent<TRowData = any, TKey = any> = EventInfo<dxDa
  * @type object
  * @inherits Cancelable,NativeEventInfo
  */
-export type FocusedCellChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxDataGrid<TRowData, TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
+export type FocusedCellChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxDataGrid<TRowData, TKey>, InteractionEvent> & {
   /** @docid _ui_data_grid_FocusedCellChangingEvent.cellElement */
   readonly cellElement: DxElement;
   /** @docid _ui_data_grid_FocusedCellChangingEvent.prevColumnIndex */
@@ -713,7 +715,7 @@ export type FocusedRowChangedEvent<TRowData = any, TKey = any> = EventInfo<dxDat
  * @type object
  * @inherits Cancelable,NativeEventInfo
  */
-export type FocusedRowChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxDataGrid<TRowData, TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
+export type FocusedRowChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxDataGrid<TRowData, TKey>, InteractionEvent> & {
   /** @docid _ui_data_grid_FocusedRowChangingEvent.rowElement */
   readonly rowElement: DxElement;
   /** @docid _ui_data_grid_FocusedRowChangingEvent.prevRowIndex */
@@ -1049,6 +1051,14 @@ export type ColumnButtonClickEvent<TRowData = any, TKey = any> = NativeEventInfo
    */
   column?: Column<TRowData, TKey>;
 };
+
+/**
+ * @docid _ui_data_grid_AIColumnRequestCreatingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,AIColumnRequestCreatingInfo
+ */
+export type AIColumnRequestCreatingEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & AIColumnRequestCreatingInfo<TRowData>;
 
 /** @public */
 export type ColumnButtonTemplateData<TRowData = any, TKey = any> = {
@@ -1435,6 +1445,14 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
      * @public
      */
     toolbar?: Toolbar | undefined;
+    /**
+     * @docid
+     * @default null
+     * @type_function_param1 e:{ui/data_grid:AIColumnRequestCreatingEvent}
+     * @action
+     * @public
+     */
+    onAIColumnRequestCreating?: ((e: AIColumnRequestCreatingEvent) => void);
 };
 
 /**
@@ -2133,7 +2151,11 @@ export default class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDat
      * @public
      */
     totalCount(): number;
-
+    abortAIColumnRequest(columnName: string): void;
+    sendAIColumnRequest(columnName: string): void;
+    refreshAIColumn(columnName: string): void;
+    clearAIColumn(columnName: string): void;
+    getAIColumnText(columnName: string, key: TKey): string;
     beginCustomLoading(messageText: string): void;
     byKey(key: TKey): DxPromise<TRowData>;
     cancelEditData(): void;
@@ -2521,7 +2543,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onExporting' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onAIColumnRequestCreating' | 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onExporting' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared'>;
 
 /**
 * @hidden

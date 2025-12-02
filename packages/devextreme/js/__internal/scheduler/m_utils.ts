@@ -3,15 +3,12 @@ import $ from '@js/core/renderer';
 import { getOuterHeight, setHeight, setWidth } from '@js/core/utils/size';
 
 import { APPOINTMENT_SETTINGS_KEY } from './constants';
+import type { AppointmentViewModelPlain } from './view_model/types';
 
 export const utils = {
   dataAccessors: {
-    getAppointmentSettings: (element) => $(element).data(APPOINTMENT_SETTINGS_KEY),
-
-    getAppointmentInfo: (element) => {
-      const settings: any = utils.dataAccessors.getAppointmentSettings(element);
-      return settings?.info;
-    },
+    getAppointmentSettings: (element) => $(element)
+      .data(APPOINTMENT_SETTINGS_KEY) as unknown as AppointmentViewModelPlain | undefined,
   },
   DOM: {
     getHeaderHeight: (header) => (header

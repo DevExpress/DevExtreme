@@ -1,6 +1,6 @@
 import {
-    UserDefinedElement,
-    DxElement,
+  UserDefinedElement,
+  DxElement,
 } from '../core/element';
 
 import {
@@ -14,30 +14,30 @@ import {
 import DataSource, { DataSourceLike } from '../data/data_source';
 
 import {
-    EventInfo,
-    NativeEventInfo,
-    InitializedEventInfo,
-    ChangedOptionInfo,
-    Cancelable,
-} from '../common/core/events';
-
-import { DxEvent } from '../events';
+  EventInfo,
+  NativeEventInfo,
+  InitializedEventInfo,
+  ChangedOptionInfo,
+  Cancelable,
+  DxEvent,
+  PointerInteractionEvent,
+} from '../events';
 
 import { dxButtonGroupOptions, dxButtonGroupItem } from './button_group';
 import {
-    CollectionWidgetItem,
+  CollectionWidgetItem,
 } from './collection/ui.collection_widget.base';
 
 import dxDraggable from './draggable';
 
-import dxForm from './form';
-import dxPopup from './popup';
+import dxForm, { Properties as FormProperties } from './form';
+import dxPopup, { Properties as PopupProperties } from './popup';
 
 import dxSortable from './sortable';
 import { dxToolbarItem } from './toolbar';
 
 import Widget, {
-    WidgetOptions,
+  WidgetOptions,
 } from './widget/ui.widget';
 
 interface AppointmentDraggingEvent {
@@ -77,6 +77,36 @@ export type AllDayPanelMode = 'all' | 'allDay' | 'hidden';
 export type CellAppointmentsLimit = 'auto' | 'unlimited';
 /** @public */
 export type RecurrenceEditMode = 'dialog' | 'occurrence' | 'series';
+/** @public */
+export type AppointmentFormIconsShowMode = 'both' | 'main' | 'recurrence' | 'none';
+
+/**
+ * @docid
+ * @public
+ * @inherits dxFormOptions
+ */
+export type AppointmentFormProperties = FormProperties & {
+  /**
+   * @docid
+   * @type_function_param1 formData:object
+   * @default undefined
+   * @public
+   */
+  onSaved?: ((formData: any) => void);
+  /**
+   * @docid
+   * @type_function_param1 formData:object
+   * @default undefined
+   * @public
+   */
+  onCanceled?: ((formData: any) => void);
+  /**
+   * @docid
+   * @default "main"
+   * @public
+   */
+  iconsShowMode?: AppointmentFormIconsShowMode;
+};
 /** @public */
 export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
 /** @public */
@@ -136,7 +166,7 @@ export type AppointmentClickEvent = Cancelable & NativeEventInfo<dxScheduler, Ke
  * @type object
  * @inherits NativeEventInfo,TargetedAppointmentInfo
  */
-export type AppointmentContextMenuEvent = NativeEventInfo<dxScheduler, MouseEvent | PointerEvent | TouchEvent> & TargetedAppointmentInfo & {
+export type AppointmentContextMenuEvent = NativeEventInfo<dxScheduler, PointerInteractionEvent> & TargetedAppointmentInfo & {
   /** @docid _ui_scheduler_AppointmentContextMenuEvent.appointmentElement */
   readonly appointmentElement: DxElement;
 };
@@ -304,7 +334,7 @@ export type CellClickEvent = Cancelable & NativeEventInfo<dxScheduler, KeyboardE
  * @type object
  * @inherits NativeEventInfo
  */
-export type CellContextMenuEvent = NativeEventInfo<dxScheduler, MouseEvent | PointerEvent | TouchEvent> & {
+export type CellContextMenuEvent = NativeEventInfo<dxScheduler, PointerInteractionEvent> & {
   /**
    * @docid _ui_scheduler_CellContextMenuEvent.cellData
    * @type object
@@ -446,6 +476,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid
      * @default "appointmentCollector"
+     * @type_function_param1 data:{ui/scheduler:AppointmentCollectorTemplateData}
      * @public
      */
     appointmentCollectorTemplate?: template | ((data: AppointmentCollectorTemplateData, collectorElement: DxElement) => string | UserDefinedElement);
@@ -514,8 +545,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @docid
      * @default "item"
      * @type_function_param1 model:{ui/scheduler:AppointmentTemplateData}
-     * @type_function_param1_field appointmentData:object
-     * @type_function_param1_field targetedAppointmentData:object
      * @public
      */
     appointmentTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
@@ -523,8 +552,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @docid
      * @default "appointmentTooltip"
      * @type_function_param1 model:{ui/scheduler:AppointmentTooltipTemplateData}
-     * @type_function_param1_field appointmentData:object
-     * @type_function_param1_field targetedAppointmentData:object
      * @public
      */
     appointmentTooltipTemplate?: template | ((model: AppointmentTooltipTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
@@ -595,15 +622,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      */
     descriptionExpr?: string;
     /**
-      * @docid
-      * @default "dropDownAppointment"
-      * @type_function_param1 itemData:object
-      * @type_function_return string|Element|jQuery
-      * @deprecated dxSchedulerOptions.appointmentTooltipTemplate
-      * @public
-      */
-    dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
-    /**
      * @docid
      * @default true
      * @public
@@ -641,6 +659,17 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @default true
        */
       allowUpdating?: boolean;
+      /**
+       * @docid
+       * @public
+       */
+      form?: AppointmentFormProperties;
+      /**
+       * @docid
+       * @public
+       * @type dxPopupOptions
+       */
+      popup?: PopupProperties;
     };
     /**
      * @docid
@@ -900,6 +929,11 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @docid
        * @default ""
        */
+      icon?: string;
+      /**
+       * @docid
+       * @default ""
+       */
       label?: string;
       /**
        * @docid
@@ -1031,14 +1065,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field targetedAppointmentData:object
        */
       appointmentTooltipTemplate?: template | ((model: AppointmentTooltipTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
-      /**
-      * @docid
-      * @default "dropDownAppointment"
-      * @type_function_param1 itemData:object
-      * @type_function_return string|Element|jQuery
-      * @deprecated dxSchedulerOptions.views.appointmentTooltipTemplate
-      */
-      dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
       /**
        * @docid
        * @default 30
@@ -1296,14 +1322,6 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
      * @public
      */
     scrollTo(date: Date, group?: object, allDay?: boolean): void;
-    /**
-     * @docid
-     * @publicName scrollToTime(hours, minutes, date)
-     * @param3 date:Date|undefined
-     * @deprecated dxScheduler.scrollTo
-     * @public
-     */
-    scrollToTime(hours: number, minutes: number, date?: Date): void;
     /**
      * @docid
      * @publicName showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)

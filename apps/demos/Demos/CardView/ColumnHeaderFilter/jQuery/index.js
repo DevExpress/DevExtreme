@@ -10,7 +10,7 @@ $(() => {
     cardMinWidth: 280,
     wordWrapEnabled: true,
     headerFilter: {
-      visible: true
+      visible: true,
     },
     columns: [{
       dataField: 'OrderNumber',
@@ -58,7 +58,7 @@ $(() => {
           value: [['SaleAmount', '>=', 10000], ['SaleAmount', '<', 20000]],
         }, {
           text: 'Greater than $20000',
-          value: ['SaleAmount', '>=', 20000], 
+          value: ['SaleAmount', '>=', 20000],
         }],
       },
     }, {

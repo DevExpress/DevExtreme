@@ -18,7 +18,7 @@ function getPieData(name: string | number) {
 export default function TooltipTemplate(info) {
   const name = info.attribute('name');
   const countryGDPData = countriesGDP[name];
-  const total = countryGDPData && countryGDPData.total;
+  const total = countryGDPData?.total;
   const pieData = getPieData(name);
 
   const gdpInfo = total

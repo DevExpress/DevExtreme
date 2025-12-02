@@ -45,7 +45,6 @@ const saleAmountHeaderFilterDataSource = [
   },
 ];
 
-
 function orderDateHeaderFilterDataSource(data) {
   data.dataSource.postProcess = function (results) {
     results.push({
@@ -54,7 +53,7 @@ function orderDateHeaderFilterDataSource(data) {
     });
     return results;
   };
-};
+}
 
 const App = () => (
   <CardView

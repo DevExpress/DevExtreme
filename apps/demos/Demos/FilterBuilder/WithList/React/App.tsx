@@ -20,7 +20,7 @@ const App = () => {
 
   useEffect(() => {
     refreshDataSource();
-  }, []);
+  }, [refreshDataSource]);
 
   return (
     <div>

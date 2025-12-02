@@ -61,7 +61,6 @@ import {
   DxGroupItem,
   DxLabel,
 } from 'devextreme-vue/form';
-// eslint-disable-next-line
 import { DxTextArea } from 'devextreme-vue/text-area'; // needs for editor-type="dxTextArea"
 import { employee, positions, states } from './data.ts';
 

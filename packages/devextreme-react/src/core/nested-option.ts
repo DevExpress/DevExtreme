@@ -62,6 +62,7 @@ const NestedOption = function NestedOption<P>(
   ] = useOptionScanning(optionElement, getHasTemplate, treeUpdateToken, 'option');
 
   useLayoutEffect(() => {
+    // eslint-disable-next-line @stylistic/max-len
     triggerParentOptionsReady(config, optionElement.descriptor, treeUpdateToken, optionComponentKey);
   }, [treeUpdateToken]);
 

@@ -20,10 +20,10 @@ import {
   } from '../../localization';
 
 import {
-    basePointObject,
-    baseSeriesObject,
-    chartSeriesObject,
-    dxChartAnnotationConfig,
+  basePointObject,
+  baseSeriesObject,
+  chartSeriesObject,
+  dxChartAnnotationConfig,
 } from '../chart';
 
 import {
@@ -47,20 +47,90 @@ import {
 
 /**
  * @docid
+ * @type object
+ * @namespace DevExpress.viz
  * @hidden
  */
-export interface PointInteractionInfo {
-    /** @docid */
-    readonly target: basePointObject;
+export type BasePointInfo<TPoint extends basePointObject> = {
+  /**
+   * @docid
+   * @public
+   */
+  argument?: string | number | Date;
+  /**
+   * @docid
+   * @public
+   */
+  argumentText?: string;
+  /**
+   * @docid
+   * @public
+   */
+  highErrorValue?: number;
+  /**
+   * @docid
+   * @public
+   */
+  lowErrorValue?: number;
+  /**
+   * @docid
+   * @public
+   */
+  originalArgument?: string | number | Date;
+  /**
+   * @docid
+   * @public
+   */
+  originalValue?: string | number | Date;
+  /**
+   * @docid
+   * @public
+   */
+  point?: TPoint;
+  /**
+   * @docid
+   * @public
+   */
+  points?: BasePointInfo<TPoint>[];
+  /**
+   * @docid
+   * @public
+   */
+  seriesName?: any;
+  /**
+   * @docid
+   * @public
+   */
+  value?: string | number | Date;
+  /**
+   * @docid
+   * @public
+   */
+  valueText?: string;
+};
+
+/**
+ * @docid
+ * @hidden
+ */
+export interface PointInteractionInfo<TPoint extends basePointObject = basePointObject> {
+    /**
+     * @docid
+     * @type object
+     */
+    readonly target: TPoint;
 }
 
 /**
  * @docid _viz_chart_components_base_chart_TooltipInfo
  * @hidden
  */
-export interface TooltipInfo {
-    /** @docid _viz_chart_components_base_chart_TooltipInfo.target */
-    target?: basePointObject | dxChartAnnotationConfig | any;
+export interface TooltipInfo<TPoint extends basePointObject = basePointObject> {
+    /**
+     * @docid _viz_chart_components_base_chart_TooltipInfo.target
+     * @type object
+     */
+    target?: TPoint | dxChartAnnotationConfig | any;
 }
 
 /**
@@ -68,7 +138,10 @@ export interface TooltipInfo {
  * @docid
  * @type object
  */
-export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TComponent> {
+export interface BaseChartOptions<
+  TComponent,
+  TPoint extends basePointObject = basePointObject,
+> extends BaseWidgetOptions<TComponent> {
     /**
      * @docid
      * @type object
@@ -144,51 +217,56 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @type_function_param1 e:object
      * @type_function_param1_field component:this
      * @type_function_param1_field event:event
+     * @type_function_param1_field target:object
      * @notUsedInTheme
      * @action
      * @public
      */
-    onPointClick?: ((e: NativeEventInfo<TComponent, MouseEvent | PointerEvent> & PointInteractionInfo) => void) | string;
+    onPointClick?: ((e: NativeEventInfo<TComponent, MouseEvent | PointerEvent> & PointInteractionInfo<TPoint>) => void) | string;
     /**
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field component:object
      * @type_function_param1_field element:object
+     * @type_function_param1_field target:object
      * @notUsedInTheme
      * @action
      * @public
      */
-    onPointHoverChanged?: ((e: EventInfo<TComponent> & PointInteractionInfo) => void);
+    onPointHoverChanged?: ((e: EventInfo<TComponent> & PointInteractionInfo<TPoint>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field component:object
      * @type_function_param1_field element:object
+     * @type_function_param1_field target:object
      * @notUsedInTheme
      * @action
      * @public
      */
-    onPointSelectionChanged?: ((e: EventInfo<TComponent> & PointInteractionInfo) => void);
+    onPointSelectionChanged?: ((e: EventInfo<TComponent> & PointInteractionInfo<TPoint>) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field component:this
+     * @type_function_param1_field target:object
      * @notUsedInTheme
      * @action
      * @public
      */
-    onTooltipHidden?: ((e: EventInfo<TComponent> & TooltipInfo) => void);
+    onTooltipHidden?: ((e: EventInfo<TComponent> & TooltipInfo<TPoint>) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field component:this
+     * @type_function_param1_field target:object
      * @notUsedInTheme
      * @action
      * @public
      */
-    onTooltipShown?: ((e: EventInfo<TComponent> & TooltipInfo) => void);
+    onTooltipShown?: ((e: EventInfo<TComponent> & TooltipInfo<TPoint>) => void);
     /**
      * @docid
      * @default "Material"
@@ -271,7 +349,7 @@ export interface BaseChartLegend extends BaseLegend {
  * @docid
  * @namespace DevExpress.viz
  */
-export interface BaseChartTooltip extends BaseWidgetTooltip {
+export interface BaseChartTooltip<TPointInfo = any> extends BaseWidgetTooltip {
     /**
      * @docid BaseChartOptions.tooltip.argumentFormat
      * @default undefined
@@ -285,7 +363,7 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
      * @default undefined
      * @public
      */
-    contentTemplate?: template | ((pointInfo: any, element: DxElement) => string | UserDefinedElement) | undefined;
+    contentTemplate?: template | ((pointInfo: TPointInfo, element: DxElement) => string | UserDefinedElement) | undefined;
     /**
      * @docid BaseChartOptions.tooltip.customizeTooltip
      * @type_function_param1 pointInfo:object
@@ -294,7 +372,7 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
      * @notUsedInTheme
      * @public
      */
-    customizeTooltip?: ((pointInfo: any) => any) | undefined;
+    customizeTooltip?: ((pointInfo: TPointInfo) => any) | undefined;
     /**
      * @docid BaseChartOptions.tooltip.shared
      * @default false

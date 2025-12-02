@@ -2,7 +2,8 @@ import errors from 'ui/widget/ui.errors';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import $ from 'jquery';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
+
+import 'generic_light.css!';
 
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 
@@ -20,10 +21,6 @@ QUnit.testStart(function() {
 QUnit.module('Initialization', baseModuleConfig, () => {
     // T837103
     QUnit.test('Enable rows hover with showCheckBoxesMode = onClick', function(assert) {
-        if(shouldSkipOnMobile(assert, 'hover is disabled for non-desktop devices')) {
-            return;
-        }
-
         // arrange
         const $dataGrid = $('#dataGrid').dxDataGrid({
             columns: [
@@ -353,10 +350,12 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         this.clock.tick(10);
 
-        const $cells = $(dataGrid.element()).find('.dx-editor-inline-block');
+        const $dataGrid = $(dataGrid.element());
+        const $cells = $dataGrid.find('.dx-editor-cell .dx-checkbox');
+        const $checkboxes = $dataGrid.find('.dx-editor-cell .dx-checkbox');
 
         // assert
-        assert.equal($cells.length, 3, 'checkbox cell count');
+        assert.equal($checkboxes.length, 3, 'checkbox cell count');
         $cells.each((_, el) => {
             assert.strictEqual($(el).css('vertical-align'), 'middle', 'middle vertical align');
         });

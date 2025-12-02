@@ -4,9 +4,11 @@ import { prepareComponentConfig } from "./core/index";
 import Chat, { Properties } from "devextreme/ui/chat";
 import  DataSource from "devextreme/data/data_source";
 import  dxChat from "devextreme/ui/chat";
+import  UploadInfo from "devextreme/file_management/upload_info";
 import {
  Alert,
  Message,
+ AttachmentDownloadClickEvent,
  DisposingEvent,
  InitializedEvent,
  MessageDeletedEvent,
@@ -20,6 +22,7 @@ import {
  TypingEndEvent,
  TypingStartEvent,
  User,
+ Attachment,
 } from "devextreme/ui/chat";
 import {
  DataSourceOptions,
@@ -32,7 +35,27 @@ import {
 } from "devextreme/common/core/localization";
 import {
  Format as CommonFormat,
+ ValidationStatus,
 } from "devextreme/common";
+import {
+ dxFileUploaderOptions,
+ BeforeSendEvent,
+ ContentReadyEvent,
+ DisposingEvent as FileUploaderDisposingEvent,
+ DropZoneEnterEvent,
+ DropZoneLeaveEvent,
+ FilesUploadedEvent,
+ InitializedEvent as FileUploaderInitializedEvent,
+ OptionChangedEvent as FileUploaderOptionChangedEvent,
+ ProgressEvent,
+ UploadAbortedEvent,
+ UploadedEvent,
+ UploadErrorEvent,
+ UploadStartedEvent,
+ ValueChangedEvent,
+ UploadHttpMethod,
+ FileUploadMode,
+} from "devextreme/ui/file_uploader";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -44,6 +67,8 @@ type AccessibleOptions = Pick<Properties,
   "disabled" |
   "editing" |
   "elementAttr" |
+  "emptyViewTemplate" |
+  "fileUploaderOptions" |
   "focusStateEnabled" |
   "height" |
   "hint" |
@@ -51,6 +76,7 @@ type AccessibleOptions = Pick<Properties,
   "items" |
   "messageTemplate" |
   "messageTimestampFormat" |
+  "onAttachmentDownloadClick" |
   "onDisposing" |
   "onInitialized" |
   "onMessageDeleted" |
@@ -89,6 +115,8 @@ const componentConfig = {
     disabled: Boolean,
     editing: Object as PropType<Record<string, any>>,
     elementAttr: Object as PropType<Record<string, any>>,
+    emptyViewTemplate: {},
+    fileUploaderOptions: Object as PropType<dxFileUploaderOptions | Record<string, any>>,
     focusStateEnabled: Boolean,
     height: [Number, String],
     hint: String,
@@ -96,6 +124,7 @@ const componentConfig = {
     items: Array as PropType<Array<Message>>,
     messageTemplate: {},
     messageTimestampFormat: [Object, String, Function] as PropType<Format | CommonFormat | (((value: number | Date) => string)) | Record<string, any> | string>,
+    onAttachmentDownloadClick: Function as PropType<((e: AttachmentDownloadClickEvent) => void)>,
     onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
     onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
     onMessageDeleted: Function as PropType<((e: MessageDeletedEvent) => void)>,
@@ -130,6 +159,8 @@ const componentConfig = {
     "update:disabled": null,
     "update:editing": null,
     "update:elementAttr": null,
+    "update:emptyViewTemplate": null,
+    "update:fileUploaderOptions": null,
     "update:focusStateEnabled": null,
     "update:height": null,
     "update:hint": null,
@@ -137,6 +168,7 @@ const componentConfig = {
     "update:items": null,
     "update:messageTemplate": null,
     "update:messageTimestampFormat": null,
+    "update:onAttachmentDownloadClick": null,
     "update:onDisposing": null,
     "update:onInitialized": null,
     "update:onMessageDeleted": null,
@@ -172,6 +204,7 @@ const componentConfig = {
       alert: { isCollectionItem: true, optionName: "alerts" },
       dayHeaderFormat: { isCollectionItem: false, optionName: "dayHeaderFormat" },
       editing: { isCollectionItem: false, optionName: "editing" },
+      fileUploaderOptions: { isCollectionItem: false, optionName: "fileUploaderOptions" },
       item: { isCollectionItem: true, optionName: "items" },
       messageTimestampFormat: { isCollectionItem: false, optionName: "messageTimestampFormat" },
       typingUser: { isCollectionItem: true, optionName: "typingUsers" },
@@ -204,6 +237,26 @@ const DxAlert = defineComponent(DxAlertConfig);
 
 (DxAlert as any).$_optionName = "alerts";
 (DxAlert as any).$_isCollectionItem = true;
+
+const DxAttachmentConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:name": null,
+    "update:size": null,
+  },
+  props: {
+    name: String,
+    size: Number
+  }
+};
+
+prepareConfigurationComponentConfig(DxAttachmentConfig);
+
+const DxAttachment = defineComponent(DxAttachmentConfig);
+
+(DxAttachment as any).$_optionName = "attachments";
+(DxAttachment as any).$_isCollectionItem = true;
 
 const DxAuthorConfig = {
   emits: {
@@ -274,11 +327,155 @@ const DxEditing = defineComponent(DxEditingConfig);
 
 (DxEditing as any).$_optionName = "editing";
 
+const DxFileUploaderOptionsConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:abortUpload": null,
+    "update:accept": null,
+    "update:accessKey": null,
+    "update:activeStateEnabled": null,
+    "update:allowCanceling": null,
+    "update:allowedFileExtensions": null,
+    "update:chunkSize": null,
+    "update:dialogTrigger": null,
+    "update:disabled": null,
+    "update:dropZone": null,
+    "update:elementAttr": null,
+    "update:focusStateEnabled": null,
+    "update:height": null,
+    "update:hint": null,
+    "update:hoverStateEnabled": null,
+    "update:inputAttr": null,
+    "update:invalidFileExtensionMessage": null,
+    "update:invalidMaxFileSizeMessage": null,
+    "update:invalidMinFileSizeMessage": null,
+    "update:isDirty": null,
+    "update:isValid": null,
+    "update:labelText": null,
+    "update:maxFileSize": null,
+    "update:minFileSize": null,
+    "update:multiple": null,
+    "update:name": null,
+    "update:onBeforeSend": null,
+    "update:onContentReady": null,
+    "update:onDisposing": null,
+    "update:onDropZoneEnter": null,
+    "update:onDropZoneLeave": null,
+    "update:onFilesUploaded": null,
+    "update:onInitialized": null,
+    "update:onOptionChanged": null,
+    "update:onProgress": null,
+    "update:onUploadAborted": null,
+    "update:onUploaded": null,
+    "update:onUploadError": null,
+    "update:onUploadStarted": null,
+    "update:onValueChanged": null,
+    "update:progress": null,
+    "update:readOnly": null,
+    "update:readyToUploadMessage": null,
+    "update:rtlEnabled": null,
+    "update:selectButtonText": null,
+    "update:showFileList": null,
+    "update:tabIndex": null,
+    "update:uploadAbortedMessage": null,
+    "update:uploadButtonText": null,
+    "update:uploadChunk": null,
+    "update:uploadCustomData": null,
+    "update:uploadedMessage": null,
+    "update:uploadFailedMessage": null,
+    "update:uploadFile": null,
+    "update:uploadHeaders": null,
+    "update:uploadMethod": null,
+    "update:uploadMode": null,
+    "update:uploadUrl": null,
+    "update:validationError": null,
+    "update:validationErrors": null,
+    "update:validationStatus": null,
+    "update:value": null,
+    "update:visible": null,
+    "update:width": null,
+  },
+  props: {
+    abortUpload: Function as PropType<((file: any, uploadInfo?: UploadInfo) => any)>,
+    accept: String,
+    accessKey: String,
+    activeStateEnabled: Boolean,
+    allowCanceling: Boolean,
+    allowedFileExtensions: Array as PropType<Array<string>>,
+    chunkSize: Number,
+    dialogTrigger: {},
+    disabled: Boolean,
+    dropZone: {},
+    elementAttr: Object as PropType<Record<string, any>>,
+    focusStateEnabled: Boolean,
+    height: [Number, String],
+    hint: String,
+    hoverStateEnabled: Boolean,
+    inputAttr: {},
+    invalidFileExtensionMessage: String,
+    invalidMaxFileSizeMessage: String,
+    invalidMinFileSizeMessage: String,
+    isDirty: Boolean,
+    isValid: Boolean,
+    labelText: String,
+    maxFileSize: Number,
+    minFileSize: Number,
+    multiple: Boolean,
+    name: String,
+    onBeforeSend: Function as PropType<((e: BeforeSendEvent) => void)>,
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: FileUploaderDisposingEvent) => void)>,
+    onDropZoneEnter: Function as PropType<((e: DropZoneEnterEvent) => void)>,
+    onDropZoneLeave: Function as PropType<((e: DropZoneLeaveEvent) => void)>,
+    onFilesUploaded: Function as PropType<((e: FilesUploadedEvent) => void)>,
+    onInitialized: Function as PropType<((e: FileUploaderInitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: FileUploaderOptionChangedEvent) => void)>,
+    onProgress: Function as PropType<((e: ProgressEvent) => void)>,
+    onUploadAborted: Function as PropType<((e: UploadAbortedEvent) => void)>,
+    onUploaded: Function as PropType<((e: UploadedEvent) => void)>,
+    onUploadError: Function as PropType<((e: UploadErrorEvent) => void)>,
+    onUploadStarted: Function as PropType<((e: UploadStartedEvent) => void)>,
+    onValueChanged: Function as PropType<((e: ValueChangedEvent) => void)>,
+    progress: Number,
+    readOnly: Boolean,
+    readyToUploadMessage: String,
+    rtlEnabled: Boolean,
+    selectButtonText: String,
+    showFileList: Boolean,
+    tabIndex: Number,
+    uploadAbortedMessage: String,
+    uploadButtonText: String,
+    uploadChunk: Function as PropType<((file: any, uploadInfo: UploadInfo) => any)>,
+    uploadCustomData: {},
+    uploadedMessage: String,
+    uploadFailedMessage: String,
+    uploadFile: Function as PropType<((file: any, progressCallback: (() => void)) => any)>,
+    uploadHeaders: {},
+    uploadMethod: String as PropType<UploadHttpMethod>,
+    uploadMode: String as PropType<FileUploadMode>,
+    uploadUrl: String,
+    validationError: {},
+    validationErrors: Array as PropType<Array<any>>,
+    validationStatus: String as PropType<ValidationStatus>,
+    value: Array as PropType<Array<any>>,
+    visible: Boolean,
+    width: [Number, String]
+  }
+};
+
+prepareConfigurationComponentConfig(DxFileUploaderOptionsConfig);
+
+const DxFileUploaderOptions = defineComponent(DxFileUploaderOptionsConfig);
+
+(DxFileUploaderOptions as any).$_optionName = "fileUploaderOptions";
+
 const DxItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
     "update:alt": null,
+    "update:attachments": null,
     "update:author": null,
     "update:id": null,
     "update:isDeleted": null,
@@ -290,6 +487,7 @@ const DxItemConfig = {
   },
   props: {
     alt: String,
+    attachments: Array as PropType<Array<Attachment>>,
     author: Object as PropType<User | Record<string, any>>,
     id: [Number, String],
     isDeleted: Boolean,
@@ -308,6 +506,7 @@ const DxItem = defineComponent(DxItemConfig);
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
 (DxItem as any).$_expectedChildren = {
+  attachment: { isCollectionItem: true, optionName: "attachments" },
   author: { isCollectionItem: false, optionName: "author" }
 };
 
@@ -389,9 +588,11 @@ export default DxChat;
 export {
   DxChat,
   DxAlert,
+  DxAttachment,
   DxAuthor,
   DxDayHeaderFormat,
   DxEditing,
+  DxFileUploaderOptions,
   DxItem,
   DxMessageTimestampFormat,
   DxTypingUser,

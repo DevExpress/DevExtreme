@@ -29,4 +29,8 @@ export default class GroupRow extends FocusableElement {
   getCell(index: number): DataCell {
     return new DataCell(this.element, index, this.widgetName);
   }
+
+  getExpandCell(): Selector {
+    return this.element.find(`.${CLASS.commandExpand}`);
+  }
 }

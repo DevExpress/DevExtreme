@@ -20,4 +20,6 @@ export {
   DxEvent,
   dxEvent,
   event,
+  PointerInteractionEvent,
+  InteractionEvent,
 } from './events.types';

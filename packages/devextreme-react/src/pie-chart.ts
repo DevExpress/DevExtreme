@@ -8,7 +8,7 @@ import dxPieChart, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, PointClickEvent, TooltipHiddenEvent, TooltipShownEvent, dxPieChartAnnotationConfig, PieChartAnnotationLocation, dxPieChartCommonAnnotationConfig, PieChartSeriesInteractionMode, SmallValuesGroupingMode, PieChartLegendItem, PieChartLegendHoverMode, PieChartSeries } from "devextreme/viz/pie_chart";
+import type { DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, PointClickEvent, TooltipHiddenEvent, TooltipShownEvent, dxPieChartAnnotationConfig, PieChartAnnotationLocation, dxPieChartCommonAnnotationConfig, PieChartSeriesInteractionMode, SmallValuesGroupingMode, PieChartLegendItem, PieChartLegendHoverMode, PieChartSeries, dxPieChartPointInfo } from "devextreme/viz/pie_chart";
 import type { AnimationEaseMode, DashStyle, Font as ChartsFont, TextOverflow, AnnotationType, WordWrap, ChartsDataType, ChartsColor, HatchDirection, LabelPosition } from "devextreme/common/charts";
 import type { template, Format as CommonFormat, ExportFormat, HorizontalAlignment, Position, Orientation, VerticalEdge } from "devextreme/common";
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
@@ -54,7 +54,7 @@ const PieChart = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["loadingIndicator","loadingIndicator.show"]), []);
       const independentEvents = useMemo(() => (["onDisposing","onDone","onDrawn","onExported","onExporting","onFileSaving","onIncidentOccurred","onInitialized","onLegendClick","onPointClick","onTooltipHidden","onTooltipShown"]), []);
@@ -1358,9 +1358,9 @@ type ITooltipProps = React.PropsWithChildren<{
   };
   color?: string;
   container?: any | string | undefined;
-  contentTemplate?: ((pointInfo: any, element: any) => string | any) | template | undefined;
+  contentTemplate?: ((pointInfo: dxPieChartPointInfo, element: any) => string | any) | template | undefined;
   cornerRadius?: number;
-  customizeTooltip?: ((pointInfo: any) => Record<string, any>) | undefined;
+  customizeTooltip?: ((pointInfo: dxPieChartPointInfo) => Record<string, any>) | undefined;
   enabled?: boolean;
   font?: ChartsFont;
   format?: LocalizationFormat | undefined;

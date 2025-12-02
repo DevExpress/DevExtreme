@@ -19,7 +19,7 @@ $(() => {
           return [data.Title,
             data.FirstName, data.LastName]
             .join(' ');
-        }, 
+        },
       },
       {
         dataField: 'Position',

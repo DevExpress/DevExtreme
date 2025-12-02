@@ -24,9 +24,8 @@ function App() {
   );
   const calculateFilterExpression = useCallback(
     (filterValue, field) =>
-      filterValue
-      && filterValue.length
-      && Array.prototype.concat
+      filterValue?.length &&
+      Array.prototype.concat
         .apply(
           [],
           filterValue.map((i) => [[field.dataField, '=', i], 'or']),

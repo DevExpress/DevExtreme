@@ -12,24 +12,26 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+} from '../events';
 
 import {
     Format,
 } from '../localization';
 
 import {
-    basePointObject,
-    baseSeriesObject,
+  basePointObject,
+  baseSeriesObject,
 } from './chart';
 
 import {
-    BaseChart,
-    BaseChartAdaptiveLayout,
-    BaseChartLegend,
-    BaseChartOptions,
-    PointInteractionInfo,
-    TooltipInfo,
+  BaseChart,
+  BaseChartAdaptiveLayout,
+  BaseChartLegend,
+  BaseChartOptions,
+  BaseChartTooltip,
+  BasePointInfo,
+  PointInteractionInfo,
+  TooltipInfo,
 } from './chart_components/base_chart';
 
 import {
@@ -178,7 +180,7 @@ export type OptionChangedEvent = EventInfo<dxPieChart> & ChangedOptionInfo;
  * @type object
  * @inherits NativeEventInfo,PointInteractionInfo
  */
-export type PointClickEvent = NativeEventInfo<dxPieChart, MouseEvent | PointerEvent> & PointInteractionInfo;
+export type PointClickEvent = NativeEventInfo<dxPieChart, MouseEvent | PointerEvent> & PointInteractionInfo<piePointObject>;
 
 /**
  * @docid _viz_pie_chart_PointHoverChangedEvent
@@ -186,7 +188,7 @@ export type PointClickEvent = NativeEventInfo<dxPieChart, MouseEvent | PointerEv
  * @type object
  * @inherits EventInfo,PointInteractionInfo
  */
-export type PointHoverChangedEvent = EventInfo<dxPieChart> & PointInteractionInfo;
+export type PointHoverChangedEvent = EventInfo<dxPieChart> & PointInteractionInfo<piePointObject>;
 
 /**
  * @docid _viz_pie_chart_PointSelectionChangedEvent
@@ -194,7 +196,7 @@ export type PointHoverChangedEvent = EventInfo<dxPieChart> & PointInteractionInf
  * @type object
  * @inherits EventInfo,PointInteractionInfo
  */
-export type PointSelectionChangedEvent = EventInfo<dxPieChart> & PointInteractionInfo;
+export type PointSelectionChangedEvent = EventInfo<dxPieChart> & PointInteractionInfo<piePointObject>;
 
 /**
  * @docid _viz_pie_chart_TooltipHiddenEvent
@@ -202,7 +204,7 @@ export type PointSelectionChangedEvent = EventInfo<dxPieChart> & PointInteractio
  * @type object
  * @inherits EventInfo,_viz_chart_components_base_chart_TooltipInfo
  */
-export type TooltipHiddenEvent = EventInfo<dxPieChart> & TooltipInfo;
+export type TooltipHiddenEvent = EventInfo<dxPieChart> & TooltipInfo<piePointObject>;
 
 /**
  * @docid _viz_pie_chart_TooltipShownEvent
@@ -210,7 +212,7 @@ export type TooltipHiddenEvent = EventInfo<dxPieChart> & TooltipInfo;
  * @type object
  * @inherits EventInfo,_viz_chart_components_base_chart_TooltipInfo
  */
-export type TooltipShownEvent = EventInfo<dxPieChart> & TooltipInfo;
+export type TooltipShownEvent = EventInfo<dxPieChart> & TooltipInfo<piePointObject>;
 
 /**
  * @public
@@ -270,11 +272,35 @@ export interface PieChartSeries extends dxPieChartSeriesTypesCommonPieChartSerie
     tag?: any | undefined;
 }
 /**
+ * @public
+ * @docid dxPieChartTooltip
+ * @type object
+ */
+export type Tooltip = Omit<BaseChartTooltip<PointInfo>, 'contentTemplate' | 'customizeTooltip'> & {
+  /**
+   * @docid dxPieChartOptions.tooltip.contentTemplate
+   * @type_function_param1 pointInfo:dxPieChartPointInfo
+   * @type_function_return string|Element|jQuery
+   * @default undefined
+   * @public
+   */
+  contentTemplate?: template | ((pointInfo: PointInfo, element: DxElement) => string | UserDefinedElement) | undefined;
+  /**
+   * @docid dxPieChartOptions.tooltip.customizeTooltip
+   * @public
+   * @type_function_param1 pointInfo:dxPieChartPointInfo
+   * @type_function_return object
+   * @default undefined
+   * @notUsedInTheme
+   */
+  customizeTooltip?: ((pointInfo: PointInfo) => any) | undefined;
+};
+/**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
  * @docid
  */
-export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
+export interface dxPieChartOptions extends BaseChartOptions<dxPieChart, piePointObject> {
     /**
      * @docid
      * @type object
@@ -410,6 +436,12 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @public
      */
     customizeAnnotation?: ((annotation: dxPieChartAnnotationConfig | any) => dxPieChartAnnotationConfig) | undefined;
+    /**
+     * @docid
+     * @type object
+     * @public
+     */
+    tooltip?: Tooltip;
 }
 
 /**
@@ -982,6 +1014,34 @@ export interface pieChartSeriesObject extends baseSeriesObject {
    */
   isHovered(): boolean;
 }
+
+/**
+ * @docid dxPieChartPointInfo
+ * @public
+ */
+export type PointInfo = BasePointInfo<piePointObject> & {
+  /**
+   * @docid dxPieChartPointInfo.percent
+   * @public
+   */
+  percent?: number;
+  /**
+   * @docid dxPieChartPointInfo.percentText
+   * @public
+   */
+  percentText?: string;
+  /**
+   * @docid dxPieChartPointInfo.points
+   * @public
+   */
+  points?: PointInfo;
+};
+
+/**
+ * @namespace DevExpress.viz
+ * @deprecated Use PointInfo instead
+ */
+export type dxPieChartPointInfo = PointInfo;
 
 /** @public */
 export type Properties = dxPieChartOptions;

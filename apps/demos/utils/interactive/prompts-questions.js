@@ -2,10 +2,20 @@
 const path = require('path');
 const prompts = require('prompts');
 
-const menuMetaUtils = require('./menu-meta-utils');
+const menuMetaUtils = require('../shared/menu-meta-utils');
 const fileSystemUtils = require('../shared/fs-utils');
 
 const setTextIfPrevIsNull = (prev) => (prev === 'new' ? 'text' : null);
+const DEMO_PATH_STAGES = [{
+  name: 'category',
+  getChoisesFn: menuMetaUtils.getCategories,
+}, {
+  name: 'group',
+  getChoisesFn: menuMetaUtils.getGroups,
+}, {
+  name: 'demo',
+  getChoisesFn: menuMetaUtils.getDemos,
+}];
 
 const getPromptForCategories = (menuMetaData, message, newCategoryText) => ({
   type: 'autocomplete',
@@ -26,22 +36,22 @@ const getCategoryQuestions = (menuMetaData) => [
     message: 'Enter the name of a new category:',
   }];
 
-const getGroupQuestions = (menuMetaData, category) => [{
+const getGroupQuestions = (menuMetaData, path) => [{
   type: 'autocomplete',
   name: 'name',
   message: 'Select a group for the new demo or `New group` to create a new group.',
-  choices: menuMetaUtils.getGroups(menuMetaData, category.name, '[New group]'),
+  choices: menuMetaUtils.getGroups(menuMetaData, path, '[New group]'),
 }, {
   type: setTextIfPrevIsNull,
   name: 'newName',
   message: 'Enter the name of a new group:',
-}];
+}]
 
-const getDemoQuestions = (menuMetaData, category, group) => [{
+const getDemoQuestions = (menuMetaData, path) => [{
   type: 'autocomplete',
   name: 'name',
   message: 'Select a demo to which you want to add missing approaches or `[New demo]` to create a new demo in this group.',
-  choices: menuMetaUtils.getDemos(menuMetaData, category.name, group.name, '[New demo]'),
+  choices: menuMetaUtils.getDemos(menuMetaData, path, '[New demo]'),
 }, {
   type: setTextIfPrevIsNull,
   name: 'newName',
@@ -66,6 +76,13 @@ const getWidgetQuestions = (baseDemosDir) => [{
   message: 'Enter the name of a new directory:',
 }];
 
+const getEquivalentsQuestions = () => [{
+  type: 'text',
+  name: 'value',
+  format: (val) => val.split(',').map(str => str.trim()).filter(str => str).join(', '),
+  message: 'Enter Equivalents:',
+}];
+
 const getApproachesQuestions = (approaches) => ({
   type: 'multiselect',
   name: 'selectedApproaches',
@@ -74,26 +91,11 @@ const getApproachesQuestions = (approaches) => ({
   choices: () => approaches.map((item) => ({ title: item, value: item })),
 });
 
-const getNewOrExistingQuestions = (menuMetaData) => [{
-  type: 'autocomplete',
-  name: 'choice',
-  message: 'Would you like to create a blank demo or copy files from existing demo?',
-  choices: [{ title: 'Create a new demo', value: 'new' }, { title: 'Copy files from existing demo', value: 'existing' }],
-}, {
-  type: (prev, answers) => (answers.choice === 'existing' ? 'autocomplete' : null),
-  name: 'category',
-  message: '[Copy from existing demo]: Select a category:',
-  choices: menuMetaUtils.getCategories(menuMetaData),
-}, {
-  type: (prev, answers) => (answers.choice === 'existing' ? 'autocomplete' : null),
-  name: 'group',
-  message: '[Copy from existing demo]: Select a group',
-  choices: (prev, answers) => menuMetaUtils.getGroups(menuMetaData, answers.category),
-}, {
-  type: (prev, answers) => (answers.choice === 'existing' ? 'autocomplete' : null),
-  name: 'demo',
-  message: '[Copy from existing demo]: Select a demo',
-  choices: (prev, answers) => menuMetaUtils.getDemos(menuMetaData, answers.category, answers.group),
+const getNeedExtraModules = (extraModules) => [{
+  type: 'multiselect',
+  name: 'modules',
+  message: 'Do you need to include some extra modules in your demo?',
+  choices: extraModules.map(module => ({ title: module, value: module })),
 }];
 
 const getApproachesFoldersQuestions = (approaches) => {
@@ -164,28 +166,79 @@ const askCategory = async (menuMetaData) => prompts(
   getCategoryQuestions(menuMetaData), { onCancel },
 );
 
-const askGroup = async (menuMetaData, category) => prompts(
-  getGroupQuestions(menuMetaData, category), { onCancel },
+const askGroup = async (menuMetaData, path) => prompts(
+  getGroupQuestions(menuMetaData, path), { onCancel },
 );
 
-const askDemo = async (menuMetaData, category, group) => prompts(
-  getDemoQuestions(menuMetaData, category, group), { onCancel },
+const askDemo = async (menuMetaData, path) => prompts(
+  getDemoQuestions(menuMetaData, path), { onCancel },
 );
 
 const askWidget = async (baseDemosDir) => prompts(
   getWidgetQuestions(baseDemosDir), { onCancel },
 );
 
+const askEquivalents = async () => prompts(
+  getEquivalentsQuestions(), { onCancel },
+);
+
 const askApproaches = async (missingApproaches) => prompts(
   getApproachesQuestions(missingApproaches), { onCancel },
 );
 
-const askNewOrExisting = async (menuMetaData) => prompts(
-  getNewOrExistingQuestions(menuMetaData), { onCancel },
-);
+const askPath = async (menuMetaData, prefix = '') => {
+  let stage = DEMO_PATH_STAGES.find(demoStage => demoStage.name === 'category');
+  const path = [];
+  while (stage) {
+    const { name, getChoisesFn } = stage;
+    const question = await prompts([{
+      type: 'autocomplete',
+      name,
+      message: `${prefix}Select a ${name}:`,
+      choices: getChoisesFn(menuMetaData, path.length ? path : undefined),
+    }], { onCancel });
+
+    path.push(question[name]);
+    if (menuMetaUtils.hasGroups(menuMetaData, path)) {
+      stage = DEMO_PATH_STAGES.find(demoStage => demoStage.name === 'group');
+    } else if (menuMetaUtils.hasDemos(menuMetaData, path)) {
+      stage = DEMO_PATH_STAGES.find(demoStage => demoStage.name === 'demo');
+    } else {
+      stage = undefined;
+    }
+  }
+
+  return { path };
+}
+
+const askNewOrExisting = async (menuMetaData) => {
+  const result = {};
+  const choiceQuestion = await prompts([{
+    type: 'autocomplete',
+    name: 'choice',
+    message: 'Would you like to create a blank demo or copy files from existing demo?',
+    choices: [{ title: 'Create a new demo', value: 'new' }, { title: 'Copy files from existing demo', value: 'existing' }],
+  }], { onCancel });
+
+  result.choice = choiceQuestion.choice;
+
+  if (result.choice === 'new') {
+    return result;
+  }
+
+  const pathQuestion = await askPath(menuMetaData, '[Copy from existing demo]: ');
+
+  result.path = pathQuestion.path;
+
+  return result;
+}
 
 const askDemoToUpdate = async (menuMetaData) => prompts(
   getDemoToUpdateQuestions(menuMetaData), { onCancel },
+);
+
+const askForExtraModules = async (extraModules) => prompts(
+  getNeedExtraModules(extraModules), { onCancel },
 );
 
 const askLinkRepositories = async () => prompts(getLinkRepositoriesQuestions(), { onCancel });
@@ -198,21 +251,16 @@ const askRepositoryPath = async (repositoryName) => prompts({
 }, { onCancel });
 
 module.exports = {
-  getCategoryQuestions,
-  getGroupQuestions,
-  askGroup,
   askNewOrExisting,
   askCategory,
+  askGroup,
   askDemo,
   askDemoToUpdate,
   askApproaches,
   askWidget,
+  askEquivalents,
   askRepositoryPath,
-  getDemoQuestions,
-  getApproachesQuestions,
-  getWidgetQuestions,
+  askForExtraModules,
   getApproachesFoldersQuestions,
-  getDemoToUpdateQuestions,
-  getNewOrExistingQuestions,
   askLinkRepositories,
 };

@@ -19,6 +19,7 @@
       :allow-multiple="false"
       label="Employee"
       field-expr="employeeID"
+      icon="group"
     />
 
     <template #resourceCellTemplate="{ data: employee }">

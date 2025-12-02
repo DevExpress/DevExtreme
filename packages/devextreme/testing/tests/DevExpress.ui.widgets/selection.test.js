@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import errors from 'ui/widget/ui.errors';
-import Selection from '__internal/ui/selection/m_selection';
+import Selection from '__internal/ui/selection/selection';
 import Guid from 'core/guid';
 import { DataSource } from 'common/data/data_source/data_source';
 import { CustomStore } from 'common/data/custom_store';

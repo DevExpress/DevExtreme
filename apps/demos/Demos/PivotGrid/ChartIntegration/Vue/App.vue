@@ -41,11 +41,11 @@ import {
   DxPivotGrid,
   DxFieldChooser,
 } from 'devextreme-vue/pivot-grid';
-import sales from './data.ts';
+import { sales } from './data.ts';
 
 const grid = ref<DxPivotGrid>();
 const chart = ref<DxChart>();
-const dataSource = {
+const dataSource: Record<string, any> = {
   fields: [{
     caption: 'Region',
     width: 120,
@@ -78,7 +78,7 @@ const dataSource = {
   }],
   store: sales,
 };
-const customizeTooltip = ({ seriesName, originalValue }) => {
+const customizeTooltip = ({ seriesName, originalValue }: Record<string, any>) => {
   const valueText = (seriesName.indexOf('Total') !== -1)
     ? new Intl.NumberFormat('en-EN', { style: 'currency', currency: 'USD' }).format(originalValue)
     : originalValue;

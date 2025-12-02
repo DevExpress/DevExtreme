@@ -19,6 +19,8 @@ import { DOCUMENT } from '@angular/common';
 import dxTreeList from 'devextreme/ui/tree_list';
 import { dxTreeListColumn, dxTreeListRowObject, TreeListPredefinedColumnButton } from 'devextreme/ui/tree_list';
 import { event } from 'devextreme/events/events.types';
+import { TextEditorButtonLocation } from 'devextreme/common';
+import { dxButtonOptions } from 'devextreme/ui/button';
 
 import {
     DxIntegrationModule,
@@ -26,10 +28,11 @@ import {
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-tree-list-button',
@@ -37,7 +40,14 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost]
+    providers: [
+        NestedOptionHost,
+        DxTemplateHost,
+        {
+           provide: PROPERTY_TOKEN_buttons,
+           useExisting: DxiTreeListButtonComponent,
+        }
+    ]
 })
 export class DxiTreeListButtonComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
@@ -74,10 +84,10 @@ export class DxiTreeListButtonComponent extends CollectionNestedOption implement
     }
 
     @Input()
-    get name(): string | TreeListPredefinedColumnButton {
+    get name(): string | TreeListPredefinedColumnButton | undefined {
         return this._getOption('name');
     }
-    set name(value: string | TreeListPredefinedColumnButton) {
+    set name(value: string | TreeListPredefinedColumnButton | undefined) {
         this._setOption('name', value);
     }
 
@@ -111,6 +121,22 @@ export class DxiTreeListButtonComponent extends CollectionNestedOption implement
     }
     set visible(value: boolean | ((options: { column: dxTreeListColumn, component: dxTreeList, row: dxTreeListRowObject }) => boolean)) {
         this._setOption('visible', value);
+    }
+
+    @Input()
+    get location(): TextEditorButtonLocation {
+        return this._getOption('location');
+    }
+    set location(value: TextEditorButtonLocation) {
+        this._setOption('location', value);
+    }
+
+    @Input()
+    get options(): dxButtonOptions | undefined {
+        return this._getOption('options');
+    }
+    set options(value: dxButtonOptions | undefined) {
+        this._setOption('options', value);
     }
 
 

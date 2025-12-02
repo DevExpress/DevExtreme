@@ -22,16 +22,16 @@ $(() => {
         dataField: 'Task_Priority',
         caption: 'Priority',
         fieldValueTemplate({ field: { value } }) {
-          const priority = priorities.find(p => p.id === value);
+          const priority = priorities.find((p) => p.id === value);
           return $('<div>').append(
-              $('<div>').addClass('task__indicator')
-            )
+            $('<div>').addClass('task__indicator'),
+          )
             .append(
-              $('<div>').text(priority.text)
+              $('<div>').text(priority.text),
             )
             .addClass('task__priority')
             .addClass(`task__priority--${priority.postfix}`);
-        }
+        },
       },
       {
         dataField: 'Task_Start_Date',
@@ -46,11 +46,11 @@ $(() => {
       {
         dataField: 'Task_Assigned_Employee_ID',
         caption: 'Assigned to',
-        fieldValueTemplate({ field: { value }}) {
+        fieldValueTemplate({ field: { value } }) {
           return $('<button>')
             .addClass('task__link-button')
-            .text(employees.find(e => e.ID === value).Name);
-        }
+            .text(employees.find((e) => e.ID === value).Name);
+        },
       },
       {
         dataField: 'Task_Status',
@@ -59,7 +59,7 @@ $(() => {
       {
         dataField: 'Task_Completion',
         caption: 'Completed',
-        fieldTemplate({ field: { value }}) {
+        fieldTemplate({ field: { value } }) {
           return $('<div>')
             .addClass('task__progress')
             .dxProgressBar({
@@ -71,7 +71,7 @@ $(() => {
                 return `${value}%`;
               },
             });
-        }
+        },
       },
     ],
   });

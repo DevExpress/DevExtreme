@@ -1,7 +1,9 @@
 import SelectBox from 'devextreme-testcafe-models/selectBox';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Scheduler header - View switcher`
   .page(url(__dirname, '../../../container.html'));
@@ -15,10 +17,16 @@ test('it should correctly switch a differently typed views (T1080992)', async (t
   } = scheduler;
 
   await t
+    .click(viewSwitcher.getButton('Day').element)
+    .pressKey('down')
+    .pressKey('down')
+    .pressKey('enter')
     .click(viewSwitcher.getButton('Some week').element)
     .expect(scheduler.checkViewType('week'))
     .ok()
-    .click(viewSwitcher.getButton('Day').element)
+    .pressKey('down')
+    .pressKey('down')
+    .pressKey('enter')
     .expect(scheduler.checkViewType('day'))
     .ok();
 }).before(async () => createWidget('dxScheduler', {
@@ -41,10 +49,18 @@ test('Changing view does not reset toolbar items state', async (t) => {
 
   await selectBox.open();
   const list = await selectBox.getList();
+
   await t
     .click(list.getItem(0).element)
     .expect(selectBox.value)
     .eql(defaultSelectBoxValue);
+
+  await t
+    .pressKey('tab')
+    .pressKey('enter')
+    .pressKey('down')
+    .pressKey('down')
+    .pressKey('enter');
 
   await t.click(scheduler.toolbar.viewSwitcher.getButton('Month').element)
     .expect(scheduler.checkViewType('month'))
@@ -66,3 +82,28 @@ test('Changing view does not reset toolbar items state', async (t) => {
     ],
   },
 }));
+
+[true, false].forEach((useDropDownViewSwitcher) => {
+  test(`view switcher should not be displayed if views has only one element when useDropDownViewSwitcher: ${useDropDownViewSwitcher}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    const { toolbar } = new Scheduler('#container');
+
+    await testScreenshot(
+      t,
+      takeScreenshot,
+      `toolbar-without-view-switcher-(useDropDownViewSwitcher=${useDropDownViewSwitcher}).png`,
+      { element: toolbar.element },
+    );
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => createWidget('dxScheduler', {
+    currentDate: new Date(2020, 2, 2),
+    currentView: 'day',
+    views: ['day'],
+    useDropDownViewSwitcher,
+    height: 580,
+  }));
+});

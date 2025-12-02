@@ -3,7 +3,7 @@ import {
   getWeekendsCount,
 } from '@ts/scheduler/r1/utils/index';
 
-import { VIEWS } from '../constants';
+import { VIEWS } from '../utils/options/constants_view';
 import SchedulerTimelineWeek from './m_timeline_week';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-work-week';

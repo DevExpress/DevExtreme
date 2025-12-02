@@ -1,7 +1,7 @@
-const $ = require('jquery');
-const Widget = require('ui/widget/ui.widget');
-const registerComponent = require('core/component_registrator');
-const EventsStrategy = require('core/events_strategy').EventsStrategy;
+import $ from 'jquery';
+import Widget from 'ui/widget/ui.widget';
+import registerComponent from 'core/component_registrator';
+import { EventsStrategy } from 'core/events_strategy';
 
 QUnit.testStart(function() {
     const markup =
@@ -10,7 +10,7 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-const DxWidget = Widget.inherit({});
+class DxWidget extends Widget {}
 registerComponent('dxWidget', DxWidget);
 
 
@@ -100,6 +100,26 @@ QUnit.test('callbacks should have correct context', function(assert) {
         assert.equal(this, context, 'context is correct');
     });
     $element.remove();
+});
+
+QUnit.module('Memory leaks', {
+    beforeEach: function() {
+        const markup = '<div id="element"></div>';
+        $('#qunit-fixture').html(markup);
+    },
+    afterEach: function() {
+        $('#element').remove();
+    }
+}, () => {
+    QUnit.test('should clear _owner reference after dispose', function(assert) {
+        const strategy = new EventsStrategy({});
+
+        assert.notStrictEqual(strategy._owner, null, '_owner is set before dispose');
+
+        strategy.dispose();
+
+        assert.strictEqual(strategy._owner, null, '_owner is null after dispose');
+    });
 });
 
 

@@ -43,7 +43,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxCheckBox from 'devextreme-vue/check-box';
+import DxCheckBox, { type DxCheckBoxTypes } from 'devextreme-vue/check-box';
 import DxGallery from 'devextreme-vue/gallery';
 import { gallery } from './data.ts';
 
@@ -53,8 +53,7 @@ const slideshowDelay = ref(2000);
 const showNavButtons = ref(true);
 const showIndicator = ref(true);
 
-function setSlideshowDelay(e) {
+function setSlideshowDelay(e: DxCheckBoxTypes.ValueChangedEvent) {
   slideshowDelay.value = e.value ? 2000 : 0;
 }
 </script>
-

@@ -19,6 +19,7 @@ import {
 } from 'devextreme-angular/core';
 import { DxiTextEditorButton } from './base/text-editor-button-dxi';
 
+import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-button',
@@ -26,7 +27,13 @@ import { DxiTextEditorButton } from './base/text-editor-button-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_buttons,
+           useExisting: DxiButtonComponent,
+        }
+    ],
     inputs: [
         'location',
         'name',

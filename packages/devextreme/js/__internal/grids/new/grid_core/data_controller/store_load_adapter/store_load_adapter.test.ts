@@ -3,7 +3,7 @@ import {
 } from '@jest/globals';
 import type { DataSource } from '@js/common/data';
 import { Deferred } from '@js/core/utils/deferred';
-import { signal } from '@preact/signals-core';
+import { signal } from '@ts/core/state_manager/index';
 import type { InternalLoadOptions, OperationOptions } from '@ts/grids/new/grid_core/data_controller/types';
 
 import { StoreLoadAdapter } from './store_load_adapter';

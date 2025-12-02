@@ -15,11 +15,11 @@
       <div class="separator"/>
       <div>
         <span class="summary-item-label">Check-in Date: </span>
-        {{ new Date(formData.dates[0]).toLocaleDateString() }}
+        {{ formatDate(formData.dates[0]) }}
       </div>
       <div>
         <span class="summary-item-label">Check-out Date: </span>
-        {{ new Date(formData.dates[1]).toLocaleDateString() }}
+        {{ formatDate(formData.dates[1]) }}
       </div>
     </div>
 
@@ -60,4 +60,6 @@ const props = withDefaults(defineProps<{
   formData: () => initialFormData,
   isConfirmed: () => false,
 });
+
+const formatDate = (value: Date | null) => value ? new Date(value).toLocaleDateString() : '';
 </script>

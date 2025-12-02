@@ -49,7 +49,7 @@ const FileUploader = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["value"]), []);
       const independentEvents = useMemo(() => (["onBeforeSend","onContentReady","onDisposing","onDropZoneEnter","onDropZoneLeave","onFilesUploaded","onInitialized","onProgress","onUploadAborted","onUploaded","onUploadError","onUploadStarted","onValueChanged"]), []);

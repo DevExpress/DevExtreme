@@ -19,7 +19,7 @@ export default function App() {
   const [typingUsers, setTypingUsers] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const processAIRequest = useCallback(
-    async(message) => {
+    async (message) => {
       setIsProcessing(true);
       setTypingUsers([assistant]);
       await fetchAIResponse(message);
@@ -29,7 +29,7 @@ export default function App() {
     [fetchAIResponse],
   );
   const onMessageEntered = useCallback(
-    async({ message, event }) => {
+    async ({ message, event }) => {
       insertMessage({ id: Date.now(), ...message });
       if (!alerts.length) {
         event.target.blur();
@@ -39,7 +39,7 @@ export default function App() {
     },
     [insertMessage, alerts.length, processAIRequest],
   );
-  const onRegenerateButtonClick = useCallback(async() => {
+  const onRegenerateButtonClick = useCallback(async () => {
     setIsProcessing(true);
     await regenerateLastAIResponse();
     setIsProcessing(false);

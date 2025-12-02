@@ -70,7 +70,7 @@ const companies: Company[] = [{
 
 @Injectable()
 export class Service {
-  getCompanies() : Company[] {
+  getCompanies(): Company[] {
     return companies;
   }
 }

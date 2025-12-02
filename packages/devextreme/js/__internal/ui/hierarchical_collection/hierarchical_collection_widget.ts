@@ -5,7 +5,6 @@ import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
 import { noop } from '@js/core/utils/common';
 import { compileGetter, compileSetter } from '@js/core/utils/data';
-import { extend } from '@js/core/utils/extend';
 import { getImageContainer } from '@js/core/utils/icon';
 import { each } from '@js/core/utils/iterator';
 import { isFunction, isObject } from '@js/core/utils/type';
@@ -17,9 +16,7 @@ import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collectio
 import DataAdapter, {
   type DataAdapterOptions,
 } from './data_adapter';
-import {
-  type DataAccessors,
-} from './data_converter';
+import type { DataAccessors, ItemKey } from './data_converter';
 
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
 const ITEM_URL_CLASS = 'dx-item-url';
@@ -30,8 +27,8 @@ TProperties extends CollectionWidgetEditProperties<any, TItem, TKey>,
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 TItem extends ItemLike = any,
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-TKey = any,
-> extends CollectionWidgetAsync<TProperties> {
+TKey extends ItemKey = any,
+> extends CollectionWidgetAsync<TProperties, TItem, TKey> {
   _dataAdapter!: DataAdapter;
 
   _getDefaultOptions(): TProperties {
@@ -79,20 +76,20 @@ TKey = any,
 
   _initDataAdapter(): void {
     const accessors = this._createDataAdapterAccessors();
-
-    this._dataAdapter = new DataAdapter(
-      extend({
-        dataAccessors: {
-          getters: accessors.getters,
-          setters: accessors.setters,
-        },
-        items: this.option('items'),
-      }, this._getDataAdapterOptions()),
-    );
+    const { items = [] } = this.option();
+    this._dataAdapter = new DataAdapter({
+      dataAccessors: {
+        getters: accessors.getters,
+        setters: accessors.setters,
+      },
+      // @ts-expect-error
+      items,
+      ...this._getDataAdapterOptions(),
+    });
   }
 
   _getDataAdapterOptions(): Partial<DataAdapterOptions> {
-    return {};
+    return {} as Partial<DataAdapterOptions>;
   }
 
   _getItemExtraPropNames(): string[] {
@@ -138,6 +135,14 @@ TKey = any,
       .append(textContainer);
   }
 
+  _clickByLink(link: HTMLElement): void {
+    link.addEventListener('click', (e: MouseEvent): void => {
+      e.stopPropagation();
+    }, { once: true });
+
+    link.click();
+  }
+
   _getIconContainer(itemData: TItem): dxElementWrapper | undefined | null {
     // @ts-expect-error ts-error
     if (!itemData.icon) {
@@ -163,7 +168,7 @@ TKey = any,
   }
 
   _initAccessors(): void {
-    each(this._getAccessors(), (_, accessor) => {
+    each(this._getAccessors(), (_index: number, accessor: string): void => {
       this._compileAccessor(accessor);
     });
 
@@ -216,7 +221,7 @@ TKey = any,
       setters: {} as DataAccessors['setters'],
     };
 
-    each(this._getAccessors(), (_, accessor) => {
+    each(this._getAccessors(), (_index: number, accessor: string): void => {
       const getterName = `_${accessor}Getter`;
       const setterName = `_${accessor}Setter`;
       const newAccessor = accessor === 'parentId' ? 'parentKey' : accessor;
@@ -224,11 +229,9 @@ TKey = any,
       accessors.getters[newAccessor] = this[getterName];
       accessors.setters[newAccessor] = this[setterName];
     });
-    // @ts-expect-error ts-error
-    accessors.getters.display = !this._displayGetter
-      // @ts-expect-error ts-error
-      ? (itemData): string => itemData.text as string
-      : this._displayGetter;
+    // @ts-expect-error
+    accessors.getters.display = this._displayGetter
+      ?? ((itemData): string => itemData.text as string);
 
     return accessors;
   }

@@ -7,7 +7,7 @@ import EditingPreview, {
     CHAT_EDITING_PREVIEW_CAPTION_CLASS,
     CHAT_EDITING_PREVIEW_TEXT_CLASS,
     CHAT_EDITING_PREVIEW_CANCEL_BUTTON_CLASS,
-} from '__internal/ui/chat/editing_preview';
+} from '__internal/ui/chat/message_box/editing_preview';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
 
 const ANIMATION_TIMEOUT = 300;

@@ -1,7 +1,7 @@
-// import type { ReadonlySignal } from '@preact/signals-core';
-// import { computed } from '@preact/signals-core';
+// import type { ReadonlySignal } from '@ts/core/state_manager/index';
+// import { computed } from '@ts/core/state_manager/index';
 import { equalByValue } from '@js/core/utils/common';
-import { batch, effect } from '@preact/signals-core';
+import { batch, effect } from '@ts/core/state_manager/index';
 import { getMatchedConditions } from '@ts/filter_builder/m_utils';
 import type { HeaderFilterInfo } from '@ts/grids/new/grid_core/filtering/header_filter/types';
 import { SearchController } from '@ts/grids/new/grid_core/search/index';

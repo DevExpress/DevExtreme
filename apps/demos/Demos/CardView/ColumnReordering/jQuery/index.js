@@ -17,7 +17,7 @@ $(() => {
         dataField: 'OrderDate',
         dataType: 'date',
       },
-      { 
+      {
         dataField: 'DeliveryDate',
         dataType: 'date',
       },

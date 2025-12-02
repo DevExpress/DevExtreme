@@ -6,7 +6,8 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
-} from '../common/core/events';
+    PointerInteractionEvent,
+} from '../events';
 
 import CollectionWidget, {
     CollectionWidgetItem,
@@ -54,7 +55,7 @@ export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEve
  * @type object
  * @inherits NativeEventInfo,ItemInfo
  */
-export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxMultiView<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxMultiView<TItem, TKey>, PointerInteractionEvent> & ItemInfo<TItem>;
 
 /**
  * @docid _ui_multi_view_ItemHoldEvent
@@ -62,7 +63,7 @@ export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = Nat
  * @type object
  * @inherits NativeEventInfo,ItemInfo
  */
-export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxMultiView<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxMultiView<TItem, TKey>, PointerInteractionEvent> & ItemInfo<TItem>;
 
 /**
  * @docid _ui_multi_view_ItemRenderedEvent
@@ -108,7 +109,7 @@ export interface dxMultiViewBaseOptions<
     TComponent extends dxMultiView<TItem, TKey> = dxMultiView<any, any>,
     TItem extends ItemLike = any,
     TKey = any,
-> extends CollectionWidgetOptions<TComponent, TItem, TKey> {
+> extends Omit<CollectionWidgetOptions<TComponent, TItem, TKey>, 'keyExpr'> {
     /**
      * @docid dxMultiViewOptions.animationEnabled
      * @default true

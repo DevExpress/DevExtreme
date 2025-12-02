@@ -6,7 +6,8 @@ import {
   InitializedEventInfo,
   ChangedOptionInfo,
   ItemInfo,
-} from '../events/index';
+  PointerInteractionEvent,
+} from '../events';
 
 import CollectionWidget, {
   CollectionWidgetItem,
@@ -51,7 +52,7 @@ export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEve
  * @type object
  * @inherits NativeEventInfo,ItemInfo
  */
-export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxStepper<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxStepper<TItem, TKey>, PointerInteractionEvent> & ItemInfo<TItem>;
 
 /**
  * @docid _ui_stepper_ItemRenderedEvent

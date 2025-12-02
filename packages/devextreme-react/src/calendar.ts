@@ -43,7 +43,7 @@ const Calendar = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["value","zoomLevel"]), []);
       const independentEvents = useMemo(() => (["onDisposing","onInitialized","onValueChanged"]), []);

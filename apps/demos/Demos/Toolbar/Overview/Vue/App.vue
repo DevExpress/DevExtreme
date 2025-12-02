@@ -79,7 +79,7 @@ const selectBoxOptions = {
   displayExpr: 'text',
   value: productTypes[0].id,
   inputAttr: { 'aria-label': 'Categories' },
-  onValueChanged: ({ value }) => {
+  onValueChanged: ({ value }: { value: number }) => {
     productsStore.filter(value > 1 ? ['type', '=', value] : null);
     productsStore.load();
   },

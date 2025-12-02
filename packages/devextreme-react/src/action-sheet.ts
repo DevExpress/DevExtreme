@@ -54,7 +54,7 @@ const ActionSheet = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["items","visible"]), []);
       const independentEvents = useMemo(() => (["onCancelClick","onContentReady","onDisposing","onInitialized","onItemClick","onItemContextMenu","onItemHold","onItemRendered"]), []);

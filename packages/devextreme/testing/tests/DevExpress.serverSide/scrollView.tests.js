@@ -1,6 +1,6 @@
-const $ = require('jquery');
+import $ from 'jquery';
 
-require('ui/scroll_view');
+import 'ui/scroll_view';
 
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const SCROLLABLE_SCROLLBAR_CLASS = 'dx-scrollable-scrollbar';

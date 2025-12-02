@@ -1,14 +1,18 @@
-const noop = require('core/utils/common').noop;
-const vizMocks = require('../../helpers/vizMocks.js');
-const mapLayerModule = require('viz/vector_map/map_layer');
-const DeferredModule = require('core/utils/deferred');
+import { noop } from 'core/utils/common';
+import {
+    Renderer,
+    stubClass
+} from '../../helpers/vizMocks.js';
+import mapLayerModule from 'viz/vector_map/map_layer';
+import DeferredModule from 'core/utils/deferred';
+
 let StubMapLayer;
 
 QUnit.module('Basic', {
     beforeEach: function() {
         const that = this;
         that.readyCallbacks = [];
-        StubMapLayer = vizMocks.stubClass(mapLayerModule._TESTS_MapLayer, null, {
+        StubMapLayer = stubClass(mapLayerModule._TESTS_MapLayer, null, {
             $constructor: function() {
                 this.proxy = { name: arguments[2] };
                 StubMapLayer.items.push(this);
@@ -23,7 +27,7 @@ QUnit.module('Basic', {
         mapLayerModule._TESTS_stub_MapLayer(StubMapLayer);
 
         this.params = {
-            renderer: new vizMocks.Renderer(),
+            renderer: new Renderer(),
             dataKey: 'data-key',
             tracker: {
                 on: sinon.spy(function() { return noop; }),

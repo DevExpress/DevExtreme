@@ -28,6 +28,7 @@ import {
   DxSeries,
   DxValueAxis,
   DxLegend,
+  type DxChartTypes,
 } from 'devextreme-vue/chart';
 import { DxButton } from 'devextreme-vue/button';
 import { type SeriesPoint } from 'devextreme-vue/common/charts';
@@ -37,21 +38,23 @@ const isFirstLevel = ref(true);
 const dataSource = ref(service.filterData(''));
 const colors = ['#6babac', '#e55253'];
 
-function customizePoint() {
+function customizePoint(): SeriesPoint {
   return {
     color: colors[Number(isFirstLevel.value)],
-    hoverStyle:  {
+    hoverStyle: {
       ...!isFirstLevel.value ? { hatching: 'none' } : {},
-    }
+    },
   } as SeriesPoint;
 }
-function onPointClick({ target }) {
+
+function onPointClick({ target }: DxChartTypes.PointClickEvent): void {
   if (isFirstLevel.value) {
     isFirstLevel.value = false;
-    dataSource.value = service.filterData(target.originalArgument);
+    dataSource.value = service.filterData(target.originalArgument as string);
   }
 }
-function onButtonClick() {
+
+function onButtonClick(): void {
   if (!isFirstLevel.value) {
     isFirstLevel.value = true;
     dataSource.value = service.filterData('');

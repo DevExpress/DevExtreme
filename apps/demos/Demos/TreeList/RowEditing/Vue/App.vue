@@ -69,15 +69,15 @@ const dataSource = {
 };
 
 function onEditorPreparing(e: DxTreeListTypes.EditorPreparingEvent) {
-  if (e.dataField === 'Head_ID' && e.row.data.ID === 1) {
+  if (e.dataField === 'Head_ID' && e.row?.data.ID === 1) {
     e.cancel = true;
   }
 }
 function onInitNewRow(e: DxTreeListTypes.InitNewRowEvent) {
   e.data.Head_ID = 1;
 }
-function allowDeleting(e) {
-  return e.row.data.ID !== 1;
+function allowDeleting({ row }: { row: DxTreeListTypes.Row }) {
+  return row.data.ID !== 1;
 }
 </script>
 <style scoped>

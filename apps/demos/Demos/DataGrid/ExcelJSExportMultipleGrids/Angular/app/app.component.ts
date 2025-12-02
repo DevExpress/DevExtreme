@@ -6,12 +6,12 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
   DxButtonModule, DxTabPanelModule, DxDataGridModule, DxDataGridComponent,
 } from 'devextreme-angular';
-import { Workbook } from 'exceljs';
+import { ArrayStore, DataSourceOptions } from 'devextreme-angular/common/data';
+import { Workbook } from 'devextreme-exceljs-fork';
 import { saveAs } from 'file-saver-es';
 // Our demo infrastructure requires us to use 'file-saver-es'. We recommend that you use the official 'file-saver' package in your applications.
 import { exportDataGrid } from 'devextreme-angular/common/export/excel';
-
-import 'devextreme-angular/common/data';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -27,6 +27,7 @@ if (window && window.config?.packageConfigPaths) {
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
+  providers: [Service],
 })
 
 export class AppComponent {
@@ -34,27 +35,29 @@ export class AppComponent {
 
   @ViewChild('ratingDataGrid', { static: false }) ratingDataGrid: DxDataGridComponent;
 
-  priceDataSource = {
-    store: {
-      type: 'odata',
-      version: 2,
-      url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
-      key: 'Product_ID',
-    },
-    select: ['Product_ID', 'Product_Name', 'Product_Sale_Price', 'Product_Retail_Price'],
-    filter: ['Product_ID', '<', 10],
-  };
+  priceDataSource: DataSourceOptions;
 
-  ratingDataSource = {
-    store: {
-      type: 'odata',
-      version: 2,
-      url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
-      key: 'Product_ID',
-    },
-    select: ['Product_ID', 'Product_Name', 'Product_Consumer_Rating', 'Product_Category'],
-    filter: ['Product_ID', '<', 10],
-  };
+  ratingDataSource: DataSourceOptions;
+
+  constructor(service: Service) {
+    this.priceDataSource = {
+      store: new ArrayStore({
+        data: service.getProducts(),
+        key: 'Product_ID',
+      }),
+      select: ['Product_ID', 'Product_Name', 'Product_Sale_Price', 'Product_Retail_Price'],
+      filter: ['Product_ID', '<', 10],
+    };
+
+    this.ratingDataSource = {
+      store: new ArrayStore({
+        data: service.getProducts(),
+        key: 'Product_ID',
+      }),
+      select: ['Product_ID', 'Product_Name', 'Product_Consumer_Rating', 'Product_Category'],
+      filter: ['Product_ID', '<', 10],
+    };
+  }
 
   exportGrids() {
     const context = this;

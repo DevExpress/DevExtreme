@@ -1,13 +1,15 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
+import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@js/common/core/events/swipe';
 import {
   end as swipeEventEnd,
   start as swipeEventStart,
   swipe as swipeEventSwipe,
 } from '@js/common/core/events/swipe';
 import { addNamespace } from '@js/common/core/events/utils/index';
-import type { Properties as DOMComponentProperties } from '@js/core/dom_component';
 import { each } from '@js/core/utils/iterator';
 import { name } from '@js/core/utils/public_component';
+import type { NativeEventInfo } from '@js/events';
+import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
 
@@ -23,17 +25,16 @@ const ACTION_TO_EVENT_MAP = {
 
 const IMMEDIATE_TIMEOUT = 180;
 
-export interface SwipeableProperties extends DOMComponentProperties {
+export interface SwipeableProperties extends DOMComponentProperties<Swipeable> {
   elastic?: boolean;
   immediate?: boolean;
   immediateTimeout?: number;
   direction?: string;
   itemSizeFunc?: (() => number) | null;
-  onStart?: ((e) => void) | null;
-  onUpdated?: ((e) => void) | null;
-  onEnd?: ((e) => void) | null;
-  onCancel?: ((e) => void) | null;
-  disabled?: boolean;
+  onStart?: ((e: Required<NativeEventInfo<Swipeable, SwipeStartEvent>>) => void) | null;
+  onUpdated?: ((e: Required<NativeEventInfo<Swipeable, SwipeUpdateEvent>>) => void) | null;
+  onEnd?: ((e: Required<NativeEventInfo<Swipeable, SwipeEndEvent>>) => void) | null;
+  onCancel?: ((e: NativeEventInfo<Swipeable>) => void) | null;
 }
 
 class Swipeable extends DOMComponent<Swipeable, SwipeableProperties> {
@@ -72,12 +73,20 @@ class Swipeable extends DOMComponent<Swipeable, SwipeableProperties> {
 
     this._createEventData();
 
-    each(ACTION_TO_EVENT_MAP, (actionName, eventName) => {
+    each(ACTION_TO_EVENT_MAP, (
+      actionName: keyof SwipeableProperties,
+      eventName: SwipeableProperties[keyof SwipeableProperties],
+    ) => {
       // @ts-expect-error ts-error
       const action = this._createActionByOption(actionName, { context: this });
       // @ts-expect-error ts-error
-      eventName = addNamespace(eventName, NAME);
-      eventsEngine.on(this.$element(), eventName, this._eventData, (e) => action({ event: e }));
+      const event = addNamespace(eventName, NAME);
+      eventsEngine.on(
+        this.$element(),
+        event,
+        this._eventData,
+        (e) => action({ event: e }),
+      );
     });
   }
 

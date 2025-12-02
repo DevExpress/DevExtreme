@@ -26,7 +26,7 @@ if (window && window.config?.packageConfigPaths) {
 export class AppComponent {
   dataSource: DataSourceOptions;
 
-  priorities: Array<Priority>;
+  priorities: Priority[];
 
   tasksStore: AspNetData.CustomStore;
 

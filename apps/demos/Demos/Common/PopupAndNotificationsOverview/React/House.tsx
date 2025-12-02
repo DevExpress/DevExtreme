@@ -73,7 +73,7 @@ export function House(props: HouseProps) {
             <div className="agent">
               <div id={`house${props.house.ID}`}>
                 <img alt="Listing agent" src="../../../../images/icon-agent.svg" />
-                                    Listing agent
+                Listing agent
               </div>
             </div>
           </div>
@@ -90,4 +90,3 @@ export function House(props: HouseProps) {
     </div>
   );
 }
-

@@ -20,7 +20,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+} from '../events';
 
 import {
     Item as dxListItem,

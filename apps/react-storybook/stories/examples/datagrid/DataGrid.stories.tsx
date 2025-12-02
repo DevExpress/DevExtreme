@@ -13,6 +13,8 @@ import DataGrid, {
 } from "devextreme-react/data-grid";
 import DiscountCell from "./DiscountCell";
 import ODataStore from "devextreme/data/odata/store";
+import { AIIntegration } from 'devextreme-react/common/ai-integration';
+import { AzureOpenAI } from 'openai';
 
 const columnOptions = {
     regularColumns: [
@@ -252,22 +254,102 @@ export const ColumnReordering: Story = {
             allowColumnDragging: true,
         },
     }
-  }
+};
 
-  const generatedData = generateData(10, 100);
+const generatedData = generateData(10, 100);
 
-  export const ColumnReorderingWithVirtualColumns: Story = {
-    argTypes: {
-        columns: {
-            control: 'object',
-            mapping: null,
-        },
+export const ColumnReorderingWithVirtualColumns: Story = {
+argTypes: {
+    columns: {
+        control: 'object',
+        mapping: null,
     },
+},
+args: {
+    allowColumnReordering: true,
+    rtlEnabled: false,
+    columnWidth: 100,
+    dataSource: generatedData,
+    columns: Object.keys(generatedData[0]),
+}
+}
+
+const deployment = "gpt-4o-mini";
+const apiVersion = "2024-02-01";
+const endpoint = "https://public-api.devexpress.com/demo-openai";
+const apiKey = "DEMO";
+
+const aiService = new AzureOpenAI({
+  dangerouslyAllowBrowser: true,
+  deployment,
+  endpoint,
+  apiVersion,
+  apiKey
+});
+
+async function getAIResponse(messages, signal): Promise<string> {
+    const params = {
+        messages,
+        model: deployment,
+        max_tokens: 1000,
+        temperature: 0.7,
+    };
+
+    const response = await aiService.chat.completions.create(params, { signal });
+    const result = response.choices[0].message?.content;
+
+    return result ?? '';
+}
+
+const aiIntegration = new AIIntegration({
+    sendRequest({ prompt }) {
+        const controller = new AbortController();
+        const signal = controller.signal;
+
+        const aiPrompt = [
+        { role: 'system', content: prompt.system, },
+        { role: 'user', content: prompt.user, },
+        ];
+
+        const promise = getAIResponse(aiPrompt, signal);
+
+        const result = {
+        promise,
+        abort: () => {
+            controller.abort();
+        },
+        };
+
+        return result;
+    },
+});
+
+
+export const AiColumn: Story = {
     args: {
+        dataSource: countries,
+        aiIntegration,
+        keyExpr: 'ID',
+        columns: [
+            {
+                caption: 'AI Column 1',
+                type: 'ai',
+                name: 'test1',
+                ai: {
+                    prompt: 'Country currency',
+                },
+            },
+            {
+                caption: 'AI Column 2',
+                type: 'ai',
+                name: 'test2',
+                ai: {
+                    prompt: 'Emoji flag of the country',
+                },
+            },
+            'Country', 'Area', 'Population_Urban', 'Population_Rural',
+        ],
+        allowColumnResizing: true,
         allowColumnReordering: true,
-        rtlEnabled: false,
-        columnWidth: 100,
-        dataSource: generatedData,
-        columns: Object.keys(generatedData[0]),
-    }
-  }
+    },
+};

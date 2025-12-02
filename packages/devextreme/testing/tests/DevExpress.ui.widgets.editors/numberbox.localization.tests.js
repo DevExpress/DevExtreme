@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import localization from 'localization';
 
-import 'generic_light.css!';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
 import 'ui/number_box';

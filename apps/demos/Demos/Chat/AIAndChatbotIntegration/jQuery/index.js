@@ -52,7 +52,7 @@ $(() => {
     } else {
       event?.target.focus();
     }
-  };
+  }
 
   async function processMessageSending(message, event) {
     toggleDisabledState(true, event);
@@ -205,7 +205,7 @@ $(() => {
       return d.promise();
     },
   });
-  
+
   const dataSource = new DevExpress.data.DataSource({
     store: customStore,
     paginate: false,
@@ -222,7 +222,7 @@ $(() => {
       const { message, event } = e;
 
       dataSource.store().push([{ type: 'insert', data: { id: Date.now(), ...message } }]);
-      
+
       if (!instance.option('alerts').length) {
         processMessageSending(message, event);
       }

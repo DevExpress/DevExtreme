@@ -34,9 +34,10 @@ const findNodeById = (nodes, id) => {
 const moveNode = (fromNode, toNode, fromItems, toItems, isDropInsideItem) => {
   const fromIndex = fromItems.findIndex((item) => item.id === fromNode.itemData.id);
   fromItems.splice(fromIndex, 1);
-  const toIndex = toNode === null || isDropInsideItem
-    ? toItems.length
-    : toItems.findIndex((item) => item.id === toNode.itemData.id);
+  const toIndex =
+    toNode === null || isDropInsideItem
+      ? toItems.length
+      : toItems.findIndex((item) => item.id === toNode.itemData.id);
   toItems.splice(toIndex, 0, fromNode.itemData);
   moveChildren(fromNode, fromItems, toItems);
   if (isDropInsideItem) {
@@ -87,9 +88,9 @@ const App = () => {
   const [itemsDriveD, setItemsDriveD] = useState(service.getItemsDriveD());
   const getTreeView = useCallback(
     (driveName) =>
-      (driveName === 'driveC'
+      driveName === 'driveC'
         ? treeViewDriveCRef.current.instance()
-        : treeViewDriveDRef.current.instance()),
+        : treeViewDriveDRef.current.instance(),
     [],
   );
   const onDragChange = useCallback(

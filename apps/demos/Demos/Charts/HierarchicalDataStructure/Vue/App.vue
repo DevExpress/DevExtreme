@@ -16,7 +16,9 @@
 import DxTreeMap, { DxTooltip } from 'devextreme-vue/tree-map';
 import { citiesPopulation } from './data.ts';
 
-const customizeTooltip = ({ node, node: { data: { name, country } }, valueText }: Record<string, any>) => (
+const customizeTooltip = ({
+  node, node: { data: { name, country } }, valueText,
+}: Record<string, any>) => (
   {
     text: node.isLeaf()
       ? `<span class="city">${name}</span> (${country})<br/>Population: ${valueText}`

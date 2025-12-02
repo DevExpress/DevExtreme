@@ -1,4 +1,4 @@
-export const populations = {
+export const populations: Record<string, any> = {
   China: 19,
   India: 17.4,
   'United States': 4.44,

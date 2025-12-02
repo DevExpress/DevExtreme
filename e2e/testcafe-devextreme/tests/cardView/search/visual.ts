@@ -3,9 +3,8 @@ import CardView from 'devextreme-testcafe-models/cardView';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
-import { a11yCheck } from '../../../helpers/accessibility/utils';
 
-fixture`Search.Visual`
+fixture.disablePageReloads`Search.Visual`
   .page(url(__dirname, '../../container.html'));
 
 const CARD_VIEW_SELECTOR = '#container';
@@ -54,8 +53,6 @@ test('highlighted search text', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-
-  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   dataSource: DATA,
   columns: COLUMNS,

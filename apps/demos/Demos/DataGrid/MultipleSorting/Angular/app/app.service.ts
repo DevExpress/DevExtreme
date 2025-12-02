@@ -196,7 +196,7 @@ const employees: Employee[] = [{
 
 @Injectable()
 export class Service {
-  getEmployees() : Employee[] {
+  getEmployees(): Employee[] {
     return employees;
   }
 }

@@ -3,10 +3,10 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable max-classes-per-file */
 
-import type { ReadonlySignal } from '@preact/signals-core';
-import { effect } from '@preact/signals-core';
 import { infernoRenderer } from '@ts/core/m_inferno_renderer';
 import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/base_component';
+import type { ReadonlySignal } from '@ts/core/state_manager/index';
+import { effect } from '@ts/core/state_manager/index';
 import { hasWindow } from '@ts/core/utils/m_window';
 import { type ComponentType } from 'inferno';
 

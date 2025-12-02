@@ -98,8 +98,12 @@ export default class DependencyCollector {
         es6: { mixedImports: true },
         ts: { skipTypeImports : true }
       });
+      const isBundleFile = filePath.includes('bundle-templates');
 
-      const deps = result.map((relativeDependency: string): string => {
+      const deps = result.map((dependency: string): string => {
+        const relativeDependency = isBundleFile
+          ? dependency.replace(/^((?:\.\.\/)+)(?!bundles)/, '$1../js/')
+          : dependency;
         let absDepPath = relativeDependency
 
         if (relativeDependency.startsWith('.')) {
@@ -176,7 +180,7 @@ export default class DependencyCollector {
   }
 
   collect(): void {
-    const fullDependencyTree = this.getFullDependencyTree(path.resolve(__dirname, '../../../devextreme/js/bundles/dx.all.js'));
+    const fullDependencyTree = this.getFullDependencyTree(path.resolve(__dirname, '../../../devextreme/build/bundle-templates/dx.all.js'));
 
     this.treeProcessor(fullDependencyTree);
     this.validate();

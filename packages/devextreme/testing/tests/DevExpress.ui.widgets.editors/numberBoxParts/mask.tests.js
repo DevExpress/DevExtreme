@@ -1383,6 +1383,14 @@ QUnit.module('format: percent format', moduleConfig, () => {
         });
     });
 
+    QUnit.test('It should be possible to type full decimal part when integer part is bigger than 100 and precision=5 (T1277123)', function(assert) {
+        this.instance.option('format', { type: 'percent', precision: 5 });
+        this.keyboard.type('123.12345').change();
+
+        assert.strictEqual(this.input.val(), '123.12345%', 'text is correct');
+        assert.strictEqual(this.instance.option('value'), 1.2312345, 'value is correct');
+    });
+
     QUnit.test('It should be possible to use percent format with more than 7 fractional digits (T1277123)', function(assert) {
         this.instance.option('format', '#0.###########%');
         this.keyboard.type('0.123456789').change();

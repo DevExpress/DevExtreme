@@ -3,47 +3,45 @@ import { isDefined, isPrimitive } from '@js/core/utils/type';
 import type { DataStructure } from '@js/ui/tree_view';
 import errors from '@js/ui/widget/ui.errors';
 
-export type DataType = DataStructure | undefined;
 export type ItemKey = string | number;
 
-export interface BaseItemData {
-  visible?: boolean;
-  key?: ItemKey;
-  parentKey?: ItemKey;
+export interface ItemData {
   disabled?: boolean;
   expanded?: boolean;
   selected?: boolean;
+
+  text?: string;
+  visible?: boolean;
+  key?: ItemKey;
+  parentKey?: ItemKey;
+
   items?: ItemData[];
 }
 
-export type ItemData = BaseItemData;
-
 export interface InternalFields {
-  disabled: boolean;
-  expanded: boolean;
-  selected: boolean;
+  disabled: boolean | undefined;
+  expanded: boolean | undefined;
+  selected: boolean | undefined;
   key: ItemKey;
-  parentKey: ItemKey | undefined;
+  parentKey: ItemKey;
   item: ItemData;
   childrenKeys: ItemKey[];
-  publicNode?: PublicNode;
+  publicNode: PublicNode;
 }
 
-export interface InternalNode extends ItemData {
+export interface InternalNode extends Omit<ItemData, 'items'> {
   internalFields: InternalFields;
 }
 
-export interface PublicNode {
+export type PublicNode<T = ItemData> = T & {
   text: string;
+
   key: ItemKey;
-  selected: boolean;
-  expanded: boolean;
-  disabled: boolean;
-  parent: PublicNode | null;
   itemData: ItemData;
+  parent: PublicNode | null;
   children: PublicNode[];
-  items: PublicNode[];
-}
+  items: PublicNode<T>[];
+};
 
 export interface DataAccessorGetters {
   key: (item: ItemData) => ItemKey;
@@ -57,9 +55,9 @@ export interface DataAccessorGetters {
 
 export interface DataAccessorSetters {
   key: (item: ItemData, value: ItemKey) => void;
-  disabled: (item: ItemData, value: boolean) => void;
-  expanded: (item: ItemData, value: boolean) => void;
-  selected: (item: ItemData, value: boolean) => void;
+  disabled: (item: ItemData, value: boolean | undefined) => void;
+  expanded: (item: ItemData, value: boolean | undefined) => void;
+  selected: (item: ItemData, value: boolean | undefined) => void;
 }
 
 export interface DataAccessors {
@@ -68,36 +66,29 @@ export interface DataAccessors {
 }
 
 class DataConverter {
-  _dataStructure: InternalNode[];
+  _dataStructure: (InternalNode | null)[] = [];
 
-  private _itemsCount: number;
+  private _itemsCount = 0;
 
-  private _visibleItemsCount: number;
+  private _visibleItemsCount = 0;
 
-  _indexByKey: Record<string, number>;
+  _indexByKey: Record<string | number, number> = {};
 
   private _dataAccessors!: DataAccessors;
 
-  private _rootValue: ItemKey | undefined;
+  private _rootValue?: ItemKey;
 
   private _dataType?: DataStructure;
 
-  constructor() {
-    this._dataStructure = [];
-    this._itemsCount = 0;
-    this._visibleItemsCount = 0;
-    this._indexByKey = {};
-  }
-
   _convertItemsToNodes(items: ItemData[], parentKey?: ItemKey): void {
-    each(items, (_, item) => {
+    each(items, (_index: number, item: ItemData): void => {
       const parentId = isDefined(parentKey) ? parentKey : this._getParentId(item);
       const node = this._convertItemToNode(item, parentId);
 
       this._dataStructure.push(node);
 
       this._checkForDuplicateId(node.internalFields.key);
-      this._indexByKey[String(node.internalFields.key)] = this._dataStructure.length - 1;
+      this._indexByKey[node.internalFields.key] = this._dataStructure.length - 1;
 
       if (this._itemHasChildren(item)) {
         this._convertItemsToNodes(this._dataAccessors.getters.items(item), node.internalFields.key);
@@ -137,7 +128,9 @@ class DataConverter {
       this._visibleItemsCount += 1;
     }
 
-    const node: InternalNode = {
+    const { items, ...itemWithoutItems } = item;
+
+    const node = {
       internalFields: {
         disabled: this._dataAccessors.getters.disabled(item, { defaultValue: false }),
         expanded: this._dataAccessors.getters.expanded(item, { defaultValue: false }),
@@ -147,16 +140,14 @@ class DataConverter {
         item: this._makeObjectFromPrimitive(item),
         childrenKeys: [],
       },
-      ...item,
+      ...itemWithoutItems,
     };
-
-    delete node.items;
-
+    // @ts-expect-error
     return node;
   }
 
   setChildrenKeys(): void {
-    each(this._dataStructure, (_, node) => {
+    each(this._dataStructure, (_index: number, node: InternalNode) => {
       if (node.internalFields.parentKey === this._rootValue) return;
 
       const parent = this.getParentNode(node);
@@ -206,7 +197,7 @@ class DataConverter {
 
     const publicNodes: PublicNode[] = [];
 
-    each(data, (_, node: ItemKey) => {
+    each(data, (_index: number, node: ItemKey): void => {
       const internalNode = isPrimitive(node) ? this._getByKey(node) : node;
 
       if (!internalNode) {
@@ -237,26 +228,25 @@ class DataConverter {
   }
 
   _getByKey(key: ItemKey): InternalNode | null {
-    return this._dataStructure[this.getIndexByKey(key)] || null;
+    return this._dataStructure[this.getIndexByKey(key)] ?? null;
   }
 
   getParentNode(node: InternalNode): InternalNode | null {
-    // @ts-expect-error ts-error
     return this._getByKey(node.internalFields.parentKey);
   }
 
-  getByKey(data: InternalNode[], key: ItemKey): InternalNode | null {
+  getByKey(data: (InternalNode | null)[], key: ItemKey): InternalNode | null {
     if (!isDefined(key)) {
       return null;
     }
 
     const findByKey = function findByKey(
-      searchData: InternalNode[],
+      searchData: (InternalNode | null)[],
       searchKey: ItemKey,
     ): InternalNode | null {
       let result: InternalNode | null = null;
 
-      each(searchData, (_, element) => {
+      each(searchData, (_index: number, element: InternalNode): boolean => {
         const currentElementKey = element.internalFields?.key ?? element.key;
         if (currentElementKey?.toString() === searchKey.toString()) {
           result = element;
@@ -281,7 +271,7 @@ class DataConverter {
 
   updateIndexByKey(): void {
     this._indexByKey = {};
-    each(this._dataStructure, (index, node) => {
+    each(this._dataStructure, (index: number, node: InternalNode): void => {
       this._checkForDuplicateId(node.internalFields.key);
       this._indexByKey[node.internalFields.key] = index;
     });
@@ -296,7 +286,7 @@ class DataConverter {
 
   removeChildrenKeys(): void {
     this._indexByKey = {};
-    each(this._dataStructure, (index, node) => {
+    each(this._dataStructure, (_index: number, node: InternalNode): void => {
       node.internalFields.childrenKeys = [];
     });
   }
@@ -307,9 +297,9 @@ class DataConverter {
 
   createPlainStructure(
     items: ItemData[],
-    rootValue: ItemKey | undefined,
-    dataType: DataType,
-  ): InternalNode[] {
+    rootValue: ItemKey,
+    dataType: DataStructure | undefined,
+  ): (InternalNode | null)[] {
     this._itemsCount = 0;
     this._visibleItemsCount = 0;
     this._rootValue = rootValue;

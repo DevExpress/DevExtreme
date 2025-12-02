@@ -126,7 +126,7 @@ $(() => {
   });
 
   const customTooltipHandlers = {
-    'Average temperature': function (arg, aggregationInfo) {
+    'Average temperature': (arg, aggregationInfo) => {
       const start = aggregationInfo && aggregationInfo.intervalStart;
       const end = aggregationInfo && aggregationInfo.intervalEnd;
 
@@ -138,7 +138,7 @@ $(() => {
         }<br/>Temperature: ${arg.value.toFixed(2)} °C`,
       };
     },
-    'Temperature range': function (arg, aggregationInfo) {
+    'Temperature range': (arg, aggregationInfo) => {
       const start = aggregationInfo.intervalStart;
       const end = aggregationInfo.intervalEnd;
 

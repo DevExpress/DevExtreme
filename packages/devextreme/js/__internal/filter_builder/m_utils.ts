@@ -6,7 +6,7 @@ import { compileGetter } from '@js/core/utils/data';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { captionize } from '@js/core/utils/inflector';
-import { isDefined, isFunction } from '@js/core/utils/type';
+import { isBoolean, isDefined, isFunction } from '@js/core/utils/type';
 import formatHelper from '@js/format_helper';
 import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
@@ -54,8 +54,21 @@ const FILTER_BUILDER_ITEM_TEXT_PART_CLASS = `${FILTER_BUILDER_ITEM_TEXT_CLASS}-p
 const FILTER_BUILDER_ITEM_TEXT_SEPARATOR_CLASS = `${FILTER_BUILDER_ITEM_TEXT_CLASS}-separator`;
 const FILTER_BUILDER_ITEM_TEXT_SEPARATOR_EMPTY_CLASS = `${FILTER_BUILDER_ITEM_TEXT_SEPARATOR_CLASS}-empty`;
 
-function getFormattedValueText(field, value) {
+function getFormattedValueText(field, value): string {
   const fieldFormat = field.format || DEFAULT_FORMAT[field.dataType];
+
+  if (isBoolean(value)) {
+    const trueText: string = field.trueText || messageLocalization.format('dxDataGrid-trueText');
+    const falseText: string = field.falseText || messageLocalization.format('dxDataGrid-falseText');
+
+    return value ? trueText : falseText;
+  }
+
+  if (field.dataType === 'date' || field.dataType === 'datetime') {
+    // value can be string or number, we need to convert it to Date object
+    return formatHelper.format(new Date(value), fieldFormat);
+  }
+
   return formatHelper.format(value, fieldFormat);
 }
 
@@ -562,14 +575,8 @@ export function getCurrentLookupValueText(field, value, handler) {
 }
 
 function getPrimitiveValueText(field, value, customOperation, target, options?) {
-  let valueText;
-  if (value === true) {
-    valueText = field.trueText || messageLocalization.format('dxDataGrid-trueText');
-  } else if (value === false) {
-    valueText = field.falseText || messageLocalization.format('dxDataGrid-falseText');
-  } else {
-    valueText = getFormattedValueText(field, value);
-  }
+  let valueText = getFormattedValueText(field, value);
+
   if (field.customizeText) {
     valueText = field.customizeText.call(field, {
       value,
@@ -577,6 +584,7 @@ function getPrimitiveValueText(field, value, customOperation, target, options?) 
       target,
     });
   }
+
   if (customOperation && customOperation.customizeText) {
     valueText = customOperation.customizeText.call(customOperation, {
       value,
@@ -585,6 +593,7 @@ function getPrimitiveValueText(field, value, customOperation, target, options?) 
       target,
     }, options);
   }
+
   return valueText;
 }
 

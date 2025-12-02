@@ -20,6 +20,7 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_ranges } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-range',
@@ -27,7 +28,13 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_ranges,
+           useExisting: DxiRangeComponent,
+        }
+    ]
 })
 export class DxiRangeComponent extends CollectionNestedOption {
     @Input()

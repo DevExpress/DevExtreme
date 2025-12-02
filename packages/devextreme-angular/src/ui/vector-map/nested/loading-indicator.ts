@@ -89,7 +89,6 @@ export class DxoVectorMapLoadingIndicatorComponent extends NestedOption implemen
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'showChange' }
         ]);

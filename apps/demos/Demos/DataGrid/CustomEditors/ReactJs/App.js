@@ -36,7 +36,8 @@ const tasks = createStore({
 const cellTemplate = (container, options) => {
   const noBreakSpace = '\u00A0';
   const assignees = (options.value || []).map((assigneeId) =>
-    options.column.lookup.calculateCellValue(assigneeId));
+    options.column.lookup.calculateCellValue(assigneeId),
+  );
   const text = assignees.join(', ');
   container.textContent = text || noBreakSpace;
   container.title = text;

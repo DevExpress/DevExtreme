@@ -126,6 +126,13 @@ export abstract class DxoTabPanelOptions extends NestedOption {
         this._setOption('itemTitleTemplate', value);
     }
 
+    get keyExpr(): Function | string {
+        return this._getOption('keyExpr');
+    }
+    set keyExpr(value: Function | string) {
+        this._setOption('keyExpr', value);
+    }
+
     get loop(): boolean {
         return this._getOption('loop');
     }

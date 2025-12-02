@@ -6,8 +6,14 @@
     >
       <h2>{{ employee.text }}</h2>
     </div>
-    <div class="avatar" :title="employee.text">
-      <img :src="employee.data.avatar" :alt="`${employee.text} photo`">
+    <div
+      class="avatar"
+      :title="employee.text"
+    >
+      <img
+        :src="employee.data.avatar"
+        :alt="`${employee.text} photo`"
+      >
     </div>
     <div
       :style="'color:' + employee.color"

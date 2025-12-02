@@ -1,0 +1,58 @@
+::ng-deep .speech-to-text-demo {
+  display: flex;
+  gap: 20px;
+  height: 640px;
+}
+
+::ng-deep .speech-to-text-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+::ng-deep #text-area {
+  margin-top: 16px;
+}
+
+::ng-deep .options {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: 300px;
+  box-sizing: border-box;
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  gap: 16px;
+}
+
+::ng-deep .caption {
+  font-weight: 500;
+  font-size: 18px;
+}
+
+::ng-deep .option {
+  display: flex;
+  flex-direction: column;
+  row-gap: 4px;
+}
+
+::ng-deep .switch {
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+}
+
+::ng-deep .option-separator {
+  border-bottom: 1px solid var(--dx-color-border);
+}
+
+::ng-deep #speech-to-text.animation-disabled {
+  animation: none;
+}
+
+::ng-deep #speech-to-text.custom-button {
+  border-radius: 2rem;
+}

@@ -203,3 +203,6 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
   $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
 }
 
+:root {
+  --dx-datagrid-row-alternation-bg: #{$datagrid-row-alternation-bg};
+}

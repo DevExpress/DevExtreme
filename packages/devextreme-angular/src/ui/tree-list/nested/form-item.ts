@@ -14,9 +14,7 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
-    QueryList,
-    AfterContentInit
+    QueryList
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -32,20 +30,14 @@ import {
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiTreeListAsyncRuleComponent } from './async-rule-dxi';
-import { DxiTreeListCompareRuleComponent } from './compare-rule-dxi';
-import { DxiTreeListCustomRuleComponent } from './custom-rule-dxi';
-import { DxiTreeListEmailRuleComponent } from './email-rule-dxi';
-import { DxiTreeListNumericRuleComponent } from './numeric-rule-dxi';
-import { DxiTreeListPatternRuleComponent } from './pattern-rule-dxi';
-import { DxiTreeListRangeRuleComponent } from './range-rule-dxi';
-import { DxiTreeListRequiredRuleComponent } from './required-rule-dxi';
-import { DxiTreeListStringLengthRuleComponent } from './string-length-rule-dxi';
-import { DxiTreeListValidationRuleComponent } from './validation-rule-dxi';
 
+import {
+    PROPERTY_TOKEN_validationRules,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-tree-list-form-item',
@@ -56,7 +48,20 @@ import { DxiTreeListValidationRuleComponent } from './validation-rule-dxi';
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxoTreeListFormItemComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
-    IDxTemplateHost, AfterContentInit  {
+    IDxTemplateHost {
+    @ContentChildren(PROPERTY_TOKEN_validationRules)
+    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('validationRules', value);
+    }
+    
+    @Input()
+    get aiOptions(): { disabled?: boolean, instruction?: string | undefined } {
+        return this._getOption('aiOptions');
+    }
+    set aiOptions(value: { disabled?: boolean, instruction?: string | undefined }) {
+        this._setOption('aiOptions', value);
+    }
+
     @Input()
     get colSpan(): number | undefined {
         return this._getOption('colSpan');
@@ -175,53 +180,6 @@ export class DxoTreeListFormItemComponent extends NestedOption implements AfterV
     }
 
 
-    @ContentChildren(forwardRef(() => DxiTreeListAsyncRuleComponent)) asyncRulesChildren!: QueryList<DxiTreeListAsyncRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiTreeListCompareRuleComponent)) compareRulesChildren!: QueryList<DxiTreeListCompareRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiTreeListCustomRuleComponent)) customRulesChildren!: QueryList<DxiTreeListCustomRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiTreeListEmailRuleComponent)) emailRulesChildren!: QueryList<DxiTreeListEmailRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiTreeListNumericRuleComponent)) numericRulesChildren!: QueryList<DxiTreeListNumericRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiTreeListPatternRuleComponent)) patternRulesChildren!: QueryList<DxiTreeListPatternRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiTreeListRangeRuleComponent)) rangeRulesChildren!: QueryList<DxiTreeListRangeRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiTreeListRequiredRuleComponent)) requiredRulesChildren!: QueryList<DxiTreeListRequiredRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiTreeListStringLengthRuleComponent)) stringLengthRulesChildren!: QueryList<DxiTreeListStringLengthRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiTreeListValidationRuleComponent)) validationRulesChildren!: QueryList<DxiTreeListValidationRuleComponent>
-    
-    setValidationRules() {
-        const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.asyncRulesChildren.toArray(),
-            ...this.compareRulesChildren.toArray(),
-            ...this.customRulesChildren.toArray(),
-            ...this.emailRulesChildren.toArray(),
-            ...this.numericRulesChildren.toArray(),
-            ...this.patternRulesChildren.toArray(),
-            ...this.rangeRulesChildren.toArray(),
-            ...this.requiredRulesChildren.toArray(),
-            ...this.stringLengthRulesChildren.toArray(),
-            ...this.validationRulesChildren.toArray(),
-        ]);
-        this.setChildren('validationRules', q);
-    }
-
-
-
-
-
-
-
-
-
-
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -251,20 +209,6 @@ export class DxoTreeListFormItemComponent extends NestedOption implements AfterV
     }
 
 
-    ngAfterContentInit() {
-        this.setValidationRules();
-        
-        this.asyncRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.compareRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.customRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.emailRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.numericRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.patternRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.rangeRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.requiredRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.stringLengthRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.validationRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-    }
 }
 
 @NgModule({

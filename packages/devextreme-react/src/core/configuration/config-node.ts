@@ -1,27 +1,10 @@
+/* eslint-disable no-param-reassign */
 import * as React from 'react';
 import { separateProps } from '../widget-config';
 import { IOptionElement } from './react/element';
+import { IConfigNode, ITemplate } from '../types';
 import { getAnonymousTemplate } from './react/templates';
 import { TemplateRenderContextContent, TemplateRenderingContext } from '../contexts';
-
-interface IConfigNode {
-  parentNode?: IConfigNode | undefined;
-  index?: number | undefined;
-  templates: ITemplate[];
-  readonly name: string;
-  readonly predefinedOptions: Record<string, any>;
-  readonly initialOptions: Record<string, any>;
-  readonly options: Record<string, any>;
-  readonly configs: Record<string, IConfigNode>;
-  readonly configCollections: Record<string, IConfigNode[]>;
-}
-
-interface ITemplate {
-  optionName: string;
-  isAnonymous: boolean;
-  type: 'component' | 'render' | 'children';
-  content: any;
-}
 
 interface NodeConfigBuilder {
   node: IConfigNode;
@@ -38,7 +21,7 @@ function buildNodeFullName(node: IConfigNode): string {
   let currentNode: IConfigNode | undefined = node;
   let fullName = '';
 
-  while (currentNode && currentNode.name) {
+  while (currentNode?.name) {
     fullName = currentNode.name.concat(
       typeof currentNode.index === 'number' ? `[${currentNode.index}]` : '',
       fullName ? `.${fullName}` : '',
@@ -117,7 +100,8 @@ const createConfigBuilder: (
         const template = getAnonymousTemplate(
           optionElement.props,
           templateMeta,
-          hasTemplateRendered && (optionElement.descriptor.isCollection || parentFullName.length > 0),
+          hasTemplateRendered
+            && (optionElement.descriptor.isCollection || parentFullName.length > 0),
         );
 
         if (template) {
@@ -144,6 +128,4 @@ const createConfigBuilder: (
 export {
   buildNodeFullName,
   createConfigBuilder,
-  IConfigNode,
-  ITemplate,
 };

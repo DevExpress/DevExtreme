@@ -20,7 +20,6 @@ QUnit.test('widgets-base', function(assert) {
         'dxCheckBox',
         'dxColorBox',
         'dxDateBox',
-        'dxDeferRendering',
         'dxFileUploader',
         'dxForm',
         'dxGallery',

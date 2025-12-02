@@ -25,7 +25,6 @@ $(() => {
     itemTemplate(data) {
       const price = formatCurrency(data.UnitPrice);
       return $('<div>')
-        .append($('<div>').text(data.CategoryName))
         .append($('<div>').text(data.ProductName))
         .append($('<b>').text(price));
     },

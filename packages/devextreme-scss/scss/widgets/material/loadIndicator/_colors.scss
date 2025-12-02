@@ -14,13 +14,13 @@ $load-indicator-animation-sparkle-bg-color2: null !default;
 $load-indicator-animation-sparkle-bg-color3: null !default;
 
 @if $mode == "light" {
-  $load-indicator-animation-sparkle-bg-color1: lighten(desaturate($base-accent, 3.66), 12.94) !default;
-  $load-indicator-animation-sparkle-bg-color2: lighten(desaturate($base-accent, 3.68), 25.88) !default;
-  $load-indicator-animation-sparkle-bg-color3: lighten(saturate(adjust-hue($base-accent, -1), 5.90), 34.31) !default;
+  $load-indicator-animation-sparkle-bg-color1: $base-accent !default;
+  $load-indicator-animation-sparkle-bg-color2: lighten(desaturate(adjust-hue($base-accent, 4), 6.73), 25.88) !default;
+  $load-indicator-animation-sparkle-bg-color3: lighten(desaturate(adjust-hue($base-accent, 4), 6.87), 34.71) !default;
 }
 
 @else if $mode == "dark" {
-  $load-indicator-animation-sparkle-bg-color1: lighten(desaturate($base-accent, 3.66), 12.94) !default;
-  $load-indicator-animation-sparkle-bg-color2: lighten(desaturate($base-accent, 3.68), 25.88) !default;
-  $load-indicator-animation-sparkle-bg-color3: lighten(saturate(adjust-hue($base-accent, -1), 5.90), 34.31) !default;
+  $load-indicator-animation-sparkle-bg-color1: lighten($base-accent, 19.22) !default;
+  $load-indicator-animation-sparkle-bg-color2: lighten(desaturate(adjust-hue($base-accent, 2), 58.44), 1.18) !default;
+  $load-indicator-animation-sparkle-bg-color3: darken(desaturate(adjust-hue($base-accent, 3), 64.56), 7.45) !default;
 }

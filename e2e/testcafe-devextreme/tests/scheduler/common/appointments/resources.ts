@@ -2,6 +2,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import TagBox from 'devextreme-testcafe-models/tagBox';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
+import { Themes } from '../../../../helpers/themes';
 
 fixture.disablePageReloads`Appointment resources`
   .page(url(__dirname, '../../../container.html'));
@@ -106,11 +107,10 @@ test('Scheduler should renders correctly if resource dataSource is not set', asy
 test('Resource with allowMultiple should be set correctly for new the appointment (T1075028)', async (t) => {
   const scheduler = new Scheduler('#container');
   const cell = scheduler.getDateTableCell(2, 0);
-  const popup = scheduler.appointmentPopup;
 
   await t
     .doubleClick(cell)
-    .expect(popup.element.exists)
+    .expect(scheduler.appointmentPopup.popup.isVisible())
     .ok();
 
   const resourceTagBox = new TagBox('.dx-tagbox');
@@ -149,7 +149,7 @@ test('Resource with allowMultiple should be set correctly for new the appointmen
   }],
 }));
 
-test('Resource color should be correct for the complex resource id without grouping', async (t) => {
+test.meta({ runInTheme: Themes.genericLight })('Resource color should be correct for the complex resource id without grouping', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointmentA = scheduler.getAppointment('a');
   const appointmentB = scheduler.getAppointment('b');

@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
-import Menu from 'devextreme-react/menu';
-import SelectBox from 'devextreme-react/select-box';
-import CheckBox from 'devextreme-react/check-box';
+import { Menu } from 'devextreme-react/menu';
+import { SelectBox } from 'devextreme-react/select-box';
+import { CheckBox } from 'devextreme-react/check-box';
 import service from './data.js';
 
 const orientations = ['horizontal', 'vertical'];
@@ -18,37 +18,26 @@ const showSubmenuModes = [
     delay: { show: 0, hide: 300 },
   },
 ];
+const isProductItem = (item) => !('items' in item);
 const App = () => {
   const [showFirstSubmenuModes, setShowFirstSubmenuModes] = useState(showSubmenuModes[1]);
   const [orientation, setOrientation] = useState('horizontal');
   const [hideSubmenuOnMouseLeave, setHideSubmenuOnMouseLeave] = useState(false);
   const [currentProduct, setCurrentProduct] = useState(null);
-  const itemClick = useCallback(
-    (e) => {
-      if (e.itemData.price) {
-        setCurrentProduct(e.itemData);
-      }
-    },
-    [setCurrentProduct],
-  );
-  const showSubmenuModeChanged = useCallback(
-    (e) => {
-      setShowFirstSubmenuModes(e.value);
-    },
-    [setShowFirstSubmenuModes],
-  );
-  const orientationChanged = useCallback(
-    (e) => {
-      setOrientation(e.value);
-    },
-    [setOrientation],
-  );
-  const hideSubmenuOnMouseLeaveChanged = useCallback(
-    (e) => {
-      setHideSubmenuOnMouseLeave(e.value);
-    },
-    [setHideSubmenuOnMouseLeave],
-  );
+  const itemClick = useCallback((e) => {
+    if (isProductItem(e.itemData)) {
+      setCurrentProduct(e.itemData);
+    }
+  }, []);
+  const showSubmenuModeChanged = useCallback((e) => {
+    setShowFirstSubmenuModes(e.value);
+  }, []);
+  const orientationChanged = useCallback((e) => {
+    setOrientation(e.value);
+  }, []);
+  const hideSubmenuOnMouseLeaveChanged = useCallback((e) => {
+    setHideSubmenuOnMouseLeave(e.value);
+  }, []);
   return (
     <div className="form">
       <div>

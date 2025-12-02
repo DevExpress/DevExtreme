@@ -1,4 +1,4 @@
-import Toast from '../__internal/ui/toast/m_toast';
+import Toast from '../__internal/ui/toast/toast';
 
 export default Toast;
 

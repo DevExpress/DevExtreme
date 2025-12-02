@@ -6,7 +6,7 @@ export class Temperature {
   value: number;
 }
 
-const temperaturesData : Temperature[] = [{
+const temperaturesData: Temperature[] = [{
   day: '1',
   value: 57,
 }, {

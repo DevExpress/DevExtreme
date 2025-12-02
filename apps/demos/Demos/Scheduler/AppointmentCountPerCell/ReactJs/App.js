@@ -33,6 +33,7 @@ const App = () => (
       dataSource={resourcesData}
       fieldExpr="roomId"
       label="Room"
+      icon="conferenceroomoutline"
     />
   </Scheduler>
 );

@@ -1,5 +1,3 @@
-/* eslint-disable import/named */
-/* eslint-disable @typescript-eslint/no-type-alias */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import {
   Store,

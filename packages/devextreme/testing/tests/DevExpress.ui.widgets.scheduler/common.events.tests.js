@@ -8,9 +8,10 @@ import { isRenderer } from 'core/utils/type';
 import { DataSource } from 'common/data/data_source/data_source';
 
 import $ from 'jquery';
-import dxScheduler from '__internal/scheduler/m_scheduler';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
+
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(() => initTestMarkup());
 
@@ -224,8 +225,8 @@ QUnit.module('Events', {
 
         const changedItems = appointments.option('items');
 
-        assert.notDeepEqual(initialItems[0].settings, changedItems[0].settings, 'Item\'s settings were changed');
-        assert.notDeepEqual(initialItems[1].settings, changedItems[1].settings, 'Item\'s settings were changed');
+        assert.notDeepEqual(initialItems[0], changedItems[0], 'Item\'s settings were changed');
+        assert.notDeepEqual(initialItems[1], changedItems[1], 'Item\'s settings were changed');
     });
 
     QUnit.test('targetedAppointmentData should return correct allDay appointmentData', async function(assert) {
@@ -322,26 +323,6 @@ QUnit.module('Events', {
 
         scheduler.instance.option('currentView', 'agenda');
         assert.ok(true, 'currentView was changed to agenda correctly');
-    });
-
-    QUnit.test('onAppointmentRendered should not contain information about particular appt resources if there are not groups(T413561)', async function(assert) {
-        const resourcesSpy = sinon.spy(dxScheduler.prototype, 'setTargetedAppointmentResources');
-
-        await createWrapper({
-            dataSource: new DataSource([
-                {
-                    startDate: new Date(2015, 1, 9, 16),
-                    endDate: new Date(2015, 1, 9, 17),
-                    text: 'caption',
-                    recurrenceRule: 'FREQ=YEARLY'
-                }
-            ]),
-            currentDate: new Date(2015, 1, 9),
-            views: ['week'],
-            currentView: 'week'
-        });
-
-        assert.equal(resourcesSpy.callCount, 2, 'Resources aren\'t required');
     });
 
     QUnit.test('onAppointmentClick should fires when appointment is clicked', async function(assert) {
@@ -502,7 +483,7 @@ QUnit.module('Events', {
             onAppointmentClick: function(e) {
                 const targetedAppointmentData = e.targetedAppointmentData;
 
-                assert.equal(targetedAppointmentData.owner.id, 2, 'Owner id is OK');
+                assert.deepEqual(targetedAppointmentData.owner.id, [2], 'Owner id is OK');
                 assert.equal(targetedAppointmentData.priority, 1, 'Priority is OK');
             },
             onAppointmentRendered: function(e) {
@@ -513,7 +494,7 @@ QUnit.module('Events', {
                     expectedOwnerId = 2;
                 }
 
-                assert.equal(targetedAppointmentData.owner.id, expectedOwnerId, 'Owner id is OK on rendered');
+                assert.deepEqual(targetedAppointmentData.owner.id, [expectedOwnerId], 'Owner id is OK on rendered');
                 assert.equal(targetedAppointmentData.priority, 1, 'Priority is OK on rendered');
             }
         });
@@ -642,7 +623,10 @@ QUnit.module('Events', {
         };
         const scheduler = await createWrapper({
             currentView: 'month',
-            onAppointmentFormOpening: stub
+            onAppointmentFormOpening: stub,
+            editing: {
+                legacyForm: true
+            },
         });
 
         scheduler.instance.showAppointmentPopup(data);
@@ -688,7 +672,7 @@ QUnit.module('Events', {
         });
 
         const workspaceSpy = sinon.spy(scheduler.instance._workSpace, '_dimensionChanged');
-        const appointmentsSpy = sinon.spy(scheduler.instance._appointments, '_repaintAppointments');
+        const appointmentsSpy = sinon.spy(scheduler.instance._appointments, 'repaintAppointments');
 
         resizeCallbacks.fire();
 

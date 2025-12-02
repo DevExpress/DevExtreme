@@ -1,6 +1,7 @@
 @use "sass:color";
 @use "../colors" as *;
 @use "../textEditor/colors" as *;
+@use "../button/colors" as *;
 
 // adduse
 
@@ -16,6 +17,8 @@ $chat-background-color: $base-bg !default;
 */
 $chat-border-color: $base-border-color !default;
 $chat-messagebox-border-color: $chat-border-color !default;
+$chat-messagebox-file-background-color: $button-normal-text-hover-bg !default;
+$chat-messagebox-file-cancel-button-secondary-color: $button-normal-text-active-bg !default;
 $chat-message-editing-preview-accent-color: $base-accent !default;
 $chat-message-editing-preview-cancel-button-color: $texteditor-label-color !default;
 
@@ -127,12 +130,18 @@ $chat-typingindicator-circle-bg-color-center: rgba($base-inverted-bg, 0.6) !defa
 */
 $chat-typingindicator-circle-bg-color: rgba($base-inverted-bg, 0.4) !default;
 
+$chat-file-container-background-color: $base-bg !default;
+$chat-file-container-box-shadow: null !default;
+$chat-file-secondary-color: $base-icon-color !default;
+
 @if $mode == "light" {
   $chat-bubble-background-color-primary: rgba($base-accent, 0.08) !default;
+  $chat-file-container-box-shadow: 0 1px 1px 0 color.change($base-shadow-color, $alpha: 0.14), 0 1px 1px 0 color.change($base-shadow-color, $alpha: 0.12), 0 1px 3px 0 color.change($base-shadow-color, $alpha: 0.2) !default;
 }
 
 @else if $mode == "dark" {
   $chat-bubble-background-color-primary: rgba(lighten($base-accent, 19.22), 0.08) !default;
+  $chat-file-container-box-shadow: 0 1px 1px 0 color.change($base-shadow-color, $alpha: 0.28), 0 1px 1px 0 color.change($base-shadow-color, $alpha: 0.24), 0 1px 3px 0 color.change($base-shadow-color, $alpha: 0.4) !default;
 }
 
 $chat-messagelist-contextmenu-delete-button-color: $base-danger !default;

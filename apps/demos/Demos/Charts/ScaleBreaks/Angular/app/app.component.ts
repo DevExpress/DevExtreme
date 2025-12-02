@@ -26,9 +26,9 @@ if (window && window.config?.packageConfigPaths) {
 export class AppComponent {
   data: SolarSystemObject[];
 
-  lineStyles: Array<string> = ['waved', 'straight'];
+  lineStyles: string[] = ['waved', 'straight'];
 
-  breaksCount: Array<number> = [1, 2, 3, 4];
+  breaksCount: number[] = [1, 2, 3, 4];
 
   lineStyleValue: string;
 

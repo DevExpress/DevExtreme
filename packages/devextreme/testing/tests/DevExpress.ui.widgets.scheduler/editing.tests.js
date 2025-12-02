@@ -1,13 +1,10 @@
 const $ = require('jquery');
 const devices = require('core/devices');
-const tooltip = require('__internal/ui/tooltip/m_tooltip');
 const fx = require('common/core/animation/fx');
 const keyboardMock = require('../../helpers/keyboardMock.js');
 const { createWrapper } = require('../../helpers/scheduler/helpers.js');
 const { waitAsync } = require('../../helpers/scheduler/waitForAsync.js');
-const dataUtils = require('core/element_data');
 
-require('generic_light.css!');
 require('__internal/scheduler/m_scheduler');
 require('ui/drop_down_button');
 
@@ -80,29 +77,13 @@ QUnit.test('Appointment should not be draggable & resizable', async function(ass
     assert.ok(appointments.option('allowResize'), 'Resize is allowed');
 });
 
-QUnit.test('Edit button should not be contain the \'pencil\' icon', async function(assert) {
-    await this.createInstance({
-        currentDate: new Date(2015, 5, 15),
-        firstDayOfWeek: 1,
-        dataSource: [{
-            text: 'a',
-            startDate: new Date(2015, 5, 15, 10),
-            endDate: new Date(2015, 5, 15, 10, 30)
-        }]
-    });
-
-    const $appointment = $(this.instance.$element().find('.dx-scheduler-appointment').first());
-
-    const itemData = dataUtils.data($appointment[0], 'dxItemData');
-
-    this.instance.showAppointmentTooltip(itemData, $appointment);
-
-    assert.notOk($('.dx-scheduler-appointment-tooltip-buttons .dx-button').hasClass('dx-button-has-icon'), 'Edit button is OK');
-    tooltip.hide();
-});
-
 QUnit.test('ReadOnly option should be passed to the details appointment view', async function(assert) {
-    await this.createInstance();
+    await this.createInstance({
+        editing: {
+            allowUpdating: false,
+            legacyForm: true
+        }
+    });
 
     this.instance.showAppointmentPopup({
         text: 'a',
@@ -114,7 +95,7 @@ QUnit.test('ReadOnly option should be passed to the details appointment view', a
 
     assert.ok(detailsAppointmentView.option('readOnly'), 'ReadOnly option is correct');
 
-    this.instance.option('editing', true);
+    this.instance.option('editing.allowUpdating', true);
     this.instance.showAppointmentPopup({
         text: 'a',
         startDate: new Date(2015, 5, 15, 10),
@@ -128,7 +109,8 @@ QUnit.test('ReadOnly option should be passed to the details appointment view', a
 QUnit.test('Details appointment view should be readOnly if editing.allowUpdating=false', async function(assert) {
     await this.createInstance({
         editing: {
-            allowUpdating: false
+            allowUpdating: false,
+            legacyForm: true
         }
     });
 
@@ -160,7 +142,8 @@ QUnit.test('Details appointment view shouldn\'t be readOnly when adding new appo
         currentDate: new Date(2015, 5, 14),
         editing: {
             allowUpdating: false,
-            allowAdding: true
+            allowAdding: true,
+            legacyForm: true
         }
     });
 
@@ -179,7 +162,8 @@ QUnit.test('Details appointment form should be readOnly after adding new appoint
     await this.createInstance({
         currentDate: new Date(2015, 5, 14),
         editing: {
-            allowUpdating: false
+            allowUpdating: false,
+            legacyForm: true
         },
         dataSource: []
     });
@@ -204,7 +188,8 @@ QUnit.test('Details form of new appointment shouldn\'t be readOnly after try to 
     await this.createInstance({
         currentDate: new Date(2015, 5, 14),
         editing: {
-            allowUpdating: false
+            allowUpdating: false,
+            legacyForm: true
         },
         dataSource: [first]
     });

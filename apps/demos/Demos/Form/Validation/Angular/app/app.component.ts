@@ -67,9 +67,9 @@ export class AppComponent {
     mode: 'password',
     valueChangeEvent: 'keyup',
     onValueChanged: () => {
-      let editor = this.form.instance.getEditor('ConfirmPassword');
+      const editor = this.form.instance.getEditor('ConfirmPassword');
       if (editor.option('value')) {
-        let instance = Validator.getInstance(editor.element()) as Validator;
+        const instance = Validator.getInstance(editor.element()) as Validator;
         instance.validate();
       }
     },
@@ -173,7 +173,7 @@ export class AppComponent {
   }
 
   changePasswordMode = (name: string) => {
-    let editor = this.form.instance.getEditor(name);
+    const editor = this.form.instance.getEditor(name);
     editor.option(
       'mode',
       editor.option('mode') === 'text' ? 'password' : 'text',

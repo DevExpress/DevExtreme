@@ -14,7 +14,7 @@ $(() => {
       enabled: true,
       pageSize: 15,
     },
-    pager:{
+    pager: {
       visible: true,
     },
     headerFilter: {
@@ -100,7 +100,7 @@ $(() => {
   });
 
   function dropDownBoxEditorTemplate(cellElement, cellInfo) {
-    const selectedRowKeys = cellInfo.value !== null && cellInfo.value !== undefined ? [cellInfo.value] : []
+    const selectedRowKeys = cellInfo.value !== null && cellInfo.value !== undefined ? [cellInfo.value] : [];
     return $('<div>').dxDropDownBox({
       dropDownOptions: { width: 500 },
       dataSource: employees,
@@ -117,7 +117,7 @@ $(() => {
           scrolling: { mode: 'virtual' },
           height: 250,
           selection: { mode: 'single' },
-          selectedRowKeys: selectedRowKeys,
+          selectedRowKeys,
           focusedRowEnabled: true,
           focusedRowKey: cellInfo.value,
           onContextMenuPreparing: (e) => {

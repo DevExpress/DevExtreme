@@ -13,7 +13,7 @@
   </li>
 </template>
 <script setup lang="ts">
-import { DxCheckBox } from 'devextreme-vue/check-box';
+import { DxCheckBox, type DxCheckBoxTypes } from 'devextreme-vue/check-box';
 import { products } from './data.ts';
 
 type Product = typeof products[0];
@@ -26,7 +26,7 @@ const props = withDefaults(defineProps<{
 
 const emit = defineEmits(['checked']);
 
-function onValueChanged(e) {
+function onValueChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
   emit('checked', e, props.product);
 }
 </script>

@@ -1,5 +1,6 @@
 import Editor, {
     EditorOptions,
+    EditorOptionsWithValue,
 } from './editor/editor';
 
 /**
@@ -28,4 +29,6 @@ export interface dxTrackBarOptions<TComponent> extends EditorOptions<TComponent>
  * @namespace DevExpress.ui
  * @options dxTrackBarOptions
  */
-export default class dxTrackBar<TProperties> extends Editor<TProperties> { }
+export default class dxTrackBar<
+    TProperties extends EditorOptionsWithValue,
+> extends Editor<TProperties> { }

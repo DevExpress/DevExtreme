@@ -18,10 +18,10 @@ export default function App() {
             <img alt="Kevin Carter" src="../../../../images/mentions/Kevin-Carter.png" />
           </div>
           <div className="name">
-              Kevin Carter
+            Kevin Carter
           </div>
           <div className="date">
-              07/03/19 - 12:22AM
+            07/03/19 - 12:22AM
           </div>
           <div className="text">
             <span className="dx-mention" spellCheck="false"><span><span>@</span>John Heart</span></span> What experience do you have in this field?
@@ -33,14 +33,14 @@ export default function App() {
             <img alt="John Heart" src="../../../../images/mentions/John-Heart.png" />
           </div>
           <div className="name">
-              John Heart
+            John Heart
           </div>
           <div className="date">
-              07/03/19 - 12:25AM
+            07/03/19 - 12:25AM
           </div>
           <div className="text">
-              I&apos;ve been in the audio/video industry since 2001,
-              and I&apos;ve been the CEO of DevAv since 2009.
+            I&apos;ve been in the audio/video industry since 2001,
+            and I&apos;ve been the CEO of DevAv since 2009.
           </div>
         </div>
         <br />
@@ -49,13 +49,13 @@ export default function App() {
             <img alt="Kevin Carter" src="../../../../images/mentions/Kevin-Carter.png" />
           </div>
           <div className="name">
-              Kevin Carter
+            Kevin Carter
           </div>
           <div className="date">
-              07/03/19 - 12:26AM
+            07/03/19 - 12:26AM
           </div>
           <div className="text">
-              That&apos;s very interesting. <span className="dx-mention" spellCheck="false"><span><span>@</span>Olivia Peyton</span></span>, what do you think?
+            That&apos;s very interesting. <span className="dx-mention" spellCheck="false"><span><span>@</span>Olivia Peyton</span></span>, what do you think?
           </div>
         </div>
       </div>

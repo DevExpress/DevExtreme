@@ -8,7 +8,6 @@ const App = () => (
   <DataGrid
     dataSource={customers}
     keyExpr="ID"
-    defaultColumns={columns}
     showBorders={true}
   >
     { columns.map((column, index) => <Column dataField={column} key={index} />) }

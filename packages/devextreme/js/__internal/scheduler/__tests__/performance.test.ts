@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
-  describe, expect, it, jest,
+  beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 
-import Scheduler from '../m_scheduler';
 import timezoneUtils from '../m_utils_time_zone';
+import { createScheduler } from './__mock__/create_scheduler';
 
 const startDate = new Date(2025, 0, 6);
 const delta = 15 * 60 * 1000;
@@ -16,12 +15,15 @@ const dataSource = Array.from({ length: 10 }, (_, i) => ({
 }));
 
 describe('scheduler', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it.each([
     { timeZone: 'Europe/London' },
     { timeZone: undefined },
   ])('should memo Intl object for timezone: $timeZone', async ({ timeZone }) => {
-    const container = document.createElement('div');
-    const scheduler = new Scheduler(container, {
+    const { container } = await createScheduler({
       dataSource,
       timeZone,
       views: ['week'],
@@ -32,6 +34,7 @@ describe('scheduler', () => {
       height: 600,
     });
     await timezoneUtils.cacheTimeZones();
+    timezoneUtils.getMachineTimezoneName();
 
     expect(container.classList).toContain('dx-scheduler');
 

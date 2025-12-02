@@ -12,7 +12,6 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -27,10 +26,13 @@ import {
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-context-menu-item',
@@ -38,10 +40,22 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost]
+    providers: [
+        NestedOptionHost,
+        DxTemplateHost,
+        {
+           provide: PROPERTY_TOKEN_items,
+           useExisting: DxiContextMenuItemComponent,
+        }
+    ]
 })
 export class DxiContextMenuItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
     @Input()
     get beginGroup(): boolean {
         return this._getOption('beginGroup');
@@ -127,14 +141,6 @@ export class DxiContextMenuItemComponent extends CollectionNestedOption implemen
         return 'items';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiContextMenuItemComponent))
-    get itemsChildren(): QueryList<DxiContextMenuItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

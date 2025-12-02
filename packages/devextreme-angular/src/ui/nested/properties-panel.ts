@@ -10,7 +10,6 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -22,10 +21,13 @@ import { Command, CustomCommand, PanelVisibility } from 'devextreme/ui/diagram';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiTabComponent } from './tab-dxi';
 
+import {
+    PROPERTY_TOKEN_tabs,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-properties-panel',
@@ -36,6 +38,11 @@ import { DxiTabComponent } from './tab-dxi';
     providers: [NestedOptionHost]
 })
 export class DxoPropertiesPanelComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_tabs)
+    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('tabs', value);
+    }
+    
     @Input()
     get tabs(): Array<any | { commands?: Array<CustomCommand | Command>, groups?: Array<any | { commands?: Array<CustomCommand | Command>, title?: string }>, title?: string }> {
         return this._getOption('tabs');
@@ -57,14 +64,6 @@ export class DxoPropertiesPanelComponent extends NestedOption implements OnDestr
         return 'propertiesPanel';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiTabComponent))
-    get tabsChildren(): QueryList<DxiTabComponent> {
-        return this._getOption('tabs');
-    }
-    set tabsChildren(value) {
-        this.setChildren('tabs', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

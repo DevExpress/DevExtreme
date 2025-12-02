@@ -6,7 +6,7 @@ import List from 'ui/list';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 import localization from 'localization';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(() => {
     const markup =
@@ -27,10 +27,6 @@ const LIST_GROUP_HEADER_CLASS = 'dx-list-group-header';
 const LIST_GROUP_BODY_CLASS = 'dx-list-group-body';
 const LIST_ITEM_BEFORE_BAG_CLASS = 'dx-list-item-before-bag';
 
-const toSelector = cssClass => {
-    return '.' + cssClass;
-};
-
 QUnit.module('List markup', {}, () => {
     QUnit.test('rendering empty message for empty list', function(assert) {
         const element = $('#list').dxList();
@@ -41,7 +37,7 @@ QUnit.module('List markup', {}, () => {
         const element = $('#list').dxList({ items: ['0', '1'] });
         assert.ok(element.hasClass(LIST_CLASS));
 
-        const items = element.find(toSelector(LIST_ITEM_CLASS));
+        const items = element.find(`.${LIST_ITEM_CLASS}`);
         assert.equal(items.length, 2);
         assert.ok(items.eq(0).hasClass(LIST_ITEM_CLASS));
         assert.ok(items.eq(1).hasClass(LIST_ITEM_CLASS));
@@ -56,7 +52,7 @@ QUnit.module('List markup', {}, () => {
             }
         });
 
-        const item = element.find(toSelector(LIST_ITEM_CLASS));
+        const item = element.find(`.${LIST_ITEM_CLASS}`);
 
         assert.equal(item.eq(0).text(), '0: a');
         assert.equal(item.eq(1).text(), '1: b');
@@ -70,7 +66,7 @@ QUnit.module('List markup', {}, () => {
             }
         });
 
-        const item = element.find(toSelector(LIST_ITEM_CLASS));
+        const item = element.find(`.${LIST_ITEM_CLASS}`);
 
         assert.equal(item.eq(0).text(), '0: a');
         assert.equal(item.eq(1).text(), '1: b');
@@ -110,16 +106,16 @@ QUnit.module('List markup', {}, () => {
             grouped: true
         });
 
-        const groups = element.find(toSelector(LIST_GROUP_CLASS));
+        const groups = element.find(`.${LIST_GROUP_CLASS}`);
         assert.equal(groups.length, 2);
 
-        const groupHeaders = element.find(toSelector(LIST_GROUP_HEADER_CLASS));
+        const groupHeaders = element.find(`.${LIST_GROUP_HEADER_CLASS}`);
         assert.equal(groupHeaders.length, 2);
 
         assert.equal(groupHeaders.eq(0).text(), 'group1');
         assert.equal(groupHeaders.eq(1).text(), 'group2');
 
-        const items = element.find(toSelector(LIST_ITEM_CLASS));
+        const items = element.find(`.${LIST_ITEM_CLASS}`);
         assert.equal(items.length, 3);
     });
 
@@ -144,7 +140,7 @@ QUnit.module('List markup', {}, () => {
             }
         });
 
-        const groupHeaders = element.find(toSelector(LIST_GROUP_HEADER_CLASS));
+        const groupHeaders = element.find(`.${LIST_GROUP_HEADER_CLASS}`);
         assert.equal(groupHeaders.eq(0).text(), '0: a');
         assert.equal(groupHeaders.eq(1).text(), '1: b');
     });
@@ -166,7 +162,7 @@ QUnit.module('List markup', {}, () => {
             }
         });
 
-        const groupHeaders = element.find(toSelector(LIST_GROUP_HEADER_CLASS));
+        const groupHeaders = element.find(`.${LIST_GROUP_HEADER_CLASS}`);
         assert.ok(groupHeaders.find('span').length);
     });
 
@@ -451,14 +447,14 @@ QUnit.module('decorators markup', {}, () => {
             itemDeleteMode: 'static'
         }));
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
 
-        const $button = $item.find(toSelector(STATIC_DELETE_BUTTON_CLASS));
+        const $button = $item.find(`.${STATIC_DELETE_BUTTON_CLASS}`);
 
         assert.equal($button.length, 1, 'delete button was rendered');
         assert.ok($button.parent().hasClass(STATIC_DELETE_BUTTON_CONTAINER_CLASS), 'delete button was rendered in correct container');
-        assert.equal($list.find(toSelector(STATIC_DELETE_BUTTON_CLASS)).length, 3, 'delete button was rendered for all items');
+        assert.equal($list.find(`.${STATIC_DELETE_BUTTON_CLASS}`).length, 3, 'delete button was rendered for all items');
     });
 
     QUnit.test('list item markup, toggle delete decorator', function(assert) {
@@ -468,12 +464,12 @@ QUnit.module('decorators markup', {}, () => {
             itemDeleteMode: 'toggle'
         }));
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
 
-        const $deleteToggle = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS)).children(toSelector(TOGGLE_DELETE_SWITCH_CLASS));
+        const $deleteToggle = $item.children(`.${LIST_ITEM_BEFORE_BAG_CLASS}`).children(`.${TOGGLE_DELETE_SWITCH_CLASS}`);
         assert.ok($deleteToggle.length, 'toggle generated');
-        assert.ok($deleteToggle.find(toSelector(TOGGLE_DELETE_SWITCH_ICON_CLASS)).length, 'toggle icon generated');
+        assert.ok($deleteToggle.find(`.${TOGGLE_DELETE_SWITCH_ICON_CLASS}`).length, 'toggle icon generated');
     });
 
     QUnit.test('list item delete icon is visible when showSelectionControls=true (T966717)', function(assert) {
@@ -579,10 +575,10 @@ QUnit.module('decorators markup', {}, () => {
             selectionMode: 'multiple'
         }));
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
-        const $checkboxContainer = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS));
-        const $checkbox = $checkboxContainer.children(toSelector(SELECT_CHECKBOX_CLASS));
+        const $checkboxContainer = $item.children(`.${LIST_ITEM_BEFORE_BAG_CLASS}`);
+        const $checkbox = $checkboxContainer.children(`.${SELECT_CHECKBOX_CLASS}`);
 
         assert.ok($checkboxContainer.hasClass(SELECT_CHECKBOX_CONTAINER_CLASS), 'container has proper class');
         assert.ok($checkbox.hasClass('dx-checkbox'), 'select generated');
@@ -595,10 +591,10 @@ QUnit.module('decorators markup', {}, () => {
             selectionMode: 'single'
         }));
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
-        const $radioButtonContainer = $item.children(toSelector(SELECT_RADIO_BUTTON_CONTAINER_CLASS));
-        const $radioButton = $radioButtonContainer.children(toSelector(SELECT_RADIO_BUTTON_CLASS));
+        const $radioButtonContainer = $item.children(`.${SELECT_RADIO_BUTTON_CONTAINER_CLASS}`);
+        const $radioButton = $radioButtonContainer.children(`.${SELECT_RADIO_BUTTON_CLASS}`);
 
         assert.ok($radioButton.hasClass('dx-radiobutton'), 'radio button generated');
     });
@@ -611,7 +607,7 @@ QUnit.module('decorators markup', {}, () => {
             selectAllText: 'Test'
         }));
 
-        const $multipleContainer = $list.find(toSelector(SELECT_ALL_CLASS));
+        const $multipleContainer = $list.find(`.${SELECT_ALL_CLASS}`);
         assert.equal($multipleContainer.length, 1, 'container for SelectAll rendered');
         assert.equal($multipleContainer.text(), 'Test', 'select all rendered');
         const $checkbox = $multipleContainer.find('.dx-checkbox');
@@ -632,8 +628,8 @@ QUnit.module('decorators markup', {}, () => {
             selectionMode: 'all',
         }));
 
-        const $selectAllCheckBox = $list.find(toSelector(SELECT_ALL_CHECKBOX_CLASS));
-        const $multipleContainer = $list.find(toSelector(SELECT_ALL_CLASS));
+        const $selectAllCheckBox = $list.find(`.${SELECT_ALL_CHECKBOX_CLASS}`);
+        const $multipleContainer = $list.find(`.${SELECT_ALL_CLASS}`);
 
         assert.strictEqual($selectAllCheckBox.attr('aria-label'), localizedSelectAllText, 'selectAll checkbox aria-label should be equal to localized text');
 
@@ -667,10 +663,10 @@ QUnit.module('decorators markup', {}, () => {
             }
         }));
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
-        const $handleContainer = $item.children(toSelector(REORDER_HANDLE_CONTAINER_CLASS));
-        const $handle = $handleContainer.children(toSelector(REORDER_HANDLE_CLASS));
+        const $handleContainer = $item.children(`.${REORDER_HANDLE_CONTAINER_CLASS}`);
+        const $handle = $handleContainer.children(`.${REORDER_HANDLE_CLASS}`);
 
         assert.equal($handleContainer.length, 1, 'container generated');
         assert.equal($handle.length, 1, 'handle generated');
@@ -682,7 +678,7 @@ QUnit.module('decorators markup', {}, () => {
             displayExpr: 'name'
         });
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
 
         assert.strictEqual($items.text(), 'Item 1', 'displayExpr works');
     });

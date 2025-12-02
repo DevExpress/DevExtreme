@@ -6,6 +6,7 @@ const multiProcess = require('gulp-multi-process');
 const env = require('./build/gulp/env-variables');
 const cache = require('gulp-cache');
 const shell = require('gulp-shell');
+const { REMOVE_NON_PRODUCTION_MODULE } = require('./build/gulp/context');
 
 gulp.task('clean', function(callback) {
     require('del').sync([
@@ -36,10 +37,9 @@ require('./build/gulp/aspnet');
 require('./build/gulp/vendor');
 require('./build/gulp/ts');
 require('./build/gulp/localization');
-require('./build/gulp/generator/gulpfile');
 require('./build/gulp/check_licenses');
-require('./build/gulp/qunit-in-docker');
 require('./build/gulp/systemjs');
+require('./build/gulp/state_manager');
 
 if(env.TEST_CI) {
     console.warn('Using test CI mode!');
@@ -68,14 +68,21 @@ function createMainBatch(dev) {
 function createDefaultBatch(dev) {
     const tasks = dev ? [] : ['clean'];
     tasks.push('localization');
-    tasks.push(dev ? 'generate-components-dev' : 'generate-components');
     tasks.push('transpile');
+
+    if(REMOVE_NON_PRODUCTION_MODULE) {
+        tasks.push('state-manager-replace-production-modules-transpiled-prod-renovation');
+        tasks.push('state-manager-replace-production-modules-transpiled-prod-esm');
+
+        tasks.push('state-manager-remove-development-only-modules-transpiled-prod-renovation');
+        tasks.push('state-manager-remove-development-only-modules-transpiled-prod-esm');
+    }
+
     tasks.push(dev && !env.BUILD_TESTCAFE ? 'main-batch-dev' : 'main-batch');
     if(!env.TEST_CI && !dev && !env.BUILD_TESTCAFE) {
         tasks.push('npm');
         tasks.push('check-license-notices');
     }
-
     return gulp.series(tasks);
 }
 
@@ -89,10 +96,7 @@ gulp.task('default-dev', createDefaultBatch(true));
 gulp.task('test-env', shell.task('node ./testing/launch'));
 
 gulp.task('dev-watch', gulp.parallel(
-    'generate-jquery-components-watch',
-    'generate-inferno-components-watch',
     'transpile-watch',
-    'renovated-components-watch',
     'bundler-config-watch',
     'js-bundles-watch',
     'test-env'
@@ -102,5 +106,3 @@ gulp.task('dev', gulp.series(
     'default-dev',
     'dev-watch'
 ));
-
-

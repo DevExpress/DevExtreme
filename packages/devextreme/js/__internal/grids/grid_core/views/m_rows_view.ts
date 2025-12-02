@@ -29,10 +29,10 @@ import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
 import { CLASSES as REORDERING_CLASSES } from '../columns_resizing_reordering/const';
 import type { EditingController } from '../editing/m_editing';
-import type { EditorFactory } from '../editor_factory/m_editor_factory';
 import gridCoreUtils from '../m_utils';
 import { CLASSES } from '../sticky_columns/const';
 import { ColumnsView } from './m_columns_view';
+import { getCellText } from './utils';
 
 const ROWS_VIEW_CLASS = 'rowsview';
 const CONTENT_CLASS = 'content';
@@ -279,7 +279,10 @@ export class RowsView extends ColumnsView {
         setWatcher({
           element: $row.get(0),
           watch: rowOptions.watch,
-          getter: () => this._isAltRow(row),
+          getter: () => this._isAltRow(
+            // The row needs to be obtained again because the current row is out of date.
+            this._dataController.getRowByKey(row.key),
+          ),
           callBack: (value) => {
             $row.toggleClass(ROW_ALTERNATION_CLASS, value);
           },
@@ -908,7 +911,7 @@ export class RowsView extends ColumnsView {
     parameters.data = data;
     parameters.rowType = row.rowType;
     parameters.values = row.values;
-    parameters.text = !column.command ? gridCoreUtils.formatValue(displayValue, column) : '';
+    parameters.text = getCellText(column, displayValue);
     parameters.rowIndex = row.rowIndex;
     parameters.summaryItems = summaryCells && summaryCells[options.columnIndex];
     parameters.resized = column.resizedCallbacks;
@@ -1149,10 +1152,7 @@ export class RowsView extends ColumnsView {
       // @ts-expect-error
       scrollable.update();
 
-      // @ts-expect-error
-      if (scrollable.option('useNative') || !scrollable?.isRenovated()) {
-        this._updateHorizontalScrollPosition();
-      }
+      this._updateHorizontalScrollPosition();
     }
   }
 
@@ -1271,7 +1271,6 @@ export class RowsView extends ColumnsView {
     this._toggleDraggableSourceColumnClass($rows, this.getColumns(), columnIndex, value);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _getCellElementsCore(rowIndex): dxElementWrapper | undefined {
     const $cells = super._getCellElementsCore.apply(this, arguments as any);
 
@@ -1436,6 +1435,26 @@ export class RowsView extends ColumnsView {
 
     return $rowsViewElement.is(this.element());
   }
+
+  /**
+   * @extended: TreeList's rowsView extender & selection
+   */
+  protected _renderIcons(
+    $iconContainer: dxElementWrapper,
+    options,
+  ): dxElementWrapper {
+    return $iconContainer;
+  }
+
+  public normalizeScrollLeft(scrollLeft: number): number {
+    const scrollable = this.getScrollable();
+
+    if (this.option('rtlEnabled') && scrollable) {
+      return getWidth(scrollable.$content()) - getWidth(scrollable.$element()) - scrollLeft;
+    }
+
+    return scrollLeft;
+  }
 }
 
 export const rowsModule = {
@@ -1453,7 +1472,6 @@ export const rowsModule = {
         width: 200,
         height: 90,
         showIndicator: true,
-        indicatorSrc: '',
         showPane: true,
       },
       dataRowTemplate: null,

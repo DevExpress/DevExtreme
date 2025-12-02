@@ -1,8 +1,9 @@
+import type { dxElementWrapper } from '@js/core/renderer';
 import type { Appointment, Properties } from '@js/ui/scheduler';
 
 import type { ResourceLoader } from './utils/loader/resource_loader';
+import type { AppointmentViewModelPlain } from './view_model/types';
 
-export type RawViewType = Required<Properties>['views'][number];
 export type Direction = 'vertical' | 'horizontal';
 export type GroupOrientation = 'vertical' | 'horizontal';
 export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
@@ -14,6 +15,10 @@ export type HeaderCellTextFormat = string | ((date: Date) => string);
 export interface SafeAppointment extends Appointment {
   startDate: Date | string;
   endDate: Date | string;
+}
+export interface TargetedAppointment extends SafeAppointment {
+  displayStartDate: Date;
+  displayEndDate: Date;
 }
 
 export interface AppointmentDataItem {
@@ -29,31 +34,12 @@ export interface AppointmentDataItem {
   rawAppointment: SafeAppointment;
 }
 
-// TODO: add correct types here. Agenda and other views have different types
-export interface BaseAppointmentViewModelSettings extends Record<string, unknown> {
-  allDay?: boolean;
-  direction: string;
-  height: number | string;
-  width: number | string;
-  groupIndex: number;
-  sortedIndex: number;
-}
-
-export interface AppointmentViewModel {
-  itemData: SafeAppointment;
-  needRepaint: boolean;
-  needRemove: boolean;
-  settings: BaseAppointmentViewModelSettings[];
-}
-
 export interface AppointmentGeometry {
   empty: boolean;
   left: number;
   top: number;
   width: number;
   height: number;
-  leftVirtualWidth: number;
-  topVirtualHeight: number;
 }
 
 export type GetDateForHeaderText = (
@@ -105,7 +91,7 @@ export interface ViewCellData {
   isFirstGroupCell: boolean;
   isLastGroupCell: boolean;
   key: number;
-  firstDayOfMonth?: boolean;
+  isFirstDayMonthHighlighting?: boolean;
   isSelected?: boolean;
   isFocused?: boolean;
   highlighted?: boolean;
@@ -168,8 +154,8 @@ export interface ViewDataProviderOptions {
   firstDayOfWeek: number;
   today: Date;
 
-  isGenerateTimePanelData: boolean;
-  isGenerateWeekDaysHeaderData: boolean;
+  isGenerateTimePanelData?: boolean;
+  isGenerateWeekDaysHeaderData?: boolean;
 }
 
 export interface CellInfo {
@@ -188,8 +174,8 @@ export interface DateHeaderCellData extends ViewCellData {
 
 export interface DateHeaderData {
   dataMap: DateHeaderCellData[][];
-  leftVirtualCellWidth: number;
-  rightVirtualCellWidth: number;
+  leftVirtualCellWidth?: number;
+  rightVirtualCellWidth?: number;
   leftVirtualCellCount: number;
   rightVirtualCellCount: number;
   weekDayLeftVirtualCellWidth?: number;
@@ -235,7 +221,12 @@ export interface ViewDataProviderType {
   viewDataMap: ViewDataMap;
   timePanelData: TimePanelData;
   dateHeaderData: DateHeaderData;
-  getCellData: (rowIndex: number, columnIndex: number, isAllDay) => ViewCellData;
+  getCellData: (
+    rowIndex: number,
+    columnIndex: number,
+    isAllDay?: boolean,
+    rtlEnabled?: boolean
+  ) => ViewCellData;
   getCellCount: (config: CountGenerationConfig) => number;
   getRowCount: (config: CountGenerationConfig) => number;
   update: (options: unknown, isGenerateNewData: boolean) => void;
@@ -256,4 +247,25 @@ export interface ViewDataProviderType {
   getCellsByGroupIndexAndAllDay: (groupIndex: number, isAllDay: boolean) => ViewCellData[][];
   getCellsBetween: (first: ViewCellData, last: ViewCellData) => ViewCellData[];
   viewType: ViewType;
+}
+
+export interface AppointmentTooltipItem {
+  appointment: Appointment;
+  targetedAppointment?: Appointment | TargetedAppointment;
+  color: Promise<string | undefined>;
+}
+
+export interface CompactAppointmentOptions {
+  $container: dxElementWrapper;
+  coordinates: { top: number; left: number };
+  items: (AppointmentTooltipItem & {
+    settings: AppointmentViewModelPlain;
+  })[];
+  buttonColor: Promise<string | undefined>;
+  sortedIndex: number;
+  width: number;
+  height: number;
+  onAppointmentClick: Properties['onAppointmentClick'];
+  allowDrag: boolean;
+  isCompact: boolean;
 }

@@ -20,6 +20,7 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_sortByGroupSummaryInfo } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-sort-by-group-summary-info',
@@ -27,7 +28,13 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_sortByGroupSummaryInfo,
+           useExisting: DxiSortByGroupSummaryInfoComponent,
+        }
+    ]
 })
 export class DxiSortByGroupSummaryInfoComponent extends CollectionNestedOption {
     @Input()

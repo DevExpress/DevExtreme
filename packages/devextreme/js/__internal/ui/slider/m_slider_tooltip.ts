@@ -5,10 +5,10 @@ import type { Format } from '@js/localization';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { TooltipProperties } from '@ts/ui/m_tooltip';
 import Tooltip from '@ts/ui/m_tooltip';
+import { SliderTooltipPositionController } from '@ts/ui/slider/slider_tooltip_position_controller';
 
-import { SliderTooltipPositionController } from './m_slider_tooltip_position_controller';
-
-// NOTE: Visibility is contolled by the 'visible' option and 'dx-slider-tooltip-visible-on-hover' class.
+// NOTE: Visibility is contolled by the 'visible' option
+// and 'dx-slider-tooltip-visible-on-hover' class
 const SLIDER_TOOLTIP_VISIBILITY_CLASS = 'dx-slider-tooltip-visible-on-hover';
 
 export interface SliderTooltipProperties extends TooltipProperties {
@@ -19,6 +19,9 @@ export interface SliderTooltipProperties extends TooltipProperties {
 }
 
 class SliderTooltip extends Tooltip<SliderTooltipProperties> {
+  // @ts-expect-error ts-error
+  _positionController!: SliderTooltipPositionController;
+
   _getDefaultOptions(): SliderTooltipProperties {
     return {
       ...super._getDefaultOptions(),
@@ -62,7 +65,7 @@ class SliderTooltip extends Tooltip<SliderTooltipProperties> {
     const { value, format } = this.option();
 
     const formattedText = numberLocalization.format(value ?? 0, format);
-    this.$content().text(formattedText);
+    this.$content()?.text(formattedText);
 
     this._renderPosition();
   }

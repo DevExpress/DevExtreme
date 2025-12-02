@@ -9,10 +9,5 @@ export function PublicMethods<T extends Constructor<GridCoreNewBase>>(GridCore: 
     public clearFilter(): void {
       this.filterSyncController.clearFilters();
     }
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    public getCombinedFilter(): any {
-      return this.filterController.displayFilter.peek();
-    }
   };
 }

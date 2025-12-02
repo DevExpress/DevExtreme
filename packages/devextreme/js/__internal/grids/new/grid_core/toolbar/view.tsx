@@ -1,5 +1,5 @@
-import type { ReadonlySignal } from '@preact/signals-core';
-import { computed } from '@preact/signals-core';
+import type { ReadonlySignal } from '@ts/core/state_manager/index';
+import { computed } from '@ts/core/state_manager/index';
 
 import { BaseContextMenuController } from '../context_menu/controller';
 import { View } from '../core/view';

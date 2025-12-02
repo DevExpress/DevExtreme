@@ -81,7 +81,6 @@ export class DxoBarGaugeLoadingIndicatorComponent extends NestedOption implement
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'showChange' }
         ]);

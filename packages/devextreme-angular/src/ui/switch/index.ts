@@ -18,7 +18,7 @@ import {
     HostListener,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
 } from '@angular/core';
 
 
@@ -39,10 +39,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
-
-
 
 
 
@@ -72,6 +70,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxSwitchComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+
     instance: DxSwitch = null;
 
     /**
@@ -604,10 +603,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
-
-
-
 
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,

@@ -244,6 +244,7 @@ import {
   DxRangeRule,
   DxAsyncRule,
   DxCustomRule,
+  type DxValidatorTypes,
 } from 'devextreme-vue/validator';
 import notify from 'devextreme/ui/notify';
 import service from './data.ts';
@@ -275,7 +276,7 @@ const namePattern = ref(/^[^0-9]+$/);
 const phonePattern = ref(/^[02-9]\d{9}$/);
 const maxDate = ref(new Date(currentDate.setFullYear(currentDate.getFullYear() - 21)));
 
-let validatorInstance;
+let validatorInstance: DxValidator['instance'];
 
 function passwordComparison() {
   return password.value;
@@ -285,11 +286,11 @@ function checkComparison() {
   return true;
 }
 
-function asyncValidation(params) {
+function asyncValidation(params: Record<string, any>) {
   return sendRequest(params.value);
 }
 
-function validateVacationDatesRange({ value }) {
+function validateVacationDatesRange({ value }: Record<string, any>) {
   const [startDate, endDate] = value;
 
   if (startDate === null || endDate === null) {
@@ -302,7 +303,7 @@ function validateVacationDatesRange({ value }) {
   return daysDifference < 25;
 }
 
-function validateVacationDatesPresence({ value }) {
+function validateVacationDatesPresence({ value }: Record<string, any>) {
   const [startDate, endDate] = value;
 
   if (startDate === null && endDate === null) {
@@ -318,11 +319,11 @@ function onPasswordChanged() {
   }
 }
 
-function onInit(e) {
+function onInit(e: DxValidatorTypes.InitializedEvent) {
   validatorInstance = e.component;
 }
 
-function onFormSubmit(e) {
+function onFormSubmit(e: Event) {
   notify({
     message: 'You have submitted the form',
     position: {
@@ -334,7 +335,7 @@ function onFormSubmit(e) {
   e.preventDefault();
 }
 
-function sendRequest(value) {
+function sendRequest(value: string) {
   const invalidEmail = 'test@dx-email.com';
 
   return new Promise((resolve) => {

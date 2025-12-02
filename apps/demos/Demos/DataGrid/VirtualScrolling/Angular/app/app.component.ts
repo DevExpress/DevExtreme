@@ -1,7 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import {DataSourceOptions as DataSourceConfig} from 'devextreme-angular/common/data';
+import { DataSourceOptions as DataSourceConfig } from 'devextreme-angular/common/data';
 import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service } from './app.service';
 

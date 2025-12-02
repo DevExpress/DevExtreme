@@ -18,9 +18,8 @@ jobs:
       with:
         node-version: '20'
 
-    - uses: pnpm/action-setup@v3
+    - uses: pnpm/action-setup@v4
       with:
-        version: 9
         run_install: false
 
     - uses: actions/cache@v4
@@ -36,7 +35,7 @@ jobs:
     - name: Install dependencies
       run: |
         corepack enable
-        pnpm install
+        pnpm install --frozen-lockfile
 
     - name: DevExtreme - Build-all
       env:
@@ -80,9 +79,8 @@ jobs:
       with:
         name: devextreme-sources
 
-    - uses: pnpm/action-setup@v3
+    - uses: pnpm/action-setup@v4
       with:
-        version: 9
         run_install: false
 
     - name: Get pnpm store directory
@@ -103,7 +101,7 @@ jobs:
     - name: Install dependencies
       run: |
         corepack enable
-        pnpm install
+        pnpm install --frozen-lockfile
 
     - name: Install tgz
       working-directory: apps/demos
@@ -182,9 +180,8 @@ jobs:
       with:
         name: devextreme-sources
 
-    - uses: pnpm/action-setup@v3
+    - uses: pnpm/action-setup@v4
       with:
-        version: 9
         run_install: false
 
     - name: Get pnpm store directory
@@ -205,7 +202,7 @@ jobs:
     - name: Install dependencies
       run: |
         corepack enable
-        pnpm install
+        pnpm install --frozen-lockfile
 
     - name: Install tgz
       working-directory: apps/demos

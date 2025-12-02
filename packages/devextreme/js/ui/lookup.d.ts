@@ -15,7 +15,7 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
-} from '../common/core/events';
+} from '../events';
 
 import {
     ValueChangedInfo,

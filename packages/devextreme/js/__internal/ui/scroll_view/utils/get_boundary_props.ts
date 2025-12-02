@@ -1,6 +1,7 @@
+import type { ScrollDirection as Direction } from '@js/common';
+
 import type {
   ScrollableBoundary,
-  ScrollableDirection,
   ScrollOffset,
 } from '../types';
 import { getScrollLeftMax } from './get_scroll_left_max';
@@ -41,7 +42,7 @@ export function isReachedBottom(
 }
 
 export function getBoundaryProps(
-  direction: ScrollableDirection,
+  direction: Direction,
   scrollOffset: ScrollOffset,
   element: HTMLDivElement,
   pocketHeight = 0,

@@ -21,6 +21,7 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_strips } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-strip',
@@ -28,7 +29,13 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_strips,
+           useExisting: DxiStripComponent,
+        }
+    ]
 })
 export class DxiStripComponent extends CollectionNestedOption {
     @Input()

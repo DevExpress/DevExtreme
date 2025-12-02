@@ -7,7 +7,6 @@ import { noop } from 'core/utils/common';
 import { Event as dxEvent } from 'common/core/events';
 import { normalizeKeyName } from 'common/core/events/utils/index';
 import Quill from 'devextreme-quill';
-import { shouldSkipOnMobile } from '../../../helpers/device.js';
 
 const SUGGESTION_LIST_CLASS = 'dx-suggestion-list';
 const LIST_ITEM_CLASS = 'dx-list-item';
@@ -477,10 +476,6 @@ QUnit.module('Mentions module', moduleConfig, () => {
     });
 
     test('list should load next page on reach end of current page', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const totalItems = 60;
         const pageSize = 50;
         const items = [];

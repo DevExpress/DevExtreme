@@ -19,6 +19,7 @@ import {
 } from 'devextreme-angular/core';
 import { DxiUser } from './base/user-dxi';
 
+import { PROPERTY_TOKEN_typingUsers } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-typing-user',
@@ -26,7 +27,13 @@ import { DxiUser } from './base/user-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_typingUsers,
+           useExisting: DxiTypingUserComponent,
+        }
+    ],
     inputs: [
         'avatarAlt',
         'avatarUrl',

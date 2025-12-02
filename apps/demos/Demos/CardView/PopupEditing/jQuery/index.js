@@ -61,7 +61,7 @@ $(() => {
     columns: [
       {
         caption: 'Full Name',
-        calculateFieldValue({firstName, lastName}) {
+        calculateFieldValue({ firstName, lastName }) {
           return `${firstName} ${lastName}`;
         },
       },

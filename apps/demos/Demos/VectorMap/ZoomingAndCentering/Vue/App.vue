@@ -25,6 +25,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
+// @ts-ignore
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import {
   DxVectorMap,
@@ -41,11 +42,12 @@ const mapsWorld = mapsData.world;
 const bounds = [-180, 85, 180, -60];
 const vectorMap = ref();
 
-function customizeTooltip(info) {
+function customizeTooltip(info: any) {
   if (info.layer.type === 'marker') {
     return { text: info.attribute('name') };
   }
-  return null;
+
+  return {};
 }
 function markerClick(e: DxVectorMapTypes.ClickEvent) {
   if (e.target?.layer.type === 'marker') {

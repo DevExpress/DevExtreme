@@ -4,7 +4,6 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
   DxToolbarModule,
   DxSelectBoxModule,
-  DxTemplateModule,
   DxResizableModule,
   DxDropDownButtonModule,
   DxButtonModule,
@@ -48,8 +47,9 @@ export class AppComponent {
   stylingMode = !themes.current().startsWith('generic') ? 'text' : undefined;
 
   fontSizes: FontSize[] = this.customService.getFontSizes();
-  
+
   lineHeights: LineHeight[] = this.customService.getLineHeights();
+
   lineHeight: number[] = [this.lineHeights[1].lineHeight];
 
   fontFamilies: FontFamily[] = this.customService.getFontFamilies();
@@ -97,7 +97,6 @@ export class AppComponent {
     BrowserModule,
     DxToolbarModule,
     DxSelectBoxModule,
-    DxTemplateModule,
     DxResizableModule,
     DxDropDownButtonModule,
     DxButtonModule,

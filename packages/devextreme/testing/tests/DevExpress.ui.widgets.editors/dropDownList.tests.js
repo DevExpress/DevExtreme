@@ -11,11 +11,10 @@ import fx from 'common/core/animation/fx';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import ajaxMock from '../../helpers/ajaxMock.js';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 import 'ui/drop_down_editor/ui.drop_down_list';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(() => {
     const markup =
@@ -73,10 +72,6 @@ QUnit.module('focus policy', {
     }
 }, () => {
     QUnit.test('focus removed from list on type some text', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         this.instance.option('opened', true);
         this.clock.tick(TIME_TO_WAIT);
         this.keyboard.keyDown('down');
@@ -139,9 +134,6 @@ QUnit.module('focus policy', {
     });
 
     QUnit.test('setFocusPolicy should correctly renew subscription', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
         const setFocusPolicySpy = sinon.spy(this.instance, '_setFocusPolicy');
 
         this.instance.option('onChange', noop);
@@ -1469,6 +1461,32 @@ QUnit.module('popup', moduleConfig, () => {
         $input.trigger(wheelEvent);
 
         assert.ok(wheelEvent.originalEvent.isDefaultPrevented());
+    });
+
+    QUnit.test('Popup should not be disabled after runtime change of disabled, dropDownOptions and option that triggers invalidate (T1279637)', function(assert) {
+        const dropDownList = $('#dropDownList').dxDropDownList({
+            items: [1, 2, 3],
+            opened: true,
+            disabled: false,
+            searchEnabled: true,
+        }).dxDropDownList('instance');
+
+        dropDownList.option({
+            disabled: true,
+            dropDownOptions: { width: 200 },
+            searchEnabled: false,
+        });
+        let popupDisabled = $('.dx-dropdowneditor-overlay.dx-popup').dxPopup('instance').option('disabled');
+
+        assert.strictEqual(popupDisabled, true, 'popup is disabled');
+
+        dropDownList.option({
+            disabled: false,
+            searchEnabled: true,
+        });
+        popupDisabled = $('.dx-dropdowneditor-overlay.dx-popup').dxPopup('instance').option('disabled');
+
+        assert.strictEqual(popupDisabled, false, 'popup is not disabled');
     });
 });
 

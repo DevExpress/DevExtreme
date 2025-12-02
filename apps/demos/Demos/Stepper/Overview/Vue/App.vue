@@ -7,14 +7,17 @@
           :key="config.id"
           class="stepper-wrapper"
         >
-          <div :id="config.labelId" class="stepper-label">
+          <div
+            :id="config.labelId"
+            class="stepper-label"
+          >
             {{ config.title }}
           </div>
           <DxStepper
             :id="config.id"
             :element-attr="{ 'aria-labelledby': config.labelId }"
             :selected-index="2"
-            :orientation="orientation as Orientation"
+            :orientation="orientation"
             :linear="navigationMode"
             :select-on-focus="selectOnFocus"
             :rtl-enabled="rtlMode"
@@ -51,7 +54,7 @@
           @item-click="onNavigationModeClick"
         />
       </div>
-      <div class="option-separator" />
+      <div class="option-separator"/>
       <div class="option">
         <DxCheckBox
           id="selectOnFocus"
@@ -75,8 +78,9 @@ import { ref } from 'vue';
 import { DxStepper, DxItem } from 'devextreme-vue/stepper';
 import { DxButtonGroup, type DxButtonGroupTypes } from 'devextreme-vue/button-group';
 import { DxCheckBox } from 'devextreme-vue/check-box';
-import { type Orientation } from 'devextreme-vue/common';
-import { steps, orientations, navigationModes } from './data.ts';
+import { steps, orientations, navigationModes, type Step } from './data.ts';
+
+type Fields = Array<keyof Step>;
 
 const orientation = ref(orientations[0].value);
 const navigationMode = ref(navigationModes[0].value);
@@ -96,23 +100,23 @@ const stepperConfigs = [
     id: 'icons',
     labelId: 'iconsLabel',
     title: 'Icons and Labels',
-    fields: ['label', 'icon', 'optional'] as const,
+    fields: ['label', 'icon', 'optional'] as Fields,
   },
   {
     id: 'numbers',
     labelId: 'numbersLabel',
     title: 'Numbers and Labels',
-    fields: ['label', 'optional'] as const,
+    fields: ['label', 'optional'] as Fields,
   },
   {
     id: 'customText',
     labelId: 'customTextLabel',
     title: 'Custom Text',
-    fields: ['text'] as const,
+    fields: ['text'] as Fields,
   },
 ];
 
-function getItemProps(step, fields) {
+function getItemProps(step: Step, fields: Fields) {
   return fields.reduce((acc, field) => {
     if (field in step) {
       acc[field] = step[field];

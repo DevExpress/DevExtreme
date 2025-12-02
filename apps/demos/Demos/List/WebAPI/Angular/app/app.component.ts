@@ -2,7 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import { DxListModule, DxTemplateModule } from 'devextreme-angular';
+import { DxListModule } from 'devextreme-angular';
 import { DataSource } from 'devextreme-angular/common/data';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
@@ -38,7 +38,6 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxListModule,
-    DxTemplateModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

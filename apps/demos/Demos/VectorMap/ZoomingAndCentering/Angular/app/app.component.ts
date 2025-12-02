@@ -42,6 +42,7 @@ export class AppComponent {
         text: arg.attribute('name'),
       };
     }
+    return null;
   }
 
   markerClick(e: DxVectorMapTypes.ClickEvent) {

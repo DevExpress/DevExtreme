@@ -63,7 +63,7 @@ import DxPivotGrid, {
 } from 'devextreme-vue/pivot-grid';
 import DxCheckBox, { type DxCheckBoxTypes } from 'devextreme-vue/check-box';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
-import { Workbook } from 'exceljs';
+import { Workbook } from 'devextreme-exceljs-fork';
 import { saveAs } from 'file-saver-es';
 import { exportPivotGrid } from 'devextreme/excel_exporter';
 import { sales } from './data.ts';

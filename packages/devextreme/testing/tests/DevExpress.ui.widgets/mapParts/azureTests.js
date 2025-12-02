@@ -2,7 +2,7 @@
 
 import $ from 'jquery';
 import { MARKERS, ROUTES } from './utils.js';
-import AzureProvider from '__internal/ui/map/m_provider.dynamic.azure';
+import AzureProvider from '__internal/ui/map/provider.dynamic.azure';
 import ajaxMock from '../../../helpers/ajaxMock.js';
 import errors from 'ui/widget/ui.errors';
 

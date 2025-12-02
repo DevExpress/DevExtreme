@@ -8,7 +8,6 @@ import { normalizeKeyName } from 'common/core/events/utils/index';
 
 import 'ui/number_box';
 import 'ui/validator';
-import { shouldSkipOnMobile } from '../../../helpers/device.js';
 
 const NUMBERBOX_CLASS = 'dx-numberbox';
 const INVALID_CLASS = 'dx-invalid';
@@ -634,10 +633,6 @@ QUnit.module('basics', {}, () => {
     });
 
     QUnit.test('T220209 - the \'displayValueFormatter\' option when value is changed using keyboard', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const $numberBox = $('#numberbox').dxNumberBox({
             value: 5,
             displayValueFormatter(value) {
@@ -2218,10 +2213,6 @@ QUnit.module('valueChanged should receive correct event parameter', {
 
     [['up', 10], ['down', -10]].forEach(([direction, delta]) => {
         QUnit.testInActiveWindow(`on mouse wheel ${direction}`, function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             this.$input.focus();
             this.mouse.wheel(delta);
 

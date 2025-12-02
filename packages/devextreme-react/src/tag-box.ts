@@ -79,7 +79,7 @@ const TagBox = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["opened","value"]), []);
       const independentEvents = useMemo(() => (["onChange","onClosed","onContentReady","onCustomItemCreating","onDisposing","onEnterKey","onFocusIn","onFocusOut","onInitialized","onInput","onItemClick","onKeyDown","onKeyUp","onMultiTagPreparing","onOpened","onSelectAllValueChanged","onValueChanged"]), []);
@@ -92,6 +92,7 @@ const TagBox = memo(
       const expectedChildren = useMemo(() => ({
         button: { optionName: "buttons", isCollectionItem: true },
         dropDownOptions: { optionName: "dropDownOptions", isCollectionItem: false },
+        fieldAddons: { optionName: "fieldAddons", isCollectionItem: false },
         item: { optionName: "items", isCollectionItem: true }
       }), []);
 
@@ -252,7 +253,6 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
     hide?: AnimationConfig;
     show?: AnimationConfig;
   };
-  bindingOptions?: Record<string, any>;
   container?: any | string | undefined;
   contentTemplate?: ((contentElement: any) => string | any) | template;
   deferRendering?: boolean;
@@ -342,6 +342,38 @@ const _componentDropDownOptions = (props: IDropDownOptionsProps) => {
 };
 
 const DropDownOptions = Object.assign<typeof _componentDropDownOptions, NestedComponentMeta>(_componentDropDownOptions, {
+  componentType: "option",
+});
+
+// owners:
+// TagBox
+type IFieldAddonsProps = React.PropsWithChildren<{
+  afterTemplate?: ((data: any, element: any) => string | any) | template;
+  beforeTemplate?: ((data: any, element: any) => string | any) | template;
+  afterRender?: (...params: any) => React.ReactNode;
+  afterComponent?: React.ComponentType<any>;
+  beforeRender?: (...params: any) => React.ReactNode;
+  beforeComponent?: React.ComponentType<any>;
+}>
+const _componentFieldAddons = (props: IFieldAddonsProps) => {
+  return React.createElement(NestedOption<IFieldAddonsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "fieldAddons",
+      TemplateProps: [{
+        tmplOption: "afterTemplate",
+        render: "afterRender",
+        component: "afterComponent"
+      }, {
+        tmplOption: "beforeTemplate",
+        render: "beforeRender",
+        component: "beforeComponent"
+      }],
+    },
+  });
+};
+
+const FieldAddons = Object.assign<typeof _componentFieldAddons, NestedComponentMeta>(_componentFieldAddons, {
   componentType: "option",
 });
 
@@ -475,7 +507,6 @@ const Offset = Object.assign<typeof _componentOffset, NestedComponentMeta>(_comp
 type IOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
-  bindingOptions?: Record<string, any>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
@@ -685,6 +716,8 @@ export {
   ICollisionProps,
   DropDownOptions,
   IDropDownOptionsProps,
+  FieldAddons,
+  IFieldAddonsProps,
   From,
   IFromProps,
   Hide,

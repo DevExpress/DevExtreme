@@ -5,7 +5,6 @@ import { isDefined, isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import windowUtils from 'core/utils/window';
 
-import 'generic_light.css!';
 import 'ui/calendar';
 
 const CALENDAR_CLASS = 'dx-calendar';
@@ -21,10 +20,6 @@ const CALENDAR_MULTIVIEW_CLASS = 'dx-calendar-multiview';
 const CALENDAR_RANGE_CLASS = 'dx-calendar-range';
 
 const ARIA_LABEL_DATE_FORMAT = 'date';
-
-const toSelector = function(className) {
-    return '.' + className;
-};
 
 const getFormattedDate = (date) => {
     return dateLocalization.format(new Date(date), ARIA_LABEL_DATE_FORMAT);
@@ -50,7 +45,7 @@ QUnit.module('Calendar markup', {
     });
 
     QUnit.test('navigator is rendered', function(assert) {
-        assert.equal(this.$element.find(toSelector(CALENDAR_NAVIGATOR_CLASS)).length, 1, 'navigator is rendered');
+        assert.equal(this.$element.find(`.${CALENDAR_NAVIGATOR_CLASS}`).length, 1, 'navigator is rendered');
     });
 
     [1, 2].forEach((viewsCount) => {
@@ -58,9 +53,9 @@ QUnit.module('Calendar markup', {
             this.calendar.option('viewsCount', viewsCount);
             if(windowUtils.hasWindow()) {
                 const hiddenViews = 2;
-                assert.equal(this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS) + ' .dx-widget').length, viewsCount + hiddenViews, 'all views are rendered');
+                assert.equal(this.$element.find(`.${CALENDAR_VIEWS_WRAPPER_CLASS} .dx-widget`).length, viewsCount + hiddenViews, 'all views are rendered');
             } else {
-                assert.equal(this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS) + ' .dx-widget').length, viewsCount, 'only one view is rendered');
+                assert.equal(this.$element.find(`.${CALENDAR_VIEWS_WRAPPER_CLASS} .dx-widget`).length, viewsCount, 'only one view is rendered');
             }
         });
     });
@@ -164,18 +159,18 @@ QUnit.module('Navigator', {
     });
 
     QUnit.test('Calendar must display previous and next month links, and previous and next year links', function(assert) {
-        assert.strictEqual(this.$element.find(toSelector(CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS)).length, 1);
-        assert.strictEqual(this.$element.find(toSelector(CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS)).length, 1);
+        assert.strictEqual(this.$element.find(`.${CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS}`).length, 1);
+        assert.strictEqual(this.$element.find(`.${CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS}`).length, 1);
     });
 
     QUnit.test('Calendar must display the current month and year', function(assert) {
-        const navigatorCaption = this.$element.find(toSelector(CALENDAR_CAPTION_BUTTON_CLASS));
+        const navigatorCaption = this.$element.find(`.${CALENDAR_CAPTION_BUTTON_CLASS}`);
         assert.equal(navigatorCaption.text(), 'June 2015');
     });
 
     QUnit.test('Calendar with two views should display 2 months', function(assert) {
         this.calendar.option('viewsCount', 2);
-        const navigatorCaption = this.$element.find(toSelector(CALENDAR_CAPTION_BUTTON_CLASS));
+        const navigatorCaption = this.$element.find(`.${CALENDAR_CAPTION_BUTTON_CLASS}`);
         assert.equal(navigatorCaption.text(), 'June 2015July 2015');
     });
 });
@@ -194,7 +189,7 @@ QUnit.module('Calendar footer', {
             value: new Date(2015, 5, 13),
             showTodayButton: true
         }).dxCalendar('instance');
-        assert.equal($element.find(toSelector(CALENDAR_FOOTER_CLASS)).length, 1, 'footer exist');
+        assert.equal($element.find(`.${CALENDAR_FOOTER_CLASS}`).length, 1, 'footer exist');
     });
 
     QUnit.test('calendar mustn\'t have _footer if showTodayButton  = false', function(assert) {
@@ -203,7 +198,7 @@ QUnit.module('Calendar footer', {
             value: new Date(2015, 5, 13),
             showTodayButton: false
         }).dxCalendar('instance');
-        assert.equal($element.find(toSelector(CALENDAR_FOOTER_CLASS)).length, 0, 'footer doesn\'t exist');
+        assert.equal($element.find(`.${CALENDAR_FOOTER_CLASS}`).length, 0, 'footer doesn\'t exist');
     });
 });
 

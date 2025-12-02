@@ -4,32 +4,41 @@
     [dataSource]="dataSource"
     [resizePanesOnZoom]="true"
   >
-    <dxi-series></dxi-series>
-    <dxo-argument-axis
+    <dxi-chart-series></dxi-chart-series>
+    <dxo-chart-argument-axis
       [valueMarginsEnabled]="false"
       [visualRange]="visualRange"
       type="logarithmic"
       [minorTickCount]="10"
     >
-      <dxo-label format="exponential"></dxo-label>
-      <dxo-grid [visible]="true"></dxo-grid>
-      <dxo-minor-grid [visible]="true"></dxo-minor-grid>
-    </dxo-argument-axis>
-    <dxo-legend [visible]="false"></dxo-legend>
+      <dxo-chart-label format="exponential"></dxo-chart-label>
+      <dxo-chart-grid [visible]="true"></dxo-chart-grid>
+      <dxo-chart-minor-grid [visible]="true"></dxo-chart-minor-grid>
+    </dxo-chart-argument-axis>
+    <dxo-chart-legend [visible]="false"></dxo-chart-legend>
   </dx-chart>
   <dx-range-selector
     id="range-selector"
     [dataSource]="dataSource"
     [(value)]="visualRange"
   >
-    <dxo-chart>
-      <dxi-series></dxi-series>
-    </dxo-chart>
-    <dxo-scale type="logarithmic" [minorTickCount]="10" [minRange]="1">
-      <dxo-label format="exponential"></dxo-label>
-    </dxo-scale>
-    <dxo-slider-marker format="exponential"></dxo-slider-marker>
-    <dxo-behavior valueChangeMode="onHandleMove" [snapToTicks]="false">
-    </dxo-behavior>
+    <dxo-range-selector-chart>
+      <dxi-range-selector-series></dxi-range-selector-series>
+    </dxo-range-selector-chart>
+    <dxo-range-selector-scale
+      type="logarithmic"
+      [minorTickCount]="10"
+      [minRange]="1"
+    >
+      <dxo-range-selector-label format="exponential"></dxo-range-selector-label>
+    </dxo-range-selector-scale>
+    <dxo-range-selector-slider-marker
+      format="exponential"
+    ></dxo-range-selector-slider-marker>
+    <dxo-range-selector-behavior
+      valueChangeMode="onHandleMove"
+      [snapToTicks]="false"
+    >
+    </dxo-range-selector-behavior>
   </dx-range-selector>
 </div>

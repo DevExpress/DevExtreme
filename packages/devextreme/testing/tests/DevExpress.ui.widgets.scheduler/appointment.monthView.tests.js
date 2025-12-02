@@ -7,7 +7,7 @@ import Color from 'color';
 import { DataSource } from 'common/data/data_source/data_source';
 import { CustomStore } from 'common/data/custom_store';
 import browser from 'core/utils/browser';
-import { APPOINTMENT_FORM_GROUP_NAMES } from '__internal/scheduler/appointment_popup/m_form';
+import { APPOINTMENT_FORM_GROUP_NAMES } from '__internal/scheduler/appointment_popup/m_legacy_form';
 import {
     initTestMarkup,
     createWrapper,
@@ -17,6 +17,7 @@ import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 import '__internal/scheduler/m_scheduler';
 import 'ui/switch';
+import 'generic_light.css!';
 
 const {
     module,
@@ -397,7 +398,10 @@ module('Integration: Appointments in Month view', {
                     currentView: 'month',
                     views: ['month'],
                     startDateExpr: 'start',
-                    endDateExpr: 'end'
+                    endDateExpr: 'end',
+                    editing: {
+                        legacyForm: true,
+                    }
                 });
 
                 scheduler.instance.showAppointmentPopup(tasks[0]);
@@ -436,7 +440,10 @@ module('Integration: Appointments in Month view', {
                     currentView: 'month',
                     views: ['month'],
                     startDateExpr: 'start',
-                    endDateExpr: 'end'
+                    endDateExpr: 'end',
+                    editing: {
+                        legacyForm: true,
+                    }
                 });
 
                 scheduler.instance.showAppointmentPopup(tasks[0]);
@@ -491,10 +498,44 @@ module('Integration: Appointments in Month view', {
                     height: 600
                 });
 
-                const appointments = scheduler.instance._getAppointmentsToRepaint();
-                assert.strictEqual(appointments[0].settings[1].index, 0, 'Long term appointment tail has right index');
-                assert.strictEqual(appointments[1].settings[0].index, 1, 'Appointment next to long term appointment head has right index');
-                assert.strictEqual(appointments[2].settings[0].index, 1, 'Appointment next to long term appointment tail has right index');
+                const appointments = scheduler.instance._layoutManager.generateViewModel();
+                const parts = appointments.map((item) => ({
+                    level: item.level,
+                    maxLevel: item.maxLevel,
+                    partIndex: item.partIndex,
+                    partTotalCount: item.partTotalCount,
+                    reduced: item.reduced,
+                }));
+                assert.deepEqual(parts, [
+                    {
+                        level: 0,
+                        maxLevel: 2,
+                        partIndex: 0,
+                        partTotalCount: 2,
+                        reduced: 'head',
+                    },
+                    {
+                        level: 1,
+                        maxLevel: 2,
+                        partIndex: 0,
+                        partTotalCount: 0,
+                        reduced: undefined,
+                    },
+                    {
+                        level: 0,
+                        maxLevel: 2,
+                        partIndex: 1,
+                        partTotalCount: 2,
+                        reduced: 'tail',
+                    },
+                    {
+                        level: 1,
+                        maxLevel: 2,
+                        partIndex: 0,
+                        partTotalCount: 0,
+                        reduced: undefined,
+                    }
+                ], 'Parts  should be correct');
             });
 
             test('Appointment should be rendered correctly after changing view (T593699)', async function(assert) {
@@ -761,11 +802,11 @@ module('Integration: Appointments in Month view', {
                 expected: [
                     {
                         color: '#ff0000',
-                        indices: [0, 1, 4]
+                        indices: [0, 1, 2]
                     },
                     {
                         color: '#0000ff',
-                        indices: [2, 3, 5]
+                        indices: [3, 4, 5]
                     }
                 ]
             }, {
