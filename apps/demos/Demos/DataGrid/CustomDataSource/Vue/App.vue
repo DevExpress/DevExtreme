@@ -41,18 +41,18 @@
 import {
   DxDataGrid, DxColumn, DxPaging, DxPager,
 } from 'devextreme-vue/data-grid';
-import { CustomStore } from 'devextreme-vue/common/data';
+import { CustomStore, type LoadOptions, type LoadResultObject } from 'devextreme-vue/common/data';
 import 'whatwg-fetch';
 
-const isNotEmpty = (value: any) => value !== undefined && value !== null && value !== '';
+const isNotEmpty = (value: unknown) => value !== undefined && value !== null && value !== '';
 
 const store = new CustomStore({
   key: 'OrderNumber',
-  async load(loadOptions) {
-    const paramNames = [
+  async load(loadOptions: LoadOptions) {
+    const paramNames: (keyof LoadOptions)[] = [
       'skip', 'take', 'requireTotalCount', 'requireGroupCount',
       'sort', 'filter', 'totalSummary', 'group', 'groupSummary',
-    ] as const;
+    ];
 
     const queryString = paramNames
       .filter((paramName) => isNotEmpty(loadOptions[paramName]))
@@ -62,7 +62,7 @@ const store = new CustomStore({
     try {
       const response = await fetch(`https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/orders?${queryString}`);
 
-      const result = await response.json();
+      const result = await response.json() as LoadResultObject;
 
       return {
         data: result.data,
