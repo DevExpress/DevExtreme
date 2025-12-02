@@ -12439,7 +12439,7 @@ declare module DevExpress.ui {
       /**
        * [descr:_ui_data_grid_EditorPreparedEvent.updateValueTimeout]
        */
-      readonly updateValueTimeout?: number;
+      updateValueTimeout?: number;
       /**
        * [descr:_ui_data_grid_EditorPreparedEvent.width]
        */
@@ -12491,7 +12491,7 @@ declare module DevExpress.ui {
       /**
        * [descr:_ui_data_grid_EditorPreparingEvent.updateValueTimeout]
        */
-      readonly updateValueTimeout?: number;
+      updateValueTimeout?: number;
       /**
        * [descr:_ui_data_grid_EditorPreparingEvent.width]
        */
@@ -18074,7 +18074,7 @@ declare module DevExpress.ui {
         /**
          * [descr:_ui_filter_builder_EditorPreparedEvent.updateValueTimeout]
          */
-        readonly updateValueTimeout?: number;
+        updateValueTimeout?: number;
         /**
          * [descr:_ui_filter_builder_EditorPreparedEvent.width]
          */
@@ -30427,7 +30427,7 @@ declare module DevExpress.ui {
       /**
        * [descr:_ui_tree_list_EditorPreparedEvent.updateValueTimeout]
        */
-      readonly updateValueTimeout?: number;
+      updateValueTimeout?: number;
       /**
        * [descr:_ui_tree_list_EditorPreparedEvent.width]
        */
