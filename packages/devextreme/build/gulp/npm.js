@@ -129,12 +129,7 @@ const sources = (src, dist, distGlob) => (() => merge(
                 delete pkg.scripts;
 
                 pkg.exports = {
-                    "./common/*": {
-                        "import": "./esm/*.js",
-                            "require": "./cjs/*.js",
-                            "types": "./*.d.ts"
-                    },
-                    "./core/utils/*": {
+                    "./*": {
                         "import": "./esm/*.js",
                         "require": "./cjs/*.js",
                         "types": "./*.d.ts"
