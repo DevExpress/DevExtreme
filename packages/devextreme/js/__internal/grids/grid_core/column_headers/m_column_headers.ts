@@ -489,9 +489,12 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     if (this.option('showColumnHeaders')) {
       if (rowCount > 1 && (!isDefined(index) || isDefined(bandColumnIndex))) {
         const result: any[] = [];
-        let visibleColumns = columnsController.getVisibleColumns();
+
+        let visibleColumns: Column[] = [];
         if (isDefined(bandColumnIndex)) {
           visibleColumns = columnsController.getChildrenByBandColumn(bandColumnIndex, true);
+        } else {
+          visibleColumns = columnsController.getVisibleColumns();
         }
 
         visibleColumns.forEach((column) => {
