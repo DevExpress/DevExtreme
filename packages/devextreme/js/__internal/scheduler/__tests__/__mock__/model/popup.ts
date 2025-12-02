@@ -29,17 +29,13 @@ export class PopupModel {
   }
 
   isMainGroupVisible(): boolean {
-    const group = this.mainGroup;
-    if (!group) return false;
-    const $group = $(group);
-    return !$group.hasClass('dx-scheduler-form-main-group-hidden');
+    const mainGroupItem = this.form.itemOption('mainGroup');
+    return mainGroupItem?.visible !== false;
   }
 
   isRecurrenceGroupVisible(): boolean {
-    const group = this.recurrenceGroup;
-    if (!group) return false;
-    const $group = $(group);
-    return !$group.hasClass('dx-scheduler-form-recurrence-group-hidden');
+    const recurrenceGroupItem = this.form.itemOption('recurrenceGroup');
+    return recurrenceGroupItem?.visible !== false;
   }
 
   get subjectIcon(): Element | null {

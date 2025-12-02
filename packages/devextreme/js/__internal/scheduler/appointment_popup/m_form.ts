@@ -1,7 +1,6 @@
 import type { TextEditorButton } from '@js/common';
 import messageLocalization from '@js/common/core/localization/message';
 import { DataSource } from '@js/common/data';
-import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
@@ -62,9 +61,7 @@ const CLASSES = {
   descriptionEditor: 'dx-scheduler-form-description-editor',
 
   recurrenceSettingsButton: 'dx-scheduler-form-recurrence-settings-button',
-  mainHidden: 'dx-scheduler-form-main-group-hidden',
   recurrenceGroup: 'dx-scheduler-form-recurrence-group',
-  recurrenceHidden: 'dx-scheduler-form-recurrence-group-hidden',
 };
 
 const repeatSelectBoxItems = [
@@ -103,6 +100,7 @@ const createTimeZoneDataSource = (): DataSource => new DataSource({
 });
 
 const MAIN_GROUP_NAME = 'mainGroup';
+const RECURRENCE_GROUP_NAME = 'recurrenceGroup';
 const DATE_GROUP_NAME = 'dateGroup';
 const DATE_OPTIONS_GROUP_NAME = 'dateOptionsGroup';
 const START_DATE_GROUP_NAME = 'startDateGroup';
@@ -141,9 +139,9 @@ export class AppointmentForm {
 
   private _popup!: any;
 
-  private _$mainGroup?: dxElementWrapper;
+  private _customMainGroupVisible?: boolean;
 
-  private _$recurrenceGroup?: dxElementWrapper;
+  private _customRecurrenceGroupVisible?: boolean;
 
   get dxForm(): dxForm {
     return this._dxForm as dxForm;
@@ -168,6 +166,7 @@ export class AppointmentForm {
 
   set formData(formData: Record<string, any>) {
     this.dxForm.option('formData', formData);
+    this.updateRepeatEditorValue();
   }
 
   get startDate(): Date | null {
@@ -227,6 +226,16 @@ export class AppointmentForm {
 
     const editingConfig = this.scheduler.getEditingConfig();
     const customizedItems = customizeFormItems(items, editingConfig?.form?.items);
+
+    const mainGroupItem = customizedItems.find((item) => item.name === MAIN_GROUP_NAME);
+    if (mainGroupItem && 'visible' in mainGroupItem) {
+      this._customMainGroupVisible = mainGroupItem.visible;
+    }
+
+    const recurrenceGroupItem = customizedItems.find((item) => item.name === RECURRENCE_GROUP_NAME);
+    if (recurrenceGroupItem && 'visible' in recurrenceGroupItem) {
+      this._customRecurrenceGroupVisible = recurrenceGroupItem.visible;
+    }
 
     this.createForm(customizedItems);
   }
@@ -295,9 +304,7 @@ export class AppointmentForm {
         onInitialized?.call(this, e);
       },
       onContentReady: (e): void => {
-        const $formElement = e.component.$element();
-        this._$mainGroup = $formElement.find(`.${CLASSES.mainGroup}`);
-        this._$recurrenceGroup = $formElement.find(`.${CLASSES.recurrenceGroup}`);
+        this.updateRepeatEditorValue();
 
         onContentReady?.call(this, e);
       },
@@ -841,12 +848,15 @@ export class AppointmentForm {
       this.dxPopup.option('height', overlayHeight);
     }
 
-    this._$mainGroup?.addClass(CLASSES.mainHidden);
-    this._$mainGroup?.attr('tabindex', '-1');
-    this._$recurrenceGroup?.removeClass(CLASSES.recurrenceHidden);
-    this._$recurrenceGroup?.removeAttr('tabindex');
-
     const repeatEditorValue = this.dxForm.getEditor(REPEAT_EDITOR_NAME)?.option('value');
+
+    if (this._customMainGroupVisible === undefined) {
+      this.dxForm.itemOption(MAIN_GROUP_NAME, 'visible', false);
+    }
+
+    if (this._customRecurrenceGroupVisible === undefined) {
+      this.dxForm.itemOption(RECURRENCE_GROUP_NAME, 'visible', true);
+    }
 
     this._recurrenceForm.updateRecurrenceFormValues(
       repeatEditorValue,
@@ -866,16 +876,20 @@ export class AppointmentForm {
       this.dxPopup.option('height', configuredHeight);
     }
 
-    this._$mainGroup?.removeClass(CLASSES.mainHidden);
-    this._$mainGroup?.removeAttr('tabindex');
-    this._$recurrenceGroup?.addClass(CLASSES.recurrenceHidden);
-    this._$recurrenceGroup?.attr('tabindex', '-1');
+    if (this._customMainGroupVisible === undefined) {
+      this.dxForm.itemOption(MAIN_GROUP_NAME, 'visible', true);
+    }
+
+    if (this._customRecurrenceGroupVisible === undefined) {
+      this.dxForm.itemOption(RECURRENCE_GROUP_NAME, 'visible', false);
+    }
 
     this._popup.updateToolbarForMainGroup();
   }
 
   saveRecurrenceValue(): void {
-    const isRecurrenceFormOpened = !this._$recurrenceGroup?.hasClass(CLASSES.recurrenceHidden);
+    const recurrenceGroupItem = this.dxForm.itemOption(RECURRENCE_GROUP_NAME);
+    const isRecurrenceFormOpened = recurrenceGroupItem?.visible !== false;
 
     if (!isRecurrenceFormOpened) {
       return;
@@ -885,6 +899,8 @@ export class AppointmentForm {
     const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
 
     const recurrenceRuleSerialized = recurrenceRule.toString() ?? '';
+
+    this.showMainGroup();
 
     this.dxForm.updateData(
       recurrenceRuleExpr,

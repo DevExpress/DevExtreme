@@ -416,7 +416,6 @@ export class AppointmentPopup {
           stylingMode: 'text',
           onClick: (): void => {
             this.form.saveRecurrenceValue();
-            this.form.showMainGroup();
           },
         },
       },

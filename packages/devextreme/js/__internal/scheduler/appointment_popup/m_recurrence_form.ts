@@ -20,7 +20,6 @@ const CLASSES = {
   formIcon: 'dx-scheduler-form-icon',
 
   recurrenceGroup: 'dx-scheduler-form-recurrence-group',
-  recurrenceHidden: 'dx-scheduler-form-recurrence-group-hidden',
 
   frequencyEditor: 'dx-scheduler-form-recurrence-frequency-editor',
   byMonthEditor: 'dx-scheduler-form-recurrence-by-month-editor',
@@ -193,7 +192,7 @@ export class RecurrenceForm {
     return {
       name: RECURRENCE_GROUP_NAME,
       itemType: 'group',
-      cssClass: `${CLASSES.recurrenceGroup} ${CLASSES.recurrenceHidden}`,
+      cssClass: CLASSES.recurrenceGroup,
       colSpan: 1,
       items: [
         this.createRecurrenceStartDateGroup(),

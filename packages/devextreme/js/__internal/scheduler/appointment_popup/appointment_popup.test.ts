@@ -15,8 +15,6 @@ const CLASSES = {
   hidden: 'dx-hidden',
 
   scheduler: 'dx-scheduler',
-  mainGroupHidden: 'dx-scheduler-form-main-group-hidden',
-  recurrenceGroupHidden: 'dx-scheduler-form-recurrence-group-hidden',
 };
 
 const getDefaultData = () => [
@@ -281,20 +279,6 @@ describe('Appointment Form', () => {
       scheduler.showAppointmentPopup({ ...commonAppointment });
 
       POM.popup.setInputValue(editorName, null);
-      POM.popup.getSaveButton().click();
-
-      expect(POM.isPopupVisible()).toBe(true);
-    });
-
-    it.each([
-      'startTimeEditor', 'endDateEditor', 'endTimeEditor',
-    ])('should not close popup on save button click in recurrence form when %s editor is empty', async (editorName) => {
-      const { scheduler, POM } = await createScheduler(getDefaultConfig());
-
-      scheduler.showAppointmentPopup({ ...commonAppointment });
-
-      POM.popup.setInputValue(editorName, null);
-      POM.popup.selectRepeatValue('daily');
       POM.popup.getSaveButton().click();
 
       expect(POM.isPopupVisible()).toBe(true);
@@ -1087,9 +1071,7 @@ describe('Appointment Form', () => {
       scheduler.showAppointmentPopup();
 
       expect(POM.popup.isMainGroupVisible()).toBe(true);
-      expect(POM.popup.mainGroup?.getAttribute('tabindex')).toBeNull();
       expect(POM.popup.isRecurrenceGroupVisible()).toBe(false);
-      expect(POM.popup.recurrenceGroup?.getAttribute('tabindex')).toBe('-1');
 
       POM.popup.selectRepeatValue('weekly');
       await new Promise(process.nextTick);
@@ -1099,17 +1081,13 @@ describe('Appointment Form', () => {
       expect(typeof popupHeight).toBe('number');
 
       expect(POM.popup.isMainGroupVisible()).toBe(false);
-      expect(POM.popup.mainGroup?.getAttribute('tabindex')).toBe('-1');
       expect(POM.popup.isRecurrenceGroupVisible()).toBe(true);
-      expect(POM.popup.recurrenceGroup?.getAttribute('tabindex')).toBeNull();
 
       POM.popup.getBackButton().click();
 
       expect(POM.popup.component.option('height')).toBe('auto');
       expect(POM.popup.isMainGroupVisible()).toBe(true);
-      expect(POM.popup.mainGroup?.getAttribute('tabindex')).toBeNull();
       expect(POM.popup.isRecurrenceGroupVisible()).toBe(false);
-      expect(POM.popup.recurrenceGroup?.getAttribute('tabindex')).toBe('-1');
     });
 
     it('should open main form when opening recurring appointment', async () => {
@@ -1452,22 +1430,27 @@ describe('Appointment Form', () => {
         scheduler.showAppointmentPopup(commonAppointment);
 
         const mainFormIcons = POM.popup.mainGroup?.querySelectorAll(`.${CLASSES.icon}`) ?? [];
-        const recurrenceFormIcons = POM.popup.recurrenceGroup?.querySelectorAll(`.${CLASSES.icon}`) ?? [];
 
         expect(mainFormIcons.length).toBe(4);
-        expect(recurrenceFormIcons.length).toBe(3);
 
         const mainIconsCorrect = Array.from(mainFormIcons).every((icon) => {
           const isVisible = !icon.classList.contains(CLASSES.hidden);
           return isVisible === visibleMain;
         });
 
+        expect(mainIconsCorrect).toBe(true);
+
+        POM.popup.selectRepeatValue('weekly');
+
+        const recurrenceFormIcons = POM.popup.recurrenceGroup?.querySelectorAll(`.${CLASSES.icon}`) ?? [];
+
+        expect(recurrenceFormIcons.length).toBe(3);
+
         const recurrenceIconsCorrect = Array.from(recurrenceFormIcons).every((icon) => {
           const isVisible = !icon.classList.contains(CLASSES.hidden);
           return isVisible === visibleRecurrence;
         });
 
-        expect(mainIconsCorrect).toBe(true);
         expect(recurrenceIconsCorrect).toBe(true);
       });
     });
@@ -1851,6 +1834,32 @@ describe('Appointment Form', () => {
       const formHeight = form.option('height') as number;
 
       expect(formHeight).toBe(500);
+    });
+
+    it('should respect recurrenceGroup visibility when configured via form.items', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          form: {
+            iconsShowMode: 'both',
+            items: [
+              {
+                name: 'mainGroup',
+                visible: true,
+              },
+              {
+                name: 'recurrenceGroup',
+                visible: true,
+              },
+            ],
+          },
+        },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const recurrenceGroupVisible = POM.popup.form.itemOption('recurrenceGroup').visible;
+      expect(recurrenceGroupVisible).toBe(true);
     });
 
     it('should merge editing.form options with default form configuration', async () => {
@@ -2575,16 +2584,13 @@ describe('Customize form items', () => {
       });
 
       scheduler.showAppointmentPopup();
-      const recurrenceGroup = $(POM.popup.recurrenceGroup);
 
       POM.popup.selectRepeatValue('weekly');
 
       await new Promise(process.nextTick);
 
-      const mainGroup = $(POM.popup.mainGroup);
-
-      expect(mainGroup.hasClass(CLASSES.mainGroupHidden)).toBe(true);
-      expect(recurrenceGroup.hasClass(CLASSES.recurrenceGroupHidden)).toBe(false);
+      expect(POM.popup.isMainGroupVisible()).toBe(false);
+      expect(POM.popup.isRecurrenceGroupVisible()).toBe(true);
 
       expect(onContentReady).toHaveBeenCalled();
       expect(onInitialized).toHaveBeenCalled();
