@@ -22,7 +22,13 @@
 
       current-view="day"
     >
-      <DxEditing :allow-adding="false">
+      <DxEditing
+        :allow-adding="false"
+        :popup="{
+          maxWidth: 440,
+          onOptionChanged: onPopupOptionChanged
+        }"
+      >
         <DxSchedulerForm :on-initialized="onFormInitialized">
           <DxItem template="movie-info-form-template"/>
 
@@ -67,14 +73,9 @@
             name="endDateGroup"
           />
         </DxSchedulerForm>
-
-        <DxPopup
-          :max-width="440"
-          :on-option-changed="onPopupOptionChanged"
-        />
       </DxEditing>
       <template #movie-info-form-template>
-        <MovieInfoForm :movie="currentMovie"/>
+        <MovieInfoContainer :movie="currentMovie"/>
       </template>
 
       <DxResource
@@ -112,16 +113,14 @@ import DxScheduler, {
   type DxSchedulerTypes,
 } from 'devextreme-vue/scheduler';
 import DxForm, { DxItem, type DxFormTypes } from 'devextreme-vue/form';
-import DxPopup from 'devextreme-vue/popup';
 import { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
+import type { OptionChangedEvent as PopupOptionChangedEvent } from 'devextreme/ui/popup';
 import query from 'devextreme/data/query';
 import type { MovieResource } from './data.ts';
 import AppointmentTemplate from './AppointmentTemplate.vue';
 import AppointmentTooltipTemplate from './AppointmentTooltipTemplate.vue';
-import MovieInfoForm from './MovieInfoForm.vue';
+import MovieInfoContainer from './MovieInfoContainer.vue';
 import { data, moviesData, theatreData } from './data.ts';
-
-type PopupOptionChangedEvent = Parameters<NonNullable<InstanceType<typeof DxPopup>['$props']['onOptionChanged']>>[0];
 
 const views = ['day', 'week', 'timelineDay'];
 const groups = ['theatreId'];

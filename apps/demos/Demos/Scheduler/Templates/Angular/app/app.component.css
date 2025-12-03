@@ -1,3 +1,11 @@
+::ng-deep .dx-scheduler-work-space-week .dx-scheduler-date-table {
+  width: 3500px;
+}
+
+::ng-deep .dx-scheduler-timeline-day .dx-scheduler-date-table {
+  width: 3500px;
+}
+
 ::ng-deep .dx-tooltip-wrapper .dx-overlay-content .dx-popup-content {
   padding: 12px;
 }
@@ -60,14 +68,21 @@
 
 ::ng-deep .movie-info .movie-details > .title {
   font-weight: 600;
-  font-size: 16px;
+  font-size: 14px;
   margin-bottom: 8px;
 }
 
+::ng-deep .dx-scheduler-form-end-date-group.dx-field-item {
+  padding-bottom: 12px;
+}
+
 ::ng-deep .long-title h3 {
-  font-family: 'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana;
   font-weight: 200;
   font-size: 28px;
   text-align: center;
   margin-bottom: 20px;
+}
+
+::ng-deep .dx-scheduler-appointment::before {
+  opacity: 0.26 !important;
 }

@@ -3,23 +3,38 @@
 </div>
 <dx-scheduler
   timeZone="America/Los_Angeles"
-  id="scheduler"
   [dataSource]="data"
   [views]="['day', 'week', 'timelineDay']"
   currentView="day"
+  [currentDate]="currentDate"
   [firstDayOfWeek]="0"
   [startDayHour]="9"
   [endDayHour]="23"
   [showAllDayPanel]="false"
+  [height]="600"
   [groups]="['theatreId']"
-  [currentDate]="currentDate"
   [crossScrollingEnabled]="true"
   [cellDuration]="20"
-  [height]="600"
   appointmentTemplate="appointment-template"
   appointmentTooltipTemplate="tooltip-template"
 >
-  <dxo-scheduler-editing [allowAdding]="false">
+  <dxi-resource
+    fieldExpr="movieId"
+    [dataSource]="moviesData"
+    [useColorAsDefault]="true"
+  >
+  </dxi-resource>
+
+  <dxi-resource fieldExpr="theatreId" [dataSource]="theatreData">
+  </dxi-resource>
+
+  <dxo-scheduler-editing
+    [allowAdding]="false"
+    [popup]="{
+      maxWidth: 440,
+      onOptionChanged: onPopupOptionChanged
+    }"
+  >
     <dxo-scheduler-form [onInitialized]="onFormInitialized">
       <dxi-scheduler-item
         template="movie-info-form-template"
@@ -68,11 +83,6 @@
         [disabled]="true"
       ></dxi-scheduler-item>
     </dxo-scheduler-form>
-
-    <dxo-scheduler-popup
-      [maxWidth]="440"
-      [onOptionChanged]="onPopupOptionChanged"
-    ></dxo-scheduler-popup>
   </dxo-scheduler-editing>
 
   <div
@@ -100,16 +110,6 @@
       </div>
     </ng-template>
   </div>
-
-  <dxi-resource
-    fieldExpr="movieId"
-    [useColorAsDefault]="true"
-    [dataSource]="moviesData"
-  >
-  </dxi-resource>
-
-  <dxi-resource fieldExpr="theatreId" [dataSource]="theatreData">
-  </dxi-resource>
 
   <div *dxTemplate="let model of 'appointment-template'">
     <ng-container

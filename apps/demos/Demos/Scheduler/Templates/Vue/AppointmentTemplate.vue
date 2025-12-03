@@ -42,36 +42,3 @@ const getMovieById = function (resourceId: string) {
 const movieData = getMovieById(props.templateModel.targetedAppointmentData?.movieId);
 
 </script>
-<style scoped>
-  .movie-tooltip .movie-info {
-    display: inline-block;
-    margin-left: 10px;
-    vertical-align: top;
-    text-align: left;
-  }
-
-  .movie-tooltip img {
-    height: 80px;
-    margin-bottom: 10px;
-  }
-
-  .movie-tooltip .movie-title {
-    font-size: 1.5em;
-    line-height: 40px;
-  }
-
-  .long-title h3 {
-    font-family:
-      'Segoe UI Light',
-      'Helvetica Neue Light',
-      'Segoe UI',
-      'Helvetica Neue',
-      'Trebuchet MS',
-      Verdana;
-    font-weight: 200;
-    font-size: 28px;
-    text-align: center;
-    margin-bottom: 20px;
-  }
-
-</style>
