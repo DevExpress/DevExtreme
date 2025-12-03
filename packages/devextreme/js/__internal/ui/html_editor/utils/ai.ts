@@ -76,15 +76,25 @@ export type AICommandExecutor<T extends AICommandNameExtended> = (
   callbacks: RequestCallbacks<AICommandResultMap[T]>,
 ) => () => void;
 
-export const defaultCommandNames: Record<AICommandName, string> = {
-  summarize: localizationMessage.format('dxHtmlEditor-aiCommandSummarize'),
-  proofread: localizationMessage.format('dxHtmlEditor-aiCommandProofread'),
-  expand: localizationMessage.format('dxHtmlEditor-aiCommandExpand'),
-  shorten: localizationMessage.format('dxHtmlEditor-aiCommandShorten'),
-  changeStyle: localizationMessage.format('dxHtmlEditor-aiCommandChangeStyle'),
-  changeTone: localizationMessage.format('dxHtmlEditor-aiCommandChangeTone'),
-  translate: localizationMessage.format('dxHtmlEditor-aiCommandTranslate'),
-  askAI: localizationMessage.format('dxHtmlEditor-aiCommandAskAI'),
+export const commandMessageKeys: Record<AICommandName, string> = {
+  summarize: 'dxHtmlEditor-aiCommandSummarize',
+  proofread: 'dxHtmlEditor-aiCommandProofread',
+  expand: 'dxHtmlEditor-aiCommandExpand',
+  shorten: 'dxHtmlEditor-aiCommandShorten',
+  changeStyle: 'dxHtmlEditor-aiCommandChangeStyle',
+  changeTone: 'dxHtmlEditor-aiCommandChangeTone',
+  translate: 'dxHtmlEditor-aiCommandTranslate',
+  askAI: 'dxHtmlEditor-aiCommandAskAI',
+};
+
+export const getDefaultCommandName = (name: AICommandNameExtended): string => {
+  const key = commandMessageKeys[name];
+
+  if (key) {
+    return localizationMessage.format(key);
+  }
+
+  return capitalize(name);
 };
 
 const htmlEditorAIChangeStyleOptions: AIChangeStyleOption[] = [
@@ -136,7 +146,7 @@ export const getDefaultOptionsByCommand = (
 };
 
 const createDefinitionFromString = (commandName: AICommandName): CommandDefinition => {
-  const text = defaultCommandNames[commandName] ?? capitalize(commandName);
+  const text = getDefaultCommandName(commandName);
   const defaultOptions = getDefaultOptionsByCommand(commandName)?.map(capitalize);
 
   return {
@@ -156,7 +166,7 @@ const createDefinitionFromObject = (
 ): CommandDefinition => {
   const capitalizedRaw = rawOptions?.map(capitalize);
   const options = capitalizedRaw ?? getDefaultOptionsByCommand(name)?.map(capitalize);
-  const displayText = text ?? defaultCommandNames[name] ?? capitalize(name);
+  const displayText = text ?? getDefaultCommandName(name);
 
   const definition = {
     id,

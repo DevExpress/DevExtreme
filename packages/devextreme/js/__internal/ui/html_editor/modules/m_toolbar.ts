@@ -26,7 +26,8 @@ import Quill from 'devextreme-quill';
 import type { CommandsMap } from '../utils/ai';
 import {
   buildCommandsMap,
-  defaultCommandNames,
+  commandMessageKeys,
+  getDefaultCommandName,
   getDefaultOptionsByCommand,
   hasInvalidCustomCommand,
 } from '../utils/ai';
@@ -373,7 +374,7 @@ if (Quill) {
       const item = {
         id: command,
         name: command,
-        text: text ?? defaultCommandNames[command],
+        text: text ?? getDefaultCommandName(command),
         items: options?.map((option) => ({
           id: option,
           text: option,
@@ -445,7 +446,7 @@ if (Quill) {
     _prepareAIMenuItemConfig(item: AIToolbarItem) {
       const {
         name = TOOLBAR_AI_ITEM_NAME,
-        commands = Object.keys(defaultCommandNames) as AICommandName[],
+        commands = Object.keys(commandMessageKeys) as AICommandName[],
       } = item;
 
       const commandsMap = buildCommandsMap(commands);
