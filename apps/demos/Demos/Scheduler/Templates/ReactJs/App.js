@@ -9,7 +9,7 @@ import Scheduler, {
 import { query } from 'devextreme-react/common/data';
 import Appointment from './Appointment.js';
 import AppointmentTooltip from './AppointmentTooltip.js';
-import MovieInfoForm from './MovieInfoForm.js';
+import MovieInfoForm from './MovieInfoContainer.js';
 import { data, moviesData, theatreData } from './data.js';
 
 const currentDate = new Date(2025, 3, 27);
