@@ -1,7 +1,7 @@
 'use strict';
 
 const gulp = require('gulp');
-const merge = require('merge-stream');
+const merge = require('ordered-read-streams');
 const rename = require('gulp-rename');
 const headerPipes = require('./header-pipes.js');
 const compressionPipes = require('./compression-pipes.js');

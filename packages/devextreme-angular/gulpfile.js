@@ -30,7 +30,7 @@ const { angularConfig } = require('../../tools/generators-config');
 gulp.task('clean.metadata', gulp.series(() => {
   const { outputFolderPath } = buildConfig.tools.metadataGenerator;
 
-  return del([outputFolderPath]);
+  return del.deleteAsync([outputFolderPath]);
 }));
 
 gulp.task('generate.metadata', gulp.series('clean.metadata', (done) => {
@@ -49,7 +49,7 @@ gulp.task('clean.generatedComponents', (done) => {
   const { outputFolderPath } = buildConfig.tools.componentGenerator;
   const { skipFromCleaningFiles } = buildConfig.components;
 
-  del.sync([
+  del.deleteSync([
     `${outputFolderPath}/*/**`,
     ...skipFromCleaningFiles.flatMap((keepPattern) => {
       const pathParts = keepPattern.match(/[\*\/]$/) ? keepPattern.split('/') : [keepPattern];
@@ -169,8 +169,8 @@ gulp.task('build.license-headers', () => {
 });
 
 gulp.task('clean.dist', () => {
-  del.sync([`${buildConfig.components.outputPath}/*.*`]);
-  return del([buildConfig.components.outputPath]);
+  del.deleteSync([`${buildConfig.components.outputPath}/*.*`]);
+  return del.deleteAsync([buildConfig.components.outputPath]);
 });
 
 gulp.task('build.ngc', () => {
@@ -256,7 +256,7 @@ gulp.task('generate', gulp.series(
 gulp.task('clean.tests', () => {
   const outputFolderPath = buildConfig.components.testsPath;
 
-  return del([outputFolderPath]);
+  return del.deleteAsync([outputFolderPath]);
 });
 
 gulp.task('generate-component-names', (done) => {

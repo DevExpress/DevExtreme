@@ -5,7 +5,7 @@ require('./ts');
 const eol = require('gulp-eol');
 const gulp = require('gulp');
 const gulpIf = require('gulp-if');
-const merge = require('merge-stream');
+const merge = require('ordered-read-streams');
 const through = require('through2');
 const replace = require('gulp-replace');
 const lazyPipe = require('lazypipe');

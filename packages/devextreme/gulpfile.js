@@ -9,7 +9,7 @@ const shell = require('gulp-shell');
 const { REMOVE_NON_PRODUCTION_MODULE } = require('./build/gulp/context');
 
 gulp.task('clean', function(callback) {
-    require('del').sync([
+    require('del').deleteSync([
         'artifacts/**',
         '!artifacts',
         '!artifacts/css',

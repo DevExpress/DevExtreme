@@ -113,7 +113,7 @@ const transpileTs = (compiler, src) => {
 };
 
 const transpileTsClean = () =>
-    async() => await del(TS_OUTPUT_BASE_DIR, { force: true });
+    async() => await del.deleteAsync(TS_OUTPUT_BASE_DIR, { force: true });
 
 
 const createTranspileTask = (input, output, pipes) =>

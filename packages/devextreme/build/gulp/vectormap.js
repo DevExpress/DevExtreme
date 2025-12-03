@@ -7,7 +7,7 @@ const rename = require('gulp-rename');
 const concat = require('gulp-concat');
 const tap = require('gulp-tap');
 const gulpIf = require('gulp-if');
-const merge = require('merge-stream');
+const merge = require('ordered-read-streams');
 const template = require('gulp-template');
 
 const context = require('./context.js');
@@ -31,7 +31,7 @@ gulp.task('vectormap-utils', function() {
 });
 
 gulp.task('vectormap-data', gulp.series('vectormap-utils', function() {
-    const stream = merge();
+    const stream = [];
     const processFiles = require(path.join('../..', VECTORMAP_UTILS_RESULT_PATH, 'dx.vectormaputils.node.js')).processFiles;
 
     if(!fs.existsSync(VECTORMAP_DATA_RESULT_PATH)) {
@@ -47,7 +47,7 @@ gulp.task('vectormap-data', gulp.series('vectormap-utils', function() {
         files.forEach(file => {
             const data = fs.readFileSync(path.join(VECTORMAP_DATA_RESULT_PATH, file), 'utf8');
 
-            stream.add(
+            stream.push(
                 gulp.src('build/gulp/vectormapdata-template.jst')
                     .pipe(template({ data: data }))
                     .pipe(rename(file))
@@ -56,7 +56,7 @@ gulp.task('vectormap-data', gulp.series('vectormap-utils', function() {
             );
         });
     });
-    return stream;
+    return merge(stream);
 }));
 
 function patchVectorMapUtilsStream(stream, isMinify) {

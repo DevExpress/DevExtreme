@@ -26,7 +26,7 @@ const removeDevelopmentStateManagerModules = (targetPath) => {
         patterns.push(`!${path.join(targetPath, type, STATE_MANAGER_PROD_FOLDER_PATH)}/**`);
     });
 
-    del.sync(patterns);
+    del.deleteSync(patterns);
 }
 
 const createRemoveDevelopmentStateManagerModulesTask = (targetPath) => (done) => {

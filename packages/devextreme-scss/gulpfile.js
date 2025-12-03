@@ -10,7 +10,7 @@ const env = require('../devextreme/build/gulp/env-variables.js');
 const del = require('del');
 
 gulp.task('clean', function(callback) {
-    del.sync([
+    del.deleteSync([
         '../devextreme/artifacts/css/**',
         '../devextreme/scss/bundles/**'
     ], { force: true });

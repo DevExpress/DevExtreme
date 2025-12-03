@@ -110,7 +110,7 @@ const getMessages = function(directory, locale) {
 };
 
 gulp.task('clean-cldr-data', function() {
-    return del('js/__internal/core/localization/cldr-data/**', { force: true });
+    return del.deleteAsync('js/__internal/core/localization/cldr-data/**', { force: true });
 });
 
 gulp.task('generate-community-locales', () => {

@@ -3,7 +3,7 @@
 const gulp = require('gulp');
 const path = require('path');
 const rename = require('gulp-rename');
-const merge = require('merge-stream');
+const merge = require('ordered-read-streams');
 const compressionPipes = require('./compression-pipes.js');
 const context = require('./context');
 
