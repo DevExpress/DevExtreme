@@ -663,6 +663,7 @@ export class AppointmentForm {
             onValueChanged: (e): void => {
               if (e.value === repeatNeverValue) {
                 this.dxForm.updateData(recurrenceRuleExpr, '');
+                this._recurrenceForm.recurrenceRule = new RecurrenceRule('', this.startDate);
               } else if (e.event) {
                 this.showRecurrenceGroup();
               }
@@ -875,12 +876,6 @@ export class AppointmentForm {
   }
 
   saveRecurrenceValue(): void {
-    const isRecurrenceFormOpened = !this._$recurrenceGroup?.hasClass(CLASSES.recurrenceHidden);
-
-    if (!isRecurrenceFormOpened) {
-      return;
-    }
-
     const { recurrenceRule } = this._recurrenceForm;
     const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
 
@@ -936,12 +931,17 @@ export class AppointmentForm {
 
     if (this.recurrenceRuleRaw === null) {
       repeatEditor.option('value', repeatNeverValue);
+      this._recurrenceForm.recurrenceRule = new RecurrenceRule('', this.startDate);
     } else {
       const recurrenceRule = new RecurrenceRule(this.recurrenceRuleRaw, this.startDate);
       const { frequency } = recurrenceRule;
       const value = frequency ?? repeatNeverValue;
 
       repeatEditor.option('value', value);
+      this._recurrenceForm.recurrenceRule = new RecurrenceRule(
+        this.recurrenceRuleRaw,
+        this.startDate,
+      );
     }
   }
 

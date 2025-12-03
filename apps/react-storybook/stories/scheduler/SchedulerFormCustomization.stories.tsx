@@ -438,6 +438,7 @@ export const LegacyPopup: Story = {
                 items: [
                   {
                     name: "recurrenceStartDateEditor",
+                    cssClass: "dx-hidden",
                   },
                   {
                     name: "recurrenceRuleGroup",

@@ -185,7 +185,7 @@ export class RecurrenceForm {
     return this._recurrenceRule;
   }
 
-  private set recurrenceRule(value: RecurrenceRule) {
+  set recurrenceRule(value: RecurrenceRule) {
     this._recurrenceRule = value;
   }
 
