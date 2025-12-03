@@ -1,6 +1,5 @@
-import { enableProdMode, Component, NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { enableProdMode, Component, provideZoneChangeDetection } from '@angular/core';
 import notify from 'devextreme/ui/notify';
 import { DxToolbarModule } from 'devextreme-angular';
 import { DxDropDownButtonModule, DxDropDownButtonComponent, DxDropDownButtonTypes } from 'devextreme-angular/ui/drop-down-button';
@@ -19,11 +18,14 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  standalone: false,
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
+  imports: [
+    DxDropDownButtonModule,
+    DxToolbarModule,
+  ],
 })
 export class AppComponent {
   dropDownButton: DxDropDownButtonComponent['instance'];
@@ -91,14 +93,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule, DxDropDownButtonModule,
-    DxToolbarModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

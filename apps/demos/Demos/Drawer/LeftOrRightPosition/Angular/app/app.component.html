@@ -40,7 +40,8 @@
         >
         </dx-radio-group>
       </div>
-      <div *ngIf="selectedOpenMode !== 'push'" class="option">
+      @if (selectedOpenMode !== 'push') {
+      <div class="option">
         <label>Reveal mode</label>
         <dx-radio-group
           [(value)]="selectedRevealMode"
@@ -49,6 +50,7 @@
         >
         </dx-radio-group>
       </div>
+      }
     </div>
   </div>
 </div>
