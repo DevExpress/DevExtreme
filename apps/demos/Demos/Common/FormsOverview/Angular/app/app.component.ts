@@ -1,6 +1,5 @@
-import { Component, NgModule, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import {
   DxSelectBoxModule,
   DxTextAreaModule,
@@ -21,11 +20,16 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  standalone: false,
   selector: 'demo-app',
   providers: [Service],
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
+  imports: [
+    DxSelectBoxModule,
+    DxTextAreaModule,
+    DxDateBoxModule,
+    DxFormModule,
+  ],
 })
 
 export class AppComponent {
@@ -42,18 +46,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxSelectBoxModule,
-    DxTextAreaModule,
-    DxDateBoxModule,
-    DxFormModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});
