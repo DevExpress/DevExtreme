@@ -67,7 +67,7 @@ const App = () => {
       }
     });
   }, []);
-  const movieInfoFormRender = useCallback(
+  const movieInfoContainerRender = useCallback(
     () => <MovieInfoContainer formInstanceRef={formInstanceRef} />,
     [],
   );
@@ -97,7 +97,7 @@ const App = () => {
         }}
       >
         <SchedulerForm onInitialized={onFormInitialized}>
-          <Item render={movieInfoFormRender} />
+          <Item render={movieInfoContainerRender} />
 
           <Item
             itemType="group"
