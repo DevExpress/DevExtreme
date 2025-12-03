@@ -4347,7 +4347,10 @@
             "Name": "UpdateItemsDynamically",
             "Equivalents": "add item, remove item, show item, hide item",
             "DocUrl": "",
-            "Widget": "Form"
+            "Widget": "Form",
+            "MvcAdditionalFiles": [
+              "/ViewModels/FormViewModel.cs"
+            ]
           },
           {
             "Title": "Smart Paste",
@@ -4357,7 +4360,9 @@
             "Widget": "Form",
             "MvcDescription": "",
             "NetCoreDescription": "",
-            "MvcAdditionalFiles": [],
+            "MvcAdditionalFiles": [
+              "/ViewModels/FormViewModel.cs"
+            ],
             "DemoType": "Web",
             "Badge": "New",
             "Modules": "openai"
