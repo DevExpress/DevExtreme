@@ -1745,7 +1745,7 @@ describe('Appointment Form', () => {
         expect(deleteAppointmentSpy).toHaveBeenCalledWith(dataItem);
       });
 
-      it('it should correctly handle e.cancel=true', async () => {
+      it('should correctly handle e.cancel=true', async () => {
         const { scheduler } = await createScheduler({
           ...getDefaultConfig(),
           dataSource: [{ ...commonAppointment }],
@@ -1759,7 +1759,7 @@ describe('Appointment Form', () => {
         expect(dataSource.items().length).toBe(1);
       });
 
-      it('it should correctly handle e.cancel=false', async () => {
+      it('should correctly handle e.cancel=false', async () => {
         const { scheduler } = await createScheduler({
           ...getDefaultConfig(),
           dataSource: [{ ...commonAppointment }],
@@ -1938,13 +1938,13 @@ describe('Appointment Popup', () => {
     expect(POM.popup.form.option('formData')).toMatchObject({ ...commonAppointment });
   });
 
-  it('should open appointment on tooltip click', async () => {
+  it('should open on tooltip click', async () => {
     const { POM } = await createScheduler({
       ...getDefaultConfig(),
       dataSource: [{ ...commonAppointment }],
     });
 
-    expect(POM.getPopups().length).toBe(0);
+    expect(POM.isPopupVisible()).toBe(false);
 
     jest.useFakeTimers();
     POM.getAppointment('common-app').element?.click();
@@ -1952,7 +1952,7 @@ describe('Appointment Popup', () => {
 
     POM.getTooltipAppointment()?.click();
 
-    expect(POM.getPopups().length).toBe(1);
+    expect(POM.isPopupVisible()).toBe(true);
     expect(POM.popup.form.option('formData')).toMatchObject({ ...commonAppointment });
   });
 
