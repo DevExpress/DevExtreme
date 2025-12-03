@@ -17,6 +17,7 @@ import type {
   TranslateCommandParams,
   TranslateCommandResult,
 } from '@js/common/ai-integration';
+import localizationMessage from '@js/common/core/localization/message';
 import type {
   AIChangeStyleOption,
   AIChangeToneOption,
@@ -76,14 +77,14 @@ export type AICommandExecutor<T extends AICommandNameExtended> = (
 ) => () => void;
 
 export const defaultCommandNames: Record<AICommandName, string> = {
-  summarize: 'Summarize',
-  proofread: 'Proofread',
-  expand: 'Expand',
-  shorten: 'Shorten',
-  changeStyle: 'Change Style',
-  changeTone: 'Change Tone',
-  translate: 'Translate',
-  askAI: 'Ask AI',
+  summarize: localizationMessage.format('dxHtmlEditor-aiCommandSummarize'),
+  proofread: localizationMessage.format('dxHtmlEditor-aiCommandProofread'),
+  expand: localizationMessage.format('dxHtmlEditor-aiCommandExpand'),
+  shorten: localizationMessage.format('dxHtmlEditor-aiCommandShorten'),
+  changeStyle: localizationMessage.format('dxHtmlEditor-aiCommandChangeStyle'),
+  changeTone: localizationMessage.format('dxHtmlEditor-aiCommandChangeTone'),
+  translate: localizationMessage.format('dxHtmlEditor-aiCommandTranslate'),
+  askAI: localizationMessage.format('dxHtmlEditor-aiCommandAskAI'),
 };
 
 const htmlEditorAIChangeStyleOptions: AIChangeStyleOption[] = [
@@ -114,13 +115,21 @@ const aiCommandNames = {
 
 export type AICommandNameEnum = typeof aiCommandNames[keyof typeof aiCommandNames];
 
+const getLocalizedCommandOption = (command: AICommandNameExtended): (
+option: AIChangeStyleOption | AIChangeToneOption | AITranslateOption
+) => string => (
+  option: AIChangeStyleOption | AIChangeToneOption | AITranslateOption,
+): string => localizationMessage.format(`dxHtmlEditor-aiCommandOption${capitalize(command)}${capitalize(option)}`);
+
 export const getDefaultOptionsByCommand = (
   command: AICommandNameExtended,
-): CommandOption[] | undefined => {
-  const commandToOptionsMap: Record<string, CommandOption[]> = {
-    changeStyle: htmlEditorAIChangeStyleOptions,
-    changeTone: htmlEditorAIChangeToneOptions,
-    translate: htmlEditorAITranslateOptions,
+): string[] | undefined => {
+  const getLocalizedOption = getLocalizedCommandOption(command);
+
+  const commandToOptionsMap: Record<string, string[]> = {
+    changeStyle: htmlEditorAIChangeStyleOptions.map(getLocalizedOption),
+    changeTone: htmlEditorAIChangeToneOptions.map(getLocalizedOption),
+    translate: htmlEditorAITranslateOptions.map(getLocalizedOption),
   };
 
   return commandToOptionsMap[command];
