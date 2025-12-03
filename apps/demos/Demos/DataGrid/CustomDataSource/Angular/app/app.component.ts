@@ -4,7 +4,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HttpClient, HttpParams, provideHttpClient, withFetch } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { DxDataGridModule } from 'devextreme-angular';
-import { CustomStore, LoadOptions } from 'devextreme-angular/common/data';
+import { CustomStore, type LoadOptions, type LoadResultObject } from 'devextreme-angular/common/data';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -21,9 +21,7 @@ if (window && window.config?.packageConfigPaths) {
   templateUrl: `.${modulePrefix}/app.component.html`,
 })
 export class AppComponent {
-  url: string;
-
-  dataSource = {} as CustomStore;
+  dataSource: CustomStore;
 
   constructor(httpClient: HttpClient) {
     const isNotEmpty = (value: unknown) => (value !== undefined && value !== null && value !== '');
@@ -33,7 +31,7 @@ export class AppComponent {
       async load(loadOptions: LoadOptions) {
         const url = 'https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/orders';
 
-        const paramNames = [
+        const paramNames: (keyof LoadOptions)[] = [
           'skip', 'take', 'requireTotalCount', 'requireGroupCount',
           'sort', 'filter', 'totalSummary', 'group', 'groupSummary',
         ];
@@ -47,7 +45,7 @@ export class AppComponent {
           });
 
         try {
-          const result = await lastValueFrom(httpClient.get(url, { params })) as Record<string, unknown>;
+          const result = await lastValueFrom(httpClient.get<LoadResultObject>(url, { params }));
 
           return {
             data: result.data,
