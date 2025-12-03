@@ -34,8 +34,8 @@ catalogs:
       specifier: 4.1.64
       version: 4.1.64
     devextreme-quill:
-      specifier: 1.7.6
-      version: 1.7.6
+      specifier: 1.7.7
+      version: 1.7.7
     eslint:
       specifier: 9.18.0
       version: 9.18.0
@@ -362,7 +362,7 @@ importers:
         version: 4.4.4
       devextreme-quill:
         specifier: 'catalog:'
-        version: 1.7.6
+        version: 1.7.7
       devextreme-react:
         specifier: workspace:*
         version: link:../../packages/devextreme-react/npm
@@ -1122,7 +1122,7 @@ importers:
         version: link:../../packages/devextreme/artifacts/npm/devextreme-dist
       devextreme-quill:
         specifier: 'catalog:'
-        version: 1.7.6
+        version: 1.7.7
       devextreme-react:
         specifier: workspace:~
         version: link:../../packages/devextreme-react/npm
@@ -1261,7 +1261,7 @@ importers:
         version: 4.1.64
       devextreme-quill:
         specifier: 'catalog:'
-        version: 1.7.6
+        version: 1.7.7
       inferno:
         specifier: 'catalog:'
         version: 8.2.3
@@ -1355,7 +1355,7 @@ importers:
         version: 0.14.2
       autoprefixer:
         specifier: 10.4.21
-        version: 10.4.21(postcss@8.5.6)
+        version: 10.4.21(postcss@8.4.38)
       axe-core:
         specifier: 4.10.3
         version: 4.10.3
@@ -2020,7 +2020,7 @@ importers:
         version: 15.11.0(typescript@5.9.2)
       stylelint-config-standard-scss:
         specifier: 9.0.0
-        version: 9.0.0(postcss@8.4.38)(stylelint@15.11.0(typescript@5.9.2))
+        version: 9.0.0(postcss@8.5.6)(stylelint@15.11.0(typescript@5.9.2))
       stylelint-scss:
         specifier: 6.10.0
         version: 6.10.0(stylelint@15.11.0(typescript@5.9.2))
@@ -10314,8 +10314,8 @@ packages:
     engines: {node: '>=20.0.0'}
     hasBin: true
 
-  devextreme-quill@1.7.6:
-    resolution: {integrity: sha512-tIAnvHcQYarpPQwhjO9HaKmB4oDRdz/DPZ8Edo5EFeiYWcejgCl6kSeLgGoFWprPWlWkQUIZI3kBJXDRbXIOBg==}
+  devextreme-quill@1.7.7:
+    resolution: {integrity: sha512-tRAdHOxGGTb5TSX2o4v7nTsXe567tdyipbehF28h2OH6pJNNLzCjWw5JAd2UHMbh6VG0bg+3xshsn9DJwX4P0Q==}
 
   devextreme-schematics@1.7.1:
     resolution: {integrity: sha512-K+FNrji2/G7QPkfWYhWiNNaXcmxdlXDTOVpIiISoMr6fumRhz5PindoIYlOx0HXtnpvcBWzb2Fqadujr8qop2g==}
@@ -24983,13 +24983,15 @@ snapshots:
     transitivePeerDependencies:
       - '@parcel/core'
 
-  '@parcel/cache@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))':
+  '@parcel/cache@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)':
     dependencies:
       '@parcel/core': 2.12.0(@swc/helpers@0.5.15)
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/logger': 2.12.0
       '@parcel/utils': 2.12.0
       lmdb: 2.8.5
+    transitivePeerDependencies:
+      - '@swc/helpers'
 
   '@parcel/codeframe@2.12.0':
     dependencies:
@@ -25049,7 +25051,7 @@ snapshots:
   '@parcel/core@2.12.0(@swc/helpers@0.5.15)':
     dependencies:
       '@mischnic/json-sourcemap': 0.1.1
-      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
+      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/diagnostic': 2.12.0
       '@parcel/events': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
@@ -25464,7 +25466,7 @@ snapshots:
 
   '@parcel/types@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)':
     dependencies:
-      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
+      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/diagnostic': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/package-manager': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
@@ -29153,6 +29155,16 @@ snapshots:
       postcss: 8.5.2
       postcss-value-parser: 4.2.0
 
+  autoprefixer@10.4.21(postcss@8.4.38):
+    dependencies:
+      browserslist: 4.28.0
+      caniuse-lite: 1.0.30001756
+      fraction.js: 4.3.7
+      normalize-range: 0.1.2
+      picocolors: 1.1.1
+      postcss: 8.4.38
+      postcss-value-parser: 4.2.0
+
   autoprefixer@10.4.21(postcss@8.5.6):
     dependencies:
       browserslist: 4.28.0
@@ -31589,7 +31601,7 @@ snapshots:
       typescript: 5.9.2
       winston: 3.17.0
 
-  devextreme-quill@1.7.6:
+  devextreme-quill@1.7.7:
     dependencies:
       core-js: 3.39.0
       eventemitter3: 4.0.7
@@ -39656,9 +39668,9 @@ snapshots:
     dependencies:
       postcss: 8.4.38
 
-  postcss-scss@4.0.9(postcss@8.4.38):
+  postcss-scss@4.0.9(postcss@8.5.6):
     dependencies:
-      postcss: 8.4.38
+      postcss: 8.5.6
 
   postcss-selector-parser@6.1.2:
     dependencies:
@@ -41896,14 +41908,14 @@ snapshots:
       postcss-html: 1.7.0
       stylelint: 16.5.0(typescript@5.4.5)
 
-  stylelint-config-recommended-scss@11.0.0(postcss@8.4.38)(stylelint@15.11.0(typescript@5.9.2)):
+  stylelint-config-recommended-scss@11.0.0(postcss@8.5.6)(stylelint@15.11.0(typescript@5.9.2)):
     dependencies:
-      postcss-scss: 4.0.9(postcss@8.4.38)
+      postcss-scss: 4.0.9(postcss@8.5.6)
       stylelint: 15.11.0(typescript@5.9.2)
       stylelint-config-recommended: 12.0.0(stylelint@15.11.0(typescript@5.9.2))
       stylelint-scss: 4.7.0(stylelint@15.11.0(typescript@5.9.2))
     optionalDependencies:
-      postcss: 8.4.38
+      postcss: 8.5.6
 
   stylelint-config-recommended-vue@1.5.0(postcss-html@1.7.0)(stylelint@16.5.0(typescript@5.4.5)):
     dependencies:
@@ -41933,13 +41945,13 @@ snapshots:
     dependencies:
       stylelint: 16.5.0(typescript@5.9.2)
 
-  stylelint-config-standard-scss@9.0.0(postcss@8.4.38)(stylelint@15.11.0(typescript@5.9.2)):
+  stylelint-config-standard-scss@9.0.0(postcss@8.5.6)(stylelint@15.11.0(typescript@5.9.2)):
     dependencies:
       stylelint: 15.11.0(typescript@5.9.2)
-      stylelint-config-recommended-scss: 11.0.0(postcss@8.4.38)(stylelint@15.11.0(typescript@5.9.2))
+      stylelint-config-recommended-scss: 11.0.0(postcss@8.5.6)(stylelint@15.11.0(typescript@5.9.2))
       stylelint-config-standard: 33.0.0(stylelint@15.11.0(typescript@5.9.2))
     optionalDependencies:
-      postcss: 8.4.38
+      postcss: 8.5.6
 
   stylelint-config-standard@33.0.0(stylelint@15.11.0(typescript@5.9.2)):
     dependencies:
