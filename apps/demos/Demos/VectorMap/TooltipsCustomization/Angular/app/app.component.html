@@ -32,31 +32,31 @@
   </dxi-vector-map-legend>
   <div *dxTemplate="let info of 'tooltipContent'" class="state-tooltip">
     <h4>{{ info.attribute("name") }}</h4>
-    @if (gdpData[info.attribute('name')] as countryGDPData) {
-    <div id="nominal">
-      Nominal GDP: $<span>{{ countryGDPData.total | number : "1.0-0" }}</span
-      >M
-    </div>
+    @if (gdpData[info.attribute('name')]; as countryGDPData) {
+      <div id="nominal">
+        Nominal GDP: $<span>{{ countryGDPData.total | number : "1.0-0" }}</span
+        >M
+      </div>
     }
-    @if (getPieData(info.attribute('name')) as data) {
-    <div>
-      <dx-pie-chart id="gdp-sectors" [dataSource]="data" [animation]="false">
-        <dxi-pie-chart-series argumentField="name" valueField="value">
-          <dxo-pie-chart-label
-            [visible]="true"
-            [customizeText]="customizePieLabel"
-          >
-            <dxo-pie-chart-connector
+    @if (getPieData(info.attribute('name')); as data) {
+      <div>
+        <dx-pie-chart id="gdp-sectors" [dataSource]="data" [animation]="false">
+          <dxi-pie-chart-series argumentField="name" valueField="value">
+            <dxo-pie-chart-label
               [visible]="true"
-              [width]="1"
-            ></dxo-pie-chart-connector>
-          </dxo-pie-chart-label>
-        </dxi-pie-chart-series>
-        <dxo-pie-chart-legend [visible]="false"></dxo-pie-chart-legend>
-      </dx-pie-chart>
-    </div>
+              [customizeText]="customizePieLabel"
+            >
+              <dxo-pie-chart-connector
+                [visible]="true"
+                [width]="1"
+              ></dxo-pie-chart-connector>
+            </dxo-pie-chart-label>
+          </dxi-pie-chart-series>
+          <dxo-pie-chart-legend [visible]="false"></dxo-pie-chart-legend>
+        </dx-pie-chart>
+      </div>
     } @else {
-    <div>No economic development data</div>
+      <div>No economic development data</div>
     }
   </div>
 </dx-vector-map>
