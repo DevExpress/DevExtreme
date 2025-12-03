@@ -202,10 +202,10 @@ export class AppointmentForm {
 
   dispose(): void {
     this._dxForm?.dispose();
-    this._dxForm = undefined;
-    if (this._recurrenceForm) {
-      this._recurrenceForm.dxForm = undefined;
-    }
+    // this._dxForm = undefined;
+    // if (this._recurrenceForm) {
+    //   // this._recurrenceForm.dxForm = undefined;
+    // }
   }
 
   create(popup: any): void {
