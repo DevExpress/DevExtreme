@@ -3,8 +3,7 @@ import Scheduler, {
   Editing,
   Resource,
   Form as SchedulerForm,
-  SimpleItem,
-  GroupItem,
+  Item,
   type SchedulerTypes,
 } from 'devextreme-react/scheduler';
 import { query } from 'devextreme-react/common/data';
@@ -119,10 +118,10 @@ const App = () => {
         }}
       >
         <SchedulerForm onInitialized={onFormInitialized}>
-          <SimpleItem render={movieInfoFormRender} />
+          <Item render={movieInfoFormRender} />
 
-          <GroupItem itemType="group" colCount={2} colCountByScreen={{ xs: 2 }}>
-            <SimpleItem
+          <Item itemType="group" colCount={2} colCountByScreen={{ xs: 2 }}>
+            <Item
               dataField="movieId"
               editorType="dxSelectBox"
               label={{ text: 'Movie' }}
@@ -137,7 +136,7 @@ const App = () => {
               }}
             />
 
-            <SimpleItem
+            <Item
               dataField="price"
               editorType="dxSelectBox"
               label={{ text: 'Price' }}
@@ -149,12 +148,11 @@ const App = () => {
                 onContentReady: onPriceEditorContentReady,
               }}
             />
-          </GroupItem>
+          </Item>
 
-          <GroupItem itemType="group" name="startDateGroup" />
+          <Item itemType="group" name="startDateGroup" />
 
-          {/* @ts-expect-error - disabled is a hidden feature not in typings */}
-          <GroupItem itemType="group" name="endDateGroup" disabled={true} />
+          <Item itemType="group" name="endDateGroup" disabled={true} />
         </SchedulerForm>
       </Editing>
 
