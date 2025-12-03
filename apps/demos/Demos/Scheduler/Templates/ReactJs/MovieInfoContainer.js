@@ -3,7 +3,7 @@ import { query } from 'devextreme-react/common/data';
 import { moviesData } from './data.js';
 
 const getMovieById = (id) => query(moviesData).filter(['id', id]).toArray()[0];
-const MovieInfoForm = ({ formInstanceRef }) => {
+const MovieInfoContainer = ({ formInstanceRef }) => {
   const [movie, setMovie] = useState(null);
   useEffect(() => {
     const form = formInstanceRef.current;
@@ -61,4 +61,4 @@ const MovieInfoForm = ({ formInstanceRef }) => {
     </div>
   );
 };
-export default MovieInfoForm;
+export default MovieInfoContainer;

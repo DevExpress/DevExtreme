@@ -13,7 +13,7 @@ import type dxForm from 'devextreme/ui/form';
 import type { OptionChangedEvent as PopupOptionChangedEvent } from 'devextreme/ui/popup';
 import Appointment from './Appointment.tsx';
 import AppointmentTooltip from './AppointmentTooltip.tsx';
-import MovieInfoForm from './MovieInfoContainer.tsx';
+import MovieInfoContainer from './MovieInfoContainer.tsx';
 import {
   data, moviesData, theatreData, type MovieResource,
 } from './data.ts';
@@ -88,7 +88,7 @@ const App = () => {
   }, []);
 
   const movieInfoFormRender = useCallback(
-    () => <MovieInfoForm formInstanceRef={formInstanceRef} />,
+    () => <MovieInfoContainer formInstanceRef={formInstanceRef} />,
     [],
   );
 

@@ -4,13 +4,13 @@ import type { FieldDataChangedEvent } from 'devextreme/ui/form';
 import { query } from 'devextreme-react/common/data';
 import { moviesData, type MovieResource } from './data.ts';
 
-type MovieInfoFormProps = {
+type MovieInfoContainerProps = {
   formInstanceRef: React.RefObject<dxForm | null>;
 };
 
 const getMovieById = (id: number) => query(moviesData).filter(['id', id]).toArray()[0];
 
-const MovieInfoForm: React.FC<MovieInfoFormProps> = ({ formInstanceRef }) => {
+const MovieInfoContainer: React.FC<MovieInfoContainerProps> = ({ formInstanceRef }) => {
   const [movie, setMovie] = useState<MovieResource | null>(null);
 
   useEffect(() => {
@@ -71,4 +71,4 @@ const MovieInfoForm: React.FC<MovieInfoFormProps> = ({ formInstanceRef }) => {
   );
 };
 
-export default MovieInfoForm;
+export default MovieInfoContainer;
