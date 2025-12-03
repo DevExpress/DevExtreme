@@ -318,9 +318,9 @@ jobs:
       #   working-directory: apps/demos
       #   run: pnpm run ts-check-ng
 
-      # - name: Run check TS for React
-      #   working-directory: apps/demos
-      #   run: pnpm run ts-check-react
+      - name: Run check TS for React
+        working-directory: apps/demos
+        run: pnpm run ts-check-react
 
   lint:
     name: Lint code base
