@@ -84,7 +84,7 @@ export class AppointmentPopup {
   dispose() {
     this.form.dispose();
     this._popup?.dispose();
-    // this._popup = undefined;
+    this._popup = undefined;
   }
 
   _createPopup(options): void {
