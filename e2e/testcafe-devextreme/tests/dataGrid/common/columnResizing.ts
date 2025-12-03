@@ -72,3 +72,55 @@ test('column separator should starts from the parent', async (t) => {
     columns: ['GDP_Total', 'Population_Urban'],
   }, 'Area'],
 }));
+
+// T1314667
+test('DataGrid – Resize indicator is moved when resizing a grouped column if showWhenGrouped is set to true', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await dataGrid.resizeHeader(3, 30, false);
+
+  await t
+    .expect(dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(0).element.clientWidth)
+    .within(128, 130);
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [{
+      ID: 1,
+      Country: 'Brazil',
+      Area: 8515767,
+      Population_Urban: 0.85,
+      Population_Rural: 0.15,
+      Population_Total: 205809000,
+    }],
+    keyExpr: 'ID',
+    allowColumnResizing: true,
+    columnResizingMode: 'widget',
+    width: 500,
+    columns: [
+      {
+        dataField: 'ID',
+        fixed: true,
+        allowReordering: false,
+        width: 50,
+      },
+
+      {
+        caption: 'Population',
+        columns: [
+          {
+            dataField: 'Country',
+            showWhenGrouped: true,
+            width: 100,
+            groupIndex: 0,
+          },
+          { dataField: 'Area' },
+          { dataField: 'Population_Total' },
+          { dataField: 'Population_Urban' },
+          { dataField: 'Population_Rural' },
+        ],
+      },
+    ],
+  });
+});
