@@ -14,7 +14,7 @@ import type dxForm from 'devextreme/ui/form';
 import type { OptionChangedEvent as PopupOptionChangedEvent } from 'devextreme/ui/popup';
 import Appointment from './Appointment.tsx';
 import AppointmentTooltip from './AppointmentTooltip.tsx';
-import MovieInfoForm from './MovieInfoForm.tsx';
+import MovieInfoForm from './MovieInfoContainer.tsx';
 import {
   data, moviesData, theatreData, type MovieResource,
 } from './data.ts';
