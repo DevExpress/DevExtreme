@@ -439,7 +439,35 @@ export const LegacyPopup: Story = {
                   {
                     name: "recurrenceStartDateEditor",
                   },
-                  "recurrenceRuleGroup",
+                  {
+                    name: "recurrenceRuleGroup",
+                    itemType: "group",
+                    items: ["recurrenceRuleIcon",
+                      {
+                        name: "recurrencePatternGroup",
+                        itemType: "group",
+                        items: [
+                          {
+                            name: "recurrenceRuleRepeatGroup",
+                            items: [
+                              "recurrenceCountEditor",
+                              {
+                                name: "recurrencePeriodEditor", editorOptions: {
+                                  onValueChanged: (e) => {
+                                    const onValueChanged = form.getEditor("repeatEditor").option("onValueChanged");
+                                    form.getEditor("repeatEditor").option("value", e.value);
+                                    onValueChanged(e);
+                                  }
+                                }
+                              },
+                            ]
+                          },
+                          "recurrenceDaysOfWeekEditor",
+                          "recurrenceDayOfYearGroup"
+                        ]
+                      },
+                    ]
+                  },
                   "recurrenceEndGroup",
                 ],
               },
