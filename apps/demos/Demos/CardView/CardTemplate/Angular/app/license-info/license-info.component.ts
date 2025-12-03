@@ -8,7 +8,6 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  standalone: false,
   selector: 'license-info',
   templateUrl: `.${modulePrefix}/license-info/license-info.component.html`,
 })

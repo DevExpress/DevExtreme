@@ -8,7 +8,6 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  standalone: false,
   selector: 'employee',
   templateUrl: `.${modulePrefix}/employee/employee.component.html`,
   styleUrls: [`.${modulePrefix}/employee/employee.component.css`],
