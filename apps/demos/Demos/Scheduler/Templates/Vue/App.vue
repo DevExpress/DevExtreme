@@ -25,7 +25,7 @@
       <DxEditing
         :allow-adding="false"
         :popup="{
-          maxWidth: 440,
+          width: 440,
           onOptionChanged: onPopupOptionChanged
         }"
       >
