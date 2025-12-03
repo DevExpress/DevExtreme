@@ -369,7 +369,7 @@ if (Quill) {
       commandOptions?: string[],
     ) {
       const options = commandOptions?.map(capitalize)
-        ?? getDefaultOptionsByCommand(command)?.map(capitalize);
+        ?? getDefaultOptionsByCommand(command);
 
       const item = {
         id: command,
@@ -379,7 +379,7 @@ if (Quill) {
           id: option,
           text: option,
           parentCommand: command,
-          options: options?.map(capitalize),
+          options,
         })),
       };
 

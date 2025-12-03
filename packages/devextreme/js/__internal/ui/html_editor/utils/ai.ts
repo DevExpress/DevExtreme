@@ -147,7 +147,7 @@ export const getDefaultOptionsByCommand = (
 
 const createDefinitionFromString = (commandName: AICommandName): CommandDefinition => {
   const text = getDefaultCommandName(commandName);
-  const defaultOptions = getDefaultOptionsByCommand(commandName)?.map(capitalize);
+  const defaultOptions = getDefaultOptionsByCommand(commandName);
 
   return {
     id: commandName,
@@ -165,7 +165,7 @@ const createDefinitionFromObject = (
   prompt?: (param?: string) => string,
 ): CommandDefinition => {
   const capitalizedRaw = rawOptions?.map(capitalize);
-  const options = capitalizedRaw ?? getDefaultOptionsByCommand(name)?.map(capitalize);
+  const options = capitalizedRaw ?? getDefaultOptionsByCommand(name);
   const displayText = text ?? getDefaultCommandName(name);
 
   const definition = {
