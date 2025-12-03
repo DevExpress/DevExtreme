@@ -1,6 +1,5 @@
-import { NgModule, Component, enableProdMode, ChangeDetectorRef } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, ChangeDetectorRef, provideZoneChangeDetection } from '@angular/core';
 import { DxButtonModule, DxLoadPanelModule, DxCheckBoxModule } from 'devextreme-angular';
 
 import { Employee, Service } from './app.service';
@@ -16,12 +15,16 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  standalone: false,
   selector: 'demo-app',
   providers: [Service],
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   preserveWhitespaces: true,
+  imports: [
+    DxButtonModule,
+    DxLoadPanelModule,
+    DxCheckBoxModule,
+  ],
 })
 
 export class AppComponent {
@@ -52,16 +55,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxButtonModule,
-    DxLoadPanelModule,
-    DxCheckBoxModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule {}
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});
