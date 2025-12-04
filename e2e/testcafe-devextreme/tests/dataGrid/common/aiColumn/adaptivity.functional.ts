@@ -33,7 +33,6 @@ test('The AI column should be hidden when columnHidingEnabled is true', async (t
   width: 350,
   columnWidth: 100,
   columnHidingEnabled: true,
-
   columns: [
     { dataField: 'id', caption: 'ID' },
     { dataField: 'name', caption: 'Name' },
