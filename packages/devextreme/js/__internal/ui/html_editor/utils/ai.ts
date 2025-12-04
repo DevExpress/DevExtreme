@@ -129,7 +129,7 @@ const getLocalizedCommandOption = (command: AICommandNameExtended): (
 option: AIChangeStyleOption | AIChangeToneOption | AITranslateOption
 ) => string => (
   option: AIChangeStyleOption | AIChangeToneOption | AITranslateOption,
-): string => localizationMessage.format(`dxHtmlEditor-aiCommandOption${capitalize(command)}${capitalize(option)}`);
+): string => localizationMessage.format(`dxHtmlEditor-aiCommand${capitalize(command)}${capitalize(option)}`);
 
 export const getDefaultOptionsByCommand = (
   command: AICommandNameExtended,
