@@ -1,4 +1,4 @@
-import { ExecutorContext } from '@nx/devkit';
+import { ExecutorContext, ProjectGraph } from '@nx/devkit';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
@@ -18,6 +18,8 @@ export interface MockContextOptions {
   projectName?: string;
   projectRoot?: string;
   isVerbose?: boolean;
+  nxJsonConfiguration?: Record<string, unknown>;
+  projectGraph?: Record<string, unknown>;
 }
 
 export function createMockContext(options: MockContextOptions = {}): ExecutorContext {
@@ -26,7 +28,23 @@ export function createMockContext(options: MockContextOptions = {}): ExecutorCon
     projectName = 'test-lib',
     projectRoot = 'packages/test-lib',
     isVerbose = false,
+    nxJsonConfiguration = {},
   } = options;
+
+  const projectGraph: ProjectGraph = {
+    nodes: {
+      [projectName]: {
+        name: projectName,
+        type: 'lib',
+        data: {
+          root: projectRoot,
+          targets: {},
+        },
+      },
+    },
+    externalNodes: {},
+    dependencies: {},
+  };
 
   return {
     root,
@@ -39,5 +57,7 @@ export function createMockContext(options: MockContextOptions = {}): ExecutorCon
       },
       version: 2,
     },
+    nxJsonConfiguration,
+    projectGraph,
   };
 }
