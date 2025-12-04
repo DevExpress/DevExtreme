@@ -873,6 +873,7 @@ export class AppointmentForm {
     this._$recurrenceGroup?.attr('tabindex', '-1');
 
     this._popup.updateToolbarForMainGroup();
+    this.updateRepeatEditorValue();
   }
 
   saveRecurrenceValue(): void {
@@ -938,7 +939,8 @@ export class AppointmentForm {
       const value = frequency ?? repeatNeverValue;
 
       repeatEditor.option('value', value);
-      this._recurrenceForm.recurrenceRule = new RecurrenceRule(
+      this._recurrenceForm.updateRecurrenceFormValues(
+        value,
         this.recurrenceRuleRaw,
         this.startDate,
       );

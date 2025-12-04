@@ -403,6 +403,7 @@ export const LegacyPopup: Story = {
                       {
                         name: "customRepeatEditor",
                         editorType: "dxSwitch",
+                        dataField: "repeat",
                         editorOptions: {
                           onValueChanged: (e) => {
                             if (e.value === true) {
@@ -420,8 +421,6 @@ export const LegacyPopup: Story = {
                               form.getEditor("repeatEditor").option("value", "never");
                               onValueChanged({ ...e, value: "never" });
                             }
-
-                            form.getEditor("customRepeatEditor").option("value", e.value);
                           },
                         },
                       },
