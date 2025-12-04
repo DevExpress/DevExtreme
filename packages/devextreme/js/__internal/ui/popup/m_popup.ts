@@ -382,7 +382,7 @@ class Popup<
     this.$element().addClass(POPUP_CLASS);
     this.$wrapper()?.addClass(popupWrapperClasses);
 
-    eventsEngine.on(this._$content, 'keydown', (e) => {
+    eventsEngine.on(this._$wrapper, 'keydown', (e) => {
       if (e.key === 'Escape') {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.hide();
