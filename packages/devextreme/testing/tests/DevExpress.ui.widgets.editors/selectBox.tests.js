@@ -4976,7 +4976,8 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
 
         let prevented = 0;
 
-        $($element).on('keydown', (e) => {
+        $input.on('keydown', (e) => {
+            debugger;
             if(e.isDefaultPrevented()) {
                 prevented++;
             }

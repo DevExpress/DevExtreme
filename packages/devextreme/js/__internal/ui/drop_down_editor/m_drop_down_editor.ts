@@ -168,6 +168,7 @@ class DropDownEditor<
       escape: (e): boolean => {
         if (this.option('opened')) {
           e.preventDefault();
+          e.stopPropagation();
         }
 
         this.close();

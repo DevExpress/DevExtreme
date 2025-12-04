@@ -682,8 +682,9 @@ QUnit.module('keyboard navigation', {
         let prevented = 0;
 
         this.dropDownEditor.option('opened', true);
+        const $input = $(this.dropDownEditor.field());
 
-        this.$rootElement.on('keydown', function(e) {
+        $input.on('keydown', function(e) {
             if(e.isDefaultPrevented()) {
                 prevented++;
             }

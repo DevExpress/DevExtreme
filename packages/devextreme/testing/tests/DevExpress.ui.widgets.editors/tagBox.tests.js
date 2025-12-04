@@ -2583,10 +2583,10 @@ QUnit.module('keyboard navigation', {
             opened: true,
             acceptCustomValue: true
         });
-
+        const $input = $(this.instance.field());
         let prevented = 0;
 
-        $(this.$element).on('keydown', e => {
+        $input.on('keydown', e => {
             if(e.isDefaultPrevented()) {
                 prevented++;
             }

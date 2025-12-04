@@ -367,6 +367,12 @@ class Overlay<
     this._customWrapperClass = null;
     this._$wrapper = $('<div>').addClass(OVERLAY_WRAPPER_CLASS);
     this._$content = $('<div>').addClass(OVERLAY_CONTENT_CLASS);
+    eventsEngine.on(this._$content, 'keydown', (e) => {
+      if (e.key === 'Escape') {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        this.hide();
+      }
+    });
     this._initInnerOverlayClass();
 
     const $element = this.$element();
