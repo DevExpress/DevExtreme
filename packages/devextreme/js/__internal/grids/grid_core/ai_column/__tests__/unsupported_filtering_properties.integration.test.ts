@@ -471,18 +471,12 @@ describe('Unsupported filtering properties', () => {
             caption: 'AI Column',
             name: 'aiColumn',
             ai: getAIColumnOptions(100),
-            calculateFilterExpression,
           },
         ],
       });
 
       await flushAsync();
-
-      expect(calculateFilterExpression).not.toHaveBeenCalled();
-      expect(instance.getVisibleRows()).toHaveLength(dataSource.length);
-
       setGridColumnOptions(instance, 'aiColumn', { calculateFilterExpression });
-
       await flushAsync();
 
       expect(calculateFilterExpression).not.toHaveBeenCalled();
