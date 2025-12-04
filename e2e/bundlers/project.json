@@ -59,7 +59,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "{projectRoot}",
-        "command": "cross-env TMPDIR=./dist NODE_PATH=./node_modules:./node_modules/globalize/dist browserify ./entry/modules_cjs.js -o ./dist/dist_browserify/bundle_cjs.js"
+        "command": "pwd && ls -la dist/ && cross-env TMPDIR=./dist NODE_PATH=./node_modules:./node_modules/globalize/dist browserify ./entry/modules_cjs.js -o ./dist/dist_browserify/bundle_cjs.js && ls -la dist/dist_browserify/"
       },
       "dependsOn": ["build"]
     },
