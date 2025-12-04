@@ -1,5 +1,6 @@
 import '@js/ui/toolbar/ui.toolbar.base';
 
+import eventsEngine from '@js/common/core/events/core/events_engine';
 import { triggerResizeEvent } from '@js/common/core/events/visibility_change';
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
@@ -380,6 +381,13 @@ class Popup<
 
     this.$element().addClass(POPUP_CLASS);
     this.$wrapper()?.addClass(popupWrapperClasses);
+
+    eventsEngine.on(this._$content, 'keydown', (e) => {
+      if (e.key === 'Escape') {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        this.hide();
+      }
+    });
 
     this._$popupContent = this._$content
       ?.wrapInner($('<div>').addClass(POPUP_CONTENT_CLASS))
