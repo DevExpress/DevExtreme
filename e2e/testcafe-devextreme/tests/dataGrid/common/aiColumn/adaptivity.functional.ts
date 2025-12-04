@@ -167,13 +167,11 @@ test('The AI column should have value in the adaptive detail row', async (t) => 
 
   await t.expect(adaptiveRow.element.exists).ok();
 
-  const aiFormItem = adaptiveRow.element.find('.dx-field-item').withText('AI Column');
+  const aiFormItem = adaptiveRow.getAdaptiveCellByName('AI Column');
 
-  await t.expect(aiFormItem.exists).ok();
+  await t.expect(aiFormItem.element.exists).ok();
 
-  const aiFormItemValue = aiFormItem.find('.dx-field-item-content');
-
-  await t.expect(aiFormItemValue.textContent).contains('Response 1');
+  await t.expect(aiFormItem.getAdaptiveCellValue()).contains('Response 1');
 }).before(async () => createWidget('dxDataGrid', () => ({
   dataSource: [
     { id: 1, name: 'Name 1', value: 10 },
