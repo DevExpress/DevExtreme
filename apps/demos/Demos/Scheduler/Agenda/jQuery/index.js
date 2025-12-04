@@ -23,6 +23,20 @@ $(() => {
         label: 'Priority',
         icon: 'tags',
       }],
+    editing: {
+      form: {
+        items: [{ name: 'mainGroup',
+          items: [
+            'subjectGroup',
+            'dateGroup', 'repeatGroup', { name: 'resourcesGroup',
+              items: [{
+                name: 'assigneeIdGroup',
+                colCount: 3,
+                items: ['assigneeIdIcon', 'assigneeId', 'priorityId'],
+              }] },
+          ] }, 'recurrenceGroup'],
+      },
+    },
     height: 600,
   });
 });

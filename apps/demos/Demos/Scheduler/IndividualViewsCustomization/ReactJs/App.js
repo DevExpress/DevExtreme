@@ -1,5 +1,11 @@
 import React from 'react';
-import Scheduler, { Resource, View } from 'devextreme-react/scheduler';
+import Scheduler, {
+  Resource,
+  View,
+  Editing,
+  Form as SchedulerForm,
+  Item,
+} from 'devextreme-react/scheduler';
 import { data, priorityData, typeData } from './data.js';
 
 const currentDate = new Date(2021, 3, 27);
@@ -50,6 +56,27 @@ const App = () => (
       label="Type"
       allowMultiple={false}
     />
+
+    <Editing>
+      <SchedulerForm>
+        <Item name="mainGroup">
+          <Item name="subjectGroup" />
+          <Item name="dateGroup" />
+          <Item name="repeatGroup" />
+          <Item name="resourcesGroup">
+            <Item
+              name="priorityIdGroup"
+              colCount={3}
+            >
+              <Item name="priorityIdIcon" />
+              <Item name="priorityId" />
+              <Item name="typeId" />
+            </Item>
+          </Item>
+        </Item>
+        <Item name="recurrenceGroup" />
+      </SchedulerForm>
+    </Editing>
   </Scheduler>
 );
 export default App;

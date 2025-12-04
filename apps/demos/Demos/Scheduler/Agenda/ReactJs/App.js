@@ -1,5 +1,10 @@
 import React from 'react';
-import Scheduler, { Resource } from 'devextreme-react/scheduler';
+import Scheduler, {
+  Resource,
+  Editing,
+  Form as SchedulerForm,
+  Item,
+} from 'devextreme-react/scheduler';
 import ArrayStore from 'devextreme/data/array_store';
 import { assignees, data, priorities } from './data.js';
 
@@ -33,6 +38,27 @@ const App = () => (
       label="Priority"
       icon="tags"
     />
+
+    <Editing>
+      <SchedulerForm>
+        <Item name="mainGroup">
+          <Item name="subjectGroup" />
+          <Item name="dateGroup" />
+          <Item name="repeatGroup" />
+          <Item name="resourcesGroup">
+            <Item
+              name="assigneeIdGroup"
+              colCount={3}
+            >
+              <Item name="assigneeIdIcon" />
+              <Item name="assigneeId" />
+              <Item name="priorityId" />
+            </Item>
+          </Item>
+        </Item>
+        <Item name="recurrenceGroup" />
+      </SchedulerForm>
+    </Editing>
   </Scheduler>
 );
 export default App;

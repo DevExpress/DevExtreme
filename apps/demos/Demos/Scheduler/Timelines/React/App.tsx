@@ -1,6 +1,12 @@
 import React from 'react';
 
-import Scheduler, { Resource, type SchedulerTypes } from 'devextreme-react/scheduler';
+import Scheduler, {
+  Resource,
+  Editing,
+  Form as SchedulerForm,
+  Item,
+  type SchedulerTypes,
+} from 'devextreme-react/scheduler';
 
 import { data, resourcesData, priorityData } from './data.ts';
 
@@ -37,6 +43,24 @@ const App = () => (
       label="Priority"
       icon="tags"
     />
+
+    <Editing>
+      <SchedulerForm>
+        <Item name="mainGroup">
+          <Item name="subjectGroup" />
+          <Item name="dateGroup" />
+          <Item name="repeatGroup" />
+          <Item name="resourcesGroup">
+            <Item name="ownerIdGroup" colCount={3}>
+              <Item name="ownerIdIcon" />
+              <Item name="ownerId" />
+              <Item name="priority" />
+            </Item>
+          </Item>
+        </Item>
+        <Item name="recurrenceGroup" />
+      </SchedulerForm>
+    </Editing>
   </Scheduler>
 );
 
