@@ -25,18 +25,19 @@
       </dxi-form-item>
     </dxi-form-item>
     <dxi-form-item itemType="group" caption="Phones" name="phones-container">
+      @for (phone of phoneOptions; track $index) {
       <dxi-form-item
         itemType="group"
         name="phones"
-        *ngFor="let phone of phoneOptions; let i = index"
       >
         <dxi-form-item
-          [dataField]="'Phones[' + i + ']'"
-          [editorOptions]="phoneOptions[i]"
+          [dataField]="'Phones[' + $index + ']'"
+          [editorOptions]="phoneOptions[$index]"
         >
-          <dxo-form-label [text]="'Phone ' + (i + 1)"> </dxo-form-label>
+          <dxo-form-label [text]="'Phone ' + ($index + 1)"> </dxo-form-label>
         </dxi-form-item>
       </dxi-form-item>
+      }
       <dxi-form-item
         itemType="button"
         horizontalAlignment="left"
