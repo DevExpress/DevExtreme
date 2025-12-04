@@ -1,6 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import {
-  ChangeDetectionStrategy, Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { DxSplitterModule } from 'devextreme-angular';
 
 if (!document.location.host.includes('localhost')) {
@@ -24,6 +24,7 @@ if (window && window.config?.packageConfigPaths) {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     DxSplitterModule,
+    NgTemplateOutlet,
   ],
 })
 export class AppComponent {

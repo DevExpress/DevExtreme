@@ -36,25 +36,29 @@
           ></dxi-splitter-item>
 
           @for (pane of paneContentTemplates; track pane.name) {
-            <div *dxTemplate="let data of pane.name" tabindex="0">
-              <ng-template
-                [ngTemplateOutlet]="customPaneTemplate"
-                [ngTemplateOutletContext]="{ data: data, title: pane.name }"
-              >
-              </ng-template>
-            </div>
+            <ng-container>
+              <div *dxTemplate="let data of pane.name" tabindex="0">
+                <ng-template
+                  [ngTemplateOutlet]="customPaneTemplate"
+                  [ngTemplateOutletContext]="{ data: data, title: pane.name }"
+                >
+                </ng-template>
+              </div>
+            </ng-container>
           }
         </dx-splitter>
       </dxi-splitter-item>
 
       @for (pane of paneContentTemplates; track pane.name) {
-        <div *dxTemplate="let data of pane.name" tabindex="0">
-          <ng-template
-            [ngTemplateOutlet]="customPaneTemplate"
-            [ngTemplateOutletContext]="{ data: data, title: pane.name }"
-          >
-          </ng-template>
-        </div>
+        <ng-container>
+          <div *dxTemplate="let data of pane.name" tabindex="0">
+            <ng-template
+              [ngTemplateOutlet]="customPaneTemplate"
+              [ngTemplateOutletContext]="{ data: data, title: pane.name }"
+            >
+            </ng-template>
+          </div>
+        </ng-container>
       }
     </dx-splitter>
   </dxi-splitter-item>
@@ -66,13 +70,15 @@
   ></dxi-splitter-item>
 
   @for (pane of paneContentTemplates; track pane.name) {
-    <div *dxTemplate="let data of pane.name" tabindex="0">
-      <ng-template
-        [ngTemplateOutlet]="customPaneTemplate"
-        [ngTemplateOutletContext]="{ data: data, title: pane.name }"
-      >
-      </ng-template>
-    </div>
+    <ng-container>
+      <div *dxTemplate="let data of pane.name" tabindex="0">
+        <ng-template
+          [ngTemplateOutlet]="customPaneTemplate"
+          [ngTemplateOutletContext]="{ data: data, title: pane.name }"
+        >
+        </ng-template>
+      </div>
+    </ng-container>
   }
 </dx-splitter>
 
@@ -81,7 +87,9 @@
     <div class="pane-title">{{ title }}</div>
     <div class="pane-state">{{ getPaneState(data) }}</div>
     @for (item of filterDimensionOptions(data); track item.key) {
-      <div class="pane-option">{{ item.key }}: {{ item.value }}</div>
+      <ng-container>
+        <div class="pane-option">{{ item.key }}: {{ item.value }}</div>
+      </ng-container>
     }
   </div>
 </ng-template>

@@ -1,4 +1,7 @@
 import { Component, Input } from '@angular/core';
+import {
+  DxProgressBarModule,
+} from 'devextreme-angular';
 
 let modulePrefix = '';
 // @ts-ignore
@@ -10,6 +13,9 @@ if (window && window.config?.packageConfigPaths) {
   selector: 'progress-bar',
   templateUrl: `.${modulePrefix}/progress-bar/progress-bar.component.html`,
   styleUrls: [`.${modulePrefix}/progress-bar/progress-bar.component.css`],
+  imports: [
+    DxProgressBarModule,
+  ],
 })
 export class ProgressComponent {
   @Input() value: number;

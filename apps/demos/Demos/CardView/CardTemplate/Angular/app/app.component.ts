@@ -1,11 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import {
-  DxButtonModule,
   DxCardViewModule,
   DxPopupModule,
 } from 'devextreme-angular';
-import { CardInfo } from 'devextreme-angular/ui/card-view';
+import { DxCardViewTypes } from 'devextreme-angular/ui/card-view';
 import { Service, Vehicle } from './app.service';
 import { VehicleCard } from './vehicle-card/vehicle-card.component';
 import { LicenseInfo } from './license-info/license-info.component';
@@ -27,7 +26,6 @@ if (window && window.config?.packageConfigPaths) {
   imports: [
     DxCardViewModule,
     DxPopupModule,
-    DxButtonModule,
     LicenseInfo,
     VehicleCard,
   ],
@@ -52,7 +50,7 @@ export class AppComponent {
     this.popupVisible = false;
   }
 
-  getFormattedPrice(card: CardInfo): string {
+  getFormattedPrice(card: DxCardViewTypes.CardInfo): string {
     const priceText = card.fields.find((f) => f?.column?.dataField === 'Price');
     return priceText?.text ?? '';
   }

@@ -2,7 +2,6 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import {
   DxCardViewModule,
-  DxProgressBarModule,
 } from 'devextreme-angular';
 import { Task, Service } from './app.service';
 import { CardHeader } from './card-header/card-header.component';
@@ -26,7 +25,6 @@ if (window && window.config?.packageConfigPaths) {
   styleUrls: [`.${modulePrefix}/app.component.css`],
   imports: [
     DxCardViewModule,
-    DxProgressBarModule,
     CardHeader,
     PriorityComponent,
     EmployeeComponent,
