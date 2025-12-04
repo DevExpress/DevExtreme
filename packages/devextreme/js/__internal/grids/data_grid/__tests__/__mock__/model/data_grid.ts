@@ -26,14 +26,14 @@ export class DataGridModel extends GridCoreModel<DataGrid> {
     });
   }
 
-  public setDataGridColumnOptions = (
+  public setDataGridColumnOptions(
     columnName: string,
     options: Record<string, unknown>,
-  ): void => {
+  ): void {
     const instance = this.getInstance();
 
     Object.entries(options).forEach(([optionName, optionValue]) => {
       instance.columnOption(columnName, optionName, optionValue);
     });
-  };
+  }
 }
