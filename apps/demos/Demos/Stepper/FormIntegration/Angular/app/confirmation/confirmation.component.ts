@@ -8,7 +8,6 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  standalone: false,
   selector: 'confirmation',
   templateUrl: `.${modulePrefix}/confirmation/confirmation.component.html`,
   styleUrls: [`.${modulePrefix}/confirmation/confirmation.component.css`],

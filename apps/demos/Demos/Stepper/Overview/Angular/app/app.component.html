@@ -1,6 +1,6 @@
 <div class="stepper-demo">
   <div class="widget-container">
-    <div class="widget-wrapper" [ngClass]="'widget-wrapper-' + orientation">
+    <div class="widget-wrapper" [class]="'widget-wrapper-' + orientation">
       <div class="stepper-wrapper">
         <div id="iconsLabel" class="stepper-label">Icons and Labels</div>
         <dx-stepper
@@ -12,12 +12,13 @@
           [selectOnFocus]="selectOnFocus"
           [rtlEnabled]="rtlMode"
         >
+          @for (step of steps; track step) {
           <dxi-stepper-item
-            *ngFor="let step of steps"
             [label]="step.label"
             [icon]="step.icon"
             [optional]="step.optional"
           ></dxi-stepper-item>
+          }
         </dx-stepper>
       </div>
 
@@ -32,11 +33,12 @@
           [selectOnFocus]="selectOnFocus"
           [rtlEnabled]="rtlMode"
         >
+          @for (step of steps; track step) {
           <dxi-stepper-item
-            *ngFor="let step of steps"
             [label]="step.label"
             [optional]="step.optional"
           ></dxi-stepper-item>
+          }
         </dx-stepper>
       </div>
 
@@ -51,10 +53,11 @@
           [selectOnFocus]="selectOnFocus"
           [rtlEnabled]="rtlMode"
         >
+          @for (step of steps; track step) {
           <dxi-stepper-item
-            *ngFor="let step of steps"
             [text]="step.text"
           ></dxi-stepper-item>
+          }
         </dx-stepper>
       </div>
     </div>

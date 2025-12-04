@@ -1,4 +1,5 @@
 import { Component, Input, SimpleChanges, ViewChild } from '@angular/core';
+import { DxFormModule, DxDateRangeBoxModule } from 'devextreme-angular';
 import { DxFormComponent, type DxFormTypes } from 'devextreme-angular/ui/form';
 import { type DxDateRangeBoxTypes } from 'devextreme-angular/ui/date-range-box';
 import type { BookingFormData } from '../app.types';
@@ -10,9 +11,12 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  standalone: false,
   selector: 'dates-form',
   templateUrl: `.${modulePrefix}/dates-form/dates-form.component.html`,
+  imports: [
+    DxFormModule,
+    DxDateRangeBoxModule,
+  ],
 })
 export class DatesFormComponent {
   @ViewChild('formComponent', { static: false }) form!: DxFormComponent;
