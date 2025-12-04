@@ -30,6 +30,7 @@
         "command": "webpack --config ./webpack.config.cjs.js"
       },
       "outputs": ["{projectRoot}/dist"],
+      "cache": false,
       "dependsOn": ["build"]
     },
     "test--webpack": {
@@ -39,6 +40,7 @@
         "command": "webpack --config ./webpack.config.js"
       },
       "outputs": ["{projectRoot}/dist"],
+      "cache": false,
       "dependsOn": ["build"]
     },
     "test--rollup": {
@@ -48,6 +50,7 @@
         "command": "rollup -c"
       },
       "outputs": ["{projectRoot}/dist"],
+      "cache": false,
       "dependsOn": ["build"]
     },
     "test--parcel": {
@@ -57,6 +60,7 @@
         "command": "mkdir -p ./dist/dist_parsel && parcel build ./entry/modules_esm.js --no-cache --dist-dir ./dist/dist_parsel"
       },
       "outputs": ["{projectRoot}/dist"],
+      "cache": false,
       "dependsOn": ["build"]
     },
     "test--browserify-cjs": {
@@ -66,6 +70,7 @@
         "command": "mkdir -p ./dist/dist_browserify && cross-env NODE_PATH=./node_modules:./node_modules/globalize/dist browserify ./entry/modules_cjs.js -o ./dist/dist_browserify/bundle_cjs.js"
       },
       "outputs": ["{projectRoot}/dist"],
+      "cache": false,
       "dependsOn": ["build"]
     },
     "test--vite": {
@@ -75,6 +80,7 @@
         "command": "vite build"
       },
       "outputs": ["{projectRoot}/dist"],
+      "cache": false,
       "dependsOn": ["build"]
     }
   }
