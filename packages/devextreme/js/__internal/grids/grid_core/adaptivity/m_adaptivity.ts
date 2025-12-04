@@ -266,7 +266,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
       if (templateOptions.watch) {
         const dispose = templateOptions.watch(() => ({
           isItemEdited: that._isItemEdited(item),
-          value: that._getValueFromCellOptions(column.index, cellOptions),
+          value: that._getValueFromCellOptions(columnIndex, cellOptions),
         }), () => {
           $container.contents().remove();
           $container.removeClass(ADAPTIVE_ITEM_TEXT_CLASS);
