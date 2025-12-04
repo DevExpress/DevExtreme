@@ -5,7 +5,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "{projectRoot}",
-        "command": "rimraf entry && mkdir entry && node ./generate_entry_files.js"
+        "command": "rimraf entry dist && mkdir entry dist && node ./generate_entry_files.js"
       },
       "outputs": [
         "{projectRoot}/entry"
@@ -29,8 +29,6 @@
         "cwd": "{projectRoot}",
         "command": "webpack --config ./webpack.config.cjs.js"
       },
-      "outputs": ["{projectRoot}/dist"],
-      "cache": false,
       "dependsOn": ["build"]
     },
     "test--webpack": {
@@ -39,8 +37,6 @@
         "cwd": "{projectRoot}",
         "command": "webpack --config ./webpack.config.js"
       },
-      "outputs": ["{projectRoot}/dist"],
-      "cache": false,
       "dependsOn": ["build"]
     },
     "test--rollup": {
@@ -49,28 +45,22 @@
         "cwd": "{projectRoot}",
         "command": "rollup -c"
       },
-      "outputs": ["{projectRoot}/dist"],
-      "cache": false,
       "dependsOn": ["build"]
     },
     "test--parcel": {
       "executor": "nx:run-commands",
       "options": {
         "cwd": "{projectRoot}",
-        "command": "mkdir -p ./dist/dist_parsel && parcel build ./entry/modules_esm.js --no-cache --dist-dir ./dist/dist_parsel"
+        "command": "parcel build ./entry/modules_esm.js --no-cache --dist-dir ./dist/dist_parsel"
       },
-      "outputs": ["{projectRoot}/dist"],
-      "cache": false,
       "dependsOn": ["build"]
     },
     "test--browserify-cjs": {
       "executor": "nx:run-commands",
       "options": {
         "cwd": "{projectRoot}",
-        "command": "mkdir -p ./dist/dist_browserify && cross-env NODE_PATH=./node_modules:./node_modules/globalize/dist browserify ./entry/modules_cjs.js -o ./dist/dist_browserify/bundle_cjs.js"
+        "command": "cross-env TMPDIR=./dist NODE_PATH=./node_modules:./node_modules/globalize/dist browserify ./entry/modules_cjs.js -o ./dist/dist_browserify/bundle_cjs.js"
       },
-      "outputs": ["{projectRoot}/dist"],
-      "cache": false,
       "dependsOn": ["build"]
     },
     "test--vite": {
@@ -79,8 +69,6 @@
         "cwd": "{projectRoot}",
         "command": "vite build"
       },
-      "outputs": ["{projectRoot}/dist"],
-      "cache": false,
       "dependsOn": ["build"]
     }
   }
