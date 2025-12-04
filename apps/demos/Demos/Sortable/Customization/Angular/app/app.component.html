@@ -27,10 +27,7 @@
           {{ dragInfo.itemData }}
         </div>
         @for(item of items; track item) {
-        <div
-          class="item dx-card"
-          [class.item-with-handle]="handle"
-        >
+        <div class="item dx-card" [class.item-with-handle]="handle">
           @if(handle) {
           <i class="handle dx-icon dx-icon-dragvertical"></i>
           }

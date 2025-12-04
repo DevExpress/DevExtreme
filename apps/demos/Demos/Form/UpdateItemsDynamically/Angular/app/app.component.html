@@ -26,10 +26,7 @@
     </dxi-form-item>
     <dxi-form-item itemType="group" caption="Phones" name="phones-container">
       @for (phone of phoneOptions; track $index) {
-      <dxi-form-item
-        itemType="group"
-        name="phones"
-      >
+      <dxi-form-item itemType="group" name="phones">
         <dxi-form-item
           [dataField]="'Phones[' + $index + ']'"
           [editorOptions]="phoneOptions[$index]"

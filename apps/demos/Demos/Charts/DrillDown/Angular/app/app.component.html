@@ -15,12 +15,12 @@
 <div id="drill-down-title">
   @for(drillInfo of drillInfos; track drillInfo; let isLast = $last) {
   <span>
-  <span
-    [class.link]="!!drillInfo.node"
-    (click)="drillInfoClick(drillInfo.node)"
-    >{{ drillInfo.text }}</span
+    <span
+      [class.link]="!!drillInfo.node"
+      (click)="drillInfoClick(drillInfo.node)"
+      >{{ drillInfo.text }}</span
     >
-  {{ isLast ? "" : " > " }}
+    {{ isLast ? "" : " > " }}
   </span>
   }
 </div>

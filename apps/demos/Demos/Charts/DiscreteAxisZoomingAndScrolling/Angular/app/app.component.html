@@ -6,10 +6,7 @@
     title="The Chemical Composition of the Earth Layers"
   >
     @for(item of seriesSource; track item.name) {
-    <dxi-chart-series
-      [valueField]="item.valueField"
-      [name]="item.name"
-    >
+    <dxi-chart-series [valueField]="item.valueField" [name]="item.name">
     </dxi-chart-series>
     }
     <dxo-chart-common-series-settings type="bar" [ignoreEmptyPoints]="true">

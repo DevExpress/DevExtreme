@@ -13,17 +13,17 @@
       <div *dxTemplate="let tabPanelItem of 'item'">
         <div class="tabpanel-item">
           @for (task of tabPanelItem.tasks; track task.text) {
-            <div [class]="getTaskItemClasses(task.priority)">
-              <span class="task-item-text">
-                {{ task.text }}
-              </span>
+          <div [class]="getTaskItemClasses(task.priority)">
+            <span class="task-item-text">
+              {{ task.text }}
+            </span>
 
-              <span class="task-item-info">
-                {{ task.date }} by {{ task.assignedBy }}
-              </span>
+            <span class="task-item-info">
+              {{ task.date }} by {{ task.assignedBy }}
+            </span>
 
-              <i class="task-item-pseudo-button dx-icon dx-icon-overflow"></i>
-            </div>
+            <i class="task-item-pseudo-button dx-icon dx-icon-overflow"></i>
+          </div>
           }
         </div>
       </div>

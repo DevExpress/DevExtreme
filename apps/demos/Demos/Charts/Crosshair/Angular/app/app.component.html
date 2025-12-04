@@ -1,9 +1,6 @@
 <dx-chart id="chart" [dataSource]="countriesInfo">
   @for(energy of energySources; track energy.name) {
-  <dxi-chart-series
-    [valueField]="energy.value"
-    [name]="energy.name"
-  >
+  <dxi-chart-series [valueField]="energy.value" [name]="energy.name">
   </dxi-chart-series>
   }
   <dxo-chart-common-series-settings argumentField="country" type="spline">

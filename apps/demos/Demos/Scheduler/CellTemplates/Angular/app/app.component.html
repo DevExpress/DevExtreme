@@ -21,7 +21,10 @@
     *dxTemplate="let dataCell of 'dataCellTemplate'"
     [class.disable-date]="isDisableDate | apply : dataCell.startDate"
     [class.dx-scheduler-date-table-cell-text]="currentView === 'month'"
-    [class.dinner]="!(isDisableDate | apply : dataCell.startDate) && (isDinner | apply : dataCell.startDate)"
+    [class.dinner]="
+      !(isDisableDate | apply : dataCell.startDate) &&
+      (isDinner | apply : dataCell.startDate)
+    "
   >
     {{ currentView === "month" ? (dataCell.startDate | date) : "" }}
   </div>
@@ -39,7 +42,7 @@
   >
     {{ timeCell.text }}
     @if(hasCoffeeCupIcon | apply : timeCell.date){
-      <div class="cafe"></div>
+    <div class="cafe"></div>
     }
   </div>
 </dx-scheduler>

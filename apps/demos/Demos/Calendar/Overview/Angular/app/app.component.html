@@ -10,10 +10,7 @@
       [cellTemplate]="cellTemplate"
       weekNumberRule="auto"
     >
-      <span
-        *dxTemplate="let cell of 'custom'"
-        [class]="getCellCssClass(cell)"
-      >
+      <span *dxTemplate="let cell of 'custom'" [class]="getCellCssClass(cell)">
         {{ cell.text }}
       </span>
     </dx-calendar>

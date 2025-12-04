@@ -13,20 +13,20 @@
       @for(bullet of week.bulletsData; track bullet) {
       <td>
         <dx-bullet
-                class="bullet"
-                [startScaleValue]="0"
-                [endScaleValue]="35"
-                [value]="bullet.value"
-                [target]="bullet.target"
-                [color]="bullet.color"
+          class="bullet"
+          [startScaleValue]="0"
+          [endScaleValue]="35"
+          [value]="bullet.value"
+          [target]="bullet.target"
+          [color]="bullet.color"
         >
           <dxo-bullet-tooltip
-                  [customizeTooltip]="customizeTooltip"
+            [customizeTooltip]="customizeTooltip"
           ></dxo-bullet-tooltip>
         </dx-bullet>
       </td>
-    }
+      }
     </tr>
-  }
+    }
   </table>
 </div>
