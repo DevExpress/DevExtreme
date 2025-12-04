@@ -940,7 +940,7 @@ export class AppointmentForm {
 
       repeatEditor.option('value', value);
       this._recurrenceForm.updateRecurrenceFormValues(
-        value,
+        value === repeatNeverValue ? '' : value,
         this.recurrenceRuleRaw,
         this.startDate,
       );

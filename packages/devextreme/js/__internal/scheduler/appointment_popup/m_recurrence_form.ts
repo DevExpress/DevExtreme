@@ -107,11 +107,11 @@ const weekDays = dateLocalization.getDayNames('abbreviated').map((dayName) => da
 const RECURRENCE_GROUP_NAME = 'recurrenceGroup';
 
 export class RecurrenceForm {
+  recurrenceRule: RecurrenceRule = new RecurrenceRule('', new Date());
+
   private readonly scheduler: any;
 
   private _dxForm?: dxForm;
-
-  private _recurrenceRule: RecurrenceRule = new RecurrenceRule('', new Date());
 
   private readonly weekDayItems: { text: string; key: string }[] = [];
 
@@ -179,14 +179,6 @@ export class RecurrenceForm {
 
   setReadOnly(value: boolean): void {
     this._readOnly = value;
-  }
-
-  get recurrenceRule(): RecurrenceRule {
-    return this._recurrenceRule;
-  }
-
-  set recurrenceRule(value: RecurrenceRule) {
-    this._recurrenceRule = value;
   }
 
   createRecurrenceFormGroup(): GroupItem {
