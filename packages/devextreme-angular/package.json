@@ -25,6 +25,7 @@
     "devextreme": "workspace:*"
   },
   "devDependencies": {
+    "shx": "0.4.0",
     "@angular-devkit/architect": "0.1900.2",
     "@angular-devkit/schematics": "17.3.11",
     "@angular/animations": "17.3.12",

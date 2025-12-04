@@ -195,7 +195,7 @@
           "pnpm --workspace-root nx build:ngc devextreme-angular",
           "pnpm --workspace-root nx npm:content devextreme-angular",
           "pnpm --workspace-root nx npm:package-json devextreme-angular",
-          "test \"$WITH_DESC\" != \"true\" || pnpm --workspace-root run angular:inject-descriptions",
+          "shx test \"$WITH_DESC\" != \"true\" || pnpm --workspace-root run angular:inject-descriptions",
           "pnpm --workspace-root nx npm:pack-npm-dist devextreme-angular",
           "pnpm --workspace-root nx update-node-modules-with-npm-dist devextreme-angular"
         ],
