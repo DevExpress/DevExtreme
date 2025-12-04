@@ -195,7 +195,6 @@
           "pnpm --workspace-root nx build:ngc devextreme-angular",
           "pnpm --workspace-root nx npm:content devextreme-angular",
           "pnpm --workspace-root nx npm:package-json devextreme-angular",
-          "shx test \"$WITH_DESC\" != \"true\" || pnpm --workspace-root run angular:inject-descriptions",
           "pnpm --workspace-root nx npm:pack-npm-dist devextreme-angular",
           "pnpm --workspace-root nx update-node-modules-with-npm-dist devextreme-angular"
         ],
@@ -203,9 +202,17 @@
       },
       "configurations": {
         "with-descriptions": {
-          "env": {
-            "WITH_DESC": "true"
-          }
+          "commands": [
+            "pnpm --workspace-root nx run-many --targets=clean:dist,clean:npm --projects=devextreme-angular",
+            "pnpm --workspace-root nx copy:build-sources devextreme-angular",
+            "pnpm --workspace-root nx build:license-headers devextreme-angular",
+            "pnpm --workspace-root nx build:ngc devextreme-angular",
+            "pnpm --workspace-root nx npm:content devextreme-angular",
+            "pnpm --workspace-root nx npm:package-json devextreme-angular",
+            "pnpm --workspace-root run angular:inject-descriptions",
+            "pnpm --workspace-root nx npm:pack-npm-dist devextreme-angular",
+            "pnpm --workspace-root nx update-node-modules-with-npm-dist devextreme-angular"
+          ]
         }
       }
     },

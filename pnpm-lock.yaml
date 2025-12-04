@@ -1852,9 +1852,6 @@ importers:
       rxjs:
         specifier: 7.8.1
         version: 7.8.1
-      shx:
-        specifier: 0.4.0
-        version: 0.4.0
       stream-browserify:
         specifier: 3.0.0
         version: 3.0.0
