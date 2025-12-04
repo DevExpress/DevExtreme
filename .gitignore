@@ -37,3 +37,5 @@ Thumbs.db
 .nx/cache
 .nx/workspace-data
 nx-cloud.env
+.cursor/rules/nx-rules.mdc
+.github/instructions/nx.instructions.md
