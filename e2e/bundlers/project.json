@@ -8,8 +8,7 @@
         "command": "rimraf entry dist && mkdir -p entry dist/dist_browserify dist/dist_parsel dist/dist_webpack && node ./generate_entry_files.js"
       },
       "outputs": [
-        "{projectRoot}/entry",
-        "{projectRoot}/dist"
+        "{projectRoot}/entry"
       ]
     },
     "test": {
@@ -60,7 +59,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "{projectRoot}",
-        "command": "cross-env NODE_PATH=./node_modules:./node_modules/globalize/dist browserify ./entry/modules_cjs.js -o ./dist/dist_browserify/bundle_cjs.js"
+        "command": "cross-env NODE_PATH=./node_modules:./node_modules/globalize/dist browserify ./entry/modules_cjs.js -o /tmp/bundle_cjs.js && mkdir -p dist/dist_browserify && mv /tmp/bundle_cjs.js ./dist/dist_browserify/bundle_cjs.js"
       },
       "dependsOn": ["build"]
     },
