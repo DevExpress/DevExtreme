@@ -1,4 +1,5 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
+import { ClientFunction } from 'testcafe';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 
@@ -6,6 +7,23 @@ fixture.disablePageReloads`Ai Column.Adaptivity`
   .page(url(__dirname, './pages/containerWithAIIntegration.html'));
 
 const DATA_GRID_SELECTOR = '#container';
+
+const resolveAIRequest = ClientFunction((): void => {
+  const { aiResponseData } = (window as any);
+  const { aiResolve } = (window as any);
+
+  if (aiResponseData && aiResolve) {
+    aiResolve(aiResponseData);
+
+    (window as any).aiResponseData = null;
+    (window as any).aiResolve = null;
+  }
+});
+
+const deleteGlobalVariables = ClientFunction((): void => {
+  delete (window as any).aiResponseData;
+  delete (window as any).aiResolve;
+});
 
 test('The AI column should be hidden when columnHidingEnabled is true', async (t) => {
   // arrange, act
@@ -132,7 +150,12 @@ test('The AI column should not be hidden when there is a second AI column with a
 
 test('The AI column should have value in the adaptive detail row', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-  await dataGrid.isReady();
+
+  // act
+  await resolveAIRequest();
+
+  // assert
+  await t.expect(dataGrid.isReady()).ok();
 
   const adaptiveButton = dataGrid.getAdaptiveButton();
 
@@ -180,28 +203,18 @@ test('The AI column should have value in the adaptive detail row', async (t) => 
         // eslint-disable-next-line new-cap
         aiIntegration: new (window as any).DevExpress.aiIntegration({
           sendRequest({ data }) {
-            let timeoutId: ReturnType<typeof setTimeout> | null = null;
-            const obj = {};
-            Object.entries(data?.data).forEach(([key, value]) => {
-              obj[key] = `Response ${(value as any).id}`;
-            });
-            const promise = new Promise((resolve) => {
-              timeoutId = setTimeout(() => {
-                resolve(JSON.stringify(obj));
-              }, 1000);
-            });
+            return {
+              promise: new Promise<string>((resolve) => {
+                const obj = {};
+                Object.entries(data?.data).forEach(([key, value]) => {
+                  obj[key] = `Response ${(value as any).id}`;
+                });
 
-            const result = {
-              promise,
-              abort: () => {
-                if (timeoutId) {
-                  clearTimeout(timeoutId);
-                  timeoutId = null;
-                }
-              },
+                (window as any).aiResponseData = JSON.stringify(obj);
+                (window as any).aiResolve = resolve;
+              }),
+              abort: (): void => {},
             };
-
-            return result;
           },
         }),
       },
@@ -209,4 +222,6 @@ test('The AI column should have value in the adaptive detail row', async (t) => 
       hidingPriority: 0,
     },
   ],
-})));
+}))).after(async () => {
+  await deleteGlobalVariables();
+});
