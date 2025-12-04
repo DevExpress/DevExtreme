@@ -1959,6 +1959,71 @@ describe('Appointment Popup', () => {
         options: { stylingMode: 'outlined' },
       },
     ];
+    const recurrenceToolbarWithSaveButton = [
+      {
+        toolbar: 'top',
+        location: 'before',
+        widget: 'dxButton',
+        options: {
+          icon: 'arrowleft',
+          stylingMode: 'text',
+          onClick: expect.any(Function),
+        },
+      },
+      {
+        toolbar: 'top',
+        location: 'before',
+        cssClass: 'dx-toolbar-label',
+      },
+      {
+        toolbar: 'top',
+        location: 'after',
+        widget: 'dxButton',
+        options: {
+          text: 'Save',
+          stylingMode: 'contained',
+          type: 'default',
+          onClick: expect.any(Function),
+        },
+      },
+      {
+        toolbar: 'top',
+        location: 'after',
+        widget: 'dxButton',
+        options: {
+          text: 'Cancel',
+          stylingMode: 'outlined',
+          onClick: expect.any(Function),
+        },
+      },
+    ];
+    const recurrenceToolbarWithCancelButton = [
+      {
+        toolbar: 'top',
+        location: 'before',
+        widget: 'dxButton',
+        options: {
+          icon: 'arrowleft',
+          stylingMode: 'text',
+          onClick: expect.any(Function),
+        },
+      },
+      {
+        toolbar: 'top',
+        location: 'before',
+        cssClass: 'dx-toolbar-label',
+      },
+      {
+        toolbar: 'top',
+        location: 'after',
+        widget: 'dxButton',
+        options: {
+          text: 'Cancel',
+          stylingMode: 'outlined',
+          onClick: expect.any(Function),
+        },
+      },
+    ];
 
     describe('Popup Title', () => {
       it('should display "New Appointment" when creating new appointment', async () => {
@@ -2011,6 +2076,16 @@ describe('Appointment Popup', () => {
         expect(POM.popup.component.option('toolbarItems')).toMatchObject(toolbarWithSaveButton);
       } else {
         expect(POM.popup.component.option('toolbarItems')).toMatchObject(toolbarWithCancelButton);
+      }
+
+      POM.popup.selectRepeatValue('daily');
+
+      await new Promise(process.nextTick);
+
+      if (shouldHaveSaveButton) {
+        expect(POM.popup.component.option('toolbarItems')).toMatchObject(recurrenceToolbarWithSaveButton);
+      } else {
+        expect(POM.popup.component.option('toolbarItems')).toMatchObject(recurrenceToolbarWithCancelButton);
       }
 
       await POM.popup.component.hide();

@@ -426,7 +426,11 @@ export class AppointmentPopup {
         text: messageLocalization.format('dxScheduler-editorLabelRecurrence'),
         cssClass: 'dx-toolbar-label',
       },
-      {
+    ];
+
+    const canSave = !this.form.readOnly;
+    if (canSave) {
+      toolbarItems.push({
         toolbar: 'top',
         location: 'after',
         widget: 'dxButton',
@@ -438,20 +442,21 @@ export class AppointmentPopup {
             this._saveButtonClickHandler(e);
           },
         },
-      },
-      {
-        toolbar: 'top',
-        location: 'after',
-        widget: 'dxButton',
-        options: {
-          text: messageLocalization.format('Cancel'),
-          stylingMode: 'outlined',
-          onClick: (): void => {
-            this.hide();
-          },
+      });
+    }
+
+    toolbarItems.push({
+      toolbar: 'top',
+      location: 'after',
+      widget: 'dxButton',
+      options: {
+        text: messageLocalization.format('Cancel'),
+        stylingMode: 'outlined',
+        onClick: (): void => {
+          this.hide();
         },
       },
-    ];
+    });
 
     this.popup.option('toolbarItems', toolbarItems);
   }
