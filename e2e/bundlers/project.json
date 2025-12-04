@@ -54,7 +54,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "{projectRoot}",
-        "command": "parcel build ./entry/modules_esm.js --no-cache --dist-dir ./dist/dist_parsel"
+        "command": "mkdir -p ./dist/dist_parsel && parcel build ./entry/modules_esm.js --no-cache --dist-dir ./dist/dist_parsel"
       },
       "outputs": ["{projectRoot}/dist"],
       "dependsOn": ["build"]
@@ -63,7 +63,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "{projectRoot}",
-        "command": "cross-env NODE_PATH=./node_modules:./node_modules/globalize/dist browserify ./entry/modules_cjs.js -o ./dist/dist_browserify/bundle_cjs.js"
+        "command": "mkdir -p ./dist/dist_browserify && cross-env NODE_PATH=./node_modules:./node_modules/globalize/dist browserify ./entry/modules_cjs.js -o ./dist/dist_browserify/bundle_cjs.js"
       },
       "outputs": ["{projectRoot}/dist"],
       "dependsOn": ["build"]
