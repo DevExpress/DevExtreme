@@ -78,36 +78,6 @@ const getColumnIndexByName = (instance: DataGrid, columnName: string): number =>
   return columnByName.index;
 };
 
-const getColumnHeaderCell = (instance: DataGrid, columnName: string): dxElementWrapper => {
-  const $element = $(instance.element());
-  const columnIndexByName = getColumnIndexByName(instance, columnName);
-
-  return $element.find('.dx-header-row td').eq(columnIndexByName);
-};
-
-const getColumnHeaderFilter = (
-  $columnHeaderCell: dxElementWrapper,
-): dxElementWrapper => $columnHeaderCell.find('.dx-column-indicators .dx-header-filter');
-
-const setGridColumnOptions = (
-  instance: DataGrid,
-  columnName: string,
-  options: Record<string, unknown>,
-): void => {
-  Object.entries(options).forEach(([optionName, optionValue]) => {
-    instance.columnOption(columnName, optionName, optionValue);
-  });
-};
-
-const setGridOptions = (
-  instance: DataGrid,
-  options: Record<string, unknown>,
-): void => {
-  Object.entries(options).forEach(([optionName, optionValue]) => {
-    instance.option(optionName, optionValue);
-  });
-};
-
 const createDataGrid = async (
   options: DataGridProperties = {},
 ): Promise<{
@@ -152,7 +122,7 @@ describe('Unsupported filtering properties', () => {
 
   describe('Filter UI options: headerFilter, allowFiltering, allowHeaderFiltering', () => {
     it('should not render filtering tools for AI columns on the first load', async () => {
-      const { instance } = await createDataGrid({
+      const { component, instance } = await createDataGrid({
         dataSource,
         keyExpr: 'id',
         headerFilter: { visible: true },
@@ -178,17 +148,17 @@ describe('Unsupported filtering properties', () => {
 
       await flushAsync();
 
-      const aiColumnHeaderCell = getColumnHeaderCell(instance, 'aiColumn');
-      const aiColumnHeaderFilter = getColumnHeaderFilter(aiColumnHeaderCell);
-      const idColumnHeaderCell = getColumnHeaderCell(instance, 'id');
-      const idColumnHeaderFilter = getColumnHeaderFilter(idColumnHeaderCell);
+      const aiColumnHeaderIndex = getColumnIndexByName(instance, 'aiColumn');
+      const aiColumnHeaderFilter = component.getHeaderCellFilter(aiColumnHeaderIndex);
+      const idColumnHeaderIndex = getColumnIndexByName(instance, 'id');
+      const idColumnHeaderFilter = component.getHeaderCellFilter(idColumnHeaderIndex);
 
       expect(aiColumnHeaderFilter).toHaveLength(0);
       expect(idColumnHeaderFilter).toHaveLength(1);
     });
 
     it('should keep filtering tools hidden after enabling options dynamically', async () => {
-      const { instance } = await createDataGrid({
+      const { component, instance } = await createDataGrid({
         dataSource,
         keyExpr: 'id',
         headerFilter: { visible: true },
@@ -205,21 +175,21 @@ describe('Unsupported filtering properties', () => {
         ],
       });
 
-      setGridColumnOptions(instance, 'id', {
+      component.setDataGridColumnOptions('id', {
         allowFiltering: true,
         allowHeaderFiltering: true,
       });
-      setGridColumnOptions(instance, 'aiColumn', {
+      component.setDataGridColumnOptions('aiColumn', {
         allowFiltering: true,
         allowHeaderFiltering: true,
       });
 
       await flushAsync();
 
-      const aiColumnHeaderCell = getColumnHeaderCell(instance, 'aiColumn');
-      const aiColumnHeaderFilter = getColumnHeaderFilter(aiColumnHeaderCell);
-      const idColumnHeaderCell = getColumnHeaderCell(instance, 'id');
-      const idColumnHeaderFilter = getColumnHeaderFilter(idColumnHeaderCell);
+      const aiColumnHeaderIndex = getColumnIndexByName(instance, 'aiColumn');
+      const aiColumnHeaderFilter = component.getHeaderCellFilter(aiColumnHeaderIndex);
+      const idColumnHeaderIndex = getColumnIndexByName(instance, 'id');
+      const idColumnHeaderFilter = component.getHeaderCellFilter(idColumnHeaderIndex);
 
       expect(aiColumnHeaderFilter).toHaveLength(0);
       expect(idColumnHeaderFilter).toHaveLength(1);
@@ -287,7 +257,7 @@ describe('Unsupported filtering properties', () => {
     });
 
     it('should not search on AI Column values while changing options dynamically', async () => {
-      const { instance } = await createDataGrid({
+      const { component, instance } = await createDataGrid({
         keyExpr: 'id',
         dataSource,
         columns: [
@@ -307,8 +277,8 @@ describe('Unsupported filtering properties', () => {
 
       expect(instance.getVisibleRows()).toHaveLength(dataSource.length);
 
-      setGridColumnOptions(instance, 'aiColumn', { allowSearch: true });
-      setGridOptions(instance, { 'searchPanel.visible': true, 'searchPanel.text': 'AI' });
+      component.setDataGridColumnOptions('aiColumn', { allowSearch: true });
+      component.setDataGridOptions({ 'searchPanel.visible': true, 'searchPanel.text': 'AI' });
       await flushAsync();
 
       expect(instance.getVisibleRows()).toHaveLength(0);
@@ -344,7 +314,7 @@ describe('Unsupported filtering properties', () => {
     });
 
     it('should ignore filter criteria options after dynamic changes', async () => {
-      const { instance } = await createDataGrid({
+      const { component, instance } = await createDataGrid({
         dataSource,
         keyExpr: 'id',
         headerFilter: { visible: true },
@@ -365,7 +335,7 @@ describe('Unsupported filtering properties', () => {
 
       expect(instance.getVisibleRows()).toHaveLength(dataSource.length);
 
-      setGridColumnOptions(instance, 'aiColumn', {
+      component.setDataGridColumnOptions('aiColumn', {
         filterOperations: ['contains'],
         selectedFilterOperation: 'contains',
         filterType: 'exclude',
@@ -403,7 +373,7 @@ describe('Unsupported filtering properties', () => {
     });
 
     it('should ignore filterValue after dynamic changes', async () => {
-      const { instance } = await createDataGrid({
+      const { component, instance } = await createDataGrid({
         dataSource,
         keyExpr: 'id',
         columns: [
@@ -423,8 +393,8 @@ describe('Unsupported filtering properties', () => {
 
       expect(instance.getVisibleRows()).toHaveLength(dataSource.length);
 
-      setGridColumnOptions(instance, 'aiColumn', { filterValue: 'AI Column Item 1' });
-      setGridOptions(instance, { 'filterRow.visible': true });
+      component.setDataGridColumnOptions('aiColumn', { filterValue: 'AI Column Item 1' });
+      component.setDataGridOptions({ 'filterRow.visible': true });
       await flushAsync();
 
       expect(instance.getVisibleRows()).toHaveLength(dataSource.length);
@@ -459,7 +429,7 @@ describe('Unsupported filtering properties', () => {
     it('should ignore calculateFilterExpression after dynamic changes', async () => {
       const calculateFilterExpression = jest.fn(() => ['aiColumn', '=', 1]);
 
-      const { instance } = await createDataGrid({
+      const { component, instance } = await createDataGrid({
         dataSource,
         keyExpr: 'id',
         columns: [
@@ -476,7 +446,7 @@ describe('Unsupported filtering properties', () => {
       });
 
       await flushAsync();
-      setGridColumnOptions(instance, 'aiColumn', { calculateFilterExpression });
+      component.setDataGridColumnOptions('aiColumn', { calculateFilterExpression });
       await flushAsync();
 
       expect(calculateFilterExpression).not.toHaveBeenCalled();
@@ -511,7 +481,7 @@ describe('Unsupported filtering properties', () => {
     });
 
     it('should not include AI Column in filterValue when filterSyncEnabled after dynamic changes', async () => {
-      const { instance } = await createDataGrid({
+      const { component, instance } = await createDataGrid({
         dataSource,
         keyExpr: 'id',
         columns: [
@@ -529,8 +499,8 @@ describe('Unsupported filtering properties', () => {
 
       await flushAsync();
 
-      setGridColumnOptions(instance, 'aiColumn', { filterValue: 'test' });
-      setGridOptions(instance, {
+      component.setDataGridColumnOptions('aiColumn', { filterValue: 'test' });
+      component.setDataGridOptions({
         filterSyncEnabled: true,
         'filterRow.visible': true,
         'filterPanel.visible': true,
