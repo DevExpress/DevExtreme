@@ -10,34 +10,37 @@
       handle=".list-title"
       (onReorder)="onListReorder($event)"
     >
-      <div class="list" *ngFor="let list of lists; let listIndex = index">
-        <div class="list-title">{{ statuses[listIndex] }}</div>
-        <dx-scroll-view
-          class="scrollable-list"
-          direction="vertical"
-          showScrollbar="always"
-        >
-          <dx-sortable
-            class="sortable-cards"
-            group="cardsGroup"
-            [data]="list"
-            (onDragStart)="onTaskDragStart($event)"
-            (onReorder)="onTaskDrop($event)"
-            (onAdd)="onTaskDrop($event)"
+      @for (list of lists; track $index; let listIndex = $index) {
+        <div class="list">
+          <div class="list-title">{{ statuses[listIndex] }}</div>
+          <dx-scroll-view
+            class="scrollable-list"
+            direction="vertical"
+            showScrollbar="always"
           >
-            <div class="card dx-card" *ngFor="let task of list">
-              <div
-                class="card-priority"
-                [ngClass]="'priority-' + task.Task_Priority"
-              ></div>
-              <div class="card-subject">{{ task.Task_Subject }}</div>
-              <div class="card-assignee">{{
-                employees[task.Task_Assigned_Employee_ID]
-              }}</div>
-            </div>
-          </dx-sortable>
-        </dx-scroll-view>
-      </div>
+            <dx-sortable
+              class="sortable-cards"
+              group="cardsGroup"
+              [data]="list"
+              (onDragStart)="onTaskDragStart($event)"
+              (onReorder)="onTaskDrop($event)"
+              (onAdd)="onTaskDrop($event)"
+            >
+              @for(task of list; track $index) {
+              <div class="card dx-card">
+                <div
+                  class="card-priority priority-{{ task.Task_Priority }}"
+                ></div>
+                <div class="card-subject">{{ task.Task_Subject }}</div>
+                <div class="card-assignee">{{
+                  employees[task.Task_Assigned_Employee_ID]
+                }}</div>
+              </div>
+              }
+            </dx-sortable>
+          </dx-scroll-view>
+        </div>
+      }
     </dx-sortable>
   </dx-scroll-view>
 </div>

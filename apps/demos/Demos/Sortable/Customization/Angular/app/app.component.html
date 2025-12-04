@@ -2,7 +2,7 @@
   <div class="widget-container">
     <dx-scroll-view
       id="scroll"
-      [ngClass]="{ horizontal: itemOrientation === 'horizontal' }"
+      [class.horizontal]="itemOrientation === 'horizontal'"
       [direction]="itemOrientation"
       showScrollbar="always"
     >
@@ -26,14 +26,17 @@
         >
           {{ dragInfo.itemData }}
         </div>
+        @for(item of items; track item) {
         <div
           class="item dx-card"
-          [ngClass]="{ 'item-with-handle': handle }"
-          *ngFor="let item of items"
+          [class.item-with-handle]="handle"
         >
-          <i *ngIf="handle" class="handle dx-icon dx-icon-dragvertical"></i>
+          @if(handle) {
+          <i class="handle dx-icon dx-icon-dragvertical"></i>
+          }
           {{ item }}
         </div>
+        }
       </dx-sortable>
     </dx-scroll-view>
   </div>

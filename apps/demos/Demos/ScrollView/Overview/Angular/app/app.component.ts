@@ -1,8 +1,6 @@
+import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  NgModule, Component, ViewChild, AfterViewInit, enableProdMode,
-} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+  Component, ViewChild, AfterViewInit, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxSelectBoxModule } from 'devextreme-angular';
 import { DxCheckBoxModule, DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
 import { DxScrollViewModule, DxScrollViewComponent, DxScrollViewTypes } from 'devextreme-angular/ui/scroll-view';
@@ -20,12 +18,16 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  standalone: false,
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
   preserveWhitespaces: true,
+  imports: [
+    DxScrollViewModule,
+    DxCheckBoxModule,
+    DxSelectBoxModule,
+  ],
 })
 export class AppComponent implements AfterViewInit {
   @ViewChild(DxScrollViewComponent, { static: false }) scrollView: DxScrollViewComponent;
@@ -88,16 +90,8 @@ export class AppComponent implements AfterViewInit {
   };
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxScrollViewModule,
-    DxCheckBoxModule,
-    DxSelectBoxModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule {}
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

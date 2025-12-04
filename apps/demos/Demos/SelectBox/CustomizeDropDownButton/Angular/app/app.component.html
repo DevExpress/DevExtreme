@@ -51,13 +51,14 @@
         valueExpr="ID"
       >
         <div *dxTemplate="let data of 'dropDownButton'">
+          @if (selectedItem) {
           <img
-            *ngIf="selectedItem"
             alt="Custom icon"
             src="../../../../images/icons/{{ selectedItem.IconSrc }}"
             class="custom-icon"
           />
-          <div *ngIf="!selectedItem" class="dx-dropdowneditor-icon"></div>
+          <div class="dx-dropdowneditor-icon"></div>
+          }
         </div>
 
         <div *dxTemplate="let data of 'item'" class="custom-item">
