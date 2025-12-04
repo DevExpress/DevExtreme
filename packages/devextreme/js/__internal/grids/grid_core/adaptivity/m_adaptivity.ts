@@ -190,7 +190,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
     const rowData = cellOptions.row.data;
 
     const value = column.type === AI_COLUMN_NAME
-      ? this._getValueFromCellOptions(column.index, cellOptions)
+      ? this._getValueFromCellOptions(cellOptions.columnIndex, cellOptions)
       : column.calculateCellValue(rowData);
 
     const displayValue = gridCoreUtils.getDisplayValue(column, value, rowData, cellOptions.rowType);
