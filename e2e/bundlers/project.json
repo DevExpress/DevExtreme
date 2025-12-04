@@ -8,7 +8,8 @@
         "command": "rimraf entry dist && mkdir -p entry dist/dist_browserify dist/dist_parsel dist/dist_webpack && node ./generate_entry_files.js"
       },
       "outputs": [
-        "{projectRoot}/entry"
+        "{projectRoot}/entry",
+        "{projectRoot}/dist"
       ]
     },
     "test": {
