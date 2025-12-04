@@ -188,9 +188,10 @@ export class AdaptiveColumnsController extends modules.ViewController {
       }
     });
     const rowData = cellOptions.row.data;
+    const columnIndex = that._columnsController.getVisibleIndex(column.index);
 
     const value = column.type === AI_COLUMN_NAME
-      ? this._getValueFromCellOptions(cellOptions.columnIndex, cellOptions)
+      ? this._getValueFromCellOptions(columnIndex, cellOptions)
       : column.calculateCellValue(rowData);
 
     const displayValue = gridCoreUtils.getDisplayValue(column, value, rowData, cellOptions.rowType);
@@ -251,7 +252,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
 
       const renderFormTemplate = function () {
         const isItemEdited = that._isItemEdited(item);
-        templateOptions.value = that._getValueFromCellOptions(column.index, cellOptions);
+        templateOptions.value = that._getValueFromCellOptions(columnIndex, cellOptions);
         if (isItemEdited || column.showEditorAlways) {
           editingController.renderFormEditorTemplate(templateOptions, item, options, $container, !isItemEdited);
         } else {
