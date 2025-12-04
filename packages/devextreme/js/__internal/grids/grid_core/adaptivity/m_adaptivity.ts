@@ -161,7 +161,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
     return ['isAdaptiveDetailRowExpanded', 'expandAdaptiveDetailRow', 'collapseAdaptiveDetailRow'];
   }
 
-  private _getValueFromCellOptions(columnIndex, cellOptions) {
+  private _getValueFromCellOptions(columnIndex: number, cellOptions: any) {
     return cellOptions.row.values[columnIndex];
   }
 
