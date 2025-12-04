@@ -158,33 +158,6 @@ test('The AI column should have value in the adaptive detail row', async (t) => 
     { id: 3, name: 'Name 3', value: 30 },
   ],
   keyExpr: 'id',
-  // eslint-disable-next-line new-cap
-  aiIntegration: new (window as any).DevExpress.aiIntegration({
-    sendRequest({ data }) {
-      let timeoutId: ReturnType<typeof setTimeout> | null = null;
-      const obj = {};
-      Object.entries(data?.data).forEach(([key, value]) => {
-        obj[key] = `Response ${(value as any).id}`;
-      });
-      const promise = new Promise((resolve) => {
-        timeoutId = setTimeout(() => {
-          resolve(JSON.stringify(obj));
-        }, 1000);
-      });
-
-      const result = {
-        promise,
-        abort: () => {
-          if (timeoutId) {
-            clearTimeout(timeoutId);
-            timeoutId = null;
-          }
-        },
-      };
-
-      return result;
-    },
-  }),
   width: 400,
   columnHidingEnabled: true,
   showBorders: true,
@@ -204,7 +177,33 @@ test('The AI column should have value in the adaptive detail row', async (t) => 
       type: 'ai',
       ai: {
         prompt: 'Send me nothing',
-        mode: 'auto',
+        // eslint-disable-next-line new-cap
+        aiIntegration: new (window as any).DevExpress.aiIntegration({
+          sendRequest({ data }) {
+            let timeoutId: ReturnType<typeof setTimeout> | null = null;
+            const obj = {};
+            Object.entries(data?.data).forEach(([key, value]) => {
+              obj[key] = `Response ${(value as any).id}`;
+            });
+            const promise = new Promise((resolve) => {
+              timeoutId = setTimeout(() => {
+                resolve(JSON.stringify(obj));
+              }, 1000);
+            });
+
+            const result = {
+              promise,
+              abort: () => {
+                if (timeoutId) {
+                  clearTimeout(timeoutId);
+                  timeoutId = null;
+                }
+              },
+            };
+
+            return result;
+          },
+        }),
       },
       width: 200,
       hidingPriority: 0,
