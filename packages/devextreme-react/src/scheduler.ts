@@ -498,14 +498,12 @@ type IFormProps = React.PropsWithChildren<{
   labelLocation?: LabelLocation;
   labelMode?: FormLabelMode;
   minColWidth?: number;
-  onCanceled?: ((formData: any) => void);
   onContentReady?: ((e: FormContentReadyEvent) => void);
   onDisposing?: ((e: FormDisposingEvent) => void);
   onEditorEnterKey?: ((e: EditorEnterKeyEvent) => void);
   onFieldDataChanged?: ((e: FieldDataChangedEvent) => void);
   onInitialized?: ((e: FormInitializedEvent) => void);
   onOptionChanged?: ((e: FormOptionChangedEvent) => void);
-  onSaved?: ((formData: any) => void);
   onSmartPasted?: ((e: SmartPastedEvent) => void);
   onSmartPasting?: ((e: SmartPastingEvent) => void);
   optionalMark?: string;
