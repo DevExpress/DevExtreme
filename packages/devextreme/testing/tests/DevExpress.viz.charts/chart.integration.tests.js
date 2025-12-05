@@ -1031,6 +1031,53 @@ QUnit.test('Set the visualRange option by the different ways', function(assert) 
     assert.deepEqual(chart.option('valueAxis._customVisualRange'), { length: 2 });
 });
 
+QUnit.test('visualRangeUpdateMode change should not corrupt _customVisualRange causing incorrect visualRange on subsequent axis rerender (T1315301)', function(assert) {
+    this.$container.css({ width: '1000px', height: '600px' });
+    const dataSource = [{
+        arg: 1,
+        val: 4
+    }, {
+        arg: 2,
+        val: 5
+    }, {
+        arg: 5,
+        val: 7
+    }, {
+        arg: 8,
+        val: 3
+    }, {
+        arg: 11,
+        val: 8
+    }];
+
+    const chart = this.createChart({
+        size: {
+            width: 1000,
+            height: 600
+        },
+        dataSource: dataSource,
+        series: { type: 'bar' },
+        valueAxis: {
+            visualRangeUpdateMode: 'auto',
+        }
+    });
+
+    const initialVisualRange = chart.option('valueAxis.visualRange');
+
+    chart.option('valueAxis.visualRangeUpdateMode', 'keep');
+
+    assert.strictEqual(chart.option('valueAxis.visualRangeUpdateMode'), 'keep', 'visualRangeUpdateMode has changed to "keep"');
+    assert.deepEqual(chart.option('valueAxis.visualRange'), initialVisualRange, 'visualRange remains unchanged');
+    assert.deepEqual(chart.option('valueAxis._customVisualRange'), undefined, '_customVisualRange not set');
+
+    chart.option('commonAxisSettings.title', 'custom');
+
+    assert.strictEqual(chart.option('valueAxis.visualRangeUpdateMode'), 'keep', 'visualRangeUpdateMode is still "keep" after rerender');
+    assert.strictEqual(chart.option('commonAxisSettings.title'), 'custom', 'commonAxisSettings.title was successfully changed');
+    assert.deepEqual(chart.option('valueAxis.visualRange'), initialVisualRange, 'visualRange remains correct after axis rerender');
+    assert.deepEqual(chart.option('valueAxis._customVisualRange'), undefined, '_customVisualRange not set');
+});
+
 QUnit.test('Reload dataSource - visualRange option should be changed', function(assert) {
     this.$container.css({ width: '1000px', height: '600px' });
     const visualRangeChanged = sinon.spy();
