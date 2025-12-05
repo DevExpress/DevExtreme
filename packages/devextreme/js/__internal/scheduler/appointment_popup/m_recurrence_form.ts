@@ -179,6 +179,7 @@ export class RecurrenceForm {
 
   setReadOnly(value: boolean): void {
     this._readOnly = value;
+    this.updateWeekDaysButtons();
   }
 
   createRecurrenceFormGroup(): GroupItem {
@@ -350,6 +351,11 @@ export class RecurrenceForm {
             disabled: this._readOnly,
             onContentReady: (e): void => {
               $(e.element).removeClass('dx-button-has-text');
+
+              const isSelected = this.recurrenceRule.byDay.includes(item.key);
+
+              e.component.option('stylingMode', isSelected ? 'contained' : 'outlined');
+              e.component.option('type', isSelected ? 'default' : 'normal');
             },
             onClick: (): void => {
               const isSelected = this.recurrenceRule.byDay.includes(item.key);
@@ -587,8 +593,6 @@ export class RecurrenceForm {
   }
 
   private updateDayEditorsVisibility(): void {
-    this.dxForm.beginUpdate();
-
     const recurrencePatternGroupPath = `${RECURRENCE_GROUP_NAME}.${GROUP_NAMES.recurrenceRuleGroup}.${GROUP_NAMES.recurrencePatternGroup}`;
 
     const daysOfWeekGroup = `${recurrencePatternGroupPath}.${GROUP_NAMES.recurrenceDaysOfWeekEditor}`;
@@ -613,7 +617,6 @@ export class RecurrenceForm {
         break;
     }
 
-    this.dxForm.endUpdate();
     this.updateWeekDaysButtons();
   }
 
@@ -623,6 +626,7 @@ export class RecurrenceForm {
 
       button.option('stylingMode', isSelected ? 'contained' : 'outlined');
       button.option('type', isSelected ? 'default' : 'normal');
+      button.option('disabled', this._readOnly);
     });
   }
 }

@@ -847,22 +847,6 @@ export class AppointmentForm {
     }
   }
 
-  showRecurrenceGroup(): void {
-    const currentHeight = this.dxPopup.option('height') as string | number | undefined;
-
-    if (currentHeight === 'auto' || currentHeight === undefined) {
-      const overlayHeight = this.dxPopup.$overlayContent().get(0).clientHeight;
-      this.dxPopup.option('height', overlayHeight);
-    }
-
-    this._$mainGroup?.addClass(CLASSES.mainHidden);
-    this._$mainGroup?.attr('tabindex', '-1');
-    this._$recurrenceGroup?.removeClass(CLASSES.recurrenceHidden);
-    this._$recurrenceGroup?.removeAttr('tabindex');
-
-    this._popup.updateToolbarForRecurrenceGroup();
-  }
-
   showMainGroup(): void {
     const currentHeight = this.dxPopup.option('height') as string | number | undefined;
     const editingConfig = this.scheduler.getEditingConfig();
@@ -878,6 +862,22 @@ export class AppointmentForm {
     this._$recurrenceGroup?.attr('tabindex', '-1');
 
     this._popup.updateToolbarForMainGroup();
+  }
+
+  showRecurrenceGroup(): void {
+    const currentHeight = this.dxPopup.option('height') as string | number | undefined;
+
+    if (currentHeight === 'auto' || currentHeight === undefined) {
+      const overlayHeight = this.dxPopup.$overlayContent().get(0).clientHeight;
+      this.dxPopup.option('height', overlayHeight);
+    }
+
+    this._$mainGroup?.addClass(CLASSES.mainHidden);
+    this._$mainGroup?.attr('tabindex', '-1');
+    this._$recurrenceGroup?.removeClass(CLASSES.recurrenceHidden);
+    this._$recurrenceGroup?.removeAttr('tabindex');
+
+    this._popup.updateToolbarForRecurrenceGroup();
   }
 
   saveRecurrenceValue(): void {

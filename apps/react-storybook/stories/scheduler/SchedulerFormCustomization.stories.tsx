@@ -381,12 +381,6 @@ export const LegacyPopup: Story = {
           form: {
             onContentReady: function (e) {
               form = e.component;
-              const onValueChanged = form.getEditor("startDateEditor").option("onValueChanged");
-
-              form.getEditor("startDateEditor").option("onValueChanged", (e) => {
-                onValueChanged(e);
-                form.getEditor("recurrenceStartDateEditor")?.option("value", e.value);
-              });
             },
             iconsShowMode: "both",
             items: [
@@ -408,23 +402,25 @@ export const LegacyPopup: Story = {
                           onValueChanged: (e) => {
                             if (e.value === true) {
                               form.option("colCount", 2);
-                              form.itemOption("recurrenceGroup", "cssClass", "");
 
-                              const onValueChanged = form.getEditor("repeatEditor").option("onValueChanged");
-                              form.getEditor("repeatEditor").option("value", "daily");
-                              onValueChanged({ ...e, value: "daily" });
+                              const recurrenceRule = form.option('formData').recurrenceRule;
+
+                              form.option('formData', {
+                                ...form.option('formData'),
+                                recurrenceRule:  recurrenceRule ? form.option('formData')?.recurrenceRule : "FREQ=DAILY"
+                              })
+                              form.itemOption("recurrenceGroup", "cssClass", "");
                             } else {
                               form.option("colCount", 1);
+                              form.option('formData', {
+                                ...form.option('formData'),
+                                recurrenceRule: ""
+                              })
                               form.itemOption("recurrenceGroup", "cssClass", "dx-hidden");
-
-                              const onValueChanged = form.getEditor("repeatEditor").option("onValueChanged");
-                              form.getEditor("repeatEditor").option("value", "never");
-                              onValueChanged({ ...e, value: "never" });
                             }
                           },
                         },
                       },
-                      { name: "repeatEditor", colCount: 0, cssClass: "dx-hidden" },
                     ],
                   },
                   "resourcesGroup",
@@ -435,10 +431,6 @@ export const LegacyPopup: Story = {
                 name: "recurrenceGroup",
                 itemType: "group",
                 items: [
-                  {
-                    name: "recurrenceStartDateEditor",
-                    cssClass: "dx-hidden",
-                  },
                   "recurrenceRuleGroup",
                   "recurrenceEndGroup",
                 ],
