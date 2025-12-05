@@ -26057,14 +26057,6 @@ declare module DevExpress.ui {
      */
     export type AppointmentFormProperties = DevExpress.ui.dxForm.Properties & {
       /**
-       * [descr:AppointmentFormProperties.onSaved]
-       */
-      onSaved?: (formData: any) => void;
-      /**
-       * [descr:AppointmentFormProperties.onCanceled]
-       */
-      onCanceled?: (formData: any) => void;
-      /**
        * [descr:AppointmentFormProperties.iconsShowMode]
        */
       iconsShowMode?: AppointmentFormIconsShowMode;
