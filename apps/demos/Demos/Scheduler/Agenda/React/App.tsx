@@ -47,7 +47,7 @@ const App = () => (
           <Item name="dateGroup" />
           <Item name="repeatGroup" />
           <Item name="resourcesGroup">
-            <Item name="assigneeIdGroup" colCount={3}>
+            <Item name="assigneeIdGroup" colCount={3} colCountByScreen={{ xs: 3 }}>
               <Item name="assigneeIdIcon" />
               <Item name="assigneeId" />
               <Item name="priorityId" />

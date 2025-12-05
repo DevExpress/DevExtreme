@@ -51,7 +51,7 @@ const App = () => (
           <Item name="dateGroup" />
           <Item name="repeatGroup" />
           <Item name="resourcesGroup">
-            <Item name="ownerIdGroup" colCount={3}>
+            <Item name="ownerIdGroup" colCount={3} colCountByScreen={{ xs: 3 }}>
               <Item name="ownerIdIcon" />
               <Item name="ownerId" />
               <Item name="priority" />

@@ -31,7 +31,11 @@
         <dxi-scheduler-item name="dateGroup"></dxi-scheduler-item>
         <dxi-scheduler-item name="repeatGroup"></dxi-scheduler-item>
         <dxi-scheduler-item name="resourcesGroup">
-          <dxi-scheduler-item name="assigneeIdGroup" [colCount]="3">
+          <dxi-scheduler-item
+            name="assigneeIdGroup"
+            [colCount]="3"
+            [colCountByScreen]="{ xs: 3 }"
+          >
             <dxi-scheduler-item name="assigneeIdIcon"></dxi-scheduler-item>
             <dxi-scheduler-item name="assigneeId"></dxi-scheduler-item>
             <dxi-scheduler-item name="priorityId"></dxi-scheduler-item>

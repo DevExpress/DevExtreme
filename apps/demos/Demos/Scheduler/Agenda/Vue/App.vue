@@ -32,6 +32,7 @@
           <DxItem name="resourcesGroup">
             <DxItem
               :col-count="3"
+              :col-count-by-screen="{ xs: 3 }"
               name="assigneeIdGroup"
             >
               <DxItem name="assigneeIdIcon"/>

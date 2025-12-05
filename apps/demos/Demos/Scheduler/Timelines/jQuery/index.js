@@ -27,16 +27,30 @@ $(() => {
     height: 580,
     editing: {
       form: {
-        items: [{ name: 'mainGroup',
-          items: [
-            'subjectGroup',
-            'dateGroup', 'repeatGroup', { name: 'resourcesGroup',
-              items: [{
-                name: 'ownerIdGroup',
-                colCount: 3,
-                items: ['ownerIdIcon', 'ownerId', 'priority'],
-              }] },
-          ] }, 'recurrenceGroup'],
+        items: [
+          {
+            name: 'mainGroup',
+            items: [
+              'subjectGroup',
+              'dateGroup',
+              'repeatGroup',
+              {
+                name: 'resourcesGroup',
+                items: [
+                  {
+                    name: 'ownerIdGroup',
+                    colCount: 3,
+                    colCountByScreen: {
+                      xs: 3,
+                    },
+                    items: ['ownerIdIcon', 'ownerId', 'priority'],
+                  },
+                ],
+              },
+            ],
+          },
+          'recurrenceGroup',
+        ],
       },
     },
   });

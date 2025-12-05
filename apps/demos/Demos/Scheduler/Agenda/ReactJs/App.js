@@ -49,6 +49,7 @@ const App = () => (
             <Item
               name="assigneeIdGroup"
               colCount={3}
+              colCountByScreen={{ xs: 3 }}
             >
               <Item name="assigneeIdIcon" />
               <Item name="assigneeId" />

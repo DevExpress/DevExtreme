@@ -67,6 +67,7 @@ const App = () => (
             <Item
               name="priorityIdGroup"
               colCount={3}
+              colCountByScreen={{ xs: 3 }}
             >
               <Item name="priorityIdIcon" />
               <Item name="priorityId" />
