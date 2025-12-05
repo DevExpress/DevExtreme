@@ -103,6 +103,7 @@ overrides:
   json5@<1.0.2: ^2.2.3
   axios@<1.8.2: ^1.13.2
   braces@<3.0.3: ^3.0.3
+  semver@<5.7.2: ^5.7.2
 
 importers:
 
@@ -16942,10 +16943,6 @@ packages:
   semver-greatest-satisfied-range@1.1.0:
     resolution: {integrity: sha512-Ny/iyOzSSa8M5ML46IAx3iXc6tfOsYU2R4AXi2UpHk60Zrgyq6eqPj/xiOfS0rRl/iiQ/rdJkVjw/5cdUyCntQ==}
     engines: {node: '>= 0.10'}
-
-  semver@4.3.6:
-    resolution: {integrity: sha512-IrpJ+yoG4EOH8DFWuVg+8H1kW1Oaof0Wxe7cPcXW3x9BjkN/eVo54F15LyqemnDIUYskQWr9qvl/RihmSy6+xQ==}
-    hasBin: true
 
   semver@5.7.2:
     resolution: {integrity: sha512-cBznnQ9KjJqU67B52RMC65CMarK2600WFnbkcaiwWq3xy/5haFJlshgnpjovMVJ+Hff49d8GEn0b87C5pDQ10g==}
@@ -40324,8 +40321,6 @@ snapshots:
     dependencies:
       sver-compat: 1.5.0
 
-  semver@4.3.6: {}
-
   semver@5.7.2: {}
 
   semver@6.3.1: {}
@@ -42146,7 +42141,7 @@ snapshots:
       commander: 2.9.0
       glob: 5.0.15
       rsvp: 3.6.2
-      semver: 4.3.6
+      semver: 5.7.2
       source-map-support: 0.2.10
 
   tree-dump@1.0.2(tslib@2.6.3):
