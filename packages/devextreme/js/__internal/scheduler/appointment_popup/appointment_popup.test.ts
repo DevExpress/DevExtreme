@@ -2006,14 +2006,12 @@ describe('Appointment Popup', () => {
       scheduler.showAppointmentPopup(disabled ? disabledAppointment : commonAppointment);
 
       const toolbarItems = POM.popup.component.option('toolbarItems') ?? [];
+      const hasButton = (shortcut: string): boolean => toolbarItems.some(
+        (item: ToolbarItem & { shortcut?: string }) => item.shortcut === shortcut,
+      );
 
-      if (shouldHaveSaveButton) {
-        expect(toolbarItems.some((item: ToolbarItem & { shortcut?: string }) => item.shortcut === 'done')).toBe(true);
-        expect(toolbarItems.some((item: ToolbarItem & { shortcut?: string }) => item.shortcut === 'cancel')).toBe(true);
-      } else {
-        expect(toolbarItems.some((item: ToolbarItem & { shortcut?: string }) => item.shortcut === 'cancel')).toBe(true);
-        expect(toolbarItems.some((item: ToolbarItem & { shortcut?: string }) => item.shortcut === 'done')).toBe(false);
-      }
+      expect(hasButton('cancel')).toBe(true);
+      expect(hasButton('done')).toBe(shouldHaveSaveButton);
 
       await POM.popup.component.hide();
     });
