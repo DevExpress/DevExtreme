@@ -401,6 +401,50 @@ export class AppointmentPopup {
     return false;
   }
 
+  updateToolbarForMainGroup(): void {
+    if (this.tryApplyCustomToolbarItems()) {
+      return;
+    }
+
+    const isCreating = this.state.action === ACTION_TO_APPOINTMENT.CREATE;
+    const formTitleKey = isCreating ? 'dxScheduler-newPopupTitle' : 'dxScheduler-editPopupTitle';
+
+    const toolbarItems: ToolbarItem[] = [{
+      toolbar: 'top',
+      location: 'before',
+      text: messageLocalization.format(formTitleKey),
+      cssClass: 'dx-toolbar-label',
+    }];
+
+    const canSave = !this.form.readOnly;
+    if (canSave) {
+      toolbarItems.push(
+        {
+          toolbar: 'top',
+          location: 'after',
+          options: {
+            onClick: (e) => this._saveButtonClickHandler(e),
+            stylingMode: 'contained',
+            type: 'default',
+            text: messageLocalization.format('dxScheduler-editPopupSaveButtonText'),
+          },
+          shortcut: 'done',
+        } as ToolbarItem,
+      );
+    }
+
+    toolbarItems.push({
+      toolbar: 'top',
+      location: 'after',
+      shortcut: 'cancel',
+      options: {
+        stylingMode: 'outlined',
+      },
+    } as ToolbarItem);
+
+    this.popup.option('toolbarItems', toolbarItems);
+  }
+
   updateToolbarForRecurrenceGroup(): void {
     if (this.tryApplyCustomToolbarItems()) {
       return;
@@ -433,64 +477,14 @@ export class AppointmentPopup {
       toolbarItems.push({
         toolbar: 'top',
         location: 'after',
-        widget: 'dxButton',
         options: {
-          text: messageLocalization.format('dxScheduler-editPopupSaveButtonText'),
+          onClick: (e) => this._saveButtonClickHandler(e),
           stylingMode: 'contained',
           type: 'default',
-          onClick: (e): void => {
-            this._saveButtonClickHandler(e);
-          },
+          text: messageLocalization.format('dxScheduler-editPopupSaveButtonText'),
         },
-      });
-    }
-
-    toolbarItems.push({
-      toolbar: 'top',
-      location: 'after',
-      widget: 'dxButton',
-      options: {
-        text: messageLocalization.format('Cancel'),
-        stylingMode: 'outlined',
-        onClick: (): void => {
-          this.hide();
-        },
-      },
-    });
-
-    this.popup.option('toolbarItems', toolbarItems);
-  }
-
-  updateToolbarForMainGroup(): void {
-    if (this.tryApplyCustomToolbarItems()) {
-      return;
-    }
-
-    const isCreating = this.state.action === ACTION_TO_APPOINTMENT.CREATE;
-    const formTitleKey = isCreating ? 'dxScheduler-newPopupTitle' : 'dxScheduler-editPopupTitle';
-
-    const toolbarItems: ToolbarItem[] = [{
-      toolbar: 'top',
-      location: 'before',
-      text: messageLocalization.format(formTitleKey),
-      cssClass: 'dx-toolbar-label',
-    }];
-
-    const canSave = !this.form.readOnly;
-    if (canSave) {
-      toolbarItems.push(
-        {
-          toolbar: 'top',
-          location: 'after',
-          options: {
-            onClick: (e) => this._saveButtonClickHandler(e),
-            stylingMode: 'contained',
-            type: 'default',
-            text: messageLocalization.format('dxScheduler-editPopupSaveButtonText'),
-          },
-          shortcut: 'done',
-        } as ToolbarItem,
-      );
+        shortcut: 'done',
+      } as ToolbarItem);
     }
 
     toolbarItems.push({

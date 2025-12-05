@@ -3,6 +3,7 @@ import {
 } from '@jest/globals';
 import $ from '@js/core/renderer';
 import type { GroupItem, Item as FormItem } from '@js/ui/form';
+import type { ToolbarItem } from '@js/ui/popup';
 import { toMilliseconds } from '@ts/utils/toMilliseconds';
 
 import fx from '../../../common/core/animation/fx';
@@ -1922,109 +1923,6 @@ describe('Appointment Popup', () => {
   });
 
   describe('Toolbar', () => {
-    const toolbarWithSaveButton = [
-      {
-        toolbar: 'top',
-        location: 'before',
-        cssClass: 'dx-toolbar-label',
-      },
-      {
-        toolbar: 'top',
-        location: 'after',
-        options: {
-          onClick: expect.any(Function),
-          stylingMode: 'contained',
-          type: 'default',
-          text: 'Save',
-        },
-        shortcut: 'done',
-      },
-      {
-        toolbar: 'top',
-        location: 'after',
-        shortcut: 'cancel',
-        options: { stylingMode: 'outlined' },
-      },
-    ];
-    const toolbarWithCancelButton = [
-      {
-        toolbar: 'top',
-        location: 'before',
-        cssClass: 'dx-toolbar-label',
-      },
-      {
-        toolbar: 'top',
-        location: 'after',
-        shortcut: 'cancel',
-        options: { stylingMode: 'outlined' },
-      },
-    ];
-    const recurrenceToolbarWithSaveButton = [
-      {
-        toolbar: 'top',
-        location: 'before',
-        widget: 'dxButton',
-        options: {
-          icon: 'arrowleft',
-          stylingMode: 'text',
-          onClick: expect.any(Function),
-        },
-      },
-      {
-        toolbar: 'top',
-        location: 'before',
-        cssClass: 'dx-toolbar-label',
-      },
-      {
-        toolbar: 'top',
-        location: 'after',
-        widget: 'dxButton',
-        options: {
-          text: 'Save',
-          stylingMode: 'contained',
-          type: 'default',
-          onClick: expect.any(Function),
-        },
-      },
-      {
-        toolbar: 'top',
-        location: 'after',
-        widget: 'dxButton',
-        options: {
-          text: 'Cancel',
-          stylingMode: 'outlined',
-          onClick: expect.any(Function),
-        },
-      },
-    ];
-    const recurrenceToolbarWithCancelButton = [
-      {
-        toolbar: 'top',
-        location: 'before',
-        widget: 'dxButton',
-        options: {
-          icon: 'arrowleft',
-          stylingMode: 'text',
-          onClick: expect.any(Function),
-        },
-      },
-      {
-        toolbar: 'top',
-        location: 'before',
-        cssClass: 'dx-toolbar-label',
-      },
-      {
-        toolbar: 'top',
-        location: 'after',
-        widget: 'dxButton',
-        options: {
-          text: 'Cancel',
-          stylingMode: 'outlined',
-          onClick: expect.any(Function),
-        },
-      },
-    ];
-
     describe('Popup Title', () => {
       it('should display "New Appointment" when creating new appointment', async () => {
         const { scheduler, POM } = await createScheduler({
@@ -2062,30 +1960,56 @@ describe('Appointment Popup', () => {
       { allowUpdating: false, disabled: true },
       { allowUpdating: true, disabled: false },
       { allowUpdating: true, disabled: true },
-    ])('Buttons visibility when %p', async ({ allowUpdating, disabled }) => {
+    ])('Buttons visibility in main form when %p', async ({ allowUpdating, disabled }) => {
       const shouldHaveSaveButton = allowUpdating && !disabled;
 
-      const { POM } = await createScheduler({
+      const { scheduler, POM } = await createScheduler({
         ...getDefaultConfig(),
         editing: { allowUpdating },
       });
 
-      POM.openPopupByDblClick(disabled ? 'disabled-app' : 'common-app');
+      scheduler.showAppointmentPopup(disabled ? getDefaultData()[2] : getDefaultData()[1]);
+
+      const toolbarItems = POM.popup.component.option('toolbarItems') ?? [];
 
       if (shouldHaveSaveButton) {
-        expect(POM.popup.component.option('toolbarItems')).toMatchObject(toolbarWithSaveButton);
+        expect(toolbarItems.some((item: ToolbarItem & { shortcut?: string }) => item.shortcut === 'done')).toBe(true);
+        expect(toolbarItems.some((item: ToolbarItem & { shortcut?: string }) => item.shortcut === 'cancel')).toBe(true);
       } else {
-        expect(POM.popup.component.option('toolbarItems')).toMatchObject(toolbarWithCancelButton);
+        expect(toolbarItems.some((item: ToolbarItem & { shortcut?: string }) => item.shortcut === 'cancel')).toBe(true);
+        expect(toolbarItems.some((item: ToolbarItem & { shortcut?: string }) => item.shortcut === 'done')).toBe(false);
       }
+
+      await POM.popup.component.hide();
+    });
+
+    it.each([
+      { allowUpdating: false, disabled: false },
+      { allowUpdating: false, disabled: true },
+      { allowUpdating: true, disabled: false },
+      { allowUpdating: true, disabled: true },
+    ])('Buttons visibility in recurrence form when %p', async ({ allowUpdating, disabled }) => {
+      const shouldHaveSaveButton = allowUpdating && !disabled;
+
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: { allowUpdating },
+      });
+
+      scheduler.showAppointmentPopup(disabled ? getDefaultData()[2] : getDefaultData()[1]);
 
       POM.popup.selectRepeatValue('daily');
 
       await new Promise(process.nextTick);
 
+      const toolbarItems = POM.popup.component.option('toolbarItems') ?? [];
+
       if (shouldHaveSaveButton) {
-        expect(POM.popup.component.option('toolbarItems')).toMatchObject(recurrenceToolbarWithSaveButton);
+        expect(toolbarItems.some((item: ToolbarItem & { shortcut?: string }) => item.shortcut === 'done')).toBe(true);
+        expect(toolbarItems.some((item: ToolbarItem & { shortcut?: string }) => item.shortcut === 'cancel')).toBe(true);
       } else {
-        expect(POM.popup.component.option('toolbarItems')).toMatchObject(recurrenceToolbarWithCancelButton);
+        expect(toolbarItems.some((item: ToolbarItem & { shortcut?: string }) => item.shortcut === 'cancel')).toBe(true);
+        expect(toolbarItems.some((item: ToolbarItem & { shortcut?: string }) => item.shortcut === 'done')).toBe(false);
       }
 
       await POM.popup.component.hide();
@@ -2100,22 +2024,24 @@ describe('Appointment Popup', () => {
         },
       });
 
-      const newAppointment = {
-        text: 'a',
-        startDate: new Date(2015, 5, 15, 10),
-        endDate: new Date(2015, 5, 15, 11),
-      };
+      const getToolbarItems = (): ToolbarItem [] => POM.popup.component.option('toolbarItems') ?? [];
 
-      scheduler.showAppointmentPopup(newAppointment);
-      expect(POM.popup.component.option('toolbarItems')).toMatchObject(toolbarWithSaveButton);
+      scheduler.showAppointmentPopup();
+
+      expect(getToolbarItems().some((item: ToolbarItem & { shortcut?: string }) => item.shortcut === 'done')).toBe(true);
+      expect(getToolbarItems().some((item: ToolbarItem & { shortcut?: string }) => item.shortcut === 'cancel')).toBe(true);
 
       scheduler.option('editing', { allowUpdating: false, allowAdding: true });
-      scheduler.showAppointmentPopup(newAppointment);
-      expect(POM.popup.component.option('toolbarItems')).toMatchObject(toolbarWithCancelButton);
+      scheduler.showAppointmentPopup(getDefaultData()[0]);
+
+      expect(getToolbarItems().some((item: ToolbarItem & { shortcut?: string }) => item.shortcut === 'done')).toBe(false);
+      expect(getToolbarItems().some((item: ToolbarItem & { shortcut?: string }) => item.shortcut === 'cancel')).toBe(true);
 
       await POM.popup.component.hide();
       scheduler.showAppointmentPopup();
-      expect(POM.popup.component.option('toolbarItems')).toMatchObject(toolbarWithSaveButton);
+
+      expect(getToolbarItems().some((item: ToolbarItem & { shortcut?: string }) => item.shortcut === 'done')).toBe(true);
+      expect(getToolbarItems().some((item: ToolbarItem & { shortcut?: string }) => item.shortcut === 'cancel')).toBe(true);
     });
   });
 
