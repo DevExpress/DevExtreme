@@ -2006,12 +2006,26 @@ describe('Appointment Popup', () => {
       scheduler.showAppointmentPopup(disabled ? disabledAppointment : commonAppointment);
 
       const toolbarItems = POM.popup.component.option('toolbarItems') ?? [];
-      const hasButton = (shortcut: string): boolean => toolbarItems.some(
-        (item: ToolbarItem & { shortcut?: string }) => item.shortcut === shortcut,
+
+      expect(toolbarItems).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            shortcut: 'cancel',
+          }),
+        ]),
       );
 
-      expect(hasButton('cancel')).toBe(true);
-      expect(hasButton('done')).toBe(shouldHaveSaveButton);
+      const doneButtonMatcher = expect.arrayContaining([
+        expect.objectContaining({
+          shortcut: 'done',
+        }),
+      ]);
+
+      if (shouldHaveSaveButton) {
+        expect(toolbarItems).toEqual(doneButtonMatcher);
+      } else {
+        expect(toolbarItems).not.toEqual(doneButtonMatcher);
+      }
 
       await POM.popup.component.hide();
     });
@@ -2041,12 +2055,24 @@ describe('Appointment Popup', () => {
 
       const toolbarItems = POM.popup.component.option('toolbarItems') ?? [];
 
+      expect(toolbarItems).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            shortcut: 'cancel',
+          }),
+        ]),
+      );
+
+      const doneButtonMatcher = expect.arrayContaining([
+        expect.objectContaining({
+          shortcut: 'done',
+        }),
+      ]);
+
       if (shouldHaveSaveButton) {
-        expect(toolbarItems.some((item: ToolbarItem & { shortcut?: string }) => item.shortcut === 'done')).toBe(true);
-        expect(toolbarItems.some((item: ToolbarItem & { shortcut?: string }) => item.shortcut === 'cancel')).toBe(true);
+        expect(toolbarItems).toEqual(doneButtonMatcher);
       } else {
-        expect(toolbarItems.some((item: ToolbarItem & { shortcut?: string }) => item.shortcut === 'cancel')).toBe(true);
-        expect(toolbarItems.some((item: ToolbarItem & { shortcut?: string }) => item.shortcut === 'done')).toBe(false);
+        expect(toolbarItems).not.toEqual(doneButtonMatcher);
       }
 
       await POM.popup.component.hide();
@@ -2063,22 +2089,33 @@ describe('Appointment Popup', () => {
 
       const getToolbarItems = (): ToolbarItem [] => POM.popup.component.option('toolbarItems') ?? [];
 
+      const doneButtonMatcher = expect.arrayContaining([
+        expect.objectContaining({
+          shortcut: 'done',
+        }),
+      ]);
+      const cancelButtonMatcher = expect.arrayContaining([
+        expect.objectContaining({
+          shortcut: 'cancel',
+        }),
+      ]);
+
       scheduler.showAppointmentPopup();
 
-      expect(getToolbarItems().some((item: ToolbarItem & { shortcut?: string }) => item.shortcut === 'done')).toBe(true);
-      expect(getToolbarItems().some((item: ToolbarItem & { shortcut?: string }) => item.shortcut === 'cancel')).toBe(true);
+      expect(getToolbarItems()).toEqual(doneButtonMatcher);
+      expect(getToolbarItems()).toEqual(cancelButtonMatcher);
 
       scheduler.option('editing', { allowUpdating: false, allowAdding: true });
       scheduler.showAppointmentPopup(commonAppointment);
 
-      expect(getToolbarItems().some((item: ToolbarItem & { shortcut?: string }) => item.shortcut === 'done')).toBe(false);
-      expect(getToolbarItems().some((item: ToolbarItem & { shortcut?: string }) => item.shortcut === 'cancel')).toBe(true);
+      expect(getToolbarItems()).not.toEqual(doneButtonMatcher);
+      expect(getToolbarItems()).toEqual(cancelButtonMatcher);
 
       await POM.popup.component.hide();
       scheduler.showAppointmentPopup();
 
-      expect(getToolbarItems().some((item: ToolbarItem & { shortcut?: string }) => item.shortcut === 'done')).toBe(true);
-      expect(getToolbarItems().some((item: ToolbarItem & { shortcut?: string }) => item.shortcut === 'cancel')).toBe(true);
+      expect(getToolbarItems()).toEqual(doneButtonMatcher);
+      expect(getToolbarItems()).toEqual(cancelButtonMatcher);
     });
   });
 
