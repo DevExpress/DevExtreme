@@ -366,6 +366,7 @@ class TimeView extends Editor<TimeViewProperties> {
 
     this._silentEditorValueUpdate(this._hourBox, hours);
     this._silentEditorValueUpdate(this._minuteBox, this._getValue().getMinutes());
+    this._silentEditorValueUpdate(this._secondBox, this._getValue().getSeconds());
 
     this._refreshFormat12();
   }
