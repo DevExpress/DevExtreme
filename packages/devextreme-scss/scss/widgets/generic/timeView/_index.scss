@@ -9,7 +9,7 @@
 @use "../../base/timeView";
 
 // adduse
-@include clock-action-icons-mixin($base-accent, $clock-bg-color, $clock-digits-color);
+@include clock-action-icons-mixin($base-accent, $clock-bg-color, $clock-digits-color, $base-danger);
 
 .dx-timeview {
   height: auto;

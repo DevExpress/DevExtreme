@@ -21,6 +21,7 @@ const TIMEVIEW_FORMAT12_CLASS = 'dx-timeview-format12';
 const TIMEVIEW_FORMAT12_AM = -1;
 const TIMEVIEW_FORMAT12_PM = 1;
 const TIMEVIEW_MINUTEARROW_CLASS = 'dx-timeview-minutearrow';
+const TIMEVIEW_SECONDARROW_CLASS = 'dx-timeview-secondarrow';
 
 const rotateArrow = function ($arrow, angle, offset) {
   cssRotate($arrow, angle, offset);
@@ -43,6 +44,10 @@ class TimeView extends Editor<TimeViewProperties> {
   _minuteBox!: NumberBox;
 
   _hourBox!: NumberBox;
+
+  _secondBox!: NumberBox;
+
+  _$secondArrow?: dxElementWrapper;
 
   _$minuteArrow?: dxElementWrapper;
 
@@ -108,11 +113,13 @@ class TimeView extends Editor<TimeViewProperties> {
   _renderClock(_, __, container): void {
     this._$hourArrow = $('<div>').addClass(TIMEVIEW_HOURARROW_CLASS);
     this._$minuteArrow = $('<div>').addClass(TIMEVIEW_MINUTEARROW_CLASS);
+    this._$secondArrow = $('<div>').addClass(TIMEVIEW_SECONDARROW_CLASS);
 
     const $container = $(container);
     $container.addClass(TIMEVIEW_CLOCK_CLASS)
       .append(this._$hourArrow)
-      .append(this._$minuteArrow);
+      .append(this._$minuteArrow)
+      .append(this._$secondArrow);
 
     this.setAria('role', 'presentation', $container);
   }
@@ -121,9 +128,11 @@ class TimeView extends Editor<TimeViewProperties> {
     const time = this._getValue();
     const hourArrowAngle = time.getHours() / 12 * 360 + time.getMinutes() / 60 * 30;
     const minuteArrowAngle = time.getMinutes() / 60 * 360;
+    const secondArrowAngle = time.getSeconds() / 60 * 360;
 
     rotateArrow(this._$hourArrow, hourArrowAngle, this.option('_arrowOffset'));
     rotateArrow(this._$minuteArrow, minuteArrowAngle, this.option('_arrowOffset'));
+    rotateArrow(this._$secondArrow, secondArrowAngle, this.option('_arrowOffset'));
   }
 
   _getBoxItems(is12HourFormat: boolean) {
@@ -143,6 +152,17 @@ class TimeView extends Editor<TimeViewProperties> {
       shrink: 0,
       baseSize: 'auto',
       template: (): dxElementWrapper => this._minuteBox.$element(),
+    }, {
+      ratio: 0,
+      shrink: 0,
+      baseSize: 'auto',
+      // @ts-expect-error ts-error
+      template: $('<div>').addClass(TIMEVIEW_TIME_SEPARATOR_CLASS).text(dateLocalization.getTimeSeparator()),
+    }, {
+      ratio: 0,
+      shrink: 0,
+      baseSize: 'auto',
+      template: (): dxElementWrapper => this._secondBox.$element(),
     }];
 
     if (is12HourFormat) {
@@ -162,6 +182,7 @@ class TimeView extends Editor<TimeViewProperties> {
 
     this._createHourBox(is12HourFormat);
     this._createMinuteBox();
+    this._createSecondBox();
 
     if (is12HourFormat) {
       this._createFormat12Box();
@@ -245,6 +266,31 @@ class TimeView extends Editor<TimeViewProperties> {
     );
 
     this._minuteBox.setAria('label', 'minutes');
+  }
+
+  _createSecondBox(): void {
+    this._secondBox = this._createComponent(
+      $('<div>'),
+      NumberBox,
+      {
+        min: -1,
+        max: 60,
+        value: this._getValue().getSeconds(),
+        onKeyboardHandled: (opts) => this._keyboardHandler(opts),
+        onValueChanged: ({ value, component }) => {
+          const newSeconds = (60 + value) % 60;
+          component.option('value', newSeconds);
+
+          const time = new Date(this._getValue());
+          time.setSeconds(newSeconds);
+          time.setMilliseconds(0);
+          this.option('value', time);
+        },
+        ...this._getNumberBoxConfig(),
+      },
+    );
+
+    this._secondBox.setAria('label', 'seconds');
   }
 
   _createFormat12Box(): void {
