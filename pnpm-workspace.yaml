@@ -42,6 +42,7 @@ catalogs:
     "@typescript-eslint/eslint-plugin": 5.62.0
     "@typescript-eslint/parser": 5.62.0
   tools:
+    "@devexpress/sbom-toolkit": https://npm.pkg.github.com/download/@devexpress/sbom-toolkit/0.1.0/1d77228c5b7f61a06852ea6415da79739841d1aa
     "devextreme-internal-tools": 20.1.0
     "prettier": 3.5.3
     "ts-node": 10.9.2

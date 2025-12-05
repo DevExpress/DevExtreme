@@ -1,0 +1,60 @@
+{
+  "name": "sbom",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "dependsOn": [
+        "make-devextreme-sbom",
+        "make-devextreme-react-sbom",
+        "make-devextreme-angular-sbom",
+        "make-devextreme-vue-sbom"
+      ],
+      "executor": "nx:noop",
+      "cache": false
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "rm -rf dist/ && mkdir -p dist/"
+      },
+      "cache": false
+    },
+    "make-devextreme-sbom": {
+      "dependsOn": ["clean"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{workspaceRoot}",
+        "command": "pnpm dx-make-sbom devextreme && mv devextreme.sbom.json packages/sbom/dist/"
+      },
+      "cache": false
+    },
+    "make-devextreme-react-sbom": {
+      "dependsOn": ["clean"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{workspaceRoot}",
+        "command": "pnpm dx-make-sbom devextreme-react && mv devextreme-react.sbom.json packages/sbom/dist/"
+      },
+      "cache": false
+    },
+    "make-devextreme-angular-sbom": {
+      "dependsOn": ["clean"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{workspaceRoot}",
+        "command": "pnpm dx-make-sbom devextreme-angular && mv devextreme-angular.sbom.json packages/sbom/dist/"
+      },
+      "cache": false
+    },
+    "make-devextreme-vue-sbom": {
+      "dependsOn": ["clean"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{workspaceRoot}",
+        "command": "pnpm dx-make-sbom devextreme-vue && mv devextreme-vue.sbom.json packages/sbom/dist/"
+      },
+      "cache": false
+    }
+  }
+}
