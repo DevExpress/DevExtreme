@@ -540,18 +540,16 @@ export class RecurrenceForm {
   }
 
   updateRecurrenceFormValues(
-    repeatEditorValue: string,
     recurrenceRuleRaw: string | null,
     startDate: Date | null,
   ): void {
     this.recurrenceRule = this.createRecurrenceRule(
-      repeatEditorValue,
       recurrenceRuleRaw,
       startDate,
     );
 
     this.dxForm.getEditor(EDITOR_NAMES.recurrenceStartDateEditor)?.option('value', this.recurrenceRule.startDate);
-    this.dxForm.getEditor(EDITOR_NAMES.recurrencePeriodEditor)?.option('value', repeatEditorValue);
+    this.dxForm.getEditor(EDITOR_NAMES.recurrencePeriodEditor)?.option('value', this.recurrenceRule.frequency);
     this.dxForm.getEditor(EDITOR_NAMES.recurrenceCountEditor)?.option('value', this.recurrenceRule.interval);
     this.dxForm.getEditor(EDITOR_NAMES.recurrenceRepeatEndEditor)?.option('value', this.recurrenceRule.repeatEnd);
     this.dxForm.getEditor(EDITOR_NAMES.recurrenceEndUntilEditor)?.option('value', this.recurrenceRule.until);
@@ -562,22 +560,17 @@ export class RecurrenceForm {
   }
 
   private createRecurrenceRule(
-    repeatEditorValue: string,
     recurrenceRuleRaw: string | null,
     startDate: Date | null,
   ): RecurrenceRule {
     const recurrenceRule = new RecurrenceRule(recurrenceRuleRaw ?? '', startDate);
-    const { frequency } = recurrenceRule;
 
-    if (frequency !== repeatEditorValue) {
-      const newRecurrenceRule = new RecurrenceRule(`freq=${repeatEditorValue};`, startDate);
+    if (recurrenceRule.byDay.length === 0) {
       const defaultByDay = [
         weekDays[startDate?.getDay() ?? this.scheduler.getFirstDayOfWeek()],
       ];
 
-      newRecurrenceRule.byDay = defaultByDay;
-
-      return newRecurrenceRule;
+      recurrenceRule.byDay = defaultByDay;
     }
 
     return recurrenceRule;

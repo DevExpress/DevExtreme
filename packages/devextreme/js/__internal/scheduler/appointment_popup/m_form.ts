@@ -280,6 +280,13 @@ export class AppointmentForm {
           this.updateDateEditorsValues();
         }
 
+        if (isRecurrenceRuleChanged || startDateExpr === dataField) {
+          this._recurrenceForm.updateRecurrenceFormValues(
+            this.recurrenceRuleRaw,
+            this.startDate,
+          );
+        }
+
         if (isRecurrenceRuleChanged) {
           this.updateRepeatEditorValue();
         }
@@ -663,8 +670,14 @@ export class AppointmentForm {
             onValueChanged: (e): void => {
               if (e.value === repeatNeverValue) {
                 this.dxForm.updateData(recurrenceRuleExpr, '');
-                this._recurrenceForm.recurrenceRule = new RecurrenceRule('', this.startDate);
-              } else if (e.event) {
+              } else {
+                const currentRecurrenceRule = this._recurrenceForm.recurrenceRule.toString() ?? '';
+                const recurrenceRule = new RecurrenceRule(currentRecurrenceRule, this.startDate);
+                recurrenceRule.frequency = e.value;
+                this.dxForm.updateData(recurrenceRuleExpr, recurrenceRule.toString());
+              }
+
+              if (e.value !== repeatNeverValue && e.event) {
                 this.showRecurrenceGroup();
               }
 
@@ -847,14 +860,6 @@ export class AppointmentForm {
     this._$recurrenceGroup?.removeClass(CLASSES.recurrenceHidden);
     this._$recurrenceGroup?.removeAttr('tabindex');
 
-    const repeatEditorValue = this.dxForm.getEditor(REPEAT_EDITOR_NAME)?.option('value');
-
-    this._recurrenceForm.updateRecurrenceFormValues(
-      repeatEditorValue,
-      this.recurrenceRuleRaw,
-      this.startDate,
-    );
-
     this._popup.updateToolbarForRecurrenceGroup();
   }
 
@@ -873,7 +878,6 @@ export class AppointmentForm {
     this._$recurrenceGroup?.attr('tabindex', '-1');
 
     this._popup.updateToolbarForMainGroup();
-    this.updateRepeatEditorValue();
   }
 
   saveRecurrenceValue(): void {
@@ -932,18 +936,12 @@ export class AppointmentForm {
 
     if (this.recurrenceRuleRaw === null) {
       repeatEditor.option('value', repeatNeverValue);
-      this._recurrenceForm.recurrenceRule = new RecurrenceRule('', this.startDate);
     } else {
       const recurrenceRule = new RecurrenceRule(this.recurrenceRuleRaw, this.startDate);
       const { frequency } = recurrenceRule;
       const value = frequency ?? repeatNeverValue;
 
       repeatEditor.option('value', value);
-      this._recurrenceForm.updateRecurrenceFormValues(
-        value === repeatNeverValue ? '' : value,
-        this.recurrenceRuleRaw,
-        this.startDate,
-      );
     }
   }
 
