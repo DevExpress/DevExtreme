@@ -510,7 +510,9 @@ export class RecurrenceForm {
               'aria-label': messageLocalization.format('dxScheduler-recurrenceUntilDateLabel'),
             },
             onContentReady: (e): void => {
+              const repeatEndValue = this.recurrenceRule.repeatEnd;
               e.component.option('value', this.recurrenceRule.until);
+              e.component.option('disabled', repeatEndValue !== 'until');
             },
             onValueChanged: (e): void => {
               this.recurrenceRule.until = e.value;
@@ -534,7 +536,9 @@ export class RecurrenceForm {
               'aria-label': messageLocalization.format('dxScheduler-recurrenceOccurrenceLabel'),
             },
             onContentReady: (e): void => {
+              const repeatEndValue = this.recurrenceRule.repeatEnd;
               e.component.option('value', this.recurrenceRule.count ?? undefined);
+              e.component.option('disabled', repeatEndValue !== 'count');
             },
             onValueChanged: (e): void => {
               this.recurrenceRule.count = e.value;
