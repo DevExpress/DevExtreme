@@ -1081,6 +1081,30 @@ describe('Appointment Form', () => {
       expect(POM.popup.isRecurrenceGroupVisible()).toBe(true);
     });
 
+    it('should have disabled week day buttons when allowUpdating is false', async () => {
+      const { POM, scheduler } = await createScheduler({
+        ...getDefaultConfig(),
+        dataSource: [{ ...recurringAppointment, recurrenceRule: 'FREQ=WEEKLY;BYDAY=WE,TU,TH,FR,SA' }],
+        editing: { allowUpdating: false },
+      });
+
+      const dataSource = (scheduler as any).getDataSource();
+      const appointment = dataSource.items()[0];
+
+      scheduler.showAppointmentPopup(appointment);
+      POM.popup.openRecurrenceSettings();
+
+      const weekDayButtons = POM.popup.recurrenceWeekDayButtons;
+      expect(weekDayButtons).toBeTruthy();
+
+      const firstButton = weekDayButtons?.querySelector('.dx-button');
+      expect(firstButton).toBeTruthy();
+
+      // @ts-expect-error
+      const buttonInstance = $(firstButton).dxButton('instance');
+      expect(buttonInstance?.option('disabled')).toBe(true);
+    });
+
     it('should be visible after changing repeat editor\'s value', async () => {
       const { scheduler, POM } = await createScheduler(getDefaultConfig());
 
