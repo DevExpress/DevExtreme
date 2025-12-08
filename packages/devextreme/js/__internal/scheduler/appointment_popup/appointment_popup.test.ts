@@ -719,6 +719,36 @@ describe('Appointment popup form', () => {
       doneButton = POM.popup.getDoneButton();
       expect(doneButton.getAttribute('aria-label')).toBe('Done');
     });
+
+    it('(T1308870): startDate popup toolbar items should remain visible when allDay and repeat switches are toggled', async () => {
+      const { scheduler } = await createScheduler({
+        dataSource: [],
+        views: ['week'],
+        currentView: 'week',
+        currentDate: new Date(2017, 4, 25),
+      });
+
+      scheduler.showAppointmentPopup();
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const appointmentForm = (scheduler as any)._appointmentForm.dxForm;
+      const startDate = appointmentForm.getEditor('startDate');
+      const toolbarItemsBefore = startDate._getPopupToolbarItems();
+
+      const allDay = appointmentForm.getEditor('allDay');
+      allDay.$element()[0].click();
+      await new Promise(process.nextTick);
+
+      const repeat = appointmentForm.getEditor('repeat');
+      repeat.$element()[0].click();
+      await new Promise(process.nextTick);
+
+      const startDateAfter = appointmentForm.getEditor('startDate');
+      const toolbarItemsAfter = startDateAfter._getPopupToolbarItems();
+
+      expect(toolbarItemsBefore.length).toBe(3);
+      expect(toolbarItemsAfter.length).toBe(3);
+    });
   });
 
   describe('Appointment Popup and Recurrence Editor visibility', () => {
