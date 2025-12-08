@@ -5,6 +5,7 @@
     "build": {
       "dependsOn": [
         "make-devextreme-sbom",
+        "make-devextreme-dist-sbom",
         "make-devextreme-react-sbom",
         "make-devextreme-angular-sbom",
         "make-devextreme-vue-sbom"
@@ -26,6 +27,15 @@
       "options": {
         "cwd": "{workspaceRoot}",
         "command": "pnpm dx-make-sbom devextreme && mv devextreme.sbom.json packages/sbom/dist/"
+      },
+      "cache": false
+    },
+    "make-devextreme-dist-sbom": {
+      "dependsOn": ["clean", "make-devextreme-sbom"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{workspaceRoot}",
+        "command": "cp packages/sbom/dist/devextreme.sbom.json packages/sbom/dist/devextreme-dist.sbom.json"
       },
       "cache": false
     },
