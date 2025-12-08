@@ -1329,10 +1329,6 @@ class EditingControllerImpl extends modules.ViewController {
   private _updateInsertAfterOrBeforeKeys(changes, index) {
     const removeChange = changes[index];
 
-    if (removeChange.type === DATA_EDIT_DATA_REMOVE_TYPE) {
-      return;
-    }
-
     changes.forEach((change) => {
       if (change.type === DATA_EDIT_DATA_INSERT_TYPE) {
         const insertAfterOrBeforeKey = this._getInsertAfterOrBeforeKey(change);
@@ -1350,13 +1346,17 @@ class EditingControllerImpl extends modules.ViewController {
   protected _removeChange(index) {
     if (index >= 0) {
       const changes = [...this.getChanges()];
-      const { key } = changes[index];
+      const { key, type } = changes[index];
 
       this._removeInternalData(key);
 
-      this._updateInsertAfterOrBeforeKeys(changes, index);
+      if (type !== DATA_EDIT_DATA_REMOVE_TYPE) {
+        this._updateInsertAfterOrBeforeKeys(changes, index);
+      }
+
       changes.splice(index, 1);
       this._silentOption(EDITING_CHANGES_OPTION_NAME, changes);
+
       if (equalByValue(this.option(EDITING_EDITROWKEY_OPTION_NAME), key)) {
         this._resetEditIndices();
       }
