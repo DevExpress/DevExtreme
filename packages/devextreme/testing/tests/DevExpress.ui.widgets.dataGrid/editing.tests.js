@@ -4887,10 +4887,9 @@ QUnit.module('Editing with real dataController', {
     });
 
     QUnit.test('Recovered row should have correct data when placed before inserted row in batch editing (T1293181)', function(assert) {
-        const that = this;
         const testElement = $('#container');
 
-        $.extend(that.options.editing, {
+        $.extend(this.options.editing, {
             mode: 'batch',
             allowDeleting: true,
             allowAdding: true,
