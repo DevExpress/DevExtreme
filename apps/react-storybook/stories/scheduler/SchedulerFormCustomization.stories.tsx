@@ -408,7 +408,7 @@ export const LegacyPopup: Story = {
 
                               form?.option('formData', {
                                 ...form.option('formData'),
-                                recurrenceRule:  recurrenceRule ? form.option('formData')?.recurrenceRule : "FREQ=DAILY"
+                                recurrenceRule:  recurrenceRule || "FREQ=DAILY"
                               })
                               form?.itemOption("recurrenceGroup", "cssClass", "");
                             } else {
