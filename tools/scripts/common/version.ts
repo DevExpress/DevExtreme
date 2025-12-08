@@ -4,7 +4,7 @@ import path from 'path';
 import { ROOT_DIR } from './paths';
 import { validateVersion } from './monorepo-tools';
 
-export function updateVersion(version: string | undefined): void {
+export function updateVersion(version: string | undefined, pnpmArgs: string[]): void {
   if (!version) {
     console.error(`Version can't be empty`);
     process.exit(1);
@@ -19,7 +19,7 @@ export function updateVersion(version: string | undefined): void {
 
   sh.sed('-i', /"version": ".*"/, `"version": "${version}"`, workspacesPaths);
 
-  sh.exec('pnpm install --no-frozen-lockfile');
+  sh.exec(`pnpm install ${["--no-frozen-lockfile", ...pnpmArgs].join(" ")}`);
 }
 
 export function updateVersionJs(version: string | undefined, build?: string | undefined): void {

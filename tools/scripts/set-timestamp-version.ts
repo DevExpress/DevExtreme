@@ -3,6 +3,8 @@ import pkg from '../../package.json';
 import { formatVersion, makeVersion } from './common/monorepo-tools';
 import { updateVersion, updateVersionJs } from './common/version';
 
+const [, ,...pnpmArgs] = process.argv;
+
 const formattedVersion = formatVersion(pkg.version);
 if(formattedVersion === undefined) {
   console.error(`Unable to generate timestamp version from ${pkg.version}`);
@@ -13,4 +15,4 @@ const timestampVersion = makeVersion(formattedVersion, true, new Date());
 sh.set('-e');
 
 updateVersionJs(timestampVersion.baseVersion, timestampVersion.build);
-updateVersion(timestampVersion.fullVersion);
+updateVersion(timestampVersion.fullVersion, pnpmArgs);
