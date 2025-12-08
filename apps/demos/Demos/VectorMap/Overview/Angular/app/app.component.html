@@ -32,14 +32,14 @@
   <div *dxTemplate="let info of 'tooltipContent'" class="state-tooltip">
     <div>
       <h4>{{ info.attribute("name") }}</h4>
-      @if (gdpData[info.attribute('name')] as countryGDPData) {
+      @if (gdpData[info.attribute('name')]; as countryGDPData) {
       <div id="nominal">
         Nominal GDP: $<span>{{
           pipe.transform(countryGDPData.total, "1.0-0")
         }}</span
         >M
       </div>
-      } @if (getPieData(info.attribute('name')) as data) {
+      } @if (getPieData(info.attribute('name')); as data) {
       <div>
         <dx-pie-chart id="gdp-sectors" [dataSource]="data" [animation]="false">
           <dxi-pie-chart-series argumentField="name" valueField="value">
