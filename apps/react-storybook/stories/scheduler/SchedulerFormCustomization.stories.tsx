@@ -9,6 +9,7 @@ import "./form-customization.css";
 const Scheduler = wrapDxWithReact<Properties>(dxScheduler);
 
 import ReactScheduler from 'devextreme-react/scheduler';
+import dxForm from "devextreme/artifacts/npm/devextreme/ui/form";
 
 const iconsShowModeArgType = {
   "editing.form.iconsShowMode": {
@@ -337,8 +338,8 @@ export const LegacyPopup: Story = {
     "editing.form.iconsShowMode": "both",
   } as Properties,
   argTypes: iconsShowModeArgType,
-  render: (args) => {
-    let form: any = null;
+  render: () => {
+    let form: InstanceType<typeof dxForm> | null = null;
 
     const schedulerRef = useRef(null);
 
@@ -401,22 +402,22 @@ export const LegacyPopup: Story = {
                         editorOptions: {
                           onValueChanged: (e) => {
                             if (e.value === true) {
-                              form.option("colCount", 2);
+                              form?.option("colCount", 2);
 
-                              const recurrenceRule = form.option('formData').recurrenceRule;
+                              const recurrenceRule = form?.option('formData')?.recurrenceRule;
 
-                              form.option('formData', {
+                              form?.option('formData', {
                                 ...form.option('formData'),
                                 recurrenceRule:  recurrenceRule ? form.option('formData')?.recurrenceRule : "FREQ=DAILY"
                               })
-                              form.itemOption("recurrenceGroup", "cssClass", "");
+                              form?.itemOption("recurrenceGroup", "cssClass", "");
                             } else {
-                              form.option("colCount", 1);
-                              form.option('formData', {
+                              form?.option("colCount", 1);
+                              form?.option('formData', {
                                 ...form.option('formData'),
                                 recurrenceRule: ""
                               })
-                              form.itemOption("recurrenceGroup", "cssClass", "dx-hidden");
+                              form?.itemOption("recurrenceGroup", "cssClass", "dx-hidden");
                             }
                           },
                         },
