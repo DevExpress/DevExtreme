@@ -209,7 +209,7 @@ const DataGrid = memo(
 
 // owners:
 // Column
-type IAiProps = React.PropsWithChildren<{
+type IAIProps = React.PropsWithChildren<{
   aiIntegration?: AIIntegration | undefined;
   editorOptions?: dxTextBoxOptions<any>;
   emptyText?: string;
@@ -219,8 +219,8 @@ type IAiProps = React.PropsWithChildren<{
   prompt?: string;
   showHeaderMenu?: boolean;
 }>
-const _componentAi = (props: IAiProps) => {
-  return React.createElement(NestedOption<IAiProps>, {
+const _componentAI = (props: IAIProps) => {
+  return React.createElement(NestedOption<IAIProps>, {
     ...props,
     elementDescriptor: {
       OptionName: "ai",
@@ -231,18 +231,18 @@ const _componentAi = (props: IAiProps) => {
   });
 };
 
-const Ai = Object.assign<typeof _componentAi, NestedComponentMeta>(_componentAi, {
+const AI = Object.assign<typeof _componentAI, NestedComponentMeta>(_componentAI, {
   componentType: "option",
 });
 
 // owners:
 // FormItem
-type IAiOptionsProps = React.PropsWithChildren<{
+type IAIOptionsProps = React.PropsWithChildren<{
   disabled?: boolean;
   instruction?: string | undefined;
 }>
-const _componentAiOptions = (props: IAiOptionsProps) => {
-  return React.createElement(NestedOption<IAiOptionsProps>, {
+const _componentAIOptions = (props: IAIOptionsProps) => {
+  return React.createElement(NestedOption<IAIOptionsProps>, {
     ...props,
     elementDescriptor: {
       OptionName: "aiOptions",
@@ -250,7 +250,7 @@ const _componentAiOptions = (props: IAiOptionsProps) => {
   });
 };
 
-const AiOptions = Object.assign<typeof _componentAiOptions, NestedComponentMeta>(_componentAiOptions, {
+const AIOptions = Object.assign<typeof _componentAIOptions, NestedComponentMeta>(_componentAIOptions, {
   componentType: "option",
 });
 
@@ -1142,7 +1142,7 @@ const EditingTexts = Object.assign<typeof _componentEditingTexts, NestedComponen
 });
 
 // owners:
-// Ai
+// AI
 type IEditorOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
@@ -3347,10 +3347,10 @@ export {
   DataGrid,
   IDataGridOptions,
   DataGridRef,
-  Ai,
-  IAiProps,
-  AiOptions,
-  IAiOptionsProps,
+  AI,
+  IAIProps,
+  AIOptions,
+  IAIOptionsProps,
   Animation,
   IAnimationProps,
   AsyncRule,

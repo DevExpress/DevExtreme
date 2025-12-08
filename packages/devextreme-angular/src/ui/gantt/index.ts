@@ -62,7 +62,7 @@ import { DxoTasksModule } from 'devextreme-angular/ui/nested';
 import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
 import { DxoValidationModule } from 'devextreme-angular/ui/nested';
 
-import { DxoGanttAiModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoGanttAIModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxiGanttButtonModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxiGanttColumnModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttColumnHeaderFilterModule } from 'devextreme-angular/ui/gantt/nested';
@@ -1361,7 +1361,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     DxoTasksModule,
     DxoToolbarModule,
     DxoValidationModule,
-    DxoGanttAiModule,
+    DxoGanttAIModule,
     DxiGanttButtonModule,
     DxiGanttColumnModule,
     DxoGanttColumnHeaderFilterModule,
@@ -1415,7 +1415,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     DxoTasksModule,
     DxoToolbarModule,
     DxoValidationModule,
-    DxoGanttAiModule,
+    DxoGanttAIModule,
     DxiGanttButtonModule,
     DxiGanttColumnModule,
     DxoGanttColumnHeaderFilterModule,
