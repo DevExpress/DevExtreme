@@ -4886,7 +4886,7 @@ QUnit.module('Editing with real dataController', {
         assert.equal(this.array.length, 7, 'items count not changed');
     });
 
-    QUnit.test('Recovered row should gave correct data when placed before inserted row in batch editing (T1293181)', function(assert) {
+    QUnit.test('Recovered row should have correct data when placed before inserted row in batch editing (T1293181)', function(assert) {
         const that = this;
         const testElement = $('#container');
 
