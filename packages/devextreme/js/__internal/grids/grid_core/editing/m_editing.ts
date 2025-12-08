@@ -1329,7 +1329,7 @@ class EditingControllerImpl extends modules.ViewController {
   private _updateInsertAfterOrBeforeKeys(changes, index) {
     const removeChange = changes[index];
 
-    if (removeChange.type !== DATA_EDIT_DATA_INSERT_TYPE) {
+    if (removeChange.type === DATA_EDIT_DATA_REMOVE_TYPE) {
       return;
     }
 
