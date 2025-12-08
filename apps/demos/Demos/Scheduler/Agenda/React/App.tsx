@@ -53,6 +53,7 @@ const App = () => (
               <Item name="priorityId" />
             </Item>
           </Item>
+          <Item name="descriptionGroup" />
         </Item>
         <Item name="recurrenceGroup" />
       </SchedulerForm>

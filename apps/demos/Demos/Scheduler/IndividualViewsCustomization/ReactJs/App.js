@@ -74,6 +74,7 @@ const App = () => (
               <Item name="typeId" />
             </Item>
           </Item>
+          <Item name="descriptionGroup" />
         </Item>
         <Item name="recurrenceGroup" />
       </SchedulerForm>

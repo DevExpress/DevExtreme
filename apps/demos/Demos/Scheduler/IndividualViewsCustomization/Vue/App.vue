@@ -58,6 +58,7 @@
               <DxItem name="typeId"/>
             </DxItem>
           </DxItem>
+          <DxItem name="descriptionGroup"/>
         </DxItem>
         <DxItem name="recurrenceGroup"/>
       </DxSchedulerForm>

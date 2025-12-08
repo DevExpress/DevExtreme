@@ -45,6 +45,7 @@
               <DxItem name="priority"/>
             </DxItem>
           </DxItem>
+          <DxItem name="descriptionGroup"/>
         </DxItem>
         <DxItem name="recurrenceGroup"/>
       </DxSchedulerForm>

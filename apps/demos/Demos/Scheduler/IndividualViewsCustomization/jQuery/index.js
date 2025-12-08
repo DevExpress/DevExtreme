@@ -68,6 +68,7 @@ $(() => {
                   },
                 ],
               },
+              'descriptionGroup',
             ],
           },
           'recurrenceGroup',
