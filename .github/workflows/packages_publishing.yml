@@ -58,7 +58,7 @@ jobs:
             ${{ runner.os }}-pnpm-store
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --config.optional=true
 
       - name: Set timestamp version
         if: ${{ env.SET_TIMESTAMP_VERSION == 'true' }}

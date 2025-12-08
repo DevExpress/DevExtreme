@@ -27,7 +27,6 @@
   "nx": {},
   "private": true,
   "devDependencies": {
-    "@devexpress/sbom-toolkit": "catalog:tools",
     "@nx/devkit": "18.3.4",
     "@nx/jest": "19.4.2",
     "@nx/js": "19.4.2",
@@ -57,6 +56,9 @@
     "ts-node": "10.9.2",
     "vue": "3.4.27",
     "yargs": "17.7.2"
+  },
+  "optionalDependencies":{
+    "@devexpress/sbom-toolkit": "catalog:tools"
   },
   "pre-commit": [
     "lint-staged",
