@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection} from '@angular/core';
+import { ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxSchedulerModule, DxDraggableModule, DxScrollViewModule } from 'devextreme-angular';
 import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
@@ -38,7 +38,6 @@ export class AppComponent {
   constructor(service: Service, private cdr: ChangeDetectorRef) {
     this.tasks = service.getTasks();
     this.appointments = service.getAppointments();
-    
   }
 
   onAppointmentRemove = (e: DxSchedulerTypes.AppointmentDraggingRemoveEvent) => {

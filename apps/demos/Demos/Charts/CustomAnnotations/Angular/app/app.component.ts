@@ -1,6 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
-import { DecimalPipe } from "@angular/common";
+import { DecimalPipe } from '@angular/common';
 import { DxChartModule } from 'devextreme-angular';
 import { Service, State } from './app.service';
 

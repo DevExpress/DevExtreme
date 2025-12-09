@@ -34,7 +34,7 @@ export class DetailGridComponent implements AfterViewInit {
       }),
       filter: ['EmployeeID', '=', this.key],
     });
-    
+
     this.cdr.detectChanges();
   }
 

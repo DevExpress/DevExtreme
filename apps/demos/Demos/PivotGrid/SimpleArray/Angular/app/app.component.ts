@@ -1,6 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import {
-  Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxPivotGridModule } from 'devextreme-angular';
 import { Options as DataSourceConfig } from 'devextreme/ui/pivot_grid/data_source';
 import { Service } from './app.service';

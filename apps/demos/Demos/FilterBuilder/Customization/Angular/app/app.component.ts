@@ -1,5 +1,5 @@
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
-import {bootstrapApplication, BrowserModule} from '@angular/platform-browser';
+import { bootstrapApplication, BrowserModule } from '@angular/platform-browser';
 import { DxListModule, DxButtonModule, DxTagBoxModule } from 'devextreme-angular';
 import { DxFilterBuilderModule, DxFilterBuilderComponent, DxFilterBuilderTypes } from 'devextreme-angular/ui/filter-builder';
 import { Service } from './app.service';
@@ -84,7 +84,6 @@ export class AppComponent {
 
   private static getLineBreak = (spaces: number) => `\r\n${new Array(spaces + 1).join(' ')}`;
 }
-
 
 bootstrapApplication(AppComponent, {
   providers: [

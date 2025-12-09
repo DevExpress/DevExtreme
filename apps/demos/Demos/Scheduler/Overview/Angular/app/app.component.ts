@@ -1,6 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import {
-  Component, enableProdMode, Pipe, PipeTransform, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, Pipe, PipeTransform, provideZoneChangeDetection } from '@angular/core';
 import { DxSchedulerModule } from 'devextreme-angular';
 import { DataSource } from 'devextreme-angular/common/data';
 import { Service, Employee, Data } from './app.service';

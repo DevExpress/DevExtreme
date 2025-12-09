@@ -1,6 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import {
-  Component, enableProdMode, ChangeDetectionStrategy, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, ChangeDetectionStrategy, provideZoneChangeDetection } from '@angular/core';
 import { DxDataGridModule, DxSliderModule } from 'devextreme-angular';
 import { DataSource, ArrayStore } from 'devextreme-angular/common/data';
 import { Product, Order, Service } from './app.service';

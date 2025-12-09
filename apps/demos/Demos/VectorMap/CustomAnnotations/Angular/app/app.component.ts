@@ -1,5 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
 import { DxVectorMapModule } from 'devextreme-angular';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/usa.js';
 import { StatesCollection, Service } from './app.service';
@@ -21,6 +22,7 @@ if (window && window.config?.packageConfigPaths) {
   styleUrls: [`.${modulePrefix}/app.component.css`],
   imports: [
     DxVectorMapModule,
+    DecimalPipe,
   ],
 })
 

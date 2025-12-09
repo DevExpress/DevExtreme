@@ -1,6 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import {
-  Component, enableProdMode, ChangeDetectionStrategy, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, ChangeDetectionStrategy, provideZoneChangeDetection } from '@angular/core';
 import { DxDataGridModule } from 'devextreme-angular';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 

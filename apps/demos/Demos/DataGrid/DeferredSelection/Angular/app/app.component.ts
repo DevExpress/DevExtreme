@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import { DxDataGridModule, DxDataGridComponent, DxButtonModule } from 'devextreme-angular';
 import { query } from 'devextreme-angular/common/data';
-import { bootstrapApplication } from "@angular/platform-browser";
+import { bootstrapApplication } from '@angular/platform-browser';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
 if (!/localhost/.test(document.location.host)) {

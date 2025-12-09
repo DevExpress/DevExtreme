@@ -1,6 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import {
-  Component, enableProdMode, ViewChild, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, ViewChild, provideZoneChangeDetection } from '@angular/core';
 import { DxSpeedDialActionModule, DxSchedulerModule, DxSchedulerComponent } from 'devextreme-angular';
 import { Appointment, Resource, Service } from './app.service';
 

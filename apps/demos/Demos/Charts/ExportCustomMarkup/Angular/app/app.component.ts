@@ -1,6 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import {
-  Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxChartModule, DxChartComponent, DxButtonModule } from 'devextreme-angular';
 import { exportFromMarkup } from 'devextreme/viz/export';
 import { Canvg } from 'canvg';

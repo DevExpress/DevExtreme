@@ -1,6 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import {
-  Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxButtonModule } from 'devextreme-angular';
 import { DxChartComponent, DxChartModule, DxChartTypes } from 'devextreme-angular/ui/chart';
 import { Service, Mountain } from './app.service';

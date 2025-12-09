@@ -44,11 +44,11 @@ if (window && window.config?.packageConfigPaths) {
 })
 export class AppComponent {
   @ViewChild(DxSchedulerComponent, { static: false }) scheduler: DxSchedulerComponent;
-  
+
   private formatDate = formatDate;
-  
+
   private service = inject(Service);
-  
+
   data: Data[] = this.service.getData();
 
   currentDate: Date = new Date(2025, 3, 27);

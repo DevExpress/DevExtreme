@@ -1,6 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import {
-  ViewChild, Component, enableProdMode, Pipe, PipeTransform, provideZoneChangeDetection } from '@angular/core';
+import { ViewChild, Component, enableProdMode, Pipe, PipeTransform, provideZoneChangeDetection } from '@angular/core';
 import {
   DxSchedulerModule,
   DxSchedulerComponent,
@@ -12,7 +11,7 @@ import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
 import { DxNumberBoxTypes } from 'devextreme-angular/ui/number-box';
 import { Appointment, Service, MovieData } from './app.service';
 
-@Pipe({ name: 'apply'})
+@Pipe({ name: 'apply' })
 export class ApplyPipe<TArgs, TReturn> implements PipeTransform {
   transform(func: ((...args: TArgs[]) => TReturn), ...args: TArgs[]): TReturn { return func(...args); }
 }

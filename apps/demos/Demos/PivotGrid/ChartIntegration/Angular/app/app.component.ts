@@ -1,6 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import {
-  Component, ViewChild, AfterViewInit, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import {
   DxPivotGridModule,

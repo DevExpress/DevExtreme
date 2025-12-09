@@ -1,7 +1,7 @@
-import {Component, Input, AfterViewInit, ChangeDetectorRef} from '@angular/core';
+import { Component, Input, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { DataSource } from 'devextreme-angular/common/data';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
-import {DxFormModule, DxDataGridModule, DxSelectBoxModule, DxTabPanelModule} from 'devextreme-angular';
+import { DxFormModule, DxDataGridModule, DxSelectBoxModule, DxTabPanelModule } from 'devextreme-angular';
 import { DxFormTypes } from 'devextreme-angular/ui/form';
 import { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 

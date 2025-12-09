@@ -28,7 +28,7 @@ if (window && window.config?.packageConfigPaths) {
     DxPopupModule,
     Trademark,
     Category,
-    LicenseInfo
+    LicenseInfo,
   ],
 })
 export class AppComponent {

@@ -1,6 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
-import { DatePipe } from "@angular/common";
+import { DatePipe } from '@angular/common';
 import { DxDataGridModule } from 'devextreme-angular';
 import { Service, Employee } from './app.service';
 
@@ -21,7 +21,7 @@ if (window && window.config?.packageConfigPaths) {
   providers: [Service],
   imports: [
     DxDataGridModule,
-    DatePipe,  
+    DatePipe,
   ],
 })
 export class AppComponent {

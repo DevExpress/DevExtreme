@@ -74,11 +74,11 @@ export class AppComponent {
     this.logRequest(method, url, data);
 
     const httpParams = new HttpParams({ fromObject: data });
-    const httpOptions = { 
-      withCredentials: true, 
-      [method === 'GET' ? 'params': 'body']: httpParams,
+    const httpOptions = {
+      withCredentials: true,
+      [method === 'GET' ? 'params' : 'body']: httpParams,
     };
-    
+
     let request: Observable<Object>;
 
     switch (method) {

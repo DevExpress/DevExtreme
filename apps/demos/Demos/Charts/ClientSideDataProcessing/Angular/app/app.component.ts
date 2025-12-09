@@ -1,5 +1,5 @@
 import {
-   Component, AfterViewInit, enableProdMode, provideZoneChangeDetection, inject,
+  Component, AfterViewInit, enableProdMode, provideZoneChangeDetection, inject,
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 
@@ -73,6 +73,6 @@ export class AppComponent implements AfterViewInit {
 bootstrapApplication(AppComponent, {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-    provideHttpClient(withFetch())
+    provideHttpClient(withFetch()),
   ],
 });

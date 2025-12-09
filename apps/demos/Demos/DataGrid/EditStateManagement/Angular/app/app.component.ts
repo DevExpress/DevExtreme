@@ -1,8 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import {
-  Component, OnInit, OnDestroy, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, OnInit, OnDestroy, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { provideHttpClient, withFetch } from '@angular/common/http';
-import { AsyncPipe } from "@angular/common";
+import { AsyncPipe } from '@angular/common';
 import { DxLoadPanelModule } from 'devextreme-angular';
 import { Observable, Subscription } from 'rxjs';
 import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';

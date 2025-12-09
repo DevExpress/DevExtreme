@@ -1,9 +1,7 @@
-import { bootstrapApplication } from '@angular/platform-browser';
-import {
-  Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
-import {
-  DomSanitizer, SafeHtml,
-} from '@angular/platform-browser';
+import { bootstrapApplication,
+  DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+
 import { DxNumberBoxComponent, DxNumberBoxModule, DxCheckBoxModule } from 'devextreme-angular';
 import { DataSource, ArrayStore } from 'devextreme-angular/common/data';
 

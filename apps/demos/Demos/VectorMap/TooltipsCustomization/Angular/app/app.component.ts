@@ -23,6 +23,7 @@ if (window && window.config?.packageConfigPaths) {
   imports: [
     DxVectorMapModule,
     DxPieChartModule,
+    DecimalPipe,
   ],
 })
 

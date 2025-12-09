@@ -1,4 +1,4 @@
-import { Component, enableProdMode, provideZoneChangeDetection} from '@angular/core';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxTabsModule, DxSelectBoxModule, DxMultiViewModule } from 'devextreme-angular';
 import { Tab, Service } from './app.service';

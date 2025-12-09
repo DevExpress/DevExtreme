@@ -1,7 +1,7 @@
 import {
   Component, Pipe, PipeTransform, enableProdMode, ViewChild, provideZoneChangeDetection,
 } from '@angular/core';
-import {bootstrapApplication, BrowserModule} from '@angular/platform-browser';
+import { bootstrapApplication, BrowserModule } from '@angular/platform-browser';
 import { DxListModule, DxCheckBoxModule } from 'devextreme-angular';
 import { DxTreeViewModule, DxTreeViewComponent, DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
 import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
