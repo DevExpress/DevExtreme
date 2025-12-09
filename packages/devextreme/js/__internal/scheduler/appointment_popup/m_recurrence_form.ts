@@ -179,7 +179,6 @@ export class RecurrenceForm {
 
   setReadOnly(value: boolean): void {
     this._readOnly = value;
-    // this.updateWeekDaysButtons();
   }
 
   createRecurrenceFormGroup(): GroupItem {
@@ -368,8 +367,11 @@ export class RecurrenceForm {
                 this.recurrenceRule.byDay.push(item.key);
               }
 
-              // todo: update state only of the current button and remove this.updateWeekDaysButtons
-              this.updateWeekDaysButtons();
+              const button = this._weekDayButtons[item.key];
+              const newIsSelected = this.recurrenceRule.byDay.includes(item.key);
+
+              button.option('stylingMode', newIsSelected ? 'contained' : 'outlined');
+              button.option('type', newIsSelected ? 'default' : 'normal');
             },
           });
         });
@@ -625,15 +627,5 @@ export class RecurrenceForm {
     }
 
     this.dxForm.endUpdate();
-  }
-
-  private updateWeekDaysButtons(): void {
-    Object.entries(this._weekDayButtons).forEach(([dayKey, button]) => {
-      const isSelected = this.recurrenceRule.byDay.includes(dayKey);
-
-      button.option('stylingMode', isSelected ? 'contained' : 'outlined');
-      button.option('type', isSelected ? 'default' : 'normal');
-      // button.option('disabled', this._readOnly);
-    });
   }
 }

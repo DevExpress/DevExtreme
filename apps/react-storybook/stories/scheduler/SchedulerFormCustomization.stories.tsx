@@ -348,6 +348,12 @@ export const LegacyPopup: Story = {
       <ReactScheduler
         ref={schedulerRef}
         {...baseConfig}
+        onAppointmentUpdating={(e) => {
+          delete e.newData.repeat;
+        }}
+        onAppointmentAdding={(e) => {
+          delete e.appointmentData.repeat;
+        }}
         editing={{
           popup: {
             maxWidth: 800,
@@ -382,6 +388,12 @@ export const LegacyPopup: Story = {
           form: {
             onContentReady: function (e) {
               form = e.component;
+
+              form.on('fieldDataChanged', (e) => {
+                if (e.dataField === 'recurrenceRule') {
+                  form?.option('formData.repeat', !!e.value)
+                }
+              });
             },
             iconsShowMode: "both",
             items: [
@@ -401,23 +413,16 @@ export const LegacyPopup: Story = {
                         dataField: "repeat",
                         editorOptions: {
                           onValueChanged: (e) => {
-                            if (e.value === true) {
-                              form?.option("colCount", 2);
-
+                            if (e.value) {
                               const recurrenceRule = form?.option('formData')?.recurrenceRule;
 
-                              form?.option('formData', {
-                                ...form.option('formData'),
-                                recurrenceRule:  recurrenceRule || "FREQ=DAILY"
-                              })
-                              form?.itemOption("recurrenceGroup", "cssClass", "");
+                              form?.option("colCount", 2);
+                              form?.option('formData.recurrenceRule', recurrenceRule || "FREQ=DAILY");
+                              form?.itemOption("recurrenceGroup", "visible", true);
                             } else {
                               form?.option("colCount", 1);
-                              form?.option('formData', {
-                                ...form.option('formData'),
-                                recurrenceRule: ""
-                              })
-                              form?.itemOption("recurrenceGroup", "cssClass", "dx-hidden");
+                              form?.option('formData.recurrenceRule', "");
+                              form?.itemOption("recurrenceGroup", "visible", false);
                             }
                           },
                         },
@@ -431,6 +436,8 @@ export const LegacyPopup: Story = {
               {
                 name: "recurrenceGroup",
                 itemType: "group",
+                cssClass: "",
+                visible: false,
                 items: [
                   "recurrenceRuleGroup",
                   "recurrenceEndGroup",
