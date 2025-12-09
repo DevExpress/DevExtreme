@@ -3,20 +3,16 @@ import {
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import query from 'devextreme/data/query';
+import { query } from 'devextreme-angular/common/data';
 import { DxSchedulerModule, DxSchedulerComponent } from 'devextreme-angular/ui/scheduler';
-import {
-  ValueChangedEvent as SelectBoxValueChangedEvent,
-  ContentReadyEvent as SelectBoxContentReadyEvent,
-} from 'devextreme/ui/select_box';
-import dxForm, {
-  InitializedEvent as FormInitializedEvent,
-  FieldDataChangedEvent,
-} from 'devextreme/ui/form';
-import { OptionChangedEvent as PopupOptionChangedEvent } from 'devextreme/ui/popup';
+import { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
+import { DxFormTypes } from 'devextreme-angular/ui/form';
+import { DxPopupTypes } from 'devextreme-angular/ui/popup';
 import {
   Service, MovieData, TheatreData, Data,
 } from './app.service';
+
+type dxForm = NonNullable<DxFormTypes.InitializedEvent['component']>;
 
 @Pipe({ name: 'apply' })
 export class ApplyPipe<TArgs, TReturn> implements PipeTransform {
@@ -69,7 +65,7 @@ export class AppComponent {
 
   priceDisplayExpr = (value: number): string => `$${value}`;
 
-  onMovieValueChanged = (e: SelectBoxValueChangedEvent): void => {
+  onMovieValueChanged = (e: DxSelectBoxTypes.ValueChangedEvent): void => {
     const movie = this.getMovieById(e.value);
     this.currentSelectedMovie = movie;
 
@@ -79,15 +75,15 @@ export class AppComponent {
     }
   };
 
-  onMovieEditorContentReady = (e: SelectBoxContentReadyEvent): void => {
+  onMovieEditorContentReady = (e: DxSelectBoxTypes.ContentReadyEvent): void => {
     e.component.option('stylingMode', this.getEditorStylingMode());
   };
 
-  onPriceEditorContentReady = (e: SelectBoxContentReadyEvent): void => {
+  onPriceEditorContentReady = (e: DxSelectBoxTypes.ContentReadyEvent): void => {
     e.component.option('stylingMode', this.getEditorStylingMode());
   };
 
-  onPopupOptionChanged = (e: PopupOptionChangedEvent): void => {
+  onPopupOptionChanged = (e: DxPopupTypes.OptionChangedEvent): void => {
     if (e.fullName === 'toolbarItems' && e.value) {
       e.value.forEach((item, index) => {
         if (item.shortcut === 'done' || item.shortcut === 'cancel') {
@@ -106,7 +102,7 @@ export class AppComponent {
     }
   };
 
-  onFormInitialized = (e: FormInitializedEvent): void => {
+  onFormInitialized = (e: DxFormTypes.InitializedEvent): void => {
     const form = e.component;
     this.formInstance = form;
 
@@ -118,7 +114,7 @@ export class AppComponent {
       this.currentSelectedMovie = null;
     }
 
-    form.on('fieldDataChanged', (fieldEvent: FieldDataChangedEvent) => {
+    form.on('fieldDataChanged', (fieldEvent: DxFormTypes.FieldDataChangedEvent) => {
       if (fieldEvent.dataField === 'startDate') {
         const currentFormData = form.option('formData');
         if (currentFormData.movieId) {

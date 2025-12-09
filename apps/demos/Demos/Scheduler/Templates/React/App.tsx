@@ -8,15 +8,16 @@ import Scheduler, {
 } from 'devextreme-react/scheduler';
 import { query } from 'devextreme-react/common/data';
 import { type SelectBoxTypes } from 'devextreme-react/select-box';
-import type { InitializedEvent as FormInitializedEvent, FieldDataChangedEvent } from 'devextreme/ui/form';
-import type dxForm from 'devextreme/ui/form';
-import type { OptionChangedEvent as PopupOptionChangedEvent } from 'devextreme/ui/popup';
+import { type FormTypes } from 'devextreme-react/form';
+import { type PopupTypes } from 'devextreme-react/popup';
 import Appointment from './Appointment.tsx';
 import AppointmentTooltip from './AppointmentTooltip.tsx';
 import MovieInfoContainer from './MovieInfoContainer.tsx';
 import {
   data, moviesData, theatreData, type MovieResource,
 } from './data.ts';
+
+type dxForm = NonNullable<FormTypes.InitializedEvent['component']>;
 
 const currentDate = new Date(2025, 3, 27);
 const views: SchedulerTypes.ViewType[] = ['day', 'week', 'timelineDay'];
@@ -60,7 +61,7 @@ const App = () => {
     e.component.option('stylingMode', getEditorStylingMode());
   }, []);
 
-  const onPopupOptionChanged = useCallback((e: PopupOptionChangedEvent) => {
+  const onPopupOptionChanged = useCallback((e: PopupTypes.OptionChangedEvent) => {
     if (e.fullName === 'toolbarItems' && e.value) {
       e.value.forEach((item: any, index: number) => {
         if (item.shortcut === 'done' || item.shortcut === 'cancel') {
@@ -70,11 +71,11 @@ const App = () => {
     }
   }, []);
 
-  const onFormInitialized = useCallback((e: FormInitializedEvent) => {
+  const onFormInitialized = useCallback((e: FormTypes.InitializedEvent) => {
     const form = e.component;
     formInstanceRef.current = form;
 
-    form.on('fieldDataChanged', (fieldEvent: FieldDataChangedEvent) => {
+    form.on('fieldDataChanged', (fieldEvent: FormTypes.FieldDataChangedEvent) => {
       if (fieldEvent.dataField === 'startDate') {
         const currentFormData = form.option('formData');
         if (currentFormData.movieId) {
