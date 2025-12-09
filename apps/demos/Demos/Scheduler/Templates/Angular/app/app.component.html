@@ -3,56 +3,140 @@
 </div>
 <dx-scheduler
   timeZone="America/Los_Angeles"
-  id="scheduler"
   [dataSource]="data"
   [views]="['day', 'week', 'timelineDay']"
   currentView="day"
+  [currentDate]="currentDate"
   [firstDayOfWeek]="0"
   [startDayHour]="9"
   [endDayHour]="23"
   [showAllDayPanel]="false"
+  [height]="600"
   [groups]="['theatreId']"
-  [currentDate]="currentDate"
   [crossScrollingEnabled]="true"
   [cellDuration]="20"
-  [height]="600"
   appointmentTemplate="appointment-template"
   appointmentTooltipTemplate="tooltip-template"
-  (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
 >
-  <dxo-scheduler-editing [allowAdding]="false"></dxo-scheduler-editing>
-
   <dxi-scheduler-resource
     fieldExpr="movieId"
-    [useColorAsDefault]="true"
     [dataSource]="moviesData"
+    [useColorAsDefault]="true"
   >
   </dxi-scheduler-resource>
 
   <dxi-scheduler-resource fieldExpr="theatreId" [dataSource]="theatreData">
   </dxi-scheduler-resource>
 
-  <div *dxTemplate="let model of 'appointment-template'">
-    <div class="showtime-preview">
-      <div>{{
-        (getMovieById | apply : model.appointmentData.movieId : this).text
-      }}</div>
-      <div
-        >Ticket Price:
-        <strong>{{ "$" + model.targetedAppointmentData.price }}</strong>
+  <dxo-scheduler-editing
+    [allowAdding]="false"
+    [popup]="{
+      maxWidth: 440,
+      onOptionChanged: onPopupOptionChanged
+    }"
+  >
+    <dxo-scheduler-form [onInitialized]="onFormInitialized">
+      <dxi-scheduler-item
+        template="movie-info-form-template"
+      ></dxi-scheduler-item>
+
+      <dxi-scheduler-item
+        itemType="group"
+        [colCount]="2"
+        [colCountByScreen]="{ xs: 2 }"
+      >
+        <dxi-scheduler-item
+          dataField="movieId"
+          editorType="dxSelectBox"
+          [label]="{ text: 'Movie' }"
+          [colSpan]="1"
+          [editorOptions]="{
+            items: moviesData,
+            displayExpr: 'text',
+            valueExpr: 'id',
+            stylingMode: getEditorStylingMode(),
+            onValueChanged: onMovieValueChanged,
+            onContentReady: onMovieEditorContentReady
+          }"
+        >
+        </dxi-scheduler-item>
+
+        <dxi-scheduler-item
+          dataField="price"
+          editorType="dxSelectBox"
+          [label]="{ text: 'Price' }"
+          [colSpan]="1"
+          [editorOptions]="{
+            items: [5, 10, 15, 20],
+            displayExpr: priceDisplayExpr,
+            stylingMode: getEditorStylingMode(),
+            onContentReady: onPriceEditorContentReady
+          }"
+        >
+        </dxi-scheduler-item>
+      </dxi-scheduler-item>
+
+      <dxi-scheduler-item name="startDateGroup"></dxi-scheduler-item>
+
+      <dxi-scheduler-item
+        name="endDateGroup"
+        [disabled]="true"
+      ></dxi-scheduler-item>
+    </dxo-scheduler-form>
+  </dxo-scheduler-editing>
+
+  <div
+    *dxTemplate="let data of 'movie-info-form-template'"
+    class="movie-info-container"
+  >
+    <ng-container *ngIf="currentSelectedMovie as movie; else noMovieSelected">
+      <div class="movie-info">
+        <div class="movie-preview-image">
+          <img [src]="movie.image" [alt]="movie.text" />
+        </div>
+        <div class="movie-details">
+          <div class="title">{{ movie.text }} ({{ movie.year }})</div>
+          <div>Director: {{ movie.director }}</div>
+          <div>Duration: {{ movie.duration }} minutes</div>
+        </div>
       </div>
-      <div class="dropdown-appointment-dates">{{
-        (formatDate
-          | apply
-            : model.targetedAppointmentData.displayStartDate
-            : "shortTime") +
-          " - " +
-          (formatDate
-            | apply
-              : model.targetedAppointmentData.displayEndDate
-              : "shortTime")
-      }}</div>
-    </div>
+    </ng-container>
+    <ng-template #noMovieSelected>
+      <div class="movie-info">
+        <div class="movie-preview-image"></div>
+        <div class="movie-details">
+          <div class="title">Select a movie</div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+
+  <div *dxTemplate="let model of 'appointment-template'">
+    <ng-container
+      *ngIf="getMovieById | apply : model.appointmentData.movieId as movie"
+    >
+      <div class="movie-preview">
+        <div class="movie-preview-image">
+          <img [src]="movie.image" [alt]="movie.text" />
+        </div>
+        <div class="movie-details">
+          <div class="title">{{ movie.text }}</div>
+          <div>
+            Ticket Price:
+            <strong>$ {{ model.targetedAppointmentData.price }}</strong>
+          </div>
+          <div>
+            {{
+              (model.targetedAppointmentData.displayStartDate
+                | date : "shortTime") +
+                " - " +
+                (model.targetedAppointmentData.displayEndDate
+                  | date : "shortTime")
+            }}
+          </div>
+        </div>
+      </div>
+    </ng-container>
   </div>
 
   <div *dxTemplate="let model of 'tooltip-template'">

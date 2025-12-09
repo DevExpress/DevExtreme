@@ -33,7 +33,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoDataGridAiComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridAIComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get aiIntegration(): AIIntegration | undefined {
         return this._getOption('aiIntegration');
@@ -125,10 +125,10 @@ export class DxoDataGridAiComponent extends NestedOption implements OnDestroy, O
 
 @NgModule({
   imports: [
-    DxoDataGridAiComponent
+    DxoDataGridAIComponent
   ],
   exports: [
-    DxoDataGridAiComponent
+    DxoDataGridAIComponent
   ],
 })
-export class DxoDataGridAiModule { }
+export class DxoDataGridAIModule { }

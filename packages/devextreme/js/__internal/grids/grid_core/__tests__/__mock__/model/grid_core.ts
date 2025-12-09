@@ -22,6 +22,8 @@ const SELECTORS = {
   toast: 'dx-toast',
   loadPanel: 'dx-loadpanel',
   editForm: 'edit-form',
+  headerCellIndicators: 'dx-column-indicators',
+  headerCellFilter: 'dx-header-filter',
 };
 
 export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
@@ -46,6 +48,13 @@ export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
       this.getHeaderCells()[columnIndex],
       this.addWidgetPrefix.bind(this),
     );
+  }
+
+  public getHeaderCellFilter(columnIndex: number): dxElementWrapper {
+    const $headerCell = $(this.getHeaderCells()[columnIndex]);
+    const headerFilterSelector = `.${SELECTORS.headerCellIndicators} > .${SELECTORS.headerCellFilter}`;
+
+    return $headerCell.find(headerFilterSelector);
   }
 
   public getDataRows(): NodeListOf<HTMLElement> {
