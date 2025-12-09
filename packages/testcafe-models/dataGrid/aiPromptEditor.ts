@@ -8,22 +8,22 @@ const CLASS = {
     regenerateButton: 'dx-ai-prompt-editor__refresh-button',
     stopButton: 'dx-ai-prompt-editor__stop-button',
     applyButton: 'dx-ai-prompt-editor__apply-button',
-}
+};
 
 export class AIPromptEditor extends Popup {
     getTextArea(): TextArea {
         return new TextArea(this.getWrapper().find(`.${CLASS.textArea}`));
     }
 
-    getRegenerateButton() {
+    getRegenerateButton(): Button {
         return new Button(this.getWrapper().find(`.${CLASS.button}.${CLASS.regenerateButton}`));
     }
 
-    getStopButton() {
+    getStopButton(): Button {
         return new Button(this.getWrapper().find(`.${CLASS.button}.${CLASS.stopButton}`));
     }
 
-    getApplyButton() {
+    getApplyButton(): Button {
         return new Button(this.getWrapper().find(`.${CLASS.button}.${CLASS.applyButton}`));
     }
 }
