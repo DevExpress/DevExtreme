@@ -16,9 +16,9 @@
     "@angular/platform-browser-dynamic": "~19.2.17",
     "@angular/router": "~19.2.17",
     "core-js": "^2.6.12",
-    "devextreme": "25.1.7",
-    "devextreme-angular": "25.1.7",
-    "rxjs": "7.8.1",
+    "devextreme": "workspace:*",
+    "devextreme-angular": "workspace:*",
+    "rxjs": "7.8.2",
     "tslib": "^2.6.1",
     "zone.js": "0.15.1"
   },
