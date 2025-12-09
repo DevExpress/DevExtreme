@@ -357,21 +357,20 @@ export class RecurrenceForm {
               e.component.option('stylingMode', isSelected ? 'contained' : 'outlined');
               e.component.option('type', isSelected ? 'default' : 'normal');
             },
-            onClick: (): void => {
+            onClick: (e): void => {
               const isSelected = this.recurrenceRule.byDay.includes(item.key);
 
               if (isSelected) {
                 const index = this.recurrenceRule.byDay.indexOf(item.key);
+
                 this.recurrenceRule.byDay.splice(index, 1);
+                e.component.option('stylingMode', 'outlined');
+                e.component.option('type', 'normal');
               } else {
                 this.recurrenceRule.byDay.push(item.key);
+                e.component.option('stylingMode', 'contained');
+                e.component.option('type', 'default');
               }
-
-              const button = this._weekDayButtons[item.key];
-              const newIsSelected = this.recurrenceRule.byDay.includes(item.key);
-
-              button.option('stylingMode', newIsSelected ? 'contained' : 'outlined');
-              button.option('type', newIsSelected ? 'default' : 'normal');
             },
           });
         });
