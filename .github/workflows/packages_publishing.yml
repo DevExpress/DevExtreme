@@ -62,7 +62,7 @@ jobs:
 
       - name: Set timestamp version
         if: ${{ env.SET_TIMESTAMP_VERSION == 'true' }}
-        run: pnpx ts-node tools/scripts/set-timestamp-version --config.optional=true
+        run: pnpx ts-node tools/scripts/set-timestamp-version
 
       - name: Build npm packages
         env:
