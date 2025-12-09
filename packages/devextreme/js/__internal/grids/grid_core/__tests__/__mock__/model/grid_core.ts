@@ -24,6 +24,8 @@ const SELECTORS = {
   editForm: 'edit-form',
   headerCellIndicators: 'dx-column-indicators',
   headerCellFilter: 'dx-header-filter',
+  deleteRowButton: 'dx-link-delete',
+  undeleteRowButton: 'dx-link-undelete',
 };
 
 export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
@@ -132,6 +134,18 @@ export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
 
   public getEditForm(): EditFormModel {
     return new EditFormModel(this.root.querySelector(`.${this.addWidgetPrefix(SELECTORS.editForm)}`));
+  }
+
+  public getRowDeleteButton(rowIndex: number): HTMLElement {
+    const row = this.getDataRows()[rowIndex];
+
+    return row.querySelector(`.${SELECTORS.deleteRowButton}`) as HTMLElement;
+  }
+
+  public getRowRecoverButton(rowIndex: number): HTMLElement {
+    const row = this.getDataRows()[rowIndex];
+
+    return row.querySelector(`.${SELECTORS.undeleteRowButton}`) as HTMLElement;
   }
 
   public abstract getInstance(): TInstance;
