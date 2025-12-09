@@ -3,7 +3,7 @@ import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 
 fixture.disablePageReloads`Ai Column.Common (TreeList)`
-  .page(url(__dirname, '../../../dataGrid/common/aiColumn/pages/containerWithAIIntegration.html'));
+  .page(url(__dirname, '../../../container-ai-integration.html'));
 
 const TREE_LIST_SELECTOR = '#container';
 const EMPTY_CELL_TEXT = '\u00A0';
