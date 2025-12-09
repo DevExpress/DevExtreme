@@ -45,14 +45,6 @@
                 "Equivalents": "ajax request"
               },
               {
-                "Title": "OData Service",
-                "Name": "OdataService",
-                "Widget": "DataGrid",
-                "MvcDocUrl": "https://docs.devexpress.com/DevExtremeAspNetMvc/400704/concepts/data-binding#odata",
-                "NetCoreDocUrl": "https://docs.devexpress.com/AspNetCore/401022/devextreme-based-controls/concepts/bind-controls-to-data/odata",
-                "DemoType": "Web"
-              },
-              {
                 "Title": "Custom Data Source",
                 "Name": "CustomDataSource",
                 "Widget": "DataGrid",
@@ -436,6 +428,7 @@
                 "Title": "Deferred Selection",
                 "Name": "DeferredSelection",
                 "Widget": "DataGrid",
+                "Modules": "devextreme-aspnet-data-nojquery",
                 "DemoType": "Web"
               }
             ]
@@ -4354,7 +4347,10 @@
             "Name": "UpdateItemsDynamically",
             "Equivalents": "add item, remove item, show item, hide item",
             "DocUrl": "",
-            "Widget": "Form"
+            "Widget": "Form",
+            "MvcAdditionalFiles": [
+              "/ViewModels/FormViewModel.cs"
+            ]
           },
           {
             "Title": "Smart Paste",
@@ -4364,7 +4360,9 @@
             "Widget": "Form",
             "MvcDescription": "",
             "NetCoreDescription": "",
-            "MvcAdditionalFiles": [],
+            "MvcAdditionalFiles": [
+              "/ViewModels/FormViewModel.cs"
+            ],
             "DemoType": "Web",
             "Badge": "New",
             "Modules": "openai"

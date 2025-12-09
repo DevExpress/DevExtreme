@@ -27,8 +27,9 @@ import {
   exportModeLabel,
   dateRangeLabel,
 } from './data.js';
-import 'jspdf-autotable';
+import { applyPlugin } from 'jspdf-autotable';
 
+applyPlugin(jsPDF);
 const formats = ['A0', 'A1', 'A2', 'A3', 'A4', 'Auto'];
 const exportModes = ['All', 'Chart', 'Tree List'];
 const dateRanges = ['All', 'Visible', 'Custom'];

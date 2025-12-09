@@ -5,10 +5,11 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../form/sizes" as *;
+@use "../radioGroup/sizes" as *;
 @use "../toolbar/sizes" as *;
 @use '../../base/scheduler/layout/header' as *;
 @use "../../base/mixins" as *;
-@use "../../base/icons" as *;
+@use "../../base/icon_fonts" as *;
 @use "../../base/scheduler" as baseScheduler with (
   $scheduler-tooltip-appointment-text-color: $scheduler-tooltip-appointment-text-color,
   $scheduler-appointment-overlay-bg: $scheduler-appointment-overlay-bg,
@@ -43,8 +44,8 @@
   $agenda-appointment-text-color: $agenda-appointment-text-color,
   $agenda-appointment-title-font-size: $agenda-appointment-title-font-size,
 
-  $scheduler-days-of-week-button-size: $fluent-scheduler-days-of-week-button-size,
-  $scheduler-recurrence-end-item-height: $fluent-scheduler-recurrence-end-item-height
+  $scheduler-appointment-popup-repeat-end-item-height: $fluent-scheduler-appointment-popup-repeat-end-item-height,
+  $scheduler-appointment-popup-repeat-end-item-vertical-margin: $fluent-radio-button-vertical-margin
 );
 @use "../button/colors" as *;
 @use "../button/mixins" as *;
@@ -716,17 +717,9 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
       margin-top: $fluent-scheduler-appointment-popup-description-icon-margin-top;
     }
 
-    .dx-scheduler-form-group-with-icon.dx-scheduler-form-recurrence-end-group:has(.dx-scheduler-form-icon:not(.dx-hidden)) .dx-field-item-label {
-      height: $fluent-scheduler-appointment-popup-recurrence-end-group-label-height;
-    }
-
-    .dx-scheduler-form-recurrence-end-group .dx-field-item-label {
-      margin-bottom: $fluent-scheduler-appointment-popup-recurrence-end-group-label-margin-bottom;
-    }
-
     .dx-scheduler-days-of-week-buttons {
       height: $fluent-toolbar-height;
-      gap: $fluent-scheduler-days-of-week-buttons-gap;
+      gap: $fluent-scheduler-appointment-popup-days-of-week-buttons-gap;
     }
 
     .dx-field-item:not(.dx-first-col) {

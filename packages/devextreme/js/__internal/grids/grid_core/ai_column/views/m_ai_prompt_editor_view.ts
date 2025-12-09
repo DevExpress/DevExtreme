@@ -138,7 +138,8 @@ export class AIPromptEditorView extends View {
       this.promptEditorInstance?.updatePrompt(value as string);
     }
 
-    if (isPromptOptionName && isAIColumnAutoMode(column)) {
+    if (isPromptOptionName
+        && (isAIColumnAutoMode(column) || this.promptEditorInstance?.isApplying())) {
       this.aiColumnController.sendRequest(
         column.name as string,
         false,

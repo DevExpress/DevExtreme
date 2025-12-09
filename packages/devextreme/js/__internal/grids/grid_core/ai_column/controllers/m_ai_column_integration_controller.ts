@@ -24,6 +24,69 @@ export class AIColumnIntegrationController extends Controller {
 
   private aiColumnCacheController!: AIColumnCacheController;
 
+  private getAIIntegration(columnName: string): AIIntegration | null {
+    if (!columnName) {
+      errors.log('E1066');
+    }
+    const aiIntegration = this.columnsController.columnOption(columnName, 'ai.aiIntegration');
+    if (aiIntegration) {
+      return aiIntegration as AIIntegration;
+    }
+
+    const gridAIIntegration = this.option('aiIntegration');
+    if (gridAIIntegration) {
+      return gridAIIntegration;
+    }
+
+    errors.log('E1067', columnName);
+    return null;
+  }
+
+  private isRequestAwaitingCompletion(columnName: string): boolean {
+    return !!this.aborts[columnName];
+  }
+
+  private processCommandCompletion(columnName: string): void {
+    this.abortRequest(columnName);
+  }
+
+  private getAICommandCallbacks(
+    columnName: string,
+    cachedResponse: Record<PropertyKey, string>,
+    callBacks?: RequestCallbacks<GenerateGridColumnCommandResult>,
+  ): RequestCallbacks<GenerateGridColumnCommandResult> {
+    const column = this.columnsController.getColumnByName(columnName);
+    const callbacks = {
+      onComplete: (finalResponse: GenerateGridColumnCommandResult): void => {
+        if (this.isRequestAwaitingCompletion(columnName)) {
+          const args = {
+            column,
+            error: null,
+            data: finalResponse.data,
+          };
+
+          this.executeAction('onAIColumnResponseReceived', args);
+          this.aiColumnCacheController.setCachedResponse(columnName, finalResponse.data);
+          this.processCommandCompletion(columnName);
+          callBacks?.onComplete?.(finalResponse);
+        }
+      },
+      onError: (error: Error): void => {
+        const message = error?.message ?? error;
+        this.executeAction('onAIColumnResponseReceived', {
+          column,
+          error: message,
+          data: null,
+        });
+        this.showError(message);
+        this.processCommandCompletion(columnName);
+        callBacks?.onError?.(error);
+      },
+    };
+
+    return callbacks;
+  }
+
   public init(): void {
     this.columnsController = this.getController('columns');
     this.dataController = this.getController('data');
@@ -62,6 +125,7 @@ export class AIColumnIntegrationController extends Controller {
 
     if (this.isRequestAwaitingCompletion(columnName)) {
       this.abortRequest(columnName);
+      callbacks.onRequestCanceled();
     }
 
     const rowItems = this.dataController.items();
@@ -110,47 +174,6 @@ export class AIColumnIntegrationController extends Controller {
     this.aborts[columnName] = abort;
   }
 
-  private processCommandCompletion(columnName: string): void {
-    this.abortRequest(columnName);
-  }
-
-  private getAICommandCallbacks(
-    columnName: string,
-    cachedResponse: Record<PropertyKey, string>,
-    callBacks?: RequestCallbacks<GenerateGridColumnCommandResult>,
-  ): RequestCallbacks<GenerateGridColumnCommandResult> {
-    const column = this.columnsController.getColumnByName(columnName);
-    const callbacks = {
-      onComplete: (finalResponse: GenerateGridColumnCommandResult): void => {
-        if (this.isRequestAwaitingCompletion(columnName)) {
-          const args = {
-            column,
-            error: null,
-            data: finalResponse.data,
-          };
-
-          this.executeAction('onAIColumnResponseReceived', args);
-          this.aiColumnCacheController.setCachedResponse(columnName, finalResponse.data);
-          this.processCommandCompletion(columnName);
-          callBacks?.onComplete?.(finalResponse);
-        }
-      },
-      onError: (error: Error): void => {
-        const message = error?.message ?? error;
-        this.executeAction('onAIColumnResponseReceived', {
-          column,
-          error: message,
-          data: null,
-        });
-        this.showError(message);
-        this.processCommandCompletion(columnName);
-        callBacks?.onError?.(error);
-      },
-    };
-
-    return callbacks;
-  }
-
   public isAnyRequestAwaitingCompletion(): boolean {
     return Object.values(this.aborts).some((abort) => !!abort);
   }
@@ -172,26 +195,8 @@ export class AIColumnIntegrationController extends Controller {
     this.aiColumnCacheController.clearCache(columnName);
   }
 
-  private getAIIntegration(columnName: string): AIIntegration | null {
-    if (!columnName) {
-      errors.log('E1066');
-    }
-    const aiIntegration = this.columnsController.columnOption(columnName, 'ai.aiIntegration');
-    if (aiIntegration) {
-      return aiIntegration as AIIntegration;
-    }
-
-    const gridAIIntegration = this.option('aiIntegration');
-    if (gridAIIntegration) {
-      return gridAIIntegration;
-    }
-
-    errors.log('E1067', columnName);
-    return null;
-  }
-
-  private isRequestAwaitingCompletion(columnName: string): boolean {
-    return !!this.aborts[columnName];
+  public clearAIColumnByKey(columnName: string, key: PropertyKey): void {
+    this.aiColumnCacheController.clearCacheByKey(columnName, key);
   }
 
   public dispose(): void {

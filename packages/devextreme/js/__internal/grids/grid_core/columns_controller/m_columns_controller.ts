@@ -1187,6 +1187,10 @@ export class ColumnsController extends modules.Controller {
     let isColumnDataTypesUpdated = false;
 
     each(that._columns, (index, column) => {
+      if (column.type === AI_COLUMN_NAME) {
+        return;
+      }
+
       let i;
       let value;
       let dataType;
@@ -1758,7 +1762,7 @@ export class ColumnsController extends modules.Controller {
     if (columnOptions.selectedFilterOperation && !('defaultSelectedFilterOperation' in calculatedColumnOptions)) {
       calculatedColumnOptions.defaultSelectedFilterOperation = columnOptions.selectedFilterOperation;
     }
-    if (columnOptions.lookup) {
+    if (columnOptions.lookup && columnOptions.type !== AI_COLUMN_NAME) {
       calculatedColumnOptions.lookup = {
         calculateCellValue(value, skipDeserialization) {
           if (this.valueExpr) {
@@ -1832,9 +1836,18 @@ export class ColumnsController extends modules.Controller {
 
   public getRowIndex(columnIndex, alwaysGetRowIndex?) {
     const column = this._columns[columnIndex];
-    const bandColumnsCache = this.getBandColumnsCache();
+    if (!column) {
+      return 0;
+    }
 
-    return column && (alwaysGetRowIndex || column.visible && !(column.command || isDefined(column.groupIndex))) ? getParentBandColumns(columnIndex, bandColumnsCache.columnParentByIndex).length : 0;
+    const isCommandOrGroupColumn = column.command || this._isColumnInGroupPanel(column);
+    const isVisibleDataColumn = column.visible && !isCommandOrGroupColumn;
+    if (!alwaysGetRowIndex && !isVisibleDataColumn) {
+      return 0;
+    }
+
+    const bandColumnsCache = this.getBandColumnsCache();
+    return getParentBandColumns(columnIndex, bandColumnsCache.columnParentByIndex).length;
   }
 
   public getChildrenByBandColumn(bandColumnIndex, onlyVisibleDirectChildren?) {

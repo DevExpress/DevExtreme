@@ -4,8 +4,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxTreeListModule } from 'devextreme-angular';
 import type { AIIntegration } from 'devextreme-angular/common/ai-integration';
 import { Service, type IEmployee } from './app.service';
-import { AiService } from './ai.service';
-import { Email } from './email/email.component';
+import { AiService } from './ai/ai.service';
 import { Employee } from './employee/employee.component';
 import { Status } from './status/status.component';
 
@@ -52,7 +51,6 @@ export class AppComponent {
   ],
   declarations: [
     AppComponent,
-    Email,
     Employee,
     Status,
   ],

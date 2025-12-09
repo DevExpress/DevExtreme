@@ -10,6 +10,8 @@ import { AIPromptEditorModel } from './ai_prompt_editor';
 import { AIHeaderCellModel } from './cell/ai_header_cell';
 import { DataCellModel } from './cell/data_cell';
 import { HeaderCellModel } from './cell/header_cell';
+import { EditFormModel } from './edit_form';
+import { DataRowModel } from './row/data_row';
 
 const SELECTORS = {
   headerRowClass: 'dx-header-row',
@@ -19,6 +21,9 @@ const SELECTORS = {
   aiPromptEditor: 'dx-ai-prompt-editor',
   toast: 'dx-toast',
   loadPanel: 'dx-loadpanel',
+  editForm: 'edit-form',
+  headerCellIndicators: 'dx-column-indicators',
+  headerCellFilter: 'dx-header-filter',
 };
 
 export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
@@ -45,8 +50,19 @@ export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
     );
   }
 
+  public getHeaderCellFilter(columnIndex: number): dxElementWrapper {
+    const $headerCell = $(this.getHeaderCells()[columnIndex]);
+    const headerFilterSelector = `.${SELECTORS.headerCellIndicators} > .${SELECTORS.headerCellFilter}`;
+
+    return $headerCell.find(headerFilterSelector);
+  }
+
   public getDataRows(): NodeListOf<HTMLElement> {
     return this.root.querySelectorAll(`.${SELECTORS.dataRowClass}`);
+  }
+
+  public getDataRow(rowIndex: number): DataRowModel {
+    return new DataRowModel(this.getDataRows()[rowIndex]);
   }
 
   public getDataCells(rowIndex: number): NodeListOf<HTMLElement> {
@@ -54,7 +70,10 @@ export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
   }
 
   public getDataCell(rowIndex: number, columnIndex: number): DataCellModel {
-    return new DataCellModel(this.getDataCells(rowIndex)[columnIndex]);
+    return new DataCellModel(
+      this.getDataCells(rowIndex)[columnIndex],
+      this.addWidgetPrefix.bind(this),
+    );
   }
 
   public getGroupRows(): NodeListOf<HTMLElement> {
@@ -109,6 +128,10 @@ export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
 
   public getLoadPanel(): LoadPanelModel {
     return new LoadPanelModel(document.body.querySelector(`.${SELECTORS.loadPanel}`));
+  }
+
+  public getEditForm(): EditFormModel {
+    return new EditFormModel(this.root.querySelector(`.${this.addWidgetPrefix(SELECTORS.editForm)}`));
   }
 
   public abstract getInstance(): TInstance;

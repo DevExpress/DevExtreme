@@ -24,6 +24,8 @@ export class AIPromptEditor {
 
   private prompt: string;
 
+  private currentAction: AIPromptEditorAction | null = null;
+
   constructor(
     private options: AIPromptEditorOptions,
   ) {
@@ -48,8 +50,8 @@ export class AIPromptEditor {
       height: 110,
       stylingMode: 'outlined',
       onValueChanged: (e): void => {
-        this.updateButtonOption(APPLY_BUTTON_INDEX, 'disabled', !e.value); // Update the disable state of the Apply button
-        this.updateButtonOption(REGENERATE_DATA_BUTTON_INDEX, 'disabled', true); // Update the disable state of the Regenerate Data button
+        this.updateButtonOption(APPLY_BUTTON_INDEX, 'disabled', !e.value || e.value === this.prompt); // Update the disable state of the Apply button
+        this.updateButtonOption(REGENERATE_DATA_BUTTON_INDEX, 'disabled', !e.value || e.value !== this.prompt); // Update the disable state of the Regenerate Data button
       },
       placeholder: messageLocalization.format('dxDataGrid-aiPromptEditorPlaceholder'),
       valueChangeEvent: 'input change keyup',
@@ -215,6 +217,8 @@ export class AIPromptEditor {
   public updateStateOnAction(
     action: AIPromptEditorAction,
   ): void {
+    this.currentAction = action;
+
     // eslint-disable-next-line default-case
     switch (action) {
       case 'apply':
@@ -235,5 +239,9 @@ export class AIPromptEditor {
     this.options = options;
     this.updatePrompt(getPrompt(options.prompt));
     this.popupInstance.option(this.getPopupConfig());
+  }
+
+  public isApplying(): boolean {
+    return this.currentAction === 'apply';
   }
 }

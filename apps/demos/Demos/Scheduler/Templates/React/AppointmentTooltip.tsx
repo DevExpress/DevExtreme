@@ -4,22 +4,27 @@ import { type SchedulerTypes } from 'devextreme-react/scheduler';
 
 import { moviesData } from './data.ts';
 
-const getMovieById = (id) => Query(moviesData).filter(['id', id]).toArray()[0];
+const getMovieById = (id: number) => Query(moviesData).filter(['id', id]).toArray()[0];
 
 type AppointmentProps = {
-  data: { appointmentData: SchedulerTypes.Appointment & { movieId: number }; }
+  data: { appointmentData: SchedulerTypes.Appointment & { movieId: number } };
 };
 
-const AppointmentTooltip = (props: AppointmentProps) => {
-  const { movieId } = props.data.appointmentData;
+const AppointmentTooltip: React.FC<AppointmentProps> = ({ data }) => {
+  const { movieId } = data.appointmentData;
 
-  const movieData = useMemo(() => getMovieById(movieId), [movieId]);
+  const movieData = useMemo(
+    () => getMovieById(movieId),
+    [movieId],
+  );
 
   return (
-    <div className="movie-tooltip">
-      <img src={movieData.image} />
-      <div className="movie-info">
-        <div className="movie-title">
+    <div className="movie-info">
+      <div className="movie-preview-image">
+        <img src={movieData.image} alt={movieData.text} />
+      </div>
+      <div className="movie-details">
+        <div className="title">
           {movieData.text} ({movieData.year})
         </div>
         <div>

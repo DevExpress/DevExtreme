@@ -3,8 +3,17 @@ import {
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { query as Query } from 'devextreme-angular/common/data';
-import { DxSchedulerModule, DxSchedulerComponent, DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
+import query from 'devextreme/data/query';
+import { DxSchedulerModule, DxSchedulerComponent } from 'devextreme-angular/ui/scheduler';
+import {
+  ValueChangedEvent as SelectBoxValueChangedEvent,
+  ContentReadyEvent as SelectBoxContentReadyEvent,
+} from 'devextreme/ui/select_box';
+import dxForm, {
+  InitializedEvent as FormInitializedEvent,
+  FieldDataChangedEvent,
+} from 'devextreme/ui/form';
+import { OptionChangedEvent as PopupOptionChangedEvent } from 'devextreme/ui/popup';
 import {
   Service, MovieData, TheatreData, Data,
 } from './app.service';
@@ -35,11 +44,15 @@ export class AppComponent {
 
   data: Data[];
 
-  currentDate: Date = new Date(2021, 3, 27);
+  currentDate: Date = new Date(2025, 3, 27);
 
   moviesData: MovieData[];
 
   theatreData: TheatreData[];
+
+  formInstance: dxForm | null = null;
+
+  currentSelectedMovie: MovieData | null = null;
 
   constructor(service: Service) {
     this.data = service.getData();
@@ -47,71 +60,76 @@ export class AppComponent {
     this.theatreData = service.getTheatreData();
   }
 
-  onAppointmentFormOpening = (data: DxSchedulerTypes.AppointmentFormOpeningEvent) => {
-    const that = this;
-    const form = data.form;
-    const startDate = data.appointmentData.startDate;
-    let movieInfo = that.getMovieById(data.appointmentData.movieId) || {};
+  getMovieById = (id: number): MovieData | undefined => query(this.moviesData).filter(['id', '=', id]).toArray()[0];
 
-    form.option('items', [{
-      label: {
-        text: 'Movie',
-      },
-      editorType: 'dxSelectBox',
-      dataField: 'movieId',
-      editorOptions: {
-        items: that.moviesData,
-        displayExpr: 'text',
-        valueExpr: 'id',
-        onValueChanged({ value }) {
-          movieInfo = that.getMovieById(value);
-
-          form.updateData('director', movieInfo.director);
-          form.updateData('endDate', new Date((startDate as Date).getTime() + 60 * 1000 * movieInfo.duration));
-        },
-      },
-    }, {
-      label: {
-        text: 'Director',
-      },
-      name: 'director',
-      editorType: 'dxTextBox',
-      editorOptions: {
-        value: movieInfo.director,
-        readOnly: true,
-      },
-    }, {
-      dataField: 'startDate',
-      editorType: 'dxDateBox',
-      editorOptions: {
-        width: '100%',
-        type: 'datetime',
-        onValueChanged({ value }) {
-          form.updateData('endDate', new Date((value as Date).getTime() + 60 * 1000 * movieInfo.duration));
-        },
-      },
-    }, {
-      name: 'endDate',
-      dataField: 'endDate',
-      editorType: 'dxDateBox',
-      editorOptions: {
-        width: '100%',
-        type: 'datetime',
-        readOnly: true,
-      },
-    }, {
-      dataField: 'price',
-      editorType: 'dxRadioGroup',
-      editorOptions: {
-        dataSource: [5, 10, 15, 20],
-        itemTemplate(itemData: string) {
-          return `$${itemData}`;
-        },
-      },
-    }]);
+  getEditorStylingMode = (): 'filled' | 'outlined' => {
+    const isMaterialOrFluent = document.querySelector('.dx-theme-fluent, .dx-theme-material');
+    return isMaterialOrFluent ? 'filled' : 'outlined';
   };
 
-  getMovieById = (id: string) => Query(this.moviesData).filter(['id', '=', id]).toArray()[0];
+  priceDisplayExpr = (value: number): string => `$${value}`;
+
+  onMovieValueChanged = (e: SelectBoxValueChangedEvent): void => {
+    const movie = this.getMovieById(e.value);
+    this.currentSelectedMovie = movie;
+
+    if (this.formInstance && movie) {
+      this.formInstance.updateData('director', movie.director);
+      this.updateEndDate(this.formInstance, movie);
+    }
+  };
+
+  onMovieEditorContentReady = (e: SelectBoxContentReadyEvent): void => {
+    e.component.option('stylingMode', this.getEditorStylingMode());
+  };
+
+  onPriceEditorContentReady = (e: SelectBoxContentReadyEvent): void => {
+    e.component.option('stylingMode', this.getEditorStylingMode());
+  };
+
+  onPopupOptionChanged = (e: PopupOptionChangedEvent): void => {
+    if (e.fullName === 'toolbarItems' && e.value) {
+      e.value.forEach((item, index) => {
+        if (item.shortcut === 'done' || item.shortcut === 'cancel') {
+          e.component.option(`toolbarItems[${index}].toolbar`, 'bottom');
+        }
+      });
+    }
+  };
+
+  updateEndDate = (form: dxForm, movie: MovieData): void => {
+    const formData = form.option('formData');
+    const { startDate } = formData;
+    if (startDate && movie?.duration) {
+      const newEndDate = new Date(startDate.getTime() + 60 * 1000 * movie.duration);
+      form.updateData('endDate', newEndDate);
+    }
+  };
+
+  onFormInitialized = (e: FormInitializedEvent): void => {
+    const form = e.component;
+    this.formInstance = form;
+
+    const formData = form.option('formData');
+    if (formData?.movieId) {
+      const movie = this.getMovieById(formData.movieId);
+      this.currentSelectedMovie = movie;
+    } else {
+      this.currentSelectedMovie = null;
+    }
+
+    form.on('fieldDataChanged', (fieldEvent: FieldDataChangedEvent) => {
+      if (fieldEvent.dataField === 'startDate') {
+        const currentFormData = form.option('formData');
+        if (currentFormData.movieId) {
+          const movie = this.getMovieById(currentFormData.movieId);
+          if (movie) {
+            this.updateEndDate(form, movie);
+          }
+        }
+      }
+    });
+  };
 }
 
 @NgModule({

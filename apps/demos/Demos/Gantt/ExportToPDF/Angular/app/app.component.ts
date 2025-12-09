@@ -12,12 +12,14 @@ import {
 } from 'devextreme-angular';
 import { exportGantt as exportGanttToPdf } from 'devextreme-angular/common/export/pdf';
 import { jsPDF } from 'jspdf';
-import 'jspdf-autotable';
+import { applyPlugin } from 'jspdf-autotable';
 import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import { DxButtonTypes } from 'devextreme-angular/ui/button';
 import {
   Service, Task, Dependency, Resource, ResourceAssignment,
 } from './app.service';
+
+applyPlugin(jsPDF);
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

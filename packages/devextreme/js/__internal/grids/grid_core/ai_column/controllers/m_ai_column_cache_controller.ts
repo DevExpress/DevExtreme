@@ -1,10 +1,18 @@
 import { Controller } from '../../m_modules';
 
 export class AIColumnCacheController extends Controller {
-  private readonly cache: Record<string, Record<PropertyKey, string> | undefined> = {};
+  private readonly cache: Record<string, Record<PropertyKey, string | undefined> | undefined> = {};
 
   public clearCache(columnName: string): void {
     this.cache[columnName] = undefined;
+  }
+
+  public clearCacheByKey(columnName: string, key: PropertyKey): void {
+    const columnCache = this.cache[columnName];
+
+    if (columnCache) {
+      columnCache[key] = undefined;
+    }
   }
 
   public getCachedResponse(columnName: string, keys: PropertyKey[]):

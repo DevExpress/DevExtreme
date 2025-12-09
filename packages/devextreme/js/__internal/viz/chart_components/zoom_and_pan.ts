@@ -39,6 +39,7 @@ const SCROLL_BAR_END_EVENT_NAME = `dxc-scroll-end${EVENTS_NS}`;
 
 const GESTURE_TIMEOUT = 300;
 const MIN_DRAG_DELTA = 5;
+export const SCROLL_PREVENTION_TIMEOUT = 500;
 
 const _min = Math.min;
 const _max = Math.max;
@@ -129,6 +130,7 @@ export default {
   init() {
     const chart = this;
     const renderer = this._renderer;
+    let lastWheelTimer: number | undefined;
 
     function getAxesCopy(zoomAndPan, actionField) {
       let axes = [];
@@ -307,13 +309,23 @@ export default {
       return e.offset[coordField] - actionData.offset[coordField];
     }
 
-    function preventDefaults(e) {
+    function setLastWheelTimer() {
+      clearTimeout(lastWheelTimer);
+      // eslint-disable-next-line no-restricted-globals
+      lastWheelTimer = setTimeout(() => {
+        lastWheelTimer = undefined;
+      }, SCROLL_PREVENTION_TIMEOUT) as unknown as number;
+    }
+
+    function preventDefaults(e, stopChartHandler = true): void {
       if (e.cancelable !== false) {
         e.preventDefault();
         e.stopPropagation();
       }
 
-      chart._stopCurrentHandling();
+      if (stopChartHandler) {
+        chart._stopCurrentHandling();
+      }
     }
 
     const zoomAndPan = {
@@ -536,11 +548,19 @@ export default {
           axesZoomed |= canZoom && zoomAxes(e, chart._argumentAxes, getRange, e.delta > 0, { coord: rotated ? coords.y : coords.x }, chart.getArgumentAxis());
         }
 
+        const isPanningAvailable = targetAxes ? isAxisAvailablePanning(targetAxes) : zoomAndPan.panningVisualRangeEnabled();
+
         if (axesZoomed) {
           chart._requestChange(['VISUAL_RANGE']);
-          if (targetAxes && isAxisAvailablePanning(targetAxes) || !targetAxes && zoomAndPan.panningVisualRangeEnabled()) {
+          if (isPanningAvailable) {
             preventDefaults(e); // T249548
+            setLastWheelTimer();
           }
+        }
+
+        if ((!axesZoomed || !isPanningAvailable) && lastWheelTimer) {
+          preventDefaults(e, false);
+          setLastWheelTimer();
         }
       },
       cleanup() {

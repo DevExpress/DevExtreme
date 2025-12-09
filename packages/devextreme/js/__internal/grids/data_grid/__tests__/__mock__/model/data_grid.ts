@@ -17,4 +17,23 @@ export class DataGridModel extends GridCoreModel<DataGrid> {
 
     return this.getInstance().getVisibleColumns(headerLevel);
   }
+
+  public setDataGridOptions(options: Record<string, unknown>): void {
+    const instance = this.getInstance();
+
+    Object.entries(options).forEach(([optionName, optionValue]) => {
+      instance.option(optionName, optionValue);
+    });
+  }
+
+  public setDataGridColumnOptions(
+    columnName: string,
+    options: Record<string, unknown>,
+  ): void {
+    const instance = this.getInstance();
+
+    Object.entries(options).forEach(([optionName, optionValue]) => {
+      instance.columnOption(columnName, optionName, optionValue);
+    });
+  }
 }

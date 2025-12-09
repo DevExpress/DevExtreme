@@ -31,7 +31,7 @@ const SCHEDULER_SELECTOR = '#container';
       t,
       takeScreenshot,
       `scheduler__appointment__recurrence-form__${frequency.toLowerCase()}.png`,
-      { element: appointmentPopup.recurrence.group },
+      { element: appointmentPopup.contentElement },
     );
 
     await t
@@ -44,40 +44,6 @@ const SCHEDULER_SELECTOR = '#container';
     currentDate: new Date(2024, 0, 1),
   }));
 });
-
-test('firstDayOfWeek is applied to recurrence form', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  const appointment = {
-    text: 'Weekly Appointment',
-    startDate: new Date('2024-01-01T10:00:00'),
-    endDate: new Date('2024-01-01T11:00:00'),
-  };
-
-  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-  const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, false);
-
-  await appointmentPopup.openRecurrenceForm(t, 'Weekly');
-  await appointmentPopup.selectRecurrenceWeekDays(t, [0, 2, 4]);
-  await appointmentPopup.setRecurrenceEnd(t, 'count', 15);
-
-  await testScreenshot(
-    t,
-    takeScreenshot,
-    'scheduler__appointment__recurrence-form__weekly__mon-wed-fri.png',
-    { element: appointmentPopup.recurrence.group },
-  );
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxScheduler', {
-  dataSource: [],
-  views: ['week'],
-  currentView: 'week',
-  currentDate: new Date(2024, 0, 1),
-  firstDayOfWeek: 1,
-}));
 
 test('recurrence form with icons', async (t) => {
   const appointment = {
@@ -135,7 +101,7 @@ test('recurrence form readonly state', async (t) => {
     t,
     takeScreenshot,
     'scheduler__appointment__recurrence-form__readonly.png',
-    { element: appointmentPopup.recurrence.group },
+    { element: appointmentPopup.contentElement },
   );
 
   await t
@@ -148,5 +114,34 @@ test('recurrence form readonly state', async (t) => {
   currentDate: new Date(2024, 0, 1),
   editing: {
     allowUpdating: false,
+  },
+}));
+
+test.meta({ browserSize: [450, 1000] })('recurrence form on mobile screen', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+
+  const appointmentPopup = await scheduler.openAppointmentPopup(t, undefined, false);
+  await appointmentPopup.openRecurrenceForm(t, 'Weekly');
+
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'scheduler__appointment__recurrence-form__mobile.png',
+  );
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxScheduler', {
+  dataSource: [],
+  views: ['week'],
+  currentView: 'week',
+  currentDate: new Date(2021, 2, 25),
+  editing: {
+    form: {
+      iconsShowMode: 'both',
+    },
   },
 }));

@@ -86,7 +86,7 @@ export default function App() {
           <Ai
             mode="auto"
             noDataText="No data"
-            prompt="Identify the country where this vehicle model is originally manufactured or developed, based on its brand, model, and specifications."
+            prompt="Identify the country where the vehicle model is manufactured. When looking up a country, consider vehicle brand, model, and specifications."
           />
         </Column>
       </DataGrid>

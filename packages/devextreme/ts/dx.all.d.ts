@@ -10400,31 +10400,6 @@ declare module DevExpress.ui {
         key: TKey;
       };
     /**
-     * [descr:_ui_card_view_CardSavedEvent]
-     */
-    export type CardSavedEvent =
-      DevExpress.common.core.events.EventInfo<dxCardView> & {
-        /**
-         * [descr:_ui_card_view_CardSavedEvent.changes]
-         */
-        changes: DevExpress.common.grids.DataChange[];
-      };
-    /**
-     * [descr:_ui_card_view_CardSavingEvent]
-     */
-    export type CardSavingEvent =
-      DevExpress.common.core.events.EventInfo<dxCardView> &
-        DevExpress.common.core.events.Cancelable & {
-          /**
-           * [descr:_ui_card_view_CardSavingEvent.promise]
-           */
-          promise?: PromiseLike<void>;
-          /**
-           * [descr:_ui_card_view_CardSavingEvent.changes]
-           */
-          changes: DevExpress.common.grids.DataChange[];
-        };
-    /**
      * [descr:CardTemplateData]
      */
     export type CardTemplateData = {
@@ -10667,6 +10642,14 @@ declare module DevExpress.ui {
          */
         promise?: PromiseLike<void>;
       };
+    /**
+     * [descr:_ui_card_view_OptionChangedEvent]
+     */
+    export type OptionChangedEvent<
+      TCardData = unknown,
+      TKey = unknown
+    > = DevExpress.common.core.events.EventInfo<dxCardView<TCardData, TKey>> &
+      DevExpress.common.core.events.ChangedOptionInfo;
 
     export type PredefinedToolbarItem =
       | 'columnChooserButton'
@@ -10678,6 +10661,31 @@ declare module DevExpress.ui {
       TCardData = unknown,
       TKey = unknown
     > = dxCardViewOptions<TCardData, TKey>;
+    /**
+     * [descr:_ui_card_view_SavedEvent]
+     */
+    export type SavedEvent =
+      DevExpress.common.core.events.EventInfo<dxCardView> & {
+        /**
+         * [descr:_ui_card_view_SavedEvent.changes]
+         */
+        changes: DevExpress.common.grids.DataChange[];
+      };
+    /**
+     * [descr:_ui_card_view_SavingEvent]
+     */
+    export type SavingEvent =
+      DevExpress.common.core.events.EventInfo<dxCardView> &
+        DevExpress.common.core.events.Cancelable & {
+          /**
+           * [descr:_ui_card_view_SavingEvent.promise]
+           */
+          promise?: PromiseLike<void>;
+          /**
+           * [descr:_ui_card_view_SavingEvent.changes]
+           */
+          changes: DevExpress.common.grids.DataChange[];
+        };
     /**
      * [descr:_ui_card_view_SelectionChangedEvent]
      */
@@ -10788,7 +10796,7 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxCardViewOptions]
    */
   export interface dxCardViewOptions<TCardData = unknown, TKey = unknown>
-    extends WidgetOptions<dxCardView> {
+    extends Omit<WidgetOptions<dxCardView>, 'onOptionChanged'> {
     /**
      * [descr:dxCardViewOptions.dataSource]
      */
@@ -11082,13 +11090,17 @@ declare module DevExpress.ui {
      */
     onCardUpdating?: (e: DevExpress.ui.dxCardView.CardUpdatingEvent) => void;
     /**
-     * [descr:dxCardViewOptions.onCardSaved]
+     * [descr:dxCardViewOptions.onOptionChanged]
      */
-    onCardSaved?: (e: DevExpress.ui.dxCardView.CardSavedEvent) => void;
+    onOptionChanged?: (e: DevExpress.ui.dxCardView.OptionChangedEvent) => void;
     /**
-     * [descr:dxCardViewOptions.onCardSaving]
+     * [descr:dxCardViewOptions.onSaved]
      */
-    onCardSaving?: (e: DevExpress.ui.dxCardView.CardSavingEvent) => void;
+    onSaved?: (e: DevExpress.ui.dxCardView.SavedEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onSaving]
+     */
+    onSaving?: (e: DevExpress.ui.dxCardView.SavingEvent) => void;
 
     /**
      * [descr:dxCardViewOptions.selectedCardKeys]
@@ -12712,7 +12724,7 @@ declare module DevExpress.ui {
       /**
        * [descr:_ui_data_grid_EditorPreparedEvent.updateValueTimeout]
        */
-      readonly updateValueTimeout?: number;
+      updateValueTimeout?: number;
       /**
        * [descr:_ui_data_grid_EditorPreparedEvent.width]
        */
@@ -12764,7 +12776,7 @@ declare module DevExpress.ui {
       /**
        * [descr:_ui_data_grid_EditorPreparingEvent.updateValueTimeout]
        */
-      readonly updateValueTimeout?: number;
+      updateValueTimeout?: number;
       /**
        * [descr:_ui_data_grid_EditorPreparingEvent.width]
        */
@@ -18288,7 +18300,7 @@ declare module DevExpress.ui {
         /**
          * [descr:_ui_filter_builder_EditorPreparedEvent.updateValueTimeout]
          */
-        readonly updateValueTimeout?: number;
+        updateValueTimeout?: number;
         /**
          * [descr:_ui_filter_builder_EditorPreparedEvent.width]
          */
@@ -26045,14 +26057,6 @@ declare module DevExpress.ui {
      */
     export type AppointmentFormProperties = DevExpress.ui.dxForm.Properties & {
       /**
-       * [descr:AppointmentFormProperties.onSaved]
-       */
-      onSaved?: (formData: any) => void;
-      /**
-       * [descr:AppointmentFormProperties.onCanceled]
-       */
-      onCanceled?: (formData: any) => void;
-      /**
        * [descr:AppointmentFormProperties.iconsShowMode]
        */
       iconsShowMode?: AppointmentFormIconsShowMode;
@@ -30928,7 +30932,7 @@ declare module DevExpress.ui {
       /**
        * [descr:_ui_tree_list_EditorPreparedEvent.updateValueTimeout]
        */
-      readonly updateValueTimeout?: number;
+      updateValueTimeout?: number;
       /**
        * [descr:_ui_tree_list_EditorPreparedEvent.width]
        */

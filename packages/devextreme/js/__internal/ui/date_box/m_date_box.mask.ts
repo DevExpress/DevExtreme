@@ -236,9 +236,12 @@ class DateBoxMask extends DateBoxBase {
     }
   }
 
-  _processInputKey(key) {
-    if (this._isAllSelected()) {
+  _processInputKey(key: string): void {
+    const hasMultipleParts = this._dateParts?.length > 1;
+
+    if (this._isAllSelected() && hasMultipleParts) {
       this._activePartIndex = 0;
+      this._clearSearchValue();
     }
     this._setNewDateIfEmpty();
     // eslint-disable-next-line radix
@@ -314,8 +317,10 @@ class DateBoxMask extends DateBoxBase {
   }
 
   _searchString(char) {
-    // eslint-disable-next-line radix
-    if (!isNaN(parseInt(this._getActivePartProp('text')))) {
+    const text = this._getActivePartProp('text');
+    const convertedText = numberLocalization.convertDigits(text, true);
+
+    if (!isNaN(parseInt(convertedText, 10))) {
       return;
     }
 

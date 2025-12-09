@@ -142,17 +142,58 @@ export class PopupModel {
     return this.element.querySelector('.dx-scheduler-form-day-of-year-group');
   }
 
-  getInput = (editorName: string): dxElementWrapper | undefined => {
+  getInput = (editorName: string): dxElementWrapper => {
     const editor = this.form.getEditor(editorName);
-    return editor?.$element().find('input.dx-texteditor-input');
+
+    let $input: dxElementWrapper | undefined | null = null;
+
+    if (editorName === 'startDateTimeZoneEditor' || editorName === 'endDateTimeZoneEditor') {
+      $input = editor?.$element().find('input[type="hidden"]');
+    }
+
+    if (!$input?.length) {
+      $input = editor?.$element().find('.dx-texteditor-input');
+    }
+
+    if (!$input?.length) {
+      $input = editor?.$element().find('input');
+    }
+
+    if (!$input?.length) {
+      throw new Error(`Input element of editor with name "${editorName}" not found`);
+    }
+
+    return $input;
   };
 
-  getInputValue = (editorName: string): string | undefined => {
-    const result = this.getInput(editorName)?.val();
-    return result as string | undefined;
+  getInputValue = (editorName: string): string => {
+    const $input = this.getInput(editorName);
+    return $input.val() as unknown as string;
   };
 
-  isInputVisible = (editorName: string): boolean => this.getInput(editorName)?.length === 1;
+  setInputValue = (editorName: string, value: string | number | Date | boolean | null): void => {
+    this.form.getEditor(editorName)?.option('value', value);
+  };
+
+  isInputVisible = (editorName: string): boolean => {
+    const editor = this.form.getEditor(editorName);
+
+    if (!editor) {
+      return false;
+    }
+
+    return editor.$element().is(':visible');
+  };
+
+  getWeekDaysSelection = (): boolean[] => {
+    const buttons = this.element.querySelectorAll('.dx-scheduler-days-of-week-buttons .dx-button');
+
+    if (buttons.length === 0) {
+      throw new Error('Week day buttons not found');
+    }
+
+    return Array.from(buttons).map((button) => button.classList.contains('dx-button-mode-contained'));
+  };
 
   getLabelIdByText = (labelText: string): string => {
     const labels = Array.from(this.element.querySelectorAll('label'));
@@ -252,7 +293,7 @@ export class PopupModel {
   getTitle = (): HTMLElement | null => document.querySelector('.dx-popup-title .dx-toolbar-label');
 
   getSaveButton = (): HTMLButtonElement => {
-    const saveButton = this.element.querySelector('.dx-button.dx-popup-done') as HTMLButtonElement;
+    const saveButton = this.element.querySelector('.dx-button[aria-label="Save"]') as HTMLButtonElement;
     if (!saveButton) {
       throw new Error('Done button not found');
     }
@@ -268,7 +309,7 @@ export class PopupModel {
   };
 
   getCancelButton = (): HTMLButtonElement => {
-    const cancelButton = this.element.querySelector('.dx-button.dx-popup-cancel') as HTMLButtonElement;
+    const cancelButton = this.element.querySelector('.dx-button[aria-label="Cancel"]') as HTMLButtonElement;
     if (!cancelButton) {
       throw new Error('Cancel button not found');
     }
@@ -340,6 +381,7 @@ export class PopupModel {
 
     if (originalOnValueChanged) {
       originalOnValueChanged({
+        component: repeatEditor,
         value,
         previousValue,
         event: new Event('change'),

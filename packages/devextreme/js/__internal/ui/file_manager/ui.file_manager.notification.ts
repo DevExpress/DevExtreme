@@ -358,7 +358,7 @@ class FileManagerNotificationControl extends Widget<FileManagerNotificationContr
     }
     this._getNotificationPopup()
       .$wrapper()
-      .toggleClass(FILE_MANAGER_NOTIFICATION_POPUP_ERROR_CLASS, !!errorMode);
+      ?.toggleClass(FILE_MANAGER_NOTIFICATION_POPUP_ERROR_CLASS, !!errorMode);
     this._getNotificationPopup().option('contentTemplate', content);
     const { visible } = this._getNotificationPopup().option();
     if (!visible) {

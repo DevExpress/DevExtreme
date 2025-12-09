@@ -27,7 +27,7 @@ const ExtensionComponent = forwardRef<ComponentBaseRef, any>(
 
     const createWidget = useCallback((el?: Element) => {
       componentBaseRef.current?.createWidget(el);
-    }, [componentBaseRef.current]);
+    }, []);
 
     useLayoutEffect(() => {
       const { onMounted } = props as any;
@@ -38,6 +38,12 @@ const ExtensionComponent = forwardRef<ComponentBaseRef, any>(
       }
     }, []);
 
+    const createWidgetRef = useRef(createWidget);
+
+    useLayoutEffect(() => {
+      createWidgetRef.current = createWidget;
+    }, [createWidget]);
+
     useImperativeHandle(ref, () => (
       {
         getInstance() {
@@ -47,10 +53,10 @@ const ExtensionComponent = forwardRef<ComponentBaseRef, any>(
           return componentBaseRef.current?.getElement();
         },
         createWidget(el) {
-          createWidget(el);
+          createWidgetRef.current?.(el);
         },
       }
-    ), [componentBaseRef.current, createWidget]);
+    ), []);
 
     return (
       <ComponentBase<P>

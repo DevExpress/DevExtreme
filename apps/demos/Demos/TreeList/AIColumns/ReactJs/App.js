@@ -6,7 +6,6 @@ import { employees } from './data.js';
 import { aiIntegration } from './service.js';
 import Employee from './Employee.js';
 import Status from './Status.js';
-import Email from './Email.js';
 
 const onAIColumnRequestCreating = (e) => {
   e.data = e.data.map((item) => ({
@@ -60,7 +59,6 @@ export default function App() {
       <Column
         dataField="Email"
         minWidth={200}
-        cellRender={Email}
       />
       <Column
         name="AI Column"
@@ -74,7 +72,7 @@ export default function App() {
         <Ai
           mode="auto"
           noDataText="No data"
-          prompt="Identify department for each employee. It should be one of the following department types:  'Management', 'Human Resources', 'IT', 'Shipping', 'Support', 'Sales',  'Engineering'. Use 'Engineering' by default."
+          prompt="Identify the department where the employee works. Select from the following department list: 'Management', 'Human Resources', 'IT', 'Shipping', 'Support', 'Sales', 'Engineering'. Use 'Engineering' if you cannot find a better match."
         />
       </Column>
     </TreeList>

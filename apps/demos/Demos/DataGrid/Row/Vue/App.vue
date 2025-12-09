@@ -6,7 +6,7 @@
       key-expr="ID"
       :column-auto-width="true"
       :show-borders="true"
-      :row-alternatin-enabled="true"
+      :row-alternation-enabled="true"
       :hover-state-enabled="true"
       data-row-template="dataRowTemplate"
     >

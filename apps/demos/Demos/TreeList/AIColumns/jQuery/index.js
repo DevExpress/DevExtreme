@@ -1,4 +1,81 @@
 $(() => {
+  const deployment = 'gpt-4o-mini';
+  const apiVersion = '2024-02-01';
+  const endpoint = 'https://public-api.devexpress.com/demo-openai';
+  const apiKey = 'DEMO';
+
+  const aiService = new AzureOpenAI({
+    dangerouslyAllowBrowser: true,
+    deployment,
+    endpoint,
+    apiVersion,
+    apiKey,
+  });
+
+  async function getAIResponse(messages, signal) {
+    const params = {
+      messages,
+      model: deployment,
+      max_tokens: 1000,
+      temperature: 0.7,
+    };
+    const response = await aiService.chat.completions
+      .create(params, { signal });
+    const result = response.choices[0].message?.content;
+
+    return result;
+  }
+
+  async function getAIResponseRecursive(messages, signal) {
+    return getAIResponse(messages, signal)
+      .catch(async (error) => {
+        if (!error.message.includes('Connection error')) {
+          return Promise.reject(error);
+        }
+
+        DevExpress.ui.notify({
+          message: 'Our demo AI service reached a temporary request limit. Retrying in 30 seconds.',
+          width: 'auto',
+          type: 'error',
+          displayTime: 5000,
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, 30000));
+
+        return getAIResponseRecursive(messages, signal);
+      });
+  }
+
+  const aiIntegration = new DevExpress.aiIntegration({
+    sendRequest({ prompt }) {
+      const isValidRequest = JSON.stringify(prompt.user).length < 5000;
+      if (!isValidRequest) {
+        return {
+          promise: Promise.reject(new Error('Request is too long. Specify a shorter prompt.')),
+          abort: () => {},
+        };
+      }
+      const controller = new AbortController();
+      const signal = controller.signal;
+
+      const aiPrompt = [
+        { role: 'system', content: prompt.system },
+        { role: 'user', content: prompt.user },
+      ];
+
+      const promise = getAIResponseRecursive(aiPrompt, signal);
+
+      const result = {
+        promise,
+        abort: () => {
+          controller.abort();
+        },
+      };
+
+      return result;
+    },
+  });
+
   const createNameTemplate = (employee) => {
     const {
       ID,
@@ -42,13 +119,6 @@ $(() => {
     .toggleClass('status--salaried', status === 'Salaried')
     .toggleClass('status--commission', status === 'Commission')
     .toggleClass('status--terminated', status === 'Terminated');
-
-  const createEmailTemplate = (email) => {
-    const emailLink = $('<a>')
-      .attr('href', `mailto:${email}`)
-      .text(email);
-    return emailLink;
-  };
 
   $('#treeList').dxTreeList({
     dataSource: employees,
@@ -99,11 +169,6 @@ $(() => {
       },
       {
         dataField: 'Email',
-        cellTemplate: (container, options) => {
-          const email = options.data.Email;
-          const emailLink = createEmailTemplate(email);
-          container.append(emailLink);
-        },
         minWidth: 200,
       },
       {
@@ -111,7 +176,7 @@ $(() => {
         caption: 'AI Column',
         type: 'ai',
         ai: {
-          prompt: 'Identify department for each employee. It should be one of the following department types:  "Management", "Human Resources", "IT", "Shipping", "Support", "Sales",  "Engineering". Use "Engineering" by default.',
+          prompt: 'Identify the department where the employee works. Select from the following department list: "Management", "Human Resources", "IT", "Shipping", "Support", "Sales", "Engineering". Use "Engineering" if you cannot find a better match.',
           mode: 'auto',
           noDataText: 'No data',
         },
