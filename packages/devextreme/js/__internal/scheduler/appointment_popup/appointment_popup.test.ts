@@ -1324,42 +1324,56 @@ describe('Appointment Form', () => {
     });
 
     describe('Repeat End Values Preservation', () => {
-      ['count', 'until'].forEach((repeatEndValue) => {
-        it(`should preserve repeat end values when switching between recurrence types for ${repeatEndValue}`, async () => {
-          const { scheduler, POM } = await createScheduler(getDefaultConfig());
-          const testCount = 15;
-          const testUntilDate = new Date(2017, 5, 16);
+      it('should preserve count value when switching between recurrence types', async () => {
+        const { scheduler, POM } = await createScheduler(getDefaultConfig());
+        const testCount = 15;
 
-          scheduler.showAppointmentPopup({
-            text: 'Meeting',
-            startDate: new Date(2017, 4, 1, 10, 30),
-            endDate: new Date(2017, 4, 1, 11),
-          });
-
-          POM.popup.selectRepeatValue('daily');
-
-          POM.popup.setInputValue('recurrenceRepeatEndEditor', repeatEndValue);
-
-          if (repeatEndValue === 'count') {
-            POM.popup.setInputValue('recurrenceEndCountEditor', testCount);
-          } else {
-            POM.popup.setInputValue('recurrenceEndUntilEditor', testUntilDate);
-          }
-
-          POM.popup.getBackButton().click();
-
-          POM.popup.selectRepeatValue('weekly');
-
-          POM.popup.openRecurrenceSettings();
-
-          if (repeatEndValue === 'count') {
-            expect(POM.popup.getInputValue('recurrenceEndCountEditor')).toBe(`${testCount} occurrence(s)`);
-          } else {
-            expect(POM.popup.getInputValue('recurrenceEndUntilEditor')).toBe('6/16/2017');
-          }
-
-          scheduler.hideAppointmentPopup();
+        scheduler.showAppointmentPopup({
+          text: 'Meeting',
+          startDate: new Date(2017, 4, 1, 10, 30),
+          endDate: new Date(2017, 4, 1, 11),
         });
+
+        POM.popup.selectRepeatValue('daily');
+
+        POM.popup.setInputValue('recurrenceRepeatEndEditor', 'count');
+        POM.popup.setInputValue('recurrenceEndCountEditor', testCount);
+
+        POM.popup.getBackButton().click();
+
+        POM.popup.selectRepeatValue('weekly');
+
+        POM.popup.openRecurrenceSettings();
+
+        expect(POM.popup.getInputValue('recurrenceEndCountEditor')).toBe(`${testCount} occurrence(s)`);
+
+        scheduler.hideAppointmentPopup();
+      });
+
+      it('should preserve until value when switching between recurrence types', async () => {
+        const { scheduler, POM } = await createScheduler(getDefaultConfig());
+        const testUntilDate = new Date(2017, 5, 16);
+
+        scheduler.showAppointmentPopup({
+          text: 'Meeting',
+          startDate: new Date(2017, 4, 1, 10, 30),
+          endDate: new Date(2017, 4, 1, 11),
+        });
+
+        POM.popup.selectRepeatValue('daily');
+
+        POM.popup.setInputValue('recurrenceRepeatEndEditor', 'until');
+        POM.popup.setInputValue('recurrenceEndUntilEditor', testUntilDate);
+
+        POM.popup.getBackButton().click();
+
+        POM.popup.selectRepeatValue('weekly');
+
+        POM.popup.openRecurrenceSettings();
+
+        expect(POM.popup.getInputValue('recurrenceEndUntilEditor')).toBe('6/16/2017');
+
+        scheduler.hideAppointmentPopup();
       });
     });
 
