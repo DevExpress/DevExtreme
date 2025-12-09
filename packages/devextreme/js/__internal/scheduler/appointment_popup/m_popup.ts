@@ -192,8 +192,8 @@ export class AppointmentPopup {
 
     const formData = this._createFormData(appointmentAdapter);
 
-    this.form.formData = formData;
     this.form.readOnly = this._isReadOnly(appointmentAdapter);
+    this.form.formData = formData;
 
     this.form.showMainGroup();
   }

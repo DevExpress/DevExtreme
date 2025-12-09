@@ -179,7 +179,7 @@ export class RecurrenceForm {
 
   setReadOnly(value: boolean): void {
     this._readOnly = value;
-    this.updateWeekDaysButtons();
+    // this.updateWeekDaysButtons();
   }
 
   createRecurrenceFormGroup(): GroupItem {
@@ -346,6 +346,7 @@ export class RecurrenceForm {
         this.weekDayItems.forEach((item) => {
           const buttonContainer = $('<div>').appendTo($container);
 
+          this._weekDayButtons[item.key]?.dispose();
           this._weekDayButtons[item.key] = this.scheduler.createComponent(buttonContainer, Button, {
             text: item.text,
             disabled: this._readOnly,
@@ -367,6 +368,7 @@ export class RecurrenceForm {
                 this.recurrenceRule.byDay.push(item.key);
               }
 
+              // todo: update state only of the current button and remove this.updateWeekDaysButtons
               this.updateWeekDaysButtons();
             },
           });
@@ -603,6 +605,7 @@ export class RecurrenceForm {
     const dayOfMonthGroup = `${recurrencePatternGroupPath}.${EDITOR_NAMES.recurrenceDayOfMonthEditor}`;
     const dayOfYearGroup = `${recurrencePatternGroupPath}.${GROUP_NAMES.recurrenceDayOfYearGroup}`;
 
+    this.dxForm.beginUpdate();
     this.dxForm.itemOption(daysOfWeekGroup, 'visible', false);
     this.dxForm.itemOption(dayOfMonthGroup, 'visible', false);
     this.dxForm.itemOption(dayOfYearGroup, 'visible', false);
@@ -621,7 +624,7 @@ export class RecurrenceForm {
         break;
     }
 
-    this.updateWeekDaysButtons();
+    this.dxForm.endUpdate();
   }
 
   private updateWeekDaysButtons(): void {
@@ -630,7 +633,7 @@ export class RecurrenceForm {
 
       button.option('stylingMode', isSelected ? 'contained' : 'outlined');
       button.option('type', isSelected ? 'default' : 'normal');
-      button.option('disabled', this._readOnly);
+      // button.option('disabled', this._readOnly);
     });
   }
 }
