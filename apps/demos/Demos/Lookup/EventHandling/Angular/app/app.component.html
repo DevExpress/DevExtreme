@@ -12,12 +12,14 @@
     ></dxo-lookup-drop-down-options>
   </dx-lookup>
 </div>
-<div class="selected" *ngIf="selectedEmployee">
+@if (selectedEmployee) {
+<div class="selected">
   <div class="frame">
     <img src="{{ selectedEmployee.Picture }}" alt="" />
   </div>
   <div id="selected-employee-notes">{{ selectedEmployee.Notes }}</div>
 </div>
+}
 <div class="options">
   <div class="caption">Options</div>
   <div class="option">

@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { formatDate } from 'devextreme-angular/common/core/localization';
-import { query as Query } from 'devextreme-angular/common/data';
+import { query } from 'devextreme-angular/common/data';
 import { DxSchedulerModule, DxSchedulerComponent } from 'devextreme-angular/ui/scheduler';
 import { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import { DxFormTypes } from 'devextreme-angular/ui/form';

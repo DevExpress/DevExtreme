@@ -89,70 +89,65 @@
     *dxTemplate="let data of 'movie-info-form-template'"
     class="movie-info-container"
   >
-    <ng-container *ngIf="currentSelectedMovie as movie; else noMovieSelected">
-      <div class="movie-info">
-        <div class="movie-preview-image">
-          <img [src]="movie.image" [alt]="movie.text" />
-        </div>
-        <div class="movie-details">
-          <div class="title">{{ movie.text }} ({{ movie.year }})</div>
-          <div>Director: {{ movie.director }}</div>
-          <div>Duration: {{ movie.duration }} minutes</div>
-        </div>
+    @if (currentSelectedMovie; as movie) {
+    <div class="movie-info">
+      <div class="movie-preview-image">
+        <img [src]="movie.image" [alt]="movie.text" />
       </div>
-    </ng-container>
-    <ng-template #noMovieSelected>
-      <div class="movie-info">
-        <div class="movie-preview-image"></div>
-        <div class="movie-details">
-          <div class="title">Select a movie</div>
-        </div>
+      <div class="movie-details">
+        <div class="title">{{ movie.text }} ({{ movie.year }})</div>
+        <div>Director: {{ movie.director }}</div>
+        <div>Duration: {{ movie.duration }} minutes</div>
       </div>
-    </ng-template>
+    </div>
+    } @else {
+    <div class="movie-info">
+      <div class="movie-preview-image"></div>
+      <div class="movie-details">
+        <div class="title">Select a movie</div>
+      </div>
+    </div>
+    }
   </div>
 
   <div *dxTemplate="let model of 'appointment-template'">
-    <ng-container
-      *ngIf="getMovieById | apply : model.appointmentData.movieId as movie"
-    >
-      <div class="movie-preview">
-        <div class="movie-preview-image">
-          <img [src]="movie.image" [alt]="movie.text" />
-        </div>
-        <div class="movie-details">
-          <div class="title">{{ movie.text }}</div>
-          <div>
-            Ticket Price:
-            <strong>$ {{ model.targetedAppointmentData.price }}</strong>
-          </div>
-          <div>
-            {{
-              (model.targetedAppointmentData.displayStartDate
-                | date : "shortTime") +
-                " - " +
-                (model.targetedAppointmentData.displayEndDate
-                  | date : "shortTime")
-            }}
-          </div>
-        </div>
+    @if (getMovieById | apply : model.appointmentData.movieId; as movie) {
+    <div class="movie-preview">
+      <div class="movie-preview-image">
+        <img [src]="movie.image" [alt]="movie.text" />
       </div>
-    </ng-container>
+      <div class="movie-details">
+        <div class="title">{{ movie.text }}</div>
+        <div>
+          Ticket Price:
+          <strong>${{ model.targetedAppointmentData.price }}</strong>
+        </div>
+        <div>{{
+          (formatDate
+            | apply
+              : model.targetedAppointmentData.displayStartDate
+              : "shortTime") +
+            " - " +
+            (formatDate
+              | apply
+                : model.targetedAppointmentData.displayEndDate
+                : "shortTime")
+        }}</div>
+      </div>
+    </div>
+    }
   </div>
 
   <div *dxTemplate="let model of 'tooltip-template'">
-    @if(getMovieById | apply : model.appointmentData.movieId; as movie) {
-    <div class="movie-tooltip">
-      <img [src]="movie.image" />
-      <div class="movie-info">
-        <div class="movie-title">
-          {{ movie.text + " (" + movie.year + ")" }}
-        </div>
-        <div>
-          {{ "Director: " + movie.director }}
-        </div>
-        <div>
-           {{ "Duration: " + movie.duration + " minutes" }}
-        </div>
+    @if (getMovieById | apply : model.appointmentData.movieId; as movie) {
+    <div class="movie-info">
+      <div class="movie-preview-image">
+        <img [src]="movie.image" [alt]="movie.text" />
+      </div>
+      <div class="movie-details">
+        <div class="title">{{ movie.text + " (" + movie.year + ")" }}</div>
+        <div>Director: {{ movie.director }}</div>
+        <div>Duration: {{ movie.duration }} minutes</div>
       </div>
     </div>
     }

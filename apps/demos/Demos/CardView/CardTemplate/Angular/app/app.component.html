@@ -50,9 +50,7 @@
   <dxo-position at="center" my="center" collision="fit"></dxo-position>
   <div *dxTemplate="let _ of 'content'">
     @if(currentVehicle) {
-    <license-info
-      [vehicle]="currentVehicle"
-    ></license-info>
+    <license-info [vehicle]="currentVehicle"></license-info>
     }
   </div>
 </dx-popup>

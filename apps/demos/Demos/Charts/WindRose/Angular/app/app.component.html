@@ -8,10 +8,7 @@
     (onLegendClick)="onLegendClick($event)"
   >
     @for(item of windSources; track item.name) {
-    <dxi-polar-chart-series
-      [valueField]="item.valueField"
-      [name]="item.name"
-    >
+    <dxi-polar-chart-series [valueField]="item.valueField" [name]="item.name">
     </dxi-polar-chart-series>
     }
     <dxo-polar-chart-common-series-settings

@@ -1,6 +1,5 @@
-import { NgModule, Component, ViewChild, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { AzureOpenAI, type OpenAI } from 'openai';
 import { DxTextAreaModule } from 'devextreme-angular';
 import {
@@ -46,11 +45,15 @@ const showNotification = (message: string, of: string, isError?: boolean, offset
 };
 
 @Component({
-  standalone: false,
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
+  imports: [
+    DxButtonModule,
+    DxFormModule,
+    DxTextAreaModule,
+  ],
 })
 export class AppComponent {
   @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;
@@ -177,16 +180,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxButtonModule,
-    DxFormModule,
-    DxTextAreaModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

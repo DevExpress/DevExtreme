@@ -1,8 +1,5 @@
-import {
-  NgModule, Component, ViewChild, enableProdMode,
-} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxListModule, DxRadioGroupModule, DxToolbarModule } from 'devextreme-angular';
 import { DxDrawerComponent, DxDrawerModule, DxDrawerTypes } from 'devextreme-angular/ui/drawer';
 import { List, Service } from './app.service';
@@ -18,12 +15,17 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  standalone: false,
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
   preserveWhitespaces: true,
+  imports: [
+    DxDrawerModule,
+    DxListModule,
+    DxRadioGroupModule,
+    DxToolbarModule,
+  ],
 })
 
 export class AppComponent {
@@ -61,17 +63,8 @@ export class AppComponent {
   }];
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxDrawerModule,
-    DxListModule,
-    DxRadioGroupModule,
-    DxToolbarModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

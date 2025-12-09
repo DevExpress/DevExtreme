@@ -26,8 +26,7 @@
     [selectedIndex]="selectedIndex"
   >
     <div *dxTemplate="let content of 'title'">
-      <span>{{ content.FirstName }} {{ content.LastName }}</span
-      >
+      <span>{{ content.FirstName }} {{ content.LastName }}</span>
       @if (showCloseButton()) {
       <i
         class="dx-icon dx-icon-close"

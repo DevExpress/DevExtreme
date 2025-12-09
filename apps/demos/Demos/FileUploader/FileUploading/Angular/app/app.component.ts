@@ -1,9 +1,5 @@
-import {
-  NgModule, Component, enableProdMode, Pipe, PipeTransform,
-} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, Pipe, PipeTransform, provideZoneChangeDetection } from '@angular/core';
 import {
   DxCheckBoxModule, DxFileUploaderModule, DxSelectBoxModule,
 } from 'devextreme-angular';
@@ -30,26 +26,22 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  standalone: false,
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
-})
-export class AppComponent {
-  value: File[] = [];
-}
-
-@NgModule({
   imports: [
-    BrowserModule,
     DxCheckBoxModule,
     DxFileUploaderModule,
     DxSelectBoxModule,
     DemoDatePipe,
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppComponent {
+  value: File[] = [];
+}
 
-platformBrowserDynamic().bootstrapModule(AppModule);
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
+  ],
+});
