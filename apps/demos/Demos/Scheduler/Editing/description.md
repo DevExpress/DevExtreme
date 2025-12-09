@@ -1,7 +1,7 @@
-Scheduler allows users to add, update, resize, drag, and delete appointments. To control these operations, specify properties in the [editing](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/editing/) object. In this demo, you can use the checkboxes below the Scheduler to toggle the edit operations.
+Scheduler allows users to add, update, resize, drag, and delete appointments. To manage these operations, use the [editing](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/editing/) object. In this demo, checkboxes below Scheduler enable or disable each edit operation.
 <!--split-->
 
-These operations raise events that you can handle with the following functions:
+Each operation raises related events:
 
 * [onAppointmentAdding](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#onAppointmentAdding) / [onAppointmentAdded](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#onAppointmentAdded)
 
@@ -9,6 +9,6 @@ These operations raise events that you can handle with the following functions:
 
 * [onAppointmentUpdating](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#onAppointmentUpdating) / [onAppointmentUpdated](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#onAppointmentUpdated)
 
-In this demo, we configured the handlers to display a toast message after a user performs an edit operation.
+This demo uses event handlers to display a toast message after each edit operation.
 
-Users can edit appointment data in the appointment details form. To open it, they need to double-click the appointment. You can use the [onAppointmentFormOpening](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#onAppointmentFormOpening) function to customize the form.
+Double-click an appointment to open the edit form. You can customize the form, specify the popup settings, and rearrange form items as needed. For more details, see [Appointment Edit Form]().
