@@ -1322,6 +1322,81 @@ describe('Appointment Form', () => {
         expect(POM.popup.getInputValue('recurrenceEndCountEditor')).toBe('10 occurrence(s)');
       });
     });
+
+    describe('Repeat End Values Preservation', () => {
+      ['count', 'until'].forEach((repeatEndValue) => {
+        it(`should preserve repeat end values when switching between recurrence types for ${repeatEndValue}`, async () => {
+          const { scheduler, POM } = await createScheduler(getDefaultConfig());
+          const testCount = 15;
+          const testUntilDate = new Date(2017, 5, 16);
+
+          scheduler.showAppointmentPopup({
+            text: 'Meeting',
+            startDate: new Date(2017, 4, 1, 10, 30),
+            endDate: new Date(2017, 4, 1, 11),
+          });
+
+          POM.popup.selectRepeatValue('daily');
+
+          POM.popup.setInputValue('recurrenceRepeatEndEditor', repeatEndValue);
+
+          if (repeatEndValue === 'count') {
+            POM.popup.setInputValue('recurrenceEndCountEditor', testCount);
+          } else {
+            POM.popup.setInputValue('recurrenceEndUntilEditor', testUntilDate);
+          }
+
+          POM.popup.getBackButton().click();
+
+          POM.popup.selectRepeatValue('weekly');
+
+          POM.popup.openRecurrenceSettings();
+
+          if (repeatEndValue === 'count') {
+            expect(POM.popup.getInputValue('recurrenceEndCountEditor')).toBe(`${testCount} occurrence(s)`);
+          } else {
+            expect(POM.popup.getInputValue('recurrenceEndUntilEditor')).toBe('6/16/2017');
+          }
+
+          scheduler.hideAppointmentPopup();
+        });
+      });
+    });
+
+    describe('Repeat End Editors Disabled State', () => {
+      ['never', 'until', 'count'].forEach((repeatEndValue) => {
+        it(`should set correct disabled state when repeatEnd is ${repeatEndValue}`, async () => {
+          const { scheduler, POM } = await createScheduler(getDefaultConfig());
+          let recurrenceRule = '';
+          switch (repeatEndValue) {
+            case 'count':
+              recurrenceRule = 'FREQ=DAILY;COUNT=10';
+              break;
+            case 'until':
+              recurrenceRule = 'FREQ=DAILY;UNTIL=20170615T000000Z';
+              break;
+            default:
+              recurrenceRule = 'FREQ=DAILY';
+          }
+
+          scheduler.showAppointmentPopup({
+            text: 'Meeting',
+            startDate: new Date(2017, 4, 1, 10, 30),
+            endDate: new Date(2017, 4, 1, 11),
+            recurrenceRule,
+          });
+
+          POM.popup.getEditSeriesButton().click();
+          POM.popup.openRecurrenceSettings();
+
+          const untilEditor = POM.popup.form.getEditor('recurrenceEndUntilEditor');
+          const countEditor = POM.popup.form.getEditor('recurrenceEndCountEditor');
+
+          expect(untilEditor?.option('disabled')).toBe(repeatEndValue !== 'until');
+          expect(countEditor?.option('disabled')).toBe(repeatEndValue !== 'count');
+        });
+      });
+    });
   });
 
   describe('firstDayOfWeek', () => {
