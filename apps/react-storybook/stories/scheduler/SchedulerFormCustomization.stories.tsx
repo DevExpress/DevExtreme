@@ -338,7 +338,7 @@ export const LegacyPopup: Story = {
     "editing.form.iconsShowMode": "both",
   } as Properties,
   argTypes: iconsShowModeArgType,
-  render: () => {
+  render: (args) => {
     let form: InstanceType<typeof dxForm> | null = null;
 
     const schedulerRef = useRef(null);
@@ -396,7 +396,7 @@ export const LegacyPopup: Story = {
             onContentReady: function (e) {
               form = e.component;
             },
-            iconsShowMode: "both",
+            iconsShowMode: args["editing.form.iconsShowMode"],
             items: [
               {
                 name: "mainGroup",
