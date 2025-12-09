@@ -1,4 +1,4 @@
-DevExtreme Chat supports file attachments. When this feature is activated ([fileUploaderOptions](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#fileUploaderOptions).**uploadFile** is `true`), an “Attach” button appears in the message input field, allowing users to add files to their messages. 
+DevExtreme Chat supports file attachments. When this feature is activated ([fileUploaderOptions](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#fileUploaderOptions).**uploadFile** is defined), an “Attach” button appears in the message input field, allowing users to add files to their messages. 
 
 When users attach files, each file is displayed in the input area with a file-type icon, basic details (name and size), upload status, and an option to remove files before sending.
 <!--split-->
@@ -6,13 +6,13 @@ When users attach files, each file is displayed in the input area with a file-ty
 You can further customize the file upload process with [fileUploaderOptions](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#fileUploaderOptions) properties:
 
 - **maxFileSize**    
-Specify the maximum allowed file size.
+Specifies the maximum allowed file size.
 - **minFileSize**    
-Specify the minimum allowed file size.
+Specifies the minimum allowed file size.
 - **multiple**    
-Set to `false` to limit uploads to a single file.
+When set to `false`, limits uploads to a single file.
 - **allowedFileExtensions**    
-Restrict accepted file types.
+Restricts accepted file types.
 
 For the complete list of configuration options, refer to the following API section: [fileUploaderOptions](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#fileUploaderOptions).
 
