@@ -2,7 +2,7 @@ import TreeList from 'devextreme-testcafe-models/treeList';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 
-fixture.disablePageReloads`Ai Column.Common (TreeList)`
+fixture`Ai Column.Common (TreeList)`
   .page(url(__dirname, '../../../container-ai-integration.html'));
 
 const TREE_LIST_SELECTOR = '#container';
