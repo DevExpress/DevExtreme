@@ -9,7 +9,7 @@ import "./form-customization.css";
 const Scheduler = wrapDxWithReact<Properties>(dxScheduler);
 
 import ReactScheduler from 'devextreme-react/scheduler';
-import dxForm from "devextreme/artifacts/npm/devextreme/ui/form";
+import dxForm from "devextreme/ui/form";
 
 const iconsShowModeArgType = {
   "editing.form.iconsShowMode": {
