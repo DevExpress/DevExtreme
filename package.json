@@ -57,9 +57,6 @@
     "vue": "3.4.27",
     "yargs": "17.7.2"
   },
-  "optionalDependencies":{
-    "@devexpress/sbom-toolkit": "catalog:tools"
-  },
   "pre-commit": [
     "lint-staged",
     "pre-commit"
