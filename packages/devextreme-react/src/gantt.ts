@@ -149,7 +149,7 @@ const Gantt = memo(
 
 // owners:
 // Column
-type IAiProps = React.PropsWithChildren<{
+type IAIProps = React.PropsWithChildren<{
   aiIntegration?: AIIntegration | undefined;
   editorOptions?: dxTextBoxOptions<any>;
   emptyText?: string;
@@ -159,8 +159,8 @@ type IAiProps = React.PropsWithChildren<{
   prompt?: string;
   showHeaderMenu?: boolean;
 }>
-const _componentAi = (props: IAiProps) => {
-  return React.createElement(NestedOption<IAiProps>, {
+const _componentAI = (props: IAIProps) => {
+  return React.createElement(NestedOption<IAIProps>, {
     ...props,
     elementDescriptor: {
       OptionName: "ai",
@@ -171,7 +171,7 @@ const _componentAi = (props: IAiProps) => {
   });
 };
 
-const Ai = Object.assign<typeof _componentAi, NestedComponentMeta>(_componentAi, {
+const AI = Object.assign<typeof _componentAI, NestedComponentMeta>(_componentAI, {
   componentType: "option",
 });
 
@@ -491,7 +491,7 @@ const Editing = Object.assign<typeof _componentEditing, NestedComponentMeta>(_co
 });
 
 // owners:
-// Ai
+// AI
 type IEditorOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
@@ -1101,8 +1101,8 @@ export {
   Gantt,
   IGanttOptions,
   GanttRef,
-  Ai,
-  IAiProps,
+  AI,
+  IAIProps,
   Button,
   IButtonProps,
   Column,
