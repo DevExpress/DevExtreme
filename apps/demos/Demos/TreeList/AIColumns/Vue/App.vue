@@ -61,7 +61,7 @@
       fixedPosition="right"
       :width="180"
     >
-      <DxAi
+      <DxAI
         mode="auto"
         noDataText="No data"
         prompt="Identify the department where the employee works.
@@ -73,7 +73,7 @@ Select from the following department list: 'Management', 'Human Resources', 'IT'
 </template>
 
 <script setup lang="ts">
-import { DxTreeList, DxColumn, DxScrolling, DxPaging, DxAi } from 'devextreme-vue/tree-list';
+import { DxTreeList, DxColumn, DxScrolling, DxPaging, DxAI } from 'devextreme-vue/tree-list';
 import Employee from './Employee.vue';
 import Status from './Status.vue';
 import { type IEmployee, employees } from './data.ts';
