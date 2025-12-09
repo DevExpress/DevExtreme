@@ -299,9 +299,16 @@ describe('Appointment Form', () => {
     });
 
     it('should create separate appointment when saving single appointment from series', async () => {
+      const appointment = {
+        text: 'recurring-app',
+        startDate: '2017-05-01T09:30:00.000Z',
+        endDate: '2017-05-01T11:00:00.000Z',
+        recurrenceRule: 'FREQ=DAILY;COUNT=5',
+      };
+
       const { scheduler, POM } = await createScheduler({
         ...getDefaultConfig(),
-        dataSource: [{ ...recurringAppointment }],
+        dataSource: [{ ...appointment }],
       });
       const dataSource = (scheduler as any).getDataSource();
 
@@ -312,11 +319,11 @@ describe('Appointment Form', () => {
 
       expect(dataSource.items()).toHaveLength(2);
       expect(dataSource.items()[0]).toEqual({
-        ...recurringAppointment,
-        recurrenceException: '20170501T013000Z',
+        ...appointment,
+        recurrenceException: '20170501T093000Z',
       });
       expect(dataSource.items()[1]).toEqual({
-        ...recurringAppointment,
+        ...appointment,
         text: 'single appointment',
         recurrenceRule: '',
         allDay: false,
