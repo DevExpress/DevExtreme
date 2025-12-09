@@ -25,6 +25,40 @@ $(() => {
         label: 'Assignee',
         icon: 'user',
       }],
+    editing: {
+      form: {
+        items: [
+          {
+            name: 'mainGroup',
+            items: [
+              'subjectGroup',
+              'dateGroup',
+              'repeatGroup',
+              {
+                name: 'resourcesGroup',
+                items: [
+                  {
+                    name: 'roomIdGroup',
+                    colCount: 3,
+                    colCountByScreen: {
+                      xs: 3,
+                    },
+                    items: [
+                      'roomIdIcon',
+                      'roomId',
+                      'priorityId',
+                    ],
+                  },
+                  'assigneeIdGroup',
+                ],
+              },
+              'descriptionGroup',
+            ],
+          },
+          'recurrenceGroup',
+        ],
+      },
+    },
     height: 600,
   }).dxScheduler('instance');
 

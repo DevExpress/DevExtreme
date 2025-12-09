@@ -46,5 +46,34 @@ $(() => {
       dataSource: typeData,
       label: 'Type',
     }],
+    editing: {
+      form: {
+        items: [
+          {
+            name: 'mainGroup',
+            items: [
+              'subjectGroup',
+              'dateGroup',
+              'repeatGroup',
+              {
+                name: 'resourcesGroup',
+                items: [
+                  {
+                    name: 'priorityIdGroup',
+                    colCount: 3,
+                    colCountByScreen: {
+                      xs: 3,
+                    },
+                    items: ['priorityIdIcon', 'priorityId', 'typeId'],
+                  },
+                ],
+              },
+              'descriptionGroup',
+            ],
+          },
+          'recurrenceGroup',
+        ],
+      },
+    },
   });
 });

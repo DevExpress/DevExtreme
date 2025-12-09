@@ -12,20 +12,23 @@ type AppointmentProps = {
 
 const Appointment = (props: AppointmentProps) => {
   const { targetedAppointmentData } = props.data;
-  const { movieId } = targetedAppointmentData;
+  const { movieId, price, displayStartDate, displayEndDate } = targetedAppointmentData;
 
   const movieData = useMemo(() => getMovieById(movieId), [movieId]);
 
   return (
-    <div className="showtime-preview">
-      <div> {movieData.text}</div>
-      <div>
-        Ticket Price: <strong>${ targetedAppointmentData.price }</strong>
+    <div className="movie-preview">
+      <div className="movie-preview-image">
+        <img src={movieData.image} alt={movieData.text} />
       </div>
-      <div>
-        {formatDate(targetedAppointmentData.displayStartDate, 'shortTime')}
-        {' - '}
-        {formatDate(targetedAppointmentData.displayEndDate, 'shortTime')}
+      <div className="movie-details">
+        <div className="title">{movieData.text}</div>
+        <div>Ticket Price: <b>${price}</b></div>
+        <div>
+          {formatDate(displayStartDate, 'shortTime')}
+          {' - '}
+          {formatDate(displayEndDate, 'shortTime')}
+        </div>
       </div>
     </div>
   );

@@ -1835,6 +1835,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   /// #DEBUG
+  // TODO: remove when legacyForm is deleted
   getAppointmentDetailsForm() { // for tests
     return this._appointmentForm.form;
   }

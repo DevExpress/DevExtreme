@@ -88,20 +88,6 @@ export type AppointmentFormIconsShowMode = 'both' | 'main' | 'recurrence' | 'non
 export type AppointmentFormProperties = FormProperties & {
   /**
    * @docid
-   * @type_function_param1 formData:object
-   * @default undefined
-   * @public
-   */
-  onSaved?: ((formData: any) => void);
-  /**
-   * @docid
-   * @type_function_param1 formData:object
-   * @default undefined
-   * @public
-   */
-  onCanceled?: ((formData: any) => void);
-  /**
-   * @docid
    * @default "main"
    * @public
    */

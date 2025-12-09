@@ -340,6 +340,14 @@ export class PopupModel {
     return editSeriesButton;
   };
 
+  getEditAppointmentButton = (): HTMLElement => {
+    const editAppointmentButton = document.querySelector('[aria-label="Edit appointment"]') as HTMLElement;
+    if (!editAppointmentButton) {
+      throw new Error('Edit appointment button not found');
+    }
+    return editAppointmentButton;
+  };
+
   openRecurrenceSettings = (): void => {
     if (!this.repeatEditor) {
       throw new Error('Repeat editor not found');
