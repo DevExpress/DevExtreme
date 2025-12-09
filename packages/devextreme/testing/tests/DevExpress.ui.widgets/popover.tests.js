@@ -19,6 +19,7 @@ const POPOVER_WITHOUT_TITLE_CLASS = 'dx-popover-without-title';
 const POPOVER_TITLE_CLASS = 'dx-popup-title';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
+const RESIZABLE_HANDLE_CLASS = 'dx-resizable-handle';
 
 const positionAtWindowCenter = function(element) {
     positionUtils.setup(element, {
@@ -1671,6 +1672,22 @@ QUnit.module('behavior', () => {
             assert.ok(this.stub.calledOnce, 'the log method is called once');
             assert.strictEqual(this.stub.lastCall.args[0], 'W1020');
         });
+    });
+
+    QUnit.test('Should not render resize handles even if resizeEnabled is true (T1315797)', function(assert) {
+        fixtures.simple.create();
+        const $popover = $('#what');
+        const $target = $('#where');
+
+        const popover = new Popover($popover, {
+            target: $target,
+            animation: null,
+            visible: true,
+            resizeEnabled: true,
+        });
+        const $handle = popover.$overlayContent().find(`.${RESIZABLE_HANDLE_CLASS}`);
+
+        assert.strictEqual($handle.length, 0, 'resize handle is not rendered');
     });
 });
 

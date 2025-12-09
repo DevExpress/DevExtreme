@@ -275,6 +275,8 @@ class Popover<
       .prependTo(this.$overlayContent());
   }
 
+  _renderResize(): void { }
+
   _documentDownHandler(e): boolean {
     if (this._isOutsideClick(e)) {
       return super._documentDownHandler(e);
