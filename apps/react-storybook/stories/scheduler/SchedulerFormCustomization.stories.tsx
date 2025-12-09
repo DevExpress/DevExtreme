@@ -386,14 +386,15 @@ export const LegacyPopup: Story = {
             ],
           },
           form: {
-            onContentReady: function (e) {
-              form = e.component;
-
-              form.on('fieldDataChanged', (e) => {
+            onInitialized: function (e) {
+              e.component?.on('fieldDataChanged', (e) => {
                 if (e.dataField === 'recurrenceRule') {
                   form?.option('formData.repeat', !!e.value)
                 }
               });
+            },
+            onContentReady: function (e) {
+              form = e.component;
             },
             iconsShowMode: "both",
             items: [
