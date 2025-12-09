@@ -18,6 +18,6 @@ Restrict accepted file types.
 
 For the complete list of configuration options, refer to the [fileUploaderOptions API section](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#fileUploaderOptions).
 
-The [Attachment](/Documentation/ApiReference/UI_Components/dxChat/Types/Attachment/) type includes `name` and `size` fields. To add custom fields (such as `url`), handle the [onMessageEntered](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#onMessageEntered) event and update the message object’s [attachments](/Documentation/ApiReference/UI_Components/dxChat/Types/TextMessage/#attachments) array as needed. You can use this handler to save files to your server.
+The [Attachment](/Documentation/ApiReference/UI_Components/dxChat/Types/Attachment/) type includes `name` and `size` fields. To add custom fields (such as `url` in this demo), handle the [onMessageEntered](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#onMessageEntered) event and update the message object’s [attachments](/Documentation/ApiReference/UI_Components/dxChat/Types/TextMessage/#attachments) array as needed. You can use this handler to save files to your server.
 
 After a user sends a message, attachments appear in the corresponding message bubble. To allow users to download attachments, implement the [onAttachmentDownloadClick](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#onAttachmentDownloadClick) event handler. You can define custom download logic within the handler.
