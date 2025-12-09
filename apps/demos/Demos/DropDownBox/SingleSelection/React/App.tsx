@@ -15,7 +15,7 @@ const makeAsyncDataSource = (jsonFile: string) =>
     loadMode: 'raw',
     key: 'ID',
     load() {
-      return fetch(`../../../../data/${jsonFile}`).then((response) => response.json());
+      return fetch(`https://js.devexpress.com/React/Demos/WidgetsGallery/JSDemos/data/${jsonFile}`).then((response) => response.json());
     },
   });
 
@@ -29,8 +29,8 @@ function App() {
   const treeViewRef = useRef(null);
   const [treeBoxValue, setTreeBoxValue] = useState('1_1');
   const [gridBoxValue, setGridBoxValue] = useState([3]);
-  const [isTreeBoxOpened, setIsTreeBoxOpened] = useState(false);
   const [isGridBoxOpened, setIsGridBoxOpened] = useState(false);
+  const [isTreeBoxOpened, setIsTreeBoxOpened] = useState(false);
 
   const treeViewItemSelectionChanged = useCallback(
     (e: { component: { getSelectedNodeKeys: () => any } }) => {
@@ -102,23 +102,24 @@ function App() {
     } else {
       treeViewRef.current.instance().selectItem(e.value);
     }
+
     setIsTreeBoxOpened(false);
   }, []);
 
-  const onTreeBoxOptionChanged = useCallback((e: DropDownBoxTypes.OptionChangedEvent) => {
-    if (e.name === 'opened') {
-      setIsTreeBoxOpened(e.value);
-    }
+  const syncDataGridSelection = useCallback((e: DropDownBoxTypes.ValueChangedEvent) => {
+    setGridBoxValue(e.value);
   }, []);
 
-  const onGridBoxOptionChanged = useCallback((e: DropDownBoxTypes.OptionChangedEvent) => {
+  const onGridBoxOpened = useCallback((e: DropDownBoxTypes.OptionChangedEvent) => {
     if (e.name === 'opened') {
       setIsGridBoxOpened(e.value);
     }
   }, []);
 
-  const syncDataGridSelection = useCallback((e: DropDownBoxTypes.ValueChangedEvent) => {
-    setGridBoxValue(e.value);
+  const onTreeBoxOpened = useCallback((e: DropDownBoxTypes.OptionChangedEvent) => {
+    if (e.name === 'opened') {
+      setIsTreeBoxOpened(e.value);
+    }
   }, []);
 
   return (
@@ -136,7 +137,7 @@ function App() {
             showClearButton={true}
             dataSource={treeDataSource}
             onValueChanged={syncTreeViewSelection}
-            onOptionChanged={onTreeBoxOptionChanged}
+            onOptionChanged={onTreeBoxOpened}
             contentRender={treeViewRender}
           />
         </div>
@@ -155,7 +156,7 @@ function App() {
             showClearButton={true}
             dataSource={gridDataSource}
             onValueChanged={syncDataGridSelection}
-            onOptionChanged={onGridBoxOptionChanged}
+            onOptionChanged={onGridBoxOpened}
             contentRender={dataGridRender}
           />
         </div>
