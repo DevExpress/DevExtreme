@@ -500,7 +500,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     const updateItemsHandler = function (change) {
       that._columnsController.columnsChanged.remove(updateItemsHandler);
       that.updateItems({
-        repaintChangesOnly: false,
+        repaintChangesOnly: that.option('repaintChangesOnly'),
         event: change?.changeTypes?.event,
         virtualColumnsScrolling: change?.changeTypes?.virtualColumnsScrolling,
       });
@@ -524,7 +524,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       }
 
       const excludedOptionNames = [
-        'ai',
         'width',
         'visibleWidth',
         'filterValue',
