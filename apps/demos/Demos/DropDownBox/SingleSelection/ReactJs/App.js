@@ -39,7 +39,9 @@ function App() {
 
   const treeViewOnContentReady = useCallback(
     (e) => {
-      e.component.selectItem(treeBoxValue);
+      if (treeBoxValue) {
+        e.component.selectItem(treeBoxValue);
+      }
     },
     [treeBoxValue],
   );
