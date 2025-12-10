@@ -186,16 +186,19 @@ class Toast<
 
   _renderContentImpl(): Promise<void> {
     const { message, type } = this.option();
+    const $content = this.$content();
 
-    this._message = $('<div>')
-      .addClass(TOAST_MESSAGE_CLASS)
-      .text(message ?? '')
-      .appendTo(this.$content());
+    if ($content) {
+      this._message = $('<div>')
+        .addClass(TOAST_MESSAGE_CLASS)
+        .text(message ?? '')
+        .appendTo($content);
+    }
 
     this.setAria('role', 'alert', this._message);
 
     if (type && toastTypes.includes(type.toLowerCase())) {
-      this.$content().prepend($('<div>').addClass(TOAST_ICON_CLASS));
+      $content?.prepend($('<div>').addClass(TOAST_ICON_CLASS));
     }
 
     return super._renderContentImpl();
@@ -204,16 +207,16 @@ class Toast<
   _render(): void {
     super._render();
 
-    this.$element().addClass(TOAST_CLASS);
-    this.$wrapper().addClass(TOAST_WRAPPER_CLASS);
+    this.$element()?.addClass(TOAST_CLASS);
+    this.$wrapper()?.addClass(TOAST_WRAPPER_CLASS);
 
     const { type } = this.option();
 
     if (type) {
-      this.$content().addClass(`${TOAST_CLASS}-${type.toLowerCase()}`);
+      this.$content()?.addClass(`${TOAST_CLASS}-${type.toLowerCase()}`);
     }
 
-    this.$content().addClass(TOAST_CONTENT_CLASS);
+    this.$content()?.addClass(TOAST_CONTENT_CLASS);
 
     this._toggleCloseEvents('Swipe');
     this._toggleCloseEvents('Click');
@@ -304,10 +307,10 @@ class Toast<
 
     switch (name) {
       case 'type':
-        this.$content().removeClass(`${TOAST_CLASS}-${previousValue}`);
+        this.$content()?.removeClass(`${TOAST_CLASS}-${previousValue}`);
 
         if (value) {
-          this.$content().addClass(`${TOAST_CLASS}-${String(value).toLowerCase()}`);
+          this.$content()?.addClass(`${TOAST_CLASS}-${String(value).toLowerCase()}`);
         }
         break;
       case 'message':

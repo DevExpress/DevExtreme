@@ -9,7 +9,7 @@ import dxCardView, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { CardClickEvent, CardDblClickEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardSavedEvent, CardSavingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, InitNewCardEvent, CardTemplateData, CardHeaderItem as CardViewCardHeaderItem, CardHeaderPredefinedItem, FieldTemplateData, ColumnTemplateData, EditingTexts as CardViewEditingTexts, PredefinedToolbarItem, dxCardViewToolbarItem } from "devextreme/ui/card_view";
+import type { CardClickEvent, CardDblClickEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, InitNewCardEvent, SavedEvent, SavingEvent, CardTemplateData, CardHeaderItem as CardViewCardHeaderItem, CardHeaderPredefinedItem, FieldTemplateData, ColumnTemplateData, EditingTexts as CardViewEditingTexts, PredefinedToolbarItem, dxCardViewToolbarItem } from "devextreme/ui/card_view";
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
 import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, ButtonStyle, template, ButtonType, ToolbarItemLocation, ToolbarItemComponent, SearchMode, SingleMultipleOrNone, SelectAllMode, DataType, Format as CommonFormat, SortOrder, ComparisonOperator, DragHighlight, Mode, Direction, PositionAlignment, DisplayMode, ScrollbarMode, TabsIconPosition, TabsStyle, Position as CommonPosition } from "devextreme/common";
 import type { dxButtonOptions, ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from "devextreme/ui/button";
@@ -44,8 +44,6 @@ type ICardViewOptionsNarrowedEvents<TCardData = any, TKey = any> = {
   onCardPrepared?: ((e: CardPreparedEvent) => void);
   onCardRemoved?: ((e: CardRemovedEvent<TCardData, TKey>) => void);
   onCardRemoving?: ((e: CardRemovingEvent<TCardData, TKey>) => void);
-  onCardSaved?: ((e: CardSavedEvent) => void);
-  onCardSaving?: ((e: CardSavingEvent) => void);
   onCardUpdated?: ((e: CardUpdatedEvent<TCardData, TKey>) => void);
   onCardUpdating?: ((e: CardUpdatingEvent<TCardData, TKey>) => void);
   onContextMenuPreparing?: ((e: ContextMenuPreparingEvent<TCardData>) => void);
@@ -59,6 +57,8 @@ type ICardViewOptionsNarrowedEvents<TCardData = any, TKey = any> = {
   onFieldValueDblClick?: ((e: FieldValueDblClickEvent) => void);
   onFieldValuePrepared?: ((e: FieldValuePreparedEvent) => void);
   onInitNewCard?: ((e: InitNewCardEvent<TCardData>) => void);
+  onSaved?: ((e: SavedEvent) => void);
+  onSaving?: ((e: SavingEvent) => void);
 }
 
 type ICardViewOptions<TCardData = any, TKey = any> = React.PropsWithChildren<ReplaceFieldTypes<Properties<TCardData, TKey>, ICardViewOptionsNarrowedEvents<TCardData, TKey>> & IHtmlOptions & {
@@ -95,7 +95,7 @@ const CardView = memo(
       ), []);
 
       const subscribableOptions = useMemo(() => (["filterValue","selectedCardKeys","filterBuilder.value","filterPanel.filterEnabled","editing.form.formData","loadPanel.position","loadPanel.visible","paging.pageIndex","paging.pageSize","searchPanel.text"]), []);
-      const independentEvents = useMemo(() => (["onCardClick","onCardDblClick","onCardInserted","onCardInserting","onCardPrepared","onCardRemoved","onCardRemoving","onCardSaved","onCardSaving","onCardUpdated","onCardUpdating","onContentReady","onContextMenuPreparing","onDataErrorOccurred","onDisposing","onEditCanceled","onEditCanceling","onEditingStart","onFieldCaptionClick","onFieldCaptionDblClick","onFieldCaptionPrepared","onFieldValueClick","onFieldValueDblClick","onFieldValuePrepared","onInitialized","onInitNewCard"]), []);
+      const independentEvents = useMemo(() => (["onCardClick","onCardDblClick","onCardInserted","onCardInserting","onCardPrepared","onCardRemoved","onCardRemoving","onCardUpdated","onCardUpdating","onContentReady","onContextMenuPreparing","onDataErrorOccurred","onDisposing","onEditCanceled","onEditCanceling","onEditingStart","onFieldCaptionClick","onFieldCaptionDblClick","onFieldCaptionPrepared","onFieldValueClick","onFieldValueDblClick","onFieldValuePrepared","onInitialized","onInitNewCard","onSaved","onSaving"]), []);
 
       const defaults = useMemo(() => ({
         defaultFilterValue: "filterValue",
@@ -168,12 +168,12 @@ const CardView = memo(
 // owners:
 // FormItem
 // SimpleItem
-type IAiOptionsProps = React.PropsWithChildren<{
+type IAIOptionsProps = React.PropsWithChildren<{
   disabled?: boolean;
   instruction?: string | undefined;
 }>
-const _componentAiOptions = (props: IAiOptionsProps) => {
-  return React.createElement(NestedOption<IAiOptionsProps>, {
+const _componentAIOptions = (props: IAIOptionsProps) => {
+  return React.createElement(NestedOption<IAIOptionsProps>, {
     ...props,
     elementDescriptor: {
       OptionName: "aiOptions",
@@ -181,7 +181,7 @@ const _componentAiOptions = (props: IAiOptionsProps) => {
   });
 };
 
-const AiOptions = Object.assign<typeof _componentAiOptions, NestedComponentMeta>(_componentAiOptions, {
+const AIOptions = Object.assign<typeof _componentAIOptions, NestedComponentMeta>(_componentAIOptions, {
   componentType: "option",
 });
 
@@ -2845,8 +2845,8 @@ export {
   CardView,
   ICardViewOptions,
   CardViewRef,
-  AiOptions,
-  IAiOptionsProps,
+  AIOptions,
+  IAIOptionsProps,
   Animation,
   IAnimationProps,
   AsyncRule,

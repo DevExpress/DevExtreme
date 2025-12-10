@@ -1,6 +1,6 @@
 {
     "name": "devextreme-demos",
-    "version": "25.2.0",
+    "version": "25.2.2",
     "description": "",
     "repository": {
         "type": "git",
@@ -31,7 +31,7 @@
         "@vue/shared": "^3.2.47",
         "canvg": "4.0.3",
         "cldr-core": "40.0.0",
-        "cldr-data": "36.0.1",
+        "cldr-data": "36.0.4",
         "cldr-dates-full": "40.0.0",
         "cldr-numbers-full": "40.0.0",
         "cldrjs": "0.5.5",
@@ -41,7 +41,7 @@
         "devextreme-aspnet-data": "5.0.0",
         "devextreme-aspnet-data-nojquery": "5.0.0",
         "devextreme-cldr-data": "1.0.3",
-        "devextreme-exceljs-fork": "^4.4.3",
+        "devextreme-exceljs-fork": "^4.4.4",
         "devextreme-quill": "catalog:",
         "dx-systemjs-vue-browser": "1.1.2",
         "esbuild": "0.25.0",
@@ -126,7 +126,7 @@
         "eslint-plugin-react-hooks": "^5.1.0",
         "eslint-plugin-react-perf": "3.3.2",
         "express": "4.21.1",
-        "glob": "10.4.5",
+        "glob": "11.1.0",
         "globals": "catalog:",
         "gulp": "4.0.2",
         "gulp-clean": "0.4.0",
@@ -149,6 +149,7 @@
         "stylelint-config-standard": "35.0.0",
         "systemjs-builder": "0.16.15",
         "testcafe": "3.7.2",
+        "testcafe-reporter-spec-time": "4.0.0",
         "ts-node": "10.9.2",
         "vue-tsc": "^3.0.6"
     },

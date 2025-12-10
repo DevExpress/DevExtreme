@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Layout:Appointments:visible`
   .page(url(__dirname, '../../../../container.html'));
@@ -12,9 +13,14 @@ fixture.disablePageReloads`Layout:Appointments:visible`
       const scheduler = new Scheduler('#container');
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+      await testScreenshot(
+        t,
+        takeScreenshot,
+        `filtering-visible=${visible}-maxAppointmentsPerCell=${maxAppointmentsPerCell}.png`,
+        { element: scheduler.workSpace },
+      );
+
       await t
-        .expect(await takeScreenshot(`filtering-visible=${visible}-maxAppointmentsPerCell=${maxAppointmentsPerCell}.png`, scheduler.workSpace))
-        .ok()
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async () => {

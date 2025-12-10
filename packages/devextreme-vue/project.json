@@ -4,25 +4,152 @@
   "sourceRoot": "packages/devextreme-vue",
   "projectType": "library",
   "targets": {
-    "pack": {
-      "executor": "nx:run-script",
+    "clean": {
+      "executor": "devextreme-nx-infra-plugin:clean",
       "options": {
-        "script": "pack"
-      },
-      "inputs": [
-        "default"
-      ],
-      "outputs": [
-        "{projectRoot}/npm"
-      ],
-      "cache": true
+        "targetDirectory": "./src",
+        "excludePatterns": ["./src/core", "./src/common"],
+        "mode": "recursive"
+      }
     },
     "regenerate": {
-      "executor": "nx:run-script",
-      "dependsOn": ["devextreme-metadata:generate"],
+      "executor": "devextreme-nx-infra-plugin:generate-components",
       "options": {
-        "script": "regenerate"
+        "framework": "vue",
+        "quotes": "double",
+        "explicitIndexInImports": true,
+        "metadataPath": "../devextreme-metadata/dist/integration-data.json",
+        "componentsDir": "./src",
+        "indexFileName": "./src/index.ts",
+        "componentGeneratorTplConfig": {
+          "createComponentFn": {
+            "name": "defineComponent",
+            "path": "vue"
+          },
+          "prepareComponentConfigFn": {
+            "name": "prepareComponentConfig",
+            "path": "./core/index"
+          },
+          "prepareExtensionComponentConfigFn": {
+            "name": "prepareExtensionComponentConfig",
+            "path": "./core/index"
+          },
+          "prepareConfigurationComponentConfigFn": {
+            "name": "prepareConfigurationComponentConfig",
+            "path": "./core/index"
+          }
+        }
+      },
+      "dependsOn": ["devextreme-metadata:generate", "clean"],
+      "cache": true,
+      "inputs": ["default"],
+      "outputs": [
+        "{projectRoot}/src/**/*",
+        "!{projectRoot}/src/core/**/*",
+        "!{projectRoot}/src/common/**/*",
+        "!{projectRoot}/src/**/__tests__/**/*"
+      ]
+    },
+    "npm:clean": {
+      "executor": "devextreme-nx-infra-plugin:clean",
+      "options": {
+        "targetDirectory": "./npm",
+        "mode": "simple"
       }
+    },
+    "build:esm": {
+      "executor": "devextreme-nx-infra-plugin:build-typescript",
+      "dependsOn": ["npm:clean"],
+      "options": {
+        "srcPattern": "./src/**/*.ts",
+        "excludePatterns": ["./src/**/__tests__/**/*", "./src/**/__mocks__/**/*"],
+        "tsconfig": "./tsconfig.esm.json",
+        "outDir": "./npm/esm",
+        "module": "esm"
+      },
+      "outputs": ["{projectRoot}/npm/esm"],
+      "cache": true,
+      "inputs": ["default"]
+    },
+    "build:cjs": {
+      "executor": "devextreme-nx-infra-plugin:build-typescript",
+      "dependsOn": ["npm:clean"],
+      "options": {
+        "srcPattern": "./src/**/*.ts",
+        "excludePatterns": ["./src/**/__tests__/**/*", "./src/**/__mocks__/**/*"],
+        "tsconfig": "./tsconfig.json",
+        "outDir": "./npm/cjs",
+        "module": "cjs"
+      },
+      "outputs": ["{projectRoot}/npm/cjs"],
+      "cache": true,
+      "inputs": ["default"]
+    },
+    "prepare-package-json": {
+      "executor": "devextreme-nx-infra-plugin:prepare-package-json",
+      "dependsOn": ["build:esm", "build:cjs"],
+      "options": {}
+    },
+    "license-headers": {
+      "executor": "devextreme-nx-infra-plugin:add-license-headers",
+      "dependsOn": ["prepare-package-json"],
+      "options": {
+        "targetDirectory": "./npm",
+        "packageJsonPath": "./package.json"
+      }
+    },
+    "copy-files": {
+      "executor": "devextreme-nx-infra-plugin:copy-files",
+      "dependsOn": ["prepare-package-json"],
+      "options": {
+        "files": [
+          {
+            "from": "./LICENSE",
+            "to": "./npm/LICENSE"
+          },
+          {
+            "from": "./README.md",
+            "to": "./npm/README.md"
+          }
+        ]
+      }
+    },
+    "npm:prepare-modules": {
+      "executor": "devextreme-nx-infra-plugin:prepare-submodules",
+      "dependsOn": ["license-headers", "copy-files"],
+      "options": {
+        "distDirectory": "./npm",
+        "submoduleFolders": [
+          ["common"],
+          ["core", ["config", "index"]],
+          ["common/core"],
+          ["common/data"],
+          ["common/export"]
+        ]
+      }
+    },
+    "pack": {
+      "executor": "devextreme-nx-infra-plugin:pack-npm",
+      "dependsOn": ["npm:prepare-modules"],
+      "options": {
+        "workingDirectory": "./npm"
+      },
+      "outputs": ["{projectRoot}/npm/*.tgz"],
+      "cache": true,
+      "inputs": ["default"]
+    },
+    "build": {
+      "executor": "devextreme-nx-infra-plugin:pack-npm",
+      "dependsOn": ["npm:prepare-modules", "^build"],
+      "options": {
+        "workingDirectory": "./npm"
+      },
+      "outputs": [
+        "{projectRoot}/npm",
+        "{projectRoot}/*.tgz"
+      ],
+      "cache": true,
+      "inputs": ["default"]
     },
     "test": {
       "executor": "nx:run-script",
@@ -41,8 +168,6 @@
       "{projectRoot}/devextreme-metadata/**/*",
       "{projectRoot}/src/**/*",
       "!{projectRoot}/src/**/__tests__/*",
-      "{projectRoot}/build.config.js",
-      "{projectRoot}/gulpfile.js",
       "{projectRoot}/tsconfig*",
       "{workspaceRoot}/tsconfig.json"
     ],

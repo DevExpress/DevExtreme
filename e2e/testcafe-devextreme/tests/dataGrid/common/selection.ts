@@ -93,7 +93,7 @@ test('The Select All checkbox should be visible when a column headerCellTemplate
 });
 
 // T1214734
-test.meta({ unstable: true })('Select rows by shift should work when grid has real time updates', async (t) => {
+test('Select rows by shift should work when grid has real time updates', async (t) => {
   const dataGrid = new DataGrid('#container');
   const secondRow = dataGrid.getDataRow(1).getSelectCheckBox();
   const seventhRow = dataGrid.getDataRow(6).getSelectCheckBox();
@@ -175,7 +175,7 @@ const DATA_GRID_SELECTOR = '#container';
     await t
       .expect(firstRow.isSelected).ok()
       .expect(secondRow.isSelected).ok();
-  }).before(() => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     dataSource: data,
     keyExpr: 'ID',
     columns: ['ID', 'Name'],
@@ -199,7 +199,7 @@ test('Deferred selection should work correctly with deferred sensitivity: \'case
   await t
     .expect(firstRow.isSelected).ok()
     .expect(secondRow.isSelected).notOk();
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: data,
   keyExpr: 'ID',
   columns: ['ID', 'Name'],
@@ -234,7 +234,7 @@ test('Sensitivity option change should be correctly handled during runtime chang
   await t
     .expect(firstRow.isSelected).ok()
     .expect(secondRow.isSelected).notOk();
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: data,
   keyExpr: 'ID',
   columns: ['ID', 'Name'],

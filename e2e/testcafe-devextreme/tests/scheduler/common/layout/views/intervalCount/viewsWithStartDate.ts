@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../../../helpers/createWidget';
 import url from '../../../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Layout: Views: IntervalCount with StartDate`
   .page(url(__dirname, '../../../../../container.html'));
@@ -49,15 +50,13 @@ fixture.disablePageReloads`Layout: Views: IntervalCount with StartDate`
 
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+    await testScreenshot(t, takeScreenshot, `start-date-in-${view}.png`);
+
+    await t.doubleClick(scheduler.getDateTableCell(0, 0));
+
+    await testScreenshot(t, takeScreenshot, `start-date-in-${view}-with-form.png`);
+
     await t
-      .expect(await takeScreenshot(`start-date-in-${view}.png`))
-      .ok()
-
-      .doubleClick(scheduler.getDateTableCell(0, 0))
-
-      .expect(await takeScreenshot(`start-date-in-${view}-with-form.png`))
-      .ok()
-
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => createWidget('dxScheduler', {
@@ -99,10 +98,9 @@ fixture.disablePageReloads`Layout: Views: IntervalCount with StartDate`
   test(`startDate should work in ${view} view when it indicates the same week as the start as currentDate`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t
-      .expect(await takeScreenshot(`complex-start-date-in-${view}.png`))
-      .ok()
+    await testScreenshot(t, takeScreenshot, `complex-start-date-in-${view}.png`);
 
+    await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => createWidget('dxScheduler', {

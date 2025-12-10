@@ -9,7 +9,7 @@ import dxTreeList, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { dxTreeListColumn, AdaptiveDetailRowPreparingEvent, AIColumnRequestCreatingEvent, AIColumnResponseReceivedEvent, CellClickEvent, CellDblClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, FocusedCellChangingEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, NodesInitializedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, ToolbarPreparingEvent, dxTreeListRowObject, TreeListPredefinedColumnButton, dxTreeListColumnButton, TreeListCommandColumnType, TreeListPredefinedToolbarItem, dxTreeListToolbarItem } from "devextreme/ui/tree_list";
+import type { dxTreeListColumn, AdaptiveDetailRowPreparingEvent, AIColumnRequestCreatingEvent, CellClickEvent, CellDblClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, FocusedCellChangingEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, NodesInitializedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, ToolbarPreparingEvent, dxTreeListRowObject, TreeListPredefinedColumnButton, dxTreeListColumnButton, TreeListCommandColumnType, TreeListPredefinedToolbarItem, dxTreeListToolbarItem } from "devextreme/ui/tree_list";
 import type { DataChange, AIColumnMode, DataChangeType, ColumnAIOptions, FilterOperation, FilterType, FixedPosition, ColumnHeaderFilter as GridsColumnHeaderFilter, SelectedFilterOperation, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, GridsEditMode, GridsEditRefreshMode, StartEditAction, FilterPanel as GridsFilterPanel, FilterPanelTexts as GridsFilterPanelTexts, ApplyFilterMode, HeaderFilterSearchConfig, HeaderFilterTexts, EnterKeyAction, EnterKeyDirection, PagerPageSize, GridBase, DataRenderMode, StateStoreType } from "devextreme/common/grids";
 import type { ContentReadyEvent as TextBoxContentReadyEvent, DisposingEvent as TextBoxDisposingEvent, InitializedEvent as TextBoxInitializedEvent, KeyDownEvent as TextBoxKeyDownEvent, dxTextBoxOptions, TextBoxType, ChangeEvent, CopyEvent, CutEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InputEvent, KeyUpEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from "devextreme/ui/text_box";
 import type { ContentReadyEvent as FilterBuilderContentReadyEvent, DisposingEvent as FilterBuilderDisposingEvent, EditorPreparedEvent as FilterBuilderEditorPreparedEvent, EditorPreparingEvent as FilterBuilderEditorPreparingEvent, InitializedEvent as FilterBuilderInitializedEvent, dxFilterBuilderField, FieldInfo, OptionChangedEvent as FilterBuilderOptionChangedEvent, ValueChangedEvent as FilterBuilderValueChangedEvent, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation } from "devextreme/ui/filter_builder";
@@ -46,7 +46,6 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 type ITreeListOptionsNarrowedEvents<TRowData = any, TKey = any> = {
   onAdaptiveDetailRowPreparing?: ((e: AdaptiveDetailRowPreparingEvent<TRowData, TKey>) => void);
   onAIColumnRequestCreating?: ((e: AIColumnRequestCreatingEvent<TRowData, TKey>) => void);
-  onAIColumnResponseReceived?: ((e: AIColumnResponseReceivedEvent<TRowData, TKey>) => void);
   onCellClick?: ((e: CellClickEvent<TRowData, TKey>) => void);
   onCellDblClick?: ((e: CellDblClickEvent<TRowData, TKey>) => void);
   onCellPrepared?: ((e: CellPreparedEvent<TRowData, TKey>) => void);
@@ -124,7 +123,7 @@ const TreeList = memo(
       ), []);
 
       const subscribableOptions = useMemo(() => (["columns","editing","editing.changes","editing.editColumnName","editing.editRowKey","expandedRowKeys","filterValue","focusedColumnIndex","focusedRowIndex","focusedRowKey","paging","paging.pageIndex","paging.pageSize","selectedRowKeys","filterBuilder.value","filterBuilderPopup.height","filterBuilderPopup.position","filterBuilderPopup.visible","filterBuilderPopup.width","filterPanel.filterEnabled","editing.form.formData","editing.popup.height","editing.popup.position","editing.popup.visible","editing.popup.width","searchPanel.text"]), []);
-      const independentEvents = useMemo(() => (["onAdaptiveDetailRowPreparing","onAIColumnRequestCreating","onAIColumnResponseReceived","onCellClick","onCellDblClick","onCellPrepared","onContentReady","onContextMenuPreparing","onDataErrorOccurred","onDisposing","onEditCanceled","onEditCanceling","onEditingStart","onEditorPrepared","onEditorPreparing","onFocusedCellChanging","onFocusedRowChanging","onInitialized","onInitNewRow","onKeyDown","onNodesInitialized","onRowClick","onRowCollapsed","onRowCollapsing","onRowDblClick","onRowExpanded","onRowExpanding","onRowInserted","onRowInserting","onRowPrepared","onRowRemoved","onRowRemoving","onRowUpdated","onRowUpdating","onRowValidating","onSaved","onSaving","onToolbarPreparing"]), []);
+      const independentEvents = useMemo(() => (["onAdaptiveDetailRowPreparing","onAIColumnRequestCreating","onCellClick","onCellDblClick","onCellPrepared","onContentReady","onContextMenuPreparing","onDataErrorOccurred","onDisposing","onEditCanceled","onEditCanceling","onEditingStart","onEditorPrepared","onEditorPreparing","onFocusedCellChanging","onFocusedRowChanging","onInitialized","onInitNewRow","onKeyDown","onNodesInitialized","onRowClick","onRowCollapsed","onRowCollapsing","onRowDblClick","onRowExpanded","onRowExpanding","onRowInserted","onRowInserting","onRowPrepared","onRowRemoved","onRowRemoving","onRowUpdated","onRowUpdating","onRowValidating","onSaved","onSaving","onToolbarPreparing"]), []);
 
       const defaults = useMemo(() => ({
         defaultColumns: "columns",
@@ -182,7 +181,7 @@ const TreeList = memo(
 
 // owners:
 // Column
-type IAiProps = React.PropsWithChildren<{
+type IAIProps = React.PropsWithChildren<{
   aiIntegration?: AIIntegration | undefined;
   editorOptions?: dxTextBoxOptions<any>;
   emptyText?: string;
@@ -192,8 +191,8 @@ type IAiProps = React.PropsWithChildren<{
   prompt?: string;
   showHeaderMenu?: boolean;
 }>
-const _componentAi = (props: IAiProps) => {
-  return React.createElement(NestedOption<IAiProps>, {
+const _componentAI = (props: IAIProps) => {
+  return React.createElement(NestedOption<IAIProps>, {
     ...props,
     elementDescriptor: {
       OptionName: "ai",
@@ -204,18 +203,18 @@ const _componentAi = (props: IAiProps) => {
   });
 };
 
-const Ai = Object.assign<typeof _componentAi, NestedComponentMeta>(_componentAi, {
+const AI = Object.assign<typeof _componentAI, NestedComponentMeta>(_componentAI, {
   componentType: "option",
 });
 
 // owners:
 // FormItem
-type IAiOptionsProps = React.PropsWithChildren<{
+type IAIOptionsProps = React.PropsWithChildren<{
   disabled?: boolean;
   instruction?: string | undefined;
 }>
-const _componentAiOptions = (props: IAiOptionsProps) => {
-  return React.createElement(NestedOption<IAiOptionsProps>, {
+const _componentAIOptions = (props: IAIOptionsProps) => {
+  return React.createElement(NestedOption<IAIOptionsProps>, {
     ...props,
     elementDescriptor: {
       OptionName: "aiOptions",
@@ -223,7 +222,7 @@ const _componentAiOptions = (props: IAiOptionsProps) => {
   });
 };
 
-const AiOptions = Object.assign<typeof _componentAiOptions, NestedComponentMeta>(_componentAiOptions, {
+const AIOptions = Object.assign<typeof _componentAIOptions, NestedComponentMeta>(_componentAIOptions, {
   componentType: "option",
 });
 
@@ -1005,7 +1004,7 @@ const EditingTexts = Object.assign<typeof _componentEditingTexts, NestedComponen
 });
 
 // owners:
-// Ai
+// AI
 type IEditorOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
@@ -2927,10 +2926,10 @@ export {
   TreeList,
   ITreeListOptions,
   TreeListRef,
-  Ai,
-  IAiProps,
-  AiOptions,
-  IAiOptionsProps,
+  AI,
+  IAIProps,
+  AIOptions,
+  IAIOptionsProps,
   Animation,
   IAnimationProps,
   AsyncRule,

@@ -21,6 +21,7 @@ import TextBox from '../textBox';
 import { GroupPanel } from './groupPanel';
 import GridCore from '../gridCore';
 import { CLASS as CLASS_BASE } from '../gridCore';
+import { AIPromptEditor } from './aiPromptEditor';
 
 export const CLASS = {
   ...CLASS_BASE,
@@ -28,6 +29,7 @@ export const CLASS = {
   headers: 'headers',
   headerPanel: 'header-panel',
   searchBox: 'dx-searchbox',
+  row: 'dx-row',
   dataRow: 'dx-data-row',
   groupRow: 'dx-group-row',
   groupPanel: 'group-panel',
@@ -53,7 +55,7 @@ export const CLASS = {
 
   overlayContent: 'dx-overlay-content',
   overlayWrapper: 'dx-overlay-wrapper',
-  loadPanelWrapper: 'dx-loadpanel-wrapper',
+  loadPanel: 'dx-loadpanel',
   revertTooltip: 'revert-tooltip',
   invalidMessage: 'invalid-message',
 
@@ -72,6 +74,7 @@ export const CLASS = {
   columnsSeparator: 'dx-datagrid-columns-separator',
   toast: 'dx-toast-wrapper',
   dragHeader: 'drag-header',
+  aiPromptEditor: 'dx-ai-prompt-editor',
 };
 
 const E2E_ATTRIBUTES = {
@@ -136,6 +139,10 @@ export default class DataGrid extends GridCore {
   constructor(id: string | Selector) {
     super(id);
 
+    /*
+      dataRows contains double collection of rows (two tables) when
+      columnFixing.legacyMode = true AND DataGrid has fixed columns
+    */
     this.dataRows = this.element.find(`.${CLASS.dataRow}`);
   }
 
@@ -144,6 +151,10 @@ export default class DataGrid extends GridCore {
 
   getContainer(): Selector {
     return this.element.find(`.${CLASS.dataGrid}`);
+  }
+
+  getHeadersContainer(): Selector {
+    return this.element.find(`.${this.addWidgetPrefix(CLASS.headers)}`);
   }
 
   getHeaders(): Headers {
@@ -156,6 +167,18 @@ export default class DataGrid extends GridCore {
 
   getScrollContainer(): Selector {
     return this.getRowsView().find(`.${CLASS.scrollableContainer}`);
+  }
+
+  /*
+    getRows() returns double collection of rows (two tables) when
+    columnFixing.legacyMode = true AND DataGrid has fixed columns
+  */
+  getRows(): Selector {
+    return this.getRowsView().find(`.${CLASS.row}`);
+  }
+
+  getCells(): Selector {
+    return this.getRowsView().find('td');
   }
 
   getDataRow(index: number): DataRow {
@@ -241,7 +264,7 @@ export default class DataGrid extends GridCore {
   }
 
   getLoadPanel(): LoadPanel {
-    return new LoadPanel(this.element.find(`.${CLASS.loadPanelWrapper}`));
+    return new LoadPanel(this.element.find(`.${CLASS.loadPanel}`));
   }
 
   getConfirmDeletionButton(): Selector {
@@ -539,6 +562,8 @@ export default class DataGrid extends GridCore {
       const dataGrid = getInstance() as any;
       return dataGrid.getVisibleRows().map((r) => ({
         key: r.key,
+        data: r.data,
+        dataIndex: r.dataIndex,
         rowType: r.rowType,
       }));
     }, { dependencies: { getInstance } })();
@@ -686,7 +711,6 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-
   apiFocus(): Promise<void> {
     const { getInstance } = this;
 
@@ -697,6 +721,15 @@ export default class DataGrid extends GridCore {
           getInstance,
         },
       },
+    )();
+  }
+
+  apiPageIndex(): Promise<number> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).pageIndex(),
+      { dependencies: { getInstance } },
     )();
   }
 
@@ -938,5 +971,9 @@ export default class DataGrid extends GridCore {
   
   getDraggableHeader() {
     return this.body.find(`.${this.addWidgetPrefix(CLASS.dragHeader)}`);
+  }
+
+  getAIPromptEditor(): AIPromptEditor {
+    return new AIPromptEditor(this.body.find(`.${CLASS.aiPromptEditor}`));
   }
 }

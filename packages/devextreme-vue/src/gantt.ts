@@ -395,7 +395,7 @@ prepareComponentConfig(componentConfig);
 const DxGantt = defineComponent(componentConfig);
 
 
-const DxAiConfig = {
+const DxAIConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -420,12 +420,12 @@ const DxAiConfig = {
   }
 };
 
-prepareConfigurationComponentConfig(DxAiConfig);
+prepareConfigurationComponentConfig(DxAIConfig);
 
-const DxAi = defineComponent(DxAiConfig);
+const DxAI = defineComponent(DxAIConfig);
 
-(DxAi as any).$_optionName = "ai";
-(DxAi as any).$_expectedChildren = {
+(DxAI as any).$_optionName = "ai";
+(DxAI as any).$_expectedChildren = {
   editorOptions: { isCollectionItem: false, optionName: "editorOptions" }
 };
 
@@ -1487,7 +1487,7 @@ const DxValidation = defineComponent(DxValidationConfig);
 export default DxGantt;
 export {
   DxGantt,
-  DxAi,
+  DxAI,
   DxButton,
   DxColumn,
   DxColumnHeaderFilter,

@@ -57,7 +57,7 @@ const items: Item[] = [
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(() => createWidget(
+  }).before(async () => createWidget(
     'dxMenu',
     {
       items,

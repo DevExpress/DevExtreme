@@ -15,7 +15,7 @@ test('Infinite scrolling', async (t) => {
     .ok();
 
   await a11yCheck(t);
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(1000, 2),
   height: 400,
   showBorders: true,
@@ -32,7 +32,7 @@ test('Horizontal Virtual Scrolling', async (t) => {
     .ok();
 
   await a11yCheck(t);
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(20, 100),
   columnWidth: 100,
   height: 400,

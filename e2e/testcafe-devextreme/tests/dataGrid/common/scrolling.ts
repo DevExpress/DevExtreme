@@ -7,6 +7,7 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { salesApiMock } from './apiMocks/salesApiMock';
 import { testScreenshot } from '../../../helpers/themeUtils';
+import { Themes } from '../../../helpers/themes';
 
 async function getMaxRightOffset(dataGrid: DataGrid): Promise<number> {
   const scrollWidth = await dataGrid.getScrollWidth();
@@ -352,7 +353,7 @@ test('Scroll position after grouping when RTL (T388508)', async (t) => {
   }],
 }));
 
-test.meta({ unstable: true })('Header container should have padding-right after expanding the master row with a detail grid when using native scrolling (T1004507)', async (t) => {
+test('Header container should have padding-right after expanding the master row with a detail grid when using native scrolling (T1004507)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -1048,7 +1049,7 @@ test('The data should display correctly after changing the dataSource and focuse
 }));
 
 // T1166649
-test.meta({ unstable: true, browserSize: [800, 800] })('The scroll position of a fixed table should be synchronized with the main table when fast scrolling to the end', async (t) => {
+test.meta({ browserSize: [800, 800] })('The scroll position of a fixed table should be synchronized with the main table when fast scrolling to the end', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -1323,9 +1324,13 @@ test('New virtual mode. Virtual rows should not be in view port after scrolling 
       mode: 'virtual',
     },
   });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).myStore;
+  })();
 });
 
-test.meta({ unstable: true })('New virtual mode. Navigation to the last row if new row is added (T1069849)', async (t) => {
+test.meta({ runInTheme: Themes.genericLight })('New virtual mode. Navigation to the last row if new row is added (T1069849)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   const addRowButton = dataGrid.getHeaderPanel().getAddRowButton();
@@ -1366,7 +1371,7 @@ test.meta({ unstable: true })('New virtual mode. Navigation to the last row if n
 }));
 
 [false, true].forEach((useNative) => {
-  test.meta({ unstable: true })(`New virtual mode. Virtual rows should not be in view port after switching to the last page with row numbers less than page size (useNative = ${useNative}) (T1085775)`, async (t) => {
+  test.meta({ runInTheme: Themes.genericLight })(`New virtual mode. Virtual rows should not be in view port after switching to the last page with row numbers less than page size (useNative = ${useNative}) (T1085775)`, async (t) => {
     const dataGrid = new DataGrid('#container');
 
     // assert
@@ -1448,6 +1453,10 @@ test.meta({ unstable: true })('New virtual mode. Navigation to the last row if n
         visible: true,
       },
     });
+  }).after(async () => {
+    await ClientFunction(() => {
+      delete (window as any).myStore;
+    })();
   });
 });
 
@@ -1703,8 +1712,11 @@ test('DataGrid - Gray boxes appear when the push method is used to remove rows i
     key: item.id,
   }));
 
+  await t.expect(dataGrid.isReady()).ok();
+
   await dataGrid.apiPush(changes);
   await testScreenshot(t, takeScreenshot, 'T1240079.png', { element: dataGrid.element });
+
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -1825,34 +1837,31 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
 [true, false].forEach((nativeScroll) => {
   type TestCaseWindow = typeof window & { dataGridScrollableEventValues?: number[] };
 
-  test(
-    `Should not scroll back on top with virtual scrolling and adaptive master detail (nativeScroll: ${nativeScroll}) [T1278804]`,
-    async (t) => {
-      // NOTE: idx + 1 logic inside POM
-      const adaptiveCellIdx = 101;
-      const scrollValuesThreshold = 100;
+  test.meta({ unstable: true })(`Should not scroll back on top with virtual scrolling and adaptive master detail (nativeScroll: ${nativeScroll}) [T1278804]`, async (t) => {
+    // NOTE: idx + 1 logic inside POM
+    const adaptiveCellIdx = 101;
+    const scrollValuesThreshold = 100;
 
-      const dataGrid = new DataGrid('#container');
-      const firstRow = dataGrid.getDataRow(0);
-      const firstDataCell = firstRow.getDataCell(0);
-      const adaptiveCell = firstRow.getCommandCell(adaptiveCellIdx);
-      const scrollContainer = dataGrid.getScrollContainer();
+    const dataGrid = new DataGrid('#container');
+    const firstRow = dataGrid.getDataRow(0);
+    const firstDataCell = firstRow.getDataCell(0);
+    const adaptiveCell = firstRow.getCommandCell(adaptiveCellIdx);
 
-      await t
-        .click(firstDataCell.element)
-        .click(adaptiveCell.element);
+    await t
+      .click(firstDataCell.element)
+      .click(adaptiveCell.element);
 
-      await t
-        .scroll(scrollContainer, 0, 1000)
-        .scroll(scrollContainer, 0, 1000);
+    await dataGrid
+      .scrollBy(t, { y: 1000 });
+    await dataGrid
+      .scrollBy(t, { y: 1000 });
 
-      const scrollOffsets = await t
-        .eval(() => (window as TestCaseWindow).dataGridScrollableEventValues) as number[];
+    const scrollOffsets = await t
+      .eval(() => (window as TestCaseWindow).dataGridScrollableEventValues) as number[];
 
-      const hasSmallScrollValues = scrollOffsets.some((offset) => offset < scrollValuesThreshold);
-      await t.expect(hasSmallScrollValues).notOk();
-    },
-  ).before(async () => {
+    const hasSmallScrollValues = scrollOffsets.some((offset) => offset < scrollValuesThreshold);
+    await t.expect(hasSmallScrollValues).notOk();
+  }).before(async () => {
     await createWidget('dxDataGrid', {
       dataSource: getData(3, 100).map((item, idx) => ({ ...item, id: idx })),
       keyExpr: 'id',
@@ -1948,6 +1957,8 @@ fixture`Scrolling - warnings`
   .page(url(__dirname, '../../container.html'));
 
 test('Warning should be thrown if scrolling is virtual and height is not specified', async (t) => {
+  await t.wait(100);
+
   const consoleMessages = await t.getBrowserConsoleMessages();
   const warningExists = !!consoleMessages?.warn.find((message) => message.startsWith('W1025'));
 

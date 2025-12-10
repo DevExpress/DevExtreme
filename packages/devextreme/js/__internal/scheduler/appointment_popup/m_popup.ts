@@ -4,9 +4,10 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { Deferred, when } from '@js/core/utils/deferred';
+import { extend } from '@js/core/utils/extend';
 import { getWidth } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
-import type { ToolbarItem } from '@js/ui/popup';
+import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
 import type dxPopup from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import { current, isFluent } from '@js/ui/themes';
@@ -19,7 +20,7 @@ import type { AppointmentForm } from './m_form';
 
 export const APPOINTMENT_POPUP_CLASS = 'dx-scheduler-appointment-popup';
 
-const POPUP_FULL_SCREEN_MODE_WINDOW_WIDTH_THRESHOLD = 460;
+const POPUP_FULL_SCREEN_MODE_WINDOW_WIDTH_THRESHOLD = 485;
 
 const DAY_IN_MS = dateUtils.dateToMilliseconds('day');
 
@@ -35,6 +36,8 @@ export class AppointmentPopup {
   form: AppointmentForm;
 
   private _popup?: dxPopup;
+
+  private customPopupOptions?: PopupProperties;
 
   state: any;
 
@@ -68,10 +71,10 @@ export class AppointmentPopup {
 
     if (!this._popup) {
       const popupConfig = this._createPopupConfig();
-      this._popup = this._createPopup(popupConfig);
+      this._createPopup(popupConfig);
     }
 
-    this._popup.show();
+    this._popup!.show();
   }
 
   hide() {
@@ -84,16 +87,21 @@ export class AppointmentPopup {
     this._popup = undefined;
   }
 
-  _createPopup(options): dxPopup {
+  _createPopup(options): void {
     const popupElement = $('<div>')
       .addClass(APPOINTMENT_POPUP_CLASS)
       .appendTo(this.scheduler.getElement());
 
-    return this.scheduler.createComponent(popupElement, Popup, options);
+    this.scheduler.createComponent(popupElement, Popup, options);
   }
 
-  _createPopupConfig() {
-    return {
+  _createPopupConfig(): PopupProperties {
+    const editingConfig = this.scheduler.getEditingConfig();
+    const customPopupOptions = editingConfig?.popup ?? {};
+
+    this.customPopupOptions = customPopupOptions;
+
+    const defaultPopupConfig = {
       height: 'auto',
       maxHeight: '90%',
       showCloseButton: false,
@@ -101,8 +109,13 @@ export class AppointmentPopup {
       preventScrollEvents: false,
       enableBodyScroll: false,
       _ignorePreventScrollEventsDeprecation: true,
-      onHiding: (): void => {
+      onInitialized: (e): void => {
+        this._popup = e.component;
+        customPopupOptions?.onInitialized?.(e);
+      },
+      onHiding: (e): void => {
         this.scheduler.focus();
+        customPopupOptions?.onHiding?.(e);
       },
       contentTemplate: (): dxElementWrapper => {
         this.form.create({
@@ -113,9 +126,18 @@ export class AppointmentPopup {
 
         return this.form.dxForm.$element();
       },
-      onShowing: (e): void => this._onShowing(e),
+      onShowing: (e): void => {
+        this._onShowing(e);
+        customPopupOptions?.onShowing?.(e);
+      },
       wrapperAttr: { class: APPOINTMENT_POPUP_CLASS },
     };
+
+    return extend(true, {}, defaultPopupConfig, customPopupOptions, {
+      onInitialized: defaultPopupConfig.onInitialized,
+      onHiding: defaultPopupConfig.onHiding,
+      onShowing: defaultPopupConfig.onShowing,
+    }) as PopupProperties;
   }
 
   _onShowing(e) {
@@ -138,7 +160,6 @@ export class AppointmentPopup {
       if (canceled) {
         e.cancel = true;
       } else {
-        this.updateToolbarForMainGroup();
         this.updatePopupFullScreenMode();
       }
     });
@@ -164,8 +185,6 @@ export class AppointmentPopup {
   }
 
   _updateForm(): void {
-    this.form.showMainGroup(false);
-
     const rawAppointment = this.state.appointment.data;
     const appointmentAdapter = this._createAppointmentAdapter(rawAppointment)
       .clone()
@@ -173,8 +192,10 @@ export class AppointmentPopup {
 
     const formData = this._createFormData(appointmentAdapter);
 
-    this.form.formData = formData;
     this.form.readOnly = this._isReadOnly(appointmentAdapter);
+    this.form.formData = formData;
+
+    this.form.showMainGroup();
   }
 
   _createFormData(appointmentAdapter: AppointmentAdapter): Record<string, any> {
@@ -200,6 +221,16 @@ export class AppointmentPopup {
     }
   }
 
+  getMaxWidth(): number | string {
+    if (this.customPopupOptions?.maxWidth !== undefined) {
+      return this.customPopupOptions.maxWidth;
+    }
+    if (this.customPopupOptions?.width !== undefined) {
+      return this.customPopupOptions.width;
+    }
+    return isFluent(current()) ? 380 : 420;
+  }
+
   updatePopupFullScreenMode(): void {
     if (this.visible) {
       const isPopupFullScreenNeeded = () => {
@@ -210,14 +241,21 @@ export class AppointmentPopup {
       };
 
       const isFullScreen = isPopupFullScreenNeeded();
-      const maxWidth = isFluent(current()) ? 380 : 420;
 
       this.popup.option('fullScreen', isFullScreen);
+
+      if (this.customPopupOptions?.width !== undefined) {
+        this.popup.option('width', this.customPopupOptions.width);
+      }
+
+      const maxWidth = this.getMaxWidth();
       this.popup.option('maxWidth', isFullScreen ? '100%' : maxWidth);
     }
   }
 
   saveChangesAsync(isShowLoadPanel) {
+    this.form.saveRecurrenceValue();
+
     // @ts-expect-error
     const deferred = new Deferred();
     const validation = this.form.dxForm.validate();
@@ -355,59 +393,19 @@ export class AppointmentPopup {
       : clonedDate;
   }
 
-  updateToolbarForRecurrenceGroup(): void {
-    const toolbarItems: ToolbarItem[] = [
-      {
-        toolbar: 'top',
-        location: 'before',
-        widget: 'dxButton',
-        options: {
-          icon: 'arrowleft',
-          stylingMode: 'text',
-          onClick: (): void => {
-            this.form.showMainGroup();
-          },
-        },
-      },
-      {
-        toolbar: 'top',
-        location: 'before',
-        text: messageLocalization.format('dxScheduler-editorLabelRecurrence'),
-        cssClass: 'dx-toolbar-label',
-      },
-      {
-        toolbar: 'top',
-        location: 'after',
-        widget: 'dxButton',
-        options: {
-          text: messageLocalization.format('dxScheduler-editPopupSaveButtonText'),
-          stylingMode: 'contained',
-          type: 'default',
-          onClick: (e): void => {
-            this.form.showMainGroup();
-            e.cancel = true;
-            this.saveEditDataAsync();
-          },
-        },
-      },
-      {
-        toolbar: 'top',
-        location: 'after',
-        widget: 'dxButton',
-        options: {
-          text: messageLocalization.format('Cancel'),
-          stylingMode: 'outlined',
-          onClick: (): void => {
-            this.hide();
-          },
-        },
-      },
-    ];
-
-    this.popup.option('toolbarItems', toolbarItems);
+  private tryApplyCustomToolbarItems(): boolean {
+    if (this.customPopupOptions?.toolbarItems) {
+      this.popup.option('toolbarItems', this.customPopupOptions.toolbarItems);
+      return true;
+    }
+    return false;
   }
 
   updateToolbarForMainGroup(): void {
+    if (this.tryApplyCustomToolbarItems()) {
+      return;
+    }
+
     const isCreating = this.state.action === ACTION_TO_APPOINTMENT.CREATE;
     const formTitleKey = isCreating ? 'dxScheduler-newPopupTitle' : 'dxScheduler-editPopupTitle';
 
@@ -433,6 +431,60 @@ export class AppointmentPopup {
           shortcut: 'done',
         } as ToolbarItem,
       );
+    }
+
+    toolbarItems.push({
+      toolbar: 'top',
+      location: 'after',
+      shortcut: 'cancel',
+      options: {
+        stylingMode: 'outlined',
+      },
+    } as ToolbarItem);
+
+    this.popup.option('toolbarItems', toolbarItems);
+  }
+
+  updateToolbarForRecurrenceGroup(): void {
+    if (this.tryApplyCustomToolbarItems()) {
+      return;
+    }
+
+    const toolbarItems: ToolbarItem[] = [
+      {
+        toolbar: 'top',
+        location: 'before',
+        widget: 'dxButton',
+        options: {
+          icon: 'arrowleft',
+          stylingMode: 'text',
+          onClick: (): void => {
+            this.form.saveRecurrenceValue();
+            this.form.showMainGroup();
+          },
+        },
+      },
+      {
+        toolbar: 'top',
+        location: 'before',
+        text: messageLocalization.format('dxScheduler-editorLabelRecurrence'),
+        cssClass: 'dx-toolbar-label',
+      },
+    ];
+
+    const canSave = !this.form.readOnly;
+    if (canSave) {
+      toolbarItems.push({
+        toolbar: 'top',
+        location: 'after',
+        options: {
+          onClick: (e) => this._saveButtonClickHandler(e),
+          stylingMode: 'contained',
+          type: 'default',
+          text: messageLocalization.format('dxScheduler-editPopupSaveButtonText'),
+        },
+        shortcut: 'done',
+      } as ToolbarItem);
     }
 
     toolbarItems.push({

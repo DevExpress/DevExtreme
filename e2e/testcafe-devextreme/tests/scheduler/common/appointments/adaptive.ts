@@ -2,6 +2,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Appointments with adaptive`
   .page(url(__dirname, '../../../container.html'));
@@ -14,7 +15,12 @@ const MOBILE_SIZE: [width: number, height: number] = [500, 700];
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
-    await takeScreenshot(`adaptive_appts_view-${view}.png`, scheduler.workSpace);
+    await testScreenshot(
+      t,
+      takeScreenshot,
+      `adaptive_appts_view-${view}.png`,
+      { element: scheduler.workSpace },
+    );
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
@@ -81,7 +87,12 @@ test.meta({ browserSize: MOBILE_SIZE })('should correctly render long appointmen
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
-  await takeScreenshot('adaptive_long-appts-without-all-day-panel_view-week.png', scheduler.workSpace);
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'adaptive_long-appts-without-all-day-panel_view-week.png',
+    { element: scheduler.workSpace },
+  );
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

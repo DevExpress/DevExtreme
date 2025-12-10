@@ -26,11 +26,10 @@ import dxScheduler from 'devextreme/ui/scheduler';
 import dxSortable from 'devextreme/ui/sortable';
 import dxDraggable from 'devextreme/ui/draggable';
 import DataSource from 'devextreme/data/data_source';
-import { AllDayPanelMode, ViewType, dxSchedulerAppointment, AppointmentFormIconsShowMode, CellAppointmentsLimit, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, RecurrenceEditMode, dxSchedulerScrolling, dxSchedulerToolbar } from 'devextreme/ui/scheduler';
+import { AllDayPanelMode, ViewType, dxSchedulerAppointment, AppointmentFormProperties, CellAppointmentsLimit, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, RecurrenceEditMode, dxSchedulerScrolling, dxSchedulerToolbar } from 'devextreme/ui/scheduler';
 import { event } from 'devextreme/events/events.types';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
-import { dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
 import { FirstDayOfWeek, Orientation } from 'devextreme/common';
 
 import DxScheduler from 'devextreme/ui/scheduler';
@@ -53,7 +52,7 @@ import { DxiResourceModule } from 'devextreme-angular/ui/nested';
 import { DxoScrollingModule } from 'devextreme-angular/ui/nested';
 import { DxiViewModule } from 'devextreme-angular/ui/nested';
 
-import { DxoSchedulerAiOptionsModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxoSchedulerAIOptionsModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxoSchedulerAppointmentDraggingModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxiSchedulerAsyncRuleModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxiSchedulerButtonItemModule } from 'devextreme-angular/ui/scheduler/nested';
@@ -393,10 +392,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get editing(): boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: undefined | { iconsShowMode?: AppointmentFormIconsShowMode, items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, onCanceled?: ((formData: any) => void), onSaved?: ((formData: any) => void) } } {
+    get editing(): boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: AppointmentFormProperties, popup?: Record<string, any> } {
         return this._getOption('editing');
     }
-    set editing(value: boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: undefined | { iconsShowMode?: AppointmentFormIconsShowMode, items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, onCanceled?: ((formData: any) => void), onSaved?: ((formData: any) => void) } }) {
+    set editing(value: boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: AppointmentFormProperties, popup?: Record<string, any> }) {
         this._setOption('editing', value);
     }
 
@@ -1202,7 +1201,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() editingChange: EventEmitter<boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: undefined | { iconsShowMode?: AppointmentFormIconsShowMode, items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, onCanceled?: ((formData: any) => void), onSaved?: ((formData: any) => void) } }>;
+    @Output() editingChange: EventEmitter<boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: AppointmentFormProperties, popup?: Record<string, any> }>;
 
     /**
     
@@ -1635,7 +1634,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     DxiResourceModule,
     DxoScrollingModule,
     DxiViewModule,
-    DxoSchedulerAiOptionsModule,
+    DxoSchedulerAIOptionsModule,
     DxoSchedulerAppointmentDraggingModule,
     DxiSchedulerAsyncRuleModule,
     DxiSchedulerButtonItemModule,
@@ -1678,7 +1677,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     DxiResourceModule,
     DxoScrollingModule,
     DxiViewModule,
-    DxoSchedulerAiOptionsModule,
+    DxoSchedulerAIOptionsModule,
     DxoSchedulerAppointmentDraggingModule,
     DxiSchedulerAsyncRuleModule,
     DxiSchedulerButtonItemModule,

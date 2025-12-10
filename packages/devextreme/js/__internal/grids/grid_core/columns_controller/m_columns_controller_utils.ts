@@ -879,7 +879,18 @@ export const mergeColumns = (that: ColumnsController, columns, commandColumns, n
     commandColumnIndex = column && (column.type || column.command) ? getCommandColumnIndex(column) : -1;
     if (commandColumnIndex >= 0) {
       if (needToExtend) {
-        result[i] = extend({ fixed: isColumnFixing }, commandColumns[commandColumnIndex], column);
+        result[i] = extend(
+          { fixed: isColumnFixing },
+          commandColumns[commandColumnIndex],
+          column,
+          {
+            calculateCellValue: commandColumns[commandColumnIndex].calculateCellValue,
+            cssClass: [
+              commandColumns[commandColumnIndex].cssClass ?? '',
+              column.cssClass ?? '',
+            ].join(' ').trim(),
+          },
+        );
         if (column.type !== GROUP_COMMAND_COLUMN_NAME) {
           defaultCommandColumns = defaultCommandColumns.filter(callbackFilter);
         }
@@ -904,7 +915,15 @@ export const mergeColumns = (that: ColumnsController, columns, commandColumns, n
   return result;
 };
 
-export const isColumnFixed = (that: ColumnsController, column) => (isDefined(column.fixed) || !column.type ? column.fixed && column.fixedPosition !== StickyPosition.Sticky : that._isColumnFixing());
+export const isColumnFixed = (that: ColumnsController, column) => {
+  const isFixedCommandColumn = column.type && column.type !== AI_COLUMN_NAME;
+
+  if (!isFixedCommandColumn) {
+    return column.fixed && column.fixedPosition !== StickyPosition.Sticky;
+  }
+
+  return that._isColumnFixing();
+};
 
 export const convertOwnerBandToColumnReference = (columns) => {
   columns.forEach((column) => {

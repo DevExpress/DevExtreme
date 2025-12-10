@@ -2,6 +2,7 @@ import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { extend } from 'devextreme/core/utils/extend';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
@@ -13,15 +14,15 @@ test('Drag-n-drop appointment above SVG element(T1017720)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const draggableAppointment = scheduler.getAppointment('text');
 
+  await t.drag(draggableAppointment.element, 330, 0);
+
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-to-right(T1017720).png', { element: scheduler.workSpace });
+
+  await t.drag(draggableAppointment.element, -330, 70);
+
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-to-left(T1017720).png', { element: scheduler.workSpace });
+
   await t
-    .drag(draggableAppointment.element, 330, 0)
-    .expect(await takeScreenshot('drag-n-drop-to-right(T1017720).png', scheduler.workSpace))
-    .ok()
-
-    .drag(draggableAppointment.element, -330, 70)
-    .expect(await takeScreenshot('drag-n-drop-to-left(T1017720).png', scheduler.workSpace))
-    .ok()
-
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {

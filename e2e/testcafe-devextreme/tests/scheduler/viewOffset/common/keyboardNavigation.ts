@@ -3,6 +3,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import asyncForEach from '../../../../helpers/asyncForEach';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Offset: Keyboard navigation`
   .page(url(__dirname, '../../../container.html'));
@@ -41,10 +42,7 @@ const KEYBOARD_ACTIONS = {
         await t.pressKey(key);
       });
 
-      await takeScreenshot(
-        `offset_keyboard_${view}_offset-${offset}.png`,
-        scheduler.workSpace,
-      );
+      await testScreenshot(t, takeScreenshot, `offset_keyboard_${view}_offset-${offset}.png`, { element: scheduler.workSpace });
 
       await t.expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
@@ -70,10 +68,7 @@ const KEYBOARD_ACTIONS = {
       .pressKey('right')
       .pressKey('left');
 
-    await takeScreenshot(
-      `offset_keyboard_week-all-day_offset-${offset}.png`,
-      scheduler.workSpace,
-    );
+    await testScreenshot(t, takeScreenshot, `offset_keyboard_week-all-day_offset-${offset}.png`, { element: scheduler.workSpace });
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());

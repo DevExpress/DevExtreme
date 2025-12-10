@@ -1,32 +1,32 @@
 <dx-chart id="chart" [dataSource]="data">
-  <dxo-title text="Life Expectancy vs. Birth Rates"></dxo-title>
-  <dxo-zoom-and-pan
+  <dxo-chart-title text="Life Expectancy vs. Birth Rates"></dxo-chart-title>
+  <dxo-chart-zoom-and-pan
     valueAxis="both"
     argumentAxis="both"
     [dragToZoom]="true"
     [allowMouseWheel]="true"
     panKey="shift"
-  ></dxo-zoom-and-pan>
-  <dxo-common-series-settings
+  ></dxo-chart-zoom-and-pan>
+  <dxo-chart-common-series-settings
     type="scatter"
     argumentField="life_exp"
     valueField="birth_rate"
   >
-    <dxo-point [size]="8"></dxo-point>
-  </dxo-common-series-settings>
-  <dxo-series-template nameField="year"></dxo-series-template>
-  <dxo-crosshair [enabled]="true">
-    <dxo-label [visible]="true"></dxo-label>
-  </dxo-crosshair>
-  <dxo-tooltip
+    <dxo-chart-point [size]="8"></dxo-chart-point>
+  </dxo-chart-common-series-settings>
+  <dxo-chart-series-template nameField="year"></dxo-chart-series-template>
+  <dxo-chart-crosshair [enabled]="true">
+    <dxo-chart-label [visible]="true"></dxo-chart-label>
+  </dxo-chart-crosshair>
+  <dxo-chart-tooltip
     [enabled]="true"
     [customizeTooltip]="customizeTooltip"
-  ></dxo-tooltip>
-  <dxo-argument-axis title="Life Expectancy"> </dxo-argument-axis>
-  <dxi-value-axis title="Birth Rate"> </dxi-value-axis>
-  <dxo-legend position="inside">
-    <dxo-border [visible]="true"></dxo-border>
-  </dxo-legend>
+  ></dxo-chart-tooltip>
+  <dxo-chart-argument-axis title="Life Expectancy"> </dxo-chart-argument-axis>
+  <dxi-chart-value-axis title="Birth Rate"> </dxi-chart-value-axis>
+  <dxo-chart-legend position="inside">
+    <dxo-chart-border [visible]="true"></dxo-chart-border>
+  </dxo-chart-legend>
 </dx-chart>
 <dx-button
   id="reset-zoom"

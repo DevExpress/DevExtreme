@@ -54,7 +54,6 @@ import {
  TreeListFilterMode,
  AdaptiveDetailRowPreparingEvent,
  AIColumnRequestCreatingEvent,
- AIColumnResponseReceivedEvent,
  CellClickEvent,
  CellDblClickEvent,
  CellHoverChangedEvent,
@@ -297,7 +296,6 @@ type AccessibleOptions = Pick<Properties,
   "noDataText" |
   "onAdaptiveDetailRowPreparing" |
   "onAIColumnRequestCreating" |
-  "onAIColumnResponseReceived" |
   "onCellClick" |
   "onCellDblClick" |
   "onCellHoverChanged" |
@@ -424,7 +422,6 @@ const componentConfig = {
     noDataText: String,
     onAdaptiveDetailRowPreparing: Function as PropType<((e: AdaptiveDetailRowPreparingEvent) => void)>,
     onAIColumnRequestCreating: Function as PropType<((e: AIColumnRequestCreatingEvent) => void)>,
-    onAIColumnResponseReceived: Function as PropType<((e: AIColumnResponseReceivedEvent) => void)>,
     onCellClick: Function as PropType<((e: CellClickEvent) => void)>,
     onCellDblClick: Function as PropType<((e: CellDblClickEvent) => void)>,
     onCellHoverChanged: Function as PropType<((e: CellHoverChangedEvent) => void)>,
@@ -547,7 +544,6 @@ const componentConfig = {
     "update:noDataText": null,
     "update:onAdaptiveDetailRowPreparing": null,
     "update:onAIColumnRequestCreating": null,
-    "update:onAIColumnResponseReceived": null,
     "update:onCellClick": null,
     "update:onCellDblClick": null,
     "update:onCellHoverChanged": null,
@@ -657,7 +653,7 @@ prepareComponentConfig(componentConfig);
 const DxTreeList = defineComponent(componentConfig);
 
 
-const DxAiConfig = {
+const DxAIConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -682,16 +678,16 @@ const DxAiConfig = {
   }
 };
 
-prepareConfigurationComponentConfig(DxAiConfig);
+prepareConfigurationComponentConfig(DxAIConfig);
 
-const DxAi = defineComponent(DxAiConfig);
+const DxAI = defineComponent(DxAIConfig);
 
-(DxAi as any).$_optionName = "ai";
-(DxAi as any).$_expectedChildren = {
+(DxAI as any).$_optionName = "ai";
+(DxAI as any).$_expectedChildren = {
   editorOptions: { isCollectionItem: false, optionName: "editorOptions" }
 };
 
-const DxAiOptionsConfig = {
+const DxAIOptionsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -704,11 +700,11 @@ const DxAiOptionsConfig = {
   }
 };
 
-prepareConfigurationComponentConfig(DxAiOptionsConfig);
+prepareConfigurationComponentConfig(DxAIOptionsConfig);
 
-const DxAiOptions = defineComponent(DxAiOptionsConfig);
+const DxAIOptions = defineComponent(DxAIOptionsConfig);
 
-(DxAiOptions as any).$_optionName = "aiOptions";
+(DxAIOptions as any).$_optionName = "aiOptions";
 
 const DxAnimationConfig = {
   emits: {
@@ -3676,8 +3672,8 @@ const DxValidationRule = defineComponent(DxValidationRuleConfig);
 export default DxTreeList;
 export {
   DxTreeList,
-  DxAi,
-  DxAiOptions,
+  DxAI,
+  DxAIOptions,
   DxAnimation,
   DxAsyncRule,
   DxAt,

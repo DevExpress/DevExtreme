@@ -105,6 +105,11 @@ $generic-fileuploader-file-wrapper-border-size: 3px;
   line-height: 13px;
 }
 
+.dx-fileuploader-file-icon {
+  color: $fileuploader-file-icon-color;
+  font-size: $generic-fileuploader-file-icon-font-size;
+}
+
 .dx-fileuploader-file-name {
   padding-bottom: math.div($generic-fileuploader-vertical-padding, 2);
   color: $fileuploader-filename-color;

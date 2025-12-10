@@ -81,7 +81,6 @@ import {
     SummaryType,
     ToolbarPreparingInfo,
     AIColumnRequestCreatingInfo,
-    AIColumnResponseReceivedInfo,
 } from '../common/grids';
 
 export {
@@ -555,7 +554,7 @@ export type EditorPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGr
   /** @docid _ui_data_grid_EditorPreparedEvent.setValue */
   readonly setValue?: any;
   /** @docid _ui_data_grid_EditorPreparedEvent.updateValueTimeout */
-  readonly updateValueTimeout?: number;
+  updateValueTimeout?: number;
   /** @docid _ui_data_grid_EditorPreparedEvent.width */
   readonly width?: number;
   /** @docid _ui_data_grid_EditorPreparedEvent.disabled */
@@ -589,7 +588,7 @@ export type EditorPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxDataG
   /** @docid _ui_data_grid_EditorPreparingEvent.setValue */
   readonly setValue?: any;
   /** @docid _ui_data_grid_EditorPreparingEvent.updateValueTimeout */
-  readonly updateValueTimeout?: number;
+  updateValueTimeout?: number;
   /** @docid _ui_data_grid_EditorPreparingEvent.width */
   readonly width?: number;
   /** @docid _ui_data_grid_EditorPreparingEvent.disabled */
@@ -1061,14 +1060,6 @@ export type ColumnButtonClickEvent<TRowData = any, TKey = any> = NativeEventInfo
  */
 export type AIColumnRequestCreatingEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & AIColumnRequestCreatingInfo<TRowData>;
 
-/**
- * @docid _ui_data_grid_AIColumnResponseReceivedEvent
- * @public
- * @type object
- * @inherits EventInfo,AIColumnResponseReceivedInfo
- */
-export type AIColumnResponseReceivedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & AIColumnResponseReceivedInfo;
-
 /** @public */
 export type ColumnButtonTemplateData<TRowData = any, TKey = any> = {
   readonly component: dxDataGrid<TRowData, TKey>;
@@ -1462,14 +1453,6 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
      * @public
      */
     onAIColumnRequestCreating?: ((e: AIColumnRequestCreatingEvent) => void);
-    /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/data_grid:AIColumnResponseReceivedEvent}
-     * @action
-     * @public
-     */
-    onAIColumnResponseReceived?: ((e: AIColumnResponseReceivedEvent) => void);
 };
 
 /**
@@ -2560,7 +2543,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onAIColumnRequestCreating' | 'onAIColumnResponseReceived' | 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onExporting' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onAIColumnRequestCreating' | 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onExporting' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared'>;
 
 /**
 * @hidden

@@ -29,7 +29,7 @@ import dxSortable from 'devextreme/ui/sortable';
 import dxDraggable from 'devextreme/ui/draggable';
 import { AIIntegration } from 'devextreme/common/ai-integration';
 import { ColumnChooser, ColumnResizeMode, DataChange, GridsEditMode, NewRowPosition, GridsEditRefreshMode, StartEditAction, FilterPanel, ApplyFilterMode, GroupExpandMode, HeaderFilter, EnterKeyAction, EnterKeyDirection, Pager, GridBase, DataRenderMode, SearchPanel, SelectionColumnDisplayMode, Sorting, StateStoreType, SummaryType } from 'devextreme/common/grids';
-import { dxDataGridColumn, dxDataGridRowObject, DataGridExportFormat, AdaptiveDetailRowPreparingEvent, AIColumnRequestCreatingEvent, AIColumnResponseReceivedEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent, DataGridScrollMode, SelectionSensitivity, dxDataGridToolbar } from 'devextreme/ui/data_grid';
+import { dxDataGridColumn, dxDataGridRowObject, DataGridExportFormat, AdaptiveDetailRowPreparingEvent, AIColumnRequestCreatingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent, DataGridScrollMode, SelectionSensitivity, dxDataGridToolbar } from 'devextreme/ui/data_grid';
 import { Mode, DragDirection, DragHighlight, ScrollbarMode, SingleMultipleOrNone, SelectAllMode, SortOrder, HorizontalAlignment } from 'devextreme/common';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
@@ -119,8 +119,8 @@ import { DxoValueFormatModule } from 'devextreme-angular/ui/nested';
 import { DxiTotalItemModule } from 'devextreme-angular/ui/nested';
 import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
 
-import { DxoDataGridAiModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridAiOptionsModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridAIModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridAIOptionsModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridAnimationModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxiDataGridAsyncRuleModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridAtModule } from 'devextreme-angular/ui/data-grid/nested';
@@ -1311,14 +1311,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
     
-     * [descr:dxDataGridOptions.onAIColumnResponseReceived]
-    
-    
-     */
-    @Output() onAIColumnResponseReceived: EventEmitter<AIColumnResponseReceivedEvent>;
-
-    /**
-    
      * [descr:dxDataGridOptions.onCellClick]
     
     
@@ -2184,7 +2176,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
         this._createEventEmitters([
             { subscribe: 'adaptiveDetailRowPreparing', emit: 'onAdaptiveDetailRowPreparing' },
             { subscribe: 'aIColumnRequestCreating', emit: 'onAIColumnRequestCreating' },
-            { subscribe: 'aIColumnResponseReceived', emit: 'onAIColumnResponseReceived' },
             { subscribe: 'cellClick', emit: 'onCellClick' },
             { subscribe: 'cellDblClick', emit: 'onCellDblClick' },
             { subscribe: 'cellHoverChanged', emit: 'onCellHoverChanged' },
@@ -2424,8 +2415,8 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoValueFormatModule,
     DxiTotalItemModule,
     DxoToolbarModule,
-    DxoDataGridAiModule,
-    DxoDataGridAiOptionsModule,
+    DxoDataGridAIModule,
+    DxoDataGridAIOptionsModule,
     DxoDataGridAnimationModule,
     DxiDataGridAsyncRuleModule,
     DxoDataGridAtModule,
@@ -2587,8 +2578,8 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoValueFormatModule,
     DxiTotalItemModule,
     DxoToolbarModule,
-    DxoDataGridAiModule,
-    DxoDataGridAiOptionsModule,
+    DxoDataGridAIModule,
+    DxoDataGridAIOptionsModule,
     DxoDataGridAnimationModule,
     DxiDataGridAsyncRuleModule,
     DxoDataGridAtModule,

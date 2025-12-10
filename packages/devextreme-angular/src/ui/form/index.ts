@@ -48,7 +48,7 @@ import { DxoTabPanelOptionsModule } from 'devextreme-angular/ui/nested';
 import { DxiTabModule } from 'devextreme-angular/ui/nested';
 import { DxoButtonOptionsModule } from 'devextreme-angular/ui/nested';
 
-import { DxoFormAiOptionsModule } from 'devextreme-angular/ui/form/nested';
+import { DxoFormAIOptionsModule } from 'devextreme-angular/ui/form/nested';
 import { DxiFormAsyncRuleModule } from 'devextreme-angular/ui/form/nested';
 import { DxiFormButtonItemModule } from 'devextreme-angular/ui/form/nested';
 import { DxoFormButtonOptionsModule } from 'devextreme-angular/ui/form/nested';
@@ -984,7 +984,7 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     DxoTabPanelOptionsModule,
     DxiTabModule,
     DxoButtonOptionsModule,
-    DxoFormAiOptionsModule,
+    DxoFormAIOptionsModule,
     DxiFormAsyncRuleModule,
     DxiFormButtonItemModule,
     DxoFormButtonOptionsModule,
@@ -1019,7 +1019,7 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     DxoTabPanelOptionsModule,
     DxiTabModule,
     DxoButtonOptionsModule,
-    DxoFormAiOptionsModule,
+    DxoFormAIOptionsModule,
     DxiFormAsyncRuleModule,
     DxiFormButtonItemModule,
     DxoFormButtonOptionsModule,

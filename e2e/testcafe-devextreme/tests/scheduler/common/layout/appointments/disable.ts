@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Layout:Appointments:disable`
   .page(url(__dirname, '../../../../container.html'));
@@ -11,29 +12,37 @@ test('Appointment popup should be readOnly if appointment is disabled', async (t
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const { appointmentPopup } = scheduler;
 
-  await t.expect(await takeScreenshot('disabled-appointments-in-grid.png')).ok();
+  await testScreenshot(t, takeScreenshot, 'disabled-appointments-in-grid.png');
 
   await t.click(scheduler.getAppointment('A', 0).element)
-    .click(scheduler.appointmentTooltip.getListItem('A').element)
-    .expect(await takeScreenshot('disabled-appointment.png', appointmentPopup.contentElement)).ok();
+    .click(scheduler.appointmentTooltip.getListItem('A').element);
+
+  await testScreenshot(t, takeScreenshot, 'disabled-appointment.png', { element: appointmentPopup.contentElement });
 
   await t.click(appointmentPopup.cancelButton.element);
 
   await t.click(scheduler.getAppointment('B').element)
-    .click(scheduler.appointmentTooltip.getListItem('B').element)
-    .expect(await takeScreenshot('enabled-appointment.png', appointmentPopup.contentElement)).ok();
+    .click(scheduler.appointmentTooltip.getListItem('B').element);
+
+  await testScreenshot(t, takeScreenshot, 'enabled-appointment.png', { element: appointmentPopup.contentElement });
 
   await t.click(appointmentPopup.cancelButton.element);
 
   await t.click(scheduler.getAppointment('C').element)
-    .click(scheduler.appointmentTooltip.getListItem('C').element)
-    .expect(await takeScreenshot('disabled-by-function-appointment.png', appointmentPopup.contentElement)).ok();
+    .click(scheduler.appointmentTooltip.getListItem('C').element);
+
+  await testScreenshot(t, takeScreenshot, 'disabled-by-function-appointment.png', {
+    element: appointmentPopup.contentElement,
+  });
 
   await t.click(appointmentPopup.cancelButton.element);
 
   await t.click(scheduler.getAppointment('D').element)
-    .click(scheduler.appointmentTooltip.getListItem('D').element)
-    .expect(await takeScreenshot('enabled-by-function-appointment.png', appointmentPopup.contentElement)).ok();
+    .click(scheduler.appointmentTooltip.getListItem('D').element);
+
+  await testScreenshot(t, takeScreenshot, 'enabled-by-function-appointment.png', {
+    element: appointmentPopup.contentElement,
+  });
 
   await t.click(appointmentPopup.cancelButton.element);
 

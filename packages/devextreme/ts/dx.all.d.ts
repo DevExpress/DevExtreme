@@ -993,11 +993,21 @@ declare module DevExpress.aiIntegration {
     additionalInfo?: Record<PropertyKey, unknown>;
   };
   /**
+   * [descr:GenerateGridColumnCommandResponse]
+   */
+  export type GenerateGridColumnCommandResponse =
+    | string
+    | {
+        /**
+         * [descr:GenerateGridColumnCommandResponse.data]
+         */
+        data: string | Record<PropertyKey, string>;
+      };
+  /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type GenerateGridColumnCommandResult = {
     data: Record<PropertyKey, string>;
-    additionalInfo?: Record<PropertyKey, unknown>;
   };
   /**
    * [descr:Prompt]
@@ -4529,6 +4539,7 @@ declare module DevExpress.common.grids {
   export type AIColumnMode = 'auto' | 'manual';
   /**
    * [descr:AIColumnRequestCreatingInfo]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type AIColumnRequestCreatingInfo<TRowData = any> = {
     /**
@@ -4538,7 +4549,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:AIColumnRequestCreatingInfo.data]
      */
-    readonly data: TRowData[];
+    data: TRowData[];
     /**
      * [descr:AIColumnRequestCreatingInfo.cancel]
      */
@@ -4551,27 +4562,6 @@ declare module DevExpress.common.grids {
      * [descr:AIColumnRequestCreatingInfo.useCache]
      */
     useCache?: boolean;
-  };
-  /**
-   * [descr:AIColumnResponseReceivedInfo]
-   */
-  export type AIColumnResponseReceivedInfo = {
-    /**
-     * [descr:AIColumnResponseReceivedInfo.column]
-     */
-    readonly column: ColumnBase;
-    /**
-     * [descr:AIColumnResponseReceivedInfo.error]
-     */
-    error?: string;
-    /**
-     * [descr:AIColumnResponseReceivedInfo.data]
-     */
-    data: any[];
-    /**
-     * [descr:AIColumnResponseReceivedInfo.additionalInfo]
-     */
-    additionalInfo?: Record<string, any>;
   };
   export type ApplyChangesMode = 'instantly' | 'onDemand';
   export type ApplyFilterMode = 'auto' | 'onClick';
@@ -10410,31 +10400,6 @@ declare module DevExpress.ui {
         key: TKey;
       };
     /**
-     * [descr:_ui_card_view_CardSavedEvent]
-     */
-    export type CardSavedEvent =
-      DevExpress.common.core.events.EventInfo<dxCardView> & {
-        /**
-         * [descr:_ui_card_view_CardSavedEvent.changes]
-         */
-        changes: DevExpress.common.grids.DataChange[];
-      };
-    /**
-     * [descr:_ui_card_view_CardSavingEvent]
-     */
-    export type CardSavingEvent =
-      DevExpress.common.core.events.EventInfo<dxCardView> &
-        DevExpress.common.core.events.Cancelable & {
-          /**
-           * [descr:_ui_card_view_CardSavingEvent.promise]
-           */
-          promise?: PromiseLike<void>;
-          /**
-           * [descr:_ui_card_view_CardSavingEvent.changes]
-           */
-          changes: DevExpress.common.grids.DataChange[];
-        };
-    /**
      * [descr:CardTemplateData]
      */
     export type CardTemplateData = {
@@ -10677,6 +10642,14 @@ declare module DevExpress.ui {
          */
         promise?: PromiseLike<void>;
       };
+    /**
+     * [descr:_ui_card_view_OptionChangedEvent]
+     */
+    export type OptionChangedEvent<
+      TCardData = unknown,
+      TKey = unknown
+    > = DevExpress.common.core.events.EventInfo<dxCardView<TCardData, TKey>> &
+      DevExpress.common.core.events.ChangedOptionInfo;
 
     export type PredefinedToolbarItem =
       | 'columnChooserButton'
@@ -10688,6 +10661,31 @@ declare module DevExpress.ui {
       TCardData = unknown,
       TKey = unknown
     > = dxCardViewOptions<TCardData, TKey>;
+    /**
+     * [descr:_ui_card_view_SavedEvent]
+     */
+    export type SavedEvent =
+      DevExpress.common.core.events.EventInfo<dxCardView> & {
+        /**
+         * [descr:_ui_card_view_SavedEvent.changes]
+         */
+        changes: DevExpress.common.grids.DataChange[];
+      };
+    /**
+     * [descr:_ui_card_view_SavingEvent]
+     */
+    export type SavingEvent =
+      DevExpress.common.core.events.EventInfo<dxCardView> &
+        DevExpress.common.core.events.Cancelable & {
+          /**
+           * [descr:_ui_card_view_SavingEvent.promise]
+           */
+          promise?: PromiseLike<void>;
+          /**
+           * [descr:_ui_card_view_SavingEvent.changes]
+           */
+          changes: DevExpress.common.grids.DataChange[];
+        };
     /**
      * [descr:_ui_card_view_SelectionChangedEvent]
      */
@@ -10798,7 +10796,7 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxCardViewOptions]
    */
   export interface dxCardViewOptions<TCardData = unknown, TKey = unknown>
-    extends WidgetOptions<dxCardView> {
+    extends Omit<WidgetOptions<dxCardView>, 'onOptionChanged'> {
     /**
      * [descr:dxCardViewOptions.dataSource]
      */
@@ -11092,13 +11090,17 @@ declare module DevExpress.ui {
      */
     onCardUpdating?: (e: DevExpress.ui.dxCardView.CardUpdatingEvent) => void;
     /**
-     * [descr:dxCardViewOptions.onCardSaved]
+     * [descr:dxCardViewOptions.onOptionChanged]
      */
-    onCardSaved?: (e: DevExpress.ui.dxCardView.CardSavedEvent) => void;
+    onOptionChanged?: (e: DevExpress.ui.dxCardView.OptionChangedEvent) => void;
     /**
-     * [descr:dxCardViewOptions.onCardSaving]
+     * [descr:dxCardViewOptions.onSaved]
      */
-    onCardSaving?: (e: DevExpress.ui.dxCardView.CardSavingEvent) => void;
+    onSaved?: (e: DevExpress.ui.dxCardView.SavedEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onSaving]
+     */
+    onSaving?: (e: DevExpress.ui.dxCardView.SavingEvent) => void;
 
     /**
      * [descr:dxCardViewOptions.selectedCardKeys]
@@ -12174,14 +12176,6 @@ declare module DevExpress.ui {
     > = DevExpress.common.core.events.EventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.common.grids.AIColumnRequestCreatingInfo<TRowData>;
     /**
-     * [descr:_ui_data_grid_AIColumnResponseReceivedEvent]
-     */
-    export type AIColumnResponseReceivedEvent<
-      TRowData = any,
-      TKey = any
-    > = DevExpress.common.core.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-      DevExpress.common.grids.AIColumnResponseReceivedInfo;
-    /**
      * [descr:_ui_data_grid_CellClickEvent]
      */
     export type CellClickEvent<
@@ -12730,7 +12724,7 @@ declare module DevExpress.ui {
       /**
        * [descr:_ui_data_grid_EditorPreparedEvent.updateValueTimeout]
        */
-      readonly updateValueTimeout?: number;
+      updateValueTimeout?: number;
       /**
        * [descr:_ui_data_grid_EditorPreparedEvent.width]
        */
@@ -12782,7 +12776,7 @@ declare module DevExpress.ui {
       /**
        * [descr:_ui_data_grid_EditorPreparingEvent.updateValueTimeout]
        */
-      readonly updateValueTimeout?: number;
+      updateValueTimeout?: number;
       /**
        * [descr:_ui_data_grid_EditorPreparingEvent.width]
        */
@@ -14288,12 +14282,6 @@ declare module DevExpress.ui {
      */
     onAIColumnRequestCreating?: (
       e: DevExpress.ui.dxDataGrid.AIColumnRequestCreatingEvent
-    ) => void;
-    /**
-     * [descr:dxDataGridOptions.onAIColumnResponseReceived]
-     */
-    onAIColumnResponseReceived?: (
-      e: DevExpress.ui.dxDataGrid.AIColumnResponseReceivedEvent
     ) => void;
   };
   /**
@@ -18312,7 +18300,7 @@ declare module DevExpress.ui {
         /**
          * [descr:_ui_filter_builder_EditorPreparedEvent.updateValueTimeout]
          */
-        readonly updateValueTimeout?: number;
+        updateValueTimeout?: number;
         /**
          * [descr:_ui_filter_builder_EditorPreparedEvent.width]
          */
@@ -26065,6 +26053,15 @@ declare module DevExpress.ui {
           readonly popup: dxPopup;
         };
     /**
+     * [descr:AppointmentFormProperties]
+     */
+    export type AppointmentFormProperties = DevExpress.ui.dxForm.Properties & {
+      /**
+       * [descr:AppointmentFormProperties.iconsShowMode]
+       */
+      iconsShowMode?: AppointmentFormIconsShowMode;
+    };
+    /**
      * [descr:_ui_scheduler_AppointmentRenderedEvent]
      */
     export type AppointmentRenderedEvent =
@@ -26482,26 +26479,11 @@ declare module DevExpress.ui {
           /**
            * [descr:dxSchedulerOptions.editing.form]
            */
-          form?:
-            | {
-                /**
-                 * [descr:dxSchedulerOptions.editing.form.items]
-                 */
-                items?: Array<DevExpress.ui.dxForm.Item>;
-                /**
-                 * [descr:dxSchedulerOptions.editing.form.onSaved]
-                 */
-                onSaved?: (formData: any) => void;
-                /**
-                 * [descr:dxSchedulerOptions.editing.form.onCanceled]
-                 */
-                onCanceled?: (formData: any) => void;
-                /**
-                 * [descr:dxSchedulerOptions.editing.form.iconsShowMode]
-                 */
-                iconsShowMode?: DevExpress.ui.dxScheduler.AppointmentFormIconsShowMode;
-              }
-            | undefined;
+          form?: DevExpress.ui.dxScheduler.AppointmentFormProperties;
+          /**
+           * [descr:dxSchedulerOptions.editing.popup]
+           */
+          popup?: DevExpress.ui.dxPopup.Properties;
         };
     /**
      * [descr:dxSchedulerOptions.endDateExpr]
@@ -30601,14 +30583,6 @@ declare module DevExpress.ui {
     > = DevExpress.common.core.events.EventInfo<dxTreeList<TRowData, TKey>> &
       DevExpress.common.grids.AIColumnRequestCreatingInfo<TRowData>;
     /**
-     * [descr:_ui_tree_list_AIColumnResponseReceivedEvent]
-     */
-    export type AIColumnResponseReceivedEvent<
-      TRowData = any,
-      TKey = any
-    > = DevExpress.common.core.events.EventInfo<dxTreeList<TRowData, TKey>> &
-      DevExpress.common.grids.AIColumnResponseReceivedInfo;
-    /**
      * [descr:_ui_tree_list_CellClickEvent]
      */
     export type CellClickEvent<
@@ -30958,7 +30932,7 @@ declare module DevExpress.ui {
       /**
        * [descr:_ui_tree_list_EditorPreparedEvent.updateValueTimeout]
        */
-      readonly updateValueTimeout?: number;
+      updateValueTimeout?: number;
       /**
        * [descr:_ui_tree_list_EditorPreparedEvent.width]
        */
@@ -32123,12 +32097,6 @@ declare module DevExpress.ui {
      */
     onAIColumnRequestCreating?: (
       e: DevExpress.ui.dxTreeList.AIColumnRequestCreatingEvent
-    ) => void;
-    /**
-     * [descr:dxTreeListOptions.onAIColumnResponseReceived]
-     */
-    onAIColumnResponseReceived?: (
-      e: DevExpress.ui.dxTreeList.AIColumnResponseReceivedEvent
     ) => void;
   };
   /**

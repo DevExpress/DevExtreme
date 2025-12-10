@@ -1,3 +1,4 @@
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type dxForm from '@js/ui/form';
 import type dxPopup from '@js/ui/popup';
@@ -27,8 +28,26 @@ export class PopupModel {
     return this.element.querySelector('.dx-scheduler-form-recurrence-group');
   }
 
+  isMainGroupVisible(): boolean {
+    const group = this.mainGroup;
+    if (!group) return false;
+    const $group = $(group);
+    return !$group.hasClass('dx-scheduler-form-main-group-hidden');
+  }
+
+  isRecurrenceGroupVisible(): boolean {
+    const group = this.recurrenceGroup;
+    if (!group) return false;
+    const $group = $(group);
+    return !$group.hasClass('dx-scheduler-form-recurrence-group-hidden');
+  }
+
   get subjectIcon(): Element | null {
     return this.element.querySelector('.dx-scheduler-form-subject-group .dx-scheduler-form-icon .dx-icon');
+  }
+
+  get subjectInput(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-text-editor .dx-textbox.dx-widget');
   }
 
   get startDate(): Element | null {
@@ -57,6 +76,10 @@ export class PopupModel {
 
   get repeatEditor(): Element | null {
     return this.element.querySelector('.dx-scheduler-form-repeat-editor .dx-selectbox.dx-widget');
+  }
+
+  get descriptionTextArea(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-description-editor .dx-textarea.dx-widget');
   }
 
   get frequencyEditor(): Element | null {
@@ -118,6 +141,59 @@ export class PopupModel {
   get recurrenceYearlyGroup(): Element | null {
     return this.element.querySelector('.dx-scheduler-form-day-of-year-group');
   }
+
+  getInput = (editorName: string): dxElementWrapper => {
+    const editor = this.form.getEditor(editorName);
+
+    let $input: dxElementWrapper | undefined | null = null;
+
+    if (editorName === 'startDateTimeZoneEditor' || editorName === 'endDateTimeZoneEditor') {
+      $input = editor?.$element().find('input[type="hidden"]');
+    }
+
+    if (!$input?.length) {
+      $input = editor?.$element().find('.dx-texteditor-input');
+    }
+
+    if (!$input?.length) {
+      $input = editor?.$element().find('input');
+    }
+
+    if (!$input?.length) {
+      throw new Error(`Input element of editor with name "${editorName}" not found`);
+    }
+
+    return $input;
+  };
+
+  getInputValue = (editorName: string): string => {
+    const $input = this.getInput(editorName);
+    return $input.val() as unknown as string;
+  };
+
+  setInputValue = (editorName: string, value: string | number | Date | boolean | null): void => {
+    this.form.getEditor(editorName)?.option('value', value);
+  };
+
+  isInputVisible = (editorName: string): boolean => {
+    const editor = this.form.getEditor(editorName);
+
+    if (!editor) {
+      return false;
+    }
+
+    return editor.$element().is(':visible');
+  };
+
+  getWeekDaysSelection = (): boolean[] => {
+    const buttons = this.element.querySelectorAll('.dx-scheduler-days-of-week-buttons .dx-button');
+
+    if (buttons.length === 0) {
+      throw new Error('Week day buttons not found');
+    }
+
+    return Array.from(buttons).map((button) => button.classList.contains('dx-button-mode-contained'));
+  };
 
   getLabelIdByText = (labelText: string): string => {
     const labels = Array.from(this.element.querySelectorAll('label'));
@@ -217,7 +293,7 @@ export class PopupModel {
   getTitle = (): HTMLElement | null => document.querySelector('.dx-popup-title .dx-toolbar-label');
 
   getSaveButton = (): HTMLButtonElement => {
-    const saveButton = this.element.querySelector('.dx-button.dx-popup-done') as HTMLButtonElement;
+    const saveButton = this.element.querySelector('.dx-button[aria-label="Save"]') as HTMLButtonElement;
     if (!saveButton) {
       throw new Error('Done button not found');
     }
@@ -233,7 +309,7 @@ export class PopupModel {
   };
 
   getCancelButton = (): HTMLButtonElement => {
-    const cancelButton = this.element.querySelector('.dx-button.dx-popup-cancel') as HTMLButtonElement;
+    const cancelButton = this.element.querySelector('.dx-button[aria-label="Cancel"]') as HTMLButtonElement;
     if (!cancelButton) {
       throw new Error('Cancel button not found');
     }
@@ -262,6 +338,14 @@ export class PopupModel {
       throw new Error('Edit series button not found');
     }
     return editSeriesButton;
+  };
+
+  getEditAppointmentButton = (): HTMLElement => {
+    const editAppointmentButton = document.querySelector('[aria-label="Edit appointment"]') as HTMLElement;
+    if (!editAppointmentButton) {
+      throw new Error('Edit appointment button not found');
+    }
+    return editAppointmentButton;
   };
 
   openRecurrenceSettings = (): void => {
@@ -305,6 +389,7 @@ export class PopupModel {
 
     if (originalOnValueChanged) {
       originalOnValueChanged({
+        component: repeatEditor,
         value,
         previousValue,
         event: new Event('change'),

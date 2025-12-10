@@ -2,14 +2,13 @@ import $ from 'jquery';
 import renderer from 'core/renderer';
 import { noop } from 'core/utils/common';
 import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
-import animationFrame from 'common/core/animation/frame';
+import animationFrame from '__internal/common/core/animation/frameModule';
 import devices from '__internal/core/m_devices';
 import eventsEngine from 'common/core/events/core/events_engine';
-import messageLocalization from 'common/core/localization/message';
 import themes from 'ui/themes';
 import pointerMock from '../../helpers/pointerMock.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import 'ui/scroll_view';
 
 const SCROLLVIEW_CLASS = 'dx-scrollview';
@@ -36,6 +35,7 @@ const SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS = SCROLLVIEW_REACHBOTTOM_CLASS + '-
 
 const PULLDOWN_HEIGHT = 160;
 const SCROLL_INIT_EVENT = 'dxscrollinit';
+const DX_STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 
 const getScrollOffset = function($scrollView) {
     const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
@@ -55,15 +55,14 @@ devices.current('iPhone');
 const moduleConfig = {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
-        this._originalRequestAnimationFrame = animationFrame.requestAnimationFrame;
-        animationFrame.requestAnimationFrame = function(callback) {
+        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
             callback();
-        };
+        });
         return new Promise((resolve) => themes.initialized(resolve));
     },
     afterEach: function() {
         this.clock.restore();
-        animationFrame.requestAnimationFrame = this._originalRequestAnimationFrame;
+        this.requestAnimationFrameStub.restore();
     }
 };
 
@@ -142,10 +141,10 @@ QUnit.module('render', moduleConfig, () => {
         const pullDownText = $scrollView.find('.' + SCROLLVIEW_PULLDOWN_TEXT_CLASS);
         const scrollBottomText = $scrollView.find('.' + SCROLLVIEW_REACHBOTTOM_TEXT_CLASS);
 
-        assert.equal(pullDownText.children().eq(0).text(), messageLocalization.format('dxScrollView-pullingDownText'));
-        assert.equal(pullDownText.children().eq(1).text(), messageLocalization.format('dxScrollView-pulledDownText'));
-        assert.equal(pullDownText.children().eq(2).text(), messageLocalization.format('dxScrollView-refreshingText'));
-        assert.equal(scrollBottomText.text(), 'Loading...');
+        assert.equal(pullDownText.children().eq(0).text(), '');
+        assert.equal(pullDownText.children().eq(1).text(), '');
+        assert.equal(pullDownText.children().eq(2).text(), '');
+        assert.equal(scrollBottomText.text(), '');
     });
 
     QUnit.test('scrollView scrollbottom markup', function(assert) {
@@ -418,7 +417,7 @@ QUnit.module('actions', moduleConfig, () => {
 
         $scrollView.dxScrollView('option', 'onPullDown', noop);
 
-        assert.ok($scrollView.find('.' + SCROLLVIEW_PULLDOWN_CLASS).is(':visible'), 'pull down element is visible');
+        assert.strictEqual($scrollView.find(`.${SCROLLVIEW_PULLDOWN_CLASS}`).eq(0).hasClass(DX_STATE_INVISIBLE_CLASS), false, 'pull down element is visible');
     });
 
     QUnit.test('pullDown behavior turns off when pullDown is undefined', function(assert) {

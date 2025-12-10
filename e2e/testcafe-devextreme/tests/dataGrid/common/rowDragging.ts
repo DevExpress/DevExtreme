@@ -369,7 +369,7 @@ test('The cross-component drag and drop rows should not block rows', async (t) =
 
 test('Virtual rendering during auto scrolling should not cause errors in onDragChange', async (t) => {
   const dataGrid = new DataGrid('#container');
-  await t.drag(dataGrid.getDataRow(0).getDragCommand(), 0, 100, { speed: 0.01 });
+  await t.drag(dataGrid.getDataRow(0).getDragCommand(), 0, 100, { speed: 0.1 });
 
   const lastRow = dataGrid.getDataRow(9);
 
@@ -414,7 +414,7 @@ test('Virtual rendering during auto scrolling should not cause errors in onDragC
 // T1078513
 test('Headers should not be hidden during auto scrolling when virtual scrollling is specified', async (t) => {
   const dataGrid = new DataGrid('#container');
-  await t.drag(dataGrid.getDataRow(0).getDragCommand(), 0, 90, { speed: 0.01 });
+  await t.drag(dataGrid.getDataRow(0).getDragCommand(), 0, 90, { speed: 0.1 });
 
   const headerRow = dataGrid.getHeaders().getHeaderRow(0).element;
 
@@ -468,9 +468,9 @@ test('Headers should not be hidden during auto scrolling when virtual scrollling
 });
 
 // T1078513
-test('Footer should not be hidden during auto scrolling when virtual scrollling is specified', async (t) => {
+test.meta({ unstable: true })('Footer should not be hidden during auto scrolling when virtual scrollling is specified', async (t) => {
   const dataGrid = new DataGrid('#container');
-  await t.drag(dataGrid.getDataRow(0).getDragCommand(), 0, 90, { speed: 0.01 });
+  await t.drag(dataGrid.getDataRow(0).getDragCommand(), 0, 90, { speed: 0.1 });
 
   const footerRow = dataGrid.getFooterRow();
 
@@ -578,7 +578,7 @@ test.meta({ unstable: true })('Dragging with scrolling should be prevented by e.
 
   await MouseUpEvents.disable(MouseAction.dragToOffset);
 
-  await t.drag(dataGrid.getDataRow(98).getDragCommand(), 0, -180, { speed: 0.01 });
+  await t.drag(dataGrid.getDataRow(98).getDragCommand(), 0, -180, { speed: 0.1 });
 
   await t.expect(Selector('.dx-sortable-placeholder').visible).notOk();
 
@@ -731,7 +731,7 @@ test.meta({ unstable: true })('toIndex should not be corrected when source item 
 });
 
 // T1139685
-test.meta({ unstable: true })('Item should appear in a correct spot when dragging to a different page with scrolling.mode: "virtual"', async (t) => {
+test('Item should appear in a correct spot when dragging to a different page with scrolling.mode: "virtual"', async (t) => {
   const fromIndex = 2;
   const toIndex = 4;
 
@@ -754,7 +754,7 @@ test.meta({ unstable: true })('Item should appear in a correct spot when draggin
     .findIndex(({ key }, index: number, rows) => key > rows[index + 1]?.key))(dataGrid);
 
   await t.expect(getDraggedRowIndexFunc)
-    .eql(toIndex - 1);
+    .eql(toIndex - 2);
 }).before(async (t) => {
   await t.maximizeWindow();
   const items = generateData(20, 1);

@@ -45,14 +45,6 @@
                 "Equivalents": "ajax request"
               },
               {
-                "Title": "OData Service",
-                "Name": "OdataService",
-                "Widget": "DataGrid",
-                "MvcDocUrl": "https://docs.devexpress.com/DevExtremeAspNetMvc/400704/concepts/data-binding#odata",
-                "NetCoreDocUrl": "https://docs.devexpress.com/AspNetCore/401022/devextreme-based-controls/concepts/bind-controls-to-data/odata",
-                "DemoType": "Web"
-              },
-              {
                 "Title": "Custom Data Source",
                 "Name": "CustomDataSource",
                 "Widget": "DataGrid",
@@ -436,6 +428,7 @@
                 "Title": "Deferred Selection",
                 "Name": "DeferredSelection",
                 "Widget": "DataGrid",
+                "Modules": "devextreme-aspnet-data-nojquery",
                 "DemoType": "Web"
               }
             ]
@@ -586,6 +579,15 @@
                   "/Models/SampleData/DataGridEmployees.cs"
                 ],
                 "DemoType": "Web"
+              },
+              {
+                "Title": "AI Columns",
+                "Name": "AIColumns",
+                "Widget": "DataGrid",
+                "DemoType": "Web",
+                "Badge": "New",
+                "Equivalents": "Smart Column, AI generated column, AI field, AI Autofill column, Smart Field",
+                "Modules": "openai"
               }
             ]
           },
@@ -1332,6 +1334,15 @@
                   "/Models/SampleData/TreeListEmployees.cs"
                 ],
                 "DemoType": "Web"
+              },
+              {
+                "Title": "AI Columns",
+                "Name": "AIColumns",
+                "Widget": "TreeList",
+                "DemoType": "Web",
+                "Badge": "New",
+                "Equivalents": "Smart Column, AI generated column, AI field, AI Autofill column, Smart Field",
+                "Modules": "openai"
               }
             ]
           },
@@ -4112,6 +4123,28 @@
             ]
           },
           {
+            "Name": "File Attachments",
+            "Equivalents": "Files Sending, Messages with files, Files Attached, Message Attachments, Document Attachments",
+            "Demos": [
+              {
+                "Title": "File Attachments",
+                "Name": "FileAttachments",
+                "Widget": "Chat",
+                "DemoType": "Web",
+                "Badge": "New",
+                "DocUrl": "",
+                "MvcDescription": "",
+                "NetCoreDescription": "",
+                "MvcAdditionalFiles": [
+                  "/Models/SampleData/ChatData.cs",
+                  "/Models/Chat/User.cs",
+                  "/Models/Chat/Message.cs",
+                  "/ViewModels/ChatViewModel.cs"
+                ]
+              }
+            ]
+          },
+          {
             "Name": "Customization",
             "Equivalents": "Settings, Options",
             "Demos": [
@@ -4314,7 +4347,10 @@
             "Name": "UpdateItemsDynamically",
             "Equivalents": "add item, remove item, show item, hide item",
             "DocUrl": "",
-            "Widget": "Form"
+            "Widget": "Form",
+            "MvcAdditionalFiles": [
+              "/ViewModels/FormViewModel.cs"
+            ]
           },
           {
             "Title": "Smart Paste",
@@ -4324,7 +4360,9 @@
             "Widget": "Form",
             "MvcDescription": "",
             "NetCoreDescription": "",
-            "MvcAdditionalFiles": [],
+            "MvcAdditionalFiles": [
+              "/ViewModels/FormViewModel.cs"
+            ],
             "DemoType": "Web",
             "Badge": "New",
             "Modules": "openai"

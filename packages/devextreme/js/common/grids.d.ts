@@ -81,33 +81,8 @@ import { AIIntegration } from './ai-integration';
 
 /**
  * @docid
+ * @hidden
  * @namespace DevExpress.common.grids
- * @public
- */
-export type AIColumnResponseReceivedInfo = {
-  /**
-   * @docid
-   * @type GridBaseColumn
-   */
-  readonly column: ColumnBase;
-  /** @docid */
-  error?: string;
-  /**
-   * @docid
-   * @type Array<object>
-   */
-  data: any[];
-  /**
-   * @docid
-   * @type object
-   */
-  additionalInfo?: Record<string, any>;
-};
-
-/**
- * @docid
- * @namespace DevExpress.common.grids
- * @public
  */
 export type AIColumnRequestCreatingInfo<TRowData = any> = {
   /**
@@ -119,7 +94,7 @@ export type AIColumnRequestCreatingInfo<TRowData = any> = {
    * @docid
    * @type Array<object>
    */
-  readonly data: TRowData[];
+  data: TRowData[];
   /** @docid */
   cancel?: boolean;
   /**

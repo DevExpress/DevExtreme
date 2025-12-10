@@ -254,7 +254,7 @@ class Submenu extends ContextMenu<SubmenuProperties> {
     return visible;
   }
 
-  getOverlayContent(): dxElementWrapper | undefined {
+  getOverlayContent(): dxElementWrapper | undefined | null {
     return this._overlay?.$content();
   }
 }

@@ -6,6 +6,7 @@ import dataSource from './init/widget.data';
 import { createScheduler, scroll } from './init/widget.setup';
 import url from '../../../../helpers/getPageUrl';
 import { DEFAULT_BROWSER_SIZE } from '../../../../helpers/const';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Appointment tooltip behavior during scrolling in the Scheduler (T755449)`
   .page(url(__dirname, '../../../container.html'));
@@ -102,12 +103,16 @@ test.meta({ browserSize: [600, 400] })('The tooltip should hide after manually s
       : scheduler.appointmentTooltip.element;
     const tooltipNamePrefix = adaptivityEnabled ? 'mobile' : 'desktop';
 
+    await t.click(appointment.element);
+
+    await testScreenshot(
+      t,
+      takeScreenshot,
+      `appointment-${tooltipNamePrefix}-tooltip-screenshot.png`,
+      { element: scheduler.element },
+    );
+
     await t
-      .click(appointment.element)
-      // act
-      .expect(await takeScreenshot(`appointment-${tooltipNamePrefix}-tooltip-screenshot.png`, scheduler.element))
-      .ok()
-      // assert
       .expect(expectedSelector.exists)
       .ok()
       .expect(compareResults.isValid())
@@ -134,7 +139,7 @@ test.meta({ browserSize: [600, 1000] })('Tooltip on mobile devices should have e
   await t.click(scheduler.collectors.find('7').element);
   await resolveAllRenderDeferreds();
 
-  await takeScreenshot('tooltip-rendering-with-react.png');
+  await testScreenshot(t, takeScreenshot, 'tooltip-rendering-with-react.png');
 
   // check again after re-doing steps
 
@@ -142,7 +147,7 @@ test.meta({ browserSize: [600, 1000] })('Tooltip on mobile devices should have e
   await t.click(scheduler.collectors.find('7').element);
   await resolveAllRenderDeferreds();
 
-  await takeScreenshot('tooltip-rendering-with-react.png');
+  await testScreenshot(t, takeScreenshot, 'tooltip-rendering-with-react.png');
 
   await t.expect(compareResults.isValid()).ok(compareResults.errorMessages());
 }).before(async () => {

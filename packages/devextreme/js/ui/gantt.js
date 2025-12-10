@@ -5,6 +5,11 @@ export default Gantt;
 // STYLE gantt
 
 /**
+ * @name dxGanttOptions.rtlEnabled
+ * @hidden
+ */
+
+/**
  * @name dxGanttToolbarItem
  * @inherits dxToolbarItem
  */

@@ -9,7 +9,7 @@ import dxDataGrid, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { dxDataGridColumn, AdaptiveDetailRowPreparingEvent, AIColumnRequestCreatingEvent, AIColumnResponseReceivedEvent, CellClickEvent, CellDblClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangingEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, ToolbarPreparingEvent, dxDataGridRowObject, DataGridPredefinedColumnButton, ColumnButtonClickEvent, dxDataGridColumnButton, DataGridCommandColumnType, SelectionSensitivity, DataGridExportFormat, DataGridPredefinedToolbarItem, DataGridScrollMode, dxDataGridToolbarItem } from "devextreme/ui/data_grid";
+import type { dxDataGridColumn, AdaptiveDetailRowPreparingEvent, AIColumnRequestCreatingEvent, CellClickEvent, CellDblClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangingEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, ToolbarPreparingEvent, dxDataGridRowObject, DataGridPredefinedColumnButton, ColumnButtonClickEvent, dxDataGridColumnButton, DataGridCommandColumnType, SelectionSensitivity, DataGridExportFormat, DataGridPredefinedToolbarItem, DataGridScrollMode, dxDataGridToolbarItem } from "devextreme/ui/data_grid";
 import type { DataChange, AIColumnMode, DataChangeType, ColumnAIOptions, FilterOperation, FilterType, FixedPosition, ColumnHeaderFilter as GridsColumnHeaderFilter, SelectedFilterOperation, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, HeaderFilterSearchConfig, HeaderFilterTexts, SelectionColumnDisplayMode, GridsEditMode, NewRowPosition, GridsEditRefreshMode, StartEditAction, FilterPanel as GridsFilterPanel, FilterPanelTexts as GridsFilterPanelTexts, ApplyFilterMode, GroupExpandMode, SummaryType, EnterKeyAction, EnterKeyDirection, PagerPageSize, GridBase, DataRenderMode, StateStoreType } from "devextreme/common/grids";
 import type { Mode, ValidationRuleType, HorizontalAlignment, VerticalAlignment, template, TextEditorButtonLocation, DataType, Format as CommonFormat, SortOrder, SearchMode, ComparisonOperator, SingleMultipleOrNone, SelectAllMode, TextBoxPredefinedButton, TextEditorButton, LabelMode, MaskMode, EditorStyle, ValidationMessageMode, Position as CommonPosition, ValidationStatus, PositionAlignment, Direction, ToolbarItemLocation, ToolbarItemComponent, ButtonStyle, ButtonType, DisplayMode, DragDirection, DragHighlight, ScrollbarMode } from "devextreme/common";
 import type { ContentReadyEvent as TextBoxContentReadyEvent, DisposingEvent as TextBoxDisposingEvent, InitializedEvent as TextBoxInitializedEvent, KeyDownEvent as TextBoxKeyDownEvent, dxTextBoxOptions, TextBoxType, ChangeEvent, CopyEvent, CutEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InputEvent, KeyUpEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from "devextreme/ui/text_box";
@@ -46,7 +46,6 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 type IDataGridOptionsNarrowedEvents<TRowData = any, TKey = any> = {
   onAdaptiveDetailRowPreparing?: ((e: AdaptiveDetailRowPreparingEvent<TRowData, TKey>) => void);
   onAIColumnRequestCreating?: ((e: AIColumnRequestCreatingEvent<TRowData, TKey>) => void);
-  onAIColumnResponseReceived?: ((e: AIColumnResponseReceivedEvent<TRowData, TKey>) => void);
   onCellClick?: ((e: CellClickEvent<TRowData, TKey>) => void);
   onCellDblClick?: ((e: CellDblClickEvent<TRowData, TKey>) => void);
   onCellPrepared?: ((e: CellPreparedEvent<TRowData, TKey>) => void);
@@ -130,7 +129,7 @@ const DataGrid = memo(
       ), []);
 
       const subscribableOptions = useMemo(() => (["columns","editing","editing.changes","editing.editColumnName","editing.editRowKey","filterValue","focusedColumnIndex","focusedRowIndex","focusedRowKey","groupPanel","groupPanel.visible","paging","paging.pageIndex","paging.pageSize","selectedRowKeys","selectionFilter","filterBuilder.value","filterBuilderPopup.height","filterBuilderPopup.position","filterBuilderPopup.visible","filterBuilderPopup.width","filterPanel.filterEnabled","editing.form.formData","editing.popup.height","editing.popup.position","editing.popup.visible","editing.popup.width","searchPanel.text"]), []);
-      const independentEvents = useMemo(() => (["onAdaptiveDetailRowPreparing","onAIColumnRequestCreating","onAIColumnResponseReceived","onCellClick","onCellDblClick","onCellPrepared","onContentReady","onContextMenuPreparing","onDataErrorOccurred","onDisposing","onEditCanceled","onEditCanceling","onEditingStart","onEditorPrepared","onEditorPreparing","onExporting","onFocusedCellChanging","onFocusedRowChanging","onInitialized","onInitNewRow","onKeyDown","onRowClick","onRowCollapsed","onRowCollapsing","onRowDblClick","onRowExpanded","onRowExpanding","onRowInserted","onRowInserting","onRowPrepared","onRowRemoved","onRowRemoving","onRowUpdated","onRowUpdating","onRowValidating","onSaved","onSaving","onToolbarPreparing"]), []);
+      const independentEvents = useMemo(() => (["onAdaptiveDetailRowPreparing","onAIColumnRequestCreating","onCellClick","onCellDblClick","onCellPrepared","onContentReady","onContextMenuPreparing","onDataErrorOccurred","onDisposing","onEditCanceled","onEditCanceling","onEditingStart","onEditorPrepared","onEditorPreparing","onExporting","onFocusedCellChanging","onFocusedRowChanging","onInitialized","onInitNewRow","onKeyDown","onRowClick","onRowCollapsed","onRowCollapsing","onRowDblClick","onRowExpanded","onRowExpanding","onRowInserted","onRowInserting","onRowPrepared","onRowRemoved","onRowRemoving","onRowUpdated","onRowUpdating","onRowValidating","onSaved","onSaving","onToolbarPreparing"]), []);
 
       const defaults = useMemo(() => ({
         defaultColumns: "columns",
@@ -210,7 +209,7 @@ const DataGrid = memo(
 
 // owners:
 // Column
-type IAiProps = React.PropsWithChildren<{
+type IAIProps = React.PropsWithChildren<{
   aiIntegration?: AIIntegration | undefined;
   editorOptions?: dxTextBoxOptions<any>;
   emptyText?: string;
@@ -220,8 +219,8 @@ type IAiProps = React.PropsWithChildren<{
   prompt?: string;
   showHeaderMenu?: boolean;
 }>
-const _componentAi = (props: IAiProps) => {
-  return React.createElement(NestedOption<IAiProps>, {
+const _componentAI = (props: IAIProps) => {
+  return React.createElement(NestedOption<IAIProps>, {
     ...props,
     elementDescriptor: {
       OptionName: "ai",
@@ -232,18 +231,18 @@ const _componentAi = (props: IAiProps) => {
   });
 };
 
-const Ai = Object.assign<typeof _componentAi, NestedComponentMeta>(_componentAi, {
+const AI = Object.assign<typeof _componentAI, NestedComponentMeta>(_componentAI, {
   componentType: "option",
 });
 
 // owners:
 // FormItem
-type IAiOptionsProps = React.PropsWithChildren<{
+type IAIOptionsProps = React.PropsWithChildren<{
   disabled?: boolean;
   instruction?: string | undefined;
 }>
-const _componentAiOptions = (props: IAiOptionsProps) => {
-  return React.createElement(NestedOption<IAiOptionsProps>, {
+const _componentAIOptions = (props: IAIOptionsProps) => {
+  return React.createElement(NestedOption<IAIOptionsProps>, {
     ...props,
     elementDescriptor: {
       OptionName: "aiOptions",
@@ -251,7 +250,7 @@ const _componentAiOptions = (props: IAiOptionsProps) => {
   });
 };
 
-const AiOptions = Object.assign<typeof _componentAiOptions, NestedComponentMeta>(_componentAiOptions, {
+const AIOptions = Object.assign<typeof _componentAIOptions, NestedComponentMeta>(_componentAIOptions, {
   componentType: "option",
 });
 
@@ -1143,7 +1142,7 @@ const EditingTexts = Object.assign<typeof _componentEditingTexts, NestedComponen
 });
 
 // owners:
-// Ai
+// AI
 type IEditorOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
@@ -3348,10 +3347,10 @@ export {
   DataGrid,
   IDataGridOptions,
   DataGridRef,
-  Ai,
-  IAiProps,
-  AiOptions,
-  IAiOptionsProps,
+  AI,
+  IAIProps,
+  AIOptions,
+  IAIOptionsProps,
   Animation,
   IAnimationProps,
   AsyncRule,

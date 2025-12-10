@@ -52,6 +52,7 @@ import {
  ButtonStyle,
  ButtonType,
  ComparisonOperator,
+ Mode,
  ToolbarItemLocation,
  ToolbarItemComponent,
  SingleMultipleOrNone,
@@ -75,14 +76,26 @@ import {
 import {
  FormItemType,
  FormPredefinedButtonItem,
- dxFormButtonItem,
- dxFormEmptyItem,
- dxFormGroupItem,
  dxFormSimpleItem,
+ dxFormGroupItem,
  dxFormTabbedItem,
- FormItemComponent,
+ dxFormEmptyItem,
+ dxFormButtonItem,
  LabelLocation,
+ FormLabelMode,
+ ContentReadyEvent as FormContentReadyEvent,
+ DisposingEvent as FormDisposingEvent,
+ EditorEnterKeyEvent,
+ FieldDataChangedEvent,
+ InitializedEvent as FormInitializedEvent,
+ OptionChangedEvent as FormOptionChangedEvent,
+ SmartPastedEvent,
+ SmartPastingEvent,
+ FormItemComponent,
 } from "devextreme/ui/form";
+import {
+ AIIntegration,
+} from "devextreme/common/ai-integration";
 import {
  dxTabPanelOptions,
  dxTabPanelItem,
@@ -389,7 +402,7 @@ prepareComponentConfig(componentConfig);
 const DxScheduler = defineComponent(componentConfig);
 
 
-const DxAiOptionsConfig = {
+const DxAIOptionsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -402,11 +415,11 @@ const DxAiOptionsConfig = {
   }
 };
 
-prepareConfigurationComponentConfig(DxAiOptionsConfig);
+prepareConfigurationComponentConfig(DxAIOptionsConfig);
 
-const DxAiOptions = defineComponent(DxAiOptionsConfig);
+const DxAIOptions = defineComponent(DxAIOptionsConfig);
 
-(DxAiOptions as any).$_optionName = "aiOptions";
+(DxAIOptions as any).$_optionName = "aiOptions";
 
 const DxAppointmentDraggingConfig = {
   emits: {
@@ -667,6 +680,7 @@ const DxEditingConfig = {
     "update:allowTimeZoneEditing": null,
     "update:allowUpdating": null,
     "update:form": null,
+    "update:popup": null,
   },
   props: {
     allowAdding: Boolean,
@@ -675,7 +689,8 @@ const DxEditingConfig = {
     allowResizing: Boolean,
     allowTimeZoneEditing: Boolean,
     allowUpdating: Boolean,
-    form: Object as PropType<Record<string, any>>
+    form: {},
+    popup: Object as PropType<Record<string, any>>
   }
 };
 
@@ -748,16 +763,96 @@ const DxFormConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:accessKey": null,
+    "update:activeStateEnabled": null,
+    "update:aiIntegration": null,
+    "update:alignItemLabels": null,
+    "update:alignItemLabelsInAllGroups": null,
+    "update:colCount": null,
+    "update:colCountByScreen": null,
+    "update:customizeItem": null,
+    "update:disabled": null,
+    "update:elementAttr": null,
+    "update:focusStateEnabled": null,
+    "update:formData": null,
+    "update:height": null,
+    "update:hint": null,
+    "update:hoverStateEnabled": null,
     "update:iconsShowMode": null,
+    "update:isDirty": null,
     "update:items": null,
-    "update:onCanceled": null,
-    "update:onSaved": null,
+    "update:labelLocation": null,
+    "update:labelMode": null,
+    "update:minColWidth": null,
+    "update:onContentReady": null,
+    "update:onDisposing": null,
+    "update:onEditorEnterKey": null,
+    "update:onFieldDataChanged": null,
+    "update:onInitialized": null,
+    "update:onOptionChanged": null,
+    "update:onSmartPasted": null,
+    "update:onSmartPasting": null,
+    "update:optionalMark": null,
+    "update:readOnly": null,
+    "update:requiredMark": null,
+    "update:requiredMessage": null,
+    "update:rtlEnabled": null,
+    "update:screenByWidth": null,
+    "update:scrollingEnabled": null,
+    "update:showColonAfterLabel": null,
+    "update:showOptionalMark": null,
+    "update:showRequiredMark": null,
+    "update:showValidationSummary": null,
+    "update:tabIndex": null,
+    "update:validationGroup": null,
+    "update:visible": null,
+    "update:width": null,
   },
   props: {
+    accessKey: String,
+    activeStateEnabled: Boolean,
+    aiIntegration: Object as PropType<AIIntegration>,
+    alignItemLabels: Boolean,
+    alignItemLabelsInAllGroups: Boolean,
+    colCount: [String, Number] as PropType<Mode | number>,
+    colCountByScreen: Object as PropType<Record<string, any>>,
+    customizeItem: Function as PropType<((item: dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem) => void)>,
+    disabled: Boolean,
+    elementAttr: Object as PropType<Record<string, any>>,
+    focusStateEnabled: Boolean,
+    formData: {},
+    height: [Number, String],
+    hint: String,
+    hoverStateEnabled: Boolean,
     iconsShowMode: String as PropType<AppointmentFormIconsShowMode>,
+    isDirty: Boolean,
     items: Array as PropType<Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>>,
-    onCanceled: Function as PropType<((formData: any) => void)>,
-    onSaved: Function as PropType<((formData: any) => void)>
+    labelLocation: String as PropType<LabelLocation>,
+    labelMode: String as PropType<FormLabelMode>,
+    minColWidth: Number,
+    onContentReady: Function as PropType<((e: FormContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: FormDisposingEvent) => void)>,
+    onEditorEnterKey: Function as PropType<((e: EditorEnterKeyEvent) => void)>,
+    onFieldDataChanged: Function as PropType<((e: FieldDataChangedEvent) => void)>,
+    onInitialized: Function as PropType<((e: FormInitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: FormOptionChangedEvent) => void)>,
+    onSmartPasted: Function as PropType<((e: SmartPastedEvent) => void)>,
+    onSmartPasting: Function as PropType<((e: SmartPastingEvent) => void)>,
+    optionalMark: String,
+    readOnly: Boolean,
+    requiredMark: String,
+    requiredMessage: String,
+    rtlEnabled: Boolean,
+    screenByWidth: Function as PropType<(() => void)>,
+    scrollingEnabled: Boolean,
+    showColonAfterLabel: Boolean,
+    showOptionalMark: Boolean,
+    showRequiredMark: Boolean,
+    showValidationSummary: Boolean,
+    tabIndex: Number,
+    validationGroup: String,
+    visible: Boolean,
+    width: [Number, String]
   }
 };
 
@@ -768,6 +863,7 @@ const DxForm = defineComponent(DxFormConfig);
 (DxForm as any).$_optionName = "form";
 (DxForm as any).$_expectedChildren = {
   ButtonItem: { isCollectionItem: true, optionName: "items" },
+  colCountByScreen: { isCollectionItem: false, optionName: "colCountByScreen" },
   EmptyItem: { isCollectionItem: true, optionName: "items" },
   GroupItem: { isCollectionItem: true, optionName: "items" },
   item: { isCollectionItem: true, optionName: "items" },
@@ -1725,7 +1821,7 @@ const DxView = defineComponent(DxViewConfig);
 export default DxScheduler;
 export {
   DxScheduler,
-  DxAiOptions,
+  DxAIOptions,
   DxAppointmentDragging,
   DxAsyncRule,
   DxButtonItem,

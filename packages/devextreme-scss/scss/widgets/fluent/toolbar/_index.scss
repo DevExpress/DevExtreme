@@ -4,7 +4,7 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/icons" as *;
+@use "../../base/icon_fonts" as *;
 @use "../list/sizes" as *;
 @use "../button/mixins" as *;
 @use "../button/colors" as *;
@@ -12,7 +12,6 @@
 @use "../checkBox/sizes" as *;
 @use "mixins" as *;
 @use "../../base/toolbar";
-@use "../../base/icons" as *;
 
 // adduse
 @use "../dropDownMenu";

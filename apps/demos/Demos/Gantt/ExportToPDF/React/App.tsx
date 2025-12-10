@@ -16,7 +16,9 @@ import {
   documentFormatLabel, exportModeLabel, dateRangeLabel,
 } from './data.ts';
 
-import 'jspdf-autotable';
+import { applyPlugin } from 'jspdf-autotable';
+
+applyPlugin(jsPDF);
 
 type GanttPdfExportMode = 'all' | 'treeList' | 'chart';
 

@@ -8,7 +8,7 @@
     area=".widget-container"
   >
     <dx-toolbar #toolbar [multiline]="true">
-      <dxi-item location="before" widget="dxButton">
+      <dxi-toolbar-item location="before" widget="dxButton">
         <div *dxTemplate>
           <dx-button
             icon="undo"
@@ -16,9 +16,9 @@
             (onClick)="onButtonClick('Undo')"
           ></dx-button>
         </div>
-      </dxi-item>
+      </dxi-toolbar-item>
 
-      <dxi-item location="before" widget="dxButton">
+      <dxi-toolbar-item location="before" widget="dxButton">
         <div *dxTemplate>
           <dx-button
             icon="redo"
@@ -26,9 +26,9 @@
             (onClick)="onButtonClick('Redo')"
           ></dx-button>
         </div>
-      </dxi-item>
+      </dxi-toolbar-item>
 
-      <dxi-item
+      <dxi-toolbar-item
         location="before"
         locateInMenu="auto"
         menuItemTemplate="menuSeparatorTemplate"
@@ -36,9 +36,13 @@
         <div *dxTemplate>
           <div class="toolbar-separator"></div>
         </div>
-      </dxi-item>
+      </dxi-toolbar-item>
 
-      <dxi-item location="before" locateInMenu="auto" widget="dxDropDownButton">
+      <dxi-toolbar-item
+        location="before"
+        locateInMenu="auto"
+        widget="dxDropDownButton"
+      >
         <div *dxTemplate>
           <dx-drop-down-button
             width="100%"
@@ -56,9 +60,13 @@
             </div>
           </dx-drop-down-button>
         </div>
-      </dxi-item>
+      </dxi-toolbar-item>
 
-      <dxi-item location="before" locateInMenu="auto" widget="dxDropDownButton">
+      <dxi-toolbar-item
+        location="before"
+        locateInMenu="auto"
+        widget="dxDropDownButton"
+      >
         <div *dxTemplate>
           <dx-drop-down-button
             width="100%"
@@ -72,9 +80,13 @@
             (onSelectionChanged)="onSelectionChanged('Line Height')"
           ></dx-drop-down-button>
         </div>
-      </dxi-item>
+      </dxi-toolbar-item>
 
-      <dxi-item location="before" locateInMenu="auto" widget="dxSelectBox">
+      <dxi-toolbar-item
+        location="before"
+        locateInMenu="auto"
+        widget="dxSelectBox"
+      >
         <div *dxTemplate>
           <dx-select-box
             placeholder="Font"
@@ -84,9 +96,9 @@
             (onItemClick)="onFontFamilyClick()"
           ></dx-select-box>
         </div>
-      </dxi-item>
+      </dxi-toolbar-item>
 
-      <dxi-item
+      <dxi-toolbar-item
         location="before"
         locateInMenu="auto"
         menuItemTemplate="menuSeparatorTemplate"
@@ -94,9 +106,9 @@
         <div *dxTemplate>
           <div class="toolbar-separator"></div>
         </div>
-      </dxi-item>
+      </dxi-toolbar-item>
 
-      <dxi-item location="before" widget="dxButtonGroup">
+      <dxi-toolbar-item location="before" widget="dxButtonGroup">
         <div *dxTemplate>
           <dx-button-group
             displayExpr="text"
@@ -107,15 +119,15 @@
             (onItemClick)="onButtonClick($event.itemData.hint)"
           ></dx-button-group>
         </div>
-      </dxi-item>
+      </dxi-toolbar-item>
 
-      <dxi-item location="before">
+      <dxi-toolbar-item location="before">
         <div *dxTemplate>
           <div class="toolbar-separator"></div>
         </div>
-      </dxi-item>
+      </dxi-toolbar-item>
 
-      <dxi-item
+      <dxi-toolbar-item
         widget="dxButtonGroup"
         location="before"
         locateInMenu="auto"
@@ -130,9 +142,9 @@
             (onItemClick)="onTextAlignChanged($event)"
           ></dx-button-group>
         </div>
-      </dxi-item>
+      </dxi-toolbar-item>
 
-      <dxi-item location="before" widget="dxButtonGroup">
+      <dxi-toolbar-item location="before" widget="dxButtonGroup">
         <div *dxTemplate>
           <dx-button-group
             keyExpr="alignment"
@@ -141,9 +153,9 @@
             (onItemClick)="onButtonClick($event.itemData.hint)"
           ></dx-button-group>
         </div>
-      </dxi-item>
+      </dxi-toolbar-item>
 
-      <dxi-item
+      <dxi-toolbar-item
         location="before"
         locateInMenu="auto"
         menuItemTemplate="menuSeparatorTemplate"
@@ -151,9 +163,13 @@
         <div *dxTemplate>
           <div class="toolbar-separator"></div>
         </div>
-      </dxi-item>
+      </dxi-toolbar-item>
 
-      <dxi-item location="before" locateInMenu="auto" widget="dxSelectBox">
+      <dxi-toolbar-item
+        location="before"
+        locateInMenu="auto"
+        widget="dxSelectBox"
+      >
         <div *dxTemplate>
           <dx-select-box
             displayExpr="text"
@@ -164,9 +180,9 @@
             (onItemClick)="onHeadingClick()"
           ></dx-select-box>
         </div>
-      </dxi-item>
+      </dxi-toolbar-item>
 
-      <dxi-item
+      <dxi-toolbar-item
         location="before"
         locateInMenu="auto"
         menuItemTemplate="menuSeparatorTemplate"
@@ -174,9 +190,9 @@
         <div *dxTemplate>
           <div class="toolbar-separator"></div>
         </div>
-      </dxi-item>
+      </dxi-toolbar-item>
 
-      <dxi-item
+      <dxi-toolbar-item
         location="before"
         locateInMenu="auto"
         widget="dxButton"
@@ -190,9 +206,9 @@
             (onClick)="onButtonClick('Link')"
           ></dx-button>
         </div>
-      </dxi-item>
+      </dxi-toolbar-item>
 
-      <dxi-item
+      <dxi-toolbar-item
         location="before"
         locateInMenu="auto"
         widget="dxButton"
@@ -206,9 +222,9 @@
             (onClick)="onButtonClick('Add Image')"
           ></dx-button>
         </div>
-      </dxi-item>
+      </dxi-toolbar-item>
 
-      <dxi-item
+      <dxi-toolbar-item
         location="before"
         locateInMenu="auto"
         menuItemTemplate="menuSeparatorTemplate"
@@ -216,9 +232,9 @@
         <div *dxTemplate>
           <div class="toolbar-separator"></div>
         </div>
-      </dxi-item>
+      </dxi-toolbar-item>
 
-      <dxi-item
+      <dxi-toolbar-item
         location="before"
         locateInMenu="auto"
         widget="dxButton"
@@ -232,9 +248,9 @@
             (onClick)="onButtonClick('Clear Formating')"
           ></dx-button>
         </div>
-      </dxi-item>
+      </dxi-toolbar-item>
 
-      <dxi-item
+      <dxi-toolbar-item
         location="before"
         locateInMenu="auto"
         widget="dxButton"
@@ -248,9 +264,9 @@
             (onClick)="onButtonClick('Code Block')"
           ></dx-button>
         </div>
-      </dxi-item>
+      </dxi-toolbar-item>
 
-      <dxi-item
+      <dxi-toolbar-item
         location="before"
         locateInMenu="auto"
         widget="dxButton"
@@ -264,9 +280,9 @@
             (onClick)="onButtonClick('Blockquote')"
           ></dx-button>
         </div>
-      </dxi-item>
+      </dxi-toolbar-item>
 
-      <dxi-item
+      <dxi-toolbar-item
         location="before"
         locateInMenu="auto"
         menuItemTemplate="menuSeparatorTemplate"
@@ -274,9 +290,9 @@
         <div *dxTemplate>
           <div class="toolbar-separator"></div>
         </div>
-      </dxi-item>
+      </dxi-toolbar-item>
 
-      <dxi-item location="after" widget="dxButton" showText="inMenu">
+      <dxi-toolbar-item location="after" widget="dxButton" showText="inMenu">
         <div *dxTemplate>
           <dx-button
             icon="attach"
@@ -285,9 +301,13 @@
             (onClick)="onButtonClick('Attach')"
           ></dx-button>
         </div>
-      </dxi-item>
+      </dxi-toolbar-item>
 
-      <dxi-item locateInMenu="always" widget="dxButton" showText="inMenu">
+      <dxi-toolbar-item
+        locateInMenu="always"
+        widget="dxButton"
+        showText="inMenu"
+      >
         <div *dxTemplate>
           <dx-button
             icon="help"
@@ -296,7 +316,7 @@
             (onClick)="onButtonClick('About')"
           ></dx-button>
         </div>
-      </dxi-item>
+      </dxi-toolbar-item>
 
       <div *dxTemplate="let data of 'menuSeparatorTemplate'">
         <div class="toolbar-menu-separator"></div>

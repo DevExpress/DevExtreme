@@ -3,7 +3,7 @@ import renderer from 'core/renderer';
 import eventsEngine from 'common/core/events/core/events_engine';
 import fx from 'common/core/animation/fx';
 import translator from 'common/core/animation/translator';
-import animationFrame from 'common/core/animation/frame';
+import animationFrame from '__internal/common/core/animation/frameModule';
 import positionUtils from 'common/core/animation/position';
 import support from '__internal/core/utils/m_support';
 
@@ -75,14 +75,13 @@ QUnit.module('frame transitions', {
 
         this.clock = sinon.useFakeTimers();
 
-        this.originalRAF = animationFrame.requestAnimationFrame;
-        animationFrame.requestAnimationFrame = function(callback) {
+        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
             return setTimeout(callback, 1);
-        };
+        });
     },
     afterEach: function() {
         this.clock.restore();
-        animationFrame.requestAnimationFrame = this.originalRAF;
+        this.requestAnimationFrameStub.restore();
     }
 });
 

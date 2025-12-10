@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const SCHEDULER_SELECTOR = '#container';
 const INITIAL_APPOINTMENT_TITLE = 'appointment';
@@ -14,12 +15,11 @@ test('Recurrence edit dialog screenshot', async (t) => {
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
   const appointment = scheduler.getAppointment(INITIAL_APPOINTMENT_TITLE);
 
+  await t.doubleClick(appointment.element);
+
+  await testScreenshot(t, takeScreenshot, 'recurrence-edit-dialog-screenshot.png', { element: scheduler.element });
+
   await t
-    .doubleClick(appointment.element)
-    // act
-    .expect(await takeScreenshot('recurrence-edit-dialog-screenshot.png', scheduler.element))
-    .ok()
-    // assert
     .expect(Scheduler.getEditRecurrenceDialog().element.exists)
     .ok()
     .expect(compareResults.isValid())
@@ -52,9 +52,11 @@ test('Recurrence delete dialog screenshot', async (t) => {
     .expect(scheduler.appointmentTooltip.element.exists)
     .ok()
     // act
-    .click(scheduler.appointmentTooltip.deleteButton)
-    .expect(await takeScreenshot('recurrence-delete-dialog-screenshot.png', scheduler.element))
-    .ok()
+    .click(scheduler.appointmentTooltip.deleteButton);
+
+  await testScreenshot(t, takeScreenshot, 'recurrence-delete-dialog-screenshot.png', { element: scheduler.element });
+
+  await t
     // assert
     .expect(Scheduler.getDeleteRecurrenceDialog().element.exists)
     .ok()

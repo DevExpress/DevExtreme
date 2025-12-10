@@ -10,9 +10,9 @@ test('Load panel should support string height and width', async (t) => {
   await dataGrid.apiBeginCustomLoading('test');
 
   await t
-    .expect(dataGrid.getLoadPanel().content.getStyleProperty('height'))
+    .expect(dataGrid.getLoadPanel().getContent().getStyleProperty('height'))
     .eql('400px')
-    .expect(dataGrid.getLoadPanel().content.getStyleProperty('width'))
+    .expect(dataGrid.getLoadPanel().getContent().getStyleProperty('width'))
     .eql('330px');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [],
