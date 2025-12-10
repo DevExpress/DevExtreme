@@ -3,7 +3,7 @@ import {
   Component,
   ViewChild,
   enableProdMode,
-  provideZoneChangeDetection
+  provideZoneChangeDetection,
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { DxTextBoxModule, DxFileUploaderModule, DxButtonModule } from 'devextreme-angular';
