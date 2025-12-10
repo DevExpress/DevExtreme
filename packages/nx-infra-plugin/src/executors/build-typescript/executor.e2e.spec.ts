@@ -150,6 +150,8 @@ describe('BuildTypescriptExecutor E2E', () => {
       fs.rmSync(path.join(projectDir, 'src'), { recursive: true, force: true });
       fs.mkdirSync(path.join(projectDir, 'src'));
 
+      fs.writeFileSync(path.join(projectDir, 'src', 'empty.ts'), '');
+
       const options: BuildTypescriptExecutorSchema = {
         module: 'esm',
       };
