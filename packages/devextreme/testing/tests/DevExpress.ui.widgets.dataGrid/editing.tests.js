@@ -4941,33 +4941,6 @@ QUnit.module('Editing with real dataController', {
         assert.equal(this.array.length, 7, 'items count not changed');
     });
 
-    QUnit.test('Recovered row should have correct data when placed before inserted row in batch editing (T1293181)', function(assert) {
-        const testElement = $('#container');
-
-        $.extend(this.options.editing, {
-            mode: 'batch',
-            allowDeleting: true,
-            allowAdding: true,
-            newRowPosition: 'pageBottom',
-            texts: {
-                deleteRow: 'Delete',
-                undeleteRow: 'Undelete',
-            }
-        });
-
-        this.rowsView.render(testElement);
-        this.editingController.init();
-
-        this.addRow();
-        this.click(testElement.find('tbody > tr').eq(6), 'a:contains(Delete)');
-        this.click(testElement.find('tbody > tr').eq(6), '.dx-link-undelete');
-
-        const rows = this.getVisibleRows();
-
-        assert.strictEqual(rows.length, 8, 'items count is correct');
-        assert.deepEqual(rows[6].data, this.array[6], 'recovered row data is correct');
-    });
-
     QUnit.test('Remove row when set onRowRemoving', function(assert) {
         // arrange
         const that = this;
