@@ -1,6 +1,5 @@
-import { Component, NgModule, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxPopupModule, DxScrollViewModule } from 'devextreme-angular';
 import { DxButtonModule, DxButtonTypes } from 'devextreme-angular/ui/button';
 

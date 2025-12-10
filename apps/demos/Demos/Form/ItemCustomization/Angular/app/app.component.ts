@@ -1,6 +1,11 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import {
-  Component, ViewChild, enableProdMode, AfterViewInit, provideZoneChangeDetection } from '@angular/core';
+import { 
+  Component,
+  ViewChild,
+  enableProdMode,
+  AfterViewInit,
+  provideZoneChangeDetection,
+} from '@angular/core';
 import {
   DxSelectBoxModule,
   DxTextAreaModule,

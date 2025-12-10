@@ -1,6 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import {
-  Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import config from 'devextreme/core/config';
 import repaintFloatingActionButton from 'devextreme/ui/speed_dial_action/repaint_floating_action_button';
 import { DxSpeedDialActionModule } from 'devextreme-angular';

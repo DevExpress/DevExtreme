@@ -1,6 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+  Component,
+  ViewChild,
+  enableProdMode,
+  provideZoneChangeDetection
+} from '@angular/core';
 import {
   DxCheckBoxModule,
   DxSelectBoxModule,

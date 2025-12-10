@@ -2,7 +2,6 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxDataGridModule } from 'devextreme-angular';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
-import { DetailGridComponent } from './detail-grid/detail-grid.component';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
