@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "description": "Generate component names. Use case example: server-side testing",
+  "properties": {
+    "componentFilesPath": {
+      "type": "string",
+      "description": "Path to the component files directory",
+      "default": "./src/ui/"
+    },
+    "excludedFileNames": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of file names to exclude from generation",
+      "default": []
+    },
+    "outputFileName": {
+      "type": "string",
+      "description": "Output file path for generated component names",
+      "default": "./tests/src/server/component-names.ts"
+    }
+  },
+  "required": [],
+  "additionalProperties": false
+}

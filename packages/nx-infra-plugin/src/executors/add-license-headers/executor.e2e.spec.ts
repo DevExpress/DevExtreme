@@ -326,6 +326,7 @@ export const value = 42;
     const options: AddLicenseHeadersExecutorSchema = {
       targetDirectory: './npm',
       packageJsonPath: './package.json',
+      separatorBetweenBannerAndContent: '\n',
     };
 
     await executor(options, context);
