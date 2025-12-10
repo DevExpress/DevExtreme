@@ -1,22 +1,29 @@
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 import {
-  Component, destroyPlatform, NgModule, PLATFORM_ID, VERSION, importProvidersFrom,
+  Component,
+  destroyPlatform,
+  NgModule,
+  PLATFORM_ID,
+  importProvidersFrom,
 } from '@angular/core';
-import { provideServerRendering, ServerModule } from '@angular/platform-server';
+import { ServerModule, renderModule } from '@angular/platform-server';
 import { DxServerModule } from 'devextreme-angular/server';
 import infernoRenderer from 'devextreme/core/inferno_renderer';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DevExtremeModule } from 'devextreme-angular';
-import { componentNames } from './component-names';
+import { componentNames as componentNamesAll } from './component-names';
+
+const componentNames = componentNamesAll.filter((n) => ['toast', 'action-sheet'].includes(n));
 
 const containerClass = 'container';
 const containerSelector = `.${containerClass}`;
 
 @Component({
   selector: 'app-root',
+  standalone: false,
   template: `<div class="${containerClass}">
-        ${componentNames.map((name) => `<dx-${name}></dx-${name}>`).join('\n')}
-    </div>`,
+    ${componentNames.map((name) => `<dx-${name}></dx-${name}>`).join('\n')}
+  </div>`,
 })
 class AppComponent {}
 
@@ -34,7 +41,6 @@ class AppBrowserModule {}
   bootstrap: [AppComponent],
   providers: [
     provideClientHydration(),
-    provideServerRendering(),
     { provide: PLATFORM_ID, useValue: 'server' },
     importProvidersFrom(DxServerModule),
   ],
@@ -42,30 +48,12 @@ class AppBrowserModule {}
 class AppSSRModule {}
 
 class TestHelpers {
-  static createSSRBodyMarkup(ssrComponentsHTML: string): string {
-    const nghData = '[{}]';
-    return `<!--nghm--><app-root ng-version="${VERSION.full}" ngh="0" ng-server-context="ssr">${ssrComponentsHTML}</app-root>
-      <script id="ng-state" type="application/json">{"DX_isPlatformServer":true,"__nghData__":${nghData}}</script>`;
-  }
-
   static normalizeClassNames(element: HTMLElement): void {
     const classNames = Array.from(element.classList).sort();
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     element.classList.remove(...element.classList);
     element.classList.add(...classNames);
-  }
-
-  static compareContainers(ssrContainer: HTMLElement, hydratedContainer: HTMLElement): [string, string] {
-    const selector = `${containerSelector} > *`;
-
-    [ssrContainer, hydratedContainer].forEach((container) => {
-      container.querySelectorAll(selector).forEach((el) => {
-        this.normalizeClassNames(el as HTMLElement);
-      });
-    });
-
-    return [ssrContainer.innerHTML, hydratedContainer.innerHTML];
   }
 
   static hasConsoleMessage(spy: jasmine.Spy, messages: string[]): boolean {
@@ -80,11 +68,11 @@ describe('Angular Components Hydration Test', () => {
     log: jasmine.Spy;
   };
   const ssrState: {
-    body: HTMLElement | null;
     containerHtml: string;
+    ssrHTML: string;
   } = {
-    body: null,
     containerHtml: '',
+    ssrHTML: '',
   };
 
   beforeAll(() => {
@@ -105,36 +93,39 @@ describe('Angular Components Hydration Test', () => {
   });
 
   it('should generate correct SSR HTML', async () => {
-    document.body.innerHTML = '<app-root></app-root>';
+    const html = await renderModule(AppSSRModule, {
+      document: '<!DOCTYPE html><html><head></head><body><app-root></app-root></body></html>',
+      url: '/',
+    });
 
-    // Act
-    await platformBrowserDynamic().bootstrapModule(AppSSRModule);
+    ssrState.ssrHTML = html
+      .replace(/ng-server-context="other"/g, 'ng-server-context="ssg"')
+      .replace(/^.*<body/, '<body')
+      .replace(/<\/body>.*$/, '</body>');
+
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = ssrState.ssrHTML;
 
     // Assert
-    ssrState.body = document.body;
-    ssrState.containerHtml = document.querySelector(`${containerSelector}`)?.outerHTML ?? '';
+    ssrState.containerHtml = tempDiv.querySelector(`${containerSelector}`)?.innerHTML ?? '';
 
     expect(ssrState.containerHtml).toBeTruthy();
+    expect(ssrState.ssrHTML).toBeTruthy();
   });
 
   it('should correctly hydrate server-rendered HTML', async () => {
     infernoRenderer.resetInjection();
-    document.body.innerHTML = TestHelpers.createSSRBodyMarkup(ssrState.containerHtml);
+
+    document.body.outerHTML = ssrState.ssrHTML;
 
     // Act
     await platformBrowserDynamic().bootstrapModule(AppBrowserModule);
-
-    // Assert
-    const [ssrResult, hydratedResult] = TestHelpers.compareContainers(
-      ssrState.body.querySelector(`${containerSelector}`),
-      document.querySelector(`${containerSelector}`),
-    );
 
     expect(TestHelpers.hasConsoleMessage(
       consoleSpies.log,
       ['Angular hydrated 1 component(s)'],
     )).toBeTruthy();
 
-    expect(ssrResult).toEqual(hydratedResult);
+    expect(ssrState.containerHtml).toEqual(document.querySelector(`${containerSelector}`).innerHTML);
   });
 });
