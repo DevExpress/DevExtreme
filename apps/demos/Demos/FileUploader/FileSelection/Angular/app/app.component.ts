@@ -1,8 +1,11 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+  Component,
+  ViewChild,
+  enableProdMode,
+  provideZoneChangeDetection
+} from '@angular/core';
 import { NgForm } from '@angular/forms';
-
 import { DxTextBoxModule, DxFileUploaderModule, DxButtonModule } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 

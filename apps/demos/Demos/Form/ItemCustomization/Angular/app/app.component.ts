@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { 
+import {
   Component,
   ViewChild,
   enableProdMode,

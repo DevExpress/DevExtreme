@@ -22,7 +22,7 @@ export class DetailGridComponent implements AfterViewInit {
 
   tasks: Task[];
 
-  constructor(private service: Service, private cdr: ChangeDetectorRef) {
+  constructor(private service: Service, private changeDetectorRef: ChangeDetectorRef) {
     this.tasks = service.getTasks();
   }
 
@@ -35,7 +35,7 @@ export class DetailGridComponent implements AfterViewInit {
       filter: ['EmployeeID', '=', this.key],
     });
 
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
   }
 
   completedValue(rowData) {

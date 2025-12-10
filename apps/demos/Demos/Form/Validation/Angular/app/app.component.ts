@@ -3,7 +3,7 @@ import {
   Component,
   ViewChild,
   enableProdMode,
-  provideZoneChangeDetection
+  provideZoneChangeDetection,
 } from '@angular/core';
 import {
   DxCheckBoxModule,

@@ -4,7 +4,7 @@ import {
   ViewChild,
   AfterViewInit,
   enableProdMode,
-  provideZoneChangeDetection
+  provideZoneChangeDetection,
 } from '@angular/core';
 import { DxSelectBoxModule } from 'devextreme-angular';
 import { DxCheckBoxModule, DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';

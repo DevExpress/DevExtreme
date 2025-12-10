@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxSchedulerModule, DxDraggableModule, DxScrollViewModule } from 'devextreme-angular';
 import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
@@ -35,7 +35,7 @@ export class AppComponent {
 
   currentDate: Date = new Date(2021, 3, 26);
 
-  constructor(service: Service, private cdr: ChangeDetectorRef) {
+  constructor(service: Service) {
     this.tasks = service.getTasks();
     this.appointments = service.getAppointments();
   }

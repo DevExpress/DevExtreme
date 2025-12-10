@@ -35,7 +35,7 @@ export class DetailViewComponent implements AfterViewInit {
 
   orderHistoryData: DataSource;
 
-  constructor(private cdr: ChangeDetectorRef) {
+  constructor(private changeDetectorRef: ChangeDetectorRef) {
     this.url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridAdvancedMasterDetailView';
   }
 
@@ -49,7 +49,7 @@ export class DetailViewComponent implements AfterViewInit {
       }),
     });
 
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
   }
 
   setDefaultProduct(items) {
@@ -58,7 +58,7 @@ export class DetailViewComponent implements AfterViewInit {
     if (firstItem && this.productIdBySupplier === undefined) {
       this.productIdBySupplier = firstItem.ProductID;
     }
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
   }
 
   handleValueChange(e: DxSelectBoxTypes.ValueChangedEvent) {
