@@ -1,5 +1,4 @@
 /* tslint:disable:component-selector */
-
 import {
   Component,
   OnInit,
@@ -95,7 +94,8 @@ import ArrayStore from 'devextreme/data/array_store';
     CustomerService,
     AppointmentService,
     OwnerService
-  ]
+  ],
+  standalone: false
 })
 export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild(DxPopoverComponent) popover: DxPopoverComponent;
