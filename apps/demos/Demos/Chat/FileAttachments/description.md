@@ -1,4 +1,4 @@
-DevExtreme Chat supports file attachments. When this feature is activated ([fileUploaderOptions](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#fileUploaderOptions).**uploadFile** is defined), an “Attach” button appears in the message input field, allowing users to add files to their messages. 
+DevExtreme Chat supports file attachments. When this feature is activated ([fileUploaderOptions](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#fileUploaderOptions).**uploadFile** is specified), an “Attach” button appears in the message input field, allowing users to add files to their messages. 
 
 When users attach files, each file is displayed in the input area with a file-type icon, basic details (name and size), upload status, and an option to remove files before sending.
 <!--split-->
