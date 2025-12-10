@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import type dxForm from 'devextreme/ui/form';
-import type { FieldDataChangedEvent } from 'devextreme/ui/form';
+import { type FormTypes } from 'devextreme-react/form';
 import { query } from 'devextreme-react/common/data';
 import { moviesData, type MovieResource } from './data.ts';
+
+type dxForm = NonNullable<FormTypes.InitializedEvent['component']>;
 
 type MovieInfoContainerProps = {
   formInstanceRef: React.RefObject<dxForm | null>;
@@ -25,7 +26,7 @@ const MovieInfoContainer: React.FC<MovieInfoContainerProps> = ({ formInstanceRef
         setMovie(null);
       }
 
-      const handleFieldDataChanged = (e: FieldDataChangedEvent) => {
+      const handleFieldDataChanged = (e: FormTypes.FieldDataChangedEvent) => {
         if (e.dataField === 'movieId') {
           if (e.value) {
             const updatedMovie = getMovieById(e.value);

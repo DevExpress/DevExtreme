@@ -1,6 +1,7 @@
 import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
+import { CustomStore } from '@js/common/data/custom_store';
 import $ from '@js/core/renderer';
 import type { GroupItem, Item as FormItem } from '@js/ui/form';
 import type { ToolbarItem } from '@js/ui/popup';
@@ -296,6 +297,38 @@ describe('Appointment Form', () => {
       POM.popup.getSaveButton().click();
 
       expect(dataSource.items()[0].roomId).toBe(2);
+    });
+
+    it('should create separate appointment when saving single appointment from series', async () => {
+      const appointment = {
+        text: 'recurring-app',
+        startDate: '2017-05-01T09:30:00.000Z',
+        endDate: '2017-05-01T11:00:00.000Z',
+        recurrenceRule: 'FREQ=DAILY;COUNT=5',
+      };
+
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        dataSource: [{ ...appointment }],
+      });
+      const dataSource = (scheduler as any).getDataSource();
+
+      POM.openPopupByDblClick('recurring-app');
+      POM.popup.getEditAppointmentButton().click();
+      POM.popup.setInputValue('subjectEditor', 'single appointment');
+      scheduler.hideAppointmentPopup(true);
+
+      expect(dataSource.items()).toHaveLength(2);
+      expect(dataSource.items()[0]).toEqual({
+        ...appointment,
+        recurrenceException: '20170501T093000Z',
+      });
+      expect(dataSource.items()[1]).toEqual({
+        ...appointment,
+        text: 'single appointment',
+        recurrenceRule: '',
+        allDay: false,
+      });
     });
   });
 
@@ -752,6 +785,38 @@ describe('Appointment Form', () => {
       expect(customFieldValue).toBe('FREQ=DAILY');
       expect(defaultFieldValue).toBeUndefined();
     });
+
+    it('should update correct resource field if fieldExpr for resource is defined', async () => {
+      const defaultField = 'roomId';
+
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowUpdating: true,
+          allowTimeZoneEditing: true,
+        },
+        resources: [{
+          fieldExpr: exprValue,
+          allowMultiple: false,
+          dataSource: [
+            { text: 'Room 1', id: 1, color: '#00af2c' },
+            { text: 'Room 2', id: 2, color: '#56ca85' },
+            { text: 'Room 3', id: 3, color: '#8ecd3c' },
+          ],
+        }],
+      });
+
+      scheduler.showAppointmentPopup();
+
+      POM.popup.setInputValue(exprValue, 2);
+      scheduler.hideAppointmentPopup(true);
+
+      const customFieldValue = scheduler.option(`dataSource[0].${exprValue}`);
+      const defaultFieldValue = scheduler.option(`dataSource[0].${defaultField}`);
+
+      expect(customFieldValue).toBe(2);
+      expect(defaultFieldValue).toBeUndefined();
+    });
   });
 
   describe('allDay switch', () => {
@@ -906,7 +971,7 @@ describe('Appointment Form', () => {
     });
   });
 
-  describe('Timezones', () => {
+  describe('Timezone Editors', () => {
     it('should have correct timezone editors values', async () => {
       const { scheduler, POM } = await createScheduler({
         ...getDefaultConfig(),
@@ -1130,6 +1195,93 @@ describe('Appointment Form', () => {
         ]),
       );
     });
+
+    it('should create dxTagBox for resource with multiple selection', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        dataSource: [{
+          text: 'Resource test app',
+          startDate: new Date(2017, 4, 9, 9, 30),
+          endDate: new Date(2017, 4, 9, 11),
+          ownerId: [1, 2],
+        }],
+        resources: [{
+          fieldExpr: 'ownerId',
+          allowMultiple: true,
+          dataSource: [{ text: 'Owner 1', id: 1 }, { text: 'Owner 2', id: 2 }, { text: 'Owner 3', id: 3 }],
+        }],
+      });
+      const dataSource = (scheduler as any).getDataSource();
+      const appointment = dataSource.items()[0];
+
+      scheduler.showAppointmentPopup(appointment);
+
+      const resourceEditor = POM.popup.form.getEditor('ownerId') as any;
+      expect(resourceEditor.NAME).toBe('dxTagBox');
+      expect(resourceEditor.option('value')).toEqual([1, 2]);
+    });
+
+    it('should create dxSelectBox for resource with single selection', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        dataSource: [{
+          text: 'Resource test app',
+          startDate: new Date(2017, 4, 9, 9, 30),
+          endDate: new Date(2017, 4, 9, 11),
+          ownerId: 2,
+        }],
+        resources: [{
+          fieldExpr: 'ownerId',
+          allowMultiple: false,
+          dataSource: [{ text: 'Owner 1', id: 1 }, { text: 'Owner 2', id: 2 }, { text: 'Owner 3', id: 3 }],
+        }],
+      });
+      const dataSource = (scheduler as any).getDataSource();
+      const appointment = dataSource.items()[0];
+
+      scheduler.showAppointmentPopup(appointment);
+
+      const resourceEditor = POM.popup.form.getEditor('ownerId') as any;
+      expect(resourceEditor.NAME).toBe('dxSelectBox');
+      expect(resourceEditor.option('value')).toEqual(2);
+    });
+
+    it('should load resource dataSource only once', async () => {
+      const resourceDataSource = new CustomStore({
+        load: () => [
+          { text: 'Owner 1', id: 1 },
+          { text: 'Owner 2', id: 2 },
+          { text: 'Owner 3', id: 3 },
+        ],
+        byKey: () => {},
+      });
+      const loadSpy = jest.spyOn(resourceDataSource, 'load');
+      const byKeySpy = jest.spyOn(resourceDataSource, 'byKey');
+
+      const { scheduler } = await createScheduler({
+        ...getDefaultConfig(),
+        dataSource: [{
+          text: 'Resource test app',
+          startDate: new Date(2017, 4, 9, 9, 30),
+          endDate: new Date(2017, 4, 9, 11),
+          ownerId: [2],
+        }],
+        resources: [{
+          allowMultiple: true,
+          fieldExpr: 'ownerId',
+          dataSource: resourceDataSource,
+        }],
+      });
+      const dataSource = (scheduler as any).getDataSource();
+      const appointment = dataSource.items()[0];
+
+      expect(loadSpy).toHaveBeenCalledTimes(1);
+
+      scheduler.showAppointmentPopup(appointment);
+
+      expect(loadSpy).toHaveBeenCalledTimes(1);
+      expect(byKeySpy).toHaveBeenCalledTimes(0);
+    });
   });
 
   describe('Recurrence Form', () => {
@@ -1153,6 +1305,30 @@ describe('Appointment Form', () => {
       POM.popup.openRecurrenceSettings();
 
       expect(POM.popup.isRecurrenceGroupVisible()).toBe(true);
+    });
+
+    it('should have disabled week day buttons when allowUpdating is false', async () => {
+      const { POM, scheduler } = await createScheduler({
+        ...getDefaultConfig(),
+        dataSource: [{ ...recurringAppointment, recurrenceRule: 'FREQ=WEEKLY;BYDAY=WE,TU,TH,FR,SA' }],
+        editing: { allowUpdating: false },
+      });
+
+      const dataSource = (scheduler as any).getDataSource();
+      const appointment = dataSource.items()[0];
+
+      scheduler.showAppointmentPopup(appointment);
+      POM.popup.openRecurrenceSettings();
+
+      const weekDayButtons = POM.popup.recurrenceWeekDayButtons;
+      expect(weekDayButtons).toBeTruthy();
+
+      const firstButton = weekDayButtons?.querySelector('.dx-button');
+      expect(firstButton).toBeTruthy();
+
+      // @ts-expect-error
+      const buttonInstance = $(firstButton).dxButton('instance');
+      expect(buttonInstance?.option('disabled')).toBe(true);
     });
 
     it('should be visible after changing repeat editor\'s value', async () => {
@@ -1409,6 +1585,95 @@ describe('Appointment Form', () => {
         expect(POM.popup.getWeekDaysSelection()).toEqual(expectedWeekDaysSelection);
 
         expect(POM.popup.getInputValue('recurrenceEndCountEditor')).toBe('5 occurrence(s)');
+      });
+    });
+
+    describe('Repeat End Values Preservation', () => {
+      it('should preserve count value when switching between recurrence types', async () => {
+        const { scheduler, POM } = await createScheduler(getDefaultConfig());
+        const testCount = 15;
+
+        scheduler.showAppointmentPopup({
+          text: 'Meeting',
+          startDate: new Date(2017, 4, 1, 10, 30),
+          endDate: new Date(2017, 4, 1, 11),
+        });
+
+        POM.popup.selectRepeatValue('daily');
+
+        POM.popup.setInputValue('recurrenceRepeatEndEditor', 'count');
+        POM.popup.setInputValue('recurrenceEndCountEditor', testCount);
+
+        POM.popup.getBackButton().click();
+
+        POM.popup.selectRepeatValue('weekly');
+
+        POM.popup.openRecurrenceSettings();
+
+        expect(POM.popup.getInputValue('recurrenceEndCountEditor')).toBe(`${testCount} occurrence(s)`);
+
+        scheduler.hideAppointmentPopup();
+      });
+
+      it('should preserve until value when switching between recurrence types', async () => {
+        const { scheduler, POM } = await createScheduler(getDefaultConfig());
+        const testUntilDate = new Date(2017, 5, 16);
+
+        scheduler.showAppointmentPopup({
+          text: 'Meeting',
+          startDate: new Date(2017, 4, 1, 10, 30),
+          endDate: new Date(2017, 4, 1, 11),
+        });
+
+        POM.popup.selectRepeatValue('daily');
+
+        POM.popup.setInputValue('recurrenceRepeatEndEditor', 'until');
+        POM.popup.setInputValue('recurrenceEndUntilEditor', testUntilDate);
+
+        POM.popup.getBackButton().click();
+
+        POM.popup.selectRepeatValue('weekly');
+
+        POM.popup.openRecurrenceSettings();
+
+        expect(POM.popup.getInputValue('recurrenceEndUntilEditor')).toBe('6/16/2017');
+
+        scheduler.hideAppointmentPopup();
+      });
+    });
+
+    describe('Repeat End Editors Disabled State', () => {
+      ['never', 'until', 'count'].forEach((repeatEndValue) => {
+        it(`should set correct disabled state when repeatEnd is ${repeatEndValue}`, async () => {
+          const { scheduler, POM } = await createScheduler(getDefaultConfig());
+          let recurrenceRule = '';
+          switch (repeatEndValue) {
+            case 'count':
+              recurrenceRule = 'FREQ=DAILY;COUNT=10';
+              break;
+            case 'until':
+              recurrenceRule = 'FREQ=DAILY;UNTIL=20170615T000000Z';
+              break;
+            default:
+              recurrenceRule = 'FREQ=DAILY';
+          }
+
+          scheduler.showAppointmentPopup({
+            text: 'Meeting',
+            startDate: new Date(2017, 4, 1, 10, 30),
+            endDate: new Date(2017, 4, 1, 11),
+            recurrenceRule,
+          });
+
+          POM.popup.getEditSeriesButton().click();
+          POM.popup.openRecurrenceSettings();
+
+          const untilEditor = POM.popup.form.getEditor('recurrenceEndUntilEditor');
+          const countEditor = POM.popup.form.getEditor('recurrenceEndCountEditor');
+
+          expect(untilEditor?.option('disabled')).toBe(repeatEndValue !== 'until');
+          expect(countEditor?.option('disabled')).toBe(repeatEndValue !== 'count');
+        });
       });
     });
   });

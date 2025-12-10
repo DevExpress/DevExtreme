@@ -112,15 +112,17 @@ import DxScheduler, {
   DxForm as DxSchedulerForm,
   type DxSchedulerTypes,
 } from 'devextreme-vue/scheduler';
-import DxForm, { DxItem, type DxFormTypes } from 'devextreme-vue/form';
+import { DxItem, type DxFormTypes } from 'devextreme-vue/form';
 import { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
-import type { OptionChangedEvent as PopupOptionChangedEvent } from 'devextreme/ui/popup';
-import query from 'devextreme/data/query';
+import { type DxPopupTypes } from 'devextreme-vue/popup';
+import { query } from 'devextreme-vue/common/data';
 import type { MovieResource } from './data.ts';
 import AppointmentTemplate from './AppointmentTemplate.vue';
 import AppointmentTooltipTemplate from './AppointmentTooltipTemplate.vue';
 import MovieInfoContainer from './MovieInfoContainer.vue';
 import { data, moviesData, theatreData } from './data.ts';
+
+type dxForm = NonNullable<DxFormTypes.InitializedEvent['component']>;
 
 const views = ['day', 'week', 'timelineDay'];
 const groups = ['theatreId'];
@@ -129,7 +131,7 @@ const currentDate = new Date(2025, 3, 27);
 const dataSource = data;
 
 const currentMovie = ref<MovieResource | null | undefined>(null);
-const formInstance = ref<DxForm['instance'] | null>(null);
+const formInstance = ref<dxForm | null>(null);
 
 const getMovieById = (resourceId: number): MovieResource | undefined =>
   query(moviesData)
@@ -143,7 +145,7 @@ const getEditorStylingMode = (): 'filled' | 'outlined' => {
 
 const priceDisplayExpr = (value: number): string => `$${value}`;
 
-const updateEndDate = (form: NonNullable<DxForm['instance']>, movie: MovieResource): void => {
+const updateEndDate = (form: dxForm, movie: MovieResource): void => {
   const formData = form.option('formData');
   const { startDate } = formData;
   if (startDate && movie?.duration) {
@@ -170,7 +172,7 @@ const onPriceEditorContentReady = (e: DxSelectBoxTypes.ContentReadyEvent): void 
   e.component.option('stylingMode', getEditorStylingMode());
 };
 
-const onPopupOptionChanged = (e: PopupOptionChangedEvent): void => {
+const onPopupOptionChanged = (e: DxPopupTypes.OptionChangedEvent): void => {
   if (e.fullName === 'toolbarItems' && e.value) {
     e.value.forEach((item: any, index: number) => {
       if (item.shortcut === 'done' || item.shortcut === 'cancel') {

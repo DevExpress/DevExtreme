@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import React from "react";
+import React, { useRef } from "react";
 import dxScheduler from "devextreme/ui/scheduler";
 import type { Properties } from "devextreme/ui/scheduler";
 import { wrapDxWithReact } from "../utils";
@@ -7,6 +7,9 @@ import { data, resources } from "./data";
 import "./form-customization.css";
 
 const Scheduler = wrapDxWithReact<Properties>(dxScheduler);
+
+import ReactScheduler from 'devextreme-react/scheduler';
+import dxForm from "devextreme/ui/form";
 
 const iconsShowModeArgType = {
   "editing.form.iconsShowMode": {
@@ -332,21 +335,117 @@ export const RTL: Story = {
 export const LegacyPopup: Story = {
   args: {
     ...baseConfig,
-    "editing.form.iconsShowMode": "none",
+    "editing.form.iconsShowMode": "both",
   } as Properties,
   argTypes: iconsShowModeArgType,
   render: (args) => {
+    let form: InstanceType<typeof dxForm> | null = null;
+
+    const schedulerRef = useRef(null);
+
     return (
-      <Scheduler
+      // @ts-ignore
+      <ReactScheduler
+        ref={schedulerRef}
         {...baseConfig}
+        onAppointmentUpdating={(e) => {
+          delete e.newData.repeat;
+        }}
+        onAppointmentAdding={(e) => {
+          delete e.appointmentData.repeat;
+        }}
         editing={{
-          form: {
-            items: [
-              "mainGroup",
-              {name: 'recurenceGroup', visible: true}
+          popup: {
+            maxWidth: 800,
+            toolbarItems: [
+              {
+                toolbar: 'top',
+                location: 'before',
+                text: "Edit Appointment",
+                cssClass: 'dx-toolbar-label',
+              },
+              {
+                toolbar: 'top',
+                location: 'after',
+                options: {
+                  stylingMode: 'contained',
+                  type: 'default',
+                  onClick: () => {
+                    // @ts-ignore
+                    schedulerRef.current?.instance()?.hideAppointmentPopup(true);
+                  },
+                  text: 'Save',
+                },
+                shortcut: 'done',
+              },
+              {
+                toolbar: 'top',
+                location: 'after',
+                shortcut: 'cancel',
+              },
             ],
-            iconsShowMode: args["editing.form.iconsShowMode"]
-          }
+          },
+          form: {
+            onInitialized: function (e) {
+              e.component?.on('fieldDataChanged', (e) => {
+                if (e.dataField === 'recurrenceRule') {
+                  form?.option('formData.repeat', !!e.value)
+                }
+              });
+            },
+            onContentReady: function (e) {
+              form = e.component;
+            },
+            iconsShowMode: args["editing.form.iconsShowMode"],
+            items: [
+              {
+                name: "mainGroup",
+                cssClass: "",
+                items: [
+                  "subjectGroup",
+                  "dateGroup",
+                  {
+                    name: "repeatGroup",
+                    items: [
+                      "repeatIcon",
+                      {
+                        name: "customRepeatEditor",
+                        editorType: "dxSwitch",
+                        dataField: "repeat",
+                        editorOptions: {
+                          onValueChanged: (e) => {
+                            if (e.value) {
+                              const recurrenceRule = form?.option('formData')?.recurrenceRule;
+
+                              form?.option("colCount", 2);
+                              form?.option('formData.recurrenceRule', recurrenceRule || "FREQ=DAILY");
+                              form?.itemOption("recurrenceGroup", "visible", true);
+                            } else {
+                              form?.option("colCount", 1);
+                              form?.option('formData.recurrenceRule', "");
+                              form?.itemOption("recurrenceGroup", "visible", false);
+                            }
+                          },
+                        },
+                      },
+                    ],
+                  },
+                  "resourcesGroup",
+                  "descriptionGroup",
+                ],
+              },
+              {
+                name: "recurrenceGroup",
+                itemType: "group",
+                cssClass: "",
+                visible: false,
+                items: [
+                  "recurrenceRuleGroup",
+                  "recurrenceEndGroup",
+                ],
+              },
+            ],
+          },
         } as Properties['editing']}
       />
     );

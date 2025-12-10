@@ -653,7 +653,7 @@ prepareComponentConfig(componentConfig);
 const DxTreeList = defineComponent(componentConfig);
 
 
-const DxAiConfig = {
+const DxAIConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -678,16 +678,16 @@ const DxAiConfig = {
   }
 };
 
-prepareConfigurationComponentConfig(DxAiConfig);
+prepareConfigurationComponentConfig(DxAIConfig);
 
-const DxAi = defineComponent(DxAiConfig);
+const DxAI = defineComponent(DxAIConfig);
 
-(DxAi as any).$_optionName = "ai";
-(DxAi as any).$_expectedChildren = {
+(DxAI as any).$_optionName = "ai";
+(DxAI as any).$_expectedChildren = {
   editorOptions: { isCollectionItem: false, optionName: "editorOptions" }
 };
 
-const DxAiOptionsConfig = {
+const DxAIOptionsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -700,11 +700,11 @@ const DxAiOptionsConfig = {
   }
 };
 
-prepareConfigurationComponentConfig(DxAiOptionsConfig);
+prepareConfigurationComponentConfig(DxAIOptionsConfig);
 
-const DxAiOptions = defineComponent(DxAiOptionsConfig);
+const DxAIOptions = defineComponent(DxAIOptionsConfig);
 
-(DxAiOptions as any).$_optionName = "aiOptions";
+(DxAIOptions as any).$_optionName = "aiOptions";
 
 const DxAnimationConfig = {
   emits: {
@@ -3672,8 +3672,8 @@ const DxValidationRule = defineComponent(DxValidationRuleConfig);
 export default DxTreeList;
 export {
   DxTreeList,
-  DxAi,
-  DxAiOptions,
+  DxAI,
+  DxAIOptions,
   DxAnimation,
   DxAsyncRule,
   DxAt,
