@@ -45,22 +45,6 @@ const dataSource = [{
   Address: '4 Westmoreland Pl.',
 }];
 
-const columns = [
-  {
-    dataField: 'Prefix',
-    caption: 'Title',
-    width: 70,
-  },
-  'FirstName',
-  'LastName', {
-    dataField: 'Position',
-    width: 170,
-  }, {
-    dataField: 'BirthDate',
-    dataType: 'date' as const,
-  },
-];
-
 const flushAsync = async (): Promise<void> => {
   jest.runOnlyPendingTimers();
   await Promise.resolve();
@@ -104,7 +88,7 @@ const afterTest = (): void => {
   jest.useRealTimers();
 };
 
-describe('Unsupported filtering properties', () => {
+describe('DataGrid editing', () => {
   beforeEach(beforeTest);
   afterEach(afterTest);
 
@@ -115,7 +99,21 @@ describe('Unsupported filtering properties', () => {
       const { component, instance } = await createDataGrid({
         keyExpr: 'ID',
         dataSource,
-        columns,
+        columns: [
+          {
+            dataField: 'Prefix',
+            caption: 'Title',
+            width: 70,
+          },
+          'FirstName',
+          'LastName', {
+            dataField: 'Position',
+            width: 170,
+          }, {
+            dataField: 'BirthDate',
+            dataType: 'date' as const,
+          },
+        ],
         editing: {
           mode: 'batch',
           allowDeleting: true,
@@ -133,14 +131,15 @@ describe('Unsupported filtering properties', () => {
       await instance.addRow();
       await flushAsync();
 
-      component.getRowDeleteButton(recoveringRowIndex).click();
+      const rowDeleteButton = component.getDataRow(recoveringRowIndex).getDeleteButton();
+      rowDeleteButton.click();
       await flushAsync();
 
-      component.getRowRecoverButton(recoveringRowIndex).click();
+      const rowRecoverButton = component.getDataRow(recoveringRowIndex).getRecoverButton();
+      rowRecoverButton.click();
       await flushAsync();
 
       const rows = instance.getVisibleRows();
-
       expect(rows).toHaveLength(dataSource.length + 1);
       expect(rows[recoveringRowIndex].data).toEqual(dataSource[recoveringRowIndex]);
     });
