@@ -4,7 +4,7 @@
 <dx-scheduler
   timeZone="America/Los_Angeles"
   [dataSource]="data"
-  [views]="['day', 'week', 'timelineDay']"
+  [views]="views"
   currentView="day"
   [currentDate]="currentDate"
   [firstDayOfWeek]="0"
@@ -12,7 +12,7 @@
   [endDayHour]="23"
   [showAllDayPanel]="false"
   [height]="600"
-  [groups]="['theatreId']"
+  [groups]="groups"
   [crossScrollingEnabled]="true"
   [cellDuration]="20"
   appointmentTemplate="appointment-template"
@@ -30,12 +30,9 @@
 
   <dxo-scheduler-editing
     [allowAdding]="false"
-    [popup]="{
-      maxWidth: 440,
-      onOptionChanged: onPopupOptionChanged
-    }"
+    [popup]="popupOptions"
   >
-    <dxo-scheduler-form [onInitialized]="onFormInitialized">
+    <dxo-scheduler-form (onInitialized)="onFormInitialized($event)">
       <dxi-scheduler-item
         template="movie-info-form-template"
       ></dxi-scheduler-item>
@@ -43,36 +40,24 @@
       <dxi-scheduler-item
         itemType="group"
         [colCount]="2"
-        [colCountByScreen]="{ xs: 2 }"
+        [colCountByScreen]="colCountByScreen"
       >
         <dxi-scheduler-item
           dataField="movieId"
           editorType="dxSelectBox"
-          [label]="{ text: 'Movie' }"
           [colSpan]="1"
-          [editorOptions]="{
-            items: moviesData,
-            displayExpr: 'text',
-            valueExpr: 'id',
-            stylingMode: getEditorStylingMode(),
-            onValueChanged: onMovieValueChanged,
-            onContentReady: onMovieEditorContentReady
-          }"
+          [editorOptions]="movieEditorOptions"
         >
+          <dxi-scheduler-label>Movie</dxi-scheduler-label>
         </dxi-scheduler-item>
 
         <dxi-scheduler-item
           dataField="price"
           editorType="dxSelectBox"
-          [label]="{ text: 'Price' }"
           [colSpan]="1"
-          [editorOptions]="{
-            items: [5, 10, 15, 20],
-            displayExpr: priceDisplayExpr,
-            stylingMode: getEditorStylingMode(),
-            onContentReady: onPriceEditorContentReady
-          }"
+          [editorOptions]="priceEditorOptions"
         >
+          <dxi-scheduler-label>Price</dxi-scheduler-label>
         </dxi-scheduler-item>
       </dxi-scheduler-item>
 

@@ -46,17 +46,43 @@ export class AppComponent {
 
   theatreData: TheatreData[];
 
+  views: string[] = ['day', 'week', 'timelineDay'];
+
+  groups: string[] = ['theatreId'];
+
   formInstance: dxForm | null = null;
 
   currentSelectedMovie: MovieData | null = null;
+
+  movieEditorOptions: DxSelectBoxTypes.Options;
+
+  priceEditorOptions: DxSelectBoxTypes.Options;
 
   constructor(service: Service) {
     this.data = service.getData();
     this.moviesData = service.getMoviesData();
     this.theatreData = service.getTheatreData();
+
+    this.movieEditorOptions = {
+      items: this.moviesData,
+      displayExpr: 'text',
+      valueExpr: 'id',
+      stylingMode: this.getEditorStylingMode(),
+      onValueChanged: this.onMovieValueChanged,
+      onContentReady: this.onCustomEditorContentReady,
+    };
+
+    this.priceEditorOptions = {
+      items: [5, 10, 15, 20],
+      displayExpr: this.priceDisplayExpr,
+      stylingMode: this.getEditorStylingMode(),
+      onContentReady: this.onCustomEditorContentReady,
+    };
   }
 
-  getMovieById = (id: number): MovieData | undefined => query(this.moviesData).filter(['id', '=', id]).toArray()[0];
+  getMovieById = (id: number | undefined): MovieData | undefined => id
+    ? query(this.moviesData).filter(['id', '=', id]).toArray()[0]
+    : null;
 
   getEditorStylingMode = (): 'filled' | 'outlined' => {
     const isMaterialOrFluent = document.querySelector('.dx-theme-fluent, .dx-theme-material');
@@ -65,23 +91,7 @@ export class AppComponent {
 
   priceDisplayExpr = (value: number): string => `$${value}`;
 
-  onMovieValueChanged = (e: DxSelectBoxTypes.ValueChangedEvent): void => {
-    const movie = this.getMovieById(e.value);
-    this.currentSelectedMovie = movie;
-
-    if (this.formInstance && movie) {
-      this.formInstance.updateData('director', movie.director);
-      this.updateEndDate(this.formInstance, movie);
-    }
-  };
-
-  onMovieEditorContentReady = (e: DxSelectBoxTypes.ContentReadyEvent): void => {
-    e.component.option('stylingMode', this.getEditorStylingMode());
-  };
-
-  onPriceEditorContentReady = (e: DxSelectBoxTypes.ContentReadyEvent): void => {
-    e.component.option('stylingMode', this.getEditorStylingMode());
-  };
+  colCountByScreen = { xs: 2 };
 
   onPopupOptionChanged = (e: DxPopupTypes.OptionChangedEvent): void => {
     if (e.fullName === 'toolbarItems' && e.value) {
@@ -93,38 +103,54 @@ export class AppComponent {
     }
   };
 
-  updateEndDate = (form: dxForm, movie: MovieData): void => {
+  popupOptions: DxPopupTypes.Options = {
+    maxWidth: 440,
+    onOptionChanged: this.onPopupOptionChanged,
+  };
+
+  updateEndDate = (movie: MovieData): void => {
+    const form = this.formInstance!;
     const formData = form.option('formData');
     const { startDate } = formData;
-    if (startDate && movie?.duration) {
+
+    if (startDate) {
       const newEndDate = new Date(startDate.getTime() + 60 * 1000 * movie.duration);
       form.updateData('endDate', newEndDate);
     }
   };
 
   onFormInitialized = (e: DxFormTypes.InitializedEvent): void => {
+    console.log('form initialized');
     const form = e.component;
-    this.formInstance = form;
-
     const formData = form.option('formData');
-    if (formData?.movieId) {
-      const movie = this.getMovieById(formData.movieId);
-      this.currentSelectedMovie = movie;
-    } else {
-      this.currentSelectedMovie = null;
-    }
+
+    this.formInstance = form;
+    this.currentSelectedMovie = this.getMovieById(formData?.movieId);
 
     form.on('fieldDataChanged', (fieldEvent: DxFormTypes.FieldDataChangedEvent) => {
       if (fieldEvent.dataField === 'startDate') {
         const currentFormData = form.option('formData');
-        if (currentFormData.movieId) {
-          const movie = this.getMovieById(currentFormData.movieId);
-          if (movie) {
-            this.updateEndDate(form, movie);
-          }
+        const movie = this.getMovieById(currentFormData?.movieId);
+
+        if (movie) {
+          this.updateEndDate(movie);
         }
       }
     });
+  };
+
+  onMovieValueChanged = (e: DxSelectBoxTypes.ValueChangedEvent): void => {
+    const movie = this.getMovieById(e.value);
+    this.currentSelectedMovie = movie;
+
+    if (movie) {
+      this.formInstance.updateData('director', movie.director);
+      this.updateEndDate(movie);
+    }
+  };
+
+  onCustomEditorContentReady = (e: DxSelectBoxTypes.ContentReadyEvent): void => {
+    e.component.option('stylingMode', this.getEditorStylingMode());
   };
 }
 
