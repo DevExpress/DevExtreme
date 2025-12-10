@@ -1,6 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import {
-  Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxBoxModule } from 'devextreme-angular';
 
 if (!/localhost/.test(document.location.host)) {
