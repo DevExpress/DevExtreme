@@ -6,6 +6,13 @@ on:
       - 'apps/**/*.md'
   push:
     branches: [25_2]
+  workflow_dispatch:
+    inputs:
+      SBOM:
+        description: 'Build SBOM'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   build:
@@ -54,6 +61,7 @@ jobs:
           retention-days: 1
 
       - name: Build SBOMs
+        if: ${{ github.event_name == 'push' || github.event.inputs.SBOM == 'true' }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -61,6 +69,7 @@ jobs:
           pnpm nx build sbom;
 
       - name: Upload SBOM artifacts
+        if: ${{ github.event_name == 'push' || github.event.inputs.SBOM == 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: sbom
