@@ -234,7 +234,6 @@ test.meta({ browserSize: [1500, 1500] })('appointment form resource with multipl
     startDate: new Date('2021-04-26T16:30:00.000Z'),
     endDate: new Date('2021-04-26T18:30:00.000Z'),
     allDay: false,
-    recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TH;COUNT=10',
     assigneeId: [1, 2, 3, 4],
     roomId: 1,
     priorityId: 1,
