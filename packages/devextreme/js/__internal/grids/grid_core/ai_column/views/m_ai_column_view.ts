@@ -196,13 +196,4 @@ export const columnHeadersViewExtender = (
 
     super.renderDragCellContent($dragContainer, column);
   }
-
-  public dispose(): void {
-    super.dispose();
-    this.activeDropDownButtonInstance = null;
-
-    if (this.aiColumnOptionChangedHandler) {
-      this._columnsController.aiColumnOptionChanged.remove(this.aiColumnOptionChangedHandler);
-    }
-  }
 };
