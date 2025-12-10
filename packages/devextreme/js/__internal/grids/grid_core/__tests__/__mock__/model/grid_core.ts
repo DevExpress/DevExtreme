@@ -4,6 +4,8 @@ import type { GridBase } from '@js/common/grids';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 
+import { DataRowModel } from './row/data_row';
+
 const SELECTORS = {
   headerRowClass: 'dx-header-row',
   dataRowClass: 'dx-data-row',
@@ -43,6 +45,14 @@ export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
 
   public getHeaderByText(text: string): dxElementWrapper {
     return $(Array.from(this.getHeaderCells()).find((el) => $(el).text().includes(text)));
+  }
+
+  public getDataRows(): NodeListOf<HTMLElement> {
+    return this.root.querySelectorAll(`.${SELECTORS.dataRowClass}`);
+  }
+
+  public getDataRow(rowIndex: number): DataRowModel {
+    return new DataRowModel(this.getDataRows()[rowIndex]);
   }
 
   public abstract getInstance(): TInstance;
