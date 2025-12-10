@@ -81,6 +81,7 @@ import {
   DxScrolling,
 } from 'devextreme-vue/data-grid';
 import { CustomStore } from 'devextreme-vue/common/data';
+import type dxTreeView from 'devextreme/ui/tree_view';
 import 'whatwg-fetch';
 
 const treeBoxValue = ref('1_1');
@@ -91,7 +92,7 @@ const gridDataSource = makeAsyncDataSource('customers.json');
 const treeDataSource = makeAsyncDataSource('treeProducts.json');
 const gridColumns = ['CompanyName', 'City', 'Phone'];
 
-const treeViewRef = ref(null);
+const treeViewRef = ref<{ instance: dxTreeView } | null>(null);
 
 function treeViewContentReady({
   component,
