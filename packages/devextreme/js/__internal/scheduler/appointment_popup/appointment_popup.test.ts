@@ -730,18 +730,15 @@ describe('Appointment popup form', () => {
 
       scheduler.showAppointmentPopup();
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const appointmentForm = (scheduler as any)._appointmentForm.dxForm;
+      const appointmentForm = scheduler._appointmentForm.dxForm;
       const startDate = appointmentForm.getEditor('startDate');
       const toolbarItemsBefore = startDate._getPopupToolbarItems();
 
       const allDay = appointmentForm.getEditor('allDay');
-      allDay.$element()[0].click();
-      await new Promise(process.nextTick);
+      allDay.option('value', true);
 
       const repeat = appointmentForm.getEditor('repeat');
-      repeat.$element()[0].click();
-      await new Promise(process.nextTick);
+      repeat.option('value', true);
 
       const startDateAfter = appointmentForm.getEditor('startDate');
       const toolbarItemsAfter = startDateAfter._getPopupToolbarItems();
