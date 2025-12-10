@@ -4,31 +4,21 @@
   "sourceRoot": "packages/devextreme-react",
   "projectType": "library",
   "targets": {
-    "clean": {
+    "clean:src": {
       "executor": "devextreme-nx-infra-plugin:clean",
       "options": {
         "targetDirectory": "./src",
-        "excludePatterns": ["./src/core", "./src/common"],
-        "mode": "recursive"
+        "excludePatterns": ["./src/core", "./src/common", "./src/index.ts"]
       }
     },
-    "regenerate": {
-      "executor": "devextreme-nx-infra-plugin:generate-components",
-      "dependsOn": ["devextreme-metadata:generate", "clean"],
+    "clean:npm": {
+      "executor": "devextreme-nx-infra-plugin:clean",
       "options": {
-        "metadataPath": "../devextreme-metadata/dist/integration-data.json",
-        "componentsDir": "./src",
-        "indexFileName": "./src/index.ts",
-        "baseComponent": "./core/component",
-        "extensionComponent": "./core/extension-component",
-        "configComponent": "./core/nested-option",
-        "quotes": "double",
-        "explicitIndexInImports": true
+        "targetDirectory": "./npm"
       }
     },
     "build:esm": {
       "executor": "devextreme-nx-infra-plugin:build-typescript",
-      "dependsOn": ["npm:clean"],
       "options": {
         "srcPattern": "./src/**/*.{ts,tsx}",
         "excludePatterns": ["./src/**/__tests__/**/*", "./src/**/__mocks__/**/*"],
@@ -42,7 +32,6 @@
     },
     "build:cjs": {
       "executor": "devextreme-nx-infra-plugin:build-typescript",
-      "dependsOn": ["npm:clean"],
       "options": {
         "srcPattern": "./src/**/*.{ts,tsx}",
         "excludePatterns": ["./src/**/__tests__/**/*", "./src/**/__mocks__/**/*"],
@@ -54,21 +43,11 @@
       "cache": true,
       "inputs": ["default"]
     },
-    "npm:clean": {
-      "executor": "devextreme-nx-infra-plugin:clean",
-      "options": {
-        "targetDirectory": "./npm",
-        "mode": "simple"
-      }
-    },
     "prepare-package-json": {
       "executor": "devextreme-nx-infra-plugin:prepare-package-json",
-      "dependsOn": ["npm:clean", "build:esm", "build:cjs"],
-      "options": {}
     },
     "license-headers": {
       "executor": "devextreme-nx-infra-plugin:add-license-headers",
-      "dependsOn": ["prepare-package-json"],
       "options": {
         "targetDirectory": "./npm",
         "packageJsonPath": "./package.json"
@@ -76,7 +55,6 @@
     },
     "npm:prepare-modules": {
       "executor": "devextreme-nx-infra-plugin:prepare-submodules",
-      "dependsOn": ["npm:clean", "license-headers", "copy-files"],
       "options": {
         "distDirectory": "./npm"
       }
@@ -97,25 +75,90 @@
         ]
       }
     },
-    "pack": {
+    "npm:pack": {
       "executor": "devextreme-nx-infra-plugin:pack-npm",
-      "dependsOn": ["npm:prepare-modules"],
       "options": {
         "workingDirectory": "./npm"
       },
       "outputs": ["{projectRoot}/npm/*.tgz"],
       "cache": true,
       "inputs": ["default"]
+   },
+   "generate-components": {
+      "executor": "devextreme-nx-infra-plugin:generate-components",
+      "dependsOn": ["devextreme-metadata:generate"],
+      "options": {
+        "metadataPath": "../devextreme-metadata/dist/integration-data.json",
+        "componentsDir": "./src",
+        "indexFileName": "./src/index.ts",
+        "baseComponent": "./core/component",
+        "extensionComponent": "./core/extension-component",
+        "configComponent": "./core/nested-option",
+        "quotes": "double",
+        "explicitIndexInImports": true
+      },
+      "outputs": [
+        "{projectRoot}/src/**/*",
+        "!{projectRoot}/src/core/**/*",
+        "!{projectRoot}/src/common/**/*",
+        "!{projectRoot}/src/**/__tests__/**/*"
+      ],
+      "cache": true,
+      "inputs": ["default"]
+    },
+    "regenerate": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["devextreme-metadata:generate"],
+      "options": {
+        "commands": [
+          "pnpm --workspace-root nx clean:src devextreme-react",
+          "pnpm --workspace-root nx generate-components devextreme-react"
+        ],
+        "parallel": false
+      },
+      "outputs": [
+        "{projectRoot}/src/**/*",
+        "!{projectRoot}/src/core/**/*",
+        "!{projectRoot}/src/common/**/*",
+        "!{projectRoot}/src/**/__tests__/**/*"
+      ],
+      "cache": true,
+      "inputs": ["default"]
     },
     "build": {
-      "executor": "devextreme-nx-infra-plugin:pack-npm",
-      "dependsOn": ["npm:prepare-modules", "^build"],
+      "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
       "options": {
-        "workingDirectory": "./npm"
+        "commands": [
+          "pnpm --workspace-root nx clean:npm devextreme-react",
+          "pnpm --workspace-root nx run-many --targets=build:esm,build:cjs --projects=devextreme-react",
+          "pnpm --workspace-root nx copy-files devextreme-react",
+          "pnpm --workspace-root nx npm:prepare-modules devextreme-react",
+          "pnpm --workspace-root nx prepare-package-json devextreme-react"
+        ],
+        "parallel": false
+      },
+      "outputs": [
+        "{projectRoot}/npm"
+      ],
+      "cache": true,
+      "inputs": ["default"]
+    },
+    "pack": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
+      "options": {
+        "commands": [
+          "pnpm --workspace-root nx build devextreme-react",
+          "pnpm --workspace-root nx license-headers devextreme-react",
+          "pnpm --workspace-root nx npm:prepare-modules devextreme-react",
+          "pnpm --workspace-root nx npm:pack devextreme-react"
+        ],
+        "parallel": false
       },
       "outputs": [
         "{projectRoot}/npm",
-        "{projectRoot}/*.tgz"
+        "{projectRoot}/npm/*.tgz"
       ],
       "cache": true,
       "inputs": ["default"]
