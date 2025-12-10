@@ -323,6 +323,70 @@ export const CustomizeExistingItems: Story = {
   },
 };
 
+interface ResourcesColumnLayoutArgs extends Properties {
+  resourcesColCount: number;
+}
+
+export const ResourcesColumnLayout: Story = {
+  args: {
+    resourcesColCount: 2,
+    ...baseConfig,
+    resources,
+  } as ResourcesColumnLayoutArgs,
+  argTypes: {
+    resourcesColCount: {
+      control: { type: "select" },
+      options: [1, 2, 3],
+    },
+    ...iconsShowModeArgType,
+  } as Record<string, unknown>,
+  render: (args: ResourcesColumnLayoutArgs) => {
+    return (
+      <Scheduler
+        {...baseConfig}
+        resources={resources}
+        editing={
+          {
+            form: {
+              onInitialized: (e) => {
+                console.log(e.component.option("items"));
+              },
+              items: [
+                {
+                  name: "mainGroup",
+                  items: [
+                    "subjectGroup",
+                    "dateGroup",
+                    "repeatGroup",
+                    {
+                      name: "resourcesGroup",
+                      items: [
+                        "resourcesGroupIcon",
+                        {
+                          name: "resourcesGroupContent",
+                          colCount: args.resourcesColCount,
+                          items: [
+                            "roomId",
+                            "priorityId",
+                            { name: "assigneeId", colSpan: 2 },
+                          ],
+                        },
+                      ],
+                    },
+                    "descriptionGroup",
+                  ],
+                },
+              ],
+              iconsShowMode: args["editing.form.iconsShowMode"],
+            },
+          } as Properties["editing"]
+        }
+      />
+    );
+  },
+};
+
+
 export const RTL: Story = {
   args: {
     ...baseConfig,
