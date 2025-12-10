@@ -107,7 +107,7 @@ function makeAsyncDataSource(jsonFile: string) {
     key: 'ID',
     load() {
       return fetch(
-        `https://js.devexpress.com/Vue/Demos/WidgetsGallery/JSDemos/data/${jsonFile}`,
+        `../../../../data/${jsonFile}`,
       ).then((response) => response.json());
     },
   });
