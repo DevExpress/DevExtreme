@@ -4,7 +4,7 @@ import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 
 fixture`Ai Column.Virtual Scrolling.Functional`
-  .page(url(__dirname, './pages/containerWithAIIntegration.html'));
+  .page(url(__dirname, '../../../container-ai-integration.html'));
 
 const DATA_GRID_SELECTOR = '#container';
 
