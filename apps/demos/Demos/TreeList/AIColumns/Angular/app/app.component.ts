@@ -48,12 +48,10 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxTreeListModule,
-  ],
-  declarations: [
-    AppComponent,
     Employee,
     Status,
   ],
+  declarations: [AppComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

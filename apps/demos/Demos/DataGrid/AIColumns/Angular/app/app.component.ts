@@ -63,13 +63,11 @@ export class AppComponent {
     BrowserModule,
     DxDataGridModule,
     DxPopupModule,
-  ],
-  declarations: [
-    AppComponent,
     Trademark,
     Category,
     LicenseInfo,
   ],
+  declarations: [AppComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
