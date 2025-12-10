@@ -54,9 +54,9 @@ export class AppComponent {
 
   currentSelectedMovie: MovieData | null = null;
 
-  movieEditorOptions: DxSelectBoxTypes.Options;
+  movieEditorOptions: DxSelectBoxTypes.Properties;
 
-  priceEditorOptions: DxSelectBoxTypes.Options;
+  priceEditorOptions: DxSelectBoxTypes.Properties;
 
   constructor(service: Service) {
     this.data = service.getData();
@@ -103,7 +103,7 @@ export class AppComponent {
     }
   };
 
-  popupOptions: DxPopupTypes.Options = {
+  popupOptions: DxPopupTypes.Properties = {
     maxWidth: 440,
     onOptionChanged: this.onPopupOptionChanged,
   };
@@ -120,7 +120,6 @@ export class AppComponent {
   };
 
   onFormInitialized = (e: DxFormTypes.InitializedEvent): void => {
-    console.log('form initialized');
     const form = e.component;
     const formData = form.option('formData');
 
