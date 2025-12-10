@@ -11,22 +11,18 @@
       "schematics": {},
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": {
-              "base": "dist/sandbox"
-            },
+            "outputPath": "dist/sandbox",
             "index": "src/index.html",
-            "polyfills": [
-              "src/polyfills.ts"
-            ],
+            "main": "src/main.ts",
+            "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "styles": [
               "node_modules/devextreme/dist/css/dx.common.css",
               "node_modules/devextreme/dist/css/dx.light.css"
             ],
-            "scripts": [],
-            "browser": "src/main.ts"
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -39,9 +35,12 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
+              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -54,23 +53,26 @@
               "optimization": false,
               "outputHashing": "none",
               "sourceMap": true,
+              "extractCss": true,
               "namedChunks": false,
               "aot": true,
-              "extractLicenses": true
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": false
             }
           }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "buildTarget": "sandbox:build"
+            "browserTarget": "sandbox:build"
           },
           "configurations": {
             "production": {
-              "buildTarget": "sandbox:build:production"
+              "browserTarget": "sandbox:build:production"
             },
             "dev": {
-              "buildTarget": "sandbox:build:dev"
+              "browserTarget": "sandbox:build:dev"
             }
           }
         },
@@ -91,5 +93,6 @@
         }
       }
     }
-  }
+  },
+  "defaultProject": "sandbox"
 }
