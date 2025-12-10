@@ -5,6 +5,7 @@ import { glob } from 'glob';
 import { BuildTypescriptExecutorSchema } from './schema';
 import { TsConfig, CompilerOptions } from '../../utils/types';
 import { resolveProjectPath, normalizeGlobPathForWindows } from '../../utils/path-resolver';
+import { isWindowsOS } from '../../utils/common';
 import { logError } from '../../utils/error-handler';
 import { readFileText, exists, ensureDir } from '../../utils/file-operations';
 
@@ -69,12 +70,20 @@ const runExecutor: PromiseExecutor<BuildTypescriptExecutorSchema> = async (optio
     await ensureDir(outDir);
 
     const srcPattern = options.srcPattern || DEFAULT_SRC_PATTERN;
-    const globPattern = normalizeGlobPathForWindows(path.join(absoluteProjectRoot, srcPattern));
+    const globPattern = isWindowsOS()
+      ? normalizeGlobPathForWindows(path.join(absoluteProjectRoot, srcPattern))
+      : path.join(absoluteProjectRoot, srcPattern);
 
     const excludePatterns = options.excludePatterns
-      ? options.excludePatterns.map((pattern) =>
-          normalizeGlobPathForWindows(path.join(absoluteProjectRoot, pattern)),
-        )
+      ? options.excludePatterns.map((pattern) => {
+          const result = path.join(absoluteProjectRoot, pattern);
+
+          if (isWindowsOS()) {
+            return normalizeGlobPathForWindows(result);
+          }
+
+          return result;
+        })
       : [];
 
     const sourceFiles = await glob(globPattern, {
