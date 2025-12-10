@@ -78,7 +78,6 @@ jobs:
       fail-fast: false
       matrix:
         ARGS: [
-          { platform: "angular" },
           { platform: "react" },
           { platform: "vue" },
         ]
