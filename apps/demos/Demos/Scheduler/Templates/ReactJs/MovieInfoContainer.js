@@ -2,35 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { query } from 'devextreme-react/common/data';
 import { moviesData } from './data.js';
 
-const getMovieById = (id) => query(moviesData).filter(['id', id]).toArray()[0];
+const getMovieById = (id) => (id ? query(moviesData).filter(['id', id]).toArray()[0] : null);
 const MovieInfoContainer = ({ formInstanceRef }) => {
   const [movie, setMovie] = useState(null);
   useEffect(() => {
     const form = formInstanceRef.current;
-    if (form) {
-      const formData = form.option('formData');
-      if (formData?.movieId) {
-        const currentMovie = getMovieById(formData.movieId);
-        setMovie(currentMovie);
-      } else {
-        setMovie(null);
+    const formData = form.option('formData');
+    const currentMovie = getMovieById(formData.movieId);
+    setMovie(currentMovie);
+    const handleFieldDataChanged = (e) => {
+      if (e.dataField === 'movieId') {
+        const updatedMovie = getMovieById(e.value);
+        setMovie(updatedMovie);
       }
-      const handleFieldDataChanged = (e) => {
-        if (e.dataField === 'movieId') {
-          if (e.value) {
-            const updatedMovie = getMovieById(e.value);
-            setMovie(updatedMovie);
-          } else {
-            setMovie(null);
-          }
-        }
-      };
-      form.on('fieldDataChanged', handleFieldDataChanged);
-      return () => {
-        form.off('fieldDataChanged', handleFieldDataChanged);
-      };
-    }
-    return undefined;
+    };
+    form.on('fieldDataChanged', handleFieldDataChanged);
+    return () => {
+      form.off('fieldDataChanged', handleFieldDataChanged);
+    };
   }, [formInstanceRef]);
   return (
     <div className="movie-info-container">
