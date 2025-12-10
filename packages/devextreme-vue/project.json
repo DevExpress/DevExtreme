@@ -130,6 +130,7 @@
     },
     "regenerate": {
       "executor": "nx:run-commands",
+      "dependsOn": ["devextreme-metadata:generate"],
       "options": {
         "commands": [
           "pnpm --workspace-root nx clean:src devextreme-vue",
