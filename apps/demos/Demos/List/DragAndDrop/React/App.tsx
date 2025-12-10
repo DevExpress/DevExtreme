@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
-import List, { IItemDraggingProps, ItemDragging } from 'devextreme-react/list';
-import { plannedTasks, doingTasks } from './data.ts';
+import List, { ItemDragging } from 'devextreme-react/list';
+import type { IItemDraggingProps } from 'devextreme-react/list';
+import { plannedTasks, doingTasks } from './data';
 
 const App = () => {
   const [plannedTasksState, setPlannedTasksState] = useState(plannedTasks);

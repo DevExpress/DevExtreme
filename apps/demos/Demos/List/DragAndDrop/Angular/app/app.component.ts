@@ -1,7 +1,7 @@
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxListModule } from 'devextreme-angular';
-import { DxSortableTypes } from 'devextreme-angular/ui/sortable';
+import type { DxSortableTypes } from 'devextreme-angular/ui/sortable';
 import { Task, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {

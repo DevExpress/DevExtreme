@@ -1,8 +1,9 @@
-import React, { FC, memo } from 'react';
+import React, { memo } from 'react';
+import type { FC } from 'react';
 import 'devextreme-react/text-area';
 import { Form, SimpleItem } from 'devextreme-react/form';
 
-import { FormProps } from './types.ts';
+import type { FormProps } from './types';
 
 const AdditionalForm: FC<FormProps> = memo(({ formData }) => (
   <React.Fragment>

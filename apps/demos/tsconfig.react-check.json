@@ -34,6 +34,19 @@
     "Demos/Sortable/**/React/**/*.ts",
     "Demos/Sortable/**/React/**/*.tsx",
     "Demos/TreeList/**/React/**/*.ts",
-    "Demos/TreeList/**/React/**/*.tsx"
+    "Demos/TreeList/**/React/**/*.tsx",
+    "Demos/Accordion/**/React/**/*.tsx",
+    "Demos/ActionSheet/**/React/**/*.tsx",
+    "Demos/ContextMenu/**/React/**/*.tsx",
+    "Demos/Menu/**/React/**/*.tsx",
+    "Demos/MultiView/**/React/**/*.tsx",
+    "Demos/Drawer/**/React/**/*.tsx",
+    "Demos/TabPanel/**/React/**/*.tsx",
+    "Demos/Tabs/**/React/**/*.tsx",
+    "Demos/Toolbar/**/React/**/*.tsx",
+    "Demos/Stepper/**/React/**/*.tsx",
+    "Demos/Pagination/**/React/**/*.tsx",
+    "Demos/List/**/React/**/*.tsx",
+    "Demos/TreeView/**/React/**/*.tsx"
   ]
 }

@@ -3,8 +3,8 @@ import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/
 import { DxListModule, DxToolbarModule, DxSelectBoxModule } from 'devextreme-angular';
 import { DataSource } from 'devextreme-angular/common/data';
 import notify from 'devextreme/ui/notify';
-import { DxButtonTypes } from 'devextreme-angular/ui/button';
-import { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
+import type { DxButtonTypes } from 'devextreme-angular/ui/button';
+import type { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import { ProductType, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {

@@ -1,4 +1,4 @@
-import { Orientation, TabsIconPosition, TabsStyle } from 'devextreme/common';
+import type { Orientation, TabsIconPosition, TabsStyle } from 'devextreme/common';
 
 export const tabsText = [
   {

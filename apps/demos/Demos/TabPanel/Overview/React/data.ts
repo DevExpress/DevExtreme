@@ -1,4 +1,4 @@
-import { Position, TabsIconPosition, TabsStyle } from 'devextreme/common';
+import type { Position, TabsIconPosition, TabsStyle } from 'devextreme/common';
 
 export const tabsPositionsSelectBoxLabel = { 'aria-label': 'Tab position' };
 

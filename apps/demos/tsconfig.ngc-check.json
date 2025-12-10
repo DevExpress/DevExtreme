@@ -14,6 +14,18 @@
   },
 
   "include": [
-    "Demos/**/Angular/**/*.ts"
+    "Demos/Accordion/**/Angular/**/*.ts",
+    "Demos/ActionSheet/**/Angular/**/*.ts",
+    "Demos/ContextMenu/**/Angular/**/*.ts",
+    "Demos/Menu/**/Angular/**/*.ts",
+    "Demos/MultiView/**/Angular/**/*.ts",
+    "Demos/Drawer/**/Angular/**/*.ts",
+    "Demos/TabPanel/**/Angular/**/*.ts",
+    "Demos/Tabs/**/Angular/**/*.ts",
+    "Demos/Toolbar/**/Angular/**/*.ts",
+    "Demos/Stepper/**/Angular/**/*.ts",
+    "Demos/Pagination/**/Angular/**/*.ts",
+    "Demos/List/**/Angular/**/*.ts",
+    "Demos/TreeView/**/Angular/**/*.ts"
   ]
 }
