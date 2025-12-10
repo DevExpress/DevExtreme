@@ -9,3 +9,4 @@ export const CSS_ARTIFACTS = path.join(ARTIFACTS_DIR, 'css');
 export const DEPS_SCANNER_ARTIFACTS = path.join(ARTIFACTS_DIR, 'deps-scanner');
 export const MENU_META = path.join(ROOT_DIR, 'apps', 'demos', 'menuMeta.json');
 export const NPM_DIR = path.join(ARTIFACTS_DIR, 'npm');
+export const SBOM_ARTIFACTS = path.join(ROOT_DIR, 'packages', 'sbom', 'dist');
