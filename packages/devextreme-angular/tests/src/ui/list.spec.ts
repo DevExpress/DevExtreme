@@ -20,6 +20,7 @@ import {
 } from 'devextreme-angular';
 
 @Component({
+  standalone: false,
   selector: 'test-container-component',
   template: '',
 })
@@ -479,6 +480,7 @@ describe('DxList', () => {
   it('should destroy angular components inside template', () => {
     let destroyed = false;
     @Component({
+      standalone: false,
       selector: 'destroyable-component',
       template: '',
     })
@@ -516,6 +518,7 @@ describe('DxList', () => {
 
   it('should destroy devextreme components inside template', () => {
     @Component({
+      standalone: false,
       selector: 'test-container-component',
       template: '',
     })
@@ -555,6 +558,7 @@ describe('DxList', () => {
 
   it('should destroy devextreme components in template root correctly', () => {
     @Component({
+      standalone: false,
       selector: 'test-container-component',
       template: '',
     })
