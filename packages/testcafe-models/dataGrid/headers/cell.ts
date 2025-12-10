@@ -1,6 +1,7 @@
 import { ClientFunction, Selector } from 'testcafe';
 import FocusableElement from '../../internal/focusable';
 import Widget from '../../internal/widget';
+import DropDownButton from '../../dropDownButton';
 
 type StickyPosition = 'left' | 'right' | 'sticky';
 
@@ -63,5 +64,9 @@ export default class HeaderCell {
 
   getEditor(): FocusableElement {
     return new FocusableElement(this.element.find('.dx-texteditor-input, .dx-checkbox'));
+  }
+
+  getAIHeaderButton(): DropDownButton {
+    return new DropDownButton(this.element.find(`.${CLASS.aiHeaderButton}`));
   }
 }

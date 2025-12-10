@@ -44,6 +44,7 @@
   $agenda-appointment-text-color: $agenda-appointment-text-color,
   $agenda-appointment-title-font-size: $agenda-appointment-title-font-size,
 
+  $scheduler-appointment-popup-icon-margin-top: $fluent-scheduler-appointment-popup-icon-margin-top,
   $scheduler-appointment-popup-repeat-end-item-height: $fluent-scheduler-appointment-popup-repeat-end-item-height,
   $scheduler-appointment-popup-repeat-end-item-vertical-margin: $fluent-radio-button-vertical-margin
 );
@@ -709,12 +710,6 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 
     .dx-scheduler-form-subject-group .dx-scheduler-form-icon {
       color: $scheduler-appointment-base-color;
-    }
-
-    .dx-scheduler-form-description-group .dx-scheduler-form-icon,
-    .dx-scheduler-form-resources-group .dx-scheduler-default-resources-icon,
-    .dx-scheduler-form-recurrence-settings-group .dx-scheduler-form-icon {
-      margin-top: $fluent-scheduler-appointment-popup-description-icon-margin-top;
     }
 
     .dx-scheduler-days-of-week-buttons {
