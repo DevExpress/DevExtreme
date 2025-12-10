@@ -348,9 +348,6 @@ export const ResourcesColumnLayout: Story = {
         editing={
           {
             form: {
-              onInitialized: (e) => {
-                console.log(e.component.option("items"));
-              },
               items: [
                 {
                   name: "mainGroup",
@@ -385,7 +382,6 @@ export const ResourcesColumnLayout: Story = {
     );
   },
 };
-
 
 export const RTL: Story = {
   args: {
