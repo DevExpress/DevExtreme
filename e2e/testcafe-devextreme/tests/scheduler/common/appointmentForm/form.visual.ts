@@ -17,6 +17,8 @@ const getResources = (withIcons = false) => ([
     dataSource: [
       { text: 'Samantha Bright', id: 1, color: '#727bd2' },
       { text: 'John Heart', id: 2, color: '#32c9ed' },
+      { text: 'Todd Hoffman', id: 3, color: '#2a7ee4' },
+      { text: 'Sandra Johnson', id: 4, color: '#7b49d3' },
     ],
     icon: withIcons ? 'user' : undefined,
   },
@@ -223,3 +225,43 @@ test.meta({ browserSize: [450, 1000] })('main form on mobile screen', async (t) 
     },
   },
 }));
+
+test.meta({ browserSize: [1500, 1500] })('appointment form resource with multiple selection', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const appointment = {
+    text: 'Appointment',
+    startDate: new Date('2021-04-26T16:30:00.000Z'),
+    endDate: new Date('2021-04-26T18:30:00.000Z'),
+    allDay: false,
+    recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TH;COUNT=10',
+    assigneeId: [1, 2, 3, 4],
+    roomId: 1,
+    priorityId: 1,
+  };
+
+  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+  const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, false);
+
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'scheduler__appointment__main-form__resource-with-multiple-selection.png',
+    { element: appointmentPopup.contentElement },
+  );
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxScheduler', {
+    dataSource: [],
+    views: ['week'],
+    currentView: 'week',
+    currentDate: new Date(2021, 2, 25),
+    resources: getResources(true),
+    editing: {
+      allowUpdating: true,
+    },
+  });
+});
