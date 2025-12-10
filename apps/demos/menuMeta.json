@@ -3762,6 +3762,7 @@
                   "/Models/SampleData/CinemaData.cs",
                   "/ViewModels/SchedulerViewModel.cs"
                 ],
+                "Badge": "Updated",
                 "DemoType": "Web"
               },
               {
