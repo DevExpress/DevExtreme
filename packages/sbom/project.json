@@ -43,7 +43,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "{projectRoot}",
-        "command": "pnpm dx-make-sbom  ../../ dist/ devextreme"
+        "command": "pnpm dx-make-sbom ../../ dist/ devextreme"
       },
       "cache": false
     },
@@ -61,7 +61,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "{projectRoot}",
-        "command": "pnpm dx-make-sbom  ../../ dist/ devextreme-react"
+        "command": "pnpm dx-make-sbom ../../ dist/ devextreme-react"
       },
       "cache": false
     },
@@ -70,7 +70,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "{projectRoot}",
-        "command": "pnpm dx-make-sbom  ../../ dist/ devextreme-angular"
+        "command": "pnpm dx-make-sbom ../../ dist/ devextreme-angular"
       },
       "cache": false
     },
@@ -79,7 +79,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "{projectRoot}",
-        "command": "pnpm dx-make-sbom  ../../ dist/ devextreme-vue"
+        "command": "pnpm dx-make-sbom ../../ dist/ devextreme-vue"
       },
       "cache": false
     }
