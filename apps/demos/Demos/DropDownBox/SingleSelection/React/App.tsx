@@ -15,7 +15,7 @@ const makeAsyncDataSource = (jsonFile: string) =>
     loadMode: 'raw',
     key: 'ID',
     load() {
-      return fetch(`https://js.devexpress.com/React/Demos/WidgetsGallery/JSDemos/data/${jsonFile}`).then((response) => response.json());
+      return fetch(`../../../../data/${jsonFile}`).then((response) => response.json());
     },
   });
 
