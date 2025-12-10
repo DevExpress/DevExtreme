@@ -15,6 +15,7 @@
     "clean": "nx clean devextreme-react",
     "regenerate": "pnpm --workspace-root nx regenerate devextreme-react",
     "lint": "eslint src/core",
+    "build": "pnpm --workspace-root nx build devextreme-react",
     "pack": "pnpm --workspace-root nx pack devextreme-react",
     "test": "jest"
   },
