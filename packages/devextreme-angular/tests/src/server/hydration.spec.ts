@@ -133,6 +133,8 @@ describe('Angular Components Hydration Test', () => {
       ssrState.body.querySelector(`${containerSelector}`),
       document.querySelector(`${containerSelector}`),
     );
+    console.log('-----ssrResult----->', ssrResult);
+    console.log('-----hydratedResult----->', hydratedResult);
 
     expect(TestHelpers.hasConsoleMessage(
       consoleSpies.log,
