@@ -1,15 +1,15 @@
 const TAB_SIZE = 4;
 
-function prepareItem(item, spaces) {
+function prepareItem(item: any, spaces: number) {
   return Array.isArray(item[0])
     ? formatValue(item, spaces + TAB_SIZE)
     : JSON.stringify(item);
 }
 
-export function formatValue(value, spaces = TAB_SIZE) {
+export function formatValue(value: any, spaces: number = TAB_SIZE) {
   if (value && Array.isArray(value[0])) {
     const formattedValue = value
-      .map((item) => prepareItem(item, spaces))
+      .map((item: any) => prepareItem(item, spaces))
       .join(`,${getLineBreak(spaces)}`);
 
     return `[${getLineBreak(spaces)}${formattedValue}${getLineBreak(spaces - TAB_SIZE)}]`;

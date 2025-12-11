@@ -8,19 +8,16 @@ function App() {
   const [value, setValue] = useState(filter);
   const [filterText, setFilterText] = useState('');
   const [dataSourceText, setDataSourceText] = useState('');
-  const updateTexts = useCallback(
-    (e) => {
-      setFilterText(formatValue(e.component.option('value')));
-      setDataSourceText(formatValue(e.component.getFilterExpression()));
-    },
-    [setFilterText, setDataSourceText],
-  );
+  const updateTexts = useCallback((e) => {
+    setFilterText(formatValue(e.component.option('value')));
+    setDataSourceText(formatValue(e.component.getFilterExpression()));
+  }, []);
   const onValueChanged = useCallback(
     (e) => {
       setValue(e.value);
       updateTexts(e);
     },
-    [updateTexts, setValue],
+    [updateTexts],
   );
   const calculateFilterExpression = useCallback(
     (filterValue, field) =>

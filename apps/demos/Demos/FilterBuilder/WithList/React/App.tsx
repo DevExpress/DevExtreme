@@ -1,8 +1,10 @@
 import React, { useCallback, useRef, useEffect } from 'react';
+
 import FilterBuilder from 'devextreme-react/filter-builder';
 import Button from 'devextreme-react/button';
 import List from 'devextreme-react/list';
 import { DataSource } from 'devextreme-react/common/data';
+
 import { filter, fields, products } from './data.ts';
 import CustomItem from './CustomItem.tsx';
 

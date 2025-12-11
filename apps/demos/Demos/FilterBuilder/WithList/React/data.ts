@@ -1,4 +1,15 @@
-import { FilterBuilderTypes } from 'devextreme-react/filter-builder';
+import type { FilterBuilderTypes } from 'devextreme-react/filter-builder';
+
+export interface Product {
+  ID: number;
+  Name: string;
+  Price: number;
+  Current_Inventory: number;
+  Backorder: number;
+  Manufacturing: number;
+  Category: string;
+  ImageSrc: string;
+}
 
 export const filter = [
   ['Category', '=', 'Video Players'],
@@ -44,7 +55,7 @@ export const fields: FilterBuilderTypes.Field[] = [
   },
 ];
 
-export const products = [{
+export const products: Product[] = [{
   ID: 1,
   Name: 'HD Video Player',
   Price: 330,
