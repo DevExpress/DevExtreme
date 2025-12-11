@@ -1,7 +1,7 @@
 # DevExtreme
 
 DevExtreme is an enterprise-ready suite of powerful, engaging UI components for popular front-end frameworks: Angular, React, Vue, and jQuery.
-test
+
 ![DevExtreme components](https://js.devexpress.com/Content/Images/Main/modern/AdaptivityDesktop.png)
 
 DevExtreme components are responsive and accessible. They work well across different devices, screen sizes, and input methods. Whether your target audience uses phones, PCs or screen readers - DevExpress components are up to the task.
