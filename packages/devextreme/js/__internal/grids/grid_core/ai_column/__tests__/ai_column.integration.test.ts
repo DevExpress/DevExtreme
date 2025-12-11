@@ -416,7 +416,7 @@ describe('Options', () => {
     });
   });
 
-  describe('when has noDataText', () => {
+  describe('when noDataText is set', () => {
     it('should render this text (initial render)', async () => {
       const { component } = await createDataGrid({
         dataSource: [
@@ -502,7 +502,7 @@ describe('Options', () => {
     });
   });
 
-  describe('when has emptyText', () => {
+  describe('when emptyText is set', () => {
     it('should render this text (initial render)', async () => {
       const { component } = await createDataGrid({
         keyExpr: 'id',
