@@ -1,9 +1,6 @@
 import React from 'react';
 import Scheduler, {
   Resource,
-  Editing,
-  Form as SchedulerForm,
-  Item,
   type SchedulerTypes,
 } from 'devextreme-react/scheduler';
 import ArrayStore from 'devextreme/data/array_store';
@@ -39,25 +36,6 @@ const App = () => (
       label="Priority"
       icon="tags"
     />
-
-    <Editing>
-      <SchedulerForm>
-        <Item name="mainGroup">
-          <Item name="subjectGroup" />
-          <Item name="dateGroup" />
-          <Item name="repeatGroup" />
-          <Item name="resourcesGroup">
-            <Item name="assigneeIdGroup" colCount={3} colCountByScreen={{ xs: 3 }}>
-              <Item name="assigneeIdIcon" />
-              <Item name="assigneeId" />
-              <Item name="priorityId" />
-            </Item>
-          </Item>
-          <Item name="descriptionGroup" />
-        </Item>
-        <Item name="recurrenceGroup" />
-      </SchedulerForm>
-    </Editing>
   </Scheduler>
 );
 

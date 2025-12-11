@@ -52,7 +52,7 @@ import { DxiResourceModule } from 'devextreme-angular/ui/nested';
 import { DxoScrollingModule } from 'devextreme-angular/ui/nested';
 import { DxiViewModule } from 'devextreme-angular/ui/nested';
 
-import { DxoSchedulerAiOptionsModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxoSchedulerAIOptionsModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxoSchedulerAppointmentDraggingModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxiSchedulerAsyncRuleModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxiSchedulerButtonItemModule } from 'devextreme-angular/ui/scheduler/nested';
@@ -1634,7 +1634,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     DxiResourceModule,
     DxoScrollingModule,
     DxiViewModule,
-    DxoSchedulerAiOptionsModule,
+    DxoSchedulerAIOptionsModule,
     DxoSchedulerAppointmentDraggingModule,
     DxiSchedulerAsyncRuleModule,
     DxiSchedulerButtonItemModule,
@@ -1677,7 +1677,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     DxiResourceModule,
     DxoScrollingModule,
     DxiViewModule,
-    DxoSchedulerAiOptionsModule,
+    DxoSchedulerAIOptionsModule,
     DxoSchedulerAppointmentDraggingModule,
     DxiSchedulerAsyncRuleModule,
     DxiSchedulerButtonItemModule,

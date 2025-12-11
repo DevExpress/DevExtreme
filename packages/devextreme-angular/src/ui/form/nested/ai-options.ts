@@ -30,7 +30,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoFormAiOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFormAIOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get disabled(): boolean {
         return this._getOption('disabled');
@@ -74,10 +74,10 @@ export class DxoFormAiOptionsComponent extends NestedOption implements OnDestroy
 
 @NgModule({
   imports: [
-    DxoFormAiOptionsComponent
+    DxoFormAIOptionsComponent
   ],
   exports: [
-    DxoFormAiOptionsComponent
+    DxoFormAIOptionsComponent
   ],
 })
-export class DxoFormAiOptionsModule { }
+export class DxoFormAIOptionsModule { }

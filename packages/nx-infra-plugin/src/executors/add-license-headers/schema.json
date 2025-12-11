@@ -10,6 +10,27 @@
       "type": "string",
       "description": "Path to package.json for version info",
       "default": "./package.json"
+    },
+    "separatorBetweenBannerAndContent": {
+      "type": "string",
+      "description": "Separator between license banner and the module content",
+      "default": "\n"
+    },
+    "includePatterns": {
+      "type": "array",
+      "description": "Glob patterns for files to include (relative to targetDirectory)",
+      "items": {
+        "type": "string"
+      },
+      "default": ["**/*.{ts,js}"]
+    },
+    "excludePatterns": {
+      "type": "array",
+      "description": "Glob patterns for files to exclude",
+      "items": {
+        "type": "string"
+      },
+      "default": []
     }
   },
   "required": []

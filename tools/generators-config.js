@@ -119,6 +119,9 @@ function commonConfig() {
         "RangeRule": "ValidationRule",
         "RequiredRule": "ValidationRule",
         "StringLengthRule": "ValidationRule"
+      },
+      nameTransformRules: {
+        acronyms: ['AI']
       }
     }
   }

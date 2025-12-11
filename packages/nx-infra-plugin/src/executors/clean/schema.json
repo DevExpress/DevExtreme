@@ -8,17 +8,11 @@
     },
     "excludePatterns": {
       "type": "array",
-      "description": "Patterns to exclude (only used with recursive mode)",
+      "description": "Patterns to exclude from cleaning.",
       "items": {
         "type": "string"
       },
       "default": []
-    },
-    "mode": {
-      "type": "string",
-      "enum": ["simple", "recursive", "shallow"],
-      "description": "Cleaning mode: 'simple' removes entire directory, 'recursive' removes contents recursively with exclusions, 'shallow' removes only first-level items with exclusions",
-      "default": "simple"
     }
   },
   "required": []
