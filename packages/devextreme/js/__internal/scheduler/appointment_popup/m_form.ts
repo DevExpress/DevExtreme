@@ -522,6 +522,7 @@ export class AppointmentForm {
       editorOptions: {
         stylingMode: getStylingModeFunc(),
         width: '100%',
+        applyValueMode: 'useButtons',
         calendarOptions: {
           firstDayOfWeek,
         },
