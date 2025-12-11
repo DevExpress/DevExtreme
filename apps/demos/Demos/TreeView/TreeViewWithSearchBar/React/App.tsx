@@ -4,7 +4,7 @@ import type { SearchMode } from 'devextreme-react/common';
 import { TreeView } from 'devextreme-react/tree-view';
 import { SelectBox, type SelectBoxTypes } from 'devextreme-react/select-box';
 
-import { products, searchModeLabel } from './data';
+import { products, searchModeLabel } from './data.ts';
 
 const options: SearchMode[] = ['contains', 'startswith', 'equals'];
 

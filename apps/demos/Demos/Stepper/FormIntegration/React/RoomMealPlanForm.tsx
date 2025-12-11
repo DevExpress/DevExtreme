@@ -3,8 +3,8 @@ import type { FC } from 'react';
 import 'devextreme-react/select-box';
 import { Form, SimpleItem } from 'devextreme-react/form';
 
-import type { FormProps } from './types';
-import { mealPlans, roomTypes } from './data';
+import type { FormProps } from './types.ts';
+import { mealPlans, roomTypes } from './data.ts';
 
 const RoomMealPlanForm: FC<FormProps> = memo(({ formData, validationGroup }) => (
   <React.Fragment>

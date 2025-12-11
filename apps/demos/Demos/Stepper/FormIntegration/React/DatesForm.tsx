@@ -3,7 +3,7 @@ import type { FC } from 'react';
 import 'devextreme-react/date-range-box';
 import { Form, SimpleItem } from 'devextreme-react/form';
 
-import type { FormProps } from './types';
+import type { FormProps } from './types.ts';
 
 const DatesForm: FC<FormProps> = memo(({ formData, validationGroup }) => (
   <React.Fragment>

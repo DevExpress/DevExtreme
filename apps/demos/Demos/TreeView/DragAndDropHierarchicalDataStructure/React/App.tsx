@@ -3,7 +3,7 @@ import TreeView from 'devextreme-react/tree-view';
 import type { TreeViewTypes, TreeViewRef } from 'devextreme-react/tree-view';
 import Sortable, { type SortableTypes } from 'devextreme-react/sortable';
 
-import service from './data';
+import service from './data.ts';
 import type { FileSystemItem } from './types';
 
 type Node = TreeViewTypes.Node<FileSystemItem>;

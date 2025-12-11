@@ -4,7 +4,7 @@ import Tabs from 'devextreme-react/tabs';
 import SelectBox from 'devextreme-react/select-box';
 import MultiView from 'devextreme-react/multi-view';
 
-import { employees, selectBoxLabel } from './data';
+import { employees, selectBoxLabel } from './data.ts';
 
 class EmployeeInfo extends React.Component<{
   data: {

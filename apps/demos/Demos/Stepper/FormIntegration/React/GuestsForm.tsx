@@ -3,7 +3,7 @@ import type { FC } from 'react';
 import { Form, RangeRule, SimpleItem } from 'devextreme-react/form';
 import 'devextreme-react/number-box';
 
-import type { FormProps } from './types';
+import type { FormProps } from './types.ts';
 
 const GuestsForm: FC<FormProps> = memo(({ formData, validationGroup }) => (
   <React.Fragment>

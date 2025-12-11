@@ -2,7 +2,7 @@ import React from 'react';
 import type { FC } from 'react';
 import 'devextreme-react/date-range-box';
 
-import type { BookingFormData } from './types';
+import type { BookingFormData } from './types.ts';
 
 interface ConfirmationProps {
   formData: BookingFormData;

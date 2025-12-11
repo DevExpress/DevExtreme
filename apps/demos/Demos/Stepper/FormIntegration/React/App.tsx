@@ -10,8 +10,8 @@ import RoomMealPlanForm from './RoomMealPlanForm.tsx';
 import AdditionalForm from './AdditionalForm.tsx';
 import Confirmation from './Confirmation.tsx';
 
-import { initialSteps, getInitialFormData } from './data';
-import type { BookingFormData } from './types';
+import { initialSteps, getInitialFormData } from './data.ts';
+import type { BookingFormData } from './types.ts';
 
 const validationGroups = ['dates', 'guests', 'roomAndMealPlan'];
 

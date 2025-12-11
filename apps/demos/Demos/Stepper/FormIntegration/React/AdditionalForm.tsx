@@ -3,7 +3,7 @@ import type { FC } from 'react';
 import 'devextreme-react/text-area';
 import { Form, SimpleItem } from 'devextreme-react/form';
 
-import type { FormProps } from './types';
+import type { FormProps } from './types.ts';
 
 const AdditionalForm: FC<FormProps> = memo(({ formData }) => (
   <React.Fragment>
