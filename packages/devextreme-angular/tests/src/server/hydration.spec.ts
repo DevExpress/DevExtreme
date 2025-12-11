@@ -70,7 +70,10 @@ class TestHelpers {
   }
 
   static hasConsoleMessage(spy: jasmine.Spy, messages: string[]): boolean {
-    return spy.calls.allArgs().some((args) => messages.some((msg) => args[0].toLowerCase().includes(msg.toLowerCase())));
+    return spy.calls.allArgs().some((args) => messages.some((msg) => {
+      console.log('-----args[0]----->', args[0]);
+      return args[0].toLowerCase().includes(msg.toLowerCase())
+    }));
   }
 }
 
@@ -131,7 +134,6 @@ describe('Angular Components Hydration Test', () => {
       document.querySelector(`${containerSelector}`),
     );
 
-    console.log('----consoleSpies.log------>', consoleSpies.log);
     expect(TestHelpers.hasConsoleMessage(
       consoleSpies.log,
       ['Angular hydrated 1 component(s)'],
