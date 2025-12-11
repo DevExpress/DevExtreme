@@ -1,4 +1,5 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
+import Button from 'devextreme-testcafe-models/button';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 
@@ -502,3 +503,62 @@ test('Change the prompt in the AI Prompt Editor', async (t) => {
     },
   ],
 })));
+
+test('The scroll position should not reset when the ai.prompt changes at runtime', async (t) => {
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const changePromptButton = new Button('#otherContainer');
+  const scrollContainer = dataGrid.getHeadersScrollContainer();
+  const scrollX = 200;
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await dataGrid.scrollTo(t, { x: scrollX });
+
+  await t.expect(scrollContainer.scrollLeft).eql(scrollX);
+
+  await t.click(changePromptButton.element);
+
+  await t.expect(dataGrid.getLoadPanel().element.exists).ok();
+
+  await t.expect(scrollContainer.scrollLeft).eql(scrollX);
+}).before(async () => {
+  await createWidget('dxDataGrid', () => ({
+    dataSource: [{ id: 1, name: 'Name 1', value: 1 }],
+    keyExpr: 'id',
+    width: 200,
+    columns: [
+      { dataField: 'id', caption: 'ID', width: 100 },
+      { dataField: 'name', caption: 'Name', width: 200 },
+      { dataField: 'value', caption: 'Value', width: 100 },
+      {
+        type: 'ai',
+        caption: 'AI Column',
+        name: 'aiColumn',
+        ai: {
+          // eslint-disable-next-line new-cap
+          aiIntegration: new (window as any).DevExpress.aiIntegration({
+            sendRequest() {
+              return {
+                promise: new Promise<string>((resolve) => {
+                  setTimeout(() => {
+                    resolve('');
+                  }, 30000);
+                }),
+                abort: (): void => {},
+              };
+            },
+          }),
+        },
+        width: 300,
+      },
+    ],
+  }));
+
+  await createWidget('dxButton', {
+    text: 'Change prompt',
+    onClick() {
+      const grid = ($ as any)('#container').dxDataGrid('instance');
+      grid.columnOption('aiColumn', 'ai.prompt', 'Updated prompt');
+    },
+  }, '#otherContainer');
+});
