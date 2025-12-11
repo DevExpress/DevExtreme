@@ -1,4 +1,7 @@
 import React from 'react';
+
+import type { SortableTypes } from 'devextreme-react/sortable';
+
 import Item from './Item.tsx';
 
 const itemStyle = {
@@ -7,7 +10,7 @@ const itemStyle = {
   fontWeight: 'bold',
 };
 
-export default function DragItem({ data }) {
+export default function DragItem({ data }: { data: SortableTypes.DragTemplateData }) {
   return (
     <Item
       text={data.itemData.Task_Subject}
