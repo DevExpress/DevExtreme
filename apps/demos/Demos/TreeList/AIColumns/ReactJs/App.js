@@ -26,7 +26,7 @@ export default function App() {
       autoExpandAll={true}
       aiIntegration={aiIntegration}
       onAIColumnRequestCreating={onAIColumnRequestCreating}
-      className="ai__datagrid"
+      className="ai__grid"
     >
       <Paging
         enabled={true}

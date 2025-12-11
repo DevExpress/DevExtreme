@@ -5,7 +5,7 @@
     :showBorders="true"
     :aiIntegration="aiIntegration"
     :onAIColumnRequestCreating="onAIColumnRequestCreating"
-    class="ai__datagrid"
+    class="ai__grid"
   >
     <DxGrouping :contextMenuEnabled="false"/>
     <DxPaging :pageSize="10"/>
@@ -123,7 +123,7 @@ const onAIColumnRequestCreating = (e: { data: Partial<Vehicle>[] }) => {
   background-color: var(--dx-datagrid-row-alternation-bg);
 }
 
-.ai__datagrid {
+.ai__grid {
   min-height: 600px;
 }
 </style>
