@@ -1,3 +1,7 @@
+::ng-deep #gridContainer {
+  min-height: 600px;
+}
+
 ::ng-deep #gridContainer .ai__cell {
   background-color: var(--dx-datagrid-row-alternation-bg);
 }

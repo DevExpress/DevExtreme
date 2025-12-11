@@ -2,6 +2,10 @@
   background-color: var(--dx-datagrid-row-alternation-bg);
 }
 
+.ai__datagrid {
+  min-height: 600px;
+}
+
 .trademark__wrapper {
     display: flex;
     align-items: center;
