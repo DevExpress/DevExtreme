@@ -11,6 +11,7 @@ import DataSource from 'devextreme/data/data_source';
 import ODataStore from 'devextreme/data/odata/store';
 import ajax from 'devextreme/core/utils/ajax';
 import { DxFileUploaderComponent, DxFileUploaderModule } from 'devextreme-angular';
+import { Observable } from 'rxjs';
 import createSpy = jasmine.createSpy;
 import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider';
 import FileSystemItem from 'devextreme/file_management/file_system_item';
@@ -23,7 +24,7 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000;
 
 @Injectable()
 export class TestInterceptor implements HttpInterceptor {
-  intercept(req: HttpRequest<any>, next: HttpHandler) {
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     interceptors.interceptorFn();
     return next.handle(req);
   }

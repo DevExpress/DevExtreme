@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { Observable } from '@angular/core/rxjs-interop';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import {
   provideHttpClient,
@@ -12,6 +11,7 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { DxHttpModule } from 'devextreme-angular/http';
 import DataSource from 'devextreme/data/data_source';
 import ODataStore from 'devextreme/data/odata/store';
+import { throwError } from 'rxjs';
 
 const TEST_URL = '';
 const interceptors: Record<string, () => void> = {};
@@ -20,13 +20,10 @@ interceptors.interceptorFn = () => {};
 
 const testInterceptorFn: HttpInterceptorFn = () => {
   interceptors.interceptorFn();
-  
-  return new Observable(observer => {
-    observer.error({
-      status: 403,
-      statusText: 'Request intercepted. Access Denied',
-    });
-  });
+  return throwError(() => ({
+    status: 403,
+    statusText: 'Request intercepted. Access Denied',
+  }));
 };
 
 @Component({
