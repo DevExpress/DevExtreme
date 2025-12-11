@@ -14,6 +14,7 @@ const containerSelector = `.${containerClass}`;
 
 @Component({
   selector: 'app-root',
+  standalone: false,
   template: `<div class="${containerClass}">
         ${componentNames.map((name) => `<dx-${name}></dx-${name}>`).join('\n')}
     </div>`,
