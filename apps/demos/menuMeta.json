@@ -16,6 +16,10 @@
                 "DocUrl": "",
                 "Widget": "DataGrid",
                 "DemoType": "Web",
+                "MvcAdditionalFiles": [
+                  "/Models/DataGridSale.cs",
+                  "/Models/SampleData/DataGridSales.cs"
+                ],
                 "ShowOnMainPage": true
               }
             ]
