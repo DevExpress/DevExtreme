@@ -131,6 +131,7 @@ describe('Angular Components Hydration Test', () => {
       document.querySelector(`${containerSelector}`),
     );
 
+    console.log('----consoleSpies.log------>', consoleSpies.log);
     expect(TestHelpers.hasConsoleMessage(
       consoleSpies.log,
       ['Angular hydrated 1 component(s)'],
