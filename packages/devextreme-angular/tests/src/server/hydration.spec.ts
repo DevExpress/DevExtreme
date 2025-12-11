@@ -45,7 +45,7 @@ class AppSSRModule {}
 class TestHelpers {
   static createSSRBodyMarkup(ssrComponentsHTML: string): string {
     const nghData = '[{}]';
-    return `<!--nghm--><app-root ng-version="${VERSION.full}" ngh="0" ng-server-context="ssr">${ssrComponentsHTML}</app-root>
+    return `<!--nghm--><app-root ng-version="${VERSION.full}" ngh="0" ng-server-context="ssg">${ssrComponentsHTML}</app-root>
       <script id="ng-state" type="application/json">{"DX_isPlatformServer":true,"__nghData__":${nghData}}</script>`;
   }
 
