@@ -2,7 +2,7 @@ import { BrowserModule, provideClientHydration } from '@angular/platform-browser
 import {
   Component, destroyPlatform, NgModule, PLATFORM_ID, VERSION, importProvidersFrom,
 } from '@angular/core';
-import { provideServerRendering, ServerModule } from '@angular/platform-server';
+import { provideServerRendering } from '@angular/platform-server';
 import { DxServerModule } from 'devextreme-angular/server';
 import infernoRenderer from 'devextreme/core/inferno_renderer';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
@@ -31,7 +31,7 @@ class AppBrowserModule {}
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [ServerModule, DevExtremeModule],
+  imports: [DevExtremeModule],
   bootstrap: [AppComponent],
   providers: [
     provideClientHydration(),
@@ -133,8 +133,6 @@ describe('Angular Components Hydration Test', () => {
       ssrState.body.querySelector(`${containerSelector}`),
       document.querySelector(`${containerSelector}`),
     );
-    console.log('-----ssrResult----->', ssrResult);
-    console.log('-----hydratedResult----->', hydratedResult);
 
     expect(TestHelpers.hasConsoleMessage(
       consoleSpies.log,
