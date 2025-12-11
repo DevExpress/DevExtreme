@@ -2,6 +2,10 @@
   background-color: var(--dx-datagrid-row-alternation-bg);
 }
 
+.ai__datagrid {
+  min-height: 600px;
+}
+
 #app .name_cell > div {
   align-items: flex-end;
 }

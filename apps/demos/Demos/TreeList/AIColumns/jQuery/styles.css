@@ -1,3 +1,7 @@
+#treeList {
+  min-height: 600px;
+}
+
 #treeList .ai__cell {
   background-color: var(--dx-datagrid-row-alternation-bg);
 }

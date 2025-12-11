@@ -1,3 +1,7 @@
+::ng-deep #employees {
+  min-height: 600px;
+}
+
 ::ng-deep #employees .ai__cell {
   background-color: var(--dx-datagrid-row-alternation-bg);
 }
