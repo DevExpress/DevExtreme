@@ -1,10 +1,15 @@
 import React, { useRef } from 'react';
+
 import CardView, {
-  CardCover, Column, Selection, Paging, HeaderFilter, SearchPanel, CardViewRef,
+  CardCover, Column, Selection, Paging, HeaderFilter, SearchPanel,
 } from 'devextreme-react/card-view';
+import type { CardViewRef, CardViewTypes } from 'devextreme-react/card-view';
 import Button from 'devextreme-react/button';
+
 import notify from 'devextreme/ui/notify';
-import { Employee, employees } from './data.ts';
+
+import { employees } from './data.ts';
+import type { Employee } from './data.ts';
 
 function imageExpr({ First_Name, Last_Name }: Employee): string {
   return `../../../../images/employees/new/${First_Name} ${Last_Name}.jpg`;
@@ -55,26 +60,26 @@ function CardFooterComponent() {
   </div>;
 }
 
-function StatusComponent({ data: { field: { value } } }) {
+function StatusComponent({ data }: { data: CardViewTypes.FieldTemplateData }) {
   const classNameMap = {
     Salaried: 'status--salaried',
     Commission: 'status--commission',
     Terminated: 'status--terminated',
   };
 
-  const className = classNameMap[value];
+  const className = classNameMap[data.field.value];
 
   return (
     <div className={`status ${className}`}>
       <div className="indicator"></div>
-      <div>{ value }</div>
+      <div>{ data.field.value }</div>
     </div>
   );
 }
 
-function EmailComponent({ data: { field: { value, text } } }) {
+function EmailComponent({ data }: { data: CardViewTypes.FieldTemplateData }) {
   return (
-    <a href={`mailto:${value}`}>{text}</a>
+    <a href={`mailto:${data.field.value}`}>{data.field.text}</a>
   );
 }
 

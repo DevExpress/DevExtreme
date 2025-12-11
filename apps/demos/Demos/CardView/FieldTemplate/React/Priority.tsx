@@ -1,13 +1,14 @@
 import React, { useMemo } from 'react';
-import { priorities, Priority } from './data.ts';
+import { priorities } from './data.ts';
+import type { Priority } from './data.ts';
 
 interface PriorityProps {
   priorityID: number;
 }
 
-const Priority = ({ priorityID }: PriorityProps) => {
+const PriorityComponent = ({ priorityID }: PriorityProps) => {
   const priority = useMemo<Priority>(
-    () => priorities.find((p) => p.id === priorityID),
+    () => priorities.find((p: Priority) => p.id === priorityID),
     [priorityID]
   );
 
@@ -19,4 +20,4 @@ const Priority = ({ priorityID }: PriorityProps) => {
   );
 };
 
-export default Priority;
+export default PriorityComponent;
