@@ -1,10 +1,9 @@
 import { PromiseExecutor, logger } from '@nx/devkit';
 import * as path from 'path';
-import * as fs from 'fs/promises';
 import { CopyFilesExecutorSchema } from './schema';
 import { resolveProjectPath } from '../../utils/path-resolver';
 import { logError } from '../../utils/error-handler';
-import { copyFile, copyRecursive, exists } from '../../utils/file-operations';
+import { copyFile, exists } from '../../utils/file-operations';
 
 const ERROR_FILES_MUST_BE_ARRAY = 'Files option must be an array';
 const ERROR_FAILED_TO_COPY = 'Failed to copy files';
@@ -27,15 +26,8 @@ const runExecutor: PromiseExecutor<CopyFilesExecutorSchema> = async (options, co
         return { success: false };
       }
 
-      const stat = await fs.stat(sourcePath);
-
-      if (stat.isDirectory()) {
-        await copyRecursive(sourcePath, destPath);
-        logger.info(`Copied directory ${sourcePath} -> ${destPath}`);
-      } else {
-        await copyFile(sourcePath, destPath);
-        logger.info(`Copied file ${sourcePath} -> ${destPath}`);
-      }
+      await copyFile(sourcePath, destPath);
+      logger.info(`Copied ${sourcePath} -> ${destPath}`);
     }
 
     return { success: true };
