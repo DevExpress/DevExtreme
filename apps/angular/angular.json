@@ -11,18 +11,22 @@
       "schematics": {},
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/sandbox",
+            "outputPath": {
+              "base": "dist/sandbox"
+            },
             "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "src/polyfills.ts"
+            ],
             "tsConfig": "src/tsconfig.app.json",
             "styles": [
               "node_modules/devextreme/dist/css/dx.common.css",
               "node_modules/devextreme/dist/css/dx.light.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "browser": "src/main.ts"
           },
           "configurations": {
             "production": {
@@ -38,8 +42,6 @@
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -54,23 +56,21 @@
               "sourceMap": true,
               "namedChunks": false,
               "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": false
+              "extractLicenses": true
             }
           }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "sandbox:build"
+            "buildTarget": "sandbox:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "sandbox:build:production"
+              "buildTarget": "sandbox:build:production"
             },
             "dev": {
-              "browserTarget": "sandbox:build:dev"
+              "buildTarget": "sandbox:build:dev"
             }
           }
         },
