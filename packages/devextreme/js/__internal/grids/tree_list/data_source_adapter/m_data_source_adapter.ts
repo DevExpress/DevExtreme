@@ -378,6 +378,16 @@ class DataSourceAdapterTreeList extends DataSourceAdapter {
   }
 
   private _loadParentsOrChildren(data, options, needChildren?) {
+    // Check if this operation is still relevant
+    if (options.operationId !== undefined
+      && this._lastOperationId !== undefined
+      && options.operationId !== this._lastOperationId) {
+      // @ts-expect-error
+      const rejectedDeferred = new Deferred();
+      rejectedDeferred.reject();
+      return rejectedDeferred; // This request is outdated - return rejected Deferred
+    }
+
     let filter;
     let needLocalFiltering;
     const { keys, keyMap } = this._generateInfoToLoad(data, needChildren);
@@ -435,6 +445,12 @@ class DataSourceAdapterTreeList extends DataSourceAdapter {
     const store = options.fullData ? new ArrayStore(options.fullData) : this._dataSource.store();
 
     this.loadFromStore(loadOptions, store).done((loadedData) => {
+      if (options.operationId !== undefined
+        && this._lastOperationId !== undefined
+        && options.operationId !== this._lastOperationId) {
+        return; // Ignore outdated result
+      }
+
       if (loadedData.length) {
         if (needLocalFiltering) {
           // @ts-expect-error

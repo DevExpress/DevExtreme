@@ -56,7 +56,7 @@ export default class DataSourceAdapter extends modules.Controller {
 
   private _isRefreshed: any;
 
-  private _lastOperationId: any;
+  protected _lastOperationId: any;
 
   private _operationTypes: any;
 
@@ -386,7 +386,6 @@ export default class DataSourceAdapter extends modules.Controller {
   protected _handleCustomizeStoreLoadOptions(options) {
     this._handleDataLoading(options);
     if (!(options.data?.length === 0)) {
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       options.data = getPageDataFromCache(options, true) || options.cachedStoreData;
     }
   }
