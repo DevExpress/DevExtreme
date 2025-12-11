@@ -124,6 +124,6 @@ const onAIColumnRequestCreating = (e: { data: Partial<Vehicle>[] }) => {
 }
 
 .ai__grid {
-  min-height: 600px;
+  min-height: 560px;
 }
 </style>

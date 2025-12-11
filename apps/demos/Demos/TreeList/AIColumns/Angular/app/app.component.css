@@ -1,5 +1,5 @@
 ::ng-deep #employees {
-  min-height: 600px;
+  min-height: 560px;
 }
 
 ::ng-deep #employees .ai__cell {
