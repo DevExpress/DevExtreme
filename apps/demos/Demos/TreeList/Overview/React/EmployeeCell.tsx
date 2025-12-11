@@ -9,11 +9,11 @@ const EmployeeCell = (props: TreeListTypes.ColumnCellTemplateData) => {
   }
 
   return (
-    <React.Fragment>
+    <>
       <div className="img" style={{ backgroundImage: `url(${employee.Picture})` }} />
       &nbsp;
       <span className="name">{employee.Name}</span>
-    </React.Fragment>
+    </>
   );
 };
 

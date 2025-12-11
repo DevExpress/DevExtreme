@@ -1,9 +1,12 @@
 import React, { useCallback, useState } from 'react';
-import {
-  TreeList, Selection, Column, type TreeListTypes,
-} from 'devextreme-react/tree-list';
-import { CheckBox, type CheckBoxTypes } from 'devextreme-react/check-box';
-import { SelectBox, type SelectBoxTypes } from 'devextreme-react/select-box';
+
+import type { CheckBoxTypes } from 'devextreme-react/check-box';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
+import { CheckBox } from 'devextreme-react/check-box';
+import { SelectBox } from 'devextreme-react/select-box';
+import { TreeList, Selection, Column } from 'devextreme-react/tree-list';
+import type { TreeListTypes } from 'devextreme-react/tree-list';
+
 import { employees, selectionModeLabel } from './data.ts';
 
 const expandedRowKeys = [1, 2, 10];
@@ -16,7 +19,7 @@ const App = () => {
   const [selectionMode, setSelectionMode] = useState('all');
   const [selectedEmployeeNames, setSelectedEmployeeNames] = useState(emptySelectedText);
 
-  const getEmployeeNames = useCallback((employeeList) => {
+  const getEmployeeNames = useCallback((employeeList: any[]) => {
     if (employeeList.length > 0) {
       return employeeList.map((employee) => employee.Full_Name).join(', ');
     }

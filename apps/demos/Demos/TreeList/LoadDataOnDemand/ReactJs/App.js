@@ -1,6 +1,6 @@
 import React from 'react';
-import { TreeList, RemoteOperations, Column } from 'devextreme-react/tree-list';
 import 'whatwg-fetch';
+import { TreeList, RemoteOperations, Column } from 'devextreme-react/tree-list';
 
 const dataSource = {
   async load(loadOptions) {
