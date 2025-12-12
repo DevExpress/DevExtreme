@@ -4,14 +4,6 @@
     "lib": [
       "esnext",
       "dom"
-    ],
-    "sourceRoot": "src/",
-    "inlineSources": true,
-    "sourceMap": true,
-    "mapRoot": ""
-  },
-  "include": [
-    "tests/src/**/*.spec.ts",
-    "tests/src/**/component-names.ts"
-  ]
+    ]
+  }
 }

@@ -88,7 +88,7 @@ jobs:
     steps:
       - name: Determine framework tests scope
         id: determine
-        run: |         
+        run: |
           if [ "${{ github.event_name }}" != "pull_request" ] || [ "${{ contains(github.event.pull_request.labels.*.name, 'force all tests') }}" = "true" ]; then
             echo "Framework tests scope: all demos"
             echo "framework-tests-scope=all" >> $GITHUB_OUTPUT
@@ -603,12 +603,12 @@ jobs:
       id: chrome-flags
       run: |
         BASE_FLAGS="chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647"
-        
+
         # For Material theme, enable better font rendering to avoid instability
         if [[ "${{ matrix.THEME }}" != *"material"* ]]; then
           BASE_FLAGS="$BASE_FLAGS --font-render-hinting=none --disable-font-subpixel-positioning"
         fi
-        
+
         echo "flags=$BASE_FLAGS" >> $GITHUB_OUTPUT
 
     - name: Run TestCafe tests (jQuery)

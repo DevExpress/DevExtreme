@@ -24,46 +24,33 @@
     >
       <DxEditing
         :allow-adding="false"
-        :popup="{
-          maxWidth: 440,
-          onOptionChanged: onPopupOptionChanged
-        }"
+        :popup="popupOptions"
       >
         <DxSchedulerForm :on-initialized="onFormInitialized">
           <DxItem template="movie-info-form-template"/>
 
           <DxItem
             :col-count="2"
-            :col-count-by-screen="{ xs: 2 }"
+            :col-count-by-screen="colCountByScreen"
             item-type="group"
           >
             <DxItem
               :col-span="1"
-              :label="{ text: 'Movie' }"
-              :editor-options="{
-                items: moviesData,
-                displayExpr: 'text',
-                valueExpr: 'id',
-                stylingMode: getEditorStylingMode(),
-                onValueChanged: onMovieValueChanged,
-                onContentReady: onMovieEditorContentReady
-              }"
+              :editor-options="movieEditorOptions"
               data-field="movieId"
               editor-type="dxSelectBox"
-            />
+            >
+              <DxLabel>Movie</DxLabel>
+            </DxItem>
 
             <DxItem
               :col-span="1"
-              :label="{ text: 'Price' }"
-              :editor-options="{
-                items: [5, 10, 15, 20],
-                displayExpr: priceDisplayExpr,
-                stylingMode: getEditorStylingMode(),
-                onContentReady: onPriceEditorContentReady
-              }"
+              :editor-options="priceEditorOptions"
               data-field="price"
               editor-type="dxSelectBox"
-            />
+            >
+              <DxLabel>Price</DxLabel>
+            </DxItem>
           </DxItem>
 
           <DxItem name="startDateGroup"/>
@@ -109,10 +96,12 @@ import { ref } from 'vue';
 import DxScheduler, {
   DxResource,
   DxEditing,
+  DxLabel,
+  DxItem,
   DxForm as DxSchedulerForm,
   type DxSchedulerTypes,
 } from 'devextreme-vue/scheduler';
-import { DxItem, type DxFormTypes } from 'devextreme-vue/form';
+import { type DxFormTypes } from 'devextreme-vue/form';
 import { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import { type DxPopupTypes } from 'devextreme-vue/popup';
 import { query } from 'devextreme-vue/common/data';
@@ -130,13 +119,16 @@ const scheduler = ref<DxScheduler['instance']>();
 const currentDate = new Date(2025, 3, 27);
 const dataSource = data;
 
-const currentMovie = ref<MovieResource | null | undefined>(null);
+const currentMovie = ref<MovieResource | null>(null);
 const formInstance = ref<dxForm | null>(null);
 
-const getMovieById = (resourceId: number): MovieResource | undefined =>
-  query(moviesData)
-    .filter(['id', '=', resourceId])
-    .toArray()[0];
+const onContentReady = (e: DxSchedulerTypes.ContentReadyEvent) => {
+  scheduler.value = e.component;
+};
+
+const getMovieById = (id: number | undefined): MovieResource | null => id
+  ? query(moviesData).filter(['id', '=', id]).toArray()[0] ?? null
+  : null;
 
 const getEditorStylingMode = (): 'filled' | 'outlined' => {
   const isMaterialOrFluent = document.querySelector('.dx-theme-fluent, .dx-theme-material');
@@ -145,32 +137,7 @@ const getEditorStylingMode = (): 'filled' | 'outlined' => {
 
 const priceDisplayExpr = (value: number): string => `$${value}`;
 
-const updateEndDate = (form: dxForm, movie: MovieResource): void => {
-  const formData = form.option('formData');
-  const { startDate } = formData;
-  if (startDate && movie?.duration) {
-    const newEndDate = new Date(startDate.getTime() + 60 * 1000 * movie.duration);
-    form.updateData('endDate', newEndDate);
-  }
-};
-
-const onMovieValueChanged = (e: DxSelectBoxTypes.ValueChangedEvent): void => {
-  const movie = getMovieById(e.value);
-  currentMovie.value = movie;
-
-  if (formInstance.value && movie) {
-    formInstance.value.updateData('director', movie.director);
-    updateEndDate(formInstance.value, movie);
-  }
-};
-
-const onMovieEditorContentReady = (e: DxSelectBoxTypes.ContentReadyEvent): void => {
-  e.component.option('stylingMode', getEditorStylingMode());
-};
-
-const onPriceEditorContentReady = (e: DxSelectBoxTypes.ContentReadyEvent): void => {
-  e.component.option('stylingMode', getEditorStylingMode());
-};
+const colCountByScreen = { xs: 2 };
 
 const onPopupOptionChanged = (e: DxPopupTypes.OptionChangedEvent): void => {
   if (e.fullName === 'toolbarItems' && e.value) {
@@ -182,29 +149,69 @@ const onPopupOptionChanged = (e: DxPopupTypes.OptionChangedEvent): void => {
   }
 };
 
+const popupOptions = {
+  maxWidth: 440,
+  onOptionChanged: onPopupOptionChanged,
+};
+
+const updateEndDate = (movie: MovieResource): void => {
+  const form = formInstance.value!;
+  const formData = form.option('formData');
+  const { startDate } = formData;
+
+  if (startDate) {
+    const newEndDate = new Date(startDate.getTime() + 60 * 1000 * movie.duration);
+    form.updateData('endDate', newEndDate);
+  }
+};
+
 const onFormInitialized = (e: DxFormTypes.InitializedEvent): void => {
   const form = e.component!;
-  formInstance.value = form;
-
   const formData = form.option('formData');
-  if (formData?.movieId) {
-    const movie = getMovieById(formData.movieId);
-    currentMovie.value = movie;
-  } else {
-    currentMovie.value = null;
-  }
+
+  formInstance.value = form;
+  currentMovie.value = formData?.movieId ? getMovieById(formData.movieId) : null;
 
   form.on('fieldDataChanged', (fieldEvent: DxFormTypes.FieldDataChangedEvent) => {
     if (fieldEvent.dataField === 'startDate') {
       const movie = getMovieById(form.option('formData').movieId);
+
       if (movie) {
-        updateEndDate(form, movie);
+        updateEndDate(movie);
       }
     }
   });
 };
 
-function onContentReady(e: DxSchedulerTypes.ContentReadyEvent) {
-  scheduler.value = e.component;
-}
+const onMovieValueChanged = (e: DxSelectBoxTypes.ValueChangedEvent): void => {
+  const form = formInstance.value!;
+  const movie = getMovieById(e.value);
+  currentMovie.value = movie;
+
+  if (movie) {
+    form.updateData('director', movie.director);
+    updateEndDate(movie);
+  }
+};
+
+const onCustomEditorContentReady = (e: DxSelectBoxTypes.ContentReadyEvent): void => {
+  e.component.option('stylingMode', getEditorStylingMode());
+};
+
+const movieEditorOptions = {
+  items: moviesData,
+  displayExpr: 'text',
+  valueExpr: 'id',
+  stylingMode: getEditorStylingMode(),
+  onValueChanged: onMovieValueChanged,
+  onContentReady: onCustomEditorContentReady,
+};
+
+const priceEditorOptions = {
+  items: [5, 10, 15, 20],
+  displayExpr: priceDisplayExpr,
+  stylingMode: getEditorStylingMode(),
+  onContentReady: onCustomEditorContentReady,
+};
+
 </script>

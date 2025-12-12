@@ -8,6 +8,7 @@
     :showBorders="true"
     :aiIntegration="aiIntegration"
     :onAIColumnRequestCreating="onAIColumnRequestCreating"
+    class="ai__grid"
   >
     <DxScrolling :mode="'standard'"/>
     <DxPaging
@@ -92,6 +93,10 @@ const onAIColumnRequestCreating = (e: { data: Partial<IEmployee>[] }) => {
 <style scoped>
 #app .ai__cell {
   background-color: var(--dx-datagrid-row-alternation-bg);
+}
+
+.ai__grid {
+  min-height: 560px;
 }
 
 #app .employee__cell > div {
