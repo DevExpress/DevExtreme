@@ -33,6 +33,7 @@ export default function App() {
         keyExpr="ID"
         aiIntegration={aiIntegration}
         onAIColumnRequestCreating={onAIColumnRequestCreating}
+        className="ai__grid"
       >
         <Paging
           enabled={true}
