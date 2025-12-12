@@ -1,9 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-
 import {
   afterEach, beforeEach, describe, expect, jest, test,
 } from '@jest/globals';
@@ -44,13 +38,6 @@ describe('TreeList DataSourceAdapter - T1311885 Race Condition', () => {
         loadCalls.push({ filter: options?.filter, deferred });
         return deferred.promise();
       },
-      // byKey: jest.fn((key: any) => {
-      //   // @ts-expect-error
-      //   const deferred = new Deferred();
-      //   const item = parentData.find((p) => p.Task_ID === key);
-      //   deferred.resolve(item);
-      //   return deferred.promise();
-      // }),
     });
 
     const dataSource = new DataSource({
@@ -100,11 +87,8 @@ describe('TreeList DataSourceAdapter - T1311885 Race Condition', () => {
   });
 
   afterEach(() => {
-    // Cleanup mocks and spies
     jest.clearAllMocks();
     jest.restoreAllMocks();
-
-    // Clear references to prevent memory leaks
     loadCalls = [];
     (dataSourceAdapter as any)._loadDataSource = undefined;
     (dataSourceAdapter as any).loadFromStore = undefined;
@@ -121,14 +105,12 @@ describe('TreeList DataSourceAdapter - T1311885 Race Condition', () => {
     };
     process.on('unhandledRejection', unhandledRejectionHandler);
 
-    // Setup initial state
     (dataSourceAdapter as any)._cachedStoreData = parentData;
     (dataSourceAdapter as any)._dataSource = {
       store: jest.fn(() => mockStore),
     };
     (dataSourceAdapter as any)._lastOperationId = OPERATION_ID.FIRST;
 
-    // Mock options
     const options = {
       remoteOperations: { filtering: true },
       storeLoadOptions: { sort: null },
@@ -136,14 +118,11 @@ describe('TreeList DataSourceAdapter - T1311885 Race Condition', () => {
       operationId: OPERATION_ID.FIRST,
     };
 
-    // Spy on loadFromStore to capture and control the deferred
-
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     (dataSourceAdapter as any).loadFromStore = jest.fn((loadOptions, store) => {
     // @ts-expect-error
       const deferred = new Deferred();
 
-      // Save first deferred for later manipulation
       if (!firstLoadDeferred) {
         firstLoadDeferred = deferred;
       }
@@ -151,21 +130,17 @@ describe('TreeList DataSourceAdapter - T1311885 Race Condition', () => {
       return deferred.promise();
     });
 
-    // STEP 1: Start first _loadParentsOrChildren call (parent lookup)
     (dataSourceAdapter as any)._loadParentsOrChildren(
       childData,
       options,
     );
 
-    // Verify loadFromStore was called
     expect((dataSourceAdapter as any).loadFromStore).toHaveBeenCalledTimes(1);
     expect(firstLoadDeferred).toBeDefined();
 
-    // STEP 2: Simulate reload() - clears _cachedStoreData
     (dataSourceAdapter as any)._cachedStoreData = undefined;
     (dataSourceAdapter as any)._lastOperationId = OPERATION_ID.SECOND;
 
-    // STEP 3: Resolve OLD parent lookup
     firstLoadDeferred.resolve(parentData);
     await Promise.resolve();
 
