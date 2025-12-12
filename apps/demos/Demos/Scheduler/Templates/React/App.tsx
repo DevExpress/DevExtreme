@@ -25,7 +25,7 @@ const views: SchedulerTypes.ViewType[] = ['day', 'week', 'timelineDay'];
 const groups = ['theatreId'];
 
 const getMovieById = (id: number | undefined): MovieResource | null => id
-  ? query(moviesData).filter(['id', '=', id]).toArray()[0]
+  ? query(moviesData).filter(['id', '=', id]).toArray()[0] ?? null
   : null;
 
 const getEditorStylingMode = (): 'filled' | 'outlined' => {
@@ -56,7 +56,7 @@ const App = () => {
   }), [onPopupOptionChanged]);
 
   const updateEndDate = useCallback((movie: MovieResource): void => {
-    const form = formInstanceRef.current!;
+    const form = formInstanceRef.current;
     const formData = form.option('formData');
     const { startDate } = formData;
 
@@ -67,7 +67,7 @@ const App = () => {
   }, []);
 
   const onFormInitialized = useCallback((e: FormTypes.InitializedEvent) => {
-    const form = e.component!;
+    const form = e.component;
     formInstanceRef.current = form;
 
     form.on('fieldDataChanged', (fieldEvent: FormTypes.FieldDataChangedEvent) => {
@@ -83,7 +83,7 @@ const App = () => {
   }, [updateEndDate]);
 
   const onMovieValueChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
-    const form = formInstanceRef.current!;
+    const form = formInstanceRef.current;
     const movie = getMovieById(e.value);
 
     if (movie) {

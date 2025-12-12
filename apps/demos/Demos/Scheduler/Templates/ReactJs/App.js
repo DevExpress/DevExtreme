@@ -15,7 +15,8 @@ import { data, moviesData, theatreData } from './data.js';
 const currentDate = new Date(2025, 3, 27);
 const views = ['day', 'week', 'timelineDay'];
 const groups = ['theatreId'];
-const getMovieById = (id) => (id ? query(moviesData).filter(['id', '=', id]).toArray()[0] : null);
+const getMovieById = (id) =>
+  id ? query(moviesData).filter(['id', '=', id]).toArray()[0] ?? null : null;
 const getEditorStylingMode = () => {
   const isMaterialOrFluent = document.querySelector('.dx-theme-fluent, .dx-theme-material');
   return isMaterialOrFluent ? 'filled' : 'outlined';

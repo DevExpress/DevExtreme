@@ -80,8 +80,8 @@ export class AppComponent {
     };
   }
 
-  getMovieById = (id: number | undefined): MovieData | undefined => id
-    ? query(this.moviesData).filter(['id', '=', id]).toArray()[0]
+  getMovieById = (id: number | undefined): MovieData | null => id
+    ? query(this.moviesData).filter(['id', '=', id]).toArray()[0] ?? null
     : null;
 
   getEditorStylingMode = (): 'filled' | 'outlined' => {
@@ -139,7 +139,7 @@ export class AppComponent {
   };
 
   onMovieValueChanged = (e: DxSelectBoxTypes.ValueChangedEvent): void => {
-    const form = this.formInstance!;
+    const form = this.formInstance;
     const movie = this.getMovieById(e.value);
     this.currentSelectedMovie = movie;
 

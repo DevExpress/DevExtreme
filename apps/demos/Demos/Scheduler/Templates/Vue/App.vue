@@ -119,17 +119,16 @@ const scheduler = ref<DxScheduler['instance']>();
 const currentDate = new Date(2025, 3, 27);
 const dataSource = data;
 
-const currentMovie = ref<MovieResource | null | undefined>(null);
+const currentMovie = ref<MovieResource | null>(null);
 const formInstance = ref<dxForm | null>(null);
 
 const onContentReady = (e: DxSchedulerTypes.ContentReadyEvent) => {
   scheduler.value = e.component;
 };
 
-const getMovieById = (resourceId: number): MovieResource | undefined =>
-  query(moviesData)
-    .filter(['id', '=', resourceId])
-    .toArray()[0];
+const getMovieById = (id: number | undefined): MovieResource | null => id
+  ? query(moviesData).filter(['id', '=', id]).toArray()[0] ?? null
+  : null;
 
 const getEditorStylingMode = (): 'filled' | 'outlined' => {
   const isMaterialOrFluent = document.querySelector('.dx-theme-fluent, .dx-theme-material');
