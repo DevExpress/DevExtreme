@@ -378,14 +378,14 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
   }
 
   private _loadParentsOrChildren(data, options, needChildren?) {
-    // Check if this operation is still relevant
     if (options.operationId !== undefined
       && this._lastOperationId !== undefined
       && options.operationId !== this._lastOperationId) {
+      this._dataSource.close(options.operationId); // Cancel the request
       // @ts-expect-error
       const rejectedDeferred = new Deferred();
       rejectedDeferred.reject();
-      return rejectedDeferred; // This request is outdated - return rejected Deferred
+      return rejectedDeferred; // Return rejected Deferred
     }
 
     let filter;
