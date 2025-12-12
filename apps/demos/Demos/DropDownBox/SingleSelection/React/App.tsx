@@ -34,7 +34,8 @@ function App() {
 
   const treeViewItemSelectionChanged = useCallback(
     (e: { component: { getSelectedNodeKeys: () => any } }) => {
-      setTreeBoxValue(e.component.getSelectedNodeKeys());
+      const selectedKeys = e.component.getSelectedNodeKeys();
+      setTreeBoxValue(selectedKeys.length > 0 ? selectedKeys[0] : null);
     },
     [],
   );
@@ -51,10 +52,6 @@ function App() {
     [treeBoxValue],
   );
 
-  const onTreeItemClick = useCallback(() => {
-    setIsTreeBoxOpened(false);
-  }, []);
-
   const treeViewRender = useCallback(
     () => (
       <TreeView
@@ -67,11 +64,10 @@ function App() {
         displayExpr="name"
         selectByClick={true}
         onContentReady={treeViewOnContentReady}
-        onItemClick={onTreeItemClick}
         onItemSelectionChanged={treeViewItemSelectionChanged}
       />
     ),
-    [treeViewRef, treeViewOnContentReady, onTreeItemClick, treeViewItemSelectionChanged],
+    [treeViewRef, treeViewOnContentReady, treeViewItemSelectionChanged],
   );
 
   const dataGridRender = useCallback(
@@ -106,6 +102,8 @@ function App() {
     } else {
       treeViewRef.current.instance().selectItem(e.value);
     }
+
+    setIsTreeBoxOpened(false);
   }, []);
 
   const syncDataGridSelection = useCallback((e: DropDownBoxTypes.ValueChangedEvent) => {
