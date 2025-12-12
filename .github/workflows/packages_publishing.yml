@@ -90,7 +90,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          pnpm set //npm.pkg.github.com/:_authToken $env:NODE_AUTH_TOKEN;
+          pnpm set "//npm.pkg.github.com/:_authToken" "$env:NODE_AUTH_TOKEN"
           pnpm nx build sbom;
 
       - name: Build artifacts package
