@@ -6,6 +6,7 @@ import List from 'devextreme-react/list';
 import { DataSource } from 'devextreme-react/common/data';
 import notify from 'devextreme/ui/notify';
 import 'devextreme/ui/select_box';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
 
 import { productTypes, products } from './data.ts';
 
@@ -68,7 +69,7 @@ const selectBoxOptions = {
   displayExpr: 'text',
   value: productTypes[0].id,
   inputAttr: { 'aria-label': 'Categories' },
-  onValueChanged: (args) => {
+  onValueChanged: (args: SelectBoxTypes.ValueChangedEvent) => {
     if (args.value > 1) {
       productsStore.filter(['type', '=', args.value]);
     } else {

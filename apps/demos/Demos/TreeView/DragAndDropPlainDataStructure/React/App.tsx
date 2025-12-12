@@ -22,7 +22,7 @@ const calculateToIndex = (e: SortableTypes.DragChangeEvent) => {
     : e.toIndex + 1;
 };
 
-const findNode = (treeView, index: string | number) => {
+const findNode = (treeView: any, index: string | number) => {
   const nodeElement = treeView.element().querySelectorAll('.dx-treeview-node')[index];
   if (nodeElement) {
     return findNodeById(treeView.getNodes(), nodeElement.getAttribute('data-item-id'));
@@ -32,7 +32,7 @@ const findNode = (treeView, index: string | number) => {
 
 const findNodeById = (nodes: Node[], id: string | number): Node => {
   for (let i = 0; i < nodes.length; i += 1) {
-    if (nodes[i].itemData.id === id) {
+    if (nodes[i].itemData?.id === id) {
       return nodes[i];
     }
     if (nodes[i].children) {
@@ -45,18 +45,18 @@ const findNodeById = (nodes: Node[], id: string | number): Node => {
   return null;
 };
 
-const moveNode = (fromNode: Node, toNode: Node, fromItems, toItems, isDropInsideItem) => {
-  const fromIndex = fromItems.findIndex((item) => item.id === fromNode.itemData.id);
+const moveNode = (fromNode: Node, toNode: Node, fromItems: FileSystemItem[], toItems: FileSystemItem[], isDropInsideItem: boolean) => {
+  const fromIndex = fromItems.findIndex((item: FileSystemItem) => item.id === fromNode.itemData.id);
   fromItems.splice(fromIndex, 1);
 
   const toIndex = toNode === null || isDropInsideItem
     ? toItems.length
-    : toItems.findIndex((item) => item.id === toNode.itemData.id);
+    : toItems.findIndex((item: FileSystemItem) => item.id === toNode.itemData.id);
   toItems.splice(toIndex, 0, fromNode.itemData);
 
   moveChildren(fromNode, fromItems, toItems);
   if (isDropInsideItem) {
-    fromNode.itemData.parentId = toNode.itemData.id;
+    fromNode.itemData.parentId = toNode.itemData?.id;
   } else {
     fromNode.itemData.parentId = toNode != null
       ? toNode.itemData.parentId
@@ -64,7 +64,7 @@ const moveNode = (fromNode: Node, toNode: Node, fromItems, toItems, isDropInside
   }
 };
 
-const moveChildren = (node: Node, fromDataSource, toDataSource: any[]) => {
+const moveChildren = (node: Node, fromDataSource: FileSystemItem[], toDataSource: FileSystemItem[]) => {
   if (!node.itemData.isDirectory) {
     return;
   }
@@ -74,7 +74,7 @@ const moveChildren = (node: Node, fromDataSource, toDataSource: any[]) => {
       moveChildren(child, fromDataSource, toDataSource);
     }
 
-    const fromIndex = fromDataSource.findIndex((item) => item.id === child.itemData.id);
+    const fromIndex = fromDataSource.findIndex((item: FileSystemItem) => item.id === child.itemData.id);
     fromDataSource.splice(fromIndex, 1);
     toDataSource.splice(toDataSource.length, 0, child.itemData);
   });
@@ -91,7 +91,7 @@ const isChildNode = (parentNode: Node, childNode: Node) => {
   return false;
 };
 
-const getTopVisibleNode = (component) => {
+const getTopVisibleNode = (component: any) => {
   const treeViewElement = component.element();
   const treeViewTopPosition = treeViewElement.getBoundingClientRect().top;
   const nodes = treeViewElement.querySelectorAll('.dx-treeview-node');

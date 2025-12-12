@@ -1,6 +1,11 @@
 import React from 'react';
+import type { Task } from './data.ts';
 
-function TaskItem({ prop }) {
+interface TaskItemProps {
+  prop: Task;
+}
+
+function TaskItem({ prop }: TaskItemProps) {
   return (
     <div className={`task-item task-item-priority-${prop.priority}`}>
       <span className="task-item-text">

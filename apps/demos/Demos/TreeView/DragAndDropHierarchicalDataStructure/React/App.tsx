@@ -41,9 +41,9 @@ const findNodeById = (nodes: Node[], id: string | number): Node => {
   return null;
 };
 
-const moveNode = (fromNode: Node, toNode: Node, fromItems, toItems, isDropInsideItem) => {
+const moveNode = (fromNode: Node, toNode: Node, fromItems: FileSystemItem[], toItems: FileSystemItem[], isDropInsideItem: boolean) => {
   const fromNodeContainingArray = getNodeContainingArray(fromNode, fromItems);
-  const fromIndex = fromNodeContainingArray.findIndex((item: { id: any; }) => item.id === fromNode.itemData.id);
+  const fromIndex = fromNodeContainingArray.findIndex((item: { id: any }) => item.id === fromNode.itemData.id);
   fromNodeContainingArray.splice(fromIndex, 1);
 
   if (isDropInsideItem) {
@@ -52,12 +52,12 @@ const moveNode = (fromNode: Node, toNode: Node, fromItems, toItems, isDropInside
     const toNodeContainingArray = getNodeContainingArray(toNode, toItems);
     const toIndex = toNode === null
       ? toNodeContainingArray.length
-      : toNodeContainingArray.findIndex((item: { id: any; }) => item.id === toNode.itemData.id);
+      : toNodeContainingArray.findIndex((item: { id: any }) => item.id === toNode.itemData.id);
     toNodeContainingArray.splice(toIndex, 0, fromNode.itemData);
   }
 };
 
-const getNodeContainingArray = (node: Node, rootArray) => (
+const getNodeContainingArray = (node: Node, rootArray: FileSystemItem[]) => (
   !node?.parent
     ? rootArray
     : node.parent.itemData.items
@@ -74,7 +74,7 @@ const isChildNode = (parentNode: Node, childNode: Node) => {
   return false;
 };
 
-const getTopVisibleNode = (component) => {
+const getTopVisibleNode = (component: any) => {
   const treeViewElement = component.element();
   const treeViewTopPosition = treeViewElement.getBoundingClientRect().top;
   const nodes = treeViewElement.querySelectorAll('.dx-treeview-node');

@@ -1,6 +1,10 @@
 import React from 'react';
 
-export default function LabelOnly(data) {
+interface LabelOnlyData {
+  label: string;
+}
+
+export default function LabelOnly(data: LabelOnlyData) {
   return (
     <div className="dx-step-caption">
       <div className="dx-step-label">{data.label}</div>

@@ -1,4 +1,15 @@
-export const products = [{
+export type Product = {
+  ID: number;
+  Name: string;
+  Price: number;
+  Current_Inventory: number | null;
+  Backorder: number;
+  Manufacturing: number;
+  Category: string;
+  ImageSrc: string;
+};
+
+export const products: Product[] = [{
   ID: 1,
   Name: 'HD Video Player',
   Price: 330,

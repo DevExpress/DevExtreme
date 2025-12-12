@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import List, { ItemDragging } from 'devextreme-react/list';
 import type { IItemDraggingProps } from 'devextreme-react/list';
 import { plannedTasks, doingTasks } from './data.ts';
+import type { Task } from './data.ts';
 
 const App = () => {
   const [plannedTasksState, setPlannedTasksState] = useState(plannedTasks);
@@ -38,7 +39,7 @@ const App = () => {
 
   const onReorder = useCallback((e) => {
     if (e.fromData === e.toData) {
-      const updateTasks = (tasks) => {
+      const updateTasks = (tasks: Task[]) => {
         const updatedTasks = [...tasks];
         const [movedTask] = updatedTasks.splice(e.fromIndex, 1);
         updatedTasks.splice(e.toIndex, 0, movedTask);

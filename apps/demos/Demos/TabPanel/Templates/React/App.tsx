@@ -2,9 +2,10 @@ import React, { useCallback, useState } from 'react';
 import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
 import TabPanel, { type TabPanelTypes } from 'devextreme-react/tab-panel';
 import { multiViewItems as companies } from './data.ts';
+import type { Company } from './data.ts';
 import CompanyItem from './CompanyItem.tsx';
 
-const itemTitleRender = (company) => <span>{company.CompanyName}</span>;
+const itemTitleRender = (company: Company) => <span>{company.CompanyName}</span>;
 
 const App = () => {
   const [animationEnabled, setAnimationEnabled] = useState(true);

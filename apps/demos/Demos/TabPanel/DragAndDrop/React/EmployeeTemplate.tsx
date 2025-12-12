@@ -1,12 +1,17 @@
 import React from 'react';
 import { List } from 'devextreme-react/list';
 import service from './data.ts';
+import type { Employee, Task } from './data.ts';
 
-function itemRender(data) {
+function itemRender(data: Task) {
   return <div>{data.Subject}</div>;
 }
 
-function EmployeeTemplate(props: { data: { ID?: any; FirstName?: any; LastName?: any; Picture?: any; Position?: any; Notes?: any; }; }) {
+interface EmployeeTemplateProps {
+  data: Employee;
+}
+
+function EmployeeTemplate(props: EmployeeTemplateProps) {
   const tasks = service
     .getTasks()
     .filter((task: { EmployeeID: any; }) => task.EmployeeID === props.data.ID);

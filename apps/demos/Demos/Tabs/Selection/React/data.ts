@@ -1,3 +1,12 @@
+export type Employee = {
+  id: number;
+  icon: string;
+  text: string;
+  position: string;
+  picture: string;
+  notes: string;
+};
+
 export const employees = [
   {
     id: 0,

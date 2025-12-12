@@ -1,6 +1,11 @@
 import React from 'react';
+import type { Company } from './data.ts';
 
-function CompanyItem({ data }) {
+interface CompanyItemProps {
+  data: Company;
+}
+
+function CompanyItem({ data }: CompanyItemProps) {
   const company = data;
   return (
     <div>

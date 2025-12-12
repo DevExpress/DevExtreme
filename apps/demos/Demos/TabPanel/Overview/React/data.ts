@@ -25,7 +25,15 @@ export const iconPositions: TabsIconPosition[] = [
   'bottom',
 ];
 
-const tasks = [
+export type Task = {
+  status: string;
+  priority: 'low' | 'medium' | 'high';
+  text: string;
+  date: string;
+  assignedBy: string;
+};
+
+const tasks: Task[] = [
   {
     status: 'Not Started',
     priority: 'high',

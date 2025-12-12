@@ -1,6 +1,16 @@
 import React from 'react';
 
-export default function CustomItem(data) {
+interface CustomItemData {
+  City: string;
+  State: string;
+  Zipcode: string;
+  Address: string;
+  Phone: string;
+  Fax: string;
+  Website: string;
+}
+
+export default function CustomItem(data: CustomItemData) {
   return (
     <div>
       <div>

@@ -17,7 +17,12 @@ import {
 
 const STRICT_WIDTH_CLASS = 'strict-width';
 
-function OptionWrapper(props) {
+interface OptionWrapperProps {
+  caption?: string;
+  children?: React.ReactNode;
+}
+
+function OptionWrapper(props: OptionWrapperProps) {
   return (
     <div className="option">
       {props.caption && <span>{props.caption}</span>}

@@ -2,8 +2,9 @@ import React, { useCallback, useState } from 'react';
 import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
 import List, { type ListTypes } from 'devextreme-react/list';
 import { products, searchModeLabel } from './data.ts';
+import type { Product } from './data.ts';
 
-function ItemTemplate(data) {
+function ItemTemplate(data: Product) {
   return <div>{data.Name}</div>;
 }
 
