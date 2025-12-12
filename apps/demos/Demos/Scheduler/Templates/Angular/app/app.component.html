@@ -32,7 +32,7 @@
     [allowAdding]="false"
     [popup]="popupOptions"
   >
-    <dxo-scheduler-form (onInitialized)="onFormInitialized($event)">
+    <dxo-scheduler-form [onInitialized]="onFormInitialized">
       <dxi-scheduler-item
         template="movie-info-form-template"
       ></dxi-scheduler-item>
@@ -48,7 +48,7 @@
           [colSpan]="1"
           [editorOptions]="movieEditorOptions"
         >
-          <dxi-scheduler-label>Movie</dxi-scheduler-label>
+          <dxo-scheduler-label>Movie</dxo-scheduler-label>
         </dxi-scheduler-item>
 
         <dxi-scheduler-item
@@ -57,7 +57,7 @@
           [colSpan]="1"
           [editorOptions]="priceEditorOptions"
         >
-          <dxi-scheduler-label>Price</dxi-scheduler-label>
+          <dxo-scheduler-label>Price</dxo-scheduler-label>
         </dxi-scheduler-item>
       </dxi-scheduler-item>
 
