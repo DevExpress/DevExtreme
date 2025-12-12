@@ -86,6 +86,13 @@ jobs:
           mkdir -p ./artifacts/deps-scanner
           cp reportGithub.json ./artifacts/deps-scanner/
 
+      - name: Build SBOMs
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pnpm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN";
+          pnpm nx build sbom;
+
       - name: Build artifacts package
         run: npx ts-node tools/scripts/make-artifacts-package
 
