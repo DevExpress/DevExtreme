@@ -13,7 +13,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DevExtremeModule } from 'devextreme-angular';
 import { componentNames as componentNamesAll } from './component-names';
 
-const componentNames = componentNamesAll.filter((n) =>  ['toast','action-sheet'].includes(n));
+const componentNames = componentNamesAll.filter((n) => ['toast','action-sheet',].includes(n));
 
 const containerClass = 'container';
 const containerSelector = `.${containerClass}`;
@@ -99,9 +99,9 @@ describe('Angular Components Hydration Test', () => {
     });
 
     ssrState.ssrHTML = html
-        //.replace(/ng-server-context="other"/g, 'ng-server-context="ssg"')
-        .replace(/^.*<body/,'<body')
-        .replace(/<\/body>.*$/,'</body>');
+      .replace(/ng-server-context="other"/g, 'ng-server-context="ssg"')
+      .replace(/^.*<body/, '<body')
+      .replace(/<\/body>.*$/, '</body>');
 
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = ssrState.ssrHTML;
@@ -115,17 +115,17 @@ describe('Angular Components Hydration Test', () => {
 
   it('should correctly hydrate server-rendered HTML', async () => {
     infernoRenderer.resetInjection();
-    
+
     document.body.outerHTML = ssrState.ssrHTML;
-    
+
     // Act
     await platformBrowserDynamic().bootstrapModule(AppBrowserModule);
 
     expect(TestHelpers.hasConsoleMessage(
-        consoleSpies.log,
-        ['Angular hydrated 1 component(s)'],
+      consoleSpies.log,
+      ['Angular hydrated 1 component(s)'],
     )).toBeTruthy();
 
-   expect(ssrState.containerHtml).toEqual(document.querySelector(`${containerSelector}`).innerHTML);
+    expect(ssrState.containerHtml).toEqual(document.querySelector(`${containerSelector}`).innerHTML);
   });
 });
