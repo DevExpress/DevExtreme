@@ -108,6 +108,7 @@ describe('TreeList DataSourceAdapter - T1311885 Race Condition', () => {
     (dataSourceAdapter as any)._cachedStoreData = parentData;
     (dataSourceAdapter as any)._dataSource = {
       store: jest.fn(() => mockStore),
+      cancel: jest.fn(),
     };
     (dataSourceAdapter as any)._lastOperationId = OPERATION_ID.FIRST;
 

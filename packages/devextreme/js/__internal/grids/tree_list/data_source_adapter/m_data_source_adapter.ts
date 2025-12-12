@@ -17,6 +17,7 @@ import treeListCore from '../m_core';
 const { queryByOptions } = storeHelper;
 
 const DEFAULT_KEY_EXPRESSION = 'id';
+const ERROR_MESSAGE = 'Operation cancelled due to operationId mismatch (possible race condition)';
 
 const isFullBranchFilterMode = (that) => that.option('filterMode') === 'fullBranch';
 
@@ -381,10 +382,10 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     if (options.operationId !== undefined
       && this._lastOperationId !== undefined
       && options.operationId !== this._lastOperationId) {
-      this._dataSource.close(options.operationId); // Cancel the request
+      this._dataSource.cancel(options.operationId); // Cancel the request
       // @ts-expect-error
       const rejectedDeferred = new Deferred();
-      rejectedDeferred.reject();
+      rejectedDeferred.reject(new Error(ERROR_MESSAGE));
       return rejectedDeferred; // Return rejected Deferred
     }
 
@@ -448,6 +449,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
       if (options.operationId !== undefined
         && this._lastOperationId !== undefined
         && options.operationId !== this._lastOperationId) {
+        d.reject();
         return; // Ignore outdated result
       }
 
