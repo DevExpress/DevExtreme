@@ -8,12 +8,12 @@ interface EmployeeProps {
 }
 
 const EmployeeComponent = ({ employeeID }: EmployeeProps) => {
-  const employee = useMemo<Employee>(
+  const employee = useMemo<Employee | undefined>(
     () => employees.find((e: Employee) => e.ID === employeeID),
     [employeeID]
   );
 
-  return <button className='task__link-button'>{ employee.Name }</button>;
+  return <button className='task__link-button'>{ employee?.Name }</button>;
 };
 
 export default EmployeeComponent;

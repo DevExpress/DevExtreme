@@ -7,15 +7,15 @@ interface PriorityProps {
 }
 
 const PriorityComponent = ({ priorityID }: PriorityProps) => {
-  const priority = useMemo<Priority>(
+  const priority = useMemo<Priority | undefined>(
     () => priorities.find((p: Priority) => p.id === priorityID),
     [priorityID]
   );
 
   return (
-    <div className={`task__priority task__priority--${priority.postfix}`}>
+    <div className={`task__priority task__priority--${priority?.postfix}`}>
       <div className="task__indicator" />
-      <div>{ priority.text }</div>
+      <div>{ priority?.text }</div>
     </div>
   );
 };

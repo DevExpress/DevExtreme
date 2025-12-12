@@ -32,7 +32,7 @@ const App = () => {
 
   const onSelectionModeChange = useCallback((value: SingleOrMultiple) => {
     setSelectionMode(value);
-    cardViewRef.current.instance().clearSelection();
+    cardViewRef.current?.instance().clearSelection();
   }, []);
 
   return (

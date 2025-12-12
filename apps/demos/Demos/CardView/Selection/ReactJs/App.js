@@ -21,7 +21,7 @@ const App = () => {
   const cardViewRef = useRef(null);
   const onSelectionModeChange = useCallback((value) => {
     setSelectionMode(value);
-    cardViewRef.current.instance().clearSelection();
+    cardViewRef.current?.instance().clearSelection();
   }, []);
   return (
     <>
