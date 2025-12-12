@@ -156,7 +156,7 @@ const popupOptions = {
 };
 
 const updateEndDate = (movie: MovieResource): void => {
-  const form = formInstance.value;
+  const form = formInstance.value!;
   const formData = form.option('formData');
   const { startDate } = formData;
 
@@ -167,7 +167,7 @@ const updateEndDate = (movie: MovieResource): void => {
 };
 
 const onFormInitialized = (e: DxFormTypes.InitializedEvent): void => {
-  const form = e.component;
+  const form = e.component!;
   const formData = form.option('formData');
 
   formInstance.value = form;
@@ -185,11 +185,12 @@ const onFormInitialized = (e: DxFormTypes.InitializedEvent): void => {
 };
 
 const onMovieValueChanged = (e: DxSelectBoxTypes.ValueChangedEvent): void => {
+  const form = formInstance.value!;
   const movie = getMovieById(e.value);
   currentMovie.value = movie;
 
   if (movie) {
-    formInstance.value.updateData('director', movie.director);
+    form.updateData('director', movie.director);
     updateEndDate(movie);
   }
 };

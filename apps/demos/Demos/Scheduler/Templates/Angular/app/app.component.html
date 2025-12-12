@@ -28,10 +28,7 @@
   <dxi-scheduler-resource fieldExpr="theatreId" [dataSource]="theatreData">
   </dxi-scheduler-resource>
 
-  <dxo-scheduler-editing
-    [allowAdding]="false"
-    [popup]="popupOptions"
-  >
+  <dxo-scheduler-editing [allowAdding]="false" [popup]="popupOptions">
     <dxo-scheduler-form [onInitialized]="onFormInitialized">
       <dxi-scheduler-item
         template="movie-info-form-template"
