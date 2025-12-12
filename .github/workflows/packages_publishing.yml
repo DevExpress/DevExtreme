@@ -60,37 +60,37 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # - name: Set timestamp version
-      #   if: ${{ env.SET_TIMESTAMP_VERSION == 'true' }}
-      #   run: pnpx ts-node tools/scripts/set-timestamp-version
+      - name: Set timestamp version
+        if: ${{ env.SET_TIMESTAMP_VERSION == 'true' }}
+        run: pnpx ts-node tools/scripts/set-timestamp-version
 
-      # - name: Build npm packages
-      #   env:
-      #     BUILD_INTERNAL_PACKAGE: true
-      #   run: pnpm run all:build
+      - name: Build npm packages
+        env:
+          BUILD_INTERNAL_PACKAGE: true
+        run: pnpm run all:build
 
-      # - name: Clone deps scanner
-      #   uses: actions/checkout@v4
-      #   with:
-      #     repository: DevExpress/npmdeps-scanner
-      #     token: ${{ secrets.NPM_DEPS_SCANNER_PAT }}
-      #     path: deps-scanner
+      - name: Clone deps scanner
+        uses: actions/checkout@v4
+        with:
+          repository: DevExpress/npmdeps-scanner
+          token: ${{ secrets.NPM_DEPS_SCANNER_PAT }}
+          path: deps-scanner
 
-      # - name: Build deps scanner
-      #   working-directory: deps-scanner
-      #   run: dotnet build npmDepsScanner.csproj /p:Configuration=Release
+      - name: Build deps scanner
+        working-directory: deps-scanner
+        run: dotnet build npmDepsScanner.csproj /p:Configuration=Release
 
-      # - name: Run deps scanner
-      #   run: |
-      #     ./deps-scanner/bin/Release/npmDepsScanner.exe scan_cache ${{ github.workspace }} reportGithub.json
-      #     mkdir -p ./artifacts/deps-scanner
-      #     cp reportGithub.json ./artifacts/deps-scanner/
+      - name: Run deps scanner
+        run: |
+          ./deps-scanner/bin/Release/npmDepsScanner.exe scan_cache ${{ github.workspace }} reportGithub.json
+          mkdir -p ./artifacts/deps-scanner
+          cp reportGithub.json ./artifacts/deps-scanner/
 
       - name: Build SBOMs
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          pnpm set //npm.pkg.github.com/:_authToken "$env:NODE_AUTH_TOKEN";
+          pnpm set //npm.pkg.github.com/:_authToken $env:NODE_AUTH_TOKEN;
           pnpm nx build sbom;
 
       - name: Build artifacts package
