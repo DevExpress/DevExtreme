@@ -43,7 +43,7 @@ const applySorting = (data: any[], sort: any): any => queryByOptions(
   },
 ).toArray();
 
-class DataSourceAdapterTreeList extends DataSourceAdapter {
+export class DataSourceAdapterTreeList extends DataSourceAdapter {
   private _indexByKey: any;
 
   private _keyGetter: any;
