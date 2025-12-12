@@ -3757,7 +3757,6 @@
                 "Widget": "Scheduler",
                 "Modules": "globalize--vue&react",
                 "MvcAdditionalFiles": [
-                  "/Views/Scheduler/_AppointmentTooltipTemplate.cshtml",
                   "/Models/Movie.cs",
                   "/Models/Theatre.cs",
                   "/Models/CinemaDataItem.cs",
