@@ -1,14 +1,17 @@
-import { PromiseExecutor, logger } from '@nx/devkit';
+import { PromiseExecutor, logger, ExecutorContext } from '@nx/devkit';
 import * as fs from 'fs';
 import * as path from 'path';
 import { GenerateReactComponentsExecutorSchema, Framework } from './schema';
 import { resolveProjectPath } from '../../utils/path-resolver';
 import { logError, getErrorMessage } from '../../utils/error-handler';
+import cleanExecutor from '../clean/executor';
+import { CleanExecutorSchema } from '../clean/schema';
 import { getFrameworkHandler, GenerationConfig } from './framework-handlers';
 
 const DEFAULT_COMPONENTS_DIR = './src';
 const DEFAULT_INDEX_FILE_NAME = './src/index.ts';
 const CORE_DIR = 'core';
+const COMMON_DIR = 'common';
 
 const TOOLS_DIR = 'tools';
 const GENERATORS_CONFIG_FILE = 'generators-config.js';
@@ -22,6 +25,10 @@ const DEFAULT_CONFIG_COMPONENT = './core/nested-option';
 
 const WIDGETS_PACKAGE = 'devextreme';
 
+const CLEAN_MODE = 'shallow';
+
+const MSG_CLEANING = '🧹 Cleaning generated components';
+const MSG_CLEANED = '✓ Successfully cleaned components directory';
 const MSG_LOADING_METADATA = '📋 Loading metadata';
 const MSG_GENERATORS_CONFIG_NOT_FOUND =
   '⚠️  generators-config.js not found, proceeding without unifiedConfig';
@@ -40,6 +47,7 @@ function createMessages(framework: Framework) {
 
 const ERROR_METADATA_NOT_FOUND =
   'Could not find devextreme-metadata/integration-data.json. Please ensure devextreme-metadata is installed or provide a metadataPath option.';
+const ERROR_CLEAN_FAILED = 'Failed to clean components directory';
 
 const PARENT_DIR_PREFIX = '../';
 const DOT_SLASH_PREFIX = './';
@@ -47,6 +55,38 @@ const DOT_SLASH_PREFIX = './';
 const ENCODING_UTF8 = 'utf-8';
 
 const EXPORT_PATTERN = /export \{/g;
+
+async function cleanComponentsDirectory(
+  absoluteComponentsDir: string,
+  preservePaths: string[],
+  context: ExecutorContext,
+): Promise<void> {
+  logger.info(MSG_CLEANING);
+
+  const absoluteProjectRoot = resolveProjectPath(context);
+
+  const relativeComponentsDir = path.relative(absoluteProjectRoot, absoluteComponentsDir);
+
+  const cleanOptions: CleanExecutorSchema = {
+    targetDirectory: DOT_SLASH_PREFIX + relativeComponentsDir,
+    excludePatterns: preservePaths.map((currentPath) => {
+      if (path.isAbsolute(currentPath)) {
+        const relative = path.relative(absoluteProjectRoot, currentPath);
+        return DOT_SLASH_PREFIX + relative;
+      }
+      return currentPath;
+    }),
+    mode: CLEAN_MODE,
+  };
+
+  const result = await cleanExecutor(cleanOptions, context);
+
+  if (result.success) {
+    logger.info(MSG_CLEANED);
+  } else {
+    throw new Error(ERROR_CLEAN_FAILED);
+  }
+}
 
 function resolveMetadataPath(
   options: GenerateReactComponentsExecutorSchema,
@@ -175,10 +215,6 @@ function loadConfigFromGeneratorsFile(
 }
 
 function loadGenerationFunction(framework: Framework): any {
-  if (framework === 'angular') {
-    return null;
-  }
-
   const handler = getFrameworkHandler(framework);
   const functionName = handler.getDefaults().generationFunctionName;
 
@@ -290,6 +326,10 @@ const runExecutor: PromiseExecutor<GenerateReactComponentsExecutorSchema> = asyn
       absoluteProjectRoot,
       options.indexFileName || DEFAULT_INDEX_FILE_NAME,
     );
+
+    const coreDir = path.join(componentsDir, CORE_DIR);
+    const commonDir = path.join(componentsDir, COMMON_DIR);
+    await cleanComponentsDirectory(componentsDir, [coreDir, commonDir, indexFileName], context);
 
     const metadataPath = resolveMetadataPath(options, absoluteProjectRoot, workspaceRoot);
     const metaData = loadMetadata(metadataPath);

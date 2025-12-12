@@ -16,6 +16,10 @@
                 "DocUrl": "",
                 "Widget": "DataGrid",
                 "DemoType": "Web",
+                "MvcAdditionalFiles": [
+                  "/Models/DataGridSale.cs",
+                  "/Models/SampleData/DataGridSales.cs"
+                ],
                 "ShowOnMainPage": true
               }
             ]
@@ -3747,13 +3751,12 @@
             "Equivalents": "",
             "Demos": [
               {
-                "Title": "Templates",
+                "Title": "Edit Form and Templates",
                 "Name": "Templates",
                 "Credits": "www.wikipedia.org",
                 "Widget": "Scheduler",
                 "Modules": "globalize--vue&react",
                 "MvcAdditionalFiles": [
-                  "/Views/Scheduler/_AppointmentTooltipTemplate.cshtml",
                   "/Models/Movie.cs",
                   "/Models/Theatre.cs",
                   "/Models/CinemaDataItem.cs",
@@ -3762,6 +3765,7 @@
                   "/Models/SampleData/CinemaData.cs",
                   "/ViewModels/SchedulerViewModel.cs"
                 ],
+                "Badge": "Updated",
                 "DemoType": "Web"
               },
               {

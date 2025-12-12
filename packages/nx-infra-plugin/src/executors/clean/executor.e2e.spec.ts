@@ -23,7 +23,7 @@ describe('CleanExecutor E2E', () => {
     cleanupTempDir(tempDir);
   });
 
-  describe('Complete removal (no exclusions)', () => {
+  describe('Simple mode', () => {
     beforeEach(async () => {
       const projectDir = path.join(tempDir, 'packages', 'test-lib');
       const npmDir = path.join(projectDir, 'npm');
@@ -50,6 +50,7 @@ describe('CleanExecutor E2E', () => {
     it('should delete the entire directory', async () => {
       const options: CleanExecutorSchema = {
         targetDirectory: './npm',
+        mode: 'simple',
       };
 
       const npmDir = path.join(tempDir, 'packages', 'test-lib', 'npm');
@@ -67,6 +68,7 @@ describe('CleanExecutor E2E', () => {
     it('should delete all files and subdirectories recursively', async () => {
       const options: CleanExecutorSchema = {
         targetDirectory: './npm',
+        mode: 'simple',
       };
 
       const projectDir = path.join(tempDir, 'packages', 'test-lib');
@@ -91,6 +93,7 @@ describe('CleanExecutor E2E', () => {
 
       const options: CleanExecutorSchema = {
         targetDirectory: './npm',
+        mode: 'simple',
       };
 
       const result = await executor(options, context);
@@ -111,6 +114,7 @@ describe('CleanExecutor E2E', () => {
 
       const options: CleanExecutorSchema = {
         targetDirectory: './npm',
+        mode: 'simple',
       };
 
       const result = await executor(options, context);
@@ -139,7 +143,7 @@ describe('CleanExecutor E2E', () => {
     });
   });
 
-  describe('Selective cleaning (with exclusions)', () => {
+  describe('Recursive mode', () => {
     beforeEach(async () => {
       const srcDir = path.join(tempDir, 'packages', 'test-lib', 'src');
 
@@ -159,6 +163,7 @@ describe('CleanExecutor E2E', () => {
       const options: CleanExecutorSchema = {
         targetDirectory: './src',
         excludePatterns: ['./src/core'],
+        mode: 'recursive',
       };
 
       const srcDir = path.join(tempDir, 'packages', 'test-lib', 'src');
@@ -180,6 +185,7 @@ describe('CleanExecutor E2E', () => {
       const options: CleanExecutorSchema = {
         targetDirectory: './src',
         excludePatterns: ['./src/core'],
+        mode: 'recursive',
       };
 
       const srcDir = path.join(tempDir, 'packages', 'test-lib', 'src');
@@ -197,6 +203,7 @@ describe('CleanExecutor E2E', () => {
       const options: CleanExecutorSchema = {
         targetDirectory: './src',
         excludePatterns: ['./src/core'],
+        mode: 'recursive',
       };
 
       const srcDir = path.join(tempDir, 'packages', 'test-lib', 'src');
@@ -222,6 +229,7 @@ describe('CleanExecutor E2E', () => {
       const options: CleanExecutorSchema = {
         targetDirectory: './src',
         excludePatterns: ['./src/core', './src/common', './src/types'],
+        mode: 'recursive',
       };
 
       const result = await executor(options, context);
@@ -248,6 +256,7 @@ describe('CleanExecutor E2E', () => {
       const options: CleanExecutorSchema = {
         targetDirectory: './src',
         excludePatterns: ['./src/core'],
+        mode: 'recursive',
       };
 
       const result = await executor(options, context);
@@ -260,6 +269,7 @@ describe('CleanExecutor E2E', () => {
     it('should clean all files when no exclude patterns specified', async () => {
       const options: CleanExecutorSchema = {
         targetDirectory: './src',
+        mode: 'recursive',
       };
 
       const srcDir = path.join(tempDir, 'packages', 'test-lib', 'src');
@@ -279,6 +289,7 @@ describe('CleanExecutor E2E', () => {
       const options: CleanExecutorSchema = {
         targetDirectory: './src',
         excludePatterns: [absoluteCorePath],
+        mode: 'recursive',
       };
 
       const result = await executor(options, context);
@@ -287,46 +298,9 @@ describe('CleanExecutor E2E', () => {
 
       expect(fs.existsSync(path.join(srcDir, 'core', 'component.tsx'))).toBe(true);
     });
-
-    it('should preserve specific files and their parent directories', async () => {
-      const srcDir = path.join(tempDir, 'packages', 'test-lib', 'src');
-
-      fs.mkdirSync(path.join(srcDir, 'ui', 'popup', 'service'), { recursive: true });
-      fs.mkdirSync(path.join(srcDir, 'ui', 'button'), { recursive: true });
-
-      await writeFileText(
-        path.join(srcDir, 'ui', 'popup', 'service', 'test.ts'),
-        'export const service = {};',
-      );
-      await writeFileText(
-        path.join(srcDir, 'ui', 'popup', 'index.ts'),
-        'export * from "./service";',
-      );
-      await writeFileText(
-        path.join(srcDir, 'ui', 'button', 'index.ts'),
-        'export const Button = {};',
-      );
-
-      const options: CleanExecutorSchema = {
-        targetDirectory: './src/ui',
-        excludePatterns: ['./src/ui/popup/service', './src/ui/popup/index.ts'],
-      };
-
-      const result = await executor(options, context);
-
-      expect(result.success).toBe(true);
-
-      expect(fs.existsSync(path.join(srcDir, 'ui', 'popup', 'index.ts'))).toBe(true);
-      expect(fs.existsSync(path.join(srcDir, 'ui', 'popup', 'service', 'test.ts'))).toBe(true);
-      expect(fs.existsSync(path.join(srcDir, 'ui', 'popup', 'service'))).toBe(true);
-      expect(fs.existsSync(path.join(srcDir, 'ui', 'popup'))).toBe(true);
-
-      expect(fs.existsSync(path.join(srcDir, 'ui', 'button'))).toBe(false);
-      expect(fs.existsSync(path.join(srcDir, 'ui', 'button', 'index.ts'))).toBe(false);
-    });
   });
 
-  describe('Selective cleaning (shallow-style)', () => {
+  describe('Shallow mode', () => {
     beforeEach(async () => {
       const srcDir = path.join(tempDir, 'packages', 'test-lib', 'src');
 
@@ -349,6 +323,7 @@ describe('CleanExecutor E2E', () => {
       const options: CleanExecutorSchema = {
         targetDirectory: './src',
         excludePatterns: ['./src/core', './src/common'],
+        mode: 'shallow',
       };
 
       const srcDir = path.join(tempDir, 'packages', 'test-lib', 'src');
@@ -382,6 +357,7 @@ describe('CleanExecutor E2E', () => {
       const options: CleanExecutorSchema = {
         targetDirectory: './src',
         excludePatterns: ['./src/core', './src/common', indexPath],
+        mode: 'shallow',
       };
 
       const result = await executor(options, context);
@@ -401,6 +377,7 @@ describe('CleanExecutor E2E', () => {
       const options: CleanExecutorSchema = {
         targetDirectory: './nonexistent',
         excludePatterns: [],
+        mode: 'shallow',
       };
 
       const result = await executor(options, context);
@@ -413,6 +390,7 @@ describe('CleanExecutor E2E', () => {
 
       const options: CleanExecutorSchema = {
         targetDirectory: './src',
+        mode: 'shallow',
       };
 
       const result = await executor(options, context);
@@ -431,6 +409,7 @@ describe('CleanExecutor E2E', () => {
       const options: CleanExecutorSchema = {
         targetDirectory: './src',
         excludePatterns: ['./src/core', './src/common'],
+        mode: 'shallow',
       };
 
       const result = await executor(options, context);
@@ -451,6 +430,7 @@ describe('CleanExecutor E2E', () => {
       const options: CleanExecutorSchema = {
         targetDirectory: './src',
         excludePatterns: [coreDir, commonDir, indexFile],
+        mode: 'shallow',
       };
 
       const result = await executor(options, context);

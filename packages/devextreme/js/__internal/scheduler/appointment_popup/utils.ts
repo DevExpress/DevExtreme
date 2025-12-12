@@ -30,6 +30,7 @@ export const getStartDateCommonConfig = (firstDayOfWeek: string): SimpleItem => 
     useMaskBehavior: true,
     calendarOptions: {
       firstDayOfWeek,
+      showTodayButton: true,
     },
   } as unknown as DateBoxProperties,
 });

@@ -1,9 +1,7 @@
 /* global process */
 process.env.CHROME_BIN = require('puppeteer').executablePath();
 
-const path = require('path');
-
-const webpackConfig = require(path.resolve(__dirname, './webpack.test'));
+const webpackConfig = require('./webpack.test');
 
 module.exports = function (config) {
   config.set({

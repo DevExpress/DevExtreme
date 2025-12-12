@@ -1,6 +1,6 @@
 {
   "name": "devextreme-vue",
-  "version": "25.2.2",
+  "version": "25.2.3",
   "description": "DevExtreme Vue UI and Visualization Components",
   "repository": {
     "type": "git",
@@ -14,7 +14,6 @@
     "clean": "pnpm --workspace-root nx run devextreme-vue:clean",
     "regenerate": "pnpm --workspace-root nx run devextreme-vue:regenerate",
     "lint": "eslint --ignore-pattern src/core/__tests__/ src/core",
-    "build": "pnpm --workspace-root nx run devextreme-vue:build",
     "pack": "pnpm --workspace-root nx run devextreme-vue:pack",
     "test": "jest"
   },

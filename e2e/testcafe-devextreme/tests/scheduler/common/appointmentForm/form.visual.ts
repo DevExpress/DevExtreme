@@ -264,3 +264,39 @@ test.meta({ browserSize: [1500, 1500] })('appointment form resource with multipl
     },
   });
 });
+
+test.meta({ browserSize: [1500, 1500] })('appointment main form with opened startDate calendar', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const appointment = {
+    text: 'Appointment',
+    startDate: new Date('2021-04-26T16:30:00.000Z'),
+    endDate: new Date('2021-04-26T18:30:00.000Z'),
+    allDay: false,
+  };
+
+  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+  const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, false);
+
+  await t.click(appointmentPopup.startDateEditor.dropDownEditorButton);
+
+  const calendarPopup = appointmentPopup.startDateEditor.getPopup();
+  await t.expect(await calendarPopup.isVisible()).ok();
+
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'scheduler__appointment__main-form__startDate-calendar-opened.png',
+  );
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxScheduler', {
+    dataSource: [],
+    views: ['week'],
+    currentView: 'week',
+    currentDate: new Date(2021, 2, 25),
+  });
+});
