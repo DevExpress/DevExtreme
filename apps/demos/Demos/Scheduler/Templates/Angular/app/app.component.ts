@@ -109,7 +109,7 @@ export class AppComponent {
   };
 
   updateEndDate = (movie: MovieData): void => {
-    const form = this.formInstance!;
+    const form = this.formInstance;
     const formData = form.option('formData');
     const { startDate } = formData;
 
@@ -139,11 +139,12 @@ export class AppComponent {
   };
 
   onMovieValueChanged = (e: DxSelectBoxTypes.ValueChangedEvent): void => {
+    const form = this.formInstance!;
     const movie = this.getMovieById(e.value);
     this.currentSelectedMovie = movie;
 
     if (movie) {
-      this.formInstance.updateData('director', movie.director);
+      form.updateData('director', movie.director);
       this.updateEndDate(movie);
     }
   };

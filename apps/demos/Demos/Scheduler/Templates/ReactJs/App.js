@@ -67,9 +67,10 @@ const App = () => {
   );
   const onMovieValueChanged = useCallback(
     (e) => {
+      const form = formInstanceRef.current;
       const movie = getMovieById(e.value);
       if (movie) {
-        formInstanceRef.current.updateData('director', movie.director);
+        form.updateData('director', movie.director);
         updateEndDate(movie);
       }
     },

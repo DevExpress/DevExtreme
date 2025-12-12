@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { query } from 'devextreme-react/common/data';
 import { moviesData } from './data.js';
 
-const getMovieById = (id) => (id ? query(moviesData).filter(['id', id]).toArray()[0] : null);
+const getMovieById = (id) => (id ? query(moviesData).filter(['id', '=', id]).toArray()[0] : null);
 const MovieInfoContainer = ({ formInstanceRef }) => {
   const [movie, setMovie] = useState(null);
   useEffect(() => {

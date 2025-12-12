@@ -9,13 +9,15 @@ type MovieInfoContainerProps = {
   formInstanceRef: React.RefObject<dxForm | null>;
 };
 
-const getMovieById = (id: number | undefined) => id ? query(moviesData).filter(['id', id]).toArray()[0] : null;
+const getMovieById = (id: number | undefined): MovieResource | null => id
+  ? query(moviesData).filter(['id', '=', id]).toArray()[0]
+  : null;
 
 const MovieInfoContainer: React.FC<MovieInfoContainerProps> = ({ formInstanceRef }) => {
   const [movie, setMovie] = useState<MovieResource | null>(null);
 
   useEffect(() => {
-    const form = formInstanceRef.current;
+    const form = formInstanceRef.current!;
     const formData = form.option('formData');
 
     const currentMovie = getMovieById(formData.movieId);
