@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from 'react';
+
+import CheckBox from 'devextreme-react/check-box';
+import type { CheckBoxTypes } from 'devextreme-react/check-box';
 import DataGrid, { Column } from 'devextreme-react/data-grid';
-import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
 
 import { employees } from './data.ts';
 
@@ -27,7 +29,7 @@ const App = () => {
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <DataGrid
         dataSource={employees}
         keyExpr="ID"
@@ -79,7 +81,7 @@ const App = () => {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 
