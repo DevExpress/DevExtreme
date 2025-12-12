@@ -1,8 +1,7 @@
 import React, { useCallback, useState } from 'react';
+
 import Button from 'devextreme-react/button';
-import DataGrid, {
-  Column, Editing, Paging, Lookup,
-} from 'devextreme-react/data-grid';
+import DataGrid, { Column, Editing, Paging, Lookup } from 'devextreme-react/data-grid';
 
 import { employees, states } from './data.ts';
 
@@ -18,7 +17,7 @@ const App = () => {
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <DataGrid
         id="gridContainer"
         dataSource={employees}
@@ -71,7 +70,7 @@ const App = () => {
           {events.map((event, index) => <li key={index}>{event}</li>)}
         </ul>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 

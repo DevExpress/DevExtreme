@@ -1,4 +1,7 @@
 import React from 'react';
+
+import type { DataGridTypes } from 'devextreme-react/data-grid';
+
 import { sendRequest } from './utils.ts';
 
 const URL = 'https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi';
@@ -33,7 +36,7 @@ export async function loadOrders(dispatch: dispatchType) {
   }
 }
 
-export async function saveChange(dispatch: dispatchType, change: { type: any; data: any; key: any; }) {
+export async function saveChange(dispatch: dispatchType, change: DataGridTypes.DataChange) {
   if (change?.type) {
     let data;
 
@@ -61,7 +64,7 @@ export async function saveChange(dispatch: dispatchType, change: { type: any; da
   }
 }
 
-async function sendChange(url: string, change: { type: any; data: any; key: any; }) {
+async function sendChange(url: string, change: DataGridTypes.DataChange) {
   switch (change.type) {
     case 'insert':
       return sendRequest(`${url}/InsertOrder`, 'POST', {
@@ -79,14 +82,14 @@ async function sendChange(url: string, change: { type: any; data: any; key: any;
   }
 }
 
-export function setChanges(dispatch: dispatchType, changes) {
+export function setChanges(dispatch: dispatchType, changes: DataGridTypes.DataChange[]) {
   dispatch({
     type: SET_CHANGES,
     payload: changes,
   });
 }
 
-export function setEditRowKey(dispatch: dispatchType, editRowKey) {
+export function setEditRowKey(dispatch: dispatchType, editRowKey: any) {
   dispatch({
     type: SET_EDIT_ROW_KEY,
     payload: editRowKey,

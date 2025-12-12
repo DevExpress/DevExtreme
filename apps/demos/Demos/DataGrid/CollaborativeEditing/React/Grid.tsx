@@ -2,6 +2,7 @@ import React from 'react';
 import DataGrid, {
   Column, Editing, Paging, RequiredRule, RangeRule, Lookup,
 } from 'devextreme-react/data-grid';
+import type { IDataGridOptions } from 'devextreme-react/data-grid';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
 const maxDate = new Date(3000, 0);
@@ -10,7 +11,7 @@ const statesStore = AspNetData.createStore({
   loadUrl: 'https://js.devexpress.com/Demos/NetCore/api/DataGridStatesLookup',
 });
 
-const Grid = (props) => (
+const Grid = (props: IDataGridOptions) => (
   <DataGrid
     dataSource={props.dataSource}
     height={600}
