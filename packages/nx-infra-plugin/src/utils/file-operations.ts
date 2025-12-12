@@ -1,12 +1,19 @@
 import * as fs from 'fs/promises';
-import * as fse from 'fs-extra';
 import * as path from 'path';
 import { glob } from 'glob';
 
 const ENCODING_UTF8 = 'utf-8';
+const ERROR_CODE_EXIST = 'EEXIST';
 
 export async function ensureDir(dirPath: string): Promise<void> {
-  await fse.ensureDir(dirPath);
+  try {
+    await fs.mkdir(dirPath, { recursive: true });
+  } catch (error: unknown) {
+    if (error instanceof Error && 'code' in error && error.code === ERROR_CODE_EXIST) {
+      return;
+    }
+    throw error;
+  }
 }
 
 export async function readJson<T = unknown>(filePath: string): Promise<T> {
@@ -59,8 +66,4 @@ export async function readFileText(filePath: string): Promise<string> {
 export async function writeFileText(filePath: string, content: string): Promise<void> {
   await ensureDir(path.dirname(filePath));
   await fs.writeFile(filePath, content, ENCODING_UTF8);
-}
-
-export async function copyRecursive(from: string, to: string): Promise<void> {
-  await fse.copy(from, to);
 }

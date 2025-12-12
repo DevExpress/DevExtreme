@@ -80,7 +80,7 @@ sh.exec('pnpm run all:pack-and-copy');
 
 sh.exec('pnpx nx pack devextreme-react', { silent: true });
 sh.exec('pnpx nx pack devextreme-vue', { silent: true });
-sh.exec(`pnpx nx pack${devMode ? '' : '-with-descriptions'} devextreme-angular`, { silent: true });
+sh.exec(`pnpx nx pack devextreme-angular${devMode ? '' : ' --with-descriptions'}`, { silent: true });
 
 sh.pushd(path.join(DEVEXTREME_NPM_DIR, 'devextreme'));
     packAndCopy(NPM_DIR);
