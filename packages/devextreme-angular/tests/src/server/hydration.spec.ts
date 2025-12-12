@@ -2,7 +2,7 @@ import { BrowserModule, provideClientHydration } from '@angular/platform-browser
 import {
   Component, destroyPlatform, NgModule, PLATFORM_ID, VERSION, importProvidersFrom,
 } from '@angular/core';
-import { provideServerRendering } from '@angular/platform-server';
+import { provideServerRendering, ServerModule } from '@angular/platform-server';
 import { DxServerModule } from 'devextreme-angular/server';
 import infernoRenderer from 'devextreme/core/inferno_renderer';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
@@ -16,8 +16,8 @@ const containerSelector = `.${containerClass}`;
   selector: 'app-root',
   standalone: false,
   template: `<div class="${containerClass}">
-        ${componentNames.map((name) => `<dx-${name}></dx-${name}>`).join('\n')}
-    </div>`,
+    ${componentNames.map((name) => `<dx-${name}></dx-${name}>`).join('\n')}
+  </div>`,
 })
 class AppComponent {}
 
@@ -31,7 +31,7 @@ class AppBrowserModule {}
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [DevExtremeModule],
+  imports: [ServerModule, DevExtremeModule],
   bootstrap: [AppComponent],
   providers: [
     provideClientHydration(),
@@ -118,6 +118,7 @@ describe('Angular Components Hydration Test', () => {
     ssrState.body = document.body;
     ssrState.containerHtml = document.querySelector(`${containerSelector}`)?.outerHTML ?? '';
 
+    console.log('-------ssrState.containerHtml--->', ssrState.containerHtml);
     expect(ssrState.containerHtml).toBeTruthy();
   });
 
@@ -130,13 +131,13 @@ describe('Angular Components Hydration Test', () => {
 
     // Assert
     const [ssrResult, hydratedResult] = TestHelpers.compareContainers(
-      ssrState.body.querySelector(`${containerSelector}`),
-      document.querySelector(`${containerSelector}`),
+        ssrState.body.querySelector(`${containerSelector}`),
+        document.querySelector(`${containerSelector}`),
     );
 
     expect(TestHelpers.hasConsoleMessage(
-      consoleSpies.log,
-      ['Angular hydrated 1 component(s)'],
+        consoleSpies.log,
+        ['Angular hydrated 1 component(s)'],
     )).toBeTruthy();
 
     expect(ssrResult).toEqual(hydratedResult);
