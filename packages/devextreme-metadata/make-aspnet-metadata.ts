@@ -223,6 +223,21 @@ AspNet.makeMetadata({
     replaceTypes('ui/data_grid:dxDataGridColumn.ownerBand', ['*'], ['int']),
     replaceTypes('ui/tree_list:dxTreeListColumn.ownerBand', ['*'], ['number']),
     // ownerBand
+    // maxLength
+    addMember({
+      uid: 'ui/drop_down_box:dxDropDownBoxOptions.maxLength',
+      types: [types.object],
+    }),
+    addMember({
+      uid: 'ui/tag_box:dxTagBoxOptions.maxLength',
+      types: [types.object],
+    }),
+    replaceTypes(
+      ['ui/drop_down_box:dxDropDownBoxOptions.maxLength', 'ui/tag_box:dxTagBoxOptions.maxLength'],
+      ['*'],
+      ['number', 'string'],
+    ),
+    // maxLength
   ],
   variables: {
     ForwardedEnums: [
