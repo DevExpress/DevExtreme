@@ -212,26 +212,14 @@ AspNet.makeMetadata({
     removeMembers('ui/scheduler:ToolbarItem.options'),
     // ownerBand
     removeMembers('common/grids:ColumnBase.ownerBand'),
-    addMember({
-      uid: 'ui/data_grid:dxDataGridColumn.ownerBand',
-      types: [types.object],
-    }),
-    addMember({
-      uid: 'ui/tree_list:dxTreeListColumn.ownerBand',
-      types: [types.object],
-    }),
+    addMember({ uid: 'ui/data_grid:dxDataGridColumn.ownerBand' }),
+    addMember({ uid: 'ui/tree_list:dxTreeListColumn.ownerBand' }),
     replaceTypes('ui/data_grid:dxDataGridColumn.ownerBand', ['*'], ['int']),
     replaceTypes('ui/tree_list:dxTreeListColumn.ownerBand', ['*'], ['number']),
     // ownerBand
     // maxLength
-    addMember({
-      uid: 'ui/drop_down_box:dxDropDownBoxOptions.maxLength',
-      types: [types.object],
-    }),
-    addMember({
-      uid: 'ui/tag_box:dxTagBoxOptions.maxLength',
-      types: [types.object],
-    }),
+    addMember({ uid: 'ui/drop_down_box:dxDropDownBoxOptions.maxLength' }),
+    addMember({ uid: 'ui/tag_box:dxTagBoxOptions.maxLength' }),
     replaceTypes(
       ['ui/drop_down_box:dxDropDownBoxOptions.maxLength', 'ui/tag_box:dxTagBoxOptions.maxLength'],
       ['*'],
