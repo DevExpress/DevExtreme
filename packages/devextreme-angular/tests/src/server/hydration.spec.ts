@@ -13,7 +13,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DevExtremeModule } from 'devextreme-angular';
 import { componentNames as componentNamesAll } from './component-names';
 
-const componentNames = componentNamesAll.filter((n) => ['toast','action-sheet',].includes(n));
+const componentNames = componentNamesAll.filter((n) => ['toast', 'action-sheet'].includes(n));
 
 const containerClass = 'container';
 const containerSelector = `.${containerClass}`;
