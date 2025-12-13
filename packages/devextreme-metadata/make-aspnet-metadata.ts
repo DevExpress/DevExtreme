@@ -118,7 +118,7 @@ AspNet.makeMetadata({
         'ui/scheduler:dxSchedulerOptions.cellDuration',
         'ui/scheduler:dxSchedulerOptions.views.(agenda|cell)Duration',
         'ui/text_box:dxTextBoxOptions.maxLength',
-        'common/grids:ColumnBase.ownerBand',
+        // 'common/grids:ColumnBase.ownerBand',
         'ui/responsive_box:dxResponsiveBoxItem.location.(col|row)',
         'ui/tag_box:dxTagBoxOptions.maxDisplayedTags',
       ],
@@ -210,6 +210,19 @@ AspNet.makeMetadata({
       types: [types.array(types.uidRef('ui/popover:ToolbarItem'))],
     }),
     removeMembers('ui/scheduler:ToolbarItem.options'),
+    // ownerBand
+    removeMembers('common/grids:ColumnBase.ownerBand'),
+    addMember({
+      uid: 'ui/data_grid:dxDataGridColumn.ownerBand',
+      types: [types.object],
+    }),
+    addMember({
+      uid: 'ui/tree_list:dxTreeListColumn.ownerBand',
+      types: [types.object],
+    }),
+    replaceTypes('ui/data_grid:dxDataGridColumn.ownerBand', ['*'], ['int']),
+    replaceTypes('ui/tree_list:dxTreeListColumn.ownerBand', ['*'], ['number']),
+    // ownerBand
   ],
   variables: {
     ForwardedEnums: [
