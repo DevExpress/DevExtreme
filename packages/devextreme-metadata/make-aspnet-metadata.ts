@@ -126,6 +126,25 @@ AspNet.makeMetadata({
       ['int'],
     ),
 
+    // recover inherited
+    // ownerBand
+    removeMembers('common/grids:ColumnBase.ownerBand'),
+    addMember({ uid: 'ui/data_grid:dxDataGridColumn.ownerBand' }),
+    addMember({ uid: 'ui/tree_list:dxTreeListColumn.ownerBand' }),
+    replaceTypes('ui/data_grid:dxDataGridColumn.ownerBand', ['*'], ['int']),
+    replaceTypes('ui/tree_list:dxTreeListColumn.ownerBand', ['*'], ['number']),
+    // ownerBand
+    // maxLength
+    addMember({ uid: 'ui/drop_down_box:dxDropDownBoxOptions.maxLength' }),
+    addMember({ uid: 'ui/tag_box:dxTagBoxOptions.maxLength' }),
+    replaceTypes(
+      ['ui/drop_down_box:dxDropDownBoxOptions.maxLength', 'ui/tag_box:dxTagBoxOptions.maxLength'],
+      ['*'],
+      ['number', 'string'],
+    ),
+    // maxLength
+    // recover inherited
+
     // This isn't the pageSize you're looking for. Rollback.
     replaceTypes('ui/diagram:dxDiagramOptions.pageSize', ['int'], []),
 
@@ -210,22 +229,6 @@ AspNet.makeMetadata({
       types: [types.array(types.uidRef('ui/popover:ToolbarItem'))],
     }),
     removeMembers('ui/scheduler:ToolbarItem.options'),
-    // ownerBand
-    removeMembers('common/grids:ColumnBase.ownerBand'),
-    addMember({ uid: 'ui/data_grid:dxDataGridColumn.ownerBand' }),
-    addMember({ uid: 'ui/tree_list:dxTreeListColumn.ownerBand' }),
-    replaceTypes('ui/data_grid:dxDataGridColumn.ownerBand', ['*'], ['int']),
-    replaceTypes('ui/tree_list:dxTreeListColumn.ownerBand', ['*'], ['number']),
-    // ownerBand
-    // maxLength
-    addMember({ uid: 'ui/drop_down_box:dxDropDownBoxOptions.maxLength' }),
-    addMember({ uid: 'ui/tag_box:dxTagBoxOptions.maxLength' }),
-    replaceTypes(
-      ['ui/drop_down_box:dxDropDownBoxOptions.maxLength', 'ui/tag_box:dxTagBoxOptions.maxLength'],
-      ['*'],
-      ['number', 'string'],
-    ),
-    // maxLength
   ],
   variables: {
     ForwardedEnums: [
