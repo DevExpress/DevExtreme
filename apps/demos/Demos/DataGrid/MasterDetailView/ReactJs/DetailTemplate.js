@@ -16,7 +16,7 @@ const DetailTemplate = (props) => {
   const { FirstName, LastName } = props.data.data;
   const dataSource = getTasks(props.data.key);
   return (
-    <>
+    <React.Fragment>
       <div className="master-detail-caption">{`${FirstName} ${LastName}'s Tasks:`}</div>
       <DataGrid
         dataSource={dataSource}
@@ -39,7 +39,7 @@ const DetailTemplate = (props) => {
           calculateCellValue={completedValue}
         />
       </DataGrid>
-    </>
+    </React.Fragment>
   );
 };
 export default DetailTemplate;

@@ -1,6 +1,9 @@
 import { type AIMessage } from './types';
-import { AIIntegration } from 'devextreme-react/common/ai-integration';
-import type { RequestParams, Response } from 'devextreme-react/common/ai-integration';
+import {
+  AIIntegration,
+  RequestParams,
+  Response,
+} from 'devextreme-react/common/ai-integration';
 import { AzureOpenAI } from 'openai';
 import notify from 'devextreme/ui/notify';
 
@@ -28,7 +31,7 @@ async function getAIResponse(messages: AIMessage[], signal: AbortSignal) {
   return result;
 }
 
-async function getAIResponseRecursive(messages: AIMessage[], signal: AbortSignal): Promise<string | null | undefined> {
+async function getAIResponseRecursive(messages: AIMessage[], signal: AbortSignal) {
   return getAIResponse(messages, signal)
     .catch(async (error) => {
       if (!error.message.includes('Connection error')) {

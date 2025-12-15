@@ -1,23 +1,20 @@
 import React, { useCallback, useState } from 'react';
-
 import DataGrid, {
   Column,
   Paging,
   Grouping,
   AI,
 } from 'devextreme-react/data-grid';
-import type { DataGridTypes } from 'devextreme-react/data-grid';
 import Popup, { Position } from 'devextreme-react/popup';
-
 import { vehicles } from './data.ts';
 import { aiIntegration } from './service.ts';
+import Trademark from './Trademark.tsx';
 import Category from './Category.tsx';
 import LicenseInfo from './LicenseInfo.tsx';
-import Trademark from './Trademark.tsx';
-import type { Vehicle } from './types.ts';
+import { type Vehicle } from './types.ts';
 
-const onAIColumnRequestCreating = (e: DataGridTypes.AIColumnRequestCreatingEvent) => {
-  e.data = e.data.map((item: Vehicle) => ({
+const onAIColumnRequestCreating = (e) => {
+  e.data = e.data.map((item) => ({
     ID: item.ID,
     TrademarkName: item.TrademarkName,
     Name: item.Name,
@@ -37,7 +34,7 @@ export default function App() {
   }, []);
 
   return (
-    <>
+    <React.Fragment>
       <DataGrid
         dataSource={vehicles}
         showBorders={true}
@@ -120,6 +117,6 @@ export default function App() {
           collision="fit"
         />
       </Popup>
-    </>
+    </React.Fragment>
   );
 }

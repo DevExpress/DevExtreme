@@ -1,9 +1,9 @@
 import React, {
   useCallback, useEffect, useMemo, useReducer,
 } from 'react';
-import 'whatwg-fetch';
 import DataGrid, { Column, Editing, Pager } from 'devextreme-react/data-grid';
 import { LoadPanel } from 'devextreme-react/load-panel';
+import 'whatwg-fetch';
 import reducer from './reducer.js';
 import {
   saveChange, loadOrders, setChanges, setEditRowKey,
@@ -45,7 +45,7 @@ const App = () => {
     setEditRowKey(dispatch, editRowKey);
   }, []);
   return (
-    <>
+    <React.Fragment>
       <LoadPanel
         position={loadPanelPosition}
         visible={state.isLoading}
@@ -96,7 +96,7 @@ const App = () => {
           <div id="changes">{changesText}</div>
         </div>
       </div>
-    </>
+    </React.Fragment>
   );
 };
 export default App;

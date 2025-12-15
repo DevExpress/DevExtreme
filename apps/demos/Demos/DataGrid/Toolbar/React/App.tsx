@@ -1,12 +1,10 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-
 import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
 import DataGrid, {
-  Grouping, Column, ColumnChooser, LoadPanel, Toolbar, Item,
+  Grouping, Column, ColumnChooser, LoadPanel, Toolbar, Item, DataGridRef,
 } from 'devextreme-react/data-grid';
-import type { DataGridRef } from 'devextreme-react/data-grid';
-import { query } from 'devextreme-react/common/data';
 
+import { query } from 'devextreme-react/common/data';
 import { orders } from './data.ts';
 
 const countLabel = { 'aria-label': 'Count' };

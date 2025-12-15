@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import DataGrid, {
-  Column, Summary, TotalItem, MasterDetail, Paging,
+  Column, Summary, TotalItem, MasterDetail, Paging, type DataGridTypes,
 } from 'devextreme-react/data-grid';
-import type { DataGridTypes } from 'devextreme-react/data-grid';
-import { Slider, Tooltip } from 'devextreme-react/slider';
-import type { SliderTypes } from 'devextreme-react/slider';
+import { Slider, type SliderTypes, Tooltip } from 'devextreme-react/slider';
 import { DataSource } from 'devextreme-react/common/data';
 import {
-  productsStore, ordersStore, getOrderCount, addOrder,
+  productsStore, ordersStore, getOrderCount, addOrder, Product,
 } from './data.ts';
-import type { Product, Order } from './data.ts';
 
 const dataSource = new DataSource({
   store: productsStore,
@@ -22,7 +19,7 @@ const getDetailGridDataSource = (product: Product) => ({
   filter: ['ProductID', '=', product.ProductID],
 });
 
-const getAmount = (order: Order) => order.UnitPrice * order.Quantity;
+const getAmount = (order) => order.UnitPrice * order.Quantity;
 
 const detailRender = (detail: DataGridTypes.MasterDetailTemplateData) => (
   <DataGrid

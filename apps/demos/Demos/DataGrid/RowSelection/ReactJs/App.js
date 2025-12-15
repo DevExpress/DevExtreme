@@ -13,7 +13,7 @@ const App = () => {
     setSelectedRowPicture(data?.Picture);
   }, []);
   return (
-    <>
+    <React.Fragment>
       <DataGrid
         dataSource={employees}
         showBorders={true}
@@ -52,7 +52,7 @@ const App = () => {
           <p className="employee-notes">{selectedRowNotes}</p>
         </div>
       )}
-    </>
+    </React.Fragment>
   );
 };
 export default App;

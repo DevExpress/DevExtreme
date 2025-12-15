@@ -1,11 +1,8 @@
 import React from 'react';
-import { saveAs } from 'file-saver-es';
-
-import DataGrid, { Column, Export } from 'devextreme-react/data-grid';
-import type { DataGridTypes } from 'devextreme-react/data-grid';
+import DataGrid, { Column, type DataGridTypes, Export } from 'devextreme-react/data-grid';
 import { Workbook } from 'devextreme-exceljs-fork';
+import { saveAs } from 'file-saver-es';
 import { exportDataGrid } from 'devextreme-react/common/export/excel';
-
 import { countries } from './data.ts';
 
 const gdpFormat = {
@@ -47,7 +44,7 @@ const onExporting = (e: DataGridTypes.ExportingEvent) => {
 };
 
 const App = () => (
-  <>
+  <React.Fragment>
     <div id="long-title">
       <h3>Country Area, Population, and GDP Structure</h3>
     </div>
@@ -102,7 +99,7 @@ const App = () => (
         </Column>
       </Column>
     </DataGrid>
-  </>
+  </React.Fragment>
 );
 
 export default App;

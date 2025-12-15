@@ -36,7 +36,7 @@ const App = () => {
     [rtlEnabled],
   );
   return (
-    <>
+    <React.Fragment>
       <DataGrid
         id="gridContainer"
         dataSource={europeanUnion}
@@ -87,7 +87,7 @@ const App = () => {
           />
         </div>
       </div>
-    </>
+    </React.Fragment>
   );
 };
 export default App;

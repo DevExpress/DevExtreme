@@ -1,14 +1,4 @@
-export interface Employee {
-  ID: number;
-  Prefix: string;
-  FirstName: string;
-  LastName: string;
-  Position: string;
-  State: string;
-  BirthDate: string;
-}
-
-export const employees: Employee[] = [{
+export const employees = [{
   ID: 1,
   Prefix: 'Mr.',
   FirstName: 'John',
@@ -90,18 +80,7 @@ export const employees: Employee[] = [{
   BirthDate: '1972/09/11',
 }];
 
-export interface Task {
-  ID: number;
-  Subject: string;
-  StartDate: string;
-  DueDate: string;
-  Status: string;
-  Priority: string;
-  Completion: number;
-  EmployeeID: number;
-}
-
-export const tasks: Task[] = [{
+export const tasks = [{
   ID: 1,
   Subject: 'Prepare 2013 Financial',
   StartDate: '2013/01/15',

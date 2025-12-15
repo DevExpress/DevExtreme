@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react';
-
 import DataGrid, {
   Column, RowDragging, Scrolling, Lookup,
 } from 'devextreme-react/data-grid';
@@ -14,12 +13,7 @@ const priorities = [{
   id: 4, text: 'Urgent',
 }];
 
-interface GridProps {
-  tasksStore: any;
-  status: number;
-}
-
-const Grid = ({ tasksStore, status }: GridProps) => {
+const Grid = ({ tasksStore, status }) => {
   const [filterExpr] = useState(['Status', '=', status]);
   const [dataSource] = useState({
     store: tasksStore,

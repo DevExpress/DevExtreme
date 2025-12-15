@@ -1,14 +1,9 @@
 import React from 'react';
 import { Form, Item } from 'devextreme-react/form';
-import type { TextBoxTypes } from 'devextreme-react/text-box';
 
 const items = ['Address', 'City', 'Region', 'PostalCode', 'Country', 'Phone'];
 
-interface FormItemRenderData {
-  editorOptions: TextBoxTypes.Properties;
-}
-
-const renderFormItem = (item: FormItemRenderData) => (
+const renderFormItem = (item) => (
   <span>{item.editorOptions.value}</span>
 );
 

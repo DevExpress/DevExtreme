@@ -1,8 +1,6 @@
 import React, { useCallback, useState } from 'react';
-
 import DataGrid, { Column, Paging, SearchPanel, Pager } from 'devextreme-react/data-grid';
-import SelectBox from 'devextreme-react/select-box';
-import type { SelectBoxTypes } from 'devextreme-react/select-box';
+import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
 
 import { europeanUnion } from './data.ts';
 
@@ -35,7 +33,7 @@ const App = () => {
   ), [rtlEnabled]);
 
   return (
-    <>
+    <React.Fragment>
       <DataGrid id="gridContainer"
         dataSource={europeanUnion}
         keyExpr="nameEn"
@@ -68,7 +66,7 @@ const App = () => {
             onValueChanged={onSelectLanguage} />
         </div>
       </div>
-    </>
+    </React.Fragment>
   );
 };
 

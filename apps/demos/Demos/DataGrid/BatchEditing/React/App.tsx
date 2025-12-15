@@ -1,17 +1,13 @@
 import React, { useCallback, useState } from 'react';
-
-import CheckBox from 'devextreme-react/check-box';
-import type { CheckBoxTypes } from 'devextreme-react/check-box';
 import DataGrid, {
   Column,
   Editing,
   Paging,
   Lookup,
+  type DataGridTypes,
 } from 'devextreme-react/data-grid';
-import type { DataGridTypes } from 'devextreme-react/data-grid';
-import SelectBox from 'devextreme-react/select-box';
-import type { SelectBoxTypes } from 'devextreme-react/select-box';
-
+import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
+import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
 import { employees, states } from './data.ts';
 
 const startEditActions = ['click', 'dblClick'];

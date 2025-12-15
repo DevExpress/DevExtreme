@@ -1,9 +1,7 @@
 import React from 'react';
-
 import DataGrid, {
   Column, Editing, Paging, RequiredRule, PatternRule, EmailRule, AsyncRule,
 } from 'devextreme-react/data-grid';
-import type { IAsyncRuleProps } from 'devextreme-react/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridEmployeesValidation';
@@ -20,7 +18,7 @@ const dataSource = createStore({
   },
 });
 
-const asyncValidation: IAsyncRuleProps['validationCallback'] = async (params) => {
+const asyncValidation = async (params) => {
   const response = await fetch(emailValidationUrl, {
     method: 'POST',
     headers: {

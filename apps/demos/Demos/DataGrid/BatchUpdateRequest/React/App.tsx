@@ -1,6 +1,5 @@
 import React from 'react';
-import DataGrid, { Column, Editing, Pager } from 'devextreme-react/data-grid';
-import type { DataGridRef, DataGridTypes } from 'devextreme-react/data-grid';
+import DataGrid, { DataGridRef, Column, DataGridTypes, Editing, Pager } from 'devextreme-react/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import 'whatwg-fetch';
 

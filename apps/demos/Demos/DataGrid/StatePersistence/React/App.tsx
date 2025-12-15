@@ -1,10 +1,7 @@
 import React, { useCallback, useRef } from 'react';
-
 import DataGrid, {
-  Selection, FilterRow, GroupPanel, StateStoring, Pager, Column,
+  Selection, FilterRow, GroupPanel, StateStoring, Pager, Column, DataGridRef,
 } from 'devextreme-react/data-grid';
-import type { DataGridRef } from 'devextreme-react/data-grid';
-
 import { orders } from './data.ts';
 
 const allowedPageSizes = [5, 10, 20];
@@ -21,7 +18,7 @@ const App = () => {
   }, []);
 
   return (
-    <>
+    <React.Fragment>
       <div id="descContainer">Sort and filter data, group, reorder and resize columns, change page numbers and page size. Once you are done, <a onClick={onRefreshClick}>refresh</a> the web page to see that the grid’s state is automatically persisted to continue working from where you stopped or you can <a onClick={onStateResetClick}>reset</a> the grid to its initial state.</div>
       <DataGrid
         id="gridContainer"
@@ -44,7 +41,7 @@ const App = () => {
         <Column dataField="CustomerStoreCity" caption="City" />
         <Column dataField="CustomerStoreState" caption="State" groupIndex={0} />
       </DataGrid>
-    </>
+    </React.Fragment>
   );
 };
 

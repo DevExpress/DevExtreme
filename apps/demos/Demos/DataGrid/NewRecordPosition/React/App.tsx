@@ -1,8 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import DataGrid, {
-  Column, Editing, ValidationRule, Button, Toolbar, Item, Scrolling, Pager,
+  Column, Editing, ValidationRule, Button, IButtonProps, Toolbar, Item, Scrolling, type DataGridTypes, Pager,
 } from 'devextreme-react/data-grid';
-import type { IButtonProps, DataGridTypes } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 import Guid from 'devextreme/core/guid';
 import { dataSource, positionLabel, scrollingModeLabel } from './data.ts';
@@ -10,7 +9,7 @@ import { dataSource, positionLabel, scrollingModeLabel } from './data.ts';
 const newRowPositionOptions = ['first', 'last', 'pageTop', 'pageBottom', 'viewportTop', 'viewportBottom'];
 const scrollingModeOptions = ['standard', 'virtual'];
 
-const isAddButtonVisible = ({ row }: { row: DataGridTypes.Row }) => !row.isEditing;
+const isAddButtonVisible = ({ row }) => !row.isEditing;
 
 const onRowInserted = (e: DataGridTypes.RowInsertedEvent) => {
   e.component.navigateToRow(e.key);
@@ -33,7 +32,7 @@ const App = () => {
   }, []);
 
   return (
-    <>
+    <React.Fragment>
       <DataGrid
         id='gridContainer'
         dataSource={dataSource}
@@ -108,7 +107,7 @@ const App = () => {
           </div>
         </div>
       </div>
-    </>
+    </React.Fragment>
   );
 };
 

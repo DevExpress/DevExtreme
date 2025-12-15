@@ -57,8 +57,7 @@ const renderGridCell = (data) => (
   </a>
 );
 const phoneNumberFormat = (value) => {
-  const valueStr = String(value);
-  const USNumber = valueStr.match(/(\d{3})(\d{3})(\d{4})/);
+  const USNumber = value.match(/(\d{3})(\d{3})(\d{4})/);
   return `(${USNumber[1]}) ${USNumber[2]}-${USNumber[3]}`;
 };
 const App = () => (
@@ -94,7 +93,7 @@ const App = () => (
       />
       <Column
         dataField="Phone"
-        format={phoneNumberFormat}
+        format={(e) => phoneNumberFormat(e)}
       />
       <Column
         dataField="Website"

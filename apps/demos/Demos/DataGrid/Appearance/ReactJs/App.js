@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import CheckBox from 'devextreme-react/check-box';
 import DataGrid, { Column } from 'devextreme-react/data-grid';
+import CheckBox from 'devextreme-react/check-box';
 import { employees } from './data.js';
 
 const App = () => {
@@ -21,7 +21,7 @@ const App = () => {
     setRowAlternationEnabled(e.value);
   }, []);
   return (
-    <>
+    <React.Fragment>
       <DataGrid
         dataSource={employees}
         keyExpr="ID"
@@ -88,7 +88,7 @@ const App = () => {
           />
         </div>
       </div>
-    </>
+    </React.Fragment>
   );
 };
 export default App;

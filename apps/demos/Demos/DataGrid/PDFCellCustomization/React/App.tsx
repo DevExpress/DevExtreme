@@ -49,9 +49,8 @@ const renderGridCell = (data: DataGridTypes.ColumnCellTemplateData) => (
   <a href={ data.text } target='_blank' rel='noopener noreferrer'>Website</a>
 );
 
-const phoneNumberFormat = (value: number) => {
-  const valueStr = String(value);
-  const USNumber = valueStr.match(/(\d{3})(\d{3})(\d{4})/);
+const phoneNumberFormat = (value: string) => {
+  const USNumber = value.match(/(\d{3})(\d{3})(\d{4})/);
   return `(${USNumber[1]}) ${USNumber[2]}-${USNumber[3]}`;
 };
 
@@ -74,8 +73,8 @@ const App = () => (
       <Column dataField="Address" width={200} />
       <Column dataField="City" />
       <Column dataField="State" groupIndex={0} />
-      <Column dataField="Phone" format={phoneNumberFormat} />
-      <Column dataField="Website" alignment="center" width={100} cellRender={(e: DataGridTypes.ColumnCellTemplateData) => renderGridCell(e)} />
+      <Column dataField="Phone" format={(e) => phoneNumberFormat(e)} />
+      <Column dataField="Website" alignment="center" width={100} cellRender={(e) => renderGridCell(e)} />
 
       <Summary>
         <TotalItem

@@ -1,5 +1,4 @@
 import React from 'react';
-
 import DataGrid, {
   Column,
   Lookup,
@@ -10,13 +9,12 @@ import DataGrid, {
   Pager,
   Paging,
 } from 'devextreme-react/data-grid';
-
 import { employees, states } from './data.ts';
 
 const allowedPageSizes = [5, 10];
 
 const App = () => (
-  <>
+  <React.Fragment>
     <p>Click this text and press <b>Tab</b></p>
     <DataGrid
       dataSource={employees}
@@ -55,7 +53,7 @@ const App = () => (
         />
       </Column>
     </DataGrid>
-  </>
+  </React.Fragment>
 );
 
 export default App;
