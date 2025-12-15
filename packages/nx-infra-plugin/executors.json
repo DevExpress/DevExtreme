@@ -5,11 +5,6 @@
       "schema": "./src/executors/generate-components/schema.json",
       "description": "Generate framework components from DevExtreme metadata"
     },
-    "generate-component-names": {
-      "implementation": "./src/executors/generate-component-names/executor",
-      "schema": "./src/executors/generate-component-names/schema.json",
-      "description": "Generate component names"
-    },
     "clean": {
       "implementation": "./src/executors/clean/executor",
       "schema": "./src/executors/clean/schema.json",
@@ -44,16 +39,6 @@
       "implementation": "./src/executors/pack-npm/executor",
       "schema": "./src/executors/pack-npm/schema.json",
       "description": "Run pnpm pack for npm distribution"
-    },
-    "build-angular-library": {
-      "implementation": "./src/executors/build-angular-library/executor",
-      "schema": "./src/executors/build-angular-library/schema.json",
-      "description": "Build Angular libraries using ng-packagr"
-    },
-    "karma-multi-env": {
-      "implementation": "./src/executors/karma-multi-env/executor",
-      "schema": "./src/executors/karma-multi-env/schema.json",
-      "description": "Run Karma tests sequentially across multiple Angular environments (client, server, hydration)"
     }
   }
 }

@@ -71,6 +71,7 @@ export const CLASS = {
   dialogWrapper: 'dx-dialog-wrapper',
   summaryTotal: 'dx-datagrid-summary-item',
   scrollableContainer: 'dx-scrollable-container',
+  scrollContainer: 'dx-datagrid-scroll-container',
   columnsSeparator: 'dx-datagrid-columns-separator',
   toast: 'dx-toast-wrapper',
   dragHeader: 'drag-header',
@@ -159,6 +160,10 @@ export default class DataGrid extends GridCore {
 
   getHeaders(): Headers {
     return new Headers(this.element.find(`.${this.addWidgetPrefix(CLASS.headers)}`), this.getName());
+  }
+
+  getHeadersScrollContainer(): Selector {
+    return this.getHeadersContainer().find(`.${CLASS.scrollContainer}`);
   }
 
   getRowsView(): Selector {
