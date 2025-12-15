@@ -2,12 +2,12 @@ import React from 'react';
 import Chart, {
   Legend,
   SeriesTemplate,
-  ISeriesTemplateProps,
   Title,
   Subtitle,
   CommonSeriesSettings,
   Export,
 } from 'devextreme-react/chart';
+import type { ISeriesTemplateProps } from 'devextreme-react/chart';
 import { dataSource } from './data.ts';
 
 const customizeSeries: ISeriesTemplateProps['customizeSeries'] = (valueFromNameField: number) => (

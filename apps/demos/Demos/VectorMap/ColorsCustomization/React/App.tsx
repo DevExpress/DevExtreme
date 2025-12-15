@@ -5,8 +5,8 @@ import VectorMap, {
   Tooltip,
   Border,
   Font,
-  ILayerProps, ITooltipProps,
 } from 'devextreme-react/vector-map';
+import type { ILayerProps, ITooltipProps } from 'devextreme-react/vector-map';
 
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { countries } from './data.ts';

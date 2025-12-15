@@ -21,5 +21,11 @@
     "Demos/FileManager/**/React/**/*.ts",
     "Demos/Gantt/**/React/**/*.tsx",
     "Demos/Gantt/**/React/**/*.ts",
+    "Demos/VectorMap/**/React/**/*.tsx",
+    "Demos/VectorMap/**/React/**/*.ts",
+    "Demos/Charts/**/React/**/*.tsx",
+    "Demos/Charts/**/React/**/*.ts",
+    "Demos/Gauges/**/React/**/*.tsx",
+    "Demos/Gauges/**/React/**/*.ts",
   ]
 }

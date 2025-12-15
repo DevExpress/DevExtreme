@@ -1,12 +1,11 @@
 import React from 'react';
 import VectorMap, {
-  ILegendProps,
-  ITooltipProps,
   Layer,
   Legend,
   Source,
   Tooltip,
 } from 'devextreme-react/vector-map';
+import type { ILegendProps, ITooltipProps } from 'devextreme-react/vector-map';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { names, markers } from './data.ts';
 

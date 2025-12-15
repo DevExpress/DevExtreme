@@ -3,8 +3,9 @@ import VectorMap, {
   Layer,
   Export,
   Title,
-  Label, ILayerProps,
+  Label,
 } from 'devextreme-react/vector-map';
+import type { ILayerProps } from 'devextreme-react/vector-map';
 import { pangaeaBorders, pangaeaContinents } from './data.ts';
 
 const projection = {

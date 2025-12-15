@@ -1,4 +1,4 @@
-import { IAggregationProps, IArgumentAxisProps } from 'devextreme-react/chart';
+import type { IAggregationProps, IArgumentAxisProps } from 'devextreme-react/chart';
 
 export const aggregationIntervals: {
   displayName: string,
