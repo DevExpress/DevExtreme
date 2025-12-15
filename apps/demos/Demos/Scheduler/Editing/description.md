@@ -1,4 +1,8 @@
-Scheduler allows users to add, update, resize, drag, and delete appointments. Double click to update an appointment. Open an appointment tooltip to update/delete. Double click an empty cell to add a new appointment.
+Scheduler allows users to manage CRUD operations as follows:
+
+- **Edit (update) appointments**: Double-click an appointment or click an appointment tooltip to edit. Drag and drop an appointment to edit start and end times (without changing duration). Drag an appointment's edge to edit start or end times (and change the appointment's duration). 
+- **Delete appointments**: Click the delete button within an appointment tooltip to delete.
+- **Create new appointments**: Double-click an empty cell to create a new appointment.
 
 In this demo, checkboxes below the Scheduler enable/disable edit operations. This demo also handles events to display a toast message after each edit.
 <!--split-->
