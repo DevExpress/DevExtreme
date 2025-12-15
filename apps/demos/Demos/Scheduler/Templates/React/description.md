@@ -5,7 +5,7 @@ The form includes two groups: `mainGroup` (general information) and `recurrenceG
 For additional information, refer to the following help topic: [Appointment Edit Form](/Documentation/Guide/UI_Components/Scheduler/Appointment/Appointment_Edit_Form/).
 <!--split-->
 
-You can customize the following DevExtreme Scheduler elements using custom Renders (globally and for individual views):
+You can customize the following DevExtreme Scheduler elements using custom templates (globally and for individual views):
 
 * Appointment rectangle: [appointmentRender](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#appointmentRender)/[appointmentComponent](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#appointmentComponent) / **views[]**.[appointmentRender](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/views/#appointmentRender)/**views[]**.[appointmentComponent](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/views/#appointmentComponent)
 
