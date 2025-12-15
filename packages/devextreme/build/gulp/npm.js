@@ -257,5 +257,5 @@ gulp.task('npm-sass', gulp.series(
     )
 ));
 
-gulp.task('npm', gulp.series('npm-sources', 'npm-dist','patch-as-esm-lib', 'fix-ext-in-imports', 'ts-check-public-modules', 'npm-sass'));
+gulp.task('npm', gulp.series('npm-sources', 'npm-dist','patch-as-esm-lib', 'npm-sass', 'fix-ext-in-imports', 'ts-check-public-modules'));
 
