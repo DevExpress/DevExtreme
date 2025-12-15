@@ -1,4 +1,4 @@
-import { SchedulerTypes } from 'devextreme-react/scheduler';
+import type { SchedulerTypes } from 'devextreme-react/scheduler';
 
 export type Appointment = SchedulerTypes.Appointment & { theatreId: number; movieId: number; price: number; };
 

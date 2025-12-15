@@ -8,7 +8,7 @@ import { data } from './data.ts';
 const currentDate = new Date(2021, 3, 29);
 const views: SchedulerTypes.ViewType[] = ['day', 'week'];
 
-const showToast = (event: string, value, type: string) => {
+const showToast = (event: string, value: string, type: string) => {
   notify(`${event} "${value}" task`, type, 800);
 };
 

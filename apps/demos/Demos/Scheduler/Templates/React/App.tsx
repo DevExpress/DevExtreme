@@ -42,7 +42,7 @@ const App = () => {
 
   const onPopupOptionChanged = useCallback((e: PopupTypes.OptionChangedEvent) => {
     if (e.fullName === 'toolbarItems' && e.value) {
-      e.value.forEach((item: any, index: number) => {
+      e.value.forEach((item, index: number) => {
         if (item.shortcut === 'done' || item.shortcut === 'cancel') {
           e.component.option(`toolbarItems[${index}].toolbar`, 'bottom');
         }
