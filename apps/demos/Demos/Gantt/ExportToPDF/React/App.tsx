@@ -1,9 +1,13 @@
 import React from 'react';
 
-import { SelectBox, ISelectBoxOptions } from 'devextreme-react/select-box';
-import { CheckBox, ICheckBoxOptions } from 'devextreme-react/check-box';
-import { NumberBox, INumberBoxOptions } from 'devextreme-react/number-box';
-import { DateBox, IDateBoxOptions } from 'devextreme-react/date-box';
+import { SelectBox } from 'devextreme-react/select-box';
+import type { ISelectBoxOptions } from 'devextreme-react/select-box';
+import { CheckBox } from 'devextreme-react/check-box';
+import type { ICheckBoxOptions } from 'devextreme-react/check-box';
+import { NumberBox } from 'devextreme-react/number-box';
+import type { INumberBoxOptions } from 'devextreme-react/number-box';
+import { DateBox } from 'devextreme-react/date-box';
+import type { IDateBoxOptions } from 'devextreme-react/date-box';
 import {
   Gantt, Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing, Toolbar, Item,
 } from 'devextreme-react/gantt';
