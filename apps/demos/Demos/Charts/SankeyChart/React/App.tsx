@@ -1,7 +1,8 @@
 import React from 'react';
 import Sankey, {
-  Tooltip, Link, Node, ITooltipProps,
+  Tooltip, Link, Node,
 } from 'devextreme-react/sankey';
+import type { ITooltipProps } from 'devextreme-react/sankey';
 import { data } from './data.ts';
 
 const customizeLinkTooltip: ITooltipProps['customizeLinkTooltip'] = (info) => ({

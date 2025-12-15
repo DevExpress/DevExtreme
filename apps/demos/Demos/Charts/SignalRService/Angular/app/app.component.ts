@@ -1,9 +1,6 @@
-import {
-  NgModule, Component, ViewChild, enableProdMode,
-} from '@angular/core';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DecimalPipe, CurrencyPipe } from '@angular/common';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
 import { CustomStore } from 'devextreme-angular/common/data';
 import { DxChartModule, DxChartComponent, DxChartTypes } from 'devextreme-angular/ui/chart';
@@ -23,6 +20,9 @@ if (window && window.config?.packageConfigPaths) {
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [DecimalPipe, CurrencyPipe],
+  imports: [
+    DxChartModule,
+  ],
 })
 export class AppComponent {
   @ViewChild(DxChartComponent, { static: false }) component: DxChartComponent;
@@ -90,14 +90,8 @@ export class AppComponent {
   };
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxChartModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

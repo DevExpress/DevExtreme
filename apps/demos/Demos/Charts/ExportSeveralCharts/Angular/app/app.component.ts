@@ -1,12 +1,8 @@
-import {
-  NgModule, Component, ViewChild, enableProdMode,
-} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import {
   DxChartModule, DxPieChartModule, DxChartComponent, DxPieChartComponent, DxButtonModule,
 } from 'devextreme-angular';
-
 import { exportWidgets } from 'devextreme/viz/export';
 import { Service, Medals } from './app.service';
 
@@ -25,6 +21,11 @@ if (window && window.config?.packageConfigPaths) {
   providers: [Service],
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
+  imports: [
+    DxChartModule,
+    DxPieChartModule,
+    DxButtonModule,
+  ],
 })
 export class AppComponent {
   @ViewChild(DxChartComponent, { static: false }) chart: DxChartComponent;
@@ -53,16 +54,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxChartModule,
-    DxPieChartModule,
-    DxButtonModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

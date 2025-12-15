@@ -1,6 +1,6 @@
 {
   "name": "devextreme-react-storybook",
-  "version": "25.2.2",
+  "version": "25.2.3",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -19,20 +19,20 @@
     "openai": "4.73.1"
   },
   "devDependencies": {
-    "@storybook/addon-essentials": "7.6.19",
-    "@storybook/addon-interactions": "7.6.19",
-    "@storybook/addon-links": "7.6.19",
-    "@storybook/blocks": "7.6.19",
-    "@storybook/react": "7.6.19",
-    "@storybook/react-webpack5": "7.6.19",
-    "@storybook/test": "7.6.19",
+    "@storybook/addon-essentials": "8.6.14",
+    "@storybook/addon-interactions": "8.6.14",
+    "@storybook/addon-links": "10.1.4",
+    "@storybook/blocks": "8.6.14",
+    "@storybook/react": "10.1.4",
+    "@storybook/react-webpack5": "10.1.4",
+    "@storybook/test": "8.6.14",
     "@types/react": "18.0.0",
     "@types/react-dom": "18.0.0",
     "http-server": "14.1.1",
     "prop-types": "15.8.1",
     "react": "18.0.0",
     "react-dom": "18.0.0",
-    "storybook": "7.6.19",
+    "storybook": "10.1.4",
     "typescript": "4.9.5"
   }
 }

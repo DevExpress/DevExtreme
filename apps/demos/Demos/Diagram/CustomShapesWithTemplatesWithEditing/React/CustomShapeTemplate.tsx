@@ -1,5 +1,5 @@
 import React from 'react';
-import { Employee } from './data';
+import type { Employee } from './data';
 
 export default function CustomShapeTemplate(employee: Employee, editEmployee, deleteEmployee) {
   const employeeName = employee ? employee.Full_Name : 'Employee\'s Name';

@@ -1,4 +1,4 @@
-import { SchedulerTypes } from 'devextreme-react/scheduler';
+import type { SchedulerTypes } from 'devextreme-react/scheduler';
 import { dinnerTime, holidays } from './data.ts';
 
 export default class Utils {

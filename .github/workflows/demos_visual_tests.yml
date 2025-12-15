@@ -88,7 +88,7 @@ jobs:
     steps:
       - name: Determine framework tests scope
         id: determine
-        run: |         
+        run: |
           if [ "${{ github.event_name }}" != "pull_request" ] || [ "${{ contains(github.event.pull_request.labels.*.name, 'force all tests') }}" = "true" ]; then
             echo "Framework tests scope: all demos"
             echo "framework-tests-scope=all" >> $GITHUB_OUTPUT
@@ -110,7 +110,7 @@ jobs:
       needs.determine-framework-tests-scope.result == 'success'
     env:
       NODE_OPTIONS: --max-old-space-size=8192
-    timeout-minutes: 20
+    timeout-minutes: 30
 
     steps:
       - name: Get sources
@@ -190,7 +190,7 @@ jobs:
   build-demos:
     runs-on: devextreme-shr2
     name: Build Demos Bundles
-    timeout-minutes: 20
+    timeout-minutes: 30
     needs: [check-should-run, determine-framework-tests-scope, build-devextreme]
     if: |
       always() &&
@@ -271,7 +271,7 @@ jobs:
       needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&
       needs.build-devextreme.result == 'success'
     runs-on: devextreme-shr2
-    timeout-minutes: 20
+    timeout-minutes: 30
 
     steps:
       - name: Get sources
@@ -310,7 +310,7 @@ jobs:
       - name: Install tgz
         run: pnpm add -w ./devextreme-installer.tgz ./devextreme-dist-installer.tgz ./devextreme-react-installer.tgz ./devextreme-vue-installer.tgz ./devextreme-angular-installer.tgz
 
-      - name: Run check TS for Vue
+      - name: Demos - Check Vue TS
         working-directory: apps/demos
         run: pnpm run ts-check-vue
 
@@ -318,9 +318,9 @@ jobs:
       #   working-directory: apps/demos
       #   run: pnpm run ts-check-ng
 
-      # - name: Run check TS for React
-      #   working-directory: apps/demos
-      #   run: pnpm run ts-check-react
+      - name: Demos - Check React TS
+        working-directory: apps/demos
+        run: pnpm run ts-check-react
 
   lint:
     name: Lint code base
@@ -603,12 +603,12 @@ jobs:
       id: chrome-flags
       run: |
         BASE_FLAGS="chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647"
-        
+
         # For Material theme, enable better font rendering to avoid instability
         if [[ "${{ matrix.THEME }}" != *"material"* ]]; then
           BASE_FLAGS="$BASE_FLAGS --font-render-hinting=none --disable-font-subpixel-positioning"
         fi
-        
+
         echo "flags=$BASE_FLAGS" >> $GITHUB_OUTPUT
 
     - name: Run TestCafe tests (jQuery)

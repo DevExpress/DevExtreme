@@ -11,8 +11,8 @@ import {
   Export,
   Legend,
   Point,
-  IExportProps,
 } from 'devextreme-react/chart';
+import type { IExportProps } from 'devextreme-react/chart';
 import { iceHockeyStatistics } from './data.ts';
 
 const exportFormats: IExportProps['formats'] = ['PNG', 'PDF', 'JPEG', 'GIF', 'SVG'];

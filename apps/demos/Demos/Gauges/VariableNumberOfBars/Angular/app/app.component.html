@@ -7,11 +7,12 @@
     </dxo-bar-gauge-label>
   </dx-bar-gauge>
   <div id="panel">
+    @for(product of products; track product.name) {
     <dx-check-box
-      *ngFor="let product of products"
       [text]="product.name"
       [(value)]="product.active"
       (onValueChanged)="productsToValues()"
     ></dx-check-box>
+    }
   </div>
 </div>

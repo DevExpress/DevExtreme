@@ -1,6 +1,5 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxNumberBoxModule, DxButtonModule } from 'devextreme-angular';
 import { DxCircularGaugeModule, DxCircularGaugeTypes } from 'devextreme-angular/ui/circular-gauge';
 
@@ -18,6 +17,11 @@ if (window && window.config?.packageConfigPaths) {
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
+  imports: [
+    DxCircularGaugeModule,
+    DxNumberBoxModule,
+    DxButtonModule,
+  ],
 })
 export class AppComponent {
   mainGenerator = 34;
@@ -36,16 +40,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxCircularGaugeModule,
-    DxNumberBoxModule,
-    DxButtonModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

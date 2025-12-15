@@ -1,6 +1,6 @@
 <dx-diagram #diagram id="diagram">
+  @for(emp of employees; track emp.ID) {
   <dxi-diagram-custom-shape
-    *ngFor="let emp of employees"
     category="employees"
     [type]="'employee' + emp.ID"
     baseType="rectangle"
@@ -8,6 +8,7 @@
     [allowEditText]="false"
   >
   </dxi-diagram-custom-shape>
+  }
   <dxo-diagram-toolbox>
     <dxi-diagram-group
       category="employees"

@@ -1,0 +1,9 @@
+{
+  "name": "sbom",
+  "version": "25.2.3",
+  "private": true,
+  "devDependencies": {
+    "@devexpress/sbom-toolkit": "0.2.0"
+  },
+  "packageManager": "pnpm@9.15.4"
+}

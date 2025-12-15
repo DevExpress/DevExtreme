@@ -1328,8 +1328,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   _recalculateWorkspace() {
     // @ts-expect-error
     this._workSpaceRecalculation = new Deferred();
+    triggerResizeEvent(this._workSpace.$element());
     this._waitAsyncTemplate(() => {
-      triggerResizeEvent(this._workSpace.$element());
       this._workSpace.renderCurrentDateTimeLineAndShader();
     });
   }
@@ -1835,6 +1835,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   /// #DEBUG
+  // TODO: remove when legacyForm is deleted
   getAppointmentDetailsForm() { // for tests
     return this._appointmentForm.form;
   }

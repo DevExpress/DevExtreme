@@ -1,8 +1,5 @@
-import {
-  NgModule, Component, ViewChild, enableProdMode,
-} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import config from 'devextreme/core/config';
 import repaintFloatingActionButton from 'devextreme/ui/speed_dial_action/repaint_floating_action_button';
 import { DxSpeedDialActionModule } from 'devextreme-angular';
@@ -27,6 +24,11 @@ if (window && window.config?.packageConfigPaths) {
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
+  imports: [
+    DxDataGridModule,
+    DxSpeedDialActionModule,
+    DxSelectBoxModule,
+  ],
 })
 export class AppComponent {
   @ViewChild(DxDataGridComponent, { static: false }) grid: DxDataGridComponent;
@@ -72,16 +74,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxDataGridModule,
-    DxSpeedDialActionModule,
-    DxSelectBoxModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

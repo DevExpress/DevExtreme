@@ -1,5 +1,7 @@
 const SELECTORS = {
   editRow: 'dx-edit-row',
+  deleteRowButton: 'dx-link-delete',
+  undeleteRowButton: 'dx-link-undelete',
 };
 
 export class DataRowModel {
@@ -11,5 +13,17 @@ export class DataRowModel {
 
   public getElement(): HTMLElement | null {
     return this.root;
+  }
+
+  public getDeleteButton(): HTMLElement {
+    const row = this.getElement() as HTMLElement;
+
+    return row.querySelector(`.${SELECTORS.deleteRowButton}`) as HTMLElement;
+  }
+
+  public getRecoverButton(): HTMLElement {
+    const row = this.getElement() as HTMLElement;
+
+    return row.querySelector(`.${SELECTORS.undeleteRowButton}`) as HTMLElement;
   }
 }

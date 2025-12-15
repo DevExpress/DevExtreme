@@ -2,8 +2,9 @@ import React from 'react';
 import VectorMap, {
   Layer,
   Tooltip,
-  Label, ITooltipProps,
+  Label,
 } from 'devextreme-react/vector-map';
+import type { ITooltipProps } from 'devextreme-react/vector-map';
 import { roomsData, buildingData } from './data.ts';
 
 const projection = {

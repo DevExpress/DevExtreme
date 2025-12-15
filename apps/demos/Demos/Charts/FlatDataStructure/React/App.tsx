@@ -1,5 +1,6 @@
 import React from 'react';
-import TreeMap, { Tooltip, ITooltipProps } from 'devextreme-react/tree-map';
+import TreeMap, { Tooltip } from 'devextreme-react/tree-map';
+import type { ITooltipProps } from 'devextreme-react/tree-map';
 import { citiesPopulation } from './data.ts';
 
 const customizeTooltip: ITooltipProps['customizeTooltip'] = (arg) => {

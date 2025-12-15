@@ -17,6 +17,7 @@ import type {
   TranslateCommandParams,
   TranslateCommandResult,
 } from '@js/common/ai-integration';
+import localizationMessage from '@js/common/core/localization/message';
 import type {
   AIChangeStyleOption,
   AIChangeToneOption,
@@ -75,15 +76,25 @@ export type AICommandExecutor<T extends AICommandNameExtended> = (
   callbacks: RequestCallbacks<AICommandResultMap[T]>,
 ) => () => void;
 
-export const defaultCommandNames: Record<AICommandName, string> = {
-  summarize: 'Summarize',
-  proofread: 'Proofread',
-  expand: 'Expand',
-  shorten: 'Shorten',
-  changeStyle: 'Change Style',
-  changeTone: 'Change Tone',
-  translate: 'Translate',
-  askAI: 'Ask AI',
+export const commandMessageKeys: Record<AICommandName, string> = {
+  summarize: 'dxHtmlEditor-aiCommandSummarize',
+  proofread: 'dxHtmlEditor-aiCommandProofread',
+  expand: 'dxHtmlEditor-aiCommandExpand',
+  shorten: 'dxHtmlEditor-aiCommandShorten',
+  changeStyle: 'dxHtmlEditor-aiCommandChangeStyle',
+  changeTone: 'dxHtmlEditor-aiCommandChangeTone',
+  translate: 'dxHtmlEditor-aiCommandTranslate',
+  askAI: 'dxHtmlEditor-aiCommandAskAI',
+};
+
+export const getDefaultCommandName = (name: AICommandNameExtended): string => {
+  const key = commandMessageKeys[name];
+
+  if (key) {
+    return localizationMessage.format(key);
+  }
+
+  return capitalize(name);
 };
 
 const htmlEditorAIChangeStyleOptions: AIChangeStyleOption[] = [
@@ -114,21 +125,29 @@ const aiCommandNames = {
 
 export type AICommandNameEnum = typeof aiCommandNames[keyof typeof aiCommandNames];
 
+const getLocalizedCommandOption = (command: AICommandNameExtended): (
+option: AIChangeStyleOption | AIChangeToneOption | AITranslateOption
+) => string => (
+  option: AIChangeStyleOption | AIChangeToneOption | AITranslateOption,
+): string => localizationMessage.format(`dxHtmlEditor-aiCommand${capitalize(command)}${capitalize(option)}`);
+
 export const getDefaultOptionsByCommand = (
   command: AICommandNameExtended,
-): CommandOption[] | undefined => {
-  const commandToOptionsMap: Record<string, CommandOption[]> = {
-    changeStyle: htmlEditorAIChangeStyleOptions,
-    changeTone: htmlEditorAIChangeToneOptions,
-    translate: htmlEditorAITranslateOptions,
+): string[] | undefined => {
+  const getLocalizedOption = getLocalizedCommandOption(command);
+
+  const commandToOptionsMap: Record<string, string[]> = {
+    changeStyle: htmlEditorAIChangeStyleOptions.map(getLocalizedOption),
+    changeTone: htmlEditorAIChangeToneOptions.map(getLocalizedOption),
+    translate: htmlEditorAITranslateOptions.map(getLocalizedOption),
   };
 
   return commandToOptionsMap[command];
 };
 
 const createDefinitionFromString = (commandName: AICommandName): CommandDefinition => {
-  const text = defaultCommandNames[commandName] ?? capitalize(commandName);
-  const defaultOptions = getDefaultOptionsByCommand(commandName)?.map(capitalize);
+  const text = getDefaultCommandName(commandName);
+  const defaultOptions = getDefaultOptionsByCommand(commandName);
 
   return {
     id: commandName,
@@ -146,8 +165,8 @@ const createDefinitionFromObject = (
   prompt?: (param?: string) => string,
 ): CommandDefinition => {
   const capitalizedRaw = rawOptions?.map(capitalize);
-  const options = capitalizedRaw ?? getDefaultOptionsByCommand(name)?.map(capitalize);
-  const displayText = text ?? defaultCommandNames[name] ?? capitalize(name);
+  const options = capitalizedRaw ?? getDefaultOptionsByCommand(name);
+  const displayText = text ?? getDefaultCommandName(name);
 
   const definition = {
     id,

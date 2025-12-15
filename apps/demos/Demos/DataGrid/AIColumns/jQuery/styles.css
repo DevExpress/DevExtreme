@@ -1,3 +1,7 @@
+#gridContainer {
+  min-height: 560px;
+}
+
 #gridContainer .ai__cell {
   background-color: var(--dx-datagrid-row-alternation-bg);
 }

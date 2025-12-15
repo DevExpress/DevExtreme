@@ -1,7 +1,5 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import notify from 'devextreme/ui/notify'; // Import notify correctly
 import { DxContextMenuModule, type DxContextMenuTypes } from 'devextreme-angular/ui/context-menu';
 
@@ -22,6 +20,9 @@ if (window && window.config?.packageConfigPaths) {
   providers: [Service],
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
+  imports: [
+    DxContextMenuModule,
+  ],
 })
 export class AppComponent {
   items: ContextMenuItems[];
@@ -37,14 +38,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxContextMenuModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

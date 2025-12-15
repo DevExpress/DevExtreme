@@ -1,13 +1,25 @@
 import {
-  NgModule, Component, ViewChild, enableProdMode, Pipe, PipeTransform,
+  Component,
+  ViewChild,
+  enableProdMode,
+  Pipe,
+  PipeTransform,
+  provideZoneChangeDetection,
+  inject,
 } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { query as Query } from 'devextreme-angular/common/data';
-import { DxSchedulerModule, DxSchedulerComponent, DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { formatDate } from 'devextreme-angular/common/core/localization';
+import { query } from 'devextreme-angular/common/data';
+import { DxSchedulerModule, DxSchedulerComponent } from 'devextreme-angular/ui/scheduler';
+import { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
+import { DxFormTypes } from 'devextreme-angular/ui/form';
+import { DxPopupTypes } from 'devextreme-angular/ui/popup';
+
 import {
   Service, MovieData, TheatreData, Data,
 } from './app.service';
+
+type dxForm = NonNullable<DxFormTypes.InitializedEvent['component']>;
 
 @Pipe({ name: 'apply' })
 export class ApplyPipe<TArgs, TReturn> implements PipeTransform {
@@ -29,99 +41,132 @@ if (window && window.config?.packageConfigPaths) {
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
+  imports: [
+    DxSchedulerModule,
+    ApplyPipe,
+  ],
 })
 export class AppComponent {
   @ViewChild(DxSchedulerComponent, { static: false }) scheduler: DxSchedulerComponent;
 
-  data: Data[];
+  private formatDate = formatDate;
+
+  private service = inject(Service);
+
+  data: Data[] = this.service.getData();
 
   currentDate: Date = new Date(2025, 3, 27);
 
-  moviesData: MovieData[];
+  moviesData: MovieData[] = this.service.getMoviesData();
 
-  theatreData: TheatreData[];
+  theatreData: TheatreData[] = this.service.getTheatreData();
 
-  constructor(service: Service) {
-    this.data = service.getData();
-    this.moviesData = service.getMoviesData();
-    this.theatreData = service.getTheatreData();
+  views: string[] = ['day', 'week', 'timelineDay'];
+
+  groups: string[] = ['theatreId'];
+
+  formInstance: dxForm | null = null;
+
+  currentSelectedMovie: MovieData | null = null;
+
+  movieEditorOptions: DxSelectBoxTypes.Properties;
+
+  priceEditorOptions: DxSelectBoxTypes.Properties;
+
+  constructor() {
+    this.movieEditorOptions = {
+      items: this.moviesData,
+      displayExpr: 'text',
+      valueExpr: 'id',
+      stylingMode: this.getEditorStylingMode(),
+      onValueChanged: this.onMovieValueChanged,
+      onContentReady: this.onCustomEditorContentReady,
+    };
+
+    this.priceEditorOptions = {
+      items: [5, 10, 15, 20],
+      displayExpr: this.priceDisplayExpr,
+      stylingMode: this.getEditorStylingMode(),
+      onContentReady: this.onCustomEditorContentReady,
+    };
   }
 
-  onAppointmentFormOpening = (data: DxSchedulerTypes.AppointmentFormOpeningEvent) => {
-    const that = this;
-    const form = data.form;
-    const startDate = data.appointmentData.startDate;
-    let movieInfo = that.getMovieById(data.appointmentData.movieId) || {};
+  getMovieById = (id: number | undefined): MovieData | null => id
+    ? query(this.moviesData).filter(['id', '=', id]).toArray()[0] ?? null
+    : null;
 
-    form.option('items', [{
-      label: {
-        text: 'Movie',
-      },
-      editorType: 'dxSelectBox',
-      dataField: 'movieId',
-      editorOptions: {
-        items: that.moviesData,
-        displayExpr: 'text',
-        valueExpr: 'id',
-        onValueChanged({ value }) {
-          movieInfo = that.getMovieById(value);
-
-          form.updateData('director', movieInfo.director);
-          form.updateData('endDate', new Date((startDate as Date).getTime() + 60 * 1000 * movieInfo.duration));
-        },
-      },
-    }, {
-      label: {
-        text: 'Director',
-      },
-      name: 'director',
-      editorType: 'dxTextBox',
-      editorOptions: {
-        value: movieInfo.director,
-        readOnly: true,
-      },
-    }, {
-      dataField: 'startDate',
-      editorType: 'dxDateBox',
-      editorOptions: {
-        width: '100%',
-        type: 'datetime',
-        onValueChanged({ value }) {
-          form.updateData('endDate', new Date((value as Date).getTime() + 60 * 1000 * movieInfo.duration));
-        },
-      },
-    }, {
-      name: 'endDate',
-      dataField: 'endDate',
-      editorType: 'dxDateBox',
-      editorOptions: {
-        width: '100%',
-        type: 'datetime',
-        readOnly: true,
-      },
-    }, {
-      dataField: 'price',
-      editorType: 'dxRadioGroup',
-      editorOptions: {
-        dataSource: [5, 10, 15, 20],
-        itemTemplate(itemData: string) {
-          return `$${itemData}`;
-        },
-      },
-    }]);
+  getEditorStylingMode = (): 'filled' | 'outlined' => {
+    const isMaterialOrFluent = document.querySelector('.dx-theme-fluent, .dx-theme-material');
+    return isMaterialOrFluent ? 'filled' : 'outlined';
   };
 
-  getMovieById = (id: string) => Query(this.moviesData).filter(['id', '=', id]).toArray()[0];
+  priceDisplayExpr = (value: number): string => `$${value}`;
+
+  colCountByScreen = { xs: 2 };
+
+  onPopupOptionChanged = (e: DxPopupTypes.OptionChangedEvent): void => {
+    if (e.fullName === 'toolbarItems' && e.value) {
+      e.value.forEach((item, index) => {
+        if (item.shortcut === 'done' || item.shortcut === 'cancel') {
+          e.component.option(`toolbarItems[${index}].toolbar`, 'bottom');
+        }
+      });
+    }
+  };
+
+  popupOptions: DxPopupTypes.Properties = {
+    maxWidth: 440,
+    onOptionChanged: this.onPopupOptionChanged,
+  };
+
+  updateEndDate = (movie: MovieData): void => {
+    const form = this.formInstance;
+    const formData = form.option('formData');
+    const { startDate } = formData;
+
+    if (startDate) {
+      const newEndDate = new Date(startDate.getTime() + 60 * 1000 * movie.duration);
+      form.updateData('endDate', newEndDate);
+    }
+  };
+
+  onFormInitialized = (e: DxFormTypes.InitializedEvent): void => {
+    const form = e.component;
+    const formData = form.option('formData');
+
+    this.formInstance = form;
+    this.currentSelectedMovie = this.getMovieById(formData?.movieId);
+
+    form.on('fieldDataChanged', (fieldEvent: DxFormTypes.FieldDataChangedEvent) => {
+      if (fieldEvent.dataField === 'startDate') {
+        const currentFormData = form.option('formData');
+        const movie = this.getMovieById(currentFormData?.movieId);
+
+        if (movie) {
+          this.updateEndDate(movie);
+        }
+      }
+    });
+  };
+
+  onMovieValueChanged = (e: DxSelectBoxTypes.ValueChangedEvent): void => {
+    const form = this.formInstance;
+    const movie = this.getMovieById(e.value);
+    this.currentSelectedMovie = movie;
+
+    if (movie) {
+      form.updateData('director', movie.director);
+      this.updateEndDate(movie);
+    }
+  };
+
+  onCustomEditorContentReady = (e: DxSelectBoxTypes.ContentReadyEvent): void => {
+    e.component.option('stylingMode', this.getEditorStylingMode());
+  };
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxSchedulerModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent, ApplyPipe],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

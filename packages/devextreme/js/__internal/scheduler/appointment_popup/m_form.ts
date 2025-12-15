@@ -280,6 +280,13 @@ export class AppointmentForm {
           this.updateDateEditorsValues();
         }
 
+        if (isRecurrenceRuleChanged || startDateExpr === dataField) {
+          this._recurrenceForm.updateRecurrenceFormValues(
+            this.recurrenceRuleRaw,
+            this.startDate,
+          );
+        }
+
         if (isRecurrenceRuleChanged) {
           this.updateRepeatEditorValue();
         }
@@ -663,7 +670,14 @@ export class AppointmentForm {
             onValueChanged: (e): void => {
               if (e.value === repeatNeverValue) {
                 this.dxForm.updateData(recurrenceRuleExpr, '');
-              } else if (e.event) {
+              } else {
+                const currentRecurrenceRule = this._recurrenceForm.recurrenceRule.toString() ?? '';
+                const recurrenceRule = new RecurrenceRule(currentRecurrenceRule, this.startDate);
+                recurrenceRule.frequency = e.value;
+                this.dxForm.updateData(recurrenceRuleExpr, recurrenceRule.toString());
+              }
+
+              if (e.value !== repeatNeverValue && e.event) {
                 this.showRecurrenceGroup();
               }
 
@@ -833,30 +847,6 @@ export class AppointmentForm {
     }
   }
 
-  showRecurrenceGroup(): void {
-    const currentHeight = this.dxPopup.option('height') as string | number | undefined;
-
-    if (currentHeight === 'auto' || currentHeight === undefined) {
-      const overlayHeight = this.dxPopup.$overlayContent().get(0).clientHeight;
-      this.dxPopup.option('height', overlayHeight);
-    }
-
-    this._$mainGroup?.addClass(CLASSES.mainHidden);
-    this._$mainGroup?.attr('tabindex', '-1');
-    this._$recurrenceGroup?.removeClass(CLASSES.recurrenceHidden);
-    this._$recurrenceGroup?.removeAttr('tabindex');
-
-    const repeatEditorValue = this.dxForm.getEditor(REPEAT_EDITOR_NAME)?.option('value');
-
-    this._recurrenceForm.updateRecurrenceFormValues(
-      repeatEditorValue,
-      this.recurrenceRuleRaw,
-      this.startDate,
-    );
-
-    this._popup.updateToolbarForRecurrenceGroup();
-  }
-
   showMainGroup(): void {
     const currentHeight = this.dxPopup.option('height') as string | number | undefined;
     const editingConfig = this.scheduler.getEditingConfig();
@@ -874,13 +864,23 @@ export class AppointmentForm {
     this._popup.updateToolbarForMainGroup();
   }
 
-  saveRecurrenceValue(): void {
-    const isRecurrenceFormOpened = !this._$recurrenceGroup?.hasClass(CLASSES.recurrenceHidden);
+  showRecurrenceGroup(): void {
+    const currentHeight = this.dxPopup.option('height') as string | number | undefined;
 
-    if (!isRecurrenceFormOpened) {
-      return;
+    if (currentHeight === 'auto' || currentHeight === undefined) {
+      const overlayHeight = this.dxPopup.$overlayContent().get(0).clientHeight;
+      this.dxPopup.option('height', overlayHeight);
     }
 
+    this._$mainGroup?.addClass(CLASSES.mainHidden);
+    this._$mainGroup?.attr('tabindex', '-1');
+    this._$recurrenceGroup?.removeClass(CLASSES.recurrenceHidden);
+    this._$recurrenceGroup?.removeAttr('tabindex');
+
+    this._popup.updateToolbarForRecurrenceGroup();
+  }
+
+  saveRecurrenceValue(): void {
     const { recurrenceRule } = this._recurrenceForm;
     const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
 

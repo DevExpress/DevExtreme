@@ -1,6 +1,5 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { Workbook } from 'devextreme-exceljs-fork';
 import { saveAs } from 'file-saver-es';
 // Our demo infrastructure requires us to use 'file-saver-es'. We recommend that you use the official 'file-saver' package in your applications.
@@ -25,6 +24,9 @@ if (window && window.config?.packageConfigPaths) {
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   providers: [Service],
+  imports: [
+    DxPivotGridModule,
+  ],
 })
 export class AppComponent {
   sales: Sale[];
@@ -134,14 +136,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxPivotGridModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

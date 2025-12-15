@@ -1,5 +1,8 @@
 import React from 'react';
-import Scheduler, { Resource, type SchedulerTypes } from 'devextreme-react/scheduler';
+import Scheduler, {
+  Resource,
+  type SchedulerTypes,
+} from 'devextreme-react/scheduler';
 import ArrayStore from 'devextreme/data/array_store';
 import { assignees, data, priorities } from './data.ts';
 

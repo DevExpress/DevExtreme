@@ -1,7 +1,8 @@
 import React from 'react';
 import Diagram, {
-  Nodes, AutoLayout, ContextToolbox, Toolbox, Group, IContextToolboxProps,
+  Nodes, AutoLayout, ContextToolbox, Toolbox, Group,
 } from 'devextreme-react/diagram';
+import type { IContextToolboxProps } from 'devextreme-react/diagram';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/NetCore/api/DiagramEmployees';

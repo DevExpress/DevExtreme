@@ -164,12 +164,12 @@ const Scheduler = memo(
 
 // owners:
 // SimpleItem
-type IAiOptionsProps = React.PropsWithChildren<{
+type IAIOptionsProps = React.PropsWithChildren<{
   disabled?: boolean;
   instruction?: string | undefined;
 }>
-const _componentAiOptions = (props: IAiOptionsProps) => {
-  return React.createElement(NestedOption<IAiOptionsProps>, {
+const _componentAIOptions = (props: IAIOptionsProps) => {
+  return React.createElement(NestedOption<IAIOptionsProps>, {
     ...props,
     elementDescriptor: {
       OptionName: "aiOptions",
@@ -177,7 +177,7 @@ const _componentAiOptions = (props: IAiOptionsProps) => {
   });
 };
 
-const AiOptions = Object.assign<typeof _componentAiOptions, NestedComponentMeta>(_componentAiOptions, {
+const AIOptions = Object.assign<typeof _componentAIOptions, NestedComponentMeta>(_componentAIOptions, {
   componentType: "option",
 });
 
@@ -498,14 +498,12 @@ type IFormProps = React.PropsWithChildren<{
   labelLocation?: LabelLocation;
   labelMode?: FormLabelMode;
   minColWidth?: number;
-  onCanceled?: ((formData: any) => void);
   onContentReady?: ((e: FormContentReadyEvent) => void);
   onDisposing?: ((e: FormDisposingEvent) => void);
   onEditorEnterKey?: ((e: EditorEnterKeyEvent) => void);
   onFieldDataChanged?: ((e: FieldDataChangedEvent) => void);
   onInitialized?: ((e: FormInitializedEvent) => void);
   onOptionChanged?: ((e: FormOptionChangedEvent) => void);
-  onSaved?: ((formData: any) => void);
   onSmartPasted?: ((e: SmartPastedEvent) => void);
   onSmartPasting?: ((e: SmartPastingEvent) => void);
   optionalMark?: string;
@@ -1532,8 +1530,8 @@ export {
   Scheduler,
   ISchedulerOptions,
   SchedulerRef,
-  AiOptions,
-  IAiOptionsProps,
+  AIOptions,
+  IAIOptionsProps,
   AppointmentDragging,
   IAppointmentDraggingProps,
   AsyncRule,

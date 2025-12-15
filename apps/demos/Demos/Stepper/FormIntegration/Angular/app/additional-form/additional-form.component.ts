@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { DxFormModule, DxTextAreaModule } from 'devextreme-angular';
 import { type DxFormTypes } from 'devextreme-angular/ui/form';
 import { type DxTextAreaTypes } from 'devextreme-angular/ui/text-area';
 import type { BookingFormData } from '../app.types';
@@ -12,6 +13,10 @@ if (window && window.config?.packageConfigPaths) {
 @Component({
   selector: 'additional-form',
   templateUrl: `.${modulePrefix}/additional-form/additional-form.component.html`,
+  imports: [
+    DxFormModule,
+    DxTextAreaModule,
+  ],
 })
 export class AdditionalFormComponent {
   @Input() formData: BookingFormData;

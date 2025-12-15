@@ -4,10 +4,10 @@ import 'ui/color_box';
 import 'ui/drop_down_box';
 import errors from 'core/errors';
 
-const LICENSE_WARNING = 'W0022';
+const DEPRECATED_WARNING = 'W0001';
 
 const FIELD_TEMPLATE_WARNING_ARGS = (componentName) => [
-    'W0001',
+    DEPRECATED_WARNING,
     componentName,
     'fieldTemplate',
     '25.2',
@@ -36,7 +36,7 @@ QUnit.module('Deprecated fieldTemplate', {
         this.errorsSpy = sinon.spy(errors, 'log');
 
         this.getFilteredWarnings = () =>
-            this.errorsSpy.getCalls().filter(({ args }) => args[0] !== LICENSE_WARNING);
+            this.errorsSpy.getCalls().filter(({ args }) => args[0] === DEPRECATED_WARNING);
 
         this.assertWarningIsCorrect = (assert, name) => {
             const warnings = this.getFilteredWarnings();

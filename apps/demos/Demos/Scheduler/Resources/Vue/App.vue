@@ -32,6 +32,30 @@
         :allow-multiple="true"
         icon="user"
       />
+
+      <DxEditing>
+        <DxSchedulerForm>
+          <DxItem name="mainGroup">
+            <DxItem name="subjectGroup"/>
+            <DxItem name="dateGroup"/>
+            <DxItem name="repeatGroup"/>
+            <DxItem name="resourcesGroup">
+              <DxItem
+                :col-count="3"
+                :col-count-by-screen="{ xs: 3 }"
+                name="roomIdGroup"
+              >
+                <DxItem name="roomIdIcon"/>
+                <DxItem name="roomId"/>
+                <DxItem name="priorityId"/>
+              </DxItem>
+              <DxItem name="assigneeIdGroup"/>
+            </DxItem>
+            <DxItem name="descriptionGroup"/>
+          </DxItem>
+          <DxItem name="recurrenceGroup"/>
+        </DxSchedulerForm>
+      </DxEditing>
     </DxScheduler>
     <div class="options">
       <div class="caption">Use colors of:</div>
@@ -48,7 +72,13 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxScheduler, { DxResource, type DxSchedulerTypes } from 'devextreme-vue/scheduler';
+import DxScheduler, {
+  DxResource,
+  DxEditing,
+  DxForm as DxSchedulerForm,
+  type DxSchedulerTypes,
+} from 'devextreme-vue/scheduler';
+import { DxItem } from 'devextreme-vue/form';
 import DxRadioGroup, { type DxRadioGroupTypes } from 'devextreme-vue/radio-group';
 import {
   resourcesList, data, priorities, assignees, rooms,

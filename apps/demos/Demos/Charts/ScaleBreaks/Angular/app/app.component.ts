@@ -1,9 +1,6 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxChartModule, DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
-
 import { SolarSystemObject, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -22,6 +19,11 @@ if (window && window.config?.packageConfigPaths) {
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
   preserveWhitespaces: true,
+  imports: [
+    DxChartModule,
+    DxCheckBoxModule,
+    DxSelectBoxModule,
+  ],
 })
 export class AppComponent {
   data: SolarSystemObject[];
@@ -45,16 +47,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxChartModule,
-    DxCheckBoxModule,
-    DxSelectBoxModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});
