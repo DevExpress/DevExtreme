@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { DrillInfo } from './data';
+import type { DrillInfo } from './data';
 
 interface BreadcrumbProps {
   key: string;

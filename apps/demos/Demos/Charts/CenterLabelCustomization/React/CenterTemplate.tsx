@@ -1,4 +1,4 @@
-import { PieChartRef } from 'devextreme-react/pie-chart';
+import type { PieChartRef } from 'devextreme-react/pie-chart';
 import React from 'react';
 
 const formatNumber = new Intl.NumberFormat('en-US', {

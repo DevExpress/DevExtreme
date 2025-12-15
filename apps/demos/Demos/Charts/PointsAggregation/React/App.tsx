@@ -11,8 +11,8 @@ import Chart, {
   Legend,
   Label,
   Tooltip,
-  IAggregationProps,
 } from 'devextreme-react/chart';
+import type { IAggregationProps } from 'devextreme-react/chart';
 import CheckBox from 'devextreme-react/check-box';
 import SelectBox from 'devextreme-react/select-box';
 import {

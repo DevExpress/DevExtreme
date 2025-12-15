@@ -1,10 +1,9 @@
 import React, { useCallback, useRef } from 'react';
 import VectorMap, {
-  ITooltipProps,
   Layer,
   Tooltip,
-  type VectorMapTypes,
 } from 'devextreme-react/vector-map';
+import type { VectorMapTypes, ITooltipProps } from 'devextreme-react/vector-map';
 
 import Button from 'devextreme-react/button';
 
