@@ -1309,8 +1309,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   _recalculateWorkspace() {
     // @ts-expect-error
     this._workSpaceRecalculation = new Deferred();
+    triggerResizeEvent(this._workSpace.$element());
     this._waitAsyncTemplate(() => {
-      triggerResizeEvent(this._workSpace.$element());
       this._workSpace.renderCurrentDateTimeLineAndShader();
     });
   }
