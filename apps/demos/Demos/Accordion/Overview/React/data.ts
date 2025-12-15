@@ -1,4 +1,6 @@
-const companies = [{
+import { Company } from './types.ts';
+
+const companies: Company[] = [{
   ID: 1,
   CompanyName: 'Super Mart of the West',
   Address: '702 SW 8th Street',
@@ -41,7 +43,7 @@ const companies = [{
 }];
 
 export default {
-  getCompanies() {
+  getCompanies(): Company[] {
     return companies;
   },
 };

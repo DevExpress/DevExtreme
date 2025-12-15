@@ -1,11 +1,10 @@
 import React from 'react';
+import { Company } from './types.ts';
 
-interface CustomTitleProps {
-  CompanyName: string;
-}
+export default function CustomTitle(company: Company) {
+  const { CompanyName } = company;
 
-export default function CustomTitle(data: CustomTitleProps) {
   return (
-    <div className='header'>{data.CompanyName}</div>
+    <div className='header'>{CompanyName}</div>
   );
 }

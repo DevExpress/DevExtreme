@@ -1,38 +1,39 @@
 import React from 'react';
+import { Company } from './types.ts';
 
-interface CustomItemData {
-  City: string;
-  State: string;
-  Zipcode: string;
-  Address: string;
-  Phone: string;
-  Fax: string;
-  Website: string;
-}
+export default function CustomItem(company: Company) {
+  const {
+    Address,
+    City,
+    State,
+    Zipcode,
+    Phone,
+    Fax,
+    Website,
+  } = company;
 
-export default function CustomItem(data: CustomItemData) {
   return (
     <div>
       <div>
         <p>
-          <b>{data.City} </b>
-          (<span>{data.State}</span>)
+          <b>{City} </b>
+          (<span>{State}</span>)
         </p>
         <p>
-          <span>{data.Zipcode} </span>
-          <span>{data.Address}</span>
+          <span>{Zipcode} </span>
+          <span>{Address}</span>
         </p>
       </div>
       <div>
         <p>
-          Phone: <b>{data.Phone}</b>
+          Phone: <b>{Phone}</b>
         </p>
         <p>
-          Fax: <b>{data.Fax}</b>
+          Fax: <b>{Fax}</b>
         </p>
         <p>
-          Website: <a href={data.Website} target="_blank">
-            {data.Website}
+          Website: <a href={Website} target="_blank">
+            {Website}
           </a>
         </p>
       </div>

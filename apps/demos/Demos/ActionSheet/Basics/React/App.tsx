@@ -6,32 +6,32 @@ import notify from 'devextreme/ui/notify';
 import { actionSheetItems } from './data.ts';
 
 const App = () => {
-  const [isActionSheetVisible, setIsActionSheetVisible] = useState(false);
-  const [showTitle, setShowTitle] = useState(true);
-  const [showCancelButton, setShowCancelButton] = useState(true);
+  const [isActionSheetVisible, setIsActionSheetVisible] = useState<boolean>(false);
+  const [showTitle, setShowTitle] = useState<boolean>(true);
+  const [showCancelButton, setShowCancelButton] = useState<boolean>(true);
 
-  const showActionSheet = useCallback(() => {
+  const showActionSheet = useCallback((): void => {
     setIsActionSheetVisible(true);
   }, [setIsActionSheetVisible]);
 
-  const onActionSheetButtonClick = useCallback((buttonName: string) => {
+  const onActionSheetButtonClick = useCallback((buttonName: string): void => {
     setIsActionSheetVisible(false);
     notify(`The "${buttonName}" button is clicked.`);
   }, [setIsActionSheetVisible]);
 
-  const onActionSheetItemClick = useCallback((e: ActionSheetTypes.ItemClickEvent) => {
+  const onActionSheetItemClick = useCallback((e: ActionSheetTypes.ItemClickEvent): void => {
     onActionSheetButtonClick(e.itemData.text);
   }, [onActionSheetButtonClick]);
 
-  const onActionSheetCancelClick = useCallback(() => {
+  const onActionSheetCancelClick = useCallback((): void => {
     onActionSheetButtonClick('Cancel');
   }, [onActionSheetButtonClick]);
 
-  const changeTitle = useCallback((e: SwitchTypes.ValueChangedEvent) => {
+  const changeTitle = useCallback((e: SwitchTypes.ValueChangedEvent): void => {
     setShowTitle(e.value);
   }, [setShowTitle]);
 
-  const changeCancelButton = useCallback((e: SwitchTypes.ValueChangedEvent) => {
+  const changeCancelButton = useCallback((e: SwitchTypes.ValueChangedEvent): void => {
     setShowCancelButton(e.value);
   }, [setShowCancelButton]);
 
