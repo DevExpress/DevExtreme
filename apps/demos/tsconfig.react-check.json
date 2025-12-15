@@ -14,6 +14,12 @@
   },
   "include": [
     "Demos/Scheduler/**/React/**/*.tsx",
-    "Demos/Scheduler/**/React/**/*.ts"
+    "Demos/Scheduler/**/React/**/*.ts",
+    "Demos/Diagram/**/React/**/*.tsx",
+    "Demos/Diagram/**/React/**/*.ts",
+    "Demos/FileManager/**/React/**/*.tsx",
+    "Demos/FileManager/**/React/**/*.ts",
+    "Demos/Gantt/**/React/**/*.tsx",
+    "Demos/Gantt/**/React/**/*.ts",
   ]
 }
