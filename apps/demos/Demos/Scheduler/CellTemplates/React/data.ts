@@ -1,4 +1,4 @@
-import { SchedulerTypes } from 'devextreme-react/scheduler';
+import type { SchedulerTypes } from 'devextreme-react/scheduler';
 
 export const dinnerTime = { from: 12, to: 13 };
 

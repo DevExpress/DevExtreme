@@ -13,6 +13,7 @@
     "lib": ["es2022", "DOM", "DOM.Iterable"]
   },
   "include": [
-    "Demos/**/React/**/*.tsx"
+    "Demos/Scheduler/**/React/**/*.tsx",
+    "Demos/Scheduler/**/React/**/*.ts"
   ]
 }
