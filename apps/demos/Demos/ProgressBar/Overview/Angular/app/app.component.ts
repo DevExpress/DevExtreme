@@ -1,11 +1,8 @@
-import {
-  NgModule, Component, Pipe, PipeTransform, enableProdMode,
-} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, Pipe, PipeTransform, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxButtonModule, DxProgressBarModule } from 'devextreme-angular';
 
-@Pipe({ name: 'time' })
+@Pipe({ name: 'time', standalone: true })
 export class TimePipe implements PipeTransform {
   transform(value: number): string {
     return `00:00:${(`0${value}`).slice(-2)}`;
@@ -26,6 +23,11 @@ if (window && window.config?.packageConfigPaths) {
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
+  imports: [
+    DxButtonModule,
+    DxProgressBarModule,
+    TimePipe,
+  ],
 })
 export class AppComponent {
   buttonText = 'Start progress';
@@ -68,15 +70,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxButtonModule,
-    DxProgressBarModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent, TimePipe],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

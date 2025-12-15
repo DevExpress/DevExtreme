@@ -1,8 +1,5 @@
-import {
-  NgModule, ViewChild, Component, enableProdMode,
-} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { ViewChild, Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxSchedulerModule, DxSchedulerComponent } from 'devextreme-angular';
 import { Appointment, Resource, Service } from './app.service';
 
@@ -20,6 +17,9 @@ if (window && window.config?.packageConfigPaths) {
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   providers: [Service],
+  imports: [
+    DxSchedulerModule,
+  ],
 })
 export class AppComponent {
   @ViewChild(DxSchedulerComponent, { static: false }) scheduler: DxSchedulerComponent;
@@ -36,14 +36,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxSchedulerModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

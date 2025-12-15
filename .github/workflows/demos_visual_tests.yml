@@ -190,7 +190,7 @@ jobs:
   build-demos:
     runs-on: devextreme-shr2
     name: Build Demos Bundles
-    timeout-minutes: 20
+    timeout-minutes: 30
     needs: [check-should-run, determine-framework-tests-scope, build-devextreme]
     if: |
       always() &&
@@ -271,7 +271,7 @@ jobs:
       needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&
       needs.build-devextreme.result == 'success'
     runs-on: devextreme-shr2
-    timeout-minutes: 20
+    timeout-minutes: 30
 
     steps:
       - name: Get sources

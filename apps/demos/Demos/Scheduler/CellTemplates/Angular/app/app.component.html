@@ -19,31 +19,30 @@
 >
   <div
     *dxTemplate="let dataCell of 'dataCellTemplate'"
-    [ngClass]="{
-      'disable-date': (isDisableDate | apply : dataCell.startDate),
-      dinner:
-        !(isDisableDate | apply : dataCell.startDate) &&
-        (isDinner | apply : dataCell.startDate),
-      'dx-scheduler-date-table-cell-text': currentView === 'month'
-    }"
+    [class.disable-date]="isDisableDate | apply : dataCell.startDate"
+    [class.dx-scheduler-date-table-cell-text]="currentView === 'month'"
+    [class.dinner]="
+      !(isDisableDate | apply : dataCell.startDate) &&
+      (isDinner | apply : dataCell.startDate)
+    "
   >
     {{ currentView === "month" ? (dataCell.startDate | date) : "" }}
   </div>
 
   <div
     *dxTemplate="let dateCell of 'dateCellTemplate'"
-    [ngClass]="{
-      'disable-date': (isDisabledDateCell | apply : dateCell.date)
-    }"
+    [class.disable-date]="isDisabledDateCell | apply : dateCell.date"
   >
     {{ dateCell.text }}
   </div>
 
   <div
     *dxTemplate="let timeCell of 'timeCellTemplate'"
-    [ngClass]="{ dinner: isDinner | apply : timeCell.date }"
+    [class.dinner]="isDinner | apply : timeCell.date"
   >
     {{ timeCell.text }}
-    <div *ngIf="hasCoffeeCupIcon | apply : timeCell.date" class="cafe"></div>
+    @if(hasCoffeeCupIcon | apply : timeCell.date){
+    <div class="cafe"></div>
+    }
   </div>
 </dx-scheduler>

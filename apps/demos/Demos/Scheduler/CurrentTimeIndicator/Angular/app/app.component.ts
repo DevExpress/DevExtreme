@@ -1,8 +1,5 @@
-import {
-  NgModule, ViewChild, Component, enableProdMode, Pipe, PipeTransform,
-} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { ViewChild, Component, enableProdMode, Pipe, PipeTransform, provideZoneChangeDetection } from '@angular/core';
 import {
   DxSchedulerModule,
   DxSchedulerComponent,
@@ -35,6 +32,12 @@ if (window && window.config?.packageConfigPaths) {
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
   preserveWhitespaces: true,
+  imports: [
+    DxSchedulerModule,
+    DxSwitchModule,
+    DxNumberBoxModule,
+    ApplyPipe,
+  ],
 })
 export class AppComponent {
   @ViewChild(DxSchedulerComponent, { static: false }) scheduler: DxSchedulerComponent;
@@ -74,19 +77,11 @@ export class AppComponent {
     this.indicatorUpdateInterval = e.value * 1000;
   };
 
-  getMovieById = (id: string | number) => Query(this.moviesData).filter(['id', '=', id]).toArray()[0];
+  getMovieById = (id: string | number) => Query(this.moviesData).filter(['id', '=', id]).toArray()[0] as MovieData;
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxSchedulerModule,
-    DxSwitchModule,
-    DxNumberBoxModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent, ApplyPipe],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

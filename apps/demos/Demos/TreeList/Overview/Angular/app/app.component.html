@@ -69,15 +69,15 @@
     dataType="date"
   ></dxi-tree-list-column>
   <div *dxTemplate="let options of 'employeeTemplate'">
+    @if(options.data.Task_Assigned_Employee) {
     <div
       class="img"
-      *ngIf="options.data.Task_Assigned_Employee"
       style.background-image="url('{{
         options.data.Task_Assigned_Employee.Picture
       }}')"
     ></div>
-    <span *ngIf="options.data.Task_Assigned_Employee" class="name">{{
-      options.data.Task_Assigned_Employee.Name
-    }}</span>
+    } @if(options.data.Task_Assigned_Employee) {
+    <span class="name">{{ options.data.Task_Assigned_Employee.Name }}</span>
+    }
   </div>
 </dx-tree-list>

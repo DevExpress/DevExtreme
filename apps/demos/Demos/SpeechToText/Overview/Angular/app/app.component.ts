@@ -1,6 +1,5 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxSpeechToTextModule } from 'devextreme-angular/ui/speech-to-text';
 import { DxTextAreaModule } from 'devextreme-angular/ui/text-area';
 import { DxButtonModule } from 'devextreme-angular/ui/button';
@@ -31,6 +30,13 @@ if (window && window.config?.packageConfigPaths) {
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
+  imports: [
+    DxSpeechToTextModule,
+    DxTextAreaModule,
+    DxButtonModule,
+    DxSelectBoxModule,
+    DxSwitchModule,
+  ],
 })
 export class AppComponent {
   state: 'initial' | 'listening';
@@ -163,19 +169,9 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxSpeechToTextModule,
-    DxTextAreaModule,
-    DxButtonModule,
-    DxSelectBoxModule,
-    DxSwitchModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
+    AppService,
   ],
-  declarations: [AppComponent],
-  providers: [AppService],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

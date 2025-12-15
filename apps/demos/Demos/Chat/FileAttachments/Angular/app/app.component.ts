@@ -1,7 +1,5 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxChatModule } from 'devextreme-angular';
 import { DxChatTypes } from 'devextreme-angular/ui/chat';
 import { type DxFileUploaderTypes } from 'devextreme-angular/ui/file-uploader';
@@ -22,6 +20,9 @@ if (window && window.config?.packageConfigPaths) {
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
+  imports: [
+    DxChatModule,
+  ],
 })
 export class AppComponent {
   dataSource: DataSource;
@@ -50,15 +51,9 @@ export class AppComponent {
   uploadFile = () => {};
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxChatModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
+    AppService,
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-  providers: [AppService],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

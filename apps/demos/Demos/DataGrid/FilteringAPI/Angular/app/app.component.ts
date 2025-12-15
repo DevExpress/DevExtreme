@@ -1,6 +1,5 @@
-import { NgModule, Component, ViewChild, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxDataGridComponent, DxDataGridModule, DxSelectBoxModule } from 'devextreme-angular';
 import { type DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 
@@ -22,6 +21,10 @@ if (window && window.config?.packageConfigPaths) {
   styleUrls: [`.${modulePrefix}/app.component.css`],
   preserveWhitespaces: true,
   providers: [Service],
+  imports: [
+    DxDataGridModule,
+    DxSelectBoxModule,
+  ],
 })
 export class AppComponent {
   @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent;
@@ -44,15 +47,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxDataGridModule,
-    DxSelectBoxModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

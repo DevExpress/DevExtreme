@@ -3,10 +3,8 @@
     <span>Use voice recognition (speech to text)</span>
     <dx-speech-to-text
       id="speech-to-text"
-      [ngClass]="{
-        'animation-disabled': !animation,
-        'custom-button': displayMode === 'Custom'
-      }"
+      [class.animation-disabled]="!animation"
+      [class.custom-button]="displayMode === 'Custom'"
       [startText]="startText"
       [stopText]="stopText"
       [stylingMode]="stylingMode"

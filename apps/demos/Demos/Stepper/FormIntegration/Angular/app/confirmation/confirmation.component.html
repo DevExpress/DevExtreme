@@ -1,7 +1,9 @@
-<div class="summary-item-header center" *ngIf="isConfirmed">
+@if (isConfirmed) {
+<div class="summary-item-header center">
   Your booking request was submitted.
 </div>
-<div class="summary-container" *ngIf="!isConfirmed">
+} @else {
+<div class="summary-container">
   <div class="summary-item">
     <div class="summary-item-header">Dates</div>
     <div class="separator"></div>
@@ -45,9 +47,12 @@
     >
   </div>
 
-  <div class="summary-item" *ngIf="!!formData.additionalRequest">
+  @if (!!formData.additionalRequest) {
+  <div class="summary-item">
     <div class="summary-item-header">Additional Requests</div>
     <div class="separator"></div>
     <div>{{ formData.additionalRequest }}</div>
   </div>
+  }
 </div>
+}

@@ -1,8 +1,5 @@
-import {
-  Component, NgModule, ViewChild, enableProdMode,
-} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxSelectBoxModule, DxCheckBoxModule, DxButtonModule } from 'devextreme-angular';
 import { DxCalendarComponent, DxCalendarModule, DxCalendarTypes } from 'devextreme-angular/ui/calendar';
 
@@ -20,6 +17,12 @@ if (window && window.config?.packageConfigPaths) {
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
+  imports: [
+    DxSelectBoxModule,
+    DxCalendarModule,
+    DxCheckBoxModule,
+    DxButtonModule,
+  ],
 })
 
 export class AppComponent {
@@ -70,18 +73,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxSelectBoxModule,
-    DxCalendarModule,
-    DxCheckBoxModule,
-    DxButtonModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

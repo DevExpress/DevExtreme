@@ -28,7 +28,8 @@
     >
     </dxo-pivot-grid-field-chooser-texts>
   </dx-pivot-grid-field-chooser>
-  <div class="bottom-bar" *ngIf="applyChangesMode === 'onDemand'">
+  @if (applyChangesMode === 'onDemand') {
+  <div class="bottom-bar">
     <dx-button
       id="applyButton"
       text="Apply"
@@ -38,6 +39,7 @@
     </dx-button>
     <dx-button text="Cancel" (onClick)="cancelClick()"> </dx-button>
   </div>
+  }
 
   <div class="options">
     <div class="caption">Options</div>

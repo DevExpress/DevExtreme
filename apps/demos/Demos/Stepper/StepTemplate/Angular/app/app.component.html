@@ -8,11 +8,13 @@
 >
   <div *dxTemplate="let data of 'item'">
     <div class="dx-step-indicator">
-      <i class="dx-icon" [ngClass]="'dx-icon-' + data.icon"></i>
+      <i class="dx-icon" [class]="'dx-icon-' + data.icon"></i>
     </div>
     <div class="dx-step-caption">
       <div class="dx-step-label">{{ data.label }}</div>
-      <div class="dx-step-optional-mark" *ngIf="data.optional">(Optional)</div>
+      @if (data.optional) {
+      <div class="dx-step-optional-mark">(Optional)</div>
+      }
     </div>
   </div>
 </dx-stepper>
@@ -39,6 +41,6 @@
   [elementAttr]="{ 'aria-labelledby': 'label-iconOnly' }"
 >
   <div *dxTemplate="let data of 'item'">
-    <i class="dx-icon" [ngClass]="'dx-icon-' + data.icon"></i>
+    <i class="dx-icon" [class]="'dx-icon-' + data.icon"></i>
   </div>
 </dx-stepper>

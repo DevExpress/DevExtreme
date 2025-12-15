@@ -1,8 +1,5 @@
-import {
-  NgModule, Component, enableProdMode, ViewChild,
-} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, ViewChild, provideZoneChangeDetection } from '@angular/core';
 import {
   DxDataGridComponent,
   DxDataGridModule,
@@ -28,6 +25,11 @@ if (window && window.config?.packageConfigPaths) {
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
+  imports: [
+    DxPivotGridModule,
+    DxPopupModule,
+    DxDataGridModule,
+  ],
 })
 export class AppComponent {
   @ViewChild('drillDownDataGrid') drillDownDataGrid: DxDataGridComponent;
@@ -84,16 +86,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxPivotGridModule,
-    DxPopupModule,
-    DxDataGridModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});
