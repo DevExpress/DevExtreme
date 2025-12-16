@@ -1,9 +1,11 @@
 <dx-list (onItemClick)="itemClick($event)">
-  <dxi-list-item *ngFor="let contact of contacts">
+  @for (contact of contacts; track contact.id) {
+  <dxi-list-item>
     <div>{{ contact.name }}</div>
     <div>{{ contact.phone }}</div>
     <div>{{ contact.email }}</div>
   </dxi-list-item>
+  }
 </dx-list>
 <dx-action-sheet
   [items]="commands"

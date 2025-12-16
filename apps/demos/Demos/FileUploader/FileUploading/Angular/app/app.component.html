@@ -8,10 +8,12 @@
     uploadMode="instantly"
   ></dx-file-uploader>
   <div class="content">
-    <div *ngIf="value.length > 0">
+    @if (value.length > 0) {
+    <div>
       <h4>Selected Files</h4>
     </div>
-    <div *ngFor="let file of value">
+    } @for (file of value; track file.name) {
+    <div>
       <div class="selected-item">
         Name:
         <span>{{ file.name }}</span
@@ -24,6 +26,7 @@
         <span>{{ file.lastModified | demodate }}</span>
       </div>
     </div>
+    }
   </div>
 </div>
 <div class="options-panel">

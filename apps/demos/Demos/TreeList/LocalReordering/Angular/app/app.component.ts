@@ -1,6 +1,5 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxCheckBoxModule } from 'devextreme-angular';
 import { DxTreeListModule, DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
 import { Service, Employee } from './app.service';
@@ -21,6 +20,10 @@ if (window && window.config?.packageConfigPaths) {
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
   preserveWhitespaces: true,
+  imports: [
+    DxTreeListModule,
+    DxCheckBoxModule,
+  ],
 })
 export class AppComponent {
   employees: Employee[];
@@ -79,15 +82,8 @@ export class AppComponent {
   };
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxTreeListModule,
-    DxCheckBoxModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

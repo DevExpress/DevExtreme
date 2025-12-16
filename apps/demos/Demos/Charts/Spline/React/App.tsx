@@ -5,7 +5,6 @@ import {
   Series,
   ArgumentAxis,
   CommonSeriesSettings,
-  ICommonSeriesSettingsProps,
   CommonAxisSettings,
   Grid,
   Export,
@@ -15,6 +14,7 @@ import {
   Label,
   Format,
 } from 'devextreme-react/chart';
+import type { ICommonSeriesSettingsProps } from 'devextreme-react/chart';
 import { architectureSources, sharingStatisticsInfo, seriesTypeLabel } from './data.ts';
 
 const types: (ICommonSeriesSettingsProps['type'])[] = ['spline', 'stackedspline', 'fullstackedspline'];

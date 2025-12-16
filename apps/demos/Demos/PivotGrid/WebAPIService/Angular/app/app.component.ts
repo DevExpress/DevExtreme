@@ -1,8 +1,5 @@
-import {
-  NgModule, Component, enableProdMode,
-} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { Options as DataSourceConfig } from 'devextreme/ui/pivot_grid/data_source';
 import { DxPivotGridModule } from 'devextreme-angular';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
@@ -20,6 +17,9 @@ if (window && window.config?.packageConfigPaths) {
 @Component({
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
+  imports: [
+    DxPivotGridModule,
+  ],
 })
 export class AppComponent {
   dataSource: DataSourceConfig = {
@@ -83,14 +83,8 @@ export class AppComponent {
   };
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxPivotGridModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

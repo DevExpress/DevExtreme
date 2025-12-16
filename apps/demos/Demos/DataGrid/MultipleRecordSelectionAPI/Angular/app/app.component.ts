@@ -1,8 +1,5 @@
-import {
-  NgModule, Component, Pipe, PipeTransform, enableProdMode,
-} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, Pipe, PipeTransform, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxDataGridModule, DxButtonModule, DxSelectBoxModule } from 'devextreme-angular';
 import { Service, Employee } from './app.service';
 
@@ -16,12 +13,25 @@ if (window && window.config?.packageConfigPaths) {
   modulePrefix = '/app';
 }
 
+@Pipe({ name: 'stringifyEmployees', standalone: true })
+export class StringifyEmployeesPipe implements PipeTransform {
+  transform(employees: Employee[]) {
+    return employees.map((employee) => `${employee.FirstName} ${employee.LastName}`).join(', ');
+  }
+}
+
 @Component({
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
   preserveWhitespaces: true,
+  imports: [
+    DxDataGridModule,
+    DxButtonModule,
+    DxSelectBoxModule,
+    StringifyEmployeesPipe,
+  ],
 })
 export class AppComponent {
   employees: Employee[];
@@ -60,23 +70,8 @@ export class AppComponent {
   }
 }
 
-@Pipe({ name: 'stringifyEmployees' })
-export class StringifyEmployeesPipe implements PipeTransform {
-  transform(employees: Employee[]) {
-    return employees.map((employee) => `${employee.FirstName} ${employee.LastName}`).join(', ');
-  }
-}
-
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxDataGridModule,
-    DxButtonModule,
-    DxSelectBoxModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent, StringifyEmployeesPipe],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

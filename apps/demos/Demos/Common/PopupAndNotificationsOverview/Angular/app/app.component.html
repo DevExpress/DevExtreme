@@ -1,5 +1,6 @@
 <div class="images">
-  <div *ngFor="let house of houses">
+  @for (house of houses; track house.ID) {
+  <div>
     <div (click)="showHouse(house)" class="item-content">
       <img alt="{{ house.Address }}" src="{{ house.Image }}" />
       <div class="item-options">
@@ -45,6 +46,7 @@
       </dx-popover>
     </div>
   </div>
+  }
 
   <dx-popup
     [width]="660"

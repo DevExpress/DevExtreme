@@ -1,6 +1,6 @@
 <div class="pies-container">
+  @for(options of pies; track options.title) {
   <dx-pie-chart
-    *ngFor="let options of pies"
     class="pie"
     [title]="options.title"
     [palette]="options.palette"
@@ -21,4 +21,5 @@
     >
     </dxo-pie-chart-legend>
   </dx-pie-chart>
+  }
 </div>

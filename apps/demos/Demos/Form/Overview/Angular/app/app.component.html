@@ -1,6 +1,8 @@
 <div id="form-demo">
   <div class="widget-container">
-    <div *ngIf="labelMode === 'outside'">Select company:</div>
+    @if (labelMode === 'outside') {
+    <div>Select company:</div>
+    }
     <dx-select-box
       #company
       displayExpr="Name"

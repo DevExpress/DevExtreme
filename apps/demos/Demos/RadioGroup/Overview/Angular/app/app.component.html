@@ -35,7 +35,7 @@
         <dx-radio-group
           [items]="priorities"
           [(value)]="colorPriority"
-          [ngClass]="colorPriority.toLowerCase()"
+          [class]="colorPriority.toLowerCase()"
         >
           <div *dxTemplate="let priority of 'item'">
             <div>{{ priority }}</div>
@@ -61,9 +61,11 @@
   <div id="tasks-list">
     Tasks by selected priority:
     <ul id="list">
-      <li *ngFor="let data of currentData">
+      @for(data of currentData; track data) {
+      <li>
         {{ data }}
       </li>
+      }
     </ul>
   </div>
 </div>

@@ -121,12 +121,13 @@
 
       <div *dxTemplate="let data of 'colorpicker'">
         <div class="custom-color-picker">
+          @for (iconColor of colors; track iconColor) {
           <i
-            *ngFor="let iconColor of colors"
             class="color dx-icon dx-icon-square"
             [style.color]="iconColor"
             (click)="onColorClick(iconColor)"
           ></i>
+          }
         </div>
       </div>
     </dx-toolbar>

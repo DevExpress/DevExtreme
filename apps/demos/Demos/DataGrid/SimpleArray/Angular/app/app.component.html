@@ -4,8 +4,7 @@
   keyExpr="ID"
   [showBorders]="true"
 >
-  <dxi-data-grid-column
-    *ngFor="let column of columns"
-    [dataField]="column"
-  ></dxi-data-grid-column>
+  @for(column of columns; track column) {
+  <dxi-data-grid-column [dataField]="column"></dxi-data-grid-column>
+  }
 </dx-data-grid>

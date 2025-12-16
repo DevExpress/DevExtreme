@@ -1,12 +1,10 @@
-import {
-  NgModule, Component, Pipe, PipeTransform, enableProdMode,
-} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, Pipe, PipeTransform, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import {
   DxDataGridModule,
   DxSparklineModule,
 } from 'devextreme-angular';
+import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { Service, WeekData } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -19,11 +17,25 @@ if (window && window.config?.packageConfigPaths) {
   modulePrefix = '/app';
 }
 
+@Pipe({ name: 'gridCellData' })
+export class GridCellDataPipe implements PipeTransform {
+  transform({ data, column }) {
+    return data[column.caption.toLowerCase()];
+  }
+}
+
 @Component({
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
+  imports: [
+    DxDataGridModule,
+    DxSparklineModule,
+    GridCellDataPipe,
+    CurrencyPipe,
+    DecimalPipe,
+  ],
 })
 export class AppComponent {
   dataSource: WeekData[];
@@ -37,22 +49,8 @@ export class AppComponent {
   }
 }
 
-@Pipe({ name: 'gridCellData' })
-export class GridCellDataPipe implements PipeTransform {
-  transform({ data, column }) {
-    return data[column.caption.toLowerCase()];
-  }
-}
-
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxDataGridModule,
-    DxSparklineModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent, GridCellDataPipe],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

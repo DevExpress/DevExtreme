@@ -1,8 +1,10 @@
+import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  NgModule, Component, ViewChild, enableProdMode,
+  Component,
+  ViewChild,
+  enableProdMode,
+  provideZoneChangeDetection,
 } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
   DxCheckBoxModule,
   DxSelectBoxModule,
@@ -45,6 +47,14 @@ if (window && window.config?.packageConfigPaths) {
   providers: [Service],
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
+  imports: [
+    DxCheckBoxModule,
+    DxSelectBoxModule,
+    DxNumberBoxModule,
+    DxButtonModule,
+    DxAutocompleteModule,
+    DxFormModule,
+  ],
 })
 export class AppComponent {
   @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;
@@ -225,19 +235,8 @@ export class AppComponent {
   };
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxCheckBoxModule,
-    DxSelectBoxModule,
-    DxNumberBoxModule,
-    DxButtonModule,
-    DxAutocompleteModule,
-    DxFormModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

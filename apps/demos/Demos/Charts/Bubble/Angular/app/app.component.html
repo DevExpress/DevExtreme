@@ -24,8 +24,8 @@
     [customizeTooltip]="customizeTooltip"
   >
   </dxo-chart-tooltip>
+  @for(correlation of correlationSource; track correlation.name) {
   <dxi-chart-series
-    *ngFor="let correlation of correlationSource"
     [name]="correlation.name"
     [argumentField]="correlation.argumentField"
     [valueField]="correlation.valueField"
@@ -33,4 +33,5 @@
     [tagField]="correlation.tagField"
   >
   </dxi-chart-series>
+  }
 </dx-chart>

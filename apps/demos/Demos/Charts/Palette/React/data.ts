@@ -1,5 +1,5 @@
-import { Palette } from 'devextreme/viz/pie_chart';
-import { PaletteExtensionMode } from 'devextreme/common/charts';
+import type { Palette } from 'devextreme/viz/pie_chart';
+import type { PaletteExtensionMode } from 'devextreme/common/charts';
 
 export const paletteCollection: Palette[] = ['Material', 'Soft Pastel', 'Harmony Light', 'Pastel', 'Bright', 'Soft', 'Ocean', 'Office', 'Vintage', 'Violet', 'Carmine', 'Dark Moon', 'Soft Blue', 'Dark Violet', 'Green Mist'];
 export const paletteExtensionModes: PaletteExtensionMode[] = ['alternate', 'blend', 'extrapolate'];

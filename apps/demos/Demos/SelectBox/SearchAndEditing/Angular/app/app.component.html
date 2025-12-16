@@ -38,17 +38,14 @@
         </div>
       </div>
       <div class="dx-field current-product">
-        Current product:
-        <span
-          *ngIf="selectBox.selectedItem; else emptyValue"
-          class="current-value"
-        >
+        Current product: @if (selectBox.selectedItem) {
+        <span class="current-value">
           {{ selectBox.selectedItem.Name }} (ID:
           {{ selectBox.selectedItem.ID }})
         </span>
-        <ng-template #emptyValue>
-          <span class="current-value">Not selected</span>
-        </ng-template>
+        } @else {
+        <span class="current-value">Not selected</span>
+        }
       </div>
     </div>
   </div>

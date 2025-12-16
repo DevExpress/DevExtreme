@@ -1,7 +1,6 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
 import { DxChatModule } from 'devextreme-angular';
 import { DxChatTypes } from 'devextreme-angular/ui/chat';
 import { Observable } from 'rxjs';
@@ -21,6 +20,10 @@ if (window && window.config?.packageConfigPaths) {
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
+  imports: [
+    DxChatModule,
+    AsyncPipe,
+  ],
 })
 export class AppComponent {
   currentUser: DxChatTypes.User;
@@ -61,15 +64,9 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxChatModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
+    AppService,
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-  providers: [AppService],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});
