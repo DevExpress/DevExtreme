@@ -18,6 +18,7 @@ import type {
   ViewDataMap, ViewOptions,
   ViewType,
 } from '../../types';
+import { createGroupPanelDataFromTree } from '../../utils/resource_manager/group_utils';
 import { DateHeaderDataGenerator } from './m_date_header_data_generator';
 import { GroupedDataMapProvider } from './m_grouped_data_map_provider';
 import { TimePanelDataGenerator } from './m_time_panel_data_generator';
@@ -167,7 +168,26 @@ export default class ViewDataProvider {
 
   getGroupPanelData(options) {
     const renderOptions = this._transformRenderOptions(options);
-    const groupResources = renderOptions.getResourceManager().groupResources();
+    const resourceManager = renderOptions.getResourceManager();
+
+    // Check if we have hierarchical resources (any resource with parentResource)
+    const hasHierarchicalResources = Object.values(resourceManager.resourceById)
+      .some((resource) => resource.parentResource);
+
+    if (hasHierarchicalResources && resourceManager.groupsTree?.length) {
+      const cellCount = this.getCellCount(renderOptions);
+      return createGroupPanelDataFromTree(
+        resourceManager.groupsTree,
+        resourceManager.resourceById,
+        resourceManager.groups,
+        cellCount,
+        renderOptions.isGroupedByDate,
+        renderOptions.isGroupedByDate ? 1 : cellCount,
+      );
+    }
+
+    // Fallback to original method
+    const groupResources = resourceManager.groupResources();
 
     if (groupResources.length > 0) {
       const cellCount = this.getCellCount(renderOptions);

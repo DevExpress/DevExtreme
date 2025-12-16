@@ -28,6 +28,10 @@ export class ResourceLoader extends Loader<RawResourceData, ResourceData> {
 
   public icon?: string;
 
+  public parentResource?: string;
+
+  public parentFieldExpr?: string;
+
   constructor(config: ResourceConfig) {
     super(config, { pageSize: 0 });
     const accessor = getAppointmentResourceAccessor(config);
@@ -40,6 +44,8 @@ export class ResourceLoader extends Loader<RawResourceData, ResourceData> {
     this.resourceIndex = String(getResourceIndex(config));
     this.resourceName = config.label;
     this.icon = config.icon;
+    this.parentResource = config.parentResource;
+    this.parentFieldExpr = config.parentFieldExpr;
     this.onInit();
   }
 

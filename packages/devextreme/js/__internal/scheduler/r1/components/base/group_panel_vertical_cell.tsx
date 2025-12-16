@@ -15,10 +15,17 @@ export class GroupPanelVerticalCell extends BaseInfernoComponent<GroupPanelCellP
       text,
       index,
       cellTemplate,
+      rowSpan,
     } = this.props;
 
+    // Apply rowSpan as flex-grow for vertical layout
+    const style = rowSpan ? { 'flex-grow': rowSpan } : undefined;
+
     return (
-      <div className={`dx-scheduler-group-header ${className}`}>
+      <div
+        className={`dx-scheduler-group-header ${className}`}
+        style={style}
+      >
         {
           cellTemplate
             ? <PublicTemplate

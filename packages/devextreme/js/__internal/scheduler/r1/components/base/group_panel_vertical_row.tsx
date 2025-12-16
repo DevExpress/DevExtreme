@@ -21,6 +21,7 @@ export class GroupPanelVerticalRow extends BaseInfernoComponent<GroupPanelRowPro
             id,
             key,
             text,
+            rowSpan,
           }, index) => <GroupPanelVerticalCell
             key={key}
             text={text}
@@ -29,6 +30,7 @@ export class GroupPanelVerticalRow extends BaseInfernoComponent<GroupPanelRowPro
             index={index}
             color={color}
             cellTemplate={cellTemplate}
+            rowSpan={rowSpan}
           />)
         }
       </div>

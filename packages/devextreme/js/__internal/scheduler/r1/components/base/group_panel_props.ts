@@ -30,6 +30,7 @@ export interface GroupPanelCellProps extends PropsWithClassName {
   data: GroupItem;
   index: number;
   cellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
+  rowSpan?: number;
 }
 
 export const GroupPanelCellDefaultProps = {
