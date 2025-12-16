@@ -5,5 +5,11 @@
   "devDependencies": {
     "@devexpress/sbom-toolkit": "0.3.0"
   },
-  "packageManager": "pnpm@9.15.4"
+  "packageManager": "pnpm@9.15.4",
+  "pnpm": {
+    "overrides": {
+      "body-parser@>=2.2.0 <2.2.1": ">=2.2.1",
+      "jws@=4.0.0": ">=4.0.1"
+    }
+  }
 }
