@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       '@devexpress/sbom-toolkit':
-        specifier: 0.2.0
-        version: 0.2.0
+        specifier: 0.3.0
+        version: 0.3.0
 
 packages:
 
@@ -137,8 +137,8 @@ packages:
     engines: {node: ^20 || ^22 || ^24, pnpm: '>=10'}
     hasBin: true
 
-  '@devexpress/sbom-toolkit@0.2.0':
-    resolution: {integrity: sha512-BZozy2Og0rj5D9Iq39AVb2Uujxo4sGEAsMj9kyyYdpDyKLyDcvocXoZ09moyyf1YY2p1f3O3DGmm9LLpwOmOrw==, tarball: https://npm.pkg.github.com/download/@devexpress/sbom-toolkit/0.2.0/30e70131e8ccb1643b5b3733a0e042cc687b84c2}
+  '@devexpress/sbom-toolkit@0.3.0':
+    resolution: {integrity: sha512-y/GibVC/uDMTK/LJQjrHV5CH7Rs1XX1+fpXQgDoQNB7zLkW8tJ9COZ8vShQcFUowIuzHxPFkpek4ZG7BfwIobg==, tarball: https://npm.pkg.github.com/download/@devexpress/sbom-toolkit/0.3.0/d2841c8974b670c7c658652120138759b1259bc0}
     hasBin: true
 
   '@iarna/toml@2.2.5':
@@ -1664,7 +1664,7 @@ snapshots:
       - supports-color
       - tedious
 
-  '@devexpress/sbom-toolkit@0.2.0':
+  '@devexpress/sbom-toolkit@0.3.0':
     dependencies:
       '@cyclonedx/cdxgen': 12.0.0
     transitivePeerDependencies:
