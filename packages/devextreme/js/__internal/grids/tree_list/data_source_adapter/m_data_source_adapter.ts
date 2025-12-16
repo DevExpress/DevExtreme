@@ -448,22 +448,24 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
 
     const store = options.fullData ? new ArrayStore(options.fullData) : this._dataSource.store();
 
-    this.loadFromStore(loadOptions, store).done((loadedData) => {
-      if (this._isOperationIdOutdated(options.operationId)) {
-        d.reject();
-        return;
-      }
-
-      if (loadedData.length) {
-        if (needLocalFiltering) {
-          // @ts-expect-error
-          loadedData = query(loadedData).filter(filter).toArray();
+    this.loadFromStore(loadOptions, store)
+      .done((loadedData) => {
+        if (this._isOperationIdOutdated(options.operationId)) {
+          d.reject();
+          return;
         }
-        this._loadParentsOrChildren(concatLoadedData(loadedData), options, needChildren).done(d.resolve).fail(d.reject);
-      } else {
-        d.resolve(data);
-      }
-    }).fail(d.reject);
+
+        if (loadedData.length) {
+          if (needLocalFiltering) {
+            // @ts-expect-error
+            loadedData = query(loadedData).filter(filter).toArray();
+          }
+          this._loadParentsOrChildren(concatLoadedData(loadedData), options, needChildren).done(d.resolve).fail(d.reject);
+        } else {
+          d.resolve(data);
+        }
+      })
+      .fail(d.reject);
 
     return d;
   }
