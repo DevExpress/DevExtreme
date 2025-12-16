@@ -19,20 +19,17 @@
     "openai": "4.73.1"
   },
   "devDependencies": {
-    "@storybook/addon-essentials": "8.6.14",
-    "@storybook/addon-interactions": "8.6.14",
-    "@storybook/addon-links": "10.1.4",
-    "@storybook/blocks": "8.6.14",
-    "@storybook/react": "10.1.4",
-    "@storybook/react-webpack5": "10.1.4",
-    "@storybook/test": "8.6.14",
+    "@storybook/addon-docs": "10.1.9",
+    "@storybook/addon-links": "10.1.9",
+    "@storybook/addon-webpack5-compiler-swc": "^4.0.2",
+    "@storybook/react-webpack5": "10.1.9",
     "@types/react": "18.0.0",
     "@types/react-dom": "18.0.0",
     "http-server": "14.1.1",
     "prop-types": "15.8.1",
     "react": "18.0.0",
     "react-dom": "18.0.0",
-    "storybook": "10.1.4",
-    "typescript": "4.9.5"
+    "storybook": "10.1.9",
+    "typescript": "5.9.3"
   }
 }
