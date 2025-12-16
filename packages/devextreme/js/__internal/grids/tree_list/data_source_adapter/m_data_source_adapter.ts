@@ -17,7 +17,6 @@ import treeListCore from '../m_core';
 const { queryByOptions } = storeHelper;
 
 const DEFAULT_KEY_EXPRESSION = 'id';
-const ERROR_MESSAGE = 'Operation cancelled due to operationId mismatch (possible race condition)';
 
 const isFullBranchFilterMode = (that) => that.option('filterMode') === 'fullBranch';
 
@@ -378,15 +377,19 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     };
   }
 
-  private _loadParentsOrChildren(data, options, needChildren?) {
-    if (options.operationId !== undefined
+  private _isOperationIdOutdated(operationId) {
+    return operationId !== undefined
       && this._lastOperationId !== undefined
-      && options.operationId !== this._lastOperationId) {
-      this._dataSource.cancel(options.operationId); // Cancel the request
+      && operationId !== this._lastOperationId;
+  }
+
+  private _loadParentsOrChildren(data, options, needChildren?) {
+    if (this._isOperationIdOutdated(options.operationId)) {
+      this._dataSource.cancel(options.operationId);
       // @ts-expect-error
       const rejectedDeferred = new Deferred();
-      rejectedDeferred.reject(new Error(ERROR_MESSAGE));
-      return rejectedDeferred; // Return rejected Deferred
+      rejectedDeferred.reject();
+      return rejectedDeferred;
     }
 
     let filter;
@@ -446,11 +449,9 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     const store = options.fullData ? new ArrayStore(options.fullData) : this._dataSource.store();
 
     this.loadFromStore(loadOptions, store).done((loadedData) => {
-      if (options.operationId !== undefined
-        && this._lastOperationId !== undefined
-        && options.operationId !== this._lastOperationId) {
+      if (this._isOperationIdOutdated(options.operationId)) {
         d.reject();
-        return; // Ignore outdated result
+        return;
       }
 
       if (loadedData.length) {
