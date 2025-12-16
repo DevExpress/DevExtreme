@@ -3,13 +3,7 @@ import React from 'react';
 import CardView, { Column, HeaderFilter, ColumnHeaderFilter, FilterPanel, FilterBuilder } from 'devextreme-react/card-view';
 
 import { orders } from './data.ts';
-import type { Order } from './data.ts';
-
-type FilterValue = [string, string, number];
-interface FilterData {
-  text: string;
-  value: FilterValue | FilterValue[];
-}
+import type { Order, OrderFilter } from './data.ts';
 
 function getOrderDay({ OrderDate }: Order): number {
   return (new Date(OrderDate)).getDay();
@@ -28,7 +22,7 @@ const customOperations = [{
   },
 }];
 
-const saleAmountHeaderFilterDataSource: FilterData[] = [
+const saleAmountHeaderFilterDataSource: OrderFilter[] = [
   {
     text: 'Less than $3000',
     value: ['SaleAmount', '<', 3000],

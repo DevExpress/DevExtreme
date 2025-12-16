@@ -4,8 +4,8 @@ import ScrollView from 'devextreme-react/scroll-view';
 import Sortable from 'devextreme-react/sortable';
 import type { SortableTypes } from 'devextreme-react/sortable';
 
-import { tasks as taskList, employees } from './data.ts';
-import type { Employee, Task } from './data.ts';
+import { tasks as taskList, employees, taskStatuses } from './data.ts';
+import type { Employee, Task, TaskStatus } from './data.ts';
 
 function getLists(statusArray: string[], taskArray: Task[]): Task[][] {
   const tasksMap = taskArray.reduce<Record<string, Task[]>>((result, task) => {
@@ -27,23 +27,22 @@ function getEmployeesMap(employeesArray: Employee[]): Record<string, string> {
   }, {});
 }
 
-function removeItem(array: any[], removeIdx: number) {
+function removeItem<T>(array: T[], removeIdx: number): T[] {
   return array.filter((_, idx) => idx !== removeIdx);
 }
 
-function insertItem(array: any[], item: any, insertIdx: number) {
+function insertItem<T>(array: T[], item: T, insertIdx: number): T[] {
   const newArray = [...array];
   newArray.splice(insertIdx, 0, item);
   return newArray;
 }
 
-function reorderItem(array: any[], fromIdx: number, toIdx: number) {
+function reorderItem<T>(array: T[], fromIdx: number, toIdx: number): T[] {
   const item = array[fromIdx];
-  const result = removeItem(array, fromIdx);
-  return insertItem(result, item, toIdx);
+  const result = removeItem<T>(array, fromIdx);
+  return insertItem<T>(result, item, toIdx);
 }
 
-const taskStatuses = ['Not Started', 'Need Assistance', 'In Progress', 'Deferred', 'Completed'];
 const employeesRecord = getEmployeesMap(employees);
 
 const Card: React.FC<{ task: Task, employeesMap: Record<string, string> }> = ({
@@ -87,12 +86,12 @@ const List: React.FC<{
 </div>;
 
 function App() {
-  const [statuses, setStatuses] = useState(taskStatuses);
-  const [lists, setLists] = useState(getLists(taskStatuses, taskList));
+  const [statuses, setStatuses] = useState<TaskStatus[]>(taskStatuses);
+  const [lists, setLists] = useState<Task[][]>(getLists(taskStatuses, taskList));
 
   const onListReorder = useCallback(({ fromIndex, toIndex }) => {
-    setLists((state) => reorderItem(state, fromIndex, toIndex));
-    setStatuses((state) => reorderItem(state, fromIndex, toIndex));
+    setLists((state) => reorderItem<Task[]>(state, fromIndex, toIndex));
+    setStatuses((state) => reorderItem<TaskStatus>(state, fromIndex, toIndex));
   }, []);
 
   const onTaskDrop = useCallback(
@@ -102,8 +101,8 @@ function App() {
       const updatedLists = [...lists];
 
       const item = updatedLists[fromData][fromIndex];
-      updatedLists[fromData] = removeItem(updatedLists[fromData], fromIndex);
-      updatedLists[toData] = insertItem(updatedLists[toData], item, toIndex);
+      updatedLists[fromData] = removeItem<Task>(updatedLists[fromData], fromIndex);
+      updatedLists[toData] = insertItem<Task>(updatedLists[toData], item, toIndex);
 
       setLists(updatedLists);
     },

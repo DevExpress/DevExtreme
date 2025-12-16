@@ -8,6 +8,7 @@ import { TreeList, Selection, Column } from 'devextreme-react/tree-list';
 import type { TreeListTypes } from 'devextreme-react/tree-list';
 
 import { employees, selectionModeLabel } from './data.ts';
+import type { Employee } from './data.ts';
 
 const expandedRowKeys = [1, 2, 10];
 const emptySelectedText = 'Nobody has been selected';
@@ -19,7 +20,7 @@ const App = () => {
   const [selectionMode, setSelectionMode] = useState('all');
   const [selectedEmployeeNames, setSelectedEmployeeNames] = useState(emptySelectedText);
 
-  const getEmployeeNames = useCallback((employeeList: any[]) => {
+  const getEmployeeNames = useCallback((employeeList: Employee[]) => {
     if (employeeList.length > 0) {
       return employeeList.map((employee) => employee.Full_Name).join(', ');
     }
