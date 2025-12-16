@@ -167,6 +167,30 @@ export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
      * @public
      */
     spellcheck?: boolean;
+    /**
+     * @docid
+     * @default false
+     * @public
+     */
+    smartSuggestionEnabled?: boolean;
+    /**
+     * @docid
+     * @default ""
+     * @public
+     */
+    userRole?: string;
+    /**
+     * @docid
+     * @default 100
+     * @public
+     */
+    suggestionLength?: number;
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
+    onSuggestionRequest?: ((text: string, userRole?: string) => PromiseLike<string>);
 }
 /**
  * @docid
@@ -268,5 +292,10 @@ onPaste?: ((e: PasteEvent) => void);
  * @type_function_param1 e:{ui/text_area:ValueChangedEvent}
  */
 onValueChanged?: ((e: ValueChangedEvent) => void);
+/**
+ * @docid dxTextAreaOptions.onSuggestionRequest
+ * @type_function_param1 e:{ui/text_area:ValueChangedEvent}
+ */
+onSuggestionRequest?: ((e: any) => void);
 };
 /// #ENDDEBUG

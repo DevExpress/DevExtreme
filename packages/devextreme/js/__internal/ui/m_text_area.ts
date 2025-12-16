@@ -1,7 +1,7 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import scrollEvents from '@js/common/core/events/gesture/emitter.gesture.scroll';
 import pointerEvents from '@js/common/core/events/pointer';
-import { addNamespace, eventData } from '@js/common/core/events/utils/index';
+import { addNamespace, eventData, normalizeKeyName } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -32,12 +32,22 @@ class TextArea<
 > extends TextBox<TProperties> {
   _eventY!: number;
 
+  _$suggestionInput?: dxElementWrapper;
+
+  _currentSuggestion?: string;
+
+  _isSuggestionVisible = false;
+
   _getDefaultOptions(): TProperties {
     return {
       ...super._getDefaultOptions(),
       spellcheck: true,
       autoResizeEnabled: false,
       _shouldAttachKeyboardEvents: false,
+      smartSuggestionEnabled: false,
+      userRole: '',
+      suggestionLength: 100,
+      onSuggestionRequest: undefined,
     };
   }
 
@@ -55,6 +65,10 @@ class TextArea<
     this.$element().addClass(TEXTAREA_CLASS);
     super._initMarkup();
     this.setAria('multiline', 'true');
+
+    if (this.option('smartSuggestionEnabled')) {
+      this.$element().addClass('dx-textarea-smart');
+    }
   }
 
   _renderContentImpl(): void {
@@ -65,6 +79,10 @@ class TextArea<
   _renderInput(): void {
     super._renderInput();
     this._renderScrollHandler();
+
+    if (this.option('smartSuggestionEnabled')) {
+      this._renderSuggestionTextArea();
+    }
   }
 
   _createInput(): dxElementWrapper {
@@ -88,6 +106,34 @@ class TextArea<
     eventsEngine.on($input, addNamespace(pointerEvents.down, this.NAME), this._pointerDownHandler.bind(this));
     // @ts-expect-error ts-error
     eventsEngine.on($input, addNamespace(pointerEvents.move, this.NAME), this._pointerMoveHandler.bind(this));
+  }
+
+  _renderAdditionalKeyDownHandler(): void {
+    const $input = this._input();
+
+    if (this.option('smartSuggestionEnabled')) {
+      // @ts-expect-error ts-error
+      eventsEngine.on($input, addNamespace('scroll', this.NAME), this._syncScroll.bind(this));
+      // @ts-expect-error ts-error
+      eventsEngine.on($input, addNamespace('keydown', this.NAME), this._keyDownHandler.bind(this));
+    }
+  }
+
+  _keyDownHandler(e): void {
+    super._keyDownHandler(e);
+
+    if (!this.option('smartSuggestionEnabled')) {
+      return;
+    }
+
+    const keyName = normalizeKeyName(e);
+
+    if (keyName === 'tab' && this._currentSuggestion && this._isSuggestionVisible) {
+      e.preventDefault();
+      this._acceptSuggestion();
+    } else if (keyName === 'escape' && this._currentSuggestion && this._isSuggestionVisible) {
+      this._rejectSuggestion();
+    }
   }
 
   _pointerDownHandler(e): void {
@@ -138,7 +184,20 @@ class TextArea<
       eventsEngine.on(this._input(), addNamespace('input paste', this.NAME), this._updateInputHeight.bind(this));
     }
 
+    if (this.option('smartSuggestionEnabled')) {
+      // @ts-expect-error ts-error
+      eventsEngine.on(this._input(), addNamespace('input paste', this.NAME), this._inputHandler.bind(this));
+    }
+
     super._renderEvents();
+  }
+
+  _inputHandler(): void {
+    if (this.option('smartSuggestionEnabled')) {
+      const { text = '' } = this.option();
+
+      this._requestSuggestion(text);
+    }
   }
 
   _refreshEvents(): void {
@@ -213,6 +272,10 @@ class TextArea<
     if (autoHeightResizing) {
       this.$element().css('height', 'auto');
     }
+
+    if (this.option('smartSuggestionEnabled')) {
+      this._syncDimensions();
+    }
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -264,6 +327,118 @@ class TextArea<
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  _createSuggestionInput(): dxElementWrapper {
+    const $suggestionInput = $('<textarea>');
+
+    // @ts-expect-error ts-error
+    $suggestionInput.attr({
+      readonly: 'readonly',
+      tabindex: '-1',
+      'aria-hidden': 'true',
+      autocomplete: 'off',
+      spellcheck: 'false',
+      'aria-label': 'suggestion textarea',
+    });
+
+    return $suggestionInput;
+  }
+
+  _renderSuggestionTextArea(): void {
+    this._$suggestionInput = this._createSuggestionInput();
+    this._$suggestionInput
+      .addClass('dx-textarea-suggestion')
+      .addClass('dx-texteditor-input')
+      .appendTo(this._$textEditorInputContainer);
+
+    this._syncDimensions();
+    this._renderAdditionalKeyDownHandler();
+  }
+
+  _disposeSuggestionTextArea(): void {
+    if (this._$suggestionInput) {
+      eventsEngine.off(this._$suggestionInput);
+      this._$suggestionInput.remove();
+      this._$suggestionInput = undefined;
+      this._currentSuggestion = undefined;
+      this._isSuggestionVisible = false;
+    }
+  }
+
+  _syncScroll(): void {
+    // sync scroll on big suggestion or input resize
+  }
+
+  _syncDimensions(): void {
+    // sync dimentions on big suggestion or input resize
+  }
+
+  _updateSuggestionDisplay(userText: string, suggestion: string): void {
+    if (!this._$suggestionInput) {
+      return;
+    }
+
+    this._currentSuggestion = suggestion;
+
+    const fullText = userText + suggestion;
+    this._$suggestionInput.val(fullText);
+
+    this._syncScroll();
+
+    this._isSuggestionVisible = !!suggestion;
+  }
+
+  _acceptSuggestion(): void {
+    if (!this._currentSuggestion) {
+      return;
+    }
+    const { text: currentValue = '' } = this.option();
+    // const currentValue = this.option('value') as unknown as string || '';
+    const newValue = currentValue + this._currentSuggestion;
+
+    this.option('value', newValue);
+
+    this._rejectSuggestion();
+  }
+
+  _rejectSuggestion(): void {
+    if (!this._$suggestionInput) {
+      return;
+    }
+
+    this._currentSuggestion = undefined;
+    this._isSuggestionVisible = false;
+
+    this._$suggestionInput.val('');
+  }
+
+  _requestSuggestion(text: string): void {
+    const { userRole, onSuggestionRequest } = this.option();
+
+    if (!onSuggestionRequest || typeof onSuggestionRequest !== 'function') {
+      return;
+    }
+
+    onSuggestionRequest(text, userRole)
+      .then((suggestion: string) => { this._updateSuggestionDisplay(text, suggestion); })
+      // @ts-expect-error ts-error
+      .catch(() => { this._rejectSuggestion(); });
+  }
+
+  // _valueChangeEventHandler(e): void {
+  //   super._valueChangeEventHandler(e);
+
+  //   if (this.option('smartSuggestionEnabled')) {
+  //     const text = this.option('value') as unknown as string || '';
+  //     this._requestSuggestion(text);
+  //   }
+  // }
+
+  _clean(): void {
+    this._disposeSuggestionTextArea();
+    super._clean();
+  }
+
   _optionChanged(args: OptionChanged<TProperties>): void {
     const { name, value } = args;
 
@@ -289,6 +464,20 @@ class TextArea<
         if (value) {
           this._updateInputHeight();
         }
+        break;
+      case 'smartSuggestionEnabled':
+        if (value) {
+          this.$element().addClass('dx-textarea-smart');
+          this._renderSuggestionTextArea();
+        } else {
+          this.$element().removeClass('dx-textarea-smart');
+          this._disposeSuggestionTextArea();
+        }
+        this._refreshEvents();
+        break;
+      case 'userRole':
+      case 'suggestionLength':
+      case 'onSuggestionRequest':
         break;
       default:
         super._optionChanged(args);

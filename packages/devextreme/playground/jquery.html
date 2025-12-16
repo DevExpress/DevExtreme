@@ -49,12 +49,29 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+        <div id="textarea"></div>
         <script>
             $(() => {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: () => { alert("clicked"); }
+                let debounceTimer;
+
+                $("#textarea").dxTextArea({
+                    height: 200,
+                    width: 600,
+                    // placeholder: 'Smart suggestions',
+                    smartSuggestionEnabled: true,
+                    userRole: 'support agent',
+                    suggestionLength: 100,
+                    onSuggestionRequest: (text, userRole) => {
+                        return new Promise((resolve) => {
+                            if (debounceTimer) {
+                                clearTimeout(debounceTimer);
+                            }
+
+                            debounceTimer = setTimeout(() => {
+                                resolve(' SUGGESTION TEXT ');
+                            }, 700);
+                        });
+                    }
                 });
             });
         </script>
