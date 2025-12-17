@@ -1,6 +1,6 @@
 import React from 'react';
 import { Stepper, Item, IStepperOptions, IItemProps } from 'devextreme-react/stepper'
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-webpack5';
 
 import { defaultItems, itemsWithTitle, itemsWithIcon, itemsWithIconAndTitle } from './data';
 import SingleFormIntegrationExample from './samples/formIntegration/SingleFormIntegration';
