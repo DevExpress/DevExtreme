@@ -1,5 +1,7 @@
 import React from 'react';
 
+import type { Product } from './data.ts';
+
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
@@ -7,7 +9,7 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 0,
 });
 
-export default function CustomItem(item) {
+export default function CustomItem(item: Product) {
   return (
     <div className="product">
       <img

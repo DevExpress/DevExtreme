@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
+
 import CardView, {
   Column, CardCover, SearchPanel, ColumnChooser, ColumnChooserSearch, ColumnChooserSelection,
 } from 'devextreme-react/card-view';
-import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
-import { employees, Employee } from './data.ts';
+import SelectBox from 'devextreme-react/select-box';
+
+import { employees } from './data.ts';
+import type { Employee } from './data.ts';
 
 function altExpr({ First_Name, Last_Name }: Employee): string {
   return `Photo of ${First_Name} ${Last_Name}`;
@@ -19,16 +22,18 @@ function calculateFullName({ First_Name, Last_Name }: Employee): string {
 }
 
 const columnChooserModeLabel = { 'aria-label': 'Column Chooser Mode' };
-const columnChooserModes = ['dragAndDrop', 'select'];
+const columnChooserModes = ['dragAndDrop', 'select'] as const;
+
+type ColumnChooserMode = typeof columnChooserModes[number];
 
 const App = () => {
-  const [columnChooserMode, setColumnChooserMode] = useState<'select' | 'dragAndDrop'>('select');
+  const [columnChooserMode, setColumnChooserMode] = useState<ColumnChooserMode>('select');
   const [searchEnabled, setSearchEnabled] = useState(true);
   const [allowSelectAll, setAllowSelectAll] = useState(true);
   const [selectByClick, setSelectByClick] = useState(true);
   const [allowColumnReordering, setAllowColumnReordering] = useState(false);
 
-  return <React.Fragment>
+  return <>
     <div className="options-panel">
       <div className="caption">Options</div>
       <div className="options-container">
@@ -126,7 +131,7 @@ const App = () => {
         visible={false}
       />
     </CardView>
-  </React.Fragment>;
+  </>;
 };
 
 export default App;

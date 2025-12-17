@@ -1,12 +1,15 @@
 import React, { useCallback, useState } from 'react';
 
-import { DragDirection, DragHighlight, Orientation } from 'devextreme-react/common';
-
-import { ScrollView } from 'devextreme-react/scroll-view';
-import { Sortable, type SortableTypes } from 'devextreme-react/sortable';
-import { SelectBox, type SelectBoxTypes } from 'devextreme-react/select-box';
-import { CheckBox, type CheckBoxTypes } from 'devextreme-react/check-box';
-import { NumberBox, type NumberBoxTypes } from 'devextreme-react/number-box';
+import CheckBox from 'devextreme-react/check-box';
+import type { CheckBoxTypes } from 'devextreme-react/check-box';
+import type { DragDirection, DragHighlight, Orientation } from 'devextreme-react/common';
+import NumberBox from 'devextreme-react/number-box';
+import type { NumberBoxTypes } from 'devextreme-react/number-box';
+import ScrollView from 'devextreme-react/scroll-view';
+import SelectBox from 'devextreme-react/select-box';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
+import Sortable from 'devextreme-react/sortable';
+import type { SortableTypes } from 'devextreme-react/sortable';
 
 import {
   tasks,
@@ -16,8 +19,8 @@ import {
   dragDirectionLabel,
   itemOrientationLabel,
 } from './data.ts';
-import Item from './Item.tsx';
 import DragItem from './DragItem.tsx';
+import Item from './Item.tsx';
 
 const dropFeedbackModes: DragHighlight[] = ['push', 'indicate'];
 const itemOrientations: Orientation[] = ['vertical', 'horizontal'];
@@ -48,37 +51,37 @@ const App = () => {
     ];
 
     setItems(updatedItems);
-  }, [items, setItems]);
+  }, [items]);
 
   const onDropFeedbackModeChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setDropFeedbackMode(e.value);
-  }, [setDropFeedbackMode]);
+  }, []);
 
   const onItemOrientationChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setItemOrientation(e.value);
     setDragDirection('both');
-  }, [setItemOrientation, setDragDirection]);
+  }, []);
 
   const onDragDirectionChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setDragDirection(e.value);
-  }, [setDragDirection]);
+  }, []);
 
   const onScrollSpeedChanged = useCallback((e: NumberBoxTypes.ValueChangedEvent) => {
     setScrollSpeed(e.value);
-  }, [setScrollSpeed]);
+  }, []);
 
   const onScrollSensitivityChanged = useCallback((e: NumberBoxTypes.ValueChangedEvent) => {
     setScrollSensitivity(e.value);
-  }, [setScrollSensitivity]);
+  }, []);
 
   const onHandleChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setHandle(e.value ? '.handle' : '');
-  }, [setHandle]);
+  }, []);
 
   const onDragTemplateChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setUseDragComponent(!!e.value);
     setCursorOffset(e.value ? { x: 10, y: 20 } : null);
-  }, [setUseDragComponent, setCursorOffset]);
+  }, []);
 
   return (
     <div id="demo-container">

@@ -183,10 +183,10 @@ const patchImports = async (resolve: PathResolvers, log: Logger) => {
 
 const prettify = async (resolve: PathResolvers, log: Logger) => {
   log.debug('running Prettier');
-  await exec(`prettier --write "${resolve.out('')}${path.sep}!(*.{css,json,md})" --single-attribute-per-line --print-width 100`, {
+  await exec(`prettier --write "${resolve.out('')}${path.sep}!(*.{css,json,md,tsbuildinfo})" --single-attribute-per-line --print-width 100`, {
     cwd: resolve.out(''),
   });
-  await exec(`eslint --fix "${resolve.out('')}" --ignore-pattern "config.js"`, {
+  await exec(`eslint --fix "${resolve.out('')}" --ignore-pattern "config.js" --ignore-pattern "*.tsbuildinfo"`, {
     cwd: resolve.out(''),
   });
 };
