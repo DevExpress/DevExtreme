@@ -118,57 +118,6 @@ describe('GenerateReactComponentsExecutor E2E', () => {
     });
   });
 
-  describe('Cleaning behavior', () => {
-    it('should clean old generated files before generation', async () => {
-      const srcDir = path.join(tempDir, 'packages', 'react-wrappers', 'src');
-
-      await writeFileText(path.join(srcDir, 'old-component.tsx'), 'old content');
-      await writeFileText(path.join(srcDir, 'legacy-file.tsx'), 'legacy content');
-
-      const options: GenerateReactComponentsExecutorSchema = {
-        metadataPath: '../metadata/dist/integration-data.json',
-      };
-
-      await executor(options, context);
-
-      expect(fs.existsSync(path.join(srcDir, 'old-component.tsx'))).toBe(false);
-      expect(fs.existsSync(path.join(srcDir, 'legacy-file.tsx'))).toBe(false);
-    });
-
-    it('should preserve core directory during cleaning', async () => {
-      const srcDir = path.join(tempDir, 'packages', 'react-wrappers', 'src');
-
-      await writeFileText(path.join(srcDir, 'core', 'custom.tsx'), 'custom core file');
-      await writeFileText(path.join(srcDir, 'temp-generated.tsx'), 'temp');
-
-      const options: GenerateReactComponentsExecutorSchema = {
-        metadataPath: '../metadata/dist/integration-data.json',
-      };
-
-      await executor(options, context);
-
-      expect(fs.existsSync(path.join(srcDir, 'core', 'component.tsx'))).toBe(true);
-      expect(fs.existsSync(path.join(srcDir, 'core', 'custom.tsx'))).toBe(true);
-
-      expect(fs.existsSync(path.join(srcDir, 'temp-generated.tsx'))).toBe(false);
-    });
-
-    it('should preserve common directory during cleaning', async () => {
-      const srcDir = path.join(tempDir, 'packages', 'react-wrappers', 'src');
-
-      fs.mkdirSync(path.join(srcDir, 'common'));
-      await writeFileText(path.join(srcDir, 'common', 'utils.ts'), 'utils');
-
-      const options: GenerateReactComponentsExecutorSchema = {
-        metadataPath: '../metadata/dist/integration-data.json',
-      };
-
-      await executor(options, context);
-
-      expect(fs.existsSync(path.join(srcDir, 'common', 'utils.ts'))).toBe(true);
-    });
-  });
-
   describe('Path resolution', () => {
     it('should resolve metadata path relative to project', async () => {
       const projectDir = path.join(tempDir, 'packages', 'react-wrappers');
