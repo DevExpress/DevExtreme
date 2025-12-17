@@ -168,10 +168,13 @@
     },
     "pack": {
       "executor": "nx:run-commands",
-      "dependsOn": ["^build"],
       "options": {
         "commands": [
-          "pnpm --workspace-root nx build devextreme-vue",
+          "pnpm --workspace-root nx clean:npm devextreme-vue",
+          "pnpm --workspace-root nx run-many --targets=build:esm,build:cjs --projects=devextreme-vue",
+          "pnpm --workspace-root nx copy-files devextreme-vue",
+          "pnpm --workspace-root nx npm:prepare-modules devextreme-vue",
+          "pnpm --workspace-root nx prepare-package-json devextreme-vue",
           "pnpm --workspace-root nx license-headers devextreme-vue",
           "pnpm --workspace-root nx npm:prepare-modules devextreme-vue",
           "pnpm --workspace-root nx npm:pack devextreme-vue"

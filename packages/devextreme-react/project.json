@@ -146,10 +146,13 @@
     },
     "pack": {
       "executor": "nx:run-commands",
-      "dependsOn": ["^build"],
       "options": {
         "commands": [
-          "pnpm --workspace-root nx build devextreme-react",
+          "pnpm --workspace-root nx clean:npm devextreme-react",
+          "pnpm --workspace-root nx run-many --targets=build:esm,build:cjs --projects=devextreme-react",
+          "pnpm --workspace-root nx copy-files devextreme-react",
+          "pnpm --workspace-root nx npm:prepare-modules devextreme-react",
+          "pnpm --workspace-root nx prepare-package-json devextreme-react",
           "pnpm --workspace-root nx license-headers devextreme-react",
           "pnpm --workspace-root nx npm:prepare-modules devextreme-react",
           "pnpm --workspace-root nx npm:pack devextreme-react"
