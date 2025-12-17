@@ -958,6 +958,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       onAppointmentDeleted: this._createActionByOption(StoreEventNames.DELETED),
       onAppointmentFormOpening: this._createActionByOption('onAppointmentFormOpening'),
       onAppointmentTooltipShowing: this._createActionByOption('onAppointmentTooltipShowing'),
+      onSelectionEnd: this._createActionByOption('onSelectionEnd'),
     };
   }
 
@@ -1374,6 +1375,13 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       selectedCellData: this.option('selectedCellData'),
       onSelectionChanged: (args) => {
         this.option('selectedCellData', args.selectedCellData);
+      },
+      onSelectionEnd: (args) => {
+        this._actions.onSelectionEnd({
+          component: this,
+          selectedCellData: args.selectedCellData,
+          selectedCells: args.selectedCells,
+        });
       },
       groupByDate: this.getViewOption('groupByDate'),
       scrolling,

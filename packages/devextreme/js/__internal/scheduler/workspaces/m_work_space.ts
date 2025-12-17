@@ -170,6 +170,7 @@ const SCHEDULER_CELL_DXCLICK_EVENT_NAME = addNamespace(clickEventName, 'dxSchedu
 
 const SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME = addNamespace(pointerEvents.down, 'dxSchedulerDateTable');
 const SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME = addNamespace(pointerEvents.up, 'dxSchedulerDateTable');
+const SCHEDULER_TABLE_DXPOINTERUP_EVENT_NAME = addNamespace(pointerEvents.up, 'dxSchedulerTable');
 
 const SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME = addNamespace(pointerEvents.move, 'dxSchedulerDateTable');
 
@@ -218,7 +219,11 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   _selectionChangedAction: any;
 
+  _selectionEndAction: any;
+
   _isCellClick: any;
+
+  _isSelectionStartedOnCell = false;
 
   _contextMenuHandled: any;
 
@@ -969,6 +974,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   _attachEvents() {
     this._createSelectionChangedAction();
+    this._createSelectionEndAction();
     this._attachClickEvent();
     this._attachContextMenuEvent();
   }
@@ -986,6 +992,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
     (eventsEngine.off as any)($element, SCHEDULER_WORKSPACE_DXPOINTERDOWN_EVENT_NAME);
     (eventsEngine.off as any)($element, SCHEDULER_CELL_DXCLICK_EVENT_NAME);
+    (eventsEngine.off as any)(domAdapter.getDocument(), SCHEDULER_TABLE_DXPOINTERUP_EVENT_NAME);
+
     eventsEngine.on($element, SCHEDULER_WORKSPACE_DXPOINTERDOWN_EVENT_NAME, (e) => {
       if (isMouseEvent(e) && e.which > 1) {
         e.preventDefault();
@@ -996,6 +1004,13 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     eventsEngine.on($element, SCHEDULER_CELL_DXCLICK_EVENT_NAME, cellSelector, (e) => {
       const $cell = $(e.target);
       that._cellClickAction({ event: e, cellElement: getPublicElement($cell), cellData: that.getCellData($cell) });
+    });
+
+    eventsEngine.on(domAdapter.getDocument(), SCHEDULER_TABLE_DXPOINTERUP_EVENT_NAME, () => {
+      if (that._isSelectionStartedOnCell) {
+        that._fireSelectionEndEvent();
+        that._isSelectionStartedOnCell = false;
+      }
     });
   }
 
@@ -1009,10 +1024,15 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this._selectionChangedAction = this._createActionByOption('onSelectionChanged');
   }
 
+  _createSelectionEndAction() {
+    this._selectionEndAction = this._createActionByOption('onSelectionEnd');
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _cellClickHandler(argument?: any) {
     if (this._showPopup) {
       delete this._showPopup;
+      this._isSelectionStartedOnCell = false;
       this._handleSelectedCellsClick();
     }
   }
@@ -1022,10 +1042,12 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
     if (!$target.hasClass(DATE_TABLE_CELL_CLASS) && !$target.hasClass(ALL_DAY_TABLE_CELL_CLASS)) {
       this._isCellClick = false;
+      this._isSelectionStartedOnCell = false;
       return;
     }
 
     this._isCellClick = true;
+    this._isSelectionStartedOnCell = true;
     if ($target.hasClass(DATE_TABLE_FOCUSED_CELL_CLASS)) {
       this._showPopup = true;
     } else {
@@ -1932,6 +1954,17 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this._selectionChangedAction({ selectedCellData });
   }
 
+  _fireSelectionEndEvent() {
+    const selectedCellData = this.option('selectedCellData') ?? [];
+    if (selectedCellData.length > 0 && this._selectionEndAction) {
+      const selectedCells = this.cellsSelectionState.getSelectedCells();
+      this._selectionEndAction({
+        selectedCellData,
+        selectedCells: $(selectedCells),
+      });
+    }
+  }
+
   _getCellByData(cellData) {
     const {
       startDate, groupIndex, allDay, index,
@@ -2368,6 +2401,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
         break;
       case 'onSelectionChanged':
         this._createSelectionChangedAction();
+        break;
+      case 'onSelectionEnd':
+        this._createSelectionEndAction();
         break;
       case 'onCellClick':
         this._createCellClickAction();

@@ -42,6 +42,13 @@ window.addEventListener('load', () =>
             allowResizing: true,
             allowDragging: true
         },
+        onSelectionEnd: ({component, selectedCellData}) => {
+            component.showAppointmentPopup({
+                startDate: selectedCellData[0].startDate,
+                endDate: selectedCellData[selectedCellData.length - 1].endDate,
+                allDay: false
+            }, true);
+        },
         onAppointmentAdded: (e) => {
             console.log('Appointment added:', e.appointmentData);
         },
