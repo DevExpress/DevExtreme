@@ -10,7 +10,7 @@ import { normalizeKeyName } from 'common/core/events/utils/index';
 import { CustomStore } from 'common/data/custom_store';
 import { DataSource } from 'common/data/data_source/data_source';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import 'ui/validator';
 import { implementationsMap } from 'core/utils/size';
 
@@ -27,11 +27,13 @@ QUnit.testStart(() => {
     $('#qunit-fixture').addClass('qunit-fixture-visible');
 });
 
-const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const TAB_KEY_CODE = 'Tab';
+
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const DX_STATE_FOCUSED_CLASS = 'dx-state-focused';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const CLEAR_BUTTON_AREA_CLASS = 'dx-clear-button-area';
+const POPUP_CLASS = 'dx-popup';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -695,25 +697,36 @@ QUnit.module('popup options', moduleConfig, () => {
 
     QUnit.test('maxHeight should be distance between the popup top bound and the element top bound if the popup has been rendered at the top already and the window was scrolled (T874949, T942217)', function(assert) {
         const scrollTopValue = 50;
-        this.$element.dxDropDownBox({
+
+        const instance = this.$element.dxDropDownBox({
             width: 300,
-            contentTemplate: (e) => $('<div id=\'dd-content\'></div>')
-        });
+            contentTemplate: () => $('<div id=\'dd-content\'></div>'),
+        }).dxDropDownBox('instance');
 
         const elementHeight = this.$element.height();
         const scrollTop = sinon.stub(renderer.fn, 'scrollTop').returns(scrollTopValue);
         const windowHeight = $(window).height();
-        this.$element.css('margin-top', windowHeight - elementHeight - 1 - scrollTopValue);
-        const instance = this.$element.dxDropDownBox('instance');
+
+        this.$element.css('margin-top', windowHeight + scrollTopValue - elementHeight);
 
         try {
             instance.open();
-            const startPopupHeight = $(instance.content()).parent('.dx-overlay-content').height();
+
+            const $overlayContent = $(instance.content()).parent(`.${OVERLAY_CONTENT_CLASS}`);
+
             $('#dd-content').height(300);
 
-            const popup = this.$element.find('.dx-popup').dxPopup('instance');
+            const popup = this.$element
+                .find(`.${POPUP_CLASS}`)
+                .dxPopup('instance');
+
             const maxHeight = popup.option('maxHeight');
-            assert.roughEqual(maxHeight(), startPopupHeight + scrollTopValue, 1.01, 'maxHeight is correct');
+
+            const overlayOffset = $overlayContent.offset().top;
+            const elementOffset = this.$element.offset().top;
+            const distanceBetweenPopupAndElement = elementOffset - overlayOffset;
+
+            assert.roughEqual(maxHeight(), distanceBetweenPopupAndElement, 1.01, 'maxHeight is correct');
         } finally {
             scrollTop.restore();
         }
