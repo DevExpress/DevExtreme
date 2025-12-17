@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
-import {
-  TreeList, Column, SearchPanel, type TreeListTypes,
-} from 'devextreme-react/tree-list';
+
+import { TreeList, Column, SearchPanel } from 'devextreme-react/tree-list';
+import type { TreeListTypes } from 'devextreme-react/tree-list';
 import SelectBox from 'devextreme-react/select-box';
+
 import { employees, filterLabel } from './data.ts';
 
-const filterModes = ['matchOnly', 'withAncestors', 'fullBranch'];
+const filterModes: TreeListTypes.TreeListFilterMode[] = ['matchOnly', 'withAncestors', 'fullBranch'];
 
 const App = () => {
   const [filterMode, setFilterMode] = useState<TreeListTypes.TreeListFilterMode>('matchOnly');
 
   return (
-    <React.Fragment>
+    <>
       <TreeList
         id="employees"
         dataSource={employees}
@@ -56,7 +57,7 @@ const App = () => {
           </SelectBox>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 

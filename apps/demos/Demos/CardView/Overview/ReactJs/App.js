@@ -55,30 +55,22 @@ function CardFooterComponent() {
     </div>
   );
 }
-function StatusComponent({
-  data: {
-    field: { value },
-  },
-}) {
+function StatusComponent({ data }) {
   const classNameMap = {
     Salaried: 'status--salaried',
     Commission: 'status--commission',
     Terminated: 'status--terminated',
   };
-  const className = classNameMap[value];
+  const className = classNameMap[data.field.value];
   return (
     <div className={`status ${className}`}>
       <div className="indicator"></div>
-      <div>{value}</div>
+      <div>{data.field.value}</div>
     </div>
   );
 }
-function EmailComponent({
-  data: {
-    field: { value, text },
-  },
-}) {
-  return <a href={`mailto:${value}`}>{text}</a>;
+function EmailComponent({ data }) {
+  return <a href={`mailto:${data.field.value}`}>{data.field.text}</a>;
 }
 function App() {
   const cardView = useRef();

@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from 'react';
-import TreeList, { Column, RowDragging } from 'devextreme-react/tree-list';
+
 import CheckBox from 'devextreme-react/check-box';
+import TreeList, { Column, RowDragging } from 'devextreme-react/tree-list';
+
 import { employees as employeeList } from './data.ts';
 
 const expandedRowKeys = [1];

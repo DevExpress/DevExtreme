@@ -3,6 +3,7 @@ import React from 'react';
 import TreeList, {
   Column, ColumnChooser, HeaderFilter, SearchPanel, Selection, Lookup,
 } from 'devextreme-react/tree-list';
+import type { TreeListTypes } from 'devextreme-react/tree-list';
 
 import { employees, priorities, tasks } from './data.ts';
 import EmployeeCell from './EmployeeCell.tsx';
@@ -29,7 +30,7 @@ const dataSourceOptions = {
   }),
 };
 
-const customizeTaskCompletionText = (cellInfo) => `${cellInfo.valueText}%`;
+const customizeTaskCompletionText = (cellInfo: TreeListTypes.ColumnCustomizeTextArg) => `${cellInfo.valueText}%`;
 
 function App() {
   return (

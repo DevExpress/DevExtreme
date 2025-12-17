@@ -1,19 +1,26 @@
 import React from 'react';
+
 import CardView, { Column, HeaderFilter, ColumnHeaderFilter, ColumnHeaderFilterSearch } from 'devextreme-react/card-view';
-import { orders, Order } from './data.ts';
+
+import { orders } from './data.ts';
+import type { Order, OrderFilter } from './data.ts';
 
 function getOrderDay(rowData: Order) {
   return new Date(rowData.OrderDate).getDay();
 }
 
-function calculateOrderDateFilterExpression(value, selectedFilterOperations, target) {
+function calculateOrderDateFilterExpression(
+  value: string,
+  selectedFilterOperations: string | null,
+  target: string
+) {
   if (value === 'weekends') {
     return [[getOrderDay, '=', 0], 'or', [getOrderDay, '=', 6]];
   }
   return this.defaultCalculateFilterExpression(value, selectedFilterOperations, target);
 }
 
-const saleAmountHeaderFilterDataSource = [
+const saleAmountHeaderFilterDataSource: OrderFilter[] = [
   {
     text: 'Less than $3000',
     value: ['SaleAmount', '<', 3000],
@@ -45,8 +52,19 @@ const saleAmountHeaderFilterDataSource = [
   },
 ];
 
-function orderDateHeaderFilterDataSource(data) {
-  data.dataSource.postProcess = function (results) {
+interface HeaderFilterDataResult {
+  text: string;
+  value: string;
+}
+
+interface HeaderFilterData {
+  dataSource: {
+    postProcess?: ((results: HeaderFilterDataResult[]) => HeaderFilterDataResult[]) | null;
+  };
+}
+
+function orderDateHeaderFilterDataSource(data: HeaderFilterData): void {
+  data.dataSource.postProcess = function (results: HeaderFilterDataResult[]) {
     results.push({
       text: 'Weekends',
       value: 'weekends',

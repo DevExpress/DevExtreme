@@ -6,14 +6,14 @@ const EmployeeCell = (props) => {
     return <span className="name">not assigned</span>;
   }
   return (
-    <React.Fragment>
+    <>
       <div
         className="img"
         style={{ backgroundImage: `url(${employee.Picture})` }}
       />
       &nbsp;
       <span className="name">{employee.Name}</span>
-    </React.Fragment>
+    </>
   );
 };
 export default EmployeeCell;

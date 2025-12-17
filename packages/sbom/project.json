@@ -2,34 +2,6 @@
   "name": "sbom",
   "projectType": "library",
   "targets": {
-    "build": {
-      "executor": "nx:noop",
-      "dependsOn": [
-        "install-dependencies",
-        "make-devextreme-sbom",
-        "make-devextreme-dist-sbom",
-        "make-devextreme-react-sbom",
-        "make-devextreme-angular-sbom",
-        "make-devextreme-vue-sbom"
-      ],
-      "cache": false
-    },
-    "prepare": {
-      "dependsOn": [
-        "install-dependencies",
-        "clean"
-      ],
-      "executor": "nx:noop",
-      "cache": false
-    },
-    "clean": {
-      "executor": "nx:run-commands",
-      "options": {
-        "cwd": "{projectRoot}",
-        "command": "rm -rf dist/"
-      },
-      "cache": false
-    },
     "install-dependencies": {
       "executor": "nx:run-commands",
       "options": {
@@ -38,48 +10,27 @@
       },
       "cache": false
     },
-    "make-devextreme-sbom": {
-      "dependsOn": ["prepare"],
+    "build": {
       "executor": "nx:run-commands",
+      "dependsOn": ["install-dependencies"],
       "options": {
         "cwd": "{projectRoot}",
-        "command": "pnpm dx-make-sbom ../../ dist/ devextreme"
+        "parallel": false,
+        "commands": [
+          "rm -rf dist/",
+          "pnpm dx-make-sbom ../../ dist/ devextreme,devextreme-react,devextreme-angular,devextreme-vue,devextreme-themebuilder",
+          "cp dist/devextreme.sbom.json dist/devextreme-dist.sbom.json"
+        ]
       },
       "cache": false
     },
-    "make-devextreme-dist-sbom": {
-      "dependsOn": ["prepare", "make-devextreme-sbom"],
+    "make": {
       "executor": "nx:run-commands",
+      "dependsOn": ["install-dependencies"],
       "options": {
         "cwd": "{projectRoot}",
-        "command": "cp dist/devextreme.sbom.json dist/devextreme-dist.sbom.json"
-      },
-      "cache": false
-    },
-    "make-devextreme-react-sbom": {
-      "dependsOn": ["prepare"],
-      "executor": "nx:run-commands",
-      "options": {
-        "cwd": "{projectRoot}",
-        "command": "pnpm dx-make-sbom ../../ dist/ devextreme-react"
-      },
-      "cache": false
-    },
-    "make-devextreme-angular-sbom": {
-      "dependsOn": ["prepare"],
-      "executor": "nx:run-commands",
-      "options": {
-        "cwd": "{projectRoot}",
-        "command": "pnpm dx-make-sbom ../../ dist/ devextreme-angular"
-      },
-      "cache": false
-    },
-    "make-devextreme-vue-sbom": {
-      "dependsOn": ["prepare"],
-      "executor": "nx:run-commands",
-      "options": {
-        "cwd": "{projectRoot}",
-        "command": "pnpm dx-make-sbom ../../ dist/ devextreme-vue"
+        "parallel": false,
+        "commands": ["pnpm dx-make-sbom ../../ dist/"]
       },
       "cache": false
     }

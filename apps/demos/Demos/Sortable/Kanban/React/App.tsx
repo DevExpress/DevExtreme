@@ -1,12 +1,14 @@
 import React, { useCallback, useState } from 'react';
+
 import ScrollView from 'devextreme-react/scroll-view';
 import Sortable from 'devextreme-react/sortable';
-import {
-  tasks as taskList, employees, Employee, Task,
-} from './data.ts';
+import type { SortableTypes } from 'devextreme-react/sortable';
 
-function getLists(statusArray: string[], taskArray: Task[]) {
-  const tasksMap = taskArray.reduce((result: { [x: string]: any[]; }, task: { Task_Status: string | number; }) => {
+import { tasks as taskList, employees, taskStatuses } from './data.ts';
+import type { Employee, Task, TaskStatus } from './data.ts';
+
+function getLists(statusArray: string[], taskArray: Task[]): Task[][] {
+  const tasksMap = taskArray.reduce<Record<string, Task[]>>((result, task) => {
     if (result[task.Task_Status]) {
       result[task.Task_Status].push(task);
     } else {
@@ -19,29 +21,28 @@ function getLists(statusArray: string[], taskArray: Task[]) {
 }
 
 function getEmployeesMap(employeesArray: Employee[]): Record<string, string> {
-  return employeesArray.reduce((result, employee) => {
+  return employeesArray.reduce<Record<string, string>>((result, employee) => {
     result[employee.ID] = employee.Name;
     return result;
   }, {});
 }
 
-function removeItem(array: any[], removeIdx: number) {
+function removeItem<T>(array: T[], removeIdx: number): T[] {
   return array.filter((_, idx) => idx !== removeIdx);
 }
 
-function insertItem(array: any[], item, insertIdx: number) {
+function insertItem<T>(array: T[], item: T, insertIdx: number): T[] {
   const newArray = [...array];
   newArray.splice(insertIdx, 0, item);
   return newArray;
 }
 
-function reorderItem(array: any[], fromIdx: number, toIdx: number) {
+function reorderItem<T>(array: T[], fromIdx: number, toIdx: number): T[] {
   const item = array[fromIdx];
-  const result = removeItem(array, fromIdx);
-  return insertItem(result, item, toIdx);
+  const result = removeItem<T>(array, fromIdx);
+  return insertItem<T>(result, item, toIdx);
 }
 
-const taskStatuses = ['Not Started', 'Need Assistance', 'In Progress', 'Deferred', 'Completed'];
 const employeesRecord = getEmployeesMap(employees);
 
 const Card: React.FC<{ task: Task, employeesMap: Record<string, string> }> = ({
@@ -52,7 +53,13 @@ const Card: React.FC<{ task: Task, employeesMap: Record<string, string> }> = ({
   <div className="card-assignee">{employeesMap[task.Task_Assigned_Employee_ID]}</div>
 </div>;
 
-const List: React.FC<{ title, index, tasks, employeesMap, onTaskDrop }> = ({
+const List: React.FC<{
+  title: string;
+  index: number;
+  tasks: Task[];
+  employeesMap: Record<string, string>;
+  onTaskDrop: (e: SortableTypes.ReorderEvent | SortableTypes.AddEvent) => void;
+}> = ({
   title, index, tasks, employeesMap, onTaskDrop,
 }) => <div className="list">
   <div className="list-title">{title}</div>
@@ -65,34 +72,37 @@ const List: React.FC<{ title, index, tasks, employeesMap, onTaskDrop }> = ({
       group="cardsGroup"
       data={index}
       onReorder={onTaskDrop}
-      onAdd={onTaskDrop}>
-      {tasks.map((task) => <Card
-        key={task.Task_ID}
-        task={task}
-        employeesMap={employeesMap}>
-      </Card>)}
+      onAdd={onTaskDrop}
+    >
+      {tasks.map((task: Task) => (
+        <Card
+          key={task.Task_ID}
+          task={task}
+          employeesMap={employeesMap}>
+        </Card>
+      ))}
     </Sortable>
   </ScrollView>
 </div>;
 
 function App() {
-  const [statuses, setStatuses] = useState(taskStatuses);
-  const [lists, setLists] = useState(getLists(taskStatuses, taskList));
+  const [statuses, setStatuses] = useState<TaskStatus[]>(taskStatuses);
+  const [lists, setLists] = useState<Task[][]>(getLists(taskStatuses, taskList));
 
   const onListReorder = useCallback(({ fromIndex, toIndex }) => {
-    setLists((state) => reorderItem(state, fromIndex, toIndex));
-    setStatuses((state) => reorderItem(state, fromIndex, toIndex));
+    setLists((state) => reorderItem<Task[]>(state, fromIndex, toIndex));
+    setStatuses((state) => reorderItem<TaskStatus>(state, fromIndex, toIndex));
   }, []);
 
   const onTaskDrop = useCallback(
     ({
       fromData, toData, fromIndex, toIndex,
-    }) => {
+    }: SortableTypes.ReorderEvent | SortableTypes.AddEvent) => {
       const updatedLists = [...lists];
 
       const item = updatedLists[fromData][fromIndex];
-      updatedLists[fromData] = removeItem(updatedLists[fromData], fromIndex);
-      updatedLists[toData] = insertItem(updatedLists[toData], item, toIndex);
+      updatedLists[fromData] = removeItem<Task>(updatedLists[fromData], fromIndex);
+      updatedLists[toData] = insertItem<Task>(updatedLists[toData], item, toIndex);
 
       setLists(updatedLists);
     },
@@ -109,8 +119,9 @@ function App() {
           className="sortable-lists"
           itemOrientation="horizontal"
           handle=".list-title"
-          onReorder={onListReorder}>
-          {lists.map((tasks, listIndex: string | number) => {
+          onReorder={onListReorder}
+        >
+          {lists.map((tasks, listIndex: number) => {
             const status = statuses[listIndex];
             return <List
               key={status}

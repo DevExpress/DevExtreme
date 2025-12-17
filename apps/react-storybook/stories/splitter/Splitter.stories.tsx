@@ -1,6 +1,6 @@
 import React from 'react';
-import {Splitter, Item} from 'devextreme-react/splitter'
-import type {Meta, StoryObj} from '@storybook/react';
+import { Splitter, Item } from 'devextreme-react/splitter'
+import type { Meta, StoryObj } from '@storybook/react-webpack5';
 
 import DataGridSample from './samples/DataGrid';
 import SchedulerSample from './samples/Scheduler';

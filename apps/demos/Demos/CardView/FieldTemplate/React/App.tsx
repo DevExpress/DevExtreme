@@ -1,9 +1,13 @@
 import React from 'react';
+
 import CardView, { CardHeader, Column, Paging } from 'devextreme-react/card-view';
-import { Task, tasks } from './data.ts';
+import type { CardViewTypes } from 'devextreme-react/card-view';
+
+import { tasks } from './data.ts';
+import type { Task } from './data.ts';
+import EmployeeComponent from './Employee.tsx';
 import HeaderTemplate from './HeaderTemplate.tsx';
-import Priority from './Priority.tsx';
-import Employee from './Employee.tsx';
+import PriorityComponent from './Priority.tsx';
 import Progress from './Progress.tsx';
 
 const App = () => (
@@ -15,7 +19,7 @@ const App = () => (
     <CardHeader
       visible={true}
       render={
-        (model) => <HeaderTemplate text={((model.card.data) as Task).Task_Subject} />
+        (model: CardViewTypes.CardTemplateData) => <HeaderTemplate text={((model.card.data) as Task).Task_Subject} />
       }
     />
     <Paging pageSize={12} />
@@ -24,7 +28,7 @@ const App = () => (
       dataField="Task_Priority"
       caption="Priority"
       fieldValueRender={
-        (model) => <Priority priorityID={model.field.value} />
+        (model: CardViewTypes.FieldTemplateData) => <PriorityComponent priorityID={model.field.value} />
       }
     />
     <Column
@@ -41,7 +45,7 @@ const App = () => (
       dataField="Task_Assigned_Employee_ID"
       caption="Assigned to"
       fieldValueRender={
-        (model) => <Employee employeeID={model.field.value} />
+        (model: CardViewTypes.FieldTemplateData) => <EmployeeComponent employeeID={model.field.value} />
       }
     />
     <Column
@@ -52,7 +56,7 @@ const App = () => (
       dataField="Task_Completion"
       caption="Completed"
       fieldRender={
-        (model) => <Progress value={model.field.value} />
+        (model: CardViewTypes.FieldTemplateData) => <Progress value={model.field.value} />
       }
     />
   </CardView>
