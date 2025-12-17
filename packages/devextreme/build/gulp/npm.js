@@ -177,7 +177,9 @@ function collectExports(baseDir) {
                 }
                 if (pkg.typings || pkg.types) {
                     const typesFile = pkg.typings || pkg.types;
-                    //  exportEntry.types = getPath(typesFile);
+                    exportEntry.types = path.join(currentDir, typesFile)
+                        .replace(/\\/g, '/')
+                        .replace(/^.*\/devextreme\//, './');
                 }
 
                 if (Object.keys(exportEntry).length > 0) {
@@ -223,8 +225,13 @@ gulp.task('add-exports-to-package-json', () => gulp
         through.obj((file, enc, callback) => {
             const pkg = JSON.parse(file.contents.toString(enc));
 
-            pkg.exports = collectExports(path.resolve(packagePath));
+            pkg.exports = {
+                "./dist/*":"./dist/*",
+                ...collectExports(path.resolve(packagePath))
+            };
+
             file.contents = Buffer.from(JSON.stringify(pkg, null, 2));
+
             callback(null, file);
         })
     )
