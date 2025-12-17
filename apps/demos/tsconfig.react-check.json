@@ -3,8 +3,6 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "strict": false,
-    "noImplicitAny": true,
-    "noPropertyAccessFromIndexSignature": true,
     "verbatimModuleSyntax": true,
     "module": "ESNext",
     "moduleResolution": "Node",
