@@ -797,7 +797,7 @@ importers:
         specifier: 10.1.9
         version: 10.1.9(@testing-library/dom@10.4.0)(prettier@3.6.2)(react-dom@18.0.0(react@18.0.0))(react@18.0.0)
       typescript:
-        specifier: 5.9.3
+        specifier: ^5.9.3
         version: 5.9.3
 
   apps/vue:
