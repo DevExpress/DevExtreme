@@ -7,11 +7,11 @@ import { employees } from './data.ts';
 const PAGE_SIZES = [4, 6];
 
 const App = () => {
-  const [pageSize, setPageSize] = useState(4);
-  const [pageIndex, setPageIndex] = useState(1);
+  const [pageSize, setPageSize] = useState<number>(4);
+  const [pageIndex, setPageIndex] = useState<number>(1);
 
   return (
-    <React.Fragment>
+    <>
       <EmployeeGallery
         employees={employees}
         pageSize={pageSize}
@@ -27,7 +27,7 @@ const App = () => {
         onPageIndexChange={setPageIndex}
         onPageSizeChange={setPageSize}
       />
-    </React.Fragment>
+    </>
   );
 };
 

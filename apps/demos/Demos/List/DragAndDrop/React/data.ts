@@ -1,7 +1,4 @@
-export type Task = {
-  id: number;
-  text: string;
-};
+import type { Task } from './types.ts';
 
 export const doingTasks: Task[] = [{ id: 1, text: 'Prepare 2019 Financial' },
   { id: 2, text: 'Prepare 2019 Marketing Plan' },

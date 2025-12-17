@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
-import { type ButtonGroupTypes } from 'devextreme-react/button-group';
-import { type CheckBoxTypes } from 'devextreme-react/check-box';
-import { type Orientation } from 'devextreme-react/common';
+import type { ButtonGroupTypes } from 'devextreme-react/button-group';
+import type { CheckBoxTypes } from 'devextreme-react/check-box';
+import type { Orientation } from 'devextreme-react/common';
 
 import { navigationModes, orientations } from './data.ts';
 
@@ -10,24 +10,24 @@ import Steppers from './Steppers.tsx';
 import Options from './Options.tsx';
 
 export default function App() {
-  const [orientation, setOrientation] = useState<Orientation>(orientations[0].value);
-  const [navigationMode, setNavigationMode] = useState<boolean>(navigationModes[0].value);
+  const [orientation, setOrientation] = useState<Orientation>(orientations[0].value as Orientation);
+  const [navigationMode, setNavigationMode] = useState<boolean>(navigationModes[0].value as boolean);
   const [selectOnFocus, setSelectOnFocus] = useState<boolean>(true);
   const [rtlMode, setRtlMode] = useState<boolean>(false);
 
-  const onOrientationClick = (e: ButtonGroupTypes.ItemClickEvent) => {
+  const onOrientationClick = (e: ButtonGroupTypes.ItemClickEvent): void => {
     setOrientation(e.itemData.value);
   };
 
-  const onNavigationModeClick = (e: ButtonGroupTypes.ItemClickEvent) => {
+  const onNavigationModeClick = (e: ButtonGroupTypes.ItemClickEvent): void => {
     setNavigationMode(e.itemData.value);
   };
 
-  const onSelectOnFocusChanged = (e: CheckBoxTypes.ValueChangedEvent) => {
+  const onSelectOnFocusChanged = (e: CheckBoxTypes.ValueChangedEvent): void => {
     setSelectOnFocus(e.value);
   };
 
-  const onRtlModeChanged = (e: CheckBoxTypes.ValueChangedEvent) => {
+  const onRtlModeChanged = (e: CheckBoxTypes.ValueChangedEvent): void => {
     setRtlMode(e.value);
   };
 

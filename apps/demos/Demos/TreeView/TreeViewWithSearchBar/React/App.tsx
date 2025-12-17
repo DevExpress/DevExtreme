@@ -11,12 +11,12 @@ const options: SearchMode[] = ['contains', 'startswith', 'equals'];
 const App = () => {
   const [value, setValue] = useState<SearchMode>('contains');
 
-  const valueChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const valueChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent): void => {
     setValue(e.value);
-  }, [setValue]);
+  }, []);
 
   return (
-    <React.Fragment>
+    <>
       <TreeView
         id="treeview"
         items={products}
@@ -36,7 +36,7 @@ const App = () => {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 

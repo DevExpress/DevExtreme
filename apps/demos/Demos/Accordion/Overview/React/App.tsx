@@ -4,23 +4,22 @@ import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
 import TagBox, { type TagBoxTypes } from 'devextreme-react/tag-box';
 import Slider, { Tooltip, Label, type SliderTypes } from 'devextreme-react/slider';
 
-import service from './data.ts';
+import { companies } from './data.ts';
 import type { Company } from './types.ts';
 import CustomTitle from './CustomTitle.tsx';
 import CustomItem from './CustomItem.tsx';
 
 const companyLabel = { 'aria-label': 'Company' };
-const companies = service.getCompanies();
 
 const App = () => {
-  const [selectedItems, setSelectedItems] = useState<Company>([companies[0]]);
+  const [selectedItems, setSelectedItems] = useState<Company[]>([companies[0]]);
   const [multiple, setMultiple] = useState<boolean>(false);
   const [collapsible, setCollapsible] = useState<boolean>(false);
   const [animationDuration, setAnimationDuration] = useState<number>(300);
 
   const selectionChanged = useCallback((e: AccordionTypes.SelectionChangedEvent): void => {
     let newItems = [...selectedItems];
-    e.removedItems.forEach((item: AccordionTypes.Item): void => {
+    e.removedItems.forEach((item: Company): void => {
       const index = newItems.indexOf(item);
       if (index >= 0) {
         newItems.splice(index, 1);
@@ -34,19 +33,19 @@ const App = () => {
 
   const selectedItemsChanged = useCallback((e: TagBoxTypes.ValueChangedEvent): void => {
     setSelectedItems(e.value);
-  }, [setSelectedItems]);
+  }, []);
 
   const multipleChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent): void => {
     setMultiple(e.value);
-  }, [setMultiple]);
+  }, []);
 
   const collapsibleChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent): void => {
     setCollapsible(e.value);
-  }, [setCollapsible]);
+  }, []);
 
   const animationDurationChanged = useCallback((e: SliderTypes.ValueChangedEvent): void => {
     setAnimationDuration(e.value);
-  }, [setAnimationDuration]);
+  }, []);
 
   return (
     <div id="accordion">

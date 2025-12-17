@@ -3,26 +3,29 @@ import TreeView from 'devextreme-react/tree-view';
 import type { TreeViewTypes, TreeViewRef } from 'devextreme-react/tree-view';
 import Sortable, { type SortableTypes } from 'devextreme-react/sortable';
 
-import service from './data.ts';
-import type { FileSystemItem } from './types';
+import { itemsDriveC as originItemsDriveC, itemsDriveD as originItemsDriveD } from './data.ts';
+import type { FileSystemItem } from './types.ts';
 
 type Node = TreeViewTypes.Node<FileSystemItem>;
 
-const getStateFieldName = (driveName: string) => (driveName === 'driveC'
+const getStateFieldName = (driveName: string): string => (driveName === 'driveC'
   ? 'itemsDriveC'
   : 'itemsDriveD');
 
-const calculateToIndex = (e: SortableTypes.DragChangeEvent) => {
+const calculateToIndex = (e: SortableTypes.DragChangeEvent): number | undefined => {
   if (e.fromComponent !== e.toComponent || e.dropInsideItem) {
     return e.toIndex;
   }
 
-  return e.fromIndex >= e.toIndex
+  return (e.fromIndex && e.toIndex) && (e.fromIndex >= e.toIndex
     ? e.toIndex
-    : e.toIndex + 1;
+    : e.toIndex + 1);
 };
 
-const findNode = (treeView: any, index: string | number) => {
+const findNode = (treeView: any, index: string | number | undefined): Node | null => {
+  if (index === undefined) {
+    return null;
+  }
   const nodeElement = treeView.element().querySelectorAll('.dx-treeview-node')[index];
   if (nodeElement) {
     return findNodeById(treeView.getNodes(), nodeElement.getAttribute('data-item-id'));
@@ -30,7 +33,7 @@ const findNode = (treeView: any, index: string | number) => {
   return null;
 };
 
-const findNodeById = (nodes: Node[], id: string | number): Node => {
+const findNodeById = (nodes: Node[], id: string | number): Node | null => {
   for (let i = 0; i < nodes.length; i += 1) {
     if (nodes[i].itemData?.id === id) {
       return nodes[i];
@@ -46,12 +49,12 @@ const findNodeById = (nodes: Node[], id: string | number): Node => {
 };
 
 const moveNode = (fromNode: Node, toNode: Node, fromItems: FileSystemItem[], toItems: FileSystemItem[], isDropInsideItem: boolean) => {
-  const fromIndex = fromItems.findIndex((item: FileSystemItem) => item.id === fromNode.itemData.id);
+  const fromIndex = fromItems.findIndex((item: FileSystemItem) => item.id === fromNode.itemData?.id);
   fromItems.splice(fromIndex, 1);
 
   const toIndex = toNode === null || isDropInsideItem
     ? toItems.length
-    : toItems.findIndex((item: FileSystemItem) => item.id === toNode.itemData.id);
+    : toItems.findIndex((item: FileSystemItem) => item.id === toNode.itemData?.id);
   toItems.splice(toIndex, 0, fromNode.itemData);
 
   moveChildren(fromNode, fromItems, toItems);
@@ -65,16 +68,16 @@ const moveNode = (fromNode: Node, toNode: Node, fromItems: FileSystemItem[], toI
 };
 
 const moveChildren = (node: Node, fromDataSource: FileSystemItem[], toDataSource: FileSystemItem[]) => {
-  if (!node.itemData.isDirectory) {
+  if (!node.itemData?.isDirectory) {
     return;
   }
 
-  node.children.forEach((child) => {
-    if (child.itemData.isDirectory) {
+  node.children?.forEach((child): void => {
+    if (child.itemData?.isDirectory) {
       moveChildren(child, fromDataSource, toDataSource);
     }
 
-    const fromIndex = fromDataSource.findIndex((item: FileSystemItem) => item.id === child.itemData.id);
+    const fromIndex = fromDataSource.findIndex((item: FileSystemItem) => item.id === child.itemData?.id);
     fromDataSource.splice(fromIndex, 1);
     toDataSource.splice(toDataSource.length, 0, child.itemData);
   });
@@ -83,10 +86,10 @@ const moveChildren = (node: Node, fromDataSource: FileSystemItem[], toDataSource
 const isChildNode = (parentNode: Node, childNode: Node) => {
   let { parent } = childNode;
   while (parent !== null) {
-    if (parent.itemData.id === parentNode.itemData.id) {
+    if (parent?.itemData?.id === parentNode.itemData?.id) {
       return true;
     }
-    parent = parent.parent;
+    parent = parent?.parent;
   }
   return false;
 };
@@ -109,24 +112,24 @@ const App = () => {
   const treeViewDriveCRef = useRef<TreeViewRef<FileSystemItem>>(null);
   const treeViewDriveDRef = useRef<TreeViewRef<FileSystemItem>>(null);
 
-  const [itemsDriveC, setItemsDriveC] = useState(service.getItemsDriveC());
-  const [itemsDriveD, setItemsDriveD] = useState(service.getItemsDriveD());
+  const [itemsDriveC, setItemsDriveC] = useState<FileSystemItem[]>(originItemsDriveC);
+  const [itemsDriveD, setItemsDriveD] = useState<FileSystemItem[]>(originItemsDriveD);
 
-  const getTreeView = useCallback((driveName: string) => (driveName === 'driveC'
-    ? treeViewDriveCRef.current.instance()
-    : treeViewDriveDRef.current.instance()), []);
+  const getTreeView = useCallback((driveName: string): ReturnType<TreeViewRef<FileSystemItem>['instance']> | undefined => (driveName === 'driveC'
+    ? treeViewDriveCRef.current?.instance()
+    : treeViewDriveDRef.current?.instance()), []);
 
-  const onDragChange = useCallback((e: SortableTypes.DragChangeEvent) => {
+  const onDragChange = useCallback((e: SortableTypes.DragChangeEvent): void => {
     if (e.fromComponent === e.toComponent) {
       const fromNode = findNode(getTreeView(e.fromData), e.fromIndex);
       const toNode = findNode(getTreeView(e.toData), calculateToIndex(e));
-      if (toNode !== null && isChildNode(fromNode, toNode)) {
+      if (fromNode !== null && toNode !== null && isChildNode(fromNode, toNode)) {
         e.cancel = true;
       }
     }
   }, [getTreeView]);
 
-  const onDragEnd = useCallback((e: SortableTypes.DragEndEvent) => {
+  const onDragEnd = useCallback((e: SortableTypes.DragEndEvent): void => {
     if (e.fromComponent === e.toComponent && e.fromIndex === e.toIndex) {
       return;
     }
@@ -137,7 +140,7 @@ const App = () => {
     const fromNode = findNode(fromTreeView, e.fromIndex);
     const toNode = findNode(toTreeView, calculateToIndex(e));
 
-    if (e.dropInsideItem && toNode !== null && !toNode.itemData.isDirectory) {
+    if (e.dropInsideItem && toNode !== null && !toNode.itemData?.isDirectory) {
       return;
     }
 
@@ -152,7 +155,9 @@ const App = () => {
       ? itemsDriveC
       : itemsDriveD;
 
-    moveNode(fromNode, toNode, fromItems, toItems, e.dropInsideItem);
+    if (fromNode && toNode) {
+      moveNode(fromNode, toNode, fromItems, toItems, e.dropInsideItem);
+    }
 
     if (getStateFieldName(e.fromData) === 'itemsDriveC') {
       setItemsDriveC([...fromItems]);
@@ -166,8 +171,8 @@ const App = () => {
       setItemsDriveD([...toItems]);
     }
 
-    fromTreeView.scrollToItem(fromTopVisibleNode);
-    toTreeView.scrollToItem(toTopVisibleNode);
+    fromTreeView?.scrollToItem(fromTopVisibleNode);
+    toTreeView?.scrollToItem(toTopVisibleNode);
   }, [getTreeView, itemsDriveC, itemsDriveD, setItemsDriveC, setItemsDriveD]);
 
   return (

@@ -1,16 +1,6 @@
-export type Company = {
-  ID: number;
-  CompanyName: string;
-  Address: string;
-  City: string;
-  State: string;
-  Zipcode: number;
-  Phone: string;
-  Fax: string;
-  Website: string;
-};
+import type { Company } from './types.ts';
 
-export const multiViewItems = [{
+export const companies: Company[] = [{
   ID: 1,
   CompanyName: 'SuprMart',
   Address: '702 SW 8th Street',

@@ -1,19 +1,26 @@
 import React from 'react';
-import type { Task } from './data.ts';
+import type { Task } from './types.ts';
 
 interface TaskItemProps {
-  prop: Task;
+  task: Task;
 }
 
-function TaskItem({ prop }: TaskItemProps) {
+function TaskItem({ task }: TaskItemProps) {
+  const {
+    priority,
+    text,
+    date,
+    assignedBy,
+  } = task;
+
   return (
-    <div className={`task-item task-item-priority-${prop.priority}`}>
+    <div className={`task-item task-item-priority-${priority}`}>
       <span className="task-item-text">
-        {prop.text}
+        {text}
       </span>
 
       <span className="task-item-info">
-        {`${prop.date} by ${prop.assignedBy}`}
+        {`${date} by ${assignedBy}`}
       </span>
 
       <i className="task-item-pseudo-button dx-icon dx-icon-overflow"></i>

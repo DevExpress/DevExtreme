@@ -1,13 +1,6 @@
-export type Employee = {
-  id: number;
-  icon: string;
-  text: string;
-  position: string;
-  picture: string;
-  notes: string;
-};
+import type { Employee } from './types.ts';
 
-export const employees = [
+export const employees: Employee[] = [
   {
     id: 0,
     icon: 'user',

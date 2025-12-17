@@ -1,4 +1,6 @@
-const employee = {
+import type { Employee } from './types.ts';
+
+export const employee: Employee = {
   ID: 1,
   FirstName: 'John',
   LastName: 'Heart',
@@ -14,10 +16,4 @@ const employee = {
   Phone: '+1(213) 555-9392',
   Email: 'jheart@dx-email.com',
   Skype: 'jheart_DX_skype',
-};
-
-export default {
-  getEmployee() {
-    return employee;
-  },
 };

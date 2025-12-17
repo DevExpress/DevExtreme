@@ -13,7 +13,7 @@ import { productTypes, products } from './data.ts';
 const renderLabel = () => <div className="toolbar-label"><b>Tom&apos;s Club</b> Products</div>;
 
 const App = () => (
-  <React.Fragment>
+  <>
     <Toolbar>
       <Item location="before"
         widget="dxButton"
@@ -43,21 +43,21 @@ const App = () => (
         options={settingsButtonOptions} />
     </Toolbar>
     <List id="products" dataSource={productsStore} />
-  </React.Fragment>
+  </>
 );
 
 const productsStore = new DataSource(products);
 
 const backButtonOptions = {
   icon: 'back',
-  onClick: () => {
+  onClick: (): void => {
     notify('Back button has been clicked!');
   },
 };
 
 const refreshButtonOptions = {
   icon: 'refresh',
-  onClick: () => {
+  onClick: (): void => {
     notify('Refresh button has been clicked!');
   },
 };
@@ -69,7 +69,7 @@ const selectBoxOptions = {
   displayExpr: 'text',
   value: productTypes[0].id,
   inputAttr: { 'aria-label': 'Categories' },
-  onValueChanged: (args: SelectBoxTypes.ValueChangedEvent) => {
+  onValueChanged: (args: SelectBoxTypes.ValueChangedEvent): void => {
     if (args.value > 1) {
       productsStore.filter(['type', '=', args.value]);
     } else {
@@ -81,28 +81,28 @@ const selectBoxOptions = {
 
 const addButtonOptions = {
   icon: 'plus',
-  onClick: () => {
+  onClick: (): void => {
     notify('Add button has been clicked!');
   },
 };
 
 const saveButtonOptions = {
   text: 'Save',
-  onClick: () => {
+  onClick: (): void => {
     notify('Save option has been clicked!');
   },
 };
 
 const printButtonOptions = {
   text: 'Print',
-  onClick: () => {
+  onClick: (): void => {
     notify('Print option has been clicked!');
   },
 };
 
 const settingsButtonOptions = {
   text: 'Settings',
-  onClick: () => {
+  onClick: (): void => {
     notify('Settings option has been clicked!');
   },
 };

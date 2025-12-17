@@ -1,30 +1,6 @@
-export type Employee = {
-  ID: number;
-  FirstName: string;
-  LastName: string;
-  Prefix: string;
-  Position: string;
-  Picture: string;
-  BirthDate: string;
-  HireDate: string;
-  Notes: string;
-  Address: string;
-  State: string;
-  City: string;
-};
+import type { Employee, Task } from './types.ts';
 
-export type Task = {
-  ID: number;
-  Subject: string;
-  StartDate: string;
-  DueDate: string;
-  Status: string;
-  Priority: string;
-  Completion: number;
-  EmployeeID: number;
-};
-
-const employees: Employee[] = [{
+export const employees: Employee[] = [{
   ID: 1,
   FirstName: 'John',
   LastName: 'Heart',
@@ -143,7 +119,7 @@ const employees: Employee[] = [{
   City: 'St. Louis',
 }];
 
-const tasks: Task[] = [{
+export const tasks: Task[] = [{
   ID: 1,
   Subject: 'Prepare 2013 Financial',
   StartDate: '2013/01/15',
@@ -513,12 +489,3 @@ const tasks: Task[] = [{
   Completion: 25,
   EmployeeID: 6,
 }];
-
-export default {
-  getEmployees() {
-    return employees;
-  },
-  getTasks() {
-    return tasks;
-  },
-};

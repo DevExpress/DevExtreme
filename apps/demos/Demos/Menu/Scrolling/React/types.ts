@@ -1,8 +1,8 @@
-interface ProductItemType {
+interface ProductItem {
   text: string;
 }
 
-export interface ProductType {
+export interface Product {
   text: string;
-  items: (ProductType | ProductItemType)[];
+  items: (Product | ProductItem)[];
 }

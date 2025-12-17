@@ -17,7 +17,7 @@ const App = () => {
   const onActionSheetButtonClick = useCallback((buttonName: string): void => {
     setIsActionSheetVisible(false);
     notify(`The "${buttonName}" button is clicked.`);
-  }, [setIsActionSheetVisible]);
+  }, []);
 
   const onActionSheetItemClick = useCallback((e: ActionSheetTypes.ItemClickEvent): void => {
     onActionSheetButtonClick(e.itemData.text);
@@ -29,11 +29,11 @@ const App = () => {
 
   const changeTitle = useCallback((e: SwitchTypes.ValueChangedEvent): void => {
     setShowTitle(e.value);
-  }, [setShowTitle]);
+  }, []);
 
   const changeCancelButton = useCallback((e: SwitchTypes.ValueChangedEvent): void => {
     setShowCancelButton(e.value);
-  }, [setShowCancelButton]);
+  }, []);
 
   return (
     <div>

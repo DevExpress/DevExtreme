@@ -49,6 +49,7 @@
     "Demos/Stepper/**/React/**/*.tsx",
     "Demos/Pagination/**/React/**/*.tsx",
     "Demos/List/**/React/**/*.tsx",
-    "Demos/TreeView/**/React/**/*.tsx"
+    "Demos/TreeView/**/React/**/*.tsx",
+    "Demos/Form/**/React/**/*.tsx",
   ]
 }

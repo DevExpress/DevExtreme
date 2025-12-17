@@ -1,5 +1,5 @@
 import React from 'react';
-import { Company } from './types.ts';
+import type { Company } from './types.ts';
 
 export default function CustomTitle(company: Company) {
   const { CompanyName } = company;

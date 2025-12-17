@@ -9,7 +9,7 @@ interface ConfirmationProps {
   isConfirmed: boolean;
 }
 
-const Confirmation: FC<ConfirmationProps> = ({ formData, isConfirmed }) => {
+const Confirmation: FC<ConfirmationProps> = ({ formData, isConfirmed }: ConfirmationProps) => {
   if (isConfirmed) {
     return (
       <div className="summary-item-header center">

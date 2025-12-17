@@ -1,7 +1,5 @@
 import type { Orientation, TabsIconPosition, TabsStyle } from 'devextreme/common';
-import type { Item } from 'devextreme/ui/tabs';
-
-type TabItem = Item & { id: number };
+import type { TabItem } from './types.ts';
 
 export const tabsText: TabItem[] = [
   {

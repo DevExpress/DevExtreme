@@ -1,13 +1,4 @@
-export type Product = {
-  ID: number;
-  Name: string;
-  Price: number;
-  Current_Inventory: number | null;
-  Backorder: number;
-  Manufacturing: number;
-  Category: string;
-  ImageSrc: string;
-};
+import type { Product } from './types.ts';
 
 export const products: Product[] = [{
   ID: 1,

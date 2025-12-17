@@ -13,16 +13,16 @@ import Confirmation from './Confirmation.tsx';
 import { initialSteps, getInitialFormData } from './data.ts';
 import type { BookingFormData } from './types.ts';
 
-const validationGroups = ['dates', 'guests', 'roomAndMealPlan'];
+const validationGroups: string[] = ['dates', 'guests', 'roomAndMealPlan'];
 
 export default function App() {
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [steps, setSteps] = useState<StepperTypes.Item[]>(initialSteps);
   const [formData, setFormData] = useState<BookingFormData>(getInitialFormData);
-  const [isConfirmed, setIsConfirmed] = useState(false);
-  const [isStepperReadonly, setIsStepperReadonly] = useState(false);
+  const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
+  const [isStepperReadonly, setIsStepperReadonly] = useState<boolean>(false);
 
-  const getValidationResult = useCallback((index: number) => {
+  const getValidationResult = useCallback((index: number): boolean | undefined => {
     if (index >= validationGroups.length) {
       return true;
     }
@@ -30,8 +30,8 @@ export default function App() {
     return validationEngine.validateGroup(validationGroups[index]).isValid;
   }, []);
 
-  const setStepValidationResult = useCallback((index: number, isValid: boolean | undefined) => {
-    setSteps((prev) => prev.map((step, i) => {
+  const setStepValidationResult = useCallback((index: number, isValid: boolean | undefined): void => {
+    setSteps((prev) => prev.map((step, i: number) => {
       if (i === index) {
         return {
           ...step,
@@ -44,7 +44,7 @@ export default function App() {
   }, []);
 
   const onPrevButtonClick = useCallback(() => {
-    setSelectedIndex((prev) => prev - 1);
+    setSelectedIndex((prev: number): number => prev - 1);
   }, []);
 
   const moveNext = useCallback(() => {
@@ -81,7 +81,7 @@ export default function App() {
     }
   }, [selectedIndex, isConfirmed, onConfirm, onReset, moveNext]);
 
-  const nextButtonText = useMemo(() => {
+  const nextButtonText = useMemo((): string => {
     if (selectedIndex < steps.length - 1) {
       return 'Next';
     }
@@ -93,7 +93,7 @@ export default function App() {
     return 'Confirm';
   }, [selectedIndex, isConfirmed, steps.length]);
 
-  const onSelectionChanging = useCallback((args: StepperTypes.SelectionChangingEvent) => {
+  const onSelectionChanging = useCallback((args: StepperTypes.SelectionChangingEvent): void => {
     const { component, addedItems, removedItems } = args;
     const { items = [] } = component.option();
 
@@ -112,7 +112,7 @@ export default function App() {
     }
   }, [setStepValidationResult, getValidationResult]);
 
-  const onSelectionChanged = useCallback(({ component }: StepperTypes.SelectionChangedEvent) => {
+  const onSelectionChanged = useCallback(({ component }: StepperTypes.SelectionChangedEvent): void => {
     setSelectedIndex(component.option('selectedIndex') ?? 0);
   }, []);
 
@@ -142,7 +142,7 @@ export default function App() {
   );
 
   return (
-    <React.Fragment>
+    <>
       <Stepper
         className={ isStepperReadonly ? 'readonly' : ''}
         focusStateEnabled={!isStepperReadonly}
@@ -171,11 +171,11 @@ export default function App() {
         <div className="nav-panel">
           <div className="current-step">
             {!isConfirmed && (
-              <React.Fragment>
+              <>
                 Step <span className="selected-index">{selectedIndex + 1}</span>
                 {' of '}
                 {steps.length}
-              </React.Fragment>
+              </>
             )}
           </div>
 
@@ -199,6 +199,6 @@ export default function App() {
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }

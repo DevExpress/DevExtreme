@@ -1,7 +1,7 @@
 import React from 'react';
 import List from 'devextreme-react/list';
 import { employees } from './data.ts';
-import type { Employee } from './data.ts';
+import type { Employee } from './types.ts';
 
 const GroupTemplate = (item: Employee) => <div>Assigned: {item.key}</div>;
 

@@ -5,8 +5,8 @@ import { Form, SimpleItem } from 'devextreme-react/form';
 
 import type { FormProps } from './types.ts';
 
-const AdditionalForm: FC<FormProps> = memo(({ formData }) => (
-  <React.Fragment>
+const AdditionalForm: FC<FormProps> = memo(({ formData }: FormProps) => (
+  <>
     <div>
       Please let us know if you have any other requests.
     </div>
@@ -21,7 +21,7 @@ const AdditionalForm: FC<FormProps> = memo(({ formData }) => (
         label={{ visible: false }}
       ></SimpleItem>
     </Form>
-  </React.Fragment>
+  </>
 ));
 
 AdditionalForm.displayName = 'AdditionalForm';

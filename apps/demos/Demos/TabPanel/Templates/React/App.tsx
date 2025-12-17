@@ -2,34 +2,34 @@ import React, { useCallback, useState } from 'react';
 import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
 import TabPanel, { type TabPanelTypes } from 'devextreme-react/tab-panel';
 import { multiViewItems as companies } from './data.ts';
-import type { Company } from './data.ts';
+import type { Company } from './types.ts';
 import CompanyItem from './CompanyItem.tsx';
 
 const itemTitleRender = (company: Company) => <span>{company.CompanyName}</span>;
 
 const App = () => {
-  const [animationEnabled, setAnimationEnabled] = useState(true);
-  const [swipeEnabled, setSwipeEnabled] = useState(true);
-  const [loop, setLoop] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [animationEnabled, setAnimationEnabled] = useState<boolean>(true);
+  const [swipeEnabled, setSwipeEnabled] = useState<boolean>(true);
+  const [loop, setLoop] = useState<boolean>(false);
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
-  const onSelectionChanged = useCallback((args: TabPanelTypes.OptionChangedEvent) => {
-    if (args.name === 'selectedIndex') {
-      setSelectedIndex(args.value);
+  const onAnimationEnabledChanged = useCallback(({ value }: CheckBoxTypes.ValueChangedEvent): void => {
+    setAnimationEnabled(value);
+  }, []);
+
+  const onSwipeEnabledChanged = useCallback(({ value }: CheckBoxTypes.ValueChangedEvent): void => {
+    setSwipeEnabled(value);
+  }, []);
+
+  const onLoopChanged = useCallback(({ value }: CheckBoxTypes.ValueChangedEvent): void => {
+    setLoop(value);
+  }, []);
+
+  const onSelectionChanged = useCallback(({ name, value }: TabPanelTypes.OptionChangedEvent): void => {
+    if (name === 'selectedIndex') {
+      setSelectedIndex(value);
     }
-  }, [setSelectedIndex]);
-
-  const onLoopChanged = useCallback((args: CheckBoxTypes.ValueChangedEvent) => {
-    setLoop(args.value);
-  }, [setLoop]);
-
-  const onAnimationEnabledChanged = useCallback((args: CheckBoxTypes.ValueChangedEvent) => {
-    setAnimationEnabled(args.value);
-  }, [setAnimationEnabled]);
-
-  const onSwipeEnabledChanged = useCallback((args: CheckBoxTypes.ValueChangedEvent) => {
-    setSwipeEnabled(args.value);
-  }, [setSwipeEnabled]);
+  }, []);
 
   return (
     <div>

@@ -5,7 +5,7 @@ import SelectBox from 'devextreme-react/select-box';
 import MultiView from 'devextreme-react/multi-view';
 
 import { employees, selectBoxLabel } from './data.ts';
-import type { Employee } from './data.ts';
+import type { Employee } from './types.ts';
 
 interface EmployeeInfoProps {
   data: Employee;
@@ -13,7 +13,10 @@ interface EmployeeInfoProps {
 
 function EmployeeInfo({ data }: EmployeeInfoProps) {
   const {
-    text, picture, position, notes,
+    text,
+    picture,
+    position,
+    notes,
   } = data;
 
   return (
@@ -28,11 +31,11 @@ function EmployeeInfo({ data }: EmployeeInfoProps) {
 }
 
 const App = () => {
-  const [selectedItem, setSelectedItem] = useState(employees[0]);
+  const [selectedItem, setSelectedItem] = useState<Employee>(employees[0]);
 
-  const onSelectionChanged = useCallback((args: { selectedItem?: typeof employees[0]; addedItems?: typeof employees }) => {
+  const onSelectionChanged = useCallback((args: { selectedItem?: typeof employees[0]; addedItems?: typeof employees }): void => {
     setSelectedItem(args.selectedItem || args.addedItems?.[0]);
-  }, [setSelectedItem]);
+  }, []);
 
   return (
     <div id="center-content">

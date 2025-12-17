@@ -1,11 +1,4 @@
-export interface Employee {
-  ID: number;
-  FullName: string;
-  Title: string;
-  Employee_Picture: string;
-  Picture: string;
-  MobilePhone: string;
-}
+import type { Employee } from './types.ts';
 
 export const employees: Employee[] = [
   {

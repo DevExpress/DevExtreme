@@ -4,22 +4,22 @@ import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
 import List, { type ListTypes } from 'devextreme-react/list';
 import { tasks, deleteModeLabel } from './data.ts';
 
-const itemDeleteModes = ['static', 'toggle', 'slideButton', 'slideItem', 'swipe', 'context'];
+const itemDeleteModes: ListTypes.Properties['itemDeleteMode'][] = ['static', 'toggle', 'slideButton', 'slideItem', 'swipe', 'context'];
 
 const App = () => {
-  const [allowDeletion, setAllowDeletion] = useState(false);
+  const [allowDeletion, setAllowDeletion] = useState<boolean>(false);
   const [itemDeleteMode, setItemDeleteMode] = useState<ListTypes.Properties['itemDeleteMode']>('toggle');
 
-  const onAllowDeletionChange = useCallback((args: CheckBoxTypes.ValueChangedEvent) => {
+  const onAllowDeletionChange = useCallback((args: CheckBoxTypes.ValueChangedEvent): void => {
     setAllowDeletion(args.value);
-  }, [setAllowDeletion]);
+  }, []);
 
-  const onItemDeleteModeChange = useCallback((args: SelectBoxTypes.ValueChangedEvent) => {
+  const onItemDeleteModeChange = useCallback((args: SelectBoxTypes.ValueChangedEvent): void => {
     setItemDeleteMode(args.value);
-  }, [setItemDeleteMode]);
+  }, []);
 
   return (
-    <React.Fragment>
+    <>
       <div className="widget-container">
         <List
           dataSource={tasks}
@@ -48,7 +48,7 @@ const App = () => {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 

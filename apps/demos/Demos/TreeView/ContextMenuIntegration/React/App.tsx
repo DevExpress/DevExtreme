@@ -1,57 +1,56 @@
 import React, { useCallback, useRef, useState } from 'react';
 
-import { TreeView, type TreeViewTypes } from 'devextreme-react/tree-view';
-import { ContextMenu, type ContextMenuTypes } from 'devextreme-react/context-menu';
+import { TreeView } from 'devextreme-react/tree-view';
+import type { TreeViewTypes, TreeViewRef } from 'devextreme-react/tree-view';
+import { ContextMenu } from 'devextreme-react/context-menu';
+import type { ContextMenuTypes, ContextMenuRef } from 'devextreme-react/context-menu';
 import List from 'devextreme-react/list';
 
-import service from './data.ts';
+import { products, menuItems } from './data.ts';
 import type { Product } from './types';
 
-const products = service.getProducts();
-const menuItems = service.getMenuItems();
-
 const App = () => {
-  const contextMenuRef = useRef(null);
-  const treeViewRef = useRef(null);
-  const [logItems, setLogItems] = useState([]);
-  const [selectedTreeItem, setSelectedTreeItem] = useState<Product>(undefined);
+  const contextMenuRef = useRef<ContextMenuRef>(null);
+  const treeViewRef = useRef<TreeViewRef>(null);
+  const [logItems, setLogItems] = useState<string[]>([]);
+  const [selectedTreeItem, setSelectedTreeItem] = useState<Product | undefined>(undefined);
 
   const treeViewItemContextMenu = useCallback((
     e: TreeViewTypes.ItemContextMenuEvent<Product>,
   ) => {
     setSelectedTreeItem(e.itemData);
 
-    const isProductItem = !e.itemData.items;
-    contextMenuRef.current.instance().option('items[0].visible', !isProductItem);
-    contextMenuRef.current.instance().option('items[1].visible', !isProductItem);
-    contextMenuRef.current.instance().option('items[2].visible', isProductItem);
-    contextMenuRef.current.instance().option('items[3].visible', isProductItem);
+    const isProductItem = !e.itemData?.items;
+    contextMenuRef.current?.instance().option('items[0].visible', !isProductItem);
+    contextMenuRef.current?.instance().option('items[1].visible', !isProductItem);
+    contextMenuRef.current?.instance().option('items[2].visible', isProductItem);
+    contextMenuRef.current?.instance().option('items[3].visible', isProductItem);
 
-    contextMenuRef.current.instance().option('items[0].disabled', e.node.expanded);
-    contextMenuRef.current.instance().option('items[1].disabled', !e.node.expanded);
+    contextMenuRef.current?.instance().option('items[0].disabled', e.node?.expanded);
+    contextMenuRef.current?.instance().option('items[1].disabled', !e.node?.expanded);
   }, []);
 
   const contextMenuItemClick = useCallback((
     e: ContextMenuTypes.ItemClickEvent<Product>,
   ) => {
     let logEntry = '';
-    switch (e.itemData.id) {
+    switch (e.itemData?.id) {
       case 'expand': {
-        logEntry = `The '${selectedTreeItem.text}' group was expanded`;
-        treeViewRef.current.instance().expandItem(selectedTreeItem.id);
+        logEntry = `The '${selectedTreeItem?.text}' group was expanded`;
+        treeViewRef.current?.instance().expandItem(selectedTreeItem?.id);
         break;
       }
       case 'collapse': {
-        logEntry = `The '${selectedTreeItem.text}' group was collapsed`;
-        treeViewRef.current.instance().collapseItem(selectedTreeItem.id);
+        logEntry = `The '${selectedTreeItem?.text}' group was collapsed`;
+        treeViewRef.current?.instance().collapseItem(selectedTreeItem?.id);
         break;
       }
       case 'details': {
-        logEntry = `Details about '${selectedTreeItem.text}' were displayed`;
+        logEntry = `Details about '${selectedTreeItem?.text}' were displayed`;
         break;
       }
       case 'copy': {
-        logEntry = `Information about '${selectedTreeItem.text}' was copied`;
+        logEntry = `Information about '${selectedTreeItem?.text}' was copied`;
         break;
       }
       default:

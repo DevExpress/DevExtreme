@@ -1,7 +1,4 @@
-export type Employee = {
-  key: string;
-  items: string[];
-};
+import type { Employee } from './types.ts';
 
 export const employees: Employee[] = [{
   key: 'Mr. John Heart',
