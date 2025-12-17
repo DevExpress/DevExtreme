@@ -1,12 +1,16 @@
 import React, { useCallback, useState } from 'react';
-import CardView, { Column, HeaderFilter, SearchPanel, Paging } from 'devextreme-react/card-view';
-import Popup, { Position } from 'devextreme-react/popup';
-import { Vehicle, vehicles } from './data.ts';
-import VehicleCard from './VehicleCard.tsx';
-import LicenseInfo from './LicenseInfo.tsx';
 
-const getFormattedPrice = (card: any): string => {
-  const priceText = card.fields.find((f) => f?.column?.dataField === 'Price');
+import CardView, { Column, HeaderFilter, SearchPanel, Paging } from 'devextreme-react/card-view';
+import type { CardViewTypes } from 'devextreme-react/card-view';
+import Popup, { Position } from 'devextreme-react/popup';
+
+import { vehicles } from './data.ts';
+import type { Vehicle } from './types.ts';
+import LicenseInfo from './LicenseInfo.tsx';
+import VehicleCard from './VehicleCard.tsx';
+
+const getFormattedPrice = (card: CardViewTypes.CardInfo): string => {
+  const priceText = card.fields?.find((f: CardViewTypes.FieldInfo) => f?.column?.dataField === 'Price');
   return priceText?.text ?? '';
 };
 
@@ -23,27 +27,33 @@ const App = () => {
     setPopupVisible(false);
   }, []);
 
+  const cardRender = useCallback((model: CardViewTypes.CardTemplateData) => {
+    const vehicle = model.card.data as Vehicle;
+    return <VehicleCard
+      vehicle={vehicle}
+      id={vehicle.ID}
+      model={`${vehicle.TrademarkName} ${vehicle.Name}`}
+      price={getFormattedPrice(model.card)}
+      categoryName={vehicle.CategoryName}
+      modification={vehicle.Modification}
+      bodyStyleName={vehicle.BodyStyleName}
+      horsepower={vehicle.Horsepower}
+      onShowInfo={showInfo}
+    />;
+  }, [showInfo]);
+
+  const contentRender = useCallback(() => (
+    currentVehicle ? <LicenseInfo vehicle={currentVehicle} /> : null
+  ), [currentVehicle]);
+
   return (
-    <React.Fragment>
+    <>
       <CardView
         dataSource={vehicles}
         height={1120}
         cardsPerRow="auto"
         cardMinWidth={240}
-        cardRender={(model) => {
-          const vehicle = model.card.data;
-          return <VehicleCard
-            vehicle={vehicle}
-            id={vehicle.ID}
-            model={`${vehicle.TrademarkName} ${vehicle.Name}`}
-            price={getFormattedPrice(model.card)}
-            categoryName={vehicle.CategoryName}
-            modification={vehicle.Modification}
-            bodyStyleName={vehicle.BodyStyleName}
-            horsepower={vehicle.Horsepower}
-            onShowInfo={showInfo}
-          />;
-        }}
+        cardRender={cardRender}
       >
         <HeaderFilter visible={true} />
         <SearchPanel visible={true} />
@@ -83,13 +93,11 @@ const App = () => {
         hideOnOutsideClick={true}
         title="Image Info"
         onHiding={hideInfo}
-        contentRender={() =>
-          currentVehicle ? <LicenseInfo vehicle={currentVehicle} /> : null
-        }
+        contentRender={contentRender}
       >
         <Position at="center" my="center" collision="fit" />
       </Popup>
-    </React.Fragment>
+    </>
   );
 };
 

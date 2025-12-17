@@ -3,7 +3,7 @@ function prepareItem(item, spaces) {
   return Array.isArray(item[0]) ? formatValue(item, spaces + TAB_SIZE) : JSON.stringify(item);
 }
 export function formatValue(value, spaces = TAB_SIZE) {
-  if (value && Array.isArray(value[0])) {
+  if (value && Array.isArray(value) && Array.isArray(value[0])) {
     const formattedValue = value
       .map((item) => prepareItem(item, spaces))
       .join(`,${getLineBreak(spaces)}`);

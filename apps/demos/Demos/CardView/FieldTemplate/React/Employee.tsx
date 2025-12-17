@@ -1,17 +1,19 @@
 import React, { useMemo } from 'react';
-import { Employee, employees } from './data.ts';
+
+import { employees } from './data.ts';
+import type { Employee } from './data.ts';
 
 interface EmployeeProps {
   employeeID: number;
 }
 
-const Employee = ({ employeeID }: EmployeeProps) => {
-  const employee = useMemo<Employee>(
-    () => employees.find((e) => e.ID === employeeID),
+const EmployeeComponent = ({ employeeID }: EmployeeProps) => {
+  const employee = useMemo<Employee | undefined>(
+    () => employees.find((e: Employee) => e.ID === employeeID),
     [employeeID]
   );
 
-  return <button className='task__link-button'>{ employee.Name }</button>;
+  return <button className='task__link-button'>{ employee?.Name }</button>;
 };
 
-export default Employee;
+export default EmployeeComponent;

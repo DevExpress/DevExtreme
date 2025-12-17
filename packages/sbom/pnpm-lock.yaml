@@ -4,13 +4,17 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  body-parser@>=2.2.0 <2.2.1: '>=2.2.1'
+  jws@=4.0.0: '>=4.0.1'
+
 importers:
 
   .:
     devDependencies:
       '@devexpress/sbom-toolkit':
-        specifier: 0.2.0
-        version: 0.2.0
+        specifier: 0.3.0
+        version: 0.3.0
 
 packages:
 
@@ -137,8 +141,8 @@ packages:
     engines: {node: ^20 || ^22 || ^24, pnpm: '>=10'}
     hasBin: true
 
-  '@devexpress/sbom-toolkit@0.2.0':
-    resolution: {integrity: sha512-BZozy2Og0rj5D9Iq39AVb2Uujxo4sGEAsMj9kyyYdpDyKLyDcvocXoZ09moyyf1YY2p1f3O3DGmm9LLpwOmOrw==, tarball: https://npm.pkg.github.com/download/@devexpress/sbom-toolkit/0.2.0/30e70131e8ccb1643b5b3733a0e042cc687b84c2}
+  '@devexpress/sbom-toolkit@0.3.0':
+    resolution: {integrity: sha512-y/GibVC/uDMTK/LJQjrHV5CH7Rs1XX1+fpXQgDoQNB7zLkW8tJ9COZ8vShQcFUowIuzHxPFkpek4ZG7BfwIobg==, tarball: https://npm.pkg.github.com/download/@devexpress/sbom-toolkit/0.3.0/d2841c8974b670c7c658652120138759b1259bc0}
     hasBin: true
 
   '@iarna/toml@2.2.5':
@@ -296,8 +300,8 @@ packages:
   bl@4.1.0:
     resolution: {integrity: sha512-1W07cM9gS6DcLperZfFSj+bWLtaPGSOHWhPiGzXmvVJbRLdG82sH/Kn8EtW1VqWVA54AKf2h5k5BbnIbwF3h6w==}
 
-  body-parser@2.2.0:
-    resolution: {integrity: sha512-02qvAaxv8tp7fBa/mw1ga98OGm+eCbqzJOKoRt70sLmfEEi+jyBYVTDGfCL/k06/4EMk/z01gCe7HoCH/f2LTg==}
+  body-parser@2.2.1:
+    resolution: {integrity: sha512-nfDwkulwiZYQIGwxdy0RUmowMhKcFVcYXUU7m4QlKYim1rUtg83xm2yjZ40QjDuc291AJjjeSc9b++AWHSgSHw==}
     engines: {node: '>=18'}
 
   boolbase@1.0.0:
@@ -775,8 +779,8 @@ packages:
   jwa@2.0.1:
     resolution: {integrity: sha512-hRF04fqJIP8Abbkq5NKGN0Bbr3JxlQ+qhZufXVr0DvujKy93ZCbXZMHDL4EOtodSbCWxOqR8MS1tXA5hwqCXDg==}
 
-  jws@4.0.0:
-    resolution: {integrity: sha512-KDncfTmOZoOMTFG4mBlG0qUIOlc03fmzH+ru6RgYVZhPkyiy/92Owlt/8UEN+a4TXR1FQetfIpJE8ApdvdVxTg==}
+  jws@4.0.1:
+    resolution: {integrity: sha512-EKI/M/yqPncGUUh44xz0PxSidXFr/+r0pA70+gIYhjv+et7yxM+s29Y+VGDkovRofQem0fs7Uvf4+YmAdyRduA==}
 
   keyv@5.5.4:
     resolution: {integrity: sha512-eohl3hKTiVyD1ilYdw9T0OiB4hnjef89e3dMYKz+mVKDzj+5IteTseASUsOB+EU9Tf6VNTCjDePcP6wkDGmLKQ==}
@@ -1611,7 +1615,7 @@ snapshots:
       got: 14.6.5
       iconv-lite: 0.7.0
       json-stringify-nice: 1.1.4
-      jws: 4.0.0
+      jws: 4.0.1
       keyv: 5.5.4
       node-stream-zip: 1.15.0
       npm-package-arg: 13.0.2
@@ -1647,7 +1651,7 @@ snapshots:
       '@cyclonedx/cdxgen-plugins-bin-linuxmusl-arm64': 1.8.0
       '@cyclonedx/cdxgen-plugins-bin-windows-amd64': 1.8.0
       '@cyclonedx/cdxgen-plugins-bin-windows-arm64': 1.8.0
-      body-parser: 2.2.0
+      body-parser: 2.2.1
       compression: 1.8.1
       connect: 3.7.0
       jsonata: 2.1.0
@@ -1664,7 +1668,7 @@ snapshots:
       - supports-color
       - tedious
 
-  '@devexpress/sbom-toolkit@0.2.0':
+  '@devexpress/sbom-toolkit@0.3.0':
     dependencies:
       '@cyclonedx/cdxgen': 12.0.0
     transitivePeerDependencies:
@@ -1856,13 +1860,13 @@ snapshots:
       readable-stream: 3.6.2
     optional: true
 
-  body-parser@2.2.0:
+  body-parser@2.2.1:
     dependencies:
       bytes: 3.1.2
       content-type: 1.0.5
       debug: 4.4.3
       http-errors: 2.0.1
-      iconv-lite: 0.6.3
+      iconv-lite: 0.7.0
       on-finished: 2.4.1
       qs: 6.14.0
       raw-body: 3.0.2
@@ -2422,7 +2426,7 @@ snapshots:
       ecdsa-sig-formatter: 1.0.11
       safe-buffer: 5.2.1
 
-  jws@4.0.0:
+  jws@4.0.1:
     dependencies:
       jwa: 2.0.1
       safe-buffer: 5.2.1

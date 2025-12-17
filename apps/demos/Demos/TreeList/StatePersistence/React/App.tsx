@@ -1,7 +1,10 @@
 import React, { useCallback, useRef } from 'react';
+
 import {
-  TreeList, Selection, FilterRow, StateStoring, Column, TreeListRef,
+  TreeList, Selection, FilterRow, StateStoring, Column,
 } from 'devextreme-react/tree-list';
+import type { TreeListRef } from 'devextreme-react/tree-list';
+
 import { employees } from './data.ts';
 
 const expandedRowKeys = [1, 2, 10];

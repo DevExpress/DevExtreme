@@ -1,7 +1,10 @@
 import React from 'react';
+
 import CardView, { Column, CardCover, Editing, SearchPanel, Form, Item, RequiredRule, EmailRule, AsyncRule, CustomRule } from 'devextreme-react/card-view';
-import 'devextreme-react/text-area';
-import { employees, Employee } from './data.ts';
+import type { ValidationCallbackData } from 'devextreme-react/common';
+
+import { employees } from './data.ts';
+import type { Employee } from './data.ts';
 
 function altExpr({ fullName }: Employee) {
   return `Photo of ${fullName}`;
@@ -17,25 +20,23 @@ function calculateFullName({ firstName, lastName }: Employee) {
 
 const emailValidationUrl = 'https://js.devexpress.com/Demos/NetCore/RemoteValidation/CheckUniqueEmailAddress';
 
-async function emailValidationCallback(params) {
+async function emailValidationCallback(options: ValidationCallbackData): Promise<boolean> {
   const response = await fetch(emailValidationUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json;',
     },
     body: JSON.stringify({
-      id: params.data.id,
-      email: params.value,
+      id: options.data.id,
+      email: options.value,
     }),
   });
 
-  const result = await response.json();
-
-  return result;
+  return response.json();
 }
 
-function hireDateValidationCallback(params) {
-  return new Date(params.value) > new Date(params.data.birthDate);
+function hireDateValidationCallback(options: ValidationCallbackData): boolean {
+  return new Date(options.value) > new Date(options.data.birthDate);
 }
 
 const App = () => (

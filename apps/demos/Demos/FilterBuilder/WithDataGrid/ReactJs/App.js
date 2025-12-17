@@ -9,15 +9,12 @@ import {
 const App = () => {
   const [value, setValue] = useState(filter);
   const [gridFilterValue, setGridFilterValue] = useState(filter);
-  const onValueChanged = useCallback(
-    (e) => {
-      setValue(e.value);
-    },
-    [setValue],
-  );
+  const onValueChanged = useCallback((e) => {
+    setValue(e.value);
+  }, []);
   const buttonClick = useCallback(() => {
     setGridFilterValue(value);
-  }, [value, setGridFilterValue]);
+  }, [value]);
   return (
     <div>
       <div className="filter-container">

@@ -1,8 +1,12 @@
 import React from 'react';
+
 import {
-  TreeList, Editing, Column, ValidationRule, Lookup, Button, type TreeListTypes,
+  TreeList, Editing, Column, ValidationRule, Lookup, Button,
 } from 'devextreme-react/tree-list';
+import type { TreeListTypes } from 'devextreme-react/tree-list';
+
 import { employees } from './data.ts';
+import type { Employee } from './data.ts';
 
 const expandedRowKeys = [1];
 
@@ -17,7 +21,7 @@ const lookupData = {
   sort: 'Full_Name',
 };
 
-const allowDeleting = (e) => e.row.data.ID !== 1;
+const allowDeleting = (e: { row: TreeListTypes.Row<Employee> }) => e.row.data.ID !== 1;
 
 const onEditorPreparing = (e: TreeListTypes.EditorPreparingEvent) => {
   if (e.dataField === 'Head_ID' && e.row.data.ID === 1) {
