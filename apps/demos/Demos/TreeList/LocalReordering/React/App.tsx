@@ -7,25 +7,37 @@ import { employees as employeeList } from './data.ts';
 
 const expandedRowKeys = [1];
 
-const onDragChange = (e) => {
-  const visibleRows = e.component.getVisibleRows();
-  const sourceNode = e.component.getNodeByKey(e.itemData.ID);
-  let targetNode = visibleRows[e.toIndex].node;
-
-  while (targetNode?.data) {
-    if (targetNode.data.ID === sourceNode.data.ID) {
-      e.cancel = true;
-      break;
-    }
-    targetNode = targetNode.parent;
-  }
-};
-
 const App = () => {
   const [employees, setEmployees] = useState(employeeList);
   const [allowDropInsideItem, setAllowDropInsideItem] = useState(true);
   const [allowReordering, setAllowReordering] = useState(true);
   const [showDragIcons, setShowDragIcons] = useState(true);
+
+  const onAllowDropInsideItemChange = useCallback((value: boolean | null | undefined) => {
+    setAllowDropInsideItem(!!value);
+  }, []);
+
+  const onAllowReorderingChange = useCallback((value: boolean | null | undefined) => {
+    setAllowReordering(!!value);
+  }, []);
+
+  const onShowDragIconsChange = useCallback((value: boolean | null | undefined) => {
+    setShowDragIcons(!!value);
+  }, []);
+
+  const onDragChange = useCallback((e) => {
+    const visibleRows = e.component.getVisibleRows();
+    const sourceNode = e.component.getNodeByKey(e.itemData.ID);
+    let targetNode = visibleRows[e.toIndex].node;
+
+    while (targetNode?.data) {
+      if (targetNode.data.ID === sourceNode.data.ID) {
+        e.cancel = true;
+        break;
+      }
+      targetNode = targetNode.parent;
+    }
+  }, []);
 
   const onReorder = useCallback((e) => {
     const visibleRows = e.component.getVisibleRows();
@@ -94,21 +106,21 @@ const App = () => {
             <CheckBox
               value={allowDropInsideItem}
               text="Allow Drop Inside Item"
-              onValueChange={setAllowDropInsideItem}
+              onValueChange={onAllowDropInsideItemChange}
             />
           </div>
           <div className="option">
             <CheckBox
               value={allowReordering}
               text="Allow Reordering"
-              onValueChange={setAllowReordering}
+              onValueChange={onAllowReorderingChange}
             />
           </div>
           <div className="option">
             <CheckBox
               value={showDragIcons}
               text="Show Drag Icons"
-              onValueChange={setShowDragIcons}
+              onValueChange={onShowDragIconsChange}
             />
           </div>
         </div>

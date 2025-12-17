@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   TreeList,
   Column,
@@ -30,6 +30,18 @@ const App = () => {
   const [selectByClick, setSelectByClick] = useState(true);
   const [recursive, setRecursive] = useState(true);
   const isDragMode = mode === columnChooserModes[0].key;
+  const onSearchEnabledChange = useCallback((value) => {
+    setSearchEnabled(!!value);
+  }, []);
+  const onAllowSelectAllChange = useCallback((value) => {
+    setAllowSelectAll(!!value);
+  }, []);
+  const onSelectByClickChange = useCallback((value) => {
+    setSelectByClick(!!value);
+  }, []);
+  const onRecursiveChange = useCallback((value) => {
+    setRecursive(!!value);
+  }, []);
   return (
     <div>
       <TreeList
@@ -113,7 +125,7 @@ const App = () => {
               id="searchEnabled"
               defaultValue={searchEnabled}
               text="Search enabled"
-              onValueChange={setSearchEnabled}
+              onValueChange={onSearchEnabledChange}
             />
           </div>
           <div className="option">
@@ -121,7 +133,7 @@ const App = () => {
               id="allowSelectAll"
               defaultValue={allowSelectAll}
               text="Allow select all"
-              onValueChange={setAllowSelectAll}
+              onValueChange={onAllowSelectAllChange}
               disabled={isDragMode}
             />
           </div>
@@ -130,7 +142,7 @@ const App = () => {
               id="selectByClick"
               defaultValue={selectByClick}
               text="Select by click"
-              onValueChange={setSelectByClick}
+              onValueChange={onSelectByClickChange}
               disabled={isDragMode}
             />
           </div>
@@ -139,7 +151,7 @@ const App = () => {
               id="recursive"
               defaultValue={recursive}
               text="Recursive"
-              onValueChange={setRecursive}
+              onValueChange={onRecursiveChange}
               disabled={isDragMode}
             />
           </div>

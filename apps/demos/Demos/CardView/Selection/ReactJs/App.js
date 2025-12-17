@@ -23,6 +23,9 @@ const App = () => {
     setSelectionMode(value);
     cardViewRef.current?.instance().clearSelection();
   }, []);
+  const onAllowSelectAllChange = useCallback((value) => {
+    setAllowSelectAll(!!value);
+  }, []);
   return (
     <>
       <div className="options-panel">
@@ -61,7 +64,7 @@ const App = () => {
             <CheckBox
               text="Allow Select All"
               value={allowSelectAll}
-              onValueChange={setAllowSelectAll}
+              onValueChange={onAllowSelectAllChange}
               disabled={selectionMode !== 'multiple'}
             ></CheckBox>
           </div>

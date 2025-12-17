@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import TreeList, { Column, Editing, KeyboardNavigation } from 'devextreme-react/tree-list';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
@@ -14,6 +14,9 @@ const App = () => {
   const [editOnKeyPress, setEditOnKeyPress] = useState(true);
   const [enterKeyAction, setEnterKeyAction] = useState('moveFocus');
   const [enterKeyDirection, setEnterKeyDirection] = useState('column');
+  const onEditOnKeyPressChange = useCallback((value) => {
+    setEditOnKeyPress(!!value);
+  }, []);
   return (
     <div id="tree-list-demo">
       <TreeList
@@ -57,7 +60,7 @@ const App = () => {
             <CheckBox
               text="Edit On Key Press"
               value={editOnKeyPress}
-              onValueChange={setEditOnKeyPress}
+              onValueChange={onEditOnKeyPressChange}
             />
           </div>
           <div className="option">

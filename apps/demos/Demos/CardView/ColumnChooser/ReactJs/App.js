@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import CardView, {
   Column,
   CardCover,
@@ -28,6 +28,18 @@ const App = () => {
   const [allowSelectAll, setAllowSelectAll] = useState(true);
   const [selectByClick, setSelectByClick] = useState(true);
   const [allowColumnReordering, setAllowColumnReordering] = useState(false);
+  const onSearchEnabledChange = useCallback((value) => {
+    setSearchEnabled(!!value);
+  }, []);
+  const onAllowSelectAllChange = useCallback((value) => {
+    setAllowSelectAll(!!value);
+  }, []);
+  const onSelectByClickChange = useCallback((value) => {
+    setSelectByClick(!!value);
+  }, []);
+  const onAllowColumnReorderingChange = useCallback((value) => {
+    setAllowColumnReordering(!!value);
+  }, []);
   return (
     <>
       <div className="options-panel">
@@ -46,14 +58,14 @@ const App = () => {
             <CheckBox
               text="Search Enabled"
               value={searchEnabled}
-              onValueChange={setSearchEnabled}
+              onValueChange={onSearchEnabledChange}
             ></CheckBox>
           </div>
           <div className="option">
             <CheckBox
               text="Allow Select All"
               value={allowSelectAll}
-              onValueChange={setAllowSelectAll}
+              onValueChange={onAllowSelectAllChange}
               disabled={columnChooserMode !== 'select'}
             ></CheckBox>
           </div>
@@ -61,7 +73,7 @@ const App = () => {
             <CheckBox
               text="Select By Click On Item"
               value={selectByClick}
-              onValueChange={setSelectByClick}
+              onValueChange={onSelectByClickChange}
               disabled={columnChooserMode !== 'select'}
             ></CheckBox>
           </div>
@@ -69,7 +81,7 @@ const App = () => {
             <CheckBox
               text="Allow Column Reordering"
               value={allowColumnReordering}
-              onValueChange={setAllowColumnReordering}
+              onValueChange={onAllowColumnReorderingChange}
             ></CheckBox>
           </div>
         </div>
