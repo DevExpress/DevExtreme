@@ -4,7 +4,7 @@ import { Form, SimpleItem } from 'devextreme-react/form';
 import { mealPlans, roomTypes } from './data.js';
 
 const RoomMealPlanForm = memo(({ formData, validationGroup }) => (
-  <React.Fragment>
+  <>
     <p>
       Review room types that can accommodate your group size and make your selection. You can also
       choose a meal plan, whether it's breakfast only or full board.
@@ -36,7 +36,7 @@ const RoomMealPlanForm = memo(({ formData, validationGroup }) => (
         }}
       />
     </Form>
-  </React.Fragment>
+  </>
 ));
 RoomMealPlanForm.displayName = 'RoomMealPlanForm';
 export default RoomMealPlanForm;

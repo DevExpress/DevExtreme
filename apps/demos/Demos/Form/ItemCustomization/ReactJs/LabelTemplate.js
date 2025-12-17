@@ -1,11 +1,11 @@
 import React from 'react';
 
 export default function LabelTemplate(iconName) {
-  return function template(data) {
+  return function template({ text }) {
     return (
       <div>
         <i className={`dx-icon dx-icon-${iconName}`}></i>
-        {data.text}
+        {text}
       </div>
     );
   };

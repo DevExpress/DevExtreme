@@ -8,20 +8,14 @@ const itemDeleteModes = ['static', 'toggle', 'slideButton', 'slideItem', 'swipe'
 const App = () => {
   const [allowDeletion, setAllowDeletion] = useState(false);
   const [itemDeleteMode, setItemDeleteMode] = useState('toggle');
-  const onAllowDeletionChange = useCallback(
-    (args) => {
-      setAllowDeletion(args.value);
-    },
-    [setAllowDeletion],
-  );
-  const onItemDeleteModeChange = useCallback(
-    (args) => {
-      setItemDeleteMode(args.value);
-    },
-    [setItemDeleteMode],
-  );
+  const onAllowDeletionChange = useCallback((args) => {
+    setAllowDeletion(args.value);
+  }, []);
+  const onItemDeleteModeChange = useCallback((args) => {
+    setItemDeleteMode(args.value);
+  }, []);
   return (
-    <React.Fragment>
+    <>
       <div className="widget-container">
         <List
           dataSource={tasks}
@@ -50,7 +44,7 @@ const App = () => {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 export default App;

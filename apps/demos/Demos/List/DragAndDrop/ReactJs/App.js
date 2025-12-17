@@ -25,7 +25,7 @@ const App = () => {
         setDoingTasksState(updatedTasks);
       }
     },
-    [setPlannedTasksState, setDoingTasksState, plannedTasksState, doingTasksState],
+    [plannedTasksState, doingTasksState],
   );
   const onRemove = useCallback(
     (e) => {
@@ -38,7 +38,7 @@ const App = () => {
         setDoingTasksState(updatedTasks);
       }
     },
-    [setPlannedTasksState, setDoingTasksState, plannedTasksState, doingTasksState],
+    [plannedTasksState, doingTasksState],
   );
   const onReorder = useCallback(
     (e) => {

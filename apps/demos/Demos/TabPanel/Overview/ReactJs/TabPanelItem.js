@@ -5,7 +5,7 @@ function TabPanelItem({ data }) {
   const taskItems = data.tasks.map((task, index) => (
     <TaskItem
       key={index}
-      prop={task}
+      task={task}
     />
   ));
   return <div className="tabpanel-item">{taskItems}</div>;

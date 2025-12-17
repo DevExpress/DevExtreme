@@ -1,18 +1,18 @@
 import React from 'react';
 import { List } from 'devextreme-react/list';
-import service from './data.js';
+import { tasks } from './data.js';
 
 function itemRender(data) {
   return <div>{data.Subject}</div>;
 }
-function EmployeeTemplate(props) {
-  const tasks = service.getTasks().filter((task) => task.EmployeeID === props.data.ID);
+function EmployeeTemplate({ data }) {
+  const employeeTasks = tasks.filter((task) => task.EmployeeID === data.ID);
   const {
     FirstName, LastName, Picture, Position, Notes,
-  } = props.data;
-  const completedTasks = tasks.filter((task) => task.Status === 'Completed');
+  } = data;
+  const completedTasks = employeeTasks.filter((task) => task.Status === 'Completed');
   return (
-    <React.Fragment>
+    <>
       <div className="employeeInfo">
         <img
           alt={`${FirstName} ${LastName}`}
@@ -28,7 +28,7 @@ function EmployeeTemplate(props) {
       <div className="caption">{`${FirstName} ${LastName}'s Tasks:`}</div>
       <div className="task-list">
         <List
-          dataSource={tasks}
+          dataSource={employeeTasks}
           showSelectionControls={true}
           selectedItems={completedTasks}
           disabled={true}
@@ -36,7 +36,7 @@ function EmployeeTemplate(props) {
           itemRender={itemRender}
         ></List>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 export default EmployeeTemplate;
