@@ -46,7 +46,7 @@ class SideEffectFinder {
             .forEach((str) => {
                 let importPath = str.match(relativePathRegExp)[0].replace(/(^['"]|['"]$)/g, '');
 
-                importPath = path.join(path.dirname(modulePath), importPath) + '.js';
+                importPath = path.join(path.dirname(modulePath), importPath);
 
                 if(!fs.existsSync(importPath)) {
                     importPath = importPath.replace(/\.js$/, '/index.js');

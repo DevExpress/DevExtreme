@@ -15,7 +15,6 @@ const gulpRename = require('gulp-rename');
 const compressionPipes = require('./compression-pipes.js');
 const ctx = require('./context.js');
 const env = require('./env-variables.js');
-const fixImports = require('./fix-imports-path');
 const dataUri = require('./gulp-data-uri').gulpPipe;
 const headerPipes = require('./header-pipes.js');
 const { packageDir, packageDistDir, isEsmPackage, stringSrc, devextremeDistDir } = require('./utils');
@@ -166,7 +165,6 @@ function collectExports(baseDir) {
         const packageJsonPath = path.join(currentDir, 'package.json');
 
         if (fs.existsSync(packageJsonPath) && !/(cjs|esm)$/.test(currentDir)) {
-            console.log('----packageJsonPath------>',currentDir)
             try {
                 const pkg = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
                 const exportEntry = {};
@@ -219,7 +217,7 @@ gulp.task('npm-dist', () => gulp
     .pipe(gulp.dest(distPath))
 );
 
-gulp.task('patch-as-esm-lib', () => gulp
+gulp.task('add-exports-to-package-json', () => gulp
     .src(`${packagePath}/package.json`)
     .pipe(
         through.obj((file, enc, callback) => {
@@ -232,11 +230,6 @@ gulp.task('patch-as-esm-lib', () => gulp
     )
     .pipe(gulp.dest(packagePath))
 );
-
-gulp.task('fix-ext-in-imports', function(done) {
-    fixImports.addExtensionToImportsPath(`${packagePath}/esm`);
-    done();
-});
 
 const scssDir = `${packagePath}/scss`;
 
@@ -257,5 +250,5 @@ gulp.task('npm-sass', gulp.series(
     )
 ));
 
-gulp.task('npm', gulp.series('npm-sources', 'npm-dist', 'ts-check-public-modules', 'npm-sass'/*, ''patch-as-esm-lib', fix-ext-in-imports'*/));
+gulp.task('npm', gulp.series('npm-sources', 'npm-dist', 'ts-check-public-modules', 'npm-sass', 'add-exports-to-package-json'));
 
