@@ -9,15 +9,6 @@ const App = () => {
   const [allowDropInsideItem, setAllowDropInsideItem] = useState(true);
   const [allowReordering, setAllowReordering] = useState(true);
   const [showDragIcons, setShowDragIcons] = useState(true);
-  const onAllowDropInsideItemChange = useCallback((value) => {
-    setAllowDropInsideItem(!!value);
-  }, []);
-  const onAllowReorderingChange = useCallback((value) => {
-    setAllowReordering(!!value);
-  }, []);
-  const onShowDragIconsChange = useCallback((value) => {
-    setShowDragIcons(!!value);
-  }, []);
   const onDragChange = useCallback((e) => {
     const visibleRows = e.component.getVisibleRows();
     const sourceNode = e.component.getNodeByKey(e.itemData.ID);
@@ -101,21 +92,21 @@ const App = () => {
             <CheckBox
               value={allowDropInsideItem}
               text="Allow Drop Inside Item"
-              onValueChange={onAllowDropInsideItemChange}
+              onValueChange={setAllowDropInsideItem}
             />
           </div>
           <div className="option">
             <CheckBox
               value={allowReordering}
               text="Allow Reordering"
-              onValueChange={onAllowReorderingChange}
+              onValueChange={setAllowReordering}
             />
           </div>
           <div className="option">
             <CheckBox
               value={showDragIcons}
               text="Show Drag Icons"
-              onValueChange={onShowDragIconsChange}
+              onValueChange={setShowDragIcons}
             />
           </div>
         </div>

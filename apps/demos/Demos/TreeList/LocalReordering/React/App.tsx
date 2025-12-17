@@ -1,29 +1,20 @@
 import React, { useCallback, useState } from 'react';
 
 import CheckBox from 'devextreme-react/check-box';
+import type { CheckBoxTypes } from 'devextreme-react/check-box';
 import TreeList, { Column, RowDragging } from 'devextreme-react/tree-list';
 
 import { employees as employeeList } from './data.ts';
+
+type CheckBoxValue = CheckBoxTypes.Properties['value'];
 
 const expandedRowKeys = [1];
 
 const App = () => {
   const [employees, setEmployees] = useState(employeeList);
-  const [allowDropInsideItem, setAllowDropInsideItem] = useState(true);
-  const [allowReordering, setAllowReordering] = useState(true);
-  const [showDragIcons, setShowDragIcons] = useState(true);
-
-  const onAllowDropInsideItemChange = useCallback((value: boolean | null | undefined) => {
-    setAllowDropInsideItem(!!value);
-  }, []);
-
-  const onAllowReorderingChange = useCallback((value: boolean | null | undefined) => {
-    setAllowReordering(!!value);
-  }, []);
-
-  const onShowDragIconsChange = useCallback((value: boolean | null | undefined) => {
-    setShowDragIcons(!!value);
-  }, []);
+  const [allowDropInsideItem, setAllowDropInsideItem] = useState<CheckBoxValue>(true);
+  const [allowReordering, setAllowReordering] = useState<CheckBoxValue>(true);
+  const [showDragIcons, setShowDragIcons] = useState<CheckBoxValue>(true);
 
   const onDragChange = useCallback((e) => {
     const visibleRows = e.component.getVisibleRows();
@@ -106,21 +97,21 @@ const App = () => {
             <CheckBox
               value={allowDropInsideItem}
               text="Allow Drop Inside Item"
-              onValueChange={onAllowDropInsideItemChange}
+              onValueChange={setAllowDropInsideItem}
             />
           </div>
           <div className="option">
             <CheckBox
               value={allowReordering}
               text="Allow Reordering"
-              onValueChange={onAllowReorderingChange}
+              onValueChange={setAllowReordering}
             />
           </div>
           <div className="option">
             <CheckBox
               value={showDragIcons}
               text="Show Drag Icons"
-              onValueChange={onShowDragIconsChange}
+              onValueChange={setShowDragIcons}
             />
           </div>
         </div>

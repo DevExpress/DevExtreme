@@ -1,10 +1,13 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import {
   TreeList, Column, ColumnChooser, ColumnChooserSearch, ColumnChooserSelection, Position, type TreeListTypes,
 } from 'devextreme-react/tree-list';
 import { SelectBox } from 'devextreme-react/select-box';
 import { CheckBox } from 'devextreme-react/check-box';
+import type { CheckBoxTypes } from 'devextreme-react/check-box';
 import { employees, columnChooserModeLabel } from './data.ts';
+
+type CheckBoxValue = CheckBoxTypes.Properties['value'];
 
 const columnChooserModes = [{
   key: 'dragAndDrop' as const,
@@ -20,28 +23,12 @@ const searchEditorOptions = { placeholder: 'Search column' };
 
 const App = () => {
   const [mode, setMode] = useState<TreeListTypes.ColumnChooserMode>(columnChooserModes[1].key);
-  const [searchEnabled, setSearchEnabled] = useState(true);
-  const [allowSelectAll, setAllowSelectAll] = useState(true);
-  const [selectByClick, setSelectByClick] = useState(true);
-  const [recursive, setRecursive] = useState(true);
+  const [searchEnabled, setSearchEnabled] = useState<CheckBoxValue>(true);
+  const [allowSelectAll, setAllowSelectAll] = useState<CheckBoxValue>(true);
+  const [selectByClick, setSelectByClick] = useState<CheckBoxValue>(true);
+  const [recursive, setRecursive] = useState<CheckBoxValue>(true);
 
   const isDragMode = mode === columnChooserModes[0].key;
-
-  const onSearchEnabledChange = useCallback((value: boolean | null | undefined) => {
-    setSearchEnabled(!!value);
-  }, []);
-
-  const onAllowSelectAllChange = useCallback((value: boolean | null | undefined) => {
-    setAllowSelectAll(!!value);
-  }, []);
-
-  const onSelectByClickChange = useCallback((value: boolean | null | undefined) => {
-    setSelectByClick(!!value);
-  }, []);
-
-  const onRecursiveChange = useCallback((value: boolean | null | undefined) => {
-    setRecursive(!!value);
-  }, []);
 
   return (
     <div>
@@ -109,7 +96,7 @@ const App = () => {
               id="searchEnabled"
               defaultValue={searchEnabled}
               text="Search enabled"
-              onValueChange={onSearchEnabledChange}
+              onValueChange={setSearchEnabled}
             />
           </div>
           <div className="option">
@@ -117,7 +104,7 @@ const App = () => {
               id="allowSelectAll"
               defaultValue={allowSelectAll}
               text="Allow select all"
-              onValueChange={onAllowSelectAllChange}
+              onValueChange={setAllowSelectAll}
               disabled={isDragMode}
             />
           </div>
@@ -126,7 +113,7 @@ const App = () => {
               id="selectByClick"
               defaultValue={selectByClick}
               text="Select by click"
-              onValueChange={onSelectByClickChange}
+              onValueChange={setSelectByClick}
               disabled={isDragMode}
             />
           </div>
@@ -135,7 +122,7 @@ const App = () => {
               id="recursive"
               defaultValue={recursive}
               text="Recursive"
-              onValueChange={onRecursiveChange}
+              onValueChange={setRecursive}
               disabled={isDragMode}
             />
           </div>

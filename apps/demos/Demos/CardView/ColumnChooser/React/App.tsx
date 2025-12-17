@@ -1,13 +1,16 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 
 import CardView, {
   Column, CardCover, SearchPanel, ColumnChooser, ColumnChooserSearch, ColumnChooserSelection,
 } from 'devextreme-react/card-view';
 import CheckBox from 'devextreme-react/check-box';
+import type { CheckBoxTypes } from 'devextreme-react/check-box';
 import SelectBox from 'devextreme-react/select-box';
 
 import { employees } from './data.ts';
 import type { Employee } from './data.ts';
+
+type CheckBoxValue = CheckBoxTypes.Properties['value'];
 
 function altExpr({ First_Name, Last_Name }: Employee): string {
   return `Photo of ${First_Name} ${Last_Name}`;
@@ -28,26 +31,10 @@ type ColumnChooserMode = typeof columnChooserModes[number];
 
 const App = () => {
   const [columnChooserMode, setColumnChooserMode] = useState<ColumnChooserMode>('select');
-  const [searchEnabled, setSearchEnabled] = useState<boolean>(true);
-  const [allowSelectAll, setAllowSelectAll] = useState(true);
-  const [selectByClick, setSelectByClick] = useState(true);
-  const [allowColumnReordering, setAllowColumnReordering] = useState(false);
-
-  const onSearchEnabledChange = useCallback((value: boolean | null | undefined) => {
-    setSearchEnabled(!!value);
-  }, []);
-
-  const onAllowSelectAllChange = useCallback((value: boolean | null | undefined) => {
-    setAllowSelectAll(!!value);
-  }, []);
-
-  const onSelectByClickChange = useCallback((value: boolean | null | undefined) => {
-    setSelectByClick(!!value);
-  }, []);
-
-  const onAllowColumnReorderingChange = useCallback((value: boolean | null | undefined) => {
-    setAllowColumnReordering(!!value);
-  }, []);
+  const [searchEnabled, setSearchEnabled] = useState<CheckBoxValue>(true);
+  const [allowSelectAll, setAllowSelectAll] = useState<CheckBoxValue>(true);
+  const [selectByClick, setSelectByClick] = useState<CheckBoxValue>(true);
+  const [allowColumnReordering, setAllowColumnReordering] = useState<CheckBoxValue>(false);
 
   return <>
     <div className="options-panel">
@@ -66,14 +53,14 @@ const App = () => {
           <CheckBox
             text="Search Enabled"
             value={searchEnabled}
-            onValueChange={onSearchEnabledChange}
+            onValueChange={setSearchEnabled}
           ></CheckBox>
         </div>
         <div className="option">
           <CheckBox
             text="Allow Select All"
             value={allowSelectAll}
-            onValueChange={onAllowSelectAllChange}
+            onValueChange={setAllowSelectAll}
             disabled={columnChooserMode !== 'select'}
           ></CheckBox>
         </div>
@@ -81,7 +68,7 @@ const App = () => {
           <CheckBox
             text="Select By Click On Item"
             value={selectByClick}
-            onValueChange={onSelectByClickChange}
+            onValueChange={setSelectByClick}
             disabled={columnChooserMode !== 'select'}
           ></CheckBox>
         </div>
@@ -89,7 +76,7 @@ const App = () => {
           <CheckBox
             text="Allow Column Reordering"
             value={allowColumnReordering}
-            onValueChange={onAllowColumnReorderingChange}
+            onValueChange={setAllowColumnReordering}
           ></CheckBox>
         </div>
       </div>
