@@ -250,7 +250,6 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "pnpm --workspace-root nx build devextreme-angular",
           "pnpm --workspace-root nx clean:tests devextreme-angular",
           "pnpm --workspace-root nx generate-component-names-for-tests devextreme-angular",
           "pnpm --workspace-root nx copy:dist-dx-angular-to-tests-dist devextreme-angular",
@@ -288,6 +287,21 @@
       ]
     },
     "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "pnpm --workspace-root nx build devextreme-angular",
+          "pnpm --workspace-root nx build:tests devextreme-angular",
+          "pnpm --workspace-root nx test:all devextreme-angular"
+        ],
+        "parallel": false,
+        "cwd": "packages/devextreme-angular"
+      },
+      "inputs": [
+        "test"
+      ]
+    },
+    "test:all": {
       "executor": "devextreme-nx-infra-plugin:karma-multi-env",
       "options": {
         "karmaConfig": "karma.conf.js",
@@ -373,6 +387,7 @@
         "karmaConfig": "karma.conf.js",
         "environments": ["client", "server", "hydration"]
       },
+      "dependsOn": ["build:tests"],
       "inputs": [
         "default",
         "test",
