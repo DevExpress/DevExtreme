@@ -138,12 +138,13 @@ if (Quill) {
           const isSilentMode = eventSource === SILENT_ACTION
             && isEmptyObject(this.quill.getFormat());
 
-          this._updateHeaderFormatWidget();
-
           if (!isSilentMode) {
             const isSelectionChanged = eventName === SELECTION_CHANGE_EVENT;
+
             this._updateToolbar(isSelectionChanged);
           }
+
+          this._updateHeaderFormatWidget();
         });
       }
     }
@@ -675,15 +676,14 @@ if (Quill) {
     }
 
     _updateHeaderFormatWidget() {
+      const selection = this.quill.getSelection();
       const formatName = 'header';
       const formatWidget = this._toolbarWidgets.getByName(formatName);
-      const selection = this.quill.getSelection();
-
+      const formats = this.quill.getFormat(selection);
       if (!selection || !formatWidget) {
         return;
       }
 
-      const formats = this.quill.getFormat(selection);
       this._markActiveFormatWidget(formatName, formatWidget, formats);
     }
 
