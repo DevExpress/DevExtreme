@@ -1,9 +1,11 @@
 import type { SafeAppointment } from '@ts/scheduler/types';
 
+import type { ListEntity } from '../../view_model/types';
 import { getResourceIndex } from '../data_accessor/appointment_resource_data_accessor';
 import { ResourceLoader } from '../loader/resource_loader';
 import type {
   ResourceConfig,
+  ResourceId,
 } from '../loader/types';
 import { getAppointmentColor } from './appointment_color_utils';
 import type { AppointmentResource } from './appointment_groups_utils';
@@ -52,6 +54,50 @@ export class ResourceManager {
 
   public groupCount(): number {
     return this.groupsLeafs.length;
+  }
+
+  public filterGroupsByAppointments(appointments: ListEntity[]): void {
+    if (!this.groups.length) {
+      return;
+    }
+
+    // Find all resource values used in appointments
+    const usedResourceValues = new Map<string, Set<ResourceId>>();
+
+    appointments.forEach((appointment) => {
+      this.groups.forEach((resourceIndex) => {
+        const resource = this.resourceById[resourceIndex];
+        if (resource) {
+          const values = resource.idsGetter(appointment.itemData);
+          if (!usedResourceValues.has(resourceIndex)) {
+            usedResourceValues.set(resourceIndex, new Set<ResourceId>());
+          }
+          const resourceValues = usedResourceValues.get(resourceIndex);
+          if (resourceValues) {
+            values.forEach((value: ResourceId) => {
+              resourceValues.add(value);
+            });
+          }
+        }
+      });
+    });
+
+    // Filter resource dataSources to include only used values
+    this.groups.forEach((resourceIndex) => {
+      const resource = this.resourceById[resourceIndex];
+      if (resource?.items) {
+        const usedValues = usedResourceValues.get(resourceIndex);
+        if (usedValues && usedValues.size > 0) {
+          const filteredItems = resource.items.filter((item) => usedValues.has(item.id));
+          resource.items = filteredItems;
+        }
+      }
+    });
+
+    // Rebuild groupsTree and groupsLeafs after filtering resources
+    const { groupTree, groupLeafs } = groupResources(this.resourceById, this.groups);
+    this.groupsTree = groupTree;
+    this.groupsLeafs = groupLeafs;
   }
 
   public groupResources(): ResourceLoader[] {
