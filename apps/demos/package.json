@@ -152,7 +152,7 @@
         "testcafe": "3.7.2",
         "testcafe-reporter-spec-time": "4.0.0",
         "ts-node": "10.9.2",
-        "vue-tsc": "^3.0.6"
+        "vue-tsc": "3.0.6"
     },
     "scripts": {
         "test": "jest --coverage --runInBand",
