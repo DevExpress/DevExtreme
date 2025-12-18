@@ -99,7 +99,7 @@ jobs:
       - name: Upload SBOM artifact
         uses: actions/upload-artifact@v4
         with:
-          name: SBOM
+          name: sbom
           path: packages/sbom/dist
           retention-days: 7
 
