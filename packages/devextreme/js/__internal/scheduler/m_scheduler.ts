@@ -1351,7 +1351,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       getResourceManager: () => this.resourceManager,
       getFilteredItems: () => this._layoutManager.filteredItems, // NOTE: used only in agenda
 
-      noDataText: this.option('noDataText'),
+      noDataText: this.option('noDataText') || messageLocalization.format('dxCollectionWidget-noDataText'),
       firstDayOfWeek: this.option('firstDayOfWeek'),
       startDayHour: this.option('startDayHour'),
       endDayHour: this.option('endDayHour'),
