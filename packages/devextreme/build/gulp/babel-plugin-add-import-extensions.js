@@ -35,19 +35,6 @@ module.exports = function addImportExtensions() {
                     const currentDir = path.dirname(currentFile);
                     const resolvedPath = path.resolve(currentDir, value).replace(distPathRegExp,'js');
 
-                    let jsFilePath = resolvedPath + '.js';
-
-                    if ( fs.existsSync(jsFilePath)
-                        || fs.existsSync(jsFilePath = resolvedPath + '.ts')
-                    ) {
-                        const stat = fs.statSync(jsFilePath);
-
-                        if (stat.isFile()) {
-                            source.value = value + '.js';
-                            return;
-                        }
-                    }
-
                     if (fs.existsSync(resolvedPath)) {
                         const stat = fs.statSync(resolvedPath);
 
@@ -58,6 +45,19 @@ module.exports = function addImportExtensions() {
                                 source.value = value + '/index.js';
                                 return;
                             }
+                        }
+                    }
+
+                    let jsFilePath = resolvedPath + '.js';
+
+                    if ( fs.existsSync(jsFilePath)
+                        || fs.existsSync(jsFilePath = resolvedPath + '.ts')
+                    ) {
+                        const stat = fs.statSync(jsFilePath);
+
+                        if (stat.isFile()) {
+                            source.value = value + '.js';
+                            return;
                         }
                     }
                 }
