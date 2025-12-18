@@ -1,7 +1,7 @@
 import sh from 'shelljs';
 import path from 'path';
 
-import { ARTIFACTS_DIR, INTERNAL_TOOLS_ARTIFACTS, JS_ARTIFACTS, TS_ARTIFACTS, CSS_ARTIFACTS, DEPS_SCANNER_ARTIFACTS, MENU_META, SBOM_ARTIFACTS } from './common/paths';
+import { ARTIFACTS_DIR, INTERNAL_TOOLS_ARTIFACTS, JS_ARTIFACTS, TS_ARTIFACTS, CSS_ARTIFACTS, DEPS_SCANNER_ARTIFACTS, MENU_META } from './common/paths';
 import { ensureEmptyDir } from './common/monorepo-tools';
 
 import { version, license, author } from '../../package.json';
@@ -13,7 +13,7 @@ ensureEmptyDir(ARTIFACTS_PACKAGE_DIR);
 
 sh.cp('-r', [JS_ARTIFACTS, TS_ARTIFACTS, CSS_ARTIFACTS, DEPS_SCANNER_ARTIFACTS], ARTIFACTS_PACKAGE_DIR);
 sh.cp('-r', INTERNAL_TOOLS_ARTIFACTS, path.join(ARTIFACTS_PACKAGE_DIR, 'internal-tools'));
-sh.cp('-r', SBOM_ARTIFACTS, path.join(ARTIFACTS_PACKAGE_DIR, 'sbom'));
+// sh.cp('-r', SBOM_ARTIFACTS, path.join(ARTIFACTS_PACKAGE_DIR, 'sbom'));
 
 sh.mkdir('-p', path.join(ARTIFACTS_PACKAGE_DIR, 'demos'));
 sh.cp(MENU_META, path.join(ARTIFACTS_PACKAGE_DIR, 'demos', 'menuMeta.json'));

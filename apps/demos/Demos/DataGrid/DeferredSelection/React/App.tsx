@@ -1,7 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import DataGrid, {
-  Column, type DataGridTypes, FilterRow, Selection, Pager, Lookup,
+  Column, FilterRow, Selection, Pager, Lookup,
 } from 'devextreme-react/data-grid';
+import type { DataGridTypes } from 'devextreme-react/data-grid';
 import Button from 'devextreme-react/button';
 import { query } from 'devextreme-react/common/data';
 import { createStore } from 'devextreme-aspnet-data-nojquery';

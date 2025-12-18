@@ -1,7 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import DataGrid, {
-  Button, Column, type DataGridTypes, Editing, Lookup,
+  Button, Column, Editing, Lookup,
 } from 'devextreme-react/data-grid';
+import type { DataGridTypes } from 'devextreme-react/data-grid';
 
 import { employees as defaultEmployees, states, getMaxID } from './data.ts';
 

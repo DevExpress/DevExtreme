@@ -1,13 +1,14 @@
 import React, {
   useCallback, useEffect, useMemo, useReducer,
 } from 'react';
-import DataGrid, {
-  Column, type DataGridTypes, Editing, Pager,
-} from 'devextreme-react/data-grid';
-import { LoadPanel } from 'devextreme-react/load-panel';
 import 'whatwg-fetch';
 
-import reducer, { State } from './reducer.ts';
+import DataGrid, { Column, Editing, Pager } from 'devextreme-react/data-grid';
+import type { DataGridTypes } from 'devextreme-react/data-grid';
+import { LoadPanel } from 'devextreme-react/load-panel';
+
+import reducer from './reducer.ts';
+import type { State } from './reducer.ts';
 import {
   saveChange, loadOrders, setChanges, setEditRowKey,
 } from './actions.ts';
@@ -24,7 +25,7 @@ const loadPanelPosition = { of: '#gridContainer' };
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const changesText = useMemo(() => JSON.stringify(state.changes.map((change) => ({
+  const changesText = useMemo(() => JSON.stringify(state.changes.map((change: DataGridTypes.DataChange) => ({
     type: change.type,
     key: change.type !== 'insert' ? change.key : undefined,
     data: change.data,
@@ -48,7 +49,7 @@ const App = () => {
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <LoadPanel
         position={loadPanelPosition}
         visible={state.isLoading}
@@ -90,7 +91,7 @@ const App = () => {
           <div id="changes">{changesText}</div>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 

@@ -1,17 +1,18 @@
 import React, { useCallback, useState } from 'react';
+
 import DataGrid, {
   Column,
-  type DataGridTypes,
   Paging,
   Scrolling,
   Selection,
 } from 'devextreme-react/data-grid';
+import type { DataGridTypes } from 'devextreme-react/data-grid';
 import DropDownBox, { type DropDownBoxTypes } from 'devextreme-react/drop-down-box';
 
 const dropDownOptions = { width: 500 };
 const ownerLabel = { 'aria-label': 'Owner' };
 
-const EmployeeDropDownBoxComponent = (props) => {
+const EmployeeDropDownBoxComponent = (props: DataGridTypes.ColumnCellTemplateData) => {
   const { data: { value: dataValue } } = props;
   const initialSelectedRowKeys = dataValue !== null && dataValue !== undefined ? [dataValue] : [];
   const [selectedRowKeys, setSelectedRowKeys] = useState(initialSelectedRowKeys);

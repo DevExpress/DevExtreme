@@ -3,12 +3,15 @@ import React, { useState, useRef, useCallback } from 'react';
 import CardView, { Column, CardCover, Selection } from 'devextreme-react/card-view';
 import type { CardViewRef } from 'devextreme-react/card-view';
 import CheckBox from 'devextreme-react/check-box';
+import type { CheckBoxTypes } from 'devextreme-react/check-box';
 import type { SingleOrMultiple, SelectAllMode } from 'devextreme-react/common';
 import type { SelectionColumnDisplayMode } from 'devextreme-react/common/grids';
 import SelectBox from 'devextreme-react/select-box';
 
 import { employees } from './data.ts';
 import type { Employee } from './data.ts';
+
+type CheckBoxValue = CheckBoxTypes.Properties['value'];
 
 function altExpr({ FullName }: Employee): string {
   return `Photo of ${FullName}`;
@@ -24,7 +27,7 @@ const selectAllModeLabel = { 'aria-label': 'Select All Mode' };
 
 const App = () => {
   const [selectionMode, setSelectionMode] = useState<SingleOrMultiple>('multiple');
-  const [allowSelectAll, setAllowSelectAll] = useState(true);
+  const [allowSelectAll, setAllowSelectAll] = useState<CheckBoxValue>(true);
   const [showCheckBoxesMode, setShowCheckBoxesMode] = useState<SelectionColumnDisplayMode>('always');
   const [selectAllMode, setSelectAllMode] = useState<SelectAllMode>('allPages');
 

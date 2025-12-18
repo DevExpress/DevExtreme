@@ -1,14 +1,16 @@
 /* global RequestInit */
 import React, { useCallback, useState } from 'react';
-import {
-  DataGrid, Column, Editing, Scrolling, Lookup, Summary, TotalItem, type DataGridTypes,
-} from 'devextreme-react/data-grid';
-import { Button } from 'devextreme-react/button';
-import { SelectBox, type SelectBoxTypes } from 'devextreme-react/select-box';
+import 'whatwg-fetch';
 
+import { Button } from 'devextreme-react/button';
+import {
+  DataGrid, Column, Editing, Scrolling, Lookup, Summary, TotalItem,
+} from 'devextreme-react/data-grid';
+import type { DataGridTypes } from 'devextreme-react/data-grid';
+import { SelectBox } from 'devextreme-react/select-box';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
 import { CustomStore } from 'devextreme-react/common/data';
 import { formatDate } from 'devextreme-react/common/core/localization';
-import 'whatwg-fetch';
 
 const refreshModeLabel = { 'aria-label': 'Refresh Mode' };
 const URL = 'https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi';
@@ -90,7 +92,7 @@ const App = () => {
   }, [logRequest]);
 
   return (
-    <React.Fragment>
+    <>
       <DataGrid
         id="grid"
         showBorders={true}
@@ -147,7 +149,7 @@ const App = () => {
           </ul>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 

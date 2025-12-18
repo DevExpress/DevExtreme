@@ -67,7 +67,7 @@ function StatusComponent({ data }: { data: CardViewTypes.FieldTemplateData }) {
     Terminated: 'status--terminated',
   };
 
-  const className = classNameMap[data.field.value];
+  const className = classNameMap[data.field.value as Employee['Status']];
 
   return (
     <div className={`status ${className}`}>
@@ -84,7 +84,7 @@ function EmailComponent({ data }: { data: CardViewTypes.FieldTemplateData }) {
 }
 
 function App() {
-  const cardView = useRef<CardViewRef>();
+  const cardView = useRef<CardViewRef>(null);
 
   return (
     <CardView
