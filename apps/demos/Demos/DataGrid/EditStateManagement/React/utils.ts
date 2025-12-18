@@ -1,4 +1,4 @@
-export async function sendRequest(url: string, method = 'GET', data = {}) {
+export async function sendRequest(url: string, method = 'GET', data: Record<string, any> = {}) {
   const params = Object.keys(data)
     .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
     .join('&');

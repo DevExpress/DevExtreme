@@ -1,7 +1,11 @@
 import React, { useCallback, useRef, useState } from 'react';
-import DataGrid, { Column, DataGridRef, Pager } from 'devextreme-react/data-grid';
-import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
+
+import DataGrid, { Column, Pager } from 'devextreme-react/data-grid';
+import type { DataGridRef } from 'devextreme-react/data-grid';
+import SelectBox from 'devextreme-react/select-box';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
 import 'devextreme-react/common/data';
+
 import { tasks, statuses } from './data.ts';
 
 const statusLabel = { 'aria-label': 'Status' };

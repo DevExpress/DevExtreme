@@ -15,7 +15,7 @@ const emptySelectedText = 'Nobody has been selected';
 const selectionModes = ['all', 'excludeRecursive', 'leavesOnly'];
 
 const App = () => {
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([]);
   const [recursive, setRecursive] = useState(false);
   const [selectionMode, setSelectionMode] = useState('all');
   const [selectedEmployeeNames, setSelectedEmployeeNames] = useState(emptySelectedText);
@@ -27,7 +27,7 @@ const App = () => {
     return emptySelectedText;
   }, []);
 
-  const onSelectionChanged = useCallback((e: TreeListTypes.SelectionChangedEvent) => {
+  const onSelectionChanged = useCallback((e: TreeListTypes.SelectionChangedEvent<Employee, number>) => {
     const selectedData = e.component.getSelectedRowsData(selectionMode);
     setSelectedRowKeys(e.selectedRowKeys);
     setSelectedEmployeeNames(getEmployeeNames(selectedData));
@@ -50,9 +50,9 @@ const App = () => {
       <TreeList
         id="employees"
         dataSource={employees}
-        showRowLines={true}
-        showBorders={true}
-        columnAutoWidth={true}
+        showRowLines
+        showBorders
+        columnAutoWidth
         defaultExpandedRowKeys={expandedRowKeys}
         selectedRowKeys={selectedRowKeys}
         keyExpr="ID"

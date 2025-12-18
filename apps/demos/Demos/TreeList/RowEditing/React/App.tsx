@@ -18,7 +18,7 @@ const headDataSource = {
 const allowDeleting = (e: { row: TreeListTypes.Row<Employee> }) => e.row.data.ID !== 1;
 
 const onEditorPreparing = (e: TreeListTypes.EditorPreparingEvent) => {
-  if (e.dataField === 'Head_ID' && e.row.data.ID === 1) {
+  if (e.dataField === 'Head_ID' && e.row?.data.ID === 1) {
     e.cancel = true;
   }
 };

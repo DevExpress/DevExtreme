@@ -1,5 +1,5 @@
 import applyChanges from 'devextreme/data/apply_changes';
-import { DataGridTypes } from 'devextreme-react/data-grid';
+import type { DataGridTypes } from 'devextreme-react/data-grid';
 import {
   FETCH_PENDING,
   FETCH_SUCCESS,
@@ -19,7 +19,12 @@ export interface State {
   isLoading: boolean;
 }
 
-export default function reducer(state: State, { type, payload }) {
+interface Action {
+  type: string;
+  payload?: any;
+}
+
+export default function reducer(state: State, { type, payload }: Action) {
   let newData;
 
   switch (type) {

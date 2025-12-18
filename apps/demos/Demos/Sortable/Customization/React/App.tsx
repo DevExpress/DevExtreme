@@ -36,7 +36,7 @@ const App = () => {
   const [scrollSensitivity, setScrollSensitivity] = useState(60);
   const [handle, setHandle] = useState('');
   const [useDragComponent, setUseDragComponent] = useState(false);
-  const [cursorOffset, setCursorOffset] = useState(null);
+  const [cursorOffset, setCursorOffset] = useState<SortableTypes.Properties['cursorOffset']>(undefined);
 
   const onDragStart = useCallback((e: SortableTypes.DragStartEvent) => {
     e.itemData = items[e.fromIndex];
@@ -80,7 +80,7 @@ const App = () => {
 
   const onDragTemplateChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setUseDragComponent(!!e.value);
-    setCursorOffset(e.value ? { x: 10, y: 20 } : null);
+    setCursorOffset(e.value ? { x: 10, y: 20 } : undefined);
   }, []);
 
   return (
@@ -100,7 +100,7 @@ const App = () => {
             scrollSpeed={scrollSpeed}
             scrollSensitivity={scrollSensitivity}
             handle={handle}
-            dragComponent={useDragComponent ? DragItem : null}
+            dragComponent={useDragComponent ? DragItem : undefined}
             cursorOffset={cursorOffset}
             onDragStart={onDragStart}
             onReorder={onReorder}
