@@ -697,6 +697,7 @@
   },
   {
     "name": "viz/common",
+    "exports": {},
     "types": "./viz/common.d.ts"
   },
   {
