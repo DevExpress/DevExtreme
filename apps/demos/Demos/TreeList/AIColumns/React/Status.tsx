@@ -6,9 +6,10 @@ import { type Employee } from './types';
 
 export default function Status(props: TreeListTypes.ColumnCellTemplateData<Employee>) {
   const { Status } = props.data;
+  const statusClass = Status ? `status status--${Status.toLowerCase()}` : '';
 
   return (
-    <div className={`status status--${Status.toLowerCase()}`}>
+    <div className={statusClass}>
       <div className="indicator" />
       <div>{Status}</div>
     </div>

@@ -5,9 +5,9 @@ import DataGrid, {
 import Popup, { Position } from 'devextreme-react/popup';
 import { vehicles } from './data.js';
 import { aiIntegration } from './service.js';
-import Trademark from './Trademark.js';
 import Category from './Category.js';
 import LicenseInfo from './LicenseInfo.js';
+import Trademark from './Trademark.js';
 
 const onAIColumnRequestCreating = (e) => {
   e.data = e.data.map((item) => ({
@@ -26,7 +26,7 @@ export default function App() {
     setCurrentVehicle(null);
   }, []);
   return (
-    <React.Fragment>
+    <>
       <DataGrid
         dataSource={vehicles}
         showBorders={true}
@@ -107,6 +107,6 @@ export default function App() {
           collision="fit"
         />
       </Popup>
-    </React.Fragment>
+    </>
   );
 }

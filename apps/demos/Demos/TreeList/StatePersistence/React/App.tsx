@@ -17,7 +17,7 @@ const App = () => {
   const treeList = useRef<TreeListRef>(null);
 
   const onStateResetClick = useCallback(() => {
-    treeList.current.instance().state(null);
+    treeList.current?.instance().state(null);
   }, []);
 
   return (

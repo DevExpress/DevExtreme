@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react';
+import CheckBox from 'devextreme-react/check-box';
 import DataGrid, {
   Column, Editing, Paging, Lookup,
 } from 'devextreme-react/data-grid';
-import CheckBox from 'devextreme-react/check-box';
 import SelectBox from 'devextreme-react/select-box';
 import { employees, states } from './data.js';
 

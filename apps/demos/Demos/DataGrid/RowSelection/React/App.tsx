@@ -1,5 +1,8 @@
 import React, { useCallback, useState } from 'react';
-import DataGrid, { Column, type DataGridTypes, Selection } from 'devextreme-react/data-grid';
+
+import DataGrid, { Column, Selection } from 'devextreme-react/data-grid';
+import type { DataGridTypes } from 'devextreme-react/data-grid';
+
 import { employees } from './data.ts';
 
 const App = () => {
@@ -16,7 +19,7 @@ const App = () => {
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <DataGrid
         dataSource={employees}
         showBorders={true}
@@ -38,7 +41,7 @@ const App = () => {
           <p className="employee-notes">{selectedRowNotes}</p>
         </div>
       )}
-    </React.Fragment>
+    </>
   );
 };
 

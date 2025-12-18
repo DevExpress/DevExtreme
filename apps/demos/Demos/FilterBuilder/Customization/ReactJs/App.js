@@ -9,8 +9,8 @@ function App() {
   const [filterText, setFilterText] = useState('');
   const [dataSourceText, setDataSourceText] = useState('');
   const updateTexts = useCallback((e) => {
-    setFilterText(formatValue(e.component.option('value')));
-    setDataSourceText(formatValue(e.component.getFilterExpression()));
+    setFilterText(formatValue(e.component?.option('value')));
+    setDataSourceText(formatValue(e.component?.getFilterExpression()));
   }, []);
   const onValueChanged = useCallback(
     (e) => {

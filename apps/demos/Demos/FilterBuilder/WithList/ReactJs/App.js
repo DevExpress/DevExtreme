@@ -14,7 +14,7 @@ const App = () => {
   );
   const filterBuilderRef = useRef(null);
   const refreshDataSource = useCallback(() => {
-    const filterExpression = filterBuilderRef.current.instance().getFilterExpression();
+    const filterExpression = filterBuilderRef.current?.instance().getFilterExpression();
     dataSource.current.filter(filterExpression);
     dataSource.current.load();
   }, []);

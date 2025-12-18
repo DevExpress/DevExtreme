@@ -15,9 +15,9 @@ import Employee from './Employee.tsx';
 import Status from './Status.tsx';
 
 const onAIColumnRequestCreating = (
-  e: TreeListTypes.AIColumnRequestCreatingEvent<Partial<EmployeeType>>
+  e: TreeListTypes.AIColumnRequestCreatingEvent<EmployeeType>
 ) => {
-  e.data = e.data.map((item) => ({
+  e.data = e.data.map((item: EmployeeType) => ({
     ID: item.ID,
     First_Name: item.First_Name,
     Last_Name: item.Last_Name,

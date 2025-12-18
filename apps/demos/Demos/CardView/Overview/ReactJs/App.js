@@ -73,7 +73,7 @@ function EmailComponent({ data }) {
   return <a href={`mailto:${data.field.value}`}>{data.field.text}</a>;
 }
 function App() {
-  const cardView = useRef();
+  const cardView = useRef(null);
   return (
     <CardView
       dataSource={employees}

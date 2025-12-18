@@ -1,8 +1,10 @@
 import React, { useCallback, useRef } from 'react';
 import Button from 'devextreme-react/button';
 import TabPanel, { Item } from 'devextreme-react/tab-panel';
-import DataGrid, { Column, DataGridRef } from 'devextreme-react/data-grid';
+import DataGrid, { Column } from 'devextreme-react/data-grid';
+import type { DataGridRef } from 'devextreme-react/data-grid';
 import { exportDataGrid } from 'devextreme-react/common/export/pdf';
+import type { DataGridCell } from 'devextreme-react/common/export/pdf';
 import { ArrayStore, DataSource } from 'devextreme-react/common/data';
 import { jsPDF } from 'jspdf';
 
@@ -23,7 +25,11 @@ const ratingDataSource = new DataSource<Product, number>({
   filter: ['Product_ID', '<', 10],
 });
 
-const setAlternatingRowsBackground = (dataGrid: DataGridRef, gridCell, pdfCell) => {
+interface PDFCell {
+  backgroundColor?: string;
+}
+
+const setAlternatingRowsBackground = (dataGrid: DataGridRef, gridCell: DataGridCell, pdfCell: PDFCell) => {
   if (gridCell.rowType === 'data') {
     const rowIndex = dataGrid.instance().getRowIndexByKey(gridCell.data.Product_ID);
     if (rowIndex % 2 === 0) {

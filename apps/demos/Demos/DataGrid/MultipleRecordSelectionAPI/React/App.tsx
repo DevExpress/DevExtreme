@@ -4,11 +4,12 @@ import DataGrid, {
   Selection,
   Toolbar,
   Item,
-  DataGridRef,
 } from 'devextreme-react/data-grid';
+import type { DataGridRef } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 import Button from 'devextreme-react/button';
-import { Employee, employees, titleLabel } from './data.ts';
+import { employees, titleLabel } from './data.ts';
+import type { Employee } from './data.ts';
 
 const titles = ['All', 'Dr.', 'Mr.', 'Mrs.', 'Ms.'];
 const getEmployeeName = (row: Employee) => `${row.FirstName} ${row.LastName}`;

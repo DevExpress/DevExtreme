@@ -3,6 +3,7 @@ import 'whatwg-fetch';
 
 import type { LoadOptions } from 'devextreme-react/common/data';
 import { TreeList, RemoteOperations, Column } from 'devextreme-react/tree-list';
+import type { TreeListTypes } from 'devextreme-react/tree-list';
 
 const dataSource = {
   async load(loadOptions: LoadOptions) {
@@ -24,11 +25,11 @@ const dataSource = {
   },
 };
 
-const customizeText = (e: { value: number | null }) => {
+const customizeText = (e: TreeListTypes.ColumnCustomizeTextArg) => {
   if (e.value !== null) {
     return `${Math.ceil(e.value / 1024)} KB`;
   }
-  return null;
+  return '';
 };
 
 const App = () => (
