@@ -226,8 +226,8 @@ gulp.task('add-exports-to-package-json', () => gulp
         through.obj((file, enc, callback) => {
             const pkg = JSON.parse(file.contents.toString(enc));
 
-            pkg.exports = {
-                "./dist/*":"./dist/*",
+/*            pkg.exports = {
+                "./dist/!*":"./dist/!*",
                 ...collectExports(path.resolve(packagePath))
             };
 
@@ -237,7 +237,7 @@ gulp.task('add-exports-to-package-json', () => gulp
                     pkg.exports[exportPath] = pkg.exports[exportPath] || {};
                     pkg.exports[exportPath].types = item.types;
                 }
-            })
+            })*/
 
             file.contents = Buffer.from(JSON.stringify(pkg, null, 2));
 
