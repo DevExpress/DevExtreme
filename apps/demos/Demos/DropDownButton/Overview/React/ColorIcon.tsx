@@ -2,7 +2,7 @@ import React from 'react';
 
 interface ColorIconProps {
   color: string;
-  onClick: Function;
+  onClick: (color: string) => void;
 }
 
 const ColorIcon = ({ color, onClick }: ColorIconProps) => (

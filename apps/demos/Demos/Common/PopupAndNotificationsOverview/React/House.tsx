@@ -21,8 +21,7 @@ const position: IPositionProps = {
 
 interface HouseProps {
   house: HouseType;
-  show: any;
-  key: string;
+  show: (house: HouseType) => void;
 }
 
 export function House(props: HouseProps) {
