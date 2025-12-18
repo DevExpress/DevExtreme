@@ -19,7 +19,7 @@ const App = () => {
     dataGridRef.current.instance().state(null);
   }, []);
   return (
-    <React.Fragment>
+    <>
       <div id="descContainer">
         Sort and filter data, group, reorder and resize columns, change page numbers and page size.
         Once you are done, <a onClick={onRefreshClick}>refresh</a> the web page to see that the
@@ -75,7 +75,7 @@ const App = () => {
           groupIndex={0}
         />
       </DataGrid>
-    </React.Fragment>
+    </>
   );
 };
 export default App;

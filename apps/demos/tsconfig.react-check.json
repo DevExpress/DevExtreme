@@ -35,6 +35,8 @@
     "Demos/Sortable/**/React/**/*.tsx",
     "Demos/TreeList/**/React/**/*.ts",
     "Demos/TreeList/**/React/**/*.tsx",
+    "Demos/DataGrid/**/React/**/*.ts",
+    "Demos/DataGrid/**/React/**/*.tsx",
     "Demos/Common/EditorsOverview/**/React/**/*.ts",
     "Demos/Common/EditorsOverview/**/React/**/*.tsx",
     "Demos/Common/CustomTextEditorButtons/**/React/**/*.ts",

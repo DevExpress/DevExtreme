@@ -1,8 +1,11 @@
 import React, { useCallback, useState } from 'react';
+
 import DataGrid, {
   Column, RowDragging, Scrolling, Lookup, Sorting,
 } from 'devextreme-react/data-grid';
-import { CheckBox, type CheckBoxTypes } from 'devextreme-react/check-box';
+import { CheckBox } from 'devextreme-react/check-box';
+import type { CheckBoxTypes } from 'devextreme-react/check-box';
+
 import { tasks as defaultTasks, employees } from './data.ts';
 
 const App = () => {
@@ -27,7 +30,7 @@ const App = () => {
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <DataGrid
         height={440}
         dataSource={tasks}
@@ -72,7 +75,7 @@ const App = () => {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 

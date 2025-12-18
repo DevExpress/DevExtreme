@@ -4,7 +4,7 @@ import Bullet, {
 } from 'devextreme-react/bullet';
 
 const customizeTooltip = (data) => ({
-  text: `${parseInt(data.value, 10)}%`,
+  text: `${parseInt(data.value.toString(), 10)}%`,
 });
 const DiscountCell = (cellData) => (
   <Bullet
