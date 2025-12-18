@@ -27,7 +27,7 @@ export default function App() {
   const [maxDateValue, setMaxDateValue] = useState<Date | null>(null);
   const [weekendDisabled, setWeekendDisabled] = useState<boolean | null>(null);
 
-  const onSelectWeekOnClickChange = useCallback(({ value }): void => {
+  const onSelectWeekOnClickChange = useCallback(({ value }: CheckBoxTypes.ValueChangedEvent): void => {
     setSelectWeekOnClick(value);
   }, [setSelectWeekOnClick]);
 

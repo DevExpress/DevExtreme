@@ -65,7 +65,7 @@ const App = () => {
         width: 125,
         stylingMode: 'text',
         useSelectMode: true,
-        onSelectionChanged: (e: any): void => {
+        onSelectionChanged: (e: DropDownButtonTypes.SelectionChangedEvent): void => {
           setAlignment(e.item.name.toLowerCase());
         },
         items: alignments,

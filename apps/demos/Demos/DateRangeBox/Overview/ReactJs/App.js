@@ -13,16 +13,13 @@ function convertRangeToDays([startDate, endDate]) {
 }
 export default function App() {
   const [selectedDays, setSelectedDays] = useState(convertRangeToDays(initialValue));
-  const onCurrentValueChange = useCallback(
-    ({ value: [startDate, endDate] }) => {
-      let daysCount = 0;
-      if (startDate && endDate) {
-        daysCount = convertRangeToDays([startDate, endDate]);
-      }
-      setSelectedDays(daysCount);
-    },
-    [setSelectedDays],
-  );
+  const onCurrentValueChange = useCallback(({ value: [startDate, endDate] }) => {
+    let daysCount = 0;
+    if (startDate && endDate) {
+      daysCount = convertRangeToDays([startDate, endDate]);
+    }
+    setSelectedDays(daysCount);
+  }, []);
   return (
     <div className="dx-fieldset">
       <div className="dx-field">

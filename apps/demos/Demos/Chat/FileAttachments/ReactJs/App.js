@@ -58,7 +58,7 @@ export default function App() {
   }, []);
   const uploadFile = useCallback(() => {}, []);
   return (
-    <React.Fragment>
+    <>
       <div className="chat-container">
         <Chat
           height={710}
@@ -74,6 +74,6 @@ export default function App() {
           />
         </Chat>
       </div>
-    </React.Fragment>
+    </>
   );
 }

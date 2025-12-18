@@ -10,7 +10,7 @@
     "jsx": "react-jsx",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "lib": ["es2023", "DOM", "DOM.Iterable"]
+    "lib": ["es2022", "DOM", "DOM.Iterable"]
   },
   "include": [
     "Demos/Scheduler/**/React/**/*.tsx",

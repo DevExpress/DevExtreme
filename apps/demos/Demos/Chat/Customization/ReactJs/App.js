@@ -24,7 +24,7 @@ export default function App() {
     setMessages((prevMessages) => [...prevMessages, message]);
   }, []);
   return (
-    <React.Fragment>
+    <>
       <div className="chat-container">
         <Chat
           height={710}
@@ -110,6 +110,6 @@ export default function App() {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
