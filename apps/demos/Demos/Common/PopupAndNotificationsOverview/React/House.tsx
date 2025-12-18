@@ -1,6 +1,9 @@
 import React, { useCallback } from 'react';
 
-import Popover, { IPositionProps } from 'devextreme-react/popover';
+import Popover from 'devextreme-react/popover';
+import type { IPositionProps } from 'devextreme-react/popover';
+
+import type { HouseType } from './types.ts';
 
 const formatCurrency = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -17,27 +20,7 @@ const position: IPositionProps = {
 };
 
 interface HouseProps {
-  house: {
-    ID: string;
-    Favorite: boolean;
-    Address: string;
-    City: string;
-    State: string;
-    ZipCode: string;
-    Beds: string;
-    Baths: string;
-    HouseSize: number;
-    LotSize: string;
-    Price: number;
-    Coordinates: string;
-    Features: string;
-    Image: string;
-    Agent: {
-      Name: string;
-      Picture: string;
-      Phone: string;
-    }
-  };
+  house: HouseType;
   show: any;
   key: string;
 }

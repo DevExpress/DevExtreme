@@ -1,6 +1,7 @@
-import { ChatTypes } from 'devextreme-react/chat';
+import type { ChatTypes } from 'devextreme-react/chat';
+import type { Format } from 'devextreme-react/common/core/localization';
 
-function getTimestamp(date, offsetMinutes = 0) {
+function getTimestamp(date: Date, offsetMinutes = 0) {
   return date.getTime() + offsetMinutes * 60000;
 }
 
@@ -18,7 +19,7 @@ export const supportAgent: ChatTypes.User = {
   avatarUrl: '../../../../images/petersmith.png',
 };
 
-export const messages = [
+export const messages: ChatTypes.Message[] = [
   {
     timestamp: getTimestamp(date, -9),
     author: supportAgent,
@@ -51,7 +52,7 @@ export const messages = [
   },
 ];
 
-export const dayHeaderFormats = ['dd/MM/yyyy', 'dd.MM.yyyy', 'MMMM dd, yyyy', 'EEEE, MMMM dd'];
-export const messageTimestampFormats = ['hh:mm a', 'hh:mm:ss a', 'HH:mm', 'HH:mm:ss'];
+export const dayHeaderFormats: Format[] = ['dd/MM/yyyy', 'dd.MM.yyyy', 'MMMM dd, yyyy', 'EEEE, MMMM dd'];
+export const messageTimestampFormats: Format[] = ['hh:mm a', 'hh:mm:ss a', 'HH:mm', 'HH:mm:ss'];
 export const messageTimestampLabel = { 'aria-label': 'Message Timestamp Format' };
 export const dayHeaderLabel = { 'aria-label': 'Day Header Format' };
