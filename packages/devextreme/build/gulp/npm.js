@@ -11,6 +11,7 @@ const replace = require('gulp-replace');
 const lazyPipe = require('lazypipe');
 const gulpFilter = require('gulp-filter');
 const gulpRename = require('gulp-rename');
+const MODULES = require('./modules_metadata.json');
 
 const compressionPipes = require('./compression-pipes.js');
 const ctx = require('./context.js');
@@ -229,6 +230,14 @@ gulp.task('add-exports-to-package-json', () => gulp
                 "./dist/*":"./dist/*",
                 ...collectExports(path.resolve(packagePath))
             };
+
+            MODULES.forEach((item) => {
+                const exportPath = './' + item.name;
+                if(item.types && !pkg.exports[exportPath]?.types) {
+                    pkg.exports[exportPath] = pkg.exports[exportPath] || {};
+                    pkg.exports[exportPath].types = item.types;
+                }
+            })
 
             file.contents = Buffer.from(JSON.stringify(pkg, null, 2));
 
