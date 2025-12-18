@@ -46,7 +46,7 @@ const textExpression = 'Full_Name';
 function onContentReady(e: DxDiagramTypes.ContentReadyEvent) {
   const diagram = e.component;
   // preselect some shape
-  const items = diagram.getItems().filter(({ itemType, dataItem }) => itemType === 'shape' && (dataItem[textExpression] === 'Greta Sims'));
+  const items = diagram.getItems().filter(({ itemType, dataItem }: DxDiagramTypes.Item) => itemType === 'shape' && (dataItem[textExpression] === 'Greta Sims'));
   if (items.length > 0) {
     diagram.setSelectedItems(items);
     diagram.scrollToItem(items[0]);
