@@ -135,11 +135,11 @@ if (Quill) {
         }
 
         this.quill.on('editor-change', (eventName, newValue, oldValue, eventSource) => {
-          const isSilentMode = eventSource === SILENT_ACTION && isEmptyObject(this.quill.getFormat());
+          const isSilentMode = eventSource === SILENT_ACTION
+            && isEmptyObject(this.quill.getFormat());
+          const isSelectionChanged = eventName === SELECTION_CHANGE_EVENT;
 
-          if (!isSilentMode) {
-            const isSelectionChanged = eventName === SELECTION_CHANGE_EVENT;
-
+          if (!isSilentMode || isSelectionChanged) {
             this._updateToolbar(isSelectionChanged);
           }
         });

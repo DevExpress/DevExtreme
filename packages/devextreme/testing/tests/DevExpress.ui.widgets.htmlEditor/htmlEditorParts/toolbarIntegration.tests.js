@@ -3,6 +3,7 @@ import $ from 'jquery';
 import 'ui/html_editor';
 import fx from 'common/core/animation/fx';
 
+import nativePointerMock from '../../../helpers/nativePointerMock.js';
 import { checkLink, prepareEmbedValue, prepareTableValue } from './utils.js';
 
 const TOOLBAR_CLASS = 'dx-htmleditor-toolbar';
@@ -10,6 +11,7 @@ const TOOLBAR_WRAPPER_CLASS = 'dx-htmleditor-toolbar-wrapper';
 const TOOLBAR_FORMAT_WIDGET_CLASS = 'dx-htmleditor-toolbar-format';
 const TOOLBAR_MULTILINE_CLASS = 'dx-toolbar-multiline';
 const TOOLBAR_FORMAT_BUTTON_ACTIVE_CLASS = 'dx-format-active';
+const HTML_EDITOR_CONTENT_CLASS = 'dx-htmleditor-content';
 const DROPDOWNMENU_CLASS = 'dx-dropdownmenu-button';
 const DROPDOWNEDITOR_ICON_CLASS = 'dx-dropdowneditor-icon';
 const BUTTON_CONTENT_CLASS = 'dx-button-content';
@@ -24,6 +26,8 @@ const SUGGESTION_LIST_CLASS = 'dx-suggestion-list';
 const LIST_ITEM_CLASS = 'dx-list-item';
 
 const BLACK_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWNgYmL6DwABFgEGpP/tHAAAAABJRU5ErkJggg==';
+
+const ENTER_KEY_CODE = 13;
 
 const { test, module: testModule } = QUnit;
 
@@ -144,6 +148,39 @@ export default function() {
             $(`.${DIALOG_CLASS} .${BUTTON_CLASS}`)
                 .first()
                 .trigger('dxclick');
+        });
+
+        test('header format should be reset after moving to next line (T1315504)', function(assert) {
+            const $htmlEditor = $('#htmlEditor').dxHtmlEditor({
+                value: '<p>test</p>',
+                toolbar: {
+                    items: [{
+                        name: 'header',
+                        acceptedValues: [false, 1, 2, 3, 4, 5],
+                        options: {
+                            opened: true
+                        },
+                    }],
+                    multiline: false
+                },
+            });
+            const htmlEditor = $htmlEditor.dxHtmlEditor('instance');
+            const $formatWidget = $htmlEditor.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+            const $content = $htmlEditor.find(`.${HTML_EDITOR_CONTENT_CLASS}`);
+            htmlEditor.setSelection(4, 0);
+
+            $(`.${LIST_ITEM_CLASS}`)
+                .last()
+                .trigger('dxclick');
+
+
+            const value = $formatWidget.find(`.${INPUT_CLASS}`).val();
+            assert.strictEqual(value, 'Heading 5', 'Header format is applied');
+
+            nativePointerMock().simulateEvent($content.get(0), 'keydown', { keyCode: ENTER_KEY_CODE });
+
+            const newValue = $formatWidget.find(`.${INPUT_CLASS}`).val();
+            assert.strictEqual(newValue, 'Normal text', 'Header format is reset');
         });
 
         test('adaptive menu should be hidden after selecting formatting', function(assert) {
