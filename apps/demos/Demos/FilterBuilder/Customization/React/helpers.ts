@@ -5,7 +5,7 @@ type FilterValue = FilterBuilderTypes.Properties['value'];
 const TAB_SIZE = 4;
 
 function prepareItem(item: FilterValue, spaces: number): string {
-  return Array.isArray(item[0])
+  return Array.isArray(item) && Array.isArray(item[0])
     ? formatValue(item, spaces + TAB_SIZE)
     : JSON.stringify(item);
 }

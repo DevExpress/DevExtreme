@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { type ComponentProps } from 'react';
 
 import CardView, { Column, HeaderFilter, ColumnHeaderFilter, ColumnHeaderFilterSearch } from 'devextreme-react/card-view';
+import type { CardViewTypes } from 'devextreme-react/card-view';
+import type { DataSourceOptions } from 'devextreme-react/common/data';
 
 import { orders } from './data.ts';
 import type { Order, OrderFilter } from './data.ts';
@@ -10,6 +12,7 @@ function getOrderDay(rowData: Order) {
 }
 
 function calculateOrderDateFilterExpression(
+  this: CardViewTypes.Column,
   value: string,
   selectedFilterOperations: string | null,
   target: string
@@ -57,20 +60,22 @@ interface HeaderFilterDataResult {
   value: string;
 }
 
-interface HeaderFilterData {
-  dataSource: {
-    postProcess?: ((results: HeaderFilterDataResult[]) => HeaderFilterDataResult[]) | null;
-  };
+interface HeaderFilterDataSourceOptions {
+  component: Record<string, any>;
+  dataSource: DataSourceOptions<HeaderFilterDataResult> | null;
 }
 
-function orderDateHeaderFilterDataSource(data: HeaderFilterData): void {
-  data.dataSource.postProcess = function (results: HeaderFilterDataResult[]) {
-    results.push({
-      text: 'Weekends',
-      value: 'weekends',
-    });
-    return results;
-  };
+function orderDateHeaderFilterDataSource(options: HeaderFilterDataSourceOptions): void {
+  if (options.dataSource) {
+    options.dataSource.postProcess = function (results: HeaderFilterDataResult[]) {
+      results.push({
+        text: 'Weekends',
+        value: 'weekends',
+      });
+
+      return results;
+    };
+  }
 }
 
 const App = () => (
@@ -94,7 +99,7 @@ const App = () => (
     <Column
       dataField="OrderDate"
       dataType="date"
-      calculateFilterExpression={calculateOrderDateFilterExpression}
+      calculateFilterExpression={calculateOrderDateFilterExpression as ComponentProps<typeof Column>['calculateFilterExpression']}
     >
       <ColumnHeaderFilter
         dataSource={orderDateHeaderFilterDataSource}

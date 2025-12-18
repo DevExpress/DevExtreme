@@ -47,14 +47,16 @@ const saleAmountHeaderFilterDataSource = [
     value: ['SaleAmount', '>=', 20000],
   },
 ];
-function orderDateHeaderFilterDataSource(data) {
-  data.dataSource.postProcess = function (results) {
-    results.push({
-      text: 'Weekends',
-      value: 'weekends',
-    });
-    return results;
-  };
+function orderDateHeaderFilterDataSource(options) {
+  if (options.dataSource) {
+    options.dataSource.postProcess = function (results) {
+      results.push({
+        text: 'Weekends',
+        value: 'weekends',
+      });
+      return results;
+    };
+  }
 }
 const App = () => (
   <CardView

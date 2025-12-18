@@ -4,10 +4,13 @@ import CardView, {
   Column, CardCover, SearchPanel, ColumnChooser, ColumnChooserSearch, ColumnChooserSelection,
 } from 'devextreme-react/card-view';
 import CheckBox from 'devextreme-react/check-box';
+import type { CheckBoxTypes } from 'devextreme-react/check-box';
 import SelectBox from 'devextreme-react/select-box';
 
 import { employees } from './data.ts';
 import type { Employee } from './data.ts';
+
+type CheckBoxValue = CheckBoxTypes.Properties['value'];
 
 function altExpr({ First_Name, Last_Name }: Employee): string {
   return `Photo of ${First_Name} ${Last_Name}`;
@@ -28,10 +31,10 @@ type ColumnChooserMode = typeof columnChooserModes[number];
 
 const App = () => {
   const [columnChooserMode, setColumnChooserMode] = useState<ColumnChooserMode>('select');
-  const [searchEnabled, setSearchEnabled] = useState(true);
-  const [allowSelectAll, setAllowSelectAll] = useState(true);
-  const [selectByClick, setSelectByClick] = useState(true);
-  const [allowColumnReordering, setAllowColumnReordering] = useState(false);
+  const [searchEnabled, setSearchEnabled] = useState<CheckBoxValue>(true);
+  const [allowSelectAll, setAllowSelectAll] = useState<CheckBoxValue>(true);
+  const [selectByClick, setSelectByClick] = useState<CheckBoxValue>(true);
+  const [allowColumnReordering, setAllowColumnReordering] = useState<CheckBoxValue>(false);
 
   return <>
     <div className="options-panel">

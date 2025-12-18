@@ -11,7 +11,7 @@ export interface Employee {
   Birth_Date: string;
   Hire_Date: string;
   Department: string;
-  Status: string;
+  Status: 'Salaried' | 'Commission' | 'Terminated';
 }
 
 export const employees: Employee[] = [{
