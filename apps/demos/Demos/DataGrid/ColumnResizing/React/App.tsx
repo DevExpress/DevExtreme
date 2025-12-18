@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react';
 
-import { ColumnResizeMode } from 'devextreme-react/common/grids';
-
+import type { ColumnResizeMode } from 'devextreme-react/common/grids';
 import { DataGrid } from 'devextreme-react/data-grid';
 import { SelectBox, type SelectBoxTypes } from 'devextreme-react/select-box';
 

@@ -52,8 +52,8 @@ const onRowInserted = (e) => e.component.navigateToRow(e.key);
 const statusEditorRender = (cell) => {
   const onValueChanged = (e) => cell.setValue(e.value);
   const itemRender = (data) => {
-    const imageSource = `images/icons/status-${data.id}.svg`;
-    if (data != null) {
+    if (data) {
+      const imageSource = `images/icons/status-${data.id}.svg`;
       return (
         <div>
           <img
