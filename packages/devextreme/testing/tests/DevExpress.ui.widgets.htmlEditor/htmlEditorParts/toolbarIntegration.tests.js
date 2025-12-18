@@ -17,6 +17,7 @@ const DROPDOWNEDITOR_ICON_CLASS = 'dx-dropdowneditor-icon';
 const BUTTON_CONTENT_CLASS = 'dx-button-content';
 const QUILL_CONTAINER_CLASS = 'dx-quill-container';
 const STATE_DISABLED_CLASS = 'dx-state-disabled';
+const FORMAT_ACTIVE_CLASS = 'dx-format-active';
 const HEX_FIELD_CLASS = 'dx-colorview-label-hex';
 const INPUT_CLASS = 'dx-texteditor-input';
 const DIALOG_CLASS = 'dx-formdialog';
@@ -181,6 +182,63 @@ export default function() {
 
             const newValue = $formatWidget.find(`.${INPUT_CLASS}`).val();
             assert.strictEqual(newValue, 'Normal text', 'Header format is reset');
+        });
+
+        test('font format should not be reset after moving to next line', function(assert) {
+            const $htmlEditor = $('#htmlEditor').dxHtmlEditor({
+                value: '<p>test</p>',
+                toolbar: {
+                    items: [{
+                        name: 'font',
+                        acceptedValues: ['Arial', 'Courier New', 'Georgia'],
+                        options: {
+                            opened: true
+                        },
+                    }],
+                    multiline: false
+                },
+            });
+            const htmlEditor = $htmlEditor.dxHtmlEditor('instance');
+            const $formatWidget = $htmlEditor.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+            const $content = $htmlEditor.find(`.${HTML_EDITOR_CONTENT_CLASS}`);
+            htmlEditor.setSelection(4, 0);
+
+            $(`.${LIST_ITEM_CLASS}`)
+                .last()
+                .trigger('dxclick');
+
+
+            const value = $formatWidget.find(`.${INPUT_CLASS}`).val();
+            assert.strictEqual(value, 'Georgia', 'Font format is applied');
+
+            nativePointerMock().simulateEvent($content.get(0), 'keydown', { keyCode: ENTER_KEY_CODE });
+
+            const newValue = $formatWidget.find(`.${INPUT_CLASS}`).val();
+            assert.strictEqual(newValue, 'Georgia', 'Font format is not reset');
+        });
+
+        ['bold', 'italic', 'strike', 'underline'].forEach((formatName) => {
+            test(`${formatName} format should not be reset after moving to next line`, function(assert) {
+                const $htmlEditor = $('#htmlEditor').dxHtmlEditor({
+                    value: '<p>test</p>',
+                    toolbar: {
+                        items: [formatName],
+                        multiline: false
+                    },
+                });
+                const htmlEditor = $htmlEditor.dxHtmlEditor('instance');
+                const $formatWidget = $htmlEditor.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+                const $content = $htmlEditor.find(`.${HTML_EDITOR_CONTENT_CLASS}`);
+                htmlEditor.setSelection(4, 0);
+
+                $formatWidget.trigger('dxclick');
+
+                assert.strictEqual($formatWidget.hasClass(FORMAT_ACTIVE_CLASS), true, `${formatName} format is applied`);
+
+                nativePointerMock().simulateEvent($content.get(0), 'keydown', { keyCode: ENTER_KEY_CODE });
+
+                assert.strictEqual($formatWidget.hasClass(FORMAT_ACTIVE_CLASS), true, `${formatName} format is not reset`);
+            });
         });
 
         test('adaptive menu should be hidden after selecting formatting', function(assert) {

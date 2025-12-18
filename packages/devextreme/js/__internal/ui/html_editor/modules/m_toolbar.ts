@@ -137,9 +137,11 @@ if (Quill) {
         this.quill.on('editor-change', (eventName, newValue, oldValue, eventSource) => {
           const isSilentMode = eventSource === SILENT_ACTION
             && isEmptyObject(this.quill.getFormat());
-          const isSelectionChanged = eventName === SELECTION_CHANGE_EVENT;
 
-          if (!isSilentMode || isSelectionChanged) {
+          this._updateHeaderFormatWidget();
+
+          if (!isSilentMode) {
+            const isSelectionChanged = eventName === SELECTION_CHANGE_EVENT;
             this._updateToolbar(isSelectionChanged);
           }
         });
@@ -670,6 +672,19 @@ if (Quill) {
       }
 
       this._toggleClearFormatting(hasFormats || selection.length > 1);
+    }
+
+    _updateHeaderFormatWidget() {
+      const formatName = 'header';
+      const formatWidget = this._toolbarWidgets.getByName(formatName);
+      const selection = this.quill.getSelection();
+
+      if (!selection || !formatWidget) {
+        return;
+      }
+
+      const formats = this.quill.getFormat(selection);
+      this._markActiveFormatWidget(formatName, formatWidget, formats);
     }
 
     _markActiveFormatWidget(name, widget, formats) {
