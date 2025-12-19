@@ -2,7 +2,7 @@
 
 const path = require('path');
 const fs = require('fs');
-const TS_OUTPUT_BASE_DIR = 'artifacts/dist_ts';
+const distPathRegExp = /artifacts[\/\\]dist_ts/;
 
 module.exports = function addImportExtensions() {
     return {
@@ -29,7 +29,6 @@ module.exports = function addImportExtensions() {
                 }
 
                 const currentFile = astPath.hub?.file?.opts?.filename;
-                const distPathRegExp = new RegExp(TS_OUTPUT_BASE_DIR)
 
                 if (currentFile) {
                     const currentDir = path.dirname(currentFile);
