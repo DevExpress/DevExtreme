@@ -1,5 +1,7 @@
 import React from 'react';
+
 import Gallery from 'devextreme-react/gallery';
+
 import { galleryData } from './data.ts';
 import Item from './item.tsx';
 

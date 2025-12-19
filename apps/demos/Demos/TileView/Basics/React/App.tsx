@@ -1,8 +1,14 @@
 import React from 'react';
+
 import TileView from 'devextreme-react/tile-view';
+
 import { homes } from './data.ts';
 
-const HomeImage = (data) => <div className="tile-image" style={{ backgroundImage: `url(${data.ImageSrc})` }}></div>;
+interface Home {
+  ImageSrc: string;
+}
+
+const HomeImage = (data: Home) => <div className="tile-image" style={{ backgroundImage: `url(${data.ImageSrc})` }}></div>;
 
 const App = () => (
   <TileView

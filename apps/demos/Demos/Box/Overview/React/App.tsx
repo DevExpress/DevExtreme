@@ -2,7 +2,7 @@ import React from 'react';
 import Box, { Item } from 'devextreme-react/box';
 
 const App = () => (
-  <React.Fragment>
+  <>
     <Box direction="row" width="100%" height={75}>
       <Item ratio={1}>
         <div className="rect demo-dark">ratio = 1</div>
@@ -65,7 +65,7 @@ const App = () => (
         <div className="rect demo-dark footer">Footer</div>
       </Item>
     </Box>
-  </React.Fragment>
+  </>
 );
 
 export default App;
