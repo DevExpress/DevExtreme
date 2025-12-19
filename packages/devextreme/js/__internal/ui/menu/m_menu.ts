@@ -692,23 +692,29 @@ class Menu extends MenuBase {
 
     this._actions.onSubmenuHiding(eventArgs);
 
+    if (eventArgs.cancel) {
+      return;
+    }
+
     const { focusedElement } = this.option();
-    const { focusedElement: submenuFocusedElement } = submenu.option();
+    const submenuContainerElement = $(eventArgs.submenuContainer).get(0);
+    const focusedDomElement = $(focusedElement).get(0);
+    const isFocusedElementInsideSubmenu = focusedDomElement && submenuContainerElement
+      ? submenuContainerElement.contains(focusedDomElement)
+      : false;
+
+    if (isFocusedElementInsideSubmenu) {
+      this.option('focusedElement', getPublicElement($menuAnchorItem));
+    }
 
     const isVisibleSubmenuHiding = this._visibleSubmenu === submenu;
-    const isFocusedElementHiding = focusedElement === submenuFocusedElement;
 
-    if (isVisibleSubmenuHiding && isFocusedElementHiding) {
-      this.option('focusedElement', $menuAnchorItem);
+    if (isVisibleSubmenuHiding) {
+      this._visibleSubmenu = null;
     }
 
-    if (!eventArgs.cancel) {
-      if (isVisibleSubmenuHiding) {
-        this._visibleSubmenu = null;
-      }
-      $border.hide();
-      $menuAnchorItem.removeClass(DX_MENU_ITEM_EXPANDED_CLASS);
-    }
+    $border.hide();
+    $menuAnchorItem.removeClass(DX_MENU_ITEM_EXPANDED_CLASS);
   }
 
   _submenuOnHiddenHandler($menuAnchorItem, submenu, { rootItem }) {
