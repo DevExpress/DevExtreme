@@ -50,7 +50,7 @@ export default function App() {
         <div className="content" style={{ display: selectedFiles.length > 0 ? 'block' : 'none' }}>
           <div>
             <h4>Selected Files</h4>
-            {selectedFiles.map((file, index: number) => (
+            {selectedFiles.map((file: File, index: number) => (
               <div className="selected-item" key={index}>
                 <span>{`Name: ${file.name}`}<br /></span>
                 <span>{`Size ${file.size}`}<br /></span>

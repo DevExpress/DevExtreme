@@ -3,6 +3,7 @@ import Map from 'devextreme-react/map';
 import type { IMarkerProps } from 'devextreme-react/map';
 import Button from 'devextreme-react/button';
 import CheckBox from 'devextreme-react/check-box';
+import type { CheckBoxTypes } from 'devextreme-react/check-box';
 import { markersData } from './data.ts';
 
 const markerUrl = 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/maps/map-marker.png';
@@ -15,7 +16,7 @@ const App = () => {
   const [currentMarkersData, setCurrentMarkersData] = useState<IMarkerProps[]>(markersData);
   const [currentMarkerUrl, setCurrentMarkerUrl] = useState<string>(markerUrl);
 
-  const onCustomMarkersChange = useCallback((value): void => {
+  const onCustomMarkersChange = useCallback((value: CheckBoxTypes.Properties['value']): void => {
     setCurrentMarkerUrl(value ? currentMarkerUrl : null);
     setCurrentMarkersData(markersData);
   }, [currentMarkerUrl]);
