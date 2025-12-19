@@ -1,13 +1,13 @@
 import React from 'react';
 import RangeSelector, {
-  Margin,
   Chart,
   CommonSeriesSettings,
-  Series,
-  Scale,
-  TickInterval,
+  Margin,
   MinorTickInterval,
+  Scale,
+  Series,
   SliderMarker,
+  TickInterval,
 } from 'devextreme-react/range-selector';
 import { dataSource } from './data.js';
 

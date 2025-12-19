@@ -11,7 +11,7 @@ const PaneContentWithTitle = (title, initialSize) => (data) =>
     />
   );
 const App = () => (
-  <React.Fragment>
+  <>
     <Splitter id="splitter">
       <Item
         resizable={true}
@@ -62,6 +62,6 @@ const App = () => (
         render={PaneContentWithTitle('Right Pane', '140px')}
       />
     </Splitter>
-  </React.Fragment>
+  </>
 );
 export default App;
