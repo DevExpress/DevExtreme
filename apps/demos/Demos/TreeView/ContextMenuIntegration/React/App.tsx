@@ -3,31 +3,52 @@ import React, { useCallback, useRef, useState } from 'react';
 import { TreeView } from 'devextreme-react/tree-view';
 import type { TreeViewTypes, TreeViewRef } from 'devextreme-react/tree-view';
 import { ContextMenu } from 'devextreme-react/context-menu';
-import type { ContextMenuTypes, ContextMenuRef } from 'devextreme-react/context-menu';
+import type { ContextMenuTypes } from 'devextreme-react/context-menu';
 import List from 'devextreme-react/list';
 
 import { products, menuItems } from './data.ts';
-import type { Product } from './types';
+import type { Product, MenuItem } from './types';
 
 const App = () => {
-  const contextMenuRef = useRef<ContextMenuRef>(null);
-  const treeViewRef = useRef<TreeViewRef>(null);
+  const [contextMenuItems, setContextMenuItems] = useState<MenuItem[]>([...menuItems]);
   const [logItems, setLogItems] = useState<string[]>([]);
   const [selectedTreeItem, setSelectedTreeItem] = useState<Product | undefined>(undefined);
+  const treeViewRef = useRef<TreeViewRef>(null);
 
   const treeViewItemContextMenu = useCallback((
     e: TreeViewTypes.ItemContextMenuEvent<Product>,
-  ) => {
+  ): void => {
     setSelectedTreeItem(e.itemData);
 
     const isProductItem = !e.itemData?.items;
-    contextMenuRef.current?.instance().option('items[0].visible', !isProductItem);
-    contextMenuRef.current?.instance().option('items[1].visible', !isProductItem);
-    contextMenuRef.current?.instance().option('items[2].visible', isProductItem);
-    contextMenuRef.current?.instance().option('items[3].visible', isProductItem);
+    const isExpanded = e.node?.expanded;
+    setContextMenuItems((prev: MenuItem[]): MenuItem[] => prev.map((item: MenuItem, index: number): MenuItem => {
+      switch (index) {
+        case 0:
+          return {
+            ...item,
+            visible: !isProductItem,
+            disabled: isExpanded,
+          };
 
-    contextMenuRef.current?.instance().option('items[0].disabled', e.node?.expanded);
-    contextMenuRef.current?.instance().option('items[1].disabled', !e.node?.expanded);
+        case 1:
+          return {
+            ...item,
+            visible: !isProductItem,
+            disabled: !isExpanded,
+          };
+
+        case 2:
+        case 3:
+          return {
+            ...item,
+            visible: isProductItem,
+          };
+
+        default:
+          return item;
+      }
+    }));
   }, []);
 
   const contextMenuItemClick = useCallback((
@@ -84,8 +105,7 @@ const App = () => {
         />
       </div>
       <ContextMenu
-        ref={contextMenuRef}
-        dataSource={menuItems}
+        dataSource={contextMenuItems}
         target="#treeview .dx-treeview-item"
         onItemClick={contextMenuItemClick}
       />

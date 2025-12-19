@@ -11,7 +11,7 @@ const App = () => {
   const [showCancelButton, setShowCancelButton] = useState(true);
   const showActionSheet = useCallback(() => {
     setIsActionSheetVisible(true);
-  }, [setIsActionSheetVisible]);
+  }, []);
   const onActionSheetButtonClick = useCallback((buttonName) => {
     setIsActionSheetVisible(false);
     notify(`The "${buttonName}" button is clicked.`);

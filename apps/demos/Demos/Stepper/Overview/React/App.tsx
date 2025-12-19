@@ -10,8 +10,8 @@ import Steppers from './Steppers.tsx';
 import Options from './Options.tsx';
 
 export default function App() {
-  const [orientation, setOrientation] = useState<Orientation>(orientations[0].value as Orientation);
-  const [navigationMode, setNavigationMode] = useState<boolean>(navigationModes[0].value as boolean);
+  const [orientation, setOrientation] = useState<Orientation>(orientations[0].value);
+  const [navigationMode, setNavigationMode] = useState<boolean>(navigationModes[0].value);
   const [selectOnFocus, setSelectOnFocus] = useState<boolean>(true);
   const [rtlMode, setRtlMode] = useState<boolean>(false);
 

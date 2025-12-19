@@ -15,4 +15,6 @@ export type Product = {
 export type MenuItem = {
   id: string;
   text: string;
+  visible?: boolean;
+  disabled?: boolean;
 };

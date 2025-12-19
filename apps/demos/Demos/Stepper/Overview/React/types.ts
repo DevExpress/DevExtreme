@@ -1,9 +1,14 @@
 import type { Orientation } from 'devextreme-react/common';
 import type { StepperTypes } from 'devextreme-react/stepper';
 
-export type StepperOption = {
+export type StepperOrientation = {
   text: string;
-  value: Orientation | boolean;
+  value: Orientation;
+};
+
+export type StepperNavigationMode = {
+  text: string;
+  value: boolean;
 };
 
 export type StepperConfig = {

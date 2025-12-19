@@ -1,14 +1,17 @@
 import React, { useCallback, useState } from 'react';
-import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
-import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
-import List, { type ListTypes } from 'devextreme-react/list';
+import SelectBox from 'devextreme-react/select-box';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
+import CheckBox from 'devextreme-react/check-box';
+import type { CheckBoxTypes } from 'devextreme-react/check-box';
+import List from 'devextreme-react/list';
+import type { ListTypes } from 'devextreme-react/list';
 import { tasks, deleteModeLabel } from './data.ts';
 
-const itemDeleteModes: ListTypes.Properties['itemDeleteMode'][] = ['static', 'toggle', 'slideButton', 'slideItem', 'swipe', 'context'];
+const itemDeleteModes: ListTypes.ItemDeleteMode[] = ['static', 'toggle', 'slideButton', 'slideItem', 'swipe', 'context'];
 
 const App = () => {
   const [allowDeletion, setAllowDeletion] = useState<boolean>(false);
-  const [itemDeleteMode, setItemDeleteMode] = useState<ListTypes.Properties['itemDeleteMode']>('toggle');
+  const [itemDeleteMode, setItemDeleteMode] = useState<ListTypes.ItemDeleteMode>('toggle');
 
   const onAllowDeletionChange = useCallback((args: CheckBoxTypes.ValueChangedEvent): void => {
     setAllowDeletion(args.value);

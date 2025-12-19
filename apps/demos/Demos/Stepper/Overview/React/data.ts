@@ -1,5 +1,5 @@
 import type { StepperTypes } from 'devextreme-react/stepper';
-import type { StepperOption } from './types.ts';
+import type { StepperOrientation, StepperNavigationMode } from './types.ts';
 
 export const steps: StepperTypes.Item[] = [
   {
@@ -30,12 +30,12 @@ export const steps: StepperTypes.Item[] = [
   },
 ];
 
-export const orientations: StepperOption[] = [
+export const orientations: StepperOrientation[] = [
   { text: 'Horizontal', value: 'horizontal' },
   { text: 'Vertical', value: 'vertical' },
 ];
 
-export const navigationModes: StepperOption[] = [
+export const navigationModes: StepperNavigationMode[] = [
   { text: 'Non-linear', value: false },
   { text: 'Linear', value: true },
 ];

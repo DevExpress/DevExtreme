@@ -75,7 +75,7 @@ export default function App() {
           <CheckBox
             value={selectByClick}
             elementAttr={selectByClickLabel}
-            onValueChange={(value) => setSelectByClick(!!value)}
+            onValueChange={setSelectByClick}
           ></CheckBox>
         </div>
       </div>

@@ -12,7 +12,7 @@ const App = () => {
 
   const showActionSheet = useCallback((): void => {
     setIsActionSheetVisible(true);
-  }, [setIsActionSheetVisible]);
+  }, []);
 
   const onActionSheetButtonClick = useCallback((buttonName: string): void => {
     setIsActionSheetVisible(false);

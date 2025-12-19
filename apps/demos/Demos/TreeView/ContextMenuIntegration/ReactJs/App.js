@@ -5,19 +5,40 @@ import List from 'devextreme-react/list';
 import { products, menuItems } from './data.js';
 
 const App = () => {
-  const contextMenuRef = useRef(null);
-  const treeViewRef = useRef(null);
+  const [contextMenuItems, setContextMenuItems] = useState([...menuItems]);
   const [logItems, setLogItems] = useState([]);
   const [selectedTreeItem, setSelectedTreeItem] = useState(undefined);
+  const treeViewRef = useRef(null);
   const treeViewItemContextMenu = useCallback((e) => {
     setSelectedTreeItem(e.itemData);
     const isProductItem = !e.itemData?.items;
-    contextMenuRef.current?.instance().option('items[0].visible', !isProductItem);
-    contextMenuRef.current?.instance().option('items[1].visible', !isProductItem);
-    contextMenuRef.current?.instance().option('items[2].visible', isProductItem);
-    contextMenuRef.current?.instance().option('items[3].visible', isProductItem);
-    contextMenuRef.current?.instance().option('items[0].disabled', e.node?.expanded);
-    contextMenuRef.current?.instance().option('items[1].disabled', !e.node?.expanded);
+    const isExpanded = e.node?.expanded;
+    setContextMenuItems((prev) =>
+      prev.map((item, index) => {
+        switch (index) {
+          case 0:
+            return {
+              ...item,
+              visible: !isProductItem,
+              disabled: isExpanded,
+            };
+          case 1:
+            return {
+              ...item,
+              visible: !isProductItem,
+              disabled: !isExpanded,
+            };
+          case 2:
+          case 3:
+            return {
+              ...item,
+              visible: isProductItem,
+            };
+          default:
+            return item;
+        }
+      }),
+    );
   }, []);
   const contextMenuItemClick = useCallback(
     (e) => {
@@ -73,8 +94,7 @@ const App = () => {
         />
       </div>
       <ContextMenu
-        ref={contextMenuRef}
-        dataSource={menuItems}
+        dataSource={contextMenuItems}
         target="#treeview .dx-treeview-item"
         onItemClick={contextMenuItemClick}
       />
