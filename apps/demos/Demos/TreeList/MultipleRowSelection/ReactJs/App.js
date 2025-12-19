@@ -41,9 +41,9 @@ const App = () => {
       <TreeList
         id="employees"
         dataSource={employees}
-        showRowLines={true}
-        showBorders={true}
-        columnAutoWidth={true}
+        showRowLines
+        showBorders
+        columnAutoWidth
         defaultExpandedRowKeys={expandedRowKeys}
         selectedRowKeys={selectedRowKeys}
         keyExpr="ID"

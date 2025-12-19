@@ -22,7 +22,7 @@ const customizeText = (e) => {
   if (e.value !== null) {
     return `${Math.ceil(e.value / 1024)} KB`;
   }
-  return null;
+  return '';
 };
 const App = () => (
   <TreeList
