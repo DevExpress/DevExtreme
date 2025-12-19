@@ -5,7 +5,7 @@ import List from 'devextreme-react/list';
 import { products, menuItems } from './data.js';
 
 const App = () => {
-  const [contextMenuItems, setContextMenuItems] = useState([...menuItems]);
+  const [contextMenuItems, setContextMenuItems] = useState(menuItems);
   const [logItems, setLogItems] = useState([]);
   const [selectedTreeItem, setSelectedTreeItem] = useState(undefined);
   const treeViewRef = useRef(null);

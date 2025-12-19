@@ -10,7 +10,7 @@ import { products, menuItems } from './data.ts';
 import type { Product, MenuItem } from './types';
 
 const App = () => {
-  const [contextMenuItems, setContextMenuItems] = useState<MenuItem[]>([...menuItems]);
+  const [contextMenuItems, setContextMenuItems] = useState<MenuItem[]>(menuItems);
   const [logItems, setLogItems] = useState<string[]>([]);
   const [selectedTreeItem, setSelectedTreeItem] = useState<Product | undefined>(undefined);
   const treeViewRef = useRef<TreeViewRef>(null);
