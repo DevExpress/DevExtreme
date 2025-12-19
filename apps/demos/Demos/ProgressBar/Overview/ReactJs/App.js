@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Button } from 'devextreme-react/button';
 import { ProgressBar } from 'devextreme-react/progress-bar';
 
-const maxValue = 10;
+const MAX_VALUE = 10;
 function formatTime(value) {
   return `00:00:${`0${value}`.slice(-2)}`;
 }
@@ -12,7 +12,7 @@ function statusFormat(ratio) {
 const elementAttr = { 'aria-label': 'Progress Bar' };
 let intervalId;
 export default function App() {
-  const [seconds, setSeconds] = useState(maxValue);
+  const [seconds, setSeconds] = useState(MAX_VALUE);
   const [buttonText, setButtonText] = useState('Start progress');
   const [inProgress, setInProgress] = useState(false);
   useEffect(() => {
@@ -29,14 +29,14 @@ export default function App() {
     } else {
       setButtonText('Stop progress');
       if (seconds === 0) {
-        setSeconds(maxValue);
+        setSeconds(MAX_VALUE);
       }
       intervalId = setInterval(() => {
         setSeconds((prevValue) => prevValue - 1);
       }, 1000);
     }
     setInProgress(!inProgress);
-  }, [setInProgress, setButtonText, seconds, inProgress]);
+  }, [seconds, inProgress]);
   return (
     <div className="form">
       <Button
@@ -51,10 +51,10 @@ export default function App() {
         className={seconds === 0 ? 'complete' : ''}
         width="90%"
         min={0}
-        max={maxValue}
+        max={MAX_VALUE}
         elementAttr={elementAttr}
         statusFormat={statusFormat}
-        value={maxValue - seconds}
+        value={MAX_VALUE - seconds}
       />
     </div>
   );

@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import Map from 'devextreme-react/map';
+import type { IMarkerProps } from 'devextreme-react/map';
 import Button from 'devextreme-react/button';
 import CheckBox from 'devextreme-react/check-box';
 import { markersData } from './data.ts';
@@ -11,24 +12,24 @@ const apiKey = {
 };
 
 const App = () => {
-  const [currentMarkersData, setCurrentMarkersData] = useState(markersData);
-  const [currentMarkerUrl, setCurrentMarkerUrl] = useState(markerUrl);
+  const [currentMarkersData, setCurrentMarkersData] = useState<IMarkerProps[]>(markersData);
+  const [currentMarkerUrl, setCurrentMarkerUrl] = useState<string>(markerUrl);
 
-  const onCustomMarkersChange = useCallback((value) => {
+  const onCustomMarkersChange = useCallback((value): void => {
     setCurrentMarkerUrl(value ? currentMarkerUrl : null);
     setCurrentMarkersData(markersData);
-  }, [currentMarkerUrl, setCurrentMarkerUrl, setCurrentMarkersData]);
+  }, [currentMarkerUrl]);
 
   const showTooltips = useCallback(() => {
-    setCurrentMarkersData(currentMarkersData.map((item) => {
+    setCurrentMarkersData(currentMarkersData.map((item: IMarkerProps): IMarkerProps => {
       const newItem = JSON.parse(JSON.stringify(item));
       newItem.tooltip.isShown = true;
       return newItem;
     }));
-  }, [currentMarkersData, setCurrentMarkersData]);
+  }, [currentMarkersData]);
 
   return (
-    <React.Fragment>
+    <>
       <Map
         defaultZoom={11}
         height={440}
@@ -55,7 +56,7 @@ const App = () => {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 

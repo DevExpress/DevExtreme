@@ -35,7 +35,23 @@
     "Demos/Sortable/**/React/**/*.tsx",
     "Demos/TreeList/**/React/**/*.ts",
     "Demos/TreeList/**/React/**/*.tsx",
-    "Demos/DataGrid/**/React/**/*.ts",
-    "Demos/DataGrid/**/React/**/*.tsx"
+    "Demos/FileUploader/**/React/**/*.tsx",
+    "Demos/FileUploader/**/React/**/*.ts",
+    "Demos/LoadPanel/**/React/**/*.tsx",
+    "Demos/LoadPanel/**/React/**/*.ts",
+    "Demos/Lookup/**/React/**/*.tsx",
+    "Demos/Lookup/**/React/**/*.ts",
+    "Demos/Map/**/React/**/*.tsx",
+    "Demos/Map/**/React/**/*.ts",
+    "Demos/NumberBox/**/React/**/*.tsx",
+    "Demos/NumberBox/**/React/**/*.ts",
+    "Demos/Popover/**/React/**/*.tsx",
+    "Demos/Popover/**/React/**/*.ts",
+    "Demos/Popup/**/React/**/*.tsx",
+    "Demos/Popup/**/React/**/*.ts",
+    "Demos/ProgressBar/**/React/**/*.tsx",
+    "Demos/ProgressBar/**/React/**/*.ts",
+    "Demos/RangeSlider/**/React/**/*.tsx",
+    "Demos/RangeSlider/**/React/**/*.ts"
   ]
 }

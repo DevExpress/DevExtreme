@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import { NumberBox, type NumberBoxTypes } from 'devextreme-react/number-box';
+import { NumberBox } from 'devextreme-react/number-box';
+import type { NumberBoxTypes } from 'devextreme-react/number-box';
 
 const simpleLabel = { 'aria-label': 'Simple' };
 const withSpinAndButtonsLabel = { 'aria-label': 'With Spin And Buttons' };
@@ -8,20 +9,20 @@ const maxAndMinLabel = { 'aria-label': 'Min And Max' };
 const salesLabel = { 'aria-label': 'Sales' };
 const stockLabel = { 'aria-label': 'Stock' };
 
-const keyDown = (e: NumberBoxTypes.KeyDownEvent) => {
-  const { event } = e;
-  const str = event.key;
-  if (/^[.,e]$/.test(str)) {
-    event.preventDefault();
-  }
-};
+const MAX_SALES = 30;
 
 function App() {
   const [value, setValue] = useState(16);
-  const [max] = useState(30);
 
-  const valueChanged = useCallback((e: NumberBoxTypes.ValueChangedEvent) => {
-    setValue(e.value);
+  const keyDown = useCallback(({ event }: NumberBoxTypes.KeyDownEvent): void => {
+    const str = event.key;
+    if (/^[.,e]$/.test(str)) {
+      event.preventDefault();
+    }
+  }, []);
+
+  const valueChanged = useCallback(({ value }: NumberBoxTypes.ValueChangedEvent): void => {
+    setValue(value);
   }, []);
 
   return (
@@ -76,7 +77,7 @@ function App() {
           <div className="dx-field-value">
             <NumberBox
               value={value}
-              max={max}
+              max={MAX_SALES}
               min={0}
               showSpinButtons={true}
               onKeyDown={keyDown}
@@ -92,7 +93,7 @@ function App() {
               min={0}
               showSpinButtons={false}
               readOnly={true}
-              value={max - value}
+              value={MAX_SALES - value}
               inputAttr={stockLabel}
             />
           </div>

@@ -1,4 +1,6 @@
-export const employees = [{
+import type { Employee } from './types.ts';
+
+export const employees: Employee[] = [{
   ID: 1,
   FirstName: 'John',
   LastName: 'Heart',
