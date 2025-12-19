@@ -1,7 +1,8 @@
 import React from 'react';
-import { Tooltip, ITooltipOptions } from 'devextreme-react/tooltip';
+import { Tooltip } from 'devextreme-react/tooltip';
+import type { TooltipTypes } from 'devextreme-react/tooltip';
 
-const animationConfig: ITooltipOptions['animation'] = {
+const animationConfig: TooltipTypes.Properties['animation'] = {
   show: {
     type: 'slide',
     from: {

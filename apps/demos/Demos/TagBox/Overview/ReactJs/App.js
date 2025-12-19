@@ -15,7 +15,7 @@ const dataSource = new ArrayStore({
 function App() {
   const [editableProducts, setEditableProducts] = useState([...simpleProducts]);
   const [target, setTarget] = useState(null);
-  const [product, setProduct] = useState({});
+  const [product, setProduct] = useState(null);
   const onCustomItemCreating = useCallback(
     (args) => {
       const newValue = args.text;
@@ -33,7 +33,7 @@ function App() {
   }, []);
   const getAltText = useCallback((text) => `${text}. Picture`, []);
   return (
-    <React.Fragment>
+    <>
       <div className="dx-fieldset">
         <div className="dx-field">
           <div className="dx-field-label">Default mode</div>
@@ -177,7 +177,7 @@ function App() {
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 export default App;

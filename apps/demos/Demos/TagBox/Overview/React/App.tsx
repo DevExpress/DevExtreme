@@ -6,26 +6,25 @@ import { ArrayStore } from 'devextreme-react/common/data';
 
 import Item from './Item.tsx';
 import Tag from './Tag.tsx';
-import {
-  simpleProducts, products, productLabel, Product,
-} from './data.ts';
+import { simpleProducts, products, productLabel } from './data.ts';
+import type { Product } from './types.ts';
 
-const disabledValue = [simpleProducts[0]];
-const value = [1, 2];
+const disabledValue: string[] = [simpleProducts[0]];
+const value: number[] = [1, 2];
 const dataSource = new ArrayStore({
   data: products,
   key: 'Id',
 });
 
 function App() {
-  const [editableProducts, setEditableProducts] = useState([...simpleProducts]);
-  const [target, setTarget] = useState(null);
-  const [product, setProduct] = useState<Product>({});
+  const [editableProducts, setEditableProducts] = useState<string[]>([...simpleProducts]);
+  const [target, setTarget] = useState<HTMLElement | null>(null);
+  const [product, setProduct] = useState<Product | null>(null);
 
   const onCustomItemCreating = useCallback(
-    (args: TagBoxTypes.CustomItemCreatingEvent) => {
+    (args: TagBoxTypes.CustomItemCreatingEvent): void => {
       const newValue = args.text;
-      const isItemInDataSource = editableProducts.some((item) => item === newValue);
+      const isItemInDataSource = editableProducts.some((item: string): boolean => item === newValue);
       if (!isItemInDataSource) {
         setEditableProducts([newValue, ...editableProducts]);
       }
@@ -34,15 +33,15 @@ function App() {
     [editableProducts],
   );
 
-  const onMouseEnter = useCallback((e: { currentTarget: any }, newProduct) => {
+  const onMouseEnter = useCallback((e: React.MouseEvent<HTMLElement>, newProduct: Product): void => {
     setTarget(e.currentTarget);
     setProduct(newProduct);
   }, []);
 
-  const getAltText = useCallback((text: String) => `${text}. Picture`, []);
+  const getAltText = useCallback((text: string): string => `${text}. Picture`, []);
 
   return (
-    <React.Fragment>
+    <>
       <div className="dx-fieldset">
         <div className="dx-field">
           <div className="dx-field-label">Default mode</div>
@@ -186,7 +185,7 @@ function App() {
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 
