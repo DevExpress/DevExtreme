@@ -154,6 +154,16 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
+  protected _getSmartPasteButtonConfig() {
+    return {
+      text: 'Smart Paste',
+      icon: 'clipboardpastesparkle',
+      onClick: () => {
+        this._editForm?.smartPaste();
+      },
+    };
+  }
+
   protected _showEditPopup(rowIndex, repaintForm?) {
     const isMobileDevice = devices.current().deviceType !== 'desktop';
     const editPopupClass = this.addWidgetPrefix(EDIT_POPUP_CLASS);
@@ -166,20 +176,13 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
       },
     ];
 
-    // Add Smart Paste button if aiIntegration is configured
     const editFormOptions = this.option(EDITING_FORM_OPTION_NAME);
     if (editFormOptions?.aiIntegration) {
       toolbarItems.unshift({
         toolbar: 'bottom',
         location: 'before',
         widget: 'dxButton',
-        options: {
-          text: 'Smart Paste 22',
-          icon: 'smartPaste',
-          onClick: () => {
-            this._editForm?.smartPaste();
-          },
-        },
+        options: this._getSmartPasteButtonConfig(),
       });
     }
 
@@ -485,15 +488,8 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
       if (!isPopupForm) {
         const $buttonsContainer = $('<div>').addClass(this.addWidgetPrefix(FORM_BUTTONS_CONTAINER_CLASS)).appendTo($container);
 
-        // Add Smart Paste button if aiIntegration is configured
         if (editFormOptions?.aiIntegration) {
-          this._createComponent($('<div>').appendTo($buttonsContainer), Button, {
-            text: 'Smart Paste',
-            icon: 'paste',
-            onClick: () => {
-              this._editForm?.smartPaste();
-            },
-          });
+          this._createComponent($('<div>').appendTo($buttonsContainer), Button, this._getSmartPasteButtonConfig());
         }
 
         this._createComponent($('<div>').appendTo($buttonsContainer), Button, this._getSaveButtonConfig());
