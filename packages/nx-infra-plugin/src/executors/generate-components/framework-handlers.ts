@@ -1,4 +1,5 @@
 import { Framework, ComponentGeneratorTplConfig } from './schema';
+import { generateAngularComponents } from './angular-generator';
 
 export interface GenerationConfig {
   metaData: any;
@@ -73,9 +74,23 @@ function createVueHandler(): FrameworkHandler {
   };
 }
 
+function createAngularHandler(): FrameworkHandler {
+  return {
+    getDefaults: () => ({
+      configName: 'angularConfig',
+      generationFunctionName: 'generateAngularComponents',
+    }),
+
+    executeGeneration: async (_generateFunction, config, metaData) => {
+      return generateAngularComponents(config, metaData);
+    },
+  };
+}
+
 const FRAMEWORK_HANDLERS: Record<Framework, FrameworkHandler> = {
   react: createReactHandler(),
   vue: createVueHandler(),
+  angular: createAngularHandler(),
 };
 
 export function getFrameworkHandler(framework: Framework): FrameworkHandler {
