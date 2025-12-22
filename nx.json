@@ -8,6 +8,15 @@
       "{projectRoot}/**/*.ts",
       "{projectRoot}/tsconfig.json",
       { "externalDependencies": [ "devextreme-internal-tools", "ts-node", "typescript"] }
+    ],
+    "devextreme-sources": [
+      "{projectRoot}/js/**/*",
+      "{projectRoot}/ts/**/*"
+    ],
+    "devextreme-build-config": [
+      "{projectRoot}/build/**/*",
+      "{projectRoot}/webpack.config.js",
+      "{projectRoot}/gulpfile.js"
     ]
   },
   "targetDefaults": {

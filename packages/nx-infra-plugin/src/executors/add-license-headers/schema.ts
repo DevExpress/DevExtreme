@@ -4,4 +4,8 @@ export interface AddLicenseHeadersExecutorSchema {
   separatorBetweenBannerAndContent?: string;
   includePatterns?: string[];
   excludePatterns?: string[];
+  licenseTemplateFile?: string;
+  eulaUrl?: string;
+  prependAfterLicense?: string;
+  version?: string;
 }

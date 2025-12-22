@@ -2246,6 +2246,9 @@ importers:
       karma:
         specifier: '>=6.0.0'
         version: 6.4.4
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.23
       ng-packagr:
         specifier: '>=19.0.0'
         version: 19.2.2(@angular/compiler-cli@21.0.8(@angular/compiler@21.0.8)(typescript@4.9.5))(tslib@2.8.1)(typescript@4.9.5)
@@ -2262,6 +2265,9 @@ importers:
       '@types/jest':
         specifier: 29.5.14
         version: 29.5.14
+      '@types/lodash':
+        specifier: ^4.17.0
+        version: 4.17.13
       '@types/node':
         specifier: 18.19.130
         version: 18.19.130
@@ -15122,7 +15128,6 @@ packages:
     engines: {node: '>=0.6.0', teleport: '>=0.2.0'}
     deprecated: |-
       You or someone you depend on is using Q, the JavaScript Promise library that gave JavaScript developers strong feelings about promises. They can almost certainly migrate to the native JavaScript promise now. Thank you literally everyone for joining me in this bet against the odds. Be excellent to each other.
-
       (For a CapTP with native promises, see @endo/eventual-send and @endo/captp)
 
   qified@0.5.3:
@@ -22465,8 +22470,8 @@ snapshots:
       espree: 7.3.1
       globals: 13.24.0
       ignore: 4.0.6
-      import-fresh: 3.3.0
-      js-yaml: 3.14.1
+      import-fresh: 3.3.1
+      js-yaml: 3.14.2
       minimatch: 3.1.2
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
@@ -22478,8 +22483,8 @@ snapshots:
       debug: 4.4.3
       espree: 10.4.0
       globals: 14.0.0
-      ignore: 5.3.1
-      import-fresh: 3.3.0
+      ignore: 5.3.2
+      import-fresh: 3.3.1
       js-yaml: 4.1.0
       minimatch: 3.1.2
       strip-json-comments: 3.1.1
@@ -22493,7 +22498,7 @@ snapshots:
       espree: 10.4.0
       globals: 14.0.0
       ignore: 5.3.2
-      import-fresh: 3.3.0
+      import-fresh: 3.3.1
       js-yaml: 4.1.0
       minimatch: 3.1.2
       strip-json-comments: 3.1.1
@@ -25396,7 +25401,7 @@ snapshots:
 
   '@types/clean-css@4.2.11':
     dependencies:
-      '@types/node': 18.19.64
+      '@types/node': 20.12.8
       source-map: 0.6.1
 
   '@types/connect-history-api-fallback@1.5.4':
@@ -25494,7 +25499,7 @@ snapshots:
   '@types/fs-extra@11.0.4':
     dependencies:
       '@types/jsonfile': 6.1.4
-      '@types/node': 18.19.64
+      '@types/node': 20.12.8
 
   '@types/glob@7.2.0':
     dependencies:
@@ -26664,7 +26669,7 @@ snapshots:
 
   '@yarnpkg/parsers@3.0.0-rc.46':
     dependencies:
-      js-yaml: 3.14.1
+      js-yaml: 3.14.2
       tslib: 2.6.3
 
   '@zkochan/js-yaml@0.0.7':
@@ -27119,7 +27124,7 @@ snapshots:
       call-bind: 1.0.8
       define-properties: 1.2.1
       es-abstract: 1.24.0
-      es-shim-unscopables: 1.0.2
+      es-shim-unscopables: 1.1.0
 
   array.prototype.flatmap@1.3.3:
     dependencies:
@@ -28767,7 +28772,7 @@ snapshots:
   cosmiconfig@6.0.0:
     dependencies:
       '@types/parse-json': 4.0.2
-      import-fresh: 3.3.0
+      import-fresh: 3.3.1
       parse-json: 5.2.0
       path-type: 4.0.0
       yaml: 1.10.2
@@ -30606,7 +30611,7 @@ snapshots:
   eslint-plugin-es-x@7.8.0(eslint@9.18.0(jiti@2.6.1)):
     dependencies:
       '@eslint-community/eslint-utils': 4.9.1(eslint@9.18.0(jiti@2.6.1))
-      '@eslint-community/regexpp': 4.12.1
+      '@eslint-community/regexpp': 4.12.2
       eslint: 9.18.0(jiti@2.6.1)
       eslint-compat-utils: 0.5.1(eslint@9.18.0(jiti@2.6.1))
 
@@ -31018,10 +31023,10 @@ snapshots:
       glob-parent: 5.1.2
       globals: 13.24.0
       ignore: 4.0.6
-      import-fresh: 3.3.0
+      import-fresh: 3.3.1
       imurmurhash: 0.1.4
       is-glob: 4.0.3
-      js-yaml: 3.14.1
+      js-yaml: 3.14.2
       json-stable-stringify-without-jsonify: 1.0.1
       levn: 0.4.1
       lodash.merge: 4.6.2
@@ -31041,8 +31046,8 @@ snapshots:
 
   eslint@9.18.0(jiti@2.6.1):
     dependencies:
-      '@eslint-community/eslint-utils': 4.9.0(eslint@9.18.0(jiti@2.6.1))
-      '@eslint-community/regexpp': 4.12.1
+      '@eslint-community/eslint-utils': 4.9.1(eslint@9.18.0(jiti@2.6.1))
+      '@eslint-community/regexpp': 4.12.2
       '@eslint/config-array': 0.19.2
       '@eslint/core': 0.10.0
       '@eslint/eslintrc': 3.3.1
@@ -31067,7 +31072,7 @@ snapshots:
       file-entry-cache: 8.0.0
       find-up: 5.0.0
       glob-parent: 6.0.2
-      ignore: 5.3.1
+      ignore: 5.3.2
       imurmurhash: 0.1.4
       is-glob: 4.0.3
       json-stable-stringify-without-jsonify: 1.0.1
@@ -31811,7 +31816,7 @@ snapshots:
 
   front-matter@4.0.2:
     dependencies:
-      js-yaml: 3.14.1
+      js-yaml: 3.14.2
 
   fs-constants@1.0.0: {}
 
@@ -32321,7 +32326,7 @@ snapshots:
       vinyl-fs: 4.0.0
     optionalDependencies:
       '@types/eslint': 9.6.1
-      '@types/node': 18.19.64
+      '@types/node': 20.12.8
     transitivePeerDependencies:
       - jiti
       - supports-color
@@ -33129,7 +33134,6 @@ snapshots:
     dependencies:
       parent-module: 1.0.1
       resolve-from: 4.0.0
-    optional: true
 
   import-lazy@3.1.0: {}
 

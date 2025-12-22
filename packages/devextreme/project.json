@@ -7,6 +7,87 @@
     "devextreme-scss"
   ],
   "targets": {
+    "clean:artifacts": {
+      "executor": "devextreme-nx-infra-plugin:clean",
+      "options": {
+        "targetDirectory": "./artifacts",
+        "excludePatterns": [
+          "./artifacts/css",
+          "./artifacts/npm/devextreme/package.json",
+          "./artifacts/npm/devextreme-dist/package.json"
+        ]
+      }
+    },
+    "clean:cldr-data": {
+      "executor": "devextreme-nx-infra-plugin:clean",
+      "options": {
+        "targetDirectory": "./js/__internal/core/localization/cldr-data"
+      }
+    },
+    "build:localization:generate": {
+      "executor": "devextreme-nx-infra-plugin:localization",
+      "options": {
+        "messagesDir": "./js/localization/messages",
+        "messageTemplate": "./build/gulp/localization-template.jst",
+        "messageOutputDir": "./artifacts/js/localization",
+        "generatedTemplate": "./build/gulp/generated_js.jst",
+        "cldrDataOutputDir": "./js/__internal/core/localization/cldr-data",
+        "defaultMessagesOutputDir": "./js/__internal/core/localization"
+      },
+      "inputs": [
+        "{projectRoot}/js/localization/messages/**/*.json",
+        "{projectRoot}/build/gulp/localization-template.jst",
+        "{projectRoot}/build/gulp/generated_js.jst"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/js/localization",
+        "{projectRoot}/js/__internal/core/localization/default_messages.ts",
+        "{projectRoot}/js/__internal/core/localization/cldr-data"
+      ],
+      "cache": true
+    },
+    "build:localization:headers": {
+      "executor": "devextreme-nx-infra-plugin:add-license-headers",
+      "options": {
+        "targetDirectory": "./artifacts/js/localization",
+        "licenseTemplateFile": "./build/gulp/license-header.txt",
+        "eulaUrl": "https://js.devexpress.com/Licensing/",
+        "prependAfterLicense": "\"use strict\";\n\n",
+        "separatorBetweenBannerAndContent": "",
+        "includePatterns": ["**/*.js"]
+      },
+      "inputs": [
+        "{projectRoot}/artifacts/js/localization/**/*.js",
+        "{projectRoot}/build/gulp/license-header.txt"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/js/localization"
+      ],
+      "cache": true
+    },
+    "build:localization": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "pnpm nx clean:cldr-data devextreme",
+          "pnpm nx build:localization:generate devextreme",
+          "pnpm nx build:localization:headers devextreme"
+        ],
+        "parallel": false
+      },
+      "inputs": [
+        "{projectRoot}/js/localization/messages/**/*.json",
+        "{projectRoot}/build/gulp/localization-template.jst",
+        "{projectRoot}/build/gulp/generated_js.jst",
+        "{projectRoot}/build/gulp/license-header.txt"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/js/localization",
+        "{projectRoot}/js/__internal/core/localization/default_messages.ts",
+        "{projectRoot}/js/__internal/core/localization/cldr-data"
+      ],
+      "cache": true
+    },
     "build": {
       "executor": "nx:run-script",
       "options": {
