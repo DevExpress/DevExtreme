@@ -2393,6 +2393,122 @@ QUnit.module('Menu tests', {
         submenu = getSubMenuInstance($rootMenuItem);
         assert.ok(submenu.option('visible'), 'submenu shown');
     });
+
+    QUnit.test('focusedElement should be set to main menu item after hiding submenu (T1291581)', function(assert) {
+        const menu = $('#menu').dxMenu({
+            orientation: 'horizontal',
+            focusStateEnabled: true,
+            items: [
+                {
+                    text: 'Item 1',
+                    items: [
+                        { text: 'Item 11', items: [ { text: 'Item 111' }, { text: 'Item 112' }, { text: 'Item 113' } ] },
+                        { text: 'Item 12' }
+                    ],
+                },
+            ]
+        }).dxMenu('instance');
+        const keyboard = keyboardMock(menu.itemsContainer());
+
+        keyboard.press('enter')
+            .press('down')
+            .press('down');
+
+        assert.strictEqual($(menu.option('focusedElement')).text(), 'Item 12', 'focusedElement is submenu item');
+
+        keyboard.press('enter');
+
+        const mainMenuItemText = $(menu.itemElements()[0]).text();
+
+        assert.strictEqual($(menu.option('focusedElement')).text(), mainMenuItemText, 'focusedElement is main menu item');
+    });
+
+    QUnit.test('focusedElement should be set to main menu item after hiding nested submenu (T1291581)', function(assert) {
+        const menu = $('#menu').dxMenu({
+            orientation: 'horizontal',
+            focusStateEnabled: true,
+            items: [
+                {
+                    text: 'Item 1',
+                    items: [
+                        { text: 'Item 11', items: [ { text: 'Item 111' }, { text: 'Item 112' }, { text: 'Item 113' } ] },
+                        { text: 'Item 12' }
+                    ],
+                },
+            ]
+        }).dxMenu('instance');
+        const keyboard = keyboardMock(menu.itemsContainer());
+
+        keyboard.press('enter')
+            .press('down')
+            .press('enter')
+            .press('right')
+            .press('down');
+
+        assert.strictEqual($(menu.option('focusedElement')).text(), 'Item 112', 'focusedElement is submenu item');
+
+        keyboard.press('enter');
+
+        const mainMenuItemText = $(menu.itemElements()[0]).text();
+
+        assert.strictEqual($(menu.option('focusedElement')).text(), mainMenuItemText, 'focusedElement is main menu item');
+    });
+
+    QUnit.test('focusedElement should not be moved if submenu hiding was cancelled (T1291581)', function(assert) {
+        const menu = $('#menu').dxMenu({
+            orientation: 'horizontal',
+            focusStateEnabled: true,
+            items: [
+                {
+                    text: 'Item 1',
+                    items: [
+                        { text: 'Item 11', items: [ { text: 'Item 111' }, { text: 'Item 112' }, { text: 'Item 113' } ] },
+                        { text: 'Item 12' }
+                    ],
+                },
+            ],
+            onSubmenuHiding: function(e) {
+                e.cancel = true;
+            }
+        }).dxMenu('instance');
+        const keyboard = keyboardMock(menu.itemsContainer());
+
+        keyboard.press('enter')
+            .press('down')
+            .press('down');
+
+        const { focusedElement: initialFocusedElement } = menu.option();
+
+        keyboard.press('enter');
+
+        assert.strictEqual($(menu.option('focusedElement')).text(), 'Item 12', 'focusedElement is submenu item');
+        assert.strictEqual(menu.option('focusedElement'), initialFocusedElement, 'focusedElement not changed');
+    });
+
+    QUnit.test('focusedElement should not be set to main menu item after hiding nested submenu if no item was focused (T1304251)', function(assert) {
+        const menu = createMenu({
+            items: [{ text: 'Item 1', items: [{ text: 'Item 11' }, { text: 'Item 12' }, { text: 'Item 13' }] }],
+            showFirstSubmenuMode: { name: 'onHover', delay: 0 },
+            hideSubmenuOnMouseLeave: true
+        });
+        const $rootMenuItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`);
+
+        $(menu.element).trigger($.Event('dxhoverstart', { target: $rootMenuItem.get(0) }));
+        $($rootMenuItem).trigger('dxpointermove');
+        this.clock.tick(0);
+
+        const submenu = getSubMenuInstance($rootMenuItem);
+        const $item = $(submenu._overlay.content()).find(`.${DX_MENU_ITEM_CLASS}`);
+
+        $(menu.element).trigger($.Event('dxhoverstart', { target: $item.get(1) }));
+        $(menu.element).trigger($.Event('dxhoverend', { target: $item.get(1) }));
+        $(menu.element).trigger($.Event('dxhoverstart', { target: window }));
+        $($(submenu._overlay.content()).find('.dx-submenu')).trigger('dxhoverend');
+        this.clock.tick(0);
+
+        assert.strictEqual($rootMenuItem.eq(0).hasClass(DX_STATE_FOCUSED_CLASS), false, 'root menu item has not focused class');
+        assert.strictEqual(menu.instance.option('focusedElement'), null, 'menu focusedElement is null');
+    });
 });
 
 QUnit.module('keyboard navigation', {
@@ -2840,62 +2956,6 @@ QUnit.module('keyboard navigation', {
             .press('up');
 
         assert.equal($(this.instance._visibleSubmenu.option('focusedElement')).text(), 'Item 113');
-    });
-
-    QUnit.test('focusedElement should be set to main menu item after hiding submenu', function(assert) {
-        this.instance.option({
-            orientation: 'horizontal',
-            items: [
-                {
-                    text: 'Item 1',
-                    items: [
-                        { text: 'Item 11', items: [ { text: 'Item 111' }, { text: 'Item 112' }, { text: 'Item 113' } ] },
-                        { text: 'Item 12' }
-                    ],
-                },
-            ]
-        });
-
-        this.keyboard.press('enter')
-            .press('down')
-            .press('down');
-
-        assert.strictEqual($(this.instance.option('focusedElement')).text(), 'Item 12', 'focusedElement is submenu item');
-
-        this.keyboard.press('enter');
-
-        const mainMenuItemText = $(this.instance.itemElements()[0]).text();
-
-        assert.strictEqual($(this.instance.option('focusedElement')).text(), mainMenuItemText, 'focusedElement is main menu item');
-    });
-
-    QUnit.test('focusedElement should be set to main menu item after hiding nested submenu', function(assert) {
-        this.instance.option({
-            orientation: 'horizontal',
-            items: [
-                {
-                    text: 'Item 1',
-                    items: [
-                        { text: 'Item 11', items: [ { text: 'Item 111' }, { text: 'Item 112' }, { text: 'Item 113' } ] },
-                        { text: 'Item 12' }
-                    ],
-                },
-            ]
-        });
-
-        this.keyboard.press('enter')
-            .press('down')
-            .press('enter')
-            .press('right')
-            .press('down');
-
-        assert.strictEqual($(this.instance.option('focusedElement')).text(), 'Item 112', 'focusedElement is submenu item');
-
-        this.keyboard.press('enter');
-
-        const mainMenuItemText = $(this.instance.itemElements()[0]).text();
-
-        assert.strictEqual($(this.instance.option('focusedElement')).text(), mainMenuItemText, 'focusedElement is main menu item');
     });
 });
 

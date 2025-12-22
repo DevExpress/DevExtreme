@@ -1,5 +1,5 @@
 import React from 'react';
-import { ICommonAnnotationSettingsProps } from 'devextreme-react/vector-map';
+import type { ICommonAnnotationSettingsProps } from 'devextreme-react/vector-map';
 
 const getImagePath = (name: string) => `../../../../images/flags/${name?.replace(/\s/, '')}.svg`;
 const formatNumber = new Intl.NumberFormat('en-US', {

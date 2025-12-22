@@ -1,10 +1,8 @@
 <dx-chart id="chart" [dataSource]="countriesInfo">
-  <dxi-chart-series
-    *ngFor="let energy of energySources"
-    [valueField]="energy.value"
-    [name]="energy.name"
-  >
+  @for(energy of energySources; track energy.name) {
+  <dxi-chart-series [valueField]="energy.value" [name]="energy.name">
   </dxi-chart-series>
+  }
   <dxo-chart-common-series-settings argumentField="country" type="spline">
     <dxo-chart-point hoverMode="allArgumentPoints"></dxo-chart-point>
   </dxo-chart-common-series-settings>

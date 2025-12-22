@@ -1,5 +1,5 @@
 import React from 'react';
-import { PieChartTypes } from 'devextreme-react/pie-chart';
+import type { PieChartTypes } from 'devextreme-react/pie-chart';
 
 function getImagePath(point: PieChartTypes.PointInfo['point']) {
   return `../../../../images/flags/${point.data.name.replace(/\s/, '')}.svg`;

@@ -1,4 +1,5 @@
 import { Component, Input, SimpleChanges, ViewChild } from '@angular/core';
+import { DxFormModule, DxSelectBoxModule } from 'devextreme-angular';
 import { DxFormComponent, type DxFormTypes } from 'devextreme-angular/ui/form';
 import { type DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import type { BookingFormData } from '../app.types';
@@ -12,6 +13,10 @@ if (window && window.config?.packageConfigPaths) {
 @Component({
   selector: 'room-meal-plan-form',
   templateUrl: `.${modulePrefix}/room-meal-plan-form/room-meal-plan-form.component.html`,
+  imports: [
+    DxFormModule,
+    DxSelectBoxModule,
+  ],
 })
 export class RoomMealPlanFormComponent {
   @ViewChild('formComponent', { static: false }) form!: DxFormComponent;

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import Diagram, { DiagramRef } from 'devextreme-react/diagram';
+import Diagram from 'devextreme-react/diagram';
+import type { DiagramRef } from 'devextreme-react/diagram';
 import 'whatwg-fetch';
 
 export default function App() {

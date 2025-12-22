@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
-import { TreeList, Selection, Column } from 'devextreme-react/tree-list';
 import { CheckBox } from 'devextreme-react/check-box';
 import { SelectBox } from 'devextreme-react/select-box';
+import { TreeList, Selection, Column } from 'devextreme-react/tree-list';
 import { employees, selectionModeLabel } from './data.js';
 
 const expandedRowKeys = [1, 2, 10];
@@ -41,9 +41,9 @@ const App = () => {
       <TreeList
         id="employees"
         dataSource={employees}
-        showRowLines={true}
-        showBorders={true}
-        columnAutoWidth={true}
+        showRowLines
+        showBorders
+        columnAutoWidth
         defaultExpandedRowKeys={expandedRowKeys}
         selectedRowKeys={selectedRowKeys}
         keyExpr="ID"

@@ -1,8 +1,11 @@
+import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  NgModule, Component, ViewChild, enableProdMode, AfterViewInit,
+  Component,
+  ViewChild,
+  enableProdMode,
+  AfterViewInit,
+  provideZoneChangeDetection,
 } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
   DxSelectBoxModule,
   DxTextAreaModule,
@@ -28,6 +31,12 @@ if (window && window.config?.packageConfigPaths) {
   providers: [Service],
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
+  imports: [
+    DxSelectBoxModule,
+    DxTextAreaModule,
+    DxFormModule,
+    DxTooltipModule,
+  ],
 })
 
 export class AppComponent implements AfterViewInit {
@@ -86,17 +95,8 @@ export class AppComponent implements AfterViewInit {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxSelectBoxModule,
-    DxTextAreaModule,
-    DxFormModule,
-    DxTooltipModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

@@ -11,7 +11,6 @@ import CardView, {
   AsyncRule,
   CustomRule,
 } from 'devextreme-react/card-view';
-import 'devextreme-react/text-area';
 import { employees } from './data.js';
 
 function altExpr({ fullName }) {
@@ -25,22 +24,21 @@ function calculateFullName({ firstName, lastName }) {
 }
 const emailValidationUrl =
   'https://js.devexpress.com/Demos/NetCore/RemoteValidation/CheckUniqueEmailAddress';
-async function emailValidationCallback(params) {
+async function emailValidationCallback(options) {
   const response = await fetch(emailValidationUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json;',
     },
     body: JSON.stringify({
-      id: params.data.id,
-      email: params.value,
+      id: options.data.id,
+      email: options.value,
     }),
   });
-  const result = await response.json();
-  return result;
+  return response.json();
 }
-function hireDateValidationCallback(params) {
-  return new Date(params.value) > new Date(params.data.birthDate);
+function hireDateValidationCallback(options) {
+  return new Date(options.value) > new Date(options.data.birthDate);
 }
 const App = () => (
   <CardView

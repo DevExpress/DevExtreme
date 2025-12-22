@@ -32,11 +32,13 @@
   </dxi-vector-map-legend>
   <div *dxTemplate="let info of 'tooltipContent'" class="state-tooltip">
     <h4>{{ info.attribute("name") }}</h4>
-    <div *ngIf="gdpData[info.attribute('name')] as countryGDPData" id="nominal">
+    @if (gdpData[info.attribute('name')]; as countryGDPData) {
+    <div id="nominal">
       Nominal GDP: $<span>{{ countryGDPData.total | number : "1.0-0" }}</span
       >M
     </div>
-    <div *ngIf="getPieData(info.attribute('name')) as data; else noData">
+    } @if (getPieData(info.attribute('name')); as data) {
+    <div>
       <dx-pie-chart id="gdp-sectors" [dataSource]="data" [animation]="false">
         <dxi-pie-chart-series argumentField="name" valueField="value">
           <dxo-pie-chart-label
@@ -52,6 +54,8 @@
         <dxo-pie-chart-legend [visible]="false"></dxo-pie-chart-legend>
       </dx-pie-chart>
     </div>
-    <ng-template #noData>No economic development data</ng-template>
+    } @else {
+    <div>No economic development data</div>
+    }
   </div>
 </dx-vector-map>

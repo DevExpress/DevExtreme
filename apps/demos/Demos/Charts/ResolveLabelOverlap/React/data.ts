@@ -1,4 +1,4 @@
-import { ChartTypes } from 'devextreme-react/chart';
+import type { ChartTypes } from 'devextreme-react/chart';
 
 export const overlappingModes: (ChartTypes.ChartsAxisLabelOverlap)[] = ['stagger', 'rotate', 'hide', 'none'];
 

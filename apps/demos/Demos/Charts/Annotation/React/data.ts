@@ -1,4 +1,4 @@
-import { IAnnotationProps } from 'devextreme-react/chart';
+import type { IAnnotationProps } from 'devextreme-react/chart';
 
 interface AnnotationSource {
   date: Date,

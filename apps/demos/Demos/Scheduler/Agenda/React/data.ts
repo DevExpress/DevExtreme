@@ -1,4 +1,4 @@
-import { SchedulerTypes } from 'devextreme-react/scheduler';
+import type { SchedulerTypes } from 'devextreme-react/scheduler';
 
 type Appointment = SchedulerTypes.Appointment & { id: number; priorityId: number; assigneeId: number[]; };
 

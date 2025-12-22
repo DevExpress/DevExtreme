@@ -1,12 +1,10 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import {
-  DxButtonModule,
   DxCardViewModule,
   DxPopupModule,
 } from 'devextreme-angular';
-import { CardInfo } from 'devextreme-angular/ui/card-view';
+import { DxCardViewTypes } from 'devextreme-angular/ui/card-view';
 import { Service, Vehicle } from './app.service';
 import { VehicleCard } from './vehicle-card/vehicle-card.component';
 import { LicenseInfo } from './license-info/license-info.component';
@@ -25,6 +23,12 @@ if (window && window.config?.packageConfigPaths) {
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   providers: [Service],
+  imports: [
+    DxCardViewModule,
+    DxPopupModule,
+    LicenseInfo,
+    VehicleCard,
+  ],
 })
 export class AppComponent {
   vehicles: Vehicle[];
@@ -46,22 +50,14 @@ export class AppComponent {
     this.popupVisible = false;
   }
 
-  getFormattedPrice(card: CardInfo): string {
+  getFormattedPrice(card: DxCardViewTypes.CardInfo): string {
     const priceText = card.fields.find((f) => f?.column?.dataField === 'Price');
     return priceText?.text ?? '';
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxCardViewModule,
-    DxPopupModule,
-    DxButtonModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent, VehicleCard, LicenseInfo],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

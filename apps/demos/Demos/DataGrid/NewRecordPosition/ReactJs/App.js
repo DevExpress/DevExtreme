@@ -43,7 +43,7 @@ const App = () => {
     setEditRowKey(key);
   }, []);
   return (
-    <React.Fragment>
+    <>
       <DataGrid
         id="gridContainer"
         dataSource={dataSource}
@@ -128,7 +128,7 @@ const App = () => {
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 export default App;

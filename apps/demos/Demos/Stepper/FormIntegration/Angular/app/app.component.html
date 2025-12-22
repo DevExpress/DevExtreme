@@ -4,14 +4,15 @@
   [(selectedIndex)]="selectedIndex"
   (onSelectionChanging)="onSelectionChanging($event)"
 >
+  @for (step of steps; track step) {
   <dxi-stepper-item
-    *ngFor="let step of steps"
     [label]="step.label"
     [icon]="step.icon"
     [isValid]="step.isValid"
     [hint]="step.hint"
     [optional]="step.optional"
   ></dxi-stepper-item>
+  }
 </dx-stepper>
 <div class="content">
   <dx-multi-view
@@ -61,10 +62,12 @@
   </dx-multi-view>
   <div class="nav-panel">
     <div class="current-step">
-      <span *ngIf="!isConfirmed">
+      @if (!isConfirmed) {
+      <span>
         Step <span class="selected-index">{{ selectedIndex + 1 }}</span> of
         {{ steps.length }}
       </span>
+      }
     </div>
     <div class="nav-buttons">
       <dx-button

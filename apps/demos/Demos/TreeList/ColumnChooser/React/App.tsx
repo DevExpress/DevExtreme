@@ -4,7 +4,10 @@ import {
 } from 'devextreme-react/tree-list';
 import { SelectBox } from 'devextreme-react/select-box';
 import { CheckBox } from 'devextreme-react/check-box';
+import type { CheckBoxTypes } from 'devextreme-react/check-box';
 import { employees, columnChooserModeLabel } from './data.ts';
+
+type CheckBoxValue = CheckBoxTypes.Properties['value'];
 
 const columnChooserModes = [{
   key: 'dragAndDrop' as const,
@@ -20,10 +23,10 @@ const searchEditorOptions = { placeholder: 'Search column' };
 
 const App = () => {
   const [mode, setMode] = useState<TreeListTypes.ColumnChooserMode>(columnChooserModes[1].key);
-  const [searchEnabled, setSearchEnabled] = useState(true);
-  const [allowSelectAll, setAllowSelectAll] = useState(true);
-  const [selectByClick, setSelectByClick] = useState(true);
-  const [recursive, setRecursive] = useState(true);
+  const [searchEnabled, setSearchEnabled] = useState<CheckBoxValue>(true);
+  const [allowSelectAll, setAllowSelectAll] = useState<CheckBoxValue>(true);
+  const [selectByClick, setSelectByClick] = useState<CheckBoxValue>(true);
+  const [recursive, setRecursive] = useState<CheckBoxValue>(true);
 
   const isDragMode = mode === columnChooserModes[0].key;
 

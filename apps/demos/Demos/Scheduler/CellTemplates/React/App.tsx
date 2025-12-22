@@ -1,8 +1,9 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
-import Scheduler, { type SchedulerTypes } from 'devextreme-react/scheduler';
+import Scheduler from 'devextreme-react/scheduler';
+import type { SchedulerTypes } from 'devextreme-react/scheduler';
+import type { FormRef } from 'devextreme-react/form';
 import notify from 'devextreme/ui/notify';
-import { FormRef } from 'devextreme-react/form';
 import { data, holidays } from './data.ts';
 import Utils from './utils.ts';
 import DataCell from './DataCell.tsx';

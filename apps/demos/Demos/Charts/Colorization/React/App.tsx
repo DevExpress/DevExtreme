@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import TreeMap, { Tooltip, ITooltipProps } from 'devextreme-react/tree-map';
+import TreeMap, { Tooltip } from 'devextreme-react/tree-map';
+import type { ITooltipProps } from 'devextreme-react/tree-map';
 import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
 import { salesAmount, colorizationOptions, colorizationTypeLabel } from './data.ts';
 

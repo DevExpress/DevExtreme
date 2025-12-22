@@ -1,6 +1,9 @@
 import React from 'react';
+
 import { TreeList, Column, ColumnFixing } from 'devextreme-react/tree-list';
-import { Employee, employees } from './data.ts';
+
+import { employees } from './data.ts';
+import type { Employee } from './data.ts';
 
 const calculateCellValue = (data: Employee) => [data.Title, data.FirstName, data.LastName].join(' ');
 

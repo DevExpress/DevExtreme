@@ -1,9 +1,6 @@
-import {
-  NgModule, Component, enableProdMode,
-} from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import notify from 'devextreme/ui/notify';
 import { ArrayStore } from 'devextreme-angular/common/data';
 import { DxDiagramModule, DxDiagramTypes } from 'devextreme-angular/ui/diagram';
@@ -25,6 +22,9 @@ if (window && window.config?.packageConfigPaths) {
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
   preserveWhitespaces: true,
+  imports: [
+    DxDiagramModule,
+  ],
 })
 export class AppComponent {
   orgItemsDataSource: ArrayStore;
@@ -118,15 +118,9 @@ export class AppComponent {
   );
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    DxDiagramModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
+    provideHttpClient(withFetch()),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

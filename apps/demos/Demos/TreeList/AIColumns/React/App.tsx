@@ -1,17 +1,23 @@
 import React from 'react';
+
 import TreeList, {
   Column,
   Scrolling,
   Paging,
   AI,
 } from 'devextreme-react/tree-list';
+import type { TreeListTypes } from 'devextreme-react/tree-list';
+
 import { employees } from './data.ts';
 import { aiIntegration } from './service.ts';
+import type { Employee as EmployeeType } from './types.ts';
 import Employee from './Employee.tsx';
 import Status from './Status.tsx';
 
-const onAIColumnRequestCreating = (e) => {
-  e.data = e.data.map((item) => ({
+const onAIColumnRequestCreating = (
+  e: TreeListTypes.AIColumnRequestCreatingEvent<EmployeeType>
+) => {
+  e.data = e.data.map((item: EmployeeType) => ({
     ID: item.ID,
     First_Name: item.First_Name,
     Last_Name: item.Last_Name,

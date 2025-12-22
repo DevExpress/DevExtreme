@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import Gantt, {
-  Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing, ContextMenu, IContextMenuProps,
+  Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing, ContextMenu,
 } from 'devextreme-react/gantt';
-import CheckBox, { ICheckBoxOptions } from 'devextreme-react/check-box';
+import type { IContextMenuProps } from 'devextreme-react/gantt';
+import CheckBox from 'devextreme-react/check-box';
+import type { ICheckBoxOptions } from 'devextreme-react/check-box';
 import {
   tasks, dependencies, resources, resourceAssignments,
 } from './data.ts';

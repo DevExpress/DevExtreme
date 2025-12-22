@@ -3,8 +3,8 @@ import PieChart, {
   Series,
   Label,
   Legend,
-  IPieChartOptions,
 } from 'devextreme-react/pie-chart';
+import type { IPieChartOptions } from 'devextreme-react/pie-chart';
 import { countries, waterLandRatio } from './data.ts';
 
 const pieCharts: {

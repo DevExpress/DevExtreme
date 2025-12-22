@@ -12,10 +12,8 @@
     >
       <div *dxTemplate="let tabPanelItem of 'item'">
         <div class="tabpanel-item">
-          <div
-            *ngFor="let task of tabPanelItem.tasks"
-            [class]="getTaskItemClasses(task.priority)"
-          >
+          @for (task of tabPanelItem.tasks; track task.text) {
+          <div [class]="getTaskItemClasses(task.priority)">
             <span class="task-item-text">
               {{ task.text }}
             </span>
@@ -26,6 +24,7 @@
 
             <i class="task-item-pseudo-button dx-icon dx-icon-overflow"></i>
           </div>
+          }
         </div>
       </div>
     </dx-tab-panel>

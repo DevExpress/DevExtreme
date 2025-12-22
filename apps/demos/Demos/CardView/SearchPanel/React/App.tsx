@@ -1,5 +1,7 @@
 import React from 'react';
+
 import CardView, { Column, HeaderFilter, SearchPanel } from 'devextreme-react/card-view';
+
 import { tasks } from './data.ts';
 
 const App = () => (

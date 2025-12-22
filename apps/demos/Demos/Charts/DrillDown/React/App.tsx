@@ -3,7 +3,8 @@ import TreeMap, {
   Size, Title, Colorizer, type TreeMapTypes,
 } from 'devextreme-react/tree-map';
 
-import { DrillInfo, citiesPopulation } from './data.ts';
+import { citiesPopulation } from './data.ts';
+import type { DrillInfo } from './data.ts';
 
 import TreeMapBreadcrumbs from './TreeMapBreadcrumbs.tsx';
 

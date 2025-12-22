@@ -1,10 +1,11 @@
+import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  NgModule, Component, ViewChild, enableProdMode,
+  Component,
+  ViewChild,
+  enableProdMode,
+  provideZoneChangeDetection,
 } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { NgForm } from '@angular/forms';
-
 import { DxTextBoxModule, DxFileUploaderModule, DxButtonModule } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 
@@ -22,6 +23,11 @@ if (window && window.config?.packageConfigPaths) {
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
+  imports: [
+    DxTextBoxModule,
+    DxFileUploaderModule,
+    DxButtonModule,
+  ],
 })
 export class AppComponent {
   @ViewChild('form') form: NgForm;
@@ -32,16 +38,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxTextBoxModule,
-    DxFileUploaderModule,
-    DxButtonModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

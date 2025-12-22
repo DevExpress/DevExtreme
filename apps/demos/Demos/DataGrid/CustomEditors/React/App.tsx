@@ -1,4 +1,5 @@
 import React from 'react';
+
 import DataGrid, {
   Paging,
   HeaderFilter,
@@ -7,11 +8,12 @@ import DataGrid, {
   Column,
   Lookup,
   RequiredRule,
-  type DataGridTypes,
   Pager,
 } from 'devextreme-react/data-grid';
+import type { DataGridTypes } from 'devextreme-react/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
+
 import { statuses } from './data.ts';
 import EmployeeDropDownBoxComponent from './EmployeeDropDownBoxComponent.tsx';
 import EmployeeTagBoxComponent from './EmployeeTagBoxComponent.tsx';
@@ -37,11 +39,14 @@ const tasks = createStore({
   },
 });
 
-const cellTemplate = (container: { textContent: any; title: any; }, options) => {
+const cellTemplate = (
+  container: { textContent: string; title: string; },
+  options: DataGridTypes.ColumnCellTemplateData
+) => {
   const noBreakSpace = '\u00A0';
 
   const assignees = (options.value || []).map(
-    (assigneeId) => options.column.lookup.calculateCellValue(assigneeId),
+    (assigneeId: number) => options.column.lookup.calculateCellValue(assigneeId),
   );
   const text = assignees.join(', ');
 
@@ -49,12 +54,21 @@ const cellTemplate = (container: { textContent: any; title: any; }, options) => 
   container.title = text;
 };
 
-function calculateFilterExpression(this: DataGridTypes.Column, filterValue, selectedFilterOperation: DataGridTypes.SelectedFilterOperation, target: string) {
+interface RowDataWithAssignedEmployee {
+  AssignedEmployee?: number[];
+}
+
+function calculateFilterExpression(
+  this: DataGridTypes.Column,
+  filterValue: number | string,
+  selectedFilterOperation: DataGridTypes.SelectedFilterOperation,
+  target: string
+) {
   if (target === 'search' && typeof (filterValue) === 'string') {
     return [this.dataField, 'contains', filterValue];
   }
 
-  return (rowData) => (rowData.AssignedEmployee || []).indexOf(filterValue) !== -1;
+  return (rowData: RowDataWithAssignedEmployee) => (rowData.AssignedEmployee || []).indexOf(filterValue as number) !== -1;
 }
 
 const onRowInserted = (e: DataGridTypes.RowInsertedEvent) => e.component.navigateToRow(e.key);
@@ -62,10 +76,10 @@ const onRowInserted = (e: DataGridTypes.RowInsertedEvent) => e.component.navigat
 const statusEditorRender = (cell) => {
   const onValueChanged = (e: SelectBoxTypes.ValueChangedEvent) => cell.setValue(e.value);
 
-  const itemRender = (data) => {
-    const imageSource = `images/icons/status-${data.id}.svg`;
+  const itemRender = (data: { id: number, name: string } | null) => {
+    if (data) {
+      const imageSource = `images/icons/status-${data.id}.svg`;
 
-    if (data != null) {
       return (
         <div>
           <img src={imageSource} className="status-icon middle"></img>

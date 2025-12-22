@@ -1,4 +1,5 @@
 import { Component, Input, SimpleChanges, ViewChild } from '@angular/core';
+import { DxFormModule, DxNumberBoxModule } from 'devextreme-angular';
 import { DxFormComponent, type DxFormTypes } from 'devextreme-angular/ui/form';
 import { type DxNumberBoxTypes } from 'devextreme-angular/ui/number-box';
 import type { BookingFormData } from '../app.types';
@@ -12,6 +13,10 @@ if (window && window.config?.packageConfigPaths) {
 @Component({
   selector: 'guests-form',
   templateUrl: `.${modulePrefix}/guests-form/guests-form.component.html`,
+  imports: [
+    DxFormModule,
+    DxNumberBoxModule,
+  ],
 })
 export class GuestsFormComponent {
   @ViewChild('formComponent', { static: false }) form!: DxFormComponent;
