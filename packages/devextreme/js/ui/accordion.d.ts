@@ -154,10 +154,9 @@ export interface dxAccordionOptions<
     focusStateEnabled?: boolean;
     /**
      * @docid
-     * @default undefined
      * @public
      */
-    height?: number | string | undefined;
+    height?: number | string;
     /**
      * @docid
      * @default true
@@ -195,7 +194,6 @@ export interface dxAccordionOptions<
     multiple?: boolean;
     /**
      * @docid
-     * @default null
      * @type function
      * @type_function_param1 e:{ui/accordion:ItemTitleClickEvent}
      * @action

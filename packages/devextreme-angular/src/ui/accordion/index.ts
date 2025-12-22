@@ -198,10 +198,10 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     
      */
     @Input()
-    get height(): number | string | undefined {
+    get height(): number | string {
         return this._getOption('height');
     }
-    set height(value: number | string | undefined) {
+    set height(value: number | string) {
         this._setOption('height', value);
     }
 
@@ -587,7 +587,7 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string>;
 
     /**
     

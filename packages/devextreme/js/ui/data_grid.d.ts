@@ -2276,10 +2276,9 @@ export interface dxDataGridColumn<TRowData = any, TKey = any> extends ColumnBase
     /**
      * @docid dxDataGridColumn.columns
      * @type Array<dxDataGridColumn|string>
-     * @default undefined
      * @public
      */
-    columns?: Array<Column<TRowData, TKey> | string> | undefined;
+    columns?: Array<Column<TRowData, TKey> | string>;
     /**
      * @docid dxDataGridColumn.editCellTemplate
      * @type_function_param2 cellInfo:object
@@ -2302,11 +2301,10 @@ export interface dxDataGridColumn<TRowData = any, TKey = any> extends ColumnBase
     groupCellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnGroupCellTemplateData<TRowData, TKey>) => any);
     /**
      * @docid dxDataGridColumn.groupIndex
-     * @default undefined
      * @fires dxDataGridOptions.onOptionChanged
      * @public
      */
-    groupIndex?: number | undefined;
+    groupIndex?: number;
     /**
      * @docid dxDataGridColumn.headerCellTemplate
      * @type_function_param2 headerInfo:object

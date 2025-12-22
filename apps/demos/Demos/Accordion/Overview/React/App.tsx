@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import Accordion, { type AccordionTypes } from 'devextreme-react/accordion';
+import Button from 'devextreme-react/button';
 import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
 import TagBox, { type TagBoxTypes } from 'devextreme-react/tag-box';
 import Slider, { Tooltip, Label, type SliderTypes } from 'devextreme-react/slider';
@@ -16,6 +17,7 @@ const App = () => {
   const [multiple, setMultiple] = useState(false);
   const [collapsible, setCollapsible] = useState(false);
   const [animationDuration, setAnimationDuration] = useState(300);
+  const [height, setHeight] = useState<AccordionTypes.Properties['height']>(400);
 
   const selectionChanged = useCallback((e: AccordionTypes.SelectionChangedEvent) => {
     let newItems = [...selectedItems];
@@ -52,6 +54,7 @@ const App = () => {
       <Accordion
         dataSource={companies}
         collapsible={collapsible}
+        height={height}
         multiple={multiple}
         animationDuration={animationDuration}
         selectedItems={selectedItems}
@@ -63,10 +66,9 @@ const App = () => {
       <div className="options">
         <div className="caption">Options</div>
         <div className="option">
-          <CheckBox
-            text="Multiple enabled"
-            value={multiple}
-            onValueChanged={multipleChanged}
+          <Button
+            text="Reset height"
+            onClick={() => setHeight(undefined)}
           />
         </div>
         <div className="option">

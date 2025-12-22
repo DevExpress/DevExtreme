@@ -6,6 +6,7 @@
     [multiple]="false"
     [animationDuration]="300"
     [selectedItems]="[companies[0]]"
+    [height]="height"
     id="accordion-container"
   >
     <div *dxTemplate="let company of 'title'">
@@ -43,10 +44,10 @@
   <div class="options">
     <div class="caption">Options</div>
     <div class="option">
-      <dx-check-box
-        text="Multiple enabled"
-        [(value)]="accordion.multiple"
-      ></dx-check-box>
+      <dx-button
+        text="Reset height"
+        (onClick)="onResetClick()"
+      ></dx-button>
     </div>
     <div class="option">
       <dx-check-box

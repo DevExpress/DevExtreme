@@ -489,7 +489,7 @@ type IColumnProps = React.PropsWithChildren<{
   format?: LocalizationFormat;
   formItem?: dxFormSimpleItem;
   groupCellTemplate?: ((cellElement: any, cellInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid, data: Record<string, any>, displayValue: any, groupContinuedMessage: string, groupContinuesMessage: string, row: dxDataGridRowObject, rowIndex: number, summaryItems: Array<any>, text: string, value: any }) => any) | template;
-  groupIndex?: number | undefined;
+  groupIndex?: number;
   headerCellTemplate?: ((columnHeader: any, headerInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid }) => any) | template;
   headerFilter?: GridsColumnHeaderFilter | undefined;
   hidingPriority?: number | undefined;
@@ -523,8 +523,8 @@ type IColumnProps = React.PropsWithChildren<{
   onFilterValueChange?: (value: any | undefined) => void;
   defaultFilterValues?: Array<any>;
   onFilterValuesChange?: (value: Array<any>) => void;
-  defaultGroupIndex?: number | undefined;
-  onGroupIndexChange?: (value: number | undefined) => void;
+  defaultGroupIndex?: number;
+  onGroupIndexChange?: (value: number) => void;
   defaultSelectedFilterOperation?: SelectedFilterOperation | undefined;
   onSelectedFilterOperationChange?: (value: SelectedFilterOperation | undefined) => void;
   defaultSortIndex?: number | undefined;

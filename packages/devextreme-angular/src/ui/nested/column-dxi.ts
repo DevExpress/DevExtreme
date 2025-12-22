@@ -147,7 +147,7 @@ export class DxiColumnComponent extends DxiDataGridColumn {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() groupIndexChange: EventEmitter<number | undefined>;
+    @Output() groupIndexChange: EventEmitter<number>;
 
     /**
     

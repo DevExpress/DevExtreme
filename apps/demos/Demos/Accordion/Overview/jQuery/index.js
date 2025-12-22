@@ -18,6 +18,7 @@ $(() => {
   const accordion = $('#accordion-container').dxAccordion({
     dataSource: accordionItems,
     animationDuration: 300,
+    height: 500,
     collapsible: false,
     multiple: false,
     selectedItems: [accordionItems[0]],
@@ -42,12 +43,10 @@ $(() => {
     },
   });
 
-  $('#multiple-enabled').dxCheckBox({
-    text: 'Multiple enabled',
-    onValueChanged(e) {
-      accordion.option('multiple', e.value);
-      tagBox.option('disabled', !e.value);
-      tagBox.option('value', accordion.option('selectedItems'));
+  $('#multiple-enabled').dxButton({
+    text: 'Reset height',
+    onClick() {
+      accordion.resetOption('height');
     },
   });
 

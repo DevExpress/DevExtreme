@@ -1,8 +1,9 @@
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  DxAccordionModule, DxCheckBoxModule, DxSliderModule, DxTagBoxModule,
+  DxButtonModule, DxCheckBoxModule, DxSliderModule, DxTagBoxModule,
 } from 'devextreme-angular';
+import { DxAccordionModule, type DxAccordionTypes } from 'devextreme-angular/ui/accordion';
 
 import { Company, Service } from './app.service';
 
@@ -24,6 +25,7 @@ if (window && window.config?.packageConfigPaths) {
   preserveWhitespaces: true,
   imports: [
     DxAccordionModule,
+    DxButtonModule,
     DxCheckBoxModule,
     DxSliderModule,
     DxTagBoxModule,
@@ -32,8 +34,14 @@ if (window && window.config?.packageConfigPaths) {
 export class AppComponent {
   companies: Company[];
 
+  height: DxAccordionTypes.Properties['height'] = 500;
+
   constructor(service: Service) {
     this.companies = service.getCompanies();
+  }
+
+  onResetClick() {
+    this.height = undefined;
   }
 }
 

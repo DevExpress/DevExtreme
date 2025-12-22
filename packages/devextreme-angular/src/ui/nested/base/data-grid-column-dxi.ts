@@ -291,10 +291,10 @@ export abstract class DxiDataGridColumn extends CollectionNestedOption {
         this._setOption('groupCellTemplate', value);
     }
 
-    get groupIndex(): number | undefined {
+    get groupIndex(): number {
         return this._getOption('groupIndex');
     }
-    set groupIndex(value: number | undefined) {
+    set groupIndex(value: number) {
         this._setOption('groupIndex', value);
     }
 

@@ -8,6 +8,7 @@
       v-model:selected-items="selectedCompanies"
       id="accordion-container"
       item-title-template="itemTitle"
+      :height="height"
     >
       <template #itemTitle="{ data }">
         <CustomTitle :item-data="data"/>
@@ -20,9 +21,9 @@
     <div class="options">
       <div class="caption">Options</div>
       <div class="option">
-        <DxCheckBox
-          v-model:value="multiple"
-          text="Multiple enabled"
+        <DxButton
+          text="Reset height"
+          @click="onResetClick"
         />
       </div>
       <div class="option">
@@ -62,7 +63,8 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import DxAccordion from 'devextreme-vue/accordion';
+import DxAccordion, { type DxAccordionTypes } from 'devextreme-vue/accordion';
+import DxButton from 'devextreme-vue/button';
 import DxTagBox from 'devextreme-vue/tag-box';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxSlider, { DxTooltip, DxLabel } from 'devextreme-vue/slider';
@@ -74,6 +76,7 @@ import service from './data.ts';
 const multiple = ref(false);
 const collapsible = ref(false);
 const animationDuration = ref(300);
+const height = ref<DxAccordionTypes.Properties['height']>(500);
 const companies = service.getCompanies();
 const selectedCompaniesIds = ref([companies[0].ID]);
 
@@ -88,6 +91,10 @@ const selectedCompanies = computed({
   get: getCompaniesBySelectedIds,
   set: setSelectedCompanies,
 });
+
+const onResetClick = () => {
+  height.value = undefined;
+};
 
 </script>
 <style scoped>

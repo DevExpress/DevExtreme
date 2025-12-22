@@ -9192,7 +9192,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxAccordionOptions.height]
      */
-    height?: number | string | undefined;
+    height?: number | string;
     /**
      * [descr:dxAccordionOptions.hoverStateEnabled]
      */
@@ -13955,9 +13955,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGridColumn.columns]
      */
-    columns?:
-      | Array<DevExpress.ui.dxDataGrid.Column<TRowData, TKey> | string>
-      | undefined;
+    columns?: Array<DevExpress.ui.dxDataGrid.Column<TRowData, TKey> | string>;
     /**
      * [descr:dxDataGridColumn.editCellTemplate]
      */
@@ -13985,7 +13983,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGridColumn.groupIndex]
      */
-    groupIndex?: number | undefined;
+    groupIndex?: number;
     /**
      * [descr:dxDataGridColumn.headerCellTemplate]
      */

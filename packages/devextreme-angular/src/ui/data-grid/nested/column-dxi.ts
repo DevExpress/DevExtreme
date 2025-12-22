@@ -388,10 +388,10 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get groupIndex(): number | undefined {
+    get groupIndex(): number {
         return this._getOption('groupIndex');
     }
-    set groupIndex(value: number | undefined) {
+    set groupIndex(value: number) {
         this._setOption('groupIndex', value);
     }
 
@@ -599,7 +599,7 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() groupIndexChange: EventEmitter<number | undefined>;
+    @Output() groupIndexChange: EventEmitter<number>;
 
     /**
     
