@@ -389,6 +389,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     const editFormItemClass = this.addWidgetPrefix(EDIT_FORM_ITEM_CLASS);
     let items: any = this.option('editing.form.items');
     const isCustomEditorType = {};
+    const formAIIntegration = this.option('editing.form.aiIntegration');
 
     if (!items) {
       const columns = this._columnsController.getColumns();
@@ -415,22 +416,47 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return extend({}, editFormOptions, {
       items,
       formID: `dx-${new Guid()}`,
+      aiIntegration: formAIIntegration,
       onSmartPasted: (e) => {
-        // Update grid editors with AI-generated values
-        if (e.aiResult) {
+        if (e.aiResult && this._editForm) {
           Object.keys(e.aiResult).forEach((dataField) => {
-            const column = this._columnsController.columnOption(`dataField:${dataField}`);
-            if (column && detailOptions.data) {
-              const oldValue = detailOptions.data[dataField];
-              const newValue = e.aiResult[dataField];
-              detailOptions.data[dataField] = newValue;
+            const newValue = e.aiResult[dataField];
 
-              // eslint-disable-next-line no-console
-              console.log(`Smart Paste: Updated ${dataField} from "${oldValue}" to "${newValue}"`);
+            const column = this._columnsController.columnOption(dataField);
+            if (column) {
+              const cellOptions = {
+                data: detailOptions.data,
+                column,
+                row: { data: detailOptions.data },
+                columnIndex: column.index,
+                key: detailOptions.key,
+              };
+
+              this.updateFieldValue(cellOptions, newValue, undefined);
+            }
+
+            const itemID = this._editForm.getItemID(dataField);
+            const $formElement = this._editForm.$element();
+
+            const escapedID = itemID.replace(/([.:!])/g, '\\$1');
+            const $fieldItem = $formElement.find(`#${escapedID}`).first();
+
+            if ($fieldItem.length) {
+              const $widget = $fieldItem.closest('.dx-widget');
+
+              if ($widget.length) {
+                const widgetNames = $widget.data('dxComponents');
+
+                if (widgetNames && widgetNames.length > 0) {
+                  const widgetInstance = $widget.data(widgetNames[0]);
+
+                  if (widgetInstance && widgetInstance.option) {
+                    widgetInstance.option('value', newValue);
+                  }
+                }
+              }
             }
           });
-          // Trigger form refresh to update editors
-          this._editForm?.repaint();
         }
       },
       customizeItem: (item) => {
