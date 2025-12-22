@@ -135,7 +135,6 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _updateEditRowCore(row, skipCurrentRow, isCustomSetCellValue) {
     const editForm = this._editForm;
 
@@ -158,19 +157,38 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   protected _showEditPopup(rowIndex, repaintForm?) {
     const isMobileDevice = devices.current().deviceType !== 'desktop';
     const editPopupClass = this.addWidgetPrefix(EDIT_POPUP_CLASS);
+    const toolbarItems = [
+      {
+        toolbar: 'bottom', location: 'after', widget: 'dxButton', options: this._getSaveButtonConfig(),
+      },
+      {
+        toolbar: 'bottom', location: 'after', widget: 'dxButton', options: this._getCancelButtonConfig(),
+      },
+    ];
+
+    // Add Smart Paste button if aiIntegration is configured
+    const editFormOptions = this.option(EDITING_FORM_OPTION_NAME);
+    if (editFormOptions?.aiIntegration) {
+      toolbarItems.unshift({
+        toolbar: 'bottom',
+        location: 'before',
+        widget: 'dxButton',
+        options: {
+          text: 'Smart Paste 22',
+          icon: 'smartPaste',
+          onClick: () => {
+            this._editForm?.smartPaste();
+          },
+        },
+      });
+    }
+
     const popupOptions = extend(
       {
         showTitle: false,
         fullScreen: isMobileDevice,
         wrapperAttr: { class: editPopupClass },
-        toolbarItems: [
-          {
-            toolbar: 'bottom', location: 'after', widget: 'dxButton', options: this._getSaveButtonConfig(),
-          },
-          {
-            toolbar: 'bottom', location: 'after', widget: 'dxButton', options: this._getCancelButtonConfig(),
-          },
-        ],
+        toolbarItems,
         contentTemplate: this._getPopupEditFormTemplate(rowIndex),
       },
       this.option(EDITING_POPUP_OPTION_NAME),
@@ -394,6 +412,24 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return extend({}, editFormOptions, {
       items,
       formID: `dx-${new Guid()}`,
+      onSmartPasted: (e) => {
+        // Update grid editors with AI-generated values
+        if (e.aiResult) {
+          Object.keys(e.aiResult).forEach((dataField) => {
+            const column = this._columnsController.columnOption(`dataField:${dataField}`);
+            if (column && detailOptions.data) {
+              const oldValue = detailOptions.data[dataField];
+              const newValue = e.aiResult[dataField];
+              detailOptions.data[dataField] = newValue;
+
+              // eslint-disable-next-line no-console
+              console.log(`Smart Paste: Updated ${dataField} from "${oldValue}" to "${newValue}"`);
+            }
+          });
+          // Trigger form refresh to update editors
+          this._editForm?.repaint();
+        }
+      },
       customizeItem: (item) => {
         let column;
         const itemId = item.name || item.dataField;
@@ -448,6 +484,18 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
 
       if (!isPopupForm) {
         const $buttonsContainer = $('<div>').addClass(this.addWidgetPrefix(FORM_BUTTONS_CONTAINER_CLASS)).appendTo($container);
+
+        // Add Smart Paste button if aiIntegration is configured
+        if (editFormOptions?.aiIntegration) {
+          this._createComponent($('<div>').appendTo($buttonsContainer), Button, {
+            text: 'Smart Paste',
+            icon: 'paste',
+            onClick: () => {
+              this._editForm?.smartPaste();
+            },
+          });
+        }
+
         this._createComponent($('<div>').appendTo($buttonsContainer), Button, this._getSaveButtonConfig());
         this._createComponent($('<div>').appendTo($buttonsContainer), Button, this._getCancelButtonConfig());
       }
