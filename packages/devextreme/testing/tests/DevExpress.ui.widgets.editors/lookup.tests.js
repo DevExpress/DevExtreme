@@ -3912,7 +3912,7 @@ QUnit.module('default options', {
 
             $(lookup.field()).trigger('dxclick');
 
-            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -31 - materialLookupPadding, 1, 'offset of the lookup after scrolling and cut-off item selecting');
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -1 - materialLookupPadding, 1, 'offset of the lookup after scrolling and cut-off item selecting');
             assert.roughEqual($('.dx-list-item').eq(1).position().top, 38, 2, 'position of the selected item after scrolling and cut-off item selecting');
 
             lookup.close();
@@ -3921,7 +3921,7 @@ QUnit.module('default options', {
 
             $(lookup.field()).trigger('dxclick');
 
-            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -31 - materialLookupPadding, 1, 'offset of the lookup if last item is selected');
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -1 - materialLookupPadding, 1, 'offset of the lookup if last item is selected');
 
             lookup.close();
 
@@ -3971,7 +3971,7 @@ QUnit.module('default options', {
 
             let $popup = $('.dx-popup-wrapper');
 
-            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -31 - materialLookupPadding, 1, 'popup position if second item is selected and there is not top place');
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -1 - materialLookupPadding, 1, 'popup position if second item is selected and there is not top place');
 
             lookup.close();
 
@@ -4025,7 +4025,7 @@ QUnit.module('default options', {
 
             $popup = $('.dx-popup-wrapper');
 
-            assert.roughEqual($popup.find('.dx-overlay-content').position().top, -19 - $('.dx-list-item').height() - materialLookupPadding * 2, 3, 'popup position if there is not place for two items');
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, 9 - $('.dx-list-item').height() - materialLookupPadding * 2, 3, 'popup position if there is not place for two items');
 
             lookup.close();
 
@@ -4134,7 +4134,7 @@ QUnit.module('default options', {
 
             const $popover = $('.dx-popover-wrapper');
 
-            assert.roughEqual($popover.find('.dx-overlay-content').eq(0).position().top, $(lookup._inputWrapper()).outerHeight() + 8 + 65, 2, 'popover position of lookup field with body padding 8px');
+            assert.roughEqual($popover.find('.dx-overlay-content').eq(0).position().top, $(lookup._inputWrapper()).outerHeight() + 8 + 12, 2, 'popover position of lookup field with body padding 8px');
 
             lookup.close();
 
