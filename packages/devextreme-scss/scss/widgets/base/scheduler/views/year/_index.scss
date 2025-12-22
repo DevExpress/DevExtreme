@@ -1,0 +1,47 @@
+.dx-scheduler-work-space-year {
+    .dx-scheduler-all-day-title {
+        display: none;
+    }
+
+    .dx-scheduler-header-panel {
+        display: none;
+    }
+
+    .dx-scheduler-time-panel {
+        display: none;
+    }
+
+    .dx-scheduler-year-calendars-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-column-gap: 12px;
+        grid-row-gap: 20px;
+        padding: 12px;
+        height: 100%;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .dx-scheduler-year-calendar-label {
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 8px;
+        text-align: center;
+    }
+
+    .dx-scheduler-year-calendar-wrapper {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        width: 100%;
+
+        .dx-calendar-navigator {
+            display: none;
+        }
+
+        .dx-calendar-cell.dx-calendar-selected-date span {
+            color: unset;
+            background-color: unset;
+        }
+    }
+}

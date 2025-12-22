@@ -14,6 +14,7 @@ const configByView: Record<Exclude<ViewType, 'agenda'>, {
   week: { isTimelineView: false, isMonthView: false, viewOrientation: 'vertical' },
   workWeek: { isTimelineView: false, isMonthView: false, viewOrientation: 'vertical' },
   month: { isTimelineView: false, isMonthView: true, viewOrientation: 'horizontal' },
+  year: { isTimelineView: false, isMonthView: true, viewOrientation: 'horizontal' },
   timelineDay: { isTimelineView: true, isMonthView: false, viewOrientation: 'horizontal' },
   timelineWeek: { isTimelineView: true, isMonthView: false, viewOrientation: 'horizontal' },
   timelineWorkWeek: { isTimelineView: true, isMonthView: false, viewOrientation: 'horizontal' },

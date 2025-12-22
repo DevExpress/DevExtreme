@@ -89,6 +89,7 @@ import SchedulerWorkSpaceDay from './workspaces/m_work_space_day';
 import SchedulerWorkSpaceMonth from './workspaces/m_work_space_month';
 import SchedulerWorkSpaceWeek from './workspaces/m_work_space_week';
 import SchedulerWorkSpaceWorkWeek from './workspaces/m_work_space_work_week';
+import SchedulerWorkSpaceYear from './workspaces/m_work_space_year';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -117,6 +118,10 @@ const VIEWS_CONFIG = {
   },
   month: {
     workSpace: SchedulerWorkSpaceMonth,
+    renderingStrategy: 'horizontalMonth',
+  },
+  year: {
+    workSpace: SchedulerWorkSpaceYear,
     renderingStrategy: 'horizontalMonth',
   },
   timelineDay: {
@@ -1308,6 +1313,15 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const currentViewType = this.currentView.type;
     const workSpaceComponent = VIEWS_CONFIG[currentViewType].workSpace;
     const workSpaceConfig = this._workSpaceConfig(this.currentView);
+    
+    // Add callback for year view date click
+    if (currentViewType === 'year') {
+      workSpaceConfig.onDateClick = (date: Date) => {
+        this.option('currentView', 'day');
+        this.option('currentDate', date);
+      };
+    }
+    
     // @ts-expect-error
     this._workSpace = this._createComponent($workSpace, workSpaceComponent, workSpaceConfig);
 

@@ -60,6 +60,7 @@ $scheduler-month-date-text-padding: 6px;
   $scheduler-month-date-text-padding: $scheduler-month-date-text-padding,
   $scheduler-first-month-cell-background-color: $scheduler-first-month-cell-background-color,
 );
+@use "./year";
 @use "./timelines" with (
   $scheduler-workspace-date-table-cell-height: $scheduler-workspace-date-table-cell-height,
   $scheduler-accent-border: $scheduler-accent-border,

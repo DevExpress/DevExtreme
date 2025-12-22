@@ -14,6 +14,7 @@ const viewTypeLocalization: Record<ViewType, string> = {
   agenda: 'dxScheduler-switcherAgenda',
   day: 'dxScheduler-switcherDay',
   month: 'dxScheduler-switcherMonth',
+  year: 'dxScheduler-switcherYear',
   week: 'dxScheduler-switcherWeek',
   workWeek: 'dxScheduler-switcherWorkWeek',
   timelineDay: 'dxScheduler-switcherTimelineDay',

@@ -81,6 +81,7 @@ const getIntervalStartDate = (options: IntervalOptions) => {
     case 'day':
     case 'week':
     case 'month':
+    case 'year':
       return getPeriodStart(date, step, false, firstDayOfWeek);
     case 'workWeek':
       // eslint-disable-next-line no-case-declarations
@@ -133,6 +134,10 @@ const getPeriodEndDate = (currentPeriodStartDate: Date, step: Step, agendaDurati
     case 'month':
       date = nextMonth(currentPeriodStartDate);
       break;
+    case 'year':
+      date = new Date(currentPeriodStartDate);
+      date.setFullYear(date.getFullYear() + 1);
+      break;
     case 'workWeek':
       date = getDateAfterWorkWeek(currentPeriodStartDate);
       break;
@@ -176,6 +181,10 @@ export const getNextIntervalDate = (options, direction: Direction): Date => {
       break;
     case 'month':
       return getNextMonthDate(date, intervalCount, direction);
+    case 'year':
+    { const nextYearDate = new Date(date);
+      nextYearDate.setFullYear(nextYearDate.getFullYear() + intervalCount * direction);
+      return nextYearDate; }
   }
 
   return addDateInterval(date, { days: dayDuration }, direction);
@@ -299,6 +308,10 @@ const getCaptionText = (startDate: Date, endDate: Date, isShort: boolean, step):
     return formatMonthViewCaption(startDate, endDate);
   }
 
+  if (step === 'year') {
+    return String(formatDate(startDate, 'year') ?? '');
+  }
+
   return formatCaptionByMonths(startDate, endDate, isShort);
 };
 
@@ -319,6 +332,7 @@ const STEP_MAP: Record<ViewType, Step> = {
   week: 'week',
   workWeek: 'workWeek',
   month: 'month',
+  year: 'year',
   timelineDay: 'day',
   timelineWeek: 'week',
   timelineWorkWeek: 'workWeek',

@@ -94,7 +94,7 @@ export type AppointmentFormProperties = FormProperties & {
   iconsShowMode?: AppointmentFormIconsShowMode;
 };
 /** @public */
-export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
+export type ViewType = 'agenda' | 'day' | 'month' | 'year' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
 /** @public */
 export type SchedulerPredefinedToolbarItem = 'today' | 'dateNavigator' | 'viewSwitcher';
 /** @public */
@@ -1024,7 +1024,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default ['day', 'week']
      * @public
      */
-    views?: Array<'day' | 'week' | 'workWeek' | 'month' | 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda' | {
+    views?: Array<'day' | 'week' | 'workWeek' | 'month' | 'year' | 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda' | {
       /**
        * @docid
        * @default 7

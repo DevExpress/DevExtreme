@@ -18,7 +18,7 @@ export interface HeaderOptions {
   customizeDateNavigatorText: SafeSchedulerOptions['customizeDateNavigatorText'];
 }
 
-export type Step = 'day' | 'week' | 'workWeek' | 'month' | 'agenda';
+export type Step = 'day' | 'week' | 'workWeek' | 'month' | 'year' | 'agenda';
 
 export interface IntervalOptions {
   date: Date;

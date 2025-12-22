@@ -6,7 +6,7 @@ import type { FilterOptions } from '../../../types';
 import { getVisibleDateTimeIntervals } from './get_visible_date_time_intervals';
 
 const VIEWS_WITH_ALL_DAY_PANEL: ViewType[] = ['day', 'week', 'workWeek'];
-const DATE_TIME_VIEWS: ViewType[] = ['day', 'week', 'workWeek', 'timelineDay', 'timelineWeek', 'timelineWorkWeek'];
+const DATE_TIME_VIEWS: ViewType[] = ['day', 'week', 'workWeek', 'year', 'timelineDay', 'timelineWeek', 'timelineWorkWeek'];
 
 export const getFilterOptions = (schedulerStore: Scheduler): FilterOptions => {
   const compareOptions = getCompareOptions(schedulerStore);
