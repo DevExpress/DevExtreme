@@ -5,6 +5,8 @@ import { countries, generateData } from './data';
 import DataGrid, {
     Column,
     DataGridTypes,
+    Editing,
+    Form,
     Grouping,
     GroupPanel,
     Pager,
@@ -15,6 +17,7 @@ import DiscountCell from "./DiscountCell";
 import ODataStore from "devextreme/data/odata/store";
 import { AIIntegration } from 'devextreme-react/common/ai-integration';
 import { AzureOpenAI } from 'openai';
+import notify from 'devextreme/ui/notify';
 
 const columnOptions = {
     regularColumns: [
@@ -241,8 +244,7 @@ export const ColumnReordering: Story = {
         rtlEnabled: false,
         columnHidingEnabled: true,
         dataSource: countries,
-        // @ts-expect-error
-        columns: 'regularColumns',
+        columns: 'regularColumns' as any,
         columnFixing: {
             enabled: false
         },
@@ -352,4 +354,168 @@ export const AiColumn: Story = {
         allowColumnResizing: true,
         allowColumnReordering: true,
     },
+};
+
+const employees = [
+    {
+        ID: 1,
+        FirstName: 'John',
+        LastName: 'Heart',
+        Position: 'CEO',
+        BirthDate: new Date('1964/03/16'),
+        HireDate: new Date('1995/01/15'),
+        City: 'Los Angeles',
+        State: 'CA',
+        Email: 'jheart@dx-email.com',
+        Phone: '+1(213) 555-9392'
+    },
+    {
+        ID: 2,
+        FirstName: 'Olivia',
+        LastName: 'Peyton',
+        Position: 'Sales Assistant',
+        BirthDate: new Date('1981/06/03'),
+        HireDate: new Date('2012/05/14'),
+        City: 'Atlanta',
+        State: 'GA',
+        Email: 'oliviap@dx-email.com',
+        Phone: '+1(310) 555-2728'
+    },
+    {
+        ID: 3,
+        FirstName: 'Robert',
+        LastName: 'Reagan',
+        Position: 'CMO',
+        BirthDate: new Date('1974/09/07'),
+        HireDate: new Date('2002/11/08'),
+        City: 'Bentonville',
+        State: 'AR',
+        Email: 'robertr@dx-email.com',
+        Phone: '+1(818) 555-2387'
+    },
+];
+
+export const SmartPaste: Story = {
+    argTypes: {
+        editingMode: {
+            control: 'radio',
+            options: ['form', 'popup'],
+            description: 'Editing mode for the DataGrid',
+        },
+    },
+    args: {
+        dataSource: employees,
+        keyExpr: 'ID',
+        showBorders: true,
+        editingMode: "popup",
+    },
+    render: (args) => {
+        const { editingMode, ...gridArgs } = args;
+        
+        const sampleText = `Name: Sarah Johnson
+Position: Senior Developer
+Email: sarah.johnson@company.com
+Phone: +1(555) 123-4567
+Born: 1985/06/15
+Hired: 2020/03/01
+Location: San Francisco, CA`;
+
+        const copyToClipboard = () => {
+            navigator.clipboard.writeText(sampleText).then(() => {
+                notify({
+                    message: 'Text copied to clipboard! Now click "Add" and then "Smart Paste" in the form.',
+                    position: {
+                        my: 'bottom center',
+                        at: 'bottom',
+                        of: window,
+                    },
+                    width: 'auto',
+                }, 'success', 2500);
+            }).catch(() => {
+                notify({
+                    message: 'Failed to copy text to clipboard',
+                    position: {
+                        my: 'bottom center',
+                        at: 'bottom',
+                        of: window,
+                    },
+                    width: 'auto',
+                }, 'error', 2000);
+            });
+        };
+
+        return (
+            <div>
+                <div style={{ 
+                    marginBottom: '20px', 
+                    padding: '15px', 
+                    backgroundColor: '#e3f2fd', 
+                    borderLeft: '4px solid #2196f3', 
+                    borderRadius: '4px' 
+                }}>
+                    <h3 style={{ marginTop: 0, color: '#1976d2' }}>AI Integration - Smart Paste Demo</h3>
+                    <p style={{ margin: '10px 0' }}><strong>How to use:</strong></p>
+                    <ol style={{ margin: '5px 0', paddingLeft: '20px' }}>
+                        <li>Change editing mode in Storybook Controls: <strong>form</strong> (inline) or <strong>popup</strong> (modal)</li>
+                        <li>Click the <strong>"Copy Sample Text"</strong> button below</li>
+                        <li>Click <strong>"Add"</strong> button in the DataGrid to open the edit form</li>
+                        <li>In the edit form, click the <strong>"Smart Paste"</strong> button</li>
+                        <li>Watch the AI automatically fill all fields from the copied text! ✨</li>
+                    </ol>
+                    <p style={{ margin: '10px 0', fontSize: '14px', color: '#666' }}>
+                        <strong>Sample text:</strong>
+                    </p>
+                    <div style={{ 
+                        backgroundColor: '#fff', 
+                        padding: '10px', 
+                        margin: '10px 0', 
+                        border: '1px solid #ccc', 
+                        borderRadius: '4px', 
+                        fontFamily: 'monospace', 
+                        fontSize: '12px',
+                        whiteSpace: 'pre-line'
+                    }}>
+                        {sampleText}
+                    </div>
+                    <button 
+                        onClick={copyToClipboard}
+                        style={{
+                            padding: '10px 20px',
+                            backgroundColor: '#2196f3',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                            cursor: 'pointer',
+                            fontSize: '14px',
+                            fontWeight: 'bold'
+                        }}
+                    >
+                        📋 Copy Sample Text
+                    </button>
+                </div>
+                <DataGrid {...gridArgs}>
+                    <Column dataField="FirstName" caption="First Name" />
+                    <Column dataField="LastName" caption="Last Name" />
+                    <Column dataField="Position" />
+                    <Column dataField="BirthDate" dataType="date" />
+                    <Column dataField="HireDate" dataType="date" />
+                    <Column dataField="City" />
+                    <Column dataField="State" />
+                    <Column dataField="Email" />
+                    <Column dataField="Phone" />
+                    
+                    <Editing
+                        mode={editingMode}
+                        allowAdding={true}
+                        allowUpdating={true}
+                        allowDeleting={true}
+                    >
+                        <Form aiIntegration={aiIntegration} />
+                    </Editing>
+                    
+                    <Paging pageSize={10} />
+                </DataGrid>
+            </div>
+        );
+    }
 };
