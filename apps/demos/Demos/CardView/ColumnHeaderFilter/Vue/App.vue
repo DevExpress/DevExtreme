@@ -78,7 +78,7 @@ function calculateOrderDateFilterExpression(
   if (value === 'weekends') {
     return [[getOrderDay, '=', 0], 'or', [getOrderDay, '=', 6]];
   }
-  return this.defaultCalculateFilterExpression(value, selectedFilterOperations, target) as any;
+  return this.defaultCalculateFilterExpression(value, selectedFilterOperations, target);
 }
 
 type HeaderFilterDataSourceArg = {

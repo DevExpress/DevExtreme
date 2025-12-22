@@ -20,6 +20,7 @@ import * as CommonTypes from 'devextreme/common';
 import { HorizontalAlignment, DataType, SortOrder } from 'devextreme/common';
 import { FilterType, ColumnHeaderFilter } from 'devextreme/common/grids';
 import { Format } from 'devextreme/common/core/localization';
+import type { Column } from 'devextreme/ui/card_view';
 import { dxFormSimpleItem } from 'devextreme/ui/form';
 
 import {
@@ -134,10 +135,10 @@ export class DxiCardViewColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get calculateFilterExpression(): ((filterValue: any, selectedFilterOperation: string | null, target: string) => string | Array<any> | Function) {
+    get calculateFilterExpression(): ((this: Column, filterValue: any, selectedFilterOperation: string | null, target: string) => string | Array<any> | Function) {
         return this._getOption('calculateFilterExpression');
     }
-    set calculateFilterExpression(value: ((filterValue: any, selectedFilterOperation: string | null, target: string) => string | Array<any> | Function)) {
+    set calculateFilterExpression(value: ((this: Column, filterValue: any, selectedFilterOperation: string | null, target: string) => string | Array<any> | Function)) {
         this._setOption('calculateFilterExpression', value);
     }
 

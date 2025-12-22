@@ -12,15 +12,15 @@ function getOrderDay(rowData: Order) {
 }
 
 function calculateOrderDateFilterExpression(
-  this: CardViewTypes.Column,
+  this: CardViewTypes.Column<Order>,
   value: string,
   selectedFilterOperations: string | null,
   target: string
-) {
+): string | any[] | (() => void) {
   if (value === 'weekends') {
     return [[getOrderDay, '=', 0], 'or', [getOrderDay, '=', 6]];
   }
-  return this.defaultCalculateFilterExpression(value, selectedFilterOperations, target);
+  return this.defaultCalculateFilterExpression(value, selectedFilterOperations, target) as string | any[] | (() => void);
 }
 
 const saleAmountHeaderFilterDataSource: OrderFilter[] = [
@@ -99,7 +99,7 @@ const App = () => (
     <Column
       dataField="OrderDate"
       dataType="date"
-      calculateFilterExpression={calculateOrderDateFilterExpression as ComponentProps<typeof Column>['calculateFilterExpression']}
+      calculateFilterExpression={calculateOrderDateFilterExpression}
     >
       <ColumnHeaderFilter
         dataSource={orderDateHeaderFilterDataSource}

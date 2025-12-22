@@ -68,7 +68,12 @@ export class AppComponent {
     },
   ];
 
-  calculateOrderDateFilterExpression(this: DxCardViewTypes.Column, value, selectedFilterOperations, target) {
+  calculateOrderDateFilterExpression(
+    this: DxCardViewTypes.Column,
+    value: string,
+    selectedFilterOperations: string | null,
+    target: string
+  ) {
     if (value === 'weekends') {
       return [[getOrderDay, '=', 0], 'or', [getOrderDay, '=', 6]];
     }

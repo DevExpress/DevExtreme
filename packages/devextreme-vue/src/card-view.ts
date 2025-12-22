@@ -45,6 +45,7 @@ import {
  EditingTexts,
  PredefinedToolbarItem,
  dxCardViewToolbarItem,
+ Column,
 } from "devextreme/ui/card_view";
 import {
  Mode,
@@ -1020,7 +1021,7 @@ const DxColumnConfig = {
     allowSorting: Boolean,
     calculateDisplayValue: Function as PropType<((cardData: any) => any)>,
     calculateFieldValue: Function as PropType<((cardData: any) => any)>,
-    calculateFilterExpression: Function as PropType<((filterValue: any, selectedFilterOperation: string | null, target: string) => string | Array<any> | (() => void))>,
+    calculateFilterExpression: Function as PropType<((this: Column, filterValue: any, selectedFilterOperation: string | null, target: string) => string | Array<any> | (() => void))>,
     calculateSortValue: [Function, String] as PropType<(((cardData: any) => any)) | string>,
     caption: String,
     customizeText: Function as PropType<((fieldInfo: { groupInterval: string | number, target: string, value: any, valueText: string }) => string)>,
