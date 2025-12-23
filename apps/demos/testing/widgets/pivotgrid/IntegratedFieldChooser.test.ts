@@ -17,7 +17,6 @@ runManualTest('PivotGrid', 'IntegratedFieldChooser', (test) => {
   test('IntegratedFieldChooser', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t.wait(500);
     await t.click(Selector(`.${PIVOTGRID_FIELD_CHOOSER_BUTTON}`));
 
     await testScreenshot(t, takeScreenshot, 'Integrated field chooser.png', `.${FIELD_CHOOSER_CONTENT}`);

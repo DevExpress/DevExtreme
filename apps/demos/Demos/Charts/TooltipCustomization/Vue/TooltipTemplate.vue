@@ -25,7 +25,7 @@ withDefaults(defineProps<{
   info: () => ({} as Record<string, any>),
 });
 
-const getImagePath = ({ data }) => `../../../../images/flags/${data.name.replace(/\s/, '')}.svg`;
+const getImagePath = ({ data }: { data: { name: string } }): string => `../../../../images/flags/${data.name.replace(/\s/, '')}.svg`;
 const formatNumber = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 0,
 }).format;

@@ -1,4 +1,12 @@
-const products = [{
+export interface Product {
+  id: string;
+  name: string;
+  price?: number;
+  icon?: string;
+  disabled?: boolean;
+  items?: Product[];
+}
+const products: Product[] = [{
   id: '1',
   name: 'Video Players',
   items: [{

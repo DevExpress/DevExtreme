@@ -89,6 +89,7 @@ const App = () => {
               disabled={!selectedRowKeys.length}
               onClick={onClearButtonClicked}
               text="Clear Selection"
+              stylingMode="text"
             />
           </Item>
         </Toolbar>

@@ -43,7 +43,7 @@ import DxPieChart, {
 } from 'devextreme-vue/pie-chart';
 import { dataSource } from './data.ts';
 
-const formatLabel = ({ argumentText, valueText }) => `${argumentText}: ${valueText}%`;
+const formatLabel = ({ argumentText, valueText }: any) => `${argumentText}: ${valueText}%`;
 </script>
 
 <style>

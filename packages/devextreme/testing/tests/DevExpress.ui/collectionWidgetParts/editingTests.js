@@ -2823,3 +2823,40 @@ module('internal methods', () => {
         assert.strictEqual(getCallSpy.callCount, 0);
     });
 });
+
+module('construction and initialization', {
+    beforeEach: function() {
+        this.element = document.createElement('div');
+    },
+    afterEach: function() {
+        TestComponent._initUserOptions = undefined;
+    }
+});
+
+test('passed options should be properly written in the non-static class field', function(assert) {
+    const testOptions = {
+        items: [1, 2, 3],
+        selectedIndex: 0,
+        customProp: 'test'
+    };
+
+    const widget = new TestComponent(this.element, testOptions);
+
+    assert.deepEqual(
+        widget._userOptions,
+        testOptions,
+        '_userOptions should contain passed options'
+    );
+});
+
+test('_initUserOptions static field should be cleared after init', function(assert) {
+    const testOptions = { items: [1, 2, 3] };
+
+    new TestComponent(this.element, testOptions);
+
+    assert.strictEqual(
+        TestComponent._initUserOptions,
+        undefined,
+        'static _initUserOptions should be cleared after widget initialization'
+    );
+});

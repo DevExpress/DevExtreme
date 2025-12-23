@@ -4,7 +4,7 @@ import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 import Pagination from 'ui/pagination';
 import DataGrid from 'ui/data_grid';

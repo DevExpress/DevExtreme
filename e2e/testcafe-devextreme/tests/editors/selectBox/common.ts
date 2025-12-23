@@ -5,7 +5,6 @@ import { testScreenshot } from '../../../helpers/themeUtils';
 import { appendElementTo, setStyleAttribute } from '../../../helpers/domUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { changeTheme } from '../../../helpers/changeTheme';
 
 fixture.disablePageReloads`SelectBox placeholder`
   .page(url(__dirname, '../../container.html'));
@@ -74,7 +73,6 @@ test('Pages should be loaded consistently after closing the dropdown popup and f
     .expect(items.nth(11).textContent)
     .eql('item 24');
 }).before(async () => {
-  await changeTheme(`${process.env.theme}.compact`);
   await appendElementTo('#container', 'div', 'selectBox');
   await setStyleAttribute(Selector('#container'), 'box-sizing: border-box; width: 300px; height: 100px; padding: 8px;');
 
@@ -119,6 +117,4 @@ test('Pages should be loaded consistently after closing the dropdown popup and f
       displayExpr: 'text',
     };
   }, '#selectBox');
-}).after(async () => {
-  await changeTheme(`${process.env.theme}`);
 });

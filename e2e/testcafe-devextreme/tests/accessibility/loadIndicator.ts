@@ -9,7 +9,6 @@ fixture.disablePageReloads`Accessibility`
 const options: Options<Properties> = {
   height: [undefined, 40],
   width: [undefined, 40],
-  hint: [undefined, 'hint'],
 };
 
 const a11yCheckConfig = {

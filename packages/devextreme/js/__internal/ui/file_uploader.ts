@@ -1069,7 +1069,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     return [...fileList];
   }
 
-  _getFile(fileData: File[] | number): FileUploaderItem | undefined {
+  _getFile(fileData: File | number): FileUploaderItem | undefined {
     const { value } = this.option();
 
     const targetFileValue = isNumeric(fileData) ? value?.[fileData] : fileData;
@@ -1496,7 +1496,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     this._resetInputValue(true);
   }
 
-  removeFile(fileData: File[]): void {
+  removeFile(fileData: File | number): void {
     const { uploadMode } = this.option();
     if (uploadMode === 'useForm' || !isDefined(fileData)) {
       return;
@@ -1915,7 +1915,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     super._clean();
   }
 
-  abortUpload(fileData: File[]): void {
+  abortUpload(fileData?: File | number): void {
     const { uploadMode } = this.option();
     if (uploadMode === 'useForm') {
       return;
@@ -1930,7 +1930,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     }
   }
 
-  upload(fileData: File[]): void {
+  upload(fileData?: File | number): void {
     const { uploadMode } = this.option();
     if (uploadMode === 'useForm') {
       return;

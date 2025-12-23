@@ -63,11 +63,6 @@
         </div>
         <div>
             <label>
-                No Renovation: <input type="checkbox" data-bind="checked: noRenovation" />
-            </label>
-        </div>
-        <div>
-            <label>
                 No CSP: <input type="checkbox" data-bind="checked: noCsp" />
             </label>
         </div>
@@ -161,7 +156,6 @@
             this.noGlobals = ko.observable(false);
             this.noTimers = ko.observable(true);
             this.noJQuery = ko.observable(true);
-            this.noRenovation = ko.observable(false);
             this.noCsp = ko.observable(true);
             this.hasChosenCat = ko.computed(
                 function() { return !!this.chosenCat() },
@@ -221,8 +215,6 @@
                     result.notimers = "true";
                 if(this.noJQuery())
                     result.nojquery = "true";
-                if(this.noRenovation())
-                    result.norenovation = "true";
                 if(this.noCsp()) {
                     result.nocsp = "true";
                 }

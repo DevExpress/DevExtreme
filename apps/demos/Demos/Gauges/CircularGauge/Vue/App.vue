@@ -3,8 +3,8 @@
     <div id="gauge-demo">
       <DxCircularGauge
         id="gauge"
-        :value="value.mean"
-        :subvalues="[value.min, value.max]"
+        :value="value?.mean"
+        :subvalues="subValue"
       >
         <DxScale
           :start-value="10"
@@ -65,8 +65,9 @@ import { dataSource } from './data.ts';
 
 const selected = ref(dataSource[0].name);
 const value = computed(() => dataSource.find((item) => item.name === selected.value));
+const subValue = computed(() => value.value ? [value.value.min, value.value.max] : []);
 
-const customizeText = ({ valueText }) => `${valueText} °C`;
+const customizeText = ({ valueText }: Record<string, any>) => `${valueText} °C`;
 </script>
 <style scoped>
 #gauge-demo {

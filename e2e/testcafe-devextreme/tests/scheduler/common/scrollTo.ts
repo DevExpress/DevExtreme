@@ -43,10 +43,10 @@ test('ScrollTo works correctly with week and day views', async (t) => {
 
     await scheduler.option('currentView', name);
     await scheduler.option('useNative', true);
-    await t.wait(2000);
+    await t.wait(1000);
 
     await scrollToDate();
-    await t.wait(3000);
+    await t.wait(1000);
 
     await t
       .expect(scheduler.workSpaceScroll.top).gt(initValue, `Work space is scrolled in ${name} view`);
@@ -67,12 +67,12 @@ test('ScrollTo works correctly with grouping in week view', async (t) => {
 
   await scheduler.option('currentView', 'week');
   await scheduler.option('useNative', true);
-  await t.wait(2000);
+  await t.wait(1000);
 
   const initialTop = await scheduler.workSpaceScroll.top;
 
   await scrollToDateWithGroups();
-  await t.wait(3000);
+  await t.wait(1000);
 
   await t
     .expect(scheduler.workSpaceScroll.top).gt(initialTop, 'Work space is scrolled with groups');
@@ -130,12 +130,12 @@ test('ScrollTo works correctly with RTL mode', async (t) => {
   await scheduler.option('currentView', 'week');
   await scheduler.option('useNative', true);
   await scheduler.option('rtlEnabled', true);
-  await t.wait(2000);
+  await t.wait(1000);
 
   const initialBrowserTop = await scheduler.workSpaceScroll.top;
 
   await scrollToDate();
-  await t.wait(3000);
+  await t.wait(1000);
 
   const browserTop = await ClientFunction(() => ($('#container') as any).dxScheduler('instance').getWorkSpaceScrollable().scrollTop())();
 

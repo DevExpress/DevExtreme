@@ -1,6 +1,6 @@
 import fx from 'common/core/animation/fx';
 import translator from 'common/core/animation/translator';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import config from 'core/config';
 import devices from '__internal/core/m_devices';
 import { isRenderer } from 'core/utils/type';

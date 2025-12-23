@@ -82,9 +82,9 @@ async function processBatchRequest(
   url: string, changes: DxDataGridTypes.DataChange[], component: DxDataGrid['instance'],
 ) {
   await sendBatchRequest(url, changes);
-  await component.refresh(true);
+  await component?.refresh(true);
 
-  component.cancelEditData();
+  component?.cancelEditData();
 }
 
 async function sendBatchRequest(url: string, changes: DxDataGridTypes.DataChange[]) {

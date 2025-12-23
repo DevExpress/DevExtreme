@@ -48,8 +48,6 @@
   padding-top: 4px;
   background-color: rgba(19, 32, 51, 0.8);
   z-index: 1;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
   border-left: 2px solid transparent;
   border-right: 2px solid transparent;

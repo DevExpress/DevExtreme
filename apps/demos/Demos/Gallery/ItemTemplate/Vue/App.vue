@@ -30,6 +30,6 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 0,
 });
 
-const formatCurrency = (value) => currencyFormatter.format(value);
+const formatCurrency = (value: number) => currencyFormatter.format(value);
 </script>
 

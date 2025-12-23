@@ -1,11 +1,18 @@
-/* hide scrollbars */
-
 body {
   overflow: clip;
 }
 
-/* trying to achieve more predictable results of rendered text */
+*:focus {
+  outline: none !important;
+}
 
-* {
+* { caret-color: transparent !important; }
+
+.dx-scrollable-scroll { visibility: hidden !important; }
+
+.dx-theme-material * {
+  -webkit-font-smoothing: antialiased !important;
+  
+  /* text-rendering: optimizeLegibility !important; */
   text-rendering: geometricprecision !important;
 }

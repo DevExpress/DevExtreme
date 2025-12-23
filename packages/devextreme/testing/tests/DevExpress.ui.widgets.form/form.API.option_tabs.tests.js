@@ -4,8 +4,6 @@ import { TABS_ITEM_CLASS } from '__internal/ui/tabs/tabs';
 import { TABS_ITEM_BADGE_CLASS } from '__internal/ui/tabs/item';
 import { TABPANEL_CLASS } from '__internal/ui/tab_panel/tab_panel';
 
-import 'generic_light.css!';
-
 const { testStart, test, module, assert } = QUnit;
 
 testStart(function() {

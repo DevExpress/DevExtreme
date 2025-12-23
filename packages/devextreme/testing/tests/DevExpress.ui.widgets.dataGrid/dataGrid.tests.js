@@ -1,11 +1,9 @@
 import DataGrid from 'ui/data_grid';
 import $ from 'jquery';
 import 'ui/drop_down_box';
-import Class from 'core/class';
 import { logger } from 'core/utils/console';
 import typeUtils from 'core/utils/type';
 import { deferUpdate } from 'core/utils/common';
-import devices from '__internal/core/m_devices';
 import { version } from 'core/version';
 import errors from 'core/errors';
 import gridCore from '__internal/grids/data_grid/m_core';
@@ -22,7 +20,8 @@ import { checkDxFontIcon, DX_ICON_XLSX_FILE_CONTENT_CODE, DX_ICON_EXPORT_SELECTE
 import { createDataGrid, baseModuleConfig, findShadowHostOrDocument } from '../../helpers/dataGridHelper.js';
 import { getOuterWidth } from 'core/utils/size';
 import { generateItems } from '../../helpers/dataGridMocks.js';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
+
+import 'generic_light.css!';
 
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 const CELL_UPDATED_CLASS = 'dx-datagrid-cell-updated-animation';
@@ -532,10 +531,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Enable rows hover', function(assert) {
-        if(shouldSkipOnMobile(assert, 'hover is disabled for non desktop devices')) {
-            return;
-        }
-
         // arrange
         const $dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: [],
@@ -557,10 +552,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Enable rows hover and row position', function(assert) {
-        if(shouldSkipOnMobile(assert, 'hover is disabled for non desktop devices')) {
-            return;
-        }
-
         // arrange
         const $dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: [],
@@ -613,10 +604,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Enable rows hover via option method', function(assert) {
-        if(shouldSkipOnMobile(assert, 'hover is disabled for non desktop devices')) {
-            return;
-        }
-
         // arrange
         const $dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: [],
@@ -1272,6 +1259,21 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.strictEqual(onContentReadySpy.callCount, 1, 'onContentReadySpy call count');
+    });
+
+    QUnit.test('Load panel has custom z-index (T1308742)', function(assert) {
+        const dataGrid = createDataGrid({
+            dataSource: {
+                load: function() {
+                    return;
+                }
+            }
+        });
+
+        const loadPanel = dataGrid.getView('rowsView')._loadPanel;
+        const loadPanelZIndex = loadPanel._zIndex;
+
+        assert.strictEqual(loadPanelZIndex, 1000, 'load z-index is set to 1000 by default');
     });
 });
 

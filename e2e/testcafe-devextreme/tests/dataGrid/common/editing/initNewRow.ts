@@ -3,7 +3,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture`initNewRow`
+fixture.disablePageReloads`initNewRow`
   .page(url(__dirname, '../../../container.html'));
 
 // T1274123

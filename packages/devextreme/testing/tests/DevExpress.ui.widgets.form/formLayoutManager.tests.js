@@ -16,7 +16,7 @@ import 'ui/text_area';
 import 'ui/radio_group';
 import 'ui/date_range_box';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(function() {
     const markup =

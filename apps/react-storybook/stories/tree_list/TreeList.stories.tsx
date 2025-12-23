@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
 
 import dxTreeList from 'devextreme/ui/tree_list';
 import { wrapDxWithReact } from '../utils';

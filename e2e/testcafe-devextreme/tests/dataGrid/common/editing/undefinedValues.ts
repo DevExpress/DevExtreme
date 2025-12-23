@@ -2,7 +2,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture`Editing - undefined values`
+fixture.disablePageReloads`Editing - undefined values`
   .disablePageReloads
   .page(url(__dirname, '../../../container.html'));
 

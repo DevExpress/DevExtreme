@@ -28,6 +28,7 @@ export const CLASS = {
   headers: 'headers',
   headerPanel: 'header-panel',
   searchBox: 'dx-searchbox',
+  row: 'dx-row',
   dataRow: 'dx-data-row',
   groupRow: 'dx-group-row',
   groupPanel: 'group-panel',
@@ -42,6 +43,8 @@ export const CLASS = {
   popupEdit: 'edit-popup',
   masterDetailRow: 'dx-master-detail-row',
   adaptiveDetailRow: 'dx-adaptive-detail-row',
+  adaptiveCommandCellHidden: 'dx-command-adaptive-hidden',
+  adaptiveColumnButton: 'dx-datagrid-adaptive-more',
   errorRow: 'dx-error-row',
 
   headerRow: 'dx-header-row',
@@ -132,6 +135,10 @@ export default class DataGrid extends GridCore {
   constructor(id: string | Selector) {
     super(id);
 
+    /*
+      dataRows contains double collection of rows (two tables) when
+      columnFixing.legacyMode = true AND DataGrid has fixed columns
+    */
     this.dataRows = this.element.find(`.${CLASS.dataRow}`);
   }
 
@@ -140,6 +147,10 @@ export default class DataGrid extends GridCore {
 
   getContainer(): Selector {
     return this.element.find(`.${CLASS.dataGrid}`);
+  }
+
+  getHeadersContainer(): Selector {
+    return this.element.find(`.${this.addWidgetPrefix(CLASS.headers)}`);
   }
 
   getHeaders(): Headers {
@@ -152,6 +163,18 @@ export default class DataGrid extends GridCore {
 
   getScrollContainer(): Selector {
     return this.getRowsView().find(`.${CLASS.scrollableContainer}`);
+  }
+
+  /*
+    getRows() returns double collection of rows (two tables) when
+    columnFixing.legacyMode = true AND DataGrid has fixed columns
+  */
+  getRows(): Selector {
+    return this.getRowsView().find(`.${CLASS.row}`);
+  }
+
+  getCells(): Selector {
+    return this.getRowsView().find('td');
   }
 
   getDataRow(index: number): DataRow {
@@ -316,7 +339,9 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-  scrollBy(options: { x?: number; y?: number; top?: number; left?: number }): Promise<void> {
+  async scrollBy(t: TestController, options: { x?: number; y?: number; top?: number; left?: number }): Promise<void> {
+    await t.expect(this.hasScrollable()).ok();
+
     const { getInstance } = this;
 
     return ClientFunction(
@@ -399,6 +424,18 @@ export default class DataGrid extends GridCore {
 
   getColumnChooserButton(): Selector {
     return this.element.find(`.${this.addWidgetPrefix(CLASS.columnChooserButton)}`);
+  }
+
+   getAdaptiveButtonSelector(): string {
+    return `.${CLASS.adaptiveColumnButton}`;
+  }
+
+  getAdaptiveButton(nth: number = 0): Selector {
+    return this.element.find(this.getAdaptiveButtonSelector()).nth(nth);
+  }
+
+  isAdaptiveColumnHidden(): Promise<boolean> {
+    return this.element.find(`.${CLASS.adaptiveCommandCellHidden}`).exists;
   }
 
   apiAddRow(): Promise<void> {

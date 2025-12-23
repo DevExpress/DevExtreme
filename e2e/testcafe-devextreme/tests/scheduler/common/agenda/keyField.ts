@@ -3,7 +3,6 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-// TODO fixture.disablePageReloads lead to fail random test in current file
 fixture`Agenda:KeyField`
   .page(url(__dirname, '../../../container.html'));
 
@@ -46,9 +45,6 @@ test('Warning should be thrown in console after set new views(T1100758)', async 
     height: 600,
   });
 });
-
-// TODO
-// The matrix test to split, so it was not possible to achieve a working state matrix test
 
 test('Warning shouldn\'t be thrown in console in case currentView=\'week\' if keyField exists(T1100758)', async (t) => {
   const messages = await t.getBrowserConsoleMessages();
@@ -93,8 +89,6 @@ test('Warning shouldn\'t be thrown in console in case currentView=\'agenda\' if 
     };
   });
 });
-
-//
 
 ['week', 'agenda'].forEach((currentView) => {
   test(`Warning should be thrown in console in case currentView='${currentView}' if keyField not set in Store(T1100758)`, async (t) => {
@@ -141,5 +135,5 @@ test('Wrong behavior: editing recurrence appointment does not affect to appointm
     currentDate: new Date(2021, 2, 28),
     recurrenceEditMode: 'series',
     height: 600,
-  }, '#container', { disableFxAnimation: true });
+  }, '#container');
 });

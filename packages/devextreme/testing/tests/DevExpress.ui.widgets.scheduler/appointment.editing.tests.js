@@ -14,6 +14,7 @@ import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js
 
 import '__internal/scheduler/m_scheduler';
 import 'ui/switch';
+import 'fluent_blue_light.css!';
 
 const {
     module,

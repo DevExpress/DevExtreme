@@ -14,7 +14,7 @@ QUnit.testStart(function() {
     addShadowDomStyles($('#qunit-fixture'));
 });
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import '__internal/grids/tree_list/m_widget';
 import $ from 'jquery';
 import fx from 'common/core/animation/fx';

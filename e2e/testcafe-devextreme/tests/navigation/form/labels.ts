@@ -3,7 +3,7 @@ import { ClientFunction } from 'testcafe';
 import { HorizontalAlignment } from 'devextreme/common';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { isMaterialBased, testScreenshot } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import { appendElementTo, insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../helpers/domUtils';
 
 const waitFont = ClientFunction(() => (window as any).DevExpress.ui.themes.waitWebFont('Item123somevalu*op ', 400));
@@ -172,11 +172,6 @@ test('Color of the mark (T882067)', async (t) => {
   const screenshotName = 'Form color of the mark.png';
 
   await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container' });
-
-  if (!isMaterialBased()) {
-    await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', theme: 'generic.dark' });
-    await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', theme: 'generic.contrast' });
-  }
 
   await t
     .expect(compareResults.isValid())

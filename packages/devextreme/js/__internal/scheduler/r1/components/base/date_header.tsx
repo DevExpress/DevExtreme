@@ -43,7 +43,7 @@ export class DateHeader extends BaseInfernoComponent<DateHeaderProps> {
       groupOrientation,
       groups,
     } = this.props;
-    const isHorizontalGrouping = isHorizontalGroupingApplied(groups, groupOrientation)
+    const isHorizontalGrouping = isHorizontalGroupingApplied(groups.length, groupOrientation)
       && !groupByDate;
 
     return (

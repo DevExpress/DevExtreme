@@ -344,7 +344,7 @@ export type EditorPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeLi
     /** @docid _ui_tree_list_EditorPreparedEvent.setValue */
     readonly setValue?: any;
     /** @docid _ui_tree_list_EditorPreparedEvent.updateValueTimeout */
-    readonly updateValueTimeout?: number;
+    updateValueTimeout?: number;
     /** @docid _ui_tree_list_EditorPreparedEvent.width */
     readonly width?: number;
     /** @docid _ui_tree_list_EditorPreparedEvent.disabled */

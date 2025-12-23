@@ -21,10 +21,6 @@ const file: File[] = [{
 const options: Options<Properties> = {
   value: [file],
   multiple: [true, false],
-  disabled: [true, false],
-  readOnly: [true, false],
-  hint: [undefined, 'hint'],
-  name: ['', 'name'],
   focusStateEnabled: [true],
   inputAttr: [{ 'aria-label': 'aria-label' }],
 };
@@ -34,10 +30,25 @@ const a11yCheckConfig = {
   rules: { 'color-contrast': { enabled: false } },
 };
 
-const configuration: Configuration = {
+const availabilityConfiguration: Configuration = {
   component: 'dxFileUploader',
   a11yCheckConfig,
-  options,
+  options: {
+    ...options,
+    disabled: [true, false],
+    readOnly: [true, false],
+  },
 };
 
-testAccessibility(configuration);
+testAccessibility(availabilityConfiguration);
+
+const infoConfiguration: Configuration = {
+  component: 'dxFileUploader',
+  a11yCheckConfig,
+  options: {
+    ...options,
+    name: ['', 'name'],
+  },
+};
+
+testAccessibility(infoConfiguration);

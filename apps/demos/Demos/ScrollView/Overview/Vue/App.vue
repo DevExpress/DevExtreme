@@ -65,7 +65,7 @@
 import { ref } from 'vue';
 import { DxScrollView, type DxScrollViewTypes } from 'devextreme-vue/scroll-view';
 import { DxSelectBox } from 'devextreme-vue/select-box';
-import { DxCheckBox } from 'devextreme-vue/check-box';
+import { DxCheckBox, type DxCheckBoxTypes } from 'devextreme-vue/check-box';
 import { longText } from './data.ts';
 
 const content = ref(longText);
@@ -93,8 +93,8 @@ const scrollByContent = ref(true);
 const scrollByThumb = ref(true);
 const scrollViewWidget = ref();
 
-let updateContentTimer;
-function updateContent(args, eventName) {
+let updateContentTimer: ReturnType<typeof setTimeout>;
+function updateContent(args: DxScrollViewTypes.ReachBottomEvent, eventName: string) {
   const updateContentText = `<br /><div>Content has been updated on the ${
     eventName
   } event.</div><br />`;
@@ -103,16 +103,16 @@ function updateContent(args, eventName) {
     content.value = eventName === 'PullDown'
       ? updateContentText + content.value
       : content.value + updateContentText;
-    args.component.release();
+    args.component.release(false);
   }, 500);
 }
-function updateBottomContent(e) {
+function updateBottomContent(e: DxScrollViewTypes.ReachBottomEvent) {
   updateContent(e, 'ReachBottom');
 }
-function updateTopContent(e) {
+function updateTopContent(e: DxScrollViewTypes.PullDownEvent) {
   updateContent(e, 'PullDown');
 }
-function onValueChanged(args) {
+function onValueChanged(args: DxCheckBoxTypes.ValueChangedEvent) {
   scrollViewWidget.value.instance.option(
     'onReachBottom',
     args.value ? updateBottomContent : null,

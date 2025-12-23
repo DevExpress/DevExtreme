@@ -62,7 +62,7 @@ export const tryGetTabPath = (fullPath: string): string => {
 
 export const getItemPath = (
   items: PreparedItem[],
-  item: PreparedItem | false,
+  item: PreparedItem | null,
   isTabs?: boolean,
 ): string => {
   if (!item) {

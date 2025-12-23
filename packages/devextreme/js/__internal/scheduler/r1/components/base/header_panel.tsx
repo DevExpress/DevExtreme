@@ -44,7 +44,7 @@ export class HeaderPanel extends InfernoWrapperComponent<HeaderPanelProps> {
       resourceCellTemplate,
       timeCellTemplate,
     } = this.props;
-    const isHorizontalGrouping = isHorizontalGroupingApplied(groups, groupOrientation);
+    const isHorizontalGrouping = isHorizontalGroupingApplied(groups.length, groupOrientation);
 
     return (
       <thead>

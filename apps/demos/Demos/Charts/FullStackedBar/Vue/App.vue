@@ -57,7 +57,7 @@ import service from './data.ts';
 
 const dataSource = service.dataSource();
 
-const customizeTooltip = ({ percentText, valueText }) => ({ text: `${percentText}`, years: `${valueText}` });
+const customizeTooltip = ({ percentText, valueText }: { percentText: string; valueText: string }) => ({ text: `${percentText}`, years: `${valueText}` });
 </script>
 <style>
 #chart {

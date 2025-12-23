@@ -17,7 +17,6 @@ import EditingPreview, {
 import {
     FOCUSED_STATE_CLASS,
 } from '__internal/core/widget/widget';
-import { shouldSkipOnDesktop, shouldSkipOnMobile } from '../../../helpers/device.js';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
@@ -187,10 +186,6 @@ QUnit.module('MessageBox', moduleConfig, () => {
         });
 
         QUnit.test('should be fired on enter key if the textarea input contains a value', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             const onMessageEnteredStub = sinon.stub();
 
             this.reinit({ onMessageEntered: onMessageEnteredStub });
@@ -288,10 +283,6 @@ QUnit.module('MessageBox', moduleConfig, () => {
         });
 
         QUnit.test('should be fired with correct arguments when enter is pressed', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             assert.expect(6);
 
             const text = '  new text message ';
@@ -314,24 +305,6 @@ QUnit.module('MessageBox', moduleConfig, () => {
                 .type(text)
                 .keyDown('enter')
                 .keyUp('enter');
-        });
-
-        QUnit.test('should not send message on enter key on mobile devices (T1293840)', function(assert) {
-            if(shouldSkipOnDesktop(assert)) {
-                return;
-            }
-
-            const onMessageEnteredStub = sinon.stub();
-
-            this.reinit({ onMessageEntered: onMessageEnteredStub });
-
-            keyboardMock(this.$input)
-                .focus()
-                .type('new text message')
-                .keyDown('enter')
-                .keyUp('enter');
-
-            assert.strictEqual(onMessageEnteredStub.callCount, 0);
         });
     });
 
@@ -720,10 +693,6 @@ QUnit.module('MessageBox', moduleConfig, () => {
         });
 
         QUnit.test('textarea should be cleared on enter key when some text is entered', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             keyboardMock(this.$input)
                 .focus()
                 .type('some text')
@@ -734,10 +703,6 @@ QUnit.module('MessageBox', moduleConfig, () => {
         });
 
         QUnit.test('enter keydown event should be prevented if input text has non-space characters', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             const enterKeyDownEvent = $.Event('keydown', { key: 'enter' });
 
             keyboardMock(this.$input).type('1');
@@ -768,10 +733,6 @@ QUnit.module('MessageBox', moduleConfig, () => {
         });
 
         QUnit.test('textarea should restore its height after enter press when multiline text was entered', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             const initialTextAreaHeight = this.$textArea.height();
 
             keyboardMock(this.$input)

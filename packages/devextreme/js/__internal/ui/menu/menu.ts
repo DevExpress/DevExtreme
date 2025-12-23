@@ -98,6 +98,7 @@ const ACTIONS = [
 
 type MenuNode = InternalNode & Item;
 interface SubmenuVisibilityChangeEventParams {
+  cancel?: boolean;
   itemData?: Item;
   rootItem: Element;
   submenuContainer: Element;
@@ -552,11 +553,12 @@ class Menu extends MenuBase<MenuProperties> {
     this._treeView = this._createComponent($('<div>'), TreeView, this._getTreeViewOptions());
     this._overlay = this._createComponent($('<div>'), Overlay, this._getAdaptiveOverlayOptions());
     this._overlay.$content()
-      .append(this._treeView.$element())
+      ?.append(this._treeView.$element())
       .addClass(DX_ADAPTIVE_MODE_CLASS)
       // @ts-expect-error ts-error
       .addClass(cssClass);
-    this._overlay.$wrapper().addClass(DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS);
+
+    this._overlay.$wrapper()?.addClass(DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS);
 
     this._$adaptiveContainer = $('<div>').addClass(DX_ADAPTIVE_MODE_CLASS);
     this._$adaptiveContainer.append($hamburger);
@@ -831,7 +833,7 @@ class Menu extends MenuBase<MenuProperties> {
   _submenuOnHidingHandler(
     $menuAnchorItem: dxElementWrapper,
     submenu: Submenu,
-    eventArgs: SubmenuHidingEvent,
+    eventArgs: SubmenuHidingEvent | SubmenuVisibilityChangeEventParams,
   ): void {
     const $border = $menuAnchorItem.children(`.${DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS}`);
     const params = this._getVisibilityChangeEventParams(
@@ -855,23 +857,29 @@ class Menu extends MenuBase<MenuProperties> {
 
     this._actions.onSubmenuHiding?.(eventArgs);
 
+    if (eventArgs.cancel) {
+      return;
+    }
+
     const { focusedElement } = this.option();
-    const { focusedElement: submenuFocusedElement } = submenu.option();
+    const submenuContainerElement = $(eventArgs.submenuContainer).get(0);
+    const focusedDomElement = $(focusedElement).get(0);
+    const isFocusedElementInsideSubmenu = focusedDomElement && submenuContainerElement
+      ? submenuContainerElement.contains(focusedDomElement)
+      : false;
 
-    const isVisibleSubmenuHiding = this._visibleSubmenu === submenu;
-    const isFocusedElementHiding = focusedElement === submenuFocusedElement;
-
-    if (isVisibleSubmenuHiding && isFocusedElementHiding) {
+    if (isFocusedElementInsideSubmenu) {
       this.option('focusedElement', getPublicElement($menuAnchorItem));
     }
 
-    if (!eventArgs.cancel) {
-      if (isVisibleSubmenuHiding) {
-        this._visibleSubmenu = null;
-      }
-      $border.hide();
-      $menuAnchorItem.removeClass(DX_MENU_ITEM_EXPANDED_CLASS);
+    const isVisibleSubmenuHiding = this._visibleSubmenu === submenu;
+
+    if (isVisibleSubmenuHiding) {
+      this._visibleSubmenu = null;
     }
+
+    $border.hide();
+    $menuAnchorItem.removeClass(DX_MENU_ITEM_EXPANDED_CLASS);
   }
 
   _submenuOnHiddenHandler(

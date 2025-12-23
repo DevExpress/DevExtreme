@@ -39,6 +39,12 @@ export default class List extends Widget {
     return this.element.find(`.${CLASS.item}:not(.${CLASS.nestedItem})`);
   }
 
+  async getItemsAsArray(): Promise<Selector[]> {
+      const count = await this.getItems().count;
+
+      return new Array(count).fill(1).map((_, index) => this.getItems().nth(index));
+  }
+
   getVisibleItems(): Selector {
     return this.element.find(`.${CLASS.item}:not(.${CLASS.invisible})`);
   }

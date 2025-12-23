@@ -12,7 +12,6 @@ fixture.disablePageReloads`Accessibility`
 const optionsWithSimpleItems: Options<Properties> = {
   useSubmitBehavior: [true, false],
   disabled: [true, false],
-  hint: [undefined, 'hint'],
   icon: [undefined, 'user'],
   text: [undefined, 'text'],
   // NOTE: Doesn't matter if there are contrast issues

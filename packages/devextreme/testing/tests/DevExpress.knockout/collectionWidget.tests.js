@@ -123,6 +123,7 @@ class TestComponent extends CollectionWidget {
 
 moduleWithoutCsp('render', {
     beforeEach: function() {
+        executeAsyncMock.setup();
         this.element = $('#cmp');
         this.clock = sinon.useFakeTimers();
     },

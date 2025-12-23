@@ -195,11 +195,54 @@ class TreeViewSearch extends TreeViewBase {
       return this._getNodeContainer();
     }
 
-    if (this._scrollable && isSearchMode) {
-      return $(this._scrollable.content());
+    if (this.getScrollable() && isSearchMode) {
+      return $(this.getScrollable().content());
     }
 
     return super._itemContainer();
+  }
+
+  _applyToAllItemContainers(callback: (itemsContainer: dxElementWrapper) => void): void {
+    if (this.getScrollable()) {
+      callback($(this.getScrollable().content()));
+    }
+
+    const nodeContainer = this._getNodeContainer();
+    if (nodeContainer.length) {
+      callback(nodeContainer);
+    }
+
+    callback(this.$element());
+  }
+
+  _attachClickEvent(): void {
+    if (this._selectAllEnabled()) {
+      this._applyToAllItemContainers((itemsContainer) => {
+        this._detachClickEvent(itemsContainer);
+      });
+    }
+
+    super._attachClickEvent();
+  }
+
+  _attachHoldEvent(): void {
+    if (this._selectAllEnabled()) {
+      this._applyToAllItemContainers((itemsContainer) => {
+        this._detachHoldEvent(itemsContainer);
+      });
+    }
+
+    super._attachHoldEvent();
+  }
+
+  _attachContextMenuEvent(): void {
+    if (this._selectAllEnabled()) {
+      this._applyToAllItemContainers((itemsContainer) => {
+        this._detachContextMenuEvent(itemsContainer);
+      });
+    }
+
+    super._attachContextMenuEvent();
   }
 
   _addWidgetClass(): void {

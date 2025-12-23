@@ -3,6 +3,8 @@ import commonUtils from 'core/utils/common';
 import { baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import { getWidth } from 'core/utils/size';
 
+import 'generic_light.css!';
+
 QUnit.testStart(function() {
     const gridMarkup = `
         <div id='container'>

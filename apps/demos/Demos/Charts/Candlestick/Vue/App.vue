@@ -56,6 +56,11 @@ import { dataSource } from './data.ts';
 
 const customizeTooltip = ({
   openValue, closeValue, highValue, lowValue,
+}: {
+  openValue: number;
+  closeValue: number;
+  highValue: number;
+  lowValue: number;
 }) => ({
   text: `Open: $${openValue}<br/>
 Close: $${closeValue}<br/>

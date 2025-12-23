@@ -2,7 +2,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Appointments with adaptive`
   .page(url(__dirname, '../../../container.html'));
@@ -11,15 +11,20 @@ const SCHEDULER_SELECTOR = '#container';
 const MOBILE_SIZE: [width: number, height: number] = [500, 700];
 
 ['week', 'month'].forEach((view) => {
-  safeSizeTest(`should correctly render appointment collectors (view:${view})`, async (t) => {
+  test.meta({ browserSize: MOBILE_SIZE })(`should correctly render appointment collectors (view:${view})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
-    await takeScreenshot(`adaptive_appts_view-${view}.png`, scheduler.workSpace);
+    await testScreenshot(
+      t,
+      takeScreenshot,
+      `adaptive_appts_view-${view}.png`,
+      { element: scheduler.workSpace },
+    );
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, MOBILE_SIZE).before(async () => createWidget('dxScheduler', {
+  }).before(async () => createWidget('dxScheduler', {
     dataSource: [
       {
         startDate: '2023-12-20T10:00:00',
@@ -78,15 +83,20 @@ const MOBILE_SIZE: [width: number, height: number] = [500, 700];
   }));
 });
 
-safeSizeTest('should correctly render long appointments with disabled allDayPanel ()', async (t) => {
+test.meta({ browserSize: MOBILE_SIZE })('should correctly render long appointments with disabled allDayPanel ()', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
-  await takeScreenshot('adaptive_long-appts-without-all-day-panel_view-week.png', scheduler.workSpace);
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'adaptive_long-appts-without-all-day-panel_view-week.png',
+    { element: scheduler.workSpace },
+  );
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, MOBILE_SIZE).before(async () => createWidget('dxScheduler', {
+}).before(async () => createWidget('dxScheduler', {
   dataSource: [
     {
       startDate: '2023-12-20T00:00:00',

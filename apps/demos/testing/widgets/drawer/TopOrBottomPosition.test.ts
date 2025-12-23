@@ -30,8 +30,7 @@ runManualTest('Drawer', 'TopOrBottomPosition', (test) => {
     await testScreenshot(t, takeScreenshot, 'drawer(overlap, bottom, expand).png');
 
     await t
-      .click(menuButton)
-      .wait(500);
+      .click(menuButton);
 
     await testScreenshot(t, takeScreenshot, 'drawer_opened(overlap, bottom, expand).png');
 
@@ -44,8 +43,7 @@ runManualTest('Drawer', 'TopOrBottomPosition', (test) => {
       .resizeWindow(900, 1200);
 
     await t
-      .click(menuButton)
-      .wait(500);
+      .click(menuButton);
 
     await testScreenshot(t, takeScreenshot, 'drawer_closed(overlap, bottom, expand).png');
 
@@ -70,8 +68,7 @@ runManualTest('Drawer', 'TopOrBottomPosition', (test) => {
     await testScreenshot(t, takeScreenshot, 'drawer(overlap, bottom, expand).png');
 
     await t
-      .click(menuButton)
-      .wait(500);
+      .click(menuButton);
 
     await testScreenshot(t, takeScreenshot, 'drawer_opened(overlap, bottom, expand).png');
 
@@ -84,8 +81,7 @@ runManualTest('Drawer', 'TopOrBottomPosition', (test) => {
       .resizeWindow(900, 1200);
 
     await t
-      .click(menuButton)
-      .wait(500);
+      .click(menuButton);
 
     await testScreenshot(t, takeScreenshot, 'drawer_closed(overlap, bottom, expand).png');
 

@@ -13,7 +13,6 @@ const options: Options<Properties> = {
   dataSource: [items],
   disabled: [true, false],
   deferRendering: [true, false],
-  hint: [undefined, 'hint'],
   multiple: [true, false],
   focusStateEnabled: [true],
 };

@@ -2,7 +2,7 @@ import CardView from 'devextreme-testcafe-models/cardView';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 
-fixture.disablePageReloads`CardView - ColumnChooser.Functional`
+fixture`CardView - ColumnChooser.Functional`
   .page(url(__dirname, '../../container.html'));
 
 function testsFactory(testModel: {
@@ -169,7 +169,7 @@ test('ColumnChooser should receive and render custom texts', async (t) => {
     });
   });
 
-  return createWidget('dxCardView', {
+  await createWidget('dxCardView', {
     dataSource: [],
     keyExpr: 'ID',
     cardsPerRow: 'auto',
@@ -181,4 +181,6 @@ test('ColumnChooser should receive and render custom texts', async (t) => {
     },
     columns: [],
   });
+}).after(async (t) => {
+  await t.eval(() => location.reload());
 });

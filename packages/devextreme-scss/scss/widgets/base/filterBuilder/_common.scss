@@ -82,6 +82,14 @@
       padding-left: 26px;
     }
   }
+
+  .dx-filterbuilder-checkbox-size {
+    vertical-align: middle;
+
+    .dx-switch-container {
+      vertical-align: baseline;
+    }
+  }
 }
 
 .dx-filterbuilder-operations {

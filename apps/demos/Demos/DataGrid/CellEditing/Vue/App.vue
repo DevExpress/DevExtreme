@@ -57,6 +57,7 @@
               :disabled="!selectedItemKeys.length"
               icon="trash"
               text="Delete Selected Records"
+              stylingMode="text"
             />
           </template>
         </DxItem>

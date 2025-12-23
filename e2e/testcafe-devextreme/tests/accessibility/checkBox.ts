@@ -9,10 +9,6 @@ fixture.disablePageReloads`Accessibility`
 const options: Options<Properties> = {
   value: [true, false, null],
   enableThreeStateBehavior: [true],
-  disabled: [true, false],
-  readOnly: [true, false],
-  name: ['', 'name'],
-  text: ['', 'text'],
   elementAttr: [{ 'aria-label': 'Checked' }],
 };
 
@@ -21,10 +17,26 @@ const a11yCheckConfig = {
   rules: { 'color-contrast': { enabled: false } },
 };
 
-const configuration: Configuration = {
+const availabilityConfiguration: Configuration = {
   component: 'dxCheckBox',
   a11yCheckConfig,
-  options,
+  options: {
+    ...options,
+    disabled: [true, false],
+    readOnly: [true, false],
+  },
 };
 
-testAccessibility(configuration);
+testAccessibility(availabilityConfiguration);
+
+const infoConfiguration: Configuration = {
+  component: 'dxCheckBox',
+  a11yCheckConfig,
+  options: {
+    ...options,
+    name: ['', 'name'],
+    text: ['', 'text'],
+  },
+};
+
+testAccessibility(infoConfiguration);

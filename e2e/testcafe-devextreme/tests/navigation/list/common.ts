@@ -5,7 +5,7 @@ import { isMaterialBased, isFluent, testScreenshot } from '../../../helpers/them
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 
-fixture`List`
+fixture.disablePageReloads`List`
   .page(url(__dirname, '../../container.html'));
 
 test('Should focus first item after changing selection mode (T811770)', async (t) => {

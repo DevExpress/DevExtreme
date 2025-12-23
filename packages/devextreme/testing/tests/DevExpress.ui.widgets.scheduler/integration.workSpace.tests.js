@@ -20,6 +20,8 @@ import config from 'core/config';
 import translator from 'common/core/animation/translator';
 import { getOuterHeight, getInnerHeight, getOuterWidth } from 'core/utils/size';
 
+import 'generic_light.css!';
+
 const SELECTED_CELL_CLASS = CLASSES.selectedCell.slice(1);
 const FOCUSED_CELL_CLASS = CLASSES.focusedCell.slice(1);
 

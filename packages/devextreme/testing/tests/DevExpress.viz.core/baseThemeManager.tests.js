@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import themeModule from 'viz/themes';
 import { BaseThemeManager } from 'viz/core/base_theme_manager';
-import paletteModule from 'viz/palette';
+import paletteModule from '__internal/viz/paletteModule';
 
 const currentTheme = themeModule.currentTheme();
 

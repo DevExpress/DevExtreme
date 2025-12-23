@@ -33,18 +33,18 @@ import { watch, ref } from 'vue';
 import type { BookingFormData } from './types.ts';
 import { roomTypes, mealPlans, getInitialFormData } from './data.ts';
 
-const formRef = ref(null);
+const formRef = ref<DxForm>();
 
 const props = withDefaults(defineProps<{
   formData: BookingFormData;
   validationGroup?: string;
 }>(), {
   formData: getInitialFormData,
-  validationGroup: () => undefined,
+  validationGroup: () => '',
 });
 
 watch(() => props.formData, (value) => {
-  formRef.value.instance.reset(value);
+  formRef.value?.instance?.reset(value);
 });
 
 const roomLabelOptions = {

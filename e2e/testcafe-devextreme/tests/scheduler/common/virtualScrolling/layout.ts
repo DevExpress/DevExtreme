@@ -1,8 +1,9 @@
-import { createScreenshotsComparer, compareScreenshot } from 'devextreme-screenshot-comparer';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { scrollToDate } from '../../helpers/utils';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 import {
   resources,
   createDataSetForScreenShotTests,
@@ -45,15 +46,11 @@ test('Virtual scrolling layout in scheduler views', async (t) => {
     await scheduler.option('currentView', view.type);
     await scrollToDate(scrollConfig[i].firstDate);
 
-    await t.expect(
-      await takeScreenshot(`virtual-scrolling-${view.type}-after-scroll.png`),
-    ).ok();
+    await testScreenshot(t, takeScreenshot, `virtual-scrolling-${view.type}-after-scroll.png`);
 
     await scrollToDate(scrollConfig[i].lastDate);
 
-    await t.expect(
-      await takeScreenshot(`virtual-scrolling-${view.type}-before-scroll.png`),
-    ).ok();
+    await testScreenshot(t, takeScreenshot, `virtual-scrolling-${view.type}-before-scroll.png`);
   }
 
   await t.expect(compareResults.isValid())
@@ -75,15 +72,11 @@ test('Virtual scrolling layout in scheduler views when horizontal grouping is en
     await scheduler.option('currentView', view.type);
     await scrollToDate(scrollConfig[i].firstDate, { resourceId: 6 });
 
-    await t.expect(
-      await takeScreenshot(`virtual-scrolling-${view.type}-after-scroll-horizontal-grouping.png`),
-    ).ok();
+    await testScreenshot(t, takeScreenshot, `virtual-scrolling-${view.type}-after-scroll-horizontal-grouping.png`);
 
     await scrollToDate(scrollConfig[i].lastDate, { resourceId: 0 });
 
-    await t.expect(
-      await takeScreenshot(`virtual-scrolling-${view.type}-before-scroll-horizontal-grouping.png`),
-    ).ok();
+    await testScreenshot(t, takeScreenshot, `virtual-scrolling-${view.type}-before-scroll-horizontal-grouping.png`);
   }
 
   await t.expect(compareResults.isValid())
@@ -109,15 +102,11 @@ test('Virtual scrolling layout in scheduler views when grouping by date is enabl
 
     await scrollToDate(scrollConfig[i].firstDate, { resourceId: 3 });
 
-    await t.expect(
-      await takeScreenshot(`virtual-scrolling-${view.type}-after-scroll-grouping-by-date.png`),
-    ).ok();
+    await testScreenshot(t, takeScreenshot, `virtual-scrolling-${view.type}-after-scroll-grouping-by-date.png`);
 
     await scrollToDate(scrollConfig[i].lastDate, { resourceId: 0 });
 
-    await t.expect(
-      await takeScreenshot(`virtual-scrolling-${view.type}-before-scroll-grouping-by-date.png`),
-    ).ok();
+    await testScreenshot(t, takeScreenshot, `virtual-scrolling-${view.type}-before-scroll-grouping-by-date.png`);
   }
 
   await t.expect(compareResults.isValid())
@@ -130,13 +119,16 @@ test('Virtual scrolling layout in scheduler views when grouping by date is enabl
 });
 
 test('Header cells should be aligned with date-table cells in timeline-month when current date changes and virtual scrolling is used', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const scheduler = new Scheduler('#container');
 
   await scheduler.option('currentDate', new Date(2020, 11, 1));
 
-  await t.expect(
-    await compareScreenshot(t, 'virtual-scrolling-timeline-month-change-current-date-virtual.png'),
-  ).ok();
+  await testScreenshot(t, takeScreenshot, 'virtual-scrolling-timeline-month-change-current-date-virtual.png');
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
 }).before(async () => {
   await createScheduler({
     currentDate: new Date(2020, 10, 1),

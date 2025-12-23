@@ -4,13 +4,11 @@ import { DataSource } from 'common/data/data_source/data_source';
 import {
     initTestMarkup,
     createWrapper,
-    asyncWrapper,
-    execAsync
 } from '../../helpers/scheduler/helpers.js';
-import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 import '__internal/scheduler/m_scheduler';
 import 'ui/switch';
+import 'generic_light.css!';
 
 QUnit.testStart(() => initTestMarkup());
 

@@ -41,7 +41,6 @@ export default [
             '**/ts/',
             'js/common/core/localization/cldr-data/*',
             'js/common/core/localization/default_messages.js',
-            'js/renovation/*',
         ],
     },
     ...compat.extends('devextreme/spell-check'),

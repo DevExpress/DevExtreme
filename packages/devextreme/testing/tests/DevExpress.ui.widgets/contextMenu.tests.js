@@ -14,7 +14,6 @@ import config from 'core/config';
 import themes from 'ui/themes';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
 import {
     SCROLLABLE_CONTENT_CLASS,
     SCROLLABLE_CONTAINER_CLASS,
@@ -22,7 +21,7 @@ import {
 } from '__internal/ui/scroll_view/consts';
 
 import 'ui/button';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(() => {
     const markup =
@@ -292,10 +291,6 @@ QUnit.module('Rendering', moduleConfig, () => {
 
 QUnit.module('Repaint', moduleConfig, () => {
     QUnit.test('On repaint all submenus should be hidden without console errors (T1257288)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 'Item 1', items: [{ text: 'Item 11' }, { text: 'Item 12' }] }],
             visible: true,
@@ -326,8 +321,9 @@ QUnit.module('Repaint', moduleConfig, () => {
 });
 
 QUnit.module('Rendering Scrollable', moduleConfig, () => {
-    const BORDER_WIDTH = 1;
     const SUBMENU_PADDING = 10;
+    const MENU_CONTAINER_PADDING = 4;
+    const MENU_ADJUSTMENT = 1;
 
     QUnit.test('Context menu should init Scrollable', function(assert) {
         new ContextMenu(this.$element, { items: [{ text: 1 }], visible: true });
@@ -339,10 +335,6 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
     });
 
     QUnit.test('Scrollable should be initialized on a 2nd level submenu', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 1, items: [{ text: 11 }] }],
             visible: true,
@@ -364,10 +356,6 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
     });
 
     QUnit.test('Height of the submenu should not exceed content height', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         new ContextMenu(this.$element, {
             items: [{ text: 1, items: [{ text: 11 }] }],
             visible: true,
@@ -381,10 +369,6 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
     });
 
     QUnit.test('Nested submenu should be positioned to a clicked item', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 1, items: (new Array(99)).fill(null).map((_, idx) => ({ text: idx })) }],
             visible: true,
@@ -399,19 +383,15 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
         const $submenus = $(`.${DX_SUBMENU_CLASS}`);
         const $nestedSubmenu = $submenus.eq(1);
         const $nestedItemsContainer = $nestedSubmenu.find(`.${DX_CONTEXT_MENU_ITEMS_CONTAINER_CLASS}`).eq(0);
-        assert.strictEqual($rootItem.offset().top, $nestedItemsContainer.offset().top, 'Nested submenu aligned to a clicked item');
+        assert.strictEqual($rootItem.offset().top, $nestedItemsContainer.offset().top + MENU_ADJUSTMENT, 'Nested submenu aligned to a clicked item');
         assert.strictEqual(
             $nestedSubmenu.height(),
-            $(window).height() - $nestedItemsContainer.offset().top - SUBMENU_PADDING,
+            $(window).height() - $nestedItemsContainer.offset().top - MENU_ADJUSTMENT - SUBMENU_PADDING,
             'Nested submenu uses all available space'
         );
     });
 
     QUnit.test('Flipping 2nd level submenu', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = new ContextMenu(this.$element, {
             items: [{
                 text: 'item 11',
@@ -435,7 +415,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
         const $nestedSubmenu = $submenus.eq(1);
         const availableHeight = Math.min($rootItem.offset().top + $($rootItem).outerHeight(), $(window).height()) - SUBMENU_PADDING;
 
-        assert.roughEqual($nestedSubmenu.offset().top, SUBMENU_PADDING - BORDER_WIDTH, .5, 'Nested submenu flipped to top');
+        assert.roughEqual($nestedSubmenu.offset().top, SUBMENU_PADDING + MENU_ADJUSTMENT, .5, 'Nested submenu flipped to top');
         assert.roughEqual($nestedSubmenu.height(), availableHeight, .5, 'Nested submenu aligned to a clicked item');
     });
 
@@ -453,10 +433,6 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
     });
 
     QUnit.test('Selected item should be always visible during keyboard navigation (root menu)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = new ContextMenu(this.$element, {
             items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })),
             focusStateEnabled: true,
@@ -473,7 +449,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
 
         assert.roughEqual(
             $scrollableContent.position().top,
-            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH,
+            $scrollableContainer.height() - $scrollableContent.height() + MENU_CONTAINER_PADDING,
             1,
             'scrolled to bottom'
         );
@@ -481,14 +457,10 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
         keyboardMock(instance.itemsContainer())
             .press('down');
 
-        assert.roughEqual($scrollableContent.position().top, -BORDER_WIDTH, 1, 'scrolled back to the 1st item');
+        assert.roughEqual($scrollableContent.position().top, -MENU_CONTAINER_PADDING, 1, 'scrolled back to the 1st item');
     });
 
     QUnit.test('Selected item should be always visible during keyboard navigation (nested menu)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 1, items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })) }],
             focusStateEnabled: true,
@@ -506,7 +478,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
 
         assert.roughEqual(
             $scrollableContent.position().top,
-            $scrollableContainer.height() - $scrollableContent.height(),
+            $scrollableContainer.height() - $scrollableContent.height() + MENU_CONTAINER_PADDING,
             2,
             'scrolled to bottom'
         );
@@ -514,14 +486,10 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
         keyboardMock(instance.itemsContainer())
             .press('down');
 
-        assert.roughEqual($scrollableContent.position().top, 0, 2, 'scrolled back to the 1st item');
+        assert.roughEqual($scrollableContent.position().top, -MENU_CONTAINER_PADDING, 2, 'scrolled back to the 1st item');
     });
 
     QUnit.test('Scroll position should be set to 0 after reopen (root menu)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = new ContextMenu(this.$element, {
             items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })),
             focusStateEnabled: true,
@@ -536,7 +504,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
 
         assert.roughEqual(
             $scrollableContent.position().top,
-            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH,
+            $scrollableContainer.height() - $scrollableContent.height() + MENU_CONTAINER_PADDING,
             1,
             'scrolled to bottom'
         );
@@ -548,10 +516,6 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
     });
 
     QUnit.test('Scroll position should be set to 0 after reopen (nested menu, KBN)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 1, items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })) }],
             focusStateEnabled: true,
@@ -569,7 +533,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
 
         assert.roughEqual(
             $scrollableContent.position().top,
-            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH,
+            $scrollableContainer.height() - $scrollableContent.height() + MENU_CONTAINER_PADDING,
             1,
             'scrolled to bottom'
         );
@@ -582,10 +546,6 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
     });
 
     QUnit.test('Scroll position should be set to 0 after reopen (nested menu, pointer)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = new ContextMenu(this.$element, {
             items: [
                 { text: 1, items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })) },
@@ -610,7 +570,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
 
         assert.roughEqual(
             $scrollableContent.position().top,
-            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH,
+            $scrollableContainer.height() - $scrollableContent.height() + MENU_CONTAINER_PADDING,
             1,
             'scrolled to bottom'
         );
@@ -692,7 +652,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
 
             assert.strictEqual(
                 $nestedSubmenu.height(),
-                windowHeight - $nestedItemsContainer.offset().top - SUBMENU_PADDING,
+                windowHeight - $nestedItemsContainer.offset().top - SUBMENU_PADDING - MENU_ADJUSTMENT,
                 'Nested submenu uses height is updated'
             );
         });
@@ -717,13 +677,13 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
 
             const $nestedSubmenu = $item.find(`.${DX_SUBMENU_CLASS}`).eq(0);
 
-            assert.roughEqual($nestedSubmenu.offset().top, $item.offset().top, 1, 'submenu expanded to bottom');
+            assert.roughEqual($nestedSubmenu.offset().top, $item.offset().top - MENU_ADJUSTMENT, 1, 'submenu expanded to bottom');
 
             const windowHeight = 100;
             this.setWindowHeight(windowHeight);
             resizeCallbacks.fire();
 
-            assert.roughEqual($nestedSubmenu.offset().top, SUBMENU_PADDING - BORDER_WIDTH, 1, 'submenu flipped to top');
+            assert.roughEqual($nestedSubmenu.offset().top, SUBMENU_PADDING + MENU_ADJUSTMENT, 1, 'submenu flipped to top');
         });
 
         QUnit.test('Submenu scrolling to an expanded item', function(assert) {
@@ -759,7 +719,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
 
             assert.roughEqual(
                 $nestedItem.offset().top,
-                windowHeight - SUBMENU_PADDING - $nestedItem.outerHeight(),
+                windowHeight - SUBMENU_PADDING - $nestedItem.outerHeight() - MENU_ADJUSTMENT,
                 1,
                 'expanded item still visible'
             );
@@ -785,7 +745,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
 
             assert.roughEqual(
                 $itemsContainer.height(),
-                $(window).height() - 2 * BORDER_WIDTH - SUBMENU_PADDING,
+                $(window).height() - SUBMENU_PADDING,
                 1,
                 'height window vs container',
             );
@@ -1186,10 +1146,6 @@ QUnit.module('Showing and hiding submenus', moduleConfig, () => {
 
     [0, { show: 0 }].forEach((delay) => {
         QUnit.test(`submenu should be shown synchronously if showSubmenuMode.delay=${JSON.stringify(delay)} (T1247739)`, function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             const instance = new ContextMenu(this.$element, {
                 items: [{ text: 1, items: [{ text: 11 }] }],
                 visible: true,
@@ -1209,10 +1165,6 @@ QUnit.module('Showing and hiding submenus', moduleConfig, () => {
     });
 
     QUnit.test('context menu should not blink after second hover on root item', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         let hideSubmenu;
 
         try {
@@ -1499,10 +1451,6 @@ QUnit.module('Options', moduleConfig, () => {
     });
 
     QUnit.test('showSubmenuMode hover without delay', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 1, items: [{ text: 11 }] }],
             visible: true,
@@ -1521,10 +1469,6 @@ QUnit.module('Options', moduleConfig, () => {
     });
 
     QUnit.test('showSubmenuMode hover with custom delay', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 1, items: [{ text: 11 }] }],
             visible: true,
@@ -1543,10 +1487,6 @@ QUnit.module('Options', moduleConfig, () => {
     });
 
     QUnit.test('submenu should not be shown if hover was ended before show delay time exceeded', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 1, items: [{ text: 11 }] }],
             visible: true,
@@ -1839,10 +1779,6 @@ QUnit.module('Options', moduleConfig, () => {
     });
 
     QUnit.test('items changed should not break keyboard navigation', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = new ContextMenu(this.$element, {});
         instance.option({ visible: true, items: [{ text: '1' }, { text: '2' }] });
 

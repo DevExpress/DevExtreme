@@ -11,9 +11,8 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import { isRenderer } from 'core/utils/type';
 import { normalizeKeyName } from 'common/core/events/utils/index';
 import { getHeight, getOuterHeight } from 'core/utils/size';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import 'ui/select_box';
 
 QUnit.testStart(() => {
@@ -55,6 +54,8 @@ const KEY_UP = 'ArrowUp';
 const KEY_ENTER = 'Enter';
 const KEY_ESC = 'Escape';
 const KEY_TAB = 'Tab';
+
+const BORDER_WIDTH = 1;
 
 QUnit.module('dxAutocomplete', {
     beforeEach: function() {
@@ -181,9 +182,11 @@ QUnit.module('dxAutocomplete', {
         autocomplete.option('height', initialHeight + increment);
         autocomplete.option('width', initialWidth + increment);
 
+        const overlayContentWidth = $overlayContent.width() - BORDER_WIDTH * 2;
+
         const dHeight = $autocomplete.height() - initialHeight;
         const dWidth = $autocomplete.width() - initialWidth;
-        const dPopupWidth = $overlayContent.width() - initialPopupWidth;
+        const dPopupWidth = overlayContentWidth - initialPopupWidth;
 
         assert.notEqual(dHeight, 0, 'Height could be changed');
         assert.notEqual(dWidth, 0, 'Width could be changed');
@@ -533,10 +536,6 @@ QUnit.module('dxAutocomplete', {
     });
 
     QUnit.test('arrow_down/arrow_up/enter provide item navigation and selection', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = this.instance;
         const keyboard = this.keyboard;
         let $selectedItem;
@@ -639,10 +638,6 @@ QUnit.module('dxAutocomplete', {
     });
 
     QUnit.testInActiveWindow('key_tab for autocomplete current value', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = this.instance;
         const keyboard = this.keyboard;
 
@@ -737,10 +732,6 @@ QUnit.module('dxAutocomplete', {
 
     QUnit.testInActiveWindow('enter - prevent default', function(assert) {
         assert.expect(1);
-
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
 
         const instance = this.instance;
         const keyboard = this.keyboard;
@@ -1309,10 +1300,6 @@ QUnit.module('regressions', {
     });
 
     QUnit.testInActiveWindow('update input value on press complete key', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         this.keyboard
             .type('i')
             .keyDown(KEY_DOWN)
@@ -1323,10 +1310,6 @@ QUnit.module('regressions', {
     });
 
     QUnit.testInActiveWindow('update input value on press enter key', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         this.keyboard
             .type('i')
             .keyDown(KEY_DOWN)

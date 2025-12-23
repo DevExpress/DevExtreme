@@ -3,6 +3,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { getData } from '../../helpers/generateDataSourceData';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const DATA_GRID_SELECTOR = '#container';
 
@@ -16,7 +17,7 @@ test('Fixed columns should work when drag and drop rows are enabled', async (t) 
 
   await t.expect(dataGrid.isReady()).ok();
 
-  await takeScreenshot('datagrid_sticky_columns_with_drag_and_drop.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'datagrid_sticky_columns_with_drag_and_drop.png', { element: dataGrid.element });
 
   // assert
   await t

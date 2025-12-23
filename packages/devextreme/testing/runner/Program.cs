@@ -19,6 +19,15 @@ namespace Runner
     {
         public static int Main(string[] argv)
         {
+            ServicePointManager.DefaultConnectionLimit = 1000;
+            ServicePointManager.MaxServicePointIdleTime = 10000;
+            ServicePointManager.Expect100Continue = false;
+            ServicePointManager.UseNagleAlgorithm = false;
+            ServicePointManager.ReusePort = true;
+
+            ThreadPool.SetMinThreads(100, 100);
+            ThreadPool.SetMaxThreads(1000, 1000);
+
             try
             {
                 var rootPath = Path.Combine(AppContext.BaseDirectory, "../../..");

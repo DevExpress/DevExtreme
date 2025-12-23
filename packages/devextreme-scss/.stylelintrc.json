@@ -1,7 +1,6 @@
 {
     "plugins": [
-        "stylelint-scss",
-        "stylelint-devextreme"
+        "stylelint-scss"
     ],
     "extends": "stylelint-config-standard-scss",
     "ignoreFiles": "!**/*.{css,scss}",
@@ -61,9 +60,6 @@
         "scss/no-global-function-names": null,
         "scss/operator-no-newline-before": true,
         "scss/operator-no-unspaced": true,
-        "scss/operator-no-newline-after": null,
-
-        "devextreme/at-use-no-public-components": true,
-        "devextreme/no-division-slash": true
+        "scss/operator-no-newline-after": null
     }
 }

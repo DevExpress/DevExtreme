@@ -171,24 +171,27 @@
 import {
   DxCardView, DxColumn, DxCardCover, DxEditing, DxForm, DxItem, DxSearchPanel, DxRequiredRule, DxEmailRule, DxPatternRule, DxAsyncRule, DxCustomRule,
 } from 'devextreme-vue/card-view';
+import { type ValidationCallbackData } from 'devextreme-vue/common';
 import 'devextreme-vue/text-area';
 import { employees, type Employee } from './data.ts';
 
-function altExpr({ fullName }: Employee) {
+function altExpr({ fullName }: Employee): string {
   return `Photo of ${fullName}`;
 }
 
-function imageExpr({ picture }: Employee) {
+function imageExpr({ picture }: Employee): string {
   return picture;
 }
 
-function calculateFullName({ firstName, lastName }: Employee) {
+function calculateFullName({ firstName, lastName }: Employee): string {
   return `${firstName} ${lastName}`;
 }
 
 const emailValidationUrl = 'https://js.devexpress.com/Demos/NetCore/RemoteValidation/CheckUniqueEmailAddress';
 
-async function emailValidationCallback(params) {
+async function emailValidationCallback(
+  params: ValidationCallbackData,
+): Promise<boolean> {
   const response = await fetch(emailValidationUrl, {
     method: 'POST',
     headers: {
@@ -205,7 +208,7 @@ async function emailValidationCallback(params) {
   return result;
 }
 
-function hireDateValidationCallback(params) {
-  return new Date(params.value) > new Date(params.data.birthDate);
-}
+const hireDateValidationCallback = (
+  params: ValidationCallbackData,
+): boolean => new Date(params.value) > new Date(params.data.birthDate);
 </script>

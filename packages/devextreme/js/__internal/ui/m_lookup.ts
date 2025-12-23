@@ -607,7 +607,7 @@ class Lookup extends DropDownList<LookupProperties> {
     }
 
     this._$popup!.addClass(LOOKUP_POPUP_CLASS);
-    this._popup!.$wrapper().addClass(LOOKUP_POPUP_WRAPPER_CLASS);
+    this._popup!.$wrapper()?.addClass(LOOKUP_POPUP_WRAPPER_CLASS);
   }
 
   _renderPopover() {
@@ -646,7 +646,12 @@ class Lookup extends DropDownList<LookupProperties> {
       this._popup._$arrow.remove();
     }
 
-    this._setPopupContentId(this._popup.$content());
+    const $content = this._popup.$content();
+
+    if ($content) {
+      this._setPopupContentId($content);
+    }
+
     this._contentReadyHandler();
   }
 
@@ -926,7 +931,7 @@ class Lookup extends DropDownList<LookupProperties> {
 
   _toggleSearchClass(isSearchEnabled) {
     if (this._popup) {
-      this._popup.$wrapper().toggleClass(LOOKUP_POPUP_SEARCH_CLASS, isSearchEnabled);
+      this._popup.$wrapper()?.toggleClass(LOOKUP_POPUP_SEARCH_CLASS, isSearchEnabled);
     }
   }
 

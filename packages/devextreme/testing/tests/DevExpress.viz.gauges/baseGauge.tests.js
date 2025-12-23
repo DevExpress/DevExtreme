@@ -13,7 +13,7 @@ import registerComponent from 'core/component_registrator';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { BaseGauge, formatValue, getSampleText } from '__internal/viz/gauges/base_gauge';
 import titleModule from 'viz/core/title';
-import exportModule from 'viz/core/export';
+import exportModule from '__internal/viz/core/exportModule';
 import loadingIndicatorModule from 'viz/core/loading_indicator';
 import rendererModule from 'viz/core/renderers/renderer_default';
 import tooltipModule from 'viz/core/tooltip';

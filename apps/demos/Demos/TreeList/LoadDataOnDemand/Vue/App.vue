@@ -37,14 +37,15 @@
 import {
   DxTreeList, DxRemoteOperations, DxColumn, type DxTreeListTypes,
 } from 'devextreme-vue/tree-list';
+import { type LoadOptions } from 'devextreme-vue/common/data';
 import 'whatwg-fetch';
 
 const dataSource = {
-  load(loadOptions) {
+  load(loadOptions: LoadOptions) {
     const parentIdsParam = loadOptions.parentIds;
     const url = new URL('https://js.devexpress.com/Demos/NetCore/api/treeListData');
     if (parentIdsParam) {
-      parentIdsParam.forEach((id) => {
+      parentIdsParam.forEach((id: string) => {
         url.searchParams.append('parentIds', id);
       });
     }
@@ -56,10 +57,7 @@ const dataSource = {
 };
 
 function customizeText({ value }: DxTreeListTypes.ColumnCustomizeTextArg) {
-  if (value !== null) {
-    return `${Math.ceil(value / 1024)} KB`;
-  }
-  return null;
+  return value ? `${Math.ceil(value / 1024)} KB` : '';
 }
 </script>
 <style scoped>

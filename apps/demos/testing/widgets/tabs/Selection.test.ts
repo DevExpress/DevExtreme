@@ -20,15 +20,13 @@ runManualTest('Tabs', 'Selection', (test) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
-      .click($(`.${TABS_WRAPPER_CLASS} .${TAB_CLASS}`).nth(1))
-      .wait(200);
+      .click($(`.${TABS_WRAPPER_CLASS} .${TAB_CLASS}`).nth(1));
 
     await testScreenshot(t, takeScreenshot, 'tabs_second_item_selection.png');
 
     await t
       .click($(`.${SELECT_BOX_CONTAINER_CLASS} .${SELECTBOX_CLASS}`).nth(0))
-      .click($(`.${SELECTBOX_POPUP_WRAPPER_CLASS} .${LIST_ITEM_CLASS}`).nth(2))
-      .wait(200);
+      .click($(`.${SELECTBOX_POPUP_WRAPPER_CLASS} .${LIST_ITEM_CLASS}`).nth(2));
 
     await testScreenshot(t, takeScreenshot, 'tabs_third_item_selection.png');
 

@@ -17,7 +17,6 @@ const optionsWithSimpleItems: Options<Properties> = {
     [{ text: 'text_1' }, { text: 'text_2', disabled: true }],
   ],
   disabled: [true, false],
-  hint: [undefined, 'hint'],
   selectionMode: ['multiple', 'none', 'single'],
   selectedItemKeys: [['text_1']],
   // NOTE: Doesn't matter if there are contrast issues

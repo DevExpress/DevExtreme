@@ -7,13 +7,11 @@ export type ViewObject = Extract<RawViewType, object>;
 export type View = ViewObject & Required<Pick<ViewObject,
   'groupOrientation'
   | 'intervalCount'
-  | 'name'
   | 'type'
 >>;
 export type AgendaView = ViewObject & Required<Pick<ViewObject,
   'agendaDuration'
   | 'intervalCount'
-  | 'name'
   | 'type'
 >>;
 export type NormalizedView = View | AgendaView;

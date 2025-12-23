@@ -9,7 +9,6 @@ fixture.disablePageReloads`Accessibility`
 const options: Options<Properties> = {
   height: [400],
   disabled: [true, false],
-  hint: [undefined, 'hint'],
   revealMode: ['slide', 'expand'],
   opened: [true, false],
   template: [() => {
