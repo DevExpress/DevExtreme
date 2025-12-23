@@ -483,5 +483,6 @@ $datagrid-text-stub-background-image-path: null !default;
 }
 
 .dx-command-ai-header-button .dx-button.dx-state-focused {
-  outline: 2px solid $datagrid-focused-border-color;
+  outline: 2px solid;
+  outline-color: $datagrid-focused-border-color;
 }
