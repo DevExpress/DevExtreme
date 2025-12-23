@@ -1,9 +1,9 @@
-import { ChatTypes } from 'devextreme-react/chat';
+import type { ChatTypes } from 'devextreme-react/chat';
 
 const date = new Date();
 date.setHours(0, 0, 0, 0);
 
-function getTimestamp(date, offsetMinutes = 0) {
+function getTimestamp(date: Date, offsetMinutes = 0): number {
   return date.getTime() + offsetMinutes * 60000;
 }
 
@@ -18,7 +18,7 @@ export const supportAgent: ChatTypes.User = {
   avatarUrl: '../../../../images/petersmith.png',
 };
 
-export const initialMessages = [
+export const initialMessages: ChatTypes.Message[] = [
   {
     timestamp: getTimestamp(date, -9),
     author: supportAgent,

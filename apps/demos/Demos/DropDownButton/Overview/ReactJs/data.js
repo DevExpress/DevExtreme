@@ -1,4 +1,4 @@
-const colors = [
+export const colors = [
   null,
   '#980000',
   '#ff0000',
@@ -12,50 +12,35 @@ const colors = [
   '#ff00ff',
   '#ff3466',
 ];
-const profileSettings = [
+export const profileSettings = [
   { id: 1, name: 'Profile', icon: 'user' },
   {
-    id: 4,
-    name: 'Messages',
-    icon: 'email',
-    badge: '5',
+    id: 4, name: 'Messages', icon: 'email', badge: '5',
   },
   { id: 2, name: 'Friends', icon: 'group' },
   { id: 3, name: 'Exit', icon: 'runner' },
 ];
-const downloads = [
+export const downloads = [
   'Download Trial For Visual Studio',
   'Download Trial For All Platforms',
   'Package Managers',
 ];
-const alignments = [
+export const alignments = [
   { id: 1, name: 'Left', icon: 'alignleft' },
   { id: 4, name: 'Right', icon: 'alignright' },
   { id: 2, name: 'Center', icon: 'aligncenter' },
   { id: 3, name: 'Justify', icon: 'alignjustify' },
 ];
-const fontSizes = [
+export const fontSizes = [
   { size: 10, text: '10px' },
   { size: 12, text: '12px' },
   { size: 14, text: '14px' },
   { size: 16, text: '16px' },
   { size: 18, text: '18px' },
 ];
-const lineHeights = [
+export const lineHeights = [
   { lineHeight: 1, text: '1' },
   { lineHeight: 1.35, text: '1.35' },
   { lineHeight: 1.5, text: '1.5' },
   { lineHeight: 2, text: '2' },
 ];
-export default {
-  getData() {
-    return {
-      colors,
-      profileSettings,
-      downloads,
-      alignments,
-      fontSizes,
-      lineHeights,
-    };
-  },
-};

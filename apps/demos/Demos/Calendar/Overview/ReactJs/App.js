@@ -28,36 +28,21 @@ export default function App() {
   const [showWeekNumbers, setShowWeekNumbers] = useState(false);
   const [firstDay, setFirstDay] = useState(0);
   const [weekNumberRule, setWeekNumberRule] = useState('auto');
-  const onCurrentValueChange = useCallback(
-    ({ value }) => {
-      setCurrentValue(value);
-    },
-    [setCurrentValue],
-  );
-  const onDisabledChange = useCallback(
-    ({ value }) => {
-      setDisabled(value);
-    },
-    [setDisabled],
-  );
-  const onZoomLevelChange = useCallback(
-    ({ value }) => {
-      setZoomLevel(value);
-    },
-    [setZoomLevel],
-  );
-  const onFirstDayChange = useCallback(
-    ({ value }) => {
-      setFirstDay(value);
-    },
-    [setFirstDay],
-  );
-  const onWeekNumberRuleChange = useCallback(
-    ({ value }) => {
-      setWeekNumberRule(value);
-    },
-    [setWeekNumberRule],
-  );
+  const onCurrentValueChange = useCallback(({ value }) => {
+    setCurrentValue(value);
+  }, []);
+  const onDisabledChange = useCallback(({ value }) => {
+    setDisabled(value);
+  }, []);
+  const onZoomLevelChange = useCallback(({ value }) => {
+    setZoomLevel(value);
+  }, []);
+  const onFirstDayChange = useCallback(({ value }) => {
+    setFirstDay(value);
+  }, []);
+  const onWeekNumberRuleChange = useCallback(({ value }) => {
+    setWeekNumberRule(value);
+  }, []);
   const onShowWeekNumbersChange = useCallback(
     ({ value }) => {
       setShowWeekNumbers(value);
@@ -73,7 +58,7 @@ export default function App() {
   const onOptionChange = useCallback(
     (e) => {
       if (e.name === 'zoomLevel') {
-        onZoomLevelChange(e);
+        onZoomLevelChange({ value: e.value });
       }
     },
     [onZoomLevelChange],
