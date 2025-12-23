@@ -62,6 +62,24 @@
     "Demos/TreeView/**/React/**/*.ts",
     "Demos/TreeView/**/React/**/*.tsx",
     "Demos/Form/**/React/**/*.ts",
-    "Demos/Form/**/React/**/*.tsx"
+    "Demos/Form/**/React/**/*.tsx",
+    "Demos/DataGrid/**/React/**/*.tsx",
+    "Demos/Box/**/React/**/*.tsx",
+    "Demos/Button/**/React/**/*.tsx",
+    "Demos/ButtonGroup/**/React/**/*.tsx",
+    "Demos/Gallery/**/React/**/*.tsx",
+    "Demos/LoadIndicator/**/React/**/*.tsx",
+    "Demos/Resizable/**/React/**/*.tsx",
+    "Demos/ResponsiveBox/**/React/**/*.tsx",
+    "Demos/ScrollView/**/React/**/*.tsx",
+    "Demos/Splitter/**/React/**/*.tsx",
+    "Demos/TileView/**/React/**/*.tsx",
+    "Demos/FieldSet/**/React/**/*.tsx",
+    "Demos/RangeSelector/**/React/**/*.tsx",
+    "Demos/Common/FormsAndMultiPurposeOverview/**/React/**/*.tsx",
+    "Demos/Common/FormsOverview/**/React/**/*.tsx",
+    "Demos/Common/ListsOverview/**/React/**/*.tsx",
+    "Demos/Common/NavigationOverview/**/React/**/*.tsx",
+    "Demos/Common/NavigationRightToLeftSupport/**/React/**/*.tsx"
   ]
 }

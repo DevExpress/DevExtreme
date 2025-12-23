@@ -1,8 +1,10 @@
 import React, { useCallback, useState } from 'react';
-import RangeSelector, {
-  Margin, Scale, Label, Behavior, Format,
-} from 'devextreme-react/range-selector';
+
 import DataGrid from 'devextreme-react/data-grid';
+import RangeSelector, {
+  Behavior, Format, Label, Margin, Scale,
+} from 'devextreme-react/range-selector';
+
 import { employees } from './data.ts';
 
 const columns = ['FirstName', 'LastName', 'BirthYear', 'City', 'Title'];
@@ -22,7 +24,7 @@ const App = () => {
   }, [setSelectedEmployees]);
 
   return (
-    <React.Fragment>
+    <>
       <RangeSelector
         id="range-selector"
         title="Filter Employee List by Birth Year"
@@ -45,7 +47,7 @@ const App = () => {
         showBorders={true}
         columnAutoWidth={true}
       />
-    </React.Fragment>
+    </>
   );
 };
 

@@ -1,14 +1,14 @@
 import React from 'react';
 import RangeSelector, {
-  Margin,
   Background,
   Image,
   Indent,
-  SliderMarker,
-  Scale,
-  TickInterval,
-  MinorTickInterval,
   Label,
+  Margin,
+  MinorTickInterval,
+  Scale,
+  SliderMarker,
+  TickInterval,
 } from 'devextreme-react/range-selector';
 
 const startValue = new Date(2012, 8, 29, 0, 0, 0);

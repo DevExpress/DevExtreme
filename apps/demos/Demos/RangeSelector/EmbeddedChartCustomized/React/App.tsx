@@ -1,11 +1,13 @@
 import React from 'react';
+
 import RangeSelector, {
-  Margin, Background, Scale, Label, SliderMarker, Chart, Series,
+  Background, Chart, Label, Margin, Scale, Series, SliderMarker,
 } from 'devextreme-react/range-selector';
+
 import { dataSource } from './data.ts';
 
 const defaultValue = [0, 5];
-const format = ({ valueText }) => `${valueText} s`;
+const format = ({ valueText }: { valueText: string }) => `${valueText} s`;
 
 export default function App() {
   return (
