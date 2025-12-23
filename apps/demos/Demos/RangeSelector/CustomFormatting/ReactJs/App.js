@@ -1,11 +1,11 @@
 import React from 'react';
 import RangeSelector, {
-  Margin,
-  Scale,
-  Label,
-  SliderMarker,
   Behavior,
   Format,
+  Label,
+  Margin,
+  Scale,
+  SliderMarker,
 } from 'devextreme-react/range-selector';
 
 const App = () => {

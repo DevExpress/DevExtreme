@@ -1,12 +1,16 @@
 import React, { useCallback, useState } from 'react';
+
+import type { SliderValueChangeMode } from 'devextreme-react/common';
 import RangeSelector, {
-  Margin, Scale, MinorTick, Marker, Label, Behavior, SliderMarker, type RangeSelectorTypes, IBehaviorProps,
+  Behavior, Label, Margin, Marker, MinorTick, Scale, SliderMarker,
 } from 'devextreme-react/range-selector';
+import type { RangeSelectorTypes } from 'devextreme-react/range-selector';
 import { SelectBox } from 'devextreme-react/select-box';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
 
 const startValue = new Date(2011, 0, 1);
 const endValue = new Date(2011, 11, 31);
-const behaviorModes: (IBehaviorProps['valueChangeMode'])[] = ['onHandleMove', 'onHandleRelease'];
+const behaviorModes: SliderValueChangeMode[] = ['onHandleMove', 'onHandleRelease'];
 
 const valueChangeModeLabel = { 'aria-label': 'Value Change Mode' };
 
@@ -14,15 +18,15 @@ function App() {
   const [workingDaysCount, setWorkingDaysCount] = useState(
     calculateWorkdays([startValue, endValue]),
   );
-  const [behaviorMode, setBehaviorMode] = useState(behaviorModes[0]);
+  const [behaviorMode, setBehaviorMode] = useState<SliderValueChangeMode>(behaviorModes[0]);
 
   const processRange = useCallback((e: RangeSelectorTypes.ValueChangedEvent) => {
     setWorkingDaysCount(calculateWorkdays(e.value));
-  }, [setWorkingDaysCount]);
+  }, []);
 
-  const setBehavior = useCallback((data) => {
+  const setBehavior = useCallback((data: SelectBoxTypes.ValueChangedEvent) => {
     setBehaviorMode(data.value);
-  }, [setBehaviorMode]);
+  }, []);
 
   return (
     <div id="range-selector-demo">

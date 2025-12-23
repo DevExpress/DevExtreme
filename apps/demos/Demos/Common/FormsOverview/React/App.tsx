@@ -1,9 +1,11 @@
 import React from 'react';
+
 import {
-  Form, SimpleItem, GroupItem, Label,
+  Form, GroupItem, Label, SimpleItem,
 } from 'devextreme-react/form';
-import { employee, positions, states } from './data.ts';
 import 'devextreme-react/text-area';
+
+import { employee, positions, states } from './data.ts';
 
 const birthDateOptions = { width: '100%' };
 const positionOptions = {

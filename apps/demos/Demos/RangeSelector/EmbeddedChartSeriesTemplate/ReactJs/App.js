@@ -1,12 +1,12 @@
 import React from 'react';
 import RangeSelector, {
-  Margin,
   Chart,
   CommonSeriesSettings,
-  SeriesTemplate,
-  Scale,
-  Label,
   Format,
+  Label,
+  Margin,
+  Scale,
+  SeriesTemplate,
 } from 'devextreme-react/range-selector';
 import { dataSource } from './data.js';
 
