@@ -1,8 +1,11 @@
 import React, { useCallback, useRef, useEffect } from 'react';
+
 import FilterBuilder from 'devextreme-react/filter-builder';
+import type { FilterBuilderRef } from 'devextreme-react/filter-builder';
 import Button from 'devextreme-react/button';
 import List from 'devextreme-react/list';
 import { DataSource } from 'devextreme-react/common/data';
+
 import { filter, fields, products } from './data.ts';
 import CustomItem from './CustomItem.tsx';
 
@@ -10,10 +13,10 @@ const App = () => {
   const dataSource = useRef(new DataSource({
     store: products,
   }));
-  const filterBuilderRef = useRef(null);
+  const filterBuilderRef = useRef<FilterBuilderRef>(null);
 
   const refreshDataSource = useCallback(() => {
-    const filterExpression = filterBuilderRef.current.instance().getFilterExpression();
+    const filterExpression = filterBuilderRef.current?.instance().getFilterExpression();
     dataSource.current.filter(filterExpression);
     dataSource.current.load();
   }, []);

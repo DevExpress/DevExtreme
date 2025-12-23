@@ -56,7 +56,7 @@ export default class DataSourceAdapter extends modules.Controller {
 
   private _isRefreshed: any;
 
-  private _lastOperationId: any;
+  protected _lastOperationId: any;
 
   private _operationTypes: any;
 

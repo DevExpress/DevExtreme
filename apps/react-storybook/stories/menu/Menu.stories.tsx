@@ -1,6 +1,6 @@
 import React from 'react';
 import { Menu, MenuTypes } from 'devextreme-react/menu';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-webpack5';
 import { menuItems } from './data';
 
 const meta: Meta<typeof Menu> = {

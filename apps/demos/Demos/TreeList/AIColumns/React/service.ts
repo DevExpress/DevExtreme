@@ -1,11 +1,13 @@
-import { type AIMessage } from './types';
-import {
-  AIIntegration,
+import { AzureOpenAI } from 'openai';
+
+import { AIIntegration } from 'devextreme-react/common/ai-integration';
+import type {
   RequestParams,
   Response,
 } from 'devextreme-react/common/ai-integration';
-import { AzureOpenAI } from 'openai';
 import notify from 'devextreme/ui/notify';
+
+import type { AIMessage } from './types.ts';
 
 const AzureOpenAIConfig = {
   dangerouslyAllowBrowser: true,
@@ -17,7 +19,7 @@ const AzureOpenAIConfig = {
 
 const aiService = new AzureOpenAI(AzureOpenAIConfig);
 
-async function getAIResponse(messages: AIMessage[], signal: AbortSignal) {
+async function getAIResponse(messages: AIMessage[], signal: AbortSignal): Promise<string> {
   const params = {
     messages,
     model: AzureOpenAIConfig.deployment,
@@ -28,10 +30,10 @@ async function getAIResponse(messages: AIMessage[], signal: AbortSignal) {
   const response = await aiService.chat.completions.create(params, { signal });
   const result = response.choices[0].message?.content;
 
-  return result;
+  return result ?? '';
 }
 
-async function getAIResponseRecursive(messages: AIMessage[], signal: AbortSignal) {
+async function getAIResponseRecursive(messages: AIMessage[], signal: AbortSignal): Promise<string> {
   return getAIResponse(messages, signal)
     .catch(async (error) => {
       if (!error.message.includes('Connection error')) {
@@ -65,8 +67,8 @@ export const aiIntegration = new AIIntegration({
     const signal = controller.signal;
 
     const aiPrompt: AIMessage[] = [
-      { role: 'system', content: prompt.system },
-      { role: 'user', content: prompt.user },
+      { role: 'system', content: prompt.system ?? '' },
+      { role: 'user', content: prompt.user ?? '' },
     ];
 
     const promise = getAIResponseRecursive(aiPrompt, signal);

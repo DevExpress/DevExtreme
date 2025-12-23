@@ -1,7 +1,10 @@
 import React, { useCallback, useRef } from 'react';
+
 import {
-  TreeList, Selection, FilterRow, StateStoring, Column, TreeListRef,
+  TreeList, Selection, FilterRow, StateStoring, Column,
 } from 'devextreme-react/tree-list';
+import type { TreeListRef } from 'devextreme-react/tree-list';
+
 import { employees } from './data.ts';
 
 const expandedRowKeys = [1, 2, 10];
@@ -14,7 +17,7 @@ const App = () => {
   const treeList = useRef<TreeListRef>(null);
 
   const onStateResetClick = useCallback(() => {
-    treeList.current.instance().state(null);
+    treeList.current?.instance().state(null);
   }, []);
 
   return (

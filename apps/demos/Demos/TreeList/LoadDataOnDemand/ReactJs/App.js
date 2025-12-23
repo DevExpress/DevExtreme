@@ -1,6 +1,6 @@
 import React from 'react';
-import { TreeList, RemoteOperations, Column } from 'devextreme-react/tree-list';
 import 'whatwg-fetch';
+import { TreeList, RemoteOperations, Column } from 'devextreme-react/tree-list';
 
 const dataSource = {
   async load(loadOptions) {
@@ -22,7 +22,7 @@ const customizeText = (e) => {
   if (e.value !== null) {
     return `${Math.ceil(e.value / 1024)} KB`;
   }
-  return null;
+  return '';
 };
 const App = () => (
   <TreeList

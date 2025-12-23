@@ -1,6 +1,6 @@
 Scheduler allows users to manage CRUD operations as follows:
 
-- **Edit (update) appointments**: Double-click an appointment or click an appointment tooltip to edit. Drag and drop an appointment to edit start and end times (without changing duration). Drag an appointment's edge to edit start or end times (and change the appointment's duration). 
+- **Edit (update) appointments**: Double-click an appointment or click an appointment tooltip to edit. Drag and drop an appointment to edit start and end time values (without changing duration). Drag an appointment's edge to edit start or end time values (and change the appointment's duration). 
 - **Delete appointments**: Click the delete button within an appointment tooltip to delete.
 - **Create new appointments**: Double-click an empty cell to create a new appointment.
 

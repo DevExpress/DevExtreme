@@ -1,29 +1,33 @@
 import React, { useCallback, useState } from 'react';
-import {
-  TreeList, Selection, Column, type TreeListTypes,
-} from 'devextreme-react/tree-list';
-import { CheckBox, type CheckBoxTypes } from 'devextreme-react/check-box';
-import { SelectBox, type SelectBoxTypes } from 'devextreme-react/select-box';
+
+import type { CheckBoxTypes } from 'devextreme-react/check-box';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
+import { CheckBox } from 'devextreme-react/check-box';
+import { SelectBox } from 'devextreme-react/select-box';
+import { TreeList, Selection, Column } from 'devextreme-react/tree-list';
+import type { TreeListTypes } from 'devextreme-react/tree-list';
+
 import { employees, selectionModeLabel } from './data.ts';
+import type { Employee } from './data.ts';
 
 const expandedRowKeys = [1, 2, 10];
 const emptySelectedText = 'Nobody has been selected';
 const selectionModes = ['all', 'excludeRecursive', 'leavesOnly'];
 
 const App = () => {
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([]);
   const [recursive, setRecursive] = useState(false);
   const [selectionMode, setSelectionMode] = useState('all');
   const [selectedEmployeeNames, setSelectedEmployeeNames] = useState(emptySelectedText);
 
-  const getEmployeeNames = useCallback((employeeList) => {
+  const getEmployeeNames = useCallback((employeeList: Employee[]) => {
     if (employeeList.length > 0) {
       return employeeList.map((employee) => employee.Full_Name).join(', ');
     }
     return emptySelectedText;
   }, []);
 
-  const onSelectionChanged = useCallback((e: TreeListTypes.SelectionChangedEvent) => {
+  const onSelectionChanged = useCallback((e: TreeListTypes.SelectionChangedEvent<Employee, number>) => {
     const selectedData = e.component.getSelectedRowsData(selectionMode);
     setSelectedRowKeys(e.selectedRowKeys);
     setSelectedEmployeeNames(getEmployeeNames(selectedData));
@@ -46,9 +50,9 @@ const App = () => {
       <TreeList
         id="employees"
         dataSource={employees}
-        showRowLines={true}
-        showBorders={true}
-        columnAutoWidth={true}
+        showRowLines
+        showBorders
+        columnAutoWidth
         defaultExpandedRowKeys={expandedRowKeys}
         selectedRowKeys={selectedRowKeys}
         keyExpr="ID"
