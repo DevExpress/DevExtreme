@@ -3,7 +3,8 @@ import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
 import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
 import NumberBox, { type NumberBoxTypes } from 'devextreme-react/number-box';
 import Form, { type FormTypes } from 'devextreme-react/form';
-import service from './data.ts';
+import { companies } from './data.ts';
+import type { Company } from './types.ts';
 
 const labelModes = ['outside', 'static', 'floating', 'hidden'];
 const labelLocations = ['left', 'top'];
@@ -17,47 +18,46 @@ const columnCountLabel = { 'aria-label': 'Column Count' };
 const minCountWidthLabel = { 'aria-label': 'Min Count Width' };
 
 const App = () => {
-  const companies = service.getCompanies();
   const [labelMode, setLabelMode] = useState<FormTypes.Properties['labelMode']>('floating');
   const [labelLocation, setLabelLocation] = useState<FormTypes.Properties['labelLocation']>('left');
-  const [readOnly, setReadOnly] = useState(false);
-  const [showColon, setShowColon] = useState(true);
-  const [minColWidth, setMinColWidth] = useState(300);
-  const [colCount, setColCount] = useState(2);
-  const [company, setCompany] = useState(companies[0]);
-  const [width, setWidth] = useState();
+  const [readOnly, setReadOnly] = useState<boolean>(false);
+  const [showColon, setShowColon] = useState<boolean>(true);
+  const [minColWidth, setMinColWidth] = useState<number>(300);
+  const [colCount, setColCount] = useState<number>(2);
+  const [company, setCompany] = useState<Company>(companies[0]);
+  const [width, setWidth] = useState<number>();
 
-  const onCompanyChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
-    setCompany(e.value);
-  }, [setCompany]);
+  const onCompanyChanged = useCallback(({ value }: SelectBoxTypes.ValueChangedEvent): void => {
+    setCompany(value);
+  }, []);
 
-  const onLabelModeChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
-    setLabelMode(e.value);
-  }, [setLabelMode]);
+  const onLabelModeChanged = useCallback(({ value }: SelectBoxTypes.ValueChangedEvent): void => {
+    setLabelMode(value);
+  }, []);
 
-  const onLabelLocationChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
-    setLabelLocation(e.value);
-  }, [setLabelLocation]);
+  const onLabelLocationChanged = useCallback(({ value }: SelectBoxTypes.ValueChangedEvent): void => {
+    setLabelLocation(value);
+  }, []);
 
-  const onReadOnlyChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
-    setReadOnly(e.value);
-  }, [setReadOnly]);
+  const onReadOnlyChanged = useCallback(({ value }: CheckBoxTypes.ValueChangedEvent): void => {
+    setReadOnly(value);
+  }, []);
 
-  const onShowColonChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
-    setShowColon(e.value);
-  }, [setShowColon]);
+  const onShowColonChanged = useCallback(({ value }: CheckBoxTypes.ValueChangedEvent): void => {
+    setShowColon(value);
+  }, []);
 
-  const onMinColWidthChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
-    setMinColWidth(e.value);
-  }, [setMinColWidth]);
+  const onMinColWidthChanged = useCallback(({ value }: SelectBoxTypes.ValueChangedEvent): void => {
+    setMinColWidth(value);
+  }, []);
 
-  const onColumnsCountChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
-    setColCount(e.value);
-  }, [setColCount]);
+  const onColumnsCountChanged = useCallback(({ value }: SelectBoxTypes.ValueChangedEvent): void => {
+    setColCount(value);
+  }, []);
 
-  const onFormWidthChanged = useCallback((e: NumberBoxTypes.ValueChangedEvent) => {
-    setWidth(e.value);
-  }, [setWidth]);
+  const onFormWidthChanged = useCallback(({ value }: NumberBoxTypes.ValueChangedEvent): void => {
+    setWidth(value);
+  }, []);
 
   const companySelectorLabelMode: SelectBoxTypes.Properties['labelMode'] = labelMode === 'outside'
     ? 'hidden'

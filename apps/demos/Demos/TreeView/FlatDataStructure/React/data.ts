@@ -1,6 +1,6 @@
 import type { Product } from './types';
 
-const products: Product[] = [{
+export const products: Product[] = [{
   ID: '1',
   name: 'Stores',
   expanded: true,
@@ -92,18 +92,3 @@ const products: Product[] = [{
   price: 750,
 },
 ];
-
-export interface ProductType {
-  ID: string,
-  categoryId?: string,
-  name: string,
-  icon?: string,
-  expanded?: boolean,
-  price?: number
-}
-
-export default {
-  getProducts(): ProductType[] {
-    return products;
-  },
-};

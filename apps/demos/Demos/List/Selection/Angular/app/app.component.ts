@@ -2,8 +2,9 @@ import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/
 import { bootstrapApplication, BrowserModule } from '@angular/platform-browser';
 import { DataSource, ArrayStore } from 'devextreme-angular/common/data';
 import { DxSelectBoxModule, DxCheckBoxModule } from 'devextreme-angular';
-import { SingleMultipleAllOrNone } from 'devextreme-angular/common';
-import { DxListModule, DxListTypes } from 'devextreme-angular/ui/list';
+import type { SingleMultipleAllOrNone } from 'devextreme-angular/common';
+import { DxListModule } from 'devextreme-angular/ui/list';
+import type { DxListTypes } from 'devextreme-angular/ui/list';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {

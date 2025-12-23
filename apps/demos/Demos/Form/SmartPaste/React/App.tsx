@@ -1,20 +1,23 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { AzureOpenAI, type OpenAI } from 'openai';
-import {
-  AIIntegration,
-  RequestParams,
-  Response,
-} from 'devextreme-react/common/ai-integration';
+import { AIIntegration } from 'devextreme-react/common/ai-integration';
+import type { AIResponse, RequestParams, Response } from 'devextreme-react/common/ai-integration';
 import type { ValidationRule } from 'devextreme-react/common';
-import { Button, type ButtonTypes } from 'devextreme-react/button';
+import { Button } from 'devextreme-react/button';
+import type { ButtonTypes } from 'devextreme-react/button';
 import {
   Form,
-  Item, GroupItem,
+  Item,
+  GroupItem,
   ButtonItem,
-  FormRef,
 } from 'devextreme-react/form';
-import { TextArea, type TextAreaTypes } from 'devextreme-react/text-area';
+import type { FormRef } from 'devextreme-react/form';
+import { TextArea } from 'devextreme-react/text-area';
+import type { TextAreaTypes } from 'devextreme-react/text-area';
 import notify from 'devextreme/ui/notify';
+import type { ITextBoxOptions } from 'devextreme-react/text-box';
+import type { IDateBoxOptions } from 'devextreme-react/date-box';
+import type { INumberBoxOptions } from 'devextreme-react/number-box';
 
 import { AzureOpenAIConfig, defaultText } from './data.ts';
 
@@ -24,21 +27,21 @@ type AIMessage = (OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionS
 
 const stylingMode = 'filled';
 
-const amountDueEditorOptions = { placeholder: '$0.00', stylingMode };
+const amountDueEditorOptions: ITextBoxOptions = { placeholder: '$0.00', stylingMode };
 const amountDueAIOptions = { instruction: 'Format as the following: $0.00' };
 
-const statementDueEditorOptions = { placeholder: 'MM/DD/YYYY', stylingMode };
+const statementDueEditorOptions: IDateBoxOptions = { placeholder: 'MM/DD/YYYY', stylingMode };
 const statementDueAIOptions = { instruction: 'Format as the following: MM/DD/YYYY' };
 
-const textEditorOptions = { stylingMode };
+const textEditorOptions: ITextBoxOptions = { stylingMode };
 
-const phoneEditorOptions = { placeholder: '(000) 000-0000', stylingMode };
+const phoneEditorOptions: ITextBoxOptions = { placeholder: '(000) 000-0000', stylingMode };
 const phoneAIOptions = { instruction: 'Format as the following: (000) 000-0000' };
 
 const emailValidationRules: ValidationRule[] = [{ type: 'email' }];
 const emailAIOptions = { instruction: 'Do not fill this field if the text contains an invalid email address. A valid email is in the following format: email@example.com' };
 
-const zipEditorOptions = { stylingMode, mode: 'text', value: null };
+const zipEditorOptions: INumberBoxOptions = { stylingMode, mode: 'text' };
 const zipAIOptions = { instruction: 'If the text does not contain a ZIP, determine the ZIP code from the provided address.' };
 
 const resetButtonOptions: ButtonTypes.Properties = {
@@ -57,7 +60,7 @@ const colCountByScreen = {
   lg: 2,
 };
 
-const showNotification = (message: string, of: string, isError?: boolean, offset?: string) => {
+const showNotification = (message: string, of: string, isError?: boolean, offset?: string): void => {
   notify({
     message,
     position: {
@@ -74,7 +77,7 @@ const showNotification = (message: string, of: string, isError?: boolean, offset
 
 const aiService = new AzureOpenAI(AzureOpenAIConfig);
 
-export async function getAIResponse(messages: AIMessage[], signal: AbortSignal) {
+export async function getAIResponse(messages: AIMessage[], signal: AbortSignal): Promise<AIResponse> {
   const params = {
     messages,
     model: AzureOpenAIConfig.deployment,
@@ -83,9 +86,8 @@ export async function getAIResponse(messages: AIMessage[], signal: AbortSignal) 
   };
 
   const response = await aiService.chat.completions.create(params, { signal });
-  const result = response.choices[0].message?.content;
 
-  return result;
+  return response.choices[0].message?.content ?? '';
 }
 
 export const aiIntegration = new AIIntegration({
@@ -94,62 +96,60 @@ export const aiIntegration = new AIIntegration({
     const signal = controller.signal;
 
     const aiPrompt: AIMessage[] = [
-      { role: 'system', content: prompt.system },
-      { role: 'user', content: prompt.user },
+      { role: 'system', content: prompt.system ?? '' },
+      { role: 'user', content: prompt.user ?? '' },
     ];
 
     const promise = getAIResponse(aiPrompt, signal);
 
-    promise.catch(() => {
+    promise.catch((): void => {
       showNotification('Something went wrong. Please try again.', '#form', true);
     });
 
-    const result: Response = {
+    return {
       promise,
-      abort: () => {
+      abort: (): void => {
         controller.abort();
       },
     };
-
-    return result;
   },
 });
 
 const App = () => {
   const formRef = useRef<FormRef>(null);
-  const [text, setText] = useState(defaultText);
+  const [text, setText] = useState<string>(defaultText);
 
   const onCopy = useCallback(() => {
     navigator.clipboard.writeText(text);
     showNotification('Text copied to clipboard', '#textarea', false, '0 -20');
   }, [text]);
 
-  const shortcutHandler = useCallback((event: KeyboardEvent) => {
+  const shortcutHandler = useCallback((event: KeyboardEvent): void => {
     if (event.ctrlKey && event.shiftKey) {
       navigator.clipboard.readText()
-        .then((clipboardText) => {
+        .then((clipboardText: string): void => {
           if (clipboardText) {
             formRef.current?.instance().smartPaste(clipboardText);
           } else {
             showNotification('Clipboard is empty. Copy text before pasting', '#form');
           }
         })
-        .catch(() => {
+        .catch((): void => {
           showNotification('Could not access the clipboard', '#form');
         });
     }
   }, []);
 
   useEffect(() => {
-    formRef.current.instance().registerKeyHandler('V', shortcutHandler);
+    formRef.current?.instance().registerKeyHandler('V', shortcutHandler);
   }, [shortcutHandler]);
 
-  const onTextAreaValueChanged = useCallback((e: TextAreaTypes.ValueChangedEvent) => {
+  const onTextAreaValueChanged = useCallback((e: TextAreaTypes.ValueChangedEvent): void => {
     setText(e.value);
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <div id="textarea-label" className="instruction">
         Copy text from the editor below to the clipboard. Edit the text to see how your changes affect Smart Paste result.
       </div>
@@ -250,7 +250,7 @@ const App = () => {
           <ButtonItem buttonOptions={resetButtonOptions} name="reset" />
         </GroupItem>
       </Form>
-    </React.Fragment>
+    </>
   );
 };
 
