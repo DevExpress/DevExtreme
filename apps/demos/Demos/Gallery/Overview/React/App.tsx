@@ -1,6 +1,9 @@
 import React, { useCallback, useState } from 'react';
+
+import CheckBox from 'devextreme-react/check-box';
+import type { CheckBoxTypes } from 'devextreme-react/check-box';
 import Gallery from 'devextreme-react/gallery';
-import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
+
 import { gallery } from './data.ts';
 
 const App = () => {
@@ -11,19 +14,19 @@ const App = () => {
 
   const onLoopChanged = useCallback((data: CheckBoxTypes.ValueChangedEvent) => {
     setLoop(data.value);
-  }, [setLoop]);
+  }, []);
 
   const onSlideShowChanged = useCallback((data: CheckBoxTypes.ValueChangedEvent) => {
     setSlideShow(data.value);
-  }, [setSlideShow]);
+  }, []);
 
   const onShowNavButtonsChanged = useCallback((data: CheckBoxTypes.ValueChangedEvent) => {
     setShowNavButtons(data.value);
-  }, [setShowNavButtons]);
+  }, []);
 
   const onShowIndicatorChanged = useCallback((data: CheckBoxTypes.ValueChangedEvent) => {
     setShowIndicator(data.value);
-  }, [setShowIndicator]);
+  }, []);
 
   return (
     <div>

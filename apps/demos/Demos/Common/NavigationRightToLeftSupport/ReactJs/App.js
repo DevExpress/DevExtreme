@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react';
-import SelectBox from 'devextreme-react/select-box';
-import Menu from 'devextreme-react/menu';
-import TreeView from 'devextreme-react/tree-view';
 import Accordion from 'devextreme-react/accordion';
+import Menu from 'devextreme-react/menu';
+import SelectBox from 'devextreme-react/select-box';
+import TreeView from 'devextreme-react/tree-view';
 import { continents, europeCountries, languageLabel } from './data.js';
 
 const languages = ['Arabic: Right-to-Left direction', 'English: Left-to-Right direction'];
@@ -28,12 +28,9 @@ const renderEnglish = (country) => (
 );
 const App = () => {
   const [rtlEnabled, setRtl] = useState(false);
-  const selectLanguage = useCallback(
-    ({ value }) => {
-      setRtl(value === languages[0]);
-    },
-    [setRtl],
-  );
+  const selectLanguage = useCallback(({ value }) => {
+    setRtl(value === languages[0]);
+  }, []);
   return (
     <div className={rtlEnabled ? 'dx-rtl' : ''}>
       <div className="options">

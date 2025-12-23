@@ -1,11 +1,18 @@
 import React from 'react';
+
 import Splitter, { Item } from 'devextreme-react/splitter';
+
 import PaneContent from './PaneContent.tsx';
 
-const PaneContentWithTitle = (title: string, initialSize?: string) => (data) => (<PaneContent title={title} {...data} size={initialSize} />);
+interface RenderData {
+  resizable?: boolean;
+  collapsible?: boolean;
+}
+
+const PaneContentWithTitle = (title: string, initialSize?: string) => (data: RenderData) => (<PaneContent title={title} {...data} size={initialSize} />);
 
 const App = () => (
-  <React.Fragment>
+  <>
     <Splitter
       id="splitter"
     >
@@ -62,7 +69,7 @@ const App = () => (
         render={PaneContentWithTitle('Right Pane', '140px')}
       />
     </Splitter>
-  </React.Fragment>
+  </>
 );
 
 export default App;
