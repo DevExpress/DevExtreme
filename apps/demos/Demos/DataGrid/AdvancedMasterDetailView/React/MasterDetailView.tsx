@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
+
+import type { DataGridTypes } from 'devextreme-react/data-grid';
 import { TabPanel, Item } from 'devextreme-react/tab-panel';
-import { type DataGridTypes } from 'devextreme-react/data-grid';
 
 import AddressTab from './AddressTab.tsx';
 import OrdersTab from './OrdersTab.tsx';

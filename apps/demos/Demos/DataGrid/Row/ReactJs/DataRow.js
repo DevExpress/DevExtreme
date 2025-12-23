@@ -2,7 +2,7 @@ import React from 'react';
 
 const formatDate = new Intl.DateTimeFormat('en-US').format;
 const DataRow = (rowInfo) => (
-  <React.Fragment>
+  <>
     <tr
       className="main-row"
       role="row"
@@ -35,6 +35,6 @@ const DataRow = (rowInfo) => (
         <div>{rowInfo.data.Notes}</div>
       </td>
     </tr>
-  </React.Fragment>
+  </>
 );
 export default DataRow;

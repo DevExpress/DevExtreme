@@ -3686,7 +3686,8 @@
                   "/Models/Appointment.cs",
                   "/Models/SampleData/Appointments.cs"
                 ],
-                "DemoType": "Web"
+                "DemoType": "Web",
+                "Badge": "Updated"
               }
             ]
           },
@@ -3789,7 +3790,8 @@
                   "/Models/Job.cs",
                   "/Models/SampleData/Jobs.cs"
                 ],
-                "DemoType": "Web"
+                "DemoType": "Web",
+                "Badge":"Updated"
               },
               {
                 "Title": "Custom View Duration",
@@ -5052,7 +5054,8 @@
             "NetCoreDescription": "",
             "MvcAdditionalFiles": [],
             "DemoType": "Web",
-            "Badge": "New"
+            "Badge": "New",
+            "ShowOnMainPage": true
           }
         ]
       },

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Decorator } from '@storybook/react';
+import { Decorator } from '@storybook/react-webpack5';
 import './styles.css';
 
 export const themeToolbarItems = [

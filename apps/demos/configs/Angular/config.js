@@ -343,3 +343,5 @@ window.process = {
 System.config(window.config);
 // eslint-disable-next-line no-console
 System.import('@angular/compiler').catch(console.error.bind(console));
+// eslint-disable-next-line
+const useTgzInCSB = ['openai'];

@@ -27,5 +27,15 @@
     "Demos/Charts/**/React/**/*.ts",
     "Demos/Gauges/**/React/**/*.tsx",
     "Demos/Gauges/**/React/**/*.ts",
+    "Demos/CardView/**/React/**/*.ts",
+    "Demos/CardView/**/React/**/*.tsx",
+    "Demos/FilterBuilder/**/React/**/*.ts",
+    "Demos/FilterBuilder/**/React/**/*.tsx",
+    "Demos/Sortable/**/React/**/*.ts",
+    "Demos/Sortable/**/React/**/*.tsx",
+    "Demos/TreeList/**/React/**/*.ts",
+    "Demos/TreeList/**/React/**/*.tsx",
+    "Demos/DataGrid/**/React/**/*.ts",
+    "Demos/DataGrid/**/React/**/*.tsx"
   ]
 }

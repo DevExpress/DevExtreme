@@ -8,7 +8,11 @@ import TreeList, {
 } from 'devextreme-react/tree-list';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
+import type { CheckBoxTypes } from 'devextreme-react/check-box';
+
 import { employees } from './data.ts';
+
+type CheckBoxValue = CheckBoxTypes.Properties['value'];
 
 const expandedRowKeys = [1, 2, 4, 5];
 const enterKeyActions = ['startEdit', 'moveFocus'];
@@ -19,7 +23,7 @@ const onFocusedCellChanging = (e: TreeListTypes.FocusedCellChangingEvent) => {
 };
 
 const App = () => {
-  const [editOnKeyPress, setEditOnKeyPress] = useState(true);
+  const [editOnKeyPress, setEditOnKeyPress] = useState<CheckBoxValue>(true);
   const [enterKeyAction, setEnterKeyAction] = useState<TreeListTypes.EnterKeyAction>('moveFocus');
   const [enterKeyDirection, setEnterKeyDirection] = useState<TreeListTypes.EnterKeyDirection>('column');
 

@@ -7,7 +7,7 @@ const filterModes = ['matchOnly', 'withAncestors', 'fullBranch'];
 const App = () => {
   const [filterMode, setFilterMode] = useState('matchOnly');
   return (
-    <React.Fragment>
+    <>
       <TreeList
         id="employees"
         dataSource={employees}
@@ -60,7 +60,7 @@ const App = () => {
           ></SelectBox>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 export default App;

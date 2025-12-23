@@ -1,5 +1,5 @@
-import { AIIntegration } from 'devextreme-react/common/ai-integration';
 import { AzureOpenAI } from 'openai';
+import { AIIntegration } from 'devextreme-react/common/ai-integration';
 import notify from 'devextreme/ui/notify';
 
 const AzureOpenAIConfig = {
@@ -19,7 +19,7 @@ async function getAIResponse(messages, signal) {
   };
   const response = await aiService.chat.completions.create(params, { signal });
   const result = response.choices[0].message?.content;
-  return result;
+  return result ?? '';
 }
 async function getAIResponseRecursive(messages, signal) {
   return getAIResponse(messages, signal).catch(async (error) => {
@@ -48,8 +48,8 @@ export const aiIntegration = new AIIntegration({
     const controller = new AbortController();
     const signal = controller.signal;
     const aiPrompt = [
-      { role: 'system', content: prompt.system },
-      { role: 'user', content: prompt.user },
+      { role: 'system', content: prompt.system ?? '' },
+      { role: 'user', content: prompt.user ?? '' },
     ];
     const promise = getAIResponseRecursive(aiPrompt, signal);
     const result = {
