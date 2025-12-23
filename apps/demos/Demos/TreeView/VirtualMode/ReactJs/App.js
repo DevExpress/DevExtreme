@@ -7,7 +7,7 @@ const dataSource = AspNetData.createStore({
   key: 'ID',
 });
 const App = () => (
-  <React.Fragment>
+  <>
     <TreeView
       dataSource={dataSource}
       dataStructure="plain"
@@ -18,6 +18,6 @@ const App = () => (
       virtualModeEnabled={true}
       rootValue={null}
     />
-  </React.Fragment>
+  </>
 );
 export default App;

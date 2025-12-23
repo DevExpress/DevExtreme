@@ -3,28 +3,27 @@ import Button from 'devextreme-react/button';
 import Sortable, { type SortableTypes } from 'devextreme-react/sortable';
 import TabPanel, { type TabPanelTypes } from 'devextreme-react/tab-panel';
 
-import service from './data.ts';
+import { employees as allEmployees } from './data.ts';
+import type { Employee } from './types.ts';
 import EmployeeTemplate from './EmployeeTemplate.tsx';
 
-const allEmployees = service.getEmployees();
-
 function App() {
-  const [employees, setEmployees] = useState(allEmployees.slice(0, 3));
-  const [selectedItem, setSelectedItem] = useState(allEmployees[0]);
+  const [employees, setEmployees] = useState<Employee[]>(allEmployees.slice(0, 3));
+  const [selectedItem, setSelectedItem] = useState<Employee>(allEmployees[0]);
 
   const addButtonHandler = useCallback(() => {
     const newItem = allEmployees
-      .filter((employee) => employees.indexOf(employee) === -1)[0];
+      .filter((employee: Employee): boolean => employees.indexOf(employee) === -1)[0];
 
     setEmployees([...employees, newItem]);
     setSelectedItem(newItem);
-  }, [employees, setEmployees, setSelectedItem]);
+  }, [employees]);
 
-  function disableButton() {
+  function disableButton(): boolean {
     return employees.length === allEmployees.length;
   }
 
-  const closeButtonHandler = useCallback((item) => {
+  const closeButtonHandler = useCallback((item: Employee): void => {
     const newEmployees = [...employees];
     const index = newEmployees.indexOf(item);
 
@@ -34,26 +33,26 @@ function App() {
     if (index >= newEmployees.length && index > 0) {
       setSelectedItem(newEmployees[index - 1]);
     }
-  }, [employees, setEmployees, setSelectedItem]);
+  }, [employees]);
 
-  const renderTitle = useCallback((data) => (
-    <React.Fragment>
+  const renderTitle = useCallback((data: Employee) => (
+    <>
       <span>
         {data.FirstName} {data.LastName}
       </span>
-      {employees.length >= 2 && <i className="dx-icon dx-icon-close" onClick={() => { closeButtonHandler(data); }} />}
-    </React.Fragment>
+      {employees.length >= 2 && <i className="dx-icon dx-icon-close" onClick={(): void => { closeButtonHandler(data); }} />}
+    </>
   ), [employees, closeButtonHandler]);
 
-  const onSelectionChanged = useCallback((args: TabPanelTypes.SelectionChangedEvent) => {
+  const onSelectionChanged = useCallback((args: TabPanelTypes.SelectionChangedEvent): void => {
     setSelectedItem(args.addedItems[0]);
   }, [setSelectedItem]);
 
-  const onTabDragStart = useCallback((e: SortableTypes.DragStartEvent) => {
+  const onTabDragStart = useCallback((e: SortableTypes.DragStartEvent): void => {
     e.itemData = e.fromData[e.fromIndex];
   }, []);
 
-  const onTabDrop = useCallback((e: SortableTypes.ReorderEvent) => {
+  const onTabDrop = useCallback((e: SortableTypes.ReorderEvent): void => {
     const newEmployees = [...employees];
 
     newEmployees.splice(e.fromIndex, 1);
@@ -63,7 +62,7 @@ function App() {
   }, [employees, setEmployees]);
 
   return (
-    <React.Fragment>
+    <>
       <div id="container">
         <Button
           disabled={disableButton()}
@@ -93,7 +92,7 @@ function App() {
           itemComponent={EmployeeTemplate}
         />
       </Sortable>
-    </React.Fragment>
+    </>
   );
 }
 

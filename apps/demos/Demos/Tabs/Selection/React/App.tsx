@@ -5,38 +5,37 @@ import SelectBox from 'devextreme-react/select-box';
 import MultiView from 'devextreme-react/multi-view';
 
 import { employees, selectBoxLabel } from './data.ts';
+import type { Employee } from './types.ts';
 
-class EmployeeInfo extends React.Component<{
-  data: {
-    text: string,
-    picture: string,
-    position: string,
-    notes: string
-  }
-}> {
-  render() {
-    const {
-      text, picture, position, notes,
-    } = this.props.data;
+interface EmployeeInfoProps {
+  data: Employee;
+}
 
-    return (
-      <div className="employee-info">
-        <img alt={text} className="employee-photo" src={picture} />
-        <p className="employee-notes">
-          <b>Position: {position}</b><br />
-          {notes}
-        </p>
-      </div>
-    );
-  }
+function EmployeeInfo({ data }: EmployeeInfoProps) {
+  const {
+    text,
+    picture,
+    position,
+    notes,
+  } = data;
+
+  return (
+    <div className="employee-info">
+      <img alt={text} className="employee-photo" src={picture} />
+      <p className="employee-notes">
+        <b>Position: {position}</b><br />
+        {notes}
+      </p>
+    </div>
+  );
 }
 
 const App = () => {
-  const [selectedItem, setSelectedItem] = useState(employees[0]);
+  const [selectedItem, setSelectedItem] = useState<Employee>(employees[0]);
 
-  const onSelectionChanged = useCallback((args) => {
-    setSelectedItem(args.selectedItem || args.addedItems[0]);
-  }, [setSelectedItem]);
+  const onSelectionChanged = useCallback((args: { selectedItem?: typeof employees[0]; addedItems?: typeof employees }): void => {
+    setSelectedItem(args.selectedItem || args.addedItems?.[0]);
+  }, []);
 
   return (
     <div id="center-content">

@@ -15,11 +15,11 @@ import {
 } from './data.js';
 
 const STRICT_WIDTH_CLASS = 'strict-width';
-function OptionWrapper(props) {
+function OptionWrapper({ caption, children }) {
   return (
     <div className="option">
-      {props.caption && <span>{props.caption}</span>}
-      {props.children}
+      {caption && <span>{caption}</span>}
+      {children}
     </div>
   );
 }
@@ -35,79 +35,61 @@ const App = () => {
   const [widgetWrapperClasses, setWidgetWrapperClasses] = useState(
     'widget-wrapper widget-wrapper-horizontal',
   );
-  const enforceWidthConstraint = useCallback(
-    (shouldRestrictWidth) => {
-      const callback = (prevClasses) => {
-        const restClasses = prevClasses
-          .split(' ')
-          .filter((className) => className !== STRICT_WIDTH_CLASS)
-          .join(' ');
-        const strictWidthClass = shouldRestrictWidth ? STRICT_WIDTH_CLASS : '';
-        return `${restClasses} ${strictWidthClass}`;
-      };
-      setWidgetWrapperClasses(callback);
-    },
-    [setWidgetWrapperClasses],
-  );
-  const stylingModeChanged = useCallback(
-    (e) => {
-      setStylingMode(e.value);
-    },
-    [setStylingMode],
-  );
-  const iconPositionChanged = useCallback(
-    (e) => {
-      setIconPosition(e.value);
-    },
-    [setIconPosition],
-  );
-  const orientationChanged = useCallback(
-    (e) => {
-      const isVertical = e.value === 'vertical';
-      const callback = (prevClasses) => {
-        const restClasses = prevClasses
-          .split(' ')
-          .filter(
-            (className) =>
-              className !== (isVertical ? 'widget-wrapper-horizontal' : 'widget-wrapper-vertical'),
-          )
-          .join(' ');
-        return `${restClasses} widget-wrapper-${e.value}`;
-      };
-      setWidgetWrapperClasses(callback);
-      setOrientation(e.value);
-    },
-    [setOrientation, setWidgetWrapperClasses],
-  );
+  const enforceWidthConstraint = useCallback((shouldRestrictWidth) => {
+    const callback = (prevClasses) => {
+      const restClasses = prevClasses
+        .split(' ')
+        .filter((className) => className !== STRICT_WIDTH_CLASS)
+        .join(' ');
+      const strictWidthClass = shouldRestrictWidth ? STRICT_WIDTH_CLASS : '';
+      return `${restClasses} ${strictWidthClass}`;
+    };
+    setWidgetWrapperClasses(callback);
+  }, []);
+  const stylingModeChanged = useCallback(({ value }) => {
+    setStylingMode(value);
+  }, []);
+  const iconPositionChanged = useCallback(({ value }) => {
+    setIconPosition(value);
+  }, []);
+  const orientationChanged = useCallback(({ value }) => {
+    const isVertical = value === 'vertical';
+    const callback = (prevClasses) => {
+      const restClasses = prevClasses
+        .split(' ')
+        .filter(
+          (className) =>
+            className !== (isVertical ? 'widget-wrapper-horizontal' : 'widget-wrapper-vertical'),
+        )
+        .join(' ');
+      return `${restClasses} widget-wrapper-${value}`;
+    };
+    setWidgetWrapperClasses(callback);
+    setOrientation(value);
+  }, []);
   const showNavigationChanged = useCallback(
-    (e) => {
-      const shouldRestrictWidth = e.value || scrollContent;
+    ({ value }) => {
+      const shouldRestrictWidth = value || scrollContent;
       enforceWidthConstraint(shouldRestrictWidth);
-      setShowNavigation(e.value);
+      setShowNavigation(value);
     },
-    [scrollContent, setShowNavigation, enforceWidthConstraint],
+    [scrollContent, enforceWidthConstraint],
   );
   const scrollContentChanged = useCallback(
-    (e) => {
-      const shouldRestrictWidth = e.value || showNavigation;
+    ({ value }) => {
+      const shouldRestrictWidth = value || showNavigation;
       enforceWidthConstraint(shouldRestrictWidth);
-      setScrollContent(e.value);
+      setScrollContent(value);
     },
-    [showNavigation, setScrollContent, enforceWidthConstraint],
+    [showNavigation, enforceWidthConstraint],
   );
-  const fullWidthChanged = useCallback(
-    (e) => {
-      setFullWidth(e.value);
-      setWidth(e.value ? '100%' : 'auto');
-    },
-    [setFullWidth, setWidth],
-  );
-  const rtlEnabledChanged = useCallback(
-    (e) => {
-      setRtlEnabled(e.value);
-    },
-    [setRtlEnabled],
-  );
+  const fullWidthChanged = useCallback(({ value }) => {
+    setFullWidth(value);
+    setWidth(value ? '100%' : 'auto');
+  }, []);
+  const rtlEnabledChanged = useCallback(({ value }) => {
+    setRtlEnabled(value);
+  }, []);
   return (
     <div className="tabs-demo">
       <div className="widget-container">

@@ -11,7 +11,7 @@ const createChildren = (parent) => {
     });
 };
 const App = () => (
-  <React.Fragment>
+  <>
     <TreeView
       id="simple-treeview"
       dataStructure="plain"
@@ -20,6 +20,6 @@ const App = () => (
       expandNodesRecursive={false}
       createChildren={createChildren}
     />
-  </React.Fragment>
+  </>
 );
 export default App;

@@ -1,4 +1,4 @@
-const customer = {
+export const customer = {
   Email: '',
   Password: '',
   Name: 'Peter',
@@ -10,7 +10,7 @@ const customer = {
   Phone: '',
   Accepted: false,
 };
-const countries = [
+export const countries = [
   'Afghanistan',
   'Albania',
   'Algeria',
@@ -203,7 +203,7 @@ const countries = [
   'Zambia',
   'Zimbabwe',
 ];
-const cities = [
+export const cities = [
   'New York',
   'Los Angeles',
   'Chicago',
@@ -303,14 +303,3 @@ const cities = [
   'Boise',
   'Richmond',
 ];
-export default {
-  getCustomer() {
-    return customer;
-  },
-  getCountries() {
-    return countries;
-  },
-  getCities() {
-    return cities;
-  },
-};

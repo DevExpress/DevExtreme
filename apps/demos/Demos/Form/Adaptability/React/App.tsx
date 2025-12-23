@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
 import Form from 'devextreme-react/form';
-import employee from './data.ts';
+import { employee } from './data.ts';
 
 const colCountByScreen = {
   sm: 2,
@@ -9,11 +9,11 @@ const colCountByScreen = {
 };
 
 const App = () => {
-  const [calculateColCountAutomatically, setCalculateColCountAutomatically] = useState(false);
+  const [calculateColCountAutomatically, setCalculateColCountAutomatically] = useState<boolean>(false);
 
-  const onCalculateColCountAutomaticallyChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+  const onCalculateColCountAutomaticallyChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent): void => {
     setCalculateColCountAutomatically(e.value);
-  }, [setCalculateColCountAutomatically]);
+  }, []);
 
   return (
     <div>
@@ -40,7 +40,7 @@ const App = () => {
   );
 };
 
-function screenByWidth(width: number) {
+function screenByWidth(width: number): string {
   return width < 720 ? 'sm' : 'md';
 }
 

@@ -1,11 +1,12 @@
-import React, { FC, memo } from 'react';
+import React, { memo } from 'react';
+import type { FC } from 'react';
 import { Form, RangeRule, SimpleItem } from 'devextreme-react/form';
 import 'devextreme-react/number-box';
 
-import { FormProps } from './types.ts';
+import type { FormProps } from './types.ts';
 
-const GuestsForm: FC<FormProps> = memo(({ formData, validationGroup }) => (
-  <React.Fragment>
+const GuestsForm: FC<FormProps> = memo(({ formData, validationGroup }: FormProps) => (
+  <>
     <p>
       Enter the number of adults, children, and pets staying in the room. This information help us suggest suitable room types, number of beds, and included amenities.
     </p>
@@ -38,7 +39,7 @@ const GuestsForm: FC<FormProps> = memo(({ formData, validationGroup }) => (
         label={{ text: 'Pets', location: 'top' }}
       />
     </Form>
-  </React.Fragment>
+  </>
 ));
 
 GuestsForm.displayName = 'GuestsForm';

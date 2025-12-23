@@ -1,7 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxListModule, DxRadioGroupModule, DxToolbarModule } from 'devextreme-angular';
-import { DxDrawerComponent, DxDrawerModule, DxDrawerTypes } from 'devextreme-angular/ui/drawer';
+import { DxDrawerComponent, DxDrawerModule } from 'devextreme-angular/ui/drawer';
+import type { DxDrawerTypes } from 'devextreme-angular/ui/drawer';
 import { List, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {

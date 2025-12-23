@@ -7,8 +7,8 @@ import { text } from './data.js';
 import NavigationList from './NavigationList.js';
 
 const openedStateModes = ['push', 'shrink', 'overlap'];
-const positions = ['left', 'right'];
 const revealModes = ['slide', 'expand'];
+const positions = ['left', 'right'];
 const App = () => {
   const [opened, setOpened] = useState(true);
   const [openedStateMode, setOpenedStateMode] = useState('shrink');
@@ -22,34 +22,25 @@ const App = () => {
         options: {
           icon: 'menu',
           stylingMode: 'text',
-          onClick: () => setOpened(!opened),
+          onClick: () => setOpened((opened) => !opened),
         },
       },
     ],
-    [opened, setOpened],
+    [],
   );
-  const onOpenedStateModeChanged = useCallback(
-    ({ value }) => {
-      setOpenedStateMode(value);
-    },
-    [setOpenedStateMode],
-  );
-  const onRevealModeChanged = useCallback(
-    ({ value }) => {
-      setRevealMode(value);
-    },
-    [setRevealMode],
-  );
-  const onPositionChanged = useCallback(
-    ({ value }) => {
-      setPosition(value);
-    },
-    [setPosition],
-  );
+  const onOpenedStateModeChanged = useCallback(({ value }) => {
+    setOpenedStateMode(value);
+  }, []);
+  const onRevealModeChanged = useCallback(({ value }) => {
+    setRevealMode(value);
+  }, []);
+  const onPositionChanged = useCallback(({ value }) => {
+    setPosition(value);
+  }, []);
   const onOutsideClick = useCallback(() => {
     setOpened(false);
     return false;
-  }, [setOpened]);
+  }, []);
   return (
     <div className="flex-container">
       <Toolbar

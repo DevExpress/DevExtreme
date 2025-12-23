@@ -6,17 +6,14 @@ import { products, searchModeLabel } from './data.js';
 function ItemTemplate(data) {
   return <div>{data.Name}</div>;
 }
-const searchModes = ['contains', 'startsWith', 'equals'];
+const searchModes = ['contains', 'startswith', 'equals'];
 const App = () => {
   const [searchMode, setSearchMode] = useState('contains');
-  const onSearchModeChange = useCallback(
-    (args) => {
-      setSearchMode(args.value);
-    },
-    [setSearchMode],
-  );
+  const onSearchModeChange = useCallback((args) => {
+    setSearchMode(args.value);
+  }, []);
   return (
-    <React.Fragment>
+    <>
       <div className="list-container">
         <List
           dataSource={products}
@@ -39,7 +36,7 @@ const App = () => {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 export default App;

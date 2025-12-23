@@ -3,7 +3,7 @@ import 'devextreme-react/date-range-box';
 import { Form, SimpleItem } from 'devextreme-react/form';
 
 const DatesForm = memo(({ formData, validationGroup }) => (
-  <React.Fragment>
+  <>
     <p>
       Select your check-in and check-out dates. If your dates are flexible, include that information
       in Additional Requests. We will do our best to suggest best pricing options, depending on room
@@ -25,7 +25,7 @@ const DatesForm = memo(({ formData, validationGroup }) => (
         label={{ visible: false }}
       />
     </Form>
-  </React.Fragment>
+  </>
 ));
 DatesForm.displayName = 'DatesForm';
 export default DatesForm;

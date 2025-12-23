@@ -1,4 +1,4 @@
-export interface Employee {
+export type Employee = {
   id: number;
   fullName: string;
   prefix: string;
@@ -6,4 +6,4 @@ export interface Employee {
   expanded?: boolean;
   selected?: boolean;
   items?: Employee[];
-}
+};
