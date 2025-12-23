@@ -1800,15 +1800,9 @@ importers:
       core-js:
         specifier: 2.6.12
         version: 2.6.12
-      cross-env:
-        specifier: 7.0.3
-        version: 7.0.3
       css-loader:
         specifier: 6.10.0
         version: 6.10.0(webpack@5.96.1(@swc/core@1.15.3))
-      del:
-        specifier: 2.2.2
-        version: 2.2.2
       devextreme-metadata:
         specifier: workspace:*
         version: link:../devextreme-metadata
@@ -1824,21 +1818,6 @@ importers:
       eslint-plugin-import:
         specifier: 'catalog:'
         version: 2.31.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.4.5))(eslint@9.18.0(jiti@2.6.1))
-      gulp:
-        specifier: 4.0.2
-        version: 4.0.2
-      gulp-header:
-        specifier: 2.0.9
-        version: 2.0.9
-      gulp-replace:
-        specifier: 0.6.1
-        version: 0.6.1
-      gulp-sourcemaps:
-        specifier: 2.6.5
-        version: 2.6.5
-      gulp-typescript:
-        specifier: 4.0.2
-        version: 4.0.2(typescript@5.4.5)
       jasmine:
         specifier: 5.4.0
         version: 5.4.0
@@ -2195,13 +2174,25 @@ importers:
 
   packages/nx-infra-plugin:
     dependencies:
+      fs-extra:
+        specifier: ^11.2.0
+        version: 11.2.0
       glob:
         specifier: 11.1.0
         version: 11.1.0
+      karma:
+        specifier: '>=6.0.0'
+        version: 6.4.4
+      ng-packagr:
+        specifier: '>=17.0.0'
+        version: 17.3.0(@angular/compiler-cli@21.0.5(@angular/compiler@21.0.5)(typescript@4.9.5))(tslib@2.8.1)(typescript@4.9.5)
       rimraf:
         specifier: 3.0.2
         version: 3.0.2
     devDependencies:
+      '@types/fs-extra':
+        specifier: ^11.0.4
+        version: 11.0.4
       '@types/jest':
         specifier: 29.5.12
         version: 29.5.12
@@ -5424,14 +5415,6 @@ packages:
 
   '@fast-csv/parse@5.0.5':
     resolution: {integrity: sha512-M0IbaXZDbxfOnpVE5Kps/a6FGlILLhtLsvWd9qNH3d2TxNnpbNkFf3KD26OmJX6MHq7PdQAl5htStDwnuwHx6w==}
-
-  '@gulp-sourcemaps/identity-map@1.0.2':
-    resolution: {integrity: sha512-ciiioYMLdo16ShmfHBXJBOFm3xPC4AuwO4xeRpFeHz7WK9PYsWCmigagG2XyzZpubK4a3qNKoUBDhbzHfa50LQ==}
-    engines: {node: '>= 0.10'}
-
-  '@gulp-sourcemaps/map-sources@1.0.0':
-    resolution: {integrity: sha512-o/EatdaGt8+x2qpb0vFLC/2Gug/xYPRXb6a+ET1wGYKozKN3krDWC/zZFZAtrzxJHuDL12mwdfEFKcKMNvc55A==}
-    engines: {node: '>= 0.10'}
 
   '@gulpjs/to-absolute-glob@4.0.0':
     resolution: {integrity: sha512-kjotm7XJrJ6v+7knhPaRgaT6q8F8K2jiafwYdNHLzmV0uGLuZY43FK6smNSHUPrhq5kX2slCUy+RGG/xGqmIKA==}
@@ -8750,11 +8733,6 @@ packages:
     resolution: {integrity: sha512-ueEepnujpqee2o5aIYnvHU6C0A42MNdsIDeqy5BydrkuC5R1ZuUFnm27EeFJGoEHJQgn3uleRvmTXaJgfXbt4g==}
     engines: {node: '>=0.4.0'}
 
-  acorn@5.7.4:
-    resolution: {integrity: sha512-1D++VG7BhrtvQpNbBzovKNc1FLGGEE/oGe7b9xJm/RFHMBeUaUGpluV9RLjZa47YFdPcDAenEYuq9pQPcMdLJg==}
-    engines: {node: '>=0.4.0'}
-    hasBin: true
-
   acorn@7.4.1:
     resolution: {integrity: sha512-nQyp0o1/mNdbTO1PO6kHkwSrmgZ0MT/jCCpNiwbUjGoRN4dlBhqJtoQuCnEOKzgTVwg0ZWiCoQy6SxMebQVh8A==}
     engines: {node: '>=0.4.0'}
@@ -9669,11 +9647,6 @@ packages:
     engines: {node: '>= 0.8'}
     hasBin: true
 
-  browserslist@4.24.2:
-    resolution: {integrity: sha512-ZIc+Q62revdMcqC6aChtW4jz3My3klmCO1fEmINZY/8J3EpBg5/A/D0AKmBveUh6pgoeycoMkVMko84tuYS+Gg==}
-    engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
-    hasBin: true
-
   browserslist@4.24.4:
     resolution: {integrity: sha512-KDi1Ny1gSePi1vm0q4oxSF8b4DR44GF4BbmS2YdhPLOEqd8pDviZOGH/GsmRwoWJ2+5Lr085X7naowMwKHDG1A==}
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
@@ -10515,9 +10488,6 @@ packages:
   css.escape@1.5.1:
     resolution: {integrity: sha512-YUifsXXuknHlUsmlgyY0PKzgPOr7/FjCePfHNt0jxm83wHZi44VDMQ7/fGNkjY3/jV1MC+1CmZbaHzugyeRtpg==}
 
-  css@2.2.4:
-    resolution: {integrity: sha512-oUnjmWpy0niI3x/mPL8dVEI1l7MnG3+HHyRPHf+YFSbK+svOhXpmSOcDURUh2aOCgl2grzrOPt1nHLuCVFULLw==}
-
   cssauron@1.4.0:
     resolution: {integrity: sha512-Ht70DcFBh+/ekjVrYS2PlDMdSQEl3OFNmjK6lcn49HptBgilXf/Zwg4uFh9Xn0pX3Q8YOkSjIFOfK2osvdqpBw==}
 
@@ -10603,9 +10573,6 @@ packages:
 
   de-indent@1.0.2:
     resolution: {integrity: sha512-e/1zu3xH5MQryN2zdVaF0OrdNLUbvWxzMbi+iNA6Bky7l1RoP8a2fIbRocyHclXt/arDrrR6lL3TqFD9pMQTsg==}
-
-  debug-fabulous@1.1.0:
-    resolution: {integrity: sha512-GZqvGIgKNlUnHUPQhepnUZFIMoi3dgZKQBzKDeL2g7oJF9SNAji/AAu36dusFUas0O+pae74lNeoIPHqXWDkLg==}
 
   debug@2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
@@ -10851,10 +10818,6 @@ packages:
   detect-libc@2.0.3:
     resolution: {integrity: sha512-bwy0MGW55bG41VqxxypOsdSdGqLwXPI/focwgTYCFMbdUiBAxLg9CFzG08sz2aqzknwiX7Hkl0bQENjg8iLByw==}
     engines: {node: '>=8'}
-
-  detect-newline@2.1.0:
-    resolution: {integrity: sha512-CwffZFvlJffUg9zZA0uqrjQayUTC8ob94pnr5sFwaVv3IOmkfUHcWH+jXaQK3askE51Cqe8/9Ql/0uXNwqZ8Zg==}
-    engines: {node: '>=0.10.0'}
 
   detect-newline@3.1.0:
     resolution: {integrity: sha512-TLz+x/vEXm/Y7P7wn1EJFNLxYpUD4TgMosxY6fAVJUnJMbupHBOncxyWUG9OpTaH9EBD7uFI5LfEgmMOc54DsA==}
@@ -11122,9 +11085,6 @@ packages:
 
   electron-to-chromium@1.5.259:
     resolution: {integrity: sha512-I+oLXgpEJzD6Cwuwt1gYjxsDmu/S/Kd41mmLA3O+/uH2pFRO/DvOjUyGozL8j3KeLV6WyZ7ssPwELMsXCcsJAQ==}
-
-  electron-to-chromium@1.5.63:
-    resolution: {integrity: sha512-ddeXKuY9BHo/mw145axlyWjlJ1UBt4WK3AlvkT7W2AbqfRQoacVoRUCF6wL3uIx/8wT9oLKXzI+rFqHHscByaA==}
 
   elegant-spinner@1.0.1:
     resolution: {integrity: sha512-B+ZM+RXvRqQaAmkMlO/oSe5nMUOaUnyfGYCEHoR8wrXsZR2mA0XVibsxV1bvTwxdRWah1PkQqso2EzhILGHtEQ==}
@@ -12820,21 +12780,12 @@ packages:
     resolution: {integrity: sha512-wHNCgmqbWkk1c6Gc2dOL5SprcoeujQdeepICwfQRo91DIylTE7a794VEE+leq3cE2YDoiS5ulvRfKVIEMazcTQ==}
     engines: {node: '>=10.0.0'}
 
-  gulp-sourcemaps@2.6.5:
-    resolution: {integrity: sha512-SYLBRzPTew8T5Suh2U8jCSDKY+4NARua4aqjj8HOysBh2tSgT9u4jc1FYirAdPx1akUxxDeK++fqw6Jg0LkQRg==}
-    engines: {node: '>=4'}
-
   gulp-tap@1.0.1:
     resolution: {integrity: sha512-VpCARRSyr+WP16JGnoIg98/AcmyQjOwCpQgYoE35CWTdEMSbpgtAIK2fndqv2yY7aXstW27v3ZNBs0Ltb0Zkbg==}
 
   gulp-template@5.0.0:
     resolution: {integrity: sha512-BsE+HrFZG0ItM0fBhRMfqWWR5MQ2W3O3ss1T3XdNqi4p9WCIFYjcdI1L5PikXMNUU93A4NoVLeWPwUmqGAKwGA==}
     engines: {node: '>=4'}
-
-  gulp-typescript@4.0.2:
-    resolution: {integrity: sha512-Hhbn5Aa2l3T+tnn0KqsG6RRJmcYEsr3byTL2nBpNBeAK8pqug9Od4AwddU4JEI+hRw7mzZyjRbB8DDWR6paGVA==}
-    peerDependencies:
-      typescript: ~2.7.1 || >=2.8.0-dev || >=2.9.0-dev
 
   gulp-typescript@5.0.1:
     resolution: {integrity: sha512-YuMMlylyJtUSHG1/wuSVTrZp60k1dMEFKYOvDf7OvbAJWrDtxxD4oZon4ancdWwzjj30ztiidhe4VXJniF0pIQ==}
@@ -13767,9 +13718,6 @@ packages:
   is-primitive@2.0.0:
     resolution: {integrity: sha512-N3w1tFaRfk3UrPfqeRyD+GYDASU3W5VinKhlORy8EWVf/sIdDL9GAcew85XmktCfH+ngG7SRXEVDoO18WMdB/Q==}
     engines: {node: '>=0.10.0'}
-
-  is-promise@2.2.2:
-    resolution: {integrity: sha512-+lP4/6lKUBfQjZ2pdxThZvLUAafmZb8OAxFb8XXtiQmS35INgr85hdOGoEs124ez1FCnZJt6jau/T+alh58QFQ==}
 
   is-promise@4.0.0:
     resolution: {integrity: sha512-hvpoI6korhJMnej285dSg6nu1+e6uxs7zG3BYAm5byqDsgJNWwxzM6z6iZiAgQR4TJ30JmBTOwqZUw3WlyH3AQ==}
@@ -14841,9 +14789,6 @@ packages:
     resolution: {integrity: sha512-jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==}
     engines: {node: '>=12'}
 
-  lru-queue@0.1.0:
-    resolution: {integrity: sha512-BpdYkt9EvGl8OfWHDQPISVpcl5xZthb+XPsbELj5AQXxIC8IriDZIQYjBJPEm5rS420sjZ0TLEzRcq5KdBhYrQ==}
-
   luxon@1.28.1:
     resolution: {integrity: sha512-gYHAa180mKrNIUJCbwpmD0aTu9kV0dREDrwNnuyFAsO1Wt0EVYSZelPnJlbj9HplzXX/YWXHFTL45kvZ53M0pw==}
 
@@ -15000,10 +14945,6 @@ packages:
 
   memfs@4.51.1:
     resolution: {integrity: sha512-Eyt3XrufitN2ZL9c/uIRMyDwXanLI88h/L3MoWqNY747ha3dMR9dWqp8cRT5ntjZ0U1TNuq4U91ZXK0sMBjYOQ==}
-
-  memoizee@0.4.17:
-    resolution: {integrity: sha512-DGqD7Hjpi/1or4F/aYAspXKNm5Yili0QDAFAY4QYvpqpgiY6+1jOfqpmByzjxbWd/T9mChbCArXAbDAsTm5oXA==}
-    engines: {node: '>=0.12'}
 
   memory-fs@0.5.0:
     resolution: {integrity: sha512-jA0rdU5KoQMC0e6ppoNRtpp6vjFq6+NY7r8hywnC7V+1Xj/MtHwGIbB1QaK/dunyjWteJzmkpd7ooeWg10T7GA==}
@@ -15557,9 +15498,6 @@ packages:
 
   node-notifier@9.0.1:
     resolution: {integrity: sha512-fPNFIp2hF/Dq7qLDzSg4vZ0J4e9v60gJR+Qx7RbjbWqzPDdEqeVpEx5CFeDAELIl+A/woaaNn1fQ5nEVerMxJg==}
-
-  node-releases@2.0.18:
-    resolution: {integrity: sha512-d9VeXT4SJ7ZeOqGX6R5EM022wpL+eWPooLI+5UpWn2jCT1aosUQEhQP214x33Wkwx3JQMvIm+tIoVOdodFS40g==}
 
   node-releases@2.0.19:
     resolution: {integrity: sha512-xxOWJsBKtzAq7DY0J+DTzuz58K8e7sJbdgwkbMWQe8UYB6ekmsQ45q0M/tJDsGaZmbC+l7n57UV8Hl5tHxO9uw==}
@@ -16334,9 +16272,6 @@ packages:
 
   piscina@4.4.0:
     resolution: {integrity: sha512-+AQduEJefrOApE4bV7KRmp3N2JnnyErlVqq4P/jmko4FPz9Z877BCccl/iB3FdrWSUkvbGV9Kan/KllJgat3Vg==}
-
-  piscina@4.7.0:
-    resolution: {integrity: sha512-b8hvkpp9zS0zsfa939b/jXbe64Z2gZv0Ha7FYPNUiDIB1y2AtxcOZdfP8xN8HFjUaqQiT9gRlfjAsoL8vdJ1Iw==}
 
   piscina@4.8.0:
     resolution: {integrity: sha512-EZJb+ZxDrQf3dihsUL7p42pjNyrNIFJCrRHPMgxu/svsj+P3xS3fuEWp7k2+rfsavfl1N0G29b1HGs7J0m8rZA==}
@@ -17534,11 +17469,6 @@ packages:
     engines: {node: '>=14.0.0'}
     hasBin: true
 
-  sass@1.81.0:
-    resolution: {integrity: sha512-Q4fOxRfhmv3sqCLoGfvrC9pRV8btc0UtqL9mN6Yrv6Qi9ScL55CVH1vlPP863ISLEEMNLLuu9P+enCeGHlnzhA==}
-    engines: {node: '>=14.0.0'}
-    hasBin: true
-
   sass@1.85.0:
     resolution: {integrity: sha512-3ToiC1xZ1Y8aU7+CkgCI/tqyuPXEmYGJXO7H4uqp0xkLXUqp88rQQ4j1HmP37xSJLbCJPaIiv+cT1y+grssrww==}
     engines: {node: '>=14.0.0'}
@@ -18182,10 +18112,6 @@ packages:
     resolution: {integrity: sha512-yH0+mD8oahBZWnY43vxs4pSinn8SMKAdml/EOGBewoe1Y0Eitd0h2Mg3ZRiXruUW6L4P+lvZiEgbh0NgUGia1w==}
     engines: {node: '>=0.10.0'}
 
-  strip-bom-string@1.0.0:
-    resolution: {integrity: sha512-uCC2VHvQRYu+lMh4My/sFNmF2klFymLX1wHJeXnbEJERpV/ZsVuonzerjfrGpIGF7LBVa1O7i9kjiWvJiFck8g==}
-    engines: {node: '>=0.10.0'}
-
   strip-bom@2.0.0:
     resolution: {integrity: sha512-kwrX1y7czp1E69n2ajbG65mIo9dqvJ+8aBQXOGVxqwvNbsXdFM6Lq37dLAY3mknUwru8CfcCbfOLL/gMo+fi3g==}
     engines: {node: '>=0.10.0'}
@@ -18634,10 +18560,6 @@ packages:
   timers-browserify@1.4.2:
     resolution: {integrity: sha512-PIxwAupJZiYU4JmVZYwXp9FKsHMXb5h0ZEFyuXTAn8WLHOlcij+FEcbrvDsom1o5dr1YggEtFbECvGCW2sT53Q==}
     engines: {node: '>=0.6.0'}
-
-  timers-ext@0.1.8:
-    resolution: {integrity: sha512-wFH7+SEAcKfJpfLPkrgMPvvwnEtj8W4IurvEyrKsDleXnKLCDw71w8jltvfLa8Rm4qQxxT4jmDBYbJG/z7qoww==}
-    engines: {node: '>=0.12'}
 
   tiny-glob@0.2.9:
     resolution: {integrity: sha512-g/55ssRPUjShh+xkfx9UPDXqhckHEsHr4Vd9zX55oSdGZc/MD0m3sferOkwWtp98bv+kcVfEHtRJgBVJzelrzg==}
@@ -21010,6 +20932,22 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@angular/compiler-cli@21.0.5(@angular/compiler@21.0.5)(typescript@4.9.5)':
+    dependencies:
+      '@angular/compiler': 21.0.5
+      '@babel/core': 7.28.4
+      '@jridgewell/sourcemap-codec': 1.5.0
+      chokidar: 4.0.1
+      convert-source-map: 1.9.0
+      reflect-metadata: 0.2.2
+      semver: 7.7.2
+      tslib: 2.6.3
+      yargs: 18.0.0
+    optionalDependencies:
+      typescript: 4.9.5
+    transitivePeerDependencies:
+      - supports-color
+
   '@angular/compiler-cli@21.0.5(@angular/compiler@21.0.5)(typescript@5.9.3)':
     dependencies:
       '@angular/compiler': 21.0.5
@@ -21638,7 +21576,7 @@ snapshots:
       '@babel/helper-plugin-utils': 7.27.1
       debug: 4.4.3
       lodash.debounce: 4.0.8
-      resolve: 1.22.10
+      resolve: 1.22.11
     transitivePeerDependencies:
       - supports-color
 
@@ -25096,7 +25034,7 @@ snapshots:
   '@eslint/config-array@0.19.2':
     dependencies:
       '@eslint/object-schema': 2.1.7
-      debug: 4.4.0
+      debug: 4.4.3
       minimatch: 3.1.2
     transitivePeerDependencies:
       - supports-color
@@ -25146,7 +25084,7 @@ snapshots:
   '@eslint/eslintrc@3.2.0':
     dependencies:
       ajv: 6.12.6
-      debug: 4.4.0
+      debug: 4.4.3
       espree: 10.4.0
       globals: 14.0.0
       ignore: 5.3.1
@@ -25160,7 +25098,7 @@ snapshots:
   '@eslint/eslintrc@3.3.1':
     dependencies:
       ajv: 6.12.6
-      debug: 4.4.0
+      debug: 4.4.3
       espree: 10.4.0
       globals: 14.0.0
       ignore: 5.3.1
@@ -25207,19 +25145,6 @@ snapshots:
       lodash.isnil: 4.0.0
       lodash.isundefined: 3.0.1
       lodash.uniq: 4.5.0
-
-  '@gulp-sourcemaps/identity-map@1.0.2':
-    dependencies:
-      acorn: 5.7.4
-      css: 2.2.4
-      normalize-path: 2.1.1
-      source-map: 0.6.1
-      through2: 2.0.5
-
-  '@gulp-sourcemaps/map-sources@1.0.0':
-    dependencies:
-      normalize-path: 2.1.1
-      through2: 2.0.5
 
   '@gulpjs/to-absolute-glob@4.0.0':
     dependencies:
@@ -27958,7 +27883,7 @@ snapshots:
       eslint-visitor-keys: 4.2.1
       espree: 10.4.0
       estraverse: 5.3.0
-      picomatch: 4.0.2
+      picomatch: 4.0.3
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -27970,7 +27895,7 @@ snapshots:
       eslint-visitor-keys: 4.2.1
       espree: 10.4.0
       estraverse: 5.3.0
-      picomatch: 4.0.2
+      picomatch: 4.0.3
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -27982,7 +27907,7 @@ snapshots:
       eslint-visitor-keys: 4.2.1
       espree: 10.4.0
       estraverse: 5.3.0
-      picomatch: 4.0.2
+      picomatch: 4.0.3
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -28537,12 +28462,12 @@ snapshots:
       '@typescript-eslint/type-utils': 6.21.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3)
       '@typescript-eslint/utils': 6.21.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3)
       '@typescript-eslint/visitor-keys': 6.21.0
-      debug: 4.4.0
+      debug: 4.4.3
       eslint: 9.18.0(jiti@2.6.1)
       graphemer: 1.4.0
       ignore: 5.3.1
       natural-compare: 1.4.0
-      semver: 7.7.2
+      semver: 7.7.3
       ts-api-utils: 1.4.0(typescript@5.9.3)
     optionalDependencies:
       typescript: 5.9.3
@@ -28639,7 +28564,7 @@ snapshots:
       '@typescript-eslint/types': 6.21.0
       '@typescript-eslint/typescript-estree': 6.21.0(typescript@5.9.3)
       '@typescript-eslint/visitor-keys': 6.21.0
-      debug: 4.4.0
+      debug: 4.4.3
       eslint: 9.18.0(jiti@2.6.1)
     optionalDependencies:
       typescript: 5.9.3
@@ -28652,7 +28577,7 @@ snapshots:
       '@typescript-eslint/types': 8.23.0
       '@typescript-eslint/typescript-estree': 8.23.0(typescript@4.9.5)
       '@typescript-eslint/visitor-keys': 8.23.0
-      debug: 4.4.0
+      debug: 4.4.3
       eslint: 9.18.0(jiti@2.6.1)
       typescript: 4.9.5
     transitivePeerDependencies:
@@ -28664,7 +28589,7 @@ snapshots:
       '@typescript-eslint/types': 8.23.0
       '@typescript-eslint/typescript-estree': 8.23.0(typescript@5.4.5)
       '@typescript-eslint/visitor-keys': 8.23.0
-      debug: 4.4.0
+      debug: 4.4.3
       eslint: 9.18.0(jiti@2.6.1)
       typescript: 5.4.5
     transitivePeerDependencies:
@@ -28676,7 +28601,7 @@ snapshots:
       '@typescript-eslint/types': 8.23.0
       '@typescript-eslint/typescript-estree': 8.23.0(typescript@5.9.3)
       '@typescript-eslint/visitor-keys': 8.23.0
-      debug: 4.4.0
+      debug: 4.4.3
       eslint: 9.18.0(jiti@2.6.1)
       typescript: 5.9.3
     transitivePeerDependencies:
@@ -28723,7 +28648,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/typescript-estree': 8.23.0(typescript@4.9.5)
       '@typescript-eslint/utils': 8.23.0(eslint@9.18.0(jiti@2.6.1))(typescript@4.9.5)
-      debug: 4.4.0
+      debug: 4.4.3
       eslint: 9.18.0(jiti@2.6.1)
       ts-api-utils: 2.0.1(typescript@4.9.5)
       typescript: 4.9.5
@@ -28734,7 +28659,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/typescript-estree': 8.23.0(typescript@5.4.5)
       '@typescript-eslint/utils': 8.23.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.4.5)
-      debug: 4.4.0
+      debug: 4.4.3
       eslint: 9.18.0(jiti@2.6.1)
       ts-api-utils: 2.0.1(typescript@5.4.5)
       typescript: 5.4.5
@@ -28745,7 +28670,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/typescript-estree': 8.23.0(typescript@5.9.3)
       '@typescript-eslint/utils': 8.23.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3)
-      debug: 4.4.0
+      debug: 4.4.3
       eslint: 9.18.0(jiti@2.6.1)
       ts-api-utils: 2.0.1(typescript@5.9.3)
       typescript: 5.9.3
@@ -28855,11 +28780,11 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 8.23.0
       '@typescript-eslint/visitor-keys': 8.23.0
-      debug: 4.4.0
+      debug: 4.4.3
       fast-glob: 3.3.3
       is-glob: 4.0.3
       minimatch: 9.0.5
-      semver: 7.7.2
+      semver: 7.7.3
       ts-api-utils: 2.0.1(typescript@4.9.5)
       typescript: 4.9.5
     transitivePeerDependencies:
@@ -28869,11 +28794,11 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 8.23.0
       '@typescript-eslint/visitor-keys': 8.23.0
-      debug: 4.4.0
+      debug: 4.4.3
       fast-glob: 3.3.3
       is-glob: 4.0.3
       minimatch: 9.0.5
-      semver: 7.7.2
+      semver: 7.7.3
       ts-api-utils: 2.0.1(typescript@5.4.5)
       typescript: 5.4.5
     transitivePeerDependencies:
@@ -28883,11 +28808,11 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 8.23.0
       '@typescript-eslint/visitor-keys': 8.23.0
-      debug: 4.4.0
+      debug: 4.4.3
       fast-glob: 3.3.3
       is-glob: 4.0.3
       minimatch: 9.0.5
-      semver: 7.7.2
+      semver: 7.7.3
       ts-api-utils: 2.0.1(typescript@5.9.3)
       typescript: 5.9.3
     transitivePeerDependencies:
@@ -29610,8 +29535,6 @@ snapshots:
   acorn-walk@8.3.4:
     dependencies:
       acorn: 8.15.0
-
-  acorn@5.7.4: {}
 
   acorn@7.4.1: {}
 
@@ -30913,13 +30836,6 @@ snapshots:
       vm-browserify: 1.1.2
       xtend: 4.0.2
 
-  browserslist@4.24.2:
-    dependencies:
-      caniuse-lite: 1.0.30001756
-      electron-to-chromium: 1.5.63
-      node-releases: 2.0.18
-      update-browserslist-db: 1.1.1(browserslist@4.24.2)
-
   browserslist@4.24.4:
     dependencies:
       caniuse-lite: 1.0.30001716
@@ -32124,13 +32040,6 @@ snapshots:
 
   css.escape@1.5.1: {}
 
-  css@2.2.4:
-    dependencies:
-      inherits: 2.0.4
-      source-map: 0.6.1
-      source-map-resolve: 0.5.3
-      urix: 0.1.0
-
   cssauron@1.4.0:
     dependencies:
       through: 2.3.8
@@ -32215,14 +32124,6 @@ snapshots:
   dayjs@1.11.13: {}
 
   de-indent@1.0.2: {}
-
-  debug-fabulous@1.1.0:
-    dependencies:
-      debug: 3.2.7
-      memoizee: 0.4.17
-      object-assign: 4.1.1
-    transitivePeerDependencies:
-      - supports-color
 
   debug@2.6.9:
     dependencies:
@@ -32435,8 +32336,6 @@ snapshots:
   detect-libc@1.0.3: {}
 
   detect-libc@2.0.3: {}
-
-  detect-newline@2.1.0: {}
 
   detect-newline@3.1.0: {}
 
@@ -32748,8 +32647,6 @@ snapshots:
   electron-to-chromium@1.5.208: {}
 
   electron-to-chromium@1.5.259: {}
-
-  electron-to-chromium@1.5.63: {}
 
   elegant-spinner@1.0.1: {}
 
@@ -33654,7 +33551,7 @@ snapshots:
     dependencies:
       debug: 3.2.7
       is-core-module: 2.16.1
-      resolve: 1.22.10
+      resolve: 1.22.11
     transitivePeerDependencies:
       - supports-color
 
@@ -34101,7 +33998,7 @@ snapshots:
       ajv: 6.12.6
       chalk: 4.1.2
       cross-spawn: 7.0.6
-      debug: 4.4.0
+      debug: 4.4.3
       escape-string-regexp: 4.0.0
       eslint-scope: 8.4.0
       eslint-visitor-keys: 4.2.1
@@ -34574,9 +34471,9 @@ snapshots:
     dependencies:
       pend: 1.2.0
 
-  fdir@6.4.4(picomatch@4.0.2):
+  fdir@6.4.4(picomatch@4.0.3):
     optionalDependencies:
-      picomatch: 4.0.2
+      picomatch: 4.0.3
 
   fdir@6.5.0(picomatch@4.0.3):
     optionalDependencies:
@@ -35365,7 +35262,7 @@ snapshots:
       eslint: 9.39.1(jiti@2.6.1)
       fancy-log: 2.0.0
       plugin-error: 2.0.1
-      semver: 7.7.2
+      semver: 7.7.3
       ternary-stream: 3.0.0
       vinyl-fs: 4.0.0
     optionalDependencies:
@@ -35512,22 +35409,6 @@ snapshots:
       through2: 3.0.2
       tslib: 1.14.1
 
-  gulp-sourcemaps@2.6.5:
-    dependencies:
-      '@gulp-sourcemaps/identity-map': 1.0.2
-      '@gulp-sourcemaps/map-sources': 1.0.0
-      acorn: 5.7.4
-      convert-source-map: 1.9.0
-      css: 2.2.4
-      debug-fabulous: 1.1.0
-      detect-newline: 2.1.0
-      graceful-fs: 4.2.11
-      source-map: 0.6.1
-      strip-bom-string: 1.0.0
-      through2: 2.0.5
-    transitivePeerDependencies:
-      - supports-color
-
   gulp-tap@1.0.1:
     dependencies:
       through2: 2.0.5
@@ -35538,16 +35419,6 @@ snapshots:
       plugin-error: 0.1.2
       safe-buffer: 5.2.1
       through2: 2.0.5
-
-  gulp-typescript@4.0.2(typescript@5.4.5):
-    dependencies:
-      ansi-colors: 1.1.0
-      plugin-error: 0.1.2
-      source-map: 0.6.1
-      through2: 2.0.5
-      typescript: 5.4.5
-      vinyl: 2.2.1
-      vinyl-fs: 3.0.3
 
   gulp-typescript@5.0.1(typescript@4.9.5):
     dependencies:
@@ -36602,8 +36473,6 @@ snapshots:
   is-potential-custom-element-name@1.0.1: {}
 
   is-primitive@2.0.0: {}
-
-  is-promise@2.2.2: {}
 
   is-promise@4.0.0: {}
 
@@ -38522,10 +38391,6 @@ snapshots:
 
   lru-cache@7.18.3: {}
 
-  lru-queue@0.1.0:
-    dependencies:
-      es5-ext: 0.10.64
-
   luxon@1.28.1:
     optional: true
 
@@ -38754,17 +38619,6 @@ snapshots:
       thingies: 2.5.0(tslib@2.6.3)
       tree-dump: 1.1.0(tslib@2.6.3)
       tslib: 2.6.3
-
-  memoizee@0.4.17:
-    dependencies:
-      d: 1.0.2
-      es5-ext: 0.10.64
-      es6-weak-map: 2.0.3
-      event-emitter: 0.3.5
-      is-promise: 2.2.2
-      lru-queue: 0.1.0
-      next-tick: 1.1.0
-      timers-ext: 0.1.8
 
   memory-fs@0.5.0:
     dependencies:
@@ -39317,25 +39171,56 @@ snapshots:
       '@rollup/wasm-node': 4.27.3
       ajv: 8.17.1
       ansi-colors: 4.1.3
-      browserslist: 4.24.2
+      browserslist: 4.25.3
       cacache: 18.0.4
       chokidar: 3.6.0
       commander: 12.1.0
       convert-source-map: 2.0.0
       dependency-graph: 1.0.0
       esbuild-wasm: 0.20.2
-      fast-glob: 3.3.2
+      fast-glob: 3.3.3
       find-cache-dir: 3.3.2
       injection-js: 2.4.0
       jsonc-parser: 3.3.1
-      less: 4.2.0
+      less: 4.2.2
       ora: 5.4.1
-      piscina: 4.7.0
+      piscina: 4.8.0
       postcss: 8.4.38
       rxjs: 7.8.1
-      sass: 1.81.0
+      sass: 1.85.0
       tslib: 2.6.3
       typescript: 5.4.5
+    optionalDependencies:
+      esbuild: 0.20.2
+      rollup: 4.22.4
+
+  ng-packagr@17.3.0(@angular/compiler-cli@21.0.5(@angular/compiler@21.0.5)(typescript@4.9.5))(tslib@2.8.1)(typescript@4.9.5):
+    dependencies:
+      '@angular/compiler-cli': 21.0.5(@angular/compiler@21.0.5)(typescript@4.9.5)
+      '@rollup/plugin-json': 6.1.0(rollup@4.22.4)
+      '@rollup/plugin-node-resolve': 15.2.3(rollup@4.22.4)
+      '@rollup/wasm-node': 4.27.3
+      ajv: 8.17.1
+      ansi-colors: 4.1.3
+      browserslist: 4.25.3
+      cacache: 18.0.4
+      chokidar: 3.6.0
+      commander: 12.1.0
+      convert-source-map: 2.0.0
+      dependency-graph: 1.0.0
+      esbuild-wasm: 0.20.2
+      fast-glob: 3.3.3
+      find-cache-dir: 3.3.2
+      injection-js: 2.4.0
+      jsonc-parser: 3.3.1
+      less: 4.2.2
+      ora: 5.4.1
+      piscina: 4.8.0
+      postcss: 8.4.38
+      rxjs: 7.8.1
+      sass: 1.85.0
+      tslib: 2.8.1
+      typescript: 4.9.5
     optionalDependencies:
       esbuild: 0.20.2
       rollup: 4.22.4
@@ -39449,8 +39334,6 @@ snapshots:
       shellwords: 0.1.1
       uuid: 8.3.2
       which: 2.0.2
-
-  node-releases@2.0.18: {}
 
   node-releases@2.0.19: {}
 
@@ -40430,10 +40313,6 @@ snapshots:
   piscina@4.4.0:
     optionalDependencies:
       nice-napi: 1.0.2
-
-  piscina@4.7.0:
-    optionalDependencies:
-      '@napi-rs/nice': 1.0.1
 
   piscina@4.8.0:
     optionalDependencies:
@@ -41845,14 +41724,6 @@ snapshots:
       immutable: 4.3.5
       source-map-js: 1.2.1
 
-  sass@1.81.0:
-    dependencies:
-      chokidar: 4.0.1
-      immutable: 5.0.3
-      source-map-js: 1.2.1
-    optionalDependencies:
-      '@parcel/watcher': 2.5.0
-
   sass@1.85.0:
     dependencies:
       chokidar: 4.0.1
@@ -42726,8 +42597,6 @@ snapshots:
     dependencies:
       first-chunk-stream: 2.0.0
       strip-bom: 2.0.0
-
-  strip-bom-string@1.0.0: {}
 
   strip-bom@2.0.0:
     dependencies:
@@ -43707,11 +43576,6 @@ snapshots:
     dependencies:
       process: 0.11.10
 
-  timers-ext@0.1.8:
-    dependencies:
-      es5-ext: 0.10.64
-      next-tick: 1.1.0
-
   tiny-glob@0.2.9:
     dependencies:
       globalyzer: 0.1.0
@@ -43723,8 +43587,8 @@ snapshots:
 
   tinyglobby@0.2.13:
     dependencies:
-      fdir: 6.4.4(picomatch@4.0.2)
-      picomatch: 4.0.2
+      fdir: 6.4.4(picomatch@4.0.3)
+      picomatch: 4.0.3
 
   tinyglobby@0.2.15:
     dependencies:
@@ -44545,12 +44409,6 @@ snapshots:
 
   upath@1.2.0: {}
 
-  update-browserslist-db@1.1.1(browserslist@4.24.2):
-    dependencies:
-      browserslist: 4.24.2
-      escalade: 3.2.0
-      picocolors: 1.1.1
-
   update-browserslist-db@1.1.1(browserslist@4.24.4):
     dependencies:
       browserslist: 4.24.4
@@ -44919,14 +44777,14 @@ snapshots:
 
   vue-eslint-parser@9.4.3(eslint@9.18.0(jiti@2.6.1)):
     dependencies:
-      debug: 4.4.0
+      debug: 4.4.3
       eslint: 9.18.0(jiti@2.6.1)
       eslint-scope: 7.2.2
       eslint-visitor-keys: 3.4.3
       espree: 9.6.1
       esquery: 1.6.0
       lodash: 4.17.21
-      semver: 7.7.2
+      semver: 7.7.3
     transitivePeerDependencies:
       - supports-color
 

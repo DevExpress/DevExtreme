@@ -1,4 +1,4 @@
-export type Framework = 'react' | 'vue';
+export type Framework = 'react' | 'vue' | 'angular';
 export type QuoteStyle = 'single' | 'double';
 
 export interface ComponentGeneratorTplConfig {
