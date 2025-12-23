@@ -12,6 +12,8 @@ import dataUtils from 'core/element_data';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
+import 'generic_light.css!';
+
 const {
     module,
     test,

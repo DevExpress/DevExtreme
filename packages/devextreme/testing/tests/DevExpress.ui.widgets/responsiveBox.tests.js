@@ -9,8 +9,6 @@ import 'ui/box';
 import eventsEngine from 'common/core/events/core/events_engine';
 import domAdapter from '__internal/core/m_dom_adapter';
 
-import 'generic_light.css!';
-
 QUnit.testStart(function() {
     const markup =
         '<div id="responsiveBox"></div>\

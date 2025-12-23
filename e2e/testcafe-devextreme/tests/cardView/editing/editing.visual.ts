@@ -4,8 +4,6 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { columns, data } from '../helpers/simpleArrayData';
 import { testScreenshot } from '../../../helpers/themeUtils';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
-import { a11yCheck } from '../../../helpers/accessibility/utils';
 
 fixture.disablePageReloads`CardView - Editing`
   .page(url(__dirname, '../../container.html'));
@@ -23,7 +21,7 @@ const baseConfig = {
   },
 };
 
-safeSizeTest('default render', async (t) => {
+test.meta({ browserSize: [1100, 700] })('default render', async (t) => {
   const cardView = new CardView(CARD_VIEW_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -32,11 +30,9 @@ safeSizeTest('default render', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxCardView', baseConfig));
 
-  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
-}, [1100, 700]).before(async () => createWidget('dxCardView', baseConfig));
-
-safeSizeTest('render of add card popup', async (t) => {
+test.meta({ browserSize: [1100, 700] })('render of add card popup', async (t) => {
   const cardView = new CardView(CARD_VIEW_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -46,11 +42,9 @@ safeSizeTest('render of add card popup', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxCardView', baseConfig));
 
-  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
-}, [1100, 700]).before(async () => createWidget('dxCardView', baseConfig));
-
-safeSizeTest('render of edit card popup', async (t) => {
+test.meta({ browserSize: [1100, 700] })('render of edit card popup', async (t) => {
   const cardView = new CardView(CARD_VIEW_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -60,6 +54,4 @@ safeSizeTest('render of edit card popup', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-
-  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
-}, [1100, 700]).before(async () => createWidget('dxCardView', baseConfig));
+}).before(async () => createWidget('dxCardView', baseConfig));

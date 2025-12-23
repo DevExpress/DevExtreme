@@ -1,53 +1,48 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { defaultConfig } from '../helpers/data';
-import { changeTheme } from '../../../../helpers/changeTheme';
-import { Themes } from '../../../../helpers/themes';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const DATA_GRID_SELECTOR = '#container';
 
 fixture.disablePageReloads`Sticky columns - Multi Row Header Columns`
   .page(url(__dirname, '../../../container.html'));
 
-[Themes.genericLight, Themes.materialBlue, Themes.fluentBlue].forEach((theme) => {
-  safeSizeTest(`The multi row header columns should have vertical borders when a column is fixed (${theme} theme) (T1282595)`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+// visual: generic.light
+// visual: material.blue.light
+// visual: fluent.blue.light
+test.meta({ browserSize: [800, 800] })('The multi row header columns should have vertical borders when a column is fixed (generic.light theme) (T1282595)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
-    await t.expect(dataGrid.isReady()).ok();
+  await t.expect(dataGrid.isReady()).ok();
 
-    await takeScreenshot(`multi_row_header_columns_(${theme}).png`, dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'multi_row_header_columns.png', { element: dataGrid.element });
 
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }, [800, 800])
-    .before(async () => {
-      await changeTheme(theme);
-      await createWidget('dxDataGrid', {
-        ...defaultConfig,
-        columns: [
-          {
-            dataField: 'ID',
-            fixed: true,
-          },
-          {
-            caption: 'Order',
-            columns: [
-              'OrderNumber',
-              'OrderDate',
-            ],
-          },
-          'SaleAmount',
-          'Terms',
-        ],
-        showBorders: true,
-      });
-    })
-    .after(async () => {
-      await changeTheme(Themes.genericLight);
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+})
+  .before(async () => {
+    await createWidget('dxDataGrid', {
+      ...defaultConfig,
+      columns: [
+        {
+          dataField: 'ID',
+          fixed: true,
+        },
+        {
+          caption: 'Order',
+          columns: [
+            'OrderNumber',
+            'OrderDate',
+          ],
+        },
+        'SaleAmount',
+        'Terms',
+      ],
+      showBorders: true,
     });
-});
+  });

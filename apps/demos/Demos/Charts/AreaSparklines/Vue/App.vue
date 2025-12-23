@@ -42,7 +42,7 @@ const years = ['2010', '2011', '2012'];
 .demo-table th {
   font-weight: 400;
   width: 200px;
-  padding: 25px 15px 20px 15px;
+  padding: 25px 15px 20px;
   border: 1px solid #c2c2c2;
 }
 

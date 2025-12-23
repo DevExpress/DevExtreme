@@ -5,7 +5,7 @@ import messageLocalization from 'common/core/localization/message';
 import uiErrors from 'ui/widget/ui.errors';
 import fx from 'common/core/animation/fx';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import 'ui/load_panel';
 
 QUnit.testStart(function() {

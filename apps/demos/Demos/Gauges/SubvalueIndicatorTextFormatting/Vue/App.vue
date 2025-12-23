@@ -45,7 +45,7 @@ const format = {
   precision: 1,
 };
 
-const customizeText = ({ valueText }) => `${valueText} °C`;
+const customizeText = ({ valueText }: Record<string, any>) => `${valueText} °C`;
 </script>
 <style scoped>
 #gauge {

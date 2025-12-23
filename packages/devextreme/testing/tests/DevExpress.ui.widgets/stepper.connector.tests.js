@@ -5,7 +5,7 @@ import Connector, {
     STEPPER_CONNECTOR_CONTAINER_CLASS,
 } from '__internal/ui/stepper/connector';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 
 QUnit.testStart(() => {
@@ -87,11 +87,11 @@ QUnit.module('Size option', moduleConfig, () => {
             });
 
             assert.strictEqual(this.getContainer().css(dimension), '300px');
-            assert.strictEqual(this.getContainer().css(newDimension), '1px');
+            assert.strictEqual(this.getContainer().css(newDimension), '2px');
 
             this.instance.option('orientation', newOrientation);
 
-            assert.strictEqual(this.getContainer().css(dimension), '1px');
+            assert.strictEqual(this.getContainer().css(dimension), '2px');
             assert.strictEqual(this.getContainer().css(newDimension), '300px');
         });
     });
@@ -118,11 +118,11 @@ QUnit.module('Value option', moduleConfig, () => {
             });
 
             assert.strictEqual(this.getConnectorValue().css(dimension), '300px');
-            assert.strictEqual(this.getConnectorValue().css(newDimension), '1px');
+            assert.strictEqual(this.getConnectorValue().css(newDimension), '2px');
 
             this.instance.option('orientation', newOrientation);
 
-            assert.strictEqual(this.getConnectorValue().css(dimension), '1px');
+            assert.strictEqual(this.getConnectorValue().css(dimension), '2px');
             assert.strictEqual(this.getConnectorValue().css(newDimension), '300px');
         });
 
@@ -133,12 +133,12 @@ QUnit.module('Value option', moduleConfig, () => {
             });
 
             assert.strictEqual(this.getConnectorValue().css(dimension), '80px');
-            assert.strictEqual(this.getConnectorValue().css(newDimension), '1px');
+            assert.strictEqual(this.getConnectorValue().css(newDimension), '2px');
 
             this.instance.option('value', 50);
 
             assert.strictEqual(this.getConnectorValue().css(dimension), '200px');
-            assert.strictEqual(this.getConnectorValue().css(newDimension), '1px');
+            assert.strictEqual(this.getConnectorValue().css(newDimension), '2px');
         });
     });
 });

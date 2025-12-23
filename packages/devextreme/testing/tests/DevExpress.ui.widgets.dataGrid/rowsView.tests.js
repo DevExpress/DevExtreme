@@ -21,7 +21,6 @@ import numberLocalization from 'common/core/localization/number';
 import virtualScrollingCore from '__internal/grids/grid_core/virtual_scrolling/m_virtual_scrolling_core';
 import ODataStore from 'common/data/odata/store';
 import ArrayStore from 'common/data/array_store';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 const expandCellTemplate = gridCoreUtils.getExpandCellTemplate();
 
@@ -1377,10 +1376,6 @@ QUnit.module('Rows view', {
     });
 
     QUnit.test('Selection rows by space keydown on checkbox', function(assert) {
-        if(shouldSkipOnMobile(assert, 'Keyboard navigation does not work on mobile devices')) {
-            return;
-        }
-
         // arrange
         const rows = [{ values: [false, 'test1', 1, '1/01/2001'], rowType: 'data' }, { values: [false, 'test2', 2, '2/02/2002'], rowType: 'data' }, { values: [false, 'test3', 3, '3/03/2003'], rowType: 'data' }];
         const dataController = new MockDataController({ items: rows, selection: { mode: 'multiple', showCheckBoxesMode: 'always' } });
@@ -4172,10 +4167,6 @@ QUnit.module('Rows view with real dataController and columnController', {
     });
 
     QUnit.test('Touch click on cell should raise rowClick with correct target arguments (T593150)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         let rowClickCount = 0;
 
         this.options.dataSource.group = 'name';

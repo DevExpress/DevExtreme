@@ -62,7 +62,7 @@ const monthWeather = new DataSource({
   paginate: false,
 });
 
-const customizeLabelText = ({ valueText }) => `${valueText}${'&#176C'}`;
+const customizeLabelText = ({ valueText }: { valueText: string }) => `${valueText}${'&#176C'}`;
 
 function changeTemperature({ value }: DxSelectBoxTypes.ValueChangedEvent) {
   monthWeather.filter(['t', '>', value]);

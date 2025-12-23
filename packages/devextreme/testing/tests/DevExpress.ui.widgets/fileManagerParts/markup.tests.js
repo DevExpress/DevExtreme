@@ -7,6 +7,7 @@ import fx from 'common/core/animation/fx';
 import windowUtils from 'core/utils/window';
 import { FileManagerWrapper, createTestFileSystem, Consts } from '../../../helpers/fileManagerHelpers.js';
 import devices from '__internal/core/m_devices';
+
 import 'generic_light.css!';
 
 const getDefaultConfig = () => {

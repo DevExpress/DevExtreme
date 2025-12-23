@@ -2,7 +2,6 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Grid on Drop Down Box`.page(
@@ -10,11 +9,13 @@ fixture.disablePageReloads`Grid on Drop Down Box`.page(
 );
 
 // T1245111
-safeSizeTest('DataGrid on dropDownBox should appear correctly on window resize', async (t) => {
+test('DataGrid on dropDownBox should appear correctly on window resize', async (t) => {
   const dropDownBox = Selector('#container');
+  const overlay = Selector('.dx-overlay-content');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t.click(dropDownBox);
+  await t.hover(overlay);
   await t.resizeWindow(800, 800);
   await testScreenshot(t, takeScreenshot, 'T1245111-dropDownBox-resize.png');
   await t

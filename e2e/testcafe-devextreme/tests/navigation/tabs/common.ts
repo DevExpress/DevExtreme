@@ -1,8 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { Selector, ClientFunction } from 'testcafe';
+import { Selector } from 'testcafe';
 import { Item } from 'devextreme/ui/tabs.d';
-import Tabs from 'devextreme-testcafe-models/tabs';
-import { testScreenshot, isMaterialBased } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { appendElementTo, setAttribute } from '../../../helpers/domUtils';
@@ -12,123 +11,89 @@ const TAB_CLASS = 'dx-tab';
 fixture.disablePageReloads`Tabs_common`
   .page(url(__dirname, '../../container.html'));
 
-test('Tabs nav buttons', async (t) => {
+test('Tabs background color', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'Tabs nav buttons.png', { element: '#tabs' });
+  await testScreenshot(t, takeScreenshot, 'Tabs background color.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await appendElementTo('#container', 'div', 'tabs');
-  await setAttribute('#container', 'style', 'width: 200px; height: 200px; background: #fff000 !important;');
+  await setAttribute('#container', 'style', 'width: 400px; background: #fff000 !important;');
 
-  const dataSource = [
+  const dataSource: Item[] = [
     { text: 'John Heart' },
     { text: 'Marina Thomas' },
     { text: 'Robert Reagan' },
     { text: 'Greta Sims' },
-    { text: 'Olivia Peyton' },
-    { text: 'Ed Holmes' },
-    { text: 'Wally Hobbs' },
-    { text: 'Brad Jameson' },
-  ] as Item[];
+  ];
 
-  return createWidget('dxTabs', { dataSource, width: 200, showNavButtons: true }, '#tabs');
+  await createWidget('dxTabs', { dataSource }, '#tabs');
 });
 
 test('Tabs text-overflow with vertical orientation', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const tabs = new Tabs('#tabs');
 
-  await testScreenshot(t, takeScreenshot, 'Tabs text-overflow.png', { element: '#tabs' });
-
-  await tabs.option({ iconPosition: 'top' } as any);
-
-  await testScreenshot(t, takeScreenshot, 'Tabs text-overflow when iconPosition is top.png', { element: '#tabs' });
-
-  await tabs.option({ height: 300 } as any);
-
-  await testScreenshot(t, takeScreenshot, 'Tabs text-overflow when height is limited.png', { element: '#tabs' });
+  await testScreenshot(t, takeScreenshot, 'Tabs text-overflow.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await appendElementTo('#container', 'div', 'tabs');
-  await setAttribute('#container', 'style', 'width: 600px; height: 400px;');
+  await setAttribute('#container', 'style', 'display: flex; gap: 40px; width: fit-content;');
 
-  const dataSource = [
+  const iconPositions = ['start', 'end', 'top'];
+  const dataSource: Item[] = [
     { icon: 'user', text: 'John Heart' },
     { icon: 'user', text: 'Marina Elizabeth Thomas Grace Sophia Alexander Benjamin Olivia Nicholas Victoria Michael Emily' },
     { icon: 'user', text: 'Robert Reagan' },
     { icon: 'user', text: 'Greta Sims' },
-  ] as Item[];
+  ];
 
-  const options = {
+  await Promise.all(iconPositions.map((iconPosition) => appendElementTo('#container', 'div', `tabs-${iconPosition}`)));
+  await Promise.all(iconPositions.map((iconPosition) => createWidget('dxTabs', {
     dataSource,
+    iconPosition,
     width: 130,
-    showNavButtons: true,
     orientation: 'vertical',
-  };
-
-  return createWidget('dxTabs', options, '#tabs');
-});
-
-test('Tab item width in secondary stylingMode', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  await testScreenshot(t, takeScreenshot, 'Tab item width in secondary stylingMode.png', { element: '#tabs' });
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await appendElementTo('#container', 'div', 'tabs');
-  await setAttribute('#container', 'style', 'display: flex; width: 800px; height: 600px;');
-
-  const dataSource = [
-    { text: 'user' },
-    { text: 'user' },
-    { text: 'user' },
-    { text: 'user' },
-    { text: 'user' },
-  ] as Item[];
-
-  return createWidget('dxTabs', { dataSource, width: 'auto', stylingMode: 'secondary' }, '#tabs');
+  }, `#tabs-${iconPosition}`)));
 });
 
 [true, false].forEach((rtlEnabled) => {
-  ['start', 'top', 'end', 'bottom'].forEach((iconPosition) => {
-    test('Tabs icon position', async (t) => {
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  test('Tabs icon position', async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      await testScreenshot(t, takeScreenshot, `Tabs iconPosition=${iconPosition},rtl=${rtlEnabled}.png`, { element: '#tabs', shouldTestInCompact: true });
+    await testScreenshot(t, takeScreenshot, `Tabs icon position,rtl=${rtlEnabled}.png`, { element: '#container' });
 
-      await t
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
-    }).before(async () => {
-      await appendElementTo('#container', 'div', 'tabs');
-      await setAttribute('#container', 'style', 'width: 800px; height: 600px;');
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await setAttribute('#container', 'style', 'display: flex; flex-direction: column; gap: 20px; width: 800px');
 
-      const dataSource = [
-        { text: 'user', badge: '1' },
-        { text: 'comment', icon: 'comment', badge: 'text' },
-        { icon: 'user' },
-        { icon: 'money' },
-      ] as Item[];
+    const iconPositions = ['start', 'end', 'top', 'bottom'];
+    const dataSource: Item[] = [
+      { text: 'user', badge: '1' },
+      { text: 'comment', icon: 'comment', badge: 'text' },
+      { icon: 'user' },
+      { icon: 'money' },
+    ];
 
-      return createWidget('dxTabs', { dataSource, iconPosition, rtlEnabled }, '#tabs');
-    });
+    await Promise.all(iconPositions.map((iconPosition) => appendElementTo('#container', 'div', `tabs-${iconPosition}`)));
+    await Promise.all(iconPositions.map((iconPosition) => createWidget('dxTabs', {
+      dataSource,
+      iconPosition,
+      rtlEnabled,
+    }, `#tabs-${iconPosition}`)));
   });
 });
 
 test('Tabs with width: auto in flex container', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'Tabs with width auto.png', { element: '#tabs', shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Tabs with width auto.png', { element: '#tabs' });
 
   await t
     .expect(compareResults.isValid())
@@ -137,174 +102,120 @@ test('Tabs with width: auto in flex container', async (t) => {
   await appendElementTo('#container', 'div', 'tabs');
   await setAttribute('#container', 'style', 'display: flex; width: 800px;');
 
-  const dataSource = [
+  const dataSource: Item[] = [
     { text: 'ok' },
     { icon: 'comment' },
     { icon: 'user' },
     { icon: 'money' },
     { text: 'ok', icon: 'search' },
     { text: 'alignright', icon: 'alignright' },
-  ] as Item[];
+  ];
 
   return createWidget('dxTabs', { dataSource, width: 'auto' }, '#tabs');
 });
 
-[true, false].forEach((rtlEnabled) => {
-  ['primary', 'secondary'].forEach((stylingMode) => {
-    test('Tabs icon position', async (t) => {
+['primary', 'secondary'].forEach((stylingMode) => {
+  ['horizontal', 'vertical'].forEach((orientation) => {
+    test('Tabs item selected states', async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      await testScreenshot(t, takeScreenshot, `Tabs 1 selected stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
-
-      await t.click('body', {
-        offsetX: -10,
-        offsetY: -10,
-      });
-
-      const firstItem = Selector(`.${TAB_CLASS}:nth-child(1)`);
-
-      await t.hover(firstItem);
-      await testScreenshot(t, takeScreenshot, `Tabs 1 selected,hovered stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
-
-      await t.dispatchEvent(firstItem, 'mousedown');
-      await testScreenshot(t, takeScreenshot, `Tabs 1 selected,active stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
-      await t.dispatchEvent(firstItem, 'mouseup');
-
-      const thirdItem = Selector(`.${TAB_CLASS}:nth-child(3)`);
-
-      await t
-        .click(firstItem)
-        .hover(thirdItem);
-      await testScreenshot(t, takeScreenshot, `Tabs 3 not selected,hovered stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
-
-      await t.dispatchEvent(thirdItem, 'mousedown');
-      await testScreenshot(t, takeScreenshot, `Tabs 3 not selected,active stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
-      await t.dispatchEvent(thirdItem, 'mouseup');
+      await testScreenshot(t, takeScreenshot, `Tabs item selected, orientation=${orientation}, stylingMode=${stylingMode}.png`, { element: '#container' });
 
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async () => {
       await appendElementTo('#container', 'div', 'tabs');
-      await setAttribute('#container', 'style', 'width: 800px; height: 600px;');
+      await appendElementTo('#container', 'div', 'tabs-rtl');
+      await setAttribute('#container', 'style', `display: flex; gap: 40px; flex-direction: ${orientation === 'horizontal' ? 'column' : 'row'}; width: fit-content;`);
 
-      const dataSource = [
-        { text: 'user' },
-        { text: 'comment', icon: 'comment' },
-        { icon: 'user' },
-        { icon: 'money' },
-      ] as Item[];
+      const dataSource: Item[] = [
+        { text: 'John Heart' },
+        { text: 'Marina Thomas', disabled: true },
+        { text: 'Robert Reagan' },
+        { text: 'Greta Sims' },
+        { text: 'Olivia Peyton' },
+        { text: 'Ed Holmes' },
+        { text: 'Wally Hobbs' },
+        { text: 'Brad Jameson' },
+      ];
 
       const tabsOptions = {
         dataSource,
+        orientation,
         stylingMode,
-        rtlEnabled,
-        selectedItem: dataSource[0],
+        width: orientation === 'horizontal' ? 450 : 'auto',
+        height: orientation === 'horizontal' ? 'auto' : 250,
+        selectedItem: dataSource[2],
+        showNavButtons: true,
       };
 
-      return createWidget('dxTabs', tabsOptions, '#tabs');
+      await createWidget('dxTabs', tabsOptions, '#tabs');
+      return createWidget('dxTabs', { ...tabsOptions, rtlEnabled: true }, '#tabs-rtl');
     });
   });
 });
 
-test('Tabs in contrast theme', async (t) => {
+test('Tabs item states', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  await testScreenshot(t, takeScreenshot, 'Tabs without focus.png', { element: '#tabs' });
 
-  if (!isMaterialBased()) {
-    await testScreenshot(t, takeScreenshot, 'Tabs in contrast theme if first tab is focused.png', { element: '#tabs', theme: 'generic.contrast' });
-  }
+  await t.pressKey('tab');
+  await testScreenshot(t, takeScreenshot, 'Tabs item focused.png', { element: '#tabs' });
+
+  await t.pressKey('right');
+  await testScreenshot(t, takeScreenshot, 'Tabs disabled item focused.png', { element: '#tabs' });
+
+  const thirdItem = Selector(`.${TAB_CLASS}:nth-child(3)`);
+  const fourthItem = Selector(`.${TAB_CLASS}:nth-child(4)`);
+
+  await t
+    .pressKey('right')
+    .dispatchEvent(thirdItem, 'mousedown');
+  await testScreenshot(t, takeScreenshot, 'Tabs item active.png', { element: '#tabs' });
+  await t.dispatchEvent(thirdItem, 'mouseup');
+
+  await t
+    .click(thirdItem)
+    .hover(fourthItem);
+  await testScreenshot(t, takeScreenshot, 'Tabs item hovered.png', { element: '#tabs' });
+
+  await t.click('body', {
+    offsetX: -10,
+    offsetY: -10,
+  });
+
+  await t.hover(thirdItem);
+  await testScreenshot(t, takeScreenshot, 'Tabs selected item hovered.png', { element: '#tabs' });
+
+  await t.dispatchEvent(thirdItem, 'mousedown');
+  await testScreenshot(t, takeScreenshot, 'Tabs selected item active.png', { element: '#tabs' });
+  await t.dispatchEvent(thirdItem, 'mouseup');
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await appendElementTo('#container', 'div', 'tabs');
-  await setAttribute('#container', 'style', 'width: 800px; height: 600px;');
 
-  const dataSource = [
-    { text: 'user' },
-    { text: 'comment', icon: 'comment' },
-    { icon: 'user' },
-    { icon: 'money' },
-  ] as Item[];
+  const dataSource: Item[] = [
+    { text: 'John Heart' },
+    { text: 'Marina Thomas', disabled: true },
+    { text: 'Robert Reagan' },
+    { text: 'Greta Sims' },
+    { text: 'Olivia Peyton' },
+    { text: 'Ed Holmes' },
+    { text: 'Wally Hobbs' },
+    { text: 'Brad Jameson' },
+  ];
 
   const tabsOptions = {
     dataSource,
-    selectedItem: dataSource[0],
+    selectOnFocus: false,
+    showNavButtons: true,
+    width: 600,
+    useInkRipple: false,
   };
 
   return createWidget('dxTabs', tabsOptions, '#tabs');
-});
-
-[true, false].forEach((rtlEnabled) => {
-  ['horizontal', 'vertical'].forEach((orientation) => {
-    [true, false].forEach((selectOnFocus) => {
-      test('Tabs item states', async (t) => {
-        const direction = rtlEnabled ? 'left' : 'right';
-        const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-        await testScreenshot(t, takeScreenshot, `Tabs without focus,sOF=${selectOnFocus},orient=${orientation},rtl=${rtlEnabled}.png`, { element: '#tabs' });
-
-        await t.pressKey('tab');
-        await testScreenshot(t, takeScreenshot, `Tabs avail focused,sOF=${selectOnFocus},orient=${orientation},rtl=${rtlEnabled}.png`, { element: '#tabs' });
-
-        await t.pressKey(direction);
-        await testScreenshot(t, takeScreenshot, `Tabs disab focused,sOF=${selectOnFocus},orient=${orientation},rtl=${rtlEnabled}.png`, { element: '#tabs' });
-
-        const thirdItem = Selector(`.${TAB_CLASS}:nth-child(3)`);
-        const fourthItem = Selector(`.${TAB_CLASS}:nth-child(4)`);
-
-        await t
-          .pressKey(direction)
-          .dispatchEvent(thirdItem, 'mousedown');
-        await testScreenshot(t, takeScreenshot, `Tabs 3item active,sOF=${selectOnFocus},orient=${orientation},rtl=${rtlEnabled}.png`, { element: '#tabs' });
-        await t.dispatchEvent(thirdItem, 'mouseup');
-
-        await t
-          .click(thirdItem)
-          .hover(fourthItem);
-        await testScreenshot(t, takeScreenshot, `Tabs 4item hovered,sOF=${selectOnFocus},orient=${orientation},rtl=${rtlEnabled}.png`, { element: '#tabs' });
-
-        await t
-          .expect(compareResults.isValid())
-          .ok(compareResults.errorMessages());
-      }).before(async () => {
-        await ClientFunction(() => {
-          (window as any).DevExpress.ui.dxTabs.defaultOptions({
-            options: {
-              useInkRipple: false,
-            },
-          });
-        })();
-
-        await appendElementTo('#container', 'div', 'tabs');
-        await setAttribute('#container', 'style', 'width: 500px; height: 600px;');
-
-        const dataSource = [
-          { text: 'John Heart' },
-          { text: 'Marina Thomas', disabled: true },
-          { text: 'Robert Reagan' },
-          { text: 'Greta Sims' },
-          { text: 'Olivia Peyton' },
-          { text: 'Ed Holmes' },
-          { text: 'Wally Hobbs' },
-          { text: 'Brad Jameson' },
-        ] as Item[];
-
-        const tabsOptions = {
-          rtlEnabled,
-          orientation,
-          dataSource,
-          selectOnFocus,
-          showNavButtons: true,
-          width: orientation === 'horizontal' ? 450 : 'auto',
-          height: orientation === 'horizontal' ? 'auto' : 250,
-          // prevent firing dxinactive event for to avoid failing test
-          itemHoldTimeout: 5000,
-          useInkRipple: false,
-        };
-
-        return createWidget('dxTabs', tabsOptions, '#tabs');
-      });
-    });
-  });
 });

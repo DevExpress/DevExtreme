@@ -13,31 +13,24 @@ runManualTest('SelectBox', 'Grouping', (test) => {
     const SELECT_BOX_CLASS = 'dx-selectbox';
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t.wait(1000);
-
     await t
-      .click($(`.${SELECT_BOX_CLASS}`).nth(0))
-      .wait(200);
+      .click($(`.${SELECT_BOX_CLASS}`).nth(0));
 
     await testScreenshot(t, takeScreenshot, 'selectbox_groupeditems_first_opened.png');
 
     await t
-      .click($(`.${SELECT_BOX_CLASS}`).nth(0))
-      .wait(200);
+      .click($(`.${SELECT_BOX_CLASS}`).nth(0));
 
     await t
-      .click($(`.${SELECT_BOX_CLASS}`).nth(1))
-      .wait(200);
+      .click($(`.${SELECT_BOX_CLASS}`).nth(1));
 
     await testScreenshot(t, takeScreenshot, 'selectbox_groupeditems_second_opened.png');
 
     await t
-      .click($(`.${SELECT_BOX_CLASS}`).nth(1))
-      .wait(200);
+      .click($(`.${SELECT_BOX_CLASS}`).nth(1));
 
     await t
-      .click($(`.${SELECT_BOX_CLASS}`).nth(2))
-      .wait(200);
+      .click($(`.${SELECT_BOX_CLASS}`).nth(2));
 
     await testScreenshot(t, takeScreenshot, 'selectbox_groupeditems_third_opened.png');
 

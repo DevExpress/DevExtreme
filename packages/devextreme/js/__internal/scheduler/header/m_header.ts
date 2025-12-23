@@ -10,6 +10,7 @@ import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import Toolbar from '@js/ui/toolbar';
 import Widget from '@js/ui/widget/ui.widget';
+import type { NormalizedView } from '@ts/scheduler/utils/options/types';
 
 import type { Direction } from './constants';
 import SchedulerCalendar from './m_calendar';
@@ -214,7 +215,7 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
     }
   }
 
-  _updateCurrentView(view) {
+  _updateCurrentView(view: Required<NormalizedView>) {
     this.option('onCurrentViewChange')(view.name);
   }
 

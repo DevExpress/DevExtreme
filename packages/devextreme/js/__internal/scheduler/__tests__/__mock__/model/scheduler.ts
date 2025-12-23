@@ -1,3 +1,5 @@
+import { ToolbarModel } from '@ts/scheduler/__tests__/__mock__/model/toolbar';
+
 import { APPOINTMENT_POPUP_CLASS } from '../../../appointment_popup/m_popup';
 import { POPUP_DIALOG_CLASS } from '../../../m_scheduler';
 import type { AppointmentModel } from './appointment';
@@ -17,6 +19,14 @@ export class SchedulerModel {
 
   get popup(): PopupModel {
     return this.getPopup();
+  }
+
+  get toolbar(): ToolbarModel {
+    return new ToolbarModel(this.container.querySelector('.dx-scheduler-header'));
+  }
+
+  getStatusContent(): string {
+    return this.container.querySelector('.dx-scheduler-a11y-status-container')?.textContent ?? '';
   }
 
   getAppointment(text?: string): AppointmentModel<HTMLDivElement | null> {

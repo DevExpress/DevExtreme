@@ -34,5 +34,5 @@ withDefaults(defineProps<{
   data: () => [],
 });
 
-const customizeText = (pointInfo) => `${pointInfo.argument[0].toUpperCase()}${pointInfo.argument.slice(1)}: $${pointInfo.value}M`;
+const customizeText = (pointInfo: Record<string, any>) => `${pointInfo.argument[0].toUpperCase()}${pointInfo.argument.slice(1)}: $${pointInfo.value}M`;
 </script>

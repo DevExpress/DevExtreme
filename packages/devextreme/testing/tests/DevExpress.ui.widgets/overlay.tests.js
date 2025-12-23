@@ -2,7 +2,7 @@ import { getWidth, getHeight, getOuterWidth } from 'core/utils/size';
 import fx from 'common/core/animation/fx';
 import positionUtils from 'common/core/animation/position';
 import { locate } from 'common/core/animation/translator';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import config from 'core/config';
 import devices from '__internal/core/m_devices';
 import { Template } from 'core/templates/template';
@@ -2199,6 +2199,27 @@ testModule('hide on outside click', moduleConfig, () => {
         assert.strictEqual(overlay2.option('visible'), false, 'Second overlay is hidden, because of outsideclick');
     });
 
+    test('overlay should handle outside click without errors when content is null', function(assert) {
+        const overlay = $('#overlay').dxOverlay({
+            hideOnOutsideClick: true,
+            visible: true,
+        }).dxOverlay('instance');
+
+        const originalContent = overlay._$content;
+
+        overlay._$content = null;
+
+        try {
+            $(document).trigger('dxpointerdown');
+            assert.ok(true, 'No error when content is null');
+            assert.strictEqual(overlay.option('visible'), false, 'Overlay should hide on outside click when content is null');
+        } catch(e) {
+            assert.ok(false, `Error occurred with null content: ${e.message}`);
+        } finally {
+            overlay._$content = originalContent;
+        }
+    });
+
     test('document events should be unsubscribed at each overlay hiding', function(assert) {
         const $overlay1 = $('#overlay').dxOverlay({
             hideOnOutsideClick: true,
@@ -3072,6 +3093,50 @@ testModule('API', moduleConfig, () => {
 
         assert.strictEqual(resizeStub.callCount, 1, '\'dxresize\' event handler was called');
         resizeStub.restore();
+    });
+
+    test('Overlay uses custom zIndex on init if zIndex option is provided', function(assert) {
+        const overlay = $('#overlay').dxOverlay({
+            visible: true,
+            zIndex: 2000
+        }).dxOverlay('instance');
+
+        const contentZIndex = Number(getComputedStyle(overlay.$content()[0]).zIndex);
+
+        assert.strictEqual(contentZIndex, 2000, 'custom zIndex assigned');
+    });
+
+    test('Changing zIndex option replaces old pool zIndex with custom', function(assert) {
+        const overlay = $('#overlay').dxOverlay({
+            visible: true
+        }).dxOverlay('instance');
+
+        const initialZIndex = Number(getComputedStyle(overlay.$content()[0]).zIndex);
+
+        assert.strictEqual(initialZIndex, 1501, 'overlay has initial pool zIndex');
+
+        overlay.option('zIndex', 5000);
+
+        const finalZIndex = Number(getComputedStyle(overlay.$content()[0]).zIndex);
+
+        assert.strictEqual(finalZIndex, 5000, 'custom zIndex applied');
+    });
+
+    test('Changing zIndex option to undefined resets the default pool zIndex', function(assert) {
+        const overlay = $('#overlay').dxOverlay({
+            visible: true,
+            zIndex: 5000
+        }).dxOverlay('instance');
+
+        const initialZIndex = Number(getComputedStyle(overlay.$content()[0]).zIndex);
+
+        assert.strictEqual(initialZIndex, 5000, 'overlay has custom zIndex');
+
+        overlay.option('zIndex', undefined);
+
+        const finalZIndex = Number(getComputedStyle(overlay.$content()[0]).zIndex);
+
+        assert.strictEqual(finalZIndex, 1501, 'initial pool zIndex applied');
     });
 });
 
@@ -4306,5 +4371,61 @@ QUnit.module('wrapper covered element choice', {
         const containerLocation = $positionOf.position();
         assert.roughEqual(wrapperLocation.left, containerLocation.left, 0.51, 'wrapper is left positioned by position.of');
         assert.roughEqual(wrapperLocation.top, containerLocation.top, 0.51, 'wrapper is top positioned by position.of');
+    });
+});
+
+QUnit.module('Memory Leaks', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        this.$element = $('#overlay');
+
+        this.getPositionController = (instance) => {
+            return instance._positionController;
+        };
+    },
+    afterEach: function() {
+        this.$element.remove();
+        this.clock.restore();
+    }
+}, () => {
+    QUnit.test('should clear _$wrapper reference on dispose', function(assert) {
+        const instance = new Overlay(this.$element, { visible: true });
+
+        this.clock.tick(0);
+
+        assert.notStrictEqual(instance.$wrapper(), null, 'wrapper exists before dispose');
+
+        instance.dispose();
+
+        assert.strictEqual(instance.$wrapper(), null, '$wrapper() returns null after dispose');
+    });
+
+    QUnit.test('should clear _$content reference on dispose', function(assert) {
+        const instance = new Overlay(this.$element, { visible: true });
+
+        this.clock.tick(0);
+
+        assert.notStrictEqual(instance.$content(), null, 'content exists before dispose');
+
+        instance.dispose();
+
+        assert.strictEqual(instance.$content(), null, '$content() returns null after dispose');
+    });
+
+    QUnit.test('should clear PositionController references on dispose', function(assert) {
+        const instance = new Overlay(this.$element, { visible: true });
+
+        this.clock.tick(0);
+
+        const positionController = this.getPositionController(instance);
+        assert.ok(positionController._$content, 'PositionController._$content exists before dispose');
+
+        instance.dispose();
+
+        assert.strictEqual(positionController._$content, undefined, 'PositionController._$content is undefined after dispose');
+        assert.strictEqual(positionController._$wrapper, undefined, 'PositionController._$wrapper is undefined after dispose');
+        assert.strictEqual(positionController._$root, undefined, 'PositionController._$root is undefined after dispose');
+        assert.strictEqual(positionController._$markupContainer, undefined, 'PositionController._$markupContainer is undefined after dispose');
+        assert.strictEqual(positionController._$visualContainer, undefined, 'PositionController._$visualContainer is undefined after dispose');
     });
 });

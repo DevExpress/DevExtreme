@@ -14,7 +14,7 @@ withDefaults(defineProps<{
   currentView: '',
 });
 
-function markDateCell(cellData, currentView) {
+function markDateCell(cellData: Record<string, any>, currentView: string) {
   const isDisabled = currentView === 'month'
     ? Utils.isWeekend(cellData.date)
     : Utils.isDisableDate(cellData.date);

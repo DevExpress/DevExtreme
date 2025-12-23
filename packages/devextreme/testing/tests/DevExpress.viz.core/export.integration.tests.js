@@ -3,7 +3,7 @@ import $ from 'jquery';
 import { Renderer, ExportMenu } from '../../helpers/vizMocks.js';
 import rendererModule from 'viz/core/renderers/renderer_default';
 import clientExporter from 'exporter';
-import exportModule from 'viz/core/export';
+import exportModule from '__internal/viz/core/exportModule';
 import { Deferred } from 'core/utils/deferred';
 import { logger } from 'core/utils/console';
 import { isFunction } from 'core/utils/type';

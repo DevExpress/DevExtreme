@@ -3,14 +3,13 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { testScreenshot } from '../../helpers/themeUtils';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
-import { safeSizeTest } from '../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`CardView - LoadPanel`
   .page(url(__dirname, '../container.html'));
 
 const CARD_VIEW_SELECTOR = '#container';
 
-safeSizeTest('Default render', async (t) => {
+test.meta({ browserSize: [800, 800] })('Default render', async (t) => {
   const cardView = new CardView(CARD_VIEW_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -19,7 +18,7 @@ safeSizeTest('Default render', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => createWidget('dxCardView', {
+}).before(async () => createWidget('dxCardView', {
   width: 500,
   height: 300,
   dataSource: {
@@ -29,7 +28,7 @@ safeSizeTest('Default render', async (t) => {
   columns: ['A', 'B', 'C', 'D'],
 }));
 
-safeSizeTest('Default render when CardView has a large height', async (t) => {
+test.meta({ browserSize: [800, 800] })('Default render when CardView has a large height', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await testScreenshot(t, takeScreenshot, 'load-panel-with-large-height.png');
@@ -37,7 +36,7 @@ safeSizeTest('Default render when CardView has a large height', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => createWidget('dxCardView', {
+}).before(async () => createWidget('dxCardView', {
   width: 500,
   height: 3000,
   dataSource: {
@@ -47,7 +46,7 @@ safeSizeTest('Default render when CardView has a large height', async (t) => {
   columns: ['A', 'B', 'C', 'D'],
 }));
 
-safeSizeTest('The load panel should match the size of the component’s root container', async (t) => {
+test.meta({ browserSize: [800, 800] })('The load panel should match the size of the component’s root container', async (t) => {
   const cardView = new CardView(CARD_VIEW_SELECTOR);
   const loadPanel = cardView.getLoadPanel();
   const cardViewOffset = await cardView.getElementOffset();
@@ -59,7 +58,7 @@ safeSizeTest('The load panel should match the size of the component’s root con
     .eql(300)
     .expect(loadPanel.getShadowOffset())
     .eql(cardViewOffset);
-}, [800, 800]).before(async () => createWidget('dxCardView', {
+}).before(async () => createWidget('dxCardView', {
   width: 500,
   height: 300,
   dataSource: {

@@ -1,4 +1,4 @@
-export const countriesGDP = {
+export const countriesGDP: Record<string, Record<string, number>> = {
   Afghanistan: {
     agriculture: 34.9, industry: 25, services: 40, total: 20312,
   },

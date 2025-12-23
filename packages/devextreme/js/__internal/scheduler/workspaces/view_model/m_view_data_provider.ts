@@ -147,15 +147,16 @@ export default class ViewDataProvider {
       ...restOptions
     } = renderOptions;
     const resourceManager = getResourceManager();
+    const groupCount = resourceManager.groupCount();
     const interval = this.viewDataGenerator.getInterval(renderOptions.hoursInterval);
 
     return {
       ...restOptions,
       startViewDate: this.viewDataGenerator.getStartViewDate(renderOptions),
-      isVerticalGrouping: isVerticalGroupingApplied(resourceManager.groups, groupOrientation),
-      isHorizontalGrouping: isHorizontalGroupingApplied(resourceManager.groups, groupOrientation),
-      isGroupedByDate: isGroupingByDate(resourceManager.groups, groupOrientation, groupByDate),
-      isGroupedAllDayPanel: calculateIsGroupedAllDayPanel(resourceManager.groups, groupOrientation, isAllDayPanelVisible),
+      isVerticalGrouping: isVerticalGroupingApplied(groupCount, groupOrientation),
+      isHorizontalGrouping: isHorizontalGroupingApplied(groupCount, groupOrientation),
+      isGroupedByDate: isGroupingByDate(groupCount, groupOrientation, groupByDate),
+      isGroupedAllDayPanel: calculateIsGroupedAllDayPanel(groupCount, groupOrientation, isAllDayPanelVisible),
       getResourceManager,
       groupOrientation,
       isAllDayPanelVisible,

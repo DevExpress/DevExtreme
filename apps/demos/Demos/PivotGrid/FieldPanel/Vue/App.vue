@@ -66,8 +66,9 @@ import { ref } from 'vue';
 import DxPivotGrid, {
   DxFieldChooser,
   DxFieldPanel,
+  type DxPivotGridTypes,
 } from 'devextreme-vue/pivot-grid';
-import DxCheckBox from 'devextreme-vue/check-box';
+import DxCheckBox, { type DxCheckBoxTypes } from 'devextreme-vue/check-box';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import { sales } from './data.ts';
 
@@ -86,7 +87,7 @@ const gridDataSource = new PivotGridDataSource({
     dataField: 'city',
     width: 150,
     area: 'row',
-    selector(data) {
+    selector(data: Record<string, unknown>) {
       return `${data.city} (${data.country})`;
     },
   }, {
@@ -103,36 +104,34 @@ const gridDataSource = new PivotGridDataSource({
   store: sales,
 });
 
-function OnShowColumnFieldsChanged(e) {
+function OnShowColumnFieldsChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
   showColumnFields.value = e.value;
 }
-function OnShowDataFieldsChanged(e) {
+function OnShowDataFieldsChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
   showDataFields.value = e.value;
 }
-function OnShowFilterFieldsChanged(e) {
+function OnShowFilterFieldsChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
   showFilterFields.value = e.value;
 }
-function OnShowRowFieldsChanged(e) {
+function OnShowRowFieldsChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
   showRowFields.value = e.value;
 }
-function onContextMenuPreparing(e) {
+function onContextMenuPreparing(e: DxPivotGridTypes.ContextMenuPreparingEvent) {
   const dataSource = e.component.getDataSource();
-  const sourceField = e.field;
+  const sourceField: Record<string, any> | undefined = e.field;
 
   if (sourceField) {
     if (!sourceField.groupName || sourceField.groupIndex === 0) {
-      e.items.push({
+      e.items?.push({
         text: 'Hide field',
         onItemClick() {
           let fieldIndex: number;
 
-          if (sourceField.groupName) {
-            fieldIndex = dataSource
-              .getAreaFields(sourceField.area, true)[sourceField.areaIndex]
-              .index;
-          } else {
-            fieldIndex = sourceField.index;
-          }
+          const dataSourceField: Record<string, any> = sourceField.groupName 
+              ? dataSource.getAreaFields(sourceField.area, true)[sourceField.areaIndex]
+              : sourceField
+
+          fieldIndex = dataSourceField.index;
 
           dataSource.field(fieldIndex, {
             area: null,
@@ -143,7 +142,7 @@ function onContextMenuPreparing(e) {
     }
 
     if (sourceField.dataType === 'number') {
-      const setSummaryType = function(args) {
+      const setSummaryType = function(args: Record<string, any>) {
         dataSource.field(sourceField.index, {
           summaryType: args.itemData.value,
         });
@@ -152,7 +151,7 @@ function onContextMenuPreparing(e) {
       };
       const menuItems: Record<string, any>[] = [];
 
-      e.items.push({ text: 'Summary Type', items: menuItems });
+      e.items?.push({ text: 'Summary Type', items: menuItems });
 
       ['Sum', 'Avg', 'Min', 'Max'].forEach((summaryType) => {
         const summaryTypeValue = summaryType.toLowerCase();
@@ -161,7 +160,7 @@ function onContextMenuPreparing(e) {
           text: summaryType,
           value: summaryType.toLowerCase(),
           onItemClick: setSummaryType,
-          selected: e.field.summaryType === summaryTypeValue,
+          selected: e.field?.summaryType === summaryTypeValue,
         });
       });
     }

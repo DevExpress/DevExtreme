@@ -33,3 +33,21 @@ test('Accordion items render (T865742)', async (t) => {
   await createWidget('dxAccordion', { items, width: 500 }, '#accordion');
   return createWidget('dxAccordion', { items, rtlEnabled: true, width: 500 }, '#accordion2');
 });
+
+test('Icon-only button should be rendered correctly (T851081)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const screenshotName = 'Accordion with icon-only button.png';
+
+  await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'accordion');
+
+  const itemTitleTemplate = () => ($('<div>') as any).dxButton({ icon: 'coffee' });
+
+  await createWidget('dxAccordion', { dataSource: [{}], itemTitleTemplate }, '#accordion');
+});

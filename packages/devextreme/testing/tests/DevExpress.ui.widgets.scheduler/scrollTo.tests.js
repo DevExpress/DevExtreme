@@ -1,5 +1,5 @@
 import fx from 'common/core/animation/fx';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import $ from 'jquery';
 import errors from 'ui/widget/ui.errors';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';

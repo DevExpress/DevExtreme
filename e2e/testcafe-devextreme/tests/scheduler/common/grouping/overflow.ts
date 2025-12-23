@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Scheduler: Grouping overflow`
   .page(url(__dirname, '../../../container.html'));
@@ -16,9 +17,9 @@ fixture.disablePageReloads`Scheduler: Grouping overflow`
           const scheduler = new Scheduler('#container');
           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+          await testScreenshot(t, takeScreenshot, `group-overflow-(${allParams}).png`, { element: scheduler.element });
+
           await t
-            .expect(await takeScreenshot(`group-overflow-(${allParams}).png`, scheduler.element))
-            .ok()
             .expect(compareResults.isValid())
             .ok(compareResults.errorMessages());
         }).before(async () => createWidget('dxScheduler', {

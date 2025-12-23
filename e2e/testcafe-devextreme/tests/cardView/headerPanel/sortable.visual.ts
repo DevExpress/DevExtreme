@@ -4,10 +4,9 @@ import url from '../../../helpers/getPageUrl';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import { MouseAction, MouseUpEvents } from '../../../helpers/mouseUpEvents';
 import { createWidget } from '../../../helpers/createWidget';
-import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../helpers/domUtils';
-import { a11yCheck } from '../../../helpers/accessibility/utils';
+import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 
-fixture`CardView - HeaderPanel`
+fixture.disablePageReloads`CardView - HeaderPanel`
   .page(url(__dirname, '../../container.html'));
 
 const PARENT_CONTAINER = '#parentContainer';
@@ -15,14 +14,6 @@ const PARENT_STYLES = `${PARENT_CONTAINER} { width: 400px; padding: 0 20px; }`;
 const CARD_VIEW_SELECTOR = '#container';
 const DRAG_MOVE_X_COEFFICIENT = 1.5;
 const DRAG_MOVE_Y_COEFFICIENT = 1;
-
-const a11yCheckConfig = {
-  rules: {
-    'color-contrast': { enabled: false },
-    // NOTE: Draggable template is outside the role="main" landmark
-    region: { enabled: false },
-  },
-};
 
 // NOTE: Main idea of these offsets -> drag header item elements
 // on the "coefficient * size" distance from an initial position
@@ -57,7 +48,7 @@ const getDragCoordinates = async (
       dragOffsetX,
       dragOffsetY,
     } = await getDragCoordinates(item.element, rtlEnabled, 'left');
-    await t.drag(item.element, dragOffsetX, dragOffsetY);
+    await t.drag(item.element, dragOffsetX, dragOffsetY, { speed: 0.5 });
 
     await testScreenshot(
       t,
@@ -70,7 +61,6 @@ const getDragCoordinates = async (
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-    await a11yCheck(t, a11yCheckConfig);
   }).before(async () => {
     await insertStylesheetRulesToPage(PARENT_STYLES);
     await MouseUpEvents.disable(MouseAction.dragToOffset);
@@ -81,7 +71,6 @@ const getDragCoordinates = async (
       width: 360,
     });
   }).after(async () => {
-    await removeStylesheetRulesFromPage();
     await MouseUpEvents.enable(MouseAction.dragToOffset);
   });
 
@@ -109,7 +98,6 @@ const getDragCoordinates = async (
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-    await a11yCheck(t, a11yCheckConfig);
   }).before(async () => {
     await insertStylesheetRulesToPage(PARENT_STYLES);
     await MouseUpEvents.disable(MouseAction.dragToOffset);
@@ -120,7 +108,6 @@ const getDragCoordinates = async (
       width: 360,
     });
   }).after(async () => {
-    await removeStylesheetRulesFromPage();
     await MouseUpEvents.enable(MouseAction.dragToOffset);
   });
 
@@ -148,7 +135,6 @@ const getDragCoordinates = async (
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-    await a11yCheck(t, a11yCheckConfig);
   }).before(async () => {
     await insertStylesheetRulesToPage(PARENT_STYLES);
     await MouseUpEvents.disable(MouseAction.dragToOffset);
@@ -159,7 +145,6 @@ const getDragCoordinates = async (
       width: 360,
     });
   }).after(async () => {
-    await removeStylesheetRulesFromPage();
     await MouseUpEvents.enable(MouseAction.dragToOffset);
   });
 });

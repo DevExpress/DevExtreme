@@ -4,8 +4,6 @@ import Tooltip from 'ui/tooltip';
 import renderer from 'core/renderer';
 import uiErrors from 'ui/widget/ui.errors';
 
-import 'generic_light.css!';
-
 const TOOLTIP_CLASS = 'dx-tooltip';
 const TOOLTIP_WRAPPER_CLASS = 'dx-tooltip-wrapper';
 const DX_INVISIBILITY_CLASS = 'dx-state-invisible';

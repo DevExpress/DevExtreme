@@ -6,7 +6,7 @@ import { isRenderer } from 'core/utils/type';
 import { deferUpdate } from 'core/utils/common';
 
 import 'ui/tile_view';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(function() {
     const markup =

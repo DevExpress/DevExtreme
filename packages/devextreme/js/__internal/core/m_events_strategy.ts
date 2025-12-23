@@ -70,5 +70,7 @@ export class EventsStrategy {
     each(this._events, (eventName, event) => {
       event.empty();
     });
+
+    this._owner = null;
   }
 }

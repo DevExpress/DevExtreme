@@ -16,8 +16,6 @@ import {
     FOCUSED_STATE_CLASS,
 } from '__internal/core/widget/widget';
 
-import 'generic_light.css!';
-
 QUnit.testStart(() => {
     const markup = '<div id="stepper"></div>';
 
@@ -99,7 +97,7 @@ QUnit.module('Navigation', moduleConfig, () => {
                 items: [{}, {}, {}, {}],
                 selectedIndex: 1,
                 linear,
-                onSelectionChanged: function(e) {
+                onSelectionChanged: function() {
                     count += 1;
                 },
             });
@@ -311,6 +309,23 @@ QUnit.module('Connector integration', moduleConfig, () => {
 
             assert.deepEqual(this.getConnector().$element().children().length, 1, 'content is not duplicated');
         });
+    });
+
+    QUnit.test('connector should update its size on items mutation (T1312793)', function(assert) {
+        const items = [{}, {}];
+
+        this.reinit({ items, width: 100 });
+
+        const sizeBefore = this.getConnector().option('size');
+
+        assert.roughEqual(sizeBefore, 50, 0.01, 'initial connector size is correct');
+
+        items.push({}, {});
+        this.instance.option('items', items);
+
+        const sizeAfter = this.getConnector().option('size');
+
+        assert.roughEqual(sizeAfter, 75, 0.01, 'connector size is correct after items mutation');
     });
 });
 

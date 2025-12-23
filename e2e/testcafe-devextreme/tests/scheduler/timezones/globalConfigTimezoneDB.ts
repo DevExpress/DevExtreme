@@ -3,6 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Timezone DB backward compatibility`
   .page(url(__dirname, '../../container.html'));
@@ -33,10 +34,7 @@ test('Scheduler should support old timezone DB format', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await takeScreenshot(
-    'appointments_support_old_timezone_db.png',
-    scheduler.workSpace,
-  );
+  await testScreenshot(t, takeScreenshot, 'appointments_support_old_timezone_db.png', { element: scheduler.workSpace });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

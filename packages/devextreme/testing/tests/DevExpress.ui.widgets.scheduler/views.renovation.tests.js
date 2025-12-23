@@ -1,4 +1,4 @@
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import $ from 'jquery';
 
 import {

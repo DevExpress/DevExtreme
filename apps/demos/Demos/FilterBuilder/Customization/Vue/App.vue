@@ -34,20 +34,20 @@
 import { ref } from 'vue';
 import DxFilterBuilder, { DxCustomOperation, type DxFilterBuilderTypes } from 'devextreme-vue/filter-builder';
 import { filter, fields } from './data.ts';
-import { formatValue } from './helpers.js';
+import { formatValue } from './helpers.ts';
 import EditorComponent from './EditorComponent.vue';
 
 const filterText = ref('');
 const groupOperations: DxFilterBuilderTypes.GroupOperation[] = ['and', 'or'];
 const dataSourceText = ref('');
 
-function updateTexts(e) {
-  filterText.value = formatValue(e.component.option('value'));
-  dataSourceText.value = formatValue(e.component.getFilterExpression());
+function updateTexts(e: DxFilterBuilderTypes.InitializedEvent) {
+  filterText.value = formatValue(e.component?.option('value') || '');
+  dataSourceText.value = formatValue(e.component?.getFilterExpression() || '');
 }
-function calculateFilterExpression(filterValue, field) {
-  return filterValue && filterValue.length
-    && Array.prototype.concat.apply([], filterValue.map((value) => [[field.dataField, '=', value], 'or'])).slice(0, -1);
+function calculateFilterExpression(filterValue: any, field: DxFilterBuilderTypes.Field) {
+  return filterValue?.length
+    && Array.prototype.concat.apply([], filterValue.map((value: any) => [[field.dataField, '=', value], 'or'])).slice(0, -1);
 }
 </script>
 <style scoped>

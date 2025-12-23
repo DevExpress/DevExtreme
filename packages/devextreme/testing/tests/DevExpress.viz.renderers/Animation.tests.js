@@ -1,7 +1,7 @@
 /* global currentAssert */
 
 import $ from 'jquery';
-import animationFrame from 'common/core/animation/frame';
+import animationFrame from '__internal/common/core/animation/frameModule';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 import animationModule from 'viz/core/renderers/animation';
@@ -44,17 +44,15 @@ import {
             return this.animationController;
         },
         afterEach: function() {
-            this.srcRequestAnimationFrame && (animationFrame.requestAnimationFrame = this.srcRequestAnimationFrame);
-            this.srcCancelAnimationFrame && (animationFrame.cancelAnimationFrame = this.srcCancelAnimationFrame);
+            this.requestAnimationFrameStub && this.requestAnimationFrameStub.restore();
+            this.cancelAnimationFrameStub && this.cancelAnimationFrameStub.restore();
             this.animationController.dispose();
         },
         mockRequestAnimationFrame: function(callback) {
-            this.srcRequestAnimationFrame = animationFrame.requestAnimationFrame;
-            animationFrame.requestAnimationFrame = callback;
+            this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake(callback);
         },
         mockCancelAnimationFrame: function(callback) {
-            this.srcCancelAnimationFrame = animationFrame.cancelAnimationFrame;
-            animationFrame.cancelAnimationFrame = callback;
+            this.cancelAnimationFrameStub = sinon.stub(animationFrame, 'cancelAnimationFrame').callsFake(callback);
         }
     });
 

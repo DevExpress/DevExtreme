@@ -10,7 +10,7 @@ QUnit.testStart(function() {
             </div>');
 });
 
-require('generic_light.css!');
+require('fluent_blue_light.css!');
 
 const noop = require('core/utils/common').noop;
 const errors = require('ui/widget/ui.errors');
@@ -49,13 +49,11 @@ QUnit.test('Header should be initialized with correct views and currentView opti
         {
             'groupOrientation': 'horizontal',
             'intervalCount': 1,
-            'name': 'Day',
             'type': 'day',
         },
         {
             'groupOrientation': 'horizontal',
             'intervalCount': 1,
-            'name': 'Week',
             'type': 'week',
         }
     ];

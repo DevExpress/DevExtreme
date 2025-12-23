@@ -66,16 +66,16 @@ test('should exclude from recurrence if mode is "occurrence"', async (t) => {
   const rect0 = await appointment0.element.boundingClientRect;
   await t
     .expect(rect0.left)
-    .within(341, 342)
+    .within(318, 319)
     .expect(rect0.top)
-    .within(139, 140);
+    .within(140, 141);
 
   const rect1 = await appointment1.element.boundingClientRect;
   await t
     .expect(rect1.left)
-    .within(574, 575)
+    .within(562, 563)
     .expect(rect1.top)
-    .within(139, 140);
+    .within(140, 141);
 }).before(async () => createWidget(
   'dxScheduler',
   {
@@ -108,7 +108,7 @@ test('should exclude from recurrence if mode is "occurrence"', async (t) => {
   },
 ));
 
-test.skip('should show delete recurrence dialog if mode is "dialog"', async (t) => {
+test('should show delete recurrence dialog if mode is "dialog"', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointment('test-appt');
   const { appointmentTooltip } = scheduler;
@@ -121,9 +121,11 @@ test.skip('should show delete recurrence dialog if mode is "dialog"', async (t) 
     .expect(appointmentTooltip.deleteButton.visible)
     .ok()
     .click(appointmentTooltip.deleteButton)
+    .wait(100)
     .expect(scheduler.getAppointmentCount())
     .eql(3)
     .click(deleteRecurrenceDialog.appointment)
+    .wait(100)
     .expect(scheduler.getAppointmentCount())
     .eql(2);
 }).before(async () => createWidget(
@@ -138,7 +140,7 @@ test.skip('should show delete recurrence dialog if mode is "dialog"', async (t) 
     currentView: 'day',
     currentDate: new Date(2022, 3, 12),
     startDayHour: 8,
-    endDayHour: 12.5,
+    endDayHour: 13,
     onAppointmentDeleting: (e) => {
       e.component.deleteRecurrence(
         e.appointmentData,

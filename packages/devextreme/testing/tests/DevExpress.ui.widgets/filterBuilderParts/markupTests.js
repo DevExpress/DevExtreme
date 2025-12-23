@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import fields from '../../../helpers/filterBuilderTestData.js';
-import { shouldSkipOnMobile } from '../../../helpers/device.js';
 
 import 'ui/filter_builder';
 import * as CLASSES from './constants.js';
@@ -8,10 +7,6 @@ import * as CLASSES from './constants.js';
 const FILTER_BUILDER_GROUP_CONTENT_CLASS = 'dx-filterbuilder-group-content';
 
 QUnit.test('markup init', function(assert) {
-    if(shouldSkipOnMobile(assert)) {
-        return;
-    }
-
     const element = $('#container').dxFilterBuilder();
     const groupId = element.find(`.${CLASSES.FILTER_BUILDER_GROUP_ITEM_CLASS}`).attr('aria-owns');
     const operationId = element.find(`.${CLASSES.FILTER_BUILDER_GROUP_OPERATION_CLASS}`).attr('aria-controls');
@@ -54,10 +49,6 @@ QUnit.test('filterbuilder is created by different values', function(assert) {
 });
 
 QUnit.test('filter Content init by one condition', function(assert) {
-    if(shouldSkipOnMobile(assert)) {
-        return;
-    }
-
     const element = $('#container').dxFilterBuilder({
         fields: fields,
         value: [[['CompanyName', '=', 'K&S Music'], 'Or'], 'And']
@@ -97,10 +88,6 @@ QUnit.test('filter Content init by one condition', function(assert) {
 });
 
 QUnit.test('filter Content init by several conditions', function(assert) {
-    if(shouldSkipOnMobile(assert, 'Not applicable to non-desktop devices: dxclick adds onclick=\'void(0)\' to every button in mobile')) {
-        return;
-    }
-
     const element = $('#container').dxFilterBuilder({
         fields: fields,
         value: [['CompanyName', '=', 'K&S Music'], 'or', ['Zipcode', '=', '98027']]
@@ -151,10 +138,6 @@ QUnit.test('filter Content init by several conditions', function(assert) {
     };
     [null, []].forEach(value => {
         QUnit.test(`filter content with custom group operations (${groupOperations}) and ${!value ? value : 'empty'} value`, function(assert) {
-            if(shouldSkipOnMobile(assert, 'Not applicable to non-desktop devices: dxclick adds onclick=\'void(0)\' to every button in mobile')) {
-                return;
-            }
-
             const element = $('#container').dxFilterBuilder({
                 fields: fields,
                 value,

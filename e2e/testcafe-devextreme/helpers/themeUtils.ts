@@ -1,11 +1,19 @@
 import { isString } from 'devextreme/core/utils/type';
+import { ClientFunction } from 'testcafe';
 import { changeTheme } from './changeTheme';
 
-const defaultThemeName = 'generic.light';
+const defaultThemeName = 'fluent.blue.light';
 
 export const getThemePostfix = (theme?: string): string => {
   const themeName = (theme ?? process.env.theme) ?? defaultThemeName;
-  return ` (${themeName.replace(/\./g, '-')})`;
+  return ` (${themeName})`;
+};
+
+export const getCurrentTheme = async (t: TestController): Promise<string> => {
+  // eslint-disable-next-line max-len
+  const currentTheme = await ClientFunction(() => (window as any).DevExpress?.ui.themes.current()).with({ boundTestRun: t })();
+
+  return currentTheme;
 };
 
 export const isMaterial = (): boolean => process.env.theme === 'material.blue.light';
@@ -19,6 +27,13 @@ export const getFullThemeName = (): string => process.env.theme ?? defaultThemeN
 export const getThemeName = (): string => getFullThemeName().split('.')[0];
 
 export const getDarkThemeName = (): string => getFullThemeName().replace('light', 'dark');
+
+const getScreenshotName = (baseName: string, theme?: string): string => {
+  const themePostfix = getThemePostfix(theme);
+  return baseName.endsWith('.png')
+    ? baseName.replace('.png', `${themePostfix}.png`)
+    : `${baseName}${themePostfix}.png`;
+};
 
 export async function testScreenshot(
   t: TestController,
@@ -47,7 +62,7 @@ export async function testScreenshot(
   }
 
   await t
-    .expect(await takeScreenshot(screenshotName.replace('.png', `${getThemePostfix(theme)}.png`), element))
+    .expect(await takeScreenshot(getScreenshotName(screenshotName, theme), element))
     .ok();
 
   if (shouldTestInCompact) {
@@ -57,7 +72,7 @@ export async function testScreenshot(
     await compactCallBack?.();
 
     await t
-      .expect(await takeScreenshot(screenshotName.replace('.png', `${getThemePostfix(`${themeName}-compact`)}.png`), element))
+      .expect(await takeScreenshot(getScreenshotName(screenshotName, `${themeName}.compact`), element))
       .ok();
   }
 

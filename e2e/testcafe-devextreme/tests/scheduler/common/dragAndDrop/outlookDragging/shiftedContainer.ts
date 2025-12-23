@@ -1,6 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
 import { setStyleAttribute } from '../../../../../helpers/domUtils';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
@@ -14,23 +15,23 @@ test('Basic drag-n-drop movements in shifted container', async (t) => {
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await t.drag(draggableAppointment.element, 100, 0, { speed: 0.5 });
+
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-to-right-in-shifted-container.png', { element: scheduler.workSpace });
+
+  await t.drag(draggableAppointment.element, -100, 0, { speed: 0.5 });
+
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-to-left-in-shifted-container.png', { element: scheduler.workSpace });
+
+  await t.drag(draggableAppointment.element, 0, 100, { speed: 0.5 });
+
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-to-bottom-in-shifted-container.png', { element: scheduler.workSpace });
+
+  await t.drag(draggableAppointment.element, 0, -100, { speed: 0.5 });
+
+  await testScreenshot(t, takeScreenshot, 'drag-n-drop-to-top-in-shifted-container.png', { element: scheduler.workSpace });
+
   await t
-    .drag(draggableAppointment.element, 100, 0, { speed: 0.5 })
-    .expect(await takeScreenshot('drag-n-drop-to-right-in-shifted-container.png', scheduler.workSpace))
-    .ok()
-
-    .drag(draggableAppointment.element, -100, 0, { speed: 0.5 })
-    .expect(await takeScreenshot('drag-n-drop-to-left-in-shifted-container.png', scheduler.workSpace))
-    .ok()
-
-    .drag(draggableAppointment.element, 0, 100, { speed: 0.5 })
-    .expect(await takeScreenshot('drag-n-drop-to-bottom-in-shifted-container.png', scheduler.workSpace))
-    .ok()
-
-    .drag(draggableAppointment.element, 0, -100, { speed: 0.5 })
-    .expect(await takeScreenshot('drag-n-drop-to-top-in-shifted-container.png', scheduler.workSpace))
-    .ok()
-
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {

@@ -3,6 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Appointment form: expressions`
   .page(url(__dirname, '../../../container.html'));
@@ -564,9 +565,11 @@ test(
     await t.doubleClick(appointment.element);
     await t.expect(scheduler.appointmentPopup.form.exists).ok();
 
-    await takeScreenshot(
+    await testScreenshot(
+      t,
+      takeScreenshot,
       'form_recurrence-editor-first-opening_nested-expr.png',
-      scheduler.appointmentPopup.content,
+      { element: scheduler.appointmentPopup.content },
     );
 
     await t.expect(compareResults.isValid())

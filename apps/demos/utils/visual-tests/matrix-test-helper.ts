@@ -1,10 +1,10 @@
 import { readFileSync, existsSync, writeFileSync } from 'fs';
 import { join } from 'path';
-import { ClientFunction, Selector } from 'testcafe';
+import { ClientFunction } from 'testcafe';
 import { THEME } from './helpers/theme-utils';
 import { gitHubIgnored } from './github-ignored-list';
 
-export const FRAMEWORKS = {
+export const FRAMEWORKS = { 
   jquery: 'jQuery',
   react: 'React',
   vue: 'Vue',
@@ -55,10 +55,17 @@ function patternGroupFromValues(product, demo, framework) {
   };
 }
 
+export const injectStyle = (style) => `
+  var style = document.createElement('style');
+  style.innerHTML = \`${style}\`;
+  document.getElementsByTagName('head')[0].appendChild(style);
+`;
+
 export const waitForAngularLoading = ClientFunction(() => new Promise((resolve) => {
   let demoAppCounter = 0;
   const demoAppIntervalHandle = setInterval(() => {
-    const demoApp = document.querySelector('demo-app') as HTMLElement;
+
+  const demoApp = document.querySelector('demo-app') as HTMLElement;
     if ((demoApp && demoApp.innerText !== 'Loading...') || demoAppCounter === 120) {
       setTimeout(resolve, 500);
       clearInterval(demoAppIntervalHandle);
@@ -105,9 +112,11 @@ export function changeTheme(dirName, demoPath, theme) {
   }
 
   const updatedContent = globalReadFrom(dirName, demoPath, (data) => {
-    const result = data.replace(/data-theme="[^"]+"/g, `data-theme="${theme}"`);
+    let result = data.replace(/data-theme="[^"]+"/g, `data-theme="${theme}"`);
 
-    return result.replace(/dx\.[^.]+(\.css")/g, `dx.${theme}$1`);
+    result = result.replace(/dx\.[^"]+\.css/g, `dx.${theme}.css`);
+
+    return result;
   });
 
   const indexFilePath = join(dirName, demoPath);
@@ -148,7 +157,7 @@ function getExplicitTestsInternal() {
       result.masks.push(patternGroupFromValues(
         groups.product,
         groups.demo,
-        groups.framework,
+        undefined,
       ));
     } else {
       // eslint-disable-next-line no-console
@@ -174,7 +183,7 @@ function getExplicitTests() {
     } finally {
       // eslint-disable-next-line no-extend-native
       // @ts-expect-error types error
-      RegExp.prototype.toJSON = oldToJSON;
+      RegExp.prototype.toJSON = oldToJSON;  
     }
   }
 
@@ -182,7 +191,7 @@ function getExplicitTests() {
 }
 
 export function shouldRunFramework(currentFramework) {
-  return !currentFramework
+  return !currentFramework 
     || !settings.targetFramework
     || currentFramework.toLowerCase() === settings.targetFramework.toLowerCase();
 }
@@ -199,169 +208,33 @@ export function shouldRunTestAtIndex(testIndex) {
 }
 
 const SKIPPED_TESTS = {
-  jQuery: {
+  jQuery: { 
+    DataGrid: ['RemoteGrouping', 'OdataService', 'FilteringAPI'],
     Charts: [
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
-      { demo: 'TooltipCustomization', themes: [THEME.material] },
-      { demo: 'LegendMarkersCustomization', themes: [THEME.material] },
     ],
-    DataGrid: [
-      { demo: 'CellEditing', themes: [THEME.material] },
-      // This test works only in simulated scrolling strategy!
-      { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
-      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
-      // Scroll to const value. Not enough for other themes, because the height of elements is different.
-      { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
-      { demo: 'RowEditing', themes: [THEME.fluent, THEME.material] },
-      { demo: 'Toolbar', themes: [THEME.generic, THEME.fluent, THEME.material] },
-    ],
-    Gantt: [
-      { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    VectorMap: [
-      { demo: 'Tooltip', themes: [THEME.material] },
-      { demo: 'TooltipsCustomization', themes: [THEME.material] },
-    ]
   },
   Angular: {
-    Common: [
-      { demo: 'PopupAndNotificationsOverview', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Charts: [
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'Crosshair', themes: [THEME.material] },
-      { demo: 'CustomAnnotations', themes: [THEME.material] },
-      { demo: 'LoadDataOnDemand', themes: [THEME.material] },
-      { demo: 'LegendMarkersCustomization', themes: [THEME.material] },
-      { demo: 'PieResolveLabelOverlap', themes: [THEME.material] },
-      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
-      { demo: 'AreaSelectionZooming', themes: [THEME.material] },
-      { demo: 'TooltipCustomization', themes: [THEME.material] },
-      { demo: 'ExportCustomMarkup', themes: [THEME.material] },
-      { demo: 'PopupEditing', themes: [THEME.material] },
-    ],
-    DataGrid: [
-      { demo: 'Appearance', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'AdvancedMasterDetailView', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'BatchEditing', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'AjaxRequest', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'InfiniteScrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'MasterDetailView', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'SimpleArray', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'MasterDetailAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'DataValidation', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'MultipleSorting', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'OdataService', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'NewRecordPosition', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Filtering', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'FilteringAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'GroupSummaries', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'RecordPaging', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'RowSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'MultipleSelection', themes: [THEME.material, THEME.fluent] },
-      { demo: 'CellEditing', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'RemoteGrouping', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'RowEditing', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'RecordGrouping', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Toolbar', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'StatePersistence', themes: [THEME.generic, THEME.fluent, THEME.material] },
-    ],
-    Scheduler: [
-      // NOTE: Context menu appearance is different in comparison to other frameworks
-      { demo: 'ContextMenu', themes: [THEME.generic, THEME.fluent, THEME.material] },
-    ],
-    Sortable: [
-      { demo: 'Kanban', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    PivotGrid: [
-      { demo: 'IntegratedFieldChooser', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    FileUploader: [
-      { demo: 'CustomDropzone', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    VectorMap: [
-      { demo: 'TooltipsCustomization', themes: [THEME.material] },
-    ],
+    Charts: ['Crosshair'],
+    Common: ['PopupAndNotificationsOverview'],
+    DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping', 'OdataService', 'FilteringAPI'],
+    Scheduler: ['ContextMenu'],
+    FileUploader: ['CustomDropzone'],
   },
   Vue: {
-    Common: [
-      { demo: 'PopupAndNotificationsOverview', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Charts: [
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
-      { demo: 'AreaSelectionZooming', themes: [THEME.material] },
-      { demo: 'LegendMarkersCustomization', themes: [THEME.material] },
-      { demo: 'CustomAnnotations', themes: [THEME.material] },
-      { demo: 'PieResolveLabelOverlap', themes: [THEME.material] },
-      { demo: 'Crosshair', themes: [THEME.material] },
-    ],
-    VectorMap: [
-      { demo: 'TooltipsCustomization', themes: [THEME.material] },
-    ],
-    DataGrid: [
-      { demo: 'BatchEditing', themes: [THEME.fluent] },
-      { demo: 'NewRecordPosition', themes: [THEME.fluent] },
-      { demo: 'CellEditing', themes: [THEME.fluent, THEME.material] },
-      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.fluent, THEME.material] },
-      { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
-      { demo: 'RowEditing', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'FilteringAPI', themes: [THEME.material] },
-      { demo: 'PopupEditing', themes: [THEME.generic] },
-      { demo: 'Toolbar', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'StatePersistence', themes: [THEME.generic, THEME.fluent, THEME.material] },
-    ],
-    FileUploader: [
-      { demo: 'CustomDropzone', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Scheduler: [
-        // NOTE: Context menu item position is different across themes
-      { demo: 'ContextMenu', themes: [THEME.generic, THEME.fluent, THEME.material] },
-    ],
+    Charts: ['Crosshair'],
+    Common: ['PopupAndNotificationsOverview'],
+    // NOTE: Context menu item position is different across themes
+    Scheduler: ['ContextMenu'],
+    DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping', 'OdataService', 'FilteringAPI'],
+    FileUploader: ['CustomDropzone']
   },
   React: {
-    Common: [
-      { demo: 'PopupAndNotificationsOverview', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Charts: [
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'PieResolveLabelOverlap', themes: [THEME.material] },
-      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
-      { demo: 'Crosshair', themes: [THEME.material] },
-      { demo: 'CustomAnnotations', themes: [THEME.material] },
-      { demo: 'LegendMarkersCustomization', themes: [THEME.material] },
-    ],
-    DataGrid: [
-      { demo: 'BatchEditing', themes: [THEME.fluent] },
-      { demo: 'NewRecordPosition', themes: [THEME.fluent] },
-      { demo: 'CellEditing', themes: [THEME.fluent, THEME.material] },
-      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.fluent, THEME.material] },
-      { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
-      { demo: 'RowEditing', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'Filtering', themes: [THEME.fluent, THEME.material] },
-      { demo: 'RecordGrouping', themes: [THEME.material] },
-      { demo: 'Toolbar', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'StatePersistence', themes: [THEME.generic, THEME.fluent, THEME.material] },
-    ],
-    Scheduler: [
-      // NOTE: Context menu item position is different across themes
-      { demo: 'ContextMenu', themes: [THEME.generic, THEME.fluent, THEME.material] },
-    ],
-    FileUploader: [
-      { demo: 'CustomDropzone', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Form: [
-      // Flaky issue: Source image size does not match target size
-      { demo: 'ItemCustomization', themes: [THEME.generic] },
-    ],
-    VectorMap: [
-      { demo: 'TooltipsCustomization', themes: [THEME.material] },
-    ],
+    Charts: ['Crosshair'],
+    Common: ['PopupAndNotificationsOverview'],
+    Scheduler: ['ContextMenu'],
+    DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping', 'OdataService', 'FilteringAPI'],
+    FileUploader: ['CustomDropzone']
   },
 };
 
@@ -449,17 +322,37 @@ export function runManualTestCore(
     }
 
     const theme = process.env.THEME.replace('generic.', '');
-    testURL = `http://127.0.0.1:808${getPortByIndex(index)}/${widget}/${demo}/${FRAMEWORKS[framework]}/?theme=dx.${theme}`;
+    testURL = `http://127.0.0.1:8080/${widget}/${demo}/${FRAMEWORKS[framework]}/?theme=dx.${theme}`;
   } else {
     changeTheme(__dirname, `../../Demos/${widget}/${demo}/${FRAMEWORKS[framework]}/index.html`, process.env.THEME);
-    testURL = `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widget}/${demo}/${FRAMEWORKS[framework]}/`;
+    testURL = `http://127.0.0.1:8080/apps/demos/Demos/${widget}/${demo}/${FRAMEWORKS[framework]}/`;
   }
+  
+  const getTestStyles = (demoName) => {
+    switch (demoName) {
+      case 'EditorAppearanceVariants':
+        return `.dx-toast-wrapper { display: none !important; }`;
+      case 'VirtualScrolling':
+      case 'StatePersistence':
+      case 'EditStateManagement':
+      case 'BatchUpdateRequest':
+        return `.dx-scrollable-scroll { visibility: visible !important; }`;
+      default:
+        return '';
+    }
+  };
+  
+  const testStyles = getTestStyles(demo);
 
-  const test = testObject.clientScripts([
+  const clientScripts = [
     { module: 'mockdate' },
     join(__dirname, './inject/test-utils.js'),
+    { content: injectStyle(globalReadFrom(__dirname, './inject/test-styles.css', (x) => x)) },
+    ...(testStyles !== '' ? [{ content: injectStyle(testStyles) }] : []),
     ...clientScriptSource,
-  ])
+  ];
+
+  const test = testObject.clientScripts(clientScripts)
     .page(testURL);
 
   test.before?.(async (t) => {
@@ -496,7 +389,7 @@ export function runManualTest(widget, demo, callback) {
 }
 
 export function getPortByIndex(testIndex) {
-  return (settings.total && (Math.floor(testIndex / settings.total) % settings.concurrency)) || 0;
+  return testIndex % (settings.concurrency || 4);
 }
 
 export function updateConfig(customSettings) {

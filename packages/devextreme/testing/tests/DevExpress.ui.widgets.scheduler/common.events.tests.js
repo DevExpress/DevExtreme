@@ -8,9 +8,10 @@ import { isRenderer } from 'core/utils/type';
 import { DataSource } from 'common/data/data_source/data_source';
 
 import $ from 'jquery';
-import dxScheduler from '__internal/scheduler/m_scheduler';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
+
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(() => initTestMarkup());
 

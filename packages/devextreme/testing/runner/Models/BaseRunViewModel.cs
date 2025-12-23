@@ -7,10 +7,10 @@ namespace Runner.Models
         public bool NoTimers { get; set; }
         public bool NoJQuery { get; set; }
         public bool ShadowDom { get; set; }
-        public bool NoRenovation { get; set; }
         public bool NoCsp { get; set; }
         public bool WorkerInWindow { get; set; }
         public bool IsContinuousIntegration { get; set; }
         public bool IsIntranet { get; set; }
+        public int? MaxWorkers { get; set; }
     }
 }

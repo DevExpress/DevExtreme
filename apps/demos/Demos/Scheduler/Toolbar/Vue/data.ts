@@ -5,7 +5,7 @@ type CustomAppointment = SchedulerTypes.Appointment & {
   assigneeId: number[];
 };
 
-const addDays = (date, days) => new Date(new Date(date).setUTCDate(date.getUTCDate() + days));
+const addDays = (date: Date, days: number) => new Date(date.setUTCDate(date.getUTCDate() + days));
 const now = new Date(new Date().setUTCHours(0, 0, 0, 0));
 const startOfTheWeek = addDays(now, -now.getUTCDay());
 export const currentDate = new Date(2025, 5, 10);

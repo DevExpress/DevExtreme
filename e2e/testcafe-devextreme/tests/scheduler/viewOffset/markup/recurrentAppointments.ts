@@ -1,8 +1,9 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
-import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../helpers/domUtils';
+import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
 import url from '../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Offset: Markup recurrent appointments`
   .page(url(__dirname, '../../../container.html'));
@@ -118,7 +119,9 @@ first day: ${views[0].firstDayOfWeek}
         const scheduler = new Scheduler(SCHEDULER_SELECTOR);
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-        await takeScreenshot(
+        await testScreenshot(
+          t,
+          takeScreenshot,
           getScreenshotName(
             views[0].type,
             offset,
@@ -126,7 +129,7 @@ first day: ${views[0].firstDayOfWeek}
             endDayHour,
             views[0].firstDayOfWeek,
           ),
-          scheduler.workSpace,
+          { element: scheduler.workSpace },
         );
 
         await t.expect(compareResults.isValid())
@@ -151,9 +154,6 @@ first day: ${views[0].firstDayOfWeek}
             startDayHour,
             endDayHour,
           });
-        })
-        .after(async () => {
-          await removeStylesheetRulesFromPage();
         });
     });
   });
@@ -300,7 +300,9 @@ end: ${endDayHour}
       const scheduler = new Scheduler(SCHEDULER_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      await takeScreenshot(
+      await testScreenshot(
+        t,
+        takeScreenshot,
         getScreenshotNameForEdgeCase(
           'short-day-views',
           views[0].type,
@@ -308,7 +310,7 @@ end: ${endDayHour}
           startDayHour,
           endDayHour,
         ),
-        scheduler.workSpace,
+        { element: scheduler.workSpace },
       );
 
       await t.expect(compareResults.isValid())
@@ -326,9 +328,6 @@ end: ${endDayHour}
         startDayHour,
         endDayHour,
       });
-    })
-      .after(async () => {
-        await removeStylesheetRulesFromPage();
-      });
+    });
   });
 });

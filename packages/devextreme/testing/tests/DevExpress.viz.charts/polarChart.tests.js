@@ -14,7 +14,7 @@ import dataValidatorModule from 'viz/components/data_validator';
 import rangeModule from 'viz/translators/range';
 import tooltipModule from 'viz/core/tooltip';
 import layoutManagerModule from 'viz/chart_components/layout_manager';
-import exportModule from 'viz/core/export';
+import exportModule from '__internal/viz/core/exportModule';
 
 import 'viz/chart';
 

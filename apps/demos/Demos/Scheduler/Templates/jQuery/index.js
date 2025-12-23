@@ -4,7 +4,7 @@ $(() => {
     dataSource: data,
     views: ['day', 'week', 'timelineDay'],
     currentView: 'day',
-    currentDate: new Date(2021, 3, 27),
+    currentDate: new Date(2025, 3, 27),
     firstDayOfWeek: 0,
     startDayHour: 9,
     endDayHour: 23,

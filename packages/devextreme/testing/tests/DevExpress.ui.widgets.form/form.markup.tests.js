@@ -25,8 +25,6 @@ import 'ui/text_area';
 import 'ui/radio_group';
 import 'ui/switch';
 
-import 'generic_light.css!';
-
 const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
 const FORM_GROUP_CUSTOM_CAPTION_CLASS = 'dx-form-group-custom-caption';
 const MULTIVIEW_ITEM_CONTENT_CLASS = 'dx-multiview-item-content';

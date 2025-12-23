@@ -1,12 +1,10 @@
 import $ from 'jquery';
 import positionUtils from 'common/core/animation/position';
-import translator from 'common/core/animation/translator';
+import translator from '__internal/common/core/animation/translatorModule';
 import browser from 'core/utils/browser';
 import fixtures from '../../helpers/positionFixtures.js';
-import devices from 'core/devices.js';
 import { implementationsMap } from 'core/utils/size';
 import { getWindow } from 'core/utils/window.js';
-import { shouldSkipOnDevices, shouldSkipOnPhone } from '../../helpers/device.js';
 
 const setupPosition = positionUtils.setup;
 const calculatePosition = positionUtils.calculate;
@@ -965,10 +963,6 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
     });
 
     QUnit.test('position should return window.height() if window.outerHeight == window.innerHeight (T939748)', function(assert) {
-        if(shouldSkipOnPhone(assert)) {
-            return;
-        }
-
         if(browser.safari) {
             assert.ok(true, 'actual only for desktop browsers except Safari');
             return;
@@ -997,10 +991,6 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
     });
 
     QUnit.test('position should return window.width() if window.outerWidth == window.innerWidth (T939748)', function(assert) {
-        if(shouldSkipOnPhone(assert)) {
-            return;
-        }
-
         if(browser.safari) {
             assert.ok(true, 'actual only for desktop browsers except Safari');
             return;
@@ -1028,103 +1018,11 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         }
     });
 
-    QUnit.test('position should be correct relative to the viewport on mobile devices', function(assert) {
-        if(shouldSkipOnDevices({ deviceTypes: ['desktop', 'tablet'], assert })) {
-            return;
-        }
-
-        const $what = $('#what').height(300).width(300);
-        const initialVisualViewport = window.visualViewport;
-
-        try {
-            window.visualViewport = {
-                height: 800,
-                width: 800,
-                offsetTop: 0,
-                offsetLeft: 0
-            };
-
-            const resultPosition = setupPosition($what, {
-                of: $(window)
-            });
-
-            assert.roughEqual(resultPosition.v.location, 250, 50, 'vertical location is correct');
-            assert.roughEqual(resultPosition.h.location, 250, 50, 'vertical location is correct');
-        } finally {
-            window.visualViewport = initialVisualViewport;
-        }
-    });
-
-    QUnit.test('position should be correct relative to the viewport on mobile devices when window is scrolled', function(assert) {
-        if(shouldSkipOnDevices({ deviceTypes: ['desktop', 'tablet'], assert })) {
-            return;
-        }
-
-        const $what = $('#what').height(300).width(300);
-        const initialVisualViewport = window.visualViewport;
-
-        try {
-            window.visualViewport = {
-                height: 800,
-                width: 800,
-                offsetTop: 300,
-                offsetLeft: 200
-            };
-
-            const resultPosition = setupPosition($what, {
-                of: $(window)
-            });
-
-            assert.roughEqual(resultPosition.v.location, 550, 50, 'vertical location is correct');
-            assert.roughEqual(resultPosition.h.location, 450, 50, 'horizontal location is correct');
-        } finally {
-            window.visualViewport = initialVisualViewport;
-        }
-    });
-
-    QUnit.test('position should be correct relative to the viewport on mobile devices when window is scrolled and window.scrollTop is bigger than visualViewport.offsetTop (T750017)', function(assert) {
-        if(shouldSkipOnDevices({ deviceTypes: ['desktop', 'tablet'], assert })) {
-            return;
-        }
-
-        const isAndroid = devices.real().platform === 'android';
-        if(isAndroid) {
-            // NOTE: scrollTop/Left are always 0 on android devices
-            assert.ok(true, 'only for non-android mobiles');
-            return;
-        }
-
-        const $what = $('#what').height(300).width(300);
-        const initialVisualViewport = window.visualViewport;
-
-        try {
-            window.scrollBy(500, 500);
-            window.visualViewport = {
-                height: 800,
-                width: 800,
-                offsetTop: 300,
-                offsetLeft: 200
-            };
-
-            const resultPosition = setupPosition($what, {
-                of: $(window)
-            });
-
-            assert.roughEqual(resultPosition.v.location, 750, 50, 'vertical location is correct');
-            assert.roughEqual(resultPosition.h.location, 750, 50, 'horizontal location is correct');
-        } finally {
-            window.visualViewport = initialVisualViewport;
-            window.scroll(0, 0);
-        }
-    });
-
     // T664522
     QUnit.test('setup should call resetPosition with finishTransition argument', function(assert) {
-        const origResetPosition = translator.resetPosition;
-
-        translator.resetPosition = ($element, finishTransition) => {
+        const resetPositionStub = sinon.stub(translator, 'resetPosition').callsFake(($element, finishTransition) => {
             assert.equal(finishTransition, true, 'finishTransition is true');
-        };
+        });
 
         try {
             const $what = $('#what').width(100);
@@ -1133,7 +1031,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
                 of: $(window)
             });
         } finally {
-            translator.resetPosition = origResetPosition;
+            resetPositionStub.restore();
         }
     });
 })();

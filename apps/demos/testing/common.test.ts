@@ -2,10 +2,9 @@
 import { glob } from 'glob';
 import { join } from 'path';
 import { existsSync } from 'fs';
-import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { axeCheck, createReport } from '@testcafe-community/axe';
 import {
-  getPortByIndex,
   runTestAtPage,
   shouldRunFramework,
   shouldRunTestAtIndex,
@@ -15,8 +14,9 @@ import {
   shouldSkipDemo,
   FRAMEWORKS,
   execCode,
+  injectStyle,
 } from '../utils/visual-tests/matrix-test-helper';
-import { getThemePostfix } from '../utils/visual-tests/helpers/theme-utils';
+import { testScreenshot } from '../utils/visual-tests/helpers/theme-utils';
 import { createMdReport, createTestCafeReport } from '../utils/axe-reporter/reporter';
 import { accessibilityUnsupportedComponents } from './accessibility-unsupported-components';
 import { knownWarnings } from './known-warnings';
@@ -24,12 +24,6 @@ import { skipJsErrorsComponents } from './skip-js-errors-components';
 import { skippedTests } from './skipped-tests';
 
 import { gitHubIgnored } from '../utils/visual-tests/github-ignored-list';
-
-const injectStyle = (style) => `
-    var style = document.createElement('style');
-    style.innerHTML = \`${style}\`;
-    document.getElementsByTagName('head')[0].appendChild(style);
-  `;
 
 const execTestCafeCode = (t, code) => {
   // eslint-disable-next-line no-eval
@@ -49,6 +43,30 @@ const getTestSpecificSkipRules = (testName) => {
   }
 };
 
+const getClientScripts = () => {
+  const scripts = [
+    { module: 'mockdate' },
+  ];
+
+  if (process.env.STRATEGY === 'accessibility') {
+    scripts.push({ module: 'axe-core/axe.min.js' });
+  }
+
+  scripts.push(
+    // @ts-expect-error ts-error
+    join(__dirname, '../utils/visual-tests/inject/test-utils.js'),
+    { content: injectStyle(globalReadFrom(__dirname, '../utils/visual-tests/inject/test-styles.css', (x) => x)) },
+    {
+      content: `
+        window.addEventListener('error', function (e) {
+            console.error(e.message);
+        });`,
+    },
+  );
+
+  return scripts;
+};
+
 Object.values(FRAMEWORKS).forEach((approach) => {
   if (!shouldRunFramework(approach)) { return; }
   fixture(approach)
@@ -62,19 +80,7 @@ Object.values(FRAMEWORKS).forEach((approach) => {
     })
     // eslint-disable-next-line spellcheck/spell-checker
     .afterEach(async (t) => clearTimeout(t.ctx.watchDogHandle))
-    .clientScripts([
-      { module: 'mockdate' },
-      { module: 'axe-core/axe.min.js' },
-      // @ts-expect-error Type 'string' is not assignable to type 'ClientScript'
-      join(__dirname, '../utils/visual-tests/inject/test-utils.js'),
-      { content: injectStyle(globalReadFrom(__dirname, '../utils/visual-tests/inject/test-styles.css', (x) => x)) },
-      {
-        content: `
-          window.addEventListener('error', function (e) {
-              console.error(e.message);
-          });`,
-      },
-    ]);
+    .clientScripts(getClientScripts());
 
   const getDemoPaths = (platform) => glob.sync('Demos/*/*')
     .map((path) => join(path, platform));
@@ -97,15 +103,16 @@ Object.values(FRAMEWORKS).forEach((approach) => {
 
     let comparisonOptions;
     if (process.env.DISABLE_DEMO_TEST_SETTINGS !== 'all') {
+      if (process.env.STRATEGY === 'accessibility' && accessibilityUnsupportedComponents.includes(widgetName)) {
+        return;
+      }
+
       const approachLowerCase = approach.toLowerCase();
       const mergedTestSettings = (visualTestSettings && {
         ...visualTestSettings,
         ...visualTestSettings[approachLowerCase],
       }) || {};
 
-      if (process.env.STRATEGY === 'accessibility' && accessibilityUnsupportedComponents.indexOf(widgetName) > -1) {
-        return;
-      }
       if (process.env.CI_ENV && process.env.DISABLE_DEMO_TEST_SETTINGS !== 'ignore') {
         if (mergedTestSettings.ignore) { return; }
       }
@@ -118,10 +125,10 @@ Object.values(FRAMEWORKS).forEach((approach) => {
     let pageURL = '';
     const theme = process.env.THEME.replace('generic.', '');
     if (isGitHubDemos) {
-      pageURL = `http://127.0.0.1:808${getPortByIndex(index)}/Demos/${widgetName}/${demoName}/${approach}/?theme=dx.${theme}`;
+      pageURL = `http://127.0.0.1:8080/Demos/${widgetName}/${demoName}/${approach}/?theme=dx.${theme}`;
     } else {
       changeTheme(__dirname, `../${demoPath}/index.html`, process.env.THEME);
-      pageURL = `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`;
+      pageURL = `http://127.0.0.1:8080/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`;
     }
     // remove when tests enabled not only for datagrid
     if (isGitHubDemos && (widgetName !== 'DataGrid' || gitHubIgnored.includes(demoName))) {
@@ -141,6 +148,7 @@ Object.values(FRAMEWORKS).forEach((approach) => {
         if (visualTestStyles) {
           await execCode(visualTestStyles);
         }
+
         if (approach === 'Angular') {
           await waitForAngularLoading();
         }
@@ -170,25 +178,20 @@ Object.values(FRAMEWORKS).forEach((approach) => {
           await t.expect(error).notOk();
           await t.expect(results.violations.length === 0).ok(createReport(results.violations));
         } else {
-          const testTheme = process.env.THEME;
-
-          let comparisonResult;
-          if (isGitHubDemos) {
-            comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, (comparisonOptions && {
-              ...comparisonOptions,
-              ...{ looksSameComparisonOptions: { antialiasingTolerance: 10 } },
-            }));
-          } else {
-            comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
-          }
-
           const consoleMessages = await t.getBrowserConsoleMessages();
 
           const errors = [...consoleMessages.error, ...consoleMessages.warn]
             .filter((e) => !knownWarnings.some((kw) => e.startsWith(kw)));
 
           await t.expect(errors).eql([]);
-          await t.expect(comparisonResult).ok('INVALID_SCREENSHOT');
+
+          const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+          await testScreenshot(t, takeScreenshot, `${testName}.png`, undefined, comparisonOptions);
+
+          await t
+            .expect(compareResults.isValid())
+            .ok(compareResults.errorMessages());
         }
       });
   });

@@ -59,7 +59,8 @@ const App = () => {
               onClick={deleteRecords}
               icon="trash"
               disabled={!selectedItemKeys.length}
-              text="Delete Selected Records" />
+              text="Delete Selected Records"
+              stylingMode="text" />
           </Item>
         </Toolbar>
       </DataGrid>

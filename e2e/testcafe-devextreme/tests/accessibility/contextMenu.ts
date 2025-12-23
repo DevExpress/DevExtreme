@@ -18,7 +18,6 @@ const options: Options<Properties> = {
   position: [{ offset: '10 10' }],
   items: [items],
   disabled: [true, false],
-  hint: [undefined, 'hint'],
   selectionMode: ['single', 'none'],
 };
 

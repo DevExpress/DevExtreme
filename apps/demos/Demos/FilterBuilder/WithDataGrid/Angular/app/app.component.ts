@@ -7,9 +7,8 @@ import {
   DxFilterBuilderModule,
 } from 'devextreme-angular';
 
-import { DataSource, ODataStore } from 'devextreme-angular/common/data';
 import { Service } from './app.service';
-import type { Fields, Condition } from './app.service';
+import type { Fields, Columns, Condition, Product } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -29,9 +28,11 @@ if (window && window.config?.packageConfigPaths) {
 })
 
 export class AppComponent {
-  dataSource: DataSource;
+  dataSource: Product[];
 
   fields: Fields;
+
+  columns: Columns;
 
   filter: Condition;
 
@@ -39,27 +40,10 @@ export class AppComponent {
 
   constructor(service: Service) {
     this.fields = service.getFields();
+    this.columns = service.getColumns();
     this.filter = service.getFilter();
     this.gridFilterValue = this.filter;
-    this.dataSource = new DataSource({
-      store: new ODataStore({
-        version: 2,
-        fieldTypes: {
-          Product_Cost: 'Decimal',
-          Product_Sale_Price: 'Decimal',
-          Product_Retail_Price: 'Decimal',
-        },
-        url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
-      }),
-      select: [
-        'Product_ID',
-        'Product_Name',
-        'Product_Cost',
-        'Product_Sale_Price',
-        'Product_Retail_Price',
-        'Product_Current_Inventory',
-      ],
-    });
+    this.dataSource = service.getProducts();
   }
 
   buttonClick() {

@@ -1,5 +1,3 @@
-/* global DATA, internals, initTree */
-
 import $ from 'jquery';
 import commonUtils from 'core/utils/common';
 import { isFunction } from 'core/utils/type';
@@ -8,6 +6,8 @@ import { DataSource } from 'common/data/data_source/data_source';
 import ArrayStore from 'common/data/array_store';
 import { CustomStore } from 'common/data/custom_store';
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
+import { DATA, internals } from './testData.js';
+import { initTree } from './testUtils.js';
 
 const NODE_LOAD_INDICATOR_CLASS = 'dx-treeview-node-loadindicator';
 const TREEVIEW_ITEM_WITH_CHECKBOX_CLASS = 'dx-treeview-item-with-checkbox';

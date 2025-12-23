@@ -3,6 +3,7 @@ import dateUtils from '@js/core/utils/date';
 import { isFunction, isObject } from '@js/core/utils/type';
 import messageLocalization from '@js/localization/message';
 import type { DateNavigatorTextInfo, Properties } from '@js/ui/scheduler';
+import { camelize } from '@ts/core/utils/m_inflector';
 import type { IntervalOptions, Step } from '@ts/scheduler/header/types';
 import type { NormalizedView, RawViewType, ViewType } from '@ts/scheduler/utils/options/types';
 
@@ -333,20 +334,18 @@ export const getViewName = (view: RawViewType): string | undefined => {
   return view;
 };
 
-export const getViewText = (view: RawViewType): string => {
-  const viewName = getViewName(view);
-  const viewText = messageLocalization.format(`dxScheduler-switcher${viewName}`);
-
-  if (!viewText) {
-    return viewName ?? '';
-  }
-
-  return viewText;
-};
+export const getViewText = (
+  view: NormalizedView,
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+): string => view.name || messageLocalization.format(`dxScheduler-switcher${camelize(view.type, true)}`);
 
 export const formatViews = (
   views: NormalizedView[],
-): NormalizedView[] => views.map((view) => ({ ...view, text: getViewText(view) }));
+): NormalizedView[] => views.map((view) => ({
+  ...view,
+  name: getViewName(view),
+  text: getViewText(view),
+}));
 
 export const getStep = (type: ViewType): Step => STEP_MAP[type];
 

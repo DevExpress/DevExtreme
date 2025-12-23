@@ -1,5 +1,4 @@
 import { getOuterHeight, getWidth, getHeight } from 'core/utils/size';
-import 'generic_light.css!';
 
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';

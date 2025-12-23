@@ -5,7 +5,7 @@ import positionUtils from 'common/core/animation/position';
 import holdEvent from 'common/core/events/hold';
 import pointerMock from '../../helpers/pointerMock.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import 'ui/action_sheet';
 
 QUnit.testStart(function() {

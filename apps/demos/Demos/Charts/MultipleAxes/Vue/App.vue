@@ -65,7 +65,11 @@ import DxChart, {
 } from 'devextreme-vue/chart';
 import { continentSources, populationData } from './data.ts';
 
-function customizeTooltip(pointInfo) {
+function customizeTooltip(pointInfo: { 
+  valueText: string; 
+  point: { getColor: () => string }; 
+  seriesName: string 
+}) {
   const items = pointInfo.valueText.split('\n');
   const color = pointInfo.point.getColor();
 

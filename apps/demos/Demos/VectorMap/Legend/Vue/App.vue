@@ -60,6 +60,7 @@
   </DxVectorMap>
 </template>
 <script setup lang="ts">
+// @ts-ignore
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import {
   DxVectorMap,
@@ -68,27 +69,29 @@ import {
   DxLegend,
   DxSource,
   DxTooltip,
+  type DxVectorMapTypes,
 } from 'devextreme-vue/vector-map';
+import { type MapLayerElement } from 'devextreme/viz/vector_map';
 import { populations, markers } from './data.ts';
 
 const colorGroups = [0, 0.5, 0.8, 1, 2, 3, 100];
-const mapsWorld = mapsData.world;
+const mapsWorld: Record<string, unknown> = mapsData.world;
 const bounds = [-180, 85, 180, -75];
 const sizeGroups = [0, 8000, 10000, 50000];
-const customizeTooltip = (info) => ({ text: info.attribute('text') });
-const customizeMarkers = ({ index }) => ['< 8000K', '8000K to 10000K', '> 10000K'][index];
-const customizeItems = (items) => items.reverse();
+const customizeTooltip = (info: MapLayerElement) => ({ text: info.attribute('text') });
+const customizeMarkers = ({ index }: any) => ['< 8000K', '8000K to 10000K', '> 10000K'][index];
+const customizeItems = (items: DxVectorMapTypes.LegendItem[]) => items.reverse();
 
-function customizeText({ index, start, end }) {
+function customizeText({ index, start, end }: Record<string, any>) {
   if (index === 0) {
     return '< 0.5%';
   }
 
   return (index === 5) ? '> 3%' : `${start}% to ${end}%`;
 }
-function customizeLayer(elements) {
+function customizeLayer(elements: MapLayerElement[]) {
   elements.forEach((element) => {
-    const name = element.attribute('name');
+    const name: string = element.attribute('name');
     const population = populations[name];
     if (population) {
       element.attribute('population', population);

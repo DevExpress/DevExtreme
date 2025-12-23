@@ -37,8 +37,8 @@ import {
 } from 'devextreme-vue/chart';
 import { catBreedsData } from './data.ts';
 
-function onDone(e: DxChartTypes.DoneEvent) {
-  e.component.getSeriesByPos(0).getPointsByArg('Siamese')[0].select();
+function onDone({ component }: DxChartTypes.DoneEvent): void {
+  component.getSeriesByPos(0).getPointsByArg('Siamese')[0].select();
 }
 function onPointClick(e: DxChartTypes.PointClickEvent) {
   const point = e.target;

@@ -50,7 +50,8 @@ import { dataSource } from './data.ts';
 
 const resolveModes: DxPieChartTypes.ShiftLabelOverlap[] = ['shift', 'hide', 'none'];
 const resolveMode = ref(resolveModes[0]);
-const formatText = ({ argumentText, percentText }) => `${argumentText} (${percentText})`;
+
+const formatText = ({ argumentText, percentText }: { argumentText: string; percentText: string }) => `${argumentText} (${percentText})`;
 </script>
 
 <style>

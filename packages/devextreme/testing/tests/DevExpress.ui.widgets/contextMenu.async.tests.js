@@ -4,7 +4,6 @@ import devices from '__internal/core/m_devices';
 import { SCROLLABLE_CONTAINER_CLASS } from '__internal/ui/scroll_view/consts';
 
 import 'ui/button';
-import 'generic_light.css!';
 
 const DX_SUBMENU_CLASS = 'dx-submenu';
 const DX_CONTEXT_MENU_ITEMS_CONTAINER_CLASS = 'dx-menu-items-container';

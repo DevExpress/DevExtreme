@@ -5,50 +5,46 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { getData } from '../helpers/generateDataSourceData';
-import { changeTheme } from '../../../helpers/changeTheme';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Column chooser`
   .page(url(__dirname, '../../container.html'));
 
-['generic.light', 'material.blue.light', 'fluent.blue.light'].forEach((theme) => {
-  ['dragAndDrop', 'select'].forEach((mode: any) => {
-    test(`Column chooser screenshot in mode=${mode}, theme=${theme}`, async (t) => {
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-      const dataGrid = new DataGrid('#container');
+// visual: generic.light
+// visual: material.blue.light
+// visual: fluent.blue.light
 
-      await dataGrid.apiShowColumnChooser();
+['dragAndDrop', 'select'].forEach((mode: any) => {
+  test(`Column chooser screenshot in mode=${mode}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid('#container');
 
-      await t
-        .expect(await takeScreenshot(`column-chooser-${mode}-mode (${theme}).png`, dataGrid.element))
-        .ok()
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
-    }).before(async () => {
-      await changeTheme(theme);
-      return createWidget('dxDataGrid', {
-        dataSource: getData(20, 3),
-        height: 400,
-        showBorders: true,
-        columns: [{
-          dataField: 'field_0',
-          dataType: 'string',
-        }, {
-          dataField: 'field_1',
-          dataType: 'string',
-        }, {
-          dataField: 'field_2',
-          dataType: 'string',
-          visible: false,
-        }],
-        columnChooser: {
-          enabled: true,
-          mode,
-        },
-      });
-    }).after(async () => {
-      await changeTheme('generic.light');
-    });
-  });
+    await dataGrid.apiShowColumnChooser();
+
+    await testScreenshot(t, takeScreenshot, `column-chooser-${mode}-mode.png`, { element: dataGrid.element });
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => createWidget('dxDataGrid', {
+    dataSource: getData(20, 3),
+    height: 400,
+    showBorders: true,
+    columns: [{
+      dataField: 'field_0',
+      dataType: 'string',
+    }, {
+      dataField: 'field_1',
+      dataType: 'string',
+    }, {
+      dataField: 'field_2',
+      dataType: 'string',
+      visible: false,
+    }],
+    columnChooser: {
+      enabled: true,
+      mode,
+    },
+  }));
 });
 
 test('Column chooser checkboxes should be aligned correctly with plain structure', async (t) => {
@@ -61,9 +57,8 @@ test('Column chooser checkboxes should be aligned correctly with plain structure
 
   const columnChooser = dataGrid.getColumnChooser();
 
+  await testScreenshot(t, takeScreenshot, 'column-chooser-checkbox-alignment-plain-structure.png', { element: columnChooser.content });
   await t
-    .expect(await takeScreenshot('column-chooser-checkbox-alignment-plain-structure.png', columnChooser.content))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -92,9 +87,8 @@ test('Column chooser checkboxes should be aligned correctly with tree structure'
 
   const columnChooser = dataGrid.getColumnChooser();
 
+  await testScreenshot(t, takeScreenshot, 'column-chooser-checkbox-alignment-tree-structure.png', { element: columnChooser.content });
   await t
-    .expect(await takeScreenshot('column-chooser-checkbox-alignment-tree-structure.png', columnChooser.content))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -154,19 +148,19 @@ test('Check the behavior of pressing the Esc button when dragging a column from 
   await t
     .click(dataGrid.getColumnChooserButton());
 
-  await takeScreenshot('T1219785-column-chooser-1.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1219785-column-chooser-1.png', { element: dataGrid.element });
 
   await dataGrid.getColumnChooser().focusList();
   await dataGrid.moveColumnChooserColumn(0, -25, -25, true);
   await dataGrid.moveColumnChooserColumn(0, -50, -50);
 
-  await takeScreenshot('T1219785-column-chooser-2.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1219785-column-chooser-2.png', { element: dataGrid.element });
 
   // act
   await t.pressKey('esc');
   await dataGrid.moveColumnChooserColumn(0, -75, -75);
 
-  await takeScreenshot('T1219785-column-chooser-3.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1219785-column-chooser-3.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -248,6 +242,7 @@ test('ColumnChooser should receive and render custom texts', async (t) => {
   const emptyMessage = columnChooser.getEmptyMessage();
   const titleText = await title.innerText;
   const emptyMessageText = await emptyMessage.innerText;
+
   await t.expect(titleText).eql('customTitle');
   await t.expect(emptyMessageText).eql('customEmptyText');
 }).before(async (t) => {
@@ -274,4 +269,6 @@ test('ColumnChooser should receive and render custom texts', async (t) => {
     dataSource: [],
     columns: [],
   });
+}).after(async (t) => {
+  await t.eval(() => location.reload());
 });

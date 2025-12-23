@@ -39,7 +39,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DxScheduler, { DxResource, type DxSchedulerTypes } from 'devextreme-vue/scheduler';
-import DxContextMenu from 'devextreme-vue/context-menu';
+import DxContextMenu, { type DxContextMenuTypes } from 'devextreme-vue/context-menu';
 import ItemTemplate from './ItemTemplate.vue';
 import { resourcesData, data } from './data.ts';
 
@@ -48,11 +48,11 @@ const appointmentClassName = '.dx-scheduler-appointment';
 const cellClassName = '.dx-scheduler-date-table-cell';
 const currentDate = ref(new Date(2020, 10, 25));
 const dataSource = data;
-const groups = ref<string[]>(undefined);
+const groups = ref<string[]>();
 const crossScrollingEnabled = ref(false);
 const disabled = ref(true);
-const contextMenuItems = ref([]);
-const target = ref(appointmentClassName);
+const contextMenuItems = ref<DxContextMenuTypes.Item[]>([]);
+const target = ref<string>(appointmentClassName);
 const schedulerRef = ref<DxScheduler>();
 
 function onAppointmentContextMenu(
@@ -61,9 +61,9 @@ function onAppointmentContextMenu(
   const scheduler = schedulerRef.value!.instance!;
   const resourceItems = resourcesData.map((item) => ({
     ...item,
-    onItemClick: ({ itemData }) => scheduler?.updateAppointment(appointmentData, {
+    onItemClick: ({ itemData }: DxContextMenuTypes.ItemClickEvent) => scheduler?.updateAppointment(appointmentData, {
       ...appointmentData,
-      ...{ roomId: [itemData.id] },
+      ...{ roomId: [itemData?.id] },
     }),
   }));
   target.value = appointmentClassName;
@@ -81,7 +81,7 @@ function onAppointmentContextMenu(
       text: 'Repeat Weekly',
       beginGroup: true,
       onItemClick: () => scheduler.updateAppointment(appointmentData, {
-        startDate: targetedAppointmentData.startDate,
+        startDate: targetedAppointmentData?.startDate,
         recurrenceRule: 'FREQ=WEEKLY',
       }),
     },
@@ -117,7 +117,7 @@ function onCellContextMenu({ cellData }: DxSchedulerTypes.CellContextMenuEvent) 
       onItemClick: () => {
         if (groups.value) {
           crossScrollingEnabled.value = false;
-          groups.value = null;
+          groups.value = undefined;
         } else {
           crossScrollingEnabled.value = true;
           groups.value = ['roomId'];
@@ -132,8 +132,8 @@ function onCellContextMenu({ cellData }: DxSchedulerTypes.CellContextMenuEvent) 
     },
   ];
 }
-function onContextMenuItemClick(e) {
-  e.itemData.onItemClick(e);
+function onContextMenuItemClick(e: DxContextMenuTypes.ItemClickEvent) {
+  e.itemData?.onItemClick(e);
 }
 </script>
 

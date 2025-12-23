@@ -4,6 +4,7 @@ import { ClientFunction } from 'testcafe';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { makeRowsViewTemplatesAsync } from '../../helpers/asyncTemplates';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture
   .disablePageReloads`Keyboard Navigation - editOnKeyPress`
@@ -24,10 +25,7 @@ const DATA_GRID_SELECTOR = '#container';
     await t.click(dataCell.element)
       .pressKey('f');
 
-    await takeScreenshot(
-      `edit-cell-keypress-with-custom-cell-template_template-${name}.png`,
-      dataGrid.element,
-    );
+    await testScreenshot(t, takeScreenshot, `edit-cell-keypress-with-custom-cell-template_template-${name}.png`, { element: dataGrid.element });
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());

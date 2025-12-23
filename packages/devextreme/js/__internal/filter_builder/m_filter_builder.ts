@@ -893,7 +893,8 @@ class FilterBuilder extends Widget<any> {
       visible: true,
       focusStateEnabled: false,
       preventScrollEvents: false,
-      container: $popup,
+      hideOnParentScroll: this.option('closePopupOnTargetScroll'),
+      _hideOnParentScrollTarget: $popup,
       hideOnOutsideClick: true,
       onShown: options.popup.onShown,
       shading: false,
@@ -920,6 +921,10 @@ class FilterBuilder extends Widget<any> {
 
     const treeViewNode = treeViewPopup?.find?.(`.${TREEVIEW_NODE_CONTAINER}`);
     treeViewNode?.attr('role', 'presentation');
+  }
+
+  addWidgetPrefix(className: string): string {
+    return `${FILTER_BUILDER_CLASS}-${className}`;
   }
 }
 

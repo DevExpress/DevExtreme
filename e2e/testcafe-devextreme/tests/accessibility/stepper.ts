@@ -51,9 +51,7 @@ const items: Item[] = [
 
 const options: Options<Properties> = {
   dataSource: [items],
-  selectOnFocus: [true, false],
   selectedIndex: [0, 7],
-  linear: [true, false],
   orientation: ['horizontal', 'vertical'],
   width: [800],
   height: [600],

@@ -179,6 +179,5 @@ testUtils.importAnd(() => 'devextreme/ui/gantt', () => DevExpress.ui.dxGantt, (d
         });
         instance.refresh();
       }
-    })
-    .then(() => testUtils.postpone(2000));
+    });
 });

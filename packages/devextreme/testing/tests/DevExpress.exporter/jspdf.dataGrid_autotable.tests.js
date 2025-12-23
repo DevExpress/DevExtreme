@@ -10,7 +10,7 @@ import { JSPdfOptionTests } from './jspdfParts/autotable/jspdf.options.tests.js'
 import { exportDataGridWithAutoTable } from 'pdf_exporter';
 
 import 'ui/data_grid';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(() => {
     const markup = '<div id="dataGrid"></div>';

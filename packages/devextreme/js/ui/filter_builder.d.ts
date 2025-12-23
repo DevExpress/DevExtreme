@@ -72,7 +72,7 @@ export type EditorPreparedEvent = EventInfo<dxFilterBuilder> & {
     /** @docid _ui_filter_builder_EditorPreparedEvent.filterOperation */
     readonly filterOperation?: string;
     /** @docid _ui_filter_builder_EditorPreparedEvent.updateValueTimeout */
-    readonly updateValueTimeout?: number;
+    updateValueTimeout?: number;
     /** @docid _ui_filter_builder_EditorPreparedEvent.width */
     readonly width?: number;
     /** @docid _ui_filter_builder_EditorPreparedEvent.readOnly */

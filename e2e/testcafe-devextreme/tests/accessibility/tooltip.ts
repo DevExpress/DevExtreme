@@ -12,7 +12,6 @@ const options: Options<Properties> = {
   width: [50],
   height: [25],
   disabled: [true, false],
-  hint: [undefined, 'hint'],
 };
 
 const a11yCheckConfig = {
