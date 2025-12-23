@@ -118,7 +118,7 @@ export const useApi = () => {
 
       updateLastMessageContent(aiResponse);
     } catch {
-      updateLastMessageContent(messageHistory.at(-1).content);
+      updateLastMessageContent(messageHistory.at(-1)?.content);
       alertLimitReached();
     }
   }, [alertLimitReached, updateLastMessageContent]);

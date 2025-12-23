@@ -1,4 +1,4 @@
-const employee = {
+export const employee = {
   ID: 1,
   FirstName: 'John',
   LastName: 'Heart',
@@ -11,7 +11,7 @@ const employee = {
   Phone: '360-684-1334',
   Email: 'jheart@dx-email.com',
 };
-const positions = [
+export const positions = [
   'HR Manager',
   'IT Manager',
   'CEO',
@@ -20,11 +20,3 @@ const positions = [
   'Support Manager',
   'Shipping Manager',
 ];
-export default {
-  getEmployee() {
-    return employee;
-  },
-  getPositions() {
-    return positions;
-  },
-};

@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import DateBox from 'devextreme-react/date-box';
-import service from './data.js';
+import { federalHolidays } from './data.js';
 
 const dateTimeLabel = { 'aria-label': 'Date Time' };
 const dateLabel = { 'aria-label': 'Date' };
@@ -16,7 +16,7 @@ function App() {
   const firstWorkDay2017 = new Date(2017, 0, 3);
   const min = new Date(1900, 0, 1);
   const dateClear = new Date(2015, 11, 1, 6);
-  const disabledDates = service.getFederalHolidays();
+  const disabledDates = federalHolidays;
   const diffInDay = useMemo(
     () =>
       `${Math.floor(

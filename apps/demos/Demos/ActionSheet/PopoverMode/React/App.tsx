@@ -11,21 +11,21 @@ const App = () => {
   const [isActionSheetVisible, setIsActionSheetVisible] = useState(false);
   const [actionSheetTarget, setActionSheetTarget] = useState<HTMLElement | string>('');
 
-  const onListItemClick = useCallback((e: ListTypes.ItemClickEvent) => {
+  const onListItemClick = useCallback((e: ListTypes.ItemClickEvent): void => {
     setIsActionSheetVisible(true);
     setActionSheetTarget(e.itemElement);
-  }, [setIsActionSheetVisible, setActionSheetTarget]);
+  }, []);
 
-  const onActionSheetItemClick = useCallback((e: ActionSheetTypes.ItemClickEvent) => {
+  const onActionSheetItemClick = useCallback((e: ActionSheetTypes.ItemClickEvent): void => {
     setIsActionSheetVisible(false);
     notify(`The "${e.itemData.text}" button is clicked.`);
-  }, [setIsActionSheetVisible]);
+  }, []);
 
-  const onVisibleChange = useCallback((isVisible: boolean) => {
+  const onVisibleChange = useCallback((isVisible: boolean): void => {
     if (isVisible !== isActionSheetVisible) {
       setIsActionSheetVisible(isVisible);
     }
-  }, [setIsActionSheetVisible, isActionSheetVisible]);
+  }, [isActionSheetVisible]);
 
   return (
     <div className="app-container">

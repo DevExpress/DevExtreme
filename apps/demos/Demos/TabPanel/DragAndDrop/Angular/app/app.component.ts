@@ -3,7 +3,7 @@ import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/
 import {
   DxButtonModule, DxSortableModule, DxTabPanelModule, DxListModule,
 } from 'devextreme-angular';
-import { DxSortableTypes } from 'devextreme-angular/ui/sortable';
+import type { DxSortableTypes } from 'devextreme-angular/ui/sortable';
 import { Employee, Service, Task } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {

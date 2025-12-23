@@ -4,8 +4,8 @@ import notify from 'devextreme/ui/notify';
 import { contextMenuItems as items } from './data.js';
 
 const itemClick = (e) => {
-  if (!e.itemData.items) {
-    notify(`The "${e.itemData.text}" item was clicked`, 'success', 1500);
+  if (!e.itemData?.items) {
+    notify(`The "${e.itemData?.text}" item was clicked`, 'success', 1500);
   }
 };
 const ItemTemplate = (itemData) => (
@@ -16,7 +16,7 @@ const ItemTemplate = (itemData) => (
   </div>
 );
 const App = () => (
-  <React.Fragment>
+  <>
     <div className="label">Right click an image to display the context menu:</div>
     <img
       id="image"
@@ -30,6 +30,6 @@ const App = () => (
       itemRender={ItemTemplate}
       onItemClick={itemClick}
     />
-  </React.Fragment>
+  </>
 );
 export default App;

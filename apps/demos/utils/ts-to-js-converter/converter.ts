@@ -53,7 +53,7 @@ const makeConfig = (
     jsx: 'react-native',
     allowJs: true,
     target: 'ES2020',
-    lib: ['ES2020', 'dom'],
+    lib: ['ES2023', 'dom'],
     types,
     noEmit: false,
     skipLibCheck: true,

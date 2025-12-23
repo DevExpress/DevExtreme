@@ -1,11 +1,15 @@
 import React, { useCallback, useState } from 'react';
 import Toolbar, { Item } from 'devextreme-react/toolbar';
 import Button from 'devextreme-react/button';
-import ButtonGroup, { type ButtonGroupTypes } from 'devextreme-react/button-group';
+import ButtonGroup from 'devextreme-react/button-group';
+import type { ButtonGroupTypes } from 'devextreme-react/button-group';
 import Resizable from 'devextreme-react/resizable';
 import CheckBox from 'devextreme-react/check-box';
-import DropDownButton, { type DropDownButtonTypes } from 'devextreme-react/drop-down-button';
-import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
+import type { CheckBoxTypes } from 'devextreme-react/check-box';
+import DropDownButton from 'devextreme-react/drop-down-button';
+import type { DropDownButtonTypes } from 'devextreme-react/drop-down-button';
+import SelectBox from 'devextreme-react/select-box';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
 import themes from 'devextreme/ui/themes';
 import notify from 'devextreme/ui/notify';
 import 'devextreme/ui/select_box';
@@ -28,20 +32,20 @@ const textAlignDefault = [textAlignItems[0].alignment];
 const fontSizeDefault = fontSizes[2].size;
 const headingDefault = headings[0].text;
 
-function onButtonClick(name: string) {
+function onButtonClick(name: string): void {
   notify(`The "${name}" button has been clicked`);
 }
 
-function onSelectionChanged(name: string) {
+function onSelectionChanged(name: string): void {
   notify(`The "${name}" value has been changed`);
 }
 
 function App() {
-  const [lineHeight, setLineHeight] = useState(lineHeightDefault);
-  const [textAlign, setTextAlign] = useState(textAlignDefault);
-  const [fontSize, setFontSize] = useState(fontSizeDefault);
-  const [heading, setHeading] = useState(headingDefault);
-  const [multiline, setMultiline] = useState(true);
+  const [lineHeight, setLineHeight] = useState<number>(lineHeightDefault);
+  const [textAlign, setTextAlign] = useState<string[]>(textAlignDefault);
+  const [fontSize, setFontSize] = useState<number>(fontSizeDefault);
+  const [heading, setHeading] = useState<string>(headingDefault);
+  const [multiline, setMultiline] = useState<boolean>(true);
 
   const onFontFamilyClick = useCallback(() => {
     notify('The "Font Family" value has been changed');
@@ -51,7 +55,7 @@ function App() {
     onButtonClick('Undo');
   }, []);
 
-  const onButtonGroupClick = useCallback((e: ButtonGroupTypes.ItemClickEvent) => {
+  const onButtonGroupClick = useCallback((e: ButtonGroupTypes.ItemClickEvent): void => {
     onButtonClick(e.itemData.hint);
   }, []);
 
@@ -88,7 +92,7 @@ function App() {
   }, []);
 
   const onHeadingClick = useCallback(
-    (e: SelectBoxTypes.ItemClickEvent) => {
+    (e: SelectBoxTypes.ItemClickEvent): void => {
       setHeading(e.itemData.text);
       notify('The "Heading" value has been changed');
     },
@@ -96,7 +100,7 @@ function App() {
   );
 
   const onLineHeightChanged = useCallback(
-    (e: DropDownButtonTypes.SelectionChangedEvent) => {
+    (e: DropDownButtonTypes.SelectionChangedEvent): void => {
       setLineHeight(e.item.lineHeight);
       onSelectionChanged('Line Height');
     },
@@ -104,7 +108,7 @@ function App() {
   );
 
   const onFontSizeChange = useCallback(
-    (e: DropDownButtonTypes.SelectionChangedEvent) => {
+    (e: DropDownButtonTypes.SelectionChangedEvent): void => {
       setFontSize(e.item.size);
       onSelectionChanged('Font Size');
     },
@@ -112,7 +116,7 @@ function App() {
   );
 
   const onTextAlignChanged = useCallback(
-    (e: ButtonGroupTypes.ItemClickEvent) => {
+    (e: ButtonGroupTypes.ItemClickEvent): void => {
       const { alignment, hint } = e.itemData;
 
       setTextAlign([alignment]);
@@ -122,7 +126,7 @@ function App() {
   );
 
   const onToolbarLineModeChanged = useCallback(
-    ({ value }) => {
+    ({ value }: CheckBoxTypes.ValueChangedEvent): void => {
       setMultiline(value);
     },
     [setMultiline],
@@ -167,7 +171,7 @@ function App() {
   );
 
   return (
-    <React.Fragment>
+    <>
       <div className="widget-container">
         <Resizable
           className="resizable-container"
@@ -422,7 +426,7 @@ function App() {
           onValueChanged={onToolbarLineModeChanged}
         />
       </div>
-    </React.Fragment>
+    </>
   );
 }
 

@@ -1,4 +1,4 @@
-export const multiViewItems = [
+export const companies = [
   {
     ID: 1,
     CompanyName: 'SuprMart',

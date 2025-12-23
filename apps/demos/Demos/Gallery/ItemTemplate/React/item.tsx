@@ -1,5 +1,13 @@
 import React from 'react';
 
+interface ItemProps {
+  Address: string;
+  City: string;
+  State: string;
+  Price: number;
+  Image: string;
+}
+
 function formatPrice(price: number) {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -11,7 +19,7 @@ function formatPrice(price: number) {
 
 export default function Item({
   Address, City, State, Price, Image,
-}) {
+}: ItemProps) {
   return (
     <div>
       <img alt={Address} src={Image} />

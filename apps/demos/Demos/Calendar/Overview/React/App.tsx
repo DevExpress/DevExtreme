@@ -1,13 +1,16 @@
 import React, { useCallback, useState } from 'react';
 import CheckBox from 'devextreme-react/check-box';
+import type { CheckBoxTypes } from 'devextreme-react/check-box';
 import SelectBox from 'devextreme-react/select-box';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
 import DateBox from 'devextreme-react/date-box';
-import Calendar, { type CalendarTypes } from 'devextreme-react/calendar';
+import Calendar from 'devextreme-react/calendar';
+import type { CalendarTypes } from 'devextreme-react/calendar';
 import CustomCell from './CustomCell.tsx';
 
-const zoomLevels = ['month', 'year', 'decade', 'century'];
-const weekNumberRules = ['auto', 'firstDay', 'firstFourDays', 'fullWeek'];
-const weekDays = [
+const zoomLevels: CalendarTypes.CalendarZoomLevel[] = ['month', 'year', 'decade', 'century'];
+const weekNumberRules: CalendarTypes.WeekNumberRule[] = ['auto', 'firstDay', 'firstFourDays', 'fullWeek'];
+const weekDays: { id: number, text: string }[] = [
   { id: 0, text: 'Sunday' },
   { id: 1, text: 'Monday' },
   { id: 2, text: 'Tuesday' },
@@ -24,66 +27,66 @@ const ruleLabel = { 'aria-label': 'Week Number Rule' };
 
 export default function App() {
   const [zoomLevel, setZoomLevel] = useState<CalendarTypes.CalendarZoomLevel>('month');
-  const [currentValue, setCurrentValue] = useState(new Date());
-  const [useCellTemplate, setUseCellTemplate] = useState(null);
-  const [disabled, setDisabled] = useState(false);
-  const [showWeekNumbers, setShowWeekNumbers] = useState(false);
+  const [currentValue, setCurrentValue] = useState<Date>(new Date());
+  const [useCellTemplate, setUseCellTemplate] = useState<boolean | null>(null);
+  const [disabled, setDisabled] = useState<boolean>(false);
+  const [showWeekNumbers, setShowWeekNumbers] = useState<boolean>(false);
   const [firstDay, setFirstDay] = useState<CalendarTypes.FirstDayOfWeek>(0);
   const [weekNumberRule, setWeekNumberRule] = useState<CalendarTypes.WeekNumberRule>('auto');
 
   const onCurrentValueChange = useCallback(
-    ({ value }) => {
+    ({ value }: { value?: Date }): void => {
       setCurrentValue(value);
     },
-    [setCurrentValue],
+    [],
   );
 
   const onDisabledChange = useCallback(
-    ({ value }) => {
+    ({ value }: CheckBoxTypes.ValueChangedEvent): void => {
       setDisabled(value);
     },
-    [setDisabled],
+    [],
   );
 
   const onZoomLevelChange = useCallback(
-    ({ value }) => {
+    ({ value }: Partial<SelectBoxTypes.ValueChangedEvent>): void => {
       setZoomLevel(value);
     },
-    [setZoomLevel],
+    [],
   );
 
   const onFirstDayChange = useCallback(
-    ({ value }) => {
+    ({ value }: SelectBoxTypes.ValueChangedEvent): void => {
       setFirstDay(value);
     },
-    [setFirstDay],
+    [],
   );
 
   const onWeekNumberRuleChange = useCallback(
-    ({ value }) => {
+    ({ value }: SelectBoxTypes.ValueChangedEvent): void => {
       setWeekNumberRule(value);
     },
-    [setWeekNumberRule],
+    [],
   );
 
   const onShowWeekNumbersChange = useCallback(
-    ({ value }) => {
+    ({ value }: CheckBoxTypes.ValueChangedEvent): void => {
       setShowWeekNumbers(value);
     },
     [setShowWeekNumbers],
   );
 
   const onUseCellTemplateChange = useCallback(
-    ({ value }) => {
+    ({ value }: CheckBoxTypes.ValueChangedEvent): void => {
       setUseCellTemplate(!!value);
     },
     [setUseCellTemplate],
   );
 
   const onOptionChange = useCallback(
-    (e: { name: string }) => {
+    (e: CalendarTypes.OptionChangedEvent): void => {
       if (e.name === 'zoomLevel') {
-        onZoomLevelChange(e);
+        onZoomLevelChange({ value: e.value });
       }
     },
     [onZoomLevelChange],

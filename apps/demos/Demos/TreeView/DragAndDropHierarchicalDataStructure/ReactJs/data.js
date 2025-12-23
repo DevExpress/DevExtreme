@@ -1,5 +1,5 @@
-const itemsDriveD = [];
-const itemsDriveC = [
+export const itemsDriveD = [];
+export const itemsDriveC = [
   {
     id: '1',
     name: 'Documents',
@@ -103,11 +103,3 @@ const itemsDriveC = [
     isDirectory: false,
   },
 ];
-export default {
-  getItemsDriveC() {
-    return itemsDriveC;
-  },
-  getItemsDriveD() {
-    return itemsDriveD;
-  },
-};

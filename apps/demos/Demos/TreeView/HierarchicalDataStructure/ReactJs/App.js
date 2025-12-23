@@ -1,16 +1,12 @@
 import React, { useCallback, useState } from 'react';
 import TreeView from 'devextreme-react/tree-view';
-import service from './data.js';
+import { products } from './data.js';
 
-const products = service.getProducts();
 const App = () => {
   const [currentItem, setCurrentItem] = useState({ ...products[0] });
-  const selectItem = useCallback(
-    (e) => {
-      setCurrentItem({ ...e.itemData });
-    },
-    [setCurrentItem],
-  );
+  const selectItem = useCallback((e) => {
+    setCurrentItem({ ...e.itemData });
+  }, []);
   return (
     <div className="form">
       <TreeView
@@ -21,7 +17,10 @@ const App = () => {
       />
       {currentItem.price && (
         <div id="product-details">
-          <img src={currentItem.image} />
+          <img
+            src={currentItem.image}
+            alt="Product image"
+          />
           <div className="name">{currentItem.text}</div>
           <div className="price">{`$${currentItem.price}`}</div>
         </div>

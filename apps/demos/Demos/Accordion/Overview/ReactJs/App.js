@@ -3,12 +3,11 @@ import Accordion from 'devextreme-react/accordion';
 import CheckBox from 'devextreme-react/check-box';
 import TagBox from 'devextreme-react/tag-box';
 import Slider, { Tooltip, Label } from 'devextreme-react/slider';
-import service from './data.js';
+import { companies } from './data.js';
 import CustomTitle from './CustomTitle.js';
 import CustomItem from './CustomItem.js';
 
 const companyLabel = { 'aria-label': 'Company' };
-const companies = service.getCompanies();
 const App = () => {
   const [selectedItems, setSelectedItems] = useState([companies[0]]);
   const [multiple, setMultiple] = useState(false);
@@ -30,30 +29,18 @@ const App = () => {
     },
     [selectedItems, setSelectedItems],
   );
-  const selectedItemsChanged = useCallback(
-    (e) => {
-      setSelectedItems(e.value);
-    },
-    [setSelectedItems],
-  );
-  const multipleChanged = useCallback(
-    (e) => {
-      setMultiple(e.value);
-    },
-    [setMultiple],
-  );
-  const collapsibleChanged = useCallback(
-    (e) => {
-      setCollapsible(e.value);
-    },
-    [setCollapsible],
-  );
-  const animationDurationChanged = useCallback(
-    (e) => {
-      setAnimationDuration(e.value);
-    },
-    [setAnimationDuration],
-  );
+  const selectedItemsChanged = useCallback((e) => {
+    setSelectedItems(e.value);
+  }, []);
+  const multipleChanged = useCallback((e) => {
+    setMultiple(e.value);
+  }, []);
+  const collapsibleChanged = useCallback((e) => {
+    setCollapsible(e.value);
+  }, []);
+  const animationDurationChanged = useCallback((e) => {
+    setAnimationDuration(e.value);
+  }, []);
   return (
     <div id="accordion">
       <Accordion

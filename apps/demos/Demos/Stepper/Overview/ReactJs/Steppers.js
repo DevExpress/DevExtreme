@@ -26,7 +26,7 @@ export default function Steppers({
   orientation, navigationMode, selectOnFocus, rtlMode,
 }) {
   return (
-    <React.Fragment>
+    <>
       {stepperConfigs.map(({
         id, labelId, title, fields,
       }) => (
@@ -64,6 +64,6 @@ export default function Steppers({
           </Stepper>
         </div>
       ))}
-    </React.Fragment>
+    </>
   );
 }
