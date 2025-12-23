@@ -14,7 +14,7 @@ export default function Options({
   onRtlModeChanged,
 }) {
   return (
-    <React.Fragment>
+    <>
       <div className="caption">Options</div>
 
       <div className="option">
@@ -54,6 +54,6 @@ export default function Options({
           onValueChanged={onRtlModeChanged}
         />
       </div>
-    </React.Fragment>
+    </>
   );
 }

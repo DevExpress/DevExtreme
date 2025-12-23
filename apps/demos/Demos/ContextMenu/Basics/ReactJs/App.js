@@ -4,8 +4,8 @@ import notify from 'devextreme/ui/notify';
 import { contextMenuItems as items } from './data.js';
 
 function itemClick(e) {
-  if (!e.itemData.items) {
-    notify(`The "${e.itemData.text}" item was clicked`, 'success', 1500);
+  if (!e.itemData?.items) {
+    notify(`The "${e.itemData?.text}" item was clicked`, 'success', 1500);
   }
 }
 function App() {
@@ -18,7 +18,7 @@ function App() {
     }
   }, []);
   return (
-    <React.Fragment>
+    <>
       <div className="label">Right click the image to show available actions:</div>
       <img
         id="image"
@@ -31,7 +31,7 @@ function App() {
         target="#image"
         onItemClick={itemClick}
       />
-    </React.Fragment>
+    </>
   );
 }
 export default App;

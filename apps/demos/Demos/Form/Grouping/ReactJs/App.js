@@ -1,28 +1,25 @@
 import React from 'react';
 import 'devextreme-react/text-area';
 import Form, {
-  SimpleItem,
   GroupItem,
+  SimpleItem,
+  Tab,
   TabbedItem,
   TabPanelOptions,
-  Tab,
 } from 'devextreme-react/form';
 import GroupCaption from './GroupCaption.js';
-import service from './data.js';
+import { employee } from './data.js';
 
-const employee = service.getEmployee();
-const groupCaptionNamedRender = (iconName) => {
-  const groupCaptionRender = (data) => (
+const groupCaptionNamedRender = (iconName) => (data) =>
+  (
     <GroupCaption
       iconName={iconName}
       {...data}
     />
   );
-  return groupCaptionRender;
-};
 export default function App() {
   return (
-    <React.Fragment>
+    <>
       <div className="long-title">
         <h3>Personal details</h3>
       </div>
@@ -82,6 +79,6 @@ export default function App() {
           </GroupItem>
         </Form>
       </div>
-    </React.Fragment>
+    </>
   );
 }

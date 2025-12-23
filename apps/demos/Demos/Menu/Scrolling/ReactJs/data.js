@@ -1,4 +1,4 @@
-const products = [
+export const products = [
   {
     text: 'Electronics',
     items: [
@@ -332,8 +332,3 @@ const products = [
     ],
   },
 ];
-export default {
-  getProducts() {
-    return products;
-  },
-};

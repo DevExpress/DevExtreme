@@ -1,17 +1,18 @@
 import React from 'react';
-import TreeView, { type TreeViewTypes } from 'devextreme-react/tree-view';
+import TreeView from 'devextreme-react/tree-view';
+import type { TreeViewTypes } from 'devextreme-react/tree-view';
 import 'whatwg-fetch';
 
-const createChildren = (parent: TreeViewTypes.Node) => {
+const createChildren = (parent: TreeViewTypes.Node): Promise<Response> => {
   const parentId = parent ? parent.itemData.id : '';
 
   return fetch(`https://js.devexpress.com/Demos/NetCore/api/TreeViewData?parentId=${parentId}`)
-    .then((response) => response.json())
-    .catch(() => { throw new Error('Data Loading Error'); });
+    .then((response: Response): Promise<Response> => response.json())
+    .catch((): never => { throw new Error('Data Loading Error'); });
 };
 
 const App = () => (
-  <React.Fragment>
+  <>
     <TreeView
       id="simple-treeview"
       dataStructure="plain"
@@ -20,7 +21,7 @@ const App = () => (
       expandNodesRecursive={false}
       createChildren={createChildren}
     />
-  </React.Fragment>
+  </>
 );
 
 export default App;

@@ -1,10 +1,10 @@
-const menuItems = [
+export const menuItems = [
   { id: 'expand', text: 'Expand category' },
   { id: 'collapse', text: 'Collapse category' },
   { id: 'details', text: 'Show product details' },
   { id: 'copy', text: 'Copy product info' },
 ];
-const products = [
+export const products = [
   {
     id: '1',
     text: 'Stores',
@@ -383,11 +383,3 @@ const products = [
     ],
   },
 ];
-export default {
-  getProducts() {
-    return products;
-  },
-  getMenuItems() {
-    return menuItems;
-  },
-};

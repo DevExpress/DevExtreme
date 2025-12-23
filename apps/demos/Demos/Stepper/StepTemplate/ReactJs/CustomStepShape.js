@@ -1,15 +1,16 @@
 import React from 'react';
 
 export default function CustomStepShape(data) {
+  const { icon, label, optional } = data;
   return (
-    <React.Fragment>
+    <>
       <div className="dx-step-indicator">
-        <i className={`dx-icon dx-icon-${data.icon}`}></i>
+        <i className={`dx-icon dx-icon-${icon}`}></i>
       </div>
       <div className="dx-step-caption">
-        <div className="dx-step-label">{data.label}</div>
-        {data.optional && <div className="dx-step-optional-mark">(Optional)</div>}
+        <div className="dx-step-label">{label}</div>
+        {optional && <div className="dx-step-optional-mark">(Optional)</div>}
       </div>
-    </React.Fragment>
+    </>
   );
 }

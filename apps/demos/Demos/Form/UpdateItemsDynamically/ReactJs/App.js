@@ -3,9 +3,8 @@ import 'devextreme-react/text-area';
 import Form, {
   GroupItem, SimpleItem, Label, ButtonItem,
 } from 'devextreme-react/form';
-import service from './data.js';
+import { employee } from './data.js';
 
-const employee = service.getEmployee();
 const App = () => {
   const [phones, setPhones] = useState(employee.Phones);
   const [isHomeAddressVisible, setIsHomeAddressVisible] = useState(true);
@@ -18,7 +17,7 @@ const App = () => {
         setIsHomeAddressVisible(e.component.option('value'));
       },
     }),
-    [setIsHomeAddressVisible, isHomeAddressVisible],
+    [isHomeAddressVisible],
   );
   const generateNewPhoneOptions = useCallback(
     (index) => ({
@@ -59,7 +58,7 @@ const App = () => {
     [],
   );
   return (
-    <React.Fragment>
+    <>
       <div className="long-title">
         <h3>Personal details</h3>
       </div>
@@ -96,11 +95,11 @@ const App = () => {
             name="phones-container"
           >
             <GroupItem name="phones">
-              {PhoneOptions.map((phone, index) => (
+              {PhoneOptions.map((options, index) => (
                 <SimpleItem
                   key={`Phones${index}`}
                   dataField={`Phones[${index}]`}
-                  editorOptions={phone}
+                  editorOptions={options}
                 >
                   <Label text={`Phone ${index + 1}`} />
                 </SimpleItem>
@@ -115,7 +114,7 @@ const App = () => {
           </GroupItem>
         </Form>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 export default App;

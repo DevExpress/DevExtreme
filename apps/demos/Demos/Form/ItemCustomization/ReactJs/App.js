@@ -3,17 +3,16 @@ import {
   Form, Item, GroupItem, Label,
 } from 'devextreme-react/form';
 import 'devextreme-react/text-area';
-import service from './data.js';
+import { employee, positions } from './data.js';
 import LabelTemplate from './LabelTemplate.js';
 import LabelNotesTemplate from './LabelNotesTemplate.js';
 
-const employee = service.getEmployee();
 const validationRules = {
   position: [{ type: 'required', message: 'Position is required.' }],
   hireDate: [{ type: 'required', message: 'Hire Date is required.' }],
 };
 const nameEditorOptions = { disabled: true };
-const positionEditorOptions = { items: service.getPositions(), searchEnabled: true, value: '' };
+const positionEditorOptions = { items: positions, searchEnabled: true, value: '' };
 const hireDateEditorOptions = { width: '100%', value: null };
 const birthDateEditorOptions = { width: '100%', disabled: true };
 const notesEditorOptions = { height: 90, maxLength: 200 };

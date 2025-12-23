@@ -1,7 +1,10 @@
 import React from 'react';
+import type { Company } from './types.ts';
 
-export default function CustomTitle(data) {
+export default function CustomTitle(company: Company) {
+  const { CompanyName } = company;
+
   return (
-    <div className='header'>{data.CompanyName}</div>
+    <div className='header'>{CompanyName}</div>
   );
 }

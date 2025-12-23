@@ -1,4 +1,14 @@
-export const fontSizes = [
+import type {
+  FontSize,
+  LineHeight,
+  FontFamily,
+  Heading,
+  FontStyle,
+  TextAlignItem,
+  ListType,
+} from './types.ts';
+
+export const fontSizes: FontSize[] = [
   { size: 10, text: '10px' },
   { size: 12, text: '12px' },
   { size: 14, text: '14px' },
@@ -6,14 +16,14 @@ export const fontSizes = [
   { size: 18, text: '18px' },
 ];
 
-export const lineHeights = [
+export const lineHeights: LineHeight[] = [
   { lineHeight: 1, text: '1' },
   { lineHeight: 1.35, text: '1.35' },
   { lineHeight: 1.5, text: '1.5' },
   { lineHeight: 2, text: '2' },
 ];
 
-export const fontFamilies = [
+export const fontFamilies: FontFamily[] = [
   { text: 'Arial' },
   { text: 'Courier New' },
   { text: 'Georgia' },
@@ -23,7 +33,7 @@ export const fontFamilies = [
   { text: 'Times New Roman' },
 ];
 
-export const headings = [
+export const headings: Heading[] = [
   { text: 'Normal text' },
   { text: 'Heading 1' },
   { text: 'Heading 2' },
@@ -32,7 +42,7 @@ export const headings = [
   { text: 'Heading 5' },
 ];
 
-export const fontStyles = [
+export const fontStyles: FontStyle[] = [
   {
     icon: 'bold',
     hint: 'Bold',
@@ -51,7 +61,7 @@ export const fontStyles = [
   },
 ];
 
-export const textAlignItemsExtended = [
+export const textAlignItemsExtended: TextAlignItem[] = [
   {
     icon: 'alignleft',
     alignment: 'left',
@@ -78,7 +88,7 @@ export const textAlignItemsExtended = [
   },
 ];
 
-export const textAlignItems = textAlignItemsExtended.map((item) => {
+export const textAlignItems: TextAlignItem[] = textAlignItemsExtended.map((item: TextAlignItem): TextAlignItem => {
   const { icon, alignment, hint } = item;
 
   return {
@@ -88,7 +98,7 @@ export const textAlignItems = textAlignItemsExtended.map((item) => {
   };
 });
 
-export const listTypes = [
+export const listTypes: ListType[] = [
   {
     icon: 'orderedlist',
     alignment: 'orderedlist',

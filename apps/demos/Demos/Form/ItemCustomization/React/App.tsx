@@ -1,20 +1,22 @@
 import React, { useCallback } from 'react';
 
-import { ValidationRule } from 'devextreme-react/common';
+import type { ValidationRule } from 'devextreme-react/common';
 
 import {
   Form,
   Item, GroupItem, Label,
   type FormTypes,
 } from 'devextreme-react/form';
+import type { ITextBoxOptions } from 'devextreme-react/text-box';
+import type { ISelectBoxOptions } from 'devextreme-react/select-box';
+import type { IDateBoxOptions } from 'devextreme-react/date-box';
+import type { ITextAreaOptions } from 'devextreme-react/text-area';
 import 'devextreme-react/text-area';
 
-import service from './data.ts';
+import { employee, positions } from './data.ts';
 
 import LabelTemplate from './LabelTemplate.tsx';
 import LabelNotesTemplate from './LabelNotesTemplate.tsx';
-
-const employee = service.getEmployee();
 
 const validationRules: {
   position: ValidationRule[],
@@ -28,22 +30,23 @@ const validationRules: {
   ],
 };
 
-const nameEditorOptions = { disabled: true };
-const positionEditorOptions = { items: service.getPositions(), searchEnabled: true, value: '' };
-const hireDateEditorOptions = { width: '100%', value: null };
-const birthDateEditorOptions = { width: '100%', disabled: true };
-const notesEditorOptions = { height: 90, maxLength: 200 };
-const phoneEditorOptions = { mask: '+1 (X00) 000-0000', maskRules: { X: /[02-9]/ } };
+const nameEditorOptions: ITextBoxOptions = { disabled: true };
+const positionEditorOptions: ISelectBoxOptions = { items: positions, searchEnabled: true, value: '' };
+const hireDateEditorOptions: IDateBoxOptions = { width: '100%', value: null };
+const birthDateEditorOptions: IDateBoxOptions = { width: '100%', disabled: true };
+const notesEditorOptions: ITextAreaOptions = { height: 90, maxLength: 200 };
+const phoneEditorOptions: ITextBoxOptions = { mask: '+1 (X00) 000-0000', maskRules: { X: /[02-9]/ } };
 
 const App = () => {
-  const validateForm = useCallback((e: FormTypes.ContentReadyEvent) => {
+  const validateForm = useCallback((e: FormTypes.ContentReadyEvent): void => {
     e.component.validate();
   }, []);
 
   return (
     <Form
       onContentReady={validateForm}
-      formData={employee}>
+      formData={employee}
+    >
       <GroupItem colCount={2} caption="Employee Details">
         <Item dataField="FirstName" editorOptions={nameEditorOptions}>
           <Label render={LabelTemplate('user')} />

@@ -1,9 +1,11 @@
-export const doingTasks = [{ id: 1, text: 'Prepare 2019 Financial' },
+import type { Task } from './types.ts';
+
+export const doingTasks: Task[] = [{ id: 1, text: 'Prepare 2019 Financial' },
   { id: 2, text: 'Prepare 2019 Marketing Plan' },
   { id: 3, text: 'Update Personnel Files' },
   { id: 4, text: 'Review Health Insurance Options Under the Affordable Care Act' }];
 
-export const plannedTasks = [{ id: 5, text: 'New Brochures' },
+export const plannedTasks: Task[] = [{ id: 5, text: 'New Brochures' },
   { id: 6, text: '2019 Brochure Designs' },
   { id: 7, text: 'Brochure Design Review' },
   { id: 8, text: 'Website Re-Design Plan' },

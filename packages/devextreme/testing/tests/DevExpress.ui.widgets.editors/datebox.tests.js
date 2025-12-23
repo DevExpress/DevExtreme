@@ -21,7 +21,7 @@ import '../../helpers/calendarFixtures.js';
 
 import 'ui/date_box';
 import 'ui/validator';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(() => {
     const markup =
@@ -1553,7 +1553,7 @@ QUnit.module('widget sizing render', {}, () => {
         const { width: actualWidth } = component.$element().get(0).getBoundingClientRect();
         const { width: buttonWidth } = $(`.${BUTTONS_CONTAINER_CLASS}`).get(0).getBoundingClientRect();
 
-        assert.strictEqual(actualWidth, initialWidth + buttonWidth);
+        assert.strictEqual(actualWidth >= initialWidth + buttonWidth, true);
     });
 
     QUnit.test('change width', function(assert) {

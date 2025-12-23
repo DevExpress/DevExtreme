@@ -1,4 +1,4 @@
-export interface ProductItemType {
+export interface ProductItem {
   id: string,
   name: string,
   price: number,
@@ -6,8 +6,8 @@ export interface ProductItemType {
   disabled?: boolean,
 }
 
-export interface ProductType {
+export interface Product {
   id: string,
   name: string,
-  items: (ProductType | ProductItemType)[],
+  items: (Product | ProductItem)[],
 }
