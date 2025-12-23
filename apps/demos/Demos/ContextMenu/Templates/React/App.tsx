@@ -6,9 +6,9 @@ import notify from 'devextreme/ui/notify';
 import { contextMenuItems as items } from './data.ts';
 import type { ContextMenuItem } from './types';
 
-const itemClick = (e: ContextMenuTypes.ItemClickEvent<ContextMenuItem>) => {
-  if (!e.itemData.items) {
-    notify(`The "${e.itemData.text}" item was clicked`, 'success', 1500);
+const itemClick = (e: ContextMenuTypes.ItemClickEvent<ContextMenuItem>): void => {
+  if (!e.itemData?.items) {
+    notify(`The "${e.itemData?.text}" item was clicked`, 'success', 1500);
   }
 };
 
@@ -21,7 +21,7 @@ const ItemTemplate = (itemData: ContextMenuItem) => (
 );
 
 const App = () => (
-  <React.Fragment>
+  <>
     <div className="label">
       Right click an image to display the context menu:
     </div>
@@ -32,7 +32,7 @@ const App = () => (
       target="#image"
       itemRender={ItemTemplate}
       onItemClick={itemClick} />
-  </React.Fragment>
+  </>
 );
 
 export default App;

@@ -4,35 +4,30 @@ import SelectBox from 'devextreme-react/select-box';
 import MultiView from 'devextreme-react/multi-view';
 import { employees, selectBoxLabel } from './data.js';
 
-class EmployeeInfo extends React.Component {
-  render() {
-    const {
-      text, picture, position, notes,
-    } = this.props.data;
-    return (
-      <div className="employee-info">
-        <img
-          alt={text}
-          className="employee-photo"
-          src={picture}
-        />
-        <p className="employee-notes">
-          <b>Position: {position}</b>
-          <br />
-          {notes}
-        </p>
-      </div>
-    );
-  }
+function EmployeeInfo({ data }) {
+  const {
+    text, picture, position, notes,
+  } = data;
+  return (
+    <div className="employee-info">
+      <img
+        alt={text}
+        className="employee-photo"
+        src={picture}
+      />
+      <p className="employee-notes">
+        <b>Position: {position}</b>
+        <br />
+        {notes}
+      </p>
+    </div>
+  );
 }
 const App = () => {
   const [selectedItem, setSelectedItem] = useState(employees[0]);
-  const onSelectionChanged = useCallback(
-    (args) => {
-      setSelectedItem(args.selectedItem || args.addedItems[0]);
-    },
-    [setSelectedItem],
-  );
+  const onSelectionChanged = useCallback((args) => {
+    setSelectedItem(args.selectedItem || args.addedItems?.[0]);
+  }, []);
   return (
     <div id="center-content">
       <div id="demo-items-container">

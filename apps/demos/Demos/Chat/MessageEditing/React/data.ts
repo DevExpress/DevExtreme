@@ -1,7 +1,7 @@
-import { type ChatTypes } from 'devextreme-react/chat';
+import type { ChatTypes } from 'devextreme-react/chat';
 import { Guid } from 'devextreme-react/common';
 
-function getTimestamp(date, offsetMinutes = 0): number {
+function getTimestamp(date: Date, offsetMinutes = 0): number {
   return date.getTime() + offsetMinutes * 60000;
 }
 
@@ -19,7 +19,7 @@ export const supportAgent: ChatTypes.User = {
   avatarUrl: '../../../../images/petersmith.png',
 };
 
-export const messages = [
+export const messages: ChatTypes.Message[] = [
   {
     id: new Guid().toString(),
     timestamp: getTimestamp(date, -9),
@@ -56,7 +56,7 @@ export const messages = [
 export const allowEditingLabel = { 'aria-label': 'Allow Editing' };
 export const allowDeletingLabel = { 'aria-label': 'Allow Deleting' };
 
-export const editingOptions = [
+export const editingOptions: { text: string, key: string }[] = [
   { text: 'Enabled', key: 'enabled' },
   { text: 'Disabled', key: 'disabled' },
   { text: 'Only the last message (custom)', key: 'custom' },

@@ -49,16 +49,13 @@ const renderTile = (item) => (
 const App = () => {
   const [currentHotel, setCurrentHotel] = useState(data[0]);
   const [selectedItemKeys, setSelectedItemKeys] = useState([data[0].Id]);
-  const handleListSelectionChange = useCallback(
-    (e) => {
-      const hotel = e.addedItems[0];
-      setCurrentHotel(hotel);
-      setSelectedItemKeys([hotel.Id]);
-    },
-    [setCurrentHotel, setSelectedItemKeys],
-  );
+  const handleListSelectionChange = useCallback((e) => {
+    const hotel = e.addedItems[0];
+    setCurrentHotel(hotel);
+    setSelectedItemKeys([hotel.Id]);
+  }, []);
   return (
-    <React.Fragment>
+    <>
       <div className="left">
         <List
           selectionMode="single"
@@ -106,7 +103,7 @@ const App = () => {
         </div>
         <div className="description">{currentHotel.Description}</div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 export default App;

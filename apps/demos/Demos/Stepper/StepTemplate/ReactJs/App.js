@@ -7,7 +7,7 @@ import IconOnly from './IconOnly.js';
 
 export default function App() {
   return (
-    <React.Fragment>
+    <>
       <div
         id="label-customStepShape"
         className="stepper-label"
@@ -50,6 +50,6 @@ export default function App() {
         linear={false}
         itemRender={IconOnly}
       />
-    </React.Fragment>
+    </>
   );
 }

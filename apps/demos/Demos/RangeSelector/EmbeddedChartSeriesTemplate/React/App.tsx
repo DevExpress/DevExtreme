@@ -1,7 +1,9 @@
 import React from 'react';
+
 import RangeSelector, {
-  Margin, Chart, CommonSeriesSettings, SeriesTemplate, Scale, Label, Format,
+  Chart, CommonSeriesSettings, Format, Label, Margin, Scale, SeriesTemplate,
 } from 'devextreme-react/range-selector';
+
 import { dataSource } from './data.ts';
 
 const App = () => {

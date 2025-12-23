@@ -1,10 +1,15 @@
 import React, { useCallback, useState } from 'react';
 
-import ColorBox, { type ColorBoxTypes } from 'devextreme-react/color-box';
-import NumberBox, { type NumberBoxTypes } from 'devextreme-react/number-box';
-import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
-import Switch, { type SwitchTypes } from 'devextreme-react/switch';
-import TextBox, { type TextBoxTypes } from 'devextreme-react/text-box';
+import ColorBox from 'devextreme-react/color-box';
+import type { ColorBoxTypes } from 'devextreme-react/color-box';
+import NumberBox from 'devextreme-react/number-box';
+import type { NumberBoxTypes } from 'devextreme-react/number-box';
+import SelectBox from 'devextreme-react/select-box';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
+import Switch from 'devextreme-react/switch';
+import type { SwitchTypes } from 'devextreme-react/switch';
+import TextBox from 'devextreme-react/text-box';
+import type { TextBoxTypes } from 'devextreme-react/text-box';
 
 import Logo from './Logo.tsx';
 
@@ -15,7 +20,7 @@ const titleLabel = { 'aria-label': 'Title' };
 const transformLabel = { 'aria-label': 'Transform' };
 
 const noFlipTransform = 'scaleX(1)';
-const transformations = [
+const transformations: { key: string, items: { name: string, value: string }[] }[] = [
   {
     key: 'Flip',
     items: [
@@ -36,41 +41,41 @@ const transformations = [
 ];
 
 function App() {
-  const [text, setText] = useState('UI Superhero');
-  const [width, setWidth] = useState(370);
-  const [height, setHeight] = useState(260);
-  const [color, setColor] = useState('#f05b41');
-  const [transform, setTransform] = useState(noFlipTransform);
-  const [border, setBorder] = useState(false);
+  const [text, setText] = useState<string>('UI Superhero');
+  const [width, setWidth] = useState<number>(370);
+  const [height, setHeight] = useState<number>(260);
+  const [color, setColor] = useState<string>('#f05b41');
+  const [transform, setTransform] = useState<string>(noFlipTransform);
+  const [border, setBorder] = useState<boolean>(false);
 
-  const handleTextChange = useCallback((e: TextBoxTypes.ValueChangedEvent) => {
-    setText(e.value);
+  const handleTextChange = useCallback(({ value }: TextBoxTypes.ValueChangedEvent): void => {
+    setText(value);
   }, []);
 
-  const handleColorChange = useCallback((e: ColorBoxTypes.ValueChangedEvent) => {
-    setColor(e.value);
+  const handleColorChange = useCallback(({ value }: ColorBoxTypes.ValueChangedEvent): void => {
+    setColor(value);
   }, []);
 
-  const handleHeightChange = useCallback((e: NumberBoxTypes.ValueChangedEvent) => {
-    setWidth((e.value * 37) / 26);
-    setHeight(e.value);
+  const handleHeightChange = useCallback(({ value }: NumberBoxTypes.ValueChangedEvent): void => {
+    setWidth((value * 37) / 26);
+    setHeight(value);
   }, []);
 
-  const handleWidthChange = useCallback((e: NumberBoxTypes.ValueChangedEvent) => {
-    setWidth(e.value);
-    setHeight((e.value * 26) / 37);
+  const handleWidthChange = useCallback(({ value }: NumberBoxTypes.ValueChangedEvent): void => {
+    setWidth(value);
+    setHeight((value * 26) / 37);
   }, []);
 
-  const handleTransformChange = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
-    setTransform(e.value);
+  const handleTransformChange = useCallback(({ value }: SelectBoxTypes.ValueChangedEvent): void => {
+    setTransform(value);
   }, []);
 
-  const handleBorderChange = useCallback((e: SwitchTypes.ValueChangedEvent) => {
-    setBorder(e.value);
+  const handleBorderChange = useCallback(({ value }: SwitchTypes.ValueChangedEvent): void => {
+    setBorder(value);
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <div className="settings">
         <div className="column">
           <div className="field">
@@ -163,7 +168,7 @@ function App() {
         transform={transform}
         border={border}
       />
-    </React.Fragment>
+    </>
   );
 }
 

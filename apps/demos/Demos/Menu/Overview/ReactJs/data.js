@@ -1,4 +1,4 @@
-const products = [
+export const products = [
   {
     id: '1',
     name: 'Video Players',
@@ -109,8 +109,3 @@ const products = [
     ],
   },
 ];
-export default {
-  getProducts() {
-    return products;
-  },
-};

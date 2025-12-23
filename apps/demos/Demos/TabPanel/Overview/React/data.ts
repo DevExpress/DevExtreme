@@ -1,4 +1,5 @@
-import { Position, TabsIconPosition, TabsStyle } from 'devextreme/common';
+import type { Position, TabsIconPosition, TabsStyle } from 'devextreme/common';
+import type { Task } from './types.ts';
 
 export const tabsPositionsSelectBoxLabel = { 'aria-label': 'Tab position' };
 
@@ -25,7 +26,7 @@ export const iconPositions: TabsIconPosition[] = [
   'bottom',
 ];
 
-const tasks = [
+const tasks: Task[] = [
   {
     status: 'Not Started',
     priority: 'high',

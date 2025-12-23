@@ -1,4 +1,5 @@
 import React from 'react';
+import type { Product } from './types';
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -7,12 +8,18 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 0,
 });
 
-export default function ProductInfo(item: { Name: string; ImageSrc: string; Price: number | number | bigint; }) {
+export default function ProductInfo(item: Product) {
+  const {
+    Name,
+    ImageSrc,
+    Price,
+  } = item;
+
   return (
     <div className="product">
-      <img alt={item.Name} src={item.ImageSrc} />
-      <div>{item.Name}</div>
-      <div className="price">{currencyFormatter.format(item.Price)}</div>
+      <img alt={Name} src={ImageSrc} />
+      <div>{Name}</div>
+      <div className="price">{currencyFormatter.format(Price)}</div>
     </div>
   );
 }

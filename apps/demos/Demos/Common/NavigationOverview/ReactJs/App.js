@@ -1,11 +1,11 @@
 import React, { useCallback, useState } from 'react';
-import TreeView from 'devextreme-react/tree-view';
 import TabPanel from 'devextreme-react/tab-panel';
+import TreeView from 'devextreme-react/tree-view';
 import { continents } from './data.js';
 
 const renderPanelItemTitle = (item) => <span className="tab-panel-title">{item.text}</span>;
 const renderPanelItem = (city) => (
-  <React.Fragment>
+  <>
     <img
       alt="country flag"
       className="flag"
@@ -41,29 +41,23 @@ const renderPanelItem = (city) => (
         </div>
       </div>
     </div>
-  </React.Fragment>
+  </>
 );
 function App() {
   const [tabPanelIndex, setTabPanelIndex] = useState(0);
   const [countryData, setCountryData] = useState(continents[0].items[0]);
   const [citiesData, setCitiesData] = useState(continents[0].items[0].cities);
-  const handleTreeViewSelectionChange = useCallback(
-    (e) => {
-      const selectedCountryData = e.itemData;
-      if (selectedCountryData.cities) {
-        setTabPanelIndex(0);
-        setCountryData(selectedCountryData);
-        setCitiesData(selectedCountryData.cities);
-      }
-    },
-    [setTabPanelIndex, setCountryData, setCitiesData],
-  );
-  const handleTabPanelSelectionChange = useCallback(
-    (e) => {
-      setTabPanelIndex(e.value);
-    },
-    [setTabPanelIndex],
-  );
+  const handleTreeViewSelectionChange = useCallback((e) => {
+    const selectedCountryData = e.itemData;
+    if (selectedCountryData.cities) {
+      setTabPanelIndex(0);
+      setCountryData(selectedCountryData);
+      setCitiesData(selectedCountryData.cities);
+    }
+  }, []);
+  const handleTabPanelSelectionChange = useCallback((e) => {
+    setTabPanelIndex(e.value);
+  }, []);
   return (
     <div className="container">
       <div className="left-content">

@@ -20,12 +20,9 @@ function calculateTotalProduction(range = []) {
 }
 function App() {
   const [totalProduction, setTotalProduction] = useState(calculateTotalProduction());
-  const processRange = useCallback(
-    (e) => {
-      setTotalProduction(calculateTotalProduction(e.value));
-    },
-    [setTotalProduction],
-  );
+  const processRange = useCallback((e) => {
+    setTotalProduction(calculateTotalProduction(e.value));
+  }, []);
   return (
     <div id="range-selector-demo">
       <RangeSelector

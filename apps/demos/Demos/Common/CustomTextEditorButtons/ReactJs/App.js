@@ -20,7 +20,7 @@ function App() {
         setPasswordMode((prevPasswordMode) => (prevPasswordMode === 'text' ? 'password' : 'text'));
       },
     }),
-    [setPasswordMode],
+    [],
   );
   const currencyButton = useMemo(
     () => ({
@@ -42,7 +42,7 @@ function App() {
         }
       },
     }),
-    [setCurrencyFormat, setCurrencyValue],
+    [],
   );
   const todayButton = useMemo(
     () => ({
@@ -52,7 +52,7 @@ function App() {
         setDateValue(new Date().getTime());
       },
     }),
-    [setDateValue],
+    [],
   );
   const prevDateButton = useMemo(
     () => ({
@@ -62,7 +62,7 @@ function App() {
         setDateValue((prevDateValue) => prevDateValue - millisecondsInDay);
       },
     }),
-    [setDateValue],
+    [],
   );
   const nextDateButton = useMemo(
     () => ({
@@ -72,22 +72,16 @@ function App() {
         setDateValue((prevDateValue) => prevDateValue + millisecondsInDay);
       },
     }),
-    [setDateValue],
+    [],
   );
-  const onDateChanged = useCallback(
-    (e) => {
-      setDateValue(e.value);
-    },
-    [setDateValue],
-  );
-  const changeCurrency = useCallback(
-    (data) => {
-      setCurrencyValue(data.value);
-    },
-    [setCurrencyValue],
-  );
+  const onDateChanged = useCallback((e) => {
+    setDateValue(e.value);
+  }, []);
+  const changeCurrency = useCallback((data) => {
+    setCurrencyValue(data.value);
+  }, []);
   return (
-    <React.Fragment>
+    <>
       <div className="dx-fieldset">
         <div className="dx-field">
           <div className="dx-field-label">Password TextBox</div>
@@ -157,7 +151,7 @@ function App() {
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 export default App;

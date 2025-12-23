@@ -1,9 +1,9 @@
 import React from 'react';
 import { Tooltip } from 'devextreme-react/tooltip';
 
-function LabelNotesTemplate(data) {
+function LabelNotesTemplate({ text }) {
   return (
-    <React.Fragment>
+    <>
       <div id="template-content">
         <i
           id="helpedInfo"
@@ -11,7 +11,7 @@ function LabelNotesTemplate(data) {
         ></i>
         Additional
         <br />
-        {data.text}
+        {text}
       </div>
 
       <Tooltip
@@ -21,7 +21,7 @@ function LabelNotesTemplate(data) {
       >
         <div id="tooltip-content">This field must not exceed 200 characters</div>
       </Tooltip>
-    </React.Fragment>
+    </>
   );
 }
 export default LabelNotesTemplate;

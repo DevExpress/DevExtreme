@@ -19,11 +19,14 @@ loadMessages({
 
 export default function App() {
   const {
-    alerts, insertMessage, fetchAIResponse, regenerateLastAIResponse,
+    alerts,
+    insertMessage,
+    fetchAIResponse,
+    regenerateLastAIResponse,
   } = useApi();
 
   const [typingUsers, setTypingUsers] = useState<ChatTypes.User[]>([]);
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   const processAIRequest = useCallback(async (message: ChatTypes.Message): Promise<void> => {
     setIsProcessing(true);
