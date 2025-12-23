@@ -38,28 +38,28 @@ function App() {
   const [color, setColor] = useState('#f05b41');
   const [transform, setTransform] = useState(noFlipTransform);
   const [border, setBorder] = useState(false);
-  const handleTextChange = useCallback((e) => {
-    setText(e.value);
+  const handleTextChange = useCallback(({ value }) => {
+    setText(value);
   }, []);
-  const handleColorChange = useCallback((e) => {
-    setColor(e.value);
+  const handleColorChange = useCallback(({ value }) => {
+    setColor(value);
   }, []);
-  const handleHeightChange = useCallback((e) => {
-    setWidth((e.value * 37) / 26);
-    setHeight(e.value);
+  const handleHeightChange = useCallback(({ value }) => {
+    setWidth((value * 37) / 26);
+    setHeight(value);
   }, []);
-  const handleWidthChange = useCallback((e) => {
-    setWidth(e.value);
-    setHeight((e.value * 26) / 37);
+  const handleWidthChange = useCallback(({ value }) => {
+    setWidth(value);
+    setHeight((value * 26) / 37);
   }, []);
-  const handleTransformChange = useCallback((e) => {
-    setTransform(e.value);
+  const handleTransformChange = useCallback(({ value }) => {
+    setTransform(value);
   }, []);
-  const handleBorderChange = useCallback((e) => {
-    setBorder(e.value);
+  const handleBorderChange = useCallback(({ value }) => {
+    setBorder(value);
   }, []);
   return (
-    <React.Fragment>
+    <>
       <div className="settings">
         <div className="column">
           <div className="field">
@@ -152,7 +152,7 @@ function App() {
         transform={transform}
         border={border}
       />
-    </React.Fragment>
+    </>
   );
 }
 export default App;

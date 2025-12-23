@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import Chat, { type ChatTypes } from 'devextreme-react/chat';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
+import type { Format } from 'devextreme-react/common/core/localization';
 
 import {
   currentUser,
@@ -14,20 +15,20 @@ import {
 
 export default function App() {
   const [messages, setMessages] = useState<ChatTypes.Message[]>(initialMessages);
-  const [showAvatar, setShowAvatar] = useState(true);
-  const [showUsername, setShowUsername] = useState(true);
-  const [showDayHeaders, setDayHeaders] = useState(true);
-  const [dayHeaderFormat, setDayHeaderFormat] = useState(headerFormats[0]);
-  const [showMessageTimestamp, setMessageTimestamp] = useState(true);
-  const [messageTimestampFormat, setMessageTimestampFormat] = useState(messageTimestamps[0]);
-  const [isDisabled, setDisabled] = useState(false);
+  const [showAvatar, setShowAvatar] = useState<boolean>(true);
+  const [showUsername, setShowUsername] = useState<boolean>(true);
+  const [showDayHeaders, setDayHeaders] = useState<boolean>(true);
+  const [dayHeaderFormat, setDayHeaderFormat] = useState<Format>(headerFormats[0]);
+  const [showMessageTimestamp, setMessageTimestamp] = useState<boolean>(true);
+  const [messageTimestampFormat, setMessageTimestampFormat] = useState<Format>(messageTimestamps[0]);
+  const [isDisabled, setDisabled] = useState<boolean>(false);
 
-  const onMessageEntered = useCallback(({ message }: ChatTypes.MessageEnteredEvent) => {
+  const onMessageEntered = useCallback(({ message }: ChatTypes.MessageEnteredEvent): void => {
     setMessages((prevMessages) => [...prevMessages, message]);
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <div className="chat-container">
         <Chat
           height={710}
@@ -113,6 +114,6 @@ export default function App() {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }

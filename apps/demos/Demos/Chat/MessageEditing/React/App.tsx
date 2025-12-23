@@ -1,6 +1,8 @@
 import React, { useState, useCallback } from 'react';
-import { Chat, Editing, type ChatTypes } from 'devextreme-react/chat';
+import { Chat, Editing } from 'devextreme-react/chat';
+import type { ChatTypes, ChatRef } from 'devextreme-react/chat';
 import { SelectBox } from 'devextreme-react/select-box';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
 import { Guid } from 'devextreme-react/common';
 import { CustomStore, DataSource } from 'devextreme-react/common/data';
 
@@ -15,11 +17,11 @@ import {
 const editingStrategy = {
   enabled: true,
   disabled: false,
-  custom: ({ component, message }) => {
+  custom: ({ component, message }: { component: ReturnType<ChatRef['instance']>, message: ChatTypes.Message }): boolean => {
     const { items, user } = component.option();
-    const userId = user.id;
+    const userId = user?.id;
 
-    const lastNotDeletedMessage = items.findLast((item) => item.author?.id === userId && !item.isDeleted);
+    const lastNotDeletedMessage = items?.findLast((item: ChatTypes.Message): boolean => item.author?.id === userId && !item.isDeleted);
 
     return message.id === lastNotDeletedMessage?.id;
   },
@@ -29,8 +31,8 @@ const store: ChatTypes.Message[] = [...initialMessages];
 
 const customStore = new CustomStore({
   key: 'id',
-  load: async () => store,
-  insert: async (message) => {
+  load: async (): Promise<ChatTypes.Message[]> => store,
+  insert: async (message: ChatTypes.Message): Promise<ChatTypes.Message> => {
     store.push(message);
     return message;
   },
@@ -41,13 +43,15 @@ const dataSource = new DataSource({
   paginate: false,
 });
 
+type EditingStrategy = NonNullable<ChatTypes.Properties['editing']>['allowUpdating'];
+
 export default function App() {
-  const [allowUpdating, setAllowUpdating] = useState(true);
-  const [allowDeleting, setAllowDeleting] = useState(true);
+  const [allowUpdating, setAllowUpdating] = useState<EditingStrategy>(true);
+  const [allowDeleting, setAllowDeleting] = useState<EditingStrategy>(true);
 
   const onMessageEntered = useCallback((
     { message }: ChatTypes.MessageEnteredEvent,
-  ) => {
+  ): void => {
     const newMessage = {
       id: new Guid().toString(),
       ...message,
@@ -62,7 +66,7 @@ export default function App() {
 
   const onMessageDeleted = useCallback((
     { message }: ChatTypes.MessageDeletedEvent,
-  ) => {
+  ): void => {
     dataSource.store().push([{
       type: 'update',
       key: message.id,
@@ -72,7 +76,7 @@ export default function App() {
 
   const onMessageUpdated = useCallback((
     { message, text }: ChatTypes.MessageUpdatedEvent,
-  ) => {
+  ): void => {
     dataSource.store().push([{
       type: 'update',
       key: message.id,
@@ -80,18 +84,18 @@ export default function App() {
     }]);
   }, []);
 
-  const handleAllowUpdatingChange = useCallback((e) => {
+  const handleAllowUpdatingChange = useCallback((e: SelectBoxTypes.ValueChangedEvent): void => {
     const strategy = editingStrategy[e.value];
     setAllowUpdating(() => strategy);
   }, []);
 
-  const handleAllowDeletingChange = useCallback((e) => {
+  const handleAllowDeletingChange = useCallback((e: SelectBoxTypes.ValueChangedEvent): void => {
     const strategy = editingStrategy[e.value];
     setAllowDeleting(() => strategy);
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <div className="chat-container">
         <Chat
           height={600}
@@ -134,6 +138,6 @@ export default function App() {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
