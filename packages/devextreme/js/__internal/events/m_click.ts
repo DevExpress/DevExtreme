@@ -17,6 +17,7 @@ const misc = { requestAnimationFrame, cancelAnimationFrame };
 
 let prevented: boolean | null = null;
 let lastFiredEvent = null;
+const subscriptions = new Map();
 
 const onNodeRemove = () => {
   lastFiredEvent = null;
@@ -32,9 +33,19 @@ const clickHandler = function (e) {
       originalEvent.DXCLICK_FIRED = true;
     }
 
-    unsubscribeNodesDisposing(lastFiredEvent, onNodeRemove);
+    if (subscriptions.has(lastFiredEvent)) {
+      const { nodes, callback } = subscriptions.get(lastFiredEvent);
+
+      unsubscribeNodesDisposing(lastFiredEvent, callback, nodes);
+
+      subscriptions.delete(lastFiredEvent);
+    }
+
     lastFiredEvent = originalEvent;
-    subscribeNodesDisposing(lastFiredEvent, onNodeRemove);
+
+    const subscriptionData = subscribeNodesDisposing(lastFiredEvent, onNodeRemove);
+
+    subscriptions.set(lastFiredEvent, subscriptionData);
 
     fireEvent({
       type: CLICK_EVENT_NAME,

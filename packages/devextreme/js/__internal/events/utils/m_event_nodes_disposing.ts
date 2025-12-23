@@ -11,9 +11,17 @@ function nodesByEvent(event) {
 }
 
 export const subscribeNodesDisposing = (event, callback) => {
-  eventsEngine.one(nodesByEvent(event), removeEvent, callback);
+  const nodes = nodesByEvent(event);
+  const onceCallback = function (...args) {
+    eventsEngine.off(nodes, removeEvent, onceCallback);
+    return callback(...args);
+  };
+
+  eventsEngine.on(nodes, removeEvent, onceCallback);
+
+  return { callback: onceCallback, nodes };
 };
 
-export const unsubscribeNodesDisposing = (event, callback) => {
-  eventsEngine.off(nodesByEvent(event), removeEvent, callback);
+export const unsubscribeNodesDisposing = (event, callback, nodes) => {
+  eventsEngine.off(nodes || nodesByEvent(event), removeEvent, callback);
 };
