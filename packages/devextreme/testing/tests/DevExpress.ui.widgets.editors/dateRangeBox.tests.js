@@ -9,7 +9,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import localization from 'localization';
 
 import 'ui/validator';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(() => {
     const markup =
@@ -166,7 +166,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 invalidStartDateMessage: 'Start value must be a date',
                 invalidEndDateMessage: 'End value must be a date',
                 isValid: true,
-                labelMode: 'static',
+                labelMode: 'outside',
                 max: undefined,
                 min: undefined,
                 onChange: null,
@@ -225,7 +225,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
             inputAttr: {},
             isValid: true,
             label: '',
-            labelMode: 'static',
+            labelMode: 'outside',
             max: undefined,
             min: undefined,
             name: '',
