@@ -1,6 +1,3 @@
-import '@js/ui/calendar';
-
-import dateLocalization from '@js/common/core/localization/date';
 import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
@@ -8,6 +5,7 @@ import dateUtils from '@js/core/utils/date';
 
 import { VIEWS } from '../utils/options/constants_view';
 import SchedulerWorkSpace from './m_work_space';
+import YearCalendar from './m_year_calendar';
 
 const YEAR_CLASS = 'dx-scheduler-work-space-year';
 const YEAR_CALENDARS_CONTAINER_CLASS = 'dx-scheduler-year-calendars-container';
@@ -71,23 +69,10 @@ class SchedulerWorkSpaceYear extends SchedulerWorkSpace {
       const $calendarItem = $('<div>').addClass(YEAR_CALENDAR_ITEM_CLASS);
       const monthDate = new Date(currentYear, month, 1);
 
-      const monthNames = dateLocalization.getMonthNames();
-      const monthName = monthNames[month];
-      const $monthLabel = $('<div>')
-        .addClass('dx-scheduler-year-calendar-label')
-        .text(monthName);
-
-      $calendarItem.append($monthLabel);
-
-      const $calendarContainer = $('<div>').addClass('dx-scheduler-year-calendar-wrapper');
       const calendarOptions: any = {
-        value: monthDate,
         date: monthDate,
         firstDayOfWeek,
-        zoomLevel: 'month',
-        disabled: false,
-        focusStateEnabled: this.option('focusStateEnabled'),
-        tabIndex: this.option('tabIndex'),
+        showMonthLabel: true,
         onCellClick: (e: any) => {
           const clickedDate = e.value;
           if (clickedDate instanceof Date) {
@@ -97,9 +82,8 @@ class SchedulerWorkSpaceYear extends SchedulerWorkSpace {
       };
 
       // @ts-expect-error
-      const calendar = this._createComponent($calendarContainer, 'dxCalendar', calendarOptions);
+      const calendar = this._createComponent($calendarItem, YearCalendar, calendarOptions);
       this._calendars.push(calendar);
-      $calendarItem.append($calendarContainer);
       $container.append($calendarItem);
     }
 
