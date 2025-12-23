@@ -29,8 +29,23 @@
             .dx-calendar-cell {
                 cursor: pointer;
 
+                &.dx-calendar-other-month {
+                    opacity: 0.5;
+                }
+
                 &:hover {
-                    background-color: $scheduler-workspace-hovered-cell-color;
+                    background-color: #f5f5f5;
+                }
+
+                .dx-scheduler-year-calendar-has-appointment {
+                    background-color: #337ab7;
+                    color: #fff;
+                    border-radius: 50%;
+                    display: inline-block;
+                    width: 1.5em;
+                    height: 1.5em;
+                    line-height: 1.5em;
+                    text-align: center;
                 }
             }
         }

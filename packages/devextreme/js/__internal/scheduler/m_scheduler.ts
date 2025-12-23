@@ -893,6 +893,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     if (this._isAgenda()) {
       this._workSpace.renderAgendaLayout(viewModel);
     }
+
+    if (this.currentView.type === 'year') {
+      workspace.repaint();
+    }
   }
 
   _initExpressions(fields: IFieldExpr) {

@@ -39,6 +39,9 @@ class AppointmentLayoutManager {
 
   public generateViewModel(): AppointmentViewModelPlain[] {
     const viewType = this.schedulerStore.currentView.type;
+    if (viewType === 'year') {
+      return [];
+    }
     if (viewType === 'agenda') {
       const viewModel = generateAgendaViewModel(this.schedulerStore, this.filteredItems);
       return viewModel.map((item) => ({

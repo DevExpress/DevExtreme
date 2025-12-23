@@ -3,27 +3,66 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import dateLocalization from '@js/common/core/localization/date';
 import registerComponent from '@js/core/component_registrator';
+import { getPublicElement } from '@js/core/element';
+import type { PropertyType } from '@js/core/index';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 
+interface CellClickArgs {
+  cancel?: boolean;
+  cellData: {
+    startDate: Date;
+    endDate: Date;
+    startDateUTC?: Date;
+    endDateUTC?: Date;
+    groups?: string[];
+    groupIndex?: number;
+    allDay?: boolean;
+  };
+  cellElement: Element;
+  component?: Widget;
+  element?: Element;
+  event: Event;
+}
+
 const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
 const CALENDAR_OTHER_MONTH_CLASS = 'dx-calendar-other-month';
-const CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view';
 const YEAR_CALENDAR_LABEL_CLASS = 'dx-scheduler-year-calendar-label';
+const YEAR_CALENDAR_HAS_APPOINTMENT_CLASS = 'dx-scheduler-year-calendar-has-appointment';
 
 const CALENDAR_DXCLICK_EVENT_NAME = addNamespace(clickEventName, 'dxYearCalendar');
 
 interface YearCalendarProperties extends WidgetProperties {
   date: Date;
   firstDayOfWeek?: number;
-  onCellClick?: (e: { value: Date }) => void;
+  onCellClick?: (e: CellClickArgs) => void;
   showMonthLabel?: boolean;
+  hasAppointment?: (date: Date) => boolean;
+  getAppointmentColor?: (date: Date) => Promise<string | undefined>;
 }
+
+type YearCalendarPropertyType<T, TProp extends string> =
+  PropertyType<T, TProp> extends never
+    ? never
+    : PropertyType<T, TProp> | undefined;
 
 class YearCalendar extends Widget<YearCalendarProperties> {
   readonly _viewName = 'yearCalendar';
+
+  public option(): YearCalendarProperties;
+  public option(options: YearCalendarProperties): void;
+  public option<TPropertyName extends string>(
+    name: TPropertyName
+  ): YearCalendarPropertyType<YearCalendarProperties, TPropertyName>;
+  public option<TPropertyName extends string>(
+    name: TPropertyName,
+    value: YearCalendarPropertyType<YearCalendarProperties, TPropertyName>
+  ): void;
+  public option(...args: unknown[]): YearCalendarProperties | unknown {
+    return super.option.apply(this, args);
+  }
 
   _getDefaultOptions(): YearCalendarProperties {
     return {
@@ -32,12 +71,9 @@ class YearCalendar extends Widget<YearCalendarProperties> {
       firstDayOfWeek: dateLocalization.firstDayOfWeekIndex(),
       onCellClick: undefined,
       showMonthLabel: true,
+      hasAppointment: undefined,
+      getAppointmentColor: undefined,
     };
-  }
-
-  _init(): void {
-    super._init();
-    this._render();
   }
 
   _render(): void {
@@ -48,9 +84,10 @@ class YearCalendar extends Widget<YearCalendarProperties> {
   }
 
   _renderMonthLabel(): void {
-    const showMonthLabel = this.option('showMonthLabel') as unknown as boolean | undefined;
+    const showMonthLabel = this.option('showMonthLabel');
     if (showMonthLabel !== false) {
-      const date = this.option('date') as unknown as Date;
+      const date = this.option('date');
+      if (!date) return;
       const monthNames = dateLocalization.getMonthNames();
       const monthName = monthNames[date.getMonth()];
       const $label = $('<div>')
@@ -61,14 +98,14 @@ class YearCalendar extends Widget<YearCalendarProperties> {
   }
 
   _renderTable(): void {
-    const date = this.option('date') as unknown as Date;
-    const firstDayOfWeek = (this.option('firstDayOfWeek') as unknown as number | undefined) ?? dateLocalization.firstDayOfWeekIndex();
+    const date = this.option('date');
+    if (!date) return;
+    const firstDayOfWeek = this.option('firstDayOfWeek') ?? dateLocalization.firstDayOfWeekIndex();
 
     const $table = $('<table>')
       .attr('role', 'grid')
       .attr('aria-label', `Calendar. Month ${dateLocalization.format(date, 'monthandyear')}`);
 
-    // Render header with day names
     const $thead = $('<thead>');
     const $headerRow = $('<tr>');
     const dayNames = dateLocalization.getDayNames('abbreviated');
@@ -91,11 +128,9 @@ class YearCalendar extends Widget<YearCalendarProperties> {
     $thead.append($headerRow);
     $table.append($thead);
 
-    // Render body with days
     const $tbody = $('<tbody>');
     const days = YearCalendar._getMonthDays(date, firstDayOfWeek);
 
-    // Group days into weeks (rows)
     const weeks: Date[][] = [];
     for (let i = 0; i < days.length; i += 7) {
       weeks.push(days.slice(i, i + 7));
@@ -114,10 +149,26 @@ class YearCalendar extends Widget<YearCalendarProperties> {
           .attr('aria-label', YearCalendar._getAriaLabel(dayDate));
 
         if (isOtherMonth) {
-          $cell.addClass(CALENDAR_OTHER_MONTH_CLASS).addClass(CALENDAR_OTHER_VIEW_CLASS);
+          $cell.addClass(CALENDAR_OTHER_MONTH_CLASS);
         }
 
         const $span = $('<span>').text(dayNumber.toString());
+
+        const hasAppointment = this.option('hasAppointment');
+        const getAppointmentColor = this.option('getAppointmentColor');
+
+        if (!isOtherMonth && hasAppointment && hasAppointment(dayDate)) {
+          $span.addClass(YEAR_CALENDAR_HAS_APPOINTMENT_CLASS);
+
+          if (getAppointmentColor) {
+            getAppointmentColor(dayDate).then((color) => {
+              if (color) {
+                $span.css('background-color', color);
+              }
+            }).catch(() => {});
+          }
+        }
+
         $cell.append($span);
         $row.append($cell);
       });
@@ -184,10 +235,29 @@ class YearCalendar extends Widget<YearCalendarProperties> {
       if (dateValue) {
         const [year, month, day] = dateValue.split('/').map(Number);
         const clickedDate = new Date(year, month - 1, day);
+        const startDate = new Date(clickedDate);
+        startDate.setHours(0, 0, 0, 0);
+        const endDate = new Date(clickedDate);
+        endDate.setHours(23, 59, 59, 999);
 
-        const onCellClick = this.option('onCellClick') as unknown as ((e: { value: Date }) => void) | undefined;
+        const onCellClick = this.option('onCellClick');
         if (onCellClick) {
-          onCellClick({ value: clickedDate });
+          const cellData = {
+            startDate,
+            endDate,
+            startDateUTC: startDate,
+            endDateUTC: endDate,
+            groups: [],
+            groupIndex: 0,
+            allDay: true,
+          };
+          const clickArgs: CellClickArgs = {
+            event: e.originalEvent || e,
+            cellElement: getPublicElement($cell),
+            cellData,
+            cancel: false,
+          };
+          onCellClick(clickArgs);
         }
       }
     });
@@ -196,7 +266,7 @@ class YearCalendar extends Widget<YearCalendarProperties> {
   _optionChanged(args: { name: string; value?: unknown; previousValue?: unknown }): void {
     const { name } = args;
 
-    if (name === 'date' || name === 'firstDayOfWeek' || name === 'showMonthLabel') {
+    if (name === 'date' || name === 'firstDayOfWeek' || name === 'showMonthLabel' || name === 'hasAppointment' || name === 'getAppointmentColor') {
       this._render();
     } else {
       super._optionChanged(args);
