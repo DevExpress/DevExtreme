@@ -589,7 +589,6 @@
                 "Name": "AIColumns",
                 "Widget": "DataGrid",
                 "DemoType": "Web",
-                "Badge": "New",
                 "Equivalents": "Smart Column, AI generated column, AI field, AI Autofill column, Smart Field",
                 "Modules": "openai"
               }
@@ -1344,7 +1343,6 @@
                 "Name": "AIColumns",
                 "Widget": "TreeList",
                 "DemoType": "Web",
-                "Badge": "New",
                 "Equivalents": "Smart Column, AI generated column, AI field, AI Autofill column, Smart Field",
                 "Modules": "openai"
               }
@@ -3686,8 +3684,7 @@
                   "/Models/Appointment.cs",
                   "/Models/SampleData/Appointments.cs"
                 ],
-                "DemoType": "Web",
-                "Badge": "Updated"
+                "DemoType": "Web"
               }
             ]
           },
@@ -3766,7 +3763,6 @@
                   "/Models/SampleData/CinemaData.cs",
                   "/ViewModels/SchedulerViewModel.cs"
                 ],
-                "Badge": "Updated",
                 "DemoType": "Web"
               },
               {
@@ -3790,8 +3786,7 @@
                   "/Models/Job.cs",
                   "/Models/SampleData/Jobs.cs"
                 ],
-                "DemoType": "Web",
-                "Badge":"Updated"
+                "DemoType": "Web"
               },
               {
                 "Title": "Custom View Duration",
@@ -4137,7 +4132,6 @@
                 "Name": "FileAttachments",
                 "Widget": "Chat",
                 "DemoType": "Web",
-                "Badge": "New",
                 "DocUrl": "",
                 "MvcDescription": "",
                 "NetCoreDescription": "",
@@ -4370,7 +4364,6 @@
               "/ViewModels/FormViewModel.cs"
             ],
             "DemoType": "Web",
-            "Badge": "New",
             "Modules": "openai"
           }
         ]
@@ -4865,8 +4858,7 @@
               "/Models/SampleData/Electronics.cs",
               "/ViewModels/SelectBoxViewModel.cs"
             ],
-            "ShowOnMainPage": true,
-            "Badge": "Updated"
+            "ShowOnMainPage": true
           },
           {
             "Title": "Search and Editing",
@@ -5054,7 +5046,6 @@
             "NetCoreDescription": "",
             "MvcAdditionalFiles": [],
             "DemoType": "Web",
-            "Badge": "New",
             "ShowOnMainPage": true
           }
         ]

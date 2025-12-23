@@ -5,7 +5,7 @@ on:
     paths-ignore:
       - 'apps/**/*.md'
   push:
-    branches: [25_2]
+    branches: [26_1]
   workflow_dispatch:
     inputs:
       SBOM:

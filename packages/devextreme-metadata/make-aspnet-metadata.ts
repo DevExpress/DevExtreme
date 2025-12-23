@@ -15,7 +15,7 @@ cleanArtifacts('StrongMetaData.json', 'StrongMetaDataGenerator.cfg.json');
 
 AspNet.makeMetadata({
   args: {
-    version: '25_2',
+    version: '26_1',
     artifacts: PATHS.artifactsDir,
   },
   mutations: [
