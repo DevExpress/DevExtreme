@@ -1,6 +1,6 @@
-import type { ProductType } from './types';
+import type { Product } from './types';
 
-const products: ProductType[] = [
+export const products: Product[] = [
   {
     text: 'Electronics',
     items: [
@@ -336,9 +336,3 @@ const products: ProductType[] = [
     ],
   },
 ];
-
-export default {
-  getProducts(): ProductType[] {
-    return products;
-  },
-};

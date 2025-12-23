@@ -1,6 +1,6 @@
-import type { Product } from './types';
+import type { Product } from './types.ts';
 
-const products: Product[] = [{
+export const products: Product[] = [{
   id: '1',
   text: 'Stores',
   expanded: true,
@@ -293,9 +293,3 @@ const products: Product[] = [{
 
   }],
 }];
-
-export default {
-  getProducts() {
-    return products;
-  },
-};

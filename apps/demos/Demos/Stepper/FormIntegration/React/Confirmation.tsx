@@ -1,14 +1,15 @@
-import React, { FC } from 'react';
+import React from 'react';
+import type { FC } from 'react';
 import 'devextreme-react/date-range-box';
 
-import { BookingFormData } from './types.ts';
+import type { BookingFormData } from './types.ts';
 
 interface ConfirmationProps {
   formData: BookingFormData;
   isConfirmed: boolean;
 }
 
-const Confirmation: FC<ConfirmationProps> = ({ formData, isConfirmed }) => {
+const Confirmation: FC<ConfirmationProps> = ({ formData, isConfirmed }: ConfirmationProps) => {
   if (isConfirmed) {
     return (
       <div className="summary-item-header center">

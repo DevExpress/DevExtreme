@@ -18,13 +18,10 @@ const App = () => {
   const [selectionMode, setSelectionMode] = useState(selectionModes[0]);
   const [isSelectionModeDisabled, setIsSelectionModeDisabled] = useState(false);
   const [isRecursiveDisabled, setIsRecursiveDisabled] = useState(false);
-  const syncSelection = useCallback(
-    (treeView) => {
-      const syncSelectedEmployees = treeView.getSelectedNodes().map((node) => node.itemData);
-      setSelectedEmployees(syncSelectedEmployees);
-    },
-    [setSelectedEmployees],
-  );
+  const syncSelection = useCallback((treeView) => {
+    const syncSelectedEmployees = treeView.getSelectedNodes().map((node) => node.itemData);
+    setSelectedEmployees(syncSelectedEmployees);
+  }, []);
   const treeViewSelectionChanged = useCallback(
     (e) => {
       syncSelection(e.component);
@@ -37,42 +34,30 @@ const App = () => {
     },
     [syncSelection],
   );
-  const showCheckBoxesModeValueChanged = useCallback(
-    (e) => {
-      const value = e.value;
-      setShowCheckBoxesMode(value);
-      if (value === 'selectAll') {
-        setSelectionMode('multiple');
-        setIsRecursiveDisabled(false);
-      }
-      setIsSelectionModeDisabled(value === 'selectAll');
-    },
-    [setShowCheckBoxesMode, setSelectionMode, setIsRecursiveDisabled, setIsSelectionModeDisabled],
-  );
-  const selectionModeValueChanged = useCallback(
-    (e) => {
-      const value = e.value;
-      setSelectionMode(value);
-      if (value === 'single') {
-        setSelectNodesRecursive(false);
-        treeViewRef.current.instance().unselectAll();
-      }
-      setIsRecursiveDisabled(value === 'single');
-    },
-    [setSelectionMode, setSelectNodesRecursive, setIsRecursiveDisabled],
-  );
-  const selectNodesRecursiveValueChanged = useCallback(
-    (e) => {
-      setSelectNodesRecursive(e.value);
-    },
-    [setSelectNodesRecursive],
-  );
-  const selectByClickValueChanged = useCallback(
-    (e) => {
-      setSelectByClick(e.value);
-    },
-    [setSelectByClick],
-  );
+  const showCheckBoxesModeValueChanged = useCallback((e) => {
+    const value = e.value;
+    setShowCheckBoxesMode(value);
+    if (value === 'selectAll') {
+      setSelectionMode('multiple');
+      setIsRecursiveDisabled(false);
+    }
+    setIsSelectionModeDisabled(value === 'selectAll');
+  }, []);
+  const selectionModeValueChanged = useCallback((e) => {
+    const value = e.value;
+    setSelectionMode(value);
+    if (value === 'single') {
+      setSelectNodesRecursive(false);
+      treeViewRef.current?.instance().unselectAll();
+    }
+    setIsRecursiveDisabled(value === 'single');
+  }, []);
+  const selectNodesRecursiveValueChanged = useCallback((e) => {
+    setSelectNodesRecursive(e.value);
+  }, []);
+  const selectByClickValueChanged = useCallback((e) => {
+    setSelectByClick(e.value);
+  }, []);
   return (
     <div>
       <div className="form">

@@ -1,7 +1,7 @@
-export interface Product {
+export type Product = {
   id: string;
   text: string;
   expanded?: boolean;
   items?: Product[];
   price?: number;
-}
+};

@@ -1,4 +1,4 @@
-const products = [
+export const products = [
   {
     id: '1',
     text: 'Stores',
@@ -377,8 +377,3 @@ const products = [
     ],
   },
 ];
-export default {
-  getProducts() {
-    return products;
-  },
-};

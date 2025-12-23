@@ -1,4 +1,4 @@
-import { type StepperTypes } from 'devextreme-react/stepper';
+import type { StepperTypes } from 'devextreme-react/stepper';
 import type { BookingFormData } from './types';
 
 export const initialSteps: StepperTypes.Item[] = [
@@ -19,9 +19,9 @@ export const initialSteps: StepperTypes.Item[] = [
   },
 ];
 
-export const roomTypes = ['Single', 'Double', 'Suite'];
+export const roomTypes: string[] = ['Single', 'Double', 'Suite'];
 
-export const mealPlans = ['Bed & Breakfast', 'Half Board', 'Full Board', 'All-Inclusive'];
+export const mealPlans: string[] = ['Bed & Breakfast', 'Half Board', 'Full Board', 'All-Inclusive'];
 
 export const initialFormData: BookingFormData = {
   dates: [null, null],
@@ -33,7 +33,7 @@ export const initialFormData: BookingFormData = {
   additionalRequest: '',
 };
 
-export const getInitialFormData = () => ({
+export const getInitialFormData = (): BookingFormData => ({
   ...initialFormData,
   dates: [...initialFormData.dates],
 });
