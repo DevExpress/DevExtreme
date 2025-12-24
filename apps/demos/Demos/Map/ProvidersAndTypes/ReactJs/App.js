@@ -11,20 +11,14 @@ const apiKey = {
   google: 'AIzaSyBIw1-l1otL9v1bY-OR4p9w21l1VLu9L2k',
 };
 const App = () => {
-  const [mapTypeValue, setMapTypeValue] = useState(mapTypes[0].key);
   const [mapProviderValue, setMapProviderValue] = useState(mapProviders[0].key);
-  const onMapTypeChange = useCallback(
-    (value) => {
-      setMapTypeValue(value);
-    },
-    [setMapTypeValue],
-  );
-  const onMapProviderChange = useCallback(
-    (value) => {
-      setMapProviderValue(value);
-    },
-    [setMapProviderValue],
-  );
+  const [mapTypeValue, setMapTypeValue] = useState(mapTypes[0].key);
+  const onMapProviderChange = useCallback((value) => {
+    setMapProviderValue(value);
+  }, []);
+  const onMapTypeChange = useCallback((value) => {
+    setMapTypeValue(value);
+  }, []);
   return (
     <div>
       <Map

@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 
 import Map from 'devextreme-react/map';
+import type { MapType, MapProvider } from 'devextreme/ui/map_types';
 import SelectBox from 'devextreme-react/select-box';
 
 import { mapTypes, mapProviders, mapTypeLabel, mapProviderLabel } from './data.ts';
@@ -12,16 +13,16 @@ const apiKey = {
 };
 
 const App = () => {
-  const [mapTypeValue, setMapTypeValue] = useState(mapTypes[0].key);
-  const [mapProviderValue, setMapProviderValue] = useState(mapProviders[0].key);
+  const [mapProviderValue, setMapProviderValue] = useState<MapProvider>(mapProviders[0].key);
+  const [mapTypeValue, setMapTypeValue] = useState<MapType>(mapTypes[0].key);
 
-  const onMapTypeChange = useCallback((value) => {
-    setMapTypeValue(value);
-  }, [setMapTypeValue]);
-
-  const onMapProviderChange = useCallback((value) => {
+  const onMapProviderChange = useCallback((value: MapProvider): void => {
     setMapProviderValue(value);
-  }, [setMapProviderValue]);
+  }, []);
+
+  const onMapTypeChange = useCallback((value: MapType): void => {
+    setMapTypeValue(value);
+  }, []);
 
   return (
     <div>

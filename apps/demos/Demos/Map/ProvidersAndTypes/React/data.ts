@@ -1,6 +1,6 @@
-import { MapType, MapProvider } from 'devextreme/ui/map';
+import type { MapProviderOption, MapTypeOption } from './types.ts';
 
-export const mapTypes: { key: MapType, name: string }[] = [{
+export const mapTypes: MapTypeOption[] = [{
   key: 'roadmap',
   name: 'Road Map',
 }, {
@@ -11,7 +11,7 @@ export const mapTypes: { key: MapType, name: string }[] = [{
   name: 'Hybrid Map',
 }];
 
-export const mapProviders: { key: MapProvider, name: string }[] = [{
+export const mapProviders: MapProviderOption[] = [{
   key: 'azure',
   name: 'Azure',
 }, {
