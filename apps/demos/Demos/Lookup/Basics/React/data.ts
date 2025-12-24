@@ -1,4 +1,6 @@
-export const employeesList = ['John Heart', 'Samantha Bright', 'Arthur Miller', 'Robert Reagan', 'Greta Sims', 'Brett Wade',
+import type { Task } from './types.ts';
+
+export const employeesList: string[] = ['John Heart', 'Samantha Bright', 'Arthur Miller', 'Robert Reagan', 'Greta Sims', 'Brett Wade',
   'Sandra Johnson', 'Ed Holmes', 'Barb Banks', 'Kevin Carter', 'Cindy Stanwick', 'Sammy Hill', 'Davey Jones', 'Victor Norris',
   'Mary Stern', 'Robin Cosworth', 'Kelly Rodriguez', 'James Anderson', 'Antony Remmen', 'Olivia Peyton', 'Taylor Riley',
   'Amelia Harper', 'Wally Hobbs', 'Brad Jameson', 'Karen Goodson', 'Marcus Orbison', 'Sandy Bright', 'Morgan Kennedy',
@@ -6,7 +8,7 @@ export const employeesList = ['John Heart', 'Samantha Bright', 'Arthur Miller', 
   'Maggie Boxter', 'Terry Bradley', 'Gabe Jones', 'Lucy Ball', 'Jim Packard', 'Hannah Brookly', 'Harv Mudd', 'Clark Morgan',
   'Todd Hoffman', 'Jackie Garmin', 'Lincoln Bartlett', 'Brad Farkus', 'Jenny Hobbs', 'Dallas Lou', 'Stu Pizaro'];
 
-export const employeesTasks = [{
+export const employeesTasks: Task[] = [{
   ID: 1,
   Assigned: 'Mr. John Heart',
   Subject: 'Choose between PPO and HMO Health Plan',

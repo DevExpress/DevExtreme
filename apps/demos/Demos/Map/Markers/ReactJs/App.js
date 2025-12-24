@@ -17,7 +17,7 @@ const App = () => {
       setCurrentMarkerUrl(value ? currentMarkerUrl : null);
       setCurrentMarkersData(markersData);
     },
-    [currentMarkerUrl, setCurrentMarkerUrl, setCurrentMarkersData],
+    [currentMarkerUrl],
   );
   const showTooltips = useCallback(() => {
     setCurrentMarkersData(
@@ -27,9 +27,9 @@ const App = () => {
         return newItem;
       }),
     );
-  }, [currentMarkersData, setCurrentMarkersData]);
+  }, [currentMarkersData]);
   return (
-    <React.Fragment>
+    <>
       <Map
         defaultZoom={11}
         height={440}
@@ -56,7 +56,7 @@ const App = () => {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 export default App;
