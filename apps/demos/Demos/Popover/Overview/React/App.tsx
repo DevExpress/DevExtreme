@@ -1,5 +1,6 @@
 import React from 'react';
-import { IPopoverOptions, Popover } from 'devextreme-react/popover';
+import { Popover } from 'devextreme-react/popover';
+import type { IPopoverOptions } from 'devextreme-react/popover';
 
 const animationConfig: IPopoverOptions['animation'] = {
   show: {

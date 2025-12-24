@@ -1,25 +1,28 @@
 import React, { useCallback } from 'react';
 import { Button } from 'devextreme-react/button';
+import type { Employee } from './types.ts';
 
 export interface EmployeeItemProps {
-  employee: { ID: number; FirstName: string; LastName: string; Prefix: string; Position: string; Picture: string; BirthDate: string; HireDate: string; Notes: string; Address: string; };
-  showInfo: any;
+  employee: Employee;
+  showInfo: (employee: Employee) => void;
 }
 
 export function EmployeeItem(props: EmployeeItemProps) {
-  const showInfo = useCallback(() => {
-    props.showInfo(props.employee);
-  }, [props]);
+  const { employee, showInfo } = props;
+
+  const onInfoButtonClick = useCallback(() => {
+    showInfo(employee);
+  }, [employee, showInfo]);
 
   return (
-    <React.Fragment>
-      <img alt={`${props.employee.FirstName} ${props.employee.LastName}`} src={ props.employee.Picture } id={ `image${props.employee.ID}` } /><br />
-      <i>{props.employee.FirstName} {props.employee.LastName}</i><br />
+    <>
+      <img alt={`${employee.FirstName} ${employee.LastName}`} src={ employee.Picture } id={ `image${employee.ID}` } /><br />
+      <i>{employee.FirstName} {employee.LastName}</i><br />
       <Button
         className="button-info"
         text="Details"
-        onClick={showInfo}
+        onClick={onInfoButtonClick}
       />
-    </React.Fragment>
+    </>
   );
 }

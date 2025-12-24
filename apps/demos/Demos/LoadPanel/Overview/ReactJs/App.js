@@ -4,10 +4,8 @@ import { CheckBox } from 'devextreme-react/check-box';
 import { LoadPanel } from 'devextreme-react/load-panel';
 import { employee } from './data.js';
 
-const position = { of: '#employee' };
-const defaultEmployeeInfo = {};
 export default function App() {
-  const [employeeInfo, setEmployeeInfo] = useState(defaultEmployeeInfo);
+  const [employeeInfo, setEmployeeInfo] = useState(null);
   const [loadPanelVisible, setLoadPanelVisible] = useState(false);
   const [showIndicator, setShowIndicator] = useState(true);
   const [shading, setShading] = useState(true);
@@ -16,38 +14,26 @@ export default function App() {
   const hideLoadPanel = useCallback(() => {
     setLoadPanelVisible(false);
     setEmployeeInfo(employee);
-  }, [setLoadPanelVisible, setEmployeeInfo]);
+  }, []);
   const onClick = useCallback(() => {
-    setEmployeeInfo({});
+    setEmployeeInfo(null);
     setLoadPanelVisible(true);
     setTimeout(hideLoadPanel, 3000);
-  }, [setEmployeeInfo, setLoadPanelVisible, hideLoadPanel]);
-  const onShowIndicatorChange = useCallback(
-    (e) => {
-      setShowIndicator(e.value);
-    },
-    [setShowIndicator],
-  );
-  const onShadingChange = useCallback(
-    (e) => {
-      setShading(e.value);
-    },
-    [setShading],
-  );
-  const onShowPaneChange = useCallback(
-    (e) => {
-      setShowPane(e.value);
-    },
-    [setShowPane],
-  );
-  const onHideOnOutsideClickChange = useCallback(
-    (e) => {
-      setHideOnOutsideClick(e.value);
-    },
-    [setHideOnOutsideClick],
-  );
+  }, [hideLoadPanel]);
+  const onShowIndicatorChange = useCallback(({ value }) => {
+    setShowIndicator(value);
+  }, []);
+  const onShadingChange = useCallback(({ value }) => {
+    setShading(value);
+  }, []);
+  const onShowPaneChange = useCallback(({ value }) => {
+    setShowPane(value);
+  }, []);
+  const onHideOnOutsideClickChange = useCallback(({ value }) => {
+    setHideOnOutsideClick(value);
+  }, []);
   return (
-    <React.Fragment>
+    <>
       <div className="header">John Heart</div>
       &nbsp;
       <Button
@@ -56,27 +42,27 @@ export default function App() {
       ></Button>
       <div id="employee">
         <p>
-          Birth date: <b>{employeeInfo.Birth_Date}</b>
+          Birth date: <b>{employeeInfo?.Birth_Date}</b>
         </p>
 
         <p className="address">
           Address:
           <br />
-          <b>{employeeInfo.City}</b>
+          <b>{employeeInfo?.City}</b>
           <br />
-          <span>{employeeInfo.Zipcode}</span>
-          <span>{employeeInfo.Address}</span>
+          <span>{employeeInfo?.Zipcode}</span>
+          <span>{employeeInfo?.Address}</span>
         </p>
 
         <p>
-          Phone: <b>{employeeInfo.Mobile_Phone}</b>
+          Phone: <b>{employeeInfo?.Mobile_Phone}</b>
           <br />
-          Email: <b>{employeeInfo.Email}</b>
+          Email: <b>{employeeInfo?.Email}</b>
         </p>
       </div>
       <LoadPanel
-        shadingColor="rgba(0,0,0,0.4)"
-        position={position}
+        shadingColor="rgba(0, 0, 0, 0.4)"
+        position={{ of: '#employee' }}
         onHiding={hideLoadPanel}
         visible={loadPanelVisible}
         showIndicator={showIndicator}
@@ -119,6 +105,6 @@ export default function App() {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }

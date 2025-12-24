@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from 'react';
-import RangeSlider, { Tooltip, Label, type RangeSliderTypes } from 'devextreme-react/range-slider';
-import NumberBox, { type NumberBoxTypes } from 'devextreme-react/number-box';
+import RangeSlider, { Tooltip, Label } from 'devextreme-react/range-slider';
+import type { RangeSliderTypes } from 'devextreme-react/range-slider';
+import NumberBox from 'devextreme-react/number-box';
+import type { NumberBoxTypes } from 'devextreme-react/number-box';
 
 const defaultValues = {
   defaultMode: [20, 60],
@@ -9,27 +11,31 @@ const defaultValues = {
   withoutRangeHighlighting: [20, 80],
   discreteStep: [20, 70],
   disabled: [25, 75],
-};
+} satisfies Record<string, [number, number]>;
 
 const startValueLabel = { 'aria-label': 'Start Value' };
 const endValueLabel = { 'aria-label': 'End Value' };
 
-function App() {
-  const [startValue, setStartValue] = useState(10);
-  const [endValue, setEndValue] = useState(90);
+function format(value: number): string {
+  return `${value}%`;
+}
 
-  const onRangeChanged = useCallback((data: RangeSliderTypes.ValueChangedEvent) => {
+function App() {
+  const [startValue, setStartValue] = useState<number>(10);
+  const [endValue, setEndValue] = useState<number>(90);
+
+  const onRangeChanged = useCallback((data: RangeSliderTypes.ValueChangedEvent): void => {
     setStartValue(data.start);
     setEndValue(data.end);
-  }, [setStartValue, setEndValue]);
+  }, []);
 
-  const onStartChanged = useCallback((data: NumberBoxTypes.ValueChangedEvent) => {
+  const onStartChanged = useCallback((data: NumberBoxTypes.ValueChangedEvent): void => {
     setStartValue(data.value);
-  }, [setStartValue]);
+  }, []);
 
-  const onEndChanged = useCallback((data: NumberBoxTypes.ValueChangedEvent) => {
+  const onEndChanged = useCallback((data: NumberBoxTypes.ValueChangedEvent): void => {
     setEndValue(data.value);
-  }, [setEndValue]);
+  }, []);
 
   return (
     <div className="form">
@@ -137,10 +143,6 @@ function App() {
       </div>
     </div>
   );
-}
-
-function format(value) {
-  return `${value}%`;
 }
 
 export default App;
