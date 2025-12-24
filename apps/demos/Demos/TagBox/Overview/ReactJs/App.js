@@ -159,19 +159,19 @@ function App() {
             >
               <p>
                 <b>Name: </b>
-                <span>{product.Name}</span>
+                <span>{product?.Name}</span>
               </p>
               <p>
                 <b>Price: </b>
-                <span>{product.Price}</span>
+                <span>{product?.Price}</span>
               </p>
               <p>
                 <b>In-stock: </b>
-                <span>{product.Current_Inventory}</span>
+                <span>{product?.Current_Inventory}</span>
               </p>
               <p>
                 <b>Category: </b>
-                <span>{product.Category}</span>
+                <span>{product?.Category}</span>
               </p>
             </Popover>
           </div>
