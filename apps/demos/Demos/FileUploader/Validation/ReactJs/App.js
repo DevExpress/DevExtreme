@@ -2,6 +2,7 @@ import React from 'react';
 import FileUploader from 'devextreme-react/file-uploader';
 
 const fileExtensions = ['.jpg', '.jpeg', '.gif', '.png'];
+const MAX_UPLOAD_FILE_SIZE = 4000000;
 export default function App() {
   return (
     <div className="main-block">
@@ -25,7 +26,7 @@ export default function App() {
           multiple={true}
           uploadMode="useButtons"
           uploadUrl="https://js.devexpress.com/Demos/NetCore/FileUploader/Upload"
-          maxFileSize={4000000}
+          maxFileSize={MAX_UPLOAD_FILE_SIZE}
         />
         <span className="note">
           {'Maximum file size: '}

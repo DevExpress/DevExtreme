@@ -21,7 +21,7 @@ export default function App() {
         }),
       );
     },
-    [routes, setRoutes],
+    [routes],
   );
   const routeColorChange = useCallback(
     (value) => {
@@ -32,7 +32,7 @@ export default function App() {
         }),
       );
     },
-    [routes, setRoutes],
+    [routes],
   );
   return (
     <div>

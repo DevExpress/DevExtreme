@@ -16,30 +16,18 @@ export default function App() {
   const [uploadMode, setUploadMode] = useState('instantly');
   const [accept, setAccept] = useState('*');
   const [selectedFiles, setSelectedFiles] = useState([]);
-  const onSelectedFilesChanged = useCallback(
-    (e) => {
-      setSelectedFiles(e.value);
-    },
-    [setSelectedFiles],
-  );
-  const onAcceptChanged = useCallback(
-    (e) => {
-      setAccept(e.value);
-    },
-    [setAccept],
-  );
-  const onUploadModeChanged = useCallback(
-    (e) => {
-      setUploadMode(e.value);
-    },
-    [setUploadMode],
-  );
-  const onMultipleChanged = useCallback(
-    (e) => {
-      setMultiple(e.value);
-    },
-    [setMultiple],
-  );
+  const onSelectedFilesChanged = useCallback(({ value }) => {
+    setSelectedFiles(value);
+  }, []);
+  const onAcceptChanged = useCallback(({ value }) => {
+    setAccept(value);
+  }, []);
+  const onUploadModeChanged = useCallback(({ value }) => {
+    setUploadMode(value);
+  }, []);
+  const onMultipleChanged = useCallback(({ value }) => {
+    setMultiple(value);
+  }, []);
   return (
     <div>
       <div className="widget-container">
@@ -56,10 +44,10 @@ export default function App() {
         >
           <div>
             <h4>Selected Files</h4>
-            {selectedFiles.map((file, i) => (
+            {selectedFiles.map((file, index) => (
               <div
                 className="selected-item"
-                key={i}
+                key={index}
               >
                 <span>
                   {`Name: ${file.name}`}
@@ -73,7 +61,7 @@ export default function App() {
                   {`Type ${file.type}`}
                   <br />
                 </span>
-                <span>{`Last Modified Date: ${file.lastModifiedDate}`}</span>
+                <span>{`Last Modified Date: ${new Date(file.lastModified).toDateString()}`}</span>
               </div>
             ))}
           </div>

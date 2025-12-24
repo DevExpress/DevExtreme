@@ -4,22 +4,16 @@ import { SelectBox } from 'devextreme-react';
 import { employees, applyValueModeLabel, lookupLabel } from './data.js';
 
 const applyValueModes = ['instantly', 'useButtons'];
-const getDisplayExpr = (item) => (item ? `${item.FirstName} ${item.LastName}` : '');
+const getDisplayExpr = (employee) => (employee ? `${employee.FirstName} ${employee.LastName}` : '');
 function App() {
   const [selectedValue, setSelectedValue] = useState(null);
   const [applyValueMode, setApplyValueMode] = useState('instantly');
-  const onValueChanged = useCallback(
-    (e) => {
-      setSelectedValue(e.value);
-    },
-    [setSelectedValue],
-  );
-  const changeApplyValueMode = useCallback(
-    (e) => {
-      setApplyValueMode(e.value);
-    },
-    [setApplyValueMode],
-  );
+  const onValueChanged = useCallback(({ value }) => {
+    setSelectedValue(value);
+  }, []);
+  const changeApplyValueMode = useCallback(({ value }) => {
+    setApplyValueMode(value);
+  }, []);
   return (
     <div>
       <div className="dx-fieldset">
