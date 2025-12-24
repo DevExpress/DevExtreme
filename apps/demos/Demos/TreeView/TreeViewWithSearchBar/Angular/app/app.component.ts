@@ -1,8 +1,8 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxSelectBoxModule } from 'devextreme-angular';
-import { DxTreeViewModule, DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
+import { DxTreeViewModule } from 'devextreme-angular/ui/tree-view';
+import type { DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
 import { Product, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -20,6 +20,10 @@ if (window && window.config?.packageConfigPaths) {
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
+  imports: [
+    DxTreeViewModule,
+    DxSelectBoxModule,
+  ],
 })
 export class AppComponent {
   products: Product[];
@@ -36,15 +40,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxTreeViewModule,
-    DxSelectBoxModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

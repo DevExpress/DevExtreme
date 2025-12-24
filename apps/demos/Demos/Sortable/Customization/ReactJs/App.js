@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from 'react';
-import { ScrollView } from 'devextreme-react/scroll-view';
-import { Sortable } from 'devextreme-react/sortable';
-import { SelectBox } from 'devextreme-react/select-box';
-import { CheckBox } from 'devextreme-react/check-box';
-import { NumberBox } from 'devextreme-react/number-box';
+import CheckBox from 'devextreme-react/check-box';
+import NumberBox from 'devextreme-react/number-box';
+import ScrollView from 'devextreme-react/scroll-view';
+import SelectBox from 'devextreme-react/select-box';
+import Sortable from 'devextreme-react/sortable';
 import {
   tasks,
   scrollSensitivityLabel,
@@ -12,8 +12,8 @@ import {
   dragDirectionLabel,
   itemOrientationLabel,
 } from './data.js';
-import Item from './Item.js';
 import DragItem from './DragItem.js';
+import Item from './Item.js';
 
 const dropFeedbackModes = ['push', 'indicate'];
 const itemOrientations = ['vertical', 'horizontal'];
@@ -28,7 +28,7 @@ const App = () => {
   const [scrollSensitivity, setScrollSensitivity] = useState(60);
   const [handle, setHandle] = useState('');
   const [useDragComponent, setUseDragComponent] = useState(false);
-  const [cursorOffset, setCursorOffset] = useState(null);
+  const [cursorOffset, setCursorOffset] = useState(undefined);
   const onDragStart = useCallback(
     (e) => {
       e.itemData = items[e.fromIndex];
@@ -45,52 +45,31 @@ const App = () => {
       ];
       setItems(updatedItems);
     },
-    [items, setItems],
+    [items],
   );
-  const onDropFeedbackModeChanged = useCallback(
-    (e) => {
-      setDropFeedbackMode(e.value);
-    },
-    [setDropFeedbackMode],
-  );
-  const onItemOrientationChanged = useCallback(
-    (e) => {
-      setItemOrientation(e.value);
-      setDragDirection('both');
-    },
-    [setItemOrientation, setDragDirection],
-  );
-  const onDragDirectionChanged = useCallback(
-    (e) => {
-      setDragDirection(e.value);
-    },
-    [setDragDirection],
-  );
-  const onScrollSpeedChanged = useCallback(
-    (e) => {
-      setScrollSpeed(e.value);
-    },
-    [setScrollSpeed],
-  );
-  const onScrollSensitivityChanged = useCallback(
-    (e) => {
-      setScrollSensitivity(e.value);
-    },
-    [setScrollSensitivity],
-  );
-  const onHandleChanged = useCallback(
-    (e) => {
-      setHandle(e.value ? '.handle' : '');
-    },
-    [setHandle],
-  );
-  const onDragTemplateChanged = useCallback(
-    (e) => {
-      setUseDragComponent(!!e.value);
-      setCursorOffset(e.value ? { x: 10, y: 20 } : null);
-    },
-    [setUseDragComponent, setCursorOffset],
-  );
+  const onDropFeedbackModeChanged = useCallback((e) => {
+    setDropFeedbackMode(e.value);
+  }, []);
+  const onItemOrientationChanged = useCallback((e) => {
+    setItemOrientation(e.value);
+    setDragDirection('both');
+  }, []);
+  const onDragDirectionChanged = useCallback((e) => {
+    setDragDirection(e.value);
+  }, []);
+  const onScrollSpeedChanged = useCallback((e) => {
+    setScrollSpeed(e.value);
+  }, []);
+  const onScrollSensitivityChanged = useCallback((e) => {
+    setScrollSensitivity(e.value);
+  }, []);
+  const onHandleChanged = useCallback((e) => {
+    setHandle(e.value ? '.handle' : '');
+  }, []);
+  const onDragTemplateChanged = useCallback((e) => {
+    setUseDragComponent(!!e.value);
+    setCursorOffset(e.value ? { x: 10, y: 20 } : undefined);
+  }, []);
   return (
     <div id="demo-container">
       <div className="widget-container">
@@ -108,7 +87,7 @@ const App = () => {
             scrollSpeed={scrollSpeed}
             scrollSensitivity={scrollSensitivity}
             handle={handle}
-            dragComponent={useDragComponent ? DragItem : null}
+            dragComponent={useDragComponent ? DragItem : undefined}
             cursorOffset={cursorOffset}
             onDragStart={onDragStart}
             onReorder={onReorder}

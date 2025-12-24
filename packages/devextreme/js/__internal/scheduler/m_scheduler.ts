@@ -1328,8 +1328,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   _recalculateWorkspace() {
     // @ts-expect-error
     this._workSpaceRecalculation = new Deferred();
+    triggerResizeEvent(this._workSpace.$element());
     this._waitAsyncTemplate(() => {
-      triggerResizeEvent(this._workSpace.$element());
       this._workSpace.renderCurrentDateTimeLineAndShader();
     });
   }
@@ -1351,7 +1351,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       getResourceManager: () => this.resourceManager,
       getFilteredItems: () => this._layoutManager.filteredItems, // NOTE: used only in agenda
 
-      noDataText: this.option('noDataText'),
+      noDataText: this.option('noDataText') || messageLocalization.format('dxCollectionWidget-noDataText'),
       firstDayOfWeek: this.option('firstDayOfWeek'),
       startDayHour: this.option('startDayHour'),
       endDayHour: this.option('endDayHour'),

@@ -10,7 +10,7 @@ export default function App() {
     setMessages((prevMessages) => [...prevMessages, message]);
   }
   function typingStart({ user }) {
-    if (user.id === currentUser.id) {
+    if (user?.id === currentUser.id) {
       setSupportChatTypingUsers([currentUser]);
     } else {
       setUserChatTypingUsers([supportAgent]);
@@ -24,7 +24,7 @@ export default function App() {
     }
   }
   return (
-    <React.Fragment>
+    <>
       <Chat
         user={currentUser}
         items={messages}
@@ -41,6 +41,6 @@ export default function App() {
         onTypingEnd={typingEnd}
         typingUsers={supportChatTypingUsers}
       />
-    </React.Fragment>
+    </>
   );
 }

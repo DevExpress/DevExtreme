@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import Gantt, {
-  Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing, IGanttOptions,
+  Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing,
 } from 'devextreme-react/gantt';
-import CheckBox, { ICheckBoxOptions } from 'devextreme-react/check-box';
-import SelectBox, { ISelectBoxOptions } from 'devextreme-react/select-box';
-import DateBox, { IDateBoxOptions } from 'devextreme-react/date-box';
+import type { IGanttOptions } from 'devextreme-react/gantt';
+import CheckBox from 'devextreme-react/check-box';
+import type { ICheckBoxOptions } from 'devextreme-react/check-box';
+import SelectBox from 'devextreme-react/select-box';
+import type { ISelectBoxOptions } from 'devextreme-react/select-box';
+import DateBox from 'devextreme-react/date-box';
+import type { IDateBoxOptions } from 'devextreme-react/date-box';
 import {
   tasks, dependencies, resources, resourceAssignments, startDateLabel, endDateLabel,
 } from './data.ts';

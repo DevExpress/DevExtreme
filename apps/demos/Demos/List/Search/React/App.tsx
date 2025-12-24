@@ -1,23 +1,26 @@
 import React, { useCallback, useState } from 'react';
-import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
-import List, { type ListTypes } from 'devextreme-react/list';
+import SelectBox from 'devextreme-react/select-box';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
+import List from 'devextreme-react/list';
+import type { SearchMode } from 'devextreme-react/common';
 import { products, searchModeLabel } from './data.ts';
+import type { Product } from './types.ts';
 
-function ItemTemplate(data) {
+function ItemTemplate(data: Product) {
   return <div>{data.Name}</div>;
 }
 
-const searchModes = ['contains', 'startsWith', 'equals'];
+const searchModes: SearchMode[] = ['contains', 'startswith', 'equals'];
 
 const App = () => {
-  const [searchMode, setSearchMode] = useState<ListTypes.Properties['searchMode']>('contains');
+  const [searchMode, setSearchMode] = useState<SearchMode>('contains');
 
-  const onSearchModeChange = useCallback((args: SelectBoxTypes.ValueChangedEvent) => {
+  const onSearchModeChange = useCallback((args: SelectBoxTypes.ValueChangedEvent): void => {
     setSearchMode(args.value);
-  }, [setSearchMode]);
+  }, []);
 
   return (
-    <React.Fragment>
+    <>
       <div className="list-container">
         <List
           dataSource={products}
@@ -38,7 +41,7 @@ const App = () => {
             onValueChanged={onSearchModeChange} />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 

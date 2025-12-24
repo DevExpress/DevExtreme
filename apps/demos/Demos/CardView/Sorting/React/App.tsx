@@ -1,6 +1,9 @@
 import React from 'react';
+
 import CardView, { Column, CardCover, Sorting } from 'devextreme-react/card-view';
-import { houses, House } from './data.ts';
+
+import { houses } from './data.ts';
+import type { House } from './data.ts';
 
 function imageExpr({ ID }: House): string {
   return `../../../../images/houses/${ID}.jpg`;

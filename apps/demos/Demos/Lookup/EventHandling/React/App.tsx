@@ -1,24 +1,27 @@
 import React, { useCallback, useState } from 'react';
-import { Lookup, DropDownOptions, type LookupTypes } from 'devextreme-react/lookup';
+import type { ApplyValueMode } from 'devextreme-react/common';
+import { Lookup, DropDownOptions } from 'devextreme-react/lookup';
+import type { LookupTypes } from 'devextreme-react/lookup';
 import { SelectBox } from 'devextreme-react';
-import { type SelectBoxTypes } from 'devextreme-react/select-box';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
 import { employees, applyValueModeLabel, lookupLabel } from './data.ts';
+import type { Employee } from './types.ts';
 
-const applyValueModes = ['instantly', 'useButtons'];
+const applyValueModes: ApplyValueMode[] = ['instantly', 'useButtons'];
 
-const getDisplayExpr = (item: { FirstName: string; LastName: string; }) => (item ? `${item.FirstName} ${item.LastName}` : '');
+const getDisplayExpr = (employee?: Employee): string => (employee ? `${employee.FirstName} ${employee.LastName}` : '');
 
 function App() {
-  const [selectedValue, setSelectedValue] = useState(null);
-  const [applyValueMode, setApplyValueMode] = useState<LookupTypes.ApplyValueMode>('instantly');
+  const [selectedValue, setSelectedValue] = useState<Employee | null>(null);
+  const [applyValueMode, setApplyValueMode] = useState<ApplyValueMode>('instantly');
 
-  const onValueChanged = useCallback((e: LookupTypes.ValueChangedEvent) => {
-    setSelectedValue(e.value);
-  }, [setSelectedValue]);
+  const onValueChanged = useCallback(({ value }: LookupTypes.ValueChangedEvent): void => {
+    setSelectedValue(value);
+  }, []);
 
-  const changeApplyValueMode = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
-    setApplyValueMode(e.value);
-  }, [setApplyValueMode]);
+  const changeApplyValueMode = useCallback(({ value }: SelectBoxTypes.ValueChangedEvent): void => {
+    setApplyValueMode(value);
+  }, []);
 
   return (
     <div>

@@ -1,18 +1,12 @@
-import {
-  NgModule, Component, enableProdMode, Pipe, PipeTransform,
-} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
-import {
-  DxCheckBoxModule, DxFileUploaderModule, DxSelectBoxModule,
-} from 'devextreme-angular';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, Pipe, PipeTransform, provideZoneChangeDetection } from '@angular/core';
+import { DxCheckBoxModule, DxFileUploaderModule, DxSelectBoxModule } from 'devextreme-angular';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-@Pipe({ name: 'demodate' })
+@Pipe({ name: 'demodate', standalone: true })
 export class DemoDatePipe implements PipeTransform {
   transform(date: number) {
     return new Date(date);
@@ -33,21 +27,19 @@ if (window && window.config?.packageConfigPaths) {
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
+  imports: [
+    DxCheckBoxModule,
+    DxFileUploaderModule,
+    DxSelectBoxModule,
+    DemoDatePipe,
+  ],
 })
 export class AppComponent {
   value: File[] = [];
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxCheckBoxModule,
-    DxFileUploaderModule,
-    DxSelectBoxModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent, DemoDatePipe],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

@@ -1,13 +1,13 @@
-import type { Product } from './types';
+import type { Product, MenuItem } from './types.ts';
 
-const menuItems = [
+export const menuItems: MenuItem[] = [
   { id: 'expand', text: 'Expand category' },
   { id: 'collapse', text: 'Collapse category' },
   { id: 'details', text: 'Show product details' },
   { id: 'copy', text: 'Copy product info' },
 ];
 
-const products: Product[] = [{
+export const products: Product[] = [{
   id: '1',
   text: 'Stores',
   expanded: true,
@@ -300,13 +300,3 @@ const products: Product[] = [{
 
   }],
 }];
-
-export default {
-  getProducts() {
-    return products;
-  },
-
-  getMenuItems() {
-    return menuItems;
-  },
-};

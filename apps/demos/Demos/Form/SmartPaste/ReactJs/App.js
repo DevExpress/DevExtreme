@@ -24,7 +24,7 @@ const emailAIOptions = {
   instruction:
     'Do not fill this field if the text contains an invalid email address. A valid email is in the following format: email@example.com',
 };
-const zipEditorOptions = { stylingMode, mode: 'text', value: null };
+const zipEditorOptions = { stylingMode, mode: 'text' };
 const zipAIOptions = {
   instruction:
     'If the text does not contain a ZIP, determine the ZIP code from the provided address.',
@@ -70,28 +70,26 @@ export async function getAIResponse(messages, signal) {
     temperature: 0.7,
   };
   const response = await aiService.chat.completions.create(params, { signal });
-  const result = response.choices[0].message?.content;
-  return result;
+  return response.choices[0].message?.content ?? '';
 }
 export const aiIntegration = new AIIntegration({
   sendRequest({ prompt }) {
     const controller = new AbortController();
     const signal = controller.signal;
     const aiPrompt = [
-      { role: 'system', content: prompt.system },
-      { role: 'user', content: prompt.user },
+      { role: 'system', content: prompt.system ?? '' },
+      { role: 'user', content: prompt.user ?? '' },
     ];
     const promise = getAIResponse(aiPrompt, signal);
     promise.catch(() => {
       showNotification('Something went wrong. Please try again.', '#form', true);
     });
-    const result = {
+    return {
       promise,
       abort: () => {
         controller.abort();
       },
     };
-    return result;
   },
 });
 const App = () => {
@@ -118,13 +116,13 @@ const App = () => {
     }
   }, []);
   useEffect(() => {
-    formRef.current.instance().registerKeyHandler('V', shortcutHandler);
+    formRef.current?.instance().registerKeyHandler('V', shortcutHandler);
   }, [shortcutHandler]);
   const onTextAreaValueChanged = useCallback((e) => {
     setText(e.value);
   }, []);
   return (
-    <React.Fragment>
+    <>
       <div
         id="textarea-label"
         className="instruction"
@@ -248,7 +246,7 @@ const App = () => {
           />
         </GroupItem>
       </Form>
-    </React.Fragment>
+    </>
   );
 };
 export default App;

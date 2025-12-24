@@ -1,28 +1,30 @@
 import React, { useCallback, useState } from 'react';
-import FileUploader, { type FileUploaderTypes } from 'devextreme-react/file-uploader';
+import FileUploader from 'devextreme-react/file-uploader';
+import type { FileUploaderTypes } from 'devextreme-react/file-uploader';
+import type { Chunk } from './types.ts';
 
-function getValueInKb(value: number) {
+function getValueInKb(value: number): string {
   return `${(value / 1024).toFixed(0)}kb`;
 }
 
 export default function App() {
-  const [chunks, setChunks] = useState([]);
+  const [chunks, setChunks] = useState<Chunk[]>([]);
 
-  const onUploadProgress = useCallback((e: FileUploaderTypes.ProgressEvent) => {
+  const onUploadProgress = useCallback((e: FileUploaderTypes.ProgressEvent): void => {
     const chunk = {
       segmentSize: e.segmentSize,
       bytesLoaded: e.bytesLoaded,
       bytesTotal: e.bytesTotal,
     };
     setChunks([...chunks, chunk]);
-  }, [chunks, setChunks]);
+  }, [chunks]);
 
   const onUploadStarted = useCallback(() => {
     setChunks([]);
-  }, [setChunks]);
+  }, []);
 
   return (
-    <React.Fragment>
+    <>
       <FileUploader
         name="file"
         accept="image/*"
@@ -35,18 +37,18 @@ export default function App() {
       <span className="note">Maximum file size: <span>4 MB.</span></span>
       <div className="chunk-panel">
         {
-          chunks.map((c, i) => (
-            <div key={i}>
+          chunks.map((chunk: Chunk, index: number) => (
+            <div key={index}>
               <span>Chunk size:</span>
-              <span className="segment-size">{getValueInKb(c.segmentSize)}</span>
+              <span className="segment-size">{getValueInKb(chunk.segmentSize)}</span>
               <span>, Uploaded:</span>
-              <span className="loaded-size">{getValueInKb(c.bytesLoaded)}</span>
+              <span className="loaded-size">{getValueInKb(chunk.bytesLoaded)}</span>
               <span>/</span>
-              <span className="total-size">{getValueInKb(c.bytesTotal)}</span>
+              <span className="total-size">{getValueInKb(chunk.bytesTotal)}</span>
             </div>
           ))
         }
       </div>
-    </React.Fragment>
+    </>
   );
 }

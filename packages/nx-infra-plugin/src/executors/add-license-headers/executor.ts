@@ -3,13 +3,15 @@ import * as path from 'path';
 import { glob } from 'glob';
 import { AddLicenseHeadersExecutorSchema } from './schema';
 import { resolveProjectPath, normalizeGlobPathForWindows } from '../../utils/path-resolver';
+import { isWindowsOS } from '../../utils/common';
 import { logError } from '../../utils/error-handler';
 import { readJson, readFileText, writeFileText } from '../../utils/file-operations';
 
 const DEFAULT_TARGET_DIR = './npm';
 const DEFAULT_PACKAGE_JSON = './package.json';
 
-const GLOB_PATTERN = '**/*.{ts,js}';
+const DEFAULT_INCLUDE_PATTERNS = ['**/*.{ts,js}'];
+const DEFAULT_EXCLUDE_PATTERNS = ['**/*.json', '**/*.map'];
 
 const LICENSE_MARKER = '/*!';
 const COMMENT_END = ' */';
@@ -43,6 +45,10 @@ const runExecutor: PromiseExecutor<AddLicenseHeadersExecutorSchema> = async (opt
     absoluteProjectRoot,
     options.packageJsonPath || DEFAULT_PACKAGE_JSON,
   );
+  const separatorBetweenBannerAndContent =
+    typeof options.separatorBetweenBannerAndContent === 'undefined'
+      ? NEWLINE
+      : options.separatorBetweenBannerAndContent;
 
   let pkg;
   try {
@@ -96,8 +102,26 @@ const runExecutor: PromiseExecutor<AddLicenseHeadersExecutorSchema> = async (opt
   const banner = renderTemplate(bannerTemplate, data);
 
   try {
-    const pattern = normalizeGlobPathForWindows(path.join(targetDirectory, GLOB_PATTERN));
-    const files = await glob(pattern);
+    const includePatterns = options.includePatterns || DEFAULT_INCLUDE_PATTERNS;
+    const excludePatterns = options.excludePatterns || DEFAULT_EXCLUDE_PATTERNS;
+
+    const patterns = includePatterns.map((pattern) => {
+      const result = path.join(targetDirectory, pattern);
+
+      if (isWindowsOS()) {
+        return normalizeGlobPathForWindows(result);
+      }
+
+      return result;
+    });
+
+    const allFiles: string[] = [];
+    for (const pattern of patterns) {
+      const matchedFiles = await glob(pattern, { ignore: excludePatterns });
+      allFiles.push(...matchedFiles);
+    }
+
+    const files = [...new Set(allFiles)];
 
     logger.info(`Adding license headers to ${files.length} files...`);
 
@@ -109,7 +133,7 @@ const runExecutor: PromiseExecutor<AddLicenseHeadersExecutorSchema> = async (opt
           return;
         }
 
-        await writeFileText(file, banner + NEWLINE + content);
+        await writeFileText(file, banner + separatorBetweenBannerAndContent + content);
       }),
     );
 

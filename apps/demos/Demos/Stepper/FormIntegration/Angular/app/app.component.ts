@@ -1,18 +1,12 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import {
   DxButtonModule,
-  DxDateRangeBoxModule,
-  DxFormModule,
   DxMultiViewModule,
-  DxNumberBoxModule,
-  DxSelectBoxModule,
-  DxTextAreaModule,
 } from 'devextreme-angular';
 import { DxStepperModule, type DxStepperTypes } from 'devextreme-angular/ui/stepper';
 import { AppService } from './app.service';
-import { BookingFormData } from './app.types';
+import type { BookingFormData } from './app.types';
 import { DatesFormComponent } from './dates-form/dates-form.component';
 import { GuestsFormComponent } from './guests-form/guests-form.component';
 import { RoomMealPlanFormComponent } from './room-meal-plan-form/room-meal-plan-form.component';
@@ -35,6 +29,16 @@ if (window && window.config?.packageConfigPaths) {
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
+  imports: [
+    DxButtonModule,
+    DxMultiViewModule,
+    DxStepperModule,
+    DatesFormComponent,
+    GuestsFormComponent,
+    RoomMealPlanFormComponent,
+    AdditionalFormComponent,
+    ConfirmationComponent,
+  ],
 })
 export class AppComponent {
   steps: DxStepperTypes.Item[];
@@ -135,29 +139,9 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxButtonModule,
-    DxDateRangeBoxModule,
-    DxFormModule,
-    DxMultiViewModule,
-    DxNumberBoxModule,
-    DxSelectBoxModule,
-    DxStepperModule,
-    DxTextAreaModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
+    AppService,
   ],
-  declarations: [
-    AppComponent,
-    DatesFormComponent,
-    GuestsFormComponent,
-    RoomMealPlanFormComponent,
-    AdditionalFormComponent,
-    ConfirmationComponent,
-  ],
-  bootstrap: [AppComponent],
-  providers: [AppService],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

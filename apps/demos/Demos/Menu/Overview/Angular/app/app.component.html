@@ -11,11 +11,13 @@
       (onItemClick)="itemClick($event)"
     >
     </dx-menu>
-    <div id="product-details" *ngIf="currentProduct">
+    @if (currentProduct) {
+    <div id="product-details">
       <img src="{{ currentProduct.icon }}" />
       <div class="name">{{ currentProduct.name }}</div>
       <div class="price">{{ "$" + currentProduct.price }}</div>
     </div>
+    }
   </div>
   <div class="options">
     <div class="caption">Options</div>

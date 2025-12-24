@@ -17,12 +17,12 @@ const ButtonDescription = ({ text, description }) => (
   </div>
 );
 const DropDownButtonTemplate = () => (
-  <React.Fragment>
+  <>
     <Avatar icon="../../../../images/employees/51.png" />
     <ButtonDescription
       text="Olivia Peyton"
       description="IT Manager"
     />
-  </React.Fragment>
+  </>
 );
 export default DropDownButtonTemplate;

@@ -1,6 +1,5 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxSchedulerModule, DxSelectBoxModule } from 'devextreme-angular';
 import { getTimeZones, dxSchedulerTimeZone } from 'devextreme/time_zone_utils';
 import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
@@ -23,6 +22,10 @@ if (window && window.config?.packageConfigPaths) {
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
   preserveWhitespaces: true,
+  imports: [
+    DxSchedulerModule,
+    DxSelectBoxModule,
+  ],
 })
 export class AppComponent {
   locations: string[];
@@ -64,15 +67,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxSchedulerModule,
-    DxSelectBoxModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

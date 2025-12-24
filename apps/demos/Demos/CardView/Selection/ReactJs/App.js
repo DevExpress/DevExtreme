@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback } from 'react';
 import CardView, { Column, CardCover, Selection } from 'devextreme-react/card-view';
-import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
+import SelectBox from 'devextreme-react/select-box';
 import { employees } from './data.js';
 
 function altExpr({ FullName }) {
@@ -21,10 +21,10 @@ const App = () => {
   const cardViewRef = useRef(null);
   const onSelectionModeChange = useCallback((value) => {
     setSelectionMode(value);
-    cardViewRef.current.instance().clearSelection();
+    cardViewRef.current?.instance().clearSelection();
   }, []);
   return (
-    <React.Fragment>
+    <>
       <div className="options-panel">
         <div className="caption">Options</div>
         <div className="options-container">
@@ -90,7 +90,7 @@ const App = () => {
         <Column dataField="Phone" />
         <Column dataField="Email" />
       </CardView>
-    </React.Fragment>
+    </>
   );
 };
 export default App;

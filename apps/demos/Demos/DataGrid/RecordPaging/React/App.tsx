@@ -1,12 +1,12 @@
 import React, { useCallback, useState } from 'react';
-import DataGrid, {
-  DataGridTypes,
-  Scrolling, Pager, Paging,
-} from 'devextreme-react/data-grid';
-import { PagerPageSize } from 'devextreme-react/common/grids';
-import { DisplayMode } from 'devextreme-react/common';
+
+import DataGrid, { Scrolling, Pager, Paging } from 'devextreme-react/data-grid';
+import type { DataGridTypes } from 'devextreme-react/data-grid';
+import type { PagerPageSize } from 'devextreme-react/common/grids';
+import type { DisplayMode } from 'devextreme-react/common';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
+
 import { generateData, displayModeLabel } from './data.ts';
 
 const displayModes = [{ text: 'Display Mode \'full\'', value: 'full' }, { text: 'Display Mode \'compact\'', value: 'compact' }];

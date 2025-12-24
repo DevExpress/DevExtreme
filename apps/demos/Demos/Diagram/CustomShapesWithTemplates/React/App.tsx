@@ -3,7 +3,8 @@ import Diagram, { CustomShape, Nodes, AutoLayout } from 'devextreme-react/diagra
 import { Popup } from 'devextreme-react/popup';
 import { ArrayStore } from 'devextreme-react/common/data';
 import CustomShapeTemplate from './CustomShapeTemplate.tsx';
-import service, { Employee as EmployeeType } from './data.ts';
+import service from './data.ts';
+import type { Employee as EmployeeType } from './data.ts';
 
 const employees = service.getEmployees();
 const dataSource = new ArrayStore({

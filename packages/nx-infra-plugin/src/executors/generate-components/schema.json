@@ -7,7 +7,7 @@
     },
     "framework": {
       "type": "string",
-      "enum": ["react", "vue"],
+      "enum": ["react", "vue", "angular"],
       "default": "react",
       "description": "Target framework for component generation"
     },

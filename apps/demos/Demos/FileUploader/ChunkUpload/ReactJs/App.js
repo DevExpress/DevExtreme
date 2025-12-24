@@ -15,13 +15,13 @@ export default function App() {
       };
       setChunks([...chunks, chunk]);
     },
-    [chunks, setChunks],
+    [chunks],
   );
   const onUploadStarted = useCallback(() => {
     setChunks([]);
-  }, [setChunks]);
+  }, []);
   return (
-    <React.Fragment>
+    <>
       <FileUploader
         name="file"
         accept="image/*"
@@ -37,17 +37,17 @@ export default function App() {
         Maximum file size: <span>4 MB.</span>
       </span>
       <div className="chunk-panel">
-        {chunks.map((c, i) => (
-          <div key={i}>
+        {chunks.map((chunk, index) => (
+          <div key={index}>
             <span>Chunk size:</span>
-            <span className="segment-size">{getValueInKb(c.segmentSize)}</span>
+            <span className="segment-size">{getValueInKb(chunk.segmentSize)}</span>
             <span>, Uploaded:</span>
-            <span className="loaded-size">{getValueInKb(c.bytesLoaded)}</span>
+            <span className="loaded-size">{getValueInKb(chunk.bytesLoaded)}</span>
             <span>/</span>
-            <span className="total-size">{getValueInKb(c.bytesTotal)}</span>
+            <span className="total-size">{getValueInKb(chunk.bytesTotal)}</span>
           </div>
         ))}
       </div>
-    </React.Fragment>
+    </>
   );
 }

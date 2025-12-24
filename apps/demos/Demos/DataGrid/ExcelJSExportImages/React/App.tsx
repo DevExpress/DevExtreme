@@ -1,12 +1,14 @@
 import React from 'react';
-import DataGrid, { Column, type DataGridTypes, Export } from 'devextreme-react/data-grid';
-import { Anchor, Workbook } from 'devextreme-exceljs-fork';
 import { saveAs } from 'file-saver-es';
+
+import DataGrid, { Column, Export } from 'devextreme-react/data-grid';
+import type { DataGridTypes } from 'devextreme-react/data-grid';
+import { Anchor, Workbook } from 'devextreme-exceljs-fork';
 import { exportDataGrid } from 'devextreme-react/common/export/excel';
 
 import { employees } from './data.ts';
 
-const renderGridCell = (cellData) => (<div><img src={cellData.value} alt='Employee photo'></img></div>);
+const renderGridCell = (cellData: DataGridTypes.ColumnCellTemplateData) => (<div><img src={cellData.value} alt='Employee photo'></img></div>);
 
 const onExporting = (e: DataGridTypes.ExportingEvent) => {
   const workbook = new Workbook();

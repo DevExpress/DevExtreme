@@ -1,6 +1,5 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxSchedulerModule, DxRadioGroupModule } from 'devextreme-angular';
 import { DxRadioGroupTypes } from 'devextreme-angular/ui/radio-group';
 import { Appointment, Service } from './app.service';
@@ -20,6 +19,10 @@ if (window && window.config?.packageConfigPaths) {
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
+  imports: [
+    DxSchedulerModule,
+    DxRadioGroupModule,
+  ],
 })
 export class AppComponent {
   appointmentsData: Appointment[];
@@ -48,15 +51,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxSchedulerModule,
-    DxRadioGroupModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

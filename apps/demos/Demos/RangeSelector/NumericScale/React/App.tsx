@@ -1,7 +1,9 @@
 import React from 'react';
+
 import RangeSelector, {
-  Margin, Chart, CommonSeriesSettings, Series, Scale,
+  Chart, CommonSeriesSettings, Margin, Scale, Series,
 } from 'devextreme-react/range-selector';
+
 import { dataSource } from './data.ts';
 
 const defaultValue = ['1', '2'];

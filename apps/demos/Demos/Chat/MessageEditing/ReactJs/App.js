@@ -16,8 +16,8 @@ const editingStrategy = {
   disabled: false,
   custom: ({ component, message }) => {
     const { items, user } = component.option();
-    const userId = user.id;
-    const lastNotDeletedMessage = items.findLast(
+    const userId = user?.id;
+    const lastNotDeletedMessage = items?.findLast(
       (item) => item.author?.id === userId && !item.isDeleted,
     );
     return message.id === lastNotDeletedMessage?.id;
@@ -79,7 +79,7 @@ export default function App() {
     setAllowDeleting(() => strategy);
   }, []);
   return (
-    <React.Fragment>
+    <>
       <div className="chat-container">
         <Chat
           height={600}
@@ -122,6 +122,6 @@ export default function App() {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }

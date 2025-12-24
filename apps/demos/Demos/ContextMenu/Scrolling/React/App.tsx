@@ -6,15 +6,15 @@ import notify from 'devextreme/ui/notify';
 import { contextMenuItems as items } from './data.ts';
 import type { ContextMenuItem } from './types';
 
-function itemClick(e: ContextMenuTypes.ItemClickEvent<ContextMenuItem>) {
-  if (!e.itemData.items) {
-    notify(`The "${e.itemData.text}" item was clicked`, 'success', 1500);
+function itemClick(e: ContextMenuTypes.ItemClickEvent<ContextMenuItem>): void {
+  if (!e.itemData?.items) {
+    notify(`The "${e.itemData?.text}" item was clicked`, 'success', 1500);
   }
 }
 
 function App() {
   return (
-    <React.Fragment>
+    <>
       <div className="target-area">
         Right click within this region to display the DevExtreme Context Menu
       </div>
@@ -24,7 +24,7 @@ function App() {
         target= ".target-area"
         onItemClick= {itemClick}
       />
-    </React.Fragment>
+    </>
   );
 }
 

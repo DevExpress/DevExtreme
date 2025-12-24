@@ -13,10 +13,12 @@
     messageTemplate="messageTemplate"
   >
     <div *dxTemplate="let data of 'messageTemplate'">
-      <ng-container *ngIf="data.message.text === regenerationText">
+      @if (data.message.text === regenerationText) {
+      <ng-container>
         <span>{{ regenerationText }}</span>
       </ng-container>
-      <ng-container *ngIf="data.message.text !== regenerationText">
+      } @if (data.message.text !== regenerationText) {
+      <ng-container>
         <div
           class="chat-messagebubble-text"
           [innerHTML]="convertToHtml(data.message)"
@@ -39,6 +41,7 @@
           </dx-button>
         </div>
       </ng-container>
+      }
     </div>
   </dx-chat>
 </div>

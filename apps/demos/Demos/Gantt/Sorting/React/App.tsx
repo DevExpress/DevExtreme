@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import Gantt, {
-  Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing, Sorting, ISortingProps,
+  Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing, Sorting,
 } from 'devextreme-react/gantt';
-import CheckBox, { ICheckBoxOptions } from 'devextreme-react/check-box';
-import { SelectBox, ISelectBoxOptions } from 'devextreme-react/select-box';
+import type { ISortingProps } from 'devextreme-react/gantt';
+import CheckBox from 'devextreme-react/check-box';
+import type { ICheckBoxOptions } from 'devextreme-react/check-box';
+import { SelectBox } from 'devextreme-react/select-box';
+import type { ISelectBoxOptions } from 'devextreme-react/select-box';
 import {
   tasks, dependencies, resources, resourceAssignments, sortingModeLabel,
 } from './data.ts';

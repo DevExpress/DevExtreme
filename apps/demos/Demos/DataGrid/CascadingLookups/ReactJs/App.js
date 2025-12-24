@@ -4,8 +4,7 @@ import { employees, states, cities } from './data.js';
 
 const onEditorPreparing = (e) => {
   if (e.parentType === 'dataRow' && e.dataField === 'CityID') {
-    const isStateNotSet = e.row.data.StateID === undefined;
-    e.editorOptions.disabled = isStateNotSet;
+    e.editorOptions.disabled = e.row.data.StateID === undefined;
   }
 };
 const getFilteredCities = (options) => ({

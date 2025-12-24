@@ -4,7 +4,7 @@ import { formatDate } from 'devextreme-react/common/core/localization';
 import { type SchedulerTypes } from 'devextreme-react/scheduler';
 import { moviesData } from './data.ts';
 
-const getMovieById = (id) => Query(moviesData).filter(['id', id]).toArray()[0];
+const getMovieById = (id: number) => Query(moviesData).filter(['id', id]).toArray()[0];
 
 type AppointmentProps = {
   data: { targetedAppointmentData: SchedulerTypes.Appointment; }

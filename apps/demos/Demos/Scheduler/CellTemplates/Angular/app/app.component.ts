@@ -1,8 +1,6 @@
-import {
-  NgModule, Component, enableProdMode, Pipe, PipeTransform,
-} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, Pipe, PipeTransform, provideZoneChangeDetection } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { DxSchedulerComponent, DxSchedulerModule } from 'devextreme-angular';
 import { DataSource } from 'devextreme-angular/common/data';
 import notify from 'devextreme/ui/notify';
@@ -30,6 +28,11 @@ if (window && window.config?.packageConfigPaths) {
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [DataService],
+  imports: [
+    DxSchedulerModule,
+    ApplyPipe,
+    DatePipe,
+  ],
 })
 export class AppComponent {
   dataSource: DataSource;
@@ -182,14 +185,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxSchedulerModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent, ApplyPipe],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

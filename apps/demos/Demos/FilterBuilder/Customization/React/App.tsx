@@ -1,5 +1,8 @@
 import React, { useCallback, useState } from 'react';
-import FilterBuilder, { CustomOperation, type FilterBuilderTypes, ICustomOperationProps } from 'devextreme-react/filter-builder';
+
+import FilterBuilder, { CustomOperation } from 'devextreme-react/filter-builder';
+import type { FilterBuilderTypes, ICustomOperationProps } from 'devextreme-react/filter-builder';
+
 import { filter, fields, groupOperations } from './data.ts';
 import { formatValue } from './helpers.ts';
 import { EditorComponent } from './EditorComponent.tsx';
@@ -10,21 +13,21 @@ function App() {
   const [dataSourceText, setDataSourceText] = useState('');
 
   const updateTexts = useCallback((e: FilterBuilderTypes.InitializedEvent) => {
-    setFilterText(formatValue(e.component.option('value')));
-    setDataSourceText(formatValue(e.component.getFilterExpression()));
-  }, [setFilterText, setDataSourceText]);
+    setFilterText(formatValue(e.component?.option('value')));
+    setDataSourceText(formatValue(e.component?.getFilterExpression()));
+  }, []);
 
   const onValueChanged = useCallback((e: FilterBuilderTypes.ValueChangedEvent) => {
     setValue(e.value);
     updateTexts(e);
-  }, [updateTexts, setValue]);
+  }, [updateTexts]);
 
   const calculateFilterExpression: ICustomOperationProps['calculateFilterExpression'] = useCallback((filterValue, field) => (
     filterValue?.length
       && Array.prototype.concat
         .apply(
           [],
-          filterValue.map((i) => [[field.dataField, '=', i], 'or']),
+          filterValue.map((i: string) => [[field.dataField, '=', i], 'or']),
         )
         .slice(0, -1)
   ), []);

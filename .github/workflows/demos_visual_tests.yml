@@ -190,7 +190,7 @@ jobs:
   build-demos:
     runs-on: devextreme-shr2
     name: Build Demos Bundles
-    timeout-minutes: 20
+    timeout-minutes: 30
     needs: [check-should-run, determine-framework-tests-scope, build-devextreme]
     if: |
       always() &&
@@ -271,7 +271,7 @@ jobs:
       needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&
       needs.build-devextreme.result == 'success'
     runs-on: devextreme-shr2
-    timeout-minutes: 20
+    timeout-minutes: 30
 
     steps:
       - name: Get sources
@@ -310,7 +310,7 @@ jobs:
       - name: Install tgz
         run: pnpm add -w ./devextreme-installer.tgz ./devextreme-dist-installer.tgz ./devextreme-react-installer.tgz ./devextreme-vue-installer.tgz ./devextreme-angular-installer.tgz
 
-      - name: Run check TS for Vue
+      - name: Demos - Check Vue TS
         working-directory: apps/demos
         run: pnpm run ts-check-vue
 
@@ -318,9 +318,9 @@ jobs:
       #   working-directory: apps/demos
       #   run: pnpm run ts-check-ng
 
-      # - name: Run check TS for React
-      #   working-directory: apps/demos
-      #   run: pnpm run ts-check-react
+      - name: Demos - Check React TS
+        working-directory: apps/demos
+        run: pnpm run ts-check-react
 
   lint:
     name: Lint code base

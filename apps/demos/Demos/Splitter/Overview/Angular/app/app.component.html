@@ -35,7 +35,8 @@
             template="Nested Right Pane"
           ></dxi-splitter-item>
 
-          <ng-container *ngFor="let pane of paneContentTemplates">
+          @for (pane of paneContentTemplates; track pane.name) {
+          <ng-container>
             <div *dxTemplate="let data of pane.name" tabindex="0">
               <ng-template
                 [ngTemplateOutlet]="customPaneTemplate"
@@ -44,10 +45,12 @@
               </ng-template>
             </div>
           </ng-container>
+          }
         </dx-splitter>
       </dxi-splitter-item>
 
-      <ng-container *ngFor="let pane of paneContentTemplates">
+      @for (pane of paneContentTemplates; track pane.name) {
+      <ng-container>
         <div *dxTemplate="let data of pane.name" tabindex="0">
           <ng-template
             [ngTemplateOutlet]="customPaneTemplate"
@@ -56,6 +59,7 @@
           </ng-template>
         </div>
       </ng-container>
+      }
     </dx-splitter>
   </dxi-splitter-item>
   <dxi-splitter-item
@@ -65,7 +69,8 @@
     template="Right Pane"
   ></dxi-splitter-item>
 
-  <ng-container *ngFor="let pane of paneContentTemplates">
+  @for (pane of paneContentTemplates; track pane.name) {
+  <ng-container>
     <div *dxTemplate="let data of pane.name" tabindex="0">
       <ng-template
         [ngTemplateOutlet]="customPaneTemplate"
@@ -74,14 +79,17 @@
       </ng-template>
     </div>
   </ng-container>
+  }
 </dx-splitter>
 
 <ng-template #customPaneTemplate let-data="data" let-title="title">
   <div class="pane-content">
     <div class="pane-title">{{ title }}</div>
     <div class="pane-state">{{ getPaneState(data) }}</div>
-    <ng-container *ngFor="let item of filterDimensionOptions(data)">
+    @for (item of filterDimensionOptions(data); track item.key) {
+    <ng-container>
       <div class="pane-option">{{ item.key }}: {{ item.value }}</div>
     </ng-container>
+    }
   </div>
 </ng-template>

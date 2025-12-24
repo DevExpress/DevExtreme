@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-webpack5';
 import dxSpeechToText from 'devextreme/ui/speech_to_text';
 import { wrapDxWithReact } from '../utils';
 

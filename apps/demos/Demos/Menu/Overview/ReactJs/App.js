@@ -2,12 +2,11 @@ import React, { useCallback, useState } from 'react';
 import { Menu } from 'devextreme-react/menu';
 import { SelectBox } from 'devextreme-react/select-box';
 import { CheckBox } from 'devextreme-react/check-box';
-import service from './data.js';
+import { products } from './data.js';
 
 const orientations = ['horizontal', 'vertical'];
 const orientationLabel = { 'aria-label': 'Orientation' };
 const showSubmenuModeLabel = { 'aria-label': 'Show Submenu Mode' };
-const products = service.getProducts();
 const showSubmenuModes = [
   {
     name: 'onHover',
@@ -18,7 +17,7 @@ const showSubmenuModes = [
     delay: { show: 0, hide: 300 },
   },
 ];
-const isProductItem = (item) => !('items' in item);
+const isProductItem = (item) => !!item && !('items' in item);
 const App = () => {
   const [showFirstSubmenuModes, setShowFirstSubmenuModes] = useState(showSubmenuModes[1]);
   const [orientation, setOrientation] = useState('horizontal');
@@ -52,7 +51,10 @@ const App = () => {
         />
         {currentProduct && (
           <div id="product-details">
-            <img src={currentProduct.icon} />
+            <img
+              src={currentProduct.icon}
+              alt="Product icon"
+            />
             <div className="name">{currentProduct.name}</div>
             <div className="price">{`$${currentProduct.price}`}</div>
           </div>

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import Diagram, { CustomShape, Group, Toolbox, DiagramRef } from 'devextreme-react/diagram';
+import Diagram, { CustomShape, Group, Toolbox } from 'devextreme-react/diagram';
+import type { DiagramRef } from 'devextreme-react/diagram';
 import service from './data.ts';
 import 'whatwg-fetch';
 

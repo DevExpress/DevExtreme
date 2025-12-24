@@ -1,21 +1,22 @@
 import React from 'react';
+import type { CalendarTypes } from 'devextreme-react/calendar';
 
-export function isWeekend(date: Date) {
+export function isWeekend(date: Date): boolean {
   const day = date.getDay();
   return day === 0 || day === 6;
 }
 
-const holidays = [
+const holidays: number[][] = [
   [1, 0],
   [4, 6],
   [25, 11],
 ];
 
-export function isHoliday(date: Date) {
-  return holidays.some((item) => date.getDate() === item[0] && date.getMonth() === item[1]);
+export function isHoliday(date: Date): boolean {
+  return holidays.some((item: number[]): boolean => date.getDate() === item[0] && date.getMonth() === item[1]);
 }
 
-function getCellCssClass({ date, view }) {
+function getCellCssClass({ date, view }: CalendarTypes.CellTemplateData): string {
   let cssClass = '';
 
   if (view === 'month') {
@@ -35,7 +36,11 @@ function getCellCssClass({ date, view }) {
   return cssClass;
 }
 
-function CustomCell({ data: cell }) {
+interface CustomCellProps {
+  data: CalendarTypes.CellTemplateData;
+}
+
+function CustomCell({ data: cell }: CustomCellProps) {
   const { text } = cell;
 
   const className = getCellCssClass(cell);

@@ -11,14 +11,11 @@ const App = () => {
   const [showCancelButton, setShowCancelButton] = useState(true);
   const showActionSheet = useCallback(() => {
     setIsActionSheetVisible(true);
-  }, [setIsActionSheetVisible]);
-  const onActionSheetButtonClick = useCallback(
-    (buttonName) => {
-      setIsActionSheetVisible(false);
-      notify(`The "${buttonName}" button is clicked.`);
-    },
-    [setIsActionSheetVisible],
-  );
+  }, []);
+  const onActionSheetButtonClick = useCallback((buttonName) => {
+    setIsActionSheetVisible(false);
+    notify(`The "${buttonName}" button is clicked.`);
+  }, []);
   const onActionSheetItemClick = useCallback(
     (e) => {
       onActionSheetButtonClick(e.itemData.text);
@@ -28,18 +25,12 @@ const App = () => {
   const onActionSheetCancelClick = useCallback(() => {
     onActionSheetButtonClick('Cancel');
   }, [onActionSheetButtonClick]);
-  const changeTitle = useCallback(
-    (e) => {
-      setShowTitle(e.value);
-    },
-    [setShowTitle],
-  );
-  const changeCancelButton = useCallback(
-    (e) => {
-      setShowCancelButton(e.value);
-    },
-    [setShowCancelButton],
-  );
+  const changeTitle = useCallback((e) => {
+    setShowTitle(e.value);
+  }, []);
+  const changeCancelButton = useCallback((e) => {
+    setShowCancelButton(e.value);
+  }, []);
   return (
     <div>
       <ActionSheet

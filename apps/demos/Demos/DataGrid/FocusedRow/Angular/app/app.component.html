@@ -10,8 +10,8 @@
 >
   <dxo-data-grid-paging [pageSize]="10"> </dxo-data-grid-paging>
   <dxo-data-grid-pager [visible]="true"></dxo-data-grid-pager>
+  @for(column of columns; track column.dataField) {
   <dxi-data-grid-column
-    *ngFor="let column of columns"
     [dataField]="column?.dataField"
     [width]="column?.width"
     [dataType]="column?.dataType"
@@ -20,6 +20,7 @@
     [allowSorting]="column?.allowSorting"
   >
   </dxi-data-grid-column>
+  }
 </dx-data-grid>
 
 <div class="task-info">

@@ -1,4 +1,4 @@
-import { FilterBuilderTypes } from 'devextreme-react/filter-builder';
+import type { FilterBuilderTypes } from 'devextreme-react/filter-builder';
 
 export const filter = [
   ['Category', 'anyof', ['Automation', 'Monitors']],

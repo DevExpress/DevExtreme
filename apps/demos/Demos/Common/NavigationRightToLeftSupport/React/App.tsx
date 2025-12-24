@@ -1,18 +1,34 @@
 import React, { useCallback, useState } from 'react';
-import SelectBox from 'devextreme-react/select-box';
-import Menu from 'devextreme-react/menu';
-import TreeView from 'devextreme-react/tree-view';
+
 import Accordion from 'devextreme-react/accordion';
+import Menu from 'devextreme-react/menu';
+import SelectBox from 'devextreme-react/select-box';
+import TreeView from 'devextreme-react/tree-view';
+
 import { continents, europeCountries, languageLabel } from './data.ts';
+
+interface Country {
+  nameAr: string;
+  nameEn: string;
+  capitalAr: string;
+  capitalEn: string;
+  population: number;
+  area: number;
+}
+
+interface AccordionItem {
+  nameAr: string;
+  nameEn: string;
+}
 
 const languages = [
   'Arabic: Right-to-Left direction',
   'English: Left-to-Right direction',
 ];
 
-const renderArabicTitle = (item) => (<div>{item.nameAr}</div>);
+const renderArabicTitle = (item: AccordionItem) => (<div>{item.nameAr}</div>);
 
-const renderArabic = (country) => (
+const renderArabic = (country: Country) => (
   <div>
     <div>عاصمة: {country.capitalAr} </div>
     <div>عدد السكان: {country.population} نسمة</div>
@@ -20,9 +36,9 @@ const renderArabic = (country) => (
   </div>
 );
 
-const renderEnglishTitle = (item) => (<div>{item.nameEn}</div>);
+const renderEnglishTitle = (item: AccordionItem) => (<div>{item.nameEn}</div>);
 
-const renderEnglish = (country) => (
+const renderEnglish = (country: Country) => (
   <div>
     <div>Capital: {country.capitalEn} </div>
     <div>Population: {country.population} people</div>
@@ -35,7 +51,7 @@ const App = () => {
 
   const selectLanguage = useCallback(({ value }) => {
     setRtl(value === languages[0]);
-  }, [setRtl]);
+  }, []);
 
   return (
     <div className={rtlEnabled ? 'dx-rtl' : ''}>

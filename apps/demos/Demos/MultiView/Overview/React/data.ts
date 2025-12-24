@@ -1,4 +1,6 @@
-export const multiViewItems = [{
+import type { Company } from './types.ts';
+
+export const companies: Company[] = [{
   ID: 1,
   CompanyName: 'SuprMart',
   Address: '702 SW 8th Street',

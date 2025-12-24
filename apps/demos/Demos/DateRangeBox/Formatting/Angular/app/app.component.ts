@@ -1,6 +1,5 @@
-import { Component, NgModule, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxDateRangeBoxModule } from 'devextreme-angular';
 
 if (!/localhost/.test(document.location.host)) {
@@ -20,6 +19,9 @@ if (window && window.config?.packageConfigPaths) {
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
+  imports: [
+    DxDateRangeBoxModule,
+  ],
 })
 
 export class AppComponent {
@@ -28,14 +30,8 @@ export class AppComponent {
   endDate: Date = new Date(now.getTime() + msInDay * 3);
 }
 
-@NgModule({
-  imports: [
-    BrowserModule, DxDateRangeBoxModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

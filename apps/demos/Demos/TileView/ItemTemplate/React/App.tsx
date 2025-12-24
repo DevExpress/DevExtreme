@@ -1,6 +1,17 @@
 import React from 'react';
+
 import TileView from 'devextreme-react/tile-view';
+
 import { homes } from './data.ts';
+
+interface Home {
+  Price: number;
+  ImageSrc: string;
+}
+
+interface TileViewItemProps {
+  data: Home;
+}
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -19,7 +30,7 @@ const App = () => (
     itemComponent={TileViewItem} />
 );
 
-const TileViewItem = ({ data }) => (
+const TileViewItem = ({ data }: TileViewItemProps) => (
   <div className="dx-tile-content">
     <div className="price">{currencyFormatter.format(data.Price)}</div>
     <div className="image" style={{ backgroundImage: `url(${data.ImageSrc})` }}></div>

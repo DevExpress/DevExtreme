@@ -1,9 +1,7 @@
 import {
-  NgModule, Component, Pipe, PipeTransform, enableProdMode,
+  Component, Pipe, PipeTransform, enableProdMode, provideZoneChangeDetection,
 } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { HttpClientModule } from '@angular/common/http';
+import { bootstrapApplication } from '@angular/platform-browser';
 import { ArrayStore } from 'devextreme-angular/common/data';
 import { DxDiagramModule, DxDiagramTypes } from 'devextreme-angular/ui/diagram';
 import { Service } from './app.service';
@@ -18,12 +16,25 @@ if (window && window.config?.packageConfigPaths) {
   modulePrefix = '/app';
 }
 
+@Pipe({ name: 'stringifyItems', standalone: true })
+export class StringifyItemsPipe implements PipeTransform {
+  transform(items: DxDiagramTypes.Item[], textExpression: string): string {
+    return items
+      .map((item) => item.dataItem[textExpression])
+      .join(', ');
+  }
+}
+
 @Component({
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
   preserveWhitespaces: true,
+  imports: [
+    DxDiagramModule,
+    StringifyItemsPipe,
+  ],
 })
 export class AppComponent {
   dataSource: ArrayStore;
@@ -55,24 +66,8 @@ export class AppComponent {
   }
 }
 
-@Pipe({ name: 'stringifyItems' })
-export class StringifyItemsPipe implements PipeTransform {
-  transform(items: DxDiagramTypes.Item[], textExpression: string): string {
-    return items
-      .map((item) => item.dataItem[textExpression])
-      .join(', ');
-  }
-}
-
-@NgModule({
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    DxDiagramModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent, StringifyItemsPipe],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

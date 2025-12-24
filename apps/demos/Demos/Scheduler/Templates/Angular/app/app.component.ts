@@ -1,13 +1,20 @@
 import {
-  NgModule, Component, ViewChild, enableProdMode, Pipe, PipeTransform,
+  Component,
+  ViewChild,
+  enableProdMode,
+  Pipe,
+  PipeTransform,
+  provideZoneChangeDetection,
+  inject,
 } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { formatDate } from 'devextreme-angular/common/core/localization';
 import { query } from 'devextreme-angular/common/data';
 import { DxSchedulerModule, DxSchedulerComponent } from 'devextreme-angular/ui/scheduler';
 import { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import { DxFormTypes } from 'devextreme-angular/ui/form';
 import { DxPopupTypes } from 'devextreme-angular/ui/popup';
+
 import {
   Service, MovieData, TheatreData, Data,
 } from './app.service';
@@ -34,17 +41,25 @@ if (window && window.config?.packageConfigPaths) {
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
+  imports: [
+    DxSchedulerModule,
+    ApplyPipe,
+  ],
 })
 export class AppComponent {
   @ViewChild(DxSchedulerComponent, { static: false }) scheduler: DxSchedulerComponent;
 
-  data: Data[];
+  private formatDate = formatDate;
+
+  private service = inject(Service);
+
+  data: Data[] = this.service.getData();
 
   currentDate: Date = new Date(2025, 3, 27);
 
-  moviesData: MovieData[];
+  moviesData: MovieData[] = this.service.getMoviesData();
 
-  theatreData: TheatreData[];
+  theatreData: TheatreData[] = this.service.getTheatreData();
 
   views: string[] = ['day', 'week', 'timelineDay'];
 
@@ -58,11 +73,7 @@ export class AppComponent {
 
   priceEditorOptions: DxSelectBoxTypes.Properties;
 
-  constructor(service: Service) {
-    this.data = service.getData();
-    this.moviesData = service.getMoviesData();
-    this.theatreData = service.getTheatreData();
-
+  constructor() {
     this.movieEditorOptions = {
       items: this.moviesData,
       displayExpr: 'text',
@@ -154,14 +165,8 @@ export class AppComponent {
   };
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxSchedulerModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent, ApplyPipe],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

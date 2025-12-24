@@ -19,7 +19,7 @@ import RangeSelector, {
   type RangeSelectorTypes,
 } from 'devextreme-react/range-selector';
 
-import { VisualRange } from 'devextreme-react/common/charts';
+import type { VisualRange } from 'devextreme-react/common/charts';
 import { dataSource } from './data.ts';
 
 function App() {

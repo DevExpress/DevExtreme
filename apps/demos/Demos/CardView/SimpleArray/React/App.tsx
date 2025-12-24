@@ -1,5 +1,7 @@
 import React from 'react';
+
 import CardView, { Column } from 'devextreme-react/card-view';
+
 import { customers } from './data.ts';
 
 const columns = ['Company', 'Address', 'City', 'State', 'Zipcode', 'Phone'];

@@ -49,9 +49,9 @@ describe('Universal', () => {
       {
         declarations: [TestContainerComponent],
         imports: [
-         DxServerModule,
-         ServerModule,
-         DxServerTransferStateModule,
+          DxServerModule,
+          ServerModule,
+          DxServerTransferStateModule,
         ],
       },
     );

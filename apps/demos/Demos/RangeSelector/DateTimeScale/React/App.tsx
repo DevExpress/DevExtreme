@@ -1,7 +1,9 @@
 import React from 'react';
+
 import RangeSelector, {
-  Margin, Chart, CommonSeriesSettings, Series, Scale, TickInterval, MinorTickInterval, SliderMarker,
+  Chart, CommonSeriesSettings, Margin, MinorTickInterval, Scale, Series, SliderMarker, TickInterval,
 } from 'devextreme-react/range-selector';
+
 import { dataSource } from './data.ts';
 
 const defaultValue = ['2013/03/01', '2013/03/07'];

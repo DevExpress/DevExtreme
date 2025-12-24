@@ -1,7 +1,8 @@
 import React, { useCallback, useRef, useState } from 'react';
 import PieChart, {
-  Series, Tooltip, Size, Legend, type PieChartTypes, PieChartRef,
+  Series, Tooltip, Size, Legend,
 } from 'devextreme-react/pie-chart';
+import type { PieChartTypes, PieChartRef } from 'devextreme-react/pie-chart';
 import { SelectBox } from 'devextreme-react/select-box';
 import { populationData, regionLabel } from './data.ts';
 

@@ -8,8 +8,8 @@ import PieChart, {
   Export,
   Legend,
   Animation,
-  IPieChartOptions,
 } from 'devextreme-react/pie-chart';
+import type { IPieChartOptions } from 'devextreme-react/pie-chart';
 
 import { dataSource, resolutionModeLabel } from './data.ts';
 

@@ -1,6 +1,5 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { bootstrapApplication } from '@angular/platform-browser';
 import { DxSelectBoxModule } from 'devextreme-angular';
 import { Options as DataSourceConfig } from 'devextreme/ui/pivot_grid/data_source';
 import { DxPivotGridModule, DxPivotGridTypes } from 'devextreme-angular/ui/pivot-grid';
@@ -19,6 +18,10 @@ if (window && window.config?.packageConfigPaths) {
   styleUrls: [`.${modulePrefix}/app.component.css`],
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
+  imports: [
+    DxPivotGridModule,
+    DxSelectBoxModule,
+  ],
 })
 export class AppComponent {
   dataSource: DataSourceConfig = {
@@ -50,15 +53,8 @@ export class AppComponent {
   applyChangesMode = this.applyChangesModes[0];
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxPivotGridModule,
-    DxSelectBoxModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

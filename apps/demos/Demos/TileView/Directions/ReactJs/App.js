@@ -1,18 +1,15 @@
 import React, { useCallback, useState } from 'react';
-import TileView from 'devextreme-react/tile-view';
 import SelectBox from 'devextreme-react/select-box';
+import TileView from 'devextreme-react/tile-view';
+import { directionLabel, homes } from './data.js';
 import RenderHomeItem from './HomeItem.js';
-import { homes, directionLabel } from './data.js';
 
 const directions = ['horizontal', 'vertical'];
 const App = () => {
   const [direction, setDirection] = useState('horizontal');
-  const directionChanged = useCallback(
-    (e) => {
-      setDirection(e.value);
-    },
-    [setDirection],
-  );
+  const directionChanged = useCallback((e) => {
+    setDirection(e.value);
+  }, []);
   return (
     <div>
       <TileView

@@ -3,6 +3,7 @@ import notify from 'devextreme/ui/notify';
 import Button from 'devextreme-react/button';
 import Popup from 'devextreme-react/popup';
 import { housesSource } from './data.ts';
+import type { HouseType } from './types.ts';
 import { House } from './House.tsx';
 
 const ADD_TO_FAVORITES = 'Add to Favorites';
@@ -20,13 +21,13 @@ const favButtonAttrs = {
 };
 
 export default function App() {
-  const [houses, setHouses] = useState(housesSource);
+  const [houses, setHouses] = useState<HouseType[]>(housesSource);
   const [currentHouse, setCurrentHouse] = useState(housesSource[0]);
-  const [popupVisible, setPopupVisible] = useState(false);
+  const [popupVisible, setPopupVisible] = useState<boolean>(false);
 
   const changeFavoriteState = useCallback(() => {
     const updatedHouses = [...houses];
-    const updatedCurrentHouse = updatedHouses.find((house) => house === currentHouse);
+    const updatedCurrentHouse = updatedHouses.find((house: HouseType): boolean => house === currentHouse);
     updatedCurrentHouse.Favorite = !updatedCurrentHouse.Favorite;
     setHouses(updatedHouses);
 
@@ -36,7 +37,7 @@ export default function App() {
     },
     updatedCurrentHouse.Favorite ? 'success' : 'error',
     2000);
-  }, [houses, currentHouse, setHouses]);
+  }, [houses, currentHouse]);
 
   const renderPopup = useCallback(() => (
     <div className="popup-property-details">
@@ -58,22 +59,22 @@ export default function App() {
     </div>
   ), [currentHouse, changeFavoriteState]);
 
-  const showHouse = useCallback((house) => {
+  const showHouse = useCallback((house: HouseType): void => {
     setCurrentHouse(house);
     setPopupVisible(true);
-  }, [setCurrentHouse, setPopupVisible]);
+  }, []);
 
   const handlePopupHidden = useCallback(() => {
     setPopupVisible(false);
-  }, [setPopupVisible]);
+  }, []);
 
   return (
     <div className="images">
       {
-        houses.map((h) => <House
-          house={h}
+        houses.map((house: HouseType) => <House
+          house={house}
           show={showHouse}
-          key={h.ID}
+          key={house.ID}
         />)
       }
       <Popup

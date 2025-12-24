@@ -1,4 +1,4 @@
-const employees = [
+export const employees = [
   {
     ID: 1,
     FirstName: 'John',
@@ -135,7 +135,7 @@ const employees = [
     City: 'St. Louis',
   },
 ];
-const tasks = [
+export const tasks = [
   {
     ID: 1,
     Subject: 'Prepare 2013 Financial',
@@ -507,11 +507,3 @@ const tasks = [
     EmployeeID: 6,
   },
 ];
-export default {
-  getEmployees() {
-    return employees;
-  },
-  getTasks() {
-    return tasks;
-  },
-};

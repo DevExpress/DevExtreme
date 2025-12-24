@@ -1,10 +1,10 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { bootstrapApplication, BrowserModule } from '@angular/platform-browser';
 import { DataSource, ArrayStore } from 'devextreme-angular/common/data';
 import { DxSelectBoxModule, DxCheckBoxModule } from 'devextreme-angular';
-import { SingleMultipleAllOrNone } from 'devextreme-angular/common';
-import { DxListModule, DxListTypes } from 'devextreme-angular/ui/list';
+import type { SingleMultipleAllOrNone } from 'devextreme-angular/common';
+import { DxListModule } from 'devextreme-angular/ui/list';
+import type { DxListTypes } from 'devextreme-angular/ui/list';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -23,6 +23,12 @@ if (window && window.config?.packageConfigPaths) {
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   preserveWhitespaces: true,
+  imports: [
+    BrowserModule,
+    DxSelectBoxModule,
+    DxListModule,
+    DxCheckBoxModule,
+  ],
 })
 export class AppComponent {
   tasks: DataSource;
@@ -43,16 +49,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxSelectBoxModule,
-    DxListModule,
-    DxCheckBoxModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

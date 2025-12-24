@@ -8,14 +8,14 @@ export default function App() {
   const [popupWithScrollViewVisible, setPopupWithScrollViewVisible] = useState(false);
   const showPopup = useCallback(() => {
     setPopupVisible(true);
-  }, [setPopupVisible]);
+  }, []);
   const showPopupWithScrollView = useCallback(() => {
     setPopupWithScrollViewVisible(true);
-  }, [setPopupWithScrollViewVisible]);
+  }, []);
   const hide = useCallback(() => {
     setPopupVisible(false);
     setPopupWithScrollViewVisible(false);
-  }, [setPopupVisible, setPopupWithScrollViewVisible]);
+  }, []);
   const bookButtonOptions = useMemo(
     () => ({
       width: 300,
@@ -27,7 +27,7 @@ export default function App() {
     [hide],
   );
   return (
-    <React.Fragment>
+    <>
       <div className="demo-container">
         <div className="button-container">
           <Button
@@ -137,6 +137,6 @@ export default function App() {
           options={bookButtonOptions}
         />
       </Popup>
-    </React.Fragment>
+    </>
   );
 }

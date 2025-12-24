@@ -9,8 +9,9 @@ import VectorMap, {
   Subtitle,
   Title,
   Tooltip,
-  Size, ILayerProps, ILegendProps,
+  Size,
 } from 'devextreme-react/vector-map';
+import type { ILayerProps, ILegendProps } from 'devextreme-react/vector-map';
 
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { countriesGDP } from './data.ts';

@@ -37,20 +37,14 @@ export default function App() {
   const defaultStylingMode = 'outlined';
   const [stylingMode, setStylingMode] = useState(defaultStylingMode);
   const [labelMode, setLabelMode] = useState('static');
-  const changeStylingMode = useCallback(
-    ({ value }) => {
-      setStylingMode(value);
-    },
-    [setStylingMode],
-  );
-  const labelModeChange = useCallback(
-    ({ value }) => {
-      setLabelMode(value);
-    },
-    [setLabelMode],
-  );
+  const changeStylingMode = useCallback(({ value }) => {
+    setStylingMode(value);
+  }, []);
+  const labelModeChange = useCallback(({ value }) => {
+    setLabelMode(value);
+  }, []);
   return (
-    <React.Fragment>
+    <>
       <div className="options">
         <div className="caption">Options</div>
         <div className="editors-modes">
@@ -183,6 +177,6 @@ export default function App() {
         type="default"
         id="validate"
       />
-    </React.Fragment>
+    </>
   );
 }

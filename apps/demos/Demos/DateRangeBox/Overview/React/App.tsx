@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import DateRangeBox from 'devextreme-react/date-range-box';
+import type { DateRangeBoxTypes } from 'devextreme-react/date-range-box';
 
 const msInDay = 1000 * 60 * 60 * 24;
 const now = new Date();
@@ -11,17 +12,17 @@ const initialValue: [Date, Date] = [
 const min = new Date(now.setDate(1));
 const max = new Date(now.setDate(lastDay));
 
-function convertRangeToDays([startDate, endDate]: [Date, Date]) {
+function convertRangeToDays([startDate, endDate]: [Date, Date]): number {
   const diffInDay = Math.floor(Math.abs((endDate.valueOf() - startDate.valueOf()) / msInDay));
 
   return diffInDay + 1;
 }
 
 export default function App() {
-  const [selectedDays, setSelectedDays] = useState(convertRangeToDays(initialValue));
+  const [selectedDays, setSelectedDays] = useState<number>(convertRangeToDays(initialValue));
 
   const onCurrentValueChange = useCallback(
-    ({ value: [startDate, endDate] }) => {
+    ({ value: [startDate, endDate] }: DateRangeBoxTypes.ValueChangedEvent): void => {
       let daysCount = 0;
 
       if (startDate && endDate) {
@@ -30,7 +31,7 @@ export default function App() {
 
       setSelectedDays(daysCount);
     },
-    [setSelectedDays],
+    [],
   );
 
   return (

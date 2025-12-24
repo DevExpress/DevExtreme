@@ -11,11 +11,9 @@
   </dx-pie-chart>
 
   <div class="palette-container flex-block">
-    <div
-      class="palette-item"
-      *ngFor="let color of baseColors"
-      [style.background-color]="color"
-    ></div>
+    @for(color of baseColors; track color) {
+    <div class="palette-item" [style.background-color]="color"></div>
+    }
   </div>
 </div>
 
