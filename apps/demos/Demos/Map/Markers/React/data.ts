@@ -1,4 +1,6 @@
-export const markersData = [{
+import type { IMarkerProps } from 'devextreme-react/map';
+
+export const markersData: IMarkerProps[] = [{
   location: [40.755833, -73.986389],
   tooltip: {
     text: 'Times Square',

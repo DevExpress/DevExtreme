@@ -4,23 +4,19 @@ import notify from 'devextreme/ui/notify';
 import { EmployeeItem } from './EmployeeItem.js';
 import { employees } from './data.js';
 
-const defaultCurrentEmployee = {};
 export default function App() {
-  const [currentEmployee, setCurrentEmployee] = useState(defaultCurrentEmployee);
+  const [currentEmployee, setCurrentEmployee] = useState(null);
   const [popupVisible, setPopupVisible] = useState(false);
   const [positionOf, setPositionOf] = useState('');
-  const showInfo = useCallback(
-    (employee) => {
-      setCurrentEmployee(employee);
-      setPositionOf(`#image${employee.ID}`);
-      setPopupVisible(true);
-    },
-    [setCurrentEmployee, setPositionOf, setPopupVisible],
-  );
+  const showInfo = useCallback((employee) => {
+    setCurrentEmployee(employee);
+    setPositionOf(`#image${employee.ID}`);
+    setPopupVisible(true);
+  }, []);
   const hideInfo = useCallback(() => {
-    setCurrentEmployee({});
+    setCurrentEmployee(null);
     setPopupVisible(false);
-  }, [setCurrentEmployee, setPopupVisible]);
+  }, []);
   const sendEmail = useCallback(() => {
     const message = `Email is sent to ${currentEmployee.FirstName} ${currentEmployee.LastName}`;
     notify(
@@ -128,20 +124,20 @@ export default function App() {
         />
         <p>
           Full Name:&nbsp;
-          <span>{currentEmployee.FirstName}</span>&nbsp;
-          <span>{currentEmployee.LastName}</span>
+          <span>{currentEmployee?.FirstName}</span>&nbsp;
+          <span>{currentEmployee?.LastName}</span>
         </p>
         <p>
-          Birth Date: <span>{currentEmployee.BirthDate}</span>
+          Birth Date: <span>{currentEmployee?.BirthDate}</span>
         </p>
         <p>
-          Address: <span>{currentEmployee.Address}</span>
+          Address: <span>{currentEmployee?.Address}</span>
         </p>
         <p>
-          Hire Date: <span>{currentEmployee.HireDate}</span>
+          Hire Date: <span>{currentEmployee?.HireDate}</span>
         </p>
         <p>
-          Position: <span>{currentEmployee.Position}</span>
+          Position: <span>{currentEmployee?.Position}</span>
         </p>
       </Popup>
     </div>
