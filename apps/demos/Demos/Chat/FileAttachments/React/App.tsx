@@ -1,6 +1,7 @@
 import React, { useCallback, useRef } from 'react';
-import Chat, { FileUploaderOptions, type ChatTypes } from 'devextreme-react/chat';
-import { type FileUploaderTypes } from 'devextreme-react/file-uploader';
+import Chat, { FileUploaderOptions } from 'devextreme-react/chat';
+import type { ChatTypes } from 'devextreme-react/chat';
+import type { FileUploaderTypes } from 'devextreme-react/file-uploader';
 import { Guid } from 'devextreme-react/common';
 import { CustomStore, DataSource } from 'devextreme-react/common/data';
 
@@ -11,7 +12,7 @@ const store: ChatTypes.Message[] = [...initialMessages];
 const customStore = new CustomStore({
   key: 'id',
   load: async () => store,
-  insert: async (message) => {
+  insert: async (message: ChatTypes.Message) => {
     store.push(message);
     return message;
   },
@@ -23,7 +24,7 @@ const dataSource = new DataSource({
 });
 
 export default function App() {
-  const uploadedFilesMapRef = useRef(new Map<string, string>());
+  const uploadedFilesMapRef = useRef<Map<string, string>>(new Map<string, string>());
 
   function getFileUrl(filename: string): string | undefined {
     return uploadedFilesMapRef.current.get(filename);
@@ -38,7 +39,7 @@ export default function App() {
   const onMessageEntered = useCallback((
     { message }: ChatTypes.MessageEnteredEvent,
   ): void => {
-    const attachmentsWithUrls = message.attachments?.map((attachment: ChatTypes.Attachment) => ({
+    const attachmentsWithUrls = message.attachments?.map((attachment: ChatTypes.Attachment): ChatTypes.Attachment => ({
       ...attachment,
       url: getFileUrl(attachment.name),
     }));
@@ -72,10 +73,10 @@ export default function App() {
     document.body.removeChild(link);
   }, []);
 
-  const uploadFile = useCallback((): void => {}, []);
+  const uploadFile = useCallback(() => {}, []);
 
   return (
-    <React.Fragment>
+    <>
       <div className="chat-container">
         <Chat
           height={710}
@@ -91,6 +92,6 @@ export default function App() {
           />
         </Chat>
       </div>
-    </React.Fragment>
+    </>
   );
 }

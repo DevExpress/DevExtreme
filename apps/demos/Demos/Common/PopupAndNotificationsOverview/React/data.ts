@@ -1,4 +1,6 @@
-export const housesSource = [{
+import type { HouseType } from './types.ts';
+
+export const housesSource: HouseType[] = [{
   ID: '1',
   Favorite: false,
   Address: '652 Avonwick Gate',

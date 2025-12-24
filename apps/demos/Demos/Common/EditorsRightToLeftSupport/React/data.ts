@@ -1,4 +1,6 @@
-export const europeanUnion = [{
+import type { EuropeanUnionCountries } from './types.ts';
+
+export const europeanUnion: EuropeanUnionCountries[] = [{
   id: 1,
   nameAr: 'النمسا',
   nameEn: 'Austria',

@@ -10,7 +10,7 @@
     "jsx": "react-jsx",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "lib": ["es2022", "DOM", "DOM.Iterable"]
+    "lib": ["es2023", "DOM", "DOM.Iterable"]
   },
   "include": [
     "Demos/Scheduler/**/React/**/*.tsx",
@@ -80,6 +80,34 @@
     "Demos/Common/FormsOverview/**/React/**/*.tsx",
     "Demos/Common/ListsOverview/**/React/**/*.tsx",
     "Demos/Common/NavigationOverview/**/React/**/*.tsx",
-    "Demos/Common/NavigationRightToLeftSupport/**/React/**/*.tsx"
+    "Demos/Common/NavigationRightToLeftSupport/**/React/**/*.tsx",
+    "Demos/Common/EditorsOverview/**/React/**/*.ts",
+    "Demos/Common/EditorsOverview/**/React/**/*.tsx",
+    "Demos/Common/CustomTextEditorButtons/**/React/**/*.ts",
+    "Demos/Common/CustomTextEditorButtons/**/React/**/*.tsx",
+    "Demos/Common/EditorAppearanceVariants/**/React/**/*.ts",
+    "Demos/Common/EditorAppearanceVariants/**/React/**/*.tsx",
+    "Demos/Common/EditorsRightToLeftSupport/**/React/**/*.ts",
+    "Demos/Common/EditorsRightToLeftSupport/**/React/**/*.tsx",
+    "Demos/Common/PopupAndNotificationsOverview/**/React/**/*.ts",
+    "Demos/Common/PopupAndNotificationsOverview/**/React/**/*.tsx",
+    "Demos/Autocomplete/**/React/**/*.ts",
+    "Demos/Autocomplete/**/React/**/*.tsx",
+    "Demos/Calendar/**/React/**/*.ts",
+    "Demos/Calendar/**/React/**/*.tsx",
+    "Demos/Chat/**/React/**/*.ts",
+    "Demos/Chat/**/React/**/*.tsx",
+    "Demos/CheckBox/**/React/**/*.ts",
+    "Demos/CheckBox/**/React/**/*.tsx",
+    "Demos/ColorBox/**/React/**/*.ts",
+    "Demos/ColorBox/**/React/**/*.tsx",
+    "Demos/DateBox/**/React/**/*.ts",
+    "Demos/DateBox/**/React/**/*.tsx",
+    "Demos/DateRangeBox/**/React/**/*.ts",
+    "Demos/DateRangeBox/**/React/**/*.tsx",
+    "Demos/DropDownBox/**/React/**/*.ts",
+    "Demos/DropDownBox/**/React/**/*.tsx",
+    "Demos/DropDownButton/**/React/**/*.ts",
+    "Demos/DropDownButton/**/React/**/*.tsx"
   ]
 }

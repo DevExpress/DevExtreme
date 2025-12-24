@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
-import Chat, { type ChatTypes } from 'devextreme-react/chat';
+import Chat from 'devextreme-react/chat';
+import type { ChatTypes } from 'devextreme-react/chat';
 import { currentUser, supportAgent, initialMessages } from './data.ts';
 
 export default function App() {
@@ -8,19 +9,19 @@ export default function App() {
   const [supportChatTypingUsers, setSupportChatTypingUsers] = useState<ChatTypes.User[]>([]);
   const [messages, setMessages] = useState<ChatTypes.Message[]>(initialMessages);
 
-  function onMessageEntered({ message }: ChatTypes.MessageEnteredEvent) {
-    setMessages((prevMessages) => [...prevMessages, message]);
+  function onMessageEntered({ message }: ChatTypes.MessageEnteredEvent): void {
+    setMessages((prevMessages: ChatTypes.Message[]): ChatTypes.Message[] => [...prevMessages, message]);
   }
 
-  function typingStart({ user }: ChatTypes.TypingStartEvent) {
-    if (user.id === currentUser.id) {
+  function typingStart({ user }: ChatTypes.TypingStartEvent): void {
+    if (user?.id === currentUser.id) {
       setSupportChatTypingUsers([currentUser]);
     } else {
       setUserChatTypingUsers([supportAgent]);
     }
   }
 
-  function typingEnd({ user }: ChatTypes.TypingEndEvent) {
+  function typingEnd({ user }: ChatTypes.TypingEndEvent): void {
     if (user.id === currentUser.id) {
       setSupportChatTypingUsers([]);
     } else {
@@ -29,7 +30,7 @@ export default function App() {
   }
 
   return (
-    <React.Fragment>
+    <>
       <Chat
         user={currentUser}
         items={messages}
@@ -46,6 +47,6 @@ export default function App() {
         onTypingEnd={typingEnd}
         typingUsers={supportChatTypingUsers}
       />
-    </React.Fragment>
+    </>
   );
 }
