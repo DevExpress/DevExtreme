@@ -106,7 +106,6 @@
     },
     "update-node-modules-with-npm-dist": {
       "executor": "devextreme-nx-infra-plugin:copy-files",
-      "dependsOn": ["npm:pack-npm-dist"],
       "options": {
         "files": [
           {
