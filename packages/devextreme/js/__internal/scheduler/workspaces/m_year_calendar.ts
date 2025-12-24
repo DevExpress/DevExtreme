@@ -1,16 +1,20 @@
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
+import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import dateLocalization from '@js/common/core/localization/date';
 import registerComponent from '@js/core/component_registrator';
 import { getPublicElement } from '@js/core/element';
 import type { PropertyType } from '@js/core/index';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 
-interface CellClickArgs {
+import type { SafeAppointment } from '../types';
+
+export interface CellClickArgs {
   cancel?: boolean;
   cellData: {
     startDate: Date;
@@ -33,14 +37,22 @@ const YEAR_CALENDAR_LABEL_CLASS = 'dx-scheduler-year-calendar-label';
 const YEAR_CALENDAR_HAS_APPOINTMENT_CLASS = 'dx-scheduler-year-calendar-has-appointment';
 
 const CALENDAR_DXCLICK_EVENT_NAME = addNamespace(clickEventName, 'dxYearCalendar');
+const CALENDAR_POINTERENTER_EVENT_NAME = addNamespace(pointerEvents.enter, 'dxYearCalendar');
+const CALENDAR_POINTERLEAVE_EVENT_NAME = addNamespace(pointerEvents.leave, 'dxYearCalendar');
 
-interface YearCalendarProperties extends WidgetProperties {
+export interface YearCalendarProperties extends WidgetProperties {
   date: Date;
   firstDayOfWeek?: number;
   onCellClick?: (e: CellClickArgs) => void;
   showMonthLabel?: boolean;
   hasAppointment?: (date: Date) => boolean;
   getAppointmentColor?: (date: Date) => Promise<string | undefined>;
+  getAppointmentsForDate?: (date: Date) => SafeAppointment[];
+  showAppointmentTooltip?: (
+    appointments: SafeAppointment[],
+    target: dxElementWrapper
+  ) => void;
+  hideAppointmentTooltip?: () => void;
 }
 
 type YearCalendarPropertyType<T, TProp extends string> =
@@ -73,6 +85,9 @@ class YearCalendar extends Widget<YearCalendarProperties> {
       showMonthLabel: true,
       hasAppointment: undefined,
       getAppointmentColor: undefined,
+      getAppointmentsForDate: undefined,
+      showAppointmentTooltip: undefined,
+      hideAppointmentTooltip: undefined,
     };
   }
 
@@ -228,6 +243,9 @@ class YearCalendar extends Widget<YearCalendarProperties> {
 
   _renderEvents(): void {
     eventsEngine.off(this.$element(), CALENDAR_DXCLICK_EVENT_NAME);
+    eventsEngine.off(this.$element(), CALENDAR_POINTERENTER_EVENT_NAME);
+    eventsEngine.off(this.$element(), CALENDAR_POINTERLEAVE_EVENT_NAME);
+
     eventsEngine.on(this.$element(), CALENDAR_DXCLICK_EVENT_NAME, `.${CALENDAR_CELL_CLASS}`, (e) => {
       const $cell = $(e.currentTarget);
       const dateValue = $cell.attr('data-value');
@@ -261,15 +279,56 @@ class YearCalendar extends Widget<YearCalendarProperties> {
         }
       }
     });
+
+    eventsEngine.on(this.$element(), CALENDAR_POINTERENTER_EVENT_NAME, `.${CALENDAR_CELL_CLASS}`, (e) => {
+      const $cell = $(e.currentTarget);
+      const dateValue = $cell.attr('data-value');
+
+      if (dateValue) {
+        const [year, month, day] = dateValue.split('/').map(Number);
+        const hoveredDate = new Date(year, month - 1, day);
+        const calendarDate = this.option('date');
+
+        if (!calendarDate || hoveredDate.getMonth() !== calendarDate.getMonth()) {
+          return;
+        }
+
+        const getAppointmentsForDate = this.option('getAppointmentsForDate');
+        const showAppointmentTooltip = this.option('showAppointmentTooltip');
+
+        if (getAppointmentsForDate && showAppointmentTooltip) {
+          const appointments = getAppointmentsForDate(hoveredDate);
+          if (appointments && appointments.length > 0) {
+            showAppointmentTooltip(appointments, $cell);
+          }
+        }
+      }
+    });
+
+    eventsEngine.on(this.$element(), CALENDAR_POINTERLEAVE_EVENT_NAME, `.${CALENDAR_CELL_CLASS}`, () => {
+      const hideAppointmentTooltip = this.option('hideAppointmentTooltip');
+      if (hideAppointmentTooltip) {
+        hideAppointmentTooltip();
+      }
+    });
   }
 
   _optionChanged(args: { name: string; value?: unknown; previousValue?: unknown }): void {
     const { name } = args;
 
-    if (name === 'date' || name === 'firstDayOfWeek' || name === 'showMonthLabel' || name === 'hasAppointment' || name === 'getAppointmentColor') {
-      this._render();
-    } else {
-      super._optionChanged(args);
+    switch (name) {
+      case 'date':
+      case 'firstDayOfWeek':
+      case 'showMonthLabel':
+      case 'hasAppointment':
+      case 'getAppointmentColor':
+      case 'getAppointmentsForDate':
+      case 'showAppointmentTooltip':
+      case 'hideAppointmentTooltip':
+        this._render();
+        break;
+      default:
+        super._optionChanged(args);
     }
   }
 }
