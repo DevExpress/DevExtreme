@@ -1,8 +1,15 @@
 import React from 'react';
-import DataGrid, { Column, type DataGridTypes, Export } from 'devextreme-react/data-grid';
-import { exportDataGrid } from 'devextreme-react/common/export/pdf';
 import { jsPDF } from 'jspdf';
+
+import DataGrid, { Column, Export } from 'devextreme-react/data-grid';
+import type { DataGridTypes } from 'devextreme-react/data-grid';
+import { exportDataGrid } from 'devextreme-react/common/export/pdf';
+import type { DataGridExportOptions } from 'devextreme-react/common/export/pdf';
+
 import { employees } from './data.ts';
+
+type RowExportingEvent = Parameters<Required<DataGridExportOptions>['onRowExporting']>[0];
+type CustomDrawCellEvent = Parameters<Required<DataGridExportOptions>['customDrawCell']>[0];
 
 const exportFormats = ['pdf'];
 
@@ -20,14 +27,14 @@ const onExporting = ({ component }: DataGridTypes.ExportingEvent) => {
     },
     topLeft: { x: 5, y: 5 },
     columnWidths: [30, 30, 30, 30, 30, 30],
-    onRowExporting: (e) => {
-      const isHeader = e.rowCells[0].text === 'Picture';
+    onRowExporting: (e: RowExportingEvent) => {
+      const isHeader = e.rowCells?.[0].text === 'Picture';
       if (!isHeader) {
         e.rowHeight = 40;
       }
     },
-    customDrawCell: (e) => {
-      if (e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'Picture') {
+    customDrawCell: (e: CustomDrawCellEvent) => {
+      if (e.gridCell && e.gridCell.rowType === 'data' && e.gridCell.column?.dataField === 'Picture' && e.rect) {
         doc.addImage(e.gridCell.value, 'PNG', e.rect.x, e.rect.y, e.rect.w, e.rect.h);
         e.cancel = true;
       }

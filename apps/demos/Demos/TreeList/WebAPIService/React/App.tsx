@@ -1,8 +1,9 @@
 import React from 'react';
 
 import TreeList, {
-  RemoteOperations, Column, SearchPanel, HeaderFilter, Editing, RequiredRule, Lookup, type TreeListTypes,
+  RemoteOperations, Column, SearchPanel, HeaderFilter, Editing, RequiredRule, Lookup,
 } from 'devextreme-react/tree-list';
+import type { TreeListTypes } from 'devextreme-react/tree-list';
 import AspNetData from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
@@ -13,7 +14,7 @@ const tasksData = AspNetData.createStore({
   insertUrl: `${url}/InsertTask`,
   updateUrl: `${url}/UpdateTask`,
   deleteUrl: `${url}/DeleteTask`,
-  onBeforeSend(method, ajaxOptions) {
+  onBeforeSend(_, ajaxOptions) {
     ajaxOptions.xhrFields = { withCredentials: true };
   },
 });
