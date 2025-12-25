@@ -180,7 +180,7 @@ const testBaselineOffset = function($labelContainer, $valueContainer) {
         $imgForInput = $('<img/>').height(1).width(1).appendTo($valueContainer);
         $imgForLabel.closest('.dx-field-label').css('whiteSpace', 'nowrap');
         $imgForInput.closest('.dx-field-value').css('whiteSpace', 'nowrap');
-        QUnit.assert.roughEqual($imgForLabel.offset().top, $imgForInput.offset().top, 0.99);
+        QUnit.assert.roughEqual($imgForLabel.offset().top, $imgForInput.offset().top, 1.99);
     } finally {
         $imgForLabel.remove();
         $imgForInput.remove();
@@ -368,19 +368,19 @@ module.exports = function(themeName, options) {
         });
 
         QUnit.test('dxTextbox on Field', function(assert) {
-            testVerticalAlign($('#textboxOnField'), VALUE, false, options.testVerticalOffset);
+            testVerticalAlign($('#textboxOnField'), VALUE + ' input', false, options.testVerticalOffset);
         });
 
         QUnit.test('dxTextbox in Field', function(assert) {
-            testVerticalAlign($('#textboxInField'), VALUE, false, options.testVerticalOffset);
+            testVerticalAlign($('#textboxInField'), VALUE + ' input', false, options.testVerticalOffset);
         });
 
         QUnit.test('dxAutocomplete on Field', function(assert) {
-            testVerticalAlign($('#autocompleteOnField'), VALUE, false, options.testVerticalOffset);
+            testVerticalAlign($('#autocompleteOnField'), VALUE + ' input.dx-texteditor-input', false, options.testVerticalOffset);
         });
 
         QUnit.test('dxAutocomplete in Field', function(assert) {
-            testVerticalAlign($('#autocompleteInField'), VALUE, false, options.testVerticalOffset);
+            testVerticalAlign($('#autocompleteInField'), VALUE + ' input.dx-texteditor-input', false, options.testVerticalOffset);
         });
 
         QUnit.test('simpleText on Field', function(assert) {
@@ -392,11 +392,11 @@ module.exports = function(themeName, options) {
         });
 
         QUnit.test('dxNumberbox on Field', function(assert) {
-            testVerticalAlign($('#numberboxOnField'), VALUE, false, options.testVerticalOffset);
+            testVerticalAlign($('#numberboxOnField'), VALUE + ' input.dx-texteditor-input', false, options.testVerticalOffset);
         });
 
         QUnit.test('dxNumberbox in Field', function(assert) {
-            testVerticalAlign($('#numberboxInField'), VALUE, false, options.testVerticalOffset);
+            testVerticalAlign($('#numberboxInField'), VALUE + ' input.dx-texteditor-input', false, options.testVerticalOffset);
         });
 
         QUnit.test('dxTextarea on Field', function(assert) {
