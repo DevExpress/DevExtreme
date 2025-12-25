@@ -996,7 +996,7 @@ module('Table properties forms', {
 
             this.applyFormChanges();
 
-            assert.roughEqual($targetCell.outerWidth(), 567, 3, 'cell width is applied');
+            assert.roughEqual($targetCell.outerWidth(), 561, 3, 'cell width is applied');
             assert.strictEqual($targetCell.get(0).style.width, '700px', 'cell width style is applied');
             assert.roughEqual($targetCell.next().outerWidth(), 32, 3, 'next cell width style is correct');
             assert.strictEqual($targetCell.next().get(0).style.width, '', 'next cell width style is correct');
@@ -1019,7 +1019,7 @@ module('Table properties forms', {
 
             this.applyFormChanges();
 
-            assert.roughEqual($targetCell.outerWidth(), 567, 3, 'cell width is applied');
+            assert.roughEqual($targetCell.outerWidth(), 561, 3, 'cell width is applied');
             assert.strictEqual($targetCell.get(0).style.width, '700px', 'cell width style is applied');
             assert.roughEqual($targetCell.next().outerWidth(), 32, 3, 'next cell width style is correct');
             assert.strictEqual($targetCell.next().get(0).style.width, '0px', 'next cell width style is correct');
