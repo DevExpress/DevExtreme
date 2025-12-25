@@ -18,6 +18,7 @@ const configByView: Record<Exclude<ViewType, 'agenda'>, {
   timelineWeek: { isTimelineView: true, isMonthView: false, viewOrientation: 'horizontal' },
   timelineWorkWeek: { isTimelineView: true, isMonthView: false, viewOrientation: 'horizontal' },
   timelineMonth: { isTimelineView: true, isMonthView: true, viewOrientation: 'horizontal' },
+  timelineYear: { isTimelineView: true, isMonthView: false, viewOrientation: 'horizontal' },
 };
 
 export interface ViewModelOptions {

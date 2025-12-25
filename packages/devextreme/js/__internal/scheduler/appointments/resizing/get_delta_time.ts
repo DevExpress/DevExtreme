@@ -50,6 +50,8 @@ export const getDeltaTime = (
   switch (true) {
     case ['timelineMonth', 'month'].includes(viewType) || Boolean(isAllDayPanel):
       return getAllDayDeltaWidth(args, initialSize, resizableStep) * toMs('day');
+    case ['timelineYear'].includes(viewType):
+      return toMs('week');
     case viewType === 'agenda':
       return 0;
     case VERTICAL_VIEW_TYPES.includes(viewType) && !isAllDayPanel:

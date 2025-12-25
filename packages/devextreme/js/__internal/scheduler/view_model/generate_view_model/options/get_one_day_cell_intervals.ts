@@ -6,6 +6,7 @@ interface Options {
   startDayHour: number;
   endDayHour: number;
   skippedDays: number[];
+  cellInterval?: number;
 }
 
 export const getOneDayCellIntervals = ({
@@ -13,9 +14,10 @@ export const getOneDayCellIntervals = ({
   startDayHour,
   endDayHour,
   skippedDays,
+  cellInterval = 1,
 }: Options): CellInterval[] => intervals.reduce<CellInterval[]>((result, interval, rowIndex) => {
   const cells = splitIntervalByDay({
-    ...interval, startDayHour, endDayHour, skippedDays,
+    ...interval, startDayHour, endDayHour, skippedDays, cellInterval,
   });
 
   let columnIndex = 0;

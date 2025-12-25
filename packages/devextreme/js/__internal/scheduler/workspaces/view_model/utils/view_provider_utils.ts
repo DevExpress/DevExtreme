@@ -4,6 +4,7 @@ import { ViewDataGenerator } from '../m_view_data_generator';
 import { ViewDataGeneratorDay } from '../m_view_data_generator_day';
 import { ViewDataGeneratorMonth } from '../m_view_data_generator_month';
 import { ViewDataGeneratorTimelineMonth } from '../m_view_data_generator_timeline_month';
+import { ViewDataGeneratorTimelineYear } from '../m_view_data_generator_timeline_year';
 import { ViewDataGeneratorWeek } from '../m_view_data_generator_week';
 import { ViewDataGeneratorWorkWeek } from '../m_view_data_generator_work_week';
 
@@ -13,6 +14,8 @@ export const getViewDataGeneratorByViewType = (viewType: ViewType): ViewDataGene
       return new ViewDataGeneratorMonth(viewType);
     case VIEWS.TIMELINE_MONTH:
       return new ViewDataGeneratorTimelineMonth(viewType);
+    case VIEWS.TIMELINE_YEAR:
+      return new ViewDataGeneratorTimelineYear(viewType);
     case VIEWS.DAY:
     case VIEWS.TIMELINE_DAY:
       return new ViewDataGeneratorDay(viewType);

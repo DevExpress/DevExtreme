@@ -30,6 +30,7 @@ export interface CompareOptions {
   min: number;
   max: number;
   skippedDays: number[];
+  cellInterval?: number;
 }
 
 export interface LayoutIntervals {

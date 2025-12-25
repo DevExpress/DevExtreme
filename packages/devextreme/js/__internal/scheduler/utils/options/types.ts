@@ -11,6 +11,7 @@ export type View = ViewObject & Required<Pick<ViewObject,
 >> & {
   skippedDays: number[];
 };
+
 export type AgendaView = ViewObject & Required<Pick<ViewObject,
   'agendaDuration'
   | 'intervalCount'

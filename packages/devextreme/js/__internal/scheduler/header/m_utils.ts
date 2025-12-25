@@ -88,6 +88,8 @@ const getIntervalStartDate = (options: IntervalOptions) => {
       return getWorkWeekStart(firstWeekDay);
     case 'agenda':
       return new Date(date);
+    case 'year':
+      break;
   }
 };
 
@@ -132,6 +134,8 @@ const getPeriodEndDate = (currentPeriodStartDate: Date, step: Step, agendaDurati
       break;
     case 'month':
       date = nextMonth(currentPeriodStartDate);
+      break;
+    case 'year':
       break;
     case 'workWeek':
       date = getDateAfterWorkWeek(currentPeriodStartDate);
@@ -323,6 +327,7 @@ const STEP_MAP: Record<ViewType, Step> = {
   timelineWeek: 'week',
   timelineWorkWeek: 'workWeek',
   timelineMonth: 'month',
+  timelineYear: 'year',
   agenda: 'agenda',
 } as const;
 

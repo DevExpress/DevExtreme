@@ -25,6 +25,7 @@ export const getGroupSize = ({
 }: Options): RealSize => {
   switch (viewType) {
     case 'month':
+    case 'timelineYear':
     case 'timelineMonth': {
       const intervalDaysCount = cells.filter((cell) => cell.rowIndex === 0).length;
       return {

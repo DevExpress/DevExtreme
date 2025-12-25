@@ -214,6 +214,7 @@ const TIMELINE_VIEWS = [
   VIEWS.TIMELINE_WEEK,
   VIEWS.TIMELINE_WORK_WEEK,
   VIEWS.TIMELINE_MONTH,
+  VIEWS.TIMELINE_YEAR,
 ];
 export const isTimelineView = (
   viewType?: ViewType,
@@ -221,7 +222,9 @@ export const isTimelineView = (
 
 export const isDateAndTimeView = (
   viewType: ViewType,
-): boolean => viewType !== VIEWS.TIMELINE_MONTH && viewType !== VIEWS.MONTH;
+): boolean => ![
+  VIEWS.MONTH, VIEWS.TIMELINE_MONTH, VIEWS.TIMELINE_YEAR,
+].includes(viewType);
 
 export const isHorizontalView = (viewType: ViewType): boolean => {
   switch (viewType) {
@@ -229,6 +232,7 @@ export const isHorizontalView = (viewType: ViewType): boolean => {
     case VIEWS.TIMELINE_WEEK:
     case VIEWS.TIMELINE_WORK_WEEK:
     case VIEWS.TIMELINE_MONTH:
+    case VIEWS.TIMELINE_YEAR:
     case VIEWS.MONTH:
       return true;
     default:
@@ -293,6 +297,9 @@ export const getCellDuration = (
 
     case 'timelineMonth':
       return dateUtils.dateToMilliseconds('day');
+
+    case 'timelineYear':
+      return dateUtils.dateToMilliseconds('week');
 
     default:
       return 3600000 * hoursInterval;

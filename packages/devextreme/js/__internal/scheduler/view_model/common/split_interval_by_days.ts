@@ -8,6 +8,7 @@ export const splitIntervalByDay = ({
   min,
   max,
   skippedDays,
+  cellInterval = 1,
 }: CompareOptions): DateInterval[] => {
   if (endDayHour < startDayHour) {
     return [];
@@ -36,7 +37,7 @@ export const splitIntervalByDay = ({
       });
     }
 
-    time.setUTCDate(time.getUTCDate() + 1);
+    time.setUTCDate(time.getUTCDate() + cellInterval);
   }
 
   return result;

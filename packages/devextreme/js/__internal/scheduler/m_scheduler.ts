@@ -85,6 +85,7 @@ import SchedulerTimelineDay from './workspaces/m_timeline_day';
 import SchedulerTimelineMonth from './workspaces/m_timeline_month';
 import SchedulerTimelineWeek from './workspaces/m_timeline_week';
 import SchedulerTimelineWorkWeek from './workspaces/m_timeline_work_week';
+import SchedulerTimelineYear from './workspaces/m_timeline_year';
 import SchedulerWorkSpaceDay from './workspaces/m_work_space_day';
 import SchedulerWorkSpaceMonth from './workspaces/m_work_space_month';
 import SchedulerWorkSpaceWeek from './workspaces/m_work_space_week';
@@ -133,6 +134,10 @@ const VIEWS_CONFIG = {
   },
   timelineMonth: {
     workSpace: SchedulerTimelineMonth,
+    renderingStrategy: 'horizontalMonthLine',
+  },
+  timelineYear: {
+    workSpace: SchedulerTimelineYear,
     renderingStrategy: 'horizontalMonthLine',
   },
   agenda: {

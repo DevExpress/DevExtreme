@@ -48,7 +48,8 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
   _calendar: any;
 
   get captionText() {
-    return this._getCaption().text;
+    return 'ABOBA';
+    // return this._getCaption().text;
   }
 
   getIntervalOptions(date: Date): IntervalOptions {

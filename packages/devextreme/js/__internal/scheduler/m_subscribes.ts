@@ -197,7 +197,7 @@ const subscribes = {
   },
 
   needCorrectAppointmentDates() {
-    return !['month', 'timelineMonth'].includes(this.currentView.type);
+    return !['month', 'timelineMonth', 'timelineYear'].includes(this.currentView.type);
   },
 
   getRenderingStrategyDirection() {

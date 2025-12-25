@@ -22,8 +22,13 @@ const getLayoutIntervals = (
   viewOffset: number,
   isTimeline: boolean,
   isMonthView: boolean,
+  isYearView: boolean,
   panelName: PanelName,
 ): LayoutIntervals => {
+  if (isYearView) {
+    return getMonthIntervals({ ...compareOptions, cellInterval: 7 }, viewOffset, true);
+  }
+
   switch (true) {
     case isMonthView:
       return getMonthIntervals(compareOptions, viewOffset, isTimeline);
@@ -106,6 +111,7 @@ export class OptionManager {
         viewOffset,
         isTimelineView || panelName === 'allDayPanel',
         isMonthView,
+        this.schedulerStore.option('currentView') === 'timelineYear',
         panelName,
       );
 

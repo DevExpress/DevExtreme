@@ -329,6 +329,7 @@
         "dxScheduler-switcherTimelineWeek": "Timeline Week",
         "dxScheduler-switcherTimelineWorkWeek": "Timeline Work Week",
         "dxScheduler-switcherTimelineMonth": "Timeline Month",
+        "dxScheduler-switcherTimelineYear": "Timeline Year",
 
         "dxScheduler-recurrenceRepeatOnDate": "on date",
         "dxScheduler-recurrenceRepeatCount": "occurrence(s)",

@@ -18,6 +18,7 @@ const viewTypeLocalization: Record<ViewType, string> = {
   workWeek: 'dxScheduler-switcherWorkWeek',
   timelineDay: 'dxScheduler-switcherTimelineDay',
   timelineMonth: 'dxScheduler-switcherTimelineMonth',
+  timelineYear: 'dxScheduler-switcherTimelineYear',
   timelineWeek: 'dxScheduler-switcherTimelineWeek',
   timelineWorkWeek: 'dxScheduler-switcherTimelineWorkWeek',
 };
@@ -54,7 +55,7 @@ export const getA11yStatusText = (
   const viewType = view?.type;
   const viewName = view?.name;
   const viewTypeLabel = localizeName(viewName, viewType);
-  const isMonth = viewType === 'month' || viewType === 'timelineMonth';
+  const isMonth = viewType === 'month' || viewType === 'timelineMonth' || viewType === 'timelineYear';
   const startDateText = isMonth ? localizeMonth(startDate) : localizeDate(startDate);
   const endDateText = isMonth ? localizeMonth(endDate) : localizeDate(endDate);
   const intervalText = startDateText === endDateText

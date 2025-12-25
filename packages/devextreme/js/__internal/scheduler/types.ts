@@ -6,7 +6,7 @@ import type { AppointmentViewModelPlain } from './view_model/types';
 
 export type Direction = 'vertical' | 'horizontal';
 export type GroupOrientation = 'vertical' | 'horizontal';
-export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
+export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineYear' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
 export type AllDayPanelModeType = 'all' | 'allDay' | 'hidden';
 export type RenderStrategyName = 'horizontal' | 'horizontalMonth' | 'horizontalMonthLine' | 'vertical' | 'week' | 'agenda';
 export type FilterItemType = Record<string, string | number> | string | number;

@@ -9,6 +9,7 @@ export const VIEWS: Record<string, ViewType> = {
   TIMELINE_WEEK: 'timelineWeek',
   TIMELINE_WORK_WEEK: 'timelineWorkWeek',
   TIMELINE_MONTH: 'timelineMonth',
+  TIMELINE_YEAR: 'timelineYear',
   AGENDA: 'agenda',
 };
 export const VIEW_TYPES: ViewType[] = Object.values(VIEWS);
@@ -36,6 +37,7 @@ export const DEFAULT_VIEW_OPTIONS: Record<Exclude<ViewType, 'agenda'>, View> & {
   timelineWeek: getView('timelineWeek', 'vertical'),
   timelineWorkWeek: getView('timelineWorkWeek', 'vertical', WEEKENDS),
   timelineMonth: getView('timelineMonth', 'vertical'),
+  timelineYear: getView('timelineYear', 'vertical'),
   agenda: {
     agendaDuration: 7,
     intervalCount: 1,
