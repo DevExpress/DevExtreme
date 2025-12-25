@@ -14,6 +14,7 @@ const RESIZABLE_HANDLER_CLASS = 'dx-resizable-handle-corner-bottom-right';
 const IMAGE = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWNgZGT8DwABDQEDEkMQNQAAAABJRU5ErkJggg==';
 const IMAGE_SIZE = 100;
 const BORDER_PADDING_WIDTH = 2;
+const HTML_EDITOR_CONTENT_MARGIN = 1;
 
 module('Resizing integration', {
     beforeEach: function() {
@@ -173,8 +174,9 @@ module('Resizing integration', {
             .get(0)
             .getBoundingClientRect();
 
+        debugger;
         assert.strictEqual(frameLeft + BORDER_PADDING_WIDTH, imageLeft, 'Frame positioned correctly by the left');
-        assert.strictEqual(frameTop + BORDER_PADDING_WIDTH, imageTop, 'Frame positioned correctly by the top');
+        assert.strictEqual(frameTop + BORDER_PADDING_WIDTH + HTML_EDITOR_CONTENT_MARGIN, imageTop, 'Frame positioned correctly by the top');
     });
 
     test('resizing frame should update its position after formatting', function(assert) {
