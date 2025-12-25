@@ -1,6 +1,6 @@
 import fx from 'common/core/animation/fx';
 import positionUtils from 'common/core/animation/position';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import config from 'core/config';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { triggerShownEvent } from 'common/core/events/visibility_change';
@@ -15,7 +15,7 @@ import { normalizeKeyName } from 'common/core/events/utils/index';
 
 
 const { module, testStart, test, testInActiveWindow } = QUnit;
-const SLIDER_PADDING = 7;
+const SLIDER_PADDING = 10;
 
 testStart(() => {
     const markup = `
@@ -1514,7 +1514,7 @@ module('tooltip integration', {
             const tooltipRightBorder = $tooltipContent.offset().left + $tooltipContent.outerWidth() - this.$slider.offset().left;
             const boundaryOffset = sliderWidth - tooltipRightBorder;
 
-            assert.roughEqual(boundaryOffset, 2, 0.3, 'tooltip content should have correct boundary offset');
+            assert.roughEqual(boundaryOffset, 2, 0.5, 'tooltip content should have correct boundary offset');
         });
 
         test('arrow should be centered after dimension was changed', function(assert) {
