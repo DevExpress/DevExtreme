@@ -5,8 +5,11 @@ import DataGrid, { Column, Export } from 'devextreme-react/data-grid';
 import type { DataGridTypes } from 'devextreme-react/data-grid';
 import { Anchor, Workbook } from 'devextreme-exceljs-fork';
 import { exportDataGrid } from 'devextreme-react/common/export/excel';
+import type { DataGridExportOptions } from 'devextreme-react/common/export/excel';
 
 import { employees } from './data.ts';
+
+type CustomizeCellOptions = Parameters<Required<DataGridExportOptions>['customizeCell']>[0];
 
 const renderGridCell = (cellData: DataGridTypes.ColumnCellTemplateData) => (<div><img src={cellData.value} alt='Employee photo'></img></div>);
 
@@ -19,9 +22,9 @@ const onExporting = (e: DataGridTypes.ExportingEvent) => {
     worksheet,
     autoFilterEnabled: true,
     topLeftCell: { row: 2, column: 2 },
-    customizeCell: ({ gridCell, excelCell }) => {
-      if (gridCell.rowType === 'data') {
-        if (gridCell.column.dataField === 'Picture') {
+    customizeCell: ({ gridCell, excelCell }: CustomizeCellOptions) => {
+      if (gridCell?.rowType === 'data') {
+        if (excelCell && gridCell?.column?.dataField === 'Picture') {
           excelCell.value = undefined;
 
           const image = workbook.addImage({

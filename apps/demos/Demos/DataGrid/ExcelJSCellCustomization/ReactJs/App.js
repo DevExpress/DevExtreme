@@ -30,21 +30,21 @@ const onExporting = (e) => {
     keepColumnWidths: false,
     topLeftCell: { row: 2, column: 2 },
     customizeCell: ({ gridCell, excelCell }) => {
-      if (gridCell.rowType === 'data') {
-        if (gridCell.column.dataField === 'Phone') {
+      if (excelCell && gridCell && gridCell.rowType === 'data') {
+        if (gridCell.column?.dataField === 'Phone') {
           excelCell.value = parseInt(gridCell.value, 10);
           excelCell.numFmt = '[<=9999999]###-####;(###) ###-####';
         }
-        if (gridCell.column.dataField === 'Website') {
+        if (gridCell.column?.dataField === 'Website') {
           excelCell.value = { text: gridCell.value, hyperlink: gridCell.value };
           excelCell.font = { color: { argb: 'FF0000FF' }, underline: true };
           excelCell.alignment = { horizontal: 'left' };
         }
       }
-      if (gridCell.rowType === 'group') {
+      if (excelCell && gridCell?.rowType === 'group') {
         excelCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'BEDFE6' } };
       }
-      if (gridCell.rowType === 'totalFooter' && excelCell.value) {
+      if (excelCell && gridCell?.rowType === 'totalFooter' && excelCell.value) {
         excelCell.font.italic = true;
       }
     },
@@ -66,7 +66,7 @@ const renderGridCell = (data) => (
 const phoneNumberFormat = (value) => {
   const valueStr = String(value);
   const USNumber = valueStr.match(/(\d{3})(\d{3})(\d{4})/);
-  return `(${USNumber[1]}) ${USNumber[2]}-${USNumber[3]}`;
+  return USNumber ? `(${USNumber[1]}) ${USNumber[2]}-${USNumber[3]}` : '';
 };
 const App = () => (
   <div>

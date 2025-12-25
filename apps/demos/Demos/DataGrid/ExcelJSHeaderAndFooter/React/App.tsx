@@ -5,6 +5,7 @@ import DataGrid, { Column, Export } from 'devextreme-react/data-grid';
 import type { DataGridTypes } from 'devextreme-react/data-grid';
 import { Workbook } from 'devextreme-exceljs-fork';
 import { exportDataGrid } from 'devextreme-react/common/export/excel';
+import type { CellRange } from 'devextreme/excel_exporter';
 
 import { countries } from './data.ts';
 
@@ -21,7 +22,7 @@ const onExporting = (e: DataGridTypes.ExportingEvent) => {
     component: e.component,
     worksheet,
     topLeftCell: { row: 4, column: 1 },
-  }).then((cellRange) => {
+  }).then((cellRange: CellRange) => {
     // header
     const headerRow = worksheet.getRow(2);
     headerRow.height = 30;
@@ -32,7 +33,7 @@ const onExporting = (e: DataGridTypes.ExportingEvent) => {
     headerRow.getCell(1).alignment = { horizontal: 'center' };
 
     // footer
-    const footerRowIndex = cellRange.to.row + 2;
+    const footerRowIndex = (cellRange.to?.row ?? 0) + 2;
     const footerRow = worksheet.getRow(footerRowIndex);
     worksheet.mergeCells(footerRowIndex, 1, footerRowIndex, 8);
 

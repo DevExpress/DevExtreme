@@ -1,11 +1,21 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { type ComponentProps, useCallback, useRef, useState } from 'react';
+
 import DataGrid, {
   Column, FilterRow, HeaderFilter, Search, SearchPanel, Pager,
 } from 'devextreme-react/data-grid';
-import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
-import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
+import type { DataGridRef, DataGridTypes } from 'devextreme-react/data-grid';
+import SelectBox from 'devextreme-react/select-box';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
+import CheckBox from 'devextreme-react/check-box';
+import type { CheckBoxTypes } from 'devextreme-react/check-box';
 
 import { orders } from './data.ts';
+import type {
+  Order,
+  OrderFilter,
+  HeaderFilterDataResult,
+  HeaderFilterDataSourceOptions,
+} from './data.ts';
 
 const saleAmountEditorOptions = {
   format: 'currency',
@@ -24,7 +34,7 @@ const applyFilterTypes = [{
   name: 'On Button Click',
 }];
 
-const saleAmountHeaderFilter = [{
+const saleAmountHeaderFilter: OrderFilter[] = [{
   text: 'Less than $3000',
   value: ['SaleAmount', '<', 3000],
 }, {
@@ -50,37 +60,44 @@ const saleAmountHeaderFilter = [{
   value: ['SaleAmount', '>=', 20000],
 }];
 
-const getOrderDay = (rowData) => (new Date(rowData.OrderDate)).getDay();
+const getOrderDay = (rowData: Order) => (new Date(rowData.OrderDate)).getDay();
 
-function calculateFilterExpression(value: string, selectedFilterOperations, target: string) {
+function calculateFilterExpression(
+  this: DataGridTypes.Column,
+  value: string,
+  selectedFilterOperations: string | null,
+  target: string
+) {
   const column = this;
 
   if (target === 'headerFilter' && value === 'weekends') {
     return [[getOrderDay, '=', 0], 'or', [getOrderDay, '=', 6]];
   }
 
-  return column.defaultCalculateFilterExpression(value, selectedFilterOperations, target);
+  return column.defaultCalculateFilterExpression?.(value, selectedFilterOperations, target);
 }
 
-const orderHeaderFilter = (data) => {
-  data.dataSource.postProcess = (results) => {
-    results.push({
-      text: 'Weekends',
-      value: 'weekends',
-    });
+const orderHeaderFilter = (data: HeaderFilterDataSourceOptions) => {
+  if (data.dataSource) {
+    data.dataSource.postProcess = (results: HeaderFilterDataResult[]) => {
+      results.push({
+        text: 'Weekends',
+        value: 'weekends',
+      });
 
-    return results;
-  };
+      return results;
+    };
+  }
 };
 
 const App = () => {
   const [showFilterRow, setShowFilterRow] = useState(true);
   const [showHeaderFilter, setShowHeaderFilter] = useState(true);
   const [currentFilter, setCurrentFilter] = useState(applyFilterTypes[0].key);
-  const dataGridRef = useRef(null);
+  const dataGridRef = useRef<DataGridRef>(null);
 
   const clearFilter = useCallback(() => {
-    dataGridRef.current.instance().clearFilter();
+    dataGridRef.current?.instance().clearFilter();
   }, []);
 
   const onShowFilterRowChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
@@ -125,7 +142,7 @@ const App = () => {
           alignment="right"
           dataType="date"
           width={120}
-          calculateFilterExpression={calculateFilterExpression}>
+          calculateFilterExpression={calculateFilterExpression as ComponentProps<typeof Column>['calculateFilterExpression']}>
           <HeaderFilter dataSource={orderHeaderFilter} />
         </Column>
         <Column
