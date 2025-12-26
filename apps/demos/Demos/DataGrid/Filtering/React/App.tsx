@@ -1,4 +1,5 @@
-import React, { type ComponentProps, useCallback, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
+import type { ComponentProps } from 'react';
 
 import DataGrid, {
   Column, FilterRow, HeaderFilter, Search, SearchPanel, Pager,

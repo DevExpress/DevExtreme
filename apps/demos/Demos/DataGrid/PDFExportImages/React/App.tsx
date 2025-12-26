@@ -8,8 +8,8 @@ import type { DataGridExportOptions } from 'devextreme-react/common/export/pdf';
 
 import { employees } from './data.ts';
 
-type RowExportingEvent = Parameters<Required<DataGridExportOptions>['onRowExporting']>[0];
-type CustomDrawCellEvent = Parameters<Required<DataGridExportOptions>['customDrawCell']>[0];
+type RowExportingEvent = Parameters<Required<DataGridExportOptions>['onRowExporting']>[number];
+type CustomDrawCellEvent = Parameters<Required<DataGridExportOptions>['customDrawCell']>[number];
 
 const exportFormats = ['pdf'];
 

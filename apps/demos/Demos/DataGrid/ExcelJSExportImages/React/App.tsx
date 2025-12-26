@@ -9,7 +9,7 @@ import type { DataGridExportOptions } from 'devextreme-react/common/export/excel
 
 import { employees } from './data.ts';
 
-type CustomizeCellOptions = Parameters<Required<DataGridExportOptions>['customizeCell']>[0];
+type CustomizeCellOptions = Parameters<Required<DataGridExportOptions>['customizeCell']>[number];
 
 const renderGridCell = (cellData: DataGridTypes.ColumnCellTemplateData) => (<div><img src={cellData.value} alt='Employee photo'></img></div>);
 
