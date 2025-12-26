@@ -32,7 +32,7 @@ function App() {
     [setDrillInfo],
   );
   return (
-    <React.Fragment>
+    <>
       <TreeMap
         dataSource={citiesPopulation}
         interactWithGroup={true}
@@ -52,7 +52,7 @@ function App() {
         onItemClick={drillInfoClick}
         treeInfo={drillInfo}
       />
-    </React.Fragment>
+    </>
   );
 }
 export default App;

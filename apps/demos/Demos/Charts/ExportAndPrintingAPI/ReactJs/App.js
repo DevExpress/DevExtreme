@@ -28,7 +28,7 @@ function App() {
     chartRef.current.instance().exportTo('Example', 'png');
   }, []);
   return (
-    <React.Fragment>
+    <>
       <Chart
         id="chart"
         ref={chartRef}
@@ -65,7 +65,7 @@ function App() {
           onClick={exportChart}
         />
       </div>
-    </React.Fragment>
+    </>
   );
 }
 export default App;

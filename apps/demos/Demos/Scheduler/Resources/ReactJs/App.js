@@ -18,7 +18,7 @@ const App = () => {
     setCurrentResource(e.value);
   }, []);
   return (
-    <React.Fragment>
+    <>
       <Scheduler
         timeZone="America/Los_Angeles"
         dataSource={data}
@@ -87,7 +87,7 @@ const App = () => {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 export default App;

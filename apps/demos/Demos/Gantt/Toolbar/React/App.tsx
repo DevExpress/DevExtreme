@@ -36,7 +36,7 @@ function App() {
   }, [ganttConfig]);
 
   return (
-    <React.Fragment>
+    <>
       <Gantt
         taskListWidth={500}
         scaleType="weeks"
@@ -92,7 +92,7 @@ function App() {
           levels of detail.
         </div>
       </Popup>
-    </React.Fragment>
+    </>
   );
 }
 

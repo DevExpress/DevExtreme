@@ -41,7 +41,7 @@ const App = () => {
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <Scheduler
         dataSource={data}
         views={views}
@@ -109,7 +109,7 @@ const App = () => {
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 

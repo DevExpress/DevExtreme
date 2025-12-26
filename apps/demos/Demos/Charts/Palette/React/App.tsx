@@ -22,7 +22,7 @@ function App() {
   }, [setExtensionMode]);
 
   return (
-    <React.Fragment>
+    <>
       <div className="flex-container">
         <PieChart
           id="pie"
@@ -68,7 +68,7 @@ function App() {
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 

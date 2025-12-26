@@ -30,7 +30,7 @@ const App = () => {
   const onAllowDraggingChanged = useCallback((e) => setAllowDragging(e.value), []);
   const onAllowUpdatingChanged = useCallback((e) => setAllowUpdating(e.value), []);
   return (
-    <React.Fragment>
+    <>
       <Scheduler
         timeZone="America/Los_Angeles"
         dataSource={data}
@@ -94,7 +94,7 @@ const App = () => {
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 export default App;

@@ -27,7 +27,7 @@ function App() {
   }, [setResolveMode]);
 
   return (
-    <React.Fragment>
+    <>
       <PieChart
         id="pie"
         dataSource={dataSource}
@@ -58,7 +58,7 @@ function App() {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 

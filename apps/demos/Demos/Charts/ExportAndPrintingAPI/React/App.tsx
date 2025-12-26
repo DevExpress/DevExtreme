@@ -33,7 +33,7 @@ function App() {
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <Chart
         id="chart"
         ref={chartRef}
@@ -54,7 +54,7 @@ function App() {
         &nbsp;
         <Button icon="export" text="Export" onClick={exportChart} />
       </div>
-    </React.Fragment>
+    </>
   );
 }
 
