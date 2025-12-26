@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import DataGrid, {
-  Column,
-} from 'devextreme-react/data-grid';
-import { CustomStore } from 'devextreme-react/common/data';
 import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
+
+import { CustomStore } from 'devextreme-react/common/data';
+import DataGrid, { Column } from 'devextreme-react/data-grid';
 
 import PriceCell from './PriceCell.tsx';
 import ChangeCell from './ChangeCell.tsx';
 
 const App = () => {
   const [connectionStarted, setConnectionStarted] = useState(false);
-  const [dataSource, setDataSource] = useState(null);
+  const [dataSource, setDataSource] = useState<CustomStore | null>(null);
 
   useEffect(() => {
     const hubConnection = new HubConnectionBuilder()

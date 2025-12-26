@@ -1,5 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { SelectBox, type SelectBoxTypes } from 'devextreme-react/select-box';
+
+import type { CustomStore } from 'devextreme-react/common/data';
+import { SelectBox } from 'devextreme-react/select-box';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridAdvancedMasterDetailView';
@@ -12,7 +15,7 @@ interface ProductSelectBoxProps {
 }
 
 const ProductSelectBox = (props: ProductSelectBoxProps) => {
-  const [productsData, setProductsData] = useState(null);
+  const [productsData, setProductsData] = useState<CustomStore | null>(null);
 
   const valueChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     props.onProductChanged(e.value);

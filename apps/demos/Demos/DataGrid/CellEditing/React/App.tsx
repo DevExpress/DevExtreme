@@ -14,7 +14,7 @@ const dataSource = new DataSource({
 });
 
 const App = () => {
-  const [selectedItemKeys, setSelectedItemKeys] = useState([]);
+  const [selectedItemKeys, setSelectedItemKeys] = useState<number[]>([]);
 
   const deleteRecords = useCallback(() => {
     selectedItemKeys.forEach((key) => {
