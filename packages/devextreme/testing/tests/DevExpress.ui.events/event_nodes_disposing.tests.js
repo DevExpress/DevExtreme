@@ -18,15 +18,11 @@ QUnit.test('should not leak memory when clicking on body with dxclick subscripti
     const document = domAdapter.getDocument();
     $(document).on('dxclick', function() {});
 
-    globalThis.gc();
-
     const initialMemory = performance.memory.usedJSHeapSize;
 
     for(let i = 0; i < 100; i++) {
         $('body').trigger('click');
     }
-
-    globalThis.gc();
 
     const finalMemory = performance.memory.usedJSHeapSize;
     const memoryDiff = finalMemory - initialMemory;
