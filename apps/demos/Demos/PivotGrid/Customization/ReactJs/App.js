@@ -9,7 +9,7 @@ const App = () => {
   const [dataFieldArea, setDataFieldArea] = useState(false);
   const [rowHeaderLayout, setRowHeaderLayout] = useState(true);
   return (
-    <React.Fragment>
+    <>
       <PivotGrid
         id="sales"
         showTotalsPrior={showTotalsPrior ? 'both' : 'none'}
@@ -51,7 +51,7 @@ const App = () => {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 const dataSource = new PivotGridDataSource({

@@ -14,7 +14,7 @@ const App = () => {
   const [applyChangesMode, setApplyChangesMode] = useState<'instantly' | 'onDemand'>('instantly');
 
   return (
-    <React.Fragment>
+    <>
       <PivotGrid
         dataSource={dataSource}
         allowSortingBySummary={true}
@@ -41,7 +41,7 @@ const App = () => {
           </SelectBox>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 
