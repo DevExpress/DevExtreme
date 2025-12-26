@@ -69,7 +69,7 @@ function App() {
         setPasswordMode(passwordMode === 'text' ? 'password' : 'text');
       },
     }),
-    [passwordMode, setPasswordMode],
+    [passwordMode],
   );
   const confirmPasswordButton = useMemo(
     () => ({
@@ -79,7 +79,7 @@ function App() {
         setConfirmPasswordMode(confirmPasswordMode === 'text' ? 'password' : 'text');
       },
     }),
-    [confirmPasswordMode, setConfirmPasswordMode],
+    [confirmPasswordMode],
   );
   const passwordComparison = useCallback(() => password, [password]);
   const onPasswordChanged = useCallback(
@@ -89,7 +89,7 @@ function App() {
         validatorRef.current.instance().validate();
       }
     },
-    [confirmPassword, setPassword],
+    [confirmPassword],
   );
   const onConfirmPasswordChanged = useCallback((e) => {
     setConfirmPassword(e.value);

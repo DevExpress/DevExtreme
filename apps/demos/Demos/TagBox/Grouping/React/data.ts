@@ -1,4 +1,6 @@
-export default [{
+import type { Product } from './types.ts';
+
+export const products: Product[] = [{
   ID: 1,
   Name: 'HD Video Player',
   Category: 'Video Players',

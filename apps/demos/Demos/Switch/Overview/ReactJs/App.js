@@ -3,8 +3,8 @@ import Switch from 'devextreme-react/switch';
 
 function App() {
   const [value, setValue] = useState(false);
-  const valueChanged = useCallback((e) => {
-    setValue(e.value);
+  const valueChanged = useCallback(({ value }) => {
+    setValue(value);
   }, []);
   return (
     <div>
