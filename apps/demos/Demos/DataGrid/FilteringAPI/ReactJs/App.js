@@ -9,11 +9,11 @@ const App = () => {
   const [filterStatus, setFilterStatus] = useState(statuses[0]);
   const dataGridRef = useRef(null);
   const onValueChanged = useCallback((e) => {
-    const dataGrid = dataGridRef.current.instance();
+    const dataGrid = dataGridRef.current?.instance();
     if (e.value === 'All') {
-      dataGrid.clearFilter();
+      dataGrid?.clearFilter();
     } else {
-      dataGrid.filter(['Task_Status', '=', e.value]);
+      dataGrid?.filter(['Task_Status', '=', e.value]);
     }
     setFilterStatus(e.value);
   }, []);

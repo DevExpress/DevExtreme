@@ -12,6 +12,7 @@ import { exportDataGrid } from 'devextreme-react/common/export/excel';
 import type { DataGridCell } from 'devextreme-react/common/export/excel';
 
 import { products } from './data.ts';
+import type { ExcelCell, CustomizeCellOptions } from './data.ts';
 
 const priceDataSource: DataSourceOptions = {
   store: new ArrayStore({
@@ -31,14 +32,9 @@ const ratingDataSource: DataSourceOptions = {
   filter: ['Product_ID', '<', 10],
 };
 
-interface ExcelCell {
-  fullAddress: { row: number };
-  fill: any;
-}
-
-const setAlternatingRowsBackground = (gridCell: DataGridCell, excelCell: ExcelCell) => {
-  if (gridCell.rowType === 'header' || gridCell.rowType === 'data') {
-    if (excelCell.fullAddress.row % 2 === 0) {
+const setAlternatingRowsBackground = (gridCell?: DataGridCell, excelCell?: ExcelCell) => {
+  if (gridCell?.rowType === 'header' || gridCell?.rowType === 'data') {
+    if (excelCell && excelCell.fullAddress.row % 2 === 0) {
       excelCell.fill = {
         type: 'pattern', pattern: 'solid', fgColor: { argb: 'D3D3D3' }, bgColor: { argb: 'D3D3D3' },
       };
@@ -63,14 +59,14 @@ const App = () => {
 
     exportDataGrid({
       worksheet: priceSheet,
-      component: priceGridRef.current.instance(),
+      component: priceGridRef.current?.instance(),
       topLeftCell: { row: 4, column: 2 },
-      customizeCell: ({ gridCell, excelCell }) => {
+      customizeCell: ({ gridCell, excelCell }: CustomizeCellOptions) => {
         setAlternatingRowsBackground(gridCell, excelCell);
       },
     }).then(() => exportDataGrid({
       worksheet: ratingSheet,
-      component: ratingGridRef.current.instance(),
+      component: ratingGridRef.current?.instance(),
       topLeftCell: { row: 4, column: 2 },
       customizeCell: ({ gridCell, excelCell }) => {
         setAlternatingRowsBackground(gridCell, excelCell);

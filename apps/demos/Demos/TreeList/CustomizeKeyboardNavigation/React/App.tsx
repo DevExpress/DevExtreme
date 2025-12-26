@@ -38,7 +38,7 @@ const App = () => {
         defaultExpandedRowKeys={expandedRowKeys}
         onFocusedCellChanging={onFocusedCellChanging}>
         <KeyboardNavigation
-          editOnKeyPress={editOnKeyPress}
+          editOnKeyPress={!!editOnKeyPress}
           enterKeyAction={enterKeyAction}
           enterKeyDirection={enterKeyDirection} />
         <Editing

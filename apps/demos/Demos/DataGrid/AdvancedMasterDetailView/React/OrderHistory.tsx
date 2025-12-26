@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import type { CustomStore } from 'devextreme-react/common/data';
 import {
   Column, DataGrid, Paging, Summary, TotalItem, ValueFormat,
 } from 'devextreme-react/data-grid';
@@ -12,7 +13,7 @@ interface OrderHistoryProps {
 }
 
 const OrderHistory = ({ productId }: OrderHistoryProps) => {
-  const [orderHistoryStore, setOrderHistoryStore] = useState(null);
+  const [orderHistoryStore, setOrderHistoryStore] = useState<CustomStore | null>(null);
 
   useEffect(() => {
     if (productId) {

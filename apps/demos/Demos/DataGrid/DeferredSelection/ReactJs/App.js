@@ -29,7 +29,7 @@ const App = () => {
   const [peopleCount, setPeopleCount] = useState(0);
   const [avgDuration, setAvgDuration] = useState(0);
   const calculateStatistics = useCallback(async () => {
-    const selectedItems = await dataGrid.getSelectedRowsData();
+    const selectedItems = (await dataGrid?.getSelectedRowsData()) ?? [];
     const totalDuration = selectedItems.reduce((currentValue, item) => {
       const dueDateTime = new Date(item.Task_Due_Date).getTime();
       const startDateTime = new Date(item.Task_Start_Date).getTime();

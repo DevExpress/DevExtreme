@@ -25,10 +25,10 @@ async function getAIResponse(messages: AIMessage[], signal: AbortSignal) {
   const response = await aiService.chat.completions.create(params, { signal });
   const result = response.choices[0].message?.content;
 
-  return result;
+  return result ?? '';
 }
 
-async function getAIResponseRecursive(messages: AIMessage[], signal: AbortSignal): Promise<string | null | undefined> {
+async function getAIResponseRecursive(messages: AIMessage[], signal: AbortSignal): Promise<string> {
   return getAIResponse(messages, signal)
     .catch(async (error) => {
       if (!error.message.includes('Connection error')) {
@@ -62,8 +62,8 @@ export const aiIntegration = new AIIntegration({
     const signal = controller.signal;
 
     const aiPrompt: AIMessage[] = [
-      { role: 'system', content: prompt.system },
-      { role: 'user', content: prompt.user },
+      { role: 'system', content: prompt.system ?? '' },
+      { role: 'user', content: prompt.user ?? '' },
     ];
 
     const promise = getAIResponseRecursive(aiPrompt, signal);
