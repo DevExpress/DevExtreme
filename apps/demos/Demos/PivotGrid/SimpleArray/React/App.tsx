@@ -1,14 +1,13 @@
 import React from 'react';
 
-import PivotGrid, {
-  FieldChooser,
-} from 'devextreme-react/pivot-grid';
+import PivotGrid, { FieldChooser } from 'devextreme-react/pivot-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 
 import { sales } from './data.ts';
+import type { Sale } from './data.ts';
 
 const App = () => (
-  <React.Fragment>
+  <>
     <div className="long-title">
       <h3>Sales Amount by Region</h3>
     </div>
@@ -24,7 +23,7 @@ const App = () => (
     >
       <FieldChooser enabled={false} />
     </PivotGrid>
-  </React.Fragment>
+  </>
 );
 
 const dataSource = new PivotGridDataSource({
@@ -38,7 +37,7 @@ const dataSource = new PivotGridDataSource({
     dataField: 'city',
     width: 150,
     area: 'row',
-    selector(data) {
+    selector(data: Sale) {
       return `${data.city} (${data.country})`;
     },
   }, {
