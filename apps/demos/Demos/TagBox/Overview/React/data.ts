@@ -1,4 +1,6 @@
-export const simpleProducts = [
+import type { Product } from './types.ts';
+
+export const simpleProducts: string[] = [
   'HD Video Player',
   'SuperHD Video Player',
   'SuperPlasma 50',
@@ -14,17 +16,6 @@ export const simpleProducts = [
   'ExcelRemote Bluetooth',
   'ExcelRemote IP',
 ];
-
-export type Product = {
-  Id?: number,
-  Name?: string,
-  Price?: number,
-  Current_Inventory?: number,
-  Backorder?: number,
-  Manufacturing?: number,
-  Category?: string,
-  ImageSrc?: string,
-};
 
 export const products: Product[] = [{
   Id: 1,

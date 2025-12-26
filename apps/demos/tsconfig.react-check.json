@@ -126,6 +126,20 @@
     "Demos/ProgressBar/**/React/**/*.tsx",
     "Demos/ProgressBar/**/React/**/*.ts",
     "Demos/RangeSlider/**/React/**/*.tsx",
-    "Demos/RangeSlider/**/React/**/*.ts"
+    "Demos/RangeSlider/**/React/**/*.ts",
+    "Demos/Switch/**/React/**/*.ts",
+    "Demos/Switch/**/React/**/*.tsx",
+    "Demos/TagBox/**/React/**/*.ts",
+    "Demos/TagBox/**/React/**/*.tsx",
+    "Demos/TextArea/**/React/**/*.ts",
+    "Demos/TextArea/**/React/**/*.tsx",
+    "Demos/TextBox/**/React/**/*.ts",
+    "Demos/TextBox/**/React/**/*.tsx",
+    "Demos/Toast/**/React/**/*.ts",
+    "Demos/Toast/**/React/**/*.tsx",
+    "Demos/Tooltip/**/React/**/*.ts",
+    "Demos/Tooltip/**/React/**/*.tsx",
+    "Demos/Validation/**/React/**/*.ts",
+    "Demos/Validation/**/React/**/*.tsx"
   ]
 }
