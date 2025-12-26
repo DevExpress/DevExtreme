@@ -1,6 +1,6 @@
 import type Scheduler from '../../m_scheduler';
 import type {
-  Duration, ListEntity, MinimalAppointmentEntity, UTCDates,
+  Duration, FilterOptions, ListEntity, MinimalAppointmentEntity, UTCDates,
   UTCDatesBeforeSplit,
 } from '../types';
 import { addAllDayPanelOccupation } from './utils/add_all_day_panel_occupation';
@@ -30,14 +30,15 @@ const saveDatesBeforeSplit = <T extends MinimalAppointmentEntity & UTCDates>(
 export const filterAppointments = (
   schedulerStore: Scheduler,
   items: MinimalAppointmentEntity[],
+  options?: FilterOptions,
 ): ListEntity[] => {
-  const options = getFilterOptions(schedulerStore);
-  const step1 = addAllDayPanelOccupation(items, options);
-  const step2 = filterByAttributes(step1, options);
-  const step3 = splitByRecurrence(step2, options);
-  const step4 = filterByIntervals(step3, options);
+  const filterOptions = options ?? getFilterOptions(schedulerStore);
+  const step1 = addAllDayPanelOccupation(items, filterOptions);
+  const step2 = filterByAttributes(step1, filterOptions);
+  const step3 = splitByRecurrence(step2, filterOptions);
+  const step4 = filterByIntervals(step3, filterOptions);
   const step5 = addDuration(step4);
-  const step6 = splitByGroupIndex(step5, options);
+  const step6 = splitByGroupIndex(step5, filterOptions);
   const step7 = saveDatesBeforeSplit(step6);
 
   return step7;

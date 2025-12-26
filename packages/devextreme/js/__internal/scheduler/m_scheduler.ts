@@ -78,7 +78,11 @@ import { setAppointmentGroupValues } from './utils/resource_manager/appointment_
 import { createResourceEditorModel } from './utils/resource_manager/popup_utils';
 import { ResourceManager } from './utils/resource_manager/resource_manager';
 import AppointmentLayoutManager from './view_model/appointments_layout_manager';
+import { filterAppointments } from './view_model/filtration/filter_appointments';
+import { getFilterOptions } from './view_model/filtration/utils/get_filter_options/get_filter_options';
+import { getAppointmentInfo } from './view_model/get_appointment_info';
 import { AppointmentDataSource } from './view_model/m_appointment_data_source';
+import { prepareAppointments } from './view_model/preparation/prepare_appointments';
 import type { AppointmentViewModelPlain } from './view_model/types';
 import SchedulerAgenda from './workspaces/m_agenda';
 import SchedulerTimelineDay from './workspaces/m_timeline_day';
@@ -2164,6 +2168,45 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   getViewOffsetMs(): number {
     const offsetFromOptions = this.getViewOption('offset');
     return this.normalizeViewOffsetValue(offsetFromOptions);
+  }
+
+  /**
+   * Get appointments for the specified date range
+   * @param startDate - The start date of the range
+   * @param endDate - The end date of the range
+   * @returns The appointments for the specified date range
+   */
+  getAppointments(startDate: Date, endDate: Date): Appointment[] {
+    const appointments = this._dataSource.items() || [];
+
+    if (appointments.length === 0) {
+      return [];
+    }
+
+    const preparedItems = prepareAppointments(this, appointments);
+
+    const filterOptions = getFilterOptions(this, {
+      startDate,
+      endDate,
+    });
+
+    const filteredItems = filterAppointments(this, preparedItems, filterOptions);
+
+    const result = filteredItems.map((item) => {
+      const appointment = { ...item.itemData };
+      const appointmentInfo = getAppointmentInfo(item);
+
+      this._dataAccessors.set('startDate', appointment, appointmentInfo.appointment.startDate);
+      this._dataAccessors.set('endDate', appointment, appointmentInfo.appointment.endDate);
+
+      return appointment;
+    });
+
+    return result.sort((a, b) => {
+      const startDateA = this._dataAccessors.get('startDate', a).getTime();
+      const startDateB = this._dataAccessors.get('startDate', b).getTime();
+      return startDateA - startDateB;
+    });
   }
 
   private normalizeViewOffsetValue(viewOffset?: number): number {
