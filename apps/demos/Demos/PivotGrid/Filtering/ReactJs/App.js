@@ -48,11 +48,11 @@ const App = () => {
         dataSource={dataSource}
       >
         <HeaderFilter
-          showRelevantValues={showRelevantValues}
+          showRelevantValues={!!showRelevantValues}
           width={300}
           height={400}
         >
-          <Search enabled={searchEnabled} />
+          <Search enabled={!!searchEnabled} />
         </HeaderFilter>
         <FieldChooser allowSearch={true} />
         <FieldPanel visible={true} />
