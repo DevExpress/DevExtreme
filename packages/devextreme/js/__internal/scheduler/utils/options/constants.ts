@@ -89,6 +89,7 @@ export const DEFAULT_SCHEDULER_OPTIONS: Properties = {
     mode: 'standard',
   },
   allDayPanelMode: 'all',
+  allowAppointmentOverlap: true,
   toolbar: {
     disabled: false,
     multiline: false,

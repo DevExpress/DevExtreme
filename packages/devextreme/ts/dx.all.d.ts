@@ -26746,6 +26746,10 @@ declare module DevExpress.ui {
      */
     allDayPanelMode?: DevExpress.ui.dxScheduler.AllDayPanelMode;
     /**
+     * [descr:dxSchedulerOptions.allowAppointmentOverlap]
+     */
+    allowAppointmentOverlap?: boolean;
+    /**
      * [descr:dxSchedulerOptions.offset]
      */
     offset?: number;

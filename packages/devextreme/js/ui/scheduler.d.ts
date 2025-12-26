@@ -1015,6 +1015,12 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     allDayPanelMode?: AllDayPanelMode;
     /**
      * @docid
+     * @default true
+     * @public
+     */
+    allowAppointmentOverlap?: boolean;
+    /**
+     * @docid
      * @default 0
      * @public
      */

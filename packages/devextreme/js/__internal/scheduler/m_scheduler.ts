@@ -74,7 +74,7 @@ import { macroTaskArray } from './utils/index';
 import { isAgendaWorkspaceComponent } from './utils/is_agenda_workpace_component';
 import { VIEWS } from './utils/options/constants_view';
 import type { NormalizedView } from './utils/options/types';
-import { setAppointmentGroupValues } from './utils/resource_manager/appointment_groups_utils';
+import { getAppointmentGroupValues, setAppointmentGroupValues } from './utils/resource_manager/appointment_groups_utils';
 import { createResourceEditorModel } from './utils/resource_manager/popup_utils';
 import { ResourceManager } from './utils/resource_manager/resource_manager';
 import AppointmentLayoutManager from './view_model/appointments_layout_manager';
@@ -1743,6 +1743,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       cancel: false,
     };
 
+    if (this.hasAppointmentOverlap(rawAppointment as SafeAppointment, target as SafeAppointment)) {
+      updatingOptions.cancel = true;
+    }
+
     const performFailAction = function (err?: any) {
       if (onUpdatePrevented) {
         onUpdatePrevented.call(this);
@@ -2054,6 +2058,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       cancel: false,
     };
 
+    if (this.hasAppointmentOverlap(serializedAppointment as SafeAppointment)) {
+      addingOptions.cancel = true;
+    }
+
     this._actions[StoreEventNames.ADDING](addingOptions);
 
     return this._processActionResult(addingOptions, (canceled) => {
@@ -2206,6 +2214,97 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       const startDateA = this._dataAccessors.get('startDate', a).getTime();
       const startDateB = this._dataAccessors.get('startDate', b).getTime();
       return startDateA - startDateB;
+    });
+  }
+
+  /**
+   * Check if two appointments overlap in time
+   * @param appointment1 - First appointment
+   * @param appointment2 - Second appointment
+   * @returns True if appointments overlap
+   */
+  private doAppointmentsOverlap(appointment1: SafeAppointment, appointment2: SafeAppointment): boolean {
+    const start1 = this._dataAccessors.get('startDate', appointment1).getTime();
+    const end1 = this._dataAccessors.get('endDate', appointment1).getTime();
+    const start2 = this._dataAccessors.get('startDate', appointment2).getTime();
+    const end2 = this._dataAccessors.get('endDate', appointment2).getTime();
+
+    return start1 < end2 && start2 < end1;
+  }
+
+  /**
+   * Check if two appointments have matching resources
+   * @param appointment1 - First appointment
+   * @param appointment2 - Second appointment
+   * @returns True if appointments have matching resources or no resources
+   */
+  private doAppointmentsHaveMatchingResources(
+    appointment1: SafeAppointment,
+    appointment2: SafeAppointment,
+  ): boolean {
+    const { groups } = this.resourceManager;
+    if (groups.length === 0) {
+      return true;
+    }
+
+    const { resourceById } = this.resourceManager;
+    const groupValues1 = getAppointmentGroupValues(appointment1, Object.values(resourceById));
+    const groupValues2 = getAppointmentGroupValues(appointment2, Object.values(resourceById));
+
+    return groups.every((resourceIndex) => {
+      const values1 = groupValues1[resourceIndex] || [];
+      const values2 = groupValues2[resourceIndex] || [];
+
+      if (values1.length === 0 || values2.length === 0) {
+        return true;
+      }
+
+      return values1.some((value) => values2.includes(value));
+    });
+  }
+
+  /**
+   * Check if an appointment overlaps with existing appointments
+   * @param newAppointment - The appointment to check
+   * @param excludeAppointment - Optional appointment to exclude from check (for updates)
+   * @returns True if appointment overlaps with existing appointments
+   */
+  private hasAppointmentOverlap(
+    newAppointment: SafeAppointment,
+    excludeAppointment?: SafeAppointment,
+  ): boolean {
+    if (this.option('allowAppointmentOverlap')) {
+      return false;
+    }
+
+    const startDate = this._dataAccessors.get('startDate', newAppointment);
+    const endDate = this._dataAccessors.get('endDate', newAppointment);
+
+    const existingAppointments = this.getAppointments(startDate, endDate);
+
+    return existingAppointments.some((existing) => {
+      if (excludeAppointment) {
+        const { keyName } = this.appointmentDataSource;
+        if (keyName) {
+          const existingKey = this._dataAccessors.get(keyName, existing);
+          const excludeKey = this._dataAccessors.get(keyName, excludeAppointment);
+          if (existingKey !== undefined && excludeKey !== undefined && existingKey === excludeKey) {
+            return false;
+          }
+        }
+        if (existing === excludeAppointment) {
+          return false;
+        }
+      }
+
+      if (!this.doAppointmentsHaveMatchingResources(
+        newAppointment,
+        existing as SafeAppointment,
+      )) {
+        return false;
+      }
+
+      return this.doAppointmentsOverlap(newAppointment, existing as SafeAppointment);
     });
   }
 
