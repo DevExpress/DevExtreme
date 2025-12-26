@@ -57,7 +57,7 @@ const App = () => {
   const chartRef = useRef(null);
   const pivotGridRef = useRef(null);
   useEffect(() => {
-    pivotGridRef.current.instance().bindChart(chartRef.current.instance(), {
+    pivotGridRef.current?.instance().bindChart(chartRef.current?.instance(), {
       dataFieldsDisplayMode: 'splitPanes',
       alternateDataFields: false,
     });
@@ -67,7 +67,7 @@ const App = () => {
     });
   }, []);
   return (
-    <React.Fragment>
+    <>
       <Chart ref={chartRef}>
         <Size height={200} />
         <Tooltip
@@ -95,7 +95,7 @@ const App = () => {
           height={400}
         />
       </PivotGrid>
-    </React.Fragment>
+    </>
   );
 };
 export default App;

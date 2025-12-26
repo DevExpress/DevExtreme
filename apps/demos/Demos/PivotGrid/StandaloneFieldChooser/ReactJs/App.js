@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
+import { Button } from 'devextreme-react/button';
 import { PivotGrid, FieldChooser } from 'devextreme-react/pivot-grid';
 import { PivotGridFieldChooser, Texts } from 'devextreme-react/pivot-grid-field-chooser';
-import { SelectBox } from 'devextreme-react/select-box';
-import { Button } from 'devextreme-react/button';
 import { RadioGroup } from 'devextreme-react/radio-group';
+import { SelectBox } from 'devextreme-react/select-box';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import service from './data.js';
 
@@ -15,7 +15,7 @@ const App = () => {
   const [layout, setLayout] = useState(0);
   const fieldChooserRef = useRef(null);
   return (
-    <React.Fragment>
+    <>
       <PivotGrid
         dataSource={dataSource}
         allowSortingBySummary={true}
@@ -48,11 +48,11 @@ const App = () => {
             <Button
               text="Apply"
               type="default"
-              onClick={() => fieldChooserRef.current.instance().applyChanges()}
+              onClick={() => fieldChooserRef.current?.instance().applyChanges()}
             ></Button>
             <Button
               text="Cancel"
-              onClick={() => fieldChooserRef.current.instance().cancelChanges()}
+              onClick={() => fieldChooserRef.current?.instance().cancelChanges()}
             ></Button>
           </div>
         )}
@@ -84,7 +84,7 @@ const App = () => {
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 const dataSource = new PivotGridDataSource({
