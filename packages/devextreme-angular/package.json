@@ -26,7 +26,6 @@
   },
   "devDependencies": {
     "@angular-devkit/architect": "catalog:angular",
-    "@angular-devkit/schematics": "catalog:angular",
     "@angular/cli": "catalog:angular",
     "@angular/common": "catalog:angular",
     "@angular/compiler": "catalog:angular",
@@ -110,7 +109,7 @@
     "shadowdom"
   ],
   "dependencies": {
-    "@angular-devkit/schematics": "19.2.19",
+    "@angular-devkit/schematics": "catalog:angular",
     "devextreme-schematics": "*",
     "inferno-server": "catalog:"
   },

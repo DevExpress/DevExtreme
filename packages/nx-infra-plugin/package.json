@@ -18,7 +18,7 @@
   },
   "peerDependencies": {
     "karma": ">=6.0.0",
-    "ng-packagr": ">=17.0.0"
+    "ng-packagr": ">=19.0.0"
   },
   "peerDependenciesMeta": {
     "karma": {
