@@ -562,32 +562,32 @@ describe('Nested DxDataGrid', () => {
   it('should not memory leak after click if dx-data-grid is on page (T1307313)', () => {
     TestBed.overrideComponent(TestContainerComponent, {
       set: {
-        template: `<dx-data-grid [dataSource]="[]"></dx-data-grid>`,
+        template: '<dx-data-grid [dataSource]="[]"></dx-data-grid>',
       },
     });
 
     const fixture = TestBed.createComponent(TestContainerComponent);
     fixture.detectChanges();
 
-    for(let i = 0; i < 100; i++) {
-      document.body.click()
+    for (let i = 0; i < 100; i++) {
+      document.body.click();
     }
-    
-    fixture.detectChanges();
-    globalThis.gc();
-    
-    let memoryBefore = (performance as any).memory?.usedJSHeapSize
 
-    for(let i = 0; i < 100; i++) {
-      document.body.click()
-    }
-    
     fixture.detectChanges();
     globalThis.gc();
-    
-    const memoryDiff = (performance as any).memory?.usedJSHeapSize - memoryBefore;
-    console.log('------memory---->', memoryDiff / 1024);
-    
+
+    const memory = (performance as any).memory;
+    const jsHeapSizeBefore = memory.usedJSHeapSize
+
+    for (let i = 0; i < 100; i++) {
+      document.body.click();
+    }
+
+    fixture.detectChanges();
+    globalThis.gc();
+
+    const memoryDiff = memory.usedJSHeapSize - jsHeapSizeBefore;
+
     expect(memoryDiff <= 0).toBeTruthy();
   })
 });

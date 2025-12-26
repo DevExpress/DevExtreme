@@ -18,7 +18,19 @@ module.exports = function (config) {
 
     autoWatch: true,
 
-    browsers: ['ChromeHeadless'],
+    browsers: ['ChromeHeadlessWithGC'],
+
+    customLaunchers: {
+      ChromeHeadlessWithGC: {
+        base: 'ChromeHeadless',
+        flags: [
+          '--js-flags=--expose-gc',
+          '--no-sandbox',
+          '--disable-gpu',
+          '--enable-precise-memory-info'
+        ]
+      }
+    },
 
     reporters: [
       'progress',
