@@ -27,9 +27,9 @@ module.exports = function (config) {
           '--js-flags=--expose-gc',
           '--no-sandbox',
           '--disable-gpu',
-          '--enable-precise-memory-info'
-        ]
-      }
+          '--enable-precise-memory-info',
+        ],
+      },
     },
 
     reporters: [

@@ -576,8 +576,8 @@ describe('Nested DxDataGrid', () => {
     fixture.detectChanges();
     globalThis.gc();
 
-    const memory = (performance as any).memory;
-    const jsHeapSizeBefore = memory.usedJSHeapSize
+    const { memory } = performance as any;
+    const jsHeapSizeBefore = memory.usedJSHeapSize;
 
     for (let i = 0; i < 100; i++) {
       document.body.click();
@@ -589,5 +589,5 @@ describe('Nested DxDataGrid', () => {
     const memoryDiff = memory.usedJSHeapSize - jsHeapSizeBefore;
 
     expect(memoryDiff <= 0).toBeTruthy();
-  })
+  });
 });
