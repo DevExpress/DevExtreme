@@ -11,7 +11,7 @@ import type { DataGridExportOptions } from 'devextreme-react/common/export/excel
 
 import { companies } from './data.ts';
 
-type CustomizeCellOptions = Parameters<Required<DataGridExportOptions>['customizeCell']>[0];
+type CustomizeCellOptions = Parameters<Required<DataGridExportOptions>['customizeCell']>[number];
 
 const onExporting = (e: DataGridTypes.ExportingEvent) => {
   const workbook = new Workbook();
@@ -27,7 +27,7 @@ const onExporting = (e: DataGridTypes.ExportingEvent) => {
     keepColumnWidths: false,
     topLeftCell: { row: 2, column: 2 },
     customizeCell: ({ gridCell, excelCell }: CustomizeCellOptions) => {
-      if (excelCell && gridCell && gridCell.rowType === 'data') {
+      if (excelCell && gridCell?.rowType === 'data') {
         if (gridCell.column?.dataField === 'Phone') {
           excelCell.value = parseInt(gridCell.value, 10);
           excelCell.numFmt = '[<=9999999]###-####;(###) ###-####';

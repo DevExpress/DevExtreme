@@ -30,7 +30,7 @@ const onExporting = (e) => {
     keepColumnWidths: false,
     topLeftCell: { row: 2, column: 2 },
     customizeCell: ({ gridCell, excelCell }) => {
-      if (excelCell && gridCell && gridCell.rowType === 'data') {
+      if (excelCell && gridCell?.rowType === 'data') {
         if (gridCell.column?.dataField === 'Phone') {
           excelCell.value = parseInt(gridCell.value, 10);
           excelCell.numFmt = '[<=9999999]###-####;(###) ###-####';

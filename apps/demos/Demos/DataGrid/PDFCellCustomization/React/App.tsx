@@ -10,8 +10,8 @@ import type { DataGridExportOptions } from 'devextreme-react/common/export/pdf';
 
 import { companies } from './data.ts';
 
-type CustomizeCellOptions = Parameters<Required<DataGridExportOptions>['customizeCell']>[0];
-type CustomDrawCellOptions = Parameters<Required<DataGridExportOptions>['customDrawCell']>[0];
+type CustomizeCellOptions = Parameters<Required<DataGridExportOptions>['customizeCell']>[number];
+type CustomDrawCellOptions = Parameters<Required<DataGridExportOptions>['customDrawCell']>[number];
 
 const exportFormats = ['pdf'];
 
