@@ -1,16 +1,22 @@
 import $ from 'jquery';
+import eventsEngine from 'common/core/events/core/events_engine';
+import domAdapter from '__internal/core/m_dom_adapter';
 
 QUnit.testStart(function() {
-    const markup = '<div id="dataGrid"></div>';
+    const markup = '';
     $('#qunit-fixture').html(markup);
 });
 
-QUnit.module('event nodes disposing');
+QUnit.module('event nodes disposing', {
+    afterEach: function() {
+        const document = domAdapter.getDocument();
+        eventsEngine.off(document, 'dxclick');
+    }
+});
 
-QUnit.test('should not leak memory when clicking on body with DxDataGrid on page', function(assert) {
-    $('#dataGrid').dxDataGrid({
-        dataSource: []
-    });
+QUnit.test('should not leak memory when clicking on body with dxclick subscription on document', function(assert) {
+    const document = domAdapter.getDocument();
+    $(document).on('dxclick', function() {});
 
     globalThis.gc();
 
@@ -26,7 +32,7 @@ QUnit.test('should not leak memory when clicking on body with DxDataGrid on page
     const memoryDiff = finalMemory - initialMemory;
 
     assert.ok(
-        memoryDiffMB <= 0,
+        memoryDiff <= 0,
         `Memory should not leak. Memory diff: ${memoryDiff}B`
     );
 });
