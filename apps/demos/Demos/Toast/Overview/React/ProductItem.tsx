@@ -1,25 +1,28 @@
 import React, { useCallback } from 'react';
 
 import { CheckBox } from 'devextreme-react/check-box';
+import type { CheckBoxTypes } from 'devextreme-react/check-box';
+
+import type { Product } from './types.ts';
 
 interface ProductItemProps {
-  product: { ID: number; Name: string; Price: number; Current_Inventory: number; Backorder: number; Manufacturing: number; Category: string; ImageSrc: string; };
-  checkAvailability: any;
+  product: Product;
+  checkAvailability: (e: CheckBoxTypes.ValueChangedEvent, product: Product) => void;
 }
 
-export function ProductItem(props: ProductItemProps) {
-  const onValueChanged = useCallback((e) => {
-    props.checkAvailability(e, props.product);
-  }, [props]);
+export function ProductItem({ product, checkAvailability }: ProductItemProps) {
+  const onValueChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent): void => {
+    checkAvailability(e, product);
+  }, [product, checkAvailability]);
 
   return (
-    <React.Fragment>
-      <img alt={props.product.Name} src={props.product.ImageSrc} />
-      <div>{props.product.Name}</div>
+    <>
+      <img alt={product.Name} src={product.ImageSrc} />
+      <div>{product.Name}</div>
       <CheckBox
         text="Available"
         onValueChanged={onValueChanged}
       />
-    </React.Fragment>
+    </>
   );
 }

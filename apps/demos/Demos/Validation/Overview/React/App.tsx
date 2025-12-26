@@ -1,12 +1,18 @@
 import React, {
-  useCallback, useMemo, useRef, useState,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
 } from 'react';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
-import { TextBox, Button as TextBoxButton, type TextBoxTypes } from 'devextreme-react/text-box';
+import { TextBox, Button as TextBoxButton } from 'devextreme-react/text-box';
+import type { TextBoxTypes } from 'devextreme-react/text-box';
 import DateBox from 'devextreme-react/date-box';
 import DateRangeBox from 'devextreme-react/date-range-box';
-import Button, { type ButtonTypes } from 'devextreme-react/button';
+import Button from 'devextreme-react/button';
+import type { ButtonTypes } from 'devextreme-react/button';
+import type { ValidationCallbackData } from 'devextreme/common';
 import ValidationSummary from 'devextreme-react/validation-summary';
 import {
   Validator,
@@ -19,6 +25,7 @@ import {
   AsyncRule,
   CustomRule,
 } from 'devextreme-react/validator';
+import type { ValidatorRef } from 'devextreme-react/validator';
 
 import notify from 'devextreme/ui/notify';
 import {
@@ -40,8 +47,8 @@ const phoneRules = {
   X: /[02-9]/,
 };
 
-const checkComparison: any = () => true;
-const onFormSubmit = (e: { preventDefault: () => void }) => {
+const checkComparison = (): boolean => true;
+const onFormSubmit = (e: { preventDefault: () => void }): void => {
   notify(
     {
       message: 'You have submitted the form',
@@ -61,47 +68,47 @@ function App() {
   const currentDate = new Date();
   const maxDate = new Date(currentDate.setFullYear(currentDate.getFullYear() - 21));
 
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [passwordMode, setPasswordMode] = useState<TextBoxTypes.TextBoxType>('password');
   const [confirmPasswordMode, setConfirmPasswordMode] = useState<TextBoxTypes.TextBoxType>('password');
-  const validatorRef = useRef(null);
+  const validatorRef = useRef<ValidatorRef>(null);
 
   const passwordButton = useMemo<ButtonTypes.Properties>(
-    () => ({
+    (): ButtonTypes.Properties => ({
       icon: 'eyeopen',
       stylingMode: 'text',
-      onClick: () => {
+      onClick: (): void => {
         setPasswordMode(passwordMode === 'text' ? 'password' : 'text');
       },
     }),
-    [passwordMode, setPasswordMode],
+    [passwordMode],
   );
 
   const confirmPasswordButton = useMemo<ButtonTypes.Properties>(
-    () => ({
+    (): ButtonTypes.Properties => ({
       icon: 'eyeopen',
       stylingMode: 'text',
-      onClick: () => {
+      onClick: (): void => {
         setConfirmPasswordMode(confirmPasswordMode === 'text' ? 'password' : 'text');
       },
     }),
-    [confirmPasswordMode, setConfirmPasswordMode],
+    [confirmPasswordMode],
   );
 
-  const passwordComparison = useCallback<any>(() => password, [password]);
+  const passwordComparison = useCallback((): string => password, [password]);
 
   const onPasswordChanged = useCallback(
-    (e: TextBoxTypes.ValueChangedEvent) => {
+    (e: TextBoxTypes.ValueChangedEvent): void => {
       setPassword(e.value);
       if (confirmPassword) {
         validatorRef.current.instance().validate();
       }
     },
-    [confirmPassword, setPassword],
+    [confirmPassword],
   );
 
-  const onConfirmPasswordChanged = useCallback((e: TextBoxTypes.ValueChangedEvent) => {
+  const onConfirmPasswordChanged = useCallback((e: TextBoxTypes.ValueChangedEvent): void => {
     setConfirmPassword(e.value);
   }, []);
 
@@ -330,20 +337,20 @@ function App() {
   );
 }
 
-function sendRequest(value: string) {
+function sendRequest(value: string): Promise<boolean> {
   const invalidEmail = 'test@dx-email.com';
-  return new Promise((resolve) => {
-    setTimeout(() => {
+  return new Promise((resolve): void => {
+    setTimeout((): void => {
       resolve(value !== invalidEmail);
     }, 1000);
   });
 }
 
-function asyncValidation(params: { value: any }) {
+function asyncValidation(params: ValidationCallbackData): Promise<boolean> {
   return sendRequest(params.value);
 }
 
-function validateVacationDatesRange({ value }) {
+function validateVacationDatesRange({ value }: ValidationCallbackData): boolean {
   const [startDate, endDate] = value;
 
   if (startDate === null || endDate === null) {
@@ -356,7 +363,7 @@ function validateVacationDatesRange({ value }) {
   return daysDifference < 25;
 }
 
-function validateVacationDatesPresence({ value }) {
+function validateVacationDatesPresence({ value }: ValidationCallbackData): boolean {
   const [startDate, endDate] = value;
 
   if (startDate === null && endDate === null) {
