@@ -4054,6 +4054,12 @@ declare module DevExpress.common.data {
    * [descr:SortDescriptor]
    */
   export type SortDescriptor<T> = DevExpress.data.SortDescriptor<T>;
+  type StoreChange<TItem = any, TKey = any> = {
+    type: 'insert' | 'update' | 'remove';
+    data?: DevExpress.core.DeepPartial<TItem>;
+    key?: TKey;
+    index?: number;
+  };
   /**
    * [descr:Store]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -4094,14 +4100,7 @@ declare module DevExpress.common.data {
     /**
      * [descr:Store.push(changes)]
      */
-    push(
-      changes: Array<{
-        type: 'insert' | 'update' | 'remove';
-        data?: DevExpress.core.DeepPartial<TItem>;
-        key?: TKey;
-        index?: number;
-      }>
-    ): void;
+    push(changes: Array<StoreChange<TItem, TKey>>): void;
     /**
      * [descr:Store.remove(key)]
      */
@@ -4157,7 +4156,7 @@ declare module DevExpress.common.data {
     /**
      * [descr:StoreOptions.onPush]
      */
-    onPush?: (changes: Array<TItem>) => void;
+    onPush?: (changes: Array<StoreChange<TItem, TKey>>) => void;
     /**
      * [descr:StoreOptions.onRemoved]
      */
