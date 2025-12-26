@@ -1,5 +1,9 @@
+const BASE_PATH = 'http://localhost:5555';
+//const BASE_PATH = 'https://js.devexpress.com/Demos/NetCore';
+let csrf = null;
+
 $(() => {
-  const URL = 'https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi';
+  const URL = `${BASE_PATH}/api/DataGridBatchUpdateWebApi`;
 
   $('#gridContainer').dxDataGrid({
     dataSource: DevExpress.data.AspNet.createStore({
@@ -26,7 +30,8 @@ $(() => {
 
       if (e.changes.length) {
         const changes = normalizeChanges(e.changes);
-        e.promise = sendBatchRequest(`${URL}/Batch`, changes).done(() => {
+        e.promise = sendBatchRequest(`${URL}/Batch`, changes,
+          { [csrf['headerName']]: csrf['token'] }).done(() => {
           e.component.refresh(true).done(() => {
             e.component.cancelEditData();
           });
@@ -77,12 +82,13 @@ $(() => {
     });
   }
 
-  function sendBatchRequest(url, changes) {
+  function sendBatchRequest(url, changes, headers) {
     const d = $.Deferred();
 
     $.ajax(url, {
       method: 'POST',
       data: JSON.stringify(changes),
+      headers: headers,
       cache: false,
       contentType: 'application/json',
       xhrFields: { withCredentials: true },
@@ -93,3 +99,11 @@ $(() => {
     return d.promise();
   }
 });
+
+(async () => {
+  const response = await fetch(`${BASE_PATH}/api/Common/GetAntiForgeryToken`, {
+    credentials: 'include'
+  });
+  const data = await response.text();
+  csrf = JSON.parse(data);
+})();

@@ -1,3 +1,7 @@
+const BASE_PATH = 'http://localhost:5555';
+//const BASE_PATH = 'https://js.devexpress.com/Demos/NetCore';
+let csrf = null;
+
 $(() => {
   $.type = $.type || function (obj) {
     if (obj == null) {
@@ -7,8 +11,7 @@ $(() => {
     return typeof obj;
   };
 
-  const BASE_PATH = 'https://js.devexpress.com/Demos/NetCore/';
-  const url = `${BASE_PATH}api/DataGridCollaborativeEditing/`;
+  const url = `${BASE_PATH}/api/DataGridCollaborativeEditing/`;
   const groupId = new DevExpress.data.Guid().toString();
 
   const createStore = function () {
@@ -20,6 +23,12 @@ $(() => {
       deleteUrl: url,
       onBeforeSend(method, ajaxOptions) {
         ajaxOptions.data.groupId = groupId;
+        ajaxOptions.xhrFields = { withCredentials: true };
+        if (method === 'insert') {
+          ajaxOptions.headers = {
+            [csrf['headerName']]: csrf['token']
+          };
+        }
       },
     });
   };
@@ -59,7 +68,7 @@ $(() => {
           lookup: {
             dataSource: DevExpress.data.AspNet.createStore({
               key: 'ID',
-              loadUrl: `${BASE_PATH}api/DataGridStatesLookup`,
+              loadUrl: `${BASE_PATH}/api/DataGridStatesLookup`,
             }),
             displayExpr: 'Name',
             valueExpr: 'ID',
@@ -90,7 +99,7 @@ $(() => {
   createDataGrid('grid1', store1);
   createDataGrid('grid2', store2);
 
-  const hubUrl = `${BASE_PATH}dataGridCollaborativeEditingHub?GroupId=${groupId}`;
+  const hubUrl = `${BASE_PATH}/DataGridCollaborativeEditingHub?GroupId=${groupId}`;
   const connection = new signalR.HubConnectionBuilder()
     .withUrl(hubUrl, {
       skipNegotiation: true,
@@ -114,3 +123,11 @@ $(() => {
       });
     });
 });
+
+(async () => {
+  const response = await fetch(`${BASE_PATH}/api/Common/GetAntiForgeryToken`, {
+    credentials: 'include'
+  });
+  const data = await response.text();
+  csrf = JSON.parse(data);
+})();
