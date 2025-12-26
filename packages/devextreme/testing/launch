@@ -41,7 +41,11 @@ function waitForRunner() {
 function openBrowser() {
     spawn(
         getBrowserCommand(),
-        [ 'http://localhost:' + PORT ],
+        [
+            '--js-flags=--expose-gc',
+            '--enable-precise-memory-info',
+            'http://localhost:' + PORT,
+        ],
         { shell: true, detached: true }
     );
 }
