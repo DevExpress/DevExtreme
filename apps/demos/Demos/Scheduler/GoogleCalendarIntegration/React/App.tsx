@@ -27,7 +27,7 @@ const currentDate = new Date(2017, 4, 25);
 const views: SchedulerTypes.ViewType[] = ['day', 'workWeek', 'month'];
 
 const App = () => (
-  <React.Fragment>
+  <>
     <div className="long-title">
       <h3>Tasks for Employees (USA Office)</h3>
     </div>
@@ -45,7 +45,7 @@ const App = () => (
       textExpr="summary"
       timeZone="America/Los_Angeles"
     />
-  </React.Fragment>
+  </>
 );
 
 export default App;

@@ -5,7 +5,7 @@ const years = ['2010', '2011', '2012'];
 
 function App() {
   return (
-    <React.Fragment>
+    <>
       <div className="long-title"><h3>Monthly Prices of Copper, Nickel and Palladium</h3></div>
       <div id="chart-demo">
         <table className="demo-table" style={{ border: 1 }}>
@@ -22,7 +22,7 @@ function App() {
           </tbody>
         </table>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 

@@ -43,7 +43,7 @@ function App() {
   }, [setVisualRange]);
 
   return (
-    <React.Fragment>
+    <>
       <Chart
         id="zoomedChart"
         palette="Soft"
@@ -79,7 +79,7 @@ function App() {
           <CommonSeriesSettingsOptions type="bar" ignoreEmptyPoints ={true} />
         </ChartOptions>
       </RangeSelector>
-    </React.Fragment>
+    </>
   );
 }
 

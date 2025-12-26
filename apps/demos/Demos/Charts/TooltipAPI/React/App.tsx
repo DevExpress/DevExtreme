@@ -29,7 +29,7 @@ function App() {
   }, [showTooltip]);
 
   return (
-    <React.Fragment>
+    <>
       <PieChart
         ref={pieChartRef}
         dataSource={populationData}
@@ -59,7 +59,7 @@ function App() {
           onValueChanged={onRegionChanged}
         />
       </div>
-    </React.Fragment>
+    </>
   );
 }
 
