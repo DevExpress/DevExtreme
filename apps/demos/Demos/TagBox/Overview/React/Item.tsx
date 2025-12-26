@@ -1,8 +1,9 @@
 import React from 'react';
+import type { Product } from './types.ts';
 
 interface ItemProps {
-  data: any;
-  getAltText: any;
+  data: Product;
+  getAltText: (text: string) => string;
 }
 
 export default function Item({ data, getAltText }: ItemProps) {
