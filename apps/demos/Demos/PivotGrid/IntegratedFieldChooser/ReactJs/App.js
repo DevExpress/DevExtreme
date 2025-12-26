@@ -7,7 +7,7 @@ const applyChangesModeLabel = { 'aria-label': 'Apply Changes Mode' };
 const App = () => {
   const [applyChangesMode, setApplyChangesMode] = useState('instantly');
   return (
-    <React.Fragment>
+    <>
       <PivotGrid
         dataSource={dataSource}
         allowSortingBySummary={true}
@@ -35,7 +35,7 @@ const App = () => {
           ></SelectBox>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 const dataSource = new PivotGridDataSource({

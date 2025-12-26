@@ -37,6 +37,8 @@
     "Demos/TreeList/**/React/**/*.tsx",
     "Demos/DataGrid/**/React/**/*.ts",
     "Demos/DataGrid/**/React/**/*.tsx",
+    "Demos/PivotGrid/**/React/**/*.ts",
+    "Demos/PivotGrid/**/React/**/*.tsx",
     "Demos/Accordion/**/React/**/*.ts",
     "Demos/Accordion/**/React/**/*.tsx",
     "Demos/ActionSheet/**/React/**/*.ts",
