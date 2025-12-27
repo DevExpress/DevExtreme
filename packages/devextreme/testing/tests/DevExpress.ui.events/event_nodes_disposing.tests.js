@@ -1,11 +1,5 @@
-import $ from 'jquery';
 import eventsEngine from 'common/core/events/core/events_engine';
 import domAdapter from '__internal/core/m_dom_adapter';
-
-QUnit.testStart(function() {
-    const markup = '';
-    $('#qunit-fixture').html(markup);
-});
 
 QUnit.module('event nodes disposing', {
     afterEach: function() {
