@@ -1,4 +1,3 @@
-import messageLocalization from '@js/common/core/localization/message';
 import devices from '@js/core/devices';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
@@ -92,7 +91,7 @@ export const DEFAULT_SCHEDULER_OPTIONS: Properties = {
   timeZone: '',
   startDateTimeZoneExpr: 'startDateTimeZone',
   endDateTimeZoneExpr: 'endDateTimeZone',
-  noDataText: messageLocalization.format('dxCollectionWidget-noDataText'),
+  noDataText: '',
   adaptivityEnabled: false,
   scrolling: {
     mode: 'standard',

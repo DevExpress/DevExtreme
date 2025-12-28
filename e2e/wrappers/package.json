@@ -35,7 +35,7 @@
     "devextreme-quill": "catalog:",
     "devextreme-react": "workspace:~",
     "devextreme-vue": "workspace:~",
-    "express": "4.21.1",
+    "express": "4.21.2",
     "inferno": "^8.2.0",
     "inferno-create-element": "^8.2.0",
     "jszip": "^3.10.1",
