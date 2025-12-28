@@ -2,11 +2,6 @@ import { DxPromise, DxExtendedPromise } from '../core/utils/deferred';
 import { DeepPartial } from '../core';
 import { FilterDescriptor, GroupDescriptor, LoadOptions } from '../common/data';
 
-/**
- * @docid StoreOptions
- * @namespace DevExpress.common.data
- * @hidden
- */
 type StoreChange<TItem = any, TKey = any > = {
     type: 'insert' | 'update' | 'remove';
     data?: DeepPartial<TItem>;
@@ -14,6 +9,11 @@ type StoreChange<TItem = any, TKey = any > = {
     index?: number;
 };
 
+/**
+ * @docid StoreOptions
+ * @namespace DevExpress.common.data
+ * @hidden
+ */
 export type StoreOptions<
     TItem = any,
     TKey = any,
