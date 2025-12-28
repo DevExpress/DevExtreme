@@ -21,7 +21,7 @@ const App = () => {
   const [taskDetails, setTaskDetails] = useState('');
   const [taskStatus, setTaskStatus] = useState('');
   const [taskProgress, setTaskProgress] = useState('');
-  const [focusedRowKey, setFocusedRowKey] = useState(117);
+  const [focusedRowKey, setFocusedRowKey] = useState<number | undefined>(117);
   const [autoNavigateToFocusedRow, setAutoNavigateToFocusedRow] = useState(true);
 
   const onTaskIdChanged = useCallback((e: NumberBoxTypes.ValueChangedEvent) => {

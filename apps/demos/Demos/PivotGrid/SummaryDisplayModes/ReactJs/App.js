@@ -4,25 +4,27 @@ import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import { sales } from './data.js';
 
 const onContextMenuPreparing = (e) => {
-  if (e.field && e.field.dataField === 'amount') {
+  if (e.field?.dataField === 'amount') {
     summaryDisplayModes.forEach((mode) => {
-      e.items.push({
-        text: mode.text,
-        selected: e.field.summaryDisplayMode === mode.value,
-        onItemClick: () => {
-          let format;
-          const caption = mode.value === 'none' ? 'Total Sales' : 'Relative Sales';
-          if (mode.value === 'none' || mode.value === 'absoluteVariation') {
-            format = 'currency';
-          }
-          dataSource.field(e.field.index, {
-            summaryDisplayMode: mode.value,
-            format,
-            caption,
-          });
-          dataSource.load();
-        },
-      });
+      if (e.items) {
+        e.items.push({
+          text: mode.text,
+          selected: e.field?.summaryDisplayMode === mode.value,
+          onItemClick: () => {
+            let format;
+            const caption = mode.value === 'none' ? 'Total Sales' : 'Relative Sales';
+            if (mode.value === 'none' || mode.value === 'absoluteVariation') {
+              format = 'currency';
+            }
+            dataSource.field(e.field?.index, {
+              summaryDisplayMode: mode.value,
+              format,
+              caption,
+            });
+            dataSource.load();
+          },
+        });
+      }
     });
   }
 };
@@ -72,7 +74,7 @@ const dataSource = new PivotGridDataSource({
   store: sales,
 });
 const App = () => (
-  <React.Fragment>
+  <>
     <div className="desc-container">
       Right-click (or&nbsp;touch and hold) the &quot;Relative Sales&quot; field and select
       an&nbsp;item from the appeared context menu to&nbsp;change the
@@ -94,6 +96,6 @@ const App = () => (
       />
       <FieldChooser enabled={false} />
     </PivotGrid>
-  </React.Fragment>
+  </>
 );
 export default App;

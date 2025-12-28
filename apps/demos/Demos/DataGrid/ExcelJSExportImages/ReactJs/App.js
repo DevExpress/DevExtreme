@@ -22,8 +22,8 @@ const onExporting = (e) => {
     autoFilterEnabled: true,
     topLeftCell: { row: 2, column: 2 },
     customizeCell: ({ gridCell, excelCell }) => {
-      if (gridCell.rowType === 'data') {
-        if (gridCell.column.dataField === 'Picture') {
+      if (gridCell?.rowType === 'data') {
+        if (excelCell && gridCell?.column?.dataField === 'Picture') {
           excelCell.value = undefined;
           const image = workbook.addImage({
             base64: gridCell.value,

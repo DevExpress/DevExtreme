@@ -24,7 +24,7 @@ const statusLabel = { 'aria-label': 'Status' };
 const employees = createStore({
   key: 'ID',
   loadUrl: `${url}/Employees`,
-  onBeforeSend(method, ajaxOptions) {
+  onBeforeSend(_method, ajaxOptions) {
     ajaxOptions.xhrFields = { withCredentials: true };
   },
 });
@@ -34,7 +34,7 @@ const tasks = createStore({
   loadUrl: `${url}/Tasks`,
   updateUrl: `${url}/UpdateTask`,
   insertUrl: `${url}/InsertTask`,
-  onBeforeSend(method, ajaxOptions) {
+  onBeforeSend(_method, ajaxOptions) {
     ajaxOptions.xhrFields = { withCredentials: true };
   },
 });
@@ -46,7 +46,7 @@ const cellTemplate = (
   const noBreakSpace = '\u00A0';
 
   const assignees = (options.value || []).map(
-    (assigneeId: number) => options.column.lookup.calculateCellValue(assigneeId),
+    (assigneeId: number) => options.column.lookup?.calculateCellValue?.(assigneeId),
   );
   const text = assignees.join(', ');
 
@@ -73,7 +73,7 @@ function calculateFilterExpression(
 
 const onRowInserted = (e: DataGridTypes.RowInsertedEvent) => e.component.navigateToRow(e.key);
 
-const statusEditorRender = (cell) => {
+const statusEditorRender = (cell: DataGridTypes.ColumnEditCellTemplateData) => {
   const onValueChanged = (e: SelectBoxTypes.ValueChangedEvent) => cell.setValue(e.value);
 
   const itemRender = (data: { id: number, name: string } | null) => {
@@ -91,10 +91,15 @@ const statusEditorRender = (cell) => {
     return <span>(All)</span>;
   };
 
+  const lookupDataSource = cell.column.lookup?.dataSource;
+  const dataSource = typeof lookupDataSource === 'function'
+    ? lookupDataSource({ data: cell.data, key: cell.row.key })
+    : lookupDataSource;
+
   return (
     <SelectBox
       defaultValue={cell.value}
-      {...cell.column.lookup}
+      dataSource={dataSource}
       onValueChanged={onValueChanged}
       inputAttr={statusLabel}
       itemRender={itemRender} />

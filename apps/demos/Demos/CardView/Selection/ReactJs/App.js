@@ -82,7 +82,7 @@ const App = () => {
         <Selection
           mode={selectionMode}
           showCheckBoxesMode={showCheckBoxesMode}
-          allowSelectAll={allowSelectAll}
+          allowSelectAll={!!allowSelectAll}
           selectAllMode={selectAllMode}
         />
         <Column dataField="FullName" />
