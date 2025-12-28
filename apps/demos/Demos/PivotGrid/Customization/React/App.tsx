@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
+
 import PivotGrid, { FieldChooser } from 'devextreme-react/pivot-grid';
 import CheckBox from 'devextreme-react/check-box';
+import type { CheckBoxTypes } from 'devextreme-react/check-box';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
+
 import { sales } from './data.ts';
 
+type CheckBoxValue = CheckBoxTypes.Properties['value'];
+
 const App = () => {
-  const [showTotalsPrior, setShowTotalsPrior] = useState(false);
-  const [dataFieldArea, setDataFieldArea] = useState(false);
-  const [rowHeaderLayout, setRowHeaderLayout] = useState(true);
+  const [showTotalsPrior, setShowTotalsPrior] = useState<CheckBoxValue>(false);
+  const [dataFieldArea, setDataFieldArea] = useState<CheckBoxValue>(false);
+  const [rowHeaderLayout, setRowHeaderLayout] = useState<CheckBoxValue>(true);
 
   return (
-    <React.Fragment>
+    <>
       <PivotGrid
         id="sales"
         showTotalsPrior={showTotalsPrior ? 'both' : 'none'}
@@ -52,7 +57,7 @@ const App = () => {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 

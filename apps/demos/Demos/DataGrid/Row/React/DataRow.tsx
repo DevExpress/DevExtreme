@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { type DataGridTypes } from 'devextreme-react/data-grid';
+import type { DataGridTypes } from 'devextreme-react/data-grid';
 
 const formatDate = new Intl.DateTimeFormat('en-US').format;
 

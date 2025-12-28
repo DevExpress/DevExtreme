@@ -1,8 +1,8 @@
 import React from 'react';
 import { formatNumber } from 'devextreme-react/common/core/localization';
-import { type DataGridTypes } from 'devextreme-react/data-grid';
+import type { DataGridTypes } from 'devextreme-react/data-grid';
 
-const getGridCellData = (gridData: DataGridTypes.ColumnCellTemplateData) => gridData.data[gridData.column.caption.toLowerCase()];
+const getGridCellData = (gridData: DataGridTypes.ColumnCellTemplateData) => gridData.data[gridData.column.caption?.toLowerCase() ?? ''];
 
 const DiffCell = (cellData: DataGridTypes.ColumnCellTemplateData) => {
   const gridCellData = getGridCellData(cellData);

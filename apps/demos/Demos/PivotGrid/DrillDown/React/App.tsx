@@ -1,10 +1,12 @@
 import React, { useCallback, useRef, useState } from 'react';
+
 import {
   PivotGrid,
   FieldChooser,
   type PivotGridTypes,
 } from 'devextreme-react/pivot-grid';
-import { DataGrid, Column, DataGridRef } from 'devextreme-react/data-grid';
+import { DataGrid, Column } from 'devextreme-react/data-grid';
+import type { DataGridRef } from 'devextreme-react/data-grid';
 import { Popup } from 'devextreme-react/popup';
 import { DataSource } from 'devextreme-react/common/data';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
@@ -13,15 +15,15 @@ import { sales } from './data.ts';
 
 const App = () => {
   const [popupTitle, setPopupTitle] = useState('');
-  const [drillDownDataSource, setDrillDownDataSource] = useState<DataSource>(null);
+  const [drillDownDataSource, setDrillDownDataSource] = useState<DataSource | null>(null);
   const [popupVisible, setPopupVisible] = useState(false);
   const dataGridRef = useRef<DataGridRef>(null);
 
   const onCellClick = useCallback((e: PivotGridTypes.CellClickEvent) => {
-    if (e.area === 'data') {
+    if (e.area === 'data' && e.cell) {
       const pivotGridDataSource = e.component.getDataSource();
-      const rowPathLength = e.cell.rowPath.length;
-      const rowPathName = e.cell.rowPath[rowPathLength - 1];
+      const rowPathLength = e.cell.rowPath?.length ?? 0;
+      const rowPathName = e.cell.rowPath?.[rowPathLength - 1];
 
       setPopupTitle(`${rowPathName || 'Total'} Drill Down Data`);
       setDrillDownDataSource(pivotGridDataSource.createDrillDownDataSource(e.cell));
@@ -30,7 +32,7 @@ const App = () => {
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <PivotGrid
         id="sales"
         allowSortingBySummary={true}
@@ -49,7 +51,7 @@ const App = () => {
         height={400}
         title={popupTitle}
         onHiding={() => setPopupVisible(false)}
-        onShown={() => dataGridRef.current.instance().updateDimensions()}
+        onShown={() => dataGridRef.current?.instance().updateDimensions()}
         showCloseButton={true}
       >
         <DataGrid
@@ -64,7 +66,7 @@ const App = () => {
           <Column dataField="date" dataType="date" />
         </DataGrid>
       </Popup>
-    </React.Fragment>
+    </>
   );
 };
 

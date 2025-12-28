@@ -12,7 +12,7 @@ import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import XmlaStore from 'devextreme/ui/pivot_grid/xmla_store';
 
 const App = () => (
-  <React.Fragment>
+  <>
     <div className="long-title">
       <h3>Sales Statistics</h3>
     </div>
@@ -30,7 +30,7 @@ const App = () => (
       </HeaderFilter>
       <Scrolling mode="virtual" />
     </PivotGrid>
-  </React.Fragment>
+  </>
 );
 
 const dataSource = new PivotGridDataSource({

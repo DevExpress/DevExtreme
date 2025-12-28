@@ -3,9 +3,12 @@ import {
   PivotGrid, HeaderFilter, Search, FieldChooser, FieldPanel,
 } from 'devextreme-react/pivot-grid';
 import { CheckBox } from 'devextreme-react/check-box';
+import type { CheckBoxTypes } from 'devextreme-react/check-box';
 
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import XmlaStore from 'devextreme/ui/pivot_grid/xmla_store';
+
+type CheckBoxValue = CheckBoxTypes.Properties['value'];
 
 const dataSource = new PivotGridDataSource({
   fields: [
@@ -32,8 +35,8 @@ const dataSource = new PivotGridDataSource({
 });
 
 const App = () => {
-  const [searchEnabled, setSearchEnabled] = useState(true);
-  const [showRelevantValues, setShowRelevantValues] = useState(true);
+  const [searchEnabled, setSearchEnabled] = useState<CheckBoxValue>(true);
+  const [showRelevantValues, setShowRelevantValues] = useState<CheckBoxValue>(true);
 
   return (
     <div>
@@ -47,11 +50,11 @@ const App = () => {
         dataSource={dataSource}
       >
         <HeaderFilter
-          showRelevantValues={showRelevantValues}
+          showRelevantValues={!!showRelevantValues}
           width={300}
           height={400}
         >
-          <Search enabled={searchEnabled} />
+          <Search enabled={!!searchEnabled} />
         </HeaderFilter>
         <FieldChooser allowSearch={true} />
         <FieldPanel visible={true} />
