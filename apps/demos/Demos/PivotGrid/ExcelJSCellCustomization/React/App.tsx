@@ -11,6 +11,8 @@ import { saveAs } from 'file-saver-es';
 // Our demo infrastructure requires us to use 'file-saver-es'.
 // We recommend that you use the official 'file-saver' package in your applications.
 import { exportPivotGrid } from 'devextreme/excel_exporter';
+import type { PivotGridCell, ExcelExportPivotGridProps } from 'devextreme/excel_exporter';
+
 import { sales } from './data.ts';
 
 interface ConditionalAppearance {
@@ -18,6 +20,8 @@ interface ConditionalAppearance {
   font: string,
   bold?: boolean,
 }
+
+type CustomizeCellOptions = Parameters<Required<ExcelExportPivotGridProps>['customizeCell']>[0];
 
 const dataSource = new PivotGridDataSource({
   fields: [{
@@ -45,9 +49,13 @@ const dataSource = new PivotGridDataSource({
   store: sales,
 });
 
-const isDataCell = (cell) => cell.rowType === 'D' && cell.columnType === 'D';
+const isDataCell = (cell: PivotGridCell) => cell.rowType === 'D' && cell.columnType === 'D';
 
-const isTotalCell = (cell) => (cell.type === 'T' || cell.type === 'GT' || cell.rowType === 'T' || cell.rowType === 'GT' || cell.columnType === 'T' || cell.columnType === 'GT');
+const isTotalCell = (cell: PivotGridCell) => (
+  cell.type === 'T' || cell.type === 'GT'
+  || cell.rowType === 'T' || cell.rowType === 'GT'
+  || cell.columnType === 'T' || cell.columnType === 'GT'
+);
 
 const getExcelCellFormat = ({ fill, font, bold }: ConditionalAppearance) =>
   ({
@@ -62,7 +70,7 @@ const getCssStyles = ({ fill, font, bold }: ConditionalAppearance) =>
     'font-weight': bold ? 'bold' : undefined,
   });
 
-const getConditionalAppearance = (cell): ConditionalAppearance => {
+const getConditionalAppearance = (cell: PivotGridCell): ConditionalAppearance => {
   if (isTotalCell(cell)) {
     return { fill: 'F2F2F2', font: '3F3F3F', bold: true };
   }
@@ -83,19 +91,21 @@ const onExporting = (e: PivotGridTypes.ExportingEvent) => {
   exportPivotGrid({
     component: e.component,
     worksheet,
-    customizeCell: ({ pivotCell, excelCell }) => {
-      if (isDataCell(pivotCell) || isTotalCell(pivotCell)) {
-        const appearance = getConditionalAppearance(pivotCell);
-        Object.assign(excelCell, getExcelCellFormat(appearance));
-      }
+    customizeCell: ({ pivotCell, excelCell }: CustomizeCellOptions) => {
+      if (pivotCell && excelCell) {
+        if (isDataCell(pivotCell) || isTotalCell(pivotCell)) {
+          const appearance = getConditionalAppearance(pivotCell);
+          Object.assign(excelCell, getExcelCellFormat(appearance));
+        }
 
-      const borderStyle = { style: 'thin', color: { argb: 'FF7E7E7E' } };
-      excelCell.border = {
-        bottom: borderStyle,
-        left: borderStyle,
-        right: borderStyle,
-        top: borderStyle,
-      };
+        const borderStyle = { style: 'thin', color: { argb: 'FF7E7E7E' } };
+        excelCell.border = {
+          bottom: borderStyle,
+          left: borderStyle,
+          right: borderStyle,
+          top: borderStyle,
+        };
+      }
     },
   }).then(() => {
     workbook.xlsx.writeBuffer().then((buffer) => {

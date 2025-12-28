@@ -1,7 +1,7 @@
 import React from 'react';
+import { jsPDF } from 'jspdf';
 import DataGrid, { Column, Export } from 'devextreme-react/data-grid';
 import { exportDataGrid } from 'devextreme-react/common/export/pdf';
-import { jsPDF } from 'jspdf';
 import { employees } from './data.js';
 
 const exportFormats = ['pdf'];
@@ -19,13 +19,18 @@ const onExporting = ({ component }) => {
     topLeft: { x: 5, y: 5 },
     columnWidths: [30, 30, 30, 30, 30, 30],
     onRowExporting: (e) => {
-      const isHeader = e.rowCells[0].text === 'Picture';
+      const isHeader = e.rowCells?.[0].text === 'Picture';
       if (!isHeader) {
         e.rowHeight = 40;
       }
     },
     customDrawCell: (e) => {
-      if (e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'Picture') {
+      if (
+        e.gridCell &&
+        e.gridCell.rowType === 'data' &&
+        e.gridCell.column?.dataField === 'Picture' &&
+        e.rect
+      ) {
         doc.addImage(e.gridCell.value, 'PNG', e.rect.x, e.rect.y, e.rect.w, e.rect.h);
         e.cancel = true;
       }

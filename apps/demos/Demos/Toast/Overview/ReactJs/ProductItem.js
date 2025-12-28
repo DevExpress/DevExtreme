@@ -1,24 +1,24 @@
 import React, { useCallback } from 'react';
 import { CheckBox } from 'devextreme-react/check-box';
 
-export function ProductItem(props) {
+export function ProductItem({ product, checkAvailability }) {
   const onValueChanged = useCallback(
     (e) => {
-      props.checkAvailability(e, props.product);
+      checkAvailability(e, product);
     },
-    [props],
+    [product, checkAvailability],
   );
   return (
-    <React.Fragment>
+    <>
       <img
-        alt={props.product.Name}
-        src={props.product.ImageSrc}
+        alt={product.Name}
+        src={product.ImageSrc}
       />
-      <div>{props.product.Name}</div>
+      <div>{product.Name}</div>
       <CheckBox
         text="Available"
         onValueChanged={onValueChanged}
       />
-    </React.Fragment>
+    </>
   );
 }

@@ -1,4 +1,4 @@
-const federalHolidays = [
+export const federalHolidays = [
   new Date(2017, 0, 1),
   new Date(2017, 0, 2),
   new Date(2017, 0, 16),
@@ -11,8 +11,3 @@ const federalHolidays = [
   new Date(2017, 10, 23),
   new Date(2017, 11, 25),
 ];
-export default {
-  getFederalHolidays() {
-    return federalHolidays;
-  },
-};

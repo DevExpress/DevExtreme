@@ -10,32 +10,20 @@ const App = () => {
   const [swipeEnabled, setSwipeEnabled] = useState(true);
   const [loop, setLoop] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const onSelectionChanged = useCallback(
-    (args) => {
-      if (args.name === 'selectedIndex') {
-        setSelectedIndex(args.value);
-      }
-    },
-    [setSelectedIndex],
-  );
-  const onLoopChanged = useCallback(
-    (args) => {
-      setLoop(args.value);
-    },
-    [setLoop],
-  );
-  const onAnimationEnabledChanged = useCallback(
-    (args) => {
-      setAnimationEnabled(args.value);
-    },
-    [setAnimationEnabled],
-  );
-  const onSwipeEnabledChanged = useCallback(
-    (args) => {
-      setSwipeEnabled(args.value);
-    },
-    [setSwipeEnabled],
-  );
+  const onAnimationEnabledChanged = useCallback(({ value }) => {
+    setAnimationEnabled(value);
+  }, []);
+  const onSwipeEnabledChanged = useCallback(({ value }) => {
+    setSwipeEnabled(value);
+  }, []);
+  const onLoopChanged = useCallback(({ value }) => {
+    setLoop(value);
+  }, []);
+  const onSelectionChanged = useCallback(({ name, value }) => {
+    if (name === 'selectedIndex') {
+      setSelectedIndex(value);
+    }
+  }, []);
   return (
     <div>
       <TabPanel

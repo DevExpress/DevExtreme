@@ -78,14 +78,14 @@ const App = () => {
           />
 
           <ColumnChooserSearch
-            enabled={searchEnabled}
+            enabled={!!searchEnabled}
             editorOptions={searchEditorOptions}
           />
 
           <ColumnChooserSelection
-            allowSelectAll={allowSelectAll}
-            selectByClick={selectByClick}
-            recursive={recursive}
+            allowSelectAll={!!allowSelectAll}
+            selectByClick={!!selectByClick}
+            recursive={!!recursive}
           />
         </ColumnChooser>
       </TreeList>

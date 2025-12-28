@@ -1,4 +1,6 @@
-export const tasks = [{ id: 1, text: 'Prepare 2016 Financial' },
+import type { Task } from './types.ts';
+
+export const tasks: Task[] = [{ id: 1, text: 'Prepare 2016 Financial' },
   { id: 2, text: 'Prepare 2016 Marketing Plan' },
   { id: 3, text: 'Update Personnel Files' },
   { id: 4, text: 'Review Health Insurance Options Under the Affordable Care Act' },

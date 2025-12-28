@@ -1,7 +1,7 @@
 import type { FileSystemItem } from './types';
 
-const itemsDriveD: FileSystemItem[] = [];
-const itemsDriveC: FileSystemItem[] = [{
+export const itemsDriveD: FileSystemItem[] = [];
+export const itemsDriveC: FileSystemItem[] = [{
   id: '1',
   name: 'Documents',
   icon: 'activefolder',
@@ -89,12 +89,3 @@ const itemsDriveC: FileSystemItem[] = [{
   icon: 'file',
   isDirectory: false,
 }];
-
-export default {
-  getItemsDriveC() {
-    return itemsDriveC;
-  },
-  getItemsDriveD() {
-    return itemsDriveD;
-  },
-};

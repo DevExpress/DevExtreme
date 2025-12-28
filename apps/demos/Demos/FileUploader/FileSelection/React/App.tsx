@@ -9,7 +9,7 @@ const lastNameLabel = { 'aria-label': 'Last Name' };
 const fileUploaderLabel = { 'aria-label': 'Select Photo' };
 
 export default function App() {
-  const formElement = useRef(null);
+  const formElement = useRef<HTMLFormElement>(null);
 
   const onClick = useCallback(() => {
     notify('This demo only illustrates the form upload interface. Uploading to a server is not available.');

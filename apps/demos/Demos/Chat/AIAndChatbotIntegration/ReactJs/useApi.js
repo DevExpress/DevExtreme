@@ -99,7 +99,7 @@ export const useApi = () => {
       const aiResponse = await getAIResponse(messageHistory.slice(0, -1));
       updateLastMessageContent(aiResponse);
     } catch {
-      updateLastMessageContent(messageHistory.at(-1).content);
+      updateLastMessageContent(messageHistory.at(-1)?.content);
       alertLimitReached();
     }
   }, [alertLimitReached, updateLastMessageContent]);

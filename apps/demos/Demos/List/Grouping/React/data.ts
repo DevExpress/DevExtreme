@@ -1,4 +1,6 @@
-export const employees = [{
+import type { Employee } from './types.ts';
+
+export const employees: Employee[] = [{
   key: 'Mr. John Heart',
   items: ['Choose between PPO and HMO Health Plan', 'Google AdWords Strategy', 'New Brochures', 'Update NDA Agreement', 'Review Product Recall Report by Engineering Team'],
 }, {

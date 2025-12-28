@@ -1,11 +1,11 @@
 import React, { useCallback, useState } from 'react';
 import RangeSelector, {
-  Margin,
-  Scale,
-  MinorTick,
-  Marker,
-  Label,
   Behavior,
+  Label,
+  Margin,
+  Marker,
+  MinorTick,
+  Scale,
   SliderMarker,
 } from 'devextreme-react/range-selector';
 import { SelectBox } from 'devextreme-react/select-box';
@@ -19,18 +19,12 @@ function App() {
     calculateWorkdays([startValue, endValue]),
   );
   const [behaviorMode, setBehaviorMode] = useState(behaviorModes[0]);
-  const processRange = useCallback(
-    (e) => {
-      setWorkingDaysCount(calculateWorkdays(e.value));
-    },
-    [setWorkingDaysCount],
-  );
-  const setBehavior = useCallback(
-    (data) => {
-      setBehaviorMode(data.value);
-    },
-    [setBehaviorMode],
-  );
+  const processRange = useCallback((e) => {
+    setWorkingDaysCount(calculateWorkdays(e.value));
+  }, []);
+  const setBehavior = useCallback((data) => {
+    setBehaviorMode(data.value);
+  }, []);
   return (
     <div id="range-selector-demo">
       <RangeSelector

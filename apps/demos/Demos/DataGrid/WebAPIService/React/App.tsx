@@ -20,6 +20,7 @@ import {
   ValueFormat,
 } from 'devextreme-react/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
+
 import MasterDetailGrid from './MasterDetailGrid.tsx';
 
 const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi';

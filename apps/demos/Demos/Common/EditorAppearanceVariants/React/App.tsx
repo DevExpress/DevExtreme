@@ -1,15 +1,17 @@
 import React, { useCallback, useState } from 'react';
 
-import { EditorStyle, LabelMode } from 'devextreme-react/common';
+import type { EditorStyle, LabelMode } from 'devextreme-react/common';
 
 import notify from 'devextreme/ui/notify';
 
 import { SelectBox } from 'devextreme-react/select-box';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
 import { TextBox } from 'devextreme-react/text-box';
 import { DateBox } from 'devextreme-react/date-box';
 import { DateRangeBox } from 'devextreme-react/date-range-box';
 import { TextArea } from 'devextreme-react/text-area';
-import { Button, type ButtonTypes } from 'devextreme-react/button';
+import { Button } from 'devextreme-react/button';
+import type { ButtonTypes } from 'devextreme-react/button';
 import { Validator, RequiredRule } from 'devextreme-react/validator';
 
 import {
@@ -31,7 +33,7 @@ const phoneRules = {
   X: /[02-9]/,
 };
 
-function validateClick({ validationGroup }: ButtonTypes.ClickEvent) {
+function validateClick({ validationGroup }: ButtonTypes.ClickEvent): void {
   const result = validationGroup.validate();
   if (result.isValid) {
     notify('The task was saved successfully.', 'success');
@@ -42,23 +44,25 @@ function validateClick({ validationGroup }: ButtonTypes.ClickEvent) {
 
 export default function App() {
   const defaultStylingMode = 'outlined';
+
   const [stylingMode, setStylingMode] = useState<EditorStyle>(defaultStylingMode);
   const [labelMode, setLabelMode] = useState<LabelMode>('static');
+
   const changeStylingMode = useCallback(
-    ({ value }) => {
+    ({ value }: SelectBoxTypes.ValueChangedEvent): void => {
       setStylingMode(value);
     },
-    [setStylingMode],
+    [],
   );
   const labelModeChange = useCallback(
-    ({ value }) => {
+    ({ value }: SelectBoxTypes.ValueChangedEvent): void => {
       setLabelMode(value);
     },
-    [setLabelMode],
+    [],
   );
 
   return (
-    <React.Fragment>
+    <>
       <div className="options">
         <div className="caption">Options</div>
         <div className="editors-modes">
@@ -191,6 +195,6 @@ export default function App() {
         type="default"
         id="validate"
       />
-    </React.Fragment>
+    </>
   );
 }

@@ -29,8 +29,8 @@ interface PDFCell {
   backgroundColor?: string;
 }
 
-const setAlternatingRowsBackground = (dataGrid: DataGridRef, gridCell: DataGridCell, pdfCell: PDFCell) => {
-  if (gridCell.rowType === 'data') {
+const setAlternatingRowsBackground = (dataGrid: DataGridRef | null, gridCell: DataGridCell, pdfCell: PDFCell) => {
+  if (dataGrid && gridCell?.rowType === 'data') {
     const rowIndex = dataGrid.instance().getRowIndexByKey(gridCell.data.Product_ID);
     if (rowIndex % 2 === 0) {
       pdfCell.backgroundColor = '#D3D3D3';
@@ -39,29 +39,33 @@ const setAlternatingRowsBackground = (dataGrid: DataGridRef, gridCell: DataGridC
 };
 
 const App = () => {
-  const priceGridRef = useRef(null);
-  const ratingGridRef = useRef(null);
+  const priceGridRef = useRef<DataGridRef>(null);
+  const ratingGridRef = useRef<DataGridRef>(null);
 
   const exportGrids = useCallback(() => {
     const doc = new jsPDF();
 
     exportDataGrid({
       jsPDFDocument: doc,
-      component: priceGridRef.current.instance(),
+      component: priceGridRef.current?.instance(),
       topLeft: { x: 7, y: 5 },
       columnWidths: [20, 50, 50, 50],
       customizeCell: ({ gridCell, pdfCell }) => {
-        setAlternatingRowsBackground(priceGridRef.current, gridCell, pdfCell);
+        if (gridCell && pdfCell) {
+          setAlternatingRowsBackground(priceGridRef.current, gridCell, pdfCell);
+        }
       },
     }).then(() => {
       doc.addPage();
       exportDataGrid({
         jsPDFDocument: doc,
-        component: ratingGridRef.current.instance(),
+        component: ratingGridRef.current?.instance(),
         topLeft: { x: 7, y: 5 },
         columnWidths: [20, 50, 50, 50],
         customizeCell: ({ gridCell, pdfCell }) => {
-          setAlternatingRowsBackground(ratingGridRef.current, gridCell, pdfCell);
+          if (gridCell && pdfCell) {
+            setAlternatingRowsBackground(ratingGridRef.current, gridCell, pdfCell);
+          }
         },
       }).then(() => {
         doc.save('MultipleGrids.pdf');

@@ -12,28 +12,22 @@ const defaultValues = {
 };
 const startValueLabel = { 'aria-label': 'Start Value' };
 const endValueLabel = { 'aria-label': 'End Value' };
+function format(value) {
+  return `${value}%`;
+}
 function App() {
   const [startValue, setStartValue] = useState(10);
   const [endValue, setEndValue] = useState(90);
-  const onRangeChanged = useCallback(
-    (data) => {
-      setStartValue(data.start);
-      setEndValue(data.end);
-    },
-    [setStartValue, setEndValue],
-  );
-  const onStartChanged = useCallback(
-    (data) => {
-      setStartValue(data.value);
-    },
-    [setStartValue],
-  );
-  const onEndChanged = useCallback(
-    (data) => {
-      setEndValue(data.value);
-    },
-    [setEndValue],
-  );
+  const onRangeChanged = useCallback((data) => {
+    setStartValue(data.start);
+    setEndValue(data.end);
+  }, []);
+  const onStartChanged = useCallback((data) => {
+    setStartValue(data.value);
+  }, []);
+  const onEndChanged = useCallback((data) => {
+    setEndValue(data.value);
+  }, []);
   return (
     <div className="form">
       <div className="dx-fieldset">
@@ -172,8 +166,5 @@ function App() {
       </div>
     </div>
   );
-}
-function format(value) {
-  return `${value}%`;
 }
 export default App;

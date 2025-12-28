@@ -5,11 +5,22 @@ import PivotGrid, {
   FieldPanel,
   StateStoring,
 } from 'devextreme-react/pivot-grid';
+import type { PivotGridTypes } from 'devextreme-react/pivot-grid';
 import Button from 'devextreme-react/button';
+import type { ContextMenuTypes } from 'devextreme-react/context-menu';
 
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 
 import { sales } from './data.ts';
+
+type FieldWithIndex = PivotGridTypes.ContextMenuPreparingEvent['field'] & {
+  index: number
+};
+
+type ContextMenuItem = ContextMenuTypes.Item & {
+  value?: string;
+  onItemClick?: (e: ContextMenuTypes.ItemClickEvent) => void;
+};
 
 const onRefreshClick = () => {
   window.location.reload();
@@ -19,17 +30,17 @@ const onResetClick = () => {
   dataSource.state({});
 };
 
-const onContextMenuPreparing = (e) => {
-  const sourceField = e.field;
+const onContextMenuPreparing = (e: PivotGridTypes.ContextMenuPreparingEvent) => {
+  const sourceField = e.field as FieldWithIndex;
 
-  if (sourceField) {
+  if (sourceField && e.items) {
     if (!sourceField.groupName || sourceField.groupIndex === 0) {
       e.items.push({
         text: 'Hide field',
         onItemClick() {
           let fieldIndex: number;
 
-          if (sourceField.groupName) {
+          if (sourceField.groupName && sourceField.area !== undefined && sourceField.areaIndex !== undefined) {
             const areaField: any = dataSource.getAreaFields(sourceField.area, true)[sourceField.areaIndex];
 
             fieldIndex = areaField.index;
@@ -46,7 +57,7 @@ const onContextMenuPreparing = (e) => {
     }
 
     if (sourceField.dataType === 'number') {
-      const menuItems = [];
+      const menuItems: ContextMenuItem[] = [];
 
       e.items.push({ text: 'Summary Type', items: menuItems });
 
@@ -56,10 +67,10 @@ const onContextMenuPreparing = (e) => {
         menuItems.push({
           text: summaryType,
           value: summaryType.toLowerCase(),
-          onItemClick(args) {
+          onItemClick(args: ContextMenuTypes.ItemClickEvent) {
             setSummaryType(args, sourceField);
           },
-          selected: e.field.summaryType === summaryTypeValue,
+          selected: e.field?.summaryType === summaryTypeValue,
         });
       });
     }
@@ -98,7 +109,10 @@ const dataSource = new PivotGridDataSource({
   store: sales,
 });
 
-const setSummaryType = (args, sourceField) => {
+const setSummaryType = (
+  args: ContextMenuTypes.ItemClickEvent,
+  sourceField: FieldWithIndex,
+) => {
   dataSource.field(sourceField.index, {
     summaryType: args.itemData.value,
   });
@@ -107,7 +121,7 @@ const setSummaryType = (args, sourceField) => {
 };
 
 const App = () => (
-  <React.Fragment>
+  <>
     <div id="pivotgrid-demo">
       <div className="desc-container">Expand, filter, sort and perform other operations
         on&nbsp;the PivotGrid&rsquo;s columns and
@@ -140,7 +154,7 @@ const App = () => (
         <FieldChooser enabled={true} />
       </PivotGrid>
     </div>
-  </React.Fragment>
+  </>
 );
 
 export default App;

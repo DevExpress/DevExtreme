@@ -1,12 +1,12 @@
 import React from 'react';
 import RangeSelector, {
-  Margin,
   Background,
-  Scale,
-  Label,
-  SliderMarker,
   Chart,
+  Label,
+  Margin,
+  Scale,
   Series,
+  SliderMarker,
 } from 'devextreme-react/range-selector';
 import { dataSource } from './data.js';
 

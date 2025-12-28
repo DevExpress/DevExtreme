@@ -12,13 +12,17 @@ const onResetClick = () => {
 };
 const onContextMenuPreparing = (e) => {
   const sourceField = e.field;
-  if (sourceField) {
+  if (sourceField && e.items) {
     if (!sourceField.groupName || sourceField.groupIndex === 0) {
       e.items.push({
         text: 'Hide field',
         onItemClick() {
           let fieldIndex;
-          if (sourceField.groupName) {
+          if (
+            sourceField.groupName &&
+            sourceField.area !== undefined &&
+            sourceField.areaIndex !== undefined
+          ) {
             const areaField = dataSource.getAreaFields(sourceField.area, true)[
               sourceField.areaIndex
             ];
@@ -44,7 +48,7 @@ const onContextMenuPreparing = (e) => {
           onItemClick(args) {
             setSummaryType(args, sourceField);
           },
-          selected: e.field.summaryType === summaryTypeValue,
+          selected: e.field?.summaryType === summaryTypeValue,
         });
       });
     }
@@ -95,7 +99,7 @@ const setSummaryType = (args, sourceField) => {
   dataSource.load();
 };
 const App = () => (
-  <React.Fragment>
+  <>
     <div id="pivotgrid-demo">
       <div className="desc-container">
         Expand, filter, sort and perform other operations on&nbsp;the PivotGrid&rsquo;s columns and
@@ -126,6 +130,6 @@ const App = () => (
         <FieldChooser enabled={true} />
       </PivotGrid>
     </div>
-  </React.Fragment>
+  </>
 );
 export default App;

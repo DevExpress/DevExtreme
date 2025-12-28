@@ -1,7 +1,8 @@
 import React from 'react';
 
 import DataGrid, { Column, Paging, Pager } from 'devextreme-react/data-grid';
-import { CustomStore, type LoadOptions, type LoadResultObject } from 'devextreme-react/common/data';
+import { CustomStore } from 'devextreme-react/common/data';
+import type { LoadOptions, LoadResultObject } from 'devextreme-react/common/data';
 import 'whatwg-fetch';
 
 function isNotEmpty(value: unknown) {

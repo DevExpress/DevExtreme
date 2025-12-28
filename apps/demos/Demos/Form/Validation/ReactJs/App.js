@@ -17,21 +17,20 @@ import notify from 'devextreme/ui/notify';
 import Validator from 'devextreme/ui/validator';
 import 'devextreme-react/autocomplete';
 import 'devextreme-react/date-range-box';
-import service from './data.js';
+import { customer, cities, countries } from './data.js';
 
-const customer = service.getCustomer();
 const checkBoxOptions = {
   text: 'I agree to the Terms and Conditions',
   value: false,
   width: 270,
 };
 const cityEditorOptions = {
-  dataSource: service.getCities(),
+  dataSource: cities,
   valueChangeEvent: 'keyup',
   minSearchLength: 2,
 };
 const countryEditorOptions = {
-  dataSource: service.getCountries(),
+  dataSource: countries,
 };
 const emailEditorOptions = {
   valueChangeEvent: 'keyup',
@@ -79,7 +78,7 @@ function sendRequest(value) {
 }
 const passwordComparison = () => customer.Password;
 const checkComparison = () => true;
-const asyncValidation = (params) => sendRequest(params.value);
+const asyncValidation = ({ value }) => sendRequest(value);
 const validateVacationDatesRange = ({ value }) => {
   const [startDate, endDate] = value;
   if (startDate === null || endDate === null) {
@@ -110,21 +109,21 @@ function App() {
     text: 'Reset',
     width: '120px',
     onClick: () => {
-      formRef.current.instance().reset();
+      formRef.current?.instance().reset();
     },
   });
   const changePasswordMode = useCallback((name) => {
-    const editor = formRef.current.instance().getEditor(name);
-    editor.option('mode', editor.option('mode') === 'text' ? 'password' : 'text');
+    const editor = formRef.current?.instance().getEditor(name);
+    editor?.option('mode', editor?.option('mode') === 'text' ? 'password' : 'text');
   }, []);
   const getPasswordOptions = useCallback(
     () => ({
       mode: 'password',
       valueChangeEvent: 'keyup',
       onValueChanged: () => {
-        const editor = formRef.current.instance().getEditor('ConfirmPassword');
-        if (editor.option('value')) {
-          const instance = Validator.getInstance(editor.element());
+        const editor = formRef.current?.instance().getEditor('ConfirmPassword');
+        if (editor?.option('value')) {
+          const instance = Validator.getInstance(editor?.element());
           instance.validate();
         }
       },
@@ -183,7 +182,7 @@ function App() {
     [resetButtonOptions, setResetButtonOptions],
   );
   return (
-    <React.Fragment>
+    <>
       <form
         action="your-action"
         onSubmit={handleSubmit}
@@ -340,7 +339,7 @@ function App() {
           </GroupItem>
         </Form>
       </form>
-    </React.Fragment>
+    </>
   );
 }
 export default App;

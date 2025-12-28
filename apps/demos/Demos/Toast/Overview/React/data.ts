@@ -1,4 +1,6 @@
-export const products = [{
+import type { Product } from './types.ts';
+
+export const products: Product[] = [{
   ID: 4,
   Name: 'SuperLED 50',
   Price: 1600,

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { type DxStepperTypes } from 'devextreme-angular/ui/stepper';
-import { BookingFormData } from "./app.types";
+import type { BookingFormData } from "./app.types";
 
 @Injectable({
   providedIn: 'root',
