@@ -4115,10 +4115,10 @@ declare module DevExpress.common.data {
     ): DevExpress.core.utils.DxExtendedPromise<TItem>;
   }
   /**
-    * [descr:StoreOptions]
-    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-    */
-   export type StoreOptions<TItem = any, TKey = any> = {
+   * [descr:StoreOptions]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type StoreOptions<TItem = any, TKey = any> = {
     /**
      * [descr:StoreOptions.errorHandler]
      */
