@@ -1,5 +1,7 @@
 import eventsEngine from 'common/core/events/core/events_engine';
 import domAdapter from '__internal/core/m_dom_adapter';
+// import clickEventName from 'common/core/events/m_click';
+const clickEventName = 'dxclick.dxDataGridEditorFactory focusin.dxDataGridEditorFactory';
 
 QUnit.testStart(function() {
     const markup = '<button id="test-element">Test</button>';
@@ -12,7 +14,7 @@ QUnit.testStart(function() {
 QUnit.module('event nodes disposing', {
     afterEach: function() {
         const document = domAdapter.getDocument();
-        eventsEngine.off(document, 'dxclick');
+        eventsEngine.off(document, clickEventName);
     }
 });
 
@@ -20,7 +22,7 @@ QUnit.test('should not leak memory when subscribing to dxclick on document and c
     const document = domAdapter.getDocument();
     const testElement = document.getElementById('test-element');
 
-    eventsEngine.on(document, 'dxclick', function() {});
+    eventsEngine.on(document, clickEventName, function() {});
 
     if(typeof globalThis !== 'undefined' && typeof globalThis.gc === 'function') {
         globalThis.gc();
