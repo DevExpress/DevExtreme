@@ -3,7 +3,8 @@ const ko = require('knockout');
 const browser = require('core/utils/browser');
 const devices = require('core/devices');
 
-require('../../../helpers/executeAsyncMock.js');
+require('fluent_blue_light.css!');
+require('../../helpers/executeAsyncMock.js');
 require('integration/knockout');
 require('bundles/modules/parts/widgets-web');
 
@@ -146,10 +147,10 @@ const checkThatTestingIsPossible = function() {
     return true;
 };
 
-const defaultOptions = {
+const options = {
     numberBoxAlign: 'right',
     testVerticalOffset: true,
-    testSwitchBaseline: true,
+    testSwitchBaseline: false,
     testDateBox: true
 };
 
@@ -199,16 +200,13 @@ const testVerticalAlign = function($parent, inputSelector, isContainer, testVert
     testBaselineOffset($label, $valueContainer);
 };
 
-module.exports = function(themeName, options) {
+const testFieldsetsOnPlatform = function() {
     if(!checkThatTestingIsPossible()) {
         return;
     }
 
-    options = options || {};
-    options = $.extend({}, defaultOptions, options);
-
-    const runTestModule = function(themeName) {
-        moduleWithoutCsp(themeName, {
+    const runTestModule = function() {
+        moduleWithoutCsp('fluent.blue.light', {
             beforeEach: function() {
                 DevExpress.testing.executeAsyncMock.setup();
                 $('#qunit-fixture').html(fieldsetFixtureTemplate);
@@ -452,3 +450,5 @@ module.exports = function(themeName, options) {
 
     runTestModule();
 };
+
+testFieldsetsOnPlatform();
