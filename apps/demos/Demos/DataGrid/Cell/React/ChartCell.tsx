@@ -1,6 +1,6 @@
 import React from 'react';
 import Sparkline, { Size, Tooltip } from 'devextreme-react/sparkline';
-import { type DataGridTypes } from 'devextreme-react/data-grid';
+import type { DataGridTypes } from 'devextreme-react/data-grid';
 
 const ChartCell = (cellData: DataGridTypes.ColumnCellTemplateData) => (
   <div className="chart-cell">

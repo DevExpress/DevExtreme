@@ -1,35 +1,39 @@
 import React from 'react';
 
-import PivotGrid, {
-  FieldChooser,
-  FieldPanel,
-} from 'devextreme-react/pivot-grid';
+import PivotGrid, { FieldChooser, FieldPanel } from 'devextreme-react/pivot-grid';
+import type { PivotGridTypes } from 'devextreme-react/pivot-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 
 import { sales } from './data.ts';
 
-const onContextMenuPreparing = (e) => {
-  if (e.field && e.field.dataField === 'amount') {
+type FieldWithIndex = PivotGridTypes.ContextMenuPreparingEvent['field'] & {
+  index: number
+};
+
+const onContextMenuPreparing = (e: PivotGridTypes.ContextMenuPreparingEvent) => {
+  if (e.field?.dataField === 'amount') {
     summaryDisplayModes.forEach((mode) => {
-      e.items.push({
-        text: mode.text,
-        selected: e.field.summaryDisplayMode === mode.value,
-        onItemClick: () => {
-          let format: string;
+      if (e.items) {
+        e.items.push({
+          text: mode.text,
+          selected: e.field?.summaryDisplayMode === mode.value,
+          onItemClick: () => {
+            let format: string | undefined;
 
-          const caption = mode.value === 'none' ? 'Total Sales' : 'Relative Sales';
-          if (mode.value === 'none' || mode.value === 'absoluteVariation') {
-            format = 'currency';
-          }
-          dataSource.field(e.field.index, {
-            summaryDisplayMode: mode.value,
-            format,
-            caption,
-          });
+            const caption = mode.value === 'none' ? 'Total Sales' : 'Relative Sales';
+            if (mode.value === 'none' || mode.value === 'absoluteVariation') {
+              format = 'currency';
+            }
+            dataSource.field((e.field as FieldWithIndex)?.index, {
+              summaryDisplayMode: mode.value,
+              format,
+              caption,
+            });
 
-          dataSource.load();
-        },
-      });
+            dataSource.load();
+          },
+        });
+      }
     });
   }
 };
@@ -83,7 +87,7 @@ const dataSource = new PivotGridDataSource({
 
 const App = () =>
   (
-    <React.Fragment>
+    <>
       <div className="desc-container">
         Right-click (or&nbsp;touch and hold) the &quot;Relative Sales&quot; field
         and select an&nbsp;item from the appeared context menu to&nbsp;change the
@@ -101,7 +105,7 @@ const App = () =>
         <FieldPanel showFilterFields={false} allowFieldDragging={false} visible={true} />
         <FieldChooser enabled={false} />
       </PivotGrid>
-    </React.Fragment>
+    </>
   );
 
 export default App;

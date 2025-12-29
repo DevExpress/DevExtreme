@@ -798,7 +798,7 @@ QUnit.module('Details View', moduleConfig, () => {
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
             width: 500,
-            height: 250,
+            height: 300,
             fileSystemProvider: createHugeFileSystem(),
             itemView: {
                 showParentFolder: true
@@ -839,7 +839,7 @@ QUnit.module('Details View', moduleConfig, () => {
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
             width: 500,
-            height: 250,
+            height: 300,
             fileSystemProvider: createHugeFileSystem(),
             itemView: {
                 showParentFolder: true

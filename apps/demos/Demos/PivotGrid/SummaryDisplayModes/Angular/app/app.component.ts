@@ -71,8 +71,6 @@ export class AppComponent {
   }
 
   prepareContextMenu(e: DxPivotGridTypes.ContextMenuPreparingEvent) {
-    type SourceField = (typeof e.field) & { index: number };
-
     if (e.field && e.field.dataField === 'amount') {
       this.summaryDisplayModes.forEach((mode) => {
         e.items.push({
@@ -86,7 +84,7 @@ export class AppComponent {
                             || mode.value === 'absoluteVariation') {
               format = 'currency';
             }
-            this.pivotGridDataSource.field((e.field as SourceField).index, {
+            this.pivotGridDataSource.field(e.field.index, {
               summaryDisplayMode: mode.value,
               format,
               caption,

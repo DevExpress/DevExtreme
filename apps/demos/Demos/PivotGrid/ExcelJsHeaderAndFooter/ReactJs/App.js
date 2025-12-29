@@ -69,10 +69,10 @@ const App = () => {
         worksheet,
         topLeftCell: { row: 4, column: 1 },
         keepColumnWidths: false,
-        exportDataFieldHeaders,
-        exportRowFieldHeaders,
-        exportColumnFieldHeaders,
-        exportFilterFieldHeaders,
+        exportDataFieldHeaders: !!exportDataFieldHeaders,
+        exportRowFieldHeaders: !!exportRowFieldHeaders,
+        exportColumnFieldHeaders: !!exportColumnFieldHeaders,
+        exportFilterFieldHeaders: !!exportFilterFieldHeaders,
       })
         .then((cellRange) => {
           // Header
@@ -87,8 +87,8 @@ const App = () => {
           headerCell.font = { name: 'Segoe UI Light', size: 22, bold: true };
           headerCell.alignment = { horizontal: 'left', vertical: 'middle', wrapText: true };
           // Footer
-          const footerRowIndex = cellRange.to.row + 2;
-          const footerCell = worksheet.getRow(footerRowIndex).getCell(cellRange.to.column);
+          const footerRowIndex = (cellRange.to?.row ?? 0) + 2;
+          const footerCell = worksheet.getRow(footerRowIndex).getCell(cellRange.to?.column ?? 0);
           footerCell.value = 'www.wikipedia.org';
           footerCell.font = { color: { argb: 'BFBFBF' }, italic: true };
           footerCell.alignment = { horizontal: 'right' };
@@ -107,7 +107,7 @@ const App = () => {
     ],
   );
   return (
-    <React.Fragment>
+    <>
       <div className="long-title">
         <h3>Sales Amount by Region</h3>
       </div>
@@ -159,7 +159,7 @@ const App = () => {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 export default App;

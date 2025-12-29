@@ -17,7 +17,7 @@ const App = () => {
   const dataGridRef = useRef<DataGridRef>(null);
 
   const onStateResetClick = useCallback(() => {
-    dataGridRef.current.instance().state(null);
+    dataGridRef.current?.instance().state(null);
   }, []);
 
   return (

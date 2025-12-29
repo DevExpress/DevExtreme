@@ -5,10 +5,10 @@ import DataGrid, {
 import { employees as defaultEmployees, states, getMaxID } from './data.js';
 
 const isChief = (position) =>
-  position && ['CEO', 'CMO'].indexOf(position.trim().toUpperCase()) >= 0;
-const isCloneIconVisible = (e) => !e.row.isEditing;
-const isCloneIconDisabled = (e) => isChief(e.row.data.Position);
-const isDeleteIconVisible = (e) => !isChief(e.row.data.Position);
+  !!position && ['CEO', 'CMO'].indexOf(position.trim().toUpperCase()) >= 0;
+const isCloneIconVisible = (e) => !e.row?.isEditing;
+const isCloneIconDisabled = (e) => isChief(e.row?.data?.Position);
+const isDeleteIconVisible = (e) => !isChief(e.row?.data?.Position);
 const onRowValidating = (e) => {
   const position = e.newData.Position;
   if (isChief(position)) {

@@ -2,10 +2,8 @@ import React, { useCallback, useState } from 'react';
 import CheckBox from 'devextreme-react/check-box';
 import SelectBox from 'devextreme-react/select-box';
 import TextArea from 'devextreme-react/text-area';
-import service from './data.js';
+import { valueChangeEvents, content } from './data.js';
 
-const content = service.getContent();
-const { valueChangeEvents } = service;
 const notesLabel = { 'aria-label': 'Notes' };
 const eventLabel = { 'aria-label': 'Event' };
 function App() {
@@ -31,7 +29,7 @@ function App() {
     setValueForEditableTestArea(e.value);
   }, []);
   return (
-    <React.Fragment>
+    <>
       <div className="dx-fieldset">
         <div className="dx-fieldset-header">Default Mode</div>
         <div className="dx-field">
@@ -92,7 +90,7 @@ function App() {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 export default App;

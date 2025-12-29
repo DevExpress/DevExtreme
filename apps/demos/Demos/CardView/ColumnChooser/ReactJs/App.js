@@ -79,7 +79,7 @@ const App = () => {
         keyExpr="ID"
         cardsPerRow="auto"
         cardMinWidth={300}
-        allowColumnReordering={allowColumnReordering}
+        allowColumnReordering={!!allowColumnReordering}
       >
         <SearchPanel visible={true} />
         <ColumnChooser
@@ -87,10 +87,10 @@ const App = () => {
           mode={columnChooserMode}
           height="340px"
         >
-          <ColumnChooserSearch enabled={searchEnabled} />
+          <ColumnChooserSearch enabled={!!searchEnabled} />
           <ColumnChooserSelection
-            allowSelectAll={allowSelectAll}
-            selectByClick={selectByClick}
+            allowSelectAll={!!allowSelectAll}
+            selectByClick={!!selectByClick}
           />
         </ColumnChooser>
         <CardCover

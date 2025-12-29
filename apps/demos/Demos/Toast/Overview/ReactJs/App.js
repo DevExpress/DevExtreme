@@ -20,14 +20,14 @@ function App() {
         message,
       });
     },
-    [toastConfig, setToastConfig],
+    [toastConfig],
   );
   const onHiding = useCallback(() => {
     setToastConfig({
       ...toastConfig,
       isVisible: false,
     });
-  }, [toastConfig, setToastConfig]);
+  }, [toastConfig]);
   const items = products.map((product) => (
     <li key={product.ID}>
       <ProductItem

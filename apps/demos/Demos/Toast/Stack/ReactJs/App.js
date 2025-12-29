@@ -31,19 +31,19 @@ function App() {
   const [direction, setDirection] = useState('up-push');
   const topNumberBoxValueChanged = useCallback(
     (top) => setCoordinatePosition({ ...coordinatePosition, top }),
-    [coordinatePosition, setCoordinatePosition],
+    [coordinatePosition],
   );
   const bottomNumberBoxValueChanged = useCallback(
     (bottom) => setCoordinatePosition({ ...coordinatePosition, bottom }),
-    [coordinatePosition, setCoordinatePosition],
+    [coordinatePosition],
   );
   const leftNumberBoxValueChanged = useCallback(
     (left) => setCoordinatePosition({ ...coordinatePosition, left }),
-    [coordinatePosition, setCoordinatePosition],
+    [coordinatePosition],
   );
   const rightNumberBoxValueChanged = useCallback(
     (right) => setCoordinatePosition({ ...coordinatePosition, right }),
-    [coordinatePosition, setCoordinatePosition],
+    [coordinatePosition],
   );
   const show = useCallback(() => {
     const position = isPredefined ? predefinedPosition : coordinatePosition;
@@ -73,7 +73,7 @@ function App() {
     setId(id + 1);
   }, [id, isPredefined, predefinedPosition, coordinatePosition, direction]);
   return (
-    <React.Fragment>
+    <>
       <div className="options">
         <div>Position</div>
         <RadioGroup
@@ -149,7 +149,7 @@ function App() {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 export default App;
