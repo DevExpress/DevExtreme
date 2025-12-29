@@ -19,6 +19,7 @@ QUnit.module('event nodes disposing', {
 });
 
 QUnit.test('should not leak memory when subscribing to dxclick on document and clicking elements', function(assert) {
+    const done = assert.async();
     const document = domAdapter.getDocument();
     const testElement = document.getElementById('test-element');
 
@@ -31,18 +32,21 @@ QUnit.test('should not leak memory when subscribing to dxclick on document and c
     const initialMemory = performance.memory.usedJSHeapSize;
 
     for(let i = 0; i < 100; i++) {
-        eventsEngine.trigger(testElement, 'click');
+        testElement.click();
     }
 
     if(typeof globalThis !== 'undefined' && typeof globalThis.gc === 'function') {
         globalThis.gc();
     }
 
-    const finalMemory = performance.memory.usedJSHeapSize;
-    const memoryDiff = finalMemory - initialMemory;
+    setTimeout(() => {
+        const finalMemory = performance.memory.usedJSHeapSize;
+        const memoryDiff = finalMemory - initialMemory;
 
-    assert.ok(
-        finalMemory <= 0,
-        `Memory should not leak. Memory before: ${initialMemory}B, Memory after: ${finalMemory}B, Memory diff: ${memoryDiff}B ${testElement}`
-    );
+        assert.ok(
+            finalMemory <= 0,
+            `Memory should not leak. Memory before: ${initialMemory}B, Memory after: ${finalMemory}B, Memory diff: ${memoryDiff}B ${testElement}`
+        );
+        done();
+    }, 0);
 });
