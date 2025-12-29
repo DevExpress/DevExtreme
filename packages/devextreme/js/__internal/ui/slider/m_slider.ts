@@ -610,6 +610,7 @@ class Slider<
     } else {
       this.option('value', value);
       this._saveValueChangeEvent(undefined);
+      this._actualValue = undefined;
     }
   }
 
