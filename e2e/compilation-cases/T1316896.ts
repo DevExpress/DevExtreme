@@ -1,4 +1,4 @@
-import ArrayStore from 'devextreme/data/array_store';
+import { ArrayStore } from 'devextreme/common/data';
 
 interface Entity {
   id?: string;
