@@ -1181,6 +1181,8 @@ module('tooltip integration', {
 
         this.init = (options) => {
             this.slider = this.$slider.dxSlider(options).dxSlider('instance');
+            this.$wrapper = this.$slider.find(`.${SLIDER_WRAPPER_CLASS}`);
+            this.pointer = pointerMock(this.$wrapper);
             this.$handle = this.$slider.find(`.${SLIDER_HANDLE_CLASS}`);
             this.handle = SliderHandle.getInstance(this.$handle);
             this.$tooltip = this.$handle.find(`.${TOOLTIP_CLASS}`);
@@ -1349,6 +1351,24 @@ module('tooltip integration', {
 
         this.slider.repaint();
         this.checkTooltipExists(true, assert);
+    });
+
+    test('tooltip should update value when slider value is changed by keyboard after swipe event without swipeEnd (T1316215)', function(assert) {
+        this.init({
+            min: 0,
+            max: 100,
+            value: 50,
+            width: 100,
+            tooltip: {
+                enabled: true,
+                showMode: 'always'
+            }
+        });
+
+        this.pointer.start().swipeStart().swipe(0);
+        keyboardMock(this.$handle).keyDown('right');
+
+        assert.strictEqual(this.getTooltipText(), '51', 'tooltip value is updated');
     });
 
     module('tooltip position', () => {
