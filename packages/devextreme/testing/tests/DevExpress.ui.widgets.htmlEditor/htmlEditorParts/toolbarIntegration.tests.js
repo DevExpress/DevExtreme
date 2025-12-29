@@ -321,7 +321,7 @@ export default function() {
             const buttonContent = $('#htmlEditor')
                 .find(`.${DROPDOWNMENU_CLASS} .${BUTTON_CONTENT_CLASS}`)
                 .html();
-            const expectedContent = '<i class="dx-icon dx-icon-overflow"></i>';
+            const expectedContent = '<i class="dx-icon dx-icon-overflow"></i><div class="dx-inkripple"></div>';
 
             assert.equal(buttonContent, expectedContent);
         });
