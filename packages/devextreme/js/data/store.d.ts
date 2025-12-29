@@ -64,6 +64,7 @@ export type StoreOptions<
     onModifying?: Function;
     /**
      * @docid StoreOptions.onPush
+     * @type_function_param1 changes:Array<any>
      * @action
      * @public
      */
