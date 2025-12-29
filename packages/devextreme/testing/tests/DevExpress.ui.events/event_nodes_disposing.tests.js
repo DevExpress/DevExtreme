@@ -1,6 +1,6 @@
 import eventsEngine from 'common/core/events/core/events_engine';
 import domAdapter from '__internal/core/m_dom_adapter';
-import clickEventName from 'common/core/events/m_click';
+import clickEventName from 'common/core/events/click';
 
 QUnit.testStart(function() {
     const markup = '<button id="test-element">Test</button>';
