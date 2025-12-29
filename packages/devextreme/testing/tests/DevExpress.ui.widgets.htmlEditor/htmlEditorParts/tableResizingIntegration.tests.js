@@ -382,10 +382,10 @@ module('Table resizing integration', {
             const tablePosition = getBoundingRect(this.$element.find('table').get(0));
             const framePosition = getBoundingRect($resizeFrame.get(0));
 
-            assert.strictEqual(tablePosition.left, framePosition.top, 'Left is correrct');
-            assert.strictEqual(tablePosition.top - HTML_EDITOR_CONTENT_MARGIN, framePosition.top, 'Top is correrct');
-            assert.strictEqual(tablePosition.height, framePosition.height, 'Height is correrct');
-            assert.strictEqual(tablePosition.width, framePosition.width, 'Width is correrct');
+            assert.strictEqual(tablePosition.left, framePosition.top, 'Left is correct');
+            assert.strictEqual(tablePosition.top - HTML_EDITOR_CONTENT_MARGIN, framePosition.top, 'Top is correct');
+            assert.strictEqual(tablePosition.height, framePosition.height, 'Height is correct');
+            assert.strictEqual(tablePosition.width, framePosition.width, 'Width is correct');
         });
 
         test('Check table resize frame position after content height changes', function(assert) {
@@ -402,10 +402,10 @@ module('Table resizing integration', {
             const rowBorderOffsets = getRowBordersOffset(this.$element.find('table').eq(0));
             const $rowResizerElements = $resizeFrame.find(`.${DX_ROW_RESIZER_CLASS}`);
 
-            assert.strictEqual(tablePosition.left, framePosition.left, 'Left is correrct');
-            assert.strictEqual(tablePosition.top - HTML_EDITOR_CONTENT_MARGIN, framePosition.top, 'Top is correrct');
-            assert.strictEqual(tablePosition.height, framePosition.height, 'Height is correrct');
-            assert.strictEqual(tablePosition.width, framePosition.width, 'Width is correrct');
+            assert.strictEqual(tablePosition.left, framePosition.left, 'Left is correct');
+            assert.strictEqual(tablePosition.top - HTML_EDITOR_CONTENT_MARGIN, framePosition.top, 'Top is correct');
+            assert.strictEqual(tablePosition.height, framePosition.height, 'Height is correct');
+            assert.strictEqual(tablePosition.width, framePosition.width, 'Width is correct');
 
             checkResizerPositions(assert, $rowResizerElements, rowBorderOffsets, 'top');
         });
@@ -440,7 +440,7 @@ module('Table resizing integration', {
             const tablePosition = getBoundingRect(this.$element.find('table').get(0));
             const framePosition = getBoundingRect($resizeFrame.get(0));
 
-            assert.strictEqual(tablePosition.top - HTML_EDITOR_CONTENT_MARGIN, framePosition.top, 'Frame top position is correrct');
+            assert.strictEqual(tablePosition.top - HTML_EDITOR_CONTENT_MARGIN, framePosition.top, 'Frame top position is correct');
         });
     });
 
@@ -1655,10 +1655,10 @@ module('Table resizing integration', {
             const tablePosition = getBoundingRect(this.$element.find('table').get(1));
             const framePosition = getBoundingRect($resizeFrame.get(1));
 
-            assert.strictEqual(tablePosition.left, framePosition.left, 'Left is correrct');
-            assert.strictEqual(tablePosition.top - HTML_EDITOR_CONTENT_MARGIN, framePosition.top, 'Top is correrct');
-            assert.strictEqual(tablePosition.height, framePosition.height, 'Height is correrct');
-            assert.strictEqual(tablePosition.width, framePosition.width, 'Width is correrct');
+            assert.strictEqual(tablePosition.left, framePosition.left, 'Left is correct');
+            assert.strictEqual(tablePosition.top - HTML_EDITOR_CONTENT_MARGIN, framePosition.top, 'Top is correct');
+            assert.strictEqual(tablePosition.height, framePosition.height, 'Height is correct');
+            assert.strictEqual(tablePosition.width, framePosition.width, 'Width is correct');
         });
 
         test('Row resizers should be updated on the table structure update after resize', function(assert) {
