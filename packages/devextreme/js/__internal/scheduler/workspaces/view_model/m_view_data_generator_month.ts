@@ -89,8 +89,14 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     this._maxVisibleDate = new Date(nextMonthDate.setDate(0));
   }
 
-  getCellCount() {
-    return DAYS_IN_WEEK;
+  getCellCount(options?) {
+    let cellCount = DAYS_IN_WEEK;
+
+    if (options?.currentView?.skippedDays && options.currentView.skippedDays.length > 0) {
+      cellCount = DAYS_IN_WEEK - options.currentView.skippedDays.length;
+    }
+
+    return cellCount;
   }
 
   getRowCount(options) {

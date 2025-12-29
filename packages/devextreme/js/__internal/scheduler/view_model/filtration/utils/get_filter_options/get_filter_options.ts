@@ -25,6 +25,7 @@ export const getFilterOptions = (schedulerStore: Scheduler): FilterOptions => {
     dataAccessor: schedulerStore._dataAccessors,
     viewOffset,
     firstDayOfWeek: schedulerStore.option('firstDayOfWeek'),
+    viewDataProvider: schedulerStore._workSpace?.viewDataProvider,
     allDayIntervals: shiftIntervals(
       getVisibleDateTimeIntervals(compareOptions, true),
       viewOffset,

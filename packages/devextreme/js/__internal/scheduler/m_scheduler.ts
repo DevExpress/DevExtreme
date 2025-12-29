@@ -1392,6 +1392,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
       // TODO: SSR does not work correctly with renovated render
       renovateRender: this._isRenovatedRender(isVirtualScrolling),
+      skippedDays: currentViewOptions.skippedDays || [],
     }, currentViewOptions);
 
     result.notifyScheduler = this._notifyScheduler;

@@ -3,7 +3,9 @@ import { isAppointmentMatchedResources } from './is_appointment_matched_resource
 
 export const filterByAttributes = <T extends MinimalAppointmentEntity & AllDayPanelOccupation>(
   entities: T[],
-  { resourceManager, showAllDayPanel, supportAllDayPanel }: FilterOptions,
+  {
+    resourceManager, showAllDayPanel, supportAllDayPanel, viewDataProvider,
+  }: FilterOptions,
 ): T[] => entities.filter((appointment): boolean => {
     if (!appointment.visible) {
       return false;
@@ -16,6 +18,13 @@ export const filterByAttributes = <T extends MinimalAppointmentEntity & AllDayPa
     );
     if (allDayPanelAppointmentHidden) {
       return false;
+    }
+
+    if (viewDataProvider && appointment.itemData) {
+      const { startDate } = appointment.itemData;
+      if (startDate && viewDataProvider.isSkippedDate(startDate)) {
+        return false;
+      }
     }
 
     const resources = resourceManager.groupResources();

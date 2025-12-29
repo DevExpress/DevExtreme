@@ -4,21 +4,57 @@ import Scheduler from '../js/__internal/scheduler/m_scheduler';
 
 const dataSource = [
     {
-        text: "Meeting with John",
-        startDate: new Date(2024, 0, 10, 9, 0),
-        endDate: new Date(2024, 0, 10, 10, 30),
+        text: "Monday Meeting",
+        startDate: new Date(2025, 11, 29, 9, 0),  // Monday
+        endDate: new Date(2025, 11, 29, 10, 30),
         allDay: false
     },
     {
-        text: "Conference Call", 
-        startDate: new Date(2024, 0, 10, 14, 0),
-        endDate: new Date(2024, 0, 10, 15, 0),
+        text: "Tuesday Conference", 
+        startDate: new Date(2025, 11, 30, 14, 0),  // Tuesday
+        endDate: new Date(2025, 11, 30, 15, 0),
         allDay: false
     },
     {
-        text: "Team Building Event",
-        startDate: new Date(2024, 0, 11, 10, 0),
-        endDate: new Date(2024, 0, 11, 17, 0),
+        text: "Wednesday Team Event",
+        startDate: new Date(2025, 11, 31, 10, 0),  // Wednesday
+        endDate: new Date(2025, 11, 31, 17, 0),
+        allDay: false
+    },
+    {
+        text: "Thursday Planning",
+        startDate: new Date(2026, 0, 1, 11, 0),   // Thursday
+        endDate: new Date(2026, 0, 1, 12, 0),
+        allDay: false
+    },
+    {
+        text: "Friday Presentation",
+        startDate: new Date(2026, 0, 2, 15, 0),   // Friday
+        endDate: new Date(2026, 0, 2, 16, 30),
+        allDay: false
+    },
+    {
+        text: "Saturday Event (Should be hidden)",
+        startDate: new Date(2026, 0, 3, 10, 0),   // Saturday
+        endDate: new Date(2026, 0, 3, 12, 0),
+        allDay: false
+    },
+    {
+        text: "Sunday Event (Should be hidden)",
+        startDate: new Date(2026, 0, 4, 14, 0),   // Sunday
+        endDate: new Date(2026, 0, 4, 16, 0),
+        allDay: false
+    },
+    {
+        text: "Event on 15th (Should be hidden in month view)",
+        startDate: new Date(2026, 0, 15, 10, 0),  // January 15th
+        endDate: new Date(2026, 0, 15, 12, 0),
+        allDay: false
+    },
+    {
+        text: "Event on 13th (Should be hidden in month view)",
+        startDate: new Date(2026, 0, 13, 14, 0),  // January 13th
+        endDate: new Date(2026, 0, 13, 16, 0),
         allDay: false
     }
 ];
@@ -26,12 +62,32 @@ const dataSource = [
 window.addEventListener('load', () => 
   setupThemeSelector('theme-selector').then(() => {
 
+    console.log('Creating scheduler with views containing skippedDays...');
 
-    new (Scheduler as any)($('#container'), {
+    const scheduler = new (Scheduler as any)($('#container'), {
         dataSource,
-        views: ['day', 'week', 'workWeek', 'month'],
-        currentView: 'week',
-        currentDate: new Date(2024, 0, 10),
+        views: [
+            { type: 'day' },
+            { 
+                type: 'week',
+                name: 'Week (Hide Weekends)',
+                skippedDays: [0, 6]  // Hide Sunday and Saturday
+            },
+            { 
+                type: 'week',
+                name: 'Week (Hide Mon & Wed)',
+                skippedDays: [1, 3]  // Hide Monday and Wednesday
+            },
+            { type: 'workWeek' },
+            { 
+                type: 'month',
+                name: 'Month (Hide 13th & 15th)',
+                skippedDates: [13, 15]  // Hide 13th and 15th of each month
+            },
+            { type: 'month' }
+        ],
+        currentView: 'Month (Hide 13th & 15th)',
+        currentDate: new Date(2026, 0, 1),  // January 1, 2026
         startDayHour: 8,
         endDayHour: 18,
         height: 600,
@@ -52,4 +108,7 @@ window.addEventListener('load', () =>
             console.log('Appointment deleted:', e.appointmentData);
         }
     });
+
+    console.log('Scheduler created:', scheduler);
+    console.log('Current view:', scheduler.option('currentView'));
 }));

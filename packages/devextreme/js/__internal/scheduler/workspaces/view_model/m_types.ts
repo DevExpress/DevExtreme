@@ -30,6 +30,11 @@ interface CommonOptions extends CountGenerationConfig {
   cellDuration: number;
   indicatorTime?: Date;
   timeZoneCalculator?: TimeZoneCalculator;
+  currentView?: {
+    type: ViewType;
+    skippedDays?: number[];
+    skippedDates?: number[];
+  };
 }
 
 export interface ViewDataProviderOptions extends CommonOptions {

@@ -5,6 +5,13 @@ export class ViewDataGeneratorWorkWeek extends ViewDataGeneratorWeek {
   readonly daysInInterval = 5;
 
   isSkippedDate(date) {
+    if (this.currentViewOptions?.currentView?.skippedDays) {
+      const day = date.getDay ? date.getDay() : new Date(date).getDay();
+      if (this.currentViewOptions.currentView.skippedDays.includes(day)) {
+        return true;
+      }
+    }
+
     return isDataOnWeekend(date);
   }
 

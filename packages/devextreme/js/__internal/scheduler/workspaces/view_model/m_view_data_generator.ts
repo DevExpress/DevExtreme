@@ -34,6 +34,8 @@ export class ViewDataGenerator {
 
   public hiddenInterval = 0;
 
+  protected currentViewOptions: any;
+
   constructor(public readonly viewType: ViewType) {}
 
   public isWorkWeekView(): boolean {
@@ -43,8 +45,23 @@ export class ViewDataGenerator {
     ].includes(this.viewType);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public isSkippedDate(date: any) {
+    const actualDate = date.getDay ? date : new Date(date);
+
+    if (this.currentViewOptions?.currentView?.skippedDays) {
+      const day = actualDate.getDay();
+      if (this.currentViewOptions.currentView.skippedDays.includes(day)) {
+        return true;
+      }
+    }
+
+    if (this.currentViewOptions?.currentView?.skippedDates) {
+      const dateOfMonth = actualDate.getDate();
+      if (this.currentViewOptions.currentView.skippedDates.includes(dateOfMonth)) {
+        return true;
+      }
+    }
+
     return false;
   }
 
@@ -74,6 +91,8 @@ export class ViewDataGenerator {
       hoursInterval,
     } = options;
 
+    this.currentViewOptions = options;
+
     this._setVisibilityDates(options);
     this.setHiddenInterval(startDayHour, endDayHour, hoursInterval);
 
@@ -82,9 +101,10 @@ export class ViewDataGenerator {
       intervalCount,
       currentDate,
       viewType,
+      hoursInterval,
       startDayHour,
       endDayHour,
-      hoursInterval,
+      currentView: options.currentView,
     });
     const rowCountInGroup = this.getRowCount({
       intervalCount,
@@ -504,6 +524,7 @@ export class ViewDataGenerator {
       firstDayOfWeek,
       intervalCount,
       viewOffset,
+      currentView,
     } = options;
     const cellCountInDay = this.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
 
@@ -525,6 +546,32 @@ export class ViewDataGenerator {
     let currentDate = new Date(
       startViewDateTime + millisecondsOffset + offsetByCount + viewOffset,
     );
+
+    if (currentView?.skippedDays && currentView.skippedDays.length > 0) {
+      // For week/workWeek views, columnIndex directly represents day index
+      // We need to map visual columnIndex to actual day, skipping hidden days
+      let actualDaysCount = 0;
+      const dateToCheck = new Date(startViewDate);
+
+      // Skip to the target day, accounting for skipped days
+      while (actualDaysCount < columnIndex) {
+        const isSkipped = this.isSkippedDate(dateToCheck);
+
+        if (!isSkipped) {
+          actualDaysCount++;
+        }
+        dateToCheck.setDate(dateToCheck.getDate() + 1);
+      }
+
+      // Now dateToCheck might land on a skipped day, so skip forward to next valid day
+      while (this.isSkippedDate(dateToCheck)) {
+        dateToCheck.setDate(dateToCheck.getDate() + 1);
+      }
+
+      const timeOfDay = millisecondsOffset % toMs('day');
+      currentDate = new Date(dateToCheck.getTime() + timeOfDay + viewOffset);
+    }
+
     const isMidnightDSTViewStart = timezoneUtils.isLocalTimeMidnightDST(startViewDate);
     const isMidnightDST = timezoneUtils.isLocalTimeMidnightDST(currentDate);
 
@@ -761,6 +808,7 @@ export class ViewDataGenerator {
       startDayHour,
       endDayHour,
       hoursInterval,
+      currentView,
     } = options;
 
     const cellCountInDay = this.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
@@ -768,7 +816,13 @@ export class ViewDataGenerator {
       ? cellCountInDay
       : 1;
 
-    return this.daysInInterval * intervalCount * columnCountInDay;
+    let { daysInInterval } = this;
+
+    if (currentView?.skippedDays && currentView.skippedDays.length > 0) {
+      daysInInterval = this.daysInInterval - currentView.skippedDays.length;
+    }
+
+    return daysInInterval * intervalCount * columnCountInDay;
   }
 
   public getRowCount(options): number {
