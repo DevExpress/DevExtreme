@@ -1,7 +1,6 @@
 import eventsEngine from 'common/core/events/core/events_engine';
 import domAdapter from '__internal/core/m_dom_adapter';
-// import clickEventName from 'common/core/events/m_click';
-const clickEventName = 'dxclick.dxDataGridEditorFactory focusin.dxDataGridEditorFactory';
+import clickEventName from 'common/core/events/m_click';
 
 QUnit.testStart(function() {
     const markup = '<button id="test-element">Test</button>';
@@ -22,8 +21,11 @@ QUnit.test('should not leak memory when subscribing to dxclick on document and c
     const done = assert.async();
     const document = domAdapter.getDocument();
     const testElement = document.getElementById('test-element');
+    let count = 0;
 
-    eventsEngine.on(document, clickEventName, function() {});
+    eventsEngine.on(document, clickEventName, function() {
+        count++;
+    });
 
     if(typeof globalThis !== 'undefined' && typeof globalThis.gc === 'function') {
         globalThis.gc();
@@ -31,22 +33,29 @@ QUnit.test('should not leak memory when subscribing to dxclick on document and c
 
     const initialMemory = performance.memory.usedJSHeapSize;
 
-    for(let i = 0; i < 100; i++) {
+    let i = 0;
+
+    const interval = setInterval(() => {
         testElement.click();
-    }
+        i++;
 
-    if(typeof globalThis !== 'undefined' && typeof globalThis.gc === 'function') {
-        globalThis.gc();
-    }
+        if(i > 99) {
+            setTimeout(() => {
+                if(typeof globalThis !== 'undefined' && typeof globalThis.gc === 'function') {
+                    globalThis.gc();
+                }
 
-    setTimeout(() => {
-        const finalMemory = performance.memory.usedJSHeapSize;
-        const memoryDiff = finalMemory - initialMemory;
+                const finalMemory = performance.memory.usedJSHeapSize;
+                const memoryDiff = finalMemory - initialMemory;
 
-        assert.ok(
-            finalMemory <= 0,
-            `Memory should not leak. Memory before: ${initialMemory}B, Memory after: ${finalMemory}B, Memory diff: ${memoryDiff}B ${testElement}`
-        );
-        done();
-    }, 0);
+                assert.ok(
+                    finalMemory <= 0,
+                    `Memory should not leak. Memory before: ${initialMemory}B, Memory after: ${finalMemory}B, Memory diff: ${memoryDiff}B ${count}`
+                );
+                done();
+            }, 50);
+
+            clearInterval(interval);
+        }
+    }, 50);
 });
