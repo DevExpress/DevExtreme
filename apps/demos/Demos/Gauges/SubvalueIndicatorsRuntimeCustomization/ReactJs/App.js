@@ -16,8 +16,8 @@ function customizeText({ valueText }) {
 }
 function customizeTooltip(arg) {
   let result = `${arg.valueText} kW`;
-  if (arg.index >= 0) {
-    result = `Secondary ${arg.index + 1}: ${result}`;
+  if (arg?.index && arg?.index >= 0) {
+    result = `Secondary ${arg?.index + 1}: ${result}`;
   } else {
     result = `Primary: ${result}`;
   }

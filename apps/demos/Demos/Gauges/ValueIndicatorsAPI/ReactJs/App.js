@@ -19,9 +19,9 @@ function App() {
   const [additionalGenerator2Value, setAdditionalGenerator2Value] = useState(23);
   const gaugeRef = useRef(null);
   const updateValues = useCallback(() => {
-    const gauge = gaugeRef.current.instance();
-    gauge.value(mainGeneratorValue);
-    gauge.subvalues([additionalGenerator1Value, additionalGenerator2Value]);
+    const gauge = gaugeRef.current?.instance();
+    gauge?.value(mainGeneratorValue);
+    gauge?.subvalues([additionalGenerator1Value, additionalGenerator2Value]);
   }, [gaugeRef, mainGeneratorValue, additionalGenerator1Value, additionalGenerator2Value]);
   const defaultSubvalues = useMemo(
     () => [additionalGenerator1Value, additionalGenerator2Value],

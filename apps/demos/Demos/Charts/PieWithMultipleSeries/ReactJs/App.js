@@ -12,7 +12,7 @@ import PieChart, {
 import { exportImportData } from './data.js';
 
 function customizeTooltip(arg) {
-  return { text: `${arg.argumentText}<br>${arg.seriesName}: ${arg.valueText}B` };
+  return { text: `${arg?.argumentText}<br>${arg.seriesName}: ${arg.valueText}B` };
 }
 function App() {
   return (

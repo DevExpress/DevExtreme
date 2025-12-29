@@ -10,14 +10,14 @@ import Chart, {
 } from 'devextreme-react/chart';
 import { exportData } from './data.js';
 
-function onPointClick({ target: point }) {
-  point.select();
+function onPointClick(e) {
+  e.target.select();
 }
-function onLegendClick({ target: series }) {
-  if (series.isVisible()) {
-    series.hide();
+function onLegendClick(e) {
+  if (e.target.isVisible()) {
+    e.target.hide();
   } else {
-    series.show();
+    e.target.show();
   }
 }
 function App() {

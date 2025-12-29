@@ -15,7 +15,7 @@ import {
 } from 'devextreme-react/chart';
 import { dataSource } from './data.ts';
 
-function customizePoint({ data }) {
+function customizePoint({ data }: any): Record<string, unknown> {
   let color;
   let hoverStyle;
   switch (data.type) {

@@ -3,26 +3,31 @@ import PieChart, {
   Series,
   Legend,
 } from 'devextreme-react/pie-chart';
-import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
+import SelectBox from 'devextreme-react/select-box';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
 import { getPalette } from 'devextreme/viz/palette';
 import {
-  paletteCollection, paletteExtensionModes, dataSource, paletteLabel, paletteExtensionLabel,
+  paletteCollection,
+  paletteExtensionModes,
+  dataSource,
+  paletteLabel,
+  paletteExtensionLabel,
 } from './data.ts';
 
 function App() {
   const [palette, setPalette] = useState(paletteCollection[0]);
   const [extensionMode, setExtensionMode] = useState(paletteExtensionModes[1]);
 
-  const handlePaletteChange = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const handlePaletteChange = useCallback((e: SelectBoxTypes.ValueChangedEvent): void => {
     setPalette(e.value);
-  }, [setPalette]);
+  }, []);
 
-  const handleExtensionModeChange = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const handleExtensionModeChange = useCallback((e: SelectBoxTypes.ValueChangedEvent): void => {
     setExtensionMode(e.value);
-  }, [setExtensionMode]);
+  }, []);
 
   return (
-    <React.Fragment>
+    <>
       <div className="flex-container">
         <PieChart
           id="pie"
@@ -35,7 +40,7 @@ function App() {
         </PieChart>
 
         <div className="palette-container flex-block">
-          {getPalette(palette).simpleSet.map((color) => (
+          {getPalette(palette).simpleSet.map((color: string) => (
             <div
               className="palette-item"
               style={{ backgroundColor: color }}
@@ -68,7 +73,7 @@ function App() {
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 

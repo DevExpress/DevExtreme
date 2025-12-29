@@ -31,7 +31,7 @@ function EmployeeInfo({ data }: EmployeeInfoProps) {
 }
 
 const App = () => {
-  const [selectedItem, setSelectedItem] = useState<Employee>(employees[0]);
+  const [selectedItem, setSelectedItem] = useState<Employee | undefined>(employees[0]);
 
   const onSelectionChanged = useCallback((args: { selectedItem?: typeof employees[0]; addedItems?: typeof employees }): void => {
     setSelectedItem(args.selectedItem || args.addedItems?.[0]);

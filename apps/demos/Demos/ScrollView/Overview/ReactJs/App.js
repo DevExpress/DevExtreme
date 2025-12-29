@@ -53,12 +53,12 @@ const App = () => {
         id="scrollview"
         ref={scrollViewRef}
         reachBottomText="Updating..."
-        scrollByContent={scrollByContent}
+        scrollByContent={scrollByContent ?? undefined}
         bounceEnabled={!!pullDown}
-        onReachBottom={reachBottom ? updateBottomContent : null}
+        onReachBottom={reachBottom ? updateBottomContent : undefined}
         onPullDown={updateTopContent}
         showScrollbar={showScrollBarMode}
-        scrollByThumb={scrollByThumb}
+        scrollByThumb={scrollByThumb ?? undefined}
       >
         <div className="text-content">{content}</div>
       </ScrollView>

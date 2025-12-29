@@ -24,7 +24,7 @@ function App() {
     (e) => {
       if (isFirstLevel) {
         setIsFirstLevel(false);
-        setData(service.filterData(e.target.originalArgument.toString()));
+        setData(service.filterData(e.target.originalArgument?.toString() ?? ''));
       }
     },
     [isFirstLevel, setData, setIsFirstLevel],

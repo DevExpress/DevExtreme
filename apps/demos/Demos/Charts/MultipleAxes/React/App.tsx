@@ -10,18 +10,23 @@ import Chart, {
   Grid,
   Format,
 } from 'devextreme-react/chart';
+import type { ChartTypes } from 'devextreme-react/chart';
 import { continentSources, populationData } from './data.ts';
 
-const customizeTooltip = (pointInfo) => {
-  const items = pointInfo.valueText.split('\n');
-  const color = pointInfo.point.getColor();
+const customizeTooltip = (pointInfo: ChartTypes.CommonPointInfo): Record<string, string> => {
+  const items = pointInfo.valueText?.split('\n');
+  const color = pointInfo.point?.getColor();
 
-  items.forEach((item, index) => {
-    if (item.indexOf(pointInfo.seriesName) === 0) {
+  if (!items) {
+    return { text: '' };
+  }
+
+  items.forEach((item: string, index: number): void => {
+    if (item.startsWith(pointInfo.seriesName)) {
       const element = document.createElement('span');
 
       element.textContent = item;
-      element.style.color = color;
+      element.style.color = color ?? '';
       element.className = 'active';
 
       items[index] = element.outerHTML;

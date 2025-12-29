@@ -14,7 +14,7 @@ const App = () => {
       text: 'Show Address',
       value: isHomeAddressVisible,
       onValueChanged: (e) => {
-        setIsHomeAddressVisible(e.component.option('value'));
+        setIsHomeAddressVisible(e.component.option('value') ?? undefined);
       },
     }),
     [isHomeAddressVisible],

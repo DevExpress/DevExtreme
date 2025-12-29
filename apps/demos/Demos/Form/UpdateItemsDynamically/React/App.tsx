@@ -14,7 +14,7 @@ import type { Employee } from './types.ts';
 
 const App = () => {
   const [phones, setPhones] = useState<string[]>(employee.Phones);
-  const [isHomeAddressVisible, setIsHomeAddressVisible] = useState<boolean | null | undefined>(true);
+  const [isHomeAddressVisible, setIsHomeAddressVisible] = useState<boolean | undefined>(true);
 
   const formData = useMemo((): Employee => ({ ...employee, Phones: phones }), [phones]);
 
@@ -22,7 +22,7 @@ const App = () => {
     text: 'Show Address',
     value: isHomeAddressVisible,
     onValueChanged: (e: CheckBoxTypes.ValueChangedEvent): void => {
-      setIsHomeAddressVisible(e.component.option('value'));
+      setIsHomeAddressVisible(e.component.option('value') ?? undefined);
     },
   }), [isHomeAddressVisible]);
 

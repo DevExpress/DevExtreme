@@ -14,11 +14,14 @@ import Chart, {
 import { dataSource } from './data.js';
 
 function customizeTooltip(arg) {
+  if (!('openValue' in arg)) {
+    return { text: '' };
+  }
   return {
     text: `Open: $${arg.openValue}<br/>
-Close: $${arg.closeValue}<br/>
-High: $${arg.highValue}<br/>
-Low: $${arg.lowValue}<br/>`,
+    Close: $${arg.closeValue}<br/>
+    High: $${arg.highValue}<br/>
+    Low: $${arg.lowValue}<br/>`,
   };
 }
 function App() {

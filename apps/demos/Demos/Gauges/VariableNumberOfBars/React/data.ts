@@ -1,4 +1,6 @@
-export const products = [{
+import type { Product } from './types.ts';
+
+export const products: Product[] = [{
   name: 'Hammers',
   count: 41,
   active: true,

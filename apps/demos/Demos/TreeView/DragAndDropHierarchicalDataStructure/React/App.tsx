@@ -37,7 +37,7 @@ const findNodeById = (nodes: Node[], id: string | number): Node | null => {
       return nodes[i];
     }
     if (nodes[i].children) {
-      const node = findNodeById(nodes[i].children, id);
+      const node = findNodeById(nodes[i].children ?? [], id);
       if (node != null) {
         return node;
       }
@@ -46,9 +46,13 @@ const findNodeById = (nodes: Node[], id: string | number): Node | null => {
   return null;
 };
 
-const moveNode = (fromNode: Node, toNode: Node, fromItems: FileSystemItem[], toItems: FileSystemItem[], isDropInsideItem: boolean) => {
+const moveNode = (fromNode: Node, toNode: Node, fromItems: FileSystemItem[], toItems: FileSystemItem[], isDropInsideItem: boolean): void => {
+  if (!fromNode.itemData || !toNode.itemData) {
+    return;
+  }
+
   const fromNodeContainingArray = getNodeContainingArray(fromNode, fromItems);
-  const fromIndex = fromNodeContainingArray?.findIndex((item: { id: any }) => item.id === fromNode.itemData?.id);
+  const fromIndex = fromNodeContainingArray?.findIndex((item: { id: any }): boolean => item.id === fromNode.itemData?.id);
 
   if (isDefined(fromIndex)) {
     fromNodeContainingArray?.splice(fromIndex, 1);

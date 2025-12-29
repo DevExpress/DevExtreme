@@ -4,7 +4,6 @@ import SelectBox from 'devextreme-react/select-box';
 import List from 'devextreme-react/list';
 import type { ListTypes } from 'devextreme-react/list';
 import CheckBox from 'devextreme-react/check-box';
-import type { CheckBoxTypes } from 'devextreme-react/check-box';
 
 import { ArrayStore } from 'devextreme-react/common/data';
 
@@ -25,7 +24,7 @@ const selectAllModes: SelectAllMode[] = ['page', 'allPages'];
 export default function App() {
   const [selectionMode, setSelectionMode] = useState<SingleMultipleAllOrNone>('all');
   const [selectAllMode, setSelectAllMode] = useState<SelectAllMode>('page');
-  const [selectByClick, setSelectByClick] = useState<CheckBoxTypes.Properties['value']>(false);
+  const [selectByClick, setSelectByClick] = useState<boolean | null | undefined>(false);
   const [selectedItemKeys, setSelectedItemKeys] = useState<ListTypes.Properties['selectedItemKeys'][]>([]);
 
   const onSelectedItemKeysChange = useCallback(({ name, value }): void => {
@@ -46,7 +45,7 @@ export default function App() {
           selectionMode={selectionMode}
           selectAllMode={selectAllMode}
           selectedItemKeys={selectedItemKeys}
-          selectByClick={selectByClick}
+          selectByClick={selectByClick ?? undefined}
           onOptionChanged={onSelectedItemKeysChange}>
         </List>
         <div className="selected-data">

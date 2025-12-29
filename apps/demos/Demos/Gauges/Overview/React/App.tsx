@@ -5,6 +5,7 @@ import CircularGauge, {
   Size as CircularSize,
   ValueIndicator as CircularValueIndicator,
 } from 'devextreme-react/circular-gauge';
+import type { CircularGaugeRef } from 'devextreme-react/circular-gauge';
 import LinearGauge, {
   Label,
   MinorTick,
@@ -17,7 +18,7 @@ import Indicator from './Indicator.tsx';
 
 const color = '#f05b41';
 
-function CenterTemplate(gauge) {
+function CenterTemplate(gauge: ReturnType<CircularGaugeRef['instance']>) {
   return (
     <svg>
       <circle cx="100" cy="100" r="55" strokeWidth="2" stroke={color} fill="transparent"></circle>
@@ -29,9 +30,9 @@ function CenterTemplate(gauge) {
 function App() {
   const [speedValue, setSpeedValue] = useState(40);
 
-  const handleSpeedChange = useCallback(({ value }) => {
+  const handleSpeedChange = useCallback(({ value }): void => {
     setSpeedValue(value);
-  }, [setSpeedValue]);
+  }, []);
 
   return (
     <div id="gauge-demo">

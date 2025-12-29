@@ -26,7 +26,7 @@ const findNodeById = (nodes, id) => {
       return nodes[i];
     }
     if (nodes[i].children) {
-      const node = findNodeById(nodes[i].children, id);
+      const node = findNodeById(nodes[i].children ?? [], id);
       if (node != null) {
         return node;
       }
@@ -35,6 +35,9 @@ const findNodeById = (nodes, id) => {
   return null;
 };
 const moveNode = (fromNode, toNode, fromItems, toItems, isDropInsideItem) => {
+  if (!fromNode.itemData || !toNode.itemData) {
+    return;
+  }
   const fromNodeContainingArray = getNodeContainingArray(fromNode, fromItems);
   const fromIndex = fromNodeContainingArray?.findIndex((item) => item.id === fromNode.itemData?.id);
   if (isDefined(fromIndex)) {

@@ -38,7 +38,7 @@ export default function App() {
           selectionMode={selectionMode}
           selectAllMode={selectAllMode}
           selectedItemKeys={selectedItemKeys}
-          selectByClick={selectByClick}
+          selectByClick={selectByClick ?? undefined}
           onOptionChanged={onSelectedItemKeysChange}
         ></List>
         <div className="selected-data">

@@ -10,13 +10,14 @@ import Chart, {
   Legend,
   Export,
 } from 'devextreme-react/chart';
+import type { ChartTypes } from 'devextreme-react/chart';
 import { versionSources, statisticsData } from './data.ts';
 
-function onSeriesClick({ target: series }) {
-  if (series.isSelected()) {
-    series.clearSelection();
+function onSeriesClick(e: ChartTypes.SeriesClickEvent): void {
+  if (e.target.isSelected()) {
+    e.target.clearSelection();
   } else {
-    series.select();
+    e.target.select();
   }
 }
 
