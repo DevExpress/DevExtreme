@@ -10,7 +10,7 @@ import type { Employee } from './data.ts';
 
 const onEditorPreparing = (e: DataGridTypes.EditorPreparingEvent) => {
   if (e.parentType === 'dataRow' && e.dataField === 'CityID') {
-    e.editorOptions.disabled = e.row.data.StateID === undefined;
+    e.editorOptions.disabled = e.row?.data.StateID === undefined;
   }
 };
 
@@ -19,9 +19,9 @@ const getFilteredCities = (options: { data?: Employee; }) => ({
   filter: options.data ? ['StateID', '=', options.data.StateID] : null,
 });
 
-function setStateValue(rowData: Employee, value: number) {
+function setStateValue(this: DataGridTypes.Column, rowData: Employee, value: number) {
   rowData.CityID = null;
-  this.defaultSetCellValue?.(rowData, value);
+  this.defaultSetCellValue?.(rowData, value, undefined);
 }
 
 const App = () => (

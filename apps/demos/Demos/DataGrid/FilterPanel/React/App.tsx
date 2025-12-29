@@ -1,4 +1,5 @@
 import React from 'react';
+
 import DataGrid, {
   Column,
   FilterRow,
@@ -7,7 +8,9 @@ import DataGrid, {
   FilterBuilderPopup,
   Scrolling,
 } from 'devextreme-react/data-grid';
+
 import { orders } from './data.ts';
+import type { Order, OrderFilter } from './data.ts';
 
 const saleAmountEditorOptions = {
   format: 'currency',
@@ -16,7 +19,7 @@ const saleAmountEditorOptions = {
     'aria-label': 'Filter cell',
   },
 };
-const getOrderDay = (rowData) => (new Date(rowData.OrderDate)).getDay();
+const getOrderDay = (rowData: Order) => (new Date(rowData.OrderDate)).getDay();
 
 const filterBuilderPopupPosition = {
   of: window,
@@ -39,7 +42,7 @@ const filterBuilder = {
 
 const filterValue = [['Employee', '=', 'Clark Morgan'], 'and', ['OrderDate', 'weekends']];
 
-const saleAmountHeaderFilters = [{
+const saleAmountHeaderFilters: OrderFilter[] = [{
   text: 'Less than $3000',
   value: ['SaleAmount', '<', 3000],
 }, {

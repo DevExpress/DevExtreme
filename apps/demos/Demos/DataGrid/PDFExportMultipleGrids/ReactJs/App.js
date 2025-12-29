@@ -22,7 +22,7 @@ const ratingDataSource = new DataSource({
   filter: ['Product_ID', '<', 10],
 });
 const setAlternatingRowsBackground = (dataGrid, gridCell, pdfCell) => {
-  if (gridCell.rowType === 'data') {
+  if (dataGrid && gridCell?.rowType === 'data') {
     const rowIndex = dataGrid.instance().getRowIndexByKey(gridCell.data.Product_ID);
     if (rowIndex % 2 === 0) {
       pdfCell.backgroundColor = '#D3D3D3';
@@ -36,21 +36,25 @@ const App = () => {
     const doc = new jsPDF();
     exportDataGrid({
       jsPDFDocument: doc,
-      component: priceGridRef.current.instance(),
+      component: priceGridRef.current?.instance(),
       topLeft: { x: 7, y: 5 },
       columnWidths: [20, 50, 50, 50],
       customizeCell: ({ gridCell, pdfCell }) => {
-        setAlternatingRowsBackground(priceGridRef.current, gridCell, pdfCell);
+        if (gridCell && pdfCell) {
+          setAlternatingRowsBackground(priceGridRef.current, gridCell, pdfCell);
+        }
       },
     }).then(() => {
       doc.addPage();
       exportDataGrid({
         jsPDFDocument: doc,
-        component: ratingGridRef.current.instance(),
+        component: ratingGridRef.current?.instance(),
         topLeft: { x: 7, y: 5 },
         columnWidths: [20, 50, 50, 50],
         customizeCell: ({ gridCell, pdfCell }) => {
-          setAlternatingRowsBackground(ratingGridRef.current, gridCell, pdfCell);
+          if (gridCell && pdfCell) {
+            setAlternatingRowsBackground(ratingGridRef.current, gridCell, pdfCell);
+          }
         },
       }).then(() => {
         doc.save('MultipleGrids.pdf');

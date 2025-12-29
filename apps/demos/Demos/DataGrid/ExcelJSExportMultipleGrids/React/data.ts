@@ -1,15 +1,22 @@
+import type { DataGridCell } from 'devextreme-react/common/export/excel';
+
 export interface Product {
   Product_ID: number;
-
   Product_Name: string;
-
   Product_Sale_Price: number;
-
   Product_Retail_Price: number;
-
   Product_Consumer_Rating: number;
-
   Product_Category: string;
+}
+
+export interface ExcelCell {
+  fullAddress: { row: number };
+  fill: any;
+}
+
+export interface CustomizeCellOptions {
+  gridCell?: DataGridCell;
+  excelCell?: ExcelCell;
 }
 
 export const products: Product[] = [

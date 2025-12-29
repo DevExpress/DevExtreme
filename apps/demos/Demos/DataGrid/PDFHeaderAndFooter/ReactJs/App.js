@@ -18,10 +18,10 @@ const onExporting = (e) => {
     topLeft: { x: 1, y: 15 },
     columnWidths: [30, 20, 30, 15, 22, 22, 20, 20],
     customDrawCell({ rect }) {
-      if (lastPoint.x < rect.x + rect.w) {
+      if (rect && lastPoint.x < rect.x + rect.w) {
         lastPoint.x = rect.x + rect.w;
       }
-      if (lastPoint.y < rect.y + rect.h) {
+      if (rect && lastPoint.y < rect.y + rect.h) {
         lastPoint.y = rect.y + rect.h;
       }
     },
