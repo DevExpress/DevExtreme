@@ -34,6 +34,7 @@ interface CommonOptions extends CountGenerationConfig {
     type: ViewType;
     skippedDays?: number[];
     skippedDates?: number[];
+    skipDatePredicate?: (date: Date) => boolean;
   };
 }
 

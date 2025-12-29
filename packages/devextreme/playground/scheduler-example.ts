@@ -53,8 +53,20 @@ const dataSource = [
     },
     {
         text: "Event on 13th (Should be hidden in month view)",
-        startDate: new Date(2026, 0, 13, 14, 0),  // January 13th
+        startDate: new Date(2026, 0, 13, 14, 0),
         endDate: new Date(2026, 0, 13, 16, 0),
+        allDay: false
+    },
+    {
+        text: "Event on Friday 13th (June)",
+        startDate: new Date(2026, 5, 13, 10, 0),
+        endDate: new Date(2026, 5, 13, 12, 0),
+        allDay: false
+    },
+    {
+        text: "Event on Friday 13th (February)",
+        startDate: new Date(2026, 1, 13, 14, 0),
+        endDate: new Date(2026, 1, 13, 16, 0),
         allDay: false
     }
 ];
@@ -67,6 +79,7 @@ window.addEventListener('load', () =>
     const scheduler = new (Scheduler as any)($('#container'), {
         dataSource,
         views: [
+            'month',
             { type: 'day' },
             { 
                 type: 'week',
@@ -82,12 +95,19 @@ window.addEventListener('load', () =>
             { 
                 type: 'month',
                 name: 'Month (Hide 13th & 15th)',
-                skippedDates: [13, 15]  // Hide 13th and 15th of each month
+                skippedDates: [13, 15]
+            },
+            {
+                type: 'month',
+                name: 'Month (Hide Friday 13th)',
+                skipDatePredicate: (date) => {
+                    return date.getDay() === 5 && date.getDate() === 13;
+                }
             },
             { type: 'month' }
         ],
-        currentView: 'Month (Hide 13th & 15th)',
-        currentDate: new Date(2026, 0, 1),  // January 1, 2026
+        currentView: 'Month (Hide Friday 13th)',
+        currentDate: new Date(2026, 0, 1),
         startDayHour: 8,
         endDayHour: 18,
         height: 600,

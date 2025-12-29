@@ -48,6 +48,10 @@ export class ViewDataGenerator {
   public isSkippedDate(date: any) {
     const actualDate = date.getDay ? date : new Date(date);
 
+    if (this.currentViewOptions?.currentView?.skipDatePredicate) {
+      return this.currentViewOptions.currentView.skipDatePredicate(actualDate);
+    }
+
     if (this.currentViewOptions?.currentView?.skippedDays) {
       const day = actualDate.getDay();
       if (this.currentViewOptions.currentView.skippedDays.includes(day)) {

@@ -898,6 +898,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
         type: this.type,
         skippedDays: this.option('skippedDays'),
         skippedDates: this.option('skippedDates'),
+        skipDatePredicate: this.option('skipDatePredicate'),
       },
 
       ...this.virtualScrollingDispatcher.getRenderState(),
