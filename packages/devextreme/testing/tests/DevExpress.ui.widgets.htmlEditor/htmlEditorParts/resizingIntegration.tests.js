@@ -174,7 +174,6 @@ module('Resizing integration', {
             .get(0)
             .getBoundingClientRect();
 
-        debugger;
         assert.strictEqual(frameLeft + BORDER_PADDING_WIDTH, imageLeft, 'Frame positioned correctly by the left');
         assert.strictEqual(frameTop + BORDER_PADDING_WIDTH + HTML_EDITOR_CONTENT_MARGIN, imageTop, 'Frame positioned correctly by the top');
     });
