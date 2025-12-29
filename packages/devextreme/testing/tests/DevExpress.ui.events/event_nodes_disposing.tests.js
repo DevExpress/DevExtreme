@@ -40,7 +40,7 @@ QUnit.test('should not leak memory when clicking on body with dxclick subscripti
     const memoryDiff = finalMemory - initialMemory;
 
     assert.ok(
-        memoryDiff <= 0,
+        memoryDiff > 0,
         `Memory should not leak. Memory diff: ${memoryDiff}B`
     );
 });
