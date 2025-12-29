@@ -1,4 +1,5 @@
 import React from 'react';
+import { jsPDF } from 'jspdf';
 import DataGrid, {
   Column,
   Summary,
@@ -8,7 +9,6 @@ import DataGrid, {
   TotalItem,
   Export,
 } from 'devextreme-react/data-grid';
-import { jsPDF } from 'jspdf';
 import { exportDataGrid } from 'devextreme-react/common/export/pdf';
 import { companies } from './data.js';
 
@@ -20,25 +20,35 @@ const onExporting = (e) => {
     component: e.component,
     columnWidths: [40, 40, 30, 30, 40],
     customizeCell({ gridCell, pdfCell }) {
-      if (gridCell.rowType === 'data' && gridCell.column.dataField === 'Phone') {
+      if (
+        gridCell?.rowType === 'data' &&
+        gridCell?.column?.dataField === 'Phone' &&
+        pdfCell?.text
+      ) {
         pdfCell.text = pdfCell.text.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
-      } else if (gridCell.rowType === 'group') {
+      } else if (gridCell?.rowType === 'group' && pdfCell) {
         pdfCell.backgroundColor = '#BEDFE6';
-      } else if (gridCell.rowType === 'totalFooter') {
+      } else if (gridCell?.rowType === 'totalFooter' && pdfCell?.font) {
         pdfCell.font.style = 'italic';
       }
     },
     customDrawCell(options) {
-      const { gridCell, pdfCell } = options;
-      if (gridCell.rowType === 'data' && gridCell.column.dataField === 'Website') {
+      const { gridCell, pdfCell, rect } = options;
+      if (
+        gridCell &&
+        pdfCell &&
+        rect &&
+        gridCell.rowType === 'data' &&
+        gridCell.column?.dataField === 'Website'
+      ) {
         options.cancel = true;
         doc.setFontSize(11);
         doc.setTextColor('#0000FF');
-        const textHeight = doc.getTextDimensions(pdfCell.text).h;
+        const textHeight = pdfCell.text ? doc.getTextDimensions(pdfCell.text).h : 0;
         doc.textWithLink(
           'website',
-          options.rect.x + pdfCell.padding.left,
-          options.rect.y + options.rect.h / 2 + textHeight / 2,
+          rect.x + (pdfCell.padding?.left ?? 0),
+          rect.y + rect.h / 2 + textHeight / 2,
           { url: pdfCell.text },
         );
       }
@@ -59,7 +69,7 @@ const renderGridCell = (data) => (
 const phoneNumberFormat = (value) => {
   const valueStr = String(value);
   const USNumber = valueStr.match(/(\d{3})(\d{3})(\d{4})/);
-  return `(${USNumber[1]}) ${USNumber[2]}-${USNumber[3]}`;
+  return USNumber ? `(${USNumber[1]}) ${USNumber[2]}-${USNumber[3]}` : '';
 };
 const App = () => (
   <div>

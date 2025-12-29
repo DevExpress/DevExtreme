@@ -6,7 +6,7 @@ import DataGrid, { Column, Editing, Paging, Lookup } from 'devextreme-react/data
 import { employees, states } from './data.ts';
 
 const App = () => {
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState<string[]>([]);
 
   const logEvent = useCallback((eventName: string) => {
     setEvents((previousEvents) => [eventName, ...previousEvents]);

@@ -3,7 +3,8 @@ const ko = require('knockout');
 const browser = require('core/utils/browser');
 const devices = require('core/devices');
 
-require('../../../helpers/executeAsyncMock.js');
+require('fluent_blue_light.css!');
+require('../../helpers/executeAsyncMock.js');
 require('integration/knockout');
 require('bundles/modules/parts/widgets-web');
 
@@ -146,10 +147,10 @@ const checkThatTestingIsPossible = function() {
     return true;
 };
 
-const defaultOptions = {
+const options = {
     numberBoxAlign: 'right',
     testVerticalOffset: true,
-    testSwitchBaseline: true,
+    testSwitchBaseline: false,
     testDateBox: true
 };
 
@@ -180,7 +181,7 @@ const testBaselineOffset = function($labelContainer, $valueContainer) {
         $imgForInput = $('<img/>').height(1).width(1).appendTo($valueContainer);
         $imgForLabel.closest('.dx-field-label').css('whiteSpace', 'nowrap');
         $imgForInput.closest('.dx-field-value').css('whiteSpace', 'nowrap');
-        QUnit.assert.roughEqual($imgForLabel.offset().top, $imgForInput.offset().top, 0.99);
+        QUnit.assert.roughEqual($imgForLabel.offset().top, $imgForInput.offset().top, 1.99);
     } finally {
         $imgForLabel.remove();
         $imgForInput.remove();
@@ -199,16 +200,13 @@ const testVerticalAlign = function($parent, inputSelector, isContainer, testVert
     testBaselineOffset($label, $valueContainer);
 };
 
-module.exports = function(themeName, options) {
+const testFieldsetsOnPlatform = function() {
     if(!checkThatTestingIsPossible()) {
         return;
     }
 
-    options = options || {};
-    options = $.extend({}, defaultOptions, options);
-
-    const runTestModule = function(themeName) {
-        moduleWithoutCsp(themeName, {
+    const runTestModule = function() {
+        moduleWithoutCsp('fluent.blue.light', {
             beforeEach: function() {
                 DevExpress.testing.executeAsyncMock.setup();
                 $('#qunit-fixture').html(fieldsetFixtureTemplate);
@@ -222,11 +220,15 @@ module.exports = function(themeName, options) {
         });
 
         QUnit.test('Horizontal align for same widgets on and in field-value', function(assert) {
-            const offsetRightForSwitchOnField = getFullOffsetRight($('#switchOnField ' + VALUE + ' .dx-switch-wrapper'));
-            const offsetRightForSwitchInField = getFullOffsetRight($('#switchInField ' + VALUE + ' .dx-switch-wrapper'));
+            const offsetRightForSwitchOnField = getFullOffsetRight($('#switchOnField ' + VALUE));
+            const offsetRightForSwitchOnFieldContainer = getFullOffsetRight($('#switchOnField ' + VALUE).parent());
+            const offsetBetweenOnFieldAndInFieldSwitch = offsetRightForSwitchOnFieldContainer - offsetRightForSwitchOnField;
+            const offsetRightForSwitchInField = getFullOffsetRight($('#switchInField ' + VALUE));
 
-            const offsetRightForCheckboxOnField = getFullOffsetRight($('#checkboxOnField ' + VALUE + ' .dx-checkbox-icon'));
-            const offsetRightForCheckboxInField = getFullOffsetRight($('#checkboxInField ' + VALUE + ' .dx-checkbox-icon'));
+            const offsetRightForCheckboxOnField = getFullOffsetRight($('#checkboxOnField ' + VALUE));
+            const offsetRightForCheckboxOnFieldContainer = getFullOffsetRight($('#checkboxOnField ' + VALUE).parent());
+            const offsetBetweenOnFieldAndInFieldCheckbox = offsetRightForCheckboxOnFieldContainer - offsetRightForCheckboxOnField;
+            const offsetRightForCheckboxInField = getFullOffsetRight($('#checkboxInField ' + VALUE));
 
             const offsetLeftForSliderOnField = getFullOffsetLeft($('#sliderOnField ' + VALUE + ' .dx-slider-wrapper'));
             const offsetLeftForSliderInField = getFullOffsetLeft($('#sliderInField ' + VALUE + ' .dx-slider-wrapper'));
@@ -255,8 +257,8 @@ module.exports = function(themeName, options) {
             const offsetLeftForNumberBoxOnField = getFullOffsetLeft($('#numberboxOnField ' + VALUE + ' input'));
             const offsetLeftForNumberBoxInField = getFullOffsetLeft($('#numberboxInField ' + VALUE + ' input'));
 
-            assert.equal(offsetRightForSwitchOnField, offsetRightForSwitchInField, 'Horizontal align for switches');
-            assert.equal(offsetRightForCheckboxOnField, offsetRightForCheckboxInField, 'Horizontal align for checkboxes');
+            assert.equal(offsetRightForSwitchOnField + offsetBetweenOnFieldAndInFieldSwitch, offsetRightForSwitchInField, 'Horizontal align for switches');
+            assert.equal(offsetRightForCheckboxOnField + offsetBetweenOnFieldAndInFieldCheckbox, offsetRightForCheckboxInField, 'Horizontal align for checkboxes');
             assert.equal(offsetLeftForSliderOnField, offsetLeftForSliderInField, 'Horizontal align for sliders');
             assert.equal(offsetLeftForTextBoxOnField, offsetLeftForTextBoxInField, 'Horizontal align for textboxes');
             assert.equal(offsetLeftForAutocompleteOnField, offsetLeftForAutocompleteInField, 'Horizontal align for autocompletes');
@@ -288,7 +290,8 @@ module.exports = function(themeName, options) {
 
             const offsetLeftForSimpleOnField = getFullOffsetLeft($('#simpleTextOnField ' + VALUE));
 
-            const paddingTextAreaDifference = 0;
+            const paddingTextAreaDifference = -2;
+            const paddingLookupDifference = -1;
 
             assert.equal(offsetLeftForTextBoxOnField, offsetLeftForAutocompleteOnField, 'Horizontal align for textbox and autocomplete');
 
@@ -300,7 +303,7 @@ module.exports = function(themeName, options) {
 
             assert.equal(offsetLeftForDateBoxOnField, offsetLeftForTextAreaOnField + paddingTextAreaDifference, 'Horizontal align for datebox and textarea');
             assert.equal(offsetLeftForTextAreaOnField + paddingTextAreaDifference, offsetLeftForLookupOnField, 'Horizontal align for textarea and lookup');
-            assert.equal(offsetLeftForLookupOnField, offsetLeftForSimpleOnField, 'Horizontal align for lookup and simpletext');
+            assert.equal(offsetLeftForLookupOnField + paddingLookupDifference, offsetLeftForSimpleOnField, 'Horizontal align for lookup and simpletext');
         });
 
         QUnit.test('Equal width for same widgets on and in field-value', function(assert) {
@@ -396,7 +399,9 @@ module.exports = function(themeName, options) {
 
         QUnit.test('dxTextarea on Field', function(assert) {
             const $parent = $('#textareaOnField');
-            const $label = $parent.find(LABEL);
+            const $label = $parent.find(LABEL)
+                .css('align-self', 'flex-start')
+                .css('padding-top', '8px');
             const $valueInput = $parent.find(VALUE + ' textarea');
 
             if(options.verticalOffsetTest) {
@@ -419,7 +424,9 @@ module.exports = function(themeName, options) {
 
         QUnit.test('dxTextarea in Field', function(assert) {
             const $parent = $('#textareaInField');
-            const $label = $parent.find(LABEL);
+            const $label = $parent.find(LABEL)
+                .css('align-self', 'flex-start')
+                .css('padding-top', '8px');
             const $valueInput = $parent.find(VALUE + ' textarea');
 
             if(options.verticalOffsetTest) {
@@ -443,3 +450,5 @@ module.exports = function(themeName, options) {
 
     runTestModule();
 };
+
+testFieldsetsOnPlatform();

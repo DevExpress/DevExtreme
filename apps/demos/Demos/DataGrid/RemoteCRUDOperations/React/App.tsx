@@ -43,7 +43,7 @@ const App = () => {
     load: () => sendRequest(`${URL}/ShippersLookup`),
   }));
 
-  const [requests, setRequests] = useState([]);
+  const [requests, setRequests] = useState<string[]>([]);
   const [refreshMode, setRefreshMode] = useState<DataGridTypes.GridsEditRefreshMode>('reshape');
 
   const handleRefreshModeChange = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {

@@ -4,7 +4,7 @@ import { employees, states, cities } from './data.js';
 
 const onEditorPreparing = (e) => {
   if (e.parentType === 'dataRow' && e.dataField === 'CityID') {
-    e.editorOptions.disabled = e.row.data.StateID === undefined;
+    e.editorOptions.disabled = e.row?.data.StateID === undefined;
   }
 };
 const getFilteredCities = (options) => ({
@@ -13,7 +13,7 @@ const getFilteredCities = (options) => ({
 });
 function setStateValue(rowData, value) {
   rowData.CityID = null;
-  this.defaultSetCellValue?.(rowData, value);
+  this.defaultSetCellValue?.(rowData, value, undefined);
 }
 const App = () => (
   <div id="data-grid-demo">

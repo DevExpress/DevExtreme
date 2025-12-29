@@ -1,10 +1,10 @@
 export function generateData(rowCount: number, columnCount: number) {
-  let i; let
-    j;
-  const items: Object[] = [];
+  let i;
+  let j;
+  const items: Record<string, string>[] = [];
 
   for (i = 0; i < rowCount; i += 1) {
-    const item: Object = {};
+    const item: Record<string, string> = {};
     for (j = 0; j < columnCount; j += 1) {
       item[`field${j + 1}`] = `${i + 1}-${j + 1}`;
     }
