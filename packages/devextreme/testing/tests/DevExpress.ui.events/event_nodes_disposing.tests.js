@@ -41,6 +41,6 @@ QUnit.test('should not leak memory when subscribing to dxclick on document and c
 
     assert.ok(
         finalMemory <= 0,
-        `Memory should not leak. Memory before: ${initialMemory}B, Memory after: ${finalMemory}B, Memory diff: ${finalMemory - initialMemory} ${finalMemory}B`
+        `Memory should not leak. Memory before: ${initialMemory}B, Memory after: ${finalMemory}B, Memory diff: ${memoryDiff}B`
     );
 });
