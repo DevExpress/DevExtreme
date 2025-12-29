@@ -48,6 +48,7 @@ DxTestWidget.defaultOptions({
 });
 
 @Component({
+  standalone: false,
   selector: 'dxo-test-option',
   template: '',
   providers: [NestedOptionHost],
@@ -81,6 +82,7 @@ export class DxoTestOptionComponent extends NestedOption {
 }
 
 @Component({
+  standalone: false,
   selector: 'dxi-test-collection-option',
   template: '',
   providers: [NestedOptionHost],
@@ -114,6 +116,7 @@ export class DxiTestCollectionOptionComponent extends CollectionNestedOption {
 }
 
 @Component({
+  standalone: false,
   selector: 'dxi-test-collection-option-with-template',
   template: '<ng-content></ng-content>',
   providers: [NestedOptionHost],
@@ -163,6 +166,7 @@ export class DxiTestCollectionOptionWithTemplateComponent extends CollectionNest
 }
 
 @Component({
+  standalone: false,
   selector: 'dx-test-widget',
   template: '',
   providers: [DxTemplateHost, NestedOptionHost, WatcherHelper],
@@ -244,6 +248,7 @@ export class DxTestWidgetComponent extends DxComponent {
 }
 
 @Component({
+  standalone: false,
   selector: 'test-container-component',
   template: '',
 })
