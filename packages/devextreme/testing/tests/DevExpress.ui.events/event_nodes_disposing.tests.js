@@ -2,9 +2,8 @@ import eventsEngine from 'common/core/events/core/events_engine';
 import domAdapter from '__internal/core/m_dom_adapter';
 
 QUnit.testStart(function() {
-    const markup = '<button id="btn_test">TEST</button>';
+    const markup = '<button id="test-element">Test</button>';
     const fixture = document.getElementById('qunit-fixture');
-
     if(fixture) {
         fixture.innerHTML = markup;
     }
@@ -17,9 +16,9 @@ QUnit.module('event nodes disposing', {
     }
 });
 
-QUnit.test('should not leak memory when clicking on body with dxclick subscription on document', function(assert) {
+QUnit.test('should not leak memory when subscribing to dxclick on document and clicking elements', function(assert) {
     const document = domAdapter.getDocument();
-    const button = document.body.querySelector('#btn_test');
+    const testElement = document.getElementById('test-element');
 
     eventsEngine.on(document, 'dxclick', function() {});
 
@@ -30,7 +29,7 @@ QUnit.test('should not leak memory when clicking on body with dxclick subscripti
     const initialMemory = performance.memory.usedJSHeapSize;
 
     for(let i = 0; i < 100; i++) {
-        eventsEngine.trigger(button, 'click');
+        eventsEngine.trigger(testElement, 'click');
     }
 
     if(typeof globalThis !== 'undefined' && typeof globalThis.gc === 'function') {
@@ -42,6 +41,6 @@ QUnit.test('should not leak memory when clicking on body with dxclick subscripti
 
     assert.ok(
         finalMemory <= 0,
-        `Memory should not leak. Memory diff: ${initialMemory} ${finalMemory}B`
+        `Memory should not leak. Memory before: ${initialMemory}B, Memory after: ${finalMemory}B, Memory diff: ${finalMemory - initialMemory} ${finalMemory}B`
     );
 });
