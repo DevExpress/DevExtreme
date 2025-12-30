@@ -23,5 +23,5 @@ export const subscribeNodesDisposing = (event, callback) => {
 };
 
 export const unsubscribeNodesDisposing = (event, callback, nodes) => {
-  eventsEngine.off(/* nodes || */ nodesByEvent(event) || nodes, removeEvent, callback);
+  eventsEngine.off(nodes || nodesByEvent(event) || nodes, removeEvent, callback);
 };
