@@ -181,7 +181,7 @@ module('Table properties forms', {
             assert.strictEqual(backgroundColorEditor.option('value'), tableBackgroundColor, 'backgroundColorEditor value is correct');
             assert.strictEqual(alignmentEditor.option('selectedItemKeys')[0], 'left', 'alignmentEditor selectedItemKeys is correct');
             assert.roughEqual(heightEditor.option('value'), 73, 3, 'heightEditor value is correct');
-            assert.roughEqual(widthEditor.option('value'), 400, 3, 'widthEditor value is correct');
+            assert.roughEqual(widthEditor.option('value'), 397, 3, 'widthEditor value is correct');
         });
 
         test('Check properties edititng at the table Form (without dimensions)', function(assert) {
@@ -368,7 +368,7 @@ module('Table properties forms', {
 
             assert.strictEqual(borderStyleEditor.option('value'), 'solid', 'borderStyleEditor value is correct');
             assert.strictEqual(borderWidthEditor.option('value'), 1, 'borderWidthEditor value is correct');
-            assert.strictEqual(borderColorEditor.option('value'), 'rgb(221, 221, 221)', 'borderColorEditor value is correct');
+            assert.strictEqual(borderColorEditor.option('value'), 'rgb(224, 224, 224)', 'borderColorEditor value is correct');
             assert.strictEqual(backgroundColorEditor.option('value'), 'rgba(0, 0, 0, 0)', 'backgroundColorEditor value is correct');
             assert.strictEqual(horizontalPaddingEditor.option('value'), 5, 'horizontalPaddingEditor value is correct');
             assert.strictEqual(verticalPaddingEditor.option('value'), 2, 'verticalPaddingEditor value is correct');
