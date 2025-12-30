@@ -9,6 +9,7 @@ import Chart, {
   ConstantLine,
   Label,
 } from 'devextreme-react/chart';
+import type { ChartTypes } from 'devextreme-react/chart';
 import { complaintsData } from './data.ts';
 
 const data = complaintsData.sort((a, b) => b.count - a.count);
@@ -24,21 +25,21 @@ const dataArray = data.map((item) => {
   };
 });
 
-const customizeTooltip = (pointInfo) => ({
+const customizeTooltip = (pointInfo: ChartTypes.CommonPointInfo): Record<string, string> => ({
   html: `<div><div class="tooltip-header">${
     pointInfo.argumentText
   }</div><div class="tooltip-body"><div class="series-name"><span class='top-series-name'>${
-    pointInfo.points[0].seriesName
+    pointInfo.points?.[0]?.seriesName
   }</span>: </div><div class="value-text"><span class='top-series-value'>${
-    pointInfo.points[0].valueText
+    pointInfo.points?.[0]?.valueText
   }</span></div><div class="series-name"><span class='bottom-series-name'>${
-    pointInfo.points[1].seriesName
+    pointInfo.points?.[1]?.seriesName
   }</span>: </div><div class="value-text"><span class='bottom-series-value'>${
-    pointInfo.points[1].valueText
+    pointInfo.points?.[1]?.valueText
   }</span>% </div></div></div>`,
 });
 
-function customizePercentageText({ valueText }) {
+function customizePercentageText({ valueText }: { valueText: string }): string {
   return `${valueText}%`;
 }
 

@@ -24,7 +24,7 @@ function App() {
     if (arg.value < lowAverage) {
       return { color: '#8c8cff', hoverStyle: { color: '#8c8cff' } };
     }
-    return null;
+    return {};
   }, []);
   const customizeLabel = useCallback((arg) => {
     if (arg.value > highAverage) {
@@ -36,7 +36,7 @@ function App() {
         },
       };
     }
-    return null;
+    return {};
   }, []);
   return (
     <Chart

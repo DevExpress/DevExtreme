@@ -1,6 +1,12 @@
 import React from 'react';
 import 'devextreme-react/text-area';
-import Form, { GroupItem, SimpleItem, Tab, TabbedItem, TabPanelOptions } from 'devextreme-react/form';
+import Form, {
+  GroupItem,
+  SimpleItem,
+  Tab,
+  TabbedItem,
+  TabPanelOptions,
+} from 'devextreme-react/form';
 import GroupCaption from './GroupCaption.tsx';
 import type { GroupCaptionProps } from './GroupCaption.tsx';
 import { employee } from './data.ts';
@@ -8,8 +14,8 @@ import { employee } from './data.ts';
 const groupCaptionNamedRender = (iconName: string) =>
   (data: GroupCaptionProps) => (
     <GroupCaption
-      iconName={iconName}
       {...data}
+      iconName={iconName}
     />
   );
 

@@ -6,9 +6,13 @@ import { products } from './data.ts';
 import type { Product } from './types.ts';
 
 const App = () => {
-  const [currentItem, setCurrentItem] = useState<Product>({ ...products[0] });
+  const [currentItem, setCurrentItem] = useState<Product | undefined>({ ...products[0] });
 
   const selectItem = useCallback((e: TreeViewTypes.ItemClickEvent<Product>): void => {
+    if (!e.itemData) {
+      return;
+    }
+
     setCurrentItem({ ...e.itemData });
   }, []);
 
@@ -18,11 +22,11 @@ const App = () => {
         items={products}
         width={300}
         onItemClick={selectItem} />
-      {currentItem.price
+      {currentItem?.price
         && <div id="product-details">
-          <img src={currentItem.image} alt="Product image" />
-          <div className="name">{currentItem.text}</div>
-          <div className="price">{`$${currentItem.price}`}</div>
+          <img src={currentItem?.image} alt="Product image" />
+          <div className="name">{currentItem?.text}</div>
+          <div className="price">{`$${currentItem?.price}`}</div>
         </div>
       }
     </div>

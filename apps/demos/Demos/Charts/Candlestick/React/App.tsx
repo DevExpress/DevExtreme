@@ -12,14 +12,21 @@ import Chart, {
   Export,
   Tooltip,
 } from 'devextreme-react/chart';
+import type { ChartTypes } from 'devextreme-react/chart';
 import { dataSource } from './data.ts';
 
-const customizeTooltip = (arg) => ({
-  text: `Open: $${arg.openValue}<br/>
-Close: $${arg.closeValue}<br/>
-High: $${arg.highValue}<br/>
-Low: $${arg.lowValue}<br/>`,
-});
+const customizeTooltip = (arg: ChartTypes.CandleStickPointInfo | ChartTypes.PointInfo): Record<string, string> => {
+  if (!('openValue' in arg)) {
+    return { text: '' };
+  }
+
+  return {
+    text: `Open: $${arg.openValue}<br/>
+          Close: $${arg.closeValue}<br/>
+          High: $${arg.highValue}<br/>
+          Low: $${arg.lowValue}<br/>`,
+  };
+};
 
 function App() {
   return (

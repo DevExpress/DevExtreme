@@ -4,15 +4,15 @@ import {
   Series,
   Legend,
   ValueAxis,
-  type ChartTypes,
 } from 'devextreme-react/chart';
+import type { ChartTypes } from 'devextreme-react/chart';
 import { Button } from 'devextreme-react/button';
 import service from './data.ts';
 
 const colors = ['#6babac', '#e55253'];
 
 function App() {
-  const [isFirstLevel, setIsFirstLevel] = useState(true);
+  const [isFirstLevel, setIsFirstLevel] = useState<boolean>(true);
   const [data, setData] = useState(service.filterData(''));
 
   const customizePoint = useCallback((): {
@@ -28,19 +28,19 @@ function App() {
     } : {},
   }), [isFirstLevel]);
 
-  const onPointClick = useCallback((e: ChartTypes.PointClickEvent) => {
+  const onPointClick = useCallback((e: ChartTypes.PointClickEvent): void => {
     if (isFirstLevel) {
       setIsFirstLevel(false);
-      setData(service.filterData(e.target.originalArgument.toString()));
+      setData(service.filterData(e.target.originalArgument?.toString() ?? ''));
     }
-  }, [isFirstLevel, setData, setIsFirstLevel]);
+  }, [isFirstLevel]);
 
   const onButtonClick = useCallback(() => {
     if (!isFirstLevel) {
       setIsFirstLevel(true);
       setData(service.filterData(''));
     }
-  }, [isFirstLevel, setData, setIsFirstLevel]);
+  }, [isFirstLevel]);
 
   return (
     <div>
