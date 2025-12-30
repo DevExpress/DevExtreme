@@ -1411,13 +1411,16 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const currentDate = date || new Date(this.option('currentDate'));
     const startDayHour = this.option('startDayHour');
     const endDayHour = this.option('endDayHour');
+    const viewOffset = this.option('viewOffset');
 
-    if (hours < startDayHour) {
-      hours = startDayHour;
-    }
+    if (viewOffset === 0) {
+      if (hours < startDayHour) {
+        hours = startDayHour;
+      }
 
-    if (hours >= endDayHour) {
-      hours = endDayHour - 1;
+      if (hours >= endDayHour) {
+        hours = endDayHour - 1;
+      }
     }
 
     currentDate.setHours(hours, minutes, 0, 0);
@@ -1865,10 +1868,14 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   _isValidScrollDate(date, throwWarning = true) {
+    const viewOffset = this.option('viewOffset') as number;
     const min = this.getStartViewDate();
     const max = this.getEndViewDate();
 
-    if (date < min || date > max) {
+    const extendedMin = new Date(min.getTime() - viewOffset);
+    const extendedMax = new Date(max.getTime() + viewOffset);
+
+    if (date < extendedMin || date > extendedMax) {
       throwWarning && errors.log('W1008', date);
       return false;
     }
