@@ -593,11 +593,11 @@ QUnit.test('removing subscriptions should not remove data from elementDataMap if
 
 QUnit.test('should not leak memory when subscribing on document and clicking elements (T1307313)', function(assert) {
     const done = assert.async();
+    const document = domAdapter.getDocument();
     const fixture = document.getElementById('qunit-fixture');
 
     fixture.innerHTML = '<button id="test-element">Test</button>';
 
-    const document = domAdapter.getDocument();
     const testElement = document.getElementById('test-element');
 
     eventsEngine.on(document, clickEventName, () => {});
