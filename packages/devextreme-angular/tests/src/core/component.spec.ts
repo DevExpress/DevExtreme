@@ -39,6 +39,7 @@ DxTestWidget.defaultOptions({
 });
 
 @Component({
+  standalone: false,
   selector: 'dx-test-widget',
   template: '',
   providers: [DxTemplateHost, WatcherHelper],
@@ -104,6 +105,7 @@ export class DxTestWidgetComponent extends DxComponent implements OnDestroy {
 }
 
 @Component({
+  standalone: false,
   selector: 'test-container-component',
   template: '',
 })

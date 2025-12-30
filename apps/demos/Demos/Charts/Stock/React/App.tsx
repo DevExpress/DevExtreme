@@ -11,14 +11,19 @@ import Chart, {
   Export,
   Tooltip,
 } from 'devextreme-react/chart';
+import type { ChartTypes } from 'devextreme-react/chart';
 import { dataSource } from './data.ts';
 
-function customizeTooltip(arg: { openValue: number, closeValue: number, highValue: number, lowValue: number }) {
+function customizeTooltip(arg: ChartTypes.PointInfo): Record<string, string> {
+  if (!('openValue' in arg)) {
+    return { text: '' };
+  }
+
   return {
     text: `Open: $${arg.openValue}<br/>
-Close: $${arg.closeValue}<br/>
-High: $${arg.highValue}<br/>
-Low: $${arg.lowValue}<br/>`,
+    Close: $${arg.closeValue}<br/>
+    High: $${arg.highValue}<br/>
+    Low: $${arg.lowValue}<br/>`,
   };
 }
 

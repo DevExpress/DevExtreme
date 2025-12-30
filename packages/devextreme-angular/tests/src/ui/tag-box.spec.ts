@@ -15,6 +15,7 @@ import {
 } from 'devextreme-angular';
 
 @Component({
+  standalone: false,
   selector: 'test-container-component',
   template: '',
 })

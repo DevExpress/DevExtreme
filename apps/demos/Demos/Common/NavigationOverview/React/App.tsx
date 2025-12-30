@@ -64,7 +64,7 @@ function App() {
   const [citiesData, setCitiesData] = useState(continents[0].items[0].cities);
 
   const handleTreeViewSelectionChange = useCallback((
-    e: TreeViewTypes.SelectionChangedEvent & { itemData: any },
+    e: TreeViewTypes.ItemSelectionChangedEvent,
   ) => {
     const selectedCountryData = e.itemData;
     if (selectedCountryData.cities) {
@@ -75,9 +75,10 @@ function App() {
   }, []);
 
   const handleTabPanelSelectionChange = useCallback((
-    e: TabPanelTypes.SelectionChangedEvent & { value: any },
+    e: TabPanelTypes.SelectionChangedEvent,
   ) => {
-    setTabPanelIndex(e.value);
+    const index = e.component.option('selectedIndex') ?? 0;
+    setTabPanelIndex(index);
   }, []);
 
   return (

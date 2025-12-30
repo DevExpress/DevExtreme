@@ -13,9 +13,10 @@ import Chart, {
   Tooltip,
   Grid,
 } from 'devextreme-react/chart';
+import type { ChartTypes } from 'devextreme-react/chart';
 import { weatherData } from './data.ts';
 
-const customizeTooltip = (pointInfo) => ({
+const customizeTooltip = (pointInfo: ChartTypes.CommonPointInfo): Record<string, string> => ({
   text: `${pointInfo.seriesName}: ${pointInfo.value} (range: ${pointInfo.lowErrorValue} - ${pointInfo.highErrorValue})`,
 });
 

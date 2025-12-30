@@ -6,20 +6,22 @@ import PieChart, {
   Label,
   Connector,
 } from 'devextreme-react/pie-chart';
+import type { PieChartTypes } from 'devextreme-react/pie-chart';
 
 import { data } from './data.ts';
+import type { CountryData } from './types.ts';
 import CenterTemplate from './CenterTemplate.tsx';
 
-const countries = Array.from(new Set(data.map((item) => item.country)));
+const countries: string[] = Array.from(new Set(data.map((item: CountryData): string => item.country)));
 
-const customizeLabel = (e) => `${e.argumentText}\n${e.valueText}`;
+const customizeLabel = (e: PieChartTypes.PointInfo): string => `${e.argumentText}\n${e.valueText}`;
 
 function App() {
-  const pies = countries.map((country) => (
+  const pies = countries.map((country: string) => (
     <PieChart
       id="pie-chart"
       key={country}
-      dataSource={data.filter((i) => i.country === country)}
+      dataSource={data.filter((i: CountryData): boolean => i.country === country)}
       resolveLabelOverlapping="shift"
       sizeGroup="piesGroup"
       innerRadius={0.65}

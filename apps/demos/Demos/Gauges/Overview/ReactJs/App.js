@@ -43,12 +43,9 @@ function CenterTemplate(gauge) {
 }
 function App() {
   const [speedValue, setSpeedValue] = useState(40);
-  const handleSpeedChange = useCallback(
-    ({ value }) => {
-      setSpeedValue(value);
-    },
-    [setSpeedValue],
-  );
+  const handleSpeedChange = useCallback(({ value }) => {
+    setSpeedValue(value);
+  }, []);
   return (
     <div id="gauge-demo">
       <div id="gauge-container">

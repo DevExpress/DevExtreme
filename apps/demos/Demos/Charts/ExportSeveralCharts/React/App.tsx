@@ -1,16 +1,25 @@
 import React, { useCallback, useRef } from 'react';
 import Chart, { Series, Label, Legend } from 'devextreme-react/chart';
+import type { ChartRef } from 'devextreme-react/chart';
 import PieChart, { Series as PieSeries, Label as PieLabel, Connector } from 'devextreme-react/pie-chart';
+import type { PieChartRef } from 'devextreme-react/pie-chart';
 import { Button } from 'devextreme-react/button';
 import { exportWidgets } from 'devextreme/viz/export';
 import { allMedals, goldMedals } from './data.ts';
 
 function App() {
-  const chartRef = useRef(null);
-  const pieChartRef = useRef(null);
+  const chartRef = useRef<ChartRef>(null);
+  const pieChartRef = useRef<PieChartRef>(null);
 
   const onClick = useCallback(() => {
-    exportWidgets([[chartRef.current.instance(), pieChartRef.current.instance()]], {
+    const chart = chartRef.current?.instance();
+    const pieChart = pieChartRef.current?.instance();
+
+    if (!chart || !pieChart) {
+      return;
+    }
+
+    exportWidgets([[chart, pieChart]], {
       fileName: 'chart',
       format: 'PNG',
     });

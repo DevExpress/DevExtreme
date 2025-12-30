@@ -13,7 +13,7 @@ import { mountains } from './data.js';
 
 function customizeTooltipText(pointInfo) {
   return {
-    text: `<span class='title'>${pointInfo.argumentText}</span><br />&nbsp;<br />System: ${pointInfo.point.data.system}<br />Height: ${pointInfo.valueText} m`,
+    text: `<span class='title'>${pointInfo.argumentText}</span><br />&nbsp;<br />System: ${pointInfo.point?.data?.system}<br />Height: ${pointInfo.valueText} m`,
   };
 }
 function customizeLabelText({ value }) {
@@ -22,13 +22,13 @@ function customizeLabelText({ value }) {
 function App() {
   const chartRef = useRef(null);
   const printChart = useCallback(() => {
-    chartRef.current.instance().print();
+    chartRef.current?.instance().print();
   }, []);
   const exportChart = useCallback(() => {
-    chartRef.current.instance().exportTo('Example', 'png');
+    chartRef.current?.instance().exportTo('Example', 'png');
   }, []);
   return (
-    <React.Fragment>
+    <>
       <Chart
         id="chart"
         ref={chartRef}
@@ -65,7 +65,7 @@ function App() {
           onClick={exportChart}
         />
       </div>
-    </React.Fragment>
+    </>
   );
 }
 export default App;

@@ -1,9 +1,12 @@
 import React from 'react';
 import {
-  LinearGauge, Scale, Label, ValueIndicator,
+  LinearGauge,
+  Scale,
+  Label,
+  ValueIndicator,
 } from 'devextreme-react/linear-gauge';
 
-function customizeText({ valueText }) {
+function customizeText({ valueText }: { valueText: string }): string {
   return `${valueText} %`;
 }
 
