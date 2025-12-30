@@ -32,9 +32,9 @@ export default function App() {
     async ({ message, event }) => {
       insertMessage({ id: Date.now(), ...message });
       if (!alerts.length) {
-        event.target.blur();
+        (event?.target).blur();
         await processAIRequest(message);
-        event.target.focus();
+        (event?.target).focus();
       }
     },
     [insertMessage, alerts.length, processAIRequest],

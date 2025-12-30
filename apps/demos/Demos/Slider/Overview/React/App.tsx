@@ -4,7 +4,7 @@ import { NumberBox } from 'devextreme-react/number-box';
 
 const sliderValueLabel = { 'aria-label': 'Slider Value' };
 
-const format = (value) => `${value}%`;
+const format = (value: number): string => `${value}%`;
 
 function App() {
   const [sliderValue, setSliderValue] = useState(10);

@@ -4,7 +4,6 @@ import type { DropDownButtonTypes, DropDownButtonRef } from 'devextreme-react/dr
 import Toolbar from 'devextreme-react/toolbar';
 import type { ToolbarTypes } from 'devextreme-react/toolbar';
 import { Template } from 'devextreme-react/core/template';
-import type { ButtonTypes } from 'devextreme-react/button';
 import notify from 'devextreme/ui/notify';
 import {
   colors,
@@ -35,18 +34,18 @@ const App = () => {
   type ColorPicker = ReturnType<DropDownButtonRef['instance']>;
   const [colorPicker, setColorPicker] = useState<ColorPicker | undefined>(undefined);
 
-  const onButtonClick = useCallback((e: ButtonTypes.ClickEvent): void => {
-    notify(`Go to ${e.element.querySelector('.button-title').textContent}'s profile`, 'success', 600);
+  const onButtonClick = useCallback((e: DropDownButtonTypes.ButtonClickEvent): void => {
+    notify(`Go to ${e.element.querySelector('.button-title')?.textContent}'s profile`, 'success', 600);
   }, []);
 
   const onItemClick = useCallback((e: DropDownButtonTypes.ItemClickEvent): void => {
     notify(e.itemData.name || e.itemData, 'success', 600);
   }, []);
 
-  const onColorClick = useCallback((selectedColor: string): void => {
+  const onColorClick = useCallback((selectedColor: string | null): void => {
     setColor(selectedColor);
     const squareIcon = colorPicker?.element().getElementsByClassName('dx-icon-square')[0] as HTMLElement;
-    squareIcon.style.color = selectedColor;
+    squareIcon.style.color = selectedColor ?? '';
     colorPicker?.close();
   }, [colorPicker]);
 

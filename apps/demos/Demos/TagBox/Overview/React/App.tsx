@@ -18,14 +18,14 @@ const dataSource = new ArrayStore({
 
 function App() {
   const [editableProducts, setEditableProducts] = useState<string[]>([...simpleProducts]);
-  const [target, setTarget] = useState<HTMLElement | null>(null);
+  const [target, setTarget] = useState<HTMLElement>();
   const [product, setProduct] = useState<Product | null>(null);
 
   const onCustomItemCreating = useCallback(
     (args: TagBoxTypes.CustomItemCreatingEvent): void => {
       const newValue = args.text;
       const isItemInDataSource = editableProducts.some((item: string): boolean => item === newValue);
-      if (!isItemInDataSource) {
+      if (!isItemInDataSource && newValue) {
         setEditableProducts([newValue, ...editableProducts]);
       }
       args.customItem = newValue;
