@@ -14,7 +14,7 @@ const App = () => {
       text: 'Show Address',
       value: isHomeAddressVisible,
       onValueChanged: (e) => {
-        setIsHomeAddressVisible(e.component.option('value') ?? undefined);
+        setIsHomeAddressVisible(e.component.option('value'));
       },
     }),
     [isHomeAddressVisible],
@@ -83,7 +83,7 @@ const App = () => {
               <GroupItem
                 caption="Home Address"
                 name="HomeAddress"
-                visible={isHomeAddressVisible}
+                visible={!!isHomeAddressVisible}
               >
                 <SimpleItem dataField="Address" />
                 <SimpleItem dataField="City" />

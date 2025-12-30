@@ -19,6 +19,7 @@ import Chart, {
   Margin,
   HorizontalLine,
 } from 'devextreme-react/chart';
+import type { SeriesPoint } from 'devextreme/common/charts';
 import type { ChartRef, IAggregationProps } from 'devextreme-react/chart';
 import type { VisualRange } from 'devextreme-react/common/charts';
 import { CustomStore } from 'devextreme-react/common/data';
@@ -32,7 +33,7 @@ function App() {
   const [dataSource, setDataSource] = useState<CustomStore | null>(null);
   const chartRef = useRef<ChartRef>(null);
 
-  const customizePoint = useCallback((arg): Record<string, unknown> => {
+  const customizePoint = useCallback((arg): SeriesPoint => {
     if (arg.seriesName === 'Volume') {
       const point = chartRef.current?.instance().getAllSeries()[0]
         .getPointsByArg(arg.argument)[0].data;

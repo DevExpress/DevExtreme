@@ -13,9 +13,10 @@ import {
   Label,
   Export,
 } from 'devextreme-react/chart';
+import type { SeriesPoint } from 'devextreme/common/charts';
 import { dataSource } from './data.ts';
 
-function customizePoint({ data }: any): Record<string, unknown> {
+function customizePoint({ data }: { data: { type: string } }): SeriesPoint {
   let color;
   let hoverStyle;
   switch (data.type) {

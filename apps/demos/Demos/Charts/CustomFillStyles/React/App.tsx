@@ -5,6 +5,7 @@ import PieChart, {
   Connector,
   Export,
 } from 'devextreme-react/pie-chart';
+import type { SeriesPoint } from 'devextreme/common/charts';
 import {
   getStrokePattern,
   getSquarePattern,
@@ -18,7 +19,14 @@ function customizeText(info: { argument: string; }): string {
   return info.argument;
 }
 
-function customizePoint(point: any): Record<string, unknown> {
+type CustomizePointArg = {
+  series: {
+    getPointsByArg: (arg: string) => { getColor: () => string; }[];
+  };
+  argument: string;
+};
+
+function customizePoint(point: CustomizePointArg): SeriesPoint {
   const color = point.series.getPointsByArg(point.argument)[0].getColor();
   let fillId;
   switch (point.argument) {

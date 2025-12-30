@@ -33,14 +33,14 @@ function App() {
       setIsFirstLevel(false);
       setData(service.filterData(e.target.originalArgument?.toString() ?? ''));
     }
-  }, [isFirstLevel, setData, setIsFirstLevel]);
+  }, [isFirstLevel]);
 
   const onButtonClick = useCallback(() => {
     if (!isFirstLevel) {
       setIsFirstLevel(true);
       setData(service.filterData(''));
     }
-  }, [isFirstLevel, setData, setIsFirstLevel]);
+  }, [isFirstLevel]);
 
   return (
     <div>

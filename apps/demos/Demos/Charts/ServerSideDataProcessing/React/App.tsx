@@ -49,7 +49,7 @@ const chartDataSource = new DataSource({
         if (!r.ok) throw new Error(`Network response fails: ${r.status}`);
         return r.json();
       })
-      .then((arr) => arr.map((item: any): any => ({
+      .then((arr) => arr.map((item: { MinTemp: number, MaxTemp: number, Date: string }) => ({
         ...item,
         Temperature: (item.MinTemp + item.MaxTemp) / 2,
         Date: new Date(item.Date),
@@ -58,12 +58,12 @@ const chartDataSource = new DataSource({
   paginate: false,
 });
 
-function onValueChanged(data: SelectBoxTypes.ValueChangedEvent) {
+function onValueChanged(data: SelectBoxTypes.ValueChangedEvent): void {
   selectedMonth = data.value;
   chartDataSource.load();
 }
 
-function customizeLabel(e: { valueText: string; }) {
+function customizeLabel(e: { valueText: string; }): string {
   return `${e.valueText}${'&#176C'}`;
 }
 
