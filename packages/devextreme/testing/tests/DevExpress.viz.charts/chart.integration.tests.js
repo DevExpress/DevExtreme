@@ -862,6 +862,36 @@ QUnit.test('Using the single section of axis options for some panes (check custo
     assert.deepEqual(visualRangeChanged.getCall(2).args[0].value, { startValue: 18, endValue: 25 });
 });
 
+// T1317590
+QUnit.test('Argument axis overlays/labels are removed when dataSource update', function(assert) {
+    const initialData = [
+        { arg: 'Monday', val: 1 },
+        { arg: 'Friday', val: 2 }
+    ];
+    const updatedData = [
+        { arg: 'Tuesday', val: 3 },
+        { arg: 'Thursday', val: 4 }
+    ];
+
+    const chart = this.createChart({
+        dataSource: initialData,
+        series: { argumentField: 'arg', valueField: 'val' },
+        argumentAxis: { label: { visible: true } }
+    });
+
+    let label = this.$container.find('.dxc-arg-elements text').filter(function() {
+        return $(this).text() === 'Friday';
+    });
+    assert.ok(label.length, 'Friday label exists');
+
+    chart.option('dataSource', updatedData);
+
+    label = this.$container.find('.dxc-arg-elements text').filter(function() {
+        return $(this).text() === 'Friday';
+    });
+    assert.notOk(label.length, 'Friday label is not exists');
+});
+
 // T681674
 QUnit.test('actual value axis visualRange after dataSource updating (argument axis without visual range)', function(assert) {
     const chart = this.createChart({
