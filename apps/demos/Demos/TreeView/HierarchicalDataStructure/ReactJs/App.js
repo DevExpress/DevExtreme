@@ -5,6 +5,9 @@ import { products } from './data.js';
 const App = () => {
   const [currentItem, setCurrentItem] = useState({ ...products[0] });
   const selectItem = useCallback((e) => {
+    if (!e.itemData) {
+      return;
+    }
     setCurrentItem({ ...e.itemData });
   }, []);
   return (
@@ -15,14 +18,14 @@ const App = () => {
         width={300}
         onItemClick={selectItem}
       />
-      {currentItem.price && (
+      {currentItem?.price && (
         <div id="product-details">
           <img
-            src={currentItem.image}
+            src={currentItem?.image}
             alt="Product image"
           />
-          <div className="name">{currentItem.text}</div>
-          <div className="price">{`$${currentItem.price}`}</div>
+          <div className="name">{currentItem?.text}</div>
+          <div className="price">{`$${currentItem?.price}`}</div>
         </div>
       )}
     </div>

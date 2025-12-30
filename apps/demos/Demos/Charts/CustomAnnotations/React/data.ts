@@ -1,4 +1,6 @@
-export const populationData = [{
+import type { PopulationData } from './types.ts';
+
+export const populationData: PopulationData[] = [{
   name: 'California',
   population: 38802500,
   capital: 'Sacramento',

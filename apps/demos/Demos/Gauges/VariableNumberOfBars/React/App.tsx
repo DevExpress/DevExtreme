@@ -1,7 +1,9 @@
 import React, { useCallback, useState } from 'react';
 import { BarGauge, Label } from 'devextreme-react/bar-gauge';
-import { CheckBox, type CheckBoxTypes } from 'devextreme-react/check-box';
+import { CheckBox } from 'devextreme-react/check-box';
+import type { CheckBoxTypes } from 'devextreme-react/check-box';
 import { products } from './data.ts';
+import type { Product } from './types.ts';
 
 const format = {
   type: 'fixedPoint',
@@ -9,10 +11,10 @@ const format = {
 };
 
 function App() {
-  const [productsActivity, setProductsActivity] = useState(products.map((p) => p.active));
-  const [values, setValues] = useState(products.map((p) => p.count));
+  const [productsActivity, setProductsActivity] = useState<boolean[]>(products.map((p: Product): boolean => p.active));
+  const [values, setValues] = useState<number[]>(products.map((p: Product): number => p.count));
 
-  const getValueChangedHandler = useCallback((productIndex: string | number) => (e: CheckBoxTypes.ValueChangedEvent) => {
+  const getValueChangedHandler = useCallback((productIndex: number) => (e: CheckBoxTypes.ValueChangedEvent): void => {
     const updatedProductsActivity = [...productsActivity];
     updatedProductsActivity[productIndex] = e.value;
     setProductsActivity(updatedProductsActivity);

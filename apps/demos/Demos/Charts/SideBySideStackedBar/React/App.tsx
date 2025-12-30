@@ -1,16 +1,25 @@
 import React from 'react';
 import {
-  Chart, Series, CommonSeriesSettings, Legend, ValueAxis, Title, Export, Tooltip, Border,
+  Chart,
+  Series,
+  CommonSeriesSettings,
+  Legend,
+  ValueAxis,
+  Title,
+  Export,
+  Tooltip,
+  Border,
 } from 'devextreme-react/chart';
-import service from './data.ts';
+import type { LegendItem as LegendItemBase } from 'devextreme/common/charts';
+import { maleAgeData } from './data.ts';
 
-const dataSource = service.getMaleAgeData();
+type LegendItem = LegendItemBase & { series?: { stack?: string } };
 
-function customizeItems(items) {
-  const sortedItems = [];
+function customizeItems(items: LegendItem[]): LegendItem[] {
+  const sortedItems: LegendItem[] = [];
 
-  items.forEach((item) => {
-    const startIndex = item.series.stack === 'male' ? 0 : 3;
+  items.forEach((item: LegendItem): void => {
+    const startIndex = item.series?.stack === 'male' ? 0 : 3;
     sortedItems.splice(startIndex, 0, item);
   });
   return sortedItems;
@@ -21,7 +30,7 @@ function App() {
     <Chart
       id="chart"
       title="Population: Age Structure"
-      dataSource={dataSource}
+      dataSource={maleAgeData}
     >
       <CommonSeriesSettings argumentField="state" type="stackedbar" />
       <Series

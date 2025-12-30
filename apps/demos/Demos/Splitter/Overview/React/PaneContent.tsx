@@ -27,11 +27,13 @@ const getFilteredDimensionOptions = (data: PaneContentProps) => Object.entries(d
   .map(([key, value]) => ({ key, value }));
 
 const PaneContent = (data: PaneContentProps) => {
-  const paneContentRef = useRef(null);
+  const paneContentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const element = paneContentRef.current.parentNode;
-    element.setAttribute('tabIndex', '0');
+    const element = paneContentRef.current?.parentNode;
+    if (element instanceof HTMLElement) {
+      element.setAttribute('tabIndex', '0');
+    }
   });
 
   return (

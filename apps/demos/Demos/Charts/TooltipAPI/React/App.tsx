@@ -1,6 +1,9 @@
 import React, { useCallback, useRef, useState } from 'react';
 import PieChart, {
-  Series, Tooltip, Size, Legend,
+  Series,
+  Tooltip,
+  Size,
+  Legend,
 } from 'devextreme-react/pie-chart';
 import type { PieChartTypes, PieChartRef } from 'devextreme-react/pie-chart';
 import { SelectBox } from 'devextreme-react/select-box';
@@ -19,17 +22,17 @@ function App() {
     setSelectedRegion(point.argument);
   }, [setSelectedRegion]);
 
-  const onPointClick = useCallback(({ target: point }: PieChartTypes.PointClickEvent) => {
+  const onPointClick = useCallback(({ target: point }: PieChartTypes.PointClickEvent): void => {
     showTooltip(point);
   }, [showTooltip]);
 
-  const onRegionChanged = useCallback(({ value }) => {
-    const point = pieChartRef.current.instance().getAllSeries()[0].getPointsByArg(value)[0];
+  const onRegionChanged = useCallback(({ value }): void => {
+    const point = pieChartRef.current?.instance().getAllSeries()[0].getPointsByArg(value)[0];
     showTooltip(point);
   }, [showTooltip]);
 
   return (
-    <React.Fragment>
+    <>
       <PieChart
         ref={pieChartRef}
         dataSource={populationData}
@@ -59,7 +62,7 @@ function App() {
           onValueChanged={onRegionChanged}
         />
       </div>
-    </React.Fragment>
+    </>
   );
 }
 

@@ -8,6 +8,10 @@ const App = () => {
   const [currentItem, setCurrentItem] = useState<Product>(products[0]);
 
   const selectItem = useCallback((e: TreeViewTypes.ItemClickEvent<Product>): void => {
+    if (!e.itemData) {
+      return;
+    }
+
     setCurrentItem({ ...e.itemData });
   }, []);
 
