@@ -31,7 +31,7 @@ function customizeText(arg: {
 }
 
 function getText(item: BarItem, text: string): string {
-  return `Racer ${(item.index && (item.index + 1))} - ${text} km/h`;
+  return `Racer ${item.index !== undefined ? item.index + 1 : ''} - ${text} km/h`;
 }
 
 function App() {
