@@ -24,6 +24,7 @@ module.exports = function (config) {
       ChromeHeadlessWithGC: {
         base: 'ChromeHeadless',
         flags: [
+          '--enable-features=MeasureMemory',
           '--js-flags=--expose-gc',
           '--no-sandbox',
           '--disable-gpu',
@@ -46,13 +47,22 @@ module.exports = function (config) {
     junitReporter: {
       outputFile: 'test-results.xml',
     },
-
+    beforeMiddleware: ['customHeaders'],
     // Karma plugins loaded
     plugins: [
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
       require('karma-junit-reporter'),
       require('karma-webpack'),
+      {
+        'middleware:customHeaders': ['factory', function () {
+          return function (req, res, next) {
+            res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+            res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+            next();
+          };
+        }],
+      },
     ],
 
     webpack: webpackConfig,

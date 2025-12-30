@@ -591,52 +591,6 @@ QUnit.test('removing subscriptions should not remove data from elementDataMap if
     assert.equal(eventsEngine.elementDataMap.has(div), hasData);
 });
 
-QUnit.test('should not leak memory when subscribing on document and clicking elements (T1307313)', function(assert) {
-    const done = assert.async();
-    const document = domAdapter.getDocument();
-    const fixture = document.getElementById('qunit-fixture');
-
-    fixture.innerHTML = '<button id="test-element">Test</button>';
-
-    const testElement = document.getElementById('test-element');
-
-    eventsEngine.on(document, clickEventName, () => {});
-
-    if(typeof globalThis !== 'undefined' && typeof globalThis.gc === 'function') {
-        globalThis.gc();
-    }
-
-    const initialMemory = performance.memory.usedJSHeapSize;
-
-    let i = 0;
-
-    const interval = setInterval(() => {
-        testElement.click();
-        i++;
-
-        if(i > 99) {
-            setTimeout(() => {
-                if(typeof globalThis !== 'undefined' && typeof globalThis.gc === 'function') {
-                    globalThis.gc();
-                }
-
-                const finalMemory = performance.memory.usedJSHeapSize;
-                const memoryDiff = finalMemory - initialMemory;
-
-                assert.ok(
-                    memoryDiff <= 0,
-                    `Memory should not leak. Memory diff: ${memoryDiff}B`
-                );
-
-                eventsEngine.off(document, clickEventName);
-                done();
-            }, 50);
-
-            clearInterval(interval);
-        }
-    }, 50);
-});
-
 QUnit.module('Strategy');
 
 QUnit.test('it should be possible to set only one method for strategy', function(assert) {

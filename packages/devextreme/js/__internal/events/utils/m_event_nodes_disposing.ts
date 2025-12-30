@@ -7,21 +7,28 @@ function nodesByEvent(event) {
     event.delegateTarget,
     event.relatedTarget,
     event.currentTarget,
-  ].filter((node) => !!node);
+  ].reduce((res, node) => {
+    if (!!node && !res.includes(node)) {
+      res.push(node);
+    }
+
+    return res;
+  }, []);
 }
 
 export const subscribeNodesDisposing = (event, callback) => {
   const nodes = nodesByEvent(event);
   const onceCallback = function (...args) {
     eventsEngine.off(nodes, removeEvent, onceCallback);
+
     return callback(...args);
   };
 
   eventsEngine.on(nodes, removeEvent, onceCallback);
 
-  return { callback: onceCallback, nodes };
+  return { onceCallback, nodes };
 };
 
 export const unsubscribeNodesDisposing = (event, callback, nodes) => {
-  eventsEngine.off(nodes || nodesByEvent(event) || nodes, removeEvent, callback);
+  eventsEngine.off(nodes || nodesByEvent(event), removeEvent, callback);
 };
