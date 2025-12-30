@@ -8,32 +8,33 @@ import Chart, {
   ValueAxis,
   VisualRange,
 } from 'devextreme-react/chart';
+import type { ChartTypes, ChartRef } from 'devextreme-react/chart';
 import Button from 'devextreme-react/button';
 import { mountains } from './data.ts';
 
-function customizeTooltipText(pointInfo) {
+function customizeTooltipText(pointInfo: ChartTypes.CommonPointInfo): Record<string, string> {
   return {
-    text: `<span class='title'>${pointInfo.argumentText}</span><br />&nbsp;<br />System: ${pointInfo.point.data.system}<br />Height: ${pointInfo.valueText} m`,
+    text: `<span class='title'>${pointInfo.argumentText}</span><br />&nbsp;<br />System: ${pointInfo.point?.data?.system}<br />Height: ${pointInfo.valueText} m`,
   };
 }
 
-function customizeLabelText({ value }) {
+function customizeLabelText({ value }: { value: string | number | Date }): string {
   return `${value} m`;
 }
 
 function App() {
-  const chartRef = useRef(null);
+  const chartRef = useRef<ChartRef>(null);
 
   const printChart = useCallback(() => {
-    chartRef.current.instance().print();
+    chartRef.current?.instance().print();
   }, []);
 
   const exportChart = useCallback(() => {
-    chartRef.current.instance().exportTo('Example', 'png');
+    chartRef.current?.instance().exportTo('Example', 'png');
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <Chart
         id="chart"
         ref={chartRef}
@@ -54,7 +55,7 @@ function App() {
         &nbsp;
         <Button icon="export" text="Export" onClick={exportChart} />
       </div>
-    </React.Fragment>
+    </>
   );
 }
 

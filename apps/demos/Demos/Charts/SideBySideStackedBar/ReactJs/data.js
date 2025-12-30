@@ -1,4 +1,4 @@
-const maleAgeData = [
+export const maleAgeData = [
   {
     state: 'USA',
     maleyoung: 29.956,
@@ -63,8 +63,3 @@ const maleAgeData = [
     femaleolder: 5.459,
   },
 ];
-export default {
-  getMaleAgeData() {
-    return maleAgeData;
-  },
-};

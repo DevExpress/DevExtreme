@@ -1,6 +1,6 @@
 import type { TreeMapTypes } from 'devextreme-react/tree-map';
 
-export type DrillInfo = { text?: string, node?: TreeMapTypes.DrillEvent['node'] };
+export type DrillInfo = { text: string, node?: TreeMapTypes.DrillEvent['node'] };
 
 export const citiesPopulation = [{
   name: 'Africa',

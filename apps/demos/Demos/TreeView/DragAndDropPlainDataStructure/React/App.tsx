@@ -39,7 +39,7 @@ const findNodeById = (nodes: Node[], id: string | number): Node | null => {
       return nodes[i];
     }
     if (nodes[i].children) {
-      const node = findNodeById(nodes[i].children, id);
+      const node = findNodeById(nodes[i].children ?? [], id);
       if (node != null) {
         return node;
       }
@@ -48,13 +48,17 @@ const findNodeById = (nodes: Node[], id: string | number): Node | null => {
   return null;
 };
 
-const moveNode = (fromNode: Node, toNode: Node, fromItems: FileSystemItem[], toItems: FileSystemItem[], isDropInsideItem: boolean) => {
-  const fromIndex = fromItems.findIndex((item: FileSystemItem) => item.id === fromNode.itemData?.id);
+const moveNode = (fromNode: Node, toNode: Node, fromItems: FileSystemItem[], toItems: FileSystemItem[], isDropInsideItem: boolean): void => {
+  if (!fromNode.itemData || !toNode.itemData) {
+    return;
+  }
+
+  const fromIndex = fromItems.findIndex((item: FileSystemItem): boolean => item.id === fromNode.itemData?.id);
   fromItems.splice(fromIndex, 1);
 
   const toIndex = toNode === null || isDropInsideItem
     ? toItems.length
-    : toItems.findIndex((item: FileSystemItem) => item.id === toNode.itemData?.id);
+    : toItems.findIndex((item: FileSystemItem): boolean => item.id === toNode.itemData?.id);
   toItems.splice(toIndex, 0, fromNode.itemData);
 
   moveChildren(fromNode, fromItems, toItems);
@@ -62,12 +66,12 @@ const moveNode = (fromNode: Node, toNode: Node, fromItems: FileSystemItem[], toI
     fromNode.itemData.parentId = toNode.itemData?.id;
   } else {
     fromNode.itemData.parentId = toNode != null
-      ? toNode.itemData.parentId
+      ? toNode.itemData?.parentId
       : undefined;
   }
 };
 
-const moveChildren = (node: Node, fromDataSource: FileSystemItem[], toDataSource: FileSystemItem[]) => {
+const moveChildren = (node: Node, fromDataSource: FileSystemItem[], toDataSource: FileSystemItem[]): void => {
   if (!node.itemData?.isDirectory) {
     return;
   }
@@ -77,13 +81,15 @@ const moveChildren = (node: Node, fromDataSource: FileSystemItem[], toDataSource
       moveChildren(child, fromDataSource, toDataSource);
     }
 
-    const fromIndex = fromDataSource.findIndex((item: FileSystemItem) => item.id === child.itemData?.id);
+    const fromIndex = fromDataSource.findIndex((item: FileSystemItem): boolean => item.id === child.itemData?.id);
     fromDataSource.splice(fromIndex, 1);
-    toDataSource.splice(toDataSource.length, 0, child.itemData);
+    if (child.itemData) {
+      toDataSource.splice(toDataSource.length, 0, child.itemData);
+    }
   });
 };
 
-const isChildNode = (parentNode: Node, childNode: Node) => {
+const isChildNode = (parentNode: Node, childNode: Node): boolean => {
   let { parent } = childNode;
   while (parent !== null) {
     if (parent?.itemData?.id === parentNode.itemData?.id) {

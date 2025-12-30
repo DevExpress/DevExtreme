@@ -56,7 +56,8 @@ function App() {
     }
   }, []);
   const handleTabPanelSelectionChange = useCallback((e) => {
-    setTabPanelIndex(e.value);
+    const index = e.component.option('selectedIndex') ?? 0;
+    setTabPanelIndex(index);
   }, []);
   return (
     <div className="container">

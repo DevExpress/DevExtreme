@@ -116,8 +116,8 @@ const onVisualRangeChanged = (visualRange, component) => {
   const items = component.getDataSource().items();
   if (
     !items.length ||
-    items[0].date - visualRange.startValue.getTime() >= HALFDAY ||
-    visualRange.endValue.getTime() - items[items.length - 1].date >= HALFDAY
+    items[0].date - visualRange.startValue?.getTime() >= HALFDAY ||
+    visualRange.endValue?.getTime() - items[items.length - 1].date >= HALFDAY
   ) {
     uploadDataByVisualRange(visualRange, component);
   }

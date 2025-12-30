@@ -9,13 +9,14 @@ import {
   Margin,
   Export,
 } from 'devextreme-react/polar-chart';
+import type { LegendClickEvent } from 'devextreme/viz/polar_chart';
 import { windSources, windRoseData, periodLabel } from './data.ts';
 
-function onLegendClick({ target: series }) {
-  if (series.isVisible()) {
-    series.hide();
+function onLegendClick(e: LegendClickEvent): void {
+  if (e.target.isVisible()) {
+    e.target.hide();
   } else {
-    series.show();
+    e.target.show();
   }
 }
 
