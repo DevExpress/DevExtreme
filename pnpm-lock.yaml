@@ -1476,12 +1476,12 @@ importers:
       eslint-plugin-jsx-a11y:
         specifier: 6.8.0
         version: 6.8.0(eslint@9.18.0(jiti@2.6.1))
+      eslint-plugin-n:
+        specifier: 14.0.0
+        version: 14.0.0(eslint@9.18.0(jiti@2.6.1))
       eslint-plugin-no-only-tests:
         specifier: 'catalog:'
         version: 3.3.0
-      eslint-plugin-node:
-        specifier: 11.1.0
-        version: 11.1.0(eslint@9.18.0(jiti@2.6.1))
       eslint-plugin-qunit:
         specifier: 'catalog:'
         version: 8.1.2(eslint@9.18.0(jiti@2.6.1))
@@ -10971,8 +10971,8 @@ packages:
       eslint: ^8.0.0
       typescript: ^4.2.4 || ^5.0.0
 
-  eslint-plugin-es@3.0.1:
-    resolution: {integrity: sha512-GUmAsJaN4Fc7Gbtl8uOBlayo2DqhwWvEzykMHSCZHU3XdJ+NSzzZcVhXh3VxX5icqQ+oQdIEawXX8xkR3mIFmQ==}
+  eslint-plugin-es@4.1.0:
+    resolution: {integrity: sha512-GILhQTnjYE2WorX5Jyi5i4dz5ALWxBIdQECVQavL6s7cI76IZTDWleTHkxz/QT3kvcs2QlGHvKLYsSlPOlPXnQ==}
     engines: {node: '>=8.10.0'}
     peerDependencies:
       eslint: '>=4.19.1'
@@ -11016,15 +11016,15 @@ packages:
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8
 
+  eslint-plugin-n@14.0.0:
+    resolution: {integrity: sha512-mNwplPLsbaKhHyA0fa/cy8j+oF6bF6l81hzBTWa6JOvPcMNAuIogk2ih6d9tYvWYzyUG+7ZFeChqbzdFpg2QrQ==}
+    engines: {node: '>=12.22.0'}
+    peerDependencies:
+      eslint: '>=7.0.0'
+
   eslint-plugin-no-only-tests@3.3.0:
     resolution: {integrity: sha512-brcKcxGnISN2CcVhXJ/kEQlNa0MEfGRtwKtWA16SkqXHKitaKIMrfemJKLKX1YqDU5C/5JY3PvZXd5jEW04e0Q==}
     engines: {node: '>=5.0.0'}
-
-  eslint-plugin-node@11.1.0:
-    resolution: {integrity: sha512-oUwtPJ1W0SKD0Tr+wqu92c5xuCeQqB3hSCHasn/ZgjFdA9iDGNkNf2Zi9ztY7X+hNuMib23LNGRm6+uN+KLE3g==}
-    engines: {node: '>=8.10.0'}
-    peerDependencies:
-      eslint: '>=5.16.0'
 
   eslint-plugin-qunit@8.1.2:
     resolution: {integrity: sha512-2gDQdHlQW8GVXD7YYkO8vbm9Ldc60JeGMuQN5QlD48OeZ8znBvvoHWZZMeXjvoDPReGaLEvyuWrDtrI8bDbcqw==}
@@ -18855,6 +18855,7 @@ packages:
   whatwg-encoding@2.0.0:
     resolution: {integrity: sha512-p41ogyeMUrw3jWclHWTQg1k05DSVXPLcVxRTYsXUk+ZooOCZLcoYgPZ/HL/D/N+uQPOtcp1me1WhBEaX02mhWg==}
     engines: {node: '>=12'}
+    deprecated: Use @exodus/bytes instead for a more spec-conformant and faster implementation
 
   whatwg-fetch@2.0.4:
     resolution: {integrity: sha512-dcQ1GWpOD/eEQ97k66aiEVpNnapVj90/+R+SXTPYGHpYBBypfKJEQjLrvMZ7YXbKm21gXd4NcuxUTjiv1YtLng==}
@@ -31660,7 +31661,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-es@3.0.1(eslint@9.18.0(jiti@2.6.1)):
+  eslint-plugin-es@4.1.0(eslint@9.18.0(jiti@2.6.1)):
     dependencies:
       eslint: 9.18.0(jiti@2.6.1)
       eslint-utils: 2.1.0
@@ -31834,17 +31835,18 @@ snapshots:
       object.entries: 1.1.8
       object.fromentries: 2.0.8
 
-  eslint-plugin-no-only-tests@3.3.0: {}
-
-  eslint-plugin-node@11.1.0(eslint@9.18.0(jiti@2.6.1)):
+  eslint-plugin-n@14.0.0(eslint@9.18.0(jiti@2.6.1)):
     dependencies:
       eslint: 9.18.0(jiti@2.6.1)
-      eslint-plugin-es: 3.0.1(eslint@9.18.0(jiti@2.6.1))
-      eslint-utils: 2.1.0
+      eslint-plugin-es: 4.1.0(eslint@9.18.0(jiti@2.6.1))
+      eslint-utils: 3.0.0(eslint@9.18.0(jiti@2.6.1))
       ignore: 5.3.1
+      is-core-module: 2.16.1
       minimatch: 3.1.2
-      resolve: 1.22.8
+      resolve: 1.22.11
       semver: 6.3.1
+
+  eslint-plugin-no-only-tests@3.3.0: {}
 
   eslint-plugin-qunit@8.1.2(eslint@9.18.0(jiti@2.6.1)):
     dependencies:
