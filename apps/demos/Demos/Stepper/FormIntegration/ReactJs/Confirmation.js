@@ -12,11 +12,11 @@ const Confirmation = ({ formData, isConfirmed }) => {
         <div className="separator"></div>
         <div>
           <span className="summary-item-label">Check-in Date: </span>
-          {new Date(formData.dates[0]).toLocaleDateString()}
+          {new Date(formData.dates[0] ?? '').toLocaleDateString()}
         </div>
         <div>
           <span className="summary-item-label">Check-out Date: </span>
-          {new Date(formData.dates[1]).toLocaleDateString()}
+          {new Date(formData.dates[1] ?? '').toLocaleDateString()}
         </div>
       </div>
 

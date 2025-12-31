@@ -30,6 +30,8 @@
    "Demos/Scheduler/**/React/**/*.ts",
    "Demos/Scheduler/**/React/**/*.tsx",
    "Demos/VectorMap/**/React/**/*.ts",
-   "Demos/VectorMap/**/React/**/*.tsx"
+   "Demos/VectorMap/**/React/**/*.tsx",
+   "Demos/Localization/**/React/**/*.ts",
+   "Demos/Localization/**/React/**/*.tsx"
   ]
 }
