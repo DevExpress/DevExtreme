@@ -1,7 +1,6 @@
-const BASE_PATH = 'http://localhost:5555';
-// const BASE_PATH = 'https://js.devexpress.com/Demos/NetCore';
-
 $(() => {
+  const BASE_PATH = 'http://localhost:5555';
+  // const BASE_PATH = 'https://js.devexpress.com/Demos/NetCore';
   const URL = `${BASE_PATH}/api/DataGridBatchUpdateWebApi`;
 
   function fetchAntiForgeryToken() {
@@ -38,7 +37,7 @@ $(() => {
     dataSource: DevExpress.data.AspNet.createStore({
       key: 'OrderID',
       loadUrl: `${URL}/Orders`,
-      async onBeforeSend(__method, ajaxOptions) {
+      async onBeforeSend(_, ajaxOptions) {
         const tokenData = await getAntiForgeryTokenValue();
         ajaxOptions.xhrFields = {
           withCredentials: true,
@@ -121,9 +120,9 @@ $(() => {
       method: 'POST',
       data: JSON.stringify(changes),
       headers,
+      xhrFields: { withCredentials: true },
       cache: false,
       contentType: 'application/json',
-      xhrFields: { withCredentials: true },
     }).done(d.resolve).fail((xhr) => {
       const errorMessage = xhr.responseJSON?.Message || xhr.statusText || 'Unknown error';
       d.reject(new Error(`Batch save failed: ${errorMessage}`));
