@@ -29,7 +29,7 @@ export default function App() {
     const updatedHouses = [...houses];
     const updatedCurrentHouse = updatedHouses.find((house: HouseType): boolean => house === currentHouse);
     if (updatedCurrentHouse) {
-      updatedCurrentHouse.Favorite = !updatedCurrentHouse?.Favorite;
+      updatedCurrentHouse.Favorite = !updatedCurrentHouse.Favorite;
     }
     setHouses(updatedHouses);
 
