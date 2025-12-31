@@ -370,7 +370,7 @@ export default [
         },
     },
     // Rules for build folder
-    ...compat.extends('plugin:node/recommended').map(config => ({
+    ...compat.extends('plugin:n/recommended-module').map(config => ({
         ...config,
         files: ['build/**/*'],
     })),
@@ -384,10 +384,10 @@ export default [
         },
         rules: {
             'no-console': 'off',
-            'node/no-unpublished-require': 'off',
-            'node/no-unsupported-features/node-builtins': 'off',
-            'node/shebang': 'off',
-            'node/no-unsupported-features/es-syntax': 'off',
+            'n/no-unpublished-require': 'off',
+            'n/no-unsupported-features/node-builtins': 'off',
+            'n/shebang': 'off',
+            'n/no-unsupported-features/es-syntax': 'off',
             'spellcheck/spell-checker': 'off',
         },
     },
