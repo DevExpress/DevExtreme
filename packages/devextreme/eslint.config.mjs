@@ -370,7 +370,7 @@ export default [
         },
     },
     // Rules for build folder
-    ...compat.extends('plugin:n/recommended-module').map(config => ({
+    ...compat.extends('plugin:n/recommended').map(config => ({
         ...config,
         files: ['build/**/*'],
     })),
