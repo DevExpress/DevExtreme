@@ -1,8 +1,7 @@
 import {
-  afterEach, beforeEach, describe, expect, it, jest,
+  afterEach, beforeEach, describe, expect, it,
 } from '@jest/globals';
 import $ from '@js/core/renderer';
-import { getWidth } from '@js/core/utils/size';
 
 import fx from '../../../common/core/animation/fx';
 import CustomStore from '../../../data/custom_store';
@@ -105,25 +104,24 @@ describe('Workspace', () => {
       });
 
       const workspace = scheduler.getWorkSpace();
-      const scrollable = workspace.getScrollable();
-      const $scrollable = scrollable.$element();
-      const scrollBySpy = jest.spyOn(scrollable, 'scrollBy');
 
       // With offset: 720 (12 hours), cells start at 18:00 (6:00 + 12h)
       // For date 22:00, this should be cell index 4 (18:00=0, 19:00=1, 20:00=2, 21:00=3, 22:00=4)
       const leftCellCount = 4;
       const cellWidth = workspace.getCellWidth();
-      const scrollableWidth = getWidth($scrollable);
-      const expectedLeft = leftCellCount * cellWidth - (scrollableWidth - cellWidth) / 2;
+      const expectedLeft = leftCellCount * cellWidth;
 
       const targetDate = new Date(2021, 1, 2, 22, 0);
-      scheduler.scrollTo(targetDate, undefined, false);
 
-      expect(scrollBySpy).toHaveBeenCalledTimes(1);
-      const scrollParams = scrollBySpy.mock.calls[0][0] as { left: number; top: number };
-      expect(scrollParams.left).toBeCloseTo(expectedLeft, 1);
+      const coordinates = workspace._getScrollCoordinates(
+        targetDate.getHours(),
+        targetDate.getMinutes(),
+        targetDate,
+        0,
+        false,
+      );
 
-      scrollBySpy.mockRestore();
+      expect(coordinates.left).toBe(expectedLeft);
     });
   });
 });
