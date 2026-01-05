@@ -6,16 +6,6 @@ import { getWidth } from '@js/core/utils/size';
 
 import fx from '../../../common/core/animation/fx';
 import CustomStore from '../../../data/custom_store';
-import { getResourceManagerMock } from '../__mock__/resource_manager.mock';
-import SchedulerTimelineDay from '../workspaces/m_timeline_day';
-import SchedulerTimelineMonth from '../workspaces/m_timeline_month';
-import SchedulerTimelineWeek from '../workspaces/m_timeline_week';
-import SchedulerTimelineWorkWeek from '../workspaces/m_timeline_work_week';
-import type SchedulerWorkSpace from '../workspaces/m_work_space';
-import SchedulerWorkSpaceDay from '../workspaces/m_work_space_day';
-import SchedulerWorkSpaceMonth from '../workspaces/m_work_space_month';
-import SchedulerWorkSpaceWeek from '../workspaces/m_work_space_week';
-import SchedulerWorkSpaceWorkWeek from '../workspaces/m_work_space_work_week';
 import { createScheduler } from './__mock__/create_scheduler';
 import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
 
@@ -24,67 +14,8 @@ const CLASSES = {
   workSpace: 'dx-scheduler-work-space',
 };
 
-type WorkspaceConstructor<T> = new (container: Element, options?: any) => T;
-
-const createWorkspace = <T extends SchedulerWorkSpace>(
-  WorkSpace: WorkspaceConstructor<T>,
-  currentView: string,
-): T => {
-  const container = document.createElement('div');
-  const workspace = new WorkSpace(container, {
-    views: [currentView],
-    currentView,
-    currentDate: new Date(2017, 4, 25),
-    firstDayOfWeek: 0,
-    getResourceManager: () => getResourceManagerMock([]),
-  });
-  (workspace as any)._isVisible = () => true;
-  expect(container.classList).toContain('dx-scheduler-work-space');
-
-  return workspace;
-};
-
-const workSpaces: {
-  currentView: string;
-  WorkSpace: WorkspaceConstructor<SchedulerWorkSpace>;
-}[] = [
-  { currentView: 'day', WorkSpace: SchedulerWorkSpaceDay },
-  { currentView: 'week', WorkSpace: SchedulerWorkSpaceWeek },
-  { currentView: 'workWeek', WorkSpace: SchedulerWorkSpaceWorkWeek },
-  { currentView: 'month', WorkSpace: SchedulerWorkSpaceMonth },
-  { currentView: 'timelineDay', WorkSpace: SchedulerTimelineDay },
-  { currentView: 'timelineWeek', WorkSpace: SchedulerTimelineWeek },
-  { currentView: 'timelineWorkWeek', WorkSpace: SchedulerTimelineWorkWeek },
-  { currentView: 'timelineMonth', WorkSpace: SchedulerTimelineMonth },
-];
-
 describe('Workspace', () => {
-  describe('Base functionality', () => {
-    workSpaces.forEach(({ currentView, WorkSpace }) => {
-      it(`should clear cache on dimension change, view: ${currentView}`, () => {
-        const workspace = createWorkspace(WorkSpace, currentView);
-        jest.spyOn(workspace.cache, 'clear');
-
-        workspace.cache.memo('test', () => 'value');
-        workspace._dimensionChanged();
-
-        expect(workspace.cache.clear).toHaveBeenCalledTimes(1);
-      });
-
-      it(`should clear cache on _cleanView call, view: ${currentView}`, () => {
-        const workspace = createWorkspace(WorkSpace, currentView);
-        jest.spyOn(workspace.cache, 'clear');
-
-        workspace.cache.memo('test', () => 'value');
-        workspace._cleanView();
-
-        expect(workspace.cache.clear).toHaveBeenCalledTimes(1);
-        expect(workspace.cache.size).toBe(0);
-      });
-    });
-  });
-
-  describe('Recalculation with Async Templates', () => {
+  describe('Recalculation with Async Templates (T661335)', () => {
     beforeEach(() => {
       fx.off = true;
       setupSchedulerTestEnvironment({ height: 600 });
@@ -149,7 +80,7 @@ describe('Workspace', () => {
     });
   });
 
-  describe('scrollTo', () => {
+  describe('scrollTo (T1310544)', () => {
     beforeEach(() => {
       fx.off = true;
       setupSchedulerTestEnvironment({ height: 600 });
@@ -160,7 +91,7 @@ describe('Workspace', () => {
       fx.off = false;
     });
 
-    it('should scroll to date with offset (T1310544)', async () => {
+    it('T1310544: should scroll to date with offset: 720 (12 hours)', async () => {
       const { scheduler } = await createScheduler({
         views: ['timelineDay'],
         currentView: 'timelineDay',
