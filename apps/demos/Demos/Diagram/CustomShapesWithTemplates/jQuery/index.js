@@ -30,11 +30,10 @@ $(() => {
       }),
       keyExpr: 'ID',
       typeExpr(obj, value) {
-        if (value) {
-          obj.type = value;
-        } else {
+        if (value === undefined) {
           return `employee${obj.ID}`;
         }
+        obj.type = value;
         return null;
       },
       parentKeyExpr: 'Head_ID',

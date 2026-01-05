@@ -13,11 +13,10 @@ const dataSource = new ArrayStore({
 });
 
 function itemTypeExpr(obj: { ID: number; type: string; }, value: string) {
-  if (value) {
-    obj.type = value;
-  } else {
+  if (value === undefined) {
     return `employee${obj.ID}`;
   }
+  obj.type = value;
   return null;
 }
 

@@ -45,11 +45,10 @@ export class AppComponent {
   }
 
   itemTypeExpr(obj, value) {
-    if (value) {
-      obj.type = value;
-    } else {
+    if (value === undefined) {
       return `employee${obj.ID}`;
     }
+    obj.type = value;
     return null;
   }
 
