@@ -275,7 +275,7 @@ export default function App() {
 }
 function PopupContentFunc(props) {
   return (
-    <React.Fragment>
+    <>
       <div className="dx-fieldset">
         <div className="dx-field">
           <div className="dx-field-label">Name</div>
@@ -366,6 +366,6 @@ function PopupContentFunc(props) {
           onClick={props.cancelEditEmployeeClick}
         ></Button>
       </div>
-    </React.Fragment>
+    </>
   );
 }
