@@ -14,10 +14,10 @@ const apiKey = {
 
 const App = () => {
   const [currentMarkersData, setCurrentMarkersData] = useState<IMarkerProps[]>(markersData);
-  const [currentMarkerUrl, setCurrentMarkerUrl] = useState<string>(markerUrl);
+  const [currentMarkerUrl, setCurrentMarkerUrl] = useState<string | undefined>(markerUrl);
 
   const onCustomMarkersChange = useCallback((value: CheckBoxTypes.Properties['value']): void => {
-    setCurrentMarkerUrl(value ? currentMarkerUrl : null);
+    setCurrentMarkerUrl(value ? currentMarkerUrl : undefined);
     setCurrentMarkersData(markersData);
   }, [currentMarkerUrl]);
 

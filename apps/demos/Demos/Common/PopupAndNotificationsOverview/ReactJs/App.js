@@ -23,16 +23,18 @@ export default function App() {
   const changeFavoriteState = useCallback(() => {
     const updatedHouses = [...houses];
     const updatedCurrentHouse = updatedHouses.find((house) => house === currentHouse);
-    updatedCurrentHouse.Favorite = !updatedCurrentHouse.Favorite;
+    if (updatedCurrentHouse) {
+      updatedCurrentHouse.Favorite = !updatedCurrentHouse.Favorite;
+    }
     setHouses(updatedHouses);
     notify(
       {
         message: `This item has been ${
-          updatedCurrentHouse.Favorite ? 'added to' : 'removed from'
+          updatedCurrentHouse?.Favorite ? 'added to' : 'removed from'
         } the Favorites list!`,
         width: 450,
       },
-      updatedCurrentHouse.Favorite ? 'success' : 'error',
+      updatedCurrentHouse?.Favorite ? 'success' : 'error',
       2000,
     );
   }, [houses, currentHouse]);

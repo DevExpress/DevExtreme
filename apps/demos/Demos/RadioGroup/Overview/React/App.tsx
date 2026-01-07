@@ -1,8 +1,9 @@
 import React, { useCallback, useState } from 'react';
-import RadioGroup, { type RadioGroupTypes } from 'devextreme-react/radio-group';
+import RadioGroup from 'devextreme-react/radio-group';
+import type { RadioGroupTypes } from 'devextreme-react/radio-group';
 import { priorities, priorityEntities, tasks } from './data.ts';
 
-const renderCustomItem = (data) => <div>{data}</div>;
+const renderCustomItem = (data: string) => <div>{data}</div>;
 
 function App() {
   const [colorPriority, setColorPriority] = useState(priorities[2]);

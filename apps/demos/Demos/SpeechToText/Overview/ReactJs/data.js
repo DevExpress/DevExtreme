@@ -31,7 +31,6 @@ export const types = [
     value: 'danger',
   },
 ];
-export const languages = ['Auto-detect', 'English', 'Spanish', 'French', 'German'];
 export const langMap = {
   'Auto-detect': '',
   English: 'en-US',
@@ -39,3 +38,4 @@ export const langMap = {
   French: 'fr-FR',
   German: 'de-DE',
 };
+export const languages = Object.keys(langMap);

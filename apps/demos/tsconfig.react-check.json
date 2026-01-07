@@ -17,26 +17,10 @@
     "Demos/**/React/**/*.ts"
   ],
   "exclude": [
-   "Demos/Autocomplete/**/React/**/*.ts",
-   "Demos/Autocomplete/**/React/**/*.tsx",
-   "Demos/Calendar/**/React/**/*.ts",
-   "Demos/Calendar/**/React/**/*.tsx",
-   "Demos/Chat/**/React/**/*.ts",
-   "Demos/Chat/**/React/**/*.tsx",
-   "Demos/Common/EditorsRightToLeftSupport/React/**/*.ts",
-   "Demos/Common/EditorsRightToLeftSupport/React/**/*.tsx",
-   "Demos/Common/PopupAndNotificationsOverview/React/**/*.ts",
-   "Demos/Common/PopupAndNotificationsOverview/React/**/*.tsx",
    "Demos/Diagram/**/React/**/*.ts",
    "Demos/Diagram/**/React/**/*.tsx",
-   "Demos/DropDownBox/**/React/**/*.ts",
-   "Demos/DropDownBox/**/React/**/*.tsx",
-   "Demos/DropDownButton/**/React/**/*.ts",
-   "Demos/DropDownButton/**/React/**/*.tsx",
    "Demos/FileManager/**/React/**/*.ts",
    "Demos/FileManager/**/React/**/*.tsx",
-   "Demos/FileUploader/**/React/**/*.ts",
-   "Demos/FileUploader/**/React/**/*.tsx",
    "Demos/FloatingActionButton/**/React/**/*.ts",
    "Demos/FloatingActionButton/**/React/**/*.tsx",
    "Demos/Gantt/**/React/**/*.ts",
@@ -72,6 +56,8 @@
    "Demos/Validation/**/React/**/*.ts",
    "Demos/Validation/**/React/**/*.tsx",
    "Demos/VectorMap/**/React/**/*.ts",
-   "Demos/VectorMap/**/React/**/*.tsx"
+   "Demos/VectorMap/**/React/**/*.tsx",
+   "Demos/Localization/**/React/**/*.ts",
+   "Demos/Localization/**/React/**/*.tsx"
   ]
 }

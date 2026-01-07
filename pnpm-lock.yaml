@@ -214,7 +214,7 @@ importers:
         version: 29.7.0(@types/node@20.12.8)(babel-plugin-macros@3.1.0)(node-notifier@9.0.1)(ts-node@10.9.2(@swc/core@1.15.3)(@types/node@20.12.8)(typescript@5.9.3))
       jspdf-autotable:
         specifier: 3.8.3
-        version: 3.8.3(jspdf@3.0.2)
+        version: 3.8.3(jspdf@4.0.0)
       lint-staged:
         specifier: 14.0.1
         version: 14.0.1(enquirer@2.4.1)
@@ -448,11 +448,11 @@ importers:
         specifier: 'catalog:'
         version: 3.7.1
       jspdf:
-        specifier: 3.0.2
-        version: 3.0.2
+        specifier: 4.0.0
+        version: 4.0.0
       jspdf-autotable:
         specifier: 5.0.2
-        version: 5.0.2(jspdf@3.0.2)
+        version: 5.0.2(jspdf@4.0.0)
       jszip:
         specifier: ^3.10.1
         version: 3.10.1
@@ -1630,11 +1630,11 @@ importers:
         specifier: 0.0.2
         version: 0.0.2
       jspdf:
-        specifier: 3.0.2
-        version: 3.0.2
+        specifier: 4.0.0
+        version: 4.0.0
       jspdf-autotable:
         specifier: 3.8.3
-        version: 3.8.3(jspdf@3.0.2)
+        version: 3.8.3(jspdf@4.0.0)
       knockout:
         specifier: 3.5.1
         version: 3.5.1
@@ -12810,8 +12810,8 @@ packages:
     peerDependencies:
       jspdf: ^2 || ^3
 
-  jspdf@3.0.2:
-    resolution: {integrity: sha512-G0fQDJ5fAm6UW78HG6lNXyq09l0PrA1rpNY5i+ly17Zb1fMMFSmS+3lw4cnrAPGyouv2Y0ylujbY2Ieq3DSlKA==}
+  jspdf@4.0.0:
+    resolution: {integrity: sha512-w12U97Z6edKd2tXDn3LzTLg7C7QLJlx0BPfM3ecjK2BckUl9/81vZ+r5gK4/3KQdhAcEZhENUxRhtgYBj75MqQ==}
 
   jsprim@1.4.2:
     resolution: {integrity: sha512-P2bSOMAc/ciLz6DzgjVlGJP9+BrJWu5UDGK70C2iweC5QBIeFf0ZXRvGjEj2uYgrY2MkAAhsSWHDWlFtEroZWw==}
@@ -34451,17 +34451,17 @@ snapshots:
 
   jsonparse@1.3.1: {}
 
-  jspdf-autotable@3.8.3(jspdf@3.0.2):
+  jspdf-autotable@3.8.3(jspdf@4.0.0):
     dependencies:
-      jspdf: 3.0.2
+      jspdf: 4.0.0
 
-  jspdf-autotable@5.0.2(jspdf@3.0.2):
+  jspdf-autotable@5.0.2(jspdf@4.0.0):
     dependencies:
-      jspdf: 3.0.2
+      jspdf: 4.0.0
 
-  jspdf@3.0.2:
+  jspdf@4.0.0:
     dependencies:
-      '@babel/runtime': 7.26.10
+      '@babel/runtime': 7.28.4
       fast-png: 6.4.0
       fflate: 0.8.2
     optionalDependencies:
