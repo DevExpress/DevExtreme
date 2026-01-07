@@ -47,7 +47,8 @@ function shouldRunTestExplicitlyInternal(framework, product, demo) {
 }
 
 function patternGroupFromValues(product, demo, framework) {
-  const wrap = (x) => RegExp(x || '.*', 'i');
+  const escapeRegExp = (string) => string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const wrap = (x) => RegExp(x ? escapeRegExp(x) : '.*', 'i');
   return {
     product: wrap(product),
     demo: wrap(demo),
