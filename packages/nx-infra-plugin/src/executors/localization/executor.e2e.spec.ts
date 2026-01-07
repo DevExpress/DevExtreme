@@ -2,8 +2,17 @@ import * as fs from 'fs';
 import * as path from 'path';
 import executor from './executor';
 import { LocalizationExecutorSchema } from './schema';
-import { createTempDir, cleanupTempDir, createMockContext } from '../../utils/test-utils';
-import { writeFileText, writeJson, readFileText } from '../../utils';
+import {
+  writeFileText,
+  writeJson,
+  cleanupTempDir,
+  readFileText,
+  createTempDir,
+  createMockContext,
+  findWorkspaceRoot,
+} from '../../utils';
+
+const WORKSPACE_ROOT = findWorkspaceRoot();
 
 const PROJECT_SUBPATH = ['packages', 'test-lib'] as const;
 
@@ -122,6 +131,16 @@ describe('LocalizationExecutor E2E', () => {
     tempDir = createTempDir('nx-localization-e2e-');
     context = createMockContext({ root: tempDir });
     fixture = await createLocalizationTestFixture(tempDir);
+
+    const devextremeNodeModules = path.join(
+      WORKSPACE_ROOT,
+      'packages',
+      'devextreme',
+      'node_modules',
+    );
+
+    const tempNodeModules = path.join(fixture.projectDir, 'node_modules');
+    fs.symlinkSync(devextremeNodeModules, tempNodeModules, 'junction');
   });
 
   afterEach(() => {
