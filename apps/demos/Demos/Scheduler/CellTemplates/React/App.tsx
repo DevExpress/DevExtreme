@@ -3,6 +3,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import Scheduler from 'devextreme-react/scheduler';
 import type { SchedulerTypes } from 'devextreme-react/scheduler';
 import type { FormRef } from 'devextreme-react/form';
+import type { dxElementWrapper } from 'devextreme/core/renderer';
 import notify from 'devextreme/ui/notify';
 import { data, holidays } from './data.ts';
 import Utils from './utils.ts';
@@ -75,7 +76,7 @@ const onAppointmentUpdating = (e: SchedulerTypes.AppointmentUpdatingEvent) => {
   }
 };
 
-const setComponentAria = (element) => {
+const setComponentAria = (element: dxElementWrapper) => {
   const prevAria = element?.attr('aria-label') || '';
   const description = ariaDescription();
   const nextAria = `${prevAria}${description ? ` ${description}` : ''}`;

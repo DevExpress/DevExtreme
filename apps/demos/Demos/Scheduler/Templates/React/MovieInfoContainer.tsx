@@ -18,7 +18,7 @@ const MovieInfoContainer: React.FC<MovieInfoContainerProps> = ({ formInstanceRef
 
   useEffect(() => {
     const form = formInstanceRef.current;
-    const formData = form.option('formData');
+    const formData = form?.option('formData');
 
     const currentMovie = getMovieById(formData.movieId);
     setMovie(currentMovie);
@@ -30,10 +30,10 @@ const MovieInfoContainer: React.FC<MovieInfoContainerProps> = ({ formInstanceRef
       }
     };
 
-    form.on('fieldDataChanged', handleFieldDataChanged);
+    form?.on('fieldDataChanged', handleFieldDataChanged);
 
     return () => {
-      form.off('fieldDataChanged', handleFieldDataChanged);
+      form?.off('fieldDataChanged', handleFieldDataChanged);
     };
   }, [formInstanceRef]);
 

@@ -99,7 +99,7 @@ const data: Appointment[] = [
     endDate: new Date(addDays(currentStartOfTheWeek, 4).setUTCHours(21)),
   },
 ];
-export const schedulerDataSource = new DataSource(data);
+export const schedulerDataSource = new DataSource(data) as unknown as DataSource<SchedulerTypes.Appointment>;
 
 export const assignees: Assignee[] = [
   {
