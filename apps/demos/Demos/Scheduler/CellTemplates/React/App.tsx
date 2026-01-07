@@ -42,7 +42,7 @@ const notifyDisableDate = () => {
 
 const onContentReady = (e: SchedulerTypes.ContentReadyEvent) => {
   const element = e.component?.$element();
-  element && typeof element.attr === 'function' && setComponentAria(element);
+  element && 'attr' in element && typeof element.attr === 'function' && setComponentAria(element);
 };
 
 const applyDisableDatesToDateEditors = (form: ReturnType<FormRef['instance']>) => {

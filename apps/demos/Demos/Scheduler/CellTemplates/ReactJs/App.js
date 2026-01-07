@@ -38,7 +38,7 @@ const notifyDisableDate = () => {
 };
 const onContentReady = (e) => {
   const element = e.component?.$element();
-  element && typeof element.attr === 'function' && setComponentAria(element);
+  element && 'attr' in element && typeof element.attr === 'function' && setComponentAria(element);
 };
 const applyDisableDatesToDateEditors = (form) => {
   const startDateEditor = form.getEditor('startDate');
