@@ -41,6 +41,7 @@ export default [
       'shared/empty-file.ts',
       'Demos/**/config.js',
       'Demos/**/Vue/**/*.html',
+      'utils',
 
       '**/*.{png,json,mjs,css,html,md}',
     ],
