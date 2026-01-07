@@ -1,4 +1,4 @@
-$(function () {
+$(() => {
   let generatedID = 100;
   const store = new DevExpress.data.ArrayStore({
     key: 'ID',
@@ -175,7 +175,7 @@ $(function () {
     currentEmployee = { ...employee };
 
     popup.show();
-    popup.content().find('.dx-field-value').each(function () {
+    popup.content().find('.dx-field-value').each(() => {
       const field = $(this).attr('data-field');
       const edit = $(this).dxTextBox('instance');
       edit.option({

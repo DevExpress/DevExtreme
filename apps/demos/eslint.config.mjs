@@ -41,7 +41,7 @@ export default [
       'shared/empty-file.ts',
       'Demos/**/config.js',
       'Demos/**/Vue/**/*.html',
-      'utils', // TODO unignore this
+      //'utils', // TODO unignore this
 
       '**/*.{png,json,mjs,css,html,md}',
     ],
@@ -108,7 +108,7 @@ export default [
 
         return spellcheckRule;
       })(),
-      'func-names': 0, // TODO warn (was warn) >500
+      'func-names': ['error', 'as-needed'],
 
       'no-shadow': 0,
       'default-case': 0,
