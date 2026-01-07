@@ -20,7 +20,7 @@ const App = () => {
   const [colorPicker, setColorPicker] = useState(undefined);
   const onButtonClick = useCallback((e) => {
     notify(
-      `Go to ${e.element.querySelector('.button-title').textContent}'s profile`,
+      `Go to ${e.element.querySelector('.button-title')?.textContent}'s profile`,
       'success',
       600,
     );
@@ -32,7 +32,7 @@ const App = () => {
     (selectedColor) => {
       setColor(selectedColor);
       const squareIcon = colorPicker?.element().getElementsByClassName('dx-icon-square')[0];
-      squareIcon.style.color = selectedColor;
+      squareIcon.style.color = selectedColor ?? '';
       colorPicker?.close();
     },
     [colorPicker],

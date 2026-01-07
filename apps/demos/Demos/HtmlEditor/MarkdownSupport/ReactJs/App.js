@@ -17,32 +17,27 @@ const headerOptions = {
 };
 const converter = {
   toHtml(value) {
-    const result = unified()
+    return unified()
       .use(remarkParse)
       .use(remarkRehype)
       .use(rehypeStringify)
       .processSync(value)
       .toString();
-    return result;
   },
   fromHtml(value) {
-    const result = unified()
+    return unified()
       .use(rehypeParse)
       .use(rehypeRemark)
       .use(remarkStringify)
       .processSync(value)
       .toString();
-    return result;
   },
 };
 export default function App() {
   const [valueContent, setValueContent] = useState(markup);
-  const valueChanged = useCallback(
-    (e) => {
-      setValueContent(e.value);
-    },
-    [setValueContent],
-  );
+  const valueChanged = useCallback((e) => {
+    setValueContent(e?.value);
+  }, []);
   return (
     <div className="widget-container">
       <HtmlEditor

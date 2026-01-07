@@ -11,9 +11,9 @@ const MAX_SALES = 30;
 function App() {
   const [value, setValue] = useState(16);
   const keyDown = useCallback(({ event }) => {
-    const str = event.key;
+    const str = event?.key ?? '';
     if (/^[.,e]$/.test(str)) {
-      event.preventDefault();
+      event?.preventDefault();
     }
   }, []);
   const valueChanged = useCallback(({ value }) => {

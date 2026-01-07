@@ -15,9 +15,9 @@ function App() {
   const [value, setValue] = useState(16);
 
   const keyDown = useCallback(({ event }: NumberBoxTypes.KeyDownEvent): void => {
-    const str = event.key;
+    const str = event?.key ?? '';
     if (/^[.,e]$/.test(str)) {
-      event.preventDefault();
+      event?.preventDefault();
     }
   }, []);
 

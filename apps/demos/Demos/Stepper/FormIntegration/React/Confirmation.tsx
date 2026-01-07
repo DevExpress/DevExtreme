@@ -24,10 +24,10 @@ const Confirmation: FC<ConfirmationProps> = ({ formData, isConfirmed }: Confirma
         <div className="summary-item-header">Dates</div>
         <div className="separator"></div>
         <div>
-          <span className="summary-item-label">Check-in Date: </span>{new Date(formData.dates[0]).toLocaleDateString()}
+          <span className="summary-item-label">Check-in Date: </span>{new Date(formData.dates[0] ?? '').toLocaleDateString()}
         </div>
         <div>
-          <span className="summary-item-label">Check-out Date: </span>{new Date(formData.dates[1]).toLocaleDateString()}
+          <span className="summary-item-label">Check-out Date: </span>{new Date(formData.dates[1] ?? '').toLocaleDateString()}
         </div>
       </div>
 

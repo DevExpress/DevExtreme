@@ -19,7 +19,8 @@ const clientsStore = new CustomStore({
   useDefaultSearch: true,
   load: (loadOptions) => {
     let params = '?';
-    ['skip', 'take', 'filter'].forEach((option) => {
+    const loadOptionKeys = ['skip', 'take', 'filter'];
+    loadOptionKeys.forEach((option) => {
       if (option in loadOptions && isNotEmpty(loadOptions[option])) {
         params += `${option}=${JSON.stringify(loadOptions[option])}&`;
       }

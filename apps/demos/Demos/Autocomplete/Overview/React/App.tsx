@@ -23,9 +23,11 @@ const clientsStore = new CustomStore({
   useDefaultSearch: true,
   load: (loadOptions: LoadOptions) => {
     let params = '?';
-    ['skip', 'take', 'filter'].forEach((option: string): void => {
+    type LoadOptionKey = keyof LoadOptions;
+    const loadOptionKeys: LoadOptionKey[] = ['skip', 'take', 'filter'];
+    loadOptionKeys.forEach((option: LoadOptionKey): void => {
       if (option in loadOptions && isNotEmpty(loadOptions[option])) {
-        params += `${option}=${JSON.stringify(loadOptions[option])}&`;
+        params += `${option as string}=${JSON.stringify(loadOptions[option])}&`;
       }
     });
     params = params.slice(0, -1);

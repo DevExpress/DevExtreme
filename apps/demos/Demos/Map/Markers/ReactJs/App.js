@@ -14,7 +14,7 @@ const App = () => {
   const [currentMarkerUrl, setCurrentMarkerUrl] = useState(markerUrl);
   const onCustomMarkersChange = useCallback(
     (value) => {
-      setCurrentMarkerUrl(value ? currentMarkerUrl : null);
+      setCurrentMarkerUrl(value ? currentMarkerUrl : undefined);
       setCurrentMarkersData(markersData);
     },
     [currentMarkerUrl],
