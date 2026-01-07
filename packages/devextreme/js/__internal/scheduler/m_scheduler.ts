@@ -991,7 +991,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._a11yStatus = createA11yStatusContainer();
     this._a11yStatus.prependTo(this.$element());
     // @ts-expect-error
-    this.setAria({ role: 'group' });
+    this.setAria({ role: 'application' });
   }
 
   _initMarkupOnResourceLoaded() {

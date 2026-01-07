@@ -2473,7 +2473,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
     (this.$element() as any)
       .addClass(COMPONENT_CLASS)
-      .addClass(this._getElementClass());
+      .addClass(this._getElementClass())
+      .attr('role', 'grid');
   }
 
   _initPositionHelper() {

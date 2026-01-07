@@ -133,6 +133,12 @@ class SchedulerAppointments extends CollectionWidget {
   _supportedKeys() {
     const parent = super._supportedKeys();
 
+    const setActiveAppointment = function ($appointment: dxElementWrapper) {
+      this._resetTabIndex($appointment);
+      // @ts-expect-error
+      eventsEngine.trigger($appointment, 'focus');
+    };
+
     const tabHandler = function (e) {
       const navigatableItems = this._getNavigatableItems();
       const focusedItem = navigatableItems.filter('.dx-state-focused');
@@ -150,9 +156,131 @@ class SchedulerAppointments extends CollectionWidget {
           $nextAppointment = this._getNavigatableItemByIndex(index);
         }
 
-        this._resetTabIndex($nextAppointment);
-        // @ts-expect-error
-        eventsEngine.trigger($nextAppointment, 'focus');
+        if ($nextAppointment) {
+          setActiveAppointment.call(this, $nextAppointment);
+        }
+      }
+    };
+
+    const arrowKeyHandler = function (e: KeyboardEvent, direction: 'up' | 'down' | 'left' | 'right') {
+      const navigatableItems = this._getNavigatableItems();
+      const focusedItem = navigatableItems.filter('.dx-state-focused');
+
+      if (!focusedItem.length) {
+        return;
+      }
+
+      interface Bounds {
+        left: number;
+        right: number;
+        top: number;
+        bottom: number;
+        centerX: number;
+        centerY: number;
+      }
+
+      const createBounds = (rect: DOMRect): Bounds => ({
+        left: rect.left,
+        right: rect.left + rect.width,
+        top: rect.top,
+        bottom: rect.top + rect.height,
+        centerX: rect.left + rect.width / 2,
+        centerY: rect.top + rect.height / 2,
+      });
+
+      const calculateOverlap = (focusedBounds: Bounds, itemBounds: Bounds, axis: 'horizontal' | 'vertical'): number => {
+        if (axis === 'horizontal') {
+          return Math.max(0, Math.min(focusedBounds.right, itemBounds.right) - Math.max(focusedBounds.left, itemBounds.left));
+        }
+        return Math.max(0, Math.min(focusedBounds.bottom, itemBounds.bottom) - Math.max(focusedBounds.top, itemBounds.top));
+      };
+
+      const calculatePerpendicularDistance = (focusedBounds: Bounds, itemBounds: Bounds, axis: 'horizontal' | 'vertical'): number => (
+        axis === 'horizontal'
+          ? Math.abs(focusedBounds.centerY - itemBounds.centerY)
+          : Math.abs(focusedBounds.centerX - itemBounds.centerX)
+      );
+
+      const focusedBounds = createBounds(getBoundingRect(focusedItem[0]));
+
+      const directionConfig: Record<'up' | 'down' | 'left' | 'right', {
+        isValid: (item: Bounds) => boolean;
+        getDistance: (item: Bounds) => number;
+        overlapAxis: 'horizontal' | 'vertical';
+      }> = {
+        up: {
+          isValid: (item: Bounds) => item.bottom <= focusedBounds.top,
+          getDistance: (item: Bounds) => focusedBounds.top - item.bottom,
+          overlapAxis: 'horizontal',
+        },
+        down: {
+          isValid: (item: Bounds) => item.top >= focusedBounds.bottom,
+          getDistance: (item: Bounds) => item.top - focusedBounds.bottom,
+          overlapAxis: 'horizontal',
+        },
+        left: {
+          isValid: (item: Bounds) => item.right <= focusedBounds.left,
+          getDistance: (item: Bounds) => focusedBounds.left - item.right,
+          overlapAxis: 'vertical',
+        },
+        right: {
+          isValid: (item: Bounds) => item.left >= focusedBounds.right,
+          getDistance: (item: Bounds) => item.left - focusedBounds.right,
+          overlapAxis: 'vertical',
+        },
+      };
+
+      const config = directionConfig[direction];
+
+      let bestCandidate: dxElementWrapper | null = null;
+      let bestDistance = Infinity;
+
+      navigatableItems.each((_, item) => {
+        const $item = $(item);
+        if ($item.is(focusedItem)) {
+          return;
+        }
+
+        const itemBounds = createBounds(getBoundingRect(item));
+
+        if (!config.isValid(itemBounds)) {
+          return;
+        }
+
+        const overlap = calculateOverlap(focusedBounds, itemBounds, config.overlapAxis);
+        let distance = config.getDistance(itemBounds);
+
+        if (overlap === 0) {
+          distance += calculatePerpendicularDistance(focusedBounds, itemBounds, config.overlapAxis);
+        }
+
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          bestCandidate = $item;
+        }
+      });
+
+      if (bestCandidate) {
+        e.preventDefault();
+        e.stopPropagation();
+        setActiveAppointment.call(this, bestCandidate);
+      }
+    };
+
+    const homeEndHandler = function (e: KeyboardEvent, goToFirst: boolean) {
+      const navigatableItems = this._getNavigatableItems();
+      if (!navigatableItems.length) {
+        return;
+      }
+
+      const $targetAppointment = goToFirst
+        ? navigatableItems.first()
+        : navigatableItems.last();
+
+      if ($targetAppointment.length) {
+        e.preventDefault();
+        e.stopPropagation();
+        setActiveAppointment.call(this, $targetAppointment);
       }
     };
 
@@ -176,6 +304,34 @@ class SchedulerAppointments extends CollectionWidget {
         }
       }.bind(this),
       tab: tabHandler,
+      upArrow: function (e) {
+        arrowKeyHandler.call(this, e, 'up');
+      }.bind(this),
+      downArrow: function (e) {
+        arrowKeyHandler.call(this, e, 'down');
+      }.bind(this),
+      leftArrow: function (e) {
+        arrowKeyHandler.call(this, e, 'left');
+      }.bind(this),
+      rightArrow: function (e) {
+        arrowKeyHandler.call(this, e, 'right');
+      }.bind(this),
+      home: function (e: KeyboardEvent) {
+        if (!e.ctrlKey) {
+          homeEndHandler.call(this, e, true);
+        }
+      }.bind(this),
+      end: function (e: KeyboardEvent) {
+        if (!e.ctrlKey) {
+          homeEndHandler.call(this, e, false);
+        }
+      }.bind(this),
+      ctrlHome: function (e: KeyboardEvent) {
+        homeEndHandler.call(this, e, true);
+      }.bind(this),
+      ctrlEnd: function (e: KeyboardEvent) {
+        homeEndHandler.call(this, e, false);
+      }.bind(this),
     });
   }
 
