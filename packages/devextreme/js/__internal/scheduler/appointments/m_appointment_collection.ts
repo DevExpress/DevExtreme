@@ -162,7 +162,101 @@ class SchedulerAppointments extends CollectionWidget {
       }
     };
 
+    const resizeHandler = function (e: KeyboardEvent, direction: 'up' | 'down' | 'left' | 'right') {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const navigatableItems = this._getNavigatableItems();
+      const focusedItem = navigatableItems.filter('.dx-state-focused');
+
+      if (!focusedItem.length) {
+        return;
+      }
+
+      const $appointment = focusedItem;
+      if (!this.option('allowResize')) {
+        return;
+      }
+
+      const appointmentSettings = $appointment.data(APPOINTMENT_SETTINGS_KEY);
+      if (!appointmentSettings) {
+        return;
+      }
+
+      const isAllDay = appointmentSettings.allDay;
+      const renderingStrategyDirection = this.invoke('getRenderingStrategyDirection');
+      const isVertical = renderingStrategyDirection === 'vertical' && !isAllDay;
+      const isRTL = this.option('rtlEnabled');
+
+      const cellWidth = this.invoke('getCellWidth');
+      const cellHeight = this.invoke('getCellHeight');
+      const step = isVertical ? cellHeight : cellWidth;
+
+      const handles: Record<'top' | 'bottom' | 'left' | 'right', boolean> = {
+        top: false,
+        bottom: false,
+        left: false,
+        right: false,
+      };
+      let deltaWidth = 0;
+      let deltaHeight = 0;
+
+      switch (true) {
+        case isVertical && direction === 'up':
+          handles.top = true;
+          deltaHeight = step;
+          break;
+        case isVertical && direction === 'down':
+          handles.bottom = true;
+          deltaHeight = step;
+          break;
+        case !isVertical && direction === 'left':
+          handles[isRTL ? 'right' : 'left'] = true;
+          deltaWidth = step;
+          break;
+        case !isVertical && direction === 'right':
+          handles[isRTL ? 'left' : 'right'] = true;
+          deltaWidth = step;
+          break;
+        default:
+          return;
+      }
+
+      const currentRect = getBoundingRect($appointment[0]);
+
+      if (!this._initialSize) {
+        this._initialSize = { width: currentRect.width, height: currentRect.height };
+        this._initialCoordinates = locate($appointment);
+        this.resizeOccur = true;
+        this._$currentAppointment = $appointment;
+      }
+
+      const initialWidth = this._initialSize.width;
+      const initialHeight = this._initialSize.height;
+
+      const newWidth = initialWidth + deltaWidth;
+      const newHeight = initialHeight + deltaHeight;
+
+      const resizeEvent = {
+        element: $appointment[0],
+        handles,
+        width: newWidth,
+        height: newHeight,
+      };
+
+      this._resizeEndHandler(resizeEvent, ($updatedElement) => {
+        if ($updatedElement && $updatedElement.length) {
+          setActiveAppointment.call(this, $updatedElement[0]);
+        }
+      });
+    };
+
     const arrowKeyHandler = function (e: KeyboardEvent, direction: 'up' | 'down' | 'left' | 'right') {
+      if (e.shiftKey) {
+        resizeHandler.call(this, e, direction);
+        return;
+      }
+
       const navigatableItems = this._getNavigatableItems();
       const focusedItem = navigatableItems.filter('.dx-state-focused');
 
@@ -923,7 +1017,7 @@ class SchedulerAppointments extends CollectionWidget {
     }) || area;
   }
 
-  _resizeEndHandler(e) {
+  _resizeEndHandler(e, onUpdated?: ($updatedElement: dxElementWrapper) => void) {
     const $element = $(e.element);
 
     const { allDay, info } = $element.data(APPOINTMENT_SETTINGS_KEY) as any;
@@ -949,6 +1043,11 @@ class SchedulerAppointments extends CollectionWidget {
       dateRange,
       this.dataAccessors,
       this.option('timeZoneCalculator'),
+      ($updatedElement) => {
+        if (onUpdated) {
+          onUpdated($updatedElement);
+        }
+      },
     );
   }
 
@@ -979,6 +1078,7 @@ class SchedulerAppointments extends CollectionWidget {
     dateRange: { startDate: Date; endDate: Date },
     dataAccessors: AppointmentDataAccessor,
     timeZoneCalculator,
+    onUpdated?: ($updatedElement: dxElementWrapper) => void,
   ) {
     const sourceAppointment = (this as any)._getItemData($element);
     const gridAdapter = new AppointmentAdapter(
@@ -1013,6 +1113,7 @@ class SchedulerAppointments extends CollectionWidget {
       target: sourceAppointment,
       data,
       $appointment: $element,
+      onUpdated,
     });
   }
 

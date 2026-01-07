@@ -67,10 +67,15 @@ const subscribes = {
   updateAppointmentAfterResize(options) {
     const { info } = utils.dataAccessors.getAppointmentSettings(options.$appointment) as AppointmentItemViewModel;
     const { startDate } = info.sourceAppointment;
+    const { onUpdated, target, data } = options;
 
-    this._checkRecurringAppointment(options.target, options.data, startDate, () => {
-      this._updateAppointment(options.target, options.data, function () {
+    this._checkRecurringAppointment(target, data, startDate, () => {
+      this._updateAppointment(target, data, function () {
         this._appointments.moveAppointmentBack();
+      }).always((storeAppointment) => {
+        if (onUpdated && storeAppointment) {
+          onUpdated(this._appointments._findItemElementByItem(storeAppointment));
+        }
       });
     });
   },
