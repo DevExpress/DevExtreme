@@ -22,6 +22,9 @@ export default function App() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
   const onSelectedFilesChanged = useCallback(({ value }: FileUploaderTypes.ValueChangedEvent): void => {
+    if (!value) {
+      return;
+    }
     setSelectedFiles(value);
   }, []);
 

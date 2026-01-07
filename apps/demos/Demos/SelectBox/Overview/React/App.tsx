@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import SelectBox, { FieldAddons, type SelectBoxTypes } from 'devextreme-react/select-box';
+import SelectBox, { FieldAddons } from 'devextreme-react/select-box';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
 import { ArrayStore } from 'devextreme-react/common/data';
 import notify from 'devextreme/ui/notify';
 
@@ -25,7 +26,7 @@ const data = new ArrayStore({
 function App() {
   const [value, setValue] = useState(service.getSimpleProducts()[0]);
 
-  const onValueChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const onValueChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent): void => {
     setValue(e.value);
     notify(`The value is changed to: "${e.value}"`);
   }, []);

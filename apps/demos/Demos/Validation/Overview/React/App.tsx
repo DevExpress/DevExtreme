@@ -102,7 +102,7 @@ function App() {
     (e: TextBoxTypes.ValueChangedEvent): void => {
       setPassword(e.value);
       if (confirmPassword) {
-        validatorRef.current.instance().validate();
+        validatorRef.current?.instance().validate();
       }
     },
     [confirmPassword],
