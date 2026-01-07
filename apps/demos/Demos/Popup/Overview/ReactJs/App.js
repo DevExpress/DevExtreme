@@ -18,7 +18,7 @@ export default function App() {
     setPopupVisible(false);
   }, []);
   const sendEmail = useCallback(() => {
-    const message = `Email is sent to ${currentEmployee.FirstName} ${currentEmployee.LastName}`;
+    const message = `Email is sent to ${currentEmployee?.FirstName} ${currentEmployee?.LastName}`;
     notify(
       {
         message,
@@ -32,7 +32,7 @@ export default function App() {
     );
   }, [currentEmployee]);
   const showMoreInfo = useCallback(() => {
-    const message = `More info about ${currentEmployee.FirstName} ${currentEmployee.LastName}`;
+    const message = `More info about ${currentEmployee?.FirstName} ${currentEmployee?.LastName}`;
     notify(
       {
         message,

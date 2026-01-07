@@ -1,11 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import { SpeechToText } from 'devextreme-react/speech-to-text';
 import { TextArea } from 'devextreme-react/text-area';
-import { Button, ButtonTypes } from 'devextreme-react/button';
+import { Button } from 'devextreme-react/button';
+import type { ButtonTypes } from 'devextreme-react/button';
 import { SelectBox } from 'devextreme-react/select-box';
 import { Switch } from 'devextreme-react/switch';
 import notify from 'devextreme/ui/notify';
 import { displayModes, stylingModes, types, languages, langMap } from './data.ts';
+import type { Language } from './data.ts';
 
 declare global {
   interface Window {
@@ -30,7 +32,7 @@ export default function App() {
   const [hint, setHint] = useState<string>('Start voice recognition');
   const [disabled, setDisabled] = useState<boolean>(false);
   const [textAreaValue, setTextAreaValue] = useState<string>('');
-  const [language, setLanguage] = useState<string>(languages[0]);
+  const [language, setLanguage] = useState<Language>(languages[0]);
   const [interimResults, setInterimResults] = useState<boolean>(true);
   const [continuous, setContinuous] = useState<boolean>(false);
   const [animation, setAnimation] = useState<boolean>(true);

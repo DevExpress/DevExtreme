@@ -1,9 +1,6 @@
-import { type HtmlEditorTypes } from 'devextreme-react/html-editor';
-import {
-  AIIntegration,
-  RequestParams,
-  Response,
-} from 'devextreme-react/common/ai-integration';
+import type { HtmlEditorTypes } from 'devextreme-react/html-editor';
+import { AIIntegration } from 'devextreme-react/common/ai-integration';
+import type { AIResponse, RequestParams, Response } from 'devextreme-react/common/ai-integration';
 import { AzureOpenAI, OpenAI } from 'openai';
 
 type AIMessage = (OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionSystemMessageParam) & {
@@ -29,9 +26,7 @@ async function getAIResponse(messages: AIMessage[], signal: AbortSignal) {
   };
 
   const response = await aiService.chat.completions.create(params, { signal });
-  const result = response.choices[0].message?.content;
-
-  return result;
+  return response.choices[0].message?.content;
 }
 
 export const aiIntegration = new AIIntegration({
@@ -40,20 +35,18 @@ export const aiIntegration = new AIIntegration({
     const signal = controller.signal;
 
     const aiPrompt: AIMessage[] = [
-      { role: 'system', content: prompt.system },
-      { role: 'user', content: prompt.user },
+      { role: 'system', content: prompt.system ?? '' },
+      { role: 'user', content: prompt.user ?? '' },
     ];
 
-    const promise = getAIResponse(aiPrompt, signal);
+    const promise = getAIResponse(aiPrompt, signal) as Promise<AIResponse>;
 
-    const result: Response = {
+    return {
       promise,
       abort: () => {
         controller.abort();
       },
     };
-
-    return result;
   },
 });
 

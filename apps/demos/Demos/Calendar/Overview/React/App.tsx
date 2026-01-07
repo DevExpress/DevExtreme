@@ -27,7 +27,7 @@ const ruleLabel = { 'aria-label': 'Week Number Rule' };
 
 export default function App() {
   const [zoomLevel, setZoomLevel] = useState<CalendarTypes.CalendarZoomLevel>('month');
-  const [currentValue, setCurrentValue] = useState<Date>(new Date());
+  const [currentValue, setCurrentValue] = useState<Date | undefined>(new Date());
   const [useCellTemplate, setUseCellTemplate] = useState<boolean | null>(null);
   const [disabled, setDisabled] = useState<boolean>(false);
   const [showWeekNumbers, setShowWeekNumbers] = useState<boolean>(false);
@@ -104,7 +104,7 @@ export default function App() {
           showWeekNumbers={showWeekNumbers}
           disabled={disabled}
           zoomLevel={zoomLevel}
-          cellComponent={useCellTemplate ? CustomCell : null}
+          cellComponent={useCellTemplate ? CustomCell : undefined}
         />
       </div>
       <div className="options">
