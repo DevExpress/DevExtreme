@@ -106,7 +106,7 @@ const compileCriteria = (() => {
 
     return formatter(
       serializePropName(fieldName),
-      serializeValue(value, protocolVersion),
+      serializeValue(value, protocolVersion, fieldTypes?.[fieldName]),
     );
   };
 
@@ -277,7 +277,7 @@ const createODataQueryAdapter = (queryOptions) => {
           jsonp: queryOptions.jsonp,
           withCredentials: queryOptions.withCredentials,
           countOnly: _countQuery,
-          deserializeDates: queryOptions.deserializeDates,
+          processDatesAsUtc: queryOptions.processDatesAsUtc,
           fieldTypes: queryOptions.fieldTypes,
           isPaged: isFinite(_take),
         },
