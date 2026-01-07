@@ -41,11 +41,7 @@ function waitForRunner() {
 function openBrowser() {
     spawn(
         getBrowserCommand(),
-        [   '""',
-            '--js-flags=--expose-gc',
-            '--enable-precise-memory-info',
-            'http://localhost:' + PORT,
-        ],
+        [ 'http://localhost:' + PORT ],
         { shell: true, detached: true }
     );
 }
@@ -53,13 +49,13 @@ function openBrowser() {
 function getBrowserCommand() {
     switch(platform()) {
         case 'win32':
-            return 'start chrome';
+            return 'start';
 
         case 'darwin':
             return 'open';
 
         case 'linux':
-            return 'google-chrome';
+            return 'xdg-open';
     }
 
     throw 'Not implemented';
