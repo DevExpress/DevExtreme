@@ -22,7 +22,7 @@ function App() {
   }, [setSelectedAlgorithm, setCurrentAlgorithm]);
 
   return (
-    <React.Fragment>
+    <>
       <TreeMap
         id="treemap"
         dataSource={populationByAge}
@@ -52,7 +52,7 @@ function App() {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 

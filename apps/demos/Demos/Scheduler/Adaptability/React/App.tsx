@@ -17,7 +17,7 @@ const App = () => {
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <Scheduler
         ref={schedulerRef}
         timeZone="America/Los_Angeles"
@@ -41,7 +41,7 @@ const App = () => {
         icon="plus"
         onClick={showAppointmentPopup}
       />
-    </React.Fragment>
+    </>
   );
 };
 

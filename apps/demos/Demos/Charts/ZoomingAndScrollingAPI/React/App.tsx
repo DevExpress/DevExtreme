@@ -25,7 +25,7 @@ function App() {
   }, [setVisualRange]);
 
   return (
-    <React.Fragment>
+    <>
       <Chart
         id="zoomedChart"
         palette="Harmony Light"
@@ -55,7 +55,7 @@ function App() {
           <Series argumentField="arg" valueField="y3" />
         </ChartOptions>
       </RangeSelector>
-    </React.Fragment>
+    </>
   );
 }
 

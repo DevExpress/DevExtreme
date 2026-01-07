@@ -20,7 +20,7 @@ const App = () => {
   }, [setAllDayPanelMode]);
 
   return (
-    <React.Fragment>
+    <>
       <Scheduler
         timeZone="America/Los_Angeles"
         dataSource={data}
@@ -45,7 +45,7 @@ const App = () => {
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 
