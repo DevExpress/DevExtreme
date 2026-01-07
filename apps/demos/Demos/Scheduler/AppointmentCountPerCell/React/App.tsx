@@ -1,6 +1,6 @@
 import React from 'react';
 import Scheduler, { Resource } from 'devextreme-react/scheduler';
-import { type SchedulerTypes } from 'devextreme-react/scheduler';
+import type { SchedulerTypes } from 'devextreme-react/scheduler';
 
 import { data, resourcesData } from './data.ts';
 

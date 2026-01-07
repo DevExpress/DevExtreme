@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 
 import Switch from 'devextreme-react/switch';
-import { type SwitchTypes } from 'devextreme-react/switch';
+import type { SwitchTypes } from 'devextreme-react/switch';
 import Scheduler, { Resource, View } from 'devextreme-react/scheduler';
 import { data, priorityData } from './data.ts';
 

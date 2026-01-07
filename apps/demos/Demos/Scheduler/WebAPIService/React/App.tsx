@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Scheduler from 'devextreme-react/scheduler';
-import { type SchedulerTypes } from 'devextreme-react/scheduler';
+import type { SchedulerTypes } from 'devextreme-react/scheduler';
 
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 

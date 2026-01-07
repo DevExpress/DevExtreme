@@ -2,9 +2,9 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import { Scheduler, Resource, Toolbar, Item } from 'devextreme-react/scheduler';
 import { SelectBox } from 'devextreme-react/select-box';
-import { type DataSource } from 'devextreme-react/common/data';
-import { type SchedulerRef, type SchedulerTypes } from 'devextreme-react/scheduler';
-import { type SelectBoxTypes } from 'devextreme-react/select-box';
+import type { DataSource } from 'devextreme-react/common/data';
+import type { SchedulerRef, SchedulerTypes } from 'devextreme-react/scheduler';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
 
 import { assignees, data, currentDate } from './data.ts';
 

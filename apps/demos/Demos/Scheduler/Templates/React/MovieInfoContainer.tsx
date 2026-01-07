@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { type FormTypes } from 'devextreme-react/form';
+import type { FormTypes } from 'devextreme-react/form';
 import { query } from 'devextreme-react/common/data';
 import { moviesData, type MovieResource } from './data.ts';
 

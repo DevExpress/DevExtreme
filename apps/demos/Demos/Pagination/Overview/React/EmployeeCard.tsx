@@ -1,5 +1,5 @@
 import React from 'react';
-import { type Employee } from './data';
+import type { Employee } from './data';
 
 interface EmployeeCardProps {
   employee: Employee;
