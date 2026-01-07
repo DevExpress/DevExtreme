@@ -28,7 +28,7 @@ const App = () => {
     [setHandles, setResizableClasses],
   );
   return (
-    <React.Fragment>
+    <>
       <div className="widget-container">
         <div className="dx-fieldset">
           <div className="dx-fieldset-header">Resizable DataGrid</div>
@@ -99,7 +99,7 @@ const App = () => {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 export default App;

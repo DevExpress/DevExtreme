@@ -25,7 +25,7 @@ function App() {
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <div className="long-title"><h3>Monthly Prices of Aluminium, Nickel and Copper</h3></div>
       <div id="chart-demo">
         <table
@@ -58,7 +58,7 @@ function App() {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 

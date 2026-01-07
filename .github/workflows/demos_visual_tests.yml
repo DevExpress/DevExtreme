@@ -416,19 +416,23 @@ jobs:
           pnpm run lint-demos
         fi
 
-  check-generated-demos:
-    name: Check generated demos
+  check-generated-demos-changed:
+    name: Check generated demos (changed only)
     runs-on: devextreme-shr2
     timeout-minutes: 10
     needs: [check-should-run, get-changes, build-devextreme, determine-framework-tests-scope]
-    if: needs.check-should-run.outputs.should-run == 'true' && needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'changed' &&
+      needs.build-devextreme.result == 'success'
 
     steps:
     - name: Get sources
       uses: actions/checkout@v4
 
-    - name: Download artifacts
-      if: github.event_name == 'pull_request'
+    - name: Download changed demos
       uses: actions/download-artifact@v4
       with:
         name: changed-demos
@@ -502,6 +506,82 @@ jobs:
           echo "Generated JS demos are up-to-date"
         else
           echo "Generated JS demos are outdated. Execute 'pnpm run convert-to-js split' and commit changes."
+          echo "If you see another diff, ensure that extra listed files have LF endings."
+          exit 1
+        fi
+
+  check-generated-demos-all:
+    name: Check generated demos (${{ matrix.CONSTEL }})
+    runs-on: devextreme-shr2
+    timeout-minutes: 15
+    needs: [check-should-run, build-devextreme, determine-framework-tests-scope]
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'all' &&
+      needs.build-devextreme.result == 'success'
+    strategy:
+      fail-fast: false
+      matrix:
+        CONSTEL: ['1/5', '2/5', '3/5', '4/5', '5/5']
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v4
+
+    - uses: pnpm/action-setup@v4
+      with:
+        run_install: false
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Download devextreme sources
+      uses: actions/download-artifact@v4
+      with:
+        name: devextreme-sources
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache/restore@v4
+      name: Restore pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Install tgz
+      working-directory: apps/demos
+      run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+
+    - name: Prepare JS
+      working-directory: apps/demos
+      run: pnpm run prepare-js
+
+    - name: Check generated JS demos
+      working-directory: apps/demos
+      env:
+        CONSTEL: ${{ matrix.CONSTEL }}
+      run: |
+        echo "Running convert-to-js for split $CONSTEL"
+        pnpm run convert-to-js
+
+        git add ./Demos -N
+
+        if git diff --exit-code . ':!package.json' ; then
+          echo "Generated JS demos are up-to-date for split $CONSTEL"
+        else
+          echo "Generated JS demos are outdated for split $CONSTEL. Execute 'pnpm run convert-to-js split' and commit changes."
           echo "If you see another diff, ensure that extra listed files have LF endings."
           exit 1
         fi

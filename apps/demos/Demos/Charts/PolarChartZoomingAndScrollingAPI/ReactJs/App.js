@@ -26,7 +26,7 @@ function App() {
     [setVisualRange],
   );
   return (
-    <React.Fragment>
+    <>
       <PolarChart
         id="zoomedChart"
         dataSource={dataSource}
@@ -80,7 +80,7 @@ function App() {
         </Scale>
         <Behavior valueChangeMode="onHandleMove" />
       </RangeSelector>
-    </React.Fragment>
+    </>
   );
 }
 export default App;
