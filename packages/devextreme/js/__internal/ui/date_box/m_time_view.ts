@@ -24,7 +24,7 @@ const TIMEVIEW_FORMAT12_AM = -1;
 const TIMEVIEW_FORMAT12_PM = 1;
 const TIMEVIEW_MINUTEARROW_CLASS = 'dx-timeview-minutearrow';
 
-const cssRotate = ($arrow: dxElementWrapper, angle: number, offset: number = 0): void => {
+const cssRotate = ($arrow: dxElementWrapper, angle: number, offset = 0): void => {
   $arrow.css('transform', `rotate(${angle}deg) translate(0,${offset}px)`);
 };
 
