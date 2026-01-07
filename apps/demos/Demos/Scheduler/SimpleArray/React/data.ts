@@ -1,4 +1,4 @@
-import type { SchedulerTypes } from 'devextreme-react/scheduler';
+import { type SchedulerTypes } from 'devextreme-react/scheduler';
 
 export const data: SchedulerTypes.Appointment[] = [
   {

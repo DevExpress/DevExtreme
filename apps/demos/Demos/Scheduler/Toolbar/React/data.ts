@@ -1,5 +1,4 @@
 import { type SchedulerTypes } from 'devextreme-react/scheduler';
-import { DataSource } from 'devextreme-react/common/data';
 
 type Appointment = SchedulerTypes.Appointment & {
   assigneeId: number[];
@@ -14,7 +13,7 @@ const now = new Date(new Date().setUTCHours(0, 0, 0, 0));
 const startOfTheWeek = addDays(now, -now.getUTCDay());
 export const currentDate = new Date(2025, 5, 10);
 const currentStartOfTheWeek = addDays(currentDate, -currentDate.getUTCDay());
-const data: Appointment[] = [
+export const data: Appointment[] = [
   {
     text: 'Website Re-Design Plan',
     assigneeId: [4],
@@ -99,7 +98,6 @@ const data: Appointment[] = [
     endDate: new Date(addDays(currentStartOfTheWeek, 4).setUTCHours(21)),
   },
 ];
-export const schedulerDataSource = new DataSource(data) as unknown as DataSource<SchedulerTypes.Appointment>;
 
 export const assignees: Assignee[] = [
   {

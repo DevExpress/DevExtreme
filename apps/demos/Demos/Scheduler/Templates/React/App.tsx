@@ -5,9 +5,9 @@ import Scheduler, {
   Form as SchedulerForm,
   Item,
   Label,
-  type SchedulerTypes,
 } from 'devextreme-react/scheduler';
 import { query } from 'devextreme-react/common/data';
+import { type SchedulerTypes } from 'devextreme-react/scheduler';
 import { type SelectBoxTypes } from 'devextreme-react/select-box';
 import { type FormTypes } from 'devextreme-react/form';
 import { type PopupTypes } from 'devextreme-react/popup';
@@ -15,9 +15,10 @@ import Appointment from './Appointment.tsx';
 import AppointmentTooltip from './AppointmentTooltip.tsx';
 import MovieInfoContainer from './MovieInfoContainer.tsx';
 import {
-  data, moviesData, theatreData, type MovieResource,
+  data, moviesData, theatreData,
 } from './data.ts';
-import type { ToolbarItem } from 'devextreme/ui/popup';
+import { type MovieResource } from './data.ts';
+import { type ToolbarItem } from 'devextreme/ui/popup';
 
 type dxForm = NonNullable<FormTypes.InitializedEvent['component']>;
 

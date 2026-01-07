@@ -1,8 +1,9 @@
 import 'whatwg-fetch';
 import React from 'react';
 
-import Scheduler, { type SchedulerTypes } from 'devextreme-react/scheduler';
-import type { LoadOptions } from 'devextreme/data';
+import Scheduler from 'devextreme-react/scheduler';
+import { type SchedulerTypes } from 'devextreme-react/scheduler';
+import { type LoadOptions } from 'devextreme/data';
 
 import { CustomStore } from 'devextreme-react/common/data';
 
