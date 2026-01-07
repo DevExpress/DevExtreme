@@ -15,12 +15,11 @@ import {
 import * as pdfExporter from 'devextreme-react/common/export/pdf';
 
 import { jsPDF } from 'jspdf';
+import { applyPlugin } from 'jspdf-autotable';
 import {
   tasks, dependencies, resources, resourceAssignments, startDateLabel, endDateLabel,
   documentFormatLabel, exportModeLabel, dateRangeLabel,
 } from './data.ts';
-
-import { applyPlugin } from 'jspdf-autotable';
 
 applyPlugin(jsPDF);
 

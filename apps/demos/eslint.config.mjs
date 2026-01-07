@@ -138,10 +138,10 @@ export default [
       'no-only-tests/no-only-tests': 'error',
 
       'import/extensions': 0,
-      'import/order': 0,
+      'import/order': 1,
       'import/no-webpack-loader-syntax': 0,
 
-      '@stylistic/max-len': 0, // TODO enable this rule (was 100)
+      '@stylistic/max-len': 0,
       '@stylistic/indent': ['error', 2, {
         SwitchCase: 1,
         MemberExpression: 1,
@@ -335,7 +335,7 @@ export default [
           children: 'never',
         },
       ],
-      'react/jsx-fragments': ['warn'],
+      'react/jsx-fragments': ['error'],
       'react/jsx-no-bind': [
         'error',
         {
@@ -348,11 +348,6 @@ export default [
       'react/jsx-tag-spacing': ['error', { beforeClosing: 'never' }],
       'react/jsx-no-undef': ['error', { allowGlobals: true }],
       'react/jsx-no-target-blank': ['error', { enforceDynamicLinks: 'never' }],
-
-      'react-perf/jsx-no-new-object-as-prop': ['error', { nativeAllowList: 'all' }],
-      'react-perf/jsx-no-new-array-as-prop': ['error', { nativeAllowList: 'all' }],
-      'react-perf/jsx-no-new-array-as-prop': 0,
-      'react-perf/jsx-no-new-object-as-prop': 0,
 
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
