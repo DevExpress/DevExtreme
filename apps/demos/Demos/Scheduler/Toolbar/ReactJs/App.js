@@ -46,7 +46,7 @@ const App = () => {
       return;
     }
     const currentDate = scheduler.option('currentDate');
-    const cellDuration = scheduler.option('cellDuration');
+    const cellDuration = Number(scheduler.option('cellDuration'));
     const cellDurationMs = cellDuration * MS_IN_HOUR;
     const currentTime = new Date(currentDate).getTime();
     const roundTime = Math.round(currentTime / cellDurationMs) * cellDurationMs;
