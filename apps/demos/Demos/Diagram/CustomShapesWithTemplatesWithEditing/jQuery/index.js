@@ -175,7 +175,7 @@ $(() => {
     currentEmployee = { ...employee };
 
     popup.show();
-    popup.content().find('.dx-field-value').each(() => {
+    popup.content().find('.dx-field-value').each(function process() {
       const field = $(this).attr('data-field');
       const edit = $(this).dxTextBox('instance');
       edit.option({
