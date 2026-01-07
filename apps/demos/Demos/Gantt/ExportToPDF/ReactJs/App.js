@@ -77,7 +77,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
+      <>
         <Gantt
           ref={this.ganttRef}
           taskListWidth={500}
@@ -223,7 +223,7 @@ class App extends React.Component {
             </div>
           </div>
         </div>
-      </React.Fragment>
+      </>
     );
   }
 

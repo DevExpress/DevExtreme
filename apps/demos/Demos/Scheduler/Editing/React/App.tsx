@@ -42,7 +42,7 @@ const App = () => {
   const onAllowUpdatingChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => setAllowUpdating(e.value), []);
 
   return (
-    <React.Fragment>
+    <>
       <Scheduler
         timeZone="America/Los_Angeles"
         dataSource={data}
@@ -106,7 +106,7 @@ const App = () => {
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 

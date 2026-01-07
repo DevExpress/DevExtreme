@@ -32,7 +32,7 @@ function App() {
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <Chart palette="Violet" dataSource={countriesInfo}>
         <CommonSeriesSettings argumentField="country" type={type} />
         {energySources.map((item) => (
@@ -65,7 +65,7 @@ function App() {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 

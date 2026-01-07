@@ -37,7 +37,7 @@ function App() {
 
   return (
     <div>
-      <div className={rtlEnabled ? 'dx-rtl' : null}>
+      <div className={rtlEnabled ? 'dx-rtl' : undefined}>
         <div className="options">
           <div className="caption">Options</div>
           <div className="dx-fieldset">

@@ -14,7 +14,7 @@ function App() {
     [setCurrentMode],
   );
   return (
-    <React.Fragment>
+    <>
       <Chart
         id="chart"
         dataSource={population}
@@ -41,7 +41,7 @@ function App() {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 export default App;

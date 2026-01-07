@@ -106,7 +106,7 @@ const ODataStore = Store.inherit({
       withCredentials: this._requestDispatcher._withCredentials,
       expand: loadOptions?.expand,
       requireTotalCount: loadOptions?.requireTotalCount,
-      deserializeDates: this._requestDispatcher._deserializeDates,
+      processDatesAsUtc: this._requestDispatcher._processDatesAsUtc,
       fieldTypes: this._fieldTypes,
     };
 

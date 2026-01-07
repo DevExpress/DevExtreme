@@ -103,7 +103,7 @@ const App = () => {
     [groups],
   );
   return (
-    <React.Fragment>
+    <>
       <Scheduler
         ref={schedulerRef}
         timeZone="America/Los_Angeles"
@@ -134,7 +134,7 @@ const App = () => {
         onItemClick={onContextMenuItemClick}
         itemComponent={AppointmentMenuTemplate}
       />
-    </React.Fragment>
+    </>
   );
 };
 export default App;

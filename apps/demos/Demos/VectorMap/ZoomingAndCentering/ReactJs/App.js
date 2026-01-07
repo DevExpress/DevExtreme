@@ -24,7 +24,7 @@ const App = () => {
     vectorMapRef.current.instance().zoomFactor(null);
   }, [vectorMapRef]);
   return (
-    <React.Fragment>
+    <>
       <VectorMap
         ref={vectorMapRef}
         id="vector-map"
@@ -46,7 +46,7 @@ const App = () => {
         id="reset"
         onClick={reset}
       />
-    </React.Fragment>
+    </>
   );
 };
 export default App;
