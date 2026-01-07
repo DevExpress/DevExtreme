@@ -201,14 +201,13 @@ export default [
       }
     },
     rules: {
-      // TODO consider this rules
       'max-classes-per-file': 0,
       'no-restricted-properties': 0,
       'no-restricted-globals': 0,
-      'no-self-assign': 0,
-      'no-multi-assign': 0,
+      'no-self-assign': 'error',
+      'no-multi-assign': 'error',
       'no-restricted-syntax': 0,
-      'prefer-rest-params': 0,
+      'prefer-rest-params': 'error',
       'radix': 0,
       'no-underscore-dangle': 0,
       'operator-assignment': 0,
@@ -227,9 +226,8 @@ export default [
       '@typescript-eslint/no-unused-vars': 'error',
       '@typescript-eslint/no-unused-expressions': 0,
       '@typescript-eslint/no-useless-constructor': 0,
-      '@typescript-eslint/explicit-module-boundary-types': 0, // was warn
+      '@typescript-eslint/explicit-module-boundary-types': 0,
 
-      // TODO: consider these rules
       '@typescript-eslint/init-declarations': 0,
       '@typescript-eslint/prefer-readonly': 0,
       '@typescript-eslint/no-unsafe-return': 0,
@@ -238,7 +236,7 @@ export default [
       '@typescript-eslint/no-misused-promises': 0,
       '@typescript-eslint/member-ordering': 0,
       '@typescript-eslint/no-base-to-string': 0,
-      '@typescript-eslint/no-non-null-assertion': 0,
+      '@typescript-eslint/no-non-null-assertion': 'error',
       '@typescript-eslint/no-invalid-this': 0,
       '@typescript-eslint/no-unsafe-function-type': 0,
       '@typescript-eslint/no-wrapper-object-types': 0,
@@ -339,9 +337,9 @@ export default [
       'react/jsx-no-bind': [
         'error',
         {
-          allowBind: true, // TODO false (was false)
-          allowArrowFunctions: true, // TODO false (was false)
-          allowFunctions: true, // TODO false
+          allowBind: false,
+          allowArrowFunctions: true,
+          allowFunctions: true,
           ignoreRefs: true,
         },
       ],

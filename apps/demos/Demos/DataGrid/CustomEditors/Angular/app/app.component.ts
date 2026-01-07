@@ -86,7 +86,7 @@ export class AppComponent {
     const noBreakSpace = '\u00A0';
 
     const assignees = (options.value || []).map(
-      (assigneeId: number) => options.column!.lookup!.calculateCellValue!(assigneeId),
+      (assigneeId: number) => options.column?.lookup?.calculateCellValue?.(assigneeId),
     );
     const text = assignees.join(', ');
 
