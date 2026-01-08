@@ -11,10 +11,6 @@ import DataCellMonth from './DataCellMonth.tsx';
 import DateCell from './DateCell.tsx';
 import TimeCell from './TimeCell.tsx';
 
-interface ElementLike {
-  attr: (name: string, value?: string) => string | undefined;
-}
-
 const currentDate = new Date(2021, 3, 27);
 const views: SchedulerTypes.ViewType[] = ['workWeek', 'month'];
 const ariaDescription = () => {
@@ -41,8 +37,8 @@ const notifyDisableDate = () => {
 };
 
 const onContentReady = (e: SchedulerTypes.ContentReadyEvent) => {
-  const element = e.component?.$element();
-  element && 'attr' in element && typeof element.attr === 'function' && setComponentAria(element);
+  const element = e.component?.element();
+  element && setComponentAria(element);
 };
 
 const applyDisableDatesToDateEditors = (form: ReturnType<FormRef['instance']>) => {
@@ -80,11 +76,11 @@ const onAppointmentUpdating = (e: SchedulerTypes.AppointmentUpdatingEvent) => {
   }
 };
 
-const setComponentAria = (element: ElementLike) => {
-  const prevAria = element?.attr('aria-label') || '';
+const setComponentAria = (element: HTMLElement) => {
+    const prevAria = element.getAttribute('aria-label') || '';
   const description = ariaDescription();
   const nextAria = `${prevAria}${description ? ` ${description}` : ''}`;
-  element?.attr('aria-label', nextAria);
+  element.setAttribute('aria-label', nextAria);
 };
 
 const App = () => {
