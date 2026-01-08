@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from 'react';
-import Scheduler, { type SchedulerTypes } from 'devextreme-react/scheduler';
-import RadioGroup, { type RadioGroupTypes } from 'devextreme-react/radio-group';
+import Scheduler from 'devextreme-react/scheduler';
+import RadioGroup from 'devextreme-react/radio-group';
+import type { SchedulerTypes } from 'devextreme-react/scheduler';
+import type { RadioGroupTypes } from 'devextreme-react/radio-group';
 import { data } from './data.ts';
 
 const currentDate = new Date(2021, 2, 28);
