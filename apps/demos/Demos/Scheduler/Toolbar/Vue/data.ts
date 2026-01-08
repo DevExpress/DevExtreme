@@ -1,7 +1,6 @@
-import { type SchedulerTypes } from 'devextreme-react/scheduler';
-import { DataSource } from 'devextreme-vue/common/data';
+import type { DxSchedulerTypes } from 'devextreme-vue/scheduler';
 
-type CustomAppointment = SchedulerTypes.Appointment & {
+type CustomAppointment = DxSchedulerTypes.Appointment & {
   assigneeId: number[];
 };
 
@@ -10,7 +9,7 @@ const now = new Date(new Date().setUTCHours(0, 0, 0, 0));
 const startOfTheWeek = addDays(now, -now.getUTCDay());
 export const currentDate = new Date(2025, 5, 10);
 const currentStartOfTheWeek = addDays(currentDate, -currentDate.getUTCDay());
-const data: CustomAppointment[] = [
+export const data: CustomAppointment[] = [
   {
     text: 'Website Re-Design Plan',
     assigneeId: [4],
@@ -95,7 +94,6 @@ const data: CustomAppointment[] = [
     endDate: new Date(addDays(currentStartOfTheWeek, 4).setUTCHours(21)),
   },
 ];
-export const schedulerDataSource = new DataSource(data);
 
 export const assignees = [
   {
