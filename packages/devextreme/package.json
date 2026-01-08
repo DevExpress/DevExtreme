@@ -84,7 +84,7 @@
     "@jest/globals": "29.7.0",
     "@stylistic/eslint-plugin": "catalog:",
     "@testcafe-community/axe": "3.5.0",
-    "@types/enzyme": "3.10.18",
+    "@types/enzyme": "3.10.19",
     "@types/jquery": "catalog:",
     "@types/react": "16.14.34",
     "@typescript-eslint/eslint-plugin": "catalog:",

@@ -1376,8 +1376,8 @@ importers:
         specifier: 3.5.0
         version: 3.5.0(axe-core@4.10.3)(testcafe@3.7.2)
       '@types/enzyme':
-        specifier: 3.10.18
-        version: 3.10.18
+        specifier: 3.10.19
+        version: 3.10.19
       '@types/jquery':
         specifier: 'catalog:'
         version: 3.5.29
@@ -6584,8 +6584,8 @@ packages:
   '@types/doctrine@0.0.9':
     resolution: {integrity: sha512-eOIHzCUSH7SMfonMG1LsC2f8vxBFtho6NGBznK41R84YzPuvSBzrhEps33IsQiOW9+VL6NQ9DbjQJznk/S4uRA==}
 
-  '@types/enzyme@3.10.18':
-    resolution: {integrity: sha512-RaO/TyyHZvXkpzinbMTZmd/S5biU4zxkvDsn22ujC29t9FMSzq8tnn8f2MxQ2P8GVhFRG5jTAL05DXKyTtpEQQ==}
+  '@types/enzyme@3.10.19':
+    resolution: {integrity: sha512-kIfCo6/DdpgCHgmrLgPTugjzbZ46BUK8S2IP0kYo8+62LD2l1k8mSVsc+zQYNTdjDRoh2E9Spxu6F1NnEiW38Q==}
 
   '@types/eslint-scope@3.7.7':
     resolution: {integrity: sha512-MzMFlSLBqNF2gcHWO0G1vP/YQyfvrxZ0bF+u7mzUdZ1/xK4A4sru+nraZz5i3iEIk1l1uyicaDVTB4QbbEkAYg==}
@@ -25335,7 +25335,7 @@ snapshots:
 
   '@types/doctrine@0.0.9': {}
 
-  '@types/enzyme@3.10.18':
+  '@types/enzyme@3.10.19':
     dependencies:
       '@types/cheerio': 0.22.35
       '@types/react': 16.14.34
