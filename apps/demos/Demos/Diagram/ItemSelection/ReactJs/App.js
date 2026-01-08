@@ -29,7 +29,7 @@ export default function App() {
       let selectedItems = 'Nobody has been selected';
       const filteredItems = items
         .filter((item) => item.itemType === 'shape')
-        .map((item) => item.text);
+        .map((item) => item.dataItem?.[textExpression]);
       if (filteredItems.length > 0) {
         selectedItems = filteredItems.join(', ');
       }

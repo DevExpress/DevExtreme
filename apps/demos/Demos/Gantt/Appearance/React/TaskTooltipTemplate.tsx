@@ -1,10 +1,10 @@
 import React from 'react';
 
-function getTimeEstimate({ start, end }) {
+function getTimeEstimate({ start, end }: { start: number; end: number; }) {
   return Math.abs(start - end) / 36e5;
 }
 
-function getTimeLeft({ start, end, progress }) {
+function getTimeLeft({ start, end, progress }: { start: number; end: number; progress: number; }) {
   const timeEstimate = Math.abs(start - end) / 36e5;
   return Math.floor(((100 - progress) / 100) * timeEstimate);
 }

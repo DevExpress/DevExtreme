@@ -7,11 +7,11 @@ export default function App() {
   const diagramRef = useRef<DiagramRef>(null);
 
   useEffect(() => {
-    const diagram = diagramRef.current.instance();
+    const diagram = diagramRef?.current?.instance();
     fetch('../../../../data/diagram-structure.json')
       .then((response) => response.json())
       .then((json) => {
-        diagram.import(JSON.stringify(json));
+        diagram?.import(JSON.stringify(json));
       })
       .catch(() => {
         throw new Error('Data Loading Error');
