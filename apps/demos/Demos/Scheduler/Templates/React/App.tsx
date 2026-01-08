@@ -5,18 +5,20 @@ import Scheduler, {
   Form as SchedulerForm,
   Item,
   Label,
-  type SchedulerTypes,
 } from 'devextreme-react/scheduler';
 import { query } from 'devextreme-react/common/data';
-import { type SelectBoxTypes } from 'devextreme-react/select-box';
-import { type FormTypes } from 'devextreme-react/form';
-import { type PopupTypes } from 'devextreme-react/popup';
+import type { SchedulerTypes } from 'devextreme-react/scheduler';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
+import type { FormTypes } from 'devextreme-react/form';
+import type { PopupTypes } from 'devextreme-react/popup';
 import Appointment from './Appointment.tsx';
 import AppointmentTooltip from './AppointmentTooltip.tsx';
 import MovieInfoContainer from './MovieInfoContainer.tsx';
 import {
-  data, moviesData, theatreData, type MovieResource,
+  data, moviesData, theatreData,
 } from './data.ts';
+import type { MovieResource } from './data.ts';
+import type { ToolbarItem } from 'devextreme/ui/popup';
 
 type dxForm = NonNullable<FormTypes.InitializedEvent['component']>;
 
@@ -42,7 +44,7 @@ const App = () => {
 
   const onPopupOptionChanged = useCallback((e: PopupTypes.OptionChangedEvent) => {
     if (e.fullName === 'toolbarItems' && e.value) {
-      e.value.forEach((item, index: number) => {
+      e.value.forEach((item: ToolbarItem & { shortcut?: string }, index: number) => {
         if (item.shortcut === 'done' || item.shortcut === 'cancel') {
           e.component.option(`toolbarItems[${index}].toolbar`, 'bottom');
         }
@@ -57,23 +59,23 @@ const App = () => {
 
   const updateEndDate = useCallback((movie: MovieResource): void => {
     const form = formInstanceRef.current;
-    const formData = form.option('formData');
+    const formData = form?.option('formData');
     const { startDate } = formData;
 
     if (startDate) {
       const newEndDate = new Date(startDate.getTime() + 60 * 1000 * movie.duration);
-      form.updateData('endDate', newEndDate);
+      form?.updateData('endDate', newEndDate);
     }
   }, []);
 
   const onFormInitialized = useCallback((e: FormTypes.InitializedEvent) => {
     const form = e.component;
-    formInstanceRef.current = form;
+    form && (formInstanceRef.current = form);
 
-    form.on('fieldDataChanged', (fieldEvent: FormTypes.FieldDataChangedEvent) => {
+    form?.on('fieldDataChanged', (fieldEvent: FormTypes.FieldDataChangedEvent) => {
       if (fieldEvent.dataField === 'startDate') {
-        const currentFormData = form.option('formData');
-        const movie = getMovieById(currentFormData.movieId);
+        const currentFormData = form?.option('formData');
+        const movie = getMovieById(currentFormData?.movieId);
 
         if (movie) {
           updateEndDate(movie);
@@ -87,7 +89,7 @@ const App = () => {
     const movie = getMovieById(e.value);
 
     if (movie) {
-      form.updateData('director', movie.director);
+      form?.updateData('director', movie.director);
       updateEndDate(movie);
     }
   }, [updateEndDate]);
