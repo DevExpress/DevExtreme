@@ -59,8 +59,12 @@ function deleteEmployee(employee: Employee) {
   dataSource.push([{ type: 'remove', key: employee.ID }]);
 }
 
-function itemTypeExpr() {
-  return 'employee';
+function itemTypeExpr(obj: { type: string; }, value: string) {
+  if (value === undefined) {
+    return 'employee';
+  }
+  obj.type = value;
+  return null;
 }
 
 function itemCustomDataExpr(obj: Employee, value: Employee) {
