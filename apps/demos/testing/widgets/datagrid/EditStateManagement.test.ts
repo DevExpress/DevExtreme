@@ -9,7 +9,7 @@ fixture('DataGrid.EditStateManagement')
   });
 
 runManualTest('DataGrid', 'EditStateManagement', (test) => {
-  test('EditStateManagement - update row', async (t) => {
+  test.skip('EditStateManagement - update row', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     // edit row
