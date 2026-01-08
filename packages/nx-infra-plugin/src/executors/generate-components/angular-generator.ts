@@ -1,5 +1,6 @@
 import * as path from 'path';
 import { logger } from '@nx/devkit';
+import normalizePath from 'normalize-path';
 import { GenerationConfig } from './framework-handlers';
 
 export async function generateAngularComponents(
@@ -24,10 +25,12 @@ export async function generateAngularComponents(
     AngularCommonReexportsGenerator,
   } = internalTools;
 
-  const componentsDir = config.out.componentsDir;
-  const indexFileName = config.out.indexFileName;
+  const componentsDir = normalizePath(config.out.componentsDir);
+  const indexFileName = normalizePath(config.out.indexFileName);
 
-  const metadataDir = path.join(path.dirname(componentsDir), 'metadata', 'generated');
+  const metadataDir = normalizePath(
+    path.join(path.dirname(componentsDir), 'metadata', 'generated'),
+  );
 
   logger.info('📝 Generating Angular-specific metadata...');
   const metadataGenerator = new AngularMetadataGenerator();
