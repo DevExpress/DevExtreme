@@ -51,8 +51,12 @@ function onRequestLayoutUpdate(e) {
 function deleteEmployee(employee) {
   dataSource.push([{ type: 'remove', key: employee.ID }]);
 }
-function itemTypeExpr() {
-  return 'employee';
+function itemTypeExpr(obj, value) {
+  if (value === undefined) {
+    return 'employee';
+  }
+  obj.type = value;
+  return null;
 }
 function itemCustomDataExpr(obj, value) {
   if (value === undefined) {
