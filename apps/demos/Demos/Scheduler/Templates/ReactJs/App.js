@@ -43,21 +43,21 @@ const App = () => {
   );
   const updateEndDate = useCallback((movie) => {
     const form = formInstanceRef.current;
-    const formData = form.option('formData');
+    const formData = form?.option('formData');
     const { startDate } = formData;
     if (startDate) {
       const newEndDate = new Date(startDate.getTime() + 60 * 1000 * movie.duration);
-      form.updateData('endDate', newEndDate);
+      form?.updateData('endDate', newEndDate);
     }
   }, []);
   const onFormInitialized = useCallback(
     (e) => {
       const form = e.component;
-      formInstanceRef.current = form;
-      form.on('fieldDataChanged', (fieldEvent) => {
+      form && (formInstanceRef.current = form);
+      form?.on('fieldDataChanged', (fieldEvent) => {
         if (fieldEvent.dataField === 'startDate') {
-          const currentFormData = form.option('formData');
-          const movie = getMovieById(currentFormData.movieId);
+          const currentFormData = form?.option('formData');
+          const movie = getMovieById(currentFormData?.movieId);
           if (movie) {
             updateEndDate(movie);
           }
@@ -71,7 +71,7 @@ const App = () => {
       const form = formInstanceRef.current;
       const movie = getMovieById(e.value);
       if (movie) {
-        form.updateData('director', movie.director);
+        form?.updateData('director', movie.director);
         updateEndDate(movie);
       }
     },

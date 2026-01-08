@@ -8,6 +8,7 @@ import type { ICheckBoxOptions } from 'devextreme-react/check-box';
 import {
   tasks, dependencies, resources, resourceAssignments,
 } from './data.ts';
+import type { ContextMenuPreparingEvent } from 'devextreme/ui/gantt';
 
 function App() {
   const [ganttConfig, setGanttConfig] = useState({
@@ -76,7 +77,7 @@ function App() {
     </div>
   );
 
-  function onContextMenuPreparing(e: { cancel: any; }) {
+  function onContextMenuPreparing(e: ContextMenuPreparingEvent) {
     e.cancel = ganttConfig.disableContextMenu;
   }
 

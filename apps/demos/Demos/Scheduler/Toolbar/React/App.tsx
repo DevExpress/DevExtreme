@@ -1,10 +1,12 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 
-import { Scheduler, Resource, Toolbar, Item, type SchedulerRef, type SchedulerTypes } from 'devextreme-react/scheduler';
-import { SelectBox, type SelectBoxTypes } from 'devextreme-react/select-box';
-import { type DataSource } from 'devextreme-react/common/data';
+import { Scheduler, Resource, Toolbar, Item } from 'devextreme-react/scheduler';
+import { SelectBox } from 'devextreme-react/select-box';
+import type { DataSource } from 'devextreme-react/common/data';
+import type { SchedulerRef, SchedulerTypes } from 'devextreme-react/scheduler';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
 
-import { assignees, schedulerDataSource, currentDate } from './data.ts';
+import { assignees, data, currentDate } from './data.ts';
 
 const views: SchedulerTypes.ViewType[] = ['day', 'week', 'workWeek', 'month'];
 const selectBoxPlaceholder = 'Select Employee';
@@ -52,7 +54,7 @@ const App = () => {
     }
 
     const currentDate = scheduler.option('currentDate');
-    const cellDuration = scheduler.option('cellDuration');
+    const cellDuration = Number(scheduler.option('cellDuration'));
     const cellDurationMs = cellDuration * MS_IN_HOUR;
     const currentTime = new Date(currentDate as Date).getTime();
     const roundTime = Math.round(currentTime / cellDurationMs) * cellDurationMs;
@@ -74,7 +76,7 @@ const App = () => {
   return (
     <Scheduler
       timeZone="America/Los_Angeles"
-      dataSource={schedulerDataSource}
+      dataSource={data}
       views={views}
       defaultCurrentView="workWeek"
       defaultCurrentDate={currentDate}

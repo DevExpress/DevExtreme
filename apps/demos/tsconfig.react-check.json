@@ -17,18 +17,8 @@
     "Demos/**/React/**/*.ts"
   ],
   "exclude": [
-   "Demos/Diagram/**/React/**/*.ts",
-   "Demos/Diagram/**/React/**/*.tsx",
-   "Demos/FileManager/**/React/**/*.ts",
-   "Demos/FileManager/**/React/**/*.tsx",
    "Demos/FloatingActionButton/**/React/**/*.ts",
    "Demos/FloatingActionButton/**/React/**/*.tsx",
-   "Demos/Gantt/**/React/**/*.ts",
-   "Demos/Gantt/**/React/**/*.tsx",
-   "Demos/Pagination/**/React/**/*.ts",
-   "Demos/Pagination/**/React/**/*.tsx",
-   "Demos/Scheduler/**/React/**/*.ts",
-   "Demos/Scheduler/**/React/**/*.tsx",
    "Demos/VectorMap/**/React/**/*.ts",
    "Demos/VectorMap/**/React/**/*.tsx",
    "Demos/Localization/**/React/**/*.ts",
