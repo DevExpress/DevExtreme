@@ -1,7 +1,7 @@
 <template>
   <DxScheduler
     time-zone="America/Los_Angeles"
-    :data-source="schedulerDataSource"
+    :data-source="data"
     :views="views"
     current-view="workWeek"
     :current-date="currentDate"
@@ -61,7 +61,7 @@ import {
 import type { DxSchedulerTypes } from 'devextreme-vue/scheduler';
 import { DxSelectBox, type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import type { DataSource } from 'devextreme-vue/common/data';
-import { assignees, currentDate, schedulerDataSource } from './data.ts';
+import { assignees, currentDate, data } from './data.ts';
 
 const MS_IN_HOUR = 60 * 1000;
 const views: DxSchedulerTypes.ViewType[] = ['day', 'week', 'workWeek', 'month'];
