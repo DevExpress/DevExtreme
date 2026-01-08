@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import Gallery from 'devextreme-react/gallery';
 import CheckBox from 'devextreme-react/check-box';
+import Gallery from 'devextreme-react/gallery';
 import { gallery } from './data.js';
 
 const App = () => {
@@ -8,30 +8,18 @@ const App = () => {
   const [slideShow, setSlideShow] = useState(true);
   const [showNavButtons, setShowNavButtons] = useState(true);
   const [showIndicator, setShowIndicator] = useState(true);
-  const onLoopChanged = useCallback(
-    (data) => {
-      setLoop(data.value);
-    },
-    [setLoop],
-  );
-  const onSlideShowChanged = useCallback(
-    (data) => {
-      setSlideShow(data.value);
-    },
-    [setSlideShow],
-  );
-  const onShowNavButtonsChanged = useCallback(
-    (data) => {
-      setShowNavButtons(data.value);
-    },
-    [setShowNavButtons],
-  );
-  const onShowIndicatorChanged = useCallback(
-    (data) => {
-      setShowIndicator(data.value);
-    },
-    [setShowIndicator],
-  );
+  const onLoopChanged = useCallback((data) => {
+    setLoop(data.value);
+  }, []);
+  const onSlideShowChanged = useCallback((data) => {
+    setSlideShow(data.value);
+  }, []);
+  const onShowNavButtonsChanged = useCallback((data) => {
+    setShowNavButtons(data.value);
+  }, []);
+  const onShowIndicatorChanged = useCallback((data) => {
+    setShowIndicator(data.value);
+  }, []);
   return (
     <div>
       <div className="widget-container">

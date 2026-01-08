@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+
 import DataGrid, {
   Column, FilterRow, Selection, Pager, Lookup,
 } from 'devextreme-react/data-grid';
@@ -24,7 +25,8 @@ const employeesDataSource = createStore({
   },
 });
 const selectionFilter = ['Task_Status', '=', 'Completed'];
-let dataGrid;
+
+let dataGrid: DataGridTypes.InitializedEvent['component'];
 
 const App = () => {
   const [taskCount, setTaskCount] = useState(0);
@@ -32,7 +34,7 @@ const App = () => {
   const [avgDuration, setAvgDuration] = useState(0);
 
   const calculateStatistics = useCallback(async () => {
-    const selectedItems = await dataGrid.getSelectedRowsData();
+    const selectedItems = await dataGrid?.getSelectedRowsData() ?? [];
 
     const totalDuration = selectedItems.reduce((currentValue: number, item: { Task_Due_Date: string; Task_Start_Date: string; }) => {
       const dueDateTime = new Date(item.Task_Due_Date).getTime();

@@ -1,44 +1,45 @@
 import React, { useCallback, useState } from 'react';
-import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
-import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
-import TextArea, { type TextAreaTypes } from 'devextreme-react/text-area';
+import CheckBox from 'devextreme-react/check-box';
+import type { CheckBoxTypes } from 'devextreme-react/check-box';
+import SelectBox from 'devextreme-react/select-box';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
+import TextArea from 'devextreme-react/text-area';
+import type { TextAreaTypes } from 'devextreme-react/text-area';
 
-import service from './data.ts';
+import { valueChangeEvents, content } from './data.ts';
 
-const content = service.getContent();
-const { valueChangeEvents } = service;
 const notesLabel = { 'aria-label': 'Notes' };
 const eventLabel = { 'aria-label': 'Event' };
 
 function App() {
-  const [value, setValue] = useState(content);
-  const [valueForEditableTestArea, setValueForEditableTestArea] = useState(content);
-  const [maxLength, setMaxLength] = useState(null);
-  const [eventValue, setEventValue] = useState(valueChangeEvents[0].name);
-  const [autoResizeEnabled, setAutoResizeEnabled] = useState(false);
-  const [height, setHeight] = useState(90);
+  const [value, setValue] = useState<string>(content);
+  const [valueForEditableTestArea, setValueForEditableTestArea] = useState<string>(content);
+  const [maxLength, setMaxLength] = useState<number | undefined>(undefined);
+  const [eventValue, setEventValue] = useState<string>(valueChangeEvents[0].name);
+  const [autoResizeEnabled, setAutoResizeEnabled] = useState<boolean>(false);
+  const [height, setHeight] = useState<number | undefined>(90);
 
-  const onCheckboxValueChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+  const onCheckboxValueChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent): void => {
     const str = content;
     setValue(e.value ? str.substring(0, 100) : str);
-    setMaxLength(e.value ? 100 : null);
+    setMaxLength(e.value ? 100 : undefined);
   }, []);
 
-  const onAutoResizeChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+  const onAutoResizeChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent): void => {
     setAutoResizeEnabled(e.value);
     setHeight(e.value ? undefined : 90);
   }, []);
 
-  const onSelectBoxValueChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+  const onSelectBoxValueChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent): void => {
     setEventValue(e.value);
   }, []);
 
-  const onTextAreaValueChanged = useCallback((e: TextAreaTypes.ValueChangedEvent) => {
+  const onTextAreaValueChanged = useCallback((e: TextAreaTypes.ValueChangedEvent): void => {
     setValueForEditableTestArea(e.value);
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <div className="dx-fieldset">
         <div className="dx-fieldset-header">Default Mode</div>
         <div className="dx-field">
@@ -99,7 +100,7 @@ function App() {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 

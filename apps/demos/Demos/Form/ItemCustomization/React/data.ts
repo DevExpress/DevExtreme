@@ -1,4 +1,6 @@
-const employee = {
+import type { Employee } from './types.ts';
+
+export const employee: Employee = {
   ID: 1,
   FirstName: 'John',
   LastName: 'Heart',
@@ -11,7 +13,7 @@ const employee = {
   Email: 'jheart@dx-email.com',
 };
 
-const positions = [
+export const positions: string[] = [
   'HR Manager',
   'IT Manager',
   'CEO',
@@ -20,12 +22,3 @@ const positions = [
   'Support Manager',
   'Shipping Manager',
 ];
-
-export default {
-  getEmployee() {
-    return employee;
-  },
-  getPositions() {
-    return positions;
-  },
-};

@@ -2,14 +2,16 @@ import React from 'react';
 import { Lookup, DropDownOptions } from 'devextreme-react/lookup';
 
 import { employees } from './data.ts';
+import type { Employee, EmployeeSearchField } from './types.ts';
+
 import Field from './Field.tsx';
 import Item from './Item.tsx';
 
-const searchExpression = ['FirstName', 'LastName', 'Prefix'];
+const searchExpression: EmployeeSearchField[] = ['FirstName', 'LastName', 'Prefix'];
 const customFieldLabel = { 'aria-label': 'Custom Field Template' };
 const customItemLabel = { 'aria-label': 'Custom Item Template' };
 
-const getDisplayExpr = (item: { FirstName: string; LastName: string; }) => (item ? `${item.FirstName} ${item.LastName}` : '');
+const getDisplayExpr = (employee?: Employee): string => (employee ? `${employee.FirstName} ${employee.LastName}` : '');
 
 export default function App() {
   return (

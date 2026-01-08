@@ -12,17 +12,19 @@ import Form, {
   StringLengthRule,
   AsyncRule,
   CustomRule,
-  type FormTypes,
-  FormRef,
 } from 'devextreme-react/form';
-import { ButtonType } from 'devextreme-react/common';
+import type { FormRef, FormTypes } from 'devextreme-react/form';
+import type { ButtonType } from 'devextreme-react/common';
+import type { IAutocompleteOptions } from 'devextreme-react/autocomplete';
+import type { ISelectBoxOptions } from 'devextreme-react/select-box';
+import type { ITextBoxOptions } from 'devextreme-react/text-box';
+import type { IDateBoxOptions } from 'devextreme-react/date-box';
+import type { IDateRangeBoxOptions } from 'devextreme-react/date-range-box';
 import notify from 'devextreme/ui/notify';
 import Validator from 'devextreme/ui/validator';
 import 'devextreme-react/autocomplete';
 import 'devextreme-react/date-range-box';
-import service from './data.ts';
-
-const customer = service.getCustomer();
+import { customer, cities, countries } from './data.ts';
 
 const checkBoxOptions = {
   text: 'I agree to the Terms and Conditions',
@@ -30,29 +32,29 @@ const checkBoxOptions = {
   width: 270,
 };
 
-const cityEditorOptions = {
-  dataSource: service.getCities(),
+const cityEditorOptions: IAutocompleteOptions = {
+  dataSource: cities,
   valueChangeEvent: 'keyup',
   minSearchLength: 2,
 };
 
-const countryEditorOptions = {
-  dataSource: service.getCountries(),
+const countryEditorOptions: ISelectBoxOptions = {
+  dataSource: countries,
 };
 
-const emailEditorOptions = {
+const emailEditorOptions: ITextBoxOptions = {
   valueChangeEvent: 'keyup',
 };
 
-const nameEditorOptions = {
+const nameEditorOptions: ITextBoxOptions = {
   valueChangeEvent: 'keyup',
 };
 
-const addressEditorOptions = {
+const addressEditorOptions: ITextBoxOptions = {
   valueChangeEvent: 'keyup',
 };
 
-const phoneEditorOptions = {
+const phoneEditorOptions: ITextBoxOptions = {
   mask: '+1 (X00) 000-0000',
   valueChangeEvent: 'keyup',
   maskRules: {
@@ -73,34 +75,34 @@ const colCountByScreen = {
 
 const maxDate = new Date().setFullYear(new Date().getFullYear() - 21);
 
-const dateBoxOptions = {
+const dateBoxOptions: IDateBoxOptions = {
   placeholder: 'Birth Date',
   acceptCustomValue: false,
   openOnFieldClick: true,
 };
 
-const dateRangeBoxOptions = {
+const dateRangeBoxOptions: IDateRangeBoxOptions = {
   startDatePlaceholder: 'Start Date',
   endDatePlaceholder: 'End Date',
   acceptCustomValue: false,
 };
 
-function sendRequest(value: string) {
+function sendRequest(value: string): Promise<unknown> {
   const invalidEmail = 'test@dx-email.com';
-  return new Promise((resolve) => {
-    setTimeout(() => {
+  return new Promise((resolve): void => {
+    setTimeout((): void => {
       resolve(value !== invalidEmail);
     }, 1000);
   });
 }
 
-const passwordComparison = () => customer.Password;
+const passwordComparison = (): string => customer.Password;
 
-const checkComparison = () => true;
+const checkComparison = (): boolean => true;
 
-const asyncValidation = (params: { value: any; }) => sendRequest(params.value);
+const asyncValidation = ({ value }: { value: any; }): Promise<unknown> => sendRequest(value);
 
-const validateVacationDatesRange = ({ value }) => {
+const validateVacationDatesRange = ({ value }: { value: any; }): boolean => {
   const [startDate, endDate] = value;
 
   if (startDate === null || endDate === null) {
@@ -113,7 +115,7 @@ const validateVacationDatesRange = ({ value }) => {
   return daysDifference < 25;
 };
 
-const validateVacationDatesPresence = ({ value }) => {
+const validateVacationDatesPresence = ({ value }: { value: any }): boolean => {
   const [startDate, endDate] = value;
 
   if (startDate === null && endDate === null) {
@@ -138,23 +140,23 @@ function App() {
     icon: 'refresh',
     text: 'Reset',
     width: '120px',
-    onClick: () => {
-      formRef.current.instance().reset();
+    onClick: (): void => {
+      formRef.current?.instance().reset();
     },
   });
 
-  const changePasswordMode = useCallback((name) => {
-    const editor = formRef.current.instance().getEditor(name);
-    editor.option('mode', editor.option('mode') === 'text' ? 'password' : 'text');
+  const changePasswordMode = useCallback((name: string): void => {
+    const editor = formRef.current?.instance().getEditor(name);
+    editor?.option('mode', editor?.option('mode') === 'text' ? 'password' : 'text');
   }, []);
 
-  const getPasswordOptions = useCallback(() => ({
+  const getPasswordOptions = useCallback((): ITextBoxOptions => ({
     mode: 'password',
     valueChangeEvent: 'keyup',
-    onValueChanged: () => {
-      const editor = formRef.current.instance().getEditor('ConfirmPassword');
-      if (editor.option('value')) {
-        const instance = Validator.getInstance(editor.element()) as Validator;
+    onValueChanged: (): void => {
+      const editor = formRef.current?.instance().getEditor('ConfirmPassword');
+      if (editor?.option('value')) {
+        const instance = Validator.getInstance(editor?.element()) as Validator;
         instance.validate();
       }
     },
@@ -165,13 +167,13 @@ function App() {
         options: {
           stylingMode: 'text',
           icon: 'eyeopen',
-          onClick: () => changePasswordMode('Password'),
+          onClick: (): void => changePasswordMode('Password'),
         },
       },
     ],
   }), [changePasswordMode]);
 
-  const getConfirmOptions = useCallback(() => ({
+  const getConfirmOptions = useCallback((): ITextBoxOptions => ({
     mode: 'password',
     valueChangeEvent: 'keyup',
     buttons: [
@@ -181,13 +183,13 @@ function App() {
         options: {
           stylingMode: 'text',
           icon: 'eyeopen',
-          onClick: () => changePasswordMode('ConfirmPassword'),
+          onClick: (): void => changePasswordMode('ConfirmPassword'),
         },
       },
     ],
   }), [changePasswordMode]);
 
-  const handleSubmit = useCallback((e: { preventDefault: () => void; }) => {
+  const handleSubmit = useCallback((e: { preventDefault: () => void; }): void => {
     notify({
       message: 'You have submitted the form',
       position: {
@@ -198,14 +200,14 @@ function App() {
     e.preventDefault();
   }, []);
 
-  const onOptionChanged = useCallback((e: FormTypes.OptionChangedEvent) => {
+  const onOptionChanged = useCallback((e: FormTypes.OptionChangedEvent): void => {
     if (e.name === 'isDirty') {
       setResetButtonOptions({ ...resetButtonOptions, disabled: !e.value });
     }
   }, [resetButtonOptions, setResetButtonOptions]);
 
   return (
-    <React.Fragment>
+    <>
       <form action="your-action" onSubmit={handleSubmit}>
         <Form
           ref={formRef}
@@ -299,7 +301,7 @@ function App() {
           </GroupItem>
         </Form>
       </form>
-    </React.Fragment>
+    </>
   );
 }
 

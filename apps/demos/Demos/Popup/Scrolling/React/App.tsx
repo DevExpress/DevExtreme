@@ -2,25 +2,26 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { Button } from 'devextreme-react';
 import { Popup, ToolbarItem } from 'devextreme-react/popup';
 import ScrollView from 'devextreme-react/scroll-view';
+import type { ButtonTypes } from 'devextreme-react/button';
 
 export default function App() {
-  const [popupVisible, setPopupVisible] = useState(false);
-  const [popupWithScrollViewVisible, setPopupWithScrollViewVisible] = useState(false);
+  const [popupVisible, setPopupVisible] = useState<boolean>(false);
+  const [popupWithScrollViewVisible, setPopupWithScrollViewVisible] = useState<boolean>(false);
 
   const showPopup = useCallback(() => {
     setPopupVisible(true);
-  }, [setPopupVisible]);
+  }, []);
 
   const showPopupWithScrollView = useCallback(() => {
     setPopupWithScrollViewVisible(true);
-  }, [setPopupWithScrollViewVisible]);
+  }, []);
 
   const hide = useCallback(() => {
     setPopupVisible(false);
     setPopupWithScrollViewVisible(false);
-  }, [setPopupVisible, setPopupWithScrollViewVisible]);
+  }, []);
 
-  const bookButtonOptions = useMemo(() => ({
+  const bookButtonOptions = useMemo((): ButtonTypes.Properties => ({
     width: 300,
     text: 'Book',
     type: 'default',
@@ -29,7 +30,7 @@ export default function App() {
   }), [hide]);
 
   return (
-    <React.Fragment>
+    <>
       <div className="demo-container">
         <div className="button-container">
           <Button
@@ -134,6 +135,6 @@ export default function App() {
           options={bookButtonOptions}
         />
       </Popup>
-    </React.Fragment>
+    </>
   );
 }

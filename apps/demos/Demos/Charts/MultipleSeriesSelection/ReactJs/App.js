@@ -12,11 +12,11 @@ import Chart, {
 } from 'devextreme-react/chart';
 import { versionSources, statisticsData } from './data.js';
 
-function onSeriesClick({ target: series }) {
-  if (series.isSelected()) {
-    series.clearSelection();
+function onSeriesClick(e) {
+  if (e.target.isSelected()) {
+    e.target.clearSelection();
   } else {
-    series.select();
+    e.target.select();
   }
 }
 function App() {

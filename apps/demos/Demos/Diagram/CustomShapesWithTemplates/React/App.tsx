@@ -12,8 +12,12 @@ const dataSource = new ArrayStore({
   data: employees,
 });
 
-function itemTypeExpr(obj: { ID: number; }) {
-  return `employee${obj.ID}`;
+function itemTypeExpr(obj: { ID: number; type: string; }, value: string) {
+  if (value === undefined) {
+    return `employee${obj.ID}`;
+  }
+  obj.type = value;
+  return null;
 }
 
 export default function App() {

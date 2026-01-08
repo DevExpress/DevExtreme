@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import SelectBox from 'devextreme-react/select-box';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
 import TabPanel from 'devextreme-react/tab-panel';
+import type { Position, TabsIconPosition, TabsStyle } from 'devextreme/common';
 import TabPanelItem from './TabPanelItem.tsx';
 
 import {
@@ -14,21 +16,21 @@ import {
 } from './data.ts';
 
 const App = () => {
-  const [tabsPosition, setTabsPosition] = useState(tabsPositions[0]);
-  const [stylingMode, setStylingMode] = useState(stylingModes[0]);
-  const [iconPosition, setIconPosition] = useState(iconPositions[0]);
+  const [tabsPosition, setTabsPosition] = useState<Position>(tabsPositions[0]);
+  const [stylingMode, setStylingMode] = useState<TabsStyle>(stylingModes[0]);
+  const [iconPosition, setIconPosition] = useState<TabsIconPosition>(iconPositions[0]);
 
-  const onTabsPositionChanged = useCallback((args) => {
-    setTabsPosition(args.value);
-  }, [setTabsPosition]);
+  const onTabsPositionChanged = useCallback(({ value }: SelectBoxTypes.ValueChangedEvent): void => {
+    setTabsPosition(value);
+  }, []);
 
-  const onStylingModeChanged = useCallback((args) => {
-    setStylingMode(args.value);
-  }, [setStylingMode]);
+  const onStylingModeChanged = useCallback(({ value }: SelectBoxTypes.ValueChangedEvent): void => {
+    setStylingMode(value);
+  }, []);
 
-  const onIconPositionChanged = useCallback((args) => {
-    setIconPosition(args.value);
-  }, [setIconPosition]);
+  const onIconPositionChanged = useCallback(({ value }: SelectBoxTypes.ValueChangedEvent): void => {
+    setIconPosition(value);
+  }, []);
 
   return (
     <div className="tabpanel-demo">

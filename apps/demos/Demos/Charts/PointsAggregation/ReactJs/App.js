@@ -23,25 +23,40 @@ import {
 } from './data.js';
 
 const customizeTooltip = (pointInfo) => {
-  const { aggregationInfo } = pointInfo.point;
-  const start = aggregationInfo?.intervalStart;
-  const end = aggregationInfo?.intervalEnd;
   const handlers = {
-    'Average temperature': (arg) => ({
-      text: `${
-        !aggregationInfo
-          ? `Date: ${arg.argument.toDateString()}`
-          : `Interval: ${start.toDateString()} - ${end.toDateString()}`
-      }<br/>Temperature: ${arg.value.toFixed(2)} °C`,
-    }),
-    'Temperature range': (arg) => ({
-      text: `Interval: ${start.toDateString()} - ${end.toDateString()}<br/>Temperature range: ${
-        arg.rangeValue1
-      } - ${arg.rangeValue2} °C`,
-    }),
-    Precipitation: (arg) => ({
-      text: `Date: ${arg.argument.toDateString()}<br/>Precipitation: ${arg.valueText} mm`,
-    }),
+    'Average temperature': (info) => {
+      const { aggregationInfo } = info.point ?? {};
+      const arg = info.argument;
+      if (!(arg instanceof Date) || !('value' in info) || typeof info.value !== 'number') {
+        return { text: '' };
+      }
+      return {
+        text: `${
+          !aggregationInfo
+            ? `Date: ${arg.toDateString()}`
+            : `Interval: ${aggregationInfo.intervalStart.toDateString()} - ${aggregationInfo.intervalEnd.toDateString()}`
+        }<br/>Temperature: ${info.value.toFixed(2)} °C`,
+      };
+    },
+    'Temperature range': (info) => {
+      const { aggregationInfo } = info.point ?? {};
+      if (!('rangeValue1' in info)) {
+        return { text: '' };
+      }
+      return {
+        text: `Interval: ${aggregationInfo?.intervalStart.toDateString()} - ${aggregationInfo?.intervalEnd.toDateString()}
+               <br/>Temperature range: ${info.rangeValue1} - ${info.rangeValue2} °C`,
+      };
+    },
+    Precipitation: (info) => {
+      const arg = info.argument;
+      if (!(arg instanceof Date)) {
+        return { text: '' };
+      }
+      return {
+        text: `Date: ${arg.toDateString()}<br/>Precipitation: ${info.valueText} mm`,
+      };
+    },
   };
   return handlers[pointInfo.seriesName](pointInfo);
 };
@@ -49,27 +64,18 @@ function App() {
   const [useAggregation, setUseAggregation] = useState(true);
   const [currentFunction, setCurrentFunction] = useState(aggregationFunctions[0].func);
   const [currentInterval, setCurrentInterval] = useState(aggregationIntervals[0].interval);
-  const updateAggregationUsage = useCallback(
-    ({ value }) => {
-      setUseAggregation(value);
-    },
-    [setUseAggregation],
-  );
-  const updateInterval = useCallback(
-    ({ value }) => {
-      setCurrentInterval(value);
-    },
-    [setCurrentInterval],
-  );
-  const updateMethod = useCallback(
-    ({ value }) => {
-      setCurrentFunction(value);
-    },
-    [setCurrentFunction],
-  );
+  const updateAggregationUsage = useCallback(({ value }) => {
+    setUseAggregation(value);
+  }, []);
+  const updateInterval = useCallback(({ value }) => {
+    setCurrentInterval(value);
+  }, []);
+  const updateMethod = useCallback(({ value }) => {
+    setCurrentFunction(value);
+  }, []);
   const calculateRangeArea = useCallback((aggregationInfo) => {
-    if (!aggregationInfo.data.length) {
-      return null;
+    if (!aggregationInfo.data?.length) {
+      return {};
     }
     const temp = aggregationInfo.data.map((item) => item.temp);
     return {

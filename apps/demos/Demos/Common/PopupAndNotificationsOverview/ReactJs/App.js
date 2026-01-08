@@ -23,19 +23,21 @@ export default function App() {
   const changeFavoriteState = useCallback(() => {
     const updatedHouses = [...houses];
     const updatedCurrentHouse = updatedHouses.find((house) => house === currentHouse);
-    updatedCurrentHouse.Favorite = !updatedCurrentHouse.Favorite;
+    if (updatedCurrentHouse) {
+      updatedCurrentHouse.Favorite = !updatedCurrentHouse.Favorite;
+    }
     setHouses(updatedHouses);
     notify(
       {
         message: `This item has been ${
-          updatedCurrentHouse.Favorite ? 'added to' : 'removed from'
+          updatedCurrentHouse?.Favorite ? 'added to' : 'removed from'
         } the Favorites list!`,
         width: 450,
       },
-      updatedCurrentHouse.Favorite ? 'success' : 'error',
+      updatedCurrentHouse?.Favorite ? 'success' : 'error',
       2000,
     );
-  }, [houses, currentHouse, setHouses]);
+  }, [houses, currentHouse]);
   const renderPopup = useCallback(
     () => (
       <div className="popup-property-details">
@@ -66,23 +68,20 @@ export default function App() {
     ),
     [currentHouse, changeFavoriteState],
   );
-  const showHouse = useCallback(
-    (house) => {
-      setCurrentHouse(house);
-      setPopupVisible(true);
-    },
-    [setCurrentHouse, setPopupVisible],
-  );
+  const showHouse = useCallback((house) => {
+    setCurrentHouse(house);
+    setPopupVisible(true);
+  }, []);
   const handlePopupHidden = useCallback(() => {
     setPopupVisible(false);
-  }, [setPopupVisible]);
+  }, []);
   return (
     <div className="images">
-      {houses.map((h) => (
+      {houses.map((house) => (
         <House
-          house={h}
+          house={house}
           show={showHouse}
-          key={h.ID}
+          key={house.ID}
         />
       ))}
       <Popup

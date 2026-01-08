@@ -26,28 +26,10 @@ export default function App() {
         }
       }
     },
-    [selectionMode, selectedItemKeys, setSelectedItemKeys],
-  );
-  const onSelectionModeChange = useCallback(
-    (value) => {
-      setSelectionMode(value);
-    },
-    [setSelectionMode],
-  );
-  const onSelectAllModeChange = useCallback(
-    (value) => {
-      setSelectAllMode(value);
-    },
-    [setSelectAllMode],
-  );
-  const onSelectByClickChange = useCallback(
-    (value) => {
-      setSelectByClick(value);
-    },
-    [setSelectByClick],
+    [selectionMode, selectedItemKeys],
   );
   return (
-    <React.Fragment>
+    <>
       <div className="widget-container">
         <List
           dataSource={dataSource}
@@ -56,7 +38,7 @@ export default function App() {
           selectionMode={selectionMode}
           selectAllMode={selectAllMode}
           selectedItemKeys={selectedItemKeys}
-          selectByClick={selectByClick}
+          selectByClick={!!selectByClick}
           onOptionChanged={onSelectedItemKeysChange}
         ></List>
         <div className="selected-data">
@@ -73,7 +55,7 @@ export default function App() {
             items={selectionModes}
             inputAttr={selectionModeLabel}
             value={selectionMode}
-            onValueChange={onSelectionModeChange}
+            onValueChange={setSelectionMode}
           ></SelectBox>
         </div>
         <div className="option">
@@ -84,7 +66,7 @@ export default function App() {
             items={selectAllModes}
             inputAttr={selectAllModeLabel}
             value={selectAllMode}
-            onValueChange={onSelectAllModeChange}
+            onValueChange={setSelectAllMode}
           ></SelectBox>
         </div>
         <div className="option">
@@ -93,10 +75,10 @@ export default function App() {
           <CheckBox
             value={selectByClick}
             elementAttr={selectByClickLabel}
-            onValueChange={onSelectByClickChange}
+            onValueChange={setSelectByClick}
           ></CheckBox>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }

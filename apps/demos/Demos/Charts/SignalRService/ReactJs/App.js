@@ -28,17 +28,17 @@ function App() {
   const customizePoint = useCallback((arg) => {
     if (arg.seriesName === 'Volume') {
       const point = chartRef.current
-        .instance()
+        ?.instance()
         .getAllSeries()[0]
         .getPointsByArg(arg.argument)[0].data;
       if (point && point.close >= point.open) {
         return { color: '#1db2f5' };
       }
     }
-    return null;
+    return {};
   }, []);
   const calculateCandle = useCallback((e) => {
-    const prices = e.data.map((d) => d.price);
+    const prices = e.data?.map((d) => d.price) ?? [];
     if (prices.length) {
       return {
         date: new Date((e.intervalStart.valueOf() + e.intervalEnd.valueOf()) / 2),
@@ -48,7 +48,7 @@ function App() {
         close: prices[prices.length - 1],
       };
     }
-    return null;
+    return {};
   }, []);
   useEffect(() => {
     const hubConnection = new HubConnectionBuilder()

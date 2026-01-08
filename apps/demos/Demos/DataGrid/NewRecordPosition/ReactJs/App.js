@@ -37,7 +37,8 @@ const App = () => {
       {
         key,
         type: 'insert',
-        insertAfterKey: e.row.key,
+        insertAfterKey: e.row?.key,
+        data: {},
       },
     ]);
     setEditRowKey(key);

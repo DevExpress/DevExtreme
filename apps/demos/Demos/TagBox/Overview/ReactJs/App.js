@@ -14,13 +14,13 @@ const dataSource = new ArrayStore({
 });
 function App() {
   const [editableProducts, setEditableProducts] = useState([...simpleProducts]);
-  const [target, setTarget] = useState(null);
-  const [product, setProduct] = useState({});
+  const [target, setTarget] = useState();
+  const [product, setProduct] = useState(null);
   const onCustomItemCreating = useCallback(
     (args) => {
       const newValue = args.text;
       const isItemInDataSource = editableProducts.some((item) => item === newValue);
-      if (!isItemInDataSource) {
+      if (!isItemInDataSource && newValue) {
         setEditableProducts([newValue, ...editableProducts]);
       }
       args.customItem = newValue;
@@ -33,7 +33,7 @@ function App() {
   }, []);
   const getAltText = useCallback((text) => `${text}. Picture`, []);
   return (
-    <React.Fragment>
+    <>
       <div className="dx-fieldset">
         <div className="dx-field">
           <div className="dx-field-label">Default mode</div>
@@ -159,25 +159,25 @@ function App() {
             >
               <p>
                 <b>Name: </b>
-                <span>{product.Name}</span>
+                <span>{product?.Name}</span>
               </p>
               <p>
                 <b>Price: </b>
-                <span>{product.Price}</span>
+                <span>{product?.Price}</span>
               </p>
               <p>
                 <b>In-stock: </b>
-                <span>{product.Current_Inventory}</span>
+                <span>{product?.Current_Inventory}</span>
               </p>
               <p>
                 <b>Category: </b>
-                <span>{product.Category}</span>
+                <span>{product?.Category}</span>
               </p>
             </Popover>
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 export default App;

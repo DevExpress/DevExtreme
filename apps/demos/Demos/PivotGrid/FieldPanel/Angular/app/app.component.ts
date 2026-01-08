@@ -68,10 +68,8 @@ export class AppComponent {
   }
 
   contextMenuPreparing(e: DxPivotGridTypes.ContextMenuPreparingEvent) {
-    type SourceField = (typeof e.field) & { index: number };
-
     const dataSource = e.component.getDataSource();
-    const sourceField = e.field as SourceField;
+    const sourceField = e.field;
 
     if (sourceField) {
       if (!sourceField.groupName || sourceField.groupIndex === 0) {
@@ -81,7 +79,7 @@ export class AppComponent {
             let fieldIndex;
 
             if (sourceField.groupName) {
-              fieldIndex = (dataSource.getAreaFields(sourceField.area, true)[sourceField.areaIndex] as SourceField).index;
+              fieldIndex = (dataSource.getAreaFields(sourceField.area, true)[sourceField.areaIndex]).index;
             } else {
               fieldIndex = sourceField.index;
             }

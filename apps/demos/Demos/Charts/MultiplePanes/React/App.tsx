@@ -12,11 +12,11 @@ import Chart, {
 } from 'devextreme-react/chart';
 import { weatherData } from './data.ts';
 
-function temperatureCustomizeText({ valueText }) {
+function temperatureCustomizeText({ valueText }: { valueText: string }): string {
   return `${valueText} °C`;
 }
 
-function precipitationCustomizeText({ valueText }) {
+function precipitationCustomizeText({ valueText }: { valueText: string }): string {
   return `${valueText} mm`;
 }
 

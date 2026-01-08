@@ -7,7 +7,7 @@ import Item from './Item.js';
 const searchExpression = ['FirstName', 'LastName', 'Prefix'];
 const customFieldLabel = { 'aria-label': 'Custom Field Template' };
 const customItemLabel = { 'aria-label': 'Custom Item Template' };
-const getDisplayExpr = (item) => (item ? `${item.FirstName} ${item.LastName}` : '');
+const getDisplayExpr = (employee) => (employee ? `${employee.FirstName} ${employee.LastName}` : '');
 export default function App() {
   return (
     <div>

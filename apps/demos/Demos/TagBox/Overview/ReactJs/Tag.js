@@ -3,7 +3,7 @@ import React from 'react';
 export default function Tag({ product, onMouseEnter, getAltText }) {
   const isDisabled = product.Name === 'SuperHD Video Player';
   return (
-    <React.Fragment>
+    <>
       <div
         className={`dx-tag-content ${isDisabled && 'disabled-tag'}`}
         onMouseEnter={(e) => onMouseEnter(e, product)}
@@ -17,6 +17,6 @@ export default function Tag({ product, onMouseEnter, getAltText }) {
         <span>{product.Name}</span>
         {!isDisabled && <div className="dx-tag-remove-button"></div>}
       </div>
-    </React.Fragment>
+    </>
   );
 }

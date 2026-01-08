@@ -1,4 +1,4 @@
-import { ChatTypes } from 'devextreme-react/chat';
+import type { ChatTypes } from 'devextreme-react/chat';
 import { Guid } from 'devextreme-react/common';
 
 function getTimestamp(date: Date, offsetMinutes = 0) {

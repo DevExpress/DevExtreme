@@ -2,45 +2,64 @@ import React, { useCallback, useRef, useState } from 'react';
 import { TreeView } from 'devextreme-react/tree-view';
 import { ContextMenu } from 'devextreme-react/context-menu';
 import List from 'devextreme-react/list';
-import service from './data.js';
+import { products, menuItems } from './data.js';
 
-const products = service.getProducts();
-const menuItems = service.getMenuItems();
 const App = () => {
-  const contextMenuRef = useRef(null);
-  const treeViewRef = useRef(null);
+  const [contextMenuItems, setContextMenuItems] = useState(menuItems);
   const [logItems, setLogItems] = useState([]);
   const [selectedTreeItem, setSelectedTreeItem] = useState(undefined);
+  const treeViewRef = useRef(null);
   const treeViewItemContextMenu = useCallback((e) => {
     setSelectedTreeItem(e.itemData);
-    const isProductItem = !e.itemData.items;
-    contextMenuRef.current.instance().option('items[0].visible', !isProductItem);
-    contextMenuRef.current.instance().option('items[1].visible', !isProductItem);
-    contextMenuRef.current.instance().option('items[2].visible', isProductItem);
-    contextMenuRef.current.instance().option('items[3].visible', isProductItem);
-    contextMenuRef.current.instance().option('items[0].disabled', e.node.expanded);
-    contextMenuRef.current.instance().option('items[1].disabled', !e.node.expanded);
+    const isProductItem = !e.itemData?.items;
+    const isExpanded = e.node?.expanded;
+    setContextMenuItems((prev) =>
+      prev.map((item, index) => {
+        switch (index) {
+          case 0:
+            return {
+              ...item,
+              visible: !isProductItem,
+              disabled: isExpanded,
+            };
+          case 1:
+            return {
+              ...item,
+              visible: !isProductItem,
+              disabled: !isExpanded,
+            };
+          case 2:
+          case 3:
+            return {
+              ...item,
+              visible: isProductItem,
+            };
+          default:
+            return item;
+        }
+      }),
+    );
   }, []);
   const contextMenuItemClick = useCallback(
     (e) => {
       let logEntry = '';
-      switch (e.itemData.id) {
+      switch (e.itemData?.id) {
         case 'expand': {
-          logEntry = `The '${selectedTreeItem.text}' group was expanded`;
-          treeViewRef.current.instance().expandItem(selectedTreeItem.id);
+          logEntry = `The '${selectedTreeItem?.text}' group was expanded`;
+          treeViewRef.current?.instance().expandItem(selectedTreeItem?.id);
           break;
         }
         case 'collapse': {
-          logEntry = `The '${selectedTreeItem.text}' group was collapsed`;
-          treeViewRef.current.instance().collapseItem(selectedTreeItem.id);
+          logEntry = `The '${selectedTreeItem?.text}' group was collapsed`;
+          treeViewRef.current?.instance().collapseItem(selectedTreeItem?.id);
           break;
         }
         case 'details': {
-          logEntry = `Details about '${selectedTreeItem.text}' were displayed`;
+          logEntry = `Details about '${selectedTreeItem?.text}' were displayed`;
           break;
         }
         case 'copy': {
-          logEntry = `Information about '${selectedTreeItem.text}' was copied`;
+          logEntry = `Information about '${selectedTreeItem?.text}' was copied`;
           break;
         }
         default:
@@ -75,8 +94,7 @@ const App = () => {
         />
       </div>
       <ContextMenu
-        ref={contextMenuRef}
-        dataSource={menuItems}
+        dataSource={contextMenuItems}
         target="#treeview .dx-treeview-item"
         onItemClick={contextMenuItemClick}
       />

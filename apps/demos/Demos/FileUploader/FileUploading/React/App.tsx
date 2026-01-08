@@ -1,38 +1,44 @@
 import React, { useCallback, useState } from 'react';
-import FileUploader, { type FileUploaderTypes } from 'devextreme-react/file-uploader';
-import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
-import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
+import FileUploader from 'devextreme-react/file-uploader';
+import type { FileUploaderTypes } from 'devextreme-react/file-uploader';
+import SelectBox from 'devextreme-react/select-box';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
+import CheckBox from 'devextreme-react/check-box';
+import type { CheckBoxTypes } from 'devextreme-react/check-box';
 
-const uploadModes = ['instantly', 'useButtons'];
+const uploadModes: FileUploaderTypes.FileUploadMode[] = ['instantly', 'useButtons'];
 const fileTypeLabel = { 'aria-label': 'File Type' };
 const uploadModeLabel = { 'aria-label': 'Mode' };
-const fileTypesSource = [
+const fileTypesSource: { name: string, value: string }[] = [
   { name: 'All types', value: '*' },
   { name: 'Images', value: 'image/*' },
   { name: 'Videos', value: 'video/*' },
 ];
 
 export default function App() {
-  const [multiple, setMultiple] = useState(false);
-  const [uploadMode, setUploadMode] = useState<FileUploaderTypes.Properties['uploadMode']>('instantly');
-  const [accept, setAccept] = useState('*');
-  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [multiple, setMultiple] = useState<boolean>(false);
+  const [uploadMode, setUploadMode] = useState<FileUploaderTypes.FileUploadMode>('instantly');
+  const [accept, setAccept] = useState<string>('*');
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
-  const onSelectedFilesChanged = useCallback((e: FileUploaderTypes.ValueChangedEvent) => {
-    setSelectedFiles(e.value);
-  }, [setSelectedFiles]);
+  const onSelectedFilesChanged = useCallback(({ value }: FileUploaderTypes.ValueChangedEvent): void => {
+    if (!value) {
+      return;
+    }
+    setSelectedFiles(value);
+  }, []);
 
-  const onAcceptChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
-    setAccept(e.value);
-  }, [setAccept]);
+  const onAcceptChanged = useCallback(({ value }: SelectBoxTypes.ValueChangedEvent): void => {
+    setAccept(value);
+  }, []);
 
-  const onUploadModeChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
-    setUploadMode(e.value);
-  }, [setUploadMode]);
+  const onUploadModeChanged = useCallback(({ value }: SelectBoxTypes.ValueChangedEvent): void => {
+    setUploadMode(value);
+  }, []);
 
-  const onMultipleChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
-    setMultiple(e.value);
-  }, [setMultiple]);
+  const onMultipleChanged = useCallback(({ value }: CheckBoxTypes.ValueChangedEvent): void => {
+    setMultiple(value);
+  }, []);
 
   return (
     <div>
@@ -47,12 +53,12 @@ export default function App() {
         <div className="content" style={{ display: selectedFiles.length > 0 ? 'block' : 'none' }}>
           <div>
             <h4>Selected Files</h4>
-            {selectedFiles.map((file, i) => (
-              <div className="selected-item" key={i}>
+            {selectedFiles.map((file: File, index: number) => (
+              <div className="selected-item" key={index}>
                 <span>{`Name: ${file.name}`}<br /></span>
                 <span>{`Size ${file.size}`}<br /></span>
                 <span>{`Type ${file.type}`}<br /></span>
-                <span>{`Last Modified Date: ${file.lastModifiedDate}`}</span>
+                <span>{`Last Modified Date: ${new Date(file.lastModified).toDateString()}`}</span>
               </div>
             ))}
           </div>

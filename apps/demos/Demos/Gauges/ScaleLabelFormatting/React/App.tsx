@@ -3,7 +3,7 @@ import {
   CircularGauge, Scale, Label, RangeContainer, Range, Export, Title, Font,
 } from 'devextreme-react/circular-gauge';
 
-function customizeText({ valueText }) {
+function customizeText({ valueText }: { valueText: string }): string {
   return `${valueText} %`;
 }
 

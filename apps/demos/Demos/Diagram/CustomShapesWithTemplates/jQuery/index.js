@@ -29,7 +29,13 @@ $(() => {
         data: employees,
       }),
       keyExpr: 'ID',
-      typeExpr(obj) { return `employee${obj.ID}`; },
+      typeExpr(obj, value) {
+        if (value === undefined) {
+          return `employee${obj.ID}`;
+        }
+        obj.type = value;
+        return null;
+      },
       parentKeyExpr: 'Head_ID',
       autoLayout: {
         type: 'tree',

@@ -12,7 +12,7 @@ import Chart, {
 } from 'devextreme-react/chart';
 import { inflationData } from './data.ts';
 
-function customizeLabelText({ valueText }) {
+function customizeLabelText({ valueText }: { valueText: string }): string {
   return `${valueText} %`;
 }
 

@@ -3,7 +3,7 @@ import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/
 import {
   DxTabPanelModule, DxCheckBoxModule, DxSelectBoxModule,
 } from 'devextreme-angular';
-import { DxTabPanelTypes } from 'devextreme-angular/ui/tab-panel';
+import type { DxTabPanelTypes } from 'devextreme-angular/ui/tab-panel';
 import { TabPanelItem, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {

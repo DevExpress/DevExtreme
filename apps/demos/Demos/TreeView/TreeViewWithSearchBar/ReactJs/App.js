@@ -6,14 +6,11 @@ import { products, searchModeLabel } from './data.js';
 const options = ['contains', 'startswith', 'equals'];
 const App = () => {
   const [value, setValue] = useState('contains');
-  const valueChanged = useCallback(
-    (e) => {
-      setValue(e.value);
-    },
-    [setValue],
-  );
+  const valueChanged = useCallback((e) => {
+    setValue(e.value);
+  }, []);
   return (
-    <React.Fragment>
+    <>
       <TreeView
         id="treeview"
         items={products}
@@ -33,7 +30,7 @@ const App = () => {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 export default App;

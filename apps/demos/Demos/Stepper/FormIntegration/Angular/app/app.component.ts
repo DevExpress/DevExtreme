@@ -6,7 +6,7 @@ import {
 } from 'devextreme-angular';
 import { DxStepperModule, type DxStepperTypes } from 'devextreme-angular/ui/stepper';
 import { AppService } from './app.service';
-import { BookingFormData } from './app.types';
+import type { BookingFormData } from './app.types';
 import { DatesFormComponent } from './dates-form/dates-form.component';
 import { GuestsFormComponent } from './guests-form/guests-form.component';
 import { RoomMealPlanFormComponent } from './room-meal-plan-form/room-meal-plan-form.component';

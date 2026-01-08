@@ -3,7 +3,7 @@ import { Form, RangeRule, SimpleItem } from 'devextreme-react/form';
 import 'devextreme-react/number-box';
 
 const GuestsForm = memo(({ formData, validationGroup }) => (
-  <React.Fragment>
+  <>
     <p>
       Enter the number of adults, children, and pets staying in the room. This information help us
       suggest suitable room types, number of beds, and included amenities.
@@ -41,7 +41,7 @@ const GuestsForm = memo(({ formData, validationGroup }) => (
         label={{ text: 'Pets', location: 'top' }}
       />
     </Form>
-  </React.Fragment>
+  </>
 ));
 GuestsForm.displayName = 'GuestsForm';
 export default GuestsForm;

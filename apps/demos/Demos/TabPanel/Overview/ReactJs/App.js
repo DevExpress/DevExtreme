@@ -16,24 +16,15 @@ const App = () => {
   const [tabsPosition, setTabsPosition] = useState(tabsPositions[0]);
   const [stylingMode, setStylingMode] = useState(stylingModes[0]);
   const [iconPosition, setIconPosition] = useState(iconPositions[0]);
-  const onTabsPositionChanged = useCallback(
-    (args) => {
-      setTabsPosition(args.value);
-    },
-    [setTabsPosition],
-  );
-  const onStylingModeChanged = useCallback(
-    (args) => {
-      setStylingMode(args.value);
-    },
-    [setStylingMode],
-  );
-  const onIconPositionChanged = useCallback(
-    (args) => {
-      setIconPosition(args.value);
-    },
-    [setIconPosition],
-  );
+  const onTabsPositionChanged = useCallback(({ value }) => {
+    setTabsPosition(value);
+  }, []);
+  const onStylingModeChanged = useCallback(({ value }) => {
+    setStylingMode(value);
+  }, []);
+  const onIconPositionChanged = useCallback(({ value }) => {
+    setIconPosition(value);
+  }, []);
   return (
     <div className="tabpanel-demo">
       <div className="widget-container">

@@ -16,7 +16,7 @@ import Button from 'devextreme-react/button';
 import { birthLife } from './data.js';
 
 function customizeTooltip(pointInfo) {
-  const { data } = pointInfo.point;
+  const { data } = pointInfo.point ?? {};
   return {
     text: `${data.country} ${data.year}`,
   };
@@ -24,7 +24,7 @@ function customizeTooltip(pointInfo) {
 function App() {
   const chartRef = useRef(null);
   const resetZoom = useCallback(() => {
-    chartRef.current.instance().resetVisualRange();
+    chartRef.current?.instance().resetVisualRange();
   }, []);
   return (
     <div>

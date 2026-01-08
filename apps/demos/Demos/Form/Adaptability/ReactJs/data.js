@@ -1,4 +1,4 @@
-export default {
+export const employee = {
   ID: 1,
   FirstName: 'John',
   LastName: 'Heart',

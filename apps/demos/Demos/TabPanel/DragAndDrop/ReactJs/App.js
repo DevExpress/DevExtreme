@@ -2,10 +2,9 @@ import React, { useCallback, useState } from 'react';
 import Button from 'devextreme-react/button';
 import Sortable from 'devextreme-react/sortable';
 import TabPanel from 'devextreme-react/tab-panel';
-import service from './data.js';
+import { employees as allEmployees } from './data.js';
 import EmployeeTemplate from './EmployeeTemplate.js';
 
-const allEmployees = service.getEmployees();
 function App() {
   const [employees, setEmployees] = useState(allEmployees.slice(0, 3));
   const [selectedItem, setSelectedItem] = useState(allEmployees[0]);
@@ -13,7 +12,7 @@ function App() {
     const newItem = allEmployees.filter((employee) => employees.indexOf(employee) === -1)[0];
     setEmployees([...employees, newItem]);
     setSelectedItem(newItem);
-  }, [employees, setEmployees, setSelectedItem]);
+  }, [employees]);
   function disableButton() {
     return employees.length === allEmployees.length;
   }
@@ -27,11 +26,11 @@ function App() {
         setSelectedItem(newEmployees[index - 1]);
       }
     },
-    [employees, setEmployees, setSelectedItem],
+    [employees],
   );
   const renderTitle = useCallback(
     (data) => (
-      <React.Fragment>
+      <>
         <span>
           {data.FirstName} {data.LastName}
         </span>
@@ -43,7 +42,7 @@ function App() {
             }}
           />
         )}
-      </React.Fragment>
+      </>
     ),
     [employees, closeButtonHandler],
   );
@@ -66,7 +65,7 @@ function App() {
     [employees, setEmployees],
   );
   return (
-    <React.Fragment>
+    <>
       <div id="container">
         <Button
           disabled={disableButton()}
@@ -96,7 +95,7 @@ function App() {
           itemComponent={EmployeeTemplate}
         />
       </Sortable>
-    </React.Fragment>
+    </>
   );
 }
 export default App;

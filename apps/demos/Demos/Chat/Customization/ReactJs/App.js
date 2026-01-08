@@ -24,17 +24,17 @@ export default function App() {
     setMessages((prevMessages) => [...prevMessages, message]);
   }, []);
   return (
-    <React.Fragment>
+    <>
       <div className="chat-container">
         <Chat
           height={710}
           items={messages}
           user={currentUser}
-          disabled={isDisabled}
-          showAvatar={showAvatar}
-          showUserName={showUsername}
-          showDayHeaders={showDayHeaders}
-          showMessageTimestamp={showMessageTimestamp}
+          disabled={!!isDisabled}
+          showAvatar={!!showAvatar}
+          showUserName={!!showUsername}
+          showDayHeaders={!!showDayHeaders}
+          showMessageTimestamp={!!showMessageTimestamp}
           dayHeaderFormat={dayHeaderFormat}
           messageTimestampFormat={messageTimestampFormat}
           onMessageEntered={onMessageEntered}
@@ -110,6 +110,6 @@ export default function App() {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }

@@ -1,21 +1,23 @@
 import React, { useCallback, useState } from 'react';
-import RangeSelector, {
-  Chart as RsChart, Series as RsSeries, Scale, Label as RsLabel, SliderMarker, Behavior,
-} from 'devextreme-react/range-selector';
+
 import Chart, {
-  ArgumentAxis, Legend, Series, Label, Grid, MinorGrid,
+  ArgumentAxis, Grid, Label, Legend, MinorGrid, Series,
 } from 'devextreme-react/chart';
+import RangeSelector, {
+  Behavior, Chart as RsChart, Label as RsLabel, Scale, Series as RsSeries, SliderMarker,
+} from 'devextreme-react/range-selector';
+
 import { dataSource } from './data.ts';
 
 const App = () => {
-  const [range, setRange] = useState([]);
+  const [range, setRange] = useState<(number | Date | string)[]>([]);
 
-  const updateRange = useCallback((data: { value: any; }) => {
+  const updateRange = useCallback((data: { value: (number | Date | string)[] }) => {
     setRange(data.value);
-  }, [setRange]);
+  }, []);
 
   return (
-    <React.Fragment>
+    <>
       <Chart
         id="zoomed-chart"
         dataSource={dataSource}
@@ -48,7 +50,7 @@ const App = () => {
         <SliderMarker format="exponential" />
         <Behavior snapToTicks={false} valueChangeMode="onHandleMove" />
       </RangeSelector>
-    </React.Fragment>
+    </>
   );
 };
 

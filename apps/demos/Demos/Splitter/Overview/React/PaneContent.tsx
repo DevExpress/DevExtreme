@@ -2,7 +2,17 @@ import React, { useRef, useEffect } from 'react';
 
 const dimensionOptions = new Set(['size', 'minSize', 'maxSize', 'collapsedSize']);
 
-const getPaneState = (data): string => {
+interface PaneContentProps {
+  title: string;
+  size?: string;
+  resizable?: boolean;
+  collapsible?: boolean;
+  minSize?: string;
+  maxSize?: string;
+  collapsedSize?: string;
+}
+
+const getPaneState = (data: PaneContentProps): string => {
   if (data.resizable !== false && !data.collapsible) {
     return 'Resizable only';
   }
@@ -12,16 +22,18 @@ const getPaneState = (data): string => {
   return `${resizableText} and ${collapsibleText}`;
 };
 
-const getFilteredDimensionOptions = (data) => Object.entries(data)
+const getFilteredDimensionOptions = (data: PaneContentProps) => Object.entries(data)
   .filter(([key, value]) => dimensionOptions.has(key) && value)
   .map(([key, value]) => ({ key, value }));
 
-const PaneContent = (data: any) => {
-  const paneContentRef = useRef(null);
+const PaneContent = (data: PaneContentProps) => {
+  const paneContentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const element = paneContentRef.current.parentNode;
-    element.setAttribute('tabIndex', '0');
+    const element = paneContentRef.current?.parentNode;
+    if (element instanceof HTMLElement) {
+      element.setAttribute('tabIndex', '0');
+    }
   });
 
   return (

@@ -7,18 +7,17 @@ const disabledLabel = { 'aria-label': 'Disabled' };
 const maxAndMinLabel = { 'aria-label': 'Min And Max' };
 const salesLabel = { 'aria-label': 'Sales' };
 const stockLabel = { 'aria-label': 'Stock' };
-const keyDown = (e) => {
-  const { event } = e;
-  const str = event.key;
-  if (/^[.,e]$/.test(str)) {
-    event.preventDefault();
-  }
-};
+const MAX_SALES = 30;
 function App() {
   const [value, setValue] = useState(16);
-  const [max] = useState(30);
-  const valueChanged = useCallback((e) => {
-    setValue(e.value);
+  const keyDown = useCallback(({ event }) => {
+    const str = event?.key ?? '';
+    if (/^[.,e]$/.test(str)) {
+      event?.preventDefault();
+    }
+  }, []);
+  const valueChanged = useCallback(({ value }) => {
+    setValue(value);
   }, []);
   return (
     <div className="form">
@@ -72,7 +71,7 @@ function App() {
           <div className="dx-field-value">
             <NumberBox
               value={value}
-              max={max}
+              max={MAX_SALES}
               min={0}
               showSpinButtons={true}
               onKeyDown={keyDown}
@@ -88,7 +87,7 @@ function App() {
               min={0}
               showSpinButtons={false}
               readOnly={true}
-              value={max - value}
+              value={MAX_SALES - value}
               inputAttr={stockLabel}
             />
           </div>

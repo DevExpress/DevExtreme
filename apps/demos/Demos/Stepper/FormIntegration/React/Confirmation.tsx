@@ -1,14 +1,15 @@
-import React, { FC } from 'react';
+import React from 'react';
+import type { FC } from 'react';
 import 'devextreme-react/date-range-box';
 
-import { BookingFormData } from './types.ts';
+import type { BookingFormData } from './types.ts';
 
 interface ConfirmationProps {
   formData: BookingFormData;
   isConfirmed: boolean;
 }
 
-const Confirmation: FC<ConfirmationProps> = ({ formData, isConfirmed }) => {
+const Confirmation: FC<ConfirmationProps> = ({ formData, isConfirmed }: ConfirmationProps) => {
   if (isConfirmed) {
     return (
       <div className="summary-item-header center">
@@ -23,10 +24,10 @@ const Confirmation: FC<ConfirmationProps> = ({ formData, isConfirmed }) => {
         <div className="summary-item-header">Dates</div>
         <div className="separator"></div>
         <div>
-          <span className="summary-item-label">Check-in Date: </span>{new Date(formData.dates[0]).toLocaleDateString()}
+          <span className="summary-item-label">Check-in Date: </span>{new Date(formData.dates[0] ?? '').toLocaleDateString()}
         </div>
         <div>
-          <span className="summary-item-label">Check-out Date: </span>{new Date(formData.dates[1]).toLocaleDateString()}
+          <span className="summary-item-label">Check-out Date: </span>{new Date(formData.dates[1] ?? '').toLocaleDateString()}
         </div>
       </div>
 

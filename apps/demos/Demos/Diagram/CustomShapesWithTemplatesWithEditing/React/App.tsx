@@ -59,8 +59,12 @@ function deleteEmployee(employee: Employee) {
   dataSource.push([{ type: 'remove', key: employee.ID }]);
 }
 
-function itemTypeExpr() {
-  return 'employee';
+function itemTypeExpr(obj: { type: string; }, value: string) {
+  if (value === undefined) {
+    return 'employee';
+  }
+  obj.type = value;
+  return null;
 }
 
 function itemCustomDataExpr(obj: Employee, value: Employee) {
@@ -247,7 +251,7 @@ export default function App() {
 
 function PopupContentFunc(props) {
   return (
-    <React.Fragment>
+    <>
       <div className="dx-fieldset">
         <div className="dx-field">
           <div className="dx-field-label">Name</div>
@@ -331,6 +335,6 @@ function PopupContentFunc(props) {
         <Button text="Update" type="default" onClick={props.updateEmployeeClick}></Button>
         <Button text="Cancel" onClick={props.cancelEditEmployeeClick}></Button>
       </div>
-    </React.Fragment>
+    </>
   );
 }

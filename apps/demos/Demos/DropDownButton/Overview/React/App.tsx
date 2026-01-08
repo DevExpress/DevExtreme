@@ -1,52 +1,59 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import DropDownButton, { type DropDownButtonTypes } from 'devextreme-react/drop-down-button';
+import DropDownButton from 'devextreme-react/drop-down-button';
+import type { DropDownButtonTypes, DropDownButtonRef } from 'devextreme-react/drop-down-button';
 import Toolbar from 'devextreme-react/toolbar';
+import type { ToolbarTypes } from 'devextreme-react/toolbar';
 import { Template } from 'devextreme-react/core/template';
-import { type ButtonTypes } from 'devextreme-react/button';
 import notify from 'devextreme/ui/notify';
-import service from './data.ts';
+import {
+  colors,
+  downloads,
+  alignments,
+  profileSettings,
+  fontSizes,
+  lineHeights,
+} from './data.ts';
+import type { TextAlign } from './types.ts';
 import ColorIcon from './ColorIcon.tsx';
 import DropDownButtonTemplate from './DropDownButtonTemplate.tsx';
 import 'whatwg-fetch';
 
-type TextAlign = 'center' | 'end' | 'justify' | 'left' | 'match-parent' | 'right' | 'start';
-
 const buttonDropDownOptions = { width: 230 };
-
-const data = service.getData();
 
 const itemTemplateRender: React.FC<{ size: number; text: string }> = (item) => (
   <div style={{ fontSize: `${item.size}px` }}>
     {item.text}
   </div>
 );
-const App: React.FC = () => {
+const App = () => {
   const [alignment, setAlignment] = useState<TextAlign>('left');
-  const [color, setColor] = useState(null);
-  const [fontSize, setFontSize] = useState(14);
-  const [lineHeight, setLineHeight] = useState(1.35);
-  const [colorPicker, setColorPicker] = useState(null);
+  const [color, setColor] = useState<string | null>(null);
+  const [fontSize, setFontSize] = useState<number>(14);
+  const [lineHeight, setLineHeight] = useState<number>(1.35);
 
-  const onButtonClick = useCallback((e: ButtonTypes.ClickEvent) => {
-    notify(`Go to ${e.element.querySelector('.button-title').textContent}'s profile`, 'success', 600);
+  type ColorPicker = ReturnType<DropDownButtonRef['instance']>;
+  const [colorPicker, setColorPicker] = useState<ColorPicker | undefined>(undefined);
+
+  const onButtonClick = useCallback((e: DropDownButtonTypes.ButtonClickEvent): void => {
+    notify(`Go to ${e.element.querySelector('.button-title')?.textContent}'s profile`, 'success', 600);
   }, []);
 
-  const onItemClick = useCallback((e: DropDownButtonTypes.ItemClickEvent) => {
+  const onItemClick = useCallback((e: DropDownButtonTypes.ItemClickEvent): void => {
     notify(e.itemData.name || e.itemData, 'success', 600);
   }, []);
 
-  const onColorClick = useCallback((selectedColor) => {
+  const onColorClick = useCallback((selectedColor: string | null): void => {
     setColor(selectedColor);
-    const squareIcon = colorPicker.element().getElementsByClassName('dx-icon-square')[0];
-    squareIcon.style.color = selectedColor;
-    colorPicker.close();
+    const squareIcon = colorPicker?.element().getElementsByClassName('dx-icon-square')[0] as HTMLElement;
+    squareIcon.style.color = selectedColor ?? '';
+    colorPicker?.close();
   }, [colorPicker]);
 
-  const onInitialized = useCallback((e: DropDownButtonTypes.InitializedEvent) => {
+  const onInitialized = useCallback((e: DropDownButtonTypes.InitializedEvent): void => {
     setColorPicker(e.component);
-  }, [setColorPicker]);
+  }, []);
 
-  const toolbarItems = useMemo(() => [
+  const toolbarItems = useMemo((): ToolbarTypes.Item[] => [
     {
       location: 'before',
       widget: 'dxDropDownButton',
@@ -57,17 +64,17 @@ const App: React.FC = () => {
         width: 125,
         stylingMode: 'text',
         useSelectMode: true,
-        onSelectionChanged: (e): void => {
+        onSelectionChanged: (e: DropDownButtonTypes.SelectionChangedEvent): void => {
           setAlignment(e.item.name.toLowerCase());
         },
-        items: data.alignments,
+        items: alignments,
       },
     },
     {
       location: 'before',
       widget: 'dxDropDownButton',
       options: {
-        items: data.colors,
+        items: colors,
         icon: 'square',
         stylingMode: 'text',
         dropDownOptions: { width: 'auto' },
@@ -83,7 +90,7 @@ const App: React.FC = () => {
         displayExpr: 'text',
         keyExpr: 'size',
         useSelectMode: true,
-        items: data.fontSizes,
+        items: fontSizes,
         selectedItemKey: 14,
         onSelectionChanged: (e: DropDownButtonTypes.SelectionChangedEvent): void => {
           setFontSize(e.item.size);
@@ -100,14 +107,14 @@ const App: React.FC = () => {
         displayExpr: 'text',
         keyExpr: 'lineHeight',
         useSelectMode: true,
-        items: data.lineHeights,
+        items: lineHeights,
         selectedItemKey: 1.35,
         onSelectionChanged: (e: DropDownButtonTypes.SelectionChangedEvent): void => {
           setLineHeight(e.item.lineHeight);
         },
       },
     },
-  ], [setAlignment, setFontSize, setLineHeight, onInitialized]);
+  ], [onInitialized]);
 
   return (
     <div>
@@ -122,7 +129,7 @@ const App: React.FC = () => {
               text="Download Trial"
               icon="save"
               dropDownOptions={buttonDropDownOptions}
-              items={data.downloads}
+              items={downloads}
               onItemClick={onItemClick}
             />
           </div>
@@ -137,7 +144,7 @@ const App: React.FC = () => {
               id="custom-template"
               splitButton={true}
               useSelectMode={false}
-              items={data.profileSettings}
+              items={profileSettings}
               displayExpr="name"
               keyExpr="id"
               onButtonClick={onButtonClick}
@@ -155,7 +162,7 @@ const App: React.FC = () => {
           <Toolbar items={toolbarItems}>
             <Template name="colorpicker">
               <div className="custom-color-picker">
-                {data.colors.map((colorValue, i) => (
+                {colors.map((colorValue: string | null, i: number) => (
                   <ColorIcon key={i} color={colorValue} onClick={onColorClick} />
                 ))}
               </div>
@@ -165,7 +172,7 @@ const App: React.FC = () => {
           </Toolbar>
         </div>
         <div className="dx-field" style={{
-          color,
+          color: color ?? undefined,
           textAlign: alignment,
           lineHeight,
           fontSize: `${fontSize}px`,

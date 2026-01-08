@@ -1,9 +1,13 @@
 import React from 'react';
 
-export default function LabelOnly(data) {
+interface LabelOnlyProps {
+  label: string;
+}
+
+export default function LabelOnly({ label }: LabelOnlyProps) {
   return (
     <div className="dx-step-caption">
-      <div className="dx-step-label">{data.label}</div>
+      <div className="dx-step-label">{label}</div>
     </div>
   );
 }

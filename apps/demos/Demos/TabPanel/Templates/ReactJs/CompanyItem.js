@@ -1,37 +1,39 @@
 import React from 'react';
 
 function CompanyItem({ data }) {
-  const company = data;
+  const {
+    Address, City, State, Zipcode, Phone, Fax, Website,
+  } = data;
   return (
     <div>
       <div className="tabpanel-item">
         <div>
           <p>
-            <span>{company.Address}</span>
+            <span>{Address}</span>
           </p>
           <p>
             <span>
-              <b>{company.City}</b>,&nbsp;
+              <b>{City}</b>,&nbsp;
             </span>
-            <span>{company.State}&nbsp;</span>
-            <span>{company.Zipcode}</span>
+            <span>{State}&nbsp;</span>
+            <span>{Zipcode}</span>
           </p>
         </div>
         <div>
           <p>
-            Phone: <b>{company.Phone}</b>
+            Phone: <b>{Phone}</b>
           </p>
           <p>
-            Fax: <b>{company.Fax}</b>
+            Fax: <b>{Fax}</b>
           </p>
           <p>
             Website:{' '}
             <a
-              href={company.Website}
+              href={Website}
               rel="noreferrer"
               target="_blank"
             >
-              {company.Website}
+              {Website}
             </a>
           </p>
         </div>

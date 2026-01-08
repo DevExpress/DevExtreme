@@ -4,8 +4,8 @@ export interface Employee {
   LastName: string;
   Prefix: string;
   Position: string;
-  StateID: number;
-  CityID: number;
+  StateID: number | null;
+  CityID: number | null;
 }
 
 export const employees: Employee[] = [{

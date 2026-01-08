@@ -12,7 +12,7 @@ const renderLabel = () => (
   </div>
 );
 const App = () => (
-  <React.Fragment>
+  <>
     <Toolbar>
       <Item
         location="before"
@@ -61,7 +61,7 @@ const App = () => (
       id="products"
       dataSource={productsStore}
     />
-  </React.Fragment>
+  </>
 );
 const productsStore = new DataSource(products);
 const backButtonOptions = {

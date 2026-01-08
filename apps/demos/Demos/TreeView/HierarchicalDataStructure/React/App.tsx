@@ -1,17 +1,20 @@
 import React, { useCallback, useState } from 'react';
-import TreeView, { type TreeViewTypes } from 'devextreme-react/tree-view';
+import TreeView from 'devextreme-react/tree-view';
+import type { TreeViewTypes } from 'devextreme-react/tree-view';
 
-import service from './data.ts';
-import type { Product } from './types';
-
-const products = service.getProducts();
+import { products } from './data.ts';
+import type { Product } from './types.ts';
 
 const App = () => {
-  const [currentItem, setCurrentItem] = useState({ ...products[0] });
+  const [currentItem, setCurrentItem] = useState<Product | undefined>({ ...products[0] });
 
-  const selectItem = useCallback((e: TreeViewTypes.ItemClickEvent<Product>) => {
+  const selectItem = useCallback((e: TreeViewTypes.ItemClickEvent<Product>): void => {
+    if (!e.itemData) {
+      return;
+    }
+
     setCurrentItem({ ...e.itemData });
-  }, [setCurrentItem]);
+  }, []);
 
   return (
     <div className="form">
@@ -19,11 +22,11 @@ const App = () => {
         items={products}
         width={300}
         onItemClick={selectItem} />
-      {currentItem.price
+      {currentItem?.price
         && <div id="product-details">
-          <img src={currentItem.image} />
-          <div className="name">{currentItem.text}</div>
-          <div className="price">{`$${currentItem.price}`}</div>
+          <img src={currentItem?.image} alt="Product image" />
+          <div className="name">{currentItem?.text}</div>
+          <div className="price">{`$${currentItem?.price}`}</div>
         </div>
       }
     </div>

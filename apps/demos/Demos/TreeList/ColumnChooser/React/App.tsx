@@ -63,13 +63,15 @@ const App = () => {
           />
 
           <ColumnChooserSearch
-            enabled={searchEnabled}
-            editorOptions={searchEditorOptions} />
+            enabled={!!searchEnabled}
+            editorOptions={searchEditorOptions}
+          />
 
           <ColumnChooserSelection
-            allowSelectAll={allowSelectAll}
-            selectByClick={selectByClick}
-            recursive={recursive} />
+            allowSelectAll={!!allowSelectAll}
+            selectByClick={!!selectByClick}
+            recursive={!!recursive}
+          />
         </ColumnChooser>
       </TreeList>
       <div className="options">
@@ -127,7 +129,6 @@ const App = () => {
             />
           </div>
         </div>
-
       </div>
     </div>
   );

@@ -137,7 +137,7 @@ function App() {
   );
   const renderMenuSeparator = useCallback(() => <div className="toolbar-menu-separator"></div>, []);
   return (
-    <React.Fragment>
+    <>
       <div className="widget-container">
         <Resizable
           className="resizable-container"
@@ -412,7 +412,7 @@ function App() {
           onValueChanged={onToolbarLineModeChanged}
         />
       </div>
-    </React.Fragment>
+    </>
   );
 }
 export default App;

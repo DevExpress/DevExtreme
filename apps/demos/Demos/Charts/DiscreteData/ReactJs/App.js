@@ -14,7 +14,7 @@ function App() {
     [setCurrentType],
   );
   return (
-    <React.Fragment>
+    <>
       <div className="long-title">
         <h3>Average temperature in London</h3>
       </div>
@@ -51,7 +51,7 @@ function App() {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 export default App;
