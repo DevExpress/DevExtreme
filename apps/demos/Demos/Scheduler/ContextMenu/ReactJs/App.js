@@ -8,7 +8,7 @@ const views = ['day', 'month'];
 const appointmentClassName = '.dx-scheduler-appointment';
 const cellClassName = '.dx-scheduler-date-table-cell';
 const onContextMenuItemClick = (e) => {
-  e.itemData.onItemClick?.(e);
+  e.itemData?.onItemClick?.(e);
 };
 const App = () => {
   const schedulerRef = useRef(null);
@@ -26,7 +26,7 @@ const App = () => {
       onItemClick: (e) =>
         scheduler?.updateAppointment(appointmentData, {
           ...appointmentData,
-          ...{ roomId: [e.itemData.id] },
+          ...{ roomId: [e.itemData?.id] },
         }),
     }));
     setTarget(appointmentClassName);

@@ -1,11 +1,9 @@
-import { DataSource } from 'devextreme-react/common/data';
-
 const addDays = (date, days) => new Date(new Date(date).setUTCDate(date.getUTCDate() + days));
 const now = new Date(new Date().setUTCHours(0, 0, 0, 0));
 const startOfTheWeek = addDays(now, -now.getUTCDay());
 export const currentDate = new Date(2025, 5, 10);
 const currentStartOfTheWeek = addDays(currentDate, -currentDate.getUTCDay());
-const data = [
+export const data = [
   {
     text: 'Website Re-Design Plan',
     assigneeId: [4],
@@ -105,7 +103,6 @@ const data = [
     endDate: new Date(addDays(currentStartOfTheWeek, 4).setUTCHours(21)),
   },
 ];
-export const schedulerDataSource = new DataSource(data);
 export const assignees = [
   {
     text: 'Samantha Bright',
