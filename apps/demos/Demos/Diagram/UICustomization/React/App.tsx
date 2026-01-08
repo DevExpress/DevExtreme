@@ -11,10 +11,10 @@ import {
   Tab,
   Toolbox,
   ViewToolbar,
-  type DiagramTypes,
 } from 'devextreme-react/diagram';
 import { confirm } from 'devextreme/ui/dialog';
 import 'whatwg-fetch';
+import type { DiagramTypes, DiagramRef } from 'devextreme-react/diagram';
 
 const pageCommands: DiagramTypes.Command[] = ['pageSize', 'pageOrientation', 'pageColor'];
 const menuCommands: DiagramTypes.Command[] = ['bringToFront', 'sendToBack', 'lock', 'unlock'];
@@ -33,14 +33,14 @@ function onCustomCommand(e: DiagramTypes.CustomCommandEvent) {
 }
 
 export default function App() {
-  const diagramRef = useRef(null);
+  const diagramRef = useRef<DiagramRef>(null);
 
   useEffect(() => {
-    const diagram = diagramRef.current.instance();
+    const diagram = diagramRef?.current?.instance();
     fetch('../../../../data/diagram-flow.json')
       .then((response) => response.json())
       .then((json) => {
-        diagram.import(JSON.stringify(json));
+        diagram?.import(JSON.stringify(json));
       })
       .catch(() => {
         throw new Error('Data Loading Error');
