@@ -75,7 +75,7 @@ const App = () => {
     form?.on('fieldDataChanged', (fieldEvent: FormTypes.FieldDataChangedEvent) => {
       if (fieldEvent.dataField === 'startDate') {
         const currentFormData = form?.option('formData');
-        const movie = getMovieById(currentFormData.movieId);
+        const movie = getMovieById(currentFormData?.movieId);
 
         if (movie) {
           updateEndDate(movie);

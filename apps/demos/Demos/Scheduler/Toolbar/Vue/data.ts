@@ -1,4 +1,4 @@
-import type { SchedulerTypes } from 'devextreme-react/scheduler';
+import type { SchedulerTypes } from 'devextreme-vue/scheduler';
 import { DataSource } from 'devextreme-vue/common/data';
 
 type CustomAppointment = SchedulerTypes.Appointment & {

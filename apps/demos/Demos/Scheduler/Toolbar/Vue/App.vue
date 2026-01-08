@@ -56,8 +56,9 @@
 import { ref } from 'vue';
 import {
   DxScheduler, DxResource,
-  DxToolbar, DxItem, type DxSchedulerTypes,
+  DxToolbar, DxItem,
 } from 'devextreme-vue/scheduler';
+import type { DxSchedulerTypes } from 'devextreme-vue/scheduler';
 import { DxSelectBox, type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import type { DataSource } from 'devextreme-vue/common/data';
 import { assignees, currentDate, schedulerDataSource } from './data.ts';
