@@ -19,6 +19,20 @@ import CustomShapeTemplate from './CustomShapeTemplate.tsx';
 import CustomShapeToolboxTemplate from './CustomShapeToolboxTemplate.tsx';
 import service from './data.ts';
 import type { Employee } from './data.ts';
+import type { ValueChangedEvent } from 'devextreme/ui/text_box';
+
+interface PopupContentFuncProps {
+  currentEmployee: Partial<Employee>;
+  handleNameChange: (e: ValueChangedEvent) => void;
+  handleTitleChange: (e: ValueChangedEvent) => void;
+  handleCityChange: (e: ValueChangedEvent) => void;
+  handleStateChange: (e: ValueChangedEvent) => void;
+  handleEmailChange: (e: ValueChangedEvent) => void;
+  handleSkypeChange: (e: ValueChangedEvent) => void;
+  handlePhoneChange: (e: ValueChangedEvent) => void;
+  updateEmployeeClick: () => void;
+  cancelEditEmployeeClick: () => void;
+}
 
 const pageCommands: DiagramTypes.Command[] = ['pageSize', 'pageOrientation', 'pageColor'];
 
@@ -36,7 +50,7 @@ const employees = service.getEmployees();
 const dataSource = new ArrayStore({
   key: 'ID',
   data: employees,
-  onInserting(values, key) {
+  onInserting(values: Employee, key: string) {
     this.update(key, {
       ID: values.ID || (generatedID += 1),
       Full_Name: values.Full_Name || "Employee's Name",
@@ -135,31 +149,31 @@ export default function App() {
     }));
   }, [setCurrentEmployee]);
 
-  const handleNameChange = useCallback((e: { value: any; }) => {
+  const handleNameChange = useCallback((e: ValueChangedEvent) => {
     handleChange('Full_Name', e.value);
   }, [handleChange]);
 
-  const handleTitleChange = useCallback((e: { value: any; }) => {
+  const handleTitleChange = useCallback((e: ValueChangedEvent) => {
     handleChange('Title', e.value);
   }, [handleChange]);
 
-  const handleCityChange = useCallback((e: { value: any; }) => {
+  const handleCityChange = useCallback((e: ValueChangedEvent) => {
     handleChange('City', e.value);
   }, [handleChange]);
 
-  const handleStateChange = useCallback((e: { value: any; }) => {
+  const handleStateChange = useCallback((e: ValueChangedEvent) => {
     handleChange('State', e.value);
   }, [handleChange]);
 
-  const handleEmailChange = useCallback((e: { value: any; }) => {
+  const handleEmailChange = useCallback((e: ValueChangedEvent) => {
     handleChange('Email', e.value);
   }, [handleChange]);
 
-  const handleSkypeChange = useCallback((e: { value: any; }) => {
+  const handleSkypeChange = useCallback((e: ValueChangedEvent) => {
     handleChange('Skype', e.value);
   }, [handleChange]);
 
-  const handlePhoneChange = useCallback((e: { value: any; }) => {
+  const handlePhoneChange = useCallback((e: ValueChangedEvent) => {
     handleChange('Mobile_Phone', e.value);
   }, [handleChange]);
 
@@ -245,7 +259,7 @@ export default function App() {
   );
 }
 
-function PopupContentFunc(props) {
+function PopupContentFunc(props: PopupContentFuncProps) {
   return (
     <>
       <div className="dx-fieldset">

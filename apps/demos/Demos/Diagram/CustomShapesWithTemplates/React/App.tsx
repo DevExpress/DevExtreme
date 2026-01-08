@@ -20,7 +20,7 @@ export default function App() {
   const [currentEmployee, setCurrentEmployee] = useState<Partial<EmployeeType>>({});
   const [popupVisible, setPopupVisible] = useState(false);
 
-  const showInfo = useCallback((employee) => {
+  const showInfo = useCallback((employee: EmployeeType) => {
     setCurrentEmployee(employee);
     setPopupVisible(true);
   }, [setCurrentEmployee, setPopupVisible]);
