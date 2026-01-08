@@ -32,7 +32,7 @@ interface IControlledComponentProps {
   complexOption?: Record<string, unknown>;
 }
 
-const ControlledComponent = memo(function ControlledComponent(props: IControlledComponentProps & React.PropsWithChildren) {
+const ControlledComponent = memo(function ControlledComponent(props: IControlledComponentProps & React.PropsWithChildren<unknown>) {
   return (
     <TestComponent
       defaults={{
@@ -54,7 +54,7 @@ const NestedComponent = function NestedComponent(props: any) {
       complexValue?: Record<string, unknown>;
       value?: number;
       onValueChange?: (value: number) => void;
-    } & React.PropsWithChildren>
+    } & React.PropsWithChildren<unknown>>
       elementDescriptor={{
         OptionName: 'nestedOption',
         DefaultsProps: {
@@ -73,7 +73,7 @@ const CollectionNestedComponent = function CollectionNestedComponent(props: any)
     <ConfigurationComponent<{
       a?: number;
       onAChange?: (value: number) => void;
-    } & React.PropsWithChildren>
+    } & React.PropsWithChildren<unknown>>
       elementDescriptor={{
         OptionName: 'items',
         IsCollectionItem: true,

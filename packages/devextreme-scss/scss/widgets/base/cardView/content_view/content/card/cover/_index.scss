@@ -5,7 +5,8 @@
   overflow: hidden;
   display: flex;
   justify-content: center;
-  border-top: $cardview-card-border-width solid $cardview-card-divider-color;
+  border-top: $cardview-card-border-width solid;
+  border-top-color: $cardview-card-divider-color;
   max-height: var(--dx-cardview-card-cover-max-height);
   aspect-ratio: var(--dx-cardview-card-cover-ratio);
   width: 100%;

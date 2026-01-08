@@ -44,9 +44,9 @@ $checkbox-invalid-faded-border-color: $base-invalid-faded-border-color !default;
   $checkbox-indeterminate-bg: $base-accent !default;
   $checkbox-border-color-focused: $base-focus-bg !default;
   $checkbox-bg: $base-element-bg !default;
-  $checkbox-hover-border-color: darken($base-accent, 12%) !default;
-  $checkbox-active-icon-bg: color.change(darken($checkbox-bg, 62.5%), $alpha: 0.2) !default;
-  $checkbox-readonly-border-color: lighten($checkbox-border-color, 9%) !default;
+  $checkbox-hover-border-color: color.adjust($base-accent, $lightness: -12%, $space: hsl) !default;
+  $checkbox-active-icon-bg: color.change(color.adjust($checkbox-bg, $lightness: -62.5%, $space: hsl), $alpha: 0.2) !default;
+  $checkbox-readonly-border-color: color.adjust($checkbox-border-color, $lightness: 9%, $space: hsl) !default;
 }
 
 @if $color == "contrast" {
@@ -56,7 +56,7 @@ $checkbox-invalid-faded-border-color: $base-invalid-faded-border-color !default;
   $checkbox-bg: $base-bg !default;
   $checkbox-hover-border-color: $base-border-color !default;
   $checkbox-active-icon-bg: $base-inverted-bg !default;
-  $checkbox-readonly-border-color: darken($checkbox-border-color, 50%) !default;
+  $checkbox-readonly-border-color: color.adjust($checkbox-border-color, $lightness: -50%, $space: hsl) !default;
 }
 
 @if $color == "dark" {
@@ -64,9 +64,9 @@ $checkbox-invalid-faded-border-color: $base-invalid-faded-border-color !default;
   $checkbox-indeterminate-bg: $base-accent !default;
   $checkbox-border-color-focused: $base-focus-bg !default;
   $checkbox-bg: $base-element-bg !default;
-  $checkbox-hover-border-color: lighten($base-accent, 12%) !default;
-  $checkbox-active-icon-bg: color.change(lighten($checkbox-bg, 62.5%), $alpha: 0.2) !default;
-  $checkbox-readonly-border-color: darken($checkbox-border-color, 9%) !default;
+  $checkbox-hover-border-color: color.adjust($base-accent, $lightness: 12%, $space: hsl) !default;
+  $checkbox-active-icon-bg: color.change(color.adjust($checkbox-bg, $lightness: 62.5%, $space: hsl), $alpha: 0.2) !default;
+  $checkbox-readonly-border-color: color.adjust($checkbox-border-color, $lightness: -9%, $space: hsl) !default;
 }
 
 @if $color == "darkmoon" {
@@ -74,9 +74,9 @@ $checkbox-invalid-faded-border-color: $base-invalid-faded-border-color !default;
   $checkbox-indeterminate-bg: $base-accent !default;
   $checkbox-border-color-focused: $base-focus-bg !default;
   $checkbox-bg: $base-element-bg !default;
-  $checkbox-hover-border-color: lighten($base-accent, 12%) !default;
-  $checkbox-active-icon-bg: color.change(lighten($checkbox-bg, 62.5%), $alpha: 0.2) !default;
-  $checkbox-readonly-border-color: darken($checkbox-border-color, 9%) !default;
+  $checkbox-hover-border-color: color.adjust($base-accent, $lightness: 12%, $space: hsl) !default;
+  $checkbox-active-icon-bg: color.change(color.adjust($checkbox-bg, $lightness: 62.5%, $space: hsl), $alpha: 0.2) !default;
+  $checkbox-readonly-border-color: color.adjust($checkbox-border-color, $lightness: -9%, $space: hsl) !default;
 }
 
 @if $color == "darkviolet" {
@@ -85,8 +85,8 @@ $checkbox-invalid-faded-border-color: $base-invalid-faded-border-color !default;
   $checkbox-border-color-focused: $base-focus-color !default;
   $checkbox-bg: $base-element-bg !default;
   $checkbox-hover-border-color: $base-accent-highlight-color !default;
-  $checkbox-active-icon-bg: color.change(lighten($checkbox-bg, 62.5%), $alpha: 0.2) !default;
-  $checkbox-readonly-border-color: darken($checkbox-border-color, 9%) !default;
+  $checkbox-active-icon-bg: color.change(color.adjust($checkbox-bg, $lightness: 62.5%, $space: hsl), $alpha: 0.2) !default;
+  $checkbox-readonly-border-color: color.adjust($checkbox-border-color, $lightness: -9%, $space: hsl) !default;
 }
 
 @if $color == "greenmist" {
@@ -94,9 +94,9 @@ $checkbox-invalid-faded-border-color: $base-invalid-faded-border-color !default;
   $checkbox-indeterminate-bg: $base-accent !default;
   $checkbox-border-color-focused: $base-focus-bg !default;
   $checkbox-bg: $base-element-bg !default;
-  $checkbox-hover-border-color: darken($base-accent, 12%) !default;
-  $checkbox-active-icon-bg: color.change(darken($base-bg, 9%), $alpha: 0.4) !default;
-  $checkbox-readonly-border-color: lighten($checkbox-border-color, 9%) !default;
+  $checkbox-hover-border-color: color.adjust($base-accent, $lightness: -12%, $space: hsl) !default;
+  $checkbox-active-icon-bg: color.change(color.adjust($base-bg, $lightness: -9%, $space: hsl), $alpha: 0.4) !default;
+  $checkbox-readonly-border-color: color.adjust($checkbox-border-color, $lightness: 9%, $space: hsl) !default;
 }
 
 @if $color == "light" {
@@ -104,9 +104,9 @@ $checkbox-invalid-faded-border-color: $base-invalid-faded-border-color !default;
   $checkbox-indeterminate-bg: $base-accent !default;
   $checkbox-border-color-focused: $base-focus-bg !default;
   $checkbox-bg: $base-element-bg !default;
-  $checkbox-hover-border-color: darken($base-accent, 12%) !default;
-  $checkbox-active-icon-bg: color.change(darken($checkbox-bg, 62.5%), $alpha: 0.2) !default;
-  $checkbox-readonly-border-color: lighten($checkbox-border-color, 9%) !default;
+  $checkbox-hover-border-color: color.adjust($base-accent, $lightness: -12%, $space: hsl) !default;
+  $checkbox-active-icon-bg: color.change(color.adjust($checkbox-bg, $lightness: -62.5%, $space: hsl), $alpha: 0.2) !default;
+  $checkbox-readonly-border-color: color.adjust($checkbox-border-color, $lightness: 9%, $space: hsl) !default;
 }
 
 @if $color == "softblue" {
@@ -114,9 +114,9 @@ $checkbox-invalid-faded-border-color: $base-invalid-faded-border-color !default;
   $checkbox-indeterminate-bg: $base-accent !default;
   $checkbox-border-color-focused: $base-focus-bg !default;
   $checkbox-bg: $base-element-bg !default;
-  $checkbox-hover-border-color: darken($base-accent, 12%) !default;
-  $checkbox-active-icon-bg: color.change(darken($checkbox-bg, 62.5%), $alpha: 0.2) !default;
-  $checkbox-readonly-border-color: lighten($checkbox-border-color, 9%) !default;
+  $checkbox-hover-border-color: color.adjust($base-accent, $lightness: -12%, $space: hsl) !default;
+  $checkbox-active-icon-bg: color.change(color.adjust($checkbox-bg, $lightness: -62.5%, $space: hsl), $alpha: 0.2) !default;
+  $checkbox-readonly-border-color: color.adjust($checkbox-border-color, $lightness: 9%, $space: hsl) !default;
 }
 
 $checkbox-readonly-bg: $checkbox-bg !default;

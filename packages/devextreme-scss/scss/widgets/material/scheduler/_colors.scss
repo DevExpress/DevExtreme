@@ -10,9 +10,9 @@
 * $type color
 */
 $scheduler-base-border-color: $base-border-color !default;
-$scheduler-cell-active-bg: color.change(darken($base-bg, 13.3%), $alpha: 0.7) !default;
+$scheduler-cell-active-bg: color.change(color.adjust($base-bg, $lightness: -13.3%, $space: hsl), $alpha: 0.7) !default;
 $scheduler-cell-hover-bg: $base-hover-bg !default;
-$scheduler-group-separator-border-color: darken($base-border-color, 13%) !default;
+$scheduler-group-separator-border-color: color.adjust($base-border-color, $lightness: -13%, $space: hsl) !default;
 
 /**
 * $name 20. Hour separator color
@@ -51,7 +51,7 @@ $scheduler-workspace-focused-cell-color: color.change($base-accent, $alpha: 0.12
 * $type color
 */
 $scheduler-first-month-border-color: $base-border-color !default;
-$scheduler-droppable-cell-background-color: darken($base-element-bg, 5%) !default;
+$scheduler-droppable-cell-background-color: color.adjust($base-element-bg, $lightness: -5%, $space: hsl) !default;
 $scheduler-panel-text-color: color.change($base-text-color, $alpha: 0.54) !default;
 $scheduler-workspace-background-color: $base-bg !default;
 $scheduler-workspace-accent-color: $base-accent !default;

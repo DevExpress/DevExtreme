@@ -34,11 +34,16 @@
   $border-inline-end,
   $border-block-end,
   $border-inline-start,
+  $border-color,
 ) {
   &::after {
     border-block-start: $border-block-start;
+    border-block-start-color: $border-color;
     border-inline-end: $border-inline-end;
+    border-inline-end-color: $border-color;
     border-block-end: $border-block-end;
+    border-block-end-color: $border-color;
     border-inline-start: $border-inline-start;
+    border-inline-start-color: $border-color;
   }
 }

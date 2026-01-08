@@ -18,10 +18,10 @@ $gantt-parent-task-background-color: null !default;
 }
 
 @if $mode == "light" {
-  $gantt-collapsable-row-bg: darken($base-bg, 5%) !default;
+  $gantt-collapsable-row-bg: color.adjust($base-bg, $lightness: -5%, $space: hsl) !default;
 }
 
 @if $mode == "dark" {
-  $gantt-collapsable-row-bg: lighten($base-bg, 5%) !default;
+  $gantt-collapsable-row-bg: color.adjust($base-bg, $lightness: 5%, $space: hsl) !default;
 }
 

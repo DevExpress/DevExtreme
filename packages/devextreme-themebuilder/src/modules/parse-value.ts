@@ -8,9 +8,9 @@ export const color = (value: sass.SassColor): string => {
     return 'transparent';
   }
 
-  const hexRed = getHex(value.red);
-  const hexGreen = getHex(value.green);
-  const hexBlue = getHex(value.blue);
+  const hexRed = getHex(value.channel('red'));
+  const hexGreen = getHex(value.channel('green'));
+  const hexBlue = getHex(value.channel('blue'));
   const hexAlpha = alpha === 255 ? '' : getHex(alpha);
 
   return `#${hexRed}${hexGreen}${hexBlue}${hexAlpha}`;
@@ -59,7 +59,6 @@ export const parseString = (str: string): sass.Value => {
     });
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
-    // debugger;
     return new sass.SassString(str);
   }
 

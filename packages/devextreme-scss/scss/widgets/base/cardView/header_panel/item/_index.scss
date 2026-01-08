@@ -52,7 +52,8 @@
   }
 
   &:focus-visible {
-    outline: 2px $cardview-header-panel__item--focused-outline-color solid;
+    outline: 2px solid;
+    outline-color: $cardview-header-panel__item--focused-outline-color;
     outline-offset: -2px;
   }
 

@@ -1,3 +1,4 @@
+/* stylelint-disable-next-line at-rule-no-vendor-prefix, at-rule-prelude-no-invalid */
 @-moz-document url-prefix() {
   .dx-scheduler-work-space-month .dx-scheduler-date-table-cell {
     position: relative;

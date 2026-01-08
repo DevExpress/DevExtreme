@@ -28,9 +28,11 @@ const handler = (_, svgEncoding, fileName) => {
 };
 
 const sassFunction = (args) => {
-    const hasEncoding = args.getLength() === 2;
-    const encoding = hasEncoding ? args.getValue(0).getValue() : null;
-    const url = hasEncoding ? args.getValue(1).getValue() : args.getValue(0).getValue();
+    const getTextFromSass = (sassValue) => sassValue.assertString().text;
+    const argList = args[0].asList;
+    const hasEncoding = argList.size === 2;
+    const encoding = hasEncoding ? getTextFromSass(argList.get(0)) : null;
+    const url = getTextFromSass(argList.get(hasEncoding ? 1 : 0));
 
     return new sass.SassString(handler(null, encoding, url), { quotes: false });
 };

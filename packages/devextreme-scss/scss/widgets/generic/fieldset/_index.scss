@@ -1,5 +1,6 @@
 @use "sass:math";
 @use "sass:color";
+@use "sass:selector";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
@@ -102,7 +103,7 @@ $generic-fieldset-attention-icon-offset: $generic-base-inline-horizontal-padding
     margin: $vertical-margin $horizontal-margin;
     padding: 0;
 
-    @at-root #{selector-append(".dx-rtl", &)},
+    @at-root #{selector.append(".dx-rtl", &)},
     .dx-rtl & {
       .dx-field-value {
         &:not(.dx-widget) {

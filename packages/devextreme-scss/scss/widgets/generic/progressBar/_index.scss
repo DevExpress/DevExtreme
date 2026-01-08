@@ -13,11 +13,12 @@ $generic-bar-height: 6px;
 $generic-background-width: 90%;
 $generic-progressbar-border-radius: 2px;
 $generic-progressbar-interdeterminate-state-gradient: -90deg, transparent 5%, $progressbar-range-indeterminate-color, transparent 95%;
-$generic-progress-bar-border: 1px solid $progressbar-border-color;
+$generic-progress-bar-border: 1px solid;
 
 .dx-progressbar-container {
   height: $generic-bar-height;
   border: $generic-progress-bar-border;
+  border-color: $progressbar-border-color;
   background-color: $progressbar-bg;
   border-radius: $generic-progressbar-border-radius;
 }
@@ -32,7 +33,8 @@ $generic-progress-bar-border: 1px solid $progressbar-border-color;
 
 .dx-progressbar-range {
   position: relative;
-  border: 1px solid $progressbar-range-border-color;
+  border: 1px solid;
+  border-color: $progressbar-range-border-color;
   background-color: $progressbar-range-bg;
   margin-top: -1px;
   box-sizing: content-box;
@@ -45,6 +47,7 @@ $generic-progress-bar-border: 1px solid $progressbar-border-color;
   background-color: $progressbar-bg;
   background-size: $generic-background-width 5px;
   border: $generic-progress-bar-border;
+  border-color: $progressbar-border-color;
   border-radius: $generic-progressbar-border-radius;
   animation: dx-loader 2s linear infinite;
 

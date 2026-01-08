@@ -1,5 +1,6 @@
 @use "sass:math";
 @use "sass:color";
+@use "sass:selector";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
@@ -31,11 +32,11 @@ $material-grid-base-row-border: 1px solid transparent;
 $material-grid-base-border-color: $datagrid-border-color;
 $material-grid-base-drag-header-first-shadow: 0 0 1px $datagrid-drag-header-shadow-color;
 $material-grid-base-drag-header-second-shadow: 0 1px 3px $datagrid-drag-header-second-shadow-color;
-$material-grid-base-header-cell-vertical-padding: round(math.div($material-grid-base-header-height - $material-grid-base-header-line-height, 2));
+$material-grid-base-header-cell-vertical-padding: math.round(math.div($material-grid-base-header-height - $material-grid-base-header-line-height, 2));
 
 $material-grid-base-command-select-column-width: $material-grid-base-checkbox-size + 2 * $material-grid-base-cell-horizontal-padding;
 
-$material-grid-base-cell-vertical-padding: round(math.div($material-grid-base-cell-height - $material-grid-base-cell-line-height, 2));
+$material-grid-base-cell-vertical-padding: math.round(math.div($material-grid-base-cell-height - $material-grid-base-cell-line-height, 2));
 $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $material-grid-base-cell-horizontal-padding;
 $grid-masterdetail-padding: 16px;
 $material-grid-base-group-panel-message-line-height: $material-button-text-line-height;
@@ -226,8 +227,10 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
       }
 
       // T838734
-      border-top: 1px solid $datagrid-row-alternation-bg;
-      border-bottom: 1px solid $datagrid-row-alternation-bg;
+      border-top: 1px solid;
+      border-top-color: $datagrid-row-alternation-bg;
+      border-bottom: 1px solid;
+      border-bottom-color: $datagrid-row-alternation-bg;
     }
 
     .dx-link {
@@ -236,11 +239,14 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
 
     .dx-row-lines > td {
       border-bottom: $datagrid-border;
+      border-bottom-color: $datagrid-border-color;
     }
 
     .dx-column-lines > td {
       border-left: $datagrid-border;
+      border-left-color: $datagrid-border-color;
       border-right: $datagrid-border;
+      border-right-color: $datagrid-border-color;
     }
 
     .dx-error-row {
@@ -569,7 +575,8 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
 
       .dx-popup-title {
         background-color: transparent;
-        border-bottom: 1px solid $popup-title-border-color;
+        border-bottom: 1px solid;
+        border-bottom-color: $popup-title-border-color;
 
         .dx-toolbar-label {
           font-size: $material-m-font-size;
@@ -656,6 +663,7 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
       right: 0;
       pointer-events: none;
       border-bottom: $datagrid-border;
+      border-bottom-color: $datagrid-border-color;
     }
 
     .dx-#{$widget-name}-table {
@@ -666,6 +674,7 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
       .dx-row {
         > td {
           border-bottom: $datagrid-border;
+          border-bottom-color: $datagrid-border-color;
           line-height: $material-grid-base-header-line-height;
           font-weight: $datagrid-columnchooser-font-weight;
           font-size: $material-grid-base-header-cell-font-size;
@@ -712,7 +721,8 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
       .dx-row {
         &.dx-header-row {
           > td {
-            border-right: 1px solid $material-grid-base-border-color;
+            border-right: 1px solid;
+            border-right-color: $material-grid-base-border-color;
           }
         }
       }
@@ -724,7 +734,8 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
           .dx-row {
             &.dx-header-row {
               > td {
-                border-left: 1px solid $material-grid-base-border-color;
+                border-left: 1px solid;
+                border-left-color: $material-grid-base-border-color;
 
                 &:first-child {
                   border-left: none;
@@ -833,6 +844,7 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
 
   .dx-#{$widget-name}-header-panel {
     border-bottom: $datagrid-border;
+    border-bottom-color: $datagrid-border-color;
     padding: $material-grid-base-header-panel-padding;
 
     .dx-toolbar-text-auto-hide .dx-button.dx-button-has-icon {
@@ -897,7 +909,8 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
   }
 
   .dx-#{$widget-name}-rowsview {
-    border-top: 1px solid $material-grid-base-border-color;
+    border-top: 1px solid;
+    border-top-color: $material-grid-base-border-color;
 
     .dx-#{$widget-name}-headers + &,
     &.dx-#{$widget-name}-after-headers {
@@ -915,11 +928,14 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
       &.dx-edit-row:first-child > td {
         border-top-width: 0;
         border-bottom: $datagrid-border;
+        border-bottom-color: $datagrid-border-color;
       }
 
       &.dx-edit-row > td {
         border-top: $datagrid-border;
+        border-top-color: $datagrid-border-color;
         border-bottom: $datagrid-border;
+        border-bottom-color: $datagrid-border-color;
       }
     }
 
@@ -931,7 +947,9 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
       > .dx-#{$widget-name}-group-space,
       .dx-master-detail-cell:not(.dx-row-lines) {
         border-top: $datagrid-border;
+        border-top-color: $datagrid-border-color;
         border-bottom: $datagrid-border;
+        border-bottom-color: $datagrid-border-color;
       }
     }
 
@@ -970,8 +988,10 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
 
     .dx-row-removed > td {
       background-color: $datagrid-row-removed-bg;
-      border-top: 1px solid $datagrid-cell-removed-border-color;
-      border-bottom: 1px solid $datagrid-cell-removed-border-color;
+      border-top: 1px solid;
+      border-top-color: $datagrid-cell-removed-border-color;
+      border-bottom: 1px solid;
+      border-bottom-color: $datagrid-cell-removed-border-color;
       color: $datagrid-cell-removed-text-color;
     }
 
@@ -1034,8 +1054,10 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
         &:not(.dx-row-lines) {
           & > td,
           & > tr:first-child > td {
-            border-top: 1px solid $datagrid-focused-border-color;
-            border-bottom: 1px solid $datagrid-focused-border-color;
+            border-top: 1px solid;
+            border-bottom: 1px solid;
+            border-top-color: $datagrid-focused-border-color;
+            border-bottom-color: $datagrid-focused-border-color;
           }
         }
       }
@@ -1077,8 +1099,10 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
       }
 
       &:not(.dx-row-lines) > td {
-        border-bottom: 1px solid $datagrid-selection-bg;
-        border-top: 1px solid $datagrid-selection-bg;
+        border-bottom: 1px solid;
+        border-bottom-color: $datagrid-selection-bg;
+        border-top: 1px solid;
+        border-top-color: $datagrid-selection-bg;
       }
 
       &.dx-row-lines > td {
@@ -1100,7 +1124,7 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
           padding: $material-grid-base-cell-padding;
           padding-right: $material-texteditor-invalid-badge-size;
 
-          @at-root #{selector-append(".dx-rtl", &)},
+          @at-root #{selector.append(".dx-rtl", &)},
           .dx-rtl & {
             padding-left: $material-texteditor-invalid-badge-size;
             padding-right: $material-grid-base-cell-horizontal-padding;
@@ -1114,7 +1138,7 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
           right: $material-invalid-badge-size;
           background-color: transparent;
 
-          @at-root #{selector-append(".dx-rtl", &)},
+          @at-root #{selector.append(".dx-rtl", &)},
           .dx-rtl & {
             left: $material-invalid-badge-size;
           }
@@ -1182,6 +1206,7 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
 
   .dx-#{$widget-name}-bottom-load-panel {
     border-top: $datagrid-border;
+    border-top-color: $datagrid-border-color;
     background-color: $datagrid-base-background-color;
   }
 
@@ -1191,7 +1216,9 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
 
   .dx-#{$widget-name}-total-footer {
     border-bottom: $datagrid-border;
+    border-bottom-color: $datagrid-border-color;
     border-top: $datagrid-border;
+    border-top-color: $datagrid-border-color;
 
     > .dx-#{$widget-name}-content {
       padding: 0;
@@ -1261,13 +1288,13 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
       .dx-selection.dx-row:hover {
         & > td,
         & > tr > td {
+          border-right-color: $datagrid-row-selected-border-color;
+
           &:not(.dx-focused) {
             &.dx-#{$widget-name}-group-space {
               border-left-color: $datagrid-selection-bg;
             }
           }
-
-          border-right-color: $datagrid-row-selected-border-color;
 
           &.dx-pointer-events-none {
             border-left-color: $datagrid-row-selected-border-color;
@@ -1284,7 +1311,8 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
   .dx-header-filter-menu {
     .dx-popup-content {
       padding: 12px 8px 0 8px;
-      border-bottom: 1px solid $material-grid-base-border-color;
+      border-bottom: 1px solid;
+      border-bottom-color: $material-grid-base-border-color;
     }
   }
 

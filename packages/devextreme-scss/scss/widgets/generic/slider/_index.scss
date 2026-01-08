@@ -19,21 +19,24 @@ $generic-slider-radius: 2px;
 
   .dx-state-active {
     &.dx-slider-handle {
-      border: 1px solid $slider-handle-border-color;
+      border: 1px solid;
+      border-color: $slider-handle-border-color;
       background: $slider-handle-active-bg;
     }
   }
 
   .dx-state-focused {
     &.dx-slider-handle:not(.dx-state-active) {
-      border: 1px solid $slider-handle-border-color;
+      border: 1px solid;
+      border-color: $slider-handle-border-color;
       background: $slider-handle-focused-bg;
     }
   }
 
   .dx-state-hover {
     &.dx-slider-handle:not(.dx-state-active) {
-      border: 1px solid $slider-handle-border-color;
+      border: 1px solid;
+      border-color: $slider-handle-border-color;
       background: $slider-handle-hover-bg;
     }
   }
@@ -56,7 +59,8 @@ $generic-slider-radius: 2px;
   box-sizing: content-box;
 
   &.dx-slider-range-visible {
-    border: 1px solid $slider-range-border-color;
+    border: 1px solid;
+    border-color: $slider-range-border-color;
     background: $slider-range-bg;
     border-radius: $generic-slider-radius;
   }
@@ -80,7 +84,8 @@ $generic-slider-radius: 2px;
   margin-inline-end: math.div(-$generic-slider-width, 2);
   width: $generic-slider-width;
   height: $generic-slider-height;
-  border: 1px solid $slider-handle-border-color;
+  border: 1px solid;
+  border-color: $slider-handle-border-color;
   background-color: $slider-handle-bg;
   border-radius: $slider-handle-border-radius;
   box-sizing: content-box;

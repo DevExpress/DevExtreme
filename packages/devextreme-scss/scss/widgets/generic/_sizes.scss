@@ -46,7 +46,7 @@ $generic-base-inline-horizontal-padding: null !default;
 $generic-base-inline-widget-vertical-padding:
   $generic-base-inline-widget-height -
   $generic-base-inline-block-height !default;
-$generic-base-inline-widget-top-padding: floor(math.div($generic-base-inline-widget-vertical-padding, 2)) !default;
+$generic-base-inline-widget-top-padding: math.floor(math.div($generic-base-inline-widget-vertical-padding, 2)) !default;
 $generic-base-inline-widget-bottom-padding:
   $generic-base-inline-widget-vertical-padding -
   $generic-base-inline-widget-top-padding !default;
@@ -69,7 +69,7 @@ $generic-base-inline-borderedwidget-bottom-padding:
   $generic-base-inline-widget-bottom-padding -
   $generic-base-border-width !default;
 
-$generic-treeview-search-editor-height: round($generic-base-line-height * $generic-base-font-size) + $generic-base-inline-borderedwidget-top-padding + $generic-base-inline-borderedwidget-bottom-padding + 2 * $generic-base-border-width;
+$generic-treeview-search-editor-height: math.round($generic-base-line-height * $generic-base-font-size) + $generic-base-inline-borderedwidget-top-padding + $generic-base-inline-borderedwidget-bottom-padding + 2 * $generic-base-border-width;
 
 :root {
   --dx-component-height: #{$generic-base-inline-widget-height};

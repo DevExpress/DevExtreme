@@ -8,5 +8,5 @@ $checkbox-border-color: color.change($base-text-color, $alpha: 0.54) !default;
 $checkbox-checked-color: $base-element-bg !default;
 $checkbox-indeterminate-bg: $base-accent !default;
 $checkbox-bg: $base-accent !default;
-$checkbox-hover-border-color: darken($base-accent, 12%) !default;
+$checkbox-hover-border-color: color.adjust($base-accent, $lightness: -12%, $space: hsl) !default;
 $checkbox-invalid-focused-border-color: $base-invalid-color !default;

@@ -84,7 +84,7 @@ $list-item-chevron-icon-color: $base-icon-color !default;
 
 @if $color == "carmine" {
   $list-group-color: $base-header-color !default;
-  $list-group-header-bg: darken($base-bg, 2%) !default;
+  $list-group-header-bg: color.adjust($base-bg, $lightness: -2%, $space: hsl) !default;
   $list-item-hover-bg: $base-hover-bg !default;
   $list-item-selected-bg: color.change($base-accent, $alpha: 0.48) !default; // #f05b41 => #ffb5a8
   $list-item-selected-hover-bg: color.change($base-accent, $alpha: 0.3) !default;
@@ -97,9 +97,9 @@ $list-item-chevron-icon-color: $base-icon-color !default;
   $list-item-active-bg: $base-accent !default;
   $list-holdmenu-border-color: $list-border-color !default;
   $list-holdmenu-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
-  $list-item-ghost-color: lighten($base-text-color, 38.5%) !default;
+  $list-item-ghost-color: color.adjust($base-text-color, $lightness: 38.5%, $space: hsl) !default;
   $list-item-ghost-border-color: $base-accent !default;
-  $list-group-header-border-bottom: 2px solid $list-border-color !default;
+  $list-group-header-border-bottom: 2px solid !default;
   $list-group-header-default-padding-top: 20px !default;
   $list-group-header-compact-padding-top: 10px !default;
 }
@@ -121,14 +121,14 @@ $list-item-chevron-icon-color: $base-icon-color !default;
   $list-holdmenu-shadow-color: $base-shadow-color !default;
   $list-item-ghost-color: $base-text-color !default;
   $list-item-ghost-border-color: $base-border-color !default;
-  $list-group-header-border-bottom: 1px solid $list-border-color !default;
+  $list-group-header-border-bottom: 1px solid !default;
   $list-group-header-default-padding-top: 10px !default;
   $list-group-header-compact-padding-top: 5px !default;
 }
 
 @if $color == "dark" {
   $list-group-color: $list-normal-color !default;
-  $list-group-header-bg: color.change(lighten($base-bg, 6.5%), $alpha: 0.05) !default;
+  $list-group-header-bg: color.change(color.adjust($base-bg, $lightness: 6.5%, $space: hsl), $alpha: 0.05) !default;
   $list-item-hover-bg: $base-hover-bg !default;
   $list-item-selected-bg: $base-select-bg !default;
   $list-item-selected-hover-bg: color.change(#fff, $alpha: 0.09) !default;
@@ -141,16 +141,16 @@ $list-item-chevron-icon-color: $base-icon-color !default;
   $list-item-active-bg: $base-accent !default;
   $list-holdmenu-border-color: $list-border-color !default;
   $list-holdmenu-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
-  $list-item-ghost-color: darken($base-text-color, 38.5%) !default;
+  $list-item-ghost-color: color.adjust($base-text-color, $lightness: -38.5%, $space: hsl) !default;
   $list-item-ghost-border-color: $base-accent !default;
-  $list-group-header-border-bottom: 2px solid $list-border-color !default;
+  $list-group-header-border-bottom: 2px solid !default;
   $list-group-header-default-padding-top: 20px !default;
   $list-group-header-compact-padding-top: 10px !default;
 }
 
 @if $color == "darkmoon" {
   $list-group-color: $list-normal-color !default;
-  $list-group-header-bg: color.change(darken($base-bg, 37%), $alpha: 0) !default;
+  $list-group-header-bg: color.change(color.adjust($base-bg, $lightness: -37%, $space: hsl), $alpha: 0) !default;
   $list-item-hover-bg: $base-hover-bg !default;
   $list-item-selected-bg: $base-select-bg !default;
   $list-item-selected-hover-bg: color.change(#748fbc, $alpha: 0.3) !default;
@@ -163,16 +163,16 @@ $list-item-chevron-icon-color: $base-icon-color !default;
   $list-item-active-bg: $base-accent !default;
   $list-holdmenu-border-color: $list-border-color !default;
   $list-holdmenu-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
-  $list-item-ghost-color: darken($base-text-color, 38.5%) !default;
+  $list-item-ghost-color: color.adjust($base-text-color, $lightness: -38.5%, $space: hsl) !default;
   $list-item-ghost-border-color: $base-accent !default;
-  $list-group-header-border-bottom: 2px solid $list-border-color !default;
+  $list-group-header-border-bottom: 2px solid !default;
   $list-group-header-default-padding-top: 20px !default;
   $list-group-header-compact-padding-top: 10px !default;
 }
 
 @if $color == "darkviolet" {
   $list-group-color: $base-header-color !default;
-  $list-group-header-bg: color.change(lighten($base-bg, 6.5%), $alpha: 0.05) !default;
+  $list-group-header-bg: color.change(color.adjust($base-bg, $lightness: 6.5%, $space: hsl), $alpha: 0.05) !default;
   $list-item-hover-bg: $base-hover-bg !default;
   $list-item-selected-bg: color.change($base-accent, $alpha: 0.46) !default;
   $list-item-selected-hover-bg: color.change($base-accent, $alpha: 0.6) !default;
@@ -185,16 +185,16 @@ $list-item-chevron-icon-color: $base-icon-color !default;
   $list-item-active-bg: #b88fff !default;
   $list-holdmenu-border-color: $list-border-color !default;
   $list-holdmenu-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
-  $list-item-ghost-color: darken($base-text-color, 38.5%) !default;
+  $list-item-ghost-color: color.adjust($base-text-color, $lightness: -38.5%, $space: hsl) !default;
   $list-item-ghost-border-color: $base-accent !default;
-  $list-group-header-border-bottom: 2px solid $list-border-color !default;
+  $list-group-header-border-bottom: 2px solid !default;
   $list-group-header-default-padding-top: 20px !default;
   $list-group-header-compact-padding-top: 10px !default;
 }
 
 @if $color == "greenmist" {
   $list-group-color: $base-accent !default;
-  $list-group-header-bg: color.change(darken($base-bg, 6.5%), $alpha: 0.05) !default;
+  $list-group-header-bg: color.change(color.adjust($base-bg, $lightness: -6.5%, $space: hsl), $alpha: 0.05) !default;
   $list-item-hover-bg: $base-hover-bg !default;
   $list-item-selected-bg: $base-select-bg !default;
   $list-item-selected-hover-bg: color.change(#000, $alpha: 0.2) !default;
@@ -207,16 +207,16 @@ $list-item-chevron-icon-color: $base-icon-color !default;
   $list-item-active-bg: $base-accent !default;
   $list-holdmenu-border-color: $list-border-color !default;
   $list-holdmenu-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
-  $list-item-ghost-color: lighten($base-text-color, 38.5%) !default;
+  $list-item-ghost-color: color.adjust($base-text-color, $lightness: 38.5%, $space: hsl) !default;
   $list-item-ghost-border-color: $base-accent !default;
-  $list-group-header-border-bottom: 2px solid $list-border-color !default;
+  $list-group-header-border-bottom: 2px solid !default;
   $list-group-header-default-padding-top: 20px !default;
   $list-group-header-compact-padding-top: 10px !default;
 }
 
 @if $color == "light" {
   $list-group-color: $list-normal-color !default;
-  $list-group-header-bg: color.change(darken($base-bg, 6.5%), $alpha: 0.05) !default;
+  $list-group-header-bg: color.change(color.adjust($base-bg, $lightness: -6.5%, $space: hsl), $alpha: 0.05) !default;
   $list-item-hover-bg: $base-hover-bg !default;
   $list-item-selected-bg: $base-select-bg !default;
   $list-item-selected-hover-bg: color.change(#000, $alpha: 0.07) !default;
@@ -229,16 +229,16 @@ $list-item-chevron-icon-color: $base-icon-color !default;
   $list-item-active-bg: $base-accent !default;
   $list-holdmenu-border-color: $list-border-color !default;
   $list-holdmenu-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
-  $list-item-ghost-color: lighten($base-text-color, 38.5%) !default;
+  $list-item-ghost-color: color.adjust($base-text-color, $lightness: 38.5%, $space: hsl) !default;
   $list-item-ghost-border-color: $base-accent !default;
-  $list-group-header-border-bottom: 2px solid $list-border-color !default;
+  $list-group-header-border-bottom: 2px solid !default;
   $list-group-header-default-padding-top: 20px !default;
   $list-group-header-compact-padding-top: 10px !default;
 }
 
 @if $color == "softblue" {
   $list-group-color: $base-icon-color !default;
-  $list-group-header-bg: darken($base-bg, 2%) !default; // #fff => #fafbfc
+  $list-group-header-bg: color.adjust($base-bg, $lightness: -2%, $space: hsl) !default; // #fff => #fafbfc
   $list-item-hover-bg: $base-hover-bg !default;
   $list-item-selected-bg: $base-select-bg !default;
   $list-item-selected-hover-bg: color.change(#000, $alpha: 0.15) !default;
@@ -251,9 +251,9 @@ $list-item-chevron-icon-color: $base-icon-color !default;
   $list-item-active-bg: $base-accent !default;
   $list-holdmenu-border-color: $list-border-color !default;
   $list-holdmenu-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
-  $list-item-ghost-color: lighten($base-text-color, 38.5%) !default;
+  $list-item-ghost-color: color.adjust($base-text-color, $lightness: 38.5%, $space: hsl) !default;
   $list-item-ghost-border-color: $base-accent !default;
-  $list-group-header-border-bottom: 2px solid $list-border-color !default;
+  $list-group-header-border-bottom: 2px solid !default;
   $list-group-header-default-padding-top: 20px !default;
   $list-group-header-compact-padding-top: 10px !default;
 }

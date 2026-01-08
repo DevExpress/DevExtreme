@@ -32,24 +32,31 @@ $treelist-row-error-color: $datagrid-row-error-color;
   > .dx-treelist-rowsview,
   > .dx-treelist-total-footer {
     border-left: $treelist-border;
+    border-left-color: $treelist-border-color;
     border-right: $treelist-border;
+    border-right-color: $treelist-border-color;
   }
 
   > .dx-treelist-rowsview,
   > .dx-treelist-total-footer {
     border-bottom: $treelist-border;
+    border-bottom-color: $treelist-border-color;
   }
 
   > .dx-treelist-headers,
   > .dx-treelist-filter-panel {
     border-top: $treelist-border;
+    border-top-color: $treelist-border-color;
   }
 
   > .dx-treelist-filter-panel {
     border-top-width: 0;
     border-left: $treelist-border;
+    border-left-color: $treelist-border-color;
     border-right: $treelist-border;
+    border-right-color: $treelist-border-color;
     border-bottom: $treelist-border;
+    border-bottom-color: $treelist-border-color;
   }
 }
 
@@ -102,6 +109,7 @@ $treelist-row-error-color: $datagrid-row-error-color;
 
 .dx-header-multi-row.dx-treelist-sticky-columns .dx-column-lines > td:first-child {
   border-left: $treelist-border;
+  border-left-color: $treelist-border-color;
 }
 
 .dx-treelist-container {
@@ -144,7 +152,8 @@ $treelist-row-error-color: $datagrid-row-error-color;
     &.dx-state-focused .dx-header-row {
       td:focus,
       td .dx-header-filter:focus {
-        outline: 2px solid $treelist-focused-border-color;
+        outline: 2px solid;
+        outline-color: $treelist-focused-border-color;
       }
 
       td:focus {
@@ -188,8 +197,10 @@ $treelist-row-error-color: $datagrid-row-error-color;
   .dx-datagrid-rowsview .dx-header-row,
   .dx-treelist-headers .dx-row {
     td.dx-pointer-events-none {
-      border-left: 2px solid $treelist-border-color;
-      border-right: 2px solid $treelist-border-color;
+      border-left: 2px solid;
+      border-left-color: $treelist-border-color;
+      border-right: 2px solid;
+      border-right-color: $treelist-border-color;
 
       &.dx-first-cell {
         border-left: none;
@@ -203,7 +214,8 @@ $treelist-row-error-color: $datagrid-row-error-color;
 
   .dx-treelist-rowsview.dx-state-focused .dx-data-row {
     & > td.dx-command-edit > a.dx-link:focus {
-      outline: 2px solid $datagrid-focused-border-color;
+      outline: 2px solid;
+      outline-color: $datagrid-focused-border-color;
       outline-offset: 2px;
     }
 
@@ -256,6 +268,7 @@ $treelist-row-error-color: $datagrid-row-error-color;
 .dx-treelist-filter-panel {
   color: $treelist-base-color;
   border-top: $treelist-border;
+  border-top-color: $treelist-border-color;
 
   .dx-icon-filter,
   .dx-treelist-filter-panel-text,
@@ -267,7 +280,8 @@ $treelist-row-error-color: $datagrid-row-error-color;
     .dx-icon-filter:focus,
     .dx-treelist-filter-panel-text:focus,
     .dx-treelist-filter-panel-clear-filter:focus {
-      outline: 2px solid $treelist-focused-border-color;
+      outline: 2px solid;
+      outline-color: $treelist-focused-border-color;
     }
   }
 }
@@ -307,6 +321,7 @@ $treelist-row-error-color: $datagrid-row-error-color;
       &:first-child {
         border-right: none;
         border-left: $treelist-border;
+        border-left-color: $treelist-border-color;
       }
 
       &:last-child {
@@ -318,6 +333,7 @@ $treelist-row-error-color: $datagrid-row-error-color;
       .dx-column-lines > td {
         border-left: none;
         border-right: $treelist-border;
+        border-right-color: $treelist-border-color;
 
         &:first-child {
           border-right: none;
@@ -330,7 +346,8 @@ $treelist-row-error-color: $datagrid-row-error-color;
           border-right: none;
 
           &.dx-treelist-sticky-column-border-left {
-            border-left: 2px solid $treelist-border-color;
+            border-left: 2px solid;
+            border-left-color: $treelist-border-color;
           }
         }
       }
@@ -341,6 +358,7 @@ $treelist-row-error-color: $datagrid-row-error-color;
     .dx-column-lines > td:first-child {
       border-left: none;
       border-right: $treelist-border;
+      border-right-color: $treelist-border-color;
     }
   }
 
@@ -351,8 +369,10 @@ $treelist-row-error-color: $datagrid-row-error-color;
     .dx-datagrid-rowsview .dx-header-row,
     .dx-treelist-headers .dx-row {
       td.dx-pointer-events-none {
-        border-left: 2px solid $treelist-border-color;
-        border-right: 2px solid $treelist-border-color;
+        border-left: 2px solid;
+        border-left-color: $treelist-border-color;
+        border-right: 2px solid;
+        border-right-color: $treelist-border-color;
 
         &.dx-first-cell {
           border-right: none;
@@ -389,11 +409,13 @@ $treelist-row-error-color: $datagrid-row-error-color;
 
 .dx-treelist .dx-treelist-sticky-columns .dx-treelist-table .dx-row {
   td.dx-treelist-sticky-column-border-right {
-    border-right: 2px solid $treelist-border-color;
+    border-right: 2px solid;
+    border-right-color: $treelist-border-color;
   }
 
   td.dx-treelist-sticky-column-border-left {
-    border-left: 2px solid $treelist-border-color;
+    border-left: 2px solid;
+    border-left-color: $treelist-border-color;
   }
 }
 
@@ -412,5 +434,6 @@ $treelist-row-error-color: $datagrid-row-error-color;
 }
 
 .dx-command-ai-header-button .dx-button.dx-state-focused {
-  outline: 2px solid $treelist-focused-border-color;
+  outline: 2px solid;
+  outline-color: $treelist-focused-border-color;
 }

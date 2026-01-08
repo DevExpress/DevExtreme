@@ -9,57 +9,57 @@ $informer-info-color: null !default;
 $informer-info-background-color: null !default;
 
 @if $color == "carmine" {
-  $informer-error-color: darken(desaturate(adjust-hue($base-danger, -351), 26.91), 5.49);
-  $informer-error-background-color: lighten(desaturate(adjust-hue($base-danger, -347), 26.69), 33.14);
+  $informer-error-color: color.adjust($base-danger, $hue: -351deg, $saturation: -26.91%, $space: hsl, $lightness: -5.49%);
+  $informer-error-background-color: color.adjust($base-danger, $hue: -347deg, $saturation: -26.69%, $space: hsl, $lightness: 33.14%);
   $informer-info-color: $base-text-color;
-  $informer-info-background-color: lighten($base-text-color, 72.16);
+  $informer-info-background-color: color.adjust($base-text-color, $lightness: 72.16%, $space: hsl);
 }
 
 @if $color == "contrast" {
-  $informer-error-color: darken(desaturate(adjust-hue($base-danger, 2), 16.93), 6.08);
+  $informer-error-color: color.adjust($base-danger, $hue: 2deg, $saturation: -16.93%, $space: hsl, $lightness: -6.08%);
   $informer-error-background-color: rgba(212, 63, 58, 0.1);
-  $informer-info-color: darken($base-text-color, 12.94);
-  $informer-info-background-color: darken($base-text-color, 68.63);;
+  $informer-info-color: color.adjust($base-text-color, $lightness: -12.94%, $space: hsl);
+  $informer-info-background-color: color.adjust($base-text-color, $lightness: -68.63%, $space: hsl);;
 }
 
 @if $color == "dark" {
   $informer-error-color: $base-danger;
   $informer-error-background-color: rgba(212, 63, 58, 0.1);
   $informer-info-color: $base-text-color;
-  $informer-info-background-color: darken($base-text-color, 55.69)
+  $informer-info-background-color: color.adjust($base-text-color, $lightness: -55.69%, $space: hsl)
 }
 
 @if $color == "darkmoon" {
-  $informer-error-color: darken(desaturate(adjust-hue($base-danger, -342), 28.85), 6.67);
+  $informer-error-color: color.adjust($base-danger, $hue: -342deg, $saturation: -28.85%, $space: hsl, $lightness: -6.67%);
   $informer-error-background-color: rgba(212, 63, 58, 0.1);
-  $informer-info-color: darken($base-text-color, 12.94);
-  $informer-info-background-color: darken($base-text-color, 68.63);
+  $informer-info-color: color.adjust($base-text-color, $lightness: -12.94%, $space: hsl);
+  $informer-info-background-color: color.adjust($base-text-color, $lightness: -68.63%, $space: hsl);
 }
 
 @if $color == "darkviolet" {
   $informer-error-color: $base-danger;
   $informer-error-background-color: rgba(212, 63, 58, 0.1);
-  $informer-info-color: darken(desaturate(adjust-hue($base-text-color, -210), 11.11), 9.41);
-  $informer-info-background-color: darken(desaturate(adjust-hue($base-text-color, -210), 11.11), 65.10);
+  $informer-info-color: color.adjust($base-text-color, $hue: -210deg, $saturation: -11.11%, $space: hsl, $lightness: -9.41%);
+  $informer-info-background-color: color.adjust($base-text-color, $hue: -210deg, $saturation: -11.11%, $space: hsl, $lightness: -65.10%);
 }
 
 @if $color == "greenmist" {
-  $informer-error-color: darken(desaturate(adjust-hue($base-danger, -351), 27.05), 4.90);
-  $informer-error-background-color: lighten(desaturate(adjust-hue($base-danger, -348), 26.83), 33.73);
-  $informer-info-color: darken(desaturate(adjust-hue($base-text-color, -191), 32.77), 3.33);
-  $informer-info-background-color: lighten(desaturate(adjust-hue($base-text-color, -191), 32.77), 68.82)
+  $informer-error-color: color.adjust($base-danger, $hue: -351deg, $saturation: -27.05%, $space: hsl, $lightness: -4.90%);
+  $informer-error-background-color: color.adjust($base-danger, $hue: -348deg, $saturation: -26.83%, $space: hsl, $lightness: 33.73%);
+  $informer-info-color: color.adjust($base-text-color, $hue: -191deg, $saturation: -32.77%, $space: hsl, $lightness: -3.33%);
+  $informer-info-background-color: color.adjust($base-text-color, $hue: -191deg, $saturation: -32.77%, $space: hsl, $lightness: 68.82%)
 }
 
 @if $color == "light" {
   $informer-error-color: $base-danger;
-  $informer-error-background-color: lighten(saturate(adjust-hue($base-danger, 4), 0.22), 38.63);
+  $informer-error-background-color: color.adjust($base-danger, $hue: 4deg, $saturation: 0.22%, $space: hsl, $lightness: 38.63%);
   $informer-info-color: $base-text-color;
-  $informer-info-background-color: lighten($base-text-color, 72.16);
+  $informer-info-background-color: color.adjust($base-text-color, $lightness: 72.16%, $space: hsl);
 }
 
 @if $color == "softblue" {
   $informer-error-color: $base-danger;
-  $informer-error-background-color: lighten(saturate(adjust-hue($base-danger, 4), 0.22), 38.63);
+  $informer-error-background-color: color.adjust($base-danger, $hue: 4deg, $saturation: 0.22%, $space: hsl, $lightness: 38.63%);
   $informer-info-color: $base-text-color;
-  $informer-info-background-color: lighten($base-text-color, 72.16);
+  $informer-info-background-color: color.adjust($base-text-color, $lightness: 72.16%, $space: hsl);
 }

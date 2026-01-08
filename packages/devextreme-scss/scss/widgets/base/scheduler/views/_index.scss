@@ -49,6 +49,7 @@ $scheduler-month-date-text-padding: 6px;
 
 @use "./day" with (
   $scheduler-base-border: $scheduler-base-border,
+  $scheduler-base-border-color: $scheduler-base-border-color,
 );
 @use "./month" with (
   $scheduler-base-border: $scheduler-base-border,
@@ -64,6 +65,7 @@ $scheduler-month-date-text-padding: 6px;
   $scheduler-workspace-date-table-cell-height: $scheduler-workspace-date-table-cell-height,
   $scheduler-accent-border: $scheduler-accent-border,
   $scheduler-base-border: $scheduler-base-border,
+  $scheduler-base-border-color: $scheduler-base-border-color,
   $scheduler-accent-border-color: $scheduler-accent-border-color,
 );
 @use "./agenda" with (
@@ -139,6 +141,7 @@ $scheduler-month-date-text-padding: 6px;
   &.dx-scheduler-work-space-odd-cells {
     .dx-scheduler-date-table-row:nth-child(odd) .dx-scheduler-date-table-cell {
       border-top: $scheduler-accent-border;
+      border-top-color: $scheduler-accent-border-color;
     }
 
     .dx-scheduler-date-table-row:first-child .dx-scheduler-date-table-cell {
@@ -155,6 +158,7 @@ $scheduler-month-date-text-padding: 6px;
 
 .dx-scheduler-work-space {
   border: $scheduler-base-border;
+  border-color: $scheduler-base-border-color;
   background-color: $scheduler-workspace-background-color;
   position: relative;
   display: flex;
@@ -169,6 +173,7 @@ $scheduler-month-date-text-padding: 6px;
   &.dx-scheduler-timeline-month:not(.dx-scheduler-agenda) {
     .dx-scheduler-all-day-title {
       border-top: $scheduler-base-border;
+      border-top-color: $scheduler-base-border-color;
     }
 
     .dx-scheduler-date-table-cell {
@@ -179,16 +184,19 @@ $scheduler-month-date-text-padding: 6px;
   &.dx-scheduler-work-space-grouped:not(.dx-scheduler-agenda) {
     .dx-scheduler-all-day-panel td {
       border-top: $scheduler-base-border;
+      border-top-color: $scheduler-base-border-color;
     }
   }
 
   &:not(.dx-scheduler-work-space-all-day):not(.dx-scheduler-work-space-month):not(.dx-scheduler-timeline) {
     .dx-scheduler-header-panel {
-      border-bottom: 2px solid $scheduler-base-border-color;
+      border-bottom: 2px solid;
+      border-bottom-color: $scheduler-base-border-color;
     }
 
     .dx-scheduler-header-panel-empty-cell {
-      border-bottom: 2px solid $scheduler-base-border-color;
+      border-bottom: 2px solid;
+      border-bottom-color: $scheduler-base-border-color;
     }
 
     &.dx-scheduler-work-space-vertical-grouped.dx-scheduler-work-space-both-scrollbar {
@@ -205,6 +213,7 @@ $scheduler-month-date-text-padding: 6px;
   &.dx-scheduler-work-space-month:not(.dx-scheduler-work-space-vertical-grouped) {
     .dx-scheduler-header-panel {
       border-bottom: $scheduler-base-border;
+      border-bottom-color: $scheduler-base-border-color;
     }
   }
 }
@@ -221,8 +230,10 @@ $scheduler-month-date-text-padding: 6px;
   align-items: flex-end;
   flex-shrink: 0;
   width: 0;
-  border-bottom: 1px solid $scheduler-base-border-color;
-  border-right: 1px solid $scheduler-base-border-color;
+  border-bottom: 1px solid;
+  border-bottom-color: $scheduler-base-border-color;
+  border-right: 1px solid;
+  border-right-color: $scheduler-base-border-color;
 }
 
 .dx-scheduler-header-tables-container {
@@ -260,6 +271,7 @@ $scheduler-month-date-text-padding: 6px;
 
 .dx-scheduler-date-table-cell {
   border-top: $scheduler-base-border;
+  border-top-color: $scheduler-base-border-color;
   height: $scheduler-workspace-date-table-cell-height;
 }
 
@@ -300,6 +312,7 @@ $scheduler-month-date-text-padding: 6px;
 
     &:last-child .dx-scheduler-group-header {
       border-right: $scheduler-base-border;
+      border-right-color: $scheduler-base-border-color;
     }
 
     .dx-scheduler-group-header {
@@ -316,6 +329,7 @@ $scheduler-month-date-text-padding: 6px;
       text-overflow: ellipsis;
       border: none;
       border-top: $scheduler-base-border;
+      border-top-color: $scheduler-base-border-color;
     }
   }
 }
@@ -335,7 +349,9 @@ $scheduler-month-date-text-padding: 6px;
 .dx-scheduler-date-table-cell,
 .dx-scheduler-all-day-table-cell {
   border-top: $scheduler-base-border;
+  border-top-color: $scheduler-base-border-color;
   border-left: $scheduler-base-border;
+  border-left-color: $scheduler-base-border-color;
 
   &:first-child {
     border-left: none;
@@ -345,6 +361,7 @@ $scheduler-month-date-text-padding: 6px;
 .dx-scheduler-date-table-cell,
 .dx-scheduler-header-panel-cell {
   border-right: $scheduler-base-border;
+  border-right-color: $scheduler-base-border-color;
 }
 
 .dx-scheduler-work-space-week,
@@ -352,6 +369,7 @@ $scheduler-month-date-text-padding: 6px;
 .dx-scheduler-work-space-day.dx-scheduler-work-space-count {
   .dx-scheduler-all-day-title {
     border-top: $scheduler-base-border;
+    border-top-color: $scheduler-base-border-color;
   }
 }
 
@@ -404,9 +422,11 @@ $scheduler-month-date-text-padding: 6px;
     .dx-scheduler-all-day-table-cell {
       &:nth-child(7n) {
         border-right: $scheduler-accent-border;
+        border-right-color: $scheduler-accent-border-color;
 
         .dx-rtl & {
           border-left: $scheduler-accent-border;
+          border-left-color: $scheduler-accent-border-color;
         }
       }
     }
@@ -418,10 +438,13 @@ $scheduler-month-date-text-padding: 6px;
     .dx-scheduler-all-day-table-cell {
       &:nth-child(5n) {
         border-right: $scheduler-accent-border;
+        border-right-color: $scheduler-accent-border-color;
 
         .dx-rtl & {
           border-right: $scheduler-base-border;
+          border-right-color: $scheduler-base-border-color;
           border-left: $scheduler-accent-border;
+          border-left-color: $scheduler-accent-border-color;
         }
       }
     }
@@ -472,6 +495,7 @@ $scheduler-month-date-text-padding: 6px;
   text-align: center;
   font-weight: normal;
   border-left: $scheduler-base-border;
+  border-left-color: $scheduler-base-border-color;
 
   &:first-child {
     border-left: 1px solid transparent;
@@ -485,7 +509,8 @@ $scheduler-month-date-text-padding: 6px;
   position: relative;
 
   .dx-scheduler-all-day-table-cell {
-    border-bottom: 2px solid $scheduler-base-border-color;
+    border-bottom: 2px solid;
+    border-bottom-color: $scheduler-base-border-color;
   }
 }
 
@@ -498,7 +523,8 @@ $scheduler-month-date-text-padding: 6px;
   height: $scheduler-all-day-table-cell-height;
   position: relative;
   text-align: center;
-  border-bottom: 2px solid $scheduler-base-border-color;
+  border-bottom: 2px solid;
+  border-bottom-color: $scheduler-base-border-color;
 
   @include user-select(none);
 
@@ -540,6 +566,7 @@ $scheduler-month-date-text-padding: 6px;
   border-collapse: collapse;
   font-size: $scheduler-workspace-info-font-size;
   border-right: $scheduler-base-border;
+  border-right-color: $scheduler-base-border-color;
 
   .dx-scheduler-small & {
     width: $scheduler-left-column-width * $scheduler-small-size-factor;
@@ -700,6 +727,7 @@ $scheduler-month-date-text-padding: 6px;
     height: 100%;
     min-height: 100px;
     border-top: $scheduler-base-border;
+    border-top-color: $scheduler-base-border-color;
     border-spacing: 0;
 
     @include flex-container(column, nowrap);
@@ -727,6 +755,7 @@ $scheduler-month-date-text-padding: 6px;
   .dx-scheduler-time-panel-cell {
     &.dx-scheduler-first-group-cell {
       border-top: $scheduler-base-border;
+      border-top-color: $scheduler-base-border-color;
 
       > div {
         margin-top: 0;
@@ -741,7 +770,8 @@ $scheduler-month-date-text-padding: 6px;
 
   .dx-scheduler-date-table-cell {
     &.dx-scheduler-last-group-cell {
-      border-bottom: 2px solid $scheduler-base-border-color;
+      border-bottom: 2px solid;
+      border-bottom-color: $scheduler-base-border-color;
     }
   }
 
@@ -749,13 +779,15 @@ $scheduler-month-date-text-padding: 6px;
     .dx-scheduler-sidebar-scrollable,
     .dx-scheduler-date-table-scrollable {
       border-top: $scheduler-base-border;
+      border-top-color: $scheduler-base-border-color;
     }
   }
 }
 
 .dx-rtl {
   .dx-scheduler-header-panel-empty-cell {
-    border-left: 1px solid $scheduler-base-border-color;
+    border-left: 1px solid;
+    border-left-color: $scheduler-base-border-color;
     border-right: none;
   }
 
@@ -769,6 +801,7 @@ $scheduler-month-date-text-padding: 6px;
     .dx-scheduler-group-row:last-child .dx-scheduler-group-header {
       border-right: none;
       border-left: $scheduler-base-border;
+      border-left-color: $scheduler-base-border-color;
     }
   }
 
@@ -800,12 +833,14 @@ $scheduler-month-date-text-padding: 6px;
   .dx-scheduler-work-space-week .dx-scheduler-all-day-table-cell,
   .dx-scheduler-work-space-work-week .dx-scheduler-all-day-table-cell {
     border-right: $scheduler-base-border;
+    border-right-color: $scheduler-base-border-color;
     border-left: none;
   }
 
   &.dx-scheduler-work-space-both-scrollbar {
     .dx-scheduler-time-panel {
       border-left: $scheduler-base-border;
+      border-left-color: $scheduler-base-border-color;
       border-right: none;
     }
 
@@ -815,6 +850,7 @@ $scheduler-month-date-text-padding: 6px;
       &:first-child {
         border-right: none;
         border-left: $scheduler-base-border;
+        border-left-color: $scheduler-base-border-color;
       }
     }
   }
@@ -844,11 +880,13 @@ $scheduler-month-date-text-padding: 6px;
     &:first-child {
       border-right: none;
       border-left: $scheduler-base-border;
+      border-left-color: $scheduler-base-border-color;
     }
   }
 
   .dx-scheduler-time-panel {
     border-left: $scheduler-base-border;
+    border-left-color: $scheduler-base-border-color;
     border-right: none;
   }
 }

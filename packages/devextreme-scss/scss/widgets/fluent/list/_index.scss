@@ -18,8 +18,8 @@
 
 $fluent-list-item-border-width: 1px;
 $fluent-list-border-width: 1px;
-$fluent-list-border: $fluent-list-border-width solid $list-border-color;
-$fluent-list-item-border: $fluent-list-item-border-width solid $list-border-color;
+$fluent-list-border: $fluent-list-border-width solid;
+$fluent-list-item-border: $fluent-list-item-border-width solid;
 
 .dx-state-disabled {
   &.dx-list {
@@ -246,6 +246,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
       &:not(:last-child) {
         padding-bottom: $fluent-list-vertical-padding;
         border-bottom: $fluent-list-item-border;
+        border-bottom-color: $list-border-color;
       }
     }
 
@@ -365,7 +366,8 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
         &.dx-state-hover {
           color: $list-item-ghost-color;
           background: $list-item-ghost-bg;
-          border: 1px solid $list-item-ghost-border-color;
+          border: 1px solid;
+          border-color: $list-item-ghost-border-color;
         }
       }
     }
@@ -400,6 +402,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
 
   .dx-list-border-visible {
     border: $fluent-list-border;
+    border-color: $list-border-color;
   }
 
   .dx-list-item-before-bag {
@@ -506,7 +509,8 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
 
   .dx-list-context-menucontent {
     background-color: $list-holdmenu-bg;
-    border: 1px solid $list-holdmenu-border-color;
+    border: 1px solid;
+    border-color: $list-holdmenu-border-color;
     border-radius: $base-border-radius;
     box-shadow: $list-holdmenu-shadow-color 0 2px 7.2px 0;
 

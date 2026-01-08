@@ -98,7 +98,8 @@ $sortable-side-offset: 6px;
 }
 
 .dx-cardview-header-item-sort-indicator {
-  border: $cardview-header-item__sort-indicator__border-size solid $cardview-header-item__sort-indicator__border-color;
+  border: $cardview-header-item__sort-indicator__border-size solid;
+  border-color: $cardview-header-item__sort-indicator__border-color;
   border-radius: $cardview-header-item__sort-indicator__border-radius;
 }
 

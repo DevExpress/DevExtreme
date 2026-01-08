@@ -36,7 +36,7 @@ $popup-border-radius: $overlay-content-border-radius !default;
 }
 
 @if $color == "greenmist" {
-  $popup-title-bg: color.change(darken($base-bg, 9%), $alpha: 0.4) !default;
+  $popup-title-bg: color.change(color.adjust($base-bg, $lightness: -9%, $space: hsl), $alpha: 0.4) !default;
 }
 
 @if $color == "light" {

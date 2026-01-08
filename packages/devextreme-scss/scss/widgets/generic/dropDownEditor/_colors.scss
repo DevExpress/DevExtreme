@@ -44,9 +44,9 @@ $dropdowneditor-icon-active-color: null !default;
 $dropdowneditor-icon-border-radius: $base-border-radius - 1px !default;
 
 @if $color == "carmine" {
-  $dropdowneditor-button-hover-bg: darken($base-bg, 4%) !default; // #fff => #f5f6f7
+  $dropdowneditor-button-hover-bg: color.adjust($base-bg, $lightness: -4%, $space: hsl) !default; // #fff => #f5f6f7
   $dropdowneditor-button-hover-border-color: transparent !default;
-  $dropdowneditor-button-active-bg: darken($button-normal-bg, 30%) !default;
+  $dropdowneditor-button-active-bg: color.adjust($button-normal-bg, $lightness: -30%, $space: hsl) !default;
   $dropdowneditor-icon-active-color: $base-icon-color !default;
 }
 
@@ -58,44 +58,44 @@ $dropdowneditor-icon-border-radius: $base-border-radius - 1px !default;
 }
 
 @if $color == "dark" {
-  $dropdowneditor-button-hover-bg: darken($button-normal-bg, 10%) !default;
+  $dropdowneditor-button-hover-bg: color.adjust($button-normal-bg, $lightness: -10%, $space: hsl) !default;
   $dropdowneditor-button-hover-border-color: transparent !default;
-  $dropdowneditor-button-active-bg: darken($button-normal-bg, 30%) !default;
+  $dropdowneditor-button-active-bg: color.adjust($button-normal-bg, $lightness: -30%, $space: hsl) !default;
   $dropdowneditor-icon-active-color: $base-icon-color !default;
 }
 
 @if $color == "darkmoon" {
-  $dropdowneditor-button-hover-bg: darken($button-normal-bg, 10%) !default;
+  $dropdowneditor-button-hover-bg: color.adjust($button-normal-bg, $lightness: -10%, $space: hsl) !default;
   $dropdowneditor-button-hover-border-color: transparent !default;
-  $dropdowneditor-button-active-bg: darken($button-normal-bg, 30%) !default;
+  $dropdowneditor-button-active-bg: color.adjust($button-normal-bg, $lightness: -30%, $space: hsl) !default;
   $dropdowneditor-icon-active-color: $base-icon-color !default;
 }
 
 @if $color == "darkviolet" {
-  $dropdowneditor-button-hover-bg: darken($button-normal-bg, 10%) !default;
+  $dropdowneditor-button-hover-bg: color.adjust($button-normal-bg, $lightness: -10%, $space: hsl) !default;
   $dropdowneditor-button-hover-border-color: transparent !default;
-  $dropdowneditor-button-active-bg: darken($button-normal-bg, 30%) !default;
+  $dropdowneditor-button-active-bg: color.adjust($button-normal-bg, $lightness: -30%, $space: hsl) !default;
   $dropdowneditor-icon-active-color: $base-icon-color !default;
 }
 
 @if $color == "greenmist" {
-  $dropdowneditor-button-hover-bg: darken($button-normal-bg, 10%) !default;
+  $dropdowneditor-button-hover-bg: color.adjust($button-normal-bg, $lightness: -10%, $space: hsl) !default;
   $dropdowneditor-button-hover-border-color: transparent !default;
-  $dropdowneditor-button-active-bg: darken($button-normal-bg, 30%) !default;
+  $dropdowneditor-button-active-bg: color.adjust($button-normal-bg, $lightness: -30%, $space: hsl) !default;
   $dropdowneditor-icon-active-color: $base-icon-color !default;
 }
 
 @if $color == "light" {
-  $dropdowneditor-button-hover-bg: darken($button-normal-bg, 10%) !default;
+  $dropdowneditor-button-hover-bg: color.adjust($button-normal-bg, $lightness: -10%, $space: hsl) !default;
   $dropdowneditor-button-hover-border-color: transparent !default;
-  $dropdowneditor-button-active-bg: darken($button-normal-bg, 30%) !default;
+  $dropdowneditor-button-active-bg: color.adjust($button-normal-bg, $lightness: -30%, $space: hsl) !default;
   $dropdowneditor-icon-active-color: $base-icon-color !default;
 }
 
 @if $color == "softblue" {
-  $dropdowneditor-button-hover-bg: darken($button-normal-bg, 10%) !default;
+  $dropdowneditor-button-hover-bg: color.adjust($button-normal-bg, $lightness: -10%, $space: hsl) !default;
   $dropdowneditor-button-hover-border-color: transparent !default;
-  $dropdowneditor-button-active-bg: darken($button-normal-bg, 30%) !default;
+  $dropdowneditor-button-active-bg: color.adjust($button-normal-bg, $lightness: -30%, $space: hsl) !default;
   $dropdowneditor-icon-active-color: $base-icon-color !default;
 }
 

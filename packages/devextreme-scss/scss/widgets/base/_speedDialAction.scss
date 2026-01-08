@@ -1,4 +1,5 @@
 @use "sass:math";
+@use "sass:color";
 
 .dx-fa-button .dx-overlay-content {
   border-radius: 50%;
@@ -38,7 +39,7 @@
         box-shadow: $speed-dial-action-shadow;
 
         &.dx-state-hover {
-          background-color: darken($button-default-bg, 10%);
+          background-color: color.adjust($button-default-bg, $lightness: -10%, $space: hsl);
 
           .dx-fa-button-icon {
             background-color: transparent;
@@ -46,7 +47,7 @@
         }
 
         &.dx-state-active {
-          background-color: darken($button-default-bg, 15%);
+          background-color: color.adjust($button-default-bg, $lightness: -15%, $space: hsl);
 
           .dx-fa-button-icon {
             background-color: transparent;

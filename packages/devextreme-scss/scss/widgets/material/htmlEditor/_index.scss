@@ -27,7 +27,8 @@
     position: relative;
 
     &:first-child {
-      border-bottom: 1px solid $texteditor-border-color;
+      border-bottom: 1px solid;
+      border-bottom-color: $texteditor-border-color;
     }
   }
 
@@ -50,7 +51,8 @@
   }
 
   &.dx-invalid {
-    border: 1px solid $htmleditor-invalid-faded-border-color;
+    border: 1px solid;
+    border-color: $htmleditor-invalid-faded-border-color;
 
     &.dx-state-focused {
       border-color: $htmleditor-invalid-border-color;
@@ -107,7 +109,8 @@
       background-color: $texteditor-hover-bg;
 
       &:not(.dx-invalid) {
-        border-bottom: 1px solid $texteditor-hover-border-color;
+        border-bottom: 1px solid;
+        border-bottom-color: $texteditor-hover-border-color;
       }
     }
 
@@ -127,7 +130,8 @@
     }
 
     &.dx-state-hover:not(.dx-state-focused) {
-      border-bottom: 2px solid $texteditor-hover-border-color;
+      border-bottom: 2px solid;
+      border-bottom-color: $texteditor-hover-border-color;
     }
 
     &.dx-state-disabled,
@@ -169,7 +173,8 @@
     &.dx-state-focused,
     &.dx-state-active {
       &::before {
-        border-bottom: 2px solid $texteditor-focused-border-color;
+        border-bottom: 2px solid;
+        border-bottom-color: $texteditor-focused-border-color;
         transform: scale(1);
         transition: transform 0.6s cubic-bezier(0.4, 0, 0.02, 1);
       }
@@ -303,7 +308,8 @@
 
   .dx-fileuploader-input-wrapper {
     padding: $material-html-editor-add-image-dialog-fileuploader-padding;
-    border: 3px dashed $base-border-color;
+    border: 3px dashed;
+    border-color: $base-border-color;
 
     .dx-fileuploader-input-label {
       border-width: 0;

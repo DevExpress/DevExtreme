@@ -94,9 +94,9 @@ $texteditor-label-transition:
 @if $mode == "light" {
   @if $color == "blue" {
     $texteditor-color: $base-text-color !default;
-    $texteditor-placeholder-color: lighten($base-text-color, 29.80) !default;
+    $texteditor-placeholder-color: color.adjust($base-text-color, $lightness: 29.80%, $space: hsl) !default;
     $texteditor-outlined-bg: $base-element-bg !default;
-    $texteditor-filled-bg: darken($base-element-bg, 3.9) !default;
+    $texteditor-filled-bg: color.adjust($base-element-bg, $lightness: -3.9%, $space: hsl) !default;
   }
 
   @if $color == "saas" {
@@ -106,17 +106,17 @@ $texteditor-label-transition:
     $texteditor-filled-bg: rgba(243, 245, 248, 1) !default;
   }
 
-  $texteditor-border-color-hover: darken($texteditor-border-color, 9.8) !default;
-  $texteditor-border-color-focused: darken($texteditor-border-color, 17.65) !default;
-  $texteditor-border-bottom-color-hover: darken($texteditor-border-bottom-color, 3.92) !default;
-  $texteditor-border-bottom-color-focused: darken($texteditor-border-bottom-color-hover, 3.92) !default;
+  $texteditor-border-color-hover: color.adjust($texteditor-border-color, $lightness: -9.8%, $space: hsl) !default;
+  $texteditor-border-color-focused: color.adjust($texteditor-border-color, $lightness: -17.65%, $space: hsl) !default;
+  $texteditor-border-bottom-color-hover: color.adjust($texteditor-border-bottom-color, $lightness: -3.92%, $space: hsl) !default;
+  $texteditor-border-bottom-color-focused: color.adjust($texteditor-border-bottom-color-hover, $lightness: -3.92%, $space: hsl) !default;
 }
 
 
 @if $mode == "dark" {
   @if $color == "blue" {
     $texteditor-outlined-bg: $base-element-bg !default;
-    $texteditor-filled-bg: darken($base-element-bg, 8.2) !default;
+    $texteditor-filled-bg: color.adjust($base-element-bg, $lightness: -8.2%, $space: hsl) !default;
   }
 
   @if $color == "saas" {
@@ -125,11 +125,11 @@ $texteditor-label-transition:
   }
 
   $texteditor-color: $base-text-color !default;
-  $texteditor-placeholder-color: darken($base-text-color, 40.00) !default;
-  $texteditor-border-color-hover: lighten($texteditor-border-color, 7.84) !default;
-  $texteditor-border-color-focused: lighten($texteditor-border-color, 3.92) !default;
-  $texteditor-border-bottom-color-hover: lighten($texteditor-border-bottom-color, 6.27) !default;
-  $texteditor-border-bottom-color-focused: lighten($texteditor-border-bottom-color-hover, 3.92) !default;
+  $texteditor-placeholder-color: color.adjust($base-text-color, $lightness: -40.00%, $space: hsl) !default;
+  $texteditor-border-color-hover: color.adjust($texteditor-border-color, $lightness: 7.84%, $space: hsl) !default;
+  $texteditor-border-color-focused: color.adjust($texteditor-border-color, $lightness: 3.92%, $space: hsl) !default;
+  $texteditor-border-bottom-color-hover: color.adjust($texteditor-border-bottom-color, $lightness: 6.27%, $space: hsl) !default;
+  $texteditor-border-bottom-color-focused: color.adjust($texteditor-border-bottom-color-hover, $lightness: 3.92%, $space: hsl) !default;
 }
 
 /**

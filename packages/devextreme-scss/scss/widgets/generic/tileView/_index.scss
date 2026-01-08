@@ -11,7 +11,8 @@
 .dx-tile {
   color: $tileview-color;
   background-color: $tileview-bg;
-  border: 1px solid $tileview-border-color;
+  border: 1px solid;
+  border-color: $tileview-border-color;
   text-align: left;
 
   &.dx-state-focused,

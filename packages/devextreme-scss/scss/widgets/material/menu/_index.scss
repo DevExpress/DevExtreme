@@ -83,7 +83,8 @@ $material-menu-font-size: $material-base-font-size;
   background-color: $menu-popup-bg;
 
   .dx-treeview {
-    border: 1px solid $menu-popup-border-color;
+    border: 1px solid;
+    border-color: $menu-popup-border-color;
     border-radius: $base-border-radius;
 
     &,
@@ -109,6 +110,7 @@ $material-menu-font-size: $material-base-font-size;
   }
 
   .dx-treeview-node-container:first-child > .dx-treeview-node {
-    border-bottom: 1px solid $menu-popup-border-color;
+    border-bottom: 1px solid;
+    border-bottom-color: $menu-popup-border-color
   }
 }

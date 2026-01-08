@@ -58,11 +58,11 @@ $list-icon-color: $base-icon-color !default;
 $base-select-all-separator-color: $base-separator-color !default;
 
 @if $mode == "light" {
-  $list-normal-color: lighten($base-text-color, 11.76) !default;
+  $list-normal-color: color.adjust($base-text-color, $lightness: 11.76%, $space: hsl) !default;
 }
 
 @if $mode == "dark" {
-  $list-normal-color: darken($base-text-color, 16.08) !default;
+  $list-normal-color: color.adjust($base-text-color, $lightness: -16.08%, $space: hsl) !default;
 }
 
 /**

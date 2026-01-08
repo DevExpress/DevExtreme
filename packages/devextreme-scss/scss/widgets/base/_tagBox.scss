@@ -1,4 +1,5 @@
 @use "./mixins" as *;
+@use "sass:selector";
 
 // adduse
 
@@ -57,7 +58,7 @@
     }
   }
 
-  @at-root #{selector-append(".dx-texteditor-container", &)} {
+  @at-root #{selector.append(".dx-texteditor-container", &)} {
     white-space: normal;
   }
 }

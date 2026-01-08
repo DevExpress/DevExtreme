@@ -62,7 +62,13 @@ $(() => {
     nodes: {
       dataSource: store,
       keyExpr: 'ID',
-      typeExpr() { return 'employee'; },
+      typeExpr(obj, value) {
+        if (value === undefined) {
+          return 'employee';
+        }
+        obj.type = value;
+        return null;
+      },
       parentKeyExpr: 'Head_ID',
       customDataExpr(obj, value) {
         if (value === undefined) {
