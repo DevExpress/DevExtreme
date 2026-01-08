@@ -1579,13 +1579,24 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       startIndex = totalCellCount;
     }
 
+    let foundElements = 0;
     for (let i = startIndex; i < totalCellCount + cellCount; i++) {
       const element = $($cells).eq(i).get(0);
       const elementWidth = element ? getBoundingRect(element).width : 0;
       width += elementWidth;
+      if (element) {
+        foundElements++;
+      }
     }
 
-    return width / (totalCellCount + cellCount - startIndex);
+    const divisor = totalCellCount + cellCount - startIndex;
+    let result = width / divisor;
+
+    if (result === 0 && groupIndex > 0 && foundElements === 0) {
+      result = this.getRoundedCellWidth(0, 0, cellCount);
+    }
+
+    return result;
   }
 
   // Mappings
