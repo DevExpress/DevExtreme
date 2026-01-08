@@ -71,11 +71,13 @@ const fileExtensions = {
   'Text Document': '.txt',
   'RTF Document': '.rtf',
   Spreadsheet: '.xls',
-};
+} as const;
+
+type FileExtensionName = keyof typeof fileExtensions;
 
 const categories = ['Work', 'Important', 'Home', 'None'];
 
-export function getItemInfo(name: string) {
+export function getItemInfo(name: FileExtensionName) {
   const extension = fileExtensions[name];
   const category = extension ?? categories.find((cat) => cat === name);
 

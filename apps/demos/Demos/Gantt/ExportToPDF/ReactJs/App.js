@@ -245,7 +245,7 @@ class App extends React.Component {
         endDate: this.state.endDate,
       };
     } else {
-      dataRange = dataRangeMode;
+      dataRange = { mode: dataRangeMode };
     }
     pdfExporter
       .exportGantt({

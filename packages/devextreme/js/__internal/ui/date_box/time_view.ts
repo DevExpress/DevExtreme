@@ -316,7 +316,6 @@ class TimeView extends Editor<TimeViewProperties> {
     this._silentEditorValueUpdate(this._format12, newValue);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _silentEditorValueUpdate(editor: NumberBox | SelectBox | undefined, value: number): void {
     if (!editor) {
       return;
