@@ -1,6 +1,7 @@
 import React from 'react';
 
-import Scheduler, { type SchedulerTypes } from 'devextreme-react/scheduler';
+import Scheduler from 'devextreme-react/scheduler';
+import type { SchedulerTypes } from 'devextreme-react/scheduler';
 
 import { data } from './data.ts';
 

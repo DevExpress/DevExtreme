@@ -82,6 +82,9 @@ catalogs:
     devexpress-gantt:
       specifier: 4.1.64
       version: 4.1.64
+    devextreme-exceljs-fork:
+      specifier: 4.4.5
+      version: 4.4.5
     devextreme-quill:
       specifier: 1.7.8
       version: 1.7.8
@@ -407,8 +410,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/devextreme/artifacts/npm/devextreme-dist
       devextreme-exceljs-fork:
-        specifier: ^4.4.4
-        version: 4.4.4
+        specifier: 'catalog:'
+        version: 4.4.5
       devextreme-quill:
         specifier: 'catalog:'
         version: 1.7.8
@@ -1436,8 +1439,8 @@ importers:
         specifier: 1.0.3
         version: 1.0.3
       devextreme-exceljs-fork:
-        specifier: 4.4.4
-        version: 4.4.4
+        specifier: 'catalog:'
+        version: 4.4.5
       devextreme-screenshot-comparer:
         specifier: 2.0.17
         version: 2.0.17(testcafe@3.7.2)
@@ -2222,6 +2225,9 @@ importers:
       ng-packagr:
         specifier: '>=19.0.0'
         version: 19.2.2(@angular/compiler-cli@21.0.5(@angular/compiler@21.0.5)(typescript@4.9.5))(tslib@2.8.1)(typescript@4.9.5)
+      normalize-path:
+        specifier: 3.0.0
+        version: 3.0.0
       rimraf:
         specifier: 3.0.2
         version: 3.0.2
@@ -2235,6 +2241,9 @@ importers:
       '@types/node':
         specifier: 18.19.64
         version: 18.19.64
+      '@types/normalize-path':
+        specifier: 3.0.2
+        version: 3.0.2
       prettier:
         specifier: catalog:tools
         version: 3.5.3
@@ -6728,6 +6737,9 @@ packages:
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
 
+  '@types/normalize-path@3.0.2':
+    resolution: {integrity: sha512-DO++toKYPaFn0Z8hQ7Tx+3iT9t77IJo/nDiqTXilgEP+kPNIYdpS9kh3fXuc53ugqwp9pxC1PVjCpV1tQDyqMA==}
+
   '@types/pako@2.0.4':
     resolution: {integrity: sha512-VWDCbrLeVXJM9fihYodcLiIv0ku+AlOa/TQ1SvYOaBuyrSKgEcro95LJyIsJ4vSo6BXIxOKxiJAat04CmST9Fw==}
 
@@ -9561,8 +9573,8 @@ packages:
   devextreme-cldr-data@1.0.3:
     resolution: {integrity: sha512-xd+uWv1KzEhr+ZH/MOWfDei3GFz+NAYyKUR9HgjM9BBwPel7PpMElYp4whM+PtAjziBaTssQnA//ob5c3BovTA==}
 
-  devextreme-exceljs-fork@4.4.4:
-    resolution: {integrity: sha512-WdlwIj3vNZ44u/Nb0y7Lk1zmgkm23VpTRSgPNfvDheZrwK6bbbtTb57jdRsEB/UwKgOBKKtp47WpTOG6w+NWog==}
+  devextreme-exceljs-fork@4.4.5:
+    resolution: {integrity: sha512-q4gG+tOUePkrocizE+akzz7QnikjjYt2vPMhtf/clAYGhuxYPrVgx63rJBVOVSjdop3VvPkHZCN8Tvi+au/CDQ==}
     engines: {node: '>=16.20.2'}
 
   devextreme-internal-tools@20.1.0:
@@ -25498,6 +25510,8 @@ snapshots:
 
   '@types/normalize-package-data@2.4.4': {}
 
+  '@types/normalize-path@3.0.2': {}
+
   '@types/pako@2.0.4': {}
 
   '@types/parse-json@4.0.2': {}
@@ -29453,7 +29467,7 @@ snapshots:
 
   devextreme-cldr-data@1.0.3: {}
 
-  devextreme-exceljs-fork@4.4.4:
+  devextreme-exceljs-fork@4.4.5:
     dependencies:
       archiver: 7.0.1
       dayjs: 1.11.13
