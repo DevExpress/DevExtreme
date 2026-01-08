@@ -1463,8 +1463,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
           }
           break;
 
+        // Normal case: boundaries don't cross midnight [adjustedStartDayHour, effectiveEndDayHour)
         case hours < adjustedStartDayHour:
-          // Normal case: boundaries don't cross midnight [adjustedStartDayHour, effectiveEndDayHour)
           hours = adjustedStartDayHour;
           break;
 
@@ -2403,11 +2403,11 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       renovateRender: true,
       height: undefined,
       draggingMode: 'outlook',
-      onScrollEnd: () => { },
+      onScrollEnd: () => {},
       getHeaderHeight: undefined,
-      onRenderAppointments: () => { },
-      onShowAllDayPanel: () => { },
-      onSelectedCellsClick: () => { },
+      onRenderAppointments: () => {},
+      onShowAllDayPanel: () => {},
+      onSelectedCellsClick: () => {},
       timeZoneCalculator: undefined,
       schedulerHeight: undefined,
       schedulerWidth: undefined,
@@ -3454,10 +3454,10 @@ const createDragBehaviorConfig = (
       const isCurrentSchedulerElement = dateTables.find(el).length === 1;
 
       return isCurrentSchedulerElement
-        && (
-          classList.contains(DATE_TABLE_CELL_CLASS)
-          || classList.contains(ALL_DAY_TABLE_CELL_CLASS)
-        );
+                && (
+                  classList.contains(DATE_TABLE_CELL_CLASS)
+                    || classList.contains(ALL_DAY_TABLE_CELL_CLASS)
+                );
     });
 
     if (droppableCell) {
