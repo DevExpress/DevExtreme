@@ -281,6 +281,7 @@ export function runTestAtPage(test, demoUrl, shouldSkipJsError) {
   }
 
   if (settings.explicitTests) {
+    // eslint-disable-next-line no-only-tests/no-only-tests
     executor = shouldRunTestExplicitly(demoUrl) ? test.only : executor = test.skip;
   }
   return executor.page(demoUrl);
@@ -362,6 +363,7 @@ export function runManualTestCore(
 
   if (settings.explicitTests) {
     if (shouldRunTestExplicitlyInternal(framework, widget, demo)) {
+      // eslint-disable-next-line no-only-tests/no-only-tests
       callback(test.only);
     }
     return;

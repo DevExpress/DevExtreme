@@ -468,11 +468,7 @@ export default [
   // testcafe tests
   ...compat.extends('devextreme/testcafe').map(config => ({
     ...config,
-    rules: {
-      // ...changeRulesToStylistic(config.rules || {}),
-      ...config.rules,
-      'no-only-tests/no-only-tests': 0,
-    },
+    rules: changeRulesToStylistic(config.rules || {}),
     files: ['testing/**/*.{js,ts}', 'utils/visual-tests/**/*.*'],
   })),
 
@@ -500,9 +496,6 @@ export default [
   ...compat.extends('plugin:jest/recommended', 'plugin:jest/style').map(config => ({
     ...config,
     files: ['utils/tests/**/*.*'],
-    rules: {
-      'jest/expect-expect': 0,
-    },
   })),
 
   // utils directory
