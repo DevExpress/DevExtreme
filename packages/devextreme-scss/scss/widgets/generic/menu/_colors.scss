@@ -58,7 +58,7 @@ $menu-container-shadow-color: null !default;
   $menu-item-focused-bg: $base-focus-bg !default;
   $menu-item-hovered-color: $menu-color !default;
   $menu-item-expanded-color: $menu-color !default;
-  $menu-item-selected-bg: lighten($base-accent, 21%) !default; // #f05b41 => #ffb5a8
+  $menu-item-selected-bg: color.adjust($base-accent, $lightness: 21%, $space: hsl) !default; // #f05b41 => #ffb5a8
   $menu-item-selected-color: $base-text-color !default;
   $menu-item-focused-selected-bg: color.change($base-focus-bg, $alpha: 0.7) !default;
   $menu-container-shadow-color: color.change($base-shadow-color, $alpha: 0.15) !default;
@@ -81,7 +81,7 @@ $menu-container-shadow-color: null !default;
   $menu-item-hover-bg: $base-hover-bg !default;
   $menu-item-hovered-color: $menu-color !default;
   $menu-item-expanded-color: $menu-color !default;
-  $menu-item-selected-bg: lighten($base-bg, 10%) !default;
+  $menu-item-selected-bg: color.adjust($base-bg, $lightness: 10%, $space: hsl) !default;
   $menu-item-selected-color: $base-text-color !default;
   $menu-item-focused-bg: $base-focus-bg !default;
   $menu-item-focused-selected-bg: color.change($base-focus-bg, $alpha: 0.7) !default;
@@ -93,7 +93,7 @@ $menu-container-shadow-color: null !default;
   $menu-item-hover-bg: $base-hover-bg !default;
   $menu-item-hovered-color: $base-hover-color !default;
   $menu-item-expanded-color: $menu-color !default;
-  $menu-item-selected-bg: lighten($base-bg, 10%) !default;
+  $menu-item-selected-bg: color.adjust($base-bg, $lightness: 10%, $space: hsl) !default;
   $menu-item-selected-color: $base-text-color !default;
   $menu-item-focused-bg: $base-focus-bg !default;
   $menu-item-focused-selected-bg: color.change($base-focus-bg, $alpha: 0.7) !default;
@@ -113,11 +113,11 @@ $menu-container-shadow-color: null !default;
 }
 
 @if $color == "greenmist" {
-  $menu-popup-bg: lighten($base-bg, 100%) !default;
+  $menu-popup-bg: color.adjust($base-bg, $lightness: 100%, $space: hsl) !default;
   $menu-item-hover-bg: $base-hover-bg !default;
   $menu-item-hovered-color: $menu-color !default;
   $menu-item-expanded-color: $menu-color !default;
-  $menu-item-selected-bg: darken($base-bg, 10%) !default;
+  $menu-item-selected-bg: color.adjust($base-bg, $lightness: -10%, $space: hsl) !default;
   $menu-item-selected-color: $base-text-color !default;
   $menu-item-focused-bg: $base-focus-bg !default;
   $menu-item-focused-selected-bg: color.change($base-focus-bg, $alpha: 0.7) !default;
@@ -130,7 +130,7 @@ $menu-container-shadow-color: null !default;
   $menu-item-focused-bg: $base-focus-bg !default;
   $menu-item-hovered-color: $menu-color !default;
   $menu-item-expanded-color: $menu-color !default;
-  $menu-item-selected-bg: darken($base-bg, 10%) !default;
+  $menu-item-selected-bg: color.adjust($base-bg, $lightness: -10%, $space: hsl) !default;
   $menu-item-selected-color: $base-text-color !default;
   $menu-item-focused-selected-bg: color.change($base-focus-bg, $alpha: 0.7) !default;
   $menu-container-shadow-color: color.change($base-shadow-color, $alpha: 0.15) !default;
@@ -141,7 +141,7 @@ $menu-container-shadow-color: null !default;
   $menu-item-hover-bg: $base-hover-bg !default;
   $menu-item-hovered-color: $menu-color !default;
   $menu-item-expanded-color: $menu-color !default;
-  $menu-item-selected-bg: darken($base-bg, 10%) !default;
+  $menu-item-selected-bg: color.adjust($base-bg, $lightness: -10%, $space: hsl) !default;
   $menu-item-selected-color: $base-text-color !default;
   $menu-item-focused-bg: $base-focus-bg !default;
   $menu-item-focused-selected-bg: color.change($base-focus-bg, $alpha: 0.7) !default;

@@ -17,7 +17,7 @@ $clock-bg-color: null !default;
 }
 
 @if $color == "dark" {
-  $clock-digits-color: darken($base-text-color, 38.5%) !default;
+  $clock-digits-color: color.adjust($base-text-color, $lightness: -38.5%, $space: hsl) !default;
 }
 
 @if $color == "darkmoon" {
@@ -25,15 +25,15 @@ $clock-bg-color: null !default;
 }
 
 @if $color == "darkviolet" {
-  $clock-digits-color: darken($base-text-color, 38.5%) !default;
+  $clock-digits-color: color.adjust($base-text-color, $lightness: -38.5%, $space: hsl) !default;
 }
 
 @if $color == "greenmist" {
-  $clock-digits-color: lighten($base-text-color, 38.5%) !default;
+  $clock-digits-color: color.adjust($base-text-color, $lightness: 38.5%, $space: hsl) !default;
 }
 
 @if $color == "light" {
-  $clock-digits-color: lighten($base-text-color, 38.5%) !default;
+  $clock-digits-color: color.adjust($base-text-color, $lightness: 38.5%, $space: hsl) !default;
 }
 
 @if $color == "softblue" {

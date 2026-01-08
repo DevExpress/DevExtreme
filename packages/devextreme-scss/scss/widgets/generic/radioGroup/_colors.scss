@@ -27,10 +27,10 @@ $radiogroup-readonly-border-color: null !default;
 @if $color == "carmine" {
   $radiogroup-checked-bg: $base-accent !default;
   $radiogroup-bg: $base-element-bg !default;
-  $radiobutton-active-bg: color.change(darken($radiogroup-bg, 62.5%), $alpha: 0.2) !default;
+  $radiobutton-active-bg: color.change(color.adjust($radiogroup-bg, $lightness: -62.5%, $space: hsl), $alpha: 0.2) !default;
   $radiogroup-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
   $radiobutton-focused-border-color: $base-focus-bg !default;
-  $radiogroup-readonly-border-color: lighten($radiogroup-border-color, 9%) !default;
+  $radiogroup-readonly-border-color: color.adjust($radiogroup-border-color, $lightness: 9%, $space: hsl) !default;
 }
 
 @if $color == "contrast" {
@@ -39,60 +39,60 @@ $radiogroup-readonly-border-color: null !default;
   $radiobutton-active-bg: $base-inverted-bg !default;
   $radiogroup-hover-border-color: $base-border-color !default;
   $radiobutton-focused-border-color: $base-focus-color !default;
-  $radiogroup-readonly-border-color: darken($radiogroup-border-color, 50%) !default;
+  $radiogroup-readonly-border-color: color.adjust($radiogroup-border-color, $lightness: -50%, $space: hsl) !default;
 }
 
 @if $color == "dark" {
   $radiogroup-checked-bg: $base-accent !default;
   $radiogroup-bg: $base-element-bg !default;
-  $radiobutton-active-bg: color.change(darken($radiogroup-bg, 62.5%), $alpha: 0.2) !default;
+  $radiobutton-active-bg: color.change(color.adjust($radiogroup-bg, $lightness: -62.5%, $space: hsl), $alpha: 0.2) !default;
   $radiogroup-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
   $radiobutton-focused-border-color: $base-focus-bg !default;
-  $radiogroup-readonly-border-color: darken($radiogroup-border-color, 9%) !default;
+  $radiogroup-readonly-border-color: color.adjust($radiogroup-border-color, $lightness: -9%, $space: hsl) !default;
 }
 
 @if $color == "darkmoon" {
   $radiogroup-checked-bg: $base-accent !default;
   $radiogroup-bg: $base-element-bg !default;
-  $radiobutton-active-bg: color.change(darken($radiogroup-bg, 62.5%), $alpha: 0.2) !default;
+  $radiobutton-active-bg: color.change(color.adjust($radiogroup-bg, $lightness: -62.5%, $space: hsl), $alpha: 0.2) !default;
   $radiogroup-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
   $radiobutton-focused-border-color: $base-focus-bg !default;
-  $radiogroup-readonly-border-color: darken($radiogroup-border-color, 9%) !default;
+  $radiogroup-readonly-border-color: color.adjust($radiogroup-border-color, $lightness: -9%, $space: hsl) !default;
 }
 
 @if $color == "darkviolet" {
   $radiogroup-checked-bg: $base-accent-highlight-color !default;
   $radiogroup-bg: $base-element-bg !default;
-  $radiobutton-active-bg: color.change(darken($radiogroup-bg, 62.5%), $alpha: 0.2) !default;
+  $radiobutton-active-bg: color.change(color.adjust($radiogroup-bg, $lightness: -62.5%, $space: hsl), $alpha: 0.2) !default;
   $radiogroup-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
   $radiobutton-focused-border-color: $base-focus-bg !default;
-  $radiogroup-readonly-border-color: darken($radiogroup-border-color, 9%) !default;
+  $radiogroup-readonly-border-color: color.adjust($radiogroup-border-color, $lightness: -9%, $space: hsl) !default;
 }
 
 @if $color == "greenmist" {
   $radiogroup-checked-bg: $base-accent !default;
   $radiogroup-bg: $base-element-bg !default;
-  $radiobutton-active-bg: color.change(darken($base-bg, 9%), $alpha: 0.4) !default;
+  $radiobutton-active-bg: color.change(color.adjust($base-bg, $lightness: -9%, $space: hsl), $alpha: 0.4) !default;
   $radiogroup-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
   $radiobutton-focused-border-color: $base-focus-bg !default;
-  $radiogroup-readonly-border-color: lighten($radiogroup-border-color, 9%) !default;
+  $radiogroup-readonly-border-color: color.adjust($radiogroup-border-color, $lightness: 9%, $space: hsl) !default;
 }
 
 @if $color == "light" {
   $radiogroup-checked-bg: $base-accent !default;
   $radiogroup-bg: $base-element-bg !default;
-  $radiobutton-active-bg: color.change(darken($radiogroup-bg, 62.5%), $alpha: 0.2) !default;
+  $radiobutton-active-bg: color.change(color.adjust($radiogroup-bg, $lightness: -62.5%, $space: hsl), $alpha: 0.2) !default;
   $radiogroup-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
   $radiobutton-focused-border-color: $base-focus-bg !default;
-  $radiogroup-readonly-border-color: lighten($radiogroup-border-color, 9%) !default;
+  $radiogroup-readonly-border-color: color.adjust($radiogroup-border-color, $lightness: 9%, $space: hsl) !default;
 }
 
 @if $color == "softblue" {
   $radiogroup-checked-bg: $base-accent !default;
   $radiogroup-bg: $base-element-bg !default;
-  $radiobutton-active-bg: color.change(darken($radiogroup-bg, 62.5%), $alpha: 0.2) !default;
+  $radiobutton-active-bg: color.change(color.adjust($radiogroup-bg, $lightness: -62.5%, $space: hsl), $alpha: 0.2) !default;
   $radiogroup-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
   $radiobutton-focused-border-color: $base-focus-bg !default;
-  $radiogroup-readonly-border-color: lighten($radiogroup-border-color, 9%) !default;
+  $radiogroup-readonly-border-color: color.adjust($radiogroup-border-color, $lightness: 9%, $space: hsl) !default;
 }
 

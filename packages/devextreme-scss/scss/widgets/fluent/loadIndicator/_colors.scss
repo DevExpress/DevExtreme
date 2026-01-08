@@ -21,23 +21,23 @@ $load-indicator-animation-sparkle-bg-color3: null !default;
 
 @if $mode == "light" {
   @if $color == "blue" {
-    $load-indicator-inner-segment-border-color: lighten(saturate(adjust-hue($load-indicator-segment-bg-color, 2.9), 2.2), 44.3) !default;
+    $load-indicator-inner-segment-border-color: color.adjust($load-indicator-segment-bg-color, $hue: 2.9deg, $saturation: 2.2%, $space: hsl, $lightness: 44.3%) !default;
     $load-indicator-animation-sparkle-bg-color1: $base-accent !default;
-    $load-indicator-animation-sparkle-bg-color2: lighten(saturate(adjust-hue($base-accent, 2), 2.73), 27.25) !default;
-    $load-indicator-animation-sparkle-bg-color3: lighten(saturate(adjust-hue($base-accent, 3), 5.61), 38.43) !default;
+    $load-indicator-animation-sparkle-bg-color2: color.adjust($base-accent, $hue: 2deg, $saturation: 2.73%, $space: hsl, $lightness: 27.25%) !default;
+    $load-indicator-animation-sparkle-bg-color3: color.adjust($base-accent, $hue: 3deg, $saturation: 5.61%, $space: hsl, $lightness: 38.43%) !default;
   }
 
   @if $color == "saas" {
-    $load-indicator-inner-segment-border-color: mix($base-bg, $load-indicator-segment-bg-color, 68.82%) !default;
-    $load-indicator-animation-sparkle-bg-color1: darken(desaturate(adjust-hue($base-accent, -15), 14.71), 26.47) !default;
-    $load-indicator-animation-sparkle-bg-color2: lighten(desaturate(adjust-hue($base-accent, -12), 11.98), 0.78) !default;
-    $load-indicator-animation-sparkle-bg-color3: lighten(desaturate(adjust-hue($base-accent, -12), 9.09), 11.96) !default;
+    $load-indicator-inner-segment-border-color: color.mix($base-bg, $load-indicator-segment-bg-color, 68.82%) !default;
+    $load-indicator-animation-sparkle-bg-color1: color.adjust($base-accent, $hue: -15deg, $saturation: -14.71%, $space: hsl, $lightness: -26.47%) !default;
+    $load-indicator-animation-sparkle-bg-color2: color.adjust($base-accent, $hue: -12deg, $saturation: -11.98%, $space: hsl, $lightness: 0.78%) !default;
+    $load-indicator-animation-sparkle-bg-color3: color.adjust($base-accent, $hue: -12deg, $saturation: -9.09%, $space: hsl, $lightness: 11.96%) !default;
   }
 }
 
 @if $mode == "dark" {
   $load-indicator-inner-segment-border-color: $base-accent-selected !default;
-  $load-indicator-animation-sparkle-bg-color1: lighten(desaturate($base-accent, 1.67), 5.29) !default;
-  $load-indicator-animation-sparkle-bg-color2: darken(desaturate(adjust-hue($base-accent, -2), 4.40), 21.96) !default;
-  $load-indicator-animation-sparkle-bg-color3: darken(desaturate(adjust-hue($base-accent, -2), 8.58), 26.67) !default;
+  $load-indicator-animation-sparkle-bg-color1: color.adjust($base-accent, $saturation: -1.67%, $space: hsl, $lightness: 5.29%) !default;
+  $load-indicator-animation-sparkle-bg-color2: color.adjust($base-accent, $hue: -2deg, $saturation: -4.40%, $space: hsl, $lightness: -21.96%) !default;
+  $load-indicator-animation-sparkle-bg-color3: color.adjust($base-accent, $hue: -2deg, $saturation: -8.58%, $space: hsl, $lightness: -26.67%) !default;
 }

@@ -1,3 +1,4 @@
+@use 'sass:math';
 @use "./mixins" as *;
 
 // adduse
@@ -662,7 +663,7 @@
 
     .dx-sort-indicator,
     .dx-header-filter-indicator {
-      max-width: calc(100% - #{round($grid-column-header-indicator-width + $grid-text-content-margin)});
+      max-width: calc(100% - #{math.round($grid-column-header-indicator-width + $grid-text-content-margin)});
 
       &.dx-text-content-alignment-left {
         margin-right: $grid-text-content-margin;
@@ -673,31 +674,31 @@
       }
 
       &.dx-text-content-alignment-left.dx-text-content-alignment-right {
-        max-width: calc(100% - #{round($grid-column-header-indicator-width * 2 + $grid-text-content-margin * 2)});
+        max-width: calc(100% - #{math.round($grid-column-header-indicator-width * 2 + $grid-text-content-margin * 2)});
       }
     }
 
     .dx-sort-indicator.dx-header-filter-indicator {
-      max-width: calc(100% - #{round($grid-column-header-indicator-width * 2 + $grid-text-content-margin)});
+      max-width: calc(100% - #{math.round($grid-column-header-indicator-width * 2 + $grid-text-content-margin)});
     }
 
     .dx-sort-indicator.dx-header-filter-indicator.dx-text-content-alignment-left.dx-text-content-alignment-right {
-      max-width: calc(100% - #{round($grid-column-header-indicator-width * 4 + $grid-text-content-margin * 2)});
+      max-width: calc(100% - #{math.round($grid-column-header-indicator-width * 4 + $grid-text-content-margin * 2)});
     }
 
     .dx-sort-indicator.dx-sort-index-indicator {
-      max-width: calc(100% - #{round($grid-column-header-indicator-width + $grid-text-content-margin + $grid-sort-index-width)});
+      max-width: calc(100% - #{math.round($grid-column-header-indicator-width + $grid-text-content-margin + $grid-sort-index-width)});
 
       &.dx-header-filter-indicator {
-        max-width: calc(100% - #{round($grid-column-header-indicator-width * 2 + $grid-text-content-margin + $grid-sort-index-width)});
+        max-width: calc(100% - #{math.round($grid-column-header-indicator-width * 2 + $grid-text-content-margin + $grid-sort-index-width)});
       }
 
       &.dx-text-content-alignment-left.dx-text-content-alignment-right {
-        max-width: calc(100% - #{round($grid-column-header-indicator-width * 2 + $grid-text-content-margin * 2 + $grid-sort-index-width)});
+        max-width: calc(100% - #{math.round($grid-column-header-indicator-width * 2 + $grid-text-content-margin * 2 + $grid-sort-index-width)});
       }
 
       &.dx-header-filter-indicator.dx-text-content-alignment-left.dx-text-content-alignment-right {
-        max-width: calc(100% - #{round($grid-column-header-indicator-width * 4 + $grid-text-content-margin * 2 + $grid-sort-index-width)});
+        max-width: calc(100% - #{math.round($grid-column-header-indicator-width * 4 + $grid-text-content-margin * 2 + $grid-sort-index-width)});
       }
     }
   }

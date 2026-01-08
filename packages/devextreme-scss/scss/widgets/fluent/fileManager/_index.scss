@@ -96,7 +96,8 @@
   }
 
   .dx-filemanager-fileuploader-dropzone-placeholder {
-    border: 2px solid $base-accent;
+    border: 2px solid;
+    border-color: $base-accent;
   }
 
   .dx-filemanager-container {
@@ -145,7 +146,8 @@
     }
 
     &.dx-state-focused {
-      border: $filemanager-file-item-focused-border 1px solid;
+      border: 1px solid;
+      border-color: $filemanager-file-item-focused-border;
     }
 
     &.dx-item-selected.dx-state-focused {

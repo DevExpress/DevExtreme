@@ -17,8 +17,8 @@
 
 $material-list-item-border-width: 1px;
 $material-list-border-width: 1px;
-$material-list-border: $material-list-border-width solid $list-border-color;
-$material-list-item-border: $material-list-item-border-width solid $list-border-color;
+$material-list-border: $material-list-border-width solid;
+$material-list-item-border: $material-list-item-border-width solid;
 $material-list-searchbox-padding-top: $material-list-searchbox-vertical-padding - 2px;
 
 .dx-list-item-chevron {
@@ -178,6 +178,7 @@ $material-list-searchbox-padding-top: $material-list-searchbox-vertical-padding 
       &:not(:last-child) {
         padding-bottom: $material-list-vertical-padding;
         border-bottom: $material-list-item-border;
+        border-bottom-color: $list-border-color;
       }
     }
 
@@ -292,8 +293,10 @@ $material-list-searchbox-padding-top: $material-list-searchbox-vertical-padding 
         &.dx-state-hover {
           color: $list-item-ghost-color;
           background: $list-item-ghost-bg;
-          border-top: 1px solid color.change($list-item-ghost-border-color, $alpha: 0.5);
-          border-bottom: 1px solid color.change($list-item-ghost-border-color, $alpha: 0.5);
+          border-top: 1px solid;
+          border-top-color: color.change($list-item-ghost-border-color, $alpha: 0.5);
+          border-bottom: 1px solid;
+          border-bottom-color: color.change($list-item-ghost-border-color, $alpha: 0.5);
           box-shadow: 0 0 1px color.change($list-item-ghost-shadow-color, $alpha: 0.1), 0 1px 3px color.change($list-item-ghost-shadow-color, $alpha: 0.2);
         }
       }
@@ -342,6 +345,7 @@ $material-list-searchbox-padding-top: $material-list-searchbox-vertical-padding 
 
   .dx-list-border-visible {
     border: $material-list-border;
+    border-color: $list-border-color;
   }
 
   .dx-list-item-before-bag {
@@ -450,7 +454,8 @@ $material-list-searchbox-padding-top: $material-list-searchbox-vertical-padding 
     @include dx-icon(trash);
 
     color: $base-inverted-text-color;
-    border: 1px solid $list-button-delete-shadow-color;
+    border: 1px solid;
+    border-color: $list-button-delete-shadow-color;
     border-right-color: transparent;
     background-color: $list-menu-button-delete-bg;
     font-size: $material-base-icon-size;
@@ -494,7 +499,8 @@ $material-list-searchbox-padding-top: $material-list-searchbox-vertical-padding 
 
   .dx-list-context-menucontent {
     background-color: $list-holdmenu-bg;
-    border: 1px solid $list-holdmenu-border-color;
+    border: 1px solid;
+    border-color: $list-holdmenu-border-color;
     border-radius: 0;
     box-shadow: 0 3px 10px $list-holdmenu-shadow-color;
   }

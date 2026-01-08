@@ -2,8 +2,10 @@ $arrow-down: "\f016";
 
 @mixin header-base(
   $border,
+  $border-color,
 ) {
   border: $border;
+  border-color: $border-color;
   margin-bottom: -1px;
   position: relative;
   z-index: 1;

@@ -41,7 +41,7 @@ $overlay-content-border-radius: $base-border-radius + 2px !default;
 }
 
 @if $color == "darkmoon" {
-  $overlay-content-shadow-color: color.change(darken($base-shadow-color, 100%), $alpha: 0.3) !default;
+  $overlay-content-shadow-color: color.change(color.adjust($base-shadow-color, $lightness: -100%, $space: hsl), $alpha: 0.3) !default;
   $overlay-shader-bg: color.change($base-bg, $alpha: 0.8) !default;
 }
 

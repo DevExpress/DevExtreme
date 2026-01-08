@@ -62,7 +62,8 @@ $generic-fileuploader-file-wrapper-border-size: 3px;
 
   .dx-fileuploader-input-label { // stylelint-disable-line no-duplicate-selectors
     padding: $generic-fileuploader-vertical-padding * 2 $generic-fileuploader-vertical-padding + 2px;
-    border: $generic-fileuploader-file-wrapper-border-size dashed $fileuploader-border-color;
+    border: $generic-fileuploader-file-wrapper-border-size dashed;
+    border-color: $fileuploader-border-color;
   }
 }
 

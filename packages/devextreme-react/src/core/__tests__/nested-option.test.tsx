@@ -10,7 +10,7 @@ jest.useFakeTimers();
 
 const NestedComponent = function NestedComponent(props: any) {
   return (
-    <ConfigurationComponent<{ a: number } & React.PropsWithChildren>
+    <ConfigurationComponent<{ a: number } & React.PropsWithChildren<unknown>>
       elementDescriptor={{
         OptionName: 'option',
         ExpectedChildren: {
@@ -26,7 +26,7 @@ NestedComponent.componentType = 'option';
 
 const NestedComponentWithPredfeinedProps = function NestedComponentWithPredfeinedProps(props: any) {
   return (
-    <ConfigurationComponent<{ a: number } & React.PropsWithChildren>
+    <ConfigurationComponent<{ a: number } & React.PropsWithChildren<unknown>>
       elementDescriptor={{
         OptionName: 'option',
         PredefinedProps: {
@@ -1152,7 +1152,7 @@ describe('nested sub-option', () => {
   it('is pulled according to expectations', () => {
     const NestedComponentWithExpectations = function NestedComponentWithExpectations(props: any) {
       return (
-        <ConfigurationComponent<{ a: number } & React.PropsWithChildren>
+        <ConfigurationComponent<{ a: number } & React.PropsWithChildren<unknown>>
           elementDescriptor={{
             OptionName: 'option',
             ExpectedChildren: {

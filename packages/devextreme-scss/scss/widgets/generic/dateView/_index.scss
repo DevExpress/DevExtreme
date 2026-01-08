@@ -119,14 +119,16 @@ $generic-dateview-roller-padding: math.div($generic-dateview-roller-height - $ge
 
   &::before {
     top: -$generic-dateview-roller-padding;
-    border-bottom: 1px solid $dateview-border-color;
+    border-bottom: 1px solid;
+    border-bottom-color: $dateview-border-color;
 
     @include gradient-linear($dateview-shadow-up);
   }
 
   &::after {
     top: $generic-dateview-roller-item-height;
-    border-top: 1px solid $dateview-border-color;
+    border-top: 1px solid;
+    border-top-color: $dateview-border-color;
 
     @include gradient-linear($dateview-shadow-down);
   }

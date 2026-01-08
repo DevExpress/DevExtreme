@@ -74,9 +74,9 @@ $scheduler-horizontal-appointment-resizing-shadow: inset -2px 0 0 0 $scheduler-a
 
 $scheduler-grouped-appointment-month-text-size: 12px;
 
-$scheduler-base-border: 1px solid $scheduler-base-border-color;
+$scheduler-base-border: 1px solid;
 $scheduler-transparent-top-border: 1px solid transparent;
-$scheduler-accent-border: 1px solid $scheduler-accent-border-color;
+$scheduler-accent-border: 1px solid;
 
 $scheduler-reduced-icon-offset: 5px;
 $scheduler-recurrence-icon-offset: 20px;
@@ -165,7 +165,7 @@ $scheduler-appointment-form-label-padding: 20px;
   }
 
   .dx-scheduler-header {
-    @include header-base($scheduler-base-border);
+    @include header-base($scheduler-base-border, $scheduler-base-border-color);
   }
 
   .dx-scheduler-view-switcher-dropdown-button-content {

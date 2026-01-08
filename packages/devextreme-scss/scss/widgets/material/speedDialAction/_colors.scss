@@ -17,13 +17,13 @@ $speed-dial-action-shading-color: $overlay-shader-bg !default;
 
 @if $mode == "light" {
   $speed-dial-action-bg: $base-bg !default;
-  $speed-dial-action-hover-bg: darken($speed-dial-action-bg, 8%) !default;
-  $speed-dial-action-active-bg: darken($speed-dial-action-bg, 36%) !default;
+  $speed-dial-action-hover-bg: color.adjust($speed-dial-action-bg, $lightness: -8%, $space: hsl) !default;
+  $speed-dial-action-active-bg: color.adjust($speed-dial-action-bg, $lightness: -36%, $space: hsl) !default;
 }
 
 @if $mode == "dark" {
   $speed-dial-action-bg: color.change($base-bg, $alpha: 1) !default;
-  $speed-dial-action-hover-bg: lighten($speed-dial-action-bg, 8%) !default;
-  $speed-dial-action-active-bg: lighten($speed-dial-action-bg, 36%) !default;
+  $speed-dial-action-hover-bg: color.adjust($speed-dial-action-bg, $lightness: 8%, $space: hsl) !default;
+  $speed-dial-action-active-bg: color.adjust($speed-dial-action-bg, $lightness: 36%, $space: hsl) !default;
 }
 

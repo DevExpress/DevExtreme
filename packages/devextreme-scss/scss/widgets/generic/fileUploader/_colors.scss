@@ -24,7 +24,7 @@ $fileuploader-falename-status-color: null !default;
 $fileuploader-border-color: $base-border-color !default;
 
 @if $color == "carmine" {
-  $fileuploader-falename-status-color: lighten($fileuploader-filename-color, 40%) !default;
+  $fileuploader-falename-status-color: color.adjust($fileuploader-filename-color, $lightness: 40%, $space: hsl) !default;
 }
 
 @if $color == "contrast" {
@@ -32,25 +32,25 @@ $fileuploader-border-color: $base-border-color !default;
 }
 
 @if $color == "dark" {
-  $fileuploader-falename-status-color: darken($fileuploader-filename-color, 40%) !default;
+  $fileuploader-falename-status-color: color.adjust($fileuploader-filename-color, $lightness: -40%, $space: hsl) !default;
 }
 
 @if $color == "darkmoon" {
-  $fileuploader-falename-status-color: darken($fileuploader-filename-color, 40%) !default;
+  $fileuploader-falename-status-color: color.adjust($fileuploader-filename-color, $lightness: -40%, $space: hsl) !default;
 }
 
 @if $color == "darkviolet" {
-  $fileuploader-falename-status-color: darken($fileuploader-filename-color, 40%) !default;
+  $fileuploader-falename-status-color: color.adjust($fileuploader-filename-color, $lightness: -40%, $space: hsl) !default;
 }
 
 @if $color == "greenmist" {
-  $fileuploader-falename-status-color: lighten($fileuploader-filename-color, 40%) !default;
+  $fileuploader-falename-status-color: color.adjust($fileuploader-filename-color, $lightness: 40%, $space: hsl) !default;
 }
 
 @if $color == "light" {
-  $fileuploader-falename-status-color: lighten($fileuploader-filename-color, 40%) !default;
+  $fileuploader-falename-status-color: color.adjust($fileuploader-filename-color, $lightness: 40%, $space: hsl) !default;
 }
 
 @if $color == "softblue" {
-  $fileuploader-falename-status-color: lighten($fileuploader-filename-color, 40%) !default;
+  $fileuploader-falename-status-color: color.adjust($fileuploader-filename-color, $lightness: 40%, $space: hsl) !default;
 }

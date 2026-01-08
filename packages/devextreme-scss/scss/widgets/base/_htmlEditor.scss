@@ -1,4 +1,6 @@
+@use "sass:list";
 @use "sass:math";
+@use "sass:selector";
 
 // adduse
 
@@ -52,7 +54,7 @@ $transparent-border: 1px solid transparent;
       counter-increment: list-#{$counter};
 
       &::before {
-        content: counter(list-#{$counter}, nth($list-style, ($counter % 3) + 1)) ". ";
+        content: counter(list-#{$counter}, list.nth($list-style, ($counter % 3) + 1)) ". ";
       }
     }
 
@@ -242,7 +244,7 @@ $transparent-border: 1px solid transparent;
     counter-increment: list-0;
 
     &::before {
-      content: counter(list-0, nth($list-style, 1)) ". ";
+      content: counter(list-0, list.nth($list-style, 1)) ". ";
     }
   }
 
@@ -430,7 +432,7 @@ $transparent-border: 1px solid transparent;
     height: $resize-handle-size;
     border-radius: 0;
 
-    @at-root #{selector-append(".dx-touch-device", &)} {
+    @at-root #{selector.append(".dx-touch-device", &)} {
       width: $touch-resize-handle-size;
       height: $touch-resize-handle-size;
     }
@@ -440,7 +442,7 @@ $transparent-border: 1px solid transparent;
   .dx-resizable-handle-corner-bottom-right {
     right: -$half-resize-handle-size;
 
-    @at-root #{selector-append(".dx-touch-device", &)} {
+    @at-root #{selector.append(".dx-touch-device", &)} {
       right: -$half-touch-resize-handle-size;
     }
   }
@@ -449,7 +451,7 @@ $transparent-border: 1px solid transparent;
   .dx-resizable-handle-corner-bottom-left {
     left: -$half-resize-handle-size;
 
-    @at-root #{selector-append(".dx-touch-device", &)} {
+    @at-root #{selector.append(".dx-touch-device", &)} {
       left: -$half-touch-resize-handle-size;
     }
   }
@@ -458,7 +460,7 @@ $transparent-border: 1px solid transparent;
   .dx-resizable-handle-corner-top-left {
     top: -$half-resize-handle-size;
 
-    @at-root #{selector-append(".dx-touch-device", &)} {
+    @at-root #{selector.append(".dx-touch-device", &)} {
       top: -$half-touch-resize-handle-size;
     }
   }
@@ -467,7 +469,7 @@ $transparent-border: 1px solid transparent;
   .dx-resizable-handle-corner-bottom-left {
     bottom: -$half-resize-handle-size;
 
-    @at-root #{selector-append(".dx-touch-device", &)} {
+    @at-root #{selector.append(".dx-touch-device", &)} {
       bottom: -$half-touch-resize-handle-size;
     }
   }
@@ -483,7 +485,7 @@ $transparent-border: 1px solid transparent;
       height: $resize-handle-size;
       border: 1px solid white;
 
-      @at-root #{selector-append(".dx-touch-device", &)} {
+      @at-root #{selector.append(".dx-touch-device", &)} {
         width: $touch-resize-handle-size;
         height: $touch-resize-handle-size;
       }
@@ -495,7 +497,7 @@ $transparent-border: 1px solid transparent;
     &::after {
       top: calc(50% - #{$half-resize-handle-size});
 
-      @at-root #{selector-append(".dx-touch-device", &)} {
+      @at-root #{selector.append(".dx-touch-device", &)} {
         top: calc(50% - #{$half-touch-resize-handle-size});
       }
     }
@@ -506,7 +508,7 @@ $transparent-border: 1px solid transparent;
     &::after {
       left: calc(50% - #{$half-resize-handle-size});
 
-      @at-root #{selector-append(".dx-touch-device", &)} {
+      @at-root #{selector.append(".dx-touch-device", &)} {
         left: calc(50% - #{$half-touch-resize-handle-size});
       }
     }
@@ -515,7 +517,7 @@ $transparent-border: 1px solid transparent;
   .dx-resizable-handle-right::after {
     right: -$half-resize-handle-size;
 
-    @at-root #{selector-append(".dx-touch-device", &)} {
+    @at-root #{selector.append(".dx-touch-device", &)} {
       right: -$half-touch-resize-handle-size;
     }
   }
@@ -523,7 +525,7 @@ $transparent-border: 1px solid transparent;
   .dx-resizable-handle-left::after {
     left: -$half-resize-handle-size;
 
-    @at-root #{selector-append(".dx-touch-device", &)} {
+    @at-root #{selector.append(".dx-touch-device", &)} {
       left: -$half-touch-resize-handle-size;
     }
   }
@@ -531,7 +533,7 @@ $transparent-border: 1px solid transparent;
   .dx-resizable-handle-top::after {
     top: -$half-resize-handle-size;
 
-    @at-root #{selector-append(".dx-touch-device", &)} {
+    @at-root #{selector.append(".dx-touch-device", &)} {
       top: -$half-touch-resize-handle-size;
     }
   }
@@ -539,7 +541,7 @@ $transparent-border: 1px solid transparent;
   .dx-resizable-handle-bottom::after {
     bottom: -$half-resize-handle-size;
 
-    @at-root #{selector-append(".dx-touch-device", &)} {
+    @at-root #{selector.append(".dx-touch-device", &)} {
       bottom: -$half-touch-resize-handle-size;
     }
   }

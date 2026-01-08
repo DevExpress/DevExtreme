@@ -82,11 +82,12 @@
   }
 
   .dx-treeview-with-search > .dx-scrollable {
-    height: calc(100% - #{round($search-editor-height + $searchbox-margin-bottom)});
+    height: calc(100% - #{math.round($search-editor-height + $searchbox-margin-bottom)});
   }
 
   .dx-treeview-select-all-item {
-    border-bottom: 1px solid $border-color;
+    border-bottom: 1px solid;
+    border-bottom-color: $border-color;
     padding: $select-all-item-padding;
 
     .dx-checkbox-container {
@@ -105,7 +106,8 @@
   }
 
   .dx-treeview-border-visible {
-    border: 1px solid $border-color;
+    border: 1px solid;
+    border-color: $border-color;
 
     .dx-treeview-select-all-item {
       padding-inline-start: $select-all-item-border-visible-padding;

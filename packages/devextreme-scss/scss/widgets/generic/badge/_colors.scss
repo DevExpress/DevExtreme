@@ -31,7 +31,7 @@ $badge-bg: null !default;
 }
 
 @if $color == "darkmoon" {
-  $badge-bg: lighten($base-accent, 25%) !default;
+  $badge-bg: color.adjust($base-accent, $lightness: 25%, $space: hsl) !default;
 }
 
 @if $color == "darkviolet" {

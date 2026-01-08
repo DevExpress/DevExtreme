@@ -452,7 +452,8 @@ $fluent-editor-border-width: 1px;
   &.dx-state-focused,
   &.dx-state-active {
     &::before {
-      border-bottom: 2px solid $texteditor-invalid-focused-border-color;
+      border-bottom: 2px solid;
+      border-bottom-color: $texteditor-invalid-focused-border-color;
     }
   }
 

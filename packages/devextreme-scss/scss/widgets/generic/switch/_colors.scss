@@ -44,16 +44,16 @@ $switch-border-radius: null !default;
 @if $color == "carmine" {
   $switch-bg: $base-element-bg !default;
   $switch-handle-bg: $base-accent !default;
-  $switch-handle-active-bg: darken($switch-handle-bg, 17%) !default;
+  $switch-handle-active-bg: color.adjust($switch-handle-bg, $lightness: -17%, $space: hsl) !default;
   $switch-hover-border-color: $base-accent !default;
   $switch-focused-border-color: $base-focus-bg !default;
-  $switch-container-active-bg: color.change(darken($switch-bg, 62.5%), $alpha: 0.2) !default;
+  $switch-container-active-bg: color.change(color.adjust($switch-bg, $lightness: -62.5%, $space: hsl), $alpha: 0.2) !default;
   $switch-hover-bg: transparent !default;
   $switch-active-border-color: $base-accent !default;
 
-  $switch-off-color: lighten($base-text-color, 40%) !default;
-  $switch-handle-off-bg: lighten($switch-handle-bg, 15%) !default;
-  $switch-readonly-border-color: lighten($switch-border-color, 9%) !default;
+  $switch-off-color: color.adjust($base-text-color, $lightness: 40%, $space: hsl) !default;
+  $switch-handle-off-bg: color.adjust($switch-handle-bg, $lightness: 15%, $space: hsl) !default;
+  $switch-readonly-border-color: color.adjust($switch-border-color, $lightness: 9%, $space: hsl) !default;
   $switch-container-readonly-bg: $switch-bg !default;
   $switch-border-radius: $base-border-radius-exsmall !default;
 }
@@ -69,7 +69,7 @@ $switch-border-radius: null !default;
   $switch-active-border-color: $base-border-color !default;
   $switch-off-color: $base-text-color !default;
   $switch-handle-off-bg: $base-inverted-bg !default;
-  $switch-readonly-border-color: darken($switch-border-color, 50%) !default;
+  $switch-readonly-border-color: color.adjust($switch-border-color, $lightness: -50%, $space: hsl) !default;
   $switch-container-readonly-bg: $switch-bg !default;
   $switch-border-radius: $base-border-radius - 2px !default;
 }
@@ -77,15 +77,15 @@ $switch-border-radius: null !default;
 @if $color == "dark" {
   $switch-bg: $base-element-bg !default;
   $switch-handle-bg: $base-accent !default;
-  $switch-handle-active-bg: lighten($switch-handle-bg, 17%) !default;
+  $switch-handle-active-bg: color.adjust($switch-handle-bg, $lightness: 17%, $space: hsl) !default;
   $switch-hover-border-color: $base-accent !default;
   $switch-focused-border-color: $base-focus-bg !default;
-  $switch-container-active-bg: color.change(lighten($switch-bg, 62.5%), $alpha: 0.2) !default;
+  $switch-container-active-bg: color.change(color.adjust($switch-bg, $lightness: 62.5%, $space: hsl), $alpha: 0.2) !default;
   $switch-hover-bg: transparent !default;
   $switch-active-border-color: $base-accent !default;
-  $switch-off-color: darken($base-text-color, 40%) !default;
-  $switch-handle-off-bg: darken($switch-handle-bg, 15%) !default;
-  $switch-readonly-border-color: darken($switch-border-color, 9%) !default;
+  $switch-off-color: color.adjust($base-text-color, $lightness: -40%, $space: hsl) !default;
+  $switch-handle-off-bg: color.adjust($switch-handle-bg, $lightness: -15%, $space: hsl) !default;
+  $switch-readonly-border-color: color.adjust($switch-border-color, $lightness: -9%, $space: hsl) !default;
   $switch-container-readonly-bg: $switch-bg !default;
   $switch-border-radius: $base-border-radius-exsmall !default;
 }
@@ -93,15 +93,15 @@ $switch-border-radius: null !default;
 @if $color == "darkmoon" {
   $switch-bg: $base-element-bg !default;
   $switch-handle-bg: $base-accent !default;
-  $switch-handle-active-bg: lighten($switch-handle-bg, 17%) !default;
+  $switch-handle-active-bg: color.adjust($switch-handle-bg, $lightness: 17%, $space: hsl) !default;
   $switch-hover-border-color: $base-accent !default;
   $switch-focused-border-color: $base-focus-bg !default;
-  $switch-container-active-bg: color.change(lighten($switch-bg, 62.5%), $alpha: 0.2) !default;
+  $switch-container-active-bg: color.change(color.adjust($switch-bg, $lightness: 62.5%, $space: hsl), $alpha: 0.2) !default;
   $switch-hover-bg: transparent !default;
   $switch-active-border-color: $base-accent !default;
-  $switch-off-color: darken($base-text-color, 40%) !default;
-  $switch-handle-off-bg: darken($switch-handle-bg, 15%) !default;
-  $switch-readonly-border-color: darken($switch-border-color, 9%) !default;
+  $switch-off-color: color.adjust($base-text-color, $lightness: -40%, $space: hsl) !default;
+  $switch-handle-off-bg: color.adjust($switch-handle-bg, $lightness: -15%, $space: hsl) !default;
+  $switch-readonly-border-color: color.adjust($switch-border-color, $lightness: -9%, $space: hsl) !default;
   $switch-container-readonly-bg: $switch-bg !default;
   $switch-border-radius: $base-border-radius-exsmall !default;
 }
@@ -109,15 +109,15 @@ $switch-border-radius: null !default;
 @if $color == "darkviolet" {
   $switch-bg: $base-element-bg !default;
   $switch-handle-bg: $base-accent !default;
-  $switch-handle-active-bg: lighten($switch-handle-bg, 17%) !default;
+  $switch-handle-active-bg: color.adjust($switch-handle-bg, $lightness: 17%, $space: hsl) !default;
   $switch-hover-border-color: $base-accent !default;
   $switch-focused-border-color: $base-focus-bg !default;
-  $switch-container-active-bg: color.change(lighten($switch-bg, 62.5%), $alpha: 0.2) !default;
+  $switch-container-active-bg: color.change(color.adjust($switch-bg, $lightness: 62.5%, $space: hsl), $alpha: 0.2) !default;
   $switch-hover-bg: transparent !default;
   $switch-active-border-color: $base-accent !default;
-  $switch-off-color: darken($base-text-color, 40%) !default;
-  $switch-handle-off-bg: darken($switch-handle-bg, 15%) !default;
-  $switch-readonly-border-color: darken($switch-border-color, 9%) !default;
+  $switch-off-color: color.adjust($base-text-color, $lightness: -40%, $space: hsl) !default;
+  $switch-handle-off-bg: color.adjust($switch-handle-bg, $lightness: -15%, $space: hsl) !default;
+  $switch-readonly-border-color: color.adjust($switch-border-color, $lightness: -9%, $space: hsl) !default;
   $switch-container-readonly-bg: $switch-bg !default;
   $switch-border-radius: $base-border-radius-exsmall !default;
 }
@@ -125,15 +125,15 @@ $switch-border-radius: null !default;
 @if $color == "greenmist" {
   $switch-bg: $base-element-bg !default;
   $switch-handle-bg: $base-accent !default;
-  $switch-handle-active-bg: darken($switch-handle-bg, 17%) !default;
+  $switch-handle-active-bg: color.adjust($switch-handle-bg, $lightness: -17%, $space: hsl) !default;
   $switch-hover-border-color: $base-accent !default;
   $switch-focused-border-color: $base-focus-bg !default;
-  $switch-container-active-bg: color.change(darken($base-bg, 9%), $alpha: 0.4) !default;
+  $switch-container-active-bg: color.change(color.adjust($base-bg, $lightness: -9%, $space: hsl), $alpha: 0.4) !default;
   $switch-hover-bg: transparent !default;
   $switch-active-border-color: $base-accent !default;
-  $switch-off-color: lighten($base-text-color, 40%) !default;
-  $switch-handle-off-bg: lighten($switch-handle-bg, 15%) !default;
-  $switch-readonly-border-color: lighten($switch-border-color, 9%) !default;
+  $switch-off-color: color.adjust($base-text-color, $lightness: 40%, $space: hsl) !default;
+  $switch-handle-off-bg: color.adjust($switch-handle-bg, $lightness: 15%, $space: hsl) !default;
+  $switch-readonly-border-color: color.adjust($switch-border-color, $lightness: 9%, $space: hsl) !default;
   $switch-container-readonly-bg: $switch-bg !default;
   $switch-border-radius: $base-border-radius-exsmall !default;
 }
@@ -141,15 +141,15 @@ $switch-border-radius: null !default;
 @if $color == "light" {
   $switch-bg: $base-element-bg !default;
   $switch-handle-bg: $base-accent !default;
-  $switch-handle-active-bg: darken($switch-handle-bg, 17%) !default;
+  $switch-handle-active-bg: color.adjust($switch-handle-bg, $lightness: -17%, $space: hsl) !default;
   $switch-hover-border-color: $base-accent !default;
   $switch-focused-border-color: $base-focus-bg !default;
-  $switch-container-active-bg: color.change(darken($switch-bg, 62.5%), $alpha: 0.2) !default;
+  $switch-container-active-bg: color.change(color.adjust($switch-bg, $lightness: -62.5%, $space: hsl), $alpha: 0.2) !default;
   $switch-hover-bg: transparent !default;
   $switch-active-border-color: $base-accent !default;
-  $switch-off-color: lighten($base-text-color, 40%) !default;
-  $switch-handle-off-bg: lighten($switch-handle-bg, 15%) !default;
-  $switch-readonly-border-color: lighten($switch-border-color, 9%) !default;
+  $switch-off-color: color.adjust($base-text-color, $lightness: 40%, $space: hsl) !default;
+  $switch-handle-off-bg: color.adjust($switch-handle-bg, $lightness: 15%, $space: hsl) !default;
+  $switch-readonly-border-color: color.adjust($switch-border-color, $lightness: 9%, $space: hsl) !default;
   $switch-container-readonly-bg: $switch-bg !default;
   $switch-border-radius: $base-border-radius-exsmall !default;
 }
@@ -157,15 +157,15 @@ $switch-border-radius: null !default;
 @if $color == "softblue" {
   $switch-bg: $base-element-bg !default;
   $switch-handle-bg: $base-accent !default;
-  $switch-handle-active-bg: darken($switch-handle-bg, 17%) !default;
+  $switch-handle-active-bg: color.adjust($switch-handle-bg, $lightness: -17%, $space: hsl) !default;
   $switch-hover-border-color: $base-accent !default;
   $switch-focused-border-color: $base-focus-bg !default;
-  $switch-container-active-bg: color.change(darken($switch-bg, 62.5%), $alpha: 0.2) !default;
+  $switch-container-active-bg: color.change(color.adjust($switch-bg, $lightness: -62.5%, $space: hsl), $alpha: 0.2) !default;
   $switch-hover-bg: transparent !default;
   $switch-active-border-color: $base-accent !default;
-  $switch-off-color: lighten($base-text-color, 40%) !default;
-  $switch-handle-off-bg: lighten($switch-handle-bg, 15%) !default;
-  $switch-readonly-border-color: lighten($switch-border-color, 9%) !default;
+  $switch-off-color: color.adjust($base-text-color, $lightness: 40%, $space: hsl) !default;
+  $switch-handle-off-bg: color.adjust($switch-handle-bg, $lightness: 15%, $space: hsl) !default;
+  $switch-readonly-border-color: color.adjust($switch-border-color, $lightness: 9%, $space: hsl) !default;
   $switch-container-readonly-bg: $switch-bg !default;
   $switch-border-radius: $base-border-radius-exsmall !default;
 }

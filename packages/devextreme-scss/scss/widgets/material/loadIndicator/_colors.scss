@@ -15,12 +15,12 @@ $load-indicator-animation-sparkle-bg-color3: null !default;
 
 @if $mode == "light" {
   $load-indicator-animation-sparkle-bg-color1: $base-accent !default;
-  $load-indicator-animation-sparkle-bg-color2: lighten(desaturate(adjust-hue($base-accent, 4), 6.73), 25.88) !default;
-  $load-indicator-animation-sparkle-bg-color3: lighten(desaturate(adjust-hue($base-accent, 4), 6.87), 34.71) !default;
+  $load-indicator-animation-sparkle-bg-color2: color.adjust($base-accent, $hue: 4deg, $saturation: -6.73%, $space: hsl, $lightness: 25.88%) !default;
+  $load-indicator-animation-sparkle-bg-color3: color.adjust($base-accent, $hue: 4deg, $saturation: -6.87%, $space: hsl, $lightness: 34.71%) !default;
 }
 
 @else if $mode == "dark" {
-  $load-indicator-animation-sparkle-bg-color1: lighten($base-accent, 19.22) !default;
-  $load-indicator-animation-sparkle-bg-color2: lighten(desaturate(adjust-hue($base-accent, 2), 58.44), 1.18) !default;
-  $load-indicator-animation-sparkle-bg-color3: darken(desaturate(adjust-hue($base-accent, 3), 64.56), 7.45) !default;
+  $load-indicator-animation-sparkle-bg-color1: color.adjust($base-accent, $lightness: 19.22%, $space: hsl) !default;
+  $load-indicator-animation-sparkle-bg-color2: color.adjust($base-accent, $hue: 2deg, $saturation: -58.44%, $space: hsl, $lightness: 1.18%) !default;
+  $load-indicator-animation-sparkle-bg-color3: color.adjust($base-accent, $hue: 3deg, $saturation: -64.56%, $space: hsl, $lightness: -7.45%) !default;
 }

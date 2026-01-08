@@ -22,24 +22,31 @@ $datagrid-text-stub-background-image-path: null !default;
   > .dx-datagrid-rowsview,
   > .dx-datagrid-total-footer {
     border-left: $datagrid-border;
+    border-left-color: $datagrid-border-color;
     border-right: $datagrid-border;
+    border-right-color: $datagrid-border-color;
   }
 
   > .dx-datagrid-rowsview,
   > .dx-datagrid-total-footer {
     border-bottom: $datagrid-border;
+    border-bottom-color: $datagrid-border-color;
   }
 
   > .dx-datagrid-headers,
   > .dx-datagrid-filter-panel {
     border-top: $datagrid-border;
+    border-top-color: $datagrid-border-color;
   }
 
   > .dx-datagrid-filter-panel {
     border-top-width: 0;
     border-left: $datagrid-border;
+    border-left-color: $datagrid-border-color;
     border-right: $datagrid-border;
+    border-right-color: $datagrid-border-color;
     border-bottom: $datagrid-border;
+    border-bottom-color: $datagrid-border-color;
   }
 }
 
@@ -97,7 +104,8 @@ $datagrid-text-stub-background-image-path: null !default;
     &.dx-state-focused .dx-datagrid-group-panel {
       .dx-group-panel-item:focus,
       .dx-header-filter:focus {
-        outline: 2px solid $datagrid-focused-border-color;
+        outline: 2px solid;
+        outline-color: $datagrid-focused-border-color;
         outline-offset: -2px;
       }
 
@@ -116,7 +124,8 @@ $datagrid-text-stub-background-image-path: null !default;
     &.dx-state-focused .dx-header-row {
       td:focus,
       td .dx-header-filter:focus {
-        outline: 2px solid $datagrid-focused-border-color;
+        outline: 2px solid;
+        outline-color: $datagrid-focused-border-color;
         outline-offset: 2px;
       }
 
@@ -157,8 +166,10 @@ $datagrid-text-stub-background-image-path: null !default;
   .dx-datagrid-rowsview .dx-header-row,
   .dx-datagrid-headers .dx-row {
     td.dx-pointer-events-none {
-      border-left: 2px solid $datagrid-border-color;
-      border-right: 2px solid $datagrid-border-color;
+      border-left: 2px solid;
+      border-left-color: $datagrid-border-color;
+      border-right: 2px solid;
+      border-right-color: $datagrid-border-color;
 
       &.dx-first-cell {
         border-left: none;
@@ -172,7 +183,8 @@ $datagrid-text-stub-background-image-path: null !default;
 
   .dx-datagrid-rowsview.dx-state-focused .dx-data-row {
     & > td.dx-command-edit > a.dx-link:focus {
-      outline: 2px solid $datagrid-focused-border-color;
+      outline: 2px solid;
+      outline-color: $datagrid-focused-border-color;
       outline-offset: 2px;
     }
 
@@ -285,11 +297,13 @@ $datagrid-text-stub-background-image-path: null !default;
 
 .dx-header-multi-row.dx-datagrid-sticky-columns .dx-column-lines > td:first-child {
   border-left: $datagrid-border;
+  border-left-color: $datagrid-border-color;
 }
 
 .dx-datagrid-filter-panel {
   color: $datagrid-base-color;
   border-top: $datagrid-border;
+  border-top-color: $datagrid-border-color;
 
   .dx-icon-filter,
   .dx-datagrid-filter-panel-text,
@@ -301,7 +315,8 @@ $datagrid-text-stub-background-image-path: null !default;
     .dx-icon-filter:focus,
     .dx-datagrid-filter-panel-text:focus,
     .dx-datagrid-filter-panel-clear-filter:focus {
-      outline: 2px solid $datagrid-focused-border-color;
+      outline: 2px solid;
+      outline-color: $datagrid-focused-border-color;
       outline-offset: 3px;
     }
   }
@@ -338,8 +353,10 @@ $datagrid-text-stub-background-image-path: null !default;
     .dx-datagrid-rowsview .dx-header-row,
     .dx-datagrid-headers .dx-row {
       td.dx-pointer-events-none {
-        border-left: 2px solid $datagrid-border-color;
-        border-right: 2px solid $datagrid-border-color;
+        border-left: 2px solid;
+        border-left-color: $datagrid-border-color;
+        border-right: 2px solid;
+        border-right-color: $datagrid-border-color;
 
         &.dx-first-cell {
           border-right: none;
@@ -367,6 +384,7 @@ $datagrid-text-stub-background-image-path: null !default;
       &:first-child {
         border-right: none;
         border-left: $datagrid-border;
+        border-left-color: $datagrid-border-color;
       }
 
       &:last-child {
@@ -382,6 +400,7 @@ $datagrid-text-stub-background-image-path: null !default;
 
         &:not(.dx-datagrid-group-footer) > td {
           border-right: $datagrid-border;
+          border-right-color: $datagrid-border-color;
 
           &:first-child {
             border-right: none;
@@ -395,7 +414,8 @@ $datagrid-text-stub-background-image-path: null !default;
           border-right: none;
 
           &.dx-datagrid-sticky-column-border-left {
-            border-left: 2px solid $datagrid-border-color;
+            border-left: 2px solid;
+            border-left-color: $datagrid-border-color;
           }
         }
       }
@@ -406,6 +426,7 @@ $datagrid-text-stub-background-image-path: null !default;
     .dx-column-lines > td:first-child {
       border-left: none;
       border-right: $datagrid-border;
+      border-right-color: $datagrid-border-color;
     }
   }
 
@@ -423,11 +444,13 @@ $datagrid-text-stub-background-image-path: null !default;
   .dx-datagrid-sticky-columns .dx-datagrid-table {
     .dx-row {
       td.dx-datagrid-sticky-column-border-right {
-        border-right: 2px solid $datagrid-border-color;
+        border-right: 2px solid;
+        border-right-color: $datagrid-border-color;
       }
 
       td.dx-datagrid-sticky-column-border-left {
-        border-left: 2px solid $datagrid-border-color;
+        border-left: 2px solid;
+        border-left-color: $datagrid-border-color;
       }
     }
   }
@@ -453,11 +476,13 @@ $datagrid-text-stub-background-image-path: null !default;
   }
 
   &:focus-within {
-    outline: 2px solid $datagrid-focused-border-color;
+    outline: 2px solid;
+    outline-color: $datagrid-focused-border-color;
     outline-offset: -2px;
   }
 }
 
 .dx-command-ai-header-button .dx-button.dx-state-focused {
-  outline: 2px solid $datagrid-focused-border-color;
+  outline: 2px solid;
+  outline-color: $datagrid-focused-border-color;
 }

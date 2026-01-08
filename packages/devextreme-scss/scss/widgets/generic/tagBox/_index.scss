@@ -1,4 +1,5 @@
 @use "sass:color";
+@use "sass:selector";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
@@ -15,7 +16,7 @@
     padding-left: 0;
     margin-left: $generic-tagbox-input-margin-left;
 
-    @at-root #{selector-append(".dx-rtl", &)},
+    @at-root #{selector.append(".dx-rtl", &)},
     .dx-rtl & {
       padding-right: 0;
       padding-left: 0;
@@ -161,7 +162,8 @@
 
 .dx-tagbox-popup-wrapper {
   .dx-list-select-all {
-    border-bottom: 1px solid $tagbox-select-all-border-color;
+    border-bottom: 1px solid;
+    border-bottom-color: $tagbox-select-all-border-color;
     padding-bottom: $generic-tagbox-select-all-padding-bottom;
     margin-bottom: $generic-tagbox-select-all-margin-bottom;
   }

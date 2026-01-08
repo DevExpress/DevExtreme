@@ -12,8 +12,8 @@
 // adduse
 @use "../../../scrollable";
 @use "../../../badge";
-@import "styling-mode/primary";
-@import "styling-mode/secondary";
+@use "styling-mode/primary" as *;
+@use "styling-mode/secondary" as *;
 
 
 .dx-tab {

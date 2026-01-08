@@ -20,49 +20,49 @@ $form-field-mark-color: null !default;
 
 @if $color == "carmine" {
   $form-group-border-color: #edc1b9 !default;
-  $form-field-required-color: darken($base-danger, 10%) !default;
-  $form-field-mark-color: lighten($base-text-color, 55%) !default;
+  $form-field-required-color: color.adjust($base-danger, $lightness: -10%, $space: hsl) !default;
+  $form-field-mark-color: color.adjust($base-text-color, $lightness: 55%, $space: hsl) !default;
 }
 
 @if $color == "contrast" {
   $form-group-border-color: $base-border-color !default;
-  $form-field-required-color: saturate(darken($base-text-color, 40.8%), 80%) !default;
+  $form-field-required-color: color.adjust($base-text-color, $saturation: -40.8%, $lightness: 80%, $space: hsl) !default;
   $form-field-mark-color: $base-accent !default;
 }
 
 @if $color == "dark" {
   $form-group-border-color: $base-border-color !default;
-  $form-field-required-color: saturate(darken($form-field-item-color, 39.2%), 80%) !default;
-  $form-field-mark-color: darken($form-field-item-color, 48.5%) !default;
+  $form-field-required-color: color.adjust($form-field-item-color, $saturation: -39.2%, $lightness: 80%, $space: hsl) !default;
+  $form-field-mark-color: color.adjust($form-field-item-color, $lightness: -48.5%, $space: hsl) !default;
 }
 
 @if $color == "darkmoon" {
   $form-group-border-color: $base-icon-color !default;
   $form-field-required-color: $base-danger !default;
-  $form-field-mark-color: darken($base-text-color, 44%) !default;
+  $form-field-mark-color: color.adjust($base-text-color, $lightness: -44%, $space: hsl) !default;
 }
 
 @if $color == "darkviolet" {
   $form-group-border-color: $base-selected-border !default;
-  $form-field-required-color: darken($base-danger, 10%) !default;
-  $form-field-mark-color: darken($form-field-item-color, 48.5%) !default;
+  $form-field-required-color: color.adjust($base-danger, $lightness: -10%, $space: hsl) !default;
+  $form-field-mark-color: color.adjust($form-field-item-color, $lightness: -48.5%, $space: hsl) !default;
 }
 
 @if $color == "greenmist" {
-  $form-group-border-color: lighten($base-text-color, 38.5%) !default;
-  $form-field-required-color: darken($base-danger, 10%) !default;
-  $form-field-mark-color: lighten($base-text-color, 40%) !default;
+  $form-group-border-color: color.adjust($base-text-color, $lightness: 38.5%, $space: hsl) !default;
+  $form-field-required-color: color.adjust($base-danger, $lightness: -10%, $space: hsl) !default;
+  $form-field-mark-color: color.adjust($base-text-color, $lightness: 40%, $space: hsl) !default;
 }
 
 @if $color == "light" {
   $form-group-border-color: $base-border-color !default;
-  $form-field-required-color: darken($base-danger, 10%) !default;
-  $form-field-mark-color: lighten($base-text-color, 48.5%) !default;
+  $form-field-required-color: color.adjust($base-danger, $lightness: -10%, $space: hsl) !default;
+  $form-field-mark-color: color.adjust($base-text-color, $lightness: 48.5%, $space: hsl) !default;
 }
 
 @if $color == "softblue" {
-  $form-group-border-color: darken($base-border-color, 7%) !default; // #e8eaeb => #d3d9de
-  $form-field-required-color: darken($base-danger, 10%) !default;
-  $form-field-mark-color: lighten($base-text-color, 55%) !default;
+  $form-group-border-color: color.adjust($base-border-color, $lightness: -7%, $space: hsl) !default; // #e8eaeb => #d3d9de
+  $form-field-required-color: color.adjust($base-danger, $lightness: -10%, $space: hsl) !default;
+  $form-field-mark-color: color.adjust($base-text-color, $lightness: 55%, $space: hsl) !default;
 }
 

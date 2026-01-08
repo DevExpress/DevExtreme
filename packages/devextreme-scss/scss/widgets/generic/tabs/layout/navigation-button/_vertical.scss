@@ -17,12 +17,14 @@
     border-color: $tabs-border-color;
 
     &.dx-tabs-nav-button-left {
-      border-right: $generic-tabs-border-width solid $tabs-border-color;
+      border-right: $generic-tabs-border-width solid;
+      border-right-color: $tabs-border-color;
       border-bottom: none;
     }
 
     &.dx-tabs-nav-button-right {
-      border-left: $generic-tabs-border-width solid $tabs-border-color;
+      border-left: $generic-tabs-border-width solid;
+      border-left-color: $tabs-border-color;
       border-top: none;
     }
   }
