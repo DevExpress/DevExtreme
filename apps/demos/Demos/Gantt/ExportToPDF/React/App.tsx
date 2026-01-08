@@ -22,6 +22,17 @@ import {
 
 import { applyPlugin } from 'jspdf-autotable';
 
+import type { ValueChangedEvent as SelectBoxValueChangedEvent } from 'devextreme/ui/select_box';
+import type { ValueChangedEvent as NumberBoxValueChangedEvent } from 'devextreme/ui/number_box';
+import type { ValueChangedEvent as DateBoxValueChangedEvent } from 'devextreme/ui/date_box';
+import type { ValueChangedEvent as CheckBoxValueChangedEvent } from 'devextreme/ui/check_box';
+
+type ValueChanged =
+  | SelectBoxValueChangedEvent
+  | NumberBoxValueChangedEvent
+  | DateBoxValueChangedEvent
+  | CheckBoxValueChangedEvent;
+
 applyPlugin(jsPDF);
 
 type GanttPdfExportMode = 'all' | 'treeList' | 'chart';
@@ -32,7 +43,7 @@ const dateRanges = ['All', 'Visible', 'Custom'];
 const startTaskIndexLabel = { 'aria-label': 'Start Task Index' };
 const endTaskIndexLabel = { 'aria-label': 'End Task Index' };
 
-class App extends React.Component {
+class App extends React.Component<object> {
   formatBoxRef: any;
 
   exportModeBoxRef: any;
@@ -61,7 +72,7 @@ class App extends React.Component {
 
   endDateValueChanged: IDateBoxOptions['onValueChanged'];
 
-  constructor(props) {
+  constructor(props: object) {
     super(props);
     this.formatBoxRef = null;
     this.exportModeBoxRef = null;
@@ -85,7 +96,7 @@ class App extends React.Component {
       onClick: this.exportButtonClick.bind(this),
     };
 
-    const updateFn = (key) => (e) => this.setState({ [key]: e.value });
+    const updateFn = (key: string) => (e: ValueChanged) => this.setState({ [key]: e.value });
 
     this.formatBoxSelectionChanged = updateFn('formatBoxValue');
     this.exportModeBoxSelectionChanged = updateFn('exportModeBoxValue');
@@ -249,7 +260,7 @@ class App extends React.Component {
     const isLandscape = this.state.landscapeCheckBoxValue;
     const exportMode: GanttPdfExportMode = this.state.exportModeBoxValue === 'Tree List' ? 'treeList' : this.state.exportModeBoxValue.toLowerCase() as GanttPdfExportMode;
     const dataRangeMode = this.state.dateRangeBoxValue.toLowerCase();
-    let dataRange;
+    let dataRange: object;
     if (dataRangeMode === 'custom') {
       dataRange = {
         startIndex: this.state.startTaskIndex,
@@ -258,7 +269,7 @@ class App extends React.Component {
         endDate: this.state.endDate,
       };
     } else {
-      dataRange = dataRangeMode;
+      dataRange = { mode: dataRangeMode };
     }
 
     pdfExporter.exportGantt(
