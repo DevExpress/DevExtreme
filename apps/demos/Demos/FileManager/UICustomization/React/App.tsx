@@ -10,7 +10,6 @@ interface FileSystemItem {
   isDirectory: boolean;
   size?: number;
   items?: FileSystemItem[];
-  [key: string]: any;
 }
 
 export default function App() {

@@ -12,7 +12,7 @@ const remoteProvider = new RemoteFileSystemProvider({
 const allowedFileExtensions: string[] = [];
 
 export default function App() {
-  const [currentPath, setCurrentPath] = useState('Documents/Reports');
+  const [currentPath, setCurrentPath] = useState<string>('Documents/Reports');
 
   const onCurrentDirectoryChanged = useCallback((e: FileManagerTypes.CurrentDirectoryChangedEvent) => {
     const path = e?.component?.option('currentPath');
