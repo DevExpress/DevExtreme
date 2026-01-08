@@ -80,7 +80,7 @@ describe('Workspace', () => {
     });
   });
 
-  describe('scrollTo (T1310544)', () => {
+  describe('scrollTo', () => {
     beforeEach(() => {
       fx.off = true;
       setupSchedulerTestEnvironment({ height: 600 });
@@ -124,6 +124,110 @@ describe('Workspace', () => {
       expect(scrollParams.left).toBeCloseTo(expectedLeft, 1);
 
       scrollBySpy.mockRestore();
+    });
+
+    describe('hour normalization', () => {
+      it('should normalize hours to visible range without viewOffset', async () => {
+        const { scheduler } = await createScheduler({
+          views: ['timelineDay'],
+          currentView: 'timelineDay',
+          currentDate: new Date(2021, 1, 2),
+          startDayHour: 6,
+          endDayHour: 18,
+          offset: 0,
+        });
+
+        const workspace = scheduler.getWorkSpace();
+        const scrollable = workspace.getScrollable();
+        const scrollBySpy = jest.spyOn(scrollable, 'scrollBy');
+
+        // Below startDayHour (6), should normalize to 6
+        const dateBelowRange = new Date(2021, 1, 2, 4, 0);
+        scheduler.scrollTo(dateBelowRange, undefined, false);
+        expect(scrollBySpy).toHaveBeenCalled();
+
+        scrollBySpy.mockClear();
+        // Above endDayHour (18), should normalize to 17
+        const dateAboveRange = new Date(2021, 1, 2, 20, 0);
+        scheduler.scrollTo(dateAboveRange, undefined, false);
+        expect(scrollBySpy).toHaveBeenCalled();
+
+        scrollBySpy.mockClear();
+        // Within range [6, 18), should scroll normally
+        const dateInRange = new Date(2021, 1, 2, 12, 0);
+        scheduler.scrollTo(dateInRange, undefined, false);
+        expect(scrollBySpy).toHaveBeenCalled();
+
+        scrollBySpy.mockRestore();
+      });
+
+      it('should normalize hours to visible range with viewOffset (no midnight crossing)', async () => {
+        const { scheduler } = await createScheduler({
+          views: ['timelineDay'],
+          currentView: 'timelineDay',
+          currentDate: new Date(2021, 1, 2),
+          startDayHour: 6,
+          endDayHour: 18,
+          offset: 360,
+        });
+
+        const workspace = scheduler.getWorkSpace();
+        const scrollable = workspace.getScrollable();
+        const scrollBySpy = jest.spyOn(scrollable, 'scrollBy');
+
+        // Below adjustedStartDayHour (12), should normalize to 12
+        const dateBelowAdjustedRange = new Date(2021, 1, 2, 10, 0);
+        scheduler.scrollTo(dateBelowAdjustedRange, undefined, false);
+        expect(scrollBySpy).toHaveBeenCalled();
+
+        scrollBySpy.mockClear();
+        // Within adjusted range [12, 24), should scroll normally
+        const dateInAdjustedRange = new Date(2021, 1, 2, 15, 0);
+        scheduler.scrollTo(dateInAdjustedRange, undefined, false);
+        expect(scrollBySpy).toHaveBeenCalled();
+
+        scrollBySpy.mockRestore();
+      });
+
+      it('should normalize hours to visible range with viewOffset (midnight crossing)', async () => {
+        const { scheduler } = await createScheduler({
+          views: ['timelineDay'],
+          currentView: 'timelineDay',
+          currentDate: new Date(2021, 1, 2),
+          startDayHour: 6,
+          endDayHour: 18,
+          offset: 720,
+        });
+
+        const workspace = scheduler.getWorkSpace();
+        const scrollable = workspace.getScrollable();
+        const scrollBySpy = jest.spyOn(scrollable, 'scrollBy');
+
+        // In gap [6, 18), should normalize to 18:00 Feb 2
+        const dateInGap = new Date(2021, 1, 2, 10, 0);
+        scheduler.scrollTo(dateInGap, undefined, false);
+        expect(scrollBySpy).toHaveBeenCalled();
+
+        scrollBySpy.mockClear();
+        // In range [18, 24) on Feb 2, should scroll normally
+        const dateInFirstRange = new Date(2021, 1, 2, 22, 0);
+        scheduler.scrollTo(dateInFirstRange, undefined, false);
+        expect(scrollBySpy).toHaveBeenCalled();
+
+        scrollBySpy.mockClear();
+        // In range [0, 6) but on wrong day (Feb 2), should normalize to 18:00 Feb 2
+        const dateInSecondRangeWrongDay = new Date(2021, 1, 2, 3, 0);
+        scheduler.scrollTo(dateInSecondRangeWrongDay, undefined, false);
+        expect(scrollBySpy).toHaveBeenCalled();
+
+        scrollBySpy.mockClear();
+        // In range [0, 6) on correct day (Feb 3), should scroll normally
+        const dateInSecondRangeCorrectDay = new Date(2021, 1, 3, 3, 0);
+        scheduler.scrollTo(dateInSecondRangeCorrectDay, undefined, false);
+        expect(scrollBySpy).toHaveBeenCalled();
+
+        scrollBySpy.mockRestore();
+      });
     });
   });
 });

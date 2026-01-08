@@ -691,8 +691,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     }
 
     if (this.isVirtualScrolling()
-            && (this.virtualScrollingDispatcher.horizontalScrollingAllowed
-                || this.virtualScrollingDispatcher.height)) {
+      && (this.virtualScrollingDispatcher.horizontalScrollingAllowed
+        || this.virtualScrollingDispatcher.height)) {
       const currentOnScroll = config.onScroll;
       config = {
         ...config,
@@ -1411,7 +1411,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const currentDate = date || new Date(this.option('currentDate'));
     const startDayHour = this.option('startDayHour');
     const endDayHour = this.option('endDayHour');
-    const viewOffset = this.option('viewOffset');
+    const viewOffset = this.option('viewOffset') as number;
+    const viewOffsetHours = viewOffset / HOUR_MS;
 
     if (viewOffset === 0) {
       if (hours < startDayHour) {
@@ -1420,6 +1421,60 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
       if (hours >= endDayHour) {
         hours = endDayHour - 1;
+      }
+    } else {
+      const adjustedStartDayHour = (startDayHour + viewOffsetHours) % 24;
+      const adjustedEndDayHour = (endDayHour + viewOffsetHours) % 24;
+
+      // If adjustedEndDayHour is 0, it means the range is [adjustedStartDayHour, 24), not crossing midnight
+      // Only consider it crossing midnight if adjustedEndDayHour > 0 and adjustedStartDayHour >= adjustedEndDayHour
+      const crossesMidnight = adjustedEndDayHour > 0 && adjustedStartDayHour >= adjustedEndDayHour;
+
+      // If adjustedEndDayHour is 0, treat it as 24 for range comparison
+      const effectiveEndDayHour = adjustedEndDayHour === 0 ? 24 : adjustedEndDayHour;
+
+      switch (true) {
+        case crossesMidnight:
+          // Boundaries cross midnight: [adjustedStartDayHour, 24) ∪ [0, adjustedEndDayHour)
+          // The second range [0, adjustedEndDayHour) belongs to the next day
+          if (hours >= adjustedStartDayHour) {
+            // Hours are in first range [adjustedStartDayHour, 24), keep original hours
+          } else if (hours < adjustedEndDayHour) {
+            // Hours are in second range [0, adjustedEndDayHour)
+            // This range belongs to the next day relative to the start of visible range
+            // Check if currentDate is the next day by comparing with startViewDate
+            const startViewDate = this.getStartViewDate();
+            const nextDayDate = new Date(startViewDate);
+            nextDayDate.setDate(nextDayDate.getDate() + 1);
+
+            // Check if currentDate is the next day (same year, month, date)
+            const isNextDay = currentDate.getFullYear() === nextDayDate.getFullYear()
+              && currentDate.getMonth() === nextDayDate.getMonth()
+              && currentDate.getDate() === nextDayDate.getDate();
+
+            if (!isNextDay) {
+              // Current date is not the next day, normalize to adjustedStartDayHour on current date
+              hours = adjustedStartDayHour;
+            }
+            // If isNextDay is true, keep original hours
+          } else {
+            // Hours are in gap [adjustedEndDayHour, adjustedStartDayHour), normalize to adjustedStartDayHour
+            hours = adjustedStartDayHour;
+          }
+          break;
+
+        case hours < adjustedStartDayHour:
+          // Normal case: boundaries don't cross midnight [adjustedStartDayHour, effectiveEndDayHour)
+          hours = adjustedStartDayHour;
+          break;
+
+        case hours >= effectiveEndDayHour:
+          hours = effectiveEndDayHour - 1;
+          break;
+
+        default:
+          // Hours are in valid range, keep original hours
+          break;
       }
     }
 
@@ -1514,8 +1569,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   isGroupedByDate() {
     return this.option('groupByDate')
-            && this._isHorizontalGroupedWorkSpace()
-            && this._getGroupCount() > 0;
+      && this._isHorizontalGroupedWorkSpace()
+      && this._getGroupCount() > 0;
   }
 
   // TODO: refactor current time indicator
@@ -1773,9 +1828,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       const cellEndTime = cellEndDate.getTime();
 
       if (((!inAllDayRow && cellStartTime <= time
-                && time < cellEndTime)
-                || (inAllDayRow && trimmedTime === cellStartTime))
-                && groupIndex === cellGroupIndex) {
+        && time < cellEndTime)
+        || (inAllDayRow && trimmedTime === cellStartTime))
+        && groupIndex === cellGroupIndex) {
         return false;
       }
       return currentResult;
@@ -1816,9 +1871,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       const rowIndex = index / totalColumnCount;
 
       if (scrolledColumnCount <= columnIndex
-                && columnIndex < columnCount
-                && scrolledRowCount <= rowIndex
-                && rowIndex < rowCount) {
+        && columnIndex < columnCount
+        && scrolledRowCount <= rowIndex
+        && rowIndex < rowCount) {
         result.push($cell);
       }
     });
@@ -1871,16 +1926,48 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const viewOffset = this.option('viewOffset') as number;
     const min = this.getStartViewDate();
     const max = this.getEndViewDate();
+    const startDayHour = this.option('startDayHour');
+    const endDayHour = this.option('endDayHour');
+    const viewOffsetHours = viewOffset / HOUR_MS;
 
-    const extendedMin = new Date(min.getTime() - viewOffset);
-    const extendedMax = new Date(max.getTime() + viewOffset);
+    // Check only the date range, not the time
+    // Time will be normalized in _getScrollCoordinates
+    const minDate = new Date(min);
+    minDate.setHours(0, 0, 0, 0);
+    const maxDate = new Date(max);
+    maxDate.setHours(23, 59, 59, 999);
 
-    if (date < extendedMin || date > extendedMax) {
-      throwWarning && errors.log('W1008', date);
-      return false;
+    const dateOnly = new Date(date);
+    dateOnly.setHours(0, 0, 0, 0);
+
+    // Check if date is within the basic range [minDate, maxDate]
+    if (dateOnly >= minDate && dateOnly <= maxDate) {
+      return true;
     }
 
-    return true;
+    // With viewOffset, if range crosses midnight, allow the next day
+    if (viewOffset !== 0) {
+      const adjustedStartDayHour = (startDayHour + viewOffsetHours) % 24;
+      const adjustedEndDayHour = (endDayHour + viewOffsetHours) % 24;
+      const crossesMidnight = adjustedEndDayHour > 0 && adjustedStartDayHour >= adjustedEndDayHour;
+
+      if (crossesMidnight) {
+        // Range crosses midnight: [adjustedStartDayHour, 24) ∪ [0, adjustedEndDayHour)
+        // Allow the next day after maxDate
+        const nextDayMin = new Date(maxDate);
+        nextDayMin.setDate(nextDayMin.getDate() + 1);
+        nextDayMin.setHours(0, 0, 0, 0);
+        const nextDayMax = new Date(nextDayMin);
+        nextDayMax.setHours(23, 59, 59, 999);
+
+        if (dateOnly >= nextDayMin && dateOnly <= nextDayMax) {
+          return true;
+        }
+      }
+    }
+
+    throwWarning && errors.log('W1008', date);
+    return false;
   }
 
   needApplyCollectorOffset() {
@@ -2316,11 +2403,11 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       renovateRender: true,
       height: undefined,
       draggingMode: 'outlook',
-      onScrollEnd: () => {},
+      onScrollEnd: () => { },
       getHeaderHeight: undefined,
-      onRenderAppointments: () => {},
-      onShowAllDayPanel: () => {},
-      onSelectedCellsClick: () => {},
+      onRenderAppointments: () => { },
+      onShowAllDayPanel: () => { },
+      onSelectedCellsClick: () => { },
       timeZoneCalculator: undefined,
       schedulerHeight: undefined,
       schedulerWidth: undefined,
@@ -3367,10 +3454,10 @@ const createDragBehaviorConfig = (
       const isCurrentSchedulerElement = dateTables.find(el).length === 1;
 
       return isCurrentSchedulerElement
-                && (
-                  classList.contains(DATE_TABLE_CELL_CLASS)
-                    || classList.contains(ALL_DAY_TABLE_CELL_CLASS)
-                );
+        && (
+          classList.contains(DATE_TABLE_CELL_CLASS)
+          || classList.contains(ALL_DAY_TABLE_CELL_CLASS)
+        );
     });
 
     if (droppableCell) {
