@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 // ignored because they have import of localization package and fail during bundling
 // 2 for Grid (RowTemplate, CellCustomization)
 const ignoredLocalization = ['Localization', 'RowTemplate', 'CellCustomization', 'TimeZonesSupport', 'ExportToPDF'];

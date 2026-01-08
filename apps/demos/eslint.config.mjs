@@ -41,7 +41,9 @@ export default [
       'shared/empty-file.ts',
       'Demos/**/config.js',
       'Demos/**/Vue/**/*.html',
-      'utils',
+      'utils/templates/**/*.ts',
+      'utils/templates/**/*.tsx',
+      '**/.DS_Store',
 
       '**/*.{png,json,mjs,css,html,md}',
     ],
@@ -104,6 +106,8 @@ export default [
           'urls',
           'whitespace',
           'yargs',
+          'treshold', // should be updated to 'threshold' in the codebase
+          'callstack',
         ];
 
         return spellcheckRule;
@@ -292,6 +296,18 @@ export default [
       'no-undef': 0,
     },
   },
+  {
+    files: ['utils/templates/jQuery/data.js'],
+    languageOptions: {
+      globals: {
+        ...globals.jquery,
+        DevExpress: true,
+      },
+    },
+    rules: {
+      'no-unused-vars': 0,
+    },
+  },
 
   // React demos
   {
@@ -452,7 +468,11 @@ export default [
   // testcafe tests
   ...compat.extends('devextreme/testcafe').map(config => ({
     ...config,
-    rules: changeRulesToStylistic(config.rules || {}),
+    rules: {
+      // ...changeRulesToStylistic(config.rules || {}),
+      ...config.rules,
+      'no-only-tests/no-only-tests': 0,
+    },
     files: ['testing/**/*.{js,ts}', 'utils/visual-tests/**/*.*'],
   })),
 
@@ -480,5 +500,33 @@ export default [
   ...compat.extends('plugin:jest/recommended', 'plugin:jest/style').map(config => ({
     ...config,
     files: ['utils/tests/**/*.*'],
+    rules: {
+      'jest/expect-expect': 0,
+    },
   })),
+
+  // utils directory
+  {
+    files: [
+      'utils/**/*.{js,ts}',
+    ],
+    ignores: [
+      'utils/testing/',
+      'utils/visual-tests/',
+      'utils/templates/',
+    ],
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+      },
+    },
+    rules: {
+      'no-console': 0,
+      'no-await-in-loop': 0,
+      'no-restricted-syntax': 0,
+      '@typescript-eslint/await-thenable': 0,
+      'spellcheck/spell-checker': 0,
+      'consistent-return': 0,
+    },
+  },
 ];

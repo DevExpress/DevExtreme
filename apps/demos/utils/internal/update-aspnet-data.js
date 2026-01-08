@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 const path = require('path');
 const fs = require('fs');
 
@@ -15,7 +14,7 @@ function unwrapSkip(text) {
 
 function panic(message) {
   console.error(message);
-  process.exit(1); // eslint-disable-line no-process-exit
+  process.exit(1);
 }
 
 if (argv.length !== 1) {
