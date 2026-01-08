@@ -37,8 +37,8 @@ const notifyDisableDate = () => {
   );
 };
 const onContentReady = (e) => {
-  const element = e.component?.$element();
-  element && 'attr' in element && typeof element.attr === 'function' && setComponentAria(element);
+  const element = e.component?.element();
+  element && setComponentAria(element);
 };
 const applyDisableDatesToDateEditors = (form) => {
   const startDateEditor = form.getEditor('startDate');
@@ -71,10 +71,10 @@ const onAppointmentUpdating = (e) => {
   }
 };
 const setComponentAria = (element) => {
-  const prevAria = element?.attr('aria-label') || '';
+  const prevAria = element.getAttribute('aria-label') || '';
   const description = ariaDescription();
   const nextAria = `${prevAria}${description ? ` ${description}` : ''}`;
-  element?.attr('aria-label', nextAria);
+  element.setAttribute('aria-label', nextAria);
 };
 const App = () => {
   const [currentView, setCurrentView] = useState(views[0]);

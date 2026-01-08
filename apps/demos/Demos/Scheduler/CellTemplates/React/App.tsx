@@ -77,7 +77,7 @@ const onAppointmentUpdating = (e: SchedulerTypes.AppointmentUpdatingEvent) => {
 };
 
 const setComponentAria = (element: HTMLElement) => {
-    const prevAria = element.getAttribute('aria-label') || '';
+  const prevAria = element.getAttribute('aria-label') || '';
   const description = ariaDescription();
   const nextAria = `${prevAria}${description ? ` ${description}` : ''}`;
   element.setAttribute('aria-label', nextAria);
