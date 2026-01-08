@@ -1,20 +1,22 @@
 import React, { useCallback, useState } from 'react';
 import FileManager, {
-  Permissions, ItemView, Details, Column, type FileManagerTypes,
+  Permissions, ItemView, Details, Column,
 } from 'devextreme-react/file-manager';
+import type { FileManagerTypes } from 'devextreme-react/file-manager';
 import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider';
 
 const remoteProvider = new RemoteFileSystemProvider({
   endpointUrl: 'https://js.devexpress.com/Demos/NetCore/api/file-manager-db',
 });
 
-const allowedFileExtensions = [];
+const allowedFileExtensions: string[] = [];
 
 export default function App() {
-  const [currentPath, setCurrentPath] = useState('Documents/Reports');
+  const [currentPath, setCurrentPath] = useState<string>('Documents/Reports');
 
   const onCurrentDirectoryChanged = useCallback((e: FileManagerTypes.CurrentDirectoryChangedEvent) => {
-    setCurrentPath(e.component.option('currentPath'));
+    const path = e?.component?.option('currentPath');
+    path && setCurrentPath(path);
   }, []);
 
   return (
