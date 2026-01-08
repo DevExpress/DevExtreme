@@ -227,7 +227,7 @@ gulp.task('add-exports-to-package-json', () => gulp
             const pkg = JSON.parse(file.contents.toString(enc));
 
             pkg.exports = {
-                "./dist/*":"./dist/!*",
+                "./dist/*":"./dist/*",
                 ...collectExports(path.resolve(packagePath))
             };
 
