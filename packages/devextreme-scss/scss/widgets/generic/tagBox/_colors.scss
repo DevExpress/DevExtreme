@@ -31,10 +31,10 @@ $tagbox-select-all-border-color: $base-border-color !default;
 
 @if $color == "carmine" {
   $tagbox-tag-color: $base-text-color !default;
-  $tagbox-tag-bg: darken($base-bg, 9%) !default; // #fff => #e6e9eb
+  $tagbox-tag-bg: color.adjust($base-bg, $lightness: -9%, $space: hsl) !default; // #fff => #e6e9eb
   $tagbox-tag-button-remove-bg: #9ea4a8 !default;
-  $tagbox-tag-button-remove-active-bg: lighten($tagbox-tag-button-remove-bg, 20%) !default;
-  $tagbox-tag-focused-bg: darken($tagbox-tag-bg, 7%) !default;
+  $tagbox-tag-button-remove-active-bg: color.adjust($tagbox-tag-button-remove-bg, $lightness: 20%, $space: hsl) !default;
+  $tagbox-tag-focused-bg: color.adjust($tagbox-tag-bg, $lightness: -7%, $space: hsl) !default;
   $tagbox-tag-focused-color: $tagbox-tag-color !default;
   $tagbox-tag-focused-button-remove-bg: $tagbox-tag-button-remove-bg !default;
 }
@@ -43,7 +43,7 @@ $tagbox-select-all-border-color: $base-border-color !default;
   $tagbox-tag-bg: extcolor.difference(#fff, $base-bg) !default;
   $tagbox-tag-color: $base-inverted-text-color !default;
   $tagbox-tag-button-remove-bg: $base-inverted-text-color !default;
-  $tagbox-tag-button-remove-active-bg: lighten($tagbox-tag-button-remove-bg, 20%) !default;
+  $tagbox-tag-button-remove-active-bg: color.adjust($tagbox-tag-button-remove-bg, $lightness: 20%, $space: hsl) !default;
   $tagbox-tag-focused-bg: $base-focus-color !default;
   $tagbox-tag-focused-color: $base-text-color !default;
   $tagbox-tag-focused-button-remove-bg: $tagbox-tag-button-remove-bg !default;
@@ -51,20 +51,20 @@ $tagbox-select-all-border-color: $base-border-color !default;
 
 @if $color == "dark" {
   $tagbox-tag-color: $base-text-color !default;
-  $tagbox-tag-bg: lighten($base-bg, 13.5%) !default;
-  $tagbox-tag-button-remove-bg: lighten($tagbox-tag-bg, 20%) !default;
-  $tagbox-tag-button-remove-active-bg: darken($tagbox-tag-button-remove-bg, 20%) !default;
-  $tagbox-tag-focused-bg: darken($tagbox-tag-bg, 7.3%) !default;
+  $tagbox-tag-bg: color.adjust($base-bg, $lightness: 13.5%, $space: hsl) !default;
+  $tagbox-tag-button-remove-bg: color.adjust($tagbox-tag-bg, $lightness: 20%, $space: hsl) !default;
+  $tagbox-tag-button-remove-active-bg: color.adjust($tagbox-tag-button-remove-bg, $lightness: -20%, $space: hsl) !default;
+  $tagbox-tag-focused-bg: color.adjust($tagbox-tag-bg, $lightness: -7.3%, $space: hsl) !default;
   $tagbox-tag-focused-color: $tagbox-tag-color !default;
   $tagbox-tag-focused-button-remove-bg: $tagbox-tag-button-remove-bg !default;
 }
 
 @if $color == "darkmoon" {
   $tagbox-tag-color: $base-text-color !default;
-  $tagbox-tag-bg: lighten($base-bg, 13.5%) !default;
-  $tagbox-tag-button-remove-bg: lighten($tagbox-tag-bg, 20%) !default;
-  $tagbox-tag-button-remove-active-bg: darken($tagbox-tag-button-remove-bg, 20%) !default;
-  $tagbox-tag-focused-bg: darken($tagbox-tag-bg, 7.3%) !default;
+  $tagbox-tag-bg: color.adjust($base-bg, $lightness: 13.5%, $space: hsl) !default;
+  $tagbox-tag-button-remove-bg: color.adjust($tagbox-tag-bg, $lightness: 20%, $space: hsl) !default;
+  $tagbox-tag-button-remove-active-bg: color.adjust($tagbox-tag-button-remove-bg, $lightness: -20%, $space: hsl) !default;
+  $tagbox-tag-focused-bg: color.adjust($tagbox-tag-bg, $lightness: -7.3%, $space: hsl) !default;
   $tagbox-tag-focused-color: $tagbox-tag-color !default;
   $tagbox-tag-focused-button-remove-bg: $tagbox-tag-button-remove-bg !default;
 }
@@ -73,38 +73,38 @@ $tagbox-select-all-border-color: $base-border-color !default;
   $tagbox-tag-color: $base-text-color !default;
   $tagbox-tag-bg: $base-select-bg !default;
   $tagbox-tag-button-remove-bg: $base-row-alternation-background !default;
-  $tagbox-tag-button-remove-active-bg: darken($tagbox-tag-button-remove-bg, 20%) !default;
-  $tagbox-tag-focused-bg: darken($tagbox-tag-bg, 7.3%) !default;
+  $tagbox-tag-button-remove-active-bg: color.adjust($tagbox-tag-button-remove-bg, $lightness: -20%, $space: hsl) !default;
+  $tagbox-tag-focused-bg: color.adjust($tagbox-tag-bg, $lightness: -7.3%, $space: hsl) !default;
   $tagbox-tag-focused-color: $tagbox-tag-color !default;
   $tagbox-tag-focused-button-remove-bg: $tagbox-tag-button-remove-bg !default;
 }
 
 @if $color == "greenmist" {
-  $tagbox-tag-color: lighten($base-text-color, 100%) !default;
+  $tagbox-tag-color: color.adjust($base-text-color, $lightness: 100%, $space: hsl) !default;
   $tagbox-tag-bg: $base-accent !default;
   $tagbox-tag-button-remove-bg: extcolor.difference($base-accent, #383838) !default; // #3cbab2  => #14827b
-  $tagbox-tag-button-remove-active-bg: lighten($tagbox-tag-button-remove-bg, 20%) !default;
-  $tagbox-tag-focused-bg: darken($tagbox-tag-bg, 7%) !default;
+  $tagbox-tag-button-remove-active-bg: color.adjust($tagbox-tag-button-remove-bg, $lightness: 20%, $space: hsl) !default;
+  $tagbox-tag-focused-bg: color.adjust($tagbox-tag-bg, $lightness: -7%, $space: hsl) !default;
   $tagbox-tag-focused-color: $tagbox-tag-color !default;
   $tagbox-tag-focused-button-remove-bg: $tagbox-tag-button-remove-bg !default;
 }
 
 @if $color == "light" {
   $tagbox-tag-color: $base-text-color !default;
-  $tagbox-tag-bg: darken($base-bg, 13.5%) !default;
-  $tagbox-tag-button-remove-bg: darken($tagbox-tag-bg, 20%) !default;
-  $tagbox-tag-button-remove-active-bg: lighten($tagbox-tag-button-remove-bg, 20%) !default;
-  $tagbox-tag-focused-bg: darken($tagbox-tag-bg, 7%) !default;
+  $tagbox-tag-bg: color.adjust($base-bg, $lightness: -13.5%, $space: hsl) !default;
+  $tagbox-tag-button-remove-bg: color.adjust($tagbox-tag-bg, $lightness: -20%, $space: hsl) !default;
+  $tagbox-tag-button-remove-active-bg: color.adjust($tagbox-tag-button-remove-bg, $lightness: 20%, $space: hsl) !default;
+  $tagbox-tag-focused-bg: color.adjust($tagbox-tag-bg, $lightness: -7%, $space: hsl) !default;
   $tagbox-tag-focused-color: $tagbox-tag-color !default;
   $tagbox-tag-focused-button-remove-bg: $tagbox-tag-button-remove-bg !default;
 }
 
 @if $color == "softblue" {
   $tagbox-tag-color: $base-text-color !default;
-  $tagbox-tag-bg: darken($base-bg, 13.5%) !default;
-  $tagbox-tag-button-remove-bg: darken($tagbox-tag-bg, 20%) !default;
-  $tagbox-tag-button-remove-active-bg: lighten($tagbox-tag-button-remove-bg, 20%) !default;
-  $tagbox-tag-focused-bg: darken($tagbox-tag-bg, 7%) !default;
+  $tagbox-tag-bg: color.adjust($base-bg, $lightness: -13.5%, $space: hsl) !default;
+  $tagbox-tag-button-remove-bg: color.adjust($tagbox-tag-bg, $lightness: -20%, $space: hsl) !default;
+  $tagbox-tag-button-remove-active-bg: color.adjust($tagbox-tag-button-remove-bg, $lightness: 20%, $space: hsl) !default;
+  $tagbox-tag-focused-bg: color.adjust($tagbox-tag-bg, $lightness: -7%, $space: hsl) !default;
   $tagbox-tag-focused-color: $tagbox-tag-color !default;
   $tagbox-tag-focused-button-remove-bg: $tagbox-tag-button-remove-bg !default;
 }

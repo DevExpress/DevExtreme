@@ -13,7 +13,8 @@
 .dx-pagination {
   padding-top: $generic-pagination-paddings;
   padding-bottom: $generic-pagination-paddings;
-  border-top: 1px solid $base-border-color;
+  border-top: 1px solid;
+  border-top-color: $base-border-color;
 
   .dx-page,
   .dx-page-size,
@@ -25,7 +26,8 @@
     .dx-page:focus,
     .dx-page-size:focus,
     .dx-navigate-button:focus {
-      outline: 2px solid $pagination-outline-color;
+      outline: 2px solid;
+      outline-color: $pagination-outline-color;
       outline-offset: -2px;
     }
   }

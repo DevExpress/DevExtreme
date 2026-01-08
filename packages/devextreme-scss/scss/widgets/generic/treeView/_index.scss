@@ -52,7 +52,8 @@
 .dx-treeview-item-with-checkbox {
   &.dx-state-focused {
     >.dx-treeview-item .dx-checkbox .dx-checkbox-icon {
-      border: 1px solid $checkbox-border-color-focused;
+      border: 1px solid;
+      border-color: $checkbox-border-color-focused;
     }
   }
 }

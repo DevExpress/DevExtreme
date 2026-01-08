@@ -1,4 +1,5 @@
 @use "sass:color";
+@use "sass:selector";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
@@ -117,7 +118,7 @@ $generic-dropdowneditor-invalid-badge-size: $generic-invalid-badge-size + $gener
       background-color: $dropdowneditor-button-hover-bg;
       border-color: $dropdowneditor-button-hover-border-color;
 
-      @at-root #{selector-append(".dx-editor-filled", &)} {
+      @at-root #{selector.append(".dx-editor-filled", &)} {
         background-color: $dropdowneditor-filled-button-hover-bg;
       }
     }
@@ -132,7 +133,7 @@ $generic-dropdowneditor-invalid-badge-size: $generic-invalid-badge-size + $gener
     color: $dropdowneditor-icon-active-color;
     opacity: 1;
 
-    @at-root #{selector-append(".dx-editor-filled", &)},
+    @at-root #{selector.append(".dx-editor-filled", &)},
     .dx-editor-filled & {
       background-color: $dropdowneditor-filled-button-active-bg;
     }
@@ -160,15 +161,15 @@ $generic-dropdowneditor-invalid-badge-size: $generic-invalid-badge-size + $gener
 
   &.dx-editor-filled {
     .dx-dropdowneditor-icon {
-      @at-root #{selector-append(".dx-state-hover", &)} {
+      @at-root #{selector.append(".dx-state-hover", &)} {
         background-color: $dropdowneditor-filled-button-invalid-hover-bg;
       }
 
-      @at-root #{selector-append(".dx-dropdowneditor-active", &)} {
+      @at-root #{selector.append(".dx-dropdowneditor-active", &)} {
         background-color: $dropdowneditor-filled-button-invalid-active-bg;
       }
 
-      @at-root #{selector-append(".dx-state-active", &)} {
+      @at-root #{selector.append(".dx-state-active", &)} {
         background-color: $dropdowneditor-filled-button-invalid-active-bg;
       }
     }

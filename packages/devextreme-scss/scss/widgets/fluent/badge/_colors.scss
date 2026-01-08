@@ -25,6 +25,6 @@ $badge-background-color-disabled: $base-background-disabled !default;
 }
 
 @if $mode == "dark" {
-  $badge-bg: darken(desaturate(adjust-hue($base-accent, 358.4), 8.6), 26.7) !default;
+  $badge-bg: color.adjust($base-accent, $hue: 358.4deg, $saturation: -8.6%, $space: hsl, $lightness: -26.7%) !default;
   $badge-color: $base-text-color !default;
 }

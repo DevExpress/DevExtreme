@@ -28,7 +28,7 @@ $diagram-toolbox-title-size: 18px;
 
   // stylelint-disable selector-class-pattern
   .dxdi-control .dxdi-canvas {
-    background-color: darken($overlay-content-bg, 15%);
+    background-color: color.adjust($overlay-content-bg, $lightness: -15%, $space: hsl);
 
     .selection-mark,
     .item-selection-rect,
@@ -134,7 +134,8 @@ $diagram-toolbox-title-size: 18px;
   // stylelint-enable selector-class-pattern
 
   .dx-diagram-toolbar-wrapper {
-    border-bottom: 1px solid $diagram-toolbar-border-color;
+    border-bottom: 1px solid;
+    border-bottom-color: $diagram-toolbar-border-color;
   }
 
 

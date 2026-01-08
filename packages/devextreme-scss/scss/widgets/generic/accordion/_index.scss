@@ -20,7 +20,8 @@
   border-top-color: $accordion-item-border-color;
 
   &:last-child {
-    border-bottom: 1px solid $accordion-item-border-color;
+    border-bottom: 1px solid;
+    border-bottom-color: $accordion-item-border-color;
   }
 
   &.dx-state-active:not(.dx-accordion-item-opened) {

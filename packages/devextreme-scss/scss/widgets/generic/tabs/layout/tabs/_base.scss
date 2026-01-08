@@ -26,6 +26,7 @@
       $generic-tabs-border,
       $generic-tabs-border,
       $generic-tabs-border,
+      $tabs-border-color,
     );
 
     .dx-scrollable-content {
@@ -51,13 +52,16 @@
     $generic-tabs-border,
     $generic-tabs-border,
     $generic-tabs-border,
+    $tabs-border-color,
   );
 }
 
 .dx-tabs-nav-buttons {
   .dx-tabs-wrapper {
     border-block-start: $generic-tabs-border;
+    border-block-start-color: $tabs-border-color;
     border-block-end: $generic-tabs-border;
+    border-block-end-color: $tabs-border-color;
 
     &::after {
       border: none;

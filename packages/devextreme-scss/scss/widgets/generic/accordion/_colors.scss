@@ -69,7 +69,7 @@ $accordion-item-hover-bg: null !default;
   $accordion-title-color: $accordion-color !default;
   $accordion-item-focused-border-color: $base-focus-bg !default;
   $accordion-title-active-color: $accordion-color !default;
-  $accordion-title-active-bg: color.change(lighten($accordion-background-color, 62.5%), $alpha: 0.2) !default;
+  $accordion-title-active-bg: color.change(color.adjust($accordion-background-color, $lightness: 62.5%, $space: hsl), $alpha: 0.2) !default;
   $accordion-item-hover-bg: $base-hover-bg !default;
 }
 
@@ -77,7 +77,7 @@ $accordion-item-hover-bg: null !default;
   $accordion-title-color: $accordion-color !default;
   $accordion-item-focused-border-color: $base-accent !default;
   $accordion-title-active-color: $base-accent !default;
-  $accordion-title-active-bg: color.change(lighten($accordion-background-color, 62.5%), $alpha: 0.2) !default;
+  $accordion-title-active-bg: color.change(color.adjust($accordion-background-color, $lightness: 62.5%, $space: hsl), $alpha: 0.2) !default;
   $accordion-item-hover-bg: $base-hover-bg !default;
 }
 
@@ -85,7 +85,7 @@ $accordion-item-hover-bg: null !default;
   $accordion-title-color: $base-header-color !default;
   $accordion-item-focused-border-color: $base-accent !default;
   $accordion-title-active-color: $base-accent-highlight-color !default;
-  $accordion-title-active-bg: color.change(lighten($accordion-background-color, 62.5%), $alpha: 0.2) !default;
+  $accordion-title-active-bg: color.change(color.adjust($accordion-background-color, $lightness: 62.5%, $space: hsl), $alpha: 0.2) !default;
   $accordion-item-hover-bg: $base-hover-bg !default;
 }
 
@@ -93,7 +93,7 @@ $accordion-item-hover-bg: null !default;
   $accordion-title-color: $base-accent !default;
   $accordion-item-focused-border-color: $base-focus-bg !default;
   $accordion-title-active-color: $accordion-color !default;
-  $accordion-title-active-bg: color.change(darken($accordion-background-color, 9%), $alpha: 0.4) !default;
+  $accordion-title-active-bg: color.change(color.adjust($accordion-background-color, $lightness: -9%, $space: hsl), $alpha: 0.4) !default;
   $accordion-item-hover-bg: $base-hover-bg !default;
 }
 
@@ -101,7 +101,7 @@ $accordion-item-hover-bg: null !default;
   $accordion-title-color: $accordion-color !default;
   $accordion-item-focused-border-color: $base-focus-bg !default;
   $accordion-title-active-color: $accordion-color !default;
-  $accordion-title-active-bg: color.change(darken($accordion-background-color, 62.5%), $alpha: 0.2) !default;
+  $accordion-title-active-bg: color.change(color.adjust($accordion-background-color, $lightness: -62.5%, $space: hsl), $alpha: 0.2) !default;
   $accordion-item-hover-bg: $base-hover-bg !default;
 }
 
@@ -109,7 +109,7 @@ $accordion-item-hover-bg: null !default;
   $accordion-title-color: $accordion-color !default;
   $accordion-item-focused-border-color: $base-accent !default;
   $accordion-title-active-color: $accordion-color !default;
-  $accordion-title-active-bg: color.change(darken($accordion-background-color, 62.5%), $alpha: 0.2) !default;
+  $accordion-title-active-bg: color.change(color.adjust($accordion-background-color, $lightness: -62.5%, $space: hsl), $alpha: 0.2) !default;
   $accordion-item-hover-bg: $base-hover-bg !default;
 }
 

@@ -1,4 +1,4 @@
-import { type DxScheduler } from 'devextreme-vue';
+import type { DxScheduler } from 'devextreme-vue';
 import { dinnerTime, holidays } from './data.ts';
 
 export default class Utils {

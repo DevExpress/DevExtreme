@@ -18,9 +18,9 @@ $htmleditor-table-border-color: $base-border-color !default;
 
 
 @if $mode == "light" {
-  $htmleditor-mention-bg: darken($base-bg, 12%) !default;
+  $htmleditor-mention-bg: color.adjust($base-bg, $lightness: -12%, $space: hsl) !default;
 }
 
 @if $mode == "dark" {
-  $htmleditor-mention-bg: lighten($base-bg, 12%) !default;
+  $htmleditor-mention-bg: color.adjust($base-bg, $lightness: 12%, $space: hsl) !default;
 }

@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use '../colors' as *;
 @use '../../base/cardView/variables' as *;
 @use '../../base/cardView/header_panel/variables' as *;
@@ -416,14 +417,14 @@ $cardview-fluent-columnchooser--empty__message-color: null !default;
   $cardview-fluent-card-divider-color: $cardview-fluent-card-border-color !default;
   $cardview-fluent-card-text-color: $cardview-fluent-common-text-color !default;
   $cardview-fluent-card__cover-bg-color: #FFF !default;
-  $cardview-fluent-card__cover--noimage-bg-color: darken($base-bg, 12.16) !default;
-  $cardview-fluent-card__cover--noimage__icon-color: lighten($cardview-fluent-common-text-color, 23.92) !default;
+  $cardview-fluent-card__cover--noimage-bg-color: color.adjust($base-bg, $lightness: -12.16%, $space: hsl) !default;
+  $cardview-fluent-card__cover--noimage__icon-color: color.adjust($cardview-fluent-common-text-color, $lightness: 23.92%, $space: hsl) !default;
 
   $cardview-fluent-card--focused-outline-color: $base-accent !default;
 
   // Card - selected
-  $cardview-fluent-card--selected-bg-color: lighten(desaturate(adjust-hue($base-accent, 4), 11.38), 55.49) !default;
-  $cardview-fluent-card--selected-border-color: lighten(saturate(adjust-hue($base-accent, 3), 2.21), 44.31) !default;
+  $cardview-fluent-card--selected-bg-color: color.adjust($base-accent, $hue: 4deg, $saturation: -11.38%, $space: hsl, $lightness: 55.49%) !default;
+  $cardview-fluent-card--selected-border-color: color.adjust($base-accent, $hue: 3deg, $saturation: 2.21%, $space: hsl, $lightness: 44.31%) !default;
   $cardview-fluent-card--selected-divider-color: $cardview-fluent-card--selected-border-color !default;
   $cardview-fluent-card--selected-text-color: $cardview-fluent-card-text-color !default;
   $cardview-fluent-card--selected__cover-bg-color: $cardview-fluent-card__cover-bg-color !default;
@@ -431,7 +432,7 @@ $cardview-fluent-columnchooser--empty__message-color: null !default;
   $cardview-fluent-card--selected__cover--noimage__icon-color: $cardview-fluent-card__cover--noimage__icon-color !default;
 
   // Header panel item - default state
-  $cardview-fluent-header-panel__item-bg-color: darken($base-bg, 5.88) !default;
+  $cardview-fluent-header-panel__item-bg-color: color.adjust($base-bg, $lightness: -5.88%, $space: hsl) !default;
   $cardview-fluent-header-panel__item-border-color: $base-border-color !default;
   $cardview-fluent-header-panel__item-text-color: $cardview-fluent-common-text-color !default;
   $cardview-fluent-header-panel__item__icon-color: $cardview-fluent-common-text-color !default;
@@ -441,8 +442,8 @@ $cardview-fluent-columnchooser--empty__message-color: null !default;
   $cardview-fluent-header-panel__item--focused-outline-color: $base-accent !default;
 
   // Header panel item - hovered
-  $cardview-fluent-header-panel__item--hovered-bg-color: darken($cardview-fluent-header-panel__item-bg-color, 1.96)  !default;
-  $cardview-fluent-header-panel__item--hovered-border-color: darken($cardview-fluent-header-panel__item-border-color, 13.73) !default;
+  $cardview-fluent-header-panel__item--hovered-bg-color: color.adjust($cardview-fluent-header-panel__item-bg-color, $lightness: -1.96%, $space: hsl)  !default;
+  $cardview-fluent-header-panel__item--hovered-border-color: color.adjust($cardview-fluent-header-panel__item-border-color, $lightness: -13.73%, $space: hsl) !default;
   $cardview-fluent-header-panel__item--hovered-text-color: $cardview-fluent-header-panel__item-text-color !default;
   $cardview-fluent-header-panel__item--hovered__icon-color: $cardview-fluent-header-panel__item__icon-color !default;
   $cardview-fluent-header-panel__item--hovered__header-filter-icon--selected-color: $cardview-fluent-header-panel__item__header-filter-icon--selected-color !default;
@@ -451,21 +452,21 @@ $cardview-fluent-columnchooser--empty__message-color: null !default;
   // Header panel item - disabled
   $cardview-fluent-header-panel__item--disabled-bg-color: $cardview-fluent-header-panel__item-bg-color !default;
   $cardview-fluent-header-panel__item--disabled-border-color: $cardview-fluent-header-panel__item-border-color !default;
-  $cardview-fluent-header-panel__item--disabled-text-color: lighten($cardview-fluent-header-panel__item-text-color, 60.00) !default;
-  $cardview-fluent-header-panel__item--disabled__icon-color: lighten($cardview-fluent-header-panel__item__icon-color, 60.00) !default;
-  $cardview-fluent-header-panel__item--disabled__header-filter-icon--selected-color: lighten(desaturate($cardview-fluent-header-panel__item__header-filter-icon--selected-color, 34.10), 27.06) !default;
-  $cardview-fluent-header-panel__item--disabled__sort-index-text-color: lighten($cardview-fluent-header-panel__item__sort-index-text-color, 60.00) !default;
+  $cardview-fluent-header-panel__item--disabled-text-color: color.adjust($cardview-fluent-header-panel__item-text-color, $lightness: 60.00%, $space: hsl) !default;
+  $cardview-fluent-header-panel__item--disabled__icon-color: color.adjust($cardview-fluent-header-panel__item__icon-color, $lightness: 60.00%, $space: hsl) !default;
+  $cardview-fluent-header-panel__item--disabled__header-filter-icon--selected-color: color.adjust($cardview-fluent-header-panel__item__header-filter-icon--selected-color, $saturation: -34.10%, $space: hsl, $lightness: 27.06%) !default;
+  $cardview-fluent-header-panel__item--disabled__sort-index-text-color: color.adjust($cardview-fluent-header-panel__item__sort-index-text-color, $lightness: 60.00%, $space: hsl) !default;
 
   // Header panel item - dragged
   $cardview-fluent-header-panel__item--dragged-bg-color: $cardview-fluent-header-panel__item-bg-color !default;
   $cardview-fluent-header-panel__item--dragged-border-color: $cardview-fluent-header-panel__item-border-color !default;
   $cardview-fluent-header-panel__item--dragged-text-color: $cardview-fluent-header-panel__item-text-color !default;
   $cardview-fluent-header-panel__item--dragged__allowance-icon-color: $cardview-fluent-common-text-color !default;
-  $cardview-fluent-header-panel__item--dragged__prohibition-icon-color: darken(saturate(adjust-hue($base-danger, -4), 22.80), 9.61) !default;
+  $cardview-fluent-header-panel__item--dragged__prohibition-icon-color: color.adjust($base-danger, $hue: -4deg, $saturation: 22.80%, $space: hsl, $lightness: -9.61%) !default;
   $cardview-fluent-header-panel__item--dragged-box-shadow-color: rgba(0, 0, 0, 0.2) !default;
 
   // Header panel Drop-zone
-  $cardview-fluent-header-panel__dropzone-bg-color: lighten(desaturate(adjust-hue($base-accent, 4), 11.38), 55.49) !default;
+  $cardview-fluent-header-panel__dropzone-bg-color: color.adjust($base-accent, $hue: 4deg, $saturation: -11.38%, $space: hsl, $lightness: 55.49%) !default;
   $cardview-fluent-header-panel__dropzone-border-color: $base-accent !default;
   $cardview-fluent-header-panel__dropzone-text-color: $base-accent !default;
   $cardview-fluent-header-panel__dropzone__icon-color: $base-accent !default;
@@ -478,9 +479,9 @@ $cardview-fluent-columnchooser--empty__message-color: null !default;
 
   // Empty view
   $cardview-fluent-nodata-view-bg-color: $cardview-fluent-common-bg-color !default;
-  $cardview-fluent-nodata-view-text-color: lighten($cardview-fluent-common-text-color, 23.92) !default;
+  $cardview-fluent-nodata-view-text-color: color.adjust($cardview-fluent-common-text-color, $lightness: 23.92%, $space: hsl) !default;
   $cardview-fluent-nodata-view__icon-color: $cardview-fluent-nodata-view-text-color !default;
-  $cardview-fluent-nodata-view__icon-bg-color: darken($base-bg, 9.80) !default;
+  $cardview-fluent-nodata-view__icon-bg-color: color.adjust($base-bg, $lightness: -9.80%, $space: hsl) !default;
 
   // Search highlight
   $cardview-fluent-card__content__field-value--highlighted-bg-color: $base-warning !default;
@@ -488,7 +489,7 @@ $cardview-fluent-columnchooser--empty__message-color: null !default;
   $cardview-fluent-card__content__field-value--highlighted-box-shadow-color: rgba(0, 0, 0, 0.25) !default;
 
   // Column chooser
-  $cardview-fluent-columnchooser--empty__message-color: lighten($cardview-fluent-common-text-color, 26%) !default;
+  $cardview-fluent-columnchooser--empty__message-color: color.adjust($cardview-fluent-common-text-color, $lightness: 26%, $space: hsl) !default;
 }
 
 @if $mode == "dark" {
@@ -504,14 +505,14 @@ $cardview-fluent-columnchooser--empty__message-color: null !default;
   $cardview-fluent-card-divider-color: $cardview-fluent-card-border-color !default;
   $cardview-fluent-card-text-color: $cardview-fluent-common-text-color !default;
   $cardview-fluent-card__cover-bg-color: #FFF !default;
-  $cardview-fluent-card__cover--noimage-bg-color: darken($base-bg, 5.88) !default;
-  $cardview-fluent-card__cover--noimage__icon-color: darken($base-text-color, 32.16) !default;
+  $cardview-fluent-card__cover--noimage-bg-color: color.adjust($base-bg, $lightness: -5.88%, $space: hsl) !default;
+  $cardview-fluent-card__cover--noimage__icon-color: color.adjust($base-text-color, $lightness: -32.16%, $space: hsl) !default;
 
   $cardview-fluent-card--focused-outline-color: $base-accent !default;
 
   // Card - selected
-  $cardview-fluent-card--selected-bg-color: darken(desaturate(adjust-hue($base-accent, -4), 14.69), 49.41) !default;
-  $cardview-fluent-card--selected-border-color: darken(desaturate(adjust-hue($base-accent, -3), 11.06), 36.27) !default;
+  $cardview-fluent-card--selected-bg-color: color.adjust($base-accent, $hue: -4deg, $saturation: -14.69%, $space: hsl, $lightness: -49.41%) !default;
+  $cardview-fluent-card--selected-border-color: color.adjust($base-accent, $hue: -3deg, $saturation: -11.06%, $space: hsl, $lightness: -36.27%) !default;
   $cardview-fluent-card--selected-divider-color: $cardview-fluent-card--selected-border-color !default;
   $cardview-fluent-card--selected-text-color: $cardview-fluent-card-text-color !default;
   $cardview-fluent-card--selected__cover-bg-color: $cardview-fluent-card__cover-bg-color !default;
@@ -519,7 +520,7 @@ $cardview-fluent-columnchooser--empty__message-color: null !default;
   $cardview-fluent-card--selected__cover--noimage__icon-color: $cardview-fluent-card__cover--noimage__icon-color !default;
 
   // Header panel item - default state
-  $cardview-fluent-header-panel__item-bg-color: darken($base-bg, 12.16) !default;
+  $cardview-fluent-header-panel__item-bg-color: color.adjust($base-bg, $lightness: -12.16%, $space: hsl) !default;
   $cardview-fluent-header-panel__item-border-color: $base-border-color !default;
   $cardview-fluent-header-panel__item-text-color: $cardview-fluent-common-text-color !default;
   $cardview-fluent-header-panel__item__icon-color: $cardview-fluent-common-text-color !default;
@@ -529,8 +530,8 @@ $cardview-fluent-columnchooser--empty__message-color: null !default;
   $cardview-fluent-header-panel__item--focused-outline-color: $base-accent !default;
 
   // Header panel item - hovered
-  $cardview-fluent-header-panel__item--hovered-bg-color: lighten($cardview-fluent-header-panel__item-bg-color, 18.04)  !default;
-  $cardview-fluent-header-panel__item--hovered-border-color: lighten($cardview-fluent-header-panel__item-border-color, 11.76) !default;
+  $cardview-fluent-header-panel__item--hovered-bg-color: color.adjust($cardview-fluent-header-panel__item-bg-color, $lightness: 18.04%, $space: hsl)  !default;
+  $cardview-fluent-header-panel__item--hovered-border-color: color.adjust($cardview-fluent-header-panel__item-border-color, $lightness: 11.76%, $space: hsl) !default;
   $cardview-fluent-header-panel__item--hovered-text-color: $cardview-fluent-common-text-color !default;
   $cardview-fluent-header-panel__item--hovered__icon-color: $cardview-fluent-common-text-color !default;
   $cardview-fluent-header-panel__item--hovered__header-filter-icon--selected-color: $base-accent !default;
@@ -539,21 +540,21 @@ $cardview-fluent-columnchooser--empty__message-color: null !default;
   // Header panel item - disabled
   $cardview-fluent-header-panel__item--disabled-bg-color: $cardview-fluent-header-panel__item-bg-color !default;
   $cardview-fluent-header-panel__item--disabled-border-color: $cardview-fluent-header-panel__item-border-color !default;
-  $cardview-fluent-header-panel__item--disabled-text-color: darken($cardview-fluent-header-panel__item-text-color, 56.08) !default;
-  $cardview-fluent-header-panel__item--disabled__icon-color: darken($cardview-fluent-header-panel__item__icon-color, 56.08) !default;
-  $cardview-fluent-header-panel__item--disabled__header-filter-icon--selected-color: darken(desaturate($cardview-fluent-header-panel__item__header-filter-icon--selected-color, 6.72), 18.04) !default;
-  $cardview-fluent-header-panel__item--disabled__sort-index-text-color: darken($cardview-fluent-header-panel__item__sort-index-text-color, 56.08) !default;
+  $cardview-fluent-header-panel__item--disabled-text-color: color.adjust($cardview-fluent-header-panel__item-text-color, $lightness: -56.08%, $space: hsl) !default;
+  $cardview-fluent-header-panel__item--disabled__icon-color: color.adjust($cardview-fluent-header-panel__item__icon-color, $lightness: -56.08%, $space: hsl) !default;
+  $cardview-fluent-header-panel__item--disabled__header-filter-icon--selected-color: color.adjust($cardview-fluent-header-panel__item__header-filter-icon--selected-color, $saturation: -6.72%, $space: hsl, $lightness: -18.04%) !default;
+  $cardview-fluent-header-panel__item--disabled__sort-index-text-color: color.adjust($cardview-fluent-header-panel__item__sort-index-text-color, $lightness: -56.08%, $space: hsl) !default;
 
   // Header panel item - dragged
   $cardview-fluent-header-panel__item--dragged-bg-color: $cardview-fluent-header-panel__item-bg-color !default;
   $cardview-fluent-header-panel__item--dragged-border-color: $cardview-fluent-header-panel__item-border-color !default;
   $cardview-fluent-header-panel__item--dragged-text-color: $cardview-fluent-header-panel__item-text-color !default;
   $cardview-fluent-header-panel__item--dragged__allowance-icon-color: $cardview-fluent-common-text-color !default;
-  $cardview-fluent-header-panel__item--dragged__prohibition-icon-color: darken(desaturate($base-danger, 0.27), 7.45) !default;
+  $cardview-fluent-header-panel__item--dragged__prohibition-icon-color: color.adjust($base-danger, $saturation: -0.27%, $space: hsl, $lightness: -7.45%) !default;
   $cardview-fluent-header-panel__item--dragged-box-shadow-color: rgba(0, 0, 0, 0.2) !default;
 
   // Header panel Drop-zone
-  $cardview-fluent-header-panel__dropzone-bg-color: darken(desaturate(adjust-hue($base-accent, -4), 14.69), 49.41) !default;
+  $cardview-fluent-header-panel__dropzone-bg-color: color.adjust($base-accent, $hue: -4deg, $saturation: -14.69%, $space: hsl, $lightness: -49.41%) !default;
   $cardview-fluent-header-panel__dropzone-border-color: $base-accent !default;
   $cardview-fluent-header-panel__dropzone-text-color: $base-accent !default;
   $cardview-fluent-header-panel__dropzone__icon-color: $base-accent !default;
@@ -566,9 +567,9 @@ $cardview-fluent-columnchooser--empty__message-color: null !default;
 
   // Empty view
   $cardview-fluent-nodata-view-bg-color: $cardview-fluent-common-bg-color !default;
-  $cardview-fluent-nodata-view-text-color: darken($cardview-fluent-common-text-color, 32.16) !default;
-  $cardview-fluent-nodata-view__icon-color: darken($cardview-fluent-common-text-color, 32.16) !default;
-  $cardview-fluent-nodata-view__icon-bg-color: lighten($base-bg, 3.92) !default;
+  $cardview-fluent-nodata-view-text-color: color.adjust($cardview-fluent-common-text-color, $lightness: -32.16%, $space: hsl) !default;
+  $cardview-fluent-nodata-view__icon-color: color.adjust($cardview-fluent-common-text-color, $lightness: -32.16%, $space: hsl) !default;
+  $cardview-fluent-nodata-view__icon-bg-color: color.adjust($base-bg, $lightness: 3.92%, $space: hsl) !default;
 
   // Search highlight
   $cardview-fluent-card__content__field-value--highlighted-bg-color: $base-warning !default;
@@ -576,7 +577,7 @@ $cardview-fluent-columnchooser--empty__message-color: null !default;
   $cardview-fluent-card__content__field-value--highlighted-box-shadow-color: rgba(0, 0, 0, 0.25) !default;
 
   // Column chooser
-  $cardview-fluent-columnchooser--empty__message-color: lighten($cardview-fluent-common-text-color, 26%) !default;
+  $cardview-fluent-columnchooser--empty__message-color: color.adjust($cardview-fluent-common-text-color, $lightness: 26%, $space: hsl) !default;
 }
 
 $cardview-bg-color: $cardview-fluent-common-bg-color !default;

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
-import Scheduler, { type SchedulerTypes } from 'devextreme-react/scheduler';
+import Scheduler from 'devextreme-react/scheduler';
+import type { SchedulerTypes } from 'devextreme-react/scheduler';
 import RadioGroup from 'devextreme-react/radio-group';
 
 import { data, shifts } from './data.ts';

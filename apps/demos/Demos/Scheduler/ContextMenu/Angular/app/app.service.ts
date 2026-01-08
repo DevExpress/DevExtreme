@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { type DxContextMenuTypes } from 'devextreme-angular/ui/context-menu';
+import type { DxContextMenuTypes } from 'devextreme-angular/ui/context-menu';
 
 export interface Appointment {
   text: string;

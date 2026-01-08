@@ -7,7 +7,8 @@
   grid-template-columns: auto 1fr;
   row-gap: $cardview-card__content-row-gap;
   width: 100%;
-  border-top: $cardview-card-border-width solid $cardview-card-divider-color;
+  border-top: $cardview-card-border-width solid;
+  border-top-color: $cardview-card-divider-color;
 
   // NOTE: Override default fonts only in "material-compact"
   font-size: $cardview-card__content-font-size;

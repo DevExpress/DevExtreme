@@ -17,8 +17,8 @@ $speed-dial-action-shading-color: null !default;
 
 @if $color == "carmine" {
   $speed-dial-action-bg: $base-bg !default;
-  $speed-dial-action-hover-bg: darken($speed-dial-action-bg, 8%) !default;
-  $speed-dial-action-active-bg: darken($speed-dial-action-bg, 24%) !default;
+  $speed-dial-action-hover-bg: color.adjust($speed-dial-action-bg, $lightness: -8%, $space: hsl) !default;
+  $speed-dial-action-active-bg: color.adjust($speed-dial-action-bg, $lightness: -24%, $space: hsl) !default;
   $speed-dial-action-color: $base-text-color !default;
   $speed-dial-action-shading-color: $overlay-shader-bg !default;
 }
@@ -32,49 +32,49 @@ $speed-dial-action-shading-color: null !default;
 }
 
 @if $color == "dark" {
-  $speed-dial-action-bg: lighten($base-bg, 3%) !default;
-  $speed-dial-action-hover-bg: lighten($speed-dial-action-bg, 9%) !default;
-  $speed-dial-action-active-bg: lighten($speed-dial-action-bg, 26%) !default;
+  $speed-dial-action-bg: color.adjust($base-bg, $lightness: 3%, $space: hsl) !default;
+  $speed-dial-action-hover-bg: color.adjust($speed-dial-action-bg, $lightness: 9%, $space: hsl) !default;
+  $speed-dial-action-active-bg: color.adjust($speed-dial-action-bg, $lightness: 26%, $space: hsl) !default;
   $speed-dial-action-color: $base-text-color !default;
   $speed-dial-action-shading-color: $overlay-shader-bg !default;
 }
 
 @if $color == "darkmoon" {
-  $speed-dial-action-bg: lighten($base-bg, 3%) !default;
-  $speed-dial-action-hover-bg: lighten($speed-dial-action-bg, 9%) !default;
-  $speed-dial-action-active-bg: lighten($speed-dial-action-bg, 26%) !default;
+  $speed-dial-action-bg: color.adjust($base-bg, $lightness: 3%, $space: hsl) !default;
+  $speed-dial-action-hover-bg: color.adjust($speed-dial-action-bg, $lightness: 9%, $space: hsl) !default;
+  $speed-dial-action-active-bg: color.adjust($speed-dial-action-bg, $lightness: 26%, $space: hsl) !default;
   $speed-dial-action-color: $base-text-color !default;
   $speed-dial-action-shading-color: $overlay-shader-bg !default;
 }
 
 @if $color == "darkviolet" {
-  $speed-dial-action-bg: lighten($base-bg, 3%) !default;
-  $speed-dial-action-hover-bg: lighten($speed-dial-action-bg, 9%) !default;
-  $speed-dial-action-active-bg: lighten($speed-dial-action-bg, 26%) !default;
+  $speed-dial-action-bg: color.adjust($base-bg, $lightness: 3%, $space: hsl) !default;
+  $speed-dial-action-hover-bg: color.adjust($speed-dial-action-bg, $lightness: 9%, $space: hsl) !default;
+  $speed-dial-action-active-bg: color.adjust($speed-dial-action-bg, $lightness: 26%, $space: hsl) !default;
   $speed-dial-action-color: $base-text-color !default;
   $speed-dial-action-shading-color: $overlay-shader-bg !default;
 }
 
 @if $color == "greenmist" {
   $speed-dial-action-bg: $base-bg !default;
-  $speed-dial-action-hover-bg: darken($speed-dial-action-bg, 8%) !default;
-  $speed-dial-action-active-bg: darken($speed-dial-action-bg, 24%) !default;
+  $speed-dial-action-hover-bg: color.adjust($speed-dial-action-bg, $lightness: -8%, $space: hsl) !default;
+  $speed-dial-action-active-bg: color.adjust($speed-dial-action-bg, $lightness: -24%, $space: hsl) !default;
   $speed-dial-action-color: $base-text-color !default;
   $speed-dial-action-shading-color: $overlay-shader-bg !default;
 }
 
 @if $color == "light" {
   $speed-dial-action-bg: $base-bg !default;
-  $speed-dial-action-hover-bg: darken($speed-dial-action-bg, 8%) !default;
-  $speed-dial-action-active-bg: darken($speed-dial-action-bg, 24%) !default;
+  $speed-dial-action-hover-bg: color.adjust($speed-dial-action-bg, $lightness: -8%, $space: hsl) !default;
+  $speed-dial-action-active-bg: color.adjust($speed-dial-action-bg, $lightness: -24%, $space: hsl) !default;
   $speed-dial-action-color: $base-text-color !default;
   $speed-dial-action-shading-color: $overlay-shader-bg !default;
 }
 
 @if $color == "softblue" {
   $speed-dial-action-bg: $base-bg !default;
-  $speed-dial-action-hover-bg: darken($speed-dial-action-bg, 8%) !default;
-  $speed-dial-action-active-bg: darken($speed-dial-action-bg, 24%) !default;
+  $speed-dial-action-hover-bg: color.adjust($speed-dial-action-bg, $lightness: -8%, $space: hsl) !default;
+  $speed-dial-action-active-bg: color.adjust($speed-dial-action-bg, $lightness: -24%, $space: hsl) !default;
   $speed-dial-action-color: $base-text-color !default;
   $speed-dial-action-shading-color: $overlay-shader-bg !default;
 }

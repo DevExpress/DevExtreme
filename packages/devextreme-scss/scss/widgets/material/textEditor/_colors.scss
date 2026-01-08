@@ -64,13 +64,13 @@ $texteditor-label-transition:
   top 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms;
 
 @if $mode == "light" {
-  $texteditor-button-clear-icon-color: lighten($texteditor-color, 46%) !default;
-  $texteditor-button-clear-icon-color-bg: lighten($texteditor-color, 76%) !default;
+  $texteditor-button-clear-icon-color: color.adjust($texteditor-color, $lightness: 46%, $space: hsl) !default;
+  $texteditor-button-clear-icon-color-bg: color.adjust($texteditor-color, $lightness: 76%, $space: hsl) !default;
 }
 
 @if $mode == "dark" {
-  $texteditor-button-clear-icon-color: darken($texteditor-color, 76%) !default;
-  $texteditor-button-clear-icon-color-bg: darken($texteditor-color, 34%) !default;
+  $texteditor-button-clear-icon-color: color.adjust($texteditor-color, $lightness: -76%, $space: hsl) !default;
+  $texteditor-button-clear-icon-color-bg: color.adjust($texteditor-color, $lightness: -34%, $space: hsl) !default;
 }
 
 :root {

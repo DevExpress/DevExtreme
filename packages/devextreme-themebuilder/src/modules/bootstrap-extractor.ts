@@ -43,7 +43,9 @@ export default class BootstrapExtractor {
 
   static async sassRender(input: string): Promise<string> {
     return new Promise((resolve, reject) => {
-      sass.compileStringAsync(input)
+      sass.compileStringAsync(input, {
+        silenceDeprecations: ['color-functions', 'global-builtin', 'import'],
+      })
         .then((data) => resolve(data.css.toString()))
         .catch((error: sass.Exception) => reject(error.message));
     });

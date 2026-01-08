@@ -79,99 +79,99 @@ $stepper-connector-bg: $base-border-color !default;
 $stepper-connector-value-bg: $base-text-color !default;
 
 @if $color == "carmine" {
-  $stepper-step-base-bg: darken($base-bg, 13.33%) !default;
-  $stepper-step-base-hover-bg: darken($base-bg, 16.86%) !default;
+  $stepper-step-base-bg: color.adjust($base-bg, $lightness: -13.33%, $space: hsl) !default;
+  $stepper-step-base-hover-bg: color.adjust($base-bg, $lightness: -16.86%, $space: hsl) !default;
 
   $stepper-step-accent-bg: $base-accent !default;
-  $stepper-step-accent-hover-bg: darken($stepper-step-accent-bg, 9%) !default;
+  $stepper-step-accent-hover-bg: color.adjust($stepper-step-accent-bg, $lightness: -9%, $space: hsl) !default;
 
-  $stepper-step-danger-hover-bg: darken($stepper-step-danger-bg, 9%) !default;
+  $stepper-step-danger-hover-bg: color.adjust($stepper-step-danger-bg, $lightness: -9%, $space: hsl) !default;
 
-  $stepper-step-disabled-bg: darken($base-bg, 6.67%) !default;
+  $stepper-step-disabled-bg: color.adjust($base-bg, $lightness: -6.67%, $space: hsl) !default;
 }
 
 @if $color == "contrast" {
-  $stepper-step-base-bg: lighten($base-bg, 13.73%) !default;
-  $stepper-step-base-hover-bg: lighten($base-bg, 17.65%) !default;
+  $stepper-step-base-bg: color.adjust($base-bg, $lightness: 13.73%, $space: hsl) !default;
+  $stepper-step-base-hover-bg: color.adjust($base-bg, $lightness: 17.65%, $space: hsl) !default;
 
   $stepper-step-accent-bg: $base-default !default;
   $stepper-step-accent-hover-bg: $base-inverted-bg !default;
 
   $stepper-step-danger-hover-bg: $base-inverted-bg !default;
 
-  $stepper-step-disabled-bg: lighten($base-bg, 5.49%) !default;
+  $stepper-step-disabled-bg: color.adjust($base-bg, $lightness: 5.49%, $space: hsl) !default;
 }
 
 @if $color == 'dark' {
-  $stepper-step-base-bg: lighten($base-bg, 13.73%) !default;
-  $stepper-step-base-hover-bg: lighten($base-bg, 17.65%) !default;
+  $stepper-step-base-bg: color.adjust($base-bg, $lightness: 13.73%, $space: hsl) !default;
+  $stepper-step-base-hover-bg: color.adjust($base-bg, $lightness: 17.65%, $space: hsl) !default;
 
   $stepper-step-accent-bg: $base-accent !default;
-  $stepper-step-accent-hover-bg: lighten($stepper-step-accent-bg, 9%) !default;
+  $stepper-step-accent-hover-bg: color.adjust($stepper-step-accent-bg, $lightness: 9%, $space: hsl) !default;
 
-  $stepper-step-danger-hover-bg: lighten($stepper-step-danger-bg, 9%) !default;
+  $stepper-step-danger-hover-bg: color.adjust($stepper-step-danger-bg, $lightness: 9%, $space: hsl) !default;
 
-  $stepper-step-disabled-bg: lighten($base-bg, 5.49%) !default;
+  $stepper-step-disabled-bg: color.adjust($base-bg, $lightness: 5.49%, $space: hsl) !default;
 }
 
 @if $color == "darkmoon" {
-  $stepper-step-base-bg: lighten($base-bg, 13.73%) !default;
-  $stepper-step-base-hover-bg: lighten($base-bg, 17.65%) !default;
+  $stepper-step-base-bg: color.adjust($base-bg, $lightness: 13.73%, $space: hsl) !default;
+  $stepper-step-base-hover-bg: color.adjust($base-bg, $lightness: 17.65%, $space: hsl) !default;
 
   $stepper-step-accent-bg: $base-accent !default;
-  $stepper-step-accent-hover-bg: lighten($stepper-step-accent-bg, 9%) !default;
+  $stepper-step-accent-hover-bg: color.adjust($stepper-step-accent-bg, $lightness: 9%, $space: hsl) !default;
 
-  $stepper-step-danger-hover-bg: lighten($stepper-step-danger-bg, 9%) !default;
+  $stepper-step-danger-hover-bg: color.adjust($stepper-step-danger-bg, $lightness: 9%, $space: hsl) !default;
 
-  $stepper-step-disabled-bg: lighten($base-bg, 5.49%) !default;
+  $stepper-step-disabled-bg: color.adjust($base-bg, $lightness: 5.49%, $space: hsl) !default;
 }
 
 @if $color == "darkviolet" {
-  $stepper-step-base-bg: lighten($base-bg, 13.73%) !default;
-  $stepper-step-base-hover-bg: lighten($base-bg, 17.65%) !default;
+  $stepper-step-base-bg: color.adjust($base-bg, $lightness: 13.73%, $space: hsl) !default;
+  $stepper-step-base-hover-bg: color.adjust($base-bg, $lightness: 17.65%, $space: hsl) !default;
 
   $stepper-step-accent-bg: $base-accent !default;
-  $stepper-step-accent-hover-bg: lighten($stepper-step-accent-bg, 9%) !default;
+  $stepper-step-accent-hover-bg: color.adjust($stepper-step-accent-bg, $lightness: 9%, $space: hsl) !default;
 
-  $stepper-step-danger-hover-bg: lighten($stepper-step-danger-bg, 9%) !default;
+  $stepper-step-danger-hover-bg: color.adjust($stepper-step-danger-bg, $lightness: 9%, $space: hsl) !default;
 
-  $stepper-step-disabled-bg: lighten($base-bg, 5.49%) !default;
+  $stepper-step-disabled-bg: color.adjust($base-bg, $lightness: 5.49%, $space: hsl) !default;
 }
 
 @if $color == "greenmist" {
-  $stepper-step-base-bg: darken($base-bg, 13.33%) !default;
-  $stepper-step-base-hover-bg: darken($base-bg, 16.86%) !default;
+  $stepper-step-base-bg: color.adjust($base-bg, $lightness: -13.33%, $space: hsl) !default;
+  $stepper-step-base-hover-bg: color.adjust($base-bg, $lightness: -16.86%, $space: hsl) !default;
 
   $stepper-step-accent-bg: $base-accent !default;
-  $stepper-step-accent-hover-bg: darken($stepper-step-accent-bg, 9%) !default;
+  $stepper-step-accent-hover-bg: color.adjust($stepper-step-accent-bg, $lightness: -9%, $space: hsl) !default;
 
-  $stepper-step-danger-hover-bg: darken($stepper-step-danger-bg, 9%) !default;
+  $stepper-step-danger-hover-bg: color.adjust($stepper-step-danger-bg, $lightness: -9%, $space: hsl) !default;
 
-  $stepper-step-disabled-bg: darken($base-bg, 6.67%) !default;
+  $stepper-step-disabled-bg: color.adjust($base-bg, $lightness: -6.67%, $space: hsl) !default;
 }
 
 @if $color == 'light' {
-  $stepper-step-base-bg: darken($base-bg, 13.33%) !default;
-  $stepper-step-base-hover-bg: darken($base-bg, 16.86%) !default;
+  $stepper-step-base-bg: color.adjust($base-bg, $lightness: -13.33%, $space: hsl) !default;
+  $stepper-step-base-hover-bg: color.adjust($base-bg, $lightness: -16.86%, $space: hsl) !default;
 
   $stepper-step-accent-bg: $base-accent !default;
-  $stepper-step-accent-hover-bg: darken($stepper-step-accent-bg, 9%) !default;
+  $stepper-step-accent-hover-bg: color.adjust($stepper-step-accent-bg, $lightness: -9%, $space: hsl) !default;
 
-  $stepper-step-danger-hover-bg: darken($stepper-step-danger-bg, 9%) !default;
+  $stepper-step-danger-hover-bg: color.adjust($stepper-step-danger-bg, $lightness: -9%, $space: hsl) !default;
 
-  $stepper-step-disabled-bg: darken($base-bg, 6.67%) !default;
+  $stepper-step-disabled-bg: color.adjust($base-bg, $lightness: -6.67%, $space: hsl) !default;
 }
 
 @if $color == "softblue" {
-  $stepper-step-base-bg: darken($base-bg, 13.33%) !default;
-  $stepper-step-base-hover-bg: darken($base-bg, 16.86%) !default;
+  $stepper-step-base-bg: color.adjust($base-bg, $lightness: -13.33%, $space: hsl) !default;
+  $stepper-step-base-hover-bg: color.adjust($base-bg, $lightness: -16.86%, $space: hsl) !default;
 
   $stepper-step-accent-bg: $base-accent !default;
-  $stepper-step-accent-hover-bg: darken($stepper-step-accent-bg, 9%) !default;
+  $stepper-step-accent-hover-bg: color.adjust($stepper-step-accent-bg, $lightness: -9%, $space: hsl) !default;
 
-  $stepper-step-danger-hover-bg: darken($stepper-step-danger-bg, 9%) !default;
+  $stepper-step-danger-hover-bg: color.adjust($stepper-step-danger-bg, $lightness: -9%, $space: hsl) !default;
 
-  $stepper-step-disabled-bg: darken($base-bg, 6.67%) !default;
+  $stepper-step-disabled-bg: color.adjust($base-bg, $lightness: -6.67%, $space: hsl) !default;
 }
 
 /**

@@ -1,5 +1,6 @@
 @use "sass:math";
 @use "sass:color";
+@use "sass:selector";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
@@ -26,14 +27,14 @@
 $generic-grid-base-border-hidden: 1px solid transparent;
 $generic-grid-base-row-border: 1px solid transparent;
 $generic-grid-base-border-color: $datagrid-border-color;
-$generic-grid-base-drag-header-border: 1px solid $datagrid-drag-header-border-color;
+$generic-grid-base-drag-header-border: 1px solid;
 $generic-grid-base-drag-header-first-shadow: 0 0 1px $datagrid-drag-header-shadow-color;
 $generic-grid-base-drag-header-second-shadow: 0 1px 3px $datagrid-drag-header-second-shadow-color;
 $generic-grid-base-checkbox-icon-size: 16px;
 $generic-grid-base-checkbox-indeterminate-icon-size: 6px;
 $grid-masterdetail-padding: 20px;
 $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-height;
-$generic-grid-base-cell-input-height: round($generic-base-line-height * $generic-base-font-size) + 2 * $generic-grid-base-cell-padding;
+$generic-grid-base-cell-input-height: math.round($generic-base-line-height * $generic-base-font-size) + 2 * $generic-grid-base-cell-padding;
 
 @mixin dx-set-checkbox-border-color-as-background() {
   @if $generic-color-postfix == ".contrast" {
@@ -155,8 +156,10 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
       }
 
       // T838734
-      border-top: 1px solid $datagrid-row-alternation-bg;
-      border-bottom: 1px solid $datagrid-row-alternation-bg;
+      border-top: 1px solid;
+      border-top-color: $datagrid-row-alternation-bg;
+      border-bottom: 1px solid;
+      border-bottom-color: $datagrid-row-alternation-bg;
     }
 
     .dx-link {
@@ -165,11 +168,14 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
 
     .dx-row-lines > td {
       border-bottom: $datagrid-border;
+      border-bottom-color: $datagrid-border-color;
     }
 
     .dx-column-lines > td {
       border-left: $datagrid-border;
+      border-left-color: $datagrid-border-color;
       border-right: $datagrid-border;
+      border-right-color: $datagrid-border-color;
     }
 
     .dx-error-row {
@@ -274,7 +280,7 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
       .dx-placeholder::before {
         padding-left: $generic-texteditor-icon-container-size;
 
-        @at-root #{selector-append(".dx-rtl", &)},
+        @at-root #{selector.append(".dx-rtl", &)},
         .dx-rtl & {
           padding-right: $generic-texteditor-icon-container-size;
         }
@@ -395,6 +401,7 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
           color: $datagrid-columnchooser-item-color;
           font-weight: $datagrid-columnchooser-font-weight;
           border: $datagrid-border;
+          border-color: $datagrid-border-color;
           padding: $generic-grid-base-cell-padding;
           box-shadow: 0 1px 3px -1px $datagrid-columnchooser-shadow-color;
         }
@@ -408,6 +415,7 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
     font-weight: $datagrid-columnchooser-font-weight;
     padding: $generic-grid-base-cell-padding;
     border: $generic-grid-base-drag-header-border;
+    border-color: $datagrid-drag-header-border-color;
     background-color: $datagrid-header-drag-bg;
   }
 
@@ -420,7 +428,8 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
   }
 
   .dx-#{$widget-name}-focus-overlay {
-    border: 2px solid $datagrid-focused-border-color;
+    border: 2px solid;
+    border-color: $datagrid-focused-border-color;
   }
 
   .dx-#{$widget-name}-table {
@@ -498,6 +507,7 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
       right: 0;
       pointer-events: none;
       border-bottom: $datagrid-border;
+      border-bottom-color: $datagrid-border-color;
     }
 
     .dx-#{$widget-name}-table {
@@ -507,6 +517,7 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
 
       .dx-row > td {
         border-bottom: $datagrid-border;
+        border-bottom-color: $datagrid-border-color;
       }
     }
   }
@@ -524,7 +535,8 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
         color: $datagrid-menu-icon-color;
 
         &::after {
-          border: 2px solid $datagrid-focused-border-color;
+          border: 2px solid;
+          border-color: $datagrid-focused-border-color;
         }
 
         &.dx-menu-item-expanded {
@@ -569,6 +581,7 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
   .dx-#{$widget-name}-filter-range-overlay {
     .dx-overlay-content {
       border: $datagrid-border;
+      border-color: $datagrid-border-color;
       overflow: inherit;
       box-shadow: 2px 2px 3px $datagrid-overlay-content-shadow-color;
 
@@ -589,7 +602,8 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
         }
 
         &.dx-state-focused::after {
-          border: 2px solid $datagrid-focused-border-color;
+          border: 2px solid;
+          border-color: $datagrid-focused-border-color;
         }
       }
     }
@@ -633,6 +647,7 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
 
   .dx-#{$widget-name}-header-panel {
     border-bottom: $datagrid-border;
+    border-bottom-color: $datagrid-border-color;
 
     .dx-toolbar {
       margin-bottom: $generic-grid-base-header-panel-margin-bottom;
@@ -681,6 +696,7 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
     .dx-#{$widget-name}-headers + &,
     &.dx-#{$widget-name}-after-headers {
       border-top: $datagrid-border;
+      border-top-color: $datagrid-border-color;
     }
 
     .dx-row {
@@ -694,11 +710,14 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
       &.dx-edit-row:first-child > td {
         border-top-width: 0;
         border-bottom: $datagrid-border;
+        border-bottom-color: $datagrid-border-color;
       }
 
       &.dx-edit-row > td {
         border-top: $datagrid-border;
+        border-top-color: $datagrid-border-color;
         border-bottom: $datagrid-border;
+        border-bottom-color: $datagrid-border-color;
       }
 
       &.dx-#{$widget-name}-edit-form {
@@ -714,7 +733,9 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
       > .dx-#{$widget-name}-group-space,
       .dx-master-detail-cell:not(.dx-row-lines) {
         border-top: $datagrid-border;
+        border-top-color: $datagrid-border-color;
         border-bottom: $datagrid-border;
+        border-bottom-color: $datagrid-border-color;
       }
 
       .dx-texteditor-input {
@@ -734,7 +755,8 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
         &.dx-cell-modified,
         &.dx-#{$widget-name}-invalid {
           &::after {
-            border: 1px solid $datagrid-row-invalid-faded-border-color;
+            border: 1px solid;
+            border-color: $datagrid-row-invalid-faded-border-color;
           }
         }
 
@@ -742,7 +764,8 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
           &.dx-cell-modified,
           &.dx-#{$widget-name}-invalid {
             &::after {
-              border: 1px solid $datagrid-row-invalid-border-color;
+              border: 1px solid;
+              border-color: $datagrid-row-invalid-border-color;
             }
           }
         }
@@ -766,8 +789,10 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
 
     .dx-row-removed > td {
       background-color: $datagrid-row-removed-bg;
-      border-top: 1px solid $datagrid-cell-removed-border-color;
-      border-bottom: 1px solid $datagrid-cell-removed-border-color;
+      border-top: 1px solid;
+      border-top-color: $datagrid-cell-removed-border-color;
+      border-bottom: 1px solid;
+      border-bottom-color: $datagrid-cell-removed-border-color;
       color: $datagrid-cell-removed-text-color;
     }
 
@@ -786,7 +811,8 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
       }
 
       .dx-#{$widget-name}-invalid {
-        border: 1px solid $datagrid-row-invalid-faded-border-color;
+        border: 1px solid;
+        border-color: $datagrid-row-invalid-faded-border-color;
 
         &.dx-adaptive-item-text {
           padding-top: $generic-grid-base-adaptive-text-padding - 1px;
@@ -798,7 +824,8 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
 
     .dx-item-modified {
       border-radius: $base-border-radius;
-      border: 2px solid $datagrid-cell-modified-border-color;
+      border: 2px solid;
+      border-color: $datagrid-cell-modified-border-color;
 
       &.dx-adaptive-item-text {
         padding-top: $generic-grid-base-adaptive-text-padding - 2px;
@@ -836,14 +863,17 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
 
         & > td,
         & > tr:last-child > td {
-          border-bottom: 1px solid $datagrid-focused-border-color;
+          border-bottom: 1px solid;
+          border-bottom-color: $datagrid-focused-border-color;
         }
 
         &:not(.dx-row-lines) {
           & > td,
           & > tr:first-child > td {
-            border-top: 1px solid $datagrid-row-focused-bg;
-            border-bottom: 1px solid $datagrid-row-focused-bg;
+            border-top: 1px solid;
+            border-top-color: $datagrid-row-focused-bg;
+            border-bottom: 1px solid;
+            border-bottom-color: $datagrid-row-focused-bg;
           }
         }
       }
@@ -887,16 +917,20 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
 
       &:not(.dx-row-lines) {
         & > td {
-          border-bottom: 1px solid $datagrid-selection-bg;
-          border-top: 1px solid $datagrid-selection-bg;
+          border-bottom: 1px solid;
+          border-bottom-color: $datagrid-selection-bg;
+          border-top: 1px solid;
+          border-top-color: $datagrid-selection-bg;
         }
 
         & > tr:first-child > td {
-          border-top: 1px solid $datagrid-selection-bg;
+          border-top: 1px solid;
+          border-top-color: $datagrid-selection-bg;
         }
 
         & > tr:last-child > td {
-          border-bottom: 1px solid $datagrid-selection-bg;
+          border-bottom: 1px solid;
+          border-bottom-color: $datagrid-selection-bg;
         }
       }
 
@@ -930,7 +964,7 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
           padding: $generic-grid-base-cell-padding;
           padding-right: $generic-texteditor-invalid-badge-size;
 
-          @at-root #{selector-append(".dx-rtl", &)},
+          @at-root #{selector.append(".dx-rtl", &)},
           .dx-rtl & {
             padding-left: $generic-texteditor-invalid-badge-size;
             padding-right: $generic-grid-base-cell-padding;
@@ -978,6 +1012,7 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
 
   .dx-#{$widget-name}-bottom-load-panel {
     border-top: $datagrid-border;
+    border-top-color: $datagrid-border-color;
     background-color: $datagrid-base-background-color;
   }
 
@@ -987,6 +1022,7 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
 
   .dx-#{$widget-name}-total-footer {
     border-top: $datagrid-border;
+    border-top-color: $datagrid-border-color;
   }
 
   .dx-#{$widget-name}-revert-tooltip {
@@ -1001,9 +1037,9 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
 
       @include dx-button-styling-variant(
         $button-danger-bg, $button-danger-border-color, $button-danger-color,
-        darken($button-danger-bg, 10%),
-        darken($button-danger-bg, 15%),
-        darken($button-danger-bg, 20%),
+        color.adjust($button-danger-bg, $lightness: -10%, $space: hsl),
+        color.adjust($button-danger-bg, $lightness: -15%, $space: hsl),
+        color.adjust($button-danger-bg, $lightness: -20%, $space: hsl),
         $button-danger-color,
         $button-danger-color
       );
@@ -1118,13 +1154,13 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
       .dx-selection.dx-row:hover {
         & > td,
         & > tr > td {
+          border-right-color: $datagrid-row-selected-border-color;
+
           &:not(.dx-focused) {
             &.dx-#{$widget-name}-group-space {
               border-left-color: $datagrid-selection-bg;
             }
           }
-
-          border-right-color: $datagrid-row-selected-border-color;
 
           &.dx-pointer-events-none {
             border-left-color: $datagrid-row-selected-border-color;

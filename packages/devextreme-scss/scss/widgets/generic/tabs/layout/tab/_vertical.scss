@@ -26,6 +26,7 @@
         $generic-tabs-vertical-border-hover-right,
         $generic-tabs-vertical-border-hover-bottom,
         $generic-tabs-vertical-border-hover-left,
+        $tabs-tab-hover-border-color-horizontal,
       );
     }
 
@@ -35,6 +36,7 @@
         $generic-tabs-vertical-border-selected-right,
         $generic-tabs-vertical-border-selected-bottom,
         $generic-tabs-vertical-border-selected-left,
+        $tabs-border-color,
       );
     }
 
@@ -44,6 +46,7 @@
         $generic-tabs-vertical-border-active-right,
         $generic-tabs-vertical-border-active-bottom,
         $generic-tabs-vertical-border-active-left,
+        $tabs-tab-active-border-color,
       );
     }
 
@@ -53,6 +56,7 @@
         $generic-tabs-vertical-border-focused-disabled-right,
         $generic-tabs-vertical-border-focused-disabled-bottom,
         $generic-tabs-vertical-border-focused-disabled-left,
+        $tabs-focused-disabled-border-color,
       );
     }
   }
@@ -65,12 +69,14 @@
           $generic-tabs-vertical-border-focused-right,
           $generic-tabs-vertical-border-focused-bottom,
           $generic-tabs-vertical-border-focused-left,
+          $tabs-focused-border-color,
         );
       }
 
       &.dx-focused-disabled-next-tab {
         &::after {
           border-inline-end: $generic-tabs-border;
+          border-inline-end-color: $tabs-border-color;
           border-block-end: none;
         }
       }
@@ -78,6 +84,7 @@
       &.dx-focused-disabled-prev-tab {
         &::after {
           border-inline-start: $generic-tabs-border;
+          border-inline-start-color: $tabs-border-color;
           border-block-start: none;
         }
       }

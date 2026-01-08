@@ -127,10 +127,12 @@
 .dx-row.dx-datagrid-group-footer {
   &.dx-column-lines {
     border-bottom: $datagrid-border;
+    border-bottom-color: $datagrid-border-color;
   }
 
   & > td {
     border-top: $datagrid-border;
+    border-top-color: $datagrid-border-color;
     background-color: $datagrid-summary-bg;
     border-left-width: 0;
     border-right-width: 0;
@@ -140,6 +142,7 @@
 .dx-datagrid-sticky-columns {
   .dx-row.dx-datagrid-group-footer > td {
     border-bottom: $datagrid-border;
+    border-bottom-color: $datagrid-border-color;
   }
 
   .dx-row.dx-row-lines, .dx-row.dx-group-row, .dx-datagrid-group-footer, .dx-edit-row {

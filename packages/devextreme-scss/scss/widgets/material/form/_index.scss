@@ -18,7 +18,8 @@
 
 .dx-form-group-with-caption { // stylelint-disable-line no-duplicate-selectors
   & > .dx-form-group-content {
-    border-top: 1px solid $form-group-border-color;
+    border-top: 1px solid;
+    border-top-color: $form-group-border-color;
     padding-bottom: $material-form-group-content-padding-bottom;
     padding-top: $material-form-group-caption-bottom-padding;
     margin-top: $material-form-group-caption-bottom-margin;

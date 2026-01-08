@@ -86,7 +86,8 @@
 .dx-gallery-indicator-item {
   border-radius: 50%;
   box-sizing: border-box;
-  border: 1px solid $gallery-indicator-item-border-color;
+  border: 1px solid;
+  border-color: $gallery-indicator-item-border-color;
   pointer-events: auto;
   margin: 5px - math.div($fluent-gallery-indicator-size, 2) 6px;
   width: $fluent-gallery-indicator-size;
@@ -99,7 +100,8 @@
   width: $fluent-gallery-indicator-selected-size;
   height: $fluent-gallery-indicator-selected-size;
   background: $gallery-indicator-item-selected-bg;
-  border: 2px solid $gallery-indicator-selected-border-color;
+  border: 2px solid;
+  border-color: $gallery-indicator-selected-border-color;
   margin: 5px - math.div($fluent-gallery-indicator-selected-size, 2) 6px;
 }
 
