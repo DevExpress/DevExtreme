@@ -8,7 +8,8 @@ import Scheduler, {
   type SchedulerTypes,
 } from 'devextreme-react/scheduler';
 
-import RadioGroup, { type RadioGroupTypes } from 'devextreme-react/radio-group';
+import RadioGroup from 'devextreme-react/radio-group';
+import type { RadioGroupTypes } from 'devextreme-react/radio-group';
 
 import {
   data, assignees, rooms, priorities, resourcesList,
