@@ -29,7 +29,7 @@ export type ApplyValueMode = 'instantly' | 'useButtons';
  * @namespace DevExpress.common
  * @type object
  */
-export type AsyncRule = {
+export type AsyncRule<TValue = unknown> = {
   /**
   * @docid
   * @default false
@@ -57,16 +57,9 @@ export type AsyncRule = {
   /**
   * @docid
   * @type_function_return Promise<any>
-  * @type_function_param1 options:object
-  * @type_function_param1_field value:string|number
-  * @type_function_param1_field rule:object
-  * @type_function_param1_field validator:object
-  * @type_function_param1_field data:object
-  * @type_function_param1_field column:object
-  * @type_function_param1_field formItem:object
   * @public
   */
-  validationCallback?: ((options: ValidationCallbackData) => PromiseLike<any>);
+  validationCallback?: ((options: ValidationCallbackData<TValue>) => PromiseLike<any>);
 };
 
 /**
@@ -132,7 +125,7 @@ export type ComparisonOperator = '!=' | '!==' | '<' | '<=' | '==' | '===' | '>' 
  * @type object
  * @namespace DevExpress.common
  */
-export type CustomRule = {
+export type CustomRule<TValue = unknown> = {
   /**
   * @docid
   * @default false
@@ -159,16 +152,9 @@ export type CustomRule = {
   type: 'custom';
   /**
   * @docid
-  * @type_function_param1 options:object
-  * @type_function_param1_field value:string|number
-  * @type_function_param1_field rule:object
-  * @type_function_param1_field validator:object
-  * @type_function_param1_field data:object
-  * @type_function_param1_field column:object
-  * @type_function_param1_field formItem:object
   * @public
   */
-  validationCallback?: ((options: ValidationCallbackData) => boolean);
+  validationCallback?: ((options: ValidationCallbackData<TValue>) => boolean);
 };
 
 /**
@@ -812,15 +798,37 @@ export type ToolbarItemLocation = 'after' | 'before' | 'center';
 export type TooltipShowMode = 'always' | 'onHover';
 
 /**
+ * @docid
  * @public
  * @namespace DevExpress.common
  */
-export type ValidationCallbackData = {
-  value?: any;
+export type ValidationCallbackData<TValue = unknown> = {
+  /** @docid */
+  value?: TValue;
+  /**
+   * @docid
+   * @type object
+   */
   rule: any;
+  /**
+   * @docid
+   * @type object
+   */
   validator: any;
+  /**
+   * @docid
+   * @type object
+   */
   data?: any;
+  /**
+   * @docid
+   * @type object
+   */
   column?: any;
+  /**
+   * @docid
+   * @type object
+   */
   formItem?: any;
 };
 
