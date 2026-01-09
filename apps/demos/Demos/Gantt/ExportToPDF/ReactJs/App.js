@@ -16,6 +16,7 @@ import {
 } from 'devextreme-react/gantt';
 import * as pdfExporter from 'devextreme-react/common/export/pdf';
 import { jsPDF } from 'jspdf';
+import { applyPlugin } from 'jspdf-autotable';
 import {
   tasks,
   dependencies,
@@ -27,7 +28,6 @@ import {
   exportModeLabel,
   dateRangeLabel,
 } from './data.js';
-import { applyPlugin } from 'jspdf-autotable';
 
 applyPlugin(jsPDF);
 const formats = ['A0', 'A1', 'A2', 'A3', 'A4', 'Auto'];

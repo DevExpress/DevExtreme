@@ -1,5 +1,5 @@
 import { exec } from 'child_process';
-import { BuildOptions, build } from 'esbuild';
+import { BuildOptions } from 'esbuild';
 import { existsSync, mkdirSync, removeSync } from 'fs-extra';
 import { Demo, Framework } from '../helper/types';
 import { createDemoLayout, getDestinationPathByDemo, getSourcePathByDemo } from '../helper';
@@ -7,8 +7,8 @@ import { getIndexHtmlPath, getProjectNameByDemo } from './utils';
 
 interface Bundler {
   framework: Framework;
-  getBuildOptions(demo: Demo): BuildOptions;
-  buildDemo(demo: Demo, res): void;
+  getBuildOptions: (demo: Demo) => BuildOptions;
+  buildDemo: (demo: Demo, res) => void;
 }
 export default class AngularBundler implements Bundler {
   framework: Framework;
@@ -17,7 +17,7 @@ export default class AngularBundler implements Bundler {
     this.framework = 'Angular';
   }
 
-  getBuildOptions = (demo: Demo): BuildOptions => ({});
+  getBuildOptions = (): BuildOptions => ({});
 
   buildDemo = (demo: Demo, res): Promise<void> => {
     const sourceDemoPath = getSourcePathByDemo(demo, this.framework);

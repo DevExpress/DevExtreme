@@ -1186,9 +1186,7 @@ const data = [{
   ],
 }].map((dataItem) => ({
   ...dataItem,
-  toLowerCase: () => function (text, render) {
-    return render(text).toLowerCase();
-  },
+  toLowerCase: () => (text, render) => render(text).toLowerCase(),
 }));
 
 const dataSource = new DevExpress.data.DataSource({

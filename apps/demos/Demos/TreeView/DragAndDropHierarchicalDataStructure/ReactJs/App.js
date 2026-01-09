@@ -1,8 +1,8 @@
 import React, { useCallback, useRef, useState } from 'react';
 import TreeView from 'devextreme-react/tree-view';
 import Sortable from 'devextreme-react/sortable';
-import { itemsDriveC as originItemsDriveC, itemsDriveD as originItemsDriveD } from './data.js';
 import { isDefined } from 'devextreme/core/utils/type';
+import { itemsDriveC as originItemsDriveC, itemsDriveD as originItemsDriveD } from './data.js';
 
 const calculateToIndex = (e) => {
   if (e.fromComponent !== e.toComponent || e.dropInsideItem) {
