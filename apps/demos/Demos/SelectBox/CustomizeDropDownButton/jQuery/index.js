@@ -44,13 +44,11 @@ $(() => {
 
   const dropDownButtonTemplate = function (selectedItem) {
     if (selectedItem) {
-      return function () {
-        return $('<img>', {
-          alt: 'Custom icon',
-          src: `../../../../images/icons/${selectedItem.IconSrc}`,
-          class: 'custom-icon',
-        });
-      };
+      return () => $('<img>', {
+        alt: 'Custom icon',
+        src: `../../../../images/icons/${selectedItem.IconSrc}`,
+        class: 'custom-icon',
+      });
     }
     return 'dropDownButton';
   };

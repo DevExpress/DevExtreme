@@ -1,12 +1,10 @@
-/* eslint-disable no-console */
 const { join } = require('path');
 const { writeFileSync, existsSync, readFileSync } = require('fs');
 
 const configPath = join(__dirname, '..', '..', 'repository.config.json');
 
-/* eslint-disable quote-props */
 const config = {
-  'devextreme': '',
+  devextreme: '',
   'devextreme-angular': '',
   'devextreme-react': '',
   'devextreme-vue': '',
@@ -14,7 +12,6 @@ const config = {
   'devexpress-gantt': '',
   'devextreme-aspnet': '',
 };
-/* eslint-enable quote-props */
 
 const updateConfig = (configObject) => {
   const configString = JSON.stringify(configObject, null, 2);

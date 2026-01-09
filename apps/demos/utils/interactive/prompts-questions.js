@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 const path = require('path');
 const prompts = require('prompts');
 
@@ -8,13 +7,13 @@ const fileSystemUtils = require('../shared/fs-utils');
 const setTextIfPrevIsNull = (prev) => (prev === 'new' ? 'text' : null);
 const DEMO_PATH_STAGES = [{
   name: 'category',
-  getChoisesFn: menuMetaUtils.getCategories,
+  getChoicesFn: menuMetaUtils.getCategories,
 }, {
   name: 'group',
-  getChoisesFn: menuMetaUtils.getGroups,
+  getChoicesFn: menuMetaUtils.getGroups,
 }, {
   name: 'demo',
-  getChoisesFn: menuMetaUtils.getDemos,
+  getChoicesFn: menuMetaUtils.getDemos,
 }];
 
 const getPromptForCategories = (menuMetaData, message, newCategoryText) => ({
@@ -45,7 +44,7 @@ const getGroupQuestions = (menuMetaData, path) => [{
   type: setTextIfPrevIsNull,
   name: 'newName',
   message: 'Enter the name of a new group:',
-}]
+}];
 
 const getDemoQuestions = (menuMetaData, path) => [{
   type: 'autocomplete',
@@ -60,7 +59,7 @@ const getDemoQuestions = (menuMetaData, path) => [{
 
 const onCancel = () => {
   console.log('Operation is canceled.');
-  // eslint-disable-next-line no-process-exit
+
   process.exit(0);
 };
 
@@ -79,7 +78,7 @@ const getWidgetQuestions = (baseDemosDir) => [{
 const getEquivalentsQuestions = () => [{
   type: 'text',
   name: 'value',
-  format: (val) => val.split(',').map(str => str.trim()).filter(str => str).join(', '),
+  format: (val) => val.split(',').map((str) => str.trim()).filter((str) => str).join(', '),
   message: 'Enter Equivalents:',
 }];
 
@@ -95,7 +94,7 @@ const getNeedExtraModules = (extraModules) => [{
   type: 'multiselect',
   name: 'modules',
   message: 'Do you need to include some extra modules in your demo?',
-  choices: extraModules.map(module => ({ title: module, value: module })),
+  choices: extraModules.map((module) => ({ title: module, value: module })),
 }];
 
 const getApproachesFoldersQuestions = (approaches) => {
@@ -187,29 +186,29 @@ const askApproaches = async (missingApproaches) => prompts(
 );
 
 const askPath = async (menuMetaData, prefix = '') => {
-  let stage = DEMO_PATH_STAGES.find(demoStage => demoStage.name === 'category');
+  let stage = DEMO_PATH_STAGES.find((demoStage) => demoStage.name === 'category');
   const path = [];
   while (stage) {
-    const { name, getChoisesFn } = stage;
+    const { name, getChoicesFn } = stage;
     const question = await prompts([{
       type: 'autocomplete',
       name,
       message: `${prefix}Select a ${name}:`,
-      choices: getChoisesFn(menuMetaData, path.length ? path : undefined),
+      choices: getChoicesFn(menuMetaData, path.length ? path : undefined),
     }], { onCancel });
 
     path.push(question[name]);
     if (menuMetaUtils.hasGroups(menuMetaData, path)) {
-      stage = DEMO_PATH_STAGES.find(demoStage => demoStage.name === 'group');
+      stage = DEMO_PATH_STAGES.find((demoStage) => demoStage.name === 'group');
     } else if (menuMetaUtils.hasDemos(menuMetaData, path)) {
-      stage = DEMO_PATH_STAGES.find(demoStage => demoStage.name === 'demo');
+      stage = DEMO_PATH_STAGES.find((demoStage) => demoStage.name === 'demo');
     } else {
       stage = undefined;
     }
   }
 
   return { path };
-}
+};
 
 const askNewOrExisting = async (menuMetaData) => {
   const result = {};
@@ -231,7 +230,7 @@ const askNewOrExisting = async (menuMetaData) => {
   result.path = pathQuestion.path;
 
   return result;
-}
+};
 
 const askDemoToUpdate = async (menuMetaData) => prompts(
   getDemoToUpdateQuestions(menuMetaData), { onCancel },

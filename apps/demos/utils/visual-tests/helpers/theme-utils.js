@@ -6,9 +6,7 @@ export const THEME = {
 
 export const DEFAULT_THEME_NAME = THEME.fluent;
 
-export const getThemePostfix = (theme = DEFAULT_THEME_NAME) => {
-  return ` (${theme})`;
-};
+export const getThemePostfix = (theme = DEFAULT_THEME_NAME) => ` (${theme})`;
 
 export const getScreenshotName = (baseName, theme) => {
   const themePostfix = getThemePostfix(theme);
@@ -46,25 +44,25 @@ export async function testScreenshot(
 
   const finalOptions = isMaterialTheme && comparisonOptions?.looksSameComparisonOptions
     ? {
-        ...comparisonOptions,
-        looksSameComparisonOptions: {
-          ...comparisonOptions.looksSameComparisonOptions,
-          ...themeOptions.looksSameComparisonOptions,
-        },
-        textDiffTreshold: themeOptions.textDiffTreshold,
-      }
+      ...comparisonOptions,
+      looksSameComparisonOptions: {
+        ...comparisonOptions.looksSameComparisonOptions,
+        ...themeOptions.looksSameComparisonOptions,
+      },
+      textDiffTreshold: themeOptions.textDiffTreshold,
+    }
     : {
-        ...comparisonOptions,
-        ...themeOptions,
-      };
+      ...comparisonOptions,
+      ...themeOptions,
+    };
 
   await t
     .expect(
       await takeScreenshot(
         getScreenshotName(screenshotName, testTheme),
         element,
-        finalOptions
-      )
+        finalOptions,
+      ),
     )
     .ok();
 }

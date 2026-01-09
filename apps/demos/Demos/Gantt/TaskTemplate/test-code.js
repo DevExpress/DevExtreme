@@ -84,7 +84,7 @@ testUtils.importAnd(() => 'devextreme/ui/gantt', () => DevExpress.ui.dxGantt, (d
       if (instance) {
         instance.option('tasks', { dataSource: fakeTasks });
         instance.option('onContentReady', () => {
-          instance.option = function () { };
+          instance.option = () => { };
         });
         instance.refresh();
       }
