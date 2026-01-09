@@ -1425,45 +1425,32 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     } else {
       const adjustedStartDayHour = (startDayHour + viewOffsetHours) % 24;
       const adjustedEndDayHour = (endDayHour + viewOffsetHours) % 24;
-
-      // If adjustedEndDayHour is 0, it means the range is [adjustedStartDayHour, 24), not crossing midnight
-      // Only consider it crossing midnight if adjustedEndDayHour > 0 and adjustedStartDayHour >= adjustedEndDayHour
       const crossesMidnight = adjustedEndDayHour > 0 && adjustedStartDayHour >= adjustedEndDayHour;
-
-      // If adjustedEndDayHour is 0, treat it as 24 for range comparison
       const effectiveEndDayHour = adjustedEndDayHour === 0 ? 24 : adjustedEndDayHour;
 
       switch (true) {
         case crossesMidnight:
-          // Boundaries cross midnight: [adjustedStartDayHour, 24) ∪ [0, adjustedEndDayHour)
-          // The second range [0, adjustedEndDayHour) belongs to the next day
+          // When range crosses midnight: [adjustedStartDayHour, 24) ∪ [0, adjustedEndDayHour)
+          // Hours in [0, adjustedEndDayHour) are valid only on the next day after startViewDate
           if (hours >= adjustedStartDayHour) {
-            // Hours are in first range [adjustedStartDayHour, 24), keep original hours
+            // Hours in first range [adjustedStartDayHour, 24) - keep original hours
           } else if (hours < adjustedEndDayHour) {
-            // Hours are in second range [0, adjustedEndDayHour)
-            // This range belongs to the next day relative to the start of visible range
-            // Check if currentDate is the next day by comparing with startViewDate
             const startViewDate = this.getStartViewDate();
             const nextDayDate = new Date(startViewDate);
             nextDayDate.setDate(nextDayDate.getDate() + 1);
 
-            // Check if currentDate is the next day (same year, month, date)
             const isNextDay = currentDate.getFullYear() === nextDayDate.getFullYear()
               && currentDate.getMonth() === nextDayDate.getMonth()
               && currentDate.getDate() === nextDayDate.getDate();
 
             if (!isNextDay) {
-              // Current date is not the next day, normalize to adjustedStartDayHour on current date
               hours = adjustedStartDayHour;
             }
-            // If isNextDay is true, keep original hours
           } else {
-            // Hours are in gap [adjustedEndDayHour, adjustedStartDayHour), normalize to adjustedStartDayHour
             hours = adjustedStartDayHour;
           }
           break;
 
-        // Normal case: boundaries don't cross midnight [adjustedStartDayHour, effectiveEndDayHour)
         case hours < adjustedStartDayHour:
           hours = adjustedStartDayHour;
           break;
@@ -1473,7 +1460,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
           break;
 
         default:
-          // Hours are in valid range, keep original hours
           break;
       }
     }
@@ -1930,8 +1916,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const endDayHour = this.option('endDayHour');
     const viewOffsetHours = viewOffset / HOUR_MS;
 
-    // Check only the date range, not the time
-    // Time will be normalized in _getScrollCoordinates
     const minDate = new Date(min);
     minDate.setHours(0, 0, 0, 0);
     const maxDate = new Date(max);
@@ -1940,20 +1924,17 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const dateOnly = new Date(date);
     dateOnly.setHours(0, 0, 0, 0);
 
-    // Check if date is within the basic range [minDate, maxDate]
     if (dateOnly >= minDate && dateOnly <= maxDate) {
       return true;
     }
 
-    // With viewOffset, if range crosses midnight, allow the next day
+    // When viewOffset causes range to cross midnight, allow the next day after maxDate
     if (viewOffset !== 0) {
       const adjustedStartDayHour = (startDayHour + viewOffsetHours) % 24;
       const adjustedEndDayHour = (endDayHour + viewOffsetHours) % 24;
       const crossesMidnight = adjustedEndDayHour > 0 && adjustedStartDayHour >= adjustedEndDayHour;
 
       if (crossesMidnight) {
-        // Range crosses midnight: [adjustedStartDayHour, 24) ∪ [0, adjustedEndDayHour)
-        // Allow the next day after maxDate
         const nextDayMin = new Date(maxDate);
         nextDayMin.setDate(nextDayMin.getDate() + 1);
         nextDayMin.setHours(0, 0, 0, 0);
