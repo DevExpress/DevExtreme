@@ -200,7 +200,7 @@ class DateView extends Editor<DateViewProperties> {
   _createRollerConfigs(type?: string): void {
     const { type: defaultType } = this.option();
     const selectedType = type ?? defaultType;
-    this._rollerConfigs = {} as Record<string, RollerConfig>;
+    this._rollerConfigs = {};
 
     dateLocalization
       // @ts-expect-error core/DateLocalization type should be fixed
