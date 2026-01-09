@@ -15,10 +15,6 @@ import {
 import * as pdfExporter from 'devextreme-react/common/export/pdf';
 
 import { jsPDF } from 'jspdf';
-import {
-  tasks, dependencies, resources, resourceAssignments, startDateLabel, endDateLabel,
-  documentFormatLabel, exportModeLabel, dateRangeLabel,
-} from './data.ts';
 
 import { applyPlugin } from 'jspdf-autotable';
 
@@ -26,6 +22,10 @@ import type { ValueChangedEvent as SelectBoxValueChangedEvent } from 'devextreme
 import type { ValueChangedEvent as NumberBoxValueChangedEvent } from 'devextreme/ui/number_box';
 import type { ValueChangedEvent as DateBoxValueChangedEvent } from 'devextreme/ui/date_box';
 import type { ValueChangedEvent as CheckBoxValueChangedEvent } from 'devextreme/ui/check_box';
+import {
+  tasks, dependencies, resources, resourceAssignments, startDateLabel, endDateLabel,
+  documentFormatLabel, exportModeLabel, dateRangeLabel,
+} from './data.ts';
 
 type ValueChanged =
   | SelectBoxValueChangedEvent

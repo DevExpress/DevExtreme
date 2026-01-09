@@ -41,7 +41,9 @@ export default [
       'shared/empty-file.ts',
       'Demos/**/config.js',
       'Demos/**/Vue/**/*.html',
-      'utils', // TODO unignore this
+      'utils/templates/**/*.ts',
+      'utils/templates/**/*.tsx',
+      '**/.DS_Store',
 
       '**/*.{png,json,mjs,css,html,md}',
     ],
@@ -104,11 +106,13 @@ export default [
           'urls',
           'whitespace',
           'yargs',
+          'treshold', // should be updated to 'threshold' in the codebase
+          'callstack',
         ];
 
         return spellcheckRule;
       })(),
-      'func-names': 0, // TODO warn (was warn) >500
+      'func-names': ['error', 'as-needed'],
 
       'no-shadow': 0,
       'default-case': 0,
@@ -138,10 +142,10 @@ export default [
       'no-only-tests/no-only-tests': 'error',
 
       'import/extensions': 0,
-      'import/order': 0,
+      'import/order': 1,
       'import/no-webpack-loader-syntax': 0,
 
-      '@stylistic/max-len': 0, // TODO enable this rule (was 100)
+      '@stylistic/max-len': 0,
       '@stylistic/indent': ['error', 2, {
         SwitchCase: 1,
         MemberExpression: 1,
@@ -201,14 +205,13 @@ export default [
       }
     },
     rules: {
-      // TODO consider this rules
       'max-classes-per-file': 0,
       'no-restricted-properties': 0,
       'no-restricted-globals': 0,
-      'no-self-assign': 0,
-      'no-multi-assign': 0,
+      'no-self-assign': 'error',
+      'no-multi-assign': 'error',
       'no-restricted-syntax': 0,
-      'prefer-rest-params': 0,
+      'prefer-rest-params': 'error',
       'radix': 0,
       'no-underscore-dangle': 0,
       'operator-assignment': 0,
@@ -227,9 +230,8 @@ export default [
       '@typescript-eslint/no-unused-vars': 'error',
       '@typescript-eslint/no-unused-expressions': 0,
       '@typescript-eslint/no-useless-constructor': 0,
-      '@typescript-eslint/explicit-module-boundary-types': 0, // was warn
+      '@typescript-eslint/explicit-module-boundary-types': 0,
 
-      // TODO: consider these rules
       '@typescript-eslint/init-declarations': 0,
       '@typescript-eslint/prefer-readonly': 0,
       '@typescript-eslint/no-unsafe-return': 0,
@@ -238,7 +240,7 @@ export default [
       '@typescript-eslint/no-misused-promises': 0,
       '@typescript-eslint/member-ordering': 0,
       '@typescript-eslint/no-base-to-string': 0,
-      '@typescript-eslint/no-non-null-assertion': 0,
+      '@typescript-eslint/no-non-null-assertion': 'error',
       '@typescript-eslint/no-invalid-this': 0,
       '@typescript-eslint/no-unsafe-function-type': 0,
       '@typescript-eslint/no-wrapper-object-types': 0,
@@ -294,6 +296,18 @@ export default [
       'no-undef': 0,
     },
   },
+  {
+    files: ['utils/templates/jQuery/data.js'],
+    languageOptions: {
+      globals: {
+        ...globals.jquery,
+        DevExpress: true,
+      },
+    },
+    rules: {
+      'no-unused-vars': 0,
+    },
+  },
 
   // React demos
   {
@@ -335,24 +349,19 @@ export default [
           children: 'never',
         },
       ],
-      'react/jsx-fragments': ['warn'],
+      'react/jsx-fragments': ['error'],
       'react/jsx-no-bind': [
         'error',
         {
-          allowBind: true, // TODO false (was false)
-          allowArrowFunctions: true, // TODO false (was false)
-          allowFunctions: true, // TODO false
+          allowBind: false,
+          allowArrowFunctions: true,
+          allowFunctions: true,
           ignoreRefs: true,
         },
       ],
       'react/jsx-tag-spacing': ['error', { beforeClosing: 'never' }],
       'react/jsx-no-undef': ['error', { allowGlobals: true }],
       'react/jsx-no-target-blank': ['error', { enforceDynamicLinks: 'never' }],
-
-      'react-perf/jsx-no-new-object-as-prop': ['error', { nativeAllowList: 'all' }],
-      'react-perf/jsx-no-new-array-as-prop': ['error', { nativeAllowList: 'all' }],
-      'react-perf/jsx-no-new-array-as-prop': 0,
-      'react-perf/jsx-no-new-object-as-prop': 0,
 
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
@@ -488,4 +497,29 @@ export default [
     ...config,
     files: ['utils/tests/**/*.*'],
   })),
+
+  // utils directory
+  {
+    files: [
+      'utils/**/*.{js,ts}',
+    ],
+    ignores: [
+      'utils/testing/',
+      'utils/visual-tests/',
+      'utils/templates/',
+    ],
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+      },
+    },
+    rules: {
+      'no-console': 0,
+      'no-await-in-loop': 0,
+      'no-restricted-syntax': 0,
+      '@typescript-eslint/await-thenable': 0,
+      'spellcheck/spell-checker': 0,
+      'consistent-return': 0,
+    },
+  },
 ];

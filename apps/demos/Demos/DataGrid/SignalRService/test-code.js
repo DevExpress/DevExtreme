@@ -10,7 +10,7 @@ testUtils.importAnd(() => ['devextreme/ui/data_grid', 'devextreme/data/data_sour
 
     clearInterval(intervalId);
 
-    window.checkReady = function () {
+    window.checkReady = () => {
       const dataSource = dxDataGrid.getInstance(document.querySelector('#gridContainer')).getDataSource();
       return dataSource ? dataSource.items().length > 0 : false;
     };
@@ -40,7 +40,7 @@ testUtils.importAnd(() => ['devextreme/ui/data_grid', 'devextreme/data/data_sour
       Symbol: 'GOOG', Price: 63.642670, DayMax: 64.967630, DayMin: 62.4260, DayOpen: 55.9, LastUpdate: '2018-06-14T07:45:11.8063377-07:00', Change: 7.742670, PercentChange: 13.85,
     }];
     if (window.$ && window.$.connection && window.$.connection.liveUpdateSignalRHub) {
-      window.$.connection.liveUpdateSignalRHub.client.updateStockPrice = function () { };
+      window.$.connection.liveUpdateSignalRHub.client.updateStockPrice = () => { };
     } else {
       dataSourceItems.forEach((item) => {
         Object.keys(item).forEach((key) => {
