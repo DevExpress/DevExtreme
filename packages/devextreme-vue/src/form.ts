@@ -9,6 +9,7 @@ import {
 import {
  Mode,
  ValidationRuleType,
+ ValidationCallbackData,
  HorizontalAlignment,
  VerticalAlignment,
  ButtonStyle,
@@ -274,7 +275,7 @@ const DxAsyncRuleConfig = {
     message: String,
     reevaluate: Boolean,
     type: String as PropType<ValidationRuleType>,
-    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => any)>
+    validationCallback: Function as PropType<((options: ValidationCallbackData) => any)>
   }
 };
 
@@ -458,7 +459,7 @@ const DxCustomRuleConfig = {
     message: String,
     reevaluate: Boolean,
     type: String as PropType<ValidationRuleType>,
-    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean)>
+    validationCallback: Function as PropType<((options: ValidationCallbackData) => boolean)>
   }
 };
 
@@ -1153,7 +1154,7 @@ const DxValidationRuleConfig = {
     reevaluate: Boolean,
     trim: Boolean,
     type: String as PropType<ValidationRuleType>,
-    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean)>
+    validationCallback: Function as PropType<((options: ValidationCallbackData) => boolean)>
   }
 };
 
