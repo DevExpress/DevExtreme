@@ -86,7 +86,6 @@
    },
    "generate-components": {
       "executor": "devextreme-nx-infra-plugin:generate-components",
-      "dependsOn": ["devextreme-metadata:generate"],
       "options": {
         "metadataPath": "../devextreme-metadata/dist/integration-data.json",
         "componentsDir": "./src",
