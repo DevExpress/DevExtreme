@@ -383,7 +383,7 @@ class DropDownList<
     return selectedItem !== undefined
       ? Deferred().resolve(selectedItem).promise()
       // @ts-expect-error ts-error
-      : this._loadValue(value);
+      : this._loadValue(value, this.option('allowNullValue'));
   }
 
   _getPlainItems(items?) {
