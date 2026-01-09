@@ -12,7 +12,7 @@ import {
 
 
 
-import { ValidationRuleType } from 'devextreme/common';
+import { ValidationRuleType, ValidationCallbackData } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -70,10 +70,10 @@ export class DxiFormCustomRuleComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get validationCallback(): ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean) {
+    get validationCallback(): ((options: ValidationCallbackData) => boolean) {
         return this._getOption('validationCallback');
     }
-    set validationCallback(value: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean)) {
+    set validationCallback(value: ((options: ValidationCallbackData) => boolean)) {
         this._setOption('validationCallback', value);
     }
 

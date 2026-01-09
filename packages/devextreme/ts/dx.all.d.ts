@@ -1168,7 +1168,7 @@ declare module DevExpress.common {
   /**
    * [descr:AsyncRule]
    */
-  export type AsyncRule = {
+  export type AsyncRule<TValue = unknown> = {
     /**
      * [descr:AsyncRule.ignoreEmptyValue]
      */
@@ -1188,7 +1188,9 @@ declare module DevExpress.common {
     /**
      * [descr:AsyncRule.validationCallback]
      */
-    validationCallback?: (options: ValidationCallbackData) => PromiseLike<any>;
+    validationCallback?: (
+      options: ValidationCallbackData<TValue>
+    ) => PromiseLike<any>;
   };
   export type ButtonStyle = 'text' | 'outlined' | 'contained';
   export type ButtonType = 'danger' | 'default' | 'normal' | 'success';
@@ -1229,7 +1231,7 @@ declare module DevExpress.common {
   /**
    * [descr:CustomRule]
    */
-  export type CustomRule = {
+  export type CustomRule<TValue = unknown> = {
     /**
      * [descr:CustomRule.ignoreEmptyValue]
      */
@@ -1249,7 +1251,7 @@ declare module DevExpress.common {
     /**
      * [descr:CustomRule.validationCallback]
      */
-    validationCallback?: (options: ValidationCallbackData) => boolean;
+    validationCallback?: (options: ValidationCallbackData<TValue>) => boolean;
   };
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -1724,12 +1726,33 @@ declare module DevExpress.common {
     | 'dxTextBox';
   export type ToolbarItemLocation = 'after' | 'before' | 'center';
   export type TooltipShowMode = 'always' | 'onHover';
-  export type ValidationCallbackData = {
-    value?: any;
+  /**
+   * [descr:ValidationCallbackData]
+   */
+  export type ValidationCallbackData<TValue = unknown> = {
+    /**
+     * [descr:ValidationCallbackData.value]
+     */
+    value?: TValue;
+    /**
+     * [descr:ValidationCallbackData.rule]
+     */
     rule: any;
+    /**
+     * [descr:ValidationCallbackData.validator]
+     */
     validator: any;
+    /**
+     * [descr:ValidationCallbackData.data]
+     */
     data?: any;
+    /**
+     * [descr:ValidationCallbackData.column]
+     */
     column?: any;
+    /**
+     * [descr:ValidationCallbackData.formItem]
+     */
     formItem?: any;
   };
   export type ValidationMessageMode = 'always' | 'auto';
