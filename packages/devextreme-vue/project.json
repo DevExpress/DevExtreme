@@ -202,11 +202,11 @@
   },
   "namedInputs": {
     "default": [
-      "{projectRoot}/devextreme-metadata/**/*",
       "{projectRoot}/src/**/*",
       "!{projectRoot}/src/**/__tests__/*",
       "{projectRoot}/tsconfig*",
-      "{workspaceRoot}/tsconfig.json"
+      "{workspaceRoot}/tsconfig.json",
+      "{workspaceRoot}/packages/devextreme-metadata/**/*"
     ],
     "test": [
       "{projectRoot}/src/**/__tests__/*",
