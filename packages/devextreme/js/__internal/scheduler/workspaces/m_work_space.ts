@@ -691,8 +691,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     }
 
     if (this.isVirtualScrolling()
-            && (this.virtualScrollingDispatcher.horizontalScrollingAllowed
-                || this.virtualScrollingDispatcher.height)) {
+      && (this.virtualScrollingDispatcher.horizontalScrollingAllowed
+        || this.virtualScrollingDispatcher.height)) {
       const currentOnScroll = config.onScroll;
       config = {
         ...config,
@@ -1407,8 +1407,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return (this.$element() as any).find(`.${GROUP_HEADER_CLASS}`);
   }
 
-  _getScrollCoordinates(hours, minutes, date, groupIndex?: any, allDay?: any) {
-    const currentDate = date || new Date(this.option('currentDate'));
+  _normalizeHoursToVisibleRange(hours: number): number {
     const startDayHour = this.option('startDayHour');
     const endDayHour = this.option('endDayHour');
     const viewOffset = this.option('viewOffset') as number;
@@ -1419,39 +1418,21 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const crossesMidnight = adjustedEndDayHour > 0 && adjustedStartDayHour >= adjustedEndDayHour;
     const effectiveEndDayHour = adjustedEndDayHour === 0 ? 24 : adjustedEndDayHour;
 
-    switch (true) {
-      case crossesMidnight:
-        // Range crosses midnight: [adjustedStartDayHour, 24) ∪ [0, adjustedEndDayHour)
-        if (hours < adjustedEndDayHour) {
-          // Hours in [0, adjustedEndDayHour) - valid only on next day
-          const startViewDate = this.getStartViewDate();
-          const nextDayDate = new Date(startViewDate);
-          nextDayDate.setDate(nextDayDate.getDate() + 1);
-
-          const isNextDay = currentDate.getFullYear() === nextDayDate.getFullYear()
-            && currentDate.getMonth() === nextDayDate.getMonth()
-            && currentDate.getDate() === nextDayDate.getDate();
-
-          if (!isNextDay) {
-            hours = adjustedStartDayHour;
-          }
-        } else if (hours < adjustedStartDayHour) {
-          // Hours outside valid ranges - normalize to start
-          hours = adjustedStartDayHour;
-        }
-        break;
-
-      case hours < adjustedStartDayHour:
-        hours = adjustedStartDayHour;
-        break;
-
-      case hours >= effectiveEndDayHour:
-        hours = effectiveEndDayHour - 1;
-        break;
-
-      default:
-        break;
+    if (!crossesMidnight) {
+      if (hours < adjustedStartDayHour) {
+        return adjustedStartDayHour;
+      }
+      if (hours >= effectiveEndDayHour) {
+        return effectiveEndDayHour - 1;
+      }
     }
+
+    return hours;
+  }
+
+  _getScrollCoordinates(hours, minutes, date, groupIndex?: any, allDay?: any) {
+    const currentDate = date || new Date(this.option('currentDate'));
+    hours = this._normalizeHoursToVisibleRange(hours);
 
     currentDate.setHours(hours, minutes, 0, 0);
 
@@ -1544,8 +1525,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   isGroupedByDate() {
     return this.option('groupByDate')
-            && this._isHorizontalGroupedWorkSpace()
-            && this._getGroupCount() > 0;
+      && this._isHorizontalGroupedWorkSpace()
+      && this._getGroupCount() > 0;
   }
 
   // TODO: refactor current time indicator
@@ -1803,9 +1784,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       const cellEndTime = cellEndDate.getTime();
 
       if (((!inAllDayRow && cellStartTime <= time
-                && time < cellEndTime)
-                || (inAllDayRow && trimmedTime === cellStartTime))
-                && groupIndex === cellGroupIndex) {
+        && time < cellEndTime)
+        || (inAllDayRow && trimmedTime === cellStartTime))
+        && groupIndex === cellGroupIndex) {
         return false;
       }
       return currentResult;
@@ -1846,9 +1827,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       const rowIndex = index / totalColumnCount;
 
       if (scrolledColumnCount <= columnIndex
-                && columnIndex < columnCount
-                && scrolledRowCount <= rowIndex
-                && rowIndex < rowCount) {
+        && columnIndex < columnCount
+        && scrolledRowCount <= rowIndex
+        && rowIndex < rowCount) {
         result.push($cell);
       }
     });
@@ -1898,41 +1879,18 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   _isValidScrollDate(date, throwWarning = true) {
-    const viewOffset = this.option('viewOffset') as number;
     const min = this.getStartViewDate();
     const max = this.getEndViewDate();
+    const viewOffset = this.option('viewOffset') as number;
+    const adjustedMin = new Date(min.getTime() + viewOffset);
+    const adjustedMax = new Date(max.getTime() + viewOffset);
 
-    // Get the date only without time
-    const minDate = new Date(min.getFullYear(), min.getMonth(), min.getDate());
-    const maxDate = new Date(max.getFullYear(), max.getMonth(), max.getDate());
-    const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-
-    // Check if the date is within the min and max dates
-    if (dateOnly >= minDate && dateOnly <= maxDate) {
-      return true;
+    if (date < adjustedMin || date > adjustedMax) {
+      throwWarning && errors.log('W1008', date);
+      return false;
     }
 
-    // When viewOffset causes range to cross midnight, allow the next day after maxDate
-    if (viewOffset !== 0) {
-      const startDayHour = this.option('startDayHour');
-      const endDayHour = this.option('endDayHour');
-      const viewOffsetHours = viewOffset / HOUR_MS;
-      const adjustedStartDayHour = (startDayHour + viewOffsetHours) % 24;
-      const adjustedEndDayHour = (endDayHour + viewOffsetHours) % 24;
-      const crossesMidnight = adjustedEndDayHour > 0 && adjustedStartDayHour >= adjustedEndDayHour;
-
-      if (crossesMidnight) {
-        const nextDayMin = new Date(maxDate);
-        nextDayMin.setDate(nextDayMin.getDate() + 1);
-
-        if (dateOnly.getTime() === nextDayMin.getTime()) {
-          return true;
-        }
-      }
-    }
-
-    throwWarning && errors.log('W1008', date);
-    return false;
+    return true;
   }
 
   needApplyCollectorOffset() {
@@ -3419,10 +3377,10 @@ const createDragBehaviorConfig = (
       const isCurrentSchedulerElement = dateTables.find(el).length === 1;
 
       return isCurrentSchedulerElement
-                && (
-                  classList.contains(DATE_TABLE_CELL_CLASS)
-                    || classList.contains(ALL_DAY_TABLE_CELL_CLASS)
-                );
+        && (
+          classList.contains(DATE_TABLE_CELL_CLASS)
+          || classList.contains(ALL_DAY_TABLE_CELL_CLASS)
+        );
     });
 
     if (droppableCell) {
