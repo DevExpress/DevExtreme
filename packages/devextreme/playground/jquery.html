@@ -49,40 +49,14 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="scheduler"></div>
+        <div id="button"></div>
         <script>
-
-$(() => {
-	$("#scheduler").dxScheduler({
-        dataSource: data,
-          views: ['timelineDay'],
-          currentView: 'timelineDay',
-          currentDate: new Date(2021, 1, 2),
-          startDayHour: 6,
-          endDayHour: 18,
-          offset: 0,
-		onContentReady(e) {
-			// console.log("scroll");
-			// e.component.scrollTo(new Date(2021, 1, 2, 20, 0));
-		}
-	});
-});
-
-const data = [
-	{
-		text: "Item 1",
-		startDate: "2021-02-02T18:00:00.000",
-		endDate: "2021-02-02T19:00:00.000"
-	},
-	{
-		text: "Item 2",
-		startDate: "2021-02-03T02:00:00.000",
-		endDate: "2021-02-03T03:00:00.000"
-	}
-];
-
-
-
+            $(() => {
+                $("#button").dxButton({
+                    text: 'Click me!',
+                    onClick: () => { alert("clicked"); }
+                });
+            });
         </script>
     </div>
 </body>
