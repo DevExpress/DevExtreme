@@ -49,7 +49,7 @@
     "css-loader": "6.10.0",
     "devextreme-metadata": "workspace:*",
     "eslint": "catalog:",
-    "eslint-config-devextreme": "1.1.5",
+    "eslint-config-devextreme": "1.1.8",
     "eslint-plugin-import": "catalog:",
     "eslint-migration-utils": "workspace:*",
     "jasmine": "5.12.0",
