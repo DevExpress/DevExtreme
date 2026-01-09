@@ -16,10 +16,4 @@
     "Demos/**/React/**/*.tsx",
     "Demos/**/React/**/*.ts"
   ],
-  "exclude": [
-  //  "Demos/VectorMap/**/React/**/*.ts",
-  //  "Demos/VectorMap/**/React/**/*.tsx",
-   "Demos/Localization/**/React/**/*.ts",
-   "Demos/Localization/**/React/**/*.tsx"
-  ]
 }
