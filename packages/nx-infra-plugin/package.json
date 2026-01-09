@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@types/fs-extra": "11.0.4",
-    "@types/jest": "29.5.12",
+    "@types/jest": "29.5.14",
     "@types/normalize-path": "3.0.2",
     "@types/node": "18.19.64",
     "prettier": "catalog:tools",
