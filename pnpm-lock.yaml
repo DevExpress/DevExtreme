@@ -68,8 +68,8 @@ catalogs:
       specifier: 2.13.0
       version: 2.13.0
     '@types/jquery':
-      specifier: 3.5.29
-      version: 3.5.29
+      specifier: 3.5.33
+      version: 3.5.33
     '@typescript-eslint/eslint-plugin':
       specifier: 8.23.0
       version: 8.23.0
@@ -997,7 +997,7 @@ importers:
         version: 2.13.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.5.4)
       '@types/jquery':
         specifier: 'catalog:'
-        version: 3.5.29
+        version: 3.5.33
       '@typescript-eslint/eslint-plugin':
         specifier: 'catalog:'
         version: 8.23.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.5.4))(eslint@9.18.0(jiti@2.6.1))(typescript@5.5.4)
@@ -1060,7 +1060,7 @@ importers:
         version: 3.5.0(axe-core@4.10.3)(testcafe@3.7.2)
       '@types/jquery':
         specifier: 'catalog:'
-        version: 3.5.29
+        version: 3.5.33
       '@typescript-eslint/eslint-plugin':
         specifier: 'catalog:'
         version: 8.23.0(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3))(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3)
@@ -1380,7 +1380,7 @@ importers:
         version: 3.10.19
       '@types/jquery':
         specifier: 'catalog:'
-        version: 3.5.29
+        version: 3.5.33
       '@types/react':
         specifier: 16.14.34
         version: 16.14.34
@@ -6677,8 +6677,8 @@ packages:
   '@types/jest@29.5.14':
     resolution: {integrity: sha512-ZN+4sdnLUbo8EVvVc2ao0GFW6oVrQRPn4K2lglySj7APvSrgzxHiNNK99us4WDMi57xxA2yggblIAMNhXOotLQ==}
 
-  '@types/jquery@3.5.29':
-    resolution: {integrity: sha512-oXQQC9X9MOPRrMhPHHOsXqeQDnWeCDT3PelUIg/Oy8FAbzSZtFHRjc7IpbfFVmpLtJ+UOoywpRsuO5Jxjybyeg==}
+  '@types/jquery@3.5.33':
+    resolution: {integrity: sha512-SeyVJXlCZpEki5F0ghuYe+L+PprQta6nRZqhONt9F13dWBtR/ftoaIbdRQ7cis7womE+X2LKhsDdDtkkDhJS6g==}
 
   '@types/jsdom@20.0.1':
     resolution: {integrity: sha512-d0r18sZPmMQr1eG35u12FZfhIXNrnsPU/g5wvRKCUf/tOGilKKwYMYGqh33BNR6ba+2gkHw1EUiHoN3mn7E5IQ==}
@@ -25447,7 +25447,7 @@ snapshots:
       expect: 29.7.0
       pretty-format: 29.7.0
 
-  '@types/jquery@3.5.29':
+  '@types/jquery@3.5.33':
     dependencies:
       '@types/sizzle': 2.3.9
 
