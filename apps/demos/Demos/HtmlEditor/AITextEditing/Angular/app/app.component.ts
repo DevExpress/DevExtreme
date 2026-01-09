@@ -3,7 +3,7 @@ import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/
 import { DxHtmlEditorModule, type DxHtmlEditorTypes } from 'devextreme-angular/ui/html-editor';
 import type { AIIntegration } from 'devextreme-angular/common/ai-integration';
 import { Service } from './app.service';
-import { AiService } from './ai.service';
+import { AiService } from './ai/ai.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

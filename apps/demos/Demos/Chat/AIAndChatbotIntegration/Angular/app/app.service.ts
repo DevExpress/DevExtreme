@@ -7,7 +7,7 @@ import rehypeStringify from 'rehype-stringify';
 import rehypeMinifyWhitespace from 'rehype-minify-whitespace';
 import { type DxChatTypes } from 'devextreme-angular/ui/chat';
 import { DataSource, CustomStore } from 'devextreme-angular/common/data';
-import { AiService } from './ai.service';
+import { AiService } from './ai/ai.service';
 
 @Injectable({
   providedIn: 'root',
