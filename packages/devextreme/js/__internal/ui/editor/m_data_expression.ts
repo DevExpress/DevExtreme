@@ -66,11 +66,11 @@ const DataExpressionMixin = extend({}, DataHelperMixin, {
     return this.option('valueExpr') || 'this';
   },
 
-  _loadValue(value, allowNullValue) {
+  _loadValue(value, allowNullValue = false) {
     const deferred = Deferred();
     value = this._unwrappedValue(value);
 
-    if (!isDefined(value) && (value === null && !allowNullValue)) {
+    if (!isDefined(value) || (value === null && !allowNullValue)) {
       return deferred.reject().promise();
     }
 
