@@ -102,7 +102,7 @@
         "@rollup/plugin-replace": "5.0.7",
         "@stylistic/eslint-plugin": "catalog:",
         "@testcafe-community/axe": "3.5.0",
-        "@types/eslint": "8.56.2",
+        "@types/eslint": "8.56.12",
         "@types/file-saver-es": "2.0.3",
         "@types/fs-extra": "11.0.2",
         "@types/react": "17.0.2",
