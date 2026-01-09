@@ -29,7 +29,7 @@
     "@nx/devkit": "18.3.4",
     "@nx/jest": "19.4.2",
     "@nx/js": "19.4.2",
-    "@types/jest": "29.5.12",
+    "@types/jest": "29.5.14",
     "@types/node": "20.12.8",
     "@types/shelljs": "0.8.15",
     "@types/tar-fs": "2.0.4",
