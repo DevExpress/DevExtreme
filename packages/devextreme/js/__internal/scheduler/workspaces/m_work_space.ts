@@ -1421,11 +1421,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
     switch (true) {
       case crossesMidnight:
-        // When range crosses midnight: [adjustedStartDayHour, 24) ∪ [0, adjustedEndDayHour)
-        // Hours in [0, adjustedEndDayHour) are valid only on the next day after startViewDate
-        if (hours >= adjustedStartDayHour) {
-          // Hours in first range [adjustedStartDayHour, 24) - keep original hours
-        } else if (hours < adjustedEndDayHour) {
+        // Range crosses midnight: [adjustedStartDayHour, 24) ∪ [0, adjustedEndDayHour)
+        if (hours < adjustedEndDayHour) {
+          // Hours in [0, adjustedEndDayHour) - valid only on next day
           const startViewDate = this.getStartViewDate();
           const nextDayDate = new Date(startViewDate);
           nextDayDate.setDate(nextDayDate.getDate() + 1);
@@ -1437,7 +1435,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
           if (!isNextDay) {
             hours = adjustedStartDayHour;
           }
-        } else {
+        } else if (hours < adjustedStartDayHour) {
+          // Hours outside valid ranges - normalize to start
           hours = adjustedStartDayHour;
         }
         break;
