@@ -691,8 +691,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     }
 
     if (this.isVirtualScrolling()
-      && (this.virtualScrollingDispatcher.horizontalScrollingAllowed
-        || this.virtualScrollingDispatcher.height)) {
+            && (this.virtualScrollingDispatcher.horizontalScrollingAllowed
+                || this.virtualScrollingDispatcher.height)) {
       const currentOnScroll = config.onScroll;
       config = {
         ...config,
@@ -1569,8 +1569,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   isGroupedByDate() {
     return this.option('groupByDate')
-      && this._isHorizontalGroupedWorkSpace()
-      && this._getGroupCount() > 0;
+            && this._isHorizontalGroupedWorkSpace()
+            && this._getGroupCount() > 0;
   }
 
   // TODO: refactor current time indicator
@@ -1828,9 +1828,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       const cellEndTime = cellEndDate.getTime();
 
       if (((!inAllDayRow && cellStartTime <= time
-        && time < cellEndTime)
-        || (inAllDayRow && trimmedTime === cellStartTime))
-        && groupIndex === cellGroupIndex) {
+                && time < cellEndTime)
+                || (inAllDayRow && trimmedTime === cellStartTime))
+                && groupIndex === cellGroupIndex) {
         return false;
       }
       return currentResult;
@@ -1871,9 +1871,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       const rowIndex = index / totalColumnCount;
 
       if (scrolledColumnCount <= columnIndex
-        && columnIndex < columnCount
-        && scrolledRowCount <= rowIndex
-        && rowIndex < rowCount) {
+                && columnIndex < columnCount
+                && scrolledRowCount <= rowIndex
+                && rowIndex < rowCount) {
         result.push($cell);
       }
     });
