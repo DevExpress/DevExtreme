@@ -18,10 +18,10 @@ const customizeTooltip: ITooltipProps['customizeTooltip'] = (arg) => {
   if (arg.layer.type === 'marker') {
     return { text: arg.attribute('tooltip') };
   }
-  return null;
+  return {};
 };
 
-const customizeText = (arg: { index: string | number; }) => ['< 8000K', '8000K to 10000K', '> 10000K'][arg.index];
+const customizeText = (arg: { index: string | number; }) => ['< 8000K', '8000K to 10000K', '> 10000K'][Number(arg.index)];
 
 const customizeItems = (items: any[]) => items.reverse();
 

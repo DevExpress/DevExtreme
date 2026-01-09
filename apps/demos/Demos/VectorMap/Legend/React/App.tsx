@@ -9,6 +9,7 @@ import VectorMap, {
 import type { ILayerProps, ILegendProps, ITooltipProps } from 'devextreme-react/vector-map';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { populations, markers } from './data.ts';
+import type { PopulationKey } from './data.ts';
 
 const colorGroups = [0, 0.5, 0.8, 1, 2, 3, 100];
 const sizeGroups = [0, 8000, 10000, 50000];
@@ -34,7 +35,7 @@ const customizeItems: ILegendProps['customizeItems'] = (items) => items.reverse(
 
 const customizeLayer: ILayerProps['customize'] = (elements) => {
   elements.forEach((element) => {
-    const name = element.attribute('name');
+    const name = element.attribute('name') as PopulationKey;
     const population = populations[name];
     if (population) {
       element.attribute('population', population);

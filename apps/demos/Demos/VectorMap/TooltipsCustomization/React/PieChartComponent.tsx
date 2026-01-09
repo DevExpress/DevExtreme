@@ -6,7 +6,16 @@ import PieChart, {
   Connector,
 } from 'devextreme-react/pie-chart';
 
-function PieChartComponent(props) {
+interface PieChartDataItem {
+  name: string;
+  value: number;
+}
+
+interface PieChartComponentProps {
+  data: PieChartDataItem[];
+}
+
+function PieChartComponent(props: PieChartComponentProps) {
   return (
     <PieChart id="gdp-sectors"
       dataSource={props.data}
