@@ -1414,54 +1414,44 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const viewOffset = this.option('viewOffset') as number;
     const viewOffsetHours = viewOffset / HOUR_MS;
 
-    if (viewOffset === 0) {
-      if (hours < startDayHour) {
-        hours = startDayHour;
-      }
+    const adjustedStartDayHour = (startDayHour + viewOffsetHours) % 24;
+    const adjustedEndDayHour = (endDayHour + viewOffsetHours) % 24;
+    const crossesMidnight = adjustedEndDayHour > 0 && adjustedStartDayHour >= adjustedEndDayHour;
+    const effectiveEndDayHour = adjustedEndDayHour === 0 ? 24 : adjustedEndDayHour;
 
-      if (hours >= endDayHour) {
-        hours = endDayHour - 1;
-      }
-    } else {
-      const adjustedStartDayHour = (startDayHour + viewOffsetHours) % 24;
-      const adjustedEndDayHour = (endDayHour + viewOffsetHours) % 24;
-      const crossesMidnight = adjustedEndDayHour > 0 && adjustedStartDayHour >= adjustedEndDayHour;
-      const effectiveEndDayHour = adjustedEndDayHour === 0 ? 24 : adjustedEndDayHour;
+    switch (true) {
+      case crossesMidnight:
+        // When range crosses midnight: [adjustedStartDayHour, 24) ∪ [0, adjustedEndDayHour)
+        // Hours in [0, adjustedEndDayHour) are valid only on the next day after startViewDate
+        if (hours >= adjustedStartDayHour) {
+          // Hours in first range [adjustedStartDayHour, 24) - keep original hours
+        } else if (hours < adjustedEndDayHour) {
+          const startViewDate = this.getStartViewDate();
+          const nextDayDate = new Date(startViewDate);
+          nextDayDate.setDate(nextDayDate.getDate() + 1);
 
-      switch (true) {
-        case crossesMidnight:
-          // When range crosses midnight: [adjustedStartDayHour, 24) ∪ [0, adjustedEndDayHour)
-          // Hours in [0, adjustedEndDayHour) are valid only on the next day after startViewDate
-          if (hours >= adjustedStartDayHour) {
-            // Hours in first range [adjustedStartDayHour, 24) - keep original hours
-          } else if (hours < adjustedEndDayHour) {
-            const startViewDate = this.getStartViewDate();
-            const nextDayDate = new Date(startViewDate);
-            nextDayDate.setDate(nextDayDate.getDate() + 1);
+          const isNextDay = currentDate.getFullYear() === nextDayDate.getFullYear()
+            && currentDate.getMonth() === nextDayDate.getMonth()
+            && currentDate.getDate() === nextDayDate.getDate();
 
-            const isNextDay = currentDate.getFullYear() === nextDayDate.getFullYear()
-              && currentDate.getMonth() === nextDayDate.getMonth()
-              && currentDate.getDate() === nextDayDate.getDate();
-
-            if (!isNextDay) {
-              hours = adjustedStartDayHour;
-            }
-          } else {
+          if (!isNextDay) {
             hours = adjustedStartDayHour;
           }
-          break;
-
-        case hours < adjustedStartDayHour:
+        } else {
           hours = adjustedStartDayHour;
-          break;
+        }
+        break;
 
-        case hours >= effectiveEndDayHour:
-          hours = effectiveEndDayHour - 1;
-          break;
+      case hours < adjustedStartDayHour:
+        hours = adjustedStartDayHour;
+        break;
 
-        default:
-          break;
-      }
+      case hours >= effectiveEndDayHour:
+        hours = effectiveEndDayHour - 1;
+        break;
+
+      default:
+        break;
     }
 
     currentDate.setHours(hours, minutes, 0, 0);
@@ -1912,24 +1902,22 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const viewOffset = this.option('viewOffset') as number;
     const min = this.getStartViewDate();
     const max = this.getEndViewDate();
-    const startDayHour = this.option('startDayHour');
-    const endDayHour = this.option('endDayHour');
-    const viewOffsetHours = viewOffset / HOUR_MS;
 
-    const minDate = new Date(min);
-    minDate.setHours(0, 0, 0, 0);
-    const maxDate = new Date(max);
-    maxDate.setHours(23, 59, 59, 999);
+    // Get the date only without time
+    const minDate = new Date(min.getFullYear(), min.getMonth(), min.getDate());
+    const maxDate = new Date(max.getFullYear(), max.getMonth(), max.getDate());
+    const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
 
-    const dateOnly = new Date(date);
-    dateOnly.setHours(0, 0, 0, 0);
-
+    // Check if the date is within the min and max dates
     if (dateOnly >= minDate && dateOnly <= maxDate) {
       return true;
     }
 
     // When viewOffset causes range to cross midnight, allow the next day after maxDate
     if (viewOffset !== 0) {
+      const startDayHour = this.option('startDayHour');
+      const endDayHour = this.option('endDayHour');
+      const viewOffsetHours = viewOffset / HOUR_MS;
       const adjustedStartDayHour = (startDayHour + viewOffsetHours) % 24;
       const adjustedEndDayHour = (endDayHour + viewOffsetHours) % 24;
       const crossesMidnight = adjustedEndDayHour > 0 && adjustedStartDayHour >= adjustedEndDayHour;
@@ -1937,11 +1925,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       if (crossesMidnight) {
         const nextDayMin = new Date(maxDate);
         nextDayMin.setDate(nextDayMin.getDate() + 1);
-        nextDayMin.setHours(0, 0, 0, 0);
-        const nextDayMax = new Date(nextDayMin);
-        nextDayMax.setHours(23, 59, 59, 999);
 
-        if (dateOnly >= nextDayMin && dateOnly <= nextDayMax) {
+        if (dateOnly.getTime() === nextDayMin.getTime()) {
           return true;
         }
       }
