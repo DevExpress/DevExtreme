@@ -1,29 +1,8 @@
 import { useCallback, useState } from 'react';
-import { AzureOpenAI } from 'openai';
 import { CustomStore, DataSource } from 'devextreme-react/common/data';
-import {
-  ALERT_TIMEOUT, assistant, AzureOpenAIConfig, REGENERATION_TEXT,
-} from './data.js';
+import { ALERT_TIMEOUT, assistant, REGENERATION_TEXT } from './data.js';
+import { getAIResponse } from './service.js';
 
-const chatService = new AzureOpenAI(AzureOpenAIConfig);
-const wait = (delay) =>
-  new Promise((resolve) => {
-    setTimeout(resolve, delay);
-  });
-export async function getAIResponse(messages, delay) {
-  const params = {
-    messages,
-    model: AzureOpenAIConfig.deployment,
-    max_tokens: 1000,
-    temperature: 0.7,
-  };
-  const response = await chatService.chat.completions.create(params);
-  const data = { choices: response.choices };
-  if (delay) {
-    await wait(delay);
-  }
-  return data.choices[0].message?.content ?? '';
-}
 const store = [];
 const customStore = new CustomStore({
   key: 'id',
