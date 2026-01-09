@@ -15,11 +15,11 @@ import { Popup } from 'devextreme-react/popup';
 import TextBox from 'devextreme-react/text-box';
 import Button from 'devextreme-react/button';
 import { ArrayStore } from 'devextreme-react/common/data';
+import type { ValueChangedEvent } from 'devextreme/ui/text_box';
 import CustomShapeTemplate from './CustomShapeTemplate.tsx';
 import CustomShapeToolboxTemplate from './CustomShapeToolboxTemplate.tsx';
 import service from './data.ts';
 import type { Employee } from './data.ts';
-import type { ValueChangedEvent } from 'devextreme/ui/text_box';
 
 interface PopupContentFuncProps {
   currentEmployee: Partial<Employee>;

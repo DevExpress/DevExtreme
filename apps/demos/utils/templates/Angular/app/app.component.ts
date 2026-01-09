@@ -37,4 +37,5 @@ export class AppComponent {
 })
 export class AppModule { }
 
+// eslint-disable-next-line deprecation/deprecation
 platformBrowserDynamic().bootstrapModule(AppModule);

@@ -144,7 +144,5 @@ const products = [{
   ImageSrc: '../../../../images/products/19.png',
 }].map((dataItem) => ({
   ...dataItem,
-  formatCurrency: () => function (text, render) {
-    return window.formatCurrency(parseInt(render(text), 10));
-  },
+  formatCurrency: () => (text, render) => window.formatCurrency(parseInt(render(text), 10)),
 }));

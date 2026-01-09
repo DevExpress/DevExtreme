@@ -88,10 +88,11 @@
 <script setup lang="ts">
 import { DxCardView, DxColumn, DxHeaderFilter, DxSearchPanel, DxPaging } from 'devextreme-vue/card-view';
 import { DxPopup, DxPosition } from 'devextreme-vue/popup';
+import { ref } from 'vue';
 import LicenseInfo from './LicenseInfo.vue';
 import VehicleCard from './VehicleCard.vue';
-import { vehicles, type Vehicle } from './data.ts';
-import { ref } from 'vue';
+import { vehicles } from './data.ts';
+import type { Vehicle } from './data.ts';
 
 const popupVisible = ref(false);
 const currentVehicle = ref<Vehicle | undefined>();

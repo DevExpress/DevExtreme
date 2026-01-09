@@ -5,8 +5,8 @@ import { createDemoLayout, getDestinationPathByDemo, getSourcePathByDemo } from 
 
 interface Bundler {
   framework: Framework;
-  getBuildOptions(demo: Demo): BuildOptions;
-  buildDemo(demo: Demo, res): Promise<void>;
+  getBuildOptions: (demo: Demo) => BuildOptions;
+  buildDemo: (demo: Demo, res) => Promise<void>;
 }
 
 export abstract class ESBundler implements Bundler {

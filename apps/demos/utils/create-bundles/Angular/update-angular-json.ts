@@ -9,7 +9,6 @@ import { getProjectNameByDemo, getIndexHtmlPath } from './utils';
 const rootFolder = process.cwd();
 
 const createConfigForDemo = (Demo: Demo) => {
-  const demoSourcePath = getSourcePathByDemo(Demo, 'Angular').split('\\').join('/');
   const demoSourcePathRelative = getSourcePathByDemo(Demo, 'Angular', true).split('\\').join('/');
   const demoDestinationPathRelative = getDestinationPathByDemo(Demo, 'Angular', true).split('\\').join('/');
   const indexPath = relative(
@@ -41,8 +40,8 @@ const createConfigForDemo = (Demo: Demo) => {
             'devexpress-diagram',
             'devexpress-gantt',
             'devextreme-quill',
-            'devextreme-aspnet-data-nojquery'
-          ]
+            'devextreme-aspnet-data-nojquery',
+          ],
         },
         configurations: {
           production: {
@@ -82,7 +81,7 @@ const createAngularJson = () => {
         if (!isSkipDemo(demo)) {
           if (existsSync(getSourcePathByDemo(demo, 'Angular'))) {
             console.log(`Angular Config created: ${demo.Widget} - ${demo.Name}`);
-  
+
             angularJsonObject.projects[getProjectNameByDemo(demo)] = createConfigForDemo(demo);
           } else {
             console.log(`No angular project for: ${demo.Widget} - ${demo.Name}`);

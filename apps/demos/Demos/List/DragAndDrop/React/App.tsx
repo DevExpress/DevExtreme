@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from 'react';
 import List, { ItemDragging } from 'devextreme-react/list';
 import type { IItemDraggingProps } from 'devextreme-react/list';
+import type { AddEvent, DragStartEvent, RemoveEvent, ReorderEvent } from 'devextreme/ui/sortable';
 import { plannedTasks, doingTasks } from './data.ts';
 import type { Task } from './types.ts';
-import type { AddEvent, DragStartEvent, RemoveEvent, ReorderEvent } from 'devextreme/ui/sortable';
 
 const App = () => {
   const [plannedTasksState, setPlannedTasksState] = useState<Task[]>(plannedTasks);
