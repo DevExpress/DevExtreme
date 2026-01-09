@@ -1245,7 +1245,7 @@ export type ODataStoreOptions<
      */
     deserializeDates?: boolean;
     /**
-     * @docid ODataStoreOptions.processDatesAsUtc
+     * @docid
      * @public
      * @default false
      */
