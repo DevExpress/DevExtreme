@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { loadMessages } from 'devextreme-angular/common/core/localization';
 import { DataSource } from 'devextreme-angular/common/data';
 import { AppService } from './app.service';
+import { AiService } from './ai.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -107,5 +108,6 @@ bootstrapApplication(AppComponent, {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
     AppService,
+    AiService,
   ],
 });
