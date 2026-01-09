@@ -49,7 +49,6 @@
 
 <script setup lang="ts">
 import { ref, onBeforeMount } from 'vue';
-import { AzureOpenAI } from 'openai';
 import DxChat, { type DxChatTypes } from 'devextreme-vue/chat';
 import DxButton from 'devextreme-vue/button';
 import { loadMessages } from 'devextreme-vue/common/core/localization';
@@ -62,12 +61,10 @@ import {
   assistant,
   dataSource,
   convertToHtml,
-  AzureOpenAIConfig,
   REGENERATION_TEXT,
   ALERT_TIMEOUT,
 } from './data.ts';
-
-const chatService = new AzureOpenAI(AzureOpenAIConfig);
+import { getAIResponse } from './service.ts';
 
 const typingUsers = ref<{ id: string, name: string }[]>([]);
 const alerts = ref<{ message: string }[]>([]);
@@ -77,20 +74,6 @@ const copyButtonIcon = ref('copy');
 onBeforeMount(() => {
   loadMessages(dictionary);
 });
-
-async function getAIResponse(messages: DxChatTypes.Message[]): Promise<string> {
-  const params: Record<string, any> = {
-    messages,
-    model: AzureOpenAIConfig.deployment,
-    max_tokens: 1000,
-    temperature: 0.7,
-  };
-
-  const response = await chatService.chat.completions.create(params as any);
-  const data = { choices: response.choices };
-
-  return data.choices[0].message?.content || '';
-}
 
 function toggleDisabledState(disabled: boolean, event?: Events.EventObject): void {
   isDisabled.value = disabled;
