@@ -118,7 +118,6 @@
           }
         }
       },
-      "dependsOn": ["devextreme-metadata:generate"],
       "cache": true,
       "inputs": ["default"],
       "outputs": [
