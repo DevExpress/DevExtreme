@@ -94,7 +94,7 @@
     "autoprefixer": "10.4.23",
     "axe-core": "4.10.3",
     "babel-plugin-add-module-exports": "1.0.4",
-    "babel-plugin-inferno": "6.8.3",
+    "babel-plugin-inferno": "6.8.5",
     "cldr-core": "41.0.0",
     "cldr-numbers-full": "41.0.0",
     "cldrjs": "0.5.5",
