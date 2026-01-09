@@ -7,10 +7,9 @@ import DataGrid, {
 import { SpeedDialAction } from 'devextreme-react/speed-dial-action';
 import { SelectBox } from 'devextreme-react/select-box';
 import {
-  employees, states, directions, directionLabel,
+  employees, states, directions, optionDirections, directionLabel,
 } from './data.js';
 
-const optionDirections = ['auto', 'up', 'down'];
 const App = () => {
   const [selectedRowIndex, setSelectedRowIndex] = useState(-1);
   const gridRef = useRef(null);
@@ -27,16 +26,16 @@ const App = () => {
     repaintFloatingActionButton();
   }, []);
   const editRow = useCallback(() => {
-    gridRef.current.instance().editRow(selectedRowIndex);
-    gridRef.current.instance().deselectAll();
+    gridRef?.current?.instance()?.editRow(selectedRowIndex);
+    gridRef?.current?.instance()?.deselectAll();
   }, [gridRef, selectedRowIndex]);
   const deleteRow = useCallback(() => {
-    gridRef.current.instance().deleteRow(selectedRowIndex);
-    gridRef.current.instance().deselectAll();
+    gridRef?.current?.instance()?.deleteRow(selectedRowIndex);
+    gridRef?.current?.instance()?.deselectAll();
   }, [gridRef, selectedRowIndex]);
   const addRow = useCallback(() => {
-    gridRef.current.instance().addRow();
-    gridRef.current.instance().deselectAll();
+    gridRef?.current?.instance()?.addRow();
+    gridRef?.current?.instance()?.deselectAll();
   }, [gridRef]);
   return (
     <div>
