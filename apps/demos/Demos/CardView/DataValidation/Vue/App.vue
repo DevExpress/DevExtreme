@@ -173,8 +173,8 @@ import {
   DxItem, DxSearchPanel, DxRequiredRule, DxEmailRule,
   DxAsyncRule, DxCustomRule,
 } from 'devextreme-vue/card-view';
-import { type ValidationCallbackData } from 'devextreme-vue/common';
 import 'devextreme-vue/text-area';
+import type { ValidationCallbackData } from 'devextreme-vue/common';
 import { employees, type Employee } from './data.ts';
 
 function altExpr({ fullName }: Employee): string {
@@ -211,6 +211,6 @@ async function emailValidationCallback(
 }
 
 const hireDateValidationCallback = (
-  params: ValidationCallbackData,
-): boolean => new Date(params.value) > new Date(params.data.birthDate);
+  params: ValidationCallbackData<Date>,
+): boolean => params.value > new Date(params.data.birthDate);
 </script>

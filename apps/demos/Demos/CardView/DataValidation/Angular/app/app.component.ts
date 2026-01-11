@@ -2,6 +2,7 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxCardViewModule, DxTextAreaModule } from 'devextreme-angular';
+import type { ValidationCallbackData } from 'devextreme-angular/common';
 import { lastValueFrom } from 'rxjs';
 import { Employee, Service } from './app.service';
 
@@ -65,7 +66,7 @@ export class AppComponent {
     return result;
   };
 
-  hireDateValidationCallback = (params) => new Date(params.value) > new Date(params.data.birthDate);
+  hireDateValidationCallback = (params: ValidationCallbackData<Date>) => params.value > new Date(params.data.birthDate);
 }
 
 bootstrapApplication(AppComponent, {

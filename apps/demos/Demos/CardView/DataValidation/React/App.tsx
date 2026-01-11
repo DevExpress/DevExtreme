@@ -35,8 +35,8 @@ async function emailValidationCallback(options: ValidationCallbackData): Promise
   return response.json();
 }
 
-function hireDateValidationCallback(options: ValidationCallbackData): boolean {
-  return new Date(options.value) > new Date(options.data.birthDate);
+function hireDateValidationCallback(options: ValidationCallbackData<Date>): boolean {
+  return options.value > new Date(options.data.birthDate);
 }
 
 const App = () => (
