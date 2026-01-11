@@ -29,7 +29,7 @@ export type ApplyValueMode = 'instantly' | 'useButtons';
  * @namespace DevExpress.common
  * @type object
  */
-export type AsyncRule<TValue = unknown> = {
+export type AsyncRule = {
   /**
   * @docid
   * @default false
@@ -59,7 +59,7 @@ export type AsyncRule<TValue = unknown> = {
   * @type_function_return Promise<any>
   * @public
   */
-  validationCallback?: ((options: ValidationCallbackData<TValue>) => PromiseLike<any>);
+  validationCallback?: ((options: ValidationCallbackData) => PromiseLike<any>);
 };
 
 /**
@@ -125,7 +125,7 @@ export type ComparisonOperator = '!=' | '!==' | '<' | '<=' | '==' | '===' | '>' 
  * @type object
  * @namespace DevExpress.common
  */
-export type CustomRule<TValue = unknown> = {
+export type CustomRule = {
   /**
   * @docid
   * @default false
@@ -154,7 +154,7 @@ export type CustomRule<TValue = unknown> = {
   * @docid
   * @public
   */
-  validationCallback?: ((options: ValidationCallbackData<TValue>) => boolean);
+  validationCallback?: ((options: ValidationCallbackData) => boolean);
 };
 
 /**
@@ -802,9 +802,9 @@ export type TooltipShowMode = 'always' | 'onHover';
  * @public
  * @namespace DevExpress.common
  */
-export type ValidationCallbackData<TValue = unknown> = {
+export type ValidationCallbackData = {
   /** @docid */
-  value?: TValue;
+  value?: any;
   /**
    * @docid
    * @type object

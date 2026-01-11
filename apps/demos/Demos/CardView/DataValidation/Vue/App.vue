@@ -211,6 +211,6 @@ async function emailValidationCallback(
 }
 
 const hireDateValidationCallback = (
-  params: ValidationCallbackData<Date>,
-): boolean => params.value > new Date(params.data.birthDate);
+  params: ValidationCallbackData,
+): boolean => new Date(params.value) > new Date(params.data.birthDate);
 </script>

@@ -66,7 +66,7 @@ export class AppComponent {
     return result;
   };
 
-  hireDateValidationCallback = (params: ValidationCallbackData<Date>) => params.value > new Date(params.data.birthDate);
+  hireDateValidationCallback = (params: ValidationCallbackData) => new Date(params.value) > new Date(params.data.birthDate);
 }
 
 bootstrapApplication(AppComponent, {

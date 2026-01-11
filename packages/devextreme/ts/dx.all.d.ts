@@ -1168,7 +1168,7 @@ declare module DevExpress.common {
   /**
    * [descr:AsyncRule]
    */
-  export type AsyncRule<TValue = unknown> = {
+  export type AsyncRule = {
     /**
      * [descr:AsyncRule.ignoreEmptyValue]
      */
@@ -1188,9 +1188,7 @@ declare module DevExpress.common {
     /**
      * [descr:AsyncRule.validationCallback]
      */
-    validationCallback?: (
-      options: ValidationCallbackData<TValue>
-    ) => PromiseLike<any>;
+    validationCallback?: (options: ValidationCallbackData) => PromiseLike<any>;
   };
   export type ButtonStyle = 'text' | 'outlined' | 'contained';
   export type ButtonType = 'danger' | 'default' | 'normal' | 'success';
@@ -1231,7 +1229,7 @@ declare module DevExpress.common {
   /**
    * [descr:CustomRule]
    */
-  export type CustomRule<TValue = unknown> = {
+  export type CustomRule = {
     /**
      * [descr:CustomRule.ignoreEmptyValue]
      */
@@ -1251,7 +1249,7 @@ declare module DevExpress.common {
     /**
      * [descr:CustomRule.validationCallback]
      */
-    validationCallback?: (options: ValidationCallbackData<TValue>) => boolean;
+    validationCallback?: (options: ValidationCallbackData) => boolean;
   };
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -1729,11 +1727,11 @@ declare module DevExpress.common {
   /**
    * [descr:ValidationCallbackData]
    */
-  export type ValidationCallbackData<TValue = unknown> = {
+  export type ValidationCallbackData = {
     /**
      * [descr:ValidationCallbackData.value]
      */
-    value?: TValue;
+    value?: any;
     /**
      * [descr:ValidationCallbackData.rule]
      */

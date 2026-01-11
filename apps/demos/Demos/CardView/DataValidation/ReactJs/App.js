@@ -38,7 +38,7 @@ async function emailValidationCallback(options) {
   return response.json();
 }
 function hireDateValidationCallback(options) {
-  return options.value > new Date(options.data.birthDate);
+  return new Date(options.value) > new Date(options.data.birthDate);
 }
 const App = () => (
   <CardView
