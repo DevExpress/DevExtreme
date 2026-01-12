@@ -6,22 +6,18 @@ import VectorMap, {
   Border,
   Font,
 } from 'devextreme-react/vector-map';
-import type { ILayerProps, ITooltipProps } from 'devextreme-react/vector-map';
+import type { ILayerProps, ITooltipProps, VectorMapTypes } from 'devextreme-react/vector-map';
 
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { countries } from './data.ts';
 
-interface MapLayerElement {
-  attribute: (name: string) => string;
-  selected: (value?: boolean) => boolean;
-  applySettings?: (settings: Record<string, any>) => void;
-}
+type CountriesKey = keyof typeof countries;
 
 const bounds = [-180, 85, 180, -60];
 
 const customizeLayer: ILayerProps['customize'] = (elements) => {
   elements.forEach((element) => {
-    const name = element.attribute('name') as keyof typeof countries;
+    const name = element.attribute('name') as CountriesKey;
     const country = countries[name];
     if (country) {
       element.applySettings({
@@ -33,7 +29,7 @@ const customizeLayer: ILayerProps['customize'] = (elements) => {
   });
 };
 
-const clickHandler = ({ target }: { target: MapLayerElement }) => {
+const clickHandler = ({ target }: VectorMapTypes.ClickEvent) => {
   const name = target?.attribute('name') as keyof typeof countries;
   if (target && countries[name]) {
     target.selected(!target.selected());

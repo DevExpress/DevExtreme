@@ -13,12 +13,9 @@ import {
 const App = () => {
   const [selectedRowIndex, setSelectedRowIndex] = useState(-1);
   const gridRef = useRef(null);
-  const selectedChanged = useCallback(
-    (e) => {
-      setSelectedRowIndex(e.component.getRowIndexByKey(e.selectedRowKeys[0]));
-    },
-    [setSelectedRowIndex],
-  );
+  const selectedChanged = useCallback((e) => {
+    setSelectedRowIndex(e.component.getRowIndexByKey(e.selectedRowKeys[0]));
+  }, []);
   const directionChanged = useCallback((e) => {
     config({
       floatingActionButtonConfig: directions[e.selectedItem],

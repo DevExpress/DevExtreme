@@ -19,7 +19,7 @@ const App = () => {
 
   const selectedChanged = useCallback((e: DataGridTypes.SelectionChangedEvent) => {
     setSelectedRowIndex(e.component.getRowIndexByKey(e.selectedRowKeys[0]));
-  }, [setSelectedRowIndex]);
+  }, []);
 
   const directionChanged = useCallback((e: SelectBoxTypes.SelectionChangedEvent) => {
     config({
