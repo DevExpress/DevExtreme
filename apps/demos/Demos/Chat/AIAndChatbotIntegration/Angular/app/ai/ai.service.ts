@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AzureOpenAI, OpenAI } from 'openai';
-import { type AIResponse } from 'devextreme/common/ai-integration';
+import { type AIResponse } from 'devextreme-angular/common/ai-integration';
 
 export type AIMessage = (
   OpenAI.ChatCompletionUserMessageParam

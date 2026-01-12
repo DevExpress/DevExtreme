@@ -1,5 +1,5 @@
 import { AzureOpenAI, OpenAI } from 'openai';
-import { type AIResponse } from 'devextreme/common/ai-integration';
+import { type AIResponse } from 'devextreme-vue/common/ai-integration';
 
 export type AIMessage = (
   OpenAI.ChatCompletionUserMessageParam
