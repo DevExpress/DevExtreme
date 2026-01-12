@@ -5,6 +5,7 @@ import SelectBox from 'devextreme-react/select-box';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import Switch from 'devextreme-react/switch';
 import type { VectorMapTypes, VectorMapRef } from 'devextreme-react/vector-map';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
 import {
   viewportCoordinates, centerLabel, zoomLabel, continentLabel,
 } from './data.ts';
@@ -19,7 +20,7 @@ const App = () => {
   const [zoomVisible, setZoomVisible] = useState(true);
   const mapRef = useRef<VectorMapRef>(null);
 
-  const continentChanged = useCallback(({ value }) => {
+  const continentChanged = useCallback(({ value }: SelectBoxTypes.ValueChangedEvent) => {
     setCoordinates(value);
     mapRef.current?.instance().viewport(value);
   }, []);
@@ -33,11 +34,11 @@ const App = () => {
     setCenter(value);
   }, []);
 
-  const panVisibleChange = useCallback((value) => {
+  const panVisibleChange = useCallback((value: boolean) => {
     setPanVisible(value);
   }, []);
 
-  const zoomVisibleChange = useCallback((value) => {
+  const zoomVisibleChange = useCallback((value: boolean) => {
     setZoomVisible(value);
   }, []);
 

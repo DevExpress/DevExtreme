@@ -25,15 +25,15 @@ const App = () => {
   const editRow = useCallback(() => {
     gridRef.current?.instance()?.editRow(selectedRowIndex);
     gridRef.current?.instance()?.deselectAll();
-  }, [gridRef, selectedRowIndex]);
+  }, [selectedRowIndex]);
   const deleteRow = useCallback(() => {
     gridRef.current?.instance()?.deleteRow(selectedRowIndex);
     gridRef.current?.instance()?.deselectAll();
-  }, [gridRef, selectedRowIndex]);
+  }, [selectedRowIndex]);
   const addRow = useCallback(() => {
     gridRef.current?.instance()?.addRow();
     gridRef.current?.instance()?.deselectAll();
-  }, [gridRef]);
+  }, []);
   return (
     <div>
       <DataGrid
