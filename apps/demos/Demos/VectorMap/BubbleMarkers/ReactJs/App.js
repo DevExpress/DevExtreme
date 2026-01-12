@@ -13,7 +13,7 @@ const customizeTooltip = (arg) => {
   }
   return {};
 };
-const customizeText = (arg) => ['< 8000K', '8000K to 10000K', '> 10000K'][Number(arg.index)];
+const customizeText = (arg) => ['< 8000K', '8000K to 10000K', '> 10000K'][arg.index];
 const customizeItems = (items) => items.reverse();
 export default function App() {
   return (
