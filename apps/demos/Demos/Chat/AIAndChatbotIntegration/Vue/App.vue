@@ -113,7 +113,7 @@ async function processMessageSending(
 ): Promise<void> {
   toggleDisabledState(true, event);
 
-  messages.push({ role: 'user', content: message.text });
+  messages.push({ role: 'user', content: message.text ?? '' });
   typingUsers.value = [assistant];
 
   try {
