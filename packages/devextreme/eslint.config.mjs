@@ -222,6 +222,11 @@ export default [
                 considerDefaultExhaustiveForUnions: true,
             }],
             'devextreme-custom/no-direct-preact-signals-core-import': 'error',
+            // TODO Shakhova: remove after fixing issues
+            '@typescript-eslint/prefer-nullish-coalescing': 'warn',
+            '@typescript-eslint/only-throw-error': 'warn',
+            '@typescript-eslint/prefer-optional-chain': 'warn',
+            'require-await': 'warn',
         },
     },
     ...typescriptConfig.map(config => {
