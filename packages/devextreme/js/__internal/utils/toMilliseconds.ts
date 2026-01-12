@@ -1,5 +1,4 @@
-type TimeUnit =
-  | 'millisecond'
+type TimeUnit = | 'millisecond'
   | 'second'
   | 'minute'
   | 'hour'

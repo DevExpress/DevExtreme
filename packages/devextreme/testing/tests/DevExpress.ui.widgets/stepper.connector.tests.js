@@ -10,21 +10,21 @@ import 'fluent_blue_light.css!';
 
 QUnit.testStart(() => {
     const markup =
-    `<style nonce="qunit-test">
-        #container {
-            position: relative;
-            width: 400px;
-            height: 400px;
-        }
+        `<style nonce="qunit-test">
+            #container {
+                position: relative;
+                width: 400px;
+                height: 400px;
+            }
 
-        #connector .dx-stepper-connector-value {
-            transition: none !important;
-        }
-    </style>
+            #connector .dx-stepper-connector-value {
+                transition: none !important;
+            }
+        </style>
 
-    <div id="container">
-        <div id="connector"></div>
-    </div>`;
+        <div id="container">
+            <div id="connector"></div>
+        </div>`;
 
     $('#qunit-fixture').html(markup);
 });

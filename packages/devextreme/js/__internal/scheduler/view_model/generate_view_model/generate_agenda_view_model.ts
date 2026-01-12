@@ -13,21 +13,21 @@ import { splitByParts } from './steps/split_by_parts/split_by_parts';
 const saveDatesAfterSplit = <T extends ListEntity>(
   entities: T[],
 ): (T & UTCDatesAfterSplit)[] => entities.map((entity) => ({
-    ...entity,
-    datesAfterSplit: {
-      startDateUTC: entity.startDateUTC,
-      endDateUTC: entity.endDateUTC,
-    },
-  }));
+  ...entity,
+  datesAfterSplit: {
+    startDateUTC: entity.startDateUTC,
+    endDateUTC: entity.endDateUTC,
+  },
+}));
 
 const addAgendaGeometry = <T>(
   entities: T[],
   height: number,
 ): (T & AgendaGeometry)[] => entities.map((entity) => ({
-    ...entity,
-    height,
-    width: '100%',
-  }));
+  ...entity,
+  height,
+  width: '100%',
+}));
 
 export const generateAgendaViewModel = (
   schedulerStore: Scheduler,

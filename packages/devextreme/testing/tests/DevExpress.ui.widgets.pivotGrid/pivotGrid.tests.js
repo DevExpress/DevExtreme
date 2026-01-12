@@ -1,15 +1,15 @@
 QUnit.testStart(function() {
     const markup =
-'<style nonce="qunit-test">\
-    table {table-layout: fixed;}/*T428108*/\
-    .dx-scrollable-content {\
-        padding: 0 !important;\
-    }\
-</style>\
-<div id="pivotGrid"></div>\
-<div class="dx-pivotgrid">\
-    <div id="pivotArea" class="dx-pivotgrid-area-data dx-pivotgrid-vertical-headers" />\
-</div>';
+        '<style nonce="qunit-test">\
+            table {table-layout: fixed;}/*T428108*/\
+            .dx-scrollable-content {\
+                padding: 0 !important;\
+            }\
+        </style>\
+        <div id="pivotGrid"></div>\
+        <div class="dx-pivotgrid">\
+            <div id="pivotArea" class="dx-pivotgrid-area-data dx-pivotgrid-vertical-headers" />\
+        </div>';
 
     $('#qunit-fixture').html(markup);
     addShadowDomStyles($('#qunit-fixture'));

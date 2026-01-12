@@ -5,6 +5,6 @@ export const addDirection = <T extends ListEntity>(
   allDayPanelDirection: Direction['direction'],
   regularPanelDirection: Direction['direction'],
 ): (T & Direction)[] => entities.map((entity) => ({
-    ...entity,
-    direction: entity.isAllDayPanelOccupied ? allDayPanelDirection : regularPanelDirection,
-  }));
+  ...entity,
+  direction: entity.isAllDayPanelOccupied ? allDayPanelDirection : regularPanelDirection,
+}));
