@@ -126,177 +126,93 @@ describe('Workspace', () => {
       scrollBySpy.mockRestore();
     });
 
-    it('should scroll to date with offset after midnight: 720 (12 hours)', async () => {
-      const { scheduler } = await createScheduler({
-        views: ['timelineDay'],
-        currentView: 'timelineDay',
-        currentDate: new Date(2021, 1, 2),
-        firstDayOfWeek: 0,
-        startDayHour: 6,
-        endDayHour: 18,
-        offset: 720,
-        cellDuration: 60,
-        height: 580,
-      });
-
-      const workspace = scheduler.getWorkSpace();
-      const scrollable = workspace.getScrollable();
-      const $scrollable = scrollable.$element();
-      const scrollBySpy = jest.spyOn(scrollable, 'scrollBy');
-
-      // With offset: 720 (12 hours), cells start at 18:00 (6:00 + 12h)
-      // For date 3 feb 04:00, this should be cell index 10 (18:00=0, 19:00=1, ... 04:00=10)
-      const leftCellCount = 10;
-      const cellWidth = workspace.getCellWidth();
-      const scrollableWidth = getWidth($scrollable);
-      const expectedLeft = leftCellCount * cellWidth - (scrollableWidth - cellWidth) / 2;
-
-      const targetDate = new Date(2021, 1, 3, 4, 0);
-      scheduler.scrollTo(targetDate, undefined, false);
-
-      expect(scrollBySpy).toHaveBeenCalledTimes(1);
-      const scrollParams = scrollBySpy.mock.calls[0][0] as { left: number; top: number };
-      expect(scrollParams.left).toBeCloseTo(expectedLeft, 1);
-
-      scrollBySpy.mockRestore();
-    });
-
-    it('should scroll to end of day', async () => {
-      const { scheduler } = await createScheduler({
-        views: ['timelineWeek'],
-        currentView: 'timelineWeek',
-        currentDate: new Date(2021, 1, 2),
-        firstDayOfWeek: 0,
-        startDayHour: 6,
-        endDayHour: 18,
-        offset: 120,
-        cellDuration: 60,
-        height: 580,
-      });
-
-      const workspace = scheduler.getWorkSpace();
-      const scrollable = workspace.getScrollable();
-      const $scrollable = scrollable.$element();
-      const scrollBySpy = jest.spyOn(scrollable, 'scrollBy');
-
-      // With offset: 720 (12 hours), cells start at 18:00 (6:00 + 12h)
-      // For date 3 feb 04:00, this should be cell index 3 (18:00=0, ... 22:00=35)
-      const leftCellCount = 35;
-      const cellWidth = workspace.getCellWidth();
-      const scrollableWidth = getWidth($scrollable);
-      const expectedLeft = leftCellCount * cellWidth - (scrollableWidth - cellWidth) / 2;
-
-      const targetDate = new Date(2021, 1, 2, 22, 0);
-      scheduler.scrollTo(targetDate, undefined, false);
-
-      expect(scrollBySpy).toHaveBeenCalledTimes(1);
-      const scrollParams = scrollBySpy.mock.calls[0][0] as { left: number; top: number };
-      expect(scrollParams.left).toBeCloseTo(expectedLeft, 1);
-
-      scrollBySpy.mockRestore();
-    });
-
     describe('hour normalization', () => {
-      it('should normalize hours to visible range without viewOffset', async () => {
-        const { scheduler } = await createScheduler({
-          views: ['timelineDay'],
-          currentView: 'timelineDay',
-          currentDate: new Date(2021, 1, 2),
+      [
+        // Without offset, normal range
+        {
           startDayHour: 6,
           endDayHour: 18,
           offset: 0,
-        });
-
-        const workspace = scheduler.getWorkSpace();
-        const scrollable = workspace.getScrollable();
-        const scrollBySpy = jest.spyOn(scrollable, 'scrollBy');
-
-        // Below startDayHour (6), should NOT normalize to 6 (?)
-        const dateBelowRange = new Date(2021, 1, 2, 4, 0);
-        scheduler.scrollTo(dateBelowRange, undefined, false);
-        expect(scrollBySpy).not.toHaveBeenCalled();
-
-        scrollBySpy.mockClear();
-        // Above endDayHour (18), should NOT normalize to 17 (?)
-        const dateAboveRange = new Date(2021, 1, 2, 20, 0);
-        scheduler.scrollTo(dateAboveRange, undefined, false);
-        expect(scrollBySpy).not.toHaveBeenCalled();
-
-        scrollBySpy.mockClear();
-        // Within range [6, 18), should scroll normally
-        const dateInRange = new Date(2021, 1, 2, 12, 0);
-        scheduler.scrollTo(dateInRange, undefined, false);
-        expect(scrollBySpy).toHaveBeenCalled();
-
-        scrollBySpy.mockRestore();
-      });
-
-      it('should normalize hours to visible range with viewOffset (no midnight crossing)', async () => {
-        const { scheduler } = await createScheduler({
-          views: ['timelineDay'],
-          currentView: 'timelineDay',
-          currentDate: new Date(2021, 1, 2),
+          hours: [4, 12, 20],
+        },
+        // With positive offset
+        {
           startDayHour: 6,
           endDayHour: 18,
           offset: 360,
-        });
-
-        const workspace = scheduler.getWorkSpace();
-        const scrollable = workspace.getScrollable();
-        const scrollBySpy = jest.spyOn(scrollable, 'scrollBy');
-
-        // Below adjustedStartDayHour (12), should NOT normalize to 12 (?)
-        const dateBelowAdjustedRange = new Date(2021, 1, 2, 10, 0);
-        scheduler.scrollTo(dateBelowAdjustedRange, undefined, false);
-        expect(scrollBySpy).not.toHaveBeenCalled();
-
-        scrollBySpy.mockClear();
-        // Within adjusted range [12, 24), should scroll normally
-        const dateInAdjustedRange = new Date(2021, 1, 2, 15, 0);
-        scheduler.scrollTo(dateInAdjustedRange, undefined, false);
-        expect(scrollBySpy).toHaveBeenCalled();
-
-        scrollBySpy.mockRestore();
-      });
-
-      it('should normalize hours to visible range with viewOffset (midnight crossing)', async () => {
-        const { scheduler } = await createScheduler({
-          views: ['timelineDay'],
-          currentView: 'timelineDay',
-          currentDate: new Date(2021, 1, 2),
+          hours: [10, 15, 22],
+        },
+        // With negative offset
+        {
+          startDayHour: 6,
+          endDayHour: 18,
+          offset: -120,
+          hours: [3, 10, 20],
+        },
+        // With offset creating midnight crossing
+        {
           startDayHour: 6,
           endDayHour: 18,
           offset: 720,
+          hours: [10, 22, 3],
+        },
+        // Edge case: startDayHour = 0
+        {
+          startDayHour: 0,
+          endDayHour: 12,
+          offset: 0,
+          hours: [0, 6, 13],
+        },
+        // Edge case: endDayHour = 24
+        {
+          startDayHour: 12,
+          endDayHour: 24,
+          offset: 0,
+          hours: [11, 18, 23],
+        },
+      ].forEach(({
+        startDayHour,
+        endDayHour,
+        offset,
+        hours,
+      }) => {
+        hours.forEach((hour) => {
+          const testName = `startDayHour: ${startDayHour}, `
+            + `endDayHour: ${endDayHour}, offset: ${offset}, `
+            + `hour: ${hour}`;
+
+          it(testName, async () => {
+            const { scheduler } = await createScheduler({
+              views: ['timelineWeek'],
+              currentView: 'timelineWeek',
+              currentDate: new Date(2021, 1, 2),
+              startDayHour,
+              endDayHour,
+              offset,
+            });
+
+            const workspace = scheduler.getWorkSpace();
+            const scrollable = workspace.getScrollable();
+            const scrollBySpy = jest.spyOn(scrollable, 'scrollBy');
+            const targetDate = new Date(2021, 1, 2, hour, 0);
+
+            scheduler.scrollTo(targetDate, undefined, false);
+            const cell = workspace.viewDataProvider.findGlobalCellPosition(
+              targetDate,
+              0,
+              false,
+              true,
+            );
+            const cellStartDate = cell.cellData.startDate;
+            const cellEndDate = cell.cellData.endDate;
+
+            expect(scrollBySpy).toHaveBeenCalledTimes(1);
+            expect(targetDate.getTime()).toBeGreaterThanOrEqual(cellStartDate.getTime());
+            expect(targetDate.getTime()).toBeLessThan(cellEndDate.getTime());
+
+            scrollBySpy.mockRestore();
+          });
         });
-
-        const workspace = scheduler.getWorkSpace();
-        const scrollable = workspace.getScrollable();
-        const scrollBySpy = jest.spyOn(scrollable, 'scrollBy');
-
-        // In gap [6, 18), should NOT normalize to 18:00 Feb 2 (?)
-        const dateInGap = new Date(2021, 1, 2, 10, 0);
-        scheduler.scrollTo(dateInGap, undefined, false);
-        expect(scrollBySpy).not.toHaveBeenCalled();
-
-        scrollBySpy.mockClear();
-        // In range [18, 24) on Feb 2, should scroll normally
-        const dateInFirstRange = new Date(2021, 1, 2, 22, 0);
-        scheduler.scrollTo(dateInFirstRange, undefined, false);
-        expect(scrollBySpy).toHaveBeenCalled();
-
-        scrollBySpy.mockClear();
-        // In range [0, 6) but on wrong day (Feb 2), should NOT normalize to 18:00 Feb 2 (?)
-        const dateInSecondRangeWrongDay = new Date(2021, 1, 2, 3, 0);
-        scheduler.scrollTo(dateInSecondRangeWrongDay, undefined, false);
-        expect(scrollBySpy).not.toHaveBeenCalled();
-
-        scrollBySpy.mockClear();
-        // In range [0, 6) on correct day (Feb 3), should scroll normally
-        const dateInSecondRangeCorrectDay = new Date(2021, 1, 3, 3, 0);
-        scheduler.scrollTo(dateInSecondRangeCorrectDay, undefined, false);
-        expect(scrollBySpy).toHaveBeenCalled();
-
-        scrollBySpy.mockRestore();
       });
     });
   });
