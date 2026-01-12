@@ -1866,6 +1866,24 @@ module('Caret moving', setupModule, () => {
 
         assert.deepEqual(this.keyboard.caret(), allSelectedCaret, 'no date part is selected');
     });
+
+    test('should keep active part after focus out and focus in (T1318439)', function(assert) {
+        const caretYear = { start: 11, end: 15 };
+
+        this.instance.option({
+            useMaskBehavior: true,
+            mode: 'text',
+        });
+
+        this.keyboard.press('end');
+
+        assert.deepEqual(this.keyboard.caret(), caretYear, 'year is selected initially');
+
+        this.$input.trigger('focusout');
+        this.$input.trigger('focusin');
+
+        assert.deepEqual(this.keyboard.caret(), caretYear, 'year is selected after focus return');
+    });
 });
 
 module('Using beforeInput event', {
