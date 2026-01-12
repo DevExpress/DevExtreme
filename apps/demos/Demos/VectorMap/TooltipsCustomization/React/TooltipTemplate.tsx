@@ -1,6 +1,5 @@
 import React from 'react';
 import { countriesGDP } from './data.ts';
-import type { CountriesGDPKey } from './data.ts';
 
 import PieChart from './PieChartComponent.tsx';
 
@@ -8,7 +7,7 @@ const { format } = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 0,
 });
 
-function getPieData(name: CountriesGDPKey) {
+function getPieData(name: string) {
   const data = countriesGDP[name];
   return data ? [
     { name: 'industry', value: data.industry ?? 0 },
