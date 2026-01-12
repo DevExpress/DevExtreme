@@ -83,7 +83,7 @@
     "eslint-plugin-import": "catalog:",
     "@typescript-eslint/eslint-plugin": "catalog:",
     "@typescript-eslint/parser": "catalog:",
-    "eslint-config-devextreme": "1.1.6"
+    "eslint-config-devextreme": "catalog:"
   },
   "publishConfig": {
     "directory": "npm",
