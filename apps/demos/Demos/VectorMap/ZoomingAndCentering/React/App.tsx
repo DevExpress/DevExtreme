@@ -32,7 +32,7 @@ const App = () => {
   const reset = useCallback(() => {
     vectorMapRef?.current?.instance().center([0, 0]);
     vectorMapRef?.current?.instance().zoomFactor(1);
-  }, [vectorMapRef]);
+  }, []);
 
   return (
     <>
