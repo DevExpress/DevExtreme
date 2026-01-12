@@ -4,6 +4,7 @@ import PieChart, {
   Label,
   Legend,
   Connector,
+  ILabelProps,
 } from 'devextreme-react/pie-chart';
 
 interface PieChartDataItem {
@@ -39,10 +40,8 @@ function PieChartComponent(props: PieChartComponentProps) {
   );
 }
 
-function customizeText(pointInfo: { argument: string | string[]; value: string; }) {
-  return `${pointInfo.argument[0].toUpperCase()}${
-    pointInfo.argument.slice(1)
-  }: $${pointInfo.value}M`;
-}
+const customizeText: ILabelProps['customizeText'] = (pointInfo) => `${pointInfo.argument[0].toUpperCase()}${
+  pointInfo.argument.slice(1)
+}: $${pointInfo.value}M`;
 
 export default PieChartComponent;

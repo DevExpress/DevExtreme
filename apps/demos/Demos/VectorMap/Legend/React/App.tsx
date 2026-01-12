@@ -16,7 +16,7 @@ const sizeGroups = [0, 8000, 10000, 50000];
 
 const bounds = [-180, 85, 180, -75];
 
-const customizeText = (arg: { index: number; start: number; end: number; }) => {
+const customizeText: ILegendProps['customizeText'] = (arg) => {
   if (arg.index === 0) {
     return '< 0.5%';
   } if (arg.index === 5) {
