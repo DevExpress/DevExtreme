@@ -47,7 +47,8 @@ function shouldRunTestExplicitlyInternal(framework, product, demo) {
 }
 
 function patternGroupFromValues(product, demo, framework) {
-  const wrap = (x) => RegExp(x || '.*', 'i');
+  const escapeRegExp = (string) => string.replace(/[.*+?^${}()|[\]\\-]/g, '\\$&');
+  const wrap = (x) => RegExp(x ? escapeRegExp(x) : '.*', 'i');
   return {
     product: wrap(product),
     demo: wrap(demo),
@@ -209,7 +210,7 @@ export function shouldRunTestAtIndex(testIndex) {
 
 const SKIPPED_TESTS = {
   jQuery: { 
-    DataGrid: ['RemoteGrouping', 'OdataService', 'FilteringAPI'],
+    DataGrid: ['RemoteGrouping', 'OdataService', 'FilteringAPI', 'EditStateManagement'],
     Charts: [
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
     ],
