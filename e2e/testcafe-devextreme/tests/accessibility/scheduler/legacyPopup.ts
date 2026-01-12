@@ -8,7 +8,7 @@ fixture.disablePageReloads`Scheduler - Popup`
 
 const checkOptions = {
   rules: {
-    'color-contrast': { enabled: false },
+    'color-contrast': { enabled: true },
   },
 };
 

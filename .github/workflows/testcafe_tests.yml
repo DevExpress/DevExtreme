@@ -95,6 +95,7 @@ jobs:
       matrix:
         ARGS: [
           { componentFolder: "accessibility", name: "accessibility" },
+          { componentFolder: "accessibility - material", name: "accessibility", theme: 'material.blue.light' },
           { componentFolder: "common", name: "common" },
 
           { name: "generic", theme: 'generic.light' },

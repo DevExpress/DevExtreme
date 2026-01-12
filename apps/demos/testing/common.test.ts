@@ -163,7 +163,7 @@ Object.values(FRAMEWORKS).forEach((approach) => {
           const specificSkipRules = getTestSpecificSkipRules(testName);
           const options = { rules: {} };
 
-          [...COMMON_SKIP_RULES, ...specificSkipRules].forEach((ruleName) => {
+          [/*...COMMON_SKIP_RULES*/, ...specificSkipRules].forEach((ruleName) => {
             options.rules[ruleName] = { enabled: false };
           });
 

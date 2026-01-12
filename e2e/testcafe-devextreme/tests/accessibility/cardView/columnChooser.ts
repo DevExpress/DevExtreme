@@ -41,7 +41,7 @@ test('column chooser in \'dragAndDrop\' mode', async (t) => {
   await cardView.apiShowColumnChooser();
 
   const a11yCheckConfig = {
-    rules: { 'color-contrast': { enabled: false } },
+    rules: { 'color-contrast': { enabled: true } },
   };
   await a11yCheck(t, a11yCheckConfig, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {

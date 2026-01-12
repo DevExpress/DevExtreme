@@ -35,7 +35,7 @@ const created = async (t: TestController, optionConfiguration): Promise<void> =>
 
 const a11yCheckConfig = {
   // NOTE: color-contrast issues
-  rules: { 'color-contrast': { enabled: false } },
+  rules: { 'color-contrast': { enabled: true } },
 };
 
 const configuration: Configuration = {

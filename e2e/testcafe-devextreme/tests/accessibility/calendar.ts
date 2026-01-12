@@ -18,7 +18,7 @@ const options: Options<Properties> = {
 const a11yCheckConfig = {
   rules: {
     // NOTE: color-contrast issues
-    'color-contrast': { enabled: false },
+    'color-contrast': { enabled: true },
     // NOTE: empty-table-header issues
     'empty-table-header': { enabled: false },
   },

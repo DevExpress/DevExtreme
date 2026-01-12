@@ -1,10 +1,10 @@
 export const accessibilityUnsupportedComponents = [
-  'Accordion',
-  'Charts',
-  'Diagram',
-  'FileManager',
-  'Gantt',
-  'Map',
-  'Scheduler',
-  'PivotGrid',
+  // 'Accordion',
+  // 'Charts',
+  // 'Diagram',
+  // 'FileManager',
+  // 'Gantt',
+  // 'Map',
+  // 'Scheduler',
+  // 'PivotGrid',
 ];

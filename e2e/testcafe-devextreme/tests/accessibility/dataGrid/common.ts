@@ -289,7 +289,7 @@ test('Filter panel - popup with filter builder', async (t) => {
     ...a11yCheckConfig,
     runOnly: '',
     rules: {
-      'color-contrast': { enabled: false },
+      'color-contrast': { enabled: true },
     },
   });
 }).before(async () => createWidget('dxDataGrid', {
@@ -341,7 +341,7 @@ test('Search panel - highlight', async (t) => {
     ...a11yCheckConfig,
     runOnly: '',
     rules: {
-      'color-contrast': { enabled: false },
+      'color-contrast': { enabled: true },
     },
   }, DATA_GRID_SELECTOR);
 }).before(async () => createWidget('dxDataGrid', {

@@ -95,7 +95,7 @@ elements.forEach(({
         {
           rules: {
             // NOTE: color-contrast issues
-            'color-contrast': { enabled: false },
+            'color-contrast': { enabled: true },
           },
         },
         '#parentContainer',

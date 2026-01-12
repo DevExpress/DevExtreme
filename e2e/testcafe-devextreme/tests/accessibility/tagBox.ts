@@ -57,7 +57,7 @@ const buttonsCreated = async (t: TestController): Promise<void> => {
 
 const a11yCheckConfig = {
   // NOTE: color-contrast issues
-  rules: { 'color-contrast': { enabled: false } },
+  rules: { 'color-contrast': { enabled: true } },
 };
 
 const configuration: Configuration = {

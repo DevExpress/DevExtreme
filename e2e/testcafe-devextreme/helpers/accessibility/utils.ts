@@ -8,7 +8,7 @@ export interface A11yCheckOptions extends RunOptions {
 
 const defaultOptions = {
   rules: {
-    'color-contrast': { enabled: false },
+    'color-contrast': { enabled: true },
   },
 };
 

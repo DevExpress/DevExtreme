@@ -16,7 +16,7 @@ const DRAG_MOVE_Y_COEFFICIENT = 1;
 
 const a11yCheckConfig = {
   rules: {
-    'color-contrast': { enabled: false },
+    'color-contrast': { enabled: true },
     // NOTE: Draggable template is outside the role="main" landmark
     region: { enabled: false },
   },

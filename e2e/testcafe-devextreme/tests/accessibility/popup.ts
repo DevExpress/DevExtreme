@@ -33,8 +33,7 @@ const options: Options<Properties> = {
 
 const a11yCheckConfig = isMaterialBased() ? {
   // NOTE: color-contrast issues in Material
-  runOnly: isMaterial() ? '' : 'color-contrast',
-  rules: { 'color-contrast': { enabled: !isMaterial() } },
+  rules: { 'color-contrast': { enabled: true } },
 } : {};
 
 const visibleConfiguration: Configuration = {
