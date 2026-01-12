@@ -38,7 +38,7 @@ test.meta({ themes: [Themes.genericLight] })('ContextMenu width should be adjust
     visible: true,
   },
   onContextMenuPreparing(e) {
-    if (e.field && e.field.dataField === 'amount') {
+    if (e.field?.dataField === 'amount') {
       const menuItems = [] as any;
 
       e.items.push({ text: 'Summary Type', items: menuItems });
