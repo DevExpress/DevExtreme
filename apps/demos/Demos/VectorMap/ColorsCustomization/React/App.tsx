@@ -9,8 +9,13 @@ import VectorMap, {
 import type { ILayerProps, ITooltipProps } from 'devextreme-react/vector-map';
 
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
-import type { MapLayerElement } from 'devextreme/viz/vector_map';
 import { countries } from './data.ts';
+
+interface MapLayerElement {
+  attribute: (name: string) => string;
+  selected: (value?: boolean) => boolean;
+  applySettings?: (settings: Record<string, any>) => void;
+}
 
 const bounds = [-180, 85, 180, -60];
 

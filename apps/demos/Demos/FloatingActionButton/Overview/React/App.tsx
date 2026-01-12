@@ -5,7 +5,8 @@ import DataGrid, {
   Column, Editing, Lookup, Texts, Selection,
 } from 'devextreme-react/data-grid';
 import { SpeedDialAction } from 'devextreme-react/speed-dial-action';
-import { SelectBox, type SelectBoxTypes } from 'devextreme-react/select-box';
+import { SelectBox } from 'devextreme-react/select-box';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
 import type { DataGridTypes, DataGridRef } from 'devextreme-react/data-grid';
 import {
   employees, states, directions, optionDirections, directionLabel,

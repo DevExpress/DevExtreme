@@ -1,4 +1,4 @@
-import type { FloatingActionButtonDirection, PositionAlignment } from 'devextreme/common';
+import type { FloatingActionButtonDirection, PositionAlignment } from 'devextreme-react/common';
 
 type DirectionValue = {
   icon: string;
