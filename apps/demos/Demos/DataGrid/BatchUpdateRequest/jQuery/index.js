@@ -4,15 +4,19 @@ $(() => {
   const URL = `${BASE_PATH}/api/DataGridBatchUpdateWebApi`;
 
   function fetchAntiForgeryToken() {
-    return $.ajax({
+    const d = $.Deferred();
+    $.ajax({
       url: `${BASE_PATH}/api/Common/GetAntiForgeryToken`,
       method: 'GET',
       xhrFields: { withCredentials: true },
       cache: false,
+    }).done((data) => {
+      d.resolve(data);
     }).fail((xhr) => {
       const error = xhr.responseJSON?.message || xhr.statusText || 'Unknown error';
-      throw new Error(`Failed to retrieve anti-forgery token: ${error}`);
+      d.reject(new Error(`Failed to retrieve anti-forgery token: ${error}`));
     });
+    return d.promise();
   }
 
   function getAntiForgeryTokenValue() {
@@ -124,7 +128,7 @@ $(() => {
       cache: false,
       contentType: 'application/json',
     }).done(d.resolve).fail((xhr) => {
-      const errorMessage = xhr.responseJSON?.Message || xhr.statusText || 'Unknown error';
+      const errorMessage = xhr.responseText || xhr.statusText || 'Unknown error';
       d.reject(new Error(`Batch save failed: ${errorMessage}`));
     });
 
