@@ -292,6 +292,13 @@ export default class ViewDataProvider {
     let resultCellColumnIndex = -1;
     let resultCellRowIndex = -1;
 
+    const getCellPosition = (rowIndex: number, cellIndex: number) => ({
+      columnIndex: rowIndex,
+      rowIndex: showAllDayPanel && !this._options.isVerticalGrouping
+        ? cellIndex - 1
+        : cellIndex,
+    });
+
     for (let rowIndex = 0; rowIndex < completeViewDataMap.length; rowIndex += 1) {
       const currentRow = completeViewDataMap[rowIndex];
 
@@ -304,7 +311,7 @@ export default class ViewDataProvider {
           allDay: cellAllDay,
         } = cellData;
 
-        if (groupIndex !== cellGroupIndex || allDay !== cellAllDay) {
+        if (groupIndex !== cellGroupIndex || allDay !== Boolean(cellAllDay)) {
           continue;
         }
 
@@ -312,32 +319,30 @@ export default class ViewDataProvider {
           ? dateUtils.sameDate(date, cellStartDate)
           : date >= cellStartDate && date < cellEndDate;
 
+        if (isDateInCell) {
+          return {
+            position: getCellPosition(columnIndex, rowIndex),
+            cellData
+          };
+        }
+
         const diff = Math.min(
           Math.abs(date.getTime() - cellStartDate.getTime()),
           Math.abs(date.getTime() - cellEndDate.getTime()),
         );
 
-        if (isDateInCell || (findClosest && diff < resultDiff)) {
+        if (findClosest && diff < resultDiff) {
           resultDiff = diff;
           resultCellData = cellData;
           resultCellColumnIndex = columnIndex;
           resultCellRowIndex = rowIndex;
-
-          if (isDateInCell) {
-            break;
-          }
         }
       }
     }
 
     return resultCellData
       ? {
-        position: {
-          columnIndex: resultCellColumnIndex,
-          rowIndex: showAllDayPanel && !this._options.isVerticalGrouping
-            ? resultCellRowIndex - 1
-            : resultCellRowIndex,
-        },
+        position: getCellPosition(resultCellColumnIndex, resultCellRowIndex),
         cellData: resultCellData,
       }
       : undefined;
