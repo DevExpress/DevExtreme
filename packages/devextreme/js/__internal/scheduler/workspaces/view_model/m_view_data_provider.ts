@@ -322,14 +322,11 @@ export default class ViewDataProvider {
         if (isDateInCell) {
           return {
             position: getCellPosition(columnIndex, rowIndex),
-            cellData
+            cellData,
           };
         }
 
-        const diff = Math.min(
-          Math.abs(date.getTime() - cellStartDate.getTime()),
-          Math.abs(date.getTime() - cellEndDate.getTime()),
-        );
+        const diff = Math.abs(date.getTime() - cellStartDate.getTime());
 
         if (findClosest && diff < resultDiff) {
           resultDiff = diff;

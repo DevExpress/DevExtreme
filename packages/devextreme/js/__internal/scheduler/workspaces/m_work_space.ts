@@ -1856,13 +1856,10 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   _isValidScrollDate(date, throwWarning = true) {
     const viewOffset = this.option('viewOffset') as number;
-    const min = this.getStartViewDate();
-    const max = this.getEndViewDate();
+    const min = new Date(this.getStartViewDate().getTime() + viewOffset);
+    const max = new Date(this.getEndViewDate().getTime() + viewOffset);
 
-    const extendedMin = new Date(min.getTime() + viewOffset);
-    const extendedMax = new Date(max.getTime() + viewOffset);
-
-    if (date < extendedMin || date > extendedMax) {
+    if (date < min || date > max) {
       throwWarning && errors.log('W1008', date);
       return false;
     }
