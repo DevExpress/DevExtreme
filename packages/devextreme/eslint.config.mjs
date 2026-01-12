@@ -266,6 +266,7 @@ export default [
             'i18n/no-russian-character': ['error', {
                 includeIdentifier: true,
             }],
+            '@typescript-eslint/no-unused-vars': 'off'
         }
     },
     //  Rules for QUnit tests

@@ -30,7 +30,7 @@ catalog:
   "@stylistic/eslint-plugin": 2.13.0
   "@types/jquery": "3.5.33"
   "@typescript-eslint/eslint-plugin": 8.52.0
-  "@typescript-eslint/parser": 8.23.0
+  "@typescript-eslint/parser": 8.52.0
 
 catalogs:
   angular:
