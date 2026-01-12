@@ -13,19 +13,19 @@ import { splitByRecurrence } from './utils/split_by_recurrence/split_by_recurren
 const addDuration = <T extends MinimalAppointmentEntity & UTCDates>(
   entities: T[],
 ): (T & Duration)[] => entities.map((entity) => ({
-    ...entity,
-    duration: entity.endDateUTC - entity.startDateUTC,
-  }));
+  ...entity,
+  duration: entity.endDateUTC - entity.startDateUTC,
+}));
 
 const saveDatesBeforeSplit = <T extends MinimalAppointmentEntity & UTCDates>(
   entities: T[],
 ): (T & UTCDatesBeforeSplit)[] => entities.map((entity) => ({
-    ...entity,
-    datesBeforeSplit: {
-      startDateUTC: entity.startDateUTC,
-      endDateUTC: entity.endDateUTC,
-    },
-  }));
+  ...entity,
+  datesBeforeSplit: {
+    startDateUTC: entity.startDateUTC,
+    endDateUTC: entity.endDateUTC,
+  },
+}));
 
 export const filterAppointments = (
   schedulerStore: Scheduler,

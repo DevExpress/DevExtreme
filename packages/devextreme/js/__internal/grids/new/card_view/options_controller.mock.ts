@@ -6,7 +6,7 @@ import type { Options } from './options';
 import { defaultOptions } from './options';
 
 export class OptionsControllerMock extends OptionsControllerBaseMock<
-Options, typeof defaultOptions
+  Options, typeof defaultOptions
 > {
   constructor(options: Options) {
     super(options, defaultOptions);

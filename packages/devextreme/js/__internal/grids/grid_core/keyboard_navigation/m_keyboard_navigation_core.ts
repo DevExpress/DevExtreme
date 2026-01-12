@@ -80,9 +80,9 @@ export class KeyboardNavigationController extends modules.ViewController {
   private getScrollPadding(
     $container: dxElementWrapper,
   ): {
-      left: number;
-      right: number;
-    } {
+    left: number;
+    right: number;
+  } {
     const containerRect = getBoundingRect($container.get(0));
     const containerBoundingRect = this.getContainerBoundingRect($container);
 

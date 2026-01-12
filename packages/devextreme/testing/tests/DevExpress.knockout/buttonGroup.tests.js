@@ -15,11 +15,11 @@ moduleWithoutCsp('Render', () => {
         ];
 
         const markup =
-        '<div id="buttongroup-with-template" data-bind="dxButtonGroup: { items: items, buttonTemplate: \'testTemplate\' }">\
-            <div data-options="dxTemplate: { name: \'testTemplate\' }">\
-                <div data-bind="text: text"></div>\
-            </div>\
-        </div>';
+            '<div id="buttongroup-with-template" data-bind="dxButtonGroup: { items: items, buttonTemplate: \'testTemplate\' }">\
+                <div data-options="dxTemplate: { name: \'testTemplate\' }">\
+                    <div data-bind="text: text"></div>\
+                </div>\
+            </div>';
 
         $(markup).appendTo($('#qunit-fixture'));
 

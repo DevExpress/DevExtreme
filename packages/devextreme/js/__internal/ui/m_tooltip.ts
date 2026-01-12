@@ -13,7 +13,7 @@ const TOOLTIP_WRAPPER_CLASS = 'dx-tooltip-wrapper';
 
 export interface TooltipProperties extends PopoverProperties {}
 class Tooltip<
-TProperties extends TooltipProperties = TooltipProperties,
+  TProperties extends TooltipProperties = TooltipProperties,
 > extends Popover<TProperties> {
   _contentId?: string;
 

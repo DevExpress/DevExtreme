@@ -44,53 +44,53 @@ export const expandAllDayAllDayPanel = <T extends Pick<ListEntity, 'startDateUTC
   endDayHour: number,
   viewOffsetMs: number,
 ): T[] => entities.map((entity) => {
-    if (!entity.allDay) {
-      return entity;
-    }
+  if (!entity.allDay) {
+    return entity;
+  }
 
-    if (viewOffsetMs === 0) {
-      // NOTE: For case of start date higher than endDayHour:
-      // (0 hours) [startHour, endHour] (appointment start, end) (24 hours)
-      const minStartDate = new Date(entity.startDateUTC)
-        .setUTCHours(endDayHour, 0, 0, 0)
+  if (viewOffsetMs === 0) {
+    // NOTE: For case of start date higher than endDayHour:
+    // (0 hours) [startHour, endHour] (appointment start, end) (24 hours)
+    const minStartDate = new Date(entity.startDateUTC)
+      .setUTCHours(endDayHour, 0, 0, 0)
         - MINUTE_MS;
-      const maxEndDate = new Date(entity.endDateUTC)
-        .setUTCHours(endDayHour, 0, 0, 0)
+    const maxEndDate = new Date(entity.endDateUTC)
+      .setUTCHours(endDayHour, 0, 0, 0)
         - MINUTE_MS;
-
-      return {
-        ...entity,
-        startDateUTC: Math.min(entity.startDateUTC, minStartDate),
-        endDateUTC: maxEndDate,
-      };
-    }
 
     return {
       ...entity,
-      startDateUTC: getShiftedStartDate(entity.startDateUTC, viewOffsetMs),
-      endDateUTC: getShiftedEndDate(entity.endDateUTC, viewOffsetMs),
+      startDateUTC: Math.min(entity.startDateUTC, minStartDate),
+      endDateUTC: maxEndDate,
     };
-  });
+  }
+
+  return {
+    ...entity,
+    startDateUTC: getShiftedStartDate(entity.startDateUTC, viewOffsetMs),
+    endDateUTC: getShiftedEndDate(entity.endDateUTC, viewOffsetMs),
+  };
+});
 
 export const expandAllDayRegularPanel = <T extends Pick<ListEntity, 'startDateUTC' | 'endDateUTC' | 'allDay'>>(
   entities: T[],
 ): T[] => entities.map((entity) => {
-    if (!entity.allDay) {
-      return entity;
-    }
+  if (!entity.allDay) {
+    return entity;
+  }
 
-    const startDate = new Date(entity.startDateUTC);
-    const endDate = new Date(entity.endDateUTC);
-    endDate.setDate(endDate.getDate() + 1);
+  const startDate = new Date(entity.startDateUTC);
+  const endDate = new Date(entity.endDateUTC);
+  endDate.setDate(endDate.getDate() + 1);
 
-    return {
-      ...entity,
-      endDateUTC: endDate
-        .setUTCHours(
-          startDate.getUTCHours(),
-          startDate.getUTCMinutes(),
-          startDate.getUTCSeconds(),
-          startDate.getUTCMilliseconds(),
-        ),
-    };
-  });
+  return {
+    ...entity,
+    endDateUTC: endDate
+      .setUTCHours(
+        startDate.getUTCHours(),
+        startDate.getUTCMinutes(),
+        startDate.getUTCSeconds(),
+        startDate.getUTCMilliseconds(),
+      ),
+  };
+});
