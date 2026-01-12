@@ -1592,7 +1592,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const divisor = totalCellCount + cellCount - startIndex;
     let result = width / divisor;
 
-    if (result === 0 && groupIndex > 0 && foundElements === 0) {
+    if ((result === 0 || foundElements < cellCount) && groupIndex > 0) {
       result = this.getRoundedCellWidth(0, 0, cellCount);
     }
 

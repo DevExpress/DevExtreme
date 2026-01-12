@@ -1,0 +1,72 @@
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
+import { insertStylesheetRulesToPage } from '../../../../../helpers/domUtils';
+import { createWidget } from '../../../../../helpers/createWidget';
+import url from '../../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
+
+fixture.disablePageReloads`Scheduler: Current Time Indication: Shader with Virtual Scrolling`
+  .page(url(__dirname, '../../../../container.html'))
+  .beforeEach(async (t) => {
+    await t.resizeWindow(2560, 600);
+  });
+
+const style = `
+.dx-scheduler-date-time-shader-top::before,
+.dx-scheduler-date-time-shader-bottom::before,
+.dx-scheduler-timeline .dx-scheduler-date-time-shader::before,
+.dx-scheduler-date-time-shader-all-day {
+  background-color: red !important;
+}`;
+
+const resources = [
+  { text: 'Room 1', id: 1, color: '#cb6bb2' },
+  { text: 'Room 2', id: 2, color: '#56ca85' },
+  { text: 'Room 3', id: 3, color: '#1e90ff' },
+  { text: 'Room 4', id: 4, color: '#ff9747' },
+  { text: 'Room 5', id: 5, color: '#ff6a00' },
+  { text: 'Room 6', id: 6, color: '#ffc0cb' },
+];
+
+test('Shader should have correct width and left positions when scrolled to last groups with virtual scrolling (T1310524)', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await scheduler.option('width', 2560);
+
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'shader-virtual-scrolling-week-start.png',
+    { element: scheduler.element },
+  );
+
+  await scheduler.scrollTo(new Date(2025, 9, 15, 17, 30), { roomId: 6 });
+
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'shader-virtual-scrolling-week-end.png',
+    { element: scheduler.element },
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await insertStylesheetRulesToPage(style);
+
+  await createWidget('dxScheduler', {
+    dataSource: [],
+    currentView: 'week',
+    views: ['week'],
+    groups: ['roomId'],
+    resources: [{ fieldExpr: 'roomId', dataSource: resources, label: 'Room' }],
+    startDayHour: 8,
+    endDayHour: 18,
+    currentDate: new Date(2025, 9, 15),
+    height: 400,
+    width: 800,
+    shadeUntilCurrentTime: true,
+    scrolling: { mode: 'virtual' },
+  });
+});
