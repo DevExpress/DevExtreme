@@ -288,23 +288,23 @@ export default class ViewDataProvider {
     const showAllDayPanel = this._options.isAllDayPanelVisible;
 
     let resultDiff = Number.MAX_VALUE;
-    let resultCellData : ViewCellData | undefined;
+    let resultCellData: ViewCellData | undefined;
     let resultCellColumnIndex = -1;
-    let resultCellRowIndex   = -1;
+    let resultCellRowIndex = -1;
 
     for (let rowIndex = 0; rowIndex < completeViewDataMap.length; rowIndex += 1) {
       const currentRow = completeViewDataMap[rowIndex];
 
       for (let columnIndex = 0; columnIndex < currentRow.length; columnIndex += 1) {
         const cellData = currentRow[columnIndex];
-        let {
+        const {
           startDate: cellStartDate,
           endDate: cellEndDate,
           groupIndex: cellGroupIndex,
           allDay: cellAllDay,
         } = cellData;
 
-        if(groupIndex !== cellGroupIndex || allDay !== cellAllDay) {
+        if (groupIndex !== cellGroupIndex || allDay !== cellAllDay) {
           continue;
         }
 
@@ -317,7 +317,7 @@ export default class ViewDataProvider {
           Math.abs(date.getTime() - cellEndDate.getTime()),
         );
 
-        if(isDateInCell || (findClosest && diff < resultDiff)) {
+        if (isDateInCell || (findClosest && diff < resultDiff)) {
           resultDiff = diff;
           resultCellData = cellData;
           resultCellColumnIndex = columnIndex;
