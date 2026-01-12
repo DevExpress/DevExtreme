@@ -39,7 +39,7 @@ function PieChartComponent(props: PieChartComponentProps) {
   );
 }
 
-function customizeText(pointInfo: { argument: string | any[]; value: any; }) {
+function customizeText(pointInfo: { argument: string | string[]; value: string; }) {
   return `${pointInfo.argument[0].toUpperCase()}${
     pointInfo.argument.slice(1)
   }: $${pointInfo.value}M`;
