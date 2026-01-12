@@ -1409,23 +1409,14 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   _getScrollCoordinates(hours, minutes, date, groupIndex?: any, allDay?: any) {
     const currentDate = date || new Date(this.option('currentDate'));
-    const startDayHour = this.option('startDayHour');
-    const endDayHour = this.option('endDayHour');
-    const viewOffset = this.option('viewOffset');
 
-    if (viewOffset === 0) {
-      if (hours < startDayHour) {
-        hours = startDayHour;
-      }
+    const cell = this.viewDataProvider.findGlobalCellPosition(currentDate, groupIndex, allDay, true);
 
-      if (hours >= endDayHour) {
-        hours = endDayHour - 1;
-      }
+    if (!cell) {
+      return;
     }
 
-    currentDate.setHours(hours, minutes, 0, 0);
-
-    const cell = this.viewDataProvider.findGlobalCellPosition(currentDate, groupIndex, allDay);
+    currentDate.setHours(cell?.cellData.startDate.getHours(), currentDate.getMinutes(), 0, 0);
 
     return this.virtualScrollingDispatcher.calculateCoordinatesByDataAndPosition(
       cell?.cellData,
@@ -1872,7 +1863,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const min = this.getStartViewDate();
     const max = this.getEndViewDate();
 
-    const extendedMin = new Date(min.getTime() - viewOffset);
+    const extendedMin = new Date(min.getTime() + viewOffset);
     const extendedMax = new Date(max.getTime() + viewOffset);
 
     if (date < extendedMin || date > extendedMax) {
