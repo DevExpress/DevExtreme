@@ -498,7 +498,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @action
      * @public
      */
-    onTypingStart?: ((e: TypingStartEvent) => void) | undefined ;
+    onTypingStart?: ((e: TypingStartEvent) => void) | undefined;
     /**
      * @docid
      * @default undefined
