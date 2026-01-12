@@ -20,8 +20,8 @@ const markerClick = (e) => {
 const App = () => {
   const vectorMapRef = useRef(null);
   const reset = useCallback(() => {
-    vectorMapRef?.current?.instance().center([0, 0]);
-    vectorMapRef?.current?.instance().zoomFactor(1);
+    vectorMapRef.current?.instance().center([0, 0]);
+    vectorMapRef.current?.instance().zoomFactor(1);
   }, []);
   return (
     <>

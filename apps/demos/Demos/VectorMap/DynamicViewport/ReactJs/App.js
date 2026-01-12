@@ -18,7 +18,7 @@ const App = () => {
   const mapRef = useRef(null);
   const continentChanged = useCallback(({ value }) => {
     setCoordinates(value);
-    mapRef?.current?.instance().viewport(value);
+    mapRef.current?.instance().viewport(value);
   }, []);
   const zoomFactorChanged = useCallback((e) => {
     setZoomFactor(e.zoomFactor.toFixed(2));
