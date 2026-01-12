@@ -18,7 +18,7 @@ function getPieData(name: CountriesGDPKey) {
 }
 
 export default function TooltipTemplate(info: {
-  attribute: (name: CountriesGDPKey) => string;
+  attribute: (name: string) => string;
 }) {
   const name = info.attribute('name');
   const countryGDPData = countriesGDP[name];

@@ -11,7 +11,6 @@ import type { DataGridTypes, DataGridRef } from 'devextreme-react/data-grid';
 import {
   employees, states, directions, optionDirections, directionLabel,
 } from './data.ts';
-
 import type { DirectionKey } from './data.ts';
 
 const App = () => {
