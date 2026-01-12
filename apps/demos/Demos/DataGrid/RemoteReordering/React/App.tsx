@@ -2,6 +2,7 @@ import React from 'react';
 import DataGrid, {
   Column, RowDragging, Scrolling, Lookup, Sorting,
 } from 'devextreme-react/data-grid';
+import type { DataGridTypes, IRowDraggingProps } from 'devextreme-react/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridRowReordering';
@@ -23,7 +24,7 @@ const employeesStore = createStore({
   },
 });
 
-const processReorder = async (e) => {
+const processReorder = async (e: DataGridTypes.RowDraggingReorderEvent) => {
   const visibleRows = e.component.getVisibleRows();
   const newOrderIndex = visibleRows[e.toIndex].data.OrderIndex;
 
@@ -31,7 +32,7 @@ const processReorder = async (e) => {
   await e.component.refresh();
 };
 
-const onReorder = (e) => {
+const onReorder = (e: DataGridTypes.RowDraggingReorderEvent) => {
   e.promise = processReorder(e);
 };
 
@@ -43,7 +44,7 @@ const App = () => (
   >
     <RowDragging
       allowReordering={true}
-      onReorder={onReorder}
+      onReorder={onReorder as unknown as IRowDraggingProps['onReorder']}
       dropFeedbackMode="push"
     />
     <Scrolling mode="virtual" />

@@ -1,7 +1,13 @@
 import React, { useCallback, useRef } from 'react';
 import {
-  Chart, CommonSeriesSettings, Series, Legend, Title, Subtitle,
+  Chart,
+  CommonSeriesSettings,
+  Series,
+  Legend,
+  Title,
+  Subtitle,
 } from 'devextreme-react/chart';
+import type { ChartRef } from 'devextreme-react/chart';
 import { Button } from 'devextreme-react/button';
 import { exportFromMarkup } from 'devextreme/viz/export';
 import { Canvg } from 'canvg';
@@ -10,7 +16,7 @@ import Form from './Form.tsx';
 
 const barPadding = 0.3;
 
-const prepareMarkup = (chartSVG, markup) => {
+const prepareMarkup = (chartSVG: string, markup: string) => {
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
   svg.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
@@ -28,21 +34,28 @@ const prepareMarkup = (chartSVG, markup) => {
 };
 
 function App() {
-  const childRef = useRef(null);
-  const chartRef = useRef(null);
+  const childRef = useRef<HTMLDivElement>(null);
+  const chartRef = useRef<ChartRef>(null);
 
   const onClick = useCallback(() => {
     exportFromMarkup(
-      prepareMarkup(chartRef.current.instance().svg(),
-        childRef.current.innerHTML), {
+      prepareMarkup(chartRef.current?.instance().svg() ?? '',
+        childRef.current?.innerHTML ?? ''), {
         width: 820,
         height: 420,
         margin: 0,
         format: 'png',
-        svgToCanvas(svg: Node, canvas) {
-          return new Promise((resolve) => {
+        svgToCanvas(svg: Node, canvas: HTMLCanvasElement) {
+          return new Promise((resolve): void => {
+            const ctx = canvas.getContext('2d');
+
+            if (!ctx) {
+              resolve(() => {});
+              return;
+            }
+
             const v = Canvg.fromString(
-              canvas.getContext('2d'),
+              ctx,
               new XMLSerializer().serializeToString(svg)
             );
 

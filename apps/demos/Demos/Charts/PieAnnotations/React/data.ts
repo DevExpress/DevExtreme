@@ -1,4 +1,6 @@
-const annotationSources = [{
+import type { AnnotationSource, DataSourceItem } from './types.ts';
+
+const annotationSources: AnnotationSource[] = [{
   country: 'Russia',
   offsetX: 15,
   offsetY: 5,
@@ -41,7 +43,7 @@ const edgeAnnotationSettings = {
   shadowOpacity: 0.3,
 };
 
-export const dataSource = [{
+export const dataSource: DataSourceItem[] = [{
   country: 'Russia',
   oldCountryName: 'Soviet Union',
   gold: 27,
@@ -85,13 +87,13 @@ export const dataSource = [{
   bronze: 1,
 }];
 
-export function getAnnotationSources() {
-  const annotations = [];
+export function getAnnotationSources(): AnnotationSource[] {
+  const annotations: AnnotationSource[] = [];
   for (let i = 0; i < annotationSources.length; i += 1) {
     const annotation = annotationSources[i];
     const { country } = annotation;
     const image = `../../../../images/flags/3x2/${country.replace(/\s/, '')}.svg`;
-    const data = { ...dataSource.filter((d) => (d.country === country))[0] };
+    const data = { ...dataSource.filter((d: DataSourceItem): boolean => (d.country === country))[0] };
 
     annotations.push({
       ...annotation,

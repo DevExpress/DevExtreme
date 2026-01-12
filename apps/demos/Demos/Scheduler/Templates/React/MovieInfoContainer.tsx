@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { type FormTypes } from 'devextreme-react/form';
+import type { FormTypes } from 'devextreme-react/form';
 import { query } from 'devextreme-react/common/data';
 import { moviesData, type MovieResource } from './data.ts';
 
@@ -18,9 +18,9 @@ const MovieInfoContainer: React.FC<MovieInfoContainerProps> = ({ formInstanceRef
 
   useEffect(() => {
     const form = formInstanceRef.current;
-    const formData = form.option('formData');
+    const formData = form?.option('formData');
 
-    const currentMovie = getMovieById(formData.movieId);
+    const currentMovie = getMovieById(formData?.movieId);
     setMovie(currentMovie);
 
     const handleFieldDataChanged = (e: FormTypes.FieldDataChangedEvent) => {
@@ -30,10 +30,10 @@ const MovieInfoContainer: React.FC<MovieInfoContainerProps> = ({ formInstanceRef
       }
     };
 
-    form.on('fieldDataChanged', handleFieldDataChanged);
+    form?.on('fieldDataChanged', handleFieldDataChanged);
 
     return () => {
-      form.off('fieldDataChanged', handleFieldDataChanged);
+      form?.off('fieldDataChanged', handleFieldDataChanged);
     };
   }, [formInstanceRef]);
 

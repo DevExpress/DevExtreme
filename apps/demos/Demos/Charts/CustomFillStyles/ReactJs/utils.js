@@ -4,10 +4,10 @@ const imagePatternSize = 12;
 const shapePatternSize = 6;
 function hexToRgb(hex, opacity = 1) {
   const hexColorParts = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return `rgba(${parseInt(hexColorParts[1], 16)}, ${parseInt(hexColorParts[2], 16)}, ${parseInt(
-    hexColorParts[3],
+  return `rgba(${parseInt(hexColorParts?.[1] ?? '', 16)}, ${parseInt(
+    hexColorParts?.[2] ?? '',
     16,
-  )}, ${opacity})`;
+  )}, ${parseInt(hexColorParts?.[3] ?? '', 16)}, ${opacity})`;
 }
 function getGradient(type, color1, color2) {
   return registerGradient(type, {
@@ -79,8 +79,8 @@ export function createRect(size, fill, stroke, strokeWidth) {
   rect.setAttribute('y', '0');
   rect.setAttribute('width', size.toString());
   rect.setAttribute('height', size.toString());
-  rect.setAttribute('fill', fill);
-  rect.setAttribute('stroke', stroke);
-  rect.setAttribute('stroke-width', strokeWidth?.toString());
+  rect.setAttribute('fill', fill ?? '');
+  rect.setAttribute('stroke', stroke ?? '');
+  rect.setAttribute('stroke-width', strokeWidth?.toString() ?? '');
   return rect;
 }

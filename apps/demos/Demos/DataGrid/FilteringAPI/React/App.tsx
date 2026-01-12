@@ -15,12 +15,12 @@ const App = () => {
   const dataGridRef = useRef<DataGridRef>(null);
 
   const onValueChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
-    const dataGrid = dataGridRef.current.instance();
+    const dataGrid = dataGridRef.current?.instance();
 
     if (e.value === 'All') {
-      dataGrid.clearFilter();
+      dataGrid?.clearFilter();
     } else {
-      dataGrid.filter(['Task_Status', '=', e.value]);
+      dataGrid?.filter(['Task_Status', '=', e.value]);
     }
 
     setFilterStatus(e.value);

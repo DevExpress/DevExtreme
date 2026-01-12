@@ -21,7 +21,7 @@ function customizePoint(arg) {
   if (arg.value < lowAverage) {
     return { color: lowAverageColor };
   }
-  return null;
+  return {};
 }
 function customizeLabel(arg) {
   if (arg.value > highAverage) {
@@ -30,7 +30,7 @@ function customizeLabel(arg) {
   if (arg.value < lowAverage) {
     return getLabelsSettings(lowAverageColor);
   }
-  return null;
+  return {};
 }
 function getLabelsSettings(backgroundColor) {
   return {

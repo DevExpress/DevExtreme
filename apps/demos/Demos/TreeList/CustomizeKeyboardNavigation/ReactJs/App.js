@@ -26,7 +26,7 @@ const App = () => {
         onFocusedCellChanging={onFocusedCellChanging}
       >
         <KeyboardNavigation
-          editOnKeyPress={editOnKeyPress}
+          editOnKeyPress={!!editOnKeyPress}
           enterKeyAction={enterKeyAction}
           enterKeyDirection={enterKeyDirection}
         />

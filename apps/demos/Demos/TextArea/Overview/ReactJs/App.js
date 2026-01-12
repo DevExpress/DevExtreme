@@ -9,14 +9,14 @@ const eventLabel = { 'aria-label': 'Event' };
 function App() {
   const [value, setValue] = useState(content);
   const [valueForEditableTestArea, setValueForEditableTestArea] = useState(content);
-  const [maxLength, setMaxLength] = useState(null);
+  const [maxLength, setMaxLength] = useState(undefined);
   const [eventValue, setEventValue] = useState(valueChangeEvents[0].name);
   const [autoResizeEnabled, setAutoResizeEnabled] = useState(false);
   const [height, setHeight] = useState(90);
   const onCheckboxValueChanged = useCallback((e) => {
     const str = content;
     setValue(e.value ? str.substring(0, 100) : str);
-    setMaxLength(e.value ? 100 : null);
+    setMaxLength(e.value ? 100 : undefined);
   }, []);
   const onAutoResizeChanged = useCallback((e) => {
     setAutoResizeEnabled(e.value);

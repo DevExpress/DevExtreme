@@ -16,6 +16,7 @@ import {
 } from 'devextreme-angular';
 
 @Component({
+  standalone: false,
   selector: 'test-container-component',
   template: '',
 })
@@ -199,6 +200,7 @@ describe('DxDataGrid', () => {
       { field: 'otherField', caption: 'Other field2', cellTemplateName: undefined },
     ];
     @Component({
+      standalone: false,
       selector: 'test-container-component',
       template: '',
     })

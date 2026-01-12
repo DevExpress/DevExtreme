@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 const addCategory = (menuMetaData, categoryName) => {
   const categoryMeta = { Name: categoryName, Equivalents: '', Groups: [] };
   menuMetaData.push(categoryMeta);
@@ -34,7 +33,7 @@ const updateDemoProperties = (
 ) => {
   const demoMetaSource = getByPath(
     menuMetaData,
-    newOrExisting.path
+    newOrExisting.path,
   );
   const demoMetaDest = getByPath(menuMetaData, pathParts);
   if (demoMetaSource.Modules) {
@@ -88,43 +87,41 @@ const getDemos = (menuMetaData, pathParts, newDemo) => {
   return result;
 };
 
-const getItemByPath = (menuMetaData, pathParts) => {
-  return pathParts
-    .reduce((result, name, i) => {
-      const current = result?.find((x) => x.Name === name);
+const getItemByPath = (menuMetaData, pathParts) => pathParts
+  .reduce((result, name, i) => {
+    const current = result?.find((x) => x.Name === name);
 
-      if (!current) {
-        throw new Error(`incorrect path for menuMetaData: ${JSON.stringify(pathParts)}`);
-      }
-
-      if (i === pathParts.length - 1) {
-        return current;
-      }
-      if (current.Groups) {
-        return current.Groups;
-      }
-      if (current.Demos) {
-        return current.Demos;
-      }
-
+    if (!current) {
       throw new Error(`incorrect path for menuMetaData: ${JSON.stringify(pathParts)}`);
-    }, menuMetaData);
-}
+    }
+
+    if (i === pathParts.length - 1) {
+      return current;
+    }
+    if (current.Groups) {
+      return current.Groups;
+    }
+    if (current.Demos) {
+      return current.Demos;
+    }
+
+    throw new Error(`incorrect path for menuMetaData: ${JSON.stringify(pathParts)}`);
+  }, menuMetaData);
 
 const hasGroups = (menuMetaData, pathParts) => {
   const item = getItemByPath(menuMetaData, pathParts);
   return !!item.Groups;
-}
+};
 
 const hasDemos = (menuMetaData, pathParts) => {
   const item = getItemByPath(menuMetaData, pathParts);
   return !!item.Demos;
-}
+};
 
 const isDemo = (menuMetaData, pathParts) => {
   const item = getItemByPath(menuMetaData, pathParts);
   return !item.Groups && !item.Demos;
-}
+};
 
 const getByPath = (menuMetaData, pathParts) => {
   let result = getItemByPath(menuMetaData, pathParts);
@@ -137,7 +134,7 @@ const getByPath = (menuMetaData, pathParts) => {
   }
 
   return result;
-}
+};
 
 const difference = (firstSet, secondSet) => {
   const result = new Set(firstSet);
@@ -147,16 +144,16 @@ const difference = (firstSet, secondSet) => {
     }
   }
   return result;
-}
+};
 
 const prepareModules = (modules) => {
   const complexSet = new Set(modules);
-  const simplifiedSet = new Set(modules.map(module => module.split('&')).flat());
+  const simplifiedSet = new Set(modules.map((module) => module.split('&')).flat());
 
   const combinedModules = difference(complexSet, simplifiedSet);
-  const simplifiedCombinedModulesSet = new Set(Array.from(combinedModules).map(module => module.split('&')).flat())
+  const simplifiedCombinedModulesSet = new Set(Array.from(combinedModules).map((module) => module.split('&')).flat());
   return Array.from(difference(complexSet, simplifiedCombinedModulesSet));
-}
+};
 
 module.exports = {
   addCategory,

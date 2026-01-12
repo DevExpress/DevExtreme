@@ -1,7 +1,7 @@
 import React from 'react';
 import { formatNumber } from 'devextreme-react/common/core/localization';
 
-const getGridCellData = (gridData) => gridData.data[gridData.column.caption.toLowerCase()];
+const getGridCellData = (gridData) => gridData.data[gridData.column.caption?.toLowerCase() ?? ''];
 const DiffCell = (cellData) => {
   const gridCellData = getGridCellData(cellData);
   return (

@@ -17,25 +17,23 @@ async function getAIResponse(messages, signal) {
     temperature: 0.7,
   };
   const response = await aiService.chat.completions.create(params, { signal });
-  const result = response.choices[0].message?.content;
-  return result;
+  return response.choices[0].message?.content;
 }
 export const aiIntegration = new AIIntegration({
   sendRequest({ prompt }) {
     const controller = new AbortController();
     const signal = controller.signal;
     const aiPrompt = [
-      { role: 'system', content: prompt.system },
-      { role: 'user', content: prompt.user },
+      { role: 'system', content: prompt.system ?? '' },
+      { role: 'user', content: prompt.user ?? '' },
     ];
     const promise = getAIResponse(aiPrompt, signal);
-    const result = {
+    return {
       promise,
       abort: () => {
         controller.abort();
       },
     };
-    return result;
   },
 });
 export const markup = `

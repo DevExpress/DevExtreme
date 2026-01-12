@@ -1,5 +1,5 @@
 import { BuildOptions } from 'esbuild';
-// eslint-disable-next-line import/no-extraneous-dependencies
+
 import vuePlugin from 'esbuild-plugin-vue3';
 import { join } from 'path';
 import {
@@ -17,7 +17,7 @@ export default class VueBundler extends ESBundler {
     const sourceDemoPath = getSourcePathByDemo(demo, this.framework);
     const destinationDemoPath = getDestinationPathByDemo(demo, this.framework);
 
-    const options: BuildOptions = {
+    return {
       bundle: true,
       minify: true,
       loader: {
@@ -33,8 +33,6 @@ export default class VueBundler extends ESBundler {
         __VUE_PROD_DEVTOOLS__: 'false',
       },
     };
-
-    return options;
   };
 
   #getEntryPoints = (sourceDemoPath: string) => [join(sourceDemoPath, 'index.js')];

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import DataGrid, { Column } from 'devextreme-react/data-grid';
-import { CustomStore } from 'devextreme-react/common/data';
 import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
+import { CustomStore } from 'devextreme-react/common/data';
+import DataGrid, { Column } from 'devextreme-react/data-grid';
 import PriceCell from './PriceCell.js';
 import ChangeCell from './ChangeCell.js';
 

@@ -118,7 +118,5 @@ const homes = [{
   ImageSrc: '../../../../images/gallery/21.jpg',
 }].map((dataItem) => ({
   ...dataItem,
-  formatCurrency: () => function (text, render) {
-    return window.formatCurrency(parseInt(render(text), 10));
-  },
+  formatCurrency: () => (text, render) => window.formatCurrency(parseInt(render(text), 10)),
 }));

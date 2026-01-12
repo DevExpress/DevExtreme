@@ -1,10 +1,13 @@
 import { useCallback, useState } from 'react';
 import { AzureOpenAI, OpenAI } from 'openai';
-import { type ChatTypes } from 'devextreme-react/chat';
+import type { ChatTypes } from 'devextreme-react/chat';
 import { CustomStore, DataSource } from 'devextreme-react/common/data';
+import type { AIResponse } from 'devextreme/common/ai-integration';
 import {
-  ALERT_TIMEOUT, assistant,
-  AzureOpenAIConfig, REGENERATION_TEXT,
+  ALERT_TIMEOUT,
+  assistant,
+  AzureOpenAIConfig,
+  REGENERATION_TEXT,
 } from './data.ts';
 
 type Message = (OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionAssistantMessageParam) & {
@@ -14,11 +17,11 @@ type Message = (OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionAss
 const chatService = new AzureOpenAI(AzureOpenAIConfig);
 
 const wait = (delay: number): Promise<void> =>
-  new Promise((resolve) => {
+  new Promise((resolve): void => {
     setTimeout(resolve, delay);
   });
 
-export async function getAIResponse(messages: Message[], delay?: number): Promise<string> {
+export async function getAIResponse(messages: Message[], delay?: number): Promise<AIResponse> {
   const params = {
     messages,
     model: AzureOpenAIConfig.deployment,
@@ -33,7 +36,7 @@ export async function getAIResponse(messages: Message[], delay?: number): Promis
     await wait(delay);
   }
 
-  return data.choices[0].message?.content;
+  return data.choices[0].message?.content ?? '';
 }
 
 const store: ChatTypes.Message[] = [];
@@ -59,7 +62,7 @@ export const dataSource = new DataSource({
 });
 
 const dataItemToMessage = (item: ChatTypes.Message): Message => ({
-  role: item.author.id as Message['role'],
+  role: item.author?.id as Message['role'],
   content: item.text,
 });
 
@@ -116,9 +119,11 @@ export const useApi = () => {
     try {
       const aiResponse = await getAIResponse(messageHistory.slice(0, -1));
 
-      updateLastMessageContent(aiResponse);
+      if (typeof aiResponse === 'string') {
+        updateLastMessageContent(aiResponse);
+      }
     } catch {
-      updateLastMessageContent(messageHistory.at(-1)?.content);
+      updateLastMessageContent(messageHistory.at(-1)?.content as string);
       alertLimitReached();
     }
   }, [alertLimitReached, updateLastMessageContent]);

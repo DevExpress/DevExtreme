@@ -83,7 +83,7 @@ const App = () => {
               <GroupItem
                 caption="Home Address"
                 name="HomeAddress"
-                visible={isHomeAddressVisible}
+                visible={!!isHomeAddressVisible}
               >
                 <SimpleItem dataField="Address" />
                 <SimpleItem dataField="City" />

@@ -13,20 +13,14 @@ import {
 function App() {
   const [palette, setPalette] = useState(paletteCollection[0]);
   const [extensionMode, setExtensionMode] = useState(paletteExtensionModes[1]);
-  const handlePaletteChange = useCallback(
-    (e) => {
-      setPalette(e.value);
-    },
-    [setPalette],
-  );
-  const handleExtensionModeChange = useCallback(
-    (e) => {
-      setExtensionMode(e.value);
-    },
-    [setExtensionMode],
-  );
+  const handlePaletteChange = useCallback((e) => {
+    setPalette(e.value);
+  }, []);
+  const handleExtensionModeChange = useCallback((e) => {
+    setExtensionMode(e.value);
+  }, []);
   return (
-    <React.Fragment>
+    <>
       <div className="flex-container">
         <PieChart
           id="pie"
@@ -72,7 +66,7 @@ function App() {
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 export default App;

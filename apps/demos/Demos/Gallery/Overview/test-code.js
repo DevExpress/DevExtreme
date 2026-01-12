@@ -5,6 +5,6 @@ testUtils.importAnd(() => 'devextreme/ui/gallery', () => DevExpress.ui.dxGallery
     i.option('slideshowDelay', 0);
     i.goToItem(0, false);
     // eslint-disable-next-line no-underscore-dangle
-    i._optionChanged = function () { };
+    i._optionChanged = () => { };
   }),
 );

@@ -17,15 +17,17 @@ import {
 const editingStrategy = {
   enabled: true,
   disabled: false,
-  custom: ({ component, message }: { component: ReturnType<ChatRef['instance']>, message: ChatTypes.Message }): boolean => {
-    const { items, user } = component.option();
+  custom: ({ component, message }: { component?: ReturnType<ChatRef['instance']>, message?: ChatTypes.Message }): boolean => {
+    const { items, user } = component?.option() ?? {};
     const userId = user?.id;
 
     const lastNotDeletedMessage = items?.findLast((item: ChatTypes.Message): boolean => item.author?.id === userId && !item.isDeleted);
 
-    return message.id === lastNotDeletedMessage?.id;
+    return message?.id === lastNotDeletedMessage?.id;
   },
-};
+} as const;
+
+type EditingStrategyKey = keyof typeof editingStrategy;
 
 const store: ChatTypes.Message[] = [...initialMessages];
 
@@ -85,12 +87,12 @@ export default function App() {
   }, []);
 
   const handleAllowUpdatingChange = useCallback((e: SelectBoxTypes.ValueChangedEvent): void => {
-    const strategy = editingStrategy[e.value];
+    const strategy = editingStrategy[e.value as EditingStrategyKey];
     setAllowUpdating(() => strategy);
   }, []);
 
   const handleAllowDeletingChange = useCallback((e: SelectBoxTypes.ValueChangedEvent): void => {
-    const strategy = editingStrategy[e.value];
+    const strategy = editingStrategy[e.value as EditingStrategyKey];
     setAllowDeleting(() => strategy);
   }, []);
 

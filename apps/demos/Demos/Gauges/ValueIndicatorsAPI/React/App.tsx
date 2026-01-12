@@ -1,9 +1,18 @@
 import React, {
-  useCallback, useMemo, useRef, useState,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
 } from 'react';
 import {
-  CircularGauge, Scale, Label, Tooltip, Title, Font,
+  CircularGauge,
+  Scale,
+  Label,
+  Tooltip,
+  Title,
+  Font,
 } from 'devextreme-react/circular-gauge';
+import type { CircularGaugeRef } from 'devextreme-react/circular-gauge';
 import { NumberBox } from 'devextreme-react/number-box';
 import { Button } from 'devextreme-react/button';
 
@@ -11,20 +20,20 @@ const mainGeneratorLabel = { 'aria-label': 'Main Generator' };
 const additionalGeneratorOneLabel = { 'aria-label': 'Additional Generator One' };
 const additionalGeneratorTwoLabel = { 'aria-label': 'Additional Generator Two' };
 
-function customizeText({ valueText }) {
+function customizeText({ valueText }: { valueText: string }): string {
   return `${valueText} kV`;
 }
 
 function App() {
-  const [mainGeneratorValue, setMainGeneratorValue] = useState(34);
-  const [additionalGenerator1Value, setAdditionalGenerator1Value] = useState(12);
-  const [additionalGenerator2Value, setAdditionalGenerator2Value] = useState(23);
-  const gaugeRef = useRef(null);
+  const [mainGeneratorValue, setMainGeneratorValue] = useState<number>(34);
+  const [additionalGenerator1Value, setAdditionalGenerator1Value] = useState<number>(12);
+  const [additionalGenerator2Value, setAdditionalGenerator2Value] = useState<number>(23);
+  const gaugeRef = useRef<CircularGaugeRef>(null);
 
   const updateValues = useCallback(() => {
-    const gauge = gaugeRef.current.instance();
-    gauge.value(mainGeneratorValue);
-    gauge.subvalues([additionalGenerator1Value, additionalGenerator2Value]);
+    const gauge = gaugeRef.current?.instance();
+    gauge?.value(mainGeneratorValue);
+    gauge?.subvalues([additionalGenerator1Value, additionalGenerator2Value]);
   }, [
     gaugeRef,
     mainGeneratorValue,

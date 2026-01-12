@@ -95,7 +95,7 @@ function App() {
           <NumberBox
             visible={!isPredefined}
             placeholder='top'
-            defaultValue={null}
+            defaultValue={undefined}
             valueChangeEvent='keyup'
             disabled={!!coordinatePosition.bottom}
             inputAttr={positionTopLabel}
@@ -103,7 +103,7 @@ function App() {
           <NumberBox
             visible={!isPredefined}
             placeholder='bottom'
-            defaultValue={null}
+            defaultValue={undefined}
             valueChangeEvent='keyup'
             inputAttr={positionBottomLabel}
             disabled={!!coordinatePosition.top}
@@ -113,7 +113,7 @@ function App() {
           <NumberBox
             visible={!isPredefined}
             placeholder='left'
-            defaultValue={null}
+            defaultValue={undefined}
             valueChangeEvent='keyup'
             inputAttr={positionLeftLabel}
             disabled={!!coordinatePosition.right}
@@ -121,7 +121,7 @@ function App() {
           <NumberBox
             visible={!isPredefined}
             placeholder='right'
-            defaultValue={null}
+            defaultValue={undefined}
             valueChangeEvent='keyup'
             inputAttr={positionRightLabel}
             disabled={!!coordinatePosition.left}

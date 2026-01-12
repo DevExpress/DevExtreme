@@ -10,7 +10,7 @@ import {
   ValueIndicator as LinearValueIndicator,
 } from 'devextreme-react/linear-gauge';
 
-function customizeText({ valueText }) {
+function customizeText({ valueText }: { valueText: string }): string {
   return `${valueText}°`;
 }
 

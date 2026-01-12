@@ -1,5 +1,5 @@
 $(() => {
-  $.type = $.type || function (obj) {
+  $.type = $.type || function getType(obj) {
     if (obj == null) {
       return `${obj}`;
     }

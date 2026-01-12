@@ -67,9 +67,9 @@ const App = () => {
         <RowDragging
           onDragChange={onDragChange}
           onReorder={onReorder}
-          allowDropInsideItem={allowDropInsideItem}
-          allowReordering={allowReordering}
-          showDragIcons={showDragIcons}
+          allowDropInsideItem={!!allowDropInsideItem}
+          allowReordering={!!allowReordering}
+          showDragIcons={!!showDragIcons}
         />
         <Column
           dataField="Title"

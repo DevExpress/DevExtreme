@@ -3,6 +3,8 @@ import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
+import type { BoxItemData } from '@ts/ui/box';
 import Box from '@ts/ui/box';
 import type { EditorProperties } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
@@ -22,17 +24,25 @@ const TIMEVIEW_FORMAT12_AM = -1;
 const TIMEVIEW_FORMAT12_PM = 1;
 const TIMEVIEW_MINUTEARROW_CLASS = 'dx-timeview-minutearrow';
 
-const rotateArrow = function ($arrow, angle, offset) {
+const cssRotate = ($arrow: dxElementWrapper, angle: number, offset = 0): void => {
+  $arrow.css('transform', `rotate(${angle}deg) translate(0,${offset}px)`);
+};
+
+const rotateArrow = (
+  $arrow: dxElementWrapper | undefined,
+  angle: number,
+  offset?: number,
+): void => {
+  if (!$arrow) {
+    return;
+  }
+
   cssRotate($arrow, angle, offset);
 };
 
-const cssRotate = function ($arrow, angle, offset) {
-  // eslint-disable-next-line no-useless-concat
-  $arrow.css('transform', `rotate(${angle}deg)` + ` translate(0,${offset}px)`);
-};
-
-export interface TimeViewProperties extends EditorProperties {
+export interface TimeViewProperties extends Omit<EditorProperties, 'value'> {
   use24HourFormat?: boolean;
+  value: Date;
   _showClock?: boolean;
   _arrowOffset?: number;
 }
@@ -58,7 +68,7 @@ class TimeView extends Editor<TimeViewProperties> {
     };
   }
 
-  _getValue() {
+  _getValue(): Date {
     const { value } = this.option();
     return value || new Date();
   }
@@ -77,11 +87,13 @@ class TimeView extends Editor<TimeViewProperties> {
   }
 
   _renderBox(): void {
-    const $box = $('<div>').appendTo(this.$element());
-    const items = [];
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { _showClock } = this.option();
 
-    if (this.option('_showClock')) {
-      // @ts-expect-error
+    const $box = $('<div>').appendTo(this.$element());
+    const items: BoxItemData[] = [];
+
+    if (_showClock) {
       items.push({
         ratio: 1,
         shrink: 0,
@@ -89,7 +101,7 @@ class TimeView extends Editor<TimeViewProperties> {
         template: this._renderClock.bind(this),
       });
     }
-    // @ts-expect-error
+
     items.push({
       ratio: 0,
       shrink: 0,
@@ -105,7 +117,7 @@ class TimeView extends Editor<TimeViewProperties> {
     });
   }
 
-  _renderClock(_, __, container): void {
+  _renderClock(_: BoxItemData, __: number, container: dxElementWrapper): void {
     this._$hourArrow = $('<div>').addClass(TIMEVIEW_HOURARROW_CLASS);
     this._$minuteArrow = $('<div>').addClass(TIMEVIEW_MINUTEARROW_CLASS);
 
@@ -118,16 +130,19 @@ class TimeView extends Editor<TimeViewProperties> {
   }
 
   _updateClock(): void {
-    const time = this._getValue();
-    const hourArrowAngle = time.getHours() / 12 * 360 + time.getMinutes() / 60 * 30;
-    const minuteArrowAngle = time.getMinutes() / 60 * 360;
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { _arrowOffset } = this.option();
 
-    rotateArrow(this._$hourArrow, hourArrowAngle, this.option('_arrowOffset'));
-    rotateArrow(this._$minuteArrow, minuteArrowAngle, this.option('_arrowOffset'));
+    const time = this._getValue();
+    const hourArrowAngle = (time.getHours() / 12) * 360 + (time.getMinutes() / 60) * 30;
+    const minuteArrowAngle = (time.getMinutes() / 60) * 360;
+
+    rotateArrow(this._$hourArrow, hourArrowAngle, _arrowOffset);
+    rotateArrow(this._$minuteArrow, minuteArrowAngle, _arrowOffset);
   }
 
-  _getBoxItems(is12HourFormat: boolean) {
-    const items = [{
+  _getBoxItems(is12HourFormat: boolean): BoxItemData[] {
+    const items: BoxItemData[] = [{
       ratio: 0,
       shrink: 0,
       baseSize: 'auto',
@@ -136,8 +151,8 @@ class TimeView extends Editor<TimeViewProperties> {
       ratio: 0,
       shrink: 0,
       baseSize: 'auto',
-      // @ts-expect-error ts-error
-      template: $('<div>').addClass(TIMEVIEW_TIME_SEPARATOR_CLASS).text(dateLocalization.getTimeSeparator()),
+      // @ts-expect-error core/DateLocalization type should be fixed
+      template: (): dxElementWrapper => $('<div>').addClass(TIMEVIEW_TIME_SEPARATOR_CLASS).text(dateLocalization.getTimeSeparator()),
     }, {
       ratio: 0,
       shrink: 0,
@@ -150,7 +165,7 @@ class TimeView extends Editor<TimeViewProperties> {
         ratio: 0,
         shrink: 0,
         baseSize: 'auto',
-        template: () => this._format12.$element(),
+        template: () => this._format12?.$element(),
       });
     }
 
@@ -158,7 +173,8 @@ class TimeView extends Editor<TimeViewProperties> {
   }
 
   _renderField(): dxElementWrapper {
-    const is12HourFormat = !this.option('use24HourFormat');
+    const { use24HourFormat } = this.option();
+    const is12HourFormat = !use24HourFormat;
 
     this._createHourBox(is12HourFormat);
     this._createMinuteBox();
@@ -188,7 +204,7 @@ class TimeView extends Editor<TimeViewProperties> {
         max: is12HourFormat ? 13 : 24,
         value: this._getValue().getHours(),
         onValueChanged: this._onHourBoxValueChanged.bind(this),
-        onKeyboardHandled: (opts) => this._keyboardHandler(opts),
+        onKeyboardHandled: (opts: KeyboardKeyDownEvent) => this._keyboardHandler(opts),
         ...this._getNumberBoxConfig(),
       },
     );
@@ -197,11 +213,14 @@ class TimeView extends Editor<TimeViewProperties> {
   }
 
   _isPM(): boolean {
-    // @ts-expect-error ts-error
-    return !this.option('use24HourFormat') && this._format12.option('value') === 1;
+    const { use24HourFormat } = this.option();
+
+    const format12Value = this._format12?.option().value;
+
+    return !use24HourFormat && format12Value === TIMEVIEW_FORMAT12_PM;
   }
 
-  _onHourBoxValueChanged({ value, component }) {
+  _onHourBoxValueChanged({ value, component }: { value: number; component: NumberBox }): void {
     const currentValue = this._getValue();
     const newValue = new Date(currentValue);
     let newHours = this._convertMaxHourToMin(value);
@@ -217,8 +236,10 @@ class TimeView extends Editor<TimeViewProperties> {
     this.option('value', newValue);
   }
 
-  _convertMaxHourToMin(hours): number {
-    const maxHoursValue = this.option('use24HourFormat') ? 24 : 12;
+  _convertMaxHourToMin(hours: number): number {
+    const { use24HourFormat } = this.option();
+
+    const maxHoursValue = use24HourFormat ? 24 : 12;
     return (maxHoursValue + hours) % maxHoursValue;
   }
 
@@ -230,8 +251,8 @@ class TimeView extends Editor<TimeViewProperties> {
         min: -1,
         max: 60,
         value: this._getValue().getMinutes(),
-        onKeyboardHandled: (opts) => this._keyboardHandler(opts),
-        onValueChanged: ({ value, component }) => {
+        onKeyboardHandled: (opts: KeyboardKeyDownEvent) => this._keyboardHandler(opts),
+        onValueChanged: ({ value, component }: { value: number; component: NumberBox }) => {
           const newMinutes = (60 + value) % 60;
           component.option('value', newMinutes);
 
@@ -248,8 +269,10 @@ class TimeView extends Editor<TimeViewProperties> {
   }
 
   _createFormat12Box(): void {
-    // @ts-expect-error ts-error
+    // @ts-expect-error core/DateLocalization type should be fixed
     const periodNames = dateLocalization.getPeriodNames();
+    const { stylingMode } = this.option();
+
     this._format12 = this._createComponent(
       $('<div>').addClass(TIMEVIEW_FORMAT12_CLASS),
       SelectBox,
@@ -260,7 +283,7 @@ class TimeView extends Editor<TimeViewProperties> {
         ],
         valueExpr: 'value',
         displayExpr: 'text',
-        onKeyboardHandled: (opts) => this._keyboardHandler(opts),
+        onKeyboardHandled: (opts: KeyboardKeyDownEvent) => this._keyboardHandler(opts),
         onValueChanged: ({ value }) => {
           const hours = this._getValue().getHours();
           const time = new Date(this._getValue());
@@ -273,15 +296,17 @@ class TimeView extends Editor<TimeViewProperties> {
           container: this.$element(),
         },
         value: this._getValue().getHours() >= 12 ? TIMEVIEW_FORMAT12_PM : TIMEVIEW_FORMAT12_AM,
-        stylingMode: this.option('stylingMode'),
+        stylingMode,
       },
     );
 
     this._format12.setAria('label', 'type');
   }
 
-  _refreshFormat12() {
-    if (this.option('use24HourFormat')) return;
+  _refreshFormat12(): void {
+    const { use24HourFormat } = this.option();
+
+    if (use24HourFormat) return;
 
     const value = this._getValue();
     const hours = value.getHours();
@@ -291,12 +316,15 @@ class TimeView extends Editor<TimeViewProperties> {
     this._silentEditorValueUpdate(this._format12, newValue);
   }
 
-  _silentEditorValueUpdate(editor, value) {
-    if (editor) {
-      editor._suppressValueChangeAction();
-      editor.option('value', value);
-      editor._resumeValueChangeAction();
+  // eslint-disable-next-line class-methods-use-this
+  _silentEditorValueUpdate(editor: NumberBox | SelectBox | undefined, value: number): void {
+    if (!editor) {
+      return;
     }
+
+    editor._suppressValueChangeAction();
+    editor.option('value', value);
+    editor._resumeValueChangeAction();
   }
 
   _getNumberBoxConfig(): NumberBoxMaskProperties {
@@ -312,7 +340,8 @@ class TimeView extends Editor<TimeViewProperties> {
   }
 
   _normalizeHours(hours: number): number {
-    return this.option('use24HourFormat') ? hours : hours % 12 || 12;
+    const { use24HourFormat } = this.option();
+    return use24HourFormat ? hours : hours % 12 || 12;
   }
 
   _updateField(): void {
@@ -325,7 +354,10 @@ class TimeView extends Editor<TimeViewProperties> {
   }
 
   _updateTime(): void {
-    if (this.option('_showClock')) {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { _showClock } = this.option();
+
+    if (_showClock) {
       this._updateClock();
     }
 

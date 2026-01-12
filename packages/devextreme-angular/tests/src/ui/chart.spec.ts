@@ -15,6 +15,7 @@ import {
 import dxChart from 'devextreme/viz/chart';
 
 @Component({
+  standalone: false,
   selector: 'test-container-component',
   template: '',
 })

@@ -27,9 +27,9 @@ export default class Utils {
   }
 
   static isValidAppointment(component, appointmentData) {
-    const startDate = new Date(appointmentData.startDate);
-    const endDate = new Date(appointmentData.endDate);
-    const cellDuration = component.option('cellDuration');
+    const startDate = appointmentData.startDate ? new Date(appointmentData.startDate) : new Date();
+    const endDate = appointmentData.endDate ? new Date(appointmentData.endDate) : new Date();
+    const cellDuration = Number(component.option('cellDuration'));
     return Utils.isValidAppointmentInterval(startDate, endDate, cellDuration);
   }
 
