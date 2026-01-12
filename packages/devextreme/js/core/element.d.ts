@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { dxElementWrapper } from './renderer';
 
 export interface Condition {}
