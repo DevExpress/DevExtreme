@@ -30,14 +30,14 @@ const customizeLayer: ILayerProps['customize'] = (elements) => {
 };
 
 const clickHandler = ({ target }: VectorMapTypes.ClickEvent) => {
-  const name = target?.attribute('name') as keyof typeof countries;
+  const name = target?.attribute('name') as CountriesKey;
   if (target && countries[name]) {
     target.selected(!target.selected());
   }
 };
 
 const customizeTooltip: ITooltipProps['customizeTooltip'] = ({ attribute }) => {
-  const name = attribute('name') as keyof typeof countries;
+  const name = attribute('name') as CountriesKey;
   const country = countries[name];
   if (country) {
     return {
