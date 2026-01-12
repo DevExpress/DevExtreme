@@ -22,24 +22,24 @@ const App = () => {
   const continentChanged = useCallback(({ value }) => {
     setCoordinates(value);
     mapRef?.current?.instance().viewport(value);
-  }, [setCoordinates]);
+  }, []);
 
   const zoomFactorChanged = useCallback((e: VectorMapTypes.ZoomFactorChangedEvent) => {
     setZoomFactor(e.zoomFactor.toFixed(2));
-  }, [setZoomFactor]);
+  }, []);
 
   const centerChanged = useCallback((e: VectorMapTypes.CenterChangedEvent) => {
     const value = `${e.center[0].toFixed(3)}, ${e.center[1].toFixed(3)}`;
     setCenter(value);
-  }, [setCenter]);
+  }, []);
 
   const panVisibleChange = useCallback((value) => {
     setPanVisible(value);
-  }, [setPanVisible]);
+  }, []);
 
   const zoomVisibleChange = useCallback((value) => {
     setZoomVisible(value);
-  }, [setZoomVisible]);
+  }, []);
 
   return (
     <div>
