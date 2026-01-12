@@ -304,13 +304,13 @@ export default class ViewDataProvider {
           allDay: cellAllDay,
         } = cellData;
 
-        if(groupIndex !== cellGroupIndex) {
+        if(groupIndex !== cellGroupIndex || allDay !== cellAllDay) {
           continue;
         }
 
         const isDateInCell = allDay
-          ? Boolean(cellAllDay) && dateUtils.sameDate(date, cellStartDate)
-          : Boolean(!cellAllDay) && date >= cellStartDate && date < cellEndDate;
+          ? dateUtils.sameDate(date, cellStartDate)
+          : date >= cellStartDate && date < cellEndDate;
 
         const diff = Math.min(
           Math.abs(date.getTime() - cellStartDate.getTime()),
@@ -318,7 +318,6 @@ export default class ViewDataProvider {
         );
 
         if(isDateInCell || (findClosest && diff < resultDiff)) {
-          console.log(cellStartDate, diff);
           resultDiff = diff;
           resultCellData = cellData;
           resultCellColumnIndex = columnIndex;
@@ -331,8 +330,8 @@ export default class ViewDataProvider {
       }
     }
 
-    if(resultCellData) {
-      return {
+    return resultCellData
+      ? {
         position: {
           columnIndex: resultCellColumnIndex,
           rowIndex: showAllDayPanel && !this._options.isVerticalGrouping
@@ -340,10 +339,8 @@ export default class ViewDataProvider {
             : resultCellRowIndex,
         },
         cellData: resultCellData,
-      };
-    }
-
-    return undefined;
+      }
+      : undefined;
   }
 
   getSkippedDaysCount(groupIndex, startDate, endDate, daysCount) {
