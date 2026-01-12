@@ -94,10 +94,10 @@ export class DxiTreeListValidationRuleComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get validationCallback(): ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean) {
+    get validationCallback(): ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => boolean) {
         return this._getOption('validationCallback');
     }
-    set validationCallback(value: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean)) {
+    set validationCallback(value: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => boolean)) {
         this._setOption('validationCallback', value);
     }
 
