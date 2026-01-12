@@ -181,6 +181,7 @@ import DxForm, {
 } from 'devextreme-vue/form';
 import DxAutocomplete from 'devextreme-vue/autocomplete'; // for editor-type=dxAutocomplete
 import 'devextreme-vue/date-range-box';
+import type { ValidationCallbackData } from 'devextreme-vue/common';
 import notify from 'devextreme/ui/notify';
 import Validator from 'devextreme/ui/validator';
 import service from './data.ts';
@@ -312,11 +313,11 @@ function passwordComparison() {
 function checkComparison() {
   return true;
 }
-function asyncValidation(params: Record<string, any>) {
+function asyncValidation(params: ValidationCallbackData) {
   return sendRequest(params.value);
 }
-function validateVacationDatesRange({ value }: Record<string, any>) {
-  const [startDate, endDate] = value;
+function validateVacationDatesRange(params: ValidationCallbackData) {
+  const [startDate, endDate] = params.value;
 
   if (startDate === null || endDate === null) {
     return true;
@@ -327,8 +328,8 @@ function validateVacationDatesRange({ value }: Record<string, any>) {
 
   return daysDifference < 25;
 }
-function validateVacationDatesPresence({ value }: Record<string, any>) {
-  const [startDate, endDate] = value;
+function validateVacationDatesPresence(params: ValidationCallbackData) {
+  const [startDate, endDate] = params.value;
 
   if (startDate === null && endDate === null) {
     return true;

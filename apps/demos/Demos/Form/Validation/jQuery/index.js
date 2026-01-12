@@ -145,8 +145,8 @@ $(() => {
         },
         validationRules: [{
           type: 'custom',
-          validationCallback: ({ value }) => {
-            const [startDate, endDate] = value;
+          validationCallback: (params) => {
+            const [startDate, endDate] = params.value;
 
             if (startDate === null || endDate === null) {
               return true;
@@ -160,8 +160,8 @@ $(() => {
           message: 'The vacation period must not exceed 25 days',
         }, {
           type: 'custom',
-          validationCallback: ({ value }) => {
-            const [startDate, endDate] = value;
+          validationCallback: (params) => {
+            const [startDate, endDate] = params.value;
 
             if (startDate === null && endDate === null) {
               return true;

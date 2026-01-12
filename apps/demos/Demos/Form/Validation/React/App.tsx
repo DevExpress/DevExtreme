@@ -14,12 +14,12 @@ import Form, {
   CustomRule,
 } from 'devextreme-react/form';
 import type { FormRef, FormTypes } from 'devextreme-react/form';
-import type { ButtonType } from 'devextreme-react/common';
 import type { IAutocompleteOptions } from 'devextreme-react/autocomplete';
 import type { ISelectBoxOptions } from 'devextreme-react/select-box';
 import type { ITextBoxOptions } from 'devextreme-react/text-box';
 import type { IDateBoxOptions } from 'devextreme-react/date-box';
 import type { IDateRangeBoxOptions } from 'devextreme-react/date-range-box';
+import type { ButtonType, ValidationCallbackData } from 'devextreme-react/common';
 import notify from 'devextreme/ui/notify';
 import Validator from 'devextreme/ui/validator';
 import 'devextreme-react/autocomplete';
@@ -100,10 +100,10 @@ const passwordComparison = (): string => customer.Password;
 
 const checkComparison = (): boolean => true;
 
-const asyncValidation = ({ value }: { value: any; }): Promise<unknown> => sendRequest(value);
+const asyncValidation = (params: ValidationCallbackData): Promise<unknown> => sendRequest(params.value);
 
-const validateVacationDatesRange = ({ value }: { value: any; }): boolean => {
-  const [startDate, endDate] = value;
+const validateVacationDatesRange = (params: ValidationCallbackData): boolean => {
+  const [startDate, endDate] = params.value;
 
   if (startDate === null || endDate === null) {
     return true;
@@ -115,8 +115,8 @@ const validateVacationDatesRange = ({ value }: { value: any; }): boolean => {
   return daysDifference < 25;
 };
 
-const validateVacationDatesPresence = ({ value }: { value: any }): boolean => {
-  const [startDate, endDate] = value;
+const validateVacationDatesPresence = (params: ValidationCallbackData): boolean => {
+  const [startDate, endDate] = params.value;
 
   if (startDate === null && endDate === null) {
     return true;

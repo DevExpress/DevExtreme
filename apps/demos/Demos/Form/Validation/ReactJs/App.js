@@ -78,9 +78,9 @@ function sendRequest(value) {
 }
 const passwordComparison = () => customer.Password;
 const checkComparison = () => true;
-const asyncValidation = ({ value }) => sendRequest(value);
-const validateVacationDatesRange = ({ value }) => {
-  const [startDate, endDate] = value;
+const asyncValidation = (params) => sendRequest(params.value);
+const validateVacationDatesRange = (params) => {
+  const [startDate, endDate] = params.value;
   if (startDate === null || endDate === null) {
     return true;
   }
@@ -88,8 +88,8 @@ const validateVacationDatesRange = ({ value }) => {
   const daysDifference = Math.abs((endDate - startDate) / millisecondsPerDay);
   return daysDifference < 25;
 };
-const validateVacationDatesPresence = ({ value }) => {
-  const [startDate, endDate] = value;
+const validateVacationDatesPresence = (params) => {
+  const [startDate, endDate] = params.value;
   if (startDate === null && endDate === null) {
     return true;
   }

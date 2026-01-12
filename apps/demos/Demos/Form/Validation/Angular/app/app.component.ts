@@ -13,12 +13,12 @@ import {
 } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import Validator from 'devextreme/ui/validator';
-import { AsyncRule } from 'devextreme-angular/common';
 import { DxFormModule, DxFormComponent, DxFormTypes } from 'devextreme-angular/ui/form';
 import { DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
 import { DxDateBoxTypes } from 'devextreme-angular/ui/date-box';
 import { DxDateRangeBoxTypes } from 'devextreme-angular/ui/date-range-box';
 import { DxButtonModule, DxButtonTypes } from 'devextreme-angular/ui/button';
+import type { ValidationCallbackData } from 'devextreme-angular/common';
 import { Customer, Service } from './app.service';
 
 type EditorOptions = DxTextBoxTypes.Properties;
@@ -190,8 +190,8 @@ export class AppComponent {
     );
   };
 
-  validateVacationDatesRange({ value }) {
-    const [startDate, endDate] = value;
+  validateVacationDatesRange(params: ValidationCallbackData) {
+    const [startDate, endDate] = params.value;
 
     if (startDate === null || endDate === null) {
       return true;
@@ -203,8 +203,8 @@ export class AppComponent {
     return daysDifference < 25;
   }
 
-  validateVacationDatesPresence({ value }) {
-    const [startDate, endDate] = value;
+  validateVacationDatesPresence(params: ValidationCallbackData) {
+    const [startDate, endDate] = params.value;
 
     if (startDate === null && endDate === null) {
       return true;
@@ -213,7 +213,7 @@ export class AppComponent {
     return startDate !== null && endDate !== null;
   }
 
-  asyncValidation: AsyncRule['validationCallback'] = ({ value }) => sendRequest(value);
+  asyncValidation = (params: ValidationCallbackData) => sendRequest(params.value);
 
   onFormSubmit = (e: SubmitEvent) => {
     notify({
