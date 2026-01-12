@@ -7,7 +7,7 @@ import {
   REGENERATION_TEXT,
 } from './data.ts';
 import { getAIResponse } from './service.ts';
-import type { Message } from './service.ts';
+import type { AIMessage } from './service.ts';
 
 const store: ChatTypes.Message[] = [];
 
@@ -31,12 +31,12 @@ export const dataSource = new DataSource({
   paginate: false,
 });
 
-const dataItemToMessage = (item: ChatTypes.Message): Message => ({
-  role: item.author?.id as Message['role'],
+const dataItemToMessage = (item: ChatTypes.Message): AIMessage => ({
+  role: item.author?.id as AIMessage['role'],
   content: item.text,
 });
 
-const getMessageHistory = (): Message[] => [...dataSource.items()].map(dataItemToMessage);
+const getMessageHistory = (): AIMessage[] => [...dataSource.items()].map(dataItemToMessage);
 
 export const useApi = () => {
   const [alerts, setAlerts] = useState<ChatTypes.Alert[]>([]);

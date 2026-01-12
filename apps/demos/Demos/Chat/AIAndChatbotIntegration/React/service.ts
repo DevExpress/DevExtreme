@@ -1,11 +1,14 @@
 import { AzureOpenAI, OpenAI } from 'openai';
-import type { AIResponse } from 'devextreme/common/ai-integration';
+import { type AIResponse } from 'devextreme/common/ai-integration';
 
-type Message = (OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionAssistantMessageParam) & {
-  content: string;
-};
+export type AIMessage = (
+  OpenAI.ChatCompletionUserMessageParam
+  | OpenAI.ChatCompletionSystemMessageParam
+  | OpenAI.ChatCompletionAssistantMessageParam) & {
+    content: string;
+  };
 
-export const AzureOpenAIConfig = {
+const AzureOpenAIConfig = {
   dangerouslyAllowBrowser: true,
   deployment: 'gpt-4o-mini',
   apiVersion: '2024-02-01',
@@ -20,7 +23,7 @@ const wait = (delay: number): Promise<void> =>
     setTimeout(resolve, delay);
   });
 
-export async function getAIResponse(messages: Message[], delay?: number): Promise<AIResponse> {
+export async function getAIResponse(messages: AIMessage[], delay?: number): Promise<AIResponse> {
   const params = {
     messages,
     model: AzureOpenAIConfig.deployment,
@@ -37,5 +40,3 @@ export async function getAIResponse(messages: Message[], delay?: number): Promis
 
   return data.choices[0].message?.content ?? '';
 }
-
-export type { Message };

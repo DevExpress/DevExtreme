@@ -1,5 +1,12 @@
-import { AzureOpenAI } from 'openai';
-import { type DxChatTypes } from 'devextreme-vue/chat';
+import { AzureOpenAI, OpenAI } from 'openai';
+import { type AIResponse } from 'devextreme/common/ai-integration';
+
+export type AIMessage = (
+  OpenAI.ChatCompletionUserMessageParam
+  | OpenAI.ChatCompletionSystemMessageParam
+  | OpenAI.ChatCompletionAssistantMessageParam) & {
+    content: string;
+  };
 
 const AzureOpenAIConfig = {
   dangerouslyAllowBrowser: true,
@@ -11,7 +18,7 @@ const AzureOpenAIConfig = {
 
 const chatService = new AzureOpenAI(AzureOpenAIConfig);
 
-export async function getAIResponse(messages: DxChatTypes.Message[]): Promise<string> {
+export async function getAIResponse(messages: AIMessage[]): Promise<AIResponse> {
   const params: Record<string, any> = {
     messages,
     model: AzureOpenAIConfig.deployment,

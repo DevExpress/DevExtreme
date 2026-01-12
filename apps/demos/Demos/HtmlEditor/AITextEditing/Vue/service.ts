@@ -4,12 +4,19 @@ import {
   type RequestParams,
   type Response,
 } from 'devextreme-vue/common/ai-integration';
-import { AzureOpenAIConfig } from './data.ts';
 
 type AIMessage = (
   OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionSystemMessageParam
 ) & {
   content: string;
+};
+
+const AzureOpenAIConfig = {
+  dangerouslyAllowBrowser: true,
+  deployment: 'gpt-4o-mini',
+  apiVersion: '2024-02-01',
+  endpoint: 'https://public-api.devexpress.com/demo-openai',
+  apiKey: 'DEMO',
 };
 
 const aiService = new AzureOpenAI(AzureOpenAIConfig);

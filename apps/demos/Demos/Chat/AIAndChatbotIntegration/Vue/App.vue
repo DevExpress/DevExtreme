@@ -117,7 +117,7 @@ async function processMessageSending(
   typingUsers.value = [assistant];
 
   try {
-    const aiResponse = await getAIResponse(messages);
+    const aiResponse = await getAIResponse(messages) as string;
 
     setTimeout(() => {
       typingUsers.value = [];
@@ -148,7 +148,7 @@ async function regenerate(): Promise<void> {
   const lastMessage = messages.at(-1);
 
   try {
-    const aiResponse = await getAIResponse(messages.slice(0, -1));
+    const aiResponse = await getAIResponse(messages.slice(0, -1)) as string;
 
     updateLastMessage(aiResponse);
 

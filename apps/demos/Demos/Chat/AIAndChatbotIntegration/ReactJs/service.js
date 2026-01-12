@@ -1,6 +1,6 @@
 import { AzureOpenAI } from 'openai';
 
-export const AzureOpenAIConfig = {
+const AzureOpenAIConfig = {
   dangerouslyAllowBrowser: true,
   deployment: 'gpt-4o-mini',
   apiVersion: '2024-02-01',

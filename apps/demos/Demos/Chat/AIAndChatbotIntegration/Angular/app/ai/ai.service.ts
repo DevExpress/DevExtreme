@@ -1,26 +1,34 @@
 import { Injectable } from '@angular/core';
-import { AzureOpenAI } from 'openai';
+import { AzureOpenAI, OpenAI } from 'openai';
+import { type AIResponse } from 'devextreme/common/ai-integration';
+
+export type AIMessage = (
+  OpenAI.ChatCompletionUserMessageParam
+  | OpenAI.ChatCompletionSystemMessageParam
+  | OpenAI.ChatCompletionAssistantMessageParam) & {
+    content: string;
+  };
+
+const AzureOpenAIConfig = {
+  dangerouslyAllowBrowser: true,
+  deployment: 'gpt-4o-mini',
+  apiVersion: '2024-02-01',
+  endpoint: 'https://public-api.devexpress.com/demo-openai',
+  apiKey: 'DEMO',
+};
 
 @Injectable()
 export class AiService {
   chatService: AzureOpenAI;
 
-  AzureOpenAIConfig = {
-    dangerouslyAllowBrowser: true,
-    deployment: 'gpt-4o-mini',
-    apiVersion: '2024-02-01',
-    endpoint: 'https://public-api.devexpress.com/demo-openai',
-    apiKey: 'DEMO',
-  };
-
   constructor() {
-    this.chatService = new AzureOpenAI(this.AzureOpenAIConfig);
+    this.chatService = new AzureOpenAI(AzureOpenAIConfig);
   }
 
-  async getAIResponse(messages: any[]) {
+  async getAIResponse(messages: AIMessage[]): Promise<AIResponse> {
     const params = {
       messages,
-      model: this.AzureOpenAIConfig.deployment,
+      model: AzureOpenAIConfig.deployment,
       max_tokens: 1000,
       temperature: 0.7,
     };

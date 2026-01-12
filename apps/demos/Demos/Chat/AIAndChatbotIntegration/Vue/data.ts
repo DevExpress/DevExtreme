@@ -5,6 +5,7 @@ import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import rehypeStringify from 'rehype-stringify';
 import rehypeMinifyWhitespace from 'rehype-minify-whitespace';
+import { type AIMessage } from './service';
 
 export const dictionary = {
   en: {
@@ -27,7 +28,8 @@ export const assistant = {
   name: 'Virtual Assistant',
 };
 
-export const messages: DxChatTypes.Message[] = [];
+export const messages: AIMessage[] = [];
+
 const store: DxChatTypes.Message[] = [];
 
 const customStore = new CustomStore<DxChatTypes.Message>({

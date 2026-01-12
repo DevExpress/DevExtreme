@@ -7,7 +7,7 @@ import rehypeStringify from 'rehype-stringify';
 import rehypeMinifyWhitespace from 'rehype-minify-whitespace';
 import { type DxChatTypes } from 'devextreme-angular/ui/chat';
 import { DataSource, CustomStore } from 'devextreme-angular/common/data';
-import { AiService } from './ai/ai.service';
+import { AiService, type AIMessage } from './ai/ai.service';
 
 @Injectable({
   providedIn: 'root',
@@ -31,7 +31,7 @@ export class AppService {
 
   store: any[] = [];
 
-  messages: any[] = [];
+  messages: AIMessage[] = [];
 
   alerts: DxChatTypes.Alert[] = [];
 
@@ -90,11 +90,11 @@ export class AppService {
     });
   }
 
-  async getAIResponse(messages) {
-    return this.aiService.getAIResponse(messages);
+  async getAIResponse(messages: AIMessage[]): Promise<string> {
+    return this.aiService.getAIResponse(messages) as Promise<string>;
   }
 
-  async processMessageSending(message) {
+  async processMessageSending(message: DxChatTypes.Message) {
     this.messages.push({ role: 'user', content: message.text });
     this.typingUsersSubject.next([this.assistant]);
 
