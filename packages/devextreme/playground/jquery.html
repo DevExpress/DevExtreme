@@ -49,13 +49,142 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+        <div id="chat"></div>
         <script>
             $(() => {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: () => { alert("clicked"); }
+                const store = [];
+
+                const user = {
+                    id: 'user1',
+                    name: 'User',
+                };
+
+                const assistant = {
+                    id: 'assistant1',
+                    name: 'AI Assistant',
+                };
+
+                store.push(
+                    {
+                        id: 1,
+                        timestamp: new Date('2024-01-15T10:00:00'),
+                        author: user,
+                        text: 'Check the current weather conditions in London.',
+                    },
+                    {
+                        id: 2,
+                        timestamp: new Date('2024-01-15T10:00:30'),
+                        author: assistant,
+                        text: 'The current weather in London is 59°F (15°C).',
+                        metadata: {
+                            functionCall: {
+                                name: 'GetWeather',
+                                arguments: [
+                                    { city: 'London' },
+                                ],
+                                result: '59°F (15°C)',
+                            },
+                        },
+                    },
+                    {
+                        id: 3,
+                        timestamp: new Date('2024-01-15T10:01:00'),
+                        author: user,
+                        text: 'What about New York?',
+                    },
+                    {
+                        id: 4,
+                        timestamp: new Date('2024-01-15T10:01:30'),
+                        author: assistant,
+                        text: 'The temperature in New York is currently 45°F (7°C) with partly cloudy skies.',
+                        metadata: {
+                            functionCall: {
+                                name: 'GetWeather',
+                                arguments: [
+                                    { city: 'New York' },
+                                    { units: 'imperial' },
+                                ],
+                                result: {
+                                    temperature: '45°F (7°C)',
+                                    conditions: 'partly cloudy',
+                                },
+                            },
+                        },
+                    }
+                );
+
+                const customStore = new DevExpress.data.CustomStore({
+                    key: 'id',
+                    load: () => {
+                        const d = $.Deferred();
+                        setTimeout(() => {
+                            d.resolve([...store]);
+                        });
+                        return d.promise();
+                    },
+                    insert: (message) => {
+                        const d = $.Deferred();
+                        setTimeout(() => {
+                            store.push(message);
+                            d.resolve();
+                        });
+                        return d.promise();
+                    },
                 });
+
+                const dataSource = new DevExpress.data.DataSource({
+                    store: customStore,
+                    paginate: false,
+                });
+
+                const chatInstance = $("#chat").dxChat({
+                    user,
+                    height: 600,
+                    dataSource: dataSource,
+                    reloadOnChange: false,
+                    showDayHeaders: true,
+                    showAvatar: true,
+                    showUserName: true,
+                    showMessageTimestamp: true,
+                    onMessageEntered: (e) => {
+                        const { message } = e;
+
+                        dataSource.store().push([{ 
+                            type: 'insert', 
+                            data: { 
+                                id: Date.now(), 
+                                ...message 
+                            } 
+                        }]);
+
+                        setTimeout(() => {
+                            const responseMessage = {
+                                id: Date.now() + 1,
+                                timestamp: new Date(),
+                                author: assistant,
+                                text: `Response to: "${message.text}"`,
+                                metadata: {
+                                    functionCall: {
+                                        name: 'ProcessUserQuery',
+                                        arguments: [
+                                            { query: message.text },
+                                            { timestamp: new Date().toISOString() }
+                                        ],
+                                        result: {
+                                            status: 'success',
+                                            processed: true
+                                        }
+                                    }
+                                }
+                            };
+                            
+                            dataSource.store().push([{ 
+                                type: 'insert', 
+                                data: responseMessage 
+                            }]);
+                        }, 500);
+                    }
+                }).dxChat('instance');
             });
         </script>
     </div>

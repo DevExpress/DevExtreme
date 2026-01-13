@@ -234,6 +234,51 @@ export type Attachment = {
 /**
  * @docid
  * @namespace DevExpress.ui.dxChat
+ * @public
+ */
+export type FunctionCallArgument = {
+    [key: string]: any;
+};
+
+/**
+ * @docid
+ * @namespace DevExpress.ui.dxChat
+ * @public
+ */
+export type FunctionCall = {
+    /**
+     * @docid
+     * @public
+     */
+    name: string;
+    /**
+     * @docid
+     * @public
+     */
+    arguments: FunctionCallArgument[];
+    /**
+     * @docid
+     * @public
+     */
+    result: any;
+};
+
+/**
+ * @docid
+ * @namespace DevExpress.ui.dxChat
+ * @public
+ */
+export type MetaData = {
+    /**
+     * @docid
+     * @public
+     */
+    functionCall: FunctionCall;
+};
+
+/**
+ * @docid
+ * @namespace DevExpress.ui.dxChat
  * @type object
  * @hidden
  */
@@ -292,6 +337,11 @@ export type TextMessage = MessageBase & {
      * @public
      */
     isEdited?: boolean;
+    /**
+     * @docid
+     * @public
+     */
+    metadata?: MetaData;
 
     [key: string]: any;
 };

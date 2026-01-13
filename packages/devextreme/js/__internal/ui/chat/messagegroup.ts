@@ -139,6 +139,7 @@ class MessageGroup extends Widget<Properties> {
       options.src = (message as ImageMessage).src;
     } else {
       options.text = (message as TextMessage).text;
+      options.metadata = (message as TextMessage).metadata;
     }
 
     if (messageTemplate) {
