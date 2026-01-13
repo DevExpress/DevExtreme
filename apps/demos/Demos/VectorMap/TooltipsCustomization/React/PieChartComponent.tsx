@@ -4,8 +4,9 @@ import PieChart, {
   Label,
   Legend,
   Connector,
-  ILabelProps,
 } from 'devextreme-react/pie-chart';
+
+import type { ILabelProps } from 'devextreme-react/pie-chart';
 
 interface PieChartDataItem {
   name: string;
