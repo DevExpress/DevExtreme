@@ -303,8 +303,20 @@ export class ColumnChooserView extends ColumnsView {
     return this.getBandColumnVisibility(columnIndex);
   }
 
+  private sortNodesByBandColumns(nodes): any[] {
+    return [...nodes].sort((a, b) => {
+      const columnA = this._columnsController.columnOption(a.itemData.id);
+      const columnB = this._columnsController.columnOption(b.itemData.id);
+      const isBandA = columnA?.hasColumns ? 1 : 0;
+      const isBandB = columnB?.hasColumns ? 1 : 0;
+      return isBandA - isBandB;
+    });
+  }
+
   private updateColumnVisibility(nodes): void {
-    nodes.forEach((node) => {
+    const sortedNodes = this.sortNodesByBandColumns(nodes);
+
+    sortedNodes.forEach((node) => {
       const columnIndex = node.itemData.id;
       const isVisible = this.getColumnVisibility(columnIndex, node.selected);
 

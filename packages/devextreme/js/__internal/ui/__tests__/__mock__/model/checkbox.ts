@@ -8,8 +8,6 @@ export class CheckBoxModel {
   }
 
   public toggle(): void {
-    const instance = this.getInstance();
-    const currentValue = instance.option('value');
-    instance.option('value', !currentValue);
+    this.root.click();
   }
 }

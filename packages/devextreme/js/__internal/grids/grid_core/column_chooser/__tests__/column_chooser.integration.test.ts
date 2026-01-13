@@ -139,5 +139,88 @@ describe('Bugs', () => {
       expect(visibleColumnsLevel1.find((col) => col.dataField === 'skype')).toBeDefined();
       expect(visibleColumnsLevel0.find((col) => col.dataField === 'name')).toBeUndefined();
     });
+
+    it('should hide banded column by click', async () => {
+      const { instance, component } = await createDataGrid({
+        dataSource: [
+          {
+            id: 1,
+            name: 'Name 1',
+            value: 10,
+            phone: 'Banded 1',
+            email: 'Banded 2',
+            skype: 'Banded 3',
+          },
+        ],
+        columnChooser: {
+          enabled: true,
+          search: {
+            enabled: true,
+          },
+          mode: 'select',
+          selection: {
+            recursive: true,
+            selectByClick: true,
+            allowSelectAll: true,
+          },
+        },
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            caption: 'Contacts',
+            columns: [
+              {
+                dataField: 'phone',
+                visible: false,
+              },
+              {
+                dataField: 'email',
+              },
+              {
+                dataField: 'skype',
+              },
+            ],
+          },
+        ],
+      });
+
+      let visibleColumnsLevel0 = instance.getVisibleColumns(0);
+      let visibleColumnsLevel1 = instance.getVisibleColumns(1);
+
+      expect(visibleColumnsLevel0.find((col) => col.caption === 'Contacts')).toBeDefined();
+      expect(visibleColumnsLevel1.find((col) => col.dataField === 'phone')).toBeUndefined();
+      expect(visibleColumnsLevel1.find((col) => col.dataField === 'email')).toBeDefined();
+      expect(visibleColumnsLevel1.find((col) => col.dataField === 'skype')).toBeDefined();
+
+      instance.showColumnChooser();
+      jest.runAllTimers();
+
+      const columnChooser = component.getColumnChooser();
+      expect(columnChooser.isVisible()).toBe(true);
+
+      columnChooser.toggleColumn('Contacts');
+      jest.runAllTimers();
+
+      visibleColumnsLevel0 = instance.getVisibleColumns(0);
+      visibleColumnsLevel1 = instance.getVisibleColumns(1);
+
+      expect(visibleColumnsLevel0.find((col) => col.caption === 'Contacts')).toBeDefined();
+      expect(visibleColumnsLevel1.find((col) => col.dataField === 'phone')).toBeDefined();
+      expect(visibleColumnsLevel1.find((col) => col.dataField === 'email')).toBeDefined();
+      expect(visibleColumnsLevel1.find((col) => col.dataField === 'skype')).toBeDefined();
+
+      columnChooser.toggleColumn('Contacts');
+      jest.runAllTimers();
+
+      visibleColumnsLevel0 = instance.getVisibleColumns(0);
+      visibleColumnsLevel1 = instance.getVisibleColumns(1);
+
+      expect(visibleColumnsLevel0.find((col) => col.caption === 'Contacts')).toBeUndefined();
+      expect(visibleColumnsLevel1.find((col) => col.dataField === 'phone')).toBeUndefined();
+      expect(visibleColumnsLevel1.find((col) => col.dataField === 'email')).toBeUndefined();
+      expect(visibleColumnsLevel1.find((col) => col.dataField === 'skype')).toBeUndefined();
+    });
   });
 });
