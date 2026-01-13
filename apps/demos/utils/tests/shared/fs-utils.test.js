@@ -118,7 +118,7 @@ describe('common functions', () => {
     const expectedPath = path.join(baseDemosDir, 'Widget2', demoName);
 
     expect(fileSystemUtils.getDemoPathByMeta(
-      [ categoryName, groupName, demoName ],
+      [categoryName, groupName, demoName],
       baseDemosDir,
       menuMetaData,
     )).toBe(expectedPath);
@@ -146,7 +146,7 @@ describe('Hi-level copy functions', () => {
     fileSystemExtra.copySync.mockClear();
   });
 
-  test(`replaceRelativePaths (mkdir)`, () => {
+  test('replaceRelativePaths (mkdir)', () => {
     fs.readdirSync.mockImplementation(() => []);
     fs.existsSync.mockImplementation(() => false);
 
@@ -173,12 +173,12 @@ describe('Hi-level copy functions', () => {
 
       expect(fs.writeFileSync.mock.calls[0]).toStrictEqual([
         path.join(basePath, file),
-        `${relativePath}node_modules`
+        `${relativePath}node_modules`,
       ]);
     });
   });
 
-  test(`replaceRelativePaths (dir)`, () => {
+  test('replaceRelativePaths (dir)', () => {
     const file = 'index.html';
     const fromPath = path.join('utils', 'templates', 'Angular');
     fs.existsSync.mockImplementation(() => true);
@@ -187,12 +187,12 @@ describe('Hi-level copy functions', () => {
         return [({
           isDirectory: () => true,
           name: 'app',
-        })]
+        })];
       }
       return [({
         isDirectory: () => false,
         name: file,
-      })]
+      })];
     });
 
     fs.readFileSync.mockImplementation(() => '__RELATIVE_PATH__node_modules');
@@ -200,7 +200,7 @@ describe('Hi-level copy functions', () => {
 
     expect(fs.writeFileSync.mock.calls[0]).toStrictEqual([
       path.join('Parent', 'Demo', 'Angular', 'app', file),
-      `../../../../node_modules`
+      '../../../../node_modules',
     ]);
   });
 

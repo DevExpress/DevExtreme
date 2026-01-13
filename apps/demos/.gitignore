@@ -9,7 +9,6 @@ NuGet
 .vscode/*
 .idea
 .vs
-.idea
 *.orig
 *.rej
 *.ldf
@@ -31,6 +30,7 @@ Demos/**/config.js
 Demos/**/tsconfig.json
 
 .DS_Store
+**/.DS_Store
 publish-demos
 
 .angular

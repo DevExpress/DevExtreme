@@ -64,13 +64,13 @@ import {
   DxScrolling,
   DxPager,
   DxPaging,
-  type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
+import type { DxDataGridTypes } from 'devextreme-vue/data-grid';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
-import { type DisplayMode } from 'devextreme-vue/common';
+import type { DisplayMode } from 'devextreme-vue/common';
+import type { PagerPageSize } from 'devextreme-vue/common/grids';
 import { generateData } from './data.ts';
-import { type PagerPageSize } from 'devextreme-vue/common/grids';
 
 const dataSource = generateData(100000);
 const displayModes: {

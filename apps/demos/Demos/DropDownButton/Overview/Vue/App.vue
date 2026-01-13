@@ -254,6 +254,6 @@ function onColorClick(clickedColor: string) {
   }
 
   #custom-template .dx-button.dx-dropdownbutton-action .dx-button-content {
-    padding-inline: 12px 12px;
+    padding-inline: 12px;
   }
 </style>

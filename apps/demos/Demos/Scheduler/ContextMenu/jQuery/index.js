@@ -53,7 +53,7 @@ $(() => {
   };
 
   const onItemClick = function (contextMenuEvent) {
-    return function (e) {
+    return (e) => {
       e.itemData.onItemClick(contextMenuEvent, e);
     };
   };

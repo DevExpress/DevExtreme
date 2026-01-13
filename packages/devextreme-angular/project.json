@@ -418,7 +418,8 @@
       "{projectRoot}/package.json",
       "{projectRoot}/metadata/**/*",
       "{workspaceRoot}/tsconfig.json",
-      "{workspaceRoot}/tools/generators-config.js"
+      "{workspaceRoot}/tools/generators-config.js",
+      "{workspaceRoot}/packages/devextreme-metadata/**/*"
     ],
     "test": [
       "{projectRoot}/tests/**/*",

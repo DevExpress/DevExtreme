@@ -90,7 +90,7 @@ type HeaderFilterDataSourceArg = {
 };
 
 function orderDateHeaderFilterDataSource(data: HeaderFilterDataSourceArg): void {
-  data.dataSource.postProcess = function (results: Array<{ text: string; value: unknown }>) {
+  data.dataSource.postProcess = (results: Array<{ text: string; value: unknown }>) => {
     results.push({
       text: 'Weekends',
       value: 'weekends',

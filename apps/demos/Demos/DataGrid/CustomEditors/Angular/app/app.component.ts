@@ -79,16 +79,14 @@ export class AppComponent {
     if (target === 'search' && typeof (filterValue) === 'string') {
       return [(this as any).dataField, 'contains', filterValue];
     }
-    return function (rowData) {
-      return (rowData.AssignedEmployee || []).indexOf(filterValue) !== -1;
-    };
+    return (rowData) => (rowData.AssignedEmployee || []).indexOf(filterValue) !== -1;
   }
 
   cellTemplate(container, options) {
     const noBreakSpace = '\u00A0';
 
     const assignees = (options.value || []).map(
-      (assigneeId: number) => options.column!.lookup!.calculateCellValue!(assigneeId),
+      (assigneeId: number) => options.column?.lookup?.calculateCellValue?.(assigneeId),
     );
     const text = assignees.join(', ');
 

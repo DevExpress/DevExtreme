@@ -17,7 +17,7 @@ const customizeTooltip: ITooltipProps['customizeTooltip'] = (arg) => {
       text: arg.attribute('tooltip'),
     };
   }
-  return null;
+  return {};
 };
 
 const customizeText: ILegendProps['customizeText'] = (arg) => names[arg.index];

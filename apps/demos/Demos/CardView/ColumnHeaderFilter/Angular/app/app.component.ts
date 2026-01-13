@@ -27,7 +27,7 @@ function getOrderDay(rowData: Order) {
 })
 export class AppComponent {
   orderDateHeaderFilterDataSource(data) {
-    data.dataSource.postProcess = function (results) {
+    data.dataSource.postProcess = (results) => {
       results.push({
         text: 'Weekends',
         value: 'weekends',
