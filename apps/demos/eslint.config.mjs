@@ -1,6 +1,9 @@
 import globals from 'globals';
 import babelParser from '@babel/eslint-parser';
-import spellcheckDevextreme from 'eslint-config-devextreme/spell-check.js';
+import spellcheckDevextreme from 'eslint-config-devextreme/spell-check';
+import testcafeConfig from 'eslint-config-devextreme/testcafe';
+import typescriptConfig from 'eslint-config-devextreme/typescript';
+import javascriptConfig from 'eslint-config-devextreme/javascript';
 import spellcheckPlugin from 'eslint-plugin-spellcheck';
 import noOnlyTests from 'eslint-plugin-no-only-tests';
 import deprecation from 'eslint-plugin-deprecation';
@@ -8,6 +11,7 @@ import reactPlugin from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactPerf from 'eslint-plugin-react-perf';
 import jest from 'eslint-plugin-jest';
+import vuePlugin from 'eslint-plugin-vue';
 import vueParser from 'vue-eslint-parser';
 import tsParser from '@typescript-eslint/parser';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
@@ -28,7 +32,7 @@ const compat = new FlatCompat({
   allConfig: js.configs.all
 });
 
-const spellcheckRule = spellcheckDevextreme.rules['spellcheck/spell-checker'];
+const spellcheckRule = spellcheckDevextreme[0].rules['spellcheck/spell-checker'];
 
 export default [
   {
@@ -76,13 +80,13 @@ export default [
     },
   },
 
-  ...compat.extends('eslint:recommended', 'devextreme/spell-check'),
-
-  ...compat.extends('devextreme/javascript').map(config => ({
+  js.configs.recommended,
+  ...spellcheckDevextreme,
+  ...javascriptConfig.map(config => ({
     ...config,
     rules: changeRulesToStylistic(config.rules || {}),
   })),
-  ...compat.extends('devextreme/typescript').map(config => ({
+  ...typescriptConfig.map(config => ({
     ...config,
     files: ['**/*.ts', '**/*.tsx'],
     rules: changeRulesToStylistic(config.rules || {}),
@@ -369,7 +373,7 @@ export default [
   },
 
   // Vue demos
-  ...compat.extends('plugin:vue/vue3-recommended').map(config => ({
+  ...vuePlugin.configs['flat/recommended'].map(config => ({
     ...config,
     files: [
       'Demos/**/Vue/*.vue',
@@ -466,7 +470,7 @@ export default [
   },
 
   // testcafe tests
-  ...compat.extends('devextreme/testcafe').map(config => ({
+  ...testcafeConfig.map(config => ({
     ...config,
     rules: changeRulesToStylistic(config.rules || {}),
     files: ['testing/**/*.{js,ts}', 'utils/visual-tests/**/*.*'],
