@@ -10,6 +10,7 @@ import { AIPromptEditorModel } from './ai_prompt_editor';
 import { AIHeaderCellModel } from './cell/ai_header_cell';
 import { DataCellModel } from './cell/data_cell';
 import { HeaderCellModel } from './cell/header_cell';
+import { ColumnChooserModel } from './column_chooser';
 import { EditFormModel } from './edit_form';
 import { DataRowModel } from './row/data_row';
 
@@ -132,6 +133,10 @@ export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
 
   public getEditForm(): EditFormModel {
     return new EditFormModel(this.root.querySelector(`.${this.addWidgetPrefix(SELECTORS.editForm)}`));
+  }
+
+  public getColumnChooser(): ColumnChooserModel {
+    return new ColumnChooserModel(this.root);
   }
 
   public abstract getInstance(): TInstance;
