@@ -1,5 +1,5 @@
 import { dateUtilsTs } from '@ts/core/utils/date';
-import rrule from 'rrule';
+import * as rrule from 'rrule';
 
 import { parseRecurrenceRule } from '../../../../recurrence/base';
 import type { DateInterval, MinimalAppointmentEntity } from '../../../types';
