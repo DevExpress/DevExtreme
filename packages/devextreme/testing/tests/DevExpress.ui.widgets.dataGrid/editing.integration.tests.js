@@ -21,7 +21,7 @@ import { getOuterHeight } from 'core/utils/size';
 import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
 import messageLocalization from 'common/core/localization/message';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 

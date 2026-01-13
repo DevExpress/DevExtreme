@@ -21,7 +21,7 @@ import { createDataGrid, baseModuleConfig, findShadowHostOrDocument } from '../.
 import { getOuterWidth } from 'core/utils/size';
 import { generateItems } from '../../helpers/dataGridMocks.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 const CELL_UPDATED_CLASS = 'dx-datagrid-cell-updated-animation';

@@ -11,7 +11,7 @@ QUnit.testStart(function() {
     // $('body').append(markup);
 });
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import devices from '__internal/core/m_devices';

@@ -1,4 +1,4 @@
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 import 'ui/data_grid';
 import gridCoreUtils from '__internal/grids/grid_core/m_utils';

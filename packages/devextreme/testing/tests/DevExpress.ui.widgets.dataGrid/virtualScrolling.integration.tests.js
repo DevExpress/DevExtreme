@@ -12,7 +12,7 @@ import translator from 'common/core/animation/translator';
 import dataUtils from 'core/element_data';
 import ODataStore from 'common/data/odata/store';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
 

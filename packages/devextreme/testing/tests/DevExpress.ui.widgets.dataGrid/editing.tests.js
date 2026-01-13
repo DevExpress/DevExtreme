@@ -15,7 +15,7 @@ import pointerEvents from 'common/core/events/pointer';
 import { name as clickEventName } from 'common/core/events/click';
 import { name as dblClickEventName } from 'common/core/events/dblclick';
 import { triggerResizeEvent } from 'common/core/events/visibility_change';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import $ from 'jquery';
 import 'ui/autocomplete';
 import 'ui/color_box';

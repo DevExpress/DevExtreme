@@ -1,6 +1,6 @@
 import devices from '__internal/core/m_devices';
 import visibilityChange from 'common/core/events/visibility_change';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import $ from 'jquery';
 import 'ui/data_grid';
 import gridCore from '__internal/grids/data_grid/m_core';

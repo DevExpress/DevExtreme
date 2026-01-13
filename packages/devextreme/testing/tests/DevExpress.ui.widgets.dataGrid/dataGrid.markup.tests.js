@@ -3,7 +3,7 @@ import windowUtils from 'core/utils/window';
 
 import 'ui/data_grid';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(function() {
     const markup =

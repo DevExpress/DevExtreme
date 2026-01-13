@@ -6,7 +6,7 @@ import config from 'core/config';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
 

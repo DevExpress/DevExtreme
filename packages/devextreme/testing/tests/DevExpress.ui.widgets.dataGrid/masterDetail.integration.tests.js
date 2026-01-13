@@ -5,7 +5,7 @@ import commonUtils from 'core/utils/common';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import $ from 'jquery';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const CELL_UPDATED_CLASS = 'dx-datagrid-cell-updated-animation';
 

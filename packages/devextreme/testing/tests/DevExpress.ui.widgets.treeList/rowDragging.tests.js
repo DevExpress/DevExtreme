@@ -16,7 +16,7 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 import 'ui/data_grid';
 import 'ui/tree_list';

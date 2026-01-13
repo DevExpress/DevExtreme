@@ -3,7 +3,7 @@ import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.j
 import pointerMock from '../../helpers/pointerMock.js';
 import $ from 'jquery';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 

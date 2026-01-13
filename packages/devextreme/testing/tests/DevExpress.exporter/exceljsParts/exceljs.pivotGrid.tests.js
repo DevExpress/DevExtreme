@@ -9,7 +9,7 @@ import { LoadPanelTests } from '../commonParts/loadPanel.tests.js';
 import { isDefined, isFunction } from 'core/utils/type';
 import 'ui/pivot_grid/ui.pivot_grid';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 import { DataController__internals } from '__internal/grids/pivot_grid/data_controller/m_data_controller';
 import { PivotGridExport } from '__internal/grids/pivot_grid/export/m_export';

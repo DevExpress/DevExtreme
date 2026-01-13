@@ -1,6 +1,6 @@
 import { addShadowDomStyles } from 'core/utils/shadow_dom.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 import 'ui/data_grid';
 

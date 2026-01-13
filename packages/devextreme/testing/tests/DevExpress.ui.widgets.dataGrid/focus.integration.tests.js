@@ -12,7 +12,7 @@ import ArrayStore from 'common/data/array_store';
 import DataGrid from 'ui/data_grid';
 import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';

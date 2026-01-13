@@ -5,7 +5,7 @@ import { getWindow } from 'core/utils/window';
 import { getWidth, getHeight } from 'core/utils/size';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(function() {
     const markup = `
