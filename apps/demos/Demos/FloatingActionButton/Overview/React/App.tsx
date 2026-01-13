@@ -2,46 +2,47 @@ import React, { useCallback, useRef, useState } from 'react';
 import config from 'devextreme/core/config';
 import repaintFloatingActionButton from 'devextreme/ui/speed_dial_action/repaint_floating_action_button';
 import DataGrid, {
-  Column, Editing, Lookup, Texts, Selection, type DataGridTypes,
+  Column, Editing, Lookup, Texts, Selection,
 } from 'devextreme-react/data-grid';
 import { SpeedDialAction } from 'devextreme-react/speed-dial-action';
-import { SelectBox, type SelectBoxTypes } from 'devextreme-react/select-box';
+import { SelectBox } from 'devextreme-react/select-box';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
+import type { DataGridTypes, DataGridRef } from 'devextreme-react/data-grid';
 import {
-  employees, states, directions, directionLabel,
+  employees, states, directions, optionDirections, directionLabel,
 } from './data.ts';
-
-const optionDirections = ['auto', 'up', 'down'];
+import type { DirectionKey } from './data.ts';
 
 const App = () => {
   const [selectedRowIndex, setSelectedRowIndex] = useState(-1);
-  const gridRef = useRef(null);
+  const gridRef = useRef<DataGridRef>(null);
 
   const selectedChanged = useCallback((e: DataGridTypes.SelectionChangedEvent) => {
     setSelectedRowIndex(e.component.getRowIndexByKey(e.selectedRowKeys[0]));
-  }, [setSelectedRowIndex]);
+  }, []);
 
   const directionChanged = useCallback((e: SelectBoxTypes.SelectionChangedEvent) => {
     config({
-      floatingActionButtonConfig: directions[e.selectedItem],
+      floatingActionButtonConfig: directions[e.selectedItem as DirectionKey],
     });
 
     repaintFloatingActionButton();
   }, []);
 
   const editRow = useCallback(() => {
-    gridRef.current.instance().editRow(selectedRowIndex);
-    gridRef.current.instance().deselectAll();
-  }, [gridRef, selectedRowIndex]);
+    gridRef.current?.instance()?.editRow(selectedRowIndex);
+    gridRef.current?.instance()?.deselectAll();
+  }, [selectedRowIndex]);
 
   const deleteRow = useCallback(() => {
-    gridRef.current.instance().deleteRow(selectedRowIndex);
-    gridRef.current.instance().deselectAll();
-  }, [gridRef, selectedRowIndex]);
+    gridRef.current?.instance()?.deleteRow(selectedRowIndex);
+    gridRef.current?.instance()?.deselectAll();
+  }, [selectedRowIndex]);
 
   const addRow = useCallback(() => {
-    gridRef.current.instance().addRow();
-    gridRef.current.instance().deselectAll();
-  }, [gridRef]);
+    gridRef.current?.instance()?.addRow();
+    gridRef.current?.instance()?.deselectAll();
+  }, []);
 
   return (
     <div>

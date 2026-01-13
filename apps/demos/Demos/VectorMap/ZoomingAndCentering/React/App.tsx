@@ -3,7 +3,7 @@ import VectorMap, {
   Layer,
   Tooltip,
 } from 'devextreme-react/vector-map';
-import type { VectorMapTypes, ITooltipProps } from 'devextreme-react/vector-map';
+import type { VectorMapTypes, ITooltipProps, VectorMapRef } from 'devextreme-react/vector-map';
 
 import Button from 'devextreme-react/button';
 
@@ -16,7 +16,7 @@ const customizeTooltip: ITooltipProps['customizeTooltip'] = (arg) => {
   if (arg.layer.type === 'marker') {
     return { text: arg.attribute('name') };
   }
-  return null;
+  return {};
 };
 
 const markerClick = (e: VectorMapTypes.ClickEvent) => {
@@ -27,12 +27,12 @@ const markerClick = (e: VectorMapTypes.ClickEvent) => {
 };
 
 const App = () => {
-  const vectorMapRef = useRef(null);
+  const vectorMapRef = useRef<VectorMapRef>(null);
 
   const reset = useCallback(() => {
-    vectorMapRef.current.instance().center(null);
-    vectorMapRef.current.instance().zoomFactor(null);
-  }, [vectorMapRef]);
+    vectorMapRef.current?.instance().center([0, 0]);
+    vectorMapRef.current?.instance().zoomFactor(1);
+  }, []);
 
   return (
     <>
