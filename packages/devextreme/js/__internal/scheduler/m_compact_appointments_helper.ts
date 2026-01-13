@@ -127,7 +127,10 @@ export class CompactAppointmentsHelper {
   _createCompactButtonElement({
     isCompact, $container, coordinates, sortedIndex, items,
   }: CompactAppointmentOptions) {
-    const appointmentDate = this._getDateText(items[0].appointment);
+    const appointmentDate = this._getDateText(
+      items[0].appointment,
+      items[0].targetedAppointment,
+    );
     const result = $('<div>')
       .addClass(APPOINTMENT_COLLECTOR_CLASS)
       .attr('aria-roledescription', appointmentDate)
@@ -187,16 +190,18 @@ export class CompactAppointmentsHelper {
     return date ? new Date(date) : null;
   }
 
-  _getDateText(appointment) {
-    const startDate = this.instance._dataAccessors.get('startDate', appointment);
-    const endDate = this.instance._dataAccessors.get('endDate', appointment);
+  _getDateText(appointment, targetedAppointment?) {
+    const displayStartDate = targetedAppointment?.displayStartDate;
+    const displayEndDate = targetedAppointment?.displayEndDate;
+
+    const startDate = displayStartDate || this._getStartDate(appointment);
+    const endDate = displayEndDate || this._getEndDate(appointment);
+
     const startDateText = startDate ? this._localizeDate(startDate) : '';
     const endDateText = endDate ? this._localizeDate(endDate) : '';
 
-    const dateText = startDateText === endDateText
-      ? `${startDateText}`
+    return startDateText === endDateText
+      ? startDateText
       : `${startDateText} - ${endDateText}`;
-
-    return `${dateText}`;
   }
 }
