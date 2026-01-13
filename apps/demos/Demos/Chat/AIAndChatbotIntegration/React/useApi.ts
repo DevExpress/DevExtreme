@@ -1,43 +1,13 @@
 import { useCallback, useState } from 'react';
-import { AzureOpenAI, OpenAI } from 'openai';
 import type { ChatTypes } from 'devextreme-react/chat';
 import { CustomStore, DataSource } from 'devextreme-react/common/data';
-import type { AIResponse } from 'devextreme/common/ai-integration';
 import {
   ALERT_TIMEOUT,
   assistant,
-  AzureOpenAIConfig,
   REGENERATION_TEXT,
 } from './data.ts';
-
-type Message = (OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionAssistantMessageParam) & {
-  content: string;
-};
-
-const chatService = new AzureOpenAI(AzureOpenAIConfig);
-
-const wait = (delay: number): Promise<void> =>
-  new Promise((resolve): void => {
-    setTimeout(resolve, delay);
-  });
-
-export async function getAIResponse(messages: Message[], delay?: number): Promise<AIResponse> {
-  const params = {
-    messages,
-    model: AzureOpenAIConfig.deployment,
-    max_tokens: 1000,
-    temperature: 0.7,
-  };
-
-  const response = await chatService.chat.completions.create(params);
-  const data = { choices: response.choices };
-
-  if (delay) {
-    await wait(delay);
-  }
-
-  return data.choices[0].message?.content ?? '';
-}
+import { getAIResponse } from './service.ts';
+import type { AIMessage } from './service.ts';
 
 const store: ChatTypes.Message[] = [];
 
@@ -61,12 +31,12 @@ export const dataSource = new DataSource({
   paginate: false,
 });
 
-const dataItemToMessage = (item: ChatTypes.Message): Message => ({
-  role: item.author?.id as Message['role'],
+const dataItemToMessage = (item: ChatTypes.Message): AIMessage => ({
+  role: item.author?.id as AIMessage['role'],
   content: item.text,
 });
 
-const getMessageHistory = (): Message[] => [...dataSource.items()].map(dataItemToMessage);
+const getMessageHistory = (): AIMessage[] => [...dataSource.items()].map(dataItemToMessage);
 
 export const useApi = () => {
   const [alerts, setAlerts] = useState<ChatTypes.Alert[]>([]);

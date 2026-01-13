@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { AzureOpenAI } from 'openai';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
@@ -8,21 +7,14 @@ import rehypeStringify from 'rehype-stringify';
 import rehypeMinifyWhitespace from 'rehype-minify-whitespace';
 import { type DxChatTypes } from 'devextreme-angular/ui/chat';
 import { DataSource, CustomStore } from 'devextreme-angular/common/data';
+import { AiService, type AIMessage } from './ai/ai.service';
 
 @Injectable({
   providedIn: 'root',
 })
 
 export class AppService {
-  chatService: AzureOpenAI;
-
-  AzureOpenAIConfig = {
-    dangerouslyAllowBrowser: true,
-    deployment: 'gpt-4o-mini',
-    apiVersion: '2024-02-01',
-    endpoint: 'https://public-api.devexpress.com/demo-openai',
-    apiKey: 'DEMO',
-  };
+  aiService: AiService;
 
   REGENERATION_TEXT = 'Regeneration...';
 
@@ -39,7 +31,7 @@ export class AppService {
 
   store: any[] = [];
 
-  messages: any[] = [];
+  messages: AIMessage[] = [];
 
   alerts: DxChatTypes.Alert[] = [];
 
@@ -51,8 +43,8 @@ export class AppService {
 
   alertsSubject: BehaviorSubject<DxChatTypes.Alert[]> = new BehaviorSubject([]);
 
-  constructor() {
-    this.chatService = new AzureOpenAI(this.AzureOpenAIConfig);
+  constructor(aiService: AiService) {
+    this.aiService = aiService;
     this.initDataSource();
     this.typingUsersSubject.next([]);
     this.alertsSubject.next([]);
@@ -98,21 +90,11 @@ export class AppService {
     });
   }
 
-  async getAIResponse(messages) {
-    const params = {
-      messages,
-      model: this.AzureOpenAIConfig.deployment,
-      max_tokens: 1000,
-      temperature: 0.7,
-    };
-
-    const response = await this.chatService.chat.completions.create(params);
-    const data = { choices: response.choices };
-
-    return data.choices[0].message?.content;
+  async getAIResponse(messages: AIMessage[]): Promise<string> {
+    return this.aiService.getAIResponse(messages) as Promise<string>;
   }
 
-  async processMessageSending(message) {
+  async processMessageSending(message: DxChatTypes.Message) {
     this.messages.push({ role: 'user', content: message.text });
     this.typingUsersSubject.next([this.assistant]);
 

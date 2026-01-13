@@ -1,13 +1,5 @@
 import type { DxHtmlEditorTypes } from 'devextreme-vue/html-editor';
 
-export const AzureOpenAIConfig = {
-  dangerouslyAllowBrowser: true,
-  deployment: 'gpt-4o-mini',
-  apiVersion: '2024-02-01',
-  endpoint: 'https://public-api.devexpress.com/demo-openai',
-  apiKey: 'DEMO',
-};
-
 export const extractKeywordsPrompt: DxHtmlEditorTypes.AICustomCommand['prompt'] = () =>
   'Extract a list of keywords from the text and return it as a comma-separated string';
 
