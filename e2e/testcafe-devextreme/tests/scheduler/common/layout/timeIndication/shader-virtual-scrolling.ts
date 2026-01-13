@@ -32,13 +32,10 @@ test('Shader should have correct width and left positions when scrolled to last 
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await scheduler.option('width', 2560);
-
   await testScreenshot(
     t,
     takeScreenshot,
     'shader-virtual-scrolling-week-start.png',
-    { element: scheduler.element },
   );
 
   await scheduler.scrollTo(new Date(2025, 9, 15, 17, 30), { roomId: 6 });
@@ -47,7 +44,6 @@ test('Shader should have correct width and left positions when scrolled to last 
     t,
     takeScreenshot,
     'shader-virtual-scrolling-week-end.png',
-    { element: scheduler.element },
   );
 
   await t.expect(compareResults.isValid())
@@ -65,7 +61,6 @@ test('Shader should have correct width and left positions when scrolled to last 
     endDayHour: 18,
     currentDate: new Date(2025, 9, 15),
     height: 400,
-    width: 800,
     shadeUntilCurrentTime: true,
     scrolling: { mode: 'virtual' },
   });
