@@ -32,6 +32,13 @@ const scrollToAllDay = ClientFunction(() => {
   instance.scrollTo(date, undefined, true);
 });
 
+const getWSScrollLeft = ClientFunction(() => {
+  const instance = ($('#container') as any).dxScheduler('instance');
+  return instance.getWorkSpaceScrollable().scrollLeft();
+});
+
+const getHeaderScrollLeft = ClientFunction(() => $('.dx-scheduler-header-scrollable .dx-scrollable-container').scrollLeft());
+
 test('ScrollTo works correctly with week and day views', async (t) => {
   const scheduler = new Scheduler('#container');
 
@@ -230,3 +237,200 @@ test('ScrollTo works correctly in timeline RTL (native, sync header/workspace)',
   height: 580,
   rtlEnabled: true,
 }));
+
+test('T1310544: ScrollTo should scroll to date with offset: 720 (12 hours)', async (t) => {
+  const scheduler = new Scheduler('#container');
+
+  await scheduler.option('currentView', 'timelineDay');
+  await scheduler.option('useNative', true);
+  await t.wait(200);
+
+  const getExpectedScrollLeft = ClientFunction(() => {
+    const instance = ($('#container') as any).dxScheduler('instance');
+    const workspace = instance.getWorkSpace();
+    const scrollable = workspace.getScrollable();
+    const $scrollable = scrollable.$element();
+    const scrollableWidth = $scrollable.width();
+
+    const targetDateValue = new Date(2021, 1, 2, 22, 0);
+
+    const cell = workspace.viewDataProvider.findGlobalCellPosition(
+      targetDateValue,
+      0,
+      false,
+      true,
+    );
+    const { startDate: cellStartDate, endDate: cellEndDate } = cell.cellData;
+
+    const isDateValid = targetDateValue.getTime() >= cellStartDate.getTime()
+      && targetDateValue.getTime() < cellEndDate.getTime();
+
+    // eslint-disable-next-line no-underscore-dangle
+    const cellCoordinates = workspace._getScrollCoordinates(targetDateValue, 0, false);
+    const cellWidth = workspace.getCellWidth();
+    const expectedScrollLeft = cellCoordinates.left - (scrollableWidth - cellWidth) / 2;
+
+    return {
+      expectedScrollLeft,
+      isDateValid,
+      cellStartDate: cellStartDate.getTime(),
+      cellEndDate: cellEndDate.getTime(),
+      targetDate: targetDateValue.getTime(),
+    };
+  });
+
+  const initialLeft = await getWSScrollLeft();
+  const initialHeaderLeft = await getHeaderScrollLeft();
+
+  await t.expect(initialLeft).eql(initialHeaderLeft, 'Initial header/workspace sync');
+
+  const cellData = await getExpectedScrollLeft();
+
+  await t
+    .expect(cellData.isDateValid)
+    .ok('Target date should be within cell range');
+
+  const scrollToTargetDate = ClientFunction((targetDate: Date) => {
+    const instance = ($('#container') as any).dxScheduler('instance');
+    instance.scrollTo(targetDate, undefined, false);
+  });
+
+  await scrollToTargetDate(new Date(2021, 1, 2, 22, 0));
+  await t.wait(300);
+
+  const actualLeft = await getWSScrollLeft();
+  const headerLeft = await getHeaderScrollLeft();
+
+  await t
+    .expect(actualLeft).notEql(initialLeft, 'Workspace should be scrolled')
+    .expect(headerLeft).eql(actualLeft, 'Header should be synchronized with workspace')
+    .expect(actualLeft)
+    .eql(cellData.expectedScrollLeft, 'Scroll position should match expected');
+}).before(async () => createScheduler({
+  dataSource: [],
+  views: ['timelineDay'],
+  currentView: 'timelineDay',
+  currentDate: new Date(2021, 1, 2),
+  firstDayOfWeek: 0,
+  startDayHour: 6,
+  endDayHour: 18,
+  offset: 720,
+  cellDuration: 60,
+  height: 580,
+}));
+
+[
+  {
+    startDayHour: 6,
+    endDayHour: 18,
+    offset: 0,
+    hours: [4, 12, 20],
+  },
+  {
+    startDayHour: 6,
+    endDayHour: 18,
+    offset: 360,
+    hours: [10, 15, 22],
+  },
+  {
+    startDayHour: 6,
+    endDayHour: 18,
+    offset: -120,
+    hours: [3, 10, 20],
+  },
+  {
+    startDayHour: 6,
+    endDayHour: 18,
+    offset: 720,
+    hours: [10, 22, 3],
+  },
+  {
+    startDayHour: 0,
+    endDayHour: 12,
+    offset: 0,
+    hours: [0, 6, 13],
+  },
+  {
+    startDayHour: 12,
+    endDayHour: 24,
+    offset: 0,
+    hours: [11, 18, 23],
+  },
+].forEach(({
+  startDayHour,
+  endDayHour,
+  offset,
+  hours,
+}) => {
+  hours.forEach((hour) => {
+    const getExpectedScrollPosition = ClientFunction((targetHour: number) => {
+      const instance = ($('#container') as any).dxScheduler('instance');
+      const workspace = instance.getWorkSpace();
+      const scrollable = workspace.getScrollable();
+      const $scrollable = scrollable.$element();
+      const scrollableWidth = $scrollable.width();
+      const targetDate = new Date(2021, 1, 2, targetHour, 0);
+
+      // eslint-disable-next-line no-underscore-dangle
+      const isValidDate = workspace._isValidScrollDate(targetDate, false);
+
+      // eslint-disable-next-line no-underscore-dangle
+      const cellCoordinates = workspace._getScrollCoordinates(targetDate, 0, false);
+      const cellWidth = workspace.getCellWidth();
+      const expectedScrollLeft = cellCoordinates.left - (scrollableWidth - cellWidth) / 2;
+
+      return {
+        expectedScrollLeft,
+        isValidDate,
+      };
+    });
+
+    const scrollToHour = ClientFunction((targetHour: number) => {
+      const instance = ($('#container') as any).dxScheduler('instance');
+      instance.scrollTo(new Date(2021, 1, 2, targetHour, 0), undefined, false);
+    });
+
+    test(`Hour normalization: startDayHour: ${startDayHour}, endDayHour: ${endDayHour}, offset: ${offset}, hour: ${hour}`, async (t) => {
+      const scheduler = new Scheduler('#container');
+
+      await scheduler.option('currentView', 'timelineWeek');
+      await scheduler.option('useNative', true);
+      await t.wait(200);
+
+      const initialLeft = await getWSScrollLeft();
+      const initialHeaderLeft = await getHeaderScrollLeft();
+
+      await t.expect(initialLeft).eql(initialHeaderLeft, 'Initial header/workspace sync');
+
+      const { expectedScrollLeft, isValidDate } = await getExpectedScrollPosition(hour);
+
+      await t
+        .expect(isValidDate)
+        .ok(`Target date (hour: ${hour}) should be within valid scroll range`);
+
+      await scrollToHour(hour);
+      await t.wait(300);
+
+      const actualLeft = await getWSScrollLeft();
+      const headerLeft = await getHeaderScrollLeft();
+
+      await t
+        .expect(actualLeft).notEql(initialLeft, 'Workspace should be scrolled')
+        .expect(headerLeft).eql(actualLeft, 'Header should be synchronized with workspace')
+        .expect(actualLeft)
+        .eql(expectedScrollLeft, 'Scroll position should match expected');
+    }).before(async () => createScheduler({
+      dataSource: [],
+      views: [{
+        type: 'timelineWeek',
+        offset,
+        cellDuration: 60,
+      }],
+      currentView: 'timelineWeek',
+      currentDate: new Date(2021, 1, 2),
+      startDayHour,
+      endDayHour,
+      height: 580,
+    }));
+  });
+});
