@@ -1,10 +1,10 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { createWidget } from '../../../../helpers/createWidget';
-import { getTimezoneTest, MACHINE_TIMEZONES } from '../../../../helpers/machineTimezones';
-import url from '../../../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
+import { getTimezoneTest, MACHINE_TIMEZONES } from '../../../helpers/machineTimezones';
+import url from '../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Scheduler - Appointment Collector Timezone`
-  .page(url(__dirname, '../../../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 [
   MACHINE_TIMEZONES.EuropeBerlin,
