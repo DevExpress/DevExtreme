@@ -17,7 +17,7 @@
     "dependencies": {
         "@angular/animations": "~21.0.0",
         "@angular-devkit/build-angular": "~21.0.0",
-        "@angular/cli": "~21.0.0",
+        "@angular/cli": "~21.0.5",
         "@angular/common": "~21.0.0",
         "@angular/compiler": "~21.0.7",
         "@angular/compiler-cli": "~21.0.7",
