@@ -1,3 +1,4 @@
+export const optionDirections = ['auto', 'up', 'down'];
 export const directions = {
   auto: {
     icon: 'rowfield',

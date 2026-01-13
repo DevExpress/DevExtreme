@@ -11,7 +11,7 @@ const customizeTooltip = (arg) => {
   if (arg.layer.type === 'marker') {
     return { text: arg.attribute('tooltip') };
   }
-  return null;
+  return {};
 };
 const customizeText = (arg) => ['< 8000K', '8000K to 10000K', '> 10000K'][arg.index];
 const customizeItems = (items) => items.reverse();
