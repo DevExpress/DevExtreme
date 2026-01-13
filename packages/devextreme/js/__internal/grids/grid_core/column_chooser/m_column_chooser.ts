@@ -288,6 +288,30 @@ export class ColumnChooserView extends ColumnsView {
     };
   }
 
+  private getBandColumnVisibility(columnIndex: number): boolean {
+    const childColumns = this._columnsController.getChildrenByBandColumn(columnIndex, true);
+    return !!childColumns.some((column) => !!column.visible);
+  }
+
+  private getColumnVisibility(columnIndex: number, isNodeSelected: boolean): boolean {
+    const column = this._columnsController.columnOption(columnIndex);
+
+    if (!column?.hasColumns) {
+      return isNodeSelected;
+    }
+
+    return this.getBandColumnVisibility(columnIndex);
+  }
+
+  private updateColumnVisibility(nodes): void {
+    nodes.forEach((node) => {
+      const columnIndex = node.itemData.id;
+      const isVisible = this.getColumnVisibility(columnIndex, node.selected);
+
+      this._columnsController.columnOption(columnIndex, 'visible', isVisible);
+    });
+  }
+
   private _prepareSelectModeConfig() {
     const that = this;
     const selectionOptions = this.option('columnChooser.selection') ?? {};
@@ -312,14 +336,6 @@ export class ColumnChooserView extends ColumnsView {
         .forEach((node) => e.component.selectItem(node.key));
     };
 
-    const updateColumnVisibility = (nodes) => {
-      nodes.forEach((node) => {
-        const columnIndex = node.itemData.id;
-        const isVisible = node.selected !== false;
-        that._columnsController.columnOption(columnIndex, 'visible', isVisible);
-      });
-    };
-
     let isUpdatingSelection = false;
 
     const selectionChangedHandler = (e) => {
@@ -340,7 +356,7 @@ export class ColumnChooserView extends ColumnsView {
       that.component.beginUpdate();
       this._isUpdatingColumnVisibility = true;
 
-      updateColumnVisibility(nodes);
+      this.updateColumnVisibility(nodes);
 
       that.component.endUpdate();
       this._isUpdatingColumnVisibility = false;
