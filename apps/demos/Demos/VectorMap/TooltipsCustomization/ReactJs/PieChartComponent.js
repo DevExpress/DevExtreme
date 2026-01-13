@@ -28,9 +28,6 @@ function PieChartComponent(props) {
     </PieChart>
   );
 }
-function customizeText(pointInfo) {
-  return `${pointInfo.argument[0].toUpperCase()}${pointInfo.argument.slice(1)}: $${
-    pointInfo.value
-  }M`;
-}
+const customizeText = (pointInfo) =>
+  `${pointInfo.argument[0].toUpperCase()}${pointInfo.argument.slice(1)}: $${pointInfo.value}M`;
 export default PieChartComponent;
