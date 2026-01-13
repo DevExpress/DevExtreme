@@ -5,10 +5,10 @@ import Gantt, {
 import type { IContextMenuProps } from 'devextreme-react/gantt';
 import CheckBox from 'devextreme-react/check-box';
 import type { ICheckBoxOptions } from 'devextreme-react/check-box';
+import type { ContextMenuPreparingEvent } from 'devextreme/ui/gantt';
 import {
   tasks, dependencies, resources, resourceAssignments,
 } from './data.ts';
-import type { ContextMenuPreparingEvent } from 'devextreme/ui/gantt';
 
 function App() {
   const [ganttConfig, setGanttConfig] = useState({

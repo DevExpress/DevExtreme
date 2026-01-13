@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import yargs from 'yargs';
 
 import {
@@ -51,7 +50,7 @@ async function processDemosInBatches(bundler: ESBundler, demoList: Demo[], batch
   const batches = [];
   for (let i = 0; i < demoList.length; i += batchSize) {
     const batch = demoList.slice(i, i + batchSize);
-    // eslint-disable-next-line no-await-in-loop
+
     batches.push(await processBatch(bundler, batch));
   }
   await Promise.all(batches);
@@ -63,7 +62,7 @@ async function processBatch(bundler: ESBundler, demos: Demo[]) {
 }
 
 async function processDemo(bundler: ESBundler, demo: Demo) {
-  return new Promise((res, rej) => {
+  return new Promise((res) => {
     bundler.buildDemo(demo, res);
   }).then(() => { console.log(`${bundler.framework} Demo: ${demo.Widget} - ${demo.Name}`); });
 }

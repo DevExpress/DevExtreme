@@ -8,7 +8,8 @@ import { countries } from './data.js';
 const bounds = [-180, 85, 180, -60];
 const customizeLayer = (elements) => {
   elements.forEach((element) => {
-    const country = countries[element.attribute('name')];
+    const name = element.attribute('name');
+    const country = countries[name];
     if (country) {
       element.applySettings({
         color: country.color,
@@ -19,7 +20,8 @@ const customizeLayer = (elements) => {
   });
 };
 const clickHandler = ({ target }) => {
-  if (target && countries[target.attribute('name')]) {
+  const name = target?.attribute('name');
+  if (target && countries[name]) {
     target.selected(!target.selected());
   }
 };
@@ -32,7 +34,7 @@ const customizeTooltip = ({ attribute }) => {
       color: country.color,
     };
   }
-  return null;
+  return {};
 };
 export default function App() {
   return (

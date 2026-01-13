@@ -38,6 +38,8 @@ export const populations = {
   Uzbekistan: 0.43,
 };
 
+export type PopulationKey = keyof typeof populations;
+
 export const markers = {
   type: 'FeatureCollection',
   features: [

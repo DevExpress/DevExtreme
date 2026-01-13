@@ -18,7 +18,8 @@ const colorGroups = [0, 10000, 50000, 100000, 500000, 1000000, 10000000, 5000000
 const mapBounds = [-180, 85, 180, -60];
 const customizeLayer = (elements) => {
   elements.forEach((element) => {
-    const countryGDPData = countriesGDP[element.attribute('name')];
+    const name = element.attribute('name');
+    const countryGDPData = countriesGDP[name];
     element.attribute('total', countryGDPData?.total || 0);
   });
 };

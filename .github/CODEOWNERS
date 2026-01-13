@@ -103,6 +103,22 @@
 
 /packages/devextreme/testing/tests/DevExpress.ui.widgets/draggable.tests.js @DevExpress/devextreme-grids
 
+## card_view
+/packages/devextreme/js/ui/card_view.d.ts                   @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/card_view_types.d.ts             @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/card_view.js                     @DevExpress/devextreme-grids
+
+/packages/devextreme/js/__internal/grids/new/card_view/**   @DevExpress/devextreme-grids
+
+/packages/devextreme-scss/scss/widgets/base/cardView/**     @DevExpress/devextreme-grids
+/packages/devextreme-scss/scss/widgets/fluent/cardView/**   @DevExpress/devextreme-grids
+/packages/devextreme-scss/scss/widgets/generic/cardView/**  @DevExpress/devextreme-grids
+/packages/devextreme-scss/scss/widgets/material/cardView/** @DevExpress/devextreme-grids
+
+/apps/demos/Demos/CardView/**                               @DevExpress/devextreme-grids
+/e2e/testcafe-devextreme/tests/cardView/**                  @DevExpress/devextreme-grids
+/e2e/testcafe-devextreme/tests/accessibility/cardView/**    @DevExpress/devextreme-grids
+
 # Scheduler
 
 ## scheduler
@@ -602,7 +618,7 @@
 
 /packages/devextreme/testing/tests/DevExpress.knockout/fieldsetParts   @DevExpress/devextreme-navigation
 
-##viz
+## viz
 /packages/devextreme/js/viz/**                                 @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/common/m_charts.ts          @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/viz/**                      @DevExpress/devextreme-navigation
@@ -918,6 +934,19 @@
 
 /e2e/testcafe-devextreme/tests/accessibility/slider.ts        @DevExpress/devextreme-editors
 
+## speech_to_text
+/packages/devextreme/js/ui/speech_to_text.d.ts                       @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/speech_to_text_types.d.ts                 @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/speech_to_text.js                         @DevExpress/devextreme-editors
+
+/packages/devextreme/js/__internal/ui/speech_to_text/**              @DevExpress/devextreme-editors
+
+/apps/demos/Demos/SpeechToText/**                                    @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/speechToText.ts         @DevExpress/devextreme-editors
+
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/speechToText.tests.js          @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/speechToText.markup.tests.js   @DevExpress/devextreme-editors
+
 ## switch
 /packages/devextreme/js/ui/switch.d.ts                               @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
 /packages/devextreme/js/ui/switch_types.d.ts                         @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
@@ -1019,7 +1048,7 @@
 /packages/devextreme-scss/scss/widgets/base/_validation.scss         @DevExpress/devextreme-editors
 /packages/devextreme-scss/scss/widgets/**/validation/**              @DevExpress/devextreme-editors
 
-/e2e/testcafe-devextreme/tests/accessibility/validationSummary.ts @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/validationSummary.ts    @DevExpress/devextreme-editors
 
 /apps/demos/Demos/Validation/**                                      @DevExpress/devextreme-editors
 

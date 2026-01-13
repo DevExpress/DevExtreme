@@ -1,4 +1,4 @@
-/* eslint-disable import/no-extraneous-dependencies, no-console */
+/* eslint-disable import/no-extraneous-dependencies */
 const path = require('path');
 const fs = require('fs-extra');
 const Builder = require('systemjs-builder');
@@ -92,18 +92,18 @@ const prepareDevextremexAngularFiles = () => {
 
   try {
     fs.rmSync(dxNgBaseDir, { recursive: true });
-  } catch (e){}
+  } catch { /* NOOP */ }
 
   try {
     fs.mkdirSync('node_modules/devextreme-angular/bundles');
     console.log(`Directory ${dxNgBaseDir} CLEANED successfully`);
-  } catch (e) {}
+  } catch { /* NOOP */ }
 
   fs.copySync('./bundles/devextreme-angular', 'node_modules/devextreme-angular/bundles');
   console.log('Copy devextreme-angular files to node_modules/devextreme-angular/bundles completed!');
-}
+};
 
-const prepareConfigs = (framework)=> {
+const prepareConfigs = (framework) => {
   // eslint-disable-next-line import/no-dynamic-require,global-require
   const currentPackage = require(`devextreme-${framework}/package.json`);
 
@@ -129,7 +129,6 @@ const prepareConfigs = (framework)=> {
       'rxjs/dist/cjs/operators/index.js',
     ];
 
-    // eslint-disable-next-line spellcheck/spell-checker
     if (currentPackage.module?.startsWith('fesm2022')) {
       main = `devextreme-${framework}`;
       minify = false;
@@ -139,16 +138,15 @@ const prepareConfigs = (framework)=> {
       const bundlesRoot = 'node_modules/devextreme-angular/bundles';
 
       const componentNames = fs.readdirSync(bundlesRoot)
-          .filter((fileName) => fileName.indexOf('umd.js') !== -1)
-          .filter((fileName) => fileName.indexOf('devextreme-angular-ui') === 0)
-          .map((fileName) => fileName.replace('devextreme-angular-ui-', '').replace('.umd.js', ''));
+        .filter((fileName) => fileName.indexOf('umd.js') !== -1)
+        .filter((fileName) => fileName.indexOf('devextreme-angular-ui') === 0)
+        .map((fileName) => fileName.replace('devextreme-angular-ui-', '').replace('.umd.js', ''));
 
       additionPaths = {
         'devextreme-angular': `${bundlesRoot}/devextreme-angular.umd.js`,
         'devextreme-angular/core': `${bundlesRoot}/devextreme-angular-core.umd.js`,
         'devextreme-angular/core/tokens': `${bundlesRoot}/devextreme-angular-core-tokens.umd.js`,
         ...componentNames.reduce((items, item) => {
-          // eslint-disable-next-line no-param-reassign
           items[`devextreme-angular/ui/${item.replace('-nested', '/nested')}`] = `${bundlesRoot}/devextreme-angular-ui-${item}.umd.js`;
           return items;
         }, {}),
@@ -156,7 +154,6 @@ const prepareConfigs = (framework)=> {
 
       modulesMap = {
         ...componentNames.reduce((items, item) => {
-          // eslint-disable-next-line no-param-reassign
           items[`devextreme-angular/ui/${item.replace('-nested', '/nested')}`] = `${bundlesRoot}/devextreme-angular-ui-${item}.umd.js`;
           return items;
         }, {}),
@@ -198,8 +195,8 @@ const prepareConfigs = (framework)=> {
   });
 
   packages.push(
-      'devextreme/bundles/dx.custom.config.js',
-      main,
+    'devextreme/bundles/dx.custom.config.js',
+    main,
   );
 
   return {
@@ -210,7 +207,7 @@ const prepareConfigs = (framework)=> {
       minify,
       uglify: { mangle: true },
       async fetch(load, fetch) {
-        if(load?.metadata?.transpile) {
+        if (load?.metadata?.transpile) {
           // access to path-specific meta if required: load?.metadata?.babelOptions
           const babelOptions = {
             plugins: [
@@ -218,33 +215,31 @@ const prepareConfigs = (framework)=> {
               '@babel/plugin-transform-object-rest-spread',
               '@babel/plugin-transform-optional-catch-binding',
               '@babel/plugin-transform-optional-chaining',
-            ]
+            ],
           };
 
           // This auto-generated runtime import is useless because grid.js exports only types,
           // but System.js transpiles this import into code that crashes when triggered in a Demo.
           const removeImportTranspiledToCrashingCode = (result) => {
-            if(result.code.includes(GRID_COMMON_STAR_IMPORT)) {
+            if (result.code.includes(GRID_COMMON_STAR_IMPORT)) {
               result.code = result.code.replace(GRID_COMMON_STAR_IMPORT, '');
             }
-          }
+          };
 
-          const result = new Promise((resolve) => {
+          return new Promise((resolve) => {
             // systemjs-builder uses babel 6, so we use babel 7 here for transpiling ES2020
             babel.transformFile(url.fileURLToPath(load.name), babelOptions, (err, result) => {
-                if(err) {
-                  fetch(load).then(r => resolve(r));
-                  console.log('Unexpected transipling error (babel 7): ' + err);
-                } else {
-                  removeImportTranspiledToCrashingCode(result);
-                  resolve(result.code);
-                }
+              if (err) {
+                fetch(load).then((r) => resolve(r));
+                console.log(`Unexpected transipling error (babel 7): ${err}`);
+              } else {
+                removeImportTranspiledToCrashingCode(result);
+                resolve(result.code);
+              }
             });
-          })
-          return result;
-        } else {
-          return fetch(load);
+          });
         }
+        return fetch(load);
       },
     },
   };
@@ -257,7 +252,6 @@ const build = async (framework) => {
   const {
     builderConfig, packages, bundlePath, bundleOpts,
   } = prepareConfigs(framework);
-
 
   builder.config(builderConfig);
 

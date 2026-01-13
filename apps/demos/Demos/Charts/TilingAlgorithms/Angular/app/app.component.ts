@@ -37,7 +37,7 @@ export class AppComponent {
   customizeTooltip(arg) {
     const data = arg.node.data;
     const parentData = arg.node.getParent().data;
-    let result = '';
+    let result: string;
 
     if (arg.node.isLeaf()) {
       result = `<span class='country'>${parentData.name}</span><br />${
@@ -62,7 +62,9 @@ export class AppComponent {
       const rect = totalRect.slice();
 
       totalSum -= item.value;
-      rect[side + 2] = totalRect[side] = totalRect[side] + size;
+      const adjustedSize = totalRect[side] + size;
+      totalRect[side] = adjustedSize;
+      rect[side + 2] = adjustedSize;
       item.rect = rect;
       side = 1 - side;
     });

@@ -41,7 +41,7 @@ function masterDetailTemplate(_, masterDetailOptions) {
 }
 
 function createOrdersTabTemplate(masterDetailData) {
-  return function () {
+  return () => {
     let orderHistoryDataGrid;
     function onProductChanged(productID) {
       orderHistoryDataGrid.option('dataSource', createOrderHistoryStore(productID));
@@ -63,84 +63,78 @@ function createOrdersTabTemplate(masterDetailData) {
 }
 
 function createProductSelectBoxTemplate(masterDetailData, onProductChanged) {
-  return function () {
-    return $('<div>').dxSelectBox({
-      inputAttr: { 'aria-label': 'Product' },
-      dataSource: DevExpress.data.AspNet.createStore({
-        key: 'ProductID',
-        loadParams: { SupplierID: masterDetailData.SupplierID },
-        loadUrl: `${url}/GetProductsBySupplier`,
-      }),
-      valueExpr: 'ProductID',
-      displayExpr: 'ProductName',
-      deferRendering: false,
-      onContentReady(e) {
-        const firstItem = e.component.option('items[0]');
-        if (firstItem) {
-          e.component.option('value', firstItem.ProductID);
-        }
-      },
-      onValueChanged(e) {
-        onProductChanged(e.value);
-      },
-    });
-  };
+  return () => $('<div>').dxSelectBox({
+    inputAttr: { 'aria-label': 'Product' },
+    dataSource: DevExpress.data.AspNet.createStore({
+      key: 'ProductID',
+      loadParams: { SupplierID: masterDetailData.SupplierID },
+      loadUrl: `${url}/GetProductsBySupplier`,
+    }),
+    valueExpr: 'ProductID',
+    displayExpr: 'ProductName',
+    deferRendering: false,
+    onContentReady(e) {
+      const firstItem = e.component.option('items[0]');
+      if (firstItem) {
+        e.component.option('value', firstItem.ProductID);
+      }
+    },
+    onValueChanged(e) {
+      onProductChanged(e.value);
+    },
+  });
 }
 
 function createOrderHistoryTemplate(onDataGridInitialized) {
-  return function () {
-    return $('<div>').dxDataGrid({
-      onInitialized: onDataGridInitialized,
-      paging: {
-        pageSize: 5,
+  return () => $('<div>').dxDataGrid({
+    onInitialized: onDataGridInitialized,
+    paging: {
+      pageSize: 5,
+    },
+    showBorders: true,
+    columns: [
+      'OrderID',
+      {
+        dataField: 'OrderDate',
+        dataType: 'date',
       },
-      showBorders: true,
-      columns: [
-        'OrderID',
-        {
-          dataField: 'OrderDate',
-          dataType: 'date',
-        },
-        'ShipCountry',
-        'ShipCity',
-        {
-          dataField: 'UnitPrice',
+      'ShipCountry',
+      'ShipCity',
+      {
+        dataField: 'UnitPrice',
+        format: 'currency',
+      },
+      'Quantity',
+      {
+        dataField: 'Discount',
+        format: 'percent',
+      },
+    ],
+    summary: {
+      totalItems: [{
+        column: 'UnitPrice',
+        summaryType: 'sum',
+        valueFormat: {
           format: 'currency',
+          precision: 2,
         },
-        'Quantity',
-        {
-          dataField: 'Discount',
-          format: 'percent',
-        },
-      ],
-      summary: {
-        totalItems: [{
-          column: 'UnitPrice',
-          summaryType: 'sum',
-          valueFormat: {
-            format: 'currency',
-            precision: 2,
-          },
-        }, {
-          column: 'Quantity',
-          summaryType: 'count',
-        }],
-      },
-    });
-  };
+      }, {
+        column: 'Quantity',
+        summaryType: 'count',
+      }],
+    },
+  });
 }
 
 function createAddressTabTemplate(data) {
-  return function () {
-    return $('<div>').addClass('address-form form-container').dxForm({
-      formData: data,
-      colCount: 2,
-      customizeItem(item) {
-        item.template = formItemTemplate;
-      },
-      items: ['Address', 'City', 'Region', 'PostalCode', 'Country', 'Phone'],
-    });
-  };
+  return () => $('<div>').addClass('address-form form-container').dxForm({
+    formData: data,
+    colCount: 2,
+    customizeItem(item) {
+      item.template = formItemTemplate;
+    },
+    items: ['Address', 'City', 'Region', 'PostalCode', 'Country', 'Phone'],
+  });
 }
 
 function formItemTemplate(item) {

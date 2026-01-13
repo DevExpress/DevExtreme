@@ -1,9 +1,11 @@
 import React, { useCallback, useRef, useState } from 'react';
-import VectorMap, { Layer, ControlBar, type VectorMapTypes } from 'devextreme-react/vector-map';
+import VectorMap, { Layer, ControlBar } from 'devextreme-react/vector-map';
 import TextBox from 'devextreme-react/text-box';
 import SelectBox from 'devextreme-react/select-box';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import Switch from 'devextreme-react/switch';
+import type { VectorMapTypes, VectorMapRef } from 'devextreme-react/vector-map';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
 import {
   viewportCoordinates, centerLabel, zoomLabel, continentLabel,
 } from './data.ts';
@@ -16,29 +18,29 @@ const App = () => {
   const [center, setCenter] = useState('0.000, 46.036');
   const [panVisible, setPanVisible] = useState(true);
   const [zoomVisible, setZoomVisible] = useState(true);
-  const mapRef = useRef(null);
+  const mapRef = useRef<VectorMapRef>(null);
 
-  const continentChanged = useCallback(({ value }) => {
+  const continentChanged = useCallback(({ value }: SelectBoxTypes.ValueChangedEvent) => {
     setCoordinates(value);
-    mapRef.current.instance().viewport(value);
-  }, [setCoordinates]);
+    mapRef.current?.instance().viewport(value);
+  }, []);
 
   const zoomFactorChanged = useCallback((e: VectorMapTypes.ZoomFactorChangedEvent) => {
     setZoomFactor(e.zoomFactor.toFixed(2));
-  }, [setZoomFactor]);
+  }, []);
 
   const centerChanged = useCallback((e: VectorMapTypes.CenterChangedEvent) => {
     const value = `${e.center[0].toFixed(3)}, ${e.center[1].toFixed(3)}`;
     setCenter(value);
-  }, [setCenter]);
+  }, []);
 
-  const panVisibleChange = useCallback((value) => {
+  const panVisibleChange = useCallback((value: boolean) => {
     setPanVisible(value);
-  }, [setPanVisible]);
+  }, []);
 
-  const zoomVisibleChange = useCallback((value) => {
+  const zoomVisibleChange = useCallback((value: boolean) => {
     setZoomVisible(value);
-  }, [setZoomVisible]);
+  }, []);
 
   return (
     <div>
