@@ -309,6 +309,7 @@ export class ColumnChooserView extends ColumnsView {
       const columnB = this._columnsController.columnOption(b.itemData.id);
       const isBandA = columnA?.hasColumns ? 1 : 0;
       const isBandB = columnB?.hasColumns ? 1 : 0;
+      // Band columns should be updated after regular columns
       return isBandA - isBandB;
     });
   }
