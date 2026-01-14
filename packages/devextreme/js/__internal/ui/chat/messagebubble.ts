@@ -31,6 +31,8 @@ export interface Properties extends WidgetOptions<MessageBubble> {
   alt?: string;
   attachments?: Attachment[];
   metadata?: MetaData;
+  focusStateEnabled?: boolean;
+  hoverStateEnabled?: boolean;
   onAttachmentDownloadClick?: (e: AttachmentDownloadClickEvent) => void;
   template?: ((message: Message, container: Element) => void) | null;
 }
@@ -48,6 +50,8 @@ class MessageBubble extends Widget<Properties> {
       isDeleted: false,
       isEdited: false,
       text: '',
+      focusStateEnabled: true,
+      hoverStateEnabled: true,
       template: null,
     };
   }
@@ -196,11 +200,18 @@ class MessageBubble extends Widget<Properties> {
       },
     }];
 
+    const {
+      focusStateEnabled,
+      hoverStateEnabled,
+    } = this.option();
+
     this._createComponent(this._$functionCall, Accordion, {
       dataSource: accordionItems,
       collapsible: true,
       multiple: false,
       selectedIndex: -1,
+      focusStateEnabled,
+      hoverStateEnabled,
     });
   }
 
@@ -257,6 +268,10 @@ class MessageBubble extends Widget<Properties> {
         break;
       case 'metadata':
         this._renderFunctionCallElement();
+        this._renderFunctionCall();
+        break;
+      case 'focusStateEnabled':
+      case 'hoverStateEnabled':
         this._renderFunctionCall();
         break;
       case 'onAttachmentDownloadClick':
