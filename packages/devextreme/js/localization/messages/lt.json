@@ -282,9 +282,9 @@
 
         "dxScheduler-editorLabelTitle": "Tema",
         "dxScheduler-editorLabelStartDate": "Pradžios data",
-        "dxScheduler-editorAriaLabelStartTime": "Start Time",
+        "dxScheduler-editorAriaLabelStartTime": "Start time",
         "dxScheduler-editorLabelEndDate": "Pabaigos data",
-        "dxScheduler-editorAriaLabelEndTime": "End Time",
+        "dxScheduler-editorAriaLabelEndTime": "End time",
         "dxScheduler-editorLabelDescription": "Aprašymas",
         "dxScheduler-editorLabelRecurrence": "Kartojimas",
 

@@ -282,9 +282,9 @@
 
         "dxScheduler-editorLabelTitle": "Nosaukums",
         "dxScheduler-editorLabelStartDate": "Sākuma Datums",
-        "dxScheduler-editorAriaLabelStartTime": "Start Time",
+        "dxScheduler-editorAriaLabelStartTime": "Start time",
         "dxScheduler-editorLabelEndDate": "Beigu Datums",
-        "dxScheduler-editorAriaLabelEndTime": "End Time",
+        "dxScheduler-editorAriaLabelEndTime": "End time",
         "dxScheduler-editorLabelDescription": "Apraksts",
         "dxScheduler-editorLabelRecurrence": "Atkārtot",
 

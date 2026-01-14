@@ -282,9 +282,9 @@
 
         "dxScheduler-editorLabelTitle": "Tárgy",
         "dxScheduler-editorLabelStartDate": "Kezdés dátuma",
-        "dxScheduler-editorAriaLabelStartTime": "Start Time",
+        "dxScheduler-editorAriaLabelStartTime": "Start time",
         "dxScheduler-editorLabelEndDate": "Befejezés dátuma",
-        "dxScheduler-editorAriaLabelEndTime": "End Time",
+        "dxScheduler-editorAriaLabelEndTime": "End time",
         "dxScheduler-editorLabelDescription": "Leírás",
         "dxScheduler-editorLabelRecurrence": "Ismétlődés",
 
