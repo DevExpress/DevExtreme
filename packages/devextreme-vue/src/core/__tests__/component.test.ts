@@ -1,16 +1,13 @@
-import { PatchFlags } from '@vue/shared';
 import { mount } from '@vue/test-utils';
 import * as events from 'devextreme/events';
 import config from 'devextreme/core/config';
 import {
-  App, createVNode, defineComponent, h, nextTick, renderSlot, ref,
+  App, defineComponent, nextTick, ref,
 } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
-import { pullConfigComponents } from '../children-processing';
 import { IWidgetComponent } from '../component';
 import globalConfig from '../config';
-import Configuration from '../configuration';
 import { IConfigurable, IConfigurationComponent } from '../configuration-component';
 import { IExtension } from '../extension-component';
 
@@ -2036,4 +2033,3 @@ describe('disposing', () => {
     expect(component.unmount.bind(component)).not.toThrow();
   });
 });
-
