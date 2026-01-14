@@ -1382,6 +1382,10 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         return filterMenuItems.find('.dx-menu-item').eq(index);
     }
 
+    function getFilterRowOverlay() {
+        return $('.dx-datagrid-headers').children('.dx-datagrid-filter-range-overlay');
+    }
+
     // T104040
     QUnit.test('Not apply filter when changed filter operation with empty filter value', function(assert) {
     // arrange
@@ -1596,7 +1600,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
 
         // assert
         assert.equal($testElement.find('.dx-filter-range-content').length, 1, 'has filter range content');
-        assert.equal($('.dx-viewport').children('.dx-datagrid-filter-range-overlay').length, 0, 'no overlay wrapper');
+        assert.equal(getFilterRowOverlay().length, 0, 'no overlay wrapper');
     });
 
     QUnit.test('Overlay of between operation does not hide after scroll event', function(assert) {
@@ -1625,14 +1629,14 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         $('#qunit-fixture').find('.dx-menu-item:contains(\'Between\')').trigger('dxclick'); // select filter operation is 'between'
 
         // assert
-        assert.equal($('.dx-viewport').children('.dx-datagrid-filter-range-overlay').length, 1, 'has overlay wrapper');
+        assert.equal(getFilterRowOverlay().length, 1, 'has overlay wrapper');
 
         // arrange
         $('.dx-viewport').find('.dx-filter-range-content').trigger('scroll');
 
         // assert
         // T1280071
-        assert.equal($('.dx-viewport').children('.dx-datagrid-filter-range-overlay').length, 0, 'overlay wrapper is removed');
+        assert.equal(getFilterRowOverlay().length, 0, 'overlay wrapper is removed');
     });
 
     // T428602
@@ -1659,7 +1663,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
 
         // assert
         assert.equal($testElement.find('.dx-filter-range-content').length, 1, 'has filter range content');
-        assert.equal($('.dx-viewport').children('.dx-datagrid-filter-range-overlay').length, 1, 'has overlay wrapper');
+        assert.equal(getFilterRowOverlay().length, 1, 'has overlay wrapper');
     });
 
     QUnit.test('Show filter range popup when column with selectedFilterOperation is \'isBetween\'', function(assert) {
@@ -1682,8 +1686,8 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         that.clock.tick(10);
 
         // assert
-        assert.equal($('.dx-viewport').children('.dx-datagrid-filter-range-overlay').length, 1, 'has overlay wrapper');
-        assert.equal($('.dx-viewport').children('.dx-datagrid-filter-range-overlay').find('.dx-numberbox').length, 2, 'count number box');
+        assert.equal(getFilterRowOverlay().length, 1, 'has overlay wrapper');
+        assert.equal(getFilterRowOverlay().find('.dx-numberbox').length, 2, 'count number box');
     });
 
     QUnit.test('Show filter range popup when column with selectedFilterOperation is \'isBetween\' and filter value is array', function(assert) {
@@ -1708,8 +1712,8 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         that.clock.tick(10);
 
         // assert
-        const $startRange = $('.dx-viewport').children('.dx-datagrid-filter-range-overlay').find('.dx-numberbox').first();
-        const $endRange = $('.dx-viewport').children('.dx-datagrid-filter-range-overlay').find('.dx-numberbox').last();
+        const $startRange = getFilterRowOverlay().find('.dx-numberbox').first();
+        const $endRange = getFilterRowOverlay().find('.dx-numberbox').last();
         assert.equal($startRange.length, 1, 'has number box');
         assert.equal($endRange.length, 1, 'has number box');
         assert.strictEqual($startRange.find('input').val(), '15', 'value of the first editor');
@@ -1864,7 +1868,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         // assert
         const column = that.columnsController.getVisibleColumns()[1];
         assert.strictEqual(column.selectedFilterOperation, 'between', 'selected filter operation');
-        assert.strictEqual($('.dx-viewport').children('.dx-datagrid-filter-range-overlay').find('input').eq(0).val(), '', 'start value of the range');
+        assert.strictEqual(getFilterRowOverlay().find('input').eq(0).val(), '', 'start value of the range');
         assert.strictEqual(column.filterValue, null, 'filter value of the column');
     });
 
@@ -1889,9 +1893,9 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         that.clock.tick(10);
 
         // assert
-        const $startRangeInput = $('.dx-viewport').children('.dx-datagrid-filter-range-overlay').find('.dx-numberbox').first().find(TEXTEDITOR_INPUT_SELECTOR);
+        const $startRangeInput = getFilterRowOverlay().find('.dx-numberbox').first().find(TEXTEDITOR_INPUT_SELECTOR);
         assert.equal($startRangeInput.length, 1, 'has input');
-        const $endRangeInput = $('.dx-viewport').children('.dx-datagrid-filter-range-overlay').find('.dx-numberbox').last().find(TEXTEDITOR_INPUT_SELECTOR);
+        const $endRangeInput = getFilterRowOverlay().find('.dx-numberbox').last().find(TEXTEDITOR_INPUT_SELECTOR);
         assert.equal($endRangeInput.length, 1, 'has input');
 
         // act
@@ -1930,9 +1934,9 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         $($testElement.find('td').last().find('.dx-filter-range-content')).trigger('focusin');
         that.clock.tick(10);
 
-        const $startRangeInput = $('.dx-viewport').children('.dx-datagrid-filter-range-overlay').find('.dx-numberbox').first().find(TEXTEDITOR_INPUT_SELECTOR);
+        const $startRangeInput = getFilterRowOverlay().find('.dx-numberbox').first().find(TEXTEDITOR_INPUT_SELECTOR);
         assert.equal($startRangeInput.length, 1, 'has input');
-        const $endRangeInput = $('.dx-viewport').children('.dx-datagrid-filter-range-overlay').find('.dx-numberbox').last().find(TEXTEDITOR_INPUT_SELECTOR);
+        const $endRangeInput = getFilterRowOverlay().find('.dx-numberbox').last().find(TEXTEDITOR_INPUT_SELECTOR);
         assert.equal($endRangeInput.length, 1, 'has input');
 
         const changedSpy = sinon.spy();
@@ -2171,14 +2175,14 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         that.clock.tick(10);
 
         // assert
-        assert.equal($('.dx-viewport').children('.dx-datagrid-filter-range-overlay').length, 1, 'has overlay wrapper');
+        assert.equal(getFilterRowOverlay().length, 1, 'has overlay wrapper');
 
         // act
         that.columnHeadersView.render($testElement);
         that.columnHeadersView.resize();
 
         // assert
-        assert.equal($('.dx-viewport').children('.dx-datagrid-filter-range-overlay').length, 0, 'hasn\'t overlay wrapper');
+        assert.equal(getFilterRowOverlay().length, 0, 'hasn\'t overlay wrapper');
     });
 
     QUnit.test('Add custom tabIndex to filter range content', function(assert) {
@@ -2869,9 +2873,9 @@ QUnit.module('Filter Row with real dataController and columnsController', {
 
             // assert
             const $cells = $testElement.find('td');
-            const $numberBoxElements = $('.dx-viewport').children('.dx-datagrid-filter-range-overlay').find('.dx-numberbox');
+            const $numberBoxElements = getFilterRowOverlay().find('.dx-numberbox');
             assert.equal($cells.first().find('.dx-datagrid-filter-range-overlay').length, 1, 'has filter range popup');
-            assert.equal($('.dx-viewport').children('.dx-datagrid-filter-range-overlay').length, 1, 'has popup wrapper');
+            assert.equal(getFilterRowOverlay().length, 1, 'has popup wrapper');
             assert.equal($numberBoxElements.length, 2, 'count number box');
 
             // act
@@ -2879,7 +2883,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
 
             // assert
             assert.equal($cells.first().find('.dx-filter-range-content').length, 1, 'has filter range content');
-            assert.ok(!$('.dx-viewport').children('.dx-datagrid-filter-range-overlay').length, 'not has popup wrapper');
+            assert.ok(!getFilterRowOverlay().length, 'not has popup wrapper');
             assert.ok($cells.last().find('.dx-menu').first().is(':focus'), 'focus on menu of the second cell');
         });
 
@@ -2904,9 +2908,9 @@ QUnit.module('Filter Row with real dataController and columnsController', {
 
             // assert
             const $cells = $testElement.find('td');
-            const $numberBoxElements = $('.dx-viewport').children('.dx-datagrid-filter-range-overlay').find('.dx-numberbox');
+            const $numberBoxElements = getFilterRowOverlay().find('.dx-numberbox');
             assert.equal($cells.first().find('.dx-datagrid-filter-range-overlay').length, 1, 'has filter range popup');
-            assert.equal($('.dx-viewport').children('.dx-datagrid-filter-range-overlay').length, 1, 'has popup wrapper');
+            assert.equal(getFilterRowOverlay().length, 1, 'has popup wrapper');
             assert.equal($numberBoxElements.length, 2, 'count number box');
 
             // act
@@ -2914,7 +2918,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
 
             // assert
             assert.equal($cells.first().find('.dx-filter-range-content').length, 1, 'has filter range content');
-            assert.ok(!$('.dx-viewport').children('.dx-datagrid-filter-range-popup').length, 'not has popup wrapper');
+            assert.ok(!getFilterRowOverlay().length, 'not has popup wrapper');
             assert.ok($cells.first().find('.dx-menu').first().is(':focus'), 'focus on menu of the first cell');
         });
     }
