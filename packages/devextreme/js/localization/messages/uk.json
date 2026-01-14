@@ -282,7 +282,9 @@
 
         "dxScheduler-editorLabelTitle": "Тема",
         "dxScheduler-editorLabelStartDate": "Дата початку",
+        "dxScheduler-editorAriaLabelStartTime": "Start time",
         "dxScheduler-editorLabelEndDate": "Дата завершення",
+        "dxScheduler-editorAriaLabelEndTime": "End time",
         "dxScheduler-editorLabelDescription": "Опис",
         "dxScheduler-editorLabelRecurrence": "Повторення",
 
