@@ -25850,6 +25850,17 @@ declare module DevExpress.ui {
      */
     scrollTo(date: Date, group?: object, allDay?: boolean): void;
     /**
+     * [descr:dxScheduler.scrollTo(date, options)]
+     */
+    scrollTo(
+      date: Date,
+      options?: {
+        group?: object;
+        allDay?: boolean;
+        align?: 'start' | 'center';
+      }
+    ): void;
+    /**
      * [descr:dxScheduler.showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)]
      */
     showAppointmentPopup(

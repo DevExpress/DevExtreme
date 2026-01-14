@@ -77,6 +77,7 @@ import type { NormalizedView } from './utils/options/types';
 import { setAppointmentGroupValues } from './utils/resource_manager/appointment_groups_utils';
 import { createResourceEditorModel } from './utils/resource_manager/popup_utils';
 import { ResourceManager } from './utils/resource_manager/resource_manager';
+import type { GroupValues, RawGroupValues } from './utils/resource_manager/types';
 import AppointmentLayoutManager from './view_model/appointments_layout_manager';
 import { AppointmentDataSource } from './view_model/m_appointment_data_source';
 import type { AppointmentViewModelPlain } from './view_model/types';
@@ -89,6 +90,14 @@ import SchedulerWorkSpaceDay from './workspaces/m_work_space_day';
 import SchedulerWorkSpaceMonth from './workspaces/m_work_space_month';
 import SchedulerWorkSpaceWeek from './workspaces/m_work_space_week';
 import SchedulerWorkSpaceWorkWeek from './workspaces/m_work_space_work_week';
+
+interface ScrollToOptions {
+  group?: RawGroupValues | GroupValues;
+  allDay?: boolean | undefined;
+  align?: 'start' | 'center';
+}
+
+type ScrollToGroupValuesOrOptions = RawGroupValues | GroupValues | ScrollToOptions | undefined;
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -2022,8 +2031,30 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._appointmentTooltip?.hide();
   }
 
-  scrollTo(date, groupValues, allDay) {
-    this._workSpace.scrollTo(date, groupValues, allDay);
+  scrollTo(
+    date: Date,
+    groupValuesOrOptions?: ScrollToGroupValuesOrOptions,
+    allDay?: boolean | undefined,
+  ) {
+    let groupValues;
+    let allDayValue;
+    let align: 'start' | 'center' = 'center';
+
+    if (this._isScrollOptionsObject(groupValuesOrOptions)) {
+      groupValues = groupValuesOrOptions.group;
+      allDayValue = groupValuesOrOptions.allDay;
+      align = groupValuesOrOptions.align ?? 'center';
+    } else {
+      groupValues = groupValuesOrOptions;
+      allDayValue = allDay;
+    }
+
+    this._workSpace.scrollTo(date, groupValues, allDayValue, true, align);
+  }
+
+  private _isScrollOptionsObject(options?: ScrollToGroupValuesOrOptions): options is ScrollToOptions {
+    return Boolean(options) && typeof options === 'object'
+      && ('align' in options || 'allDay' in options || 'group' in options);
   }
 
   _isHorizontalVirtualScrolling() {

@@ -1310,6 +1310,20 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
     scrollTo(date: Date, group?: object, allDay?: boolean): void;
     /**
      * @docid
+     * @publicName scrollTo(date, options)
+     * @param2 options:Object|undefined
+     * @param2_field group:Object|undefined
+     * @param2_field allDay:Boolean|undefined
+     * @param2_field align:Enums.SchedulerScrollToAlign|undefined
+     * @public
+     */
+    scrollTo(date: Date, options?: {
+        group?: object;
+        allDay?: boolean;
+        align?: 'start' | 'center';
+    }): void;
+    /**
+     * @docid
      * @publicName showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)
      * @param1 appointmentData:dxSchedulerAppointment|undefined
      * @param2 createNewAppointment:Boolean|undefined
