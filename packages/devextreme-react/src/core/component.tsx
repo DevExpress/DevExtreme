@@ -63,9 +63,9 @@ const Component = forwardRef<ComponentRef, any>(
       },
     ), [props, registerExtension]);
 
-    const createWidget = useCallback((el?: Element) => {
-      return componentBaseRef.current?.createWidget(el) ?? false;
-    }, []);
+    const createWidget = useCallback(
+      (el?: Element) => componentBaseRef.current?.createWidget(el) ?? false, []
+    );
 
     const clearExtensions = useCallback(() => {
       props.clearExtensions?.();
@@ -89,7 +89,7 @@ const Component = forwardRef<ComponentRef, any>(
           if (clearedRef.cleared) return;
 
           // If still connected, it's likely Activity hide -> do nothing
-          if (el && el.isConnected) return;
+          if (el?.isConnected) return;
 
           clearedRef.cleared = true;
           clearExtensionsRef.current?.();

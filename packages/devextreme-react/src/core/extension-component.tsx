@@ -25,9 +25,9 @@ const ExtensionComponent = forwardRef<ComponentBaseRef, any>(
   <P extends IHtmlOptions>(props: P & ComponentProps, ref: React.ForwardedRef<ComponentBaseRef>) => {
     const componentBaseRef = useRef<ComponentBaseRef>(null);
 
-    const createWidget = useCallback((el?: Element) => {
-      return componentBaseRef.current?.createWidget(el) ?? false;
-    }, []);
+    const createWidget = useCallback(
+      (el?: Element) => componentBaseRef.current?.createWidget(el) ?? false, []
+    );
 
     useLayoutEffect(() => {
       const { onMounted } = props as any;

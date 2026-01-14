@@ -375,8 +375,8 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       const checkAndDispose = () => {
         if (disposedRef.disposed) return;
 
-        // If element is still connected, it is likely Activity hide (effects teardown) -> keep instance
-        if (el && el.isConnected) return;
+        // If element is still connected, it is likely Activity hide -> keep instance
+        if (el?.isConnected) return;
 
         disposedRef.disposed = true;
         disposeWidgetNow();
