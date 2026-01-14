@@ -282,7 +282,9 @@
 
         "dxScheduler-editorLabelTitle": "Subiect",
         "dxScheduler-editorLabelStartDate": "Data de început",
+        "dxScheduler-editorAriaLabelStartTime": "Start Time",
         "dxScheduler-editorLabelEndDate": "Data de încheiere",
+        "dxScheduler-editorAriaLabelEndTime": "End Time",
         "dxScheduler-editorLabelDescription": "Descriere",
         "dxScheduler-editorLabelRecurrence": "Repetă",
 

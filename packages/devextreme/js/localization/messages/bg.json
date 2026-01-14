@@ -282,7 +282,9 @@
 
         "dxScheduler-editorLabelTitle": "Заглавие",
         "dxScheduler-editorLabelStartDate": "Начална дата",
+        "dxScheduler-editorAriaLabelStartTime": "Start Time",
         "dxScheduler-editorLabelEndDate": "Краен срок",
+        "dxScheduler-editorAriaLabelEndTime": "End Time",
         "dxScheduler-editorLabelDescription": "Описание",
         "dxScheduler-editorLabelRecurrence": "Repeat",
 
