@@ -282,7 +282,9 @@
 
         "dxScheduler-editorLabelTitle": "Assignatura",
         "dxScheduler-editorLabelStartDate": "Data d'inici",
+        "dxScheduler-editorAriaLabelStartTime": "Start time",
         "dxScheduler-editorLabelEndDate": "Data de finalització",
+        "dxScheduler-editorAriaLabelEndTime": "End time",
         "dxScheduler-editorLabelDescription": "Descripció",
         "dxScheduler-editorLabelRecurrence": "Repetir",
 
