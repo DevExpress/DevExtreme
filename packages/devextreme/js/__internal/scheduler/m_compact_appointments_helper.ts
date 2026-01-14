@@ -6,6 +6,7 @@ import { FunctionTemplate } from '@js/core/templates/function_template';
 import Button from '@js/ui/button';
 
 import { APPOINTMENT_SETTINGS_KEY, LIST_ITEM_CLASS, LIST_ITEM_DATA_KEY } from './constants';
+import type Scheduler from './m_scheduler';
 import type { AppointmentTooltipItem, CompactAppointmentOptions } from './types';
 
 const APPOINTMENT_COLLECTOR_CLASS = 'dx-scheduler-appointment-collector';
@@ -15,7 +16,10 @@ const APPOINTMENT_COLLECTOR_CONTENT_CLASS = `${APPOINTMENT_COLLECTOR_CLASS}-cont
 export class CompactAppointmentsHelper {
   elements: any[] = [];
 
-  constructor(public instance) {
+  instance: Scheduler;
+
+  constructor(instance: Scheduler) {
+    this.instance = instance;
   }
 
   render(options: CompactAppointmentOptions): dxElementWrapper {
@@ -43,6 +47,7 @@ export class CompactAppointmentsHelper {
     const $button = $(e.element);
     this.instance.showAppointmentTooltipCore(
       $button,
+      // @ts-expect-error
       $button.data('items'),
       this._getExtraOptionsForTooltip(options, $button),
     );
@@ -96,6 +101,7 @@ export class CompactAppointmentsHelper {
   _createCompactButton(template, options: CompactAppointmentOptions) {
     const $button = this._createCompactButtonElement(options);
 
+    // @ts-expect-error
     return this.instance._createComponent($button, Button, {
       type: 'default',
       width: options.width,
@@ -180,25 +186,12 @@ export class CompactAppointmentsHelper {
     return `${dateLocalization.format(date, 'monthAndDay')}, ${dateLocalization.format(date, 'year')}`;
   }
 
-  _getStartDate(appointment) {
-    const date = appointment.startDate;
-    return date ? new Date(date) : null;
-  }
-
-  _getEndDate(appointment) {
-    const date = appointment.endDate;
-    return date ? new Date(date) : null;
-  }
-
   _getDateText(appointment, targetedAppointment?) {
-    const displayStartDate = targetedAppointment?.displayStartDate;
-    const displayEndDate = targetedAppointment?.displayEndDate;
+    const startDate = targetedAppointment?.displayStartDate || appointment.startDate;
+    const endDate = targetedAppointment?.displayEndDate || appointment.endDate;
 
-    const startDate = displayStartDate || this._getStartDate(appointment);
-    const endDate = displayEndDate || this._getEndDate(appointment);
-
-    const startDateText = startDate ? this._localizeDate(startDate) : '';
-    const endDateText = endDate ? this._localizeDate(endDate) : '';
+    const startDateText = this._localizeDate(startDate);
+    const endDateText = this._localizeDate(endDate);
 
     return startDateText === endDateText
       ? startDateText
