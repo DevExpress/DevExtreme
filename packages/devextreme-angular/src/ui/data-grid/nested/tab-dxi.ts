@@ -18,7 +18,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem, FormItemType } from 'devextreme/ui/form';
+import { dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
 
 import {
     DxIntegrationModule,
@@ -30,12 +30,13 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_tabs } from 'devextreme-angular/core/tokens';
 import {
     PROPERTY_TOKEN_items,
 } from 'devextreme-angular/core/tokens';
 
 @Component({
-    selector: 'dxi-data-grid-group-item',
+    selector: 'dxi-data-grid-tab',
     standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
@@ -44,12 +45,12 @@ import {
         NestedOptionHost,
         DxTemplateHost,
         {
-           provide: PROPERTY_TOKEN_items,
-           useExisting: DxiDataGridGroupItemComponent,
+           provide: PROPERTY_TOKEN_tabs,
+           useExisting: DxiDataGridTabComponent,
         }
     ]
 })
-export class DxiDataGridGroupItemComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiDataGridTabComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
@@ -65,19 +66,11 @@ export class DxiDataGridGroupItemComponent extends CollectionNestedOption implem
     }
 
     @Input()
-    get caption(): string | undefined {
-        return this._getOption('caption');
+    get badge(): string | undefined {
+        return this._getOption('badge');
     }
-    set caption(value: string | undefined) {
-        this._setOption('caption', value);
-    }
-
-    @Input()
-    get captionTemplate(): any {
-        return this._getOption('captionTemplate');
-    }
-    set captionTemplate(value: any) {
-        this._setOption('captionTemplate', value);
+    set badge(value: string | undefined) {
+        this._setOption('badge', value);
     }
 
     @Input()
@@ -97,19 +90,19 @@ export class DxiDataGridGroupItemComponent extends CollectionNestedOption implem
     }
 
     @Input()
-    get colSpan(): number | undefined {
-        return this._getOption('colSpan');
+    get disabled(): boolean {
+        return this._getOption('disabled');
     }
-    set colSpan(value: number | undefined) {
-        this._setOption('colSpan', value);
+    set disabled(value: boolean) {
+        this._setOption('disabled', value);
     }
 
     @Input()
-    get cssClass(): string | undefined {
-        return this._getOption('cssClass');
+    get icon(): string | undefined {
+        return this._getOption('icon');
     }
-    set cssClass(value: string | undefined) {
-        this._setOption('cssClass', value);
+    set icon(value: string | undefined) {
+        this._setOption('icon', value);
     }
 
     @Input()
@@ -121,19 +114,11 @@ export class DxiDataGridGroupItemComponent extends CollectionNestedOption implem
     }
 
     @Input()
-    get itemType(): FormItemType {
-        return this._getOption('itemType');
+    get tabTemplate(): any {
+        return this._getOption('tabTemplate');
     }
-    set itemType(value: FormItemType) {
-        this._setOption('itemType', value);
-    }
-
-    @Input()
-    get name(): string | undefined {
-        return this._getOption('name');
-    }
-    set name(value: string | undefined) {
-        this._setOption('name', value);
+    set tabTemplate(value: any) {
+        this._setOption('tabTemplate', value);
     }
 
     @Input()
@@ -145,24 +130,16 @@ export class DxiDataGridGroupItemComponent extends CollectionNestedOption implem
     }
 
     @Input()
-    get visible(): boolean {
-        return this._getOption('visible');
+    get title(): string | undefined {
+        return this._getOption('title');
     }
-    set visible(value: boolean) {
-        this._setOption('visible', value);
-    }
-
-    @Input()
-    get visibleIndex(): number | undefined {
-        return this._getOption('visibleIndex');
-    }
-    set visibleIndex(value: number | undefined) {
-        this._setOption('visibleIndex', value);
+    set title(value: string | undefined) {
+        this._setOption('title', value);
     }
 
 
     protected get _optionPath() {
-        return 'items';
+        return 'tabs';
     }
 
 
@@ -176,8 +153,6 @@ export class DxiDataGridGroupItemComponent extends CollectionNestedOption implem
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
         templateHost.setHost(this);
-        this.itemType = 'group';
-    
     }
 
     setTemplate(template: DxTemplateDirective) {
@@ -197,10 +172,10 @@ export class DxiDataGridGroupItemComponent extends CollectionNestedOption implem
 
 @NgModule({
   imports: [
-    DxiDataGridGroupItemComponent
+    DxiDataGridTabComponent
   ],
   exports: [
-    DxiDataGridGroupItemComponent
+    DxiDataGridTabComponent
   ],
 })
-export class DxiDataGridGroupItemModule { }
+export class DxiDataGridTabModule { }
