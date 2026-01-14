@@ -231,30 +231,6 @@ test('ScrollTo works correctly in timeline RTL (native, sync header/workspace)',
   rtlEnabled: true,
 }));
 
-test('T1310544: ScrollTo should scroll to date with offset: 720 (12 hours)', async (t) => {
-  const scheduler = new Scheduler('#container');
-
-  const targetDate = new Date(2021, 1, 2, 22, 0);
-  await scheduler.scrollTo(targetDate);
-
-  const cellData = await scheduler.getCellDataAtViewportCenter();
-
-  await t
-    .expect(targetDate.getTime()).gte(cellData.startDate.getTime())
-    .expect(targetDate.getTime()).lt(cellData.endDate.getTime());
-}).before(async () => createScheduler({
-  dataSource: [],
-  views: ['timelineDay'],
-  currentView: 'timelineDay',
-  currentDate: new Date(2021, 1, 2),
-  firstDayOfWeek: 0,
-  startDayHour: 6,
-  endDayHour: 18,
-  offset: 720,
-  cellDuration: 60,
-  height: 580,
-}));
-
 [
   // startDayHour: 6:00, endDayHour: 18:00
   {
@@ -317,7 +293,7 @@ test('T1310544: ScrollTo should scroll to date with offset: 720 (12 hours)', asy
     expectedDate: new Date(2021, 1, 3, 6, 0),
   },
 ].forEach(({ offset, targetDate, expectedDate }) => {
-  test(`Hour normalization: offset=${offset}, targetDate=${targetDate.toString()}`, async (t) => {
+  test(`scrollTo should scroll to date with offset=${offset}, targetDate=${targetDate.toString()} (T1310544)`, async (t) => {
     const scheduler = new Scheduler('#container');
 
     await scheduler.scrollTo(targetDate);
