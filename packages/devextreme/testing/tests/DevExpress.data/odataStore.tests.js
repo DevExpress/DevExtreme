@@ -104,10 +104,8 @@ QUnit.test('options are not changed after the merger', function(assert) {
     assert.deepEqual(storeOptions.fieldTypes, { id1: 'String' });
 });
 
-// TODO: Publish `url` method
-QUnit.skip('strips trailing slash', function(assert) {
-    assert.expect(1);
-    assert.equal(new ODataStore({ url: 'odata.org/EntitySet/' }).url(), 'odata.org/EntitySet');
+QUnit.test('strips trailing slash', function(assert) {
+    assert.equal(new ODataStore({ url: 'odata.org/EntitySet/' })._requestDispatcher.url, 'odata.org/EntitySet');
 });
 
 QUnit.module('load', moduleConfig);
