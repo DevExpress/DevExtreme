@@ -4,7 +4,7 @@ import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { checkOptions } from './axe_options';
 
-fixture.disablePageReloads`Scheduler - Appointment`
+fixture.disablePageReloads`Scheduler - Appointment Form`
   .page(url(__dirname, '../../container.html'));
 
 const APPOINTMENT_POPUP_CONTENT_SELECTOR = '.dx-scheduler-appointment-popup .dx-overlay-content';
