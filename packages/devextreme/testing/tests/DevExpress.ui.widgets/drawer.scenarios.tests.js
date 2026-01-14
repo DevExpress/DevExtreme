@@ -215,13 +215,8 @@ baseConfigs.forEach(baseConfig => {
             return isOpenedStateMode && isPosition;
         }
 
-        function testOrSkip(name, skip, callback) {
-            if(skip()) {
-
-                // QUnit.skip(name + ' - NOT SUPPORTED', function() {});
-            } else {
-                QUnit.test(name, callback);
-            }
+        function conditionalTest(name, isUnsupportedConfig, callback) {
+            !isUnsupportedConfig() && QUnit.test(name, callback);
         }
 
         [undefined, 25].forEach(minSize => {
@@ -309,7 +304,7 @@ baseConfigs.forEach(baseConfig => {
                 });
             });
 
-            testOrSkip(`(revealMode: ${revealMode}) opened: false, visible: false -> visible: true -> opened: true`, () => configIs('overlap'), function(assert) {
+            conditionalTest(`(revealMode: ${revealMode}) opened: false, visible: false -> visible: true -> opened: true`, () => configIs('overlap'), function(assert) {
                 const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
                 const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                     opened: false,
@@ -489,7 +484,7 @@ baseConfigs.forEach(baseConfig => {
             drawerTesters[baseConfig.position].checkOpened(assert, drawer, drawerElement);
         });
 
-        testOrSkip('opened: true (T813710: template + rendered + _viewPortChangeHandler)', () => configIs(['shrink', 'push']) || configIs(undefined, 'right'), function(assert) {
+        conditionalTest('opened: true (T813710: template + rendered + _viewPortChangeHandler)', () => configIs(['shrink', 'push']) || configIs(undefined, 'right'), function(assert) {
             const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: true,
@@ -517,7 +512,7 @@ baseConfigs.forEach(baseConfig => {
             drawerTesters[baseConfig.position].checkOpened(assert, drawer, drawerElement);
         });
 
-        testOrSkip('opened: true, visible: false -> visible: true', () => configIs('overlap'), function(assert) {
+        conditionalTest('opened: true, visible: false -> visible: true', () => configIs('overlap'), function(assert) {
             const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: true,
@@ -532,7 +527,7 @@ baseConfigs.forEach(baseConfig => {
             drawerTesters[baseConfig.position].checkOpened(assert, drawer, drawerElement);
         });
 
-        testOrSkip('opened: true, visible: false -> repaint -> visible: true', () => configIs('overlap'), function(assert) {
+        conditionalTest('opened: true, visible: false -> repaint -> visible: true', () => configIs('overlap'), function(assert) {
             const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: true,
