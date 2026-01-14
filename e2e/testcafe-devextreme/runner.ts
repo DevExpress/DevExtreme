@@ -100,12 +100,12 @@ function expandBrowserAlias(browser: string): string {
 function getArgs(): ParsedArgs {
   return parseArgs(process.argv.slice(1), {
     default: {
-      concurrency: 1,
+      concurrency: 0,
       browsers: 'chrome',
       test: '',
       reporter: 'spec-time',
-      componentFolder: 'accessibility/scheduler',
-      file: 'appointmentForm',
+      componentFolder: '',
+      file: '*',
       cache: false,
       quarantineMode: false,
       indices: '',
@@ -114,7 +114,7 @@ function getArgs(): ParsedArgs {
       shadowDom: false,
       skipUnstable: true,
       disableScreenshots: false,
-      retryFailed: false,
+      retryFailed: true,
     },
   }) as ParsedArgs;
 }
@@ -136,7 +136,7 @@ async function main() {
     setShadowDom(args);
 
     const componentFolderArg = typeof args.componentFolder === 'string' ? args.componentFolder.trim() : '';
-    const componentFolder = componentFolderArg ? `${componentFolderArg}` : '**';
+    const componentFolder = componentFolderArg ? `${componentFolderArg}/**` : '**';
 
     if (fs.existsSync('./screenshots')) {
       fs.rmSync('./screenshots', { recursive: true });
