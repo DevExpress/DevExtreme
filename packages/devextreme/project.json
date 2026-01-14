@@ -261,9 +261,9 @@
       ],
       "outputs": [
         "{projectRoot}/artifacts",
-        "{projectRoot}/js/bundles/dx.custom.js",
-        "{projectRoot}/js/common/core/localization/cldr-data",
-        "{projectRoot}/js/common/core/localization/default_messages.js"
+        "{projectRoot}/build/bundle-templates/dx.custom.js",
+        "{projectRoot}/js/__internal/core/localization/cldr-data",
+        "{projectRoot}/js/__internal/core/localization/default_messages.ts"
       ],
       "cache": true,
       "configurations": {
@@ -308,9 +308,9 @@
       ],
       "outputs": [
         "{projectRoot}/artifacts",
-        "{projectRoot}/js/bundles/dx.custom.js",
-        "{projectRoot}/js/common/core/localization/cldr-data",
-        "{projectRoot}/js/common/core/localization/default_messages.js"
+        "{projectRoot}/build/bundle-templates/dx.custom.js",
+        "{projectRoot}/js/__internal/core/localization/cldr-data",
+        "{projectRoot}/js/__internal/core/localization/default_messages.ts"
       ],
       "cache": true
     },
