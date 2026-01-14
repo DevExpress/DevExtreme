@@ -420,7 +420,7 @@
         "dxChat-fileViewLabel": "File list",
         "dxChat-downloadButtonLabel": "Download file {0}",
         "dxChat-fileLimitReachedWarning": "You selected too many files. Select no more than {0} files and retry.",
-        "dxChat-functionCallTitle": "{0} function called",
+        "dxChat-functionCallTitle": "function called",
         "dxChat-functionCallLabel": "Function Called",
         "dxChat-argumentsLabel": "Arguments",
         "dxChat-resultLabel": "Result",
