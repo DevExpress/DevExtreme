@@ -709,7 +709,6 @@ $.each([null, [-180, 90, 180, -20], [-50, 90, 180, -90], [-180, 20, 180, -90], [
 
         this.projection1.setZoom(2);
         this.projection1.setCenter([0, 80]);
-
         this.projection2.setViewport(this.projection1.getViewport());
 
         assert.roughEqual(this.projection2.getZoom(), this.projection1.getZoom(), 1E-8, 'zoom');
