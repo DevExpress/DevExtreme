@@ -472,7 +472,11 @@ export default [
   // testcafe tests
   ...testcafeConfig.map(config => ({
     ...config,
-    rules: changeRulesToStylistic(config.rules || {}),
+    rules: {
+      ...changeRulesToStylistic(config.rules || {}),
+      'require-await': 'warn',
+
+    },
     files: ['testing/**/*.{js,ts}', 'utils/visual-tests/**/*.*'],
   })),
 
@@ -505,7 +509,25 @@ export default [
   // utils directory
   {
     files: [
-      'utils/**/*.{js,ts}',
+      'utils/**/*.js',
+    ],
+    ignores: [
+      'utils/testing/',
+      'utils/visual-tests/',
+      'utils/templates/',
+    ],
+    rules: {
+      'no-console': 0,
+      'no-await-in-loop': 0,
+      'no-restricted-syntax': 0,
+      '@typescript-eslint/await-thenable': 0,
+      'spellcheck/spell-checker': 0,
+      'consistent-return': 0,
+    },
+  },
+  {
+    files: [
+      'utils/**/*.ts',
     ],
     ignores: [
       'utils/testing/',
@@ -514,7 +536,7 @@ export default [
     ],
     languageOptions: {
       parserOptions: {
-        projectService: true,
+        project: './tsconfig.json',
       },
     },
     rules: {
