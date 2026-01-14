@@ -9,6 +9,7 @@ import { isDefined } from '@js/core/utils/type';
 import Button from '@js/ui/button';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
+import type { Item } from '@js/ui/tree_view';
 import TreeView from '@js/ui/tree_view';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
@@ -30,6 +31,12 @@ const COLUMN_CHOOSER_ICON_NAME = 'column-chooser';
 const COLUMN_CHOOSER_ITEM_CLASS = 'dx-column-chooser-item';
 
 const COLUMN_OPTIONS_USED_IN_ITEMS = ['showInColumnChooser', 'caption', 'allowHiding', 'visible', 'cssClass', 'ownerBand'];
+
+type Node = Item & {
+  itemData: {
+    id: number;
+  };
+};
 
 const processItems = function (that: ColumnChooserView, chooserColumns) {
   const items: any = [];
@@ -293,7 +300,10 @@ export class ColumnChooserView extends ColumnsView {
     return !!childColumns.some((column) => !!column.visible);
   }
 
-  private getColumnVisibility(columnIndex: number, isNodeSelected: boolean): boolean {
+  private getColumnVisibility(
+    columnIndex: number,
+    isNodeSelected: boolean | undefined,
+  ): boolean | undefined {
     const column = this._columnsController.columnOption(columnIndex);
     const selectionOptions = this.option('columnChooser.selection');
     const recursive = selectionOptions?.recursive;
@@ -305,7 +315,7 @@ export class ColumnChooserView extends ColumnsView {
     return isNodeSelected;
   }
 
-  private sortNodesByBandColumns(nodes): any[] {
+  private sortNodesByBandColumns(nodes: Node[]): Node[] {
     return [...nodes].sort((a, b) => {
       const columnA = this._columnsController.columnOption(a.itemData.id);
       const columnB = this._columnsController.columnOption(b.itemData.id);
@@ -316,7 +326,7 @@ export class ColumnChooserView extends ColumnsView {
     });
   }
 
-  private updateColumnVisibility(nodes): void {
+  private updateColumnVisibility(nodes: Node[]): void {
     const sortedNodes = this.sortNodesByBandColumns(nodes);
 
     sortedNodes.forEach((node) => {
@@ -331,7 +341,7 @@ export class ColumnChooserView extends ColumnsView {
     const that = this;
     const selectionOptions = this.option('columnChooser.selection') ?? {};
 
-    const getFlatNodes = (nodes) => {
+    const getFlatNodes = (nodes): any[] => {
       const addNodesToArray = (nodes, flatNodesArray) => nodes.reduce((result, node) => {
         result.push(node);
 
