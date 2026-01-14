@@ -261,6 +261,7 @@ export default [
       '@typescript-eslint/ban-ts-comment': 0,
       '@typescript-eslint/no-extraneous-class': 0,
       '@typescript-eslint/no-floating-promises': 0,
+      '@typescript-eslint/only-throw-error': 'warn',
     },
   },
 
