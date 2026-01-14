@@ -243,7 +243,7 @@ export default class DataGrid extends GridCore {
   }
 
   getFilterRangeOverlay(): Selector {
-    return this.body.find(`.${this.addWidgetPrefix(CLASS.filterRangeOverlay)}`);
+    return this.getHeadersContainer().child(`.${this.addWidgetPrefix(CLASS.filterRangeOverlay)}`);
   }
   getFocusOverlay() {
     return this.body.find(`.${this.addWidgetPrefix(CLASS.focusOverlay)}`);
