@@ -282,7 +282,9 @@
 
         "dxScheduler-editorLabelTitle": "Ämne",
         "dxScheduler-editorLabelStartDate": "Startdatum",
+        "dxScheduler-editorAriaLabelStartTime": "Start time",
         "dxScheduler-editorLabelEndDate": "Slutdatum",
+        "dxScheduler-editorAriaLabelEndTime": "End time",
         "dxScheduler-editorLabelDescription": "Beskrivning",
         "dxScheduler-editorLabelRecurrence": "Upprepa",
 
