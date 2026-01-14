@@ -2037,24 +2037,3 @@ describe('disposing', () => {
   });
 });
 
-describe('children processing', () => {
-  it.skip('should process children if they are wrapped to a bail container', () => {
-    const Nested = buildTestConfigCtor();
-    const config = new Configuration(
-      () => undefined,
-      null,
-      {},
-    );
-    (Nested as IConfigurationComponent).$_optionName = 'nestedOption';
-    const nestedVNode = createVNode(Nested);
-    const vnode = renderSlot(
-      { default: () => [nestedVNode] },
-      'default',
-      undefined,
-      () => [h('comment')],
-    );
-    expect(vnode.patchFlag).toBe(PatchFlags.BAIL);
-    pullConfigComponents([vnode], [], config);
-    expect(nestedVNode).toHaveProperty('$_config');
-  });
-});
