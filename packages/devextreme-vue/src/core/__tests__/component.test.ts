@@ -2047,15 +2047,14 @@ describe('children processing', () => {
     );
     (Nested as IConfigurationComponent).$_optionName = 'nestedOption';
     const nestedVNode = createVNode(Nested);
-    const bailFragment = createVNode(
+    const vnode = createVNode(
       Fragment,
       null,
       [nestedVNode],
       PatchFlags.BAIL,
     );
-    
-    expect(bailFragment.patchFlag).toBe(PatchFlags.BAIL);
-    pullConfigComponents([bailFragment], [], config);
+    expect(vnode.patchFlag).toBe(PatchFlags.BAIL);
+    pullConfigComponents([vnode], [], config);
     expect(nestedVNode).toHaveProperty('$_config');
   });
 });
