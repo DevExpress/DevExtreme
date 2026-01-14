@@ -203,7 +203,7 @@ export function shouldRunTestAtIndex(testIndex) {
   return part === currentPart;
 }
 
-const SKIPPED_TESTS = { // one more test run
+const SKIPPED_TESTS = {
   jQuery: {
     DataGrid: ['EditStateManagement', 'RemoteGrouping'],
   },
