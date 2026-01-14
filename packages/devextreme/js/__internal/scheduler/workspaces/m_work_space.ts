@@ -1568,6 +1568,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       return 0;
     }
 
+    return this.getCellWidth();
+
     const $row = (this.$element() as any).find(`.${DATE_TABLE_ROW_CLASS}`).eq(0);
     let width = 0;
     const $cells = $row.find(`.${DATE_TABLE_CELL_CLASS}`);
