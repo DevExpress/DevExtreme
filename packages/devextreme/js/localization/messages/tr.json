@@ -282,9 +282,9 @@
 
         "dxScheduler-editorLabelTitle": "Konu",
         "dxScheduler-editorLabelStartDate": "Başlangıç Tarihi",
-        "dxScheduler-editorAriaLabelStartTime": "Start Time",
+        "dxScheduler-editorAriaLabelStartTime": "Start time",
         "dxScheduler-editorLabelEndDate": "Bitiş Tarihi",
-        "dxScheduler-editorAriaLabelEndTime": "End Time",
+        "dxScheduler-editorAriaLabelEndTime": "End time",
         "dxScheduler-editorLabelDescription": "Açıklama",
         "dxScheduler-editorLabelRecurrence": "Tekrar",
 

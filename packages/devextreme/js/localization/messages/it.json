@@ -282,9 +282,9 @@
 
         "dxScheduler-editorLabelTitle": "Oggetto",
         "dxScheduler-editorLabelStartDate": "Data inizio",
-        "dxScheduler-editorAriaLabelStartTime": "Start Time",
+        "dxScheduler-editorAriaLabelStartTime": "Start time",
         "dxScheduler-editorLabelEndDate": "Data fine",
-        "dxScheduler-editorAriaLabelEndTime": "End Time",
+        "dxScheduler-editorAriaLabelEndTime": "End time",
         "dxScheduler-editorLabelDescription": "Descrizione",
         "dxScheduler-editorLabelRecurrence": "Ripeti",
 

@@ -282,9 +282,9 @@
 
         "dxScheduler-editorLabelTitle": "Θέμα",
         "dxScheduler-editorLabelStartDate": "Ημερομηνία έναρξης",
-        "dxScheduler-editorAriaLabelStartTime": "Start Time",
+        "dxScheduler-editorAriaLabelStartTime": "Start time",
         "dxScheduler-editorLabelEndDate": "Ημερομηνία λήξης",
-        "dxScheduler-editorAriaLabelEndTime": "End Time",
+        "dxScheduler-editorAriaLabelEndTime": "End time",
         "dxScheduler-editorLabelDescription": "Περιγραφή",
         "dxScheduler-editorLabelRecurrence": "Επανάληψη",
 
