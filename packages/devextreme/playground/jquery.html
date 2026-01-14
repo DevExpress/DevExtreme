@@ -38,6 +38,11 @@
     <script type="text/javascript" src="../artifacts/js/jspdf.plugin.autotable.min.js"></script>
     -->
 
+    <script type="module">
+        import { AzureOpenAI } from "https://esm.sh/openai@4.73.1";
+
+        window.AzureOpenAI = AzureOpenAI;
+    </script>
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
@@ -52,66 +57,160 @@
         <div id="chat"></div>
         <script>
             $(() => {
+                const deployment = 'gpt-4o-mini';
+                const apiVersion = '2024-02-01';
+                const endpoint = 'https://public-api.devexpress.com/demo-openai';
+                const apiKey = 'DEMO';
+                
                 const store = [];
+                const conversationMessages = [];
 
                 const user = {
-                    id: 'user1',
+                    id: 'user',
                     name: 'User',
                 };
 
                 const assistant = {
-                    id: 'assistant1',
+                    id: 'assistant',
                     name: 'AI Assistant',
                 };
 
-                store.push(
-                    {
-                        id: 1,
-                        timestamp: new Date('2024-01-15T10:00:00'),
-                        author: user,
-                        text: 'Check the current weather conditions in London.',
+                DevExpress.localization.loadMessages({
+                    en: {
+                        'dxChat-emptyListMessage': 'Here Chat uses fake data. Ask about weather',
+                        'dxChat-emptyListPrompt': 'Chat is empty',
+                        'dxChat-textareaPlaceholder': 'Ask about weather...',
                     },
-                    {
-                        id: 2,
-                        timestamp: new Date('2024-01-15T10:00:30'),
-                        author: assistant,
-                        text: 'The current weather in London is 59°F (15°C).',
-                        metadata: {
-                            functionCall: {
-                                name: 'GetWeather',
-                                arguments: [
-                                    { city: 'London' },
-                                ],
-                                result: '59°F (15°C)',
-                            },
-                        },
-                    },
-                    {
-                        id: 3,
-                        timestamp: new Date('2024-01-15T10:01:00'),
-                        author: user,
-                        text: 'What about New York?',
-                    },
-                    {
-                        id: 4,
-                        timestamp: new Date('2024-01-15T10:01:30'),
-                        author: assistant,
-                        text: 'The temperature in New York is currently 45°F (7°C) with partly cloudy skies.',
-                        metadata: {
-                            functionCall: {
-                                name: 'GetWeather',
-                                arguments: [
-                                    { city: 'New York' },
-                                    { units: 'imperial' },
-                                ],
-                                result: {
-                                    temperature: '45°F (7°C)',
-                                    conditions: 'partly cloudy',
+                });
+
+                const chatService = new AzureOpenAI({
+                    dangerouslyAllowBrowser: true,
+                    deployment,
+                    endpoint,
+                    apiVersion,
+                    apiKey,
+                });
+
+                function getWeather(location) {
+                    const cityKey = location.toLowerCase();
+                    const data = { temperature: 20, conditions: 'clear', humidity: 50 };
+                    
+                    return {
+                        location,
+                        temperature: `${data.temperature}°C`,
+                        conditions: data.conditions,
+                        humidity: `${data.humidity}%`,
+                    };
+                }
+
+                const weatherTool = {
+                    type: 'function',
+                    function: {
+                        name: 'get_weather',
+                        description: 'Get the current weather in a given location',
+                        parameters: {
+                            type: 'object',
+                            properties: {
+                                location: {
+                                    type: 'string',
+                                    description: 'The city name, e.g. London, New York',
                                 },
                             },
+                            required: ['location'],
+                            additionalProperties: false,
                         },
+                    },
+                    strict: true,
+                };
+
+                async function getAIResponse(messages, tools) {
+                    const params = {
+                        messages,
+                        model: deployment,
+                        max_tokens: 1000,
+                        temperature: 0.7,
+                        tools,
+                    };
+
+                    const response = await chatService.chat.completions.create(params);
+                    return response.choices[0];
+                }
+
+                async function processMessageSending(message) {
+                    conversationMessages.push({ role: 'user', content: message.text });
+                    chatInstance.option({ typingUsers: [assistant] });
+
+                    try {
+                        const tools = [weatherTool];
+                        const choice = await getAIResponse(conversationMessages, tools);
+
+                        chatInstance.option({ typingUsers: [] });
+
+                        if (choice.message.tool_calls && choice.message.tool_calls.length > 0) {
+                            const toolCall = choice.message.tool_calls[0];
+                            const functionName = toolCall.function.name;
+                            const functionArgs = JSON.parse(toolCall.function.arguments);
+
+                            conversationMessages.push(choice.message);
+
+                            const functionResult = getWeather(functionArgs.location);
+
+                            conversationMessages.push({
+                                role: 'tool',
+                                content: JSON.stringify(functionResult),
+                                tool_call_id: toolCall.id,
+                            });
+
+                            chatInstance.option({ typingUsers: [assistant] });
+
+                            const finalChoice = await getAIResponse(conversationMessages, tools);
+
+                            chatInstance.option({ typingUsers: [] });
+
+                            const aiText = finalChoice.message?.content;
+
+                            conversationMessages.push(finalChoice.message);
+
+                            renderAssistantMessage(aiText, {
+                                functionCall: {
+                                    name: functionName,
+                                    arguments: Object.entries(functionArgs).map(([key, value]) => ({ [key]: value })),
+                                    result: functionResult,
+                                },
+                            });
+                        } else {
+                            const aiText = choice.message?.content;
+
+                            conversationMessages.push(choice.message);
+                            renderAssistantMessage(aiText);
+                        }
+                    } catch (error) {
+                        chatInstance.option({ typingUsers: [] });
+                        conversationMessages.pop();
+                        
+                        chatInstance.option({
+                            alerts: [{
+                                message: 'Request failed. Please try again.',
+                            }],
+                        });
+
+                        setTimeout(() => {
+                            chatInstance.option({ alerts: [] });
+                        }, 2000);
                     }
-                );
+                }
+
+                function renderAssistantMessage(text, metadata) {
+                    const message = {
+                        id: Date.now(),
+                        timestamp: new Date(),
+                        author: assistant,
+                        text,
+                        metadata,
+                    };
+
+                    dataSource.store().push([{ type: 'insert', data: message }]);
+                }
 
                 const customStore = new DevExpress.data.CustomStore({
                     key: 'id',
@@ -139,10 +238,11 @@
 
                 const chatInstance = $("#chat").dxChat({
                     user,
+                    width: 500,
                     height: 600,
                     dataSource: dataSource,
                     reloadOnChange: false,
-                    showDayHeaders: true,
+                    showDayHeaders: false,
                     showAvatar: true,
                     showUserName: true,
                     showMessageTimestamp: true,
@@ -157,32 +257,7 @@
                             } 
                         }]);
 
-                        setTimeout(() => {
-                            const responseMessage = {
-                                id: Date.now() + 1,
-                                timestamp: new Date(),
-                                author: assistant,
-                                text: `Response to: "${message.text}"`,
-                                metadata: {
-                                    functionCall: {
-                                        name: 'ProcessUserQuery',
-                                        arguments: [
-                                            { query: message.text },
-                                            { timestamp: new Date().toISOString() }
-                                        ],
-                                        result: {
-                                            status: 'success',
-                                            processed: true
-                                        }
-                                    }
-                                }
-                            };
-                            
-                            dataSource.store().push([{ 
-                                type: 'insert', 
-                                data: responseMessage 
-                            }]);
-                        }, 500);
+                        processMessageSending(message);
                     }
                 }).dxChat('instance');
             });
