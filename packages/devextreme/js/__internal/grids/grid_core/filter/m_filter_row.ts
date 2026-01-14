@@ -13,6 +13,7 @@ import Menu from '@js/ui/menu';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import { selectView } from '@js/ui/shared/accessibility';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type MenuInternal from '@ts/ui/menu/menu';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { ColumnsResizerViewController } from '../columns_resizing_reordering/m_columns_resizing_reordering';
@@ -650,15 +651,11 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
         editorFactoryController.loseFocus();
       },
       onSubmenuHiding() {
-        // @ts-expect-error
-        eventsEngine.trigger($menu, 'blur');
         restoreFocus();
       },
       onContentReady(e) {
         eventsEngine.on($menu, 'blur', () => {
-          const menu = e.component;
-          // @ts-expect-error
-          menu._hideSubmenuAfterTimeout();
+          (e.component as unknown as MenuInternal)._hideSubmenuAfterTimeout();
           restoreFocus();
         });
       },
