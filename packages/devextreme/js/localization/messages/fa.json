@@ -282,7 +282,9 @@
 
         "dxScheduler-editorLabelTitle": "موضوع",
         "dxScheduler-editorLabelStartDate": "تاریخ شروع",
+        "dxScheduler-editorAriaLabelStartTime": "Start Time",
         "dxScheduler-editorLabelEndDate": "تاریخ پایان",
+        "dxScheduler-editorAriaLabelEndTime": "End Time",
         "dxScheduler-editorLabelDescription": "شرح",
         "dxScheduler-editorLabelRecurrence": "تکرار",
 

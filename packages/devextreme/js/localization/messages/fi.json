@@ -282,7 +282,9 @@
 
         "dxScheduler-editorLabelTitle": "Aihe",
         "dxScheduler-editorLabelStartDate": "Alkamispäivä",
+        "dxScheduler-editorAriaLabelStartTime": "Start Time",
         "dxScheduler-editorLabelEndDate": "Päättymispäivä",
+        "dxScheduler-editorAriaLabelEndTime": "End Time",
         "dxScheduler-editorLabelDescription": "Kuvaus",
         "dxScheduler-editorLabelRecurrence": "Toista",
 
