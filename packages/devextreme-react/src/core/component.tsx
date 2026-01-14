@@ -64,7 +64,7 @@ const Component = forwardRef<ComponentRef, any>(
     ), [props, registerExtension]);
 
     const createWidget = useCallback((el?: Element) => {
-      componentBaseRef.current?.createWidget(el);
+      return componentBaseRef.current?.createWidget(el) ?? false;
     }, []);
 
     const clearExtensions = useCallback(() => {
@@ -76,11 +76,27 @@ const Component = forwardRef<ComponentRef, any>(
     const clearExtensionsRef = useRef(clearExtensions);
 
     useLayoutEffect(() => {
-      createWidget();
-      createExtensions();
+      const created = createWidget();
+      if (created) {
+        createExtensions();
+      }
 
       return () => {
-        clearExtensionsRef.current?.();
+        const el = componentBaseRef.current?.getElement();
+        const clearedRef = { cleared: false };
+
+        const checkAndClear = () => {
+          if (clearedRef.cleared) return;
+
+          // If still connected, it's likely Activity hide -> do nothing
+          if (el && el.isConnected) return;
+
+          clearedRef.cleared = true;
+          clearExtensionsRef.current?.();
+        };
+
+        queueMicrotask(checkAndClear);
+        setTimeout(checkAndClear, 0);
       };
     }, []);
 
@@ -101,7 +117,7 @@ const Component = forwardRef<ComponentRef, any>(
           return componentBaseRef.current?.getElement();
         },
         createWidget(el) {
-          createWidgetRef.current?.(el);
+          return createWidgetRef.current?.(el) ?? false;
         },
         clearExtensions() {
           clearExtensionsRef.current?.();

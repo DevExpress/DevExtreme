@@ -49,7 +49,7 @@ type ComponentBaseProps = ComponentProps & {
 interface ComponentBaseRef {
   getInstance: () => any;
   getElement: () => HTMLDivElement | undefined;
-  createWidget: (element?: Element) => void;
+  createWidget: (element?: Element) => boolean;
 }
 
 interface IHtmlOptions {
@@ -155,6 +155,14 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       }
     }, []);
 
+    const getInstanceHost = (inst: any): Element | undefined => {
+      try {
+        return inst?.element?.();
+      } catch {
+        return undefined;
+      }
+    };
+
     const setInlineStyles = useCallback((styles) => {
       if (element.current) {
         const el = element.current;
@@ -217,11 +225,17 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       unscheduleGuards();
     }, []);
 
-    const createWidget = useCallback((el?: Element) => {
-      beforeCreateWidget();
-
+    const createWidget = useCallback((el?: Element): boolean => {
       // eslint-disable-next-line no-param-reassign
       el = el || element.current;
+
+      const currentHost = getInstanceHost(instance.current);
+      if (instance.current && el && currentHost === el) {
+        return false; // reuse existing instance on same host (Activity resume)
+      }
+
+      // Only run these hooks when we actually create
+      beforeCreateWidget();
 
       let options: any = {
         templatesRenderAsynchronously: true,
@@ -255,6 +269,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       instance.current.on('optionChanged', optionsManager.current.onOptionChanged);
 
       afterCreateWidget();
+      return true;
     }, [
       beforeCreateWidget,
       afterCreateWidget,
@@ -294,6 +309,18 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     ]);
 
     const onComponentMounted = useCallback(() => {
+      // Activity resume: instance exists but effects were torn down -> refresh layout after showing
+      if (instance.current) {
+        requestAnimationFrame(() => {
+          const inst = instance.current;
+          if (inst?.updateDimensions) {
+            inst.updateDimensions();
+          } else if (inst?.repaint) {
+            inst.repaint();
+          }
+        });
+      }
+
       const { style } = props;
 
       if (childElementsDetached.current) {
@@ -309,12 +336,13 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
       prevPropsRef.current = props;
     }, [
+      restoreTree,
       updateCssClasses,
       setInlineStyles,
       props,
     ]);
 
-    const onComponentUnmounted = useCallback(() => {
+    const disposeWidgetNow = useCallback(() => {
       removalLocker?.lock();
 
       if (instance.current) {
@@ -339,6 +367,25 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
       removalLocker?.unlock();
     }, [removalLocker]);
+
+    const onComponentUnmounted = useCallback(() => {
+      const el = element.current;
+      const disposedRef = { disposed: false };
+
+      const checkAndDispose = () => {
+        if (disposedRef.disposed) return;
+
+        // If element is still connected, it is likely Activity hide (effects teardown) -> keep instance
+        if (el && el.isConnected) return;
+
+        disposedRef.disposed = true;
+        disposeWidgetNow();
+      };
+
+      // Run in both microtask and macrotask to avoid timing edge cases
+      queueMicrotask(checkAndDispose);
+      setTimeout(checkAndDispose, 0);
+    }, [disposeWidgetNow]);
 
     useLayoutEffect(() => {
       onComponentMounted();
@@ -371,7 +418,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
           return element.current;
         },
         createWidget(el) {
-          createWidgetRef.current?.(el);
+          return createWidgetRef.current?.(el) ?? false;
         },
       }
     ), []);

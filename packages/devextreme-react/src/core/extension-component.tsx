@@ -26,7 +26,7 @@ const ExtensionComponent = forwardRef<ComponentBaseRef, any>(
     const componentBaseRef = useRef<ComponentBaseRef>(null);
 
     const createWidget = useCallback((el?: Element) => {
-      componentBaseRef.current?.createWidget(el);
+      return componentBaseRef.current?.createWidget(el) ?? false;
     }, []);
 
     useLayoutEffect(() => {
@@ -53,7 +53,7 @@ const ExtensionComponent = forwardRef<ComponentBaseRef, any>(
           return componentBaseRef.current?.getElement();
         },
         createWidget(el) {
-          createWidgetRef.current?.(el);
+          return createWidgetRef.current?.(el) ?? false;
         },
       }
     ), []);
