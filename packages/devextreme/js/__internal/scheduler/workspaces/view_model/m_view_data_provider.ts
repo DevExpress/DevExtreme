@@ -292,11 +292,11 @@ export default class ViewDataProvider {
     let resultCellColumnIndex = -1;
     let resultCellRowIndex = -1;
 
-    const getCellPosition = (rowIndex: number, cellIndex: number) => ({
-      columnIndex: rowIndex,
+    const getCellPosition = (columnIndex: number, rowIndex: number) => ({
+      columnIndex,
       rowIndex: showAllDayPanel && !this._options.isVerticalGrouping
-        ? cellIndex - 1
-        : cellIndex,
+        ? rowIndex - 1
+        : rowIndex,
     });
 
     for (let rowIndex = 0; rowIndex < completeViewDataMap.length; rowIndex += 1) {

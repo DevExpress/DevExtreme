@@ -1412,11 +1412,15 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
     const cell = this.viewDataProvider.findGlobalCellPosition(currentDate, groupIndex, allDay, true);
 
-    currentDate.setHours(cell?.cellData.startDate.getHours(), currentDate.getMinutes(), 0, 0);
+    if (!cell) {
+      return undefined;
+    }
+
+    currentDate.setHours(cell.cellData.startDate.getHours(), currentDate.getMinutes(), 0, 0);
 
     return this.virtualScrollingDispatcher.calculateCoordinatesByDataAndPosition(
-      cell?.cellData,
-      cell?.position,
+      cell.cellData,
+      cell.position,
       currentDate,
       isDateAndTimeView(this.type as any),
       this.viewDirection === 'vertical',
@@ -1824,6 +1828,10 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const isScrollToAllDay = allDay && this.isAllDayPanelVisible;
 
     const coordinates = this._getScrollCoordinates(date, groupIndex, isScrollToAllDay);
+
+    if (!coordinates) {
+      return;
+    }
 
     const scrollable = this.getScrollable();
     const $scrollable = scrollable.$element();
