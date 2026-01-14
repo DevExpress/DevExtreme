@@ -166,7 +166,7 @@ class MessageBubble extends Widget<Properties> {
     const { functionCall } = metadata;
 
     const accordionItems = [{
-      title: `${messageLocalization.format('dxChat-functionCallTitle')}`,
+      title: messageLocalization.format('dxChat-functionCallTitle'),
       template: (): dxElementWrapper => {
         const $content = $('<div>');
 

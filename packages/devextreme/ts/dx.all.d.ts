@@ -33993,6 +33993,29 @@ declare module DevExpress.ui.dxChat {
     [key: string]: any;
   };
   /**
+   * [descr:FunctionCall]
+   */
+  export type FunctionCall = {
+    /**
+     * [descr:FunctionCall.name]
+     */
+    name: string;
+    /**
+     * [descr:FunctionCall.arguments]
+     */
+    arguments: FunctionCallArgument[];
+    /**
+     * [descr:FunctionCall.result]
+     */
+    result: any;
+  };
+  /**
+   * [descr:FunctionCallArgument]
+   */
+  export type FunctionCallArgument = {
+    [key: string]: any;
+  };
+  /**
    * [descr:ImageMessage]
    */
   export type ImageMessage = MessageBase & {
@@ -34038,6 +34061,15 @@ declare module DevExpress.ui.dxChat {
     [key: string]: any;
   };
   /**
+   * [descr:MetaData]
+   */
+  export type MetaData = {
+    /**
+     * [descr:MetaData.functionCall]
+     */
+    functionCall: FunctionCall;
+  };
+  /**
    * [descr:TextMessage]
    */
   export type TextMessage = MessageBase & {
@@ -34053,6 +34085,10 @@ declare module DevExpress.ui.dxChat {
      * [descr:TextMessage.isEdited]
      */
     isEdited?: boolean;
+    /**
+     * [descr:TextMessage.metadata]
+     */
+    metadata?: MetaData;
 
     [key: string]: any;
   };
