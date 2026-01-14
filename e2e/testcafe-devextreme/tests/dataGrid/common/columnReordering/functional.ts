@@ -174,3 +174,239 @@ test('Column without allowReordering should have same position after dragging to
   ],
   allowColumnReordering: false,
 }));
+
+// T1316881
+test('Column reordering should work correctly with fixed columns on the right and columnRenderingMode is virtual', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const headers = dataGrid.getHeaders();
+  const headerRow = headers.getHeaderRow(0);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  const lastHeader = headerRow.getDataHeaderCells().nth(11);
+
+  // assert
+  await t
+    .expect(lastHeader.textContent)
+    .eql('19');
+
+  // act
+  await t.drag(lastHeader, -200, 0);
+
+  // assert
+  await t
+    .expect(headerRow.getDataHeaderCells().nth(11).textContent)
+    .eql('18');
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{}],
+  width: 800,
+  allowColumnReordering: true,
+  columnWidth: 100,
+  scrolling: {
+    columnRenderingMode: 'virtual',
+  },
+  columns: [
+    { dataField: '1' },
+    { dataField: '2' },
+    { dataField: '3' },
+    { dataField: '4' },
+    { dataField: '5' },
+    { dataField: '6' },
+    { dataField: '7' },
+    { dataField: '8' },
+    { dataField: '9' },
+    { dataField: '10' },
+    { dataField: '11' },
+    { dataField: '12' },
+    { dataField: '13' },
+    { dataField: '14' },
+    { dataField: '15' },
+    { dataField: '16' },
+    { dataField: '17' },
+    { dataField: '18', fixed: true, fixedPosition: 'right' },
+    { dataField: '19', fixed: true, fixedPosition: 'right' },
+  ],
+}));
+
+// T1316881
+test('Column reordering should work correctly after scrolling right with fixed columns on the left and columnRenderingMode is virtual', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const headers = dataGrid.getHeaders();
+  const headerRow = headers.getHeaderRow(0);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  // act
+  await dataGrid.scrollTo(t, { x: 10000 });
+
+  // assert
+  await t
+    .expect(dataGrid.getScrollLeft())
+    .eql(1100)
+    .expect(headerRow.getHeaderCell(16).element.exists) // last non-fixed column
+    .ok()
+    .expect(headerRow.getDataHeaderCells().nth(0).textContent)
+    .eql('1');
+
+  // act
+  await t.drag(headerRow.getDataHeaderCells().nth(1), -200, 0);
+
+  // assert
+  await t
+    .expect(headerRow.getDataHeaderCells().nth(0).textContent)
+    .eql('2');
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{}],
+  width: 800,
+  allowColumnReordering: true,
+  columnWidth: 100,
+  scrolling: {
+    columnRenderingMode: 'virtual',
+  },
+  columns: [
+    { dataField: '1', fixed: true, fixedPosition: 'left' },
+    { dataField: '2', fixed: true, fixedPosition: 'left' },
+    { dataField: '3' },
+    { dataField: '4' },
+    { dataField: '5' },
+    { dataField: '6' },
+    { dataField: '7' },
+    { dataField: '8' },
+    { dataField: '9' },
+    { dataField: '10' },
+    { dataField: '11' },
+    { dataField: '12' },
+    { dataField: '13' },
+    { dataField: '14' },
+    { dataField: '15' },
+    { dataField: '16' },
+    { dataField: '17' },
+    { dataField: '18' },
+    { dataField: '19' },
+  ],
+}));
+
+// T1316881
+test('Dragging a fixed column to a group panel should work correctly when columnRenderingMode is virtual', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const headers = dataGrid.getHeaders();
+  const headerRow = headers.getHeaderRow(0);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  const fixedHeader = headerRow.getDataHeaderCells().nth(10);
+
+  // assert
+  await t
+    .expect(fixedHeader.textContent)
+    .eql('18');
+
+  // act
+  await t.drag(fixedHeader, -600, -50);
+
+  // assert
+  await t
+    .expect(dataGrid.getGroupPanel().getHeader(0).element.textContent)
+    .eql('18');
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{}],
+  width: 800,
+  allowColumnReordering: true,
+  columnWidth: 100,
+  scrolling: {
+    columnRenderingMode: 'virtual',
+  },
+  groupPanel: {
+    visible: true,
+  },
+  columns: [
+    { dataField: '1' },
+    { dataField: '2' },
+    { dataField: '3' },
+    { dataField: '4' },
+    { dataField: '5' },
+    { dataField: '6' },
+    { dataField: '7' },
+    { dataField: '8' },
+    { dataField: '9' },
+    { dataField: '10' },
+    { dataField: '11' },
+    { dataField: '12' },
+    { dataField: '13' },
+    { dataField: '14' },
+    { dataField: '15' },
+    { dataField: '16' },
+    { dataField: '17' },
+    { dataField: '18', fixed: true, fixedPosition: 'right' },
+    { dataField: '19', fixed: true, fixedPosition: 'right' },
+  ],
+}));
+
+// T1316881
+test('Dragging a fixed column to a column chooser should work correctly when columnRenderingMode is virtual', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const headers = dataGrid.getHeaders();
+  const headerRow = headers.getHeaderRow(0);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  // act - open column chooser
+  await t.click(dataGrid.getColumnChooserButton());
+
+  // assert
+  await t
+    .expect(dataGrid.getColumnChooser().isOpened)
+    .ok();
+
+  const fixedHeader = headerRow.getDataHeaderCells().nth(10);
+
+  // assert
+  await t
+    .expect(fixedHeader.textContent)
+    .eql('18');
+
+  // act
+  await t.drag(fixedHeader, 20, 300);
+
+  // assert
+  await t
+    .expect(await dataGrid.getColumnChooser().getColumnTexts())
+    .eql(['18']);
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{}],
+  width: 800,
+  height: 500,
+  allowColumnReordering: true,
+  columnWidth: 100,
+  scrolling: {
+    columnRenderingMode: 'virtual',
+  },
+  columnChooser: {
+    enabled: true,
+  },
+  columns: [
+    { dataField: '1' },
+    { dataField: '2' },
+    { dataField: '3' },
+    { dataField: '4' },
+    { dataField: '5' },
+    { dataField: '6' },
+    { dataField: '7' },
+    { dataField: '8' },
+    { dataField: '9' },
+    { dataField: '10' },
+    { dataField: '11' },
+    { dataField: '12' },
+    { dataField: '13' },
+    { dataField: '14' },
+    { dataField: '15' },
+    { dataField: '16' },
+    { dataField: '17' },
+    { dataField: '18', fixed: true, fixedPosition: 'right' },
+    { dataField: '19', fixed: true, fixedPosition: 'right' },
+  ],
+}));

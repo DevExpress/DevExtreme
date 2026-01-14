@@ -122,15 +122,7 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
   }
 
   protected _getCell(cellPosition): dxElementWrapper {
-    const columnIndexOffset = this.getColumnIndexOffset(cellPosition.columnIndex);
-    const columnIndex = cellPosition.columnIndex >= 0
-      ? cellPosition.columnIndex - columnIndexOffset
-      : -1;
-
-    return this._columnHeadersView?.getCell({
-      rowIndex: cellPosition.rowIndex,
-      columnIndex,
-    });
+    return this._columnHeadersView?.getCell(cellPosition);
   }
 
   protected getFocusedView(): any {
@@ -201,6 +193,16 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
     return -1;
   }
 
+  private correctFocusedColumnIndexAfterScroll(columnIndexOffset): void {
+    if (isDefined(this._focusedCellPosition?.columnIndex)) {
+      const columnIndexOffsetDiff = this._columnsController.getColumnIndexOffset() - columnIndexOffset;
+
+      this.setFocusedColumnIndex(
+        this._focusedCellPosition.columnIndex - columnIndexOffsetDiff,
+      );
+    }
+  }
+
   public restoreFocus(): void {
     const $focusedCell = this._getFocusedCell();
     const isFixedCell = GridCoreStickyColumnsDom
@@ -217,7 +219,11 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
     );
 
     if (focusedCellIsOutsideVisibleArea) {
+      const columnIndexOffset = this._columnsController.getColumnIndexOffset();
+
+      this.needToRestoreFocus = false;
       this.scrollToNextCell($focusedCell).then(() => {
+        this.correctFocusedColumnIndexAfterScroll(columnIndexOffset);
         super.restoreFocus();
       });
       return;

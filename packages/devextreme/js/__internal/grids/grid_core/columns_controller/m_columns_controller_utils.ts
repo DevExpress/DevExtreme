@@ -417,7 +417,7 @@ export const updateColumnVisibleIndexes = function (that: ColumnsController, cur
 export const getColumnIndexByVisibleIndex = function (that: ColumnsController, visibleIndex, location) {
   // @ts-expect-error
   const rowIndex = isObject(visibleIndex) ? visibleIndex.rowIndex : null;
-  const columns = location === GROUP_LOCATION ? that.getGroupColumns() : location === COLUMN_CHOOSER_LOCATION ? that.getChooserColumns() : that.getVisibleColumns(rowIndex, true);
+  const columns = location === GROUP_LOCATION ? that.getGroupColumns() : location === COLUMN_CHOOSER_LOCATION ? that.getChooserColumns() : that.getVisibleColumns(rowIndex);
   let column;
 
   // @ts-expect-error

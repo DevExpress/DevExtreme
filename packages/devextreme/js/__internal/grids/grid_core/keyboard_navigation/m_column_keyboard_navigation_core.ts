@@ -73,7 +73,7 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
 
   public moveColumn(column, direction = Direction.Next, rowIndex = 0) {
     const viewName = this.getFocusedView().getName();
-    const visibleIndex = this.getVisibleIndex(column, rowIndex);
+    const visibleIndex = this._columnsController.getVisibleIndex(column.index, rowIndex);
     const newVisibleIndex = this.getNewVisibleIndex(visibleIndex, rowIndex, direction);
     const newFocusedColumnIndex = this.getNewFocusedColumnIndex(newVisibleIndex, direction);
 
