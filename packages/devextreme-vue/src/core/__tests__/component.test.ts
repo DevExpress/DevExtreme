@@ -2046,7 +2046,6 @@ describe('children processing', () => {
       {},
     );
     (Nested as IConfigurationComponent).$_optionName = 'nestedOption';
-    
     const nestedVNode = createVNode(Nested);
     const bailFragment = createVNode(
       Fragment,
