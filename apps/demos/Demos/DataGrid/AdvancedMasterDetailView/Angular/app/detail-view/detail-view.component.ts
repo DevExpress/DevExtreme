@@ -13,8 +13,8 @@ if (window && window.config?.packageConfigPaths) {
 
 @Component({
   selector: 'detail-view',
-  templateUrl: `.${modulePrefix && (`${modulePrefix}/detail-view`)}/detail-view.component.html`,
-  styleUrls: [`.${modulePrefix && (`${modulePrefix}/detail-view`)}/detail-view.component.css`],
+  templateUrl: `.${modulePrefix}/detail-view/detail-view.component.html`,
+  styleUrls: [`.${modulePrefix}/detail-view/detail-view.component.css`],
   imports: [
     DxDataGridModule,
     DxFormModule,
