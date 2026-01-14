@@ -38,6 +38,16 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
     }
   }
 
+  private correctFocusedColumnIndexAfterScroll(columnIndexOffset: number): void {
+    if (isDefined(this._focusedCellPosition?.columnIndex)) {
+      const columnIndexOffsetDiff = this._columnsController.getColumnIndexOffset() - columnIndexOffset;
+
+      this.setFocusedColumnIndex(
+        this._focusedCellPosition.columnIndex - columnIndexOffsetDiff,
+      );
+    }
+  }
+
   protected getColumnVisibleIndexCorrection(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     visibleColumnIndex: number,
@@ -191,16 +201,6 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
     }
 
     return -1;
-  }
-
-  private correctFocusedColumnIndexAfterScroll(columnIndexOffset): void {
-    if (isDefined(this._focusedCellPosition?.columnIndex)) {
-      const columnIndexOffsetDiff = this._columnsController.getColumnIndexOffset() - columnIndexOffset;
-
-      this.setFocusedColumnIndex(
-        this._focusedCellPosition.columnIndex - columnIndexOffsetDiff,
-      );
-    }
   }
 
   public restoreFocus(): void {
