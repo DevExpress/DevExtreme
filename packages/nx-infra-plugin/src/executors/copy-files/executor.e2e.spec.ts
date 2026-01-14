@@ -105,4 +105,29 @@ describe('CopyFilesExecutor E2E', () => {
       expect(content).not.toBe('Old content');
     });
   });
+
+  describe('Glob patterns', () => {
+    it('should copy files using glob pattern', async () => {
+      const projectDir = path.join(tempDir, 'packages', 'test-lib');
+      const srcDir = path.join(projectDir, 'src');
+      fs.mkdirSync(srcDir, { recursive: true });
+
+      await writeFileText(path.join(srcDir, 'file1.ts'), 'export const a = 1;');
+      await writeFileText(path.join(srcDir, 'file2.ts'), 'export const b = 2;');
+      await writeFileText(path.join(srcDir, 'other.js'), 'module.exports = {};');
+
+      const options: CopyFilesExecutorSchema = {
+        files: [{ from: './src/*.ts', to: './dist' }],
+      };
+
+      const result = await executor(options, context);
+
+      expect(result.success).toBe(true);
+
+      const distDir = path.join(projectDir, 'dist');
+      expect(fs.existsSync(path.join(distDir, 'file1.ts'))).toBe(true);
+      expect(fs.existsSync(path.join(distDir, 'file2.ts'))).toBe(true);
+      expect(fs.existsSync(path.join(distDir, 'other.js'))).toBe(false);
+    });
+  });
 });
