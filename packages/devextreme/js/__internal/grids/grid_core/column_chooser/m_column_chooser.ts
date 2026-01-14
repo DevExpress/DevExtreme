@@ -295,12 +295,14 @@ export class ColumnChooserView extends ColumnsView {
 
   private getColumnVisibility(columnIndex: number, isNodeSelected: boolean): boolean {
     const column = this._columnsController.columnOption(columnIndex);
+    const selectionOptions = this.option('columnChooser.selection');
+    const recursive = selectionOptions?.recursive;
 
-    if (!column?.hasColumns) {
-      return isNodeSelected;
+    if (recursive && column?.hasColumns) {
+      return this.getBandColumnVisibility(columnIndex);
     }
 
-    return this.getBandColumnVisibility(columnIndex);
+    return isNodeSelected;
   }
 
   private sortNodesByBandColumns(nodes): any[] {
