@@ -1,12 +1,15 @@
+import { PatchFlags } from '@vue/shared';
 import { mount } from '@vue/test-utils';
 import * as events from 'devextreme/events';
 import config from 'devextreme/core/config';
 import {
-  App, defineComponent, nextTick, ref,
+  App, defineComponent, nextTick, ref, createVNode, Fragment
 } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
+import { pullConfigComponents } from '../children-processing';
 import { IWidgetComponent } from '../component';
+import Configuration from '../configuration';
 import globalConfig from '../config';
 import { IConfigurable, IConfigurationComponent } from '../configuration-component';
 import { IExtension } from '../extension-component';
@@ -2031,5 +2034,29 @@ describe('disposing', () => {
     const component = mount(TestComponent);
 
     expect(component.unmount.bind(component)).not.toThrow();
+  });
+});
+
+describe('children processing', () => {
+  it('should process children if they are wrapped in a BAIL fragment', () => {
+    const Nested = buildTestConfigCtor();
+    const config = new Configuration(
+      () => undefined,
+      null,
+      {},
+    );
+    (Nested as IConfigurationComponent).$_optionName = 'nestedOption';
+    
+    const nestedVNode = createVNode(Nested);
+    const bailFragment = createVNode(
+      Fragment,
+      null,
+      [nestedVNode],
+      PatchFlags.BAIL,
+    );
+    
+    expect(bailFragment.patchFlag).toBe(PatchFlags.BAIL);
+    pullConfigComponents([bailFragment], [], config);
+    expect(nestedVNode).toHaveProperty('$_config');
   });
 });
