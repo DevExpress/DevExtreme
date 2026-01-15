@@ -114,14 +114,14 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     if (difference > this._getCellCount()) {
       difference = this._getCellCount();
     }
-    const width = difference * this.getRoundedCellWidth(groupIndex, groupIndex * this._getCellCount(), difference);
+    const width = difference * this.getCellWidth();
 
     return maxWidth < width ? maxWidth : width;
   }
 
   getIndicatorOffset(groupIndex) {
     const difference = this._getIndicatorDuration() - 1;
-    const offset = difference * this.getRoundedCellWidth(groupIndex, groupIndex * this._getCellCount(), difference);
+    const offset = difference * this.getCellWidth();
 
     return offset;
   }
