@@ -30,8 +30,8 @@ fixture.disablePageReloads`Scheduler - Appointment Collector Timezone`
       dataSource: [
         {
           text: 'Website Re-Design Plan',
-          startDate: new Date('2021-03-05T23:45:00.000Z'),
-          endDate: new Date('2021-03-05T18:15:00.000Z'),
+          startDate: new Date('2021-03-05T15:30:00.000Z'),
+          endDate: new Date('2021-03-05T17:00:00.000Z'),
         },
         {
           text: 'Complete Shipper Selection Form',
@@ -45,8 +45,8 @@ fixture.disablePageReloads`Scheduler - Appointment Collector Timezone`
         },
         {
           text: 'Upgrade Personal Computers',
-          startDate: new Date('2021-03-05T21:45:00.000Z'),
-          endDate: new Date('2021-03-05T23:30:00.000Z'),
+          startDate: new Date('2021-03-05T23:45:00.000Z'),
+          endDate: new Date('2021-03-06T01:30:00.000Z'),
         },
       ],
       currentView: 'month',
