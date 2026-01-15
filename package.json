@@ -18,7 +18,7 @@
     "prepare": "husky install",
     "all:update-version": "ts-node tools/scripts/update-version.ts",
     "all:build": "ts-node tools/scripts/build-all.ts",
-    "all:build-dev": "pnpm run all:build --dev",
+    "all:build-dev": "nx all:build-dev workflows",
     "all:pack-and-copy": "nx run-many -t pack-and-copy",
     "demos:prepare": "nx run devextreme-demos:prepare-js",
     "demos:start": "http-server ./apps/demos --port 8080 -c-1"
