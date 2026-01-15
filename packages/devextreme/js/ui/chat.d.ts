@@ -166,6 +166,17 @@ export type AttachmentDownloadClickEvent = EventInfo<dxChat> & {
 };
 
 /**
+ * @docid _ui_chat_SuggestionClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
+export type SuggestionClickEvent = NativeEventInfo<dxChat> & {
+  /** @docid _ui_chat_SuggestionClickEvent.suggestion */
+  readonly suggestion?: Suggestion;
+};
+
+/**
  * @docid
  * @namespace DevExpress.ui.dxChat
  * @public
@@ -227,6 +238,21 @@ export type Attachment = {
      * @public
      */
     size: number;
+
+    [key: string]: any;
+};
+
+/**
+ * @docid
+ * @namespace DevExpress.ui.dxChat
+ * @public
+ */
+export type Suggestion = {
+    /**
+     * @docid
+     * @public
+     */
+    text: string;
 
     [key: string]: any;
 };
@@ -432,6 +458,12 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @public
      */
     alerts?: Array<Alert>;
+        /**
+     * @docid
+     * @default ''
+     * @public
+     */
+    messageBoxValue?: string;
     /**
      * @docid
      * @default null
@@ -475,6 +507,12 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @public
      */
     showMessageTimestamp?: boolean;
+    /**
+     * @docid
+     * @public
+     * @type Array<Suggestion>
+     */
+    suggestions?: Suggestion[];
     /**
      * @docid
      * @default undefined
@@ -555,6 +593,14 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @public
      */
     onMessageUpdated?: ((e: MessageUpdatedEvent) => void) | undefined;
+    /**
+     * @docid
+     * @default undefined
+     * @type_function_param1 e:{ui/chat:SuggestionClickEvent}
+     * @action
+     * @public
+     */
+    onSuggestionClick?: ((e: SuggestionClickEvent) => void) | undefined;
 }
 
 /**
@@ -593,7 +639,7 @@ type FilterOutHidden<T> = Omit<T, 'onContentReady' | 'onFocusIn' | 'onFocusOut' 
 
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onMessageEntered'
   | 'onTypingStart' | 'onTypingEnd' | 'onMessageDeleting' | 'onMessageDeleted'
-  | 'onMessageEditingStart' | 'onMessageEditCanceled' | 'onMessageUpdating' | 'onMessageUpdated' | 'onAttachmentDownloadClick'>;
+  | 'onMessageEditingStart' | 'onMessageEditCanceled' | 'onMessageUpdating' | 'onMessageUpdated' | 'onAttachmentDownloadClick' | 'onSuggestionClick'>;
 
 /**
 * @hidden

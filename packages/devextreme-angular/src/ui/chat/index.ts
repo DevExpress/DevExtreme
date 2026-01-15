@@ -24,7 +24,7 @@ import {
 
 import DataSource from 'devextreme/data/data_source';
 import dxChat from 'devextreme/ui/chat';
-import { Alert, Message, AttachmentDownloadClickEvent, DisposingEvent, InitializedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, OptionChangedEvent, TypingEndEvent, TypingStartEvent, User } from 'devextreme/ui/chat';
+import { Alert, Message, AttachmentDownloadClickEvent, DisposingEvent, InitializedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, OptionChangedEvent, SuggestionClickEvent, TypingEndEvent, TypingStartEvent, Suggestion, User } from 'devextreme/ui/chat';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 import { Format } from 'devextreme/common/core/localization';
@@ -50,6 +50,7 @@ import { DxoEditingModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxoAuthorModule } from 'devextreme-angular/ui/nested';
 import { DxoMessageTimestampFormatModule } from 'devextreme-angular/ui/nested';
+import { DxiSuggestionModule } from 'devextreme-angular/ui/nested';
 import { DxiTypingUserModule } from 'devextreme-angular/ui/nested';
 import { DxoUserModule } from 'devextreme-angular/ui/nested';
 
@@ -61,12 +62,14 @@ import { DxoChatEditingModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatFileUploaderOptionsModule } from 'devextreme-angular/ui/chat/nested';
 import { DxiChatItemModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatMessageTimestampFormatModule } from 'devextreme-angular/ui/chat/nested';
+import { DxiChatSuggestionModule } from 'devextreme-angular/ui/chat/nested';
 import { DxiChatTypingUserModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatUserModule } from 'devextreme-angular/ui/chat/nested';
 import { 
            PROPERTY_TOKEN_alerts,
            PROPERTY_TOKEN_attachments,
            PROPERTY_TOKEN_items,
+           PROPERTY_TOKEN_suggestions,
            PROPERTY_TOKEN_typingUsers,
      } from 'devextreme-angular/core/tokens';
 
@@ -103,6 +106,11 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_suggestions)
+    set _suggestionsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('suggestions', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_typingUsers)
@@ -305,6 +313,19 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
 
     /**
+     * [descr:dxChatOptions.messageBoxValue]
+    
+     */
+    @Input()
+    get messageBoxValue(): string {
+        return this._getOption('messageBoxValue');
+    }
+    set messageBoxValue(value: string) {
+        this._setOption('messageBoxValue', value);
+    }
+
+
+    /**
      * [descr:dxChatOptions.messageTemplate]
     
      */
@@ -405,6 +426,19 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
     set showUserName(value: boolean) {
         this._setOption('showUserName', value);
+    }
+
+
+    /**
+     * [descr:dxChatOptions.suggestions]
+    
+     */
+    @Input()
+    get suggestions(): Array<Suggestion> {
+        return this._getOption('suggestions');
+    }
+    set suggestions(value: Array<Suggestion>) {
+        this._setOption('suggestions', value);
     }
 
 
@@ -549,6 +583,14 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
     
+     * [descr:dxChatOptions.onSuggestionClick]
+    
+    
+     */
+    @Output() onSuggestionClick: EventEmitter<SuggestionClickEvent>;
+
+    /**
+    
      * [descr:dxChatOptions.onTypingEnd]
     
     
@@ -673,6 +715,13 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() messageBoxValueChange: EventEmitter<string>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() messageTemplateChange: EventEmitter<any>;
 
     /**
@@ -729,6 +778,13 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() suggestionsChange: EventEmitter<Array<Suggestion>>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() typingUsersChange: EventEmitter<Array<User>>;
 
     /**
@@ -776,6 +832,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
             { subscribe: 'messageUpdated', emit: 'onMessageUpdated' },
             { subscribe: 'messageUpdating', emit: 'onMessageUpdating' },
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { subscribe: 'suggestionClick', emit: 'onSuggestionClick' },
             { subscribe: 'typingEnd', emit: 'onTypingEnd' },
             { subscribe: 'typingStart', emit: 'onTypingStart' },
             { emit: 'accessKeyChange' },
@@ -793,6 +850,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
             { emit: 'hintChange' },
             { emit: 'hoverStateEnabledChange' },
             { emit: 'itemsChange' },
+            { emit: 'messageBoxValueChange' },
             { emit: 'messageTemplateChange' },
             { emit: 'messageTimestampFormatChange' },
             { emit: 'reloadOnChangeChange' },
@@ -801,6 +859,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
             { emit: 'showDayHeadersChange' },
             { emit: 'showMessageTimestampChange' },
             { emit: 'showUserNameChange' },
+            { emit: 'suggestionsChange' },
             { emit: 'typingUsersChange' },
             { emit: 'userChange' },
             { emit: 'visibleChange' },
@@ -826,6 +885,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this.setupChanges('alerts', changes);
         this.setupChanges('dataSource', changes);
         this.setupChanges('items', changes);
+        this.setupChanges('suggestions', changes);
         this.setupChanges('typingUsers', changes);
     }
 
@@ -839,6 +899,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._idh.doCheck('alerts');
         this._idh.doCheck('dataSource');
         this._idh.doCheck('items');
+        this._idh.doCheck('suggestions');
         this._idh.doCheck('typingUsers');
         this._watcherHelper.checkWatchers();
         super.ngDoCheck();
@@ -864,6 +925,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     DxiItemModule,
     DxoAuthorModule,
     DxoMessageTimestampFormatModule,
+    DxiSuggestionModule,
     DxiTypingUserModule,
     DxoUserModule,
     DxiChatAlertModule,
@@ -874,6 +936,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     DxoChatFileUploaderOptionsModule,
     DxiChatItemModule,
     DxoChatMessageTimestampFormatModule,
+    DxiChatSuggestionModule,
     DxiChatTypingUserModule,
     DxoChatUserModule,
     DxIntegrationModule,
@@ -887,6 +950,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     DxiItemModule,
     DxoAuthorModule,
     DxoMessageTimestampFormatModule,
+    DxiSuggestionModule,
     DxiTypingUserModule,
     DxoUserModule,
     DxiChatAlertModule,
@@ -897,6 +961,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     DxoChatFileUploaderOptionsModule,
     DxiChatItemModule,
     DxoChatMessageTimestampFormatModule,
+    DxiChatSuggestionModule,
     DxiChatTypingUserModule,
     DxoChatUserModule,
     DxTemplateModule

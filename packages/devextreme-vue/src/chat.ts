@@ -19,8 +19,10 @@ import {
  MessageUpdatedEvent,
  MessageUpdatingEvent,
  OptionChangedEvent,
+ SuggestionClickEvent,
  TypingEndEvent,
  TypingStartEvent,
+ Suggestion,
  User,
  Attachment,
 } from "devextreme/ui/chat";
@@ -87,6 +89,7 @@ type AccessibleOptions = Pick<Properties,
   "onMessageUpdated" |
   "onMessageUpdating" |
   "onOptionChanged" |
+  "onSuggestionClick" |
   "onTypingEnd" |
   "onTypingStart" |
   "reloadOnChange" |
@@ -95,6 +98,7 @@ type AccessibleOptions = Pick<Properties,
   "showDayHeaders" |
   "showMessageTimestamp" |
   "showUserName" |
+  "suggestions" |
   "typingUsers" |
   "user" |
   "visible" |
@@ -135,6 +139,7 @@ const componentConfig = {
     onMessageUpdated: Function as PropType<((e: MessageUpdatedEvent) => void)>,
     onMessageUpdating: Function as PropType<((e: MessageUpdatingEvent) => void)>,
     onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onSuggestionClick: Function as PropType<((e: SuggestionClickEvent) => void)>,
     onTypingEnd: Function as PropType<((e: TypingEndEvent) => void)>,
     onTypingStart: Function as PropType<((e: TypingStartEvent) => void)>,
     reloadOnChange: Boolean,
@@ -143,6 +148,7 @@ const componentConfig = {
     showDayHeaders: Boolean,
     showMessageTimestamp: Boolean,
     showUserName: Boolean,
+    suggestions: Array as PropType<Array<Suggestion>>,
     typingUsers: Array as PropType<Array<User>>,
     user: Object as PropType<User | Record<string, any>>,
     visible: Boolean,
@@ -179,6 +185,7 @@ const componentConfig = {
     "update:onMessageUpdated": null,
     "update:onMessageUpdating": null,
     "update:onOptionChanged": null,
+    "update:onSuggestionClick": null,
     "update:onTypingEnd": null,
     "update:onTypingStart": null,
     "update:reloadOnChange": null,
@@ -187,6 +194,7 @@ const componentConfig = {
     "update:showDayHeaders": null,
     "update:showMessageTimestamp": null,
     "update:showUserName": null,
+    "update:suggestions": null,
     "update:typingUsers": null,
     "update:user": null,
     "update:visible": null,
@@ -207,6 +215,7 @@ const componentConfig = {
       fileUploaderOptions: { isCollectionItem: false, optionName: "fileUploaderOptions" },
       item: { isCollectionItem: true, optionName: "items" },
       messageTimestampFormat: { isCollectionItem: false, optionName: "messageTimestampFormat" },
+      suggestion: { isCollectionItem: true, optionName: "suggestions" },
       typingUser: { isCollectionItem: true, optionName: "typingUsers" },
       user: { isCollectionItem: false, optionName: "user" }
     };
@@ -537,6 +546,24 @@ const DxMessageTimestampFormat = defineComponent(DxMessageTimestampFormatConfig)
 
 (DxMessageTimestampFormat as any).$_optionName = "messageTimestampFormat";
 
+const DxSuggestionConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:text": null,
+  },
+  props: {
+    text: String
+  }
+};
+
+prepareConfigurationComponentConfig(DxSuggestionConfig);
+
+const DxSuggestion = defineComponent(DxSuggestionConfig);
+
+(DxSuggestion as any).$_optionName = "suggestions";
+(DxSuggestion as any).$_isCollectionItem = true;
+
 const DxTypingUserConfig = {
   emits: {
     "update:isActive": null,
@@ -595,6 +622,7 @@ export {
   DxFileUploaderOptions,
   DxItem,
   DxMessageTimestampFormat,
+  DxSuggestion,
   DxTypingUser,
   DxUser
 };

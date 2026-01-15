@@ -6,6 +6,7 @@ export * from './editing';
 export * from './file-uploader-options';
 export * from './item-dxi';
 export * from './message-timestamp-format';
+export * from './suggestion-dxi';
 export * from './typing-user-dxi';
 export * from './user';
 

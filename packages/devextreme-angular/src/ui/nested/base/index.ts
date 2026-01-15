@@ -50,6 +50,7 @@ export * from './search-panel';
 export * from './sortable-options';
 export * from './sorting';
 export * from './splitter-options';
+export * from './suggestion-dxi';
 export * from './tab-panel-options';
 export * from './text-box-options';
 export * from './text-editor-button-dxi';

@@ -11305,6 +11305,16 @@ declare module DevExpress.ui {
         DevExpress.common.core.events.ChangedOptionInfo;
     export type Properties = dxChatOptions;
     /**
+     * [descr:_ui_chat_SuggestionClickEvent]
+     */
+    export type SuggestionClickEvent =
+      DevExpress.common.core.events.NativeEventInfo<dxChat> & {
+        /**
+         * [descr:_ui_chat_SuggestionClickEvent.suggestion]
+         */
+        readonly suggestion?: Suggestion;
+      };
+    /**
      * [descr:_ui_chat_TypingEndEvent]
      */
     export type TypingEndEvent =
@@ -11410,6 +11420,10 @@ declare module DevExpress.ui {
      */
     alerts?: Array<DevExpress.ui.dxChat.Alert>;
     /**
+     * [descr:dxChatOptions.messageBoxValue]
+     */
+    messageBoxValue?: string;
+    /**
      * [descr:dxChatOptions.messageTemplate]
      */
     messageTemplate?:
@@ -11443,6 +11457,10 @@ declare module DevExpress.ui {
      * [descr:dxChatOptions.showMessageTimestamp]
      */
     showMessageTimestamp?: boolean;
+    /**
+     * [descr:dxChatOptions.suggestions]
+     */
+    suggestions?: DevExpress.ui.dxChat.Suggestion[];
     /**
      * [descr:dxChatOptions.onAttachmentDownloadClick]
      */
@@ -11502,6 +11520,12 @@ declare module DevExpress.ui {
      */
     onMessageUpdated?:
       | ((e: DevExpress.ui.dxChat.MessageUpdatedEvent) => void)
+      | undefined;
+    /**
+     * [descr:dxChatOptions.onSuggestionClick]
+     */
+    onSuggestionClick?:
+      | ((e: DevExpress.ui.dxChat.SuggestionClickEvent) => void)
       | undefined;
   }
   /**
@@ -34034,6 +34058,17 @@ declare module DevExpress.ui.dxChat {
      * [descr:MessageBase.isDeleted]
      */
     isDeleted?: boolean;
+
+    [key: string]: any;
+  };
+  /**
+   * [descr:Suggestion]
+   */
+  export type Suggestion = {
+    /**
+     * [descr:Suggestion.text]
+     */
+    text: string;
 
     [key: string]: any;
   };
