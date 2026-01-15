@@ -264,7 +264,15 @@
         "{projectRoot}/js/bundles/dx.custom.js",
         "{projectRoot}/js/common/core/localization/cldr-data",
         "{projectRoot}/js/common/core/localization/default_messages.js"
-      ]
+      ],
+      "cache": true,
+      "configurations": {
+        "testing": {
+          "env": {
+            "BUILD_TEST_INTERNAL_PACKAGE": "true"
+          }
+        }
+      }
     },
     "build-dist": {
       "executor": "nx:run-script",
