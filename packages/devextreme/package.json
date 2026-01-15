@@ -120,7 +120,7 @@
     "jest-environment-jsdom": "29.7.0",
     "jquery": "3.7.1",
     "jquery.tmpl": "0.0.2",
-    "jspdf": "2.5.1",
+    "jspdf": "4.0.0",
     "knockout": "3.5.1",
     "lazypipe": "1.0.2",
     "looks-same": "7.3.0",
