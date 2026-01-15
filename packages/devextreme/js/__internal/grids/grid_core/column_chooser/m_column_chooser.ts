@@ -331,7 +331,7 @@ export class ColumnChooserView extends ColumnsView {
   }
 
   private getSortedFlatNodes(nodes): NodeInternal[] {
-    const getNodeLevelPairs = (
+    const getNodeLevelPairsRecursive = (
       sourceNodes: NodeInternal[],
       flatNodesArray: NodeLevelPair[],
       level: number,
@@ -339,13 +339,13 @@ export class ColumnChooserView extends ColumnsView {
       result.push({ node, level });
 
       if (node.children.length) {
-        getNodeLevelPairs(node.children, result, level + 1);
+        getNodeLevelPairsRecursive(node.children, result, level + 1);
       }
 
       return result;
     }, flatNodesArray);
 
-    const flatNodes = getNodeLevelPairs(nodes, [], 0)
+    const flatNodes = getNodeLevelPairsRecursive(nodes, [], 0)
       // Band columns should be updated after regular columns
       .sort((a, b) => b.level - a.level)
       .map((pair) => pair.node);
