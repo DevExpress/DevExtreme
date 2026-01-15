@@ -192,8 +192,7 @@ export type LoadResultObject<TItem = any> = {
  */
 export type LoadResult<
     TItem = any,
-> =
-  | Object
+> = | Object
   | LoadResultArray<TItem>
   | LoadResultObject<TItem>;
 
@@ -792,22 +791,20 @@ export type LangParams = {
 * @public
 * @namespace DevExpress.data.utils
 */
-export type Store<TItem = any, TKey = any> =
-  CustomStore<TItem, TKey> |
-  ArrayStore<TItem, TKey> |
-  LocalStore<TItem, TKey> |
-  ODataStore<TItem, TKey>;
+export type Store<TItem = any, TKey = any> = CustomStore<TItem, TKey>
+  | ArrayStore<TItem, TKey>
+  | LocalStore<TItem, TKey>
+  | ODataStore<TItem, TKey>;
 
 /**
 * @public
 * @namespace DevExpress.data.utils
 * @type object
 */
-export type StoreOptions<TItem = any, TKey = any> =
-  CustomStoreOptions<TItem, TKey> |
-  ArrayStoreOptions<TItem, TKey> & { type: 'array' } |
-  LocalStoreOptions<TItem, TKey> & { type: 'local' } |
-  ODataStoreOptions<TItem, TKey> & { type: 'odata' };
+export type StoreOptions<TItem = any, TKey = any> = CustomStoreOptions<TItem, TKey>
+  | ArrayStoreOptions<TItem, TKey> & { type: 'array' }
+  | LocalStoreOptions<TItem, TKey> & { type: 'local' }
+  | ODataStoreOptions<TItem, TKey> & { type: 'odata' };
 
 /**
  * @docid

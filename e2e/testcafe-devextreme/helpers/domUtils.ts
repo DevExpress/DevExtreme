@@ -35,7 +35,7 @@ export const getStyleAttribute = ClientFunction((selector) => {
 export const setStyleAttribute = ClientFunction((selector, styleValue) => {
   const element = selector();
 
-  const styles = element.getAttribute('style') || '';
+  const styles = element.getAttribute('style') ?? '';
   const updatedStyles = `${styles} ${styleValue}`;
 
   element.setAttribute('style', updatedStyles);
@@ -44,7 +44,7 @@ export const setStyleAttribute = ClientFunction((selector, styleValue) => {
 export const setClassAttribute = ClientFunction((selector, styleValue) => {
   const element = selector();
 
-  const styles = element.getAttribute('class') || '';
+  const styles = element.getAttribute('class') ?? '';
   const updatedClasses = `${styles} ${styleValue}`;
 
   element.setAttribute('class', updatedClasses);
@@ -53,7 +53,7 @@ export const setClassAttribute = ClientFunction((selector, styleValue) => {
 export const removeClassAttribute = ClientFunction((selector, styleValue) => {
   const element = selector();
 
-  const styles = element.getAttribute('class') || '';
+  const styles = element.getAttribute('class') ?? '';
   const updatedClasses = `${styles.replace(styleValue, '')}`;
 
   element.setAttribute('class', updatedClasses);

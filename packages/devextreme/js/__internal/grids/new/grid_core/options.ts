@@ -22,8 +22,7 @@ import type { GridCoreNew } from './widget';
 /**
  * @interface
  */
-export type Options =
-  & WidgetOptions<GridCoreNew>
+export type Options = & WidgetOptions<GridCoreNew>
   & dataController.Options
   & sortingController.Options
   & pager.Options

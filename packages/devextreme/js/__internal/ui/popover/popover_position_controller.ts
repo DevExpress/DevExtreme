@@ -82,10 +82,10 @@ export class PopoverPositionController<
   TElements extends PopoverControllerElements = PopoverControllerElements,
   TPosition extends Position = Position,
 > extends OverlayPositionController<
-  TProperties,
-  TElements,
-  TPosition
-> {
+    TProperties,
+    TElements,
+    TPosition
+  > {
   _positionSide?: CommonPosition;
 
   _$arrow?: TElements['$arrow'];

@@ -9,18 +9,18 @@ export const createComponentMock = <
   TProps extends Record<string, any>,
   TDefaultProps extends TProps = TProps,
 >(
-    options: TProps,
-    defaultOptions: TDefaultProps,
-    isInitialized = true,
-  ): Component<TProps> => new class ComponentMock extends Component<TProps> {
-    public initialized = signal(isInitialized);
+  options: TProps,
+  defaultOptions: TDefaultProps,
+  isInitialized = true,
+): Component<TProps> => new class ComponentMock extends Component<TProps> {
+  public initialized = signal(isInitialized);
 
-    // NOTE: Add default option values to base Component for merging them
-    // with Component's algorithms
-    public _getDefaultOptions(): TDefaultProps {
+  // NOTE: Add default option values to base Component for merging them
+  // with Component's algorithms
+  public _getDefaultOptions(): TDefaultProps {
     // @ts-expect-error badly typed base Component class
-      const baseDefaultOptions = super._getDefaultOptions();
+    const baseDefaultOptions = super._getDefaultOptions();
 
-      return extend(true, {}, baseDefaultOptions, defaultOptions) as TDefaultProps;
-    }
-  }(extend(true, {}, options));
+    return extend(true, {}, baseDefaultOptions, defaultOptions) as TDefaultProps;
+  }
+}(extend(true, {}, options));
