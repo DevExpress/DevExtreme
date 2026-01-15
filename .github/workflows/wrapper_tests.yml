@@ -149,6 +149,8 @@ jobs:
 
       - name: Test ${{ matrix.framework }}
         run: pnpx nx test devextreme-${{ matrix.framework }}
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
 
       - name: Pack ${{ matrix.framework }}
         run: pnpx nx pack devextreme-${{ matrix.framework }}
