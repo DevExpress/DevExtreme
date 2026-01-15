@@ -32,10 +32,12 @@ const COLUMN_CHOOSER_ITEM_CLASS = 'dx-column-chooser-item';
 
 const COLUMN_OPTIONS_USED_IN_ITEMS = ['showInColumnChooser', 'caption', 'allowHiding', 'visible', 'cssClass', 'ownerBand'];
 
-type Node = Item & {
+type NodeInternal = Item & {
   itemData: {
     id: number;
   };
+  level: number;
+  children: NodeInternal[];
 };
 
 const processItems = function (that: ColumnChooserView, chooserColumns) {
@@ -315,44 +317,37 @@ export class ColumnChooserView extends ColumnsView {
     return isNodeSelected;
   }
 
-  private sortNodesByBandColumns(nodes: Node[]): Node[] {
-    return [...nodes].sort((a, b) => {
-      const columnA = this._columnsController.columnOption(a.itemData.id);
-      const columnB = this._columnsController.columnOption(b.itemData.id);
-      const isBandA = columnA?.hasColumns ? 1 : 0;
-      const isBandB = columnB?.hasColumns ? 1 : 0;
-      // Band columns should be updated after regular columns
-      return isBandA - isBandB;
-    });
-  }
+  private updateColumnVisibility(nodes: NodeInternal[]): void {
+    nodes
+      .sort((a, b) => b.level - a.level)
+      .forEach((node) => {
+        const columnIndex = node.itemData.id;
+        const isVisible = this.getColumnVisibility(columnIndex, node.selected);
 
-  private updateColumnVisibility(nodes: Node[]): void {
-    const sortedNodes = this.sortNodesByBandColumns(nodes);
-
-    sortedNodes.forEach((node) => {
-      const columnIndex = node.itemData.id;
-      const isVisible = this.getColumnVisibility(columnIndex, node.selected);
-
-      this._columnsController.columnOption(columnIndex, 'visible', isVisible);
-    });
+        this._columnsController.columnOption(columnIndex, 'visible', isVisible);
+      });
   }
 
   private _prepareSelectModeConfig() {
-    const that = this;
     const selectionOptions = this.option('columnChooser.selection') ?? {};
 
-    const getFlatNodes = (nodes): any[] => {
-      const addNodesToArray = (nodes, flatNodesArray) => nodes.reduce((result, node) => {
+    const getFlatNodes = (nodes): NodeInternal[] => {
+      const addNodesToArray = (
+        sourceNodes: NodeInternal[],
+        flatNodesArray: NodeInternal[],
+        level: number,
+      ): NodeInternal[] => sourceNodes.reduce((result, node) => {
+        node.level = level;
         result.push(node);
 
         if (node.children.length) {
-          addNodesToArray(node.children, result);
+          addNodesToArray(node.children, result, level + 1);
         }
 
         return result;
       }, flatNodesArray);
 
-      return addNodesToArray(nodes, []);
+      return addNodesToArray(nodes, [], 0);
     };
 
     const updateSelection = (e, nodes) => {
@@ -378,12 +373,12 @@ export class ColumnChooserView extends ColumnsView {
       e.component.endUpdate();
       isUpdatingSelection = false;
 
-      that.component.beginUpdate();
+      this.component.beginUpdate();
       this._isUpdatingColumnVisibility = true;
 
       this.updateColumnVisibility(nodes);
 
-      that.component.endUpdate();
+      this.component.endUpdate();
       this._isUpdatingColumnVisibility = false;
     };
 
