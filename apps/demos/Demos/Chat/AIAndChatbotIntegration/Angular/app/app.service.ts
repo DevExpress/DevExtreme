@@ -90,7 +90,7 @@ export class AppService {
     });
   }
 
-  async getAIResponse(messages: AIMessage[]): Promise<string> {
+  getAIResponse(messages: AIMessage[]): Promise<string> {
     return this.aiService.getAIResponse(messages) as Promise<string>;
   }
 

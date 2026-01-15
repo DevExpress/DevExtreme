@@ -274,7 +274,7 @@ async function main() {
 
               await t.hover('html');
 
-              const [width, height] = meta?.browserSize || DEFAULT_BROWSER_SIZE;
+              const [width, height] = meta?.browserSize ?? DEFAULT_BROWSER_SIZE;
               await t.resizeWindow(width, height);
             } else {
               await loadAxeCore(t);

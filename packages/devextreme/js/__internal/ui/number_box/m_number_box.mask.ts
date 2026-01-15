@@ -34,9 +34,9 @@ const NUMPAD_DOT_KEY_CODE = 110;
 
 const CARET_TIMEOUT_DURATION = 0;
 
-export interface NumberBoxMaskProperties extends Omit<Properties, 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' |
-'onKeyDown' | 'onKeyUp' | 'onPaste' | 'onValueChanged' | 'onContentReady' | 'onDisposing' |
-'onOptionChanged' | 'onInitialized' > {
+export interface NumberBoxMaskProperties extends Omit<Properties, 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput'
+| 'onKeyDown' | 'onKeyUp' | 'onPaste' | 'onValueChanged' | 'onContentReady' | 'onDisposing'
+| 'onOptionChanged' | 'onInitialized' > {
   useMaskBehavior?: boolean;
 
   displayValueFormatter?: ((value: any) => string);

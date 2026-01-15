@@ -61,6 +61,7 @@ async function processBatch(bundler: ESBundler, demos: Demo[]) {
   await Promise.all(promises);
 }
 
+// eslint-disable-next-line require-await
 async function processDemo(bundler: ESBundler, demo: Demo) {
   return new Promise((res) => {
     bundler.buildDemo(demo, res);

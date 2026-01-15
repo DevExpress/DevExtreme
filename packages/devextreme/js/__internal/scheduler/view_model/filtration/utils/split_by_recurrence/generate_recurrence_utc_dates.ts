@@ -17,14 +17,14 @@ const WEEK_DAY_NUMBERS = [6, 0, 1, 2, 3, 4, 5];
 export const generateRecurrenceUTCDates = <
   T extends Pick<MinimalAppointmentEntity, 'source' | 'recurrenceRule' | 'hasRecurrenceRule'>,
 >(
-    appointment: T,
-    {
-      firstDayOfWeek,
-      interval,
-      timeZone,
-      startDateTimeZone,
-    }: Options,
-  ): number[] => {
+  appointment: T,
+  {
+    firstDayOfWeek,
+    interval,
+    timeZone,
+    startDateTimeZone,
+  }: Options,
+): number[] => {
   if (!appointment.hasRecurrenceRule || !appointment.recurrenceRule) {
     return [appointment.source.startDate];
   }

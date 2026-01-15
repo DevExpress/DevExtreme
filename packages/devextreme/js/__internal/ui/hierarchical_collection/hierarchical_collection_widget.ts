@@ -23,11 +23,11 @@ const ITEM_URL_CLASS = 'dx-item-url';
 
 class HierarchicalCollectionWidget<
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-TProperties extends CollectionWidgetEditProperties<any, TItem, TKey>,
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-TItem extends ItemLike = any,
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-TKey extends ItemKey = any,
+  TProperties extends CollectionWidgetEditProperties<any, TItem, TKey>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TItem extends ItemLike = any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TKey extends ItemKey = any,
 > extends CollectionWidgetAsync<TProperties, TItem, TKey> {
   _dataAdapter!: DataAdapter;
 

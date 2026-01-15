@@ -48,8 +48,8 @@ const SEARCH_MODES = ['startswith', 'contains', 'endwith', 'notcontains'];
 const useCompositionEvents = devices.real().platform !== 'android';
 
 interface DropDownListProperties extends Omit<dxDropDownListOptions<DropDownList>,
-'onOpened' | 'onClosed' |
-'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' | 'onKeyDown' | 'onKeyUp' | 'onPaste'
+'onOpened' | 'onClosed'
+| 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' | 'onKeyDown' | 'onKeyUp' | 'onPaste'
 | 'onValueChanged' | 'validationMessagePosition' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'> {
   encodeNoDataText?: boolean;
 }

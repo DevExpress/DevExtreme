@@ -35,10 +35,10 @@ export class PopupPositionController<
   TElements extends ControllerOverlayElements = ControllerOverlayElements,
   TPosition = Position,
 > extends OverlayPositionController<
-  TProperties,
-  TElements,
-  TPosition
-> {
+    TProperties,
+    TElements,
+    TPosition
+  > {
   _$dragResizeContainer?: dxElementWrapper;
 
   constructor(params: PopupPositionControllerConstructor<TProperties, TElements, TPosition>) {

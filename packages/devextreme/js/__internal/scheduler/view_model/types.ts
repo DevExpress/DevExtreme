@@ -217,7 +217,6 @@ export interface AppointmentItemViewModel extends BaseAppointmentViewModel, Appo
   columnIndex: number;
 }
 
-export type AppointmentViewModelPlain =
-  | AppointmentAgendaViewModel
+export type AppointmentViewModelPlain = | AppointmentAgendaViewModel
   | AppointmentItemViewModel
   | AppointmentCollectorViewModel;

@@ -65,8 +65,7 @@ const App = () => {
       },
       ...resourceItems,
     ]);
-  }
-  , []);
+  }, []);
 
   const onCellContextMenu = useCallback((e: SchedulerTypes.CellContextMenuEvent) => {
     const scheduler = schedulerRef.current?.instance();
