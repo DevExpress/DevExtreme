@@ -69,16 +69,11 @@
         "commands": [
           "pnpm nx build devextreme -c testing",
           "pnpm nx build devextreme-themebuilder",
-          "pnpm nx copy:artifacts-to-root workflows",
-          "pnpm nx copy:bootstrap workflows",
-          "pnpm run all:pack-and-copy",
           "pnpm nx pack devextreme-react",
           "pnpm nx pack devextreme-vue",
           "pnpm nx pack devextreme-angular",
           "pnpm nx pack:devextreme-npm devextreme",
-          "pnpm nx pack:devextreme-dist-npm devextreme",
-          "pnpm nx copy:npm-tgz workflows",
-          "pnpm nx copy:wrappers-tgz workflows"
+          "pnpm nx pack:devextreme-dist-npm devextreme"
         ],
         "parallel": false
       },
