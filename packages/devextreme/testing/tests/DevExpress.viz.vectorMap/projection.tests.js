@@ -801,7 +801,6 @@ $.each(boundsList, function(_, bounds) {
         } else {
             assert.arraysEqual(this.projection2.getCenter(), this.projection1.getCenter(), 'center');
         }
-
     });
 
     QUnit.test('Southern edge - from viewport' + namePart, function(assert) {
