@@ -10,8 +10,8 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-const BASE_PATH = 'http://localhost:5555';
-// const BASE_PATH = 'https://js.devexpress.com/Demos/NetCore';
+// const BASE_PATH = 'http://localhost:5555';
+const BASE_PATH = 'https://js.devexpress.com/Demos/NetCore';
 const URL = `${BASE_PATH}/api/DataGridBatchUpdateWebApi`;
 
 let modulePrefix = '';

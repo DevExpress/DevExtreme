@@ -13,8 +13,8 @@ interface TokenData {
   providedIn: 'root',
 })
 export class AntiForgeryTokenService {
-  private BASE_PATH = 'http://localhost:5555';
-  // private BASE_PATH = 'https://js.devexpress.com/Demos/NetCore';
+  // private BASE_PATH = 'http://localhost:5555';
+  private BASE_PATH = 'https://js.devexpress.com/Demos/NetCore';
 
   private tokenCache$: Observable<TokenData> | null = null;
 
