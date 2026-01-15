@@ -1,4 +1,22 @@
-export const directions = {
+import type { FloatingActionButtonDirection, PositionAlignment } from 'devextreme-react/common';
+
+type DirectionValue = {
+  icon: string;
+  shading: boolean;
+  direction?: FloatingActionButtonDirection;
+  position: {
+    of: string;
+    my: PositionAlignment;
+    at: PositionAlignment;
+    offset: string;
+  };
+};
+
+export const optionDirections = ['auto', 'up', 'down'] as const;
+
+export type DirectionKey = typeof optionDirections[number];
+
+export const directions: Record<DirectionKey, DirectionValue> = {
   auto: {
     icon: 'rowfield',
     shading: true,

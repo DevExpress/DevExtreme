@@ -282,7 +282,9 @@
 
         "dxScheduler-editorLabelTitle": "标题",
         "dxScheduler-editorLabelStartDate": "开始日期",
+        "dxScheduler-editorAriaLabelStartTime": "Start time",
         "dxScheduler-editorLabelEndDate": "结束日期",
+        "dxScheduler-editorAriaLabelEndTime": "End time",
         "dxScheduler-editorLabelDescription": "描述",
         "dxScheduler-editorLabelRecurrence": "重复",
 

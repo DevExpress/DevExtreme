@@ -456,6 +456,11 @@ export class AppointmentForm {
       {
         name: START_TIME_EDITOR_NAME,
         cssClass: CLASSES.startTimeEditor,
+        editorOptions: {
+          inputAttr: {
+            'aria-label': messageLocalization.format('dxScheduler-editorAriaLabelStartTime'),
+          },
+        },
       },
       {
         name: START_DATE_TIMEZONE_EDITOR_NAME,
@@ -491,6 +496,11 @@ export class AppointmentForm {
       {
         name: END_TIME_EDITOR_NAME,
         cssClass: CLASSES.endTimeEditor,
+        editorOptions: {
+          inputAttr: {
+            'aria-label': messageLocalization.format('dxScheduler-editorAriaLabelEndTime'),
+          },
+        },
       },
       {
         name: END_DATE_TIMEZONE_EDITOR_NAME,

@@ -1,4 +1,11 @@
-export const countriesGDP = {
+export type CountryGDP = {
+  agriculture?: number;
+  industry?: number;
+  services?: number;
+  total?: number;
+};
+
+export const countriesGDP: Record<string, CountryGDP> = {
   Afghanistan: {
     agriculture: 34.9, industry: 25, services: 40, total: 20312,
   },
@@ -663,3 +670,5 @@ export const countriesGDP = {
     agriculture: 20.4, industry: 24.6, services: 54.9, total: 13672,
   },
 };
+
+export type CountriesGDPKey = keyof typeof countriesGDP;

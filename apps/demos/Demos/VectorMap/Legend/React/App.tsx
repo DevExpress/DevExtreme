@@ -9,13 +9,14 @@ import VectorMap, {
 import type { ILayerProps, ILegendProps, ITooltipProps } from 'devextreme-react/vector-map';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { populations, markers } from './data.ts';
+import type { PopulationKey } from './data.ts';
 
 const colorGroups = [0, 0.5, 0.8, 1, 2, 3, 100];
 const sizeGroups = [0, 8000, 10000, 50000];
 
 const bounds = [-180, 85, 180, -75];
 
-const customizeText = (arg: { index: number; start: any; end: any; }) => {
+const customizeText: ILegendProps['customizeText'] = (arg) => {
   if (arg.index === 0) {
     return '< 0.5%';
   } if (arg.index === 5) {
@@ -34,7 +35,7 @@ const customizeItems: ILegendProps['customizeItems'] = (items) => items.reverse(
 
 const customizeLayer: ILayerProps['customize'] = (elements) => {
   elements.forEach((element) => {
-    const name = element.attribute('name');
+    const name = element.attribute('name') as PopulationKey;
     const population = populations[name];
     if (population) {
       element.attribute('population', population);

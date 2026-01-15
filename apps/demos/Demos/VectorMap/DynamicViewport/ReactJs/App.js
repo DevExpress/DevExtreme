@@ -16,38 +16,23 @@ const App = () => {
   const [panVisible, setPanVisible] = useState(true);
   const [zoomVisible, setZoomVisible] = useState(true);
   const mapRef = useRef(null);
-  const continentChanged = useCallback(
-    ({ value }) => {
-      setCoordinates(value);
-      mapRef.current.instance().viewport(value);
-    },
-    [setCoordinates],
-  );
-  const zoomFactorChanged = useCallback(
-    (e) => {
-      setZoomFactor(e.zoomFactor.toFixed(2));
-    },
-    [setZoomFactor],
-  );
-  const centerChanged = useCallback(
-    (e) => {
-      const value = `${e.center[0].toFixed(3)}, ${e.center[1].toFixed(3)}`;
-      setCenter(value);
-    },
-    [setCenter],
-  );
-  const panVisibleChange = useCallback(
-    (value) => {
-      setPanVisible(value);
-    },
-    [setPanVisible],
-  );
-  const zoomVisibleChange = useCallback(
-    (value) => {
-      setZoomVisible(value);
-    },
-    [setZoomVisible],
-  );
+  const continentChanged = useCallback(({ value }) => {
+    setCoordinates(value);
+    mapRef.current?.instance().viewport(value);
+  }, []);
+  const zoomFactorChanged = useCallback((e) => {
+    setZoomFactor(e.zoomFactor.toFixed(2));
+  }, []);
+  const centerChanged = useCallback((e) => {
+    const value = `${e.center[0].toFixed(3)}, ${e.center[1].toFixed(3)}`;
+    setCenter(value);
+  }, []);
+  const panVisibleChange = useCallback((value) => {
+    setPanVisible(value);
+  }, []);
+  const zoomVisibleChange = useCallback((value) => {
+    setZoomVisible(value);
+  }, []);
   return (
     <div>
       <VectorMap
