@@ -1819,7 +1819,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       return;
     }
 
-    const coordinates = this._getScrollCoordinates(hours, minutes, date);
+    date = date || new Date(this.option('currentDate'));
+    date.setHours(hours, minutes, 0, 0);
+    const coordinates = this._getScrollCoordinates(date);
 
     const scrollable = this.getScrollable();
 
