@@ -125,15 +125,15 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
 
   _getIndicatorDaysSpan(): number {
     const today = this._getToday();
-    const viewStartDate = new Date(this.getStartViewDate());
-    let timeDiffInDays = (today.getTime() - viewStartDate.getTime()) / toMs('day');
+    const viewStartTime = this.getStartViewDate().getTime();
+    let timeDiff = today.getTime() - viewStartTime;
 
     if (this.option('type') === 'workWeek') {
-      const weekendDays = this._getWeekendsCount(Math.round(timeDiffInDays));
-      timeDiffInDays -= weekendDays;
+      const weekendDays = this._getWeekendsCount(Math.round(timeDiff / toMs('day'))) * toMs('day');
+      timeDiff -= weekendDays;
     }
 
-    return Math.ceil(timeDiffInDays);
+    return Math.ceil((timeDiff + 1) / toMs('day'));
   }
 
   getIndicationHeight() {
