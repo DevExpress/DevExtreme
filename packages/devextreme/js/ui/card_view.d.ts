@@ -717,8 +717,8 @@ export type CardHoverChangedEvent = EventInfo<dxCardView> & WithCardInfo & {
 };
 
 /**
- * @public
  * @docid
+ * @public
  */
 export type FieldTemplateData = {
     /**
@@ -729,18 +729,26 @@ export type FieldTemplateData = {
 };
 
 /**
- * @public
  * @docid
+ * @public
  */
 export type CardTemplateData = {
+  /**
+   * @docid
+   * @public
+   */
     card: CardInfo;
 };
 
 /**
- * @public
  * @docid
+ * @public
  */
 export type ColumnTemplateData<TCardData = unknown, TKey = unknown> = {
+  /**
+   * @docid
+   * @public
+   */
     column: Column<TCardData, TKey>;
 };
 
