@@ -422,7 +422,9 @@ const logTestResults = (
   options: KarmaMultiEnvExecutorSchema,
 ): void => {
   if (options.watch) {
-    logger.verbose(`\n${STATUS_ICONS.WATCH} Watch mode active for: ${plan.executionOrder.join(', ')}`);
+    logger.verbose(
+      `\n${STATUS_ICONS.WATCH} Watch mode active for: ${plan.executionOrder.join(', ')}`,
+    );
     if (options.verbose) {
       logger.verbose(`Karma config: ${options.karmaConfig}`);
       logger.verbose('Watching file changes...');
@@ -434,7 +436,9 @@ const logTestResults = (
   logger.verbose('\n' + '='.repeat(50));
   logger.verbose(`${STATUS_ICONS.DOCUMENTATION} TEST RESULTS SUMMARY`);
   logger.verbose('='.repeat(50));
-  logger.verbose(`\n${STATUS_ICONS.SUCCESS} Environments tested: ${plan.executionOrder.join(', ')}`);
+  logger.verbose(
+    `\n${STATUS_ICONS.SUCCESS} Environments tested: ${plan.executionOrder.join(', ')}`,
+  );
   logger.verbose(`${STATUS_ICONS.CLOCK} Total duration: ${summary.totalDuration}ms`);
 
   summary.results.forEach((result) => {
@@ -470,7 +474,9 @@ const setupWatchModeEvents = (environment: KarmaEnvironment, server: any): void 
     const statusIcon = results.success ? STATUS_ICONS.SUCCESS : STATUS_ICONS.FAILURE;
     const statusText = results.success ? 'All tests passed' : 'Some tests failed';
 
-    logger.verbose(`\n[${environment.toUpperCase()}] Test run completed. Success: ${results.success}`);
+    logger.verbose(
+      `\n[${environment.toUpperCase()}] Test run completed. Success: ${results.success}`,
+    );
     logger.verbose(`${statusIcon} ${statusText} in watch mode - continuing to watch...`);
     logger.verbose('Press CTRL+C to stop watching...');
   });
