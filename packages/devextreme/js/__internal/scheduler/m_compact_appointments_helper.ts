@@ -4,10 +4,11 @@ import messageLocalization from '@js/common/core/localization/message';
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import { FunctionTemplate } from '@js/core/templates/function_template';
 import Button from '@js/ui/button';
+import type { Appointment } from '@js/ui/scheduler';
 
 import { APPOINTMENT_SETTINGS_KEY, LIST_ITEM_CLASS, LIST_ITEM_DATA_KEY } from './constants';
 import type Scheduler from './m_scheduler';
-import type { AppointmentTooltipItem, CompactAppointmentOptions } from './types';
+import type { AppointmentTooltipItem, CompactAppointmentOptions, TargetedAppointment } from './types';
 
 const APPOINTMENT_COLLECTOR_CLASS = 'dx-scheduler-appointment-collector';
 const COMPACT_APPOINTMENT_COLLECTOR_CLASS = `${APPOINTMENT_COLLECTOR_CLASS}-compact`;
@@ -186,9 +187,12 @@ export class CompactAppointmentsHelper {
     return `${dateLocalization.format(date, 'monthAndDay')}, ${dateLocalization.format(date, 'year')}`;
   }
 
-  _getDateText(appointment, targetedAppointment?) {
-    const startDate = targetedAppointment?.displayStartDate || appointment.startDate;
-    const endDate = targetedAppointment?.displayEndDate || appointment.endDate;
+  _getDateText(
+    appointment: Appointment,
+    targetedAppointment: Appointment | TargetedAppointment | undefined,
+  ): string {
+    const startDate = targetedAppointment?.displayStartDate ?? appointment.startDate;
+    const endDate = targetedAppointment?.displayEndDate ?? appointment.endDate;
 
     const startDateText = this._localizeDate(startDate);
     const endDateText = this._localizeDate(endDate);
