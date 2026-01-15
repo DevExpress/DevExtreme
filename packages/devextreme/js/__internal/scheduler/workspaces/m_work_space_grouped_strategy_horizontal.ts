@@ -170,8 +170,8 @@ class HorizontalGroupedStrategy {
     return getBoundingRect(this._workSpace._dateTableScrollable.$content().get(0)).height;
   }
 
-  getShaderWidth(i) {
-    return this._workSpace.getIndicationWidth(i);
+  getShaderWidth() {
+    return this._workSpace.getIndicationWidth();
   }
 
   getScrollableScrollTop(allDay) {
