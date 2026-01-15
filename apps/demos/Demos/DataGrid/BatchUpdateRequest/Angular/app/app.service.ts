@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
-import { catchError, map, shareReplay } from 'rxjs/operators';
+import { catchError, switchMap, map, shareReplay } from 'rxjs/operators';
+import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 
 interface TokenData {
   headerName: string;
@@ -74,3 +75,32 @@ export class AntiForgeryTokenService {
     }
   }
 }
+
+export const antiForgeryInterceptor: HttpInterceptorFn = (req, next) => {
+  const tokenService = inject(AntiForgeryTokenService);
+
+  if (req.method === 'GET' && req.url.includes('/GetAntiForgeryToken')) {
+    return next(req);
+  }
+
+  if (req.method !== 'GET') {
+    return tokenService.getToken().pipe(
+      switchMap((tokenData) => {
+        const clonedRequest = req.clone({
+          setHeaders: {
+            [tokenData.headerName]: tokenData.token,
+          },
+        });
+        return next(clonedRequest);
+      }),
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 401 || error.status === 403) {
+          tokenService.clearToken();
+        }
+        return throwError(() => error);
+      }),
+    );
+  }
+
+  return next(req);
+};
