@@ -37,7 +37,7 @@ async function copyGlobPatternFiles(
     const fileName = path.basename(file);
     const destFile = path.join(destPath, fileName);
     await copyFile(file, destFile);
-    logger.info(`Copied file ${file} -> ${destFile}`);
+    logger.verbose(`Copied file ${file} -> ${destFile}`);
   }
 
   return { success: true };
@@ -53,12 +53,12 @@ async function copyDirectPath(sourcePath: string, destPath: string): Promise<{ s
 
   if (sourceStat.isDirectory()) {
     await copyRecursive(sourcePath, destPath);
-    logger.info(`Copied directory ${sourcePath} -> ${destPath}`);
+    logger.verbose(`Copied directory ${sourcePath} -> ${destPath}`);
     return { success: true };
   }
 
   await copyFile(sourcePath, destPath);
-  logger.info(`Copied file ${sourcePath} -> ${destPath}`);
+  logger.verbose(`Copied file ${sourcePath} -> ${destPath}`);
   return { success: true };
 }
 
