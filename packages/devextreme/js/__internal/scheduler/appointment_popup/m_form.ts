@@ -1,4 +1,5 @@
 import type { TextEditorButton } from '@js/common';
+import { name as CLICK_EVENT_NAME } from '@js/common/core/events/click';
 import messageLocalization from '@js/common/core/localization/message';
 import { DataSource } from '@js/common/data';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -677,7 +678,7 @@ export class AppointmentForm {
                 this.dxForm.updateData(recurrenceRuleExpr, recurrenceRule.toString());
               }
 
-              if (e.value !== repeatNeverValue && e.event) {
+              if (e.value !== repeatNeverValue && e.event?.type === CLICK_EVENT_NAME) {
                 this.showRecurrenceGroup();
               }
 
