@@ -10405,6 +10405,9 @@ declare module DevExpress.ui {
      * [descr:CardTemplateData]
      */
     export type CardTemplateData = {
+      /**
+       * [descr:CardTemplateData.card]
+       */
       card: CardInfo;
     };
     /**
@@ -10448,6 +10451,9 @@ declare module DevExpress.ui {
      * [descr:ColumnTemplateData]
      */
     export type ColumnTemplateData<TCardData = unknown, TKey = unknown> = {
+      /**
+       * [descr:ColumnTemplateData.column]
+       */
       column: Column<TCardData, TKey>;
     };
     /**
