@@ -63,7 +63,7 @@ describe('Bugs', () => {
   afterEach(afterTest);
 
   describe('T1311329 - DataGrid - Column chooser hides a banded column on using search and recursive selection', () => {
-    it('should not hide banded column when using search', async () => {
+    it('should not hide banded column when using search (two levels)', async () => {
       const { instance, component } = await createDataGrid({
         dataSource: [
           {
@@ -138,6 +138,88 @@ describe('Bugs', () => {
       expect(visibleColumnsLevel1.find((col) => col.dataField === 'email')).toBeDefined();
       expect(visibleColumnsLevel1.find((col) => col.dataField === 'skype')).toBeDefined();
       expect(visibleColumnsLevel0.find((col) => col.dataField === 'name')).toBeUndefined();
+    });
+
+    it('should not hide banded column when using search (three levels)', async () => {
+      const { instance, component } = await createDataGrid({
+        dataSource: [],
+        columnChooser: {
+          enabled: true,
+          search: {
+            enabled: true,
+          },
+          mode: 'select',
+          selection: {
+            recursive: true,
+            selectByClick: true,
+            allowSelectAll: true,
+          },
+        },
+        columns: [
+          {
+            caption: 'band_level1',
+            columns: [
+              {
+                caption: 'band_level2',
+                columns: [
+                  {
+                    dataField: 'data1_level3',
+                    visible: false,
+                  },
+                  {
+                    dataField: 'data2_level3',
+                  },
+                ],
+              },
+              {
+                dataField: 'data1_level2',
+              },
+              {
+                dataField: 'data2_level2',
+              },
+            ],
+          },
+          {
+            dataField: 'data1_level1',
+          },
+        ],
+      });
+
+      let visibleColumnsLevel0 = instance.getVisibleColumns(0);
+      let visibleColumnsLevel1 = instance.getVisibleColumns(1);
+      let visibleColumnsLevel2 = instance.getVisibleColumns(2);
+
+      expect(visibleColumnsLevel0.find((col) => col.caption === 'band_level1')).toBeDefined();
+      expect(visibleColumnsLevel0.find((col) => col.dataField === 'data1_level1')).toBeDefined();
+      expect(visibleColumnsLevel1.find((col) => col.dataField === 'data1_level2')).toBeDefined();
+      expect(visibleColumnsLevel1.find((col) => col.dataField === 'data2_level2')).toBeDefined();
+      expect(visibleColumnsLevel1.find((col) => col.caption === 'band_level2')).toBeDefined();
+      expect(visibleColumnsLevel2.find((col) => col.dataField === 'data1_level3')).toBeUndefined();
+      expect(visibleColumnsLevel2.find((col) => col.dataField === 'data2_level3')).toBeDefined();
+
+      instance.showColumnChooser();
+      jest.runAllTimers();
+
+      const columnChooser = component.getColumnChooser();
+      expect(columnChooser.isVisible()).toBe(true);
+
+      columnChooser.searchColumn('1');
+      jest.runAllTimers();
+
+      columnChooser.toggleColumn('Data 1 level 1');
+      jest.runAllTimers();
+
+      visibleColumnsLevel0 = instance.getVisibleColumns(0);
+      visibleColumnsLevel1 = instance.getVisibleColumns(1);
+      visibleColumnsLevel2 = instance.getVisibleColumns(2);
+
+      expect(visibleColumnsLevel0.find((col) => col.caption === 'band_level1')).toBeDefined();
+      expect(visibleColumnsLevel0.find((col) => col.dataField === 'data1_level1')).toBeUndefined();
+      expect(visibleColumnsLevel1.find((col) => col.dataField === 'data1_level2')).toBeDefined();
+      expect(visibleColumnsLevel1.find((col) => col.dataField === 'data2_level2')).toBeDefined();
+      expect(visibleColumnsLevel1.find((col) => col.caption === 'band_level2')).toBeDefined();
+      expect(visibleColumnsLevel2.find((col) => col.dataField === 'data1_level3')).toBeUndefined();
+      expect(visibleColumnsLevel2.find((col) => col.dataField === 'data2_level3')).toBeDefined();
     });
 
     it('should hide banded column by click', async () => {
