@@ -28,7 +28,7 @@ const resources = [
   { text: 'Room 6', id: 6, color: '#ffc0cb' },
 ];
 
-test('Shader should have correct width and left positions when scrolled to last groups with virtual scrolling (T1310524)', async (t) => {
+test('Should render shader correct with virtual scrolling without current time indicator', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -60,6 +60,45 @@ test('Shader should have correct width and left positions when scrolled to last 
     startDayHour: 8,
     endDayHour: 18,
     currentDate: new Date(2025, 9, 15),
+    height: 400,
+    shadeUntilCurrentTime: true,
+    scrolling: { mode: 'virtual' },
+  });
+});
+
+test('Should render shader correctly with virtual scrolling and current time indicator', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'shader-virtual-scrolling-week-start-with-current-time-indicator.png',
+  );
+
+  await scheduler.scrollTo(new Date(2025, 9, 15, 17, 30), { roomId: 6 });
+
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'shader-virtual-scrolling-week-end-with-current-time-indicator.png',
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await insertStylesheetRulesToPage(style);
+
+  await createWidget('dxScheduler', {
+    dataSource: [],
+    currentView: 'week',
+    views: ['week'],
+    groups: ['roomId'],
+    resources: [{ fieldExpr: 'roomId', dataSource: resources, label: 'Room' }],
+    startDayHour: 8,
+    endDayHour: 18,
+    currentDate: new Date(2025, 9, 15),
+    indicatorTime: new Date(2025, 9, 15, 17, 30),
     height: 400,
     shadeUntilCurrentTime: true,
     scrolling: { mode: 'virtual' },
