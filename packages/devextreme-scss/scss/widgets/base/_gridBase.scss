@@ -207,7 +207,7 @@
     }
 
     .dx-#{$widget-name}-total-footer {
-      td:not(.dx-#{$widget-name}-sticky-column, .dx-#{$widget-name}-sticky-column-left, .dx-#{$widget-name}-sticky-column-right) {
+      td:not(.dx-#{$widget-name}-sticky-column):not(.dx-#{$widget-name}-sticky-column-left):not(.dx-#{$widget-name}-sticky-column-right) {
         background-color: transparent;
       }
     }
