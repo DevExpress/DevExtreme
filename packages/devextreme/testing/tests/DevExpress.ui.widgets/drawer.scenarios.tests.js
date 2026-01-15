@@ -320,7 +320,6 @@ baseConfigs.forEach(baseConfig => {
                 } else {
                     assert.strictEqual(drawer._overlay.option('visible'), true, 'panel is opened');
                 }
-
             });
 
 
