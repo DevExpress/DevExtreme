@@ -267,7 +267,6 @@ describe('Bugs', () => {
           },
         ],
       });
-
       let visibleColumnsLevel0 = instance.getVisibleColumns(0);
       let visibleColumnsLevel1 = instance.getVisibleColumns(1);
 
