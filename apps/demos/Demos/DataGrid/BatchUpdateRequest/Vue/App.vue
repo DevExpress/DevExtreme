@@ -36,7 +36,6 @@ import {
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import 'whatwg-fetch';
 
-// const BASE_PATH = 'http://localhost:5555';
 const BASE_PATH = 'https://js.devexpress.com/Demos/NetCore';
 const URL = `${BASE_PATH}/api/DataGridBatchUpdateWebApi`;
 
