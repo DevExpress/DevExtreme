@@ -825,7 +825,6 @@ $.each(boundsList, function(_, bounds) {
 
         assert.roughEqual(this.projection2.getZoom(), this.projection1.getZoom(), 1E-8, 'zoom');
         assert.arraysEqual(this.projection2.getCenter(), this.projection1.getCenter(), 'center');
-        // assert.arraysEqual(this.projection2.getCenter(), this.projection1.getCenter(), 'center');
     });
 
     QUnit.test('Western edge - from viewport' + namePart, function(assert) {
