@@ -21,6 +21,7 @@ import Widget from '@ts/core/widget/widget';
 import FileUploader from '@ts/ui/file_uploader/file_uploader';
 import type { CancelButtonClickEvent, FileValidationErrorEvent, Properties as FileUploaderProperties } from '@ts/ui/file_uploader/file_uploader.types';
 import Informer from '@ts/ui/informer/informer';
+import type { Properties as SpeechToTextProperties } from '@js/ui/speech_to_text';
 import type { TextAreaProperties } from '@ts/ui/m_text_area';
 import TextArea from '@ts/ui/m_text_area';
 
@@ -53,6 +54,10 @@ type FileToSend = Attachment & {
 export type Properties = TextAreaProperties & {
   fileUploaderOptions?: FileUploaderProperties;
 
+  speechToTextConfig?: SpeechToTextProperties;
+
+  voiceInputEnabled?: boolean;
+
   onSend?: (e: SendEvent) => void;
 };
 
@@ -73,6 +78,8 @@ class ChatTextArea extends TextArea<Properties> {
   _filesToSend?: Map<File, FileToSend>;
 
   _attachButton?: Button;
+
+  _speechToTextButton?: Button;
 
   _sendButton?: Button;
 
@@ -96,6 +103,7 @@ class ChatTextArea extends TextArea<Properties> {
       autoResizeEnabled: true,
       valueChangeEvent: 'input',
       maxHeight: '53.86em',
+      voiceInputEnabled: true,
     };
   }
 
@@ -208,7 +216,7 @@ class ChatTextArea extends TextArea<Properties> {
   }
 
   _getToolbarItems(): ToolbarItem[] {
-    const { fileUploaderOptions } = this.option();
+    const { fileUploaderOptions, voiceInputEnabled } = this.option();
 
     const items = [
       this._getSendButtonConfig(),
@@ -216,6 +224,10 @@ class ChatTextArea extends TextArea<Properties> {
 
     if (fileUploaderOptions) {
       items.push(this._getAttachButtonConfig());
+    }
+
+    if (voiceInputEnabled) {
+      items.push(this._getSpeechToTextButtonConfig());
     }
 
     return items;
@@ -241,6 +253,31 @@ class ChatTextArea extends TextArea<Properties> {
           this._attachButton = e.component;
         },
         onClick: (): void => this._processInformerCleaning(),
+      },
+    } as ToolbarItem;
+
+    return configuration;
+  }
+
+  _getSpeechToTextButtonConfig(): ToolbarItem {
+    const {
+      activeStateEnabled,
+      focusStateEnabled,
+      hoverStateEnabled,
+      speechToTextConfig,
+    } = this.option();
+
+    const configuration = {
+      widget: 'dxSpeechToText',
+      location: 'before',
+      options: {
+        activeStateEnabled,
+        focusStateEnabled,
+        hoverStateEnabled,
+        onInitialized: (e: InitializedEvent): void => {
+          this._speechToTextButton = e.component;
+        },
+        ...speechToTextConfig,
       },
     } as ToolbarItem;
 
@@ -442,7 +479,7 @@ class ChatTextArea extends TextArea<Properties> {
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
-    const { name, value } = args;
+    const { name, fullName, value } = args;
 
     switch (name) {
       case 'activeStateEnabled':
@@ -462,6 +499,11 @@ class ChatTextArea extends TextArea<Properties> {
 
       case 'fileUploaderOptions':
         this._handleFileUploaderOptionsChange(args);
+        break;
+
+      case 'speechToTextConfig':
+        const optionName = fullName.replace(/^[^.]*\./, "");
+        this._speechToTextButton?.option(optionName, value);
         break;
 
       default:

@@ -16,7 +16,7 @@ import type {
   MessageEnteredEvent,
   MessageUpdatedEvent,
   MessageUpdatingEvent,
-  Properties,
+  Properties as ChatProperties,
   TypingEndEvent,
   TypingStartEvent,
 } from '@js/ui/chat';
@@ -37,11 +37,17 @@ import type {
   MessageTemplate,
   Properties as MessageListProperties,
 } from '@ts/ui/chat/messagelist';
+import type { Properties as SpeechToTextProperties } from '@js/ui/speech_to_text';
 import MessageList from '@ts/ui/chat/messagelist';
 import type { DataChange } from '@ts/ui/collection/collection_widget.base';
 
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+
+type Properties = ChatProperties & {
+  messageBoxValue?: string;
+  speechToTextConfig?: SpeechToTextProperties;
+};
 
 class Chat extends Widget<Properties> {
   _messageBox!: MessageBox;
@@ -92,6 +98,7 @@ class Chat extends Widget<Properties> {
       focusStateEnabled: true,
       hoverStateEnabled: true,
       items: [],
+      messageBoxValue: '',
       messageTemplate: null,
       messageTimestampFormat: 'shorttime',
       reloadOnChange: true,
@@ -99,6 +106,7 @@ class Chat extends Widget<Properties> {
       showDayHeaders: true,
       showMessageTimestamp: true,
       showUserName: true,
+      speechToTextConfig: {},
       typingUsers: [],
       user: { id: new Guid().toString() },
       onMessageDeleted: undefined,
@@ -460,6 +468,7 @@ class Chat extends Widget<Properties> {
       fileUploaderOptions,
       focusStateEnabled,
       hoverStateEnabled,
+      speechToTextConfig,
     } = this.option();
 
     const $messageBox = $('<div>');
@@ -471,6 +480,7 @@ class Chat extends Widget<Properties> {
       fileUploaderOptions,
       focusStateEnabled,
       hoverStateEnabled,
+      speechToTextConfig,
       onMessageEntered: (e) => {
         this._messageEnteredHandler(e);
       },
@@ -698,6 +708,9 @@ class Chat extends Widget<Properties> {
       case 'typingUsers':
         this._messageList.option(name, value);
         break;
+      case 'messageBoxValue':
+        this._messageBox.option('textAreaValue', value);
+        break;
       case 'messageTemplate':
         this._messageList.option(name, this._getMessageTemplate());
         break;
@@ -705,6 +718,9 @@ class Chat extends Widget<Properties> {
         this._messageList.option(name, this._getEmptyViewTemplate());
         break;
       case 'reloadOnChange':
+        break;
+      case 'speechToTextConfig':
+        this._messageBox.option(fullName, value);
         break;
       default:
         super._optionChanged(args);

@@ -11,6 +11,7 @@ import type {
   Properties as ChatTextAreaProperties,
   SendEvent,
 } from '@ts/ui/chat/message_box/chat_text_area';
+import type { Properties as SpeechToTextProperties } from '@js/ui/speech_to_text';
 import ChatTextArea from '@ts/ui/chat/message_box/chat_text_area';
 import EditingPreview from '@ts/ui/chat/message_box/editing_preview';
 
@@ -39,6 +40,10 @@ export interface Properties extends DOMComponentProperties<MessageBox> {
   fileUploaderOptions?: FileUploaderProperties;
 
   text?: string;
+
+  speechToTextConfig?: SpeechToTextProperties;
+
+  textAreaValue?: string;
 
   onMessageEntered?: (e: MessageEnteredEvent) => void;
 
@@ -72,7 +77,9 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       focusStateEnabled: true,
       hoverStateEnabled: true,
       fileUploaderOptions: undefined,
+      speechToTextConfig: {},
       text: '',
+      textAreaValue: '',
       onMessageEntered: undefined,
       onMessageEditCanceled: undefined,
       onMessageUpdating: undefined,
@@ -160,6 +167,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       fileUploaderOptions,
       focusStateEnabled,
       hoverStateEnabled,
+      speechToTextConfig,
       text,
     } = this.option();
 
@@ -168,6 +176,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       fileUploaderOptions,
       focusStateEnabled,
       hoverStateEnabled,
+      speechToTextConfig,
       value: text,
       onInput: (e: InputEvent): void => {
         this._triggerTypingStartAction(e);
@@ -282,6 +291,14 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
       case 'text':
         this._updateEditingPreview(value);
+        this._textArea.option('value', value);
+        break;
+
+      case 'speechToTextConfig':
+        this._textArea.option(fullName, value);
+        break;
+
+      case 'textAreaValue':
         this._textArea.option('value', value);
         break;
 
