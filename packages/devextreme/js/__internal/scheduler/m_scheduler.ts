@@ -64,7 +64,7 @@ import { MobileTooltipStrategy } from './tooltip_strategies/m_mobile_tooltip_str
 import type {
   AppointmentTooltipItem,
   SafeAppointment,
-  TargetedAppointment,
+  ScrollToGroupValuesOrOptions, ScrollToOptions, TargetedAppointment,
 } from './types';
 import { AppointmentAdapter } from './utils/appointment_adapter/appointment_adapter';
 import { AppointmentDataAccessor } from './utils/data_accessor/appointment_data_accessor';
@@ -77,7 +77,6 @@ import type { NormalizedView } from './utils/options/types';
 import { setAppointmentGroupValues } from './utils/resource_manager/appointment_groups_utils';
 import { createResourceEditorModel } from './utils/resource_manager/popup_utils';
 import { ResourceManager } from './utils/resource_manager/resource_manager';
-import type { GroupValues, RawGroupValues } from './utils/resource_manager/types';
 import AppointmentLayoutManager from './view_model/appointments_layout_manager';
 import { AppointmentDataSource } from './view_model/m_appointment_data_source';
 import type { AppointmentViewModelPlain } from './view_model/types';
@@ -90,14 +89,6 @@ import SchedulerWorkSpaceDay from './workspaces/m_work_space_day';
 import SchedulerWorkSpaceMonth from './workspaces/m_work_space_month';
 import SchedulerWorkSpaceWeek from './workspaces/m_work_space_week';
 import SchedulerWorkSpaceWorkWeek from './workspaces/m_work_space_work_week';
-
-interface ScrollToOptions {
-  group?: RawGroupValues | GroupValues;
-  allDay?: boolean | undefined;
-  align?: 'start' | 'center';
-}
-
-type ScrollToGroupValuesOrOptions = RawGroupValues | GroupValues | ScrollToOptions | undefined;
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -2045,6 +2036,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       allDayValue = groupValuesOrOptions.allDay;
       align = groupValuesOrOptions.align ?? 'center';
     } else {
+      errors.log('W0002', 'dxScheduler', 'scrollTo', '26.1', 'Use an object with "group", "allDay", and "align" properties instead of separate parameters.');
       groupValues = groupValuesOrOptions;
       allDayValue = allDay;
     }
