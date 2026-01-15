@@ -21,13 +21,17 @@ export interface SelectionEventInfo<TCardData = unknown, TKey = unknown> {
   readonly isDeselectAll: boolean;
 }
 
-export type SelectionChangingEvent<TCardData = unknown, TKey = unknown> =
-  EventInfo<dxCardView> & SelectionEventInfo<TCardData, TKey> & {
-    cancel: boolean | PromiseLike<boolean> | PromiseLike<void>;
-  };
+export type SelectionChangingEvent<
+  TCardData = unknown,
+  TKey = unknown,
+> = EventInfo<dxCardView> & SelectionEventInfo<TCardData, TKey> & {
+  cancel: boolean | PromiseLike<boolean> | PromiseLike<void>;
+};
 
-export type SelectionChangedEvent<TCardData = unknown, TKey = unknown> =
-  EventInfo<dxCardView> & SelectionEventInfo<TCardData, TKey>;
+export type SelectionChangedEvent<
+  TCardData = unknown,
+  TKey = unknown,
+> = EventInfo<dxCardView> & SelectionEventInfo<TCardData, TKey>;
 
 export type { SelectionColumnDisplayMode as ShowCheckBoxesMode };
 

@@ -71,7 +71,7 @@ export class AppComponent {
   }
 
   prepareContextMenu(e: DxPivotGridTypes.ContextMenuPreparingEvent) {
-    if (e.field && e.field.dataField === 'amount') {
+    if (e.field?.dataField === 'amount') {
       this.summaryDisplayModes.forEach((mode) => {
         e.items.push({
           text: mode.text,
@@ -80,8 +80,7 @@ export class AppComponent {
             let format: string;
             const caption = mode.value === 'none' ? 'Total Sales' : 'Relative Sales';
 
-            if (mode.value === 'none'
-                            || mode.value === 'absoluteVariation') {
+            if (mode.value === 'none' || mode.value === 'absoluteVariation') {
               format = 'currency';
             }
             this.pivotGridDataSource.field(e.field.index, {

@@ -26,10 +26,10 @@ const editingStrategy = {
 const store = [...initialMessages];
 const customStore = new CustomStore({
   key: 'id',
-  load: async () => store,
-  insert: async (message) => {
+  load: () => Promise.resolve(store),
+  insert: (message) => {
     store.push(message);
-    return message;
+    return Promise.resolve(message);
   },
 });
 const dataSource = new DataSource({

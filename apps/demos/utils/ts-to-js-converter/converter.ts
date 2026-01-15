@@ -78,6 +78,7 @@ const pipeSource = async (
   }));
 };
 
+// eslint-disable-next-line require-await
 const execTsc = async (directory: string, args: string): Promise<string> => new Promise((resolve, reject) => {
   cps.exec(`tsc ${args}`, (error, stdout, stderr) => {
     if (error != null) {
@@ -140,6 +141,7 @@ const strip = async (resolve: PathResolvers, log: Logger) => {
   });
 };
 
+// eslint-disable-next-line require-await
 const replaceInFiles = async (filenamePatterns: string[], replacementCallback: (string) => string, resolvePath: (string) => string, log: Logger) => (
   Promise.all(
     filenamePatterns.map(async (pattern) => {

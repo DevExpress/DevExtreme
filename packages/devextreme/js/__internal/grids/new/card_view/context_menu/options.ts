@@ -8,8 +8,7 @@ import type { CardInfo, Column } from '../../grid_core/columns_controller/types'
 export type ContextMenuTarget = 'toolbar' | 'headerPanel' | 'content';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export type ContextMenuPreparingEvent<TCardData = unknown, TKey = unknown>
-= EventInfo<any> & {
+export type ContextMenuPreparingEvent<TCardData = unknown, TKey = unknown> = EventInfo<any> & {
   items?: any[];
 
   readonly target: ContextMenuTarget;

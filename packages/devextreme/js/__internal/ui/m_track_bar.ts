@@ -15,8 +15,8 @@ const TRACKBAR_WRAPPER_CLASS = 'dx-trackbar-wrapper';
 export interface TrackBarProperties extends dxTrackBarOptions<TrackBar> {}
 
 class TrackBar<
- TProperties extends TrackBarProperties = TrackBarProperties,
- > extends Editor<TProperties> {
+  TProperties extends TrackBarProperties = TrackBarProperties,
+> extends Editor<TProperties> {
   _$wrapper!: dxElementWrapper;
 
   _$range!: dxElementWrapper;

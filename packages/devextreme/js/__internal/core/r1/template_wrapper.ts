@@ -30,9 +30,7 @@ export interface TemplateWrapperProps {
   renovated?: boolean;
 }
 
-type TemplateModelArgs =
-
-  Required<Pick<TemplateWrapperProps, 'model'>>
+type TemplateModelArgs = Required<Pick<TemplateWrapperProps, 'model'>>
 
   & Omit<TemplateWrapperProps, 'model'>;
 

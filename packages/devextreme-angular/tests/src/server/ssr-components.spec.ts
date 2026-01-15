@@ -52,6 +52,7 @@ describe('Universal', () => {
     expect(fixture.detectChanges.bind(fixture)).not.toThrow();
   });
 
+  // eslint-disable-next-line require-await
   it('should not throw error if core/renderer is called (T1255582)', async () => {
     TestBed.overrideComponent(TestContainerComponent, {
       set: {

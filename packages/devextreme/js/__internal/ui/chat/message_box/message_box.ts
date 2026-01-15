@@ -20,9 +20,8 @@ export const CHAT_MESSAGEBOX_TEXTAREA_CONTAINER_CLASS = 'dx-chat-messagebox-text
 export const TYPING_END_DELAY = 2000;
 const ESCAPE_KEY = 'escape';
 
-export type MessageEnteredEvent =
-  NativeEventInfo<MessageBox, InteractionEvent> &
-  {
+export type MessageEnteredEvent = NativeEventInfo<MessageBox, InteractionEvent>
+  & {
     text?: string;
     attachments?: Attachment[];
   };

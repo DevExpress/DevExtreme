@@ -645,8 +645,7 @@ export type CommonPointInfo = BasePointInfo<chartPointObject>;
  * @docid dxChartPointInfo
  * @public
  */
-export type PointInfo =
-  | CommonPointInfo
+export type PointInfo = | CommonPointInfo
   | StackedPointInfo
   | BubblePointInfo
   | CandleStickPointInfo
