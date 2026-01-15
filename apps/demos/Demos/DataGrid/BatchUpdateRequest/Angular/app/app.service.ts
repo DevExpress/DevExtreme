@@ -1,8 +1,7 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, switchMap, map, shareReplay } from 'rxjs/operators';
-import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 
 interface TokenData {
   headerName: string;
