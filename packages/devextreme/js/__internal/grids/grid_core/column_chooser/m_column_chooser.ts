@@ -36,9 +36,13 @@ type NodeInternal = Item & {
   itemData: {
     id: number;
   };
-  level: number;
   children: NodeInternal[];
 };
+
+interface NodeLevelPair {
+  node: NodeInternal;
+  level: number;
+}
 
 const processItems = function (that: ColumnChooserView, chooserColumns) {
   const items: any = [];
@@ -318,37 +322,39 @@ export class ColumnChooserView extends ColumnsView {
   }
 
   private updateColumnVisibility(nodes: NodeInternal[]): void {
-    nodes
-      .sort((a, b) => b.level - a.level)
-      .forEach((node) => {
-        const columnIndex = node.itemData.id;
-        const isVisible = this.getColumnVisibility(columnIndex, node.selected);
+    nodes.forEach((node) => {
+      const columnIndex = node.itemData.id;
+      const isVisible = this.getColumnVisibility(columnIndex, node.selected);
 
-        this._columnsController.columnOption(columnIndex, 'visible', isVisible);
-      });
+      this._columnsController.columnOption(columnIndex, 'visible', isVisible);
+    });
+  }
+
+  private getSortedFlatNodes(nodes): NodeInternal[] {
+    const getNodeLevelPairs = (
+      sourceNodes: NodeInternal[],
+      flatNodesArray: NodeLevelPair[],
+      level: number,
+    ): NodeLevelPair[] => sourceNodes.reduce((result, node) => {
+      result.push({ node, level });
+
+      if (node.children.length) {
+        getNodeLevelPairs(node.children, result, level + 1);
+      }
+
+      return result;
+    }, flatNodesArray);
+
+    const flatNodes = getNodeLevelPairs(nodes, [], 0)
+      // Band columns should be updated after regular columns
+      .sort((a, b) => b.level - a.level)
+      .map((pair) => pair.node);
+
+    return flatNodes;
   }
 
   private _prepareSelectModeConfig() {
     const selectionOptions = this.option('columnChooser.selection') ?? {};
-
-    const getFlatNodes = (nodes): NodeInternal[] => {
-      const addNodesToArray = (
-        sourceNodes: NodeInternal[],
-        flatNodesArray: NodeInternal[],
-        level: number,
-      ): NodeInternal[] => sourceNodes.reduce((result, node) => {
-        node.level = level;
-        result.push(node);
-
-        if (node.children.length) {
-          addNodesToArray(node.children, result, level + 1);
-        }
-
-        return result;
-      }, flatNodesArray);
-
-      return addNodesToArray(nodes, [], 0);
-    };
 
     const updateSelection = (e, nodes) => {
       nodes
@@ -363,7 +369,7 @@ export class ColumnChooserView extends ColumnsView {
         return;
       }
 
-      const nodes = getFlatNodes(e.component.getNodes());
+      const nodes = this.getSortedFlatNodes(e.component.getNodes());
 
       e.component.beginUpdate();
       isUpdatingSelection = true;
