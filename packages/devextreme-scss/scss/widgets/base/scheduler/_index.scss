@@ -39,6 +39,8 @@ $scheduler-appointment-popup-repeat-end-item-vertical-margin: null !default;
 // Agenda
 $agenda-appointment-recurrence-icon-color: null !default;
 
+$button-normal-text-active-bg: null !default;
+
 @use "./layout/header" as *;
 @use "./mixins" as *;
 @use "../mixins" as *;
@@ -581,6 +583,10 @@ $scheduler-appointment-form-label-padding: 20px;
 
         .dx-icon {
           color: $scheduler-workspace-accent-color;
+        }
+
+        &.dx-state-focused {
+          background-color: $button-normal-text-active-bg;
         }
       }
 
