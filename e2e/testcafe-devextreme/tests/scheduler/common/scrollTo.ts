@@ -230,3 +230,91 @@ test('ScrollTo works correctly in timeline RTL (native, sync header/workspace)',
   height: 580,
   rtlEnabled: true,
 }));
+
+[
+  // startDayHour: 6:00, endDayHour: 18:00
+  {
+    offset: 0,
+    targetDate: new Date(2021, 1, 3, 4, 0),
+    expectedDate: new Date(2021, 1, 3, 6, 0),
+  },
+  {
+    offset: 0,
+    targetDate: new Date(2021, 1, 3, 12, 0),
+    expectedDate: new Date(2021, 1, 3, 12, 0),
+  },
+  {
+    offset: 0,
+    targetDate: new Date(2021, 1, 3, 20, 0),
+    expectedDate: new Date(2021, 1, 3, 18, 0),
+  },
+
+  // startDayHour: 18:00, endDayHour: next day 6:00
+  {
+    offset: 720,
+    targetDate: new Date(2021, 1, 3, 10, 0),
+    expectedDate: new Date(2021, 1, 3, 6, 0),
+  },
+  {
+    offset: 720,
+    targetDate: new Date(2021, 1, 3, 20, 0),
+    expectedDate: new Date(2021, 1, 3, 20, 0),
+  },
+  {
+    offset: 720,
+    targetDate: new Date(2021, 1, 4, 1, 0),
+    expectedDate: new Date(2021, 1, 4, 1, 0),
+  },
+  {
+    offset: 720,
+    targetDate: new Date(2021, 1, 4, 7, 0),
+    expectedDate: new Date(2021, 1, 4, 6, 0),
+  },
+
+  // startDayHour: prev day 18:00, endDayHour: 6:00
+  {
+    offset: -720,
+    targetDate: new Date(2021, 1, 3, 16, 0),
+    expectedDate: new Date(2021, 1, 3, 18, 0),
+  },
+  {
+    offset: -720,
+    targetDate: new Date(2021, 1, 3, 21, 0),
+    expectedDate: new Date(2021, 1, 3, 21, 0),
+  },
+  {
+    offset: -720,
+    targetDate: new Date(2021, 1, 4, 3, 0),
+    expectedDate: new Date(2021, 1, 4, 3, 0),
+  },
+  {
+    offset: -720,
+    targetDate: new Date(2021, 1, 3, 7, 0),
+    expectedDate: new Date(2021, 1, 3, 6, 0),
+  },
+].forEach(({ offset, targetDate, expectedDate }) => {
+  test(`scrollTo should scroll to date with offset=${offset}, targetDate=${targetDate.toString()} (T1310544)`, async (t) => {
+    const scheduler = new Scheduler('#container');
+
+    await scheduler.scrollTo(targetDate);
+
+    const cellData = await scheduler.getCellDataAtViewportCenter();
+
+    await t
+      .expect(expectedDate.getTime()).gte(cellData.startDate.getTime())
+      // eslint-disable-next-line spellcheck/spell-checker
+      .expect(expectedDate.getTime()).lte(cellData.endDate.getTime());
+  }).before(async () => createScheduler({
+    dataSource: [],
+    views: [{
+      type: 'timelineWeek',
+      offset,
+      cellDuration: 60,
+    }],
+    currentView: 'timelineWeek',
+    currentDate: new Date(2021, 1, 2),
+    startDayHour: 6,
+    endDayHour: 18,
+    height: 580,
+  }));
+});
