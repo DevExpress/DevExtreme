@@ -1,15 +1,16 @@
 export const skippedTests = {
   jQuery: {
+    DataGrid: ['SignalRService', 'BatchUpdateRequest'],
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
   },
   Angular: {
     Common: ['PopupAndNotificationsOverview'],
-    DataGrid: ['SignalRService'],
+    DataGrid: ['SignalRService', 'BatchUpdateRequest'],
     Scheduler: ['Templates'],
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
   },
   React: {
-    DataGrid: ['SignalRService'],
+    DataGrid: ['SignalRService', 'BatchUpdateRequest'],
     // NOTE: 'GroupByDate' demo has problems with rendering
     Scheduler: ['GroupByDate', 'Templates'],
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
@@ -17,7 +18,7 @@ export const skippedTests = {
   Vue: {
     Common: ['PopupAndNotificationsOverview'],
     Scheduler: ['Templates'],
-    DataGrid: ['SignalRService'],
+    DataGrid: ['SignalRService', 'BatchUpdateRequest'],
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
   },
 };
