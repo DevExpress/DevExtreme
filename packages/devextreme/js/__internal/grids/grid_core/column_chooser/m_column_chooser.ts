@@ -325,7 +325,7 @@ export class ColumnChooserView extends ColumnsView {
     });
   }
 
-  private _getSortedFlatNodes(nodes): NodeInternal[] {
+  private _getSortedFlatNodes(nodes: NodeInternal[]): NodeInternal[] {
     const getNodeLevelPairsRecursive = (
       sourceNodes: NodeInternal[],
       flatNodesArray: NodeInternal[],
