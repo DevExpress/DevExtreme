@@ -1554,31 +1554,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return DATE_TABLE_MIN_CELL_WIDTH;
   }
 
-  getRoundedCellWidth(groupIndex, startIndex, cellCount) {
-    if (groupIndex < 0 || !hasWindow()) {
-      return 0;
-    }
-
-    const $row = (this.$element() as any).find(`.${DATE_TABLE_ROW_CLASS}`).eq(0);
-    let width = 0;
-    const $cells = $row.find(`.${DATE_TABLE_CELL_CLASS}`);
-    const totalCellCount = this._getCellCount() * groupIndex;
-
-    cellCount = cellCount || this._getCellCount();
-
-    if (!isDefined(startIndex)) {
-      startIndex = totalCellCount;
-    }
-
-    for (let i = startIndex; i < totalCellCount + cellCount; i++) {
-      const element = $($cells).eq(i).get(0);
-      const elementWidth = element ? getBoundingRect(element).width : 0;
-      width += elementWidth;
-    }
-
-    return width / (totalCellCount + cellCount - startIndex);
-  }
-
   // Mappings
   getCellWidth() {
     return getCellWidth(this.getDOMElementsMetaData());
