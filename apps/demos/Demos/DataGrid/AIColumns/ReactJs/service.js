@@ -52,12 +52,11 @@ export const aiIntegration = new AIIntegration({
       { role: 'user', content: prompt.user ?? '' },
     ];
     const promise = getAIResponseRecursive(aiPrompt, signal);
-    const result = {
+    return {
       promise,
       abort: () => {
         controller.abort();
       },
     };
-    return result;
   },
 });

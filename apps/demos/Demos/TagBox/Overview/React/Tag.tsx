@@ -3,7 +3,7 @@ import type { Product } from './types.ts';
 
 interface TagProps {
   product: Product;
-  onMouseEnter: (e: React.MouseEvent, product: Product) => void;
+  onMouseEnter: (e: React.MouseEvent<HTMLElement>, product: Product) => void;
   getAltText: (text: string) => string;
 }
 
@@ -13,7 +13,7 @@ export default function Tag({ product, onMouseEnter, getAltText }: TagProps) {
     <>
       <div
         className={`dx-tag-content ${isDisabled && 'disabled-tag'}`}
-        onMouseEnter={(e: React.MouseEvent): void => onMouseEnter(e, product)}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>): void => onMouseEnter(e, product)}
         aria-disabled={isDisabled}
       >
         <img

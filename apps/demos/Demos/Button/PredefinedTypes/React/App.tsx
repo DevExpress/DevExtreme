@@ -1,13 +1,14 @@
 import React from 'react';
-import { Button, type ButtonTypes } from 'devextreme-react/button';
+import { Button } from 'devextreme-react/button';
+import type { ButtonTypes } from 'devextreme-react/button';
 import notify from 'devextreme/ui/notify';
 
-const onClick = (e: ButtonTypes.ClickEvent) => {
-  const buttonText = e.component.option('text');
+const onClick = (e: ButtonTypes.ClickEvent): void => {
+  const buttonText = e.component.option('text') ?? '';
   notify(`The ${capitalize(buttonText)} button was clicked`);
 };
 
-function capitalize(text: string) {
+function capitalize(text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
 

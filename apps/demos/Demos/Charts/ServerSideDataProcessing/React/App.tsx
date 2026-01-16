@@ -15,7 +15,9 @@ import Chart, {
   Export,
   LoadingIndicator,
 } from 'devextreme-react/chart';
-import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
+import type { ChartTypes } from 'devextreme-react/chart';
+import SelectBox from 'devextreme-react/select-box';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
 import { months, monthLabel } from './data.ts';
 
 const year = 2017;
@@ -47,7 +49,7 @@ const chartDataSource = new DataSource({
         if (!r.ok) throw new Error(`Network response fails: ${r.status}`);
         return r.json();
       })
-      .then((arr) => arr.map((item) => ({
+      .then((arr) => arr.map((item: { MinTemp: number, MaxTemp: number, Date: string }) => ({
         ...item,
         Temperature: (item.MinTemp + item.MaxTemp) / 2,
         Date: new Date(item.Date),
@@ -56,22 +58,22 @@ const chartDataSource = new DataSource({
   paginate: false,
 });
 
-function onValueChanged(data: SelectBoxTypes.ValueChangedEvent) {
+function onValueChanged(data: SelectBoxTypes.ValueChangedEvent): void {
   selectedMonth = data.value;
   chartDataSource.load();
 }
 
-function customizeLabel(e: { valueText: string; }) {
+function customizeLabel(e: { valueText: string; }): string {
   return `${e.valueText}${'&#176C'}`;
 }
 
-function customizeArgumentAxisLabel(e: { value: string | number | Date, valueText: string; }) {
+function customizeArgumentAxisLabel(e: { value: string | number | Date, valueText: string; }): string {
   return new Date(e.value).getDate().toString();
 }
 
-function customizeTooltip(arg: { valueText: string; }) {
+function customizeTooltip({ valueText }: ChartTypes.PointInfo): Record<string, string> {
   return {
-    text: `${arg.valueText}${'&#176C'}`,
+    text: `${valueText}${'&#176C'}`,
   };
 }
 

@@ -5,13 +5,13 @@ import 'whatwg-fetch';
 
 const employees = service.getEmployees();
 export default function App() {
-  const diagramRef = useRef();
+  const diagramRef = useRef(null);
   useEffect(() => {
-    const diagram = diagramRef.current.instance();
+    const diagram = diagramRef?.current?.instance();
     fetch('../../../../data/diagram-employees.json')
       .then((response) => response.json())
       .then((json) => {
-        diagram.import(JSON.stringify(json));
+        diagram?.import(JSON.stringify(json));
       })
       .catch(() => {
         throw new Error('Data Loading Error');

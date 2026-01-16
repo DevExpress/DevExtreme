@@ -19,7 +19,7 @@ const App = () => {
   const [pullDown, setPullDown] = useState<CheckBoxValue>(false);
   const [scrollByContent, setScrollByContent] = useState<CheckBoxValue>(true);
   const [scrollByThumb, setScrollByThumb] = useState<CheckBoxValue>(true);
-  const [content, setContent] = useState(service.getContent());
+  const [content, setContent] = useState<string>(service.getContent());
   const [reachBottom, setReachBottom] = useState<CheckBoxValue>(true);
 
   const scrollViewRef = useRef<ScrollViewRef>(null);
@@ -57,12 +57,12 @@ const App = () => {
         id="scrollview"
         ref={scrollViewRef}
         reachBottomText="Updating..."
-        scrollByContent={scrollByContent}
+        scrollByContent={!!scrollByContent}
         bounceEnabled={!!pullDown}
-        onReachBottom={reachBottom ? updateBottomContent : null}
+        onReachBottom={reachBottom ? updateBottomContent : undefined}
         onPullDown={updateTopContent}
         showScrollbar={showScrollBarMode}
-        scrollByThumb={scrollByThumb}
+        scrollByThumb={!!scrollByThumb}
       >
         <div className="text-content">{content}</div>
       </ScrollView>

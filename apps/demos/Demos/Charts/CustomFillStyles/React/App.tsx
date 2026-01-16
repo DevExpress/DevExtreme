@@ -1,17 +1,32 @@
 import React from 'react';
 import PieChart, {
-  Series, Label, Connector, Export,
+  Series,
+  Label,
+  Connector,
+  Export,
 } from 'devextreme-react/pie-chart';
+import type { SeriesPoint } from 'devextreme/common/charts';
 import {
-  getStrokePattern, getSquarePattern, getLinearGradient, getRadialGradient, getPatternImage,
+  getStrokePattern,
+  getSquarePattern,
+  getLinearGradient,
+  getRadialGradient,
+  getPatternImage,
 } from './utils.ts';
 import { data } from './data.ts';
 
-function customizeText(info: { argument: string; }) {
+function customizeText(info: { argument: string; }): string {
   return info.argument;
 }
 
-function customizePoint(point) {
+type CustomizePointArg = {
+  series: {
+    getPointsByArg: (arg: string) => { getColor: () => string; }[];
+  };
+  argument: string;
+};
+
+function customizePoint(point: CustomizePointArg): SeriesPoint {
   const color = point.series.getPointsByArg(point.argument)[0].getColor();
   let fillId;
   switch (point.argument) {

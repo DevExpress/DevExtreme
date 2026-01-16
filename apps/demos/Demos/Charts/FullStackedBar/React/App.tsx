@@ -1,12 +1,19 @@
 import React from 'react';
 import {
-  Chart, Series, CommonSeriesSettings, Legend, Export, Tooltip, Title,
+  Chart,
+  Series,
+  CommonSeriesSettings,
+  Legend,
+  Export,
+  Tooltip,
+  Title,
 } from 'devextreme-react/chart';
+import type { ChartTypes } from 'devextreme-react/chart';
 import service from './data.ts';
 
 const dataSource = service.dataSource();
 
-function customizeTooltip(arg: { percentText: string; valueText: string; }) {
+function customizeTooltip(arg: ChartTypes.StackedPointInfo): Record<string, string> {
   return {
     text: `${arg.percentText} years: ${arg.valueText}`,
   };

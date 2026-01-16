@@ -28,7 +28,7 @@ $(() => {
       },
       headerFilter: {
         dataSource(data) {
-          data.dataSource.postProcess = function (results) {
+          data.dataSource.postProcess = (results) => {
             results.push({
               text: 'Weekends',
               value: 'weekends',

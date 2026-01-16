@@ -1,4 +1,4 @@
-import { ButtonTypes } from 'devextreme-react/button';
+import type { ButtonTypes } from 'devextreme-react/button';
 
 export const displayModes = ['Icon Only', 'Text and Icon', 'Custom'];
 
@@ -36,14 +36,6 @@ export const types: { displayValue: string; value: ButtonTypes.ButtonType }[] = 
   },
 ];
 
-export const languages = [
-  'Auto-detect',
-  'English',
-  'Spanish',
-  'French',
-  'German',
-];
-
 export const langMap = {
   "Auto-detect": '',
   "English": 'en-US',
@@ -51,3 +43,7 @@ export const langMap = {
   "French": 'fr-FR',
   "German": 'de-DE',
 };
+
+export type Language = keyof typeof langMap;
+
+export const languages: readonly Language[] = Object.keys(langMap) as Language[];

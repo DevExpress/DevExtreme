@@ -9,37 +9,38 @@ import {
   ConstantLine,
   Export,
 } from 'devextreme-react/chart';
+import type { SeriesPoint, SeriesLabel } from 'devextreme-react/common/charts';
 import { temperaturesData } from './data.ts';
 
 const highAverage = 77;
 const lowAverage = 58;
 
-function customizeText(arg: { valueText: string; }) {
+function customizeText(arg: { valueText: string; }): string {
   return `${arg.valueText}&#176F`;
 }
 
 function App() {
-  const customizePoint = useCallback((arg: { value: number; }) => {
+  const customizePoint = useCallback((arg: { value: number; }): SeriesPoint => {
     if (arg.value > highAverage) {
       return { color: '#ff7c7c', hoverStyle: { color: '#ff7c7c' } };
     }
     if (arg.value < lowAverage) {
       return { color: '#8c8cff', hoverStyle: { color: '#8c8cff' } };
     }
-    return null;
+    return {};
   }, []);
 
-  const customizeLabel = useCallback((arg: { value: number; }) => {
+  const customizeLabel = useCallback((arg: { value: number; }): SeriesLabel => {
     if (arg.value > highAverage) {
       return {
         visible: true,
         backgroundColor: '#ff7c7c',
-        customizeText(e) {
+        customizeText(e: { valueText: string }): string {
           return `${e.valueText}&#176F`;
         },
       };
     }
-    return null;
+    return {};
   }, []);
 
   return (

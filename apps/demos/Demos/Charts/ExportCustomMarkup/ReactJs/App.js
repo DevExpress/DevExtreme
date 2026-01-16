@@ -32,21 +32,26 @@ function App() {
   const childRef = useRef(null);
   const chartRef = useRef(null);
   const onClick = useCallback(() => {
-    exportFromMarkup(prepareMarkup(chartRef.current.instance().svg(), childRef.current.innerHTML), {
-      width: 820,
-      height: 420,
-      margin: 0,
-      format: 'png',
-      svgToCanvas(svg, canvas) {
-        return new Promise((resolve) => {
-          const v = Canvg.fromString(
-            canvas.getContext('2d'),
-            new XMLSerializer().serializeToString(svg),
-          );
-          resolve(v.render());
-        });
+    exportFromMarkup(
+      prepareMarkup(chartRef.current?.instance().svg() ?? '', childRef.current?.innerHTML ?? ''),
+      {
+        width: 820,
+        height: 420,
+        margin: 0,
+        format: 'png',
+        svgToCanvas(svg, canvas) {
+          return new Promise((resolve) => {
+            const ctx = canvas.getContext('2d');
+            if (!ctx) {
+              resolve(() => {});
+              return;
+            }
+            const v = Canvg.fromString(ctx, new XMLSerializer().serializeToString(svg));
+            resolve(v.render());
+          });
+        },
       },
-    });
+    );
   }, []);
   return (
     <div id="chart-demo">

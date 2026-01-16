@@ -6,7 +6,7 @@ import VectorMap, {
   Source,
   Tooltip,
 } from 'devextreme-react/vector-map';
-import type { ITooltipProps } from 'devextreme-react/vector-map';
+import type { ILegendProps, ITooltipProps, VectorMapTypes } from 'devextreme-react/vector-map';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { markers } from './data.ts';
 
@@ -18,12 +18,12 @@ const customizeTooltip: ITooltipProps['customizeTooltip'] = (arg) => {
   if (arg.layer.type === 'marker') {
     return { text: arg.attribute('tooltip') };
   }
-  return null;
+  return {};
 };
 
-const customizeText = (arg: { index: string | number; }) => ['< 8000K', '8000K to 10000K', '> 10000K'][arg.index];
+const customizeText: ILegendProps['customizeText'] = (arg) => ['< 8000K', '8000K to 10000K', '> 10000K'][arg.index];
 
-const customizeItems = (items: any[]) => items.reverse();
+const customizeItems = (items: VectorMapTypes.LegendItem[]) => items.reverse();
 
 export default function App() {
   return (

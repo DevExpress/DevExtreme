@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 
 const fs = require('fs');
-const helper = require('../../visual-tests/matrix-test-helper');
+const helper = require('../../visual-tests/matrix-test-helper.ts');
 
 const productDemoFramework = [{ filename: 'Demos/Accordion/Overview/Angular/index.json' }];
 const productDemo = [{ filename: 'Demos/Accordion/Overview/visualtestrc.json' }];
@@ -20,7 +20,7 @@ const testStub = {
     page() { return this; },
   },
   page() { return this; },
-  clientScripts() { return this; }
+  clientScripts() { return this; },
 };
 
 function updateChanges(value, options) {

@@ -48,14 +48,13 @@ function getValues(getter) {
   return Array.isArray(values) ? values : [values];
 }
 
-// eslint-disable-next-line spellcheck/spell-checker
 function importAnd(es6, cjs, callback) {
   if (window.Promise && window.System) {
     return Promise.all(getValues(es6)
       .map((x) => window.System.import(x)))
       .then((x) => callback(...x));
   }
-  // eslint-disable-next-line spellcheck/spell-checker
+
   return callback(...getValues(cjs));
 }
 
@@ -72,7 +71,6 @@ function mockOptionMethod(instance) {
   };
 }
 
-// eslint-disable-next-line no-unused-vars
 const testUtils = {
   postpone,
   postponeUntil,

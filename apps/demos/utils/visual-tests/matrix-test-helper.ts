@@ -8,7 +8,7 @@ export const FRAMEWORKS = {
   jquery: 'jQuery',
   react: 'React',
   vue: 'Vue',
-  angular: 'Angular'
+  angular: 'Angular',
 };
 
 export const execCode = ClientFunction((code) => {
@@ -36,7 +36,6 @@ const settings = {
   manualTestIndex: undefined,
 };
 
-// eslint-disable-next-line no-use-before-define
 // @ts-expect-error types error
 updateConfig();
 
@@ -47,7 +46,8 @@ function shouldRunTestExplicitlyInternal(framework, product, demo) {
 }
 
 function patternGroupFromValues(product, demo, framework) {
-  const wrap = (x) => RegExp(x || '.*', 'i');
+  const escapeRegExp = (string) => string.replace(/[.*+?^${}()|[\]\\-]/g, '\\$&');
+  const wrap = (x) => RegExp(x ? escapeRegExp(x) : '.*', 'i');
   return {
     product: wrap(product),
     demo: wrap(demo),
@@ -64,8 +64,8 @@ export const injectStyle = (style) => `
 export const waitForAngularLoading = ClientFunction(() => new Promise((resolve) => {
   let demoAppCounter = 0;
   const demoAppIntervalHandle = setInterval(() => {
-
-  const demoApp = document.querySelector('demo-app') as HTMLElement;
+    const demoApp = document.querySelector('demo-app');
+    // @ts-expect-error ts-error
     if ((demoApp && demoApp.innerText !== 'Loading...') || demoAppCounter === 120) {
       setTimeout(resolve, 500);
       clearInterval(demoAppIntervalHandle);
@@ -75,7 +75,6 @@ export const waitForAngularLoading = ClientFunction(() => new Promise((resolve) 
 }));
 
 function getInterestProcessArgs() {
-  // eslint-disable-next-line spellcheck/spell-checker
   return process.argv.slice(2);
 }
 
@@ -131,13 +130,11 @@ function getExplicitTestsInternal() {
 
   if (!changedFiles) { return getExplicitTestsFromArgs(); }
   if (!Array.isArray(changedFiles)) {
-    // eslint-disable-next-line no-console
     console.log('Running all tests. Changed files are not iterable: ', JSON.stringify(changedFiles));
   }
 
   const result = { masks: [], traceTree: undefined };
 
-  // eslint-disable-next-line no-restricted-syntax
   for (const changedFile of changedFiles) {
     const fileName = changedFile.filename;
 
@@ -160,7 +157,6 @@ function getExplicitTestsInternal() {
         undefined,
       ));
     } else {
-      // eslint-disable-next-line no-console
       if (settings.verbose) { console.log('Unable to parse changed file, running all tests: ', fileName); }
       return undefined;
     }
@@ -175,14 +171,14 @@ function getExplicitTests() {
     const oldToJSON = RegExp.prototype.toJSON;
     try {
       // Necessary for JSON.stringify call: by default RegExps will produce an empty string.
-      // eslint-disable-next-line no-extend-native
+
       // @ts-expect-error types error
+      // eslint-disable-next-line no-extend-native
       RegExp.prototype.toJSON = RegExp.prototype.toString;
-      // eslint-disable-next-line no-console
       if (settings.verbose) { console.log('Test filters: \r\n', JSON.stringify(result, null, 2)); }
     } finally {
-      // eslint-disable-next-line no-extend-native
       // @ts-expect-error types error
+      // eslint-disable-next-line no-extend-native
       RegExp.prototype.toJSON = oldToJSON;
     }
   }
@@ -208,30 +204,27 @@ export function shouldRunTestAtIndex(testIndex) {
 }
 
 const SKIPPED_TESTS = {
-  jQuery: { 
-    DataGrid: ['RemoteGrouping', 'EditStateManagement'],
+  jQuery: {
+    DataGrid: ['EditStateManagement', 'RemoteGrouping'],
   },
   Angular: {
-    Charts: ['Crosshair'],
     Common: ['PopupAndNotificationsOverview'],
-    DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping', 'EditStateManagement'],
+    DataGrid: ['EditStateManagement', 'RemoteGrouping'],
     Scheduler: ['ContextMenu'],
     FileUploader: ['CustomDropzone'],
   },
   Vue: {
-    Charts: ['Crosshair'],
     Common: ['PopupAndNotificationsOverview'],
     // NOTE: Context menu item position is different across themes
     Scheduler: ['ContextMenu'],
-    DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping', 'EditStateManagement'],
-    FileUploader: ['CustomDropzone']
+    DataGrid: ['EditStateManagement', 'RemoteGrouping'],
+    FileUploader: ['CustomDropzone'],
   },
   React: {
-    Charts: ['Crosshair'],
     Common: ['PopupAndNotificationsOverview'],
     Scheduler: ['ContextMenu'],
-    DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping', 'EditStateManagement'],
-    FileUploader: ['CustomDropzone']
+    DataGrid: ['EditStateManagement', 'RemoteGrouping'],
+    FileUploader: ['CustomDropzone'],
   },
 };
 
@@ -246,7 +239,6 @@ export function shouldSkipDemo(framework, component, demoName, skippedTests) {
     return false;
   }
 
-  // eslint-disable-next-line no-restricted-syntax
   for (const test of componentTests) {
     if (typeof test === 'string' && test === demoName) {
       return true;
@@ -270,7 +262,7 @@ export function shouldRunTest(currentFramework, testIndex, product, demo, skippe
 export function shouldRunTestExplicitly(demoUrl) {
   if (!settings.explicitTests) { return false; }
 
-  const parts = demoUrl.split('/').filter((x) => x && x.length);
+  const parts = demoUrl.split('/').filter((x) => x?.length);
 
   return shouldRunTestExplicitlyInternal(
     parts[parts.length - 1],
@@ -287,6 +279,7 @@ export function runTestAtPage(test, demoUrl, shouldSkipJsError) {
   }
 
   if (settings.explicitTests) {
+    // eslint-disable-next-line no-only-tests/no-only-tests
     executor = shouldRunTestExplicitly(demoUrl) ? test.only : executor = test.skip;
   }
   return executor.page(demoUrl);
@@ -324,21 +317,21 @@ export function runManualTestCore(
     changeTheme(__dirname, `../../Demos/${widget}/${demo}/${FRAMEWORKS[framework]}/index.html`, process.env.THEME);
     testURL = `http://127.0.0.1:8080/apps/demos/Demos/${widget}/${demo}/${FRAMEWORKS[framework]}/`;
   }
-  
+
   const getTestStyles = (demoName) => {
     switch (demoName) {
       case 'EditorAppearanceVariants':
-        return `.dx-toast-wrapper { display: none !important; }`;
+        return '.dx-toast-wrapper { display: none !important; }';
       case 'VirtualScrolling':
       case 'StatePersistence':
       case 'EditStateManagement':
       case 'BatchUpdateRequest':
-        return `.dx-scrollable-scroll { visibility: visible !important; }`;
+        return '.dx-scrollable-scroll { visibility: visible !important; }';
       default:
         return '';
     }
   };
-  
+
   const testStyles = getTestStyles(demo);
 
   const clientScripts = [
@@ -368,6 +361,7 @@ export function runManualTestCore(
 
   if (settings.explicitTests) {
     if (shouldRunTestExplicitlyInternal(framework, widget, demo)) {
+      // eslint-disable-next-line no-only-tests/no-only-tests
       callback(test.only);
     }
     return;

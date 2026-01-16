@@ -5,7 +5,7 @@ import {
 
 const subvalues = [8, 18];
 
-function customizeTooltip({ valueText }) {
+function customizeTooltip({ valueText }: { valueText: string }): Record<string, string> {
   return {
     text: `${valueText} ohm`,
   };

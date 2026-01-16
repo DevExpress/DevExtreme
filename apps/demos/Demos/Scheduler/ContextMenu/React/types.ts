@@ -1,5 +1,5 @@
 import type { SchedulerTypes } from 'devextreme-react/scheduler';
-import { type ContextMenuTypes } from 'devextreme-react/context-menu';
+import type { ContextMenuTypes } from 'devextreme-react/context-menu';
 
 export type Appointment = SchedulerTypes.Appointment & { roomId: number[] };
 

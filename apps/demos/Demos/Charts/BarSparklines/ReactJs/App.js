@@ -25,7 +25,7 @@ function App() {
     dataSource.load();
   }, []);
   return (
-    <React.Fragment>
+    <>
       <div className="long-title">
         <h3>Monthly Prices of Aluminium, Nickel and Copper</h3>
       </div>
@@ -61,7 +61,7 @@ function App() {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 export default App;

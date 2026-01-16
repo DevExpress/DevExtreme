@@ -15,12 +15,12 @@ const editingStrategy = {
   enabled: true,
   disabled: false,
   custom: ({ component, message }) => {
-    const { items, user } = component.option();
+    const { items, user } = component?.option() ?? {};
     const userId = user?.id;
     const lastNotDeletedMessage = items?.findLast(
       (item) => item.author?.id === userId && !item.isDeleted,
     );
-    return message.id === lastNotDeletedMessage?.id;
+    return message?.id === lastNotDeletedMessage?.id;
   },
 };
 const store = [...initialMessages];

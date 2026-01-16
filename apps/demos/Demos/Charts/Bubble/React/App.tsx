@@ -10,17 +10,17 @@ import {
   Border,
   Tooltip,
   Export,
-  type ChartTypes,
 } from 'devextreme-react/chart';
+import type { ChartTypes } from 'devextreme-react/chart';
 import { dataSource } from './data.ts';
 
-const palette = ['#00ced1', '#008000', '#ffd700', '#ff7f50'];
+const palette: string[] = ['#00ced1', '#008000', '#ffd700', '#ff7f50'];
 
-const customizeTooltip = (pointInfo) => ({
-  text: `${pointInfo.point.tag}<br/>Total Population: ${pointInfo.argumentText}M<br/>Population with Age over 60: ${pointInfo.valueText}M (${pointInfo.size}%)`,
+const customizeTooltip = (pointInfo: ChartTypes.BubblePointInfo): Record<string, string> => ({
+  text: `${pointInfo.point?.tag}<br/>Total Population: ${pointInfo.argumentText}M<br/>Population with Age over 60: ${pointInfo.valueText}M (${pointInfo.size}%)`,
 });
 
-function seriesClick(e: ChartTypes.SeriesClickEvent) {
+function seriesClick(e: ChartTypes.SeriesClickEvent): void {
   const series = e.target;
   if (series.isVisible()) {
     series.hide();
@@ -29,7 +29,7 @@ function seriesClick(e: ChartTypes.SeriesClickEvent) {
   }
 }
 
-const customizeText = (e) => `${e.value}M`;
+const customizeText = (e: { value: string | number | Date }): string => `${e.value}M`;
 
 function App() {
   return (

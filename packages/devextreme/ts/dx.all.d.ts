@@ -4094,14 +4094,7 @@ declare module DevExpress.common.data {
     /**
      * [descr:Store.push(changes)]
      */
-    push(
-      changes: Array<{
-        type: 'insert' | 'update' | 'remove';
-        data?: DevExpress.core.DeepPartial<TItem>;
-        key?: TKey;
-        index?: number;
-      }>
-    ): void;
+    push(changes: Array<DevExpress.data.StoreChange<TItem, TKey>>): void;
     /**
      * [descr:Store.remove(key)]
      */
@@ -4157,7 +4150,7 @@ declare module DevExpress.common.data {
     /**
      * [descr:StoreOptions.onPush]
      */
-    onPush?: (changes: Array<TItem>) => void;
+    onPush?: (changes: Array<DevExpress.data.StoreChange<TItem, TKey>>) => void;
     /**
      * [descr:StoreOptions.onRemoved]
      */
@@ -7861,6 +7854,15 @@ declare module DevExpress.data {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
+  type StoreChange<TItem = any, TKey = any> = {
+    type: 'insert' | 'update' | 'remove';
+    data?: DevExpress.core.DeepPartial<TItem>;
+    key?: TKey;
+    index?: number;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
   type StoreEventName =
     | 'loaded'
     | 'loading'
@@ -10403,6 +10405,9 @@ declare module DevExpress.ui {
      * [descr:CardTemplateData]
      */
     export type CardTemplateData = {
+      /**
+       * [descr:CardTemplateData.card]
+       */
       card: CardInfo;
     };
     /**
@@ -10446,6 +10451,9 @@ declare module DevExpress.ui {
      * [descr:ColumnTemplateData]
      */
     export type ColumnTemplateData<TCardData = unknown, TKey = unknown> = {
+      /**
+       * [descr:ColumnTemplateData.column]
+       */
       column: Column<TCardData, TKey>;
     };
     /**

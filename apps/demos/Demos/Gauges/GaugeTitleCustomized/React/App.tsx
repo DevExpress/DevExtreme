@@ -1,10 +1,18 @@
 import React from 'react';
 import {
-  CircularGauge, Scale, Title, Font, Margin, MinorTick,
-  Export, RangeContainer, ValueIndicator,
+  CircularGauge,
+  Scale,
+  Title,
+  Font,
+  Margin,
+  MinorTick,
+  Export,
+  RangeContainer,
+  ValueIndicator,
 } from 'devextreme-react/circular-gauge';
+import type { CircularGaugeRef } from 'devextreme-react/circular-gauge';
 
-function CenterTemplate(gauge) {
+function CenterTemplate(gauge: ReturnType<CircularGaugeRef['instance']>) {
   return (
     <svg>
       <rect y="0" x="0" width="200" height="200" fill="transparent"></rect>

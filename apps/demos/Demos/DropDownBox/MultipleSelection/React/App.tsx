@@ -43,7 +43,7 @@ function App() {
           treeView.unselectAll();
         } else {
           const values = e.value || treeBoxValue;
-          values?.forEach((value): void => {
+          values?.forEach((value: string): void => {
             treeView.selectItem(value);
           });
         }

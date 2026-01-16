@@ -67,7 +67,7 @@ interface HeaderFilterDataSourceOptions {
 
 function orderDateHeaderFilterDataSource(options: HeaderFilterDataSourceOptions): void {
   if (options.dataSource) {
-    options.dataSource.postProcess = function (results: HeaderFilterDataResult[]) {
+    options.dataSource.postProcess = (results: HeaderFilterDataResult[]) => {
       results.push({
         text: 'Weekends',
         value: 'weekends',

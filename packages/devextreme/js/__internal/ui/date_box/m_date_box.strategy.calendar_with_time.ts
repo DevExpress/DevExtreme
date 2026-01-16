@@ -5,7 +5,7 @@ import { extend } from '@js/core/utils/extend';
 import { getWidth } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
 import Box from '@ts/ui/box';
-import TimeView from '@ts/ui/date_box/m_time_view';
+import TimeView from '@ts/ui/date_box/time_view';
 
 import CalendarStrategy from './m_date_box.strategy.calendar';
 import uiDateUtils from './m_date_utils';

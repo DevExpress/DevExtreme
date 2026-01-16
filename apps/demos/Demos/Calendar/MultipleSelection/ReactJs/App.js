@@ -65,7 +65,7 @@ export default function App() {
           min={minDateValue}
           max={maxDateValue}
           defaultValue={initialValue}
-          disabledDates={weekendDisabled ? isDateDisabled : null}
+          disabledDates={weekendDisabled ? isDateDisabled : undefined}
         />
       </div>
       <div className="options">
