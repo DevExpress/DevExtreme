@@ -912,7 +912,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class SummaryRowsViewExtender e
 
   protected _getCellTemplate(options) {
     if (!options.column.command && !isDefined(options.column.groupIndex) && options.summaryItems && options.summaryItems.length) {
-      return renderSummaryCell;
+      return (cell, options) => renderSummaryCell(cell, options, this.setAria.bind(this));
     }
     return super._getCellTemplate(options);
   }
