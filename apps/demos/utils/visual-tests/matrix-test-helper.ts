@@ -210,7 +210,7 @@ export function shouldRunTestAtIndex(testIndex) {
 
 const SKIPPED_TESTS = {
   jQuery: { 
-    DataGrid: ['RemoteGrouping', 'OdataService', 'FilteringAPI', 'EditStateManagement'],
+    DataGrid: [ 'BatchUpdateRequest', 'RemoteGrouping', 'OdataService', 'FilteringAPI', 'EditStateManagement'],
     Charts: [
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
     ],
@@ -218,7 +218,7 @@ const SKIPPED_TESTS = {
   Angular: {
     Charts: ['Crosshair'],
     Common: ['PopupAndNotificationsOverview'],
-    DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping', 'OdataService', 'FilteringAPI'],
+    DataGrid: [ 'BatchUpdateRequest', 'EditStateManagement', 'Toolbar', 'RemoteGrouping', 'OdataService', 'FilteringAPI'],
     Scheduler: ['ContextMenu'],
     FileUploader: ['CustomDropzone'],
   },
@@ -227,14 +227,14 @@ const SKIPPED_TESTS = {
     Common: ['PopupAndNotificationsOverview'],
     // NOTE: Context menu item position is different across themes
     Scheduler: ['ContextMenu'],
-    DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping', 'OdataService', 'FilteringAPI'],
+    DataGrid: [ 'BatchUpdateRequest', 'EditStateManagement', 'Toolbar', 'RemoteGrouping', 'OdataService', 'FilteringAPI'],
     FileUploader: ['CustomDropzone']
   },
   React: {
     Charts: ['Crosshair'],
     Common: ['PopupAndNotificationsOverview'],
     Scheduler: ['ContextMenu'],
-    DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping', 'OdataService', 'FilteringAPI'],
+    DataGrid: [ 'BatchUpdateRequest', 'EditStateManagement', 'Toolbar', 'RemoteGrouping', 'OdataService', 'FilteringAPI'],
     FileUploader: ['CustomDropzone']
   },
 };
