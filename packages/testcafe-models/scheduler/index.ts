@@ -163,6 +163,28 @@ export default class Scheduler extends Widget {
     return cells.filter(`.${CLASS.focusedCell}`);
   }
 
+  getCellDataAtViewportCenter(): any {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => {
+        const instance = getInstance() as any;
+        const workSpace = instance.getWorkSpace();
+        const scrollable = workSpace.getScrollable();
+        const scrollLeft = scrollable.scrollLeft();
+        const scrollTop = scrollable.scrollTop();
+        const centerX = scrollLeft + scrollable.$element().width() / 2;
+        const centerY = scrollTop + scrollable.$element().height() / 2;
+
+        const cellElement = workSpace.getCellByCoordinates({ top: centerY, left: centerX }, false);
+        const cellData = workSpace.getCellData(cellElement);
+
+        return cellData;
+      }, 
+      { dependencies: { getInstance } }
+    )();
+  }
+
   getSelectedCells(isAllDay = false): Selector {
     const cells = isAllDay ? this.allDayTableCells : this.dateTableCells;
 
@@ -197,13 +219,15 @@ export default class Scheduler extends Widget {
 
   scrollTo(date: Date, group?: Record<string, unknown>, allDay?: boolean): Promise<any> {
     const { getInstance } = this;
-    const scrollTo = (): any => (getInstance() as any).scrollTo(date, group, allDay);
 
-    return ClientFunction(scrollTo, {
-      dependencies: {
-        date, group, allDay, getInstance,
-      },
-    })();
+    return ClientFunction(
+      () => {
+        const instance = getInstance() as any;
+        instance.scrollTo(date, group, allDay);
+      }, {
+        dependencies: { date, group, allDay, getInstance },
+      }
+    )();
   }
 
   hideAppointmentTooltip(): Promise<any> {
