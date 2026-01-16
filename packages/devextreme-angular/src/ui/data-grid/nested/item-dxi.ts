@@ -19,12 +19,12 @@ import { DOCUMENT } from '@angular/common';
 
 
 import * as CommonTypes from 'devextreme/common';
-import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
-import { ToolbarItemLocation, ToolbarItemComponent, HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
+import { FormItemComponent, FormItemType, LabelLocation, FormPredefinedButtonItem, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
+import { HorizontalAlignment, VerticalAlignment, ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 import { DataGridPredefinedToolbarItem } from 'devextreme/ui/data_grid';
-import { FormItemComponent, FormItemType, LabelLocation, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
 import { dxTabPanelOptions } from 'devextreme/ui/tab_panel';
 import { dxButtonOptions } from 'devextreme/ui/button';
+import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 
 import {
     DxIntegrationModule,
@@ -75,11 +75,11 @@ export class DxiDataGridItemComponent extends CollectionNestedOption implements 
     }
     
     @Input()
-    get cssClass(): string | undefined {
-        return this._getOption('cssClass');
+    get badge(): string {
+        return this._getOption('badge');
     }
-    set cssClass(value: string | undefined) {
-        this._setOption('cssClass', value);
+    set badge(value: string) {
+        this._setOption('badge', value);
     }
 
     @Input()
@@ -99,51 +99,19 @@ export class DxiDataGridItemComponent extends CollectionNestedOption implements 
     }
 
     @Input()
-    get locateInMenu(): LocateInMenuMode {
-        return this._getOption('locateInMenu');
+    get icon(): string {
+        return this._getOption('icon');
     }
-    set locateInMenu(value: LocateInMenuMode) {
-        this._setOption('locateInMenu', value);
-    }
-
-    @Input()
-    get location(): ToolbarItemLocation {
-        return this._getOption('location');
-    }
-    set location(value: ToolbarItemLocation) {
-        this._setOption('location', value);
+    set icon(value: string) {
+        this._setOption('icon', value);
     }
 
     @Input()
-    get menuItemTemplate(): any {
-        return this._getOption('menuItemTemplate');
+    get tabTemplate(): any {
+        return this._getOption('tabTemplate');
     }
-    set menuItemTemplate(value: any) {
-        this._setOption('menuItemTemplate', value);
-    }
-
-    @Input()
-    get name(): DataGridPredefinedToolbarItem | string {
-        return this._getOption('name');
-    }
-    set name(value: DataGridPredefinedToolbarItem | string) {
-        this._setOption('name', value);
-    }
-
-    @Input()
-    get options(): any {
-        return this._getOption('options');
-    }
-    set options(value: any) {
-        this._setOption('options', value);
-    }
-
-    @Input()
-    get showText(): ShowTextMode {
-        return this._getOption('showText');
-    }
-    set showText(value: ShowTextMode) {
-        this._setOption('showText', value);
+    set tabTemplate(value: any) {
+        this._setOption('tabTemplate', value);
     }
 
     @Input()
@@ -163,51 +131,19 @@ export class DxiDataGridItemComponent extends CollectionNestedOption implements 
     }
 
     @Input()
-    get visible(): boolean {
-        return this._getOption('visible');
-    }
-    set visible(value: boolean) {
-        this._setOption('visible', value);
-    }
-
-    @Input()
-    get widget(): ToolbarItemComponent {
-        return this._getOption('widget');
-    }
-    set widget(value: ToolbarItemComponent) {
-        this._setOption('widget', value);
-    }
-
-    @Input()
-    get badge(): string {
-        return this._getOption('badge');
-    }
-    set badge(value: string) {
-        this._setOption('badge', value);
-    }
-
-    @Input()
-    get icon(): string {
-        return this._getOption('icon');
-    }
-    set icon(value: string) {
-        this._setOption('icon', value);
-    }
-
-    @Input()
-    get tabTemplate(): any {
-        return this._getOption('tabTemplate');
-    }
-    set tabTemplate(value: any) {
-        this._setOption('tabTemplate', value);
-    }
-
-    @Input()
     get title(): string {
         return this._getOption('title');
     }
     set title(value: string) {
         this._setOption('title', value);
+    }
+
+    @Input()
+    get visible(): boolean {
+        return this._getOption('visible');
+    }
+    set visible(value: boolean) {
+        this._setOption('visible', value);
     }
 
     @Input()
@@ -224,6 +160,14 @@ export class DxiDataGridItemComponent extends CollectionNestedOption implements 
     }
     set colSpan(value: number | undefined) {
         this._setOption('colSpan', value);
+    }
+
+    @Input()
+    get cssClass(): string | undefined {
+        return this._getOption('cssClass');
+    }
+    set cssClass(value: string | undefined) {
+        this._setOption('cssClass', value);
     }
 
     @Input()
@@ -280,6 +224,14 @@ export class DxiDataGridItemComponent extends CollectionNestedOption implements 
     }
     set label(value: { alignment?: HorizontalAlignment, location?: LabelLocation, showColon?: boolean, template?: any, text?: string | undefined, visible?: boolean }) {
         this._setOption('label', value);
+    }
+
+    @Input()
+    get name(): string | undefined | FormPredefinedButtonItem | DataGridPredefinedToolbarItem {
+        return this._getOption('name');
+    }
+    set name(value: string | undefined | FormPredefinedButtonItem | DataGridPredefinedToolbarItem) {
+        this._setOption('name', value);
     }
 
     @Input()
@@ -384,6 +336,54 @@ export class DxiDataGridItemComponent extends CollectionNestedOption implements 
     }
     set verticalAlignment(value: VerticalAlignment) {
         this._setOption('verticalAlignment', value);
+    }
+
+    @Input()
+    get locateInMenu(): LocateInMenuMode {
+        return this._getOption('locateInMenu');
+    }
+    set locateInMenu(value: LocateInMenuMode) {
+        this._setOption('locateInMenu', value);
+    }
+
+    @Input()
+    get location(): ToolbarItemLocation {
+        return this._getOption('location');
+    }
+    set location(value: ToolbarItemLocation) {
+        this._setOption('location', value);
+    }
+
+    @Input()
+    get menuItemTemplate(): any {
+        return this._getOption('menuItemTemplate');
+    }
+    set menuItemTemplate(value: any) {
+        this._setOption('menuItemTemplate', value);
+    }
+
+    @Input()
+    get options(): any {
+        return this._getOption('options');
+    }
+    set options(value: any) {
+        this._setOption('options', value);
+    }
+
+    @Input()
+    get showText(): ShowTextMode {
+        return this._getOption('showText');
+    }
+    set showText(value: ShowTextMode) {
+        this._setOption('showText', value);
+    }
+
+    @Input()
+    get widget(): ToolbarItemComponent {
+        return this._getOption('widget');
+    }
+    set widget(value: ToolbarItemComponent) {
+        this._setOption('widget', value);
     }
 
 

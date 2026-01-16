@@ -10,15 +10,12 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input,
-    ContentChildren,
-    QueryList
+    Input
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
 
 
-import { dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
 
 import {
     DxIntegrationModule,
@@ -30,13 +27,10 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
-import { PROPERTY_TOKEN_tabs } from 'devextreme-angular/core/tokens';
-import {
-    PROPERTY_TOKEN_items,
-} from 'devextreme-angular/core/tokens';
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
 
 @Component({
-    selector: 'dxi-data-grid-tab',
+    selector: 'dxi-tree-list-tab-panel-options-item',
     standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
@@ -45,48 +39,19 @@ import {
         NestedOptionHost,
         DxTemplateHost,
         {
-           provide: PROPERTY_TOKEN_tabs,
-           useExisting: DxiDataGridTabComponent,
+           provide: PROPERTY_TOKEN_items,
+           useExisting: DxiTreeListTabPanelOptionsItemComponent,
         }
     ]
 })
-export class DxiDataGridTabComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiTreeListTabPanelOptionsItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('items', value);
-    }
-    
     @Input()
-    get alignItemLabels(): boolean {
-        return this._getOption('alignItemLabels');
-    }
-    set alignItemLabels(value: boolean) {
-        this._setOption('alignItemLabels', value);
-    }
-
-    @Input()
-    get badge(): string | undefined {
+    get badge(): string {
         return this._getOption('badge');
     }
-    set badge(value: string | undefined) {
+    set badge(value: string) {
         this._setOption('badge', value);
-    }
-
-    @Input()
-    get colCount(): number {
-        return this._getOption('colCount');
-    }
-    set colCount(value: number) {
-        this._setOption('colCount', value);
-    }
-
-    @Input()
-    get colCountByScreen(): { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined } {
-        return this._getOption('colCountByScreen');
-    }
-    set colCountByScreen(value: { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined }) {
-        this._setOption('colCountByScreen', value);
     }
 
     @Input()
@@ -98,19 +63,19 @@ export class DxiDataGridTabComponent extends CollectionNestedOption implements A
     }
 
     @Input()
-    get icon(): string | undefined {
-        return this._getOption('icon');
+    get html(): string {
+        return this._getOption('html');
     }
-    set icon(value: string | undefined) {
-        this._setOption('icon', value);
+    set html(value: string) {
+        this._setOption('html', value);
     }
 
     @Input()
-    get items(): Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem> {
-        return this._getOption('items');
+    get icon(): string {
+        return this._getOption('icon');
     }
-    set items(value: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>) {
-        this._setOption('items', value);
+    set icon(value: string) {
+        this._setOption('icon', value);
     }
 
     @Input()
@@ -130,16 +95,32 @@ export class DxiDataGridTabComponent extends CollectionNestedOption implements A
     }
 
     @Input()
-    get title(): string | undefined {
+    get text(): string {
+        return this._getOption('text');
+    }
+    set text(value: string) {
+        this._setOption('text', value);
+    }
+
+    @Input()
+    get title(): string {
         return this._getOption('title');
     }
-    set title(value: string | undefined) {
+    set title(value: string) {
         this._setOption('title', value);
+    }
+
+    @Input()
+    get visible(): boolean {
+        return this._getOption('visible');
+    }
+    set visible(value: boolean) {
+        this._setOption('visible', value);
     }
 
 
     protected get _optionPath() {
-        return 'tabs';
+        return 'items';
     }
 
 
@@ -172,10 +153,10 @@ export class DxiDataGridTabComponent extends CollectionNestedOption implements A
 
 @NgModule({
   imports: [
-    DxiDataGridTabComponent
+    DxiTreeListTabPanelOptionsItemComponent
   ],
   exports: [
-    DxiDataGridTabComponent
+    DxiTreeListTabPanelOptionsItemComponent
   ],
 })
-export class DxiDataGridTabModule { }
+export class DxiTreeListTabPanelOptionsItemModule { }

@@ -5,11 +5,17 @@ import {
     Component,
     NgModule,
     Host,
+    ElementRef,
+    Renderer2,
+    Inject,
+    AfterViewInit,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    QueryList
 } from '@angular/core';
 
-
+import { DOCUMENT } from '@angular/common';
 
 
 import { dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
@@ -17,26 +23,40 @@ import { dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, d
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    extractTemplate,
+    DxTemplateDirective,
+    IDxTemplateHost,
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_tabs } from 'devextreme-angular/core/tokens';
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-tree-list-tab',
     standalone: true,
-    template: '',
-    styles: [''],
+    template: '<ng-content></ng-content>',
+    styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
+        DxTemplateHost,
         {
            provide: PROPERTY_TOKEN_tabs,
            useExisting: DxiTreeListTabComponent,
         }
     ]
 })
-export class DxiTreeListTabComponent extends CollectionNestedOption {
+export class DxiTreeListTabComponent extends CollectionNestedOption implements AfterViewInit,
+    IDxTemplateHost {
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
     @Input()
     get alignItemLabels(): boolean {
         return this._getOption('alignItemLabels');
@@ -124,10 +144,22 @@ export class DxiTreeListTabComponent extends CollectionNestedOption {
 
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost) {
+            @Host() optionHost: NestedOptionHost,
+            private renderer: Renderer2,
+            @Inject(DOCUMENT) private document: any,
+            @Host() templateHost: DxTemplateHost,
+            private element: ElementRef) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        templateHost.setHost(this);
+    }
+
+    setTemplate(template: DxTemplateDirective) {
+        this.template = template;
+    }
+    ngAfterViewInit() {
+        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 

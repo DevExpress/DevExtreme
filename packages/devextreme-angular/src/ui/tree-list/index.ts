@@ -116,6 +116,8 @@ import { DxiTreeListAsyncRuleModule } from 'devextreme-angular/ui/tree-list/nest
 import { DxoTreeListAtModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListBoundaryOffsetModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListButtonModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListButtonItemModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListButtonOptionsModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListChangeModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListColCountByScreenModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListCollisionModule } from 'devextreme-angular/ui/tree-list/nested';
@@ -138,6 +140,7 @@ import { DxoTreeListEditingTextsModule } from 'devextreme-angular/ui/tree-list/n
 import { DxoTreeListEditorOptionsModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListEditorOptionsButtonModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListEmailRuleModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListEmptyItemModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListFieldModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListFieldLookupModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListFilterBuilderModule } from 'devextreme-angular/ui/tree-list/nested';
@@ -150,6 +153,7 @@ import { DxoTreeListFormModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListFormatModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListFormItemModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListFromModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListGroupItemModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListGroupOperationDescriptionsModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListHeaderFilterModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListHideModule } from 'devextreme-angular/ui/tree-list/nested';
@@ -179,9 +183,14 @@ import { DxoTreeListSearchModule } from 'devextreme-angular/ui/tree-list/nested'
 import { DxoTreeListSearchPanelModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListSelectionModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListShowModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListSimpleItemModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListSortingModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListStateStoringModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListStringLengthRuleModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListTabModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListTabbedItemModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListTabPanelOptionsModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListTabPanelOptionsItemModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListTextsModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListToModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListToolbarModule } from 'devextreme-angular/ui/tree-list/nested';
@@ -190,23 +199,18 @@ import { DxoTreeListTreeListHeaderFilterModule } from 'devextreme-angular/ui/tre
 import { DxoTreeListTreeListHeaderFilterSearchModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListTreeListHeaderFilterTextsModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListTreeListSelectionModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListTreeListToolbarItemModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListValidationRuleModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiTreeListButtonItemModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiTreeListEmptyItemModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiTreeListGroupItemModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiTreeListSimpleItemModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiTreeListTabbedItemModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiTreeListTabModule } from 'devextreme-angular/ui/tree-list/nested';
 import { 
            PROPERTY_TOKEN_validationRules,
            PROPERTY_TOKEN_buttons,
+           PROPERTY_TOKEN_items,
            PROPERTY_TOKEN_changes,
            PROPERTY_TOKEN_columns,
            PROPERTY_TOKEN_customOperations,
            PROPERTY_TOKEN_fields,
-           PROPERTY_TOKEN_items,
-           PROPERTY_TOKEN_toolbarItems,
            PROPERTY_TOKEN_tabs,
+           PROPERTY_TOKEN_toolbarItems,
      } from 'devextreme-angular/core/tokens';
 
 
@@ -239,6 +243,11 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this.setChildren('buttons', value);
     }
 
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
     @ContentChildren(PROPERTY_TOKEN_changes)
     set _changesContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('changes', value);
@@ -259,19 +268,14 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this.setChildren('fields', value);
     }
 
-    @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('items', value);
+    @ContentChildren(PROPERTY_TOKEN_tabs)
+    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('tabs', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_toolbarItems)
     set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('toolbarItems', value);
-    }
-
-    @ContentChildren(PROPERTY_TOKEN_tabs)
-    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('tabs', value);
     }
 
     instance: DxTreeList<TRowData, TKey> = null;
@@ -2379,6 +2383,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTreeListAtModule,
     DxoTreeListBoundaryOffsetModule,
     DxiTreeListButtonModule,
+    DxiTreeListButtonItemModule,
+    DxoTreeListButtonOptionsModule,
     DxiTreeListChangeModule,
     DxoTreeListColCountByScreenModule,
     DxoTreeListCollisionModule,
@@ -2401,6 +2407,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTreeListEditorOptionsModule,
     DxiTreeListEditorOptionsButtonModule,
     DxiTreeListEmailRuleModule,
+    DxiTreeListEmptyItemModule,
     DxiTreeListFieldModule,
     DxoTreeListFieldLookupModule,
     DxoTreeListFilterBuilderModule,
@@ -2413,6 +2420,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTreeListFormatModule,
     DxoTreeListFormItemModule,
     DxoTreeListFromModule,
+    DxiTreeListGroupItemModule,
     DxoTreeListGroupOperationDescriptionsModule,
     DxoTreeListHeaderFilterModule,
     DxoTreeListHideModule,
@@ -2442,9 +2450,14 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTreeListSearchPanelModule,
     DxoTreeListSelectionModule,
     DxoTreeListShowModule,
+    DxiTreeListSimpleItemModule,
     DxoTreeListSortingModule,
     DxoTreeListStateStoringModule,
     DxiTreeListStringLengthRuleModule,
+    DxiTreeListTabModule,
+    DxiTreeListTabbedItemModule,
+    DxoTreeListTabPanelOptionsModule,
+    DxiTreeListTabPanelOptionsItemModule,
     DxoTreeListTextsModule,
     DxoTreeListToModule,
     DxoTreeListToolbarModule,
@@ -2453,13 +2466,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTreeListTreeListHeaderFilterSearchModule,
     DxoTreeListTreeListHeaderFilterTextsModule,
     DxoTreeListTreeListSelectionModule,
+    DxiTreeListTreeListToolbarItemModule,
     DxiTreeListValidationRuleModule,
-    DxiTreeListButtonItemModule,
-    DxiTreeListEmptyItemModule,
-    DxiTreeListGroupItemModule,
-    DxiTreeListSimpleItemModule,
-    DxiTreeListTabbedItemModule,
-    DxiTreeListTabModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -2527,6 +2535,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTreeListAtModule,
     DxoTreeListBoundaryOffsetModule,
     DxiTreeListButtonModule,
+    DxiTreeListButtonItemModule,
+    DxoTreeListButtonOptionsModule,
     DxiTreeListChangeModule,
     DxoTreeListColCountByScreenModule,
     DxoTreeListCollisionModule,
@@ -2549,6 +2559,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTreeListEditorOptionsModule,
     DxiTreeListEditorOptionsButtonModule,
     DxiTreeListEmailRuleModule,
+    DxiTreeListEmptyItemModule,
     DxiTreeListFieldModule,
     DxoTreeListFieldLookupModule,
     DxoTreeListFilterBuilderModule,
@@ -2561,6 +2572,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTreeListFormatModule,
     DxoTreeListFormItemModule,
     DxoTreeListFromModule,
+    DxiTreeListGroupItemModule,
     DxoTreeListGroupOperationDescriptionsModule,
     DxoTreeListHeaderFilterModule,
     DxoTreeListHideModule,
@@ -2590,9 +2602,14 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTreeListSearchPanelModule,
     DxoTreeListSelectionModule,
     DxoTreeListShowModule,
+    DxiTreeListSimpleItemModule,
     DxoTreeListSortingModule,
     DxoTreeListStateStoringModule,
     DxiTreeListStringLengthRuleModule,
+    DxiTreeListTabModule,
+    DxiTreeListTabbedItemModule,
+    DxoTreeListTabPanelOptionsModule,
+    DxiTreeListTabPanelOptionsItemModule,
     DxoTreeListTextsModule,
     DxoTreeListToModule,
     DxoTreeListToolbarModule,
@@ -2601,13 +2618,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTreeListTreeListHeaderFilterSearchModule,
     DxoTreeListTreeListHeaderFilterTextsModule,
     DxoTreeListTreeListSelectionModule,
+    DxiTreeListTreeListToolbarItemModule,
     DxiTreeListValidationRuleModule,
-    DxiTreeListButtonItemModule,
-    DxiTreeListEmptyItemModule,
-    DxiTreeListGroupItemModule,
-    DxiTreeListSimpleItemModule,
-    DxiTreeListTabbedItemModule,
-    DxiTreeListTabModule,
     DxTemplateModule
   ]
 })
