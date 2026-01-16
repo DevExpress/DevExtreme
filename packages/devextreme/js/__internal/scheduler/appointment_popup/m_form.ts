@@ -897,7 +897,7 @@ export class AppointmentForm {
       this._$mainGroup.attr('inert', true);
     }
 
-    if(this._$recurrenceGroup) {
+    if (this._$recurrenceGroup) {
       this._$recurrenceGroup.removeClass(CLASSES.recurrenceHidden);
       this._$recurrenceGroup.removeAttr('inert');
 
