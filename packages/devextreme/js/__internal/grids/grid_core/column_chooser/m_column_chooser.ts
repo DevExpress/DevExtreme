@@ -325,22 +325,22 @@ export class ColumnChooserView extends ColumnsView {
     });
   }
 
-  private _getSortedFlatNodes(nodes: NodeInternal[]): NodeInternal[] {
-    const getNodeLevelPairsRecursive = (
+  private _getOrderedFlatNodes(nodes: NodeInternal[]): NodeInternal[] {
+    const getFlattenedNodesRecursive = (
       sourceNodes: NodeInternal[],
       flatNodesArray: NodeInternal[],
     ): NodeInternal[] => sourceNodes.reduce((result, node) => {
       result.push(node);
 
       if (node.children.length) {
-        getNodeLevelPairsRecursive(node.children, result);
+        getFlattenedNodesRecursive(node.children, result);
       }
 
       return result;
     }, flatNodesArray);
 
     // Band columns should be updated after regular columns
-    return getNodeLevelPairsRecursive(nodes, []).reverse();
+    return getFlattenedNodesRecursive(nodes, []).reverse();
   }
 
   private _prepareSelectModeConfig() {
@@ -359,7 +359,7 @@ export class ColumnChooserView extends ColumnsView {
         return;
       }
 
-      const nodes = this._getSortedFlatNodes(e.component.getNodes());
+      const nodes = this._getOrderedFlatNodes(e.component.getNodes());
 
       e.component.beginUpdate();
       isUpdatingSelection = true;
