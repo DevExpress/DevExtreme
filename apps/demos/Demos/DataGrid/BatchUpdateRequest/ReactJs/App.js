@@ -2,6 +2,7 @@ import React from 'react';
 import DataGrid, { Column, Editing, Pager } from 'devextreme-react/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import 'whatwg-fetch';
+
 const BASE_PATH = 'https://js.devexpress.com/Demos/NetCore';
 const URL = `${BASE_PATH}/api/DataGridBatchUpdateWebApi`;
 async function fetchAntiForgeryToken() {
