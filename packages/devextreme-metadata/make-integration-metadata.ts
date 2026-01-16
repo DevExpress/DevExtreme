@@ -75,14 +75,6 @@ Imd.makeMetadata({
       { omitConfigComponents: ['*'] },
     ),
 
-    addMetadata(['ui/form:dxFormOptions.items'], {
-      omitConfigComponents: [/*'DxDataGrid',*/ 'DxTreeList'],
-    }),
-
-    // addMetadata(['ui/popup:dxPopupOptions.toolbarItems'], {
-    //   omitConfigComponents: ['DxDataGrid'],
-    // }),
-
     [
       ['common:AsyncRule', 'async'],
       ['common:CompareRule', 'compare'],
@@ -111,6 +103,9 @@ Imd.makeMetadata({
     // collision Toolbar.Item vs Popup.ToolbarItem
     addMetadata('ui/data_grid:Toolbar.items', {
       forcedName: 'dataGridToolbarItem',
+    }),
+    addMetadata('ui/tree_list:Toolbar.items', {
+      forcedName: 'treeListToolbarItem',
     }),
 
     replaceTypes(/.+/, ['core/element:UserDefinedElement'], ['any']),
