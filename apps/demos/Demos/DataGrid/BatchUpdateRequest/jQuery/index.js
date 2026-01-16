@@ -1,12 +1,51 @@
 $(() => {
-  const URL = 'https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi';
+  const BASE_PATH = 'https://js.devexpress.com/Demos/NetCore';
+  const URL = `${BASE_PATH}/api/DataGridBatchUpdateWebApi`;
+
+  function fetchAntiForgeryToken() {
+    const d = $.Deferred();
+    $.ajax({
+      url: `${BASE_PATH}/api/Common/GetAntiForgeryToken`,
+      method: 'GET',
+      xhrFields: { withCredentials: true },
+      cache: false,
+    }).done((data) => {
+      d.resolve(data);
+    }).fail((xhr) => {
+      const error = xhr.responseJSON?.message || xhr.statusText || 'Unknown error';
+      d.reject(new Error(`Failed to retrieve anti-forgery token: ${error}`));
+    });
+    return d.promise();
+  }
+
+  function getAntiForgeryTokenValue() {
+    const tokenMeta = document.querySelector('meta[name="csrf-token"]');
+    if (tokenMeta) {
+      const headerName = tokenMeta.dataset.headerName || 'RequestVerificationToken';
+      const token = tokenMeta.getAttribute('content');
+      return $.Deferred().resolve({ headerName, token });
+    }
+
+    return fetchAntiForgeryToken().then((tokenData) => {
+      const meta = document.createElement('meta');
+      meta.name = 'csrf-token';
+      meta.content = tokenData.token;
+      meta.dataset.headerName = tokenData.headerName;
+      document.head.appendChild(meta);
+      return tokenData;
+    });
+  }
 
   $('#gridContainer').dxDataGrid({
     dataSource: DevExpress.data.AspNet.createStore({
       key: 'OrderID',
       loadUrl: `${URL}/Orders`,
-      onBeforeSend(method, ajaxOptions) {
-        ajaxOptions.xhrFields = { withCredentials: true };
+      async onBeforeSend(_, ajaxOptions) {
+        const tokenData = await getAntiForgeryTokenValue();
+        ajaxOptions.xhrFields = {
+          withCredentials: true,
+          headers: { [tokenData.headerName]: tokenData.token },
+        };
       },
     }),
     pager: {
@@ -26,11 +65,11 @@ $(() => {
 
       if (e.changes.length) {
         const changes = normalizeChanges(e.changes);
-        e.promise = sendBatchRequest(`${URL}/Batch`, changes).done(() => {
-          e.component.refresh(true).done(() => {
+        e.promise = getAntiForgeryTokenValue().then((tokenData) => sendBatchRequest(`${URL}/Batch`, changes, { [tokenData.headerName]: tokenData.token }))
+          .then(() => e.component.refresh(true))
+          .then(() => {
             e.component.cancelEditData();
           });
-        });
       }
     },
     columns: [{
@@ -77,17 +116,19 @@ $(() => {
     });
   }
 
-  function sendBatchRequest(url, changes) {
+  function sendBatchRequest(url, changes, headers) {
     const d = $.Deferred();
 
     $.ajax(url, {
       method: 'POST',
       data: JSON.stringify(changes),
+      headers,
+      xhrFields: { withCredentials: true },
       cache: false,
       contentType: 'application/json',
-      xhrFields: { withCredentials: true },
     }).done(d.resolve).fail((xhr) => {
-      d.reject(xhr.responseJSON ? xhr.responseJSON.Message : xhr.statusText);
+      const errorMessage = xhr.responseText || xhr.statusText || 'Unknown error';
+      d.reject(new Error(`Batch save failed: ${errorMessage}`));
     });
 
     return d.promise();
