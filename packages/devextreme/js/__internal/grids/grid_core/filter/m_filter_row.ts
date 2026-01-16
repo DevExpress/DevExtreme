@@ -301,6 +301,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       hideOnParentScroll: true,
       _hideOnParentScrollTarget: $overlay,
       wrapperAttr: { class: filterRangeOverlayClass },
+      container: this.element(),
       animation: false,
       position: {
         my: 'top',
@@ -338,10 +339,13 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
         that._renderEditor($editor, editorOptions);
         eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), 'keydown', (e) => {
           if (normalizeKeyName(e) === 'tab' && !e.shiftKey) {
-            e.preventDefault();
             that._hideFilterRange();
-            // @ts-expect-error
-            eventsEngine.trigger($cell.next().find('[tabindex]').first(), 'focus');
+
+            if ($cell.next().length) {
+              e.preventDefault();
+              // @ts-expect-error
+              eventsEngine.trigger($cell.next().find('[tabindex]').first(), 'focus');
+            }
           }
         });
 
