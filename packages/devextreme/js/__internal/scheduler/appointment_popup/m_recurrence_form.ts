@@ -621,8 +621,25 @@ export class RecurrenceForm {
     const dayOfMonthGroup = `${recurrencePatternGroupPath}.${EDITOR_NAMES.recurrenceDayOfMonthEditor}`;
     const dayOfYearGroup = `${recurrencePatternGroupPath}.${GROUP_NAMES.recurrenceDayOfYearGroup}`;
 
-    this.dxForm.itemOption(daysOfWeekGroup, 'visible', this.recurrenceRule.frequency === FREQ.WEEKLY);
-    this.dxForm.itemOption(dayOfMonthGroup, 'visible', this.recurrenceRule.frequency === FREQ.MONTHLY);
-    this.dxForm.itemOption(dayOfYearGroup, 'visible', this.recurrenceRule.frequency === FREQ.YEARLY);
+    this.dxForm.beginUpdate();
+    this.dxForm.itemOption(daysOfWeekGroup, 'visible', false);
+    this.dxForm.itemOption(dayOfMonthGroup, 'visible', false);
+    this.dxForm.itemOption(dayOfYearGroup, 'visible', false);
+
+    switch (this.recurrenceRule.frequency) {
+      case FREQ.WEEKLY:
+        this.dxForm.itemOption(daysOfWeekGroup, 'visible', true);
+        break;
+      case FREQ.MONTHLY:
+        this.dxForm.itemOption(dayOfMonthGroup, 'visible', true);
+        break;
+      case FREQ.YEARLY:
+        this.dxForm.itemOption(dayOfYearGroup, 'visible', true);
+        break;
+      default:
+        break;
+    }
+
+    this.dxForm.endUpdate();
   }
 }
