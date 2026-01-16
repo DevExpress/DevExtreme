@@ -107,31 +107,30 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     return true;
   }
 
-  getIndicationWidth(groupIndex) {
-    const maxWidth = this.getCellWidth() * this._getCellCount();
+  getIndicationWidth() {
+    const cellCount = this._getCellCount();
+    const cellSpan = Math.min(this._getIndicatorDaysSpan(), cellCount);
+    const width = cellSpan * this.getCellWidth();
+    const maxWidth = this.getCellWidth() * cellCount;
 
-    let difference = this._getIndicatorDuration();
-    if (difference > this._getCellCount()) {
-      difference = this._getCellCount();
-    }
-    const width = difference * this.getRoundedCellWidth(groupIndex, groupIndex * this._getCellCount(), difference);
-
-    return maxWidth < width ? maxWidth : width;
+    return Math.min(width, maxWidth);
   }
 
-  getIndicatorOffset(groupIndex) {
-    const difference = this._getIndicatorDuration() - 1;
-    const offset = difference * this.getRoundedCellWidth(groupIndex, groupIndex * this._getCellCount(), difference);
+  getIndicatorOffset() {
+    const cellSpan = this._getIndicatorDaysSpan() - 1;
+    const offset = cellSpan * this.getCellWidth();
 
     return offset;
   }
 
-  _getIndicatorDuration() {
+  _getIndicatorDaysSpan(): number {
     const today = this._getToday();
-    const firstViewDate = new Date(this.getStartViewDate());
-    let timeDiff = today.getTime() - firstViewDate.getTime();
+    const viewStartTime = this.getStartViewDate().getTime();
+    let timeDiff = today.getTime() - viewStartTime;
+
     if (this.option('type') === 'workWeek') {
-      timeDiff -= this._getWeekendsCount(Math.round(timeDiff / toMs('day'))) * toMs('day');
+      const weekendDays = this._getWeekendsCount(Math.round(timeDiff / toMs('day'))) * toMs('day');
+      timeDiff -= weekendDays;
     }
 
     return Math.ceil((timeDiff + 1) / toMs('day'));
