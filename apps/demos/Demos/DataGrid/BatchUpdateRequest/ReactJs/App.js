@@ -3,12 +3,51 @@ import DataGrid, { Column, Editing, Pager } from 'devextreme-react/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import 'whatwg-fetch';
 
-const URL = 'https://js.devexpress.com/Demos/NetCore/api/DataGridBatchUpdateWebApi';
+const BASE_PATH = 'https://js.devexpress.com/Demos/NetCore';
+const URL = `${BASE_PATH}/api/DataGridBatchUpdateWebApi`;
+async function fetchAntiForgeryToken() {
+  try {
+    const response = await fetch(`${BASE_PATH}/api/Common/GetAntiForgeryToken`, {
+      method: 'GET',
+      credentials: 'include',
+      cache: 'no-cache',
+    });
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(
+        `Failed to retrieve anti-forgery token: ${errorMessage || response.statusText}`,
+      );
+    }
+    return await response.json();
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    throw new Error(errorMessage);
+  }
+}
+async function getAntiForgeryTokenValue() {
+  const tokenMeta = document.querySelector('meta[name="csrf-token"]');
+  if (tokenMeta) {
+    const headerName = tokenMeta.dataset.headerName || 'RequestVerificationToken';
+    const token = tokenMeta.getAttribute('content') || '';
+    return Promise.resolve({ headerName, token });
+  }
+  const tokenData = await fetchAntiForgeryToken();
+  const meta = document.createElement('meta');
+  meta.name = 'csrf-token';
+  meta.content = tokenData.token;
+  meta.dataset.headerName = tokenData.headerName;
+  document.head.appendChild(meta);
+  return tokenData;
+}
 const ordersStore = createStore({
   key: 'OrderID',
   loadUrl: `${URL}/Orders`,
-  onBeforeSend: (method, ajaxOptions) => {
-    ajaxOptions.xhrFields = { withCredentials: true };
+  async onBeforeSend(_method, ajaxOptions) {
+    const tokenData = await getAntiForgeryTokenValue();
+    ajaxOptions.xhrFields = {
+      withCredentials: true,
+      headers: { [tokenData.headerName]: tokenData.token },
+    };
   },
 });
 function normalizeChanges(changes) {
@@ -35,22 +74,29 @@ function normalizeChanges(changes) {
     }
   });
 }
-async function sendBatchRequest(url, changes) {
-  const result = await fetch(url, {
-    method: 'POST',
-    body: JSON.stringify(changes),
-    headers: {
-      'Content-Type': 'application/json;charset=UTF-8',
-    },
-    credentials: 'include',
-  });
-  if (!result.ok) {
-    const json = await result.json();
-    throw json.Message;
+async function sendBatchRequest(url, changes, headers) {
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(changes),
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        ...headers,
+      },
+      credentials: 'include',
+    });
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(`Batch save failed: ${errorMessage || response.statusText}`);
+    }
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    throw new Error(errorMessage);
   }
 }
 async function processBatchRequest(url, changes, component) {
-  await sendBatchRequest(url, changes);
+  const tokenData = await getAntiForgeryTokenValue();
+  await sendBatchRequest(url, changes, { [tokenData.headerName]: tokenData.token });
   await component.refresh(true);
   component.cancelEditData();
 }
