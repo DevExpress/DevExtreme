@@ -1,6 +1,6 @@
 {
   "name": "devextreme",
-  "version": "25.1.7",
+  "version": "25.1.8",
   "description": "HTML5 JavaScript Component Suite for Responsive Web Development",
   "keywords": [
     "devextreme",
@@ -170,7 +170,7 @@
     "jest-environment-node": "29.7.0",
     "jquery": "3.7.1",
     "jquery.tmpl": "0.0.2",
-    "jspdf": "3.0.1",
+    "jspdf": "4.0.0",
     "jspdf-autotable": "3.8.3",
     "knockout": "3.5.1",
     "lazypipe": "1.0.2",
