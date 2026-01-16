@@ -39,11 +39,6 @@ type NodeInternal = Item & {
   children: NodeInternal[];
 };
 
-interface NodeLevelPair {
-  node: NodeInternal;
-  level: number;
-}
-
 const processItems = function (that: ColumnChooserView, chooserColumns) {
   const items: any = [];
   const isSelectMode = that.isSelectMode();
@@ -301,12 +296,12 @@ export class ColumnChooserView extends ColumnsView {
     };
   }
 
-  private getBandColumnVisibility(columnIndex: number): boolean {
+  private _getBandColumnVisibility(columnIndex: number): boolean {
     const childColumns = this._columnsController.getChildrenByBandColumn(columnIndex, true);
     return !!childColumns.some((column) => !!column.visible);
   }
 
-  private getColumnVisibility(
+  private _getColumnVisibility(
     columnIndex: number,
     isNodeSelected: boolean | undefined,
   ): boolean | undefined {
@@ -315,42 +310,37 @@ export class ColumnChooserView extends ColumnsView {
     const recursive = selectionOptions?.recursive;
 
     if (recursive && column?.hasColumns) {
-      return this.getBandColumnVisibility(columnIndex);
+      return this._getBandColumnVisibility(columnIndex);
     }
 
     return isNodeSelected;
   }
 
-  private updateColumnVisibility(nodes: NodeInternal[]): void {
+  private _updateColumnVisibility(nodes: NodeInternal[]): void {
     nodes.forEach((node) => {
       const columnIndex = node.itemData.id;
-      const isVisible = this.getColumnVisibility(columnIndex, node.selected);
+      const isVisible = this._getColumnVisibility(columnIndex, node.selected);
 
       this._columnsController.columnOption(columnIndex, 'visible', isVisible);
     });
   }
 
-  private getSortedFlatNodes(nodes): NodeInternal[] {
+  private _getSortedFlatNodes(nodes): NodeInternal[] {
     const getNodeLevelPairsRecursive = (
       sourceNodes: NodeInternal[],
-      flatNodesArray: NodeLevelPair[],
-      level: number,
-    ): NodeLevelPair[] => sourceNodes.reduce((result, node) => {
-      result.push({ node, level });
+      flatNodesArray: NodeInternal[],
+    ): NodeInternal[] => sourceNodes.reduce((result, node) => {
+      result.push(node);
 
       if (node.children.length) {
-        getNodeLevelPairsRecursive(node.children, result, level + 1);
+        getNodeLevelPairsRecursive(node.children, result);
       }
 
       return result;
     }, flatNodesArray);
 
-    const flatNodes = getNodeLevelPairsRecursive(nodes, [], 0)
-      // Band columns should be updated after regular columns
-      .sort((a, b) => b.level - a.level)
-      .map((pair) => pair.node);
-
-    return flatNodes;
+    // Band columns should be updated after regular columns
+    return getNodeLevelPairsRecursive(nodes, []).reverse();
   }
 
   private _prepareSelectModeConfig() {
@@ -369,7 +359,7 @@ export class ColumnChooserView extends ColumnsView {
         return;
       }
 
-      const nodes = this.getSortedFlatNodes(e.component.getNodes());
+      const nodes = this._getSortedFlatNodes(e.component.getNodes());
 
       e.component.beginUpdate();
       isUpdatingSelection = true;
@@ -382,7 +372,7 @@ export class ColumnChooserView extends ColumnsView {
       this.component.beginUpdate();
       this._isUpdatingColumnVisibility = true;
 
-      this.updateColumnVisibility(nodes);
+      this._updateColumnVisibility(nodes);
 
       this.component.endUpdate();
       this._isUpdatingColumnVisibility = false;
