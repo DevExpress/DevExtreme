@@ -1273,8 +1273,8 @@ importers:
         specifier: 7.0.1
         version: 7.0.1(eslint@9.39.1(jiti@2.6.1))
       eslint-plugin-react-refresh:
-        specifier: 0.4.24
-        version: 0.4.24(eslint@9.39.1(jiti@2.6.1))
+        specifier: 0.4.26
+        version: 0.4.26(eslint@9.39.1(jiti@2.6.1))
       globals:
         specifier: 15.15.0
         version: 15.15.0
@@ -1631,8 +1631,8 @@ importers:
         specifier: 5.0.1
         version: 5.0.1
       ignore:
-        specifier: 5.3.1
-        version: 5.3.1
+        specifier: 5.3.2
+        version: 5.3.2
       intl:
         specifier: 1.2.5
         version: 1.2.5
@@ -10361,8 +10361,8 @@ packages:
     peerDependencies:
       eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0
 
-  eslint-plugin-react-refresh@0.4.24:
-    resolution: {integrity: sha512-nLHIW7TEq3aLrEYWpVaJ1dRgFR+wLDPN8e8FpYAql/bMV2oBEfC37K0gLEGgv9fy66juNShSMV8OkTqzltcG/w==}
+  eslint-plugin-react-refresh@0.4.26:
+    resolution: {integrity: sha512-1RETEylht2O6FM/MvgnyvT+8K21wLqDNg4qD51Zj3guhjt433XbnnkVttHMyaVyAFD03QSV4LPS5iE3VQmO7XQ==}
     peerDependencies:
       eslint: '>=8.40'
 
@@ -22378,7 +22378,7 @@ snapshots:
       debug: 4.4.3
       espree: 10.4.0
       globals: 14.0.0
-      ignore: 5.3.1
+      ignore: 5.3.2
       import-fresh: 3.3.0
       js-yaml: 4.1.0
       minimatch: 3.1.2
@@ -23666,7 +23666,7 @@ snapshots:
       '@nrwl/devkit': 18.3.4(nx@19.4.2(@swc/core@1.15.3))
       ejs: 3.1.10
       enquirer: 2.3.6
-      ignore: 5.3.1
+      ignore: 5.3.2
       nx: 19.4.2(@swc/core@1.15.3)
       semver: 7.6.3
       tmp: 0.2.3
@@ -23678,7 +23678,7 @@ snapshots:
       '@nrwl/devkit': 19.4.2(nx@19.4.2(@swc/core@1.15.3))
       ejs: 3.1.10
       enquirer: 2.3.6
-      ignore: 5.3.1
+      ignore: 5.3.2
       minimatch: 9.0.3
       nx: 19.4.2(@swc/core@1.15.3)
       semver: 7.7.3
@@ -23738,7 +23738,7 @@ snapshots:
       detect-port: 1.6.1
       fast-glob: 3.2.7
       fs-extra: 11.2.0
-      ignore: 5.3.1
+      ignore: 5.3.2
       js-tokens: 4.0.0
       minimatch: 9.0.3
       npm-package-arg: 11.0.1
@@ -25641,7 +25641,7 @@ snapshots:
       debug: 4.4.3
       eslint: 9.18.0(jiti@2.6.1)
       graphemer: 1.4.0
-      ignore: 5.3.1
+      ignore: 5.3.2
       natural-compare: 1.4.0
       semver: 7.7.3
       ts-api-utils: 1.4.0(typescript@5.9.3)
@@ -30717,7 +30717,7 @@ snapshots:
     dependencies:
       eslint: 9.18.0(jiti@2.6.1)
 
-  eslint-plugin-react-refresh@0.4.24(eslint@9.39.1(jiti@2.6.1)):
+  eslint-plugin-react-refresh@0.4.26(eslint@9.39.1(jiti@2.6.1)):
     dependencies:
       eslint: 9.39.1(jiti@2.6.1)
 
@@ -32050,7 +32050,7 @@ snapshots:
       dir-glob: 3.0.1
       fast-glob: 3.3.3
       glob: 7.2.3
-      ignore: 5.3.1
+      ignore: 5.3.2
       merge2: 1.4.1
       slash: 3.0.0
 
@@ -32059,7 +32059,7 @@ snapshots:
       array-union: 2.1.0
       dir-glob: 3.0.1
       fast-glob: 3.3.3
-      ignore: 5.3.1
+      ignore: 5.3.2
       merge2: 1.4.1
       slash: 3.0.0
 
@@ -36314,7 +36314,7 @@ snapshots:
       flat: 5.0.2
       front-matter: 4.0.2
       fs-extra: 11.2.0
-      ignore: 5.3.1
+      ignore: 5.3.2
       jest-diff: 29.7.0
       jsonc-parser: 3.2.0
       lines-and-columns: 2.0.4
@@ -39368,7 +39368,7 @@ snapshots:
       globby: 11.1.0
       globjoin: 0.1.4
       html-tags: 3.3.1
-      ignore: 5.3.1
+      ignore: 5.3.2
       import-lazy: 4.0.0
       imurmurhash: 0.1.4
       is-plain-object: 5.0.0
@@ -39414,7 +39414,7 @@ snapshots:
       globby: 11.1.0
       globjoin: 0.1.4
       html-tags: 3.3.1
-      ignore: 5.3.1
+      ignore: 5.3.2
       import-lazy: 4.0.0
       imurmurhash: 0.1.4
       is-plain-object: 5.0.0
