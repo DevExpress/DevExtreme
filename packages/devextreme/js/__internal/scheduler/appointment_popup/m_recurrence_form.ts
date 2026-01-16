@@ -319,7 +319,7 @@ export class RecurrenceForm {
             onContentReady: (e): void => {
               e.component.option('value', this.recurrenceRule.frequency);
 
-              if(needRestoreFrequencyEditorFocus) {
+              if (needRestoreFrequencyEditorFocus) {
                 setTimeout(() => {
                   e.component.focus();
                   needRestoreFrequencyEditorFocus = false;
@@ -333,7 +333,7 @@ export class RecurrenceForm {
                 return;
               }
 
-              if(e.event) {
+              if (e.event) {
                 needRestoreFrequencyEditorFocus = true;
               }
 
