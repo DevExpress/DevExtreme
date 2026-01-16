@@ -3786,35 +3786,6 @@ QUnit.module('Nested Splitters', moduleConfig, () => {
             assert.strictEqual(nestedSplitterResizeHandlerStub.callCount, 1);
         });
 
-        QUnit.skip(`nestedSplitter.${eventHandler} event handler should be able to be updated at runtime`, function(assert) {
-            const handlerStub = sinon.stub();
-            const handlerStubAfterUpdate = sinon.stub();
-
-            this.reinit({
-                items: [{
-                    splitter: {
-                        [eventHandler]: handlerStub,
-                        dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }]
-                    }
-                }]
-            });
-
-            let pointer = pointerMock(this.getResizeHandles(false).get(0));
-
-            pointer.start().dragStart().drag(0, 50).dragEnd();
-
-            assert.strictEqual(handlerStub.callCount, 1);
-            assert.strictEqual(handlerStubAfterUpdate.callCount, 0);
-            handlerStub.reset();
-
-            this.instance.option(`items[0].splitter.${eventHandler}`, handlerStubAfterUpdate);
-
-            pointer = pointerMock(this.getResizeHandles(false)[0]);
-            pointer.start().dragStart().drag(0, 50).dragEnd();
-
-            assert.strictEqual(handlerStub.callCount, 0);
-            assert.strictEqual(handlerStubAfterUpdate.callCount, 1);
-        });
     });
 
     QUnit.test('itemRendered callback should be called when the panes of a nested splitter are rendered', function(assert) {
