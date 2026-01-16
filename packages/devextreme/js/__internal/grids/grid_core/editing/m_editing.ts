@@ -2302,7 +2302,10 @@ class EditingControllerImpl extends modules.ViewController {
         $container.addClass(COMMAND_EDIT_WITH_ICONS_CLASS);
 
         const localizationName = this.getButtonLocalizationNames()[button.name];
-        localizationName && $button.attr('aria-label', messageLocalization.format(localizationName));
+
+        if (localizationName) {
+          this.setAria('label', messageLocalization.format(localizationName), $button);
+        }
       } else {
         $button.text(button.text);
       }
