@@ -144,7 +144,7 @@ jobs:
         shell: bash
         run: |
           pnpx nx build devextreme-scss
-          pnpx nx build devextreme
+          pnpx nx build devextreme -c testing
 
       - name: DevExtreme - Build-all
         if: needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
@@ -472,7 +472,7 @@ jobs:
 
     - name: Prepare JS
       working-directory: apps/demos
-      run: pnpm run prepare-js
+      run: pnpm run prepare-js -c testing
 
     - name: Check generated JS demos
       working-directory: apps/demos
