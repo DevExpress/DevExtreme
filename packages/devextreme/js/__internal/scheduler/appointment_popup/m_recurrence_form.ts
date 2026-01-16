@@ -269,6 +269,10 @@ export class RecurrenceForm {
   }
 
   private createRecurrenceRuleGroup(): GroupItem {
+    // Change of frequency editor's value causes rerender of the recurrencePatternGroup.
+    // To prevent focus loss in this editor, we use this flag.
+    let needRestoreFrequencyEditorFocus = false;
+
     return {
       itemType: 'group',
       name: GROUP_NAMES.recurrenceRuleRepeatGroup,
@@ -314,12 +318,23 @@ export class RecurrenceForm {
             displayExpr: 'text',
             onContentReady: (e): void => {
               e.component.option('value', this.recurrenceRule.frequency);
+
+              if(needRestoreFrequencyEditorFocus) {
+                setTimeout(() => {
+                  e.component.focus();
+                  needRestoreFrequencyEditorFocus = false;
+                });
+              }
             },
             onValueChanged: (e): void => {
               const previousValue = this.recurrenceRule.frequency;
 
               if (previousValue === e.value) {
                 return;
+              }
+
+              if(e.event) {
+                needRestoreFrequencyEditorFocus = true;
               }
 
               this.recurrenceRule.frequency = e.value;
@@ -606,25 +621,8 @@ export class RecurrenceForm {
     const dayOfMonthGroup = `${recurrencePatternGroupPath}.${EDITOR_NAMES.recurrenceDayOfMonthEditor}`;
     const dayOfYearGroup = `${recurrencePatternGroupPath}.${GROUP_NAMES.recurrenceDayOfYearGroup}`;
 
-    this.dxForm.beginUpdate();
-    this.dxForm.itemOption(daysOfWeekGroup, 'visible', false);
-    this.dxForm.itemOption(dayOfMonthGroup, 'visible', false);
-    this.dxForm.itemOption(dayOfYearGroup, 'visible', false);
-
-    switch (this.recurrenceRule.frequency) {
-      case FREQ.WEEKLY:
-        this.dxForm.itemOption(daysOfWeekGroup, 'visible', true);
-        break;
-      case FREQ.MONTHLY:
-        this.dxForm.itemOption(dayOfMonthGroup, 'visible', true);
-        break;
-      case FREQ.YEARLY:
-        this.dxForm.itemOption(dayOfYearGroup, 'visible', true);
-        break;
-      default:
-        break;
-    }
-
-    this.dxForm.endUpdate();
+    this.dxForm.itemOption(daysOfWeekGroup, 'visible', this.recurrenceRule.frequency === FREQ.WEEKLY);
+    this.dxForm.itemOption(dayOfMonthGroup, 'visible', this.recurrenceRule.frequency === FREQ.MONTHLY);
+    this.dxForm.itemOption(dayOfYearGroup, 'visible', this.recurrenceRule.frequency === FREQ.YEARLY);
   }
 }
