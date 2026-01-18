@@ -22,6 +22,7 @@ const CLASSES = {
   recurrenceGroup: 'dx-scheduler-form-recurrence-group',
   recurrenceHidden: 'dx-scheduler-form-recurrence-group-hidden',
 
+  recurrenceStartDateEditor: 'dx-scheduler-form-recurrence-start-date-editor',
   frequencyEditor: 'dx-scheduler-form-recurrence-frequency-editor',
   byMonthEditor: 'dx-scheduler-form-recurrence-by-month-editor',
   dayOfMonthEditor: 'dx-scheduler-form-day-of-month-editor',
@@ -216,6 +217,7 @@ export class RecurrenceForm {
           getStartDateCommonConfig(this.scheduler.getFirstDayOfWeek()),
           {
             name: EDITOR_NAMES.recurrenceStartDateEditor,
+            cssClass: CLASSES.recurrenceStartDateEditor,
             label: {
               text: messageLocalization.format('dxScheduler-editorLabelStartDate'),
             },
