@@ -468,7 +468,7 @@ test('Headers should not be hidden during auto scrolling when virtual scrollling
 });
 
 // T1078513
-test.meta({ unstable: true })('Footer should not be hidden during auto scrolling when virtual scrollling is specified', async (t) => {
+test('Footer should not be hidden during auto scrolling when virtual scrollling is specified', async (t) => {
   const dataGrid = new DataGrid('#container');
   await t.drag(dataGrid.getDataRow(0).getDragCommand(), 0, 90, { speed: 0.1 });
 
