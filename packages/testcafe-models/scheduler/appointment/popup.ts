@@ -27,6 +27,7 @@ export const SELECTORS = {
   recurrenceGroup: '.dx-scheduler-form-recurrence-group',
   backButton: `.dx-button.dx-widget[aria-label="arrowleft"]`,
   recurrenceStartDateInput: '.dx-scheduler-form-recurrence-start-date-editor input[type="text"]',
+  recurrenceFrequencyEditor: '.dx-scheduler-form-recurrence-frequency-editor .dx-selectbox.dx-widget',
   repeatEditorButton: '.dx-scheduler-form-repeat-editor .dx-button-has-icon',
   recurrenceSettingsButton: '.dx-scheduler-form-recurrence-settings-button',
   repeatEveryInput: '.dx-scheduler-form-recurrence-settings-group [type="text"]',
@@ -65,11 +66,11 @@ export default class AppointmentPopup {
 
   descriptionEditor: TextArea = new TextArea(this.contentElement.find(SELECTORS.descriptionEditor));
 
-  // Recurrence form elements
   recurrence = {
     backButton: Selector(SELECTORS.backButton),
     group: Selector(SELECTORS.recurrenceGroup),
     startDateInput: Selector(SELECTORS.recurrenceStartDateInput),
+    frequencyEditor: Selector(SELECTORS.recurrenceFrequencyEditor),
     settingsButton: Selector(SELECTORS.recurrenceSettingsButton),
     repeatEditorButton: Selector(SELECTORS.repeatEditorButton),
     repeatEveryInput: Selector(SELECTORS.repeatEveryInput),
