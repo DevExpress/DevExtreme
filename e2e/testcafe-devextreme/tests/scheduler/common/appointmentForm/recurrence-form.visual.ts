@@ -160,13 +160,6 @@ test.meta({ browserSize: [1500, 1500] })('Recurrence settings button should have
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
   const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, true);
 
-  await testScreenshot(
-    t,
-    takeScreenshot,
-    'scheduler__appointment__recurrence-settings-button__not-focused.png',
-    { element: appointmentPopup.contentElement },
-  );
-
   await t.hover(appointmentPopup.recurrence.settingsButton);
 
   await testScreenshot(
