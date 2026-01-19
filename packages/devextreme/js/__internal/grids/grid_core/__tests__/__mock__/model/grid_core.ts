@@ -4,6 +4,7 @@ import type { GridBase } from '@js/common/grids';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 
+import { ColumnChooserModel } from './column_chooser';
 import { DataRowModel } from './row/data_row';
 
 const SELECTORS = {
@@ -53,6 +54,10 @@ export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
 
   public getDataRow(rowIndex: number): DataRowModel {
     return new DataRowModel(this.getDataRows()[rowIndex]);
+  }
+
+  public getColumnChooser(): ColumnChooserModel {
+    return new ColumnChooserModel(this.root);
   }
 
   public abstract getInstance(): TInstance;
