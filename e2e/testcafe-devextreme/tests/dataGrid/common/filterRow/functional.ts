@@ -170,14 +170,18 @@ test('DataGrid - NVDA reads filter menu items as "Search box 1 of 8" (T1290386)'
   test('DataGrid - filter range overlay in last column on Tab pressed moves focus to next tabbable element (T1312521)', async (t) => {
     const dataGrid = new DataGrid('#container');
     const filterCell = dataGrid.getFilterCell(2);
-    const firstCell = grouped ? dataGrid.getGroupRow(0) : dataGrid.getDataCell(0, 0);
+    const expectedFocusedElement = grouped ? dataGrid.getGroupRow(0) : dataGrid.getDataCell(0, 0);
 
     await t
       .click(filterCell)
+      .expect(dataGrid.getFilterRangeOverlay().exists)
+      .ok('Filter range overlay is shown')
       .pressKey('tab')
       .pressKey('tab')
-      .expect(firstCell.isFocused)
-      .ok();
+      .expect(dataGrid.getFilterRangeOverlay().exists)
+      .notOk('Filter range overlay is closed')
+      .expect(expectedFocusedElement.isFocused)
+      .ok('First cell of first row is focused');
   }).before(async () => createWidget('dxDataGrid', {
     dataSource: [
       { Group: 'group1', Value: 'field1', Range: 10 },
@@ -206,10 +210,14 @@ test('DataGrid - filter range overlay in last column on Tab pressed moves focus 
 
   await t
     .click(filterCell)
+    .expect(dataGrid.getFilterRangeOverlay().exists)
+    .ok('Filter range overlay is shown')
     .pressKey('tab')
     .pressKey('tab')
+    .expect(dataGrid.getFilterRangeOverlay().exists)
+    .notOk('Filter range overlay is closed')
     .expect(dataGrid.getRowsView().focused)
-    .ok();
+    .ok('Empty rows view is focused');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [],
   filterRow: { visible: true },
