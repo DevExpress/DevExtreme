@@ -1676,6 +1676,52 @@ describe('Appointment Form', () => {
         });
       });
     });
+
+    describe('FrequencyEditor focus', () => {
+      it('should not be focused when value is changed via API', async () => {
+        const { POM, scheduler } = await createScheduler({
+          ...getDefaultConfig(),
+          dataSource: [],
+          views: ['week'],
+          currentView: 'week',
+          currentDate: new Date(2021, 2, 25),
+        });
+
+        scheduler.showAppointmentPopup(recurringAppointment);
+        POM.popup.getEditSeriesButton().click();
+        POM.popup.openRecurrenceSettings();
+
+        const frequencyEditor = POM.popup.form.getEditor('recurrencePeriodEditor');
+        const frequencyEditorInputElement = POM.popup.getInput('recurrencePeriodEditor').get(0) as HTMLElement;
+
+        frequencyEditor?.option('value', 'yearly');
+
+        expect(document.activeElement).not.toBe(frequencyEditorInputElement);
+      });
+
+      it('should be focused when value is changed via keyboard', async () => {
+        const { POM, scheduler, keydown } = await createScheduler({
+          ...getDefaultConfig(),
+          dataSource: [],
+          views: ['week'],
+          currentView: 'week',
+          currentDate: new Date(2021, 2, 25),
+        });
+
+        scheduler.showAppointmentPopup(recurringAppointment);
+        POM.popup.getEditSeriesButton().click();
+        POM.popup.openRecurrenceSettings();
+
+        const frequencyEditorInputElement = POM.popup.getInput('recurrencePeriodEditor').get(0) as HTMLElement;
+
+        frequencyEditorInputElement.click();
+        jest.useFakeTimers();
+        keydown(frequencyEditorInputElement, 'ArrowDown');
+        jest.runAllTimers();
+
+        expect(document.activeElement).toBe(frequencyEditorInputElement);
+      });
+    });
   });
 
   describe('firstDayOfWeek', () => {
