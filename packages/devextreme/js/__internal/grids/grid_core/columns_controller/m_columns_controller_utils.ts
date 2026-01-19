@@ -468,7 +468,7 @@ export function getColumnIndexByVisibleIndex(
 ): number {
   const column = getColumnByVisibleIndex(that, visibleIndex, location);
 
-  return isDefined(column?.index) ? column.index : -1;
+  return column?.index ?? -1;
 }
 
 export const moveColumnToGroup = function (that: ColumnsController, column, groupIndex) {
