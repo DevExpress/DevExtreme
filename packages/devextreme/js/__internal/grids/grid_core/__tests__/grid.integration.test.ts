@@ -76,7 +76,8 @@ describe('Grid', () => {
         },
       });
 
-      expect(component.getHeaderCellFilter(1).attr('aria-label')).not.toMatch(/\n/);
+      expect(component.getHeaderCellFilter(1).attr('aria-label'))
+        .toBe('Show filter options for column \'Test Name\'');
     });
   });
 });

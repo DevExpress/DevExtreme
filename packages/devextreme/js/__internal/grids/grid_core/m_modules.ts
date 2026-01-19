@@ -145,7 +145,11 @@ export class ModuleItem {
     return this._actions[actionName];
   }
 
-  public setAria(name: string, value: any, $target: dxElementWrapper) {
+  public setAria(
+    name: string,
+    value: string | number | boolean | undefined,
+    $target: dxElementWrapper,
+  ) {
     const target = $target.get(0);
     const prefix = name !== 'role' && name !== 'id' ? 'aria-' : '';
     const normalizedValue = String(value).replace(/\s+/g, ' ').trim();
