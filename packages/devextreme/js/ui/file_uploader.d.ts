@@ -556,7 +556,6 @@ export default class dxFileUploader extends Editor<dxFileUploaderOptions> {
 /** @public */
 export type Properties = dxFileUploaderOptions;
 
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

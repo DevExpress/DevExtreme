@@ -225,7 +225,6 @@ export type Properties<
     TKey = any,
 > = dxToolbarOptions<TItem, TKey>;
 
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

@@ -220,7 +220,6 @@ export interface dxSliderBase { }
 /** @public */
 export type Properties = dxSliderOptions;
 
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

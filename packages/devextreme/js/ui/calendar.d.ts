@@ -245,7 +245,6 @@ export default class dxCalendar extends Editor<dxCalendarOptions> {
 /** @public */
 export type Properties = dxCalendarOptions;
 
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

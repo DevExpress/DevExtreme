@@ -280,7 +280,6 @@ export type Properties<
     TKey = any,
 > = dxGalleryOptions<TItem, TKey>;
 
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

@@ -23,4 +23,3 @@ export default class dxValidationMessage extends dxOverlay<dxValidationMessageOp
 
 /** @public */
 export type Properties = dxValidationMessageOptions;
-

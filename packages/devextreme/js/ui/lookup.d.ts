@@ -363,7 +363,6 @@ export default class dxLookup extends dxDropDownList<dxLookupOptions> { }
 /** @public */
 export type Properties = dxLookupOptions;
 
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

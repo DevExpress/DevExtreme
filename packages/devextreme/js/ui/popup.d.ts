@@ -299,4 +299,3 @@ interface PopupInstance extends dxPopup<Properties> { }
 
 /** @public */
 export type Properties = dxPopupOptions<PopupInstance>;
-

@@ -124,7 +124,6 @@ export interface dxValidationGroupResult {
 /** @public */
 export type Properties = dxValidationGroupOptions;
 
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

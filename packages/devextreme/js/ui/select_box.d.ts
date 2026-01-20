@@ -302,7 +302,6 @@ interface SelectBoxInstance extends dxSelectBox<Properties> { }
 /** @public */
 export type Properties = dxSelectBoxOptions<SelectBoxInstance>;
 
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

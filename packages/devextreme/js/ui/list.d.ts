@@ -850,7 +850,6 @@ export type Properties<
     TKey = any,
 > = dxListOptions<TItem, TKey>;
 
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

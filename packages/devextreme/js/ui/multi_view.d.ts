@@ -208,7 +208,6 @@ export type Properties<
     TKey = any,
 > = dxMultiViewOptions<TItem, TKey>;
 
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

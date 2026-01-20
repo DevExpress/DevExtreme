@@ -254,7 +254,6 @@ export default class dxLoadPanel extends dxOverlay<dxLoadPanelOptions> { }
 /** @public */
 export type Properties = dxLoadPanelOptions;
 
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

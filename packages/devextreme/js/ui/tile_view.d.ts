@@ -236,7 +236,6 @@ export type Properties<
     TKey = any,
 > = dxTileViewOptions<TItem, TKey>;
 
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

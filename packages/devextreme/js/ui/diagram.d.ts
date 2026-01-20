@@ -1704,7 +1704,6 @@ export interface dxDiagramMoveShapeArgs {
 /** @public */
 export type Properties = dxDiagramOptions;
 
-
 // #region deprecated in v24.1
 
 /** @deprecated Use AutoZoomMode instead */

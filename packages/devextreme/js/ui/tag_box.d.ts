@@ -331,7 +331,6 @@ export default class dxTagBox extends dxSelectBox<dxTagBoxOptions> {
 /** @public */
 export type Properties = dxTagBoxOptions;
 
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

@@ -373,7 +373,6 @@ export interface dxDropDownButtonItem extends dxListItem {
 /** @public */
 export type Properties = dxDropDownButtonOptions;
 
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

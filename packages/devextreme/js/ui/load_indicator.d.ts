@@ -74,7 +74,6 @@ export default class dxLoadIndicator extends Widget<dxLoadIndicatorOptions> { }
 /** @public */
 export type Properties = dxLoadIndicatorOptions;
 
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

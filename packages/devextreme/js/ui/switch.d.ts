@@ -120,7 +120,6 @@ export default class dxSwitch extends Editor<dxSwitchOptions> {
 /** @public */
 export type Properties = dxSwitchOptions;
 
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

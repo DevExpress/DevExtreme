@@ -1665,7 +1665,6 @@ export interface dxGanttHeaderFilterTexts {
 /** @public */
 export type Properties = dxGanttOptions;
 
-
 /** @public */
 export type Column<TRowData = any, TKey = any> = dxGanttColumn<TRowData, TKey>;
 

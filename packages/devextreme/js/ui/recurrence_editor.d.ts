@@ -74,7 +74,6 @@ export default class dxRecurrenceEditor extends Editor<dxRecurrenceEditorOptions
 
 export type Properties = dxRecurrenceEditorOptions;
 
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

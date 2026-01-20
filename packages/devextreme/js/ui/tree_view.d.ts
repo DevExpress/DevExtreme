@@ -705,7 +705,6 @@ export type ExplicitTypes<TItem extends ItemLike = any, TKey = any> = {
 /** @public */
 export type Properties<TItem extends ItemLike = any, TKey = any> = dxTreeViewOptions<TItem, TKey>;
 
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

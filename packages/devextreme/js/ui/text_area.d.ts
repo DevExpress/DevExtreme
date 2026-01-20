@@ -180,7 +180,6 @@ export default class dxTextArea extends dxTextBox<dxTextAreaOptions> { }
 /** @public */
 export type Properties = dxTextAreaOptions;
 
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

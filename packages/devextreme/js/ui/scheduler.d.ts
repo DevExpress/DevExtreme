@@ -1422,7 +1422,6 @@ export type dxSchedulerAppointment = CollectionWidgetItem & {
 /** @public */
 export type Properties = dxSchedulerOptions;
 
-
 /**
  * @docid
  * @public

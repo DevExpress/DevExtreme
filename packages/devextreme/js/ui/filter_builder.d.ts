@@ -560,7 +560,6 @@ export interface dxFilterBuilderField {
 /** @public */
 export type Properties = dxFilterBuilderOptions;
 
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

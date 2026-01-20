@@ -254,7 +254,6 @@ export default class dxDraggable extends DOMComponent<dxDraggableOptions> implem
 /** @public */
 export type Properties = dxDraggableOptions;
 
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

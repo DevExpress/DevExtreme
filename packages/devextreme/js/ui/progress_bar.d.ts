@@ -113,7 +113,6 @@ export default class dxProgressBar extends dxTrackBar<dxProgressBarOptions> {
 /** @public */
 export type Properties = dxProgressBarOptions;
 
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

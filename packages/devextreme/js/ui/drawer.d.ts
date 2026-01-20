@@ -168,7 +168,6 @@ export default class dxDrawer extends Widget<dxDrawerOptions> {
 /** @public */
 export type Properties = dxDrawerOptions;
 
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

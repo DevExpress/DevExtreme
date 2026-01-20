@@ -190,7 +190,6 @@ interface TextBoxInstance extends dxTextBox<Properties> { }
 /** @public */
 export type Properties = dxTextBoxOptions<TextBoxInstance>;
 
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

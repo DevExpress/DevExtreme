@@ -993,7 +993,6 @@ export interface dxFileManagerDetailsColumn {
 /** @public */
 export type Properties = dxFileManagerOptions;
 
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

@@ -273,7 +273,6 @@ export type Properties<
     TKey = any,
 > = dxTabsBaseOptions<dxTabs<TItem, TKey>, TItem, TKey>;
 
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

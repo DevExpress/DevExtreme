@@ -242,7 +242,6 @@ interface PopoverInstance extends dxPopover<Properties> { }
 /** @public */
 export type Properties = dxPopoverOptions<PopoverInstance>;
 
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

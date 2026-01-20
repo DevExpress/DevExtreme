@@ -5213,7 +5213,6 @@ export interface dxChartSeriesTypesStockSeriesLabel extends SeriesLabel {
 /** @public */
 export type Properties = dxChartOptions;
 
-
 // #region deprecated in v23.1
 
     /** @deprecated Use ArgumentAxis instead */

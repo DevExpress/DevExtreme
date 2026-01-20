@@ -357,7 +357,6 @@ export type Properties<
     TKey = any,
 > = dxTabPanelOptions<TItem, TKey>;
 
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

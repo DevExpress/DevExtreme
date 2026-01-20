@@ -821,7 +821,6 @@ export default class dxRangeSelector extends BaseWidget<dxRangeSelectorOptions> 
 /** @public */
 export type Properties = dxRangeSelectorOptions;
 
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
