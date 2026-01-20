@@ -11,6 +11,8 @@ const SELECTORS = {
   headerRowClass: 'dx-header-row',
   dataRowClass: 'dx-data-row',
   groupRowClass: 'dx-group-row',
+  headerCellIndicators: 'dx-column-indicators',
+  headerCellFilter: 'dx-header-filter',
 };
 
 export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
@@ -58,6 +60,13 @@ export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
 
   public getColumnChooser(): ColumnChooserModel {
     return new ColumnChooserModel(this.root);
+  }
+
+  public getHeaderCellFilter(columnIndex: number): dxElementWrapper {
+    const $headerCell = $(this.getHeaderCells()[columnIndex]);
+    const headerFilterSelector = `.${SELECTORS.headerCellIndicators} > .${SELECTORS.headerCellFilter}`;
+
+    return $headerCell.find(headerFilterSelector);
   }
 
   public abstract getInstance(): TInstance;
