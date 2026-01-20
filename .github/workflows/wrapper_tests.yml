@@ -148,6 +148,8 @@ jobs:
         run: pnpx puppeteer browsers install chrome@130.0.6723.69
 
       - name: Test ${{ matrix.framework }}
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
         run: pnpx nx test devextreme-${{ matrix.framework }}
 
       - name: Pack ${{ matrix.framework }}
