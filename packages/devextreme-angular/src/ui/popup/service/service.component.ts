@@ -20,7 +20,6 @@ import {
 import { DxPopupComponent, DxPopupTypes } from '../component';
 
 @Component({
-  standalone: true,
   providers: [
     DxTemplateHost,
     WatcherHelper,
