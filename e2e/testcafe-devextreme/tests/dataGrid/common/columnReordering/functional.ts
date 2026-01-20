@@ -12,7 +12,7 @@ const getVisibleColumns = (dataGrid: DataGrid): Promise<string[]> => {
   return ClientFunction(
     () => (getInstance() as any)
       .getVisibleColumns()
-      .map((column: any) => column.dataField || column.name),
+      .map((column: any) => column.dataField ?? column.name),
     { dependencies: { getInstance } },
   )();
 };
