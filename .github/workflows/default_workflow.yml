@@ -56,7 +56,7 @@ jobs:
       run: >
         pnpx nx run-many
         -t lint,test
-        --configuration ci
+        -c ci
         --exclude
         devextreme
         devextreme-themebuilder
