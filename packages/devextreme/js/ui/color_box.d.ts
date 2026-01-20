@@ -237,8 +237,6 @@ export default class dxColorBox extends dxDropDownEditor<dxColorBoxOptions> {
 /** @public */
 export type Properties = dxColorBoxOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxColorBoxOptions;
 
 /// #DEBUG
 // eslint-disable-next-line import/first

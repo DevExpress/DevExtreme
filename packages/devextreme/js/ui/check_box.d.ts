@@ -132,8 +132,6 @@ export default class dxCheckBox extends Editor<dxCheckBoxOptions> {
 /** @public */
 export type Properties = dxCheckBoxOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxCheckBoxOptions;
 
 /// #DEBUG
 // eslint-disable-next-line import/first

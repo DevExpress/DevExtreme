@@ -383,8 +383,6 @@ export default class dxSortable extends DOMComponent<dxSortableOptions> implemen
 /** @public */
 export type Properties = dxSortableOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxSortableOptions;
 
 /// #DEBUG
 // eslint-disable-next-line import/first

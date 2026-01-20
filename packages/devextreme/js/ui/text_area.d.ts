@@ -180,8 +180,6 @@ export default class dxTextArea extends dxTextBox<dxTextAreaOptions> { }
 /** @public */
 export type Properties = dxTextAreaOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxTextAreaOptions;
 
 /// #DEBUG
 // eslint-disable-next-line import/first

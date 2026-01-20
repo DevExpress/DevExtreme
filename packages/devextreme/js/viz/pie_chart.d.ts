@@ -1046,8 +1046,6 @@ export type dxPieChartPointInfo = PointInfo;
 /** @public */
 export type Properties = dxPieChartOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxPieChartOptions;
 
 // #region deprecated in v23.1
 

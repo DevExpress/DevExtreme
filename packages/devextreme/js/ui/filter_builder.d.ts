@@ -560,8 +560,6 @@ export interface dxFilterBuilderField {
 /** @public */
 export type Properties = dxFilterBuilderOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxFilterBuilderOptions;
 
 /// #DEBUG
 // eslint-disable-next-line import/first

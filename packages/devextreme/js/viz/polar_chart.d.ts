@@ -2456,8 +2456,6 @@ export interface polarChartSeriesObject extends baseSeriesObject {
 /** @public */
 export type Properties = dxPolarChartOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxPolarChartOptions;
 
 // #region deprecated in v23.1
 

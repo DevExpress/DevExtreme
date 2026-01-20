@@ -74,8 +74,6 @@ export default class dxRecurrenceEditor extends Editor<dxRecurrenceEditorOptions
 
 export type Properties = dxRecurrenceEditorOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxRecurrenceEditorOptions;
 
 /// #DEBUG
 // eslint-disable-next-line import/first

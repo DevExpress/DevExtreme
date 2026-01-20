@@ -168,8 +168,6 @@ export default class dxDrawer extends Widget<dxDrawerOptions> {
 /** @public */
 export type Properties = dxDrawerOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxDrawerOptions;
 
 /// #DEBUG
 // eslint-disable-next-line import/first
