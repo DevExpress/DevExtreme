@@ -316,15 +316,7 @@ test.meta({ browserSize: [1500, 1500] })('Recurrence settings button should have
   const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, true);
 
   await t
-    .pressKey('tab')
-    .pressKey('tab')
-    .pressKey('tab')
-    .pressKey('tab')
-    .pressKey('tab')
-    .pressKey('tab')
-    .pressKey('tab')
-    .pressKey('tab')
-    .pressKey('tab')
+    .click(appointmentPopup.repeatEditor.element)
     .pressKey('tab');
 
   await testScreenshot(

@@ -747,8 +747,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
       height: auto;
 
       &.dx-button-mode-text.dx-state-focused {
-        outline: 2px solid;
-        outline-color: $base-accent;
+        outline: auto;
         outline-offset: -2px;
       }
     }
