@@ -39,8 +39,7 @@
   {
     "name": "core/dom_component",
     "exports": {
-      "default": { "path": "DOMComponent" },
-      "Options": { "path": "DOMComponentOptions", "exportAs": "type" }
+      "default": { "path": "DOMComponent" }
     }
   },
   {
@@ -514,10 +513,7 @@
     }
   },
   {
-    "name": "ui/scroll_view/scrollable",
-    "exports": {
-      "Options": { "path": "ui.dxScrollableOptions", "exportAs": "type" }
-    }
+    "name": "ui/scroll_view/scrollable"
   },
   {
     "name": "ui/select_box",
