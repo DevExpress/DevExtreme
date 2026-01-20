@@ -39,7 +39,6 @@ import {
 
 @Component({
     selector: 'dxo-card-view-card-header',
-    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],

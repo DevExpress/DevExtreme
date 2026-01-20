@@ -29,7 +29,6 @@ import {
 
 @Component({
     selector: 'dxi-diagram-item',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

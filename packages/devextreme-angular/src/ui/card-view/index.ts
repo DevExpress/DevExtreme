@@ -139,7 +139,6 @@ import {
 
 @Component({
     selector: 'dx-card-view',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

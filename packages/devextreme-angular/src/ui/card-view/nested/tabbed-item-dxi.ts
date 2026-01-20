@@ -30,7 +30,6 @@ import {
 
 @Component({
     selector: 'dxi-card-view-tabbed-item',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -32,7 +32,6 @@ import {
 
 @Component({
     selector: 'dxo-file-manager-toolbar',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

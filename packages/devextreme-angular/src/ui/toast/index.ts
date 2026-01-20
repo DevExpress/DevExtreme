@@ -64,7 +64,6 @@ import { DxoToastToModule } from 'devextreme-angular/ui/toast/nested';
  */
 @Component({
     selector: 'dx-toast',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

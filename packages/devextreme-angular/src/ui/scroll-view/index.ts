@@ -41,7 +41,6 @@ import {
  */
 @Component({
     selector: 'dx-scroll-view',
-    standalone: true,
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

@@ -27,7 +27,6 @@ import { DxoCalendarOptions } from './base/calendar-options';
 
 @Component({
     selector: 'dxo-calendar-options',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

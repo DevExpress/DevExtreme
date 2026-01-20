@@ -37,7 +37,6 @@ import {
 
 @Component({
     selector: 'dxi-scheduler-tab',
-    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],

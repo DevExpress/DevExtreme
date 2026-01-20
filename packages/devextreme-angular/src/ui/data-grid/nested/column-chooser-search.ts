@@ -24,7 +24,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-grid-column-chooser-search',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

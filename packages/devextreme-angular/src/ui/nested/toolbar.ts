@@ -31,7 +31,6 @@ import {
 
 @Component({
     selector: 'dxo-toolbar',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

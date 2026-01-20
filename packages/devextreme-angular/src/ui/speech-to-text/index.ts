@@ -40,7 +40,6 @@ import { DxoSpeechToTextSpeechRecognitionConfigModule } from 'devextreme-angular
 
 @Component({
     selector: 'dx-speech-to-text',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

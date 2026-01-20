@@ -24,7 +24,6 @@ import { DxoColumnChooserSearchConfig } from './base/column-chooser-search-confi
 
 @Component({
     selector: 'dxo-search',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

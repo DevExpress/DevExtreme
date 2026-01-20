@@ -56,7 +56,6 @@ import {
  */
 @Component({
     selector: 'dx-accordion',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

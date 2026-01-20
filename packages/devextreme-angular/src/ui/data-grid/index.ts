@@ -234,7 +234,6 @@ import {
  */
 @Component({
     selector: 'dx-data-grid',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

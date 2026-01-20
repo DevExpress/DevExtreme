@@ -35,7 +35,6 @@ import {
 
 @Component({
     selector: 'dxi-card-view-column',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

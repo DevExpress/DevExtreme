@@ -36,7 +36,6 @@ import {
 
 @Component({
     selector: 'dxi-tree-view-item',
-    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],

@@ -27,7 +27,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-gantt-resource-assignments',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

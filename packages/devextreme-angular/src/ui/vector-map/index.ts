@@ -104,7 +104,6 @@ import {
  */
 @Component({
     selector: 'dx-vector-map',
-    standalone: true,
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },

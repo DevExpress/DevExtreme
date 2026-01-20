@@ -36,7 +36,6 @@ import {
 
 @Component({
     selector: 'dxo-scheduler-form',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

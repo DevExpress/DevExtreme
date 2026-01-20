@@ -27,7 +27,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-linear-gauge-scale',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

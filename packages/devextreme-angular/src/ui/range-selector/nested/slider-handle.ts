@@ -24,7 +24,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-range-selector-slider-handle',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

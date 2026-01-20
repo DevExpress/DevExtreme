@@ -37,7 +37,6 @@ import {
 
 @Component({
     selector: 'dxi-chart-value-axis',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

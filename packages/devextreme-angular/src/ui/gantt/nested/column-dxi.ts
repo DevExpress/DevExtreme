@@ -28,7 +28,6 @@ import { PROPERTY_TOKEN_columns } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-gantt-column',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

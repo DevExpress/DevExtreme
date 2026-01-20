@@ -24,7 +24,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-polar-chart-data-prepare-settings',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

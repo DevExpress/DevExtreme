@@ -37,7 +37,6 @@ import {
 
 @Component({
     selector: 'dxi-diagram-custom-shape',
-    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],

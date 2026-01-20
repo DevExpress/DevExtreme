@@ -24,7 +24,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-range-selector-font',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

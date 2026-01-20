@@ -57,7 +57,6 @@ import {
  */
 @Component({
     selector: 'dx-tabs',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

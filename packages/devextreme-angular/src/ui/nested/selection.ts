@@ -24,7 +24,6 @@ import { DxoColumnChooserSelectionConfig } from './base/column-chooser-selection
 
 @Component({
     selector: 'dxo-selection',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

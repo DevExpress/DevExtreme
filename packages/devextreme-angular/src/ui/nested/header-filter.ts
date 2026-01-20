@@ -24,7 +24,6 @@ import { DxoColumnHeaderFilter } from './base/column-header-filter';
 
 @Component({
     selector: 'dxo-header-filter',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

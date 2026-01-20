@@ -33,7 +33,6 @@ import {
 
 @Component({
     selector: 'dxo-filter-builder',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

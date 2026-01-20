@@ -25,7 +25,6 @@ import { PROPERTY_TOKEN_views } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-view',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

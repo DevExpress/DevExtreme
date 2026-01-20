@@ -56,7 +56,6 @@ import {
  */
 @Component({
     selector: 'dx-toolbar',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

@@ -29,7 +29,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-grid-row-dragging',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -55,7 +55,6 @@ import { DxoPivotGridFieldChooserTextsModule } from 'devextreme-angular/ui/pivot
  */
 @Component({
     selector: 'dx-pivot-grid-field-chooser',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

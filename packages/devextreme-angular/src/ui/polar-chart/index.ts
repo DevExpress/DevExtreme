@@ -179,7 +179,6 @@ import {
  */
 @Component({
     selector: 'dx-polar-chart',
-    standalone: true,
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },

@@ -56,7 +56,6 @@ import {
  */
 @Component({
     selector: 'dx-action-sheet',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

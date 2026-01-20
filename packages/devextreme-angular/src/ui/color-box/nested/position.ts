@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-color-box-position',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

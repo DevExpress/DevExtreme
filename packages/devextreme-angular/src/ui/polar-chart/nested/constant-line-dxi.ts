@@ -24,7 +24,6 @@ import { PROPERTY_TOKEN_constantLines } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-polar-chart-constant-line',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

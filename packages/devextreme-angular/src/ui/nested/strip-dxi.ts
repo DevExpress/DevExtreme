@@ -25,7 +25,6 @@ import { PROPERTY_TOKEN_strips } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-strip',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

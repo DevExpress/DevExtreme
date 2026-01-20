@@ -41,7 +41,6 @@ import {
 
 @Component({
     selector: 'dxo-tag-box-drop-down-options',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

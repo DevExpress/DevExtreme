@@ -24,7 +24,6 @@ import { DxoChartCommonAnnotationConfig } from './base/chart-common-annotation-c
 
 @Component({
     selector: 'dxo-common-annotation-settings',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -83,7 +83,6 @@ import {
  */
 @Component({
     selector: 'dx-drop-down-button',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

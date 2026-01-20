@@ -41,7 +41,6 @@ import {
 
 @Component({
     selector: 'dxo-select-box-drop-down-options',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

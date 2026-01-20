@@ -23,7 +23,6 @@ import { PROPERTY_TOKEN_fileSelectionItems } from 'devextreme-angular/core/token
 
 @Component({
     selector: 'dxi-file-selection-item',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

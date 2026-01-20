@@ -53,7 +53,6 @@ import {
 
 @Component({
     selector: 'dx-stepper',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

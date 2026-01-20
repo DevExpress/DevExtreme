@@ -26,7 +26,6 @@ import { DxoFilterPanel } from './base/filter-panel';
 
 @Component({
     selector: 'dxo-filter-panel',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

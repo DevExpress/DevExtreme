@@ -41,7 +41,6 @@ import {
 
 @Component({
     selector: 'dxo-tree-list-filter-builder-popup',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

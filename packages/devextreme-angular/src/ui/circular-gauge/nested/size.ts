@@ -24,7 +24,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-circular-gauge-size',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

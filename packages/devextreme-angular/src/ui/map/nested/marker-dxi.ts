@@ -23,7 +23,6 @@ import { PROPERTY_TOKEN_markers } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-map-marker',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

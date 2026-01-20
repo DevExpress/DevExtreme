@@ -85,7 +85,6 @@ import { DxoBarGaugeTooltipBorderModule } from 'devextreme-angular/ui/bar-gauge/
  */
 @Component({
     selector: 'dx-bar-gauge',
-    standalone: true,
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },

@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-toast-show',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

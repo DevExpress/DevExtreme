@@ -23,7 +23,6 @@ import { PROPERTY_TOKEN_customOperations } from 'devextreme-angular/core/tokens'
 
 @Component({
     selector: 'dxi-custom-operation',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

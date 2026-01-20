@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-sankey-hover-style',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

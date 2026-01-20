@@ -120,7 +120,6 @@ import {
  */
 @Component({
     selector: 'dx-pie-chart',
-    standalone: true,
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },

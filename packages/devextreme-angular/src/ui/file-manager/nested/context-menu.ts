@@ -31,7 +31,6 @@ import {
 
 @Component({
     selector: 'dxo-file-manager-context-menu',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -24,7 +24,6 @@ import { DxoFormat } from './base/format';
 
 @Component({
     selector: 'dxo-value-format',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -29,7 +29,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tree-list-form',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -24,7 +24,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-validator-adapter',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

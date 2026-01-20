@@ -33,7 +33,6 @@ import {
 
 @Component({
     selector: 'dxo-splitter',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

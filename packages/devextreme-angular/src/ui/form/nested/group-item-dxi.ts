@@ -36,7 +36,6 @@ import {
 
 @Component({
     selector: 'dxi-form-group-item',
-    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],

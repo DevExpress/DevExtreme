@@ -24,7 +24,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-list-cursor-offset',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

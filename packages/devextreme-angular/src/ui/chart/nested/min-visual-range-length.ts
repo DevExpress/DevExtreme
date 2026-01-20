@@ -24,7 +24,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-min-visual-range-length',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -24,7 +24,6 @@ import { PROPERTY_TOKEN_sortByGroupSummaryInfo } from 'devextreme-angular/core/t
 
 @Component({
     selector: 'dxi-sort-by-group-summary-info',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

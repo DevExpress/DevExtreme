@@ -35,7 +35,6 @@ import {
 
 @Component({
     selector: 'dxo-scheduler-options',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

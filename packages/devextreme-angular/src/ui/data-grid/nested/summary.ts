@@ -35,7 +35,6 @@ import {
 
 @Component({
     selector: 'dxo-data-grid-summary',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

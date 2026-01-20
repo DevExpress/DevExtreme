@@ -34,7 +34,6 @@ import {
 
 @Component({
     selector: 'dxo-data-grid-filter-builder',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

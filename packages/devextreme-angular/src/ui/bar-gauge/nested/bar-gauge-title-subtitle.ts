@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-bar-gauge-bar-gauge-title-subtitle',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

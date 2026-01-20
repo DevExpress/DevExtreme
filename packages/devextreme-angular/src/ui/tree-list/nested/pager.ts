@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tree-list-pager',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

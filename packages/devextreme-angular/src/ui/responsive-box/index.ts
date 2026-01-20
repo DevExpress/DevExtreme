@@ -65,7 +65,6 @@ import {
  */
 @Component({
     selector: 'dx-responsive-box',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

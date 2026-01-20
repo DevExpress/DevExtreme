@@ -107,7 +107,6 @@ import {
  */
 @Component({
     selector: 'dx-diagram',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

@@ -37,7 +37,6 @@ import {
 
 @Component({
     selector: 'dxo-form-tab-panel-options',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -53,7 +53,6 @@ import {
  */
 @Component({
     selector: 'dx-button-group',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

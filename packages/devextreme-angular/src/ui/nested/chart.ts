@@ -33,7 +33,6 @@ import {
 
 @Component({
     selector: 'dxo-chart',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

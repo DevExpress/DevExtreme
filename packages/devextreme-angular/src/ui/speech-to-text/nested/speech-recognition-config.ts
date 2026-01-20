@@ -24,7 +24,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-speech-to-text-speech-recognition-config',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

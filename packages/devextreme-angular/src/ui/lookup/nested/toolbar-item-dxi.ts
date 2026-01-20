@@ -34,7 +34,6 @@ import { PROPERTY_TOKEN_toolbarItems } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-lookup-toolbar-item',
-    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],

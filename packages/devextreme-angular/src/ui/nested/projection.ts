@@ -24,7 +24,6 @@ import { DxoVectorMapProjectionConfig } from './base/vector-map-projection-confi
 
 @Component({
     selector: 'dxo-projection',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

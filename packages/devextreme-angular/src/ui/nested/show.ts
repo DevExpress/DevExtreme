@@ -24,7 +24,6 @@ import { DxoAnimationConfig } from './base/animation-config';
 
 @Component({
     selector: 'dxo-show',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

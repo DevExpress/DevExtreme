@@ -25,7 +25,6 @@ import { PROPERTY_TOKEN_groupItems } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-data-grid-group-item',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

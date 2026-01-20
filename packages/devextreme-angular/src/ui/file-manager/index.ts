@@ -76,7 +76,6 @@ import {
  */
 @Component({
     selector: 'dx-file-manager',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

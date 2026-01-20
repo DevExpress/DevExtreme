@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-sankey-link',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

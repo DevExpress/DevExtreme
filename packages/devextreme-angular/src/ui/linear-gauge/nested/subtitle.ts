@@ -25,7 +25,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-linear-gauge-subtitle',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

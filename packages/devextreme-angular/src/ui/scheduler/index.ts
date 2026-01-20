@@ -100,7 +100,6 @@ import {
  */
 @Component({
     selector: 'dx-scheduler',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],
