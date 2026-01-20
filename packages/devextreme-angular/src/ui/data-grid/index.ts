@@ -210,7 +210,6 @@ import { DxoDataGridSortingModule } from 'devextreme-angular/ui/data-grid/nested
 import { DxoDataGridStateStoringModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxiDataGridStringLengthRuleModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridSummaryModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxiDataGridSummaryGroupItemModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridSummaryTextsModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxiDataGridTabModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxiDataGridTabbedItemModule } from 'devextreme-angular/ui/data-grid/nested';
@@ -231,8 +230,8 @@ import {
            PROPERTY_TOKEN_columns,
            PROPERTY_TOKEN_customOperations,
            PROPERTY_TOKEN_fields,
-           PROPERTY_TOKEN_sortByGroupSummaryInfo,
            PROPERTY_TOKEN_groupItems,
+           PROPERTY_TOKEN_sortByGroupSummaryInfo,
            PROPERTY_TOKEN_tabs,
            PROPERTY_TOKEN_toolbarItems,
            PROPERTY_TOKEN_totalItems,
@@ -293,14 +292,14 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
         this.setChildren('fields', value);
     }
 
-    @ContentChildren(PROPERTY_TOKEN_sortByGroupSummaryInfo)
-    set _sortByGroupSummaryInfoContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('sortByGroupSummaryInfo', value);
-    }
-
     @ContentChildren(PROPERTY_TOKEN_groupItems)
     set _groupItemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('groupItems', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_sortByGroupSummaryInfo)
+    set _sortByGroupSummaryInfoContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('sortByGroupSummaryInfo', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_tabs)
@@ -2522,7 +2521,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoDataGridStateStoringModule,
     DxiDataGridStringLengthRuleModule,
     DxoDataGridSummaryModule,
-    DxiDataGridSummaryGroupItemModule,
     DxoDataGridSummaryTextsModule,
     DxiDataGridTabModule,
     DxiDataGridTabbedItemModule,
@@ -2695,7 +2693,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoDataGridStateStoringModule,
     DxiDataGridStringLengthRuleModule,
     DxoDataGridSummaryModule,
-    DxiDataGridSummaryGroupItemModule,
     DxoDataGridSummaryTextsModule,
     DxiDataGridTabModule,
     DxiDataGridTabbedItemModule,

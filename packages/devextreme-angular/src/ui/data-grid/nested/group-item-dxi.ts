@@ -5,127 +5,69 @@ import {
     Component,
     NgModule,
     Host,
-    ElementRef,
-    Renderer2,
-    Inject,
-    AfterViewInit,
     SkipSelf,
-    Input,
-    ContentChildren,
-    QueryList
+    Input
 } from '@angular/core';
 
-import { DOCUMENT } from '@angular/common';
 
 
-import { dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem, FormItemType } from 'devextreme/ui/form';
+
+import { SummaryType } from 'devextreme/common/grids';
+import { Format } from 'devextreme/common/core/localization';
 
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    extractTemplate,
-    DxTemplateDirective,
-    IDxTemplateHost,
-    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
-import {
-    PROPERTY_TOKEN_items,
-} from 'devextreme-angular/core/tokens';
+import { PROPERTY_TOKEN_groupItems } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-data-grid-group-item',
     standalone: true,
-    template: '<ng-content></ng-content>',
-    styles: [':host { display: block; }'],
+    template: '',
+    styles: [''],
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-        DxTemplateHost,
         {
-           provide: PROPERTY_TOKEN_items,
+           provide: PROPERTY_TOKEN_groupItems,
            useExisting: DxiDataGridGroupItemComponent,
         }
     ]
 })
-export class DxiDataGridGroupItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost {
-    @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('items', value);
-    }
-    
+export class DxiDataGridGroupItemComponent extends CollectionNestedOption {
     @Input()
-    get alignItemLabels(): boolean {
-        return this._getOption('alignItemLabels');
+    get alignByColumn(): boolean {
+        return this._getOption('alignByColumn');
     }
-    set alignItemLabels(value: boolean) {
-        this._setOption('alignItemLabels', value);
+    set alignByColumn(value: boolean) {
+        this._setOption('alignByColumn', value);
     }
 
     @Input()
-    get caption(): string | undefined {
-        return this._getOption('caption');
+    get column(): string | undefined {
+        return this._getOption('column');
     }
-    set caption(value: string | undefined) {
-        this._setOption('caption', value);
-    }
-
-    @Input()
-    get captionTemplate(): any {
-        return this._getOption('captionTemplate');
-    }
-    set captionTemplate(value: any) {
-        this._setOption('captionTemplate', value);
+    set column(value: string | undefined) {
+        this._setOption('column', value);
     }
 
     @Input()
-    get colCount(): number {
-        return this._getOption('colCount');
+    get customizeText(): ((itemInfo: { value: string | number | Date, valueText: string }) => string) {
+        return this._getOption('customizeText');
     }
-    set colCount(value: number) {
-        this._setOption('colCount', value);
-    }
-
-    @Input()
-    get colCountByScreen(): { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined } {
-        return this._getOption('colCountByScreen');
-    }
-    set colCountByScreen(value: { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined }) {
-        this._setOption('colCountByScreen', value);
+    set customizeText(value: ((itemInfo: { value: string | number | Date, valueText: string }) => string)) {
+        this._setOption('customizeText', value);
     }
 
     @Input()
-    get colSpan(): number | undefined {
-        return this._getOption('colSpan');
+    get displayFormat(): string | undefined {
+        return this._getOption('displayFormat');
     }
-    set colSpan(value: number | undefined) {
-        this._setOption('colSpan', value);
-    }
-
-    @Input()
-    get cssClass(): string | undefined {
-        return this._getOption('cssClass');
-    }
-    set cssClass(value: string | undefined) {
-        this._setOption('cssClass', value);
-    }
-
-    @Input()
-    get items(): Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem> {
-        return this._getOption('items');
-    }
-    set items(value: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>) {
-        this._setOption('items', value);
-    }
-
-    @Input()
-    get itemType(): FormItemType {
-        return this._getOption('itemType');
-    }
-    set itemType(value: FormItemType) {
-        this._setOption('itemType', value);
+    set displayFormat(value: string | undefined) {
+        this._setOption('displayFormat', value);
     }
 
     @Input()
@@ -137,54 +79,56 @@ export class DxiDataGridGroupItemComponent extends CollectionNestedOption implem
     }
 
     @Input()
-    get template(): any {
-        return this._getOption('template');
+    get showInColumn(): string | undefined {
+        return this._getOption('showInColumn');
     }
-    set template(value: any) {
-        this._setOption('template', value);
-    }
-
-    @Input()
-    get visible(): boolean {
-        return this._getOption('visible');
-    }
-    set visible(value: boolean) {
-        this._setOption('visible', value);
+    set showInColumn(value: string | undefined) {
+        this._setOption('showInColumn', value);
     }
 
     @Input()
-    get visibleIndex(): number | undefined {
-        return this._getOption('visibleIndex');
+    get showInGroupFooter(): boolean {
+        return this._getOption('showInGroupFooter');
     }
-    set visibleIndex(value: number | undefined) {
-        this._setOption('visibleIndex', value);
+    set showInGroupFooter(value: boolean) {
+        this._setOption('showInGroupFooter', value);
+    }
+
+    @Input()
+    get skipEmptyValues(): boolean {
+        return this._getOption('skipEmptyValues');
+    }
+    set skipEmptyValues(value: boolean) {
+        this._setOption('skipEmptyValues', value);
+    }
+
+    @Input()
+    get summaryType(): string | SummaryType | undefined {
+        return this._getOption('summaryType');
+    }
+    set summaryType(value: string | SummaryType | undefined) {
+        this._setOption('summaryType', value);
+    }
+
+    @Input()
+    get valueFormat(): Format | undefined {
+        return this._getOption('valueFormat');
+    }
+    set valueFormat(value: Format | undefined) {
+        this._setOption('valueFormat', value);
     }
 
 
     protected get _optionPath() {
-        return 'items';
+        return 'groupItems';
     }
 
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost,
-            private renderer: Renderer2,
-            @Inject(DOCUMENT) private document: any,
-            @Host() templateHost: DxTemplateHost,
-            private element: ElementRef) {
+            @Host() optionHost: NestedOptionHost) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
-        templateHost.setHost(this);
-        this.itemType = 'group';
-    
-    }
-
-    setTemplate(template: DxTemplateDirective) {
-        this.template = template;
-    }
-    ngAfterViewInit() {
-        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 

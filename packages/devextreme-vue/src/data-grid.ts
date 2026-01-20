@@ -45,13 +45,13 @@ import {
  FilterPanelTexts,
  ApplyFilterMode,
  GroupExpandMode,
+ SummaryType,
  EnterKeyAction,
  EnterKeyDirection,
  PagerPageSize,
  GridBase,
  DataRenderMode,
  StateStoreType,
- SummaryType,
 } from "devextreme/common/grids";
 import {
  dxDataGridColumn,
@@ -2739,34 +2739,28 @@ const DxGroupItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:alignItemLabels": null,
-    "update:caption": null,
-    "update:captionTemplate": null,
-    "update:colCount": null,
-    "update:colCountByScreen": null,
-    "update:colSpan": null,
-    "update:cssClass": null,
-    "update:items": null,
-    "update:itemType": null,
+    "update:alignByColumn": null,
+    "update:column": null,
+    "update:customizeText": null,
+    "update:displayFormat": null,
     "update:name": null,
-    "update:template": null,
-    "update:visible": null,
-    "update:visibleIndex": null,
+    "update:showInColumn": null,
+    "update:showInGroupFooter": null,
+    "update:skipEmptyValues": null,
+    "update:summaryType": null,
+    "update:valueFormat": null,
   },
   props: {
-    alignItemLabels: Boolean,
-    caption: String,
-    captionTemplate: {},
-    colCount: Number,
-    colCountByScreen: Object as PropType<Record<string, any>>,
-    colSpan: Number,
-    cssClass: String,
-    items: Array as PropType<Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>>,
-    itemType: String as PropType<FormItemType>,
+    alignByColumn: Boolean,
+    column: String,
+    customizeText: Function as PropType<((itemInfo: { value: string | number | Date, valueText: string }) => string)>,
+    displayFormat: String,
     name: String,
-    template: {},
-    visible: Boolean,
-    visibleIndex: Number
+    showInColumn: String,
+    showInGroupFooter: Boolean,
+    skipEmptyValues: Boolean,
+    summaryType: String as PropType<string | SummaryType>,
+    valueFormat: [Object, String, Function] as PropType<Format | CommonFormat | (((value: number | Date) => string)) | Record<string, any> | string>
   }
 };
 
@@ -2774,13 +2768,10 @@ prepareConfigurationComponentConfig(DxGroupItemConfig);
 
 const DxGroupItem = defineComponent(DxGroupItemConfig);
 
-(DxGroupItem as any).$_optionName = "items";
+(DxGroupItem as any).$_optionName = "groupItems";
 (DxGroupItem as any).$_isCollectionItem = true;
-(DxGroupItem as any).$_predefinedProps = {
-  itemType: "group"
-};
 (DxGroupItem as any).$_expectedChildren = {
-  colCountByScreen: { isCollectionItem: false, optionName: "colCountByScreen" }
+  valueFormat: { isCollectionItem: false, optionName: "valueFormat" }
 };
 
 const DxGroupOperationDescriptionsConfig = {
@@ -4095,49 +4086,10 @@ const DxSummary = defineComponent(DxSummaryConfig);
 
 (DxSummary as any).$_optionName = "summary";
 (DxSummary as any).$_expectedChildren = {
-  summaryGroupItem: { isCollectionItem: true, optionName: "groupItems" },
+  groupItem: { isCollectionItem: true, optionName: "groupItems" },
   summaryTexts: { isCollectionItem: false, optionName: "texts" },
   texts: { isCollectionItem: false, optionName: "texts" },
   totalItem: { isCollectionItem: true, optionName: "totalItems" }
-};
-
-const DxSummaryGroupItemConfig = {
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:alignByColumn": null,
-    "update:column": null,
-    "update:customizeText": null,
-    "update:displayFormat": null,
-    "update:name": null,
-    "update:showInColumn": null,
-    "update:showInGroupFooter": null,
-    "update:skipEmptyValues": null,
-    "update:summaryType": null,
-    "update:valueFormat": null,
-  },
-  props: {
-    alignByColumn: Boolean,
-    column: String,
-    customizeText: Function as PropType<((itemInfo: { value: string | number | Date, valueText: string }) => string)>,
-    displayFormat: String,
-    name: String,
-    showInColumn: String,
-    showInGroupFooter: Boolean,
-    skipEmptyValues: Boolean,
-    summaryType: String as PropType<string | SummaryType>,
-    valueFormat: [Object, String, Function] as PropType<Format | CommonFormat | (((value: number | Date) => string)) | Record<string, any> | string>
-  }
-};
-
-prepareConfigurationComponentConfig(DxSummaryGroupItemConfig);
-
-const DxSummaryGroupItem = defineComponent(DxSummaryGroupItemConfig);
-
-(DxSummaryGroupItem as any).$_optionName = "groupItems";
-(DxSummaryGroupItem as any).$_isCollectionItem = true;
-(DxSummaryGroupItem as any).$_expectedChildren = {
-  valueFormat: { isCollectionItem: false, optionName: "valueFormat" }
 };
 
 const DxSummaryTextsConfig = {
@@ -4783,7 +4735,6 @@ export {
   DxStateStoring,
   DxStringLengthRule,
   DxSummary,
-  DxSummaryGroupItem,
   DxSummaryTexts,
   DxTab,
   DxTabbedItem,

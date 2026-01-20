@@ -10,7 +10,7 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { dxDataGridColumn, AdaptiveDetailRowPreparingEvent, AIColumnRequestCreatingEvent, CellClickEvent, CellDblClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangingEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, ToolbarPreparingEvent, dxDataGridRowObject, DataGridPredefinedColumnButton, ColumnButtonClickEvent, dxDataGridColumnButton, DataGridCommandColumnType, SelectionSensitivity, DataGridPredefinedToolbarItem, DataGridExportFormat, DataGridScrollMode, dxDataGridToolbarItem } from "devextreme/ui/data_grid";
-import type { DataChange, AIColumnMode, DataChangeType, ColumnAIOptions, FilterOperation, FilterType, FixedPosition, ColumnHeaderFilter as GridsColumnHeaderFilter, SelectedFilterOperation, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, HeaderFilterSearchConfig, HeaderFilterTexts, SelectionColumnDisplayMode, GridsEditMode, NewRowPosition, GridsEditRefreshMode, StartEditAction, FilterPanel as GridsFilterPanel, FilterPanelTexts as GridsFilterPanelTexts, ApplyFilterMode, GroupExpandMode, EnterKeyAction, EnterKeyDirection, PagerPageSize, GridBase, DataRenderMode, StateStoreType, SummaryType } from "devextreme/common/grids";
+import type { DataChange, AIColumnMode, DataChangeType, ColumnAIOptions, FilterOperation, FilterType, FixedPosition, ColumnHeaderFilter as GridsColumnHeaderFilter, SelectedFilterOperation, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, HeaderFilterSearchConfig, HeaderFilterTexts, SelectionColumnDisplayMode, GridsEditMode, NewRowPosition, GridsEditRefreshMode, StartEditAction, FilterPanel as GridsFilterPanel, FilterPanelTexts as GridsFilterPanelTexts, ApplyFilterMode, GroupExpandMode, SummaryType, EnterKeyAction, EnterKeyDirection, PagerPageSize, GridBase, DataRenderMode, StateStoreType } from "devextreme/common/grids";
 import type { Mode, ValidationRuleType, HorizontalAlignment, VerticalAlignment, template, TextEditorButtonLocation, ButtonStyle, ButtonType, DataType, Format as CommonFormat, SortOrder, SearchMode, ComparisonOperator, SingleMultipleOrNone, SelectAllMode, ToolbarItemLocation, ToolbarItemComponent, TextBoxPredefinedButton, TextEditorButton, LabelMode, MaskMode, EditorStyle, ValidationMessageMode, Position as CommonPosition, ValidationStatus, PositionAlignment, Direction, DisplayMode, DragDirection, DragHighlight, ScrollbarMode, TabsIconPosition, TabsStyle } from "devextreme/common";
 import type { ContentReadyEvent as ButtonContentReadyEvent, DisposingEvent as ButtonDisposingEvent, InitializedEvent as ButtonInitializedEvent, dxButtonOptions, ClickEvent, OptionChangedEvent } from "devextreme/ui/button";
 import type { ContentReadyEvent as TextBoxContentReadyEvent, DisposingEvent as TextBoxDisposingEvent, InitializedEvent as TextBoxInitializedEvent, KeyDownEvent as TextBoxKeyDownEvent, dxTextBoxOptions, OptionChangedEvent as TextBoxOptionChangedEvent, TextBoxType, ChangeEvent, CopyEvent, CutEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InputEvent, KeyUpEvent, PasteEvent, ValueChangedEvent } from "devextreme/ui/text_box";
@@ -493,7 +493,7 @@ const Change = Object.assign<typeof _componentChange, NestedComponentMeta>(_comp
 
 // owners:
 // Form
-// GroupItem
+// undefined
 // Tab
 type IColCountByScreenProps = React.PropsWithChildren<{
   lg?: number | undefined;
@@ -2092,51 +2092,27 @@ const GroupingTexts = Object.assign<typeof _componentGroupingTexts, NestedCompon
 });
 
 // owners:
-// Form
+// Summary
 type IGroupItemProps = React.PropsWithChildren<{
-  alignItemLabels?: boolean;
-  caption?: string | undefined;
-  captionTemplate?: ((data: { caption: string, component: dxForm, name: string }, itemElement: any) => string | any) | template;
-  colCount?: number;
-  colCountByScreen?: Record<string, any> | {
-    lg?: number | undefined;
-    md?: number | undefined;
-    sm?: number | undefined;
-    xs?: number | undefined;
-  };
-  colSpan?: number | undefined;
-  cssClass?: string | undefined;
-  items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>;
-  itemType?: FormItemType;
+  alignByColumn?: boolean;
+  column?: string | undefined;
+  customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string);
+  displayFormat?: string | undefined;
   name?: string | undefined;
-  template?: ((data: { component: dxForm, formData: Record<string, any> }, itemElement: any) => string | any) | template;
-  visible?: boolean;
-  visibleIndex?: number | undefined;
-  captionRender?: (...params: any) => React.ReactNode;
-  captionComponent?: React.ComponentType<any>;
-  render?: (...params: any) => React.ReactNode;
-  component?: React.ComponentType<any>;
+  showInColumn?: string | undefined;
+  showInGroupFooter?: boolean;
+  skipEmptyValues?: boolean;
+  summaryType?: string | SummaryType | undefined;
+  valueFormat?: LocalizationFormat | undefined;
 }>
 const _componentGroupItem = (props: IGroupItemProps) => {
   return React.createElement(NestedOption<IGroupItemProps>, {
     ...props,
     elementDescriptor: {
-      OptionName: "items",
+      OptionName: "groupItems",
       IsCollectionItem: true,
       ExpectedChildren: {
-        colCountByScreen: { optionName: "colCountByScreen", isCollectionItem: false }
-      },
-      TemplateProps: [{
-        tmplOption: "captionTemplate",
-        render: "captionRender",
-        component: "captionComponent"
-      }, {
-        tmplOption: "template",
-        render: "render",
-        component: "component"
-      }],
-      PredefinedProps: {
-        itemType: "group"
+        valueFormat: { optionName: "valueFormat", isCollectionItem: false }
       },
     },
   });
@@ -3412,7 +3388,7 @@ const _componentSummary = (props: ISummaryProps) => {
     elementDescriptor: {
       OptionName: "summary",
       ExpectedChildren: {
-        summaryGroupItem: { optionName: "groupItems", isCollectionItem: true },
+        groupItem: { optionName: "groupItems", isCollectionItem: true },
         summaryTexts: { optionName: "texts", isCollectionItem: false },
         texts: { optionName: "texts", isCollectionItem: false },
         totalItem: { optionName: "totalItems", isCollectionItem: true }
@@ -3422,37 +3398,6 @@ const _componentSummary = (props: ISummaryProps) => {
 };
 
 const Summary = Object.assign<typeof _componentSummary, NestedComponentMeta>(_componentSummary, {
-  componentType: "option",
-});
-
-// owners:
-// Summary
-type ISummaryGroupItemProps = React.PropsWithChildren<{
-  alignByColumn?: boolean;
-  column?: string | undefined;
-  customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string);
-  displayFormat?: string | undefined;
-  name?: string | undefined;
-  showInColumn?: string | undefined;
-  showInGroupFooter?: boolean;
-  skipEmptyValues?: boolean;
-  summaryType?: string | SummaryType | undefined;
-  valueFormat?: LocalizationFormat | undefined;
-}>
-const _componentSummaryGroupItem = (props: ISummaryGroupItemProps) => {
-  return React.createElement(NestedOption<ISummaryGroupItemProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "groupItems",
-      IsCollectionItem: true,
-      ExpectedChildren: {
-        valueFormat: { optionName: "valueFormat", isCollectionItem: false }
-      },
-    },
-  });
-};
-
-const SummaryGroupItem = Object.assign<typeof _componentSummaryGroupItem, NestedComponentMeta>(_componentSummaryGroupItem, {
   componentType: "option",
 });
 
@@ -3933,7 +3878,7 @@ const ValidationRule = Object.assign<typeof _componentValidationRule, NestedComp
 });
 
 // owners:
-// SummaryGroupItem
+// GroupItem
 // TotalItem
 type IValueFormatProps = React.PropsWithChildren<{
   currency?: string;
@@ -4143,8 +4088,6 @@ export {
   IStringLengthRuleProps,
   Summary,
   ISummaryProps,
-  SummaryGroupItem,
-  ISummaryGroupItemProps,
   SummaryTexts,
   ISummaryTextsProps,
   Tab,

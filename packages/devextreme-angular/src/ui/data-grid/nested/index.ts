@@ -88,7 +88,6 @@ export * from './sort-by-group-summary-info-dxi';
 export * from './sorting';
 export * from './state-storing';
 export * from './string-length-rule-dxi';
-export * from './summary-group-item-dxi';
 export * from './summary-texts';
 export * from './summary';
 export * from './tab-dxi';
