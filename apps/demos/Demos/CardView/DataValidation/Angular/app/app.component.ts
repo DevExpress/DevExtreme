@@ -55,10 +55,11 @@ export class AppComponent {
   emailValidationCallback = async (params) => {
     const emailValidationUrl = 'https://js.devexpress.com/Demos/NetCore/RemoteValidation/CheckUniqueEmailAddress';
 
-    const result = await lastValueFrom(this.httpClient.post(emailValidationUrl, {
-      id: params.data.id,
-      email: params.value,
-    }, {
+    const result = await lastValueFrom(this.httpClient.get(emailValidationUrl, {
+      params: {
+        id: params.data.id,
+        email: params.value,
+      },
       responseType: 'json',
     }));
 
