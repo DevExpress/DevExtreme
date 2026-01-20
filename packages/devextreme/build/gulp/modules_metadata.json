@@ -513,9 +513,6 @@
     }
   },
   {
-    "name": "ui/scroll_view/scrollable"
-  },
-  {
     "name": "ui/select_box",
     "exports": {
       "default": { "path": "ui.dxSelectBox", "isWidget": true }
