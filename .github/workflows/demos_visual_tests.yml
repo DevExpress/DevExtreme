@@ -472,7 +472,7 @@ jobs:
 
     - name: Prepare JS
       working-directory: apps/demos
-      run: pnpm run prepare-js -c testing
+      run: pnpm run prepare-js
 
     - name: Check generated JS demos
       working-directory: apps/demos
