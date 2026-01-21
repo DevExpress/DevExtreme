@@ -14,7 +14,7 @@ import ValidationEngine from './m_validation_engine';
 import type ValidationGroup from './m_validation_group';
 
 const VALIDATION_SUMMARY_CLASS = 'dx-validationsummary';
-const VALIDATION_SUMMARY_SCREEN_READER_ONLY = 'dx-screen-reader-only';
+const SCREEN_READER_ONLY_CLASS = 'dx-screen-reader-only';
 const ITEM_CLASS = `${VALIDATION_SUMMARY_CLASS}-item`;
 const ITEM_DATA_KEY = `${VALIDATION_SUMMARY_CLASS}-item-data`;
 
@@ -143,12 +143,24 @@ class ValidationSummary extends CollectionWidget<ValidationSummaryProperties> {
     }
   }
 
-  _announceText(text: string): void {
-    if (!this._$announceContainer) {
-      return;
-    }
+  _removeAnnounceContainer(): void {
+    this._$announceContainer?.remove();
+    this._$announceContainer = undefined;
+  }
 
-    this._$announceContainer.text(text);
+  _renderAnnounceContainer(): void {
+    this._removeAnnounceContainer();
+
+    this._$announceContainer = $('<div>')
+      .addClass(SCREEN_READER_ONLY_CLASS)
+      .attr('role', 'alert')
+      .appendTo(this.element());
+  }
+
+  _announceText(text: string): void {
+    this._renderAnnounceContainer();
+
+    this._$announceContainer?.text(text);
   }
 
   _itemValidationHandler({ isValid, validator, brokenRules }): void {
@@ -197,11 +209,6 @@ class ValidationSummary extends CollectionWidget<ValidationSummaryProperties> {
   _initMarkup(): void {
     this.$element().addClass(VALIDATION_SUMMARY_CLASS);
 
-    this._$announceContainer = $('<div>')
-      .addClass(VALIDATION_SUMMARY_SCREEN_READER_ONLY)
-      .attr('role', 'alert')
-      .appendTo(this.element());
-
     super._initMarkup();
   }
 
@@ -230,6 +237,7 @@ class ValidationSummary extends CollectionWidget<ValidationSummaryProperties> {
   }
 
   _dispose(): void {
+    this._removeAnnounceContainer();
     super._dispose();
     this._unsubscribeGroup();
   }

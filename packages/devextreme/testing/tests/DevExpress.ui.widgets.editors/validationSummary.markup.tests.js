@@ -475,7 +475,7 @@ QUnit.module('Accessibility', {
                 message: messages[1],
                 validator: validator,
             }],
-            validators: [validator]
+            validators: [validator],
         });
 
         const items = summary.option('items');
@@ -488,6 +488,18 @@ QUnit.module('Accessibility', {
 
     QUnit.test('ValidationSummary announce container should have role=alert attribute', function(assert) {
         const summary = this.fixture.createSummary();
+        const validator = sinon.createStubInstance(Validator);
+
+        summary._groupValidationHandler({
+            isValid: false,
+            brokenRules: [{
+                type: 'async',
+                message: 'test message',
+                validator: validator,
+            }],
+            validators: [validator],
+        });
+
         const $announceContainer = summary.$element().find('.dx-screen-reader-only');
 
         assert.strictEqual($announceContainer.attr('role'), 'alert', 'role=alert is present');
