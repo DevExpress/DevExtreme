@@ -44,8 +44,7 @@ export const renderSummaryCell = function (cell, options, setAria) {
   const $summaryItems: any = [];
 
   if (!column.command && summaryItems) {
-    for (let i = 0; i < summaryItems.length; i++) {
-      const summaryItem = summaryItems[i];
+    for (const summaryItem of summaryItems) {
       const text = gridCore.getSummaryText(summaryItem, options.summaryTexts);
       const $summaryItemElement = $('<div>')
         .css('textAlign', summaryItem.alignment || column.alignment)
@@ -55,7 +54,7 @@ export const renderSummaryCell = function (cell, options, setAria) {
         .toggleClass(DATAGRID_GROUP_TEXT_CONTENT_CLASS, options.rowType === 'group')
         .text(text);
 
-      setAria('label', `${column.caption} ${text}`, $summaryItemElement);
+      setAria('label', `${column.caption ?? ''} ${text ?? ''}`, $summaryItemElement);
       $summaryItems.push($summaryItemElement);
     }
     $cell.append($summaryItems);
