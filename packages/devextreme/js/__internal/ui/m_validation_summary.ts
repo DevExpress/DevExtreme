@@ -131,7 +131,7 @@ class ValidationSummary extends CollectionWidget<ValidationSummaryProperties> {
   _announceOnGroupValidation(items): void {
     if (!items?.length) {
       this._lastAnnouncedText = '';
-      this._$announceContainer?.text('');
+      this._removeAnnounceContainer();
       return;
     }
 
