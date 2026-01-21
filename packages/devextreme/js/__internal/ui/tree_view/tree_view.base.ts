@@ -96,6 +96,8 @@ export interface TreeViewBaseProperties extends Properties<TreeViewNode>, Omit<
 > {
   deferRendering?: boolean;
 
+  allowSelect?: boolean | ((e: { component: TreeViewBase; item: ItemData }) => boolean);
+
   _supportItemUrl?: boolean;
 }
 
@@ -256,6 +258,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   _getDefaultOptions(): TreeViewBaseProperties {
     const defaultOptions = {
       ...super._getDefaultOptions(),
+      allowSelect: true,
       animationEnabled: true,
       dataStructure: 'tree',
       deferRendering: true,
@@ -1549,6 +1552,10 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   }
 
   _renderCheckBox($node: dxElementWrapper, node: TreeViewNode | null): void {
+    if (!this._isItemSelectable(node)) {
+      return;
+    }
+
     const $checkbox = $('<div>').appendTo($node);
 
     this._createComponent<CheckBox, CheckBoxProperties>($checkbox, CheckBox, {
@@ -1579,6 +1586,28 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       const checkbox = this._getCheckBoxInstance($node);
       checkbox.option('disabled', !!state);
     }
+  }
+
+  _isItemSelectable(node: TreeViewNode | null): boolean {
+    if (!node) {
+      return true;
+    }
+
+    const { allowSelect } = this.option();
+
+    if (typeof allowSelect === 'boolean') {
+      return allowSelect;
+    }
+
+    if (isFunction(allowSelect)) {
+      const result = allowSelect({
+        component: this,
+        item: node.internalFields.item,
+      });
+      return Boolean(result);
+    }
+
+    return true;
   }
 
   _itemOptionChanged(item: Item, property: keyof Item, value: unknown): void {
@@ -1667,6 +1696,10 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   ): boolean {
     const node = this._getNode(itemElement);
     if (!node || node.visible === false) {
+      return false;
+    }
+
+    if (!this._isItemSelectable(node)) {
       return false;
     }
 
