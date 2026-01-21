@@ -84,7 +84,7 @@ const getIntervalStartDate = (options: IntervalOptions): Date => {
     case 'day':
     case 'week':
     case 'month':
-      return getPeriodStart(date, step, false, firstDayOfWeek);
+      return getPeriodStart(date, step, false, firstDayOfWeek) as Date;
     case 'workWeek':
       return getWorkWeekStart(getWeekStart(date, firstDayOfWeek));
     case 'agenda':
