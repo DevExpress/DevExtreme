@@ -2244,7 +2244,10 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   }
 
   getSelectedNodeKeys(): ItemKey[] {
-    return this._dataAdapter.getSelectedNodesKeys();
+    return this._dataAdapter.getSelectedNodesKeys().filter((key: ItemKey) => {
+      const node = this._dataAdapter.getNodeByKey(key) as TreeViewNode;
+      return this._isItemSelectable(node);
+    });
   }
 
   selectAll(): void {
