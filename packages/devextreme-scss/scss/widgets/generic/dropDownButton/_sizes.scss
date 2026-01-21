@@ -11,6 +11,6 @@ $generic-dropdownbutton-action-horizontal-padding: null !default;
 }
 
 @else if $size == "compact" {
-  $generic-dropdownbutton-icon-spindown-size: 16px;
+  $generic-dropdownbutton-icon-spindown-size: 14px;
   $generic-dropdownbutton-action-horizontal-padding: 10px !default;
 }
