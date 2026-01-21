@@ -59,6 +59,11 @@
       "implementation": "./src/executors/localization/executor",
       "schema": "./src/executors/localization/schema.json",
       "description": "Generate localization message files and TypeScript CLDR data modules"
+    },
+    "concatenate-files": {
+      "implementation": "./src/executors/concatenate-files/executor",
+      "schema": "./src/executors/concatenate-files/schema.json",
+      "description": "Concatenate files with optional content extraction and transforms"
     }
   }
 }
