@@ -134,7 +134,12 @@ const getFirstQuarterMonth = function (month) {
   return getQuarter(month) * 3;
 };
 
-function correctDateWithUnitBeginning(date, dateInterval, withCorrection?, firstDayOfWeek?) {
+function correctDateWithUnitBeginning(
+  date: Date,
+  dateInterval: typeof dateUnitIntervals[number],
+  withCorrection?: boolean,
+  firstDayOfWeek?: number,
+): Date {
   date = new Date(date.getTime());
   const oldDate = new Date(date.getTime());
   let firstQuarterMonth;
