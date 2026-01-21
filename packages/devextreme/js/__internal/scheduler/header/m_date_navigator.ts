@@ -31,7 +31,7 @@ const { trimTime } = dateUtils;
 
 interface DateNavigatorItem extends ButtonGroupItem {
   key: string;
-  clickHandler: (event: ItemClickEvent) => void;
+  clickHandler: (event: ItemClickEvent) => Promise<void> | void;
   onContentReady: (event: ContentReadyEvent) => void;
 }
 
@@ -170,7 +170,7 @@ export const getDateNavigator = (header: SchedulerHeader, item: ToolbarItem): To
   const options = config.options as ButtonGroupOptions;
   const { onItemClick } = options;
 
-  options.items = (options.items ?? DEFAULT_ITEMS).map((groupItem) => {
+  options.items = (options.items ?? DEFAULT_ITEMS).map((groupItem: ButtonGroupItem) => {
     switch (groupItem) {
       case ITEMS_NAME.previousButton:
         return getPreviousButtonOptions(header);
