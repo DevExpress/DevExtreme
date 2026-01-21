@@ -40,8 +40,8 @@ import { ACTION_TO_APPOINTMENT, AppointmentPopup as AppointmentLegacyPopup } fro
 import { AppointmentPopup } from './appointment_popup/m_popup';
 import AppointmentCollection from './appointments/m_appointment_collection';
 import NotifyScheduler from './base/m_widget_notify_scheduler';
-import { SchedulerHeader } from './header/m_header';
-import type { HeaderOptions } from './header/types';
+import { SchedulerHeader } from './header/components/m_header';
+import type { HeaderOptions } from './header/core/types';
 import { CompactAppointmentsHelper } from './m_compact_appointments_helper';
 import { hide as hideLoading, show as showLoading } from './m_loading';
 import type { SubscribeKey, SubscribeMethods } from './m_subscribes';

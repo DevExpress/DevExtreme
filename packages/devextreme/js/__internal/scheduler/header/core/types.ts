@@ -1,6 +1,6 @@
 import type { FirstDayOfWeek } from '@js/common';
 
-import type { NormalizedView, SafeSchedulerOptions } from '../utils/options/types';
+import type { NormalizedView, SafeSchedulerOptions } from '../../utils/options/types';
 
 export interface HeaderOptions {
   currentView: NormalizedView;

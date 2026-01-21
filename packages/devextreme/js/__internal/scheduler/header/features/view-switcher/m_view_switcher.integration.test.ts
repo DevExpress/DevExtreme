@@ -7,8 +7,8 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { loadMessages, locale } from '@js/localization';
 
-import type { Properties as SchedulerProperties } from '../../../ui/scheduler';
-import Scheduler from '../../../ui/scheduler';
+import type { Properties as SchedulerProperties } from '../../../../../ui/scheduler';
+import Scheduler from '../../../../../ui/scheduler';
 
 const SCHEDULER_CONTAINER_ID = 'schedulerContainer';
 
