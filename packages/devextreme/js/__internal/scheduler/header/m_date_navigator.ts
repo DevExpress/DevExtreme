@@ -154,6 +154,26 @@ const getNextButtonOptions = (header: SchedulerHeader): DateNavigatorItem => {
   };
 };
 
+export const getTodayButtonOptions = (
+  header: SchedulerHeader,
+  item: ToolbarItem,
+): ToolbarItem => extend(true, {}, {
+  location: 'before',
+  locateInMenu: 'auto',
+  widget: 'dxButton',
+  cssClass: 'dx-scheduler-today',
+  options: {
+    text: messageLocalization.format('dxScheduler-navigationToday'),
+    icon: 'today',
+    stylingMode: 'outlined',
+    type: 'normal',
+    onClick() {
+      const headerOptions = header.option();
+      header._updateCurrentDate(headerOptions.indicatorTime ?? new Date());
+    },
+  },
+}, item) as ToolbarItem;
+
 export const getDateNavigator = (header: SchedulerHeader, item: ToolbarItem): ToolbarItem => {
   const stylingMode = isMaterialBased(current()) ? 'text' : 'contained';
   const config: ToolbarItem = extend(true, {}, {

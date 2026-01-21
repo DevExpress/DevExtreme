@@ -18,6 +18,7 @@ import type { Direction } from './constants';
 import SchedulerCalendar from './m_calendar';
 import {
   getDateNavigator,
+  getTodayButtonOptions,
 } from './m_date_navigator';
 import {
   getCaption,
@@ -29,7 +30,6 @@ import {
   getDropDownViewSwitcher,
   getTabViewSwitcher,
 } from './m_view_switcher';
-import { getTodayButtonOptions } from './today';
 import type {
   EventMapHandler,
   HeaderOptions, IntervalOptions,
