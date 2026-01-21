@@ -1,13 +1,9 @@
-In many cases, you need to process data on the server before a chart displays it. The Chart component supports this scenario. 
-
-In this demo, the data source of the Chart loads weather data for a selected month from an OData service. Each time you select a different month in the drop-down menu, the data source sends a new query to the service. To implement this functionality, assign a [DataSource](/Documentation/ApiReference/Data_Layer/DataSource/) object to the Chart's [dataSource](/Documentation/ApiReference/UI_Components/dxChart/Configuration/#dataSource) property. 
+DevExtreme Chart supports remote data processing. In this demo, the component loads weather data for a specified month from an ASP.NET backend. When you change the selected month in the drop-down below Chart, the component sends a new query to update the displayed data. 
 <!--split-->
 
-In the [DataSource](/Documentation/ApiReference/Data_Layer/DataSource/), implement the [ODataStore](/Documentation/ApiReference/Data_Layer/ODataStore/). An OData service can include multiple entity collections related to each other, but the [ODataStore](/Documentation/ApiReference/Data_Layer/ODataStore/) specifies only one collection. To load multiple collections at once, set the [expand](/Documentation/ApiReference/Data_Layer/DataSource/Configuration/#expand) property to an array with the additional collection titles. Then, call the [postProcess](/Documentation/ApiReference/Data_Layer/DataSource/Configuration/#postProcess) function to process additional data.
+To use a remote data store in Chart, implement a [CustomStore](/Documentation/ApiReference/Data_Layer/CustomStore/) (within a [DataSource](/Documentation/ApiReference/Data_Layer/DataSource/) object). Specify a [load](/Documentation/ApiReference/Data_Layer/CustomStore/Configuration/#load) method that fetches the backend. To process data on the server, configure the ASP.NET backend and include processing operations in requests. For backend implementation details, refer to **TemperatureDataController.cs** in the ASP.NET Core version of this demo: [Server-Side Data Processing - ASP.NET Core Charts](https://demos.devexpress.com/AspNetCore/Demo/Charts/ServerSideDataProcessing)
 
-Set the [paginate](/Documentation/ApiReference/Data_Layer/DataSource/Configuration/#paginate) property to **false** to prevent data from partitioning. You can also apply a [filter](/Documentation/ApiReference/Data_Layer/DataSource/Configuration/#filter) to the received values.
-
-Once you load the data, specify the [series](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/) type and its nested options ([argumentField](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/#argumentField) and [valueField](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/#valueField)), so the component can determine the objects that indicate Chart arguments and values in the data source.
+You can shape the loaded data within the **DataSource** as needed (for instance, apply a [filter](/Documentation/ApiReference/Data_Layer/DataSource/Configuration/#filter) value). Disable the [paginate](/Documentation/ApiReference/Data_Layer/DataSource/Configuration/#paginate) property to prevent data partitioning.
 
 ### A 1-Click Solution for CRUD Web API Services with Role-based Access Control via EF Core
 
