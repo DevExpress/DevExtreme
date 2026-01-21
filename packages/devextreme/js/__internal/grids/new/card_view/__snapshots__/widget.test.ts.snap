@@ -16,7 +16,7 @@ exports[`common initial render should be successfull 1`] = `
     <div
       class="dx-cardview-header-container"
     >
-
+      
       <div
         class="dx-cardview-headers"
       >
@@ -51,7 +51,7 @@ exports[`common initial render should be successfull 1`] = `
                         class="dx-cardview-headerpanel-text-empty"
                         role="menuitem"
                       >
-                        Use
+                        Use 
                         <a
                           class="dx-link"
                         >
@@ -81,7 +81,7 @@ exports[`common initial render should be successfull 1`] = `
               </div>
             </div>
           </div>
-
+          
           <div
             class="dx-cardview-dropzone"
           >
@@ -141,7 +141,7 @@ exports[`common initial render should be successfull 1`] = `
       <div />
     </div>
     <div>
-
+      
     </div>
     <div
       class="dx-cardview-exclude-flexbox"
@@ -150,8 +150,8 @@ exports[`common initial render should be successfull 1`] = `
         class="dx-header-filter-menu"
       />
     </div>
-
-
+    
+    
     <div
       class="dx-cardview-exclude-flexbox"
     >
