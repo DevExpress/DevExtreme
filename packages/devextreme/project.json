@@ -88,6 +88,53 @@
       ],
       "cache": true
     },
+    "build:devextreme-bundler-config:generate": {
+      "executor": "devextreme-nx-infra-plugin:concatenate-files",
+      "options": {
+        "sourceFiles": [
+          "./build/bundle-templates/modules/parts/core.js",
+          "./build/bundle-templates/modules/parts/data.js",
+          "./build/bundle-templates/modules/parts/widgets-base.js",
+          "./build/bundle-templates/modules/parts/widgets-web.js",
+          "./build/bundle-templates/modules/parts/viz.js",
+          "./build/bundle-templates/modules/parts/aspnet.js"
+        ],
+        "outputFile": "./build/bundle-templates/dx.custom.js",
+        "extractPattern": "[^]*BUNDLER_PARTS.*?$([^]*)^.*?BUNDLER_PARTS_END[^]*",
+        "extractPatternFlags": "gm",
+        "header": "\"use strict\";\n\n/* Comment lines below for the widgets you don't require and run \"devextreme-bundler\" in this directory, then include dx.custom.js in your project */\n\n",
+        "transforms": [
+          {
+            "find": "require *\\( *[\"']..\\/\\.\\.\\/",
+            "replace": "require('"
+          },
+          { "find": "^[ ]{4}", "replace": "", "flags": "gm" },
+          { "find": "\\n{3,}", "replace": "\n\n", "flags": "g" }
+        ]
+      },
+      "inputs": ["{projectRoot}/build/bundle-templates/modules/parts/**/*.js"],
+      "outputs": ["{projectRoot}/build/bundle-templates/dx.custom.js"],
+      "cache": true
+    },
+    "build:devextreme-bundler-config:prod": {
+      "dependsOn": ["build:devextreme-bundler-config:generate"],
+      "executor": "devextreme-nx-infra-plugin:concatenate-files",
+      "options": {
+        "sourceFiles": ["./build/bundle-templates/dx.custom.js"],
+        "outputFile": "./artifacts/npm/devextreme/bundles/dx.custom.config.js",
+        "transforms": [
+          {
+            "find": "require *\\( *[\"']\\.\\.\\/",
+            "replace": "require('devextreme/"
+          }
+        ]
+      },
+      "inputs": ["{projectRoot}/build/bundle-templates/dx.custom.js"],
+      "outputs": [
+        "{projectRoot}/artifacts/npm/devextreme/bundles/dx.custom.config.js"
+      ],
+      "cache": true
+    },
     "build:transpile": {
       "executor": "nx:run-commands",
       "options": {
