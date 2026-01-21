@@ -241,9 +241,10 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
       firstDayOfWeek: headerOptions.firstDayOfWeek,
       focusStateEnabled: headerOptions.focusStateEnabled,
       tabIndex: headerOptions.tabIndex,
-      onValueChanged: async (e) => {
+      onValueChanged: (e) => {
         this._updateCurrentDate(e.value);
-        await this._calendar?.hide();
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        this._calendar?.hide();
       },
     });
 
