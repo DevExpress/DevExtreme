@@ -274,7 +274,7 @@ export interface CompactAppointmentOptions {
 export interface ScrollToOptions {
   group?: RawGroupValues | GroupValues;
   allDay?: boolean | undefined;
-  align?: 'start' | 'center';
+  alignInView?: 'start' | 'center';
 }
 
 export type ScrollToGroupValuesOrOptions =

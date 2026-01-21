@@ -25857,7 +25857,7 @@ declare module DevExpress.ui {
       options?: {
         group?: object;
         allDay?: boolean;
-        align?: 'start' | 'center';
+        alignInView?: 'start' | 'center';
       }
     ): void;
     /**

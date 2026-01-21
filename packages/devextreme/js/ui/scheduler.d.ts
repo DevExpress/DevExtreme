@@ -1320,7 +1320,7 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
     scrollTo(date: Date, options?: {
         group?: object;
         allDay?: boolean;
-        align?: 'start' | 'center';
+        alignInView?: 'start' | 'center';
     }): void;
     /**
      * @docid
