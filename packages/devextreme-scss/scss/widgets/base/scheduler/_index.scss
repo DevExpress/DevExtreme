@@ -508,13 +508,13 @@ $scheduler-appointment-form-label-padding: 20px;
       }
 
       .dx-scheduler-form-group-with-icon:not(
-        .dx-scheduler-form-date-range-group, 
+        .dx-scheduler-form-date-range-group,
         .dx-scheduler-form-recurrence-end-group
       ) {
         .dx-item:has(+ .dx-item .dx-first-row > .dx-field-item-label-location-top) {
           .dx-scheduler-form-icon {
-            /* 
-            If the item next to icon element has label on top, 
+            /*
+            If the item next to icon element has label on top,
             then in order to align icon with the editor we need to add margin to icon.
             For date range and recurrence end groups, alignment is not needed.
             */
