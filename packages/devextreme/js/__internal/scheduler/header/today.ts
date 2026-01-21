@@ -18,7 +18,8 @@ export const getTodayButtonOptions = (
     stylingMode: 'outlined',
     type: 'normal',
     onClick() {
-      header._updateCurrentDate(header.option('indicatorTime') ?? new Date());
+      const headerOptions = header.option();
+      header._updateCurrentDate(headerOptions.indicatorTime ?? new Date());
     },
   },
 }, item) as ToolbarItem;
