@@ -154,6 +154,26 @@ const getNextButtonOptions = (header: SchedulerHeader): DateNavigatorItem => {
   };
 };
 
+export const getTodayButtonOptions = (
+  header: SchedulerHeader,
+  item: ToolbarItem,
+): ToolbarItem => extend(true, {}, {
+  location: 'before',
+  locateInMenu: 'auto',
+  widget: 'dxButton',
+  cssClass: 'dx-scheduler-today',
+  options: {
+    text: messageLocalization.format('dxScheduler-navigationToday'),
+    icon: 'today',
+    stylingMode: 'outlined',
+    type: 'normal',
+    onClick() {
+      const headerOptions = header.option();
+      header._updateCurrentDate(headerOptions.indicatorTime ?? new Date());
+    },
+  },
+}, item) as ToolbarItem;
+
 export const getDateNavigator = (header: SchedulerHeader, item: ToolbarItem): ToolbarItem => {
   // @ts-expect-error current theme used
   const stylingMode = isMaterialBased() ? 'text' : 'contained';
@@ -170,17 +190,21 @@ export const getDateNavigator = (header: SchedulerHeader, item: ToolbarItem): To
   const options = config.options as ButtonGroupOptions;
   const { onItemClick } = options;
 
-  options.items = (options.items ?? DEFAULT_ITEMS).map((groupItem: ButtonGroupItem) => {
-    switch (groupItem) {
-      case ITEMS_NAME.previousButton:
-        return getPreviousButtonOptions(header);
-      case ITEMS_NAME.nextButton:
-        return getNextButtonOptions(header);
-      case ITEMS_NAME.calendarButton:
-        return getCalendarButtonOptions(header);
-      default:
-        return groupItem;
+  const items = (options.items ?? DEFAULT_ITEMS) as (ButtonGroupItem | string)[];
+  options.items = items.map((groupItem) => {
+    if (typeof groupItem === 'string') {
+      switch (groupItem) {
+        case ITEMS_NAME.previousButton:
+          return getPreviousButtonOptions(header);
+        case ITEMS_NAME.nextButton:
+          return getNextButtonOptions(header);
+        case ITEMS_NAME.calendarButton:
+          return getCalendarButtonOptions(header);
+        default:
+          return groupItem as ButtonGroupItem;
+      }
     }
+    return groupItem;
   });
   options.onItemClick = (event): void => {
     event.itemData.clickHandler?.(event);
