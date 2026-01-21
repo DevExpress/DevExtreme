@@ -1337,9 +1337,9 @@ describe('Appointment Form', () => {
       scheduler.showAppointmentPopup();
 
       expect(POM.popup.isMainGroupVisible()).toBe(true);
-      expect(POM.popup.mainGroup?.getAttribute('tabindex')).toBeNull();
+      expect(POM.popup.mainGroup?.getAttribute('inert')).toBeNull();
       expect(POM.popup.isRecurrenceGroupVisible()).toBe(false);
-      expect(POM.popup.recurrenceGroup?.getAttribute('tabindex')).toBe('-1');
+      expect(POM.popup.recurrenceGroup?.getAttribute('inert')).toBe('true');
 
       POM.popup.selectRepeatValue('weekly');
       await new Promise(process.nextTick);
@@ -1349,17 +1349,17 @@ describe('Appointment Form', () => {
       expect(typeof popupHeight).toBe('number');
 
       expect(POM.popup.isMainGroupVisible()).toBe(false);
-      expect(POM.popup.mainGroup?.getAttribute('tabindex')).toBe('-1');
+      expect(POM.popup.mainGroup?.getAttribute('inert')).toBe('true');
       expect(POM.popup.isRecurrenceGroupVisible()).toBe(true);
-      expect(POM.popup.recurrenceGroup?.getAttribute('tabindex')).toBeNull();
+      expect(POM.popup.recurrenceGroup?.getAttribute('inert')).toBeNull();
 
       POM.popup.getBackButton().click();
 
       expect(POM.popup.component.option('height')).toBe('auto');
       expect(POM.popup.isMainGroupVisible()).toBe(true);
-      expect(POM.popup.mainGroup?.getAttribute('tabindex')).toBeNull();
+      expect(POM.popup.mainGroup?.getAttribute('inert')).toBeNull();
       expect(POM.popup.isRecurrenceGroupVisible()).toBe(false);
-      expect(POM.popup.recurrenceGroup?.getAttribute('tabindex')).toBe('-1');
+      expect(POM.popup.recurrenceGroup?.getAttribute('inert')).toBe('true');
     });
 
     it('should open main form when opening recurring appointment', async () => {
@@ -1674,6 +1674,52 @@ describe('Appointment Form', () => {
           expect(untilEditor?.option('disabled')).toBe(repeatEndValue !== 'until');
           expect(countEditor?.option('disabled')).toBe(repeatEndValue !== 'count');
         });
+      });
+    });
+
+    describe('FrequencyEditor focus', () => {
+      it('should not be focused when value is changed via API', async () => {
+        const { POM, scheduler } = await createScheduler({
+          ...getDefaultConfig(),
+          dataSource: [],
+          views: ['week'],
+          currentView: 'week',
+          currentDate: new Date(2021, 2, 25),
+        });
+
+        scheduler.showAppointmentPopup(recurringAppointment);
+        POM.popup.getEditSeriesButton().click();
+        POM.popup.openRecurrenceSettings();
+
+        const frequencyEditor = POM.popup.form.getEditor('recurrencePeriodEditor');
+        const frequencyEditorInputElement = POM.popup.getInput('recurrencePeriodEditor').get(0) as HTMLElement;
+
+        frequencyEditor?.option('value', 'yearly');
+
+        expect(document.activeElement).not.toBe(frequencyEditorInputElement);
+      });
+
+      it('should be focused when value is changed via keyboard', async () => {
+        const { POM, scheduler, keydown } = await createScheduler({
+          ...getDefaultConfig(),
+          dataSource: [],
+          views: ['week'],
+          currentView: 'week',
+          currentDate: new Date(2021, 2, 25),
+        });
+
+        scheduler.showAppointmentPopup(recurringAppointment);
+        POM.popup.getEditSeriesButton().click();
+        POM.popup.openRecurrenceSettings();
+
+        const frequencyEditorInputElement = POM.popup.getInput('recurrencePeriodEditor').get(0) as HTMLElement;
+
+        frequencyEditorInputElement.click();
+        jest.useFakeTimers();
+        keydown(frequencyEditorInputElement, 'ArrowDown');
+        jest.runAllTimers();
+
+        expect(document.activeElement).toBe(frequencyEditorInputElement);
       });
     });
   });

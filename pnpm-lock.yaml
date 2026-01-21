@@ -134,8 +134,8 @@ catalogs:
       specifier: ^8.2.3
       version: 8.2.3
     jquery:
-      specifier: 3.7.1
-      version: 3.7.1
+      specifier: 4.0.0
+      version: 4.0.0
     vue-eslint-parser:
       specifier: 10.0.0
       version: 10.0.0
@@ -462,7 +462,7 @@ importers:
         version: 8.2.3
       jquery:
         specifier: 'catalog:'
-        version: 3.7.1
+        version: 4.0.0
       jspdf:
         specifier: 4.0.0
         version: 4.0.0
@@ -979,7 +979,7 @@ importers:
         version: 1.7.0
       jquery:
         specifier: 'catalog:'
-        version: 3.7.1
+        version: 4.0.0
       minimist:
         specifier: 1.2.8
         version: 1.2.8
@@ -1045,7 +1045,7 @@ importers:
         version: 3.3.0
       jquery:
         specifier: 'catalog:'
-        version: 3.7.1
+        version: 4.0.0
       typescript:
         specifier: catalog:angular
         version: 5.5.4
@@ -1647,7 +1647,7 @@ importers:
         version: 29.7.0
       jquery:
         specifier: 'catalog:'
-        version: 3.7.1
+        version: 4.0.0
       jquery.tmpl:
         specifier: 0.0.2
         version: 0.0.2
@@ -12764,8 +12764,8 @@ packages:
   jquery.tmpl@0.0.2:
     resolution: {integrity: sha512-ONpdW9JcxJxi5Eu9s640SdN0y/nSjnXAP24s3X/LeWlG4xA+hyuIcxEdTWZPy9scWC7owkEeSU6ReQvpbWhs7A==}
 
-  jquery@3.7.1:
-    resolution: {integrity: sha512-m4avr8yL8kmFN8psrbFFFmB/If14iN5o9nw/NgnnM+kybDJpRsAynV2BsfpTYrTRysYUdADVD7CkUUizgkpLfg==}
+  jquery@4.0.0:
+    resolution: {integrity: sha512-TXCHVR3Lb6TZdtw1l3RTLf8RBWVGexdxL6AC8/e0xZKEpBflBsjh9/8LXw+dkNFuOyW9B7iB3O1sP7hS0Kiacg==}
 
   jqueryify@0.0.3:
     resolution: {integrity: sha512-9WKxzVa00eYc3RWHV4qlmts71OjdPbGOBoeLepfQSFbs6/NBwY4HDEG02EP2X2aH1MSmtG1tRcXx7VQzoz9Azg==}
@@ -34577,7 +34577,7 @@ snapshots:
     dependencies:
       jqueryify: 0.0.3
 
-  jquery@3.7.1: {}
+  jquery@4.0.0: {}
 
   jqueryify@0.0.3: {}
 
@@ -38871,7 +38871,7 @@ snapshots:
 
   signalr@2.4.3:
     dependencies:
-      jquery: 3.7.1
+      jquery: 4.0.0
 
   sigstore@3.1.0:
     dependencies:
