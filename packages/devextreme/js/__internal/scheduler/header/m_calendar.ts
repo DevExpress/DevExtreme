@@ -22,7 +22,7 @@ const CALENDAR_POPOVER_CLASS = 'dx-scheduler-navigator-calendar-popover';
  * It shows a popup/popover with a calendar widget for date selection.
  */
 export default class SchedulerCalendar extends Widget<
-SchedulerProperties & SchedulerCalendarProperties
+  SchedulerProperties & SchedulerCalendarProperties
 > {
   _overlay: Popup | Popover | undefined;
 
@@ -124,14 +124,13 @@ SchedulerProperties & SchedulerCalendarProperties
   _getCalendarOptions(): CalendarProperties {
     const schedulerOptions = this.option();
     return {
-      value: schedulerOptions.currentDate,
+      value: schedulerOptions.value,
       min: schedulerOptions.min,
       max: schedulerOptions.max,
       firstDayOfWeek: schedulerOptions.firstDayOfWeek,
       focusStateEnabled: schedulerOptions.focusStateEnabled,
       tabIndex: schedulerOptions.tabIndex,
-      // @ts-expect-error onCurrentDateChange exists in HeaderOptions but not in Scheduler types
-      onValueChanged: schedulerOptions.onCurrentDateChange,
+      onValueChanged: schedulerOptions.onValueChanged,
       // @ts-expect-error skipFocusCheck is an internal Calendar property
       skipFocusCheck: true,
     };
