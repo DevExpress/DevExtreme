@@ -12,6 +12,8 @@ import type { CalendarProperties } from '@ts/ui/calendar/calendar';
 import Calendar from '@ts/ui/calendar/calendar';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 
+import type { SchedulerCalendarProperties } from './types';
+
 const CALENDAR_CLASS = 'dx-scheduler-navigator-calendar';
 const CALENDAR_POPOVER_CLASS = 'dx-scheduler-navigator-calendar-popover';
 
@@ -19,7 +21,9 @@ const CALENDAR_POPOVER_CLASS = 'dx-scheduler-navigator-calendar-popover';
  * Calendar component that is displayed when clicking on the date navigator in the scheduler header.
  * It shows a popup/popover with a calendar widget for date selection.
  */
-export default class SchedulerCalendar extends Widget<SchedulerProperties> {
+export default class SchedulerCalendar extends Widget<
+SchedulerProperties & SchedulerCalendarProperties
+> {
   _overlay: Popup | Popover | undefined;
 
   _calendar: Calendar | undefined;
@@ -106,7 +110,7 @@ export default class SchedulerCalendar extends Widget<SchedulerProperties> {
   }
 
   _optionChanged(
-    { name, value } : { name: string; value: DateLike | DateLike[] },
+    { name, value }: { name: string; value: DateLike | DateLike[] },
   ): void {
     switch (name) {
       case 'value':

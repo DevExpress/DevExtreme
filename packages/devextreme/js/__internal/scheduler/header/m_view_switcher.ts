@@ -15,9 +15,14 @@ const ClASS = {
   dropDownButtonContent: 'dx-scheduler-view-switcher-dropdown-button-content',
 };
 
-const getViewsAndSelectedView = (header: SchedulerHeader) => {
-  const views = formatViews(header.option('views'));
-  const selectedView = getViewName(header.option('currentView'));
+const getViewsAndSelectedView = (header: SchedulerHeader):
+{
+  selectedView: string | undefined;
+  views: NormalizedView[];
+} => {
+  const headerOptions = header.option();
+  const views = formatViews(headerOptions.views);
+  const selectedView = getViewName(headerOptions.currentView);
   const isSelectedViewInViews = views.some((view) => view.name === selectedView);
 
   return {
@@ -26,7 +31,10 @@ const getViewsAndSelectedView = (header: SchedulerHeader) => {
   };
 };
 
-export const getTabViewSwitcher = (header: SchedulerHeader, item): ToolbarItem => {
+export const getTabViewSwitcher = (
+  header: SchedulerHeader,
+  item: ToolbarItem,
+): ToolbarItem => {
   const { selectedView, views } = getViewsAndSelectedView(header);
 
   // @ts-expect-error
@@ -50,7 +58,7 @@ export const getTabViewSwitcher = (header: SchedulerHeader, item): ToolbarItem =
         const viewSwitcher = e.component;
 
         header._addEvent('currentView', (view) => {
-          viewSwitcher.option('selectedItemKeys', [getViewName(view)]);
+          viewSwitcher.option('selectedItemKeys', [getViewName(view as NormalizedView)]);
         });
       },
     },
@@ -58,7 +66,10 @@ export const getTabViewSwitcher = (header: SchedulerHeader, item): ToolbarItem =
   } as ToolbarItem;
 };
 
-export const getDropDownViewSwitcher = (header: SchedulerHeader, item): ToolbarItem => {
+export const getDropDownViewSwitcher = (
+  header: SchedulerHeader,
+  item: ToolbarItem,
+): ToolbarItem => {
   const { selectedView, views } = getViewsAndSelectedView(header);
   const isOnlyOneView = isOneView(views, selectedView);
 
@@ -84,11 +95,11 @@ export const getDropDownViewSwitcher = (header: SchedulerHeader, item): ToolbarI
       onContentReady: (e) => {
         const viewSwitcher = e.component;
 
-        header._addEvent('currentView', (view: NormalizedView) => {
-          const currentViews = header.option('views');
+        header._addEvent('currentView', (view) => {
+          const { views: currentViews } = header.option();
 
-          viewSwitcher.option('showArrowIcon', !isOneView(currentViews, view.name));
-          viewSwitcher.option('selectedItemKey', getViewName(view));
+          viewSwitcher.option('showArrowIcon', !isOneView(currentViews, (view as NormalizedView).name));
+          viewSwitcher.option('selectedItemKey', getViewName(view as NormalizedView));
         });
       },
       dropDownOptions: {
