@@ -897,7 +897,9 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
       if (overlayInstance) {
         const cellIndex = overlayInstance.$element().closest('td').index();
 
-        if (cellIndex === that._targetPoint.columnIndex || cellIndex === that._targetPoint.columnIndex + 1) {
+        if (cellIndex === that._targetPoint?.columnIndex
+          || (that._targetPoint && cellIndex === that._targetPoint.columnIndex + 1)
+        ) {
           overlayInstance.$content().hide();
         }
       }
