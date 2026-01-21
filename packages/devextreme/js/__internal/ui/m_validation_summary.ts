@@ -1,5 +1,7 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import registerComponent from '@js/core/component_registrator';
+import type { dxElementWrapper } from '@js/core/renderer';
+import $ from '@js/core/renderer';
 // @ts-expect-error ts-error
 import { grep } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
@@ -12,6 +14,7 @@ import ValidationEngine from './m_validation_engine';
 import type ValidationGroup from './m_validation_group';
 
 const VALIDATION_SUMMARY_CLASS = 'dx-validationsummary';
+const VALIDATION_SUMMARY_SCREEN_READER_ONLY = 'dx-screen-reader-only';
 const ITEM_CLASS = `${VALIDATION_SUMMARY_CLASS}-item`;
 const ITEM_DATA_KEY = `${VALIDATION_SUMMARY_CLASS}-item-data`;
 
@@ -25,6 +28,10 @@ class ValidationSummary extends CollectionWidget<ValidationSummaryProperties> {
   _validationGroup?: ValidationGroup;
 
   validators?: any[];
+
+  _$announceContainer?: dxElementWrapper;
+
+  _lastAnnouncedText?: string;
 
   groupSubscription?: (params) => void;
 
@@ -117,6 +124,31 @@ class ValidationSummary extends CollectionWidget<ValidationSummaryProperties> {
     });
 
     this.option('items', items);
+
+    this._announceOnGroupValidation(items);
+  }
+
+  _announceOnGroupValidation(items): void {
+    if (!items?.length) {
+      this._lastAnnouncedText = '';
+      this._$announceContainer?.text('');
+      return;
+    }
+
+    const text = items.map((item) => item.text).join('. ');
+
+    if (text !== this._lastAnnouncedText) {
+      this._lastAnnouncedText = text;
+      this._announceText(text);
+    }
+  }
+
+  _announceText(text: string): void {
+    if (!this._$announceContainer) {
+      return;
+    }
+
+    this._$announceContainer.text(text);
   }
 
   _itemValidationHandler({ isValid, validator, brokenRules }): void {
@@ -164,6 +196,12 @@ class ValidationSummary extends CollectionWidget<ValidationSummaryProperties> {
 
   _initMarkup(): void {
     this.$element().addClass(VALIDATION_SUMMARY_CLASS);
+
+    this._$announceContainer = $('<div>')
+      .addClass(VALIDATION_SUMMARY_SCREEN_READER_ONLY)
+      .attr('role', 'alert')
+      .appendTo(this.element());
+
     super._initMarkup();
   }
 

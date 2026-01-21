@@ -51,7 +51,7 @@ QUnit.module('General', {
     });
 
 
-    QUnit.test('Summary can subscribe on group\'s Validated event', function(assert) {
+    QUnit.test('Summary can subscribe on group Validated event', function(assert) {
         const group = 'group1';
         const validator = sinon.createStubInstance(Validator);
         validator.validate.returns({ isValid: true, brokenRule: null });
@@ -173,7 +173,7 @@ QUnit.module('Regression', {
         assert.strictEqual(group, summary.option('validationGroup'));
     });
 
-    QUnit.test('T212238: Summary can subscribe on group\'s Validated event when Summary is created before any validator in group', function(assert) {
+    QUnit.test('T212238: Summary can subscribe on group Validated event when Summary is created before any validator in group', function(assert) {
         const group = 'group1';
         const validator = sinon.createStubInstance(Validator);
         validator.validate.returns({ isValid: true, brokenRule: null });
@@ -232,7 +232,7 @@ QUnit.module('Regression', {
     });
 });
 
-QUnit.module('Update on validator\'s validation', {
+QUnit.module('Update on validator validation', {
     beforeEach: function() {
         this.fixture = new Fixture();
     }
@@ -408,7 +408,7 @@ QUnit.module('Update on validator\'s validation', {
         assert.equal(items[1].text, message + ' 2', 'Message should be updated');
     });
 
-    QUnit.test('T270338: Summary should subscribe to validator\'s events only once', function(assert) {
+    QUnit.test('T270338: Summary should subscribe to validator events only once', function(assert) {
         const validator1 = this.fixture.createValidator({
             validationGroup: 'group1',
             validationRules: [{
@@ -428,7 +428,7 @@ QUnit.module('Update on validator\'s validation', {
         assert.equal(spy.callCount, 1, 'Render of validation summary should be called only once');
     });
 
-    QUnit.test('T270338 - the \'items\' option changed should not be called if validator state is not changed', function(assert) {
+    QUnit.test('T270338 - the items option changed should not be called if validator state is not changed', function(assert) {
         let itemsChangedCallCount = 0;
         const validator = this.fixture.createValidator({
             validationGroup: 'group',
@@ -450,5 +450,46 @@ QUnit.module('Update on validator\'s validation', {
         validator.validate();
 
         assert.equal(itemsChangedCallCount, 1, 'items should not be changed if the validator state is not changed');
+    });
+});
+
+QUnit.module('Accessibility', {
+    beforeEach: function() {
+        this.fixture = new Fixture();
+    }
+}, () => {
+    QUnit.test('ValidationSummary should have announce container with validation summary for screen reader', function(assert) {
+        const summary = this.fixture.createSummary();
+        const validator = sinon.createStubInstance(Validator);
+        const messages = ['test message 1', 'test message 2'];
+
+        summary._groupValidationHandler({
+            isValid: false,
+            brokenRules: [{
+                type: 'async',
+                message: messages[0],
+                validator: validator,
+            },
+            {
+                type: 'async',
+                message: messages[1],
+                validator: validator,
+            }],
+            validators: [validator]
+        });
+
+        const items = summary.option('items');
+
+        const $announceContainer = summary.$element().find('.dx-screen-reader-only');
+
+        assert.strictEqual($announceContainer.length, 1, 'announce container is present');
+        assert.strictEqual($announceContainer.text(), messages.join('. '), 'announce container has correct text');
+    });
+
+    QUnit.test('ValidationSummary announce container should have role=alert attribute', function(assert) {
+        const summary = this.fixture.createSummary();
+        const $announceContainer = summary.$element().find('.dx-screen-reader-only');
+
+        assert.strictEqual($announceContainer.attr('role'), 'alert', 'role=alert is present');
     });
 });
