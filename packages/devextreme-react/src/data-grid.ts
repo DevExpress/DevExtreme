@@ -493,7 +493,7 @@ const Change = Object.assign<typeof _componentChange, NestedComponentMeta>(_comp
 
 // owners:
 // Form
-// undefined
+// FormGroupItem
 // Tab
 type IColCountByScreenProps = React.PropsWithChildren<{
   lg?: number | undefined;
@@ -1911,7 +1911,7 @@ const _componentForm = (props: IFormProps) => {
         ButtonItem: { optionName: "items", isCollectionItem: true },
         colCountByScreen: { optionName: "colCountByScreen", isCollectionItem: false },
         EmptyItem: { optionName: "items", isCollectionItem: true },
-        GroupItem: { optionName: "items", isCollectionItem: true },
+        FormGroupItem: { optionName: "items", isCollectionItem: true },
         item: { optionName: "items", isCollectionItem: true },
         SimpleItem: { optionName: "items", isCollectionItem: true },
         TabbedItem: { optionName: "items", isCollectionItem: true }
@@ -1945,6 +1945,61 @@ const _componentFormat = (props: IFormatProps) => {
 };
 
 const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_componentFormat, {
+  componentType: "option",
+});
+
+// owners:
+// Form
+type IFormGroupItemProps = React.PropsWithChildren<{
+  alignItemLabels?: boolean;
+  caption?: string | undefined;
+  captionTemplate?: ((data: { caption: string, component: dxForm, name: string }, itemElement: any) => string | any) | template;
+  colCount?: number;
+  colCountByScreen?: Record<string, any> | {
+    lg?: number | undefined;
+    md?: number | undefined;
+    sm?: number | undefined;
+    xs?: number | undefined;
+  };
+  colSpan?: number | undefined;
+  cssClass?: string | undefined;
+  items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>;
+  itemType?: FormItemType;
+  name?: string | undefined;
+  template?: ((data: { component: dxForm, formData: Record<string, any> }, itemElement: any) => string | any) | template;
+  visible?: boolean;
+  visibleIndex?: number | undefined;
+  captionRender?: (...params: any) => React.ReactNode;
+  captionComponent?: React.ComponentType<any>;
+  render?: (...params: any) => React.ReactNode;
+  component?: React.ComponentType<any>;
+}>
+const _componentFormGroupItem = (props: IFormGroupItemProps) => {
+  return React.createElement(NestedOption<IFormGroupItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      ExpectedChildren: {
+        colCountByScreen: { optionName: "colCountByScreen", isCollectionItem: false }
+      },
+      TemplateProps: [{
+        tmplOption: "captionTemplate",
+        render: "captionRender",
+        component: "captionComponent"
+      }, {
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+      PredefinedProps: {
+        itemType: "group"
+      },
+    },
+  });
+};
+
+const FormGroupItem = Object.assign<typeof _componentFormGroupItem, NestedComponentMeta>(_componentFormGroupItem, {
   componentType: "option",
 });
 
@@ -4004,6 +4059,8 @@ export {
   IFormProps,
   Format,
   IFormatProps,
+  FormGroupItem,
+  IFormGroupItemProps,
   FormItem,
   IFormItemProps,
   From,

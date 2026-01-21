@@ -2561,7 +2561,7 @@ const DxForm = defineComponent(DxFormConfig);
   ButtonItem: { isCollectionItem: true, optionName: "items" },
   colCountByScreen: { isCollectionItem: false, optionName: "colCountByScreen" },
   EmptyItem: { isCollectionItem: true, optionName: "items" },
-  GroupItem: { isCollectionItem: true, optionName: "items" },
+  FormGroupItem: { isCollectionItem: true, optionName: "items" },
   item: { isCollectionItem: true, optionName: "items" },
   SimpleItem: { isCollectionItem: true, optionName: "items" },
   TabbedItem: { isCollectionItem: true, optionName: "items" }
@@ -2593,6 +2593,54 @@ prepareConfigurationComponentConfig(DxFormatConfig);
 const DxFormat = defineComponent(DxFormatConfig);
 
 (DxFormat as any).$_optionName = "format";
+
+const DxFormGroupItemConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:alignItemLabels": null,
+    "update:caption": null,
+    "update:captionTemplate": null,
+    "update:colCount": null,
+    "update:colCountByScreen": null,
+    "update:colSpan": null,
+    "update:cssClass": null,
+    "update:items": null,
+    "update:itemType": null,
+    "update:name": null,
+    "update:template": null,
+    "update:visible": null,
+    "update:visibleIndex": null,
+  },
+  props: {
+    alignItemLabels: Boolean,
+    caption: String,
+    captionTemplate: {},
+    colCount: Number,
+    colCountByScreen: Object as PropType<Record<string, any>>,
+    colSpan: Number,
+    cssClass: String,
+    items: Array as PropType<Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>>,
+    itemType: String as PropType<FormItemType>,
+    name: String,
+    template: {},
+    visible: Boolean,
+    visibleIndex: Number
+  }
+};
+
+prepareConfigurationComponentConfig(DxFormGroupItemConfig);
+
+const DxFormGroupItem = defineComponent(DxFormGroupItemConfig);
+
+(DxFormGroupItem as any).$_optionName = "items";
+(DxFormGroupItem as any).$_isCollectionItem = true;
+(DxFormGroupItem as any).$_predefinedProps = {
+  itemType: "group"
+};
+(DxFormGroupItem as any).$_expectedChildren = {
+  colCountByScreen: { isCollectionItem: false, optionName: "colCountByScreen" }
+};
 
 const DxFormItemConfig = {
   emits: {
@@ -4693,6 +4741,7 @@ export {
   DxFilterRow,
   DxForm,
   DxFormat,
+  DxFormGroupItem,
   DxFormItem,
   DxFrom,
   DxGrouping,

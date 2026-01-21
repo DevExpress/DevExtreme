@@ -168,6 +168,7 @@ import { DxoDataGridFilterPanelTextsModule } from 'devextreme-angular/ui/data-gr
 import { DxoDataGridFilterRowModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridFormModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridFormatModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridFormGroupItemModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridFormItemModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridFromModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridGroupingModule } from 'devextreme-angular/ui/data-grid/nested';
@@ -2479,6 +2480,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoDataGridFilterRowModule,
     DxoDataGridFormModule,
     DxoDataGridFormatModule,
+    DxiDataGridFormGroupItemModule,
     DxoDataGridFormItemModule,
     DxoDataGridFromModule,
     DxoDataGridGroupingModule,
@@ -2651,6 +2653,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoDataGridFilterRowModule,
     DxoDataGridFormModule,
     DxoDataGridFormatModule,
+    DxiDataGridFormGroupItemModule,
     DxoDataGridFormItemModule,
     DxoDataGridFromModule,
     DxoDataGridGroupingModule,
