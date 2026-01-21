@@ -5,10 +5,10 @@ import messageLocalization from '@js/localization/message';
 import type { DateNavigatorTextInfo, Properties } from '@js/ui/scheduler';
 import type { BaseFormat } from '@ts/core/localization/date';
 import { camelize } from '@ts/core/utils/m_inflector';
-import type { IntervalOptions, Step } from '@ts/scheduler/header/core/types';
+import type { IntervalOptions, Step } from '@ts/scheduler/header/types';
 import type { NormalizedView, RawViewType, ViewType } from '@ts/scheduler/utils/options/types';
 
-import type { Direction } from '../core/constants';
+import type { Direction } from './constants';
 
 const DAY_FORMAT = 'd';
 

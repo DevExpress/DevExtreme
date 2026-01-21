@@ -3,10 +3,10 @@ import {
 } from '@jest/globals';
 import type { ToolbarItem } from '@js/ui/scheduler';
 
-import type { SchedulerHeader } from '../../components/m_header';
 import {
   CLASS, DEFAULT_ITEMS, getDateNavigator, ITEMS_NAME,
 } from './m_date_navigator';
+import type { SchedulerHeader } from './m_header';
 
 describe('getDateNavigator', () => {
   it('should return default options in case of item is empty', () => {
