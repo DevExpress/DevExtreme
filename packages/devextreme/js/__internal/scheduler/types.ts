@@ -277,8 +277,7 @@ export interface ScrollToOptions {
   alignInView?: 'start' | 'center';
 }
 
-export type ScrollToGroupValuesOrOptions =
-  | RawGroupValues
+export type ScrollToGroupValuesOrOptions = RawGroupValues
   | GroupValues
   | ScrollToOptions
   | undefined;
