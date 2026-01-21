@@ -1,3 +1,5 @@
+import type { FirstDayOfWeek } from '@js/common';
+
 import type { NormalizedView, SafeSchedulerOptions } from '../utils/options/types';
 
 export interface HeaderOptions {
@@ -11,7 +13,7 @@ export interface HeaderOptions {
   tabIndex?: number;
   focusStateEnabled?: boolean;
   useDropDownViewSwitcher: boolean;
-  firstDayOfWeek?: number;
+  firstDayOfWeek?: FirstDayOfWeek;
   toolbar: SafeSchedulerOptions['toolbar'];
   onCurrentViewChange: (name: string) => void;
   onCurrentDateChange: (date: Date) => void;
@@ -27,3 +29,15 @@ export interface IntervalOptions {
   intervalCount: number;
   agendaDuration?: number;
 }
+
+export interface SchedulerCalendarProperties {
+  value: Date;
+  min?: Date;
+  max?: Date;
+  firstDayOfWeek?: FirstDayOfWeek;
+  focusStateEnabled?: boolean;
+  tabIndex?: number;
+  onValueChanged?: (e: { value: Date }) => Promise<void>;
+}
+
+export type EventMapHandler = (value: unknown) => void;
