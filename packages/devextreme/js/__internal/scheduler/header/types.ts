@@ -1,4 +1,7 @@
 import type { FirstDayOfWeek } from '@js/common';
+import type { NativeEventInfo } from '@js/common/core/events';
+import type dxCalendar from '@js/ui/calendar';
+import type { ValueChangedInfo } from '@js/ui/editor/editor';
 
 import type { NormalizedView, SafeSchedulerOptions } from '../utils/options/types';
 
@@ -37,7 +40,7 @@ export interface SchedulerCalendarProperties {
   firstDayOfWeek?: FirstDayOfWeek;
   focusStateEnabled?: boolean;
   tabIndex?: number;
-  onValueChanged?: (e: { value: Date }) => Promise<void>;
+  onValueChanged?: (e: (NativeEventInfo<dxCalendar> & ValueChangedInfo)) => void;
 }
 
 export type EventMapHandler = (value: unknown) => void;
