@@ -157,7 +157,7 @@ test.meta({ browserSize: [1500, 1500] })('recurrence form with labelMode=static'
   };
 
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-  const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, false);
+  const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, true);
 
   await appointmentPopup.openRecurrenceSettings(t);
 

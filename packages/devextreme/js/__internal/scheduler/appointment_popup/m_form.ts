@@ -866,19 +866,29 @@ export class AppointmentForm {
   }
 
   private alignIconsWithEditors(): void {
-    const $groups = this.dxForm.$element().find(`.${CLASSES.groupWithIcon}`);
+    const groupElements = this.dxForm.element().querySelectorAll(`.${CLASSES.groupWithIcon}`);
 
-    $groups.toArray().forEach((groupElement) => {
-      const $group = $(groupElement);
-      const $icon = $group.find(`.${CLASSES.formIcon}`);
-      const $items = $group.find(`.${CLASSES.formItem}:not(:has(.${CLASSES.formIcon}))`);
-      const $firstSimpleItem = $items.filter(`:not(:has(.${CLASSES.formItem}))`).first();
+    groupElements.forEach((groupElement) => {
+      const iconElement = groupElement.querySelector(`.${CLASSES.formIcon}`);
 
-      const hasTopLabel = $firstSimpleItem.find(`.${CLASSES.labelTop}`).length > 0;
-      const hasInnerLabel = $firstSimpleItem.find(`.${CLASSES.label}`).length > 0;
+      const itemElements = groupElement.querySelectorAll(`.${CLASSES.fieldItemContent}`);
+      const firstSimpleItemElement = Array.from(itemElements)
+        .find((itemElement) => {
+          const isGroup = itemElement.querySelector(`.${CLASSES.formItem}`) !== null;
+          const isIcon = itemElement.querySelector(`.${CLASSES.formIcon}`) !== null;
 
-      $icon.toggleClass(CLASSES.formIconTopLabelOffset, hasTopLabel);
-      $icon.toggleClass(CLASSES.formIconInnerLabelOffset, hasInnerLabel);
+          return !isGroup && !isIcon;
+        });
+
+      if (!firstSimpleItemElement || !iconElement) {
+        return;
+      }
+
+      const hasTopLabel = firstSimpleItemElement.querySelector(`.${CLASSES.labelTop}`) !== null;
+      const hasInnerLabel = firstSimpleItemElement.querySelector(`.${CLASSES.label}`) !== null;
+
+      iconElement.classList.toggle(CLASSES.formIconTopLabelOffset, hasTopLabel);
+      iconElement.classList.toggle(CLASSES.formIconInnerLabelOffset, hasInnerLabel);
     });
   }
 
