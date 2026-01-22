@@ -507,10 +507,6 @@ $scheduler-appointment-form-label-padding: 20px;
         align-items: start;
       }
 
-      .dx-scheduler-form-top-label-offset {
-        margin-top: $scheduler-appointment-popup-icon-margin-top;
-      }
-
       .dx-scheduler-form-icon {
         display: flex;
         align-items: center;
@@ -518,6 +514,22 @@ $scheduler-appointment-form-label-padding: 20px;
         > .dx-field-item-content {
           line-height: 1;
         }
+      }
+
+      .dx-scheduler-form-subject-group .dx-scheduler-form-icon,
+      .dx-scheduler-form-repeat-group .dx-scheduler-form-icon,
+      .dx-scheduler-form-description-group .dx-scheduler-form-icon {
+        align-items: start;
+        margin-top: $scheduler-appointment-popup-icon-margin-top;
+      }
+
+      .dx-scheduler-form-date-range-group .dx-scheduler-form-icon {
+        align-items: center;
+      }
+
+      .dx-scheduler-form-resources-group .dx-scheduler-form-group-with-icon .dx-scheduler-form-icon {
+        align-items: start;
+        margin-top: $scheduler-appointment-popup-icon-margin-top;
       }
 
       /* Editors alignment */
