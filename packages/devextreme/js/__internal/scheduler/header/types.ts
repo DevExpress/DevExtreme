@@ -31,7 +31,7 @@ export interface IntervalOptions {
   agendaDuration?: number;
 }
 
-export interface SchedulerCalendarOptions {
+export interface HeaderCalendarOptions {
   value: Date;
   min?: Date;
   max?: Date;

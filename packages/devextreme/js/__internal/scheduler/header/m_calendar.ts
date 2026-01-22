@@ -11,12 +11,12 @@ import type { CalendarProperties } from '@ts/ui/calendar/calendar';
 import Calendar from '@ts/ui/calendar/calendar';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 
-import type { SchedulerCalendarOptions } from './types';
+import type { HeaderCalendarOptions } from './types';
 
 const CALENDAR_CLASS = 'dx-scheduler-navigator-calendar';
 const CALENDAR_POPOVER_CLASS = 'dx-scheduler-navigator-calendar-popover';
 
-export default class SchedulerCalendar extends Widget<SchedulerCalendarOptions> {
+export default class SchedulerCalendar extends Widget<HeaderCalendarOptions> {
   _overlay?: Popup | Popover;
 
   _calendar?: Calendar;

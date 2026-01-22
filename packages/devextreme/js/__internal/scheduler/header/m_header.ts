@@ -31,7 +31,8 @@ import {
 } from './m_view_switcher';
 import { getTodayButtonOptions } from './today';
 import type {
-  EventMapHandler, HeaderOptions, IntervalOptions, SchedulerCalendarOptions,
+  EventMapHandler, HeaderCalendarOptions,
+  HeaderOptions, IntervalOptions,
 } from './types';
 
 const CLASSES = {
@@ -249,8 +250,8 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
     this._calendar.$element().appendTo(this.$element());
   }
 
-  _getCalendarOptionUpdater(name: keyof SchedulerCalendarOptions) {
-    return (value: SchedulerCalendarOptions[typeof name]): void => {
+  _getCalendarOptionUpdater(name: keyof HeaderCalendarOptions) {
+    return (value: HeaderCalendarOptions[typeof name]): void => {
       if (this._calendar) {
         this._calendar.option(name, value);
       }
