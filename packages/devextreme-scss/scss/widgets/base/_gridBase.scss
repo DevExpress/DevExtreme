@@ -1144,6 +1144,12 @@
         .dx-filter-range-content {
           padding: $grid-cell-padding $grid-texteditor-input-padding $grid-cell-padding $grid-cell-padding;
         }
+
+        .dx-command-expand{
+          &.dx-#{$widget-name}-sticky-column-right {
+            z-index: 4;
+          }
+        }
       }
     }
     .dx-#{$widget-name}-headers, .dx-#{$widget-name}-total-footer {
