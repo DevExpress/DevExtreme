@@ -475,10 +475,21 @@ $datagrid-text-stub-background-image-path: null !default;
     outline: none;
   }
 
-  &:focus-within {
+  &:focus-within:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
     outline: 2px solid;
     outline-color: $datagrid-focused-border-color;
     outline-offset: -2px;
+    // should overlap sticky column cells
+    z-index: 4;
+    pointer-events: none;
+    background-color: transparent;
   }
 }
 
