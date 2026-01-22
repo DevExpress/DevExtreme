@@ -25,7 +25,7 @@ export const SELECTORS = {
   repeatEditor: `.dx-scheduler-form-repeat-editor .dx-selectbox.dx-widget`,
   descriptionEditor: `.dx-scheduler-form-description-editor .dx-textarea.dx-widget`,
   recurrenceGroup: '.dx-scheduler-form-recurrence-group',
-  backButton: `.dx-button.dx-widget[aria-label="arrowleft"]`,
+  backButton: `.dx-button.dx-widget[aria-label="Back"]`,
   recurrenceStartDateInput: '.dx-scheduler-form-recurrence-start-date-editor input[type="text"]',
   recurrenceFrequencyEditor: '.dx-scheduler-form-recurrence-frequency-editor .dx-selectbox.dx-widget',
   repeatEditorButton: '.dx-scheduler-form-repeat-editor .dx-button-has-icon',
