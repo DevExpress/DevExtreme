@@ -11,7 +11,7 @@ import type { Properties as NumberBoxProperties } from '@js/ui/number_box';
 import type { Properties as RadioGroupProperties } from '@js/ui/radio_group';
 import type { Properties as SelectBoxProperties } from '@js/ui/select_box';
 import { capitalize } from '@ts/core/utils/capitalize';
-import { RECURRENCE_FORM_CLASSES } from '@ts/scheduler/appointment_popup/components/core/constants';
+import { RECURRENCE_FORM_CLASSES } from '@ts/scheduler/appointment_popup/core/constants';
 
 import type Scheduler from '../../../m_scheduler';
 import { createFormIconTemplate, getStartDateCommonConfig, RecurrenceRule } from '../../utils';
