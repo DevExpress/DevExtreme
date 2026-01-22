@@ -209,7 +209,7 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
     if (this.eventMap.has(event)) {
       const events = this.eventMap.get(event);
       if (events) {
-        events.forEach((EventMapHandler) => EventMapHandler(arg));
+        events.forEach((eventMapHandler) => eventMapHandler(arg));
       }
     }
   }
