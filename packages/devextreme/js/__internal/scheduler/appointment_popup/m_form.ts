@@ -866,9 +866,9 @@ export class AppointmentForm {
   }
 
   private alignIconsWithEditors(): void {
-    const groupElements = this.dxForm.element().querySelectorAll(`.${CLASSES.groupWithIcon}`);
+    const $groups = this.dxForm.$element().find(`.${CLASSES.groupWithIcon}`);
 
-    groupElements.forEach((groupElement) => {
+    $groups.toArray().forEach((groupElement) => {
       const iconElement = groupElement.querySelector(`.${CLASSES.formIcon}`);
 
       const itemElements = groupElement.querySelectorAll(`.${CLASSES.fieldItemContent}`);
