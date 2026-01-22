@@ -64,7 +64,7 @@ import { MobileTooltipStrategy } from './tooltip_strategies/m_mobile_tooltip_str
 import type {
   AppointmentTooltipItem,
   SafeAppointment,
-  TargetedAppointment,
+  ScrollToGroupValuesOrOptions, ScrollToOptions, TargetedAppointment,
 } from './types';
 import { AppointmentAdapter } from './utils/appointment_adapter/appointment_adapter';
 import { AppointmentDataAccessor } from './utils/data_accessor/appointment_data_accessor';
@@ -2022,8 +2022,31 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._appointmentTooltip?.hide();
   }
 
-  scrollTo(date, groupValues, allDay) {
-    this._workSpace.scrollTo(date, groupValues, allDay);
+  scrollTo(
+    date: Date,
+    groupValuesOrOptions?: ScrollToGroupValuesOrOptions,
+    allDay?: boolean | undefined,
+  ) {
+    let groupValues;
+    let allDayValue;
+    let align: 'start' | 'center' = 'center';
+
+    if (this._isScrollOptionsObject(groupValuesOrOptions)) {
+      groupValues = groupValuesOrOptions.group;
+      allDayValue = groupValuesOrOptions.allDay;
+      align = groupValuesOrOptions.alignInView ?? 'center';
+    } else {
+      errors.log('W0002', 'dxScheduler', 'scrollTo', '26.1', 'Use an object with "group", "allDay" and "alignInView" properties instead of separate parameters.');
+      groupValues = groupValuesOrOptions;
+      allDayValue = allDay;
+    }
+
+    this._workSpace.scrollTo(date, groupValues, allDayValue, true, align);
+  }
+
+  private _isScrollOptionsObject(options?: ScrollToGroupValuesOrOptions): options is ScrollToOptions {
+    return Boolean(options) && typeof options === 'object'
+      && ('align' in options || 'allDay' in options || 'group' in options);
   }
 
   _isHorizontalVirtualScrolling() {
