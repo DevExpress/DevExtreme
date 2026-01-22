@@ -25878,6 +25878,17 @@ declare module DevExpress.ui {
      */
     scrollTo(date: Date, group?: object, allDay?: boolean): void;
     /**
+     * [descr:dxScheduler.scrollTo(date, options)]
+     */
+    scrollTo(
+      date: Date,
+      options?: {
+        group?: object;
+        allDay?: boolean;
+        alignInView?: DevExpress.ui.dxScheduler.SchedulerScrollToAlign;
+      }
+    ): void;
+    /**
      * [descr:dxScheduler.showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)]
      */
     showAppointmentPopup(
@@ -26239,6 +26250,7 @@ declare module DevExpress.ui {
       | 'today'
       | 'dateNavigator'
       | 'viewSwitcher';
+    export type SchedulerScrollToAlign = 'start' | 'center';
     /**
      * [descr:TargetedAppointmentInfo]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.

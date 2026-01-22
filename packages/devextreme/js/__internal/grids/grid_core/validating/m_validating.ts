@@ -1390,8 +1390,9 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
 
     if (shouldSetValidationAriaAttributes) {
       const $focusElement = this._getCurrentFocusElement($focus);
-      $focusElement.attr('aria-labelledby', inputDescriptionValues.join(' '));
-      $focusElement.attr('aria-invalid', true);
+
+      this.setAria('labelledby', inputDescriptionValues.join(' '), $focusElement);
+      this.setAria('invalid', true, $focusElement);
     }
   }
 
