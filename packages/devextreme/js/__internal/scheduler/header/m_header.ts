@@ -47,7 +47,7 @@ const ITEM_NAMES = {
 export class SchedulerHeader extends Widget<HeaderOptions> {
   eventMap!: Map<string, EventMapHandler[]>;
 
-  _toolbar!: Toolbar;
+  _toolbar?: Toolbar;
 
   _calendar?: SchedulerCalendar;
 
@@ -85,7 +85,7 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
       ['focusStateEnabled', [this.repaint.bind(this)]],
       ['useDropDownViewSwitcher', [this.repaint.bind(this)]],
       ['indicatorTime', []],
-    ] as unknown as [string, EventMapHandler[]][]);
+    ] as [string, EventMapHandler[]][]);
   }
 
   _addEvent(name: string, event: EventMapHandler): void {
@@ -121,16 +121,16 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
         this.repaint();
         break;
       case fullName === 'toolbar.items':
-        this._toolbar.option(
+        this._toolbar?.option(
           'items',
           (value as []).map((item: ToolbarItem) => this._parseItem(item)),
         );
         break;
       case parts[1] === 'items' && parts.length === 3:
-        this._toolbar.option(optionName, this._parseItem(value as ToolbarItem));
+        this._toolbar?.option(optionName, this._parseItem(value as ToolbarItem));
         break;
       default:
-        this._toolbar.option(optionName, value);
+        this._toolbar?.option(optionName, value);
     }
   }
 
