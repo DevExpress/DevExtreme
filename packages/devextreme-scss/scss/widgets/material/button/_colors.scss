@@ -98,9 +98,9 @@ $button-default-selected-bg: null !default;
 $button-default-icon-color: $button-default-color !default;
 $button-default-outlined-bg: transparent !default;
 $button-default-outlined-hover-bg: color.change($button-default-bg, $alpha: 0.08) !default;
-$button-default-outlined-focused-bg: color.change($button-default-bg, $alpha: 0.08) !default;
-$button-default-outlined-active-bg: color.change($button-default-bg, $alpha: 0.36) !default;
-$button-default-outlined-selected-bg: color.change($button-default-bg, $alpha: 0.36) !default;
+$button-default-outlined-focused-bg: color.change($button-default-bg, $alpha: 0.16) !default;
+$button-default-outlined-active-bg: color.change($button-default-bg, $alpha: 0.18) !default;
+$button-default-outlined-selected-bg: color.change($button-default-bg, $alpha: 0.12) !default;
 
 /**
 * $name 11. Text color (outlined)
@@ -116,9 +116,9 @@ $button-default-outlined-border-color: $button-default-bg !default;
 $button-default-outlined-selected-color: $button-default-bg !default;
 $button-default-text-bg: transparent !default;
 $button-default-text-hover-bg: color.change($button-default-bg, $alpha: 0.08) !default;
-$button-default-text-focused-bg: color.change($button-default-bg, $alpha: 0.08) !default;
-$button-default-text-active-bg: color.change($button-default-bg, $alpha: 0.36) !default;
-$button-default-text-selected-bg: color.change($button-default-bg, $alpha: 0.36) !default;
+$button-default-text-focused-bg: color.change($button-default-bg, $alpha: 0.16) !default;
+$button-default-text-active-bg: color.change($button-default-bg, $alpha: 0.18) !default;
+$button-default-text-selected-bg: color.change($button-default-bg, $alpha: 0.12) !default;
 
 /**
 * $name 11. Text color (text)
@@ -176,16 +176,16 @@ $button-danger-selected-bg: null !default;
 $button-danger-icon-color: $button-danger-color !default;
 $button-danger-outlined-bg: transparent !default;
 $button-danger-outlined-hover-bg: color.change($button-danger-bg, $alpha: 0.08) !default;
-$button-danger-outlined-focused-bg: color.change($button-danger-bg, $alpha: 0.08) !default;
-$button-danger-outlined-active-bg: color.change($button-danger-bg, $alpha: 0.36) !default;
-$button-danger-outlined-selected-bg: color.change($button-danger-bg, $alpha: 0.36) !default;
+$button-danger-outlined-focused-bg: color.change($button-danger-bg, $alpha: 0.16) !default;
+$button-danger-outlined-active-bg: color.change($button-danger-bg, $alpha: 0.18) !default;
+$button-danger-outlined-selected-bg: color.change($button-danger-bg, $alpha: 0.12) !default;
 $button-danger-outlined-selected-color: $button-danger-bg !default;
 
 $button-danger-text-bg: transparent !default;
 $button-danger-text-hover-bg: color.change($button-danger-bg, $alpha: 0.08) !default;
-$button-danger-text-focused-bg: color.change($button-danger-bg, $alpha: 0.08) !default;
-$button-danger-text-active-bg: color.change($button-danger-bg, $alpha: 0.36) !default;
-$button-danger-text-selected-bg: color.change($button-danger-bg, $alpha: 0.36) !default;
+$button-danger-text-focused-bg: color.change($button-danger-bg, $alpha: 0.16) !default;
+$button-danger-text-active-bg: color.change($button-danger-bg, $alpha: 0.18) !default;
+$button-danger-text-selected-bg: color.change($button-danger-bg, $alpha: 0.12) !default;
 $button-danger-text-selected-color: $button-danger-bg !default;
 
 /**
@@ -232,16 +232,16 @@ $button-success-selected-bg: null !default;
 $button-success-icon-color: $button-success-color !default;
 $button-success-outlined-bg: transparent !default;
 $button-success-outlined-hover-bg: color.change($button-success-bg, $alpha: 0.08) !default;
-$button-success-outlined-focused-bg: color.change($button-success-bg, $alpha: 0.08) !default;
-$button-success-outlined-active-bg: color.change($button-success-bg, $alpha: 0.36) !default;
-$button-success-outlined-selected-bg: color.change($button-success-bg, $alpha: 0.36) !default;
+$button-success-outlined-focused-bg: color.change($button-success-bg, $alpha: 0.16) !default;
+$button-success-outlined-active-bg: color.change($button-success-bg, $alpha: 0.18) !default;
+$button-success-outlined-selected-bg: color.change($button-success-bg, $alpha: 0.12) !default;
 $button-success-outlined-selected-color: $button-success-bg !default;
 
 $button-success-text-bg: transparent !default;
 $button-success-text-hover-bg: color.change($button-success-bg, $alpha: 0.08) !default;
-$button-success-text-focused-bg: color.change($button-success-bg, $alpha: 0.08) !default;
-$button-success-text-active-bg: color.change($button-success-bg, $alpha: 0.36) !default;
-$button-success-text-selected-bg: color.change($button-success-bg, $alpha: 0.36) !default;
+$button-success-text-focused-bg: color.change($button-success-bg, $alpha: 0.16) !default;
+$button-success-text-active-bg: color.change($button-success-bg, $alpha: 0.18) !default;
+$button-success-text-selected-bg: color.change($button-success-bg, $alpha: 0.12) !default;
 $button-success-text-selected-color: $button-success-bg !default;
 
 @if $mode == "light" {
@@ -252,18 +252,18 @@ $button-success-text-selected-color: $button-success-bg !default;
   $button-normal-active-bg: color.adjust($button-normal-bg, $lightness: -30%, $space: hsl) !default;
   $button-normal-selected-bg: color.adjust($button-normal-bg, $lightness: -18%, $space: hsl) !default;
   $button-normal-bg-inverted: color.adjust($button-normal-bg, $lightness: -100%, $space: hsl) !default;
-  $button-default-hover-bg: color.adjust($button-default-bg, $lightness: -8.5%, $space: hsl) !default;
-  $button-default-focused-bg: color.adjust($button-default-bg, $lightness: -8.5%, $space: hsl) !default;
-  $button-default-active-bg: color.adjust($button-default-bg, $lightness: -19.5%, $space: hsl) !default;
-  $button-default-selected-bg: color.adjust($button-default-bg, $lightness: -19.5%, $space: hsl) !default;
-  $button-danger-hover-bg: color.adjust($button-danger-bg, $lightness: -8.5%, $space: hsl) !default;
-  $button-danger-focused-bg: color.adjust($button-danger-bg, $lightness: -8.5%, $space: hsl) !default;
-  $button-danger-active-bg: color.adjust($button-danger-bg, $lightness: -19.5%, $space: hsl) !default;
-  $button-danger-selected-bg: color.adjust($button-danger-bg, $lightness: -19.5%, $space: hsl) !default;
-  $button-success-hover-bg: color.adjust($button-success-bg, $lightness: -8.5%, $space: hsl) !default;
-  $button-success-focused-bg: color.adjust($button-success-bg, $lightness: -8.5%, $space: hsl) !default;
-  $button-success-active-bg: color.adjust($button-success-bg, $lightness: -19.5%, $space: hsl) !default;
-  $button-success-selected-bg: color.adjust($button-success-bg, $lightness: -19.5%, $space: hsl) !default;
+  $button-default-hover-bg: color.adjust($button-default-bg, $lightness: 3.53%, $space: hsl) !default;
+  $button-default-focused-bg: color.adjust($button-default-bg, $lightness: 7.84%, $space: hsl) !default;
+  $button-default-active-bg: color.adjust($button-default-bg, $lightness: 7.06%, $space: hsl) !default;
+  $button-default-selected-bg: color.adjust($button-default-bg, $lightness: 6.27%, $space: hsl) !default;
+  $button-danger-hover-bg: color.adjust($button-danger-bg, $lightness: 3.53%, $space: hsl) !default;
+  $button-danger-focused-bg: color.adjust($button-danger-bg, $lightness: 7.84%, $space: hsl) !default;
+  $button-danger-active-bg: color.adjust($button-danger-bg, $lightness: 7.06%, $space: hsl) !default;
+  $button-danger-selected-bg: color.adjust($button-danger-bg, $lightness: 6.27%, $space: hsl) !default;
+  $button-success-hover-bg: color.adjust($button-success-bg, $lightness: 3.53%, $space: hsl) !default;
+  $button-success-focused-bg: color.adjust($button-success-bg, $lightness: 7.84%, $space: hsl) !default;
+  $button-success-active-bg: color.adjust($button-success-bg, $lightness: 7.06%, $space: hsl) !default;
+  $button-success-selected-bg: color.adjust($button-success-bg, $lightness: 6.27%, $space: hsl) !default;
 }
 
 @if $mode == "dark" {
@@ -274,18 +274,18 @@ $button-success-text-selected-color: $button-success-bg !default;
   $button-normal-active-bg: color.adjust($button-normal-bg, $lightness: 30%, $space: hsl) !default;
   $button-normal-selected-bg: color.adjust($button-normal-bg, $lightness: 18%, $space: hsl) !default;
   $button-normal-bg-inverted: color.adjust($button-normal-bg, $lightness: 100%, $space: hsl) !default;
-  $button-default-hover-bg: color.adjust($button-default-bg, $lightness: 8.5%, $space: hsl) !default;
-  $button-default-focused-bg: color.adjust($button-default-bg, $lightness: 8.5%, $space: hsl) !default;
-  $button-default-active-bg: color.adjust($button-default-focused-bg, $lightness: 19.5%, $space: hsl) !default;
-  $button-default-selected-bg: color.adjust($button-default-focused-bg, $lightness: 19.5%, $space: hsl) !default;
-  $button-danger-hover-bg: color.adjust($button-danger-bg, $lightness: 8.5%, $space: hsl) !default;
-  $button-danger-focused-bg: color.adjust($button-danger-bg, $lightness: 8.5%, $space: hsl) !default;
-  $button-danger-active-bg: color.adjust($button-danger-bg, $lightness: 19.5%, $space: hsl) !default;
-  $button-danger-selected-bg: color.adjust($button-danger-bg, $lightness: 19.5%, $space: hsl) !default;
-  $button-success-hover-bg: color.adjust($button-success-bg, $lightness: 8.5%, $space: hsl) !default;
-  $button-success-focused-bg: color.adjust($button-success-bg, $lightness: 8.5%, $space: hsl) !default;
-  $button-success-active-bg: color.adjust($button-success-bg, $lightness: 19.5%, $space: hsl) !default;
-  $button-success-selected-bg: color.adjust($button-success-bg, $lightness: 19.5%, $space: hsl) !default;
+  $button-default-hover-bg: color.adjust($button-default-bg, $lightness: -3.53%, $space: hsl) !default;
+  $button-default-focused-bg: color.adjust($button-default-bg, $lightness: -7.84%, $space: hsl) !default;
+  $button-default-active-bg: color.adjust($button-default-focused-bg, $lightness: -7.06%, $space: hsl) !default;
+  $button-default-selected-bg: color.adjust($button-default-focused-bg, $lightness: -6.27%, $space: hsl) !default;
+  $button-danger-hover-bg: color.adjust($button-danger-bg, $lightness: -3.53%, $space: hsl) !default;
+  $button-danger-focused-bg: color.adjust($button-danger-bg, $lightness: -7.84%, $space: hsl) !default;
+  $button-danger-active-bg: color.adjust($button-danger-bg, $lightness: -7.06%, $space: hsl) !default;
+  $button-danger-selected-bg: color.adjust($button-danger-bg, $lightness: -6.27%, $space: hsl) !default;
+  $button-success-hover-bg: color.adjust($button-success-bg, $lightness: -3.53%, $space: hsl) !default;
+  $button-success-focused-bg: color.adjust($button-success-bg, $lightness: -7.84%, $space: hsl) !default;
+  $button-success-active-bg: color.adjust($button-success-bg, $lightness: -7.06%, $space: hsl) !default;
+  $button-success-selected-bg: color.adjust($button-success-bg, $lightness: -6.27%, $space: hsl) !default;
 }
 
 $button-disabled-text-color: $button-disabled-background !default;

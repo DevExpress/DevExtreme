@@ -62,19 +62,19 @@ $base-shadow-color: null !default;
 * $name 50. Success color
 * $type color
 */
-$base-success: #8bc34a !default;
+$base-success: #006600 !default;
 
 /**
 * $name 60. Warning color
 * $type color
 */
-$base-warning: #ffc107 !default;
+$base-warning: #E54304 !default;
 
 /**
 * $name 70. Danger color
 * $type color
 */
-$base-danger: #f44336 !default;
+$base-danger: #C40011 !default;
 
 /**
 * $name 80. Hover state text color
@@ -111,7 +111,7 @@ $scrollview-pulldown-path: null !default;
 
 @if $color == "blue" {
   $material-color-accent-modificator: "blue" !default;
-  $base-accent: #03a9f4 !default;
+  $base-accent: #1F3DFF !default;
 }
 
 @if $color == "lime" {
@@ -154,10 +154,10 @@ $base-link-color: $base-accent !default;
   $base-element-bg: $base-bg !default;
   $base-shadow-color: $base-inverted-bg !default;
   $base-hover-color: $base-text-color !default;
-  $base-hover-bg: color.change(#000, $alpha: 0.04) !default;
+  $base-hover-bg: color.change(#fff, $alpha: 0.08) !default;
   $base-inverted-text-color: #fff !default;
   $base-focus-color: $base-inverted-text-color !default;
-  $base-focus-bg: color.change(#000, $alpha: 0.04) !default;
+  $base-focus-bg: color.change(#fff, $alpha: 0.08) !default;
   $base-inverted-icon-color: $base-inverted-text-color !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
 

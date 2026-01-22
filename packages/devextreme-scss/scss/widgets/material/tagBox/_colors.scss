@@ -9,7 +9,7 @@
 * $name 10. Tag text color
 * $type color
 */
-$tagbox-tag-color: color.change($base-text-color, $alpha: 0.6) !default;
+$tagbox-tag-color: $base-text-color !default;
 
 /**
 * $name 20. Tag background color
@@ -28,7 +28,7 @@ $tagbox-tag-active-color: $base-text-color !default;
 * $name 40. Tag close button color
 * $type color
 */
-$tagbox-tag-button-remove-bg: rgba(0, 0, 0, 0.36) !default;
+$tagbox-tag-button-remove-bg: $base-icon-color !default;
 $tagbox-tag-button-remove-color: null !default;
 $tagbox-tag-focused-bg: null !default;
 $tagbox-select-all-border-color: $base-border-color !default;
