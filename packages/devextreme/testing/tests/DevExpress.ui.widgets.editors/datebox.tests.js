@@ -3146,13 +3146,13 @@ QUnit.module('valueChanged handler should receive correct event', {
             this.testProgramChange(assert);
         });
 
-        QUnit.skip(`on calendar cell selecting using enter when useMaskBehavior=${useMaskBehavior}`, function(assert) {
+        test(`on calendar cell selecting using enter when useMaskBehavior=${useMaskBehavior}`, function(assert) {
             this.reinit({ useMaskBehavior });
-            const $calendarCell = $('.dx-calendar-today');
 
             this.keyboard.press('enter');
+            this.clock.tick(10);
 
-            this.checkEvent(assert, 'keydown', $calendarCell, 'enter');
+            this.checkEvent(assert, 'keydown', this.$input, 'enter');
             this.testProgramChange(assert);
         });
     });
