@@ -179,6 +179,10 @@ test.meta({ browserSize: [1500, 1500] })('recurrence form with labelMode=static'
     currentDate: new Date(2021, 2, 25),
     editing: {
       allowUpdating: true,
+      popup: {
+        width: 420,
+        height: 500,
+      },
       form: {
         iconsShowMode: 'both',
         labelMode: 'static',
