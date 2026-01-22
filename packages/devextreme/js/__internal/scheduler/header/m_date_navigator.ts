@@ -2,7 +2,7 @@ import messageLocalization from '@js/common/core/localization/message';
 import dateUtils from '@js/core/utils/date';
 import type { ContentReadyEvent } from '@js/ui/button';
 import type { Item as ButtonGroupItem, ItemClickEvent, Properties as ButtonGroupOptions } from '@js/ui/button_group';
-import { isMaterialBased } from '@js/ui/themes';
+import { current, isMaterialBased } from '@js/ui/themes';
 import type { Item as ToolbarItem } from '@js/ui/toolbar';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { extend } from '@ts/core/utils/m_extend';
@@ -175,8 +175,7 @@ export const getTodayButtonOptions = (
 }, item) as ToolbarItem;
 
 export const getDateNavigator = (header: SchedulerHeader, item: ToolbarItem): ToolbarItem => {
-  // @ts-expect-error current theme used
-  const stylingMode = isMaterialBased() ? 'text' : 'contained';
+  const stylingMode = isMaterialBased(current()) ? 'text' : 'contained';
   const config: ToolbarItem = extend(true, {}, {
     location: 'before',
     name: 'dateNavigator',
@@ -190,21 +189,18 @@ export const getDateNavigator = (header: SchedulerHeader, item: ToolbarItem): To
   const options = config.options as ButtonGroupOptions;
   const { onItemClick } = options;
 
-  const items = (options.items ?? DEFAULT_ITEMS) as (ButtonGroupItem | string)[];
-  options.items = items.map((groupItem) => {
-    if (typeof groupItem === 'string') {
-      switch (groupItem) {
-        case ITEMS_NAME.previousButton:
-          return getPreviousButtonOptions(header);
-        case ITEMS_NAME.nextButton:
-          return getNextButtonOptions(header);
-        case ITEMS_NAME.calendarButton:
-          return getCalendarButtonOptions(header);
-        default:
-          return groupItem as ButtonGroupItem;
-      }
+  const items = (options.items ?? DEFAULT_ITEMS);
+  options.items = items.map((groupItem: ButtonGroupItem | string) => {
+    switch (groupItem) {
+      case ITEMS_NAME.previousButton:
+        return getPreviousButtonOptions(header);
+      case ITEMS_NAME.nextButton:
+        return getNextButtonOptions(header);
+      case ITEMS_NAME.calendarButton:
+        return getCalendarButtonOptions(header);
+      default:
+        return groupItem as ButtonGroupItem;
     }
-    return groupItem;
   });
   options.onItemClick = (event): void => {
     event.itemData.clickHandler?.(event);
