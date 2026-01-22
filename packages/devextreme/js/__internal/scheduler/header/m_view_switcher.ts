@@ -1,4 +1,4 @@
-import { isFluent } from '@js/ui/themes';
+import { current, isFluent } from '@js/ui/themes';
 import type { Item as ToolbarItem } from '@js/ui/toolbar';
 
 import type { NormalizedView } from '../utils/options/types';
@@ -39,8 +39,7 @@ export const getTabViewSwitcher = (
   const { selectedView, views } = getViewsAndSelectedView(header);
   const isVisible = isViewSwitcherVisible(views);
 
-  // @ts-expect-error
-  const stylingMode = isFluent() ? 'outlined' : 'contained';
+  const stylingMode = isFluent(current()) ? 'outlined' : 'contained';
 
   return {
     widget: 'dxButtonGroup',
