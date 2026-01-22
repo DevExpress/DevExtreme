@@ -3145,14 +3145,6 @@ QUnit.module('valueChanged handler should receive correct event', {
             this.checkEvent(assert, 'keydown', this.$input, 'enter');
             this.testProgramChange(assert);
         });
-
-        test(`on calendar cell selecting using enter when useMaskBehavior=${useMaskBehavior}`, function(assert) {
-            this.reinit({ useMaskBehavior });
-
-            this.$input.trigger($.Event('keydown', { key: 'Enter' }));
-
-            this.checkEvent(assert, 'keydown', this.$input, 'enter');
-        });
     });
 
     ['calendar', 'rollers'].forEach(pickerType => {
