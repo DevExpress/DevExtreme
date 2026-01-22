@@ -475,7 +475,7 @@ $datagrid-text-stub-background-image-path: null !default;
     outline: none;
   }
 
-  &:focus-within:after {
+  &:focus-within::after {
     content: "";
     display: block;
     position: absolute;
@@ -486,8 +486,7 @@ $datagrid-text-stub-background-image-path: null !default;
     outline: 2px solid;
     outline-color: $datagrid-focused-border-color;
     outline-offset: -2px;
-    // should overlap sticky column cells
-    z-index: 4;
+    z-index: 4; // should overlap sticky column cells
     pointer-events: none;
     background-color: transparent;
   }
