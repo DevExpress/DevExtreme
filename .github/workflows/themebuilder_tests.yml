@@ -19,7 +19,7 @@ jobs:
   test:
     runs-on: devextreme-shr2
     env:
-        NODE_OPTIONS: --max-old-space-size=8192
+      NODE_OPTIONS: --max-old-space-size=8192
     timeout-minutes: 30
 
     steps:
