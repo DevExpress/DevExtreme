@@ -13,8 +13,8 @@ import { employee } from './data.js';
 const groupCaptionNamedRender = (iconName) => (data) =>
   (
     <GroupCaption
-      iconName={iconName}
       {...data}
+      iconName={iconName}
     />
   );
 export default function App() {

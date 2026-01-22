@@ -2484,8 +2484,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 }
 
-export type EditingController =
-  EditingControllerImpl
+export type EditingController = EditingControllerImpl
   & ICellBasedEditingControllerExtender
   & IFormBasedEditingControllerExtender;
 

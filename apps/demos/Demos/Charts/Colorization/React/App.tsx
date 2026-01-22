@@ -20,7 +20,7 @@ function App() {
   }, [setTypeOptions]);
 
   return (
-    <React.Fragment>
+    <>
       <TreeMap
         id="treemap"
         dataSource={salesAmount}
@@ -49,7 +49,7 @@ function App() {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 

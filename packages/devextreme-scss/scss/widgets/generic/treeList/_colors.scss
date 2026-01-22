@@ -12,7 +12,7 @@ $treelist-selection-spin-icon-color: null !default;
 
 @if $color == "carmine" {
   $treelist-spin-icon-color: $base-icon-color !default;
-  $treelist-selection-spin-icon-color: lighten($base-icon-color, 100%) !default;
+  $treelist-selection-spin-icon-color: color.adjust($base-icon-color, $lightness: 100%, $space: hsl) !default;
 }
 
 @if $color == "contrast" {
@@ -37,7 +37,7 @@ $treelist-selection-spin-icon-color: null !default;
 
 @if $color == "greenmist" {
   $treelist-spin-icon-color: $base-icon-color !default;
-  $treelist-selection-spin-icon-color: lighten($treelist-spin-icon-color, 100%) !default;
+  $treelist-selection-spin-icon-color: color.adjust($treelist-spin-icon-color, $lightness: 100%, $space: hsl) !default;
 }
 
 @if $color == "light" {

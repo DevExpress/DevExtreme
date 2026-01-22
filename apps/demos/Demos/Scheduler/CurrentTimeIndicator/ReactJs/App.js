@@ -31,7 +31,7 @@ const App = () => {
     setUpdateInterval(e.value);
   }, []);
   return (
-    <React.Fragment>
+    <>
       <Scheduler
         dataSource={data}
         views={views}
@@ -95,7 +95,7 @@ const App = () => {
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 export default App;

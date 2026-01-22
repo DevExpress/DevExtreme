@@ -152,7 +152,8 @@
 
     &.dx-calendar-today {
       span {
-        border: 2px solid $base-accent;
+        border: 2px solid;
+        border-color: $base-accent;
       }
     }
 

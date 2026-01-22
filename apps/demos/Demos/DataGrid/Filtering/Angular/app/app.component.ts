@@ -85,14 +85,14 @@ export class AppComponent {
     return (new Date(OrderDate)).getDay();
   }
 
-  calculateFilterExpression(value: string, _: unknown, target: string) {
+  calculateFilterExpression(value: string, _: unknown, target: string, ...args: unknown[]) {
     const column = this as any;
 
     if (target === 'headerFilter' && value === 'weekends') {
       return [[AppComponent.getOrderDay, '=', 0], 'or', [AppComponent.getOrderDay, '=', 6]];
     }
 
-    return column.defaultCalculateFilterExpression.apply(this, arguments);
+    return column.defaultCalculateFilterExpression.apply(this, [value, _, target, ...args]);
   }
 
   orderHeaderFilter = ({ dataSource }) => {

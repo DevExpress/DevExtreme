@@ -1,4 +1,4 @@
-$(function () {
+$(() => {
   let generatedID = 100;
   const store = new DevExpress.data.ArrayStore({
     key: 'ID',
@@ -62,7 +62,13 @@ $(function () {
     nodes: {
       dataSource: store,
       keyExpr: 'ID',
-      typeExpr() { return 'employee'; },
+      typeExpr(obj, value) {
+        if (value === undefined) {
+          return 'employee';
+        }
+        obj.type = value;
+        return null;
+      },
       parentKeyExpr: 'Head_ID',
       customDataExpr(obj, value) {
         if (value === undefined) {
@@ -175,7 +181,7 @@ $(function () {
     currentEmployee = { ...employee };
 
     popup.show();
-    popup.content().find('.dx-field-value').each(function () {
+    popup.content().find('.dx-field-value').each(function process() {
       const field = $(this).attr('data-field');
       const edit = $(this).dxTextBox('instance');
       edit.option({

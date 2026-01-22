@@ -86,6 +86,7 @@ describe('compile', () => {
         '$base-font-family': '"Segoe UI", helvetica, verdana, sans-serif',
         '$base-accent': '#ff0000',
         '$accordion-title-color': '#ff0000',
+        '$float-channel-color': '#e60000',
         '$accordion-item-title-opened-bg': '#008000',
       });
     });
@@ -97,8 +98,8 @@ describe('compile', () => {
     return compiler.compile('dx.error.scss', [], { }).then(
       () => expect(false).toBe(true),
       (error) => {
-        expect(error.code).toBe('ERR_INVALID_URL');
-        expect(`${error.message}: ${error.input}`).toBe('Invalid URL: dx.error.scss');
+        expect(error.sassMessage.startsWith('Cannot open file:')).toBe(true);
+        expect(error.span.url.href.endsWith('dx.error.scss')).toBe(true);
       },
     );
   });

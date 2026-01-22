@@ -1,4 +1,5 @@
 $scheduler-base-border: null !default;
+$scheduler-base-border-color: null !default;
 
 .dx-scheduler-work-space-day {
   &:not(.dx-scheduler-work-space-count) {
@@ -64,6 +65,7 @@ $scheduler-base-border: null !default;
       .dx-scheduler-time-panel,
       .dx-scheduler-header-panel-empty-cell {
         border-right: $scheduler-base-border;
+        border-right-color: $scheduler-base-border-color;
       }
     }
   }
@@ -71,6 +73,7 @@ $scheduler-base-border: null !default;
   &.dx-scheduler-work-space-vertical-grouped {
     .dx-scheduler-all-day-table-cell {
       border-top: $scheduler-base-border;
+      border-top-color: $scheduler-base-border-color;
     }
   }
 
@@ -79,7 +82,9 @@ $scheduler-base-border: null !default;
     .dx-scheduler-all-day-table-cell,
     .dx-scheduler-header-panel-cell {
       border-left: $scheduler-base-border;
+      border-left-color: $scheduler-base-border-color;
       border-right: $scheduler-base-border;
+      border-right-color: $scheduler-base-border-color;
 
       &:first-child {
         border-left: none;
@@ -104,6 +109,7 @@ $scheduler-base-border: null !default;
           .dx-scheduler-time-panel,
           .dx-scheduler-header-panel-empty-cell {
             border-left: $scheduler-base-border;
+            border-left-color: $scheduler-base-border-color;
             border-right: none;
           }
         }
@@ -116,6 +122,7 @@ $scheduler-base-border: null !default;
       .dx-scheduler-header-panel-cell {
         &:first-child {
           border-left: $scheduler-base-border;
+          border-left-color: $scheduler-base-border-color;
           border-right: none;
         }
       }

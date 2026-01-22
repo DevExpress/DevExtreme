@@ -13,36 +13,32 @@ import { resourceLinks } from './external-resource-metadata';
 export const isSkipDemo = (demo: Demo) => {
   const { Widget, Name } = demo;
   const excluded = ['Localization', 'RowTemplate', 'CellCustomization', 'TimeZonesSupport', 'ExportToPDF'];
-  const shouldSkip = excluded.includes(Widget) || excluded.includes(Name);
-
-  return shouldSkip;
+  return excluded.includes(Widget) || excluded.includes(Name);
 };
 
 const demosRootDir = join(__dirname, '..', '..', '..');
 const destinationPublishDir = join(demosRootDir, 'publish-demos');
 
-export const getDemoPath = (path: string = '', demo: Demo, framework: string) => {
-  return join(path, 'Demos', demo.Widget, demo.Name, framework);
-}
+// eslint-disable-next-line @typescript-eslint/default-param-last
+export const getDemoPath = (path: string = '', demo: Demo, framework: string) => join(path, 'Demos', demo.Widget, demo.Name, framework);
 
 export const getSourcePathByDemo = (demo: Demo, framework: string, relative = false) => {
   if (relative) {
     return getDemoPath('', demo, framework);
   }
   return getDemoPath(demosRootDir, demo, framework);
-}
+};
 
 export const getDestinationPathByDemo = (demo: Demo, framework: string, relative = false) => {
   if (relative) {
     return getDemoPath('publish-demos', demo, framework);
   }
   return getDemoPath(destinationPublishDir, demo, framework);
-}
+};
 
 const getFileHash = (fileContent: string) => {
   const hash = createHash('shake256', { outputLength: 4 }).update(fileContent);
-  const hashResult = hash.digest('hex');
-  return hashResult;
+  return hash.digest('hex');
 };
 
 const getTemplateContent = (framework: Framework) => {
@@ -50,9 +46,7 @@ const getTemplateContent = (framework: Framework) => {
   if (!existsSync(templatePath)) {
     throw new Error(`Not found ${framework} template\n${templatePath}`);
   }
-
-  const templateContent = readFileSync(templatePath, { encoding: 'utf-8' });
-  return templateContent;
+  return readFileSync(templatePath, { encoding: 'utf-8' });
 };
 
 const getBundlePath = (demoPath: string, prefix: string, postfix: string) => readdirSync(demoPath)
@@ -79,8 +73,8 @@ export const copyVueCustomCss = (demo: Demo): boolean => {
   const destinationDir = join(getDestinationPathByDemo(demo, 'Vue'), 'styles.css');
 
   if (existsSync(customCssPath)) {
-      copyFileSync(customCssPath, destinationDir);
-      return true;
+    copyFileSync(customCssPath, destinationDir);
+    return true;
   }
   return false;
 };
@@ -88,13 +82,13 @@ export const copyVueCustomCss = (demo: Demo): boolean => {
 const addExternalResources = (demo: Demo, framework: Framework, cssLinks: string) => {
   let newCssLinks = cssLinks;
   const externalResources = resourceLinks[demo.Widget]?.[demo.Name];
-  externalResources?.resources?.forEach(resource => {
-    if (resource.frameworks.includes(framework)){
-      newCssLinks = newCssLinks.concat('\n', resource.link)
+  externalResources?.resources?.forEach((resource) => {
+    if (resource.frameworks.includes(framework)) {
+      newCssLinks = newCssLinks.concat('\n', resource.link);
     }
   });
   return newCssLinks;
-}
+};
 
 export const createDemoLayout = (demo: Demo, framework: Framework) => {
   const demoPath = getDestinationPathByDemo(demo, framework);
@@ -113,7 +107,7 @@ export const createDemoLayout = (demo: Demo, framework: Framework) => {
   if (framework === 'Vue') {
     hasCustomCss = copyVueCustomCss(demo);
   }
-  
+
   const options = {
     css_bundle_path: getBundlePath(demoPath, 'bundle', '.css'),
     demo_title: `${framework} ${demo.Widget} - ${demo.Title} - DevExtreme ${framework} Demo`,
@@ -182,12 +176,12 @@ export const copyMetadata = () => {
 
   const imagesPath = join(__dirname, '..', '..', '..', 'images');
   const imagesDest = join(destinationPublishDir, 'images');
-  cpSync(imagesPath, imagesDest, {recursive: true});
+  cpSync(imagesPath, imagesDest, { recursive: true });
 
   const destinationCss = join(destinationPublishDir, 'css');
 
   const themesPath = join(nodeModulesPath, 'devextreme', 'dist', 'css');
-  cpSync(themesPath, destinationCss, {recursive: true});
+  cpSync(themesPath, destinationCss, { recursive: true });
 
   const diagramCssPath = join(nodeModulesPath, 'devexpress-diagram', 'dist', 'dx-diagram.css');
   copySync(diagramCssPath, join(destinationCss, 'dx-diagram.css'));

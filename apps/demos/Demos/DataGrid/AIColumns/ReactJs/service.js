@@ -21,7 +21,7 @@ async function getAIResponse(messages, signal) {
   const result = response.choices[0].message?.content;
   return result ?? '';
 }
-async function getAIResponseRecursive(messages, signal) {
+function getAIResponseRecursive(messages, signal) {
   return getAIResponse(messages, signal).catch(async (error) => {
     if (!error.message.includes('Connection error')) {
       return Promise.reject(error);
@@ -52,12 +52,11 @@ export const aiIntegration = new AIIntegration({
       { role: 'user', content: prompt.user ?? '' },
     ];
     const promise = getAIResponseRecursive(aiPrompt, signal);
-    const result = {
+    return {
       promise,
       abort: () => {
         controller.abort();
       },
     };
-    return result;
   },
 });

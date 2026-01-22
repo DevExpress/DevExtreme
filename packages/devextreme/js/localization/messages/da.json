@@ -282,7 +282,9 @@
 
         "dxScheduler-editorLabelTitle": "Emne",
         "dxScheduler-editorLabelStartDate": "Startdato",
+        "dxScheduler-editorAriaLabelStartTime": "Start time",
         "dxScheduler-editorLabelEndDate": "Slutdato",
+        "dxScheduler-editorAriaLabelEndTime": "End time",
         "dxScheduler-editorLabelDescription": "Beskrivelse",
         "dxScheduler-editorLabelRecurrence": "Gentag",
 

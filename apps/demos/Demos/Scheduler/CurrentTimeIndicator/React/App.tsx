@@ -1,7 +1,10 @@
 import React, { useCallback, useState } from 'react';
-import Scheduler, { Resource, type SchedulerTypes } from 'devextreme-react/scheduler';
-import { Switch, type SwitchTypes } from 'devextreme-react/switch';
-import { NumberBox, type NumberBoxTypes } from 'devextreme-react/number-box';
+import Scheduler, { Resource } from 'devextreme-react/scheduler';
+import { Switch } from 'devextreme-react/switch';
+import { NumberBox } from 'devextreme-react/number-box';
+import type { SchedulerTypes } from 'devextreme-react/scheduler';
+import type { SwitchTypes } from 'devextreme-react/switch';
+import type { NumberBoxTypes } from 'devextreme-react/number-box';
 
 import { data, moviesData } from './data.ts';
 import AppointmentTemplate from './AppointmentTemplate.tsx';
@@ -41,7 +44,7 @@ const App = () => {
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <Scheduler
         dataSource={data}
         views={views}
@@ -109,7 +112,7 @@ const App = () => {
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 

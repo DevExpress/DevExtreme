@@ -1,18 +1,18 @@
-import type { PieChartRef } from 'devextreme-react/pie-chart';
 import React from 'react';
+import type { PieChartRef } from 'devextreme-react/pie-chart';
 
 const formatNumber = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 0,
 }).format;
 
-function calculateTotal(pieChart: ReturnType<PieChartRef['instance']>) {
+function calculateTotal(pieChart: ReturnType<PieChartRef['instance']>): string {
   return formatNumber(pieChart
     .getAllSeries()[0]
     .getVisiblePoints()
-    .reduce((s, p) => s + Number(p.originalValue), 0));
+    .reduce((s, p): number => s + Number(p.originalValue), 0));
 }
 
-function getImagePath(country: string) {
+function getImagePath(country: string): string {
   return `../../../../images/flags/${country.replace(/\s/, '').toLowerCase()}.svg`;
 }
 

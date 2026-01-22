@@ -46,7 +46,8 @@ $fluent-pivotgridfieldchooser-field-min-height: 36px;
   &.dx-drag {
     .dx-area-field.dx-area-box {
       background-color: color.change($pivotgrid-field-area-box-background-color, $alpha: 0.9);
-      border: 1px solid $base-border-color-disabled;
+      border: 1px solid;
+      border-color: $base-border-color-disabled;
       box-shadow: $fluent-pivotgrid-drag-header-shadow;
     }
   }
@@ -55,7 +56,8 @@ $fluent-pivotgridfieldchooser-field-min-height: 36px;
     color: $pivotgrid-field-area-box-text-color;
     background-color: $pivotgrid-field-area-box-background-color;
     border-radius: $area-field-border-radius;
-    border: 1px solid $base-border-color-disabled;
+    border: 1px solid;
+    border-color: $base-border-color-disabled;
     font-size: $fluent-pivotgrid-headers-font-size;
     font-weight: $pivotgrid-field-area-box-font-weight;
     line-height: 20px;

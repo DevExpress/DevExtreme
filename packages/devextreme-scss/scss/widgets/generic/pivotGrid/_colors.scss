@@ -45,15 +45,15 @@ $pivotgrid-spin-icon-color: null !default;
 
 @if $color == "carmine" {
   $pivotgrid-area-color: $base-header-color !default;
-  $pivotgrid-totalcolor: darken($pivotgrid-area-background, 2.7%) !default;
-  $pivotgrid-grandtotalcolor: darken($pivotgrid-area-background, 4%) !default;
-  $pivotgrid-field-area-text-color: darken($pivotgrid-area-color, 26.2%) !default;
+  $pivotgrid-totalcolor: color.adjust($pivotgrid-area-background, $lightness: -2.7%, $space: hsl) !default;
+  $pivotgrid-grandtotalcolor: color.adjust($pivotgrid-area-background, $lightness: -4%, $space: hsl) !default;
+  $pivotgrid-field-area-text-color: color.adjust($pivotgrid-area-color, $lightness: -26.2%, $space: hsl) !default;
   $pivotgrid-accent-color: $base-accent !default;
   $pivotgrid-drag-header-border-color: color.change($pivotgrid-accent-color, $alpha: 0.5) !default;
   $pivotgrid-drag-header-first-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
   $pivotgrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
   $pivotgrid-position-indicator-color: gray !default;
-  $pivotgrid-spin-icon-color: lighten($base-icon-color, 3%) !default;
+  $pivotgrid-spin-icon-color: color.adjust($base-icon-color, $lightness: 3%, $space: hsl) !default;
 }
 
 @if $color == "contrast" {
@@ -70,23 +70,23 @@ $pivotgrid-spin-icon-color: null !default;
 }
 
 @if $color == "dark" {
-  $pivotgrid-area-color: darken($base-text-color, 30%) !default;
-  $pivotgrid-totalcolor: lighten($pivotgrid-area-background, 2.5%) !default;
+  $pivotgrid-area-color: color.adjust($base-text-color, $lightness: -30%, $space: hsl) !default;
+  $pivotgrid-totalcolor: color.adjust($pivotgrid-area-background, $lightness: 2.5%, $space: hsl) !default;
   $pivotgrid-grandtotalcolor: $base-hover-bg !default;
-  $pivotgrid-field-area-text-color: lighten($pivotgrid-area-color, 26.2%) !default;
+  $pivotgrid-field-area-text-color: color.adjust($pivotgrid-area-color, $lightness: 26.2%, $space: hsl) !default;
   $pivotgrid-accent-color: $base-accent !default;
   $pivotgrid-drag-header-border-color: color.change($pivotgrid-accent-color, $alpha: 0.5) !default;
   $pivotgrid-drag-header-first-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
   $pivotgrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
   $pivotgrid-position-indicator-color: gray !default;
-  $pivotgrid-spin-icon-color: darken($base-icon-color, 38%) !default;
+  $pivotgrid-spin-icon-color: color.adjust($base-icon-color, $lightness: -38%, $space: hsl) !default;
 }
 
 @if $color == "darkmoon" {
   $pivotgrid-area-color: $screen-text-color !default;
-  $pivotgrid-totalcolor: darken($base-bg, 2%) !default; // #465672 => #40506b
+  $pivotgrid-totalcolor: color.adjust($base-bg, $lightness: -2%, $space: hsl) !default; // #465672 => #40506b
   $pivotgrid-grandtotalcolor: $base-hover-bg !default;
-  $pivotgrid-field-area-text-color: lighten($pivotgrid-area-color, 26.2%) !default;
+  $pivotgrid-field-area-text-color: color.adjust($pivotgrid-area-color, $lightness: 26.2%, $space: hsl) !default;
   $pivotgrid-accent-color: $base-accent !default;
   $pivotgrid-drag-header-border-color: color.change($pivotgrid-accent-color, $alpha: 0.5) !default;
   $pivotgrid-drag-header-first-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
@@ -96,10 +96,10 @@ $pivotgrid-spin-icon-color: null !default;
 }
 
 @if $color == "darkviolet" {
-  $pivotgrid-area-color: darken($base-text-color, 30%) !default;
+  $pivotgrid-area-color: color.adjust($base-text-color, $lightness: -30%, $space: hsl) !default;
   $pivotgrid-totalcolor: #1f1f2b !default;
   $pivotgrid-grandtotalcolor: color.change($base-accent-highlight-color, $alpha: 0.15) !default;
-  $pivotgrid-field-area-text-color: lighten($pivotgrid-area-color, 26.2%) !default;
+  $pivotgrid-field-area-text-color: color.adjust($pivotgrid-area-color, $lightness: 26.2%, $space: hsl) !default;
   $pivotgrid-accent-color: $base-accent !default;
   $pivotgrid-drag-header-border-color: color.change($pivotgrid-accent-color, $alpha: 0.5) !default;
   $pivotgrid-drag-header-first-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
@@ -109,9 +109,9 @@ $pivotgrid-spin-icon-color: null !default;
 }
 
 @if $color == "greenmist" {
-  $pivotgrid-area-color: lighten($base-text-color, 38.5%) !default;
-  $pivotgrid-totalcolor: darken($base-bg, 1%) !default; // #f5f5f5 => #f0f2f2
-  $pivotgrid-grandtotalcolor: lighten($base-label-color, 40.6%) !default; // #728e94 => #e8eded
+  $pivotgrid-area-color: color.adjust($base-text-color, $lightness: 38.5%, $space: hsl) !default;
+  $pivotgrid-totalcolor: color.adjust($base-bg, $lightness: -1%, $space: hsl) !default; // #f5f5f5 => #f0f2f2
+  $pivotgrid-grandtotalcolor: color.adjust($base-label-color, $lightness: 40.6%, $space: hsl) !default; // #728e94 => #e8eded
   $pivotgrid-field-area-text-color: $base-text-color !default;
   $pivotgrid-accent-color: $base-accent !default;
   $pivotgrid-drag-header-border-color: color.change($pivotgrid-accent-color, $alpha: 0.5) !default;
@@ -122,23 +122,23 @@ $pivotgrid-spin-icon-color: null !default;
 }
 
 @if $color == "light" {
-  $pivotgrid-area-color: lighten($base-text-color, 38.5%) !default;
-  $pivotgrid-totalcolor: color.change(darken($pivotgrid-area-background, 13.3%), $alpha: 0.2) !default;
-  $pivotgrid-grandtotalcolor: darken($base-bg, 4%) !default;
-  $pivotgrid-field-area-text-color: darken($pivotgrid-area-color, 26.2%) !default;
+  $pivotgrid-area-color: color.adjust($base-text-color, $lightness: 38.5%, $space: hsl) !default;
+  $pivotgrid-totalcolor: color.change(color.adjust($pivotgrid-area-background, $lightness: -13.3%, $space: hsl), $alpha: 0.2) !default;
+  $pivotgrid-grandtotalcolor: color.adjust($base-bg, $lightness: -4%, $space: hsl) !default;
+  $pivotgrid-field-area-text-color: color.adjust($pivotgrid-area-color, $lightness: -26.2%, $space: hsl) !default;
   $pivotgrid-accent-color: $base-accent !default;
   $pivotgrid-drag-header-border-color: color.change($pivotgrid-accent-color, $alpha: 0.5) !default;
   $pivotgrid-drag-header-first-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
   $pivotgrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
   $pivotgrid-position-indicator-color: gray !default;
-  $pivotgrid-spin-icon-color: lighten($base-icon-color, 38.5%) !default;
+  $pivotgrid-spin-icon-color: color.adjust($base-icon-color, $lightness: 38.5%, $space: hsl) !default;
 }
 
 @if $color == "softblue" {
   $pivotgrid-area-color: $base-icon-color !default;
-  $pivotgrid-totalcolor: color.change(darken($pivotgrid-area-background, 4%), $alpha: 0.7) !default; // #fff => #f5f5f5
-  $pivotgrid-grandtotalcolor: darken($base-bg, 4%) !default; // #fff => #f5f5f5
-  $pivotgrid-field-area-text-color: darken($pivotgrid-area-color, 26.2%) !default;
+  $pivotgrid-totalcolor: color.change(color.adjust($pivotgrid-area-background, $lightness: -4%, $space: hsl), $alpha: 0.7) !default; // #fff => #f5f5f5
+  $pivotgrid-grandtotalcolor: color.adjust($base-bg, $lightness: -4%, $space: hsl) !default; // #fff => #f5f5f5
+  $pivotgrid-field-area-text-color: color.adjust($pivotgrid-area-color, $lightness: -26.2%, $space: hsl) !default;
   $pivotgrid-accent-color: $base-accent !default;
   $pivotgrid-drag-header-border-color: color.change($pivotgrid-accent-color, $alpha: 0.5) !default;
   $pivotgrid-drag-header-first-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;

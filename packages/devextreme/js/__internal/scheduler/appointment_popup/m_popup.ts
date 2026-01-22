@@ -458,6 +458,9 @@ export class AppointmentPopup {
         options: {
           icon: 'arrowleft',
           stylingMode: 'text',
+          elementAttr: {
+            'aria-label': messageLocalization.format('Back'),
+          },
           onClick: (): void => {
             this.form.saveRecurrenceValue();
             this.form.showMainGroup();

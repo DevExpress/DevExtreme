@@ -637,7 +637,7 @@ describe('component/render in nested options', () => {
         item?: any;
         itemRender?: any;
         itemComponent?: any;
-      } & React.PropsWithChildren>
+      } & React.PropsWithChildren<unknown>>
         elementDescriptor={{
           OptionName: 'option',
           TemplateProps: [{
@@ -662,7 +662,7 @@ describe('component/render in nested options', () => {
         item?: any;
         itemRender?: any;
         itemComponent?: any;
-      } & React.PropsWithChildren>
+      } & React.PropsWithChildren<unknown>>
         elementDescriptor={{
           OptionName: 'leafOption',
           TemplateProps: [{
@@ -684,7 +684,7 @@ describe('component/render in nested options', () => {
         template?: any;
         render?: any;
         component?: any;
-      } & React.PropsWithChildren>
+      } & React.PropsWithChildren<unknown>>
         elementDescriptor={{
           OptionName: 'collection',
           IsCollectionItem: true,

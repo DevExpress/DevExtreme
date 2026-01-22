@@ -12,7 +12,7 @@ $textbox-search-icon-color: null !default;
 
 
 @if $color == "carmine" {
-  $textbox-search-icon-color: lighten($base-icon-color, 3%) !default;
+  $textbox-search-icon-color: color.adjust($base-icon-color, $lightness: 3%, $space: hsl) !default;
 }
 
 @if $color == "contrast" {
@@ -20,7 +20,7 @@ $textbox-search-icon-color: null !default;
 }
 
 @if $color == "dark" {
-  $textbox-search-icon-color: darken($base-icon-color, 40%) !default;
+  $textbox-search-icon-color: color.adjust($base-icon-color, $lightness: -40%, $space: hsl) !default;
 }
 
 @if $color == "darkmoon" {
@@ -28,7 +28,7 @@ $textbox-search-icon-color: null !default;
 }
 
 @if $color == "darkviolet" {
-  $textbox-search-icon-color: darken($base-icon-color, 40%) !default;
+  $textbox-search-icon-color: color.adjust($base-icon-color, $lightness: -40%, $space: hsl) !default;
 }
 
 @if $color == "greenmist" {
@@ -36,7 +36,7 @@ $textbox-search-icon-color: null !default;
 }
 
 @if $color == "light" {
-  $textbox-search-icon-color: lighten($base-icon-color, 40%) !default;
+  $textbox-search-icon-color: color.adjust($base-icon-color, $lightness: 40%, $space: hsl) !default;
 }
 
 @if $color == "softblue" {

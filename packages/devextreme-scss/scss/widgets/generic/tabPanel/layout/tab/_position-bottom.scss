@@ -20,10 +20,12 @@
         null,
         null,
         null,
+        null,
       );
 
       margin-block-start: -$generic-tabs-border-width;
       border-block-start: $generic-tabpanel-tab-border-selected-bottom;
+      border-block-start-color: $tabs-tab-selected-bg;
     }
   }
 }

@@ -11,11 +11,11 @@ import {
 } from 'devextreme-react/polar-chart';
 import { windSources, windRoseData, periodLabel } from './data.js';
 
-function onLegendClick({ target: series }) {
-  if (series.isVisible()) {
-    series.hide();
+function onLegendClick(e) {
+  if (e.target.isVisible()) {
+    e.target.hide();
   } else {
-    series.show();
+    e.target.show();
   }
 }
 function App() {

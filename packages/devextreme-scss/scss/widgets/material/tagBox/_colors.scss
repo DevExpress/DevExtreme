@@ -34,17 +34,17 @@ $tagbox-tag-focused-bg: null !default;
 $tagbox-select-all-border-color: $base-border-color !default;
 
 @if $mode == "light" {
-  $tagbox-tag-bg: darken($base-bg, 12%) !default;
-  $tagbox-tag-hover-bg: darken($base-bg, 15%) !default;
+  $tagbox-tag-bg: color.adjust($base-bg, $lightness: -12%, $space: hsl) !default;
+  $tagbox-tag-hover-bg: color.adjust($base-bg, $lightness: -15%, $space: hsl) !default;
   $tagbox-tag-button-remove-color: $tagbox-tag-bg !default;
-  $tagbox-tag-focused-bg: darken($base-bg, 32%) !default;
+  $tagbox-tag-focused-bg: color.adjust($base-bg, $lightness: -32%, $space: hsl) !default;
 }
 
 @if $mode == "dark" {
-  $tagbox-tag-bg: lighten($base-bg, 12%) !default;
-  $tagbox-tag-hover-bg: lighten($base-bg, 15%) !default;
-  $tagbox-tag-button-remove-color: lighten($base-bg, 22%) !default;
-  $tagbox-tag-focused-bg: lighten($base-bg, 32%) !default;
+  $tagbox-tag-bg: color.adjust($base-bg, $lightness: 12%, $space: hsl) !default;
+  $tagbox-tag-hover-bg: color.adjust($base-bg, $lightness: 15%, $space: hsl) !default;
+  $tagbox-tag-button-remove-color: color.adjust($base-bg, $lightness: 22%, $space: hsl) !default;
+  $tagbox-tag-focused-bg: color.adjust($base-bg, $lightness: 32%, $space: hsl) !default;
 }
 
 $tagbox-tag-disabled-bg: $tagbox-tag-focused-bg !default;

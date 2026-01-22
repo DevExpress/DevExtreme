@@ -153,7 +153,8 @@ $material-editor-custom-button-margin: 5px;
     background-color: $texteditor-focused-bg;
 
     &::before {
-      border-bottom: 2px solid $texteditor-focused-border-color;
+      border-bottom: 2px solid;
+      border-bottom-color: $texteditor-focused-border-color;
       transform: scale(1);
       transition: transform 0.6s cubic-bezier(0.4, 0, 0.02, 1);
     }
@@ -175,7 +176,8 @@ $material-editor-custom-button-margin: 5px;
     background-color: $texteditor-bg;
 
     &::after {
-      border-bottom: 1px solid $texteditor-border-color;
+      border-bottom: 1px solid;
+      border-bottom-color: $texteditor-border-color;
     }
 
     &.dx-state-hover {
@@ -201,12 +203,14 @@ $material-editor-custom-button-margin: 5px;
     background-color: transparent;
 
     &::after {
-      border-bottom: 1px solid $texteditor-border-color;
+      border-bottom: 1px solid;
+      border-bottom-color: $texteditor-border-color;
     }
 
     &.dx-state-hover {
       &::after {
-        border-bottom: 2px solid $texteditor-hover-border-color;
+        border-bottom: 2px solid;
+        border-bottom-color: $texteditor-hover-border-color;
       }
     }
 
@@ -314,7 +318,8 @@ $material-editor-custom-button-margin: 5px;
   &.dx-state-focused,
   &.dx-state-active {
     &::before {
-      border-bottom: 2px solid $texteditor-invalid-focused-border-color;
+      border-bottom: 2px solid;
+      border-bottom-color: $texteditor-invalid-focused-border-color;
     }
   }
 

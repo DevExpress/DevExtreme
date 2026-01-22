@@ -1,4 +1,5 @@
 @use "sass:color";
+@use "sass:selector";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
@@ -26,9 +27,10 @@
 .dx-tabpanel-tabs-position-top {
   > .dx-tabpanel-tabs {
     .dx-tabs {
-      border-bottom: 1px solid $base-border-color;
+      border-bottom: 1px solid;
+      border-bottom-color: $base-border-color;
 
-      @at-root #{selector-append(".dx-empty-collection", &)} {
+      @at-root #{selector.append(".dx-empty-collection", &)} {
         border-bottom: none;
       }
     }
@@ -38,9 +40,10 @@
 .dx-tabpanel-tabs-position-bottom {
   > .dx-tabpanel-tabs {
     .dx-tabs {
-      border-top: 1px solid $base-border-color;
+      border-top: 1px solid;
+      border-top-color: $base-border-color;
 
-      @at-root #{selector-append(".dx-empty-collection", &)} {
+      @at-root #{selector.append(".dx-empty-collection", &)} {
         border-top: none;
       }
     }
@@ -50,9 +53,10 @@
 .dx-tabpanel-tabs-position-left {
   > .dx-tabpanel-tabs {
     .dx-tabs {
-      border-right: 1px solid $base-border-color;
+      border-right: 1px solid;
+      border-right-color: $base-border-color;
 
-      @at-root #{selector-append(".dx-empty-collection", &)} {
+      @at-root #{selector.append(".dx-empty-collection", &)} {
         border-right: none;
       }
     }
@@ -62,9 +66,10 @@
 .dx-tabpanel-tabs-position-right {
   > .dx-tabpanel-tabs {
     .dx-tabs {
-      border-left: 1px solid $base-border-color;
+      border-left: 1px solid;
+      border-left-color: $base-border-color;
 
-      @at-root #{selector-append(".dx-empty-collection", &)} {
+      @at-root #{selector.append(".dx-empty-collection", &)} {
         border-left: none;
       }
     }

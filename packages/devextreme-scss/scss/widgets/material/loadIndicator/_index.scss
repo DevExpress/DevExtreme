@@ -45,7 +45,7 @@
 }
 
 .dx-loadindicator-content-circle {
-  .dx-loadindicator-content {
+  &.dx-loadindicator-content {
     animation: dx-content-rotation 1568ms linear infinite;
   }
 

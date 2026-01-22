@@ -10,29 +10,30 @@ import {
   Font,
   Export,
 } from 'devextreme-react/chart';
+import type { SeriesPoint, SeriesLabel } from 'devextreme/common/charts';
 import { temperaturesData, lowAverage, highAverage } from './data.ts';
 
 const highAverageColor = '#ff9b52';
 const lowAverageColor = '#6199e6';
 
-function customizePoint(arg: { value: number; }) {
+function customizePoint(arg: { value: number; }): SeriesPoint {
   if (arg.value > highAverage) {
     return { color: highAverageColor };
   }
   if (arg.value < lowAverage) {
     return { color: lowAverageColor };
   }
-  return null;
+  return {};
 }
 
-function customizeLabel(arg: { value: number; }) {
+function customizeLabel(arg: { value: number; }): SeriesLabel {
   if (arg.value > highAverage) {
     return getLabelsSettings(highAverageColor);
   }
   if (arg.value < lowAverage) {
     return getLabelsSettings(lowAverageColor);
   }
-  return null;
+  return {};
 }
 
 function getLabelsSettings(backgroundColor: string) {
@@ -43,7 +44,7 @@ function getLabelsSettings(backgroundColor: string) {
   };
 }
 
-function customizeText(arg: { valueText: string; }) {
+function customizeText(arg: { valueText: string; }): string {
   return `${arg.valueText}&#176F`;
 }
 

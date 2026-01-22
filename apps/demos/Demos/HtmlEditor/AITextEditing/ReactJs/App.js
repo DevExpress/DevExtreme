@@ -1,6 +1,7 @@
 import React from 'react';
 import HtmlEditor, { Toolbar, ToolbarItem, Command } from 'devextreme-react/html-editor';
-import { markup, extractKeywordsPrompt, aiIntegration } from './data.js';
+import { markup, extractKeywordsPrompt } from './data.js';
+import { aiIntegration } from './service.js';
 
 export default function App() {
   return (

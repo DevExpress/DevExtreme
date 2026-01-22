@@ -45,7 +45,8 @@
 }
 
 .dx-toolbar-menu-section {
-  border-bottom: 1px solid $toolbar-separator-color;
+  border-bottom: 1px solid;
+  border-bottom-color: $toolbar-separator-color;
 
   .dx-list-item-content,
   .dx-toolbar-item-auto-hide {

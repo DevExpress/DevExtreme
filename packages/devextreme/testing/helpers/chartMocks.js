@@ -490,7 +490,7 @@ export const MockSeries = function MockSeries(options) {
 
             this._extGroups =
                 this.drawArguments =
-                this._options = null;
+                    this._options = null;
 
             this.disposed = true;
         },
@@ -928,16 +928,16 @@ export const MockAxis = function(renderOptions) {
 
             this._axisElementsGroup =
                 this._constantLinesGroup =
-                this._scaleBreaksGroup =
-                this._renderer =
-                this._stripLabelAxesGroup =
-                this._orthogonalTranslator =
-                this._stripsGroup =
-                this._translator =
-                this.axesContainerGroup =
-                this.gridGroup =
-                this._labelsAxesGroup =
-                this._options = null;
+                    this._scaleBreaksGroup =
+                        this._renderer =
+                            this._stripLabelAxesGroup =
+                                this._orthogonalTranslator =
+                                    this._stripsGroup =
+                                        this._translator =
+                                            this.axesContainerGroup =
+                                                this.gridGroup =
+                                                    this._labelsAxesGroup =
+                                                        this._options = null;
 
             this.disposed = true;
         },

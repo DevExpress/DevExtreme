@@ -67,7 +67,8 @@ $generic-switch-inner-size: $generic-switch-height - $generic-switch-border-weig
   margin: 0 (-$generic-switch-container-adjustment) 0 0;
   padding: 0 $generic-switch-handle-offset;
   height: $generic-switch-height;
-  border: $generic-switch-border-weight solid $switch-border-color;
+  border: $generic-switch-border-weight solid;
+  border-color: $switch-border-color;
   background: $switch-bg;
   border-radius: $switch-border-radius;
 }

@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
+import SelectBox from 'devextreme-react/select-box';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
 import {
   Chart,
   Series,
@@ -20,7 +21,7 @@ import service from './data.ts';
 const countriesInfo = service.getCountriesInfo();
 const energySources = service.getEnergySources();
 
-const types: (ChartPropsType['commonSeriesSettings']['type'])[] = ['line', 'stackedline', 'fullstackedline'];
+const types: (NonNullable<ChartPropsType['commonSeriesSettings']>['type'])[] = ['line', 'stackedline', 'fullstackedline'];
 const seriesTypeLabel = { 'aria-label': 'Series Type' };
 
 function App() {
@@ -31,7 +32,7 @@ function App() {
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <Chart palette="Violet" dataSource={countriesInfo}>
         <CommonSeriesSettings argumentField="country" type={type} />
         {energySources.map((item) => (
@@ -64,7 +65,7 @@ function App() {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 

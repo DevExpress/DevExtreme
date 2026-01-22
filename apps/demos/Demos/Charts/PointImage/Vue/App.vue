@@ -47,8 +47,8 @@ import {
   DxLegend,
   DxPoint,
 } from 'devextreme-vue/chart';
+import type { ExportFormat } from 'devextreme/common';
 import { iceHockeyStatistics } from './data.ts';
-import { type ExportFormat } from 'devextreme/common';
 
 const exportFormats: ExportFormat[] = ['PNG', 'PDF', 'JPEG', 'GIF', 'SVG'];
 

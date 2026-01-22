@@ -12,7 +12,7 @@ const customizeTooltip = (arg) => {
       text: arg.attribute('tooltip'),
     };
   }
-  return null;
+  return {};
 };
 const customizeText = (arg) => names[arg.index];
 export default function App() {

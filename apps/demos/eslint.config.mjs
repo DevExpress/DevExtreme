@@ -1,6 +1,9 @@
 import globals from 'globals';
 import babelParser from '@babel/eslint-parser';
-import spellcheckDevextreme from 'eslint-config-devextreme/spell-check.js';
+import spellcheckDevextreme from 'eslint-config-devextreme/spell-check';
+import testcafeConfig from 'eslint-config-devextreme/testcafe';
+import typescriptConfig from 'eslint-config-devextreme/typescript';
+import javascriptConfig from 'eslint-config-devextreme/javascript';
 import spellcheckPlugin from 'eslint-plugin-spellcheck';
 import noOnlyTests from 'eslint-plugin-no-only-tests';
 import deprecation from 'eslint-plugin-deprecation';
@@ -8,6 +11,7 @@ import reactPlugin from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactPerf from 'eslint-plugin-react-perf';
 import jest from 'eslint-plugin-jest';
+import vuePlugin from 'eslint-plugin-vue';
 import vueParser from 'vue-eslint-parser';
 import tsParser from '@typescript-eslint/parser';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
@@ -28,7 +32,7 @@ const compat = new FlatCompat({
   allConfig: js.configs.all
 });
 
-const spellcheckRule = spellcheckDevextreme.rules['spellcheck/spell-checker'];
+const spellcheckRule = spellcheckDevextreme[0].rules['spellcheck/spell-checker'];
 
 export default [
   {
@@ -41,7 +45,9 @@ export default [
       'shared/empty-file.ts',
       'Demos/**/config.js',
       'Demos/**/Vue/**/*.html',
-      'utils', // TODO unignore this
+      'utils/templates/**/*.ts',
+      'utils/templates/**/*.tsx',
+      '**/.DS_Store',
 
       '**/*.{png,json,mjs,css,html,md}',
     ],
@@ -74,13 +80,13 @@ export default [
     },
   },
 
-  ...compat.extends('eslint:recommended', 'devextreme/spell-check'),
-
-  ...compat.extends('devextreme/javascript').map(config => ({
+  js.configs.recommended,
+  ...spellcheckDevextreme,
+  ...javascriptConfig.map(config => ({
     ...config,
     rules: changeRulesToStylistic(config.rules || {}),
   })),
-  ...compat.extends('devextreme/typescript').map(config => ({
+  ...typescriptConfig.map(config => ({
     ...config,
     files: ['**/*.ts', '**/*.tsx'],
     rules: changeRulesToStylistic(config.rules || {}),
@@ -104,11 +110,13 @@ export default [
           'urls',
           'whitespace',
           'yargs',
+          'treshold', // should be updated to 'threshold' in the codebase
+          'callstack',
         ];
 
         return spellcheckRule;
       })(),
-      'func-names': 0, // TODO warn (was warn) >500
+      'func-names': ['error', 'as-needed'],
 
       'no-shadow': 0,
       'default-case': 0,
@@ -138,10 +146,10 @@ export default [
       'no-only-tests/no-only-tests': 'error',
 
       'import/extensions': 0,
-      'import/order': 0,
+      'import/order': 1,
       'import/no-webpack-loader-syntax': 0,
 
-      '@stylistic/max-len': 0, // TODO enable this rule (was 100)
+      '@stylistic/max-len': 0,
       '@stylistic/indent': ['error', 2, {
         SwitchCase: 1,
         MemberExpression: 1,
@@ -201,14 +209,13 @@ export default [
       }
     },
     rules: {
-      // TODO consider this rules
       'max-classes-per-file': 0,
       'no-restricted-properties': 0,
       'no-restricted-globals': 0,
-      'no-self-assign': 0,
-      'no-multi-assign': 0,
+      'no-self-assign': 'error',
+      'no-multi-assign': 'error',
       'no-restricted-syntax': 0,
-      'prefer-rest-params': 0,
+      'prefer-rest-params': 'error',
       'radix': 0,
       'no-underscore-dangle': 0,
       'operator-assignment': 0,
@@ -227,9 +234,8 @@ export default [
       '@typescript-eslint/no-unused-vars': 'error',
       '@typescript-eslint/no-unused-expressions': 0,
       '@typescript-eslint/no-useless-constructor': 0,
-      '@typescript-eslint/explicit-module-boundary-types': 0, // was warn
+      '@typescript-eslint/explicit-module-boundary-types': 0,
 
-      // TODO: consider these rules
       '@typescript-eslint/init-declarations': 0,
       '@typescript-eslint/prefer-readonly': 0,
       '@typescript-eslint/no-unsafe-return': 0,
@@ -238,7 +244,7 @@ export default [
       '@typescript-eslint/no-misused-promises': 0,
       '@typescript-eslint/member-ordering': 0,
       '@typescript-eslint/no-base-to-string': 0,
-      '@typescript-eslint/no-non-null-assertion': 0,
+      '@typescript-eslint/no-non-null-assertion': 'error',
       '@typescript-eslint/no-invalid-this': 0,
       '@typescript-eslint/no-unsafe-function-type': 0,
       '@typescript-eslint/no-wrapper-object-types': 0,
@@ -255,6 +261,7 @@ export default [
       '@typescript-eslint/ban-ts-comment': 0,
       '@typescript-eslint/no-extraneous-class': 0,
       '@typescript-eslint/no-floating-promises': 0,
+      '@typescript-eslint/only-throw-error': 'warn',
     },
   },
 
@@ -292,6 +299,18 @@ export default [
     },
     rules: {
       'no-undef': 0,
+    },
+  },
+  {
+    files: ['utils/templates/jQuery/data.js'],
+    languageOptions: {
+      globals: {
+        ...globals.jquery,
+        DevExpress: true,
+      },
+    },
+    rules: {
+      'no-unused-vars': 0,
     },
   },
 
@@ -335,13 +354,13 @@ export default [
           children: 'never',
         },
       ],
-      'react/jsx-fragments': ['warn'],
+      'react/jsx-fragments': ['error'],
       'react/jsx-no-bind': [
         'error',
         {
-          allowBind: true, // TODO false (was false)
-          allowArrowFunctions: true, // TODO false (was false)
-          allowFunctions: true, // TODO false
+          allowBind: false,
+          allowArrowFunctions: true,
+          allowFunctions: true,
           ignoreRefs: true,
         },
       ],
@@ -349,18 +368,13 @@ export default [
       'react/jsx-no-undef': ['error', { allowGlobals: true }],
       'react/jsx-no-target-blank': ['error', { enforceDynamicLinks: 'never' }],
 
-      'react-perf/jsx-no-new-object-as-prop': ['error', { nativeAllowList: 'all' }],
-      'react-perf/jsx-no-new-array-as-prop': ['error', { nativeAllowList: 'all' }],
-      'react-perf/jsx-no-new-array-as-prop': 0,
-      'react-perf/jsx-no-new-object-as-prop': 0,
-
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
     },
   },
 
   // Vue demos
-  ...compat.extends('plugin:vue/vue3-recommended').map(config => ({
+  ...vuePlugin.configs['flat/recommended'].map(config => ({
     ...config,
     files: [
       'Demos/**/Vue/*.vue',
@@ -457,9 +471,13 @@ export default [
   },
 
   // testcafe tests
-  ...compat.extends('devextreme/testcafe').map(config => ({
+  ...testcafeConfig.map(config => ({
     ...config,
-    rules: changeRulesToStylistic(config.rules || {}),
+    rules: {
+      ...changeRulesToStylistic(config.rules || {}),
+      'require-await': 'warn',
+
+    },
     files: ['testing/**/*.{js,ts}', 'utils/visual-tests/**/*.*'],
   })),
 
@@ -488,4 +506,47 @@ export default [
     ...config,
     files: ['utils/tests/**/*.*'],
   })),
+
+  // utils directory
+  {
+    files: [
+      'utils/**/*.js',
+    ],
+    ignores: [
+      'utils/testing/',
+      'utils/visual-tests/',
+      'utils/templates/',
+    ],
+    rules: {
+      'no-console': 0,
+      'no-await-in-loop': 0,
+      'no-restricted-syntax': 0,
+      '@typescript-eslint/await-thenable': 0,
+      'spellcheck/spell-checker': 0,
+      'consistent-return': 0,
+    },
+  },
+  {
+    files: [
+      'utils/**/*.ts',
+    ],
+    ignores: [
+      'utils/testing/',
+      'utils/visual-tests/',
+      'utils/templates/',
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: './tsconfig.json',
+      },
+    },
+    rules: {
+      'no-console': 0,
+      'no-await-in-loop': 0,
+      'no-restricted-syntax': 0,
+      '@typescript-eslint/await-thenable': 0,
+      'spellcheck/spell-checker': 0,
+      'consistent-return': 0,
+    },
+  },
 ];

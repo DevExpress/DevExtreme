@@ -26,7 +26,7 @@ const findNodeById = (nodes, id) => {
       return nodes[i];
     }
     if (nodes[i].children) {
-      const node = findNodeById(nodes[i].children, id);
+      const node = findNodeById(nodes[i].children ?? [], id);
       if (node != null) {
         return node;
       }
@@ -35,6 +35,9 @@ const findNodeById = (nodes, id) => {
   return null;
 };
 const moveNode = (fromNode, toNode, fromItems, toItems, isDropInsideItem) => {
+  if (!fromNode.itemData || !toNode.itemData) {
+    return;
+  }
   const fromIndex = fromItems.findIndex((item) => item.id === fromNode.itemData?.id);
   fromItems.splice(fromIndex, 1);
   const toIndex =
@@ -46,7 +49,7 @@ const moveNode = (fromNode, toNode, fromItems, toItems, isDropInsideItem) => {
   if (isDropInsideItem) {
     fromNode.itemData.parentId = toNode.itemData?.id;
   } else {
-    fromNode.itemData.parentId = toNode != null ? toNode.itemData.parentId : undefined;
+    fromNode.itemData.parentId = toNode != null ? toNode.itemData?.parentId : undefined;
   }
 };
 const moveChildren = (node, fromDataSource, toDataSource) => {
@@ -59,7 +62,9 @@ const moveChildren = (node, fromDataSource, toDataSource) => {
     }
     const fromIndex = fromDataSource.findIndex((item) => item.id === child.itemData?.id);
     fromDataSource.splice(fromIndex, 1);
-    toDataSource.splice(toDataSource.length, 0, child.itemData);
+    if (child.itemData) {
+      toDataSource.splice(toDataSource.length, 0, child.itemData);
+    }
   });
 };
 const isChildNode = (parentNode, childNode) => {

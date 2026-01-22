@@ -16,13 +16,16 @@
   > .dx-tabpanel-tabs {
     .dx-tabs-wrapper {
       border-block-start: $generic-tabs-border;
+      border-block-start-color: $tabs-border-color;
       border-block-end: $generic-tabs-border;
+      border-block-end-color: $tabs-border-color;
 
       @include dx-tabs-border-mixin(
         none,
         $generic-tabs-border,
         none,
         $generic-tabs-border,
+        $tabs-border-color,
       );
     }
 
@@ -32,6 +35,7 @@
         $generic-tabs-border-width solid,
         none,
         $generic-tabs-border-width solid,
+        null,
       );
 
       &::after {

@@ -21,7 +21,7 @@ $generic-texteditor-input-padding:
   $generic-base-inline-borderedwidget-horizontal-padding
   $generic-base-inline-borderedwidget-bottom-padding;
 
-$generic-texteditor-input-height: round($generic-base-line-height * $generic-base-font-size) + $generic-base-inline-borderedwidget-top-padding + $generic-base-inline-borderedwidget-bottom-padding;
+$generic-texteditor-input-height: math.round($generic-base-line-height * $generic-base-font-size) + $generic-base-inline-borderedwidget-top-padding + $generic-base-inline-borderedwidget-bottom-padding;
 
 $generic-texteditor-icon-container-size: $generic-base-inline-borderedwidget-inner-size;
 $generic-texteditor-icon-size: $generic-base-icon-size;
@@ -69,7 +69,8 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
 
   &.dx-editor-underlined {
     background: $texteditor-underlined-bg;
-    border-bottom: $generic-texteditor-border-width solid $texteditor-border-color;
+    border-bottom: $generic-texteditor-border-width solid;
+    border-bottom-color: $texteditor-border-color;
     border-radius: 0;
   }
 

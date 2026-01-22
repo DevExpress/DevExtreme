@@ -11,8 +11,7 @@ export interface PromptTemplate {
   user?: string;
 }
 
-export type PromptTemplateName =
-  | 'changeStyle'
+export type PromptTemplateName = | 'changeStyle'
   | 'changeTone'
   | 'execute'
   | 'expand'

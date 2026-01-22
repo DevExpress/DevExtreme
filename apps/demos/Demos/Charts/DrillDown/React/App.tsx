@@ -1,27 +1,30 @@
 import React, { useCallback, useState } from 'react';
 import TreeMap, {
-  Size, Title, Colorizer, type TreeMapTypes,
+  Size,
+  Title,
+  Colorizer,
 } from 'devextreme-react/tree-map';
+import type { TreeMapTypes } from 'devextreme-react/tree-map';
 
 import { citiesPopulation } from './data.ts';
 import type { DrillInfo } from './data.ts';
 
 import TreeMapBreadcrumbs from './TreeMapBreadcrumbs.tsx';
 
-function drillInfoClick(node: DrillInfo['node']) {
+function drillInfoClick(node: DrillInfo['node']): void {
   if (node) {
     node.drillDown();
   }
 }
 
-function nodeClick(e: TreeMapTypes.ClickEvent) {
+function nodeClick(e: TreeMapTypes.ClickEvent): void {
   e.node.drillDown();
 }
 
 function App() {
   const [drillInfo, setDrillInfo] = useState<DrillInfo[]>([]);
 
-  const drill = useCallback((e: TreeMapTypes.DrillEvent) => {
+  const drill = useCallback((e: TreeMapTypes.DrillEvent): void => {
     const newDrillInfo = [];
     for (let node = e.node.getParent(); node; node = node.getParent()) {
       newDrillInfo.unshift({
@@ -36,10 +39,10 @@ function App() {
     }
 
     setDrillInfo(newDrillInfo);
-  }, [setDrillInfo]);
+  }, []);
 
   return (
-    <React.Fragment>
+    <>
       <TreeMap
         dataSource={citiesPopulation}
         interactWithGroup={true}
@@ -59,7 +62,7 @@ function App() {
         onItemClick={drillInfoClick}
         treeInfo={drillInfo}
       />
-    </React.Fragment>
+    </>
   );
 }
 

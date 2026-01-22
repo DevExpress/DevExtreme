@@ -18,16 +18,16 @@ function wrapBundleScripts(filePath) {
 
     const scripts = [];
 
-    [polyfillRegex, runtimeRegex, mainRegex].forEach(regex => {
+    [polyfillRegex, runtimeRegex, mainRegex].forEach((regex) => {
       const match = regex.exec(data);
       if (match) {
         scripts.push(match[1]);
       }
-    }); 
-    
+    });
+
     if (scripts.length === 0) {
-        console.log("There are no bundle scripts to edit");
-        return;
+      console.log('There are no bundle scripts to edit');
+      return;
     }
 
     const cleanedHtml = data.replace(polyfillRegex, '').replace(runtimeRegex, '').replace(mainRegex, '');
@@ -67,25 +67,23 @@ function processDemoProjects(demosDirectory) {
     }
 
     widgets.forEach((widget) => {
-        const widgetPath = path.join(demosDirectory, widget);
-        fs.readdir(widgetPath, (err, demoName) => {
-            if (err) {
-                console.error(`Error reading directory ${widgetPath}:`, err);
-                return;
-            }
-            demoName.forEach((demo) => {
-                const filePath = path.join(widgetPath, demo, 'Angular', 'index.html');
-                if (fs.existsSync(filePath)) {
-                  wrapBundleScripts(filePath);
-                } else {
-                  console.warn(`File not found: ${filePath}`);
-                }
-              });
-        })
+      const widgetPath = path.join(demosDirectory, widget);
+      fs.readdir(widgetPath, (err, demoName) => {
+        if (err) {
+          console.error(`Error reading directory ${widgetPath}:`, err);
+          return;
+        }
+        demoName.forEach((demo) => {
+          const filePath = path.join(widgetPath, demo, 'Angular', 'index.html');
+          if (fs.existsSync(filePath)) {
+            wrapBundleScripts(filePath);
+          } else {
+            console.warn(`File not found: ${filePath}`);
+          }
+        });
+      });
     });
-
-    
   });
 }
 
-processDemoProjects(demoProjectsDir)
+processDemoProjects(demoProjectsDir);

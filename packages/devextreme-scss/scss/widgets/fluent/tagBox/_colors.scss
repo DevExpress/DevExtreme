@@ -36,9 +36,9 @@ $tagbox-tag-foreground-disabled: $base-foreground-disabled !default;
 $tagbox-tag-disabled: $base-background-disabled !default;
 
 @if $mode == "light" {
-  $tagbox-tag-bg: darken($base-hover-bg, 1.96) !default;
+  $tagbox-tag-bg: color.adjust($base-hover-bg, $lightness: -1.96%, $space: hsl) !default;
 }
 
 @if $mode == "dark" {
-  $tagbox-tag-bg: darken($base-element-bg, 12.16) !default;
+  $tagbox-tag-bg: color.adjust($base-element-bg, $lightness: -12.16%, $space: hsl) !default;
 }

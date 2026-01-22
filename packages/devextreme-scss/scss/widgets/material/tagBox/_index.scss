@@ -153,7 +153,8 @@
 
 .dx-tagbox-popup-wrapper {
   .dx-list-select-all {
-    border-bottom: 1px solid $tagbox-select-all-border-color;
+    border-bottom: 1px solid;
+    border-bottom-color: $tagbox-select-all-border-color;
     padding-bottom: $material-tagbox-select-all-padding-bottom;
     margin-bottom: $material-tagbox-select-all-margin-bottom;
 

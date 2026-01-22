@@ -8,7 +8,7 @@ testUtils.importAnd(() => 'devextreme/viz/chart', () => DevExpress.viz.dxChart, 
       const dataSourceItems = getData();
 
       if (window.$ && window.$.connection && window.$.connection.stockTickDataHub) {
-        window.$.connection.liveUpdateSignalRHub.client.updateStockPrice = function () { };
+        window.$.connection.liveUpdateSignalRHub.client.updateStockPrice = () => { };
       } else {
         dataSourceItems.forEach((item) => {
           Object.keys(item).forEach((key) => {

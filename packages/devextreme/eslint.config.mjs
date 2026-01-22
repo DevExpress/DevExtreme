@@ -14,6 +14,9 @@ import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import { changeRulesToStylistic } from 'eslint-migration-utils';
 import unicorn from 'eslint-plugin-unicorn';
 import customRules from './eslint_plugins/index.js';
+import spellCheckConfig from 'eslint-config-devextreme/spell-check';
+import typescriptConfig from 'eslint-config-devextreme/typescript';
+import qunitConfig from 'eslint-config-devextreme/qunit';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -43,7 +46,7 @@ export default [
             'js/common/core/localization/default_messages.js',
         ],
     },
-    ...compat.extends('devextreme/spell-check'),
+    ...spellCheckConfig,
     {
         plugins: {
             'no-only-tests': noOnlyTests,
@@ -174,7 +177,7 @@ export default [
             'import': importPlugin,
         }
     },
-    ...compat.extends('devextreme/typescript').map(config => {
+    ...typescriptConfig.map(config => {
         const newConfig = {
             ...config,
             files: ['**/*.ts?(x)'],
@@ -219,9 +222,14 @@ export default [
                 considerDefaultExhaustiveForUnions: true,
             }],
             'devextreme-custom/no-direct-preact-signals-core-import': 'error',
+            // TODO Shakhova: remove after fixing issues
+            '@typescript-eslint/prefer-nullish-coalescing': 'warn',
+            '@typescript-eslint/only-throw-error': 'warn',
+            '@typescript-eslint/prefer-optional-chain': 'warn',
+            'require-await': 'warn',
         },
     },
-    ...compat.extends('devextreme/typescript').map(config => {
+    ...typescriptConfig.map(config => {
         const newConfig = {
             ...config,
             files: ['**/*.d.ts'],
@@ -258,10 +266,11 @@ export default [
             'i18n/no-russian-character': ['error', {
                 includeIdentifier: true,
             }],
+            '@typescript-eslint/no-unused-vars': 'off'
         }
     },
     //  Rules for QUnit tests
-    ...compat.extends('devextreme/qunit').map(config => ({
+    ...qunitConfig.map(config => ({
         ...config,
         files: ['testing/tests/**/*.js', 'testing/helpers/**/*.js'],
     })),
@@ -370,7 +379,7 @@ export default [
         },
     },
     // Rules for build folder
-    ...compat.extends('plugin:node/recommended').map(config => ({
+    ...compat.extends('plugin:n/recommended').map(config => ({
         ...config,
         files: ['build/**/*'],
     })),
@@ -384,10 +393,10 @@ export default [
         },
         rules: {
             'no-console': 'off',
-            'node/no-unpublished-require': 'off',
-            'node/no-unsupported-features/node-builtins': 'off',
-            'node/shebang': 'off',
-            'node/no-unsupported-features/es-syntax': 'off',
+            'n/no-unpublished-require': 'off',
+            'n/no-unsupported-features/node-builtins': 'off',
+            'n/shebang': 'off',
+            'n/no-unsupported-features/es-syntax': 'off',
             'spellcheck/spell-checker': 'off',
         },
     },

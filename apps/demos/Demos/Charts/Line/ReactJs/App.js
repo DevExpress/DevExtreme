@@ -25,7 +25,7 @@ function App() {
     setType(e.value);
   }, []);
   return (
-    <React.Fragment>
+    <>
       <Chart
         palette="Violet"
         dataSource={countriesInfo}
@@ -71,7 +71,7 @@ function App() {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 export default App;

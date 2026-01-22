@@ -7,8 +7,7 @@ import * as HeaderPanel from './header_panel/index';
 /**
  * @interface
  */
-export type Options =
-  & GridCore.Options
+export type Options = & GridCore.Options
   & ContentView.Options
   & HeaderPanel.Options
   & ContextMenu.Options;

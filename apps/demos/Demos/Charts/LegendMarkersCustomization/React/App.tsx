@@ -1,12 +1,17 @@
 import React from 'react';
 
 import {
-  Chart, type ChartTypes, Series, CommonSeriesSettings, Point, Legend,
+  Chart,
+  Series,
+  CommonSeriesSettings,
+  Point,
+  Legend,
 } from 'devextreme-react/chart';
+import type { ChartTypes } from 'devextreme-react/chart';
 import { dataSource } from './data.ts';
 import markerTemplate from './MarkerTemplate.tsx';
 
-function onLegendClick(e: ChartTypes.LegendClickEvent) {
+function onLegendClick(e: ChartTypes.LegendClickEvent): void {
   e.target.isVisible() ? e.target.hide() : e.target.show();
 }
 

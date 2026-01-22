@@ -14,9 +14,9 @@ import type { CollectorOptions } from './types';
 export const addCollector = <
   T extends ListEntity & Position & Duration & AppointmentPart & UTCDatesBeforeSplit,
 >(
-    entities: T[],
-    options: CollectorOptions,
-  ): (T & Level & AppointmentCollector)[] => {
+  entities: T[],
+  options: CollectorOptions,
+): (T & Level & AppointmentCollector)[] => {
   const step1 = addLevel(entities, options);
   const step2 = addCollectorByLevel(step1, options);
   return step2;

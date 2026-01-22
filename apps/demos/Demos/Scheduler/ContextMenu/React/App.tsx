@@ -15,7 +15,7 @@ const appointmentClassName = '.dx-scheduler-appointment';
 const cellClassName = '.dx-scheduler-date-table-cell';
 
 const onContextMenuItemClick = (e: ContextMenuTypes.ItemClickEvent<ContextMenuItem>) => {
-  e.itemData.onItemClick?.(e);
+  e.itemData?.onItemClick?.(e);
 };
 
 const App = () => {
@@ -35,7 +35,7 @@ const App = () => {
       ...item,
       onItemClick: (e: ContextMenuTypes.ItemClickEvent<ContextMenuItem>) => scheduler?.updateAppointment(appointmentData, {
         ...appointmentData,
-        ...{ roomId: [e.itemData.id] },
+        ...{ roomId: [e.itemData?.id] },
       }),
     }));
 
@@ -65,8 +65,7 @@ const App = () => {
       },
       ...resourceItems,
     ]);
-  }
-  , []);
+  }, []);
 
   const onCellContextMenu = useCallback((e: SchedulerTypes.CellContextMenuEvent) => {
     const scheduler = schedulerRef.current?.instance();
@@ -114,7 +113,7 @@ const App = () => {
   }, [groups]);
 
   return (
-    <React.Fragment>
+    <>
       <Scheduler
         ref={schedulerRef}
         timeZone="America/Los_Angeles"
@@ -145,7 +144,7 @@ const App = () => {
         onItemClick={onContextMenuItemClick}
         itemComponent={AppointmentMenuTemplate}
       />
-    </React.Fragment>
+    </>
   );
 };
 

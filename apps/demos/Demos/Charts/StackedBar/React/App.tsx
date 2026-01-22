@@ -1,12 +1,20 @@
 import React from 'react';
 import {
-  Chart, Series, CommonSeriesSettings, Legend, ValueAxis, Title, Export, Tooltip,
+  Chart,
+  Series,
+  CommonSeriesSettings,
+  Legend,
+  ValueAxis,
+  Title,
+  Export,
+  Tooltip,
 } from 'devextreme-react/chart';
+import type { ChartTypes } from 'devextreme-react/chart';
 import service from './data.ts';
 
 const dataSource = service.getMaleAgeData();
 
-function customizeTooltip(arg: { seriesName: string; valueText: string; }) {
+function customizeTooltip(arg: ChartTypes.PointInfo): Record<string, string> {
   return {
     text: `${arg.seriesName} years: ${arg.valueText}`,
   };

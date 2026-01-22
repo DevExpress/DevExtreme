@@ -104,10 +104,8 @@ QUnit.test('options are not changed after the merger', function(assert) {
     assert.deepEqual(storeOptions.fieldTypes, { id1: 'String' });
 });
 
-// TODO: Publish `url` method
-QUnit.skip('strips trailing slash', function(assert) {
-    assert.expect(1);
-    assert.equal(new ODataStore({ url: 'odata.org/EntitySet/' }).url(), 'odata.org/EntitySet');
+QUnit.test('strips trailing slash', function(assert) {
+    assert.equal(new ODataStore({ url: 'odata.org/EntitySet/' })._requestDispatcher.url, 'odata.org/EntitySet');
 });
 
 QUnit.module('load', moduleConfig);
@@ -1718,7 +1716,7 @@ QUnit.test('Dates, on updating', function(assert) {
 });
 
 QUnit.module('Deserialization', moduleConfig);
-QUnit.test('Dates, disableable, ODataStore', function(assert) {
+QUnit.test('Dates, default behaviour (processDatesAsUtc = false), ODataStore', function(assert) {
     assert.expect(2);
 
     const done = assert.async();
@@ -1733,7 +1731,7 @@ QUnit.test('Dates, disableable, ODataStore', function(assert) {
         responseText: { dateProperty: '1945-05-09T14:25:12.1234567Z' }
     });
 
-    const store = new ODataStore({ version: 4, url: 'odata.org', deserializeDates: false });
+    const store = new ODataStore({ version: 4, url: 'odata.org' });
     const promises = [
         store.load()
             .done(function(r) {
@@ -1751,7 +1749,7 @@ QUnit.test('Dates, disableable, ODataStore', function(assert) {
         .always(done);
 });
 
-QUnit.test('Dates, disableable, ODataContext', function(assert) {
+QUnit.test('Dates, default behaviour (processDatesAsUtc = false) and fieldType of dateProperty is undefined, ODataContext', function(assert) {
     assert.expect(4);
 
     const done = assert.async();
@@ -1774,10 +1772,9 @@ QUnit.test('Dates, disableable, ODataContext', function(assert) {
     const ctx = new ODataContext({
         version: 4,
         url: 'odata.org',
-        deserializeDates: false,
         entities: {
             'X': { name: 'name' },
-            'Y': { name: 'name', deserializeDates: true }
+            'Y': { name: 'name', processDatesAsUtc: true }
         }
     });
 
@@ -1795,6 +1792,63 @@ QUnit.test('Dates, disableable, ODataContext', function(assert) {
         ctx.X.load()
             .done(function(r) {
                 assert.strictEqual(typeof r[0].dateProperty, 'string');
+            }),
+
+        ctx.Y.load()
+            .done(function(r) {
+                assert.ok(isDate(r[0].dateProperty));
+            })
+    ];
+
+    $.when.apply($, promises)
+        .fail(function() { assert.ok(false, MUST_NOT_REACH_MESSAGE); })
+        .always(done);
+});
+
+QUnit.test('Dates, processDatesAsUtc = true, ODataContext', function(assert) {
+    assert.expect(4);
+
+    const done = assert.async();
+
+    ajaxMock.setup({
+        url: 'odata.org/name',
+        responseText: { value: [{ dateProperty: '1945-05-09T14:25:12.1234567Z' }] }
+    });
+
+    ajaxMock.setup({
+        url: 'odata.org/function()',
+        responseText: { dateProperty: '1945-05-09T14:25:12.1234567Z' }
+    });
+
+    ajaxMock.setup({
+        url: 'odata.org/action',
+        responseText: { dateProperty: '1945-05-09T14:25:12.1234567Z' }
+    });
+
+    const ctx = new ODataContext({
+        version: 4,
+        url: 'odata.org',
+        processDatesAsUtc: true,
+        entities: {
+            'X': { name: 'name' },
+            'Y': { name: 'name' }
+        }
+    });
+
+    const promises = [
+        ctx.get('function')
+            .done(function(r) {
+                assert.ok(isDate(r.dateProperty));
+            }),
+
+        ctx.invoke('action')
+            .done(function(r) {
+                assert.ok(isDate(r.dateProperty));
+            }),
+
+        ctx.X.load()
+            .done(function(r) {
+                assert.ok(isDate(r[0].dateProperty));
             }),
 
         ctx.Y.load()

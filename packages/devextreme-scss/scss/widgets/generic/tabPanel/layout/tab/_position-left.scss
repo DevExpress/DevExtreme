@@ -20,10 +20,12 @@
         $generic-tabpanel-tab-border-transparent,
         null,
         null,
+        null,
       );
 
       margin-inline-end: -$generic-tabs-border-width;
       border-inline-end: $generic-tabpanel-tab-border-selected-bottom;
+      border-inline-end-color: $tabs-tab-selected-bg;
     }
   }
 }

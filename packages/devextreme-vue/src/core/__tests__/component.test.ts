@@ -3,14 +3,14 @@ import { mount } from '@vue/test-utils';
 import * as events from 'devextreme/events';
 import config from 'devextreme/core/config';
 import {
-  App, createVNode, defineComponent, h, nextTick, renderSlot, ref,
+  App, defineComponent, nextTick, ref, createVNode, Fragment
 } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
 import { pullConfigComponents } from '../children-processing';
 import { IWidgetComponent } from '../component';
-import globalConfig from '../config';
 import Configuration from '../configuration';
+import globalConfig from '../config';
 import { IConfigurable, IConfigurationComponent } from '../configuration-component';
 import { IExtension } from '../extension-component';
 
@@ -2038,7 +2038,7 @@ describe('disposing', () => {
 });
 
 describe('children processing', () => {
-  it.skip('should process children if they are wrapped to a bail container', () => {
+  it('should process children if they are wrapped in a BAIL fragment', () => {
     const Nested = buildTestConfigCtor();
     const config = new Configuration(
       () => undefined,
@@ -2047,11 +2047,11 @@ describe('children processing', () => {
     );
     (Nested as IConfigurationComponent).$_optionName = 'nestedOption';
     const nestedVNode = createVNode(Nested);
-    const vnode = renderSlot(
-      { default: () => [nestedVNode] },
-      'default',
-      undefined,
-      () => [h('comment')],
+    const vnode = createVNode(
+      Fragment,
+      null,
+      [nestedVNode],
+      PatchFlags.BAIL,
     );
     expect(vnode.patchFlag).toBe(PatchFlags.BAIL);
     pullConfigComponents([vnode], [], config);

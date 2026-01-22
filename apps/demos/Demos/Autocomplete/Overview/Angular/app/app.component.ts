@@ -4,8 +4,8 @@ import { HttpClient, HttpParams, provideHttpClient, withFetch } from '@angular/c
 import { lastValueFrom } from 'rxjs';
 import { DxAutocompleteModule } from 'devextreme-angular';
 import { CustomStore } from 'devextreme-angular/common/data';
-import { Service } from './app.service';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -58,7 +58,7 @@ export class AppComponent {
     this.clientsStore = new CustomStore({
       key: 'Value',
       useDefaultSearch: true,
-      async load(loadOptions) {
+      load(loadOptions) {
         let params: HttpParams = new HttpParams();
         [
           'skip',

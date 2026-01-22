@@ -7,7 +7,8 @@
   width: 100%;
   min-width: var(--dx-cardview-card-min-width, $cardview-card-min-width);
   max-width: var(--dx-cardview-card-max-width);
-  border: $cardview-card-border-width solid $cardview-card-border-color;
+  border: $cardview-card-border-width solid;
+  border-color: $cardview-card-border-color;
   border-radius: $cardview-card-border-radius;
   background-color: $cardview-card-bg-color;
   color: $cardview-card-text-color;
@@ -18,7 +19,8 @@
   }
 
   &:focus-visible {
-    outline: 2px $cardview-card--focused-outline-color solid;
+    outline: 2px solid;
+    outline-color: $cardview-card--focused-outline-color;
     outline-offset: -2px;
   }
 }

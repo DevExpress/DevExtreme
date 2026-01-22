@@ -1,16 +1,20 @@
 import * as sass from 'sass-embedded';
 
 export const color = (value: sass.SassColor): string => {
-  const getHex = (colorValue: number): string => colorValue.toString(16).padStart(2, '0');
+  const getHex = (colorValue: number): string => {
+    const n = Math.max(0, Math.min(255, Math.round(colorValue)));
+
+    return n.toString(16).padStart(2, '0');
+  };
 
   const alpha = Math.round(255 * value.alpha);
   if (alpha === 0) {
     return 'transparent';
   }
 
-  const hexRed = getHex(value.red);
-  const hexGreen = getHex(value.green);
-  const hexBlue = getHex(value.blue);
+  const hexRed = getHex(value.channel('red'));
+  const hexGreen = getHex(value.channel('green'));
+  const hexBlue = getHex(value.channel('blue'));
   const hexAlpha = alpha === 255 ? '' : getHex(alpha);
 
   return `#${hexRed}${hexGreen}${hexBlue}${hexAlpha}`;
@@ -59,7 +63,6 @@ export const parseString = (str: string): sass.Value => {
     });
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
-    // debugger;
     return new sass.SassString(str);
   }
 

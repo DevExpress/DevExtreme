@@ -1,6 +1,11 @@
 import React from 'react';
 
-export default function Item(data) {
+interface ItemProps {
+  ImageSrc: string;
+  Name: string;
+}
+
+export default function Item(data: ItemProps) {
   return (
     <div className="custom-item">
       <img

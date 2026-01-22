@@ -2,12 +2,12 @@ import { addShadowDomStyles } from 'core/utils/shadow_dom.js';
 
 QUnit.testStart(function() {
     const markup =
-'<!--qunit-fixture-->\
-    <div id="container">\
-        <div id="treeList">\
-        </div>\
-    </div>\
-';
+        '<!--qunit-fixture-->\
+            <div id="container">\
+                <div id="treeList">\
+                </div>\
+            </div>\
+        ';
 
     $('#qunit-fixture').html(markup);
 

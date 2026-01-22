@@ -343,7 +343,7 @@ module('Image uploading integration', {
             assert.strictEqual($(`.${ADD_IMAGE_DIALOG_CLASS}`).length, 0, 'has no add image dialog class');
             assert.strictEqual($(`.${ADD_IMAGE_DIALOG_WITH_TABS_CLASS}`).length, 0, 'has no add image dialog with tabs class');
             assert.strictEqual(formInstance.option('colCount'), 1, 'has correct form callCount');
-            assert.strictEqual(formInstance.option('labelLocation'), 'left', 'has correct form labelLocation');
+            assert.strictEqual(formInstance.option('labelLocation'), 'top', 'has correct form labelLocation');
             assert.strictEqual($(DIALOG_OK_BUTTON_SELECTOR).first().text(), 'OK', 'dialog ok button text is reverted');
         });
 

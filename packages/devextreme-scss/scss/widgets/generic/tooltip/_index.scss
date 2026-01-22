@@ -10,7 +10,8 @@
 
 .dx-tooltip-wrapper {
   .dx-overlay-content {
-    border: 1px solid $tooltip-border-color;
+    border: 1px solid;
+    border-color: $tooltip-border-color;
     background-color: $tooltip-bg;
     color: $tooltip-color;
     box-shadow: 0 2px 4px $tooltip-shadow-color;
@@ -19,7 +20,8 @@
 
   &.dx-popover-wrapper .dx-popover-arrow {
     &::after {
-      border: 1px solid $tooltip-border-color;
+      border: 1px solid;
+      border-color: $tooltip-border-color;
       background: $tooltip-bg;
     }
   }
