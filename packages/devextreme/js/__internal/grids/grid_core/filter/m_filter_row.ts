@@ -884,22 +884,23 @@ export class ApplyFilterViewController extends modules.ViewController {
 }
 
 const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class FilterRowColumnsResizerExtender extends Base {
-  protected _startResizing() {
-    const that = this;
-
+  protected _startResizing(): void {
     // @ts-expect-error
-    super._startResizing.apply(that, arguments);
+    super._startResizing.apply(this, arguments);
 
-    if (that.isResizing()) {
+    if (this.isResizing()) {
       // @ts-expect-error
-      const overlayInstance = that._columnHeadersView.getFilterRangeOverlayInstance();
+      const overlayInstance = this._columnHeadersView.getFilterRangeOverlayInstance();
 
-      if (overlayInstance) {
-        const cellIndex = overlayInstance.$element().closest('td').index();
+      if (!overlayInstance || !this._targetPoint) {
+        return;
+      }
 
-        if (cellIndex === that._targetPoint.columnIndex || cellIndex === that._targetPoint.columnIndex + 1) {
-          overlayInstance.$content().hide();
-        }
+      const cellIndex = overlayInstance.$element().closest('td').index();
+      const { columnIndex: resizingColumnIndex } = this._targetPoint;
+
+      if (cellIndex === resizingColumnIndex || cellIndex === resizingColumnIndex + 1) {
+        overlayInstance.$content().hide();
       }
     }
   }
