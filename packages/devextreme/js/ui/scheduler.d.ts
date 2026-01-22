@@ -96,6 +96,8 @@ export type AppointmentFormProperties = FormProperties & {
 /** @public */
 export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
 /** @public */
+export type SchedulerScrollToAlign = 'start' | 'center';
+/** @public */
 export type SchedulerPredefinedToolbarItem = 'today' | 'dateNavigator' | 'viewSwitcher';
 /** @public */
 export type SchedulerPredefinedDateNavigatorItem = 'prev' | 'next' | 'dateInterval';
@@ -1314,13 +1316,13 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
      * @param2 options:Object|undefined
      * @param2_field group:Object|undefined
      * @param2_field allDay:Boolean|undefined
-     * @param2_field align:Enums.SchedulerScrollToAlign|undefined
+     * @param2_field alignInView:Enums.SchedulerScrollToAlign|undefined
      * @public
      */
     scrollTo(date: Date, options?: {
         group?: object;
         allDay?: boolean;
-        alignInView?: 'start' | 'center';
+        alignInView?: SchedulerScrollToAlign;
     }): void;
     /**
      * @docid
