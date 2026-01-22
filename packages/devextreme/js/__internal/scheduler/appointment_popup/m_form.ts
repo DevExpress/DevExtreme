@@ -34,9 +34,14 @@ const CLASSES = {
   icon: 'dx-icon',
   hidden: 'dx-hidden',
   fieldItemContent: 'dx-field-item-content',
+  formItem: 'dx-item',
+  labelTop: 'dx-field-item-label-location-top',
+  label: 'dx-label',
 
   groupWithIcon: 'dx-scheduler-form-group-with-icon',
   formIcon: 'dx-scheduler-form-icon',
+  formIconTopLabelOffset: 'dx-scheduler-form-top-label-offset',
+  formIconInnerLabelOffset: 'dx-scheduler-form-inner-label-offset',
   defaultResourceIcon: 'dx-scheduler-default-resources-icon',
 
   mainGroup: 'dx-scheduler-form-main-group',
@@ -306,6 +311,8 @@ export class AppointmentForm {
         const $formElement = e.component.$element();
         this._$mainGroup = $formElement.find(`.${CLASSES.mainGroup}`);
         this._$recurrenceGroup = $formElement.find(`.${CLASSES.recurrenceGroup}`);
+
+        this.alignIconsWithEditors();
 
         onContentReady?.call(this, e);
       },
@@ -856,6 +863,23 @@ export class AppointmentForm {
         this.setStylingModeToEditors(child, showIcon);
       });
     }
+  }
+
+  private alignIconsWithEditors(): void {
+    const $groups = this.dxForm.$element().find(`.${CLASSES.groupWithIcon}`);
+
+    $groups.toArray().forEach((groupElement) => {
+      const $group = $(groupElement);
+      const $icon = $group.find(`.${CLASSES.formIcon}`);
+      const $items = $group.find(`.${CLASSES.formItem}:not(:has(.${CLASSES.formIcon}))`);
+      const $firstSimpleItem = $items.filter(`:not(:has(.${CLASSES.formItem}))`).first();
+
+      const hasTopLabel = $firstSimpleItem.find(`.${CLASSES.labelTop}`).length > 0;
+      const hasInnerLabel = $firstSimpleItem.find(`.${CLASSES.label}`).length > 0;
+
+      $icon.toggleClass(CLASSES.formIconTopLabelOffset, hasTopLabel);
+      $icon.toggleClass(CLASSES.formIconInnerLabelOffset, hasInnerLabel);
+    });
   }
 
   showMainGroup(): void {
