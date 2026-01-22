@@ -871,7 +871,7 @@ export class AppointmentForm {
     $groups.toArray().forEach((groupElement) => {
       const iconElement = groupElement.querySelector(`.${CLASSES.formIcon}`);
 
-      const itemElements = groupElement.querySelectorAll(`.${CLASSES.fieldItemContent}`);
+      const itemElements = groupElement.querySelectorAll(`.${CLASSES.formItem}`);
       const firstSimpleItemElement = Array.from(itemElements)
         .find((itemElement) => {
           const isGroup = itemElement.querySelector(`.${CLASSES.formItem}`) !== null;
