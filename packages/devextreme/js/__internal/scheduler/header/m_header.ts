@@ -31,7 +31,7 @@ import {
   getTabViewSwitcher,
 } from './m_view_switcher';
 import type {
-  EventMapHandler, HeaderCalendarOptions,
+  EventMapHandler,
   HeaderOptions, IntervalOptions,
 } from './types';
 
@@ -250,8 +250,8 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
     this._calendar.$element().appendTo(this.$element());
   }
 
-  _getCalendarOptionUpdater(name: keyof HeaderCalendarOptions) {
-    return (value: HeaderCalendarOptions[typeof name]): void => {
+  _getCalendarOptionUpdater(name: string) {
+    return (value: unknown): void => {
       if (this._calendar) {
         this._calendar.option(name, value);
       }
