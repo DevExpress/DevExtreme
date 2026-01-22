@@ -107,7 +107,6 @@ describe('Bugs', () => {
 
       expect(headerCellsArray.length).toBe(2);
       expect(dataCellsArray.length).toBe(2);
-      expect(headerCellsArray.length).toBe(dataCellsArray.length);
     });
 
     it('should remove column with data cell if repaintChangesOnly=true', async () => {
@@ -133,7 +132,6 @@ describe('Bugs', () => {
       expect(dataCellsArray.length).toBe(2);
 
       instance.deleteColumn('field_2');
-
       jest.runAllTimers();
 
       visibleColumns = instance.getVisibleColumns();
@@ -145,7 +143,6 @@ describe('Bugs', () => {
 
       expect(headerCellsArray.length).toBe(1);
       expect(dataCellsArray.length).toBe(1);
-      expect(headerCellsArray.length).toBe(dataCellsArray.length);
     });
   });
 });
