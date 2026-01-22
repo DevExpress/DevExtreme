@@ -17,7 +17,7 @@ import {
 } from '../../helpers/scheduler/helpers.js';
 import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const { module, test, testStart } = QUnit;
 
@@ -261,9 +261,9 @@ module('All day appointments common', config, () => {
                     maxAppointmentsPerCell: 2
                 });
 
-                assert.roughEqual(scheduler.appointments.getAppointmentHeight(0), 25, 1.5, 'Appointment has correct height');
-                assert.roughEqual(scheduler.appointments.getAppointmentHeight(1), 25, 1.5, 'Appointment has correct height');
-                assert.roughEqual(scheduler.appointments.getAppointmentPosition(0).top, 25, 1.5, 'Appointment has correct top');
+                assert.roughEqual(scheduler.appointments.getAppointmentHeight(0), 13.5, 1.5, 'Appointment has correct height');
+                assert.roughEqual(scheduler.appointments.getAppointmentHeight(1), 13.5, 1.5, 'Appointment has correct height');
+                assert.roughEqual(scheduler.appointments.getAppointmentPosition(0).top, 30, 1.5, 'Appointment has correct top');
 
                 assert.equal(scheduler.appointments.compact.getButtonCount(), 1, 'Appointment collector is rendered');
             });
