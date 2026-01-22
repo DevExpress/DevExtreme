@@ -499,7 +499,13 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     // B255430
     const updateItemsHandler = function (change) {
       that._columnsController.columnsChanged.remove(updateItemsHandler);
-      const needsFullRepaint = optionNames.visible || that._columnsController.getVisibleColumns().some((col) => col.showEditorAlways);
+
+      const visibleColumns = that._columnsController.getVisibleColumns();
+      const hasAddedOrDeletedColumns = visibleColumns.some((col) => col.added)
+        || that._columnsController.getColumns().some((col) => col.deleted);
+      const hasShowEditorAlways = visibleColumns.some((col) => col.showEditorAlways);
+      const needsFullRepaint = optionNames.visible || hasAddedOrDeletedColumns || hasShowEditorAlways;
+
       that.updateItems({
         repaintChangesOnly: needsFullRepaint ? false : that.option('repaintChangesOnly'),
         event: change?.changeTypes?.event,
