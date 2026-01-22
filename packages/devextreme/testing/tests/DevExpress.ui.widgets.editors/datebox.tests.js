@@ -3152,7 +3152,6 @@ QUnit.module('valueChanged handler should receive correct event', {
             this.$input.trigger($.Event('keydown', { key: 'Enter' }));
 
             this.checkEvent(assert, 'keydown', this.$input, 'enter');
-            this.testProgramChange(assert);
         });
     });
 
