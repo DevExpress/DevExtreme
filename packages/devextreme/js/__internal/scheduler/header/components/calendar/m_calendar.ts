@@ -11,7 +11,7 @@ import type { CalendarProperties } from '@ts/ui/calendar/calendar';
 import Calendar from '@ts/ui/calendar/calendar';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 
-import type { HeaderCalendarOptions } from './types';
+import type { HeaderCalendarOptions } from '../../core/types';
 
 const CALENDAR_CLASS = 'dx-scheduler-navigator-calendar';
 const CALENDAR_POPOVER_CLASS = 'dx-scheduler-navigator-calendar-popover';

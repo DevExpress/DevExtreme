@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>DevExtreme jQuery Example</title>
 
@@ -42,6 +43,7 @@
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
 </head>
+
 <body class="dx-surface">
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
@@ -49,15 +51,20 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+        <div id="scheduler"></div>
         <script>
             $(() => {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: () => { alert("clicked"); }
+                $("#scheduler").dxScheduler({
+                    dataSource: [],
+                    views: ['week'],
+                    currentView: 'week',
+                    currentDate: new Date(2021, 2, 28),
+                    width: 600,
+                    height: 400,
                 });
             });
         </script>
     </div>
 </body>
+
 </html>

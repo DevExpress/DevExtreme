@@ -1,4 +1,4 @@
-import '../m_recurrence_editor';
+import '../../m_recurrence_editor';
 import '@js/ui/text_area';
 import '@js/ui/tag_box';
 import '@js/ui/switch';
@@ -14,7 +14,7 @@ import { extend } from '@js/core/utils/extend';
 import Form from '@js/ui/form';
 import { current, isFluent } from '@js/ui/themes';
 
-import timeZoneUtils from '../m_utils_time_zone';
+import timeZoneUtils from '../../m_utils_time_zone';
 
 const SCREEN_SIZE_OF_SINGLE_COLUMN = 600;
 

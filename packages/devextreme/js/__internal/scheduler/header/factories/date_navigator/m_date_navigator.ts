@@ -6,9 +6,9 @@ import { current, isMaterialBased } from '@js/ui/themes';
 import type { Item as ToolbarItem } from '@js/ui/toolbar';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { extend } from '@ts/core/utils/m_extend';
-import type { SchedulerHeader } from '@ts/scheduler/header/m_header';
+import type { SchedulerHeader } from '@ts/scheduler/header/components/m_header';
 
-import { Direction } from './constants';
+import { Direction } from '../../core/constants';
 
 export const CLASS = {
   container: 'dx-scheduler-navigator',

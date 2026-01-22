@@ -7,10 +7,10 @@ import type { GroupItem, Item as FormItem } from '@js/ui/form';
 import type { ToolbarItem } from '@js/ui/popup';
 import { toMilliseconds } from '@ts/utils/toMilliseconds';
 
-import fx from '../../../common/core/animation/fx';
-import { createScheduler } from '../__tests__/__mock__/create_scheduler';
-import { setupSchedulerTestEnvironment } from '../__tests__/__mock__/m_mock_scheduler';
-import { DEFAULT_SCHEDULER_OPTIONS } from '../utils/options/constants';
+import fx from '../../../../common/core/animation/fx';
+import { createScheduler } from '../../__tests__/__mock__/create_scheduler';
+import { setupSchedulerTestEnvironment } from '../../__tests__/__mock__/m_mock_scheduler';
+import { DEFAULT_SCHEDULER_OPTIONS } from '../../utils/options/constants';
 
 const CLASSES = {
   icon: 'dx-scheduler-form-icon',

@@ -214,7 +214,7 @@ describe('CleanExecutor E2E', () => {
       const srcDir = path.join(tempDir, 'packages', 'test-lib', 'src');
 
       fs.mkdirSync(path.join(srcDir, 'common'), { recursive: true });
-      await writeFileText(path.join(srcDir, 'common', 'utils.ts'), 'export const utils = {};');
+      await writeFileText(path.join(srcDir, 'common', 'index.ts'), 'export const utils = {};');
 
       fs.mkdirSync(path.join(srcDir, 'types'), { recursive: true });
       await writeFileText(path.join(srcDir, 'types', 'index.d.ts'), 'export type Foo = string;');
@@ -229,7 +229,7 @@ describe('CleanExecutor E2E', () => {
       expect(result.success).toBe(true);
 
       expect(fs.existsSync(path.join(srcDir, 'core', 'component.tsx'))).toBe(true);
-      expect(fs.existsSync(path.join(srcDir, 'common', 'utils.ts'))).toBe(true);
+      expect(fs.existsSync(path.join(srcDir, 'common', 'index.ts'))).toBe(true);
       expect(fs.existsSync(path.join(srcDir, 'types', 'index.d.ts'))).toBe(true);
 
       expect(fs.existsSync(path.join(srcDir, 'button.tsx'))).toBe(false);
@@ -339,7 +339,7 @@ describe('CleanExecutor E2E', () => {
       await writeFileText(path.join(srcDir, 'core', 'config.tsx'), 'export class Config {}');
 
       fs.mkdirSync(path.join(srcDir, 'common'), { recursive: true });
-      await writeFileText(path.join(srcDir, 'common', 'utils.ts'), 'export const utils = {};');
+      await writeFileText(path.join(srcDir, 'common', 'index.ts'), 'export const utils = {};');
 
       fs.mkdirSync(path.join(srcDir, 'data'), { recursive: true });
       await writeFileText(path.join(srcDir, 'data', 'grid.tsx'), 'export const Grid = () => {};');
@@ -372,7 +372,7 @@ describe('CleanExecutor E2E', () => {
       expect(fs.existsSync(path.join(srcDir, 'core', 'component.tsx'))).toBe(true);
       expect(fs.existsSync(path.join(srcDir, 'core', 'config.tsx'))).toBe(true);
       expect(fs.existsSync(path.join(srcDir, 'common'))).toBe(true);
-      expect(fs.existsSync(path.join(srcDir, 'common', 'utils.ts'))).toBe(true);
+      expect(fs.existsSync(path.join(srcDir, 'common', 'index.ts'))).toBe(true);
     });
 
     it('should preserve specific files at root level', async () => {
@@ -438,7 +438,7 @@ describe('CleanExecutor E2E', () => {
       expect(result.success).toBe(true);
 
       expect(fs.existsSync(path.join(srcDir, 'core', 'component.tsx'))).toBe(true);
-      expect(fs.existsSync(path.join(srcDir, 'common', 'utils.ts'))).toBe(true);
+      expect(fs.existsSync(path.join(srcDir, 'common', 'index.ts'))).toBe(true);
     });
 
     it('should handle absolute path exclusions', async () => {

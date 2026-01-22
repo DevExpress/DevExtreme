@@ -12,11 +12,11 @@ import type dxPopup from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import { current, isFluent } from '@js/ui/themes';
 
-import { hide as hideLoading, show as showLoading } from '../m_loading';
-import type { SafeAppointment } from '../types';
-import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
-import { getAppointmentGroupValues, getRawAppointmentGroupValues } from '../utils/resource_manager/appointment_groups_utils';
-import type { AppointmentForm } from './m_form';
+import { hide as hideLoading, show as showLoading } from '../../m_loading';
+import type { SafeAppointment } from '../../types';
+import { AppointmentAdapter } from '../../utils/appointment_adapter/appointment_adapter';
+import { getAppointmentGroupValues, getRawAppointmentGroupValues } from '../../utils/resource_manager/appointment_groups_utils';
+import type { AppointmentForm } from './form/m_form';
 
 export const APPOINTMENT_POPUP_CLASS = 'dx-scheduler-appointment-popup';
 

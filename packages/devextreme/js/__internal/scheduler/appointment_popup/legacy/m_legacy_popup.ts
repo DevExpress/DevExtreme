@@ -9,11 +9,11 @@ import {
   getMaxWidth,
   getPopupToolbarItems,
   isPopupFullScreenNeeded,
-} from '@ts/scheduler/r1/appointment_popup/index';
+} from '@ts/scheduler/r1/appointment_popup';
 
-import { hide as hideLoading, show as showLoading } from '../m_loading';
-import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
-import { getAppointmentGroupValues, getRawAppointmentGroupValues } from '../utils/resource_manager/appointment_groups_utils';
+import { hide as hideLoading, show as showLoading } from '../../m_loading';
+import { AppointmentAdapter } from '../../utils/appointment_adapter/appointment_adapter';
+import { getAppointmentGroupValues, getRawAppointmentGroupValues } from '../../utils/resource_manager/appointment_groups_utils';
 
 const toMs = dateUtils.dateToMilliseconds;
 

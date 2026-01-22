@@ -19,17 +19,17 @@ import { current, isFluent } from '@js/ui/themes';
 import { dateSerialization } from '@ts/core/utils/m_date_serialization';
 import type Popup from '@ts/ui/popup/m_popup';
 
-import timeZoneUtils from '../m_utils_time_zone';
-import type { SafeAppointment } from '../types';
-import type { ResourceLoader } from '../utils/loader/resource_loader';
-import { DEFAULT_ICONS_SHOW_MODE } from '../utils/options/constants';
-import { getAppointmentGroupIndex, getRawAppointmentGroupValues, getSafeGroupValues } from '../utils/resource_manager/appointment_groups_utils';
-import type { ResourceManager } from '../utils/resource_manager/resource_manager';
-import { customizeFormItems } from './m_customize_form_items';
-import { RecurrenceForm } from './m_recurrence_form';
-import { createFormIconTemplate, getStartDateCommonConfig, RecurrenceRule } from './utils';
+import timeZoneUtils from '../../../m_utils_time_zone';
+import type { SafeAppointment } from '../../../types';
+import type { ResourceLoader } from '../../../utils/loader/resource_loader';
+import { DEFAULT_ICONS_SHOW_MODE } from '../../../utils/options/constants';
+import { getAppointmentGroupIndex, getRawAppointmentGroupValues, getSafeGroupValues } from '../../../utils/resource_manager/appointment_groups_utils';
+import type { ResourceManager } from '../../../utils/resource_manager/resource_manager';
+import { customizeFormItems } from '../../factories/customize_form_items/m_customize_form_items';
+import { createFormIconTemplate, getStartDateCommonConfig, RecurrenceRule } from '../../utils';
+import { RecurrenceForm } from '../recurrence_form/m_recurrence_form';
 
-const CLASSES = {
+const FORM_CLASSES = {
   form: 'dx-scheduler-form',
   icon: 'dx-icon',
   hidden: 'dx-hidden',
@@ -260,7 +260,7 @@ export class AppointmentForm {
         xs: 1,
       },
       elementAttr: {
-        class: CLASSES.form,
+        class: FORM_CLASSES.form,
       },
       onFieldDataChanged: (e) => {
         const {
@@ -304,8 +304,8 @@ export class AppointmentForm {
       },
       onContentReady: (e): void => {
         const $formElement = e.component.$element();
-        this._$mainGroup = $formElement.find(`.${CLASSES.mainGroup}`);
-        this._$recurrenceGroup = $formElement.find(`.${CLASSES.recurrenceGroup}`);
+        this._$mainGroup = $formElement.find(`.${FORM_CLASSES.mainGroup}`);
+        this._$recurrenceGroup = $formElement.find(`.${FORM_CLASSES.recurrenceGroup}`);
 
         onContentReady?.call(this, e);
       },
@@ -320,7 +320,7 @@ export class AppointmentForm {
       name: MAIN_GROUP_NAME,
       itemType: 'group',
       colSpan: 1,
-      cssClass: CLASSES.mainGroup,
+      cssClass: FORM_CLASSES.mainGroup,
       items: [
         this.createSubjectGroup(),
         this.createDateRangeGroup(),
@@ -337,7 +337,7 @@ export class AppointmentForm {
     return {
       name: SUBJECT_GROUP_NAME,
       itemType: 'group',
-      cssClass: `${CLASSES.subjectGroup} ${CLASSES.groupWithIcon}`,
+      cssClass: `${FORM_CLASSES.subjectGroup} ${FORM_CLASSES.groupWithIcon}`,
       colCount: 2,
       colCountByScreen: {
         xs: 2,
@@ -346,14 +346,14 @@ export class AppointmentForm {
         {
           name: SUBJECT_ICON_NAME,
           colSpan: 1,
-          cssClass: CLASSES.formIcon,
+          cssClass: FORM_CLASSES.formIcon,
           template: createFormIconTemplate('isnotblank'),
         },
         {
           name: SUBJECT_EDITOR_NAME,
           colSpan: 1,
           itemType: 'simple',
-          cssClass: CLASSES.textEditor,
+          cssClass: FORM_CLASSES.textEditor,
           dataField: textExpr,
           label: {
             text: messageLocalization.format('dxScheduler-editorLabelTitle'),
@@ -368,7 +368,7 @@ export class AppointmentForm {
     return {
       name: DATE_GROUP_NAME,
       itemType: 'group',
-      cssClass: `${CLASSES.dateRangeGroup} ${CLASSES.groupWithIcon}`,
+      cssClass: `${FORM_CLASSES.dateRangeGroup} ${FORM_CLASSES.groupWithIcon}`,
       colCount: 2,
       colCountByScreen: {
         xs: 2,
@@ -377,7 +377,7 @@ export class AppointmentForm {
         {
           name: DATE_ICON_NAME,
           colSpan: 1,
-          cssClass: CLASSES.formIcon,
+          cssClass: FORM_CLASSES.formIcon,
           template: createFormIconTemplate('clock'),
         },
         {
@@ -401,7 +401,7 @@ export class AppointmentForm {
       name: ALL_DAY_EDITOR_NAME,
       itemType: 'simple',
       dataField: allDayExpr,
-      cssClass: CLASSES.allDaySwitch,
+      cssClass: FORM_CLASSES.allDaySwitch,
       label: {
         text: messageLocalization.format('dxScheduler-allDay'),
         location: 'left',
@@ -445,18 +445,18 @@ export class AppointmentForm {
       startDateExpr,
       {
         name: START_DATE_GROUP_NAME,
-        cssClass: CLASSES.startDateGroup,
+        cssClass: FORM_CLASSES.startDateGroup,
       },
       {
         name: START_DATE_EDITOR_NAME,
         label: {
           text: messageLocalization.format('dxScheduler-editorLabelStartDate'),
         },
-        cssClass: CLASSES.startDateEditor,
+        cssClass: FORM_CLASSES.startDateEditor,
       },
       {
         name: START_TIME_EDITOR_NAME,
-        cssClass: CLASSES.startTimeEditor,
+        cssClass: FORM_CLASSES.startTimeEditor,
         editorOptions: {
           inputAttr: {
             'aria-label': messageLocalization.format('dxScheduler-editorAriaLabelStartTime'),
@@ -466,7 +466,7 @@ export class AppointmentForm {
       {
         name: START_DATE_TIMEZONE_EDITOR_NAME,
         dataField: startDateTimeZoneExpr,
-        cssClass: CLASSES.startDateTimeZoneEditor,
+        cssClass: FORM_CLASSES.startDateTimeZoneEditor,
         editorOptions: {
           onValueChanged: (e) => {
             const endDateTimeZoneEditor = this.dxForm.getEditor(endDateTimeZoneExpr);
@@ -485,18 +485,18 @@ export class AppointmentForm {
       endDateExpr,
       {
         name: END_DATE_GROUP_NAME,
-        cssClass: CLASSES.endDateGroup,
+        cssClass: FORM_CLASSES.endDateGroup,
       },
       {
         name: END_DATE_EDITOR_NAME,
         label: {
           text: messageLocalization.format('dxScheduler-editorLabelEndDate'),
         },
-        cssClass: CLASSES.endDateEditor,
+        cssClass: FORM_CLASSES.endDateEditor,
       },
       {
         name: END_TIME_EDITOR_NAME,
-        cssClass: CLASSES.endTimeEditor,
+        cssClass: FORM_CLASSES.endTimeEditor,
         editorOptions: {
           inputAttr: {
             'aria-label': messageLocalization.format('dxScheduler-editorAriaLabelEndTime'),
@@ -506,7 +506,7 @@ export class AppointmentForm {
       {
         name: END_DATE_TIMEZONE_EDITOR_NAME,
         dataField: endDateTimeZoneExpr,
-        cssClass: CLASSES.endDateTimeZoneEditor,
+        cssClass: FORM_CLASSES.endDateTimeZoneEditor,
       },
     );
   }
@@ -654,19 +654,19 @@ export class AppointmentForm {
       colCountByScreen: {
         xs: 2,
       },
-      cssClass: `${CLASSES.repeatGroup} ${CLASSES.groupWithIcon}`,
+      cssClass: `${FORM_CLASSES.repeatGroup} ${FORM_CLASSES.groupWithIcon}`,
       items: [
         {
           name: REPEAT_ICON_NAME,
           colSpan: 1,
-          cssClass: CLASSES.formIcon,
+          cssClass: FORM_CLASSES.formIcon,
           template: createFormIconTemplate('repeat'),
         },
         {
           name: REPEAT_EDITOR_NAME,
           colSpan: 1,
           itemType: 'simple',
-          cssClass: CLASSES.repeatEditor,
+          cssClass: FORM_CLASSES.repeatEditor,
           label: {
             text: messageLocalization.format('dxScheduler-editorLabelRecurrence'),
           },
@@ -710,12 +710,12 @@ export class AppointmentForm {
       colCountByScreen: {
         xs: 2,
       },
-      cssClass: `${CLASSES.descriptionGroup} ${CLASSES.groupWithIcon}`,
+      cssClass: `${FORM_CLASSES.descriptionGroup} ${FORM_CLASSES.groupWithIcon}`,
       items: [
         {
           name: DESCRIPTION_ICON_NAME,
           colSpan: 1,
-          cssClass: CLASSES.formIcon,
+          cssClass: FORM_CLASSES.formIcon,
           template: createFormIconTemplate('description'),
         },
         {
@@ -723,7 +723,7 @@ export class AppointmentForm {
           dataField: descriptionExpr,
           colSpan: 1,
           itemType: 'simple',
-          cssClass: CLASSES.descriptionEditor,
+          cssClass: FORM_CLASSES.descriptionEditor,
           label: {
             text: messageLocalization.format('dxScheduler-editorLabelDescription'),
           },
@@ -771,12 +771,12 @@ export class AppointmentForm {
         colCountByScreen: {
           xs: 2,
         },
-        cssClass: `${CLASSES.resourcesGroup} ${CLASSES.groupWithIcon}`,
+        cssClass: `${FORM_CLASSES.resourcesGroup} ${FORM_CLASSES.groupWithIcon}`,
         items: [
           {
             name: `${RESOURCES_GROUP_NAME}Icon`,
             colSpan: 1,
-            cssClass: `${CLASSES.formIcon} ${CLASSES.defaultResourceIcon}`,
+            cssClass: `${FORM_CLASSES.formIcon} ${FORM_CLASSES.defaultResourceIcon}`,
             template: createFormIconTemplate('addcircleoutline'),
           },
           {
@@ -800,12 +800,12 @@ export class AppointmentForm {
         colCountByScreen: {
           xs: 2,
         },
-        cssClass: CLASSES.groupWithIcon,
+        cssClass: FORM_CLASSES.groupWithIcon,
         items: [
           {
             colSpan: 1,
             name: `${dataField}Icon`,
-            cssClass: CLASSES.formIcon,
+            cssClass: FORM_CLASSES.formIcon,
             template: createFormIconTemplate(icon),
           },
           item,
@@ -820,20 +820,20 @@ export class AppointmentForm {
       colCountByScreen: {
         xs: 1,
       },
-      cssClass: CLASSES.resourcesGroup,
+      cssClass: FORM_CLASSES.resourcesGroup,
       items: resourcesItems,
     } as GroupItem;
   }
 
   private setStylingModeToEditors(item: FormItem, showIcon: boolean): void {
     const itemClasses = (item.cssClass ?? '').split(' ');
-    const isIconItem = itemClasses.includes(CLASSES.formIcon);
+    const isIconItem = itemClasses.includes(FORM_CLASSES.formIcon);
 
     if (isIconItem) {
-      const isHidden = itemClasses.includes(CLASSES.hidden);
+      const isHidden = itemClasses.includes(FORM_CLASSES.hidden);
 
       if (!showIcon && !isHidden) {
-        item.cssClass += ` ${CLASSES.hidden}`;
+        item.cssClass += ` ${FORM_CLASSES.hidden}`;
       }
 
       return;
@@ -870,14 +870,14 @@ export class AppointmentForm {
     }
 
     if (this._$mainGroup) {
-      this._$mainGroup.removeClass(CLASSES.mainHidden);
+      this._$mainGroup.removeClass(FORM_CLASSES.mainHidden);
       this._$mainGroup.removeAttr('inert');
 
       this.focusFirstFocusableInGroup(this._$mainGroup);
     }
 
     if (this._$recurrenceGroup) {
-      this._$recurrenceGroup.addClass(CLASSES.recurrenceHidden);
+      this._$recurrenceGroup.addClass(FORM_CLASSES.recurrenceHidden);
       this._$recurrenceGroup.attr('inert', true);
     }
   }
@@ -893,12 +893,12 @@ export class AppointmentForm {
     }
 
     if (this._$mainGroup) {
-      this._$mainGroup.addClass(CLASSES.mainHidden);
+      this._$mainGroup.addClass(FORM_CLASSES.mainHidden);
       this._$mainGroup.attr('inert', true);
     }
 
     if (this._$recurrenceGroup) {
-      this._$recurrenceGroup.removeClass(CLASSES.recurrenceHidden);
+      this._$recurrenceGroup.removeClass(FORM_CLASSES.recurrenceHidden);
       this._$recurrenceGroup.removeAttr('inert');
 
       this.focusFirstFocusableInGroup(this._$recurrenceGroup);
@@ -935,7 +935,7 @@ export class AppointmentForm {
       groupIndex,
     });
 
-    const $icon = this.dxForm.$element().find(`.${CLASSES.subjectGroup} .${CLASSES.formIcon} .${CLASSES.icon}`);
+    const $icon = this.dxForm.$element().find(`.${FORM_CLASSES.subjectGroup} .${FORM_CLASSES.formIcon} .${FORM_CLASSES.icon}`);
 
     $icon.css('color', color ?? '');
   }
@@ -988,7 +988,7 @@ export class AppointmentForm {
             this.showRecurrenceGroup();
           },
           elementAttr: {
-            class: `${CLASSES.recurrenceSettingsButton} dx-shape-standard`,
+            class: `${FORM_CLASSES.recurrenceSettingsButton} dx-shape-standard`,
           },
         },
       });
@@ -1023,7 +1023,7 @@ export class AppointmentForm {
   }
 
   private focusFirstFocusableInGroup($group: dxElementWrapper): void {
-    const focusTarget = $group.find(`.${CLASSES.fieldItemContent} [tabindex]`).first().get(0) as HTMLElement;
+    const focusTarget = $group.find(`.${FORM_CLASSES.fieldItemContent} [tabindex]`).first().get(0) as HTMLElement;
     focusTarget?.focus({ preventScroll: true });
   }
 }

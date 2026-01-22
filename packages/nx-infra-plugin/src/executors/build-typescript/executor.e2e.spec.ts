@@ -24,7 +24,7 @@ describe('BuildTypescriptExecutor E2E', () => {
     );
 
     await writeFileText(
-      path.join(srcDir, 'utils.ts'),
+      path.join(srcDir, 'index.ts'),
       `export const add = (a: number, b: number): number => a + b;\n`,
     );
 
