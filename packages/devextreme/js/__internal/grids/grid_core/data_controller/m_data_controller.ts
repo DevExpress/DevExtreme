@@ -488,16 +488,18 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     e.group = columnsController.getGroupDataSourceParameters(!dataSource.remoteOperations().grouping);
   }
 
-  private needFullRepaint(optionNames) {
+  private needFullRepaint(optionNames, changeTypes) {
     if (optionNames.visible) {
       return true;
     }
 
-    const visibleColumns = this._columnsController.getVisibleColumns();
-    const hasAddedOrDeletedColumns = visibleColumns.some((col) => col.added)
-        || this._columnsController.getColumns().some((col) => col.deleted);
-    const hasShowEditorAlways = visibleColumns.some((col) => col.showEditorAlways);
-    return hasAddedOrDeletedColumns || hasShowEditorAlways;
+    const columnCountChanged = changeTypes.columns && optionNames.all;
+    if (columnCountChanged) {
+      return true;
+    }
+
+    const hasShowEditorAlways = this._columnsController.getVisibleColumns().some((col) => col.showEditorAlways);
+    return hasShowEditorAlways;
   }
 
   private _handleColumnsChanged(e) {
@@ -511,7 +513,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     // B255430
     const updateItemsHandler = function (change) {
       that._columnsController.columnsChanged.remove(updateItemsHandler);
-      const needsFullRepaint = that.needFullRepaint(optionNames);
+      const needsFullRepaint = that.needFullRepaint(optionNames, changeTypes);
 
       that.updateItems({
         repaintChangesOnly: needsFullRepaint ? false : that.option('repaintChangesOnly'),
