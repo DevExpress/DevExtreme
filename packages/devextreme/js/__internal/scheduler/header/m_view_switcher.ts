@@ -27,7 +27,7 @@ const getViewsAndSelectedView = (header: SchedulerHeader):
 
   return {
     selectedView: isSelectedViewInViews ? selectedView : undefined,
-    views,
+    views: formattedViews,
   };
 };
 
