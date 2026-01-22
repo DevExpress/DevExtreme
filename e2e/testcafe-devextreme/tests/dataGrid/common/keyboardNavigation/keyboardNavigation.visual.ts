@@ -497,7 +497,7 @@ test.meta({ unstable: true })('Navigate to last cell in the last row when virtua
   },
 }));
 
-test.meta({ unstable: true })('Navigate to first cell in the first row when virtual scrolling is enabled', async (t) => {
+test('Navigate to first cell in the first row when virtual scrolling is enabled', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
