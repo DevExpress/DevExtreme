@@ -72,7 +72,7 @@ describe('Bugs', () => {
       },
     ];
 
-    it('should add column with  data cell if repaintChangesOnly=true', async () => {
+    it('should add column with data cell if repaintChangesOnly=true', async () => {
       const { instance, component } = await createDataGrid({
         dataSource: data,
         repaintChangesOnly: true,
@@ -107,6 +107,44 @@ describe('Bugs', () => {
 
       expect(headerCellsArray.length).toBe(2);
       expect(dataCellsArray.length).toBe(2);
+      expect(headerCellsArray.length).toBe(dataCellsArray.length);
+    });
+
+    it('should remove column with data cell if repaintChangesOnly=true', async () => {
+      const { instance, component } = await createDataGrid({
+        dataSource: data,
+        repaintChangesOnly: true,
+        columns: [
+          {
+            dataField: 'field_1',
+          },
+          {
+            dataField: 'field_2',
+          },
+        ],
+      });
+
+      let visibleColumns = instance.getVisibleColumns();
+      let headerCellsArray = Array.from(component.getHeaderCells());
+      let dataCellsArray = Array.from(component.getDataCells(0));
+
+      expect(visibleColumns.length).toBe(2);
+      expect(headerCellsArray.length).toBe(2);
+      expect(dataCellsArray.length).toBe(2);
+
+      instance.deleteColumn('field_2');
+
+      jest.runAllTimers();
+
+      visibleColumns = instance.getVisibleColumns();
+      headerCellsArray = Array.from(component.getHeaderCells());
+      dataCellsArray = Array.from(component.getDataCells(0));
+
+      expect(visibleColumns.length).toBe(1);
+      expect(visibleColumns[0].dataField).toBe('field_1');
+
+      expect(headerCellsArray.length).toBe(1);
+      expect(dataCellsArray.length).toBe(1);
       expect(headerCellsArray.length).toBe(dataCellsArray.length);
     });
   });
