@@ -1012,7 +1012,7 @@ QUnit.module('delete key', moduleConfig, () => {
         assert.equal($input.val(), '_- x', 'letter deleted');
     });
 
-    QUnit.skip('should skip consecutive stub chars', function(assert) {
+    QUnit.test('should skip consecutive stub chars', function(assert) {
         const $textEditor = $('#texteditor').dxTextEditor({
             mask: '0---0'
         });
@@ -1025,7 +1025,7 @@ QUnit.module('delete key', moduleConfig, () => {
             .caret(1)
             .press('del');
 
-        assert.deepEqual(keyboard.caret(), { start: 4, end: 4 }, 'caret is set after a stub');
+        assert.deepEqual(keyboard.caret(), { start: 5, end: 5 }, 'caret is set after a stub');
     });
 });
 
@@ -2061,7 +2061,7 @@ QUnit.module('paste', moduleConfig, () => {
         assert.equal($input.val(), '00', '\'v\' char from ctrl+V combination was ignored');
     });
 
-    QUnit.skip('digit stub should not be duplicated after paste if caret is placed before the stub', function(assert) {
+    QUnit.test('digit stub should not be duplicated after paste if caret is placed before the stub', function(assert) {
         const $textEditor = $('#texteditor').dxTextEditor({
             mask: '10000'
         });
@@ -2072,7 +2072,7 @@ QUnit.module('paste', moduleConfig, () => {
         caretWorkaround($input);
 
         keyboard
-            .caret(0)
+            .caret(1)
             .paste('6');
 
         assert.strictEqual(textEditor.option('text'), '16___', 'only pasted digit is added');
