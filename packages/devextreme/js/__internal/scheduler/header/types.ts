@@ -1,7 +1,5 @@
 import type { FirstDayOfWeek } from '@js/common';
-import type { NativeEventInfo } from '@js/common/core/events';
-import type dxCalendar from '@js/ui/calendar';
-import type { ValueChangedInfo } from '@js/ui/editor/editor';
+import type { ValueChangedEvent } from '@js/ui/calendar';
 
 import type { NormalizedView, SafeSchedulerOptions } from '../utils/options/types';
 
@@ -33,14 +31,14 @@ export interface IntervalOptions {
   agendaDuration?: number;
 }
 
-export interface SchedulerCalendarProperties {
+export interface SchedulerCalendarOptions {
   value: Date;
   min?: Date;
   max?: Date;
   firstDayOfWeek?: FirstDayOfWeek;
   focusStateEnabled?: boolean;
   tabIndex?: number;
-  onValueChanged?: (e: (NativeEventInfo<dxCalendar> & ValueChangedInfo)) => void;
+  onValueChanged?: (e: ValueChangedEvent) => void;
 }
 
 export type EventMapHandler = (value: unknown) => void;

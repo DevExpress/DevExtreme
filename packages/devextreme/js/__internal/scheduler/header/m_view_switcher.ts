@@ -20,10 +20,10 @@ const getViewsAndSelectedView = (header: SchedulerHeader):
   selectedView: string | undefined;
   views: NormalizedView[];
 } => {
-  const headerOptions = header.option();
-  const views = formatViews(headerOptions.views);
-  const selectedView = getViewName(headerOptions.currentView);
-  const isSelectedViewInViews = views.some((view) => view.name === selectedView);
+  const { views, currentView } = header.option();
+  const formattedViews = formatViews(views);
+  const selectedView = getViewName(currentView);
+  const isSelectedViewInViews = formattedViews.some((view) => view.name === selectedView);
 
   return {
     selectedView: isSelectedViewInViews ? selectedView : undefined,

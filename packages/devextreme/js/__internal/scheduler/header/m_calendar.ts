@@ -5,28 +5,21 @@ import $ from '@js/core/renderer';
 import type { DateLike } from '@js/ui/calendar';
 import Popover from '@js/ui/popover/ui.popover';
 import Popup from '@js/ui/popup/ui.popup';
-import type { Properties as SchedulerProperties } from '@js/ui/scheduler';
 import Widget from '@ts/core/widget/widget';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
 import type { CalendarProperties } from '@ts/ui/calendar/calendar';
 import Calendar from '@ts/ui/calendar/calendar';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 
-import type { SchedulerCalendarProperties } from './types';
+import type { SchedulerCalendarOptions } from './types';
 
 const CALENDAR_CLASS = 'dx-scheduler-navigator-calendar';
 const CALENDAR_POPOVER_CLASS = 'dx-scheduler-navigator-calendar-popover';
 
-/**
- * Calendar component that is displayed when clicking on the date navigator in the scheduler header.
- * It shows a popup/popover with a calendar widget for date selection.
- */
-export default class SchedulerCalendar extends Widget<
-  SchedulerProperties & SchedulerCalendarProperties
-> {
-  _overlay: Popup | Popover | undefined;
+export default class SchedulerCalendar extends Widget<SchedulerCalendarOptions> {
+  _overlay?: Popup | Popover;
 
-  _calendar: Calendar | undefined;
+  _calendar?: Calendar;
 
   async show(target: HTMLElement): Promise<void> {
     if (!SchedulerCalendar._isMobileLayout()) {
@@ -61,8 +54,8 @@ export default class SchedulerCalendar extends Widget<
     const isMobileLayout = SchedulerCalendar._isMobileLayout();
 
     const overlayConfig = {
-      contentTemplate: () => this._createOverlayContent(),
-      onShown: () => {
+      contentTemplate: (): dxElementWrapper => this._createOverlayContent(),
+      onShown: (): void => {
         this._calendar?.focus();
       },
       defaultOptionsRules: [
@@ -78,7 +71,7 @@ export default class SchedulerCalendar extends Widget<
           },
         },
       ],
-    } as const;
+    };
 
     if (isMobileLayout) {
       this._overlay = this._createComponent(this.$element(), Popup, overlayConfig);
@@ -122,15 +115,17 @@ export default class SchedulerCalendar extends Widget<
   }
 
   _getCalendarOptions(): CalendarProperties {
-    const schedulerOptions = this.option();
+    const {
+      value, min, max, firstDayOfWeek, focusStateEnabled, tabIndex, onValueChanged,
+    } = this.option();
     return {
-      value: schedulerOptions.value,
-      min: schedulerOptions.min,
-      max: schedulerOptions.max,
-      firstDayOfWeek: schedulerOptions.firstDayOfWeek,
-      focusStateEnabled: schedulerOptions.focusStateEnabled,
-      tabIndex: schedulerOptions.tabIndex,
-      onValueChanged: schedulerOptions.onValueChanged,
+      value,
+      min,
+      max,
+      firstDayOfWeek,
+      focusStateEnabled,
+      tabIndex,
+      onValueChanged,
       // @ts-expect-error skipFocusCheck is an internal Calendar property
       skipFocusCheck: true,
     };
