@@ -301,7 +301,7 @@ export class PopupModel {
   };
 
   getBackButton = (): HTMLButtonElement => {
-    const backButton = this.element.querySelector('.dx-toolbar-button  .dx-button[aria-label="arrowleft"]') as HTMLButtonElement;
+    const backButton = this.element.querySelector('.dx-toolbar-button  .dx-button[aria-label="Back"]') as HTMLButtonElement;
     if (!backButton) {
       throw new Error('Back button not found');
     }
