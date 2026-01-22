@@ -885,7 +885,7 @@ export class AppointmentForm {
       }
 
       const hasTopLabel = firstSimpleItemElement.querySelector(`.${CLASSES.labelTop}`) !== null;
-      const hasInnerLabel = firstSimpleItemElement.querySelector(`.${CLASSES.label}`) !== null;
+      const hasInnerLabel = !hasTopLabel && firstSimpleItemElement.querySelector(`.${CLASSES.label}`) !== null;
 
       iconElement.classList.toggle(CLASSES.formIconTopLabelOffset, hasTopLabel);
       iconElement.classList.toggle(CLASSES.formIconInnerLabelOffset, hasInnerLabel);
