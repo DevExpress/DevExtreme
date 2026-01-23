@@ -26,7 +26,7 @@ catalog:
   vue-eslint-parser: 10.0.0
   globals: 15.14.0
   gulp-eslint-new: 2.4.0
-  jquery: 3.7.1
+  jquery: 4.0.0
   "@babel/eslint-parser": 7.28.5
   "@eslint-stylistic/metadata": ^2.13.0
   "@eslint/eslintrc": 3.2.0

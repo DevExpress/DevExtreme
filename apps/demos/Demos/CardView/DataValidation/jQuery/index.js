@@ -114,13 +114,12 @@ $(() => {
           validationCallback(params) {
             return $.ajax({
               url: 'https://js.devexpress.com/Demos/NetCore/RemoteValidation/CheckUniqueEmailAddress',
-              type: 'POST',
+              type: 'GET',
               dataType: 'json',
-              contentType: 'application/json',
-              data: JSON.stringify({
+              data: {
                 id: params.data.id,
                 email: params.value,
-              }),
+              },
             });
           },
         }],
