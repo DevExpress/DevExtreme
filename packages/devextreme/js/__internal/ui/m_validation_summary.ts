@@ -125,10 +125,12 @@ class ValidationSummary extends CollectionWidget<ValidationSummaryProperties> {
 
     this.option('items', items);
 
-    this._announceOnGroupValidation(items);
+    this._announceOnGroupValidation();
   }
 
-  _announceOnGroupValidation(items): void {
+  _announceOnGroupValidation(): void {
+    const { items } = this.option();
+
     if (!items?.length) {
       this._lastAnnouncedText = '';
       this._removeAnnounceContainer();
@@ -153,7 +155,7 @@ class ValidationSummary extends CollectionWidget<ValidationSummaryProperties> {
 
     this._$announceContainer = $('<div>')
       .addClass(SCREEN_READER_ONLY_CLASS)
-      .attr('role', 'alert')
+      .attr('role', 'status')
       .appendTo(this.element());
   }
 
