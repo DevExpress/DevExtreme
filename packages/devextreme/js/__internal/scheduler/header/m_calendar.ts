@@ -21,7 +21,7 @@ export default class SchedulerCalendar extends Widget<HeaderCalendarOptions> {
 
   _calendar?: Calendar;
 
-  async show(target: HTMLElement): Promise<void> {
+  public async show(target: HTMLElement): Promise<void> {
     if (!SchedulerCalendar._isMobileLayout()) {
       this._overlay?.option('target', target);
     }
@@ -29,26 +29,26 @@ export default class SchedulerCalendar extends Widget<HeaderCalendarOptions> {
     await this._overlay?.show();
   }
 
-  async hide(): Promise<void> {
+  public async hide(): Promise<void> {
     await this._overlay?.hide();
   }
 
-  _keyboardHandler(opts: KeyboardKeyDownEvent): boolean {
+  public _keyboardHandler(opts: KeyboardKeyDownEvent): boolean {
     this._calendar?._keyboardHandler(opts);
     return true;
   }
 
-  _init(): void {
+  public _init(): void {
     super._init();
     this.$element();
   }
 
-  _render(): void {
+  public _render(): void {
     super._render();
     this._renderOverlay();
   }
 
-  _renderOverlay(): void {
+  private _renderOverlay(): void {
     this.$element().addClass(CALENDAR_POPOVER_CLASS);
 
     const isMobileLayout = SchedulerCalendar._isMobileLayout();
@@ -80,7 +80,7 @@ export default class SchedulerCalendar extends Widget<HeaderCalendarOptions> {
     }
   }
 
-  _createOverlayContent(): dxElementWrapper {
+  private _createOverlayContent(): dxElementWrapper {
     const result = $('<div>').addClass(CALENDAR_CLASS);
     this._calendar = this._createComponent(result, Calendar, this._getCalendarOptions());
 
@@ -92,7 +92,7 @@ export default class SchedulerCalendar extends Widget<HeaderCalendarOptions> {
     return result;
   }
 
-  _createScrollable(content: dxElementWrapper): Scrollable {
+  private _createScrollable(content: dxElementWrapper): Scrollable {
     const result = this._createComponent('<div>', Scrollable, {
       height: 'auto',
       direction: 'both',
@@ -102,7 +102,7 @@ export default class SchedulerCalendar extends Widget<HeaderCalendarOptions> {
     return result;
   }
 
-  _optionChanged(
+  public _optionChanged(
     { name, value } : { name: string; value: DateLike | DateLike[] },
   ): void {
     switch (name) {
@@ -114,7 +114,7 @@ export default class SchedulerCalendar extends Widget<HeaderCalendarOptions> {
     }
   }
 
-  _getCalendarOptions(): CalendarProperties {
+  private _getCalendarOptions(): CalendarProperties {
     const {
       value, min, max, firstDayOfWeek, focusStateEnabled, tabIndex, onValueChanged,
     } = this.option();
@@ -131,7 +131,7 @@ export default class SchedulerCalendar extends Widget<HeaderCalendarOptions> {
     };
   }
 
-  static _isMobileLayout(): boolean {
+  private static _isMobileLayout(): boolean {
     return !devices.current().generic;
   }
 }
