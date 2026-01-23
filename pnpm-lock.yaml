@@ -2295,6 +2295,9 @@ importers:
       rimraf:
         specifier: 3.0.2
         version: 3.0.2
+      tsc-alias:
+        specifier: 1.8.10
+        version: 1.8.10
     devDependencies:
       '@types/babel__core':
         specifier: 7.20.5

@@ -17,7 +17,8 @@
     "minimatch": "9.0.5",
     "normalize-path": "3.0.0",
     "lodash": "4.17.23",
-    "rimraf": "3.0.2"
+    "rimraf": "3.0.2",
+    "tsc-alias": "1.8.10"
   },
   "peerDependencies": {
     "@babel/core": ">=7.0.0",
