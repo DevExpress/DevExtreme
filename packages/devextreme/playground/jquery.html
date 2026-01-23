@@ -49,14 +49,123 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+        <div id="selectedNodeKeys"></div>
+        <div id="button_print"></div>
+        <div id="treeview"></div>
         <script>
             $(() => {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: () => { alert("clicked"); }
+                const treeview = $("#treeview")
+                    .dxTreeView({
+                    items: products,
+                    selectionMode: "multiple",
+                    selectByClick: true,
+                    showCheckBoxesMode: "selectAll",
+                    selectNodesRecursive: true,
+                    allowShowCheckbox: ({component, item}) => {
+                        if(item.id === '1_1_1_1') {
+                            return false;
+                        }
+                        return true;
+                    },
+                    })
+                    .dxTreeView("instance");
+                
+                $("#button_print").dxButton({
+                    text: "Print selected node keys",
+                    onClick(e) {
+                    $("#selectedNodeKeys").empty();
+                    treeview.getSelectedNodeKeys().forEach((key) => {
+                        $("#selectedNodeKeys").append(`<div>${key}</div>`);
+                    });
+                    }
                 });
             });
+
+            const products = [
+  {
+    id: "1",
+    text: "1 : Stores",
+    expanded: true,
+    items: [
+      {
+        id: "1_1",
+        text: "1_1 : Super Mart of the West",
+        expanded: true,
+        items: [
+          {
+            id: "1_1_1",
+            text: "1_1_1 : Video Players",
+            expanded: true,
+            items: [
+              {
+                id: "1_1_1_1",
+                text: "1_1_1_1 : HD Video Player",
+                price: 220,
+                image: "images/products/1.png",
+                expanded: true,
+                items: [
+                    {
+                        id: "1_1_1_1_1",
+                        text: "1_1_1_1_1 : Test Item 1",
+                        price: 10,
+                    },
+                    {
+                        id: "1_1_1_1_2",
+                        text: "1_1_1_1_2 : Test Item 2",
+                        price: 20,
+                    }
+                ]
+              },
+              {
+                id: "1_1_1_2",
+                text: "1_1_1_2 : SuperHD Video Player",
+                image: "images/products/2.png",
+                price: 270
+              }
+            ]
+          },
+          {
+            id: "1_1_2",
+            text: "1_1_2 : Televisions",
+            items: [
+              {
+                id: "1_1_2_1",
+                text: "1_1_2_1 : SuperLCD 42",
+                image: "images/products/7.png",
+                price: 1200
+              },
+              {
+                id: "1_1_2_2",
+                text: "1_1_2_2 : SuperLED 42",
+                image: "images/products/5.png",
+                price: 1450,
+              },
+              {
+                id: "1_1_2_3",
+                text: "1_1_2_3 : SuperLED 50",
+                image: "images/products/4.png",
+                price: 1600
+              },
+              {
+                id: "1_1_2_4",
+                text: "1_1_2_4 : SuperLCD 55",
+                image: "images/products/6.png",
+                price: 1350
+              },
+              {
+                id: "1_1_2_5",
+                text: "1_1_2_5 : SuperLCD 70",
+                image: "images/products/9.png",
+                price: 4000
+              }
+            ]
+          },
+        ]
+      }
+    ]
+  }
+];
+        
         </script>
     </div>
 </body>
