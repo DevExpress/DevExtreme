@@ -2036,7 +2036,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       allDayValue = groupValuesOrOptions.allDay;
       align = groupValuesOrOptions.alignInView ?? 'center';
     } else {
-      errors.log('W0002', 'dxScheduler', 'scrollTo', '26.1', 'Use an object with "group", "allDay" and "alignInView" properties instead of separate parameters.');
+      if (isDefined(groupValuesOrOptions) || isDefined(allDay)) {
+        errors.log('W0002', 'dxScheduler', 'scrollTo', '26.1', 'Use an object with "group", "allDay" and "alignInView" properties instead of separate parameters.');
+      }
+
       groupValues = groupValuesOrOptions;
       allDayValue = allDay;
     }
