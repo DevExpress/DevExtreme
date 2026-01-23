@@ -35,7 +35,7 @@ describe('Scheduler scrollTo deprecation', () => {
     );
   });
 
-  it('should not deprecation warning when using scrollTo API with date only', async () => {
+  it('should not log deprecation warning when using scrollTo API with date only', async () => {
     setupSchedulerTestEnvironment();
     const loggerWarnSpy = jest.spyOn(logger, 'warn');
 
