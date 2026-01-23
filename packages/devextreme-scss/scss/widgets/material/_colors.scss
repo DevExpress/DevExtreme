@@ -62,19 +62,19 @@ $base-shadow-color: null !default;
 * $name 50. Success color
 * $type color
 */
-$base-success: #006600 !default;
+$base-success: #2E7D32 !default;
 
 /**
 * $name 60. Warning color
 * $type color
 */
-$base-warning: #E54304 !default;
+$base-warning: #EE6002 !default;
 
 /**
 * $name 70. Danger color
 * $type color
 */
-$base-danger: #C40011 !default;
+$base-danger: #C62828 !default;
 
 /**
 * $name 80. Hover state text color
@@ -111,7 +111,7 @@ $scrollview-pulldown-path: null !default;
 
 @if $color == "blue" {
   $material-color-accent-modificator: "blue" !default;
-  $base-accent: #1F3DFF !default;
+  $base-accent: #1564C0 !default;
 }
 
 @if $color == "lime" {
@@ -146,8 +146,8 @@ $base-link-color: $base-accent !default;
   $base-text-color: rgba(0, 0, 0, 0.87) !default;
   $base-label-color: rgba(0, 0, 0, 0.6) !default;
   $base-disabled-color: rgba(0, 0, 0, $base-disabled-opacity) !default;
-  $base-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
-  $base-spin-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
+  $base-icon-color: color.change($base-text-color, $alpha: 0.6) !default;
+  $base-spin-icon-color: color.change($base-text-color, $alpha: 0.6) !default;
   $base-bg: #fff !default;
   $base-border-color: #e0e0e0 !default;
   $base-inverted-bg: color.adjust($base-bg, $lightness: -100%, $space: hsl) !default;
@@ -169,8 +169,8 @@ $base-link-color: $base-accent !default;
   $base-text-color: #fff !default;
   $base-label-color: rgba(255, 255, 255, 0.6) !default;
   $base-disabled-color: rgba(255, 255, 255, $base-disabled-opacity) !default;
-  $base-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
-  $base-spin-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
+  $base-icon-color: color.change($base-text-color, $alpha: 0.6) !default;
+  $base-spin-icon-color: color.change($base-text-color, $alpha: 0.6) !default;
   $base-bg: #363640 !default;
   $base-border-color: #515159 !default;
   $base-inverted-bg: color.adjust($base-bg, $lightness: 100%, $space: hsl) !default;

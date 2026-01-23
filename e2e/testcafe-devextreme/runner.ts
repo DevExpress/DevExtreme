@@ -12,9 +12,9 @@ import {
 } from './helpers/testPageUtils';
 import { getCurrentTheme } from './helpers/themeUtils';
 
-const LAUNCH_RETRY_ATTEMPTS = 1;
+const LAUNCH_RETRY_ATTEMPTS = 3;
 const LAUNCH_RETRY_TIMEOUT = 10000;
-const FAILED_TESTS_RETRY_ATTEMPTS = 2;
+const FAILED_TESTS_RETRY_ATTEMPTS = 1;
 
 const wait = async (
   timeout: number,

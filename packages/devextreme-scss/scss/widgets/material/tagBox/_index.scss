@@ -57,15 +57,15 @@
     }
   }
 
-  &.dx-state-disabled {
-    .dx-tag-content {
-      background-color: $tagbox-tag-disabled-bg;
+  // &.dx-state-disabled {
+  //   .dx-tag-content {
+  //     background-color: $base-bg;
 
-      .dx-tag-remove-button::before {
-        color: $tagbox-tag-disabled-bg;
-      }
-    }
-  }
+  //     // .dx-tag-remove-button::before {
+  //     //   color: $tagbox-tag-disabled-bg;
+  //     // }
+  //   }
+  // }
 }
 
 .dx-tagbox-single-line {
@@ -108,7 +108,7 @@
     width: $material-tagbox-remove-button-icon-size;
     height: $material-tagbox-remove-button-icon-size;
     color: $tagbox-tag-button-remove-color;
-    background-color: $tagbox-tag-button-remove-bg;
+    // background-color: $tagbox-tag-button-remove-bg;
     border-radius: 50%;
     transform: none;
   }
