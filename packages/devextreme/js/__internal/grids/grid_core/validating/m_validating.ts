@@ -979,7 +979,11 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
   }
 
   protected _beforeCancelEditData() {
-    this._validatingController.initValidationState();
+    // Don't reset a validation state if repaintChangesOnly is switched on
+    // to let the revert button get access to initial values via _getOldData()
+    if (!this.option('repaintChangesOnly')) {
+      this._validatingController.initValidationState();
+    }
 
     super._beforeCancelEditData();
   }
