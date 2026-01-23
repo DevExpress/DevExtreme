@@ -106,16 +106,14 @@ module('ScrollTo', {
             scheduler.instance.scrollTo(new Date(2020, 8, 5));
             await waitAsync(0);
 
-            assert.equal(errors.log.callCount, 2, 'warnings have been called twice');
-            assert.equal(errors.log.getCall(0).args[0], 'W0002', 'first warning is deprecation warning');
-            assert.equal(errors.log.getCall(1).args[0], 'W1008', 'second warning has correct error id');
+            assert.equal(errors.log.callCount, 1, 'warnings have been called twice');
+            assert.equal(errors.log.getCall(0).args[0], 'W1008', 'second warning has correct error id');
 
             scheduler.instance.scrollTo(new Date(2020, 8, 14));
             await waitAsync(0);
 
-            assert.equal(errors.log.callCount, 4, 'warnings have been called four times total');
-            assert.equal(errors.log.getCall(2).args[0], 'W0002', 'third warning is deprecation warning');
-            assert.equal(errors.log.getCall(3).args[0], 'W1008', 'fourth warning has correct error id');
+            assert.equal(errors.log.callCount, 2, 'warnings have been called two times total');
+            assert.equal(errors.log.getCall(1).args[0], 'W1008', 'fourth warning has correct error id');
         });
 
         test(`A warning should not be thrown when scrolling to a valid date when ${scrolling.text} is used`, async function(assert) {
@@ -124,8 +122,7 @@ module('ScrollTo', {
             scheduler.instance.scrollTo(new Date(2020, 8, 7));
             await waitAsync(0);
 
-            assert.equal(errors.log.callCount, 1, 'deprecation warning has been called once');
-            assert.equal(errors.log.getCall(0).args[0], 'W0002', 'warning is deprecation warning for old API');
+            assert.equal(errors.log.callCount, 0, 'warning has not been called');
         });
 
         [{
