@@ -506,7 +506,7 @@ QUnit.module('Accessibility', {
             validators: [this.validator],
         });
 
-        let $announceContainer = this.summary.$element().find('.dx-screen-reader-only');
+        const $announceContainer = this.summary.$element().find('.dx-screen-reader-only');
 
         assert.strictEqual($announceContainer.length, 0, 'announce container is not present');
     });
@@ -539,7 +539,7 @@ QUnit.module('Accessibility', {
         [''],
         ['', ''],
     ].forEach((errors) => {
-        QUnit.test(`ValidationSummary should accordingly update announce container when errors change from ["first"] to ${JSON.stringify(errors)}`, function (assert) {
+        QUnit.test(`ValidationSummary should accordingly update announce container when errors change from ["first"] to ${JSON.stringify(errors)}`, function(assert) {
             this.summary._groupValidationHandler({
                 isValid: false,
                 brokenRules: [{
