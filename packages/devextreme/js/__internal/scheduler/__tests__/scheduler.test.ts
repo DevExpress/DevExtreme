@@ -34,4 +34,29 @@ describe('Scheduler scrollTo deprecation', () => {
       expect.stringContaining('W0002'),
     );
   });
+
+  it('should not deprecation warning when using scrollTo API with date only', async () => {
+    setupSchedulerTestEnvironment();
+    const loggerWarnSpy = jest.spyOn(logger, 'warn');
+
+    const { scheduler } = await createScheduler({
+      dataSource: [{
+        text: 'Meeting',
+        startDate: new Date(2025, 0, 15, 9, 0),
+        endDate: new Date(2025, 0, 15, 10, 0),
+      }],
+      views: ['week'],
+      currentView: 'week',
+      currentDate: new Date(2025, 0, 15),
+      startDayHour: 8,
+      endDayHour: 18,
+    });
+    loggerWarnSpy.mockReset();
+
+    const testDate = new Date(2025, 0, 16, 14, 0);
+
+    scheduler.scrollTo(testDate);
+
+    expect(loggerWarnSpy).toHaveBeenCalledTimes(0);
+  });
 });
