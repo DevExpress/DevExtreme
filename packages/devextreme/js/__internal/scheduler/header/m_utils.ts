@@ -99,31 +99,18 @@ const getPeriodEndDate = (
   step: Step,
   agendaDuration: number,
 ): Date => {
-  let date: Date = new Date();
+  const calculators: Record<Step, () => Date> = {
+    day: () => nextDay(currentPeriodStartDate),
+    week: () => nextWeek(currentPeriodStartDate),
+    month: () => nextMonth(currentPeriodStartDate),
+    workWeek: () => getDateAfterWorkWeek(currentPeriodStartDate),
+    agenda: () => nextAgendaStart(currentPeriodStartDate, agendaDuration),
+  };
 
-  // eslint-disable-next-line default-case
-  switch (step) {
-    case 'day':
-      date = nextDay(currentPeriodStartDate);
-      break;
-    case 'week':
-      date = nextWeek(currentPeriodStartDate);
-      break;
-    case 'month':
-      date = nextMonth(currentPeriodStartDate);
-      break;
-    case 'workWeek':
-      date = getDateAfterWorkWeek(currentPeriodStartDate);
-      break;
-    case 'agenda':
-      date = nextAgendaStart(currentPeriodStartDate, agendaDuration);
-      break;
-  }
-
-  return subMS(date);
+  return subMS(calculators[step]());
 };
 
-const getNextPeriodStartDate = (currentPeriodEndDate: Date, step): Date => {
+const getNextPeriodStartDate = (currentPeriodEndDate: Date, step: Step): Date => {
   let date = addMS(currentPeriodEndDate);
 
   if (step === 'workWeek') {
