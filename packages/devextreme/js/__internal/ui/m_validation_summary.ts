@@ -155,7 +155,7 @@ class ValidationSummary extends CollectionWidget<ValidationSummaryProperties> {
 
     this._$announceContainer = $('<div>')
       .addClass(SCREEN_READER_ONLY_CLASS)
-      .attr('role', 'status')
+      .attr('role', 'alert')
       .appendTo(this.element());
   }
 

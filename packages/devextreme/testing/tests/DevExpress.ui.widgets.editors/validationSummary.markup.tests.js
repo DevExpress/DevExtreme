@@ -497,7 +497,7 @@ QUnit.module('Accessibility', {
 
         const $announceContainer = this.summary.$element().find('.dx-screen-reader-only');
 
-        assert.strictEqual($announceContainer.attr('role'), 'status', 'role=status is present');
+        assert.strictEqual($announceContainer.attr('role'), 'alert', 'role=alert is present');
     });
 
     QUnit.test('ValidationSummary should remove announce container when there are no validation errors', function(assert) {
