@@ -224,7 +224,7 @@ export const widgetTestModule = widgetName => {
         });
 
         QUnit.module('deferRendering', () => {
-            QUnit.test('default dropDownOptions.deferRendering value is true', function(assert) {
+            QUnit.test('default dropDownOptions.deferRendering value is undefined', function(assert) {
                 const editor = new dropDownEditorsList[widgetName]($('#editor'));
 
                 assert.strictEqual(editor.option('dropDownOptions.deferRendering'), undefined, 'deferRendering is not provided to dropDownOptions');
