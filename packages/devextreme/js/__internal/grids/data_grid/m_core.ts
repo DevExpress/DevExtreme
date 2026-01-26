@@ -7,3 +7,5 @@ export default {
   ...gridCoreUtils,
   modules: [] as Module[],
 };
+
+// collaboration test
