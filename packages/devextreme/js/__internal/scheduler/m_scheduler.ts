@@ -3,7 +3,6 @@ import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import config from '@js/core/config';
-import devices from '@js/core/devices';
 import { getPublicElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -1240,7 +1239,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       onCurrentDateChange: (date): void => {
         this.option('currentDate', date);
       },
-      _useShortDateFormat: !devices.real().generic || devices.isSimulator(),
     };
   }
 
