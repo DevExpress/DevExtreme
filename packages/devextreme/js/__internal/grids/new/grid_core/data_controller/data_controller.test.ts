@@ -121,7 +121,7 @@ describe('DataController', () => {
           store: {
             type: 'odata',
             version: 2,
-            url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
+            url: 'https://www.example.com/odata',
             key: 'Product_ID',
           },
           select: [
