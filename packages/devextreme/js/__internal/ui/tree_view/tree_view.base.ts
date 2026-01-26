@@ -84,6 +84,7 @@ export const CHECK_BOX_CLASS = 'dx-checkbox';
 const CHECK_BOX_ICON_CLASS = 'dx-checkbox-icon';
 const ROOT_NODE_CLASS = `${WIDGET_CLASS}-root-node`;
 export const EXPANDER_ICON_STUB_CLASS = `${WIDGET_CLASS}-expander-icon-stub`;
+const ITEM_NOT_SELECTABLE_CLASS = `${ITEM_CLASS}-not-selectable`;
 
 type TreeViewItem = Item & {
   url?: string;
@@ -97,6 +98,8 @@ export interface TreeViewBaseProperties extends Properties<TreeViewNode>, Omit<
   deferRendering?: boolean;
 
   allowShowCheckbox?: boolean | ((e: { component: TreeViewBase; item: ItemData }) => boolean);
+
+  allowSelect?: boolean | ((e: { component: TreeViewBase; item: ItemData }) => boolean);
 
   _supportItemUrl?: boolean;
 }
@@ -259,6 +262,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     const defaultOptions = {
       ...super._getDefaultOptions(),
       allowShowCheckbox: true,
+      allowSelect: true,
       animationEnabled: true,
       dataStructure: 'tree',
       deferRendering: true,
@@ -385,6 +389,9 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
           // @ts-expect-error ts-error
           this._$selectAllItem.dxCheckBox('instance').option('text', value);
         }
+        break;
+      case 'allowSelect':
+        this.repaint();
         break;
       case 'showCheckBoxesMode':
         this._checkBoxModeChange(value, previousValue);
@@ -703,6 +710,122 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       dataType: dataStructure,
       sort: this._dataSource?.sort(),
       langParams: this._dataSource?.loadOptions?.()?.langParams,
+    };
+  }
+
+  _initDataAdapter(): void {
+    super._initDataAdapter();
+
+    const adapter = this._dataAdapter;
+    const originalToggleSelectAll = adapter.toggleSelectAll.bind(adapter);
+
+    adapter._setParentSelection = (): void => {
+      each(adapter._dataStructure, (_index: number, node: InternalNode): void => {
+        if (!node) return;
+
+        const parent = adapter.options.dataConverter.getParentNode(node);
+
+        if (parent && node.internalFields.parentKey !== adapter.options.rootValue) {
+          adapter._iterateParents(node, (parentNode: InternalNode): void => {
+            if (!this._isItemSelectable(parentNode as TreeViewNode)) {
+              return;
+            }
+
+            const newParentState = adapter._calculateSelectedState(parentNode);
+            adapter._setFieldState(parentNode, 'selected', newParentState);
+          });
+        }
+      });
+    };
+
+    adapter._calculateSelectedState = (node: InternalNode): boolean | undefined => {
+      const itemsCount = node.internalFields.childrenKeys.length;
+      let selectedItemsCount = 0;
+      let invisibleItemsCount = 0;
+      let nonSelectableItemsCount = 0;
+      let result: boolean | undefined = false;
+
+      for (let i = 0; i <= itemsCount - 1; i += 1) {
+        const childNode = adapter.getNodeByKey(node.internalFields.childrenKeys[i]);
+        const isChildInvisible = childNode?.internalFields.item.visible === false;
+        const isChildNonSelectable = !this._isItemSelectable(childNode as TreeViewNode);
+        const childState = childNode?.internalFields.selected;
+
+        if (isChildInvisible) {
+          invisibleItemsCount += 1;
+        } else if (isChildNonSelectable) {
+          nonSelectableItemsCount += 1;
+        } else if (childState) {
+          selectedItemsCount += 1;
+        } else if (childState === undefined) {
+          selectedItemsCount += 0.5;
+        }
+      }
+
+      const selectableChildrenCount = itemsCount - invisibleItemsCount - nonSelectableItemsCount;
+
+      if (selectedItemsCount) {
+        result = selectedItemsCount === selectableChildrenCount ? true : undefined;
+      }
+
+      return result;
+    };
+
+    adapter.toggleSelection = (key: ItemKey, state: boolean, selectRecursive?: boolean): void => {
+      const node = adapter.getNodeByKey(key);
+
+      if (!node) {
+        return;
+      }
+
+      if (!this._isItemSelectable(node as TreeViewNode)) {
+        return;
+      }
+
+      adapter._setFieldState(node, 'selected', state);
+
+      if (this._isRecursiveSelection()) {
+        const children = adapter.getChildrenNodes(node?.internalFields.key);
+
+        each(children, (_index: number, child: TreeViewNode): void => {
+          if (this._isItemSelectable(child)) {
+            adapter.toggleSelection(child.internalFields.key, state, true);
+          } else {
+            const processDescendants = (parentNode: TreeViewNode): void => {
+              const descendants = adapter.getChildrenNodes(parentNode.internalFields.key);
+              each(descendants, (_idx: number, descendant: TreeViewNode): void => {
+                if (this._isItemSelectable(descendant)) {
+                  adapter.toggleSelection(descendant.internalFields.key, state, true);
+                } else {
+                  processDescendants(descendant);
+                }
+              });
+            };
+            processDescendants(child);
+          }
+        });
+
+        if (!selectRecursive) {
+          adapter._setParentSelection();
+        }
+      }
+
+      adapter._selectedNodesKeys = adapter._updateNodesKeysArray('selected');
+    };
+
+    adapter.toggleSelectAll = (state: boolean): void => {
+      if (!state) {
+        originalToggleSelectAll(state);
+        return;
+      }
+
+      const rootNodes = adapter.getRootNodes();
+
+      each(rootNodes, (_index: number, node: TreeViewNode): void => {
+        if (node && this._isItemSelectable(node)) {
+          adapter.toggleSelection(node.internalFields.key, true);
+        }
+      });
     };
   }
 
@@ -1556,6 +1679,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       return;
     }
 
+    const isSelectable = this._isItemSelectable(node);
     const $checkbox = $('<div>').appendTo($node);
 
     this._createComponent<CheckBox, CheckBoxProperties>($checkbox, CheckBox, {
@@ -1566,8 +1690,13 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       focusStateEnabled: false,
       elementAttr: { 'aria-label': messageLocalization.format('CheckState') },
       // @ts-expect-error ts-error
-      disabled: this._disabledGetter(node),
+      disabled: !isSelectable || this._disabledGetter(node),
     });
+
+    if (!isSelectable) {
+      const $item = $node.find(`.${ITEM_CLASS}`);
+      $item.addClass(ITEM_NOT_SELECTABLE_CLASS);
+    }
   }
 
   _toggleSelectedClass($node: dxElementWrapper, value: boolean | undefined): void {
@@ -1601,6 +1730,28 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
 
     if (isFunction(allowShowCheckbox)) {
       const result = allowShowCheckbox({
+        component: this,
+        item: node.internalFields.item,
+      });
+      return Boolean(result);
+    }
+
+    return true;
+  }
+
+  _isItemSelectable(node: TreeViewNode | null): boolean {
+    if (!node) {
+      return true;
+    }
+
+    const { allowSelect } = this.option();
+
+    if (typeof allowSelect === 'boolean') {
+      return allowSelect;
+    }
+
+    if (isFunction(allowSelect)) {
+      const result = allowSelect({
         component: this,
         item: node.internalFields.item,
       });
@@ -1701,6 +1852,10 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
 
     if (node.internalFields.selected === value) {
       return true;
+    }
+
+    if (!this._isItemSelectable(node)) {
+      return false;
     }
 
     if (!value && this._isLastRequired(node)) {
