@@ -10,7 +10,7 @@ exports[`common initial render should be successfull 1`] = `
     role="group"
   >
     <div
-      class="dx-screen-reader-only dx-cardview-exclude-flexbox"
+      class="dx-gridbase-a11y-status-container dx-cardview-exclude-flexbox"
       role="status"
     />
     <div

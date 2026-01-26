@@ -2,7 +2,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 
 const CLASSES = {
-  container: 'dx-screen-reader-only',
+  container: 'dx-gridbase-a11y-status-container',
 };
 
 export interface A11yStatusContainerComponentProps {
