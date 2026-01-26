@@ -189,6 +189,18 @@ QUnit.module('fileUploader markup', () => {
         assert.strictEqual($fileInput.attr('autocomplete'), 'on', '"autocomplete" attribute has the same value');
     });
 
+    QUnit.test('Default input class should not be removed when a custom class added via inputAttr', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            inputAttr: {
+                class: 'custom',
+            }
+        });
+
+        const $field = $fileUploader.find(`.${FILEUPLOADER_INPUT_CONTAINER_CLASS}`).find('input');
+
+        assert.strictEqual($field.attr('class'), `custom ${FILEUPLOADER_INPUT_CLASS}`, 'custom class is added and default class remains');
+    });
 });
 
 QUnit.module('multiple option', () => {
