@@ -18,6 +18,7 @@ import MasterRow from './masterRow';
 import AdaptiveDetailRow from './adaptiveDetailRow';
 import ColumnChooser from './columnChooser';
 import TextBox from '../textBox';
+import DateBox from '../dateBox';
 import { GroupPanel } from './groupPanel';
 import GridCore from '../gridCore';
 import { CLASS as CLASS_BASE } from '../gridCore';
@@ -36,6 +37,8 @@ export const CLASS = {
   focusedRow: 'dx-row-focused',
   filterRow: 'filter-row',
   filterRangeOverlay: 'filter-range-overlay',
+  filterRangeStartEditor: 'filter-range-start',
+  filterRangeEndEditor: 'filter-range-end',
   focusOverlay: 'focus-overlay',
   editFormRow: 'edit-form',
   button: 'dx-button',
@@ -236,6 +239,15 @@ export default class DataGrid extends GridCore {
   getFilterRangeOverlay(): Selector {
     return this.getHeadersContainer().child(`.${this.addWidgetPrefix(CLASS.filterRangeOverlay)}`);
   }
+
+  getFilterRangeStartEditor(): DateBox {
+    return new DateBox(this.body.find(`.${this.addWidgetPrefix(CLASS.filterRangeStartEditor)}`));
+  }
+
+  getFilterRangeEndEditor(): DateBox {
+    return new DateBox(this.body.find(`.${this.addWidgetPrefix(CLASS.filterRangeEndEditor)}`));
+  }
+
   getFocusOverlay() {
     return this.body.find(`.${this.addWidgetPrefix(CLASS.focusOverlay)}`);
   }
