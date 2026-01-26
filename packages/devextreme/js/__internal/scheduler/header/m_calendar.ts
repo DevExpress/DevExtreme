@@ -2,9 +2,9 @@ import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type { DateLike } from '@js/ui/calendar';
 import Popover from '@js/ui/popover/ui.popover';
 import Popup from '@js/ui/popup/ui.popup';
+import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
 import type { CalendarProperties } from '@ts/ui/calendar/calendar';
@@ -34,8 +34,7 @@ export default class SchedulerCalendar extends Widget<HeaderCalendarOptions> {
   }
 
   public _keyboardHandler(opts: KeyboardKeyDownEvent): boolean {
-    this._calendar?._keyboardHandler(opts);
-    return true;
+    return this._calendar?._keyboardHandler(opts) ?? false;
   }
 
   public _init(): void {
@@ -103,8 +102,10 @@ export default class SchedulerCalendar extends Widget<HeaderCalendarOptions> {
   }
 
   public _optionChanged(
-    { name, value } : { name: string; value: DateLike | DateLike[] },
+    args: OptionChanged<HeaderCalendarOptions>,
   ): void {
+    const { name, value } = args;
+
     switch (name) {
       case 'value':
         this._calendar?.option('value', value);
