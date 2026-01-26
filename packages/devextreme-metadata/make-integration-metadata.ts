@@ -75,10 +75,6 @@ Imd.makeMetadata({
       { omitConfigComponents: ['*'] },
     ),
 
-    addMetadata(['ui/form:dxFormOptions.items'], {
-      omitConfigComponents: ['DxDataGrid', 'DxTreeList'],
-    }),
-
     [
       ['common:AsyncRule', 'async'],
       ['common:CompareRule', 'compare'],
@@ -98,6 +94,19 @@ Imd.makeMetadata({
       ['ui/form:dxFormSimpleItem', 'simple'],
       ['ui/form:dxFormTabbedItem', 'tabbed'],
     ].map(([uid, alias]) => addMetadata(uid, { itemTypeAlias: alias })),
+
+    // collision Form.GroupItem vs Summary.GroupItem (missed because of different case)
+    // addMetadata('ui/data_grid:Summary.groupItems', {
+    //   forcedName: 'summaryGroupItem',
+    // }),
+
+    // collision Toolbar.Item vs Popup.ToolbarItem
+    addMetadata('ui/data_grid:Toolbar.items', {
+      forcedName: 'dataGridToolbarItem',
+    }),
+    addMetadata('ui/tree_list:Toolbar.items', {
+      forcedName: 'treeListToolbarItem',
+    }),
 
     replaceTypes(/.+/, ['core/element:UserDefinedElement'], ['any']),
 
