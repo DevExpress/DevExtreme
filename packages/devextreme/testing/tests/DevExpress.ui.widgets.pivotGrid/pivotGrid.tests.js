@@ -2376,6 +2376,199 @@ QUnit.module('dxPivotGrid', {
         assert.deepEqual(dataSource.expandAll.lastCall.args, [1], 'collapseLevel args');
     });
 
+    QUnit.test('Expand all should not mark hidden columns as expanded when hideEmptySummaryCells enabled with calculateSummaryValue returning null', function(assert) {
+        const pivotGrid = createPivotGrid({
+            allowExpandAll: true,
+            hideEmptySummaryCells: true,
+            width: 600,
+            dataSource: {
+                store: [
+                    { region: 'North America', city: 'New York', country: 'USA', amount: 1740, date: '2013/01/06' },
+                    { region: 'North America', city: 'Los Angeles', country: 'USA', amount: 850, date: '2013/01/13' },
+                    { region: 'North America', city: 'Denver', country: 'USA', amount: 2235, date: '2013/01/07' },
+                    { region: 'North America', city: 'Vancouver', country: 'CAN', amount: 1965, date: '2013/01/03' },
+                    { region: 'North America', city: 'Edmonton', country: 'CAN', amount: 880, date: '2013/01/10' },
+                    { region: 'South America', city: 'Rio de Janeiro', country: 'BRA', amount: 5260, date: '2013/01/17' },
+                    { region: 'South America', city: 'Buenos Aires', country: 'ARG', amount: 2790, date: '2013/01/21' },
+                    { region: 'South America', city: 'Asuncion', country: 'PRY', amount: 3140, date: '2013/01/01' },
+                    { region: 'Europe', city: 'London', country: 'GBR', amount: 6175, date: '2013/01/24' },
+                    { region: 'North America', city: 'New York', country: 'USA', amount: 0, date: '2014/01/18' }
+                ],
+                fields: [
+                    {
+                        caption: 'Region',
+                        dataField: 'region',
+                        area: 'row',
+                        expanded: false
+                    },
+                    {
+                        caption: 'City',
+                        dataField: 'city',
+                        area: 'row',
+                        selector(data) {
+                            return `${data.city} (${data.country})`;
+                        }
+                    },
+                    {
+                        dataField: 'date',
+                        dataType: 'date',
+                        area: 'column',
+                        expanded: false
+                    },
+                    {
+                        caption: 'Sales',
+                        dataField: 'amount',
+                        dataType: 'number',
+                        summaryType: 'sum',
+                        area: 'data',
+                        calculateSummaryValue(e) {
+                            const value = e.value();
+                            if(value === 0) return null;
+                            return value;
+                        }
+                    }
+                ]
+            }
+        });
+
+        const dataSource = pivotGrid.getDataSource();
+
+        this.clock.tick(10);
+
+        // Check that only 2013 column and Grand Total columns are rendered
+        // Find and save the initial width of the Grand Total column from DOM
+        const $grandTotalInitial = pivotGrid.$element().find('.dx-pivotgrid-horizontal-headers .dx-grandtotal').last();
+        assert.ok($grandTotalInitial.length, 'Grand Total column should exist initially in DOM');
+        const initialGrandTotalWidth = getWidth($grandTotalInitial);
+
+        // Replicate the issue sequence
+        dataSource.expandAll('date');
+        this.clock.tick(10);
+
+        dataSource.collapseHeaderItem('column', [2013, 1]);
+        this.clock.tick(10);
+
+        dataSource.collapseHeaderItem('column', [2013]);
+        this.clock.tick(10);
+
+        // Check the width of the Grand Total column after the collapse sequence
+        const $grandTotalAfter = pivotGrid.$element().find('.dx-pivotgrid-horizontal-headers .dx-grandtotal').last();
+        assert.ok($grandTotalAfter.length, 'Grand Total column should exist after collapse in DOM');
+        const finalGrandTotalWidth = getWidth($grandTotalAfter);
+
+        // Output widths for examination
+        assert.ok(true, `Initial Grand Total width: ${initialGrandTotalWidth}`);
+        assert.ok(true, `Final Grand Total width: ${finalGrandTotalWidth}`);
+
+        assert.strictEqual(
+            finalGrandTotalWidth,
+            initialGrandTotalWidth,
+            'Grand Total column width should remain the same after collapse sequence'
+        );
+    });
+
+    QUnit.test('Export should not include hidden columns when hideEmptySummaryCells enabled with calculateSummaryValue returning null after expand/collapse sequence', function(assert) {
+        const pivotGrid = createPivotGrid({
+            allowExpandAll: true,
+            hideEmptySummaryCells: true,
+            'export': {
+                enabled: true
+            },
+            dataSource: {
+                store: [
+                    { region: 'North America', city: 'New York', country: 'USA', amount: 1740, date: '2013/01/06' },
+                    { region: 'North America', city: 'Los Angeles', country: 'USA', amount: 850, date: '2013/01/13' },
+                    { region: 'North America', city: 'Denver', country: 'USA', amount: 2235, date: '2013/01/07' },
+                    { region: 'North America', city: 'Vancouver', country: 'CAN', amount: 1965, date: '2013/01/03' },
+                    { region: 'North America', city: 'Edmonton', country: 'CAN', amount: 880, date: '2013/01/10' },
+                    { region: 'South America', city: 'Rio de Janeiro', country: 'BRA', amount: 5260, date: '2013/01/17' },
+                    { region: 'South America', city: 'Buenos Aires', country: 'ARG', amount: 2790, date: '2013/01/21' },
+                    { region: 'South America', city: 'Asuncion', country: 'PRY', amount: 3140, date: '2013/01/01' },
+                    { region: 'Europe', city: 'London', country: 'GBR', amount: 6175, date: '2013/01/24' },
+                    { region: 'North America', city: 'New York', country: 'USA', amount: 0, date: '2014/01/18' }
+                ],
+                fields: [
+                    {
+                        caption: 'Region',
+                        dataField: 'region',
+                        area: 'row',
+                        expanded: false
+                    },
+                    {
+                        caption: 'City',
+                        dataField: 'city',
+                        area: 'row',
+                        selector(data) {
+                            return `${data.city} (${data.country})`;
+                        }
+                    },
+                    {
+                        dataField: 'date',
+                        dataType: 'date',
+                        area: 'column',
+                        expanded: false
+                    },
+                    {
+                        caption: 'Sales',
+                        dataField: 'amount',
+                        dataType: 'number',
+                        summaryType: 'sum',
+                        area: 'data',
+                        calculateSummaryValue(e) {
+                            const value = e.value();
+                            if(value === 0) return null;
+                            return value;
+                        }
+                    }
+                ]
+            }
+        });
+
+        const dataSource = pivotGrid.getDataSource();
+
+        this.clock.tick(10);
+
+        const initialDataProvider = pivotGrid.getDataProvider();
+        const initialColumnsInfo = $.extend(true, [], pivotGrid._dataController.getColumnsInfo(true));
+        const initialRowsInfo = $.extend(true, [], pivotGrid._dataController.getRowsInfo(true));
+        const initialCellsInfo = pivotGrid._dataController.getCellsInfo(true);
+        const initialItems = pivotGrid._getAllItems(initialColumnsInfo, initialRowsInfo, initialCellsInfo);
+        initialDataProvider.ready();
+        this.clock.tick(10);
+
+        const initialColumnCount = initialItems[0].length;
+        assert.ok(true, `Initial export column count: ${initialColumnCount}`);
+
+        dataSource.expandAll('date');
+        this.clock.tick(10);
+
+        dataSource.collapseHeaderItem('column', [2013]);
+        this.clock.tick(10);
+
+        const finalDataProvider = pivotGrid.getDataProvider();
+        const finalColumnsInfo = $.extend(true, [], pivotGrid._dataController.getColumnsInfo(true));
+        const finalRowsInfo = $.extend(true, [], pivotGrid._dataController.getRowsInfo(true));
+        const finalCellsInfo = pivotGrid._dataController.getCellsInfo(true);
+        const finalItems = pivotGrid._getAllItems(finalColumnsInfo, finalRowsInfo, finalCellsInfo);
+        finalDataProvider.ready();
+        this.clock.tick(10);
+
+        const finalColumnCount = finalItems[0].length;
+        assert.ok(true, `Final export column count: ${finalColumnCount}`);
+
+        assert.strictEqual(
+            finalColumnCount,
+            initialColumnCount,
+            'Export column count should remain the same after collapse sequence (hidden columns should not be exported)'
+        );
+
+        assert.strictEqual(
+            finalDataProvider.getColumns().length,
+            initialDataProvider.getColumns().length,
+            'Data provider column count should remain consistent'
+        );
+    });
+
     QUnit.test('pivot grid render', function(assert) {
         const pivotGrid = createPivotGrid({});
         const testElement = $('#pivotGrid');

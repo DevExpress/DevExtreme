@@ -102,6 +102,115 @@ QUnit.module('Scenarios', moduleConfig, () => {
         return result;
     };
 
+    QUnit.test('Export with hideEmptySummaryCells and calculateSummaryValue returning null', function(assert) {
+        const clock = sinon.useFakeTimers();
+        const done = assert.async();
+        assert.timeout(5000);
+
+        const pivotGrid = $('#pivotGrid').dxPivotGrid({
+            allowExpandAll: true,
+            hideEmptySummaryCells: true,
+            width: 600,
+            dataSource: {
+                store: [
+                    { region: 'North America', city: 'New York', country: 'USA', amount: 1740, date: '2013/01/06' },
+                    { region: 'North America', city: 'Los Angeles', country: 'USA', amount: 850, date: '2013/01/13' },
+                    { region: 'North America', city: 'Denver', country: 'USA', amount: 2235, date: '2013/01/07' },
+                    { region: 'North America', city: 'Vancouver', country: 'CAN', amount: 1965, date: '2013/01/03' },
+                    { region: 'North America', city: 'Edmonton', country: 'CAN', amount: 880, date: '2013/01/10' },
+                    { region: 'South America', city: 'Rio de Janeiro', country: 'BRA', amount: 5260, date: '2013/01/17' },
+                    { region: 'South America', city: 'Buenos Aires', country: 'ARG', amount: 2790, date: '2013/01/21' },
+                    { region: 'South America', city: 'Asuncion', country: 'PRY', amount: 3140, date: '2013/01/01' },
+                    { region: 'Europe', city: 'London', country: 'GBR', amount: 6175, date: '2013/01/24' },
+                    { region: 'North America', city: 'New York', country: 'USA', amount: 0, date: '2014/01/18' }
+                ],
+                fields: [
+                    {
+                        caption: 'Region',
+                        dataField: 'region',
+                        area: 'row',
+                        expanded: false
+                    },
+                    {
+                        caption: 'City',
+                        dataField: 'city',
+                        area: 'row',
+                        selector(data) {
+                            return `${data.city} (${data.country})`;
+                        }
+                    },
+                    {
+                        dataField: 'date',
+                        dataType: 'date',
+                        area: 'column',
+                        expanded: false
+                    },
+                    {
+                        caption: 'Sales',
+                        dataField: 'amount',
+                        dataType: 'number',
+                        summaryType: 'sum',
+                        area: 'data',
+                        calculateSummaryValue(e) {
+                            const value = e.value();
+                            if(value === 0) return null;
+                            return value;
+                        }
+                    }
+                ]
+            }
+        }).dxPivotGrid('instance');
+
+        const dataSource = pivotGrid.getDataSource();
+
+        dataSource.expandAll('date');
+        clock.tick(10);
+
+        dataSource.expandAll('date', [2013]);
+        clock.tick(10);
+
+        dataSource.collapseHeaderItem('column', [2013]);
+        clock.tick(10);
+
+        clock.restore();
+
+        const expectedCells = [[
+            { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+            { excelCell: { value: '2013', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 3, path: [2013], rowspan: 1, text: '2013', type: 'T', width: 100 } },
+            { excelCell: { value: 'Grand Total', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, isLast: true, rowspan: 1, text: 'Grand Total', type: 'GT', width: 100 } }
+        ], [
+            { excelCell: { value: 'Europe', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['Europe'], rowspan: 1, text: 'Europe', type: 'D' } },
+            { excelCell: { value: 6175, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [2013], columnType: 'T', dataIndex: 0, dataType: 'number', rowPath: ['Europe'], rowType: 'D', rowspan: 1, text: '6175' } },
+            { excelCell: { value: 6175, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [], columnType: 'GT', dataIndex: 0, dataType: 'number', rowPath: ['Europe'], rowType: 'D', rowspan: 1, text: '6175' } }
+        ], [
+            { excelCell: { value: 'North America', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 2, isLast: true, path: ['North America'], rowspan: 1, text: 'North America', type: 'D' } },
+            { excelCell: { value: 7670, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [2013], columnType: 'T', dataIndex: 0, dataType: 'number', rowPath: ['North America'], rowType: 'D', rowspan: 1, text: '7670' } },
+            { excelCell: { value: 7670, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [], columnType: 'GT', dataIndex: 0, dataType: 'number', rowPath: ['North America'], rowType: 'D', rowspan: 1, text: '7670' } }
+        ], [
+            { excelCell: { value: 'South America', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 3, isLast: true, path: ['South America'], rowspan: 1, text: 'South America', type: 'D' } },
+            { excelCell: { value: 11190, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [2013], columnType: 'T', dataIndex: 0, dataType: 'number', rowPath: ['South America'], rowType: 'D', rowspan: 1, text: '11190' } },
+            { excelCell: { value: 11190, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [], columnType: 'GT', dataIndex: 0, dataType: 'number', rowPath: ['South America'], rowType: 'D', rowspan: 1, text: '11190' } }
+        ], [
+            { excelCell: { value: 'Grand Total', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, isLast: true, rowspan: 1, text: 'Grand Total', type: 'GT' } },
+            { excelCell: { value: 25035, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [2013], columnType: 'T', dataIndex: 0, dataType: 'number', rowPath: [], rowType: 'GT', rowspan: 1, text: '25035' } },
+            { excelCell: { value: 25035, alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: [], columnType: 'GT', dataIndex: 0, dataType: 'number', rowPath: [], rowType: 'GT', rowspan: 1, text: '25035' } }
+        ]];
+
+        helper.extendExpectedCells(expectedCells, topLeft);
+
+        exportPivotGrid(getOptions(this, pivotGrid, undefined)).then((cellRange) => {
+            helper.checkRowAndColumnCount({ row: 5, column: 3 }, { row: 5, column: 3 }, topLeft);
+            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkCellStyle(expectedCells);
+            helper.checkValues(expectedCells);
+            helper.checkOutlineLevel([0, 0, 0, 0, 0], topLeft.row);
+            helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column });
+            helper.checkCellRange(cellRange, { row: 5, column: 3 }, topLeft);
+
+            done();
+        });
+    });
+
     QUnit.test('Empty pivot', function(assert) {
         const done = assert.async();
 

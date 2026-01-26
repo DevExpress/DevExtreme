@@ -167,6 +167,17 @@ class DataController {
     let depth = 0;
 
     foreachTree(headerItems, (items) => {
+      const item = items[0];
+      let { isEmpty } = item;
+
+      if (isEmpty?.length) {
+        isEmpty = item.isEmpty.filter((v) => v).length === isEmpty.length;
+      }
+
+      if (item && isEmpty) {
+        return;
+      }
+
       depth = math.max(depth, items.length);
     });
 
