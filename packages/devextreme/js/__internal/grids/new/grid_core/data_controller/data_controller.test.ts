@@ -3,12 +3,14 @@ import {
 } from '@jest/globals';
 import { CustomStore } from '@js/common/data';
 import ajax from '@js/core/utils/ajax';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 
 import { getContext } from '../di.test_utils';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
 import { DataController } from './data_controller';
+import type { DataObject } from './types';
 
 const setup = (options?: Options) => {
   const context = getContext(options ?? {});
@@ -101,10 +103,14 @@ describe('DataController', () => {
 
   describe('regressions', () => {
     it('should work good with odata store', async () => {
-      const sendRequestSpy = jest.spyOn(ajax, 'sendRequest').mockImplementation(() => {
+      const sendRequestSpy = jest.spyOn(ajax, 'sendRequest').mockImplementation((params: any) => {
+        const isFirstPage = params.data.$skip === undefined || params.data.$skip === 0;
+        const firstPageItems = [{ Product_ID: 1 }, { Product_ID: 2 }, { Product_ID: 4 }];
+        const secondPageItems = [{ Product_ID: 5 }, { Product_ID: 6 }, { Product_ID: 7 }];
+
         const response = {
           d: {
-            results: [{ Product_ID: 1 }, { Product_ID: 2 }, { Product_ID: 3 }],
+            results: isFirstPage ? firstPageItems : secondPageItems,
             __count: 10,
           },
         };
@@ -113,7 +119,7 @@ describe('DataController', () => {
         const deferred = new Deferred();
         deferred.resolve(response, 'success');
 
-        return deferred.promise();
+        return deferred.promise() as DeferredObj<{ Product_ID: number }[]>;
       });
 
       const { dataController } = setup({
@@ -141,6 +147,10 @@ describe('DataController', () => {
         },
       });
 
+      const getCurrentItemIds = (): number[] => (
+        dataController.items.value as (DataObject & { Product_ID: number })[]
+      ).map((item) => item.Product_ID);
+
       const expectedFilter = 'Product_Current_Inventory gt 0';
       const expectedSelect = 'Product_ID,Product_Name,Product_Cost,Product_Sale_Price,Product_Retail_Price,Product_Current_Inventory';
 
@@ -155,6 +165,7 @@ describe('DataController', () => {
           $select: expectedSelect,
         }),
       }));
+      expect(getCurrentItemIds()).toEqual([1, 2, 4]);
 
       dataController.pageIndex.value = 1;
       await dataController.waitLoaded();
@@ -169,6 +180,7 @@ describe('DataController', () => {
           $select: expectedSelect,
         }),
       }));
+      expect(getCurrentItemIds()).toEqual([5, 6, 7]);
 
       sendRequestSpy.mockRestore();
     });
