@@ -170,7 +170,7 @@ export const getDateNavigator = (header: SchedulerHeader, item: ToolbarItem): To
   const { onItemClick } = options;
 
   const items = options.items ?? DEFAULT_ITEMS;
-  options.items = items.map((groupItem: ButtonGroupItem) => {
+  options.items = items.map((groupItem: ButtonGroupItem | string) => {
     switch (groupItem) {
       case ITEMS_NAME.previousButton:
         return getPreviousButtonOptions(header);
@@ -179,7 +179,7 @@ export const getDateNavigator = (header: SchedulerHeader, item: ToolbarItem): To
       case ITEMS_NAME.calendarButton:
         return getCalendarButtonOptions(header);
       default:
-        return groupItem;
+        return groupItem as ButtonGroupItem;
     }
   });
   options.onItemClick = (event): void => {
