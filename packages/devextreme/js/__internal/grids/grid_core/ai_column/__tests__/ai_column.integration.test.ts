@@ -4749,7 +4749,7 @@ describe('AI data', () => {
   });
 
   describe('when repaintChangesOnly is enabled', () => {
-    /* We skip this test for now until we refactor columnsChanged callback */
+    /* TODO: We skip this test for now until we refactor columnsChanged callback */
     it.skip('should render only AI cells', async () => {
       const { component } = await createDataGrid({
         dataSource: items,
