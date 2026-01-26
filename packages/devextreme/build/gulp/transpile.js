@@ -3,7 +3,6 @@
 const babel = require('gulp-babel');
 const flatMap = require('gulp-flatmap');
 const fs = require('fs');
-const del = require('del');
 const gulp = require('gulp');
 
 const normalize = require('normalize-path');
@@ -13,11 +12,9 @@ const plumber = require('gulp-plumber');
 const rename = require('gulp-rename');
 const replace = require('gulp-replace');
 const watch = require('gulp-watch');
-const cache = require('gulp-cache');
 
 const removeDebug = require('./compression-pipes.js').removeDebug;
 const ctx = require('./context.js');
-const { ifEsmPackage } = require('./utils');
 const testsConfig = require('../../testing/tests.babelrc.json');
 const transpileConfig = require('./transpile-config');
 
@@ -58,7 +55,6 @@ const generatedTs = [
 ];
 
 const TS_OUTPUT_BASE_DIR = 'artifacts/dist_ts';
-const TS_OUTPUT_SRC = [`${TS_OUTPUT_BASE_DIR}/__internal/**/*.{js,jsx}`];
 const TS_COMPILER_CONFIG = {
     baseAbsPath: path.resolve(__dirname, '../..'),
     relativePath: {
@@ -112,83 +108,17 @@ const transpileTs = (compiler, src) => {
     return task;
 };
 
-const transpileTsClean = () =>
-    async() => await del(TS_OUTPUT_BASE_DIR, { force: true });
-
-
-const createTranspileTask = (input, output, pipes) =>
-    () => {
-        let result = gulp.src(input);
-
-        pipes.forEach(pipe => {
-            result = result.pipe(pipe);
-        });
-
-        return result.pipe(gulp.dest(output));
-    };
-
-
-const transpile = (src, dist, { jsPipes, tsPipes }) => {
-    const transpilePipes = [];
-
-    if(tsPipes) {
-        const transpileTS = createTranspileTask(TS_OUTPUT_SRC, `${dist}/__internal`, tsPipes);
-        transpileTS.displayName = `transpile TS: ${dist}`;
-        transpilePipes.push(transpileTS);
-    }
-
-    if(jsPipes) {
-        const transpileJS = createTranspileTask(src, dist, jsPipes);
-        transpileJS.displayName = `transpile JS: ${dist}`;
-        transpilePipes.push(transpileJS);
-    }
-
-
-    return gulp.series(...transpilePipes);
-};
-
-const cachedJsBabelCjs = () =>
-    cache(babel(transpileConfig.cjs), { name: 'babel-cjs' });
-
-const bundlesSrc = 'build/bundle-templates/**/*.js';
-
-const transpileBundles = (dist) => transpile(bundlesSrc, path.join(dist, './bundles'), {
-    jsPipes: [ removeDebug(), cachedJsBabelCjs() ],
+gulp.task('ts-compile-internal', (done) => {
+    createTsCompiler(TS_COMPILER_CONFIG).then((compiler) => {
+        transpileTs(compiler, srcTsPattern)()
+            .on('end', done)
+            .on('error', done);
+    });
 });
 
-const transpileDefault = () => gulp.series(
-    transpile(src, ctx.TRANSPILED_PATH, {
-        jsPipes: [ cachedJsBabelCjs() ],
-        tsPipes: [ babel(transpileConfig.tsCjs) ],
-    }),
-    transpileBundles(ctx.TRANSPILED_PATH),
-);
-
-const transpileProd = (dist, isEsm) => transpile(
-    src,
-    dist,
-    {
-        jsPipes: [
-            removeDebug(),
-            isEsm ? babel(transpileConfig.esm) : cachedJsBabelCjs()
-        ],
-        tsPipes: [
-            removeDebug(),
-            isEsm ? babel(transpileConfig.esm) : babel(transpileConfig.tsCjs),
-        ]
-    },
-);
-
-const transpileRenovationProd = (watch) => gulp.series(
-    transpileProd(ctx.TRANSPILED_PROD_RENOVATION_PATH, false, watch),
-    transpileBundles(ctx.TRANSPILED_PROD_RENOVATION_PATH),
-);
-
-const transpileEsm = (dist) => gulp.series.apply(gulp, [
-    transpileProd(path.join(dist, './cjs'), false),
-    transpileProd(path.join(dist, './esm'), true),
-    transpileBundles(dist),
-    () => gulp
+gulp.task('esm-dual-mode-manifests', () => {
+    const dist = ctx.TRANSPILED_PROD_ESM_PATH;
+    return gulp
         .src(esmTranspileSrc)
         .pipe(flatMap((stream, file) => {
             const filePath = file.path;
@@ -213,24 +143,8 @@ const transpileEsm = (dist) => gulp.series.apply(gulp, [
                     fPath.extname = '.json';
                 }));
         }))
-        .pipe(gulp.dest(dist))
-]);
-
-gulp.task('transpile-esm', transpileEsm(ctx.TRANSPILED_PROD_ESM_PATH));
-
-gulp.task('transpile', (done) => {
-    createTsCompiler(TS_COMPILER_CONFIG).then((compiler) => {
-        gulp.series(
-            'bundler-config',
-            transpileTs(compiler, srcTsPattern),
-            transpileDefault(),
-            transpileRenovationProd(),
-            ifEsmPackage('transpile-esm'),
-            transpileTsClean(),
-        )(done);
-    });
+        .pipe(gulp.dest(dist));
 });
-
 
 const watchJsTask = () => {
     const watchTask = watch(src)
