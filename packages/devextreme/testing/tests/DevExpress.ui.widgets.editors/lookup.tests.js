@@ -4394,18 +4394,6 @@ QUnit.module('onContentReady', {
         assert.strictEqual(contentReadyHandler.callCount, 3, 'onContentReady is not fired after popup with search results showing');
     });
 
-    QUnit.skip('onContentReady should be fired after input rendering when deferRendering=true', function(assert) {
-        assert.expect(2);
-
-        $('#lookup').dxLookup({
-            onContentReady: (e) => {
-                assert.ok(true, 'contentReady is fired after input rendering');
-                assert.strictEqual(e.component._$field.get(0), $('.dx-lookup-field').get(0), 'input is rendered');
-            },
-            deferRendering: true
-        });
-    });
-
     QUnit.test('onContentReady should be fired after list rendering when deferRendering=true', function(assert) {
         assert.expect(2);
 
