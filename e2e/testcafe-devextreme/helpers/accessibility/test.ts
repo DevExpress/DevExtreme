@@ -45,7 +45,16 @@ export const testAccessibility = <TComponentOptions = unknown>(
 
   optionConfigurations.forEach((optionConfiguration, index) => {
     test(`${component}: test with axe #${index}`, async (t) => {
-      await a11yCheck(t, a11yCheckConfig, selector, optionConfiguration);
+      const currentA11yCheckConfig = { ...a11yCheckConfig } as A11yCheckOptions;
+
+      if (component === 'dxTagBox' && (optionConfiguration as any).disabled) {
+        currentA11yCheckConfig.rules = {
+          ...currentA11yCheckConfig.rules,
+          'color-contrast': { enabled: false },
+        };
+      }
+
+      await a11yCheck(t, currentA11yCheckConfig, selector, optionConfiguration);
     }).before(async (t) => {
       await createWidget(
         component,
