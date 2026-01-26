@@ -1,7 +1,6 @@
 import '@js/ui/drop_down_button';
 
 import registerComponent from '@js/core/component_registrator';
-import devices from '@js/core/devices';
 import errors from '@js/core/errors';
 import $ from '@js/core/renderer';
 import { getPathParts } from '@js/core/utils/data';
@@ -69,12 +68,6 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
     };
   }
 
-  public _getDefaultOptions(): HeaderOptions & { _useShortDateFormat: boolean } {
-    return extend(super._getDefaultOptions(), {
-      _useShortDateFormat: !devices.real().generic || devices.isSimulator(),
-    }) as HeaderOptions & { _useShortDateFormat: boolean };
-  }
-
   private _createEventMap(): void {
     this.eventMap = new Map([
       ['currentView', []],
@@ -90,25 +83,18 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
   }
 
   public _addEvent(name: string, event: EventMapHandler): void {
-    if (!this.eventMap.has(name)) {
-      this.eventMap.set(name, []);
-    }
-
-    const events = this.eventMap.get(name);
-    if (events) {
-      this.eventMap.set(name, [...events, event]);
-    }
+    const events = this.eventMap.get(name) ?? [];
+    this.eventMap.set(name, [...events, event]);
   }
 
   public _optionChanged(args: OptionChanged<HeaderOptions>): void {
     const { name, value } = args;
 
-    if (this.eventMap.has(name)) {
-      const events = this.eventMap.get(name);
-      events?.forEach((event) => {
-        event(value);
-      });
-    }
+    const events = this.eventMap.get(name);
+
+    events?.forEach((event) => {
+      event(value);
+    });
   }
 
   public onToolbarOptionChanged(fullName: string, value: unknown): void {
@@ -161,8 +147,7 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
 
   public _toggleVisibility(): void {
     const { toolbar } = this.option();
-    const isHeaderShown = toolbar.visible
-      ?? (toolbar.visible === undefined && toolbar.items.length);
+    const isHeaderShown = toolbar.visible ?? toolbar.items.length;
 
     if (isHeaderShown) {
       this.$element().removeClass(CLASSES.invisible);
@@ -190,7 +175,7 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
         case ITEM_NAMES.today:
           return getTodayButtonOptions(this, itemOptions);
         case ITEM_NAMES.viewSwitcher:
-          return this.option('useDropDownViewSwitcher')
+          return this.option().useDropDownViewSwitcher
             ? getDropDownViewSwitcher(this, itemOptions)
             : getTabViewSwitcher(this, itemOptions);
         case ITEM_NAMES.dateNavigator:
@@ -206,12 +191,9 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
   }
 
   private _callEvent(event: string, arg: unknown): void {
-    if (this.eventMap.has(event)) {
-      const events = this.eventMap.get(event);
-      if (events) {
-        events.forEach((EventMapHandler) => EventMapHandler(arg));
-      }
-    }
+    const events = this.eventMap.get(event);
+
+    events?.forEach((EventMapHandler) => EventMapHandler(arg));
   }
 
   public _updateCurrentView(view: Required<NormalizedView>): void {
@@ -289,7 +271,7 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
   public _getCaption(): DateNavigatorTextInfo {
     const { customizeDateNavigatorText } = this.option();
     const options = this._getCaptionOptions();
-    const useShortDateFormat = this.option('_useShortDateFormat');
+    const useShortDateFormat = this.option()._useShortDateFormat;
 
     return getCaption(options, Boolean(useShortDateFormat), customizeDateNavigatorText);
   }
@@ -302,10 +284,6 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
 
   public async _showCalendar(e: ItemClickEvent): Promise<void> {
     await this._calendar?.show(e.element);
-  }
-
-  private async _hideCalendar(): Promise<void> {
-    await this._calendar?.hide();
   }
 }
 
