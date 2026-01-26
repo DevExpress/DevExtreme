@@ -36,7 +36,7 @@ interface DateNavigatorItem extends ButtonGroupItem {
 }
 
 const isPreviousButtonDisabled = (header: SchedulerHeader): boolean => {
-  const minOption = header.option('min');
+  const minOption = header.option().min;
 
   if (!dateUtilsTs.isValidDate(minOption)) return false;
 
@@ -50,7 +50,7 @@ const isPreviousButtonDisabled = (header: SchedulerHeader): boolean => {
 };
 
 const isNextButtonDisabled = (header: SchedulerHeader): boolean => {
-  const maxOption = header.option('max');
+  const maxOption = header.option().max;
 
   if (!dateUtilsTs.isValidDate(maxOption)) return false;
 

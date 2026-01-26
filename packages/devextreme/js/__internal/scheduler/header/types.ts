@@ -19,6 +19,7 @@ export interface HeaderOptions {
   onCurrentViewChange: (name: string) => void;
   onCurrentDateChange: (date: Date) => void;
   customizeDateNavigatorText: SafeSchedulerOptions['customizeDateNavigatorText'];
+  _useShortDateFormat: boolean;
 }
 
 export type Step = 'day' | 'week' | 'workWeek' | 'month' | 'agenda';
