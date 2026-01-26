@@ -1,6 +1,7 @@
 import '@js/ui/drop_down_button';
 
 import registerComponent from '@js/core/component_registrator';
+import devices from '@js/core/devices';
 import errors from '@js/core/errors';
 import $ from '@js/core/renderer';
 import { getPathParts } from '@js/core/utils/data';
@@ -66,6 +67,12 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
       intervalCount: currentView.intervalCount,
       agendaDuration: currentView.agendaDuration,
     };
+  }
+
+  public _getDefaultOptions(): HeaderOptions {
+    return extend(super._getDefaultOptions(), {
+      _useShortDateFormat: !devices.real().generic || devices.isSimulator(),
+    }) as HeaderOptions;
   }
 
   private _createEventMap(): void {
