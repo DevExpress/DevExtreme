@@ -4,7 +4,7 @@ import { CLASSES as BASE_CLASSES } from '../const';
 
 const CLASSES = {
   ...BASE_CLASSES,
-  container: 'dx-screen-reader-only',
+  container: 'dx-gridbase-a11y-status-container',
 };
 
 export interface A11yStatusContainerComponentProps {
