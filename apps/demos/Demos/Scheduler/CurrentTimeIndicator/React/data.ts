@@ -52,7 +52,7 @@ export const moviesData: Resource[] = [{
 }, {
   id: 3,
   text: 'A Star Is Born',
-  image: '../../../../images/movies/AStartIsBorn.jpg',
+  image: '../../../../images/movies/AStarIsBorn.jpg',
 }, {
   id: 4,
   text: 'The Screaming Skull',
