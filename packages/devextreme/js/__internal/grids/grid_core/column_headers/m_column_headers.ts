@@ -206,7 +206,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     if (options.rowType === 'header' && renderingTemplate && column.headerCellTemplate && !column.command) {
       resultTemplate = {
         render(options) {
-          const $content = that.createCellContent(options.container, options.model);
+          const $content = that.createCellContent(options.container, column);
           renderingTemplate.render(extend({}, options, { container: $content }));
         },
       };
