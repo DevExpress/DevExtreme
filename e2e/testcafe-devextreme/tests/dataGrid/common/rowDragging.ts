@@ -468,7 +468,7 @@ test('Headers should not be hidden during auto scrolling when virtual scrollling
 });
 
 // T1078513
-test.meta({ unstable: true })('Footer should not be hidden during auto scrolling when virtual scrollling is specified', async (t) => {
+test('Footer should not be hidden during auto scrolling when virtual scrollling is specified', async (t) => {
   const dataGrid = new DataGrid('#container');
   await t.drag(dataGrid.getDataRow(0).getDragCommand(), 0, 90, { speed: 0.1 });
 
@@ -570,7 +570,7 @@ test('The draggable element should be displayed correctly after horizontal scrol
   });
 });
 
-test.meta({ unstable: true })('Dragging with scrolling should be prevented by e.cancel (T1179555)', async (t) => {
+test('Dragging with scrolling should be prevented by e.cancel (T1179555)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await dataGrid.scrollBy(t, { top: 10000 });
@@ -661,7 +661,7 @@ test('The placeholder should have correct position after dragging the row to the
 }));
 
 // T1126013
-test.meta({ unstable: true })('toIndex should not be corrected when source item gets removed from DOM', async (t) => {
+test('toIndex should not be corrected when source item gets removed from DOM', async (t) => {
   const fromIndex = 2;
   const toIndex = 4;
 
@@ -787,7 +787,7 @@ test('Item should appear in a correct spot when dragging to a different page wit
 });
 
 // T1179218
-test.meta({ unstable: true })('Rows should appear correctly during dragging when virtual scrolling is enabled and rowDragging.dropFeedbackMode = "push"', async (t) => {
+test('Rows should appear correctly during dragging when virtual scrolling is enabled and rowDragging.dropFeedbackMode = "push"', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
