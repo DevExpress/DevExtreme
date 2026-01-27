@@ -46,16 +46,25 @@ describe('BabelTransformExecutor E2E', () => {
   let tempDir: string;
   let context = createMockContext();
   let projectDir: string;
+  let savedCwd: string;
 
   beforeEach(async () => {
+    savedCwd = process.cwd();
     tempDir = createTempDir('nx-babel-e2e-');
     context = createMockContext({ root: tempDir });
     projectDir = path.join(tempDir, 'packages', 'test-lib');
     fs.mkdirSync(projectDir, { recursive: true });
 
-    const workspaceNodeModules = path.join(WORKSPACE_ROOT, 'node_modules');
+    const infraPluginNodeModules = path.join(
+      WORKSPACE_ROOT,
+      'packages',
+      'nx-infra-plugin',
+      'node_modules',
+    );
     const tempNodeModules = path.join(projectDir, 'node_modules');
-    fs.symlinkSync(workspaceNodeModules, tempNodeModules, 'junction');
+    fs.symlinkSync(infraPluginNodeModules, tempNodeModules, 'junction');
+
+    process.chdir(projectDir);
 
     const buildDir = path.join(projectDir, 'build', 'gulp');
     fs.mkdirSync(buildDir, { recursive: true });
@@ -93,6 +102,7 @@ export function helper() {
   });
 
   afterEach(() => {
+    process.chdir(savedCwd);
     cleanupTempDir(tempDir);
   });
 
