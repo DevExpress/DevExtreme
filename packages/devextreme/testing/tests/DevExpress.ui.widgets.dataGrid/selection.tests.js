@@ -1161,7 +1161,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         assert.strictEqual(selectionChangedCount, 1);
     });
 
-    QUnit.skip('Not rise event on second set selectedRows without changes', function(assert) {
+    QUnit.test('Not rise event on second set selectedRows without changes', function(assert) {
         let selectionChangedCount = 0;
 
         this.applyOptions({
