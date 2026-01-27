@@ -341,6 +341,7 @@
       "options": {
         "commands": [
           "pnpm nx build:devextreme-bundler-config:generate devextreme",
+          "pnpm nx build:devextreme-bundler-config:prod devextreme",
           "pnpm nx build:ts:internal devextreme",
           "pnpm nx run-many --targets=build:cjs,build:cjs:internal,build:cjs:bundles --projects=devextreme --parallel",
           "pnpm nx copy:json:transpiled devextreme",
@@ -364,13 +365,15 @@
         "{projectRoot}/artifacts/transpiled",
         "{projectRoot}/artifacts/transpiled-esm-npm",
         "{projectRoot}/artifacts/transpiled-renovation-npm",
-        "{projectRoot}/build/bundle-templates/dx.custom.js"
+        "{projectRoot}/build/bundle-templates/dx.custom.js",
+        "{projectRoot}/artifacts/npm/devextreme/bundles/dx.custom.config.js"
       ],
       "cache": true,
       "configurations": {
         "ci": {
           "commands": [
             "pnpm nx build:devextreme-bundler-config:generate devextreme",
+            "pnpm nx build:devextreme-bundler-config:prod devextreme",
             "pnpm nx build:ts:internal devextreme",
             "pnpm nx run-many --targets=build:cjs,build:cjs:internal,build:cjs:bundles --projects=devextreme --parallel",
             "pnpm nx copy:json:transpiled devextreme",
@@ -382,7 +385,8 @@
           "outputs": [
             "{projectRoot}/artifacts/transpiled",
             "{projectRoot}/artifacts/transpiled-renovation-npm",
-            "{projectRoot}/build/bundle-templates/dx.custom.js"
+            "{projectRoot}/build/bundle-templates/dx.custom.js",
+            "{projectRoot}/artifacts/npm/devextreme/bundles/dx.custom.config.js"
           ]
         }
       }
