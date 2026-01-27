@@ -578,7 +578,7 @@ test('Dragging with scrolling should be prevented by e.cancel (T1179555)', async
 
   await MouseUpEvents.disable(MouseAction.dragToOffset);
 
-  await t.drag(dataGrid.getDataRow(98).getDragCommand(), 0, -180, { speed: 0.1 });
+  await t.drag(dataGrid.getDataRow(98).getDragCommand(), 0, -160, { speed: 0.1 });
 
   await t.expect(Selector('.dx-sortable-placeholder').visible).notOk();
 
