@@ -19,6 +19,7 @@ import AdaptiveDetailRow from './adaptiveDetailRow';
 import ColumnChooser from './columnChooser';
 import TextBox from '../textBox';
 import DateBox from '../dateBox';
+import NumberBox from '../numberBox';
 import { GroupPanel } from './groupPanel';
 import GridCore from '../gridCore';
 import { CLASS as CLASS_BASE } from '../gridCore';
@@ -249,12 +250,16 @@ export default class DataGrid extends GridCore {
     return this.getHeadersContainer().child(`.${this.addWidgetPrefix(CLASS.filterRangeOverlay)}`);
   }
 
-  getFilterRangeStartEditor(): DateBox {
-    return new DateBox(this.body.find(`.${this.addWidgetPrefix(CLASS.filterRangeStartEditor)}`));
+  getFilterRangeStartEditor(): DateBox;
+  getFilterRangeStartEditor(EditorType?: typeof DateBox | typeof NumberBox): DateBox | NumberBox {
+    const Editor = EditorType ?? DateBox;
+    return new Editor(this.body.find(`.${this.addWidgetPrefix(CLASS.filterRangeStartEditor)}`));
   }
 
-  getFilterRangeEndEditor(): DateBox {
-    return new DateBox(this.body.find(`.${this.addWidgetPrefix(CLASS.filterRangeEndEditor)}`));
+  getFilterRangeEndEditor(): DateBox;
+  getFilterRangeEndEditor(EditorType?: typeof DateBox | typeof NumberBox): DateBox | NumberBox {
+    const Editor = EditorType ?? DateBox;
+    return new Editor(this.body.find(`.${this.addWidgetPrefix(CLASS.filterRangeEndEditor)}`));
   }
 
   getFocusOverlay() {
