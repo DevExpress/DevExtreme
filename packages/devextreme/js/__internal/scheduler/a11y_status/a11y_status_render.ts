@@ -2,7 +2,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 
 const CLASSES = {
-  container: 'dx-scheduler-a11y-status-container',
+  container: 'dx-screen-reader-only',
 };
 
 export const createA11yStatusContainer = (statusText = ''): dxElementWrapper => $('<div>')

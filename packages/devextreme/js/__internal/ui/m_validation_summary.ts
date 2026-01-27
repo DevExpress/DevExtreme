@@ -1,5 +1,7 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import registerComponent from '@js/core/component_registrator';
+import type { dxElementWrapper } from '@js/core/renderer';
+import $ from '@js/core/renderer';
 // @ts-expect-error ts-error
 import { grep } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
@@ -12,6 +14,7 @@ import ValidationEngine from './m_validation_engine';
 import type ValidationGroup from './m_validation_group';
 
 const VALIDATION_SUMMARY_CLASS = 'dx-validationsummary';
+const SCREEN_READER_ONLY_CLASS = 'dx-screen-reader-only';
 const ITEM_CLASS = `${VALIDATION_SUMMARY_CLASS}-item`;
 const ITEM_DATA_KEY = `${VALIDATION_SUMMARY_CLASS}-item-data`;
 
@@ -25,6 +28,10 @@ class ValidationSummary extends CollectionWidget<ValidationSummaryProperties> {
   _validationGroup?: ValidationGroup;
 
   validators?: any[];
+
+  _$announceContainer?: dxElementWrapper;
+
+  _lastAnnouncedText?: string;
 
   groupSubscription?: (params) => void;
 
@@ -117,6 +124,45 @@ class ValidationSummary extends CollectionWidget<ValidationSummaryProperties> {
     });
 
     this.option('items', items);
+
+    this._announceOnGroupValidation();
+  }
+
+  _announceOnGroupValidation(): void {
+    const { items } = this.option();
+
+    if (!items?.length) {
+      this._lastAnnouncedText = '';
+      this._removeAnnounceContainer();
+      return;
+    }
+
+    const text = items.map((item) => item.text).join('. ');
+
+    if (text !== this._lastAnnouncedText) {
+      this._lastAnnouncedText = text;
+      this._announceText(text);
+    }
+  }
+
+  _removeAnnounceContainer(): void {
+    this._$announceContainer?.remove();
+    this._$announceContainer = undefined;
+  }
+
+  _renderAnnounceContainer(): void {
+    this._removeAnnounceContainer();
+
+    this._$announceContainer = $('<div>')
+      .addClass(SCREEN_READER_ONLY_CLASS)
+      .attr('role', 'alert')
+      .appendTo(this.element());
+  }
+
+  _announceText(text: string): void {
+    this._renderAnnounceContainer();
+
+    this._$announceContainer?.text(text);
   }
 
   _itemValidationHandler({ isValid, validator, brokenRules }): void {
@@ -164,6 +210,7 @@ class ValidationSummary extends CollectionWidget<ValidationSummaryProperties> {
 
   _initMarkup(): void {
     this.$element().addClass(VALIDATION_SUMMARY_CLASS);
+
     super._initMarkup();
   }
 
@@ -192,6 +239,7 @@ class ValidationSummary extends CollectionWidget<ValidationSummaryProperties> {
   }
 
   _dispose(): void {
+    this._removeAnnounceContainer();
     super._dispose();
     this._unsubscribeGroup();
   }
