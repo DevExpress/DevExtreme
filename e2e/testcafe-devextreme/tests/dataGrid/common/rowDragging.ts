@@ -799,7 +799,10 @@ test('Rows should appear correctly during dragging when virtual scrolling is ena
   await t.wait(2000);
 
   // drag the row up
-  await dataGrid.moveRow(0, 30, 75);
+  await dataGrid.moveRow(0, 30, 100);
+
+  // waiting for autoscrolling
+  await t.wait(1000);
 
   await testScreenshot(t, takeScreenshot, 'T1179218-virtual-scrolling-dragging-row.png', { element: dataGrid.element });
   await t
