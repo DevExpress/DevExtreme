@@ -1837,8 +1837,8 @@ importers:
         specifier: 'catalog:'
         version: 5.4.0(eslint@9.18.0(jiti@2.6.1))
       '@types/jasmine':
-        specifier: 2.8.23
-        version: 2.8.23
+        specifier: 2.8.24
+        version: 2.8.24
       '@types/node':
         specifier: 20.11.17
         version: 20.11.17
@@ -6915,8 +6915,8 @@ packages:
   '@types/istanbul-reports@3.0.4':
     resolution: {integrity: sha512-pk2B1NWalF9toCRu6gjBzR69syFjP4Od8WRAX+0mmf9lAjCRicLOWc+ZrxZHx/0XRjotgkF9t6iaMJ+aXcOdZQ==}
 
-  '@types/jasmine@2.8.23':
-    resolution: {integrity: sha512-x2taYv8LtplAGTEPxEnc1nWh3dqV4VhgAzXLXQkRolB/+cAOfCAqXt+8cKjX/a8v1JmNXQ9yGCJT8+8pEuU1Mg==}
+  '@types/jasmine@2.8.24':
+    resolution: {integrity: sha512-AUiYOhMC7FV7risPijqkhCetw8Ar2Hk3Y5YOCBWRCAYd3KJX/nF13aF2xyRe4E4QH7fKo8fZWmX/V7lb6rZhMA==}
 
   '@types/jasmine@5.1.4':
     resolution: {integrity: sha512-px7OMFO/ncXxixDe1zR13V1iycqWae0MxTaw62RpFlksUi5QuNWgQJFkTQjIOvrmutJbI7Fp2Y2N1F6D2R4G6w==}
@@ -25683,7 +25683,7 @@ snapshots:
 
   '@testing-library/dom@10.4.0':
     dependencies:
-      '@babel/code-frame': 7.27.1
+      '@babel/code-frame': 7.28.6
       '@babel/runtime': 7.28.4
       '@types/aria-query': 5.0.4
       aria-query: 5.3.0
@@ -25943,7 +25943,7 @@ snapshots:
     dependencies:
       '@types/istanbul-lib-report': 3.0.3
 
-  '@types/jasmine@2.8.23': {}
+  '@types/jasmine@2.8.24': {}
 
   '@types/jasmine@5.1.4': {}
 
@@ -41209,7 +41209,7 @@ snapshots:
 
   tslint@6.1.3(typescript@5.5.4):
     dependencies:
-      '@babel/code-frame': 7.27.1
+      '@babel/code-frame': 7.28.6
       builtin-modules: 1.1.1
       chalk: 2.4.2
       commander: 2.20.3
@@ -41226,7 +41226,7 @@ snapshots:
 
   tslint@6.1.3(typescript@5.9.3):
     dependencies:
-      '@babel/code-frame': 7.27.1
+      '@babel/code-frame': 7.28.6
       builtin-modules: 1.1.1
       chalk: 2.4.2
       commander: 2.20.3
