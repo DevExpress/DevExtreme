@@ -111,7 +111,7 @@ test('Proper handle custom filter operations for dates with non-date values', as
           hasValue: false,
           calculateFilterExpression() {
             function getOrderDay(rowData: { OrderDate: string }) {
-              return (new Date(rowData.OrderDate)).getDay();
+              return new Date(rowData.OrderDate).getDay();
             }
 
             return [[getOrderDay, '=', 0], 'or', [getOrderDay, '=', 6]];
@@ -125,11 +125,11 @@ test('Proper handle custom filter operations for dates with non-date values', as
         dataField: 'OrderDate',
         dataType: 'date',
         calculateFilterExpression(value, selectedFilterOperations, target) {
-          if (target === 'headerFilter' && value === 'weekends') {
-            function getOrderDay(rowData: { OrderDate: string }) {
-              return (new Date(rowData.OrderDate)).getDay();
-            }
+          function getOrderDay(rowData: { OrderDate: string }) {
+            return new Date(rowData.OrderDate).getDay();
+          }
 
+          if (target === 'headerFilter' && value === 'weekends') {
             return [[getOrderDay, '=', 0], 'or', [getOrderDay, '=', 6]];
           }
           return this.defaultCalculateFilterExpression?.(
