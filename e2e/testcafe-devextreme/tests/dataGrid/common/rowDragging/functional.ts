@@ -5,6 +5,7 @@ import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
 import { MouseUpEvents, MouseAction } from '../../../../helpers/mouseUpEvents';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
+import { getThemeName } from '../../../../helpers/themeUtils';
 
 const CLASS = { ...DataGridClassNames, ...ClassNames };
 
@@ -570,13 +571,23 @@ test('The draggable element should be displayed correctly after horizontal scrol
 
 test('Dragging with scrolling should be prevented by e.cancel (T1179555)', async (t) => {
   const dataGrid = new DataGrid('#container');
+  const scrollTopOffsetByTheme = {
+    generic: -180,
+    fluent: -160,
+    material: -160,
+  };
 
   await dataGrid.scrollBy(t, { top: 10000 });
   await t.expect(dataGrid.isReady()).ok();
 
   await MouseUpEvents.disable(MouseAction.dragToOffset);
 
-  await t.drag(dataGrid.getDataRow(98).getDragCommand(), 0, -160, { speed: 0.1 });
+  await t.drag(
+    dataGrid.getDataRow(98).getDragCommand(),
+    0,
+    scrollTopOffsetByTheme[getThemeName()],
+    { speed: 0.1 },
+  );
 
   await t.expect(Selector('.dx-sortable-placeholder').visible).notOk();
 

@@ -2,7 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
-import { testScreenshot } from '../../../../helpers/themeUtils';
+import { getThemeName, testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture`Row dragging.Visual`
   .page(url(__dirname, '../../../container.html'));
@@ -11,16 +11,22 @@ fixture`Row dragging.Visual`
 test('Rows should appear correctly during dragging when virtual scrolling is enabled and rowDragging.dropFeedbackMode = "push"', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const themeName = getThemeName();
+  const scrollTopOffsetsByTheme = {
+    generic: [150, 350, 75],
+    fluent: [150, 350, 100],
+    material: [150, 350, 100],
+  };
 
   // drag the row down
-  await dataGrid.moveRow(0, 30, 150, true);
-  await dataGrid.moveRow(0, 30, 350);
+  await dataGrid.moveRow(0, 30, scrollTopOffsetsByTheme[themeName][0], true);
+  await dataGrid.moveRow(0, 30, scrollTopOffsetsByTheme[themeName][1]);
 
   // waiting for autoscrolling
   await t.wait(2000);
 
   // drag the row up
-  await dataGrid.moveRow(0, 30, 100);
+  await dataGrid.moveRow(0, 30, scrollTopOffsetsByTheme[themeName][2]);
 
   // waiting for autoscrolling
   await t.wait(1000);
