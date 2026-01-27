@@ -224,10 +224,10 @@ export const widgetTestModule = widgetName => {
         });
 
         QUnit.module('deferRendering', () => {
-            QUnit.skip('default dropDownOptions.deferRendering value is true', function(assert) {
+            QUnit.test('default dropDownOptions.deferRendering value is undefined', function(assert) {
                 const editor = new dropDownEditorsList[widgetName]($('#editor'));
 
-                assert.strictEqual(editor.option('dropDownOptions.deferRendering'), true);
+                assert.strictEqual(editor.option('dropDownOptions.deferRendering'), undefined, 'deferRendering is not provided to dropDownOptions');
             });
 
             QUnit.test('dropDownOptions.deferRendering=false should not override deferRendering', function(assert) {
@@ -307,7 +307,7 @@ export const widgetTestModule = widgetName => {
                 assert.strictEqual(popup, undefined, 'popup is not rendered');
             });
 
-            QUnit.skip('popup should not open if dropDownOptions.visible=true and deferRendering=false', function(assert) {
+            QUnit.test('popup should not open if dropDownOptions.visible=true and deferRendering=false', function(assert) {
                 const editor = new dropDownEditorsList[widgetName]($('#editor'), { 'dropDownOptions.visible': true, deferRendering: false });
                 const popup = getPopupInstance(editor);
 
@@ -350,20 +350,21 @@ export const widgetTestModule = widgetName => {
         });
 
         QUnit.module('dropDownOptions using after repaint', () => {
-            // TODO: skip because of ddOptions.visible incorrect behavior
-            QUnit.skip('dropDownOptions should not be cleared', function(assert) {
+            QUnit.test('dropDownOptions should not be cleared', function(assert) {
                 const editor = new dropDownEditorsList[widgetName]($('#editor'), {
                     dropDownOptions: optionTestValues,
                     deferRendering: false,
-                    pickerType: 'calendar'
+                    pickerType: 'calendar',
                 });
 
                 editor.repaint();
                 const popup = getPopupInstance(editor);
 
                 dropDownOptionsKeys.forEach(option => {
-                    assert.deepEqual(editor.option(`dropDownOptions.${option}`), optionTestValues[option], `dropDownOptions.${option}`);
-                    assert.deepEqual(popup.option(option), optionTestValues[option], option);
+                    const value = option === 'visible' ? false : optionTestValues[option];
+
+                    assert.deepEqual(editor.option(`dropDownOptions.${option}`), value, `dropDownOptions.${option}`);
+                    assert.deepEqual(popup.option(option), value, option);
                 });
             });
 
