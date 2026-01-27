@@ -27,7 +27,7 @@ catalog:
   globals: 15.14.0
   gulp-eslint-new: 2.4.0
   jquery: 4.0.0
-  "@babel/eslint-parser": 7.28.5
+  "@babel/eslint-parser": 7.28.6
   "@eslint-stylistic/metadata": ^2.13.0
   "@eslint/eslintrc": 3.2.0
   "@stylistic/eslint-plugin": 5.4.0
@@ -61,7 +61,7 @@ catalogs:
     eslint-plugin-no-only-tests: 3.1.0
     eslint-plugin-qunit: 7.3.4
     gulp-eslint-new: 1.9.1
-    "@babel/eslint-parser": 7.28.5
+    "@babel/eslint-parser": 7.28.6
     "@typescript-eslint/eslint-plugin": 5.62.0
     "@typescript-eslint/parser": 5.62.0
   tools:
