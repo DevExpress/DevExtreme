@@ -49,7 +49,7 @@ async function getAntiForgeryTokenValue(): Promise<{ headerName: string; token: 
     return tokenData;
 }
 
-window.fetch = async (url, options) => {
+window.fetch = async (url, options = {}) => {
     const { headerName, token } = await getAntiForgeryTokenValue();
 
     options.headers = {
