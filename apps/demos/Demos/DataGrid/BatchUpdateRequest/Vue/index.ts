@@ -1,5 +1,5 @@
 import { createApp } from 'vue';
+import '/shared/anti-forgery/frameworks.ts';
 import App from './App.vue';
-import '/shared/anti-forgery/frameworks.ts'
 
 createApp(App).mount('#app');
