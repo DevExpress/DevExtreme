@@ -1,18 +1,25 @@
+import type { Format } from '@js/common/core/localization';
 import messageLocalization from '@js/common/core/localization/message';
 import { DataSource } from '@js/common/data/data_source/data_source';
 import { errors as dataErrors } from '@js/common/data/errors';
 import $ from '@js/core/renderer';
 import { compileGetter } from '@js/core/utils/data';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { captionize } from '@js/core/utils/inflector';
-import { isBoolean, isDefined, isFunction } from '@js/core/utils/type';
+import {
+  isBoolean, isDefined, isFunction, isNumeric, isString,
+} from '@js/core/utils/type';
 import formatHelper from '@js/format_helper';
+import type { CustomOperation, DataType, Field } from '@js/ui/filter_builder';
 import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
 
 import { getConfig } from './m_between';
 import filterOperationsDictionary from './m_filter_operations_dictionary';
+
+type FieldValue = string | number | boolean | Date | null | undefined;
 
 const DEFAULT_DATA_TYPE = 'string';
 const EMPTY_MENU_ICON = 'icon-none';
@@ -27,7 +34,7 @@ const DATATYPE_OPERATIONS = {
   boolean: ['=', '<>', 'isblank', 'isnotblank'],
   object: ['isblank', 'isnotblank'],
 };
-const DEFAULT_FORMAT = {
+const DEFAULT_FORMAT: Partial<Record<DataType, Format>> = {
   date: 'shortDate',
   datetime: 'shortDateShortTime',
 };
@@ -54,19 +61,24 @@ const FILTER_BUILDER_ITEM_TEXT_PART_CLASS = `${FILTER_BUILDER_ITEM_TEXT_CLASS}-p
 const FILTER_BUILDER_ITEM_TEXT_SEPARATOR_CLASS = `${FILTER_BUILDER_ITEM_TEXT_CLASS}-separator`;
 const FILTER_BUILDER_ITEM_TEXT_SEPARATOR_EMPTY_CLASS = `${FILTER_BUILDER_ITEM_TEXT_SEPARATOR_CLASS}-empty`;
 
-function getFormattedValueText(field, value): string {
-  const fieldFormat = field.format || DEFAULT_FORMAT[field.dataType];
+function getDateFormat(dataType: DataType | undefined): Format | undefined {
+  return dataType ? DEFAULT_FORMAT[dataType] : undefined;
+}
+
+function getFormattedValueText(field: Field, value: FieldValue): string {
+  const fieldFormat = field.format ?? getDateFormat(field.dataType);
 
   if (isBoolean(value)) {
-    const trueText: string = field.trueText || messageLocalization.format('dxDataGrid-trueText');
-    const falseText: string = field.falseText || messageLocalization.format('dxDataGrid-falseText');
+    const trueText = field.trueText ?? messageLocalization.format('dxDataGrid-trueText');
+    const falseText = field.falseText ?? messageLocalization.format('dxDataGrid-falseText');
 
     return value ? trueText : falseText;
   }
 
   if (field.dataType === 'date' || field.dataType === 'datetime') {
-    // value can be string or number, we need to convert it to Date object
-    return formatHelper.format(new Date(value), fieldFormat);
+    if (isString(value) || isNumeric(value)) {
+      return formatHelper.format(new Date(value), fieldFormat);
+    }
   }
 
   return formatHelper.format(value, fieldFormat);
@@ -574,11 +586,18 @@ export function getCurrentLookupValueText(field, value, handler) {
   }
 }
 
-function getPrimitiveValueText(field, value, customOperation, target, options?) {
+function getPrimitiveValueText(
+  field: Field,
+  value: FieldValue,
+  customOperation: CustomOperation | null,
+  target: string,
+  options?,
+): string {
   let valueText = getFormattedValueText(field, value);
 
   if (field.customizeText) {
     valueText = field.customizeText.call(field, {
+      // @ts-expect-error
       value,
       valueText,
       target,
@@ -591,32 +610,43 @@ function getPrimitiveValueText(field, value, customOperation, target, options?) 
       valueText,
       field,
       target,
+      // @ts-expect-error
     }, options);
   }
 
   return valueText;
 }
 
-function getArrayValueText(field, value, customOperation, target) {
+function getArrayValueText(
+  field: Field,
+  value: FieldValue[],
+  customOperation: CustomOperation | null,
+  target: string,
+): string[] {
   const options = { values: value };
   return value.map((v) => getPrimitiveValueText(field, v, customOperation, target, options));
 }
 
-function checkDefaultValue(value) {
+function checkDefaultValue(value: FieldValue | FieldValue[]): value is '' | null {
   return value === '' || value === null;
 }
 
-export function getCurrentValueText(field, value, customOperation, target = 'filterBuilder') {
+export function getCurrentValueText(
+  field: Field,
+  value: FieldValue | FieldValue[],
+  customOperation: CustomOperation | null,
+  target = 'filterBuilder',
+): string | DeferredObj<string | string[]> {
   if (checkDefaultValue(value)) {
     return '';
   }
 
   if (Array.isArray(value)) {
     // @ts-expect-error Deferred has badly typed ctor function
-    const result = new Deferred();
+    const result: DeferredObj<string | string[]> = new Deferred();
     when.apply(this, getArrayValueText(field, value, customOperation, target)).done((...args) => {
-      const text = args.some((item) => !checkDefaultValue(item))
-        ? args.map((item) => (!checkDefaultValue(item) ? item : '?'))
+      const text: string | string[] = (args as string[]).some((item) => !checkDefaultValue(item))
+        ? (args as string[]).map((item) => (!checkDefaultValue(item) ? item : '?'))
         : '';
       result.resolve(text);
     });
