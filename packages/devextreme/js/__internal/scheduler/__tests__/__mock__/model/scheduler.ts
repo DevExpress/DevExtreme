@@ -26,7 +26,7 @@ export class SchedulerModel {
   }
 
   getStatusContent(): string {
-    return this.container.querySelector('.dx-scheduler-a11y-status-container')?.textContent ?? '';
+    return this.container.querySelector('.dx-screen-reader-only')?.textContent ?? '';
   }
 
   getAppointment(text?: string): AppointmentModel<HTMLDivElement | null> {
