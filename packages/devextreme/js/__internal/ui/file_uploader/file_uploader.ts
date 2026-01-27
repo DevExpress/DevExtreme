@@ -1101,10 +1101,10 @@ class FileUploader extends Editor<FileUploaderProperties> {
       .addClass(FILEUPLOADER_INPUT_CONTAINER_CLASS)
       .appendTo(this._$inputWrapper);
 
+    this._renderInput();
+
     this._$fileInput
       .addClass(FILEUPLOADER_INPUT_CLASS);
-
-    this._renderInput();
 
     const labelId = `dx-fileuploader-input-label-${new Guid()}`;
 
