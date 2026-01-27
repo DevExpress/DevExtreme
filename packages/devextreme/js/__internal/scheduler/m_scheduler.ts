@@ -28,7 +28,7 @@ import {
 import { hasWindow } from '@js/core/utils/window';
 import DataHelperMixin from '@js/data_helper';
 import { custom as customDialog } from '@js/ui/dialog';
-import type { Appointment, AppointmentTooltipShowingEvent } from '@js/ui/scheduler';
+import type { Appointment, AppointmentTooltipShowingEvent, FirstDayOfWeek } from '@js/ui/scheduler';
 import errors from '@js/ui/widget/ui.errors';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
@@ -2134,10 +2134,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
   }
 
-  getFirstDayOfWeek() {
+  getFirstDayOfWeek(): FirstDayOfWeek {
     return isDefined(this.getViewOption('firstDayOfWeek'))
-      ? this.getViewOption('firstDayOfWeek')
-      : dateLocalization.firstDayOfWeekIndex();
+      ? this.getViewOption('firstDayOfWeek') as FirstDayOfWeek
+      : dateLocalization.firstDayOfWeekIndex() as FirstDayOfWeek;
   }
 
   _validateKeyFieldIfAgendaExist() {
