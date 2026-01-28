@@ -1,5 +1,5 @@
 $(async () => {
-  const URL = `https://js.devexpress.com/Demos/NetCore/api/DataGridBatchUpdateWebApi`;
+  const URL = 'https://js.devexpress.com/Demos/NetCore/api/DataGridBatchUpdateWebApi';
 
   $('#gridContainer').dxDataGrid({
     dataSource: DevExpress.data.AspNet.createStore({
