@@ -23,6 +23,11 @@
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
         "jestConfig": "{projectRoot}/jest.config.ts"
+      },
+      "configurations": {
+        "ci": {
+          "silent": true
+        }
       }
     }
   }
