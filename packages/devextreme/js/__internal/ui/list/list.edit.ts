@@ -63,6 +63,10 @@ class ListEdit extends ListBase {
         const nextItemIndex = focusedItemIndex + (moveUp ? -1 : 1);
         const $nextItem = editStrategy.getItemElement(nextItemIndex);
 
+        if (!$nextItem) {
+          return;
+        }
+
         const isMoveFromGroup = grouped
           && $(focusedElement).parent().get(0) !== $nextItem.parent().get(0);
         if (!isMoveFromGroup) {
