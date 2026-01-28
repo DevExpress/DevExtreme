@@ -50,7 +50,7 @@
     "postcss": "8.4.38",
     "shelljs": "0.8.5",
     "shx": "0.4.0",
-    "source-map": "0.7.4",
+    "source-map": "0.7.6",
     "tar-fs": "3.1.1",
     "ts-node": "10.9.2",
     "vue": "3.4.27",
