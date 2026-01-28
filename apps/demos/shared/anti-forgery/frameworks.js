@@ -12,7 +12,7 @@ ajax.sendRequest = (options) => {
     return sendRequestOrig(options);
 }
 
-async function fetchAntiForgeryToken(): Promise<{ headerName: string; token: string }> {
+async function fetchAntiForgeryToken() {
     try {
         const response = await fetchOrig(`${BASE_PATH}/api/Common/GetAntiForgeryToken`, {
             method: 'GET',
@@ -32,8 +32,8 @@ async function fetchAntiForgeryToken(): Promise<{ headerName: string; token: str
     }
 }
 
-async function getAntiForgeryTokenValue(): Promise<{ headerName: string; token: string }> {
-    const tokenMeta = document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]');
+async function getAntiForgeryTokenValue() {
+    const tokenMeta = document.querySelector('meta[name="csrf-token"]');
     if (tokenMeta) {
         const headerName = tokenMeta.dataset.headerName || 'RequestVerificationToken';
         const token = tokenMeta.getAttribute('content') || '';
