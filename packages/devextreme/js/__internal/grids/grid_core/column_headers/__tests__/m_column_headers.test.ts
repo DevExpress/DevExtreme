@@ -60,7 +60,7 @@ describe('Column Headers', () => {
   afterEach(afterTest);
 
   describe('headerCellTemplate', () => {
-    it('should apply right alighnment to number column when headerCellTemplate is used', async () => {
+    it('should apply right alignment to number column when headerCellTemplate is used', async () => {
       const { component } = await createDataGrid({
         dataSource: [],
         showBorders: true,
