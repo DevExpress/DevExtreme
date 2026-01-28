@@ -6917,6 +6917,29 @@ QUnit.module('Stores', () => {
         });
     });
 
+    QUnit.test('PivotGridDataSource dispose disposes LocalStore', function(assert) {
+        const dataSource = new PivotGridDataSource({
+            store: window.orders
+        });
+        const store = dataSource.store();
+
+        dataSource.dispose();
+
+        assert.ok(store._dataSource._disposed, 'LocalStore internal DataSource is disposed');
+    });
+
+    QUnit.test('PivotGridDataSource dispose disposes RemoteStore', function(assert) {
+        const dataSource = new PivotGridDataSource({
+            remoteOperations: true,
+            store: window.orders
+        });
+        const store = dataSource.store();
+
+        dataSource.dispose();
+
+        assert.ok(store._dataSource._disposed, 'RemoteStore internal DataSource is disposed');
+    });
+
 
 });
 
