@@ -586,9 +586,7 @@ const LocalStore = Class.inherit((function () {
     },
 
     dispose() {
-      if (this._dataSource) {
-        this._dataSource.dispose();
-      }
+      this._dataSource?.dispose();
     },
   };
 })()).include(storeDrillDownMixin);

@@ -1406,9 +1406,7 @@ class PivotGridDataSource {
       delayedLoadTask.abort();
     }
 
-    if (that._store) {
-      that._store.dispose();
-    }
+    that._store?.dispose();
 
     this._isDisposed = true;
   }
