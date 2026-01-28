@@ -6,7 +6,6 @@ import 'whatwg-fetch';
 
 const BASE_PATH = 'https://js.devexpress.com/Demos/NetCore';
 const URL = `${BASE_PATH}/api/DataGridBatchUpdateWebApi`;
-
 const ordersStore = createStore({
   key: 'OrderID',
   loadUrl: `${URL}/Orders`,
