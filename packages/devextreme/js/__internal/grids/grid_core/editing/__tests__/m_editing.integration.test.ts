@@ -1,17 +1,13 @@
 import {
-  afterEach, beforeEach, describe, expect, it, jest,
+  afterEach, beforeEach, describe, expect, it,
 } from '@jest/globals';
-import type { dxElementWrapper } from '@js/core/renderer';
-import $ from '@js/core/renderer';
-import type { Properties as DataGridProperties } from '@js/ui/data_grid';
-import DataGrid from '@js/ui/data_grid';
-import { DataGridModel } from '@ts/grids/data_grid/__tests__/__mock__/model/data_grid';
 
-const GRID_CONTAINER_ID = 'gridContainer';
-
-const SELECTORS = {
-  gridContainer: `#${GRID_CONTAINER_ID}`,
-};
+import {
+  afterTest,
+  beforeTest,
+  createDataGrid,
+  flushAsync,
+} from '../../__tests__/__mock__/helpers/utils';
 
 const dataSource = [{
   ID: 1,
@@ -44,49 +40,6 @@ const dataSource = [{
   Notes: 'Robert was recently voted the CMO of the year by CMO Magazine. He is a proud member of the DevAV Management Team.\r\n\r\nRobert is a championship BBQ chef, so when you get the chance ask him for his secret recipe.',
   Address: '4 Westmoreland Pl.',
 }];
-
-const flushAsync = async (): Promise<void> => {
-  jest.runOnlyPendingTimers();
-  await Promise.resolve();
-};
-
-const createDataGrid = async (
-  options: DataGridProperties = {},
-): Promise<{
-  $container: dxElementWrapper;
-  component: DataGridModel;
-  instance: DataGrid;
-}> => new Promise((resolve) => {
-  const $container = $('<div>')
-    .attr('id', GRID_CONTAINER_ID)
-    .appendTo(document.body);
-
-  const instance = new DataGrid($container.get(0) as HTMLDivElement, options);
-  const component = new DataGridModel($container.get(0) as HTMLElement);
-
-  jest.runAllTimers();
-  resolve({
-    $container,
-    component,
-    instance,
-  });
-});
-
-const beforeTest = (): void => {
-  jest.useFakeTimers();
-};
-
-const afterTest = (): void => {
-  const $container = $(SELECTORS.gridContainer);
-  const dataGrid = (
-    $container as dxElementWrapper & { dxDataGrid: (command: string) => DataGrid }
-  ).dxDataGrid('instance');
-
-  dataGrid.dispose();
-  $container.remove();
-  jest.clearAllMocks();
-  jest.useRealTimers();
-};
 
 describe('DataGrid editing', () => {
   beforeEach(beforeTest);

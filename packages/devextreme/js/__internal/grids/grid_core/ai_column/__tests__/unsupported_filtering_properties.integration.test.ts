@@ -3,23 +3,20 @@ import {
 } from '@jest/globals';
 import type { GenerateGridColumnCommandResponse, RequestParams } from '@js/common/ai-integration';
 import type { ColumnAIOptions } from '@js/common/grids';
-import type { dxElementWrapper } from '@js/core/renderer';
-import $ from '@js/core/renderer';
-import type { Properties as DataGridProperties } from '@js/ui/data_grid';
-import DataGrid from '@js/ui/data_grid';
+import type DataGrid from '@js/ui/data_grid';
 import { AIIntegration } from '@ts/core/ai_integration/core/ai_integration';
-import { DataGridModel } from '@ts/grids/data_grid/__tests__/__mock__/model/data_grid';
+
+import {
+  afterTest as baseAfterTest,
+  beforeTest,
+  createDataGrid,
+  flushAsync,
+} from '../../__tests__/__mock__/helpers/utils';
 
 interface RequestResult {
   promise: Promise<GenerateGridColumnCommandResponse>;
   abort: () => void;
 }
-
-const GRID_CONTAINER_ID = 'gridContainer';
-
-const SELECTORS = {
-  gridContainer: `#${GRID_CONTAINER_ID}`,
-};
 
 const dataSource = [
   { id: 1, name: 'Item 1', value: 1 },
@@ -66,11 +63,6 @@ const getAIColumnOptions = (delay: number): ColumnAIOptions => ({
   aiIntegration: createAIIntegration(delay),
 });
 
-const flushAsync = async (): Promise<void> => {
-  jest.runOnlyPendingTimers();
-  await Promise.resolve();
-};
-
 const getColumnIndexByName = (instance: DataGrid, columnName: string): number => {
   const columnsController = (instance as any).getController('columns');
   const columnByName = columnsController.getColumnByName(columnName);
@@ -78,43 +70,7 @@ const getColumnIndexByName = (instance: DataGrid, columnName: string): number =>
   return columnByName.index;
 };
 
-const createDataGrid = async (
-  options: DataGridProperties = {},
-): Promise<{
-  $container: dxElementWrapper;
-  component: DataGridModel;
-  instance: DataGrid;
-}> => new Promise((resolve) => {
-  const $container = $('<div>')
-    .attr('id', GRID_CONTAINER_ID)
-    .appendTo(document.body);
-
-  const instance = new DataGrid($container.get(0) as HTMLDivElement, options);
-  const component = new DataGridModel($container.get(0) as HTMLElement);
-
-  jest.runAllTimers();
-  resolve({
-    $container,
-    component,
-    instance,
-  });
-});
-
-const beforeTest = (): void => {
-  jest.useFakeTimers();
-};
-
-const afterTest = (): void => {
-  const $container = $(SELECTORS.gridContainer);
-  const dataGrid = (
-    $container as dxElementWrapper & { dxDataGrid: (command: string) => DataGrid }
-  ).dxDataGrid('instance');
-
-  dataGrid.dispose();
-  $container.remove();
-  jest.clearAllMocks();
-  jest.useRealTimers();
-};
+const afterTest = baseAfterTest;
 
 describe('Unsupported filtering properties', () => {
   beforeEach(beforeTest);
