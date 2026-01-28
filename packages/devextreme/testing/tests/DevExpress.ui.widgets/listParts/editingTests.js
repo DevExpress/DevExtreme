@@ -319,6 +319,53 @@ QUnit.module('keyboard navigation', {
         assert.deepEqual(list.option('items'), items, 'items were reordered');
     });
 
+    QUnit.test('shift+arrowUp on first item should not throw error', function(assert) {
+        const items = ['1', '2', '3'];
+
+        const $list = $('#list').dxList({
+            items: items,
+            editEnabled: true,
+            itemDragging: {
+                allowReordering: true
+            },
+            focusStateEnabled: true
+        });
+        const list = $list.dxList('instance');
+        const keyboard = keyboardMock($list.find('[tabindex=0]'));
+
+        const $firstItem = $list.find('.' + LIST_ITEM_CLASS).eq(0);
+        $firstItem.trigger('dxpointerdown');
+        this.clock.tick(10);
+
+        keyboard.keyDown('arrowUp', { shiftKey: true });
+
+        assert.deepEqual(list.option('items'), items, 'items order is unchanged');
+    });
+
+    QUnit.test('shift+arrowDown on last item should not throw error', function(assert) {
+        const items = ['1', '2', '3'];
+
+        const $list = $('#list').dxList({
+            items: items,
+            editEnabled: true,
+            itemDragging: {
+                allowReordering: true
+            },
+            focusStateEnabled: true
+        });
+        const list = $list.dxList('instance');
+        const keyboard = keyboardMock($list.find('[tabindex=0]'));
+
+        const $lastItem = $list.find('.' + LIST_ITEM_CLASS).eq(2);
+        $lastItem.trigger('dxpointerdown');
+        this.clock.tick(10);
+
+        keyboard.keyDown('arrowDown', { shiftKey: true });
+
+        assert.deepEqual(list.option('items'), items, 'items order is unchanged');
+    });
+
+
     QUnit.module('grouped', {
         beforeEach: function() {
             this.getInitialItems = () => {
