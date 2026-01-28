@@ -24,7 +24,7 @@ import { isDefined, isObject, isString } from '@js/core/utils/type';
 import swatchContainer from '@ts/core/utils/swatch_container';
 import { getDraggingPanelBoundingRects } from '@ts/grids/grid_core/columns_resizing_reordering/utils';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
-import type { ColumnPoint, ModuleType } from '@ts/grids/grid_core/m_types';
+import type { ColumnPoint, Coordinates, ModuleType } from '@ts/grids/grid_core/m_types';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import type { ColumnChooserView } from '../column_chooser/m_column_chooser';
@@ -61,11 +61,6 @@ const allowResizing = function (that) {
 const allowReordering = function (that) {
   // TODO getController
   return that.option('allowColumnReordering') || that.getController('columns').isColumnOptionUsed('allowReordering');
-};
-
-type ColumnIndex = number | {
-  rowIndex: number;
-  columnIndex: number;
 };
 
 export class TrackerView extends modules.View {
@@ -668,13 +663,13 @@ export class ColumnsResizerViewController extends modules.ViewController {
 
   private _$parentContainer: any;
 
-  public _targetPoint: any;
+  public _targetPoint?: ColumnPoint | null;
 
   private _resizingInfo: any;
 
   protected _columnsController!: ColumnsController;
 
-  private _pointsByColumns: any;
+  private _pointsByColumns?: ColumnPoint[] | null;
 
   private _moveSeparatorHandler: any;
 
@@ -785,13 +780,24 @@ export class ColumnsResizerViewController extends modules.ViewController {
   /**
    * @extended: column_fixing
    */
-  protected _getTargetPoint(pointsByColumns, currentX, deltaX) {
+  protected _getTargetPoint(
+    pointsByColumns: ColumnPoint[] | null | undefined,
+    currentPoint: Coordinates,
+    deltaX: number,
+  ): ColumnPoint | null {
     if (pointsByColumns) {
-      for (let i = 0; i < pointsByColumns.length; i++) {
-        if (pointsByColumns[i].x === pointsByColumns[0].x && pointsByColumns[i + 1] && pointsByColumns[i].x === pointsByColumns[i + 1].x) {
+      for (let i = 0; i < pointsByColumns.length; i += 1) {
+        if (pointsByColumns[i].x === pointsByColumns[0].x
+          && pointsByColumns[i + 1]
+          && pointsByColumns[i].x === pointsByColumns[i + 1].x
+        ) {
+          // eslint-disable-next-line no-continue
           continue;
         }
-        if (pointsByColumns[i].x - deltaX <= currentX && currentX <= pointsByColumns[i].x + deltaX) {
+        if (currentPoint.y >= pointsByColumns[i].y
+          && pointsByColumns[i].x - deltaX <= currentPoint.x
+          && currentPoint.x <= pointsByColumns[i].x + deltaX
+        ) {
           return pointsByColumns[i];
         }
       }
@@ -843,7 +849,11 @@ export class ColumnsResizerViewController extends modules.ViewController {
           }
         }
 
-        that._targetPoint = that._getTargetPoint(that.pointsByColumns(), eventData.x, columnsSeparatorWidth);
+        that._targetPoint = that._getTargetPoint(
+          that.pointsByColumns(),
+          eventData,
+          columnsSeparatorWidth,
+        );
         that._previousParentOffset = parentOffset;
         that._isReadyResizing = false;
 
@@ -895,19 +905,21 @@ export class ColumnsResizerViewController extends modules.ViewController {
   }
 
   private _setupResizingInfo(posX) {
-    const currentColumnIndex = this._targetPoint.columnIndex;
-    const nextColumnIndex = this._getNextColumnIndex(currentColumnIndex);
-    const $currentHeader = this._columnHeadersView.getHeaderElement(currentColumnIndex);
-    const $nextHeader = this._columnHeadersView.getHeaderElement(nextColumnIndex);
+    if (this._targetPoint) {
+      const currentColumnIndex = this._targetPoint.columnIndex;
+      const nextColumnIndex = this._getNextColumnIndex(currentColumnIndex);
+      const $currentHeader = this._columnHeadersView.getHeaderElement(currentColumnIndex);
+      const $nextHeader = this._columnHeadersView.getHeaderElement(nextColumnIndex);
 
-    this._resizingInfo = {
-      startPosX: posX,
-      currentColumnIndex,
-      currentColumnWidth: $currentHeader?.length ? getBoundingRect($currentHeader[0]).width : 0,
-      nextColumnIndex,
-      nextColumnWidth: $nextHeader?.length ? getBoundingRect($nextHeader[0]).width : 0,
-      needToInvertResizing: this._needToInvertResizing($currentHeader),
-    };
+      this._resizingInfo = {
+        startPosX: posX,
+        currentColumnIndex,
+        currentColumnWidth: $currentHeader?.length ? getBoundingRect($currentHeader[0]).width : 0,
+        nextColumnIndex,
+        nextColumnWidth: $nextHeader?.length ? getBoundingRect($nextHeader[0]).width : 0,
+        needToInvertResizing: this._needToInvertResizing($currentHeader),
+      };
+    }
   }
 
   /**
@@ -920,7 +932,11 @@ export class ColumnsResizerViewController extends modules.ViewController {
 
     if (isTouchEvent(e)) {
       if (that._isHeadersRowArea(eventData.y)) {
-        that._targetPoint = that._getTargetPoint(that.pointsByColumns(), eventData.x, COLUMNS_SEPARATOR_TOUCH_TRACKER_WIDTH);
+        that._targetPoint = that._getTargetPoint(
+          that.pointsByColumns(),
+          eventData,
+          COLUMNS_SEPARATOR_TOUCH_TRACKER_WIDTH,
+        );
         if (that._targetPoint) {
           that._columnsSeparatorView.moveByX(that._targetPoint.x - that._columnsSeparatorView.width() / 2);
           that._isReadyResizing = true;
@@ -1270,15 +1286,14 @@ export class ColumnsResizerViewController extends modules.ViewController {
     return this._isResizing;
   }
 
-  private pointsByColumns(value) {
+  private pointsByColumns(value?: ColumnPoint[] | null): ColumnPoint[] | null | undefined {
     if (value !== undefined) {
       this._pointsByColumns = value;
-    } else {
-      if (!this._pointsByColumns) {
-        this._generatePointsByColumns();
-      }
-      return this._pointsByColumns;
+    } else if (!this._pointsByColumns) {
+      this._generatePointsByColumns();
     }
+
+    return this._pointsByColumns;
   }
 }
 
@@ -1582,8 +1597,8 @@ export class DraggingHeaderViewController extends modules.ViewController {
 
   private allowDrop(parameters) {
     return this._columnsController.allowMoveColumn(
-      this.addColumnIndexOffset(parameters.sourceColumnIndex),
-      this.addColumnIndexOffset(parameters.targetColumnIndex),
+      parameters.sourceColumnIndex,
+      parameters.targetColumnIndex,
       parameters.sourceLocation,
       parameters.targetLocation,
     );
@@ -1643,19 +1658,6 @@ export class DraggingHeaderViewController extends modules.ViewController {
     }
   }
 
-  private addColumnIndexOffset(columnIndex: ColumnIndex): ColumnIndex {
-    const offset = this._columnsController.getColumnIndexOffset();
-
-    if (isObject(columnIndex)) {
-      return {
-        ...columnIndex,
-        columnIndex: columnIndex.columnIndex + offset,
-      };
-    }
-
-    return columnIndex + offset;
-  }
-
   private drop(parameters) {
     const { sourceColumnElement } = parameters;
 
@@ -1673,8 +1675,8 @@ export class DraggingHeaderViewController extends modules.ViewController {
       }
 
       this._columnsController.moveColumn(
-        this.addColumnIndexOffset(parameters.sourceColumnIndex),
-        this.addColumnIndexOffset(parameters.targetColumnIndex),
+        parameters.sourceColumnIndex,
+        parameters.targetColumnIndex,
         parameters.sourceLocation,
         parameters.targetLocation,
       );

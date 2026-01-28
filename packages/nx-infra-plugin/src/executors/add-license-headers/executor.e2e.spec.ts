@@ -65,6 +65,10 @@ describe('AddLicenseHeadersExecutor E2E', () => {
       expect(indexContent).toContain('test-package');
       expect(indexContent).toContain('Version: 1.0.0');
       expect(indexContent).toContain('Developer Express Inc.');
+      expect(indexContent).toContain('MIT license');
+      const currentYear = new Date().getFullYear();
+      expect(indexContent).toContain(`2012 - ${currentYear}`);
+      expect(indexContent).toMatch(/Build date:/);
 
       const utilsContent = await readFileText(path.join(npmDir, 'utils.js'));
       expect(utilsContent).toMatch(/^\/\*!/);
@@ -106,6 +110,46 @@ describe('AddLicenseHeadersExecutor E2E', () => {
       expect(newContent).toMatch(/^\/\*!/);
 
       expect(newContent).toContain(originalContent.trim());
+    });
+
+    it('should support custom license template', async () => {
+      const projectDir = path.join(tempDir, 'packages', 'test-lib');
+      const buildDir = path.join(projectDir, 'build', 'gulp');
+      fs.mkdirSync(buildDir, { recursive: true });
+
+      await writeFileText(
+        path.join(buildDir, 'license-header.txt'),
+        `/*!
+* DevExtreme (<%= file.relative %>)
+* Version: <%= version %>
+* Build date: <%= date %>
+*
+* Copyright (c) 2012 - <%= year %> Developer Express Inc. ALL RIGHTS RESERVED
+* Read about DevExtreme licensing here: <%= eula %>
+*/
+`,
+      );
+
+      const options: AddLicenseHeadersExecutorSchema = {
+        targetDirectory: './npm',
+        packageJsonPath: './package.json',
+        licenseTemplateFile: './build/gulp/license-header.txt',
+        eulaUrl: 'https://js.devexpress.com/Licensing/',
+        prependAfterLicense: '"use strict";\n\n',
+        includePatterns: ['**/*.js'],
+      };
+
+      const result = await executor(options, context);
+      expect(result.success).toBe(true);
+
+      const npmDir = path.join(projectDir, 'npm');
+      const content = await readFileText(path.join(npmDir, 'index.js'));
+
+      expect(content).toMatch(/^\/\*!/);
+      expect(content).toContain('DevExtreme (index.js)');
+      expect(content).toContain('https://js.devexpress.com/Licensing/');
+      expect(content).toContain('"use strict";');
+      expect(content).toContain("return 'Hello'");
     });
   });
 
@@ -156,65 +200,6 @@ describe('AddLicenseHeadersExecutor E2E', () => {
       expect(content).toMatch(/^\/\*!/);
       expect(content).toContain('Existing header');
       expect(content).not.toContain('test-package');
-    });
-  });
-
-  describe('Header content validation', () => {
-    it('should include package name in header', async () => {
-      const options: AddLicenseHeadersExecutorSchema = {
-        targetDirectory: './npm',
-        packageJsonPath: './package.json',
-      };
-
-      await executor(options, context);
-
-      const npmDir = path.join(tempDir, 'packages', 'test-lib', 'npm');
-      const content = await readFileText(path.join(npmDir, 'index.js'));
-
-      expect(content).toContain('test-package');
-    });
-
-    it('should include version in header', async () => {
-      const options: AddLicenseHeadersExecutorSchema = {
-        targetDirectory: './npm',
-        packageJsonPath: './package.json',
-      };
-
-      await executor(options, context);
-
-      const npmDir = path.join(tempDir, 'packages', 'test-lib', 'npm');
-      const content = await readFileText(path.join(npmDir, 'index.js'));
-
-      expect(content).toContain('Version: 1.0.0');
-    });
-
-    it('should include current year in header', async () => {
-      const options: AddLicenseHeadersExecutorSchema = {
-        targetDirectory: './npm',
-        packageJsonPath: './package.json',
-      };
-
-      await executor(options, context);
-
-      const npmDir = path.join(tempDir, 'packages', 'test-lib', 'npm');
-      const content = await readFileText(path.join(npmDir, 'index.js'));
-
-      const currentYear = new Date().getFullYear();
-      expect(content).toContain(`2012 - ${currentYear}`);
-    });
-
-    it('should include build date in header', async () => {
-      const options: AddLicenseHeadersExecutorSchema = {
-        targetDirectory: './npm',
-        packageJsonPath: './package.json',
-      };
-
-      await executor(options, context);
-
-      const npmDir = path.join(tempDir, 'packages', 'test-lib', 'npm');
-      const content = await readFileText(path.join(npmDir, 'index.js'));
-
-      expect(content).toMatch(/Build date:/);
     });
   });
 
