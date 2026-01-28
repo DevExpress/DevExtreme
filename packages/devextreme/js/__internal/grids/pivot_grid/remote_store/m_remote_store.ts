@@ -664,7 +664,9 @@ class RemoteStore {
   }
 
   dispose() {
-    this._dataSource?.dispose();
+    if (this._dataSource) {
+      this._dataSource.dispose();
+    }
   }
 }
 
