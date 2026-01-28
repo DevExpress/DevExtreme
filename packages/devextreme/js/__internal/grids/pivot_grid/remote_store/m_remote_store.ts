@@ -662,6 +662,10 @@ class RemoteStore {
       },
     });
   }
+
+  dispose() {
+    this._dataSource?.dispose();
+  }
 }
 
 export default { RemoteStore };
