@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import '/shared/anti-forgery/frameworks.js';
+import 'anti-forgery';
 import App from './App.tsx';
 
 ReactDOM.render(
