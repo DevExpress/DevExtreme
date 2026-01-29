@@ -6,6 +6,7 @@ import { MouseUpEvents, MouseAction } from '../../../../helpers/mouseUpEvents';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { getThemeName } from '../../../../helpers/themeUtils';
+import { isScrollAtEnd, getOffsetToTriggerUpwardAutoScroll } from '../../helpers/rowDraggingHelpers';
 
 const CLASS = { ...DataGridClassNames, ...ClassNames };
 
@@ -671,51 +672,77 @@ test('The placeholder should have correct position after dragging the row to the
 
 // T1126013
 test('toIndex should not be corrected when source item gets removed from DOM', async (t) => {
-  const fromIndex = 2;
-  const toIndex = 4;
-
+  // arrange
   const dataGrid = new DataGrid('#container');
+  const AUTOSCROLL_WAIT_TIME = 2000;
+  const AUTOSCROLL_SPEED_FACTOR = 0.5;
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  // act - scroll to the bottom to make the last row visible
   await dataGrid.scrollTo(t, { y: 3000 });
 
-  const sourceKey = await ClientFunction((grid, idx) => {
-    const instance: any = grid.getInstance();
-    const visibleRows = instance.getVisibleRows();
-    return visibleRows[idx]?.key;
-  }, { dependencies: {} })(dataGrid, fromIndex);
+  // assert
+  await t
+    .expect(dataGrid.getDataRow(49).getDataCell(1).element.textContent)
+    .eql('50-1')
+    .expect(isScrollAtEnd('vertical'))
+    .ok();
 
-  const initialIndices = await ClientFunction((grid) => {
-    const instance: any = grid.getInstance();
-    return instance.getVisibleRows().map((r: any) => r.key);
-  })(dataGrid);
-  const sourceInitialIndex = initialIndices.indexOf(sourceKey);
+  let visibleRows = await dataGrid.apiGetVisibleRows();
+  const draggableRow = visibleRows[1];
 
-  await dataGrid.moveRow(fromIndex, 0, 50, true);
-  await dataGrid.moveRow(fromIndex, 0, -20);
-  await dataGrid.moveRow(toIndex, 0, 5);
+  // Calculate offsetY to trigger upward autoscroll when dragging the row.
+  // Using speedFactor 0.5 to ensure medium scrolling speed.
+  const scrollOffsetForFastAutoScroll = await getOffsetToTriggerUpwardAutoScroll(
+    draggableRow.rowIndex,
+    AUTOSCROLL_SPEED_FACTOR,
+  );
 
-  await ClientFunction((grid) => {
-    const instance = grid.getInstance();
-    $(instance.element()).trigger($.Event('dxpointerup'));
-  })(dataGrid);
+  // act - drag a row up the grid to start auto-scrolling.
+  await dataGrid.moveRow(draggableRow.rowIndex, 0, 150, true);
+  await dataGrid.moveRow(draggableRow.rowIndex, 0, 100);
+  await dataGrid.moveRow(draggableRow.rowIndex, 0, scrollOffsetForFastAutoScroll);
 
-  const finalIndex = await ClientFunction((grid, key) => {
-    const instance: any = grid.getInstance();
-    const visibleRows = instance.getVisibleRows();
-    return visibleRows.findIndex((r: any) => r.key === key);
-  })(dataGrid, sourceKey);
+  // Waiting for autoscrolling
+  await t.wait(AUTOSCROLL_WAIT_TIME);
 
-  const expectedFinalIndex = (toIndex - 1) - (sourceInitialIndex < toIndex ? 1 : 0);
+  // assert
+  visibleRows = await dataGrid.apiGetVisibleRows();
 
-  await t.expect(finalIndex)
-    .eql(expectedFinalIndex, `Dragged row key ${sourceKey} expected at ${expectedFinalIndex} but ended up at index ${finalIndex}`);
+  await t
+    .expect(dataGrid.getDataRow(0).getDataCell(1).element.textContent)
+    .eql('1-1')
+    .expect(dataGrid.getScrollTop())
+    .eql(0);
+
+  // act - drag and drop the row to the third position (after row 2-1).
+  const rowHeight = await dataGrid.getDataRow(0).element.offsetHeight;
+
+  await dataGrid.moveRow(draggableRow.rowIndex, 0, rowHeight / 2);
+  await dataGrid.dropRow();
+
+  // assert
+  await t.expect(dataGrid.isReady()).ok();
+
+  visibleRows = await dataGrid.apiGetVisibleRows();
+
+  await t
+    .expect(visibleRows[0].key)
+    .eql('1-1')
+    .expect(visibleRows[1].key)
+    .eql('2-1')
+    .expect(visibleRows[2].key)
+    .eql(draggableRow.key);
 }).before(async (t) => {
   await t.maximizeWindow();
   const items = generateData(50, 1);
   return createWidget('dxDataGrid', {
-    height: 250,
+    height: 260,
     keyExpr: 'field1',
     scrolling: {
       mode: 'virtual',
+      useNative: false,
     },
     paging: {
       pageSize: 4,
