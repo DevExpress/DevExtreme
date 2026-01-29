@@ -58,7 +58,7 @@ export class AppComponent {
     this.clientsStore = new CustomStore({
       key: 'Value',
       useDefaultSearch: true,
-      async load(loadOptions) {
+      load(loadOptions) {
         let params: HttpParams = new HttpParams();
         [
           'skip',

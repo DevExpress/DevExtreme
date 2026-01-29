@@ -90,6 +90,7 @@ describe('Compile manager - integration test on test sass', () => {
       expect(result.compiledMetadata).toEqual({
         "$base-font-family": "-apple-system, BlinkMacSystemFont, \"avenir next\", avenir, \"segoe ui\", \"helvetica neue\", \"adwaita sans\", cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif",
         '$base-accent': '#337ab7',
+        '$float-channel-color': '#2d6da3',
       });
     });
   });

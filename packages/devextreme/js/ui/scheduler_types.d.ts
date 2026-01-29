@@ -8,6 +8,7 @@ export {
   AppointmentFormIconsShowMode,
   AppointmentFormProperties,
   ViewType,
+  SchedulerScrollToAlign,
   SchedulerPredefinedToolbarItem,
   SchedulerPredefinedDateNavigatorItem,
   AppointmentAddedEvent,

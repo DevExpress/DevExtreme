@@ -282,7 +282,9 @@
 
         "dxScheduler-editorLabelTitle": "Predmet",
         "dxScheduler-editorLabelStartDate": "Datum začetka",
+        "dxScheduler-editorAriaLabelStartTime": "Start time",
         "dxScheduler-editorLabelEndDate": "Datum konca",
+        "dxScheduler-editorAriaLabelEndTime": "End time",
         "dxScheduler-editorLabelDescription": "Opis",
         "dxScheduler-editorLabelRecurrence": "Ponovi",
 

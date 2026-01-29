@@ -40,3 +40,5 @@ export const populations = {
   Morocco: 0.46,
   Uzbekistan: 0.43,
 };
+
+export type PopulationsKey = keyof typeof populations;

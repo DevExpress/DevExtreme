@@ -15,11 +15,14 @@ runManualTest('FileUploader', 'CustomDropzone', (test) => {
   const triggerDragEnter = async (dropZoneSelector, items) => {
     await ClientFunction(() => {
       // @ts-expect-error $ is not typed
+      // eslint-disable-next-line no-undef
       const $dropZone = $(dropZoneSelector);
       const { left, top } = $dropZone.offset();
       // @ts-expect-error $ is not typed
+      // eslint-disable-next-line no-undef
       $dropZone.trigger($.Event('dragenter', {
         // @ts-expect-error $ is not typed
+        // eslint-disable-next-line no-undef
         originalEvent: $.Event('dragenter', {
           dataTransfer: {
             items,

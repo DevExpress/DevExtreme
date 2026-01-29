@@ -11,6 +11,7 @@ import { fitIntoRange, inRange, sign } from '@js/core/utils/math';
 import {
   isDate, isDefined, isFunction, isString,
 } from '@js/core/utils/type';
+import type { DxEvent } from '@js/events';
 import type { Properties } from '@js/ui/date_box';
 import dateLocalization from '@ts/core/localization/date';
 
@@ -661,18 +662,22 @@ class DateBoxMask extends DateBoxBase {
     }
   }
 
-  _enterHandler() {
+  _enterHandler(): void {
     this._fireChangeEvent();
-    this._selectNextPart(FORWARD);
+
+    if (this._useMaskBehavior() && this._isAllSelected()) {
+      this._selectFirstPart();
+    } else {
+      this._selectNextPart(FORWARD);
+    }
   }
 
-  _focusOutHandler(e) {
+  _focusOutHandler(e: DxEvent): void {
     const shouldFireChangeEvent = this._useMaskBehavior() && !e.isDefaultPrevented();
 
     if (shouldFireChangeEvent) {
       this._fireChangeEvent();
       super._focusOutHandler(e);
-      this._selectFirstPart();
     } else {
       super._focusOutHandler(e);
     }

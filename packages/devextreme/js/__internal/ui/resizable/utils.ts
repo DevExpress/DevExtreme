@@ -83,12 +83,12 @@ export function getDragOffsets(
   handleEl: HTMLElement,
   areaProp: AreaProp | undefined,
 ): ({
-    maxLeftOffset: number;
-    maxRightOffset: number;
-    maxTopOffset: number;
-    maxBottomOffset: number;
-  }
-  ) {
+  maxLeftOffset: number;
+  maxRightOffset: number;
+  maxTopOffset: number;
+  maxBottomOffset: number;
+}
+) {
   const hWidth = getOuterWidth(handleEl);
   const hHeight = getOuterHeight(handleEl);
   const hOffset = getOffset(handleEl);

@@ -134,6 +134,7 @@ function compareCollections(
   Object.keys(current.configCollections).forEach((key) => {
     const currentCollection = current.configCollections[key];
     const prevCollection = prev.configCollections[key] || [];
+    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     if (!currentCollection || currentCollection.length !== prevCollection.length) {
       const updatedCollection: Record<string, any>[] = [];
       currentCollection.forEach(

@@ -86,6 +86,7 @@ describe('compile', () => {
         '$base-font-family': '"Segoe UI", helvetica, verdana, sans-serif',
         '$base-accent': '#ff0000',
         '$accordion-title-color': '#ff0000',
+        '$float-channel-color': '#e60000',
         '$accordion-item-title-opened-bg': '#008000',
       });
     });

@@ -36,7 +36,7 @@ export type ItemRenderedEvent = EventInfo<ButtonCollection> & ItemInfo<Button>;
 export type SelectionChangedEvent = EventInfo<ButtonCollection> & SelectionChangeInfo<Item>;
 
 export interface ButtonCollectionProperties extends CollectionWidgetEditProperties<
- ButtonCollection
+  ButtonCollection
 > {
   buttonTemplate?: template | (
     (buttonData: Item, buttonContent: Element) => dxElementWrapper

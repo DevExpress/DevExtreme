@@ -42,12 +42,11 @@ const CLEAR_BUTTON_CLASS = 'dx-clear-button-area';
 const commonEnvironment = {
     beforeEach: function() {
         const markup =
-                `<div id="dateBox"></div>
-                <div id="numberBox"></div>
-                <div id="dateBoxWithPicker"></div>
-                <div id="widthRootStyle"></div>
-                <div id="calendar"></div>`;
-
+            `<div id="dateBox"></div>
+            <div id="numberBox"></div>
+            <div id="dateBoxWithPicker"></div>
+            <div id="widthRootStyle"></div>
+            <div id="calendar"></div>`;
         $('#qunit-fixture').html(markup);
         $('#widthRootStyle').css({ width: '300px' });
     },

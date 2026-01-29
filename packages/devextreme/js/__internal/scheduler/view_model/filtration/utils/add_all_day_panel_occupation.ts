@@ -5,17 +5,17 @@ export const addAllDayPanelOccupation = <T extends MinimalAppointmentEntity>(
   entities: T[],
   { supportAllDayPanel, allDayPanelMode }: FilterOptions,
 ): (T & AllDayPanelOccupation)[] => entities.map((entity) => {
-    const isAllDayPanelOccupied = supportAllDayPanel && isAppointmentTakesAllDay(
-      {
-        allDay: entity.allDay,
-        startDate: new Date(entity.source.startDate),
-        endDate: new Date(entity.source.endDate),
-      },
-      allDayPanelMode,
-    );
+  const isAllDayPanelOccupied = supportAllDayPanel && isAppointmentTakesAllDay(
+    {
+      allDay: entity.allDay,
+      startDate: new Date(entity.source.startDate),
+      endDate: new Date(entity.source.endDate),
+    },
+    allDayPanelMode,
+  );
 
-    return {
-      ...entity,
-      isAllDayPanelOccupied,
-    };
-  });
+  return {
+    ...entity,
+    isAllDayPanelOccupied,
+  };
+});

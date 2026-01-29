@@ -4257,7 +4257,7 @@ QUnit.module('reset', () => {
 
         const validationItemsBeforeReset = $(`.${FORM_VALIDATION_SUMMARY}`).children();
 
-        assert.strictEqual(validationItemsBeforeReset.length, 2, 'form has validation summary items before reset');
+        assert.strictEqual(validationItemsBeforeReset.length, 3, 'form has validation summary items before reset');
 
         form.reset();
 
@@ -4284,7 +4284,7 @@ QUnit.module('reset', () => {
 
         const summaryItemsAfterValidate = $(`.${FORM_VALIDATION_SUMMARY}`).children();
 
-        assert.strictEqual(summaryItemsAfterValidate.length, 2, 'form has validation summary after validation');
+        assert.strictEqual(summaryItemsAfterValidate.length, 3, 'form has validation summary after validation');
     });
 
     [

@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "title": "Localization Executor",
+  "description": "Generates localization message files and TypeScript CLDR data modules",
+  "type": "object",
+  "properties": {
+    "messagesDir": {
+      "type": "string",
+      "description": "Directory containing locale message JSON files (e.g., en.json, de.json)",
+      "default": "./js/localization/messages"
+    },
+    "messageTemplate": {
+      "type": "string",
+      "description": "Path to the Lodash template file for UMD message generation",
+      "default": "./build/gulp/localization-template.jst"
+    },
+    "messageOutputDir": {
+      "type": "string",
+      "description": "Output directory for generated dx.messages.{locale}.js files",
+      "default": "./artifacts/js/localization"
+    },
+    "generatedTemplate": {
+      "type": "string",
+      "description": "Path to the Lodash template file for TypeScript exports",
+      "default": "./build/gulp/generated_js.jst"
+    },
+    "cldrDataOutputDir": {
+      "type": "string",
+      "description": "Output directory for CLDR data TypeScript modules",
+      "default": "./js/__internal/core/localization/cldr-data"
+    },
+    "defaultMessagesOutputDir": {
+      "type": "string",
+      "description": "Output directory for default_messages.ts",
+      "default": "./js/__internal/core/localization"
+    },
+    "lintGeneratedFiles": {
+      "type": "boolean",
+      "description": "Run ESLint with auto-fix on generated TypeScript files",
+      "default": true
+    },
+    "skipCldrGeneration": {
+      "type": "boolean",
+      "description": "Skip CLDR TypeScript generation (only generate message files)",
+      "default": false
+    },
+    "skipMessageGeneration": {
+      "type": "boolean",
+      "description": "Skip message file generation (only generate CLDR TypeScript files)",
+      "default": false
+    }
+  },
+  "required": []
+}

@@ -22,8 +22,7 @@ import type {
 
 import windowUtils from '../../core/utils/m_window';
 
-export type OverlayPositionAlignment =
-  | 'top center'
+export type OverlayPositionAlignment = | 'top center'
   | 'bottom center'
   | 'right center'
   | 'left center'

@@ -282,7 +282,9 @@
 
         "dxScheduler-editorLabelTitle": "Chủ đề",
         "dxScheduler-editorLabelStartDate": "Ngày bắt đầu",
+        "dxScheduler-editorAriaLabelStartTime": "Start time",
         "dxScheduler-editorLabelEndDate": "Ngày kết thúc",
+        "dxScheduler-editorAriaLabelEndTime": "End time",
         "dxScheduler-editorLabelDescription": "Mô tả",
         "dxScheduler-editorLabelRecurrence": "Lặp lại",
 

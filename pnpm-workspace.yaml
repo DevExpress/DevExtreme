@@ -16,37 +16,41 @@ catalog:
   devextreme-quill: 1.7.8
   eslint: 9.18.0
   eslint-config-airbnb-typescript: 18.0.0
+  eslint-config-devextreme: 1.1.9
   eslint-plugin-i18n: 2.4.0
-  eslint-plugin-import: 2.31.0
+  eslint-plugin-import: 2.32.0
+  eslint-plugin-jsx-a11y: 6.10.2
   eslint-plugin-no-only-tests: 3.3.0
-  eslint-plugin-qunit: 8.1.2
+  eslint-plugin-qunit: 8.2.5
+  eslint-plugin-vue: 10.4.0
+  vue-eslint-parser: 10.0.0
   globals: 15.14.0
   gulp-eslint-new: 2.4.0
-  jquery: 3.7.1
-  "@babel/eslint-parser": 7.28.5
+  jquery: 4.0.0
+  "@babel/eslint-parser": 7.28.6
   "@eslint-stylistic/metadata": ^2.13.0
   "@eslint/eslintrc": 3.2.0
-  "@stylistic/eslint-plugin": 2.13.0
-  "@types/jquery": "3.5.33"
-  "@typescript-eslint/eslint-plugin": 8.23.0
-  "@typescript-eslint/parser": 8.23.0
+  "@stylistic/eslint-plugin": 5.4.0
+  "@types/jquery": 3.5.33
+  "@typescript-eslint/eslint-plugin": 8.52.0
+  "@typescript-eslint/parser": 8.52.0
 
 catalogs:
   angular:
-    "@angular-devkit/build-angular": 19.2.19
-    "@angular-devkit/architect": 0.1902.19
-    "@angular-devkit/schematics": 19.2.19
-    "@angular/cli": 19.2.19
-    "@angular/common": 19.2.17
-    "@angular/compiler": 19.2.17
-    "@angular/compiler-cli": 19.2.17
-    "@angular/core": 19.2.17
-    "@angular/forms": 19.2.17
-    "@angular/platform-browser": 19.2.17
-    "@angular/platform-browser-dynamic": 19.2.17
-    "@angular/platform-server": 19.2.17
-    "@angular/router": 19.2.17
-    "ng-packagr": 19.2.2
+    "@angular-devkit/build-angular": ~19.2.19
+    "@angular-devkit/architect": ~0.1902.19
+    "@angular-devkit/schematics": ~19.2.19
+    "@angular/cli": ~19.2.19
+    "@angular/common": ~19.2.18
+    "@angular/compiler": ~19.2.18
+    "@angular/compiler-cli": ~19.2.18
+    "@angular/core": ~19.2.18
+    "@angular/forms": ~19.2.18
+    "@angular/platform-browser": ~19.2.18
+    "@angular/platform-browser-dynamic": ~19.2.18
+    "@angular/platform-server": ~19.2.18
+    "@angular/router": ~19.2.18
+    "ng-packagr": ~19.2.2
     "typescript": 5.5.4
     "zone.js": 0.15.1
   eslint8:
@@ -57,7 +61,7 @@ catalogs:
     eslint-plugin-no-only-tests: 3.1.0
     eslint-plugin-qunit: 7.3.4
     gulp-eslint-new: 1.9.1
-    "@babel/eslint-parser": 7.28.5
+    "@babel/eslint-parser": 7.28.6
     "@typescript-eslint/eslint-plugin": 5.62.0
     "@typescript-eslint/parser": 5.62.0
   tools:

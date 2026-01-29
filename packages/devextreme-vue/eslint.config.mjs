@@ -1,4 +1,3 @@
-import { FlatCompat } from '@eslint/eslintrc';
 import js from "@eslint/js";
 import tsParser from "@typescript-eslint/parser";
 import babelParser from '@babel/eslint-parser';
@@ -10,10 +9,11 @@ import { rules as stylisticRules } from '@eslint-stylistic/metadata';
 import stylistic from '@stylistic/eslint-plugin';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import spellCheckConfig from 'eslint-config-devextreme/spell-check';
+import typescriptConfig from 'eslint-config-devextreme/typescript';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const compat = new FlatCompat({ baseDirectory: __dirname });
 
 const REMOVED_TYPESCRIPT_RULES = ['@typescript-eslint/no-throw-literal', '@typescript-eslint/ban-types'];
 
@@ -34,7 +34,7 @@ const processDevExtremeRules = devExtremeRules => (
 );
 
 export default [
-    ...compat.extends('devextreme/spell-check'),
+    ...spellCheckConfig,
     {
         ignores: ['metadata/*'],
         plugins: {
@@ -42,7 +42,6 @@ export default [
             spellcheck,
             'no-only-tests': noOnlyTests,
             i18n: i18N,
-            '@stylistic': stylistic,
         },
     },
     {
@@ -126,7 +125,7 @@ export default [
             "import/no-duplicates": "error",
         },
     },
-    ...compat.extends('devextreme/typescript').map(config => {
+    ...typescriptConfig.map(config => {
       const newConfig = {
         ...config,
         files: ['**/*.ts?(x)'],
@@ -179,7 +178,7 @@ export default [
             "@typescript-eslint/no-unused-vars": "warn",
         },
     },
-    ...compat.extends('devextreme/typescript').map(config => {
+    ...typescriptConfig.map(config => {
         const newConfig = {
             ...config,
             files: ["**/*.d.ts"],

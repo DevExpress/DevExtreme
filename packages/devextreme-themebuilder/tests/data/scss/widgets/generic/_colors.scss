@@ -1,17 +1,20 @@
 $base-font-family: getCustomVar(("$base-font-family")) !default;
 $base-accent: getCustomVar(("$base-accent")) !default;
+$float-channel-color: getCustomVar(("$float-channel-color")) !default;
 
 @use "sass:color";
 $color: null !default;
 
 $base-font-family: null !default;
 $base-accent: null !default;
+$float-channel-color: null !default;
 
 
 @if $color == "light" {
   $base-font-family: -apple-system, BlinkMacSystemFont, 'avenir next', avenir, 'segoe ui', 'helvetica neue', 'adwaita sans', cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif !default;
 
   $base-accent: #337ab7 !default;
+  $float-channel-color: color.adjust($base-accent, $lightness: -5%, $space: hsl) !default;
 }
 
 
@@ -19,6 +22,7 @@ $never-used: collector(
 (
 "$base-font-family": $base-font-family,
 "$base-accent": $base-accent,
+"$float-channel-color": $float-channel-color,
 12345: "",
 )
 );

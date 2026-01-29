@@ -5313,10 +5313,10 @@ declare module DevExpress.common.grids {
     | 'anyof'
     | 'noneof';
   /**
-   * [descr:FilterPanel]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface FilterPanel<TComponent = any, TRowData = any, TKey = any> {
+    * [descr:FilterPanel]
+    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+    */
+   export interface FilterPanel<TComponent = any, TRowData = any, TKey = any> {
     /**
      * [descr:FilterPanel.customizeText]
      */
@@ -7179,7 +7179,6 @@ declare module DevExpress.core {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type OmitInternal<T> = Omit<T, `${'_' | '$'}${any}`>;
-
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -8493,10 +8492,10 @@ declare module DevExpress.fileManagement {
     ): DevExpress.core.utils.DxPromise<any>;
   }
   /**
-   * [descr:FileSystemProviderBaseOptions]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
+    * [descr:FileSystemProviderBaseOptions]
+    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+    */
+   export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
     /**
      * [descr:FileSystemProviderBaseOptions.dateModifiedExpr]
      */
@@ -8856,10 +8855,10 @@ declare module DevExpress.ui {
     getDataSource(): DevExpress.common.data.DataSource;
   }
   /**
-   * [descr:DataExpressionMixinOptions]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
+    * [descr:DataExpressionMixinOptions]
+    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+    */
+   export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
     /**
      * [descr:DataExpressionMixinOptions.dataSource]
      */
@@ -10426,6 +10425,9 @@ declare module DevExpress.ui {
      * [descr:CardTemplateData]
      */
     export type CardTemplateData = {
+      /**
+       * [descr:CardTemplateData.card]
+       */
       card: CardInfo;
     };
     /**
@@ -10469,6 +10471,9 @@ declare module DevExpress.ui {
      * [descr:ColumnTemplateData]
      */
     export type ColumnTemplateData<TCardData = unknown, TKey = unknown> = {
+      /**
+       * [descr:ColumnTemplateData.column]
+       */
       column: Column<TCardData, TKey>;
     };
     /**
@@ -25873,6 +25878,17 @@ declare module DevExpress.ui {
      */
     scrollTo(date: Date, group?: object, allDay?: boolean): void;
     /**
+     * [descr:dxScheduler.scrollTo(date, options)]
+     */
+    scrollTo(
+      date: Date,
+      options?: {
+        group?: object;
+        allDay?: boolean;
+        alignInView?: DevExpress.ui.dxScheduler.SchedulerScrollToAlign;
+      }
+    ): void;
+    /**
      * [descr:dxScheduler.showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)]
      */
     showAppointmentPopup(
@@ -26234,6 +26250,7 @@ declare module DevExpress.ui {
       | 'today'
       | 'dateNavigator'
       | 'viewSwitcher';
+    export type SchedulerScrollToAlign = 'start' | 'center';
     /**
      * [descr:TargetedAppointmentInfo]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
