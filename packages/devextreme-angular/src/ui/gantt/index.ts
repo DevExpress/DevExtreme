@@ -62,8 +62,6 @@ import { DxoTasksModule } from 'devextreme-angular/ui/nested';
 import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
 import { DxoValidationModule } from 'devextreme-angular/ui/nested';
 
-import { DxoGanttAIModule } from 'devextreme-angular/ui/gantt/nested';
-import { DxiGanttButtonModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxiGanttColumnModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttColumnHeaderFilterModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttColumnHeaderFilterSearchModule } from 'devextreme-angular/ui/gantt/nested';
@@ -72,7 +70,6 @@ import { DxiGanttContextMenuItemModule } from 'devextreme-angular/ui/gantt/neste
 import { DxiGanttContextMenuItemItemModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttDependenciesModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttEditingModule } from 'devextreme-angular/ui/gantt/nested';
-import { DxoGanttEditorOptionsModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttFilterRowModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttFormatModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttGanttHeaderFilterModule } from 'devextreme-angular/ui/gantt/nested';
@@ -80,7 +77,6 @@ import { DxoGanttGanttHeaderFilterSearchModule } from 'devextreme-angular/ui/gan
 import { DxoGanttHeaderFilterModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxiGanttItemModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttOperationDescriptionsModule } from 'devextreme-angular/ui/gantt/nested';
-import { DxoGanttOptionsModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttResourceAssignmentsModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttResourcesModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttScaleTypeRangeModule } from 'devextreme-angular/ui/gantt/nested';
@@ -93,7 +89,6 @@ import { DxoGanttToolbarModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxiGanttToolbarItemModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttValidationModule } from 'devextreme-angular/ui/gantt/nested';
 import { 
-           PROPERTY_TOKEN_buttons,
            PROPERTY_TOKEN_columns,
            PROPERTY_TOKEN_items,
            PROPERTY_TOKEN_stripLines,
@@ -118,11 +113,6 @@ import {
     ]
 })
 export class DxGanttComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-
-    @ContentChildren(PROPERTY_TOKEN_buttons)
-    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('buttons', value);
-    }
 
     @ContentChildren(PROPERTY_TOKEN_columns)
     set _columnsContentChildren(value: QueryList<CollectionNestedOption>) {
@@ -1361,8 +1351,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     DxoTasksModule,
     DxoToolbarModule,
     DxoValidationModule,
-    DxoGanttAIModule,
-    DxiGanttButtonModule,
     DxiGanttColumnModule,
     DxoGanttColumnHeaderFilterModule,
     DxoGanttColumnHeaderFilterSearchModule,
@@ -1371,7 +1359,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     DxiGanttContextMenuItemItemModule,
     DxoGanttDependenciesModule,
     DxoGanttEditingModule,
-    DxoGanttEditorOptionsModule,
     DxoGanttFilterRowModule,
     DxoGanttFormatModule,
     DxoGanttGanttHeaderFilterModule,
@@ -1379,7 +1366,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     DxoGanttHeaderFilterModule,
     DxiGanttItemModule,
     DxoGanttOperationDescriptionsModule,
-    DxoGanttOptionsModule,
     DxoGanttResourceAssignmentsModule,
     DxoGanttResourcesModule,
     DxoGanttScaleTypeRangeModule,
@@ -1415,8 +1401,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     DxoTasksModule,
     DxoToolbarModule,
     DxoValidationModule,
-    DxoGanttAIModule,
-    DxiGanttButtonModule,
     DxiGanttColumnModule,
     DxoGanttColumnHeaderFilterModule,
     DxoGanttColumnHeaderFilterSearchModule,
@@ -1425,7 +1409,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     DxiGanttContextMenuItemItemModule,
     DxoGanttDependenciesModule,
     DxoGanttEditingModule,
-    DxoGanttEditorOptionsModule,
     DxoGanttFilterRowModule,
     DxoGanttFormatModule,
     DxoGanttGanttHeaderFilterModule,
@@ -1433,7 +1416,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     DxoGanttHeaderFilterModule,
     DxiGanttItemModule,
     DxoGanttOperationDescriptionsModule,
-    DxoGanttOptionsModule,
     DxoGanttResourceAssignmentsModule,
     DxoGanttResourcesModule,
     DxoGanttScaleTypeRangeModule,
