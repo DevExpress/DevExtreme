@@ -936,14 +936,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
       });
       this._focusEditingCell();
     } else if (!cancel) {
-      let shouldResetValidationState = true;
-
-      if (isCellEditMode) {
-        const columns = this._columnsController.getColumns();
-        const columnsWithValidatingEditors = columns.filter((col) => col.showEditorAlways && col.validationRules?.length > 0).length > 0;
-
-        shouldResetValidationState = !columnsWithValidatingEditors;
-      }
+      const shouldResetValidationState = this._shouldResetValidationState();
 
       if (shouldResetValidationState) {
         this._validatingController.initValidationState();
@@ -979,16 +972,28 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
   }
 
   protected _beforeCancelEditData() {
-    const isBatchBasedEditMode = this.isBatchBasedEditMode();
-    const repaintChangesOnly = this.option('repaintChangesOnly');
+    const shouldResetValidationState = this._shouldResetValidationState();
 
-    // Don't reset a validation state if repaintChangesOnly is switched on
-    // to let the revert button get access to initial values via _getOldData()
-    if (isBatchBasedEditMode || !repaintChangesOnly) {
+    if (shouldResetValidationState) {
       this._validatingController.initValidationState();
     }
 
     super._beforeCancelEditData();
+  }
+
+  private _shouldResetValidationState(): boolean {
+    const isCellEditMode = this.getEditMode() === EDIT_MODE_CELL;
+
+    if (isCellEditMode) {
+      const columns = this._columnsController.getColumns();
+      const columnsWithValidatingEditors = columns.filter(
+        (col) => col.showEditorAlways && col.validationRules?.length > 0,
+      );
+
+      return columnsWithValidatingEditors.length === 0;
+    }
+
+    return true;
   }
 
   private _showErrorRow(change) {
