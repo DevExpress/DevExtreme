@@ -4,7 +4,6 @@ import executeAsyncMock from '../../../helpers/executeAsyncMock.js';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { DataSource } from 'common/data/data_source/data_source';
 import ArrayStore from 'common/data/array_store';
-import consoleUtils from 'core/utils/console';
 
 import 'ui/list';
 
