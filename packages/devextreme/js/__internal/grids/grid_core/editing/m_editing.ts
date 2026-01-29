@@ -51,6 +51,7 @@ import {
   EDIT_FORM_CLASS,
   EDIT_ICON_CLASS,
   EDIT_LINK_CLASS,
+  EDIT_MODE_BATCH,
   EDIT_MODE_POPUP,
   EDIT_MODE_ROW,
   EDIT_MODES,
@@ -214,6 +215,10 @@ class EditingControllerImpl extends modules.ViewController {
   public isCellBasedEditMode(): boolean {
     const editMode: GridsEditMode = this.getEditMode();
     return CELL_BASED_MODES.includes(editMode);
+  }
+
+  protected isBatchBasedEditMode(): boolean {
+    return this.getEditMode() === EDIT_MODE_BATCH;
   }
 
   private _getDefaultEditorTemplate() {
