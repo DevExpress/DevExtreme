@@ -52,6 +52,10 @@ export class PopupModel {
     return queryRequiredElement(this.element, '.dx-button[aria-label="Cancel"]');
   }
 
+  get closeButton(): HTMLElement {
+    return queryRequiredElement(this.element, '.dx-button[aria-label="Close"]');
+  }
+
   get backButton(): HTMLElement {
     return queryRequiredElement(this.element, '.dx-toolbar-button  .dx-button[aria-label="Back"]');
   }

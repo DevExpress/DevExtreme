@@ -2247,6 +2247,23 @@ describe('Appointment Popup', () => {
     expect(POM.popup.dxForm.option('formData')).toMatchObject({ ...commonAppointment });
   });
 
+  it('should focus appointment after closing popup', async () => {
+    const { POM, keydown } = await createScheduler({
+      ...getDefaultConfig(),
+      dataSource: [{ ...recurringAppointment }],
+    });
+
+    const appointmentElement = POM.getAppointment('recurring-app').element as HTMLElement;
+    appointmentElement.focus();
+
+    jest.useFakeTimers();
+    keydown(appointmentElement, 'Enter');
+    POM.popup.closeButton.click();
+    jest.runAllTimers();
+
+    expect(appointmentElement?.classList.contains('dx-state-focused')).toBe(true);
+  });
+
   describe('Toolbar', () => {
     describe('Popup Title', () => {
       it('should display "New Appointment" when creating new appointment', async () => {
@@ -2695,25 +2712,15 @@ describe('Appointment Popup', () => {
 
 describe('Appointment Popup Content', () => {
   it.todo('appointmentPopup should not prevent mouse/touch events by default (T968188)');
-  it.todo('showAppointmentPopup method with passed a recurrence appointment should render popup(T698732)');
   it.todo('showAppointmentPopup should render a popup only once');
   it.todo('showAppointmentPopup should work correctly after scheduler repainting');
   it.todo('changing editing should work correctly after showing popup');
   it.todo('showAppointmentPopup should render a popup form only once');
-  it.todo('popup should have right height');
   it.todo('showAppointmentPopup should render a popup content only once');
-  it.todo('Popup should contain editors and components with right dx-rtl classes and rtlEnabled option value');
-  it.todo('Popup should contains caption textbox with right value');
-  it.todo('Confirm dialog should be shown when showAppointmentPopup for recurrence appointment was called');
-  it.todo('Recurrence Editor should have right freq editor value if recurrence rule was set on init');
-  it.todo('Popup should contain recurrence editor with right config');
-  it.todo('Recurrence editor should change value if freq editor value changed');
   it.todo('Recurrence editor should has right startDate after form items change');
   it.todo('There are no exceptions when select date on the appointment popup,if dates are undefined');
   it.todo('Validate works always before done click');
   it.todo('Load panel should not be shown if validation is fail');
-  it.todo('Done button default configuration should be correct');
-  it.todo('Done button custom configuration should be correct');
   it.todo('Load panel should be hidden if event validation fail');
   it.todo('Load panel should be hidden at the second appointment form opening');
 });
