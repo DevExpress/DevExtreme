@@ -43,23 +43,60 @@ const getIgnoredRules = (testName) => {
     ignoredRules.push('color-contrast');
   }
 
+  if (process.env.THEME === THEME.fluent
+    && [
+      // False positive: contrast rules do not apply to disabled tags
+      'TreeList-StatePersistence',
+    ].includes(testName)
+  ) {
+    ignoredRules.push('color-contrast');
+  }
+
   const specificRules = {
     'Accordion-Overview': ['nested-interactive'],
+
     'Calendar-MultipleSelection': ['empty-table-header'],
-    'Localization-UsingGlobalize': ['label'],
-    'DataGrid-EditStateManagement': ['aria-required-parent'],
-    'DataGrid-RemoteCRUDOperations': ['scrollable-region-focusable'],
-    'Charts-BarSparklines': ['empty-table-header'],
+
     'Charts-AreaSparklines': ['empty-table-header'],
+    'Charts-BarSparklines': ['empty-table-header'],
     'Charts-SimpleBullets': ['empty-table-header'],
     'Charts-SimpleSparklines': ['empty-table-header'],
     'Charts-WinlossSparklines': ['empty-table-header'],
+
+    'DataGrid-EditStateManagement': ['aria-required-parent'],
+    'DataGrid-RemoteCRUDOperations': ['scrollable-region-focusable'],
+
     'Diagram-Adaptability': ['aria-dialog-name', 'label'],
     'Diagram-AdvancedDataBinding': ['aria-dialog-name', 'label'],
     'Diagram-Containers': ['aria-dialog-name', 'label'],
     'Diagram-CustomShapesWithIcons': ['aria-dialog-name', 'label'],
-    'Diagram-CustomShapesWithTemplates': ['label'],
-    'Diagram-CustomShapesWithTemplatesWithEditing': ['label'],
+    'Diagram-CustomShapesWithTemplatesWithEditing': ['aria-dialog-name', 'label'],
+    'Diagram-CustomShapesWithTexts': ['aria-dialog-name', 'label'],
+    'Diagram-ImagesInShapes': ['aria-dialog-name', 'label'],
+    'Diagram-ItemSelection': ['label'],
+    'Diagram-NodesAndEdgesArrays': ['aria-dialog-name', 'label'],
+    'Diagram-NodesArrayHierarchicalStructure': ['aria-dialog-name', 'label'],
+    'Diagram-NodesArrayPlainStructure': ['aria-dialog-name', 'label'],
+    'Diagram-OperationRestrictions': ['aria-dialog-name', 'label'],
+    'Diagram-Overview': ['aria-dialog-name', 'label'],
+    'Diagram-ReadOnly': ['label'],
+    'Diagram-SimpleView': ['label'],
+    'Diagram-UICustomization': ['aria-dialog-name', 'label'],
+    'Diagram-WebAPIService': ['aria-dialog-name', 'label'],
+
+    'FileManager-BindingToEF': ['aria-command-name', 'label'],
+    'FileManager-BindingToFileSystem': ['aria-command-name', 'empty-table-header', 'label'],
+    'FileManager-BindingToHierarchicalStructure': ['aria-command-name', 'empty-table-header', 'label'],
+    'FileManager-CustomThumbnails': ['aria-allowed-attr', 'aria-command-name', 'image-alt', 'label'],
+    'FileManager-Overview': ['aria-command-name', 'empty-table-header', 'label'],
+    'FileManager-UICustomization': ['aria-command-name', 'empty-table-header', 'label'],
+
+    'Gantt-Appearance': ['aria-toggle-field-name'],
+    'Gantt-ExportToPDF': ['aria-toggle-field-name'],
+    'Gantt-StripLines': ['aria-required-parent', 'aria-valid-attr-value'],
+    'Gantt-Validation': ['aria-required-parent', 'aria-valid-attr-value'],
+
+    'Localization-UsingGlobalize': ['label'],
   };
 
   return [

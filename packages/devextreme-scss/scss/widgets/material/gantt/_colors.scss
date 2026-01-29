@@ -8,13 +8,32 @@
 $gantt-collapsable-row-bg: null !default;
 $gantt-icon-color: $datagrid-columnchooser-item-color !default;
 $gantt-parent-task-background-color: null !default;
+$gantt-tPrg-background-color: null !default;
+$gantt-task-color: null !default;
 
 @if $color == "lime" {
   $gantt-parent-task-background-color: #f44336 !default;
+  $gantt-tPrg-background-color: rgba(0, 0, 0, 0.2) !default;
+  $gantt-task-color: #fff;
 }
 
-@if $color == "blue" or $color == "orange" or $color == "purple" or $color == "teal" {
+@if $color == "blue" {
   $gantt-parent-task-background-color: $base-success !default;
+  $gantt-task-color: $base-inverted-text-color !default;
+
+  @if $mode == "light" {
+    $gantt-tPrg-background-color: rgba(0, 0, 0, 0.2) !default;
+  }
+
+  @if $mode == "dark" {
+    $gantt-tPrg-background-color: rgba(255, 255, 255, 0.2) !default;
+  }
+}
+
+@if $color == "orange" or $color == "purple" or $color == "teal" {
+  $gantt-parent-task-background-color: #8bc34a !default;
+  $gantt-tPrg-background-color: rgba(0, 0, 0, 0.2) !default;
+  $gantt-task-color: #fff;
 }
 
 @if $mode == "light" {
