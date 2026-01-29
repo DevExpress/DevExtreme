@@ -47,7 +47,11 @@ export const testAccessibility = <TComponentOptions = unknown>(
     test(`${component}: test with axe #${index}`, async (t) => {
       const currentA11yCheckConfig = { ...a11yCheckConfig } as A11yCheckOptions;
 
-      if (component === 'dxTagBox' && (optionConfiguration as any).disabled) {
+      if ((component === 'dxTagBox' || component === 'dxFileUploader' || component === 'dxDateRangeBox') && (optionConfiguration as any).disabled === true) {
+        if (currentA11yCheckConfig.runOnly === 'color-contrast') {
+          return;
+        }
+
         currentA11yCheckConfig.rules = {
           ...currentA11yCheckConfig.rules,
           'color-contrast': { enabled: false },

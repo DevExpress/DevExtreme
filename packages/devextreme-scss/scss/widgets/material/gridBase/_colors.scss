@@ -131,7 +131,7 @@ $datagrid-row-error-color: null !default;
 * $name 120. Error row background color
 * $type color
 */
-$datagrid-row-error-bg: color.mix($base-invalid-color, $datagrid-base-background-color, 60%) !default;
+$datagrid-row-error-bg: $base-invalid-color !default;
 $datagrid-link-color: $base-link-color !default;
 
 /**

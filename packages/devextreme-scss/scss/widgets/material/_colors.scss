@@ -143,12 +143,6 @@ $scrollview-pulldown-path: null !default;
   $base-danger: #f44336 !default;
 }
 
-/**
-* $name 30. Link color
-* $type color
-*/
-$base-link-color: $base-accent !default;
-
 @if $mode == "light" {
   $material-color-theme-modificator: "light" !default;
 
@@ -210,6 +204,12 @@ $base-link-color: $base-accent !default;
 
   $scrollview-pulldown-path: data-uri('images/widgets/material/color-schemes/dark/pulldown.png') !default;
 }
+
+/**
+* $name 30. Link color
+* $type color
+*/
+$base-link-color: $base-accent !default;
 
 $base-invalid-color: $base-danger !default;
 $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
