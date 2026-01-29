@@ -14,7 +14,7 @@ $gantt-parent-task-background-color: null !default;
 }
 
 @if $color == "blue" or $color == "orange" or $color == "purple" or $color == "teal" {
-  $gantt-parent-task-background-color: #8bc34a !default;
+  $gantt-parent-task-background-color: $base-success !default;
 }
 
 @if $mode == "light" {

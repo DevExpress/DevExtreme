@@ -11,7 +11,7 @@ $pivotgrid-border-color: $base-border-color !default;
 * $name 10. Header text color
 * $type color
 */
-$pivotgrid-area-color: color.change($base-text-color, $alpha: 0.54) !default;
+$pivotgrid-area-color: $base-text-color !default;
 $pivotgrid-field-area-box-text-color: $pivotgrid-area-color !default;
 $pivotgrid-field-area-box-background-color: null !default;
 $pivotgrid-data-area-color: $base-text-color !default;

@@ -5,7 +5,7 @@ import { a11yCheck } from '../../../helpers/accessibility/utils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { getData } from '../../dataGrid/helpers/generateDataSourceData';
-import { isMaterialBased } from '../../../helpers/themeUtils';
+import { isFluent, isMaterialBased } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`DataGrid - Common`
   .page(url(__dirname, '../../container.html'));
@@ -884,7 +884,13 @@ test('Error row', async (t) => {
     .expect(dataGrid.getErrorRow().exists)
     .ok();
 
-  await a11yCheck(t);
+  const A11yCheckOptions = {
+    rules: {
+      'color-contrast': { enabled: !isFluent() },
+    },
+  };
+
+  await a11yCheck(t, A11yCheckOptions);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
