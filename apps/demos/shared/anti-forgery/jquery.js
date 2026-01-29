@@ -51,7 +51,7 @@ async function setAntiForgery() {
     } else {
       options.url = url;
     }
-    
+
     options.headers = { [tokenData.headerName]: tokenData.token, ...(options.headers || {}) };
     options.xhrFields = { withCredentials: true, ...(options.xhrFields || {}) };
 
@@ -61,16 +61,16 @@ async function setAntiForgery() {
   DevExpress.utils.ajax.sendRequest = (options) => {
     options.headers = {
       [tokenData.headerName]: tokenData.token,
-      ...(options.headers || {})
+      ...(options.headers || {}),
     };
 
     options.xhrFields = {
       withCredentials: true,
-      ...(options.xhrFields || {})
+      ...(options.xhrFields || {}),
     };
 
     return ajaxSendRequestOrig(...args);
-  }
+  };
 }
 
 // eslint-disable-next-line no-global-assign

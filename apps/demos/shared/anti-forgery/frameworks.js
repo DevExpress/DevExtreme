@@ -48,7 +48,7 @@ ajax.sendRequest = (options) => {
   getAntiForgeryTokenValue().then(({ headerName, token }) => {
     options.headers = {
       [headerName]: token,
-      ...(options.headers || {})
+      ...(options.headers || {}),
     };
 
     options.xhrFields = {
@@ -66,7 +66,7 @@ ajax.sendRequest = (options) => {
       },
       (e) => deferred.reject(e),
     );
-  })
+  });
 
   return deferred.promise();
 };
