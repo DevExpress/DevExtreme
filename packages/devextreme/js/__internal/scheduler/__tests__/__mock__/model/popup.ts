@@ -73,17 +73,11 @@ export class PopupModel {
   }
 
   isMainGroupVisible(): boolean {
-    const group = this.mainGroup;
-    if (!group) return false;
-
-    return !group.classList.contains('dx-scheduler-form-main-group-hidden');
+    return !this.mainGroup.classList.contains('dx-scheduler-form-main-group-hidden');
   }
 
   isRecurrenceGroupVisible(): boolean {
-    const group = this.recurrenceGroup;
-    if (!group) return false;
-
-    return !group.classList.contains('dx-scheduler-form-recurrence-group-hidden');
+    return !this.recurrenceGroup.classList.contains('dx-scheduler-form-recurrence-group-hidden');
   }
 
   getInput = (editorName: string): HTMLInputElement => {
