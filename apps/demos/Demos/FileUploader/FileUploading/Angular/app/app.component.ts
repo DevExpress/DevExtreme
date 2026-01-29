@@ -1,4 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
+import 'anti-forgery';
 import { Component, enableProdMode, Pipe, PipeTransform, provideZoneChangeDetection } from '@angular/core';
 import { DxCheckBoxModule, DxFileUploaderModule, DxSelectBoxModule } from 'devextreme-angular';
 

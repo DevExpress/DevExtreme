@@ -1,16 +1,9 @@
 import ajax from 'devextreme/core/utils/ajax';
+import { Deferred } from 'devextreme/core/utils/deferred';
 
 const sendRequestOrig = ajax.sendRequest;
 const fetchOrig = fetch;
 const BASE_PATH = 'https://js.devexpress.com/Demos/NetCore';
-
-ajax.sendRequest = (options) => {
-  options.xhrFields = {
-    withCredentials: true,
-  };
-
-  return sendRequestOrig(options);
-};
 
 async function fetchAntiForgeryToken() {
   try {
@@ -48,6 +41,35 @@ async function getAntiForgeryTokenValue() {
   document.head.appendChild(meta);
   return tokenData;
 }
+
+ajax.sendRequest = (options) => {
+  const deferred = new Deferred();
+
+  getAntiForgeryTokenValue().then(({ headerName, token }) => {
+    options.headers = {
+      [headerName]: token,
+      ...(options.headers || {})
+    };
+
+    options.xhrFields = {
+      withCredentials: true,
+    };
+
+    sendRequestOrig(options).then(
+      (result) => {
+        deferred.resolve(result);
+        if (result.success) {
+          deferred.resolve(result);
+        } else {
+          deferred.reject(result);
+        }
+      },
+      (e) => deferred.reject(e),
+    );
+  })
+
+  return deferred.promise();
+};
 
 window.fetch = async (url, options = {}) => {
   const { headerName, token } = await getAntiForgeryTokenValue();

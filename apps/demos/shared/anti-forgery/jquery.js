@@ -1,5 +1,6 @@
-/* global $ */
+/* global $, DevExpress */
 const orig$ = $;
+const ajaxSendRequestOrig = DevExpress.utils.ajax.sendRequest;
 
 function fetchAntiForgeryToken() {
   const d = orig$.Deferred();
@@ -50,11 +51,26 @@ async function setAntiForgery() {
     } else {
       options.url = url;
     }
+    
     options.headers = { [tokenData.headerName]: tokenData.token, ...(options.headers || {}) };
     options.xhrFields = { withCredentials: true, ...(options.xhrFields || {}) };
 
     return originalAjax.call(this, options);
   };
+
+  DevExpress.utils.ajax.sendRequest = (options) => {
+    options.headers = {
+      [tokenData.headerName]: tokenData.token,
+      ...(options.headers || {})
+    };
+
+    options.xhrFields = {
+      withCredentials: true,
+      ...(options.xhrFields || {})
+    };
+
+    return ajaxSendRequestOrig(...args);
+  }
 }
 
 // eslint-disable-next-line no-global-assign
