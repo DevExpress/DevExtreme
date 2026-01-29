@@ -250,8 +250,8 @@ importers:
         specifier: 0.4.0
         version: 0.4.0
       source-map:
-        specifier: 0.7.4
-        version: 0.7.4
+        specifier: 0.7.6
+        version: 0.7.6
       tar-fs:
         specifier: 3.1.1
         version: 3.1.1
