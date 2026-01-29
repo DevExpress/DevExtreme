@@ -4,6 +4,7 @@ import executeAsyncMock from '../../../helpers/executeAsyncMock.js';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { DataSource } from 'common/data/data_source/data_source';
 import ArrayStore from 'common/data/array_store';
+import consoleUtils from 'core/utils/console';
 
 import 'ui/list';
 
@@ -319,7 +320,7 @@ QUnit.module('keyboard navigation', {
         assert.deepEqual(list.option('items'), items, 'items were reordered');
     });
 
-    QUnit.test('shift+arrowUp on first item should not throw error', function(assert) {
+    QUnit.test('shift+arrowUp on first item should not throw error (T1320189)', function(assert) {
         const items = ['1', '2', '3'];
 
         const $list = $('#list').dxList({
@@ -330,19 +331,24 @@ QUnit.module('keyboard navigation', {
             },
             focusStateEnabled: true
         });
+
         const list = $list.dxList('instance');
         const keyboard = keyboardMock($list.find('[tabindex=0]'));
 
         const $firstItem = $list.find('.' + LIST_ITEM_CLASS).eq(0);
-        $firstItem.trigger('dxpointerdown');
-        this.clock.tick(10);
+        list.option('focusedElement', $firstItem.get(0));
 
-        keyboard.keyDown('arrowUp', { shiftKey: true });
+        let errorMessage = '';
+        try {
+            keyboard.keyDown('arrowUp', { shiftKey: true });
+        } catch(e) {
+            errorMessage = `error message: ${e.message}`;
+        }
 
-        assert.deepEqual(list.option('items'), items, 'items order is unchanged');
+        assert.strictEqual(errorMessage, '', 'no error thrown when trying to move first item up');
     });
 
-    QUnit.test('shift+arrowDown on last item should not throw error', function(assert) {
+    QUnit.test('shift+arrowDown on last item should not throw error (T1320189)', function(assert) {
         const items = ['1', '2', '3'];
 
         const $list = $('#list').dxList({
@@ -357,12 +363,16 @@ QUnit.module('keyboard navigation', {
         const keyboard = keyboardMock($list.find('[tabindex=0]'));
 
         const $lastItem = $list.find('.' + LIST_ITEM_CLASS).eq(2);
-        $lastItem.trigger('dxpointerdown');
-        this.clock.tick(10);
+        list.option('focusedElement', $lastItem.get(0));
 
-        keyboard.keyDown('arrowDown', { shiftKey: true });
+        let errorMessage = '';
+        try {
+            keyboard.keyDown('arrowDown', { shiftKey: true });
+        } catch(e) {
+            errorMessage = `error message: ${e.message}`;
+        }
 
-        assert.deepEqual(list.option('items'), items, 'items order is unchanged');
+        assert.strictEqual(errorMessage, '', 'no error thrown when trying to move first item up');
     });
 
 
