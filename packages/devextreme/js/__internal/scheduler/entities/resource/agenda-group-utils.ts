@@ -1,4 +1,4 @@
-import type { ListEntity } from '../../view_model/types';
+import type { ListEntity } from '../appointment-view-model/types';
 import type { ResourceLoader } from './loader';
 import type { GroupNode } from './types';
 

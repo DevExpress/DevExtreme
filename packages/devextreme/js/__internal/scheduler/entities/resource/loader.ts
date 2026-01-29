@@ -2,14 +2,14 @@ import {
   getAppointmentResourceAccessor,
   getResourceIndex,
   type ResourceIdAccessor,
-} from '../../utils/data_accessor/appointment_resource_data_accessor';
-import { ResourceDataAccessor } from '../../utils/data_accessor/resource_data_accessor';
-import { Loader } from '../../utils/loader/loader';
+} from '../data-source/data-accessor/appointment_resource_data_accessor';
+import { ResourceDataAccessor } from '../data-source/data-accessor/resource_data_accessor';
+import { Loader } from '../data-source/loader/loader';
 import type {
   RawResourceData,
   ResourceConfig,
   ResourceData,
-} from '../../utils/loader/types';
+} from '../data-source/loader/types';
 
 export class ResourceLoader extends Loader<RawResourceData, ResourceData> {
   public idsGetter: ResourceIdAccessor['idsGetter'];

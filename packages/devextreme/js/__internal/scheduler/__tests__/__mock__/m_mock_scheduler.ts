@@ -2,7 +2,7 @@ import { jest } from '@jest/globals';
 import { logger } from '@ts/core/utils/m_console';
 import DOMComponent from '@ts/core/widget/dom_component';
 
-import SchedulerWorkSpace from '../../workspaces/m_work_space';
+import SchedulerWorkSpace from '../../entities/workspace/m_work_space';
 
 interface SetupSchedulerTestEnvironmentOptions {
   width?: number;

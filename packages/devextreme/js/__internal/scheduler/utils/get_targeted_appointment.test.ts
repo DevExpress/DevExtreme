@@ -4,7 +4,7 @@ import {
 import { getResourceManagerMock } from '@ts/scheduler/__mock__/resource_manager.mock';
 
 import { mockUppercaseFieldExpressions } from '../__mock__/appointment_data_accessor.mock';
-import { AppointmentDataAccessor } from './data_accessor/appointment_data_accessor';
+import { AppointmentDataAccessor } from '../entities/data-source/data-accessor/appointment_data_accessor';
 import { getTargetedAppointment, getTargetedAppointmentFromInfo } from './get_targeted_appointment';
 
 const dataAccessor = new AppointmentDataAccessor(mockUppercaseFieldExpressions, true);

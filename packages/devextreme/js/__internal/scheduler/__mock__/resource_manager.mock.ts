@@ -1,7 +1,7 @@
 import { DataSource } from '@ts/data/data_source/m_data_source';
 import CustomStore from '@ts/data/m_custom_store';
 
-import type { ResourceConfig } from '../utils/loader/types';
+import type { ResourceConfig } from '../entities/data-source/loader/types';
 import { ResourceManager } from '../entities/resource/manager';
 
 export const resourceItemsByIdMock = {

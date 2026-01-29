@@ -1,8 +1,8 @@
 import dateSerialization from '@js/core/utils/date_serialization';
 import type { Appointment } from '@js/ui/scheduler';
 
-import { AppointmentAdapter } from '../../utils/appointment_adapter/appointment_adapter';
-import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
+import { AppointmentAdapter } from '../../entities/appointment/adapter/appointment_adapter';
+import type { AppointmentDataAccessor } from '../../entities/data-source/data-accessor/appointment_data_accessor';
 
 const FULL_DATE_FORMAT = 'yyyyMMddTHHmmss';
 const UTC_FULL_DATE_FORMAT = `${FULL_DATE_FORMAT}Z`;

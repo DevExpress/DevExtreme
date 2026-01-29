@@ -7,12 +7,12 @@ import {
   DEFAULT_SCHEDULER_INTERNAL_OPTIONS,
   DEFAULT_SCHEDULER_OPTIONS,
   DEFAULT_SCHEDULER_OPTIONS_RULES,
-} from './utils/options/constants';
+} from './entities/options/options/constants';
 import type {
   NormalizedView, SafeSchedulerOptions, SchedulerOptionsRule, View,
-} from './utils/options/types';
-import { getCurrentView, getViewOption, getViews } from './utils/options/utils';
-import { SchedulerOptionsValidator, SchedulerOptionsValidatorErrorsHandler } from './utils/options_validator/index';
+} from './entities/options/options/types';
+import { getCurrentView, getViewOption, getViews } from './entities/options/options/utils';
+import { SchedulerOptionsValidator, SchedulerOptionsValidatorErrorsHandler } from './entities/options/validator/index';
 
 export class SchedulerOptionsBaseWidget extends Widget<SafeSchedulerOptions> {
   protected views: NormalizedView[] = [];

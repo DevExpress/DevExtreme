@@ -83,8 +83,11 @@ export const getResourcesByGroupIndex = (
 
   return Object.entries(resourceById)
     .filter(([resourceIndex]) => leafGroups[resourceIndex] !== undefined)
-    .map(([resourceIndex, resource]) => ({
-      ...resource,
-      items: resource.items.filter((item) => item.id === leafGroups[resourceIndex]),
-    }) as ResourceLoader);
+    .map(([resourceIndex, resource]) => {
+      const filteredResource = {
+        ...resource,
+        items: resource.items.filter((item) => item.id === leafGroups[resourceIndex]),
+      };
+      return filteredResource as ResourceLoader;
+    });
 };

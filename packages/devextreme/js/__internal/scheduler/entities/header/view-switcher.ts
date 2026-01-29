@@ -1,7 +1,7 @@
 import { current, isFluent } from '@js/ui/themes';
 import type { Item as ToolbarItem } from '@js/ui/toolbar';
 
-import type { NormalizedView } from '../../utils/options/types';
+import type { NormalizedView } from '../options/options/types';
 import type { SchedulerHeader } from './header';
 import {
   formatViews,

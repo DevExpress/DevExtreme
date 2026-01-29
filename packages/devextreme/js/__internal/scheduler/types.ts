@@ -3,7 +3,7 @@ import type { Appointment, Properties } from '@js/ui/scheduler';
 
 import type { ResourceLoader } from './entities/resource/loader';
 import type { GroupValues, RawGroupValues } from './entities/resource/types';
-import type { AppointmentViewModelPlain } from './view_model/types';
+import type { AppointmentViewModelPlain } from './entities/appointment-view-model/types';
 
 export type Direction = 'vertical' | 'horizontal';
 export type GroupOrientation = 'vertical' | 'horizontal';

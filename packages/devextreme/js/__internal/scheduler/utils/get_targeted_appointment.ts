@@ -3,8 +3,8 @@ import type {
   AppointmentAgendaViewModel,
   AppointmentItemViewModel,
   AppointmentViewModelPlain,
-} from '../view_model/types';
-import type { AppointmentDataAccessor } from './data_accessor/appointment_data_accessor';
+} from '../entities/appointment-view-model/types';
+import type { AppointmentDataAccessor } from '../entities/data-source/data-accessor/appointment_data_accessor';
 import { setAppointmentGroupValues } from '../entities/resource/appointment-groups-utils';
 import { getLeafGroupValues } from '../entities/resource/group-utils';
 import type { ResourceManager } from '../entities/resource/manager';

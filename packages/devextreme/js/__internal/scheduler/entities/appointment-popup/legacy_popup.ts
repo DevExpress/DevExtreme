@@ -12,7 +12,7 @@ import {
 } from './config';
 
 import { hide as hideLoading, show as showLoading } from '../../m_loading';
-import { AppointmentAdapter } from '../../utils/appointment_adapter/appointment_adapter';
+import { AppointmentAdapter } from '../appointment/adapter/appointment_adapter';
 import { getAppointmentGroupValues, getRawAppointmentGroupValues } from '../resource/appointment-groups-utils';
 
 const toMs = dateUtils.dateToMilliseconds;

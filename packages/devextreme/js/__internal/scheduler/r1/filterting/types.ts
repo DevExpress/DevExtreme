@@ -1,4 +1,4 @@
-import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
+import type { AppointmentDataAccessor } from '../../entities/data-source/data-accessor/appointment_data_accessor';
 
 export type DateFilterType = string | string[] | (string | Date)[][];
 

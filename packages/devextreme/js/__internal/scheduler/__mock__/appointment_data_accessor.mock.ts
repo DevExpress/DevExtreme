@@ -1,5 +1,5 @@
-import { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
-import type { IFieldExpr } from '../utils/data_accessor/types';
+import { AppointmentDataAccessor } from '../entities/data-source/data-accessor/appointment_data_accessor';
+import type { IFieldExpr } from '../entities/data-source/data-accessor/types';
 
 export const mockFieldExpressions: IFieldExpr = {
   startDateExpr: 'startDate',

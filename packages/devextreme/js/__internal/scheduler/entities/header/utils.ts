@@ -6,7 +6,7 @@ import type { DateNavigatorTextInfo, Properties } from '@js/ui/scheduler';
 import type { BaseFormat } from '@ts/core/localization/date';
 import { camelize } from '@ts/core/utils/m_inflector';
 import type { IntervalOptions, Step } from './types';
-import type { NormalizedView, RawViewType, ViewType } from '@ts/scheduler/utils/options/types';
+import type { NormalizedView, RawViewType, ViewType } from '../options/options/types';
 
 import type { Direction } from './constants';
 
@@ -322,7 +322,7 @@ const STEP_MAP: Record<ViewType, Step> = {
 
 export const getViewName = (view: RawViewType): string | undefined => {
   if (isObject(view)) {
-    return view.name ?? view.type;
+    return (view as NormalizedView).name ?? (view as NormalizedView).type;
   }
 
   return view;

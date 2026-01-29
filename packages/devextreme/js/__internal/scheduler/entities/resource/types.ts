@@ -1,4 +1,4 @@
-import type { ResourceId, ResourceData } from '../../utils/loader/types';
+import type { ResourceId, ResourceData } from '../data-source/loader/types';
 
 export type { ResourceId, ResourceData };
 export type GroupValues = Record<string, ResourceId[]>;

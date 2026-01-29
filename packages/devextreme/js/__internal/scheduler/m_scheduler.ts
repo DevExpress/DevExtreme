@@ -38,7 +38,7 @@ import { AppointmentForm } from './entities/appointment-popup/form';
 import { AppointmentForm as AppointmentLegacyForm } from './entities/appointment-popup/legacy_form';
 import { ACTION_TO_APPOINTMENT, AppointmentPopup as AppointmentLegacyPopup } from './entities/appointment-popup/legacy_popup';
 import { AppointmentPopup } from './entities/appointment-popup/popup';
-import AppointmentCollection from './appointments/m_appointment_collection';
+import AppointmentCollection from './entities/appointment/m_appointment_collection';
 import NotifyScheduler from './base/m_widget_notify_scheduler';
 import { SchedulerHeader } from './entities/header/header';
 import type { HeaderOptions } from './entities/header/types';
@@ -66,29 +66,29 @@ import type {
   SafeAppointment,
   ScrollToGroupValuesOrOptions, ScrollToOptions, TargetedAppointment,
 } from './types';
-import { AppointmentAdapter } from './utils/appointment_adapter/appointment_adapter';
-import { AppointmentDataAccessor } from './utils/data_accessor/appointment_data_accessor';
+import { AppointmentAdapter } from './entities/appointment/adapter/appointment_adapter';
+import { AppointmentDataAccessor } from './entities/data-source/data-accessor/appointment_data_accessor';
 import { getTargetedAppointment } from './utils/get_targeted_appointment';
 import type { IFieldExpr } from './utils/index';
 import { macroTaskArray } from './utils/index';
 import { isAgendaWorkspaceComponent } from './utils/is_agenda_workpace_component';
-import { VIEWS } from './utils/options/constants_view';
-import type { NormalizedView } from './utils/options/types';
+import { VIEWS } from './entities/options/options/constants_view';
+import type { NormalizedView } from './entities/options/options/types';
 import { setAppointmentGroupValues } from './entities/resource/appointment-groups-utils';
 import { createResourceEditorModel } from './entities/resource/popup-utils';
 import { ResourceManager } from './entities/resource/manager';
-import AppointmentLayoutManager from './view_model/appointments_layout_manager';
-import { AppointmentDataSource } from './view_model/m_appointment_data_source';
-import type { AppointmentViewModelPlain } from './view_model/types';
-import SchedulerAgenda from './workspaces/m_agenda';
-import SchedulerTimelineDay from './workspaces/m_timeline_day';
-import SchedulerTimelineMonth from './workspaces/m_timeline_month';
-import SchedulerTimelineWeek from './workspaces/m_timeline_week';
-import SchedulerTimelineWorkWeek from './workspaces/m_timeline_work_week';
-import SchedulerWorkSpaceDay from './workspaces/m_work_space_day';
-import SchedulerWorkSpaceMonth from './workspaces/m_work_space_month';
-import SchedulerWorkSpaceWeek from './workspaces/m_work_space_week';
-import SchedulerWorkSpaceWorkWeek from './workspaces/m_work_space_work_week';
+import AppointmentLayoutManager from './entities/appointment-view-model/appointments_layout_manager';
+import { AppointmentDataSource } from './entities/appointment-view-model/m_appointment_data_source';
+import type { AppointmentViewModelPlain } from './entities/appointment-view-model/types';
+import SchedulerAgenda from './entities/workspace/m_agenda';
+import SchedulerTimelineDay from './entities/workspace/m_timeline_day';
+import SchedulerTimelineMonth from './entities/workspace/m_timeline_month';
+import SchedulerTimelineWeek from './entities/workspace/m_timeline_week';
+import SchedulerTimelineWorkWeek from './entities/workspace/m_timeline_work_week';
+import SchedulerWorkSpaceDay from './entities/workspace/m_work_space_day';
+import SchedulerWorkSpaceMonth from './entities/workspace/m_work_space_month';
+import SchedulerWorkSpaceWeek from './entities/workspace/m_work_space_week';
+import SchedulerWorkSpaceWorkWeek from './entities/workspace/m_work_space_work_week';
 
 const toMs = dateUtils.dateToMilliseconds;
 

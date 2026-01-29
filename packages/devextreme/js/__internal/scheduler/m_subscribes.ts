@@ -4,8 +4,8 @@ import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 
-import { formatDates, getFormatType } from './appointments/m_text_utils';
-import { getDeltaTime } from './appointments/resizing/get_delta_time';
+import { formatDates, getFormatType } from './entities/appointment/m_text_utils';
+import { getDeltaTime } from './entities/appointment/resizing/get_delta_time';
 import { VERTICAL_VIEW_TYPES } from './constants';
 import type Scheduler from './m_scheduler';
 import { utils } from './m_utils';
@@ -16,8 +16,8 @@ import type {
   SafeAppointment,
   TargetedAppointment,
 } from './types';
-import { AppointmentAdapter } from './utils/appointment_adapter/appointment_adapter';
-import type { AppointmentItemViewModel } from './view_model/types';
+import { AppointmentAdapter } from './entities/appointment/adapter/appointment_adapter';
+import type { AppointmentItemViewModel } from './entities/appointment-view-model/types';
 
 const toMs = dateUtils.dateToMilliseconds;
 const isAllDay = (

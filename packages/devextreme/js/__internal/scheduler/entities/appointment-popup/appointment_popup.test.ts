@@ -10,7 +10,7 @@ import { toMilliseconds } from '@ts/utils/toMilliseconds';
 import fx from '../../../common/core/animation/fx';
 import { createScheduler } from '../../__tests__/__mock__/create_scheduler';
 import { setupSchedulerTestEnvironment } from '../../__tests__/__mock__/m_mock_scheduler';
-import { DEFAULT_SCHEDULER_OPTIONS } from '../../utils/options/constants';
+import { DEFAULT_SCHEDULER_OPTIONS } from '../options/options/constants';
 
 const CLASSES = {
   icon: 'dx-scheduler-form-icon',

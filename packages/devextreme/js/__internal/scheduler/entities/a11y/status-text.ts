@@ -2,7 +2,7 @@ import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
 import type { ViewType } from '@js/ui/scheduler';
 
-import type { NormalizedView } from '../../utils/options/types';
+import type { NormalizedView } from '../options/options/types';
 
 const KEYS = {
   dateRange: 'dxScheduler-dateRange',

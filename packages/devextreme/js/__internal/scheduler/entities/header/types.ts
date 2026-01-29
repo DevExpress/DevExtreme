@@ -1,7 +1,7 @@
 import type { FirstDayOfWeek } from '@js/common';
 import type { ValueChangedEvent } from '@js/ui/calendar';
 
-import type { NormalizedView, SafeSchedulerOptions } from '../../utils/options/types';
+import type { NormalizedView, SafeSchedulerOptions } from '../options/options/types';
 
 export interface HeaderOptions {
   currentView: NormalizedView;

@@ -12,7 +12,7 @@ import type { DateNavigatorTextInfo, ToolbarItem } from '@js/ui/scheduler';
 import Toolbar from '@js/ui/toolbar';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
-import type { NormalizedView, SafeSchedulerOptions } from '@ts/scheduler/utils/options/types';
+import type { NormalizedView, SafeSchedulerOptions } from '../options/options/types';
 
 import type { Direction } from './constants';
 import SchedulerCalendar from './calendar';

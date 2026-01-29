@@ -14,7 +14,7 @@ import { current, isFluent } from '@js/ui/themes';
 
 import { hide as hideLoading, show as showLoading } from '../../m_loading';
 import type { SafeAppointment } from '../../types';
-import { AppointmentAdapter } from '../../utils/appointment_adapter/appointment_adapter';
+import { AppointmentAdapter } from '../appointment/adapter/appointment_adapter';
 import { getAppointmentGroupValues, getRawAppointmentGroupValues } from '../resource/appointment-groups-utils';
 import type { AppointmentForm } from './form';
 

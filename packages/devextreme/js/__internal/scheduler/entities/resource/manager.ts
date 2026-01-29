@@ -1,10 +1,10 @@
 import type { SafeAppointment } from '@ts/scheduler/types';
 
-import { getResourceIndex } from '../../utils/data_accessor/appointment_resource_data_accessor';
+import { getResourceIndex } from '../data-source/data-accessor/appointment_resource_data_accessor';
 import { ResourceLoader } from './loader';
 import type {
   ResourceConfig,
-} from '../../utils/loader/types';
+} from '../data-source/loader/types';
 import { getAppointmentColor } from './color-utils';
 import type { AppointmentResource } from './appointment-groups-utils';
 import {

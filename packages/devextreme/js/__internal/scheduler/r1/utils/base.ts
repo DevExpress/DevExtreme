@@ -22,8 +22,8 @@ import type {
   ViewType,
 } from '../../types';
 import type { ResourceLoader } from '../../entities/resource/loader';
-import type { ResourceId } from '../../utils/loader/types';
-import { VIEWS } from '../../utils/options/constants_view';
+import type { ResourceId } from '../../entities/data-source/loader/types';
+import { VIEWS } from '../../entities/options/options/constants_view';
 
 const toMs = dateUtils.dateToMilliseconds;
 const DAY_HOURS = 24;

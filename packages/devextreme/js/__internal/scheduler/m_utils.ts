@@ -3,7 +3,7 @@ import $ from '@js/core/renderer';
 import { getOuterHeight, setHeight, setWidth } from '@js/core/utils/size';
 
 import { APPOINTMENT_SETTINGS_KEY } from './constants';
-import type { AppointmentViewModelPlain } from './view_model/types';
+import type { AppointmentViewModelPlain } from './entities/appointment-view-model/types';
 
 export const utils = {
   dataAccessors: {

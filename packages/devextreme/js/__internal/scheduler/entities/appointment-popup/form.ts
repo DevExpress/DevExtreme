@@ -22,7 +22,7 @@ import type Popup from '@ts/ui/popup/m_popup';
 import timeZoneUtils from '../timezone/utils';
 import type { SafeAppointment } from '../../types';
 import type { ResourceLoader } from '../resource/loader';
-import { DEFAULT_ICONS_SHOW_MODE } from '../../utils/options/constants';
+import { DEFAULT_ICONS_SHOW_MODE } from '../options/options/constants';
 import { getAppointmentGroupIndex, getRawAppointmentGroupValues, getSafeGroupValues } from '../resource/appointment-groups-utils';
 import type { ResourceManager } from '../resource/manager';
 import { customizeFormItems } from './customize_form_items';
