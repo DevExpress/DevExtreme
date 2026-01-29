@@ -28012,7 +28012,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSpeechToTextOptions]
      */
-    export interface Properties extends WidgetOptions<dxSpeechToText> {
+    export type Properties = WidgetOptions<dxSpeechToText> & {
       /**
        * [descr:dxSpeechToTextOptions.customSpeechRecognizer]
        */
@@ -28079,7 +28079,7 @@ declare module DevExpress.ui {
        * [descr:dxSpeechToTextOptions.onEnd]
        */
       onEnd?: ((e: EndEvent) => void) | undefined;
-    }
+    };
     /**
      * [descr:_ui_speech_to_text_ResultEvent]
      */
