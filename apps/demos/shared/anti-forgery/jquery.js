@@ -69,7 +69,7 @@ async function setAntiForgery() {
       ...(options.xhrFields || {}),
     };
 
-    return ajaxSendRequestOrig(...args);
+    return ajaxSendRequestOrig(options);
   };
 }
 
