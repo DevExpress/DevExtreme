@@ -371,7 +371,7 @@ QUnit.module('keyboard navigation', {
             errorMessage = `error message: ${e.message}`;
         }
 
-        assert.strictEqual(errorMessage, '', 'no error thrown when trying to move first item up');
+        assert.strictEqual(errorMessage, '', 'no error thrown when trying to move last item down');
     });
 
 
