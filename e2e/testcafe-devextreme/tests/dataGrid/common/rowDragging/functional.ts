@@ -2,11 +2,10 @@
 import { ClientFunction, Selector } from 'testcafe';
 import DataGrid, { CLASS as DataGridClassNames } from 'devextreme-testcafe-models/dataGrid';
 import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
-import { MouseUpEvents, MouseAction } from '../../../../helpers/mouseUpEvents';
+import { dragWithDisabledMouseUp } from '../../../../helpers/mouseUpEvents';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
-import { getThemeName } from '../../../../helpers/themeUtils';
-import { isScrollAtEnd, getOffsetToTriggerUpwardAutoScroll } from '../../helpers/rowDraggingHelpers';
+import { isScrollAtEnd, getOffsetToTriggerAutoScroll } from '../../helpers/rowDraggingHelpers';
 
 const CLASS = { ...DataGridClassNames, ...ClassNames };
 
@@ -572,27 +571,39 @@ test('The draggable element should be displayed correctly after horizontal scrol
 
 test('Dragging with scrolling should be prevented by e.cancel (T1179555)', async (t) => {
   const dataGrid = new DataGrid('#container');
-  const scrollTopOffsetByTheme = {
-    generic: -180,
-    fluent: -160,
-    material: -160,
-  };
 
-  await dataGrid.scrollBy(t, { top: 10000 });
   await t.expect(dataGrid.isReady()).ok();
 
-  await MouseUpEvents.disable(MouseAction.dragToOffset);
+  await dataGrid.scrollBy(t, { top: 10000 });
 
-  await t.drag(
-    dataGrid.getDataRow(98).getDragCommand(),
-    0,
-    scrollTopOffsetByTheme[getThemeName()],
-    { speed: 0.1 },
+  await t
+    .expect(dataGrid.getDataRow(99).getDataCell(1).element.textContent)
+    .eql('99')
+    .expect(isScrollAtEnd('vertical'))
+    .ok();
+
+  const visibleRows = await dataGrid.apiGetVisibleRows();
+  const scrollTopOffsetByTheme = await getOffsetToTriggerAutoScroll(
+    visibleRows.length - 2,
+    1,
   );
 
-  await t.expect(Selector('.dx-sortable-placeholder').visible).notOk();
+  await dragWithDisabledMouseUp(
+    t,
+    dataGrid.getDataRow(98).getDragCommand(),
+    { offsetX: 0, offsetY: scrollTopOffsetByTheme, speed: 0.8 },
+  );
 
-  await MouseUpEvents.enable(MouseAction.dragToOffset);
+  // Wait for autoscrolling
+  await t.wait(2000);
+
+  await t
+    .expect(dataGrid.getDataRow(0).getDataCell(1).element.textContent)
+    .eql('0')
+    .expect(dataGrid.getScrollTop())
+    .eql(0);
+
+  await t.expect(Selector('.dx-sortable-placeholder').visible).notOk();
 }).before(async (t) => {
   await t.maximizeWindow();
   return createWidget('dxDataGrid', {
@@ -694,7 +705,7 @@ test('toIndex should not be corrected when source item gets removed from DOM', a
 
   // Calculate offsetY to trigger upward autoscroll when dragging the row.
   // Using speedFactor 0.5 to ensure medium scrolling speed.
-  const scrollOffsetForFastAutoScroll = await getOffsetToTriggerUpwardAutoScroll(
+  const scrollOffsetForFastAutoScroll = await getOffsetToTriggerAutoScroll(
     draggableRow.rowIndex,
     AUTOSCROLL_SPEED_FACTOR,
   );
@@ -742,10 +753,6 @@ test('toIndex should not be corrected when source item gets removed from DOM', a
     keyExpr: 'field1',
     scrolling: {
       mode: 'virtual',
-      useNative: false,
-    },
-    paging: {
-      pageSize: 4,
     },
     dataSource: items,
     rowDragging: {

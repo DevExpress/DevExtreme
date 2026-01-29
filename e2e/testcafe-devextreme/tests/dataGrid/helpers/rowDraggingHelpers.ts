@@ -11,13 +11,13 @@ export const isScrollAtEnd = ClientFunction((orientation: 'vertical' | 'horizont
   const scrollPosition = element[orientation === 'vertical' ? 'scrollTop' : 'scrollLeft'];
   const clientSize = element[orientation === 'vertical' ? 'clientHeight' : 'clientWidth'];
 
-  return scrollPosition + clientSize >= scrollSize - 1;
+  return Math.round(scrollPosition + clientSize) >= scrollSize - 1;
 });
 
 /**
- * Calculates Y-offset for dragging a row to the top of the grid with upward autoscroll.
+ * Calculates offsetY for dragging a row to trigger autoscroll.
  * Autoscroll triggers when the cursor is within scrollSensitivity (default 60px)
- * from the top edge of the container.
+ * from the edge of the container.
  * Autoscroll speed is calculated by formula:
  * Math.ceil(((sensitivity - distance) / sensitivity) ** 2 * maxSpeed)
  *
@@ -26,10 +26,13 @@ export const isScrollAtEnd = ClientFunction((orientation: 'vertical' | 'horizont
  *   - 0 = minimum speed (cursor at scrollSensitivity boundary)
  *   - 0.5 = medium speed (cursor halfway to the edge)
  *   - 1 = maximum speed (cursor at the container edge)
- * @returns Y-offset relative to the current row position to trigger upward autoscroll
+ * @param direction - autoscroll direction (default 'up'):
+ *   - 'up' = upward autoscroll (drag towards top edge)
+ *   - 'down' = downward autoscroll (drag towards bottom edge)
+ * @returns offsetY relative to the current row position to trigger autoscroll
  */
-export const getOffsetToTriggerUpwardAutoScroll = ClientFunction(
-  (rowIndex: number, speedFactor = 0.5): number => {
+export const getOffsetToTriggerAutoScroll = ClientFunction(
+  (rowIndex: number, speedFactor = 0.5, direction: 'up' | 'down' = 'up'): number => {
     const gridInstance = $('#container').data('dxDataGrid');
     const $row = $(gridInstance.getRowElement(rowIndex));
     const $scrollContainer = $('.dx-datagrid-rowsview .dx-scrollable-container');
@@ -47,22 +50,29 @@ export const getOffsetToTriggerUpwardAutoScroll = ClientFunction(
 
     // scrollSensitivity is 60px by default
     // To trigger autoscroll, the row must be dragged so that
-    // the cursor is within scrollSensitivity from the top edge of the container
+    // the cursor is within scrollSensitivity from the edge of the container
     const scrollSensitivity = gridInstance.option('rowDragging.scrollSensitivity') ?? 60;
 
     // Clamp speedFactor to [0, 1] range
     const normalizedSpeedFactor = Math.max(0, Math.min(1, speedFactor));
 
-    // Calculate distance from the top edge of the container:
+    // Calculate distance from the edge of the container:
     // - speedFactor = 0: distance = scrollSensitivity (minimum speed)
     // - speedFactor = 0.5: distance = scrollSensitivity / 2 (medium speed)
     // - speedFactor = 1: distance = 0 (maximum speed, cursor at the edge)
     const distance = scrollSensitivity * (1 - normalizedSpeedFactor);
 
-    // Target Y-coordinate
-    const targetY = containerOffset.top + distance;
+    if (direction === 'up') {
+      // Target Y-coordinate for upward autoscroll
+      const targetY = containerOffset.top + distance + 1;
 
-    // Return offset relative to the current row position
+      return Math.round(targetY - rowOffset.top);
+    }
+
+    // Target Y-coordinate for downward autoscroll
+    const containerHeight = $scrollContainer.height() ?? 0;
+    const targetY = containerOffset.top + containerHeight - distance - 1;
+
     return Math.round(targetY - rowOffset.top);
   },
 );

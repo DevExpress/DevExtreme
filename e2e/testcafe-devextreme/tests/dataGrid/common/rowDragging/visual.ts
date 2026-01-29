@@ -2,7 +2,8 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
-import { getThemeName, testScreenshot } from '../../../../helpers/themeUtils';
+import { testScreenshot } from '../../../../helpers/themeUtils';
+import { getOffsetToTriggerAutoScroll, isScrollAtEnd } from '../../helpers/rowDraggingHelpers';
 
 fixture`Row dragging.Visual`
   .page(url(__dirname, '../../../container.html'));
@@ -11,25 +12,31 @@ fixture`Row dragging.Visual`
 test('Rows should appear correctly during dragging when virtual scrolling is enabled and rowDragging.dropFeedbackMode = "push"', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const themeName = getThemeName();
-  const scrollTopOffsetsByTheme = {
-    generic: [150, 350, 75],
-    fluent: [150, 350, 100],
-    material: [150, 350, 100],
-  };
 
   // drag the row down
-  await dataGrid.moveRow(0, 30, scrollTopOffsetsByTheme[themeName][0], true);
-  await dataGrid.moveRow(0, 30, scrollTopOffsetsByTheme[themeName][1]);
+  await dataGrid.moveRow(0, 30, 150, true);
+  await dataGrid.moveRow(0, 30, await getOffsetToTriggerAutoScroll(0, 1, 'down'));
 
   // waiting for autoscrolling
   await t.wait(2000);
 
+  await t
+    .expect(dataGrid.getDataRow(99).getDataCell(1).element.textContent)
+    .eql('99')
+    .expect(isScrollAtEnd('vertical'))
+    .ok();
+
   // drag the row up
-  await dataGrid.moveRow(0, 30, scrollTopOffsetsByTheme[themeName][2]);
+  await dataGrid.moveRow(0, 30, await getOffsetToTriggerAutoScroll(0, 1));
 
   // waiting for autoscrolling
-  await t.wait(1000);
+  await t.wait(2000);
+
+  await t
+    .expect(dataGrid.getDataRow(0).getDataCell(1).element.textContent)
+    .eql('0')
+    .expect(dataGrid.getScrollTop())
+    .eql(0);
 
   await testScreenshot(t, takeScreenshot, 'T1179218-virtual-scrolling-dragging-row.png', { element: dataGrid.element });
   await t

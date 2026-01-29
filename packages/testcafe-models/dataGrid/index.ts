@@ -76,6 +76,7 @@ export const CLASS = {
   toast: 'dx-toast-wrapper',
   dragHeader: 'drag-header',
   aiPromptEditor: 'dx-ai-prompt-editor',
+  sortableDragging: 'dx-sortable-dragging',
 };
 
 const E2E_ATTRIBUTES = {
@@ -570,6 +571,7 @@ export default class DataGrid extends GridCore {
         data: r.data,
         dataIndex: r.dataIndex,
         rowType: r.rowType,
+        rowIndex: r.rowIndex,
       }));
     }, { dependencies: { getInstance } })();
   }
@@ -757,6 +759,21 @@ export default class DataGrid extends GridCore {
         },
       },
     )();
+  }
+
+  dropRow(): Promise<void> {
+    return ClientFunction((sortableDraggingClass) => {
+        const $dragElement = $(`.${sortableDraggingClass}`);
+        const dragOffset = $dragElement.offset();
+
+        triggerPointerUp($dragElement, dragOffset.left, dragOffset.top);
+      },
+      {
+        dependencies: {
+          triggerPointerUp,
+        },
+      },
+    )(CLASS.sortableDragging);
   }
 
   resizeHeader(columnIndex: number, offset: number, needToTriggerPointerUp = true): Promise<void> {
