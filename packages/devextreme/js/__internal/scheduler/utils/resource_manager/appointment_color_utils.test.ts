@@ -9,7 +9,7 @@ import {
   resourceItemsByIdMock,
 } from '@ts/scheduler/__mock__/resource_manager.mock';
 
-import { getAppointmentColor, getPaintedResource } from './appointment_color_utils';
+import { getAppointmentColor, getPaintedResource } from '../../entities/resource/color-utils';
 
 const ownerFirstColor = '#cb2824';
 const ownerSecondColor = '#cb7d7b';

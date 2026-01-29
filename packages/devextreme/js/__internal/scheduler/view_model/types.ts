@@ -2,8 +2,8 @@ import type { Orientation } from '@js/common';
 
 import type { AllDayPanelModeType, SafeAppointment } from '../types';
 import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
-import type { ResourceManager } from '../utils/resource_manager/resource_manager';
-import type { GroupLeaf } from '../utils/resource_manager/types';
+import type { ResourceManager } from '../entities/resource/manager';
+import type { GroupLeaf } from '../entities/resource/types';
 import type {
   Empty,
   Geometry,

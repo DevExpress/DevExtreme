@@ -1,9 +1,9 @@
 import type { Orientation } from '@js/common';
 import type NotifyScheduler from '@ts/scheduler/base/m_widget_notify_scheduler';
-import type { TimeZoneCalculator } from '@ts/scheduler/r1/timezone_calculator/calculator';
+import type { TimeZoneCalculator } from '../../entities/timezone';
 import type { SafeAppointment } from '@ts/scheduler/types';
 import type { AppointmentDataAccessor } from '@ts/scheduler/utils/data_accessor/appointment_data_accessor';
-import type { ResourceManager } from '@ts/scheduler/utils/resource_manager/resource_manager';
+import type { ResourceManager } from '@ts/scheduler/entities/resource/manager';
 
 export interface AppointmentProperties extends Record<string, unknown> {
   data: SafeAppointment;

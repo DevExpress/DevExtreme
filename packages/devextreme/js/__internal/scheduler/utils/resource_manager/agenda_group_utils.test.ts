@@ -3,7 +3,7 @@ import {
 } from '@jest/globals';
 
 import { getResourceManagerMock } from '../../__mock__/resource_manager.mock';
-import { reduceResourcesTree } from './agenda_group_utils';
+import { reduceResourcesTree } from '../../entities/resource/agenda-group-utils';
 
 describe('agenda group utils', () => {
   describe('reduceResourcesTree', () => {

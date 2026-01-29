@@ -2,7 +2,7 @@ import {
   describe, expect, it,
 } from '@jest/globals';
 
-import { getAsciiStringByDate } from '../../../../recurrence/base';
+import { getAsciiStringByDate } from '../../../../entities/recurrence/base';
 import { getAppointmentRecurrenceOccurrences } from './get_appointment_recurrence_occurrences';
 
 const options = {

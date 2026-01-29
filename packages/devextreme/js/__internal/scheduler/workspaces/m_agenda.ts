@@ -20,8 +20,8 @@ import {
 import tableCreatorModule from '../m_table_creator';
 import { agendaUtils, formatWeekday, getVerticalGroupCountClass } from '../r1/utils/index';
 import { VIEWS } from '../utils/options/constants_view';
-import { reduceResourcesTree } from '../utils/resource_manager/agenda_group_utils';
-import type { GroupNode } from '../utils/resource_manager/types';
+import { reduceResourcesTree } from '../entities/resource/agenda-group-utils';
+import type { GroupNode } from '../entities/resource/types';
 import type { ListEntity } from '../view_model/types';
 import WorkSpace from './m_work_space';
 

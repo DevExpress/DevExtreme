@@ -1,6 +1,6 @@
 import { isDefined } from '@js/core/utils/type';
 
-import type { TimeZoneCalculator } from '../../../r1/timezone_calculator';
+import type { TimeZoneCalculator } from '../../../entities/timezone';
 import type { SafeAppointment } from '../../../types';
 import type { AppointmentDataAccessor } from '../../../utils/data_accessor/appointment_data_accessor';
 import type { MinimalAppointmentEntity } from '../../types';

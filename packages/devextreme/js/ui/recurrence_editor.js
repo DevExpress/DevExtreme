@@ -1,4 +1,4 @@
-import RecurrenceEditor from '../__internal/scheduler/m_recurrence_editor';
+import RecurrenceEditor from '../__internal/scheduler/entities/recurrence/editor';
 export default RecurrenceEditor;
 
 /**

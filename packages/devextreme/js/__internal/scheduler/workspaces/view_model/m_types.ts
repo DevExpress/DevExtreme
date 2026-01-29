@@ -1,4 +1,4 @@
-import type { TimeZoneCalculator } from '../../r1/timezone_calculator/calculator';
+import type { TimeZoneCalculator } from '../../entities/timezone';
 import type {
   CountGenerationConfig,
   GetDateForHeaderText,
@@ -6,8 +6,8 @@ import type {
   ViewOptions,
   ViewType,
 } from '../../types';
-import type { ResourceManager } from '../../utils/resource_manager/resource_manager';
-import type { GroupLeaf } from '../../utils/resource_manager/types';
+import type { ResourceManager } from '../../entities/resource/manager';
+import type { GroupLeaf } from '../../entities/resource/types';
 
 interface CommonOptions extends CountGenerationConfig {
   getResourceManager: () => ResourceManager;

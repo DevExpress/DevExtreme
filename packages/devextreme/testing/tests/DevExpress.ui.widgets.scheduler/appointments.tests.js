@@ -17,7 +17,7 @@ import Resizable from 'ui/resizable';
 import fx from 'common/core/animation/fx';
 import { DataSource } from 'common/data/data_source/data_source';
 import { Deferred } from 'core/utils/deferred';
-import { createTimeZoneCalculator } from '__internal/scheduler/r1/timezone_calculator/index.js';
+import { createTimeZoneCalculator } from '__internal/scheduler/entities/timezone/index.js';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html(`

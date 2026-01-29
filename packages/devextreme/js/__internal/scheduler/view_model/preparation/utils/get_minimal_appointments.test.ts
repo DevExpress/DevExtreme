@@ -3,7 +3,7 @@ import { describe, expect, it } from '@jest/globals';
 import {
   mockAppointmentDataAccessor, mockUppercaseFieldExpressions,
 } from '../../../__mock__/appointment_data_accessor.mock';
-import { createTimeZoneCalculator } from '../../../r1/timezone_calculator';
+import { createTimeZoneCalculator } from '../../../entities/timezone';
 import { AppointmentDataAccessor } from '../../../utils/data_accessor/appointment_data_accessor';
 import type { MinimalAppointmentEntity } from '../../types';
 import { getMinimalAppointments } from './get_minimal_appointments';

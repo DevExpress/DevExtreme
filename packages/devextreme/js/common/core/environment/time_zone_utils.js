@@ -1,3 +1,3 @@
-import timeZoneUtils from '../../../__internal/scheduler/m_utils_time_zone';
+import timeZoneUtils from '../../../__internal/scheduler/entities/timezone/utils';
 
 export const getTimeZones = timeZoneUtils.getTimeZones;

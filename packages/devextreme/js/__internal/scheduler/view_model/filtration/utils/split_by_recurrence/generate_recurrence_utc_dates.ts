@@ -1,7 +1,7 @@
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { RRule, RRuleSet } from 'rrule';
 
-import { parseRecurrenceRule } from '../../../../recurrence/base';
+import { parseRecurrenceRule } from '../../../../entities/recurrence/base';
 import type { DateInterval, MinimalAppointmentEntity } from '../../../types';
 import { getDateOffsetMs } from './get_date_information';
 

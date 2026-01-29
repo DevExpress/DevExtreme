@@ -2,7 +2,7 @@ import { initTestMarkup, createWrapper } from '../../helpers/scheduler/helpers.j
 import dateLocalization from 'common/core/localization/date';
 import fx from 'common/core/animation/fx';
 import { dateToMilliseconds as toMs } from 'core/utils/date';
-import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
+import timeZoneUtils from '__internal/scheduler/entities/timezone/utils';
 import '__internal/scheduler/m_scheduler';
 import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 

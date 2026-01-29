@@ -1,9 +1,9 @@
 import dateUtils from '@js/core/utils/date';
 import { dateUtilsTs } from '@ts/core/utils/date';
-import type { GroupLeaf } from '@ts/scheduler/utils/resource_manager/types';
+import type { GroupLeaf } from '../../entities/resource/types';
 
 import { HORIZONTAL_GROUP_ORIENTATION } from '../../constants';
-import timezoneUtils from '../../m_utils_time_zone';
+import timezoneUtils from '../../entities/timezone/utils';
 import {
   calculateCellIndex,
   calculateDayDuration,
@@ -17,7 +17,7 @@ import {
 } from '../../r1/utils/index';
 import type { ViewDataMap, ViewType } from '../../types';
 import { VIEWS } from '../../utils/options/constants_view';
-import { getAllGroupValues } from '../../utils/resource_manager/group_utils';
+import { getAllGroupValues } from '../../entities/resource/group-utils';
 import type {
   ViewCellDataSimple,
   ViewCellGeneratedData,

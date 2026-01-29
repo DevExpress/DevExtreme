@@ -1,13 +1,13 @@
 import $ from 'jquery';
 import dateUtils from 'core/utils/date';
-import RecurrenceEditor from '__internal/scheduler/m_recurrence_editor';
+import RecurrenceEditor from '__internal/scheduler/entities/recurrence/editor';
 import SelectBox from 'ui/select_box';
 import NumberBox from 'ui/number_box';
 import RadioGroup from 'ui/radio_group';
 import ButtonGroup from 'ui/button_group';
 import DateBox from 'ui/date_box';
-import { getAsciiStringByDate, getDateByAsciiString } from '__internal/scheduler/recurrence/base';
-import { createTimeZoneCalculator } from '__internal/scheduler/r1/timezone_calculator/index.js';
+import { getAsciiStringByDate, getDateByAsciiString } from '__internal/scheduler/entities/recurrence/base';
+import { createTimeZoneCalculator } from '__internal/scheduler/entities/timezone/index.js';
 import dateLocalization from 'common/core/localization/date';
 
 const FREQUENCY_EDITOR = 'dx-recurrence-selectbox-freq';

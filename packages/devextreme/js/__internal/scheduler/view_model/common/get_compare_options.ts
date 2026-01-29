@@ -1,5 +1,5 @@
 import type Scheduler from '../../m_scheduler';
-import timeZoneUtils from '../../m_utils_time_zone';
+import timeZoneUtils from '../../entities/timezone/utils';
 import type { CompareOptions } from '../types';
 
 export const getCompareOptions = (

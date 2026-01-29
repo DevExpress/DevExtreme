@@ -1,4 +1,4 @@
-import type { TimeZoneCalculator } from '../../r1/timezone_calculator';
+import type { TimeZoneCalculator } from '../../entities/timezone';
 import type { ViewDataProviderType } from '../../types';
 import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
 import type { AppointmentItemViewModel } from '../../view_model/types';

@@ -4,7 +4,7 @@ import { data as elementData } from '@js/core/element_data';
 import $ from '@js/core/renderer';
 import { isFunction } from '@js/core/utils/type';
 
-import type { GroupNode } from './utils/resource_manager/types';
+import type { GroupNode } from './entities/resource/types';
 
 const ROW_SELECTOR = 'tr';
 

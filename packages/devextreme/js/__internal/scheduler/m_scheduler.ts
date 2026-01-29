@@ -32,24 +32,24 @@ import type { Appointment, AppointmentTooltipShowingEvent, FirstDayOfWeek } from
 import errors from '@js/ui/widget/ui.errors';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
-import { createA11yStatusContainer } from './a11y_status/a11y_status_render';
-import { getA11yStatusText } from './a11y_status/a11y_status_text';
-import { AppointmentForm } from './appointment_popup/m_form';
-import { AppointmentForm as AppointmentLegacyForm } from './appointment_popup/m_legacy_form';
-import { ACTION_TO_APPOINTMENT, AppointmentPopup as AppointmentLegacyPopup } from './appointment_popup/m_legacy_popup';
-import { AppointmentPopup } from './appointment_popup/m_popup';
+import { createA11yStatusContainer } from './entities/a11y/status-render';
+import { getA11yStatusText } from './entities/a11y/status-text';
+import { AppointmentForm } from './entities/appointment-popup/form';
+import { AppointmentForm as AppointmentLegacyForm } from './entities/appointment-popup/legacy_form';
+import { ACTION_TO_APPOINTMENT, AppointmentPopup as AppointmentLegacyPopup } from './entities/appointment-popup/legacy_popup';
+import { AppointmentPopup } from './entities/appointment-popup/popup';
 import AppointmentCollection from './appointments/m_appointment_collection';
 import NotifyScheduler from './base/m_widget_notify_scheduler';
-import { SchedulerHeader } from './header/m_header';
-import type { HeaderOptions } from './header/types';
+import { SchedulerHeader } from './entities/header/header';
+import type { HeaderOptions } from './entities/header/types';
 import { CompactAppointmentsHelper } from './m_compact_appointments_helper';
 import { hide as hideLoading, show as showLoading } from './m_loading';
 import type { SubscribeKey, SubscribeMethods } from './m_subscribes';
 import subscribes from './m_subscribes';
 import { utils } from './m_utils';
-import timeZoneUtils, { type TimezoneLabel } from './m_utils_time_zone';
+import timeZoneUtils, { type TimezoneLabel } from './entities/timezone/utils';
 import { combineRemoteFilter } from './r1/filterting/remote';
-import { createTimeZoneCalculator } from './r1/timezone_calculator/index';
+import { createTimeZoneCalculator } from './entities/timezone/index';
 import {
   excludeFromRecurrence,
   getToday,
@@ -57,10 +57,10 @@ import {
   isDateAndTimeView,
   isTimelineView,
 } from './r1/utils/index';
-import { validateRRule } from './recurrence/validate_rule';
+import { validateRRule } from './entities/recurrence/validate-rule';
 import { SchedulerOptionsBaseWidget } from './scheduler_options_base_widget';
-import { DesktopTooltipStrategy } from './tooltip_strategies/m_desktop_tooltip_strategy';
-import { MobileTooltipStrategy } from './tooltip_strategies/m_mobile_tooltip_strategy';
+import { DesktopTooltipStrategy } from './entities/tooltip/desktop-strategy';
+import { MobileTooltipStrategy } from './entities/tooltip/mobile-strategy';
 import type {
   AppointmentTooltipItem,
   SafeAppointment,
@@ -74,9 +74,9 @@ import { macroTaskArray } from './utils/index';
 import { isAgendaWorkspaceComponent } from './utils/is_agenda_workpace_component';
 import { VIEWS } from './utils/options/constants_view';
 import type { NormalizedView } from './utils/options/types';
-import { setAppointmentGroupValues } from './utils/resource_manager/appointment_groups_utils';
-import { createResourceEditorModel } from './utils/resource_manager/popup_utils';
-import { ResourceManager } from './utils/resource_manager/resource_manager';
+import { setAppointmentGroupValues } from './entities/resource/appointment-groups-utils';
+import { createResourceEditorModel } from './entities/resource/popup-utils';
+import { ResourceManager } from './entities/resource/manager';
 import AppointmentLayoutManager from './view_model/appointments_layout_manager';
 import { AppointmentDataSource } from './view_model/m_appointment_data_source';
 import type { AppointmentViewModelPlain } from './view_model/types';

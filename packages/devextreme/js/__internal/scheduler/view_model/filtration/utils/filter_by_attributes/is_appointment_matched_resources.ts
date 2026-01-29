@@ -1,8 +1,8 @@
 import { equalByValue } from '@js/core/utils/common';
 
 import type { SafeAppointment } from '../../../../types';
-import type { ResourceLoader } from '../../../../utils/loader/resource_loader';
-import { getAppointmentGroupValues } from '../../../../utils/resource_manager/appointment_groups_utils';
+import type { ResourceLoader } from '../../../../entities/resource/loader';
+import { getAppointmentGroupValues } from '../../../../entities/resource/appointment-groups-utils';
 
 export const isAppointmentMatchedResources = (
   appointment: SafeAppointment,

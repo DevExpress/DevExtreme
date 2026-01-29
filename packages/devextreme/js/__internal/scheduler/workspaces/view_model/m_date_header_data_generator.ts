@@ -1,7 +1,7 @@
 import dateUtils from '@js/core/utils/date';
 import type { DateHeaderData } from '@ts/scheduler/types';
 
-import timeZoneUtils from '../../m_utils_time_zone';
+import timeZoneUtils from '../../entities/timezone/utils';
 import {
   formatWeekdayAndDay,
   getDisplayedCellCount,

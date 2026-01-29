@@ -2,7 +2,7 @@ import { compileGetter, compileSetter } from '@js/core/utils/data';
 import dateSerialization from '@js/core/utils/date_serialization';
 import type { Appointment } from '@js/ui/scheduler';
 
-import { validateRRule } from '../../recurrence/validate_rule';
+import { validateRRule } from '../../entities/recurrence/validate-rule';
 import { DataAccessor } from './data_accessor';
 import type { DataAccessorGetter, DataAccessorSetter, IFieldExpr } from './types';
 

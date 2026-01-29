@@ -16,7 +16,7 @@ import '__internal/scheduler/m_scheduler';
 import 'ui/switch';
 import viewPort from 'core/utils/view_port';
 import browser from 'core/utils/browser';
-import timezoneUtils from '__internal/scheduler/m_utils_time_zone';
+import timezoneUtils from '__internal/scheduler/entities/timezone/utils';
 
 
 const { module, test, testStart } = QUnit;

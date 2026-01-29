@@ -16,7 +16,7 @@ import { hide } from '__internal/ui/tooltip/m_tooltip';
 import { DataSource } from 'common/data/data_source/data_source';
 import ArrayStore from 'common/data/array_store';
 import dragEvents from 'common/core/events/drag';
-import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
+import timeZoneUtils from '__internal/scheduler/entities/timezone/utils';
 
 import 'generic_light.css!';
 

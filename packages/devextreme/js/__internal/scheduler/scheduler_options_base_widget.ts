@@ -1,7 +1,7 @@
 import Widget from '@js/ui/widget/ui.widget';
 import { extend } from '@ts/core/utils/m_extend';
 
-import timeZoneUtils from './m_utils_time_zone';
+import timeZoneUtils from './entities/timezone/utils';
 import {
   DEFAULT_SCHEDULER_INTEGRATION_OPTIONS,
   DEFAULT_SCHEDULER_INTERNAL_OPTIONS,

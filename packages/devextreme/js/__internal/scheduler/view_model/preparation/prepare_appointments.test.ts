@@ -3,7 +3,7 @@ import { mockAppointmentDataAccessor } from '@ts/scheduler/__mock__/appointment_
 import type { MinimalAppointmentEntity } from '@ts/scheduler/view_model/types';
 
 import type Scheduler from '../../m_scheduler';
-import { createTimeZoneCalculator } from '../../r1/timezone_calculator';
+import { createTimeZoneCalculator } from '../../entities/timezone';
 import { prepareAppointments } from './prepare_appointments';
 
 const schedulerMock = {

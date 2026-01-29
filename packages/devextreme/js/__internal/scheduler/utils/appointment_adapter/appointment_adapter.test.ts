@@ -3,7 +3,7 @@ import {
 } from '@jest/globals';
 import { mockFieldExpressions } from '@ts/scheduler/__mock__/appointment_data_accessor.mock';
 
-import { createTimeZoneCalculator } from '../../r1/timezone_calculator';
+import { createTimeZoneCalculator } from '../../entities/timezone';
 import { AppointmentDataAccessor } from '../data_accessor/appointment_data_accessor';
 import { AppointmentAdapter } from './appointment_adapter';
 

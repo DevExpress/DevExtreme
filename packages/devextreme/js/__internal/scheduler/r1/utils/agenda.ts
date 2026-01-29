@@ -1,4 +1,4 @@
-import timeZoneUtils from '../../m_utils_time_zone';
+import timeZoneUtils from '../../entities/timezone/utils';
 import type { ListEntity } from '../../view_model/types';
 import { setOptionHour } from './base';
 

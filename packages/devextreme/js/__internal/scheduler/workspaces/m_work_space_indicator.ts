@@ -9,7 +9,7 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 import { getToday } from '@ts/scheduler/r1/utils/index';
 
 import { HEADER_CURRENT_TIME_CELL_CLASS } from '../m_classes';
-import timezoneUtils from '../m_utils_time_zone';
+import timezoneUtils from '../entities/timezone/utils';
 import SchedulerWorkSpace from './m_work_space';
 
 const toMs = dateUtils.dateToMilliseconds;

@@ -1,8 +1,8 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { Appointment, Properties } from '@js/ui/scheduler';
 
-import type { ResourceLoader } from './utils/loader/resource_loader';
-import type { GroupValues, RawGroupValues } from './utils/resource_manager/types';
+import type { ResourceLoader } from './entities/resource/loader';
+import type { GroupValues, RawGroupValues } from './entities/resource/types';
 import type { AppointmentViewModelPlain } from './view_model/types';
 
 export type Direction = 'vertical' | 'horizontal';

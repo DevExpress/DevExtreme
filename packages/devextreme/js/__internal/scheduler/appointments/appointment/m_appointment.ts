@@ -24,7 +24,7 @@ import {
   REDUCED_APPOINTMENT_PARTS_CLASSES,
 } from '../../m_classes';
 import type { SubscribeKey, SubscribeMethods } from '../../m_subscribes';
-import { validateRRule } from '../../recurrence/validate_rule';
+import { validateRRule } from '../../entities/recurrence/validate-rule';
 import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
 import type { AppointmentProperties } from './m_types';
 import {

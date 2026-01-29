@@ -1,7 +1,7 @@
 import dateUtils from '@js/core/utils/date';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
-import timeZoneUtils from '../../m_utils_time_zone';
+import timeZoneUtils from '../../entities/timezone/utils';
 import {
   calculateIsGroupedAllDayPanel,
   getGroupPanelData,

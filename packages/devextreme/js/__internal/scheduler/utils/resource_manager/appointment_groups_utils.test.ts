@@ -14,7 +14,7 @@ import {
   getSafeGroupValues,
   groupAppointmentsByGroupLeafs,
   setAppointmentGroupValues,
-} from './appointment_groups_utils';
+} from '../../entities/resource/appointment-groups-utils';
 
 describe('appointment groups utils', () => {
   describe('getResourceItemById', () => {

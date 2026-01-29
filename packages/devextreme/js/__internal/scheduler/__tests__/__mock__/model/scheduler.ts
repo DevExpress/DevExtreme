@@ -1,6 +1,6 @@
 import { ToolbarModel } from '@ts/scheduler/__tests__/__mock__/model/toolbar';
 
-import { APPOINTMENT_POPUP_CLASS } from '../../../appointment_popup/m_popup';
+import { APPOINTMENT_POPUP_CLASS } from '../../../entities/appointment-popup/popup';
 import { POPUP_DIALOG_CLASS } from '../../../m_scheduler';
 import type { AppointmentModel } from './appointment';
 import { createAppointmentModel } from './appointment';

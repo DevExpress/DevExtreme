@@ -5,7 +5,7 @@ import {
   getResourceManagerMock,
 } from '@ts/scheduler/__mock__/resource_manager.mock';
 
-import { createResourceEditorModel } from './popup_utils';
+import { createResourceEditorModel } from '../../entities/resource/popup-utils';
 
 describe('popup utils', () => {
   describe('createResourceEditorModel', () => {

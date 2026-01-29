@@ -16,8 +16,8 @@ import {
   HEADER_CURRENT_TIME_CELL_CLASS,
 } from '../m_classes';
 import tableCreatorModule from '../m_table_creator';
-import timezoneUtils from '../m_utils_time_zone';
-import HorizontalShader from '../shaders/m_current_time_shader_horizontal';
+import timezoneUtils from '../entities/timezone/utils';
+import HorizontalShader from '../entities/shaders/current-time-shader-horizontal';
 import SchedulerWorkSpace from './m_work_space_indicator';
 
 const { tableCreator } = tableCreatorModule;

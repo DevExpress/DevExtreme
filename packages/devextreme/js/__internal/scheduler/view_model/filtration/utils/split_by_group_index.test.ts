@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 
 import type { ResourceConfig } from '../../../utils/loader/types';
-import { ResourceManager } from '../../../utils/resource_manager/resource_manager';
+import { ResourceManager } from '../../../entities/resource/manager';
 import type { MinimalAppointmentEntity } from '../../types';
 import { splitByGroupIndex } from './split_by_group_index';
 

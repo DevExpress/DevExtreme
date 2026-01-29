@@ -1,7 +1,7 @@
 import {
   getAppointmentGroupIndex,
   getAppointmentGroupValues,
-} from '../../../utils/resource_manager/appointment_groups_utils';
+} from '../../../entities/resource/appointment-groups-utils';
 import type { FilterOptions, GroupIndex, MinimalAppointmentEntity } from '../../types';
 
 export const splitByGroupIndex = <T extends MinimalAppointmentEntity>(

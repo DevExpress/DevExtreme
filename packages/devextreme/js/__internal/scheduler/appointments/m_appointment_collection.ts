@@ -28,7 +28,7 @@ import {
   APPOINTMENT_DRAG_SOURCE_CLASS,
   APPOINTMENT_ITEM_CLASS,
 } from '../m_classes';
-import timeZoneUtils from '../m_utils_time_zone';
+import timeZoneUtils from '../entities/timezone/utils';
 import type { CompactAppointmentOptions } from '../types';
 import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
 import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
@@ -36,9 +36,9 @@ import {
   getTargetedAppointment,
   getTargetedAppointmentFromInfo,
 } from '../utils/get_targeted_appointment';
-import { getAppointmentGroupValues } from '../utils/resource_manager/appointment_groups_utils';
-import { getGroupTexts } from '../utils/resource_manager/group_utils';
-import type { ResourceManager } from '../utils/resource_manager/resource_manager';
+import { getAppointmentGroupValues } from '../entities/resource/appointment-groups-utils';
+import { getGroupTexts } from '../entities/resource/group-utils';
+import type { ResourceManager } from '../entities/resource/manager';
 import type {
   AppointmentAgendaViewModel,
   AppointmentCollectorViewModel,

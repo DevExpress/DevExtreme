@@ -7,7 +7,7 @@ import {
   HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION,
 } from '../../constants';
 import { VERTICAL_GROUP_COUNT_CLASSES } from '../../m_classes';
-import timeZoneUtils from '../../m_utils_time_zone';
+import timeZoneUtils from '../../entities/timezone/utils';
 import type {
   AllDayPanelModeType,
   AppointmentGeometry,
@@ -21,7 +21,7 @@ import type {
   ViewDataProviderType,
   ViewType,
 } from '../../types';
-import type { ResourceLoader } from '../../utils/loader/resource_loader';
+import type { ResourceLoader } from '../../entities/resource/loader';
 import type { ResourceId } from '../../utils/loader/types';
 import { VIEWS } from '../../utils/options/constants_view';
 

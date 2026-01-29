@@ -2,7 +2,7 @@ import { describe, expect, it } from '@jest/globals';
 
 import { mockAppointmentDataAccessor } from '../../../../__mock__/appointment_data_accessor.mock';
 import type Scheduler from '../../../../m_scheduler';
-import { ResourceManager } from '../../../../utils/resource_manager/resource_manager';
+import { ResourceManager } from '../../../../entities/resource/manager';
 import { getFilterOptions } from './get_filter_options';
 
 export const getSchedulerMock = ({

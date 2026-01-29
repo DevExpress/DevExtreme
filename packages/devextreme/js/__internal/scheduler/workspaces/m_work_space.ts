@@ -71,15 +71,15 @@ import { CompactAppointmentsHelper } from '../m_compact_appointments_helper';
 import type { SubscribeKey, SubscribeMethods } from '../m_subscribes';
 import tableCreatorModule from '../m_table_creator';
 import { utils } from '../m_utils';
-import VerticalShader from '../shaders/m_current_time_shader_vertical';
-import type { ResourceLoader } from '../utils/loader/resource_loader';
+import VerticalShader from '../entities/shaders/current-time-shader-vertical';
+import type { ResourceLoader } from '../entities/resource/loader';
 import {
   getAppointmentGroupIndex,
   getSafeGroupValues,
-} from '../utils/resource_manager/appointment_groups_utils';
-import { getLeafGroupValues } from '../utils/resource_manager/group_utils';
-import type { ResourceManager } from '../utils/resource_manager/resource_manager';
-import type { GroupValues, RawGroupValues } from '../utils/resource_manager/types';
+} from '../entities/resource/appointment-groups-utils';
+import { getLeafGroupValues } from '../entities/resource/group-utils';
+import type { ResourceManager } from '../entities/resource/manager';
+import type { GroupValues, RawGroupValues } from '../entities/resource/types';
 import {
   getAllDayHeight,
   getCellHeight,

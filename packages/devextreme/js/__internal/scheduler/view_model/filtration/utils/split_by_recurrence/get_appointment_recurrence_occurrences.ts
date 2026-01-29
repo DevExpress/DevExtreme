@@ -1,4 +1,4 @@
-import { getDateByAsciiString } from '../../../../recurrence/base';
+import { getDateByAsciiString } from '../../../../entities/recurrence/base';
 import type { DateInterval, MinimalAppointmentEntity, UTCDates } from '../../../types';
 import { generateRecurrenceUTCDates } from './generate_recurrence_utc_dates';
 import type { DateInformation } from './get_date_information';

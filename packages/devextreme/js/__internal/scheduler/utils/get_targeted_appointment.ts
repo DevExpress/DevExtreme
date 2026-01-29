@@ -5,9 +5,9 @@ import type {
   AppointmentViewModelPlain,
 } from '../view_model/types';
 import type { AppointmentDataAccessor } from './data_accessor/appointment_data_accessor';
-import { setAppointmentGroupValues } from './resource_manager/appointment_groups_utils';
-import { getLeafGroupValues } from './resource_manager/group_utils';
-import type { ResourceManager } from './resource_manager/resource_manager';
+import { setAppointmentGroupValues } from '../entities/resource/appointment-groups-utils';
+import { getLeafGroupValues } from '../entities/resource/group-utils';
+import type { ResourceManager } from '../entities/resource/manager';
 
 const setTargetedAppointmentResources = (
   rawAppointment: SafeAppointment,

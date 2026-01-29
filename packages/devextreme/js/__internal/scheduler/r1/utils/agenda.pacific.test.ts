@@ -4,7 +4,7 @@
 
 import { describe, expect, it } from '@jest/globals';
 
-import timeZoneUtils from '../../m_utils_time_zone';
+import timeZoneUtils from '../../entities/timezone/utils';
 import { calculateRows } from './agenda';
 
 const createDate = (year: number, month: number, day: number, hours: number) => {
