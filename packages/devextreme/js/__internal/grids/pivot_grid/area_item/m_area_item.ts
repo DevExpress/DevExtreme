@@ -330,6 +330,7 @@ abstract class AreaItem {
     const rowsLength = this.getRowsLength();
     const processedCells: boolean[][] = [];
     const result: number[] = [];
+    const colSpans: number[] = [];
 
     if (!rowsLength) {
       return [];
@@ -350,8 +351,9 @@ abstract class AreaItem {
           }
         }
 
-        if (cell.colSpan === 1) {
-          result[columnIndex] ||= getRealElementWidth(cell);
+        if (colSpans[columnIndex] === undefined || cell.colSpan < colSpans[columnIndex]) {
+          result[columnIndex] = getRealElementWidth(cell);
+          colSpans[columnIndex] = cell.colSpan;
         }
       });
     }
