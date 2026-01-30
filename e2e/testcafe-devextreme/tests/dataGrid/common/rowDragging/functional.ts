@@ -569,7 +569,7 @@ test('The draggable element should be displayed correctly after horizontal scrol
   });
 });
 
-test.meta({ unstable: true })('Dragging with scrolling should be prevented by e.cancel (T1179555)', async (t) => {
+test('Dragging with scrolling should be prevented by e.cancel (T1179555)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t.expect(dataGrid.isReady()).ok();
