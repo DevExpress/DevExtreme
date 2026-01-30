@@ -14,7 +14,7 @@ on:
 
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
-  NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
+  NX_SKIP_NX_CACHE: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'skip-cache') && 'true' || 'false' }}
   BUILD_TEST_INTERNAL_PACKAGE: true
   RUN_TESTS: true
 
@@ -89,7 +89,7 @@ jobs:
       - name: Determine framework tests scope
         id: determine
         run: |
-          if [ "${{ github.event_name }}" != "pull_request" ] || [ "${{ contains(github.event.pull_request.labels.*.name, 'force all tests') }}" = "true" ]; then
+          if [ "${{ github.event_name }}" != "pull_request" ] || [ "${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'force all tests') }}" = "true" ]; then
             echo "Framework tests scope: all demos"
             echo "framework-tests-scope=all" >> $GITHUB_OUTPUT
           elif [ "${{ needs.get-changes.outputs.has-changed-demos }}" = "true" ]; then
