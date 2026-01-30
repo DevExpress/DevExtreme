@@ -6,6 +6,6 @@ import 'anti-forgery';
 import App from './App.tsx';
 
 ReactDOM.render(
-  <App />,
+    <App />,
   document.getElementById('app'),
 );
