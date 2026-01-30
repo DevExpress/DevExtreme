@@ -75,6 +75,7 @@ export const CLASS = {
   summaryTotal: 'dx-datagrid-summary-item',
   scrollableContainer: 'dx-scrollable-container',
   columnsSeparator: 'dx-datagrid-columns-separator',
+  sortableDragging: 'dx-sortable-dragging',
 };
 
 const E2E_ATTRIBUTES = {
@@ -569,6 +570,7 @@ export default class DataGrid extends GridCore {
       return dataGrid.getVisibleRows().map((r) => ({
         key: r.key,
         rowType: r.rowType,
+        rowIndex: r.rowIndex,
       }));
     }, { dependencies: { getInstance } })();
   }
@@ -748,6 +750,21 @@ export default class DataGrid extends GridCore {
         },
       },
     )();
+  }
+
+  dropRow(): Promise<void> {
+    return ClientFunction((sortableDraggingClass) => {
+        const $dragElement = $(`.${sortableDraggingClass}`);
+        const dragOffset = $dragElement.offset();
+
+        triggerPointerUp($dragElement, dragOffset.left, dragOffset.top);
+      },
+      {
+        dependencies: {
+          triggerPointerUp,
+        },
+      },
+    )(CLASS.sortableDragging);
   }
 
   resizeHeader(columnIndex: number, offset: number, needToTriggerPointerUp = true): Promise<void> {
