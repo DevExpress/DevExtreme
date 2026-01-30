@@ -11,6 +11,9 @@ export const isScrollAtEnd = ClientFunction((orientation: 'vertical' | 'horizont
   const scrollPosition = element[orientation === 'vertical' ? 'scrollTop' : 'scrollLeft'];
   const clientSize = element[orientation === 'vertical' ? 'clientHeight' : 'clientWidth'];
 
+  // Subtract 1 from scrollSize to account for sub-pixel rendering and rounding errors.
+  // Due to browser rounding, scrollPosition + clientSize may not exactly equal scrollSize
+  // even when visually scrolled to the end.
   return Math.round(scrollPosition + clientSize) >= scrollSize - 1;
 });
 
@@ -63,13 +66,17 @@ export const getOffsetToTriggerAutoScroll = ClientFunction(
     const distance = scrollSensitivity * (1 - normalizedSpeedFactor);
 
     if (direction === 'up') {
-      // Target Y-coordinate for upward autoscroll
+      // Target Y-coordinate for upward autoscroll.
+      // Add 1 to ensure the cursor is inside the autoscroll zone, not on its boundary.
+      // Without this offset, boundary values may not reliably trigger autoscroll due to rounding.
       const targetY = containerOffset.top + distance + 1;
 
       return Math.round(targetY - rowOffset.top);
     }
 
-    // Target Y-coordinate for downward autoscroll
+    // Target Y-coordinate for downward autoscroll.
+    // Subtract 1 to ensure the cursor is inside the autoscroll zone, not on its boundary.
+    // Without this offset, boundary values may not reliably trigger autoscroll due to rounding.
     const containerHeight = $scrollContainer.height() ?? 0;
     const targetY = containerOffset.top + containerHeight - distance - 1;
 
