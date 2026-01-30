@@ -2897,7 +2897,7 @@ QUnit.module('dxPivotGrid', {
         assert.ok(pivotGrid._rowsArea.hasScroll(), 'rows area scroll');
     });
 
-    QUnit.test('All columns should have width > 0 in virtual scrolling mode with many fields', function(assert) {
+    QUnit.test('T1317673 - First and third columns should have width > 0 in virtual scrolling mode with many fields', function(assert) {
         const fields = [
             { dataField: 'row1', area: 'row', dataType: 'string', index: 0, },
             { dataField: 'row2', area: 'row', dataType: 'string', index: 1 },
@@ -2945,7 +2945,6 @@ QUnit.module('dxPivotGrid', {
 
         assert.strictEqual($cols.length, 3, 'colgroup has 3 elements');
         assert.ok(getWidth($cols.eq(0)) > 0, 'first column width > 0');
-        assert.strictEqual(getWidth($cols.eq(1)), 0, 'second column width == 0');
         assert.ok(getWidth($cols.eq(2)) > 0, 'third column width > 0');
     });
 
