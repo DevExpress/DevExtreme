@@ -6,6 +6,7 @@ packages:
   - '!packages/sbom'
 
 catalog:
+  axe-core: ^4.11.1
   inferno: ^8.2.3
   inferno-hydrate: ^8.2.3
   inferno-create-element: ^8.2.3

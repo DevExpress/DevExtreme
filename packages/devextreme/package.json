@@ -92,7 +92,7 @@
     "@typescript-eslint/parser": "catalog:",
     "ast-types": "0.14.2",
     "autoprefixer": "10.4.23",
-    "axe-core": "4.11.1",
+    "axe-core": "catalog:",
     "babel-plugin-add-module-exports": "1.0.4",
     "babel-plugin-inferno": "6.8.5",
     "cldr-core": "41.0.0",
