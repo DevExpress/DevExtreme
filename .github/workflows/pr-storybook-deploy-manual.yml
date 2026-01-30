@@ -1,0 +1,94 @@
+name: Storybook PR Preview (manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "Pull Request number"
+        required: true
+        type: string
+      action:
+        description: "What to do with the preview"
+        required: true
+        type: choice
+        options:
+          - deploy
+          - remove
+        default: deploy
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: storybook-preview-${{ inputs.pr_number }}
+  cancel-in-progress: true
+
+env:
+  SOURCE_DIR: ./apps/react-storybook/storybook-static
+
+jobs:
+  preview:
+    name: ${{ inputs.action }} Storybook preview for PR
+    runs-on: ubuntu-latest
+
+    environment: preview
+
+    steps:
+      - name: Checkout PR head commit
+        if: inputs.action == 'deploy'
+        uses: actions/checkout@v4
+        with:
+          ref: refs/pull/${{ inputs.pr_number }}/head
+          fetch-depth: 1
+          submodules: true
+
+      - name: Use Node.js
+        if: inputs.action == 'deploy'
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Setup pnpm
+        if: inputs.action == 'deploy'
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Get pnpm store directory
+        if: inputs.action == 'deploy'
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm + nx cache
+        if: inputs.action == 'deploy'
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ env.STORE_PATH }}
+            .nx/cache
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store
+
+      - name: Install dependencies
+        if: inputs.action == 'deploy'
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Storybook preview (static)
+        if: inputs.action == 'deploy'
+        run: |
+          pnpm nx build devextreme-react-storybook
+
+      - name: Deploy/remove PR preview
+        uses: rossjrw/pr-preview-action@8ff09e486b4c23709012eedd3b42e9f0b95dd0c5 # v1
+        with:
+          action: ${{ inputs.action }}
+          pr-number: ${{ inputs.pr_number }}
+          source-dir: ${{ env.SOURCE_DIR }}
+          preview-branch: gh-pages
+          umbrella-dir: preview
+          comment: false
+          token: ${{ secrets.CHECKOUT_TOKEN }}
