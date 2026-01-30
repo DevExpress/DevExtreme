@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { ClientFunction, Selector } from 'testcafe';
-import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid, { CLASS as DataGridClassNames } from 'devextreme-testcafe-models/dataGrid';
 import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
-import { MouseUpEvents, MouseAction } from '../../../helpers/mouseUpEvents';
-import url from '../../../helpers/getPageUrl';
-import { createWidget } from '../../../helpers/createWidget';
-import { testScreenshot } from '../../../helpers/themeUtils';
+import { dragWithDisabledMouseUp } from '../../../../helpers/mouseUpEvents';
+import url from '../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../helpers/createWidget';
+import { isScrollAtEnd, getOffsetToTriggerAutoScroll } from '../../helpers/rowDraggingHelpers';
 
 const CLASS = { ...DataGridClassNames, ...ClassNames };
 
@@ -55,8 +54,8 @@ const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
   return items;
 };
 
-fixture`Row dragging`
-  .page(url(__dirname, '../../container.html'));
+fixture`Row dragging.Functional`
+  .page(url(__dirname, '../../../container.html'));
 
 // T903351
 test('The placeholder should appear when a cross-component dragging rows after scrolling the window', async (t) => {
@@ -468,7 +467,7 @@ test('Headers should not be hidden during auto scrolling when virtual scrollling
 });
 
 // T1078513
-test.meta({ unstable: true })('Footer should not be hidden during auto scrolling when virtual scrollling is specified', async (t) => {
+test('Footer should not be hidden during auto scrolling when virtual scrolling is specified', async (t) => {
   const dataGrid = new DataGrid('#container');
   await t.drag(dataGrid.getDataRow(0).getDragCommand(), 0, 90, { speed: 0.1 });
 
@@ -570,19 +569,41 @@ test('The draggable element should be displayed correctly after horizontal scrol
   });
 });
 
-test.meta({ unstable: true })('Dragging with scrolling should be prevented by e.cancel (T1179555)', async (t) => {
+test('Dragging with scrolling should be prevented by e.cancel (T1179555)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
-  await dataGrid.scrollBy(t, { top: 10000 });
   await t.expect(dataGrid.isReady()).ok();
 
-  await MouseUpEvents.disable(MouseAction.dragToOffset);
+  await dataGrid.scrollBy(t, { top: 10000 });
 
-  await t.drag(dataGrid.getDataRow(98).getDragCommand(), 0, -180, { speed: 0.1 });
+  await t
+    .expect(dataGrid.getDataRow(99).getDataCell(1).element.textContent)
+    .eql('99')
+    .expect(isScrollAtEnd('vertical'))
+    .ok();
+
+  const visibleRows = await dataGrid.apiGetVisibleRows();
+  const scrollTopOffsetByTheme = await getOffsetToTriggerAutoScroll(
+    visibleRows.length - 2,
+    1,
+  );
+
+  await dragWithDisabledMouseUp(
+    t,
+    dataGrid.getDataRow(98).getDragCommand(),
+    { offsetX: 0, offsetY: scrollTopOffsetByTheme, speed: 0.8 },
+  );
+
+  // Wait for autoscrolling
+  await t.wait(2000);
+
+  await t
+    .expect(dataGrid.getDataRow(0).getDataCell(1).element.textContent)
+    .eql('0')
+    .expect(dataGrid.getScrollTop())
+    .eql(0);
 
   await t.expect(Selector('.dx-sortable-placeholder').visible).notOk();
-
-  await MouseUpEvents.enable(MouseAction.dragToOffset);
 }).before(async (t) => {
   await t.maximizeWindow();
   return createWidget('dxDataGrid', {
@@ -661,55 +682,75 @@ test('The placeholder should have correct position after dragging the row to the
 }));
 
 // T1126013
-test.meta({ unstable: true })('toIndex should not be corrected when source item gets removed from DOM', async (t) => {
-  const fromIndex = 2;
-  const toIndex = 4;
-
+test('toIndex should not be corrected when source item gets removed from DOM', async (t) => {
+  // arrange
   const dataGrid = new DataGrid('#container');
+  const AUTOSCROLL_WAIT_TIME = 2000;
+  const AUTOSCROLL_SPEED_FACTOR = 0.5;
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  // act - scroll to the bottom to make the last row visible
   await dataGrid.scrollTo(t, { y: 3000 });
 
-  const sourceKey = await ClientFunction((grid, idx) => {
-    const instance: any = grid.getInstance();
-    const visibleRows = instance.getVisibleRows();
-    return visibleRows[idx]?.key;
-  }, { dependencies: {} })(dataGrid, fromIndex);
+  // assert
+  await t
+    .expect(dataGrid.getDataRow(49).getDataCell(1).element.textContent)
+    .eql('50-1')
+    .expect(isScrollAtEnd('vertical'))
+    .ok();
 
-  const initialIndices = await ClientFunction((grid) => {
-    const instance: any = grid.getInstance();
-    return instance.getVisibleRows().map((r: any) => r.key);
-  })(dataGrid);
-  const sourceInitialIndex = initialIndices.indexOf(sourceKey);
+  let visibleRows = await dataGrid.apiGetVisibleRows();
+  const draggableRow = visibleRows[1];
 
-  await dataGrid.moveRow(fromIndex, 0, 50, true);
-  await dataGrid.moveRow(fromIndex, 0, -20);
-  await dataGrid.moveRow(toIndex, 0, 5);
+  // Calculate offsetY to trigger upward autoscroll when dragging the row.
+  // Using speedFactor 0.5 to ensure medium scrolling speed.
+  const scrollOffsetForFastAutoScroll = await getOffsetToTriggerAutoScroll(
+    draggableRow.rowIndex,
+    AUTOSCROLL_SPEED_FACTOR,
+  );
 
-  await ClientFunction((grid) => {
-    const instance = grid.getInstance();
-    $(instance.element()).trigger($.Event('dxpointerup'));
-  })(dataGrid);
+  // act - drag a row up the grid to start auto-scrolling.
+  await dataGrid.moveRow(draggableRow.rowIndex, 0, 150, true);
+  await dataGrid.moveRow(draggableRow.rowIndex, 0, 100);
+  await dataGrid.moveRow(draggableRow.rowIndex, 0, scrollOffsetForFastAutoScroll);
 
-  const finalIndex = await ClientFunction((grid, key) => {
-    const instance: any = grid.getInstance();
-    const visibleRows = instance.getVisibleRows();
-    return visibleRows.findIndex((r: any) => r.key === key);
-  })(dataGrid, sourceKey);
+  // Waiting for autoscrolling
+  await t.wait(AUTOSCROLL_WAIT_TIME);
 
-  const expectedFinalIndex = (toIndex - 1) - (sourceInitialIndex < toIndex ? 1 : 0);
+  // assert
+  await t
+    .expect(dataGrid.getDataRow(0).getDataCell(1).element.textContent)
+    .eql('1-1')
+    .expect(dataGrid.getScrollTop())
+    .eql(0);
 
-  await t.expect(finalIndex)
-    .eql(expectedFinalIndex, `Dragged row key ${sourceKey} expected at ${expectedFinalIndex} but ended up at index ${finalIndex}`);
+  // act - drag and drop the row to the third position (after row 2-1).
+  const rowHeight = await dataGrid.getDataRow(0).element.offsetHeight;
+
+  await dataGrid.moveRow(draggableRow.rowIndex, 0, rowHeight / 2);
+  await dataGrid.dropRow();
+
+  // assert
+  await t.expect(dataGrid.isReady()).ok();
+
+  visibleRows = await dataGrid.apiGetVisibleRows();
+
+  await t
+    .expect(visibleRows[0].key)
+    .eql('1-1')
+    .expect(visibleRows[1].key)
+    .eql('2-1')
+    .expect(visibleRows[2].key)
+    .eql(draggableRow.key);
 }).before(async (t) => {
   await t.maximizeWindow();
   const items = generateData(50, 1);
   return createWidget('dxDataGrid', {
-    height: 250,
+    height: 260,
     keyExpr: 'field1',
     scrolling: {
       mode: 'virtual',
-    },
-    paging: {
-      pageSize: 4,
     },
     dataSource: items,
     rowDragging: {
@@ -783,41 +824,5 @@ test('Item should appear in a correct spot when dragging to a different page wit
       }, { dependencies: { items } }),
     },
     showBorders: true,
-  });
-});
-
-// T1179218
-test.meta({ unstable: true })('Rows should appear correctly during dragging when virtual scrolling is enabled and rowDragging.dropFeedbackMode = "push"', async (t) => {
-  const dataGrid = new DataGrid('#container');
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  // drag the row down
-  await dataGrid.moveRow(0, 30, 150, true);
-  await dataGrid.moveRow(0, 30, 350);
-
-  // waiting for autoscrolling
-  await t.wait(2000);
-
-  // drag the row up
-  await dataGrid.moveRow(0, 30, 75);
-
-  await testScreenshot(t, takeScreenshot, 'T1179218-virtual-scrolling-dragging-row.png', { element: dataGrid.element });
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async (t) => {
-  await t.maximizeWindow();
-  return createWidget('dxDataGrid', {
-    height: 440,
-    keyExpr: 'id',
-    scrolling: {
-      mode: 'virtual',
-    },
-    dataSource: [...new Array(100)].fill(null).map((_, index) => ({ id: index })),
-    columns: ['id'],
-    rowDragging: {
-      allowReordering: true,
-      dropFeedbackMode: 'push',
-    },
   });
 });
