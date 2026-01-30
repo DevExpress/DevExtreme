@@ -39,6 +39,10 @@ class ariaAccessibilityTestHelper {
         return this.$itemContainer.find('.dx-list-items');
     }
 
+    getGroupContainers() {
+        return this.$itemContainer.find('.dx-list-group');
+    }
+
     checkAttributes($target, expectedAttributes, prefix) {
         const element = $target.get(0);
         const skipAttributes = ['class', 'style', 'onclick'];
