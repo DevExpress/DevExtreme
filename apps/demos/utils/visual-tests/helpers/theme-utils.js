@@ -6,6 +6,7 @@ export const THEME = {
 
 export const DEFAULT_THEME_NAME = THEME.fluent;
 
+export const isMaterial = (theme = process.env.THEME) => theme?.startsWith('material');
 export const getThemePostfix = (theme = DEFAULT_THEME_NAME) => ` (${theme})`;
 
 export const getScreenshotName = (baseName, theme) => {

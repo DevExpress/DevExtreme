@@ -65,12 +65,12 @@ $texteditor-label-transition:
 
 @if $mode == "light" {
   $texteditor-disabled-color: rgba(0, 0, 0, 0.6) !default;
-  $texteditor-button-clear-icon-color-bg: color.adjust($texteditor-color, $lightness: 76%, $space: hsl) !default;
+  $texteditor-button-clear-icon-color-bg: rgba(0, 0, 0, 0.12) !default;
 }
 
 @if $mode == "dark" {
   $texteditor-disabled-color: rgba(255, 255, 255, 0.6) !default;
-  $texteditor-button-clear-icon-color-bg: color.adjust($texteditor-color, $lightness: -34%, $space: hsl) !default;
+  $texteditor-button-clear-icon-color-bg: rgba(255, 255, 255, 0.12) !default;
 }
 
 :root {

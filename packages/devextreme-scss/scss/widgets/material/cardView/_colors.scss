@@ -484,7 +484,7 @@ $cardview-material-columnchooser--empty__message-color: null !default;
   $cardview-material-nodata-view__icon-bg-color: color.adjust($base-bg, $lightness: -7.84%, $space: hsl) !default;
 
   // Search highlight
-  $cardview-material-card__content__field-value--highlighted-bg-color: $base-warning !default;
+  $cardview-material-card__content__field-value--highlighted-bg-color: color.scale($base-warning, $lightness: 72%) !default;
   $cardview-material-card__content__field-value--highlighted-text-color: $cardview-material-common-text-color !default;
   $cardview-material-card__content__field-value--highlighted-box-shadow-color: rgba(0, 0, 0, 0.25) !default;
 

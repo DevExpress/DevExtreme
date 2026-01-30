@@ -18,6 +18,7 @@ import {
 import {
   testScreenshot,
   THEME,
+  isMaterial,
 } from '../utils/visual-tests/helpers/theme-utils';
 import { createMdReport, createTestCafeReport } from '../utils/axe-reporter/reporter';
 import { knownWarnings } from './known-warnings';
@@ -34,7 +35,7 @@ const execTestCafeCode = (t, code) => {
 const getIgnoredRules = (testName) => {
   const ignoredRules = [];
 
-  if (process.env.THEME === THEME.material
+  if (isMaterial()
     && [
       // False positive: contrast rules do not apply to disabled tags
       'Accordion-Overview',
