@@ -4,11 +4,3 @@
 
 // adduse
 $clock-digits-color: $base-icon-color !default;
-
-// @if $mode == "light" {
-//   $clock-digits-color: color.change($base-text-color, $alpha: 0.54) !default;
-// }
-
-// @if $mode == "dark" {
-//   $clock-digits-color: color.change($base-text-color, $alpha: 0.6) !default;
-// }

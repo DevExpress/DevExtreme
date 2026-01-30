@@ -9,11 +9,11 @@
 }
 
 ::ng-deep #gridContainer .inc {
-  color: #2ab71b;
+  color: var(--dx-color-success);
 }
 
 ::ng-deep #gridContainer .dec {
-  color: #f00;
+  color: var(--dx-color-danger);
 }
 
 ::ng-deep #gridContainer .inc .arrow,

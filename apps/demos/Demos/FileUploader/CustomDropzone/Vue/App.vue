@@ -137,7 +137,7 @@ function onUploadStarted() {
 
 #dropzone-text > span {
   font-weight: 100;
-  opacity: 0.5;
+  color: var(--dx-texteditor-color-label);
 }
 
 #upload-progress {

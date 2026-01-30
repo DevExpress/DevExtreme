@@ -37,7 +37,10 @@ const getIgnoredRules = (testName) => {
   if (process.env.THEME === THEME.material
     && [
       // False positive: contrast rules do not apply to disabled tags
+      'Accordion-Overview',
       'TagBox-Overview',
+      // False positive:contrast rules do not apply to custom orange color
+      'CardView-FieldTemplate',
     ].includes(testName)
   ) {
     ignoredRules.push('color-contrast');
@@ -70,6 +73,7 @@ const getIgnoredRules = (testName) => {
     'Diagram-AdvancedDataBinding': ['aria-dialog-name', 'label'],
     'Diagram-Containers': ['aria-dialog-name', 'label'],
     'Diagram-CustomShapesWithIcons': ['aria-dialog-name', 'label'],
+    'Diagram-CustomShapesWithTemplates': ['label'],
     'Diagram-CustomShapesWithTemplatesWithEditing': ['aria-dialog-name', 'label'],
     'Diagram-CustomShapesWithTexts': ['aria-dialog-name', 'label'],
     'Diagram-ImagesInShapes': ['aria-dialog-name', 'label'],
@@ -90,6 +94,14 @@ const getIgnoredRules = (testName) => {
     'FileManager-CustomThumbnails': ['aria-allowed-attr', 'aria-command-name', 'image-alt', 'label'],
     'FileManager-Overview': ['aria-command-name', 'empty-table-header', 'label'],
     'FileManager-UICustomization': ['aria-command-name', 'empty-table-header', 'label'],
+
+    'PivotGrid-SummaryDisplayModes': ['aria-allowed-attr'],
+    'PivotGrid-StatePersistence': ['aria-allowed-attr'],
+    'PivotGrid-StandaloneFieldChooser': ['aria-allowed-attr'],
+    'PivotGrid-FieldPanel': ['aria-allowed-attr'],
+    'PivotGrid-ExcelJsHeaderAndFooter': ['aria-allowed-attr'],
+
+    'Scheduler-Templates': ['image-alt'],
 
     'Gantt-Appearance': ['aria-toggle-field-name'],
     'Gantt-ExportToPDF': ['aria-toggle-field-name'],

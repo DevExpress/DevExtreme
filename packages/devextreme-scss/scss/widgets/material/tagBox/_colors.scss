@@ -23,12 +23,6 @@ $tagbox-tag-hover-bg: null !default;
 * $type color
 */
 $tagbox-tag-active-color: $base-text-color !default;
-
-// /**
-// * $name 40. Tag close button color
-// * $type color
-// */
-// $tagbox-tag-button-remove-bg: $base-icon-color !default;
 $tagbox-tag-button-remove-color: $base-icon-color !default;
 $tagbox-tag-focused-bg: null !default;
 $tagbox-select-all-border-color: $base-border-color !default;
@@ -36,16 +30,11 @@ $tagbox-select-all-border-color: $base-border-color !default;
 @if $mode == "light" {
   $tagbox-tag-bg: rgba(0, 0, 0, 0.08) !default;
   $tagbox-tag-hover-bg: color.adjust($base-bg, $lightness: -15%, $space: hsl) !default;
-  // $tagbox-tag-button-remove-color: $tagbox-tag-bg !default;
   $tagbox-tag-focused-bg: color.adjust($base-bg, $lightness: -32%, $space: hsl) !default;
 }
 
 @if $mode == "dark" {
   $tagbox-tag-bg: rgba(255, 255, 255, 0.08) !default;
   $tagbox-tag-hover-bg: color.adjust($base-bg, $lightness: 15%, $space: hsl) !default;
-  // $tagbox-tag-button-remove-color: color.adjust($base-bg, $lightness: 22%, $space: hsl) !default;
   $tagbox-tag-focused-bg: color.adjust($base-bg, $lightness: 32%, $space: hsl) !default;
 }
-
-// $tagbox-tag-disabled-bg: color.adjust($base-bg, $lightness: 8%, $space: hsl) !default;
-

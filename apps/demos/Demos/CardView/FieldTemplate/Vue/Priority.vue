@@ -36,7 +36,7 @@ const priorityClassName = computed(() =>
 }
 
 .task__priority--urgent {
-  color: #f7630c;
+  color: var(--dx-color-warning);
 }
 
 .task__priority--high {
