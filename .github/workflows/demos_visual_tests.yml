@@ -607,6 +607,10 @@ jobs:
             CONSTEL: jquery(3/3)
           - STRATEGY: screenshots
             CONSTEL: jquery
+          - STRATEGY: screenshots
+            THEME: material.blue.dark
+          - STRATEGY: screenshots
+            THEME: fluent.blue.dark
     env:
       ACCESSIBILITY_TESTCAFE_REPORT_PATH: "accessibility_testcafe_report"
 
