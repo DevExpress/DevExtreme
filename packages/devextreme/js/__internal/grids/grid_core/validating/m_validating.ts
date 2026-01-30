@@ -115,6 +115,34 @@ export class ValidatingController extends modules.Controller {
     this._validationStateCache = {};
   }
 
+  public resetValidationStateForChanges(changes) {
+    if (!changes?.length) {
+      return;
+    }
+
+    changes.forEach(({ key }) => {
+      this._removeValidationData(key);
+    });
+  }
+
+  private _removeValidationData(key) {
+    if (!this._validationState?.length) {
+      return;
+    }
+
+    const keyHash = getKeyHash(key);
+    const isObjectKeyHash = isObject(keyHash);
+
+    if (!isObjectKeyHash && this._validationStateCache) {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete this._validationStateCache[keyHash];
+    }
+
+    this._validationState = this._validationState.filter((data) => (
+      isObjectKeyHash ? !equalByValue(data.key, key) : data.key !== key
+    ));
+  }
+
   public _rowIsValidated(change) {
     const validationData = this._getValidationData(change?.key);
 
@@ -972,10 +1000,14 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
   }
 
   protected _beforeCancelEditData() {
+    const validatingController = this._validatingController;
     const shouldResetValidationState = this._shouldResetValidationState();
 
     if (shouldResetValidationState) {
-      this._validatingController.initValidationState();
+      validatingController.initValidationState();
+    } else {
+      const changes = this.getChanges();
+      validatingController.resetValidationStateForChanges(changes);
     }
 
     super._beforeCancelEditData();
