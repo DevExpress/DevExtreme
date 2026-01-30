@@ -719,8 +719,6 @@ test('toIndex should not be corrected when source item gets removed from DOM', a
   await t.wait(AUTOSCROLL_WAIT_TIME);
 
   // assert
-  visibleRows = await dataGrid.apiGetVisibleRows();
-
   await t
     .expect(dataGrid.getDataRow(0).getDataCell(1).element.textContent)
     .eql('1-1')
