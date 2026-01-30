@@ -225,7 +225,7 @@ test('DataGrid should not reset its top scroll position after cell modification 
   },
 }));
 
-test.meta({ unstable: true })('Ungrouping after grouping should work correctly if row rendering mode is virtual', async (t) => {
+test('Ungrouping after grouping should work correctly if row rendering mode is virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t.expect(dataGrid.isReady()).ok();
@@ -494,7 +494,7 @@ test('Header container should have padding-right if grid has max-height and scro
   });
 });
 
-test.meta({ unstable: true })('New virtual mode. A detail row should be rendered when the last master row is expanded', async (t) => {
+test('New virtual mode. A detail row should be rendered when the last master row is expanded', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t.expect(dataGrid.isReady()).ok();
@@ -548,7 +548,7 @@ test.meta({ unstable: true })('New virtual mode. A detail row should be rendered
   });
 });
 
-test.meta({ unstable: true })('New virtual mode. An adaptive row should be rendered when the last row is expanded', async (t) => {
+test('New virtual mode. An adaptive row should be rendered when the last row is expanded', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   // act
@@ -604,7 +604,7 @@ test.meta({ unstable: true })('New virtual mode. An adaptive row should be rende
   });
 });
 
-test.meta({ unstable: true })('New virtual mode. Virtual rows should not be in view port', async (t) => {
+test('New virtual mode. Virtual rows should not be in view port', async (t) => {
   const dataGrid = new DataGrid('#container');
   const getVirtualRowInfo = ClientFunction(() => {
     const result: any = {};
@@ -883,7 +883,7 @@ test.meta({ browserSize: [800, 700] })('New mode. Rows should be rendered proper
   });
 });
 
-test.meta({ unstable: true, browserSize: [800, 800] })('Rows are rendered properly when window content is scrolled (T1070388)', async (t) => {
+test.meta({ browserSize: [800, 800] })('Rows are rendered properly when window content is scrolled (T1070388)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t.expect(dataGrid.isReady()).ok();
@@ -1837,7 +1837,7 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
 [true, false].forEach((nativeScroll) => {
   type TestCaseWindow = typeof window & { dataGridScrollableEventValues?: number[] };
 
-  test.meta({ unstable: true })(`Should not scroll back on top with virtual scrolling and adaptive master detail (nativeScroll: ${nativeScroll}) [T1278804]`, async (t) => {
+  test(`Should not scroll back on top with virtual scrolling and adaptive master detail (nativeScroll: ${nativeScroll}) [T1278804]`, async (t) => {
     // NOTE: idx + 1 logic inside POM
     const adaptiveCellIdx = 101;
     const scrollValuesThreshold = 100;
