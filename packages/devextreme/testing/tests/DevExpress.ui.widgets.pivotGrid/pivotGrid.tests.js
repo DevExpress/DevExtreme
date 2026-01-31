@@ -1044,6 +1044,43 @@ QUnit.module('dxPivotGrid', {
 
     });
 
+    QUnit.test('Reassigning dataSource keeps only one current PivotGridDataSource instance (no stale references)', function(assert) {
+        const baseOptions = {
+            store: { type: 'array', data: [] },
+            fields: [
+                { area: 'row', dataField: 'region' },
+                { area: 'column', dataField: 'date' },
+                { area: 'data', dataField: 'amount', summaryType: 'sum' }
+            ]
+        };
+
+        const dataSource1 = new PivotGridDataSource(baseOptions);
+        const dataSource2 = new PivotGridDataSource(baseOptions);
+        const dataSource3 = new PivotGridDataSource(baseOptions);
+
+        const pivotGrid = createPivotGrid({ dataSource: dataSource1 });
+        this.clock.tick(10);
+
+        assert.strictEqual(pivotGrid.getDataSource(), dataSource1, 'initial dataSource is dataSource1');
+        assert.strictEqual(pivotGrid.$element().dxPivotGridFieldChooserBase('instance').option('dataSource'), dataSource1, 'FieldChooserBase uses dataSource1');
+
+        const initialOptionChangedListLength = pivotGrid._eventsStrategy._events.optionChanged._list.length;
+
+        pivotGrid.option('dataSource', dataSource2);
+        this.clock.tick(10);
+
+        assert.strictEqual(pivotGrid.getDataSource(), dataSource2, 'current dataSource is dataSource2 after first reassignment');
+        assert.strictEqual(pivotGrid.$element().dxPivotGridFieldChooserBase('instance').option('dataSource'), dataSource2, 'FieldChooserBase uses dataSource2');
+        assert.strictEqual(pivotGrid._eventsStrategy._events.optionChanged._list.length, initialOptionChangedListLength, 'optionChanged listener count does not grow after first reassignment');
+
+        pivotGrid.option('dataSource', dataSource3);
+        this.clock.tick(10);
+
+        assert.strictEqual(pivotGrid.getDataSource(), dataSource3, 'current dataSource is dataSource3 after second reassignment');
+        assert.strictEqual(pivotGrid.$element().dxPivotGridFieldChooserBase('instance').option('dataSource'), dataSource3, 'FieldChooserBase uses current dataSource (no stale reference to dataSource1 or dataSource2)');
+        assert.strictEqual(pivotGrid._eventsStrategy._events.optionChanged._list.length, initialOptionChangedListLength, 'optionChanged listener count does not grow after multiple reassignments');
+    });
+
     QUnit.test('not show field chooser popup on description area click when fieldChooser disabled', function(assert) {
         createPivotGrid({
             fieldChooser: {

@@ -1174,15 +1174,22 @@ class PivotGrid extends Widget {
 
     that.$element().addClass(OVERFLOW_HIDDEN_CLASS);
 
-    that._createComponent(that.$element(), FieldChooserBase, {
-      dataSource: that.getDataSource(),
+    const fieldChooserOptions = {
+      dataSource: that.option('dataSource'),
       encodeHtml: that.option('encodeHtml'),
       allowFieldDragging: that.option('fieldPanel.allowFieldDragging'),
       headerFilter: that.option('headerFilter'),
       visible: that.option('visible'),
       // @ts-expect-error ts-error
       remoteSort: that.option('scrolling.mode') === 'virtual',
-    });
+    };
+
+    if (isFirstDrawing) {
+      that._createComponent(that.$element(), FieldChooserBase, fieldChooserOptions);
+    } else {
+      // @ts-expect-error dxPivotGridFieldChooserBase is registered as jQuery plugin
+      that.$element().dxPivotGridFieldChooserBase('instance').option(fieldChooserOptions);
+    }
 
     const dataArea = that._renderDataArea(dataAreaElement);
     const rowsArea = that._renderRowsArea(rowsAreaElement);
