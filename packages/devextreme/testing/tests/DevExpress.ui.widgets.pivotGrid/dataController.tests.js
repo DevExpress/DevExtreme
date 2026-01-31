@@ -3194,7 +3194,6 @@ QUnit.module('dxPivotGrid DataController', moduleConfig, () => {
         assert.deepEqual(dataController.getRowsInfo(), [
             [
                 {
-                    'colspan': 2,
                     'dataSourceIndex': 0,
                     'isLast': true,
                     'path': [
@@ -3206,7 +3205,6 @@ QUnit.module('dxPivotGrid DataController', moduleConfig, () => {
             ],
             [
                 {
-                    'colspan': 2,
                     'dataSourceIndex': 3,
                     'expanded': false,
                     'isLast': true,
@@ -3219,9 +3217,7 @@ QUnit.module('dxPivotGrid DataController', moduleConfig, () => {
             ],
             [
                 {
-                    'colspan': 2,
                     'isLast': true,
-                    'text': undefined,
                     'type': 'GT'
                 }
             ]

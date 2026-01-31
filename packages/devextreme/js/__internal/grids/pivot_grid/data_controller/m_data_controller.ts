@@ -163,18 +163,20 @@ class DataController {
     return d;
   };
 
+  _isHeaderItemEmpty = (item) => {
+    if (!item) return false;
+    const { isEmpty } = item;
+    if (isEmpty === true) return true;
+    if (isEmpty === false) return false;
+    return Array.isArray(isEmpty) && isEmpty.length > 0 && isEmpty.every(Boolean);
+  };
+
   _getHeaderItemsDepth = (headerItems) => {
     let depth = 0;
 
     foreachTree(headerItems, (items) => {
       const item = items[0];
-      let { isEmpty } = item;
-
-      if (isEmpty?.length) {
-        isEmpty = item.isEmpty.filter((v) => v).length === isEmpty.length;
-      }
-
-      if (item && isEmpty) {
+      if (this._isHeaderItemEmpty(item)) {
         return;
       }
 
