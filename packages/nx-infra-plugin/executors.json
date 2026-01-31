@@ -54,6 +54,11 @@
       "implementation": "./src/executors/karma-multi-env/executor",
       "schema": "./src/executors/karma-multi-env/schema.json",
       "description": "Run Karma tests sequentially across multiple Angular environments (client, server, hydration)"
+    },
+    "localization": {
+      "implementation": "./src/executors/localization/executor",
+      "schema": "./src/executors/localization/schema.json",
+      "description": "Generate localization message files and TypeScript CLDR data modules"
     }
   }
 }

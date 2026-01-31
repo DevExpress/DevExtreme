@@ -1,5 +1,9 @@
+import type { HeaderCellAlignment } from './types';
+
 const SELECTORS = {
   headerContent: 'text-content',
+  alignmentRight: 'dx-text-content-alignment-right',
+  alignmentLeft: 'dx-text-content-alignment-left',
 };
 
 export class HeaderCellModel {
@@ -17,6 +21,22 @@ export class HeaderCellModel {
   }
 
   public getHeaderContent(): HTMLElement | null {
-    return this.root?.querySelector(this.addWidgetPrefix(`.${SELECTORS.headerContent}`)) ?? null;
+    return this.root?.querySelector(`.${this.addWidgetPrefix(SELECTORS.headerContent)}`) ?? null;
+  }
+
+  public getAlignment(): HeaderCellAlignment {
+    const content = this.getHeaderContent();
+    const alignedRight = content?.classList.contains(SELECTORS.alignmentRight);
+    const alignedLeft = content?.classList.contains(SELECTORS.alignmentLeft);
+    const alignedCenter = alignedLeft && alignedRight;
+
+    switch (true) {
+      case alignedCenter:
+        return 'center';
+      case alignedRight:
+        return 'right';
+      default:
+        return 'left';
+    }
   }
 }

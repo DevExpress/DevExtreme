@@ -1,4 +1,3 @@
-import '@js/ui/button_group';
 import '@js/ui/drop_down_button';
 
 import registerComponent from '@js/core/component_registrator';
@@ -8,14 +7,18 @@ import $ from '@js/core/renderer';
 import { getPathParts } from '@js/core/utils/data';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
+import type { ItemClickEvent } from '@js/ui/button_group';
+import type { DateNavigatorTextInfo, ToolbarItem } from '@js/ui/scheduler';
 import Toolbar from '@js/ui/toolbar';
-import Widget from '@js/ui/widget/ui.widget';
-import type { NormalizedView } from '@ts/scheduler/utils/options/types';
+import type { OptionChanged } from '@ts/core/widget/types';
+import Widget from '@ts/core/widget/widget';
+import type { NormalizedView, SafeSchedulerOptions } from '@ts/scheduler/utils/options/types';
 
 import type { Direction } from './constants';
 import SchedulerCalendar from './m_calendar';
 import {
   getDateNavigator,
+  getTodayButtonOptions,
 } from './m_date_navigator';
 import {
   getCaption,
@@ -27,8 +30,10 @@ import {
   getDropDownViewSwitcher,
   getTabViewSwitcher,
 } from './m_view_switcher';
-import { getTodayButtonOptions } from './today';
-import type { HeaderOptions, IntervalOptions } from './types';
+import type {
+  EventMapHandler,
+  HeaderOptions, IntervalOptions,
+} from './types';
 
 const CLASSES = {
   component: 'dx-scheduler-header',
@@ -41,20 +46,19 @@ const ITEM_NAMES = {
 };
 
 export class SchedulerHeader extends Widget<HeaderOptions> {
-  eventMap: any;
+  eventMap!: Map<string, EventMapHandler[]>;
 
-  _toolbar!: Toolbar;
+  _toolbar?: Toolbar;
 
-  _calendar: any;
+  _calendar?: SchedulerCalendar;
 
-  get captionText() {
+  get captionText(): string {
     return this._getCaption().text;
   }
 
-  getIntervalOptions(date: Date): IntervalOptions {
-    const currentView = this.option('currentView');
+  public getIntervalOptions(date: Date): IntervalOptions {
+    const { currentView, firstDayOfWeek } = this.option();
     const step = getStep(currentView.type);
-    const firstDayOfWeek = this.option('firstDayOfWeek');
 
     return {
       date,
@@ -65,50 +69,42 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
     };
   }
 
-  _getDefaultOptions() {
-    // @ts-expect-error
+  public _getDefaultOptions(): HeaderOptions {
     return extend(super._getDefaultOptions(), {
       _useShortDateFormat: !devices.real().generic || devices.isSimulator(),
-    });
+    }) as HeaderOptions;
   }
 
-  _createEventMap() {
-    this.eventMap = new Map(
-      [
-        ['currentView', []],
-        ['views', []],
-        ['currentDate', [this._getCalendarOptionUpdater('value')]],
-        ['min', [this._getCalendarOptionUpdater('min')]],
-        ['max', [this._getCalendarOptionUpdater('max')]],
-        ['tabIndex', [this.repaint.bind(this)]],
-        ['focusStateEnabled', [this.repaint.bind(this)]],
-        ['useDropDownViewSwitcher', [this.repaint.bind(this)]],
-        ['indicatorTime', []],
-      ],
-    );
+  private _createEventMap(): void {
+    this.eventMap = new Map([
+      ['currentView', []],
+      ['views', []],
+      ['currentDate', [this._getCalendarOptionUpdater('value')]],
+      ['min', [this._getCalendarOptionUpdater('min')]],
+      ['max', [this._getCalendarOptionUpdater('max')]],
+      ['tabIndex', [this.repaint.bind(this)]],
+      ['focusStateEnabled', [this.repaint.bind(this)]],
+      ['useDropDownViewSwitcher', [this.repaint.bind(this)]],
+      ['indicatorTime', []],
+    ] as [string, EventMapHandler[]][]);
   }
 
-  _addEvent(name, event) {
-    if (!this.eventMap.has(name)) {
-      this.eventMap.set(name, []);
-    }
-
-    const events = this.eventMap.get(name);
+  public _addEvent(name: string, event: EventMapHandler): void {
+    const events = this.eventMap.get(name) ?? [];
     this.eventMap.set(name, [...events, event]);
   }
 
-  _optionChanged(args) {
+  public _optionChanged(args: OptionChanged<HeaderOptions>): void {
     const { name, value } = args;
 
-    if (this.eventMap.has(name)) {
-      const events = this.eventMap.get(name);
-      events.forEach((event) => {
-        event(value);
-      });
-    }
+    const events = this.eventMap.get(name);
+
+    events?.forEach((event) => {
+      event(value);
+    });
   }
 
-  onToolbarOptionChanged(fullName: string, value: unknown): void {
+  public onToolbarOptionChanged(fullName: string, value: unknown): void {
     const parts = getPathParts(fullName);
     const optionName = fullName.replace(/^toolbar\./, '');
 
@@ -119,32 +115,27 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
         this.repaint();
         break;
       case fullName === 'toolbar.items':
-        this._toolbar.option(
+        this._toolbar?.option(
           'items',
-          (value as []).map((item) => this._parseItem(item)),
+          (value as []).map((item: ToolbarItem) => this._parseItem(item)),
         );
         break;
       case parts[1] === 'items' && parts.length === 3:
-        // `toolbar.items[i]` case
-        this._toolbar.option(optionName, this._parseItem(value));
+        this._toolbar?.option(optionName, this._parseItem(value as ToolbarItem));
         break;
       default:
-        // `toolbar.prop` case
-        // `toolbar.items[i].prop` case
-        this._toolbar.option(optionName, value);
+        this._toolbar?.option(optionName, value);
     }
   }
 
-  _init() {
-    // @ts-expect-error
+  public _init(): void {
     super._init();
     this._createEventMap();
 
     this.$element().addClass(CLASSES.component);
   }
 
-  _render() {
-    // @ts-expect-error
+  public _render(): void {
     super._render();
 
     this._createEventMap();
@@ -152,20 +143,18 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
     this._toggleVisibility();
   }
 
-  _renderToolbar() {
+  private _renderToolbar(): void {
     const config = this._createToolbarConfig();
 
     const toolbarElement = $('<div>');
     toolbarElement.appendTo(this.$element());
 
-    // @ts-expect-error
     this._toolbar = this._createComponent(toolbarElement, Toolbar, config);
   }
 
-  _toggleVisibility(): void {
-    const toolbarOptions = this.option('toolbar') as any;
-    const isHeaderShown = toolbarOptions.visible
-      || (toolbarOptions.visible === undefined && toolbarOptions.items.length);
+  public _toggleVisibility(): void {
+    const { toolbar } = this.option();
+    const isHeaderShown = toolbar.visible ?? toolbar.items.length;
 
     if (isHeaderShown) {
       this.$element().removeClass(CLASSES.invisible);
@@ -174,17 +163,17 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
     }
   }
 
-  _createToolbarConfig() {
-    const options = this.option('toolbar');
-    const parsedItems = options.items.map((element) => this._parseItem(element));
+  private _createToolbarConfig(): SafeSchedulerOptions['toolbar'] {
+    const { toolbar } = this.option();
+    const parsedItems = toolbar.items.map((element) => this._parseItem(element));
 
     return {
-      ...options,
+      ...toolbar,
       items: parsedItems,
     };
   }
 
-  _parseItem(item) {
+  private _parseItem(item: ToolbarItem | string): ToolbarItem {
     const itemName = typeof item === 'string' ? item : item.name;
     const itemOptions = typeof item === 'string' ? {} : item;
 
@@ -193,7 +182,7 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
         case ITEM_NAMES.today:
           return getTodayButtonOptions(this, itemOptions);
         case ITEM_NAMES.viewSwitcher:
-          return this.option('useDropDownViewSwitcher')
+          return this.option().useDropDownViewSwitcher
             ? getDropDownViewSwitcher(this, itemOptions)
             : getTabViewSwitcher(this, itemOptions);
         case ITEM_NAMES.dateNavigator:
@@ -205,74 +194,79 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
       }
     }
 
-    return extend(true, {}, item);
+    return extend(true, {}, item) as ToolbarItem;
   }
 
-  _callEvent(event, arg) {
-    if (this.eventMap.has(event)) {
-      const events = this.eventMap.get(event);
-      events.forEach((event) => event(arg));
-    }
+  private _callEvent(event: string, arg: unknown): void {
+    const events = this.eventMap.get(event);
+
+    events?.forEach((eventMapHandler) => eventMapHandler(arg));
   }
 
-  _updateCurrentView(view: Required<NormalizedView>) {
-    this.option('onCurrentViewChange')(view.name);
+  public _updateCurrentView(view: Required<NormalizedView>): void {
+    const { onCurrentViewChange } = this.option();
+    onCurrentViewChange(view.name);
   }
 
-  _updateCalendarValueAndCurrentDate(date) {
+  private _updateCalendarValueAndCurrentDate(date: Date): void {
     this._updateCurrentDate(date);
-    this._calendar.option('value', date);
+    this._calendar?.option('value', date);
   }
 
-  _updateCurrentDate(date) {
-    this.option('onCurrentDateChange')(date);
+  public _updateCurrentDate(date: Date): void {
+    const { onCurrentDateChange } = this.option();
+    onCurrentDateChange(date);
     this._callEvent('currentDate', date);
   }
 
-  _renderCalendar() {
-    // @ts-expect-error
+  private _renderCalendar(): void {
+    const {
+      currentDate, min, max, firstDayOfWeek, focusStateEnabled, tabIndex,
+    } = this.option();
     this._calendar = this._createComponent('<div>', SchedulerCalendar, {
-      value: this.option('currentDate'),
-      min: this.option('min'),
-      max: this.option('max'),
-      firstDayOfWeek: this.option('firstDayOfWeek'),
-      focusStateEnabled: this.option('focusStateEnabled'),
-      tabIndex: this.option('tabIndex'),
-      onValueChanged: (e) => {
+      value: currentDate,
+      min,
+      max,
+      firstDayOfWeek,
+      focusStateEnabled,
+      tabIndex,
+      onValueChanged: async (e) => {
         this._updateCurrentDate(e.value);
-        this._calendar.hide();
+        await this._calendar?.hide();
       },
     });
 
     this._calendar.$element().appendTo(this.$element());
   }
 
-  _getCalendarOptionUpdater(name) {
-    return (value) => {
+  private _getCalendarOptionUpdater(name: string) {
+    return (value: unknown): void => {
       if (this._calendar) {
         this._calendar.option(name, value);
       }
     };
   }
 
-  _getNextDate(direction: Direction, initialDate?: Date) {
-    const date = initialDate ?? this.option('currentDate');
+  public _getNextDate(direction: Direction, initialDate?: Date): Date {
+    const { currentDate } = this.option();
+    const date = initialDate ?? currentDate;
     const options = this.getIntervalOptions(date);
 
     return getNextIntervalDate(options, direction);
   }
 
-  _getDisplayedDate() {
-    const startViewDate = new Date(this.option('startViewDate'));
-    const isMonth = this.option('currentView')?.type === 'month';
+  private _getDisplayedDate(): Date {
+    const { startViewDate, currentView } = this.option();
+    const isMonth = currentView.type === 'month';
 
     return isMonth ? nextWeek(startViewDate) : startViewDate;
   }
 
-  _getCaptionOptions() {
-    let date = this.option('currentDate');
+  private _getCaptionOptions(): IntervalOptions {
+    const { currentDate, startViewDate } = this.option();
+    let date = currentDate;
 
-    if (this.option('startViewDate')) {
+    if (startViewDate) {
       date = this._getDisplayedDate();
     }
 
@@ -281,28 +275,23 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
     return this.getIntervalOptions(date);
   }
 
-  _getCaption() {
+  public _getCaption(): DateNavigatorTextInfo {
+    const { customizeDateNavigatorText } = this.option();
     const options = this._getCaptionOptions();
-    const customizationFunction = this.option('customizeDateNavigatorText');
-    const useShortDateFormat = this.option('_useShortDateFormat');
+    const useShortDateFormat = this.option()._useShortDateFormat;
 
-    return getCaption(options, Boolean(useShortDateFormat), customizationFunction);
+    return getCaption(options, Boolean(useShortDateFormat), customizeDateNavigatorText);
   }
 
-  _updateDateByDirection(direction: Direction) {
+  public _updateDateByDirection(direction: Direction): void {
     const date = this._getNextDate(direction);
 
     this._updateCalendarValueAndCurrentDate(date);
   }
 
-  _showCalendar(e) {
-    this._calendar.show(e.element);
-  }
-
-  _hideCalendar() {
-    this._calendar.hide();
+  public async _showCalendar(e: ItemClickEvent): Promise<void> {
+    await this._calendar?.show(e.element);
   }
 }
 
-// @ts-expect-error
 registerComponent('dxSchedulerHeader', SchedulerHeader);

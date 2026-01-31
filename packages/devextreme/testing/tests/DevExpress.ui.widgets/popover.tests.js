@@ -425,37 +425,6 @@ QUnit.module('arrow positioning', () => {
         }
     });
 
-    QUnit.skip('arrow position is calculated relative to the target when popup-content is hidden', function(assert) {
-        fixtures.simple.create();
-        try {
-            const $target = $('#where').css({
-                width: 25,
-                height: 25
-            });
-
-            const $popover = $('#what');
-            const popover = new Popover($popover, {
-                target: $target,
-                animation: null,
-                visible: false
-            });
-
-            $popover.hide();
-            $popover.find(`.${OVERLAY_CONTENT_CLASS}`).hide();
-            popover.option('visible', true);
-            $popover.show();
-
-            const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
-            const arrowOffsetTop = $target.offset().top + getHeight($target);
-            const arrowOffsetLeft = $target.offset().left + getWidth($target) / 2 - getWidth($arrow) / 2;
-
-            assert.equal($arrow.offset().top, arrowOffsetTop, 'popover arrow positioned at the bottom of the target vertically');
-            assert.ok(Math.abs($arrow.offset().left - arrowOffsetLeft) <= 0.5, 'popover arrow positioned at the center of the target horizontally');
-        } finally {
-            fixtures.collisionTopLeft.drop();
-        }
-    });
-
     QUnit.test('arrow bottom left position', function(assert) {
         fixtures.collisionTopLeft.create();
         try {
