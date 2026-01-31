@@ -1175,7 +1175,7 @@ class PivotGrid extends Widget {
     that.$element().addClass(OVERFLOW_HIDDEN_CLASS);
 
     const fieldChooserOptions = {
-      dataSource: that.option('dataSource'),
+      dataSource: that.getDataSource(),
       encodeHtml: that.option('encodeHtml'),
       allowFieldDragging: that.option('fieldPanel.allowFieldDragging'),
       headerFilter: that.option('headerFilter'),
