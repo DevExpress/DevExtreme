@@ -3218,7 +3218,8 @@ QUnit.module('dxPivotGrid DataController', moduleConfig, () => {
             [
                 {
                     'type': 'GT',
-                    'isLast': true
+                    'isLast': true,
+                    'isEmpty': undefined
                 }
             ]
         ]);
