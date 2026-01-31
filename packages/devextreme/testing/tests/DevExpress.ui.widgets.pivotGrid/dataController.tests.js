@@ -3191,6 +3191,8 @@ QUnit.module('dxPivotGrid DataController', moduleConfig, () => {
             ]
         ], 'cells info');
 
+        // With hideEmptySummaryCells, empty child items (P1, P2 under A) are not counted in depth,
+        // so row depth is 1 and header info has no colspan (breadth 1).
         assert.deepEqual(dataController.getRowsInfo(), [
             [
                 {
