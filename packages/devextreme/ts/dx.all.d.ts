@@ -15262,7 +15262,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.contextToolbox.shapes]
        */
-      shapes?: Array<DevExpress.ui.dxDiagram.ShapeType> | Array<string>;
+      shapes?: Array<DevExpress.ui.dxDiagram.ShapeType | string>;
       /**
        * [descr:dxDiagramOptions.contextToolbox.width]
        */
@@ -15945,7 +15945,7 @@ declare module DevExpress.ui {
             /**
              * [descr:dxDiagramOptions.toolbox.groups.shapes]
              */
-            shapes?: Array<DevExpress.ui.dxDiagram.ShapeType> | Array<string>;
+            shapes?: Array<DevExpress.ui.dxDiagram.ShapeType | string>;
             /**
              * [descr:dxDiagramOptions.toolbox.groups.title]
              */
