@@ -287,7 +287,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       /**
        * @docid
        */
-      shapes?: Array<ShapeType> | Array<string>;
+      shapes?: Array<ShapeType | string>;
       /**
        * @docid
        * @default 152
@@ -1068,7 +1068,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
         /**
          * @docid
          */
-        shapes?: Array<ShapeType> | Array<string>;
+        shapes?: Array<ShapeType | string>;
         /**
          * @docid
          */
