@@ -41,7 +41,6 @@ jobs:
         with:
           ref: refs/pull/${{ inputs.pr_number }}/head
           fetch-depth: 1
-          submodules: true
 
       - name: Use Node.js
         if: inputs.action == 'deploy'
@@ -59,7 +58,6 @@ jobs:
         if: inputs.action == 'deploy'
         shell: bash
         run: |
-          set -euo pipefail
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
       - name: Setup pnpm + nx cache
