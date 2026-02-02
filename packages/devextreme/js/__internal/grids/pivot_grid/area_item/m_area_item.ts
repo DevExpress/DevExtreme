@@ -90,7 +90,7 @@ abstract class AreaItem {
     return this.component.option.apply(this.component, arguments);
   }
 
-  _getRowElement(index: number) : HTMLTableRowElement | null {
+  _getRowElement(index: number): HTMLTableRowElement | null {
     if (this._tableElement?.length > 0) {
       const tableElement = this._tableElement.get(0) as HTMLTableElement;
       return tableElement.rows[index];
