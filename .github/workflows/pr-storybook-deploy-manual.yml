@@ -32,7 +32,7 @@ jobs:
     name: ${{ inputs.action }} Storybook preview for PR
     runs-on: ubuntu-latest
 
-    environment: preview
+    environment: github-pages
 
     steps:
       - name: Checkout PR head commit
