@@ -1866,7 +1866,7 @@ export class ColumnsController extends modules.Controller {
   public getVisibleDataColumnsByBandColumn(bandColumnIndex: number) {
     const that = this;
     const bandColumnsCache = that.getBandColumnsCache();
-    const result = this.getChildrenByBandColumn(bandColumnIndex, bandColumnsCache.columnChildrenByIndex);
+    const result = getChildrenByBandColumn(bandColumnIndex, bandColumnsCache.columnChildrenByIndex, true);
 
     return result
       .filter((column) => !column.isBand && column.visible);

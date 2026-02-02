@@ -115,7 +115,7 @@ const getStickyOffsetCore = function (
 
 const isFirstOrLastColumn = function (
   that: ColumnsController,
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+
   column,
   rowIndex: number,
   onlyWithinBandColumn = false,
@@ -243,7 +243,7 @@ export const needToRemoveColumnBorder = function (
   isDataColumn = false,
 ): boolean {
   const visibleColumns = that.getVisibleColumns(isDataColumn ? null : rowIndex);
-  const parentColumn = that.getParentColumn(column);
+  const parentColumn = !isDefined(column.type) && that.getParentColumn(column);
 
   if (parentColumn) {
     const isFirstColumn = that.isFirstColumn(column, rowIndex, true);

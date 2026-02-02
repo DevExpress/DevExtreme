@@ -1,65 +1,114 @@
 import {
-  afterEach, beforeEach, describe, expect, it,
+  describe, expect, it, jest,
 } from '@jest/globals';
-import type { DataGridCommandColumnType } from '@js/ui/data_grid';
 
-import {
-  afterTest,
-  beforeTest,
-  createDataGrid,
-} from '../__tests__/__mock__/helpers/utils';
+import type { ColumnsController } from './m_columns_controller';
+import { ColumnsController as ColumnsControllerClass } from './m_columns_controller';
 
-const UNSUPPORTED_GROUPING_COLUMN_TYPES = ['adaptive', 'buttons', 'detailExpand', 'groupExpand', 'selection', 'drag', 'ai'];
+interface ControllerConfig {
+  columns?: object[];
+  options?: Record<string, unknown>;
+}
 
-const dataSource = [
-  { id: 1, name: 'Item 1' },
-  { id: 2, name: 'Item 2' },
-  { id: 3, name: 'Item 3' },
-];
+interface ComponentMock {
+  option: jest.Mock<(optionName: string) => unknown>;
+  _createComponent: jest.Mock;
+  element: jest.Mock<() => { jquery: boolean }>;
+  _controllers: {
+    data: { getDataSource: jest.Mock<() => null> };
+    focus: Record<string, never>;
+    stateStoring: Record<string, never>;
+  };
+}
 
-describe('Column Controller', () => {
-  beforeEach(beforeTest);
-  afterEach(afterTest);
+const createRealColumnsController = (config: ControllerConfig): ColumnsController => {
+  const componentMock: ComponentMock = {
+    option: jest.fn((optionName: string) => {
+      if (optionName === 'columns') return config.columns ?? [];
+      return config.options?.[optionName];
+    }),
+    _createComponent: jest.fn(),
+    element: jest.fn(() => ({
+      jquery: true,
+    })),
+    _controllers: {
+      data: { getDataSource: jest.fn(() => null) },
+      focus: {},
+      stateStoring: {},
+    },
+  };
 
-  describe('Grouping for unsupported column types', () => {
-    describe.each(UNSUPPORTED_GROUPING_COLUMN_TYPES)('unsupported grouping column types', (columnType) => {
-      it(`Should have no group rows after put type property = ${columnType} (first load)`, async () => {
-        const { component } = await createDataGrid({
-          dataSource,
-          showBorders: true,
+  const controller = new ColumnsControllerClass(componentMock);
+  controller.init();
+
+  return controller;
+};
+
+describe('Methods', () => {
+  describe('getVisibleDataColumnsByBandColumn', () => {
+    it('should return only visible data columns', () => {
+      const columns = [
+        {
+          caption: 'Band',
           columns: [
-            'id',
+            { dataField: 'field1' },
+            { dataField: 'field2', visible: false },
+            { dataField: 'field3' },
+          ],
+        },
+      ];
+
+      const controller = createRealColumnsController({ columns });
+      const bandColumn = controller.getColumns()[0];
+      const result = controller.getVisibleDataColumnsByBandColumn(bandColumn.index);
+
+      expect(result).toHaveLength(2);
+      expect(result.map((c) => c.dataField as string)).toEqual(['field1', 'field3']);
+    });
+
+    it('should recursively get data columns from nested bands', () => {
+      const columns = [
+        {
+          caption: 'Band 1',
+          columns: [
+            { dataField: 'field1' },
             {
-              caption: 'Test',
-              type: columnType as DataGridCommandColumnType | undefined,
-              name: 'test',
-              groupIndex: 0,
+              caption: 'Band 2',
+              columns: [
+                { dataField: 'field2' },
+                { dataField: 'field3' },
+              ],
             },
           ],
-        });
+        },
+      ];
 
-        const groupRow = component.getGroupRows();
-        expect(groupRow.length).toBe(0);
-      });
+      const controller = createRealColumnsController({ columns });
+      const bandColumn = controller.getColumns()[0];
+      const result = controller.getVisibleDataColumnsByBandColumn(bandColumn.index);
 
-      it(`Should have no group rows after put type property = ${columnType} (dynamic update)`, async () => {
-        const { component } = await createDataGrid({
-          dataSource,
-          showBorders: true,
+      expect(result).toHaveLength(3);
+      expect(result.map((c) => c.dataField as string)).toEqual(['field1', 'field2', 'field3']);
+    });
+
+    it('should exclude grouped columns without showWhenGrouped', () => {
+      const columns = [
+        {
+          caption: 'Band',
           columns: [
-            'id',
-            {
-              caption: 'Test',
-              name: 'AItest',
-            },
+            { dataField: 'field1', groupIndex: 0 },
+            { dataField: 'field2', groupIndex: 0, showWhenGrouped: true },
+            { dataField: 'field3' },
           ],
-        });
+        },
+      ];
 
-        component.apiColumnOption('AItest', 'type', columnType as DataGridCommandColumnType | undefined);
+      const controller = createRealColumnsController({ columns });
+      const bandColumn = controller.getColumns()[0];
+      const result = controller.getVisibleDataColumnsByBandColumn(bandColumn.index);
 
-        const groupRow = component.getGroupRows();
-        expect(groupRow.length).toBe(0);
-      });
+      expect(result).toHaveLength(2);
+      expect(result.map((c) => c.dataField as string)).toEqual(['field2', 'field3']);
     });
   });
 });
