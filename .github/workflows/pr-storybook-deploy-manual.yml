@@ -84,9 +84,6 @@ jobs:
         uses: rossjrw/pr-preview-action@8ff09e486b4c23709012eedd3b42e9f0b95dd0c5 # v1
         with:
           action: ${{ inputs.action }}
-          pr-number: ${{ inputs.pr_number }}
           source-dir: ${{ env.SOURCE_DIR }}
           preview-branch: gh-pages
           umbrella-dir: preview
-          comment: false
-          token: ${{ secrets.GITHUB_TOKEN }}
