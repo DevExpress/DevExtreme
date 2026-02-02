@@ -47,13 +47,21 @@
       },
       "dependsOn": ["build"]
     },
+    "build-parcel-watcher": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "cross-env npm_config_build_from_source=true pnpm rebuild --recursive @parcel/watcher"
+      },
+      "dependsOn": ["build-parcel-watcher"]
+    },
     "test--parcel": {
       "executor": "nx:run-commands",
       "options": {
         "cwd": "{projectRoot}",
         "command": "parcel build ./entry/modules_esm.js --no-cache --dist-dir ./dist/dist_parsel"
       },
-      "dependsOn": ["build"]
+      "dependsOn": ["build-parcel-watcher"]
     },
     "test--browserify-cjs": {
       "executor": "nx:run-commands",
