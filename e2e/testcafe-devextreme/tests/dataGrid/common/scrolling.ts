@@ -232,8 +232,18 @@ test('Ungrouping after grouping should work correctly if row rendering mode is v
 
   // act
   await dataGrid.scrollTo(t, { top: 500 });
-  await dataGrid.apiColumnOption('group', 'groupIndex', 0);
   let visibleRows = await dataGrid.apiGetVisibleRows();
+
+  // assert
+  await t
+    .expect(visibleRows[0].rowType)
+    .eql('data')
+    .expect(visibleRows[0].key)
+    .notEql(1);
+
+  // act
+  await dataGrid.apiColumnOption('group', 'groupIndex', 0);
+  visibleRows = await dataGrid.apiGetVisibleRows();
 
   // assert
   await t
@@ -279,7 +289,7 @@ test('Ungrouping after grouping should work correctly if row rendering mode is v
     return items;
   };
   return createWidget('dxDataGrid', {
-    height: 400,
+    height: 500,
     loadingTimeout: null,
     keyExpr: 'id',
     dataSource: getItems(),
