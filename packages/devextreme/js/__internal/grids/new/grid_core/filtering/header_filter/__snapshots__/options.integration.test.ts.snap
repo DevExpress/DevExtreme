@@ -123,6 +123,7 @@ exports[`Options Column.HeaderFilter dataSource: custom dataSource 1`] = `
                 </div>
                 <div
                   aria-label="Items"
+                  aria-multiselectable="true"
                   class="dx-list-items"
                   role="listbox"
                 >
@@ -490,6 +491,7 @@ exports[`Options Column.HeaderFilter dataSource: custom dataSource with exclude 
                 </div>
                 <div
                   aria-label="Items"
+                  aria-multiselectable="true"
                   class="dx-list-items"
                   role="listbox"
                 >
@@ -857,6 +859,7 @@ exports[`Options Column.HeaderFilter dataSource: custom dataSource with exclude 
                 </div>
                 <div
                   aria-label="Items"
+                  aria-multiselectable="true"
                   class="dx-list-items"
                   role="listbox"
                 >
@@ -1224,6 +1227,7 @@ exports[`Options Column.HeaderFilter dataSource: custom dataSource with filter v
                 </div>
                 <div
                   aria-label="Items"
+                  aria-multiselectable="true"
                   class="dx-list-items"
                   role="listbox"
                 >
@@ -1591,6 +1595,7 @@ exports[`Options Column.HeaderFilter filterType + values: exclude filter 1`] = `
                 </div>
                 <div
                   aria-label="Items"
+                  aria-multiselectable="true"
                   class="dx-list-items"
                   role="listbox"
                 >
@@ -2069,6 +2074,7 @@ exports[`Options Column.HeaderFilter filterType + values: exclude filter with va
                 </div>
                 <div
                   aria-label="Items"
+                  aria-multiselectable="true"
                   class="dx-list-items"
                   role="listbox"
                 >
@@ -2547,6 +2553,7 @@ exports[`Options Column.HeaderFilter filterType + values: filter values 1`] = `
                 </div>
                 <div
                   aria-label="Items"
+                  aria-multiselectable="true"
                   class="dx-list-items"
                   role="listbox"
                 >
@@ -3025,6 +3032,7 @@ exports[`Options HeaderFilter texts: custom translations 1`] = `
                 </div>
                 <div
                   aria-label="Items"
+                  aria-multiselectable="true"
                   class="dx-list-items"
                   role="listbox"
                 >
@@ -3355,6 +3363,7 @@ exports[`Options HeaderFilter texts: default translation 1`] = `
                 </div>
                 <div
                   aria-label="Items"
+                  aria-multiselectable="true"
                   class="dx-list-items"
                   role="listbox"
                 >
