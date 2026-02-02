@@ -187,7 +187,10 @@
         "!{projectRoot}/js/**/*.d.ts",
         "!{projectRoot}/js/__internal/**/*"
       ],
-      "outputs": ["{projectRoot}/artifacts/transpiled"],
+      "outputs": [
+        "{projectRoot}/artifacts/transpiled",
+        "{projectRoot}/artifacts/transpiled-renovation-npm"
+      ],
       "cache": true
     },
     "copy:json:transpiled": {
@@ -280,7 +283,10 @@
         }
       },
       "inputs": ["{projectRoot}/artifacts/dist_ts/__internal/**/*.{js,jsx}"],
-      "outputs": ["{projectRoot}/artifacts/transpiled/__internal"],
+      "outputs": [
+        "{projectRoot}/artifacts/transpiled/__internal",
+        "{projectRoot}/artifacts/transpiled-renovation-npm/__internal"
+      ],
       "cache": true
     },
     "build:npm:esm:internal": {
@@ -329,7 +335,11 @@
         }
       },
       "inputs": ["{projectRoot}/build/bundle-templates/**/*.js"],
-      "outputs": ["{projectRoot}/artifacts/transpiled/bundles"],
+      "outputs": [
+        "{projectRoot}/artifacts/transpiled/bundles",
+        "{projectRoot}/artifacts/transpiled-renovation-npm/bundles",
+        "{projectRoot}/artifacts/transpiled-esm-npm/bundles"
+      ],
       "cache": true
     },
     "build:npm:dual-mode": {
