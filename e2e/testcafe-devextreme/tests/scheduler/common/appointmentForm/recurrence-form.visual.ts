@@ -25,7 +25,7 @@ const SCHEDULER_SELECTOR = '#container';
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
     const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, false);
 
-    await appointmentPopup.openRecurrenceForm(t, frequency);
+    await appointmentPopup.selectRepeatValue(t, frequency);
 
     await testScreenshot(
       t,
@@ -60,7 +60,7 @@ test('recurrence form with icons', async (t) => {
 
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
   const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, true);
-  await appointmentPopup.openRecurrenceSettings(t);
+  await appointmentPopup.clickRecurrenceSettingsButton(t);
 
   await testScreenshot(
     t,
@@ -95,7 +95,7 @@ test('recurrence form readonly state', async (t) => {
 
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
   const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, false);
-  await appointmentPopup.openRecurrenceSettings(t);
+  await appointmentPopup.clickRecurrenceSettingsButton(t);
 
   await testScreenshot(
     t,
@@ -123,7 +123,7 @@ test.meta({ browserSize: [450, 1000] })('recurrence form on mobile screen', asyn
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
   const appointmentPopup = await scheduler.openAppointmentPopup(t, undefined, false);
-  await appointmentPopup.openRecurrenceForm(t, 'Weekly');
+  await appointmentPopup.selectRepeatValue(t, 'Weekly');
 
   await testScreenshot(
     t,
@@ -159,7 +159,7 @@ test.meta({ browserSize: [1500, 1500] })('recurrence form with labelMode=static'
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
   const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, true);
 
-  await appointmentPopup.openRecurrenceSettings(t);
+  await appointmentPopup.clickRecurrenceSettingsButton(t);
 
   await testScreenshot(
     t,
