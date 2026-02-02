@@ -78,7 +78,7 @@ jobs:
       - name: Build Storybook preview (static)
         if: inputs.action == 'deploy'
         run: |
-          pnpm nx build devextreme-react-storybook
+          pnpx nx build devextreme-react-storybook
 
       - name: Deploy/remove PR preview
         uses: rossjrw/pr-preview-action@8ff09e486b4c23709012eedd3b42e9f0b95dd0c5 # v1
