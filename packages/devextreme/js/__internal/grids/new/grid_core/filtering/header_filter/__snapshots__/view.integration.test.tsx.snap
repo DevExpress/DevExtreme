@@ -123,6 +123,7 @@ exports[`HeaderFilter View integration should render popup with list by default 
                 </div>
                 <div
                   aria-label="Items"
+                  aria-multiselectable="true"
                   class="dx-list-items"
                   role="listbox"
                 >
@@ -601,6 +602,7 @@ exports[`HeaderFilter View integration should render popup with tree list if dat
                 </div>
                 <div
                   aria-label="Items"
+                  aria-multiselectable="true"
                   class="dx-list-items"
                   role="listbox"
                 >
