@@ -562,9 +562,11 @@ test('New virtual mode. A detail row should be rendered when the last master row
 
 test('New virtual mode. An adaptive row should be rendered when the last row is expanded', async (t) => {
   const dataGrid = new DataGrid('#container');
+  const COLUMNS_AMOUNT = 100;
+  const COLUMN_HEIGHT = 48.5; // depends on theme
 
   // act
-  await dataGrid.scrollTo(t, { top: 3300 });
+  await dataGrid.scrollTo(t, { top: COLUMNS_AMOUNT * COLUMN_HEIGHT });
   await t
     .wait(300)
     .click(dataGrid.getDataRow(99).getCommandCell(3).element);
