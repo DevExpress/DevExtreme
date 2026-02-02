@@ -7,12 +7,13 @@ import {
   createDataGrid,
 } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
 
-describe('Bugs', () => {
+describe('DataGrid Cell Editing', () => {
   beforeEach(beforeTest);
   afterEach(afterTest);
 
-  describe('T1308327 - DataGrid - Cell value is not restored after canceling changes in cell editing mode if repaintChangesOnly is enabled', () => {
-    it('should restore cell value after canceling changes with validation error', async () => {
+  // T1308327
+  describe('when showEditorAlways and repaintChangesOnly is enabled', () => {
+    it('should restore the value after canceling changes with validation error (T1308327)', async () => {
       const data = [
         { id: 1, name: 'Job 1', article: 'Article A' },
         { id: 2, name: 'Job 2', article: 'Article B' },
