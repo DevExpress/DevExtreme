@@ -93,9 +93,15 @@ const runExecutor: PromiseExecutor<BabelTransformExecutorSchema> = async (option
     const sourcePath = path.join(projectRoot, options.sourcePattern);
     const globPattern = isWindowsOS() ? normalizeGlobPathForWindows(sourcePath) : sourcePath;
 
+    const rawExcludePatterns = options.excludePatterns ?? [];
+    const excludePatterns = rawExcludePatterns.map((pattern) => {
+      const resolved = path.isAbsolute(pattern) ? pattern : path.join(projectRoot, pattern);
+      return isWindowsOS() ? normalizeGlobPathForWindows(resolved) : resolved;
+    });
+
     const sourceFiles = await glob(globPattern, {
       absolute: true,
-      ignore: options.excludePatterns || [],
+      ignore: excludePatterns,
     });
 
     if (sourceFiles.length === 0) {
