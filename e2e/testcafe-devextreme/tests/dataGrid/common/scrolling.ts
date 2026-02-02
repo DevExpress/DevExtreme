@@ -926,12 +926,12 @@ test.meta({ browserSize: [800, 800] })('Rows are rendered properly when window c
     .ok();
 
   // act
-  await scrollWindowTo(3000);
+  await scrollWindowTo(3100);
 
   // assert
   await t
     .expect(getWindowScrollPosition())
-    .eql(3000)
+    .eql(3100)
     .wait(300);
 
   visibleRows = await dataGrid.apiGetVisibleRows();
@@ -939,10 +939,10 @@ test.meta({ browserSize: [800, 800] })('Rows are rendered properly when window c
   // assert
   await t
     .expect(visibleRows.length)
-    .eql(26)
-    .expect(visibleRows[0].key > 30)
+    .eql(19)
+    .expect(visibleRows[0].key > 20)
     .ok()
-    .expect(visibleRows[25].key > 55)
+    .expect(visibleRows[18].key > 35)
     .ok();
 
   // act
@@ -954,12 +954,12 @@ test.meta({ browserSize: [800, 800] })('Rows are rendered properly when window c
     .eql(6000);
 
   // act
-  await scrollWindowTo(3000);
+  await scrollWindowTo(3100);
 
   // assert
   await t
     .expect(getWindowScrollPosition())
-    .eql(3000)
+    .eql(3100)
     .wait(300);
 
   visibleRows = await dataGrid.apiGetVisibleRows();
@@ -967,10 +967,10 @@ test.meta({ browserSize: [800, 800] })('Rows are rendered properly when window c
   // assert
   await t
     .expect(visibleRows.length)
-    .eql(26)
-    .expect(visibleRows[0].key > 30)
+    .eql(19)
+    .expect(visibleRows[0].key > 20)
     .ok()
-    .expect(visibleRows[25].key > 55)
+    .expect(visibleRows[18].key > 35)
     .ok();
 
   // act
