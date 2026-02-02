@@ -28,7 +28,7 @@
 >
   <div *dxTemplate="let e of 'item'">
     @if(e.color) {
-    <div class="item-badge" [ngStyle]="{ backgroundColor: e.color }"></div>
+    <div class="item-badge" [style.background-color]="e.color"></div>
     }
     <div class="item-text">{{ e.text }}</div>
   </div>
