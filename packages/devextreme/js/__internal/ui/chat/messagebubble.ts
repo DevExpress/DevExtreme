@@ -116,7 +116,6 @@ class MessageBubble extends Widget<Properties> {
 
       return;
     }
-
     switch (type) {
       case 'image':
         this.$element().addClass(CHAT_MESSAGEBUBBLE_HAS_IMAGE_CLASS);
