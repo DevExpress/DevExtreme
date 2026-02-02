@@ -5,14 +5,26 @@ import { a11yCheck } from '../../../helpers/accessibility/utils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { getData } from '../../dataGrid/helpers/generateDataSourceData';
-import { isMaterialBased } from '../../../helpers/themeUtils';
+import { isFluent } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`DataGrid - Common`
   .page(url(__dirname, '../../container.html'));
 
 const DATA_GRID_SELECTOR = '#container';
 
-const a11yCheckConfig = isMaterialBased() ? { runOnly: 'color-contrast' } : { };
+const a11yCheckConfig = isFluent() ? {} : { runOnly: 'color-contrast' };
+
+test('Grid without config', async (t) => {
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [],
+}));
 
 test('Grid without data', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -24,6 +36,9 @@ test('Grid without data', async (t) => {
   await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [],
+  columns: [
+    'test',
+  ],
 }));
 
 test('Sorting and group panel', async (t) => {
