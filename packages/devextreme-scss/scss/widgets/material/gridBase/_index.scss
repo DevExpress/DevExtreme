@@ -717,15 +717,6 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
           }
         }
       }
-
-      .dx-row {
-        &.dx-header-row {
-          > td {
-            border-right: 1px solid;
-            border-right-color: $material-grid-base-border-color;
-          }
-        }
-      }
     }
 
     &.dx-header-multi-row:not(.dx-#{$widget-name}-sticky-columns) {
