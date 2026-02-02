@@ -1,7 +1,7 @@
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { ClassNames as CLASS } from 'devextreme-testcafe-models/dataGrid/classNames';
+import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
 import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
@@ -620,9 +620,11 @@ test('New virtual mode. An adaptive row should be rendered when the last row is 
 
 test('New virtual mode. Virtual rows should not be in view port', async (t) => {
   const dataGrid = new DataGrid('#container');
+  const virtualRowSelector = `.${ClassNames.virtualRow}`;
+  const dataRowSelector = `.${ClassNames.dataRow}`;
   const getVirtualRowInfo = ClientFunction(() => {
     const result: any = {};
-    const $virtualRows = $((window as any).widget.element()).find(CLASS.virtualRow);
+    const $virtualRows = $((window as any).widget.element()).find(virtualRowSelector);
 
     result.count = $virtualRows.length;
     $virtualRows.each((index, el) => {
@@ -634,17 +636,17 @@ test('New virtual mode. Virtual rows should not be in view port', async (t) => {
     });
 
     return result;
-  });
+  }, { dependencies: { virtualRowSelector } });
   const getVisibleRowsHeight = ClientFunction(() => {
     let result = 0;
-    const $rows = $((window as any).widget.element()).find(CLASS.dataRow);
+    const $rows = $((window as any).widget.element()).find(dataRowSelector);
 
     $rows.each((_, el) => {
       result += $(el).height() ?? 0;
     });
 
     return result;
-  });
+  }, { dependencies: { dataRowSelector } });
 
   await t.wait(350);
   let visibleRows = await dataGrid.apiGetVisibleRows();
@@ -654,16 +656,16 @@ test('New virtual mode. Virtual rows should not be in view port', async (t) => {
   // assert
   await t
     .expect(visibleRows.length)
-    .eql(20)
+    .eql(16)
     .expect(virtualRowInfo.count)
     .eql(1)
     .expect(virtualRowInfo[0].top >= visibleRowsHeight)
     .ok();
 
   // act
-  await dataGrid.scrollTo(t, { top: 1580 });
+  await dataGrid.scrollTo(t, { top: 2520 });
   await t.wait(300);
-  await dataGrid.scrollTo(t, { top: 3250 });
+  await dataGrid.scrollTo(t, { top: 4580 });
   await t.wait(600);
 
   visibleRows = await dataGrid.apiGetVisibleRows();
@@ -676,16 +678,16 @@ test('New virtual mode. Virtual rows should not be in view port', async (t) => {
   // assert
   await t
     .expect(visibleRows.length)
-    .eql(10)
+    .eql(8)
     .expect(visibleRows[0].key)
-    .eql(91)
+    .eql(93)
     .expect(virtualRowInfo.count)
     .eql(1)
     .expect(bottomVirtualRowPosition <= topScrollPosition)
     .ok();
 
   // act
-  await dataGrid.scrollTo(t, { top: 1580 });
+  await dataGrid.scrollTo(t, { top: 2520 });
   await t.wait(300);
   await dataGrid.scrollTo(t, { top: 0 });
   await t.wait(300);
@@ -697,7 +699,7 @@ test('New virtual mode. Virtual rows should not be in view port', async (t) => {
   // assert
   await t
     .expect(visibleRows.length)
-    .eql(10)
+    .eql(8)
     .expect(visibleRows[0].key)
     .eql(1)
     .expect(virtualRowInfo.count)
@@ -741,7 +743,7 @@ test('New virtual mode. Virtual rows should not be in view port', async (t) => {
         return (window as any).myStore.totalCount(loadOptions);
       },
     } as any, // todo check
-    height: 300,
+    height: 420,
     remoteOperations: true,
     scrolling: {
       mode: 'virtual',
