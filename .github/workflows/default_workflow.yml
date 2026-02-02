@@ -53,9 +53,6 @@ jobs:
     - name: Install dependencies
       run: pnpm install
 
-    - name: Rebuild native modules
-      run: pnpm rebuild @parcel/watcher
-
     - name: Run targets
       run: >
         pnpx nx run-many
