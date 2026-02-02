@@ -25,6 +25,7 @@ const SELECTORS = {
   editForm: 'edit-form',
   headerCellIndicators: 'dx-column-indicators',
   headerCellFilter: 'dx-header-filter',
+  revertButton: 'dx-revert-button',
 };
 
 export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
@@ -99,6 +100,10 @@ export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
 
   public getToast(): ToastModel {
     return new ToastModel(this.getToastContainer());
+  }
+
+  public getRevertButton(): HTMLElement {
+    return document.body.querySelector(`.${SELECTORS.revertButton}`) as HTMLElement;
   }
 
   public addWidgetPrefix(classNames: string): string {
