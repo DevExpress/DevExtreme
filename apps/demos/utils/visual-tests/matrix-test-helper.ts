@@ -204,22 +204,17 @@ export function shouldRunTestAtIndex(testIndex) {
 }
 
 const SKIPPED_TESTS = {
-  jQuery: {
-    DataGrid: ['BatchUpdateRequest', 'EditStateManagement', 'RemoteGrouping'],
-  },
+  jQuery: {},
   Angular: {
     Common: ['PopupAndNotificationsOverview'],
-    DataGrid: ['BatchUpdateRequest', 'EditStateManagement', 'RemoteGrouping'],
     FileUploader: ['CustomDropzone'],
   },
   Vue: {
     Common: ['PopupAndNotificationsOverview'],
-    DataGrid: ['BatchUpdateRequest', 'EditStateManagement', 'RemoteGrouping'],
     FileUploader: ['CustomDropzone'],
   },
   React: {
     Common: ['PopupAndNotificationsOverview'],
-    DataGrid: ['BatchUpdateRequest', 'EditStateManagement', 'RemoteGrouping'],
     FileUploader: ['CustomDropzone'],
   },
 };
