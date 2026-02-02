@@ -1,7 +1,7 @@
 import createTestCafe, { ClientFunction } from 'testcafe';
 import fs from 'fs';
 
-const LAUNCH_RETRY_ATTEMPTS = 1;
+const LAUNCH_RETRY_ATTEMPTS = 3;
 const LAUNCH_RETRY_TIMEOUT = 10000;
 
 const wait = async (

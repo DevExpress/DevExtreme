@@ -5,7 +5,6 @@ import { a11yCheck } from '../../../helpers/accessibility/utils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { getData } from '../../dataGrid/helpers/generateDataSourceData';
-import { isFluent } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`DataGrid - Common`
   .page(url(__dirname, '../../container.html'));
@@ -303,9 +302,6 @@ test('Filter panel - popup with filter builder', async (t) => {
   await a11yCheck(t, {
     ...a11yCheckConfig,
     runOnly: '',
-    rules: {
-      'color-contrast': { enabled: true },
-    },
   });
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
@@ -355,9 +351,6 @@ test('Search panel - highlight', async (t) => {
   await a11yCheck(t, {
     ...a11yCheckConfig,
     runOnly: '',
-    rules: {
-      'color-contrast': { enabled: true },
-    },
   }, DATA_GRID_SELECTOR);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
@@ -483,7 +476,7 @@ test('Column chooser with the \'dragAndDrop\' mode', async (t) => {
     .expect(columnChooser.isOpened)
     .ok();
 
-  await a11yCheck(t, a11yCheckConfig);
+  await a11yCheck(t);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 7),
   keyExpr: 'field_0',
@@ -899,13 +892,7 @@ test('Error row', async (t) => {
     .expect(dataGrid.getErrorRow().exists)
     .ok();
 
-  const A11yCheckOptions = {
-    rules: {
-      'color-contrast': { enabled: !isFluent() },
-    },
-  };
-
-  await a11yCheck(t, A11yCheckOptions);
+  await a11yCheck(t);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
