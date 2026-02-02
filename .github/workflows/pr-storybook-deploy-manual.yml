@@ -91,4 +91,4 @@ jobs:
           preview-branch: gh-pages
           umbrella-dir: preview
           comment: false
-          token: ${{ secrets.CHECKOUT_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
