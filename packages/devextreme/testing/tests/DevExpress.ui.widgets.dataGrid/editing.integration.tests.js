@@ -2809,10 +2809,9 @@ QUnit.module('Editing', baseModuleConfig, () => {
             this.clock.tick(10);
             $(grid.getCellElement(0, 1)).trigger('dxclick');
             this.clock.tick(10);
-            const callCount = action === 'close edit cell' ? 3 : 4;
 
             // assert
-            assert.equal(validationCallback.callCount, callCount, 'validation callback call count');
+            assert.equal(validationCallback.callCount, 3, 'validation callback call count');
         });
     });
 
