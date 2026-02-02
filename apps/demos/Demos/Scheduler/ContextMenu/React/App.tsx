@@ -5,7 +5,7 @@ import type { SchedulerTypes, SchedulerRef } from 'devextreme-react/scheduler';
 import { ContextMenu } from 'devextreme-react/context-menu';
 import type { ContextMenuTypes } from 'devextreme-react/context-menu';
 
-import AppointmentMenuTemplate from './AppointmentTemplate.tsx';
+import ItemTemplate from './itemTemplate.tsx';
 import { data, resourcesData } from './data.ts';
 import type { ContextMenuItem } from './types';
 
@@ -143,7 +143,7 @@ const App = () => {
         target={target}
         disabled={disabled}
         onItemClick={onContextMenuItemClick}
-        itemComponent={AppointmentMenuTemplate}
+        itemComponent={ItemTemplate}
       />
     </>
   );
