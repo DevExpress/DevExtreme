@@ -1,0 +1,85 @@
+{
+  "name": "workflows",
+  "metadata": {
+    "description": "Build workflow that orchestrates targets across multiple packages for specific use cases like local development, CI/CD, etc."
+  },
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "targets": {
+    "copy:artifacts-to-root": {
+      "executor": "devextreme-nx-infra-plugin:copy-files",
+      "options": {
+        "files": [
+          { "from": "../devextreme/artifacts/js", "to": "../../artifacts/js" },
+          { "from": "../devextreme/artifacts/css", "to": "../../artifacts/css" }
+        ]
+      }
+    },
+    "copy:bootstrap": {
+      "executor": "devextreme-nx-infra-plugin:copy-files",
+      "options": {
+        "files": [
+          { "from": "../devextreme-themebuilder/node_modules/bootstrap/dist/js/bootstrap.js", "to": "../../artifacts/js/bootstrap.js" },
+          { "from": "../devextreme-themebuilder/node_modules/bootstrap/dist/js/bootstrap.min.js", "to": "../../artifacts/js/bootstrap.min.js" },
+          { "from": "../devextreme-themebuilder/node_modules/bootstrap/dist/css/bootstrap.css", "to": "../../artifacts/css/bootstrap.css" },
+          { "from": "../devextreme-themebuilder/node_modules/bootstrap/dist/css/bootstrap.min.css", "to": "../../artifacts/css/bootstrap.min.css" }
+        ]
+      }
+    },
+    "copy:npm-tgz": {
+      "executor": "devextreme-nx-infra-plugin:copy-files",
+      "options": {
+        "files": [
+          { "from": "../devextreme/artifacts/npm/devextreme/*.tgz", "to": "../../artifacts/npm/" },
+          { "from": "../devextreme/artifacts/npm/devextreme-dist/*.tgz", "to": "../../artifacts/npm/" }
+        ]
+      }
+    },
+    "copy:wrappers-tgz": {
+      "executor": "devextreme-nx-infra-plugin:copy-files",
+      "options": {
+        "files": [
+          { "from": "../devextreme-angular/npm/dist/*.tgz", "to": "../../artifacts/npm/" },
+          { "from": "../devextreme-react/npm/*.tgz", "to": "../../artifacts/npm/" },
+          { "from": "../devextreme-vue/npm/*.tgz", "to": "../../artifacts/npm/" }
+        ]
+      }
+    },
+    "all:build-dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "pnpm nx build devextreme",
+          "pnpm nx build devextreme-themebuilder",
+          "pnpm nx pack devextreme-react",
+          "pnpm nx pack devextreme-vue",
+          "pnpm nx pack devextreme-angular",
+          "pnpm nx pack:devextreme-npm devextreme",
+          "pnpm nx pack:devextreme-dist-npm devextreme"
+        ],
+        "parallel": false
+      },
+      "metadata": {
+        "description": "Build all packages for the local development environment."
+      }
+    },
+    "all:build-testing": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "pnpm nx build devextreme -c testing",
+          "pnpm nx build devextreme-themebuilder",
+          "pnpm nx pack devextreme-react",
+          "pnpm nx pack devextreme-vue",
+          "pnpm nx pack devextreme-angular",
+          "pnpm nx pack:devextreme-npm devextreme",
+          "pnpm nx pack:devextreme-dist-npm devextreme"
+        ],
+        "parallel": false
+      },
+      "metadata": {
+        "description": "Build all packages for the testing environment."
+      }
+    }
+  }
+}

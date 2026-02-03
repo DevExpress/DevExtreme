@@ -84,14 +84,14 @@ async function executeNgPackagrBuild(config: BuildConfiguration): Promise<BuildR
   const startTime = Date.now();
 
   try {
-    logger.info(
+    logger.verbose(
       `Using ng-package config: ${path.relative(config.projectDir, config.ngPackagePath)}`,
     );
-    logger.info(
+    logger.verbose(
       `Using TypeScript config: ${path.relative(config.projectDir, config.tsconfigPath)}`,
     );
-    logger.info(`Running ng-packagr from: ${config.projectDir}`);
-    logger.info(`Executing: ${config.ngPackagrPath} ${config.args.join(' ')}`);
+    logger.verbose(`Running ng-packagr from: ${config.projectDir}`);
+    logger.verbose(`Executing: ${config.ngPackagrPath} ${config.args.join(' ')}`);
 
     const { exitCode, signal } = await spawnProcess({
       command: config.ngPackagrPath,
@@ -104,7 +104,7 @@ async function executeNgPackagrBuild(config: BuildConfiguration): Promise<BuildR
     });
 
     if (exitCode === 0) {
-      logger.info(`✓ ng-packagr completed successfully (exitCode: ${exitCode})`);
+      logger.verbose(`✓ ng-packagr completed successfully (exitCode: ${exitCode})`);
       return {
         success: true,
         message: '✓ Angular library build completed successfully',
@@ -140,12 +140,12 @@ function spawnProcess(options: {
   options: any;
 }): Promise<{ exitCode: number; signal?: string | undefined }> {
   return new Promise((resolve, reject) => {
-    logger.info(`Spawning process: ${options.command} ${options.args.join(' ')}`);
+    logger.verbose(`Spawning process: ${options.command} ${options.args.join(' ')}`);
 
     const child = spawn(options.command, options.args, options.options);
 
     child.on('close', (code, signal) => {
-      logger.info(`Process closed with code: ${code}, signal: ${signal || 'none'}`);
+      logger.verbose(`Process closed with code: ${code}, signal: ${signal || 'none'}`);
       const actualExitCode = code === null ? -1 : code;
       resolve({ exitCode: actualExitCode, signal: signal || undefined });
     });
@@ -183,7 +183,7 @@ const runExecutor: PromiseExecutor<BuildAngularLibraryExecutorSchema> = async (
   context,
 ) => {
   try {
-    logger.info('Building Angular library with ng-packagr...');
+    logger.verbose('Building Angular library with ng-packagr...');
 
     const config = resolveBuildConfiguration(options, context);
     await validateBuildConfiguration(config);

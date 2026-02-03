@@ -1,16 +1,7 @@
 import sh from 'shelljs';
 import path from 'node:path';
-import yargs from 'yargs';
 import { ARTIFACTS_DIR, INTERNAL_TOOLS_ARTIFACTS, ROOT_DIR, NPM_DIR, JS_ARTIFACTS, CSS_ARTIFACTS } from './common/paths';
 import { version as devextremeNpmVersion } from '../../packages/devextreme/package.json';
-
-const argv = yargs
-    .option('dev', { type: 'boolean', default: false })
-    .parseSync();
-
-const devMode = argv.dev;
-
-console.log(`Dev mode: ${devMode}`);
 
 const DEVEXTREME_NPM_DIR = path.join(ROOT_DIR, 'packages/devextreme/artifacts/npm');
 
@@ -45,26 +36,20 @@ const MAJOR_VERSION = monorepoVersion.split('.').slice(0, 2).join('_');
 
 sh.cd(ROOT_DIR);
 
-if (!devMode) {
-    // aspnet metadata will be used in Build custom-tasks to inject aspnet descriptions
-    sh.exec(`pnpx nx run devextreme-metadata:make-aspnet-metadata`);
+// aspnet metadata will be used in Build custom-tasks to inject aspnet descriptions
+sh.exec(`pnpx nx run devextreme-metadata:make-aspnet-metadata`);
 
-    injectDescriptions();
-}
+injectDescriptions();
 
-if (devMode) {
-    sh.exec('pnpx nx build devextreme');
-} else {
-    sh.exec('pnpx nx build devextreme-scss');
-    sh.exec('pnpx nx build-dist devextreme --skipNxCache', {
-        env: {
-            ...sh.env,
-            BUILD_INTERNAL_PACKAGE: 'false'
-        }
-    });
-}
+sh.exec('pnpx nx build devextreme-scss');
+sh.exec('pnpx nx build-dist devextreme --skipNxCache', {
+    env: {
+        ...sh.env,
+        BUILD_INTERNAL_PACKAGE: 'false'
+    }
+});
 
-sh.exec(`pnpx nx build devextreme-themebuilder${devMode ? '' : ' --skipNxCache'}`);
+sh.exec('pnpx nx build devextreme-themebuilder --skipNxCache');
 
 // Copy artifacts for DXBuild (Installation)
 sh.pushd(path.join(ROOT_DIR, 'packages/devextreme/artifacts'));
@@ -80,7 +65,7 @@ sh.exec('pnpm run all:pack-and-copy');
 
 sh.exec('pnpx nx pack devextreme-react', { silent: true });
 sh.exec('pnpx nx pack devextreme-vue', { silent: true });
-sh.exec(`pnpx nx pack${devMode ? '' : '-with-descriptions'} devextreme-angular`, { silent: true });
+sh.exec('pnpx nx pack-with-descriptions devextreme-angular', { silent: true });
 
 sh.pushd(path.join(DEVEXTREME_NPM_DIR, 'devextreme'));
     packAndCopy(NPM_DIR);

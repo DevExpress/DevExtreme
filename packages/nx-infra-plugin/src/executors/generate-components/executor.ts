@@ -91,8 +91,8 @@ function resolveDefaultMetadataPath(): string {
 }
 
 function loadMetadata(metadataPath: string): any {
-  logger.info(MSG_LOADING_METADATA);
-  logger.info(`   Path: ${metadataPath}`);
+  logger.verbose(MSG_LOADING_METADATA);
+  logger.verbose(`   Path: ${metadataPath}`);
 
   if (!fs.existsSync(metadataPath)) {
     throw new Error(`Metadata file not found: ${metadataPath}`);
@@ -102,7 +102,7 @@ function loadMetadata(metadataPath: string): any {
   const metaData = JSON.parse(metadataContent);
 
   const widgetCount = Object.keys(metaData.Widgets || {}).length;
-  logger.info(`✓ Loaded ${widgetCount} widget definitions`);
+  logger.verbose(`✓ Loaded ${widgetCount} widget definitions`);
 
   return metaData;
 }
@@ -136,7 +136,7 @@ function loadConfigFromFile(projectRoot: string, configPath: string, framework: 
     const config = require(absoluteConfigPath);
 
     const frameworkName = framework.charAt(0).toUpperCase() + framework.slice(1);
-    logger.info(`✓ Loaded ${frameworkName} configuration from ${configPath}`);
+    logger.verbose(`✓ Loaded ${frameworkName} configuration from ${configPath}`);
     return config;
   } catch (error) {
     logger.warn(`⚠️  Could not load configuration from ${configPath}: ${getErrorMessage(error)}`);
@@ -166,7 +166,7 @@ function loadConfigFromGeneratorsFile(
     }
 
     const messages = createMessages(framework);
-    logger.info(messages.loadedConfig);
+    logger.verbose(messages.loadedConfig);
     return config;
   } catch (error) {
     logger.warn(`⚠️  Could not load generators-config.js: ${getErrorMessage(error)}`);
@@ -244,26 +244,26 @@ async function executeGeneration(
   const messages = createMessages(framework);
   const handler = getFrameworkHandler(framework);
 
-  logger.info(messages.generating);
+  logger.verbose(messages.generating);
 
   await handler.executeGeneration(generateComponents, config, metaData);
 
-  logger.info(MSG_GENERATION_COMPLETED);
+  logger.verbose(MSG_GENERATION_COMPLETED);
 
   if (fs.existsSync(indexFileName)) {
     const indexContent = fs.readFileSync(indexFileName, ENCODING_UTF8);
     const exportCount = (indexContent.match(EXPORT_PATTERN) || []).length;
-    logger.info(`   Exports: ${exportCount}`);
+    logger.verbose(`   Exports: ${exportCount}`);
   }
 
   if (fs.existsSync(componentsDir)) {
     const dirCount = fs
       .readdirSync(componentsDir, { withFileTypes: true })
       .filter((entry) => entry.isDirectory() && entry.name !== CORE_DIR).length;
-    logger.info(`   Component Directories: ${dirCount}`);
+    logger.verbose(`   Component Directories: ${dirCount}`);
   }
 
-  logger.info(messages.generationSuccess);
+  logger.verbose(messages.generationSuccess);
 }
 
 const runExecutor: PromiseExecutor<GenerateReactComponentsExecutorSchema> = async (
@@ -276,10 +276,10 @@ const runExecutor: PromiseExecutor<GenerateReactComponentsExecutorSchema> = asyn
   const framework: Framework = options.framework || 'react';
   const messages = createMessages(framework);
 
-  logger.info(messages.starting);
+  logger.verbose(messages.starting);
   const projectRelativePath = path.relative(workspaceRoot, absoluteProjectRoot) || DOT_SLASH_PREFIX;
-  logger.info(`   Project root: ${projectRelativePath}`);
-  logger.info(`   Framework: ${framework}`);
+  logger.verbose(`   Project root: ${projectRelativePath}`);
+  logger.verbose(`   Framework: ${framework}`);
 
   try {
     const componentsDir = path.resolve(
