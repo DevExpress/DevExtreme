@@ -15,7 +15,6 @@ on:
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
   NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
-  BUILD_TEST_INTERNAL_PACKAGE: true
 
 jobs:
   build-packages:
@@ -55,9 +54,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build all DevExtreme packages
-        env:
-          BUILD_TEST_INTERNAL_PACKAGE: true
-        run: pnpm run all:build-dev
+        run: pnpm nx all:build-testing workflows
 
       - name: Build wrappers apps
         working-directory: e2e/wrappers

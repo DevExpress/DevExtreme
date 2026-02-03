@@ -43,6 +43,8 @@ const getIgnoredRules = (testName) => {
       'TagBox-Overview',
       // False positive:contrast rules do not apply to custom orange color
       'CardView-FieldTemplate',
+      // False positive: contrast rules do not apply to read-only editors on the custom option panel background
+      'VectorMap-DynamicViewport',
     ].includes(testName)
   ) {
     ignoredRules.push('color-contrast');
@@ -52,8 +54,6 @@ const getIgnoredRules = (testName) => {
     && [
       // False positive: contrast rules do not apply to disabled tags
       'TreeList-StatePersistence',
-      // False positive: contrast rules do not apply to read-only editors on the custom option panel background
-      'VectorMap-DynamicViewport',
     ].includes(testName)
   ) {
     ignoredRules.push('color-contrast');
