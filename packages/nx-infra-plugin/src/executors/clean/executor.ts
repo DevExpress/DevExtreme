@@ -98,12 +98,12 @@ const runExecutor: PromiseExecutor<CleanExecutorSchema> = async (options, contex
   );
   const excludePatterns = options.excludePatterns || [];
 
-  logger.info(
+  logger.verbose(
     `Cleaning ${targetDirectory}${excludePatterns.length > 0 ? ` with ${excludePatterns.length} exclusions` : ' completely'}...`,
   );
 
   if (excludePatterns.length > 0) {
-    logger.info(`Excluding patterns: ${excludePatterns.join(', ')}`);
+    logger.verbose(`Excluding patterns: ${excludePatterns.join(', ')}`);
   }
 
   try {
@@ -111,16 +111,16 @@ const runExecutor: PromiseExecutor<CleanExecutorSchema> = async (options, contex
 
     if (excludePatterns.length === 0) {
       await removeDirectoryCompletely(targetDirectory);
-      logger.info(`Removed directory: ${targetDirectory}`);
+      logger.verbose(`Removed directory: ${targetDirectory}`);
     } else {
       if (!fs.existsSync(targetDirectory)) {
-        logger.info(`Directory does not exist: ${targetDirectory}`);
+        logger.verbose(`Directory does not exist: ${targetDirectory}`);
         return { success: true };
       }
 
       await removeDirectoryWithExclusions(targetDirectory, absoluteExcludePaths);
 
-      logger.info(
+      logger.verbose(
         `Cleaned directory: ${targetDirectory} with ${absoluteExcludePaths.length} exclusions preserved`,
       );
     }

@@ -286,6 +286,10 @@ if(devices.real().deviceType === 'desktop') {
                 role: 'listbox',
                 'aria-label': 'Items',
             };
+            this.expectedItemsContainerMultipleModeAttrs = {
+                ...this.expectedItemsContainerAttrs,
+                'aria-multiselectable': 'true',
+            };
             this.expectedListAttrs = {
                 role: 'group',
                 'aria-roledescription': localizedRoleDescription,
@@ -344,7 +348,7 @@ if(devices.real().deviceType === 'desktop') {
                 });
 
                 helper.checkAttributes(helper.$itemContainer, this.expectedContainerAttrs);
-                helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerAttrs);
+                helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerMultipleModeAttrs);
                 helper.checkAttributes(helper.$widget, this.expectedListAttrs);
                 helper.checkItemsAttributes([1, 2], { attributes: ['aria-selected'], role: 'option' });
             });
@@ -410,6 +414,31 @@ if(devices.real().deviceType === 'desktop') {
             helper.widget.option('noDataText', noDataText);
 
             assert.strictEqual(helper.getListContainer().attr('aria-label'), undefined);
+        });
+
+        [true, false].forEach(multiselectMode => {
+            QUnit.test(`list with collapsible groups should have correct aria-multiselectable attr in ${multiselectMode ? '' : 'non-'}multiselect mode`, function(assert) {
+                helper.createWidget({
+                    items: [
+                        { key: 'Group_1', items: ['Item_1', 'Item_2'] },
+                        { key: 'Group_2', items: ['Item_3'] },
+                    ],
+                    grouped: true,
+                    collapsibleGroups: true,
+                    selectionMode: multiselectMode ? 'multiple' : 'single',
+                });
+
+                const $groupContainers = helper.getGroupContainers();
+                $groupContainers.each((index, group) => {
+                    const $groupBody = $(group).children(`.${LIST_GROUP_BODY_CLASS}`);
+
+                    if(multiselectMode) {
+                        assert.strictEqual($groupBody.attr('aria-multiselectable'), 'true', `Group #${index} body has correct aria-multiselectable attr`);
+                    } else {
+                        assert.strictEqual($groupBody.attr('aria-multiselectable'), undefined, `Group #${index} body has no aria-multiselectable attr`);
+                    }
+                });
+            });
         });
     });
 }
