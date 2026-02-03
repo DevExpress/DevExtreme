@@ -584,7 +584,7 @@ jobs:
         fi
 
   testcafe-jquery:
-    needs: [check-should-run, build-devextreme]
+    needs: [check-should-run, build-devextreme, determine-framework-tests-scope]
     if: |
       always() &&
       needs.check-should-run.outputs.should-run == 'true' &&
@@ -695,6 +695,7 @@ jobs:
     - name: Run TestCafe tests (jQuery)
       shell: bash
       working-directory: apps/demos
+      if: ${{ !contains(matrix.THEME, 'dark') || needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' }}
       env:
         NODE_OPTIONS: --max-old-space-size=8192
         STRATEGY: ${{ matrix.STRATEGY }}

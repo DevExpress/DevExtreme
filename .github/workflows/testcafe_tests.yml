@@ -23,10 +23,21 @@ jobs:
     runs-on: devextreme-shr2
     outputs:
       should-run: ${{ steps.check.outputs.should-run }}
+      styles-changed: ${{ steps.changes.outputs.styles }}
     steps:
+      - uses: actions/checkout@v4
       - name: Check RUN_TESTS flag
         id: check
         run: echo "should-run=${{ env.RUN_TESTS }}" >> $GITHUB_OUTPUT
+
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            styles:
+              - 'packages/devextreme-scss/**'
+              - 'packages/devextreme/js/**/themes/**'
+              - 'e2e/testcafe-devextreme/helpers/accessibility/**'
 
   build:
     name: Build DevExtreme
@@ -94,9 +105,9 @@ jobs:
       matrix:
         ARGS: [
           { componentFolder: "accessibility", name: "accessibility" },
-          { componentFolder: "accessibility", name: "accessibility - fluent.dark", theme: 'fluent.blue.dark' },
-          { componentFolder: "accessibility", name: "accessibility - material.light", theme: 'material.blue.light' },
-          { componentFolder: "accessibility", name: "accessibility - material.dark", theme: 'material.blue.dark' },
+          { componentFolder: "accessibility", name: "accessibility - fluent.dark", theme: 'fluent.blue.dark', styleDependent: true },
+          { componentFolder: "accessibility", name: "accessibility - material.light", theme: 'material.blue.light', styleDependent: true },
+          { componentFolder: "accessibility", name: "accessibility - material.dark", theme: 'material.blue.dark', styleDependent: true },
           { componentFolder: "common", name: "common" },
 
           { name: "generic", theme: 'generic.light' },
@@ -180,6 +191,7 @@ jobs:
 
     - name: Run TestCafe tests
       working-directory: ./e2e/testcafe-devextreme
+      if: ${{ !matrix.ARGS.styleDependent || needs.check-should-run.outputs.styles-changed == 'true' }}
       env:
         NODE_OPTIONS: --max-old-space-size=8192
       run: |

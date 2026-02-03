@@ -17,7 +17,6 @@ import {
 } from '../utils/visual-tests/matrix-test-helper';
 import {
   testScreenshot,
-  THEME,
   isMaterial,
   isFluent,
 } from '../utils/visual-tests/helpers/theme-utils';

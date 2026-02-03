@@ -48,8 +48,9 @@ export const testAccessibility = <TComponentOptions = unknown>(
   optionConfigurations.forEach((optionConfiguration: TComponentOptions, index) => {
     test(`${component}: test with axe #${index}`, async (t) => {
       const currentA11yCheckConfig = { ...a11yCheckConfig } as A11yCheckOptions;
-      const isComponentDisabled = (optionConfiguration as Record<string, unknown>).disabled === true;
-      const shouldIgnoreColorContrast = componentsWithDisabledColorContrastIssues.includes(component) && isComponentDisabled;
+      const isComponentDisabled = (optionConfiguration as Record<string, unknown>).disabled;
+      const shouldIgnoreColorContrast = componentsWithDisabledColorContrastIssues
+        .includes(component) && isComponentDisabled;
 
       if (shouldIgnoreColorContrast) {
         if (currentA11yCheckConfig.runOnly === 'color-contrast') {
