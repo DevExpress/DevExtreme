@@ -95,3 +95,4 @@ jobs:
           preview-branch: gh-pages
           umbrella-dir: preview
           comment: false
+          wait-for-pages-deployment: true
