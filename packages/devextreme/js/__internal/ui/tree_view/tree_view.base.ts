@@ -717,7 +717,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     super._initDataAdapter();
 
     const adapter = this._dataAdapter;
-    const originalToggleSelectAll = adapter.toggleSelectAll.bind(adapter);
 
     adapter._setParentSelection = (): void => {
       each(adapter._dataStructure, (_index: number, node: InternalNode): void => {
@@ -727,7 +726,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
 
         if (parent && node.internalFields.parentKey !== adapter.options.rootValue) {
           adapter._iterateParents(node, (parentNode: InternalNode): void => {
-            if (!this._isItemSelectable(parentNode as TreeViewNode)) {
+            if (!this._isNodeSelectableAndEnabled(parentNode)) {
               return;
             }
 
@@ -748,12 +747,12 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       for (let i = 0; i <= itemsCount - 1; i += 1) {
         const childNode = adapter.getNodeByKey(node.internalFields.childrenKeys[i]);
         const isChildInvisible = childNode?.internalFields.item.visible === false;
-        const isChildNonSelectable = !this._isItemSelectable(childNode as TreeViewNode);
+        const isChildNonSelectableOrDisabled = !this._isNodeSelectableAndEnabled(childNode);
         const childState = childNode?.internalFields.selected;
 
         if (isChildInvisible) {
           invisibleItemsCount += 1;
-        } else if (isChildNonSelectable) {
+        } else if (isChildNonSelectableOrDisabled) {
           nonSelectableItemsCount += 1;
         } else if (childState) {
           selectedItemsCount += 1;
@@ -778,7 +777,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
         return;
       }
 
-      if (!this._isItemSelectable(node as TreeViewNode)) {
+      if (!this._isNodeSelectableAndEnabled(node)) {
         return;
       }
 
@@ -788,13 +787,13 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
         const children = adapter.getChildrenNodes(node?.internalFields.key);
 
         each(children, (_index: number, child: TreeViewNode): void => {
-          if (this._isItemSelectable(child)) {
+          if (this._isNodeSelectableAndEnabled(child)) {
             adapter.toggleSelection(child.internalFields.key, state, true);
           } else {
             const processDescendants = (parentNode: TreeViewNode): void => {
               const descendants = adapter.getChildrenNodes(parentNode.internalFields.key);
               each(descendants, (_idx: number, descendant: TreeViewNode): void => {
-                if (this._isItemSelectable(descendant)) {
+                if (this._isNodeSelectableAndEnabled(descendant)) {
                   adapter.toggleSelection(descendant.internalFields.key, state, true);
                 } else {
                   processDescendants(descendant);
@@ -814,18 +813,28 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     };
 
     adapter.toggleSelectAll = (state: boolean): void => {
-      if (!state) {
-        originalToggleSelectAll(state);
-        return;
-      }
-
       const rootNodes = adapter.getRootNodes();
 
       each(rootNodes, (_index: number, node: TreeViewNode): void => {
-        if (node && this._isItemSelectable(node)) {
-          adapter.toggleSelection(node.internalFields.key, true);
+        if (node && this._isNodeSelectableAndEnabled(node)) {
+          adapter.toggleSelection(node.internalFields.key, state);
         }
       });
+    };
+
+    adapter.isAllSelected = (): boolean => {
+      const rootNodes = adapter.getRootNodes();
+      const selectableRootNodes = rootNodes.filter(
+        (node) => this._isNodeSelectableAndEnabled(node),
+      );
+
+      if (selectableRootNodes.length === 0) {
+        return false;
+      }
+
+      return selectableRootNodes.every(
+        (node) => node.internalFields.selected === true,
+      );
     };
   }
 
@@ -1274,9 +1283,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     if (!node) {
       return Deferred().reject().promise();
     }
-    if (node.internalFields.disabled) {
-      return Deferred().reject().promise();
-    }
 
     const currentState = node.internalFields.expanded;
     if (currentState === state) {
@@ -1333,10 +1339,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     $icon.appendTo(this._getItem($node));
     $icon.addClass(iconClass);
 
-    if (node.internalFields.disabled) {
-      $icon.addClass(DISABLED_STATE_CLASS);
-    }
-
     this._renderToggleItemVisibilityIconClick($icon, node);
   }
 
@@ -1353,10 +1355,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     if (node.internalFields.expanded) {
       $icon.addClass(TOGGLE_ITEM_VISIBILITY_OPENED_CLASS);
       $node.parent().addClass(OPENED_NODE_CONTAINER_CLASS);
-    }
-
-    if (node.internalFields.disabled) {
-      $icon.addClass(DISABLED_STATE_CLASS);
     }
 
     this._renderToggleItemVisibilityIconClick($icon, node);
@@ -1696,6 +1694,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     if (!isSelectable) {
       const $item = $node.find(`.${ITEM_CLASS}`);
       $item.addClass(ITEM_NOT_SELECTABLE_CLASS);
+      $item.addClass(DISABLED_STATE_CLASS);
     }
   }
 
@@ -1756,6 +1755,24 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
         item: node.internalFields.item,
       });
       return Boolean(result);
+    }
+
+    return true;
+  }
+
+  _isNodeSelectableAndEnabled(node: TreeViewNode | InternalNode | null): boolean {
+    if (!node) {
+      return true;
+    }
+
+    // Check if node is disabled
+    if (node.internalFields?.disabled) {
+      return false;
+    }
+
+    // Check if node is selectable (for TreeViewNode)
+    if ('internalFields' in node && 'item' in node.internalFields) {
+      return this._isItemSelectable(node as TreeViewNode);
     }
 
     return true;
