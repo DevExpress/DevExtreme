@@ -503,15 +503,23 @@ test('Header container should have padding-right if grid has max-height and scro
   });
 });
 
-test('New virtual mode. A detail row should be rendered when the last master row is expanded', async (t) => {
-  const dataGrid = new DataGrid('#container');
+test.meta({ runInTheme: Themes.genericLight })('New virtual mode. A detail row should be rendered when the last master row is expanded', async (t) => {
   const ROWS_AMOUNT = 100;
-  const ROW_HEIGHT = 48.5; // depends on theme
+  const dataGrid = new DataGrid('#container');
+  const dataRowSelector = `.${ClassNames.dataRow}`;
+
+  const getFirstVisibleRowHeight = ClientFunction(() => $((window as any).widget.element())
+    .find(dataRowSelector)
+    .first()
+    .height() ?? 0, { dependencies: { dataRowSelector } });
 
   await t.expect(dataGrid.isReady()).ok();
 
   // act
-  await dataGrid.scrollTo(t, { top: ROWS_AMOUNT * ROW_HEIGHT });
+  const firstVisibleRowHeight = await getFirstVisibleRowHeight();
+  const scrollTopOffset = ROWS_AMOUNT * firstVisibleRowHeight;
+
+  await dataGrid.scrollTo(t, { top: scrollTopOffset });
   await t
     .wait(300)
     .click(dataGrid.getDataRow(99).getCommandCell(0).element);
@@ -559,13 +567,23 @@ test('New virtual mode. A detail row should be rendered when the last master row
   });
 });
 
-test('New virtual mode. An adaptive row should be rendered when the last row is expanded', async (t) => {
-  const dataGrid = new DataGrid('#container');
+test.meta({ runInTheme: Themes.genericLight })('New virtual mode. An adaptive row should be rendered when the last row is expanded', async (t) => {
   const ROWS_AMOUNT = 100;
-  const ROW_HEIGHT = 48.5; // depends on theme
+  const dataGrid = new DataGrid('#container');
+  const dataRowSelector = `.${ClassNames.dataRow}`;
+
+  const getFirstVisibleRowHeight = ClientFunction(() => $((window as any).widget.element())
+    .find(dataRowSelector)
+    .first()
+    .height() ?? 0, { dependencies: { dataRowSelector } });
+
+  await t.expect(dataGrid.isReady()).ok();
 
   // act
-  await dataGrid.scrollTo(t, { top: ROWS_AMOUNT * ROW_HEIGHT });
+  const firstVisibleRowHeight = await getFirstVisibleRowHeight();
+  const scrollTopOffset = ROWS_AMOUNT * firstVisibleRowHeight;
+
+  await dataGrid.scrollTo(t, { top: scrollTopOffset });
   await t
     .wait(300)
     .click(dataGrid.getDataRow(99).getCommandCell(3).element);
