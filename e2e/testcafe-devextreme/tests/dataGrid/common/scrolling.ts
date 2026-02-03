@@ -506,13 +506,13 @@ test('Header container should have padding-right if grid has max-height and scro
 
 test('New virtual mode. A detail row should be rendered when the last master row is expanded', async (t) => {
   const dataGrid = new DataGrid('#container');
-  const COLUMNS_AMOUNT = 100;
-  const COLUMN_HEIGHT = 48.5; // depends on theme
+  const ROWS_AMOUNT = 100;
+  const ROW_HEIGHT = 48.5; // depends on theme
 
   await t.expect(dataGrid.isReady()).ok();
 
   // act
-  await dataGrid.scrollTo(t, { top: COLUMNS_AMOUNT * COLUMN_HEIGHT });
+  await dataGrid.scrollTo(t, { top: ROWS_AMOUNT * ROW_HEIGHT });
   await t
     .wait(300)
     .click(dataGrid.getDataRow(99).getCommandCell(0).element);
@@ -527,11 +527,11 @@ test('New virtual mode. A detail row should be rendered when the last master row
     .expect(penultimateRow.rowType)
     .eql('data')
     .expect(penultimateRow.key)
-    .eql(COLUMNS_AMOUNT)
+    .eql(ROWS_AMOUNT)
     .expect(lastRow.rowType)
     .eql('detail')
     .expect(lastRow.key)
-    .eql(COLUMNS_AMOUNT);
+    .eql(ROWS_AMOUNT);
 }).before(async () => {
   const getItems = (): Record<string, unknown>[] => {
     const items: Record<string, unknown>[] = [];
@@ -562,11 +562,11 @@ test('New virtual mode. A detail row should be rendered when the last master row
 
 test('New virtual mode. An adaptive row should be rendered when the last row is expanded', async (t) => {
   const dataGrid = new DataGrid('#container');
-  const COLUMNS_AMOUNT = 100;
-  const COLUMN_HEIGHT = 48.5; // depends on theme
+  const ROWS_AMOUNT = 100;
+  const ROW_HEIGHT = 48.5; // depends on theme
 
   // act
-  await dataGrid.scrollTo(t, { top: COLUMNS_AMOUNT * COLUMN_HEIGHT });
+  await dataGrid.scrollTo(t, { top: ROWS_AMOUNT * ROW_HEIGHT });
   await t
     .wait(300)
     .click(dataGrid.getDataRow(99).getCommandCell(3).element);
@@ -581,11 +581,11 @@ test('New virtual mode. An adaptive row should be rendered when the last row is 
     .expect(penultimateRow.rowType)
     .eql('data')
     .expect(penultimateRow.key)
-    .eql(100)
+    .eql(ROWS_AMOUNT)
     .expect(lastRow.rowType)
     .eql('detailAdaptive')
     .expect(lastRow.key)
-    .eql(100);
+    .eql(ROWS_AMOUNT);
 }).before(async () => {
   const getItems = (): Record<string, unknown>[] => {
     const items: Record<string, unknown>[] = [];
