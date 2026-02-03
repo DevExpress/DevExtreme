@@ -100,31 +100,17 @@ $treeview-searchbox-margin-bottom: 5px;
   }
 
   &.dx-state-disabled {
-    opacity: 0.5;
-  }
-
-  &.dx-treeview-item-not-selectable {
-    .dx-checkbox {
-      opacity: 0.5;
-      cursor: default;
-    }
-
+    .dx-checkbox,
     .dx-treeview-item-content {
       opacity: 0.5;
-      pointer-events: none;
-      cursor: default;
     }
 
     .dx-treeview-toggle-item-visibility,
     .dx-treeview-custom-expand-icon,
     .dx-treeview-custom-collapse-icon {
       opacity: 1;
-      pointer-events: auto;
-      cursor: pointer;
-
-      &.dx-state-disabled {
-        cursor: default;
-      }
+      pointer-events: auto !important;
+      cursor: pointer !important;
     }
   }
 }
