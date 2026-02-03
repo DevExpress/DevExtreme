@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { Scheduler, Resource } from 'devextreme-react/scheduler';
 import { ContextMenu } from 'devextreme-react/context-menu';
-import AppointmentMenuTemplate from './AppointmentTemplate.js';
+import ItemTemplate from './itemTemplate.js';
 import { data, resourcesData } from './data.js';
 
 const views = ['day', 'month'];
@@ -132,7 +132,7 @@ const App = () => {
         target={target}
         disabled={disabled}
         onItemClick={onContextMenuItemClick}
-        itemComponent={AppointmentMenuTemplate}
+        itemComponent={ItemTemplate}
       />
     </>
   );
