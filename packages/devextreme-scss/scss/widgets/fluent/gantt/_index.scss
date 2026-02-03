@@ -162,7 +162,7 @@ $gantt-successor-background-color: white;
     }
 
     .dx-gantt-titleIn {
-      color: #fff;
+      color: $gantt-task-color;
       padding: 0 $gantt-task-title-padding-left;
     }
   }
@@ -170,8 +170,8 @@ $gantt-successor-background-color: white;
   .dx-gantt-taskRes {
     height: $gantt-task-height;
     line-height: $gantt-task-height;
-    color: #fff;
-    background-color: #999;
+    color: $gantt-task-color;
+    background-color: $gantt-task-background-color;
     border-radius: $base-border-radius;
     margin-left: 21px;
     padding-left: 4px;

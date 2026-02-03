@@ -100,7 +100,7 @@ const onValueChanged = ({ value }: DxSelectBoxTypes.ValueChangedEvent) => {
 }
 
 .dx-row.dx-data-row .employee {
-  color: #bf4e6a;
+  color: var(--dx-color-primary);
   font-weight: bold;
 }
 
