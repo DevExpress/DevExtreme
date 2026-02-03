@@ -89,13 +89,13 @@ $stepper-connector-value-bg: $base-label-color !default;
 }
 
 @if $mode == 'dark' {
-  $stepper-step-base-bg: color.adjust($base-bg, $saturation: -5.59%, $space: hsl, $lightness: 29.22%) !default;
-  $stepper-step-base-hover-bg: color.adjust($base-bg, $saturation: -5.84%, $space: hsl, $lightness: 32.16%) !default;
+  $stepper-step-base-bg: color.adjust($base-bg, $saturation: -5.59%, $lightness: 29.22%, $space: hsl) !default;
+  $stepper-step-base-hover-bg: color.adjust($base-bg, $saturation: -5.84%, $lightness: 32.16%, $space: hsl) !default;
 
   $stepper-step-accent-hover-bg: color.adjust($stepper-step-accent-bg, $lightness: 8.5%, $space: hsl) !default;
   $stepper-step-danger-hover-bg: color.adjust($stepper-step-danger-bg, $lightness: 8.5%, $space: hsl) !default;
 
-  $stepper-step-disabled-bg: color.adjust($base-bg, $saturation: -3.02%, $space: hsl, $lightness: 9.22%) !default;
+  $stepper-step-disabled-bg: color.adjust($base-bg, $saturation: -3.02%, $lightness: 9.22%, $space: hsl) !default;
 }
 
 /**

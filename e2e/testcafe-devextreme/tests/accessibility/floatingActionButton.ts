@@ -11,10 +11,7 @@ const options: Options<Properties> = {
   icon: [undefined, 'save'],
 };
 
-const a11yCheckConfig = {
-  // NOTE: color-contrast issues
-  rules: { 'color-contrast': { enabled: true } },
-};
+const a11yCheckConfig = {};
 
 const configuration: Configuration = {
   component: 'dxSpeedDialAction',

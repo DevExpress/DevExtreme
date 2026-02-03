@@ -25,12 +25,12 @@ $gantt-task-background-color: null !default;
 
   @if $mode == "light" {
     $gantt-task-progress-background-color: rgba(0, 0, 0, 0.2) !default;
-    $gantt-task-background-color: color.adjust($base-bg, $lightness: -60%) !default;
+    $gantt-task-background-color: color.adjust($base-bg, $lightness: -60%, $space: hsl) !default;
   }
 
   @if $mode == "dark" {
     $gantt-task-progress-background-color: rgba(255, 255, 255, 0.32) !default;
-    $gantt-task-background-color: color.adjust($base-bg, $lightness: 60%) !default;
+    $gantt-task-background-color: color.adjust($base-bg, $lightness: 60%, $space: hsl) !default;
   }
 }
 

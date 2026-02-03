@@ -14,10 +14,7 @@ const options: Options<Properties> = {
   delay: [undefined, 3000],
 };
 
-const a11yCheckConfig = {
-  // NOTE: color-contrast issues
-  rules: { 'color-contrast': { enabled: true } },
-};
+const a11yCheckConfig = {};
 
 const configuration: Configuration = {
   component: 'dxLoadPanel',

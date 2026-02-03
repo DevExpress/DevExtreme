@@ -30,6 +30,8 @@ const getOptionConfigurations = <TComponentOptions = unknown>(
   return generateOptionMatrix(options);
 };
 
+const componentsWithDisabledColorContrastIssues: WidgetName[] = ['dxTagBox', 'dxFileUploader', 'dxDateRangeBox'];
+
 export const testAccessibility = <TComponentOptions = unknown>(
   configuration: Configuration<TComponentOptions>,
 ): void => {
@@ -43,11 +45,13 @@ export const testAccessibility = <TComponentOptions = unknown>(
 
   const optionConfigurations = getOptionConfigurations(options);
 
-  optionConfigurations.forEach((optionConfiguration, index) => {
+  optionConfigurations.forEach((optionConfiguration: TComponentOptions, index) => {
     test(`${component}: test with axe #${index}`, async (t) => {
       const currentA11yCheckConfig = { ...a11yCheckConfig } as A11yCheckOptions;
+      const isComponentDisabled = (optionConfiguration as Record<string, unknown>).disabled === true;
+      const shouldIgnoreColorContrast = componentsWithDisabledColorContrastIssues.includes(component) && isComponentDisabled;
 
-      if ((component === 'dxTagBox' || component === 'dxFileUploader' || component === 'dxDateRangeBox') && (optionConfiguration as any).disabled === true) {
+      if (shouldIgnoreColorContrast) {
         if (currentA11yCheckConfig.runOnly === 'color-contrast') {
           return;
         }

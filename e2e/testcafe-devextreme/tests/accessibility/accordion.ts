@@ -33,10 +33,7 @@ const created = async (t: TestController, optionConfiguration): Promise<void> =>
     .click(itemTitle.nth(1));
 };
 
-const a11yCheckConfig = {
-  // NOTE: color-contrast issues
-  rules: { 'color-contrast': { enabled: true } },
-};
+const a11yCheckConfig = {};
 
 const configuration: Configuration = {
   component: 'dxAccordion',

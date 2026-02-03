@@ -37,10 +37,7 @@ const requiredFieldsOptions: Options<Properties> = {
   items: [items],
 };
 
-const a11yCheckConfig = {
-  // NOTE: color-contrast issues
-  rules: { 'color-contrast': { enabled: true } },
-};
+const a11yCheckConfig = {};
 
 const configuration: Configuration = {
   component: 'dxForm',

@@ -37,10 +37,7 @@ const created = async (t: TestController, optionConfiguration): Promise<void> =>
     .click(overflowMenu.element);
 };
 
-const a11yCheckConfig = {
-  // NOTE: color-contrast issues
-  rules: { 'color-contrast': { enabled: true } },
-};
+const a11yCheckConfig = {};
 
 const configuration: Configuration = {
   component: 'dxToolbar',

@@ -20,10 +20,10 @@ $tooltip-bg: null !default;
 $tooltip-border-radius: $base-border-radius !default;
 
 @if $mode == "light" {
-  $tooltip-bg: color.adjust($base-bg, $lightness: -60%) !default;
+  $tooltip-bg: color.adjust($base-bg, $lightness: -60%, $space: hsl) !default;
 }
 
 @if $mode == "dark" {
-  $tooltip-bg: color.adjust($base-bg, $lightness: 60%) !default;
+  $tooltip-bg: color.adjust($base-bg, $lightness: 60%, $space: hsl) !default;
 }
 

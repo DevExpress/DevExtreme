@@ -47,9 +47,7 @@ test('dropzone appear in headerPanel when drag from columnChooser a column', asy
   await triggerDragEnd(columnElement);
   await t.wait(500); // wait for dropzone animation to finish
 
-  const a11yCheckConfig = {
-    rules: { 'color-contrast': { enabled: true } },
-  };
+  const a11yCheckConfig = {};
   await a11yCheck(t, a11yCheckConfig, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   allowColumnReordering: true,

@@ -10,10 +10,7 @@ const options: Options<Properties> = {
   validationGroup: [undefined, 'validationGroup'],
 };
 
-const a11yCheckConfig = {
-  // NOTE: color-contrast issues
-  rules: { 'color-contrast': { enabled: true } },
-};
+const a11yCheckConfig = {};
 
 const configuration: Configuration = {
   component: 'dxValidationSummary',
