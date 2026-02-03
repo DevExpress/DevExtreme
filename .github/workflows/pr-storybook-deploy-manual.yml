@@ -42,6 +42,12 @@ jobs:
           ref: refs/pull/${{ inputs.pr_number }}/head
           fetch-depth: 1
 
+      - name: Checkout base repo
+        if: inputs.action == 'remove'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
       - name: Use Node.js
         if: inputs.action == 'deploy'
         uses: actions/setup-node@v4
@@ -81,7 +87,7 @@ jobs:
           pnpx nx build devextreme-react-storybook
 
       - name: Deploy/remove PR preview
-        uses: rossjrw/pr-preview-action@8ff09e486b4c23709012eedd3b42e9f0b95dd0c5 # v1
+        uses: rossjrw/pr-preview-action@6f3a89d9ff1b752c6e781d91eacd27d9952188b0 # v1
         with:
           action: ${{ inputs.action }}
           pr-number: ${{ inputs.pr_number }}
@@ -89,4 +95,3 @@ jobs:
           preview-branch: gh-pages
           umbrella-dir: preview
           comment: false
-          token: ${{ secrets.GITHUB_TOKEN }}
