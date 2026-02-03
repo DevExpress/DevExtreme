@@ -227,7 +227,6 @@ test('DataGrid should not reset its top scroll position after cell modification 
 
 test('Ungrouping after grouping should work correctly if row rendering mode is virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
-
   await t.expect(dataGrid.isReady()).ok();
 
   // act
@@ -243,6 +242,7 @@ test('Ungrouping after grouping should work correctly if row rendering mode is v
 
   // act
   await dataGrid.apiColumnOption('group', 'groupIndex', 0);
+  await t.expect(dataGrid.isReady()).ok();
   visibleRows = await dataGrid.apiGetVisibleRows();
 
   // assert
@@ -260,17 +260,16 @@ test('Ungrouping after grouping should work correctly if row rendering mode is v
 
   // act
   await dataGrid.apiColumnOption('group', 'groupIndex', 'undefined');
-
-  // assert
+  await t.expect(dataGrid.isReady()).ok();
   const groupRow = dataGrid.getGroupRowSelector();
 
+  // assert
   await t
     .expect(groupRow.exists)
     .notOk();
 
   visibleRows = await dataGrid.apiGetVisibleRows();
 
-  // assert
   await t
     .expect(visibleRows[0].rowType)
     .eql('data')
@@ -290,7 +289,6 @@ test('Ungrouping after grouping should work correctly if row rendering mode is v
   };
   return createWidget('dxDataGrid', {
     height: 500,
-    loadingTimeout: null,
     keyExpr: 'id',
     dataSource: getItems(),
     scrolling: {
