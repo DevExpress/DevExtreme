@@ -96,7 +96,7 @@ const runExecutor: PromiseExecutor<BuildTypescriptExecutorSchema> = async (optio
       throw new Error(`No source files matched pattern: ${srcPattern}`);
     }
 
-    logger.info(`Building ${module.toUpperCase()} for ${sourceFiles.length} source files...`);
+    logger.verbose(`Building ${module.toUpperCase()} for ${sourceFiles.length} source files...`);
 
     const parsedConfig = ts.parseJsonConfigFileContent(
       tsconfigContent,
@@ -121,7 +121,7 @@ const runExecutor: PromiseExecutor<BuildTypescriptExecutorSchema> = async (optio
       return { success: false };
     }
 
-    logger.info(`✓ ${module.toUpperCase()} build completed successfully`);
+    logger.verbose(`✓ ${module.toUpperCase()} build completed successfully`);
     return { success: true };
   } catch (error) {
     logError(`Failed to build ${module.toUpperCase()}`, error);

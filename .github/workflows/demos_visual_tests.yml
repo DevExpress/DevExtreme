@@ -14,8 +14,7 @@ on:
 
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
-  NX_SKIP_NX_CACHE: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'skip-cache') }}
-  BUILD_TEST_INTERNAL_PACKAGE: true
+  NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
   RUN_TESTS: true
 
 jobs:
@@ -145,13 +144,11 @@ jobs:
         shell: bash
         run: |
           pnpx nx build devextreme-scss
-          pnpx nx build devextreme
+          pnpx nx build devextreme -c testing
 
       - name: DevExtreme - Build-all
         if: needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
-        env:
-          BUILD_TEST_INTERNAL_PACKAGE: true
-        run: pnpm run all:build-dev
+        run: pnpm nx all:build-testing workflows
 
       - name: Zip artifacts (for jQuery tests)
         working-directory: ./packages/devextreme
