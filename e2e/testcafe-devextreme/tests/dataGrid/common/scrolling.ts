@@ -225,7 +225,8 @@ test('DataGrid should not reset its top scroll position after cell modification 
   },
 }));
 
-test('Ungrouping after grouping should work correctly if row rendering mode is virtual', async (t) => {
+// Theme dependent test
+test.meta({ runInTheme: Themes.fluentBlue })('Ungrouping after grouping should work correctly if row rendering mode is virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
   await t.expect(dataGrid.isReady()).ok();
 
@@ -616,7 +617,8 @@ test('New virtual mode. An adaptive row should be rendered when the last row is 
   });
 });
 
-test('New virtual mode. Virtual rows should not be in view port', async (t) => {
+// Theme dependent test
+test.meta({ runInTheme: Themes.fluentBlue })('New virtual mode. Virtual rows should not be in view port', async (t) => {
   const dataGrid = new DataGrid('#container');
   const virtualRowSelector = `.${ClassNames.virtualRow}`;
   const dataRowSelector = `.${ClassNames.dataRow}`;
@@ -897,7 +899,8 @@ test.meta({ browserSize: [800, 700] })('New mode. Rows should be rendered proper
   });
 });
 
-test.meta({ browserSize: [800, 800] })('Rows are rendered properly when window content is scrolled (T1070388)', async (t) => {
+// Theme dependent test
+test.meta({ browserSize: [800, 800], runInTheme: Themes.fluentBlue })('Rows are rendered properly when window content is scrolled (T1070388)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t.expect(dataGrid.isReady()).ok();
