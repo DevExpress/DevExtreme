@@ -34,9 +34,14 @@ const CLASSES = {
   icon: 'dx-icon',
   hidden: 'dx-hidden',
   fieldItemContent: 'dx-field-item-content',
+  formItem: 'dx-item',
+  labelTop: 'dx-field-item-label-location-top',
+  label: 'dx-label',
 
   groupWithIcon: 'dx-scheduler-form-group-with-icon',
   formIcon: 'dx-scheduler-form-icon',
+  formIconTopLabelOffset: 'dx-scheduler-form-top-label-offset',
+  formIconInnerLabelOffset: 'dx-scheduler-form-inner-label-offset',
   defaultResourceIcon: 'dx-scheduler-default-resources-icon',
 
   mainGroup: 'dx-scheduler-form-main-group',
@@ -306,6 +311,8 @@ export class AppointmentForm {
         const $formElement = e.component.$element();
         this._$mainGroup = $formElement.find(`.${CLASSES.mainGroup}`);
         this._$recurrenceGroup = $formElement.find(`.${CLASSES.recurrenceGroup}`);
+
+        this.alignIconsWithEditors();
 
         onContentReady?.call(this, e);
       },
@@ -856,6 +863,33 @@ export class AppointmentForm {
         this.setStylingModeToEditors(child, showIcon);
       });
     }
+  }
+
+  private alignIconsWithEditors(): void {
+    const $groups = this.dxForm.$element().find(`.${CLASSES.groupWithIcon}`);
+
+    $groups.toArray().forEach((groupElement) => {
+      const iconElement = groupElement.querySelector(`.${CLASSES.formIcon}`);
+
+      const itemElements = groupElement.querySelectorAll(`.${CLASSES.formItem}`);
+      const firstSimpleItemElement = Array.from(itemElements)
+        .find((itemElement) => {
+          const isGroup = itemElement.querySelector(`.${CLASSES.formItem}`) !== null;
+          const isIcon = itemElement.querySelector(`.${CLASSES.formIcon}`) !== null;
+
+          return !isGroup && !isIcon;
+        });
+
+      if (!firstSimpleItemElement || !iconElement) {
+        return;
+      }
+
+      const hasTopLabel = firstSimpleItemElement.querySelector(`.${CLASSES.labelTop}`) !== null;
+      const hasInnerLabel = !hasTopLabel && firstSimpleItemElement.querySelector(`.${CLASSES.label}`) !== null;
+
+      iconElement.classList.toggle(CLASSES.formIconTopLabelOffset, hasTopLabel);
+      iconElement.classList.toggle(CLASSES.formIconInnerLabelOffset, hasInnerLabel);
+    });
   }
 
   showMainGroup(): void {

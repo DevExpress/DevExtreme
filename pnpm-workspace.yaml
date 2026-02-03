@@ -6,6 +6,7 @@ packages:
   - '!packages/sbom'
 
 catalog:
+  axe-core: ^4.11.1
   inferno: ^8.2.3
   inferno-hydrate: ^8.2.3
   inferno-create-element: ^8.2.3
@@ -14,7 +15,7 @@ catalog:
   devexpress-gantt: 4.1.64
   devextreme-exceljs-fork: 4.4.5
   devextreme-quill: 1.7.8
-  eslint: 9.18.0
+  eslint: 9.26.0
   eslint-config-airbnb-typescript: 18.0.0
   eslint-config-devextreme: 1.1.9
   eslint-plugin-i18n: 2.4.0
@@ -54,7 +55,7 @@ catalogs:
     "typescript": 5.5.4
     "zone.js": 0.15.1
   eslint8:
-    eslint: 8.56.0
+    eslint: 9.26.0
     eslint-config-airbnb-typescript: 17.1.0
     eslint-plugin-i18n: 2.3.0
     eslint-plugin-import: 2.29.0

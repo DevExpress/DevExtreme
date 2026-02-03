@@ -109,7 +109,7 @@
         "script": "prepare-js"
       },
       "dependsOn": [
-        { "projects": ["devextreme"], "target": "build" },
+        { "projects": ["devextreme"], "target": "build", "params": "forward" },
         { "projects": ["devextreme-angular", "devextreme-react", "devextreme-vue"], "target": "pack" }
       ],
       "inputs": [
