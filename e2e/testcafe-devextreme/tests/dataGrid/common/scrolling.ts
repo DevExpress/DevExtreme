@@ -503,7 +503,7 @@ test('Header container should have padding-right if grid has max-height and scro
   });
 });
 
-test.meta({ runInTheme: Themes.genericLight })('New virtual mode. A detail row should be rendered when the last master row is expanded', async (t) => {
+test('New virtual mode. A detail row should be rendered when the last master row is expanded', async (t) => {
   const ROWS_AMOUNT = 100;
   const dataGrid = new DataGrid('#container');
   const dataRowSelector = `.${ClassNames.dataRow}`;
@@ -567,7 +567,7 @@ test.meta({ runInTheme: Themes.genericLight })('New virtual mode. A detail row s
   });
 });
 
-test.meta({ runInTheme: Themes.genericLight })('New virtual mode. An adaptive row should be rendered when the last row is expanded', async (t) => {
+test('New virtual mode. An adaptive row should be rendered when the last row is expanded', async (t) => {
   const ROWS_AMOUNT = 100;
   const dataGrid = new DataGrid('#container');
   const dataRowSelector = `.${ClassNames.dataRow}`;
