@@ -91,7 +91,7 @@ $treelist-row-error-color: $datagrid-row-error-color;
     }
 
     .dx-treelist-content .dx-treelist-table .dx-row {
-      &.dx-column-lines > td.dx-treelist-first-header,
+      > td.dx-treelist-first-header,
       .dx-treelist-column-no-border {
         border-left: none;
       }
@@ -341,7 +341,7 @@ $treelist-row-error-color: $datagrid-row-error-color;
       }
 
       .dx-treelist-content .dx-treelist-table .dx-row {
-        &.dx-column-lines > td.dx-treelist-first-header,
+        > td.dx-treelist-first-header,
         .dx-treelist-column-no-border {
           border-right: none;
 

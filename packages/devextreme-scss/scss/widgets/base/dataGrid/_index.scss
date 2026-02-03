@@ -279,7 +279,7 @@ $datagrid-text-stub-background-image-path: null !default;
     }
 
     .dx-datagrid-content .dx-datagrid-table .dx-row {
-      &.dx-column-lines > td.dx-datagrid-first-header,
+      > td.dx-datagrid-first-header,
       .dx-datagrid-column-no-border {
         border-left: none;
       }
@@ -409,7 +409,7 @@ $datagrid-text-stub-background-image-path: null !default;
       }
 
       .dx-datagrid-content .dx-datagrid-table .dx-row {
-        &.dx-column-lines > td.dx-datagrid-first-header,
+        > td.dx-datagrid-first-header,
         .dx-datagrid-column-no-border {
           border-right: none;
 
