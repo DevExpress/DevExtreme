@@ -3,11 +3,10 @@ import { Deferred } from 'devextreme/core/utils/deferred';
 
 const sendRequestOrig = ajax.sendRequest;
 const fetchOrig = fetch;
-const BASE_PATH = 'https://js.devexpress.com/Demos/NetCore';
 
 async function fetchAntiForgeryToken() {
   try {
-    const response = await fetchOrig(`${BASE_PATH}/api/Common/GetAntiForgeryToken`, {
+    const response = await fetchOrig(`https://js.devexpress.com/Demos/NetCore/api/Common/GetAntiForgeryToken`, {
       method: 'GET',
       credentials: 'include',
       cache: 'no-cache',
