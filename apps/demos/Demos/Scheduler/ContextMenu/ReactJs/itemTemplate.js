@@ -1,6 +1,6 @@
 import React from 'react';
 
-const AppointmentMenuTemplate = (props) => (
+const ItemTemplate = (props) => (
   <div>
     {props.data.color && (
       <div
@@ -11,4 +11,4 @@ const AppointmentMenuTemplate = (props) => (
     {props.data.text}
   </div>
 );
-export default AppointmentMenuTemplate;
+export default ItemTemplate;
