@@ -6,7 +6,7 @@ $(() => {
     itemTemplate: contextMenuItemTemplate,
     onItemClick: (e) => {
       e.itemData.onItemClick(e);
-    }
+    },
   }).dxContextMenu('instance');
 
   const cellContextMenuInstance = $('#cell-context-menu').dxContextMenu({
@@ -16,7 +16,7 @@ $(() => {
     itemTemplate: contextMenuItemTemplate,
     onItemClick: (e) => {
       e.itemData.onItemClick(e);
-    }
+    },
   }).dxContextMenu('instance');
 
   $('#scheduler').dxScheduler({
@@ -63,27 +63,28 @@ $(() => {
     const { appointmentData: appointment, targetedAppointmentData: targetedAppointment } = e;
 
     return [
-      { 
-        text: 'Open', 
-        onItemClick: () => { scheduler.showAppointmentPopup(appointment); } 
+      {
+        text: 'Open',
+        onItemClick: () => { scheduler.showAppointmentPopup(appointment); },
       },
-      { 
-        text: 'Delete', 
-        onItemClick: () => { scheduler.deleteAppointment(appointment); } 
+      {
+        text: 'Delete',
+        onItemClick: () => { scheduler.deleteAppointment(appointment); },
       },
-      { 
-        text: 'Repeat Weekly', beginGroup: true, 
+      {
+        text: 'Repeat Weekly',
+        beginGroup: true,
         onItemClick: () => {
           scheduler.updateAppointment(appointment, $.extend(appointment, {
             startDate: targetedAppointment.startDate,
             recurrenceRule: 'FREQ=WEEKLY',
           }));
-        } 
+        },
       },
-      { 
-        text: 'Set Room', 
-        beginGroup: true, 
-        disabled: true 
+      {
+        text: 'Set Room',
+        beginGroup: true,
+        disabled: true,
       },
       ...resourcesData.map((item) => ({
         ...item,
@@ -92,7 +93,7 @@ $(() => {
             roomId: [clickEvent.itemData.id],
           }));
         },
-      }))
+      })),
     ];
   }
 
@@ -100,39 +101,39 @@ $(() => {
     const scheduler = e.component;
 
     return [
-      { 
-        text: 'New Appointment', 
-        onItemClick: () => { 
+      {
+        text: 'New Appointment',
+        onItemClick: () => {
           scheduler.showAppointmentPopup({
             startDate: e.cellData.startDateUTC,
           }, true);
-        } 
+        },
       },
-      { 
-        text: 'New Recurring Appointment', 
+      {
+        text: 'New Recurring Appointment',
         onItemClick: () => {
           scheduler.showAppointmentPopup({
             startDate: e.cellData.startDateUTC,
             recurrenceRule: 'FREQ=DAILY',
           }, true);
-        }
+        },
       },
-      { 
-        text: 'Group by Room/Ungroup', 
-        beginGroup: true, 
+      {
+        text: 'Group by Room/Ungroup',
+        beginGroup: true,
         onItemClick: () => {
           if (scheduler.option('groups').length) {
             scheduler.option({ crossScrollingEnabled: false, groups: [] });
           } else {
             scheduler.option({ crossScrollingEnabled: true, groups: ['roomId'] });
           }
-        } 
+        },
       },
-      { 
-        text: 'Go to Today', 
+      {
+        text: 'Go to Today',
         onItemClick: () => {
           scheduler.option('currentDate', new Date());
-        } 
+        },
       },
     ];
   }

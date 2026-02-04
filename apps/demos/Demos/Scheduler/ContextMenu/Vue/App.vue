@@ -63,23 +63,23 @@ const crossScrollingEnabled = ref(false);
 const appointmentContextMenuItems = ref<ContextMenuItem[]>([]);
 const cellContextMenuItems = ref<ContextMenuItem[]>([]);
 
-function onAppointmentContextMenu(e: DxSchedulerTypes.AppointmentContextMenuEvent) {
+const onAppointmentContextMenu = (e: DxSchedulerTypes.AppointmentContextMenuEvent) => {
   const items = getAppointmentContextMenuItems(e);
   appointmentContextMenuItems.value = items;
-}
+};
 
-function onCellContextMenu(e: DxSchedulerTypes.CellContextMenuEvent) {
+const onCellContextMenu = (e: DxSchedulerTypes.CellContextMenuEvent) => {
   const items = getCellContextMenuItems(e);
   cellContextMenuItems.value = items;
-}
+};
 
-function onContextMenuItemClick(e: DxContextMenuTypes.ItemClickEvent<ContextMenuItem>) {
+const onContextMenuItemClick = (e: DxContextMenuTypes.ItemClickEvent<ContextMenuItem>) => {
   e.itemData?.onItemClick?.(e);
-}
+};
 
-function getAppointmentContextMenuItems(
+const getAppointmentContextMenuItems = (
   e: DxSchedulerTypes.AppointmentContextMenuEvent,
-): ContextMenuItem[] {
+): ContextMenuItem[] => {
   const scheduler = e.component;
   const { appointmentData: appointment, targetedAppointmentData: targetedAppointment } = e;
 
@@ -98,7 +98,7 @@ function getAppointmentContextMenuItems(
       onItemClick: () => {
         scheduler.updateAppointment(appointment, {
           ...appointment,
-          startDate: targetedAppointment.startDate,
+          startDate: targetedAppointment?.startDate,
           recurrenceRule: 'FREQ=WEEKLY',
         });
       },
@@ -118,11 +118,11 @@ function getAppointmentContextMenuItems(
       },
     })),
   ];
-}
+};
 
-function getCellContextMenuItems(
+const getCellContextMenuItems = (
   e: DxSchedulerTypes.CellContextMenuEvent,
-): ContextMenuItem[] {
+): ContextMenuItem[] => {
   const scheduler = e.component;
 
   return [
@@ -161,7 +161,7 @@ function getCellContextMenuItems(
       },
     },
   ];
-}
+};
 
 </script>
 
