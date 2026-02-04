@@ -37,12 +37,19 @@ export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
     return this.root.querySelector(`.${SELECTORS.aiPromptEditor}`) as HTMLElement;
   }
 
-  public getHeaderCells(): NodeListOf<HTMLElement> {
-    return this.root.querySelectorAll(`.${SELECTORS.headerRowClass} > td`);
+  public getHeaderRows(): NodeListOf<HTMLElement> {
+    return this.root.querySelectorAll(`.${SELECTORS.headerRowClass}`);
   }
 
-  public getHeaderCell(columnIndex: number): HeaderCellModel {
-    return new HeaderCellModel(this.getHeaderCells()[columnIndex], this.addWidgetPrefix.bind(this));
+  public getHeaderCells(rowIndex = 0): NodeListOf<HTMLElement> {
+    return this.getHeaderRows()[rowIndex].querySelectorAll('td');
+  }
+
+  public getHeaderCell(rowIndex = 0, columnIndex = 0): HeaderCellModel {
+    return new HeaderCellModel(
+      this.getHeaderCells(rowIndex)[columnIndex],
+      this.addWidgetPrefix.bind(this),
+    );
   }
 
   public getAIHeaderCell(columnIndex: number): AIHeaderCellModel {

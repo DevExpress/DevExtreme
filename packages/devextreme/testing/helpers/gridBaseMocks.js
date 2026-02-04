@@ -649,6 +649,10 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return true;
             },
 
+            isFirstColumn: function() {
+                return false;
+            },
+
             getFirstDataColumnIndex: function() {
                 const visibleColumns = this.getVisibleColumns();
                 const visibleColumnsLength = visibleColumns.length;

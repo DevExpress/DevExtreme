@@ -13,7 +13,6 @@ export const CLASSES = {
   stickyColumnBorderRight: 'sticky-column-border-right',
   stickyColumnBorderLeft: 'sticky-column-border-left',
   stickyColumns: 'sticky-columns',
-  firstHeader: 'first-header',
   columnNoBorder: 'column-no-border',
   groupRowContainer: 'group-row-container',
   focusedFixedElement: 'dx-focused-fixed-element',
