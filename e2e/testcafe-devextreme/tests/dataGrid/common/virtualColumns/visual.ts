@@ -461,3 +461,46 @@ test('Header, fixed columns and virtual scroll bar should have stable position d
     },
   });
 });
+
+test('Virtual columns should render correctly with repaintChangesOnly and grouping after horizontal scrolling (T1319173)', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // assert
+  await t
+    .expect(dataGrid.isReady())
+    .ok()
+    .expect(dataGrid.getDataCell(0, 1).element.textContent)
+    .eql('0');
+
+  // act
+  await dataGrid.scrollTo(t, { x: 10000 });
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(1, 50).element.textContent)
+    .eql('1-50')
+    .expect(dataGrid.getScrollLeft())
+    .eql(4430);
+
+  await testScreenshot(t, takeScreenshot, 'T1319173__datagrid__virtual-columns__repaintChangesOnly=true.png', { element: dataGrid.element });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: generateData(10, 50).map((item, index) => ({ id: index, ...item })),
+  keyExpr: 'id',
+  height: 400,
+  width: 600,
+  repaintChangesOnly: true,
+  scrolling: {
+    columnRenderingMode: 'virtual',
+    useNative: false,
+  },
+  columnWidth: 100,
+  customizeColumns(columns) {
+    columns[1].groupIndex = 0;
+  },
+}));
