@@ -690,7 +690,7 @@ class DateBoxMask extends DateBoxBase {
   }
 
   _isDateValid(date: DateLike): boolean {
-    return isDate(date) && !isNaN(date.getDate());
+    return isDate(date) && !isNaN(date.getTime());
   }
 
   _isValueDirty(): boolean {
