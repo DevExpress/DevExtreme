@@ -45,7 +45,6 @@ const getIgnoredRules = (testName) => {
       'CardView-FieldTemplate',
       // False positive: contrast rules do not apply to read-only editors on the custom option panel background
       'VectorMap-DynamicViewport',
-      'Charts-SignalRService',
       'TreeList-StatePersistence',
     ].includes(testName)
   ) {

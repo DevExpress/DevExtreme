@@ -25,12 +25,7 @@ const buttonsOptions: Options<Properties> = {
   inputAttr: [{ 'aria-label': 'aria-label' }],
 };
 
-const a11yCheckConfig = {
-  rules: {
-    // NOTE: color-contrast issues
-    'color-contrast': { enabled: true },
-  },
-};
+const a11yCheckConfig = {};
 
 const deferredConfiguration: Configuration = {
   component: 'dxAutocomplete',

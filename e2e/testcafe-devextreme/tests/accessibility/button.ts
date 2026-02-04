@@ -35,8 +35,6 @@ const created = async (t: TestController, optionConfiguration): Promise<void> =>
 
 const a11yCheckConfig = {
   rules: {
-    // NOTE: color-contrast issues
-    'color-contrast': { enabled: true },
     // NOTE: false positive in isMaterialBased
     'nested-interactive': { enabled: !isMaterialBased() },
   },
