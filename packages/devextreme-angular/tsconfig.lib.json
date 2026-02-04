@@ -19,6 +19,7 @@
     "emitDecoratorMetadata": false,
     "importHelpers": true,
     "target": "ES2022",
+    "useDefineForClassFields": false,
     "strictNullChecks": false,
     "module": "ES2022",
     "lib": [
