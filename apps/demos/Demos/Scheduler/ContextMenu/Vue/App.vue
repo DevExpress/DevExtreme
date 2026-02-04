@@ -166,15 +166,3 @@ const getCellContextMenuItems = (
 };
 
 </script>
-
-<style scoped>
-.dx-menu-item-content span {
-  margin-right: 5px;
-}
-
-.dx-menu-item-has-submenu .dx-icon-spinright {
-  position: absolute;
-  top: 7px;
-  right: 2px;
-}
-</style>
