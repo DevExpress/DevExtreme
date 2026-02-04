@@ -148,7 +148,7 @@ jobs:
 
       - name: DevExtreme - Build-all
         if: needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
-        run: pnpm nx all:build-testing workflows
+        run: pnpx nx all:build-testing workflows
 
       - name: Zip artifacts (for jQuery tests)
         working-directory: ./packages/devextreme
