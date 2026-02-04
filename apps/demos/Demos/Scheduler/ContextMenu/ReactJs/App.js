@@ -1,51 +1,38 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Scheduler, Resource } from 'devextreme-react/scheduler';
 import { ContextMenu } from 'devextreme-react/context-menu';
 import ItemTemplate from './itemTemplate.js';
 import { data, resourcesData } from './data.js';
 
 const views = ['day', 'month'];
-const appointmentClassName = '.dx-scheduler-appointment';
-const cellClassName = '.dx-scheduler-date-table-cell';
 const onContextMenuItemClick = (e) => {
   e.itemData?.onItemClick?.(e);
 };
 const App = () => {
-  const schedulerRef = useRef(null);
   const [currentDate, setCurrentDate] = useState(new Date(2020, 10, 25));
-  const [contextMenuItems, setContextMenuItems] = useState([]);
-  const [target, setTarget] = useState(appointmentClassName);
-  const [disabled, setDisabled] = useState(true);
-  const [groups, setGroups] = useState(undefined);
+  const [appointmentContextMenuItems, setAppointmentContextMenuItems] = useState([]);
+  const [cellContextMenuItems, setCellContextMenuItems] = useState([]);
+  const [groups, setGroups] = useState([]);
   const [crossScrollingEnabled, setCrossScrollingEnabled] = useState(false);
-  const onAppointmentContextMenu = useCallback((event) => {
-    const { appointmentData, targetedAppointmentData } = event;
-    const scheduler = schedulerRef.current?.instance();
-    const resourceItems = resourcesData.map((item) => ({
-      ...item,
-      onItemClick: (e) =>
-        scheduler?.updateAppointment(appointmentData, {
-          ...appointmentData,
-          ...{ roomId: [e.itemData?.id] },
-        }),
-    }));
-    setTarget(appointmentClassName);
-    setDisabled(false);
-    setContextMenuItems([
+  const getAppointmentContextMenuItems = useCallback((e) => {
+    const { appointmentData: appointment, targetedAppointmentData: targetedAppointment } = e;
+    const scheduler = e.component;
+    return [
       {
         text: 'Open',
-        onItemClick: () => scheduler?.showAppointmentPopup(appointmentData),
+        onItemClick: () => scheduler?.showAppointmentPopup(appointment),
       },
       {
         text: 'Delete',
-        onItemClick: () => scheduler?.deleteAppointment(appointmentData),
+        onItemClick: () => scheduler?.deleteAppointment(appointment),
       },
       {
         text: 'Repeat Weekly',
         beginGroup: true,
         onItemClick: () =>
-          scheduler?.updateAppointment(appointmentData, {
-            startDate: targetedAppointmentData?.startDate,
+          scheduler?.updateAppointment(appointment, {
+            ...appointment,
+            startDate: targetedAppointment?.startDate,
             recurrenceRule: 'FREQ=WEEKLY',
           }),
       },
@@ -54,38 +41,46 @@ const App = () => {
         beginGroup: true,
         disabled: true,
       },
-      ...resourceItems,
-    ]);
+      ...resourcesData.map((item) => ({
+        ...item,
+        onItemClick: (clickEvent) => {
+          scheduler?.updateAppointment(appointment, {
+            ...appointment,
+            roomId: [clickEvent.itemData?.id],
+          });
+        },
+      })),
+    ];
   }, []);
-  const onCellContextMenu = useCallback(
+  const getCellContextMenuItems = useCallback(
     (e) => {
-      const scheduler = schedulerRef.current?.instance();
-      setTarget(cellClassName);
-      setDisabled(false);
-      setContextMenuItems([
+      const scheduler = e.component;
+      return [
         {
           text: 'New Appointment',
-          onItemClick: () =>
-            scheduler?.showAppointmentPopup({ startDate: e.cellData.startDateUTC }, true),
+          onItemClick: () => {
+            scheduler?.showAppointmentPopup({ startDate: e.cellData.startDateUTC }, true);
+          },
         },
         {
           text: 'New Recurring Appointment',
-          onItemClick: () =>
+          onItemClick: () => {
             scheduler?.showAppointmentPopup(
               {
                 startDate: e.cellData.startDateUTC,
                 recurrenceRule: 'FREQ=DAILY',
               },
               true,
-            ),
+            );
+          },
         },
         {
           text: 'Group by Room/Ungroup',
           beginGroup: true,
           onItemClick: () => {
-            if (groups) {
+            if (groups.length) {
               setCrossScrollingEnabled(false);
-              setGroups(undefined);
+              setGroups([]);
             } else {
               setCrossScrollingEnabled(true);
               setGroups(['roomId']);
@@ -98,14 +93,41 @@ const App = () => {
             setCurrentDate(new Date());
           },
         },
-      ]);
+      ];
     },
     [groups],
   );
+  const onAppointmentContextMenu = useCallback(
+    (e) => {
+      const items = getAppointmentContextMenuItems(e);
+      setAppointmentContextMenuItems(items);
+    },
+    [getAppointmentContextMenuItems],
+  );
+  const onCellContextMenu = useCallback(
+    (e) => {
+      const items = getCellContextMenuItems(e);
+      setCellContextMenuItems(items);
+    },
+    [getCellContextMenuItems],
+  );
   return (
     <>
+      <ContextMenu
+        dataSource={appointmentContextMenuItems}
+        width={200}
+        target=".dx-scheduler-appointment"
+        onItemClick={onContextMenuItemClick}
+        itemComponent={ItemTemplate}
+      />
+      <ContextMenu
+        dataSource={cellContextMenuItems}
+        width={200}
+        target=".dx-scheduler-date-table-cell"
+        onItemClick={onContextMenuItemClick}
+        itemComponent={ItemTemplate}
+      />
       <Scheduler
-        ref={schedulerRef}
         timeZone="America/Los_Angeles"
         dataSource={data}
         views={views}
@@ -126,14 +148,6 @@ const App = () => {
           icon="conferenceroomoutline"
         />
       </Scheduler>
-      <ContextMenu
-        dataSource={contextMenuItems}
-        width={200}
-        target={target}
-        disabled={disabled}
-        onItemClick={onContextMenuItemClick}
-        itemComponent={ItemTemplate}
-      />
     </>
   );
 };
